@@ -2,133 +2,321 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74CE83DFC98
-	for <lists+linux-can@lfdr.de>; Wed,  4 Aug 2021 10:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38C743DFDCE
+	for <lists+linux-can@lfdr.de>; Wed,  4 Aug 2021 11:19:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236188AbhHDIQb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 4 Aug 2021 04:16:31 -0400
-Received: from mail-io1-f70.google.com ([209.85.166.70]:41622 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236185AbhHDIQb (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 4 Aug 2021 04:16:31 -0400
-Received: by mail-io1-f70.google.com with SMTP id c18-20020a0566023352b0290523c137a6a4so1011453ioz.8
-        for <linux-can@vger.kernel.org>; Wed, 04 Aug 2021 01:16:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=oKFGrnqPpcOPV7wZiKJ6cPKB9Oi3nefvOJEtkwdIyG4=;
-        b=U7YHHBqfuECOou8XdBp9GQ8ne+zFhx6SeMTABi2As3RYhQRyzt26s+0AzfOX68SJUI
-         zm4hZPvv5LtqmFyiGgozt6SkU1oCx+q284wzvaYPzbri9YmlWqquymzU0crBJVBst6a3
-         N6u2CUox6fw3LIDW5ml0NseG6x3nIJTkWZzRM69ogLX0Cy+/+DKikSPOqbEfZriKbuAT
-         0wxDpdFiNtfl8OrSpSO4xSFxAHyMD1IX9Xt5Db5pz0YFDqc4PNgsDzVNv29qaPBkTDv8
-         /5XeTKjTu+YW8ryuTD4V3TdX9TS26vUoozJa9iNsUbA3ul2GmobMvkn0b5H1pGOYku2R
-         0KBw==
-X-Gm-Message-State: AOAM530KUqmARHll3vw6RjX0t2xr4H/4KkjenM5f36cI1GXkeRzahL/k
-        oMHdW9pk/gcg5Ee/VdBl+vkqtmlndbY3o6QFSi6TOSZWjgQh
-X-Google-Smtp-Source: ABdhPJxWm9eHbu5NZ/QigOM9PqOGbgeIUqYHTyGBkWDzxpyQHt2ScxP4AaoT5sSsF9AsTyG1mj8HvIxGR+ygQHi4plbEQ0yLvAyK
+        id S235323AbhHDJT1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 4 Aug 2021 05:19:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40014 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236356AbhHDJTQ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 4 Aug 2021 05:19:16 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB96C0613D5
+        for <linux-can@vger.kernel.org>; Wed,  4 Aug 2021 02:19:04 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1mBD3F-0004PM-TN; Wed, 04 Aug 2021 11:19:02 +0200
+Received: from pengutronix.de (unknown [IPv6:2a02:810a:8940:aa0:e44:2d7c:bf4a:7b36])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 485A96606DC;
+        Wed,  4 Aug 2021 09:19:00 +0000 (UTC)
+Date:   Wed, 4 Aug 2021 11:18:58 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Matt Kline <matt@bitbashing.io>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>, linux-can@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] can: m_can: Batch FIFO writes during CAN transmit
+Message-ID: <20210804091858.vvvrzrmnmi76mg3c@pengutronix.de>
+References: <20210727015855.17482-1-matt@bitbashing.io>
+ <20210727015855.17482-3-matt@bitbashing.io>
 MIME-Version: 1.0
-X-Received: by 2002:a92:c549:: with SMTP id a9mr313514ilj.248.1628064978847;
- Wed, 04 Aug 2021 01:16:18 -0700 (PDT)
-Date:   Wed, 04 Aug 2021 01:16:18 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000bc4eb305c8b76ab5@google.com>
-Subject: [syzbot] WARNING in j1939_xtp_rx_abort_one
-From:   syzbot <syzbot+9981a614060dcee6eeca@syzkaller.appspotmail.com>
-To:     bst@pengutronix.de, davem@davemloft.net,
-        dev.kurt@vandijck-laurijssen.be, ecathinds@gmail.com,
-        kernel@pengutronix.de, kuba@kernel.org, linux-can@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux@rempel-privat.de,
-        lkp@intel.com, maxime.jayat@mobile-devices.fr, mkl@pengutronix.de,
-        netdev@vger.kernel.org, o.rempel@pengutronix.de, robin@protonic.nl,
-        socketcan@hartkopp.net, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6lm5m36afn7usqet"
+Content-Disposition: inline
+In-Reply-To: <20210727015855.17482-3-matt@bitbashing.io>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello,
 
-syzbot found the following issue on:
+--6lm5m36afn7usqet
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-HEAD commit:    c7d102232649 Merge tag 'net-5.14-rc4' of git://git.kernel...
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1308610a300000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6cc86e19161c9d37
-dashboard link: https://syzkaller.appspot.com/bug?extid=9981a614060dcee6eeca
-compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.1
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15874fda300000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10a507b6300000
+On 26.07.2021 18:58:55, Matt Kline wrote:
+> Give FIFO writes the same treatment as reads to avoid fixed costs of
+> individual transfers on a slow bus (e.g., tcan4x5x).
+>=20
+> Signed-off-by: Matt Kline <matt@bitbashing.io>
+> ---
+>  drivers/net/can/m_can/m_can.c          | 55 ++++++++++++--------------
+>  drivers/net/can/m_can/m_can.h          |  2 +-
+>  drivers/net/can/m_can/m_can_pci.c      |  5 ++-
+>  drivers/net/can/m_can/m_can_platform.c |  5 ++-
+>  drivers/net/can/m_can/tcan4x5x-core.c  |  4 +-
+>  5 files changed, 34 insertions(+), 37 deletions(-)
+>=20
+> diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+> index 233d5da907ec..7aae2d19ad65 100644
+> --- a/drivers/net/can/m_can/m_can.c
+> +++ b/drivers/net/can/m_can/m_can.c
+> @@ -278,7 +278,7 @@ enum m_can_reg {
+>  /* Message RAM Elements */
+>  #define M_CAN_FIFO_ID		0x0
+>  #define M_CAN_FIFO_DLC		0x4
+> -#define M_CAN_FIFO_DATA(n)	(0x8 + ((n) << 2))
+> +#define M_CAN_FIFO_DATA		0x8
+> =20
+>  /* Rx Buffer Element */
+>  /* R0 */
+> @@ -331,18 +331,20 @@ static void m_can_fifo_read(struct m_can_classdev *=
+cdev,
+>  }
+> =20
+>  static void m_can_fifo_write(struct m_can_classdev *cdev,
+> -			     u32 fpi, unsigned int offset, u32 val)
+> +			     u32 fpi, unsigned int offset, const void *val, size_t val_count)
+>  {
+>  	u32 addr_offset =3D cdev->mcfg[MRAM_TXB].off + fpi * TXB_ELEMENT_SIZE +
+>  		offset;
+> +	int result;
+> =20
+> -	cdev->ops->write_fifo(cdev, addr_offset, val);
+> +	result =3D cdev->ops->write_fifo(cdev, addr_offset, val, val_count);
+> +	WARN_ON(result !=3D 0);
 
-The issue was bisected to:
+What about converting all read/write functions to return an error, and
+handle the error in the caller?
 
-commit 9d71dd0c70099914fcd063135da3c580865e924c
-Author: The j1939 authors <linux-can@vger.kernel.org>
-Date:   Mon Oct 8 09:48:36 2018 +0000
+>  }
+> =20
+>  static inline void m_can_fifo_write_no_off(struct m_can_classdev *cdev,
+>  					   u32 fpi, u32 val)
+>  {
+> -	cdev->ops->write_fifo(cdev, fpi, val);
+> +	cdev->ops->write_fifo(cdev, fpi, &val, 1);
+>  }
+> =20
+>  static u32 m_can_txe_fifo_read(struct m_can_classdev *cdev, u32 fgi, u32=
+ offset)
+> @@ -506,7 +508,7 @@ static void m_can_read_fifo(struct net_device *dev, u=
+32 rxfs)
+>  		if (dlc & RX_BUF_BRS)
+>  			cf->flags |=3D CANFD_BRS;
+> =20
+> -		m_can_fifo_read(cdev, fgi, M_CAN_FIFO_DATA(0), cf->data, DIV_ROUND_UP(=
+cf->len, 4));
+> +		m_can_fifo_read(cdev, fgi, M_CAN_FIFO_DATA, cf->data, DIV_ROUND_UP(cf-=
+>len, 4));
+>  	}
+> =20
+>  	/* acknowledge rx fifo 0 */
+> @@ -1546,8 +1548,8 @@ static netdev_tx_t m_can_tx_handler(struct m_can_cl=
+assdev *cdev)
+>  	struct net_device *dev =3D cdev->net;
+>  	struct sk_buff *skb =3D cdev->tx_skb;
+>  	u32 id, cccr, fdflags;
+> -	int i;
+>  	int putidx;
+> +	u32 id_and_dlc[2];
 
-    can: add support of SAE J1939 protocol
+Can you create a struct for this?
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=17a70c66300000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=14670c66300000
-console output: https://syzkaller.appspot.com/x/log.txt?x=10670c66300000
+> =20
+>  	cdev->tx_skb =3D NULL;
+> =20
+> @@ -1563,18 +1565,16 @@ static netdev_tx_t m_can_tx_handler(struct m_can_=
+classdev *cdev)
+>  	if (cf->can_id & CAN_RTR_FLAG)
+>  		id |=3D TX_BUF_RTR;
+> =20
+> +	id_and_dlc[0] =3D id;
+> +
+>  	if (cdev->version =3D=3D 30) {
+>  		netif_stop_queue(dev);
+> =20
+> -		/* message ram configuration */
+> -		m_can_fifo_write(cdev, 0, M_CAN_FIFO_ID, id);
+> -		m_can_fifo_write(cdev, 0, M_CAN_FIFO_DLC,
+> -				 can_fd_len2dlc(cf->len) << 16);
+> +		id_and_dlc[1] =3D can_fd_len2dlc(cf->len) << 16;
+> =20
+> -		for (i =3D 0; i < cf->len; i +=3D 4)
+> -			m_can_fifo_write(cdev, 0,
+> -					 M_CAN_FIFO_DATA(i / 4),
+> -					 *(u32 *)(cf->data + i));
+> +		/* Write the frame ID, DLC, and payload to the FIFO element. */
+> +		m_can_fifo_write(cdev, 0, M_CAN_FIFO_ID, id_and_dlc, ARRAY_SIZE(id_and=
+_dlc));
+> +		m_can_fifo_write(cdev, 0, M_CAN_FIFO_DATA, cf->data, DIV_ROUND_UP(cf->=
+len, 4));
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9981a614060dcee6eeca@syzkaller.appspotmail.com
-Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
+Does it make sense to combine these, too? Same for the v3.1 variant.
 
-vcan0: j1939_tp_rxtimer: 0xffff888012588c00: rx timeout, send abort
-vcan0: j1939_xtp_rx_abort_one: 0xffff88802f335800: 0x00000: (3) A timeout occurred and this is the connection abort to close the session.
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 19 at net/can/j1939/transport.c:1085 j1939_session_deactivate net/can/j1939/transport.c:1085 [inline]
-WARNING: CPU: 1 PID: 19 at net/can/j1939/transport.c:1085 j1939_session_deactivate_activate_next net/can/j1939/transport.c:1095 [inline]
-WARNING: CPU: 1 PID: 19 at net/can/j1939/transport.c:1085 j1939_xtp_rx_abort_one+0x666/0x790 net/can/j1939/transport.c:1329
-Modules linked in:
-CPU: 1 PID: 19 Comm: ksoftirqd/1 Not tainted 5.14.0-rc3-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:j1939_session_deactivate net/can/j1939/transport.c:1085 [inline]
-RIP: 0010:j1939_session_deactivate_activate_next net/can/j1939/transport.c:1095 [inline]
-RIP: 0010:j1939_xtp_rx_abort_one+0x666/0x790 net/can/j1939/transport.c:1329
-Code: e9 88 fa ff ff e8 da 5f 8b f8 4c 89 f7 be 03 00 00 00 48 83 c4 20 5b 41 5c 41 5d 41 5e 41 5f 5d e9 af 1f 11 fb e8 ba 5f 8b f8 <0f> 0b e9 4b fd ff ff e8 ae 5f 8b f8 0f 0b e9 ca fd ff ff 89 e9 80
-RSP: 0018:ffffc90000d975a0 EFLAGS: 00010246
-RAX: ffffffff88f4c4f6 RBX: 0000000000000001 RCX: ffff8880124354c0
-RDX: 0000000000000301 RSI: 0000000000000001 RDI: 0000000000000002
-RBP: 1ffff11005e66b00 R08: ffffffff88f4c23a R09: ffffed1005e66b06
-R10: ffffed1005e66b06 R11: 0000000000000000 R12: ffff88802f335800
-R13: 0000000000000009 R14: ffff8880221ad070 R15: ffff88802f335828
-FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000004b8120 CR3: 00000000334c1000 CR4: 00000000001506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- j1939_xtp_rx_abort net/can/j1939/transport.c:1340 [inline]
- j1939_tp_cmd_recv+0x374/0x1200 net/can/j1939/transport.c:2065
- j1939_tp_recv+0x1f7/0x540 net/can/j1939/transport.c:2098
- j1939_can_recv+0x652/0xa10 net/can/j1939/main.c:101
- deliver net/can/af_can.c:574 [inline]
- can_rcv_filter+0x35e/0x800 net/can/af_can.c:608
- can_receive+0x2e8/0x410 net/can/af_can.c:665
- can_rcv+0xda/0x1f0 net/can/af_can.c:696
- __netif_receive_skb_one_core net/core/dev.c:5498 [inline]
- __netif_receive_skb+0x1d1/0x500 net/core/dev.c:5612
- process_backlog+0x4d8/0x940 net/core/dev.c:6492
- __napi_poll+0xba/0x4f0 net/core/dev.c:7047
- napi_poll net/core/dev.c:7114 [inline]
- net_rx_action+0x62c/0xf30 net/core/dev.c:7201
- __do_softirq+0x372/0x783 kernel/softirq.c:558
- run_ksoftirqd+0xa2/0x100 kernel/softirq.c:920
- smpboot_thread_fn+0x533/0x9d0 kernel/smpboot.c:164
- kthread+0x453/0x480 kernel/kthread.c:319
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+> =20
+>  		can_put_echo_skb(skb, dev, 0, 0);
+> =20
+> @@ -1618,8 +1618,11 @@ static netdev_tx_t m_can_tx_handler(struct m_can_c=
+lassdev *cdev)
+>  		/* get put index for frame */
+>  		putidx =3D FIELD_GET(TXFQS_TFQPI_MASK,
+>  				   m_can_read(cdev, M_CAN_TXFQS));
+> -		/* Write ID Field to FIFO Element */
+> -		m_can_fifo_write(cdev, putidx, M_CAN_FIFO_ID, id);
+> +
+> +		/* Construct the DLC Field, with CAN-FD configuration.
+> +		 * Use the put index of fifo as message the marker,
+> +		 * used in the TX interrupt for sending the correct echo frame.
+> +		 */
+> =20
+>  		/* get CAN FD configuration of frame */
+>  		fdflags =3D 0;
+> @@ -1628,21 +1631,13 @@ static netdev_tx_t m_can_tx_handler(struct m_can_=
+classdev *cdev)
+>  			if (cf->flags & CANFD_BRS)
+>  				fdflags |=3D TX_BUF_BRS;
+>  		}
+> +		id_and_dlc[1] =3D FIELD_PREP(TX_BUF_MM_MASK, putidx) |
+> +				 FIELD_PREP(TX_BUF_DLC_MASK, can_fd_len2dlc(cf->len)) |
+> +				 fdflags | TX_BUF_EFC;
+> =20
+> -		/* Construct DLC Field. Also contains CAN-FD configuration
+> -		 * use put index of fifo as message marker
+> -		 * it is used in TX interrupt for
+> -		 * sending the correct echo frame
+> -		 */
+> -		m_can_fifo_write(cdev, putidx, M_CAN_FIFO_DLC,
+> -				 FIELD_PREP(TX_BUF_MM_MASK, putidx) |
+> -				 FIELD_PREP(TX_BUF_DLC_MASK,
+> -					    can_fd_len2dlc(cf->len)) |
+> -				 fdflags | TX_BUF_EFC);
+> -
+> -		for (i =3D 0; i < cf->len; i +=3D 4)
+> -			m_can_fifo_write(cdev, putidx, M_CAN_FIFO_DATA(i / 4),
+> -					 *(u32 *)(cf->data + i));
+> +		/* Write the frame ID, DLC, and payload to the FIFO element. */
+> +		m_can_fifo_write(cdev, putidx, M_CAN_FIFO_ID, id_and_dlc, ARRAY_SIZE(i=
+d_and_dlc));
+> +		m_can_fifo_write(cdev, 0, M_CAN_FIFO_DATA, cf->data, DIV_ROUND_UP(cf->=
+len, 4));
+> =20
+>  		/* Push loopback echo.
+>  		 * Will be looped back on TX interrupt based on message marker
+> diff --git a/drivers/net/can/m_can/m_can.h b/drivers/net/can/m_can/m_can.h
+> index 2571ec1efec4..edf2477b064f 100644
+> --- a/drivers/net/can/m_can/m_can.h
+> +++ b/drivers/net/can/m_can/m_can.h
+> @@ -66,7 +66,7 @@ struct m_can_ops {
+>  	int (*write_reg)(struct m_can_classdev *cdev, int reg, int val);
+>  	int (*read_fifo)(struct m_can_classdev *cdev, int addr_offset, void *va=
+l, size_t val_count);
+>  	int (*write_fifo)(struct m_can_classdev *cdev, int addr_offset,
+> -			  int val);
+> +			  const void *val, size_t val_count);
+>  	int (*init)(struct m_can_classdev *cdev);
+>  };
+> =20
+> diff --git a/drivers/net/can/m_can/m_can_pci.c b/drivers/net/can/m_can/m_=
+can_pci.c
+> index 11614a635796..89cc3d41e952 100644
+> --- a/drivers/net/can/m_can/m_can_pci.c
+> +++ b/drivers/net/can/m_can/m_can_pci.c
+> @@ -57,11 +57,12 @@ static int iomap_write_reg(struct m_can_classdev *cde=
+v, int reg, int val)
+>  	return 0;
+>  }
+> =20
+> -static int iomap_write_fifo(struct m_can_classdev *cdev, int offset, int=
+ val)
+> +static int iomap_write_fifo(struct m_can_classdev *cdev, int offset,
+> +			    const void *val, size_t val_count)
+>  {
+>  	struct m_can_pci_priv *priv =3D cdev_to_priv(cdev);
+> =20
+> -	writel(val, priv->base + offset);
+> +	iowrite32_rep(priv->base + offset, val, val_count);
+> =20
+>  	return 0;
+>  }
+> diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m_c=
+an/m_can_platform.c
+> index 94c82dd39076..40e5351c7f74 100644
+> --- a/drivers/net/can/m_can/m_can_platform.c
+> +++ b/drivers/net/can/m_can/m_can_platform.c
+> @@ -46,11 +46,12 @@ static int iomap_write_reg(struct m_can_classdev *cde=
+v, int reg, int val)
+>  	return 0;
+>  }
+> =20
+> -static int iomap_write_fifo(struct m_can_classdev *cdev, int offset, int=
+ val)
+> +static int iomap_write_fifo(struct m_can_classdev *cdev, int offset,
+> +			    const void *val, size_t val_count)
+>  {
+>  	struct m_can_plat_priv *priv =3D cdev_to_priv(cdev);
+> =20
+> -	writel(val, priv->mram_base + offset);
+> +	iowrite32_rep(priv->base + offset, val, val_count);
+> =20
+>  	return 0;
+>  }
+> diff --git a/drivers/net/can/m_can/tcan4x5x-core.c b/drivers/net/can/m_ca=
+n/tcan4x5x-core.c
+> index 4f77b1dbd492..89d2009c895b 100644
+> --- a/drivers/net/can/m_can/tcan4x5x-core.c
+> +++ b/drivers/net/can/m_can/tcan4x5x-core.c
+> @@ -170,11 +170,11 @@ static int tcan4x5x_write_reg(struct m_can_classdev=
+ *cdev, int reg, int val)
+>  }
+> =20
+>  static int tcan4x5x_write_fifo(struct m_can_classdev *cdev,
+> -			       int addr_offset, int val)
+> +			       int addr_offset, const void *val, size_t val_count)
+>  {
+>  	struct tcan4x5x_priv *priv =3D cdev_to_priv(cdev);
+> =20
+> -	return regmap_write(priv->regmap, TCAN4X5X_MRAM_START + addr_offset, va=
+l);
+> +	return regmap_bulk_write(priv->regmap, TCAN4X5X_MRAM_START + addr_offse=
+t, val, val_count);
+>  }
+> =20
+>  static int tcan4x5x_power_enable(struct regulator *reg, int enable)
+> --=20
+> 2.32.0
 
+regards,
+Marc
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+--6lm5m36afn7usqet
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmEKW3gACgkQqclaivrt
+76lzFQgAoGyP7PWrdUH3/xPmFAnsp7gczwJXdHjgZ0zzjbfct3uQEenSkVVFT+RN
+sS8gN+B+Q7jIRk5QI+zUyeQqsbuPqWO76oguQIFkqCiKMkLyIQ5zi0cZhZcE5BUn
+Gr5no5wpH/jOVE6yW7UYKasm56+VqX5G5mSGl773mlK6B5Tp35RgVzo0BtmulBE7
+RtzXmy5FS8I6xCf11dzZ8o5WJuUxpDcRcrs8BQCUKeuZn2httzWLmhms73e9fyZ9
+O+9UKg6NvuC9etyas3pTdvTOH+B+bu1yWc+rhlwRm4aNG1pa9sFzcqSaUl4/O2Gp
+Do/FlRoh1s0SNmflPcgn6HPBVT8q0Q==
+=2Hg8
+-----END PGP SIGNATURE-----
+
+--6lm5m36afn7usqet--
