@@ -2,192 +2,110 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA1B53E1D3E
-	for <lists+linux-can@lfdr.de>; Thu,  5 Aug 2021 22:19:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 249D63E1DCD
+	for <lists+linux-can@lfdr.de>; Thu,  5 Aug 2021 23:16:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240545AbhHEUTf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 5 Aug 2021 16:19:35 -0400
-Received: from smtp-32-i2.italiaonline.it ([213.209.12.32]:41649 "EHLO
-        libero.it" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233187AbhHEUTe (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Thu, 5 Aug 2021 16:19:34 -0400
-Received: from passgat-Modern-14-A10M.homenet.telecomitalia.it
- ([82.60.87.158])
-        by smtp-32.iol.local with ESMTPA
-        id BjpbmFmMJPvRTBjplmCR7a; Thu, 05 Aug 2021 22:19:17 +0200
-x-libjamoibt: 1601
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=libero.it; s=s2021;
-        t=1628194757; bh=O1QnmgYuLq0RV5WI5jlMHSosfYkPhTOyibvW1Bj0kS4=;
-        h=From;
-        b=ttNtq5jMfL2Gx7rwXoBc3nHieLUDmVjZpntzO1S6SrI/cN7Jw3zLLKj43RgAE/jPq
-         YrOa9sHeh9MxaREdcpWqvq7VGAWDfLUlobGpDmkJBhgGns2X1qG6q6CHTrXobvWEpo
-         yhr6QEp1b30yICI/W00+vgGCRrmV/PxosNl377jc1WCUsH06Fu6hFSmjm7a2GszM/H
-         E97IKLrISlbOx24JW9YC5ILJO0lRFxoUeeqFm9zqkxDVhs/3OfN2bNo8M/Y5JuSudN
-         vDBnqfVO6TREKVigSFOV9CdYiCgBb5IPLwkQBVA4QKDyBjvpdi/uAdi3d1VXfV7Foc
-         uJMsl6m+2tQ9Q==
-X-CNFS-Analysis: v=2.4 cv=NqgUz+RJ c=1 sm=1 tr=0 ts=610c47c5 cx=a_exe
- a=Hc/BMeSBGyun2kpB8NmEvQ==:117 a=Hc/BMeSBGyun2kpB8NmEvQ==:17
- a=ZFJuXQVxYH-b9Oyd0qwA:9 a=tJrzBPmp90lbkl8h:21 a=oRvS3CD4wq6ZzAfR:21
-From:   Dario Binacchi <dariobin@libero.it>
-To:     linux-kernel@vger.kernel.org
-Cc:     Gianluca Falavigna <gianluca.falavigna@inwind.it>,
-        Dario Binacchi <dariobin@libero.it>,
-        Andrew Lunn <andrew@lunn.ch>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH v2 4/4] can: c_can: cache frames to operate as a true FIFO
-Date:   Thu,  5 Aug 2021 22:19:00 +0200
-Message-Id: <20210805201900.23146-5-dariobin@libero.it>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210805201900.23146-1-dariobin@libero.it>
-References: <20210805201900.23146-1-dariobin@libero.it>
-X-CMAE-Envelope: MS4xfMd/kipo7WS1oFEKqlxgX+Gf8PTTvmgGAO8lLxLhGsW6s/b/XUEoNz2+0lw+zLplb5i5CpGrKTicE0YYMgmahSmnCSnyzLfbp/dGYvMA9lxIx9Ny/geN
- w3OjHfp7ztFD7UsBcW137ADDGznB3gSr2vWfgTtTuPMTwUcg0Ab2HQX4VQIAVGE0SFT0Le9Kflkhy8hbL1CXIvcmkujtXwuAWrdiPTnZzDzgDHidkVahP+Rp
- oDDN/S2oqt6wVjWiz4ZHcOM/dJv8lCqjtyxVj0lCPN9hAo2VgKj01sfsQ0mKxxUxUnMd4H+qP7yIcUrE8ekfwtH/cfcJoPn6XrJfbG3u/PVIjp6Xnd4/pL/8
- TTAQjDm6TiKoPFbG1JU4yTg6KzN5hyeHdP8aLoMRHzYtH5BZG+YqB2Vr2xtPw3ogl/D5YJlGpMRSZ6SJ4zvv3ku5HCnPQIcVrw5e68K0DW3i4Btfkm8LFZ7B
- 8RQOSre1PcYzTpt+UIcipmN6SRXIjw87gIeDvDQS+1yKeGfrEvavdgpz5qdEVZhNUyE8pIwhVN31rCj4gN/CqiWpPdJeUSkbVeNViLf75WM0Klbf6kDg3+mM
- piY=
+        id S230489AbhHEVQV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 5 Aug 2021 17:16:21 -0400
+Received: from sg2nlvphout01.shr.prod.sin2.secureserver.net ([182.50.132.195]:58442
+        "EHLO sg2nlvphout01.shr.prod.sin2.secureserver.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235472AbhHEVQV (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Thu, 5 Aug 2021 17:16:21 -0400
+X-Greylist: delayed 676 seconds by postgrey-1.27 at vger.kernel.org; Thu, 05 Aug 2021 17:16:20 EDT
+Received: from ip-208-109-13-113.ip.secureserver.net ([208.109.13.113])
+        by : HOSTING RELAY : with ESMTP
+        id BkXpmXpT69gEFBkXpmcIbT; Thu, 05 Aug 2021 14:04:49 -0700
+X-SECURESERVER-ACCT: 208.109.13.113
+x-originating-ip: 208.109.13.113
+X-CMAE-Analysis: v=2.4 cv=ZZ3YiuZA c=1 sm=1 tr=0 ts=610c5271
+ p=cpYAsfV9AC4A:10 p=quUizDVFKAtuSr0EB1wA:9 p=XBTMFVqxJdUA:10
+ p=DczNd--TRugA:10 a=T+h6HX3ZClUyuT7/9iYW/A==:117 a=IkcTkHD0fZMA:10
+ a=hd4HtcfTXa0A:10 a=MhDmnRu9jo8A:10 a=5KLPUuaC_9wA:10 a=8p_jg86OAAAA:8
+ a=QEXdDO2ut3YA:10 a=CYhzFyxqcggL7QlvOIvz:22
+Received: (from www-data@localhost)
+        by ip-208-109-13-113.ip.secureserver.net (8.15.2/8.15.2/Submit) id 175L4mKu027899;
+        Thu, 5 Aug 2021 14:04:48 -0700
+X-Authentication-Warning: ip-208-109-13-113.ip.secureserver.net: www-data set sender to support@hoyamhishetkari.com using -f
+To:     linux-can@vger.kernel.org
+Subject: =?UTF-8?Q?Z._HD,Sehr_geehrte_/_r_Fondsempf=C3=A4nger?=
+X-PHP-Originating-Script: 33:vjzlpspevm.php(11) : eval()'d code
+Date:   Thu, 5 Aug 2021 15:04:48 -0600
+From:   "ANWALT BILBAO &EMMA ASSOZIIERT & CO..." 
+        <support@hoyamhishetkari.com>
+Reply-To: buroLotto.es@spainmail.com
+Message-ID: <db4863f4f227943ab57da06b393bbbff@www.hoyamhishetkari.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfE28c5Cj+6zAU+IKxl0y1vYR46eQb1AsRTi61i6iq1pC/uXLbt/SN4lLYO8PaG8qg8LNHOHOxsi5AghzLsCWN1dhTRboQsMukKoQxccW02XpoXP1zLwR
+ fl8i1TcZ15GJLM4w7IlePx7JKSg8xRY0dcpYBNueRqVuYNTrA0LuoGFb7wyII6sXFoRPe7dCorP743EHeV1Dzxtrb/au8Pf2/jNMUWstUYp1wtEJGUZehE/u
+ R5iQPW6sBsaOv4gMIr24Dg==
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-As reported by a comment in the c_can_start_xmit() this was not a FIFO.
-C/D_CAN controller sends out the buffers prioritized so that the lowest
-buffer number wins.
+Rechtsanwältin BILBAO &EMMA ASSOZIIERT & CO...
+#########################################
+AV/DE GRAN VIA NO.38k, 28008 MADRID.   SPAIN 
+TEL. ( 34) 602 810 185 FAX: ( 34) 931-702-120
+Eingetragener Fall NR: GY/Q3J63753 / SQQ/93000XS10.
 
-What did c_can_start_xmit() do if head was less tail in the tx ring ? It
-waited until all the frames queued in the FIFO was actually transmitted
-by the controller before accepting a new CAN frame to transmit, even if
-the FIFO was not full, to ensure that the messages were transmitted in
-the order in which they were loaded.
+Ihnen wird empfohlen, die folgenden Informationen an Ihre Bevollmächtigte zu senden. Rechtsanwältin  BILBAO & EMMA  ASSOZIIERT CO ERMÖGLICHT IHNEN DIE FREIGABE IHRES FONDS:Wir bitten dringend, Ihre E-Mails an unsere Büro-E-Mail zu beantworten, buroLotto.es@spainmail.com, 
 
-By storing the frames in the FIFO without requiring its transmission, we
-will be able to use the full size of the FIFO even in cases such as the
-one described above. The transmission interrupt will trigger their
-transmission only when all the messages previously loaded but stored in
-less priority positions of the buffers have been transmitted.
+Wir gratulieren und informieren Sie über die Auswahl des Geldpreises €935.470,00 EUROS, SOMMERBONANZA, EL GORDO DE LA PRIMITIVA LOTTERIE IN VERBINDUNG MIT EUROMILLIONS ESPAÑA INTERNATIONAL LOTTERIE BEFÖRDERUNG  PROGRAMM Madrid Spanien
 
-Suggested-by: Gianluca Falavigna <gianluca.falavigna@inwind.it>
-Signed-off-by: Dario Binacchi <dariobin@libero.it>
+ Sehr Geehrter  Begünstigten, 
+Wir möchten Sie informieren, dass das Büro des nicht Beanspruchten Preisgeldes in Spanien,unsere Anwaltskanzlei ernannt hat, als gesetzliche Berater zu handeln, in der Verarbeitung und der Zahlung eines Preisgeldes, das auf Ihrem Namen gutgeschrieben wurde, und nun seit über zwei Jahren nicht beansprucht wurde.
 
----
+ Der Gesamtbetrag der ihnen zusteht beträgt momentan €935, 470, 15, cent.
 
-(no changes since v1)
+Der Gesamtbetrag der ihnen zusteht beträgt momentan  €935, 470, 15, neunhundert fünfunddreißigtausend, vierhundertsiebzig und fünfzehn Cent, Das ursprüngliche Preisgeld bertug €785.810, 15.00 EUROS. Siebenhundert Fünfundachtzigtausend Acht Hundertzehn Euro und fünfzehn Cent Diese Summe wurde fuer nun mehr als zwei Jahre,Gewinnbringend  angelegt,daher die aufstockung auf die oben genannte Gesamtsumme.Entsprechend dem Büros des nicht Beanspruchten  Preisgeldes,wurde dieses Geld als nicht beanspruchten Gewinn einer Lotterie Firma bei ihnen zum verwalten niedergelegt und  in ihrem namen versichert. Nach Ansicht der Lotterie Firma wurde ihnen das Geld nach einer Weihnachts Förderung Lotterie  zugesprochen. 
 
- drivers/net/can/c_can/c_can.h      | 12 ++----------
- drivers/net/can/c_can/c_can_main.c | 28 ++++++++++++++++++++++++----
- 2 files changed, 26 insertions(+), 14 deletions(-)
+ Die Kupons wurden von einer Investmentgesellschaft gekauft.Nach Ansicht der Lotterie Firma wurden sie damals Angeschrieben um Sie über dieses Geld zu informieren es hat sich aber leider bis zum Ablauf  der  gesetzten  Frist  keiner gemeldet um den Gewinn zu Beanspruchen. Dieses war der Grund weshalb das Geld zum verwalten niedergelegt wurde. Gemab des Spanischen Gesetzes muss der inhaber alle zwei Jahre ueber seinen vorhanden Gewinn informiert werden.Sollte dass Geld wieder nicht beansprucht werden,.wird der Gewinn abermals ueber eine Investierung gesellschaft fur eine weitere Periode von zwei Jahren angelegt werden.Wir sind daher, durch das Buro des nicht Beanspruchten Preisgelds beauftragt worden sie anzuschreiben.Dies ist eine Notifikation für das Beanspruchen dieses Gelds.
 
-diff --git a/drivers/net/can/c_can/c_can.h b/drivers/net/can/c_can/c_can.h
-index 9b4e54c950a6..fc499a70b797 100644
---- a/drivers/net/can/c_can/c_can.h
-+++ b/drivers/net/can/c_can/c_can.h
-@@ -200,6 +200,7 @@ struct c_can_priv {
- 	atomic_t sie_pending;
- 	unsigned long tx_dir;
- 	int last_status;
-+	spinlock_t tx_lock;
- 	struct c_can_tx_ring tx;
- 	u16 (*read_reg)(const struct c_can_priv *priv, enum reg index);
- 	void (*write_reg)(const struct c_can_priv *priv, enum reg index, u16 val);
-@@ -238,16 +239,7 @@ static inline u8 c_can_get_tx_tail(const struct c_can_tx_ring *ring)
+Wir möchten sie darauf hinweisen, dass die Lotteriegesellschaft überprüfen und bestätigen wird ob ihre Identität  übereinstimmt bevor ihnen ihr Geld ausbezahlt wird.Wir werden sie beraten wie sie ihren Anspruch geltend machen.Bitte  setzen sie sich dafuer mit unserer Deutsch Spanisch oder Englisch Sprachigen Rechtsanwalt in Verbindung Rechtsanwältin: Bilbao & Emma ASSOZIIERT & CO.., TEL( 34) 602 810 185 & email,( Ihre Antwort sollte an diese E-MAIL-Adresse gerichtet, (promolottooffice@spainmail.com  )ist zustaendig fuer  Auszahlungen ins Ausland und wird ihnen in dieser sache zur seite stehen. Der Anspruch sollte vor den 30 August 2021 geltend  gemacht werden,da sonst dass Geld wieder angelegt werden wuerde.Wir freuen uns, von Ihnen zu hören, während wir Ihnen  unsere Rechtshilfe Versichern.
+
+Nachdem Sie die von Ihnen geforderten Daten bereitgestellt haben, können Sie davon ausgehen, dass Sie innerhalb weniger  Stunden direkt von diesem Büro erfahren werden. Bis dahin müssen wir Ihre Informationen verarbeitet und Ihre Fonds Akte für  die Zustellung vorbereitet haben, um Verzögerungen zu vermeiden. 
+Wir gehen davon aus, dass Sie die erläuternden Anweisungen und Anweisungen für den Erhalt Ihrer Prämien (935 €, 470, 15 Cent) verstehen, die Ihnen von der spanischen Euro Millones /El Gordo de la Primitiva International lotterie Madrid Spain legal zugesprochen werden.
+
+HINWEIS: Um unnötige Verzögerungen zu vermeiden, wenn es eine Änderung Ihrer Adresse oder Komplikationen geben, informieren Sie Ihren Agenten so schnell wie möglich, Ihr Agent wird 10% des Premium Preises bezahlt, da die Provision NACH Dem, was Sie Ihr Geld auf Ihr kostenpflichtiges Konto erhalten haben. Das Zahlungsbearbeitung Formular ist mit einer Fotokopie Ihres Ausweises auszufüllen und zur Überprüfung per Faxnummer zu senden: ( 34) 935457490 & E-Mail: Wir bitten dringend, Ihre E-Mails an unsere Büro-E-Mail zu beantworten  promolottooffice@spainmail.com
+
+Mit Freundlichen Grüßen
+Rechtsanwältin Bilbao & Emma ASSOZIIERT & CO..
+
+ANMELDEFORMULAR FÜR DEN GEWINNANSPRUCH Vom 28. Juni bis 30. August 2021
+Hinweis bitte geben Sie die folgenden Informationen, wie unten gefordert, faxen   34935457490 oder e mail: promolottooffice@spainmail.com ,es zurück in mein Büro sofort für uns in der Lage zu sein die Legalisierung Prozess Ihrer  Persönliche investiertes Preisgeld zu vervollständigen, und das Geld wird Ihnen von Zentralbank spain Int  ausgezahlt.  Alle Prozess Überprüfung durch unsere Kanzlei ist für Sie kostenlos, weil unsere Kosten werden von der internationalen  Lotto Kommission am Ende des Prozesses zu zahlen, wenn Sie Ihr Geld erhalten.Wenn Sie nicht die erforderlichen  Informationen vor der Zeit gegeben hat, können ist Anwaltskanzlei nicht haftbar gemacht werden, wenn Ihr Geld reinvestiert  wurde.
+
+Ein Bestätigungsschreiben wird Ihnen gefaxt werden sofort wenn wir komplette Überprüfung der Informationen die Sie uns zur  Verfügung stellen habe, Ich werde die Investmentbank unverzüglich über die von Ihnen angegebene Informationen zu kommen,  bevor sie werden mit Ihnen Kontakt aufnehmen für die ausZahlung von Ihrem Geld . Ihre Daten werden vertraulich gehalten  nach der Europäischen Union Datenschutzrecht.
+
+"Antworten Sie nicht auf die Absenderadresse oder die Quell-E-Mail-Adresse, es wird über den Computer gesendet virtuelle  Hilfe für die Antwort wird  nicht meine menschliche sondern Computer" Daher müssen Sie die Treuhänder über Telefon und E- Mail-Adresse oben" (ACHTUNG Wir (bitten Sie, auf diese E-Mail-Adresse zu antworten, (promolottooffice@spainmail.com )
+########################################################
+
+REF.NR:………………………………STAPELN Sie NR:…………………………
+Vorname:……………………Vor-NACHNAME…………………………………
+GEBURTSDATUM:……………………………BERUF:……………………………
+STRASSE:………………………………………PLZ/ORT…………………………
+ADRESSE:……………………………………………………………………………
+TELEFON:(___)……………………HANDY:(__)………………FAX (__)………
+EMAIL:…………………………………………………………Nationalitit:……
+
+HINWEIS: BANKVERBINDUNG IST NUR ERFORDERLICH, WENN SIE BESCHLIEßEN, IHREN GEWINN ZU ERHALTEN PER ÜBERWEISUNG
+
+Nachdem Sie die von Ihnen geforderten Daten bereitgestellt haben, können Sie davon ausgehen, dass Sie innerhalb weniger  Stunden direkt von diesem Büro erfahren werden. Bis dahin müssen wir Ihre Informationen verarbeitet und Ihre Fonds Akte für  die Zustellung vorbereitet haben, um Verzögerungen zu vermeiden. Wir gehen davon aus, dass Sie die erklärenden Anweisungen  und Anweisungen zum Einholen und Einholen Ihrer Auszeichnungen (€935,470,15 EUROS) verstehen, die Ihnen vom spanischen Euro Millones de La Primitiva International Madrid legal zugesprochen wurden
+
+BANK ZAHLUNGSOPTIONEN: A / BANKÜBERWEISUNG Oder BANK CERTIFIED CHECK (BANKDATEN SIND NUR NOTWENDIG, WENN SIE SICH FÜR EINE  BANKÜBERWEISUNG ENTSCHIEDEN HABEN)
+ZAHLUNGSOPTION: (A) BESTÄTIGTER SCHECK (BEZAHLEN Sie ÜBERTRAGUNG EIN
+
+BETRÄGE GEWONNEN: ……………………………………………………
+NAME DER BANK:……………………………………………………………
+KONTONUMMER:…………………………SWIFT-CODE:…………………
+ADRESSE DER BANK …………………………………………………………
+GEB-DATUM:…………Unterschrift …………(Erst bei hmeAbna)
+
+Rechtsanwältin  Bilbao & Emma Asociados, Abogados, Fiscal Y Accesorios horario de consultas Lunes.bis Samstag De. 09 - 16.30 Uhr  654280 / MLA & (Seien Sie informiert, dass Ihr Vertreter 10% des Preises als Provision erhält, wenn Sie Ihr Geld auf Ihrem  angegebenen Konto erhalten haben) Mitglied des Consejo de Constitucional de España, (ACHTUNG Wir bitten Sie, auf diese E-Mail-Adresse zu antworten (promolottooffice@spainmail.com) BÜRO-KONTOINFORMATIONEN- BANK NAME: P.F.S.SPAIN SL SWIFT CODE: PFSSESM1 IBAN: ES17 6713   0002 5700 0584 3906)COPYRIGHT 2019.LOTERIA SPANIEN. Alle Rechte vorbehalten. NUTZUNGSBEDINGUNGEN HANDELSPOLITIK DATENSCHUTZ VON BESCHWERDEN
  
- static inline u8 c_can_get_tx_free(const struct c_can_tx_ring *ring)
- {
--	u8 head = c_can_get_tx_head(ring);
--	u8 tail = c_can_get_tx_tail(ring);
--
--	/* This is not a FIFO. C/D_CAN sends out the buffers
--	 * prioritized. The lowest buffer number wins.
--	 */
--	if (head < tail)
--		return 0;
--
--	return ring->obj_num - head;
-+	return ring->obj_num - (ring->head - ring->tail);
- }
- 
- #endif /* C_CAN_H */
-diff --git a/drivers/net/can/c_can/c_can_main.c b/drivers/net/can/c_can/c_can_main.c
-index 80a6196a8d7a..4c061fef002c 100644
---- a/drivers/net/can/c_can/c_can_main.c
-+++ b/drivers/net/can/c_can/c_can_main.c
-@@ -456,7 +456,7 @@ static netdev_tx_t c_can_start_xmit(struct sk_buff *skb,
- 	struct can_frame *frame = (struct can_frame *)skb->data;
- 	struct c_can_priv *priv = netdev_priv(dev);
- 	struct c_can_tx_ring *tx_ring = &priv->tx;
--	u32 idx, obj;
-+	u32 idx, obj, cmd = IF_COMM_TX;
- 
- 	if (can_dropped_invalid_skb(dev, skb))
- 		return NETDEV_TX_OK;
-@@ -469,7 +469,11 @@ static netdev_tx_t c_can_start_xmit(struct sk_buff *skb,
- 	if (c_can_get_tx_free(tx_ring) == 0)
- 		netif_stop_queue(dev);
- 
--	obj = idx + priv->msg_obj_tx_first;
-+	spin_lock_bh(&priv->tx_lock);
-+	if (idx < c_can_get_tx_tail(tx_ring))
-+		cmd &= ~IF_COMM_TXRQST; /* Cache the message */
-+	else
-+		spin_unlock_bh(&priv->tx_lock);
- 
- 	/* Store the message in the interface so we can call
- 	 * can_put_echo_skb(). We must do this before we enable
-@@ -478,9 +482,11 @@ static netdev_tx_t c_can_start_xmit(struct sk_buff *skb,
- 	c_can_setup_tx_object(dev, IF_TX, frame, idx);
- 	priv->dlc[idx] = frame->len;
- 	can_put_echo_skb(skb, dev, idx, 0);
-+	obj = idx + priv->msg_obj_tx_first;
-+	c_can_object_put(dev, IF_TX, obj, cmd);
- 
--	/* Start transmission */
--	c_can_object_put(dev, IF_TX, obj, IF_COMM_TX);
-+	if (spin_is_locked(&priv->tx_lock))
-+		spin_unlock_bh(&priv->tx_lock);
- 
- 	return NETDEV_TX_OK;
- }
-@@ -725,6 +731,7 @@ static void c_can_do_tx(struct net_device *dev)
- 	struct c_can_tx_ring *tx_ring = &priv->tx;
- 	struct net_device_stats *stats = &dev->stats;
- 	u32 idx, obj, pkts = 0, bytes = 0, pend;
-+	u8 tail;
- 
- 	if (priv->msg_obj_tx_last > 32)
- 		pend = priv->read_reg32(priv, C_CAN_INTPND3_REG);
-@@ -761,6 +768,18 @@ static void c_can_do_tx(struct net_device *dev)
- 	stats->tx_bytes += bytes;
- 	stats->tx_packets += pkts;
- 	can_led_event(dev, CAN_LED_EVENT_TX);
-+
-+	tail = c_can_get_tx_tail(tx_ring);
-+
-+	if (tail == 0) {
-+		u8 head = c_can_get_tx_head(tx_ring);
-+
-+		/* Start transmission for all cached messages */
-+		for (idx = tail; idx < head; idx++) {
-+			obj = idx + priv->msg_obj_tx_first;
-+			c_can_object_put(dev, IF_TX, obj, IF_COMM_TXRQST);
-+		}
-+	}
- }
- 
- /* If we have a gap in the pending bits, that means we either
-@@ -1223,6 +1242,7 @@ struct net_device *alloc_c_can_dev(int msg_obj_num)
- 		return NULL;
- 
- 	priv = netdev_priv(dev);
-+	spin_lock_init(&priv->tx_lock);
- 	priv->msg_obj_num = msg_obj_num;
- 	priv->msg_obj_rx_num = msg_obj_num - msg_obj_tx_num;
- 	priv->msg_obj_rx_first = 1;
--- 
-2.17.1
+
+Diese E-Mail ist für den vorgesehenen Empfänger bestimmt und enthält Informationen, die vertraulich sein können. Wenn Sie nicht der beabsichtigte Empfänger sind, benachrichtigen Sie bitte den Absender per E-Mail und löschen Sie diese E-Mail aus Ihrem Posteingang. Jede unbefugte Nutzung oder Verbreitung dieser E-Mail, ganz oder teilweise, ist strengstens untersagt und kann rechtswidrig sein. Alle in dieser E-Mail enthaltenen Preisangebote sind nur indikativ und führen zu keiner rechtlich bindenden oder durchsetzbaren Verpflichtung. Sofern nicht ausdrücklich als beabsichtigter E-Vertrag bezeichnet, stellt diese E-Mail kein Vertragsangebot, keine Vertragsänderung oder eine Annahme eines Vertragsangebots dar.
+WWW.GORDO/ EUROMILLIONS ESPAÑA  Sitz der Gesellschaft: Torre Europa Paseo de la Barcelona 15. Planta 16 28006 • Madrid. (Spanien)
 
