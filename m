@@ -2,91 +2,61 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F24303E04CB
-	for <lists+linux-can@lfdr.de>; Wed,  4 Aug 2021 17:49:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 291C83E1254
+	for <lists+linux-can@lfdr.de>; Thu,  5 Aug 2021 12:10:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239206AbhHDPtz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 4 Aug 2021 11:49:55 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:43648 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239442AbhHDPtz (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 4 Aug 2021 11:49:55 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 174FnRuh010232;
-        Wed, 4 Aug 2021 10:49:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1628092167;
-        bh=uGCZbtqEYmK5kLgwupBcfUZCsog7QexvO2Uxics2r+k=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=lRDZ119Vp5RfkrAPbJiFD7zbm8ynrlWp6+fMlaaaryaQxnuKSZdG+TBxRQNow/CLB
-         jvaela/0MA9K+THEyyCqD8+oTFtzWweX8VhEpE8zeUrIskz2RgkNDfiHmXfrFlDgbw
-         KINebrXHFvtbY0rXXbxMACqHSowwM4rhtcj2HSFM=
-Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 174FnR6m121600
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 4 Aug 2021 10:49:27 -0500
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Wed, 4 Aug
- 2021 10:49:27 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Wed, 4 Aug 2021 10:49:26 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 174FnRsq039974;
-        Wed, 4 Aug 2021 10:49:27 -0500
-Date:   Wed, 4 Aug 2021 10:49:27 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-CC:     Aswath Govindraju <a-govindraju@ti.com>,
-        Lokesh Vutla <lokeshvutla@ti.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sriram Dash <sriram.dash@samsung.com>,
-        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] dt-bindings: net: can: Document power-domains property
-Message-ID: <20210804154927.w5jtppcc6n6qh7mf@never>
-References: <20210802091822.16407-1-a-govindraju@ti.com>
- <20210804072341.l4flosh7rkvma22o@pengutronix.de>
+        id S240483AbhHEKKu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 5 Aug 2021 06:10:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39002 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240491AbhHEKKh (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 5 Aug 2021 06:10:37 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CBFFC0617BD
+        for <linux-can@vger.kernel.org>; Thu,  5 Aug 2021 03:10:17 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id z11so7535644edb.11
+        for <linux-can@vger.kernel.org>; Thu, 05 Aug 2021 03:10:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=J67+rxbQxfS8kPDQ/50P30WNOuT2eFzd+bURjICaS/k=;
+        b=iS9YA7D4AkLyKrMVsoVYMawu0L36NuU4+ZSSyySlEHd80Db/SKmaXNHUYbn10iE1ak
+         iC2IvrlH8v1AbmVGIfByuGkfSJI0XOychxHlUayNB69sXT4UE/GxiJdUnwpUeLi55ukG
+         xxmbK315oyKozAfiGnXEqKK3PxzEgZV5MZYS8JrbDSFfNkjPPnwGCrlh5tDeKwhJwNKw
+         T5dIuH8sR8enUCr5iznpK0TZ2LjgjrjjYSvOKCwjpML2kXz9bFVQEOg044XfixvXje/K
+         h6N675zJB4VwjShIVvQTmJWjRDKft4Rcevz64ZRcI/rUzQ/43BUMnv9UMxVY4mSVx0dv
+         +ZPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=J67+rxbQxfS8kPDQ/50P30WNOuT2eFzd+bURjICaS/k=;
+        b=XXhG3wf2UTVGzWKPn9DBMhakDv+QNd85SqDrZHj3Jo0XAOnqBD0UkS41I9PBuG6bEF
+         uigHa8YHISF1UUlrkxgYSPEtnJgcPdEf/CX59JcBT4VD4YBk7hxl/SJhGfQvJqENGHr3
+         8LRMBxPekLE1AJy5JRpEhbMn8OZ975d0yaCuKUQ6N5KskSaJuUk8M9Rr9fWQ1IX5Xh10
+         NVeWr01gxfkOcVPdd6OxphKbqpgR2QQeKdmW46wO58F2OF65WEjigV3HkyK730DSOLh3
+         1iBvWu7njXgFcyf+onKvYtYy/MLy45b7LQ1omD6DsGkE657PVNAh/KihMa+BsWQEZZ+L
+         q8lA==
+X-Gm-Message-State: AOAM531Z05qRFpUDbnPTzwlt7i4FJcAjFg0+KnPL9aZxpY48QKqdpEKB
+        ugKIw8YH4RaBIiMGfrJNXbZfYBF6vTBni6gitF0=
+X-Google-Smtp-Source: ABdhPJz/RKmv260xIbuerDTPdwMwXLpAeKReSpRsKd2xVxrYh4CfQJfzAebDIdig2CS2Izsib4l5qV0PM0JZd046dok=
+X-Received: by 2002:a05:6402:40c7:: with SMTP id z7mr5373679edb.193.1628158216069;
+ Thu, 05 Aug 2021 03:10:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210804072341.l4flosh7rkvma22o@pengutronix.de>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Received: by 2002:a05:6408:258c:b029:e3:fe5c:5c2d with HTTP; Thu, 5 Aug 2021
+ 03:10:15 -0700 (PDT)
+Reply-To: theresabangurah3333@yahoo.com
+From:   Theresa Bangurah <mariamabah77879@gmail.com>
+Date:   Thu, 5 Aug 2021 11:10:15 +0100
+Message-ID: <CAAi==jrP1LU0nh-DrLEYOsm5GW=VtCGzFW8zeRyVbCcv17qusA@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 09:23-20210804, Marc Kleine-Budde wrote:
-> On 02.08.2021 14:48:22, Aswath Govindraju wrote:
-> > Document power-domains property for adding the Power domain provider.
-> > 
-> > Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-> 
-> Applied to linux-can-next/testing.
-> 
-> BTW: TI's dkim is broken:
-> 
-> |   ✗ [PATCH v2] dt-bindings: net: can: Document power-domains property
-> |     + Link: https://lore.kernel.org/r/20210802091822.16407-1-a-govindraju@ti.com
-> |     + Acked-by: Rob Herring <robh@kernel.org>
-> |     + Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> |   ---
-> |   ✗ BADSIG: DKIM/ti.com
-> 
-
-I have taken this up with TI's IT operations folks, Thanks for the headsup.
-
 -- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+My name is Mrs.Theresa Bangurah,i am American citizen i have something
+important to tell you.Reply me immediately you get this message.God
+bless you.
