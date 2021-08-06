@@ -2,88 +2,90 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E1013E2866
-	for <lists+linux-can@lfdr.de>; Fri,  6 Aug 2021 12:16:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BB7B3E28BF
+	for <lists+linux-can@lfdr.de>; Fri,  6 Aug 2021 12:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244924AbhHFKQw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 6 Aug 2021 06:16:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56824 "EHLO
+        id S245112AbhHFKhC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 6 Aug 2021 06:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244773AbhHFKQs (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Aug 2021 06:16:48 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B437C061798;
-        Fri,  6 Aug 2021 03:16:28 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id k4so10436036wrc.0;
-        Fri, 06 Aug 2021 03:16:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=in-reply-to:to:cc:from:subject:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=ow/YCifQJGCqqdbMI3qwBTpDZquMwyp33IWsPkh/PBk=;
-        b=SCGPwxQ6KgkiYy5MzVMWte93J3GhGS0pJpxCILWPJYqM9CVJfJcNEYdhe+Fa946bwf
-         /QcpMwzY5VVNPjUzfBCL8vgaN7RDHvCzuCUksogEahUKF5Yp2H2sLmTsLzc7CAdxtN/9
-         17vPe5rrl9EAbwuVejV68rz+kQK5WD0OjmADECeDOsMyVESHuzupIvUfz973BXqYhqV4
-         mRy9o/pOzhRHZWY8KFMGYMFnxhGj0/MXjUIhATdrN1aAf2iEhn5d6ERGEeqrUwB+fR1x
-         HYI83rzvM8qMImZOiHbe/q/DS3yUxoGIp4GxawwPFQb6MvdnEpo0mvCJoxuNRCgZJHa8
-         a5Ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:in-reply-to:to:cc:from:subject:message-id:date
-         :user-agent:mime-version:content-language:content-transfer-encoding;
-        bh=ow/YCifQJGCqqdbMI3qwBTpDZquMwyp33IWsPkh/PBk=;
-        b=f6JT+77CBLPxbkN+RGj+7ytxKJYY+oY+KbuYwq91GzrusnlVeFlw3FbgvpfyQhZVLJ
-         IifiegEH5flyacuV6ilmlx1MQIVG2cPCL+q/Vx4j8NSPgKTfE20k1voHmTLgv2HQaeHt
-         zHHa3PD55zqqOkhBwc6m7+MVjsH8zw0dc/R8lIxtsqyuVT+9+RE53PeThUk8+4UyjMr0
-         pZvC3PL7j6OXuW3H/XRuzay3FGSXB7eDQW+1jngrOWrlZQEkOfZZFIYiN8S0KLCY0Gu0
-         HMfYaQLTDR7vhCh6wAtx4Wxeujv5rPdlFLuWWYxVZ0eyiLcnOUPkqhjGpEB4vFONKO91
-         e7tA==
-X-Gm-Message-State: AOAM530lhZ5eWr9F2y5OsoFqEw3f7bazlGTvlbF/nbvD+0XLgLPdrWI5
-        2oEO72trLBuota1qfrJJMDE=
-X-Google-Smtp-Source: ABdhPJwbkvbgiTRgY5IR0dovVLsrUIQhDeHx8JeQV7DNUG5VSTN/HhalGtbn44s/F/jw8PZO1ebkzQ==
-X-Received: by 2002:a5d:6102:: with SMTP id v2mr9565416wrt.223.1628244987322;
-        Fri, 06 Aug 2021 03:16:27 -0700 (PDT)
-Received: from [192.168.0.10] (105.72.60.188.dynamic.wline.res.cust.swisscom.ch. [188.60.72.105])
-        by smtp.gmail.com with ESMTPSA id z3sm11726983wmf.6.2021.08.06.03.16.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Aug 2021 03:16:26 -0700 (PDT)
-In-Reply-To: <20190208132954.28166-1-andrejs.cainikovs@netmodule.com>
-To:     ezequiel@collabora.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-can@vger.kernel.org
-From:   Andrejs Cainikovs <andrejs.cainikovs@gmail.com>
+        with ESMTP id S245103AbhHFKhC (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Aug 2021 06:37:02 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 828C3C061798
+        for <linux-can@vger.kernel.org>; Fri,  6 Aug 2021 03:36:46 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1mBxDX-0000xn-9c; Fri, 06 Aug 2021 12:36:43 +0200
+Received: from pengutronix.de (unknown [IPv6:2a02:810a:8940:aa0:66f0:974b:98ab:a2fd])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 48280661E12;
+        Fri,  6 Aug 2021 10:36:41 +0000 (UTC)
+Date:   Fri, 6 Aug 2021 12:36:39 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Andrejs Cainikovs <andrejs.cainikovs@gmail.com>
+Cc:     ezequiel@collabora.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
+        Dario Binacchi <dariobin@libero.it>
 Subject: Re: [PATCH 0/2] D_CAN RX buffer size improvements
-Message-ID: <4da667f3-899a-459c-2cca-6514135a1918@gmail.com>
-Date:   Fri, 6 Aug 2021 12:16:26 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+Message-ID: <20210806103639.q3xim42zcispv6ak@pengutronix.de>
+References: <20190208132954.28166-1-andrejs.cainikovs@netmodule.com>
+ <4da667f3-899a-459c-2cca-6514135a1918@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ljdw7bteqjpthojv"
+Content-Disposition: inline
+In-Reply-To: <4da667f3-899a-459c-2cca-6514135a1918@gmail.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Ezequiel,
 
-Sorry for a late reply. I'm the author of this patch set, and I will 
-have a look at this after I obtain the hardware. I hope this is still 
-relevant.
+--ljdw7bteqjpthojv
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-Andrejs.
+On 06.08.2021 12:16:26, Andrejs Cainikovs wrote:
+> Sorry for a late reply. I'm the author of this patch set, and I will
+> have a look at this after I obtain the hardware. I hope this is still
+> relevant.
 
-  > Hi everyone,
-  >
-  > This series was recently brought to my attention, in connection to a
-long-standing packet drop issue that we had on a Sitara-based product.
-  >
-  > I haven't tested this personally, but I've been notified that this
-was backported to the v4.19 kernel, and the packet drop was fixed.
-  >
-  > It seems the series never managed to get upstreamed, but I think this
-should be resurrected and merged (probably with after some cleanup/review).
-  >
-  > Thanks,
-  > Ezequiel
+Dario (Cc'ed) created a proper patch series to support 64 message
+objects. The series has been mainlined in:
+
+https://git.kernel.org/linus/132f2d45fb2302a582aef617ea766f3fa52a084c
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--ljdw7bteqjpthojv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmENELUACgkQqclaivrt
+76n1bAf+Jf09YVSpTXhDggE8e/L/5sth+tbUq8M6PRmZmTP/U+ZXCHFhgKCp/09+
+3ua8CL7EwGSsiEsmFmt/QCIdtn9ruIHkgZ8s4uCXhUM45YSKqC7OyPGLEf8n+DZT
+cctJyMFAj5rVDswh7nGET3SyrelJWByKYvRbasK2dT3ivhXt+Fr9AUbrq3BXdazh
+Ib/Yy5SJfLkOMRj7qHZHp9AKn9vmZ39x3uI2klfQv/gHRt1MCAplU4UH4BKQ1v+R
+j1aGme/ITy6QcprlwtXW+Asb6oQ8nV6KGbj9XdfSy1GuM57fK17fFQolizXMAvTC
+ErWUrtA1vRq+vdoTUTYDd+Y9aDPR6Q==
+=O5oe
+-----END PGP SIGNATURE-----
+
+--ljdw7bteqjpthojv--
