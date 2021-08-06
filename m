@@ -2,50 +2,111 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF0533E2360
-	for <lists+linux-can@lfdr.de>; Fri,  6 Aug 2021 08:41:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F030C3E23E6
+	for <lists+linux-can@lfdr.de>; Fri,  6 Aug 2021 09:21:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242641AbhHFGlm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 6 Aug 2021 02:41:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38640 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229625AbhHFGll (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Fri, 6 Aug 2021 02:41:41 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 11FBD611B0;
-        Fri,  6 Aug 2021 06:41:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1628232085;
-        bh=iuGbdZGYxA9aBjWOoujin9mNkUt7jmXvTheOfTYXCcQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=r1m5rb1vWawHqiDT6Ol7HjLFTwjprnlRlUqniSZX16DkggMREEI4wyMmyHKncTbEH
-         XWl+TqkPWwyulEV9fCUTg8Ksvn5GGZ15zmwdVJOxK457KFiJQWTzToM+fMRFvR4uuT
-         wZuRuQdv+VT2o6H7DTkFg0GlaKAyA0CbF29oWbdU=
-Date:   Fri, 6 Aug 2021 08:41:22 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-stable <stable@vger.kernel.org>,
-        Ziyang Xuan <william.xuanziyang@huawei.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: Re: [PATCH stable 4.4 4.9] can: raw: raw_setsockopt(): fix raw_rcv
- panic for sock UAF
-Message-ID: <YQzZkjg20mPXHUqK@kroah.com>
-References: <20210803112241.3253-1-socketcan@hartkopp.net>
+        id S243591AbhHFHVN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 6 Aug 2021 03:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44034 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243616AbhHFHVM (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Aug 2021 03:21:12 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17832C06179A
+        for <linux-can@vger.kernel.org>; Fri,  6 Aug 2021 00:20:56 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1mBu9y-0002hU-1c; Fri, 06 Aug 2021 09:20:50 +0200
+Received: from pengutronix.de (unknown [IPv6:2a02:810a:8940:aa0:66f0:974b:98ab:a2fd])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 1B0BC661BEA;
+        Fri,  6 Aug 2021 07:20:46 +0000 (UTC)
+Date:   Fri, 6 Aug 2021 09:20:45 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Dario Binacchi <dariobin@libero.it>
+Cc:     linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        devicetree@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v5] dt-bindings: net: can: c_can: convert to json-schema
+Message-ID: <20210806072045.akase7hseu4wrxxt@pengutronix.de>
+References: <20210805192750.9051-1-dariobin@libero.it>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ywt3kfhn3c2zmo73"
 Content-Disposition: inline
-In-Reply-To: <20210803112241.3253-1-socketcan@hartkopp.net>
+In-Reply-To: <20210805192750.9051-1-dariobin@libero.it>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue, Aug 03, 2021 at 01:22:41PM +0200, Oliver Hartkopp wrote:
-> From: Ziyang Xuan <william.xuanziyang@huawei.com>
-> 
-> commit 54f93336d000229f72c26d8a3f69dd256b744528 upstream.
-> 
-> We get a bug during ltp can_filter test as following.
 
-thanks for the backport.
+--ywt3kfhn3c2zmo73
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-greg k-h
+On 05.08.2021 21:27:50, Dario Binacchi wrote:
+> Convert the Bosch C_CAN/D_CAN controller device tree binding
+> documentation to json-schema.
+>=20
+> Document missing properties.
+> Remove "ti,hwmods" as it is no longer used in TI dts.
+> Make "clocks" required as it is used in all dts.
+> Update the examples.
+>=20
+> Signed-off-by: Dario Binacchi <dariobin@libero.it>
+
+[...]
+
+> +if:
+> +  properties:
+> +    compatible:
+> +      contains:
+> +        enum:
+> +          - bosch,d_can
+> +
+> +then:
+> +  properties:
+> +    interrupts:
+> +      minItems: 4
+> +      maxItems: 4
+
+The driver uses only 1 interrupt, on the other hand the only in-tree
+user the bosch,d_can compatible specifies 4 interrupts.
+
+Marc
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--ywt3kfhn3c2zmo73
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmEM4ssACgkQqclaivrt
+76kH+wf/Us0Znp2pcbUwxbQq8O11+Bbroua1J8Na8qc7NwTESuk9N2Qu0zpUO8Tz
+oTTsibqJD9m3Z3AXxILJcv0mueNL4NbvFdjQ2hd7kl28X7B1KgqJvx63DLRrI9Vp
+ZtY1ve+ZEqf1ZwG0CnHThvLBqAR0102h29X7HrjS1JGD9mVNXiobqArfcLfh5Lpu
+7rGXUYj6OtQmg+QoWsduOpMAwod91M0bCkvGuTDZGqdCOxyTb/TZPZTtQOTS0e2Z
+FBSD8hp8mp4AffaX3MXe2rEbDCSY/ZRFlhth3WRigVSu0rpf5m0al9QiRcOe9nUc
+0hcetz9jGIIn4gNvOm6nxBKRXO10MA==
+=Boa7
+-----END PGP SIGNATURE-----
+
+--ywt3kfhn3c2zmo73--
