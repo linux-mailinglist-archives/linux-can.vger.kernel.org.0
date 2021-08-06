@@ -2,31 +2,31 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D2903E272F
-	for <lists+linux-can@lfdr.de>; Fri,  6 Aug 2021 11:25:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F05A33E2765
+	for <lists+linux-can@lfdr.de>; Fri,  6 Aug 2021 11:37:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231553AbhHFJZt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 6 Aug 2021 05:25:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44796 "EHLO
+        id S244478AbhHFJhW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 6 Aug 2021 05:37:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231489AbhHFJZt (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Aug 2021 05:25:49 -0400
+        with ESMTP id S244396AbhHFJhW (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Aug 2021 05:37:22 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0591AC061798
-        for <linux-can@vger.kernel.org>; Fri,  6 Aug 2021 02:25:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43960C061798
+        for <linux-can@vger.kernel.org>; Fri,  6 Aug 2021 02:37:07 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1mBw6b-0000hA-5H; Fri, 06 Aug 2021 11:25:29 +0200
+        id 1mBwHm-00029e-MZ; Fri, 06 Aug 2021 11:37:02 +0200
 Received: from pengutronix.de (unknown [IPv6:2a02:810a:8940:aa0:66f0:974b:98ab:a2fd])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 58E50661D38;
-        Fri,  6 Aug 2021 09:25:25 +0000 (UTC)
-Date:   Fri, 6 Aug 2021 11:25:23 +0200
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 63286661D5B;
+        Fri,  6 Aug 2021 09:37:00 +0000 (UTC)
+Date:   Fri, 6 Aug 2021 11:36:58 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     Dario Binacchi <dariobin@libero.it>
 Cc:     linux-kernel@vger.kernel.org,
@@ -38,18 +38,15 @@ Cc:     linux-kernel@vger.kernel.org,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
         Wolfgang Grandegger <wg@grandegger.com>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [RESEND PATCH 4/4] can: c_can: cache frames to operate as a true
- FIFO
-Message-ID: <20210806092523.hij5ejjq6wecbgfr@pengutronix.de>
-References: <20210725161150.11801-1-dariobin@libero.it>
- <20210725161150.11801-5-dariobin@libero.it>
- <20210804094515.ariv7d24t2i4hic5@pengutronix.de>
- <1485600069.218377.1628194566441@mail1.libero.it>
+Subject: Re: [PATCH v2 4/4] can: c_can: cache frames to operate as a true FIFO
+Message-ID: <20210806093658.rvzw7zycrmyp4msp@pengutronix.de>
+References: <20210805201900.23146-1-dariobin@libero.it>
+ <20210805201900.23146-5-dariobin@libero.it>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7iqxv4fk64mddgi7"
+        protocol="application/pgp-signature"; boundary="kkgc47zk5ugabioc"
 Content-Disposition: inline
-In-Reply-To: <1485600069.218377.1628194566441@mail1.libero.it>
+In-Reply-To: <20210805201900.23146-5-dariobin@libero.it>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -59,55 +56,41 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---7iqxv4fk64mddgi7
+--kkgc47zk5ugabioc
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 05.08.2021 22:16:06, Dario Binacchi wrote:
-> > > --- a/drivers/net/can/c_can/c_can.h
-> > > +++ b/drivers/net/can/c_can/c_can.h
-> > > @@ -200,6 +200,7 @@ struct c_can_priv {
-> > >  	atomic_t sie_pending;
-> > >  	unsigned long tx_dir;
-> > >  	int last_status;
-> > > +	spinlock_t tx_lock;
-> >=20
-> > What does the spin lock protect?
-[...]
-> > > @@ -483,7 +469,11 @@ static netdev_tx_t c_can_start_xmit(struct sk_bu=
-ff *skb,
-> > >  	if (c_can_get_tx_free(tx_ring) =3D=3D 0)
-> > >  		netif_stop_queue(dev);
-> > > =20
-> > > -	obj =3D idx + priv->msg_obj_tx_first;
-> > > +	spin_lock_bh(&priv->tx_lock);
-> >=20
-> > What does the spin_lock protect? The ndo_start_xmit function is properly
-> > serialized by the networking core.
-> >=20
+On 05.08.2021 22:19:00, Dario Binacchi wrote:
+> As reported by a comment in the c_can_start_xmit() this was not a FIFO.
+> C/D_CAN controller sends out the buffers prioritized so that the lowest
+> buffer number wins.
 >=20
-> The spin_lock protects the access to the IF_TX interface.
+> What did c_can_start_xmit() do if head was less tail in the tx ring ? It
+> waited until all the frames queued in the FIFO was actually transmitted
+> by the controller before accepting a new CAN frame to transmit, even if
+> the FIFO was not full, to ensure that the messages were transmitted in
+> the order in which they were loaded.
+>=20
+> By storing the frames in the FIFO without requiring its transmission, we
+> will be able to use the full size of the FIFO even in cases such as the
+> one described above. The transmission interrupt will trigger their
+> transmission only when all the messages previously loaded but stored in
+> less priority positions of the buffers have been transmitted.
+>=20
+> Suggested-by: Gianluca Falavigna <gianluca.falavigna@inwind.it>
+> Signed-off-by: Dario Binacchi <dariobin@libero.it>
 
-How? You only use the spin_lock in c_can_start_xmit(), but not anywhere
-else.
+My review from
+https://lore.kernel.org/linux-can/20210806092523.hij5ejjq6wecbgfr@pengutron=
+ix.de/
+applies here, too.
 
-> Enabling the transmission of cached messages occur inside interrupt
+Please use IF_RX in c_can_do_tx(), remove the spin_lock and test. After
+applying your series, I'll send a patch that changes IF_RX into IF_NAPI
+to avoid any further confusion.
 
-The call chain is c_can_poll() -> c_can_do_tx(), and c_can_poll() is
-called from NAPI, which is not the IRQ handler.
-
-> and the use of the IF_RX interface, which would avoid the use of the
-> spinlock, has not been validated by the tests.
-
-What do you mean be has not been validated?
-
-The driver already uses IF_RX to avoid concurrent access in
-c_can_do_tx() for c_can_inval_tx_object() [1], why not use IF_RX for
-c_can_object_put(), too?
-
-[1] https://lore.kernel.org/r/20210302215435.18286-4-dariobin@libero.it
-
+regards,
 Marc
 
 --=20
@@ -116,19 +99,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---7iqxv4fk64mddgi7
+--kkgc47zk5ugabioc
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmENAAEACgkQqclaivrt
-76lMMwgAjXgHSoDKSNnaDwB8xLfHIA0i0vgMnwo+f82AnyFrFRJil6i4UyYDEdRP
-FUZ6Gvi8/rG838Wf+lklNcdz66bhPI4WF+fwC76xekDUWqG4KJPJZyg17RiZ7ESU
-G+bk7aOZB34Je45xLxcuTFncnM48Lb8M5PwXrkO36R2GMo2qrfKN3cAKm8B6Fz+y
-7p/5/j/d0D0GB8HbYUY64bccuF/iCr4uDaXD3MSbwTrF/QdckMy6yPmjpFfaMMLz
-5ksHn/d7hO30GvAQJmr4nmYiksFBTrUwio1wnYbdiM3A2E+6Syqh8vbWDH3x5m8p
-EQJypD3+YjvwpRVb9hR5DRFtLrIIhw==
-=lEmb
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmENArgACgkQqclaivrt
+76lr2ggAtT5H7Kcg2sOQ418ClRECb7Ivlr96/mGdHw2VANvbT0xzrmACGFjFQG1k
+yGPnmsKdA+SZp5lkRJNVFgZMUc5vZQjqFEh+V5YScdG1hYSnRtRkvvbqOqWrxfmG
+bZBHiUJKZIGRQLT61mBHQS9HmKnGMX0j3WEGn/uNTr/guFH+P3JzbZj7GGLNUgGA
+hjdTYUnO3j2i7dV/E6hPRSDwcBDkXzuwZxmtkuWOdb5ZNeokfF/1oi466phe5fBg
+r1UXw830FbsaqrkI+HnoxxZRBXCl6EneRNfapJxMmtRGdc8+czpdkoo5xDL61DMW
+UdcsQpCF8GUp9Igluek5mBqCnzVa1w==
+=WNgH
 -----END PGP SIGNATURE-----
 
---7iqxv4fk64mddgi7--
+--kkgc47zk5ugabioc--
