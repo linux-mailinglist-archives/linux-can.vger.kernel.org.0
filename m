@@ -2,132 +2,123 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C96F3E3559
-	for <lists+linux-can@lfdr.de>; Sat,  7 Aug 2021 14:36:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 739FD3E356A
+	for <lists+linux-can@lfdr.de>; Sat,  7 Aug 2021 15:08:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232181AbhHGMgh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 7 Aug 2021 08:36:37 -0400
-Received: from smtp-35-i2.italiaonline.it ([213.209.12.35]:38078 "EHLO
-        libero.it" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232160AbhHGMgh (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Sat, 7 Aug 2021 08:36:37 -0400
-Received: from oxapps-35-162.iol.local ([10.101.8.208])
-        by smtp-35.iol.local with ESMTPA
-        id CLYmmoiQe8HOxCLYmmpRQL; Sat, 07 Aug 2021 14:36:18 +0200
+        id S232254AbhHGNI0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 7 Aug 2021 09:08:26 -0400
+Received: from smtp-32.italiaonline.it ([213.209.10.32]:41955 "EHLO libero.it"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230291AbhHGNI0 (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Sat, 7 Aug 2021 09:08:26 -0400
+Received: from passgat-Modern-14-A10M.homenet.telecomitalia.it
+ ([82.60.87.158])
+        by smtp-32.iol.local with ESMTPA
+        id CM3WmQm3XPvRTCM3amIfYI; Sat, 07 Aug 2021 15:08:07 +0200
 x-libjamoibt: 1601
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=libero.it; s=s2021;
-        t=1628339778; bh=3V3l7i5/LxTvopvC+hXlPOoiT/wst+I7MPvJIRo+dUk=;
+        t=1628341687; bh=whE/smR+GfQX6eqwPlzh75+C188l9V5ywfgFh/erjGo=;
         h=From;
-        b=lPwqQG7SxX6jlpTFh2FUjPywxdCGMrslxZEHxE1aD9IYL60Djux1SmZ5z1hvqTXMe
-         CevlYfLEGSW/eDv6eP38TAH9nxs8dGdghkuSqee4sXJYlSnsqHljSerivAXGr1tOtf
-         HVlQ8Hu60TO2QQaEpkUYLiRhJAzuj/Fvcn6IHUCEPiLEUT+PAWak06RiSP22ynHGXI
-         F1A8gQeGr0PD5ica2Scgf8yqz4FBYoBthDzuCcujPKIkKGfHywlPw9x267fj2xm5YU
-         tOAFqJf/lDAsKsDAzpWwkaz0ioLd2GYJ3RmXa6rX4yaKoSHcxLDNL/kWcv9ZC2QPYI
-         yzFbBiojnLjeA==
-X-CNFS-Analysis: v=2.4 cv=LfD5VhTi c=1 sm=1 tr=0 ts=610e7e42 cx=a_exe
- a=OCAZjQWm+uh9gf1btJle/A==:117 a=J7go-RGC33AA:10 a=IkcTkHD0fZMA:10
- a=nep-EciQ0nEA:10 a=VwQbUJbxAAAA:8 a=bGNZPXyTAAAA:8 a=lneh_w3DiUngg6D-LXoA:9
- a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22 a=yL4RfsBhuEsimFDS2qtJ:22
-Date:   Sat, 7 Aug 2021 14:36:15 +0200 (CEST)
+        b=oYgZU853/nnrWGJwIz/IlbPnBsKer7Vppx2tKf7T6sjTf+Dx2HD+NKj68oqWWm8O9
+         vT80vbCzUPsQdbSNou21+C6mJnmKTAFoAViB31MELxFj/wYgdMyI51C291wmTnjdaG
+         waQ8i2dmQQAhhgDhM+cKawj4XEk2zYSbnZh5Rlh+O09cgG1RUfS28wWu1zxofGfnJd
+         dbDILumkTyoM3e2SSEb1jeWo4Y+agPQCLip5pHNDeBcQCXzOmQ2m8awwqHQlxkfksJ
+         HlJBJjvvc17l7WPnRnZ/bK8pp9ZmkVkf9M6+YTtuBqbz5Pfeq+VEjfPrhp1WPkPay3
+         H+fD3vyugPJMA==
+X-CNFS-Analysis: v=2.4 cv=NqgUz+RJ c=1 sm=1 tr=0 ts=610e85b7 cx=a_exe
+ a=Hc/BMeSBGyun2kpB8NmEvQ==:117 a=Hc/BMeSBGyun2kpB8NmEvQ==:17 a=gu6fZOg2AAAA:8
+ a=8Szu4Ex1LEpqERUTuRwA:9 a=-FEs8UIgK8oA:10 a=NWVoK91CQyQA:10
+ a=2RSlZUUhi9gRBrsHwhhZ:22
 From:   Dario Binacchi <dariobin@libero.it>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Gianluca Falavigna <gianluca.falavigna@inwind.it>,
+To:     linux-kernel@vger.kernel.org
+Cc:     Gianluca Falavigna <gianluca.falavigna@inwind.it>,
+        Dario Binacchi <dariobin@libero.it>,
         Andrew Lunn <andrew@lunn.ch>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
         Oliver Hartkopp <socketcan@hartkopp.net>,
+        Tong Zhang <ztong0001@gmail.com>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
         Wolfgang Grandegger <wg@grandegger.com>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org
-Message-ID: <1265712151.254355.1628339776021@mail1.libero.it>
-In-Reply-To: <20210806092523.hij5ejjq6wecbgfr@pengutronix.de>
-References: <20210725161150.11801-1-dariobin@libero.it>
- <20210725161150.11801-5-dariobin@libero.it>
- <20210804094515.ariv7d24t2i4hic5@pengutronix.de>
- <1485600069.218377.1628194566441@mail1.libero.it>
- <20210806092523.hij5ejjq6wecbgfr@pengutronix.de>
-Subject: Re: [RESEND PATCH 4/4] can: c_can: cache frames to operate as a
- true FIFO
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-Importance: Normal
-X-Mailer: Open-Xchange Mailer v7.10.3-Rev34
-X-Originating-IP: 82.60.87.158
-X-Originating-Client: open-xchange-appsuite
-x-libjamsun: V5Mpv/1xPgKjfbi1h4xDhLvgdQkMzdTz
-x-libjamv: VPJ6QSya3cM=
-X-CMAE-Envelope: MS4xfNWgmEuo1GkEGu+LRftwWn03HCw3gPrzT7PKUF7aePMx6I8w+iXB7XAAVLOAE/Gql13xzIOAwsJ9Wq6dZkqcDPLCbGNu/2Il+oziGFt4kFfEZNIoaVpX
- HDlK8osLTYv+YzEruAZUpO3b9IFG8ho0Tw459UcdfCBeJUcYTE2ks3KHSKKx3N4ewXMkZr/mGnw4xchPa3em2NtKq3Db5BYawvbV8D5rxVIYczDlowOfpmm4
- SAop+4FJX21kGGA+Dq5a+HnkJUXo5HWkwg0qou9XiDBFilMcBrnFAks3BimvCsa6K+MM3e39SN7n0SVYofFJ0PTUIKJPSOIEKztzsYwgvMxWuO6pOloYrDsN
- cnn2sk76zQRYsbo7m3ccQlG6WwWH9EVEjRW1Ujv8oXJ92Yso4r68s27QSlpGNfAp0X1Ta16YejoDnJ7PC3GyZG6pYVEbz/9nXZI1PHKEjwvGPULjvT5xqq9H
- Zhs6/YIAznkPn66/kSPl71Xifo/BFrOxxaT1UuF7641Oqbwes9NTf1lfrIHwOm2qRAU4oP3A5/Ue6jL/
+Subject: [PATCH v3 0/4] can: c_can: cache frames to operate as a true FIFO
+Date:   Sat,  7 Aug 2021 15:07:56 +0200
+Message-Id: <20210807130800.5246-1-dariobin@libero.it>
+X-Mailer: git-send-email 2.17.1
+X-CMAE-Envelope: MS4xfJ9UyNdh2EUq9EiRVjihG6s1usW765LlWJv078A5wh5ixuN84y3IBvMwgw4lUiJZrSrqatSlsGEif4bXSpE9eDXh5dZTHBgwrVuLevzoH/tuxkjXnUKo
+ ytfTjkVuo7m47wqHrv9xlhT+LwRHLDgn8rby2qn1v26OePvCUEvnNImjG/5pwt5xi6e8ukqvUXkQlh1nQmMEvi+uOt7aNNQQzYIKNtL1kDq1hdeJCAYbIk+u
+ OUoY//Km+tOjia3+ngzxWnBDeCsLTGGE+UfyFj/Ic3WryEPqShxSUK7H05ybmSx90qeQXPSPsWqN+amu1NYzRuPffwyKKO7TSw6cdjMkk1rVuVb4IHpmDIMv
+ FLCjHqNZRSX+XTcLMxbv8rhWCRUl7aaIwZn/rD5mZ789oO+7QPcTnS6uvdA30Tl5cLXUSeXzsvnerEvKVfSkWgqhOFnF4jva+f0bDLfrW8xZF7I8yDKqhODR
+ N3xgAYqJrn4OdUFckDW2UPw1aT7Jqa/HA+QYmx8wTHoYIrFSuzNrFy/6gjssczAtFg+unHEflG46I6cs2zn/o0KHtoraVGZkbaAfV4pe6LLuEQRYPLN6VPUW
+ KbsQ2eHQaVqhdyRVzxoT1+eED54vHFVs9fWhkHpz3CWZig==
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
-> Il 06/08/2021 11:25 Marc Kleine-Budde <mkl@pengutronix.de> ha scritto:
-> 
->  
-> On 05.08.2021 22:16:06, Dario Binacchi wrote:
-> > > > --- a/drivers/net/can/c_can/c_can.h
-> > > > +++ b/drivers/net/can/c_can/c_can.h
-> > > > @@ -200,6 +200,7 @@ struct c_can_priv {
-> > > >  	atomic_t sie_pending;
-> > > >  	unsigned long tx_dir;
-> > > >  	int last_status;
-> > > > +	spinlock_t tx_lock;
-> > > 
-> > > What does the spin lock protect?
-> [...]
-> > > > @@ -483,7 +469,11 @@ static netdev_tx_t c_can_start_xmit(struct sk_buff *skb,
-> > > >  	if (c_can_get_tx_free(tx_ring) == 0)
-> > > >  		netif_stop_queue(dev);
-> > > >  
-> > > > -	obj = idx + priv->msg_obj_tx_first;
-> > > > +	spin_lock_bh(&priv->tx_lock);
-> > > 
-> > > What does the spin_lock protect? The ndo_start_xmit function is properly
-> > > serialized by the networking core.
-> > > 
-> > 
-> > The spin_lock protects the access to the IF_TX interface.
-> 
-> How? You only use the spin_lock in c_can_start_xmit(), but not anywhere
-> else.
-> 
-> > Enabling the transmission of cached messages occur inside interrupt
-> 
-> The call chain is c_can_poll() -> c_can_do_tx(), and c_can_poll() is
-> called from NAPI, which is not the IRQ handler.
-> 
-> > and the use of the IF_RX interface, which would avoid the use of the
-> > spinlock, has not been validated by the tests.
-> 
-> What do you mean be has not been validated?
+Performance tests of the c_can driver led to the patch that gives the
+series its name. I also added two patches not really related to the topic
+of the series.
 
-It's been a while since I submitted the series and I certainly got confused.
+Run test succesfully on a custom board having two CAN ports.
+I connected the CAN1 port to the CAN2 port with a cable. Then I
+opened two terminals. On one I issued a dump command and on the
+other the transmit command used in the tests described in
+https://marc.info/?l=linux-can&m=139746476821294&w=2.
 
-> 
-> The driver already uses IF_RX to avoid concurrent access in
-> c_can_do_tx() for c_can_inval_tx_object() [1], why not use IF_RX for
-> c_can_object_put(), too?
-> 
-> [1] https://lore.kernel.org/r/20210302215435.18286-4-dariobin@libero.it
+Terminal-1:
+$ ip link set can1 type can bitrate <bitrate>
+$ ip link set up can1
+$ candump can1 >/tmp/can-test-<bitrate>
 
-Right!
+Terminal-2
+$ ip link set can0 type can bitrate <bitrate>
+$ ip link set up can0
+$ time cangen can0 -g0 -p1 -I5A5 -L0 -x -n 1000000
 
-Thanks and Regards,
-Dario
+Then I applied the following commands to the file generated by the dump
+command:
+$ wc -l </tmp/can-test-<bitrate>                                 # ca
+$ egrep -v '  can1  5A5   \[0\]' /tmp/can-test-<bitrate> | wc -l # cb
 
-> 
-> Marc
-> 
-> -- 
-> Pengutronix e.K.                 | Marc Kleine-Budde           |
-> Embedded Linux                   | https://www.pengutronix.de  |
-> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+I repeated the tests for 1000000, 500000, 250000 and 125000 bitrates,
+before and after applying the series.
+Here are the results:
+
+Before applying the series:
+ bitrate       time         ca         cb
+  125000    6m 42.71s    1000000        0
+  250000    3m 23.28s    1000000        0
+  500000    1m 44.04s    1000000        0
+ 1000000    1m  8.44s    1000000        0
+
+After applying ring-FIFO series:
+ bitrate       time         ca         cb
+  125000    6m 40.48s    1000000        0
+  250000    3m 20.80s    1000000        0
+  500000    1m 42.56s    1000000        0
+ 1000000    1m  7.89s    1000000        0
+
+
+Changes in v3:
+- Remove the transmission spin_lock.
+- Use IF_RX in c_can_do_tx().
+
+Changes in v2:
+- Move c_can_get_tx_free() from c_can_main.c to c_can.h.
+
+Dario Binacchi (4):
+  can: c_can: remove struct c_can_priv::priv field
+  can: c_can: exit c_can_do_tx() early if no frames have been sent
+  can: c_can: support tx ring algorithm
+  can: c_can: cache frames to operate as a true FIFO
+
+ drivers/net/can/c_can/c_can.h          | 25 ++++++-
+ drivers/net/can/c_can/c_can_main.c     | 95 +++++++++++++++++++-------
+ drivers/net/can/c_can/c_can_platform.c |  1 -
+ 3 files changed, 94 insertions(+), 27 deletions(-)
+
+-- 
+2.17.1
+
