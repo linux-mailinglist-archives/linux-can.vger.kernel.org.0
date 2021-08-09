@@ -2,43 +2,33 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6AC23E460F
-	for <lists+linux-can@lfdr.de>; Mon,  9 Aug 2021 15:05:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F8CE3E4672
+	for <lists+linux-can@lfdr.de>; Mon,  9 Aug 2021 15:23:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235011AbhHINGD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 9 Aug 2021 09:06:03 -0400
-Received: from mail-vs1-f42.google.com ([209.85.217.42]:43684 "EHLO
-        mail-vs1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234993AbhHINGD (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 9 Aug 2021 09:06:03 -0400
-Received: by mail-vs1-f42.google.com with SMTP id s196so4885262vsc.10;
-        Mon, 09 Aug 2021 06:05:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9BYczZr0yfjAeAsaFmWRSoq/nggtxlu5P8r6E3vGSE8=;
-        b=Q0O2f/4CLACL0iYk6YVYX8QoHGArHZyP5plDjIj5fzZ9/8GYkoXFlQOUjT3odHZiSm
-         6AVKhcjlAn1iyqDoYMSGGV2leVDVndWFYBYqWYGs2AoXBQLVguV6K6HSGL3QysSCHxYd
-         aiG4Ojb6cNbu1wOOtz7UxKTaIo1Ec2nuAPpY6hwfoFlxSQtelGf/SqHHMiPW5NLsi2IZ
-         k4WuHUqxUTxkRm4EZ/qfxtypATIJ84QguJWTsfg+Ln4dMXHJLbOJ+ZY10tvhOWk9sDci
-         8OcTvj6ya2U3u1n3G7dtGaZUcnRo7cUu4iQIz9SBrRKUYTqxsvwrj/UjqzzhNnMfdTjC
-         GXQA==
-X-Gm-Message-State: AOAM532xuvesAYW32KZgfQ/Rg+pYjxFv8mLgQgN/mU9Ey8mTK3UNtY7t
-        xw4dZxoScPS/QpsXQl7RYsYeO2Zut7WALvdKwO0=
-X-Google-Smtp-Source: ABdhPJzVo62iWNM+kZ4l3hKNVIhLmyg5P6ZvsJ36M+BaOA89mgFS0yHN3LM/mc7B0rbMG+P6pStB6JLNHvBOAgTqGek=
-X-Received: by 2002:a67:b604:: with SMTP id d4mr8931798vsm.40.1628514341988;
- Mon, 09 Aug 2021 06:05:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210727133022.634-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20210727133022.634-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20210804075855.2vjvfb67kufiibqx@pengutronix.de> <CA+V-a8tWMVfnS3PWeOSqtDddO-M6zDS+WFpUSjv=2MgUV56Qvg@mail.gmail.com>
-In-Reply-To: <CA+V-a8tWMVfnS3PWeOSqtDddO-M6zDS+WFpUSjv=2MgUV56Qvg@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 9 Aug 2021 15:05:30 +0200
-Message-ID: <CAMuHMdU5q0_gC7e_n=+Nq-1q2OkOvEB_iY7bMRnB0ZAcOZk9Eg@mail.gmail.com>
-Subject: Re: [PATCH v4 3/3] arm64: dts: renesas: r9a07g044: Add CANFD node
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
+        id S235359AbhHINXF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 9 Aug 2021 09:23:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58104 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235165AbhHINXE (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 9 Aug 2021 09:23:04 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 746C0C061796
+        for <linux-can@vger.kernel.org>; Mon,  9 Aug 2021 06:22:44 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1mD5EY-0004BF-Pq; Mon, 09 Aug 2021 15:22:26 +0200
+Received: from pengutronix.de (unknown [IPv6:2a02:810a:8940:aa0:565a:9e00:3ca4:4826])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 592916634AA;
+        Mon,  9 Aug 2021 13:22:22 +0000 (UTC)
+Date:   Mon, 9 Aug 2021 15:22:20 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
 Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Rob Herring <robh+dt@kernel.org>,
         Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
@@ -52,107 +42,71 @@ Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
         Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
         Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v4 3/3] arm64: dts: renesas: r9a07g044: Add CANFD node
+Message-ID: <20210809132220.dr5fguraiuyfc47k@pengutronix.de>
+References: <20210727133022.634-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20210727133022.634-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20210804075855.2vjvfb67kufiibqx@pengutronix.de>
+ <CA+V-a8tWMVfnS3PWeOSqtDddO-M6zDS+WFpUSjv=2MgUV56Qvg@mail.gmail.com>
+ <CAMuHMdU5q0_gC7e_n=+Nq-1q2OkOvEB_iY7bMRnB0ZAcOZk9Eg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6ok3gdedsoqgsdxb"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdU5q0_gC7e_n=+Nq-1q2OkOvEB_iY7bMRnB0ZAcOZk9Eg@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Marc,
 
-On Wed, Aug 4, 2021 at 10:11 AM Lad, Prabhakar
-<prabhakar.csengg@gmail.com> wrote:
-> On Wed, Aug 4, 2021 at 8:59 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> > On 27.07.2021 14:30:22, Lad Prabhakar wrote:
-> > > Add CANFD node to R9A07G044 (RZ/G2L) SoC DTSI.
+--6ok3gdedsoqgsdxb
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 09.08.2021 15:05:30, Geert Uytterhoeven wrote:
+> > > This doesn't apply to net-next/master, the r9a07g044.dtsi doesn't hav=
+e a
+> > > i2c0 node at all. There isn't a i2c0 node in Linus' master branch, ye=
+t.
 > > >
-> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
-> > > ---
-> > >  arch/arm64/boot/dts/renesas/r9a07g044.dtsi | 41 ++++++++++++++++++++++
-> > >  1 file changed, 41 insertions(+)
-> > >
-> > > diff --git a/arch/arm64/boot/dts/renesas/r9a07g044.dtsi b/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
-> > > index 9a7489dc70d1..51655c09f1f8 100644
-> > > --- a/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
-> > > +++ b/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
-> > > @@ -13,6 +13,13 @@
-> > >       #address-cells = <2>;
-> > >       #size-cells = <2>;
-> > >
-> > > +     /* External CAN clock - to be overridden by boards that provide it */
-> > > +     can_clk: can {
-> > > +             compatible = "fixed-clock";
-> > > +             #clock-cells = <0>;
-> > > +             clock-frequency = <0>;
-> > > +     };
-> > > +
-> > >       /* clock can be either from exclk or crystal oscillator (XIN/XOUT) */
-> > >       extal_clk: extal {
-> > >               compatible = "fixed-clock";
-> > > @@ -89,6 +96,40 @@
-> > >                       status = "disabled";
-> > >               };
-> > >
-> > > +             canfd: can@10050000 {
-> > > +                     compatible = "renesas,r9a07g044-canfd", "renesas,rzg2l-canfd";
-> > > +                     reg = <0 0x10050000 0 0x8000>;
-> > > +                     interrupts = <GIC_SPI 426 IRQ_TYPE_LEVEL_HIGH>,
-> > > +                                  <GIC_SPI 427 IRQ_TYPE_LEVEL_HIGH>,
-> > > +                                  <GIC_SPI 422 IRQ_TYPE_LEVEL_HIGH>,
-> > > +                                  <GIC_SPI 424 IRQ_TYPE_LEVEL_HIGH>,
-> > > +                                  <GIC_SPI 428 IRQ_TYPE_LEVEL_HIGH>,
-> > > +                                  <GIC_SPI 423 IRQ_TYPE_LEVEL_HIGH>,
-> > > +                                  <GIC_SPI 425 IRQ_TYPE_LEVEL_HIGH>,
-> > > +                                  <GIC_SPI 429 IRQ_TYPE_LEVEL_HIGH>;
-> > > +                     interrupt-names = "g_err", "g_recc",
-> > > +                                       "ch0_err", "ch0_rec", "ch0_trx",
-> > > +                                       "ch1_err", "ch1_rec", "ch1_trx";
-> > > +                     clocks = <&cpg CPG_MOD R9A07G044_CANFD_PCLK>,
-> > > +                              <&cpg CPG_CORE R9A07G044_CLK_P0_DIV2>,
-> > > +                              <&can_clk>;
-> > > +                     clock-names = "fck", "canfd", "can_clk";
-> > > +                     assigned-clocks = <&cpg CPG_CORE R9A07G044_CLK_P0_DIV2>;
-> > > +                     assigned-clock-rates = <50000000>;
-> > > +                     resets = <&cpg R9A07G044_CANFD_RSTP_N>,
-> > > +                              <&cpg R9A07G044_CANFD_RSTC_N>;
-> > > +                     reset-names = "rstp_n", "rstc_n";
-> > > +                     power-domains = <&cpg>;
-> > > +                     status = "disabled";
-> > > +
-> > > +                     channel0 {
-> > > +                             status = "disabled";
-> > > +                     };
-> > > +                     channel1 {
-> > > +                             status = "disabled";
-> > > +                     };
-> > > +             };
-> > > +
-> > >               i2c0: i2c@10058000 {
-> > >                       #address-cells = <1>;
-> > >                       #size-cells = <0>;
+> > I had based the patch on top [1] (sorry I should have mentioned the
+> > dependency), usually Geert picks up the DTS/I patches and queues it
+> > via ARM tree. Shall I rebase it on net-next and re-send ?
 > >
-> > This doesn't apply to net-next/master, the r9a07g044.dtsi doesn't have a
-> > i2c0 node at all. There isn't a i2c0 node in Linus' master branch, yet.
-> >
-> I had based the patch on top [1] (sorry I should have mentioned the
-> dependency), usually Geert picks up the DTS/I patches and queues it
-> via ARM tree. Shall I rebase it on net-next and re-send ?
->
-> @Geert Uytterhoeven Is that OK ?
+> > @Geert Uytterhoeven Is that OK ?
+>=20
+> Please do not take Renesas DTS patches through the netdev tree
+> (or any other subsystem tree).
 
-Please do not take Renesas DTS patches through the netdev tree
-(or any other subsystem tree).
+Ok, I'm taking path 1 and 2 then.
 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git/log/?h=renesas-arm-dt-for-v5.15
+regards,
+Marc
 
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-Gr{oetje,eeting}s,
+--6ok3gdedsoqgsdxb
+Content-Type: application/pgp-signature; name="signature.asc"
 
-                        Geert
+-----BEGIN PGP SIGNATURE-----
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmERLAoACgkQqclaivrt
+76mo9Qf8CZ0JJWPgA33crkNVLB+u0tltfBSDMshDI9dcbzi6dNWEBeZeV9LYQbdy
+3bJMII7VgsbNrgLDbfIvkQb8ZEy51234cLYjo+KbnDi/sfTsxmjeTsywXGN7AIjt
+ZZUHg1CRixfx9OPDUTp5ju7KWWHeCHAlkvu9LUgWOvRrq0aaiOPBYodojZqDjYtk
+G7ZYFqjkbY9HhJ1E3022iP+vZbZv7z+b45eUAJQn2u2mGfBC2WU1GuO9NvQ/wGeu
+uRZeIEIDed307rDvHDcqNL2ivyusfoZ71zHahqwir+/MYqVs35FwltQz4GE3w77L
+KcLA3oVOFv96JkUYBg8HsD+kGXjwRw==
+=ppvL
+-----END PGP SIGNATURE-----
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--6ok3gdedsoqgsdxb--
