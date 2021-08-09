@@ -2,173 +2,101 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 283A83E356E
-	for <lists+linux-can@lfdr.de>; Sat,  7 Aug 2021 15:08:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5E603E40AE
+	for <lists+linux-can@lfdr.de>; Mon,  9 Aug 2021 09:09:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232181AbhHGNI3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 7 Aug 2021 09:08:29 -0400
-Received: from smtp-32.italiaonline.it ([213.209.10.32]:42629 "EHLO libero.it"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232259AbhHGNI1 (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Sat, 7 Aug 2021 09:08:27 -0400
-Received: from passgat-Modern-14-A10M.homenet.telecomitalia.it
- ([82.60.87.158])
-        by smtp-32.iol.local with ESMTPA
-        id CM3WmQm3XPvRTCM3dmIfZb; Sat, 07 Aug 2021 15:08:09 +0200
-x-libjamoibt: 1601
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=libero.it; s=s2021;
-        t=1628341689; bh=AckADGcKabU1CkSpV4t7qzvQ6zrVoNpS9rhgk52TYv0=;
-        h=From;
-        b=smRCHIBK8S6QqS7tkru9LBe/cQwDrZcfQFF6q0cP2i7unpVPIscnkqubkglJCAj+v
-         uayEpMUnjl7ROMw+dIdClFEQRo9nQHmNivzpSJ8piPV7A+m7+mNBTolNcRgcNRKJAm
-         ThjDkiMELzmYlcclMoyc2jCI//UsLps7yOTymwwAThH3mmfcHZjuP1mnebx9lbQimi
-         kb9A48CtSve/IYVpAeKlnUgwohS/ERbKRB8QToy906rTxcNj7IYCxcQRRKnGc8ZFmj
-         onpSCwyDIensMPsXKreJTDbMmnw61/2EJTVoCG/i9QE/aZ9/u41AiLmRKbgPAZyF8k
-         LBUUJiV/K6s0Q==
-X-CNFS-Analysis: v=2.4 cv=NqgUz+RJ c=1 sm=1 tr=0 ts=610e85b9 cx=a_exe
- a=Hc/BMeSBGyun2kpB8NmEvQ==:117 a=Hc/BMeSBGyun2kpB8NmEvQ==:17
- a=ZFJuXQVxYH-b9Oyd0qwA:9
-From:   Dario Binacchi <dariobin@libero.it>
-To:     linux-kernel@vger.kernel.org
-Cc:     Gianluca Falavigna <gianluca.falavigna@inwind.it>,
-        Dario Binacchi <dariobin@libero.it>,
+        id S233228AbhHIHJa (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 9 Aug 2021 03:09:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56634 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231675AbhHIHJ1 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 9 Aug 2021 03:09:27 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3CB9C0613CF
+        for <linux-can@vger.kernel.org>; Mon,  9 Aug 2021 00:09:06 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1mCzPB-0007u0-22; Mon, 09 Aug 2021 09:09:01 +0200
+Received: from pengutronix.de (unknown [IPv6:2a02:810a:8940:aa0:565a:9e00:3ca4:4826])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id DA85866308D;
+        Mon,  9 Aug 2021 07:08:55 +0000 (UTC)
+Date:   Mon, 9 Aug 2021 09:08:54 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Dario Binacchi <dariobin@libero.it>
+Cc:     linux-kernel@vger.kernel.org,
+        Gianluca Falavigna <gianluca.falavigna@inwind.it>,
         Andrew Lunn <andrew@lunn.ch>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
         Oliver Hartkopp <socketcan@hartkopp.net>,
+        Tong Zhang <ztong0001@gmail.com>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
         Wolfgang Grandegger <wg@grandegger.com>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH v3 4/4] can: c_can: cache frames to operate as a true FIFO
-Date:   Sat,  7 Aug 2021 15:08:00 +0200
-Message-Id: <20210807130800.5246-5-dariobin@libero.it>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210807130800.5246-1-dariobin@libero.it>
+Subject: Re: [PATCH v3 0/4] can: c_can: cache frames to operate as a true FIFO
+Message-ID: <20210809070854.wwqealdhd2sai5mo@pengutronix.de>
 References: <20210807130800.5246-1-dariobin@libero.it>
-X-CMAE-Envelope: MS4xfGmoOd6GOqyevjfeI0zB2i24sWp8gcgfOcTme321pSFLb1391FI8sMh2uwQ33GcP7ve3oVNJSCCFK4M3gta3YFF46gmfy8mjPINjb8SgQk0sYSYElZIA
- TUeZZw2dN2t4yilSRcoCASz1cP8wYxJdheHTh2TDubSnu1KMKvrBSjixj/xAQlh0srNHUpZq+fvScR6KjwQAFKlwSshQaoJYwy8a93WutjcdeYo2sPbgEV0V
- 87DlYFJcDo2CZFerCOip/5We7BHD/vePwPMkh+nQPBre0rNu3FoxEFb+8ye/JZ8mDKjJRRmD28T6Kh0UZiWhPI36l6zkOjO8mC4+LwhiACB8DVCHNmuRIIkq
- 9GXLpCW9SfKZl5mbqM2ZXrytcRFlDrHH79dcWSKuL7WfTT6n7xu3r0Ja0L3ooH92rv7rphRPTAyj3gbZvdpaTUM1IOX2qCaqXGY+NgMo3LPxh3BDqUxjZqws
- FRVHuAPNt/+We5kFVbITTHpKerkDPnn+wyi99wh++3AOueuUJeInuCnWZNy7fsxx51VuNzeuHuYyg5fUgocvbcs9VefTESy0jnyFU2zj1GEkVJysMtOff9Gj
- dQo=
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ay6iz3pyqwovhyef"
+Content-Disposition: inline
+In-Reply-To: <20210807130800.5246-1-dariobin@libero.it>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-As reported by a comment in the c_can_start_xmit() this was not a FIFO.
-C/D_CAN controller sends out the buffers prioritized so that the lowest
-buffer number wins.
 
-What did c_can_start_xmit() do if head was less tail in the tx ring ? It
-waited until all the frames queued in the FIFO was actually transmitted
-by the controller before accepting a new CAN frame to transmit, even if
-the FIFO was not full, to ensure that the messages were transmitted in
-the order in which they were loaded.
+--ay6iz3pyqwovhyef
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-By storing the frames in the FIFO without requiring its transmission, we
-will be able to use the full size of the FIFO even in cases such as the
-one described above. The transmission interrupt will trigger their
-transmission only when all the messages previously loaded but stored in
-less priority positions of the buffers have been transmitted.
+On 07.08.2021 15:07:56, Dario Binacchi wrote:
+>=20
+> Performance tests of the c_can driver led to the patch that gives the
+> series its name. I also added two patches not really related to the topic
+> of the series.
+>=20
+> Run test succesfully on a custom board having two CAN ports.
+> I connected the CAN1 port to the CAN2 port with a cable. Then I
+> opened two terminals. On one I issued a dump command and on the
+> other the transmit command used in the tests described in
+> https://marc.info/?l=3Dlinux-can&m=3D139746476821294&w=3D2.
 
-Suggested-by: Gianluca Falavigna <gianluca.falavigna@inwind.it>
-Signed-off-by: Dario Binacchi <dariobin@libero.it>
+Thanks! Applied to linux-can-next/testing.
 
----
+regards,
+Marc
 
-Changes in v3:
-- Remove the transmission spin_lock.
-- Use IF_RX in c_can_do_tx().
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
- drivers/net/can/c_can/c_can.h      | 11 +----------
- drivers/net/can/c_can/c_can_main.c | 23 ++++++++++++++++++-----
- 2 files changed, 19 insertions(+), 15 deletions(-)
+--ay6iz3pyqwovhyef
+Content-Type: application/pgp-signature; name="signature.asc"
 
-diff --git a/drivers/net/can/c_can/c_can.h b/drivers/net/can/c_can/c_can.h
-index 9b4e54c950a6..08b6efa7a1a7 100644
---- a/drivers/net/can/c_can/c_can.h
-+++ b/drivers/net/can/c_can/c_can.h
-@@ -238,16 +238,7 @@ static inline u8 c_can_get_tx_tail(const struct c_can_tx_ring *ring)
- 
- static inline u8 c_can_get_tx_free(const struct c_can_tx_ring *ring)
- {
--	u8 head = c_can_get_tx_head(ring);
--	u8 tail = c_can_get_tx_tail(ring);
--
--	/* This is not a FIFO. C/D_CAN sends out the buffers
--	 * prioritized. The lowest buffer number wins.
--	 */
--	if (head < tail)
--		return 0;
--
--	return ring->obj_num - head;
-+	return ring->obj_num - (ring->head - ring->tail);
- }
- 
- #endif /* C_CAN_H */
-diff --git a/drivers/net/can/c_can/c_can_main.c b/drivers/net/can/c_can/c_can_main.c
-index 80a6196a8d7a..e26b097b11ff 100644
---- a/drivers/net/can/c_can/c_can_main.c
-+++ b/drivers/net/can/c_can/c_can_main.c
-@@ -456,7 +456,7 @@ static netdev_tx_t c_can_start_xmit(struct sk_buff *skb,
- 	struct can_frame *frame = (struct can_frame *)skb->data;
- 	struct c_can_priv *priv = netdev_priv(dev);
- 	struct c_can_tx_ring *tx_ring = &priv->tx;
--	u32 idx, obj;
-+	u32 idx, obj, cmd = IF_COMM_TX;
- 
- 	if (can_dropped_invalid_skb(dev, skb))
- 		return NETDEV_TX_OK;
-@@ -469,7 +469,8 @@ static netdev_tx_t c_can_start_xmit(struct sk_buff *skb,
- 	if (c_can_get_tx_free(tx_ring) == 0)
- 		netif_stop_queue(dev);
- 
--	obj = idx + priv->msg_obj_tx_first;
-+	if (idx < c_can_get_tx_tail(tx_ring))
-+		cmd &= ~IF_COMM_TXRQST; /* Cache the message */
- 
- 	/* Store the message in the interface so we can call
- 	 * can_put_echo_skb(). We must do this before we enable
-@@ -478,9 +479,8 @@ static netdev_tx_t c_can_start_xmit(struct sk_buff *skb,
- 	c_can_setup_tx_object(dev, IF_TX, frame, idx);
- 	priv->dlc[idx] = frame->len;
- 	can_put_echo_skb(skb, dev, idx, 0);
--
--	/* Start transmission */
--	c_can_object_put(dev, IF_TX, obj, IF_COMM_TX);
-+	obj = idx + priv->msg_obj_tx_first;
-+	c_can_object_put(dev, IF_TX, obj, cmd);
- 
- 	return NETDEV_TX_OK;
- }
-@@ -725,6 +725,7 @@ static void c_can_do_tx(struct net_device *dev)
- 	struct c_can_tx_ring *tx_ring = &priv->tx;
- 	struct net_device_stats *stats = &dev->stats;
- 	u32 idx, obj, pkts = 0, bytes = 0, pend;
-+	u8 tail;
- 
- 	if (priv->msg_obj_tx_last > 32)
- 		pend = priv->read_reg32(priv, C_CAN_INTPND3_REG);
-@@ -761,6 +762,18 @@ static void c_can_do_tx(struct net_device *dev)
- 	stats->tx_bytes += bytes;
- 	stats->tx_packets += pkts;
- 	can_led_event(dev, CAN_LED_EVENT_TX);
-+
-+	tail = c_can_get_tx_tail(tx_ring);
-+
-+	if (tail == 0) {
-+		u8 head = c_can_get_tx_head(tx_ring);
-+
-+		/* Start transmission for all cached messages */
-+		for (idx = tail; idx < head; idx++) {
-+			obj = idx + priv->msg_obj_tx_first;
-+			c_can_object_put(dev, IF_RX, obj, IF_COMM_TXRQST);
-+		}
-+	}
- }
- 
- /* If we have a gap in the pending bits, that means we either
--- 
-2.17.1
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmEQ1IMACgkQqclaivrt
+76mypggAlneAs4NSSW3S+G3/q1nOv7cdt5e//scBTcElGf6JbAL8kcJFZ5PcQFbR
+R3c/CAPgIk/NpU+6xBHBJfijxWOVYQhx2txEtcWPpClTRjwKM04/SYDU3ilVx3t9
+3xe3/943AhxOeZ+nOfWWAceyxuprlcJAigMLKcalqwTwQlQOr1BIz9PEALXJ2Wo0
+mCHhJpSVhQupUczLlOR3zTVTY6+WjSrfNLI630EZWX9pYb2J4gXhlqwZzpiqYr8h
+OoHnM14rOfbz5ND56+xS7dCGKNgsf8vwff8AskDcMbHQul7j+1bD4m/2l+EgTUGx
+uxGYNxMYF/Op+c6cCuBD721Q1Sw4Yg==
+=6OpO
+-----END PGP SIGNATURE-----
+
+--ay6iz3pyqwovhyef--
