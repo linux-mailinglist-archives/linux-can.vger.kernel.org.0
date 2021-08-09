@@ -2,48 +2,45 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4708A3E4BB0
-	for <lists+linux-can@lfdr.de>; Mon,  9 Aug 2021 20:00:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE89D3E4BAF
+	for <lists+linux-can@lfdr.de>; Mon,  9 Aug 2021 20:00:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232392AbhHISA6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 9 Aug 2021 14:00:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36620 "EHLO
+        id S231509AbhHISA5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 9 Aug 2021 14:00:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233747AbhHISAq (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 9 Aug 2021 14:00:46 -0400
+        with ESMTP id S232625AbhHISAx (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 9 Aug 2021 14:00:53 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A0BC061796
-        for <linux-can@vger.kernel.org>; Mon,  9 Aug 2021 10:59:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0431BC0613A1
+        for <linux-can@vger.kernel.org>; Mon,  9 Aug 2021 10:59:55 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1mD9YS-0003xv-EA
-        for linux-can@vger.kernel.org; Mon, 09 Aug 2021 19:59:16 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 641D6663773
-        for <linux-can@vger.kernel.org>; Mon,  9 Aug 2021 17:59:15 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        id 1mD9Z2-00040f-KE; Mon, 09 Aug 2021 19:59:52 +0200
+Received: from pengutronix.de (unknown [IPv6:2a02:810a:8940:aa0:b60e:a8cd:6ec5:c321])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 98D0566376E;
-        Mon,  9 Aug 2021 17:59:14 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 4a9ddbcc;
-        Mon, 9 Aug 2021 17:59:13 +0000 (UTC)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 300D2663779;
+        Mon,  9 Aug 2021 17:59:51 +0000 (UTC)
+Date:   Mon, 9 Aug 2021 19:59:49 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Joe Perches <joe@perches.com>, socketcan@esd.eu,
-        =?UTF-8?q?Stefan=20M=C3=A4tje?= <Stefan.Maetje@esd.eu>
-Subject: [PATCH v3] =?UTF-8?q?mailmap:=20update=20email=20address=20of=20M?= =?UTF-8?q?atthias=20Fuchs=20and=20Thomas=20K=C3=B6rper?=
-Date:   Mon,  9 Aug 2021 19:58:44 +0200
-Message-Id: <20210809175843.207864-1-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+To:     Joe Perches <joe@perches.com>
+Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        socketcan@esd.eu,
+        Stefan =?utf-8?B?TcOkdGpl?= <Stefan.Maetje@esd.eu>
+Subject: Re: [PATCH] mailmap: update email address of Matthias Fuchs
+Message-ID: <20210809175949.vqyuyphiumygmdc5@pengutronix.de>
+References: <20210806104833.102081-1-mkl@pengutronix.de>
+ <6b7de60b83cc5ce930736c6158a648b91f647c0b.camel@perches.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="g7pcjkbleem2pqrn"
+Content-Disposition: inline
+In-Reply-To: <6b7de60b83cc5ce930736c6158a648b91f647c0b.camel@perches.com>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -52,42 +49,41 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Matthias Fuchs's and Thomas Körper's email addresses aren't valid
-anymore. Use the newly created role account instead.
 
-Cc: socketcan@esd.eu
-Cc: Stefan Mätje <Stefan.Maetje@esd.eu>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
-Changes since v2:
-- use name, not only email address (thanks, Joe)
-Changes since v1:
-- also replace Thomas Körper's email
+--g7pcjkbleem2pqrn
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
- .mailmap | 2 ++
- 1 file changed, 2 insertions(+)
+On 09.08.2021 10:44:02, Joe Perches wrote:
+> On Fri, 2021-08-06 at 12:48 +0200, Marc Kleine-Budde wrote:
+> Please add a name not only the email address and place the entry
+> in alphabetical order by name.
 
-diff --git a/.mailmap b/.mailmap
-index a35ae244dfda..6e849110cb4e 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -229,6 +229,7 @@ Matthew Wilcox <willy@infradead.org> <mawilcox@microsoft.com>
- Matthew Wilcox <willy@infradead.org> <willy@debian.org>
- Matthew Wilcox <willy@infradead.org> <willy@linux.intel.com>
- Matthew Wilcox <willy@infradead.org> <willy@parisc-linux.org>
-+Matthias Fuchs <socketcan@esd.eu> <matthias.fuchs@esd.eu>
- Matthieu CASTET <castet.matthieu@free.fr>
- Matt Ranostay <matt.ranostay@konsulko.com> <matt@ranostay.consulting>
- Matt Ranostay <mranostay@gmail.com> Matthew Ranostay <mranostay@embeddedalley.com>
-@@ -341,6 +342,7 @@ Sumit Semwal <sumit.semwal@ti.com>
- Takashi YOSHII <takashi.yoshii.zj@renesas.com>
- Tejun Heo <htejun@gmail.com>
- Thomas Graf <tgraf@suug.ch>
-+Thomas Körper <socketcan@esd.eu> <thomas.koerper@esd.eu>
- Thomas Pedersen <twp@codeaurora.org>
- Tiezhu Yang <yangtiezhu@loongson.cn> <kernelpatch@126.com>
- Todor Tomov <todor.too@gmail.com> <todor.tomov@linaro.org>
--- 
-2.30.2
+done, sent v3
 
+regards,
+Marc
 
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--g7pcjkbleem2pqrn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmERbRMACgkQqclaivrt
+76kwIwf8Dd9BMSMZ44JRKvNEU0JTkdqV6C4agDhkEQXU/NyglSArtIeQGO3tlg3k
+gdxYDm3rpO28adDZ31vyY+h3sLTlNsGSTIkXC4SM6NggNE2BcFa/2dHx7QPC/0+z
+SLpWIUE4d+nGzQYvM7NRQ93tB+EROUAa+cX69CZMOnDOLx8bXMTdEzMMD4Kkhhot
+CeWrMaXtDUc8Vvblydi66/dyPSfakhpUpK0DD5HfNXzzJ7MKdXDIL2TgwKrCs2sj
+Y378+JkHqVH8jGO3zHMyXFywJkcyxIWBtz2w8klLq3XqubfLjeqLSumKn0qDSgDU
+1aYrmoz2PkSdxauEoaV3hte2XG/v7g==
+=cE8M
+-----END PGP SIGNATURE-----
+
+--g7pcjkbleem2pqrn--
