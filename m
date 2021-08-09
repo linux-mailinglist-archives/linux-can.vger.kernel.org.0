@@ -2,198 +2,162 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AF323E4924
-	for <lists+linux-can@lfdr.de>; Mon,  9 Aug 2021 17:49:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63B633E4AB9
+	for <lists+linux-can@lfdr.de>; Mon,  9 Aug 2021 19:23:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235864AbhHIPtb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 9 Aug 2021 11:49:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35150 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235826AbhHIPtH (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 9 Aug 2021 11:49:07 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF5B5C0613D3;
-        Mon,  9 Aug 2021 08:48:46 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id j77so30390773ybj.3;
-        Mon, 09 Aug 2021 08:48:46 -0700 (PDT)
+        id S234180AbhHIRXP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 9 Aug 2021 13:23:15 -0400
+Received: from mail-eopbgr40108.outbound.protection.outlook.com ([40.107.4.108]:53027
+        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234095AbhHIRXO (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 9 Aug 2021 13:23:14 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Dvrgvo4UWsiNxeFECIsSqBxQ00VYziOybgNX0vkP2rybgstU2xayp1Tb78/9OZFcu+eSgE6uChbA7OS+vlJzFibRXtz2galmxEk8jSfoG2M80DENS3UVlo6kfsghj+ZCCVU3+pKS9cENc6biyvM3fe5WaZGumjeuRp300sYlt7okaT9Pc0ocbkePPdTgzW6NKZXUF5brqFl3IJBCrOtR8E4DYdc8wRVIy0fcai9Ro86cY2KuxCu4uCtBEbZS6DGJx6N4xFdXntApMhcorybhD9gDHRRow87KzR3F5MoyLu5dKQGpd42qRJ9RF5EfNv56ohzRkNBftvNiUwsxATzlqA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ufSYIfcBBLeXYkjIUrq463bxCOz+pBiNziYfGGL3rNQ=;
+ b=fMlA8JQoePDL1QLBuf6V1s0n94H3UTUJK1pwUs3OaC3KvDJpIw+YdFJ6rwcxgIbAIMwBBxGpnXy5n4v25+WBprj5BRwEH3Cf/mt3XlKJvW0aMkp3nlPz/YouuszhgiOxZ/t4O/7CwM7hrEQMssIyf8fDaQtuNv6pCt0rd7VJmygCRzZGA2Ku7W5VhLF+GXJJjMJPD3snWj+8ktIscgEocOaZa7kq5v4wFPvl0aCHc9y3tK3dB/bVx5O3dZJEH+wY04sH8JEgJN0ZNEEZuMer6UI4CLYulRqaGVQHeLhAGYElACDtddMp6pgF2O1lplrgY3wi9c4CYfjTGpqkoMZx3Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=esd.eu; dmarc=pass action=none header.from=esd.eu; dkim=pass
+ header.d=esd.eu; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CttDxHiCnPodE+fRVXutDrc3UtK9OxegaBoQba6T7pg=;
-        b=HSNxa2u8osQbqxNs8P6Yow3+3cv6sFFXG7vuRpeSOrtXnoQ9NIs1NzgEQ3bPz9vrF8
-         CzUzTyZ/kpguld6CZ2y6TpVHCA0J/WQUjGCBnK6eT8r6wdyso6LNH6MlLwyEteO9Ki+M
-         XQIpH1yVy9eB/16PnXa40PlU+GDorTpOKWWXsJRo1Ev9hCfPDGIwWW+X/wB5btHSh78A
-         HRXaCwxwdvewUK/Qj8OUAGwzlIHGj+PJSfuaBu9d876+cZ9vZ6WyIj/RfgboWgvDKidT
-         4Yqsce1J40lFu73UHz+bVpWONsl0qiJz4trpIddBFEtaUsjyysL1XodCku/3ZVnRZYUb
-         UHEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CttDxHiCnPodE+fRVXutDrc3UtK9OxegaBoQba6T7pg=;
-        b=GOlq8tbrYSghkYNumIvCmcqzP9j6N5MTE3MSjE+BkTnPdEThs8tuJo4i3/uT2I9g87
-         FyGomH9ioeZa1kyXrA6Rqmg5rR1ow1KOhvfREqFpryV6QDaxiW8eKdk9lIbHnjChTlNL
-         ss0HBNUFgEtPRX2UokKuDDhhBzKupxnJkANZhhNuu2E7g+2uBSwjW70SA+Z+Rzuq7j9t
-         KzXkC1Hwq0zdPCow6/GZEmFL8xkNAhzJzdc6dHqbG+LMhDCB9mkCNFFxCW1+jAd3ztNC
-         0iCgOni9kt0fTYmyNXXysG5/lB0IQtut3OlhXdj2d+fVo/YcU/HW1WuuANQewQ2pNZms
-         NizQ==
-X-Gm-Message-State: AOAM532gXUtjcoRDdp7z6DAjzEKXQARzLKfMZqy11R4ElUy1GJ1WP1Np
-        j6pME4lJAIOJKfRQwvtvsYCsSrQZsBFCfYG0GQ4=
-X-Google-Smtp-Source: ABdhPJx2fmwsYZrAdA/dVqw0R46k9XdivjCwFnQGurTZ8bcpvGyuWuvhsRqVC4wmjDtleYKdnU8JdnU9oa37iK0Uajc=
-X-Received: by 2002:a5b:2cf:: with SMTP id h15mr25624687ybp.426.1628524126062;
- Mon, 09 Aug 2021 08:48:46 -0700 (PDT)
+ d=esdhannover.onmicrosoft.com; s=selector1-esdhannover-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ufSYIfcBBLeXYkjIUrq463bxCOz+pBiNziYfGGL3rNQ=;
+ b=IDbvTmwsmYEbY6s+vQK34yExTI5Y1aV3FoTVvoHickKvqrIP9VUzmvVuVPXYhj0onmNwQhfBGj7GdyfFyq7jEJdmCZiJjJE+Q6g8fjR+nR75OKeWlCdsPOHuG6jwpI1BmHS2A8tMeWXk0sUdAEp/4LRpUj+JDNi/EAmuYT7GX2k=
+Received: from AM9PR03MB6929.eurprd03.prod.outlook.com (2603:10a6:20b:287::7)
+ by AM0PR03MB5826.eurprd03.prod.outlook.com (2603:10a6:208:15d::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4394.19; Mon, 9 Aug
+ 2021 17:22:51 +0000
+Received: from AM9PR03MB6929.eurprd03.prod.outlook.com
+ ([fe80::1846:f0d4:5710:e65d]) by AM9PR03MB6929.eurprd03.prod.outlook.com
+ ([fe80::1846:f0d4:5710:e65d%5]) with mapi id 15.20.4394.023; Mon, 9 Aug 2021
+ 17:22:51 +0000
+From:   =?utf-8?B?U3RlZmFuIE3DpHRqZQ==?= <Stefan.Maetje@esd.eu>
+To:     "mkl@pengutronix.de" <mkl@pengutronix.de>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Subject: Re: [PATCH] mailmap: update email address of Matthias Fuchs
+Thread-Topic: [PATCH] mailmap: update email address of Matthias Fuchs
+Thread-Index: AQHXirCeglqz0Unlkk66HIEFwudub6tmlDoAgAQ1gACAAKdAAA==
+Date:   Mon, 9 Aug 2021 17:22:51 +0000
+Message-ID: <1b5875759dc9d68f2379cde389b1bf5595ee3964.camel@esd.eu>
+References: <20210806104833.102081-1-mkl@pengutronix.de>
+         <10024d316c23d7be2ce6037f7994aa2af033208f.camel@esd.eu>
+         <20210809072414.syapcl2v7urytygg@pengutronix.de>
+In-Reply-To: <20210809072414.syapcl2v7urytygg@pengutronix.de>
+Accept-Language: de-DE, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+authentication-results: pengutronix.de; dkim=none (message not signed)
+ header.d=none;pengutronix.de; dmarc=none action=none header.from=esd.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: bb50679e-db96-437b-c507-08d95b5a510f
+x-ms-traffictypediagnostic: AM0PR03MB5826:
+x-microsoft-antispam-prvs: <AM0PR03MB58268B3D9856C89FF62BEB7181F69@AM0PR03MB5826.eurprd03.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: MJGQFJ6zuiwFE99/XARgrkVYt/voa/GWfDyQXAVM1hebkJ2C8h+cFcSefsrT2Kbh6ROWPYvjOSooD2lYayD8V9ms08KVzJkDvSx/0sy8+w5qhyvj8O84SF1arB76V6fkGTbmhcfxN4XXYllAyD64TN9Fgi3nJyHwispgTAMYFNpZy9wZhv4Cs9iDsazGNiPR+P8ORnUkCftkPwGzwp0v0/xVRKF2PEx+Q4um+n7WUWoFTm83nEzptZvWkRcOYpkBh12XLwo16oP7K5W909rHHD7HRT8Upf/93YpsCi9kqekKnVhsl56sqBuoEukM7/MSrv62hiC+v/Vu3U5r82orN4YTazgUjfOzojXvKuU1DRHpsulaHqlM+w5M/0oZwTHyInWWJhlb7heYhxZpSZNEs2J00ZbCdwllN6dl8+5v2guVSKZ03gluom8NqAv1ENeXIuY7CiXyeOj2NGzFt6ku3KNSEJ42Jb6+g/0Gcp2Phr50drVsDmuNJ6Dj12rpTDkVqe1KTlZD02CM0SLP/odr+PF7+D4m0Ah8lJP7t1O7/p9r45mVLwvJVksfFIVI+ptQ7Vk/w3RZutjyg8bUF+p88mlD1eDpDtZxvj0vRusbn9I2hPlU1hd8gsp6UUmoM8JqQ1Rqw/PZtGROjhkd799QkDDr6vLsf+QtFhI6sBbUb3dEb+es2LbKejHbyGDTBiAiuBRxPfZt2FCqZrBFyEefsbanfDG401HcxiafBw5hVpIt3XUyoCsrAUxzBTEXHZaJg5JKDCIDT33Sm5iphVZy4F5NFmOPeL8ZUtq3hhyUR3HPVHhsCqclf9nbVWAYKxgP
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR03MB6929.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(396003)(376002)(39830400003)(366004)(136003)(6486002)(85202003)(53546011)(15650500001)(6512007)(83380400001)(85182001)(64756008)(66946007)(6916009)(8936002)(8676002)(2616005)(66446008)(66476007)(2906002)(71200400001)(66556008)(6506007)(66574015)(186003)(38070700005)(122000001)(26005)(76116006)(91956017)(36756003)(5660300002)(86362001)(478600001)(54906003)(316002)(38100700002)(4326008)(966005)(99106002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?L2E0T0pHTkoxTXlmbFRRdGNmRHZCVWsvMWl6dlV0UDNtNGFINGMxZENBZ0NY?=
+ =?utf-8?B?ZmpBSWZHbDlBT2E2a1FwM2xlTnA3cHQxTXRwNythWG15ejlzZi9jRmYyQ3hx?=
+ =?utf-8?B?cnRQWVdId2lqSmhaNTV3YnpaM2Evc2RGRVN2RDdpbk9TdmtkVEtFMWhBcTZB?=
+ =?utf-8?B?ZlpoeVJXdjVSZ2MzYm1QWVJ4L1VrMThVVmFSMXNwYmtGWmIvREcyckt5eVpS?=
+ =?utf-8?B?UVA4U3MyTWpMRmdHRHJRbllYNjZyQURBcWJpSmlMRnJoTVJwc2hSQ3JRWldt?=
+ =?utf-8?B?b3FtYlE0VkIrSUlCU01JZ2tkU25vbTZNcWRFSDFoTzVaam5WOG5ZblNweXlh?=
+ =?utf-8?B?bG92M3V0RVU4VDBRQzBlaklPVDBqajhXVUgwMEhmc1RyYjIwSHJ0NWlrOUxi?=
+ =?utf-8?B?d1lFZnZ1OVNUQjYvOTNlTGp4cUdjcURZQzcrZG56VUNtaCtSVnVzdml0ZUpy?=
+ =?utf-8?B?U0ZLbTlOT3FhUHVVcThHamJVYkRZZndGRU9hSTUwU0k2U2dqeUtHODdMWE51?=
+ =?utf-8?B?SnMzUUpza2I1OVVvODRLdkJtSUhjQVVhcUpsQ21vTCtNbkFodEZmYmppQ2Rh?=
+ =?utf-8?B?NDVyWlpNb3J1cmxsOVlmYnlZM3QwRkp3Y2tVZ2VmdG1uNGJZaUo2aUIrVG1u?=
+ =?utf-8?B?RzI0MC9IeEtYYUJVcGNvTTBjclArS0pSazVpMDBkcmgwVk1RWEhtT1QvcmtO?=
+ =?utf-8?B?S0pDVEc5MDhiTVFUV1Y5eHZjbmF6QkU5cVVqVkRUUnFpNVhMWUcxZnkyOVZM?=
+ =?utf-8?B?V2lrdXU3Vll0V2IwL0QwQ1dPQk10aGwwdUtZUzN3dEUyWGh2U2NlUVZ6R0dp?=
+ =?utf-8?B?Snd3eVJjQWlXVnFEaE5pdGhzYUNmOUx0dWI3U0drd2tHNmg2djRSYVpoL0x5?=
+ =?utf-8?B?K1pwS09hcFBwbE0rM01yNkpQUjlMMExjVlYwMzdDQVdkYTlPR0dQZjZML1Yy?=
+ =?utf-8?B?bTVPdzQrY0tjektRRnVrTml2d3B2c293VkxmVGRrZnVXSDAwdW9sOUdOcEw1?=
+ =?utf-8?B?dWh2ZnAzUm4yMWJiSmRPckJXMWt2UzZMMDJlUXNCUVVRSys4S3ZzNmNOakZZ?=
+ =?utf-8?B?bjRvaGNUcVJFay92ekpuV1l3YTN1a1pYcEVlbVFsQkdzY1ZGcC9KSWQyUVZI?=
+ =?utf-8?B?UXRUOFVPRzhBY0lrSUg4NFRVdmpWWVhKZHdQZzZlVTlLclVhVThsRE4wYWJF?=
+ =?utf-8?B?bmhNMjFMNERKSmtVdllzYWR0STRTSlFQR3FaUUg4Wi96N1ZvTFlPWThqNnor?=
+ =?utf-8?B?Q0lWZHFFVmNLVTJ1VHZvUjV4U0RmYTN1TnhjMEF3RUZIQ2xHVXRlcExTaGtk?=
+ =?utf-8?B?MlRScGhJVTQxbXluSFZkSk9ienl3K2lCTmZpQllkbGFWalNROUNYMER5VzJP?=
+ =?utf-8?B?QmlkckQyS3ZrU29icU4ydEZpR01JM2dDc3FFTXJ6R3FWVk9qWG5wSkg0WXJu?=
+ =?utf-8?B?a2tRQk1uRnM1dlFKYW03cW1KMjFVemk3QTNBM2RteDNRWDk4UlVib3NlZ3ht?=
+ =?utf-8?B?QzNLTnhVY0tXbWlTbFpzc3NiSkhUbkdHSUJJUmNPblp1QStja0d6UG81MWtu?=
+ =?utf-8?B?bFM5NGtwWWV5THBwUk9haEFiazM2QzZBaE1OKzZjeXNJTDRjbm9OZEV1TkZh?=
+ =?utf-8?B?K05uOW1VWXp4U1ppTjJmR2FLcHFkOXNlZnZ0cGt0c1dnM0p0M0ZTVTlwcmtw?=
+ =?utf-8?B?dXhOSzlvb0FsK05jSDdtR0ZRYTV5bnBWK05WK3BKTC9aS1VpZnh5c1Q5SVJu?=
+ =?utf-8?Q?RAT4xjQNSMDBHBO8cqTPwrbnKBROv7LGj1wUdjk?=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <B5626F1432F4C447B18205D281C30815@eurprd03.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20210727133022.634-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20210727133022.634-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <20210809132605.m76mnxkp6bdcn77c@pengutronix.de>
-In-Reply-To: <20210809132605.m76mnxkp6bdcn77c@pengutronix.de>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Mon, 9 Aug 2021 16:48:20 +0100
-Message-ID: <CA+V-a8uDPn83W6wi2Jq8VFrBeGSVMPMiFmXGV2z=L8xxZteFNQ@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] dt-bindings: net: can: renesas,rcar-canfd:
- Document RZ/G2L SoC
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Herring <robh+dt@kernel.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-can@vger.kernel.org, netdev <netdev@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: esd.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM9PR03MB6929.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bb50679e-db96-437b-c507-08d95b5a510f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Aug 2021 17:22:51.3523
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5a9c3a1d-52db-4235-b74c-9fd851db2e6b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: oG2BtVQNx71dAxvtYp5oU8NpogxqxlhFbrx+JVZJr+lLnA1wTO7VEGqjh2wwccEi+FFEwr4s7gL21RrGxtNfgA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR03MB5826
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Marc,
-
-On Mon, Aug 9, 2021 at 2:26 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->
-> On 27.07.2021 14:30:20, Lad Prabhakar wrote:
-> > Add CANFD binding documentation for Renesas RZ/G2L SoC.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
-> > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > Reviewed-by: Rob Herring <robh@kernel.org>
-> > ---
-> >  .../bindings/net/can/renesas,rcar-canfd.yaml  | 69 +++++++++++++++++--
-> >  1 file changed, 63 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-> > index 0b33ba9ccb47..546c6e6d2fb0 100644
-> > --- a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-> > +++ b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-> > @@ -30,13 +30,15 @@ properties:
-> >                - renesas,r8a77995-canfd     # R-Car D3
-> >            - const: renesas,rcar-gen3-canfd # R-Car Gen3 and RZ/G2
-> >
-> > +      - items:
-> > +          - enum:
-> > +              - renesas,r9a07g044-canfd    # RZ/G2{L,LC}
-> > +          - const: renesas,rzg2l-canfd     # RZ/G2L family
-> > +
-> >    reg:
-> >      maxItems: 1
-> >
-> > -  interrupts:
-> > -    items:
-> > -      - description: Channel interrupt
-> > -      - description: Global interrupt
-> > +  interrupts: true
-> >
-> >    clocks:
-> >      maxItems: 3
-> > @@ -50,8 +52,7 @@ properties:
-> >    power-domains:
-> >      maxItems: 1
-> >
-> > -  resets:
-> > -    maxItems: 1
-> > +  resets: true
-> >
-> >    renesas,no-can-fd:
-> >      $ref: /schemas/types.yaml#/definitions/flag
-> > @@ -91,6 +92,62 @@ required:
-> >    - channel0
-> >    - channel1
-> >
-> > +if:
-> > +  properties:
-> > +    compatible:
-> > +      contains:
-> > +        enum:
-> > +          - renesas,rzg2l-canfd
-> > +then:
-> > +  properties:
-> > +    interrupts:
-> > +      items:
-> > +        - description: CAN global error interrupt
-> > +        - description: CAN receive FIFO interrupt
-> > +        - description: CAN0 error interrupt
-> > +        - description: CAN0 transmit interrupt
-> > +        - description: CAN0 transmit/receive FIFO receive completion interrupt
-> > +        - description: CAN1 error interrupt
-> > +        - description: CAN1 transmit interrupt
-> > +        - description: CAN1 transmit/receive FIFO receive completion interrupt
-> > +
-> > +    interrupt-names:
-> > +      items:
-> > +        - const: g_err
-> > +        - const: g_recc
-> > +        - const: ch0_err
-> > +        - const: ch0_rec
-> > +        - const: ch0_trx
-> > +        - const: ch1_err
-> > +        - const: ch1_rec
-> > +        - const: ch1_trx
-> > +
-> > +    resets:
-> > +      maxItems: 2
-> > +
-> > +    reset-names:
-> > +      items:
-> > +        - const: rstp_n
-> > +        - const: rstc_n
-> > +
-> > +  required:
-> > +    - interrupt-names
-> > +    - reset-names
-> > +else:
-> > +  properties:
-> > +    interrupts:
-> > +      items:
-> > +        - description: Channel interrupt
-> > +        - description: Global interrupt
-> > +
-> > +    interrupt-names:
-> > +      items:
-> > +        - const: ch_int
-> > +        - const: g_int
->
-> Are you adding the new interrupt-names to the existing DTs, too?
-> Otherwise this patch will generate more warnings in the existing DTs.
->
-For non RZ/G2L family interrupt-names property is not marked as
-required property so dtbs_check won't complain. Once we have added
-interrupt names in all the SoC DTSI's we will mark it as required
-property for the rest of the SoC's.
-
-Cheers,
-Prabhakar
-
-> regards,
-> Marc
->
-> --
-> Pengutronix e.K.                 | Marc Kleine-Budde           |
-> Embedded Linux                   | https://www.pengutronix.de  |
-> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+QW0gTW9udGFnLCBkZW4gMDkuMDguMjAyMSwgMDk6MjQgKzAyMDAgc2NocmllYiBNYXJjIEtsZWlu
+ZS1CdWRkZToNCj4gT24gMDYuMDguMjAyMSAxNTowNzo0MywgU3RlZmFuIE3DpHRqZSB3cm90ZToN
+Cj4gPiBJIHdhcyBub3QgYXdhcmUgb2YgdGhlIC5tYWlsbWFwIGZpbGUgYW5kIGl0cyB3b3JraW5n
+cy4gDQo+IA0KPiBUaGUgbWFpbG1hcCBmaWxlIHdvcmtzIG9uIHRoZSBnaXQgbG9nLCBhbmQgdGh1
+cyB0b29scyB1c2luZyBpdDogZS5nLg0KPiBzY3JpcHRzL2dldF9tYWludGFpbmVyLnBsLg0KPiAN
+Cj4gPiBNeSBxdWVzdGlvbiBpcyBzaG91bGQgdGhlbiBhbHNvIDx0aG9tYXMua29lcnBlckBlc2Qu
+ZXU+IGJlIHB1dCBpbiB0aGlzDQo+ID4gZmlsZQ0KPiANCj4gUHJvYmFibHkgeWVzLCBhcyB0aGVy
+ZSBhcmUgdHdvIHBhdGNoZXMgYnkgaGltIGluIHRoZSBMaW51eCBrZXJuZWw6DQo+IA0KPiA+IFRo
+b21hcyBLw7ZycGVyICgyKToNCj4gPiAgICAgICBjYW46IGRldjogYXZvaWQgY2FsbGluZyBrZnJl
+ZV9za2IoKSBmcm9tIGludGVycnVwdCBjb250ZXh0DQo+ID4gICAgICAgY2FuOiBlc2RfdXNiMjog
+Rml4IHNwYXJzZSB3YXJuaW5ncw0KPiANCj4gSSdsbCB1cGRhdGUgdGhpcyBwYXRjaC4NCj4gDQo+
+ID4gYmVjYXVzZSBoZSBpcyB0aGUgY28tYXV0aG9yIG9mIHRoZSBwYXRjaCB5b3UncmUgcmV2aWV3
+aW5nIGF0bS4NCj4gDQo+IEZvciBjby1hdXRob3JzaGlwLCB1c2UgdGhlIENvLWRldmVsb3BlZC1i
+eSB0YWcsIHRoYXQgd2FzIHJlY2VudGx5IGFkZGVkOg0KPiANCj4gaHR0cHM6Ly9lbGl4aXIuYm9v
+dGxpbi5jb20vbGludXgvdjUuMTIvc291cmNlL0RvY3VtZW50YXRpb24vcHJvY2Vzcy9zdWJtaXR0
+aW5nLXBhdGNoZXMucnN0I0w0NDkNCg0KSSB3aWxsIGRvIHRoYXQuDQoNCj4gU3BlYWtpbmcgb2Yg
+dGhhdCBwYXRjaC4gQ2FuIHlvdSBwbGVhc2UgY3JlYXRlIGFuIGVudHJ5IGluIHRoZQ0KPiBNQUlO
+VEFJTkVSUyBmaWxlLCB0b28/IEkgc3VnZ2VzdCB0byBhZGQgeW91cnNlbGYgYXMgTTogYW5kIHRo
+ZQ0KPiBzb2NrZXRjYW5AZS51IGFzIFI6LiBUaGUgY2hhbmdlIGluIHRoZSBNQUlOVEFJTkVSUyBm
+aWxlIHdpbGwgYmUgYSBzZWNvbmQNCj4gcGF0Y2ggaW4gdGhhdCBzZXJpZXMuIEp1c3QgaW5jbHVk
+ZSBpdCB0aGUgbmV4dCBpdGVyYXRpb24gb2YgdGhhdCBzZXJpZXMuDQoNCkRvIHlvdSB0aGluayBv
+ZiBzb21ldGhpbmcgbGlrZSB0aGUgcGF0Y2ggYmVsb3c/IEknbSBjdXJpb3VzLiBTaG91bGRuJ3Qg
+dGhlcmUgDQpiZSBzaW1pbGFyIGVudHJpZXMgZm9yIHRoZSBkcml2ZXJzIGZyb20gVmluY2VudCAo
+ZHJpdmVycy9uZXQvY2FuL3VzYi9ldGFzX2VzNTh4LykNCmFuZCB0aGUgUEVBSyBkcml2ZXIgZmFt
+aWx5IChkcml2ZXJzL25ldC9jYW4vcGVha19jYW5mZC8pPyBXaHkgYXJlIHRoZXkgbm90IHRoZXJl
+Pw0KSGF2ZSBJIG1pc3VuZGVyc3Rvb2Qgc29tZXRoaW5nPw0KDQpkaWZmIC0tZ2l0IGEvTUFJTlRB
+SU5FUlMgYi9NQUlOVEFJTkVSUw0KaW5kZXggNDFmY2ZkYjI0YTgxLi5mMjVlM2Y3OWIzOTIgMTAw
+NjQ0DQotLS0gYS9NQUlOVEFJTkVSUw0KKysrIGIvTUFJTlRBSU5FUlMNCkBAIC00MTExLDYgKzQx
+MTEsMTQgQEAgRjogICAgICAgaW5jbHVkZS91YXBpL2xpbnV4L2Nhbi9lcnJvci5oDQogRjogICAg
+IGluY2x1ZGUvdWFwaS9saW51eC9jYW4vbmV0bGluay5oDQogRjogICAgIGluY2x1ZGUvdWFwaS9s
+aW51eC9jYW4vdnhjYW4uaA0KIA0KK0NBTiBORVRXT1JLIERSSVZFUlMgRVNEIEhBUkRXQVJFDQor
+TTogICAgIFN0ZWZhbiBNw6R0amUgPHN0ZWZhbi5tYWV0amVAZXNkLmV1Pg0KK1I6ICAgICBzb2Nr
+ZXRjYW5AZXNkLmV1DQorTDogICAgIGxpbnV4LWNhbkB2Z2VyLmtlcm5lbC5vcmcNCitTOiAgICAg
+TWFpbnRhaW5lZA0KK0Y6ICAgICBkcml2ZXJzL25ldC9jYW4vZXNkLw0KK0Y6ICAgICBkcml2ZXJz
+L25ldC9jYW4vdXNiL2VzZF91c2IyLmMNCisNCiBDQU4gTkVUV09SSyBMQVlFUg0KIE06ICAgICBP
+bGl2ZXIgSGFydGtvcHAgPHNvY2tldGNhbkBoYXJ0a29wcC5uZXQ+DQogTTogICAgIE1hcmMgS2xl
+aW5lLUJ1ZGRlIDxta2xAcGVuZ3V0cm9uaXguZGU+DQoNCg0KPiA+IGFuZCBoaXMgZW1haWwgYWRk
+cmVzcyBzaG93cyB1cCBpbiBNT0RVTEVfQVVUSE9SKCkgbWFjcm8uIEhlIGFsc28gbGVmdA0KPiA+
+IG91ciBjb21wYW55IGFscmVhZHkuDQo+IA0KPiBJbiBuZXdseSBhZGRlZCBjaGFuZ2VzLCBpdCBt
+YWtlcyBzZW5zZSB0aGF0IGFsbCBlbWFpbCBhZGRyZXNzZXMgYXJlDQo+IHdvcmtpbmcuIDpEDQoN
+ClNvIEknbGwgcmVtb3ZlIGhpcyBzdGFsZSBlbWFpbCBhZGRyZXNzIHRvZ2V0aGVyIHdpdGggdGhl
+IE1PRFVMRV9BVVRIT1IoKSBtYWNybw0KYW5kIGZpbGUgdGhlIGF1dGhvcnNoaXAgY3JlZGl0cyBp
+biBhIGNoYW5nZWQgY29weXJpZ2h0IGhpc3RvcnkgYXQgdGhlIHRvcCBvZg0KdGhlIHNvdXJjZSBm
+aWxlcy4NCg0KQmVzdCByZWdhcmRzLA0KICAgIFN0ZWZhbg0KDQo=
