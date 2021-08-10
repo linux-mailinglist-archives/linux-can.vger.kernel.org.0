@@ -2,156 +2,172 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CD113E4DC3
-	for <lists+linux-can@lfdr.de>; Mon,  9 Aug 2021 22:25:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A05A3E52F6
+	for <lists+linux-can@lfdr.de>; Tue, 10 Aug 2021 07:34:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231559AbhHIUZk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 9 Aug 2021 16:25:40 -0400
-Received: from mail-fr2deu01on2070.outbound.protection.outlook.com ([40.107.135.70]:26561
-        "EHLO DEU01-FR2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S236220AbhHIUZk (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Mon, 9 Aug 2021 16:25:40 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fJoL0r0NQhnBv4d+GvTPMHSQRgy6dftXPXLCCAOHtSvFQY5rHdY2LJ6I3G4ArMkxqNJ2hHBdpaQSdHOycalXeuVbuakhS50MxAUzLegMZTM3x/wiBRkJ5K/1yqQRIer+dwdNrFpgqkqdUsYmFHmLX3QTTSl7pgNDlkaH0iEMtvmM6lOAWOhoWmr6Ruez8KQ3RyQW3n0FxTg1W3KtgEml1Wc7jmMI6MAoiqszYk3eRiYqqnKmQ4QylAGCq621HVUtRx1I6xnDN35mRJx0EIN7GANGKEFyB2vypg0XFhL/7u2LT55WYfXk1wRT0yCiJNjMiXgsbqzO6eHPfOZyzMokKg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5oBxPBun8VVEsRw2Rb01f9kqbjcaFZPSbk1hyh/Ojyw=;
- b=LUWjcIRV+fx99f+dRYqE91viBQdjVwAtjxK5rxSL7/KKDBo28kDoF/g+6lXuTuJHlBTu71WoeGq9xaxZ2LFrfbtfUg8DH1ncAcyDfbOWDi4ALef6m5maICAMjejr4XEcHVLvYsKbKQdv4mFQheJjHRkhkN3J7Ob/YFbkMiG8mtw538qirnnStvfBTehQpnqN7PORS4jMj37lINaV+pepw4XZ1jRy94tLCKIgxk5QAGlQ+onAI6ouvsXCVy9u9gR7lqoS/GdAxv3nLqrQ4lkvPnm59iXZDWMy89npXSMOG2/E0eO339slUk4P6KenI/TOI1CZvDziBk0x2wuh3JfeAg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arecs.eu; dmarc=pass action=none header.from=arecs.eu;
- dkim=pass header.d=arecs.eu; arc=none
-Received: from FRYP281MB0614.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:47::10)
- by FR2P281MB0388.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:3b::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4415.5; Mon, 9 Aug
- 2021 20:25:16 +0000
-Received: from FRYP281MB0614.DEUP281.PROD.OUTLOOK.COM
- ([fe80::7dd0:6928:5a70:923a]) by FRYP281MB0614.DEUP281.PROD.OUTLOOK.COM
- ([fe80::7dd0:6928:5a70:923a%6]) with mapi id 15.20.4415.013; Mon, 9 Aug 2021
- 20:25:16 +0000
-From:   Hussein Alasadi <alasadi@arecs.eu>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-CC:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Subject: RE: [PATCH] m_can: fixed typo in m_can_set_bittiming() causing
- corrupt DBTP register content
-Thread-Topic: [PATCH] m_can: fixed typo in m_can_set_bittiming() causing
- corrupt DBTP register content
-Thread-Index: AdeNQ/Q4bqZPOm0YR2qWN96aJuPPYAABe62AAASFYOA=
-Date:   Mon, 9 Aug 2021 20:25:16 +0000
-Message-ID: <FRYP281MB06149A25C5C0F55E9AC1B635D1F69@FRYP281MB0614.DEUP281.PROD.OUTLOOK.COM>
-References: <FRYP281MB06140984ABD9994C0AAF7433D1F69@FRYP281MB0614.DEUP281.PROD.OUTLOOK.COM>
- <20210809181051.5a7vckphc5mizv2f@pengutronix.de>
-In-Reply-To: <20210809181051.5a7vckphc5mizv2f@pengutronix.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: pengutronix.de; dkim=none (message not signed)
- header.d=none;pengutronix.de; dmarc=none action=none header.from=arecs.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 29b00453-246c-4f07-17e2-08d95b73ccdf
-x-ms-traffictypediagnostic: FR2P281MB0388:
-x-microsoft-antispam-prvs: <FR2P281MB0388F94EEB259F9076B66D31D1F69@FR2P281MB0388.DEUP281.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:6108;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: vSbWxP8YlhSCma2f7AYlw9hGHTTth14Sy3dxf92Xn0HVqo47Ben9beAUCZcWBY39rqsGjNPxWJPDaogOOiQTdtULBi3yjZiGW4jt66ffQWysBjj6D9qjt6OJs2Pin5mxcRDO1xKb60iiCe1g+m/LtSlvwgsQ0UZLrhf6q5ca9tAO21881dAEGGDmIpEr3KD9A6ka1zdn8wxKyAfWKlRFv+D7xbZxyTDEYwWbpk6r7h5KwxA/W3u0n5A9EOBW3nEqOnTsu9W6+ctMNItB8RupcGVDRpaVhbf3vkBYQMi1gFOUii8c1ziNkvkv8LbhRvCxdO8NOwECKocfkle4X3hiRwRvJ0mNZg3gt56b2BSFsgBfupZZ8wrmRt2Eq3BjpIzUvNn0EicqB/XoZhRXyajtoICgeWxrSaiu75Oem9OKdgIBurAtXLayquxA5hKD6UcV738gUiaDvDI0xnjRtp+rAVDlq701cs7pCB3Qj6hLy5roctLQIw0a+mQSVIlHOsosYtLrmRtb15PzH/nU4ge623zGFHiFCJMqEKo8N9O+6WdypQJbNLiV3b6i85lT9/qlJVbzM3RA5WcjVgRNkmTRgRLZHiQiTwN4vpWrZRvoheUArQq9lfyvnVZktCGxPvNKcT3AaU9BB4AlExi1bvHWoDkw+3z3oQ4JCe+V5E0fBqoZNpGnO9uXDExFOCtRkOOSGFbm4tpuDHwLPFOAWZaLMI9r9gv1wpao+/Yb+KjNyjj2uUlMkb3TBcOx3IVgyizFh62812NOBk6Oko82vn0jPK6jxZ1OyTe5vZVq7pp+dLYlP5g7YEqY+hNF0JjI2F7u
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:FRYP281MB0614.DEUP281.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(346002)(39830400003)(396003)(136003)(366004)(376002)(33656002)(4326008)(86362001)(6916009)(9686003)(53546011)(76116006)(6506007)(8936002)(66556008)(55016002)(66446008)(5660300002)(64756008)(8676002)(7696005)(66946007)(66476007)(71200400001)(52536014)(83380400001)(316002)(2906002)(966005)(26005)(508600001)(186003)(38070700005)(122000001)(38100700002)(21314003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SW1DNStyTFhHODRzNVBHMUZBMjNick0vMXlxZWUwdkFmalJjcUUvT0wrRWto?=
- =?utf-8?B?bTFVbzVUZGUvak1ZdE5wZ3BKREMvdTZMb1ptdzdxWVhuMGRoQVludHA1cmFz?=
- =?utf-8?B?WWpLSEQ5cUxmK0lNQlM3MDkvaWovUHprYnlrYStuYlBybGFrdTZUSmNLMEFj?=
- =?utf-8?B?bzFqOHRWMDBUYjFOcG1NeEhacTdGcWhxeENjdUxZR1Q3T0pTWDMyRHI4ZTNu?=
- =?utf-8?B?aG53Y3huNVQwU2RwT1RuMFNTc0NYMTB2UFFMNG9oYU5BaHhLTzB3Ym5YY04z?=
- =?utf-8?B?RTlScjVCbWJrLzk1YVRvZ2RqNWxrUzRNSy84bDZZeFJOaWZKL3E3Smd6ZGNq?=
- =?utf-8?B?VHNuTUk4T1pzNzFyeEhteHZzbHdwemZrK2FqbFMrQkE2eDVvVmF2RllHUFVv?=
- =?utf-8?B?Tkw3REdVcHpzdHVwd0pFTWZFTm1WcG4rc0VKcG1iUGV6QUVGYXdEaWxLZTI2?=
- =?utf-8?B?dXhDMUZhVVBhU3hMVkFMN2lPSzlYdFpkM0p2ZnE4YkRuYWN1S0NmY2JoNGVL?=
- =?utf-8?B?c0hNMmtSdDRkcEptMzNTUEdwemtJTVBGakdTT05LVzRnZCtwWEFjdk9JRURh?=
- =?utf-8?B?RUpXN3NHYWw4ZWl2WUQycm1XdWhyb21DQUdtTC9EdnF3T3VYN0ZuZ1RWbVRy?=
- =?utf-8?B?dmlHSTVLU1pvUkY5YWdzaUd4UkRpN3dzdS8zTDEvV3RrWGsrSlowTFlJTjdI?=
- =?utf-8?B?eU10bDV6M2ZjdWZBMkxOSlhldWYyMzdTZG1EWkNoS3FDaFlRaExvZ3NuZ2t1?=
- =?utf-8?B?Rkt6aFNoZE5FdXVJazVFRWFGSlRPcFd5bkszdGcxd0pDaE1udU40UzRRNlRM?=
- =?utf-8?B?eVBuenFtZFR1Y3Uzc1R5Ym1pUWVhTWRYWlp4ai92aWxjcVJwMlZWVlR3U3Zv?=
- =?utf-8?B?YVRLUjZWaW1kakgyMHk5K3FROXpOTytTTytmbDkvcFpxK1NTYlozY3laYXFN?=
- =?utf-8?B?by9wOS8wRnZlNG5PaGxtTlhqSVQ3aG1zV1NYK3JpeDg1N1BHeFUycHlqZGt3?=
- =?utf-8?B?eTdpekhRSENKeUJtYVNndXR3aG1tQXRXVUF0V3ZMdHEzRlhOREVBK0MrOFVD?=
- =?utf-8?B?YWhHS0xBb3hqcC9lQ2dwN09TQWdrVHhxd3NrNG1rS1NzNjBweEVqVDJGYmJz?=
- =?utf-8?B?SkVjS21naENUMXcwVXplem5rM0ttZjJmZVE5WWZCemErQ0U4cGhING1TUXVE?=
- =?utf-8?B?V0VNa1M4YzAwQUhRV0R4YUliRjFOQUhzbm9qWklmRUp2WGtrR3JyaWlieWsv?=
- =?utf-8?B?RjBrZllzekxsVnJva2wyU3hMMENmb0RJNExwRGI5NlFKWXNmWjVVOExteEVy?=
- =?utf-8?B?bmVOS0l3UmFvNVJsQU8zT2tvbGdESDZsakd4M1JwQnRyNTUxcmtNOTVnQWoz?=
- =?utf-8?B?cEFqZmZMK0FYVjJBSXRZVHdaR2tvTFgyR2srMkphcmowSWZYU0lHTmVjaTJv?=
- =?utf-8?B?MlFSRjlVcTBvOGh0c1VsWEdHdGRvcUNVVnE4Nlo0TThNNkZrSEQwdGo1bC81?=
- =?utf-8?B?YlE1dlRWNjR4akgxdHU0Si94Tm13cHNJd2paUjhFaE5pU2JKQjd6SkhaQ09u?=
- =?utf-8?B?eDRLcjFrSFB0UUdLKzRwN2xWZmhpdmhoYnhheGNUR1NUaSsvc1JUL0tMQUk4?=
- =?utf-8?B?U29NbElERkludVZleWtPRjEzcitIdWlaMUFSSi9sTjZSc1h3a29XTGQ3MS9t?=
- =?utf-8?B?NGtxRVprZE44RU1TYkZ0RC9tUkZCcTdEMUtHU1QyM1IxaWZwQURCSGcwUHhq?=
- =?utf-8?Q?1qmybiyyevwbuYib400YpSWknNoFgbw2LNbnpbZ?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S237143AbhHJFe3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 10 Aug 2021 01:34:29 -0400
+Received: from smtp-16-i2.italiaonline.it ([213.209.12.16]:40990 "EHLO
+        libero.it" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S236481AbhHJFe2 (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 10 Aug 2021 01:34:28 -0400
+Received: from oxapps-11-063.iol.local ([10.101.8.73])
+        by smtp-16.iol.local with ESMTPA
+        id DKOrmHojZNAOdDKOrmZ1Bb; Tue, 10 Aug 2021 07:34:05 +0200
+x-libjamoibt: 1601
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=libero.it; s=s2021;
+        t=1628573645; bh=JMxweIV1r1BetrnL0LcaNchdA/T8X+41xtfojuq2Xj0=;
+        h=From;
+        b=Z1RLkq6RvPsSjhZjyfry4hqeGjQs/QClzu33V4z/SEGMMjVn6+GokWWBMr/PKwnHl
+         uHtmk6H1Utgkrk7OUx0+AHhq21p6b4yAA6lx9+acBDV4C6xWEXxAsvstIrynx7KG2y
+         4/EV/UVIb1nrsNqrUCsx/en7jpZr1FZ3rm4RpmHF4UES7YIEW3ccaf5XPw7QZxG/Pf
+         C1pNihjdJdyaPKfrijFyOfx1PDk2YGN5viOQSbkKiBtQoFgEPDs8Qmsksm0TlOhO/8
+         V4HQ0VaWfhhBfj4bm1akkQynoy1XpnQrzfrJv+ERdDiZE8sx1C8VDESKz2PBPE0Gf0
+         CniL9Y+N1i2Mg==
+X-CNFS-Analysis: v=2.4 cv=FoLAQ0nq c=1 sm=1 tr=0 ts=61120fcd cx=a_exe
+ a=mMekBfHVlu8C64H7xmYZHA==:117 a=53-0AmxBnkoA:10 a=IkcTkHD0fZMA:10
+ a=XmJMGle_k8YA:10 a=US0YOg7qL0DOt7DS0ekA:9 a=QEXdDO2ut3YA:10
+Date:   Tue, 10 Aug 2021 07:34:05 +0200 (CEST)
+From:   Dario Binacchi <dariobin@libero.it>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+Message-ID: <384767683.303063.1628573645349@mail1.libero.it>
+In-Reply-To: <20210809080608.171545-1-mkl@pengutronix.de>
+References: <20210809080608.171545-1-mkl@pengutronix.de>
+Subject: Re: [PATCH] can: c_can: rename IF_RX -> IF_NAPI
 MIME-Version: 1.0
-X-OriginatorOrg: arecs.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: FRYP281MB0614.DEUP281.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 29b00453-246c-4f07-17e2-08d95b73ccdf
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Aug 2021 20:25:16.5040
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: e40e33a7-902f-4fef-acb0-37bc625d7548
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: att3d2IivwFuwLcCFY3XA0+8y58PB4kLanarX3R7wevAhu4HBIPdpWD0KL/qQycHSy6mVTKnHR3lHOKrDNG9bg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: FR2P281MB0388
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+Importance: Normal
+X-Mailer: Open-Xchange Mailer v7.10.3-Rev34
+X-Originating-IP: 5.90.110.159
+X-Originating-Client: open-xchange-appsuite
+x-libjamsun: 7sBD9cYHmJaZJvp+DukmNcRXlCu/vApK
+x-libjamv: 4eSgXx2vbbA=
+X-CMAE-Envelope: MS4xfFp1rGMPo3sNxl9SnTRjArol2wA4L7Rbt2r2M5Si9Yman2tU312YbMKxJUnUfYJ1rStaCAujgY0oZN4ZBNQoIUtccPxHFE/81OYzkKIw6Fd/HYWjkkmf
+ f8SE6txyseVMEyDSKsOGdfw+/R2DG1xTFiD89BPV9hFA79SjSwhktMk8EJYhEDs+iupcI+TbIM2rKNJjGLSxmwOKoNVsFbT48K1YBwMUmjdQBCJ0usKPowJu
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-SGVsbG8gTWFyYywNCg0KSSBob3BlIGl0J3MgaW4gdGhlIGNvcnJlY3QgZm9ybWF0IG5vdy4NCg0K
-Rml4ZWQgTV9DQU5fREJUUCBjb3JydXB0IHJlZ2lzdGVyIGNvbnRlbnRzOg0KKiBOQlRQX3h4eCBk
-ZWZpbmVzIHdlcmUgYmVpbmcgdXNlZCBpbnN0ZWFkIG9mIERCVFBfeHh4Lg0KKiByZWdfYnRwIHdh
-cyBub3QgZ2V0dGluZyBPUmVkIHdpdGggdGhlIHBvc3NpYmx5LWV4aXN0aW5nIERCVFBfVERDIGZs
-YWcuDQoNClNpZ25lZC1vZmYtYnk6IEh1c3NlaW4gQWxhc2FkaSA8YWxhc2FkaUBhcmVjcy5ldT4N
-Cg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L2Nhbi9tX2Nhbi9tX2Nhbi5jIGIvZHJpdmVycy9u
-ZXQvY2FuL21fY2FuL21fY2FuLmMgaW5kZXggMGNmZmFhZDkwNWMyLi5mMzgwOWY0Y2ZjN2IgMTAw
-NjQ0DQotLS0gYS9kcml2ZXJzL25ldC9jYW4vbV9jYW4vbV9jYW4uYw0KKysrIGIvZHJpdmVycy9u
-ZXQvY2FuL21fY2FuL21fY2FuLmMNCkBAIC0xMTY4LDEwICsxMTY4LDEwIEBAIHN0YXRpYyBpbnQg
-bV9jYW5fc2V0X2JpdHRpbWluZyhzdHJ1Y3QgbmV0X2RldmljZSAqZGV2KQ0KICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgRklFTERfUFJFUChURENSX1REQ09fTUFTSywgdGRjbykp
-Ow0KICAgICAgICAgICAgICAgIH0NCg0KLSAgICAgICAgICAgICAgIHJlZ19idHAgPSBGSUVMRF9Q
-UkVQKE5CVFBfTkJSUF9NQVNLLCBicnApIHwNCi0gICAgICAgICAgICAgICAgICAgICAgICAgRklF
-TERfUFJFUChOQlRQX05TSldfTUFTSywgc2p3KSB8DQotICAgICAgICAgICAgICAgICAgICAgICAg
-IEZJRUxEX1BSRVAoTkJUUF9OVFNFRzFfTUFTSywgdHNlZzEpIHwNCi0gICAgICAgICAgICAgICAg
-ICAgICAgICAgRklFTERfUFJFUChOQlRQX05UU0VHMl9NQVNLLCB0c2VnMik7DQorICAgICAgICAg
-ICAgICAgcmVnX2J0cCB8PSBGSUVMRF9QUkVQKERCVFBfREJSUF9NQVNLLCBicnApIHwNCisgICAg
-ICAgICAgICAgICAgICAgICAgICAgRklFTERfUFJFUChEQlRQX0RTSldfTUFTSywgc2p3KSB8DQor
-ICAgICAgICAgICAgICAgICAgICAgICAgIEZJRUxEX1BSRVAoREJUUF9EVFNFRzFfTUFTSywgdHNl
-ZzEpIHwNCisgICAgICAgICAgICAgICAgICAgICAgICAgRklFTERfUFJFUChEQlRQX0RUU0VHMl9N
-QVNLLCB0c2VnMik7DQoNCiAgICAgICAgICAgICAgICBtX2Nhbl93cml0ZShjZGV2LCBNX0NBTl9E
-QlRQLCByZWdfYnRwKTsNCiAgICAgICAgfQ0KDQoNCk1pdCBmcmV1bmRsaWNoZW4gR3LDvMOfZW4s
-DQoNCkguIEFsYXNhZGkNClByb2pla3RsZWl0ZXIgRW50d2lja2x1bmcNCkFSRUNTIEdtYkgNCkxp
-bmRiZXJnaHN0ci4gNQ0KODIxNzggUHVjaGhlaW0sIEdlcm1hbnkNCsKgDQpBUkVDUyBBZHZhbmNl
-ZCBSZXNlYXJjaCwgRW5naW5lZXJpbmcgJiBDb25zdWx0aW5nIFNlcnZpY2VzIEdtYkgNCkFtdHNn
-ZXJpY2h0IE3DvG5jaGVuIEhSQiAxNzQwNzUsIFNpdHogZGVyIEdlc2VsbHNjaGFmdDogUHVjaGhl
-aW0gYmVpIE3DvG5jaGVuDQoNCi0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQpGcm9tOiBNYXJj
-IEtsZWluZS1CdWRkZSA8bWtsQHBlbmd1dHJvbml4LmRlPiANClNlbnQ6IE1vbmRheSwgOSBBdWd1
-c3QgMjAyMSA4OjExIFBNDQpUbzogSHVzc2VpbiBBbGFzYWRpIDxhbGFzYWRpQGFyZWNzLmV1Pg0K
-Q2M6IGxpbnV4LWNhbkB2Z2VyLmtlcm5lbC5vcmcNClN1YmplY3Q6IFJlOiBbUEFUQ0hdIG1fY2Fu
-OiBmaXhlZCB0eXBvIGluIG1fY2FuX3NldF9iaXR0aW1pbmcoKSBjYXVzaW5nIGNvcnJ1cHQgREJU
-UCByZWdpc3RlciBjb250ZW50DQoNCkhleSBIdXNzZWluIEFsYXNhZGksDQoNCk9uIDA5LjA4LjIw
-MjEgMTc6MzY6NTIsIEh1c3NlaW4gQWxhc2FkaSB3cm90ZToNCj4gRml4ZWQgTV9DQU5fREJUUCBj
-b3JydXB0IHJlZ2lzdGVyIGNvbnRlbnRzOg0KPiAqIE5CVFBfeHh4IGRlZmluZXMgd2VyZSBiZWlu
-ZyB1c2VkIGluc3RlYWQgb2YgREJUUF94eHguDQo+ICogcmVnX2J0cCB3YXMgbm90IGdldHRpbmcg
-T1JlZCB3aXRoIHRoZSBwb3NzaWJseS1leGlzdGluZyBEQlRQX1REQyBmbGFnLg0KDQpUaGFua3Mg
-Zm9yIHlvdXIgcGF0Y2ghDQoNCkNhbiB5b3UgcGxlYXNlIHJlLXNlbmQgdGhlIHBhdGNoIHdpdGgg
-eW91ciAiU2lnbmVkLW9mZi1ieToiLiBGb3IgZGV0YWlscw0Kc2VlOg0KDQpodHRwczovL2VsaXhp
-ci5ib290bGluLmNvbS9saW51eC92NS4xMi9zb3VyY2UvRG9jdW1lbnRhdGlvbi9wcm9jZXNzL3N1
-Ym1pdHRpbmctcGF0Y2hlcy5yc3QjTDM1Ng0KDQpyZWdhcmRzLA0KTWFyYw0KDQotLSANClBlbmd1
-dHJvbml4IGUuSy4gICAgICAgICAgICAgICAgIHwgTWFyYyBLbGVpbmUtQnVkZGUgICAgICAgICAg
-IHwNCkVtYmVkZGVkIExpbnV4ICAgICAgICAgICAgICAgICAgIHwgaHR0cHM6Ly93d3cucGVuZ3V0
-cm9uaXguZGUgIHwNClZlcnRyZXR1bmcgV2VzdC9Eb3J0bXVuZCAgICAgICAgIHwgUGhvbmU6ICs0
-OS0yMzEtMjgyNi05MjQgICAgIHwNCkFtdHNnZXJpY2h0IEhpbGRlc2hlaW0sIEhSQSAyNjg2IHwg
-RmF4OiAgICs0OS01MTIxLTIwNjkxNy01NTU1IHwNCg==
+Hi Marc,
+
+> Il 09/08/2021 10:06 Marc Kleine-Budde <mkl@pengutronix.de> ha scritto:
+> 
+>  
+> The C_CAN/D_CAN cores implement 2 interfaces to manage the message
+> objects. To avoid concurrency and the need for locking one interface
+> is used in the TX path (IF_TX). While the other one, named IF_RX is
+> used from NAPI context only. As this interface is not only used to
+> manage RX, but also TX message objects, this patch renames IF_RX to
+> IF_NAPI.
+> 
+> Cc: Dario Binacchi <dariobin@libero.it>
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> ---
+> Hey Dario,
+> 
+> as promised a patch to rename IF_RX -> IF_NAPI.
+>
+
+I agree with you. It's the right choice.
+Thanks and regards,
+Dario
+ 
+> In my current patch stack, I've added this patch before your FIFO
+> changes (and updated your patch accordingly), to avoid changing the
+> newly added IF_RX in your patch to IF_NAPI in the next patch.
+> 
+> regards,
+> Marc
+> 
+>  drivers/net/can/c_can/c_can_main.c | 24 +++++++++++++-----------
+>  1 file changed, 13 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/net/can/c_can/c_can_main.c b/drivers/net/can/c_can/c_can_main.c
+> index e65bd7a9cf1d..a3c2d9ec90f9 100644
+> --- a/drivers/net/can/c_can/c_can_main.c
+> +++ b/drivers/net/can/c_can/c_can_main.c
+> @@ -161,7 +161,7 @@
+>  #define IF_MCONT_TX		(IF_MCONT_TXIE | IF_MCONT_EOB)
+>  
+>  /* Use IF1 for RX and IF2 for TX */
+> -#define IF_RX			0
+> +#define IF_NAPI			0
+>  #define IF_TX			1
+>  
+>  /* minimum timeout for checking BUSY status */
+> @@ -529,13 +529,13 @@ static void c_can_configure_msg_objects(struct net_device *dev)
+>  
+>  	/* first invalidate all message objects */
+>  	for (i = priv->msg_obj_rx_first; i <= priv->msg_obj_num; i++)
+> -		c_can_inval_msg_object(dev, IF_RX, i);
+> +		c_can_inval_msg_object(dev, IF_NAPI, i);
+>  
+>  	/* setup receive message objects */
+>  	for (i = priv->msg_obj_rx_first; i < priv->msg_obj_rx_last; i++)
+> -		c_can_setup_receive_object(dev, IF_RX, i, 0, 0, IF_MCONT_RCV);
+> +		c_can_setup_receive_object(dev, IF_NAPI, i, 0, 0, IF_MCONT_RCV);
+>  
+> -	c_can_setup_receive_object(dev, IF_RX, priv->msg_obj_rx_last, 0, 0,
+> +	c_can_setup_receive_object(dev, IF_NAPI, priv->msg_obj_rx_last, 0, 0,
+>  				   IF_MCONT_RCV_EOB);
+>  }
+>  
+> @@ -710,11 +710,11 @@ static void c_can_do_tx(struct net_device *dev)
+>  		pend &= ~BIT(idx);
+>  		obj = idx + priv->msg_obj_tx_first;
+>  
+> -		/* We use IF_RX interface instead of IF_TX because we
+> +		/* We use IF_NAPI interface instead of IF_TX because we
+>  		 * are called from c_can_poll(), which runs inside
+>  		 * NAPI. We are not transmitting.
+>  		 */
+> -		c_can_inval_tx_object(dev, IF_RX, obj);
+> +		c_can_inval_tx_object(dev, IF_NAPI, obj);
+>  		can_get_echo_skb(dev, idx, NULL);
+>  		bytes += priv->dlc[idx];
+>  		pkts++;
+> @@ -766,14 +766,14 @@ static u32 c_can_adjust_pending(u32 pend, u32 rx_mask)
+>  static inline void c_can_rx_object_get(struct net_device *dev,
+>  				       struct c_can_priv *priv, u32 obj)
+>  {
+> -	c_can_object_get(dev, IF_RX, obj, priv->comm_rcv_high);
+> +	c_can_object_get(dev, IF_NAPI, obj, priv->comm_rcv_high);
+>  }
+>  
+>  static inline void c_can_rx_finalize(struct net_device *dev,
+>  				     struct c_can_priv *priv, u32 obj)
+>  {
+>  	if (priv->type != BOSCH_D_CAN)
+> -		c_can_object_get(dev, IF_RX, obj, IF_COMM_CLR_NEWDAT);
+> +		c_can_object_get(dev, IF_NAPI, obj, IF_COMM_CLR_NEWDAT);
+>  }
+>  
+>  static int c_can_read_objects(struct net_device *dev, struct c_can_priv *priv,
+> @@ -785,10 +785,12 @@ static int c_can_read_objects(struct net_device *dev, struct c_can_priv *priv,
+>  		pend &= ~BIT(obj - 1);
+>  
+>  		c_can_rx_object_get(dev, priv, obj);
+> -		ctrl = priv->read_reg(priv, C_CAN_IFACE(MSGCTRL_REG, IF_RX));
+> +		ctrl = priv->read_reg(priv, C_CAN_IFACE(MSGCTRL_REG, IF_NAPI));
+>  
+>  		if (ctrl & IF_MCONT_MSGLST) {
+> -			int n = c_can_handle_lost_msg_obj(dev, IF_RX, obj, ctrl);
+> +			int n;
+> +
+> +			n = c_can_handle_lost_msg_obj(dev, IF_NAPI, obj, ctrl);
+>  
+>  			pkts += n;
+>  			quota -= n;
+> @@ -803,7 +805,7 @@ static int c_can_read_objects(struct net_device *dev, struct c_can_priv *priv,
+>  			continue;
+>  
+>  		/* read the data from the message object */
+> -		c_can_read_msg_object(dev, IF_RX, ctrl);
+> +		c_can_read_msg_object(dev, IF_NAPI, ctrl);
+>  
+>  		c_can_rx_finalize(dev, priv, obj);
+>  
+> -- 
+> 2.30.2
