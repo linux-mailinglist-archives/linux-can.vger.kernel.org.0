@@ -2,98 +2,94 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD2793E539F
-	for <lists+linux-can@lfdr.de>; Tue, 10 Aug 2021 08:37:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8BFD3E5521
+	for <lists+linux-can@lfdr.de>; Tue, 10 Aug 2021 10:27:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235412AbhHJGhd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 10 Aug 2021 02:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37768 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234293AbhHJGhd (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 10 Aug 2021 02:37:33 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCAF4C0613D3
-        for <linux-can@vger.kernel.org>; Mon,  9 Aug 2021 23:37:11 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1mDLNs-0005xA-9l
-        for linux-can@vger.kernel.org; Tue, 10 Aug 2021 08:37:08 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id E3AB8663C95
-        for <linux-can@vger.kernel.org>; Tue, 10 Aug 2021 06:37:06 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id A9ECD663C88;
-        Tue, 10 Aug 2021 06:37:05 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 9b78e67d;
-        Tue, 10 Aug 2021 06:37:03 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Hussein Alasadi <alasadi@arecs.eu>,
-        Torin Cooper-Bennun <torin@maxiluxsystems.com>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net 2/2] can: m_can: m_can_set_bittiming(): fix setting M_CAN_DBTP register
-Date:   Tue, 10 Aug 2021 08:37:02 +0200
-Message-Id: <20210810063702.350109-3-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210810063702.350109-1-mkl@pengutronix.de>
-References: <20210810063702.350109-1-mkl@pengutronix.de>
+        id S238102AbhHJI13 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 10 Aug 2021 04:27:29 -0400
+Received: from mail-vs1-f53.google.com ([209.85.217.53]:35520 "EHLO
+        mail-vs1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232772AbhHJI13 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 10 Aug 2021 04:27:29 -0400
+Received: by mail-vs1-f53.google.com with SMTP id b138so11840170vsd.2;
+        Tue, 10 Aug 2021 01:27:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vEsirkXQR9XRp+ESI/NxcQBZnW3vhj14fJ6I3VFuv8A=;
+        b=UD91EvcN64Sn5cTlmapZjGWsk6y0y7UxLBoYUCY/5B2dh/9AHGEVGnfg8w2mlTSvpi
+         oKkcKz7XnoZgUBXq1FRabu/PUictdty3Tp0ypOjFJifmZscNy4Oa9+vduuRQZQ7rxdyM
+         xOkedV28ASTRmZNQddXahBCIuMll74ecCm6sKJpNrczMdttjfk8kQ9lDe70+wxa0+G93
+         wcHeSjiIv0of8t4qZ+jOe9H+MjOE//F69awHM2kyy4ReDDSBKsNJYAhfBOsSowKOUxo9
+         4xs3y476RL/MqWTFqNgDjPRYvf6LWORdkQwoRAGpXKi+NGwKV9unIcXyHTp0Qvyqm7AX
+         jcnw==
+X-Gm-Message-State: AOAM531/fbaB2CevqC8dCODysNQPCiwAPe/QbScQ5jd0nFAHm32lqaPN
+        qPGPSgQENLJveDrd5zRPDLpCnejxnFyjNLDtPOM=
+X-Google-Smtp-Source: ABdhPJwyqKTQQpPefbrJQBBtVL0JrZHJed0ystZSCbUas8Yc765XYNut1HHYKt7QAQ0qru2tK8FCEcPeuQXvb7ROTe4=
+X-Received: by 2002:a05:6102:d9:: with SMTP id u25mr11249297vsp.42.1628584026679;
+ Tue, 10 Aug 2021 01:27:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+References: <20210727133022.634-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20210727133022.634-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20210727133022.634-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 10 Aug 2021 10:26:55 +0200
+Message-ID: <CAMuHMdU7-AahJmKLabba_ZF2bcPwktU00Q_uBOYm+AdiBVGyTA@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] can: rcar_canfd: Add support for RZ/G2L family
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-can@vger.kernel.org, netdev <netdev@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Hussein Alasadi <alasadi@arecs.eu>
+Hi Prabhakar,
 
-This patch fixes the setting of the M_CAN_DBTP register contents:
-- use DBTP_ (the data bitrate macros) instead of NBTP_ which area used
-  for the nominal bitrate
-- do not overwrite possibly-existing DBTP_TDC flag by ORing reg_btp
-  instead of overwriting
+On Tue, Jul 27, 2021 at 3:30 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> CANFD block on RZ/G2L SoC is almost identical to one found on
+> R-Car Gen3 SoC's. On RZ/G2L SoC interrupt sources for each channel
+> are split into different sources and the IP doesn't divide (1/2)
+> CANFD clock within the IP.
+>
+> This patch adds compatible string for RZ/G2L family and splits
+> the irq handlers to accommodate both RZ/G2L and R-Car Gen3 SoC's.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
 
-Link: https://lore.kernel.org/r/FRYP281MB06140984ABD9994C0AAF7433D1F69@FRYP281MB0614.DEUP281.PROD.OUTLOOK.COM
-Fixes: 20779943a080 ("can: m_can: use bits.h macros for all regmasks")
-Cc: Torin Cooper-Bennun <torin@maxiluxsystems.com>
-Cc: Chandrasekar Ramakrishnan <rcsekar@samsung.com>
-Signed-off-by: Hussein Alasadi <alasadi@arecs.eu>
-[mkl: update patch description, update indention]
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/m_can/m_can.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Thanks for your patch!
 
-diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index bba2a449ac70..43bca315a66c 100644
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -1164,10 +1164,10 @@ static int m_can_set_bittiming(struct net_device *dev)
- 				    FIELD_PREP(TDCR_TDCO_MASK, tdco));
- 		}
- 
--		reg_btp = FIELD_PREP(NBTP_NBRP_MASK, brp) |
--			  FIELD_PREP(NBTP_NSJW_MASK, sjw) |
--			  FIELD_PREP(NBTP_NTSEG1_MASK, tseg1) |
--			  FIELD_PREP(NBTP_NTSEG2_MASK, tseg2);
-+		reg_btp |= FIELD_PREP(DBTP_DBRP_MASK, brp) |
-+			FIELD_PREP(DBTP_DSJW_MASK, sjw) |
-+			FIELD_PREP(DBTP_DTSEG1_MASK, tseg1) |
-+			FIELD_PREP(DBTP_DTSEG2_MASK, tseg2);
- 
- 		m_can_write(cdev, M_CAN_DBTP, reg_btp);
- 	}
+I've just noticed a set of silly typos:
+
+> --- a/drivers/net/can/rcar/rcar_canfd.c
+> +++ b/drivers/net/can/rcar/rcar_canfd.c
+
+> +static void rcar_canfd_handle_global_recieve(struct rcar_canfd_global *gpriv, u32 ch)
+
+receive (everywhere)
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.30.2
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
