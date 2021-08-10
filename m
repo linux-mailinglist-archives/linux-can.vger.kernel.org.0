@@ -2,78 +2,63 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72D0E3E5787
-	for <lists+linux-can@lfdr.de>; Tue, 10 Aug 2021 11:53:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60B793E5B4B
+	for <lists+linux-can@lfdr.de>; Tue, 10 Aug 2021 15:24:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbhHJJxp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 10 Aug 2021 05:53:45 -0400
-Received: from mail-vs1-f42.google.com ([209.85.217.42]:35634 "EHLO
-        mail-vs1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbhHJJxp (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 10 Aug 2021 05:53:45 -0400
-Received: by mail-vs1-f42.google.com with SMTP id b138so11968848vsd.2;
-        Tue, 10 Aug 2021 02:53:23 -0700 (PDT)
+        id S241362AbhHJNYZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 10 Aug 2021 09:24:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48560 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241354AbhHJNYV (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 10 Aug 2021 09:24:21 -0400
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9F03C0617A2
+        for <linux-can@vger.kernel.org>; Tue, 10 Aug 2021 06:23:58 -0700 (PDT)
+Received: by mail-ua1-x92b.google.com with SMTP id 67so8555719uaq.4
+        for <linux-can@vger.kernel.org>; Tue, 10 Aug 2021 06:23:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=2tvLhkad0w+Mh63WhnFJkmRFgYsLXsJmUqGVjzUAFIo=;
+        b=qJkL8fZ0S06Z0FQYNh/4MmhK7j+A3bS9xjmC8OhX22QJHec66aC0Yf4uxmFTWU4uq4
+         4zaEpRJNfTE5P16qMJLxRcIb0ytBzoINHrciZ16oueveU7FDwweNrhTU3c5UDo/z56b1
+         V6OdxuJ3tySYUYaZ04rAyM/uWtPYMenii8jy05cVXjVhDDgXkFHgaK2GOhpBsc52YFve
+         VL8iidod2m9w/QUkoClpuMrUGWkFzng1pEsZ+h9zY+IQVIYyQzRt6aNjeoljVsfoneAG
+         aU0zlSqRp6BET5jUs8EdKhkDPhg4/tsUe0YNuMP0A6vUsTut9Hk4K2nn2uiUPyEelDJr
+         VDiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=S2mwLXgLe34hkbYtljXjTjA3I8KCckCNQbP0HcYtm9A=;
-        b=Mjw9MdWQ9n8Ku0vMn4aJ7MyBog0BnIWtNuSyxK+pqf3bNya9KedG3VCGt7VCUc1Q0R
-         YGS5CzbRCJGVk23iS5XD3G/9yZ0jmHcWSaqTY/i8nsHYfX9FlbtuolZbuJYOlW4b1pdg
-         tm7AX7XnuFGbYFvZZSt3GpbHeOYRM/t4MgbrxR9+29lwM5OM6jQS5gOvVh0rp4/2emkc
-         3s0ZmgInG5ooVL52TQ+3zVjfIhzsJ/UnjPBcvf3Eg9kpY5CaGPuza5gMX/gEjuzgcDnL
-         yTolgR6Rsnahcpj9q1NbupyH0T+JsHYDbexkyFkxBlmgVX1147lfHaD00Uj1XuSuhx39
-         s3Og==
-X-Gm-Message-State: AOAM5333h6C9k9GvOLZ6X5hBmRYzWXVJL3oQcti9ACIVMCW/qHJZerC5
-        vCwWku0Jg8bnXWxv5b/wqYIwO4DqOUqLpNlmB7E=
-X-Google-Smtp-Source: ABdhPJw+OOGkNx22bnwbTSGu3XUk55wtMnmGfEefyDALdGanu14MXj52HaBVsKThqaWtgVAjZr46DwVYcpKhfqn+2kw=
-X-Received: by 2002:a67:e2c7:: with SMTP id i7mr20103201vsm.3.1628589202976;
- Tue, 10 Aug 2021 02:53:22 -0700 (PDT)
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=2tvLhkad0w+Mh63WhnFJkmRFgYsLXsJmUqGVjzUAFIo=;
+        b=Ib2inVzphJARDvlezqfg4vzAm1Z3Mfxbh5qYd86sXkebLtxC+AQuRnvsZU5IUL5T6v
+         TycW1iIAph0kZ9W2ik0iOFht+r5a+6K6u2yEjTKtpOOPhr5WWBYvfu7FyEG9uKVlg+GO
+         peVrSrNua0Oz1Sj+rIT9tOSVHROzDZtPXhsQ8N6qlsnzn1dbMKwfeoV0vGOVmpxNyNi5
+         arzYD+C19VD+irtVrPlci8+WNBMfLamlehnB7md5bSBGSupebX8h63YSZOtrnwzCh45C
+         NJwaJuv62H3UXjBOlttMIOn8PJr7T2f6gWyemrRlutB/nQUEfsrOZeEvX7iYajfb2J4p
+         kWdQ==
+X-Gm-Message-State: AOAM532ZaHo+6QoAw0kvOz2tcb0DYoWbqIxi0Jc66IBt2xHxQfnj73ET
+        4iu4bBTFQY7CsxotC74kmeoeYeteosKLHJhqLxM=
+X-Google-Smtp-Source: ABdhPJzvLPSDVsAzGJ6P6qYZROOmnBdkR5scyeQ8xySEfopDOzsn96BkEsNJXYQk9ma1do3JY374g/deOX6n1CT3K3s=
+X-Received: by 2002:ab0:3b59:: with SMTP id o25mr9024839uaw.80.1628601838128;
+ Tue, 10 Aug 2021 06:23:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210727133022.634-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20210727133022.634-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20210727133022.634-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 10 Aug 2021 11:53:11 +0200
-Message-ID: <CAMuHMdWhi_Zey-031hhRz_G4wHA_guSg5kZTw+LUdtvF9bbQfA@mail.gmail.com>
-Subject: Re: [PATCH v4 3/3] arm64: dts: renesas: r9a07g044: Add CANFD node
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-can@vger.kernel.org, netdev <netdev@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
+Sender: immeublesourou@gmail.com
+Received: by 2002:ab0:3903:0:0:0:0:0 with HTTP; Tue, 10 Aug 2021 06:23:57
+ -0700 (PDT)
+From:   John Kumor <owo219901@gmail.com>
+Date:   Wed, 11 Aug 2021 01:23:57 +1200
+X-Google-Sender-Auth: yS3UzgPnn68wNDbf-hnce3gLnn0
+Message-ID: <CAHdg_cT_K-3CiTtG_z=2JyS3OA_ir2VvAFdLZYYHbPxjicSz0w@mail.gmail.com>
+Subject: Urgent
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue, Jul 27, 2021 at 3:30 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Add CANFD node to R9A07G044 (RZ/G2L) SoC DTSI.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
-
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v5.15.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+My dear,
+Greetings! I trust that all is well with you and your family. Did you
+receive my previous email?
+Regards
+John Kumor.
