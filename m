@@ -2,98 +2,69 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A0273E55B4
-	for <lists+linux-can@lfdr.de>; Tue, 10 Aug 2021 10:41:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08AAA3E561E
+	for <lists+linux-can@lfdr.de>; Tue, 10 Aug 2021 11:00:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232763AbhHJIlz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 10 Aug 2021 04:41:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38448 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231326AbhHJIlz (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 10 Aug 2021 04:41:55 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A427FC0613D3;
-        Tue, 10 Aug 2021 01:41:33 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id f11so31047535ioj.3;
-        Tue, 10 Aug 2021 01:41:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xB1ACiy7Io0kW/dBZ3duTDNb8SeLXwDQNctKQur/fh8=;
-        b=WyyT1rbehAfV2SiLbf+Z59W37jcNL2wHrtZIEBmyJEHmeMTEWOEp121p7nNWgkGLkl
-         g5/AEobroGqP7YelCTbTmT2PDz1oaj/AVhItZ+lV/KiIOoDigWZ6kbqlviZT1CDUPsww
-         i5uJsPFRi0q65h2vtyFju/j0s+KuZPztx2oxUF4QjHfh3T+PZWOtGmnB28iAvVaZLeG8
-         Bfy9KYqPbp6wmnb9lJi1Wlxo/Z0JRex4P5Qxc+ZJG5ebPx+LoqqID9A6tv7FWYs+DCSV
-         3S177aikTY8CxPH79pcmhgng3GWUJdZseBrPRL/vlHCWWYpSW6Xp39ETr4MlfhZ+LrFY
-         3zzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xB1ACiy7Io0kW/dBZ3duTDNb8SeLXwDQNctKQur/fh8=;
-        b=KOhaZpTGEEA46Zne0N6E+j5ac4Yz57AwB8KNMfcFgUTZGONbyPb925ubS8x7DfhEQu
-         /ROTlkP2AIolc3AfNIdwxX2fJRPDmUgWCUlrWvCDx5dQPl5HFRpWc9JzSbB6JXM94nhV
-         J49gZ1H+8D4uk6a7GVSdRKf7l79zbz2QSIzWa5CxkLH+tr/+cANigXhrPa+NMOiQoF22
-         Gmo5pqswmpE7vvaTcURBkY/uazBnJpYspomxJ6y4SnLYBe0swzsPZbz/lGLalKjjt0/s
-         KMOsyQsR8U4EHeTutAWc2jNlEu3Bz7Rmc/XCra5DMsU8xgThnZeJVg2lpSnJirqdkNXg
-         ozlQ==
-X-Gm-Message-State: AOAM530q3uHaI+CXUMd1S3GBzMCtK9mJI1KfUZUCQi68bcOsvb+NVgNj
-        vAQAe+MLYIqJdiCQztrBZ0KiV9FyNVRPtC8hds0=
-X-Google-Smtp-Source: ABdhPJzqMo9V5pQJsK+5D81gy4SX3IpJ5wO1t4vb+Ak3Z2jc9b20h2i1IYQY/j+sZtJZiGv/rULFj5j6VVw6UMdP/Jo=
-X-Received: by 2002:a05:6602:24d9:: with SMTP id h25mr2370ioe.11.1628584893196;
- Tue, 10 Aug 2021 01:41:33 -0700 (PDT)
+        id S237695AbhHJJA3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 10 Aug 2021 05:00:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38498 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236949AbhHJJA2 (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 10 Aug 2021 05:00:28 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 41AA360ED8;
+        Tue, 10 Aug 2021 09:00:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628586007;
+        bh=XqWSWaTZHzLaSU1ELOx8/u7JPCQ9OtAKaORBLFqFPiQ=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=ePf7DVoRhMMg5NmxHrbPbKmW4xCRkApaoBiZ7QIpeqyTIxkXeXpNeCLXAzuZ8iyqf
+         y7c/CFtPSLI0FAt2ZBqkT9/juX5eL4uBuToWchzcUY21qyfKSjhwOncitLBwmAMva/
+         pmBLlwH8GRSgrqJJe/fIE+KbUm/aMkFc01Ac1GiQzdLYQ8KQqbbo0ifEBhyzeRin+y
+         +HRfbMRfaebAJkEmNipSXdWZgGu4AoShrbl5CE8mlEwdxiLyq2WhHRow6qtvDvC8BM
+         fnzCO4tXFiJ5oVt56fB7nswcrJTuITxIpWM0G+2MR4yblA8HRC/u3J8jONrA3ZX5w9
+         mh3UA4Np18OSQ==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 30B5C609AD;
+        Tue, 10 Aug 2021 09:00:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20210727133022.634-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20210727133022.634-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMuHMdU7-AahJmKLabba_ZF2bcPwktU00Q_uBOYm+AdiBVGyTA@mail.gmail.com>
- <CA+V-a8vfnnfgK1cY8dqsPJUwotK7SZZu5MjeGuJTa--+qaN4gg@mail.gmail.com> <20210810083925.weikjhpnzmq77oeh@pengutronix.de>
-In-Reply-To: <20210810083925.weikjhpnzmq77oeh@pengutronix.de>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Tue, 10 Aug 2021 09:41:07 +0100
-Message-ID: <CA+V-a8uVrzyOhdJFU+vy9Bpp8GuZrZAq4gnfZ-YfisJBPNwmmA@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] can: rcar_canfd: Add support for RZ/G2L family
+Content-Transfer-Encoding: 8bit
+Subject: Re: pull-request: can 2021-08-10
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <162858600719.23529.7661440175156491627.git-patchwork-notify@kernel.org>
+Date:   Tue, 10 Aug 2021 09:00:07 +0000
+References: <20210810063702.350109-1-mkl@pengutronix.de>
+In-Reply-To: <20210810063702.350109-1-mkl@pengutronix.de>
 To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-can@vger.kernel.org, netdev <netdev@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        linux-can@vger.kernel.org, kernel@pengutronix.de
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue, Aug 10, 2021 at 9:39 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->
-> On 10.08.2021 09:36:50, Lad, Prabhakar wrote:
-> > > > +static void rcar_canfd_handle_global_recieve(struct rcar_canfd_global *gpriv, u32 ch)
-> > >
-> > > receive (everywhere)
-> > >
-> > Ouch, I'll respin with the typo's fixed.
->
-> No need, I've fixed it here.
->
-Thanks Marc.
+Hello:
 
-Cheers,
-Prabhakar
+This pull request was applied to netdev/net.git (refs/heads/master):
 
-> Marc
->
-> --
-> Pengutronix e.K.                 | Marc Kleine-Budde           |
-> Embedded Linux                   | https://www.pengutronix.de  |
-> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+On Tue, 10 Aug 2021 08:37:00 +0200 you wrote:
+> Hello Jakub, hello David,
+> 
+> this is a pull request of 2 patches for net/master.
+> 
+> Baruch Siach's patch fixes a typo for the Microchip CAN BUS Analyzer
+> Tool entry in the MAINTAINERS file.
+> 
+> [...]
+
+Here is the summary with links:
+  - pull-request: can 2021-08-10
+    https://git.kernel.org/netdev/net/c/31782a01d14f
+  - [net,2/2] can: m_can: m_can_set_bittiming(): fix setting M_CAN_DBTP register
+    https://git.kernel.org/netdev/net/c/aae32b784ebd
+
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
