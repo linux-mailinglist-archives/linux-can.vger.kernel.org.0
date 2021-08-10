@@ -2,69 +2,102 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77A0D3E7F85
-	for <lists+linux-can@lfdr.de>; Tue, 10 Aug 2021 19:41:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D96223E848B
+	for <lists+linux-can@lfdr.de>; Tue, 10 Aug 2021 22:47:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234105AbhHJRkp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 10 Aug 2021 13:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50578 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233869AbhHJRhd (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 10 Aug 2021 13:37:33 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC99AC0619E3
-        for <linux-can@vger.kernel.org>; Tue, 10 Aug 2021 10:33:36 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id a7so30247038ljq.11
-        for <linux-can@vger.kernel.org>; Tue, 10 Aug 2021 10:33:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=y3BZ+wT7TMDVjM2/WQcyPOhYkG/NWjvDbJIsMqFI2RA=;
-        b=BggyEzSIpVznrhWTl8MIRAYEe15KlTxcMGseAQSFa7RDeDzVHxU4eSoETbmExnaLIE
-         zuq8OYsbcAC4TRTZpDVHuqOpZQ9IWzoDnFG9KE9Hgoh5GHNRpLrX7GaTa2Rlpi17Sa+7
-         wynv7o5vGtXcABH0YLjEMHBgYbVN4gwCCmMbmqM96vylTsH+XuSJQxB2T0aZ0px1WpyQ
-         RfAqEbEJWHwau3sZBSpHTPqcKq0lEWF+TZfP6Hoo/gEZtnmpQsbvRYpoOVsYPdrPzr7x
-         t3j+1ErMjanfyKX6UgQnU/AAqtfTm/Qksyzzn7HfgMwEBK6s4oZtKRsuVtciK72GKLQ3
-         6YUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=y3BZ+wT7TMDVjM2/WQcyPOhYkG/NWjvDbJIsMqFI2RA=;
-        b=GJr3/B0beAz+vioguXuv3xv2aP18WJ+wTAiH8CrH7t8ZQtHkpXDdEbYWaTDXIHnRsQ
-         5jHpdwaFghzlPwg9FYTgL4cnH6u0APGOGqZswFwEBCzPmazf2SWcD2f5Z8UKXbK7IUgW
-         Ku2C8ati2kLZnRvlCTuyb82jvCtOO51gm+BgKwK2mWWO5Jrnr4wahgnS+8Q+/1qezyet
-         L21Uudo8bPsUxr1qoSZiIwnunZEowMQM6HO2OTW9ZhX8mKxJ0yvXowAWqFBBikDVFDqC
-         6xRTs9HF4zrTBjrJnji+h8cbtvhnw4Z6eceLNYa1BfzPxRVZtUi5ktQooezGJjtunRik
-         llmA==
-X-Gm-Message-State: AOAM531sfugGRcBL9R/fYuV2pmdOrxzd6cPnMFfyZEIPK1BaDn3z5W8w
-        1kYKlg+Bu7LT3zEXGbdcvfBojS8mhwWOtUw5rJw=
-X-Google-Smtp-Source: ABdhPJxJzT1Kb5atT5yD66iaERNxaunOV6XJPdXL1z2OXUo9BKjwXZsRFKaZJQfJZWzQJ7vPYlv2A2MhcLNWOaJIEsQ=
-X-Received: by 2002:a2e:b61c:: with SMTP id r28mr13615658ljn.274.1628616814996;
- Tue, 10 Aug 2021 10:33:34 -0700 (PDT)
+        id S230419AbhHJUr6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 10 Aug 2021 16:47:58 -0400
+Received: from h4.fbrelay.privateemail.com ([131.153.2.45]:52402 "EHLO
+        h4.fbrelay.privateemail.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230181AbhHJUr5 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 10 Aug 2021 16:47:57 -0400
+Received: from MTA-06-3.privateemail.com (mta-06-1.privateemail.com [68.65.122.26])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by h3.fbrelay.privateemail.com (Postfix) with ESMTPS id 93686814DE
+        for <linux-can@vger.kernel.org>; Tue, 10 Aug 2021 16:47:34 -0400 (EDT)
+Received: from mta-06.privateemail.com (localhost [127.0.0.1])
+        by mta-06.privateemail.com (Postfix) with ESMTP id A2D5F18003ED;
+        Tue, 10 Aug 2021 16:47:33 -0400 (EDT)
+Received: from localhost (unknown [10.20.151.245])
+        by mta-06.privateemail.com (Postfix) with ESMTPA id 7B2F518000AE;
+        Tue, 10 Aug 2021 16:47:33 -0400 (EDT)
+Date:   Tue, 10 Aug 2021 13:47:32 -0700
+From:   Matt Kline <matt@bitbashing.io>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] can: m_can: Batch FIFO writes during CAN transmit
+Message-ID: <YRLl5PavqmjkIkeD@kline-desktop>
+References: <20210727015855.17482-1-matt@bitbashing.io>
+ <20210727015855.17482-3-matt@bitbashing.io>
+ <20210804091858.vvvrzrmnmi76mg3c@pengutronix.de>
 MIME-Version: 1.0
-Received: by 2002:ac2:5d2e:0:0:0:0:0 with HTTP; Tue, 10 Aug 2021 10:33:33
- -0700 (PDT)
-Reply-To: majidmuzaffar8@gmail.com
-From:   Majid Muzaffar <ing.abdullabin.rishid.me@gmail.com>
-Date:   Tue, 10 Aug 2021 20:33:33 +0300
-Message-ID: <CAFsu49W_3bbJbgEKV5RQo3TBRgLduTA-4EwS7hHkwcfSHSRrcg@mail.gmail.com>
-Subject: Proposal
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210804091858.vvvrzrmnmi76mg3c@pengutronix.de>
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Salam alaikum,
+On Wed, Aug 04, 2021 at 11:18:58AM +0200, Marc Kleine-Budde wrote:
+> >  
+> > -	cdev->ops->write_fifo(cdev, addr_offset, val);
+> > +	result = cdev->ops->write_fifo(cdev, addr_offset, val, val_count);
+> > +	WARN_ON(result != 0);
+> 
+> What about converting all read/write functions to return an error, and
+> handle the error in the caller?
 
-I am the investment officer of UAE based investment company who are
-ready to fund projects outside UAE, in the form of debt finance. We
-grant loan to both Corporate and private entities at a low interest
-rate of 3% ROI per annum. The terms are very flexible and interesting.
-Kindly revert back if you have projects that needs funding for further
-discussion and negotiation.
+Yeah, that would be cleaner.
 
-Thanks
+> >  	/* acknowledge rx fifo 0 */
+> > @@ -1546,8 +1548,8 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
+> >  	struct net_device *dev = cdev->net;
+> >  	struct sk_buff *skb = cdev->tx_skb;
+> >  	u32 id, cccr, fdflags;
+> > -	int i;
+> >  	int putidx;
+> > +	u32 id_and_dlc[2];
+> 
+> Can you create a struct for this?
 
-investment officer
+Ditto, sure!
+
+> >  
+> >  	cdev->tx_skb = NULL;
+> >  
+> > @@ -1563,18 +1565,16 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
+> >  	if (cf->can_id & CAN_RTR_FLAG)
+> >  		id |= TX_BUF_RTR;
+> >  
+> > +	id_and_dlc[0] = id;
+> > +
+> >  	if (cdev->version == 30) {
+> >  		netif_stop_queue(dev);
+> >  
+> > -		/* message ram configuration */
+> > -		m_can_fifo_write(cdev, 0, M_CAN_FIFO_ID, id);
+> > -		m_can_fifo_write(cdev, 0, M_CAN_FIFO_DLC,
+> > -				 can_fd_len2dlc(cf->len) << 16);
+> > +		id_and_dlc[1] = can_fd_len2dlc(cf->len) << 16;
+> >  
+> > -		for (i = 0; i < cf->len; i += 4)
+> > -			m_can_fifo_write(cdev, 0,
+> > -					 M_CAN_FIFO_DATA(i / 4),
+> > -					 *(u32 *)(cf->data + i));
+> > +		/* Write the frame ID, DLC, and payload to the FIFO element. */
+> > +		m_can_fifo_write(cdev, 0, M_CAN_FIFO_ID, id_and_dlc, ARRAY_SIZE(id_and_dlc));
+> > +		m_can_fifo_write(cdev, 0, M_CAN_FIFO_DATA, cf->data, DIV_ROUND_UP(cf->len, 4));
+> 
+> Does it make sense to combine these, too? Same for the v3.1 variant.
+
+I think that's the eventual goal, but since the ID, DLC, and frame data would
+have to be contiguous for a single m_can_fifo_write(), you'd end up copying
+things around. I wanted to start with this smaller, simpler patch first.
+Is that alright?
+
+I'll try to send a v3 up shortly.
+
+Best,
+Matt
