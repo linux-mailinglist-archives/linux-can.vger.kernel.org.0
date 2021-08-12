@@ -2,60 +2,90 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EDD33E9138
-	for <lists+linux-can@lfdr.de>; Wed, 11 Aug 2021 14:32:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31E6D3E9F62
+	for <lists+linux-can@lfdr.de>; Thu, 12 Aug 2021 09:23:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbhHKMcQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 11 Aug 2021 08:32:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56040 "EHLO
+        id S234686AbhHLHXZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 12 Aug 2021 03:23:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229918AbhHKMcL (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 11 Aug 2021 08:32:11 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CABC8C0619FF
-        for <linux-can@vger.kernel.org>; Wed, 11 Aug 2021 05:30:02 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id t128so4329776oig.1
-        for <linux-can@vger.kernel.org>; Wed, 11 Aug 2021 05:30:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=77BwqRII9XCweQU8IJul6unijI/BEL+vUJmVmCRLxH4=;
-        b=l4gMJVQR0kiw5jB7QjBwuNpfM6KgRmAnZ+U3/uWnaDOrOmeNXH1cBsuQp1/yvU/vbe
-         h7truI0tSaL01ahWzSqREXmT86UPLmMGQ2+FLEgN9spMzc4cuAIBO//Q+H5br/KBc0TV
-         kFrfyS3HAXSTLm9xum/FyUF/jALDjxDHHjAbGHdZk+wTj7O/Gvjxi495MUWK0LMLb61t
-         xWjyjzLQh6acP97vVSQvECAoNev4PY9q3zMqG/1nqsutkiyZpW2+ssMsVdYVIVzVs9ax
-         stDtdqMeOw7/9vXNfePZRksemawFwQjcQ1gGbjzrFwOEwtevs3PZsUTk25T8b2r2n2+I
-         0gBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=77BwqRII9XCweQU8IJul6unijI/BEL+vUJmVmCRLxH4=;
-        b=AV6H9dyX9G/NTot/4MtJhfBkHK2SS3GWPZJxfbgoT9jMFoatVL8ttrX+/0wD5wvAIL
-         +Qhmog2pZQa1RXnUejq4+hj6/mmERCoc+KuVOkxMS8kXdd68dRauhSvUxy5LUe5Fyfk9
-         JOzk9CzxKnRhLfREWojIHBnPPfbJzlQ0XLym8ow6Cu82243ixfaiTpIZwI8OS6FFn6Xr
-         OOMNW1J4SmaV0VjhBBn9bkbtYu2I9XKtSIkeWd0t0V7jq9wIYJvtFYzz7bkAoGgtBkjc
-         jgUPX4s2WemPMVAkPo7sHsJY5crSM92WyMKtjpRW7Mlo1kUEXiF+RnOcYuJMA1auPV/U
-         hO9w==
-X-Gm-Message-State: AOAM530Fxy7eUen/Fk4FE9WuRI+nx76yyR8z+FREK4DgTWnI4vRmf60X
-        2o1cfHynGAikbdXpGF0bOv1w/SNkDJq8yn59ITo=
-X-Google-Smtp-Source: ABdhPJwW80yC3Jv4N7Ygd/oz/W2w0OMWMVUNvF3laMRZsfuxi/a2uJ5LPRrNJQDqCRwhEl9YwYATyhizs0DKY0HnRMk=
-X-Received: by 2002:a05:6808:1924:: with SMTP id bf36mr24189327oib.106.1628685002002;
- Wed, 11 Aug 2021 05:30:02 -0700 (PDT)
+        with ESMTP id S234586AbhHLHXZ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 12 Aug 2021 03:23:25 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C6ADC061765
+        for <linux-can@vger.kernel.org>; Thu, 12 Aug 2021 00:23:00 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1mE53I-00051H-S0; Thu, 12 Aug 2021 09:22:56 +0200
+Received: from pengutronix.de (unknown [IPv6:2a02:810a:8940:aa0:3ed7:427:d9dd:eb1b])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 96039665D37;
+        Thu, 12 Aug 2021 07:22:54 +0000 (UTC)
+Date:   Thu, 12 Aug 2021 09:22:53 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Joe Perches <joe@perches.com>, socketcan@esd.eu,
+        Stefan =?utf-8?B?TcOkdGpl?= <Stefan.Maetje@esd.eu>
+Subject: Re: [PATCH v3] mailmap: update email address of =?utf-8?Q?Matthia?=
+ =?utf-8?Q?s_Fuchs_and_Thomas_K=C3=B6rper?=
+Message-ID: <20210812072253.mlbuv4b3reoif7s7@pengutronix.de>
+References: <20210809175843.207864-1-mkl@pengutronix.de>
 MIME-Version: 1.0
-Received: by 2002:a05:6830:23a5:0:0:0:0 with HTTP; Wed, 11 Aug 2021 05:30:01
- -0700 (PDT)
-Reply-To: rihabmanyang07@yahoo.com
-From:   Rihab Manyang <ndourandiogou1@gmail.com>
-Date:   Wed, 11 Aug 2021 13:30:01 +0100
-Message-ID: <CAP5_mB76a-FSZzks8OG9YWvLEFv62qfHQ6sTAFQrmH0xjgR9bw@mail.gmail.com>
-Subject: hi
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rk3yaxxzgtpdvgkj"
+Content-Disposition: inline
+In-Reply-To: <20210809175843.207864-1-mkl@pengutronix.de>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
--- 
-How are you?I am miss.Rihab Manyang i will like to be your friend
-please write me back on my email for more details, Thanks.
+
+--rk3yaxxzgtpdvgkj
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 09.08.2021 19:58:44, Marc Kleine-Budde wrote:
+> Matthias Fuchs's and Thomas K=C3=B6rper's email addresses aren't valid
+> anymore. Use the newly created role account instead.
+>=20
+> Cc: socketcan@esd.eu
+> Cc: Stefan M=C3=A4tje <Stefan.Maetje@esd.eu>
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+
+Stefan, if you're OK with this change, please add your Acked-by to this.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--rk3yaxxzgtpdvgkj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmEUzEoACgkQqclaivrt
+76mPbQf/R2mvcUwUCM2WS/l4NazaHH4NDR8o2JZK9g43oQezUzedKGOASufQMNNK
+XRPhIZyz6eGvpE1WNnAbLZTLiEGRVEg8kj5nt0cNBXBWYjZxBZychj9cHavB05My
+RHqO5UZRSFhpxiQVQhIclMbVp5PdRURs6cwaxpnLggrjg2Bl7K4ayMhLBIlcMzPi
+/0EMJpzh3A0PQZtz2C8xHzMGgmWJ7FMVxYadPoUZn5byX4/w44CHef9xSvfB5ZPF
+y7jJOQkYw45Znnjfmof0UzbKrybREsS4A7pr+jK6Lq5ufXvx6tFjwb5GnRR1t2V3
+u0t4EllCMvT/IJ+Eu/cYFvWjwYvTXg==
+=QcX5
+-----END PGP SIGNATURE-----
+
+--rk3yaxxzgtpdvgkj--
