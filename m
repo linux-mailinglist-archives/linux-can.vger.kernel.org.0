@@ -2,118 +2,92 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3173EB330
-	for <lists+linux-can@lfdr.de>; Fri, 13 Aug 2021 11:10:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B9D93EBC60
+	for <lists+linux-can@lfdr.de>; Fri, 13 Aug 2021 21:04:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238823AbhHMJLD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 13 Aug 2021 05:11:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48710 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231582AbhHMJLD (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 13 Aug 2021 05:11:03 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B465C061756
-        for <linux-can@vger.kernel.org>; Fri, 13 Aug 2021 02:10:37 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1mETD1-0005bw-HP
-        for linux-can@vger.kernel.org; Fri, 13 Aug 2021 11:10:35 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 903DA6668DC
-        for <linux-can@vger.kernel.org>; Fri, 13 Aug 2021 09:10:34 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id E8E636668D8;
-        Fri, 13 Aug 2021 09:10:33 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 3fd3d6fd;
-        Fri, 13 Aug 2021 09:10:32 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Thomas Kopp <thomas.kopp@microchip.com>
-Subject: [PATCH] can: mcp251xfd: mark some instances of struct mcp251xfd_priv as const
-Date:   Fri, 13 Aug 2021 11:10:27 +0200
-Message-Id: <20210813091027.159379-1-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        id S233309AbhHMTEt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 13 Aug 2021 15:04:49 -0400
+Received: from mail-oi1-f176.google.com ([209.85.167.176]:33345 "EHLO
+        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230440AbhHMTEt (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 13 Aug 2021 15:04:49 -0400
+Received: by mail-oi1-f176.google.com with SMTP id h11so17425292oie.0;
+        Fri, 13 Aug 2021 12:04:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=NrmDW/ZBllomE5AxcJODWY1MRA899f7YuB5FSGUGdl4=;
+        b=Ikb6ZiWjUBBBReX/1LfTmwtmRNhqRCgpZpQsX2ay7tbuc0THuCzeqhzsZw3Deb8csu
+         7WCh19Lnum5+exwTjD7HIwmTjaxKKXQpiTKcGbYCXpCofH4Smu9CsU6Gjr+r1jtkcWJK
+         4p+DjM332d8/NUTXCGlTYrP6jhzUmZZI/Ce/ssX5QW+I6qol1cE1V/+lLOrI3HnIwCYL
+         I0GkFERoAYLpbYnYAq+nAghP7KRxD+jCl2xMkLmj5zrBVwJNqxn2xF1R0mgH+rsBc2Y/
+         y/5/tvqQPJIe6tQK6qJ1qVPAci5yupdhFpGf4qExbnyX0HidZtOTun/0h05ckDoHjmkl
+         +xhg==
+X-Gm-Message-State: AOAM533Kq7ykPvYOr7PApU9FWMhEG967Oni3m82LvRhB2hXz9q6CSoZQ
+        mfssoV4NAk56UD29KMGlPg==
+X-Google-Smtp-Source: ABdhPJwqhigabSuyefr+IrvHLf6DHEmD3u1u2FbjzIKZINf4M0ZKaKCqylikcADmgr691peKxmW5kA==
+X-Received: by 2002:aca:3c07:: with SMTP id j7mr3309058oia.8.1628881461882;
+        Fri, 13 Aug 2021 12:04:21 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id i188sm535845oih.7.2021.08.13.12.04.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Aug 2021 12:04:21 -0700 (PDT)
+Received: (nullmailer pid 3874502 invoked by uid 1000);
+        Fri, 13 Aug 2021 19:04:20 -0000
+Date:   Fri, 13 Aug 2021 14:04:20 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Dario Binacchi <dariobin@libero.it>, linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        devicetree@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v5] dt-bindings: net: can: c_can: convert to json-schema
+Message-ID: <YRbCNNPbYSC66gIP@robh.at.kernel.org>
+References: <20210805192750.9051-1-dariobin@libero.it>
+ <20210806072045.akase7hseu4wrxxt@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210806072045.akase7hseu4wrxxt@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-With the patch 07ff4aed015c ("time/timecounter: Mark 1st argument of
-timecounter_cyc2time() as const") some instances of the struct
-mcp251xfd_priv can be marked as const. This patch marks these as
-const.
+On Fri, Aug 06, 2021 at 09:20:45AM +0200, Marc Kleine-Budde wrote:
+> On 05.08.2021 21:27:50, Dario Binacchi wrote:
+> > Convert the Bosch C_CAN/D_CAN controller device tree binding
+> > documentation to json-schema.
+> > 
+> > Document missing properties.
+> > Remove "ti,hwmods" as it is no longer used in TI dts.
+> > Make "clocks" required as it is used in all dts.
+> > Update the examples.
+> > 
+> > Signed-off-by: Dario Binacchi <dariobin@libero.it>
+> 
+> [...]
+> 
+> > +if:
+> > +  properties:
+> > +    compatible:
+> > +      contains:
+> > +        enum:
+> > +          - bosch,d_can
+> > +
+> > +then:
+> > +  properties:
+> > +    interrupts:
+> > +      minItems: 4
+> > +      maxItems: 4
+> 
+> The driver uses only 1 interrupt, on the other hand the only in-tree
+> user the bosch,d_can compatible specifies 4 interrupts.
 
-Cc: Manivannan Sadhasivam <mani@kernel.org>
-Cc: Thomas Kopp <thomas.kopp@microchip.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c      | 2 +-
- drivers/net/can/spi/mcp251xfd/mcp251xfd-timestamp.c | 4 ++--
- drivers/net/can/spi/mcp251xfd/mcp251xfd.h           | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+The DT should reflect all the interrupts. It can't know what some OS or 
+some version of OS actually uses.
 
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-index 6c369a399c45..673861ab665a 100644
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-@@ -1456,7 +1456,7 @@ mcp251xfd_rx_ring_update(const struct mcp251xfd_priv *priv,
- }
- 
- static void
--mcp251xfd_hw_rx_obj_to_skb(struct mcp251xfd_priv *priv,
-+mcp251xfd_hw_rx_obj_to_skb(const struct mcp251xfd_priv *priv,
- 			   const struct mcp251xfd_hw_rx_obj_canfd *hw_rx_obj,
- 			   struct sk_buff *skb)
- {
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-timestamp.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-timestamp.c
-index ed3169274d24..712e09186987 100644
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-timestamp.c
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-timestamp.c
-@@ -13,7 +13,7 @@
- 
- static u64 mcp251xfd_timestamp_read(const struct cyclecounter *cc)
- {
--	struct mcp251xfd_priv *priv;
-+	const struct mcp251xfd_priv *priv;
- 	u32 timestamp = 0;
- 	int err;
- 
-@@ -39,7 +39,7 @@ static void mcp251xfd_timestamp_work(struct work_struct *work)
- 			      MCP251XFD_TIMESTAMP_WORK_DELAY_SEC * HZ);
- }
- 
--void mcp251xfd_skb_set_timestamp(struct mcp251xfd_priv *priv,
-+void mcp251xfd_skb_set_timestamp(const struct mcp251xfd_priv *priv,
- 				 struct sk_buff *skb, u32 timestamp)
- {
- 	struct skb_shared_hwtstamps *hwtstamps = skb_hwtstamps(skb);
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-index 1002f3902ad2..0f322dabaf65 100644
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-@@ -853,7 +853,7 @@ int mcp251xfd_regmap_init(struct mcp251xfd_priv *priv);
- u16 mcp251xfd_crc16_compute2(const void *cmd, size_t cmd_size,
- 			     const void *data, size_t data_size);
- u16 mcp251xfd_crc16_compute(const void *data, size_t data_size);
--void mcp251xfd_skb_set_timestamp(struct mcp251xfd_priv *priv,
-+void mcp251xfd_skb_set_timestamp(const struct mcp251xfd_priv *priv,
- 				 struct sk_buff *skb, u32 timestamp);
- void mcp251xfd_timestamp_init(struct mcp251xfd_priv *priv);
- void mcp251xfd_timestamp_stop(struct mcp251xfd_priv *priv);
--- 
-2.30.2
-
+Rob
 
