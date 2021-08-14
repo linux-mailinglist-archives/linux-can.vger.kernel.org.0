@@ -2,88 +2,67 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A56523EC24D
-	for <lists+linux-can@lfdr.de>; Sat, 14 Aug 2021 13:14:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 489E63EC549
+	for <lists+linux-can@lfdr.de>; Sat, 14 Aug 2021 23:02:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238064AbhHNLPD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 14 Aug 2021 07:15:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33948 "EHLO
+        id S231956AbhHNVD0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 14 Aug 2021 17:03:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237914AbhHNLPD (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 14 Aug 2021 07:15:03 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0DC7C061764
-        for <linux-can@vger.kernel.org>; Sat, 14 Aug 2021 04:14:34 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1mErcW-0006nt-I0; Sat, 14 Aug 2021 13:14:32 +0200
-Received: from pengutronix.de (unknown [IPv6:2a02:810a:8940:aa0:9c12:ab28:ecb4:fe2f])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id DCFB56672BB;
-        Sat, 14 Aug 2021 11:14:29 +0000 (UTC)
-Date:   Sat, 14 Aug 2021 13:14:28 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     Stephen Hemminger <stephen@networkplumber.org>,
-        linux-can@vger.kernel.org,
-        Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 4/4] iplink_can: add new CAN FD bittiming parameters:
- Transmitter Delay Compensation (TDC)
-Message-ID: <20210814111428.2jivv6rbj5piqrto@pengutronix.de>
-References: <20210814101728.75334-1-mailhol.vincent@wanadoo.fr>
- <20210814101728.75334-5-mailhol.vincent@wanadoo.fr>
+        with ESMTP id S229532AbhHNVDZ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 14 Aug 2021 17:03:25 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1676AC061764
+        for <linux-can@vger.kernel.org>; Sat, 14 Aug 2021 14:02:56 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id b13so18075293wrs.3
+        for <linux-can@vger.kernel.org>; Sat, 14 Aug 2021 14:02:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:from:mime-version:content-transfer-encoding
+         :content-description:subject:to:date:reply-to;
+        bh=5NTJSky9UX3JbuB9riY3wCYfXDpCwy2c7hzO0kF4AHA=;
+        b=WxW3qdpzqORdyfn6stfiA8ZAsz1kdusfeHOID+SaA5SLHmdklHS0eo3efjd2pAaGCU
+         ZLgxLXXb4x8OymJcKRw8ok+JSlmFogHOp00qYOnqqna8Qm8y+y2YW4hB44n16xx/BgAF
+         ESVlhrN8ajJU9vgnbzNiIIhWnqj5JLXW9E+koNZ2R/BBSzSZTNyF+EUtAH/2dYenzXXN
+         iTEw2G6dbb3Fg0DoDagu+y9AYx3tN6dd7Npng+9icKS7qU/qFeS1E3sLsTUXZWoM7B/P
+         NF//V2jXoMrr7QeZz1xDCvmvGyPV7r2kafeFz6tgXhSlRJrxNHzRBOfK0GqbSBMPSCTy
+         nviA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:from:mime-version
+         :content-transfer-encoding:content-description:subject:to:date
+         :reply-to;
+        bh=5NTJSky9UX3JbuB9riY3wCYfXDpCwy2c7hzO0kF4AHA=;
+        b=GXcsX7YP7jjgW3U16devNLFMPgmeL/ISnAU/qPBc0H/GaxnObR0dZkCZAuKtyyv9eG
+         Va/RtEzcGEx9lBQh/M0ACPMaiqWQ9T3Voui48f1HDpI60zr5Np/ZCj+3Hg+0zbTjmnAn
+         dSLej3DuyyrWrZcGm8BVnwxZjYq6+0USyDmCWbCJm7vaZ4NZVvCv3RB55jmHjy23O6o7
+         nmohqL0bYEtTEZ2wbTPqPyIYqylihIMAWKOSj+Xo72xIO38nVhS/ONykWdVtCiRxrcTJ
+         o+ZBG1hRVYcZHyyY8XOtQiBrjcOqRnNdgg/mjzQbVtY1o5J+SWjwCg3TEy48n+Pk2D03
+         RV8A==
+X-Gm-Message-State: AOAM530AI7IitIjDNImsgfbbRxSDAqp1h+XiAF4pJfhz1HR7N8tnsIve
+        gI4ibIeAol3oPt33gyW8nShSDJAYftit5A==
+X-Google-Smtp-Source: ABdhPJyRJl+GpriJH3dReQrZZTeHSTHuwqSsrxIVjBsRvln/zd4VmJVClp1HJV/Pdlpe0C/9gVToeQ==
+X-Received: by 2002:a05:6000:12d0:: with SMTP id l16mr10122826wrx.166.1628974974663;
+        Sat, 14 Aug 2021 14:02:54 -0700 (PDT)
+Received: from [192.168.1.70] ([102.64.221.122])
+        by smtp.gmail.com with ESMTPSA id y192sm4734525wmy.1.2021.08.14.14.02.49
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Sat, 14 Aug 2021 14:02:53 -0700 (PDT)
+Message-ID: <61182f7d.1c69fb81.eb9ef.9542@mx.google.com>
+From:   Vanina curth <curtisvani0029@gmail.com>
+X-Google-Original-From: Vanina curth
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="73h3dlf3qatldber"
-Content-Disposition: inline
-In-Reply-To: <20210814101728.75334-5-mailhol.vincent@wanadoo.fr>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Sir,
+To:     Recipients <Vanina@vger.kernel.org>
+Date:   Sat, 14 Aug 2021 21:02:33 +0000
+Reply-To: curtisvani9008@gmail.com
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-
---73h3dlf3qatldber
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 14.08.2021 19:17:28, Vincent Mailhol wrote:
->  include/uapi/linux/can/netlink.h |  30 +++++++-
-
-IIRC, changes of the uapi headers will be pull in regularly from the
-mainline kernel.
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---73h3dlf3qatldber
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmEXpZIACgkQqclaivrt
-76kKYgf+JV/LuzN1hF+gI3ry0V34s2jMRSTFIQByzhHWHzB1Qazs7i0LGyx5hxz0
-gj82ic9FwIsQEjJ+4XaBBhvAw/8j0VC2/6y1buTg28ncM5uBPxm4p9z2nIucDjLx
-dne76fM7Zhk6Ck0Cjp4dxZ5Pvt5/j2PNaYdkendHRpl4/5+XJe2qXMryAYqSA0qS
-p7rto3EjzOlBPOeVJ4BRrtHGyHQKNTmz5CRpxjnZ7AkZXzwbLt7nzShp6Ma5tdo0
-Uf1xiz7Nd2/N+2HEpe1sZDVED2xbvpt3OavcetX7TGamg60LIaS/3S28ut9W6Vzw
-ROV6s7b4Yxmb5K5uGWKZ2t4a3qHu3w==
-=5Uju
------END PGP SIGNATURE-----
-
---73h3dlf3qatldber--
+How are you? I'm Vanina. I'm interested to know you and I would like to kno=
+w more about you and establish relationship with you. i will wait for your =
+response. thank you.
