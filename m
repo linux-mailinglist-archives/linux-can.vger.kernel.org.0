@@ -2,175 +2,197 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 272A53ED358
-	for <lists+linux-can@lfdr.de>; Mon, 16 Aug 2021 13:48:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B36B3ED3DD
+	for <lists+linux-can@lfdr.de>; Mon, 16 Aug 2021 14:25:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236276AbhHPLtY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 16 Aug 2021 07:49:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55366 "EHLO
+        id S229733AbhHPMZ4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 16 Aug 2021 08:25:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236254AbhHPLtW (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 16 Aug 2021 07:49:22 -0400
+        with ESMTP id S229676AbhHPMZ4 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 16 Aug 2021 08:25:56 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D71CC061764
-        for <linux-can@vger.kernel.org>; Mon, 16 Aug 2021 04:48:51 -0700 (PDT)
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF4EC061764
+        for <linux-can@vger.kernel.org>; Mon, 16 Aug 2021 05:25:24 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1mFb6j-0004bt-L5; Mon, 16 Aug 2021 13:48:45 +0200
-Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1mFb6i-0004Zb-SF; Mon, 16 Aug 2021 13:48:44 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, David Jander <david@protonic.nl>
-Subject: [PATCH v1 3/3] can: dev: provide optional GPIO based termination support
-Date:   Mon, 16 Aug 2021 13:48:40 +0200
-Message-Id: <20210816114840.17502-3-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210816114840.17502-1-o.rempel@pengutronix.de>
-References: <20210816114840.17502-1-o.rempel@pengutronix.de>
+        (envelope-from <mkl@pengutronix.de>)
+        id 1mFbgA-0000AU-Rp; Mon, 16 Aug 2021 14:25:22 +0200
+Received: from pengutronix.de (unknown [IPv6:2a02:810a:8940:aa0:3272:cc96:80a9:1a01])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id EFFB46682BB;
+        Mon, 16 Aug 2021 12:25:20 +0000 (UTC)
+Date:   Mon, 16 Aug 2021 14:25:19 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     linux-can <linux-can@vger.kernel.org>,
+        Stefan =?utf-8?B?TcOkdGpl?= <Stefan.Maetje@esd.eu>,
+        netdev <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 2/7] can: bittiming: allow TDC{V,O} to be zero and add
+ can_tdc_const::tdc{v,o,f}_min
+Message-ID: <20210816122519.mme272z6tqrkyc6x@pengutronix.de>
+References: <20210815033248.98111-1-mailhol.vincent@wanadoo.fr>
+ <20210815033248.98111-3-mailhol.vincent@wanadoo.fr>
+ <20210816084235.fr7fzau2ce7zl4d4@pengutronix.de>
+ <CAMZ6RqK5t62UppiMe9k5jG8EYvnSbFW3doydhCvp72W_X2rXAw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: ore@pengutronix.de
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4wa7afvud7rocqox"
+Content-Disposition: inline
+In-Reply-To: <CAMZ6RqK5t62UppiMe9k5jG8EYvnSbFW3doydhCvp72W_X2rXAw@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-For CAN buses to work, a termination resistor has to be present at both
-ends of the bus. This resistor is usually 120 Ohms, other values may be
-required for special bus topologies.
 
-This patch adds support for a generic GPIO based CAN termination. The
-resistor value has to be specified via device tree, and it can only be
-attached to or detached from the bus. By default the termination is not
-active.
+--4wa7afvud7rocqox
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- drivers/net/can/dev/dev.c | 54 +++++++++++++++++++++++++++++++++++++++
- include/linux/can/dev.h   |  7 +++++
- 2 files changed, 61 insertions(+)
+On 16.08.2021 19:24:43, Vincent MAILHOL wrote:
+> On Mon. 16 Aug 2021 at 17:42, Marc Kleine-Budde <mkl@pengutronix.de> wrot=
+e:
+> > On 15.08.2021 12:32:43, Vincent Mailhol wrote:
+> > > ISO 11898-1 specifies in section 11.3.3 "Transmitter delay
+> > > compensation" that "the configuration range for [the] SSP position
+> > > shall be at least 0 to 63 minimum time quanta."
+> > >
+> > > Because SSP =3D TDCV + TDCO, it means that we should allow both TDCV =
+and
+> > > TDCO to hold zero value in order to honor SSP's minimum possible
+> > > value.
+> > >
+> > > However, current implementation assigned special meaning to TDCV and
+> > > TDCO's zero values:
+> > >   * TDCV =3D 0 -> TDCV is automatically measured by the transceiver.
+> > >   * TDCO =3D 0 -> TDC is off.
+> > >
+> > > In order to allow for those values to really be zero and to maintain
+> > > current features, we introduce two new flags:
+> > >   * CAN_CTRLMODE_TDC_AUTO indicates that the controller support
+> > >     automatic measurement of TDCV.
+> > >   * CAN_CTRLMODE_TDC_MANUAL indicates that the controller support
+> > >     manual configuration of TDCV. N.B.: current implementation failed
+> > >     to provide an option for the driver to indicate that only manual
+> > >     mode was supported.
+> > >
+> > > TDC is disabled if both CAN_CTRLMODE_TDC_AUTO and
+> > > CAN_CTRLMODE_TDC_MANUAL flags are off, c.f. the helper function
+> > > can_tdc_is_enabled() which is also introduced in this patch.
+> >
+> > Nitpick: We can only say that TDC is disabled, if the driver supports
+> > the TDC interface at all, which is the case if tdc_const is set.
+>=20
+> I would argue that saying that a device does not support TDC is
+> equivalent to saying that TDC is always disabled for that device.
+> Especially, the function can_tdc_is_enabled() can be used even if
+> the device does not support TDC (even if there is no benefit
+> doing so).
+>=20
+> Do you still want me to rephrase this part?
+>=20
+> > > Also, this patch adds three fields: tdcv_min, tdco_min and tdcf_min to
+> > > struct can_tdc_const. While we are not convinced that those three
+> > > fields could be anything else than zero, we can imagine that some
+> > > controllers might specify a lower bound on these. Thus, those minimums
+> > > are really added "just in case".
+> >
+> > I'm not sure, if we talked about the mcp251xfd's tcdo, valid values are
+> > -64...63.
+>=20
+> Yes! Stefan shed some light on this. The mcp251xfd uses a tdco
+> value which is relative to the sample point.
 
-diff --git a/drivers/net/can/dev/dev.c b/drivers/net/can/dev/dev.c
-index 311d8564d611..b4a6c7a6fc18 100644
---- a/drivers/net/can/dev/dev.c
-+++ b/drivers/net/can/dev/dev.c
-@@ -15,6 +15,7 @@
- #include <linux/can/dev.h>
- #include <linux/can/skb.h>
- #include <linux/can/led.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/of.h>
- 
- #define MOD_DESC "CAN device driver interface"
-@@ -400,10 +401,57 @@ void close_candev(struct net_device *dev)
- }
- EXPORT_SYMBOL_GPL(close_candev);
- 
-+static int can_set_termination(struct net_device *ndev, u16 term)
-+{
-+	struct can_priv *priv = netdev_priv(ndev);
-+	int set;
-+
-+	if (term == priv->termination_gpio_ohms[CAN_TERMINATION_GPIO_ENABLED])
-+		set = 1;
-+	else
-+		set = 0;
-+
-+	gpiod_set_value(priv->termination_gpio, set);
-+
-+	return 0;
-+}
-+
-+static int can_get_termination(struct net_device *ndev)
-+{
-+	struct can_priv *priv = netdev_priv(ndev);
-+	struct device *dev = ndev->dev.parent;
-+	struct gpio_desc *gpio;
-+	u16 term;
-+	int ret;
-+
-+	/* Disabling termination by default is the safe choice: Else if many
-+	 * bus participants enable it, no communication is possible at all.
-+	 */
-+	gpio = devm_gpiod_get_optional(dev, "termination", GPIOD_OUT_LOW);
-+	if (IS_ERR(gpio))
-+		return dev_err_probe(dev, PTR_ERR(gpio),
-+				     "Cannot get termination-gpios\n");
-+
-+	ret = device_property_read_u16(dev, "termination-ohms", &term);
-+	if (ret)
-+		return ret;
-+
-+	priv->termination_const_cnt = ARRAY_SIZE(priv->termination_gpio_ohms);
-+	priv->termination_const = priv->termination_gpio_ohms;
-+	priv->termination_gpio = gpio;
-+	priv->termination_gpio_ohms[CAN_TERMINATION_GPIO_DISABLED] =
-+		CAN_TERMINATION_DISABLED;
-+	priv->termination_gpio_ohms[CAN_TERMINATION_GPIO_ENABLED] = term;
-+	priv->do_set_termination = can_set_termination;
-+
-+	return 0;
-+}
-+
- /* Register the CAN network device */
- int register_candev(struct net_device *dev)
- {
- 	struct can_priv *priv = netdev_priv(dev);
-+	int err;
- 
- 	/* Ensure termination_const, termination_const_cnt and
- 	 * do_set_termination consistency. All must be either set or
-@@ -419,6 +467,12 @@ int register_candev(struct net_device *dev)
- 	if (!priv->data_bitrate_const != !priv->data_bitrate_const_cnt)
- 		return -EINVAL;
- 
-+	if (!priv->termination_const) {
-+		err = can_get_termination(dev);
-+		if (err)
-+			return err;
-+	}
-+
- 	dev->rtnl_link_ops = &can_link_ops;
- 	netif_carrier_off(dev);
- 
-diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
-index 27b275e463da..82bdc5b09a3a 100644
---- a/include/linux/can/dev.h
-+++ b/include/linux/can/dev.h
-@@ -32,6 +32,11 @@ enum can_mode {
- 	CAN_MODE_SLEEP
- };
- 
-+enum can_termination_gpio {
-+	CAN_TERMINATION_GPIO_DISABLED = 0,
-+	CAN_TERMINATION_GPIO_ENABLED,
-+};
-+
- /*
-  * CAN common private data
-  */
-@@ -55,6 +60,8 @@ struct can_priv {
- 	unsigned int termination_const_cnt;
- 	const u16 *termination_const;
- 	u16 termination;
-+	struct gpio_desc *termination_gpio;
-+	u16 termination_gpio_ohms[2];
- 
- 	enum can_state state;
- 
--- 
-2.30.2
+I don't read the documentation this way....
 
+> | SSP =3D TDCV + absolute TDCO
+> |     =3D TDCV + SP + relative TDCO
+>=20
+> Consequently:
+> | relative TDCO =3D absolute TDCO - SP
+
+In the mcp15xxfd family manual
+(http://ww1.microchip.com/downloads/en/DeviceDoc/MCP251XXFD-CAN-FD-Controll=
+er-Module-Family-Reference-Manual-20005678B.pdf)
+in the 2mbit/s data bit rate example in table 3-5 (page 21) it says:
+
+| DTSEG1  15 DTQ
+| DTSEG2   4 DTQ
+| TDCO    15 DTQ
+
+The mcp251xfd driver uses 15, the framework calculates 16 (=3D=3D Sync Seg+
+tseg1, which is correct), and relative tdco would be 0:
+
+| mcp251xfd_set_bittiming: tdco=3D15, priv->tdc.tdc=3D16, relative_tdco=3D0
+
+Here the output with the patched ip tool:
+
+| 4: mcp251xfd0: <NOARP,UP,LOWER_UP,ECHO> mtu 72 qdisc pfifo_fast state UP =
+mode DEFAULT group default qlen 10
+|     link/can  promiscuity 0 minmtu 0 maxmtu 0=20
+|     can <FD,TDC_AUTO> state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart=
+-ms 100=20
+|           bitrate 500000 sample-point 0.875
+|           tq 25 prop-seg 34 phase-seg1 35 phase-seg2 10 sjw 1 brp 1
+|           mcp251xfd: tseg1 2..256 tseg2 1..128 sjw 1..128 brp 1..256 brp_=
+inc 1
+|           dbitrate 2000000 dsample-point 0.750
+|           dtq 25 dprop-seg 7 dphase-seg1 7 dphase-seg2 5 dsjw 1 dbrp 1
+|           tdco 15
+|           mcp251xfd: dtseg1 1..32 dtseg2 1..16 dsjw 1..16 dbrp 1..256 dbr=
+p_inc 1
+|           tdco 0..127
+|           clock 40000000 numtxqueues 1 numrxqueues 1 gso_max_size 65536 g=
+so_max_segs 65535 parentbus spi parentdev spi0.0
+
+
+> Which is also why TDCO can be negative.
+>=20
+> I added an helper function can_tdc_get_relative_tdco() in the
+> fourth path of this series:
+> https://lore.kernel.org/linux-can/20210814091750.73931-5-mailhol.vincent@=
+wanadoo.fr/T/#u
+>=20
+> Devices which use the absolute TDCO can directly use
+> can_priv->tdc.tdco. Devices which use the relative TDCO such as
+> the mcp251xfd should use this helper function instead.
+
+Don't think so....
+
+> However, you will still need to convert the TDCO valid range from
+> relative values to absolute ones. In your case 0..127.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--4wa7afvud7rocqox
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmEaWSwACgkQqclaivrt
+76m+zwf/VM6/1EJp9c/l13XNadBgkcOD6qDCfY8Al859da3SYXfk4G3/Ff1yhlIy
+EFByvLU+oJ1jiSZw+BN09Z0Ylr3+YdKePxDezJG0Sg/+RjI2f4/TkcVg85KJiYgm
+9qfhQ8jWZxn3lRL74j1ZRuJ2cA3mzhDRgfudSh2yJeFuaUiRJz80lj1KFTRAYXaU
+ZmWYMnjN8YZ1Amnicadrp3U5/auPgrzEMR2+at9th9ZT5fXqmCBCNAwz2SAIFamq
+gJI48KJDZySrq+Ml7edlHKGq5pVPyQ/3I9gufRVKqqZ0Kci8KThKMGqnDexuNU6f
+YcbnGGA+VA6EDKNKZnEP5YDINPPPQg==
+=0b7z
+-----END PGP SIGNATURE-----
+
+--4wa7afvud7rocqox--
