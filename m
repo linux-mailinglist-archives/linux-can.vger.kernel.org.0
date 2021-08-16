@@ -2,176 +2,155 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62C183ED7EF
-	for <lists+linux-can@lfdr.de>; Mon, 16 Aug 2021 15:51:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 180203ED8B4
+	for <lists+linux-can@lfdr.de>; Mon, 16 Aug 2021 16:10:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230490AbhHPNvu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 16 Aug 2021 09:51:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55484 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230332AbhHPNvu (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 16 Aug 2021 09:51:50 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0414FC061764
-        for <linux-can@vger.kernel.org>; Mon, 16 Aug 2021 06:51:19 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1mFd1I-0003Ma-Pm; Mon, 16 Aug 2021 15:51:16 +0200
-Received: from pengutronix.de (unknown [IPv6:2a02:810a:8940:aa0:3272:cc96:80a9:1a01])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 07E3F6683A0;
-        Mon, 16 Aug 2021 13:51:14 +0000 (UTC)
-Date:   Mon, 16 Aug 2021 15:51:13 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     Stephen Hemminger <stephen@networkplumber.org>,
-        linux-can@vger.kernel.org,
-        Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 4/4] iplink_can: add new CAN FD bittiming parameters:
- Transmitter Delay Compensation (TDC)
-Message-ID: <20210816135113.gpk3fpafiqnhjbw4@pengutronix.de>
-References: <20210814101728.75334-1-mailhol.vincent@wanadoo.fr>
- <20210814101728.75334-5-mailhol.vincent@wanadoo.fr>
+        id S231768AbhHPOLO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 16 Aug 2021 10:11:14 -0400
+Received: from mail-lf1-f45.google.com ([209.85.167.45]:34340 "EHLO
+        mail-lf1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231910AbhHPOLN (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 16 Aug 2021 10:11:13 -0400
+Received: by mail-lf1-f45.google.com with SMTP id z2so34783990lft.1;
+        Mon, 16 Aug 2021 07:10:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WBogRPOPppta5F1L9M+H6FLMAUp3xVfVteZhfXnb2q4=;
+        b=jmfA9S/+JpJkExV6dS5M+3f/qiMnegC/hhp1Q3SjjiUAdij/ukN67eu55WFl3IuNJw
+         OjX8QjRHiTGBY+yhoVxHacqG5FDBpL2Cy0yNucJek8iuHcSL9aFy8Ej/JhTaDvRVBqIb
+         Fv4dMlKNkoHHRnqPRygHhVbHb6Or5bxgf1WyRGr8mlPjprtel3w+9LNy4WH2gWy5+7tO
+         CCrPEBpLFwYkXwqbInlXMuRt4I0R1tc9UDXeQw1ECfmIBYwOKYp9eaHxLtyhShrZvBSK
+         HSVa0K/J8iyzzPpWT7W6pyV2w5tfwuexudFy+pUJKkE3nIdXb9K1jgcn6c9Q2xu64bpK
+         INmQ==
+X-Gm-Message-State: AOAM531FARdRjpy+WiOVc0k3Z3QwmWogNAGYTy3Po3GERhPBch+X4vQx
+        sQ3p6WL5OB1kn5ZRuhegZti5NN3ZHfz8QFiXhcs=
+X-Google-Smtp-Source: ABdhPJzFtjalDhfmirenO6s4EPO+uTs73yG035abSYq/TXFVv2pt/k7QnnBHWXQ7jPUkLkwDmp6hyz6yHkZ1BS93cYc=
+X-Received: by 2002:a19:c112:: with SMTP id r18mr11227013lff.531.1629123040998;
+ Mon, 16 Aug 2021 07:10:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uw3za2cin73atu2y"
-Content-Disposition: inline
-In-Reply-To: <20210814101728.75334-5-mailhol.vincent@wanadoo.fr>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+References: <20210815033248.98111-1-mailhol.vincent@wanadoo.fr>
+ <20210815033248.98111-3-mailhol.vincent@wanadoo.fr> <20210816084235.fr7fzau2ce7zl4d4@pengutronix.de>
+ <CAMZ6RqK5t62UppiMe9k5jG8EYvnSbFW3doydhCvp72W_X2rXAw@mail.gmail.com>
+ <20210816122519.mme272z6tqrkyc6x@pengutronix.de> <20210816123309.pfa57tke5hrycqae@pengutronix.de>
+In-Reply-To: <20210816123309.pfa57tke5hrycqae@pengutronix.de>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Mon, 16 Aug 2021 23:10:29 +0900
+Message-ID: <CAMZ6RqK0vTtCkSM7Lim2TQCZyYTYvKYsFVwWDnyNaFghwqToXg@mail.gmail.com>
+Subject: Re: [PATCH v5 2/7] can: bittiming: allow TDC{V,O} to be zero and add can_tdc_const::tdc{v,o,f}_min
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can <linux-can@vger.kernel.org>,
+        =?UTF-8?Q?Stefan_M=C3=A4tje?= <Stefan.Maetje@esd.eu>,
+        netdev <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Mon. 16 Aug 2021 at 21:33, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> On 16.08.2021 14:25:19, Marc Kleine-Budde wrote:
+> > > > I'm not sure, if we talked about the mcp251xfd's tcdo, valid values are
+> > > > -64...63.
+> > >
+> > > Yes! Stefan shed some light on this. The mcp251xfd uses a tdco
+> > > value which is relative to the sample point.
+> >
+> > I don't read the documentation this way....
+> >
+> > > | SSP = TDCV + absolute TDCO
+> > > |     = TDCV + SP + relative TDCO
+> > >
+> > > Consequently:
+> > > | relative TDCO = absolute TDCO - SP
+> >
+> > In the mcp15xxfd family manual
+> > (http://ww1.microchip.com/downloads/en/DeviceDoc/MCP251XXFD-CAN-FD-Controller-Module-Family-Reference-Manual-20005678B.pdf)
+> > in the 2mbit/s data bit rate example in table 3-5 (page 21) it says:
+> >
+> > | DTSEG1  15 DTQ
+> > | DTSEG2   4 DTQ
+> > | TDCO    15 DTQ
+> >
+> > The mcp251xfd driver uses 15, the framework calculates 16 (== Sync Seg+
+> > tseg1, which is correct), and relative tdco would be 0:
+> >
+> > | mcp251xfd_set_bittiming: tdco=15, priv->tdc.tdc=16, relative_tdco=0
+> >
+> > Here the output with the patched ip tool:
+>
+> Sorry, the previous output was not using the sample points of the
+> example in the data sheet, this is the fixed output:
+>
+> | 6: mcp251xfd0: <NOARP,UP,LOWER_UP,ECHO> mtu 72 qdisc pfifo_fast state UP mode DEFAULT group default qlen 10
+> |     link/can  promiscuity 0 minmtu 0 maxmtu 0
+> |     can <FD,TDC_AUTO> state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 100
+> |           bitrate 500000 sample-point 0.800
+> |           tq 25 prop-seg 31 phase-seg1 32 phase-seg2 16 sjw 1 brp 1
+> |           mcp251xfd: tseg1 2..256 tseg2 1..128 sjw 1..128 brp 1..256 brp_inc 1
+> |           dbitrate 2000000 dsample-point 0.800
+> |           dtq 25 dprop-seg 7 dphase-seg1 8 dphase-seg2 4 dsjw 1 dbrp 1
+> |           tdco 16
+> |           mcp251xfd: dtseg1 1..32 dtseg2 1..16 dsjw 1..16 dbrp 1..256 dbrp_inc 1
+> |           tdco 0..127
+> |           clock 40000000 numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 parentbus spi parentdev spi0.0
 
---uw3za2cin73atu2y
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+After the discussion I had with Stefan, I assumed mcp251xxfd also
+used relative TDCO.  However, in the mcp15xxfd family manual,
+Equation 3-10: "Secondary Sample Point" on page 18 states that:
 
-On 14.08.2021 19:17:28, Vincent Mailhol wrote:
-> At high bit rates, the propagation delay from the TX pin to the RX pin
-> of the transceiver causes measurement errors: the sample point on the
-> RX pin might occur on the previous bit.
->=20
-> This issue is addressed in ISO 11898-1 section 11.3.3 "Transmitter
-> delay compensation" (TDC).
->=20
-> This patch brings command line support to nine TDC parameters which
-> were recently added to the kernel's CAN netlink interface in order to
-> implement TDC:
->   - IFLA_CAN_TDC_TDCV_MIN: Transmitter Delay Compensation Value
->     minimum value
->   - IFLA_CAN_TDC_TDCV_MAX: Transmitter Delay Compensation Value
->     maximum value
->   - IFLA_CAN_TDC_TDCO_MIN: Transmitter Delay Compensation Offset
->     minimum value
->   - IFLA_CAN_TDC_TDCO_MAX: Transmitter Delay Compensation Offset
->     maximum value
->   - IFLA_CAN_TDC_TDCF_MIN: Transmitter Delay Compensation Filter
->     window minimum value
->   - IFLA_CAN_TDC_TDCF_MAX: Transmitter Delay Compensation Filter
->     window maximum value
->   - IFLA_CAN_TDC_TDCV: Transmitter Delay Compensation Value
->   - IFLA_CAN_TDC_TDCO: Transmitter Delay Compensation Offset
->   - IFLA_CAN_TDC_TDCF: Transmitter Delay Compensation Filter window
->=20
-> All those new parameters are nested together into the attribute
-> IFLA_CAN_TDC.
->=20
-> A tdc-mode parameter allow to specify how to operate. Valid options
-> are:
->=20
->   * auto: the transmitter automatically measures TDCV. As such, TDCV
->     values can not be manually provided. In this mode, the user must
->     specify TDCO and may also specify TDCF if supported.
->=20
->   * manual: Use the TDCV value provided by the user are used. In this
->     mode, the user must specify both TDCV and TDCO and may also
->     specify TDCF if supported.
->=20
->   * off: TDC is explicitly disabled.
->=20
->   * tdc-mode parameter omitted (default mode): the kernel decides
->     whether TDC should be enabled or not and if so, it calculates the
->     TDC values. TDC parameters are an expert option and the average
->     user is not expected to provide those, thus the presence of this
->     "default mode".
->=20
-> TDCV is always reported in manual mode. In auto mode, TDCV is reported
-> only if the value is available. Especially, the TDCV might not be
-> available if the controller has no feature to report it or if the
-> value in not yet available (i.e. no data sent yet and measurement did
-> not occur).
->=20
-> TDCF is reported only if tdcf_max is not zero (i.e. if supported by the c=
-ontroller).
->=20
-> For reference, here are a few samples of how the output looks like:
->=20
-> $ ip link set can0 type can bitrate 1000000 dbitrate 8000000 fd on tdco 7=
- tdcf 8 tdc-mode auto
->=20
-> $ ip --details link show can0
-> 1:  can0: <NOARP,ECHO> mtu 72 qdisc noop state DOWN mode DEFAULT group de=
-fault qlen 10
->     link/can  promiscuity 0 minmtu 0 maxmtu 0
->     can <FD,TDC_AUTO> state STOPPED (berr-counter tx 0 rx 0) restart-ms 0
-              ^^^^^^^^
-This is just the supported mode(s), right?
+| SSP = TDCV + TDCO
 
-> 	  bitrate 1000000 sample-point 0.750
-> 	  tq 12 prop-seg 29 phase-seg1 30 phase-seg2 20 sjw 1 brp 1
-> 	  ES582.1/ES584.1: tseg1 2..256 tseg2 2..128 sjw 1..128 brp 1..512 brp_i=
-nc 1
-> 	  dbitrate 8000000 dsample-point 0.700
-> 	  dtq 12 dprop-seg 3 dphase-seg1 3 dphase-seg2 3 dsjw 1 dbrp 1
-> 	  tdco 7 tdcf 8
-> 	  ES582.1/ES584.1: dtseg1 2..32 dtseg2 1..16 dsjw 1..8 dbrp 1..32 dbrp_i=
-nc 1
-> 	  tdco 0..127 tdcf 0..127
-> 	  clock 80000000 numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_=
-segs 65535
+As I commented above, this is the formula of the absolute
+TDCO. Furthermore, in the example you shared, TDCO is
+16 (absolute), not 0 (relative).
 
-Is there a way to figure out, which tdc mode is currently active?
+*BUT*, if this is the absolute TDCO, I just do not get how it can
+be negative (I already elaborated on this in the past: if you
+subtract from TDCV, you are measuring the previous bit...)
 
-AFAICS just implicitly:
-- tdco + tdcv   -> manual
-- tdco          -> automatic
-- neither       -> off
+Another thing which is misleading to me is that the mcp15xxfd
+family manual lists the min and max values for most of the
+bittiming parameters but not for TDCO.
 
-correct?
+Finally, I did a bit of research and found that:
+http://ww1.microchip.com/downloads/en/DeviceDoc/Section_56_Controller_Area_Network_with_Flexible_Data_rate_DS60001549A.pdf
 
-regards,
-Marc
+This is *not* the mcp25xxfd datasheet but it is still from
+Microship and as you will see, it is mostly similar to the
+mcp25xxfd except for, you guessed it, the TDCO.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+It reads:
+| TDCMOD<1:0>: Transmitter Delay Compensation Mode bits
+| Secondary Sample Point (SSP).
+| 10 = Auto; measure delay and add CFDxDBTCFG.TSEG1; add TDCO
+| 11 = Auto; measure delay and add CFDxDBTCFG.TSEG1; add TDCO
+| 01 = Manual; Do not measure, use TDCV plus TDCO from the register
+| 00 = Disable
 
---uw3za2cin73atu2y
-Content-Type: application/pgp-signature; name="signature.asc"
+| TDCO<6:0>: Transmitter Delay Compensation Offset bits
+| Secondary Sample Point (SSP). Two's complement; offset can be
+positive, zero, or negative.
+| 1111111 = -64 x SYSCLK
+| .
+| .
+| .
+| 0111111 = 63 x SYSCLK
+| .
+| .
+| .
+| 0000000 = 0 x SYSCLK
 
------BEGIN PGP SIGNATURE-----
+Here, you can clearly see that the TDCO has the exact same range
+as the one of the mcp25xxfd but the description of TDCMOD
+changes, telling us that:
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmEabU8ACgkQqclaivrt
-76nQ9wf8DSYrFmAPlYxWQHsv0ovgFow7hrqpCljYwTYqsn4Ft7+s6L/1gcZtX5Uh
-z9L3W4nGFtfC380xQYR9pSLSK0G300ceeN7rdbEa4cYEWPQK6OZNEszqUr+rh5ur
-kbZGuc+pGVrU8ZZ3ru42ntu2Bo/ob7/s5TIdpr/Ujuish1zNLwQmWymnsGw9KQEU
-g0BeZMU/FnjsTsAdr/a9DnczunuuX9AomlwrYIR4R2EdPYm3VxZnZ7ttuecTF2Ri
-9Qq5y8mNaR7jrvWTOHMZc7wAeZJMugtorLUc90kmGwD3TAbjTC2TtARSKSKOLvey
-Qfa0IiiGx0hgEil37JPbfVwWQ4TIHQ==
-=H91n
------END PGP SIGNATURE-----
+| SSP = TDCV (measured delay) + CFDxDBTCFG.TSEG1 (sample point) + TDCO
 
---uw3za2cin73atu2y--
+Which means this is a relative TDCO.
+
+I just do not get how two documents from Microchip can have the
+TDCO relative range of -64..63 but use a different formula. I am
+sorry but at that point, I just do not understand what is going
+on with your controller...
