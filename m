@@ -2,176 +2,64 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B5E93EE552
-	for <lists+linux-can@lfdr.de>; Tue, 17 Aug 2021 06:13:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F21863EE60A
+	for <lists+linux-can@lfdr.de>; Tue, 17 Aug 2021 07:09:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbhHQENw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 17 Aug 2021 00:13:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56396 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbhHQENu (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 17 Aug 2021 00:13:50 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10D1AC061764
-        for <linux-can@vger.kernel.org>; Mon, 16 Aug 2021 21:13:18 -0700 (PDT)
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1mFqTN-0003Bb-S1; Tue, 17 Aug 2021 06:13:09 +0200
-Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1mFqTM-0006ZY-8h; Tue, 17 Aug 2021 06:13:08 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
+        id S234165AbhHQFJc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 17 Aug 2021 01:09:32 -0400
+Received: from h4.fbrelay.privateemail.com ([131.153.2.45]:54562 "EHLO
+        h4.fbrelay.privateemail.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230272AbhHQFJc (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 17 Aug 2021 01:09:32 -0400
+Received: from MTA-13-3.privateemail.com (mta-13-1.privateemail.com [198.54.122.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by h3.fbrelay.privateemail.com (Postfix) with ESMTPS id C91EB80981
+        for <linux-can@vger.kernel.org>; Tue, 17 Aug 2021 01:08:58 -0400 (EDT)
+Received: from mta-13.privateemail.com (localhost [127.0.0.1])
+        by mta-13.privateemail.com (Postfix) with ESMTP id 906CD18000AF;
+        Tue, 17 Aug 2021 01:08:57 -0400 (EDT)
+Received: from localhost.localdomain (unknown [10.20.151.223])
+        by mta-13.privateemail.com (Postfix) with ESMTPA id 2DD3118000AD;
+        Tue, 17 Aug 2021 01:08:57 -0400 (EDT)
+From:   Matt Kline <matt@bitbashing.io>
 To:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, David Jander <david@protonic.nl>
-Subject: [PATCH v2 3/3] can: dev: provide optional GPIO based termination support
-Date:   Tue, 17 Aug 2021 06:13:06 +0200
-Message-Id: <20210817041306.25185-4-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210817041306.25185-1-o.rempel@pengutronix.de>
-References: <20210817041306.25185-1-o.rempel@pengutronix.de>
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Matt Kline <matt@bitbashing.io>, linux-can@vger.kernel.org
+Subject: [PATCH v3 0/3] can: m_can: Merge FIFO ops to increase throughput
+Date:   Mon, 16 Aug 2021 22:08:50 -0700
+Message-Id: <20210817050853.14875-1-matt@bitbashing.io>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-For CAN buses to work, a termination resistor has to be present at both
-ends of the bus. This resistor is usually 120 Ohms, other values may be
-required for special bus topologies.
+As requested, I've propagated FIFO errors up to the m_can driver - on
+failure we now log the error and disable interrupts, similar to
+https://elixir.bootlin.com/linux/v5.13/source/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c#L2298
 
-This patch adds support for a generic GPIO based CAN termination. The
-resistor value has to be specified via device tree, and it can only be
-attached to or detached from the bus. By default the termination is not
-active.
+I've also folded the ID and DLC fields into a struct (as suggested) so
+that we don't need to copy them to and from arrays for the FIFO transfers.
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- drivers/net/can/dev/dev.c | 54 +++++++++++++++++++++++++++++++++++++++
- include/linux/can/dev.h   |  8 ++++++
- 2 files changed, 62 insertions(+)
+Following-up on
+https://lore.kernel.org/linux-can/20210811063520.aw6hkll2kax22ytr@pengutronix.de/T/#u
+Sorry for the slight delay - last week was busy!
 
-diff --git a/drivers/net/can/dev/dev.c b/drivers/net/can/dev/dev.c
-index 311d8564d611..b4a6c7a6fc18 100644
---- a/drivers/net/can/dev/dev.c
-+++ b/drivers/net/can/dev/dev.c
-@@ -15,6 +15,7 @@
- #include <linux/can/dev.h>
- #include <linux/can/skb.h>
- #include <linux/can/led.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/of.h>
- 
- #define MOD_DESC "CAN device driver interface"
-@@ -400,10 +401,57 @@ void close_candev(struct net_device *dev)
- }
- EXPORT_SYMBOL_GPL(close_candev);
- 
-+static int can_set_termination(struct net_device *ndev, u16 term)
-+{
-+	struct can_priv *priv = netdev_priv(ndev);
-+	int set;
-+
-+	if (term == priv->termination_gpio_ohms[CAN_TERMINATION_GPIO_ENABLED])
-+		set = 1;
-+	else
-+		set = 0;
-+
-+	gpiod_set_value(priv->termination_gpio, set);
-+
-+	return 0;
-+}
-+
-+static int can_get_termination(struct net_device *ndev)
-+{
-+	struct can_priv *priv = netdev_priv(ndev);
-+	struct device *dev = ndev->dev.parent;
-+	struct gpio_desc *gpio;
-+	u16 term;
-+	int ret;
-+
-+	/* Disabling termination by default is the safe choice: Else if many
-+	 * bus participants enable it, no communication is possible at all.
-+	 */
-+	gpio = devm_gpiod_get_optional(dev, "termination", GPIOD_OUT_LOW);
-+	if (IS_ERR(gpio))
-+		return dev_err_probe(dev, PTR_ERR(gpio),
-+				     "Cannot get termination-gpios\n");
-+
-+	ret = device_property_read_u16(dev, "termination-ohms", &term);
-+	if (ret)
-+		return ret;
-+
-+	priv->termination_const_cnt = ARRAY_SIZE(priv->termination_gpio_ohms);
-+	priv->termination_const = priv->termination_gpio_ohms;
-+	priv->termination_gpio = gpio;
-+	priv->termination_gpio_ohms[CAN_TERMINATION_GPIO_DISABLED] =
-+		CAN_TERMINATION_DISABLED;
-+	priv->termination_gpio_ohms[CAN_TERMINATION_GPIO_ENABLED] = term;
-+	priv->do_set_termination = can_set_termination;
-+
-+	return 0;
-+}
-+
- /* Register the CAN network device */
- int register_candev(struct net_device *dev)
- {
- 	struct can_priv *priv = netdev_priv(dev);
-+	int err;
- 
- 	/* Ensure termination_const, termination_const_cnt and
- 	 * do_set_termination consistency. All must be either set or
-@@ -419,6 +467,12 @@ int register_candev(struct net_device *dev)
- 	if (!priv->data_bitrate_const != !priv->data_bitrate_const_cnt)
- 		return -EINVAL;
- 
-+	if (!priv->termination_const) {
-+		err = can_get_termination(dev);
-+		if (err)
-+			return err;
-+	}
-+
- 	dev->rtnl_link_ops = &can_link_ops;
- 	netif_carrier_off(dev);
- 
-diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
-index 27b275e463da..2413253e54c7 100644
---- a/include/linux/can/dev.h
-+++ b/include/linux/can/dev.h
-@@ -32,6 +32,12 @@ enum can_mode {
- 	CAN_MODE_SLEEP
- };
- 
-+enum can_termination_gpio {
-+	CAN_TERMINATION_GPIO_DISABLED = 0,
-+	CAN_TERMINATION_GPIO_ENABLED,
-+	CAN_TERMINATION_GPIO_MAX,
-+};
-+
- /*
-  * CAN common private data
-  */
-@@ -55,6 +61,8 @@ struct can_priv {
- 	unsigned int termination_const_cnt;
- 	const u16 *termination_const;
- 	u16 termination;
-+	struct gpio_desc *termination_gpio;
-+	u16 termination_gpio_ohms[CAN_TERMINATION_GPIO_MAX];
- 
- 	enum can_state state;
- 
+Matt Kline (3):
+  can: m_can: Disable IRQs on FIFO bus errors
+  can: m_can: Batch FIFO reads during CAN receive
+  can: m_can: Batch FIFO writes during CAN transmit
+
+ drivers/net/can/m_can/m_can.c          | 221 ++++++++++++++++---------
+ drivers/net/can/m_can/m_can.h          |   6 +-
+ drivers/net/can/m_can/m_can_pci.c      |  11 +-
+ drivers/net/can/m_can/m_can_platform.c |  15 +-
+ drivers/net/can/m_can/tcan4x5x-core.c  |  16 +-
+ 5 files changed, 172 insertions(+), 97 deletions(-)
+
 -- 
-2.30.2
+2.32.0
 
