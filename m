@@ -2,105 +2,65 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83CD43EE1F8
-	for <lists+linux-can@lfdr.de>; Tue, 17 Aug 2021 03:12:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7098C3EE553
+	for <lists+linux-can@lfdr.de>; Tue, 17 Aug 2021 06:13:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233167AbhHQBN3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 16 Aug 2021 21:13:29 -0400
-Received: from mail-lj1-f181.google.com ([209.85.208.181]:36433 "EHLO
-        mail-lj1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231649AbhHQBN3 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 16 Aug 2021 21:13:29 -0400
-Received: by mail-lj1-f181.google.com with SMTP id y7so30218495ljp.3;
-        Mon, 16 Aug 2021 18:12:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LcDb6cdiTT2+/+iDeVpLBBojjo/JZmuIoI4va9to8jg=;
-        b=s7Q58AH41jtWNx+HjVRBO/yPdKIkPd0j99QDF+d1kLGH8a9WkIj8oN3uMfE6DysDdx
-         i52epGrdR3laBwYJfWM12utUDbtC4bNo19N2OuEQOF+67kItMNKGgxUVtzU8oYS9tgov
-         5zboQw/KvHzNBJ0Rl3S3jdB5UGyb46OVLYWl/oOXxD1k79wNcz2mRG9XO99aRKxuckOy
-         zn/lbeUEvV2RhYqdl8YU3TRJ4wx61mlyORs60CcQxR0+IUcdf1lwDyqJO2h+jxGkeq6j
-         HahxL+NfF4WgBjt5iyfBZ57HbggwJHI4RiG4KgDFQ+0aycthTKYoXmoZSwYlSdZp4Ekc
-         SBjQ==
-X-Gm-Message-State: AOAM532YFqDheKFndnegdYjOHI+XfeBzJluAcZgtyfwirV+TGCKalBfl
-        FXh2Jya1WWU6ILGUtEdYpYvzH3RSZrelqyeDX7E=
-X-Google-Smtp-Source: ABdhPJyB1qsxbqnkqQ5jHf1wNevftc7GdUwJ+dkza6fML2jtBsA6lk+NhNU6sw9pR3mYEq+Kk7Onv5EvynhAUIkvzns=
-X-Received: by 2002:a2e:9182:: with SMTP id f2mr820778ljg.57.1629162775444;
- Mon, 16 Aug 2021 18:12:55 -0700 (PDT)
+        id S230395AbhHQENw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 17 Aug 2021 00:13:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56402 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229738AbhHQENu (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 17 Aug 2021 00:13:50 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227F5C061796
+        for <linux-can@vger.kernel.org>; Mon, 16 Aug 2021 21:13:18 -0700 (PDT)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1mFqTN-0003BY-S1; Tue, 17 Aug 2021 06:13:09 +0200
+Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1mFqTM-0006Z7-5Z; Tue, 17 Aug 2021 06:13:08 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, David Jander <david@protonic.nl>
+Subject: [PATCH v2 0/3] can: provide GPIO based termination 
+Date:   Tue, 17 Aug 2021 06:13:03 +0200
+Message-Id: <20210817041306.25185-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20210815033248.98111-1-mailhol.vincent@wanadoo.fr>
- <20210815033248.98111-3-mailhol.vincent@wanadoo.fr> <20210816084235.fr7fzau2ce7zl4d4@pengutronix.de>
- <CAMZ6RqK5t62UppiMe9k5jG8EYvnSbFW3doydhCvp72W_X2rXAw@mail.gmail.com>
- <20210816122519.mme272z6tqrkyc6x@pengutronix.de> <20210816123309.pfa57tke5hrycqae@pengutronix.de>
- <20210816134342.w3bc5zjczwowcjr4@pengutronix.de> <CAMZ6RqJFxKSZahAMz9Y8hpPJPh858jxDEXsRm1YkTwf4NFAFwg@mail.gmail.com>
- <CAMZ6Rq+ZtN+=ppPEYYm0ykJWP8_LtPNBtOM6gwM1VrpM3idsyw@mail.gmail.com>
-In-Reply-To: <CAMZ6Rq+ZtN+=ppPEYYm0ykJWP8_LtPNBtOM6gwM1VrpM3idsyw@mail.gmail.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Tue, 17 Aug 2021 10:12:44 +0900
-Message-ID: <CAMZ6Rq+kQ5+00p_-Pdk7v-h6_8oYA6MPP1SU-AdPH=ux++z-dQ@mail.gmail.com>
-Subject: Re: [PATCH v5 2/7] can: bittiming: allow TDC{V,O} to be zero and add can_tdc_const::tdc{v,o,f}_min
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can <linux-can@vger.kernel.org>,
-        =?UTF-8?Q?Stefan_M=C3=A4tje?= <Stefan.Maetje@esd.eu>,
-        netdev <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Marc,
+changes v2:
+- add CAN_TERMINATION_GPIO_MAX
+- remove fsl,scu-index from yaml example. It is not used on imx6q
 
-This patch fixes the bug you just encountered: having both TDC_AUTO
-and TDC_MANUAL set at the same time. I also cleaned all garbage
-data in struct can_tdc because that was trivial.
+Oleksij Rempel (3):
+  dt-bindings: can-controller: add support for termination-gpios
+  dt-bindings: can: fsl,flexcan: enable termination-* bindings
+  can: dev: provide optional GPIO based termination support
 
-This patch is meant to be squashed into:
-commit ca7200319a90 ("can: netlink: add interface for CAN-FD
-Transmitter Delay Compensation (TDC)")
+ .../bindings/net/can/can-controller.yaml      |  9 ++++
+ .../bindings/net/can/fsl,flexcan.yaml         | 17 ++++++
+ drivers/net/can/dev/dev.c                     | 54 +++++++++++++++++++
+ include/linux/can/dev.h                       |  8 +++
+ 4 files changed, 88 insertions(+)
 
-For now, I am just sharing it here so that you can continue your
-testing. I will resend the full series after we finish current
-ongoing discussion.
-
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- drivers/net/can/dev/netlink.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlink.c
-index f05745c96b9c..d8cefe7d354c 100644
---- a/drivers/net/can/dev/netlink.c
-+++ b/drivers/net/can/dev/netlink.c
-@@ -204,6 +204,7 @@ static int can_changelink(struct net_device *dev,
-struct nlattr *tb[],
-         }
-     }
-
-+    priv->ctrlmode &= ~CAN_CTRLMODE_TDC_MASK;
-     if (data[IFLA_CAN_CTRLMODE]) {
-         struct can_ctrlmode *cm;
-         u32 ctrlstatic;
-@@ -239,8 +240,6 @@ static int can_changelink(struct net_device *dev,
-struct nlattr *tb[],
-             dev->mtu = CAN_MTU;
-             memset(&priv->data_bittiming, 0,
-                    sizeof(priv->data_bittiming));
--            memset(&priv->tdc, 0, sizeof(priv->tdc));
--            priv->ctrlmode &= ~CAN_CTRLMODE_TDC_MASK;
-         }
-
-         tdc_mask = cm->mask & CAN_CTRLMODE_TDC_MASK;
-@@ -326,6 +325,7 @@ static int can_changelink(struct net_device *dev,
-struct nlattr *tb[],
-         priv->termination = termval;
-     }
-
-+    memset(&priv->tdc, 0, sizeof(priv->tdc));
-     if (data[IFLA_CAN_TDC]) {
-         /* Use the provided TDC parameters */
-         err = can_tdc_changelink(dev, data[IFLA_CAN_TDC], extack);
 -- 
-2.31.1
+2.30.2
+
