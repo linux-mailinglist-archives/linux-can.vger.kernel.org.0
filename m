@@ -2,177 +2,130 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D2A63EE60D
-	for <lists+linux-can@lfdr.de>; Tue, 17 Aug 2021 07:09:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA9EE3EEA28
+	for <lists+linux-can@lfdr.de>; Tue, 17 Aug 2021 11:43:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234088AbhHQFJh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 17 Aug 2021 01:09:37 -0400
-Received: from h2.fbrelay.privateemail.com ([131.153.2.43]:43481 "EHLO
-        h2.fbrelay.privateemail.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234214AbhHQFJc (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 17 Aug 2021 01:09:32 -0400
-Received: from MTA-13-3.privateemail.com (mta-13-1.privateemail.com [198.54.122.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by h1.fbrelay.privateemail.com (Postfix) with ESMTPS id F20A680682
-        for <linux-can@vger.kernel.org>; Tue, 17 Aug 2021 01:08:59 -0400 (EDT)
-Received: from mta-13.privateemail.com (localhost [127.0.0.1])
-        by mta-13.privateemail.com (Postfix) with ESMTP id 01A7418000BE;
-        Tue, 17 Aug 2021 01:08:59 -0400 (EDT)
-Received: from localhost.localdomain (unknown [10.20.151.223])
-        by mta-13.privateemail.com (Postfix) with ESMTPA id 9878B18000BF;
-        Tue, 17 Aug 2021 01:08:58 -0400 (EDT)
-From:   Matt Kline <matt@bitbashing.io>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Matt Kline <matt@bitbashing.io>, linux-can@vger.kernel.org
-Subject: [PATCH v3 3/3] can: m_can: Batch FIFO writes during CAN transmit
-Date:   Mon, 16 Aug 2021 22:08:53 -0700
-Message-Id: <20210817050853.14875-4-matt@bitbashing.io>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210817050853.14875-1-matt@bitbashing.io>
-References: <20210817050853.14875-1-matt@bitbashing.io>
+        id S236577AbhHQJnp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 17 Aug 2021 05:43:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46960 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236157AbhHQJnp (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 17 Aug 2021 05:43:45 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29D63C061764
+        for <linux-can@vger.kernel.org>; Tue, 17 Aug 2021 02:43:12 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1mFvcj-0006iv-Rp; Tue, 17 Aug 2021 11:43:09 +0200
+Received: from pengutronix.de (unknown [IPv6:2a02:810a:8940:aa0:dc61:eeed:d4a6:acca])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id C046B668D72;
+        Tue, 17 Aug 2021 09:43:07 +0000 (UTC)
+Date:   Tue, 17 Aug 2021 11:43:06 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     linux-can <linux-can@vger.kernel.org>,
+        Stefan =?utf-8?B?TcOkdGpl?= <Stefan.Maetje@esd.eu>,
+        netdev <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Thomas Kopp <thomas.kopp@microchip.com>
+Subject: Re: [PATCH v5 2/7] can: bittiming: allow TDC{V,O} to be zero and add
+ can_tdc_const::tdc{v,o,f}_min
+Message-ID: <20210817094306.iyezzml6m7nlznri@pengutronix.de>
+References: <20210815033248.98111-1-mailhol.vincent@wanadoo.fr>
+ <20210815033248.98111-3-mailhol.vincent@wanadoo.fr>
+ <20210816084235.fr7fzau2ce7zl4d4@pengutronix.de>
+ <CAMZ6RqK5t62UppiMe9k5jG8EYvnSbFW3doydhCvp72W_X2rXAw@mail.gmail.com>
+ <20210816122519.mme272z6tqrkyc6x@pengutronix.de>
+ <20210816123309.pfa57tke5hrycqae@pengutronix.de>
+ <CAMZ6RqK0vTtCkSM7Lim2TQCZyYTYvKYsFVwWDnyNaFghwqToXg@mail.gmail.com>
+ <20210816143052.3brm6ny26jy3nbkq@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: ClamAV using ClamSMTP
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="cq7vy33mil2ht6ci"
+Content-Disposition: inline
+In-Reply-To: <20210816143052.3brm6ny26jy3nbkq@pengutronix.de>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Give FIFO writes the same treatment as reads to avoid fixed costs of
-individual transfers on a slow bus (e.g., tcan4x5x).
 
-Signed-off-by: Matt Kline <matt@bitbashing.io>
----
- drivers/net/can/m_can/m_can.c | 61 +++++++++++++++--------------------
- 1 file changed, 26 insertions(+), 35 deletions(-)
+--cq7vy33mil2ht6ci
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index 85d6cd03bff1..b0e20c7d596c 100644
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -278,7 +278,7 @@ enum m_can_reg {
- /* Message RAM Elements */
- #define M_CAN_FIFO_ID		0x0
- #define M_CAN_FIFO_DLC		0x4
--#define M_CAN_FIFO_DATA(n)	(0x8 + ((n) << 2))
-+#define M_CAN_FIFO_DATA		0x8
- 
- /* Rx Buffer Element */
- /* R0 */
-@@ -510,7 +510,7 @@ static int m_can_read_fifo(struct net_device *dev, u32 rxfs)
- 		if (fifo_header.dlc & RX_BUF_BRS)
- 			cf->flags |= CANFD_BRS;
- 
--		err = m_can_fifo_read(cdev, fgi, M_CAN_FIFO_DATA(0),
-+		err = m_can_fifo_read(cdev, fgi, M_CAN_FIFO_DATA,
- 				      cf->data, DIV_ROUND_UP(cf->len, 4));
- 		if (err)
- 			goto out_fail;
-@@ -1593,8 +1593,9 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
- 	struct canfd_frame *cf = (struct canfd_frame *)cdev->tx_skb->data;
- 	struct net_device *dev = cdev->net;
- 	struct sk_buff *skb = cdev->tx_skb;
--	u32 id, dlc, cccr, fdflags;
--	int i, err;
-+	struct id_and_dlc fifo_header;
-+	u32 cccr, fdflags;
-+	int err;
- 	int putidx;
- 
- 	cdev->tx_skb = NULL;
-@@ -1602,34 +1603,30 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
- 	/* Generate ID field for TX buffer Element */
- 	/* Common to all supported M_CAN versions */
- 	if (cf->can_id & CAN_EFF_FLAG) {
--		id = cf->can_id & CAN_EFF_MASK;
--		id |= TX_BUF_XTD;
-+		fifo_header.id = cf->can_id & CAN_EFF_MASK;
-+		fifo_header.id |= TX_BUF_XTD;
- 	} else {
--		id = ((cf->can_id & CAN_SFF_MASK) << 18);
-+		fifo_header.id = ((cf->can_id & CAN_SFF_MASK) << 18);
- 	}
- 
- 	if (cf->can_id & CAN_RTR_FLAG)
--		id |= TX_BUF_RTR;
-+		fifo_header.id |= TX_BUF_RTR;
- 
- 	if (cdev->version == 30) {
- 		netif_stop_queue(dev);
- 
--		/* message ram configuration */
--		err = m_can_fifo_write(cdev, 0, M_CAN_FIFO_ID, &id, 1);
-+		fifo_header.dlc = can_fd_len2dlc(cf->len) << 16;
-+
-+		/* Write the frame ID, DLC, and payload to the FIFO element. */
-+		err = m_can_fifo_write(cdev, 0, M_CAN_FIFO_ID, &fifo_header, 2);
- 		if (err)
- 			goto out_fail;
- 
--		dlc = can_fd_len2dlc(cf->len) << 16;
--		err = m_can_fifo_write(cdev, 0, M_CAN_FIFO_DLC, &dlc, 1);
-+		err = m_can_fifo_write(cdev, 0, M_CAN_FIFO_DATA,
-+				       cf->data, DIV_ROUND_UP(cf->len, 4));
- 		if (err)
- 			goto out_fail;
- 
--		for (i = 0; i < cf->len; i += 4) {
--			err = m_can_fifo_write(cdev, 0, M_CAN_FIFO_DATA(i / 4), cf->data + i, 1);
--			if (err)
--				goto out_fail;
--		}
--
- 		can_put_echo_skb(skb, dev, 0, 0);
- 
- 		if (cdev->can.ctrlmode & CAN_CTRLMODE_FD) {
-@@ -1672,10 +1669,11 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
- 		/* get put index for frame */
- 		putidx = FIELD_GET(TXFQS_TFQPI_MASK,
- 				   m_can_read(cdev, M_CAN_TXFQS));
--		/* Write ID Field to FIFO Element */
--		err = m_can_fifo_write(cdev, putidx, M_CAN_FIFO_ID, &id, 1);
--		if (err)
--			goto out_fail;
-+
-+		/* Construct DLC Field, with CAN-FD configuration.
-+		 * Use the put index of the fifo as the message marker,
-+		 * used in the TX interrupt for sending the correct echo frame.
-+		 */
- 
- 		/* get CAN FD configuration of frame */
- 		fdflags = 0;
-@@ -1685,24 +1683,17 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
- 				fdflags |= TX_BUF_BRS;
- 		}
- 
--		/* Construct DLC Field. Also contains CAN-FD configuration
--		 * use put index of fifo as message marker
--		 * it is used in TX interrupt for
--		 * sending the correct echo frame
--		 */
--		dlc = FIELD_PREP(TX_BUF_MM_MASK, putidx) |
-+		fifo_header.dlc = FIELD_PREP(TX_BUF_MM_MASK, putidx) |
- 			FIELD_PREP(TX_BUF_DLC_MASK, can_fd_len2dlc(cf->len)) |
- 			fdflags | TX_BUF_EFC;
--		err = m_can_fifo_write(cdev, putidx, M_CAN_FIFO_DLC, &dlc, 1);
-+		err = m_can_fifo_write(cdev, putidx, M_CAN_FIFO_ID, &fifo_header, 2);
- 		if (err)
- 			goto out_fail;
- 
--		for (i = 0; i < cf->len; i += 4) {
--			err = m_can_fifo_write(cdev, putidx, M_CAN_FIFO_DATA(i / 4),
--					       cf->data + i, 1);
--			if (err)
--				goto out_fail;
--		}
-+		err = m_can_fifo_write(cdev, putidx, M_CAN_FIFO_DATA,
-+				       cf->data, DIV_ROUND_UP(cf->len, 4));
-+		if (err)
-+			goto out_fail;
- 
- 		/* Push loopback echo.
- 		 * Will be looped back on TX interrupt based on message marker
--- 
-2.32.0
+On 16.08.2021 16:30:52, Marc Kleine-Budde wrote:
+> > Finally, I did a bit of research and found that:
+> > http://ww1.microchip.com/downloads/en/DeviceDoc/Section_56_Controller_A=
+rea_Network_with_Flexible_Data_rate_DS60001549A.pdf
 
+> > This is *not* the mcp25xxfd datasheet but it is still from
+> > Microship and as you will see, it is mostly similar to the
+> > mcp25xxfd except for, you guessed it, the TDCO.
+> >=20
+> > It reads:
+> > | TDCMOD<1:0>: Transmitter Delay Compensation Mode bits
+> > | Secondary Sample Point (SSP).
+> > | 10 =3D Auto; measure delay and add CFDxDBTCFG.TSEG1; add TDCO
+> > | 11 =3D Auto; measure delay and add CFDxDBTCFG.TSEG1; add TDCO
+> > | 01 =3D Manual; Do not measure, use TDCV plus TDCO from the register
+> > | 00 =3D Disable
+> >=20
+> > | TDCO<6:0>: Transmitter Delay Compensation Offset bits
+> > | Secondary Sample Point (SSP). Two's complement; offset can be
+> > positive, zero, or negative.
+> > | 1111111 =3D -64 x SYSCLK
+> > | .
+> > | .
+> > | .
+> > | 0111111 =3D 63 x SYSCLK
+> > | .
+> > | .
+> > | .
+> > | 0000000 =3D 0 x SYSCLK
+> >=20
+> > Here, you can clearly see that the TDCO has the exact same range
+> > as the one of the mcp25xxfd but the description of TDCMOD
+> > changes, telling us that:
+> >=20
+> > | SSP =3D TDCV (measured delay) + CFDxDBTCFG.TSEG1 (sample point) + TDCO
+> >=20
+> > Which means this is a relative TDCO.
+
+Good catch! Microchip is investigating this.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--cq7vy33mil2ht6ci
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmEbhKcACgkQqclaivrt
+76mRUwf/WqgGXJS5FJYsgXeQ9DB2ao8JrxXEawnFdtnwp+LzoU6Xa8+NOrcwaDE/
+74ZFUhUVOoA/gl06bwixPLrBuFt9XVCa7uJEU7fnUdKAFl99LN4F1l6dGIT1gQ3l
+Iqtl/bOhwYGVRqyOH5sXTzF/kWrBny14xoGFUk+QtNwgaGGQ2vmvZ/Cx518xJnSd
+sQNdxGK9z71oYf8lqUndIJO/zdQGRgJtABVCCanRRTtoeYf52U+pdMUmo/I/2CX9
+AHP+hCR2yCDU+R93/SMwQH0RDFQvSUZ3YsP7ANO7ROzGLaeXhdM79gA1DiOClXK6
+bLLjwDxvRhoJwmHMDc6DGrOWCfL+3g==
+=DOw1
+-----END PGP SIGNATURE-----
+
+--cq7vy33mil2ht6ci--
