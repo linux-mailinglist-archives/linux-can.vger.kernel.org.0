@@ -2,143 +2,191 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F3BC3EFCA7
-	for <lists+linux-can@lfdr.de>; Wed, 18 Aug 2021 08:27:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 021413EFD14
+	for <lists+linux-can@lfdr.de>; Wed, 18 Aug 2021 08:48:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238429AbhHRG17 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 18 Aug 2021 02:27:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49094 "EHLO
+        id S238377AbhHRGtQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 18 Aug 2021 02:49:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238263AbhHRG16 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 18 Aug 2021 02:27:58 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 454BFC0613CF
-        for <linux-can@vger.kernel.org>; Tue, 17 Aug 2021 23:27:24 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1mGF2W-0007Xm-Bs; Wed, 18 Aug 2021 08:27:04 +0200
-Received: from pengutronix.de (unknown [IPv6:2a02:810a:8940:aa0:ed04:8488:5061:54d4])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 7335C66975A;
-        Wed, 18 Aug 2021 06:26:59 +0000 (UTC)
-Date:   Wed, 18 Aug 2021 08:26:57 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Wolfgang Grandegger <wg@grandegger.com>,
+        with ESMTP id S238626AbhHRGtQ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 18 Aug 2021 02:49:16 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3227FC061796
+        for <linux-can@vger.kernel.org>; Tue, 17 Aug 2021 23:48:42 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 17so1240240pgp.4
+        for <linux-can@vger.kernel.org>; Tue, 17 Aug 2021 23:48:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ydwImPka+33pK3zFh/3ZRhWUJUFUKLKTzYRKuwQUsxw=;
+        b=cGjVLJJdziTcmvJ27JU5rTQ8yCeDMcn5cVnyGLyKhLTIfFt1+UogEWL2TR600L0YNa
+         2ooQ2QARhAFf0vpH9wd2/xNtxYtH/TARe4IIayGOo1ZKruM4m488v+jeFjPTdR1DQCVO
+         +vukV7cOhOLhxKJWKPtV2YOFJB/OfXWuW9pwQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ydwImPka+33pK3zFh/3ZRhWUJUFUKLKTzYRKuwQUsxw=;
+        b=s/l8kVXM+3t6x69rwWaCM9TTuKQcOLxRNpuopzwaIgAPfg1+CrKhi9Erqd6YP+7Esa
+         Vu+mmyrfCnMx+h/9pG3J+anfuGXB7VywO89lgUq0Ith0S0vTXzHvDiG4dZM8r/X27gII
+         /DqXiSBzVAEPmYwmlxLedKF7DiJHH8prHtK2q9onzWAyyY5fGWv1QD0BratW8RGWfDdw
+         FyuNGDeAFU/d54W4R/XhvbvAEHbbR6PsHGcbcx2BkVOuIfKUFwlSRssKru6swaTxEjCn
+         VigWqjmoTiAlDTvuHrT6N/nLRUoQ5a/sZDvRUZj1I+QNPgjhXDR4lDB+wUNosgeHGNwO
+         ShnA==
+X-Gm-Message-State: AOAM533KkSsX2lBa1Y4fUorqCwWDd/H1SULU3uGASZ/iasePfDIMj1Op
+        rPGNHw+Uy12Wrd+omUZAidM8C73RR3+yiw==
+X-Google-Smtp-Source: ABdhPJzRpcjoH3bs6liJdFrWxeTvcoqJK6VQgSUO0sZF2MvCC+Ej5U0n0/HIJjlFa325ZCnA9guB0w==
+X-Received: by 2002:a62:878a:0:b029:3e0:7810:ec36 with SMTP id i132-20020a62878a0000b02903e07810ec36mr7701759pfe.4.1629269321704;
+        Tue, 17 Aug 2021 23:48:41 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id d5sm4039400pju.28.2021.08.17.23.48.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Aug 2021 23:48:41 -0700 (PDT)
+Date:   Tue, 17 Aug 2021 23:48:40 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-wireless@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-staging@lists.linux.dev, linux-block@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, clang-built-linux@googlegroups.com,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
+        linux-can <linux-can@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
         linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2 59/63] can: flexcan: Use struct_group() to zero struct
- flexcan_regs regions
-Message-ID: <20210818062657.6hvn75kf5o5cgey2@pengutronix.de>
-References: <20210818060533.3569517-1-keescook@chromium.org>
- <20210818060533.3569517-60-keescook@chromium.org>
+Subject: Re: [PATCH] can: etas_es58x: Replace 0-element raw_msg array
+Message-ID: <202108172320.1540EC10C@keescook>
+References: <20210818034010.800652-1-keescook@chromium.org>
+ <CAMZ6RqK4Rn4d-1CZsg9vJiAMHhxN6fgcqukdHpGwXoGTyNVr_Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kduqcl3tf4g5uel5"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210818060533.3569517-60-keescook@chromium.org>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <CAMZ6RqK4Rn4d-1CZsg9vJiAMHhxN6fgcqukdHpGwXoGTyNVr_Q@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Wed, Aug 18, 2021 at 02:13:51PM +0900, Vincent MAILHOL wrote:
+> On Wed. 18 Aug 2021 at 12:40, Kees Cook <keescook@chromium.org> wrote:
+> > While raw_msg isn't a fixed size, it does have a maximum size. Adjust the
+> > struct to represent this and avoid the following warning when building
+> > with -Wzero-length-bounds:
+> >
+> > drivers/net/can/usb/etas_es58x/es58x_fd.c: In function 'es58x_fd_tx_can_msg':
+> > drivers/net/can/usb/etas_es58x/es58x_fd.c:360:35: warning: array subscript 65535 is outside the bounds of an interior zero-length array 'u8[0]' {aka 'unsigned char[]'} [-Wzero-length-bounds]
+> >   360 |  tx_can_msg = (typeof(tx_can_msg))&es58x_fd_urb_cmd->raw_msg[msg_len];
+> >       |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > In file included from drivers/net/can/usb/etas_es58x/es58x_core.h:22,
+> >                  from drivers/net/can/usb/etas_es58x/es58x_fd.c:17:
+> > drivers/net/can/usb/etas_es58x/es58x_fd.h:231:6: note: while referencing 'raw_msg'
+> >   231 |   u8 raw_msg[0];
+> >       |      ^~~~~~~
+> >
+> > Cc: Wolfgang Grandegger <wg@grandegger.com>
+> > Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+> > Cc: "David S. Miller" <davem@davemloft.net>
+> > Cc: Jakub Kicinski <kuba@kernel.org>
+> > Cc: Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
+> > Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > Cc: linux-can@vger.kernel.org
+> > Cc: netdev@vger.kernel.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> >  drivers/net/can/usb/etas_es58x/es581_4.h  | 2 +-
+> >  drivers/net/can/usb/etas_es58x/es58x_fd.h | 2 +-
+> >  2 files changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/net/can/usb/etas_es58x/es581_4.h b/drivers/net/can/usb/etas_es58x/es581_4.h
+> > index 4bc60a6df697..af38c4938859 100644
+> > --- a/drivers/net/can/usb/etas_es58x/es581_4.h
+> > +++ b/drivers/net/can/usb/etas_es58x/es581_4.h
+> > @@ -192,7 +192,7 @@ struct es581_4_urb_cmd {
+> >                 struct es581_4_rx_cmd_ret rx_cmd_ret;
+> >                 __le64 timestamp;
+> >                 u8 rx_cmd_ret_u8;
+> > -               u8 raw_msg[0];
+> > +               u8 raw_msg[USHRT_MAX];
+> >         } __packed;
+> >
+> >         __le16 reserved_for_crc16_do_not_use;
+> > diff --git a/drivers/net/can/usb/etas_es58x/es58x_fd.h b/drivers/net/can/usb/etas_es58x/es58x_fd.h
+> > index ee18a87e40c0..e0319b8358ef 100644
+> > --- a/drivers/net/can/usb/etas_es58x/es58x_fd.h
+> > +++ b/drivers/net/can/usb/etas_es58x/es58x_fd.h
+> > @@ -228,7 +228,7 @@ struct es58x_fd_urb_cmd {
+> >                 struct es58x_fd_tx_ack_msg tx_ack_msg;
+> >                 __le64 timestamp;
+> >                 __le32 rx_cmd_ret_le32;
+> > -               u8 raw_msg[0];
+> > +               u8 raw_msg[USHRT_MAX];
+> >         } __packed;
+> >
+> >         __le16 reserved_for_crc16_do_not_use;
+> > --
+> > 2.30.2
+> 
+> raw_msg is part of a union so its maximum size is implicitly the
+> biggest size of the other member of that union:
 
---kduqcl3tf4g5uel5
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yup, understood. See below...
 
-On 17.08.2021 23:05:29, Kees Cook wrote:
-> In preparation for FORTIFY_SOURCE performing compile-time and run-time
-> field bounds checking for memset(), avoid intentionally writing across
-> neighboring fields.
->=20
-> Add struct_group() to mark both regions of struct flexcan_regs that get
-> initialized to zero. Avoid the future warnings:
->=20
-> In function 'fortify_memset_chk',
->     inlined from 'memset_io' at ./include/asm-generic/io.h:1169:2,
->     inlined from 'flexcan_ram_init' at drivers/net/can/flexcan.c:1403:2:
-> ./include/linux/fortify-string.h:199:4: warning: call to '__write_overflo=
-w_field' declared with attribute warning: detected write beyond size of fie=
-ld (1st parameter); maybe use struct_group()? [-Wattribute-warning]
->   199 |    __write_overflow_field(p_size_field, size);
->       |    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> In function 'fortify_memset_chk',
->     inlined from 'memset_io' at ./include/asm-generic/io.h:1169:2,
->     inlined from 'flexcan_ram_init' at drivers/net/can/flexcan.c:1408:3:
-> ./include/linux/fortify-string.h:199:4: warning: call to '__write_overflo=
-w_field' declared with attribute warning: detected write beyond size of fie=
-ld (1st parameter); maybe use struct_group()? [-Wattribute-warning]
->   199 |    __write_overflow_field(p_size_field, size);
->       |    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->=20
-> Cc: Wolfgang Grandegger <wg@grandegger.com>
-> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: linux-can@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+> 
+> | struct es58x_fd_urb_cmd {
+> |     __le16 SOF;
+> |    u8 cmd_type;
+> |    u8 cmd_id;
+> |    u8 channel_idx;
+> |    __le16 msg_len;
+> |
+> |    union {
+> |        struct es58x_fd_tx_conf_msg tx_conf_msg;
+> |        u8 tx_can_msg_buf[ES58X_FD_TX_BULK_MAX * ES58X_FD_CANFD_TX_LEN];
+> |        u8 rx_can_msg_buf[ES58X_FD_RX_BULK_MAX * ES58X_FD_CANFD_RX_LEN];
+> |        struct es58x_fd_echo_msg echo_msg[ES58X_FD_ECHO_BULK_MAX];
+> |        struct es58x_fd_rx_event_msg rx_event_msg;
+> |        struct es58x_fd_tx_ack_msg tx_ack_msg;
+> |        __le64 timestamp;
+> |        __le32 rx_cmd_ret_le32;
+> |        u8 raw_msg[0];
+> |    } __packed;
+> |
+> |    __le16 reserved_for_crc16_do_not_use;
+> | } __packed;
+> 
+> ram_msg can then be used to manipulate the other fields at the byte level.
+> I am sorry but I fail to understand why this is an issue.
 
-Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
+The issue is with using a 0-element array (these are being removed from
+the kernel[1] so we can add -Warray-bounds). Normally in this situation I
+would replace the 0-element array with a flexible array, but this
+case is unusual in several ways:
 
-> -	memset_io(&regs->mb[0][0], 0,
-> -		  offsetof(struct flexcan_regs, rx_smb1[3]) -
-> -		  offsetof(struct flexcan_regs, mb[0][0]) + 0x4);
-> +	memset_io(&regs->init, 0, sizeof(regs->init));
+- There is a trailing struct member (reserved_for_crc16_do_not_use),
+  which is never accessed (good), and documented as "please never access
+  this".
 
-This even makes the code more readable! \o/
+- struct es58x_fd_urb_cmd is statically allocated (it is written into
+  from the URB handler).
 
->  	if (priv->can.ctrlmode & CAN_CTRLMODE_FD)
-> -		memset_io(&regs->tx_smb_fd[0], 0,
-> -			  offsetof(struct flexcan_regs, rx_smb1_fd[17]) -
-> -			  offsetof(struct flexcan_regs, tx_smb_fd[0]) + 0x4);
-> +		memset_io(&regs->init_fd, 0, sizeof(regs->init_fd));
-> =20
->  	reg_ctrl2 &=3D ~FLEXCAN_CTRL2_WRMFRZ;
->  	priv->write(reg_ctrl2, &regs->ctrl2);
+- The message lengths coming from the USB device are stored in a u16,
+  which looked like it was possible to overflow the buffer.
 
-regards,
-Marc
+In taking a closer look, I see that the URB command length is checked,
+and the in-data length is checked as well, so the overflow concern
+appears to be addressed.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+> Also, the proposed fix drastically increases the size of the structure.
 
---kduqcl3tf4g5uel5
-Content-Type: application/pgp-signature; name="signature.asc"
+Indeed. I will send a v2, now that I see that the overflow concern isn't
+an issue.
 
------BEGIN PGP SIGNATURE-----
+Thanks!
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmEcqC4ACgkQqclaivrt
-76lMtAf+PLTf+69ONg9/KGwncoo4yvZ5m8bSKHLYfYYuCITf4oOnHWQIBFT3P8Fn
-GMKihDcISmFKjqSbFu8aJSqtNFhYzGB0uIUjuhW+15TJRH7SUTZCuT/U6VPXrEWi
-qWCGvkl3szxqSpDVrbCW5ChnnsAZ3Nj2pXV+gkB62mvtcwTdqFBczMfbKHNhLHgv
-BYjF2uWTN51iadHR3Kese6EccsTaIoCrqZjnGrlJSBVLtt66BT101RY0pE9890e+
-+p/LRFYivNeT0DnAObs8TDghwzxWlqfE3nR1QLSvENRbMBSzhEbipc7oz3DQJC4v
-WM/41iCaZScHUFfgxPrBqtGtM1p9RA==
-=LXIZ
------END PGP SIGNATURE-----
+-Kees
 
---kduqcl3tf4g5uel5--
+[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
+
+-- 
+Kees Cook
