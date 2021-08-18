@@ -2,116 +2,145 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E94843F0092
-	for <lists+linux-can@lfdr.de>; Wed, 18 Aug 2021 11:35:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 648753F0115
+	for <lists+linux-can@lfdr.de>; Wed, 18 Aug 2021 11:57:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233145AbhHRJfS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 18 Aug 2021 05:35:18 -0400
-Received: from mail-lj1-f173.google.com ([209.85.208.173]:35707 "EHLO
-        mail-lj1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233729AbhHRJe2 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 18 Aug 2021 05:34:28 -0400
-Received: by mail-lj1-f173.google.com with SMTP id y6so3964461lje.2;
-        Wed, 18 Aug 2021 02:33:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CzC7eMg6GoorXihbZpnBiMn0rer4lRtJPAUz1wNS7Ds=;
-        b=DLZXoPf7Dv9d35O+flm97fCaasEQnPwFPFtSRBSvjLOsvq5Xixo7UkXN/U09L/Htaq
-         QEXQQ38ScqBKZDJ5wH2iCa9yGbeCiKj4H3Ls6vwIKKPTfeAK/uZMb/gEJgxtPK3UQukP
-         txvFkcsI2/rQNRKouXjwUNrtPRZZR5ISjKZ637+FQl/1vj5buwDFQlSY1xMLtp9ar8xN
-         6myV1g4EWi4zDuYv8RJuOrlZcr4wA1ji4mR8W70L6dw2Dh2LOzITt7F2XgA6MMYWMjkm
-         JKYKFU8HH9VBf7QobF7QvMtMCm8pcLlym9r/noUYVVeg+Liy1fFq9+kAFMxe+Akfn1sV
-         9N/A==
-X-Gm-Message-State: AOAM532CQi+7UVwEX2cfdxrqMI+OVOTLYg6ZPijsrgIV7dat5kd+F/jA
-        b10xeC9LuUnmO4pIB/Iu3RW2WhyQBqOh0OVnfi4=
-X-Google-Smtp-Source: ABdhPJwHqkci/wVHZz1RIQo9bHJpWPoiaE+GXkLl0fV34qDOm85KGMeIPwC/RwTgPkoYJWCGg83a0bkp1B1FDN32yQQ=
-X-Received: by 2002:a2e:a288:: with SMTP id k8mr6989386lja.315.1629279230564;
- Wed, 18 Aug 2021 02:33:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210818034010.800652-1-keescook@chromium.org>
- <CAMZ6RqK4Rn4d-1CZsg9vJiAMHhxN6fgcqukdHpGwXoGTyNVr_Q@mail.gmail.com>
- <202108172320.1540EC10C@keescook> <CAMZ6RqLecbytJFQDC35n7YiqBbrB3--POofnXFeH77Zi2xzqWA@mail.gmail.com>
- <202108180159.5C1CEE70F@keescook>
-In-Reply-To: <202108180159.5C1CEE70F@keescook>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Wed, 18 Aug 2021 18:33:39 +0900
-Message-ID: <CAMZ6RqK=Q3mvV5gyPVhBsFxE+JPANHNrgFqs=bvTgkbXjwT4Eg@mail.gmail.com>
-Subject: Re: [PATCH] can: etas_es58x: Replace 0-element raw_msg array
+        id S232885AbhHRJ6P (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 18 Aug 2021 05:58:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42938 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231910AbhHRJ6P (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 18 Aug 2021 05:58:15 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C974BC061764
+        for <linux-can@vger.kernel.org>; Wed, 18 Aug 2021 02:57:40 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1mGIJV-0003Ak-CF; Wed, 18 Aug 2021 11:56:49 +0200
+Received: from pengutronix.de (unknown [IPv6:2a02:810a:8940:aa0:ed04:8488:5061:54d4])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 08E5E669A16;
+        Wed, 18 Aug 2021 09:56:36 +0000 (UTC)
+Date:   Wed, 18 Aug 2021 11:56:35 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     Kees Cook <keescook@chromium.org>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
+Cc:     linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ayush Sawal <ayush.sawal@chelsio.com>,
+        Vinay Kumar Yadav <vinay.yadav@chelsio.com>,
+        Rohit Maheshwari <rohitm@chelsio.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         "David S. Miller" <davem@davemloft.net>,
+        Kalle Valo <kvalo@codeaurora.org>,
         Jakub Kicinski <kuba@kernel.org>,
+        Stanislaw Gruszka <stf_xl@wp.pl>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Mordechay Goodstein <mordechay.goodstein@intel.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
         Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
-        linux-can <linux-can@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>,
+        linux-crypto@vger.kernel.org, ath10k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-can@vger.kernel.org,
+        bpf@vger.kernel.org, clang-built-linux@googlegroups.com,
         linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH 2/5] treewide: Replace open-coded flex arrays in unions
+Message-ID: <20210818095635.tm42ctkm6aydjr6g@pengutronix.de>
+References: <20210818081118.1667663-1-keescook@chromium.org>
+ <20210818081118.1667663-3-keescook@chromium.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="h4irlmrxob7c5btq"
+Content-Disposition: inline
+In-Reply-To: <20210818081118.1667663-3-keescook@chromium.org>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed. 18 Aug 2021 at 18:03, Kees Cook <keescook@chromium.org> wrote:
-> On Wed, Aug 18, 2021 at 04:55:20PM +0900, Vincent MAILHOL wrote:
-> > At the end, the only goal of raw_msg[] is to have a tag pointing
-> > to the beginning of the union. It would be virtually identical to
-> > something like:
-> > |    u8 raw_msg[];
-> > |    union {
-> > |        /* ... */
-> > |    } __packed ;
-> >
-> > I had a look at your work and especially at your struct_group() macro.
-> > Do you think it would make sense to introduce a union_group()?
-> >
-> > Result would look like:
-> >
-> > |    union_group_attr(urb_msg, __packed, /* raw_msg renamed to urb_msg */
-> > |        struct es58x_fd_tx_conf_msg tx_conf_msg;
-> > |        u8 tx_can_msg_buf[ES58X_FD_TX_BULK_MAX * ES58X_FD_CANFD_TX_LEN];
-> > |        u8 rx_can_msg_buf[ES58X_FD_RX_BULK_MAX * ES58X_FD_CANFD_RX_LEN];
-> > |        struct es58x_fd_echo_msg echo_msg[ES58X_FD_ECHO_BULK_MAX];
-> > |        struct es58x_fd_rx_event_msg rx_event_msg;
-> > |        struct es58x_fd_tx_ack_msg tx_ack_msg;
-> > |        __le64 timestamp;
-> > |        __le32 rx_cmd_ret_le32;
-> > |    );
-> >
-> > And I can then use urb_msg in place of the old raw_msg (might
-> > need a bit of rework here and there but I can take care of it).
-> >
-> > This is the most pretty way I can think of to remove this zero length array.
-> > Keeping the raw_msg[] but with another size seems odd to me.
-> >
-> > Or maybe I would be the only one using this feature in the full
-> > tree? In that case, maybe it would make sense to keep the
-> > union_group_attr() macro local to the etas_es58x driver?
->
-> I actually ended up with something close to this idea, but more
-> generalized for other cases in the kernel. There was a sane way to
-> include a "real" flexible array in a union (or alone in a struct), so
-> I've proposed this flex_array() helper:
-> https://lore.kernel.org/lkml/20210818081118.1667663-2-keescook@chromium.org/
->
-> and then it's just a drop-in replacement for all the places that need
-> this fixed, including etas_es58x:
-> https://lore.kernel.org/lkml/20210818081118.1667663-3-keescook@chromium.org/#Z30drivers:net:can:usb:etas_es58x:es581_4.h
->
-> Hopefully this will work out; I think it's as clean as we can get for
-> now. :)
 
-The __flex_array itself is a nasty hack :D but the rest is clean.
+--h4irlmrxob7c5btq
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Is this compliant to the C standard? Well, I guess that as long
-as both GCC and LLVM supports it, it is safe to add it to the
-kernel.
+On 18.08.2021 01:11:15, Kees Cook wrote:
+> diff --git a/drivers/net/can/usb/etas_es58x/es581_4.h b/drivers/net/can/u=
+sb/etas_es58x/es581_4.h
+> index 4bc60a6df697..8657145dc2a9 100644
+> --- a/drivers/net/can/usb/etas_es58x/es581_4.h
+> +++ b/drivers/net/can/usb/etas_es58x/es581_4.h
+> @@ -192,7 +192,7 @@ struct es581_4_urb_cmd {
+>  		struct es581_4_rx_cmd_ret rx_cmd_ret;
+>  		__le64 timestamp;
+>  		u8 rx_cmd_ret_u8;
+> -		u8 raw_msg[0];
+> +		flex_array(u8 raw_msg);
+>  	} __packed;
+> =20
+>  	__le16 reserved_for_crc16_do_not_use;
+> diff --git a/drivers/net/can/usb/etas_es58x/es58x_fd.h b/drivers/net/can/=
+usb/etas_es58x/es58x_fd.h
+> index ee18a87e40c0..3053e0958132 100644
+> --- a/drivers/net/can/usb/etas_es58x/es58x_fd.h
+> +++ b/drivers/net/can/usb/etas_es58x/es58x_fd.h
+> @@ -228,7 +228,7 @@ struct es58x_fd_urb_cmd {
+>  		struct es58x_fd_tx_ack_msg tx_ack_msg;
+>  		__le64 timestamp;
+>  		__le32 rx_cmd_ret_le32;
+> -		u8 raw_msg[0];
+> +		flex_array(u8 raw_msg[]);
+>  	} __packed;
 
-I like the final result. I will do a bit more testing and give my
-acknowledgement if everything goes well.
+This doesn't look consistent, what's preferred?
 
+u8 raw_msg[0];  -> flex_array(u8 raw_msg);
+ - or-
+                -> flex_array(u8 raw_msg[]);
 
-Yours sincerely,
-Vincent
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--h4irlmrxob7c5btq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmEc2VEACgkQqclaivrt
+76kXUQf/cn+R4mRgon+iBBoNOjSG6Xpa5C1kWsnyfyJAQq9geHgAtcyoTTot+9QH
+bjo6l3vIxXSY85B6NbV+TQFuedtSpFYkRQJgWzMG/eIuwHZ7Buuf8uK5C5MESqwm
+PJDEl2lZpKA7MtM2gMtvmhElNsv1Nr4FqMEOmCHs5LeQQ8ddsbJ0Ab7X7ffQ4SRu
+UgMoqqUUFxReCmF+pmoxDC5uHBbovnw/hYPulDH6AN7jj8ml9/lPLuJKfBnyYGI5
+jYTHTlc4+VnN6a7NJ7V9DhTCncLaFjXVFFxoQBWYgpetIV/eWwu2WwrrYhyrvEK0
+cORmz7LG97TWWd3NSNNy9j7XKs0y+Q==
+=UYoj
+-----END PGP SIGNATURE-----
+
+--h4irlmrxob7c5btq--
