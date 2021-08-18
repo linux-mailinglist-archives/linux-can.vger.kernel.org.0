@@ -2,213 +2,143 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 353583EFE51
-	for <lists+linux-can@lfdr.de>; Wed, 18 Aug 2021 09:55:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A032E3EFEB8
+	for <lists+linux-can@lfdr.de>; Wed, 18 Aug 2021 10:09:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238955AbhHRH4I (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 18 Aug 2021 03:56:08 -0400
-Received: from mail-lf1-f46.google.com ([209.85.167.46]:33508 "EHLO
-        mail-lf1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239275AbhHRH4I (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 18 Aug 2021 03:56:08 -0400
-Received: by mail-lf1-f46.google.com with SMTP id p38so2894758lfa.0;
-        Wed, 18 Aug 2021 00:55:32 -0700 (PDT)
+        id S239489AbhHRIJj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 18 Aug 2021 04:09:39 -0400
+Received: from mail-lj1-f172.google.com ([209.85.208.172]:33561 "EHLO
+        mail-lj1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238650AbhHRIJi (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 18 Aug 2021 04:09:38 -0400
+Received: by mail-lj1-f172.google.com with SMTP id n7so3629744ljq.0;
+        Wed, 18 Aug 2021 01:09:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=OKNqcjyMKvezCUeqQ9JLkZ4cJ3Qp1tm5Mjp0xQPfVdk=;
-        b=KL93TLEfVVWKQlk9QF5xuI3dfpCI8RPbYAw0WT8QHMc7FcyQENZutcXYw7kuq1EH4Z
-         vcyVg7ZRehOhMA1W7SusE5Trf4TSXxrE2gtEij0mGVbVGz9CwsUhk+Ge5WZtfVq10yHB
-         kZAha8RNscVFV8aZa8m+obW9FYmp1M9kVmdnXgVqrD7QiEM0zdeD41v+yD+d0mcSMOw1
-         F8cORnoxfY6R3zppmB2yv39hNvbZmEg9pVvfn67HYodqzuYaGMhKj6ln79mvMPretcuT
-         PfWNgZPOeU40z6hqrfEr+y62Bb3PeEmVsg0VN22dWnrvv7I3RUODPF7ZTxQcQs7NxXmA
-         aLLw==
-X-Gm-Message-State: AOAM533vwkQcuayi3Yci5yNHmL+2eGfPXLPsBx0HccC9VjEgtbVtAOBI
-        nA5CIEn8fi3HcPwEpAOl6YcQtvg3EtgeuD3o0Yc=
-X-Google-Smtp-Source: ABdhPJzvrTUEsuu+UliVD0ZQ+G9FKD87vbsYb/+XxmogarBDMIyGh6vgVKWqgJPt1W2rNzsulcpbB/8ovtLoJb5k9UY=
-X-Received: by 2002:ac2:5ec7:: with SMTP id d7mr5435897lfq.234.1629273332108;
- Wed, 18 Aug 2021 00:55:32 -0700 (PDT)
+        bh=zS3HmGadTV/ONEUOpne6IQWm4IBd42AxFALL1jwUdAk=;
+        b=bpsTizG81nzqZZb4mMT4MYy+MNPh3DyB65e7F9Yag5xXP1ql5xzPwdWWMBp+rdHW3N
+         1Ez3BrKMH+iupIseDou1kapDEGXbdU2qd4FPMxnFosg8GbBwDhMN6un3NXiJJKAXXXcr
+         IBPfk5deMBv36hj006pKtxUkehpwPu6OR3kzIsb+X8m8hp4zEhch3CiCbb9FULSwxSbu
+         K9aVnTxqNWxWG1nG94T3nF+JNfJumdc8hT1E3jXYozYDR5K57C+IXj7HZcre0/apcdta
+         8E+462Vw1YBn5fVRL3RkO7mqaZTupCUhpkHPkKqfWioZoMdulDiq+DAJavHNtoKYlN7m
+         OeLg==
+X-Gm-Message-State: AOAM530DxnTinbkStZ3xRgQSgV+ZGRlK9sHz33bTQkcD5IVVX0uAV5MQ
+        u7p+r3NJTUNUWXFftsIgd57H+u1NFd0BlSR4IVw=
+X-Google-Smtp-Source: ABdhPJyEQpgstBeIffhtaQMrcR3+Gd2+TUMkttxus/h5F9v1P7W7b2JxpAhr6zSfbO97feFAtn1PfYRm+9LIiggYxgM=
+X-Received: by 2002:a2e:9c08:: with SMTP id s8mr6828658lji.331.1629274142982;
+ Wed, 18 Aug 2021 01:09:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210818034010.800652-1-keescook@chromium.org>
- <CAMZ6RqK4Rn4d-1CZsg9vJiAMHhxN6fgcqukdHpGwXoGTyNVr_Q@mail.gmail.com> <202108172320.1540EC10C@keescook>
-In-Reply-To: <202108172320.1540EC10C@keescook>
+References: <20210815033248.98111-1-mailhol.vincent@wanadoo.fr>
+ <20210815033248.98111-6-mailhol.vincent@wanadoo.fr> <20210817195551.wwgu7dnhb6qyvo7n@pengutronix.de>
+In-Reply-To: <20210817195551.wwgu7dnhb6qyvo7n@pengutronix.de>
 From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Wed, 18 Aug 2021 16:55:20 +0900
-Message-ID: <CAMZ6RqLecbytJFQDC35n7YiqBbrB3--POofnXFeH77Zi2xzqWA@mail.gmail.com>
-Subject: Re: [PATCH] can: etas_es58x: Replace 0-element raw_msg array
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
-        linux-can <linux-can@vger.kernel.org>,
+Date:   Wed, 18 Aug 2021 17:08:51 +0900
+Message-ID: <CAMZ6RqLj94UU_b8dDAzinVsLaV6pBR-cWbHmjwGhx3vfWiKt_g@mail.gmail.com>
+Subject: Re: [PATCH v5 5/7] can: netlink: add interface for CAN-FD Transmitter
+ Delay Compensation (TDC)
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can <linux-can@vger.kernel.org>,
+        =?UTF-8?Q?Stefan_M=C3=A4tje?= <Stefan.Maetje@esd.eu>,
         netdev <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-hardening@vger.kernel.org
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed. 18 Aug 2021 at 15:48, Kees Cook <keescook@chromium.org> wrote:
-> On Wed, Aug 18, 2021 at 02:13:51PM +0900, Vincent MAILHOL wrote:
-> > On Wed. 18 Aug 2021 at 12:40, Kees Cook <keescook@chromium.org> wrote:
-> > > While raw_msg isn't a fixed size, it does have a maximum size. Adjust the
-> > > struct to represent this and avoid the following warning when building
-> > > with -Wzero-length-bounds:
-> > >
-> > > drivers/net/can/usb/etas_es58x/es58x_fd.c: In function 'es58x_fd_tx_can_msg':
-> > > drivers/net/can/usb/etas_es58x/es58x_fd.c:360:35: warning: array subscript 65535 is outside the bounds of an interior zero-length array 'u8[0]' {aka 'unsigned char[]'} [-Wzero-length-bounds]
-> > >   360 |  tx_can_msg = (typeof(tx_can_msg))&es58x_fd_urb_cmd->raw_msg[msg_len];
-> > >       |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > In file included from drivers/net/can/usb/etas_es58x/es58x_core.h:22,
-> > >                  from drivers/net/can/usb/etas_es58x/es58x_fd.c:17:
-> > > drivers/net/can/usb/etas_es58x/es58x_fd.h:231:6: note: while referencing 'raw_msg'
-> > >   231 |   u8 raw_msg[0];
-> > >       |      ^~~~~~~
-> > >
-> > > Cc: Wolfgang Grandegger <wg@grandegger.com>
-> > > Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-> > > Cc: "David S. Miller" <davem@davemloft.net>
-> > > Cc: Jakub Kicinski <kuba@kernel.org>
-> > > Cc: Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
-> > > Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > > Cc: linux-can@vger.kernel.org
-> > > Cc: netdev@vger.kernel.org
-> > > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > > ---
-> > >  drivers/net/can/usb/etas_es58x/es581_4.h  | 2 +-
-> > >  drivers/net/can/usb/etas_es58x/es58x_fd.h | 2 +-
-> > >  2 files changed, 2 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/net/can/usb/etas_es58x/es581_4.h b/drivers/net/can/usb/etas_es58x/es581_4.h
-> > > index 4bc60a6df697..af38c4938859 100644
-> > > --- a/drivers/net/can/usb/etas_es58x/es581_4.h
-> > > +++ b/drivers/net/can/usb/etas_es58x/es581_4.h
-> > > @@ -192,7 +192,7 @@ struct es581_4_urb_cmd {
-> > >                 struct es581_4_rx_cmd_ret rx_cmd_ret;
-> > >                 __le64 timestamp;
-> > >                 u8 rx_cmd_ret_u8;
-> > > -               u8 raw_msg[0];
-> > > +               u8 raw_msg[USHRT_MAX];
-> > >         } __packed;
-> > >
-> > >         __le16 reserved_for_crc16_do_not_use;
-> > > diff --git a/drivers/net/can/usb/etas_es58x/es58x_fd.h b/drivers/net/can/usb/etas_es58x/es58x_fd.h
-> > > index ee18a87e40c0..e0319b8358ef 100644
-> > > --- a/drivers/net/can/usb/etas_es58x/es58x_fd.h
-> > > +++ b/drivers/net/can/usb/etas_es58x/es58x_fd.h
-> > > @@ -228,7 +228,7 @@ struct es58x_fd_urb_cmd {
-> > >                 struct es58x_fd_tx_ack_msg tx_ack_msg;
-> > >                 __le64 timestamp;
-> > >                 __le32 rx_cmd_ret_le32;
-> > > -               u8 raw_msg[0];
-> > > +               u8 raw_msg[USHRT_MAX];
-> > >         } __packed;
-> > >
-> > >         __le16 reserved_for_crc16_do_not_use;
-> > > --
-> > > 2.30.2
-> >
-> > raw_msg is part of a union so its maximum size is implicitly the
-> > biggest size of the other member of that union:
+On Wed 18 Aug 2021 at 04:55, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> On 15.08.2021 12:32:46, Vincent Mailhol wrote:
+> > +static int can_tdc_changelink(struct net_device *dev, const struct nlattr *nla,
+> > +                           struct netlink_ext_ack *extack)
+> > +{
+> > +     struct nlattr *tb_tdc[IFLA_CAN_TDC_MAX + 1];
+> > +     struct can_priv *priv = netdev_priv(dev);
+> > +     struct can_tdc *tdc = &priv->tdc;
+> > +     const struct can_tdc_const *tdc_const = priv->tdc_const;
+> > +     int err;
+> > +
+> > +     if (!tdc_const || !can_tdc_is_enabled(priv))
+> > +             return -EOPNOTSUPP;
+> > +
+> > +     if (dev->flags & IFF_UP)
+> > +             return -EBUSY;
+> > +
+> > +     err = nla_parse_nested(tb_tdc, IFLA_CAN_TDC_MAX, nla,
+> > +                            can_tdc_policy, extack);
+> > +     if (err)
+> > +             return err;
+> > +
+> > +     if (tb_tdc[IFLA_CAN_TDC_TDCV]) {
+> > +             u32 tdcv = nla_get_u32(tb_tdc[IFLA_CAN_TDC_TDCV]);
+> > +
+> > +             if (tdcv < tdc_const->tdcv_min || tdcv > tdc_const->tdcv_max)
+> > +                     return -EINVAL;
+> > +
+> > +             tdc->tdcv = tdcv;
 >
-> Yup, understood. See below...
+> You have to assign to a temporary struct first, and set the priv->tdc
+> after complete validation, otherwise you end up with inconsistent
+> values.
+
+Actually, copying the temporary structure to priv->tdc is not an
+atomic operation. Here, you are only reducing the window, not
+closing it.
+
+> > +     }
+> > +
+> > +     if (tb_tdc[IFLA_CAN_TDC_TDCO]) {
+> > +             u32 tdco = nla_get_u32(tb_tdc[IFLA_CAN_TDC_TDCO]);
+> > +
+> > +             if (tdco < tdc_const->tdco_min || tdco > tdc_const->tdco_max)
+> > +                     return -EINVAL;
+> > +
+> > +             tdc->tdco = tdco;
+> > +     }
+> > +
+> > +     if (tb_tdc[IFLA_CAN_TDC_TDCF]) {
+> > +             u32 tdcf = nla_get_u32(tb_tdc[IFLA_CAN_TDC_TDCF]);
+> > +
+> > +             if (tdcf < tdc_const->tdcf_min || tdcf > tdc_const->tdcf_max)
+> > +                     return -EINVAL;
+> > +
+> > +             tdc->tdcf = tdcf;
+> > +     }
+> > +
+> > +     return 0;
+> > +}
 >
-> >
-> > | struct es58x_fd_urb_cmd {
-> > |     __le16 SOF;
-> > |    u8 cmd_type;
-> > |    u8 cmd_id;
-> > |    u8 channel_idx;
-> > |    __le16 msg_len;
-> > |
-> > |    union {
-> > |        struct es58x_fd_tx_conf_msg tx_conf_msg;
-> > |        u8 tx_can_msg_buf[ES58X_FD_TX_BULK_MAX * ES58X_FD_CANFD_TX_LEN];
-> > |        u8 rx_can_msg_buf[ES58X_FD_RX_BULK_MAX * ES58X_FD_CANFD_RX_LEN];
-> > |        struct es58x_fd_echo_msg echo_msg[ES58X_FD_ECHO_BULK_MAX];
-> > |        struct es58x_fd_rx_event_msg rx_event_msg;
-> > |        struct es58x_fd_tx_ack_msg tx_ack_msg;
-> > |        __le64 timestamp;
-> > |        __le32 rx_cmd_ret_le32;
-> > |        u8 raw_msg[0];
-> > |    } __packed;
-> > |
-> > |    __le16 reserved_for_crc16_do_not_use;
-> > | } __packed;
-> >
-> > ram_msg can then be used to manipulate the other fields at the byte level.
-> > I am sorry but I fail to understand why this is an issue.
+> To reproduce (ip pseudo-code only :D ):
 >
-> The issue is with using a 0-element array (these are being removed from
-> the kernel[1] so we can add -Warray-bounds). Normally in this situation I
-> would replace the 0-element array with a flexible array, but this
-> case is unusual in several ways:
->
-> - There is a trailing struct member (reserved_for_crc16_do_not_use),
->   which is never accessed (good), and documented as "please never access
->   this".
+> ip down
+> ip up tdc-mode manual tdco 111 tdcv 33  # 111 is out of range, 33 is valid
+> ip down
+> ip up                                   # results in tdco=0 tdcv=33 mode=manual
 
-Yes. And FYI, this field is here so that
-| sizeof(struct es58x_fd_urb_cmd)
-returns the correct maximum size.
+I do not think that this PoC would work because, thankfully, the
+netlink interface uses a mutex to prevent this issue from
+occurring.
 
-And, of course, because this structure will be sent to the
-device, there is no possibility to reorder those fields.
+That mutex is defined in:
+https://elixir.bootlin.com/linux/latest/source/net/core/rtnetlink.c#L68
 
-> - struct es58x_fd_urb_cmd is statically allocated (it is written into
->   from the URB handler).
->
-> - The message lengths coming from the USB device are stored in a u16,
->   which looked like it was possible to overflow the buffer.
->
-> In taking a closer look, I see that the URB command length is checked,
-> and the in-data length is checked as well, so the overflow concern
-> appears to be addressed.
->
-> > Also, the proposed fix drastically increases the size of the structure.
->
-> Indeed. I will send a v2, now that I see that the overflow concern isn't
-> an issue.
+Each time a netlink message is sent to the kernel, it would be
+dispatched by rtnetlink_rcv_msg() which will make sure to lock
+the mutex before doing so:
+https://elixir.bootlin.com/linux/latest/source/net/core/rtnetlink.c#L5551
 
-Thanks for the explanation. That makes sense.
+A funny note is that because the mutex is global, if you run two
+ip command in a row:
 
-At the end, the only goal of raw_msg[] is to have a tag pointing
-to the beginning of the union. It would be virtually identical to
-something like:
-|    u8 raw_msg[];
-|    union {
-|        /* ... */
-|    } __packed ;
+| ip link set can0 type can bitrate 500000
+| ip link set can1 up
 
-I had a look at your work and especially at your struct_group() macro.
-Do you think it would make sense to introduce a union_group()?
+the second one will wait for the first one to finish even if it
+is on a different network device.
 
-Result would look like:
+To conclude, I do not think this needs to be fixed.
 
-|    union_group_attr(urb_msg, __packed, /* raw_msg renamed to urb_msg */
-|        struct es58x_fd_tx_conf_msg tx_conf_msg;
-|        u8 tx_can_msg_buf[ES58X_FD_TX_BULK_MAX * ES58X_FD_CANFD_TX_LEN];
-|        u8 rx_can_msg_buf[ES58X_FD_RX_BULK_MAX * ES58X_FD_CANFD_RX_LEN];
-|        struct es58x_fd_echo_msg echo_msg[ES58X_FD_ECHO_BULK_MAX];
-|        struct es58x_fd_rx_event_msg rx_event_msg;
-|        struct es58x_fd_tx_ack_msg tx_ack_msg;
-|        __le64 timestamp;
-|        __le32 rx_cmd_ret_le32;
-|    );
-
-And I can then use urb_msg in place of the old raw_msg (might
-need a bit of rework here and there but I can take care of it).
-
-This is the most pretty way I can think of to remove this zero length array.
-Keeping the raw_msg[] but with another size seems odd to me.
-
-Or maybe I would be the only one using this feature in the full
-tree? In that case, maybe it would make sense to keep the
-union_group_attr() macro local to the etas_es58x driver?
 
 Yours sincerely,
 Vincent
