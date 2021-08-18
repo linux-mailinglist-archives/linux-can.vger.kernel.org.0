@@ -2,109 +2,98 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C87423EF309
-	for <lists+linux-can@lfdr.de>; Tue, 17 Aug 2021 22:05:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B5423EF768
+	for <lists+linux-can@lfdr.de>; Wed, 18 Aug 2021 03:18:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233217AbhHQUFU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 17 Aug 2021 16:05:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49238 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbhHQUFU (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 17 Aug 2021 16:05:20 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7F31C061764
-        for <linux-can@vger.kernel.org>; Tue, 17 Aug 2021 13:04:46 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1mG5KH-0000Iv-BQ
-        for linux-can@vger.kernel.org; Tue, 17 Aug 2021 22:04:45 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 8E24F669247
-        for <linux-can@vger.kernel.org>; Tue, 17 Aug 2021 20:04:44 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 2B7B2669245;
-        Tue, 17 Aug 2021 20:04:44 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id dc359313;
-        Tue, 17 Aug 2021 20:04:43 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH] can: netlink: can_tdc_changelink(): assign tdc only after complete validation
-Date:   Tue, 17 Aug 2021 22:04:41 +0200
-Message-Id: <20210817200441.434270-1-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.32.0
+        id S236216AbhHRBTa (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 17 Aug 2021 21:19:30 -0400
+Received: from mail-ot1-f54.google.com ([209.85.210.54]:45733 "EHLO
+        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234975AbhHRBTa (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 17 Aug 2021 21:19:30 -0400
+Received: by mail-ot1-f54.google.com with SMTP id r17-20020a0568302371b0290504f3f418fbso747664oth.12;
+        Tue, 17 Aug 2021 18:18:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YZdOGsqD+urHDCjHCdjJOrriltdQIdlSRawPeo4UfKY=;
+        b=oOPUOI5d1xOz3IELLdsI/vcM8sClRqqmZ2nLdHYchaO9nvzFaF1jNEzxpmnAT7YC4m
+         DfFfY2MXncbqxExI4qqSqOOBoaJj63pJPCtTfwxgRhDBpr0SzH8/evUlDkedXQeQI301
+         xYkakZJw17psrRt67tIl3RI6MATTiKPri3Il/8Z36ld0vvyfzzTzc1nav5Zrr7Hh9fD3
+         fSBBWP8nQROINjlG++nsQXUhawfhPwT/3cFGuy/3ZQLLEO9+JJCDaWoW18AFwDoeyLbr
+         evqSWQHucS8P6iIpJs0E0ju9JX0ik3AN9AqyY6/q7GizIV9PLI7txxGdIj7iTfqeSGyx
+         Y1GA==
+X-Gm-Message-State: AOAM530icb1rA7cZkCUBWEZBL2QVMqTVdnqjdfKLSJGUFZgTjrOtAFMs
+        9ym4tCLfKyPR7FVqsm0EWg==
+X-Google-Smtp-Source: ABdhPJxCGAdPpbh79Ogzr6eYEZ2NJhmJScyvJnK9cm/Gv67ucaQYIk6J4BFKmjXeg3omKzi1oTrPBQ==
+X-Received: by 2002:a9d:6490:: with SMTP id g16mr4882866otl.184.1629249536153;
+        Tue, 17 Aug 2021 18:18:56 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id v11sm466308oto.22.2021.08.17.18.18.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Aug 2021 18:18:55 -0700 (PDT)
+Received: (nullmailer pid 1180157 invoked by uid 1000);
+        Wed, 18 Aug 2021 01:18:54 -0000
+Date:   Tue, 17 Aug 2021 20:18:54 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        David Jander <david@protonic.nl>
+Subject: Re: [PATCH v2 1/3] dt-bindings: can-controller: add support for
+ termination-gpios
+Message-ID: <YRxf/gKvS3o+hq1/@robh.at.kernel.org>
+References: <20210817041306.25185-1-o.rempel@pengutronix.de>
+ <20210817041306.25185-2-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210817041306.25185-2-o.rempel@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Cc: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
-Feel free to squash into you series.
+On Tue, Aug 17, 2021 at 06:13:04AM +0200, Oleksij Rempel wrote:
+> Some boards provide GPIO controllable termination resistor. Provide
+> binding to make use of it.
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>  .../devicetree/bindings/net/can/can-controller.yaml      | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/can/can-controller.yaml b/Documentation/devicetree/bindings/net/can/can-controller.yaml
+> index 9cf2ae097156..298ce69a8208 100644
+> --- a/Documentation/devicetree/bindings/net/can/can-controller.yaml
+> +++ b/Documentation/devicetree/bindings/net/can/can-controller.yaml
+> @@ -13,6 +13,15 @@ properties:
+>    $nodename:
+>      pattern: "^can(@.*)?$"
+>  
+> +  termination-gpios:
+> +    description: GPIO pin to enable CAN bus termination.
 
-Marc
+maxItems: 1
 
- drivers/net/can/dev/netlink.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+> +
+> +  termination-ohms:
+> +    description: The resistance value of the CAN bus termination resistor.
+> +    $ref: /schemas/types.yaml#/definitions/uint16-array
 
-diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlink.c
-index ba644f120573..f16a98998f45 100644
---- a/drivers/net/can/dev/netlink.c
-+++ b/drivers/net/can/dev/netlink.c
-@@ -109,7 +109,7 @@ static int can_tdc_changelink(struct net_device *dev, const struct nlattr *nla,
- {
- 	struct nlattr *tb_tdc[IFLA_CAN_TDC_MAX + 1];
- 	struct can_priv *priv = netdev_priv(dev);
--	struct can_tdc *tdc = &priv->tdc;
-+	struct can_tdc tdc = { };
- 	const struct can_tdc_const *tdc_const = priv->tdc_const;
- 	int err;
- 
-@@ -130,7 +130,7 @@ static int can_tdc_changelink(struct net_device *dev, const struct nlattr *nla,
- 		if (tdcv < tdc_const->tdcv_min || tdcv > tdc_const->tdcv_max)
- 			return -EINVAL;
- 
--		tdc->tdcv = tdcv;
-+		tdc.tdcv = tdcv;
- 	}
- 
- 	if (tb_tdc[IFLA_CAN_TDC_TDCO]) {
-@@ -139,7 +139,7 @@ static int can_tdc_changelink(struct net_device *dev, const struct nlattr *nla,
- 		if (tdco < tdc_const->tdco_min || tdco > tdc_const->tdco_max)
- 			return -EINVAL;
- 
--		tdc->tdco = tdco;
-+		tdc.tdco = tdco;
- 	}
- 
- 	if (tb_tdc[IFLA_CAN_TDC_TDCF]) {
-@@ -148,9 +148,11 @@ static int can_tdc_changelink(struct net_device *dev, const struct nlattr *nla,
- 		if (tdcf < tdc_const->tdcf_min || tdcf > tdc_const->tdcf_max)
- 			return -EINVAL;
- 
--		tdc->tdcf = tdcf;
-+		tdc.tdcf = tdcf;
- 	}
- 
-+	priv->tdc = tdc;
-+
- 	return 0;
- }
- 
--- 
-2.32.0
+Standard unit properties already have a type and are uint32.
 
-
+> +    minimum: 1
+> +    maximum: 65535
+> +
+>  additionalProperties: true
+>  
+>  ...
+> -- 
+> 2.30.2
+> 
+> 
