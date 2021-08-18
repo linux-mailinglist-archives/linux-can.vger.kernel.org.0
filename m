@@ -2,124 +2,143 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 904553EF8CC
-	for <lists+linux-can@lfdr.de>; Wed, 18 Aug 2021 05:40:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B5C03EF9E3
+	for <lists+linux-can@lfdr.de>; Wed, 18 Aug 2021 07:14:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234435AbhHRDlW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 17 Aug 2021 23:41:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39548 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236235AbhHRDlW (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 17 Aug 2021 23:41:22 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563B8C061764
-        for <linux-can@vger.kernel.org>; Tue, 17 Aug 2021 20:40:48 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id cp15-20020a17090afb8fb029017891959dcbso8047984pjb.2
-        for <linux-can@vger.kernel.org>; Tue, 17 Aug 2021 20:40:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BsdVXbhtWjUQaskCMlUgEBNS4pC3NCkpK2fi3WMsLKs=;
-        b=Ljf+4KWeVggSI4Lf6tc0A3nHEXXDjCM1/9HKrlbPRAGljqsAxLc2XrTWzSUlDcrMPh
-         P6DnuN3vSN0v5bJ/HdgOf94oR/ORI+tgmH6XRTm2wnfkm5667m2RKbNnJ77J82+Nx5pX
-         bpu+zhJrfZSTkVjY8NK3lNiH6W5lAUhuFMu7g=
+        id S237435AbhHRFOi (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 18 Aug 2021 01:14:38 -0400
+Received: from mail-lf1-f53.google.com ([209.85.167.53]:45724 "EHLO
+        mail-lf1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232380AbhHRFOi (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 18 Aug 2021 01:14:38 -0400
+Received: by mail-lf1-f53.google.com with SMTP id g13so1930651lfj.12;
+        Tue, 17 Aug 2021 22:14:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BsdVXbhtWjUQaskCMlUgEBNS4pC3NCkpK2fi3WMsLKs=;
-        b=rKUqBMSQwOMDJYmQeffC1UqUzGeVxmSOSnr6sYvB5pDuVywtUqQ/8N/Tc38Z6L1zyT
-         C0VmuhQvSp7sICBdgIKLh7z84ssSkK9g8b34PRQjdi9sikO9+7BWQ29ky59KhUJeJhDU
-         cNbWH2Z1yWPY1Ar27dMXx0eS7jvmZsUtyd/cjHIaUaGJvMlKtZ1W5zKOOPjVueB3Bsy1
-         wfXOSrt6PuzGDdgFjpO/rNAfL/Ss9U4LD01kQDe7/WrzFcmwe+oeEykl/TVAFdYLKdQo
-         6+aFGHXk10qBWsmILmdJBfZzLhgoXF9jHcRncCFf2ma9Ec3fniTS2UGF8og7dTpUR78O
-         TjrQ==
-X-Gm-Message-State: AOAM5306k6RI/Od/WONlGyZLGHEYV16hy6Iq2OHvwDA1xoTZh39bk18J
-        ziE7UnEa36bm7ZZla+FDd9yHaw==
-X-Google-Smtp-Source: ABdhPJw24WGCJrWQghLliT0HNHXvdWx3O8W8rtadIm9NJXzk0hbgrpwKdgVNf6ToS1Ukehs1HtNQaw==
-X-Received: by 2002:a17:90a:6888:: with SMTP id a8mr7162828pjd.91.1629258047889;
-        Tue, 17 Aug 2021 20:40:47 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y5sm3790937pfa.5.2021.08.17.20.40.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Aug 2021 20:40:47 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Wolfgang Grandegger <wg@grandegger.com>
-Cc:     Kees Cook <keescook@chromium.org>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dThlhLLrplnuLh2UP7jmiTXGduhqKRmat16fPmXeSs4=;
+        b=mJMGN8v2uzWYrKsMoCbN/zimJ+q+km9nqHHf00Nw/i0zZ9aChKgb+MqX/n3hsizlCh
+         2if2pDhs/Aq5iNpxMyp2tIG2oX3bmtdYw27M+OMEGy/A9vt5RCFHxj7REJJxhDptpXID
+         YSHQmMz4BPpeMRx5rx8EYb/NHJ1aaA00IEulfbYkLdcUnLnm2YV10xWLPfg23k19P97Q
+         etwKG5LPsOR43rkYgjRucyuekdBoj/VNTURRNrP1NemTnxhr/kGMVD26x8vE0T5g65Us
+         6XnGeoVxZgZ/6PFG+9aWhYPsBTZiOPIQw0foMuSKnHFftzqAkg7v6PlgJtJ8QI7V+5UA
+         ckbQ==
+X-Gm-Message-State: AOAM532rc/NUUIEtYO8OZUYN8Jq3hY2xJFPs+CGN2FJHTV99apgNUz/Y
+        WqFn0+fz24D7+shASMKCUPw0Sy3eg4hw8HJmHL8=
+X-Google-Smtp-Source: ABdhPJzGqt8rmnrhyLdtbX+v8/EnvPatnAlw9hMVu1/WitSQD341ru1TC1ELyRE65BhkPZnlrfdXY1mSAqt/mVKCk4k=
+X-Received: by 2002:ac2:5d27:: with SMTP id i7mr5022735lfb.488.1629263642539;
+ Tue, 17 Aug 2021 22:14:02 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210818034010.800652-1-keescook@chromium.org>
+In-Reply-To: <20210818034010.800652-1-keescook@chromium.org>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Wed, 18 Aug 2021 14:13:51 +0900
+Message-ID: <CAMZ6RqK4Rn4d-1CZsg9vJiAMHhxN6fgcqukdHpGwXoGTyNVr_Q@mail.gmail.com>
+Subject: Re: [PATCH] can: etas_es58x: Replace 0-element raw_msg array
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
         Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] can: etas_es58x: Replace 0-element raw_msg array
-Date:   Tue, 17 Aug 2021 20:40:10 -0700
-Message-Id: <20210818034010.800652-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2405; h=from:subject; bh=2pghWRFPuQ+zVAOzO5gfNiPmiJDuiTH+Yfm+Ryq/M0I=; b=owEBbAKT/ZANAwAKAYly9N/cbcAmAcsmYgBhHIEaiZ+lXRC4QwUOqC71mOhS6HSGOj3Caw1KKYLF 7L2JZyaJAjIEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYRyBGgAKCRCJcvTf3G3AJsVpD/ j7xXbwKjJwKT2/GO+ODaujdBGdL6Osu0WV1eU4XmqS5JfJkc+l2PFtKNfj6weSU0gXlOjRX8zQo9Vk RGTXtjXdt7Cw6atuK6aFxzGJuFRek6LadYkYs7hUunrsAuHTyoV++Q/ltnSzptbX6zTZtKkzjT4Mnb 1sbL6mA+MGtTnYFO6cqc5IPv9qZZFZr7lOyYkpiztuUQjj1Lb8Zqj+/IP6sh7ePDPksNRFqHcIeEx4 u+cDgj0hCPPHdE4WRYbK2CSXjL5m9stprftBB5AfmdxXblnZIPW9w26iSWTVSKoyej3pB/f1upjQxs YUs4j6qklJb8pe1DGwrudFdZtGtFImGSL7ap+9UXyYhkU2txwLCOMZbwHhrSKTGw7C2c/GLTO+rceS qa/qXMGgpT1cMAkKX2yL1XK/wg4yCEbT00q4oj7XPLEcadol2gXH3dafW+/ydbcaY4kgxvYvBSewsP rXPTtLeoN4RpHB+kHdSXET3oed3KzRg6hS2x1078wD2iCE/RKQtbEyGHXPlpq8HOkHjCazT9CMbR9L cpAmLTqZeddlhGnvs0rlgQ8LxHHeEPEPCzyK+2blJZjg7aYahRjZlUm05YoPSQUN0XhInmO7oJIutG lbwOtuCNS2QSeh6mvvNab0mm/3Ibe3VZ8Kq/+P1m+l1sisDz595D+GbIOg
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+        linux-can <linux-can@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-While raw_msg isn't a fixed size, it does have a maximum size. Adjust the
-struct to represent this and avoid the following warning when building
-with -Wzero-length-bounds:
+On Wed. 18 Aug 2021 at 12:40, Kees Cook <keescook@chromium.org> wrote:
+> While raw_msg isn't a fixed size, it does have a maximum size. Adjust the
+> struct to represent this and avoid the following warning when building
+> with -Wzero-length-bounds:
+>
+> drivers/net/can/usb/etas_es58x/es58x_fd.c: In function 'es58x_fd_tx_can_msg':
+> drivers/net/can/usb/etas_es58x/es58x_fd.c:360:35: warning: array subscript 65535 is outside the bounds of an interior zero-length array 'u8[0]' {aka 'unsigned char[]'} [-Wzero-length-bounds]
+>   360 |  tx_can_msg = (typeof(tx_can_msg))&es58x_fd_urb_cmd->raw_msg[msg_len];
+>       |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> In file included from drivers/net/can/usb/etas_es58x/es58x_core.h:22,
+>                  from drivers/net/can/usb/etas_es58x/es58x_fd.c:17:
+> drivers/net/can/usb/etas_es58x/es58x_fd.h:231:6: note: while referencing 'raw_msg'
+>   231 |   u8 raw_msg[0];
+>       |      ^~~~~~~
+>
+> Cc: Wolfgang Grandegger <wg@grandegger.com>
+> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
+> Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> Cc: linux-can@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  drivers/net/can/usb/etas_es58x/es581_4.h  | 2 +-
+>  drivers/net/can/usb/etas_es58x/es58x_fd.h | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/net/can/usb/etas_es58x/es581_4.h b/drivers/net/can/usb/etas_es58x/es581_4.h
+> index 4bc60a6df697..af38c4938859 100644
+> --- a/drivers/net/can/usb/etas_es58x/es581_4.h
+> +++ b/drivers/net/can/usb/etas_es58x/es581_4.h
+> @@ -192,7 +192,7 @@ struct es581_4_urb_cmd {
+>                 struct es581_4_rx_cmd_ret rx_cmd_ret;
+>                 __le64 timestamp;
+>                 u8 rx_cmd_ret_u8;
+> -               u8 raw_msg[0];
+> +               u8 raw_msg[USHRT_MAX];
+>         } __packed;
+>
+>         __le16 reserved_for_crc16_do_not_use;
+> diff --git a/drivers/net/can/usb/etas_es58x/es58x_fd.h b/drivers/net/can/usb/etas_es58x/es58x_fd.h
+> index ee18a87e40c0..e0319b8358ef 100644
+> --- a/drivers/net/can/usb/etas_es58x/es58x_fd.h
+> +++ b/drivers/net/can/usb/etas_es58x/es58x_fd.h
+> @@ -228,7 +228,7 @@ struct es58x_fd_urb_cmd {
+>                 struct es58x_fd_tx_ack_msg tx_ack_msg;
+>                 __le64 timestamp;
+>                 __le32 rx_cmd_ret_le32;
+> -               u8 raw_msg[0];
+> +               u8 raw_msg[USHRT_MAX];
+>         } __packed;
+>
+>         __le16 reserved_for_crc16_do_not_use;
+> --
+> 2.30.2
 
-drivers/net/can/usb/etas_es58x/es58x_fd.c: In function 'es58x_fd_tx_can_msg':
-drivers/net/can/usb/etas_es58x/es58x_fd.c:360:35: warning: array subscript 65535 is outside the bounds of an interior zero-length array 'u8[0]' {aka 'unsigned char[]'} [-Wzero-length-bounds]
-  360 |  tx_can_msg = (typeof(tx_can_msg))&es58x_fd_urb_cmd->raw_msg[msg_len];
-      |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-In file included from drivers/net/can/usb/etas_es58x/es58x_core.h:22,
-                 from drivers/net/can/usb/etas_es58x/es58x_fd.c:17:
-drivers/net/can/usb/etas_es58x/es58x_fd.h:231:6: note: while referencing 'raw_msg'
-  231 |   u8 raw_msg[0];
-      |      ^~~~~~~
+raw_msg is part of a union so its maximum size is implicitly the
+biggest size of the other member of that union:
 
-Cc: Wolfgang Grandegger <wg@grandegger.com>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
-Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc: linux-can@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/net/can/usb/etas_es58x/es581_4.h  | 2 +-
- drivers/net/can/usb/etas_es58x/es58x_fd.h | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+| struct es58x_fd_urb_cmd {
+|     __le16 SOF;
+|    u8 cmd_type;
+|    u8 cmd_id;
+|    u8 channel_idx;
+|    __le16 msg_len;
+|
+|    union {
+|        struct es58x_fd_tx_conf_msg tx_conf_msg;
+|        u8 tx_can_msg_buf[ES58X_FD_TX_BULK_MAX * ES58X_FD_CANFD_TX_LEN];
+|        u8 rx_can_msg_buf[ES58X_FD_RX_BULK_MAX * ES58X_FD_CANFD_RX_LEN];
+|        struct es58x_fd_echo_msg echo_msg[ES58X_FD_ECHO_BULK_MAX];
+|        struct es58x_fd_rx_event_msg rx_event_msg;
+|        struct es58x_fd_tx_ack_msg tx_ack_msg;
+|        __le64 timestamp;
+|        __le32 rx_cmd_ret_le32;
+|        u8 raw_msg[0];
+|    } __packed;
+|
+|    __le16 reserved_for_crc16_do_not_use;
+| } __packed;
 
-diff --git a/drivers/net/can/usb/etas_es58x/es581_4.h b/drivers/net/can/usb/etas_es58x/es581_4.h
-index 4bc60a6df697..af38c4938859 100644
---- a/drivers/net/can/usb/etas_es58x/es581_4.h
-+++ b/drivers/net/can/usb/etas_es58x/es581_4.h
-@@ -192,7 +192,7 @@ struct es581_4_urb_cmd {
- 		struct es581_4_rx_cmd_ret rx_cmd_ret;
- 		__le64 timestamp;
- 		u8 rx_cmd_ret_u8;
--		u8 raw_msg[0];
-+		u8 raw_msg[USHRT_MAX];
- 	} __packed;
- 
- 	__le16 reserved_for_crc16_do_not_use;
-diff --git a/drivers/net/can/usb/etas_es58x/es58x_fd.h b/drivers/net/can/usb/etas_es58x/es58x_fd.h
-index ee18a87e40c0..e0319b8358ef 100644
---- a/drivers/net/can/usb/etas_es58x/es58x_fd.h
-+++ b/drivers/net/can/usb/etas_es58x/es58x_fd.h
-@@ -228,7 +228,7 @@ struct es58x_fd_urb_cmd {
- 		struct es58x_fd_tx_ack_msg tx_ack_msg;
- 		__le64 timestamp;
- 		__le32 rx_cmd_ret_le32;
--		u8 raw_msg[0];
-+		u8 raw_msg[USHRT_MAX];
- 	} __packed;
- 
- 	__le16 reserved_for_crc16_do_not_use;
--- 
-2.30.2
+ram_msg can then be used to manipulate the other fields at the byte level.
+I am sorry but I fail to understand why this is an issue.
 
+Also, the proposed fix drastically increases the size of the structure.
+
+
+Yours sincerely,
+Vincent
