@@ -2,98 +2,124 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B5423EF768
-	for <lists+linux-can@lfdr.de>; Wed, 18 Aug 2021 03:18:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 904553EF8CC
+	for <lists+linux-can@lfdr.de>; Wed, 18 Aug 2021 05:40:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236216AbhHRBTa (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 17 Aug 2021 21:19:30 -0400
-Received: from mail-ot1-f54.google.com ([209.85.210.54]:45733 "EHLO
-        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234975AbhHRBTa (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 17 Aug 2021 21:19:30 -0400
-Received: by mail-ot1-f54.google.com with SMTP id r17-20020a0568302371b0290504f3f418fbso747664oth.12;
-        Tue, 17 Aug 2021 18:18:56 -0700 (PDT)
+        id S234435AbhHRDlW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 17 Aug 2021 23:41:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39548 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236235AbhHRDlW (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 17 Aug 2021 23:41:22 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563B8C061764
+        for <linux-can@vger.kernel.org>; Tue, 17 Aug 2021 20:40:48 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id cp15-20020a17090afb8fb029017891959dcbso8047984pjb.2
+        for <linux-can@vger.kernel.org>; Tue, 17 Aug 2021 20:40:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BsdVXbhtWjUQaskCMlUgEBNS4pC3NCkpK2fi3WMsLKs=;
+        b=Ljf+4KWeVggSI4Lf6tc0A3nHEXXDjCM1/9HKrlbPRAGljqsAxLc2XrTWzSUlDcrMPh
+         P6DnuN3vSN0v5bJ/HdgOf94oR/ORI+tgmH6XRTm2wnfkm5667m2RKbNnJ77J82+Nx5pX
+         bpu+zhJrfZSTkVjY8NK3lNiH6W5lAUhuFMu7g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YZdOGsqD+urHDCjHCdjJOrriltdQIdlSRawPeo4UfKY=;
-        b=oOPUOI5d1xOz3IELLdsI/vcM8sClRqqmZ2nLdHYchaO9nvzFaF1jNEzxpmnAT7YC4m
-         DfFfY2MXncbqxExI4qqSqOOBoaJj63pJPCtTfwxgRhDBpr0SzH8/evUlDkedXQeQI301
-         xYkakZJw17psrRt67tIl3RI6MATTiKPri3Il/8Z36ld0vvyfzzTzc1nav5Zrr7Hh9fD3
-         fSBBWP8nQROINjlG++nsQXUhawfhPwT/3cFGuy/3ZQLLEO9+JJCDaWoW18AFwDoeyLbr
-         evqSWQHucS8P6iIpJs0E0ju9JX0ik3AN9AqyY6/q7GizIV9PLI7txxGdIj7iTfqeSGyx
-         Y1GA==
-X-Gm-Message-State: AOAM530icb1rA7cZkCUBWEZBL2QVMqTVdnqjdfKLSJGUFZgTjrOtAFMs
-        9ym4tCLfKyPR7FVqsm0EWg==
-X-Google-Smtp-Source: ABdhPJxCGAdPpbh79Ogzr6eYEZ2NJhmJScyvJnK9cm/Gv67ucaQYIk6J4BFKmjXeg3omKzi1oTrPBQ==
-X-Received: by 2002:a9d:6490:: with SMTP id g16mr4882866otl.184.1629249536153;
-        Tue, 17 Aug 2021 18:18:56 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id v11sm466308oto.22.2021.08.17.18.18.54
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BsdVXbhtWjUQaskCMlUgEBNS4pC3NCkpK2fi3WMsLKs=;
+        b=rKUqBMSQwOMDJYmQeffC1UqUzGeVxmSOSnr6sYvB5pDuVywtUqQ/8N/Tc38Z6L1zyT
+         C0VmuhQvSp7sICBdgIKLh7z84ssSkK9g8b34PRQjdi9sikO9+7BWQ29ky59KhUJeJhDU
+         cNbWH2Z1yWPY1Ar27dMXx0eS7jvmZsUtyd/cjHIaUaGJvMlKtZ1W5zKOOPjVueB3Bsy1
+         wfXOSrt6PuzGDdgFjpO/rNAfL/Ss9U4LD01kQDe7/WrzFcmwe+oeEykl/TVAFdYLKdQo
+         6+aFGHXk10qBWsmILmdJBfZzLhgoXF9jHcRncCFf2ma9Ec3fniTS2UGF8og7dTpUR78O
+         TjrQ==
+X-Gm-Message-State: AOAM5306k6RI/Od/WONlGyZLGHEYV16hy6Iq2OHvwDA1xoTZh39bk18J
+        ziE7UnEa36bm7ZZla+FDd9yHaw==
+X-Google-Smtp-Source: ABdhPJw24WGCJrWQghLliT0HNHXvdWx3O8W8rtadIm9NJXzk0hbgrpwKdgVNf6ToS1Ukehs1HtNQaw==
+X-Received: by 2002:a17:90a:6888:: with SMTP id a8mr7162828pjd.91.1629258047889;
+        Tue, 17 Aug 2021 20:40:47 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id y5sm3790937pfa.5.2021.08.17.20.40.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Aug 2021 18:18:55 -0700 (PDT)
-Received: (nullmailer pid 1180157 invoked by uid 1000);
-        Wed, 18 Aug 2021 01:18:54 -0000
-Date:   Tue, 17 Aug 2021 20:18:54 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Tue, 17 Aug 2021 20:40:47 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Wolfgang Grandegger <wg@grandegger.com>
+Cc:     Kees Cook <keescook@chromium.org>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        David Jander <david@protonic.nl>
-Subject: Re: [PATCH v2 1/3] dt-bindings: can-controller: add support for
- termination-gpios
-Message-ID: <YRxf/gKvS3o+hq1/@robh.at.kernel.org>
-References: <20210817041306.25185-1-o.rempel@pengutronix.de>
- <20210817041306.25185-2-o.rempel@pengutronix.de>
+        Jakub Kicinski <kuba@kernel.org>,
+        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] can: etas_es58x: Replace 0-element raw_msg array
+Date:   Tue, 17 Aug 2021 20:40:10 -0700
+Message-Id: <20210818034010.800652-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210817041306.25185-2-o.rempel@pengutronix.de>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2405; h=from:subject; bh=2pghWRFPuQ+zVAOzO5gfNiPmiJDuiTH+Yfm+Ryq/M0I=; b=owEBbAKT/ZANAwAKAYly9N/cbcAmAcsmYgBhHIEaiZ+lXRC4QwUOqC71mOhS6HSGOj3Caw1KKYLF 7L2JZyaJAjIEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYRyBGgAKCRCJcvTf3G3AJsVpD/ j7xXbwKjJwKT2/GO+ODaujdBGdL6Osu0WV1eU4XmqS5JfJkc+l2PFtKNfj6weSU0gXlOjRX8zQo9Vk RGTXtjXdt7Cw6atuK6aFxzGJuFRek6LadYkYs7hUunrsAuHTyoV++Q/ltnSzptbX6zTZtKkzjT4Mnb 1sbL6mA+MGtTnYFO6cqc5IPv9qZZFZr7lOyYkpiztuUQjj1Lb8Zqj+/IP6sh7ePDPksNRFqHcIeEx4 u+cDgj0hCPPHdE4WRYbK2CSXjL5m9stprftBB5AfmdxXblnZIPW9w26iSWTVSKoyej3pB/f1upjQxs YUs4j6qklJb8pe1DGwrudFdZtGtFImGSL7ap+9UXyYhkU2txwLCOMZbwHhrSKTGw7C2c/GLTO+rceS qa/qXMGgpT1cMAkKX2yL1XK/wg4yCEbT00q4oj7XPLEcadol2gXH3dafW+/ydbcaY4kgxvYvBSewsP rXPTtLeoN4RpHB+kHdSXET3oed3KzRg6hS2x1078wD2iCE/RKQtbEyGHXPlpq8HOkHjCazT9CMbR9L cpAmLTqZeddlhGnvs0rlgQ8LxHHeEPEPCzyK+2blJZjg7aYahRjZlUm05YoPSQUN0XhInmO7oJIutG lbwOtuCNS2QSeh6mvvNab0mm/3Ibe3VZ8Kq/+P1m+l1sisDz595D+GbIOg
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue, Aug 17, 2021 at 06:13:04AM +0200, Oleksij Rempel wrote:
-> Some boards provide GPIO controllable termination resistor. Provide
-> binding to make use of it.
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
->  .../devicetree/bindings/net/can/can-controller.yaml      | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/can/can-controller.yaml b/Documentation/devicetree/bindings/net/can/can-controller.yaml
-> index 9cf2ae097156..298ce69a8208 100644
-> --- a/Documentation/devicetree/bindings/net/can/can-controller.yaml
-> +++ b/Documentation/devicetree/bindings/net/can/can-controller.yaml
-> @@ -13,6 +13,15 @@ properties:
->    $nodename:
->      pattern: "^can(@.*)?$"
->  
-> +  termination-gpios:
-> +    description: GPIO pin to enable CAN bus termination.
+While raw_msg isn't a fixed size, it does have a maximum size. Adjust the
+struct to represent this and avoid the following warning when building
+with -Wzero-length-bounds:
 
-maxItems: 1
+drivers/net/can/usb/etas_es58x/es58x_fd.c: In function 'es58x_fd_tx_can_msg':
+drivers/net/can/usb/etas_es58x/es58x_fd.c:360:35: warning: array subscript 65535 is outside the bounds of an interior zero-length array 'u8[0]' {aka 'unsigned char[]'} [-Wzero-length-bounds]
+  360 |  tx_can_msg = (typeof(tx_can_msg))&es58x_fd_urb_cmd->raw_msg[msg_len];
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from drivers/net/can/usb/etas_es58x/es58x_core.h:22,
+                 from drivers/net/can/usb/etas_es58x/es58x_fd.c:17:
+drivers/net/can/usb/etas_es58x/es58x_fd.h:231:6: note: while referencing 'raw_msg'
+  231 |   u8 raw_msg[0];
+      |      ^~~~~~~
 
-> +
-> +  termination-ohms:
-> +    description: The resistance value of the CAN bus termination resistor.
-> +    $ref: /schemas/types.yaml#/definitions/uint16-array
+Cc: Wolfgang Grandegger <wg@grandegger.com>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
+Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: linux-can@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ drivers/net/can/usb/etas_es58x/es581_4.h  | 2 +-
+ drivers/net/can/usb/etas_es58x/es58x_fd.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Standard unit properties already have a type and are uint32.
+diff --git a/drivers/net/can/usb/etas_es58x/es581_4.h b/drivers/net/can/usb/etas_es58x/es581_4.h
+index 4bc60a6df697..af38c4938859 100644
+--- a/drivers/net/can/usb/etas_es58x/es581_4.h
++++ b/drivers/net/can/usb/etas_es58x/es581_4.h
+@@ -192,7 +192,7 @@ struct es581_4_urb_cmd {
+ 		struct es581_4_rx_cmd_ret rx_cmd_ret;
+ 		__le64 timestamp;
+ 		u8 rx_cmd_ret_u8;
+-		u8 raw_msg[0];
++		u8 raw_msg[USHRT_MAX];
+ 	} __packed;
+ 
+ 	__le16 reserved_for_crc16_do_not_use;
+diff --git a/drivers/net/can/usb/etas_es58x/es58x_fd.h b/drivers/net/can/usb/etas_es58x/es58x_fd.h
+index ee18a87e40c0..e0319b8358ef 100644
+--- a/drivers/net/can/usb/etas_es58x/es58x_fd.h
++++ b/drivers/net/can/usb/etas_es58x/es58x_fd.h
+@@ -228,7 +228,7 @@ struct es58x_fd_urb_cmd {
+ 		struct es58x_fd_tx_ack_msg tx_ack_msg;
+ 		__le64 timestamp;
+ 		__le32 rx_cmd_ret_le32;
+-		u8 raw_msg[0];
++		u8 raw_msg[USHRT_MAX];
+ 	} __packed;
+ 
+ 	__le16 reserved_for_crc16_do_not_use;
+-- 
+2.30.2
 
-> +    minimum: 1
-> +    maximum: 65535
-> +
->  additionalProperties: true
->  
->  ...
-> -- 
-> 2.30.2
-> 
-> 
