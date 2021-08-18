@@ -2,133 +2,115 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1BBE3F0056
-	for <lists+linux-can@lfdr.de>; Wed, 18 Aug 2021 11:22:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E94843F0092
+	for <lists+linux-can@lfdr.de>; Wed, 18 Aug 2021 11:35:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232071AbhHRJXV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 18 Aug 2021 05:23:21 -0400
-Received: from mail-lf1-f51.google.com ([209.85.167.51]:41550 "EHLO
-        mail-lf1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232260AbhHRJXU (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 18 Aug 2021 05:23:20 -0400
-Received: by mail-lf1-f51.google.com with SMTP id y34so3228314lfa.8;
-        Wed, 18 Aug 2021 02:22:45 -0700 (PDT)
+        id S233145AbhHRJfS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 18 Aug 2021 05:35:18 -0400
+Received: from mail-lj1-f173.google.com ([209.85.208.173]:35707 "EHLO
+        mail-lj1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233729AbhHRJe2 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 18 Aug 2021 05:34:28 -0400
+Received: by mail-lj1-f173.google.com with SMTP id y6so3964461lje.2;
+        Wed, 18 Aug 2021 02:33:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=px7UgFG6E5mTzVJ1HJVqacatEH28xso/Wk3PeVQ1roc=;
-        b=bGr7D6z3wiE7kBNRpYIfZnuYKpZfTc/QO7wh262KnR1diuYM+B37u8MjDLGWNbQEh3
-         yHxCyFD4cQ3I/H3ueBtSuTEmLD0dVNnwtsV9YNlVdmwenkIyiD81Ks+WN3AoivY6i5Ve
-         FPahT43/PopTVpv2gLRALTEayD9nnz9tgCrFHbbGDAJOjwvrhl9guLsSsHMT4fXHXFX7
-         bPjBhuN2Q2fDhPB/7/kPZN7XqTnQIILRlrlp4kjs91qe11fHt+Gn7QQyE9+Liz0YyfMq
-         6JH7bfvHZm5BlbRHoxMLQfMPbeX9ZbsasocH/G5FF6S8l/6KSu2Z1dj2dTXWdHmASEdu
-         iH+w==
-X-Gm-Message-State: AOAM530PjeZibKNHKgFAUaspBbun7PfOBInZM9isv8mFjVXK7Siir6OL
-        OgoeypKAgrs16a4h3r6MgJ1IU0YgzmWkztMeb4g=
-X-Google-Smtp-Source: ABdhPJzQVkytK0wd558pspDu3Fqy+acPbMPxrwPsKAEbRDI6Q7RrbO7spPpJfnd4/Elqx5ASQrQ11WyoqNlDmWiGjxE=
-X-Received: by 2002:ac2:4e8c:: with SMTP id o12mr5869825lfr.374.1629278565189;
- Wed, 18 Aug 2021 02:22:45 -0700 (PDT)
+        bh=CzC7eMg6GoorXihbZpnBiMn0rer4lRtJPAUz1wNS7Ds=;
+        b=DLZXoPf7Dv9d35O+flm97fCaasEQnPwFPFtSRBSvjLOsvq5Xixo7UkXN/U09L/Htaq
+         QEXQQ38ScqBKZDJ5wH2iCa9yGbeCiKj4H3Ls6vwIKKPTfeAK/uZMb/gEJgxtPK3UQukP
+         txvFkcsI2/rQNRKouXjwUNrtPRZZR5ISjKZ637+FQl/1vj5buwDFQlSY1xMLtp9ar8xN
+         6myV1g4EWi4zDuYv8RJuOrlZcr4wA1ji4mR8W70L6dw2Dh2LOzITt7F2XgA6MMYWMjkm
+         JKYKFU8HH9VBf7QobF7QvMtMCm8pcLlym9r/noUYVVeg+Liy1fFq9+kAFMxe+Akfn1sV
+         9N/A==
+X-Gm-Message-State: AOAM532CQi+7UVwEX2cfdxrqMI+OVOTLYg6ZPijsrgIV7dat5kd+F/jA
+        b10xeC9LuUnmO4pIB/Iu3RW2WhyQBqOh0OVnfi4=
+X-Google-Smtp-Source: ABdhPJwHqkci/wVHZz1RIQo9bHJpWPoiaE+GXkLl0fV34qDOm85KGMeIPwC/RwTgPkoYJWCGg83a0bkp1B1FDN32yQQ=
+X-Received: by 2002:a2e:a288:: with SMTP id k8mr6989386lja.315.1629279230564;
+ Wed, 18 Aug 2021 02:33:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210815033248.98111-1-mailhol.vincent@wanadoo.fr>
- <20210815033248.98111-3-mailhol.vincent@wanadoo.fr> <20210816084235.fr7fzau2ce7zl4d4@pengutronix.de>
- <CAMZ6RqK5t62UppiMe9k5jG8EYvnSbFW3doydhCvp72W_X2rXAw@mail.gmail.com>
- <20210816122519.mme272z6tqrkyc6x@pengutronix.de> <20210816123309.pfa57tke5hrycqae@pengutronix.de>
- <20210816134342.w3bc5zjczwowcjr4@pengutronix.de> <CAMZ6RqJFxKSZahAMz9Y8hpPJPh858jxDEXsRm1YkTwf4NFAFwg@mail.gmail.com>
- <20210817200123.4wcdwsdfsdjr3ovk@pengutronix.de>
-In-Reply-To: <20210817200123.4wcdwsdfsdjr3ovk@pengutronix.de>
+References: <20210818034010.800652-1-keescook@chromium.org>
+ <CAMZ6RqK4Rn4d-1CZsg9vJiAMHhxN6fgcqukdHpGwXoGTyNVr_Q@mail.gmail.com>
+ <202108172320.1540EC10C@keescook> <CAMZ6RqLecbytJFQDC35n7YiqBbrB3--POofnXFeH77Zi2xzqWA@mail.gmail.com>
+ <202108180159.5C1CEE70F@keescook>
+In-Reply-To: <202108180159.5C1CEE70F@keescook>
 From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Wed, 18 Aug 2021 18:22:33 +0900
-Message-ID: <CAMZ6RqKsjPF2gBbzsKatFG7S4qcOahSX9vSU=dj_e9R-Kqq0CA@mail.gmail.com>
-Subject: Re: [PATCH v5 2/7] can: bittiming: allow TDC{V,O} to be zero and add can_tdc_const::tdc{v,o,f}_min
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can <linux-can@vger.kernel.org>,
-        =?UTF-8?Q?Stefan_M=C3=A4tje?= <Stefan.Maetje@esd.eu>,
+Date:   Wed, 18 Aug 2021 18:33:39 +0900
+Message-ID: <CAMZ6RqK=Q3mvV5gyPVhBsFxE+JPANHNrgFqs=bvTgkbXjwT4Eg@mail.gmail.com>
+Subject: Re: [PATCH] can: etas_es58x: Replace 0-element raw_msg array
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
+        linux-can <linux-can@vger.kernel.org>,
         netdev <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
+        open list <linux-kernel@vger.kernel.org>,
+        linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed. 18 Aug 2021 at 05:01, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+On Wed. 18 Aug 2021 at 18:03, Kees Cook <keescook@chromium.org> wrote:
+> On Wed, Aug 18, 2021 at 04:55:20PM +0900, Vincent MAILHOL wrote:
+> > At the end, the only goal of raw_msg[] is to have a tag pointing
+> > to the beginning of the union. It would be virtually identical to
+> > something like:
+> > |    u8 raw_msg[];
+> > |    union {
+> > |        /* ... */
+> > |    } __packed ;
+> >
+> > I had a look at your work and especially at your struct_group() macro.
+> > Do you think it would make sense to introduce a union_group()?
+> >
+> > Result would look like:
+> >
+> > |    union_group_attr(urb_msg, __packed, /* raw_msg renamed to urb_msg */
+> > |        struct es58x_fd_tx_conf_msg tx_conf_msg;
+> > |        u8 tx_can_msg_buf[ES58X_FD_TX_BULK_MAX * ES58X_FD_CANFD_TX_LEN];
+> > |        u8 rx_can_msg_buf[ES58X_FD_RX_BULK_MAX * ES58X_FD_CANFD_RX_LEN];
+> > |        struct es58x_fd_echo_msg echo_msg[ES58X_FD_ECHO_BULK_MAX];
+> > |        struct es58x_fd_rx_event_msg rx_event_msg;
+> > |        struct es58x_fd_tx_ack_msg tx_ack_msg;
+> > |        __le64 timestamp;
+> > |        __le32 rx_cmd_ret_le32;
+> > |    );
+> >
+> > And I can then use urb_msg in place of the old raw_msg (might
+> > need a bit of rework here and there but I can take care of it).
+> >
+> > This is the most pretty way I can think of to remove this zero length array.
+> > Keeping the raw_msg[] but with another size seems odd to me.
+> >
+> > Or maybe I would be the only one using this feature in the full
+> > tree? In that case, maybe it would make sense to keep the
+> > union_group_attr() macro local to the etas_es58x driver?
 >
-> On 17.08.2021 00:49:35, Vincent MAILHOL wrote:
-> > > We have 4 operations:
-> > > - tdc-mode off                  switch off tdc altogether
-> > > - tdc-mode manual tdco X tdcv Y configure X and Y for tdco and tdcv
-> > > - tdc-mode auto tdco X          configure X tdco and
-> > >                                 controller measures tdcv automatically
-> > > - /* nothing */                 configure default value for tdco
-> > >                                 controller measures tdcv automatically
-> >
-> > The "nothing" does one more thing: it decides whether TDC should
-> > be activated or not.
-> >
-> > > The /* nothing */ operation is what the old "ip" tool does, so we're
-> > > backwards compatible here (using the old "ip" tool on an updated
-> > > kernel/driver).
-> >
-> > That's true but this isn't the real intent. By doing this design,
-> > I wanted the user to be able to transparently use TDC while
-> > continuing to use the exact same ip commands she or he is used
-> > to using.
+> I actually ended up with something close to this idea, but more
+> generalized for other cases in the kernel. There was a sane way to
+> include a "real" flexible array in a union (or alone in a struct), so
+> I've proposed this flex_array() helper:
+> https://lore.kernel.org/lkml/20210818081118.1667663-2-keescook@chromium.org/
 >
-> Backwards compatibility using an old ip tool on a new kernel/driver must
-> work.
+> and then it's just a drop-in replacement for all the places that need
+> this fixed, including etas_es58x:
+> https://lore.kernel.org/lkml/20210818081118.1667663-3-keescook@chromium.org/#Z30drivers:net:can:usb:etas_es58x:es581_4.h
+>
+> Hopefully this will work out; I think it's as clean as we can get for
+> now. :)
 
-I am not trying to argue against backward compatibility :)
-My comment was just to point out that I had other intents as well.
+The __flex_array itself is a nasty hack :D but the rest is clean.
 
-> In case of the mcp251xfd the tdc mode must be activated and tdcv
-> set to the automatic calculated value and tdco automatically measured.
+Is this compliant to the C standard? Well, I guess that as long
+as both GCC and LLVM supports it, it is safe to add it to the
+kernel.
 
-Sorry but I am not sure if I will follow you. Here, do you mean
-that "nothing" should do the "fully automated" calculation?
-
-In your previous message, you said:
-
-> Does it make sense to let "mode auto" without a tdco value switch the
-> controller into full automatic mode and /* nothing */ not tough the tdc
-> config at all?
-
-So, you would like this behavior:
-
-| "nothing" -> TDC is off (not touch the tdc config at all)
-| mode auto, no tdco provided -> kernel decides between TDC_AUTO and TDC off.
-| mode auto, tdco provided -> TDC_AUTO
-| mode manual, tdcv and tdco provided -> TDC_MANUAL
-| mode off is not needed anymore (redundant with "nothing")
-(TDCF left out of the picture intentionally)
-
-Correct?
-
-If you do so, I see three issues:
-
-1/ Some of the drivers already implement TDC. Those will
-automatically do a calculation as long as FD is on. If "nothing"
-now brings TDC off, some users will find themselves with some
-error on the bus after the iproute2 update if they continue using
-the same command.
-
-2/ Users will need to read and understand how to use the TDC
-parameters of iproute2. And by experience, too many people just
-don't read the doc. If I can make the interface transparent and
-do the correct thing by default ("nothing"), I prefer to do so.
-
-3/ Final one is more of a nitpick. The mode auto might result in
-TDC being off. If we have a TDC_AUTO flag, I would expect the
-auto mode to always set that flag (unless error occurs). I see
-this to be slightly counter intuitive (I recognize that my
-solution also has some aspects which are not intuitive, I just
-want to point here that none are perfect).
-
-
-To be honest, I really preferred the v1 of this series where
-there were no tdc-mode {auto,manual,off} and where the "off"
-behavior was controlled by setting TDCO to zero. However, as we
-realized, zero is a valid value and thus, I had to add all this
-complexity just to allow that damn zero value.
+I like the final result. I will do a bit more testing and give my
+acknowledgement if everything goes well.
 
 
 Yours sincerely,
