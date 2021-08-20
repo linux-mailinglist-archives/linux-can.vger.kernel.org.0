@@ -2,69 +2,61 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 368633F28E3
-	for <lists+linux-can@lfdr.de>; Fri, 20 Aug 2021 11:09:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 922C73F315A
+	for <lists+linux-can@lfdr.de>; Fri, 20 Aug 2021 18:15:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234193AbhHTJKW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 20 Aug 2021 05:10:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45300 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234032AbhHTJKT (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 20 Aug 2021 05:10:19 -0400
-Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5241CC0613CF
-        for <linux-can@vger.kernel.org>; Fri, 20 Aug 2021 02:09:42 -0700 (PDT)
-Received: by mail-qk1-x741.google.com with SMTP id t190so10176111qke.7
-        for <linux-can@vger.kernel.org>; Fri, 20 Aug 2021 02:09:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=WuDQPRa1pRZEmgy3rMsrN6WxMhN/6RZwdTFnT+vP0Q4=;
-        b=hFJnYYN6W4CsDcIVyUx2ldgP3beMW4jLNH/SGyYzXZ7BCc0KGd1k2ND/ddXkVyFBzR
-         guIjkcbm1NmdCLbZe8HMFSijx65jRHp/SdEKwlTl1Wrrm5GfFB+4ZVS5sv8x1a29xP5U
-         THsPNWQYsSJ5yPuhXe5CCySbf3d8KHk4ieqNWU1QRBTQFpIYNevU0ISY6bHFs3nh/n2S
-         aeYB/F9nFQwaieLCZI54fOmj0REUKAHwNOHq6pxHqVkFNAYAR1ZrLiFgkhfJD1EtDH4X
-         GpetBqXCAI10TRHamsMBRTUQpFk6zzmcbkWEi4ufFi/59ztBcLqf45Sb9NTW5DLLfDf/
-         UjVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=WuDQPRa1pRZEmgy3rMsrN6WxMhN/6RZwdTFnT+vP0Q4=;
-        b=X3IdnfWvhKFaTV26qzhAn0KxuFyHyZzLVABn/qnZX4UGEgFO/91t2TcX6xFvt5JbRw
-         EjyyPRmGmsSVgB6Q6rToWQuYt2KSNakEQIefZCaBLQxGl4z2rnwTkGn0rvYFH167MAV6
-         l/eI9NAmDikgb2nMoocUV8V3oI06rx/xwBzPcZB9SxYSJd6faZQkB23efcrkEiAkbu2V
-         FlswCwLFRuCuDz84+LjHl94nnY5p332kwQDBqcEEBHQRYICTcrFHNqE6zKRpdo62xm0t
-         wVES4SWgZogMzEaRsuvO/WQ242UhUxTLhGT8W7VcwkeBo3iK3hHJ9tOjrR/VC8x8D6Wg
-         rQwQ==
-X-Gm-Message-State: AOAM532c1/lX/NTaUJVApOk4gT2AiYnMrGlg31tL9ICugisOnG8QmGSQ
-        Z3y5+f9b9Xi1NKmsjvMG+Gt91NMPFDpMDCq7mcYlMaBLVBU=
-X-Google-Smtp-Source: ABdhPJyG2xEmxAYbVbw0iUlOEmdXfXcy24m7DXEexS/mITfNOxQp5Wtr3TQ/AKKjTgQq+sXNyeHYc24WCQSN0Ret/HU=
-X-Received: by 2002:a37:846:: with SMTP id 67mr7997191qki.167.1629450581284;
- Fri, 20 Aug 2021 02:09:41 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:ac8:5184:0:0:0:0:0 with HTTP; Fri, 20 Aug 2021 02:09:40
- -0700 (PDT)
-Reply-To: geomic123@yahoo.com
-From:   George Micheal <philipowiredu77@gmail.com>
-Date:   Fri, 20 Aug 2021 10:09:40 +0100
-Message-ID: <CAGkcCGHZMGrNP48LcZn4sRuaLsMHSeJnxJjFCOZvC71-qdJ4xg@mail.gmail.com>
-Subject: Waiting for response
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        id S231502AbhHTQPe (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 20 Aug 2021 12:15:34 -0400
+Received: from relmlor2.renesas.com ([210.160.252.172]:50922 "EHLO
+        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231527AbhHTQPe (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 20 Aug 2021 12:15:34 -0400
+X-IronPort-AV: E=Sophos;i="5.84,338,1620658800"; 
+   d="scan'208";a="91278064"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie6.idc.renesas.com with ESMTP; 21 Aug 2021 01:14:54 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id EAF93409F9A6;
+        Sat, 21 Aug 2021 01:14:52 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-can@vger.kernel.org
+Cc:     netdev@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH -next] can: rcar_canfd: Fix redundant assignment
+Date:   Fri, 20 Aug 2021 17:14:49 +0100
+Message-Id: <20210820161449.18169-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Fix redundant assignment of 'priv' to itself in
+rcar_canfd_handle_channel_tx().
+
+Fixes: 76e9353a80e9 ("can: rcar_canfd: Add support for RZ/G2L family")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+ drivers/net/can/rcar/rcar_canfd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
+index 5d4d52afde15..c47988d3674e 100644
+--- a/drivers/net/can/rcar/rcar_canfd.c
++++ b/drivers/net/can/rcar/rcar_canfd.c
+@@ -1182,7 +1182,7 @@ static void rcar_canfd_state_change(struct net_device *ndev,
+ 
+ static void rcar_canfd_handle_channel_tx(struct rcar_canfd_global *gpriv, u32 ch)
+ {
+-	struct rcar_canfd_channel *priv = priv = gpriv->ch[ch];
++	struct rcar_canfd_channel *priv = gpriv->ch[ch];
+ 	struct net_device *ndev = priv->ndev;
+ 	u32 sts;
+ 
 -- 
-Dear Sir/Madam
+2.17.1
 
-My name is Mr George Michael,i am the Personal Aid to former
-President Baba Yahya Abdul-Aziz Jemus Jammeh the Republic of Gambia in
-west Africa, who is currently in exile with his farmily. I have been
-trying on how to get in touch with you over an important issue
-concerning a project that will be profitable. I anticipate hearing
-from you for more details.
-
-Yours faithfully
-Mr George Michael
