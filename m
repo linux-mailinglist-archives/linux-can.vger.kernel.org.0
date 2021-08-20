@@ -2,233 +2,281 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9067F3F26B1
-	for <lists+linux-can@lfdr.de>; Fri, 20 Aug 2021 08:12:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ECF23F28CE
+	for <lists+linux-can@lfdr.de>; Fri, 20 Aug 2021 11:03:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235243AbhHTGNS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 20 Aug 2021 02:13:18 -0400
-Received: from mail-lf1-f46.google.com ([209.85.167.46]:44923 "EHLO
-        mail-lf1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237102AbhHTGNS (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 20 Aug 2021 02:13:18 -0400
-Received: by mail-lf1-f46.google.com with SMTP id o10so18161396lfr.11;
-        Thu, 19 Aug 2021 23:12:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xLvU9GuXVhZoxVFcj/FjnjcckHyZpXV4uqRAEhn5yh4=;
-        b=PAbnmW/vGWkpIlC5AYvYgErcPGVqeMUh91jdy6DpNZtVIN6irhpt5S7nf5odrL3JUw
-         lTMAusFKH5tAZeTUe6rT4NZITgGDb+MviYDl/mRfO83U0WUrpYm0rAuocYAkYwtL+MoK
-         v6qtAN1pZ6QCmBTNrW+fJ9Dpa79mvtMPL0vk+eEIK4KmoemBwzGO3cHga7Ncm5b9ijH6
-         uupKfR3IR4y3AOGHi5Ns7JTsW3OtwOkE+TEuTJ9sd4I7lOVRZHdanId7uKCh3z/+WvHa
-         WTe6u2fXBuls/rTMQYTEN4Dy6QQ7UtiLrerWxABxl6I1dY6/S1Bt+fIa5yM9dvHUKSzk
-         Lthg==
-X-Gm-Message-State: AOAM533m9lqBxdD/CpB3YUXCMGISULtebgttxVNfVHkTQFIDg/qhTx1w
-        8Yq57sEFuPCokfuqKLDthBh0h6qnAIhNCfbl+vE=
-X-Google-Smtp-Source: ABdhPJwVIIevQCIed41pBtiC60V491vzwR5191VKMVLKJIhu0v22jdVkbHV4ejbb19KJUnj41IlW4Vfybt4q+wKkuiA=
-X-Received: by 2002:a05:6512:3991:: with SMTP id j17mr5874457lfu.374.1629439958905;
- Thu, 19 Aug 2021 23:12:38 -0700 (PDT)
+        id S234177AbhHTJET (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 20 Aug 2021 05:04:19 -0400
+Received: from smtp11.smtpout.orange.fr ([80.12.242.133]:60433 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232354AbhHTJET (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 20 Aug 2021 05:04:19 -0400
+Received: from tomoyo.flets-east.jp ([114.149.34.46])
+        by mwinf5d89 with ME
+        id jl3S250090zjR6y03l3dMz; Fri, 20 Aug 2021 11:03:39 +0200
+X-ME-Helo: tomoyo.flets-east.jp
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Fri, 20 Aug 2021 11:03:39 +0200
+X-ME-IP: 114.149.34.46
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH] can: netlink: prevent incoherent can configuration in case of early return
+Date:   Fri, 20 Aug 2021 18:03:13 +0900
+Message-Id: <20210820090313.299483-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20210815033248.98111-1-mailhol.vincent@wanadoo.fr>
- <20210815033248.98111-3-mailhol.vincent@wanadoo.fr> <20210816084235.fr7fzau2ce7zl4d4@pengutronix.de>
- <CAMZ6RqK5t62UppiMe9k5jG8EYvnSbFW3doydhCvp72W_X2rXAw@mail.gmail.com>
- <20210816122519.mme272z6tqrkyc6x@pengutronix.de> <20210816123309.pfa57tke5hrycqae@pengutronix.de>
- <20210816134342.w3bc5zjczwowcjr4@pengutronix.de> <CAMZ6RqJFxKSZahAMz9Y8hpPJPh858jxDEXsRm1YkTwf4NFAFwg@mail.gmail.com>
- <20210817200123.4wcdwsdfsdjr3ovk@pengutronix.de> <CAMZ6RqKsjPF2gBbzsKatFG7S4qcOahSX9vSU=dj_e9R-Kqq0CA@mail.gmail.com>
- <20210818122923.hvxmffoi5rf7rbe6@pengutronix.de> <CAMZ6Rq+H4u9D41Fdx+J-kj35g3GVRqoYvDiHtR3LGMXfRjcsiA@mail.gmail.com>
-In-Reply-To: <CAMZ6Rq+H4u9D41Fdx+J-kj35g3GVRqoYvDiHtR3LGMXfRjcsiA@mail.gmail.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Fri, 20 Aug 2021 15:12:27 +0900
-Message-ID: <CAMZ6RqJkzLh2Qf1gWo5oZ2XvTKGeeZREWu79Q4zGTdZ3Vv_mkA@mail.gmail.com>
-Subject: Re: [PATCH v5 2/7] can: bittiming: allow TDC{V,O} to be zero and add can_tdc_const::tdc{v,o,f}_min
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can <linux-can@vger.kernel.org>,
-        =?UTF-8?Q?Stefan_M=C3=A4tje?= <Stefan.Maetje@esd.eu>,
-        netdev <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed. 18 Aug 2021 at 23:17, Vincent MAILHOL
-<mailhol.vincent@wanadoo.fr> wrote:
-> On Wed. 18 Aug 2021 at 21:29, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> > On 18.08.2021 18:22:33, Vincent MAILHOL wrote:
-> > > > Backwards compatibility using an old ip tool on a new kernel/driver must
-> > > > work.
-> > >
-> > > I am not trying to argue against backward compatibility :)
-> > > My comment was just to point out that I had other intents as well.
-> > >
-> > > > In case of the mcp251xfd the tdc mode must be activated and tdcv
-> > > > set to the automatic calculated value and tdco automatically measured.
-> > >
-> > > Sorry but I am not sure if I will follow you. Here, do you mean
-> > > that "nothing" should do the "fully automated" calculation?
-> >
-> > Sort of.
-> > The use case is the old ip tool with a driver that supports tdc, for
-> > CAN-FD to work it must be configured in fully automated mode.
->
-> The current patch does that: "nothing" means that both TDC_AUTO
-> and TDC_MANUAL are not set, same as what an old ip tool would
-> do. And that triggers the default (fully automated) mode (call
-> can_calc_tdco()).
->
-> > > In your previous message, you said:
-> > >
-> > > > Does it make sense to let "mode auto" without a tdco value switch the
-> > > > controller into full automatic mode and /* nothing */ not tough the tdc
-> > > > config at all?
-> > >
-> > > So, you would like this behavior:
-> > >
-> > > | mode auto, no tdco provided -> kernel decides between TDC_AUTO and TDC off.
-> >
-> > NACK - mode auto, no tdco -> TDC_AUTO with tdco calculated by the kernel
->
-> Currently, the tdco calculation is paired with the decision to
-> enable or not TDC. If dbrp is one or two, then do the tdco
-> calculation, else, TDC is off (c.f. can_calc_tdco()). This
-> behaviour is to follow ISO 11898-1 which states that TDC is only
-> applicable if data BRP is one or two. In the current patch I
-> allow to have TDC enabled with a dbrp greater than 2 only if the
-> tdco is provided by the user (i.e. I allow the user to forcefully
-> go against ISO but the automatic calculation guarantees
-> compliance).
->
-> So what do you suggest to do when drbp is greater than 2? Still
-> enable TDC (and violate ISO standard) or return an error
-> code (e.g. -ENOTSUPP)?
->
-> > > | mode auto, tdco provided -> TDC_AUTO
-> >
-> > ACK - TDC_AUTO with user supplied tdco
-> >
-> > > | mode manual, tdcv and tdco provided -> TDC_MANUAL
-> >
-> > ACK - TDC_MANUAL with tdco and tdcv user provided
-> >
-> > > | mode off is not needed anymore (redundant with "nothing")
-> > > (TDCF left out of the picture intentionally)
-> >
-> > NACK - TDC is switched off
->
-> Same as the current patch then :)
->
-> > > | "nothing" -> TDC is off (not touch the tdc config at all)
-> >
-> > NACK - do not touch TDC setting, use previous setting
->
-> Sorry but I still fail to understand your definition of "do not
-> touch".
->
-> The first time you start a device, all the structures are zeroed
-> out meaning that TDC is off to begin with.  So the first time the
-> user do something like:
->
-> | ip link set can0 type can bitrate 1000000 dbitrate 8000000 fd on
->
-> If you "do not touch" TDC it means that all TDC values stays at
-> zero, i.e. TDC stays off. This would contradict point 1/.
->
-> > > Correct?
-> >
-> > See above. Plus a change that addresses your issue 1/ from below.
-> >
-> > If driver supports TDC it should be initially brought into TDC auto
-> > mode, if no TDC mode is given. Maybe we need an explizit TDC off to make
-> > that work.
-> >
-> > > If you do so, I see three issues:
-> > >
-> > > 1/ Some of the drivers already implement TDC. Those will
-> > > automatically do a calculation as long as FD is on. If "nothing"
-> > > now brings TDC off, some users will find themselves with some
-> > > error on the bus after the iproute2 update if they continue using
-> > > the same command.
-> >
-> > Nothing would mean "do not touch" and as TDC auto is default a new ip
-> > would work out of the box. Old ip will work, too. Just failing to decode
-> > TDC_AUTO...
->
-> See above: if you "do not touch", my understanding is that the
-> old ip tool will indefinitely keep TDC to its initial value:
-> everything zeroed out.
->
-> To turn TDC auto, you will eventually call can_calc_tdco() and
-> that will touch something.
->
-> > > 2/ Users will need to read and understand how to use the TDC
-> > > parameters of iproute2. And by experience, too many people just
-> > > don't read the doc. If I can make the interface transparent and
-> > > do the correct thing by default ("nothing"), I prefer to do so.
-> >
-> > ACK, see above
-> >
-> > > 3/ Final one is more of a nitpick. The mode auto might result in
-> > > TDC being off. If we have a TDC_AUTO flag, I would expect the
-> > > auto mode to always set that flag (unless error occurs). I see
-> > > this to be slightly counter intuitive (I recognize that my
-> > > solution also has some aspects which are not intuitive, I just
-> > > want to point here that none are perfect).
-> >
-> > What are the corner cases where TDC_AUTO results in TDC off?
->
-> dbrp greater than 2 (see above).
->
-> > > To be honest, I really preferred the v1 of this series where
-> > > there were no tdc-mode {auto,manual,off} and where the "off"
-> > > behavior was controlled by setting TDCO to zero. However, as we
-> > > realized, zero is a valid value and thus, I had to add all this
-> > > complexity just to allow that damn zero value.
-> >
-> > Maybe we should not put the TDC mode _not_ into ctrl-mode, but info a
-> > dedicated tdc-mode (which is not bit-field) inside the struct tdc?
->
-> If you do so, then you would need both a tdcmode and a
-> tdcmode_supported in order for the device to announce which modes
-> it supports (same as the ctrlmode and ctrlmode_supported in
-> can_priv). I seriously thought about this option but it seemed
-> like reinventing the wheel for me.
->
-> Also, it needs to be bit field to differentiate between a device
-> which would only support manual mode, one device which would only
-> support auto mode and one device which would support both.
+struct can_priv has a set of flags (can_priv::ctrlmode) which are
+correlated with the other field of the structure. In can_changelink(),
+those flags are set first and copied to can_priv. If the function has
+to return early, for example due to an out of range value provided by
+the user, then the global configuration might become incoherent.
 
-I just realized something. If the user first sets the TDC
-parameters and then does another command without any data
-bittiming parameters provided, then the TDC parameters will be
-recalculated but the other data bittiming parameters would remain
-unchanged.
+Example: the user provides an out of range dbitrate (e.g. 20
+Mbps). The command fails (-EINVAL), however the FD flag was already
+set resulting in a configuration where FD is on but the databittiming
+parameters are empty.
 
-Example:
-$ ip link set can0 type can bitrate 1000000 dbitrate 8000000 fd on
-tdcv 33 tdco 16 tdc-mode manual
-$ ip link set can0 type can bitrate 500000
+Illustration of above example:
 
-Here, can_calc_tdco() will be triggered resulting in a switch to
-TDC_AUTO mode.
-In this scenario, it is not normal to only have the TDC
-recalculated but not the other data bittiming parameters. Is it
-what you were trying to explain when saying "do not touch"?
+| $ ip link set can0 type can bitrate 500000 dbitrate 20000000 fd on
+| RTNETLINK answers: Invalid argument
+| $ ip --details link show can0
+| 1: can0: <NOARP,ECHO> mtu 72 qdisc noop state DOWN mode DEFAULT group default qlen 10
+|     link/can  promiscuity 0 minmtu 0 maxmtu 0
+|     can <FD> state STOPPED restart-ms 0
+           ^^ FD flag is set without any of the databittiming parameters...
+| 	  bitrate 500000 sample-point 0.875
+| 	  tq 12 prop-seg 69 phase-seg1 70 phase-seg2 20 sjw 1
+| 	  ES582.1/ES584.1: tseg1 2..256 tseg2 2..128 sjw 1..128 brp 1..512 brp-inc 1
+| 	  ES582.1/ES584.1: dtseg1 2..32 dtseg2 1..16 dsjw 1..8 dbrp 1..32 dbrp-inc 1
+| 	  clock 80000000 numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535
 
-I am preparing a new series with below behavior:
+To prevent this from happening, we do a local copy of can_priv, work
+on it, an copy it at the very end of the function (i.e. only if all
+previous checks succeeded).
 
-* data bittiming not provided: TDC parameters unchanged
-* data bittiming provided: (unchanged from current behavior)
-    - tdc-mode not provided: do can_calc_tdco (fully automated)
-    - tdc-mode auto and tdco provided: TDC_AUTO
-    - tdc-mode manual and both of tdcv and tdco provided: TDC_MANUAL
+Once this done, there is no more need to have a temporary variable for
+a specific parameter. As such, the bittiming and data bittiming (bt
+and dbt) are directly written to the temporary priv variable.
 
-N.B. TDC parameters must be provided together with data bittiming
-parameters, e.g. data bittiming not provided + TDC parameters is
-an invalid command.
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+---
+Hi Marc,
 
-Does that make more sense?
+Do you think this need a "Fixes" tag?
+If yes, feel free to add this line to the patch:
 
+Fixes: 9859ccd2c8be ("can: introduce the data bitrate configuration for CAN FD")
+---
+ drivers/net/can/dev/netlink.c | 86 ++++++++++++++++++-----------------
+ 1 file changed, 45 insertions(+), 41 deletions(-)
 
-Yours sincerely,
-Vinent
+diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlink.c
+index 80425636049d..6a14c51a058b 100644
+--- a/drivers/net/can/dev/netlink.c
++++ b/drivers/net/can/dev/netlink.c
+@@ -58,14 +58,20 @@ static int can_changelink(struct net_device *dev, struct nlattr *tb[],
+ 			  struct nlattr *data[],
+ 			  struct netlink_ext_ack *extack)
+ {
+-	struct can_priv *priv = netdev_priv(dev);
++	/* Work on a local copy of priv to prevent inconsistent value
++	 * in case of early return. net/core/rtnetlink.c has a global
++	 * mutex so static declaration is OK
++	 */
++	static struct can_priv priv;
+ 	int err;
+ 
+ 	/* We need synchronization with dev->stop() */
+ 	ASSERT_RTNL();
+ 
++	memcpy(&priv, netdev_priv(dev), sizeof(priv));
++
+ 	if (data[IFLA_CAN_BITTIMING]) {
+-		struct can_bittiming bt;
++		struct can_bittiming *bt = &priv.bittiming;
+ 
+ 		/* Do not allow changing bittiming while running */
+ 		if (dev->flags & IFF_UP)
+@@ -76,28 +82,26 @@ static int can_changelink(struct net_device *dev, struct nlattr *tb[],
+ 		 * directly via do_set_bitrate(). Bail out if neither
+ 		 * is given.
+ 		 */
+-		if (!priv->bittiming_const && !priv->do_set_bittiming)
++		if (!priv.bittiming_const && !priv.do_set_bittiming)
+ 			return -EOPNOTSUPP;
+ 
+-		memcpy(&bt, nla_data(data[IFLA_CAN_BITTIMING]), sizeof(bt));
+-		err = can_get_bittiming(dev, &bt,
+-					priv->bittiming_const,
+-					priv->bitrate_const,
+-					priv->bitrate_const_cnt);
++		memcpy(bt, nla_data(data[IFLA_CAN_BITTIMING]), sizeof(*bt));
++		err = can_get_bittiming(dev, bt,
++					priv.bittiming_const,
++					priv.bitrate_const,
++					priv.bitrate_const_cnt);
+ 		if (err)
+ 			return err;
+ 
+-		if (priv->bitrate_max && bt.bitrate > priv->bitrate_max) {
++		if (priv.bitrate_max && bt->bitrate > priv.bitrate_max) {
+ 			netdev_err(dev, "arbitration bitrate surpasses transceiver capabilities of %d bps\n",
+-				   priv->bitrate_max);
++				   priv.bitrate_max);
+ 			return -EINVAL;
+ 		}
+ 
+-		memcpy(&priv->bittiming, &bt, sizeof(bt));
+-
+-		if (priv->do_set_bittiming) {
++		if (priv.do_set_bittiming) {
+ 			/* Finally, set the bit-timing registers */
+-			err = priv->do_set_bittiming(dev);
++			err = priv.do_set_bittiming(dev);
+ 			if (err)
+ 				return err;
+ 		}
+@@ -112,11 +116,11 @@ static int can_changelink(struct net_device *dev, struct nlattr *tb[],
+ 		if (dev->flags & IFF_UP)
+ 			return -EBUSY;
+ 		cm = nla_data(data[IFLA_CAN_CTRLMODE]);
+-		ctrlstatic = priv->ctrlmode_static;
++		ctrlstatic = priv.ctrlmode_static;
+ 		maskedflags = cm->flags & cm->mask;
+ 
+ 		/* check whether provided bits are allowed to be passed */
+-		if (maskedflags & ~(priv->ctrlmode_supported | ctrlstatic))
++		if (maskedflags & ~(priv.ctrlmode_supported | ctrlstatic))
+ 			return -EOPNOTSUPP;
+ 
+ 		/* do not check for static fd-non-iso if 'fd' is disabled */
+@@ -128,16 +132,16 @@ static int can_changelink(struct net_device *dev, struct nlattr *tb[],
+ 			return -EOPNOTSUPP;
+ 
+ 		/* clear bits to be modified and copy the flag values */
+-		priv->ctrlmode &= ~cm->mask;
+-		priv->ctrlmode |= maskedflags;
++		priv.ctrlmode &= ~cm->mask;
++		priv.ctrlmode |= maskedflags;
+ 
+ 		/* CAN_CTRLMODE_FD can only be set when driver supports FD */
+-		if (priv->ctrlmode & CAN_CTRLMODE_FD) {
++		if (priv.ctrlmode & CAN_CTRLMODE_FD) {
+ 			dev->mtu = CANFD_MTU;
+ 		} else {
+ 			dev->mtu = CAN_MTU;
+-			memset(&priv->data_bittiming, 0,
+-			       sizeof(priv->data_bittiming));
++			memset(&priv.data_bittiming, 0,
++			       sizeof(priv.data_bittiming));
+ 		}
+ 	}
+ 
+@@ -145,7 +149,7 @@ static int can_changelink(struct net_device *dev, struct nlattr *tb[],
+ 		/* Do not allow changing restart delay while running */
+ 		if (dev->flags & IFF_UP)
+ 			return -EBUSY;
+-		priv->restart_ms = nla_get_u32(data[IFLA_CAN_RESTART_MS]);
++		priv.restart_ms = nla_get_u32(data[IFLA_CAN_RESTART_MS]);
+ 	}
+ 
+ 	if (data[IFLA_CAN_RESTART]) {
+@@ -158,7 +162,7 @@ static int can_changelink(struct net_device *dev, struct nlattr *tb[],
+ 	}
+ 
+ 	if (data[IFLA_CAN_DATA_BITTIMING]) {
+-		struct can_bittiming dbt;
++		struct can_bittiming *dbt = &priv.data_bittiming;
+ 
+ 		/* Do not allow changing bittiming while running */
+ 		if (dev->flags & IFF_UP)
+@@ -169,31 +173,29 @@ static int can_changelink(struct net_device *dev, struct nlattr *tb[],
+ 		 * directly via do_set_bitrate(). Bail out if neither
+ 		 * is given.
+ 		 */
+-		if (!priv->data_bittiming_const && !priv->do_set_data_bittiming)
++		if (!priv.data_bittiming_const && !priv.do_set_data_bittiming)
+ 			return -EOPNOTSUPP;
+ 
+-		memcpy(&dbt, nla_data(data[IFLA_CAN_DATA_BITTIMING]),
+-		       sizeof(dbt));
+-		err = can_get_bittiming(dev, &dbt,
+-					priv->data_bittiming_const,
+-					priv->data_bitrate_const,
+-					priv->data_bitrate_const_cnt);
++		memcpy(dbt, nla_data(data[IFLA_CAN_DATA_BITTIMING]),
++		       sizeof(*dbt));
++		err = can_get_bittiming(dev, dbt,
++					priv.data_bittiming_const,
++					priv.data_bitrate_const,
++					priv.data_bitrate_const_cnt);
+ 		if (err)
+ 			return err;
+ 
+-		if (priv->bitrate_max && dbt.bitrate > priv->bitrate_max) {
++		if (priv.bitrate_max && dbt->bitrate > priv.bitrate_max) {
+ 			netdev_err(dev, "canfd data bitrate surpasses transceiver capabilities of %d bps\n",
+-				   priv->bitrate_max);
++				   priv.bitrate_max);
+ 			return -EINVAL;
+ 		}
+ 
+-		memcpy(&priv->data_bittiming, &dbt, sizeof(dbt));
+-
+ 		can_calc_tdco(dev);
+ 
+-		if (priv->do_set_data_bittiming) {
++		if (priv.do_set_data_bittiming) {
+ 			/* Finally, set the bit-timing registers */
+-			err = priv->do_set_data_bittiming(dev);
++			err = priv.do_set_data_bittiming(dev);
+ 			if (err)
+ 				return err;
+ 		}
+@@ -201,28 +203,30 @@ static int can_changelink(struct net_device *dev, struct nlattr *tb[],
+ 
+ 	if (data[IFLA_CAN_TERMINATION]) {
+ 		const u16 termval = nla_get_u16(data[IFLA_CAN_TERMINATION]);
+-		const unsigned int num_term = priv->termination_const_cnt;
++		const unsigned int num_term = priv.termination_const_cnt;
+ 		unsigned int i;
+ 
+-		if (!priv->do_set_termination)
++		if (!priv.do_set_termination)
+ 			return -EOPNOTSUPP;
+ 
+ 		/* check whether given value is supported by the interface */
+ 		for (i = 0; i < num_term; i++) {
+-			if (termval == priv->termination_const[i])
++			if (termval == priv.termination_const[i])
+ 				break;
+ 		}
+ 		if (i >= num_term)
+ 			return -EINVAL;
+ 
+ 		/* Finally, set the termination value */
+-		err = priv->do_set_termination(dev, termval);
++		err = priv.do_set_termination(dev, termval);
+ 		if (err)
+ 			return err;
+ 
+-		priv->termination = termval;
++		priv.termination = termval;
+ 	}
+ 
++	memcpy(netdev_priv(dev), &priv, sizeof(priv));
++
+ 	return 0;
+ }
+ 
+-- 
+2.31.1
+
