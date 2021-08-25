@@ -2,65 +2,101 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5099F3F701D
-	for <lists+linux-can@lfdr.de>; Wed, 25 Aug 2021 09:07:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 391823F71C9
+	for <lists+linux-can@lfdr.de>; Wed, 25 Aug 2021 11:35:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238693AbhHYHIR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 25 Aug 2021 03:08:17 -0400
-Received: from cmccmta3.chinamobile.com ([221.176.66.81]:9597 "EHLO
-        cmccmta3.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238318AbhHYHIQ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 25 Aug 2021 03:08:16 -0400
-Received: from spf.mail.chinamobile.com (unknown[172.16.121.19]) by rmmx-syy-dmz-app12-12012 (RichMail) with SMTP id 2eec6125ec23ade-1e8a3; Wed, 25 Aug 2021 15:07:15 +0800 (CST)
-X-RM-TRANSID: 2eec6125ec23ade-1e8a3
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG: 00000000
-Received: from localhost.localdomain (unknown[223.112.105.130])
-        by rmsmtp-syy-appsvr10-12010 (RichMail) with SMTP id 2eea6125ec1ede0-4e93f;
-        Wed, 25 Aug 2021 15:07:15 +0800 (CST)
-X-RM-TRANSID: 2eea6125ec1ede0-4e93f
-From:   Tang Bin <tangbin@cmss.chinamobile.com>
-To:     mkl@pengutronix.de, wg@grandegger.com, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Tang Bin <tangbin@cmss.chinamobile.com>
-Subject: [PATCH v2] can: mscan: mpc5xxx_can: Remove useless BUG_ON()
-Date:   Wed, 25 Aug 2021 15:07:52 +0800
-Message-Id: <20210825070752.18724-1-tangbin@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.20.1.windows.1
+        id S239510AbhHYJgI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 25 Aug 2021 05:36:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56670 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238197AbhHYJgH (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 25 Aug 2021 05:36:07 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C08C061757
+        for <linux-can@vger.kernel.org>; Wed, 25 Aug 2021 02:35:22 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1mIpJY-00046f-Lk
+        for linux-can@vger.kernel.org; Wed, 25 Aug 2021 11:35:20 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 9059E66F59D
+        for <linux-can@vger.kernel.org>; Wed, 25 Aug 2021 09:35:18 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id D050A66F591;
+        Wed, 25 Aug 2021 09:35:17 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id b2780a62;
+        Wed, 25 Aug 2021 09:35:17 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: pull-request: can-next 2021-08-25
+Date:   Wed, 25 Aug 2021 11:35:12 +0200
+Message-Id: <20210825093516.448231-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-In the function mpc5xxx_can_probe(), the variable 'data'
-has already been determined in the above code, so the
-BUG_ON() in this place is useless, remove it.
+Hello Jakub, hello David,
 
-Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
+this is a pull request of 4 patches for net-next/master.
+
+The first patch is by Cai Huoqing, and enables COMPILE_TEST for the
+rcar CAN drivers.
+
+Lad Prabhakar contributes a patch for the rcar_canfd driver, fixing a
+redundant assignment.
+
+The last 2 patches are by Tang Bin, target the mscan driver, and clean
+up the driver by converting it to of_device_get_match_data() and
+removing a useless BUG_ON.
+
+regards,
+Marc
+
 ---
-Changes to v1
- - Fix the commit message for typo
----
- drivers/net/can/mscan/mpc5xxx_can.c | 1 -
- 1 file changed, 1 deletion(-)
+The following changes since commit a37c5c26693eadb3aa4101d8fe955e40d206b386:
 
-diff --git a/drivers/net/can/mscan/mpc5xxx_can.c b/drivers/net/can/mscan/mpc5xxx_can.c
-index 3b7465acd..35892c1ef 100644
---- a/drivers/net/can/mscan/mpc5xxx_can.c
-+++ b/drivers/net/can/mscan/mpc5xxx_can.c
-@@ -317,7 +317,6 @@ static int mpc5xxx_can_probe(struct platform_device *ofdev)
- 
- 	clock_name = of_get_property(np, "fsl,mscan-clock-source", NULL);
- 
--	BUG_ON(!data);
- 	priv->type = data->type;
- 	priv->can.clock.freq = data->get_clock(ofdev, clock_name,
- 					       &mscan_clksrc);
--- 
-2.20.1.windows.1
+  net: bridge: change return type of br_handle_ingress_vlan_tunnel (2021-08-24 16:51:09 -0700)
 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git tags/linux-can-next-for-5.15-20210825
+
+for you to fetch changes up to cbe8cd7d83e251bff134a57ea4b6378db992ad82:
+
+  can: mscan: mpc5xxx_can: mpc5xxx_can_probe(): remove useless BUG_ON() (2021-08-25 08:25:11 +0200)
+
+----------------------------------------------------------------
+linux-can-next-for-5.15-20210825
+
+----------------------------------------------------------------
+Cai Huoqing (1):
+      can: rcar: Kconfig: Add helper dependency on COMPILE_TEST
+
+Lad Prabhakar (1):
+      can: rcar_canfd: rcar_canfd_handle_channel_tx(): fix redundant assignment
+
+Tang Bin (2):
+      can: mscan: mpc5xxx_can: mpc5xxx_can_probe(): use of_device_get_match_data to simplify code
+      can: mscan: mpc5xxx_can: mpc5xxx_can_probe(): remove useless BUG_ON()
+
+ drivers/net/can/mscan/mpc5xxx_can.c | 7 ++-----
+ drivers/net/can/rcar/Kconfig        | 4 ++--
+ drivers/net/can/rcar/rcar_canfd.c   | 2 +-
+ 3 files changed, 5 insertions(+), 8 deletions(-)
 
 
