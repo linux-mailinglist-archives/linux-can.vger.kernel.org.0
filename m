@@ -2,110 +2,86 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 470EE3F7838
-	for <lists+linux-can@lfdr.de>; Wed, 25 Aug 2021 17:26:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DD9C3F7C5F
+	for <lists+linux-can@lfdr.de>; Wed, 25 Aug 2021 20:44:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240801AbhHYP1F (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 25 Aug 2021 11:27:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54338 "EHLO
+        id S240109AbhHYSpE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 25 Aug 2021 14:45:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240741AbhHYP1E (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 25 Aug 2021 11:27:04 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA41C061757
-        for <linux-can@vger.kernel.org>; Wed, 25 Aug 2021 08:26:17 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1mIunA-0007cV-8d; Wed, 25 Aug 2021 17:26:16 +0200
-Received: from pengutronix.de (2a03-f580-87bc-d400-c8d1-09c2-d573-6e5f.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:c8d1:9c2:d573:6e5f])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 5E6EF66F950;
-        Wed, 25 Aug 2021 15:26:15 +0000 (UTC)
-Date:   Wed, 25 Aug 2021 17:26:13 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     =?utf-8?B?U3TDqXBoYW5l?= Grosjean <s.grosjean@peak-system.com>
-Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Subject: Re: TR: pull-request: can-next 2021-07-25
-Message-ID: <20210825152613.mbtrnujlpb7635xi@pengutronix.de>
-References: <20210726141144.862529-1-mkl@pengutronix.de>
- <162733441301.18684.10819552730140170023.git-patchwork-notify@kernel.org>
- <PA4PR03MB6797385C06D695452B79513BD6C69@PA4PR03MB6797.eurprd03.prod.outlook.com>
+        with ESMTP id S237460AbhHYSpD (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 25 Aug 2021 14:45:03 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2CA2C061757
+        for <linux-can@vger.kernel.org>; Wed, 25 Aug 2021 11:44:17 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a25so474917ejv.6
+        for <linux-can@vger.kernel.org>; Wed, 25 Aug 2021 11:44:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arcolaenergy-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=L9qWcMSyPY2p51Cm3uhjfSx2IF3EHnV06Scvi6owNmc=;
+        b=MZtndjC6g5kHRZ5IFlLL2z0wvcjSykyQj2TiDz5Gp8eijSA921R+ANCtwAEgv+h+S4
+         81Y/n1Pzn46F+6LMIPnHCTQQ/NMcrJM00xyM+uWjCQKUB5o0C8HPx7q7ot3gBzwjIFGV
+         DWkXzfqTe9N1UkGfJ7fh0Qe7Gagxny3qUzAv4RSME7PgeXjfR5YxaZYyIUYcvn6L4x0Y
+         sqmxEPtqxsD+sV+XSXd49nlcgndwL4wszUAawZuXKe3J511x0wvaQrNWa3r+HfUbS8su
+         LMse7cIlyKo8GRBbK19Xfw/0eBKkswzRQcdDU16HWWF+NdtgsPcJIGR0kMaeT9ButRgC
+         FWrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=L9qWcMSyPY2p51Cm3uhjfSx2IF3EHnV06Scvi6owNmc=;
+        b=bzqmc3q+sfScJAiRRS7kgceOfLsiTQsSbknuRUe/6k5J2nwPaxXQyGWoEnPh62idha
+         2hukOia7BFnaIu7aqYblRF4N6onHeQgYpW71SowipjEew/Auc04MjwGVJs1gHilWHVuO
+         xBcSKWiF/p1/wReI2irdTDvHP0ulOPePPYqy1UWdplL0nG1UOn8T2OY0xbyx6lQ3LIS8
+         cWDqslgbNXFqfkx/3IBygyTRY/RlhagzALgzYlhOjP1OWZL+Hfpl5eu2/3XuGB5NnlRS
+         XLOozlHaN9an7fkk28hjSHtl20/79CvSZIWwVEUiflntaXjTPlyO6aE0KfmZTC3CUBf7
+         emlg==
+X-Gm-Message-State: AOAM531BkP5VHuwho6PvfWXz1oftTO70T7BerST3/7VWKeGtJLF4cQxH
+        s8qNNNX7xyfzwUTls1XfAqJheCf4HCbCuL9Qp33kOWK/QesMZLQjr3QGzOFLpgJS7LenNUpfi8J
+        u2YzXFTKa9Yr7sOdpmtTASJ8WxNFEgFoFT8Wk4w==
+X-Google-Smtp-Source: ABdhPJwff3bOzQi98yn9aQhUYiDM/Udfv/53fRgxMyVF3nUSzdH2zCJJZJOrHbCHNuFEufN7u8dZID7kyogSas/Cfg4=
+X-Received: by 2002:a17:907:1b02:: with SMTP id mp2mr84877ejc.196.1629917056129;
+ Wed, 25 Aug 2021 11:44:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7xeu5x5szksoieie"
-Content-Disposition: inline
-In-Reply-To: <PA4PR03MB6797385C06D695452B79513BD6C69@PA4PR03MB6797.eurprd03.prod.outlook.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+From:   Jasper Wallace <jasper@arcolaenergy.com>
+Date:   Wed, 25 Aug 2021 19:44:05 +0100
+Message-ID: <CAPvzSFeGLtH-fz8mdSZL3UfajeoegvRL6cNuTdru6HnYH2=Hfw@mail.gmail.com>
+Subject: Renaming can devices interfaces names with udev
+To:     linux-can@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi all,
 
---7xeu5x5szksoieie
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I'm going to be using a number of the Korlan/8devices usb2can
+interfaces and I want to make sure they have persistent interface
+names. Thankfully they all have unique serial numbers that are printed
+on the devices so I can match a physical device with a linux interface
+name.
 
-On 25.08.2021 13:55:08, St=C3=A9phane Grosjean wrote:
-> AFAIK I don't see any of the peak_* patches below appearing in linux
-> for all this time... Any idea?
+In theory I should be able to do something like add a file at
+/etc/udev/rules.d/10-usb2can.rules containing something like:
 
-You mean these patches?
+SUBSYSTEM=="net", ACTION=="add", ATTR{ID_VENDOR_ENC}=="8Devices",
+ATTR{ID_MODEL}=="USB2CAN_converter", NAME="can$attr{ID_SERIAL_SHORT}"
 
->   - [net-next,31/46] can: peak_pci: convert comments to network style com=
-ments
->     https://git.kernel.org/netdev/net-next/c/9b69aff9fd1a
->   - [net-next,32/46] can: peak_pci: fix checkpatch warnings
->     https://git.kernel.org/netdev/net-next/c/fe1fa1387a15
->   - [net-next,33/46] can: peak_pci: Add name and FW version of the card i=
-n kernel buffer
->     https://git.kernel.org/netdev/net-next/c/805ff68c8e7f
->   - [net-next,34/46] can: peak_usb: pcan_usb_get_device_id(): read value =
-only in case of success
->     https://git.kernel.org/netdev/net-next/c/1d0214a0f5db
->   - [net-next,35/46] can: peak_usb: PCAN-USB: add support of loopback and=
- one-shot mode
->     https://git.kernel.org/netdev/net-next/c/3a7939495ce8
->   - [net-next,36/46] can: peak_usb: pcan_usb_encode_msg(): add information
->     https://git.kernel.org/netdev/net-next/c/1763c547648d
->   - [net-next,37/46] can: peak_usb: pcan_usb_decode_error(): upgrade hand=
-ling of bus state changes
->     https://git.kernel.org/netdev/net-next/c/c11dcee75830
+But I've not been able to get anything to work.
 
-These were parts of this pull request to net-next, which will hit
-mainline in the v5.15 release cycle. They should be in Linus' tree with
-v5.15-rc1.
+Has anyone been able to get something like this to work?
 
-regards,
-Marc
+I'm on Debian Buster.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Thanks,
 
---7xeu5x5szksoieie
-Content-Type: application/pgp-signature; name="signature.asc"
+Jasper
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmEmYRMACgkQqclaivrt
-76lwGAf/ex+JI5jjU9CGu2/Kb7yQzgRZlevA/CTrTEiEtlFV9P4sTj5hNPAs3iqy
-Cuk/0Z/z1zj2J7XSLW/S4ejhyyuzH6saHpfJfaDPzffIuzyBFhDgw2OcNRkqfsTu
-ya+K8dpTfGDbsgcII+5XHyCbr/+QgzKfrvwwH6xm3XsoL47JrzAs/0m8A8oQz/zq
-aUyh45izjhh89tmB8RAkd6+4YqKROzzYPjy/e3KRYg6ffC8TFnCsKIswHKbIo14t
-UP+gxjffS++oTfJxM0ObigKMtKaHhwhklmhCfjihkfT2UYQ02m3XSXn4072ngX2h
-l5eNf3fgudGleu7GXq7CXQSEeeLr3Q==
-=H46r
------END PGP SIGNATURE-----
-
---7xeu5x5szksoieie--
+-- 
+Your hydrogen & fuel cell partner
+Arcola Energy Ltd, 24 Ashwin Street, 
+London E8 3DL. www.arcolaenergy.com <https://www.arcolaenergy.com/> / +44 
+20 7503 1386
+Registered in England and Wales, Company Number 7257863, VAT 
+Number 110085273. Copyright 2020. Confidential and Proprietary. Not to be 
+disseminated or copied in full or in part.
