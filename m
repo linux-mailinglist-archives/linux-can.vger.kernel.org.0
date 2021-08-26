@@ -2,120 +2,421 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 623183F7E07
-	for <lists+linux-can@lfdr.de>; Thu, 26 Aug 2021 00:02:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C9653F81EA
+	for <lists+linux-can@lfdr.de>; Thu, 26 Aug 2021 07:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231860AbhHYVyI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 25 Aug 2021 17:54:08 -0400
-Received: from mail-eopbgr00132.outbound.protection.outlook.com ([40.107.0.132]:48611
-        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229707AbhHYVyI (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 25 Aug 2021 17:54:08 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CH529VG7k0BXO5froUG9TyxAKLWvmC03QO4/ZMEcUEn+uP5DBn0v13ke0eVuJwyQz3A0P+x+oJ31MQHJnTi9mfpps/X59vw26Cl8K0HTYfj9mVRFf9FtNgT6zm/EV3qQlZddtDk8Q+FI60MB/87WUjY+bkimTPNCG3yTtp1xnwus2JkyPs6iIE4X8bVPhEH6jCTtR+R0XGaxn8gZwk5+Jl3ItObL7G6q4Aobt8Ssrpd+IA+WugS83BMGpfwRi4f8XFV2DcqEdw1pbbqT8hd1Zo9HDa5W8mlcVNhs3zck/iVwXqC1hMMKUtU4uHt6ay4dt2y8yWPfPPewCWRpX7FqlA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5BtOpUdW+JaHWG5tH1USJRKSPORFjaePfcrEOGDsQGk=;
- b=Hj2+4r5Q/RprqZoGG+gi+oU6NIWm63tZrGQSQpqVAQ3FMLjTmGCNf16cXO+AeHXi1bKacsy/r3KkN0uiqylOFwLOPGdytbbFCnr74nv5QdUSlatGYtcktvimfWNtGflZwXLEo4fXvFhdQ5nOliKEJzON+lGFDPwAzizin+Ydoa6+Nez/DGtDb4svAQkCt2lIzba4vMBjrj3xF9+gO1UHX0Brttiw0IGxHJSJGNJgJ1wO3zEdcGIskeGlUc0bwZV2WLWcK8EjyHz9L/DCW1qniHG4EV0LRqdKJR46Z5hcIwncXhRHW+B1wtD3lKpnRPdC/wo4/in7rTWgkMK9qVyxiA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 81.14.233.218) smtp.rcpttodomain=esd.eu smtp.mailfrom=esd.eu;
- dmarc=bestguesspass action=none header.from=esd.eu; dkim=none (message not
- signed); arc=none
+        id S239440AbhHZFGB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 26 Aug 2021 01:06:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42852 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238543AbhHZFFu (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 26 Aug 2021 01:05:50 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0833BC0613A4
+        for <linux-can@vger.kernel.org>; Wed, 25 Aug 2021 22:05:04 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id 18so1704709pfh.9
+        for <linux-can@vger.kernel.org>; Wed, 25 Aug 2021 22:05:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=esdhannover.onmicrosoft.com; s=selector1-esdhannover-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5BtOpUdW+JaHWG5tH1USJRKSPORFjaePfcrEOGDsQGk=;
- b=Yt4KYwdQBtAoqHajB+cJWjR22o4UZpgh6TkBXn3dkiLTWEtpHJ/D/85ruGO+G7NcS2LGyaHlj8BrOw4aP9U2gU32FnEyFP9KP8FTqHMcl3Y3hJmD3jeArKdd+mMImzMmvR4T67UVnZ7rDAFAm/hC8PVYMOr/46MvJmfPlqBbw7c=
-Received: from FR3P281CA0034.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:1c::20)
- by AS8PR03MB7448.eurprd03.prod.outlook.com (2603:10a6:20b:293::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4436.22; Wed, 25 Aug
- 2021 21:53:20 +0000
-Received: from VI1EUR06FT054.eop-eur06.prod.protection.outlook.com
- (2603:10a6:d10:1c:cafe::cb) by FR3P281CA0034.outlook.office365.com
- (2603:10a6:d10:1c::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4457.6 via Frontend
- Transport; Wed, 25 Aug 2021 21:53:19 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 81.14.233.218)
- smtp.mailfrom=esd.eu; esd.eu; dkim=none (message not signed)
- header.d=none;esd.eu; dmarc=bestguesspass action=none header.from=esd.eu;
-Received-SPF: Pass (protection.outlook.com: domain of esd.eu designates
- 81.14.233.218 as permitted sender) receiver=protection.outlook.com;
- client-ip=81.14.233.218; helo=esd-s7.esd;
-Received: from esd-s7.esd (81.14.233.218) by
- VI1EUR06FT054.mail.protection.outlook.com (10.13.6.124) with Microsoft SMTP
- Server id 15.20.4457.17 via Frontend Transport; Wed, 25 Aug 2021 21:53:19
- +0000
-Received: from esd-s9.esd.local (unknown [10.0.0.190])
-        by esd-s7.esd (Postfix) with ESMTP id 8BAB57C16C5;
-        Wed, 25 Aug 2021 23:53:19 +0200 (CEST)
-Received: by esd-s9.esd.local (Postfix, from userid 2044)
-        id 889E3E00E4; Wed, 25 Aug 2021 23:53:19 +0200 (CEST)
-From:   =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>
-To:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>, netdev@vger.kernel.org,
-        =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>
-Subject: [PATCH 1/1] can: usb: esd_usb2: Fix the interchange of the CAN RX and TX error counters.
-Date:   Wed, 25 Aug 2021 23:52:27 +0200
-Message-Id: <20210825215227.4947-2-stefan.maetje@esd.eu>
-X-Mailer: git-send-email 2.19.2
-In-Reply-To: <20210825215227.4947-1-stefan.maetje@esd.eu>
-References: <20210825215227.4947-1-stefan.maetje@esd.eu>
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ZSgFy57aU31YAE4YjuonHLTOTN+opVUhkqzU115GN7k=;
+        b=Jaa0OsO5LQdH8WgOyS9ndwRvK8LzNxLKzCQoMWW6XcZkBiYeJoAsZqI4uhrbQmfyBb
+         1gyGuoYu36w+LLJPzuYuGER6fPiukf9lX3652XliU4BgS6pdB4uMZ8SSQSBuhvqOkhNi
+         loKrzcQOF0ovGL/c3TKgyb/fkDaXzwvjSSXMs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ZSgFy57aU31YAE4YjuonHLTOTN+opVUhkqzU115GN7k=;
+        b=QJQhmCi01DLbaPSqNpgEAPWAim0k3cZoP+D/udz4XiDbL3Awx9+p0GyqHYQ5KUeT5A
+         WfceRzQ83KUkHEwx+UMpxyCYiBfk8n3BE8anf8QFoPqIuK9S21SnSA7CFK1Q+8X1A0bW
+         tqYhHId8l8jHVg8nXD6QPM/FxF7KZrRBNV67gIkLNDsm4NzG+tr5mWEP+Ou21PawkoNM
+         ttM8NDbwxbe7vC8D3364WCmn8XPoGMFEVmZtQAi4qLjYV7i/e9wOP0X4DUWdt9CV+eR9
+         dJx/tmx9Nshfbu046u1A8A0hmRAQazEk53ONnxJmYwx3Y3XPGhKdXRxRCJ7TS7KlwRsr
+         Auow==
+X-Gm-Message-State: AOAM532WuJlAdoTFWausGXft/nQIa57DD0MNv2/NlYmaHVCvWdOaO1j0
+        jZ6IwwRYOEXoSWzlSoZL/CiMmA==
+X-Google-Smtp-Source: ABdhPJzy/JVpclWJVBZkyMc2AYkafS208omc/rL11mcaFm6dDiRxDbzEwPOwn80ykhIFOgT5FPGJ3A==
+X-Received: by 2002:a63:ed50:: with SMTP id m16mr1716378pgk.231.1629954303366;
+        Wed, 25 Aug 2021 22:05:03 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id g14sm1330326pfr.31.2021.08.25.22.05.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Aug 2021 22:05:00 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Kees Cook <keescook@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ayush Sawal <ayush.sawal@chelsio.com>,
+        Vinay Kumar Yadav <vinay.yadav@chelsio.com>,
+        Rohit Maheshwari <rohitm@chelsio.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Stanislaw Gruszka <stf_xl@wp.pl>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Mordechay Goodstein <mordechay.goodstein@intel.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>,
+        linux-crypto@vger.kernel.org, ath10k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-can@vger.kernel.org,
+        bpf@vger.kernel.org, Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Keith Packard <keithp@keithp.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        clang-built-linux@googlegroups.com, linux-hardening@vger.kernel.org
+Subject: [PATCH v2 2/5] treewide: Replace open-coded flex arrays in unions
+Date:   Wed, 25 Aug 2021 22:04:55 -0700
+Message-Id: <20210826050458.1540622-3-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210826050458.1540622-1-keescook@chromium.org>
+References: <20210826050458.1540622-1-keescook@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=12175; h=from:subject; bh=8yrZikuHYRUCJy7aFbsFeoitUA6PG80HcXIsUEETpA0=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhJyD5HYHBqTFRtgMP92ux+bJ3ZZ3k5eNX2+Qj2FAM kHlY8AqJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYScg+QAKCRCJcvTf3G3AJjuQEA CtEauy4ZDh80JsPAya4mLNjdFzLZWYCR9RimW/Z8oniFQ9T8iG+nLmrYdtIzut03o6dJFTEyPIrw9J gerKm0uFi5AS1HPVoldFywhjEpjE/X+RXg6Fa5F1aFkzPKD+2TzbEHAA9YyZJEHfQbgkSOg+ldQhxA 5omNx7q/Eho7+bXC5DNYQXo3u/lf1xoxy7YbtEZSJP3JQeS7zTi2e+5acYDyb8ZarRLPAVcXEeGSo2 Y2RH2r8nw1l87B/Bomi7buM+WWs5ng6xk3/zDFNvei6ZHjxSpzhlg2aoYuZ2BTUEY8A3abrtOqVe4g z5oIQfcjXDekjtrD6Uw9n66iIwkl2FXQ9mY1hp/0Cqh7Ma0gcFZKSUtx6LjGxbnXekgx2Ub8l8RRRt b4IIsYHhzgKV8Y12zdD12tY7KInEVRqJ1DRQep8j43qEq/LFuIIAg8TIBueMiEvnRUWUYm1MfOJePv GfAQvTNhr8lK+U0GHkdWEN4qscV4M99BJ6lR8ogbi7Yxzyk7PQCLqnuN9e/oeptt/NuuE0iBmB5Sqq 3+VVfB+JFQayZq5yatctWiKohRhU0GSHBzFLkx8WZezSYcamJmnl4OAiC4qu8hfyGC3BHGmhNIOFc9 Q0WjeM7VmIZxZCE06me6i5wXlJBAkk+E1Ce4Os0AUkssDmYdWi4hS4F96KGg==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f6fd9878-3859-442a-228c-08d96812c086
-X-MS-TrafficTypeDiagnostic: AS8PR03MB7448:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AS8PR03MB74488E85AE1DEE799A2D108E81C69@AS8PR03MB7448.eurprd03.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4bKLPF7kR3hFQahmfKoUwR1Nm6TQeQqRWvtsHUJWQhCGcgjbEgaqUHCY8UyGjJCLSRFQnpQPy3fd9i/Ia+ATfCZZkqihnmdcIiF7R9JS1PzrdPru+YEHmG1DITbePae7dZbSQqG9hb9/wFTv7V4eCwxuwUTdJA/1aJ0F7ZGNH79IipuZfgvsgYnEhAciUhkKs5vtSpR/R6zVeAGnRVISJ1DC1qrDAgHvw1BwOpMcAKYW87wh6My9Rwpnl/yVWVjXYrQ188DLbaavurQl5+1W7IyT4xTlWFn9USmk4N115DFu330wxGj1W/xSYVyr2qfRBj6Ra0c1RGZMPTQ49KXepbC903YqKnpAjRFqZfjFtDkNtpOk1CTCAtWCahuHZwHfBI3exvSvXDD4P9ew44XTEn08BeLtiemzNLjhTrCoeoGFPyAlXm15QCoYQzKaEEFWv3Bpfj74AUCSBkaekh51ar/KmGct93Z6bHZAbWmPg0akv4OjKp5v5rW+iWzdbaXKFw+1FV0uJCbbyHLGOynSKJfyGyEIf3egfCIrgsnZlwrVjwgDJr7fMbGAzqymxlWMmluvds4TYP5yNGCmBwmp7jjqhAjQDKL6KE33Tg6fClaaNHHf2qaSDRj+FvM/Y7FVxLU1E1Rleuj/u6Hr+LIzLtbcteRnnIWEf3eID+2gMtBe/1NrFG/aBqmyCE3ey4uNjZAtzIV1lOI5BWbSj/B0dA==
-X-Forefront-Antispam-Report: CIP:81.14.233.218;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:esd-s7.esd;PTR:a81-14-233-218.net-htp.de;CAT:NONE;SFS:(39840400004)(376002)(346002)(136003)(396003)(46966006)(36840700001)(336012)(26005)(186003)(6266002)(86362001)(82310400003)(47076005)(36860700001)(83380400001)(1076003)(2616005)(2906002)(4744005)(4326008)(316002)(8936002)(8676002)(5660300002)(70206006)(36756003)(6666004)(42186006)(478600001)(6916009)(54906003)(356005)(70586007)(81166007);DIR:OUT;SFP:1102;
-X-OriginatorOrg: esd.eu
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2021 21:53:19.7462
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f6fd9878-3859-442a-228c-08d96812c086
-X-MS-Exchange-CrossTenant-Id: 5a9c3a1d-52db-4235-b74c-9fd851db2e6b
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5a9c3a1d-52db-4235-b74c-9fd851db2e6b;Ip=[81.14.233.218];Helo=[esd-s7.esd]
-X-MS-Exchange-CrossTenant-AuthSource: VI1EUR06FT054.eop-eur06.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR03MB7448
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This patch fixes the interchanged fetch of the CAN RX and TX error counters
-from the ESD_EV_CAN_ERROR_EXT message. The RX error counter is really in
-struct rx_msg::data[2] and the TX error counter is in struct rx_msg::data[3].
+In support of enabling -Warray-bounds and -Wzero-length-bounds and
+correctly handling run-time memcpy() bounds checking, replace all
+open-coded flexible arrays (i.e. 0-element arrays) in unions with the
+flex_array() helper macro.
 
-Signed-off-by: Stefan Mätje <stefan.maetje@esd.eu>
+This fixes warnings such as:
+
+fs/hpfs/anode.c: In function 'hpfs_add_sector_to_btree':
+fs/hpfs/anode.c:209:27: warning: array subscript 0 is outside the bounds of an interior zero-length array 'struct bplus_internal_node[0]' [-Wzero-length-bounds]
+  209 |    anode->btree.u.internal[0].down = cpu_to_le32(a);
+      |    ~~~~~~~~~~~~~~~~~~~~~~~^~~
+In file included from fs/hpfs/hpfs_fn.h:26,
+                 from fs/hpfs/anode.c:10:
+fs/hpfs/hpfs.h:412:32: note: while referencing 'internal'
+  412 |     struct bplus_internal_node internal[0]; /* (internal) 2-word entries giving
+      |                                ^~~~~~~~
+
+drivers/net/can/usb/etas_es58x/es58x_fd.c: In function 'es58x_fd_tx_can_msg':
+drivers/net/can/usb/etas_es58x/es58x_fd.c:360:35: warning: array subscript 65535 is outside the bounds of an interior zero-length array 'u8[0]' {aka 'unsigned char[]'} [-Wzero-length-bounds]
+  360 |  tx_can_msg = (typeof(tx_can_msg))&es58x_fd_urb_cmd->raw_msg[msg_len];
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from drivers/net/can/usb/etas_es58x/es58x_core.h:22,
+                 from drivers/net/can/usb/etas_es58x/es58x_fd.c:17:
+drivers/net/can/usb/etas_es58x/es58x_fd.h:231:6: note: while referencing 'raw_msg'
+  231 |   u8 raw_msg[0];
+      |      ^~~~~~~
+
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Ayush Sawal <ayush.sawal@chelsio.com>
+Cc: Vinay Kumar Yadav <vinay.yadav@chelsio.com>
+Cc: Rohit Maheshwari <rohitm@chelsio.com>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Kalle Valo <kvalo@codeaurora.org>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Stanislaw Gruszka <stf_xl@wp.pl>
+Cc: Luca Coelho <luciano.coelho@intel.com>
+Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: KP Singh <kpsingh@kernel.org>
+Cc: Johannes Berg <johannes.berg@intel.com>
+Cc: Mordechay Goodstein <mordechay.goodstein@intel.com>
+Cc: Lee Jones <lee.jones@linaro.org>
+Cc: Wolfgang Grandegger <wg@grandegger.com>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
+Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>
+Cc: linux-crypto@vger.kernel.org
+Cc: ath10k@lists.infradead.org
+Cc: linux-wireless@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: linux-scsi@vger.kernel.org
+Cc: linux-can@vger.kernel.org
+Cc: bpf@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/net/can/usb/esd_usb2.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/crypto/chelsio/chcr_crypto.h              | 14 +++++++++-----
+ drivers/net/can/usb/etas_es58x/es581_4.h          |  2 +-
+ drivers/net/can/usb/etas_es58x/es58x_fd.h         |  2 +-
+ drivers/net/wireless/ath/ath10k/htt.h             |  7 +++++--
+ drivers/net/wireless/intel/iwlegacy/commands.h    |  6 ++++--
+ drivers/net/wireless/intel/iwlwifi/dvm/commands.h |  6 ++++--
+ drivers/net/wireless/intel/iwlwifi/fw/api/tx.h    |  6 ++++--
+ drivers/scsi/aic94xx/aic94xx_sds.c                |  6 ++++--
+ fs/hpfs/hpfs.h                                    |  8 ++++----
+ include/linux/filter.h                            |  6 ++++--
+ include/scsi/sas.h                                | 12 ++++++++----
+ include/uapi/rdma/rdma_user_rxe.h                 |  4 ++--
+ include/uapi/sound/asoc.h                         |  4 ++--
+ 13 files changed, 52 insertions(+), 31 deletions(-)
 
-diff --git a/drivers/net/can/usb/esd_usb2.c b/drivers/net/can/usb/esd_usb2.c
-index 7370981e9b34..c6068a251fbe 100644
---- a/drivers/net/can/usb/esd_usb2.c
-+++ b/drivers/net/can/usb/esd_usb2.c
-@@ -224,8 +224,8 @@ static void esd_usb2_rx_event(struct esd_usb2_net_priv *priv,
- 	if (id == ESD_EV_CAN_ERROR_EXT) {
- 		u8 state = msg->msg.rx.data[0];
- 		u8 ecc = msg->msg.rx.data[1];
--		u8 txerr = msg->msg.rx.data[2];
--		u8 rxerr = msg->msg.rx.data[3];
-+		u8 rxerr = msg->msg.rx.data[2];
-+		u8 txerr = msg->msg.rx.data[3];
+diff --git a/drivers/crypto/chelsio/chcr_crypto.h b/drivers/crypto/chelsio/chcr_crypto.h
+index e89f9e0094b4..c7816c83e324 100644
+--- a/drivers/crypto/chelsio/chcr_crypto.h
++++ b/drivers/crypto/chelsio/chcr_crypto.h
+@@ -222,8 +222,10 @@ struct chcr_authenc_ctx {
+ };
  
- 		skb = alloc_can_err_skb(priv->netdev, &cf);
- 		if (skb == NULL) {
+ struct __aead_ctx {
+-	struct chcr_gcm_ctx gcm[0];
+-	struct chcr_authenc_ctx authenc[];
++	union {
++		DECLARE_FLEX_ARRAY(struct chcr_gcm_ctx, gcm);
++		DECLARE_FLEX_ARRAY(struct chcr_authenc_ctx, authenc);
++	};
+ };
+ 
+ struct chcr_aead_ctx {
+@@ -245,9 +247,11 @@ struct hmac_ctx {
+ };
+ 
+ struct __crypto_ctx {
+-	struct hmac_ctx hmacctx[0];
+-	struct ablk_ctx ablkctx[0];
+-	struct chcr_aead_ctx aeadctx[];
++	union {
++		DECLARE_FLEX_ARRAY(struct hmac_ctx, hmacctx);
++		DECLARE_FLEX_ARRAY(struct ablk_ctx, ablkctx);
++		DECLARE_FLEX_ARRAY(struct chcr_aead_ctx, aeadctx);
++	};
+ };
+ 
+ struct chcr_context {
+diff --git a/drivers/net/can/usb/etas_es58x/es581_4.h b/drivers/net/can/usb/etas_es58x/es581_4.h
+index 4bc60a6df697..667ecb77168c 100644
+--- a/drivers/net/can/usb/etas_es58x/es581_4.h
++++ b/drivers/net/can/usb/etas_es58x/es581_4.h
+@@ -192,7 +192,7 @@ struct es581_4_urb_cmd {
+ 		struct es581_4_rx_cmd_ret rx_cmd_ret;
+ 		__le64 timestamp;
+ 		u8 rx_cmd_ret_u8;
+-		u8 raw_msg[0];
++		DECLARE_FLEX_ARRAY(u8, raw_msg);
+ 	} __packed;
+ 
+ 	__le16 reserved_for_crc16_do_not_use;
+diff --git a/drivers/net/can/usb/etas_es58x/es58x_fd.h b/drivers/net/can/usb/etas_es58x/es58x_fd.h
+index ee18a87e40c0..e33003f96e5e 100644
+--- a/drivers/net/can/usb/etas_es58x/es58x_fd.h
++++ b/drivers/net/can/usb/etas_es58x/es58x_fd.h
+@@ -228,7 +228,7 @@ struct es58x_fd_urb_cmd {
+ 		struct es58x_fd_tx_ack_msg tx_ack_msg;
+ 		__le64 timestamp;
+ 		__le32 rx_cmd_ret_le32;
+-		u8 raw_msg[0];
++		DECLARE_FLEX_ARRAY(u8, raw_msg);
+ 	} __packed;
+ 
+ 	__le16 reserved_for_crc16_do_not_use;
+diff --git a/drivers/net/wireless/ath/ath10k/htt.h b/drivers/net/wireless/ath/ath10k/htt.h
+index ec689e3ce48a..a6de08d3bf4a 100644
+--- a/drivers/net/wireless/ath/ath10k/htt.h
++++ b/drivers/net/wireless/ath/ath10k/htt.h
+@@ -1674,8 +1674,11 @@ struct htt_tx_fetch_ind {
+ 	__le32 token;
+ 	__le16 num_resp_ids;
+ 	__le16 num_records;
+-	__le32 resp_ids[0]; /* ath10k_htt_get_tx_fetch_ind_resp_ids() */
+-	struct htt_tx_fetch_record records[];
++	union {
++		/* ath10k_htt_get_tx_fetch_ind_resp_ids() */
++		DECLARE_FLEX_ARRAY(__le32, resp_ids);
++		DECLARE_FLEX_ARRAY(struct htt_tx_fetch_record, records);
++	};
+ } __packed;
+ 
+ static inline void *
+diff --git a/drivers/net/wireless/intel/iwlegacy/commands.h b/drivers/net/wireless/intel/iwlegacy/commands.h
+index 89c6671b32bc..4a97310f8fee 100644
+--- a/drivers/net/wireless/intel/iwlegacy/commands.h
++++ b/drivers/net/wireless/intel/iwlegacy/commands.h
+@@ -1408,8 +1408,10 @@ struct il3945_tx_cmd {
+ 	 * MAC header goes here, followed by 2 bytes padding if MAC header
+ 	 * length is 26 or 30 bytes, followed by payload data
+ 	 */
+-	u8 payload[0];
+-	struct ieee80211_hdr hdr[];
++	union {
++		DECLARE_FLEX_ARRAY(u8, payload);
++		DECLARE_FLEX_ARRAY(struct ieee80211_hdr, hdr);
++	};
+ } __packed;
+ 
+ /*
+diff --git a/drivers/net/wireless/intel/iwlwifi/dvm/commands.h b/drivers/net/wireless/intel/iwlwifi/dvm/commands.h
+index 235c7a2e3483..75a4b8e26232 100644
+--- a/drivers/net/wireless/intel/iwlwifi/dvm/commands.h
++++ b/drivers/net/wireless/intel/iwlwifi/dvm/commands.h
+@@ -1251,8 +1251,10 @@ struct iwl_tx_cmd {
+ 	 * MAC header goes here, followed by 2 bytes padding if MAC header
+ 	 * length is 26 or 30 bytes, followed by payload data
+ 	 */
+-	u8 payload[0];
+-	struct ieee80211_hdr hdr[];
++	union {
++		DECLARE_FLEX_ARRAY(u8, payload);
++		DECLARE_FLEX_ARRAY(struct ieee80211_hdr, hdr);
++	};
+ } __packed;
+ 
+ /*
+diff --git a/drivers/net/wireless/intel/iwlwifi/fw/api/tx.h b/drivers/net/wireless/intel/iwlwifi/fw/api/tx.h
+index 24e4a82a55da..66c5487e857e 100644
+--- a/drivers/net/wireless/intel/iwlwifi/fw/api/tx.h
++++ b/drivers/net/wireless/intel/iwlwifi/fw/api/tx.h
+@@ -713,8 +713,10 @@ struct iwl_mvm_compressed_ba_notif {
+ 	__le32 tx_rate;
+ 	__le16 tfd_cnt;
+ 	__le16 ra_tid_cnt;
+-	struct iwl_mvm_compressed_ba_ratid ra_tid[0];
+-	struct iwl_mvm_compressed_ba_tfd tfd[];
++	union {
++		DECLARE_FLEX_ARRAY(struct iwl_mvm_compressed_ba_ratid, ra_tid);
++		DECLARE_FLEX_ARRAY(struct iwl_mvm_compressed_ba_tfd, tfd);
++	};
+ } __packed; /* COMPRESSED_BA_RES_API_S_VER_4 */
+ 
+ /**
+diff --git a/drivers/scsi/aic94xx/aic94xx_sds.c b/drivers/scsi/aic94xx/aic94xx_sds.c
+index 46815e65f7a4..5def83c88f13 100644
+--- a/drivers/scsi/aic94xx/aic94xx_sds.c
++++ b/drivers/scsi/aic94xx/aic94xx_sds.c
+@@ -517,8 +517,10 @@ struct asd_ms_conn_map {
+ 	u8    num_nodes;
+ 	u8    usage_model_id;
+ 	u32   _resvd;
+-	struct asd_ms_conn_desc conn_desc[0];
+-	struct asd_ms_node_desc node_desc[];
++	union {
++		DECLARE_FLEX_ARRAY(struct asd_ms_conn_desc, conn_desc);
++		DECLARE_FLEX_ARRAY(struct asd_ms_node_desc, node_desc);
++	};
+ } __attribute__ ((packed));
+ 
+ struct asd_ctrla_phy_entry {
+diff --git a/fs/hpfs/hpfs.h b/fs/hpfs/hpfs.h
+index d92c4af3e1b4..281dec8f636b 100644
+--- a/fs/hpfs/hpfs.h
++++ b/fs/hpfs/hpfs.h
+@@ -409,10 +409,10 @@ struct bplus_header
+   __le16 first_free;			/* offset from start of header to
+ 					   first free node in array */
+   union {
+-    struct bplus_internal_node internal[0]; /* (internal) 2-word entries giving
+-					       subtree pointers */
+-    struct bplus_leaf_node external[0];	    /* (external) 3-word entries giving
+-					       sector runs */
++	/* (internal) 2-word entries giving subtree pointers */
++	DECLARE_FLEX_ARRAY(struct bplus_internal_node, internal);
++	/* (external) 3-word entries giving sector runs */
++	DECLARE_FLEX_ARRAY(struct bplus_leaf_node, external);
+   } u;
+ };
+ 
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 472f97074da0..5ca52bfa5868 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -572,8 +572,10 @@ struct bpf_prog {
+ 	struct bpf_prog_aux	*aux;		/* Auxiliary fields */
+ 	struct sock_fprog_kern	*orig_prog;	/* Original BPF program */
+ 	/* Instructions for interpreter */
+-	struct sock_filter	insns[0];
+-	struct bpf_insn		insnsi[];
++	union {
++		DECLARE_FLEX_ARRAY(struct sock_filter, insns);
++		DECLARE_FLEX_ARRAY(struct bpf_insn, insnsi);
++	};
+ };
+ 
+ struct sk_filter {
+diff --git a/include/scsi/sas.h b/include/scsi/sas.h
+index 4726c1bbec65..64154c1fed02 100644
+--- a/include/scsi/sas.h
++++ b/include/scsi/sas.h
+@@ -323,8 +323,10 @@ struct ssp_response_iu {
+ 	__be32 sense_data_len;
+ 	__be32 response_data_len;
+ 
+-	u8     resp_data[0];
+-	u8     sense_data[];
++	union {
++		DECLARE_FLEX_ARRAY(u8, resp_data);
++		DECLARE_FLEX_ARRAY(u8, sense_data);
++	};
+ } __attribute__ ((packed));
+ 
+ struct ssp_command_iu {
+@@ -554,8 +556,10 @@ struct ssp_response_iu {
+ 	__be32 sense_data_len;
+ 	__be32 response_data_len;
+ 
+-	u8     resp_data[0];
+-	u8     sense_data[];
++	union {
++		DECLARE_FLEX_ARRAY(u8, resp_data);
++		DECLARE_FLEX_ARRAY(u8, sense_data);
++	};
+ } __attribute__ ((packed));
+ 
+ struct ssp_command_iu {
+diff --git a/include/uapi/rdma/rdma_user_rxe.h b/include/uapi/rdma/rdma_user_rxe.h
+index e283c2220aba..040752c99ec9 100644
+--- a/include/uapi/rdma/rdma_user_rxe.h
++++ b/include/uapi/rdma/rdma_user_rxe.h
+@@ -141,8 +141,8 @@ struct rxe_dma_info {
+ 	__u32			sge_offset;
+ 	__u32			reserved;
+ 	union {
+-		__u8		inline_data[0];
+-		struct rxe_sge	sge[0];
++		__DECLARE_FLEX_ARRAY(u8, inline_data);
++		__DECLARE_FLEX_ARRAY(struct rxe_sge, sge);
+ 	};
+ };
+ 
+diff --git a/include/uapi/sound/asoc.h b/include/uapi/sound/asoc.h
+index da61398b1f8f..053949287ce8 100644
+--- a/include/uapi/sound/asoc.h
++++ b/include/uapi/sound/asoc.h
+@@ -240,8 +240,8 @@ struct snd_soc_tplg_vendor_array {
+ struct snd_soc_tplg_private {
+ 	__le32 size;	/* in bytes of private data */
+ 	union {
+-		char data[0];
+-		struct snd_soc_tplg_vendor_array array[0];
++		__DECLARE_FLEX_ARRAY(char, data);
++		__DECLARE_FLEX_ARRAY(struct snd_soc_tplg_vendor_array, array);
+ 	};
+ } __attribute__((packed));
+ 
 -- 
-2.25.1
+2.30.2
 
