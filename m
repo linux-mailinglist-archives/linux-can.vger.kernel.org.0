@@ -2,78 +2,44 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37EA53F826A
-	for <lists+linux-can@lfdr.de>; Thu, 26 Aug 2021 08:26:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B41123F8297
+	for <lists+linux-can@lfdr.de>; Thu, 26 Aug 2021 08:43:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239257AbhHZG1P (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 26 Aug 2021 02:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60898 "EHLO
+        id S239566AbhHZGoE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 26 Aug 2021 02:44:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239220AbhHZG1P (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 26 Aug 2021 02:27:15 -0400
+        with ESMTP id S239112AbhHZGoD (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 26 Aug 2021 02:44:03 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40E8BC061757
-        for <linux-can@vger.kernel.org>; Wed, 25 Aug 2021 23:26:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F38C061757
+        for <linux-can@vger.kernel.org>; Wed, 25 Aug 2021 23:43:16 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1mJ8pO-0006Yt-6y; Thu, 26 Aug 2021 08:25:30 +0200
+        id 1mJ96X-000885-PP; Thu, 26 Aug 2021 08:43:13 +0200
 Received: from pengutronix.de (2a03-f580-87bc-d400-b2ee-1fdd-6b26-f446.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:b2ee:1fdd:6b26:f446])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id AB6A066FE3E;
-        Thu, 26 Aug 2021 06:24:53 +0000 (UTC)
-Date:   Thu, 26 Aug 2021 08:24:52 +0200
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 8295C66FF4C;
+        Thu, 26 Aug 2021 06:43:12 +0000 (UTC)
+Date:   Thu, 26 Aug 2021 08:43:11 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Ayush Sawal <ayush.sawal@chelsio.com>,
-        Vinay Kumar Yadav <vinay.yadav@chelsio.com>,
-        Rohit Maheshwari <rohitm@chelsio.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Stanislaw Gruszka <stf_xl@wp.pl>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Mordechay Goodstein <mordechay.goodstein@intel.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>,
-        linux-crypto@vger.kernel.org, ath10k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-can@vger.kernel.org,
-        bpf@vger.kernel.org, Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Keith Packard <keithp@keithp.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        clang-built-linux@googlegroups.com, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2 2/5] treewide: Replace open-coded flex arrays in unions
-Message-ID: <20210826062452.jekmoo43f4xu5jxk@pengutronix.de>
-References: <20210826050458.1540622-1-keescook@chromium.org>
- <20210826050458.1540622-3-keescook@chromium.org>
+To:     Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>
+Cc:     linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH 0/1] can: usb: esd_usb2: Fix the interchange of CAN TX
+ and RX error counters
+Message-ID: <20210826064311.c3wrmxivzuppb24x@pengutronix.de>
+References: <20210825215227.4947-1-stefan.maetje@esd.eu>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mnmsc5sxlpdvk3xn"
+        protocol="application/pgp-signature"; boundary="5suf7qa6qtsi6bcm"
 Content-Disposition: inline
-In-Reply-To: <20210826050458.1540622-3-keescook@chromium.org>
+In-Reply-To: <20210825215227.4947-1-stefan.maetje@esd.eu>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -83,100 +49,41 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---mnmsc5sxlpdvk3xn
+--5suf7qa6qtsi6bcm
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 25.08.2021 22:04:55, Kees Cook wrote:
-> In support of enabling -Warray-bounds and -Wzero-length-bounds and
-> correctly handling run-time memcpy() bounds checking, replace all
-> open-coded flexible arrays (i.e. 0-element arrays) in unions with the
-> flex_array() helper macro.
+On 25.08.2021 23:52:26, Stefan M=C3=A4tje wrote:
+> In the driver for the esd CAN-USB/2 the CAN RX and TX error counters
+> were fetched interchanged from the ESD_EV_CAN_ERROR_EXT message and
+> therefore delivered wrong to the user.
 >=20
-> This fixes warnings such as:
+> To verify the now correct behavior call the candump tool to print CAN
+> error frames with extra infos (including CAN RX and TX error counters)
+> like "candump -e -x can4,0:0,#fffffffff".
+> Then send a CAN frame to the open (no other node) but terminated CAN
+> bus. The TX error counter must increase by 8 for each transmit attempt
+> until CAN_STATE_ERROR_PASSIVE is reached.
 >=20
-> fs/hpfs/anode.c: In function 'hpfs_add_sector_to_btree':
-> fs/hpfs/anode.c:209:27: warning: array subscript 0 is outside the bounds =
-of an interior zero-length array 'struct bplus_internal_node[0]' [-Wzero-le=
-ngth-bounds]
->   209 |    anode->btree.u.internal[0].down =3D cpu_to_le32(a);
->       |    ~~~~~~~~~~~~~~~~~~~~~~~^~~
-> In file included from fs/hpfs/hpfs_fn.h:26,
->                  from fs/hpfs/anode.c:10:
-> fs/hpfs/hpfs.h:412:32: note: while referencing 'internal'
->   412 |     struct bplus_internal_node internal[0]; /* (internal) 2-word =
-entries giving
->       |                                ^~~~~~~~
+> Stefan M=C3=A4tje (1):
+>   can: usb: esd_usb2: Fix the interchange of the CAN RX and TX error
+>     counters.
 >=20
-> drivers/net/can/usb/etas_es58x/es58x_fd.c: In function 'es58x_fd_tx_can_m=
-sg':
-> drivers/net/can/usb/etas_es58x/es58x_fd.c:360:35: warning: array subscrip=
-t 65535 is outside the bounds of an interior zero-length array 'u8[0]' {aka=
- 'unsigned char[]'} [-Wzero-length-bounds]
->   360 |  tx_can_msg =3D (typeof(tx_can_msg))&es58x_fd_urb_cmd->raw_msg[ms=
-g_len];
->       |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~
-> In file included from drivers/net/can/usb/etas_es58x/es58x_core.h:22,
->                  from drivers/net/can/usb/etas_es58x/es58x_fd.c:17:
-> drivers/net/can/usb/etas_es58x/es58x_fd.h:231:6: note: while referencing =
-'raw_msg'
->   231 |   u8 raw_msg[0];
->       |      ^~~~~~~
->=20
-> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Ayush Sawal <ayush.sawal@chelsio.com>
-> Cc: Vinay Kumar Yadav <vinay.yadav@chelsio.com>
-> Cc: Rohit Maheshwari <rohitm@chelsio.com>
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Kalle Valo <kvalo@codeaurora.org>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Stanislaw Gruszka <stf_xl@wp.pl>
-> Cc: Luca Coelho <luciano.coelho@intel.com>
-> Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-> Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-> Cc: Alexei Starovoitov <ast@kernel.org>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: Andrii Nakryiko <andrii@kernel.org>
-> Cc: Martin KaFai Lau <kafai@fb.com>
-> Cc: Song Liu <songliubraving@fb.com>
-> Cc: Yonghong Song <yhs@fb.com>
-> Cc: John Fastabend <john.fastabend@gmail.com>
-> Cc: KP Singh <kpsingh@kernel.org>
-> Cc: Johannes Berg <johannes.berg@intel.com>
-> Cc: Mordechay Goodstein <mordechay.goodstein@intel.com>
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Cc: Wolfgang Grandegger <wg@grandegger.com>
-> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-> Cc: Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
-> Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> Cc: Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>
-> Cc: linux-crypto@vger.kernel.org
-> Cc: ath10k@lists.infradead.org
-> Cc: linux-wireless@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-scsi@vger.kernel.org
-> Cc: linux-can@vger.kernel.org
-> Cc: bpf@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  drivers/net/can/usb/etas_es58x/es581_4.h          |  2 +-
->  drivers/net/can/usb/etas_es58x/es58x_fd.h         |  2 +-
+>  drivers/net/can/usb/esd_usb2.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-For the can drivers:
+Applied to linux-can/testing.
 
-Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
-
-BTW: Is there opportunity for conversion, too?
-
-| drivers/net/can/peak_canfd/peak_pciefd_main.c:146:32: warning: array of f=
-lexible structures
-
-regards,
+Thanks,
 Marc
+
+> base-commit: cbe8cd7d83e251bff134a57ea4b6378db992ad82
+
+BTW: Thanks for including a base-commit. Your base is
+linux-can-next-for-5.15-20210825, but this is a bug-fix patch. It should
+be based on the latest can pull request, can/master or net/master
+instead. It doesn't matter here, as the patch applies without problems.
 
 --=20
 Pengutronix e.K.                 | Marc Kleine-Budde           |
@@ -184,19 +91,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---mnmsc5sxlpdvk3xn
+--5suf7qa6qtsi6bcm
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmEnM7EACgkQqclaivrt
-76kN7Af/X372HVlb+QqkjppsRpwpNYqhBsuZx17Ly+If1NlY7bxjdbRsOVskRV0a
-zEmr21eyBZFMHhrQ4+CPzjkv8AMTA9dfjFViAemjlC9mP6NR63oty7R+Ae0a/pbe
-T0EDxGooHMTU7H702xrzo8CzTCJM01TTmriW+YM3pZC4DfhNfqYFVx6hgGrah9U5
-HWD8HH3NTi9GLBk8caCqNlZVNv7lJbM7ygt5hxm2EdEy+aJGezlpS4LMpZScF9c9
-p7YOev4usm+X08379kFnX7T8IympuH51b4uhaUIbsekkjACT5rJtj3cKbupp0i2X
-X8w2WKQ8P+u+4VA9+tgBqpt731LPIA==
-=1VPl
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmEnN/wACgkQqclaivrt
+76l81Af/Rv8oQATPJBM2ThVeUa4zLmHN4sVf2IBLdaRrG323fQHgl05JiGUgU+pB
+IHiF6oCLC5oTYtJSDXPZ3L7Dj6rXh4J89L9KsDo2oWa+XcD23iS+vjz2T3cZKUc3
+2CWXKjuOK8S/cNiVn9nYFG0BiJAILbNP6ED/uFzHLjSB5k8XJ5l4jM/Ch49KyE9x
+t1u/Omv/47wqt20ehtko9XCbEykWoSO+e10WeT4BLwGXGOCGtWmxNTyqpQVd6Zqp
+9IICTFM+1I8e+FzRolPFz4UgYrEp7I98owynxKGRxgcUgIo2hfbmJR6PL4u8EOX3
+IY8qyqdp6TXbEBKmj0V7NTJ3Ps2sZg==
+=dOHP
 -----END PGP SIGNATURE-----
 
---mnmsc5sxlpdvk3xn--
+--5suf7qa6qtsi6bcm--
