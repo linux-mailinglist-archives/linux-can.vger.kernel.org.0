@@ -2,72 +2,198 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FCA33F926F
-	for <lists+linux-can@lfdr.de>; Fri, 27 Aug 2021 04:42:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20C043F9C1D
+	for <lists+linux-can@lfdr.de>; Fri, 27 Aug 2021 18:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244076AbhH0CmM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 26 Aug 2021 22:42:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57406 "EHLO
+        id S245472AbhH0QJM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 27 Aug 2021 12:09:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244056AbhH0CmK (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 26 Aug 2021 22:42:10 -0400
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8827C061757
-        for <linux-can@vger.kernel.org>; Thu, 26 Aug 2021 19:41:22 -0700 (PDT)
-Received: by mail-io1-xd43.google.com with SMTP id g9so6586656ioq.11
-        for <linux-can@vger.kernel.org>; Thu, 26 Aug 2021 19:41:22 -0700 (PDT)
+        with ESMTP id S245346AbhH0QJM (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 27 Aug 2021 12:09:12 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39483C0613D9
+        for <linux-can@vger.kernel.org>; Fri, 27 Aug 2021 09:08:23 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id j1so4847489pjv.3
+        for <linux-can@vger.kernel.org>; Fri, 27 Aug 2021 09:08:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=JcCnNkxtHweN6ApEPCItRB3oqJyAr4ORMY/4f0Zly6Y=;
-        b=hePZR6l3xkStPPzaZuEEI5aAsDiq5dQtzNWNyjWzrepGL3zDg5RRM5jmzv3hA8Qe8s
-         U5eUSbP2BQ7A45zN3gKzMQbxc2I7TBQ+WGjJw07Ca+N4SD7OgsCT4ZKEmx6x2fsD6OqX
-         sDvMxBGlSNKZbvz0OZuVA0WFxvTs+J+u862pdllDKBdFdGgib9ZiPj9FP+K5yMejz9W4
-         OuAlWF0fiIbSrR3GjuzqKB/+JO2AcrVVCdco4KgUAztF/I1ojRBAGLgKYgf3zRYK3mCq
-         atYBVOANeHK8VXipDb5RywYKh0b5pA6B9IAIIuUon7ytDHQT/+sb7hMNDgkjIhtqobzS
-         9yGw==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=3BOREjcUGdekjt/HzJv8JPNZZV+WRxv1ga5r5CaLfMg=;
+        b=LgSMkv8yRY6NcFjGg/J63Y2GpE2F2TGefzma4o9g5HEhtSAND6DhVddNHYYks45NsN
+         vl/76kMWgkZPlkAHgvJTPVgljvSFRJ7Ui/2QED3sjgSLOAoCwiEAsmgZNMGT/LdlCbMz
+         6XWQqYT5qF5nKBsTivPFzvO7iyOTn/hubgj2U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=JcCnNkxtHweN6ApEPCItRB3oqJyAr4ORMY/4f0Zly6Y=;
-        b=ISSJs84002J4uzFmxle0ZOMFopGXtoakkrjh5COaCQcws/6O0Dai/nGgfkexTcCBqF
-         KpbumgH1B14AaNTgGfKwneMb2y7zjLcSCNNfm07q4eX2DfwwSrr8QQWym96HenNXmPzx
-         lkVxqYlTon05meT1tWZIDZpjIXzo7+QW4L7AldyAi0b0dikKukjriYPM4oLhm4Jeufku
-         7t0M2J7IwV+KSdtMtz3TqGtV7CXS2wavDF/5RDsKaMTpXhPdk/d4QtpcvW9WoaQOxaVT
-         dwH9yki7rt5fVuCRkbjKuIpY7nrbJYi9ZgBwSR1yIWPSFl34XY0K03CPKL2RV+/JjJbx
-         yX9w==
-X-Gm-Message-State: AOAM533T/tjJs9ZMSMlDHkV33N90Rbj+40xhAw1jwswQ7Pxs/fYHScC6
-        zvWqAvQInhMqzT1Wj362HEs98UOIO9L0fT7BZt0=
-X-Google-Smtp-Source: ABdhPJy2KvQ1y9lDWFCt4tUkVLyCqygzMboFgevi6gaXvHUugKzDyPWXP8Dr7Y84OXabbw7jN7/E9JfzCpuZS4GffJY=
-X-Received: by 2002:a05:6602:26cb:: with SMTP id g11mr5610199ioo.110.1630032081852;
- Thu, 26 Aug 2021 19:41:21 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3BOREjcUGdekjt/HzJv8JPNZZV+WRxv1ga5r5CaLfMg=;
+        b=UWv4vC35rbbZ8jEvoFGv4AZiZFN1pEGmMhj7KWSyL/WQY1z1/gGPygVZcYIXXFGPgz
+         LKhq1X6s8MmG1AfbmEN4QhbJl6yqfXRuWW8XwMYjsSJNOnM71Iz9o+qI+bdGIoTfOXiL
+         5hY3ZaZPKum4ltxNlaOZo3xu6UQhUMpPdQvx5S5l0RuZ4HCTPb91sKclJCtaYAvr/F9x
+         dhgIqbHEhYKCNqQ2v6xUMJveJlIkXo/ggvwKR21EeDAD1Uf1GyJaA5ZxYKxzI+KJyTDF
+         7qff1yK6GSDFjg64CerUolBI1Zfe3Rk8Wp1KKdr1g6o/20Dp6VSo6rmTAZDQ777lDT00
+         8VGw==
+X-Gm-Message-State: AOAM532+DUE5qA4IWExCJDUVdwJsl4wgsyS9DuPf0sljixGd6Ymxk2AU
+        /S3AJNyo7OAT7zcu+tD4u7vDTQ==
+X-Google-Smtp-Source: ABdhPJz9b21uTH+fuc32V76US0q/VM+qkB83+nJU8q4xHvgfI8nk8UEzE23GCJMggnW3rTr9tTvrxA==
+X-Received: by 2002:a17:90b:357:: with SMTP id fh23mr8796487pjb.140.1630080502650;
+        Fri, 27 Aug 2021 09:08:22 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id h9sm13930821pjg.9.2021.08.27.09.08.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Aug 2021 09:08:21 -0700 (PDT)
+Date:   Fri, 27 Aug 2021 09:08:19 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ayush Sawal <ayush.sawal@chelsio.com>,
+        Vinay Kumar Yadav <vinay.yadav@chelsio.com>,
+        Rohit Maheshwari <rohitm@chelsio.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Stanislaw Gruszka <stf_xl@wp.pl>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Mordechay Goodstein <mordechay.goodstein@intel.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>,
+        linux-crypto@vger.kernel.org, ath10k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-can@vger.kernel.org,
+        bpf@vger.kernel.org, Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Keith Packard <keithp@keithp.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        clang-built-linux@googlegroups.com, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2 2/5] treewide: Replace open-coded flex arrays in unions
+Message-ID: <202108270906.7C85982525@keescook>
+References: <20210826050458.1540622-1-keescook@chromium.org>
+ <20210826050458.1540622-3-keescook@chromium.org>
+ <20210826062452.jekmoo43f4xu5jxk@pengutronix.de>
 MIME-Version: 1.0
-Received: by 2002:a02:c6bc:0:0:0:0:0 with HTTP; Thu, 26 Aug 2021 19:41:21
- -0700 (PDT)
-From:   john williams <jw626521@gmail.com>
-Date:   Thu, 26 Aug 2021 14:41:21 -1200
-Message-ID: <CAA3cKDMLeZp=ywZ5d2MXfHebbUuYzsTJ67QeWGpBio58+vGPUA@mail.gmail.com>
-Subject: CONFIRM YOUR DETAILS TO ENABLE US START,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210826062452.jekmoo43f4xu5jxk@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Dear Beneficiary,
+On Thu, Aug 26, 2021 at 08:24:52AM +0200, Marc Kleine-Budde wrote:
+> On 25.08.2021 22:04:55, Kees Cook wrote:
+> > In support of enabling -Warray-bounds and -Wzero-length-bounds and
+> > correctly handling run-time memcpy() bounds checking, replace all
+> > open-coded flexible arrays (i.e. 0-element arrays) in unions with the
+> > flex_array() helper macro.
+> > 
+> > This fixes warnings such as:
+> > 
+> > fs/hpfs/anode.c: In function 'hpfs_add_sector_to_btree':
+> > fs/hpfs/anode.c:209:27: warning: array subscript 0 is outside the bounds of an interior zero-length array 'struct bplus_internal_node[0]' [-Wzero-length-bounds]
+> >   209 |    anode->btree.u.internal[0].down = cpu_to_le32(a);
+> >       |    ~~~~~~~~~~~~~~~~~~~~~~~^~~
+> > In file included from fs/hpfs/hpfs_fn.h:26,
+> >                  from fs/hpfs/anode.c:10:
+> > fs/hpfs/hpfs.h:412:32: note: while referencing 'internal'
+> >   412 |     struct bplus_internal_node internal[0]; /* (internal) 2-word entries giving
+> >       |                                ^~~~~~~~
+> > 
+> > drivers/net/can/usb/etas_es58x/es58x_fd.c: In function 'es58x_fd_tx_can_msg':
+> > drivers/net/can/usb/etas_es58x/es58x_fd.c:360:35: warning: array subscript 65535 is outside the bounds of an interior zero-length array 'u8[0]' {aka 'unsigned char[]'} [-Wzero-length-bounds]
+> >   360 |  tx_can_msg = (typeof(tx_can_msg))&es58x_fd_urb_cmd->raw_msg[msg_len];
+> >       |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > In file included from drivers/net/can/usb/etas_es58x/es58x_core.h:22,
+> >                  from drivers/net/can/usb/etas_es58x/es58x_fd.c:17:
+> > drivers/net/can/usb/etas_es58x/es58x_fd.h:231:6: note: while referencing 'raw_msg'
+> >   231 |   u8 raw_msg[0];
+> >       |      ^~~~~~~
+> > 
+> > Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Ayush Sawal <ayush.sawal@chelsio.com>
+> > Cc: Vinay Kumar Yadav <vinay.yadav@chelsio.com>
+> > Cc: Rohit Maheshwari <rohitm@chelsio.com>
+> > Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> > Cc: "David S. Miller" <davem@davemloft.net>
+> > Cc: Kalle Valo <kvalo@codeaurora.org>
+> > Cc: Jakub Kicinski <kuba@kernel.org>
+> > Cc: Stanislaw Gruszka <stf_xl@wp.pl>
+> > Cc: Luca Coelho <luciano.coelho@intel.com>
+> > Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+> > Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+> > Cc: Alexei Starovoitov <ast@kernel.org>
+> > Cc: Daniel Borkmann <daniel@iogearbox.net>
+> > Cc: Andrii Nakryiko <andrii@kernel.org>
+> > Cc: Martin KaFai Lau <kafai@fb.com>
+> > Cc: Song Liu <songliubraving@fb.com>
+> > Cc: Yonghong Song <yhs@fb.com>
+> > Cc: John Fastabend <john.fastabend@gmail.com>
+> > Cc: KP Singh <kpsingh@kernel.org>
+> > Cc: Johannes Berg <johannes.berg@intel.com>
+> > Cc: Mordechay Goodstein <mordechay.goodstein@intel.com>
+> > Cc: Lee Jones <lee.jones@linaro.org>
+> > Cc: Wolfgang Grandegger <wg@grandegger.com>
+> > Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+> > Cc: Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
+> > Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > Cc: Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>
+> > Cc: linux-crypto@vger.kernel.org
+> > Cc: ath10k@lists.infradead.org
+> > Cc: linux-wireless@vger.kernel.org
+> > Cc: netdev@vger.kernel.org
+> > Cc: linux-scsi@vger.kernel.org
+> > Cc: linux-can@vger.kernel.org
+> > Cc: bpf@vger.kernel.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> >  drivers/net/can/usb/etas_es58x/es581_4.h          |  2 +-
+> >  drivers/net/can/usb/etas_es58x/es58x_fd.h         |  2 +-
+> 
+> For the can drivers:
+> 
+> Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
 
-Following your pending fund for years and the delay you imposed in
-receiving it,We have called back your fund to this office as directed
-by the Finance Office and we will be paying you directly through the
-BANK OF AMERICA.(BOA) NEW YORK BRANCH AND ALL YOU NEED NOW IS TO
-RE-CONFIRM YOUR BANKING DETAILS FOR THE TRANSFER IMMEDIATELY WITHOUT
-ANY FURTHER DELAY.
+Thanks!
 
-NOTE THAT WE WILL PAY ALL THE EXPENSES INVOLVED FOR YOU TO RECEIVE
-THIS FUND AND ALL WE NEED FROM YOU IS YOUR CO-OPERATION.
+> BTW: Is there opportunity for conversion, too?
+> 
+> | drivers/net/can/peak_canfd/peak_pciefd_main.c:146:32: warning: array of flexible structures
 
-Send your full details with Banking details to enable us commence the
-transfer process immediately through the BOA BANK IN NEW YORK,USA OR
-DO YOU WANT TO RECEIVE THIS FUND VIA ATM CARD ????????.
+Oh, hrmpf. This isn't a sane use of flex arrays:
 
-John O.Williams.
+
+struct __packed pucan_rx_msg {
+	...
+	__le32	can_id;
+	u8	d[];
+};
+
+struct pciefd_rx_dma {
+        __le32 irq_status;
+        __le32 sys_time_low;
+        __le32 sys_time_high;
+        struct pucan_rx_msg msg[];
+} __packed __aligned(4);
+
+I think that needs to be handled separately. How are you building to get
+that warning, by the way? I haven't seen that in my builds...
+
+-- 
+Kees Cook
