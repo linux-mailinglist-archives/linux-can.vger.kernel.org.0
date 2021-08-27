@@ -2,61 +2,72 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 382C93F8FAC
-	for <lists+linux-can@lfdr.de>; Thu, 26 Aug 2021 22:34:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FCA33F926F
+	for <lists+linux-can@lfdr.de>; Fri, 27 Aug 2021 04:42:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243471AbhHZUep (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 26 Aug 2021 16:34:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36454 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229916AbhHZUeo (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Thu, 26 Aug 2021 16:34:44 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id DC9A260F91;
-        Thu, 26 Aug 2021 20:33:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1630010036;
-        bh=HcJnSY3xITwzNO2duOVAGRP0zMYM1V/J9YMW/ut7EuE=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=L6jEDJ62hPX8QqgmBTbgddsn/DMCkC3os2G2/Wx1yJ4uzmXZ+TdYY44Q3BJbdn0Z+
-         /sBO7H7WcrM0xAhMmjbTfXJaL/wP4mJwPvl4Cn6TKE2JhIZIktiYTyFUGFf31cx0g9
-         6csU6VVSS+irlqo2fBO8Zu9aZNTQuESJp5bxxloIFVg4ykmMJVdVpzWX9QDLkj1VcR
-         0IjfvWvOUO0bi+m48AGFPC4Jm/II4YoyOhwpHCRDdRBojTEXhUrsQm345maXbbaAE/
-         saG0I75w1fOfiTeB0LPsednG2B8uyAw/Q1NAD5np2M+rqrad7MaynCcRgAU0gZSDxv
-         iWjnX5GSWmAfA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id D0F7260972;
-        Thu, 26 Aug 2021 20:33:56 +0000 (UTC)
-Subject: Re: [GIT PULL] Networking for 5.14-rc8
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20210826191017.1345100-1-kuba@kernel.org>
-References: <20210826191017.1345100-1-kuba@kernel.org>
-X-PR-Tracked-List-Id: <bpf.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20210826191017.1345100-1-kuba@kernel.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.14-rc8
-X-PR-Tracked-Commit-Id: 9ebc2758d0bbed951511d1709be0717178ec2660
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 8a2cb8bd064ecb089995469076f3055fbfd0a4c9
-Message-Id: <163001003679.31497.10308151113469684476.pr-tracker-bot@kernel.org>
-Date:   Thu, 26 Aug 2021 20:33:56 +0000
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     torvalds@linux-foundation.org, kuba@kernel.org,
-        davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-can@vger.kernel.org, kvalo@codeaurora.org
+        id S244076AbhH0CmM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 26 Aug 2021 22:42:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57406 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244056AbhH0CmK (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 26 Aug 2021 22:42:10 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8827C061757
+        for <linux-can@vger.kernel.org>; Thu, 26 Aug 2021 19:41:22 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id g9so6586656ioq.11
+        for <linux-can@vger.kernel.org>; Thu, 26 Aug 2021 19:41:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=JcCnNkxtHweN6ApEPCItRB3oqJyAr4ORMY/4f0Zly6Y=;
+        b=hePZR6l3xkStPPzaZuEEI5aAsDiq5dQtzNWNyjWzrepGL3zDg5RRM5jmzv3hA8Qe8s
+         U5eUSbP2BQ7A45zN3gKzMQbxc2I7TBQ+WGjJw07Ca+N4SD7OgsCT4ZKEmx6x2fsD6OqX
+         sDvMxBGlSNKZbvz0OZuVA0WFxvTs+J+u862pdllDKBdFdGgib9ZiPj9FP+K5yMejz9W4
+         OuAlWF0fiIbSrR3GjuzqKB/+JO2AcrVVCdco4KgUAztF/I1ojRBAGLgKYgf3zRYK3mCq
+         atYBVOANeHK8VXipDb5RywYKh0b5pA6B9IAIIuUon7ytDHQT/+sb7hMNDgkjIhtqobzS
+         9yGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=JcCnNkxtHweN6ApEPCItRB3oqJyAr4ORMY/4f0Zly6Y=;
+        b=ISSJs84002J4uzFmxle0ZOMFopGXtoakkrjh5COaCQcws/6O0Dai/nGgfkexTcCBqF
+         KpbumgH1B14AaNTgGfKwneMb2y7zjLcSCNNfm07q4eX2DfwwSrr8QQWym96HenNXmPzx
+         lkVxqYlTon05meT1tWZIDZpjIXzo7+QW4L7AldyAi0b0dikKukjriYPM4oLhm4Jeufku
+         7t0M2J7IwV+KSdtMtz3TqGtV7CXS2wavDF/5RDsKaMTpXhPdk/d4QtpcvW9WoaQOxaVT
+         dwH9yki7rt5fVuCRkbjKuIpY7nrbJYi9ZgBwSR1yIWPSFl34XY0K03CPKL2RV+/JjJbx
+         yX9w==
+X-Gm-Message-State: AOAM533T/tjJs9ZMSMlDHkV33N90Rbj+40xhAw1jwswQ7Pxs/fYHScC6
+        zvWqAvQInhMqzT1Wj362HEs98UOIO9L0fT7BZt0=
+X-Google-Smtp-Source: ABdhPJy2KvQ1y9lDWFCt4tUkVLyCqygzMboFgevi6gaXvHUugKzDyPWXP8Dr7Y84OXabbw7jN7/E9JfzCpuZS4GffJY=
+X-Received: by 2002:a05:6602:26cb:: with SMTP id g11mr5610199ioo.110.1630032081852;
+ Thu, 26 Aug 2021 19:41:21 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a02:c6bc:0:0:0:0:0 with HTTP; Thu, 26 Aug 2021 19:41:21
+ -0700 (PDT)
+From:   john williams <jw626521@gmail.com>
+Date:   Thu, 26 Aug 2021 14:41:21 -1200
+Message-ID: <CAA3cKDMLeZp=ywZ5d2MXfHebbUuYzsTJ67QeWGpBio58+vGPUA@mail.gmail.com>
+Subject: CONFIRM YOUR DETAILS TO ENABLE US START,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The pull request you sent on Thu, 26 Aug 2021 12:10:17 -0700:
+Dear Beneficiary,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.14-rc8
+Following your pending fund for years and the delay you imposed in
+receiving it,We have called back your fund to this office as directed
+by the Finance Office and we will be paying you directly through the
+BANK OF AMERICA.(BOA) NEW YORK BRANCH AND ALL YOU NEED NOW IS TO
+RE-CONFIRM YOUR BANKING DETAILS FOR THE TRANSFER IMMEDIATELY WITHOUT
+ANY FURTHER DELAY.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/8a2cb8bd064ecb089995469076f3055fbfd0a4c9
+NOTE THAT WE WILL PAY ALL THE EXPENSES INVOLVED FOR YOU TO RECEIVE
+THIS FUND AND ALL WE NEED FROM YOU IS YOUR CO-OPERATION.
 
-Thank you!
+Send your full details with Banking details to enable us commence the
+transfer process immediately through the BOA BANK IN NEW YORK,USA OR
+DO YOU WANT TO RECEIVE THIS FUND VIA ATM CARD ????????.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+John O.Williams.
