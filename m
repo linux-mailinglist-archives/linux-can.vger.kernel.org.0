@@ -2,128 +2,189 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2FB63FAE6D
-	for <lists+linux-can@lfdr.de>; Sun, 29 Aug 2021 22:34:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5B8A3FAEA8
+	for <lists+linux-can@lfdr.de>; Sun, 29 Aug 2021 23:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232450AbhH2U3T (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 29 Aug 2021 16:29:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58864 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232328AbhH2U3S (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 29 Aug 2021 16:29:18 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174EEC061575
-        for <linux-can@vger.kernel.org>; Sun, 29 Aug 2021 13:28:26 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1mKRPh-0008PR-Hp; Sun, 29 Aug 2021 22:28:21 +0200
-Received: from pengutronix.de (2a03-f580-87bc-d400-50d5-102f-5e46-82bb.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:50d5:102f:5e46:82bb])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 4E70E671B46;
-        Sun, 29 Aug 2021 20:28:20 +0000 (UTC)
-Date:   Sun, 29 Aug 2021 22:28:19 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Sven Schuchmann <schuchmann@schleissheimer.de>,
+        id S236069AbhH2VKf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 29 Aug 2021 17:10:35 -0400
+Received: from mail-eopbgr00092.outbound.protection.outlook.com ([40.107.0.92]:36653
+        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S236020AbhH2VKe (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Sun, 29 Aug 2021 17:10:34 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=S29C1jKXZVWfCCnRUoXvHE5+HrYIATzo/NdOIjVr68M0yKmAH8CRl/A5A1C7NYjRIVCxzt8Z86myhYDaM93utaNu+e2ugSI3okJMDjEN0XSEj8AQbvNw+cjTRn6FsAWgibhecI0cJDbPbnXlVT2RkT4C0cx1ZT/mTUSDLqyFNeRhs17E48IjF4FztmATvwbPANftxKmRd2U4sfhjxATMFq3WDdrqt5RRJcItEIoswVOuhpWDZXDIUaxDp/kgBE1HNTuW99fFeUX+Q+wB5X0U/obgFW7szeQ6kzCmznrX1DTCvdphpVDQQ0oxmvkm+eWyMsToc+3QI/gPfVabqRpjaw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UtrRJqwqjjRqPZkQs9YUMJT3zXdiWp7G+7Qf8e8u9aI=;
+ b=m8Af4fkTL/Rmvwm2Pq3YgP7wEauPMRVnfFsExVP5tNt+vMtxWBk87f5b9xWBaEzYP9ad11CO1cLpdzcXNTzKqXtn45WjdcY50GnizW2PqXHqZ6AW0y+wxBpX332eHLHRALprRA9vr9R5P0NDBFy2AsGXlc0p/Agw2YWjBs3NrinyqKsmEt0fHMKvws+f1eF6bj6zQOj+SxCBt9wTXzuI2iHuNosP3NitODnr7FvvKeu5FonJSvxNOK/bEaEZy/2AT6zLjWtXXHO0PZEB67fn9qczRPN57yLm9KGPRq2/n01vEEBKaIQGZ2NagmuU06yOujWxn11kOLCBgddYv7UK5A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=schleissheimer.de; dmarc=pass action=none
+ header.from=schleissheimer.de; dkim=pass header.d=schleissheimer.de; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=schleissheimer.onmicrosoft.com; s=selector1-schleissheimer-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UtrRJqwqjjRqPZkQs9YUMJT3zXdiWp7G+7Qf8e8u9aI=;
+ b=gxlNdiULzOEex62c0gJBhDOYQBzm0RJkZ7edcchMMRQFtBv24Nx4W74avRqg4xojMvsq3GxsmFixrXo0mHddUpYm+1E+vIWKdmudfzpORvuWM/gnqpOWjk2ywkTiHVXFIrLwCXaE0mxvJcTbY9S3O7tG7B3CfyMcM1SpL6H+bJM=
+Received: from DB8P190MB0634.EURP190.PROD.OUTLOOK.COM (2603:10a6:10:12d::21)
+ by DB8P190MB0730.EURP190.PROD.OUTLOOK.COM (2603:10a6:10:12f::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4457.24; Sun, 29 Aug
+ 2021 21:09:38 +0000
+Received: from DB8P190MB0634.EURP190.PROD.OUTLOOK.COM
+ ([fe80::396d:bf7c:32d7:426]) by DB8P190MB0634.EURP190.PROD.OUTLOOK.COM
+ ([fe80::396d:bf7c:32d7:426%6]) with mapi id 15.20.4457.024; Sun, 29 Aug 2021
+ 21:09:38 +0000
+From:   Sven Schuchmann <schuchmann@schleissheimer.de>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>,
         "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Subject: Re: [PATCH] can: isotp: omit unintended hrtimer restart on socket
- release
-Message-ID: <20210829202819.tdjkhihpewglytn5@pengutronix.de>
+CC:     Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: AW: AW: AW: [PATCH] can: isotp: omit unintended hrtimer restart on
+ socket release
+Thread-Topic: AW: AW: [PATCH] can: isotp: omit unintended hrtimer restart on
+ socket release
+Thread-Index: AQHXZGiarGqUjPpuCESr46IsZOKw9auJVcCAgAFwdYCAAHML8IAAIu6AgAALcxA=
+Date:   Sun, 29 Aug 2021 21:09:38 +0000
+Message-ID: <DB8P190MB0634C90D304A2AA97F481738D9CA9@DB8P190MB0634.EURP190.PROD.OUTLOOK.COM>
 References: <20210618173713.2296-1-socketcan@hartkopp.net>
  <DB8P190MB06343614CAD6B48C3EA0EF00D9C99@DB8P190MB0634.EURP190.PROD.OUTLOOK.COM>
  <abc23fd0-9bb1-1cc7-fc67-0a3298673b86@hartkopp.net>
  <DB8P190MB0634E1A09E060C9A5A539073D9CA9@DB8P190MB0634.EURP190.PROD.OUTLOOK.COM>
  <fa1cac52-73aa-b092-0137-2b1ed734f0ee@hartkopp.net>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="weezsnv3gebq6be4"
-Content-Disposition: inline
 In-Reply-To: <fa1cac52-73aa-b092-0137-2b1ed734f0ee@hartkopp.net>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: hartkopp.net; dkim=none (message not signed)
+ header.d=none;hartkopp.net; dmarc=none action=none
+ header.from=schleissheimer.de;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: f65520c6-0f6d-42e1-b266-08d96b314fc9
+x-ms-traffictypediagnostic: DB8P190MB0730:
+x-microsoft-antispam-prvs: <DB8P190MB073095DAB4C679B6F1A7424DD9CA9@DB8P190MB0730.EURP190.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:3513;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: V1jo5y1voN0ongmwcHcbwruJVFfao9vEjcVzLCRYQsTO8dUjlDDY8YOPjc4vfSXsvdMchaBWsLWrit7Hs5IalobUTCJiyo6gI1SmD/CRlFzMiM7HUoM42b/GAOwFGRxX9CQXdWi2BRPnkllUnR5GL/jZcaue5kNIEjYtlbyXPCN+kp3p53NfWzAeSETnEWblquGPbCT6BWqCaYiL3+OidJZLLBdfazHd2+q3XVuSAbp5BK419OI7HvaDBO1aXL0jt7rj1vG065peMLScNPnj9Xm+1r/Uyewhp3U37bKdOWE5Mgqq001h4tbdRe3e3sE9oNfv2W8DvgyG6z3ErUna29Ugo8e7YnvJ6e+Jm1hCpLaopbOVgnObJou9r2DzmCzui7ReVmViivUPA89U8wcS1OosOMlrpob36zkszt28fY+TcQyKLP4twLEoQQmCiTsg14Fk1ouCPZ8kmWukhVJKFLLxdd5SayqegUK9nl+ASfQ6hY7YkFzPek55GsnzLTaW2XF6MVsN3+qEqejiAA8oz/uftk3MNVL67BSI2mz4FF9I44c/jZWzaz8y+NWNXQ+VrYv1EDtCpdwaIqXAWoQn21u131tRM/sg2SugTWMMYQ6+MTQHY6HQo5q+fbHScJ+0Re3yQMQgvlZ9lCOK93JCqDWgcaaQsECg924x/skJQzFTgo8wdcy3I2PYuegwlw/wg046PxFi+s3EkKGOozOGrg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8P190MB0634.EURP190.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(396003)(39830400003)(136003)(366004)(346002)(376002)(110136005)(38100700002)(38070700005)(122000001)(7696005)(76116006)(478600001)(86362001)(8676002)(5660300002)(6506007)(316002)(64756008)(66556008)(55016002)(9686003)(66946007)(66446008)(4326008)(71200400001)(8936002)(52536014)(33656002)(2906002)(26005)(83380400001)(66476007)(186003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VVNtUVZZckVuNk9NSTJ6RlIvRGppcG9TWHZ3VUlMeG5DZkdEeTVMcVlQTHU2?=
+ =?utf-8?B?L1Z6M0pRWWlMdXJxK1NiaDJyOVZaUzgrczZ4dUFVNSsrVy9jZ3B0YXM3NjhL?=
+ =?utf-8?B?MjJTMm5VaGdTY2gyaTduazQwaG5ETTc2bDNrK3RzcTAzWno4L29LVXZubUd5?=
+ =?utf-8?B?NXA4WTU2cjB1MExBdEhjdFE2SkFFdlgxZTlHT3R2TG12VnVzTkt6ZTlmU2My?=
+ =?utf-8?B?ZzZoaDQ1SW1MSFBtUi9qRlZrZXZwckw3eEtqSkRXRUFRa0hzN1RGUmxBWnlO?=
+ =?utf-8?B?M0pTekZ6VWkvS1pWS0FEQ3dLeVBNNkJNMGZqTExtRVNkNU91aUhzQk4vVHM4?=
+ =?utf-8?B?RUhpS3VMSmJENmo5ZGd1NTRERzdwRmdLV21WQjAxNUxpbEdScTFYK0V3TldF?=
+ =?utf-8?B?WU8yeGJjMGhXTzFLZjB4Wm15ajlLeEJ4alVOOGExRElTU2R2TGQvR3p6WS9M?=
+ =?utf-8?B?dlBSOW53dmkvME0vRFQwNDVCK3pMRkFPTU1CdmYyRUV2c0Y2cE5LUTUzWVZS?=
+ =?utf-8?B?SS8yR1gzZ2JPdVBiR2RvYTM0a05JbEdtSmlnR28rMlBnNE95WFU2YjI0aHJu?=
+ =?utf-8?B?R25DZytrUWxQNm9YNEJlTGxBalp4YjBLazk0RmZlVWJUTUJTNUttK2dZeVhU?=
+ =?utf-8?B?TThrS0krRGVEZVhlZ3JRYzEvYjgyM3hoZkI5NWIrdThQTTc5dlFrN05uQXBP?=
+ =?utf-8?B?dm5RbnFTYnlmV0JVaUFhVHBVWE5UblBsUEpoOFk1M0Z4c3Z3alQyWXl6VTc5?=
+ =?utf-8?B?L2EwMCtyV3R4dGJMQmhZcWJVMUpEY05yTUM3Tnc2Q01qaFRVY3VqNEE2R1ZC?=
+ =?utf-8?B?bkVLeUxTWkVrNUJ5bHFPdzFHWWxoZ0YwQzBxd3FNaThkZGJrbGtWa1gxRHc2?=
+ =?utf-8?B?YklKZzdPVGZPMDdJVHMraCtocDdYaVVwY3hXZmxqNlhkbTlpVkRDZ3ZyUWNs?=
+ =?utf-8?B?L2Zaa0ppQ0pYaUJsQW1aRXVBWnFmbUZxbEZvdU15OUpidkhkMGVHYlIzVmpw?=
+ =?utf-8?B?VXNralJuYWN3ZU8yRVVrVGdOR2d0Q1RCU2RKR0ZwRVZudlF0TFMzWHBCSElS?=
+ =?utf-8?B?b2QyeCtBV2lib1VBS2VRV3kyZjVMVXBhUkVrY1VTT3R0endrWlR1WjlQU3NF?=
+ =?utf-8?B?NlIzL1BRVVVnUkFNT3lhNmNCd2tYS09vbU1OU2NWemtRRjQzV3RZVUkwbG4w?=
+ =?utf-8?B?N2h2RWh4TzRjNGVIMjVIUkJJNGZ1ZnozdTlmbEM5TDQrYnk3T1FaQUlRRGVZ?=
+ =?utf-8?B?SmNsVjlVSkVwSEs2VXo1cDNpV2JvMFJKTitSUE12MHg1eXRqOHdybXdkOTNk?=
+ =?utf-8?B?bVhMcUJqS3VEUVlDejVLWWlxeGNCK0w5citha0xJdUhCWTJTbTRQRkhFN2Yr?=
+ =?utf-8?B?Q2l6dVJTd0V4bVA0TlVJQ2tRSGtzbnpXcVVsU3ZpZjZIaFRzLzc3R3FjWERu?=
+ =?utf-8?B?Z0VFRVdadmFnTHdRNUZPa2FwUlErRm1SU3FtOWtZa2RMOXdJSTA1TjB1VVdN?=
+ =?utf-8?B?Wlc4TXUrSllmbTg5ejZPd25JVm9lZ25GK0hwdU9nZGJmNHJmUFRUUzhqSXd1?=
+ =?utf-8?B?MjBqaWtFSk5jYWRMd1FNSTA3OHAzemNaaGdDdHRrZ3p6VTVSWE9EOHVxQzZs?=
+ =?utf-8?B?azRGSUZSUTQwdnUvWHBXclhHaGhMMWJJWEY3YnU1SEtPK2dEU2dTdXlPT3M2?=
+ =?utf-8?B?aGpMRUh5aURoLzJXeEpTTlRMZ2N3UzFuY2RCY3lPblY0K1d4bGFqRG8vR1gv?=
+ =?utf-8?Q?da9WGkMuLRaCxbWT+E5B2oJOQmYPOScge24LdzE?=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: schleissheimer.de
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB8P190MB0634.EURP190.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: f65520c6-0f6d-42e1-b266-08d96b314fc9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Aug 2021 21:09:38.4210
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: ba05321a-a007-44df-8805-c7e62d5887b5
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: VJLz4DYefRwtz706wW5i28OUhpkjeGrtGh+8JV+AEATC2mboJpxs/80gWMIdDus6RUZ5oZxOz4yR96QOvCu7qksaQfFAoOL7kW0KpNHjWls=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8P190MB0730
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-
---weezsnv3gebq6be4
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 29.08.2021 22:14:41, Oliver Hartkopp wrote:
-> > > IMO the issue arises with the use of isotpsend and isotprecv.
-> > > These tools are intended to get a hands-on impression how the isotp
-> > > stack works.
-> > >=20
-> > > This kind of use in a script leads to the creation and (now delayed)
-> > > *removal* of isotp sockets for *each* single PDU transfer.
-> >=20
-> > Maybe I am wrong but I see something different.
-> > e.g. without this patch:
-> >   (000.000240)  canfd0  714   [8]  2B 01 01 01 01 01 01 01
-> >   (000.000261)  canfd0  77E   [8]  30 0F 00 AA AA AA AA AA
-> >   (000.000496)  canfd0  714   [8]  2C 01 01 01 01 01 01 01
-> >=20
-> > and with this patch:
-> >   (000.000414)  canfd0  714   [8]  2B 01 01 01 01 01 01 01
-> >   (000.000262)  canfd0  77E   [8]  30 0F 00 AA AA AA AA AA
-> >   (000.001536)  canfd0  714   [8]  2C 01 01 01 01 01 01 01
-> >=20
->=20
-> I'm running a 5.14.0-rc7-00011-g6e764bcd1cf7 kernel here and see this:
->=20
->  (000.000001)  vcan0  714   [8]  2B 01 01 01 01 01 01 01
->  (000.000015)  vcan0  77E   [8]  30 0F 00 AA AA AA AA AA
->  (000.000005)  vcan0  714   [8]  2C 01 01 01 01 01 01 01
->=20
-> Test iso-tp with 1000 byte frames on vcan0 (data:01)
->     1 / curr:   40 / min:   40 / max:   40 / avg:   40.0
->     2 / curr:   30 / min:   30 / max:   40 / avg:   35.0
->     3 / curr:   35 / min:   30 / max:   40 / avg:   35.0
->     4 / curr:   52 / min:   30 / max:   52 / avg:   39.2
->     5 / curr:   40 / min:   30 / max:   52 / avg:   39.4
-> (..)
->=20
-> when running your scripts from the initial post.
->=20
-> Is you canfd0 interface a real hardware?
-
-I can reproduce the issue here, on an embedded system with a real
-hardware CAN interface.
-
-In j1939 we make use of rcu so that we don't need the synchronize_net().
-Is it possible to use this is ISOTP, too?
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---weezsnv3gebq6be4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmEr7eAACgkQqclaivrt
-76l/HQf/ah48f0ixX5yWz2+VhkHk+lM6IOiDbEaJgNnhMYu7U2fSdzZMXFTgPfOV
-9JU4Aeu/CvFr9zC+CM5gH1hEiFmm062xev38wh9Cnn0HhgTkfV0glgxAJ4h9dySp
-3ocpLJ9cFO902DNcWRb8ulf8JLMjxkaQmCrp0WJ1DWmcYG6SgNplv03PBvPb2BpO
-ehO+PTFkclGpQqI1G8wiYJjyVQM7AON/G2/WdEXaRzqRVHS3PmTDqFbePj4gHnjo
-SvEREgnDB8CdThfSGkl8XiZ0jnCLsKMo7K38mtg2+/8n0BOkgB7usQbseXnVy6Z4
-A2m1UVMgqnwMPmTqDy3S95KbuLFtZw==
-=SV9F
------END PGP SIGNATURE-----
-
---weezsnv3gebq6be4--
+SGVsbG8gT2xpdmVyLA0KDQo+ID4+PiBicmluZyB1cCBhIHZjYW4wIGludGVyZmFjZSB3aXRoOg0K
+PiA+Pj4gc3VkbyBtb2Rwcm9iZSB2Y2FuDQo+ID4+PiBzdWRvIGlwIGxpbmsgYWRkIGRldiB2Y2Fu
+MCB0eXBlIHZjYW4NCj4gPj4+IHN1ZG8gaWZjb25maWcgdmNhbjAgdXANCj4gPj4+DQo+ID4+PiBo
+ZXJlIGFyZSB0aGUgc2NyaXB0czoNCj4gPj4+IC0tLSBpc290cF9zZXJ2ZXIuc2ggLS0tDQo+ID4+
+PiAjIS9iaW4vYmFzaA0KPiA+Pj4gaWZhY2U9dmNhbjANCj4gPj4+IGVjaG8gIldhaXQgZm9yIE1l
+c3NhZ2VzIG9uICRpZmFjZSINCj4gPj4+IHdoaWxlIHRydWU7IGRvDQo+ID4+PiAgICAgICBleGVj
+IDM8IDwoaXNvdHByZWN2IC1zIDc3RSAtZCA3MTQgLWIgRiAtcCBBQTpBQSAkaWZhY2UpDQo+ID4+
+PiAgICAgICByeHBpZD0kIQ0KPiA+Pj4gICAgICAgd2FpdCAkcnhwaWQNCj4gPj4+ICAgICAgIG91
+dHB1dD0kKGNhdCA8JjMpDQo+ID4+PiAgICAgICBlY2hvICI3RiAwMSAxMSIgfCBpc290cHNlbmQg
+LXMgNzdFIC1kIDcxNCAtcCBBQTpBQSAtTCAxNjo4OjAgJGlmYWNlDQo+ID4+PiBkb25lDQo+ID4+
+DQo+ID4+IElNTyB0aGUgaXNzdWUgYXJpc2VzIHdpdGggdGhlIHVzZSBvZiBpc290cHNlbmQgYW5k
+IGlzb3RwcmVjdi4NCj4gPj4gVGhlc2UgdG9vbHMgYXJlIGludGVuZGVkIHRvIGdldCBhIGhhbmRz
+LW9uIGltcHJlc3Npb24gaG93IHRoZSBpc290cA0KPiA+PiBzdGFjayB3b3Jrcy4NCj4gPj4NCj4g
+Pj4gVGhpcyBraW5kIG9mIHVzZSBpbiBhIHNjcmlwdCBsZWFkcyB0byB0aGUgY3JlYXRpb24gYW5k
+IChub3cgZGVsYXllZCkNCj4gPj4gKnJlbW92YWwqIG9mIGlzb3RwIHNvY2tldHMgZm9yICplYWNo
+KiBzaW5nbGUgUERVIHRyYW5zZmVyLg0KPiA+DQo+ID4gTWF5YmUgSSBhbSB3cm9uZyBidXQgSSBz
+ZWUgc29tZXRoaW5nIGRpZmZlcmVudC4NCj4gPiBlLmcuIHdpdGhvdXQgdGhpcyBwYXRjaDoNCj4g
+PiAgICgwMDAuMDAwMjQwKSAgY2FuZmQwICA3MTQgICBbOF0gIDJCIDAxIDAxIDAxIDAxIDAxIDAx
+IDAxDQo+ID4gICAoMDAwLjAwMDI2MSkgIGNhbmZkMCAgNzdFICAgWzhdICAzMCAwRiAwMCBBQSBB
+QSBBQSBBQSBBQQ0KPiA+ICAgKDAwMC4wMDA0OTYpICBjYW5mZDAgIDcxNCAgIFs4XSAgMkMgMDEg
+MDEgMDEgMDEgMDEgMDEgMDENCj4gPg0KPiA+IGFuZCB3aXRoIHRoaXMgcGF0Y2g6DQo+ID4gICAo
+MDAwLjAwMDQxNCkgIGNhbmZkMCAgNzE0ICAgWzhdICAyQiAwMSAwMSAwMSAwMSAwMSAwMSAwMQ0K
+PiA+ICAgKDAwMC4wMDAyNjIpICBjYW5mZDAgIDc3RSAgIFs4XSAgMzAgMEYgMDAgQUEgQUEgQUEg
+QUEgQUENCj4gPiAgICgwMDAuMDAxNTM2KSAgY2FuZmQwICA3MTQgICBbOF0gIDJDIDAxIDAxIDAx
+IDAxIDAxIDAxIDAxDQo+ID4NCj4gDQo+IEknbSBydW5uaW5nIGEgNS4xNC4wLXJjNy0wMDAxMS1n
+NmU3NjRiY2QxY2Y3IGtlcm5lbCBoZXJlIGFuZCBzZWUgdGhpczoNCj4gDQo+ICAgKDAwMC4wMDAw
+MDEpICB2Y2FuMCAgNzE0ICAgWzhdICAyQiAwMSAwMSAwMSAwMSAwMSAwMSAwMQ0KPiAgICgwMDAu
+MDAwMDE1KSAgdmNhbjAgIDc3RSAgIFs4XSAgMzAgMEYgMDAgQUEgQUEgQUEgQUEgQUENCj4gICAo
+MDAwLjAwMDAwNSkgIHZjYW4wICA3MTQgICBbOF0gIDJDIDAxIDAxIDAxIDAxIDAxIDAxIDAxDQo+
+IA0KPiBUZXN0IGlzby10cCB3aXRoIDEwMDAgYnl0ZSBmcmFtZXMgb24gdmNhbjAgKGRhdGE6MDEp
+DQo+ICAgICAgMSAvIGN1cnI6ICAgNDAgLyBtaW46ICAgNDAgLyBtYXg6ICAgNDAgLyBhdmc6ICAg
+NDAuMA0KPiAgICAgIDIgLyBjdXJyOiAgIDMwIC8gbWluOiAgIDMwIC8gbWF4OiAgIDQwIC8gYXZn
+OiAgIDM1LjANCj4gICAgICAzIC8gY3VycjogICAzNSAvIG1pbjogICAzMCAvIG1heDogICA0MCAv
+IGF2ZzogICAzNS4wDQo+ICAgICAgNCAvIGN1cnI6ICAgNTIgLyBtaW46ICAgMzAgLyBtYXg6ICAg
+NTIgLyBhdmc6ICAgMzkuMg0KPiAgICAgIDUgLyBjdXJyOiAgIDQwIC8gbWluOiAgIDMwIC8gbWF4
+OiAgIDUyIC8gYXZnOiAgIDM5LjQNCj4gKC4uKQ0KPiANCj4gd2hlbiBydW5uaW5nIHlvdXIgc2Ny
+aXB0cyBmcm9tIHRoZSBpbml0aWFsIHBvc3QuDQo+IA0KPiBJcyB5b3UgY2FuZmQwIGludGVyZmFj
+ZSBhIHJlYWwgaGFyZHdhcmU/DQo+IA0KWWVzLCB0aGUgY2FuZmQwIGludGVyZmFjZSBpcyBhIHJl
+YWwgaGFyZHdhcmUgKGEgTUNQMjUxOEZEIGNvbm5lY3RlZA0KdG8gYSBSYXNwYmVycnlQaS00LUNv
+bXB1dGUtTW9kdWxlKS4NCg0KSSBhbSBydW5uaW5nIGEgNS4xMC42MCBrZXJuZWwuIA0KV2l0aCB1
+c2luZyB0aGUgdGVzdHNjcmlwdHMgSSBwcm92aWRlZCBJIGNhbiBzZWUgdGhpczoNCndpdGggdGhl
+IHBhdGNoOg0KDQogICAgMSAvIGN1cnI6ICAxNDcgLyBtaW46ICAxNDcgLyBtYXg6ICAxNDcgLyBh
+dmc6ICAxNDcuMA0KICAgIDIgLyBjdXJyOiAgMTA3IC8gbWluOiAgMTA3IC8gbWF4OiAgMTQ3IC8g
+YXZnOiAgMTI3LjANCiAgICAzIC8gY3VycjogIDExOCAvIG1pbjogIDEwNyAvIG1heDogIDE0NyAv
+IGF2ZzogIDEyNC4wDQogICAgNCAvIGN1cnI6ICAxMzggLyBtaW46ICAxMDcgLyBtYXg6ICAxNDcg
+LyBhdmc6ICAxMjcuNQ0KICAgIDUgLyBjdXJyOiAgMTE1IC8gbWluOiAgMTA3IC8gbWF4OiAgMTQ3
+IC8gYXZnOiAgMTI1LjANCiAgICA2IC8gY3VycjogIDE1OCAvIG1pbjogIDEwNyAvIG1heDogIDE1
+OCAvIGF2ZzogIDEzMC41DQogICAgNyAvIGN1cnI6ICAxNDAgLyBtaW46ICAxMDcgLyBtYXg6ICAx
+NTggLyBhdmc6ICAxMzEuOQ0KDQphbmQgd2l0aG91dCB0aGUgcGF0Y2g6DQoNCiAgIDM5IC8gY3Vy
+cjogICA0MiAvIG1pbjogICAyOCAvIG1heDogICA0NSAvIGF2ZzogICAzMC45DQogICA0MCAvIGN1
+cnI6ICAgNDEgLyBtaW46ICAgMjggLyBtYXg6ICAgNDUgLyBhdmc6ICAgMzEuMg0KICAgNDEgLyBj
+dXJyOiAgIDI4IC8gbWluOiAgIDI4IC8gbWF4OiAgIDQ1IC8gYXZnOiAgIDMxLjENCiAgIDQyIC8g
+Y3VycjogICAyOSAvIG1pbjogICAyOCAvIG1heDogICA0NSAvIGF2ZzogICAzMS4wDQogICA0MyAv
+IGN1cnI6ICAgMzEgLyBtaW46ICAgMjggLyBtYXg6ICAgNDUgLyBhdmc6ICAgMzEuMA0KICAgNDQg
+LyBjdXJyOiAgIDI4IC8gbWluOiAgIDI4IC8gbWF4OiAgIDQ1IC8gYXZnOiAgIDMxLjANCg0KYnV0
+IGlmIEkgY29tcGFyZSB0aGUgY2FuZHVtcHMgSSBjYW4gc2VlOg0Kd2l0aCB0aGUgcGF0Y2g6DQoN
+CiAoMDAwLjAwMDAwOCkgIHZjYW4wICA3MTQgICBbOF0gIDJGIDAxIDAxIDAxIDAxIDAxIDAxIDAx
+DQogKDAwMC4wMDAyMDkpICB2Y2FuMCAgNzdFICAgWzhdICAzMCAwRiAwMCBBQSBBQSBBQSBBQSBB
+QQ0KICgwMDAuMDAwMDYxKSAgdmNhbjAgIDcxNCAgIFs4XSAgMjAgMDEgMDEgMDEgMDEgMDEgMDEg
+MDENCg0KYW5kIHdpdGhvdXQ6DQoNCiAoMDAwLjAwMDAwNCkgIHZjYW4wICA3MTQgICBbOF0gIDJG
+IDAxIDAxIDAxIDAxIDAxIDAxIDAxDQogKDAwMC4wMDAwNjkpICB2Y2FuMCAgNzdFICAgWzhdICAz
+MCAwRiAwMCBBQSBBQSBBQSBBQSBBQQ0KICgwMDAuMDAwMDE3KSAgdmNhbjAgIDcxNCAgIFs4XSAg
+MjAgMDEgMDEgMDEgMDEgMDEgMDEgMDENCg0Kc29ycnksIEkgbWlzc2VkIHRoYXQ6IE92ZXIgaGVy
+ZSB0aGUgZGVsYXkgc2VlbXMgdG8gYmUgaW4NCnRoZSBGQyBhbmQgbm90IGluIHRoZSBDRiBhZnRl
+ciB0aGUgRkMuIFRoaXMgaXMgd2hhdCBpcw0KZGlmZmVyZW50IGNvbXBhcmVkIHRvIHRoZSByZWFs
+IGhhcmR3YXJlLg0KDQpTbyB0byBtZSBpdCBzZWVtcyB0aGF0IHRoZSByY3UgaW1wbGVtZW50YXRp
+b24NCmhhcyBjaGFuZ2VkIG9uIHRoZSB3YXkgZnJvbSA1LjEwIHRvIDUuMTQ/DQoNClN2ZW4NCg0K
+DQoNCg0K
