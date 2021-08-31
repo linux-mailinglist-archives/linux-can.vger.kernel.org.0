@@ -2,116 +2,79 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06F8A3FC5E8
-	for <lists+linux-can@lfdr.de>; Tue, 31 Aug 2021 13:33:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7B043FC834
+	for <lists+linux-can@lfdr.de>; Tue, 31 Aug 2021 15:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241030AbhHaKhX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 31 Aug 2021 06:37:23 -0400
-Received: from mail-io1-f71.google.com ([209.85.166.71]:51764 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233654AbhHaKhS (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 31 Aug 2021 06:37:18 -0400
-Received: by mail-io1-f71.google.com with SMTP id i11-20020a056602134b00b005be82e3028bso5317477iov.18
-        for <linux-can@vger.kernel.org>; Tue, 31 Aug 2021 03:36:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=2qd5l81swi+xRw37GGw82lqKntZQqf/pXfsBP2WkvJI=;
-        b=tFUwwNwRxu9xfQH+rWAy/IT4fPlT+51+dGgAb/+d6snIAi7kZdi7EM/xI7dcwkuwUq
-         OKpxtGZbl+NnOP56VEurcJ+BEBDKbiGnmgCe0Id+U8qWAd0Obej9qJ+jrDxN39iUNj8X
-         InV5GuzUnna75AHulqB+aFgYliTk00hUek4GYAvunoJ22GDhGAm6YqWVcBeJcJl/vRtn
-         jtIH7Z9qklOSKax77UqqlLMc7iW/crMsNSl0S+uxOo4s+iQCZkwZRa9wVrDk/ixDiPSj
-         myML/zj96+kU9RDmrZLApuqhmmXoTFmcKr6l2tmXeSO0mD+tehBYpyM7n6qCZInrYg3V
-         Kujw==
-X-Gm-Message-State: AOAM531jSjvjzi+elS/eF8Vwp5eeaPfl20/sQAUfWK8aJh1MJmuzxP6P
-        VGLlZ0n92jfgtEMNcP9k1yFqKzIxwNjWrYpuCoCfyGt/IAiM
-X-Google-Smtp-Source: ABdhPJz4rBzzNikjOjsztr7lQys04ZKpKbcUXSuij/fKhSA82oPZ+9CIpIBV8UWBQPaHrthpepM3sNcWtsXVwAc9b62eZhDX1XI8
+        id S234263AbhHaN2k (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 31 Aug 2021 09:28:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50744 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233512AbhHaN2k (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 31 Aug 2021 09:28:40 -0400
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D244C061760
+        for <linux-can@vger.kernel.org>; Tue, 31 Aug 2021 06:27:44 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:2193:279a:893d:20ae])
+        by baptiste.telenet-ops.be with bizsmtp
+        id oDTi2500G1ZidPp01DTi9D; Tue, 31 Aug 2021 15:27:42 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1mL3nh-000rvz-M3; Tue, 31 Aug 2021 15:27:41 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1mL3nh-001JYB-6q; Tue, 31 Aug 2021 15:27:41 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] can: rcar: Drop unneeded ARM dependency
+Date:   Tue, 31 Aug 2021 15:27:40 +0200
+Message-Id: <362d9ced19f3524ee8917df5681b3880c13cac85.1630416373.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Received: by 2002:a92:611:: with SMTP id x17mr19317931ilg.41.1630406183351;
- Tue, 31 Aug 2021 03:36:23 -0700 (PDT)
-Date:   Tue, 31 Aug 2021 03:36:23 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000065fe6705cad8850e@google.com>
-Subject: [syzbot] WARNING in j1939_session_deactivate
-From:   syzbot <syzbot+535e5aae63c0d0433473@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, kernel@pengutronix.de, kuba@kernel.org,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux@rempel-privat.de, mkl@pengutronix.de, netdev@vger.kernel.org,
-        robin@protonic.nl, socketcan@hartkopp.net,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello,
+The dependency on ARM predates the dependency on ARCH_RENESAS.
+The latter was introduced for Renesas arm64 SoCs first, and later
+extended to cover Renesas ARM SoCs, too.
 
-syzbot found the following issue on:
-
-HEAD commit:    1a6436f37512 Merge tag 'mmc-v5.14-rc7' of git://git.kernel..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=11f1f6a9300000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=765eea9a273a8879
-dashboard link: https://syzkaller.appspot.com/bug?extid=535e5aae63c0d0433473
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.1
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17193c4d300000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12d86fd5300000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+535e5aae63c0d0433473@syzkaller.appspotmail.com
-
-vcan0: j1939_xtp_rx_abort_one: 0xffff888040cd1c00: 0x00000: (3) A timeout occurred and this is the connection abort to close the session.
-vcan0: j1939_xtp_rx_abort_one: 0xffff88802a973400: 0x00000: (3) A timeout occurred and this is the connection abort to close the session.
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 13 at net/can/j1939/transport.c:1085 j1939_session_deactivate+0xaf/0xd0 net/can/j1939/transport.c:1085
-Modules linked in:
-CPU: 0 PID: 13 Comm: ksoftirqd/0 Not tainted 5.14.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:j1939_session_deactivate+0xaf/0xd0 net/can/j1939/transport.c:1085
-Code: fd 01 76 21 e8 d2 4c 68 f9 48 89 ef e8 2a fc ff ff 4c 89 e7 41 89 c5 e8 5f ca 1f 01 44 89 e8 5d 41 5c 41 5d c3 e8 b1 4c 68 f9 <0f> 0b eb d6 4c 89 ef e8 d5 86 ae f9 eb b5 48 89 ef e8 db 86 ae f9
-RSP: 0018:ffffc90000d27990 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000100
-RDX: ffff888010a60000 RSI: ffffffff880d5c3f RDI: 0000000000000003
-RBP: ffff88802a973400 R08: 0000000000000001 R09: ffff88802a97342b
-R10: ffffffff880d5c13 R11: 0000000000000003 R12: ffff888042005070
-R13: 0000000000000001 R14: ffff88802bd11418 R15: ffffffff8a9ecde0
-FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000200 CR3: 000000000b68e000 CR4: 00000000001506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- j1939_session_deactivate_activate_next+0x12/0x35 net/can/j1939/transport.c:1095
- j1939_xtp_rx_abort_one.cold+0x205/0x321 net/can/j1939/transport.c:1329
- j1939_xtp_rx_abort net/can/j1939/transport.c:1340 [inline]
- j1939_tp_cmd_recv net/can/j1939/transport.c:2068 [inline]
- j1939_tp_recv+0x488/0xb40 net/can/j1939/transport.c:2098
- j1939_can_recv+0x6d7/0x930 net/can/j1939/main.c:101
- deliver net/can/af_can.c:574 [inline]
- can_rcv_filter+0x5d4/0x8d0 net/can/af_can.c:608
- can_receive+0x31d/0x580 net/can/af_can.c:665
- can_rcv+0x120/0x1c0 net/can/af_can.c:696
- __netif_receive_skb_one_core+0x114/0x180 net/core/dev.c:5498
- __netif_receive_skb+0x24/0x1b0 net/core/dev.c:5612
- process_backlog+0x2a5/0x6c0 net/core/dev.c:6492
- __napi_poll+0xaf/0x440 net/core/dev.c:7047
- napi_poll net/core/dev.c:7114 [inline]
- net_rx_action+0x801/0xb40 net/core/dev.c:7201
- __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
- run_ksoftirqd kernel/softirq.c:920 [inline]
- run_ksoftirqd+0x2d/0x60 kernel/softirq.c:912
- smpboot_thread_fn+0x645/0x9c0 kernel/smpboot.c:164
- kthread+0x3e5/0x4d0 kernel/kthread.c:319
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
-
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/net/can/rcar/Kconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+diff --git a/drivers/net/can/rcar/Kconfig b/drivers/net/can/rcar/Kconfig
+index 56320a7f828b6684..c66762ef631b0871 100644
+--- a/drivers/net/can/rcar/Kconfig
++++ b/drivers/net/can/rcar/Kconfig
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ config CAN_RCAR
+ 	tristate "Renesas R-Car and RZ/G CAN controller"
+-	depends on ARCH_RENESAS || ARM || COMPILE_TEST
++	depends on ARCH_RENESAS || COMPILE_TEST
+ 	help
+ 	  Say Y here if you want to use CAN controller found on Renesas R-Car
+ 	  or RZ/G SoCs.
+@@ -11,7 +11,7 @@ config CAN_RCAR
+ 
+ config CAN_RCAR_CANFD
+ 	tristate "Renesas R-Car CAN FD controller"
+-	depends on ARCH_RENESAS || ARM || COMPILE_TEST
++	depends on ARCH_RENESAS || COMPILE_TEST
+ 	help
+ 	  Say Y here if you want to use CAN FD controller found on
+ 	  Renesas R-Car SoCs. The driver puts the controller in CAN FD only
+-- 
+2.25.1
+
