@@ -2,122 +2,116 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BB313FB64C
-	for <lists+linux-can@lfdr.de>; Mon, 30 Aug 2021 14:46:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06F8A3FC5E8
+	for <lists+linux-can@lfdr.de>; Tue, 31 Aug 2021 13:33:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230513AbhH3Mpr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 30 Aug 2021 08:45:47 -0400
-Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.24]:23362 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbhH3Mpp (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 30 Aug 2021 08:45:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1630327484;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:Date:Message-ID:References:To:Subject:From:Cc:Date:From:
-    Subject:Sender;
-    bh=8jY/a4xEDeiJ/QOE6qIwugMLibHCWfle1xnl2xy4Vyc=;
-    b=JZvVuDprz1aCxPTc7La5jgCz0bc0oopG9zpPAidohfCL75knoD2f139kIIcPtqg4p5
-    ZLVAq05HpRFOmoZwBpd+fNb0pPEU1KxK9HcgYlY6dgUtG24w+1wP3W7WwTBT1IGljpXX
-    A4tW6hAF1IXaLk2iWhfjs5/q3GFVd+vbusvPWgfsVd2w8Q6IRHlqumVBQBwkfU64IvL5
-    lX80msaySJG/Te8pWx9KIHvm5srdDRLmCmeeNfwxbkt5W2oKogfyM4pIKM51odfzY9DD
-    cv7iKd3Hi1oC2rVe2ZZKrW49/bQ1fWR7YI4bQuwpjC2WYhDSlLEvWKwzKWLEu9eKLna4
-    hgUg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3TMaFqTEVR8J8xryV0="
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.10.137]
-    by smtp.strato.de (RZmta 47.31.0 DYNA|AUTH)
-    with ESMTPSA id Q09fd7x7UCii1jr
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Mon, 30 Aug 2021 14:44:44 +0200 (CEST)
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: Re: AW: AW: AW: [PATCH] can: isotp: omit unintended hrtimer restart
- on socket release
-To:     Sven Schuchmann <schuchmann@schleissheimer.de>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-References: <20210618173713.2296-1-socketcan@hartkopp.net>
- <DB8P190MB06343614CAD6B48C3EA0EF00D9C99@DB8P190MB0634.EURP190.PROD.OUTLOOK.COM>
- <abc23fd0-9bb1-1cc7-fc67-0a3298673b86@hartkopp.net>
- <DB8P190MB0634E1A09E060C9A5A539073D9CA9@DB8P190MB0634.EURP190.PROD.OUTLOOK.COM>
- <fa1cac52-73aa-b092-0137-2b1ed734f0ee@hartkopp.net>
- <DB8P190MB0634C90D304A2AA97F481738D9CA9@DB8P190MB0634.EURP190.PROD.OUTLOOK.COM>
- <DB8P190MB0634D4408A4A57A74134E698D9CB9@DB8P190MB0634.EURP190.PROD.OUTLOOK.COM>
-Message-ID: <6f9a3a93-fa0e-f039-6332-5ac0d4064731@hartkopp.net>
-Date:   Mon, 30 Aug 2021 14:44:39 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        id S241030AbhHaKhX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 31 Aug 2021 06:37:23 -0400
+Received: from mail-io1-f71.google.com ([209.85.166.71]:51764 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233654AbhHaKhS (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 31 Aug 2021 06:37:18 -0400
+Received: by mail-io1-f71.google.com with SMTP id i11-20020a056602134b00b005be82e3028bso5317477iov.18
+        for <linux-can@vger.kernel.org>; Tue, 31 Aug 2021 03:36:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=2qd5l81swi+xRw37GGw82lqKntZQqf/pXfsBP2WkvJI=;
+        b=tFUwwNwRxu9xfQH+rWAy/IT4fPlT+51+dGgAb/+d6snIAi7kZdi7EM/xI7dcwkuwUq
+         OKpxtGZbl+NnOP56VEurcJ+BEBDKbiGnmgCe0Id+U8qWAd0Obej9qJ+jrDxN39iUNj8X
+         InV5GuzUnna75AHulqB+aFgYliTk00hUek4GYAvunoJ22GDhGAm6YqWVcBeJcJl/vRtn
+         jtIH7Z9qklOSKax77UqqlLMc7iW/crMsNSl0S+uxOo4s+iQCZkwZRa9wVrDk/ixDiPSj
+         myML/zj96+kU9RDmrZLApuqhmmXoTFmcKr6l2tmXeSO0mD+tehBYpyM7n6qCZInrYg3V
+         Kujw==
+X-Gm-Message-State: AOAM531jSjvjzi+elS/eF8Vwp5eeaPfl20/sQAUfWK8aJh1MJmuzxP6P
+        VGLlZ0n92jfgtEMNcP9k1yFqKzIxwNjWrYpuCoCfyGt/IAiM
+X-Google-Smtp-Source: ABdhPJz4rBzzNikjOjsztr7lQys04ZKpKbcUXSuij/fKhSA82oPZ+9CIpIBV8UWBQPaHrthpepM3sNcWtsXVwAc9b62eZhDX1XI8
 MIME-Version: 1.0
-In-Reply-To: <DB8P190MB0634D4408A4A57A74134E698D9CB9@DB8P190MB0634.EURP190.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a92:611:: with SMTP id x17mr19317931ilg.41.1630406183351;
+ Tue, 31 Aug 2021 03:36:23 -0700 (PDT)
+Date:   Tue, 31 Aug 2021 03:36:23 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000065fe6705cad8850e@google.com>
+Subject: [syzbot] WARNING in j1939_session_deactivate
+From:   syzbot <syzbot+535e5aae63c0d0433473@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, kernel@pengutronix.de, kuba@kernel.org,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux@rempel-privat.de, mkl@pengutronix.de, netdev@vger.kernel.org,
+        robin@protonic.nl, socketcan@hartkopp.net,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Sven,
+Hello,
 
-On 30.08.21 09:55, Sven Schuchmann wrote:
+syzbot found the following issue on:
 
->> but if I compare the candumps I can see:
->> with the patch:
->>
->>   (000.000008)  vcan0  714   [8]  2F 01 01 01 01 01 01 01
->>   (000.000209)  vcan0  77E   [8]  30 0F 00 AA AA AA AA AA
->>   (000.000061)  vcan0  714   [8]  20 01 01 01 01 01 01 01
->>
->> and without:
->>
->>   (000.000004)  vcan0  714   [8]  2F 01 01 01 01 01 01 01
->>   (000.000069)  vcan0  77E   [8]  30 0F 00 AA AA AA AA AA
->>   (000.000017)  vcan0  714   [8]  20 01 01 01 01 01 01 01
->>
->> sorry, I missed that: Over here the delay seems to be in
->> the FC and not in the CF after the FC. This is what is
->> different compared to the real hardware.
->>
->> So to me it seems that the rcu implementation
->> has changed on the way from 5.10 to 5.14?
-> 
-> Just checked with a 5.14.0-rc6 which contains the patch, same result:
-> 
->     93 / curr:  143 / min:  129 / max:  200 / avg:  156.2
->     94 / curr:  144 / min:  129 / max:  200 / avg:  156.0
->     95 / curr:  141 / min:  129 / max:  200 / avg:  155.9
->     96 / curr:  171 / min:  129 / max:  200 / avg:  156.0
->     97 / curr:  138 / min:  129 / max:  200 / avg:  155.8
->     98 / curr:  137 / min:  129 / max:  200 / avg:  155.6
-> 
->   (000.000011)  vcan0  714   [8]  2B 01 01 01 01 01 01 01
->   (000.000193)  vcan0  77E   [8]  30 0F 00 AA AA AA AA AA
->   (000.000037)  vcan0  714   [8]  2C 01 01 01 01 01 01 01
-> 
-> So maybe there is something wrong on the rpi?
+HEAD commit:    1a6436f37512 Merge tag 'mmc-v5.14-rc7' of git://git.kernel..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=11f1f6a9300000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=765eea9a273a8879
+dashboard link: https://syzkaller.appspot.com/bug?extid=535e5aae63c0d0433473
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.1
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17193c4d300000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12d86fd5300000
 
-I see a similar difference on my i7-8650U system:
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+535e5aae63c0d0433473@syzkaller.appspotmail.com
 
-"5" without and "65" with the patch.
+vcan0: j1939_xtp_rx_abort_one: 0xffff888040cd1c00: 0x00000: (3) A timeout occurred and this is the connection abort to close the session.
+vcan0: j1939_xtp_rx_abort_one: 0xffff88802a973400: 0x00000: (3) A timeout occurred and this is the connection abort to close the session.
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 13 at net/can/j1939/transport.c:1085 j1939_session_deactivate+0xaf/0xd0 net/can/j1939/transport.c:1085
+Modules linked in:
+CPU: 0 PID: 13 Comm: ksoftirqd/0 Not tainted 5.14.0-rc7-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:j1939_session_deactivate+0xaf/0xd0 net/can/j1939/transport.c:1085
+Code: fd 01 76 21 e8 d2 4c 68 f9 48 89 ef e8 2a fc ff ff 4c 89 e7 41 89 c5 e8 5f ca 1f 01 44 89 e8 5d 41 5c 41 5d c3 e8 b1 4c 68 f9 <0f> 0b eb d6 4c 89 ef e8 d5 86 ae f9 eb b5 48 89 ef e8 db 86 ae f9
+RSP: 0018:ffffc90000d27990 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000100
+RDX: ffff888010a60000 RSI: ffffffff880d5c3f RDI: 0000000000000003
+RBP: ffff88802a973400 R08: 0000000000000001 R09: ffff88802a97342b
+R10: ffffffff880d5c13 R11: 0000000000000003 R12: ffff888042005070
+R13: 0000000000000001 R14: ffff88802bd11418 R15: ffffffff8a9ecde0
+FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020000200 CR3: 000000000b68e000 CR4: 00000000001506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ j1939_session_deactivate_activate_next+0x12/0x35 net/can/j1939/transport.c:1095
+ j1939_xtp_rx_abort_one.cold+0x205/0x321 net/can/j1939/transport.c:1329
+ j1939_xtp_rx_abort net/can/j1939/transport.c:1340 [inline]
+ j1939_tp_cmd_recv net/can/j1939/transport.c:2068 [inline]
+ j1939_tp_recv+0x488/0xb40 net/can/j1939/transport.c:2098
+ j1939_can_recv+0x6d7/0x930 net/can/j1939/main.c:101
+ deliver net/can/af_can.c:574 [inline]
+ can_rcv_filter+0x5d4/0x8d0 net/can/af_can.c:608
+ can_receive+0x31d/0x580 net/can/af_can.c:665
+ can_rcv+0x120/0x1c0 net/can/af_can.c:696
+ __netif_receive_skb_one_core+0x114/0x180 net/core/dev.c:5498
+ __netif_receive_skb+0x24/0x1b0 net/core/dev.c:5612
+ process_backlog+0x2a5/0x6c0 net/core/dev.c:6492
+ __napi_poll+0xaf/0x440 net/core/dev.c:7047
+ napi_poll net/core/dev.c:7114 [inline]
+ net_rx_action+0x801/0xb40 net/core/dev.c:7201
+ __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
+ run_ksoftirqd kernel/softirq.c:920 [inline]
+ run_ksoftirqd+0x2d/0x60 kernel/softirq.c:912
+ smpboot_thread_fn+0x645/0x9c0 kernel/smpboot.c:164
+ kthread+0x3e5/0x4d0 kernel/kthread.c:319
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
 
-The problem remains to be the added time that is now introduced at 
-socket close time with the rcu_synchronize().
 
-In your script you are waiting for isotprecv process to finally end with:
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-	wait $rxpid
-
-And that's the expectable effect ...
-
-It looks like the script works fine without the 'wait' code (which does 
-not wait for the process removal then).
-
-@mkl: I assume we have to live with that increased time at socket close 
-for security reasons, right?
-
-Best regards,
-Oliver
-
-ps. Btw IMO a C program is still the better approach here. 
-isotp[send|recv] open/close the sockets for each PDU in the given setup :-/
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
