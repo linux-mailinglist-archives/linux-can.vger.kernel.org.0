@@ -2,92 +2,91 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEF1A3FC844
-	for <lists+linux-can@lfdr.de>; Tue, 31 Aug 2021 15:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B78F3FE1D6
+	for <lists+linux-can@lfdr.de>; Wed,  1 Sep 2021 20:11:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235908AbhHaNdn (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 31 Aug 2021 09:33:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51970 "EHLO
+        id S1345768AbhIASMN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 1 Sep 2021 14:12:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235477AbhHaNdn (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 31 Aug 2021 09:33:43 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D5DC061575
-        for <linux-can@vger.kernel.org>; Tue, 31 Aug 2021 06:32:48 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1mL3sY-0000xs-Fm; Tue, 31 Aug 2021 15:32:42 +0200
-Received: from pengutronix.de (2a03-f580-87bc-d400-251e-7a0a-4ec6-bf9c.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:251e:7a0a:4ec6:bf9c])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id BD320674096;
-        Tue, 31 Aug 2021 13:32:39 +0000 (UTC)
-Date:   Tue, 31 Aug 2021 15:32:38 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH] can: rcar: Drop unneeded ARM dependency
-Message-ID: <20210831133238.75us5ipf25wzqkuq@pengutronix.de>
-References: <362d9ced19f3524ee8917df5681b3880c13cac85.1630416373.git.geert+renesas@glider.be>
+        with ESMTP id S1346649AbhIASMN (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 1 Sep 2021 14:12:13 -0400
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60844C06129D
+        for <linux-can@vger.kernel.org>; Wed,  1 Sep 2021 11:11:12 -0700 (PDT)
+Received: by mail-vs1-xe2f.google.com with SMTP id d6so581033vsr.7
+        for <linux-can@vger.kernel.org>; Wed, 01 Sep 2021 11:11:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=2joGkq8i8C5vglZO1FYNTlWqLyr4vSiCXKQYXBVnv4Q=;
+        b=LD3mpzy1s09M3e/Eheelu/QMtbN6lrYJQ+S1BsYhmG4zP9OQuKOeD1zHV2lZaK7Hdt
+         vXoBMumPRACuZhnwd8TYAFIvdImPe0Zn4DA41GnzHGsnpDZPE0wUFWVFNzgpxF6bh6D8
+         CVxTiiIN7w8BVpPirFLytZKK2cFqqV6q9qR8cw4XmdYYgGZs+MdnDeP+neEr/SbnLI2h
+         mwT6gqJ8+HvNCQei5Zu6b3U+/YcUOepEDfVn6t0IkNG5YzxTV8mH8IqZ4zEsqBchdgxI
+         E/zGH3KCiuS7UdfEMBVKPbpzhhPyh4quLRALvE4iCHtswqSZDgWUuzksodIw8OWwGR1Z
+         0RlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=2joGkq8i8C5vglZO1FYNTlWqLyr4vSiCXKQYXBVnv4Q=;
+        b=fyi0FtDrQG5Uhb8HrQPwDhxfhN4FZ9Us0fcaFrZ8boJ+SudRcn9vJqTrpuOchoLseS
+         0iyVsegvn795pnkheGqyC1WJFbxXTyPslWi/84PyU4fFXkCh8TSP3YvoELNuiqQCmd+o
+         wKs0l5Ag0V9cT3zzZ1zoorP/Jc4jJafq98FUeKMvfnbQp2sKaeQqspBcDidbBx+VPQmX
+         Q2WqdhRI2hEI/qCTIaUxmjIfBEvUwuWbX3zbR7YT3vLNu3E8uXCXH0aBO4MA3o2GWQcB
+         SHMXqcFtU0ZZ/GdPMLBvQl2REQPjQq5ROY6OfJREQbFzRLjf/yzj/rcjjBLlQNju1Sbg
+         3ptA==
+X-Gm-Message-State: AOAM530ObWhBWc3EyvXJ8imMANageUlnyT4lYwfikCImfTUIAmSSm/PQ
+        ogBnfRuntSEh4JiHD7lfslqH5rvvMUZ2vut+wn8=
+X-Google-Smtp-Source: ABdhPJwbbBYGjUEQSS3Bb7EfYk34O3AVuG22pVIF78fkATQG8c+PQmeHgcc35+YrriS74Wl5STB8JbzOasp+8kCVBlk=
+X-Received: by 2002:a67:8c5:: with SMTP id 188mr1017695vsi.4.1630519870726;
+ Wed, 01 Sep 2021 11:11:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="srzl6ahi5ee46qdy"
-Content-Disposition: inline
-In-Reply-To: <362d9ced19f3524ee8917df5681b3880c13cac85.1630416373.git.geert+renesas@glider.be>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Received: by 2002:ab0:740d:0:0:0:0:0 with HTTP; Wed, 1 Sep 2021 11:11:10 -0700 (PDT)
+From:   CorisBank International <corisbankintlbf@gmail.com>
+Date:   Wed, 1 Sep 2021 11:11:10 -0700
+Message-ID: <CA+25hwzjLgVdtDXYWeuqFBTvAbpc4oxK0dW54s7tjGNyU_m0ow@mail.gmail.com>
+Subject: CORISBANK INTERNATIONAL OFFICIAL NOTIFICATION
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Att: Client
 
---srzl6ahi5ee46qdy
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On 31.08.2021 15:27:40, Geert Uytterhoeven wrote:
-> The dependency on ARM predates the dependency on ARCH_RENESAS.
-> The latter was introduced for Renesas arm64 SoCs first, and later
-> extended to cover Renesas ARM SoCs, too.
->=20
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+CORISBANK INTERNATIONAL URGENT NOTIFICATION
 
-Applied to linux-can-next/testing.
+Notification / Notification/ Notification
 
-regards,
-Marc
+Note, We are writing to inform you officially that Finally the Central
+Bank Financial Authority have approved to transfer your $8.2Million
+which was signed by late Mrs Rose Banneth the COVID.19 victim to
+transfer to you, Late Mrs Rose Banneth the France Lady contacted us to
+transfer her fund in our bank to you for Orphanage work before she
+died by the COVID.19
+and as it is now, you will receive your fund through our corresponding
+bank in Dubai [Emirate Investment Bank ] for security reason. Please
+you should reconfirm your details to receive the $8.2Million.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Name, Country, Address, occupations, Age, Telephone number, account
+Details so that we can immediately forward to the World Bank to
+transfer the fund.
+You are advised to comply on timely manner to permit this esteem bank
+transfer your fund as scheduled.
 
---srzl6ahi5ee46qdy
-Content-Type: application/pgp-signature; name="signature.asc"
+We look forward to serving you better
+Your Financial Comfort Is A Priority
+Thank you for choosing Corisbank International.
 
------BEGIN PGP SIGNATURE-----
+Sincerely,
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmEuL3MACgkQqclaivrt
-76miCQgAnAZxW8kG/d0p+m5teLbGjtg/Ay3Paa1gufGRAaoufrQq7DqQ/gmrEKjW
-Izq+CNSzSQnd2SqYHOdeTQgn6gCMRCNiNnpPqo+ERvgm+veU8u1FiTHQYZCx+jjX
-v3IH4xCtZcIaRmATo2qWxFttVE1rZlVT6Pvkv+UJAPlkTBxTPr/LtswE7lrYa5WV
-baHtesfrkI6dy72vnZWL3SN7YzysHTw/k6Z3fDGX0TUgkhjvhFApcnj9JppVBCyj
-1irSai1oL3RP2xblXo0W51Xi+MKwJA85LNorc/yV3JHmrJRunh+nDvqC3ZhouKHI
-hIuPU2KhM1nGMixGJkPVJu1nFyaZUw==
-=xBj4
------END PGP SIGNATURE-----
+----
 
---srzl6ahi5ee46qdy--
+Mr Diakarya Ouattara
+Managing Director
+Bank Coris
+Burkina Faso
++226 556 163 37
+financial_bf_info@accountant.com
