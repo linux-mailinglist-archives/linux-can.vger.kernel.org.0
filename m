@@ -2,144 +2,63 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D7C3401D02
-	for <lists+linux-can@lfdr.de>; Mon,  6 Sep 2021 16:31:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08AED401DFE
+	for <lists+linux-can@lfdr.de>; Mon,  6 Sep 2021 18:03:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243334AbhIFOcF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 6 Sep 2021 10:32:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33204 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243212AbhIFOcF (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 6 Sep 2021 10:32:05 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FAD6C061575
-        for <linux-can@vger.kernel.org>; Mon,  6 Sep 2021 07:31:00 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1mNFeE-000511-Sr; Mon, 06 Sep 2021 16:30:58 +0200
-Received: from pengutronix.de (2a03-f580-87bc-d400-4919-df7f-870a-a6c2.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:4919:df7f:870a:a6c2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 199E16782F0;
-        Mon,  6 Sep 2021 14:30:58 +0000 (UTC)
-Date:   Mon, 6 Sep 2021 16:30:57 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can <linux-can@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [RESEND PATCH v2] can: netlink: prevent incoherent can
- configuration in case of early return
-Message-ID: <20210906143057.zrpor5fkh67uqwi2@pengutronix.de>
-References: <20210903071704.455855-1-mailhol.vincent@wanadoo.fr>
- <20210906081805.dyd74xfu74gcnslg@pengutronix.de>
- <CAMZ6Rq+tNxU5ePDivMdwkbZK_hyao9hSyd0DrXnF503Qk1duqw@mail.gmail.com>
+        id S243599AbhIFQEo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 6 Sep 2021 12:04:44 -0400
+Received: from smtp13.smtpout.orange.fr ([80.12.242.135]:23401 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S243586AbhIFQEn (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 6 Sep 2021 12:04:43 -0400
+Received: from localhost.localdomain ([114.149.34.46])
+        by mwinf5d79 with ME
+        id qg3U2500Z0zjR6y03g3b31; Mon, 06 Sep 2021 18:03:37 +0200
+X-ME-Helo: localhost.localdomain
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Mon, 06 Sep 2021 18:03:37 +0200
+X-ME-IP: 114.149.34.46
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v3 0/2] prevent incoherent can configuration in case of early return in the CAN netlink interface
+Date:   Tue,  7 Sep 2021 01:03:08 +0900
+Message-Id: <20210906160310.54831-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="sal5ak2ol57i6ub6"
-Content-Disposition: inline
-In-Reply-To: <CAMZ6Rq+tNxU5ePDivMdwkbZK_hyao9hSyd0DrXnF503Qk1duqw@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+This series of two patch prevents, once for all, can_priv to be in an
+inconsistent state in case of an early return in can_changelink() due
+to invalid parameters.
 
---sal5ak2ol57i6ub6
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+* Changelog *
 
-On 06.09.2021 23:17:40, Vincent MAILHOL wrote:
-> > > To prevent this from happening, we do a local copy of can_priv, work
-> > > on it, an copy it at the very end of the function (i.e. only if all
-> > > previous checks succeeded).
-> >
-> > I don't like the optimization of using a static priv. If it's too big to
-> > be allocated on the stack, allocate it on the heap, i.e. using
-> > kmemdup()/kfree().
->=20
-> The static declaration is only an issue of coding style, correct?
+v2 -> v3:
+  - Allocate the temporary struct can_priv on the heap instead of
+    declaring it as static.
+  - Split the patch into two to make it easier to backport to LTS
+    kernels and add the "Fixes" tag.
 
-I don't know (but I haven't checked) if the coding style doc says
-anything about that.
+v1 -> v2:
+  - Change the prototype of can_calc_tdco() so that the changes are
+    applied to the temporary priv instead of netdev_priv(dev).
 
-> Or is there an actual risk of doing so?
+Vincent Mailhol (2):
+  can: netlink: prevent incoherent can configuration in case of early
+    return
+  can: bittiming: change can_calc_tdco()'s prototype to not directly
+    modify priv
 
-As you pointed out, this relies on the serialization of the changelink
-callback by the networking stack. There's no sane way in C to track this
-requirement in the networking stack, so I don't want to have any
-roadblocks and/or potential bugs in the CAN code. Marking a variable as
-static places it in the BSS section, right? This mean, the memory is
-always "used", even if not setting the bitrate.
+ drivers/net/can/dev/bittiming.c |  8 ++------
+ drivers/net/can/dev/netlink.c   | 34 ++++++++++++++++++---------------
+ include/linux/can/bittiming.h   |  7 +++++--
+ 3 files changed, 26 insertions(+), 23 deletions(-)
 
-> This is for my understanding, I will remove the static
-> declaration regardless of your answer.
+-- 
+2.32.0
 
-tnx
-
-> On my x86_64 machine, sizeof(priv) is 448 and if I declare priv on the st=
-ack:
-> | $ objdump -d drivers/net/can/dev/netlink.o | ./scripts/checkstack.pl
-> | 0x00000000000002100 can_changelink []:            1200
->=20
-> So I will allocate it on the heap.
-
-Sounds reasonable.
-
-> N.B. In above figures CONFIG_CAN_LEDS is *off* because that driver
-> was tagged as broken in:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit=
-/?id=3D30f3b42147ba6f29bc95c1bba34468740762d91b
-
-ok - BTW: I think we can remove LEDs support now, it's marked as broken
-for more than 3 years.
-
-> > > Once this done, there is no more need to have a temporary variable for
-> > > a specific parameter. As such, the bittiming and data bittiming (bt
-> > > and dbt) are directly written to the temporary priv variable.
-> > >
-> > > Finally, function can_calc_tdco() was retrieving can_priv from the
-> > > net_device and directly modifying it. We changed the prototype so that
-> > > it instead writes its changes into our temporary priv variable.
-> >
-> > Is it possible to split this into a separate patch, so that the part
-> > without the tdco can be backported more easily to older kernels not
-> > having tdco? The patch fixing the tdco would be the 2nd patch...
->=20
-> ACK. I will send a v3 with that split.
-
-Thanks for helping taking care of the LTS kernels!
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---sal5ak2ol57i6ub6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmE2Jh4ACgkQqclaivrt
-76kXPAf+LawgzZhe3NINCbn5Mu+zFOBLsgk+OtKnx+ZRL51tTZn1pwhqnSABSyvG
-rhs6sdK3JEPTDgdj9T8odyZKbBf7SYAKshiYwH/DTZPVaxEBgyDzJWoYCRdcXaz0
-Vslz4o3LZzmdEEL6KVIoji6B7zqNQGmmjn2FKQzJAZ40kgrK/FylBru0tr7XPwbj
-DvHeScws/Nh6zTcUJabQJeYT9sL+sA4pXUMle2wlbC94sAVOvz8uiSVYuQyZbRlM
-VV+20cJvSiAV/SXK6yUmK6H+zGilHuHhe/QyTsz9WjqPHgb5IKHQBNC8hwsDPD3K
-M6329A8OqA35p7XU7eV+SVb+ZQZOfA==
-=Ut4l
------END PGP SIGNATURE-----
-
---sal5ak2ol57i6ub6--
