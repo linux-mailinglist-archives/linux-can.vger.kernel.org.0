@@ -2,126 +2,107 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0E6F402232
-	for <lists+linux-can@lfdr.de>; Tue,  7 Sep 2021 04:31:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A57EF402387
+	for <lists+linux-can@lfdr.de>; Tue,  7 Sep 2021 08:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbhIGCHC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 6 Sep 2021 22:07:02 -0400
-Received: from mail-lj1-f182.google.com ([209.85.208.182]:33390 "EHLO
-        mail-lj1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233217AbhIGCHC (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 6 Sep 2021 22:07:02 -0400
-Received: by mail-lj1-f182.google.com with SMTP id s12so14089102ljg.0;
-        Mon, 06 Sep 2021 19:05:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Wag34i0mvHaNCgUONRntiQDWweufyQCEE0D3LbDF1CM=;
-        b=f3xVvob51H2RgMzM9D6HraI7VM5O6sj5rUTO4Wh8Yjndw2vQNn0WTe5aWromSPNRar
-         +CkU7D5XEBZPDzj5wSY3kpCawbABoLosfbMBkAOwVY/ggidIsHVt+V3JAlcrkHAlskx3
-         +H/EjGARwjufW4ko3UY7SbVxE2MQ2koABzg0WRz5U5BCZ1mWRZjM5T/FlNVtqyhAsq0X
-         Z1Wvc1cuzieQt6mP4eXZL1gybR7rLxfxL4RxEnUAyjLpx2tTJLY69ho2Yq8PttrYwI4+
-         BDvcgp89GjT49ZWrSqXJZQ70Y8VA/Y0wvbUWxfAW0I8XT3wwo8Jk8X+D8OiysTopB5da
-         9aXg==
-X-Gm-Message-State: AOAM530Zx1RJuln/a3xkZCCkezC8yZGqk/wiDxujz2nchOXTSdPFrjgC
-        qnZAiRjy1QA5h54H5RAkUgOHoEgedeVUIVICMJk=
-X-Google-Smtp-Source: ABdhPJy+CbY2y8CERUjMXXsS7HPCNIesrefPkqW4hMG6MgUbHWAjvbCBBA4uaokAOeINMsByvcEk75LkcmFIyRocXkM=
-X-Received: by 2002:a2e:90d6:: with SMTP id o22mr13297103ljg.366.1630980355363;
- Mon, 06 Sep 2021 19:05:55 -0700 (PDT)
+        id S233403AbhIGGkS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 7 Sep 2021 02:40:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48304 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233050AbhIGGkR (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 7 Sep 2021 02:40:17 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DF5C061575
+        for <linux-can@vger.kernel.org>; Mon,  6 Sep 2021 23:39:11 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1mNUl5-0003cx-6v; Tue, 07 Sep 2021 08:39:03 +0200
+Received: from pengutronix.de (2a03-f580-87bc-d400-bd09-20f3-2295-682f.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:bd09:20f3:2295:682f])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id BE641678816;
+        Tue,  7 Sep 2021 06:39:00 +0000 (UTC)
+Date:   Tue, 7 Sep 2021 08:38:59 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Tong Zhang <ztong0001@gmail.com>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Dario Binacchi <dariobin@libero.it>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] can: c_can: fix null-ptr-deref on ioctl()
+Message-ID: <20210907063859.llgedf5wc4n4rc73@pengutronix.de>
+References: <20210906233704.1162666-1-ztong0001@gmail.com>
 MIME-Version: 1.0
-References: <20210906160310.54831-1-mailhol.vincent@wanadoo.fr> <20210906160310.54831-2-mailhol.vincent@wanadoo.fr>
-In-Reply-To: <20210906160310.54831-2-mailhol.vincent@wanadoo.fr>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Tue, 7 Sep 2021 11:05:42 +0900
-Message-ID: <CAMZ6RqK4DFOqpvarZa+ee1h0Z1GCpMMYFLzLQsbBjhKRTkgNdA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] can: netlink: prevent incoherent can configuration
- in case of early return
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can <linux-can@vger.kernel.org>
-Cc:     netdev <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hbn3bbhn5ny2drbw"
+Content-Disposition: inline
+In-Reply-To: <20210906233704.1162666-1-ztong0001@gmail.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue. 7 Sep 2021 at 01:03, Vincent Mailhol <mailhol.vincent@wanadoo.fr> wrote:
-> struct can_priv has a set of flags (can_priv::ctrlmode) which are
-> correlated with the other fields of the structure. In
-> can_changelink(), those flags are set first and copied to can_priv. If
-> the function has to return early, for example due to an out of range
-> value provided by the user, then the global configuration might become
-> incoherent.
->
-> Example: the user provides an out of range dbitrate (e.g. 20
-> Mbps). The command fails (-EINVAL), however the FD flag was already
-> set resulting in a configuration where FD is on but the databittiming
-> parameters are empty.
->
-> * Illustration of above example *
->
-> | $ ip link set can0 type can bitrate 500000 dbitrate 20000000 fd on
-> | RTNETLINK answers: Invalid argument
-> | $ ip --details link show can0
-> | 1: can0: <NOARP,ECHO> mtu 72 qdisc noop state DOWN mode DEFAULT group default qlen 10
-> |     link/can  promiscuity 0 minmtu 0 maxmtu 0
-> |     can <FD> state STOPPED restart-ms 0
->            ^^ FD flag is set without any of the databittiming parameters...
-> |         bitrate 500000 sample-point 0.875
-> |         tq 12 prop-seg 69 phase-seg1 70 phase-seg2 20 sjw 1
-> |         ES582.1/ES584.1: tseg1 2..256 tseg2 2..128 sjw 1..128 brp 1..512 brp-inc 1
-> |         ES582.1/ES584.1: dtseg1 2..32 dtseg2 1..16 dsjw 1..8 dbrp 1..32 dbrp-inc 1
-> |         clock 80000000 numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535
->
-> To prevent this from happening, we do a local copy of can_priv, work
-> on it, an copy it at the very end of the function (i.e. only if all
-> previous checks succeeded).
->
-> Once this done, there is no more need to have a temporary variable for
-> a specific parameter. As such, the bittiming and data bittiming (bt
-> and dbt) are directly written to the temporary priv variable.
->
->
-> N.B. The temporary can_priv is too big to be allocated on the stack
-> because, on x86_64 sizeof(struct can_priv) is 448 and:
->
-> | $ objdump -d drivers/net/can/dev/netlink.o | ./scripts/checkstack.pl
-> | 0x00000000000002100 can_changelink []:            1200
->
->
-> Fixes: 9859ccd2c8be ("can: introduce the data bitrate configuration for CAN FD")
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> ---
->  drivers/net/can/dev/netlink.c | 32 ++++++++++++++++++--------------
->  1 file changed, 18 insertions(+), 14 deletions(-)
->
-> diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlink.c
-> index 80425636049d..21b76ca8cb22 100644
-> --- a/drivers/net/can/dev/netlink.c
-> +++ b/drivers/net/can/dev/netlink.c
-> @@ -58,14 +58,19 @@ static int can_changelink(struct net_device *dev, struct nlattr *tb[],
->                           struct nlattr *data[],
->                           struct netlink_ext_ack *extack)
->  {
-> -       struct can_priv *priv = netdev_priv(dev);
-> +       /* Work on a local copy of priv to prevent inconsistent value
-> +        * in case of early return.
-> +        */
-> +       static struct can_priv *priv;
->         int err;
->
->         /* We need synchronization with dev->stop() */
->         ASSERT_RTNL();
->
-> +       priv = kmemdup(netdev_priv(dev), sizeof(*priv), GFP_KERNEL);
 
-Arg... I forgot to check the return value.
-+       if (!priv)
-+               return -ENOMEM;
+--hbn3bbhn5ny2drbw
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I will send a v4, sorry for the noise.
+On 06.09.2021 16:37:02, Tong Zhang wrote:
+> the pdev maybe not a platform device, e.g. c_can_pci device,
+> in this case, calling to_platform_device() would not make sense.
+> Also, per the comment in drivers/net/can/c_can/c_can_ethtool.c, @bus_info
+> sould match dev_name() string, so I am replacing this with dev_name() to
+  ^^^^^
+  should
 
+Fixed while applying.
 
-Yours sincerely,
-Vincent
+> fix this issue.
+>=20
+> [    1.458583] BUG: unable to handle page fault for address: 000000010000=
+0000
+> [    1.460921] RIP: 0010:strnlen+0x1a/0x30
+> [    1.466336]  ? c_can_get_drvinfo+0x65/0xb0 [c_can]
+> [    1.466597]  ethtool_get_drvinfo+0xae/0x360
+> [    1.466826]  dev_ethtool+0x10f8/0x2970
+> [    1.467880]  sock_ioctl+0xef/0x300
+>=20
+> Fixes: 2722ac986e93 ("can: c_can: add ethtool support")
+> Signed-off-by: Tong Zhang <ztong0001@gmail.com>
+
+Applied to linux-can/testing + added stable on Cc.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--hbn3bbhn5ny2drbw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmE3CQAACgkQqclaivrt
+76mPnQf9FlnF0qWsD40bZToqcod8lIoeZbZpp1TIqbe0jiVif3a5s3eohV7/ZyDb
+wyVKfYK3kDsRZrR8ooDXXhjW6KjtX9RPdxt7q26+bq3FnZz1yxb3XYDB2L3tKh/T
+WUY0xS0f+rBM+YprvBorusR/m1/RH1Y8FTVJplHNcyV4GYP3l+8DiYBkdYvDh5Pb
+Ki9DE7h1aPcGatI2GejClZ8graC6PCklIpuvtIw4A907RteARcvwvUZYKClv8KFP
+xgzUIABh60Tvz4BtC4FFB48WtMeaDp2rfxLXap06u+ZvEF2PNXmmCFAMnbP2demE
+Lkpxz5fHT40EmTo7E1g0sdbYG364Dw==
+=NJEs
+-----END PGP SIGNATURE-----
+
+--hbn3bbhn5ny2drbw--
