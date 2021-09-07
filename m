@@ -2,104 +2,126 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5427440217C
-	for <lists+linux-can@lfdr.de>; Tue,  7 Sep 2021 01:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0E6F402232
+	for <lists+linux-can@lfdr.de>; Tue,  7 Sep 2021 04:31:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230169AbhIFXiR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 6 Sep 2021 19:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41516 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbhIFXiR (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 6 Sep 2021 19:38:17 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC46C061575;
-        Mon,  6 Sep 2021 16:37:10 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id e7so8132966pgk.2;
-        Mon, 06 Sep 2021 16:37:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sanJQgCOj6QndmuB/d1oi1oeHwgYC+0Otb8h+XZVNNI=;
-        b=Z5I2WDWbjBd8bVxVY5zxa5Lf6V+l0DGyC/hOgiwHSrTOOen/88bEu07rDPQ4ZShBgQ
-         dSUy9aWem3GOLdx3PzONf9XLsqdDFHgVstzRF+EdBjFoeY37c8bJZY+SWsOfyMsYLoWB
-         iFilu0WgaYjxlK17giSFJ1D+ykz1C1SLgZqkwMFdEx+R+g1GYgJTvMBabjnJKP/crLMR
-         I+ieOQGPYltTq7oDpxKVsg1Gkcpsu1ecvpEhfyNGTYzVYAhRK1ChnO+OY4qTtbQ09pny
-         xwdTl1DjEIS4+AvBZrvhTOSl2gLYeRban0knGGjzJLESTLxctKuPAmy1jRDteoxQFH61
-         rmwg==
+        id S230123AbhIGCHC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 6 Sep 2021 22:07:02 -0400
+Received: from mail-lj1-f182.google.com ([209.85.208.182]:33390 "EHLO
+        mail-lj1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233217AbhIGCHC (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 6 Sep 2021 22:07:02 -0400
+Received: by mail-lj1-f182.google.com with SMTP id s12so14089102ljg.0;
+        Mon, 06 Sep 2021 19:05:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sanJQgCOj6QndmuB/d1oi1oeHwgYC+0Otb8h+XZVNNI=;
-        b=Ot2C/Uj4EXyxEJTmRJbdav8QjyBlGn/N/GYsSPwMvlc7YPQA6buG+GXRxH7L8/joJi
-         Saw1XO7CW6IjojUHljyO4RBKSk50Wa7ncEXMI6Q7G5ykBXhHZvEGKmsuHciBmWkg/R1R
-         HBF++RgKHO7J6qc1lMplMk465ZGRC08K/LwXs9YCeVEcFI3rJprdQMjrehoPL4fJaHgx
-         HkheCgNyIJXt1d6hMRK/ryQmK378hdrKIKQDhtNKBAe1iYqjU8aMjMuAm4mviaV24gEH
-         kj1zxoIp+rVSobKn2gt6tJpfleala8g3aD+R7fzf45JrEDpxrpFQUJ2oHOAuctxnmtw2
-         f6SA==
-X-Gm-Message-State: AOAM532MxMRm/WHbSVKnX0i5t26x/zGEvHG3NM+v5KANKQWUlvbdYrD8
-        /a9vvbywMY4Wu+MwKYzWdnE=
-X-Google-Smtp-Source: ABdhPJxQv460ugCPPWo2Au4TeA7NDFDB7zF3qIAdkwwmscxGUcK+DTWr5lJwt5yAdkfHSl7t2N3ENQ==
-X-Received: by 2002:a62:8415:0:b0:407:8998:7c84 with SMTP id k21-20020a628415000000b0040789987c84mr14198037pfd.71.1630971429983;
-        Mon, 06 Sep 2021 16:37:09 -0700 (PDT)
-Received: from tong-desktop.local (99-105-211-126.lightspeed.sntcca.sbcglobal.net. [99.105.211.126])
-        by smtp.googlemail.com with ESMTPSA id t68sm10890250pgc.59.2021.09.06.16.37.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Sep 2021 16:37:09 -0700 (PDT)
-From:   Tong Zhang <ztong0001@gmail.com>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Tong Zhang <ztong0001@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Dario Binacchi <dariobin@libero.it>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1] can: c_can: fix null-ptr-deref on ioctl()
-Date:   Mon,  6 Sep 2021 16:37:02 -0700
-Message-Id: <20210906233704.1162666-1-ztong0001@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Wag34i0mvHaNCgUONRntiQDWweufyQCEE0D3LbDF1CM=;
+        b=f3xVvob51H2RgMzM9D6HraI7VM5O6sj5rUTO4Wh8Yjndw2vQNn0WTe5aWromSPNRar
+         +CkU7D5XEBZPDzj5wSY3kpCawbABoLosfbMBkAOwVY/ggidIsHVt+V3JAlcrkHAlskx3
+         +H/EjGARwjufW4ko3UY7SbVxE2MQ2koABzg0WRz5U5BCZ1mWRZjM5T/FlNVtqyhAsq0X
+         Z1Wvc1cuzieQt6mP4eXZL1gybR7rLxfxL4RxEnUAyjLpx2tTJLY69ho2Yq8PttrYwI4+
+         BDvcgp89GjT49ZWrSqXJZQ70Y8VA/Y0wvbUWxfAW0I8XT3wwo8Jk8X+D8OiysTopB5da
+         9aXg==
+X-Gm-Message-State: AOAM530Zx1RJuln/a3xkZCCkezC8yZGqk/wiDxujz2nchOXTSdPFrjgC
+        qnZAiRjy1QA5h54H5RAkUgOHoEgedeVUIVICMJk=
+X-Google-Smtp-Source: ABdhPJy+CbY2y8CERUjMXXsS7HPCNIesrefPkqW4hMG6MgUbHWAjvbCBBA4uaokAOeINMsByvcEk75LkcmFIyRocXkM=
+X-Received: by 2002:a2e:90d6:: with SMTP id o22mr13297103ljg.366.1630980355363;
+ Mon, 06 Sep 2021 19:05:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210906160310.54831-1-mailhol.vincent@wanadoo.fr> <20210906160310.54831-2-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20210906160310.54831-2-mailhol.vincent@wanadoo.fr>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Tue, 7 Sep 2021 11:05:42 +0900
+Message-ID: <CAMZ6RqK4DFOqpvarZa+ee1h0Z1GCpMMYFLzLQsbBjhKRTkgNdA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] can: netlink: prevent incoherent can configuration
+ in case of early return
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can <linux-can@vger.kernel.org>
+Cc:     netdev <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-the pdev maybe not a platform device, e.g. c_can_pci device,
-in this case, calling to_platform_device() would not make sense.
-Also, per the comment in drivers/net/can/c_can/c_can_ethtool.c, @bus_info
-sould match dev_name() string, so I am replacing this with dev_name() to
-fix this issue.
+On Tue. 7 Sep 2021 at 01:03, Vincent Mailhol <mailhol.vincent@wanadoo.fr> wrote:
+> struct can_priv has a set of flags (can_priv::ctrlmode) which are
+> correlated with the other fields of the structure. In
+> can_changelink(), those flags are set first and copied to can_priv. If
+> the function has to return early, for example due to an out of range
+> value provided by the user, then the global configuration might become
+> incoherent.
+>
+> Example: the user provides an out of range dbitrate (e.g. 20
+> Mbps). The command fails (-EINVAL), however the FD flag was already
+> set resulting in a configuration where FD is on but the databittiming
+> parameters are empty.
+>
+> * Illustration of above example *
+>
+> | $ ip link set can0 type can bitrate 500000 dbitrate 20000000 fd on
+> | RTNETLINK answers: Invalid argument
+> | $ ip --details link show can0
+> | 1: can0: <NOARP,ECHO> mtu 72 qdisc noop state DOWN mode DEFAULT group default qlen 10
+> |     link/can  promiscuity 0 minmtu 0 maxmtu 0
+> |     can <FD> state STOPPED restart-ms 0
+>            ^^ FD flag is set without any of the databittiming parameters...
+> |         bitrate 500000 sample-point 0.875
+> |         tq 12 prop-seg 69 phase-seg1 70 phase-seg2 20 sjw 1
+> |         ES582.1/ES584.1: tseg1 2..256 tseg2 2..128 sjw 1..128 brp 1..512 brp-inc 1
+> |         ES582.1/ES584.1: dtseg1 2..32 dtseg2 1..16 dsjw 1..8 dbrp 1..32 dbrp-inc 1
+> |         clock 80000000 numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535
+>
+> To prevent this from happening, we do a local copy of can_priv, work
+> on it, an copy it at the very end of the function (i.e. only if all
+> previous checks succeeded).
+>
+> Once this done, there is no more need to have a temporary variable for
+> a specific parameter. As such, the bittiming and data bittiming (bt
+> and dbt) are directly written to the temporary priv variable.
+>
+>
+> N.B. The temporary can_priv is too big to be allocated on the stack
+> because, on x86_64 sizeof(struct can_priv) is 448 and:
+>
+> | $ objdump -d drivers/net/can/dev/netlink.o | ./scripts/checkstack.pl
+> | 0x00000000000002100 can_changelink []:            1200
+>
+>
+> Fixes: 9859ccd2c8be ("can: introduce the data bitrate configuration for CAN FD")
+> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> ---
+>  drivers/net/can/dev/netlink.c | 32 ++++++++++++++++++--------------
+>  1 file changed, 18 insertions(+), 14 deletions(-)
+>
+> diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlink.c
+> index 80425636049d..21b76ca8cb22 100644
+> --- a/drivers/net/can/dev/netlink.c
+> +++ b/drivers/net/can/dev/netlink.c
+> @@ -58,14 +58,19 @@ static int can_changelink(struct net_device *dev, struct nlattr *tb[],
+>                           struct nlattr *data[],
+>                           struct netlink_ext_ack *extack)
+>  {
+> -       struct can_priv *priv = netdev_priv(dev);
+> +       /* Work on a local copy of priv to prevent inconsistent value
+> +        * in case of early return.
+> +        */
+> +       static struct can_priv *priv;
+>         int err;
+>
+>         /* We need synchronization with dev->stop() */
+>         ASSERT_RTNL();
+>
+> +       priv = kmemdup(netdev_priv(dev), sizeof(*priv), GFP_KERNEL);
 
-[    1.458583] BUG: unable to handle page fault for address: 0000000100000000
-[    1.460921] RIP: 0010:strnlen+0x1a/0x30
-[    1.466336]  ? c_can_get_drvinfo+0x65/0xb0 [c_can]
-[    1.466597]  ethtool_get_drvinfo+0xae/0x360
-[    1.466826]  dev_ethtool+0x10f8/0x2970
-[    1.467880]  sock_ioctl+0xef/0x300
+Arg... I forgot to check the return value.
++       if (!priv)
++               return -ENOMEM;
 
-Fixes: 2722ac986e93 ("can: c_can: add ethtool support")
-Signed-off-by: Tong Zhang <ztong0001@gmail.com>
----
- drivers/net/can/c_can/c_can_ethtool.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+I will send a v4, sorry for the noise.
 
-diff --git a/drivers/net/can/c_can/c_can_ethtool.c b/drivers/net/can/c_can/c_can_ethtool.c
-index cd5f07fca2a5..377c7d2e7612 100644
---- a/drivers/net/can/c_can/c_can_ethtool.c
-+++ b/drivers/net/can/c_can/c_can_ethtool.c
-@@ -15,10 +15,8 @@ static void c_can_get_drvinfo(struct net_device *netdev,
- 			      struct ethtool_drvinfo *info)
- {
- 	struct c_can_priv *priv = netdev_priv(netdev);
--	struct platform_device *pdev = to_platform_device(priv->device);
--
- 	strscpy(info->driver, "c_can", sizeof(info->driver));
--	strscpy(info->bus_info, pdev->name, sizeof(info->bus_info));
-+	strscpy(info->bus_info, dev_name(priv->device), sizeof(info->bus_info));
- }
- 
- static void c_can_get_ringparam(struct net_device *netdev,
--- 
-2.25.1
 
+Yours sincerely,
+Vincent
