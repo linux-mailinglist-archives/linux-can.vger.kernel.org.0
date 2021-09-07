@@ -2,98 +2,83 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E3324023A3
-	for <lists+linux-can@lfdr.de>; Tue,  7 Sep 2021 08:54:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FECA4023DD
+	for <lists+linux-can@lfdr.de>; Tue,  7 Sep 2021 09:14:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234612AbhIGGyG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 7 Sep 2021 02:54:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51408 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235276AbhIGGyF (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 7 Sep 2021 02:54:05 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3E3C061757
-        for <linux-can@vger.kernel.org>; Mon,  6 Sep 2021 23:52:59 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1mNUyX-000553-Ry
-        for linux-can@vger.kernel.org; Tue, 07 Sep 2021 08:52:57 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id A4537678852
-        for <linux-can@vger.kernel.org>; Tue,  7 Sep 2021 06:52:55 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 91DB8678841;
-        Tue,  7 Sep 2021 06:52:54 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 3fabed0f;
-        Tue, 7 Sep 2021 06:52:54 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Tong Zhang <ztong0001@gmail.com>,
-        stable@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net 2/2] can: c_can: fix null-ptr-deref on ioctl()
-Date:   Tue,  7 Sep 2021 08:52:52 +0200
-Message-Id: <20210907065252.1061052-3-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210907065252.1061052-1-mkl@pengutronix.de>
-References: <20210907065252.1061052-1-mkl@pengutronix.de>
+        id S235480AbhIGHLT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 7 Sep 2021 03:11:19 -0400
+Received: from mail-vk1-f181.google.com ([209.85.221.181]:36456 "EHLO
+        mail-vk1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235953AbhIGHLR (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 7 Sep 2021 03:11:17 -0400
+Received: by mail-vk1-f181.google.com with SMTP id s126so2964287vkd.3;
+        Tue, 07 Sep 2021 00:10:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oBtP9mc69XVfuTO+56uUxq1BAzYKObHV02/QNrtHWJo=;
+        b=fA2OT2K5RPqXkhsHQmYHNnrANulzWhxCdoCODs7+JAe9GHuICq6+nWRgyWc5YysITv
+         H6iw4DywvmvfQfcUDbbUwlXjot8bHT83QoLFzoAoxFNiG/CuBibZB1B2HOuofOuXrlt9
+         dfEKjXTcgRACWRpZkP3Qic8kk+oRu0anqzukuGt1blybdc8/2EPfS0M8khyPauokI7Pe
+         NdmxVEGxu0c5gz4aiWqlmUAsyVvRBTB6BNtOYgnRZYKR2Fm+GDEefjRmOnLBq4cnTuNH
+         k87meGLi3OafjOiNfvrCUTuYIUGMFFGo6fckvpmCnVuWVMZ1pKjOeYzch0FTzv8ypkI9
+         8zKw==
+X-Gm-Message-State: AOAM5301iZnGvzBIILqLm3WbXrpSp5SEp9mNMEOa5g37CuLoiJH2GswM
+        8jmGJUTMjhJJV5vOh5uxwkjj5L5vZgDEgnKslic=
+X-Google-Smtp-Source: ABdhPJwIma66+usweJzyanXrJb3XxlLEmfkI/JyuKgfh3YsqK4FosOLOxClx4FPVgkxNvEX+9CZuny8XUrks74d455U=
+X-Received: by 2002:a1f:d247:: with SMTP id j68mr7008661vkg.7.1630998609343;
+ Tue, 07 Sep 2021 00:10:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+References: <20210907064537.1054268-1-mkl@pengutronix.de>
+In-Reply-To: <20210907064537.1054268-1-mkl@pengutronix.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 7 Sep 2021 09:09:58 +0200
+Message-ID: <CAMuHMdV-4JM17XPzte5JPN6LfanCugQzVDC-yk2vKhr95zAO4A@mail.gmail.com>
+Subject: Re: [PATCH v2] can: rcar_canfd: add __maybe_unused annotation to
+ silence warning
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Tong Zhang <ztong0001@gmail.com>
+On Tue, Sep 7, 2021 at 8:48 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> Since commit
+>
+> | dd3bd23eb438 ("can: rcar_canfd: Add Renesas R-Car CAN FD driver")
+>
+> the rcar_canfd driver can be compile tested on all architectures. On
+> non OF enabled archs, or archs where OF is optional (and disabled in
+> the .config) the compilation throws the following warning:
+>
+> | drivers/net/can/rcar/rcar_canfd.c:2020:34: warning: unused variable 'rcar_canfd_of_table' [-Wunused-const-variable]
+> | static const struct of_device_id rcar_canfd_of_table[] = {
+> |                                  ^
+>
+> This patch fixes the warning by marking the variable
+> rcar_canfd_of_table as __maybe_unused.
+>
+> Fixes: ac4224087312 ("can: rcar: Kconfig: Add helper dependency on COMPILE_TEST")
+> Fixes: dd3bd23eb438 ("can: rcar_canfd: Add Renesas R-Car CAN FD driver")
+> Cc: linux-renesas-soc@vger.kernel.org
+> Cc: Cai Huoqing <caihuoqing@baidu.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 
-The pdev maybe not a platform device, e.g. c_can_pci device, in this
-case, calling to_platform_device() would not make sense. Also, per the
-comment in drivers/net/can/c_can/c_can_ethtool.c, @bus_info should
-match dev_name() string, so I am replacing this with dev_name() to fix
-this issue.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-[    1.458583] BUG: unable to handle page fault for address: 0000000100000000
-[    1.460921] RIP: 0010:strnlen+0x1a/0x30
-[    1.466336]  ? c_can_get_drvinfo+0x65/0xb0 [c_can]
-[    1.466597]  ethtool_get_drvinfo+0xae/0x360
-[    1.466826]  dev_ethtool+0x10f8/0x2970
-[    1.467880]  sock_ioctl+0xef/0x300
+Gr{oetje,eeting}s,
 
-Fixes: 2722ac986e93 ("can: c_can: add ethtool support")
-Link: https://lore.kernel.org/r/20210906233704.1162666-1-ztong0001@gmail.com
-Cc: stable@vger.kernel.org # 5.14+
-Signed-off-by: Tong Zhang <ztong0001@gmail.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/c_can/c_can_ethtool.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+                        Geert
 
-diff --git a/drivers/net/can/c_can/c_can_ethtool.c b/drivers/net/can/c_can/c_can_ethtool.c
-index cd5f07fca2a5..377c7d2e7612 100644
---- a/drivers/net/can/c_can/c_can_ethtool.c
-+++ b/drivers/net/can/c_can/c_can_ethtool.c
-@@ -15,10 +15,8 @@ static void c_can_get_drvinfo(struct net_device *netdev,
- 			      struct ethtool_drvinfo *info)
- {
- 	struct c_can_priv *priv = netdev_priv(netdev);
--	struct platform_device *pdev = to_platform_device(priv->device);
--
- 	strscpy(info->driver, "c_can", sizeof(info->driver));
--	strscpy(info->bus_info, pdev->name, sizeof(info->bus_info));
-+	strscpy(info->bus_info, dev_name(priv->device), sizeof(info->bus_info));
- }
- 
- static void c_can_get_ringparam(struct net_device *netdev,
 -- 
-2.33.0
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
