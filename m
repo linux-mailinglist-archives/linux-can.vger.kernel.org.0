@@ -2,46 +2,48 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A57EF402387
-	for <lists+linux-can@lfdr.de>; Tue,  7 Sep 2021 08:39:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2031402395
+	for <lists+linux-can@lfdr.de>; Tue,  7 Sep 2021 08:47:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233403AbhIGGkS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 7 Sep 2021 02:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48304 "EHLO
+        id S233563AbhIGGqr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 7 Sep 2021 02:46:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233050AbhIGGkR (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 7 Sep 2021 02:40:17 -0400
+        with ESMTP id S230029AbhIGGqr (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 7 Sep 2021 02:46:47 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DF5C061575
-        for <linux-can@vger.kernel.org>; Mon,  6 Sep 2021 23:39:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6BEFC061757
+        for <linux-can@vger.kernel.org>; Mon,  6 Sep 2021 23:45:41 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1mNUl5-0003cx-6v; Tue, 07 Sep 2021 08:39:03 +0200
-Received: from pengutronix.de (2a03-f580-87bc-d400-bd09-20f3-2295-682f.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:bd09:20f3:2295:682f])
+        id 1mNUrU-0004QY-6e
+        for linux-can@vger.kernel.org; Tue, 07 Sep 2021 08:45:40 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 19E5A67882E
+        for <linux-can@vger.kernel.org>; Tue,  7 Sep 2021 06:45:39 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id BE641678816;
-        Tue,  7 Sep 2021 06:39:00 +0000 (UTC)
-Date:   Tue, 7 Sep 2021 08:38:59 +0200
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id CC4E367882A;
+        Tue,  7 Sep 2021 06:45:38 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 4125da05;
+        Tue, 7 Sep 2021 06:45:38 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Tong Zhang <ztong0001@gmail.com>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Dario Binacchi <dariobin@libero.it>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] can: c_can: fix null-ptr-deref on ioctl()
-Message-ID: <20210907063859.llgedf5wc4n4rc73@pengutronix.de>
-References: <20210906233704.1162666-1-ztong0001@gmail.com>
+To:     linux-can@vger.kernel.org
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-renesas-soc@vger.kernel.org,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v2] can: rcar_canfd: add __maybe_unused annotation to silence warning
+Date:   Tue,  7 Sep 2021 08:45:37 +0200
+Message-Id: <20210907064537.1054268-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="hbn3bbhn5ny2drbw"
-Content-Disposition: inline
-In-Reply-To: <20210906233704.1162666-1-ztong0001@gmail.com>
+Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -50,59 +52,49 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Since commit
 
---hbn3bbhn5ny2drbw
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+| dd3bd23eb438 ("can: rcar_canfd: Add Renesas R-Car CAN FD driver")
 
-On 06.09.2021 16:37:02, Tong Zhang wrote:
-> the pdev maybe not a platform device, e.g. c_can_pci device,
-> in this case, calling to_platform_device() would not make sense.
-> Also, per the comment in drivers/net/can/c_can/c_can_ethtool.c, @bus_info
-> sould match dev_name() string, so I am replacing this with dev_name() to
-  ^^^^^
-  should
+the rcar_canfd driver can be compile tested on all architectures. On
+non OF enabled archs, or archs where OF is optional (and disabled in
+the .config) the compilation throws the following warning:
 
-Fixed while applying.
+| drivers/net/can/rcar/rcar_canfd.c:2020:34: warning: unused variable 'rcar_canfd_of_table' [-Wunused-const-variable]
+| static const struct of_device_id rcar_canfd_of_table[] = {
+|                                  ^
 
-> fix this issue.
->=20
-> [    1.458583] BUG: unable to handle page fault for address: 000000010000=
-0000
-> [    1.460921] RIP: 0010:strnlen+0x1a/0x30
-> [    1.466336]  ? c_can_get_drvinfo+0x65/0xb0 [c_can]
-> [    1.466597]  ethtool_get_drvinfo+0xae/0x360
-> [    1.466826]  dev_ethtool+0x10f8/0x2970
-> [    1.467880]  sock_ioctl+0xef/0x300
->=20
-> Fixes: 2722ac986e93 ("can: c_can: add ethtool support")
-> Signed-off-by: Tong Zhang <ztong0001@gmail.com>
+This patch fixes the warning by marking the variable
+rcar_canfd_of_table as __maybe_unused.
 
-Applied to linux-can/testing + added stable on Cc.
+Fixes: ac4224087312 ("can: rcar: Kconfig: Add helper dependency on COMPILE_TEST")
+Fixes: dd3bd23eb438 ("can: rcar_canfd: Add Renesas R-Car CAN FD driver")
+Cc: linux-renesas-soc@vger.kernel.org
+Cc: Cai Huoqing <caihuoqing@baidu.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
 
-regards,
-Marc
+Changes since v1:
+- moved __maybe_unused in front after "static const"
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+ drivers/net/can/rcar/rcar_canfd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---hbn3bbhn5ny2drbw
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
+index c47988d3674e..ff9d0f5ae0dd 100644
+--- a/drivers/net/can/rcar/rcar_canfd.c
++++ b/drivers/net/can/rcar/rcar_canfd.c
+@@ -2017,7 +2017,7 @@ static int __maybe_unused rcar_canfd_resume(struct device *dev)
+ static SIMPLE_DEV_PM_OPS(rcar_canfd_pm_ops, rcar_canfd_suspend,
+ 			 rcar_canfd_resume);
+ 
+-static const struct of_device_id rcar_canfd_of_table[] = {
++static const __maybe_unused struct of_device_id rcar_canfd_of_table[] = {
+ 	{ .compatible = "renesas,rcar-gen3-canfd", .data = (void *)RENESAS_RCAR_GEN3 },
+ 	{ .compatible = "renesas,rzg2l-canfd", .data = (void *)RENESAS_RZG2L },
+ 	{ }
+-- 
+2.33.0
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmE3CQAACgkQqclaivrt
-76mPnQf9FlnF0qWsD40bZToqcod8lIoeZbZpp1TIqbe0jiVif3a5s3eohV7/ZyDb
-wyVKfYK3kDsRZrR8ooDXXhjW6KjtX9RPdxt7q26+bq3FnZz1yxb3XYDB2L3tKh/T
-WUY0xS0f+rBM+YprvBorusR/m1/RH1Y8FTVJplHNcyV4GYP3l+8DiYBkdYvDh5Pb
-Ki9DE7h1aPcGatI2GejClZ8graC6PCklIpuvtIw4A907RteARcvwvUZYKClv8KFP
-xgzUIABh60Tvz4BtC4FFB48WtMeaDp2rfxLXap06u+ZvEF2PNXmmCFAMnbP2demE
-Lkpxz5fHT40EmTo7E1g0sdbYG364Dw==
-=NJEs
------END PGP SIGNATURE-----
-
---hbn3bbhn5ny2drbw--
