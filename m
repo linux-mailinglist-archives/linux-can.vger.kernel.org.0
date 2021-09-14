@@ -2,115 +2,118 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 696F940AB00
-	for <lists+linux-can@lfdr.de>; Tue, 14 Sep 2021 11:35:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6630740AB73
+	for <lists+linux-can@lfdr.de>; Tue, 14 Sep 2021 12:10:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231652AbhINJhF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Tue, 14 Sep 2021 05:37:05 -0400
-Received: from mail-lf1-f54.google.com ([209.85.167.54]:44997 "EHLO
-        mail-lf1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231691AbhINJhB (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 14 Sep 2021 05:37:01 -0400
-Received: by mail-lf1-f54.google.com with SMTP id p29so537725lfa.11
-        for <linux-can@vger.kernel.org>; Tue, 14 Sep 2021 02:35:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Idw001S1xp7a5JP7/Tl2CMkaRRP23vBRqDmYi3sMIFE=;
-        b=ofVahz9Tnt7y7hlciIGc1wnQ39IlY3Pj1GMjy/T6MrkV5dnEQGsPBy8n3pncr1rV2d
-         0+hJ/3Dmg/yd4Yw/T0F7u78S6ht0ldIH/dsBP8CDcXv5iCqoEaqORSCiMRpahGZzazV3
-         wI5sM4xx1vp8al2xskMiD9aoNlzKtPyq9kdcbXkN2HTBwMW1mdYOSs+5tqeIo0wzGlcN
-         rSdY6OQwHHNN8ovtH6WK6n28ktVK+bf4AyS+2Jo/7si8VeU4sRN2JtfxoTKlwUGt9Lvt
-         nlBoVJimjmNw8bCWMR2ewddMGzU5sLP/i+euALGA8UnEIiQMmYtlH3Y2RMryWchnlVRf
-         twvg==
-X-Gm-Message-State: AOAM533ci5gUySdVB7y9qdFse1TztlCssVJ2sddSp4wB+tlnFbJZh4pr
-        07S8nXh3cafO9Qpk4PAFaE/1j8AyGAwzCiC02I4=
-X-Google-Smtp-Source: ABdhPJwhYIVpv/u1ErJWfeRvR3jFJlxEEubBFjb5Fm0yFESVBdeDZLMX4zSKretVINFJIijK1l7ekWvPkgMYXhHklRY=
-X-Received: by 2002:a05:6512:1292:: with SMTP id u18mr2893241lfs.384.1631612143287;
- Tue, 14 Sep 2021 02:35:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210906160310.54831-1-mailhol.vincent@wanadoo.fr>
- <20210906160310.54831-2-mailhol.vincent@wanadoo.fr> <CAMZ6RqJaY_jRv+AZ6oH6rxP=dE9Vs1fBwhBQJq_o3dgMWM1vUg@mail.gmail.com>
- <bccb03f4-5179-895a-f803-5adf543a8c19@hartkopp.net>
-In-Reply-To: <bccb03f4-5179-895a-f803-5adf543a8c19@hartkopp.net>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Tue, 14 Sep 2021 18:35:31 +0900
-Message-ID: <CAMZ6RqKpiYOLn7=NoN1U4PwnW4fdrJ1N57nGrCJ6FgKnyx5GvQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] can: netlink: prevent incoherent can configuration
- in case of early return
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
+        id S231308AbhINKLb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 14 Sep 2021 06:11:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33804 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229969AbhINKL3 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 14 Sep 2021 06:11:29 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CF3EC061574
+        for <linux-can@vger.kernel.org>; Tue, 14 Sep 2021 03:10:10 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1mQ5OC-0000Ml-G2
+        for linux-can@vger.kernel.org; Tue, 14 Sep 2021 12:10:08 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id AF37467DA05
+        for <linux-can@vger.kernel.org>; Tue, 14 Sep 2021 10:10:07 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 57C9667DA02;
+        Tue, 14 Sep 2021 10:10:07 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id a31ce124;
+        Tue, 14 Sep 2021 10:10:06 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     linux-can@vger.kernel.org
 Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can <linux-can@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+        Roman Valls <brainstorm@nopcode.org>
+Subject: [PATCH] can: gs_usb: use %u to print unsigned values
+Date:   Tue, 14 Sep 2021 12:10:05 +0200
+Message-Id: <20210914101005.84394-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Oliver,
+This patch changes printf modifier to an unsigned int, as the printed
+variables are unsigned.
 
-On Wed. 8 sep. 2021 at 20:41, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
-> - nextdev ML
-> - linux-kernel ML
->
-> Hi Vincent,
->
-> On 07.09.21 14:51, Vincent MAILHOL wrote:
-> > On Tue. 7 Sep. 2021 at 01:03, Vincent Mailhol
-> > <mailhol.vincent@wanadoo.fr> wrote:
-> >> struct can_priv has a set of flags (can_priv::ctrlmode) which are
-> >> correlated with the other fields of the structure. In
-> >> can_changelink(), those flags are set first and copied to can_priv. If
-> >> the function has to return early, for example due to an out of range
-> >> value provided by the user, then the global configuration might become
-> >> incoherent.
-> >>
-> >> Example: the user provides an out of range dbitrate (e.g. 20
-> >> Mbps). The command fails (-EINVAL), however the FD flag was already
-> >> set resulting in a configuration where FD is on but the databittiming
-> >> parameters are empty.
->
-> When the ip configuration fails you get an error code. And you
-> *typically* do it again to fix your wrong command line parameters.
->
-> ¯\_(ツ)_/¯
+Cc: Roman Valls <brainstorm@nopcode.org>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+ drivers/net/can/usb/gs_usb.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-Overall yes. I tried to think of a counterexample and the best I
-could think of is if the user does:
-# ip link set can0 type can bitrate 500000 dbitrate 20000000 fd on; ip
-link set can0 up
+diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
+index 5e892bef46b0..1b400de00f51 100644
+--- a/drivers/net/can/usb/gs_usb.c
++++ b/drivers/net/can/usb/gs_usb.c
+@@ -352,7 +352,7 @@ static void gs_usb_receive_bulk_callback(struct urb *urb)
+ 	} else { /* echo_id == hf->echo_id */
+ 		if (hf->echo_id >= GS_MAX_TX_URBS) {
+ 			netdev_err(netdev,
+-				   "Unexpected out of range echo id %d\n",
++				   "Unexpected out of range echo id %u\n",
+ 				   hf->echo_id);
+ 			goto resubmit_urb;
+ 		}
+@@ -365,7 +365,7 @@ static void gs_usb_receive_bulk_callback(struct urb *urb)
+ 		/* bad devices send bad echo_ids. */
+ 		if (!txc) {
+ 			netdev_err(netdev,
+-				   "Unexpected unused echo id %d\n",
++				   "Unexpected unused echo id %u\n",
+ 				   hf->echo_id);
+ 			goto resubmit_urb;
+ 		}
+@@ -458,7 +458,7 @@ static void gs_usb_xmit_callback(struct urb *urb)
+ 	struct net_device *netdev = dev->netdev;
+ 
+ 	if (urb->status)
+-		netdev_info(netdev, "usb xmit fail %d\n", txc->echo_id);
++		netdev_info(netdev, "usb xmit fail %u\n", txc->echo_id);
+ 
+ 	usb_free_coherent(urb->dev,
+ 			  urb->transfer_buffer_length,
+@@ -501,7 +501,7 @@ static netdev_tx_t gs_can_start_xmit(struct sk_buff *skb,
+ 	idx = txc->echo_id;
+ 
+ 	if (idx >= GS_MAX_TX_URBS) {
+-		netdev_err(netdev, "Invalid tx context %d\n", idx);
++		netdev_err(netdev, "Invalid tx context %u\n", idx);
+ 		goto badidx;
+ 	}
+ 
+@@ -964,11 +964,11 @@ static int gs_usb_probe(struct usb_interface *intf,
+ 	}
+ 
+ 	icount = dconf->icount + 1;
+-	dev_info(&intf->dev, "Configuring for %d interfaces\n", icount);
++	dev_info(&intf->dev, "Configuring for %u interfaces\n", icount);
+ 
+ 	if (icount > GS_MAX_INTF) {
+ 		dev_err(&intf->dev,
+-			"Driver cannot handle more that %d CAN interfaces\n",
++			"Driver cannot handle more that %u CAN interfaces\n",
+ 			GS_MAX_INTF);
+ 		kfree(dconf);
+ 		return -EINVAL;
+-- 
+2.33.0
 
-In which case, the .ndo_open() function of the driver would be
-triggered with incorrect parameters.
 
-> If not the attempt to set the CAN interface to 'up' will fail (as the
-> last line of defense).
-
-Mostly correct: open_candev() will spot that the data bitrate is not set
-making the .ndo_open() fails as long as the driver correctly
-checks open_candev() return value.
-
-However, one driver fails to check the return value of open_candev():
-https://elixir.bootlin.com/linux/v5.11/source/drivers/net/can/softing/softing_fw.c#L636
-
-So, for this particular driver, we can send incoherent values to the device.
-
-> The code with all the sanity checks is already pretty complex IMO.
-
-ACK.
-
-> I wonder if this effort is worth it.
-
-Well, I was thinking "this is a bug so let's fix it". But your
-argument is fair. I also did not like how complex the code was
-getting when trying to fix that. I guess that this bug is
-acceptable. I will leave it as it is.
-
-Now, I am just worried about the softing driver.
-
-Thanks.
-
-
-Yours sincerely,
-Vincent
