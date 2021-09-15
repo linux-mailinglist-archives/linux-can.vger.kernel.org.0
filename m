@@ -2,78 +2,74 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C4B440B97D
-	for <lists+linux-can@lfdr.de>; Tue, 14 Sep 2021 22:51:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1270340C89C
+	for <lists+linux-can@lfdr.de>; Wed, 15 Sep 2021 17:44:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234061AbhINUwr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 14 Sep 2021 16:52:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44276 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233951AbhINUwr (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 14 Sep 2021 16:52:47 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E0FBC061764
-        for <linux-can@vger.kernel.org>; Tue, 14 Sep 2021 13:51:29 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id g21so808383edw.4
-        for <linux-can@vger.kernel.org>; Tue, 14 Sep 2021 13:51:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=5JMhK9pOqseAjHRtHcU/HG4i5NuvupLcjaClPwT4ItM=;
-        b=kS44ofgfGQyKmz0tNjrSG9ZtN/ltZYJAFnz+wPzAOctlc0RWCfAtTlOXfZeLp42NtJ
-         Ls68AXtPhxhzDeVYopS01IGoHZvuLz8wJYkw4hlOop14hPE3bOYCU+vmzC7Vdz14Mxta
-         e6q3x5oXMFAU0dbdw90EAa4TbDR+EE+mRTdsO+xhSX85Bf+GslnY1vmo/QTkd0B5nre6
-         usyol9zqfzLuXVetPKaqEIMDRRdNI307LdTBgii+pyPf5CmC2fgoRd6obGTuZ7PaJlLU
-         IkaNICIp6AuUxniZxhc114PcsoMRi6f2faV783d7xCHhvuxhoE2TGcJ+Wc6Ty/xprw0g
-         jhbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=5JMhK9pOqseAjHRtHcU/HG4i5NuvupLcjaClPwT4ItM=;
-        b=UtJDuWQ+73KINX01tBTV2Wh+MBbyOKCkKQ86kILfzkhAJ7+gsCkkKHWAvqxzSSkNew
-         sA27WxlGlAwhUX8bn1OCP4pu8ZPocHs/+GT/iNUHyBZoJzoeItC+DAXaFfpVYUlf2MMz
-         kOiddVBcZJaRWEAWt4bAwAG4z6fr6JbXZJz5yq7okN3rHVeyjBtEpZozxvGmvCLiHj+i
-         7pMSsttIgPAVbPWr23Mb2kbeh85TvwKVMUwE9PaGS0beqcuoJP09AdfNcYDf7MmBChYM
-         VLGzx0xS1ok5EfoyJfCYo6FLQ0PnBhy39XdgfroHDk1TSIW3EhYAbnNfWNAbH1Czwi69
-         5OOg==
-X-Gm-Message-State: AOAM531C8UW36tAB52linoHxPuNUw3AYzUNyQfaBjbpOftoV11Fmd7nw
-        ymng/7u35epQblMvYBkp31z9IsRX3MY6fBwtjYw=
-X-Google-Smtp-Source: ABdhPJybl412w5jdLq4Wu7+u1R6CHTLC2G/l3nsPcvuxsFjhmqfRUuf7aX0MM+6fUZvDvV07YA8fsYa7SgdznnIEzoU=
-X-Received: by 2002:aa7:df09:: with SMTP id c9mr21837322edy.243.1631652687463;
- Tue, 14 Sep 2021 13:51:27 -0700 (PDT)
+        id S234392AbhIOPpt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 15 Sep 2021 11:45:49 -0400
+Received: from mx22.baidu.com ([220.181.50.185]:33486 "EHLO baidu.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234391AbhIOPpt (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 15 Sep 2021 11:45:49 -0400
+X-Greylist: delayed 1858 seconds by postgrey-1.27 at vger.kernel.org; Wed, 15 Sep 2021 11:45:48 EDT
+Received: from BJHW-Mail-Ex03.internal.baidu.com (unknown [10.127.64.13])
+        by Forcepoint Email with ESMTPS id F293D16AD8CBF85EBDEB;
+        Wed, 15 Sep 2021 22:57:31 +0800 (CST)
+Received: from BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42) by
+ BJHW-Mail-Ex03.internal.baidu.com (10.127.64.13) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.14; Wed, 15 Sep 2021 22:57:31 +0800
+Received: from LAPTOP-UKSR4ENP.internal.baidu.com (172.31.63.8) by
+ BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.14; Wed, 15 Sep 2021 22:57:31 +0800
+From:   Cai Huoqing <caihuoqing@baidu.com>
+To:     <caihuoqing@baidu.com>
+CC:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, <linux-can@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] can: mscan: mpc5xxx_can: Make use of the helper function dev_err_probe()
+Date:   Wed, 15 Sep 2021 22:57:25 +0800
+Message-ID: <20210915145726.7092-1-caihuoqing@baidu.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Received: by 2002:a17:906:2921:0:0:0:0 with HTTP; Tue, 14 Sep 2021 13:51:26
- -0700 (PDT)
-Reply-To: ayishagddafio@mail.ru
-From:   AISHA GADDAFI <aishagddaf068@gmail.com>
-Date:   Tue, 14 Sep 2021 13:51:26 -0700
-Message-ID: <CAL1XoCnY3X8Nh65Ov51hnBMp19O_NFusTq3AuWeB6BQdJhSp3g@mail.gmail.com>
-Subject: Liebster Freund,?
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-Originating-IP: [172.31.63.8]
+X-ClientProxiedBy: BJHW-Mail-Ex10.internal.baidu.com (10.127.64.33) To
+ BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42)
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
---=20
-Liebster Freund,
+When possible use dev_err_probe help to properly deal with the
+PROBE_DEFER error, the benefit is that DEFER issue will be logged
+in the devices_deferred debugfs file.
+And using dev_err_probe() can reduce code size, and simplify the code.
 
-Im Namen Gottes, des gn=C3=A4digsten, barmherzigsten.
+Signed-off-by: Cai Huoqing <caihuoqing@baidu.com>
+---
+ drivers/net/can/mscan/mpc5xxx_can.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-Friede sei mit dir und Barmherzigkeit sei mit dir und Segen sei mit dir.
-Ich habe die Summe von 27,5 Millionen USD f=C3=BCr Investitionen, ich
-interessiere mich f=C3=BCr Sie f=C3=BCr die Unterst=C3=BCtzung von
-Investitionsprojekten in Ihrem Land. Mein Name ist Aisha Gaddafi und
-lebe derzeit im Oman, ich bin eine Witwe und alleinerziehende Mutter
-mit drei Kindern, die einzige leibliche Tochter des verstorbenen
-libyschen Pr=C3=A4sidenten (dem verstorbenen Oberst Muammar Gaddafi) und
-stehe derzeit unter politischem Asylschutz der omanischen Regierung.
+diff --git a/drivers/net/can/mscan/mpc5xxx_can.c b/drivers/net/can/mscan/mpc5xxx_can.c
+index 35892c1efef0..de4ddf79ba9b 100644
+--- a/drivers/net/can/mscan/mpc5xxx_can.c
++++ b/drivers/net/can/mscan/mpc5xxx_can.c
+@@ -293,10 +293,8 @@ static int mpc5xxx_can_probe(struct platform_device *ofdev)
+ 		return -EINVAL;
+ 
+ 	base = of_iomap(np, 0);
+-	if (!base) {
+-		dev_err(&ofdev->dev, "couldn't ioremap\n");
+-		return err;
+-	}
++	if (!base)
++		return dev_err_probe(&ofdev->dev, err, "couldn't ioremap\n");
+ 
+ 	irq = irq_of_parse_and_map(np, 0);
+ 	if (!irq) {
+-- 
+2.25.1
 
-Bitte antworten Sie dringend f=C3=BCr weitere Details.
-
-meine E-Mail-Adresse unten: ayishagddafio@mail.ru
-Vielen Dank
-Mit freundlichen Gr=C3=BC=C3=9Fen Aisha
