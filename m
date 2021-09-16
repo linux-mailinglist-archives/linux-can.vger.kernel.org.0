@@ -2,74 +2,85 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1270340C89C
-	for <lists+linux-can@lfdr.de>; Wed, 15 Sep 2021 17:44:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F10540D872
+	for <lists+linux-can@lfdr.de>; Thu, 16 Sep 2021 13:22:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234392AbhIOPpt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 15 Sep 2021 11:45:49 -0400
-Received: from mx22.baidu.com ([220.181.50.185]:33486 "EHLO baidu.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234391AbhIOPpt (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 15 Sep 2021 11:45:49 -0400
-X-Greylist: delayed 1858 seconds by postgrey-1.27 at vger.kernel.org; Wed, 15 Sep 2021 11:45:48 EDT
-Received: from BJHW-Mail-Ex03.internal.baidu.com (unknown [10.127.64.13])
-        by Forcepoint Email with ESMTPS id F293D16AD8CBF85EBDEB;
-        Wed, 15 Sep 2021 22:57:31 +0800 (CST)
-Received: from BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42) by
- BJHW-Mail-Ex03.internal.baidu.com (10.127.64.13) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.14; Wed, 15 Sep 2021 22:57:31 +0800
-Received: from LAPTOP-UKSR4ENP.internal.baidu.com (172.31.63.8) by
- BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.14; Wed, 15 Sep 2021 22:57:31 +0800
-From:   Cai Huoqing <caihuoqing@baidu.com>
-To:     <caihuoqing@baidu.com>
-CC:     Wolfgang Grandegger <wg@grandegger.com>,
+        id S237226AbhIPLXr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 16 Sep 2021 07:23:47 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:33086 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235650AbhIPLXq (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 16 Sep 2021 07:23:46 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 18GBLvRN072416;
+        Thu, 16 Sep 2021 06:21:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1631791318;
+        bh=loyLdB1v5vUHIjEAh9kEXRTLBkdeLjMQwiy6qnyLWbk=;
+        h=From:To:CC:Subject:Date;
+        b=k30se4MwmAsqGZMdtXmRWPETKgNKMf8Mp06nzefr2D14KYzSycfFUU5zlWGNri28e
+         y7O5aMlslYSzV06wWD8+7BvcS24p+1GGh9ixAwjmg3NHk1tGeMUlt/zpDKthCzypOH
+         8NpZVJbg1slVtHbNLIjFAqCJ5YrGFb48sKANZdcE=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 18GBLvlJ017550
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 16 Sep 2021 06:21:57 -0500
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 16
+ Sep 2021 06:21:57 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 16 Sep 2021 06:21:57 -0500
+Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 18GBLrV2074899;
+        Thu, 16 Sep 2021 06:21:53 -0500
+From:   Aswath Govindraju <a-govindraju@ti.com>
+CC:     Lokesh Vutla <lokeshvutla@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, <linux-can@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matt Kline <matt@bitbashing.io>, <linux-can@vger.kernel.org>,
         <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] can: mscan: mpc5xxx_can: Make use of the helper function dev_err_probe()
-Date:   Wed, 15 Sep 2021 22:57:25 +0800
-Message-ID: <20210915145726.7092-1-caihuoqing@baidu.com>
+Subject: [PATCH] can: m_can: m_can_platform: Fix the base address in iomap_write_fifo()
+Date:   Thu, 16 Sep 2021 16:51:51 +0530
+Message-ID: <20210916112151.26494-1-a-govindraju@ti.com>
 X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [172.31.63.8]
-X-ClientProxiedBy: BJHW-Mail-Ex10.internal.baidu.com (10.127.64.33) To
- BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42)
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-When possible use dev_err_probe help to properly deal with the
-PROBE_DEFER error, the benefit is that DEFER issue will be logged
-in the devices_deferred debugfs file.
-And using dev_err_probe() can reduce code size, and simplify the code.
+The write into fifo must be performed with an offset from the message ram
+base address. Therefore, fix the base address to mram_base.
 
-Signed-off-by: Cai Huoqing <caihuoqing@baidu.com>
+Fixes: e39381770ec9 ("can: m_can: Disable IRQs on FIFO bus errors")
+Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
 ---
- drivers/net/can/mscan/mpc5xxx_can.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/net/can/m_can/m_can_platform.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/can/mscan/mpc5xxx_can.c b/drivers/net/can/mscan/mpc5xxx_can.c
-index 35892c1efef0..de4ddf79ba9b 100644
---- a/drivers/net/can/mscan/mpc5xxx_can.c
-+++ b/drivers/net/can/mscan/mpc5xxx_can.c
-@@ -293,10 +293,8 @@ static int mpc5xxx_can_probe(struct platform_device *ofdev)
- 		return -EINVAL;
+diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m_can/m_can_platform.c
+index 308d4f2fff00..08eac03ebf2a 100644
+--- a/drivers/net/can/m_can/m_can_platform.c
++++ b/drivers/net/can/m_can/m_can_platform.c
+@@ -52,7 +52,7 @@ static int iomap_write_fifo(struct m_can_classdev *cdev, int offset,
+ {
+ 	struct m_can_plat_priv *priv = cdev_to_priv(cdev);
  
- 	base = of_iomap(np, 0);
--	if (!base) {
--		dev_err(&ofdev->dev, "couldn't ioremap\n");
--		return err;
--	}
-+	if (!base)
-+		return dev_err_probe(&ofdev->dev, err, "couldn't ioremap\n");
+-	iowrite32_rep(priv->base + offset, val, val_count);
++	iowrite32_rep(priv->mram_base + offset, val, val_count);
  
- 	irq = irq_of_parse_and_map(np, 0);
- 	if (!irq) {
+ 	return 0;
+ }
 -- 
-2.25.1
+2.17.1
 
