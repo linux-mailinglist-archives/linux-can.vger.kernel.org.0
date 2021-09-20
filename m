@@ -2,111 +2,59 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3C224105D8
-	for <lists+linux-can@lfdr.de>; Sat, 18 Sep 2021 11:58:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECDFE410F99
+	for <lists+linux-can@lfdr.de>; Mon, 20 Sep 2021 08:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244956AbhIRJ75 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 18 Sep 2021 05:59:57 -0400
-Received: from smtp05.smtpout.orange.fr ([80.12.242.127]:54534 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244992AbhIRJ7b (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 18 Sep 2021 05:59:31 -0400
-Received: from tomoyo.flets-east.jp ([114.149.34.46])
-        by smtp.orange.fr with ESMTPA
-        id RX5Zmuh4X1yYBRX6im0kJV; Sat, 18 Sep 2021 11:58:07 +0200
-X-ME-Helo: tomoyo.flets-east.jp
-X-ME-Auth: MDU0YmViZGZmMDIzYiBlMiM2NTczNTRjNWZkZTMwOGRiOGQ4ODf3NWI1ZTMyMzdiODlhOQ==
-X-ME-Date: Sat, 18 Sep 2021 11:58:07 +0200
-X-ME-IP: 114.149.34.46
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Stefan=20M=C3=A4tje?= <Stefan.Maetje@esd.eu>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v6 6/6] can: dev: add can_tdc_get_relative_tdco() helper function
-Date:   Sat, 18 Sep 2021 18:56:37 +0900
-Message-Id: <20210918095637.20108-7-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210918095637.20108-1-mailhol.vincent@wanadoo.fr>
-References: <20210918095637.20108-1-mailhol.vincent@wanadoo.fr>
+        id S232966AbhITGpO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 20 Sep 2021 02:45:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57648 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232938AbhITGpN (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 20 Sep 2021 02:45:13 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B0CC061574
+        for <linux-can@vger.kernel.org>; Sun, 19 Sep 2021 23:43:47 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1mSD1i-0007XT-0o; Mon, 20 Sep 2021 08:43:42 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1mSD1h-0000LG-Nq; Mon, 20 Sep 2021 08:43:41 +0200
+Date:   Mon, 20 Sep 2021 08:43:41 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     linux-can@vger.kernel.org
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: Marc is on vacation
+Message-ID: <20210920064341.GA878@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 08:41:50 up 214 days, 10:05, 85 users,  load average: 0.21, 0.26,
+ 0.26
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-struct can_tdc::tdco represents the absolute offset from TDCV. Some
-controllers use instead an offset relative to the Sample Point (SP)
-such that:
-| SSP = TDCV + absolute TDCO
-|     = TDCV + SP + relative TDCO
+Hello all,
 
-Consequently:
-| relative TDCO = absolute TDCO - SP
+Marc is on vacation, he will be back on cw41
 
-The function can_tdc_get_relative_tdco() allow to retrieve this
-relative TDCO value.
-
-CC: Stefan Mätje <Stefan.Maetje@esd.eu>
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
-Hi Marc,
-
-As Stefan pointed out in:
-https://lore.kernel.org/linux-can/79691916e4280970f583a54cd5010ece025a1c53.c
-amel@esd.eu/
-it seems that no so many CAN devices are using the relative TDCO
-(maybe the ESDACC is the only one?). Depending on the output of your
-discussion with Microchip and if the mcp25xxfd is indeed using an
-absolute tdco, it might make sense to drop this patch from the series.
-
-Yours sincerely,
-Vincent
----
- include/linux/can/dev.h | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
-
-diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
-index b4aa0f048cab..45f19d9db5ca 100644
---- a/include/linux/can/dev.h
-+++ b/include/linux/can/dev.h
-@@ -102,6 +102,35 @@ static inline bool can_tdc_is_enabled(const struct can_priv *priv)
- 	return !!(priv->ctrlmode & CAN_CTRLMODE_TDC_MASK);
- }
- 
-+/*
-+ * can_get_relative_tdco() - TDCO relative to the sample point
-+ *
-+ * struct can_tdc::tdco represents the absolute offset from TDCV. Some
-+ * controllers use instead an offset relative to the Sample Point (SP)
-+ * such that:
-+ *
-+ * SSP = TDCV + absolute TDCO
-+ *     = TDCV + SP + relative TDCO
-+ *
-+ * -+----------- one bit ----------+-- TX pin
-+ *  |<--- Sample Point --->|
-+ *
-+ *                         --+----------- one bit ----------+-- RX pin
-+ *  |<-------- TDCV -------->|
-+ *                           |<------------------------>| absolute TDCO
-+ *                           |<--- Sample Point --->|
-+ *                           |                      |<->| relative TDCO
-+ *  |<------------- Secondary Sample Point ------------>|
-+ */
-+static inline s32 can_get_relative_tdco(const struct can_priv *priv)
-+{
-+	const struct can_bittiming *dbt = &priv->data_bittiming;
-+	s32 sample_point_in_tc = (CAN_SYNC_SEG + dbt->prop_seg +
-+				  dbt->phase_seg1) * dbt->brp;
-+
-+	return (s32)priv->tdc.tdco - sample_point_in_tc;
-+}
-+
- /* helper to define static CAN controller features at device creation time */
- static inline void can_set_static_ctrlmode(struct net_device *dev,
- 					   u32 static_mode)
+Regards,
+Oleksij
 -- 
-2.32.0
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
