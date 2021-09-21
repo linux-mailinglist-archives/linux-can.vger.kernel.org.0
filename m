@@ -2,101 +2,101 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 693E4412D6C
-	for <lists+linux-can@lfdr.de>; Tue, 21 Sep 2021 05:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FA91412E2C
+	for <lists+linux-can@lfdr.de>; Tue, 21 Sep 2021 07:25:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231444AbhIUDbX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 20 Sep 2021 23:31:23 -0400
-Received: from mail-lf1-f45.google.com ([209.85.167.45]:38566 "EHLO
-        mail-lf1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352791AbhIUCzD (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 20 Sep 2021 22:55:03 -0400
-Received: by mail-lf1-f45.google.com with SMTP id x27so75642318lfu.5;
-        Mon, 20 Sep 2021 19:53:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IC0pg/XX+TI+s5bIXMNwch4sO7j1nEoBLODd5HuH4zo=;
-        b=nA84a7kTHr4gQHJosCqtcn8rA1p1+oJf9gjAblY1sajKurT8QteAyV8qutsAvhQrg+
-         Sao5l79ccRXA44NvSb4E7qu2zsci+QJyhu7OHc0G+2YoX5R8nVb/5+fXi95w1y75gjjR
-         pLxWBKO8UeOmEpIyDMJgpUUsdrtDY85K+hryRwI44WqVFyS5084SYQBhImmwG58W8YNc
-         3X7EVfJSFn32LVmmsAIyywY6xtNnjQABDHDFuEv5BqUXa9C0Mx8Sibb4xC2M3nIyhvjG
-         Zxa/H4tGKNrngBbzWQj1HWjty5ivO+81OmHVv/j3SKSGwLVI5Im7SpEMtfLF6UGhMOC+
-         W5nw==
-X-Gm-Message-State: AOAM531WFM4ps+OGUdmKG/z5T9XzNX3zNj0YdxINR4NFqtzacb24jHIm
-        5gxkx7IpzoNJcZSYNSopgPFp7KkY0Shj7zmrrGY=
-X-Google-Smtp-Source: ABdhPJxBcBj27N0TTO69dgMarQ2SCYu+PhTbfemZzP4y8lLoYVpqH62I91YWXTrklj655Qn1US/umvEUN/gNtO1y80c=
-X-Received: by 2002:a2e:a782:: with SMTP id c2mr25735230ljf.388.1632192814113;
- Mon, 20 Sep 2021 19:53:34 -0700 (PDT)
+        id S229499AbhIUF0w (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 21 Sep 2021 01:26:52 -0400
+Received: from relmlor2.renesas.com ([210.160.252.172]:12316 "EHLO
+        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229471AbhIUF0w (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 21 Sep 2021 01:26:52 -0400
+X-IronPort-AV: E=Sophos;i="5.85,310,1624287600"; 
+   d="scan'208";a="94654052"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie6.idc.renesas.com with ESMTP; 21 Sep 2021 14:25:23 +0900
+Received: from localhost.localdomain (unknown [10.166.14.185])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 3129541C799A;
+        Tue, 21 Sep 2021 14:25:23 +0900 (JST)
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     wg@grandegger.com, mkl@pengutronix.de
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Ayumi Nakamichi <ayumi.nakamichi.kf@renesas.com>
+Subject: [PATCH] can: rcar_can: Fix suspend/resume
+Date:   Tue, 21 Sep 2021 14:19:59 +0900
+Message-Id: <20210921051959.50309-1-yoshihiro.shimoda.uh@renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20210920123045.795228-1-arnd@kernel.org>
-In-Reply-To: <20210920123045.795228-1-arnd@kernel.org>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Tue, 21 Sep 2021 11:53:22 +0900
-Message-ID: <CAMZ6Rq+pfOHGshH=U3ZtzooD9sHvAz+=i2vdEcqF8Xv=q4eexQ@mail.gmail.com>
-Subject: Re: [PATCH] can: etas_es58x: avoid -Wzero-length-bounds warning
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
-        linux-can <linux-can@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Arnd,
-+CC: Kees Cook
+If the driver was not opened, rcar_can_suspend() should not call
+clk_disable() because the clock was not enabled.
 
-On Mon. 20 Sep 2021 at 21:30, Arnd Bergmann <arnd@kernel.org> wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> gcc complains when writing into a zero-length array:
->
-> drivers/net/can/usb/etas_es58x/es581_4.c: In function 'es581_4_tx_can_msg':
-> drivers/net/can/usb/etas_es58x/es581_4.c:374:42: warning: array subscript 65535 is outside the bounds of an interior zero-length array 'u8[0]' {aka 'unsigned char[]'} [-Wzero-length-bounds]
->   374 |         tx_can_msg = (typeof(tx_can_msg))&es581_4_urb_cmd->raw_msg[msg_len];
->       |                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> In file included from drivers/net/can/usb/etas_es58x/es58x_core.h:21,
->                  from drivers/net/can/usb/etas_es58x/es581_4.c:15:
-> drivers/net/can/usb/etas_es58x/es581_4.h:195:20: note: while referencing 'raw_msg'
->   195 |                 u8 raw_msg[0];
->       |                    ^~~~~~~
->   CC [M]  drivers/net/can/usb/etas_es58x/es58x_fd.o
-> drivers/net/can/usb/etas_es58x/es58x_fd.c: In function 'es58x_fd_tx_can_msg':
-> drivers/net/can/usb/etas_es58x/es58x_fd.c:360:42: warning: array subscript 65535 is outside the bounds of an interior zero-length array 'u8[0]' {aka 'unsigned char[]'} [-Wzero-length-bounds]
->   360 |         tx_can_msg = (typeof(tx_can_msg))&es58x_fd_urb_cmd->raw_msg[msg_len];
->       |                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> In file included from drivers/net/can/usb/etas_es58x/es58x_core.h:22,
->                  from drivers/net/can/usb/etas_es58x/es58x_fd.c:17:
-> drivers/net/can/usb/etas_es58x/es58x_fd.h:222:20: note: while referencing 'raw_msg'
->   222 |                 u8 raw_msg[0];
->       |                    ^~~~~~~
->
-> The solution is usually to use a flexible-array member the struct, but
-> we can't directly have that inside of a union, nor can it be the only
-> member of a struct, so add a dummy struct with another zero-length
-> member to get the intended behavior.
->
-> If someone has a better workaround, let me know and I can send a new
-> patch, as this version is rather ugly.
+Fixes: fd1159318e55 ("can: add Renesas R-Car CAN driver")
+Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Tested-by: Ayumi Nakamichi <ayumi.nakamichi.kf@renesas.com>
+---
+ drivers/net/can/rcar/rcar_can.c | 21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
 
-Actually, there is one. Kees Cook introduced a new macro,
-DECLARE_FLEX_ARRAY(), to do this in a more elegant way:
-https://lkml.org/lkml/2021/8/27/524
+diff --git a/drivers/net/can/rcar/rcar_can.c b/drivers/net/can/rcar/rcar_can.c
+index 00e4533c8bdd..6b4eefb03044 100644
+--- a/drivers/net/can/rcar/rcar_can.c
++++ b/drivers/net/can/rcar/rcar_can.c
+@@ -846,10 +846,12 @@ static int __maybe_unused rcar_can_suspend(struct device *dev)
+ 	struct rcar_can_priv *priv = netdev_priv(ndev);
+ 	u16 ctlr;
+ 
+-	if (netif_running(ndev)) {
+-		netif_stop_queue(ndev);
+-		netif_device_detach(ndev);
+-	}
++	if (!netif_running(ndev))
++		return 0;
++
++	netif_stop_queue(ndev);
++	netif_device_detach(ndev);
++
+ 	ctlr = readw(&priv->regs->ctlr);
+ 	ctlr |= RCAR_CAN_CTLR_CANM_HALT;
+ 	writew(ctlr, &priv->regs->ctlr);
+@@ -858,6 +860,7 @@ static int __maybe_unused rcar_can_suspend(struct device *dev)
+ 	priv->can.state = CAN_STATE_SLEEPING;
+ 
+ 	clk_disable(priv->clk);
++
+ 	return 0;
+ }
+ 
+@@ -868,6 +871,9 @@ static int __maybe_unused rcar_can_resume(struct device *dev)
+ 	u16 ctlr;
+ 	int err;
+ 
++	if (!netif_running(ndev))
++		return 0;
++
+ 	err = clk_enable(priv->clk);
+ 	if (err) {
+ 		netdev_err(ndev, "clk_enable() failed, error %d\n", err);
+@@ -881,10 +887,9 @@ static int __maybe_unused rcar_can_resume(struct device *dev)
+ 	writew(ctlr, &priv->regs->ctlr);
+ 	priv->can.state = CAN_STATE_ERROR_ACTIVE;
+ 
+-	if (netif_running(ndev)) {
+-		netif_device_attach(ndev);
+-		netif_start_queue(ndev);
+-	}
++	netif_device_attach(ndev);
++	netif_start_queue(ndev);
++
+ 	return 0;
+ }
+ 
+-- 
+2.25.1
 
-The same series also fixes the warning in the etas_es58x driver:
-https://lkml.org/lkml/2021/8/27/523
-
-So we only need to wait for Kees's series to get merged :)
-
-
-Yours sincerely,
-Vincent Mailhol
