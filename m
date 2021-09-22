@@ -2,79 +2,71 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BDDC414CED
-	for <lists+linux-can@lfdr.de>; Wed, 22 Sep 2021 17:23:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DABC4151C7
+	for <lists+linux-can@lfdr.de>; Wed, 22 Sep 2021 22:55:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236378AbhIVPZK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 22 Sep 2021 11:25:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46760 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232318AbhIVPZK (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 22 Sep 2021 11:25:10 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 98E7C611CA;
-        Wed, 22 Sep 2021 15:23:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632324220;
-        bh=IpBkLTIQvIUZPkRaGwMHEUj4owQqlTkaaZEJ5Z2AWZY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cPEi6jiO8TomHvLDhGygh5ypE8WXDmzCmL9R8h7hj/R1Kj2ox0S7hrwww9SK8AIxd
-         rXvEJ2cOHRdoWrwfLUn3KqmFg/DOALNxwfTWJBoGnii2CFxFTHhZbXLMX8y2SvnYe/
-         gGUNj5EMUpJodk7XVgujI43yIsjcPLh+xZLY32AyKeaOdtCn31pPY0M4/SNJwFCcrq
-         cgUWk24Lz7DaLK13/CjJ1zOXKZ/Mk7IWwCuHjQP8773Rzp/NVHqCGm1B5MrqOf/m4A
-         Lz59M2bXohUmDuYVbs8vSrRM58QmLcG9emmPxrQ2rrotL57Sz3jzqqAuTBqrY4twti
-         W6FuR8WIBvprA==
-Date:   Wed, 22 Sep 2021 17:23:36 +0200
-From:   Simon Horman <horms@kernel.org>
-To:     Ulrich Hecht <uli@fpond.eu>
-Cc:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
-        kuba@kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Ayumi Nakamichi <ayumi.nakamichi.kf@renesas.com>
-Subject: Re: [PATCH] can: rcar_can: Fix suspend/resume
-Message-ID: <20210922152336.GA26223@kernel.org>
-References: <20210921051959.50309-1-yoshihiro.shimoda.uh@renesas.com>
- <1020394138.1395460.1632220693209@webmail.strato.com>
+        id S237802AbhIVU4a (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 22 Sep 2021 16:56:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33886 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237805AbhIVU42 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 22 Sep 2021 16:56:28 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09CCCC0613D5
+        for <linux-can@vger.kernel.org>; Wed, 22 Sep 2021 13:54:56 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id b15so16665342lfe.7
+        for <linux-can@vger.kernel.org>; Wed, 22 Sep 2021 13:54:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=ijKrByR1/KtEp2Ut8Wj0vMi00kBZm/A/r1gPwOEYZIg=;
+        b=fr8lNb1tzuroNDnbJJtYWeXOCGZbssrkZvaRy8HVdYCeSSxS96vSwd3R2+r1vg3M6/
+         ex66FoD7Oi9BZ+eroN2ctcLno3UxJhL89X1t6yEsFayGc2q4Pz0zZQBaUGqcHr3s/S1+
+         lgIwwHuJ4O8SDnA5oR3zC/CFwa9fWO84703n6I2aQyNKP1VzeqgyNRTdZaVTG81gy6Vx
+         t6u58+esbUQxWBZY5IFD1w784RDrV2U7d72/V+RQAoF8LyHU+KHsqwJTuZK+RI9xoYHQ
+         hU/k+XKo5P60J+yjbN5r0LQMnBzU5qvJitpMdoh7dt6f9DChJ/lZbweVN/xESakomSrI
+         Tc/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=ijKrByR1/KtEp2Ut8Wj0vMi00kBZm/A/r1gPwOEYZIg=;
+        b=CUzKmmFGSSbUI8CzbRVWjL+8CqInnqyo8q1G1+NQE/mo+SyfofjTtQsm4yyfPQIKgX
+         X5sKkPC/+2Ewj48DXlcEVrPtOBZoIhiAQ6UJ7SE46GH9yXYKw+xbmZnavEyZm+R0M3Mu
+         qHBQGKEEoq3yk8t+EB1KVf0pCQjzuC2Ags+H5PRvXcv/Wp/GPLbhjA18fWGxsWHPax1p
+         U0iY/MpZbB4cvWu/3PP5oFPT55W1dpyzx9rZXROUiF2UvTzCeIqXFbMgrklLlZqm9iQv
+         9LWCB92g42pLRZa2EfgGaf/zG+1i3K5rxLs0jbUL3dIChjOLPmklXsJIGic51yRp4Nop
+         BILg==
+X-Gm-Message-State: AOAM532Wpn0Ta0XwpstAZXkJsPIKdPj50i2LODk4qFAYZI+E8Tw/nf7y
+        rIdZ1xTDRdBAFjgf666i0M1gsnCbORdkGT92tj0=
+X-Google-Smtp-Source: ABdhPJwYYn7ZwazUxB30/XTxKCOf4dlZaC6TfP1ljKsU4ZNb40cpLRsdAvw7sAb51nYQkeG7S6W5vU7Cgq+lC3FYxgE=
+X-Received: by 2002:a05:651c:1546:: with SMTP id y6mr1383813ljp.53.1632344095088;
+ Wed, 22 Sep 2021 13:54:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1020394138.1395460.1632220693209@webmail.strato.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Sender: ratcliffijames58@gmail.com
+Received: by 2002:a05:6504:5067:0:0:0:0 with HTTP; Wed, 22 Sep 2021 13:54:54
+ -0700 (PDT)
+From:   Aisha Al-Qaddafi <aisha.gdaffi24@gmail.com>
+Date:   Wed, 22 Sep 2021 21:54:54 +0100
+X-Google-Sender-Auth: B3PIuwFz7UcaHNCffYC8akvbLEk
+Message-ID: <CAKVTYWSPSMf085dB7FkhkLr9XtoZHkjbvunoMard5qsSPn4ZOg@mail.gmail.com>
+Subject: My Dear Friend
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue, Sep 21, 2021 at 12:38:13PM +0200, Ulrich Hecht wrote:
-> 
-> > On 09/21/2021 7:19 AM Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com> wrote:
-> > 
-> >  
-> > If the driver was not opened, rcar_can_suspend() should not call
-> > clk_disable() because the clock was not enabled.
-> > 
-> > Fixes: fd1159318e55 ("can: add Renesas R-Car CAN driver")
-> > Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-> > Tested-by: Ayumi Nakamichi <ayumi.nakamichi.kf@renesas.com>
-> > ---
-> >  drivers/net/can/rcar/rcar_can.c | 21 +++++++++++++--------
-> >  1 file changed, 13 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/drivers/net/can/rcar/rcar_can.c b/drivers/net/can/rcar/rcar_can.c
-> > index 00e4533c8bdd..6b4eefb03044 100644
-> > --- a/drivers/net/can/rcar/rcar_can.c
-> > +++ b/drivers/net/can/rcar/rcar_can.c
-
-...
-
-> > @@ -858,6 +860,7 @@ static int __maybe_unused rcar_can_suspend(struct device *dev)
-> >  	priv->can.state = CAN_STATE_SLEEPING;
-> >  
-> >  	clk_disable(priv->clk);
-> > +
-> >  	return 0;
-> >  }
-> >  
-
-nit: this hunk seems unrelated to the rest of the patch
-
-...
+Assalamu alaikum,
+I came across your e-mail contact prior to a private search while in
+need of your assistance. I am Aisha Al-Qaddafi, the only biological,
+Daughter of Former President of Libya Col. Muammar Al-Qaddafi. Am a
+single Mother and a Widow with three Children. I have investment funds
+worth Twenty Seven Million Five Hundred Thousand United State Dollar
+($27.500.000.00 ) and i need a trusted  investment Manager/Partner
+because of my current refugee status, however, I am interested in you
+for investment project assistance in your country. If you are willing
+to handle this project on my behalf kindly reply urgently to enable me
+to provide you more information about the investment
+funds.
+Best Regards
