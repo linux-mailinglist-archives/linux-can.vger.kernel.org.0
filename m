@@ -2,90 +2,71 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A71424178D2
-	for <lists+linux-can@lfdr.de>; Fri, 24 Sep 2021 18:35:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AB16417F7D
+	for <lists+linux-can@lfdr.de>; Sat, 25 Sep 2021 05:22:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344258AbhIXQh2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 24 Sep 2021 12:37:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38348 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1347650AbhIXQgc (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Fri, 24 Sep 2021 12:36:32 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CAE21604AC;
-        Fri, 24 Sep 2021 16:34:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632501299;
-        bh=M2gUitgMmxHvTeA6IbPHMv2h0xP5gcxshq65vE4o2KM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VUu/5Dy8CG8Odj1tnkrCBeRA2NRy+UNOzNb7DuDK8lTuAWop9t5Zet72GDiz/at1C
-         bUBlcvt8HWkyMmOHHiQY2x52qDqXjT8OFfNTSXoGhnOPOjZDqVYkjvMNe21aWpEKcA
-         t0kR2P7wSx38AF6gbBQrSUAYSBjC6l80UfJuhoPda5IduQ4OirvaDX/6CzDsiXoQSc
-         6HkbzN3RNxfOkHBgEDp7S/Vkf5FCiNIkccAgEmwIkfZGwRefAYcJjOBNKMyM4KTwTG
-         VSZj/RzQMVI4g0bJTO4sJHiFwZ5tqAjvEaAQV2e+nKt/hr5ZHcf/KmsiXKJw1sTtpW
-         6tC9FqSPw802g==
-Date:   Fri, 24 Sep 2021 18:34:51 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Ulrich Hecht <uli+renesas@fpond.eu>
-Cc:     linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
-        davem@davemloft.net, linux-can@vger.kernel.org,
-        prabhakar.mahadev-lad.rj@bp.renesas.com,
-        biju.das.jz@bp.renesas.com, yoshihiro.shimoda.uh@renesas.com,
-        wg@grandegger.com, mkl@pengutronix.de, kuba@kernel.org,
-        mailhol.vincent@wanadoo.fr, socketcan@hartkopp.net
-Subject: Re: [PATCH 1/3] can: rcar_canfd: Add support for r8a779a0 SoC
-Message-ID: <YU3+K5WQkBC2YBBy@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Ulrich Hecht <uli+renesas@fpond.eu>,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
-        davem@davemloft.net, linux-can@vger.kernel.org,
-        prabhakar.mahadev-lad.rj@bp.renesas.com, biju.das.jz@bp.renesas.com,
-        yoshihiro.shimoda.uh@renesas.com, wg@grandegger.com,
-        mkl@pengutronix.de, kuba@kernel.org, mailhol.vincent@wanadoo.fr,
-        socketcan@hartkopp.net
-References: <20210924153113.10046-1-uli+renesas@fpond.eu>
- <20210924153113.10046-2-uli+renesas@fpond.eu>
+        id S1347777AbhIYDYF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 24 Sep 2021 23:24:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43982 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347678AbhIYDYE (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 24 Sep 2021 23:24:04 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87078C061571
+        for <linux-can@vger.kernel.org>; Fri, 24 Sep 2021 20:22:30 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id b20so48770479lfv.3
+        for <linux-can@vger.kernel.org>; Fri, 24 Sep 2021 20:22:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=+MDYu2cZk5y6qEtCDaD7IWEU7wQ5JsJjonx7gGHCu64=;
+        b=O+8X6W8JT/1yweIODxHNh/jYCAdibMY94g3wWsnYSZNl0WJYcRYOxLotrthCpZftKI
+         vKwUnTh2F1NS0UJZ7JB+0vPJO2jLNiC5HYhn8ULvqUhRs4g4FFfF/AbYJHnR9aqaPukb
+         YVfe9Dbmw94nHMKpeO3P5djiAXNd98Df5gZupKurPL3mieFpxeoeRdCeLzXHjmsGGqiC
+         wndqP+bHbZx76eM8JQcy/wfsIGKnALH2CK9PFNT6hX2h5j4Eyk5M0AETvgFIXJrCnf+9
+         waHcfqIkwIHyvMWWngER1MxeY8uEV1sVY0DPIK5K0xS7kK39whdO+yJ4MJnZtANJFlK7
+         N+PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=+MDYu2cZk5y6qEtCDaD7IWEU7wQ5JsJjonx7gGHCu64=;
+        b=wKnQ54cvQahtr0NjVFcoquH3v0KTtZIs2GD3Ex0oGKG1OsHWtPYxr4UXuH0CSxKyI9
+         bdU+nxnZpwIXXosNz1foXMruPjJ0x4Jsb7YbmLmC6/5W100y2TEXytyEwChYzorSMYTo
+         E6tD2HPV38vI+Iqo1F+IrTlKKOFW8BdOyRKYZ1VBEsIHwXp69ITrx39ahe5MMgi97DUK
+         a9UiMyUMYspx96/vhIShzRWfSzLDeodz6tCuYkVUKQAk1Sceo+X8mDClkWdU4ogKN5+O
+         mg73CdTKOIC+d08bre9Fpq/Hewqfh6OcUjrY7xWoDjf24QgnmdNq6wU0yohti6ggO9b5
+         4ZEA==
+X-Gm-Message-State: AOAM533dsVPNy59DPpS8GVUD5sYFDCx9jK7eVDCWArdlBymuQ1EOa3VK
+        +LIOAo/7fyB9/FTyEB3eSvIrMgS0SznFlWxc4n0=
+X-Google-Smtp-Source: ABdhPJzCYL4DUCFGRID3MfCH/Je6p/UBCH21RqZEm3ugYlJrnhAQRl/zZisDDC2/0aHnrQvzZZEgSV0PSQhnmhW8K6w=
+X-Received: by 2002:a2e:4a0a:: with SMTP id x10mr865167lja.372.1632540148954;
+ Fri, 24 Sep 2021 20:22:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="g10CtCYoBSkx6XEj"
-Content-Disposition: inline
-In-Reply-To: <20210924153113.10046-2-uli+renesas@fpond.eu>
+Reply-To: mrakainkarim7@gmail.com
+Sender: fridayot00@gmail.com
+Received: by 2002:a9a:486:0:b0:145:17dc:9cad with HTTP; Fri, 24 Sep 2021
+ 20:22:28 -0700 (PDT)
+From:   Mr Akain Karim <aeyuhlmy739@gmail.com>
+Date:   Fri, 24 Sep 2021 20:22:28 -0700
+X-Google-Sender-Auth: eQerqFzWsC7zcU8U8AvEaIxj2h4
+Message-ID: <CAHaoCc9oObUPEnqRw4zgDXwdzzY+XuxkH6=n14t4=-0oF2USQQ@mail.gmail.com>
+Subject: Greetings
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-
---g10CtCYoBSkx6XEj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-
->  1 file changed, 152 insertions(+), 75 deletions(-)
-
-Nice work, Ulrich. Compared to the BSP patch which has "422
-insertions(+), 128 deletions(-)", this is a really good improvement.
-
-Did you test it on D3 to ensure there is no regression? Or are the
-additions in a way that they don't affect older versions?
-
-
---g10CtCYoBSkx6XEj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmFN/iYACgkQFA3kzBSg
-Kba9/Q//VXO86dP3rHXXX9sgyj7cgtdw515ZLn6GwaYfbgYdRFFin7Z4Nu6CVmzT
-cURgUJFMXR3HvHY7AhiRPeqd15GmCvmk+xKnoNvZadjRW1XeNxXneRB2Dd7vSHXM
-IQnZaySM6/xdSLMD533qba7EsZB8cqtqxEaIm/AU/Dzrs1wZG3MZTbpkM+etpgIf
-UEBYyW0vJGeZghPCz7YLu6lDFqJ6DYjcLVL39fjcRt+TAQ5mb3/9zEs6FyPFaUhl
-qwJFCyuIVtR7bU6ocm6hH52fXAcFKHeb1EnW14nt9oQn3qUzMaE1J3i2s47o4OYH
-HtCdIJxdT2F8FQ8rix3Qe6fxPE0p/bUHw4B+d6Nl3MzKcgc+Se4PEToBWpmGM8dG
-FXcQTK8tDd2UVrRLN0wAVY1t+m7Ft5TB1Hq3V1FkOxrF+pUszkMsrB9gwwB12tTf
-aIaCugarFsW1u3GCT1ifgLk8VDaxeD/ZmqRFk1bGgB64VRX0ihchQheWI0DzioRJ
-+2kjyaBfhiqxJg7NcH+h76vR+kJVWTkyx/lAFo8RXlJVREFYcI6xhWmPLFvbOKxQ
-paB/TRijGVZ4mFjoQxKipSB/fX8DhU2rddsyfvxdNu9XAvns5PEiqR2Pcpv9TW/x
-M7aPDUoAHXXKfP/SR549HccUnqnU6pQ5bD9MLa8a4sWpt2t6o3g=
-=0DHv
------END PGP SIGNATURE-----
-
---g10CtCYoBSkx6XEj--
+-- 
+*Compliment of the day,I am Mr. Akain Karim,  I Have a Business Proposal of
+$10.5million for you and I  was compelled to use this medium due to the
+nature of this project, I have access to very vital information that can be
+used to transfer this huge amount of money, which may culminate into the
+investment of the said funds into your company or any lucrative venture in
+your country. If you will like to assist me as a partner then indicate your
+interest, after which we shall both discuss the modalities and the sharing
+percentage.Upon receipt of your reply on your expression of Interest.I will
+give you full details on how the business will be executed and I am open
+for negotiation.Thanks for your anticipated cooperation.Best RegardsMr. 	
+Akain Karim*  Please feel free to reach me on my e-mail:mrakainkarim7@gmail.com
