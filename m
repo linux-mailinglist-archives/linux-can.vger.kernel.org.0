@@ -2,78 +2,64 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EBB3418D84
-	for <lists+linux-can@lfdr.de>; Mon, 27 Sep 2021 03:40:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A60004190B5
+	for <lists+linux-can@lfdr.de>; Mon, 27 Sep 2021 10:25:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbhI0Blf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 26 Sep 2021 21:41:35 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:24977 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230174AbhI0Ble (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 26 Sep 2021 21:41:34 -0400
-Received: from dggeml757-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4HHlZh3PLlzbmlY;
-        Mon, 27 Sep 2021 09:35:40 +0800 (CST)
-Received: from [10.174.179.200] (10.174.179.200) by
- dggeml757-chm.china.huawei.com (10.1.199.137) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.8; Mon, 27 Sep 2021 09:39:55 +0800
-Subject: Re: [PATCH net] can: isotp: add result check for
- wait_event_interruptible()
-From:   "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>
-To:     <socketcan@hartkopp.net>
-CC:     <mkl@pengutronix.de>, <davem@davemloft.net>, <kuba@kernel.org>,
-        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>
-References: <20210918092819.156291-1-william.xuanziyang@huawei.com>
-Message-ID: <1fcfeb88-d49d-2a2a-1524-8504eb848123@huawei.com>
-Date:   Mon, 27 Sep 2021 09:39:54 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S233385AbhI0I0q (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 27 Sep 2021 04:26:46 -0400
+Received: from h4.fbrelay.privateemail.com ([131.153.2.45]:32809 "EHLO
+        h4.fbrelay.privateemail.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233337AbhI0I0q (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 27 Sep 2021 04:26:46 -0400
+Received: from MTA-05-3.privateemail.com (mta-05-1.privateemail.com [198.54.122.55])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by h3.fbrelay.privateemail.com (Postfix) with ESMTPS id 4411480C30
+        for <linux-can@vger.kernel.org>; Mon, 27 Sep 2021 04:25:08 -0400 (EDT)
+Received: from mta-05.privateemail.com (localhost [127.0.0.1])
+        by mta-05.privateemail.com (Postfix) with ESMTP id 2E74918000B8;
+        Mon, 27 Sep 2021 04:25:07 -0400 (EDT)
+Received: from localhost (unknown [10.20.151.233])
+        by mta-05.privateemail.com (Postfix) with ESMTPA id F195918000A1;
+        Mon, 27 Sep 2021 04:25:06 -0400 (EDT)
+Date:   Mon, 27 Sep 2021 01:25:06 -0700
+From:   Matt Kline <matt@bitbashing.io>
+To:     Aswath Govindraju <a-govindraju@ti.com>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] can: m_can: Batch FIFO reads during CAN receive
+Message-ID: <YVF/4iJDwLXTJOCJ@kline-desktop>
+References: <20210817050853.14875-1-matt@bitbashing.io>
+ <20210817050853.14875-3-matt@bitbashing.io>
+ <aa0d3bed-dd0d-ae13-d0ef-6fb130db5aa5@ti.com>
 MIME-Version: 1.0
-In-Reply-To: <20210918092819.156291-1-william.xuanziyang@huawei.com>
-Content-Type: text/plain; charset="gbk"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.200]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggeml757-chm.china.huawei.com (10.1.199.137)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aa0d3bed-dd0d-ae13-d0ef-6fb130db5aa5@ti.com>
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-> Using wait_event_interruptible() to wait for complete transmission,
-> but do not check the result of wait_event_interruptible() which can
-> be interrupted. It will result in tx buffer has multiple accessers
-> and the later process interferes with the previous process.
-> 
-> Following is one of the problems reported by syzbot.
-> 
-> =============================================================
-> WARNING: CPU: 0 PID: 0 at net/can/isotp.c:840 isotp_tx_timer_handler+0x2e0/0x4c0
-> CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.13.0-rc7+ #68
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1 04/01/2014
-> RIP: 0010:isotp_tx_timer_handler+0x2e0/0x4c0
-> Call Trace:
->  <IRQ>
->  ? isotp_setsockopt+0x390/0x390
->  __hrtimer_run_queues+0xb8/0x610
->  hrtimer_run_softirq+0x91/0xd0
->  ? rcu_read_lock_sched_held+0x4d/0x80
->  __do_softirq+0xe8/0x553
->  irq_exit_rcu+0xf8/0x100
->  sysvec_apic_timer_interrupt+0x9e/0xc0
->  </IRQ>
->  asm_sysvec_apic_timer_interrupt+0x12/0x20
-> 
-> Add result check for wait_event_interruptible() in isotp_sendmsg()
-> to avoid multiple accessers for tx buffer.
-> 
-> Reported-by: syzbot+78bab6958a614b0c80b9@syzkaller.appspotmail.com
-> Fixes: e057dd3fc20f ("can: add ISO 15765-2:2016 transport protocol")
-> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+Hey Aswath,
 
-Hi Oliver,
-I send a new patch with this problem, ignore this patch please.
+Definitely looks like a silly mistake on my part, thanks for sending fixes!
+Apologies for the slow response; I was out for the past week or so.
 
-Thank you!
+Best,
+Matt
+
+On Thu, Sep 16, 2021 at 05:34:45PM +0530, Aswath Govindraju wrote:
+> Hi Matt, Marc,
+> 
+> While reading multiple register fields and calling iomap_read_fifo() in
+> m_can_platform.c is causing an issue.
+> 
+> In iomap_read_fifo(), ioread32_rep() is being used for reading.
+> ioread32_rep reads() from the same source address for val_count times.
+> This is not the intended behavior here. The source address also needs to
+> be shifted along with the destination address.
+> 
+> Is a fix required in iomap_read_fifo() ?
+> 
+> Thanks,
+> Aswath
