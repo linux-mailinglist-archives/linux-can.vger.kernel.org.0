@@ -2,74 +2,68 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E922041AAED
-	for <lists+linux-can@lfdr.de>; Tue, 28 Sep 2021 10:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA87841C678
+	for <lists+linux-can@lfdr.de>; Wed, 29 Sep 2021 16:15:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239622AbhI1ItG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 28 Sep 2021 04:49:06 -0400
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.53]:27661 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239563AbhI1ItG (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 28 Sep 2021 04:49:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1632818824;
-    s=strato-dkim-0002; d=fpond.eu;
-    h=Subject:References:In-Reply-To:Message-ID:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=gbQ3IMAvZc7aLDyCplOxZibt9MvPS8SVs44QxppKxOA=;
-    b=gFiugyO1XIpCrAYcg8xIW2AhFwdl2RbtwCdPt4NTRkscDiDegdROOIVST81bAyCka/
-    EUllEQJtKRKVGbJ1teX/P6NLpUZvnmiPjkgTCeyLIVvWwa2QN8shsnqhjrqU2aDN5ecF
-    mxr7NL387Jowb+kxHSo0UrbsepeeegSnaY+kLYKaES6fdXDPSxB0nWRbbdN20gnKshb5
-    6/9SIAvmt4D3mTlHD4snShtF6grlbJqGwSVR9mz76Yr0JXPSoyl/JRV7l9cOBsluRdOv
-    wiRu+ctTA2zabJJ/0KIjE422OGTM2x6HMbraVm4IKBYt/Iiis9ir3waz2v0rKMspAs5P
-    YjlA==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":OWANVUa4dPFUgKR/3dpvnYP0Np73amq+g13rqGzvv3qxio1R8fGl/w2B+Io="
-X-RZG-CLASS-ID: mo00
-Received: from oxapp02-03.back.ox.d0m.de
-    by smtp-ox.front (RZmta 47.33.8 AUTH)
-    with ESMTPSA id c00f85x8S8l3dQz
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Tue, 28 Sep 2021 10:47:03 +0200 (CEST)
-Date:   Tue, 28 Sep 2021 10:47:03 +0200 (CEST)
-From:   Ulrich Hecht <uli@fpond.eu>
-To:     Wolfram Sang <wsa@kernel.org>, Ulrich Hecht <uli+renesas@fpond.eu>
-Cc:     linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
-        davem@davemloft.net, linux-can@vger.kernel.org,
-        prabhakar.mahadev-lad.rj@bp.renesas.com,
-        biju.das.jz@bp.renesas.com, yoshihiro.shimoda.uh@renesas.com,
-        wg@grandegger.com, mkl@pengutronix.de, kuba@kernel.org,
-        mailhol.vincent@wanadoo.fr, socketcan@hartkopp.net
-Message-ID: <128093803.822456.1632818823845@webmail.strato.com>
-In-Reply-To: <YU3+K5WQkBC2YBBy@ninjato>
-References: <20210924153113.10046-1-uli+renesas@fpond.eu>
- <20210924153113.10046-2-uli+renesas@fpond.eu> <YU3+K5WQkBC2YBBy@ninjato>
-Subject: Re: [PATCH 1/3] can: rcar_canfd: Add support for r8a779a0 SoC
+        id S1343779AbhI2ORC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 29 Sep 2021 10:17:02 -0400
+Received: from smtp5-g21.free.fr ([212.27.42.5]:32842 "EHLO smtp5-g21.free.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S245475AbhI2ORC (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 29 Sep 2021 10:17:02 -0400
+Received: from localhost.localdomain (unknown [89.158.142.148])
+        (Authenticated sender: stephane.grosjean@free.fr)
+        by smtp5-g21.free.fr (Postfix) with ESMTPSA id BEFBA5FF10;
+        Wed, 29 Sep 2021 16:14:44 +0200 (CEST)
+From:   Stephane Grosjean <s.grosjean@peak-system.com>
+To:     linux-can Mailing List <linux-can@vger.kernel.org>
+Cc:     Stephane Grosjean <s.grosjean@peak-system.com>
+Subject: [PATCH 1/2] can: peak_usb: always ask for BERR reporting for PCAN-USB devices
+Date:   Wed, 29 Sep 2021 16:14:20 +0200
+Message-Id: <20210929141421.55580-1-s.grosjean@peak-system.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-Importance: Normal
-X-Mailer: Open-Xchange Mailer v7.10.5-Rev24
-X-Originating-Client: open-xchange-appsuite
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Since for the PCAN-USB, the management of the transition to the
+ERROR_WARNING or ERROR_PASSIVE state is done according to the error
+counters, these must be requested unconditionally.
 
-> On 09/24/2021 6:34 PM Wolfram Sang <wsa@kernel.org> wrote:
-> 
->  
-> >  1 file changed, 152 insertions(+), 75 deletions(-)
-> 
-> Nice work, Ulrich. Compared to the BSP patch which has "422
-> insertions(+), 128 deletions(-)", this is a really good improvement.
-> 
-> Did you test it on D3 to ensure there is no regression? Or are the
-> additions in a way that they don't affect older versions?
+Signed-off-by: Stephane Grosjean <s.grosjean@peak-system.com>
+---
+ drivers/net/can/usb/peak_usb/pcan_usb.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-The behavior of the driver on non-V3U systems is unchanged.
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb.c b/drivers/net/can/usb/peak_usb/pcan_usb.c
+index 837b3fecd71e..4c8993f69e6b 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb.c
++++ b/drivers/net/can/usb/peak_usb/pcan_usb.c
+@@ -841,14 +841,14 @@ static int pcan_usb_start(struct peak_usb_device *dev)
+ 	pdev->bec.rxerr = 0;
+ 	pdev->bec.txerr = 0;
+ 
+-	/* be notified on error counter changes (if requested by user) */
+-	if (dev->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING) {
+-		err = pcan_usb_set_err_frame(dev, PCAN_USB_BERR_MASK);
+-		if (err)
+-			netdev_warn(dev->netdev,
+-				    "Asking for BERR reporting error %u\n",
+-				    err);
+-	}
++	/* always ask the device for BERR reporting, to be able to switch from
++	 * WARNING to PASSIVE state
++	 */
++	err = pcan_usb_set_err_frame(dev, PCAN_USB_BERR_MASK);
++	if (err)
++		netdev_warn(dev->netdev,
++			    "Asking for BERR reporting error %u\n",
++			    err);
+ 
+ 	/* if revision greater than 3, can put silent mode on/off */
+ 	if (dev->device_rev > 3) {
+-- 
+2.25.1
 
-CU
-Uli
