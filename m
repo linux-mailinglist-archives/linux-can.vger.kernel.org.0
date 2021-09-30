@@ -2,113 +2,150 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FF1A41D6B3
-	for <lists+linux-can@lfdr.de>; Thu, 30 Sep 2021 11:47:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C1AB41DF7D
+	for <lists+linux-can@lfdr.de>; Thu, 30 Sep 2021 18:44:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349555AbhI3Jsf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 30 Sep 2021 05:48:35 -0400
-Received: from smtp5-g21.free.fr ([212.27.42.5]:26446 "EHLO smtp5-g21.free.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349498AbhI3Jse (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Thu, 30 Sep 2021 05:48:34 -0400
-Received: from Focal.peak-system.com (unknown [89.158.142.148])
-        (Authenticated sender: stephane.grosjean@free.fr)
-        by smtp5-g21.free.fr (Postfix) with ESMTPSA id DB4D65FFB1;
-        Thu, 30 Sep 2021 11:46:17 +0200 (CEST)
-From:   Stephane Grosjean <s.grosjean@peak-system.com>
-To:     linux-can Mailing List <linux-can@vger.kernel.org>
-Cc:     Stephane Grosjean <s.grosjean@peak-system.com>
-Subject: [PATCH] can: peak_usb: CANFD: store 64-bits hw timestamps
-Date:   Thu, 30 Sep 2021 11:46:03 +0200
-Message-Id: <20210930094603.23134-1-s.grosjean@peak-system.com>
-X-Mailer: git-send-email 2.25.1
+        id S1352281AbhI3QqA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 30 Sep 2021 12:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40208 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352270AbhI3Qp7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 30 Sep 2021 12:45:59 -0400
+Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C83C5C06176D
+        for <linux-can@vger.kernel.org>; Thu, 30 Sep 2021 09:44:16 -0700 (PDT)
+Received: by mail-vs1-xe44.google.com with SMTP id 188so8218098vsv.0
+        for <linux-can@vger.kernel.org>; Thu, 30 Sep 2021 09:44:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=/T9drlD1s9vO6lHEMs4LJzmDo2MKXEHBXvFYaWoQWpk=;
+        b=QarvOlJMuTSdHI+b8Hr3A3HrXimA547zfxBxsgE3cWk0htfApzaiL4/m+PlwNlDFuW
+         5QiZANF2fDaEHGtKfAXTax5CfmJ9+6VoNDLp5TpRVGYfHNkM9YCMRpziHjlf45OuyALh
+         ltkHFxK1XaDeuRQ3br+kpQXFf717kamV0Rii/lmaMYUdvh8PpSW9JC3BXvTaJ6dtHZYg
+         wwIati/h9T6zmgykEpbfUF8dnlGB4B5zFL8vU+PqIwDzxWFuB9apZ+OfzNjcNZfKyThH
+         E8bu9cyC5P7tImy3KVgdbLW5529f9X1xqRQxSg2RSqx2Hls1NE0MceyKCtdzZb5YCqS7
+         w7MA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=/T9drlD1s9vO6lHEMs4LJzmDo2MKXEHBXvFYaWoQWpk=;
+        b=mQgqXoQCDDN95Wltsigq5PzrzvGqFHY55G5tO9A0YQW5ZVktghGbkPU4uktjYJfIpR
+         e/w4U/e5tBBFkD2nM4LuSHz/8JXyaqLSy2yoQTX7XZDFyfn+xmdCnkNgi5RbZ/8EVHJr
+         k69FnJdQk0bgHOP5qRK9VrJmUEmEh2Ep3TqoopHKqGROXLC4HQcE5lENx7GguKcsGQk9
+         Eb0tydkgGUPgUKLiIFoliixOQHnkEX0ST8tqIAyxsijiP9imcLezeLjg5v/4xiC+KaW5
+         pGgDzX6e8/dgB4LtSqc+msfJLVmzWFI30DgaoPWn9q7nmW9DRCTgdHhVZqhpJ0kK0VTh
+         SMeg==
+X-Gm-Message-State: AOAM531F8lrUN4j1Nt0zkHsbs6v11APqevyoOPbuc+kr1hGyDlPP6uuj
+        uVoobUL8tIvO2CK9sSrsho2pQ7gJQye6wFbNaQA=
+X-Google-Smtp-Source: ABdhPJylc8jr22SgVWjaSGbV5AA2fINHLLnkryQ3YSc8O9YHaCdhISJtr4mesfL+Vz6nH2CFYAiSfAGQOPAVq77cqbY=
+X-Received: by 2002:a67:f74f:: with SMTP id w15mr88415vso.61.1633020255972;
+ Thu, 30 Sep 2021 09:44:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a59:ab2e:0:b0:22d:7f44:603a with HTTP; Thu, 30 Sep 2021
+ 09:44:15 -0700 (PDT)
+Reply-To: irenezakari24@gmail.com
+From:   Irene zakari <irenezakari88@gmail.com>
+Date:   Thu, 30 Sep 2021 09:44:15 -0700
+Message-ID: <CAFT8PFHO6AoNO68AY9yLBeu9HW25zXm39mgx+NiZtQSk6n-rcg@mail.gmail.com>
+Subject: PLEASE I NEED YOUR HELP
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This patch allows to use the whole 64-bit timestamps received from the
-CAN-FD device (expressed in µs) rather than only its low part, in the
-hwtstamp structure of the skb transferred to the network layer, when a
-CAN/CANFD frame has been received.
+Hello   ..
 
-Signed-off-by: Stephane Grosjean <s.grosjean@peak-system.com>
----
- drivers/net/can/usb/peak_usb/pcan_usb_core.c | 11 +++++++++++
- drivers/net/can/usb/peak_usb/pcan_usb_core.h |  1 +
- drivers/net/can/usb/peak_usb/pcan_usb_fd.c   |  9 ++++++---
- 3 files changed, 18 insertions(+), 3 deletions(-)
+How do you do over there? I hope you are doing well?
 
-diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.c b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
-index e8f43ed90b72..4bb6b9d53df4 100644
---- a/drivers/net/can/usb/peak_usb/pcan_usb_core.c
-+++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
-@@ -205,6 +205,17 @@ int peak_usb_netif_rx(struct sk_buff *skb,
- 	return netif_rx(skb);
- }
- 
-+/* post received skb with native 64-bit hw timestamp */
-+int peak_usb_netif_rx_64(struct sk_buff *skb, u32 ts_low, u32 ts_high)
-+{
-+	struct skb_shared_hwtstamps *hwts = skb_hwtstamps(skb);
-+	u64 ns_ts = (((u64)ts_high << 32) + ts_low) * NSEC_PER_USEC;
-+
-+	hwts->hwtstamp = ns_to_ktime(ns_ts);
-+
-+	return netif_rx(skb);
-+}
-+
- /*
-  * callback for bulk Rx urb
-  */
-diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.h b/drivers/net/can/usb/peak_usb/pcan_usb_core.h
-index b00a4811bf61..daa19f57e742 100644
---- a/drivers/net/can/usb/peak_usb/pcan_usb_core.h
-+++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.h
-@@ -143,6 +143,7 @@ void peak_usb_set_ts_now(struct peak_time_ref *time_ref, u32 ts_now);
- void peak_usb_get_ts_time(struct peak_time_ref *time_ref, u32 ts, ktime_t *tv);
- int peak_usb_netif_rx(struct sk_buff *skb,
- 		      struct peak_time_ref *time_ref, u32 ts_low);
-+int peak_usb_netif_rx_64(struct sk_buff *skb, u32 ts_low, u32 ts_high);
- void peak_usb_async_complete(struct urb *urb);
- void peak_usb_restart_complete(struct peak_usb_device *dev);
- 
-diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-index 09029a3bad1a..6bd12549f101 100644
---- a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-+++ b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-@@ -515,7 +515,8 @@ static int pcan_usb_fd_decode_canmsg(struct pcan_usb_fd_if *usb_if,
- 	netdev->stats.rx_packets++;
- 	netdev->stats.rx_bytes += cfd->len;
- 
--	peak_usb_netif_rx(skb, &usb_if->time_ref, le32_to_cpu(rm->ts_low));
-+	peak_usb_netif_rx_64(skb, le32_to_cpu(rm->ts_low),
-+			     le32_to_cpu(rm->ts_high));
- 
- 	return 0;
- }
-@@ -579,7 +580,8 @@ static int pcan_usb_fd_decode_status(struct pcan_usb_fd_if *usb_if,
- 	netdev->stats.rx_packets++;
- 	netdev->stats.rx_bytes += cf->len;
- 
--	peak_usb_netif_rx(skb, &usb_if->time_ref, le32_to_cpu(sm->ts_low));
-+	peak_usb_netif_rx_64(skb, le32_to_cpu(sm->ts_low),
-+			     le32_to_cpu(sm->ts_high));
- 
- 	return 0;
- }
-@@ -629,7 +631,8 @@ static int pcan_usb_fd_decode_overrun(struct pcan_usb_fd_if *usb_if,
- 	cf->can_id |= CAN_ERR_CRTL;
- 	cf->data[1] |= CAN_ERR_CRTL_RX_OVERFLOW;
- 
--	peak_usb_netif_rx(skb, &usb_if->time_ref, le32_to_cpu(ov->ts_low));
-+	peak_usb_netif_rx_64(skb, le32_to_cpu(ov->ts_low),
-+			     le32_to_cpu(ov->ts_high));
- 
- 	netdev->stats.rx_over_errors++;
- 	netdev->stats.rx_errors++;
--- 
-2.25.1
+My name is Irene. (24 years), i am single, from Gambia, the only child
+of late Eng. Bernard Bakary Zakaria. the Director of Bajam Enterprise
+(Building Construction Company in The Gambia) also the CEO of Bernard
+Import and Export (GAMBIA).
 
+As a matter of fact my mother died when i was barely 4 years old
+according to my late father and because of the type of love he had for
+my mother made him to remain UN-married till he left the ghost..
+
+So after the death of my father as a result of assassinate, his brother (My
+Uncle) who is the purchasing and marketing sale manager of my late
+fathers company named (Mr. James Tokunbo Oriade Zakaria) wanted to
+convert all the properties and resources of my late father into his
+which i quarreled with him and it made him to lay his anger on me to
+the extent of hiring an assassins to kill me but to God be the glory i
+succeeded by making a way to Burkina faso for my dear life.
+Honestly i do live a fearful life even here in Burkina faso because of
+those Assassins coming after me .
+
+I would want to live and study in your country for my better future.
+because my father same blood brother wanted to force me into undecided
+marriage, just for me to leave my father home and went and live with
+another man I never know as he want to occupied all my father home
+and maybe to sold it as my father no longer alive, I'm the only child
+daughter my father born, '' but he don't know that i am not
+interesting in any of my father properties or early marriage for now,
+because i still have future to think about and to focus on my studies
+first as i was doing my first year in the University before the death
+of my father.
+
+Actually what I want to discuss with you is about my personal issue
+concern funds my late father deposited in a bank outside my country,
+worth $4.5 million united state dollars. i need your assistance to
+receive and invest this funds in your country.
+
+Please help me, I am sincere to you and I want to be member of your
+family as well if you wouldn't mind to accept me and lead me to better
+future in your country.
+
+All the documents the bank issue to my father during time of deposit
+is with me now.
+I already notify the bank on phone about the death of my father and
+they are surprise for the news and accept that my father is their good
+customer.
+I will be happy if this money can be invested in any business of your
+choice and it will be under your control till i finished my education,
+also I'm assuring you good relationship and I am ready to discuss the
+amount of money to give you from this money for your help.
+
+Therefore, I shall give you the bank contact and other necessary
+information in my next email if you will only promise me that you will
+not/never betray and disclosed this matter to anybody, because, this
+money is the only hope i have for survival on earth since I have lost
+my parents.
+
+Moreover I have the FUND PLACEMENT CERTIFICATE and the DEATH
+CERTIFICATE here with me, but before I give you further information, i
+will like to know your full data
+
+1. Full Name: ........................
+2. Address: ..................
+3. Nationality: ........... Sex................
+4. Age:........... Date of Birth:................
+5. Occupation:...................
+.....
+6. Phone: ........... Fax:.........................
+7. State of Origin: .......Country:..............
+8. Occupation:...................
+................
+9. Marital status........... E-mail address's: ............
+10. Scan copy of your ID card or Driving License/Photo:............
+DECLARATION:
+
+so that i will be fully sure that i am not trusting the wrong person.
+and it will also give me the mind to send you the bank contact for you
+to communicate with them for more verification about this money. and
+to know you more better.
+
+Meanwhile, you can reach me through my pastor,his name is Pastor Paul
+any time you call, tell him that you want to speak with me because
+right now i am living in the church here in Burkina faso and i don't
+want to stay here any longer,
+send for me to speak with you his phone number is this(+226 75213646)
+
+I will stop here and i will be waiting for your reply and feel free
+ask any thing you want to know about me.
+Please help me, I would be highly appreciated
+Have nice day.
+From Irene
