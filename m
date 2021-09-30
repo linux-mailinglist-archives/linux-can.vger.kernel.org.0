@@ -2,78 +2,76 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9315741E393
-	for <lists+linux-can@lfdr.de>; Fri,  1 Oct 2021 00:00:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 902A241E43A
+	for <lists+linux-can@lfdr.de>; Fri,  1 Oct 2021 00:57:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235502AbhI3WBr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 30 Sep 2021 18:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55684 "EHLO
+        id S1348798AbhI3W7b (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 30 Sep 2021 18:59:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbhI3WBq (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 30 Sep 2021 18:01:46 -0400
-Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5994C06176A
-        for <linux-can@vger.kernel.org>; Thu, 30 Sep 2021 15:00:03 -0700 (PDT)
-Received: by mail-vs1-xe41.google.com with SMTP id f18so9192949vsp.2
-        for <linux-can@vger.kernel.org>; Thu, 30 Sep 2021 15:00:03 -0700 (PDT)
+        with ESMTP id S1348921AbhI3W7Z (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 30 Sep 2021 18:59:25 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC817C061774
+        for <linux-can@vger.kernel.org>; Thu, 30 Sep 2021 15:57:41 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id t8so12572423wri.1
+        for <linux-can@vger.kernel.org>; Thu, 30 Sep 2021 15:57:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=5JMhK9pOqseAjHRtHcU/HG4i5NuvupLcjaClPwT4ItM=;
-        b=beXgj8D2sN/8W30rm6uG3Zy/MA0boR7x5Z1pZRz7mxKO/j4NasBhY0KZBnWNmyaSAl
-         OKwD3ZHKaRI6CzeD+OoQGUYsmaQXkupXJ8r2w+E8/EEx3rzJSugzkDs3LgUU83TkNT9C
-         vZ66jrUBa2xUxVfshJ2FTQyzXPxNW0t9F6GnzIldSLLn0Af4gOQfkyKgGsibEdWES79A
-         nbAJjvoa+yxFqB3NI+zHE3160MUyyAWx2X5PMMghmZtPMlthvCSVsGOCsF0JyvFzo2sT
-         L8YpS4C6yN55Jin8f3adZBpBOriSWnWXQxduR743dKrBx3lalXesukk7jtZ+FYGF9o+w
-         UJgA==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=AnIUtRQtDgk3YDJAatwz+LXUKRWPbctJNdAprjwvZ5o=;
+        b=NbyMdHEZeBs3sGq/yDHhFme6/Fat2fIEs1FbuecL1VGVLNPFVKU5MMEzqqtmtv3lrT
+         LyW5uhTxAor2u02W/ObGaIVKkso13EmNkPeqEKWvp/MUMhviRWbZ8nckHCYJ556NudOp
+         CVsQD4dF9ZylhNVdYAbBqX0A0zUyE0K2pGMLE76ziizR4sORoxcFl/sLgtHo3wxalxgg
+         zVWop8qYFvchibQzEbMROBdDHjlzHZVZJ1FRfybhb6wrSwetzJb9THEFmdLn6gkHaAVz
+         dFyBj/yMHcUaz8lAQTBNC3OUOyaayX15aeEcmR3hIb43fnzJKw76ohBZCKh7LDPECDvY
+         Mt4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=5JMhK9pOqseAjHRtHcU/HG4i5NuvupLcjaClPwT4ItM=;
-        b=tk8NS5IVHB05nchAsVtMMoriOA6FioIB5fCkPao1NmXQ7fgORe+kkaQAvCWaATFuYS
-         46DZt3d75Udm1tv3gYs0NrXwya89sj9YCyySPYC/KDXKAYTmDWY7Dx9G3XU0NkY1wXjs
-         V1lzwph73ylrzGNomT1Vrx1RyYFK7zoqguzRpowqyhsEsKlnQcixZDhOah36uClyfSq6
-         PRVjb9i4nM5krJ350i6G6Xxbj5JySkpitnAGkYUuZGNt39LkQrRp8w5nnjx4n+W/ords
-         5LIEAoZ6FurRmmAUTAY3dmxljgcL/0tQLf9GPq5qvQtfwKqPHlhtOADdudUSxUIEfFNh
-         pYpQ==
-X-Gm-Message-State: AOAM530oS9MsXv/XzhMvVw0mEkmR9HozM0n/p2enzINioe2RR/TZYLUC
-        SPopnOgWfXs2zbxqPH/vSkuexYP4Q/xrDGJXP/8=
-X-Google-Smtp-Source: ABdhPJyDFnoc8mn9DP+G/0ycIsPqGXAxe2Sid5aCx3OjNd8SpNrPtnllHNPNiG7UjV7zJAdlyjNOhH0eWjbX9kdtR/w=
-X-Received: by 2002:a05:6102:518:: with SMTP id l24mr1695795vsa.57.1633039202705;
- Thu, 30 Sep 2021 15:00:02 -0700 (PDT)
+         :subject:to;
+        bh=AnIUtRQtDgk3YDJAatwz+LXUKRWPbctJNdAprjwvZ5o=;
+        b=xm6Fy6oaSqQDjbMqI+NAvRaAQCUpjmLVhXuni8AXUpJ7IA+zgtjF9x8l5GUyIdLHUX
+         nXtNil1YNN//jmj8w316Y4VW8q6L1jZGq4fa8u8t0nPgpdultgBkKkZCPI6Ssn9qn7rq
+         SApwETyvUjYUakIvLj+If0pU0miSLmYT0Z80zmi78ztlvP8+pYrlT2k0icS8o7Y/nyV2
+         2DQEkfE5Ojf48owjdhWwNgPppGxhsg8OzVjJl5ZRjFLS88vkq1jg17h1+FVskwDyCsOj
+         2NUJ2O13klQ/DvIZ8QtGT26zA/+0ecW33b9fH/572bI3Aon9oZIH8CSK1gGlFscsazqp
+         2wUA==
+X-Gm-Message-State: AOAM531flLB0U6tkIf3GB9HXSAam/guR/u5VBymehbpME/DdTCq3xkhK
+        6LZiyisZX0gL3uwm0S3Tfglpr+M19NxQL501668C+QKHEMaAXBn3
+X-Google-Smtp-Source: ABdhPJwtAjakrk22PhsocMynsw1dcpQi8Yyjww/qtw286RJir5/Sf5h95h400OE8CslcguyIOaDpjCBWapvMI27/7k0=
+X-Received: by 2002:a2e:5705:: with SMTP id l5mr8854699ljb.456.1633042649694;
+ Thu, 30 Sep 2021 15:57:29 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:ab0:2689:0:0:0:0:0 with HTTP; Thu, 30 Sep 2021 15:00:02
+Received: by 2002:a05:6512:5d8:0:0:0:0 with HTTP; Thu, 30 Sep 2021 15:57:29
  -0700 (PDT)
-Reply-To: ayishagddafio@mail.ru
-From:   AISHA GADDAFI <aisha20110016@gmail.com>
-Date:   Thu, 30 Sep 2021 15:00:02 -0700
-Message-ID: <CAESqvJrnrBqhzdpmUrNP24-EMW7qDOhgmfiBYsiGdV4+n=RbnQ@mail.gmail.com>
-Subject: Liebster Freund,?
+Reply-To: southwestloanco59@gmail.com
+From:   SOUTHWESTLOANCO <saniabdullahinng2020@gmail.com>
+Date:   Thu, 30 Sep 2021 15:57:29 -0700
+Message-ID: <CA+3X9TxSf18dxD51aJOg_UrukfudS2Vv1PZk=HxC5aHG_Y0JQg@mail.gmail.com>
+Subject: Dear owner,
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
---=20
-Liebster Freund,
+-- 
+Good day,
+          Do you need a loan ? We offer any kind of loan to repay in
+6months with just 2% interest
 
-Im Namen Gottes, des gn=C3=A4digsten, barmherzigsten.
+Kindly Reply with below information
 
-Friede sei mit dir und Barmherzigkeit sei mit dir und Segen sei mit dir.
-Ich habe die Summe von 27,5 Millionen USD f=C3=BCr Investitionen, ich
-interessiere mich f=C3=BCr Sie f=C3=BCr die Unterst=C3=BCtzung von
-Investitionsprojekten in Ihrem Land. Mein Name ist Aisha Gaddafi und
-lebe derzeit im Oman, ich bin eine Witwe und alleinerziehende Mutter
-mit drei Kindern, die einzige leibliche Tochter des verstorbenen
-libyschen Pr=C3=A4sidenten (dem verstorbenen Oberst Muammar Gaddafi) und
-stehe derzeit unter politischem Asylschutz der omanischen Regierung.
+NAME...............
+ADDRESS..........
+OCCUPATION....
+AGE...................
+PHONE..............
+AMOUNT NEEDED......
 
-Bitte antworten Sie dringend f=C3=BCr weitere Details.
+Regards
 
-meine E-Mail-Adresse unten: ayishagddafio@mail.ru
-Vielen Dank
-Mit freundlichen Gr=C3=BC=C3=9Fen Aisha
+Contact  Mr Gary Edward +13182955380
+
+Remittance Department southwestloanco59@gmail.com
