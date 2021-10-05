@@ -2,66 +2,76 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 194BA420021
-	for <lists+linux-can@lfdr.de>; Sun,  3 Oct 2021 07:03:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C35D4223F5
+	for <lists+linux-can@lfdr.de>; Tue,  5 Oct 2021 12:54:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbhJCFFB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 3 Oct 2021 01:05:01 -0400
-Received: from smtp04.smtpout.orange.fr ([80.12.242.126]:58455 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbhJCFFA (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 3 Oct 2021 01:05:00 -0400
-Received: from tomoyo.flets-east.jp ([114.149.34.46])
-        by smtp.orange.fr with ESMTPA
-        id WtdMmhDZXsoWhWteYm9Qcm; Sun, 03 Oct 2021 07:03:12 +0200
-X-ME-Helo: tomoyo.flets-east.jp
-X-ME-Auth: MDU0YmViZGZmMDIzYiBlMiM2NTczNTRjNWZkZTMwOGRiOGQ4ODf3NWI1ZTMyMzdiODlhOQ==
-X-ME-Date: Sun, 03 Oct 2021 07:03:12 +0200
-X-ME-IP: 114.149.34.46
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [RFC PATCH v1 3/3] uapi: can: netlink: add new field to struct can_ctrlmode to report capabilities
-Date:   Sun,  3 Oct 2021 14:01:47 +0900
-Message-Id: <20211003050147.569044-4-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211003050147.569044-1-mailhol.vincent@wanadoo.fr>
-References: <20211003050147.569044-1-mailhol.vincent@wanadoo.fr>
+        id S233514AbhJEK4L (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 5 Oct 2021 06:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50728 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233449AbhJEK4K (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 5 Oct 2021 06:56:10 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C3CC06161C
+        for <linux-can@vger.kernel.org>; Tue,  5 Oct 2021 03:54:20 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id f9so14342060edx.4
+        for <linux-can@vger.kernel.org>; Tue, 05 Oct 2021 03:54:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=b4Cg2Y/3wiUjtiqeOvdvkE+K47yGcGknGIfpNYtPER0=;
+        b=kPxM1WELOWKxmcyIyhIYn4ElJKlBG1lsIceQU8UukKrOhJVfkS9p1rOlffD+R+pLwq
+         Sd8Cdty9ZoswK1XXCZZIBciI5pILoQtFaJcyvaZmBxbsoqVK65s8LdmwXJn7/FRflFvW
+         RIjnX4vob10Dn/tofP6Iv8VfZkUKtYo46PuhGZ34/yVH5mFcmeYhGC0th08wFTFGbyk+
+         v67CyS7asw27yLS6q3Ib65Mn9gIlNUgT8KGLpP8+CxObEVnLkAjP8vrdH1h33Lx1l1MV
+         CKkfOAzI7VAyRFqKuyleSY13GDzFXaABEikGzD74XQyxfaxYLzfzwPbR5XprXwSoHrJL
+         4Yrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=b4Cg2Y/3wiUjtiqeOvdvkE+K47yGcGknGIfpNYtPER0=;
+        b=WtW6g52JAAlF3/wiu5ziorKzs5LKW4qSxUJa3g4+t3Bad20tfZ2CA/Pl0iWHmAa8er
+         njCGyQVoF8E1wwL0rWY3D+eyHHwBRq8DuxMWiuyfCdG+8It61Btlq4jEoY3FUy6N5VvE
+         1V1d19mDNzRFsGi8csBqL0Y4ADNY/0fbc6NDGGjajNmPd4tfZLkg0WTl9iLeCQC8OEXv
+         Uw1GTe6VcLYSyFAftrSkw9YPSAPwDJNp6AeVUm/B6I94jJxHWEkO1oseByRKuYYYCVsF
+         diFYW2ITQNv6SvLrxYKd5aEun6UhYKxMDjDpBUy1vcXpZLmv6RFCQHQogkWFhaHTWf2s
+         xznw==
+X-Gm-Message-State: AOAM5308/5tWkQ0iGmsA4WDZeQEnG6YDWEgfY1zgt1pmOlOpwQrbnK3E
+        EhdbuTDBdXRj7/flhg4WiA6DCFoufA08CjRUCKg=
+X-Google-Smtp-Source: ABdhPJzMdTD1Wsuvm6x0eC/d/ynDX317zywe6CTWO0d9JL58qOxRE1hKMwrqFMT7w9/NxnSH44BQPYzKncnUBS2p/Ac=
+X-Received: by 2002:a05:6402:2552:: with SMTP id l18mr25444765edb.132.1633431258930;
+ Tue, 05 Oct 2021 03:54:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6400:5b8f:0:0:0:0 with HTTP; Tue, 5 Oct 2021 03:54:18
+ -0700 (PDT)
+Reply-To: lydiawright836@gmail.com
+From:   LYDIA WRIGHT <jacobbarney57@gmail.com>
+Date:   Tue, 5 Oct 2021 13:54:18 +0300
+Message-ID: <CALM1g1NHnO_TbyoFGP0iCxtzRtF0E38GPLjQxnMN5bbmsLTQ8g@mail.gmail.com>
+Subject: Greetings to You
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This patch is for your convinience. iproute2-next normally directly
-pulls the uapi changes but I think it will be more convinient for
-people who want to test to just be able to directly apply this series
-and have things working.
+Greetings dear,
 
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
-Please do not pull!
----
- include/uapi/linux/can/netlink.h | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+My name is Lydia A. Wright, and I'm from Akron, Ohio. The U.S.A, This
+message will most likely surprise you. I'm dying of cancer, which I
+was diagnosed with around two years ago, and I'm recovering from a
+stroke that has made walking difficult.
 
-diff --git a/include/uapi/linux/can/netlink.h b/include/uapi/linux/can/netlink.h
-index 00c763df..fa1cab72 100644
---- a/include/uapi/linux/can/netlink.h
-+++ b/include/uapi/linux/can/netlink.h
-@@ -88,7 +88,10 @@ struct can_berr_counter {
-  * CAN controller mode
-  */
- struct can_ctrlmode {
--	__u32 mask;
-+	union {
-+		__u32 mask;		/* Userland to kernel */
-+		__u32 supported;	/* Kernel to userland */
-+	};
- 	__u32 flags;
- };
- 
--- 
-2.32.0
+Mr. L=C3=A9vi Wright, my husband, passed away in mid-March 2011 from a
+heart attack. I'll be having surgery soon.  I only have a few years
+left in this world, my late spouse has  $10.5 million as a family
+valuable , which I intend to gift to charity.
 
+For more information, please contact me at (lydiawright836@gmail.com)
+. Thank you sincerely!
+
+Mrs. Lydia A. Wright
+Rosalind Ct, Akron, Ohio, U.S.A
