@@ -2,143 +2,97 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B45944227A9
-	for <lists+linux-can@lfdr.de>; Tue,  5 Oct 2021 15:20:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F6DA42301C
+	for <lists+linux-can@lfdr.de>; Tue,  5 Oct 2021 20:37:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234850AbhJENWH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 5 Oct 2021 09:22:07 -0400
-Received: from mail-vs1-f43.google.com ([209.85.217.43]:34478 "EHLO
-        mail-vs1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233825AbhJENWF (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 5 Oct 2021 09:22:05 -0400
-Received: by mail-vs1-f43.google.com with SMTP id d18so1004850vsh.1;
-        Tue, 05 Oct 2021 06:20:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=U41vIYP4S6yqbRG1Slu37+HOLovPRo8OgE9R7vD6bFY=;
-        b=Z66mpLt9SVNNibuByFl4WaSt4+BQoBxkVew1v+5rys1pEBrplaPjg2HeSXbqrujp5y
-         04YwOSNkDjfry308R00Q8dlryC7pKqcnSpAeh01otNZRMAwxKCgWEstCe8DIz5yfey4R
-         ypEVBvvGagbjS+nELpYA8BOfrCfawng90LnJqHUrPJTj6Ahwe92k4leZ5OjTrnRh2eBx
-         mvNFoEAXEvPOMzWi2iy+7H52JgioG8P3PC930SUVGo16ktAx9kMvFDF3CIsEZzrKD7Wj
-         vYmi90yUiCFzmBuq3OwEp+vSVy7rM4VyeP+cSVgFJdFbpV+7LBaDtiyHI5SwBIiLWuqe
-         O/yQ==
-X-Gm-Message-State: AOAM5317TEnHSTDuoVixWifjyor7aiZaUEqBuMSCe+lX9bP1Y1I//Ixt
-        uWKBQRyfjDKrKp6Imz8uYk4S90jjip3FdRFe4tA=
-X-Google-Smtp-Source: ABdhPJx6S8AApCKlPVWbntYziz6p+YUeec4ETTmqZaPRa1Htlr9pyQIUAheWi4UTTxbnWWGp+v6ssK0XG8neizkedao=
-X-Received: by 2002:a67:2c58:: with SMTP id s85mr18268943vss.35.1633440014839;
- Tue, 05 Oct 2021 06:20:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210924153113.10046-1-uli+renesas@fpond.eu> <20210924153113.10046-4-uli+renesas@fpond.eu>
-In-Reply-To: <20210924153113.10046-4-uli+renesas@fpond.eu>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 5 Oct 2021 15:20:03 +0200
-Message-ID: <CAMuHMdXKuvxnLBRXUgaT=kvvyE4LY9tzM8WiM1J+=4__kY8Stw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] arm64: dts: r8a779a0: Add CANFD device node
-To:     Ulrich Hecht <uli+renesas@fpond.eu>
-Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>, linux-can@vger.kernel.org,
-        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        id S234762AbhJESjs (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 5 Oct 2021 14:39:48 -0400
+Received: from ch3vs03.rockwellcollins.com ([205.175.226.47]:37686 "EHLO
+        ch3vs03.rockwellcollins.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229577AbhJESjs (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 5 Oct 2021 14:39:48 -0400
+X-Greylist: delayed 427 seconds by postgrey-1.27 at vger.kernel.org; Tue, 05 Oct 2021 14:39:48 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=rockwellcollins.com; s=hrcrc2020;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=KnwWS8FxXuoDgDDRlM7P5scofOq7+jfHg9Cs3y6jq5E=;
+  b=rBTp802gP1HQZIHecSVzcp8H0WNOmElvKX9j5ygPUJL82c6wRNk4Udh1
+   givVUvZjay8v4+WwSuhXG1efnjcUcnmKoO+K8DscjHZFN5cR39VNj4bEy
+   eP7SqS1xwYsscWd8wQ9bOQsBIW/YRNPCCK30EiqpVamgqz3RRe3PDyOSA
+   dacsOYKjQDsAmZ5yI6czaSTyu8gM+XrIbUgQ6NAVquPeYjOpvustvdnIa
+   qUaoE4LwdOeD9UCxETh9msEkjn6KLxB6KJyMJYzaREHycYxwmSIC4rBpO
+   7wOHAsNmAmMlHnuoFsuOr+/O8mBf8sOEftj0Riuc4PBOo1UclUCc1Terg
+   w==;
+IronPort-SDR: rkO7ETqPYBTFbL3KKFATaFVfS96dZm5FYwzuP2qG5qayGYRh/rCwTExBt5v7lcwAGZ4fEacaEs
+ 6pfzbCZ9bMBk4DuAXlk6C+kgAMx/rFIwwOcPI6U0ZK00ZEjrvhN8MeNRMBWvCoDkFX1lKQ49Ro
+ pNROYUmlIF53zNy3yjz450idAgvvN+ld/rYYYDCYaPAjyUYAYZ4AW0Hlg+un7eORHf/aGOoISG
+ VnnTpqYCMjcFd4IYpR2WKyrjf8SuLtGxj2nEJb3gYVFBBpIY0f+3IX7PCGu8fNUmzrSSVH1mza
+ N6Y=
+Received: from ofwch3n02.rockwellcollins.com (HELO crulimr01.rockwellcollins.com) ([205.175.226.14])
+  by ch3vs03.rockwellcollins.com with ESMTP; 05 Oct 2021 13:30:49 -0500
+X-Received: from righttwix.rockwellcollins.com (righttwix.rockwellcollins.com [192.168.141.218])
+        by crulimr01.rockwellcollins.com (Postfix) with ESMTP id 5ED8B6038E;
+        Tue,  5 Oct 2021 13:30:48 -0500 (CDT)
+From:   Brandon Maier <brandon.maier@rockwellcollins.com>
+Cc:     Brandon Maier <brandon.maier@rockwellcollins.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
-        Jakub Kicinski <kuba@kernel.org>, mailhol.vincent@wanadoo.fr,
-        socketcan@hartkopp.net
-Content-Type: text/plain; charset="UTF-8"
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        linux-can@vger.kernel.org (open list:CAN NETWORK DRIVERS),
+        netdev@vger.kernel.org (open list:NETWORKING DRIVERS),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Microchip
+        (AT91) SoC support), linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] can: at91_can: fix passive-state AERR flooding
+Date:   Tue,  5 Oct 2021 13:30:23 -0500
+Message-Id: <20211005183023.109328-1-brandon.maier@rockwellcollins.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Uli,
+When the at91_can is a single node on the bus and a user attempts to
+transmit, the can state machine will report ack errors and increment the
+transmit error count until it reaches the passive-state. Per the
+specification, it will then transmit with a passive error, but will stop
+incrementing the transmit error count. This results in the host machine
+being flooded with the AERR interrupt forever, or until another node
+rejoins the bus.
 
-On Fri, Sep 24, 2021 at 5:34 PM Ulrich Hecht <uli+renesas@fpond.eu> wrote:
-> This patch adds CANFD device node for r8a779a0.
->
-> Based on patch by Kazuya Mizuguchi.
->
-> Signed-off-by: Ulrich Hecht <uli+renesas@fpond.eu>
+To prevent the AERR flooding, disable the AERR interrupt when we are in
+passive mode.
 
-Thanks for your patch!
+Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
+---
+ drivers/net/can/at91_can.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-> --- a/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
-> +++ b/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
-
-> @@ -236,6 +243,54 @@
->                         #interrupt-cells = <2>;
->                 };
->
-> +               canfd: can@e6660000 {
-
-Please preserve sort order (by unit address).
-
-> +                       compatible = "renesas,r8a779a0-canfd";
-> +                       reg = <0 0xe6660000 0 0x8000>;
-> +                       interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>,
-> +                                       <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
-
-Please add interrupt-names, so we can make the property required soon.
-
-> +                       clocks = <&cpg CPG_MOD 328>,
-> +                                <&cpg CPG_CORE R8A779A0_CLK_CANFD>,
-> +                                <&can_clk>;
-> +                       clock-names = "fck", "canfd", "can_clk";
-> +                       assigned-clocks = <&cpg CPG_CORE R8A779A0_CLK_CANFD>;
-> +                       assigned-clock-rates = <40000000>;
-> +                       power-domains = <&sysc R8A779A0_PD_ALWAYS_ON>;
-> +                       resets = <&cpg 328>;
-> +                       status = "disabled";
-> +
-> +                       channel0 {
-> +                               status = "disabled";
-> +                       };
-> +
-> +                       channel1 {
-> +                               status = "disabled";
-> +                       };
-> +
-> +                       channel2 {
-> +                               status = "disabled";
-> +                       };
-> +
-> +                       channel3 {
-> +                               status = "disabled";
-> +                       };
-> +
-> +                       channel4 {
-> +                               status = "disabled";
-> +                       };
-> +
-> +                       channel5 {
-> +                               status = "disabled";
-> +                       };
-> +
-> +                       channel6 {
-> +                               status = "disabled";
-> +                       };
-> +
-> +                       channel7 {
-> +                               status = "disabled";
-> +                       };
-> +               };
-> +
->                 cmt0: timer@e60f0000 {
->                         compatible = "renesas,r8a779a0-cmt0",
->                                      "renesas,rcar-gen3-cmt0";
-
-With the above fixed:
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
+diff --git a/drivers/net/can/at91_can.c b/drivers/net/can/at91_can.c
+index b06af90a9964..2a8831127bd0 100644
+--- a/drivers/net/can/at91_can.c
++++ b/drivers/net/can/at91_can.c
+@@ -804,8 +804,13 @@ static int at91_poll(struct napi_struct *napi, int quota)
+ 		work_done += at91_poll_err(dev, quota - work_done, reg_sr);
+ 
+ 	if (work_done < quota) {
+-		/* enable IRQs for frame errors and all mailboxes >= rx_next */
++		/* enable IRQs for frame errors and all mailboxes >= rx_next,
++		 * disable the ack error in passive mode to avoid flooding
++		 * ourselves with interrupts
++		 */
+ 		u32 reg_ier = AT91_IRQ_ERR_FRAME;
++		if (priv->can.state == CAN_STATE_ERROR_PASSIVE)
++			reg_ier &= ~AT91_IRQ_AERR;
+ 
+ 		reg_ier |= get_irq_mb_rx(priv) & ~AT91_MB_MASK(priv->rx_next);
+ 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.30.2
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
