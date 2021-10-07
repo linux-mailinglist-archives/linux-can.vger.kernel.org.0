@@ -2,97 +2,120 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F6DA42301C
-	for <lists+linux-can@lfdr.de>; Tue,  5 Oct 2021 20:37:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6CC8425416
+	for <lists+linux-can@lfdr.de>; Thu,  7 Oct 2021 15:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234762AbhJESjs (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 5 Oct 2021 14:39:48 -0400
-Received: from ch3vs03.rockwellcollins.com ([205.175.226.47]:37686 "EHLO
-        ch3vs03.rockwellcollins.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229577AbhJESjs (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 5 Oct 2021 14:39:48 -0400
-X-Greylist: delayed 427 seconds by postgrey-1.27 at vger.kernel.org; Tue, 05 Oct 2021 14:39:48 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=rockwellcollins.com; s=hrcrc2020;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=KnwWS8FxXuoDgDDRlM7P5scofOq7+jfHg9Cs3y6jq5E=;
-  b=rBTp802gP1HQZIHecSVzcp8H0WNOmElvKX9j5ygPUJL82c6wRNk4Udh1
-   givVUvZjay8v4+WwSuhXG1efnjcUcnmKoO+K8DscjHZFN5cR39VNj4bEy
-   eP7SqS1xwYsscWd8wQ9bOQsBIW/YRNPCCK30EiqpVamgqz3RRe3PDyOSA
-   dacsOYKjQDsAmZ5yI6czaSTyu8gM+XrIbUgQ6NAVquPeYjOpvustvdnIa
-   qUaoE4LwdOeD9UCxETh9msEkjn6KLxB6KJyMJYzaREHycYxwmSIC4rBpO
-   7wOHAsNmAmMlHnuoFsuOr+/O8mBf8sOEftj0Riuc4PBOo1UclUCc1Terg
+        id S241508AbhJGNaV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 7 Oct 2021 09:30:21 -0400
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:46022 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241287AbhJGNaU (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 7 Oct 2021 09:30:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1633613307; x=1665149307;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=OtxaPdc9nCj58wqh5NA9JcRznQexEFxjFLqqlEhFp7s=;
+  b=xlM4FZm507dzzb3cT9lL2FMeDtFD0zmySCuMjckfQPr9jiUQcVTbjVGA
+   /IaeOfTaLATFY6VEVDc87iSxe7R8rgDuGt18DHqrsvsWC6OxowzXuRRbW
+   vhLZrXptHl750gjiEJDP1Io7q7RUJi5+yT8oZLA0UbUcRqom+hV8ejf2q
+   zFBjATdttp8RHXwS+caR8shtWT2gA4f5R9tUIxmTn1Ii8Z+lTn84Xize6
+   iO/KIVOoJOY6PeWhXBTk/9fqR32+tbP6i3PDo51bUZvqsDGezRTxFOl+c
+   ThR0UxT+ljYKomRN1IKe4slbQkSsHPas0r0CT14R2YsH3e90cqFuTHTxJ
    w==;
-IronPort-SDR: rkO7ETqPYBTFbL3KKFATaFVfS96dZm5FYwzuP2qG5qayGYRh/rCwTExBt5v7lcwAGZ4fEacaEs
- 6pfzbCZ9bMBk4DuAXlk6C+kgAMx/rFIwwOcPI6U0ZK00ZEjrvhN8MeNRMBWvCoDkFX1lKQ49Ro
- pNROYUmlIF53zNy3yjz450idAgvvN+ld/rYYYDCYaPAjyUYAYZ4AW0Hlg+un7eORHf/aGOoISG
- VnnTpqYCMjcFd4IYpR2WKyrjf8SuLtGxj2nEJb3gYVFBBpIY0f+3IX7PCGu8fNUmzrSSVH1mza
- N6Y=
-Received: from ofwch3n02.rockwellcollins.com (HELO crulimr01.rockwellcollins.com) ([205.175.226.14])
-  by ch3vs03.rockwellcollins.com with ESMTP; 05 Oct 2021 13:30:49 -0500
-X-Received: from righttwix.rockwellcollins.com (righttwix.rockwellcollins.com [192.168.141.218])
-        by crulimr01.rockwellcollins.com (Postfix) with ESMTP id 5ED8B6038E;
-        Tue,  5 Oct 2021 13:30:48 -0500 (CDT)
-From:   Brandon Maier <brandon.maier@rockwellcollins.com>
-Cc:     Brandon Maier <brandon.maier@rockwellcollins.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
+IronPort-SDR: MY1/8bnyhRLbIxxiQe7hzBwhAEMc1kE0v0ibPOsaD04QOdYFArX+bXBNz2DACy4mxF3dzegbfo
+ Udklacoj5AQwWFOTtJv3zVimz6gRI7/mbMCmg83n6cSY8R4DRSJv46cc+dcImX4MrULc1DyMqF
+ UZ1WWH1WzBKUdNDjvhghyZTr6zMXCJSvg2/mcRdyjnPG/NBlitwz/z04LAhLTJ443GlfWsdzoY
+ KIy600DHd3rcgvtmAUm3RqvrKssawB9tFI0ebLL0QMycT2vDi7Uqt3VqO0qAsItI6kaQrJ2OTx
+ YLNsKHDqM8ZXEfj3F7POVBzI
+X-IronPort-AV: E=Sophos;i="5.85,354,1624345200"; 
+   d="scan'208";a="147133223"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Oct 2021 06:28:26 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Thu, 7 Oct 2021 06:28:26 -0700
+Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
+ Transport; Thu, 7 Oct 2021 06:28:24 -0700
+Subject: Re: [PATCH] can: at91_can: fix passive-state AERR flooding
+To:     Brandon Maier <brandon.maier@rockwellcollins.com>
+CC:     Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        linux-can@vger.kernel.org (open list:CAN NETWORK DRIVERS),
-        netdev@vger.kernel.org (open list:NETWORKING DRIVERS),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Microchip
-        (AT91) SoC support), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] can: at91_can: fix passive-state AERR flooding
-Date:   Tue,  5 Oct 2021 13:30:23 -0500
-Message-Id: <20211005183023.109328-1-brandon.maier@rockwellcollins.com>
-X-Mailer: git-send-email 2.30.2
+        "Ludovic Desroches" <ludovic.desroches@microchip.com>,
+        "open list:CAN NETWORK DRIVERS" <linux-can@vger.kernel.org>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        "moderated list:ARM/Microchip (AT91) SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20211005183023.109328-1-brandon.maier@rockwellcollins.com>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+Message-ID: <ac0aaa78-d258-fb22-300a-43851006b5c5@microchip.com>
+Date:   Thu, 7 Oct 2021 15:28:23 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+In-Reply-To: <20211005183023.109328-1-brandon.maier@rockwellcollins.com>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-When the at91_can is a single node on the bus and a user attempts to
-transmit, the can state machine will report ack errors and increment the
-transmit error count until it reaches the passive-state. Per the
-specification, it will then transmit with a passive error, but will stop
-incrementing the transmit error count. This results in the host machine
-being flooded with the AERR interrupt forever, or until another node
-rejoins the bus.
+On 05/10/2021 at 20:30, Brandon Maier wrote:
+> When the at91_can is a single node on the bus and a user attempts to
+> transmit, the can state machine will report ack errors and increment the
+> transmit error count until it reaches the passive-state. Per the
+> specification, it will then transmit with a passive error, but will stop
+> incrementing the transmit error count. This results in the host machine
+> being flooded with the AERR interrupt forever, or until another node
+> rejoins the bus.
+> 
+> To prevent the AERR flooding, disable the AERR interrupt when we are in
+> passive mode.
+> 
+> Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
 
-To prevent the AERR flooding, disable the AERR interrupt when we are in
-passive mode.
+Even if I'm not familiar with the matter, the explanation above makes sense:
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
----
- drivers/net/can/at91_can.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+Thanks Brandon, best regards,
+   Nicolas
 
-diff --git a/drivers/net/can/at91_can.c b/drivers/net/can/at91_can.c
-index b06af90a9964..2a8831127bd0 100644
---- a/drivers/net/can/at91_can.c
-+++ b/drivers/net/can/at91_can.c
-@@ -804,8 +804,13 @@ static int at91_poll(struct napi_struct *napi, int quota)
- 		work_done += at91_poll_err(dev, quota - work_done, reg_sr);
- 
- 	if (work_done < quota) {
--		/* enable IRQs for frame errors and all mailboxes >= rx_next */
-+		/* enable IRQs for frame errors and all mailboxes >= rx_next,
-+		 * disable the ack error in passive mode to avoid flooding
-+		 * ourselves with interrupts
-+		 */
- 		u32 reg_ier = AT91_IRQ_ERR_FRAME;
-+		if (priv->can.state == CAN_STATE_ERROR_PASSIVE)
-+			reg_ier &= ~AT91_IRQ_AERR;
- 
- 		reg_ier |= get_irq_mb_rx(priv) & ~AT91_MB_MASK(priv->rx_next);
- 
+> ---
+>   drivers/net/can/at91_can.c | 7 ++++++-
+>   1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/can/at91_can.c b/drivers/net/can/at91_can.c
+> index b06af90a9964..2a8831127bd0 100644
+> --- a/drivers/net/can/at91_can.c
+> +++ b/drivers/net/can/at91_can.c
+> @@ -804,8 +804,13 @@ static int at91_poll(struct napi_struct *napi, int quota)
+>                  work_done += at91_poll_err(dev, quota - work_done, reg_sr);
+> 
+>          if (work_done < quota) {
+> -               /* enable IRQs for frame errors and all mailboxes >= rx_next */
+> +               /* enable IRQs for frame errors and all mailboxes >= rx_next,
+> +                * disable the ack error in passive mode to avoid flooding
+> +                * ourselves with interrupts
+> +                */
+>                  u32 reg_ier = AT91_IRQ_ERR_FRAME;
+> +               if (priv->can.state == CAN_STATE_ERROR_PASSIVE)
+> +                       reg_ier &= ~AT91_IRQ_AERR;
+> 
+>                  reg_ier |= get_irq_mb_rx(priv) & ~AT91_MB_MASK(priv->rx_next);
+> 
+> --
+> 2.30.2
+> 
+
+
 -- 
-2.30.2
-
+Nicolas Ferre
