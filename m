@@ -2,148 +2,78 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78DD7426F60
-	for <lists+linux-can@lfdr.de>; Fri,  8 Oct 2021 19:09:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2AD94270CC
+	for <lists+linux-can@lfdr.de>; Fri,  8 Oct 2021 20:31:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233614AbhJHRLj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 8 Oct 2021 13:11:39 -0400
-Received: from relay-b01.edpnet.be ([212.71.1.221]:56870 "EHLO
-        relay-b01.edpnet.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231171AbhJHRLi (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 8 Oct 2021 13:11:38 -0400
-X-ASG-Debug-ID: 1633712978-15c4341a8812a4040001-ZXuqFv
-Received: from zotac.vandijck-laurijssen.be (94.105.120.149.dyn.edpnet.net [94.105.120.149]) by relay-b01.edpnet.be with ESMTP id 9YazIlV7jGF6uqr7; Fri, 08 Oct 2021 19:09:38 +0200 (CEST)
-X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
-X-Barracuda-Effective-Source-IP: 94.105.120.149.dyn.edpnet.net[94.105.120.149]
-X-Barracuda-Apparent-Source-IP: 94.105.120.149
-Received: from x1.vandijck-laurijssen.be (x1.vandijck-laurijssen.be [IPv6:fd01::1a1d:eaff:fe02:d339])
-        by zotac.vandijck-laurijssen.be (Postfix) with ESMTPSA id 5ED651697A73;
-        Fri,  8 Oct 2021 19:09:38 +0200 (CEST)
-Date:   Fri, 8 Oct 2021 19:09:37 +0200
-From:   Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Zhang Changzhong <zhangchangzhong@huawei.com>,
-        Robin van der Gracht <robin@protonic.nl>,
-        Oleksij Rempel <linux@rempel-privat.de>, kernel@pengutronix.de,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Maxime Jayat <maxime.jayat@mobile-devices.fr>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] can: j1939: j1939_xtp_rx_dat_one(): cancel session
- if receive TP.DT with error length
-Message-ID: <20211008170937.GA12224@x1.vandijck-laurijssen.be>
-X-ASG-Orig-Subj: Re: [PATCH net] can: j1939: j1939_xtp_rx_dat_one(): cancel session
- if receive TP.DT with error length
-Mail-Followup-To: Oleksij Rempel <o.rempel@pengutronix.de>,
-        Zhang Changzhong <zhangchangzhong@huawei.com>,
-        Robin van der Gracht <robin@protonic.nl>,
-        Oleksij Rempel <linux@rempel-privat.de>, kernel@pengutronix.de,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Maxime Jayat <maxime.jayat@mobile-devices.fr>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1632972800-45091-1-git-send-email-zhangchangzhong@huawei.com>
- <20210930074206.GB7502@x1.vandijck-laurijssen.be>
- <1cab07f2-593a-1d1c-3a29-43ee9df4b29e@huawei.com>
- <20211008110007.GE29653@pengutronix.de>
+        id S231342AbhJHSc4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 8 Oct 2021 14:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46384 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231430AbhJHScu (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 8 Oct 2021 14:32:50 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B0DC061767
+        for <linux-can@vger.kernel.org>; Fri,  8 Oct 2021 11:30:55 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id u32so23007873ybd.9
+        for <linux-can@vger.kernel.org>; Fri, 08 Oct 2021 11:30:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=PYbXX+m3yh2JK7MjnWR4NgQd2KGxw42JomoIBePHBfM=;
+        b=DrA1WAC9qR8XIdIWAr32D/vxyBSERCvsm+inFALlkkhucOM6nBFFox98QWX7QBzqHF
+         i6SJhGzj0ztS7NTKkCIteIkvSBOmEpCJsIhAvYvKWjZOAxpTWDQ/XoKEp52QW6oyr1+u
+         4YcsFZHt1lQkJ246is9+eGNIB7FUzBfuyYMfRw8jLBIlPTEgW6bcgl9nSwxdbhHwjPiI
+         jS2sompNRx3M/9zWrhwCRjRT7GF/0Wkj2pyFAsTHLUV6mV0041AImCgNsO1bmR4ZOUuP
+         bgiJqC1ZIZLZOmPd+LdvOOpLogMfALAETEG9gu1syDzlwjnwSAsffXdPrsLRbSIVfpf+
+         tw2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=PYbXX+m3yh2JK7MjnWR4NgQd2KGxw42JomoIBePHBfM=;
+        b=x6rLcPZ72ipXXQAbFhF5zK2zBaAlXcZCEj3c6DVO2z+fDqbbvg5hs3MOGXpn4YZ2P0
+         Eum6HzXbYmOD9wqGRv8+90tkzW2SrOQEG8b/gA+NbHqyzUCPbGby4llwoUQaHItLSWSz
+         YbZHYD92oH4nIX+LZdancn/a8szu1mgWVZNRe9FCHpy7NeJKUnxobj/81GyFbi3NcN29
+         JKcpgYMcX5CS8osBsSdVPaRDfEF33N2tZ7x/mLFZm/I07h/uPwa2KI4jMLdLIC07isDm
+         d9hoQ67DGcO95KE9t3nDaeeUY/rkxmhH6Fo7ZdZEC2n20cLG+rlnKvs8YDO5PsXGoSjf
+         shiQ==
+X-Gm-Message-State: AOAM532KIQYpS0XAESD9dS07IRztx3RLmL3fmBNwtMz/uLbFpKVkHfSO
+        8/IN6JlWLA0ALf8YDBLpeHCJdT2KFwV6ZlaVVLs=
+X-Google-Smtp-Source: ABdhPJxCQ7UH7VOwVwKy/o4HAf8iTjDzkrRBUnS/1hynsdoeARWUpXjyYk+eucrhrIaBrMo/aTupBqWgqvnCmiVhCOw=
+X-Received: by 2002:a25:9d89:: with SMTP id v9mr5655035ybp.8.1633717854125;
+ Fri, 08 Oct 2021 11:30:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211008110007.GE29653@pengutronix.de>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Barracuda-Connect: 94.105.120.149.dyn.edpnet.net[94.105.120.149]
-X-Barracuda-Start-Time: 1633712978
-X-Barracuda-URL: https://212.71.1.221:443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at edpnet.be
-X-Barracuda-Scan-Msg-Size: 3123
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Spam-Score: 0.50
-X-Barracuda-Spam-Status: No, SCORE=0.50 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=BSF_RULE7568M
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.93131
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-        0.50 BSF_RULE7568M          Custom Rule 7568M
+Received: by 2002:a05:7110:313:b0:fa:45c9:2c6b with HTTP; Fri, 8 Oct 2021
+ 11:30:53 -0700 (PDT)
+Reply-To: greogebrown@gmail.com
+From:   george brown <edemhoegbesso@gmail.com>
+Date:   Fri, 8 Oct 2021 20:30:53 +0200
+Message-ID: <CAPM9i6_ZLrMP1FcaXHAHmtn2ViZdhYF8Hmk-2yTW2udU0az=8w@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri, 08 Oct 2021 13:00:07 +0200, Oleksij Rempel wrote:
-> On Fri, Oct 08, 2021 at 05:22:12PM +0800, Zhang Changzhong wrote:
-> > Hi Kurt,
-> > Sorry for the late reply.
-> > 
-> > On 2021/9/30 15:42, Kurt Van Dijck wrote:
-> > > On Thu, 30 Sep 2021 11:33:20 +0800, Zhang Changzhong wrote:
-> > >> According to SAE-J1939-21, the data length of TP.DT must be 8 bytes, so
-> > >> cancel session when receive unexpected TP.DT message.
-> > > 
-> > > SAE-j1939-21 indeed says that all TP.DT must be 8 bytes.
-> > > However, the last TP.DT may contain up to 6 stuff bytes, which have no meaning.
-> > > If I remember well, they are even not 'reserved'.
-> > 
-> > Agree, these bytes are meaningless for last TP.DT.
-> > 
-> > >
-> > >>
-> > >> Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
-> > >> Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
-> > >> ---
-> > >>  net/can/j1939/transport.c | 7 +++++--
-> > >>  1 file changed, 5 insertions(+), 2 deletions(-)
-> > >>
-> > >> diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
-> > >> index bb5c4b8..eedaeaf 100644
-> > >> --- a/net/can/j1939/transport.c
-> > >> +++ b/net/can/j1939/transport.c
-> > >> @@ -1789,6 +1789,7 @@ static void j1939_xtp_rx_dpo(struct j1939_priv *priv, struct sk_buff *skb,
-> > >>  static void j1939_xtp_rx_dat_one(struct j1939_session *session,
-> > >>  				 struct sk_buff *skb)
-> > >>  {
-> > >> +	enum j1939_xtp_abort abort = J1939_XTP_ABORT_FAULT;
-> > >>  	struct j1939_priv *priv = session->priv;
-> > >>  	struct j1939_sk_buff_cb *skcb, *se_skcb;
-> > >>  	struct sk_buff *se_skb = NULL;
-> > >> @@ -1803,9 +1804,11 @@ static void j1939_xtp_rx_dat_one(struct j1939_session *session,
-> > >>  
-> > >>  	skcb = j1939_skb_to_cb(skb);
-> > >>  	dat = skb->data;
-> > >> -	if (skb->len <= 1)
-> > >> +	if (skb->len != 8) {
-> > >>  		/* makes no sense */
-> > >> +		abort = J1939_XTP_ABORT_UNEXPECTED_DATA;
-> > >>  		goto out_session_cancel;
-> > > 
-> > > I think this is a situation of
-> > > "be strict on what you send, be tolerant on what you receive".
-> > > 
-> > > Did you find a technical reason to abort a session because the last frame didn't
-> > > bring overhead that you don't use?
-> > 
-> > No technical reason. The only reason is that SAE-J1939-82 requires responder
-> > to abort session if any TP.DT less than 8 bytes (section A.3.4, Row 7).
+Hallo
 
-IMHO, this is some kind of laziness to make the exception for the last TP.DT.
+Mein Name ist George Brown und ich bin Rechtsanwalt von Beruf. Ich
+m=C3=B6chte dir anbieten
+die n=C3=A4chsten Angeh=C3=B6rigen meines Klienten. Sie erben die Summe von=
+ (8,5
+Millionen US-Dollar)
+Dollar, die mein Mandant vor seinem Tod auf der Bank gelassen hat.
 
-I attended an ISOBUS certification (back in 2013) where the transmitting
-node effectively stripped the trailing bytes, and this 'deviation' was
-not even noticed.
+Mein Mandant ist ein B=C3=BCrger Ihres Landes, der mit seiner Frau bei
+einem Autounfall gestorben ist
+und einziger Sohn. Ich habe Anspruch auf 50 % des Gesamtfonds, w=C3=A4hrend
+50 % zustehen
+sein f=C3=BCr dich.
+Bitte kontaktieren Sie meine private E-Mail hier f=C3=BCr weitere
+Details:greogebrown@gmail.com
 
-This change applies to the receiving side. Would a sender that
-leaves the trailing bytes want you to discard the session bacause of this?
-So the spirit of the SAE-J1939-82 is, in this case, different from
-the strict literal interpretation.
-
-> 
-> Do you mean: "BAM Transport: Ensure DUT discards BAM transport when
-> TP.DT data packets are not correct size" ... "Verify DUT discards the
-> BAM transport if any TP.DT data packet has less than 8 bytes"?
-
-Kind regards,
-Kurt
+Danke im Voraus,
+Herr George Brown,
