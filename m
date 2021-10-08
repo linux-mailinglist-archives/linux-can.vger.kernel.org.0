@@ -2,131 +2,126 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F16BA42669B
-	for <lists+linux-can@lfdr.de>; Fri,  8 Oct 2021 11:22:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC9E942685F
+	for <lists+linux-can@lfdr.de>; Fri,  8 Oct 2021 13:00:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235642AbhJHJYL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 8 Oct 2021 05:24:11 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:13878 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbhJHJYK (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 8 Oct 2021 05:24:10 -0400
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4HQjJR5b2dz90BM;
-        Fri,  8 Oct 2021 17:17:27 +0800 (CST)
-Received: from dggpeml500006.china.huawei.com (7.185.36.76) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.8; Fri, 8 Oct 2021 17:22:13 +0800
-Received: from [10.174.178.240] (10.174.178.240) by
- dggpeml500006.china.huawei.com (7.185.36.76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.8; Fri, 8 Oct 2021 17:22:12 +0800
-Subject: Re: [PATCH net] can: j1939: j1939_xtp_rx_dat_one(): cancel session if
- receive TP.DT with error length
-To:     Robin van der Gracht <robin@protonic.nl>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        <kernel@pengutronix.de>, Oliver Hartkopp <socketcan@hartkopp.net>,
+        id S239650AbhJHLCX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 8 Oct 2021 07:02:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55642 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239911AbhJHLCW (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 8 Oct 2021 07:02:22 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 737A1C061755
+        for <linux-can@vger.kernel.org>; Fri,  8 Oct 2021 04:00:27 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1mYnbl-0003cn-Hz; Fri, 08 Oct 2021 13:00:09 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1mYnbj-0002EF-Ku; Fri, 08 Oct 2021 13:00:07 +0200
+Date:   Fri, 8 Oct 2021 13:00:07 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Zhang Changzhong <zhangchangzhong@huawei.com>
+Cc:     Robin van der Gracht <robin@protonic.nl>,
+        Oleksij Rempel <linux@rempel-privat.de>, kernel@pengutronix.de,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
         Maxime Jayat <maxime.jayat@mobile-devices.fr>,
-        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] can: j1939: j1939_xtp_rx_dat_one(): cancel session
+ if receive TP.DT with error length
+Message-ID: <20211008110007.GE29653@pengutronix.de>
 References: <1632972800-45091-1-git-send-email-zhangchangzhong@huawei.com>
  <20210930074206.GB7502@x1.vandijck-laurijssen.be>
-From:   Zhang Changzhong <zhangchangzhong@huawei.com>
-Message-ID: <1cab07f2-593a-1d1c-3a29-43ee9df4b29e@huawei.com>
-Date:   Fri, 8 Oct 2021 17:22:12 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+ <1cab07f2-593a-1d1c-3a29-43ee9df4b29e@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <20210930074206.GB7502@x1.vandijck-laurijssen.be>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.240]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500006.china.huawei.com (7.185.36.76)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1cab07f2-593a-1d1c-3a29-43ee9df4b29e@huawei.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 12:47:01 up 232 days, 14:10, 145 users,  load average: 0.04, 0.14,
+ 0.16
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Kurt,
-Sorry for the late reply.
-
-On 2021/9/30 15:42, Kurt Van Dijck wrote:
-> On Thu, 30 Sep 2021 11:33:20 +0800, Zhang Changzhong wrote:
->> According to SAE-J1939-21, the data length of TP.DT must be 8 bytes, so
->> cancel session when receive unexpected TP.DT message.
+On Fri, Oct 08, 2021 at 05:22:12PM +0800, Zhang Changzhong wrote:
+> Hi Kurt,
+> Sorry for the late reply.
 > 
-> SAE-j1939-21 indeed says that all TP.DT must be 8 bytes.
-> However, the last TP.DT may contain up to 6 stuff bytes, which have no meaning.
-> If I remember well, they are even not 'reserved'.
-
-Agree, these bytes are meaningless for last TP.DT.
-
->
->>
->> Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
->> Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
->> ---
->>  net/can/j1939/transport.c | 7 +++++--
->>  1 file changed, 5 insertions(+), 2 deletions(-)
->>
->> diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
->> index bb5c4b8..eedaeaf 100644
->> --- a/net/can/j1939/transport.c
->> +++ b/net/can/j1939/transport.c
->> @@ -1789,6 +1789,7 @@ static void j1939_xtp_rx_dpo(struct j1939_priv *priv, struct sk_buff *skb,
->>  static void j1939_xtp_rx_dat_one(struct j1939_session *session,
->>  				 struct sk_buff *skb)
->>  {
->> +	enum j1939_xtp_abort abort = J1939_XTP_ABORT_FAULT;
->>  	struct j1939_priv *priv = session->priv;
->>  	struct j1939_sk_buff_cb *skcb, *se_skcb;
->>  	struct sk_buff *se_skb = NULL;
->> @@ -1803,9 +1804,11 @@ static void j1939_xtp_rx_dat_one(struct j1939_session *session,
->>  
->>  	skcb = j1939_skb_to_cb(skb);
->>  	dat = skb->data;
->> -	if (skb->len <= 1)
->> +	if (skb->len != 8) {
->>  		/* makes no sense */
->> +		abort = J1939_XTP_ABORT_UNEXPECTED_DATA;
->>  		goto out_session_cancel;
+> On 2021/9/30 15:42, Kurt Van Dijck wrote:
+> > On Thu, 30 Sep 2021 11:33:20 +0800, Zhang Changzhong wrote:
+> >> According to SAE-J1939-21, the data length of TP.DT must be 8 bytes, so
+> >> cancel session when receive unexpected TP.DT message.
+> > 
+> > SAE-j1939-21 indeed says that all TP.DT must be 8 bytes.
+> > However, the last TP.DT may contain up to 6 stuff bytes, which have no meaning.
+> > If I remember well, they are even not 'reserved'.
 > 
-> I think this is a situation of
-> "be strict on what you send, be tolerant on what you receive".
+> Agree, these bytes are meaningless for last TP.DT.
 > 
-> Did you find a technical reason to abort a session because the last frame didn't
-> bring overhead that you don't use?
-
-No technical reason. The only reason is that SAE-J1939-82 requires responder
-to abort session if any TP.DT less than 8 bytes (section A.3.4, Row 7).
-
-Best regards,
-Changzhong
-
+> >
+> >>
+> >> Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
+> >> Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
+> >> ---
+> >>  net/can/j1939/transport.c | 7 +++++--
+> >>  1 file changed, 5 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
+> >> index bb5c4b8..eedaeaf 100644
+> >> --- a/net/can/j1939/transport.c
+> >> +++ b/net/can/j1939/transport.c
+> >> @@ -1789,6 +1789,7 @@ static void j1939_xtp_rx_dpo(struct j1939_priv *priv, struct sk_buff *skb,
+> >>  static void j1939_xtp_rx_dat_one(struct j1939_session *session,
+> >>  				 struct sk_buff *skb)
+> >>  {
+> >> +	enum j1939_xtp_abort abort = J1939_XTP_ABORT_FAULT;
+> >>  	struct j1939_priv *priv = session->priv;
+> >>  	struct j1939_sk_buff_cb *skcb, *se_skcb;
+> >>  	struct sk_buff *se_skb = NULL;
+> >> @@ -1803,9 +1804,11 @@ static void j1939_xtp_rx_dat_one(struct j1939_session *session,
+> >>  
+> >>  	skcb = j1939_skb_to_cb(skb);
+> >>  	dat = skb->data;
+> >> -	if (skb->len <= 1)
+> >> +	if (skb->len != 8) {
+> >>  		/* makes no sense */
+> >> +		abort = J1939_XTP_ABORT_UNEXPECTED_DATA;
+> >>  		goto out_session_cancel;
+> > 
+> > I think this is a situation of
+> > "be strict on what you send, be tolerant on what you receive".
+> > 
+> > Did you find a technical reason to abort a session because the last frame didn't
+> > bring overhead that you don't use?
 > 
-> Kind regards,
-> Kurt
->> +	}
->>  
->>  	switch (session->last_cmd) {
->>  	case 0xff:
->> @@ -1904,7 +1907,7 @@ static void j1939_xtp_rx_dat_one(struct j1939_session *session,
->>   out_session_cancel:
->>  	kfree_skb(se_skb);
->>  	j1939_session_timers_cancel(session);
->> -	j1939_session_cancel(session, J1939_XTP_ABORT_FAULT);
->> +	j1939_session_cancel(session, abort);
->>  	j1939_session_put(session);
->>  }
->>  
->> -- 
->> 2.9.5
->>
-> .
-> 
+> No technical reason. The only reason is that SAE-J1939-82 requires responder
+> to abort session if any TP.DT less than 8 bytes (section A.3.4, Row 7).
+
+Do you mean: "BAM Transport: Ensure DUT discards BAM transport when
+TP.DT data packets are not correct size" ... "Verify DUT discards the
+BAM transport if any TP.DT data packet has less than 8 bytes"?
+
+Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
