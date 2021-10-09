@@ -2,88 +2,55 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62B4D42778F
-	for <lists+linux-can@lfdr.de>; Sat,  9 Oct 2021 07:37:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3242A4277E9
+	for <lists+linux-can@lfdr.de>; Sat,  9 Oct 2021 09:41:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244214AbhJIFjO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 9 Oct 2021 01:39:14 -0400
-Received: from mail-yb1-f175.google.com ([209.85.219.175]:44782 "EHLO
-        mail-yb1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbhJIFjO (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 9 Oct 2021 01:39:14 -0400
-Received: by mail-yb1-f175.google.com with SMTP id s64so25518242yba.11;
-        Fri, 08 Oct 2021 22:37:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aIghcbJ60FBCmsTSZcidGZHdsZIgJ4C2Kwndg3+KdLc=;
-        b=GSRQ1Iaf1jcG6jkjDcE0B8hBNwjtTQ4mbDh4TEU1M0ryezASe86tpYTv9qBlFiPagV
-         0mOzC2xtjSIGX/LLi4BHeLJy0yDZkYncrVPdPuUleydzjo0GGcOF1zXVENu9wwUi8mr0
-         QFCfJwknKg16eYQ19JaarW9giEtkdoIJCNn36fsdUT6BKWgRP17/fRIVV4SlgUaKA1iN
-         f6QEw1wJP0XwSwpMn3LNUnUHrE0XkFp0zJlCWyNAgQdRU10qXhL40FqSD0ZyQsIfhHPv
-         DuUS9Dk8SJi5XuhcFayv/JGNevgGZcnQrqeZdjcyIx3jgzOfj1ylaI0wQ6d7cP5FAUaZ
-         Pdeg==
-X-Gm-Message-State: AOAM532jXNoziPEEQG1Xma1tenb3tIzCE3M5Toi64XQfIIcIviqsRT9d
-        HI1KThQXJpoZ2J45OshLZ4NdIbJiw/XNgA0vSsajTDd22nk=
-X-Google-Smtp-Source: ABdhPJwapPhvRWOK7oAubzYHeJAPIsGJxNM1/egYo2N66jARLGywT7RkiLRh5RujnE7WH05gmBL1JvYmHW5mG+9ozEE=
-X-Received: by 2002:a25:4146:: with SMTP id o67mr8514459yba.113.1633757837390;
- Fri, 08 Oct 2021 22:37:17 -0700 (PDT)
+        id S232701AbhJIHnP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 9 Oct 2021 03:43:15 -0400
+Received: from szxga08-in.huawei.com ([45.249.212.255]:25112 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229804AbhJIHnO (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 9 Oct 2021 03:43:14 -0400
+Received: from dggeml757-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4HRH5D6gbgz1DGn9;
+        Sat,  9 Oct 2021 15:39:44 +0800 (CST)
+Received: from localhost.localdomain (10.175.104.82) by
+ dggeml757-chm.china.huawei.com (10.1.199.137) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.8; Sat, 9 Oct 2021 15:41:16 +0800
+From:   Ziyang Xuan <william.xuanziyang@huawei.com>
+To:     <socketcan@hartkopp.net>, <mkl@pengutronix.de>
+CC:     <davem@davemloft.net>, <kuba@kernel.org>,
+        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH net v2 0/2] fix tx buffer concurrent access protection
+Date:   Sat, 9 Oct 2021 15:40:08 +0800
+Message-ID: <cover.1633764159.git.william.xuanziyang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20211003044049.568441-1-mailhol.vincent@wanadoo.fr>
-In-Reply-To: <20211003044049.568441-1-mailhol.vincent@wanadoo.fr>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Sat, 9 Oct 2021 14:37:06 +0900
-Message-ID: <CAMZ6RqKm+nLPd2oHgNebeDh2hSOMVnV7cJn12FM6NLpVaOz2iA@mail.gmail.com>
-Subject: Re: [PATCH v1] can: netlink: report the CAN controller mode supported flags
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can <linux-can@vger.kernel.org>
-Cc:     netdev <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.104.82]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggeml757-chm.china.huawei.com (10.1.199.137)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Sun. 3 Oct 2021 at 13:40, Vincent Mailhol <mailhol.vincent@wanadoo.fr> wrote:
-> This patch introduces a method for the user to check both the
-> supported and the static capabilities.
->
-> Currently, the CAN netlink interface provides no easy ways to check
-> the capabilities of a given controller. The only method from the
-> command line is to try each CAN_CTRLMODE_ individually to check
-> whether the netlink interface returns an -EOPNOTSUPP error or not
-> (alternatively, one may find it easier to directly check the source
-> code of the driver instead...)
->
-> It appears that, currently, the struct can_ctrlmode::mask field is
-> only used in one direction: from the userland to the kernel. So we can
-> just reuse this field in the other direction (from the kernel to
-> userland). But, because the semantic is different, we use a union to
-> give this field a proper name: supported.
->
-> Below table explains how the two fields can_ctrlmode::supported and
-> can_ctrlmode::flags, when masked with any of the CAN_CTRLMODE_* bit
-> flags, allow us to identify both the supported and the static
-> capabilities:
->
->  supported &    flags &         Controller capabilities
->  CAN_CTRLMODE_* CAN_CTRLMODE_*
->  ------------------------------------------------------------------------
->  false          false           Feature not supported (always disabled)
->  false          true            Static feature (always enabled)
->  true           false           Feature supported but disabled
->  true           true            Feature supported and enabled
->
-> N.B.: This patch relies on the fact that a given CAN_CTRLMODE_*
-> feature can not be set for both can_priv::ctrlmode_supported and
-> can_priv::ctrlmode_static at the same time. c.f. comments in struct
-> can_priv [1]. Else, there would be no way to distinguish which
-> features were statically enabled.
+Fix tx buffer concurrent access protection in isotp_sendmsg().
 
-Actually, can_priv::ctrlmode_static can be derived from the other
-ctrlmode fields. I will send a v2 in which I will add a patch to
-replace that field with an inline function.
+v2:
+ - Change state of struct tpcon to u32 for cmpxchg just support 4-byte
+   and 8-byte in some architectures.
 
-Yours sincerely,
-Vincent Mailhol
+Ziyang Xuan (2):
+  can: isotp: add result check for wait_event_interruptible()
+  can: isotp: fix tx buffer concurrent access in isotp_sendmsg()
+
+ net/can/isotp.c | 48 +++++++++++++++++++++++++++++++++---------------
+ 1 file changed, 33 insertions(+), 15 deletions(-)
+
+-- 
+2.25.1
+
