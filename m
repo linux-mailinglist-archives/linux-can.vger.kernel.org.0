@@ -2,174 +2,125 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 394234277EF
-	for <lists+linux-can@lfdr.de>; Sat,  9 Oct 2021 09:41:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 588EF42782C
+	for <lists+linux-can@lfdr.de>; Sat,  9 Oct 2021 10:44:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbhJIHnh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 9 Oct 2021 03:43:37 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:13713 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232955AbhJIHnh (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 9 Oct 2021 03:43:37 -0400
-Received: from dggeml757-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4HRH5f42whzWZKb;
-        Sat,  9 Oct 2021 15:40:06 +0800 (CST)
-Received: from localhost.localdomain (10.175.104.82) by
- dggeml757-chm.china.huawei.com (10.1.199.137) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.8; Sat, 9 Oct 2021 15:41:38 +0800
-From:   Ziyang Xuan <william.xuanziyang@huawei.com>
-To:     <socketcan@hartkopp.net>, <mkl@pengutronix.de>
-CC:     <davem@davemloft.net>, <kuba@kernel.org>,
+        id S231410AbhJIIp5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 9 Oct 2021 04:45:57 -0400
+Received: from szxga08-in.huawei.com ([45.249.212.255]:25113 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230479AbhJIIp5 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 9 Oct 2021 04:45:57 -0400
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4HRJTY3v3kz1DHTJ;
+        Sat,  9 Oct 2021 16:42:25 +0800 (CST)
+Received: from dggpeml500006.china.huawei.com (7.185.36.76) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.8; Sat, 9 Oct 2021 16:43:57 +0800
+Received: from [10.174.178.240] (10.174.178.240) by
+ dggpeml500006.china.huawei.com (7.185.36.76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.8; Sat, 9 Oct 2021 16:43:56 +0800
+From:   Zhang Changzhong <zhangchangzhong@huawei.com>
+Subject: Re: [PATCH net] can: j1939: j1939_xtp_rx_dat_one(): cancel session if
+ receive TP.DT with error length
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+CC:     Robin van der Gracht <robin@protonic.nl>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        <kernel@pengutronix.de>, Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Maxime Jayat <maxime.jayat@mobile-devices.fr>,
         <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH net v2 2/2] can: isotp: fix tx buffer concurrent access in isotp_sendmsg()
-Date:   Sat, 9 Oct 2021 15:40:30 +0800
-Message-ID: <c2517874fbdf4188585cf9ddf67a8fa74d5dbde5.1633764159.git.william.xuanziyang@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1633764159.git.william.xuanziyang@huawei.com>
-References: <cover.1633764159.git.william.xuanziyang@huawei.com>
+References: <1632972800-45091-1-git-send-email-zhangchangzhong@huawei.com>
+ <20210930074206.GB7502@x1.vandijck-laurijssen.be>
+ <1cab07f2-593a-1d1c-3a29-43ee9df4b29e@huawei.com>
+ <20211008110007.GE29653@pengutronix.de>
+Message-ID: <556a04ed-c350-7b2b-5bbe-98c03846630b@huawei.com>
+Date:   Sat, 9 Oct 2021 16:43:56 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.82]
+In-Reply-To: <20211008110007.GE29653@pengutronix.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.240]
 X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggeml757-chm.china.huawei.com (10.1.199.137)
+ dggpeml500006.china.huawei.com (7.185.36.76)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-When isotp_sendmsg() concurrent, tx.state of all tx processes can be
-ISOTP_IDLE. The conditions so->tx.state != ISOTP_IDLE and
-wq_has_sleeper(&so->wait) can not protect tx buffer from being accessed
-by multiple tx processes.
+On 2021/10/8 19:00, Oleksij Rempel wrote:
+> On Fri, Oct 08, 2021 at 05:22:12PM +0800, Zhang Changzhong wrote:
+>> Hi Kurt,
+>> Sorry for the late reply.
+>>
+>> On 2021/9/30 15:42, Kurt Van Dijck wrote:
+>>> On Thu, 30 Sep 2021 11:33:20 +0800, Zhang Changzhong wrote:
+>>>> According to SAE-J1939-21, the data length of TP.DT must be 8 bytes, so
+>>>> cancel session when receive unexpected TP.DT message.
+>>>
+>>> SAE-j1939-21 indeed says that all TP.DT must be 8 bytes.
+>>> However, the last TP.DT may contain up to 6 stuff bytes, which have no meaning.
+>>> If I remember well, they are even not 'reserved'.
+>>
+>> Agree, these bytes are meaningless for last TP.DT.
+>>
+>>>
+>>>>
+>>>> Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
+>>>> Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
+>>>> ---
+>>>>  net/can/j1939/transport.c | 7 +++++--
+>>>>  1 file changed, 5 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
+>>>> index bb5c4b8..eedaeaf 100644
+>>>> --- a/net/can/j1939/transport.c
+>>>> +++ b/net/can/j1939/transport.c
+>>>> @@ -1789,6 +1789,7 @@ static void j1939_xtp_rx_dpo(struct j1939_priv *priv, struct sk_buff *skb,
+>>>>  static void j1939_xtp_rx_dat_one(struct j1939_session *session,
+>>>>  				 struct sk_buff *skb)
+>>>>  {
+>>>> +	enum j1939_xtp_abort abort = J1939_XTP_ABORT_FAULT;
+>>>>  	struct j1939_priv *priv = session->priv;
+>>>>  	struct j1939_sk_buff_cb *skcb, *se_skcb;
+>>>>  	struct sk_buff *se_skb = NULL;
+>>>> @@ -1803,9 +1804,11 @@ static void j1939_xtp_rx_dat_one(struct j1939_session *session,
+>>>>  
+>>>>  	skcb = j1939_skb_to_cb(skb);
+>>>>  	dat = skb->data;
+>>>> -	if (skb->len <= 1)
+>>>> +	if (skb->len != 8) {
+>>>>  		/* makes no sense */
+>>>> +		abort = J1939_XTP_ABORT_UNEXPECTED_DATA;
+>>>>  		goto out_session_cancel;
+>>>
+>>> I think this is a situation of
+>>> "be strict on what you send, be tolerant on what you receive".
+>>>
+>>> Did you find a technical reason to abort a session because the last frame didn't
+>>> bring overhead that you don't use?
+>>
+>> No technical reason. The only reason is that SAE-J1939-82 requires responder
+>> to abort session if any TP.DT less than 8 bytes (section A.3.4, Row 7).
+> 
+> Do you mean: "BAM Transport: Ensure DUT discards BAM transport when
+> TP.DT data packets are not correct size" ... "Verify DUT discards the
+> BAM transport if any TP.DT data packet has less than 8 bytes"?
 
-We can use cmpxchg() to try to modify tx.state to ISOTP_SENDING firstly.
-If the modification of the previous process succeed, the later process
-must wait tx.state to ISOTP_IDLE firstly. Thus, we can ensure tx buffer
-is accessed by only one process at the same time. And we should also
-restore the original tx.state at the subsequent error processes.
+Yes.
 
-Fixes: e057dd3fc20f ("can: add ISO 15765-2:2016 transport protocol")
-Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
----
- net/can/isotp.c | 46 +++++++++++++++++++++++++++++++---------------
- 1 file changed, 31 insertions(+), 15 deletions(-)
+Regards,
+Changzhong
 
-diff --git a/net/can/isotp.c b/net/can/isotp.c
-index 2ac29c2b2ca6..d1f54273c0bb 100644
---- a/net/can/isotp.c
-+++ b/net/can/isotp.c
-@@ -121,7 +121,7 @@ enum {
- struct tpcon {
- 	int idx;
- 	int len;
--	u8 state;
-+	u32 state;
- 	u8 bs;
- 	u8 sn;
- 	u8 ll_dl;
-@@ -848,6 +848,7 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
- {
- 	struct sock *sk = sock->sk;
- 	struct isotp_sock *so = isotp_sk(sk);
-+	u32 old_state = so->tx.state;
- 	struct sk_buff *skb;
- 	struct net_device *dev;
- 	struct canfd_frame *cf;
-@@ -860,47 +861,55 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
- 		return -EADDRNOTAVAIL;
- 
- 	/* we do not support multiple buffers - for now */
--	if (so->tx.state != ISOTP_IDLE || wq_has_sleeper(&so->wait)) {
--		if (msg->msg_flags & MSG_DONTWAIT)
--			return -EAGAIN;
-+	if (cmpxchg(&so->tx.state, ISOTP_IDLE, ISOTP_SENDING) != ISOTP_IDLE ||
-+	    wq_has_sleeper(&so->wait)) {
-+		if (msg->msg_flags & MSG_DONTWAIT) {
-+			err = -EAGAIN;
-+			goto err_out;
-+		}
- 
- 		/* wait for complete transmission of current pdu */
- 		err = wait_event_interruptible(so->wait, so->tx.state == ISOTP_IDLE);
- 		if (err)
--			return err;
-+			goto err_out;
- 	}
- 
--	if (!size || size > MAX_MSG_LENGTH)
--		return -EINVAL;
-+	if (!size || size > MAX_MSG_LENGTH) {
-+		err = -EINVAL;
-+		goto err_out;
-+	}
- 
- 	/* take care of a potential SF_DL ESC offset for TX_DL > 8 */
- 	off = (so->tx.ll_dl > CAN_MAX_DLEN) ? 1 : 0;
- 
- 	/* does the given data fit into a single frame for SF_BROADCAST? */
- 	if ((so->opt.flags & CAN_ISOTP_SF_BROADCAST) &&
--	    (size > so->tx.ll_dl - SF_PCI_SZ4 - ae - off))
--		return -EINVAL;
-+	    (size > so->tx.ll_dl - SF_PCI_SZ4 - ae - off)) {
-+		err = -EINVAL;
-+		goto err_out;
-+	}
- 
- 	err = memcpy_from_msg(so->tx.buf, msg, size);
- 	if (err < 0)
--		return err;
-+		goto err_out;
- 
- 	dev = dev_get_by_index(sock_net(sk), so->ifindex);
--	if (!dev)
--		return -ENXIO;
-+	if (!dev) {
-+		err = -ENXIO;
-+		goto err_out;
-+	}
- 
- 	skb = sock_alloc_send_skb(sk, so->ll.mtu + sizeof(struct can_skb_priv),
- 				  msg->msg_flags & MSG_DONTWAIT, &err);
- 	if (!skb) {
- 		dev_put(dev);
--		return err;
-+		goto err_out;
- 	}
- 
- 	can_skb_reserve(skb);
- 	can_skb_prv(skb)->ifindex = dev->ifindex;
- 	can_skb_prv(skb)->skbcnt = 0;
- 
--	so->tx.state = ISOTP_SENDING;
- 	so->tx.len = size;
- 	so->tx.idx = 0;
- 
-@@ -956,7 +965,7 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
- 	if (err) {
- 		pr_notice_once("can-isotp: %s: can_send_ret %pe\n",
- 			       __func__, ERR_PTR(err));
--		return err;
-+		goto err_out;
- 	}
- 
- 	if (wait_tx_done) {
-@@ -965,6 +974,13 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
- 	}
- 
- 	return size;
-+
-+err_out:
-+	so->tx.state = old_state;
-+	if (so->tx.state == ISOTP_IDLE)
-+		wake_up_interruptible(&so->wait);
-+
-+	return err;
- }
- 
- static int isotp_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
--- 
-2.25.1
-
+> 
+> Regards,
+> Oleksij
+> 
