@@ -2,78 +2,88 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2AD94270CC
-	for <lists+linux-can@lfdr.de>; Fri,  8 Oct 2021 20:31:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B4D42778F
+	for <lists+linux-can@lfdr.de>; Sat,  9 Oct 2021 07:37:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231342AbhJHSc4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 8 Oct 2021 14:32:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46384 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231430AbhJHScu (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 8 Oct 2021 14:32:50 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B0DC061767
-        for <linux-can@vger.kernel.org>; Fri,  8 Oct 2021 11:30:55 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id u32so23007873ybd.9
-        for <linux-can@vger.kernel.org>; Fri, 08 Oct 2021 11:30:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=PYbXX+m3yh2JK7MjnWR4NgQd2KGxw42JomoIBePHBfM=;
-        b=DrA1WAC9qR8XIdIWAr32D/vxyBSERCvsm+inFALlkkhucOM6nBFFox98QWX7QBzqHF
-         i6SJhGzj0ztS7NTKkCIteIkvSBOmEpCJsIhAvYvKWjZOAxpTWDQ/XoKEp52QW6oyr1+u
-         4YcsFZHt1lQkJ246is9+eGNIB7FUzBfuyYMfRw8jLBIlPTEgW6bcgl9nSwxdbhHwjPiI
-         jS2sompNRx3M/9zWrhwCRjRT7GF/0Wkj2pyFAsTHLUV6mV0041AImCgNsO1bmR4ZOUuP
-         bgiJqC1ZIZLZOmPd+LdvOOpLogMfALAETEG9gu1syDzlwjnwSAsffXdPrsLRbSIVfpf+
-         tw2g==
+        id S244214AbhJIFjO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 9 Oct 2021 01:39:14 -0400
+Received: from mail-yb1-f175.google.com ([209.85.219.175]:44782 "EHLO
+        mail-yb1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229596AbhJIFjO (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 9 Oct 2021 01:39:14 -0400
+Received: by mail-yb1-f175.google.com with SMTP id s64so25518242yba.11;
+        Fri, 08 Oct 2021 22:37:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=PYbXX+m3yh2JK7MjnWR4NgQd2KGxw42JomoIBePHBfM=;
-        b=x6rLcPZ72ipXXQAbFhF5zK2zBaAlXcZCEj3c6DVO2z+fDqbbvg5hs3MOGXpn4YZ2P0
-         Eum6HzXbYmOD9wqGRv8+90tkzW2SrOQEG8b/gA+NbHqyzUCPbGby4llwoUQaHItLSWSz
-         YbZHYD92oH4nIX+LZdancn/a8szu1mgWVZNRe9FCHpy7NeJKUnxobj/81GyFbi3NcN29
-         JKcpgYMcX5CS8osBsSdVPaRDfEF33N2tZ7x/mLFZm/I07h/uPwa2KI4jMLdLIC07isDm
-         d9hoQ67DGcO95KE9t3nDaeeUY/rkxmhH6Fo7ZdZEC2n20cLG+rlnKvs8YDO5PsXGoSjf
-         shiQ==
-X-Gm-Message-State: AOAM532KIQYpS0XAESD9dS07IRztx3RLmL3fmBNwtMz/uLbFpKVkHfSO
-        8/IN6JlWLA0ALf8YDBLpeHCJdT2KFwV6ZlaVVLs=
-X-Google-Smtp-Source: ABdhPJxCQ7UH7VOwVwKy/o4HAf8iTjDzkrRBUnS/1hynsdoeARWUpXjyYk+eucrhrIaBrMo/aTupBqWgqvnCmiVhCOw=
-X-Received: by 2002:a25:9d89:: with SMTP id v9mr5655035ybp.8.1633717854125;
- Fri, 08 Oct 2021 11:30:54 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aIghcbJ60FBCmsTSZcidGZHdsZIgJ4C2Kwndg3+KdLc=;
+        b=GSRQ1Iaf1jcG6jkjDcE0B8hBNwjtTQ4mbDh4TEU1M0ryezASe86tpYTv9qBlFiPagV
+         0mOzC2xtjSIGX/LLi4BHeLJy0yDZkYncrVPdPuUleydzjo0GGcOF1zXVENu9wwUi8mr0
+         QFCfJwknKg16eYQ19JaarW9giEtkdoIJCNn36fsdUT6BKWgRP17/fRIVV4SlgUaKA1iN
+         f6QEw1wJP0XwSwpMn3LNUnUHrE0XkFp0zJlCWyNAgQdRU10qXhL40FqSD0ZyQsIfhHPv
+         DuUS9Dk8SJi5XuhcFayv/JGNevgGZcnQrqeZdjcyIx3jgzOfj1ylaI0wQ6d7cP5FAUaZ
+         Pdeg==
+X-Gm-Message-State: AOAM532jXNoziPEEQG1Xma1tenb3tIzCE3M5Toi64XQfIIcIviqsRT9d
+        HI1KThQXJpoZ2J45OshLZ4NdIbJiw/XNgA0vSsajTDd22nk=
+X-Google-Smtp-Source: ABdhPJwapPhvRWOK7oAubzYHeJAPIsGJxNM1/egYo2N66jARLGywT7RkiLRh5RujnE7WH05gmBL1JvYmHW5mG+9ozEE=
+X-Received: by 2002:a25:4146:: with SMTP id o67mr8514459yba.113.1633757837390;
+ Fri, 08 Oct 2021 22:37:17 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:7110:313:b0:fa:45c9:2c6b with HTTP; Fri, 8 Oct 2021
- 11:30:53 -0700 (PDT)
-Reply-To: greogebrown@gmail.com
-From:   george brown <edemhoegbesso@gmail.com>
-Date:   Fri, 8 Oct 2021 20:30:53 +0200
-Message-ID: <CAPM9i6_ZLrMP1FcaXHAHmtn2ViZdhYF8Hmk-2yTW2udU0az=8w@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+References: <20211003044049.568441-1-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20211003044049.568441-1-mailhol.vincent@wanadoo.fr>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Sat, 9 Oct 2021 14:37:06 +0900
+Message-ID: <CAMZ6RqKm+nLPd2oHgNebeDh2hSOMVnV7cJn12FM6NLpVaOz2iA@mail.gmail.com>
+Subject: Re: [PATCH v1] can: netlink: report the CAN controller mode supported flags
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can <linux-can@vger.kernel.org>
+Cc:     netdev <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hallo
+On Sun. 3 Oct 2021 at 13:40, Vincent Mailhol <mailhol.vincent@wanadoo.fr> wrote:
+> This patch introduces a method for the user to check both the
+> supported and the static capabilities.
+>
+> Currently, the CAN netlink interface provides no easy ways to check
+> the capabilities of a given controller. The only method from the
+> command line is to try each CAN_CTRLMODE_ individually to check
+> whether the netlink interface returns an -EOPNOTSUPP error or not
+> (alternatively, one may find it easier to directly check the source
+> code of the driver instead...)
+>
+> It appears that, currently, the struct can_ctrlmode::mask field is
+> only used in one direction: from the userland to the kernel. So we can
+> just reuse this field in the other direction (from the kernel to
+> userland). But, because the semantic is different, we use a union to
+> give this field a proper name: supported.
+>
+> Below table explains how the two fields can_ctrlmode::supported and
+> can_ctrlmode::flags, when masked with any of the CAN_CTRLMODE_* bit
+> flags, allow us to identify both the supported and the static
+> capabilities:
+>
+>  supported &    flags &         Controller capabilities
+>  CAN_CTRLMODE_* CAN_CTRLMODE_*
+>  ------------------------------------------------------------------------
+>  false          false           Feature not supported (always disabled)
+>  false          true            Static feature (always enabled)
+>  true           false           Feature supported but disabled
+>  true           true            Feature supported and enabled
+>
+> N.B.: This patch relies on the fact that a given CAN_CTRLMODE_*
+> feature can not be set for both can_priv::ctrlmode_supported and
+> can_priv::ctrlmode_static at the same time. c.f. comments in struct
+> can_priv [1]. Else, there would be no way to distinguish which
+> features were statically enabled.
 
-Mein Name ist George Brown und ich bin Rechtsanwalt von Beruf. Ich
-m=C3=B6chte dir anbieten
-die n=C3=A4chsten Angeh=C3=B6rigen meines Klienten. Sie erben die Summe von=
- (8,5
-Millionen US-Dollar)
-Dollar, die mein Mandant vor seinem Tod auf der Bank gelassen hat.
+Actually, can_priv::ctrlmode_static can be derived from the other
+ctrlmode fields. I will send a v2 in which I will add a patch to
+replace that field with an inline function.
 
-Mein Mandant ist ein B=C3=BCrger Ihres Landes, der mit seiner Frau bei
-einem Autounfall gestorben ist
-und einziger Sohn. Ich habe Anspruch auf 50 % des Gesamtfonds, w=C3=A4hrend
-50 % zustehen
-sein f=C3=BCr dich.
-Bitte kontaktieren Sie meine private E-Mail hier f=C3=BCr weitere
-Details:greogebrown@gmail.com
-
-Danke im Voraus,
-Herr George Brown,
+Yours sincerely,
+Vincent Mailhol
