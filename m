@@ -2,119 +2,99 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2D3142D923
-	for <lists+linux-can@lfdr.de>; Thu, 14 Oct 2021 14:14:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0D4942E271
+	for <lists+linux-can@lfdr.de>; Thu, 14 Oct 2021 22:10:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230473AbhJNMQ7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 14 Oct 2021 08:16:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37280 "EHLO
+        id S230018AbhJNUMY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 14 Oct 2021 16:12:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbhJNMQ7 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 14 Oct 2021 08:16:59 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD7B9C061570
-        for <linux-can@vger.kernel.org>; Thu, 14 Oct 2021 05:14:54 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1mazdB-0002Q8-4c; Thu, 14 Oct 2021 14:14:41 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1mazd5-0000Ck-Bp; Thu, 14 Oct 2021 14:14:35 +0200
-Date:   Thu, 14 Oct 2021 14:14:35 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Zhang Changzhong <zhangchangzhong@huawei.com>
-Cc:     Robin van der Gracht <robin@protonic.nl>,
-        Oleksij Rempel <linux@rempel-privat.de>, kernel@pengutronix.de,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
-        Maxime Jayat <maxime.jayat@mobile-devices.fr>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] can: j1939: j1939_xtp_rx_rts_session_new(): abort TP
- less than 9 bytes
-Message-ID: <20211014121435.GA7427@pengutronix.de>
-References: <1634203601-3460-1-git-send-email-zhangchangzhong@huawei.com>
+        with ESMTP id S233014AbhJNUMV (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 14 Oct 2021 16:12:21 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE8DC061762
+        for <linux-can@vger.kernel.org>; Thu, 14 Oct 2021 13:10:16 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id r2so6513364pgl.10
+        for <linux-can@vger.kernel.org>; Thu, 14 Oct 2021 13:10:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=hcDyU+zIY4Ss8fjL+Pic9FdthqpnWN+VG42syy+/mwc=;
+        b=appy5bCOum3d8Tda8BTLGF3sKcXVtg/qY9l7fHvstYswnsAxrB39SLkFihIOJDzEVN
+         Qj0CMf4V9WQE477RZnBHhHQWMbYqVPOa2amkulcZxRbpouJciwKoDW7HF5z35BDE7A1j
+         ZjF9ZFw4Wp87+V7zB01CnVTsvjFA1cvX+5FGlEh4oQlVIJBLrf7TSbKutquBcVeguaT/
+         QHG+BPOB2M6vOIyXupX98BgdWtyduPZJD+970VfSJhrraInIuABONNe4a1L9ZKfPGxGk
+         t+XPl8kwZ958L4lFG9bSLepA+vwKRf+CDhJHLuYGnL9Tmd5V/vd8iMnwVAsfXdHKPtbz
+         JRdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=hcDyU+zIY4Ss8fjL+Pic9FdthqpnWN+VG42syy+/mwc=;
+        b=HDGtu+ffTp4og2lpsraCE4EXN3hGt96o10JIksLqsz7LAoqZI/LpwuvAEtbfUYRMxz
+         tqS0lyjVmZUgKMzNQp8BeyhIjTETKWfamBnalkDlFzeGOdIakJSJPgT0jYIYkmGGxvqK
+         dVyv62jAXWHyTu9RhLdUcJCFn7SnbIMt12K5hA+Bz4iGiMAofTcbElG8dlOFNhDRWThe
+         CSpV4msR8QTOGRHrotBn9QtF8MfkHXp7kKmfhmPSAyIJzqm0UfioRsbiE0PETfclRzv0
+         7UoNedAgQNl0vQCArIX1uShN0MUrdWjl1NXVxAFa0gvJFt1L3hcodhMPdIXuFQPNAahA
+         MS0Q==
+X-Gm-Message-State: AOAM531KjDSBXYOQrjpQ24WlGXfShtpPuuAqIuXcdSXga19/LST6LHv8
+        cL7OZUP3+H6MPbd+LBIkKdxpCxwGPFEYEjvuvZ0=
+X-Google-Smtp-Source: ABdhPJz+q13zpzBeeAjLUv93jk50TSJ0o0r7nLDaTKEtPPl3iu8gjtpr1VZJln6YzYghtm858+E+qxIEcOox+2jAnIU=
+X-Received: by 2002:a63:7b18:: with SMTP id w24mr4919862pgc.234.1634242215900;
+ Thu, 14 Oct 2021 13:10:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1634203601-3460-1-git-send-email-zhangchangzhong@huawei.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 14:13:58 up 238 days, 15:37, 145 users,  load average: 0.23, 0.38,
- 0.40
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Received: by 2002:a17:90b:3e84:0:0:0:0 with HTTP; Thu, 14 Oct 2021 13:10:15
+ -0700 (PDT)
+Reply-To: compaorekone34@gmail.com
+From:   kone compaore <abbttnb20@gmail.com>
+Date:   Thu, 14 Oct 2021 13:10:15 -0700
+Message-ID: <CAL4=2zk9MVCuXSKgZK4WxA-7Xy7uFNkc0wwWMEGk_RMaZDXB-g@mail.gmail.com>
+Subject: Greetings from kone
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Thu, Oct 14, 2021 at 05:26:40PM +0800, Zhang Changzhong wrote:
-> The receiver should abort TP if 'total message size' in TP.CM_RTS and
-> TP.CM_BAM is less than 9 or greater than 1785 [1], but currently the
-> j1939 stack only checks the upper bound and the receiver will accept the
-> following broadcast message:
->   vcan1  18ECFF00   [8]  20 08 00 02 FF 00 23 01
->   vcan1  18EBFF00   [8]  01 00 00 00 00 00 00 00
->   vcan1  18EBFF00   [8]  02 00 FF FF FF FF FF FF
-> 
-> This patch adds check for the lower bound and abort illegal TP.
-> 
-> [1] SAE-J1939-82 A.3.4 Row 2 and A.3.6 Row 6.
-> 
-> Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
-> Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
+Greetings,
 
-Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Thank you!
+Greetings to you and your family.
 
-> ---
->  net/can/j1939/j1939-priv.h | 1 +
->  net/can/j1939/transport.c  | 2 ++
->  2 files changed, 3 insertions(+)
-> 
-> diff --git a/net/can/j1939/j1939-priv.h b/net/can/j1939/j1939-priv.h
-> index f6df208..16af1a7 100644
-> --- a/net/can/j1939/j1939-priv.h
-> +++ b/net/can/j1939/j1939-priv.h
-> @@ -330,6 +330,7 @@ int j1939_session_activate(struct j1939_session *session);
->  void j1939_tp_schedule_txtimer(struct j1939_session *session, int msec);
->  void j1939_session_timers_cancel(struct j1939_session *session);
->  
-> +#define J1939_MIN_TP_PACKET_SIZE 9
->  #define J1939_MAX_TP_PACKET_SIZE (7 * 0xff)
->  #define J1939_MAX_ETP_PACKET_SIZE (7 * 0x00ffffff)
->  
-> diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
-> index bb5c4b8..b685d31 100644
-> --- a/net/can/j1939/transport.c
-> +++ b/net/can/j1939/transport.c
-> @@ -1609,6 +1609,8 @@ j1939_session *j1939_xtp_rx_rts_session_new(struct j1939_priv *priv,
->  			abort = J1939_XTP_ABORT_FAULT;
->  		else if (len > priv->tp_max_packet_size)
->  			abort = J1939_XTP_ABORT_RESOURCE;
-> +		else if (len < J1939_MIN_TP_PACKET_SIZE)
-> +			abort = J1939_XTP_ABORT_FAULT;
->  	}
->  
->  	if (abort != J1939_XTP_NO_ABORT) {
-> -- 
-> 2.9.5
-> 
-> 
+My name is Mr. Kone Compaore, the auditing general with the bank,
+Africa Develop bank (ADB) Ouagadougou, Burkina
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Faso, in West Africa. I am contacting you to seek your honesty and
+sincere cooperation in confidential manner to
+
+transfer the sum of 10.5 (Ten million five hundred thousand Dollars)
+to your existing or new bank account.
+
+This money belongs to one of our bank client, a Libyan oil exporter
+who was working with the former Libyan
+
+government; I learn t that he was killed by the revolutionary forces
+since October 2011. Our bank is planning to
+
+transfer this entire fund into the government public treasury as
+unclaimed fund if nobody comes to claim the money
+
+from our bank after four years without account activities .
+
+What the bank need is proof and information about the late customer
+which I will assist you on. This is a genuine,
+
+risk free and legal business transaction, All details shall be sent to
+you once I hear from you.
+
+The information as contained herein be accorded the necessary
+attention, urgency as well as the secrecy it
+
+deserves.
+
+If you are really sure of your integrity, trustworthy and
+confidentiality reply back to me urgently for more
+
+details
+
+Best regards,
+Kone Compaore
