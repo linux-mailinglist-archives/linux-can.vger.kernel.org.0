@@ -2,100 +2,112 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B09EE42C1F9
-	for <lists+linux-can@lfdr.de>; Wed, 13 Oct 2021 15:59:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D317342D2AA
+	for <lists+linux-can@lfdr.de>; Thu, 14 Oct 2021 08:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231644AbhJMOBw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 13 Oct 2021 10:01:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42584 "EHLO
+        id S229962AbhJNGbj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 14 Oct 2021 02:31:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbhJMOBw (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 13 Oct 2021 10:01:52 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02075C061570
-        for <linux-can@vger.kernel.org>; Wed, 13 Oct 2021 06:59:48 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1maenF-00047v-AN; Wed, 13 Oct 2021 15:59:41 +0200
-Received: from pengutronix.de (2a03-f580-87bc-d400-4e9e-60fc-b8e7-7754.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:4e9e:60fc:b8e7:7754])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 85F196924D0;
-        Wed, 13 Oct 2021 13:59:39 +0000 (UTC)
-Date:   Wed, 13 Oct 2021 15:59:38 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [patch 05/11] can: bcm: Use hrtimer_forward_now()
-Message-ID: <20211013135938.mdg3ucyjtkvfcxcu@pengutronix.de>
-References: <20210923153311.225307347@linutronix.de>
- <20210923153339.684546907@linutronix.de>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ulf5aacqnjevo763"
-Content-Disposition: inline
-In-Reply-To: <20210923153339.684546907@linutronix.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+        with ESMTP id S229933AbhJNGbY (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 14 Oct 2021 02:31:24 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84874C061570;
+        Wed, 13 Oct 2021 23:29:20 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id x8so3439379plv.8;
+        Wed, 13 Oct 2021 23:29:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=n5SnxvhmY+qTRILLCzaztY5PSjGFzaDoDn+bV8S3cgY=;
+        b=ZVJLFTxXpbZlHXGhzWOAW0ZgukXn/BcWxZcMXnLe3lSgvCuDecQK4rDC1FiR5DNNYS
+         o6DsfgABOcQm39yOjdWLbGFZL1OA53fn7N5C8Xq8VCmR0YHN1Di+WlxoU/LoeDeaPhB/
+         Nco9gx4kfdafhWeryAeC9GicsYYGkX02NPWEMgFAOAowxiDwZIZImJi+FNTVOobgaQdw
+         NekzqVew0rCucgQbwknB+w0WhpQBxf1Deice9SArFSCEyqeMdJlO2XPpA4nTqTHtqhtK
+         1qI/512+z/eZAtlL+pRBARHRpVGYWj5RfrGGK4ncUG4XrgInQZmoysgOYsyHCBEocCI/
+         J/9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=n5SnxvhmY+qTRILLCzaztY5PSjGFzaDoDn+bV8S3cgY=;
+        b=p2TVCpU7vhKQY3lQlcJ3TDyLOhZJ+uRhHQuY6eL+SxZ8eGVNLsGPa5uDxKTUIfPGGq
+         7949BEnpIIlLy7Am52pk9xUs8fou6bEwbzQKD9AAgXqBA1BiE9yK5WQZ1Ja+R2bkzhj3
+         H4AQ69slUhVTq9pOdkcWP0P7ydcd0z1ZHxkDlWlvGCefRdS0IRDIEjd/cgi8wvAEOwi/
+         XxJl4Ty5i5udRMLWz1/Jc0NlXrZnFVesiPI7qVhllRB1R9FbRoAPlQY2TcFTF7pMDldd
+         Qp3tExpZ2PhsvBgPs+Vrlkfqrh0hgkUM4tqM3OGBF3v6Aj2DyPGIFQbtZnjDjfwDtp3G
+         Srkw==
+X-Gm-Message-State: AOAM5319/NdlF+thxGU9PEkRCvo6VTz5oE/uCBOuQVVPpg/sS/rKnrOJ
+        gXQMHy2B3JgtlkehvUidQA==
+X-Google-Smtp-Source: ABdhPJxr7qNWbYDpMwgqOQ0O/nEjHG9wzCmIqSUfEjlh+p+/T+oIrofLbPZ7u+jrggvcZzc43H5dqQ==
+X-Received: by 2002:a17:90b:1d0d:: with SMTP id on13mr7346518pjb.36.1634192960097;
+        Wed, 13 Oct 2021 23:29:20 -0700 (PDT)
+Received: from vultr.guest ([107.191.53.97])
+        by smtp.gmail.com with ESMTPSA id x7sm7769503pjg.5.2021.10.13.23.29.17
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 13 Oct 2021 23:29:19 -0700 (PDT)
+From:   Zheyu Ma <zheyuma97@gmail.com>
+To:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>
+Subject: [PATCH] can: peak_pci: Fix UAF in peak_pci_remove
+Date:   Thu, 14 Oct 2021 06:28:33 +0000
+Message-Id: <1634192913-15639-1-git-send-email-zheyuma97@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+When remove the module peek_pci, referencing 'chan' again after
+releasing 'dev' will cause UAF.
 
---ulf5aacqnjevo763
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fix this by releasing 'dev' later.
 
-On 23.09.2021 18:04:27, Thomas Gleixner wrote:
-> hrtimer_forward_now() provides the same functionality as the open coded
-> hrimer_forward() invocation. Prepares for removal of hrtimer_forward() fr=
-om
-> the public interfaces.
->=20
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Oliver Hartkopp <socketcan@hartkopp.net>
-> Cc: linux-can@vger.kernel.org
-> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-> Cc: netdev@vger.kernel.org
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
+The following log reveals it:
 
-Tnx, applied to linux-can-next/testing.
+[   35.961814 ] BUG: KASAN: use-after-free in peak_pci_remove+0x16f/0x270 [peak_pci]
+[   35.963414 ] Read of size 8 at addr ffff888136998ee8 by task modprobe/5537
+[   35.965513 ] Call Trace:
+[   35.965718 ]  dump_stack_lvl+0xa8/0xd1
+[   35.966028 ]  print_address_description+0x87/0x3b0
+[   35.966420 ]  kasan_report+0x172/0x1c0
+[   35.966725 ]  ? peak_pci_remove+0x16f/0x270 [peak_pci]
+[   35.967137 ]  ? trace_irq_enable_rcuidle+0x10/0x170
+[   35.967529 ]  ? peak_pci_remove+0x16f/0x270 [peak_pci]
+[   35.967945 ]  __asan_report_load8_noabort+0x14/0x20
+[   35.968346 ]  peak_pci_remove+0x16f/0x270 [peak_pci]
+[   35.968752 ]  pci_device_remove+0xa9/0x250
 
-regards,
-Marc
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+---
+ drivers/net/can/sja1000/peak_pci.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+diff --git a/drivers/net/can/sja1000/peak_pci.c b/drivers/net/can/sja1000/peak_pci.c
+index 6db90dc4bc9d..84f34020aafb 100644
+--- a/drivers/net/can/sja1000/peak_pci.c
++++ b/drivers/net/can/sja1000/peak_pci.c
+@@ -752,16 +752,15 @@ static void peak_pci_remove(struct pci_dev *pdev)
+ 		struct net_device *prev_dev = chan->prev_dev;
+ 
+ 		dev_info(&pdev->dev, "removing device %s\n", dev->name);
++		/* do that only for first channel */
++		if (!prev_dev && chan->pciec_card)
++			peak_pciec_remove(chan->pciec_card);
+ 		unregister_sja1000dev(dev);
+ 		free_sja1000dev(dev);
+ 		dev = prev_dev;
+ 
+-		if (!dev) {
+-			/* do that only for first channel */
+-			if (chan->pciec_card)
+-				peak_pciec_remove(chan->pciec_card);
++		if (!dev)
+ 			break;
+-		}
+ 		priv = netdev_priv(dev);
+ 		chan = priv->priv;
+ 	}
+-- 
+2.17.6
 
---ulf5aacqnjevo763
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmFm5kgACgkQqclaivrt
-76ly8Af+MZpwNSBSkgu3BoHbXJM/ftEtG8NwqL4gN3XFG2q00fGFifF6cR1SZqB8
-lnFWAfGMCPGla49W/6vkAg9x1QwGR74q++Z+Dj51dImt7qYTsDMoVhDS3jrSO+5b
-ESnvU6e5FXZbI0bvnZCvM3ML9kxSb8vXaYUxKRBrkf4gK7dQNAl1PAAK4B3h03xf
-JPV4wpZGxcxeVUEffv9PvvX9fdwVfb7szCmt8KqaxIUuH1IfM+gZGxxoiNW8YEPZ
-YgixZRWjON1Y5SJ/FmEYBW3Wk/1Scyqg/Ts9LC0TQRvLJIiojQrpC4X5qDUr2P8N
-3tH/WZoW99MfvlmrL8zSxRcp0sNqPQ==
-=PxYX
------END PGP SIGNATURE-----
-
---ulf5aacqnjevo763--
