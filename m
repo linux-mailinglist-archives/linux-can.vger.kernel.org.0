@@ -2,118 +2,96 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1220D432B8D
-	for <lists+linux-can@lfdr.de>; Tue, 19 Oct 2021 03:44:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 401D2432EEF
+	for <lists+linux-can@lfdr.de>; Tue, 19 Oct 2021 09:05:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbhJSBqw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 18 Oct 2021 21:46:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60368 "EHLO
+        id S234406AbhJSHHa (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 19 Oct 2021 03:07:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbhJSBqw (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 18 Oct 2021 21:46:52 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122FBC06161C;
-        Mon, 18 Oct 2021 18:44:40 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id w14so6586432edv.11;
-        Mon, 18 Oct 2021 18:44:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=eIyfm+J/Yiqd42wl+2b5QKxYh+1XpsmhBsVt4wFmf+I=;
-        b=qShU93dfa/sj9q0hdtN7R6YbFMIX8lLRbtRSYMl4baM5yg+YCYJR1UlFKVwaodp8FP
-         2nMGMeAx9IKmcxyNs7QePGEDi6vrwfKfQLYlqmlTDXSY/ahYRl3rsAM+TqbOjqEbnJ9M
-         iNR8UCHtN+8vvhwhUOMyz+AqAEtHIo2bO5flUN8lE+MeprQFM4LHyJmX7JFBLVTb1b9c
-         MZuiLubrhaI/wScW90cI5OQLPxc4EXzgJ8WQmuPtyeikLsAKIfKgkvwuIOywpORrxYQj
-         igz5kxratpPu61QBzB20567Ish9laoEBhKqnIQPYeMzGfVwePLwF8cRK6mq9wKYbKu8L
-         ebag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=eIyfm+J/Yiqd42wl+2b5QKxYh+1XpsmhBsVt4wFmf+I=;
-        b=jwvfPE5BvMlixiNJ4ZmmQ2LvEYris5E3xCxZmiCKAKy3MK27V84o9AV4iqVdLQZxqO
-         60sRlsNCErVnVeMNE1ZJNyU0SdX7zw57YwP/O/jO8lqiHt0B6R6kBpg2pKabQCzOEXeB
-         5UKl8HMVJaEEpS6ThgqYKYlF910u3ucx5xty+JEuI02/oO22TVbIh3qLChUIhpyvNUNe
-         mWdAJAJhKunQn1sp9TRMEfE/EPwiYu6pN0lg6nIv6+zoRIh0/ObW8kDa4OI1Lv09DuiX
-         XLMfVTKfikC5P1n2PIt7GMepQjCbYqqMWgQ1PYLCRwWYOpJEewmSag7uNT0fS/CsXbju
-         In4w==
-X-Gm-Message-State: AOAM530hne/HoVhbGR9byGAgtvkxFkoCVwLQu4+DWZwuOjC1OP1aPks9
-        XmcFBc591tCw4HIcYVlgjH1x70qRrYpydKQkfE7VDqcVlk5RKq8R
-X-Google-Smtp-Source: ABdhPJzpMGSttq1LxPFQAy0/QQ3kY4ML/4FAPDu+Lvy5V9Orglgt0VLaADKMA3cqC6v7UhdLO3RiflHKf2eJTJ+ehGI=
-X-Received: by 2002:aa7:cd99:: with SMTP id x25mr49392012edv.266.1634607878541;
- Mon, 18 Oct 2021 18:44:38 -0700 (PDT)
+        with ESMTP id S234434AbhJSHHa (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 19 Oct 2021 03:07:30 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20938C061765
+        for <linux-can@vger.kernel.org>; Tue, 19 Oct 2021 00:05:18 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1mcjBU-0004e2-HG; Tue, 19 Oct 2021 09:05:16 +0200
+Received: from pengutronix.de (2a03-f580-87bc-d400-6267-dd6f-bd00-49b6.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:6267:dd6f:bd00:49b6])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 65F66697738;
+        Tue, 19 Oct 2021 07:05:15 +0000 (UTC)
+Date:   Tue, 19 Oct 2021 09:05:12 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     "Sottas Guillaume (LMB)" <Guillaume.Sottas@liebherr.com>
+Cc:     linux-can <linux-can@vger.kernel.org>
+Subject: Re: [PATCH RFC] can: isotp: isotp_sendmsg(): return error on FC
+ timeout on TX path
+Message-ID: <20211019070512.epqsgeuzjvcbrox5@pengutronix.de>
+References: <e9ebf4ab4b1a431eac24a21ab8379894@liebherr.com>
+ <20210507125017.hu3rcilzcw4rknof@pengutronix.de>
+ <d691ed18-d9d4-bf78-d506-cbd7a74dba6b@hartkopp.net>
+ <20210507141842.uu3huooq4gfywacd@pengutronix.de>
+ <b3efce9895784f8ab6f5dee8ae03c604@liebherr.com>
 MIME-Version: 1.0
-References: <20211017125022.3100329-1-mudongliangabcd@gmail.com> <20211018104759.t5ib62kqjenjepkv@pengutronix.de>
-In-Reply-To: <20211018104759.t5ib62kqjenjepkv@pengutronix.de>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Tue, 19 Oct 2021 09:44:12 +0800
-Message-ID: <CAD-N9QVziDjvdSwqADX2hDdepHBeDF7FxzPLfH5UGhGvUxshcg@mail.gmail.com>
-Subject: Re: [PATCH] can: xilinx_can: remove redundent netif_napi_del from xcan_remove
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
-        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-can@vger.kernel.org,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="c4owwrgujkosfsym"
+Content-Disposition: inline
+In-Reply-To: <b3efce9895784f8ab6f5dee8ae03c604@liebherr.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, Oct 18, 2021 at 6:48 PM Marc Kleine-Budde <mkl@pengutronix.de> wrot=
-e:
->
-> On 17.10.2021 20:50:21, Dongliang Mu wrote:
-> > Since netif_napi_del is already done in the free_candev, so we remove
-> > this redundent netif_napi_del invocation. In addition, this patch can
-> > match the operations in the xcan_probe and xcan_remove functions.
-> >
-> > Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-> > ---
-> >  drivers/net/can/xilinx_can.c | 1 -
-> >  1 file changed, 1 deletion(-)
-> >
-> > diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.=
-c
-> > index 3b883e607d8b..60a3fb369058 100644
-> > --- a/drivers/net/can/xilinx_can.c
-> > +++ b/drivers/net/can/xilinx_can.c
-> > @@ -1848,7 +1848,6 @@ static int xcan_remove(struct platform_device *pd=
-ev)
-> >
-> >       unregister_candev(ndev);
-> >       pm_runtime_disable(&pdev->dev);
-> > -     netif_napi_del(&priv->napi);
-> >       free_candev(ndev);
-> >
-> >       return 0;
->
-> Fixed the following error:
->
-> | drivers/net/can/xilinx_can.c: In function =E2=80=98xcan_remove=E2=80=99=
-:
-> | drivers/net/can/xilinx_can.c:1847:20: error: unused variable =E2=80=98p=
-riv=E2=80=99 [-Werror=3Dunused-variable]
-> |  1847 |  struct xcan_priv *priv =3D netdev_priv(ndev);
-> |       |                    ^~~~
 
-For now, xilinx_can already enables "-Werror" proposed by Linus?
+--c4owwrgujkosfsym
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-That's my problem. Sorry for that.
+On 19.10.2021 04:51:18, Sottas Guillaume (LMB) wrote:
+> Hope you are doing fine?
 
->
-> regards,
-> Marc
->
-> --
-> Pengutronix e.K.                 | Marc Kleine-Budde           |
-> Embedded Linux                   | https://www.pengutronix.de  |
-> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Thanks, yes :)
+
+> I was wondering if this patch were integrated in the mainline? I
+> searched around but I've not be able to find it.
+
+Oh, that somehow slipped my fingers. I'm about to send a pull request,
+hopefully this patch gets into v5.15.
+
+> Thank you in advance for your feedback,
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--c4owwrgujkosfsym
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmFubiUACgkQqclaivrt
+76nN0ggAlfO3/BLZFFvtpFoaD0Jf4XM9F9JGlM9bNqjOqr1VPSnjXydsYWqXV9vZ
+gIFzBzrl07l4g7wHPHuCR9d5f+rA7F4m0j9QfxMYPRbU14993rdkGQ7XvBgh3xPh
+eDd5QOsqRknXNRKwOAz/sbAGIZPaKYSEV76+KLXQt8e09yGtqUspPpflKjs51UT+
+bBLRhs4+m7vlCbYo4+z1270wJA453yOmKz3rdwEg0w13mZqomZXXKHVod/2tcSxr
+CEPgcEOASjnevRhmvGeNLaVbLjOqreftjgzRQw/7SGztGN8qnHLMGIze2DFLtvKL
+LDHy7cKIPSMh75gwyxYFLYNmrsFNPw==
+=qOxh
+-----END PGP SIGNATURE-----
+
+--c4owwrgujkosfsym--
