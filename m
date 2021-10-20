@@ -2,172 +2,257 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77DC143324A
-	for <lists+linux-can@lfdr.de>; Tue, 19 Oct 2021 11:33:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A64B84345B9
+	for <lists+linux-can@lfdr.de>; Wed, 20 Oct 2021 09:14:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235045AbhJSJfq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 19 Oct 2021 05:35:46 -0400
-Received: from mx0b-0064b401.pphosted.com ([205.220.178.238]:14086 "EHLO
-        mx0b-0064b401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234914AbhJSJfl (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 19 Oct 2021 05:35:41 -0400
-Received: from pps.filterd (m0250811.ppops.net [127.0.0.1])
-        by mx0a-0064b401.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19J821bG026898;
-        Tue, 19 Oct 2021 09:33:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=PPS06212021;
- bh=V70kHdMaKbFoL9SL40FRW98noSN68wWHCYnTjYmC6gk=;
- b=N/FDkxEca1wWvxetbsTypi2oWfRsIgrBaUjX97Nt/LMITwXskpGBQrTG6af4n86opW0w
- V9dxplFHt7aLOqrxER2RNQGKxDyaiwfnkHzXU403fTyiGWCoMXrHhN845U/SaP7gJT2j
- Yr/yNzjxT9Ib+3vKMS5RzzE1EL1P8JHSbISXR2ppDWeujRFAFuFnJXR4aWAI9KIzfJNC
- L+s8DjoQHziQSPvqrJWshjI4YvTzouc2/6qPR6xfsTFLxaO4cxJTnhtIq5kvUDuSEvFE
- o6xOsfUebCjzthDGeElyc6nDmWNqngWy4y5cjyEfOUAeerYt3Oq89uXa2q/yAdF+hR68 sg== 
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2168.outbound.protection.outlook.com [104.47.55.168])
-        by mx0a-0064b401.pphosted.com with ESMTP id 3bs6hhgx88-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Oct 2021 09:33:08 +0000
+        id S229820AbhJTHQi (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 20 Oct 2021 03:16:38 -0400
+Received: from mail-eopbgr40057.outbound.protection.outlook.com ([40.107.4.57]:30478
+        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229817AbhJTHQh (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 20 Oct 2021 03:16:37 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nPdhptZJx0pUUg1tfVsg3FJcHlMqz3esnRyL/WJXXsWoRuL2+w2xnJxNgLDgEBFXvcMPDyKIYJclx1SI+IBy3bsJRoWd6haSm0WqxwR+IDN/s7o1ezWi0sMnlIb0pEuROyGdHZVlDhHpiCQaTJSXD0eQ6lDYRra207jL085/5aKcf8Ebe3ph4xU8rqxNoUSS7YB3kM38l6zI8xV8pTGmFMBQyYGU9biLBY3edsuhfx8zT2rl6BQZ7/J+htFiOJ+8eAlauEuG6jI5eu2oD3jCG9AdAMzU4KFEdzTlHONp2X0WTBBkaSaNGVz+RV990O3p/rdskT8NbARV8i4kvJiHXQ==
+ b=kMeLKjpNPRuHupubBNVv+OpjdsYPpWboSGiHyEF3MPWAqLBRHQ3vmXurh54sx6vj8iE6ksaCt7l9eZBpaz6qE2FaN9EoRWaLGdtfNGWBRnlPqsczkFQMS1ZBOn329iT3ZZnJQdIKzD9+Yy0B3nuRFfBY17l5fpwB4bVLW5r+VQeyzZkrKtTNB0ZX0/yNEkkPla9JdgsJcdbHTwZm2oQDQDCSXEUUdGKDRyPetFSX28I1+B+11DEPnAeuPSobNmQY58WVXkCjDZAN7g0Ap4M8Qs5O1339H00wSh7JIirdlH9wgp0YUuyX1aUuU7kF3gR28mv6kEegCeBhanxOnCDkkw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=V70kHdMaKbFoL9SL40FRW98noSN68wWHCYnTjYmC6gk=;
- b=LtvBCLcDIWnLymvmdqxxhWlrWWfIjx+wDsp4I5n1aClQoi1KW9YtPIsrP9RgwsOa3t9XmOYzsV617/18JJhWiUmT0IczY78PGsogTKEbzfwGxiEEQOqhR1fXMxVwpdCZ872gLhQ4o/1VYMMpVPYZyPYOWYknDKJc/pZ9VDE4SpE9uKwtnRb12wJnsxBZjiyu4h0pEtOo83qwxXE13C/EIWb0nDOHiISvWQP06L+tBl4owlVz6AF448e7O9MSyHvB0fuOjpju0LjGM8S577nc4IaSrkexMBE0FGLaYPB/LohT3bYErlA0ERKMMT6yEsnTneEFH5beKJsznEfD4KappQ==
+ bh=CIcngtSUqXbRjBit+QKq5B+MleUrA1oNB0Qx9cVerzM=;
+ b=QcFNe7YQWy6bHl3JiobfR1G+5WAwSZZmttG4edxsxQlDqQxoslOOAZzQh64UkB8r1AgliNXwIIm9AyodpG4w2ZNy87tez9YlnC95hWO4Jl1HfqTqzBxklcho3kXizbn11yIxy0KdHvNDlWyXol5FOot6aYY75qS/cNaK3h8sL7rjFZT6d5toYOAWzP0IYtHPdvgMbio1b/Zt1wxPckQwHva0RA/+FIxcnY9z8o9FmGM7l8C3ZvbmIkCt4NVN6umeCIZvFG4LD2xU3HvmG6yR3Jk8dcsdIpDa1NxaQ/z+FFlIgEX5R8tq5ZmRvS8fW3NV7TgXGIf9amFcvcvclS7n/A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=windriver.com; dmarc=pass action=none
- header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
-Received: from PH0PR11MB5191.namprd11.prod.outlook.com (2603:10b6:510:3e::24)
- by PH0PR11MB4837.namprd11.prod.outlook.com (2603:10b6:510:41::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4608.16; Tue, 19 Oct
- 2021 09:33:06 +0000
-Received: from PH0PR11MB5191.namprd11.prod.outlook.com
- ([fe80::c11a:b99e:67ce:4a14]) by PH0PR11MB5191.namprd11.prod.outlook.com
- ([fe80::c11a:b99e:67ce:4a14%8]) with mapi id 15.20.4608.018; Tue, 19 Oct 2021
- 09:33:06 +0000
-From:   "Li, Meng" <Meng.Li@windriver.com>
+ smtp.mailfrom=peak-system.com; dmarc=pass action=none
+ header.from=peak-system.com; dkim=pass header.d=peak-system.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=itpeak.onmicrosoft.com; s=selector2-itpeak-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CIcngtSUqXbRjBit+QKq5B+MleUrA1oNB0Qx9cVerzM=;
+ b=aeM7gUwkaiPb5Q/VxNDY3K+RAf4Q38FZL18en52YIZqpKLkOq6/mFpLZeBJW+zd3Eg1MJrIPbv2/dBwwH78elResexWW6iXX9IkFNYHSZ6c/XlF+RWWtvbUb1XqCS3GXDSaibAu9mYK+D1H9AtKdKUCrcvsEPRxO60fkk+oUzIA=
+Received: from PA4PR03MB6797.eurprd03.prod.outlook.com (20.182.212.73) by
+ PR2PR03MB5210.eurprd03.prod.outlook.com (52.133.110.75) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4608.15; Wed, 20 Oct 2021 07:14:20 +0000
+Received: from PA4PR03MB6797.eurprd03.prod.outlook.com
+ ([fe80::8442:8aef:e942:f813]) by PA4PR03MB6797.eurprd03.prod.outlook.com
+ ([fe80::8442:8aef:e942:f813%7]) with mapi id 15.20.4608.018; Wed, 20 Oct 2021
+ 07:14:20 +0000
+From:   =?iso-8859-1?Q?St=E9phane_Grosjean?= <s.grosjean@peak-system.com>
 To:     Marc Kleine-Budde <mkl@pengutronix.de>
-CC:     "wg@grandegger.com" <wg@grandegger.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "mailhol.vincent@wanadoo.fr" <mailhol.vincent@wanadoo.fr>,
-        "socketcan@hartkopp.net" <socketcan@hartkopp.net>,
-        "ramesh.shanmugasundaram@bp.renesas.com" 
-        <ramesh.shanmugasundaram@bp.renesas.com>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] driver: net: can: disable clock when it is in enable
- status
-Thread-Topic: [PATCH] driver: net: can: disable clock when it is in enable
- status
-Thread-Index: AQHXxMnLa7t/w2ky1kKaKS/hPb8GyKvaDFUAgAACufA=
-Date:   Tue, 19 Oct 2021 09:33:05 +0000
-Message-ID: <PH0PR11MB51910E4A6C3B4879EB6F524FF1BD9@PH0PR11MB5191.namprd11.prod.outlook.com>
-References: <20211019091416.16923-1-Meng.Li@windriver.com>
- <20211019092320.wrs2o7cmn4pmnirt@pengutronix.de>
-In-Reply-To: <20211019092320.wrs2o7cmn4pmnirt@pengutronix.de>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
+CC:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Subject: RE: [RFC PATCH] can: peak_usb: CANFD: remove unused timestamp
+ infrastructure
+Thread-Topic: [RFC PATCH] can: peak_usb: CANFD: remove unused timestamp
+ infrastructure
+Thread-Index: AQHXxBwr6idrzqKtMUK7zrm4y+bVZavbWPqw
+Date:   Wed, 20 Oct 2021 07:14:20 +0000
+Message-ID: <PA4PR03MB67977F6773983F04C7F0EB5DD6BE9@PA4PR03MB6797.eurprd03.prod.outlook.com>
+References: <20211018123203.2234904-1-mkl@pengutronix.de>
+In-Reply-To: <20211018123203.2234904-1-mkl@pengutronix.de>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 authentication-results: pengutronix.de; dkim=none (message not signed)
  header.d=none;pengutronix.de; dmarc=none action=none
- header.from=windriver.com;
+ header.from=peak-system.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 59f9f522-02a2-410c-28db-08d992e3748b
-x-ms-traffictypediagnostic: PH0PR11MB4837:
-x-microsoft-antispam-prvs: <PH0PR11MB4837D4A18205BD81D09DF6F0F1BD9@PH0PR11MB4837.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:949;
+x-ms-office365-filtering-correlation-id: c01168e1-2280-49c3-d29c-08d993993cb7
+x-ms-traffictypediagnostic: PR2PR03MB5210:
+x-microsoft-antispam-prvs: <PR2PR03MB5210B888FE1F379CCA7A76B0D6BE9@PR2PR03MB5210.eurprd03.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: wMMUKSJGKpKBuu/cNPvA1OSat2IDum9xJlJsGMl8XpHMFHpiL5PVOt9frIICKsHJkrcTC09YXZZqaE/Huz0z7mugGFsiq0E+8arHOpFVFVuP6VU0st10oRUpxxAwWIIsZcHWa+MUuMvPgKjtbHY4LtA4BRKRTaiN9qxdy4DWZ2mgJVHcVDjopfjzACf0ghR8pUxN9xoyoo0Rpku9e5zRM9/yF8pNdGyemxPQZLWZtjmZnH4G3KQn8aQjsO5XzG9xCpv+k0X2WnMlVqI4R2s3RBuGDfIXLfTWxaFWsyuuB81qCPrkBjprVV1OkRGx6m08Xu5Ipy00NJOhE+JHsW301hYAjBygAAWXWOWIWBKQ7lEkFKWL16Qs5U9eUFvYd23dBZuWrU+6wfsWQQjwh0Uryq3EsgLNMna7OCS8X3WxPRYdnsjGwgqoslybIQp+/tcJ96g7W3nyWfpWbBf1D0eHJ2eKjxFZTHxIVKBbJzhOB8Nr8A5nUXZF+IR2lZATr20HrtglOss9OcgpTE13hpJXhC7SOH0sl9cy1EeJdECyLKx0xihYC6180NdXvNKp0B4J2vD0cnQv1K47DTk9HV0huhp0033S3l9zgS5xkS3/yA0k1ykUfa83uBNq/lQThNiUb8Szq594jqVs1LSvGr+0nvNHegalrS3sTO42MxRibAMxiG6WntFjBhBK7dTQje9QqmZ46XxBroCYyM4lwugDzyELCHyZDIAd7Xdg/8astYc/zeoSzBHVWr0idqFWlUoj1wLAWUUYaQcz0Pu3cBTqeXae/ql929E0bbO0I/SC8z0=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5191.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(52536014)(508600001)(4326008)(38070700005)(316002)(76116006)(64756008)(8936002)(7696005)(33656002)(53546011)(83380400001)(66946007)(966005)(38100700002)(66476007)(6506007)(86362001)(2906002)(66556008)(8676002)(55016002)(186003)(71200400001)(54906003)(9686003)(66446008)(7416002)(122000001)(6916009)(5660300002)(26005);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: Mhwv8uALKcPdVe1Bj+yExfo1yRTNEc9UhaI1Af3rGxdGXKYLZ+eGS1TPRspc8lDajRI0C02/7ANRMfbqsHn82I3lLLXzqImlTNTzOF0n7XcpRsXcyrxB49qXced95h9mE5h+a5Fse7rrmc7CkFUqHRlE771Kb6y8nB1olGD6JhZ9TZA34V5eeGCW1v4jHIKH56sdMQMB2BwF4DOpSrkewA7NkJFtmRzOdYUmGg2GrPzuTnPdGpqWC2lGUZu5o1DzigT8moFVy7NuQuEN0JN14ucW5thGv1uXiZxU1oQZhxQaav3X/KR2qXXc/RaLcTAPMJHELZkoxqBHubf3tKUFRDB+8YdcitSx10o4C9g9bmAep6EngkFGpBTI2XSdYUorcqhyFxipqQl+lqeKh/1EXdo27OOaKoXq3tlqtMHXldvu36/OSgWfQsu6pkoTtI6PAHhyW+KzuAXwNBYMgFH4srzpNrhOSGU6iejKGPKyP4ADXA0Fn53hvgNaVdpxNcS8KbfmQBc3AH8uYIuDd78BPlJzlXr4/c/aNb+X7oUhb92RBfw99g6PArdaH4bXNJtRpVCvi/OqoZxgF6BugiTDRzxaeXMuamTtiG4x1Dm6STEOc4/oVJM5wPZb2kTlF35/bXywxm7oqJrm64hKro40snoeJhHJ/fEq5SElI1gTiZ0B/p5hbYtc4zMYS0se41BEBQr4lQsAgBXSCi2hYOKSzw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR03MB6797.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(39840400004)(136003)(396003)(376002)(346002)(366004)(86362001)(2906002)(71200400001)(186003)(38100700002)(26005)(8936002)(66946007)(7696005)(6506007)(38070700005)(8676002)(9686003)(4326008)(52536014)(122000001)(66556008)(66476007)(33656002)(55016002)(66446008)(64756008)(76116006)(66574015)(508600001)(316002)(15974865002)(83380400001)(5660300002)(6916009);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?c2tZSk4xK0xDN1c1N0NMSlQzU0hvR1V4Umx3QlZza1RCNFJ1T3RyWVcyUHla?=
- =?utf-8?B?bzBnUk9laklrN2xwdEtGY3F2Vm5mcjk5WUxjYjBhVTRoRHNka0VqMjUxM1F2?=
- =?utf-8?B?bWx1VExteDJuN1NZYVZLUG1NRFdVdnQzRTNrRmJ1dU96enM5RC8yaS9sVHNJ?=
- =?utf-8?B?Zk54VEZVSTNVZGZGUC9PdnY4aE1wMUhMaGM1MDgwSE5YY1cyZU5HVnArVXJG?=
- =?utf-8?B?TTF2MTA0Ymhodm5rTmZoYkxJNHZFZHEwNE1EMjl0TG5HZDRoc25lZklFSTJY?=
- =?utf-8?B?ODl4VHdwcmhzd1M4cm9zRGtGaEVMRXRPQnVvOTJQVHdnZFdCd3dkc0Y2aCsy?=
- =?utf-8?B?NmtFYXp0czdHZU5rT1U1YStUWExBSUVpY1FXMU4zSFIxak9xNkZObXozQTFF?=
- =?utf-8?B?MldUYXFRMlJNTlhQV1JSWTM1Y2FYMG4wdFcvdlBreWF5Uit3Z25qLzNrbWFF?=
- =?utf-8?B?eGhNUkQzdmhNL3RRNjY1S21TeWgvaHZmRkpKUE81OEZZVUdiRTV5a096RWJD?=
- =?utf-8?B?SFJuNDJXUXl0WkwzbHF0bmlFSlJGS0trOWN0dnFlYXJ2QVRCVHZNQlhJYW9V?=
- =?utf-8?B?MitBemJ5UWhEZEI5NTZPOGU2RE1aeitobjU5TTZ0NG1OZW9qQkNYL0dPL1BS?=
- =?utf-8?B?dDZjSHJ1dW5DMlFSck1Ec2taY3BQZStpU1Rxb1UwcUljeEdKazRvSXpWS2Yx?=
- =?utf-8?B?UUE1OFR1ZkFyc1RJSFZucHBEZWZob2JSekE5RzBYbHlTMmhCajY0Vk45eFZt?=
- =?utf-8?B?c1pzankwdlNSNUxqd1Npbjl6MGhXRlp5YzFhb2FFQkZVbzhXZXJ4R0VkZCtB?=
- =?utf-8?B?am9IekVzMnozR0RPZXdnV3M5blBLZmx5SDNOQWw2LzRUQVQyUWpHS1M4bERn?=
- =?utf-8?B?S2daN0FmeGdROVk2dEF4ZlZSekZVRUVEZWRpTEJVcmhEdm16cVVydzhmZjZu?=
- =?utf-8?B?MlhKbDA3MmdtcVBERjU5MVNxTS9vNEdaN1kzYSs2WDVDNHNpM21LRURSaHFP?=
- =?utf-8?B?d2VNR244akNKQW5yNkQrcllEeDhpaFZpUmJJUnh0S25VZTdPc2QrMFUvYTFE?=
- =?utf-8?B?dlFDZkQ2WXQ0Y0FTL3g5c0d1MHdoOVY5UENvL1VBM2tVcmlZanBKZlUrakNU?=
- =?utf-8?B?TTFNeWxmNVFxMWoySjFGYnlIS3lYbVlaSWszUG1OU1QvRjhsUE82ckdXenI3?=
- =?utf-8?B?NldVYkFmVnhCalJXaitSMXFVVUJDSmVhajB3Q0s1TVRGYWFJaVJtaUoyY3dU?=
- =?utf-8?B?dE5OL3FBVk94RmdSczN2eHJJWXlZUy9HUEhjbjB2SjhMREgrRHNCbXg5MDlV?=
- =?utf-8?B?bUQ3VENHblhiQ0NEdVZrd0plck9kVTBkbGp2NmpuYXN5cEZrVGp1SWkreGd5?=
- =?utf-8?B?K2JFMHdaQ0ZvY2syREZVckxYdGRGeXQrM1hqUmZaa1hpSnYzQk5TYVlxclJh?=
- =?utf-8?B?elRkQWE1SXNGY2hZL2ZsVGZpRTRaMUpEaDlEY05kY1NHRTJwc1NWMGFuSGZo?=
- =?utf-8?B?eTNGcFlzVjVnZlVUOHliRmhQYUp5U2VZK2lZN0NaVWdkUzIwVTN4SUZwUXJS?=
- =?utf-8?B?VU9hNVBIc3lQb0lES3VwU2l2M0xJT1VIR09zUDRrY0RhNWpOOFZmMTVSNVlS?=
- =?utf-8?B?TE1OckltTmU1RUd1UUlZdUZXRnovZGo4KytGU0wxZUJtVklrZ3I1Q2x6bW1y?=
- =?utf-8?B?Tzhnc042em1LQlpaT3NRZU5vcEl1YmhwS24rWEhEZ1dhZ3JUMExlZGZpNm85?=
- =?utf-8?Q?M33NfxyJ3BDKEoCvcUshO6U6qZiOq2Dr2D0Ya2I?=
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?n0I8pmGPJM70TFUR0QQol5689gNpoMJ/zoL9SsEW90vQisix/4hbAQoN5Y?=
+ =?iso-8859-1?Q?oLQXqugDnUqateo9PFEA4+bSgYjmLMwO2m0uK+BfQWpI0tNdj2c/LdmzpS?=
+ =?iso-8859-1?Q?DM8OwY7ufYqo62bAjkWT7DP3pBcUi56NNs85dTajUny4tAp7MIRMmGVuMN?=
+ =?iso-8859-1?Q?b/jpGe85rNuB1kVzdKDrJcd3RNOaLE0G3baHWJlsRZBrhlxuUU/z3gOhhe?=
+ =?iso-8859-1?Q?wIkLnxs78iIssM3uuVDX+A+TA2bk7QUMEiOXdLu/y/ofJf5gJezSw5zZU6?=
+ =?iso-8859-1?Q?2BDnSpqGJV2GdRY8CBz7/xnRaxzby5nUq/5gZcOH7cTA4f6XtHxacXtkNN?=
+ =?iso-8859-1?Q?I4iE8agRgSEBDj+Iy3E1xEx35Z2FHlJQoAw1ghlb46bPbFlzwo4T5350Kv?=
+ =?iso-8859-1?Q?ta+B/uu+coTmIYtq3qUcCxoMKdFVnTFz1v+u9zo2vQ1cqc6KUusD4SVl3U?=
+ =?iso-8859-1?Q?z6pG1psRi8inl15dd85uWL2QbK+yc3XLCzNXTuPEkIP+vJE7AdwnPStrtX?=
+ =?iso-8859-1?Q?eWtWPdPmieVSe9e+TLQTjkHGREjEL8z0htNqFGPbMY4qfYPeiCkvS7UahP?=
+ =?iso-8859-1?Q?f49U1P0cEUVt6UZ/GPbHf6atRjavyquN8CHdcs4cp495xCE8A9w9UEqLlX?=
+ =?iso-8859-1?Q?4pvTR+OLToM3m0QaPWTrV+8UJMIL2HJQR/2pmyuYn0P0GneTeAy3B0lYj6?=
+ =?iso-8859-1?Q?MhEoig+wOQGaAGVxGrZzSAChgMlEc8E3s/XUGq3QeCDNk8NjkGCJTTvS7u?=
+ =?iso-8859-1?Q?hQRzGXmoyE7qYW3RNlZ9tNzz0FF8qWaBK/TFbybci0X4XKdyLnSCAOxT50?=
+ =?iso-8859-1?Q?jHKgPR/Qdl6dkRy11PLd9d9aCQlzLkNKVz9awU2MA2CiRFpLkA84whe+In?=
+ =?iso-8859-1?Q?vrs9GagLoZuo/ROaBTvmBUL/oXmZ2VM0GBMLEkKJaefadAADyl5FmrXpdW?=
+ =?iso-8859-1?Q?IeZOHk35n5FQubLk/qvRM91OgSsc+0bgxirc9LOUS/14ZPY4fnv6uCwKSh?=
+ =?iso-8859-1?Q?+UgpRP3Ogkhs1WrQEuzqAGpLNX5yDADL8nAXKrJ7uXX7TfliZwku3gmxSb?=
+ =?iso-8859-1?Q?5fexSFxMb0Q9VMx7HHNJH0LrZJ7rIADAuFn1SgiV4a7hbV/VUUygOQNlRk?=
+ =?iso-8859-1?Q?84sc2SLwYv+5cBCP4OeTn9dE0f1k6/MfpEnylAs2/ZAkLPHNJBDbTymtXW?=
+ =?iso-8859-1?Q?VOTKgXYIDtRxDIZmRx0jTDF5lzsBruKt2FDmjhASUPBUL+wmBX3LASWiBL?=
+ =?iso-8859-1?Q?4MBojeak41+n2/fbmZtv0FC2pPDGagbBjV4zJdKK8VDmvrdDeDc8wZKFTe?=
+ =?iso-8859-1?Q?Go+0lkSzUn0z+GLSTpkg+wBbGPxzhsDgiZ/NxChAAo0jQqE=3D?=
 x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: windriver.com
+X-OriginatorOrg: peak-system.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5191.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 59f9f522-02a2-410c-28db-08d992e3748b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Oct 2021 09:33:05.9009
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR03MB6797.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c01168e1-2280-49c3-d29c-08d993993cb7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Oct 2021 07:14:20.5952
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
+X-MS-Exchange-CrossTenant-id: e31dcbd8-3f8b-4c5c-8e73-a066692b30a1
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 5NIpytg9xUzYNS8u4Q+bUjUVsRVglzkZpEuirUaUF5JG2LPD3OtFrFpXiGIzWzZLe+npIIXfcViiZneKpTbI7Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4837
-X-Proofpoint-ORIG-GUID: ToiJHXhOAO5e0XQXB4Z2cZWFu-lxLtBV
-X-Proofpoint-GUID: ToiJHXhOAO5e0XQXB4Z2cZWFu-lxLtBV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-10-18_10,2021-10-18_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- clxscore=1015 impostorscore=0 mlxlogscore=809 adultscore=0
- lowpriorityscore=0 phishscore=0 priorityscore=1501 bulkscore=0
- malwarescore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2109230001 definitions=main-2110190058
+X-MS-Exchange-CrossTenant-userprincipalname: s.grosjean@peak-system.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR2PR03MB5210
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogTWFyYyBLbGVpbmUtQnVk
-ZGUgPG1rbEBwZW5ndXRyb25peC5kZT4NCj4gU2VudDogVHVlc2RheSwgT2N0b2JlciAxOSwgMjAy
-MSA1OjIzIFBNDQo+IFRvOiBMaSwgTWVuZyA8TWVuZy5MaUB3aW5kcml2ZXIuY29tPg0KPiBDYzog
-d2dAZ3JhbmRlZ2dlci5jb207IGRhdmVtQGRhdmVtbG9mdC5uZXQ7IGt1YmFAa2VybmVsLm9yZzsN
-Cj4gbWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI7IHNvY2tldGNhbkBoYXJ0a29wcC5uZXQ7DQo+
-IHJhbWVzaC5zaGFubXVnYXN1bmRhcmFtQGJwLnJlbmVzYXMuY29tOyBsaW51eC1jYW5Admdlci5r
-ZXJuZWwub3JnOw0KPiBuZXRkZXZAdmdlci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5r
-ZXJuZWwub3JnDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0hdIGRyaXZlcjogbmV0OiBjYW46IGRpc2Fi
-bGUgY2xvY2sgd2hlbiBpdCBpcyBpbiBlbmFibGUgc3RhdHVzDQo+IA0KPiBPbiAxOS4xMC4yMDIx
-IDE3OjE0OjE2LCBNZW5nIExpIHdyb3RlOg0KPiA+IElmIGRpc2FibGUgYSBjbG9jayB3aGVuIGl0
-IGlzIGFscmVhZHkgaW4gZGlzYWJsZSBzdGF0dXMsIHRoZXJlIHdpbGwgYmUNCj4gPiBhIHdhcm5p
-bmcgdHJhY2UgZ2VuZXJhdGVkLiBTbywgaXQgaXMgbmVlZCB0byBjb25maXJtIHdoZXRoZXIgd2hh
-dA0KPiA+IHN0YXR1cyB0aGUgY2xvY2sgaXMgaW4gYmVmb3JlIGRpc2FibGUgaXQuDQo+ID4NCj4g
-PiBGaXhlczogYTIzYjk3ZTYyNTViICgiY2FuOiByY2FyX2NhbjogTW92ZSBSZW5lc2FzIENBTiBk
-cml2ZXIgdG8gcmNhcg0KPiA+IGRpciIpDQo+ID4gQ2M6IHN0YWJsZUB2Z2VyLmtlcm5lbC5vcmcN
-Cj4gPiBTaWduZWQtb2ZmLWJ5OiBNZW5nIExpIDxNZW5nLkxpQHdpbmRyaXZlci5jb20+DQo+IA0K
-PiBUaGFua3MgZm9yIHlvdXIgcGF0Y2guIFRoaXMgcHJvYmxlbSBzaG91bGQgaGF2ZSBiZWVuIHJl
-c29sdmVkIHdpdGg6DQo+IA0KPiBodHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgv
-a2VybmVsL2dpdC9uZXRkZXYvbmV0LmdpdC9jb21taXQvP2lkDQo+ID1mN2MwNWMzOTg3ZGNmZGU5
-YTRlOGMyZDUzM2RiMDEzZmFiZWJjYTBkDQo+IA0KDQpPayENClRoYW5rcyBmb3IgcmVtaW5kaW5n
-IG1lLg0KDQpSZWdhcmRzLA0KTGltZW5nDQoNCj4gcmVnYXJkcw0KPiBNYXJjDQo+IA0KPiAtLQ0K
-PiBQZW5ndXRyb25peCBlLksuICAgICAgICAgICAgICAgICB8IE1hcmMgS2xlaW5lLUJ1ZGRlICAg
-ICAgICAgICB8DQo+IEVtYmVkZGVkIExpbnV4ICAgICAgICAgICAgICAgICAgIHwgaHR0cHM6Ly93
-d3cucGVuZ3V0cm9uaXguZGUgIHwNCj4gVmVydHJldHVuZyBXZXN0L0RvcnRtdW5kICAgICAgICAg
-fCBQaG9uZTogKzQ5LTIzMS0yODI2LTkyNCAgICAgfA0KPiBBbXRzZ2VyaWNodCBIaWxkZXNoZWlt
-LCBIUkEgMjY4NiB8IEZheDogICArNDktNTEyMS0yMDY5MTctNTU1NSB8DQo=
+Hello Marc,
+
+Nice shot! I confirm that all of this stuff that converted 32 bit timestamp=
+s into self-made 64 bit ones is now obsolete for the CANFD - USB interfaces=
+ from PEAK-System. However, note that requesting those PCAN_UFD_MSG_CALIBRA=
+TION messages is still mandatory to get valid hw timestamps from them.
+
+Thank you,
+
+St=E9phane
+
+-----Message d'origine-----
+De : Marc Kleine-Budde <mkl@pengutronix.de>
+Envoy=E9 : lundi 18 octobre 2021 14:32
+=C0 : linux-can@vger.kernel.org
+Cc : Marc Kleine-Budde <mkl@pengutronix.de>; St=E9phane Grosjean <s.grosjea=
+n@peak-system.com>
+Objet : [RFC PATCH] can: peak_usb: CANFD: remove unused timestamp infrastru=
+cture
+
+With the support for full 64 bit timestamps the old timestamping infrastruc=
+ture is obsolete. This patch removes the left over bits.
+
+Cc: Stephane Grosjean <s.grosjean@peak-system.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+ drivers/net/can/usb/peak_usb/pcan_usb_core.c | 13 -----------  drivers/net=
+/can/usb/peak_usb/pcan_usb_core.h |  2 --
+ drivers/net/can/usb/peak_usb/pcan_usb_fd.c   | 23 --------------------
+ 3 files changed, 38 deletions(-)
+
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.c b/drivers/net/can=
+/usb/peak_usb/pcan_usb_core.c
+index 6107fef9f4a0..9411a76f315c 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb_core.c
++++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+@@ -192,19 +192,6 @@ void peak_usb_get_ts_time(struct peak_time_ref *time_r=
+ef, u32 ts, ktime_t *time)
+        }
+ }
+
+-/*
+- * post received skb after having set any hw timestamp
+- */
+-int peak_usb_netif_rx(struct sk_buff *skb,
+-                     struct peak_time_ref *time_ref, u32 ts_low)
+-{
+-       struct skb_shared_hwtstamps *hwts =3D skb_hwtstamps(skb);
+-
+-       peak_usb_get_ts_time(time_ref, ts_low, &hwts->hwtstamp);
+-
+-       return netif_rx(skb);
+-}
+-
+ /* post received skb with native 64-bit hw timestamp */  int peak_usb_neti=
+f_rx_64(struct sk_buff *skb, u32 ts_low, u32 ts_high)  { diff --git a/drive=
+rs/net/can/usb/peak_usb/pcan_usb_core.h b/drivers/net/can/usb/peak_usb/pcan=
+_usb_core.h
+index daa19f57e742..ffc2be6ef881 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb_core.h
++++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.h
+@@ -141,8 +141,6 @@ void peak_usb_init_time_ref(struct peak_time_ref *time_=
+ref,  void peak_usb_update_ts_now(struct peak_time_ref *time_ref, u32 ts_no=
+w);  void peak_usb_set_ts_now(struct peak_time_ref *time_ref, u32 ts_now); =
+ void peak_usb_get_ts_time(struct peak_time_ref *time_ref, u32 ts, ktime_t =
+*tv); -int peak_usb_netif_rx(struct sk_buff *skb,
+-                     struct peak_time_ref *time_ref, u32 ts_low);
+ int peak_usb_netif_rx_64(struct sk_buff *skb, u32 ts_low, u32 ts_high);  v=
+oid peak_usb_async_complete(struct urb *urb);  void peak_usb_restart_comple=
+te(struct peak_usb_device *dev); diff --git a/drivers/net/can/usb/peak_usb/=
+pcan_usb_fd.c b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
+index 2770087d4d5d..394f4959a515 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
++++ b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
+@@ -50,8 +50,6 @@ struct __packed pcan_ufd_fw_info {  struct pcan_usb_fd_if=
+ {
+        struct peak_usb_device  *dev[PCAN_USB_MAX_CHANNEL];
+        struct pcan_ufd_fw_info fw_info;
+-       struct peak_time_ref    time_ref;
+-       int                     cm_ignore_count;
+        int                     dev_opened_count;
+ };
+
+@@ -642,19 +640,6 @@ static int pcan_usb_fd_decode_overrun(struct pcan_usb_=
+fd_if *usb_if,
+        return 0;
+ }
+
+-/* handle USB calibration message */
+-static void pcan_usb_fd_decode_ts(struct pcan_usb_fd_if *usb_if,
+-                                 struct pucan_msg *rx_msg)
+-{
+-       struct pcan_ufd_ts_msg *ts =3D (struct pcan_ufd_ts_msg *)rx_msg;
+-
+-       /* should wait until clock is stabilized */
+-       if (usb_if->cm_ignore_count > 0)
+-               usb_if->cm_ignore_count--;
+-       else
+-               peak_usb_set_ts_now(&usb_if->time_ref, le32_to_cpu(ts->ts_l=
+ow));
+-}
+-
+ /* callback for bulk IN urb */
+ static int pcan_usb_fd_decode_buf(struct peak_usb_device *dev, struct urb =
+*urb)  { @@ -695,7 +680,6 @@ static int pcan_usb_fd_decode_buf(struct peak_=
+usb_device *dev, struct urb *urb)
+                        break;
+
+                case PCAN_UFD_MSG_CALIBRATION:
+-                       pcan_usb_fd_decode_ts(usb_if, rx_msg);
+                        break;
+
+                case PUCAN_MSG_ERROR:
+@@ -811,10 +795,6 @@ static int pcan_usb_fd_start(struct peak_usb_device *d=
+ev)
+
+        /* opening first device: */
+        if (pdev->usb_if->dev_opened_count =3D=3D 0) {
+-               /* reset time_ref */
+-               peak_usb_init_time_ref(&pdev->usb_if->time_ref,
+-                                      &pcan_usb_pro_fd);
+-
+                /* enable USB calibration messages */
+                err =3D pcan_usb_fd_set_options(dev, 1,
+                                              PUCAN_OPTION_ERROR,
+@@ -880,9 +860,6 @@ static int pcan_usb_fd_init(struct peak_usb_device *dev=
+)
+                if (!pdev->cmd_buffer_addr)
+                        goto err_out_1;
+
+-               /* number of ts msgs to ignore before taking one into accou=
+nt */
+-               pdev->usb_if->cm_ignore_count =3D 5;
+-
+                err =3D pcan_usb_pro_send_req(dev, PCAN_USBPRO_REQ_INFO,
+                                            PCAN_USBPRO_INFO_FW,
+                                            &pdev->usb_if->fw_info,
+--
+2.33.0
+
+
+
+--
+PEAK-System Technik GmbH
+Sitz der Gesellschaft Darmstadt - HRB 9183
+Geschaeftsfuehrung: Alexander Gach / Uwe Wilhelm
+Unsere Datenschutzerklaerung mit wichtigen Hinweisen
+zur Behandlung personenbezogener Daten finden Sie unter
+www.peak-system.com/Datenschutz.483.0.html
