@@ -2,65 +2,63 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E9E643615F
-	for <lists+linux-can@lfdr.de>; Thu, 21 Oct 2021 14:19:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D89B43637B
+	for <lists+linux-can@lfdr.de>; Thu, 21 Oct 2021 15:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231793AbhJUMVu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 21 Oct 2021 08:21:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36812 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231709AbhJUMV0 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 21 Oct 2021 08:21:26 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6409C061765
-        for <linux-can@vger.kernel.org>; Thu, 21 Oct 2021 05:18:57 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id o184so621355iof.6
-        for <linux-can@vger.kernel.org>; Thu, 21 Oct 2021 05:18:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=G2Jq8ABcZaKAiy06d3oRm5z7XXaT0OFvg3EWPt/6AmM=;
-        b=ffKmYx2fMIYl+OvJQQopnpiCeJRTG9P9KFv8M/82NWd2iRdr6FH2GSUfX4dihVwp/4
-         j3BBt8gtfGRwriH7QaI70cXqaYxp9ZB8IdW+AAJ3XWxbhn/W/4z89PrBZ3/2rnhl+5p4
-         slIUeI/d0se+fbKVCqySusiscs7YTggdFIx/lIQo0jD9OBm3/E6HIs73TdR5+EDc4Ahn
-         Mx3oX/4Jht8hJFRtk5Rk/ZtBUnWHcvUlGjzuHFD2c3qgVHCXo5sQXMFhDt//I4s8bxor
-         0lHgZbVQWxyw1uqR2LKA3z5mNeOQjztcOBRK2nMHBotT/Ptq5yh5oJc65RUVpYj9vAKX
-         E+1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=G2Jq8ABcZaKAiy06d3oRm5z7XXaT0OFvg3EWPt/6AmM=;
-        b=DSgDOAEyEmQa7Oinmyd/h1hlhO8UBswou6CMDVNGhnp1KUD8aMEZKNVKzpCwH96ulH
-         8iZktG004SQx+FPMSZA+RQEuxUSt2vuTwKaRojTB7KXtBbmUX5sO1lIRmwZsed6NySII
-         sH7b1OpGMRRLZqy1P9c+Al9qHigr4FOTwNT9uBEZg1HJbJlmVD1y0oCb9HGMU4yanF04
-         vzQPmhZ0jFCGuBsuTgYuPIImN5F5LIIjWidAxAvexZwbC16E6gomqtH6fHLjOQNYaNjh
-         maMLR/q2BSFunMt0UrPf4+HSE2EnX9PvTW2g+aIJAlHyHR74Uf8/Bldfgk+j2WLxaGNi
-         ACPw==
-X-Gm-Message-State: AOAM530J+XnaVn6J0ot5H4aNfligYDoR6TG35SMiX6VLaTTpuOUrEEoO
-        3MTR9F6F/CJ5DQfcApGLMRDldzHj539pWgUjVNA=
-X-Google-Smtp-Source: ABdhPJy/O5GAp34/8OGCgwxgN16t4zAtUhD1QqHkZqC4kznm6N81zl7Wcf3jBmF+fUfqmk/Z+gQhgoaiTdlocMxWQvk=
-X-Received: by 2002:a05:6602:2e81:: with SMTP id m1mr3773434iow.23.1634818737372;
- Thu, 21 Oct 2021 05:18:57 -0700 (PDT)
+        id S231169AbhJUN43 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 21 Oct 2021 09:56:29 -0400
+Received: from szxga03-in.huawei.com ([45.249.212.189]:26178 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230072AbhJUN43 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 21 Oct 2021 09:56:29 -0400
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4HZppH3t3lz8tmB;
+        Thu, 21 Oct 2021 21:52:55 +0800 (CST)
+Received: from dggpeml500006.china.huawei.com (7.185.36.76) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.15; Thu, 21 Oct 2021 21:54:11 +0800
+Received: from compute.localdomain (10.175.112.70) by
+ dggpeml500006.china.huawei.com (7.185.36.76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.15; Thu, 21 Oct 2021 21:54:10 +0800
+From:   Zhang Changzhong <zhangchangzhong@huawei.com>
+To:     Robin van der Gracht <robin@protonic.nl>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        <kernel@pengutronix.de>, Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+CC:     Zhang Changzhong <zhangchangzhong@huawei.com>,
+        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH net 0/3] can: j1939: fix some standard conformance problems
+Date:   Thu, 21 Oct 2021 22:04:14 +0800
+Message-ID: <1634825057-47915-1-git-send-email-zhangchangzhong@huawei.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Received: by 2002:a05:6638:1924:0:0:0:0 with HTTP; Thu, 21 Oct 2021 05:18:57
- -0700 (PDT)
-Reply-To: ooisangkuang63@gmail.com
-From:   Mr Ooi Sang Kuang <mrsshirleyperezfosgate7@gmail.com>
-Date:   Thu, 21 Oct 2021 05:18:57 -0700
-Message-ID: <CA+ynneC82om4XGpeSLLyaZ9uiZCuHkofPAtHcga0--5BW77aFA@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.70]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500006.china.huawei.com (7.185.36.76)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+This patchset fixes 3 standard conformance problems in the j1939 stack.
+
+Zhang Changzhong (3):
+  can: j1939: j1939_tp_cmd_recv(): ignore abort message in the BAM
+    transport
+  can: j1939: j1939_can_recv(): ignore messages with invalid source
+    address
+  can: j1939: j1939_tp_cmd_recv(): check the dst address of TP.CM_BAM
+
+ net/can/j1939/main.c      | 4 ++++
+ net/can/j1939/transport.c | 5 +++++
+ 2 files changed, 9 insertions(+)
+
 -- 
-Hello,
+2.9.5
 
-I want to discuss an important project issue with you.
-Please, let me know if this email is valid. Reply me at ooisangkuang63@gmail.com
-
-Thank you,
-Mr Ooi Sang Kuang
