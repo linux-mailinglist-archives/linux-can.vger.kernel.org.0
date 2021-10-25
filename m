@@ -2,112 +2,85 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57F91439D85
-	for <lists+linux-can@lfdr.de>; Mon, 25 Oct 2021 19:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7C4A439EA8
+	for <lists+linux-can@lfdr.de>; Mon, 25 Oct 2021 20:43:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233502AbhJYR0U (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 25 Oct 2021 13:26:20 -0400
-Received: from smtp02.smtpout.orange.fr ([80.12.242.124]:49352 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234076AbhJYR0K (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 25 Oct 2021 13:26:10 -0400
-Received: from tomoyo.flets-east.jp ([114.149.34.46])
-        by smtp.orange.fr with ESMTPA
-        id f3gYmY0E4niuxf3hImufL8; Mon, 25 Oct 2021 19:23:46 +0200
-X-ME-Helo: tomoyo.flets-east.jp
-X-ME-Auth: MDU0YmViZGZmMDIzYiBlMiM2NTczNTRjNWZkZTMwOGRiOGQ4ODf3NWI1ZTMyMzdiODlhOQ==
-X-ME-Date: Mon, 25 Oct 2021 19:23:46 +0200
-X-ME-IP: 114.149.34.46
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v3 4/4] can: netlink: report the CAN controller mode supported flags
-Date:   Tue, 26 Oct 2021 02:22:47 +0900
-Message-Id: <20211025172247.1774451-5-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211025172247.1774451-1-mailhol.vincent@wanadoo.fr>
-References: <20211025172247.1774451-1-mailhol.vincent@wanadoo.fr>
+        id S233470AbhJYSpY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 25 Oct 2021 14:45:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57122 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232401AbhJYSpY (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 25 Oct 2021 14:45:24 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D06E660EBD;
+        Mon, 25 Oct 2021 18:43:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1635187382;
+        bh=gE6uHg+CNrCPttWP8SdyDtd6v7lrV6svF2oKjF+jHo8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=S6/JBHAHhqopwImSyelRp+Lf8IqMi6PcEBuZ06uQcejJSjtfFnNgmTPL0Keu218md
+         ZIIDYqo8H5WtgGxMjDABu9mog+POKgz+GnKMQ11XXZ3CpY7Iteoa1XTvbBpOVaFza1
+         EQjpJfVnSZwuIHuQBPPyHYBeDdA7CqwOFRwPuq+3iYyHwWXAeVAIKJaKLhQQfY+n++
+         7m/ULST8RTc/EfL3xVPRmhersfkf62LTRUxR5MF4T+HnMoCMzOTHEtduKcK++PNfrE
+         Bd93uI8a/v7OUHNYiqHPJQujPDE5MfahkuyrJX5jz3bSeMgvBA9DymBsI1qezdfIpc
+         K+AUR13oRVzew==
+Date:   Mon, 25 Oct 2021 11:43:00 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can <linux-can@vger.kernel.org>, netdev@vger.kernel.org
+Subject: Re: ethtool: ring configuration for CAN devices
+Message-ID: <20211025114300.15b8814c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <YXaqEk97/WcCxcFE@lunn.ch>
+References: <20211024213759.hwhlb4e3repkvo6y@pengutronix.de>
+        <YXaimhlXkpBKRQin@lunn.ch>
+        <20211025124331.d7r7qbadkzfk7i4f@pengutronix.de>
+        <YXaqEk97/WcCxcFE@lunn.ch>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This patch introduces a method for the user to check both the
-supported and the static capabilities. The proposed method reuses the
-existing struct can_ctrlmode and thus do not need a new IFLA_CAN_*
-entry.
+On Mon, 25 Oct 2021 14:58:58 +0200 Andrew Lunn wrote:
+> > > struct ethtool_kringparam {
+> > > 	__u32	cmd;
+> > > 	__u32   mode;
+> > > 	__u32	rx_max_pending;
+> > > 	__u32	rx_mini_max_pending;
+> > > 	__u32	rx_jumbo_max_pending;
+> > > 	__u32	tx_max_pending;
+> > > 	__u32	rx_pending;
+> > > 	__u32	rx_mini_pending;
+> > > 	__u32	rx_jumbo_pending;
+> > > 	__u32	tx_pending;
+> > > };
 
-Currently, the CAN netlink interface provides no easy ways to check
-the capabilities of a given controller. The only method from the
-command line is to try each CAN_CTRLMODE_* individually to check
-whether the netlink interface returns an -EOPNOTSUPP error or not
-(alternatively, one may find it easier to directly check the source
-code of the driver instead...)
+Ah, yes, if we do full field-by-field translation the result is not as
+bad as embedding the "base" structure, at the cost of additional
+boilerplate code in the core. But frankly potato, potatoe.
 
-It appears that can_ctrlmode::mask is only used in one direction: from
-the userland to the kernel. So we can just reuse this field in the
-other direction (from the kernel to userland). But, because the
-semantic is different, we use a union to give this field a proper
-name: "supported".
+> > > and use this structure between the ethtool core and the drivers. This
+> > > has already been done at least once to allow extending the
+> > > API. Semantic patches are good for making the needed changes to all
+> > > the drivers.  
+> > 
+> > What about the proposed "two new parameters ringparam_ext and extack for
+> > .get_ringparam and .set_ringparam to extend more ring params through
+> > netlink." by Hao Chen/Guangbin Huang in:
+> > 
+> > https://lore.kernel.org/all/20211014113943.16231-5-huangguangbin2@huawei.com/
+> >
+> > I personally like the conversion of the in in-kernel API to struct
+> > ethtool_kringparam better than adding ringparam_ext.  
+> 
+> Ah, i missed that development.
 
-Below table explains how the two fields can_ctrlmode::supported and
-can_ctrlmode::flags, when masked with any of the CAN_CTRLMODE_* bit
-flags, allow us to identify both the supported and the static
-capabilities:
+I think it's the fifth version and people are starting to have feedback.
+Something is not working :(
 
- supported &	flags &		Controller capabilities
- CAN_CTRLMODE_*	CAN_CTRLMODE_*
- -----------------------------------------------------------------------
- false		false		Feature not supported (always disabled)
- false		true		Static feature (always enabled)
- true		false		Feature supported but disabled
- true		true		Feature supported and enabled
-
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
-Please refer to below link for the iproute2-next counterpart of this
-patch:
-
-https://lore.kernel.org/linux-can/20211003050147.569044-1-mailhol.vincent@wanadoo.fr/T/#t
----
- drivers/net/can/dev/netlink.c    | 5 ++++-
- include/uapi/linux/can/netlink.h | 5 ++++-
- 2 files changed, 8 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlink.c
-index 26c336808be5..32e1eb63ee7d 100644
---- a/drivers/net/can/dev/netlink.c
-+++ b/drivers/net/can/dev/netlink.c
-@@ -475,7 +475,10 @@ static int can_tdc_fill_info(struct sk_buff *skb, const struct net_device *dev)
- static int can_fill_info(struct sk_buff *skb, const struct net_device *dev)
- {
- 	struct can_priv *priv = netdev_priv(dev);
--	struct can_ctrlmode cm = {.flags = priv->ctrlmode};
-+	struct can_ctrlmode cm = {
-+		.supported = priv->ctrlmode_supported,
-+		.flags = priv->ctrlmode
-+	};
- 	struct can_berr_counter bec = { };
- 	enum can_state state = priv->state;
- 
-diff --git a/include/uapi/linux/can/netlink.h b/include/uapi/linux/can/netlink.h
-index 75b85c60efb2..b846922ac18f 100644
---- a/include/uapi/linux/can/netlink.h
-+++ b/include/uapi/linux/can/netlink.h
-@@ -88,7 +88,10 @@ struct can_berr_counter {
-  * CAN controller mode
-  */
- struct can_ctrlmode {
--	__u32 mask;
-+	union {
-+		__u32 mask;		/* Userland to kernel */
-+		__u32 supported;	/* Kernel to userland */
-+	};
- 	__u32 flags;
- };
- 
--- 
-2.32.0
-
+> I don't like it.
+> 
+> You should probably jump into that discussion and explain your
+> requirements. Make sure it is heading in a direction you can extend
+> for your needs.
