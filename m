@@ -2,154 +2,106 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3849B439238
-	for <lists+linux-can@lfdr.de>; Mon, 25 Oct 2021 11:23:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C779E4395B0
+	for <lists+linux-can@lfdr.de>; Mon, 25 Oct 2021 14:10:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230512AbhJYJZt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 25 Oct 2021 05:25:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54054 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbhJYJZt (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 25 Oct 2021 05:25:49 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2DC2C061745
-        for <linux-can@vger.kernel.org>; Mon, 25 Oct 2021 02:23:27 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1mewCT-0005a4-AP; Mon, 25 Oct 2021 11:23:25 +0200
-Received: from pengutronix.de (2a03-f580-87bc-d400-d7c8-7df6-a4ac-55f0.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:d7c8:7df6:a4ac:55f0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 5AB0969D3CD;
-        Mon, 25 Oct 2021 09:21:10 +0000 (UTC)
-Date:   Mon, 25 Oct 2021 11:21:09 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Cc:     linux-can <linux-can@vger.kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org
-Subject: Re: ethtool: ring configuration for CAN devices
-Message-ID: <20211025092109.tyapmi5naky7hmww@pengutronix.de>
-References: <20211024213759.hwhlb4e3repkvo6y@pengutronix.de>
- <20211025090008.GD7834@x1.vandijck-laurijssen.be>
+        id S232473AbhJYMMh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 25 Oct 2021 08:12:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51904 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231512AbhJYMMh (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 25 Oct 2021 08:12:37 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id E828360F9B;
+        Mon, 25 Oct 2021 12:10:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1635163814;
+        bh=W2h5Q1o7cirea6jpDKxXDkn1U4ZWiueFqOXYM5m7Qck=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=QBMY98u+qlTDhBUcag9EzsEf0IiXuUBfgctP1Iq2DMBLdzqBN4sUaVZ/VTqLc9CVD
+         HFZjLcPRgBWIbpoCbBCu0Ps+Vx5DAVl7VT6Amv8E0PGExN1pPbeBPjkUV+OnVd/7hn
+         deptDV4abILJXRq5dXlaHa4TE4TXDN1aZUOzCtiqzxEaPv0PIof1E8YRsn0RlVPgtG
+         3CrDLiHmtzK4BH4lpdGcNhSsgJoyr56hLqiTSMoXY0K63C36PKEYz3XBGjJMAdwChU
+         0sidBi/M1fHVgeSLkl6dohtbAZsCXoC0lqINvMjqJ2BK0a9+nkNNNmGbg4d46uDimb
+         2fmTnekoru2aA==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id DF48760A17;
+        Mon, 25 Oct 2021 12:10:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qfnavhxk2kntkswq"
-Content-Disposition: inline
-In-Reply-To: <20211025090008.GD7834@x1.vandijck-laurijssen.be>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 01/15] can: bcm: Use hrtimer_forward_now()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163516381490.1029.18024695570384102149.git-patchwork-notify@kernel.org>
+Date:   Mon, 25 Oct 2021 12:10:14 +0000
+References: <20211024204325.3293425-2-mkl@pengutronix.de>
+In-Reply-To: <20211024204325.3293425-2-mkl@pengutronix.de>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        linux-can@vger.kernel.org, kernel@pengutronix.de,
+        tglx@linutronix.de, socketcan@hartkopp.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello:
 
---qfnavhxk2kntkswq
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This series was applied to netdev/net-next.git (master)
+by Marc Kleine-Budde <mkl@pengutronix.de>:
 
-On 25.10.2021 11:00:08, Kurt Van Dijck wrote:
-> On Sun, 24 Oct 2021 23:37:59 +0200, Marc Kleine-Budde wrote:
-> > Hello,
-> >=20
-> > I'm currently working on runtime configurable RX/TX ring sizes for a the
-> > mcp251xfd CAN driver.
-> >=20
-> > Unlike modern Ethernet cards with DMA support, most CAN IP cores come
-> > with a fixed size on chip RAM that's used to store received CAN frames
-> > and frames that should be sent.
-> >=20
-> > For CAN-2.0 only devices that can be directly supported via ethtools's
-> > set/get_ringparam. A minor unaesthetic is, as the on chip RAM is usually
-> > shared between RX and TX, the maximum values for RX and TX cannot be set
-> > at the same time.
-> >=20
-> > The mcp251xfd chip I'm enhancing supports CAN-2.0 and CAN-FD mode. The
-> > relevant difference of these modes is the size of the CAN frame. 8 vs 64
-> > bytes of payload + 12 bytes of header. This means we have different
-> > maximum values for both RX and TX for those modes.
-> >=20
-> > How do we want to deal with the configuration of the two different
-> > modes? As the current set/get_ringparam interface can configure the
-> > mini- and jumbo frames for RX, but has only a single TX value.
-> >=20
-> > Hao Chen and Guangbin Huang are laying the groundwork to extend the
-> > ringparam interface via netlink:
-> >=20
-> > | https://lore.kernel.org/all/20211014113943.16231-1-huangguangbin2@hua=
-wei.com
-> >=20
-> > I was thinking about adding rx/tx_pending for CAN-FD. The use case would
-> > be to configure the ring parameters independent of the current active
-> > CAN mode. For example in systemd the RX/TX ring parameters are
-> > configured in the .link file, while the CAN FD mode is configured in a
-> > .network file. When switching to the other CAN mode, the previously
-> > configured ring configuration of that CAN mode will be applied to the
-> > hardware.
-> >=20
-> > In my proof of concept implementation I'm misusing the struct
-> > ethtool_ringparam's mini and jumbo values to pre-configure the CAN-2.0
-> > and CAN-FD mode's RX ring size, but this is not mainlinable from my
-> > point of view.
-> >=20
-> > I'm interested in your opinion and use cases.
->=20
-> Isn't the simplest setup to stick to the current CAN mode (2.0 vs. FD).
->=20
-> Certain values/combinations may be valid in 2.0 and not in FD. So what?
-> This is true also for data-bittiming and what not.
->=20
-> I see no advantage in putting your configuration in different files
-> (.link and .network), since they influence each other.
+On Sun, 24 Oct 2021 22:43:11 +0200 you wrote:
+> From: Thomas Gleixner <tglx@linutronix.de>
+> 
+> hrtimer_forward_now() provides the same functionality as the open coded
+> hrimer_forward() invocation. Prepares for removal of hrtimer_forward() from
+> the public interfaces.
+> 
+> Link: https://lore.kernel.org/all/20210923153339.684546907@linutronix.de
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Oliver Hartkopp <socketcan@hartkopp.net>
+> Cc: linux-can@vger.kernel.org
+> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+> Cc: netdev@vger.kernel.org
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> 
+> [...]
 
-That's the way systemd has chosen to put these values....
+Here is the summary with links:
+  - [net-next,01/15] can: bcm: Use hrtimer_forward_now()
+    https://git.kernel.org/netdev/net-next/c/9b44a927e195
+  - [net-next,02/15] can: bittiming: can_fixup_bittiming(): change type of tseg1 and alltseg to unsigned int
+    https://git.kernel.org/netdev/net-next/c/e34629043960
+  - [net-next,03/15] can: bittiming: allow TDC{V,O} to be zero and add can_tdc_const::tdc{v,o,f}_min
+    https://git.kernel.org/netdev/net-next/c/63dfe0709643
+  - [net-next,04/15] can: bittiming: change unit of TDC parameters to clock periods
+    https://git.kernel.org/netdev/net-next/c/39f66c9e2297
+  - [net-next,05/15] can: bittiming: change can_calc_tdco()'s prototype to not directly modify priv
+    https://git.kernel.org/netdev/net-next/c/da45a1e4d7b9
+  - [net-next,06/15] can: netlink: add interface for CAN-FD Transmitter Delay Compensation (TDC)
+    https://git.kernel.org/netdev/net-next/c/d99755f71a80
+  - [net-next,07/15] can: netlink: add can_priv::do_get_auto_tdcv() to retrieve tdcv from device
+    https://git.kernel.org/netdev/net-next/c/e8060f08cd69
+  - [net-next,08/15] can: dev: add can_tdc_get_relative_tdco() helper function
+    https://git.kernel.org/netdev/net-next/c/fa759a9395ea
+  - [net-next,09/15] can: at91/janz-ican3: replace snprintf() in show functions with sysfs_emit()
+    https://git.kernel.org/netdev/net-next/c/7bc9ab0f42b3
+  - [net-next,10/15] can: rcar: drop unneeded ARM dependency
+    https://git.kernel.org/netdev/net-next/c/39aab46063ed
+  - [net-next,11/15] can: mscan: mpc5xxx_can: Make use of the helper function dev_err_probe()
+    https://git.kernel.org/netdev/net-next/c/28616ed180c3
+  - [net-next,12/15] can: gs_usb: use %u to print unsigned values
+    https://git.kernel.org/netdev/net-next/c/108194666a3f
+  - [net-next,13/15] can: peak_usb: CANFD: store 64-bits hw timestamps
+    https://git.kernel.org/netdev/net-next/c/28e0a70cede3
+  - [net-next,14/15] can: xilinx_can: remove repeated word from the kernel-doc
+    https://git.kernel.org/netdev/net-next/c/c92603931bfd
+  - [net-next,15/15] can: xilinx_can: xcan_remove(): remove redundant netif_napi_del()
+    https://git.kernel.org/netdev/net-next/c/b9b8218bb3c0
 
-> I can imaging one network operating in FD, with certain rx/tx settings,
-> and another network operating in 2.0, with different rx/tx settings.
-> and a 3rd network operating in FD, with also different rx/tx settings.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-ACK - the .link and .network files are per network interface, so that
-should be no problem to have different settings for different CAN
-interfaces.
 
-> If that is a problem for systemd, then ... fix systemd?
-> (systemd is really out of my scope, I'm not used to it)
->=20
-> IMHO, you try to provide different default settings (rx/tx split) for FD
-> and 2.0 mode.
-
-ACK - the driver provides default settings for CAN-2.0 and CAN-FD mode
-and I want to overwrite both default settings via ethtool ring settings.
-So that these overwritten settings are used when switching from CAN to
-CAN-FD mode an back.
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---qfnavhxk2kntkswq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmF2dwEACgkQqclaivrt
-76l4rwf/eeHWWcGFuyFbNhuSVFQHwW12Ov7Nwz8XVTIfmtmNRhY+5hRxYRi/WJ/E
-Q5YZyeogqNuMEHXTCZfAvJSgUmpSGrkKiU7boTi0p+3xOvaYVFRFDGsCvumSjTxx
-uN0QCRlkDHbZxN1oLhIwAeBWKBf0u1A70ejGMYLoHb2seF9SYCXb0G314MJZSZA+
-HHt+JWMwHekAUo092anRhgtKvAGhpMzIKDk431PtQpmG0I/fjWLU5Jd4JsqsbFbf
-QpNmPVvgkm8KCyXnNMeIiZ8GkyHFXYSOQvsrI6LscTyIQoGCz75WRx0A9+enLzcK
-DrYqwiYYv/TIucEDA16Bh5a7OmQ5VA==
-=+4Hy
------END PGP SIGNATURE-----
-
---qfnavhxk2kntkswq--
