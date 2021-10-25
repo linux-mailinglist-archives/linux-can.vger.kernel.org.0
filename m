@@ -2,118 +2,86 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3389243974C
-	for <lists+linux-can@lfdr.de>; Mon, 25 Oct 2021 15:14:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63A02439D71
+	for <lists+linux-can@lfdr.de>; Mon, 25 Oct 2021 19:22:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231694AbhJYNQs (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 25 Oct 2021 09:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51162 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbhJYNQs (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 25 Oct 2021 09:16:48 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23605C061745
-        for <linux-can@vger.kernel.org>; Mon, 25 Oct 2021 06:14:26 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1mezo0-0001ED-JF; Mon, 25 Oct 2021 15:14:24 +0200
-Received: from pengutronix.de (2a03-f580-87bc-d400-d7c8-7df6-a4ac-55f0.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:d7c8:7df6:a4ac:55f0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id DE5D269D683;
-        Mon, 25 Oct 2021 13:14:23 +0000 (UTC)
-Date:   Mon, 25 Oct 2021 15:14:23 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     linux-can <linux-can@vger.kernel.org>, netdev@vger.kernel.org
-Subject: Re: ethtool: ring configuration for CAN devices
-Message-ID: <20211025131423.q2o6oybl5mj5rq6x@pengutronix.de>
-References: <20211024213759.hwhlb4e3repkvo6y@pengutronix.de>
- <YXaimhlXkpBKRQin@lunn.ch>
- <20211025124331.d7r7qbadkzfk7i4f@pengutronix.de>
- <YXaqEk97/WcCxcFE@lunn.ch>
+        id S232644AbhJYRZK convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Mon, 25 Oct 2021 13:25:10 -0400
+Received: from mail-yb1-f169.google.com ([209.85.219.169]:37566 "EHLO
+        mail-yb1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231220AbhJYRZK (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 25 Oct 2021 13:25:10 -0400
+Received: by mail-yb1-f169.google.com with SMTP id d204so12433300ybb.4;
+        Mon, 25 Oct 2021 10:22:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=sSSeHmsaBBlZpqQyuRz9odgeuyaHFZ1YcP2UvLwb0kU=;
+        b=ykVbArbUalx8iOt31JnJSOrT4s+J1/l8KWkJuvXeE7sFBcUgMqlGAw42TXgenyknnE
+         2mbuqicvWh9kAPj35Ufypr2MMypRpXzpOSvafzob68W/LzOWcB1WsRQ+dHVSE/iBSeLF
+         J1LsIh18f7QVtEZnYuomYQL/Z2Edec7ng3vcnlpjDsIO2AgeozehFSVtLutw20FsL+XB
+         5CD91nAfCRfNhfsJkc3kWXwLo9+ANWLZIgYB5U5O+JzJxRSYnN3V0PNbmtWrLHQAIEtH
+         o/fnnsj4D9Yu9u45bO2JRikLyAIaSG99wvkcTSYFqA8JQlQpeqA+cifAUqmc3PtHdLj6
+         x9iA==
+X-Gm-Message-State: AOAM532XFjwvsi0I9q1pQgd0SHyX+v/SFkKiMLVUUbTDu8tgn1Yxx9zU
+        qBrl4rjrrq5UdQ/1+vH/upSAWVinPparaSsXP2Kk5cA7vnI=
+X-Google-Smtp-Source: ABdhPJyAfZpUnzupj2frXcFWueXXJV5ryHvw0+Md4TxROgRA4RUeA8DPWzUsqXiMFraWANAzMWKrGyyLwuKinVT6YSc=
+X-Received: by 2002:a25:3412:: with SMTP id b18mr17851186yba.131.1635182567037;
+ Mon, 25 Oct 2021 10:22:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lvk2bzg6xv455nw4"
-Content-Disposition: inline
-In-Reply-To: <YXaqEk97/WcCxcFE@lunn.ch>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+References: <20211009131304.19729-1-mailhol.vincent@wanadoo.fr>
+ <20211009131304.19729-2-mailhol.vincent@wanadoo.fr> <20211024183007.u5pvfnlawhf36lfn@pengutronix.de>
+In-Reply-To: <20211024183007.u5pvfnlawhf36lfn@pengutronix.de>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Tue, 26 Oct 2021 02:22:36 +0900
+Message-ID: <CAMZ6RqLw+B8ZioOyMFzha67Om3c8eKEK4P53U9xHiVxB4NBhkA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] can: dev: replace can_priv::ctrlmode_static by can_get_static_ctrlmode()
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can <linux-can@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi Marc,
 
---lvk2bzg6xv455nw4
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Welcome back on the mailing list, hope you had some nice
+holidays! And also thanks a lot for your support over the last
+few months on my other series to introduce the TDC netlink
+interface :)
 
-On 25.10.2021 14:58:58, Andrew Lunn wrote:
-> > > struct ethtool_kringparam {
-> > > 	__u32	cmd;
-> > > 	__u32   mode;
-> > > 	__u32	rx_max_pending;
-> > > 	__u32	rx_mini_max_pending;
-> > > 	__u32	rx_jumbo_max_pending;
-> > > 	__u32	tx_max_pending;
-> > > 	__u32	rx_pending;
-> > > 	__u32	rx_mini_pending;
-> > > 	__u32	rx_jumbo_pending;
-> > > 	__u32	tx_pending;
-> > > };
-> > >=20
-> > > and use this structure between the ethtool core and the drivers. This
-> > > has already been done at least once to allow extending the
-> > > API. Semantic patches are good for making the needed changes to all
-> > > the drivers.
-> >=20
-> > What about the proposed "two new parameters ringparam_ext and extack for
-> > .get_ringparam and .set_ringparam to extend more ring params through
-> > netlink." by Hao Chen/Guangbin Huang in:
-> >=20
-> > https://lore.kernel.org/all/20211014113943.16231-5-huangguangbin2@huawe=
-i.com/
+Le lun. 25 oct. 2021 à 03:30, Marc Kleine-Budde <mkl@pengutronix.de> a écrit :
+>
+> On 09.10.2021 22:13:02, Vincent Mailhol wrote:
+> > The statically enabled features of a CAN controller can be retrieved
+> > using below formula:
 > >
-> > I personally like the conversion of the in in-kernel API to struct
-> > ethtool_kringparam better than adding ringparam_ext.
->=20
-> Ah, i missed that development. I don't like it.
->=20
-> You should probably jump into that discussion and explain your
-> requirements. Make sure it is heading in a direction you can extend
-> for your needs.
+> > | u32 ctrlmode_static = priv->ctrlmode & ~priv->ctrlmode_supported;
+> >
+> > As such, there is no need to store this information. This patch remove
+> > the field ctrlmode_static of struct can_priv and provides, in
+> > replacement, the inline function can_get_static_ctrlmode() which
+> > returns the same value.
+> >
+> > A condition sine qua non for this to work is that the controller
+> > static modes should never be set in can_priv::ctrlmode_supported. This
+> > is already the case for existing drivers, however, we added a warning
+> > message in can_set_static_ctrlmode() to check that.
+>
+> Please make the can_set_static_ctrlmode to return an error in case of a
+> problem. Adjust the drivers using the function is this patch, too.
 
-Will do. I've added you on Cc.
+I didn't do so initially because this is more a static
+configuration issue that should only occur during
+development. Nonetheless, what you suggest is really simple.
 
-regards,
-Marc
+I will just split the patch in two: one of the setter and one for
+the getter and address your comments.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---lvk2bzg6xv455nw4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmF2rawACgkQqclaivrt
-76l8rAf/ftPf0PHIfUtxgi1pSTEEL6t7HS8unn423bD847e5gsylA7rl44f3Xwrr
-7EPEVSbTvD9Nvso1qDqaSuRmO12XPhSfGQVmtKVZEwk1BOLugazaj7JlT+6WM09D
-vTujgno9eVMirZDSiyqFFh/hO48Z6icJRnwWP4mbQwJzn6pktZuh8fDfTfcP5Bv4
-Jt9xkQW+do/Cpq/Dd1CZY/a58gW8C8O5klLjAEjv5HJP3j54zjyPxw588U9pTrv5
-G0uv31zLEklUpmy7lx9Ud8i111Uo5LHqXHOPPw9slkwVssE6t9RRYCmAaOxSl/j/
-n3pYkvxfOvbZhkEAS32nbYTnUpE71A==
-=0Qqn
------END PGP SIGNATURE-----
-
---lvk2bzg6xv455nw4--
+Yours sincerely,
+Vincent Mailhol
