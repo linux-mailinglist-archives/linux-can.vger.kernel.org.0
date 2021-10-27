@@ -2,78 +2,94 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5CB543BF5B
-	for <lists+linux-can@lfdr.de>; Wed, 27 Oct 2021 04:13:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAF5343C416
+	for <lists+linux-can@lfdr.de>; Wed, 27 Oct 2021 09:39:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238108AbhJ0CPq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 26 Oct 2021 22:15:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46246 "EHLO
+        id S240537AbhJ0Hle (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 27 Oct 2021 03:41:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237714AbhJ0CPo (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 26 Oct 2021 22:15:44 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09198C061243
-        for <linux-can@vger.kernel.org>; Tue, 26 Oct 2021 19:13:20 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id oa12-20020a17090b1bcc00b0019f715462a8so908232pjb.3
-        for <linux-can@vger.kernel.org>; Tue, 26 Oct 2021 19:13:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=+OhYyTKGmAf5Y61RBhMkXMlQv+hOjswu4u5NSWPSjMI=;
-        b=EG9Nsjl+Eip141PWF+gaBUl1KOWYkVWkt1OXOEZnqtckn0jrX24eTk8UDRzdanWsjC
-         9yBSsvsQJotknvFKA9EQtwg6TYbjKuB2B6TeA9FpEjuXwfev4spJrb1stelnldSVU05K
-         9gDfyUx9hxjQgXAvSoidRv5/L36SOUZnVcgUrTM9tbDStJSMOyaTK7co10bTYaslWL6G
-         KEMVQ2/UtsJj5Uhe9sAzIbF0NlCUlFDN4b2Grw7CXZCthk66H6QQ7cfpSD7pU+Ay2+Nj
-         Q0QsrrBll0HvZsVEqt8NPrW+XN3K+0FC+b/X0b9b+fJud88cD9kdaePkDe4cxFsTTvDp
-         HYfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=+OhYyTKGmAf5Y61RBhMkXMlQv+hOjswu4u5NSWPSjMI=;
-        b=iAmn0bWh5aT//AdCPZ5hF3RMthZGDTl0T8joWPHIG2HFCix9u2RGOODS+kmgOcEnU5
-         +G8GnR77mY9pTBeUXqxy5LRJJWDAlUkPft3DBxnoGoEgGjlvhXs7Y5N0C5qb9czmtm19
-         u+76xLdEtBA45OI0SMeSJ0eCpALTzi5d2D/V1ZiNpdqrLDD6eihaGZd6WpTqYDXxudPf
-         JifRE7pmw4guEPJxI2NqQEgkO38RxOxDk+IXCunUom+JKLBFCsTaY+Gfe7JkfH1Qs0Y5
-         rsYWDatlQin6vr8F/jiFVcpFJ6tjhsUxMspnNdbRoewoOtcOP+cgykep2E5YprYghFor
-         2Cnw==
-X-Gm-Message-State: AOAM533cNEaIj0H6bBRxMREz8Rv6Mz/6GjOajVrwBlUOVqToguNb6eVA
-        eHpfwuSibJbDlbJ+GX5+c6B6WQiVl9LEMIbgbb8=
-X-Google-Smtp-Source: ABdhPJzwOfSEFC+ZhBFJFbO7cJJvi3wx28mFQEmwNZmSp0wIuhE8auS2ZQZdxDxGrsxbdq14UKAhXuffjqSVAtd5Ev8=
-X-Received: by 2002:a17:90b:1c02:: with SMTP id oc2mr2782635pjb.52.1635300799308;
- Tue, 26 Oct 2021 19:13:19 -0700 (PDT)
+        with ESMTP id S240533AbhJ0Hld (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 27 Oct 2021 03:41:33 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB31FC061745
+        for <linux-can@vger.kernel.org>; Wed, 27 Oct 2021 00:39:08 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1mfdWd-0006Vw-Cs; Wed, 27 Oct 2021 09:39:07 +0200
+Received: from pengutronix.de (2a03-f580-87bc-d400-7316-ec5d-e57a-90b9.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:7316:ec5d:e57a:90b9])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 0F75C69EDB8;
+        Wed, 27 Oct 2021 07:39:06 +0000 (UTC)
+Date:   Wed, 27 Oct 2021 09:39:05 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] can: etas_es58x: es58x_rx_err_msg: fix memory leak in
+ error path
+Message-ID: <20211027073905.aff3mmonp7a3itrn@pengutronix.de>
+References: <20211026180740.1953265-1-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
-Sender: officedeskofgeneral0@gmail.com
-Received: by 2002:a17:90b:4c11:0:0:0:0 with HTTP; Tue, 26 Oct 2021 19:13:18
- -0700 (PDT)
-From:   "Mr. Mustafa Ali." <muafalia@gmail.com>
-Date:   Wed, 27 Oct 2021 03:13:18 +0100
-X-Google-Sender-Auth: -ap4vRnh22PsKG1mBvTJWKrUl0o
-Message-ID: <CAL=mczUC43H-jvBwTepLgLaj-FOUBZcvw1kdD=RpB4-U2MPw0g@mail.gmail.com>
-Subject: Greetings Dear Friend.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="so4fmimmw6kiun32"
+Content-Disposition: inline
+In-Reply-To: <20211026180740.1953265-1-mailhol.vincent@wanadoo.fr>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Friend,
 
-This message might meet you in utmost surprise. However, It's just my
-urgent need for a foreign partner that made me contact you for this
-transaction. I assured you of honesty and reliability to champion this
-business opportunity. I am a banker by profession in Turkey, and
-currently holding the post of Auditor in Standard Chartered Bank.
+--so4fmimmw6kiun32
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I have the opportunity of transferring the leftover funds ($15 Million
-Dollars) of one of my clients who died along with his entire family in
-a crisis in Myanmar Asia. I am inviting you for a business deal where
-this money can be shared between us if you agree to my business
-proposal.
+On 27.10.2021 03:07:40, Vincent Mailhol wrote:
+> In es58x_rx_err_msg(), if can->do_set_mode() fails, the function
+> directly returns without calling netif_rx(skb). This means that the
+> skb previously allocated by alloc_can_err_skb() is not freed. In other
+> terms, this is a memory leak.
+>=20
+> This patch simply removes the return statement in the error branch and
+> let the function continue.
+>=20
+> * Appendix: how the issue was found *
 
-Further details of the transfer will be forwarded to you immediately
-after I receive your return letter.
+Thanks for the explanation, but I think I'll remove the appendix while
+applying.
 
-Best Regards,
-Mr. Mustafa Ali.
-mustafa.ali@rahroco.com
+Thanks,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--so4fmimmw6kiun32
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmF5AhYACgkQqclaivrt
+76nlNgf+Nst6/jhatMuQ6s55GqXjlZM4LItQalQjTFtFT8heBKLfM3/CypSNlkGe
+T5/1RfrQCGnLMMlnk3bbl/01DR5dG8CqnU1wNahQcQydYSe2ApXYE7hgM2ow6NLn
+wHgtpD8IW30GDyNRDgjv8woi0UUpk52wqz4hsmUE3OhzBhhMHSZ+sydSIIrlwARF
+35VDMgHaW8d8FLOLgHkQ84zAnLsvdhe2gDAHSoKHygUcLG1cOQeUuBD9c9Ugq1xD
+nKIj2fW0i0G8ojCUB1vg45D/SR1oRdgNa+XH08nDOjMR29NM+6ALgQ8zzHza4KF0
+1OPX3s4bxeqz6h3bosAZuSR9JxIzOQ==
+=wcGt
+-----END PGP SIGNATURE-----
+
+--so4fmimmw6kiun32--
