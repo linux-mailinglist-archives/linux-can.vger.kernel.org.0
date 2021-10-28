@@ -2,107 +2,89 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1455843DCF5
-	for <lists+linux-can@lfdr.de>; Thu, 28 Oct 2021 10:31:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE51743DF58
+	for <lists+linux-can@lfdr.de>; Thu, 28 Oct 2021 12:52:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbhJ1Id0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 28 Oct 2021 04:33:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33858 "EHLO
+        id S230166AbhJ1Kyp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 28 Oct 2021 06:54:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbhJ1IdZ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 28 Oct 2021 04:33:25 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0DAC061570
-        for <linux-can@vger.kernel.org>; Thu, 28 Oct 2021 01:30:59 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1mg0oB-00045G-SJ; Thu, 28 Oct 2021 10:30:47 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1mg0oA-0007Qs-Fn; Thu, 28 Oct 2021 10:30:46 +0200
-Date:   Thu, 28 Oct 2021 10:30:46 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Zhang Changzhong <zhangchangzhong@huawei.com>
-Cc:     Robin van der Gracht <robin@protonic.nl>,
-        linux-kernel@vger.kernel.org,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        netdev@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        kernel@pengutronix.de, Oliver Hartkopp <socketcan@hartkopp.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-can@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH net 2/3] can: j1939: j1939_can_recv(): ignore messages
- with invalid source address
-Message-ID: <20211028083046.GF20681@pengutronix.de>
-References: <1634825057-47915-1-git-send-email-zhangchangzhong@huawei.com>
- <1634825057-47915-3-git-send-email-zhangchangzhong@huawei.com>
- <20211022102306.GB20681@pengutronix.de>
- <9c636d7f-70df-18c9-66ed-46eb21f4ffbb@huawei.com>
- <20211028065144.GE20681@pengutronix.de>
- <ff21f8b9-0fe0-e6be-73d4-18b9f5bfd773@huawei.com>
+        with ESMTP id S230174AbhJ1Kyj (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 28 Oct 2021 06:54:39 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E29C061231
+        for <linux-can@vger.kernel.org>; Thu, 28 Oct 2021 03:52:12 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id d23so8576447ljj.10
+        for <linux-can@vger.kernel.org>; Thu, 28 Oct 2021 03:52:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=vprh3gRT3Cegcj0K7Fy7tqOfLGKK384XjLMkCZvF/BY=;
+        b=MqgQiMnth4O6zLvpsYbAhVLW1BorpgoCleWwfkY0/i+i6OSDuXRZO1jIKzpTTrmehO
+         XtsLWdXiTcL+XCe4naFtf2tTUJnbwwmDpuUkpvRhLd+LEnuxY7nNr11hmTRUVX1WOHsO
+         bN0u1arCg4gm9LHdXRMZFcXOD22U5gDGuBOuhPo6qvWbt6nA2j/p/5IZ88XFHrEsiSW3
+         12hentYJMlWeUfa2lUQkLm+5/fvMSizrI7wGoF2taOa3dgGUV5HKZWb0yAAH7nAXVevJ
+         tDC/xbHNLzSn310XeD3Gkoobjl6MPBQzT5DSLzerNBdTKOdmyp3xvfvOyo80qVUTZIED
+         gaRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=vprh3gRT3Cegcj0K7Fy7tqOfLGKK384XjLMkCZvF/BY=;
+        b=FwvwTaMRhbizzGQWDhLJhmn+bzE7ex/PjXSlg5kVcQDA3DnXVg7mk8OrMogEBe+UTz
+         U7GWL+kZpOGWo77EbdDZkn/v+apGB2dn5w3LXOZUL5rk/aCEEDdMdYOLgFZN6O8oo90M
+         vKapOFkkWJdcNz6oWZ40/8Pkj9VA54uA0PkqL6mcUbxZrbHNUPFuZpP5uNx3E4zShPX5
+         J/HWi0j/AE2q7j5yj3qt1+/414BF3ydPXZwaQQloXCYNS3ZXghR8upFMixR9IAqMp2XY
+         RAkv8saJgnIHEcMMefa8ryxdDqHqLPqdi9jozmZIZcQy6jfr4KvpyYRFcxzddSuMBEc0
+         GqMg==
+X-Gm-Message-State: AOAM532S8e1CJtGteyNZ2jpjjIB0GVrrGspE/KnZNG+a8EHefoHgYioB
+        dTTmDPMZkwhXcSxZa6ocvLVOPcLQU+0FGumJtTY=
+X-Google-Smtp-Source: ABdhPJw39EF9dJlXS9lAFrZ3adXxB8DVzXcygVzA3uRLiZxWlggxaB9ElCxkEB0P82xisoA6G442GD5iqMe2hCgLIt8=
+X-Received: by 2002:a2e:9a83:: with SMTP id p3mr3750290lji.145.1635418330269;
+ Thu, 28 Oct 2021 03:52:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ff21f8b9-0fe0-e6be-73d4-18b9f5bfd773@huawei.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 10:29:58 up 252 days, 11:53, 140 users,  load average: 0.15, 0.51,
- 0.43
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Received: by 2002:ab3:6f89:0:0:0:0:0 with HTTP; Thu, 28 Oct 2021 03:52:09
+ -0700 (PDT)
+Reply-To: aabdulwalialhashmi@gmail.com
+From:   Abdulwali Alhashmi <husamalsayed.hs@gmail.com>
+Date:   Thu, 28 Oct 2021 03:52:09 -0700
+Message-ID: <CAF6yYCeS=rm8=_71-kMjVo4oaVK57w9X52R_yv1HDrBe7vh-sA@mail.gmail.com>
+Subject: PLEASE GET BACK TO ME IF I CAN I TRUST YOU
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Thu, Oct 28, 2021 at 03:33:21PM +0800, Zhang Changzhong wrote:
-> On 2021/10/28 14:51, Oleksij Rempel wrote:
-> > Hi,
-> > 
-> > On Mon, Oct 25, 2021 at 03:30:57PM +0800, Zhang Changzhong wrote:
-> >> On 2021/10/22 18:23, Oleksij Rempel wrote:
-> >>> On Thu, Oct 21, 2021 at 10:04:16PM +0800, Zhang Changzhong wrote:
-> >>>> According to SAE-J1939-82 2015 (A.3.6 Row 2), a receiver should never
-> >>>> send TP.CM_CTS to the global address, so we can add a check in
-> >>>> j1939_can_recv() to drop messages with invalid source address.
-> >>>>
-> >>>> Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
-> >>>> Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
-> >>>
-> >>> NACK. This will break Address Claiming, where first message is SA == 0xff
-> >>
-> >> I know that 0xfe can be used as a source address, but which message has a source
-> >> address of 0xff?
-> >>
-> >> According to SAE-J1939-81 2017 4.2.2.8：
-> >>
-> >>   The network address 255, also known as the Global address, is permitted in the
-> >>   Destination Address field of the SAE J1939 message identifier but never in the
-> >>   Source Address field.
-> > 
-> > You are right. Thx!
-> > 
-> > Are you using any testing frameworks?
-> > Can you please take a look here:
-> > https://github.com/linux-can/can-tests/tree/master/j1939
-> > 
-> > We are using this scripts for regression testing of some know bugs.
-> 
-> Great! I'll run these scripts before posting patches.
- 
-You are welcome to extend this tests :)
-
-Regards,
-Oleksij
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Greetings,
+
+Firstly, I apologize for encroaching into your privacy in this manner
+as it may seem unethical though it is a matter of great importance.
+
+I am Abdulwali Alhashmi, I work with Cayman National Bank (Cayman Islands).
+
+I am contacting you because my status would not permit me to do this
+alone as it is concerning our customer and an investment placed under
+our bank's management over 5 years ago.
+
+I have a proposal I would love to discuss with you which will be very
+beneficial to both of us. It's regarding my late client who has a huge
+deposit with my bank.
+
+He is from your country and shares the same last name with you.
+
+I want to seek your consent to present you as the next of kin to my
+late client who died and left a huge deposit with my bank.
+
+I would respectfully request that you keep the contents of this mail
+confidential and respect the integrity of the information you come by
+as a result of this mail.
+
+Please kindly get back to me for more details if I can TRUST YOU.{
+aabdulwalialhashmi@gmail.com }
+
+Regards
+Abdulwali Alhashmi
+Treasury and Deposit Management,
+Cayman National Bank Cayman Islands
