@@ -2,84 +2,126 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0F92443137
-	for <lists+linux-can@lfdr.de>; Tue,  2 Nov 2021 16:03:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 548264431CE
+	for <lists+linux-can@lfdr.de>; Tue,  2 Nov 2021 16:36:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233881AbhKBPGW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 2 Nov 2021 11:06:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49844 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233886AbhKBPGV (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 2 Nov 2021 11:06:21 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B381C061714
-        for <linux-can@vger.kernel.org>; Tue,  2 Nov 2021 08:03:46 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id i12so16007238ila.12
-        for <linux-can@vger.kernel.org>; Tue, 02 Nov 2021 08:03:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=BH+76tZGjxyYDWE6KSTlJIqaYK5R3lpPXsw+rhEyGXQ=;
-        b=Tr8lcINOf0ARGKz4E+WugHKedlrcHjva4uYhM6jp8djvXYBWVaYcha4N+blB8f+BWW
-         LSpavBt1cdoaP1pA1lQN3XrJHLpkqI+J1dXM54Mu1ADWAO9HU3Tb178gKI4EUbHltNFL
-         FDlVtDoj3wgYIDQQ0VSlqeg51Drgsr2ve/u1dvhlX2srOQEHp3l7C2cWTJ3TlazEHHqN
-         2vJ1IZOErQc22KXgRECgXETejKh9I5QoMrJMJoNis4pjh95fo9dxOYWPjrqJRujvSDqF
-         Oe8ntbcPEgZTKpVxnAam1GMbAQP85ipidvYI1S6f9JquhXtlNbDpTHyMyD2RGvoKNWKD
-         Pivw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=BH+76tZGjxyYDWE6KSTlJIqaYK5R3lpPXsw+rhEyGXQ=;
-        b=eqoNIxXEfMwt9e37k3vGTbKkbCPTmZrE8q7HEOP40O9HgUZXqtXsxVNwB+9JpmvWXC
-         cbTY/6pQr2NDRsqIdT/HpLnVBQjMjRGaXTbA4y1y/2opTR0/y7gM6DisByyV22TsSWf/
-         cc7xmTy55RPBo5GZhvX4Rap4hPd5sw4z/U2cqHDAsJYIAU9l5FWdkMYC1UWljKJUV/q9
-         4hqib9HrAIPb+ke3AOTVyZ0fe8C1gy9R6Hy07d4/YH6qNBHKPlXY8HHd8UVM71rlrvuz
-         spm0Lwpn+TDkzaJiR1HT7ZfP1UB7UlJ9OTME+gHSZIiuoeYd+8kuFQ5//UizjeWy3BCp
-         C/Ew==
-X-Gm-Message-State: AOAM530HNqeK2YB9mgh9Ef4W8OfYSzKv68L2mbcOH5FsFC5xoDudVH7i
-        xnV9tanXasvNXisxNFekG0Y5s6kTwI83fJFf+15nCH4rRg==
-X-Google-Smtp-Source: ABdhPJwWnFPUmyloQNj+uvQoVaMjeEp0mfnmGXz6d0HaTelUP10DZbk61nDDiw78+TqwhcRO9OcXaugCSmTjSJP2Meo=
-X-Received: by 2002:a05:6e02:1347:: with SMTP id k7mr24991527ilr.110.1635865425461;
- Tue, 02 Nov 2021 08:03:45 -0700 (PDT)
+        id S231918AbhKBPiq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 2 Nov 2021 11:38:46 -0400
+Received: from mo4-p00-ob.smtp.rzone.de ([81.169.146.160]:15398 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231874AbhKBPim (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 2 Nov 2021 11:38:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1635867366;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:Date:Message-ID:From:References:To:Subject:Cc:Date:From:
+    Subject:Sender;
+    bh=neJBGp/5r9ouc1s+FaG3NPLAPYoUkE1w41C/csDB288=;
+    b=lYAIPov3UZXxC9YWW1IqYegshdcDEbZeU4MED7Dnuemdepxpm9GjgCeRmXPAtRXSS0
+    iGLvJvtwmRV6d+Ut839ejpE3oekToT5cD/qRZbbgNI6xilEv8wmBeMEHJTQ/4RiPKQTn
+    5cxdxByyTf0ZprO2ko1Vlrrgp8SOnG1Q7ZLdD0/vnzP/NT4gMt2UtcZp0I8dRQcaaeXM
+    2j6wgb5zybH74ZNbv+vIR3vbw1+NdtK39QXNoMpWTKCqbGnBFhoFM66Tb+gDQGfO35Wn
+    McYRPDbbZanl3AMu3YE9kD1tbDHvs5pArgjrlo+bu+j6BVTOyLPgIhAfo60R2G7St1ou
+    5Q2g==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdd0DIgVuBOfXW6v7w=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPv6:2a00:6020:1cfa:f900::b82]
+    by smtp.strato.de (RZmta 47.33.8 AUTH)
+    with ESMTPSA id 900f80xA2Fa518y
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Tue, 2 Nov 2021 16:36:05 +0100 (CET)
+Subject: Re: sjw in can_calc_bittiming
+To:     =?UTF-8?Q?Matthias_Wei=c3=9fer?= <m.weisser.m@gmail.com>,
+        linux-can@vger.kernel.org
+References: <CAO8h3eEcK7c6M5T88K0MO6eQk64DY+85Mzsi5zdT9tV9mxiMfw@mail.gmail.com>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <0a539c49-b92e-892e-5848-613ff745c283@hartkopp.net>
+Date:   Tue, 2 Nov 2021 16:36:05 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-From:   =?UTF-8?Q?Matthias_Wei=C3=9Fer?= <m.weisser.m@gmail.com>
-Date:   Tue, 2 Nov 2021 16:03:33 +0100
-Message-ID: <CAO8h3eEcK7c6M5T88K0MO6eQk64DY+85Mzsi5zdT9tV9mxiMfw@mail.gmail.com>
-Subject: sjw in can_calc_bittiming
-To:     linux-can@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAO8h3eEcK7c6M5T88K0MO6eQk64DY+85Mzsi5zdT9tV9mxiMfw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi
+Hi Matthias,
 
-we recently had a case here where one member of a CAN bus couldn't receive
-frames with data content of only zeros:
+On 02.11.21 16:03, Matthias Weißer wrote:
 
-$ cansend can0 123#0000000000000000
+> we recently had a case here where one member of a CAN bus couldn't receive
+> frames with data content of only zeros:
+> 
+> $ cansend can0 123#0000000000000000
+> 
+> After some investigation we found the root cause to be a slight difference
+> (about 1%) in actual bitrates of the two members. The one with showed the
+> RX errors had a sjw value of 1 and a lot of time quanta (40) due to the 40MHz
+> CAN clock.
+> 
+> This leads to a build up of phase error (as sjw is not able to compensate for
+> enough of the bitrate difference) which at some point leads to a framing
+> error due to missing a stuff bit. Playing around with the sample point can
+> improve or worsen the behavior.
+> 
+> We can fix this quite easily by specifying a higher sjw value.
 
-After some investigation we found the root cause to be a slight difference
-(about 1%) in actual bitrates of the two members. The one with showed the
-RX errors had a sjw value of 1 and a lot of time quanta (40) due to the 40MHz
-CAN clock.
+You can specify the sjw value with the ip command (for CAN FD there is 
+also a dsjw). And IIRC you can set it to the max. value for your CAN 
+controller if you define sjw to be 4.
 
-This leads to a build up of phase error (as sjw is not able to compensate for
-enough of the bitrate difference) which at some point leads to a framing
-error due to missing a stuff bit. Playing around with the sample point can
-improve or worsen the behavior.
+Best regards,
+Oliver
 
-We can fix this quite easily by specifying a higher sjw value.
+$ ip link help can
+Usage: ip link set DEVICE type can
+	[ bitrate BITRATE [ sample-point SAMPLE-POINT] ] |
+	[ tq TQ prop-seg PROP_SEG phase-seg1 PHASE-SEG1
+  	  phase-seg2 PHASE-SEG2 [ sjw SJW ] ]
 
-Question is now:
-Wouldn't it make sense to increase sjw in can_calc_bittiming() to something
-like 5% of the total time quanta? This may increase the reliability of the CAN
-network when there are differences in the bitrates of the single members. Are
-there any arguments against such an arbitrary selection of sjw?
+	[ dbitrate BITRATE [ dsample-point SAMPLE-POINT] ] |
+	[ dtq TQ dprop-seg PROP_SEG dphase-seg1 PHASE-SEG1
+  	  dphase-seg2 PHASE-SEG2 [ dsjw SJW ] ]
 
-If you agree with such a change I can come up with a proper patch. If I wrote
-totally nonsense please tell me :-)
+	[ loopback { on | off } ]
+	[ listen-only { on | off } ]
+	[ triple-sampling { on | off } ]
+	[ one-shot { on | off } ]
+	[ berr-reporting { on | off } ]
+	[ fd { on | off } ]
+	[ fd-non-iso { on | off } ]
+	[ presume-ack { on | off } ]
 
-Regards
+	[ restart-ms TIME-MS ]
+	[ restart ]
 
-Matthias
+	[ termination { 0..65535 } ]
+
+	Where: BITRATE	:= { 1..1000000 }
+		  SAMPLE-POINT	:= { 0.000..0.999 }
+		  TQ		:= { NUMBER }
+		  PROP-SEG	:= { 1..8 }
+		  PHASE-SEG1	:= { 1..8 }
+		  PHASE-SEG2	:= { 1..8 }
+		  SJW		:= { 1..4 }
+		  RESTART-MS	:= { 0 | NUMBER }
+
+> 
+> Question is now:
+> Wouldn't it make sense to increase sjw in can_calc_bittiming() to something
+> like 5% of the total time quanta? This may increase the reliability of the CAN
+> network when there are differences in the bitrates of the single members. Are
+> there any arguments against such an arbitrary selection of sjw?
+> 
+> If you agree with such a change I can come up with a proper patch. If I wrote
+> totally nonsense please tell me :-)
+> 
+> Regards
+> 
+> Matthias
+> 
