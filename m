@@ -2,71 +2,82 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6525447412
-	for <lists+linux-can@lfdr.de>; Sun,  7 Nov 2021 17:50:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1304544752A
+	for <lists+linux-can@lfdr.de>; Sun,  7 Nov 2021 20:10:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235848AbhKGQxE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 7 Nov 2021 11:53:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35566 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235852AbhKGQxC (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 7 Nov 2021 11:53:02 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73FC6C06120C
-        for <linux-can@vger.kernel.org>; Sun,  7 Nov 2021 08:50:19 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id j5-20020a17090a318500b001a6c749e697so5188684pjb.1
-        for <linux-can@vger.kernel.org>; Sun, 07 Nov 2021 08:50:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=3KhLtwCKP93j3EcWq+BGTsAWsp8Oi4eBuXX0Ov40ah8=;
-        b=CGgoC4BsgHelzytn+/VTrKwS3n0T68QEW7GeWdpL8zfErEA81MOI4RL138iNx/cHCC
-         3mOCWFKMwLBKqHyI1x8QZIxdZmn/T2z7wxCAL1QJSDwY+yMd/5vpY5vZsY6UEO3VfUIk
-         NmE02Lf+f1FnTMQjl4bIN7/MkullBrFIYleaUA1lhngjIcmWGropAefRtmKn85kF4AjF
-         9REnU8D8TvvsrxnzIdJuHntvDW0z4R21EhRUYYG9p+p2KSbQQtyOBLs4eMyycwEMv9DU
-         iYxtgVtsDfraOGEV3mHhUsdsFHn4Oc6mkCc25JbUs6k1jHra7jUoaikUuMgz3yZaGGWB
-         oWWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=3KhLtwCKP93j3EcWq+BGTsAWsp8Oi4eBuXX0Ov40ah8=;
-        b=KRmhh3XknEm8+tRxziD+B3PZvnhL5vLUxrYH7rD9XpmfTNHrpAAyYjksrndrkmvX3F
-         pGNtkx9SsXkgwtzSNRGZ+pv9cT68OPIyM+a0ObN3q2PrrVSNTZGabTPklBeq6ydm7PfF
-         nmrXKQWfd1kYt4pIWlGPI/3ufGbacP9NWeOu4J4IGoU1gvu1BFTMVXEnQ0c2e1fmocnS
-         LobAJX+gGAeXyLwFEvwK/RHUPcG6L/q8pOnGAWl2GMOeOvnvIHEwWuQJOvF6yHxNvw1w
-         UiERxDsau5AVIydL6f8AUQmFFWEET3nS9XGnbx+uQaedlX4UIJisHGOKOIqz5z2CPf2B
-         Q9lw==
-X-Gm-Message-State: AOAM533GBQi0AO1PFqVWQ8SHAPSFxyR5GGDOEO7SMoUBxKsrxorcB9WQ
-        sXPASy+QYT8TUIeycTnfOJxEKOc6DqsK4A+2VrQ=
-X-Google-Smtp-Source: ABdhPJwRzqzdXmZqk+E0BGOtRSVuotVxv3vktjD61tF3yrYnFRN7LmPJ9X2Sktepu1Y4J0ZwltgXDIouReyvwFUOa3w=
-X-Received: by 2002:a17:902:d2ce:b0:141:f710:922 with SMTP id
- n14-20020a170902d2ce00b00141f7100922mr42873278plc.7.1636303818711; Sun, 07
- Nov 2021 08:50:18 -0800 (PST)
+        id S236251AbhKGTMx (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 7 Nov 2021 14:12:53 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37412 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229990AbhKGTMv (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Sun, 7 Nov 2021 14:12:51 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id B23F360EBB;
+        Sun,  7 Nov 2021 19:10:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1636312208;
+        bh=wZR7a6HrkbX4Ku9WZ4G4CNA6D5gqWJIXCQMCCZ2A4jk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Mm36nEeOjzhbELI7T36gtDabrEJ7G/qFn8a2LIP95NKnzAoiNixnstuCRnuxxvq1j
+         bPzLpdfzLpOY1MVP3N5gP4Pgso91inve50jNQ6J0JTKFfvCEt/foWA7AFBq+lc4LWg
+         uXv9+zsWP3eJf0V20WAFJ5PIww83Bv0GlVCJGgw70/cn93r3SMOYLpGJpeP8PPhgPk
+         g5LiMPpPrheD/CcY7g3HLun5qAqzxesi4g3i3K0dyLOkXiXr7Hb8fkQCDHt9JSkEam
+         hTHmw2y1GcM7Ytshj4ceBowdmOBa5nbN6LFCiZ6pvwuyJ7qbSc29XmTsL4JYmxTocX
+         71e+4sHaE2UWg==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id A4C7E609F7;
+        Sun,  7 Nov 2021 19:10:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:4a14:0:0:0:0 with HTTP; Sun, 7 Nov 2021 08:50:18
- -0800 (PST)
-Reply-To: amabenchambers00@gmail.com
-From:   Amadou Benjamin <ousmanekarim54@gmail.com>
-Date:   Sun, 7 Nov 2021 08:50:18 -0800
-Message-ID: <CAJFAt4ZtDp1d-Lyr-uxqQ9skQkUswz-oAXSiT_oB13J29FH1QQ@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: pull-request: can 2021-11-06
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163631220867.2857.10166147031340186904.git-patchwork-notify@kernel.org>
+Date:   Sun, 07 Nov 2021 19:10:08 +0000
+References: <20211106215449.57946-1-mkl@pengutronix.de>
+In-Reply-To: <20211106215449.57946-1-mkl@pengutronix.de>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        linux-can@vger.kernel.org, kernel@pengutronix.de
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello:
+
+This pull request was applied to netdev/net.git (master)
+by Marc Kleine-Budde <mkl@pengutronix.de>:
+
+On Sat,  6 Nov 2021 22:54:41 +0100 you wrote:
+> Hello Jakub, hello David,
+> 
+> this is a pull request of 8 patches for net/master.
+> 
+> The first 3 patches are by Zhang Changzhong and fix 3 standard
+> conformance problems in the j1939 CAN stack.
+> 
+> [...]
+
+Here is the summary with links:
+  - pull-request: can 2021-11-06
+    https://git.kernel.org/netdev/net/c/f05fb508ec3b
+  - [net,2/8] can: j1939: j1939_can_recv(): ignore messages with invalid source address
+    https://git.kernel.org/netdev/net/c/a79305e156db
+  - [net,3/8] can: j1939: j1939_tp_cmd_recv(): check the dst address of TP.CM_BAM
+    https://git.kernel.org/netdev/net/c/164051a6ab54
+  - [net,4/8] can: etas_es58x: es58x_rx_err_msg(): fix memory leak in error path
+    https://git.kernel.org/netdev/net/c/d9447f768bc8
+  - [net,5/8] can: peak_usb: always ask for BERR reporting for PCAN-USB devices
+    https://git.kernel.org/netdev/net/c/3f1c7aa28498
+  - [net,6/8] can: peak_usb: exchange the order of information messages
+    https://git.kernel.org/netdev/net/c/6b78ba3e51f9
+  - [net,7/8] can: mcp251xfd: mcp251xfd_irq(): add missing can_rx_offload_threaded_irq_finish() in case of bus off
+    https://git.kernel.org/netdev/net/c/691204bd66b3
+  - [net,8/8] can: mcp251xfd: mcp251xfd_chip_start(): fix error handling for mcp251xfd_chip_rx_int_enable()
+    https://git.kernel.org/netdev/net/c/69c55f6e7669
+
+You are awesome, thank you!
 -- 
-Hello good day.
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-I am Barrister Amadou Benjamin by name, with due respect, I am
-contacting you to help get the deposit 10.5 million Dollars, my late
-client Engineer Vasiliy left in his Bank before his sudden death on
-April 21, 2007, to avoid confiscation by Lloyds bank. Please write me
-back through this email (amabenchambers00@gmail.com)for more
-information about this transaction or send me your private email to
-Contact you myself.
 
-Sincerely,
-Barrister Amadou Benjamin Esq
