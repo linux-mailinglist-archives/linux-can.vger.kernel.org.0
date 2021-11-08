@@ -2,82 +2,61 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1304544752A
-	for <lists+linux-can@lfdr.de>; Sun,  7 Nov 2021 20:10:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD8E3447B00
+	for <lists+linux-can@lfdr.de>; Mon,  8 Nov 2021 08:30:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236251AbhKGTMx (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 7 Nov 2021 14:12:53 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37412 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229990AbhKGTMv (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Sun, 7 Nov 2021 14:12:51 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id B23F360EBB;
-        Sun,  7 Nov 2021 19:10:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636312208;
-        bh=wZR7a6HrkbX4Ku9WZ4G4CNA6D5gqWJIXCQMCCZ2A4jk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Mm36nEeOjzhbELI7T36gtDabrEJ7G/qFn8a2LIP95NKnzAoiNixnstuCRnuxxvq1j
-         bPzLpdfzLpOY1MVP3N5gP4Pgso91inve50jNQ6J0JTKFfvCEt/foWA7AFBq+lc4LWg
-         uXv9+zsWP3eJf0V20WAFJ5PIww83Bv0GlVCJGgw70/cn93r3SMOYLpGJpeP8PPhgPk
-         g5LiMPpPrheD/CcY7g3HLun5qAqzxesi4g3i3K0dyLOkXiXr7Hb8fkQCDHt9JSkEam
-         hTHmw2y1GcM7Ytshj4ceBowdmOBa5nbN6LFCiZ6pvwuyJ7qbSc29XmTsL4JYmxTocX
-         71e+4sHaE2UWg==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id A4C7E609F7;
-        Sun,  7 Nov 2021 19:10:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S237773AbhKHHaY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 8 Nov 2021 02:30:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57640 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237766AbhKHHaI (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 8 Nov 2021 02:30:08 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 448A9C061210
+        for <linux-can@vger.kernel.org>; Sun,  7 Nov 2021 23:27:23 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id g14so58052796edz.2
+        for <linux-can@vger.kernel.org>; Sun, 07 Nov 2021 23:27:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=gS+G2bXPLTc8QV9oSOsVFPfildfSifO+gabOlUjPn+8=;
+        b=lohGAXI96njXpZ5r6vgYlUkp2V68iRMzDV25uaLpmT1WmpX2h0YNNnPekuKOrJR7Hh
+         rCcmOUgGjsAkeHEvvQCkM6ux+TyqL0CqGbf0IPfL8V+eIKLF7r3X9QWFup/xVl2xV9qZ
+         NGc0LQ7JpvXhk+YTEHFaFd2QnuENE8mCWi0drmIQkANv1zf9DM6Bfjx/yF/A/b9RtJFU
+         CT2DuJeqJ7evq+rJKQgmUSCIg2GjkqvLZlnb0ekZ1/3u7apFf2k73Uqo2u8YZ8hKmOIw
+         ZGA3M8LZJFGSmW3P+nQyYMCLCtL13s+WCsnPOmCuuFd5xieMsN0vbLhindKIE3OfrP6U
+         BcYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=gS+G2bXPLTc8QV9oSOsVFPfildfSifO+gabOlUjPn+8=;
+        b=cdJ2RseHlQR4XfuanDbA68xm9oC0ZYWZhvLTg+gZu2lBceAhyMhRlp21Hx1SXRNb2J
+         jEcYHkcWQAbB6WvIWaDCruadHLk/84tUxdPMlP690wk3H1iyxGEIeOmT5/k0ry4Cco4y
+         zdNsoTv/eY05qnpuTY/G/2umBotl/8/pn2TbACfcXUqYjyAcr26vKkLGe+cq8jFvb9Lc
+         FWZb5SHCApz80Jmprppx/qyVvGYksx6/7lwAlp295UMP3+cUkCFECMasBQ5hKDtBxGTB
+         LuwqPu+pwgQ2DYNP553GVOMTHD3eWuArpOFTHsEoLGiNvozZ0R2dXPME6+uUOrNXvQCl
+         iSaw==
+X-Gm-Message-State: AOAM531GE/ccehgNbv9SqZTHhD98WKZpTVw0ulE7xFflkj2AOh6CVedN
+        PuQIxsA4GCDF7Ba6+9jD629tXxNb3/ZrMIcEOc4=
+X-Google-Smtp-Source: ABdhPJwiROS9SRRNMvDLES4YHo6uT5d60ZUwIiFmBNAm9OxEfLgMU9cee9PqVQWim0XNVifN/Rk5vWcyMQ7rvBndYNE=
+X-Received: by 2002:a05:6402:557:: with SMTP id i23mr66769092edx.176.1636356441798;
+ Sun, 07 Nov 2021 23:27:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: pull-request: can 2021-11-06
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163631220867.2857.10166147031340186904.git-patchwork-notify@kernel.org>
-Date:   Sun, 07 Nov 2021 19:10:08 +0000
-References: <20211106215449.57946-1-mkl@pengutronix.de>
-In-Reply-To: <20211106215449.57946-1-mkl@pengutronix.de>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, kernel@pengutronix.de
+Received: by 2002:a50:2501:0:0:0:0:0 with HTTP; Sun, 7 Nov 2021 23:27:21 -0800 (PST)
+Reply-To: mariaschaefler@gmx.com
+From:   Maria Schaefler <ziskoraa@gmail.com>
+Date:   Mon, 8 Nov 2021 07:27:21 +0000
+Message-ID: <CAJh0FjiFL7uihMBL6ckYO8FJ6tnzM+tBivU2c60yDbG14LZLeA@mail.gmail.com>
+Subject: MY HEART CHOOSE YOU.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello:
-
-This pull request was applied to netdev/net.git (master)
-by Marc Kleine-Budde <mkl@pengutronix.de>:
-
-On Sat,  6 Nov 2021 22:54:41 +0100 you wrote:
-> Hello Jakub, hello David,
-> 
-> this is a pull request of 8 patches for net/master.
-> 
-> The first 3 patches are by Zhang Changzhong and fix 3 standard
-> conformance problems in the j1939 CAN stack.
-> 
-> [...]
-
-Here is the summary with links:
-  - pull-request: can 2021-11-06
-    https://git.kernel.org/netdev/net/c/f05fb508ec3b
-  - [net,2/8] can: j1939: j1939_can_recv(): ignore messages with invalid source address
-    https://git.kernel.org/netdev/net/c/a79305e156db
-  - [net,3/8] can: j1939: j1939_tp_cmd_recv(): check the dst address of TP.CM_BAM
-    https://git.kernel.org/netdev/net/c/164051a6ab54
-  - [net,4/8] can: etas_es58x: es58x_rx_err_msg(): fix memory leak in error path
-    https://git.kernel.org/netdev/net/c/d9447f768bc8
-  - [net,5/8] can: peak_usb: always ask for BERR reporting for PCAN-USB devices
-    https://git.kernel.org/netdev/net/c/3f1c7aa28498
-  - [net,6/8] can: peak_usb: exchange the order of information messages
-    https://git.kernel.org/netdev/net/c/6b78ba3e51f9
-  - [net,7/8] can: mcp251xfd: mcp251xfd_irq(): add missing can_rx_offload_threaded_irq_finish() in case of bus off
-    https://git.kernel.org/netdev/net/c/691204bd66b3
-  - [net,8/8] can: mcp251xfd: mcp251xfd_chip_start(): fix error handling for mcp251xfd_chip_rx_int_enable()
-    https://git.kernel.org/netdev/net/c/69c55f6e7669
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Given my current state of health, I have decided to donate what I
+inherited from my late husband to you to help the poor and needy. I am
+Mrs Maria Schaefler,a 57years old dying woman. I was diagnosed for
+cancer about 2 years ago and I have few months to live according to
+medical experts. Email me for my directives
