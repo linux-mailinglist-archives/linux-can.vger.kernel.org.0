@@ -2,134 +2,181 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6D2D44E714
-	for <lists+linux-can@lfdr.de>; Fri, 12 Nov 2021 14:07:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B624D44E7E7
+	for <lists+linux-can@lfdr.de>; Fri, 12 Nov 2021 14:49:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235000AbhKLNKj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 12 Nov 2021 08:10:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50570 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231652AbhKLNKj (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 12 Nov 2021 08:10:39 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3E8C061766
-        for <linux-can@vger.kernel.org>; Fri, 12 Nov 2021 05:07:48 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1mlWHR-0004WL-QI; Fri, 12 Nov 2021 14:07:45 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-de63-3764-bcb9-a107.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:de63:3764:bcb9:a107])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id F3C906AABAD;
-        Fri, 12 Nov 2021 13:07:44 +0000 (UTC)
-Date:   Fri, 12 Nov 2021 14:07:44 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Michael Anochin <anochin@photo-meter.com>
-Cc:     linux-can@vger.kernel.org
-Subject: Re: can: m_can: m_can_read_fifo, can_fd_dlc2len returns sometimes
- cf->len=0
-Message-ID: <20211112130744.gqnnkn67oxwumczq@pengutronix.de>
-References: <5215c43f-d208-4bc6-5bd3-3425bc4f107a@photo-meter.com>
+        id S235095AbhKLNwJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 12 Nov 2021 08:52:09 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:60078 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233894AbhKLNwE (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 12 Nov 2021 08:52:04 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1ACDmxPe037162;
+        Fri, 12 Nov 2021 07:48:59 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1636724939;
+        bh=9RemVQAEh/lpbGewLitahIriAr6pZ2qjF/8p+5UfOFo=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=Y1Hn+O6Y4kLde+84VKJYpSL97AS66FWipwAo6rez7GcZKKvXIoLvqqxZ45iGLG3kX
+         kNez4CW9h/x4IBgr42D9bXUfwPmv+R3JOIJkJIPg3vrWeOI3bDv+e+UcVbUR7u6Gxx
+         qnSsFz0Z45xYg5YstgxVOR8b/VwbESbumq6HwUac=
+Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1ACDmxql019477
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 12 Nov 2021 07:48:59 -0600
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 12
+ Nov 2021 07:48:59 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 12 Nov 2021 07:48:59 -0600
+Received: from [10.250.232.124] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1ACDmtxd017180;
+        Fri, 12 Nov 2021 07:48:56 -0600
+Subject: Re: [PATCH RFC 2/2] phy: phy-can-transceiver: Add support for setting
+ mux
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Nishanth Menon <nm@ti.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, <linux-can@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Peter Rosin <peda@axentia.se>
+References: <20211111164313.649-1-a-govindraju@ti.com>
+ <20211111164313.649-3-a-govindraju@ti.com>
+ <20211112084027.b2t2beqiiodnwjtv@pengutronix.de>
+From:   Aswath Govindraju <a-govindraju@ti.com>
+Message-ID: <085ec3c0-75c6-f3c2-9999-348098fd88f9@ti.com>
+Date:   Fri, 12 Nov 2021 19:18:54 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="i2vrx7m4vzlw4fli"
-Content-Disposition: inline
-In-Reply-To: <5215c43f-d208-4bc6-5bd3-3425bc4f107a@photo-meter.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <20211112084027.b2t2beqiiodnwjtv@pengutronix.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi Marc,
 
---i2vrx7m4vzlw4fli
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 12/11/21 2:10 pm, Marc Kleine-Budde wrote:
+> On 11.11.2021 22:13:12, Aswath Govindraju wrote:
+>> On some boards, for routing CAN signals from controller to transceiver,
+>> muxes might need to be set. Therefore, add support for setting the mux by
+>> reading the mux-controls property from the device tree node.
+>>
+>> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+>> ---
+>>  drivers/phy/phy-can-transceiver.c | 21 +++++++++++++++++++++
+>>  1 file changed, 21 insertions(+)
+>>
+>> diff --git a/drivers/phy/phy-can-transceiver.c b/drivers/phy/phy-can-transceiver.c
+>> index 6f3fe37dee0e..3d8da5226e27 100644
+>> --- a/drivers/phy/phy-can-transceiver.c
+>> +++ b/drivers/phy/phy-can-transceiver.c
+>> @@ -10,6 +10,7 @@
+>>  #include<linux/module.h>
+>>  #include<linux/gpio.h>
+>>  #include<linux/gpio/consumer.h>
+>> +#include <linux/mux/consumer.h>
+>>  
+>>  struct can_transceiver_data {
+>>  	u32 flags;
+>> @@ -21,13 +22,22 @@ struct can_transceiver_phy {
+>>  	struct phy *generic_phy;
+>>  	struct gpio_desc *standby_gpio;
+>>  	struct gpio_desc *enable_gpio;
+>> +	struct mux_control *mux_ctrl;
+>>  };
+>>  
+>>  /* Power on function */
+>>  static int can_transceiver_phy_power_on(struct phy *phy)
+>>  {
+>> +	int ret;
+>>  	struct can_transceiver_phy *can_transceiver_phy = phy_get_drvdata(phy);
+>>  
+>> +	if (can_transceiver_phy->mux_ctrl) {
+>> +		ret = mux_control_select(can_transceiver_phy->mux_ctrl, 1);
+> 
+> Hard coding the "1" looks wrong here. I have seen some boards where you
+> can select between a CAN-2.0 and a single wire CAN transceiver with a
+> mux. So I think we cannot hard code the "1" here.
+> 
 
-On 12.11.2021 13:11:06, Michael Anochin wrote:
-> Hello,
->=20
-> I use tcan4x5x over m_can driver with CANFD tcan4450 chip. Sometimes after
-> continuous communication I get in dmesg
-> tcan4x5x spi4.0 can1: FIFO read returned -22 . After that nothing works.
->=20
-> I have followed this behavior up to can_fd_dlc2len and found the followin=
-g:
-> 1. in m_can.c,=C2=A0 function m_can_read_fifo does
-> =C2=A0=C2=A0=C2=A0 cf->len =3D can_fd_dlc2len((fifo_header.dlc >> 16) & 0=
-x0F);
-> =C2=A0=C2=A0=C2=A0 cf->len =3D 0
-> =C2=A0=C2=A0=C2=A0 DIV_ROUND_UP(cf->len, 4)
->=20
-> 2. m_can_fifo_read(cdev, fgi, M_CAN_FIFO_DATA, cf->data,
-> DIV_ROUND_UP(cf->len, 4)) returns error because val_count=3D0
-> 3. Following further chain with val_count=3D0:
-> =C2=A0=C2=A0=C2=A0 cdev->ops->read_fifo(cdev, addr_offset, val, val_count=
-) ->
-> tcan4x5x_read_fifo -> regmap_bulk_read -> ret -EINVAL
->=20
-> I can try to look deeper at fifo_header. Perhaps someone has the possible
-> cause of this behavior.
+Yes, as you mentioned it is not ideal to hard code "1". I feel that, it
+would be much better to read the state of the mux to be set from the
+mux-controls property. The issue that I see with this approach is that
+the current implementation in the mux framework only allows for one
+argument, which is for indicating the line to be toggled in the mux. If
+more arguments are added then an error is returned from the
+"mux_control_get". I am not sure why this limitation was added.
 
-It seems the driver break when trying to send CAN frame with 0 length.
-First try to reproduce if 'cansend can0 abc#' breaks the driver. Then
-check if this patch helps:
 
-diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index ab4371aa4ff1..4278009c3eea 100644
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -336,6 +336,9 @@ m_can_fifo_read(struct m_can_classdev *cdev,
-        u32 addr_offset =3D cdev->mcfg[MRAM_RXF0].off + fgi * RXF0_ELEMENT_=
-SIZE +
-                offset;
-=20
-+       if (val_count =3D=3D 0)
-+               return 0;
-+
-        return cdev->ops->read_fifo(cdev, addr_offset, val, val_count);
- }
-=20
-@@ -346,6 +349,9 @@ m_can_fifo_write(struct m_can_classdev *cdev,
-        u32 addr_offset =3D cdev->mcfg[MRAM_TXB].off + fpi * TXB_ELEMENT_SI=
-ZE +
-                offset;
-=20
-+       if (val_count =3D=3D 0)
-+               return 0;
-+
-        return cdev->ops->write_fifo(cdev, addr_offset, val, val_count);
- }
+>> +		if (ret) {
+>> +			dev_err(&phy->dev, "Failed to select CAN mux: %d\n", ret);
+>> +			return ret;
+>> +		}
+>> +	}
+>>  	if (can_transceiver_phy->standby_gpio)
+>>  		gpiod_set_value_cansleep(can_transceiver_phy->standby_gpio, 0);
+>>  	if (can_transceiver_phy->enable_gpio)
+>> @@ -45,6 +55,8 @@ static int can_transceiver_phy_power_off(struct phy *phy)
+>>  		gpiod_set_value_cansleep(can_transceiver_phy->standby_gpio, 1);
+>>  	if (can_transceiver_phy->enable_gpio)
+>>  		gpiod_set_value_cansleep(can_transceiver_phy->enable_gpio, 0);
+>> +	if (can_transceiver_phy->mux_ctrl)
+>> +		mux_control_deselect(can_transceiver_phy->mux_ctrl);
+>>  
+>>  	return 0;
+>>  }
+>> @@ -95,6 +107,15 @@ static int can_transceiver_phy_probe(struct platform_device *pdev)
+>>  	match = of_match_node(can_transceiver_phy_ids, pdev->dev.of_node);
+>>  	drvdata = match->data;
+>>  
+>> +	if (of_property_read_bool(dev->of_node, "mux-controls")) {
+> 
+> Is this the proper way of doing this? Looks like we need a
+> devm_mux_control_get_optional(), which doesn't return a -ENODEV if the
+> device doesn't exist.
+> 
+> Cc'ed Peter Rosin.
+> 
+>> +		struct mux_control *control;
+>> +
+>> +		control = devm_mux_control_get(dev, NULL);
+>> +		if (IS_ERR(control))
+>> +			return PTR_ERR(control);
+> 
+> What about making use of dev_err_probe()?
+> 
 
-regards,
-Marc
+Sure, I will make this change.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Thank you for the comments.
 
---i2vrx7m4vzlw4fli
-Content-Type: application/pgp-signature; name="signature.asc"
+Regards,
+Aswath
 
------BEGIN PGP SIGNATURE-----
+>> +		can_transceiver_phy->mux_ctrl = control;
+>> +	}
+>> +
+>>  	phy = devm_phy_create(dev, dev->of_node,
+>>  			      &can_transceiver_phy_ops);
+>>  	if (IS_ERR(phy)) {
+>> -- 
+>> 2.17.1
+>>
+>>
+> 
+> Regards,
+> Marc
+> 
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmGOZx0ACgkQqclaivrt
-76k1mAf+I8X0q8hwSAgpeVImzNpy9JqIKoVfc78VPm3KD7Dc4yjBwXax49EP1UC0
-xg/g69GqYgO5dH0aIOUX/JabyPGfG57fDKRJyNp+fAaMUWAzHPzJI6nP8zBwB1WQ
-NnCHT+P5DDH0ESThRvh5PnO85H7dlm65ts50y4RPs8PJsEovYB8bnPNIlak+UhEX
-YNwmJYsQFHvNEjggkb6IeAW4IybTrpfSagzlkcJeBf147c/DNeH/VsfbGwpOro0Y
-f/wXkf90UPlI6P+CRe1/MNmfH7fZt9WboqjlyOl1RoSqwO2yNOp1CLPLF2T5fWyr
-8TgEQHilynk74XK0oK0KBghKDCR9HA==
-=ghgh
------END PGP SIGNATURE-----
-
---i2vrx7m4vzlw4fli--
