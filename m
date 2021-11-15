@@ -2,257 +2,168 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7703544FEA9
-	for <lists+linux-can@lfdr.de>; Mon, 15 Nov 2021 07:32:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E77D944FF4F
+	for <lists+linux-can@lfdr.de>; Mon, 15 Nov 2021 08:40:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbhKOGfo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 15 Nov 2021 01:35:44 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:38442 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbhKOGfk (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 15 Nov 2021 01:35:40 -0500
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1AF6VrjL093042;
-        Mon, 15 Nov 2021 00:31:53 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1636957913;
-        bh=Yp6cJZ8oIsFnm9F73Lzb1xo9cWF3HS71rWFf2uvETQM=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=tb7mjZbvhX+CsniZ8ypDDVMisBYCCgVpSxpZNYMzxisbRqJW2jJ5DAWGz5becJN55
-         60WKLcpd8nNkq9TGJDH/fWXAgeDIDsovEPLfgX2wtGNkrKE39LXARtwJTP8+grxBpH
-         UbRraZkSr6uEEAQ+1tOZxWS5srf4bU7qT3a4TspE=
-Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1AF6Vr1h097679
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 15 Nov 2021 00:31:53 -0600
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 15
- Nov 2021 00:31:53 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 15 Nov 2021 00:31:53 -0600
-Received: from [10.250.232.124] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1AF6VnnP059580;
-        Mon, 15 Nov 2021 00:31:49 -0600
-Subject: Re: [PATCH RFC 2/2] phy: phy-can-transceiver: Add support for setting
- mux
-To:     Peter Rosin <peda@axentia.se>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Nishanth Menon <nm@ti.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, <linux-can@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20211111164313.649-1-a-govindraju@ti.com>
- <20211111164313.649-3-a-govindraju@ti.com>
- <20211112084027.b2t2beqiiodnwjtv@pengutronix.de>
- <085ec3c0-75c6-f3c2-9999-348098fd88f9@ti.com>
- <f933048c-099f-054a-6563-671cf2a2e2af@axentia.se>
-From:   Aswath Govindraju <a-govindraju@ti.com>
-Message-ID: <8be2b770-9c4c-ce41-4c49-27fa30b4afee@ti.com>
-Date:   Mon, 15 Nov 2021 12:01:48 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S230366AbhKOHnd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 15 Nov 2021 02:43:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46446 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229842AbhKOHnW (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 15 Nov 2021 02:43:22 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3027C061746;
+        Sun, 14 Nov 2021 23:40:25 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id l22so41131103lfg.7;
+        Sun, 14 Nov 2021 23:40:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=hD+y9+QPBxPIEHLp2C5nAr71aH7yvAgfpLbqsq9aZ20=;
+        b=aHa5zLbymxJfKWMSKuuwCIgwPfTWfAFmUOyDgzniMmSzRrIDS0rjcrnDo5E7FO/6hG
+         9OcfykS8DzQo4JtVBnLU2azMeMQmgjeJnH4F6xpq54i8akSRJZe6Q9hbFqaObu72xAMI
+         RmsRReglCA2C4w6SKQsb8+CfFG1wFlG7+CV/ZxauYzdIDceiUsy621RP5rw5mAGB3ObQ
+         ylI99/FN3BuDSDDl36lwMBN09peOteR5zpil2LEE04OP7uyStv9qngvRbsbF5+ByvN/c
+         Utfnny6kjs5HEihZlKA48ZoLxiOiFzyyK/slIdCW002pnLksHNIpHW3wuKroM9IeRtYJ
+         jgrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=hD+y9+QPBxPIEHLp2C5nAr71aH7yvAgfpLbqsq9aZ20=;
+        b=oaFoojGDqyQDSQGnqhIYswAo+Rd5RkcPD9KM64z/4Lh1Z6vOAzvxQDaGoyj709JDWB
+         9FJn8k5u6Z96DUCHw0vZ5RoZy/m4YEFS2JjDknGmK1f3+U1rRcCmFaYA2aSCgWligEGw
+         dWNhwyYjRaF6FnzjA+GHP+2NoG+LSYpUmqQG1W82GbR4groD9bKaOhnBqiS6YClOYzcu
+         euIfykquak1AT50Fokx1B/jOwMTOrpt3cqLodz5YnPVu1daC0P0MGZy8+ifcQctIryg7
+         kkM5QAdigTjm187onrTnBIxjfRMgc0+nu/oELUQ89N6drRDMyo8LORBXkQ2IiVCJh6TQ
+         IcBw==
+X-Gm-Message-State: AOAM532gb4tt9wnq18QkfFrba7TQtqowsFP348IpFvR5eby55XMJ0YkM
+        CtoXCqj17WQ1f7qfRkYGKRW1Hs14o2A=
+X-Google-Smtp-Source: ABdhPJz/1l54205h8je5+/DlGM4h3RRIPAHFZqLGoWjlpkXdR7oZotRHyGHQxVCVy6i9CYcQKMF70g==
+X-Received: by 2002:a05:6512:220e:: with SMTP id h14mr34728927lfu.310.1636962023930;
+        Sun, 14 Nov 2021 23:40:23 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.224.112])
+        by smtp.gmail.com with ESMTPSA id c15sm1332667lft.244.2021.11.14.23.40.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 14 Nov 2021 23:40:23 -0800 (PST)
+Message-ID: <9a811cfb-1e9c-763f-0c8f-577f21d8f3cc@gmail.com>
+Date:   Mon, 15 Nov 2021 10:40:22 +0300
 MIME-Version: 1.0
-In-Reply-To: <f933048c-099f-054a-6563-671cf2a2e2af@axentia.se>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] can: etas_es58x: fix error handling
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
+        kuba@kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211114205839.15316-1-paskripkin@gmail.com>
+ <CAMZ6Rq+orfUuUCCgeWyGc7P0vp3t-yjf_g9H=Jhk43f1zXGfDQ@mail.gmail.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <CAMZ6Rq+orfUuUCCgeWyGc7P0vp3t-yjf_g9H=Jhk43f1zXGfDQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Peter,
-
-On 13/11/21 12:45 am, Peter Rosin wrote:
-> Hi!
+On 11/15/21 08:27, Vincent MAILHOL wrote:
+> Hi Pavel,
 > 
-> On 2021-11-12 14:48, Aswath Govindraju wrote:
->> Hi Marc,
->>
->> On 12/11/21 2:10 pm, Marc Kleine-Budde wrote:
->>> On 11.11.2021 22:13:12, Aswath Govindraju wrote:
->>>> On some boards, for routing CAN signals from controller to transceiver,
->>>> muxes might need to be set. Therefore, add support for setting the mux by
->>>> reading the mux-controls property from the device tree node.
->>>>
->>>> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
->>>> ---
->>>>  drivers/phy/phy-can-transceiver.c | 21 +++++++++++++++++++++
->>>>  1 file changed, 21 insertions(+)
->>>>
->>>> diff --git a/drivers/phy/phy-can-transceiver.c b/drivers/phy/phy-can-transceiver.c
->>>> index 6f3fe37dee0e..3d8da5226e27 100644
->>>> --- a/drivers/phy/phy-can-transceiver.c
->>>> +++ b/drivers/phy/phy-can-transceiver.c
->>>> @@ -10,6 +10,7 @@
->>>>  #include<linux/module.h>
->>>>  #include<linux/gpio.h>
->>>>  #include<linux/gpio/consumer.h>
->>>> +#include <linux/mux/consumer.h>
->>>>  
->>>>  struct can_transceiver_data {
->>>>  	u32 flags;
->>>> @@ -21,13 +22,22 @@ struct can_transceiver_phy {
->>>>  	struct phy *generic_phy;
->>>>  	struct gpio_desc *standby_gpio;
->>>>  	struct gpio_desc *enable_gpio;
->>>> +	struct mux_control *mux_ctrl;
->>>>  };
->>>>  
->>>>  /* Power on function */
->>>>  static int can_transceiver_phy_power_on(struct phy *phy)
->>>>  {
->>>> +	int ret;
->>>>  	struct can_transceiver_phy *can_transceiver_phy = phy_get_drvdata(phy);
->>>>  
->>>> +	if (can_transceiver_phy->mux_ctrl) {
->>>> +		ret = mux_control_select(can_transceiver_phy->mux_ctrl, 1);
->>>
->>> Hard coding the "1" looks wrong here. I have seen some boards where you
->>> can select between a CAN-2.0 and a single wire CAN transceiver with a
->>> mux. So I think we cannot hard code the "1" here.
->>>
->>
->> Yes, as you mentioned it is not ideal to hard code "1". I feel that, it
->> would be much better to read the state of the mux to be set from the
->> mux-controls property. The issue that I see with this approach is that
->> the current implementation in the mux framework only allows for one
->> argument, which is for indicating the line to be toggled in the mux. If
->> more arguments are added then an error is returned from the
->> "mux_control_get". I am not sure why this limitation was added.
+> Thanks for the patch!
 > 
-> The only current use of the first argument is for mux chips that contain
-> more than one mux control. The limit in the mux core is there since no
-> mux driver need more than this one argument. The number of mux-control
-> property arguments is fixed by the #mux-control-cells property in the
-> mux-control node. I don't see any way to and a new optional mux-control
-> property argument that specifies a specific state. How would that not
-> break all existing users?
+> On Mon. 15 Nov 2021 at 05:58, Pavel Skripkin <paskripkin@gmail.com> wrote:
+>> When register_candev() fails there are 2 possible device states:
+>> NETREG_UNINITIALIZED and NETREG_UNREGISTERED. None of them are suitable
+>> for calling unregister_candev(), because of following checks in
+>> unregister_netdevice_many():
+>>
+>>         if (dev->reg_state == NETREG_UNINITIALIZED)
+>>                 WARN_ON(1);
+>> ...
+>>         BUG_ON(dev->reg_state != NETREG_REGISTERED);
+>>
+>> To avoid possible BUG_ON or WARN_ON let's free current netdev before
+>> returning from es58x_init_netdev() and leave others (registered)
+>> net devices for es58x_free_netdevs().
+>>
+>> Fixes: 004653f0abf2 ("can: etas_es58x: add es58x_free_netdevs() to factorize code")
 > 
 
-My idea was to use the second argument for reading the state of mux to
-be set after increasing the #mux-control-cells value to 2. I don't think
-this will break the existing mux controller users as the second argument
-was not used till now, would be equivalent to adding an additional feature.
+Hi, Vincent!
 
-One more question that I had is, if the number of arguments match the
-#mux-control-cells and if the number of arguments are greater than 1 why
-is an error being returned?
-
-> The current mux interface is designed around the idea that you wrap a
-> mux control in a mux (lacking better name) application. There are
-> several such mux applications in the tree, those for I2C, IIO and SPI
-> pops into my head, and that you then tie the end user consumer to this
-> muxing application. The mux state comes as a part of how you have tied
-> the end user consumer to the mux application and is not really something
-> that the mux-control is involved in.
+> Fixes: 8537257874e9 ("can: etas_es58x: add core support for ETAS ES58X
+> CAN USB interfaces")
 > 
-> In other words, a mux-control is not really designed to be used directly
-> by a driver that needs only one of the states.
+> The bug existed from the initial commit.  Prior to the
+> introduction of es58x_free_netdevs(), unregister_candev() was
+> called in the error handling of es58x_probe():
 > 
-> However, I'm not saying that doing so isn't also a useful model. It
-> cetainly sound like it could be. However, the reason it's not done that
-> way is that I did not want to add muxing code to *all* drivers. I.e. it
-> would not be flexible to have to add boilerplate mux code to each and
-> every IIO driver that happen to be connected in a way that a mux has to
-> be in a certain state for the signal to reach the ADC (or whatever).
-> Instead, new IIO channels are created for the appropriate mux states
-> and the IIO mux is connected to the parent IIO channel. When one of the
-> muxed channels is accessed the mux is selected as needed, and the ADC
-> driver needs to know nothing about it. If two muxes need to be in a
-> certain position, you again have no need to "pollute" drivers with
-> double builerplate mux code. Instead, you simply add two levels of
-> muxing to the muxed IIO channel.
-> 
-> I think the same is probably true in this case too, and that it would
-> perhaps be better to create a mux application for phys? But I don't know
-> what the phy structure looks like, so I'm not in a position to say for
-> sure if this model fits. But I imagine that phys have providers and
-> consumers and that a mux can be jammed in there in some way and
-> intercept some api such that the needed mux state can be selected when
-> needed.
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/net/can/usb/etas_es58x/es58x_core.c?id=8537257874e949a59c834cecfd5a063e11b64b0b#n2234
 > 
 
-Yes, I understand that reading the state of the mux in drivers would not
-be efficient as it would adding the boiler plate code in each of the
-drivers. However, for phys as each of them can be used for a different
-interface, I am not sure if a common mux phy wrapper can be introduced.
-This is reason why I felt that drivers should be allowed to read the
-state of the mux directly, when no mux wrapper application is suitable
-for it.
+I see, will fix in v2
 
-Thanks,
-Aswath
-
-> Cheers,
-> Peter
+>> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+>> ---
+>>  drivers/net/can/usb/etas_es58x/es58x_core.c | 5 ++++-
+>>  1 file changed, 4 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/usb/etas_es58x/es58x_core.c
+>> index 96a13c770e4a..41c721f2fbbe 100644
+>> --- a/drivers/net/can/usb/etas_es58x/es58x_core.c
+>> +++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
+>> @@ -2098,8 +2098,11 @@ static int es58x_init_netdev(struct es58x_device *es58x_dev, int channel_idx)
+>>         netdev->flags |= IFF_ECHO;      /* We support local echo */
+>>
+>>         ret = register_candev(netdev);
+>> -       if (ret)
+>> +       if (ret) {
+>> +               free_candev(netdev);
+>> +               es58x_dev->netdev[channel_idx] = NULL;
 > 
->>
->>>> +		if (ret) {
->>>> +			dev_err(&phy->dev, "Failed to select CAN mux: %d\n", ret);
->>>> +			return ret;
->>>> +		}
->>>> +	}
->>>>  	if (can_transceiver_phy->standby_gpio)
->>>>  		gpiod_set_value_cansleep(can_transceiver_phy->standby_gpio, 0);
->>>>  	if (can_transceiver_phy->enable_gpio)
->>>> @@ -45,6 +55,8 @@ static int can_transceiver_phy_power_off(struct phy *phy)
->>>>  		gpiod_set_value_cansleep(can_transceiver_phy->standby_gpio, 1);
->>>>  	if (can_transceiver_phy->enable_gpio)
->>>>  		gpiod_set_value_cansleep(can_transceiver_phy->enable_gpio, 0);
->>>> +	if (can_transceiver_phy->mux_ctrl)
->>>> +		mux_control_deselect(can_transceiver_phy->mux_ctrl);
->>>>  
->>>>  	return 0;
->>>>  }
->>>> @@ -95,6 +107,15 @@ static int can_transceiver_phy_probe(struct platform_device *pdev)
->>>>  	match = of_match_node(can_transceiver_phy_ids, pdev->dev.of_node);
->>>>  	drvdata = match->data;
->>>>  
->>>> +	if (of_property_read_bool(dev->of_node, "mux-controls")) {
->>>
->>> Is this the proper way of doing this? Looks like we need a
->>> devm_mux_control_get_optional(), which doesn't return a -ENODEV if the
->>> device doesn't exist.
->>>
->>> Cc'ed Peter Rosin.
->>>
->>>> +		struct mux_control *control;
->>>> +
->>>> +		control = devm_mux_control_get(dev, NULL);
->>>> +		if (IS_ERR(control))
->>>> +			return PTR_ERR(control);
->>>
->>> What about making use of dev_err_probe()?
->>>
->>
->> Sure, I will make this change.
->>
->> Thank you for the comments.
->>
->> Regards,
->> Aswath
->>
->>>> +		can_transceiver_phy->mux_ctrl = control;
->>>> +	}
->>>> +
->>>>  	phy = devm_phy_create(dev, dev->of_node,
->>>>  			      &can_transceiver_phy_ops);
->>>>  	if (IS_ERR(phy)) {
->>>> -- 
->>>> 2.17.1
->>>>
->>>>
->>>
->>> Regards,
->>> Marc
->>>
->>
+> A nitpick, but if you don’t mind, I would prefer to set
+> es58x_dev->netdev[channel_idx] after register_candev() succeeds
+> so that we do not have to reset it to NULL in the error handling.
+> 
+> diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c
+> b/drivers/net/can/usb/etas_es58x/es58x_core.c
+> index ce2b9e1ce3af..fb0daad9b9c8 100644
+> --- a/drivers/net/can/usb/etas_es58x/es58x_core.c
+> +++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
+> @@ -2091,18 +2091,20 @@ static int es58x_init_netdev(struct
+> es58x_device *es58x_dev, int channel_idx)
+>                  return -ENOMEM;
+>          }
+>          SET_NETDEV_DEV(netdev, dev);
+> -       es58x_dev->netdev[channel_idx] = netdev;
+>          es58x_init_priv(es58x_dev, es58x_priv(netdev), channel_idx);
+> 
+>          netdev->netdev_ops = &es58x_netdev_ops;
+>          netdev->flags |= IFF_ECHO;      /* We support local echo */
+> 
+>          ret = register_candev(netdev);
+> -       if (ret)
+> +       if (ret) {
+> +               free_candev(netdev);
+>                  return ret;
+> +       }
+> 
+>          netdev_queue_set_dql_min_limit(netdev_get_tx_queue(netdev, 0),
+>                                         es58x_dev->param->dql_min_limit);
+> +       es58x_dev->netdev[channel_idx] = netdev;
+> 
+>          return ret;
+>   }
+> 
 
+Also will do in v2. Thank you for your review :)
+
+
+
+
+
+With regards,
+Pavel Skripkin
