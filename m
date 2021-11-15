@@ -2,101 +2,92 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 518D845015B
-	for <lists+linux-can@lfdr.de>; Mon, 15 Nov 2021 10:27:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2348450778
+	for <lists+linux-can@lfdr.de>; Mon, 15 Nov 2021 15:48:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236489AbhKOJae (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 15 Nov 2021 04:30:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42440 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237676AbhKOJ37 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 15 Nov 2021 04:29:59 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831B8C061220;
-        Mon, 15 Nov 2021 01:27:00 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id e7so19513703ljq.12;
-        Mon, 15 Nov 2021 01:27:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=cHDJGKZoIt3Qvf99KfbasimQ+ZvWTUZpWV/kwcIxxcE=;
-        b=IWmt0HHNxT+F5HX7t+OPRF+L3YGJ9ilWgsiQGUpin9c3mIlnxjnL/SLvlvDj4iT7RF
-         s5LehX2AY1VZ+oowhzUcOAeICJW6ccmU/Ma+BuEc5159xr+pgd11fLjX4AQwMugCQMSy
-         5ZbHrMlnkrb+soOcWOMF06nnMmSWF3EqVecB8ANiiyTSCGqq1CQSgiMCYlY7TCR5Hfa2
-         5KnknkyMatKYgL+seUMbq7NknpRTS4IfT52HckTTNXfBUr6kz7R5c2JaUsdbto55EWPC
-         yFW4rWRtfeN0CWe/CABR0l76fW7l8hjCCotWcNLYvGOz57kDTqgizPgl3KSAhaogVAL+
-         eBdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=cHDJGKZoIt3Qvf99KfbasimQ+ZvWTUZpWV/kwcIxxcE=;
-        b=Cpy5B6/h3XvOZRkeSlgOr8aTlJMPZsp5YFIrC9ArIQrzshyxug8XXqvWwRYsF8dNxV
-         1bzABJDCmKzEz89RZioAdnGIPdmjUBvTtfpM347IK0ZzQqQNUqCazpNFrvL5e0kxG0bN
-         3cnGU7mqy8zngDyBcF+QJaomaEbjchzBvKgSFa8C89ustY3xxlrq/7Xw6DGogL4Ub+AE
-         6SBY5Ps3Ir1JR0IuNAOqVFJUf1eyyHPfVFEEASICzGKGjJ320nr02D12yx9K++3RpN0o
-         9W+xVtLehiU67YFw+wMwtOxBF8ZlKPBLctROekytW8M5t8K8ftGeI+hNDHFO0bvpyzik
-         il3A==
-X-Gm-Message-State: AOAM533GhNruI978mcdvj+mfoXUUrrN+XmeJW7TVh839hpghKiXa7Rec
-        51TzSWohwKTW+N7XoCikLYs=
-X-Google-Smtp-Source: ABdhPJxv/LcPZowZ9jkwjHoLct8hWdA+g5iJ23DCn5Pn/SmRFJiOK/9ULfpreoKtUN7cnthEssX1eQ==
-X-Received: by 2002:a2e:a54d:: with SMTP id e13mr28507661ljn.319.1636968418855;
-        Mon, 15 Nov 2021 01:26:58 -0800 (PST)
-Received: from [192.168.1.11] ([94.103.224.112])
-        by smtp.gmail.com with ESMTPSA id j21sm1354975lfu.151.2021.11.15.01.26.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Nov 2021 01:26:57 -0800 (PST)
-Message-ID: <af7d7175-730e-5a41-4cff-92c2554010d9@gmail.com>
-Date:   Mon, 15 Nov 2021 12:26:56 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v2] can: etas_es58x: fix error handling
-Content-Language: en-US
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Johan Hovold <johan@kernel.org>, wg@grandegger.com,
-        mkl@pengutronix.de, davem@davemloft.net, kuba@kernel.org,
+        id S231805AbhKOOvO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 15 Nov 2021 09:51:14 -0500
+Received: from mga05.intel.com ([192.55.52.43]:52838 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230038AbhKOOvK (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 15 Nov 2021 09:51:10 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10168"; a="319662285"
+X-IronPort-AV: E=Sophos;i="5.87,236,1631602800"; 
+   d="scan'208";a="319662285"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2021 06:48:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,236,1631602800"; 
+   d="scan'208";a="494043353"
+Received: from mylly.fi.intel.com (HELO [10.237.72.160]) ([10.237.72.160])
+  by orsmga007.jf.intel.com with ESMTP; 15 Nov 2021 06:48:01 -0800
+Subject: Re: [PATCH net 1/4] can: m_can: pci: fix incorrect reference clock
+ rate
+To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Felipe Balbi (Intel)" <balbi@kernel.org>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <CAMZ6Rq+orfUuUCCgeWyGc7P0vp3t-yjf_g9H=Jhk43f1zXGfDQ@mail.gmail.com>
- <20211115075124.17713-1-paskripkin@gmail.com>
- <YZIWT9ATzN611n43@hovoldconsulting.com>
- <7a98b159-f9bf-c0dd-f244-aec6c9a7dcaa@gmail.com>
- <YZIXdnFQcDcC2QvE@hovoldconsulting.com>
- <e91eb5b1-295e-1a21-d153-5e0fa52b2ffe@gmail.com>
- <CAMZ6Rq+3uPE31q=HN-BdkXsMYZf53=VfNSn0OD6HcweLO0u-_Q@mail.gmail.com>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <CAMZ6Rq+3uPE31q=HN-BdkXsMYZf53=VfNSn0OD6HcweLO0u-_Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+References: <cover.1636967198.git.matthias.schiffer@ew.tq-group.com>
+ <c9cf3995f45c363e432b3ae8eb1275e54f009fc8.1636967198.git.matthias.schiffer@ew.tq-group.com>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Message-ID: <48d37d59-e7d1-e151-4201-1dcc151819fe@linux.intel.com>
+Date:   Mon, 15 Nov 2021 16:48:00 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <c9cf3995f45c363e432b3ae8eb1275e54f009fc8.1636967198.git.matthias.schiffer@ew.tq-group.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 11/15/21 12:24, Vincent MAILHOL wrote:
->> Sure! I should have check it before sending v2 :( My bad, sorry. I see
->> now, that there is possible calltrace which can hit NULL defer.
-> 
-> I should be the one apologizing here. Sorry for the confusion.
-> 
->> One thing I am wondering about is why in some code parts there are
->> validation checks for es58x_dev->netdev[i] and in others they are missing.
-> 
-> There is a validation when it is accessed in a for loop.
-> It is not guarded in es58x_send_msg() because this function
-> expects the channel_idx to be a valid index.
-> 
-> Does this answer your wonders?
-> 
+Hi
 
-Yeah! I have just looked at the code one more time and came up with the 
-same idea.
+On 11/15/21 11:18 AM, Matthias Schiffer wrote:
+> When testing the CAN controller on our Ekhart Lake hardware, we
+> determined that all communication was running with twice the configured
+> bitrate. Changing the reference clock rate from 100MHz to 200MHz fixed
+> this. Intel's support has confirmed to us that 200MHz is indeed the
+> correct clock rate.
+> 
+> Fixes: cab7ffc0324f ("can: m_can: add PCI glue driver for Intel Elkhart Lake")
+> Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+> ---
+>   drivers/net/can/m_can/m_can_pci.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/can/m_can/m_can_pci.c b/drivers/net/can/m_can/m_can_pci.c
+> index 89cc3d41e952..d3c030a13cbe 100644
+> --- a/drivers/net/can/m_can/m_can_pci.c
+> +++ b/drivers/net/can/m_can/m_can_pci.c
+> @@ -18,7 +18,7 @@
+>   
+>   #define M_CAN_PCI_MMIO_BAR		0
+>   
+> -#define M_CAN_CLOCK_FREQ_EHL		100000000
+> +#define M_CAN_CLOCK_FREQ_EHL		200000000
+>   #define CTL_CSR_INT_CTL_OFFSET		0x508
+>   
+I'll double check this from HW people but at quick test on an HW I have 
+the signals on an oscilloscope were having 1 us shortest cycle (~500 ns 
+low, ~500 ns high) when testing like below:
 
-Thank you for confirming and acking my patch :)
+ip link set can0 type can bitrate 1000000 dbitrate 2000000 fd on
+ip link set can0 up
+ip link set can1 type can bitrate 1000000 dbitrate 2000000 fd on
+ip link set can1 up
 
+candump can0 &
 
+cansend can1 01a#11223344AABBCCDD
 
-With regards,
-Pavel Skripkin
+Caveat: I'm not an CAN signaling expert at all.
+
+Jarkko
