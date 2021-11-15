@@ -2,118 +2,106 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8141345000B
-	for <lists+linux-can@lfdr.de>; Mon, 15 Nov 2021 09:38:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27F194500F8
+	for <lists+linux-can@lfdr.de>; Mon, 15 Nov 2021 10:15:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbhKOIlV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 15 Nov 2021 03:41:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59552 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbhKOIlQ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 15 Nov 2021 03:41:16 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F6AC061746;
-        Mon, 15 Nov 2021 00:38:20 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id d11so33836830ljg.8;
-        Mon, 15 Nov 2021 00:38:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=5BO6zupXKsq7QxwcvI+ZE0fQUmmRHhVHR5EykOjogIQ=;
-        b=eCxb09vAsBlDE2SDJArcqnAOet8mEGHcTLJFtsburnUVRDUd5/jTwmzvJkkV4nMfje
-         /S04ouHtVNbTJ4Xn1SjF9kJO80blQwp4cbIQsQC63Ie9NRPsPUuxRSTeyG+dk7cdR/5T
-         K99l7t51UNPFRC8ovf7oVm7jRcUfYJeGn2YuUMbaJ4wwxttiULYbvOLz1IVbL/p+lH9v
-         oys+yue0TJ1wGojTyetM2J4vDmCc4uexGCaqo9NqdniKDWv6bnAS/kqQaMief8t2x9SS
-         0MfFU7JKJ6/jmILUsYBmuOAwWNA1DZdfrvPEJ0s0vh1J0gtOvBL+5n2+KXLA4FIki45I
-         +A4w==
+        id S230162AbhKOJSf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 15 Nov 2021 04:18:35 -0500
+Received: from mail-yb1-f172.google.com ([209.85.219.172]:38776 "EHLO
+        mail-yb1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230126AbhKOJSW (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 15 Nov 2021 04:18:22 -0500
+Received: by mail-yb1-f172.google.com with SMTP id v64so45030562ybi.5;
+        Mon, 15 Nov 2021 01:15:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=5BO6zupXKsq7QxwcvI+ZE0fQUmmRHhVHR5EykOjogIQ=;
-        b=ykb51liP1OoQrC9nCjP9IY2zrpVYTl5BIDeI/ZE73s16sEbSceb8sAbvBwKbq+AXPY
-         isxW5iK7avP257yjGYd16xfqIgKWr4S5lqgfn3FQAlAAZI9tdrj4eAL6j3JENIwq38YO
-         CIZLxJKlDxSHB8iacsAhRN/IZ6Bqeo+R5DpnaUcYpi/37a1vvW/MMCinYTu8tdQJdW7V
-         kF/0Xpa1CY8jWKr4EOPK0RX2TuGvWpOPC8ULTs/ypwdXZu9v3bGNAn3YXQXQT/t/XWue
-         OvLAkqmf5G7FKJEp8omXOrLjsL27+nxhEfpe+7Ew0JZJbOTvNxLag5cbFevuewb6XZqu
-         GrBQ==
-X-Gm-Message-State: AOAM530z00VV0+CudWaIfeSWgVK6PAaEz5FTeeOqS9Oj0FWkcNwOFdRw
-        GLofpRm36rBQUu5okViB+RA=
-X-Google-Smtp-Source: ABdhPJzZVk/Og28FR7o4EgCwydyOJJTERcZJyzie5FipEwjoYb/sP9+fiQ5SMZq2AVJ9QZvNsQY7vQ==
-X-Received: by 2002:a2e:81da:: with SMTP id s26mr35794403ljg.94.1636965498874;
-        Mon, 15 Nov 2021 00:38:18 -0800 (PST)
-Received: from localhost.localdomain ([94.103.224.112])
-        by smtp.gmail.com with ESMTPSA id r5sm1440797lji.132.2021.11.15.00.38.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Nov 2021 00:38:18 -0800 (PST)
-From:   Pavel Skripkin <paskripkin@gmail.com>
-To:     mailhol.vincent@wanadoo.fr, wg@grandegger.com, mkl@pengutronix.de,
-        davem@davemloft.net, kuba@kernel.org
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>
-Subject: [PATCH v3] can: etas_es58x: fix error handling
-Date:   Mon, 15 Nov 2021 11:37:56 +0300
-Message-Id: <20211115083756.25971-1-paskripkin@gmail.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <YZIWT9ATzN611n43@hovoldconsulting.com>
-References: <YZIWT9ATzN611n43@hovoldconsulting.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Jyzl7oZfTfctjkCbDjpVsRa/ezMbHf5XSEZ7cgOuE0g=;
+        b=yHoi3O63Yyj0yY5wa5oiwVLQ853NE+qzHS53eaA3aTfFxJn9+DAYy9ZbJTVIIJoVdh
+         tKh00J75J2zfVLsee0gSJozRnPny0UjVI9kDPcM+dnfNwRmrfYtynumxqmeylylErkLl
+         76auhotkYGW7yfyBu02oRdcFqIS1LcfiLBk4S8BMiU6jUja1hyOdybvk7xJKbj1Nmgrn
+         9IFoZUeof6HB33QNgLhwQrRxWJlc0HwFYRlGuyG54KjnXtsm/CaURx2E8DLNMP8rKTRo
+         lgerOi7BknyKLwHDXDExw3JcsbTInLBJsUYqA8X3BFBkLmfYUusLsxWRzB+Y087TYsJc
+         KMWg==
+X-Gm-Message-State: AOAM530Ux8j5kx4QBBzznGpZXclgwTqALk+AjSe8FsvQ5Nj1bA9Zpf1Q
+        GdWAJrFe7MmIqeY843MICVMadypXxMQRaHSezHG7ogYZsaKHgQ==
+X-Google-Smtp-Source: ABdhPJwrV32VxQ+3kGtTABQunws8sfYjJXxMQtaGBbZ51iMbAmJ7LEFHHSOKyt6zRPScDJ2poZ/Ui+emLSD6bmwQ+2E=
+X-Received: by 2002:a25:3d1:: with SMTP id 200mr41631260ybd.113.1636967725954;
+ Mon, 15 Nov 2021 01:15:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <YZIWT9ATzN611n43@hovoldconsulting.com> <20211115083756.25971-1-paskripkin@gmail.com>
+In-Reply-To: <20211115083756.25971-1-paskripkin@gmail.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Mon, 15 Nov 2021 18:15:15 +0900
+Message-ID: <CAMZ6RqJZqXHLrrbzerR6GzSKqtYE8j8qVSzH-Hdd_zjR6YUv9Q@mail.gmail.com>
+Subject: Re: [PATCH v3] can: etas_es58x: fix error handling
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
+        kuba@kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-When register_candev() fails there are 2 possible device states:
-NETREG_UNINITIALIZED and NETREG_UNREGISTERED. None of them are suitable
-for calling unregister_candev(), because of following checks in
-unregister_netdevice_many():
+On Mon. 15 Nov 2021 at 17:37, Pavel Skripkin <paskripkin@gmail.com> wrote:
+> When register_candev() fails there are 2 possible device states:
+> NETREG_UNINITIALIZED and NETREG_UNREGISTERED. None of them are suitable
+> for calling unregister_candev(), because of following checks in
+> unregister_netdevice_many():
+>
+>         if (dev->reg_state == NETREG_UNINITIALIZED)
+>                 WARN_ON(1);
+> ...
+>         BUG_ON(dev->reg_state != NETREG_REGISTERED);
+>
+> To avoid possible BUG_ON or WARN_ON let's free current netdev before
+> returning from es58x_init_netdev() and leave others (registered)
+> net devices for es58x_free_netdevs().
+>
+> Fixes: 8537257874e9 ("can: etas_es58x: add core support for ETAS ES58X CAN USB interfaces")
+> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
 
-	if (dev->reg_state == NETREG_UNINITIALIZED)
-		WARN_ON(1);
-...
-	BUG_ON(dev->reg_state != NETREG_REGISTERED);
+Acked-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
-To avoid possible BUG_ON or WARN_ON let's free current netdev before
-returning from es58x_init_netdev() and leave others (registered)
-net devices for es58x_free_netdevs().
+> ---
+>
+> Changes in v3:
+>         - Moved back es58x_dev->netdev[channel_idx] initialization,
+>           since it's unsafe to intialize it _after_ register_candev()
+>           call. Thanks to Johan Hovold <johan@kernel.org> for spotting
+>           it
 
-Fixes: 8537257874e9 ("can: etas_es58x: add core support for ETAS ES58X CAN USB interfaces")
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
----
+My bad on that. I missed the fact that the netdev_ops becomes
+active once register_candev() returns.
 
-Changes in v3:
-	- Moved back es58x_dev->netdev[channel_idx] initialization,
-	  since it's unsafe to intialize it _after_ register_candev()
-	  call. Thanks to Johan Hovold <johan@kernel.org> for spotting
-	  it
-
-Changes in v2:
-	- Fixed Fixes: tag
-	- Moved es58x_dev->netdev[channel_idx] initialization at the end
-	  of the function
-
----
- drivers/net/can/usb/etas_es58x/es58x_core.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/usb/etas_es58x/es58x_core.c
-index 96a13c770e4a..41c721f2fbbe 100644
---- a/drivers/net/can/usb/etas_es58x/es58x_core.c
-+++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
-@@ -2098,8 +2098,11 @@ static int es58x_init_netdev(struct es58x_device *es58x_dev, int channel_idx)
- 	netdev->flags |= IFF_ECHO;	/* We support local echo */
- 
- 	ret = register_candev(netdev);
--	if (ret)
-+	if (ret) {
-+		free_candev(netdev);
-+		es58x_dev->netdev[channel_idx] = NULL;
- 		return ret;
-+	}
- 
- 	netdev_queue_set_dql_min_limit(netdev_get_tx_queue(netdev, 0),
- 				       es58x_dev->param->dql_min_limit);
--- 
-2.33.1
-
+> Changes in v2:
+>         - Fixed Fixes: tag
+>         - Moved es58x_dev->netdev[channel_idx] initialization at the end
+>           of the function
+>
+> ---
+>  drivers/net/can/usb/etas_es58x/es58x_core.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/usb/etas_es58x/es58x_core.c
+> index 96a13c770e4a..41c721f2fbbe 100644
+> --- a/drivers/net/can/usb/etas_es58x/es58x_core.c
+> +++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
+> @@ -2098,8 +2098,11 @@ static int es58x_init_netdev(struct es58x_device *es58x_dev, int channel_idx)
+>         netdev->flags |= IFF_ECHO;      /* We support local echo */
+>
+>         ret = register_candev(netdev);
+> -       if (ret)
+> +       if (ret) {
+> +               free_candev(netdev);
+> +               es58x_dev->netdev[channel_idx] = NULL;
+>                 return ret;
+> +       }
+>
+>         netdev_queue_set_dql_min_limit(netdev_get_tx_queue(netdev, 0),
+>                                        es58x_dev->param->dql_min_limit);
+> --
+> 2.33.1
+>
