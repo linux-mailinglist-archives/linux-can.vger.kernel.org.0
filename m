@@ -2,107 +2,112 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F46452B6D
-	for <lists+linux-can@lfdr.de>; Tue, 16 Nov 2021 08:16:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C627B453368
+	for <lists+linux-can@lfdr.de>; Tue, 16 Nov 2021 14:59:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbhKPHSv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 16 Nov 2021 02:18:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53200 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229958AbhKPHSn (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 16 Nov 2021 02:18:43 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D02C061570
-        for <linux-can@vger.kernel.org>; Mon, 15 Nov 2021 23:15:46 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1mmsgq-0000S2-Bh; Tue, 16 Nov 2021 08:15:36 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-a4ec-1e51-dfc5-35f4.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:a4ec:1e51:dfc5:35f4])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 17C0A6ACF73;
-        Tue, 16 Nov 2021 07:15:31 +0000 (UTC)
-Date:   Tue, 16 Nov 2021 08:15:30 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        id S236979AbhKPOBV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 16 Nov 2021 09:01:21 -0500
+Received: from mx1.tq-group.com ([93.104.207.81]:43038 "EHLO mx1.tq-group.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236972AbhKPOBU (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 16 Nov 2021 09:01:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1637071103; x=1668607103;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=QowfK6lC7OtKEtHi/XsDP4k8Yh+I7P+hRoVD2rZgP8k=;
+  b=QJnquHeq09Qt6VpPciGdFsoG4bjxNFHZUjFMVH2O2K/uOO1l+gmrIqY4
+   Nq8lQ8sFqrxf1WpkiUE8bMCFeT9xNMzNZM8sQ/Zt5yNGrsal69FRRlBJV
+   T9bHfKiwaOrLgJaXmFpBbftAQaNkMNEv5O8beisrrIsTyMo3/o5L7SAJz
+   HXRsdwH1o3GXPqnVwtar65elSiuq60oA3QZxXtGxHnykSmnwkmBMPfO1P
+   i7mpVM9XI4P2S+DzuRQZNG4+QAgJKO+yWOt+1GPQOts91+o/N67zxdEyi
+   JspwaEO/gF/J0x/zjjsF5dhzHOFNsafY3M4BkkWctAJSd176dt53D0XDa
+   w==;
+X-IronPort-AV: E=Sophos;i="5.87,239,1631570400"; 
+   d="scan'208";a="20492169"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 16 Nov 2021 14:58:22 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Tue, 16 Nov 2021 14:58:22 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Tue, 16 Nov 2021 14:58:22 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1637071102; x=1668607102;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=QowfK6lC7OtKEtHi/XsDP4k8Yh+I7P+hRoVD2rZgP8k=;
+  b=ZtY6UPcXE7+ed5iEmzLsAD4UCq9jplRHfwBzqrej6e9yet2mejHEKi+Q
+   FKmrtNowmzN8rbcf4Ph0OjbDF2RoslYEYVMH3stMWDUED1GG5BZdSsWdQ
+   EfmsAVnrsIT6rOj008K3e/1n1PE3cm7dQPLXNj4oJVGjU+ykR6F9U6D3U
+   cL/6ifURiC/xH1+DpKhAsUPr8S9cbwUH41hsYMXvdgfhgtxRC7zBaLjuo
+   nrdvuWojboRvEud7TUq1+GmzCHvCa1zxg20E+NGMluubIsd7MMHiQxBHG
+   oRGinYDXVwIcNMNiUkHbVFRH5SdfC/BTaM8srOwWx8WNSiLwBPsbUoD5k
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.87,239,1631570400"; 
+   d="scan'208";a="20492168"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 16 Nov 2021 14:58:22 +0100
+Received: from schifferm-ubuntu4.tq-net.de (schifferm-ubuntu4.tq-net.de [10.121.48.12])
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id 195A1280065;
+        Tue, 16 Nov 2021 14:58:22 +0100 (CET)
+Message-ID: <e38eb4ca0a03c60c8bbeccbd8126ffc5bf97d490.camel@ew.tq-group.com>
+Subject: Re: [PATCH net 0/4] Fix bit timings for m_can_pci (Elkhart Lake)
+From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
         "Felipe Balbi (Intel)" <balbi@kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net 1/4] can: m_can: pci: fix incorrect reference clock
- rate
-Message-ID: <20211116071530.k2qaccz5qixgt2jj@pengutronix.de>
+Date:   Tue, 16 Nov 2021 14:58:19 +0100
+In-Reply-To: <cover.1636967198.git.matthias.schiffer@ew.tq-group.com>
 References: <cover.1636967198.git.matthias.schiffer@ew.tq-group.com>
- <c9cf3995f45c363e432b3ae8eb1275e54f009fc8.1636967198.git.matthias.schiffer@ew.tq-group.com>
- <48d37d59-e7d1-e151-4201-1dcc151819fe@linux.intel.com>
- <0400022a-0515-db87-03cc-30b83c2aede2@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="c7fuwfwv5pgm7und"
-Content-Disposition: inline
-In-Reply-To: <0400022a-0515-db87-03cc-30b83c2aede2@linux.intel.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Mon, 2021-11-15 at 10:18 +0100, Matthias Schiffer wrote:
+> This series fixes two issues we found with the setup of the CAN
+> controller of Intel Elkhart Lake CPUs:
+> 
+> - Patch 1 fixes an incorrect reference clock rate, which caused the
+>   configured and the actual bitrate always to differ by a factor of 2.
+> - Patches 2-4 fix a deviation between the driver and the documentation.
+>   We did not actually see issues without these patches, however we did
+>   only superficial testing and may just not have hit the specific
+>   bittiming values that violate the documented limits.
+> 
+> 
+> Matthias Schiffer (4):
+>   can: m_can: pci: fix incorrect reference clock rate
+>   Revert "can: m_can: remove support for custom bit timing"
+>   can: m_can: make custom bittiming fields const
+>   can: m_can: pci: use custom bit timings for Elkhart Lake
+> 
+>  drivers/net/can/m_can/m_can.c     | 24 ++++++++++++----
+>  drivers/net/can/m_can/m_can.h     |  3 ++
+>  drivers/net/can/m_can/m_can_pci.c | 48 ++++++++++++++++++++++++++++---
+>  3 files changed, 65 insertions(+), 10 deletions(-)
+> 
 
---c7fuwfwv5pgm7und
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I just noticed that m_can_pci is completely broken on 5.15.2, while
+it's working fine on 5.14.y.
 
-On 16.11.2021 09:11:40, Jarkko Nikula wrote:
-> > ip link set can0 type can bitrate 1000000 dbitrate 2000000 fd on
->=20
-> I got confirmation the clock to CAN controller is indeed changed from 100
-> MHz to 200 MHz in release HW & firmware.
->=20
-> I haven't upgraded the FW in a while on our HW so that perhaps explain
-> why I was seeing expected rate :-)
+I assume something simliar to [1] will be necessary in m_can_pci as
+well, however I'm not really familiar with the driver. There is no
+"mram_base" in m_can_plat_pci, only "base". Is using "base" with
+iowrite32/ioread32 + manual increment the correct solution here?
 
-Can we query the FW version in the driver and set the clock rate
-accordingly?
 
-> So which one is more appropriate:
->=20
-> Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-> or
-> Reviewed-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=99d173fbe8944861a00ebd1c73817a1260d21e60
 
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---c7fuwfwv5pgm7und
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmGTWo8ACgkQqclaivrt
-76nKDAf/Xc7Mj3LR7IgGI1jF2bN0zLidqH9pHqlcRF2wiOkrK/VK7DWXqHwdpf3G
-FtQK/Dz7A/mPPMTs6Z9Iqn4fv9vrL8oypftFlie62KIdB+c2v3P+uzt2EP9XoSTr
-6LZbSSTPf5a2D8xaY/E++Pm2M3eSyDnksvc0hWRT3QEuQqxpnFaCkt2bkpnn9iED
-REraCBzsyJqRvqkJPixrte23qN9vVju5q+Kz+fIvVTNzZ98A5jmA/vmGBgmwMUcL
-nNp9I1hHeyxGd9Sc0daZ9FU4w6W3XhiOZeZknd6HWfcSAuGqD6FCcTjUAzdDl32x
-ox9KSrotDqHU5UmpnZn5MoNhTGXl+Q==
-=ShOs
------END PGP SIGNATURE-----
-
---c7fuwfwv5pgm7und--
