@@ -2,70 +2,64 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C58454638
-	for <lists+linux-can@lfdr.de>; Wed, 17 Nov 2021 13:14:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BB19454982
+	for <lists+linux-can@lfdr.de>; Wed, 17 Nov 2021 16:01:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236149AbhKQMRa (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 17 Nov 2021 07:17:30 -0500
-Received: from mga18.intel.com ([134.134.136.126]:45535 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233484AbhKQMR3 (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 17 Nov 2021 07:17:29 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10170"; a="220821100"
-X-IronPort-AV: E=Sophos;i="5.87,241,1631602800"; 
-   d="scan'208";a="220821100"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2021 04:14:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,241,1631602800"; 
-   d="scan'208";a="506895679"
-Received: from mylly.fi.intel.com (HELO [10.237.72.56]) ([10.237.72.56])
-  by orsmga008.jf.intel.com with ESMTP; 17 Nov 2021 04:14:28 -0800
-Subject: Re: [PATCH net 0/4] Fix bit timings for m_can_pci (Elkhart Lake)
-To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Felipe Balbi (Intel)" <balbi@kernel.org>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1636967198.git.matthias.schiffer@ew.tq-group.com>
- <e38eb4ca0a03c60c8bbeccbd8126ffc5bf97d490.camel@ew.tq-group.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Message-ID: <72489ea7-cf81-2446-3620-06a98f53ce54@linux.intel.com>
-Date:   Wed, 17 Nov 2021 14:14:27 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        id S232549AbhKQPEt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 17 Nov 2021 10:04:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36402 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232509AbhKQPEr (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 17 Nov 2021 10:04:47 -0500
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4ADFC061570
+        for <linux-can@vger.kernel.org>; Wed, 17 Nov 2021 07:01:48 -0800 (PST)
+Received: from localhost.localdomain (unknown [89.158.146.116])
+        (Authenticated sender: stephane.grosjean@free.fr)
+        by smtp2-g21.free.fr (Postfix) with ESMTPSA id 216C2200371;
+        Wed, 17 Nov 2021 16:01:43 +0100 (CET)
+From:   Stephane Grosjean <s.grosjean@peak-system.com>
+To:     linux-can Mailing List <linux-can@vger.kernel.org>
+Cc:     Stephane Grosjean <s.grosjean@peak-system.com>
+Subject: [PATCH 0/6] can: peak_usb: add sysfs interface to flashed value
+Date:   Wed, 17 Nov 2021 16:01:26 +0100
+Message-Id: <20211117150132.37056-1-s.grosjean@peak-system.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <e38eb4ca0a03c60c8bbeccbd8126ffc5bf97d490.camel@ew.tq-group.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi
+This series of patches offers the user the possibility to access in
+read/write mode a flashed numerical value for each channel of a PEAK-System
+USB - CAN/CANFD interface, through the sysfs interface, under the tree
+/sys/class/net/canX and the new entry "dev_num" of the newly created group
+"peak_usb". Thus the command :
 
-On 11/16/21 3:58 PM, Matthias Schiffer wrote:
-> I just noticed that m_can_pci is completely broken on 5.15.2, while
-> it's working fine on 5.14.y.
-> 
-Hmm.. so that may explain why I once saw candump received just zeroes on 
-v5.15-rc something but earlier kernels were ok. What's odd then next 
-time v5.15-rc was ok so went blaming sun spots instead of bisecting.
+$ echo /sys/class/net/can0/peak_usb/dev_num
 
-> I assume something simliar to [1] will be necessary in m_can_pci as
-> well, however I'm not really familiar with the driver. There is no
-> "mram_base" in m_can_plat_pci, only "base". Is using "base" with
-> iowrite32/ioread32 + manual increment the correct solution here?
-> 
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=99d173fbe8944861a00ebd1c73817a1260d21e60
-> 
-If your test case after 5.15 reliably fails are you able to bisect or 
-check does the regression originate from the same commit?
+will display the value stored in the internal memory, for the first channel
+of the PEAK-System device.
 
-Jarkko
+Signed-off-by: Stephane Grosjean <s.grosjean@peak-system.com>
+
+Stephane Grosjean (6):
+  can: peak_usb: rename a callback to a more explicit name
+  can: peak_usb: add callback to read user value of CANFD devices
+  can: peak_usb: correction of a wrong field name
+  can: peak_usb: allow flashing of user defined value
+  can: peak_usb: replace unregister_netdev() with unregister_candev()
+  can: peak_usb: add sysfs interface to internal device user value
+
+ drivers/net/can/usb/peak_usb/pcan_usb.c      | 26 ++++++-
+ drivers/net/can/usb/peak_usb/pcan_usb_core.c | 82 +++++++++++++++++++-
+ drivers/net/can/usb/peak_usb/pcan_usb_core.h |  3 +-
+ drivers/net/can/usb/peak_usb/pcan_usb_fd.c   | 48 ++++++++++++
+ drivers/net/can/usb/peak_usb/pcan_usb_pro.c  | 23 +++++-
+ drivers/net/can/usb/peak_usb/pcan_usb_pro.h  |  3 +-
+ 6 files changed, 173 insertions(+), 12 deletions(-)
+
+-- 
+2.25.1
+
