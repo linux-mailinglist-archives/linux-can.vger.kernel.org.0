@@ -2,195 +2,287 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B78245586C
-	for <lists+linux-can@lfdr.de>; Thu, 18 Nov 2021 10:58:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B66D4559E5
+	for <lists+linux-can@lfdr.de>; Thu, 18 Nov 2021 12:14:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245402AbhKRKBM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 18 Nov 2021 05:01:12 -0500
-Received: from mail-eopbgr150079.outbound.protection.outlook.com ([40.107.15.79]:59268
-        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S245298AbhKRKAm (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Thu, 18 Nov 2021 05:00:42 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mx4laZTx9ls8LHDEU4gPM72stbjqhVq+nuGHFpOkdfKjlWf4HBp8JyS4gqHTCqlJyGTg6gpYPzqhbqifYsxMWkZvo6HeyWLdK0obWSMLPtw97L3K56UgP9IaRgilNEZ+ge6tgCctd5mCKVHln1V4Bchf+4Uj0ZbX07qhZBwqSQl6UszNuYPzy5Y+coGeLeVB555Yj3ZFRowqH0q01kRspH9oFkeJArQX5jFXQZoLpyx0lID7MG/noVMrrjr9J69aeJuEKWoJcyrrRnm2C9VoPR5bdfQbv7MHKC7gMmjmTa/LKaqec7XIJqhbWxVgqwGWzDhRMph37SiYzWIVJkH7YQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=S9IACGmBzqbmezz3IbLDsjxOeBOnIgq0hH5d0RL4h3w=;
- b=KV5muneqwfW2FZxjFO2hLorQX/1c8icYfxMLtowfhIuhyKs9FCtc21ag0MK/FomVHDLvmG61wXzbQOxegfmhAqoXfkrOJbpAGfp+J4aTRpjltaVGFNFw5XRHqwQvHbwC43A5TyLx1i4k8exW4NGm+IC1q/SqqqojTUZNoP+XJtpFaST/w33es4k2fqD2rYrIj6+HKPmwdaaP3ebg1tyaCjXRi8EoEy+qJjMDY9ZJukACcqfEk93uhk70QzOWidci8PcGhKMBXuY2/aUCyyokJdEXgv6aLY13cKaYH/KIVXIznYtX13OywZJivExohsn4LRjGG3QMA2jMQx+fwymiQw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=peak-system.com; dmarc=pass action=none
- header.from=peak-system.com; dkim=pass header.d=peak-system.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=itpeak.onmicrosoft.com; s=selector2-itpeak-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=S9IACGmBzqbmezz3IbLDsjxOeBOnIgq0hH5d0RL4h3w=;
- b=X3sJrfN7nTkIXn638bDLQ711apdqD8CzGCRU9h9/NTwoUHyXbpfpWTVcB+nHlLiLaexeTWCQHwJjOUZqqRrHH0pzClum6s6NaEQk6ldqh5ydF1q6nP97jzNNsIPWUtJsDVykv9LFGV9+pz1hu1mV80QONLUvoRmYsPUkFqWWyuE=
-Received: from PA4PR03MB6797.eurprd03.prod.outlook.com (2603:10a6:102:f1::9)
- by PA4PR03MB6861.eurprd03.prod.outlook.com (2603:10a6:102:ec::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4690.27; Thu, 18 Nov
- 2021 09:57:40 +0000
-Received: from PA4PR03MB6797.eurprd03.prod.outlook.com
- ([fe80::6019:5c45:ecb4:1982]) by PA4PR03MB6797.eurprd03.prod.outlook.com
- ([fe80::6019:5c45:ecb4:1982%3]) with mapi id 15.20.4690.027; Thu, 18 Nov 2021
- 09:57:40 +0000
-From:   =?iso-8859-1?Q?St=E9phane_Grosjean?= <s.grosjean@peak-system.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-CC:     linux-can Mailing List <linux-can@vger.kernel.org>
-Subject: RE: [PATCH 6/6] can: peak_usb: add sysfs interface to internal device
- user value (resend)
-Thread-Topic: [PATCH 6/6] can: peak_usb: add sysfs interface to internal
- device user value (resend)
-Thread-Index: AQHX3GGE5OusfFVuXEKQqDdIlNmmBQ==
-Date:   Thu, 18 Nov 2021 09:57:40 +0000
-Message-ID: <PA4PR03MB67977EAB8E9F1B720B12167DD69B9@PA4PR03MB6797.eurprd03.prod.outlook.com>
-Accept-Language: fr-FR, en-US
-Content-Language: fr-FR
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-suggested_attachment_session_id: 9e437f29-a57e-51e6-c0b4-9481fb461ac6
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=peak-system.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b22430a6-a5f4-42fd-9532-08d9aa79dbdd
-x-ms-traffictypediagnostic: PA4PR03MB6861:
-x-microsoft-antispam-prvs: <PA4PR03MB6861261BEC453A44B692D67AD69B9@PA4PR03MB6861.eurprd03.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: iYAK6OWl2NOlxQpHdFWWESwNTUJaywXAveil7At7x/Uep9dtmssYhOkixNuj2UmdZ1i/AnhLvQzvkU76oA9uBX21tlUppYXwhYHkr1C7vkV9PCao6OhCmRPINarUTpIb6F8KIYV+A4B9XyfrkLEm3krJXyJUdE5ijaoTZo++PgkxEIP81JJQx6oWUojd85ZdCQezUAW43+omrQmV7XgMUsx31hriRqJ9d9q26lt5O/HI/hZlwJ8TB4L6M9BOvfR8NG437ROGieLxWKXneW1dFMhKUWasAxzUFbDDNruvMaPqSb0ujtN/5MqD/5BRj60vcW40SixxERGVy3fn08ArNuCHMwlFu45Qfj0oxhANXmrOqWod5kzn/ot6Nkw6eRkGxq2NAxK4Bcbg/1n+rq1aYac3P5buIcYiXtrf3VTjmb+geUp6MxCbSq32ROplc7M5IcYZSYiFLhF09G4fqPjV7TcLWJH9NodATr/WJdi8UN+9OHNKXgQWmHoA2QlhuaobRYJFkHgZ4zADwLRQuENnEO9zFet0YUW+IIY8ySWRlni3MK87HRr9YLOUD5hXb3GXcPOIBuAsX11DUBPftSA3Lv9bZD2iXlR8YcUyU5cRdFvYkBLs7rkROzqrpu3d36Kkd+Dn2/SHpb1qdjwM/m/JRN7bsQuv9xV2zBaNvchmXAaLqSyR7AKIcg6FfZfvT2S8YZ6TExZFv/Ld0UvYMrhAtQ53q7TIWr6X5+eSzcLJYpCsump72nLiYr8NfKjIq1viVYXoapgRDeVeHQpnayVUg1Hj5r5vV6/S2gQRuU0C3wc=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR03MB6797.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(39840400004)(396003)(136003)(346002)(366004)(376002)(9686003)(76116006)(86362001)(66446008)(64756008)(2906002)(66556008)(52536014)(4326008)(66476007)(71200400001)(83380400001)(38070700005)(33656002)(8936002)(26005)(53546011)(66946007)(66574015)(15974865002)(55016002)(966005)(508600001)(316002)(7696005)(186003)(122000001)(5660300002)(8676002)(6916009)(38100700002)(6506007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?Re5HK1Un+5fdD9MnSBVD2vdhUVqdxKMgvF78pM/uTaRUteR1Le8JkOa+zD?=
- =?iso-8859-1?Q?AE7p2geUNvA6Dbo8EH5LmU3RsUsVzfnAvuCZtelRucsbl/aAuL+PiBc5sJ?=
- =?iso-8859-1?Q?FejQj+4Qf57qmNg9znDfmgCTXtjzt7MY8t300LeViNMufPf3ii85iDMcN+?=
- =?iso-8859-1?Q?l42yJXu1f6aTAk2OKrXisv/Z14P7srk2cPgJbIIYbIYNjb6nmnlUGrNaCx?=
- =?iso-8859-1?Q?/tnnkfDYoQGbuV5ScS/i6sf18o+ZOpUQpFqP3UlABjD3GXmjPLqit4aYaM?=
- =?iso-8859-1?Q?/GCYQxrSygldYqomj+1dJ3b6Qu230/Q7NrgIQ81x3cc+Q8TES7NvrZ4RX2?=
- =?iso-8859-1?Q?moqX2jcFfs1YQkhVfK5tJJ70fydb2O9I10hFtn6WcBHE8+52pIMDuGnRMv?=
- =?iso-8859-1?Q?5FdCs0t3v9QBhDIRppwXnQoWKynR746JCZC/0+yHedOYka7sdtZm0yNtyK?=
- =?iso-8859-1?Q?Cj3/VKcTMv50XU38+tyFFnu+BqguZS7b6O3ePddtHtjbV1Rl54xmRXuDZh?=
- =?iso-8859-1?Q?A+/yYbx6EyqRgz9/EdWlFXD5wyKzraVL0fcRpkvGpx8W9+8C1BODl/SpN/?=
- =?iso-8859-1?Q?e3noCNTSIemrR7SiEf7C5IzCG7QhZuaIVgBzdCb8d6gg9zFQ1u3eXAgFgD?=
- =?iso-8859-1?Q?TiMcnfEkWJXtcGgbQ2wBE1lCZLfBhXJ1rCiBp1GnDozRWSpCneH0bDEQyF?=
- =?iso-8859-1?Q?ZETVYFaBE4JCVuFmAJ1kLqALDNpbzf6ZlVdsHsqqc6pX4PLU5gFyyxELiw?=
- =?iso-8859-1?Q?lyCgfLsQczyGQ39V963Xoog2erZqDngxezCLXiocFgeI3dM6hWrrozh/7t?=
- =?iso-8859-1?Q?y13HYGCC77Q4F0DMaYvinxNQ5LjkV1lAnd7wau5mfVmTk1AnQTIbUQze4d?=
- =?iso-8859-1?Q?OLN4d7VyA6ua8/EP4AXplIa9l9SUAp6ocVPehGEtAaUM1ByEMLRRRuQVNY?=
- =?iso-8859-1?Q?8PFevHqxUv/p0xZTQYrCBI5qpshoo2I9D0lcVG+Bra6PqNsvSY/ge+MuIp?=
- =?iso-8859-1?Q?/LeeGDK2gHhKprikdObJYZjfUt5rdaqeem4FbDABHzdxxOw4LiO5rQAKqP?=
- =?iso-8859-1?Q?g0Nfgr4KUPyZhua/Ya/BPuJI8qRdN1OnZDpQV+zYzw+5kHsiU3k+Rkgz4O?=
- =?iso-8859-1?Q?s+VZL13OakyvvzdULQ1NmZpjmCSM3epDecqnTsFX56qXFGUtlqr3U6Gr+s?=
- =?iso-8859-1?Q?bmhCz6h6iU5x856R+g3LrGO6Cg3LY/oiMdLkMoPGJlFosNtnrqsJuUCy5N?=
- =?iso-8859-1?Q?+bF2CEJgvixHkuXwwcY/AZaZSKEQKDY0oo/F6UB3/XO5Xgko++7jMbJv8r?=
- =?iso-8859-1?Q?nMqsv53K8Er8f/bPJl2ci3nOGCPS4fEsnRept81uCC0GTwaq+UlB12AV4O?=
- =?iso-8859-1?Q?yyk13skaWoAtAW69NKjtCn30f1xD7ywTuL0wUwwsO8OpQeA1xPaxWIqK8K?=
- =?iso-8859-1?Q?MsiURklQRacwam07Jgdm4KRfXeqSOgeUh+TE+KPRuA0/nfcgA9O1yDRnkD?=
- =?iso-8859-1?Q?Y7cgJBUNwssPK7xM3asfqnmy52PnVZVu2fYp/wsRjXHUM0u9xuqyL9HZOU?=
- =?iso-8859-1?Q?xImAnHLtAA0BqKEWxq1Gzpjuz4jYN+jVa6Z04UT0nHmWh7W0+8bFitvx8k?=
- =?iso-8859-1?Q?0Gk26jJ7u0phcvrlOPKXyHxX2kpxGRq8J8CCCA3F4sxnl4RtRnz7l6A9iN?=
- =?iso-8859-1?Q?C3Kg+4rWVFOBajKPfSuoSXZ9+flDBz3nbfgrkX8dLGLRp4Uf/moHGG1bvn?=
- =?iso-8859-1?Q?WVaw=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        id S1343908AbhKRLRf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 18 Nov 2021 06:17:35 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:36682 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343911AbhKRLPb (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 18 Nov 2021 06:15:31 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1AIBC6q7056350;
+        Thu, 18 Nov 2021 05:12:06 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1637233926;
+        bh=V7yPbnnma5Hb1kIJnwWQfhUbAlN9gFoVmGDPT0oyMbg=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=iuwcjZ8hiinhosA151HPSbb/aUkeGKqWRhYsy0OWVrcdCyIoCsynLvnx/z6OE1rQz
+         WJAL26ydS4aGgVA+kXBf4OLQqfSppTIdkX1uQ28TbB8B2UW10uOG4ml1j/hVT56RnG
+         g+UH4XSCZACYDEU5gOfsavJMoLPetQ7v+mtR55jk=
+Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1AIBC5e3034846
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 18 Nov 2021 05:12:06 -0600
+Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 18
+ Nov 2021 05:12:05 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 18 Nov 2021 05:12:05 -0600
+Received: from [10.250.232.124] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1AIBC1Zj030631;
+        Thu, 18 Nov 2021 05:12:02 -0600
+Subject: Re: [PATCH RFC 2/2] phy: phy-can-transceiver: Add support for setting
+ mux
+To:     Peter Rosin <peda@axentia.se>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Nishanth Menon <nm@ti.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, <linux-can@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20211111164313.649-1-a-govindraju@ti.com>
+ <20211111164313.649-3-a-govindraju@ti.com>
+ <20211112084027.b2t2beqiiodnwjtv@pengutronix.de>
+ <085ec3c0-75c6-f3c2-9999-348098fd88f9@ti.com>
+ <f933048c-099f-054a-6563-671cf2a2e2af@axentia.se>
+ <8be2b770-9c4c-ce41-4c49-27fa30b4afee@ti.com>
+ <b8b0c7c4-3006-071b-d68f-8b18d24a1f72@axentia.se>
+From:   Aswath Govindraju <a-govindraju@ti.com>
+Message-ID: <f47dc612-adea-4dfb-f2fd-d67b5df6ed50@ti.com>
+Date:   Thu, 18 Nov 2021 16:42:00 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-X-OriginatorOrg: peak-system.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR03MB6797.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b22430a6-a5f4-42fd-9532-08d9aa79dbdd
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Nov 2021 09:57:40.4878
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: e31dcbd8-3f8b-4c5c-8e73-a066692b30a1
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 0O8/4ueQ1oHcVMR7JtF3DtKmF3QQh09bw+oCmoOfShxpm7Gv6BHOCBXsvWmQODJ/pAEGd9gPPqVO1DoAO7/c274W2KPWM0Njdzok40uWEJc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR03MB6861
+In-Reply-To: <b8b0c7c4-3006-071b-d68f-8b18d24a1f72@axentia.se>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi,
+Hi Peter,
 
-I understand and why not. But:
+On 18/11/21 2:54 am, Peter Rosin wrote:
+> Hi!
+> 
+> On 2021-11-15 07:31, Aswath Govindraju wrote:
+>> Hi Peter,
+>>
+>> On 13/11/21 12:45 am, Peter Rosin wrote:
+>>> Hi!
+>>>
+>>> On 2021-11-12 14:48, Aswath Govindraju wrote:
+>>>> Hi Marc,
+>>>>
+>>>> On 12/11/21 2:10 pm, Marc Kleine-Budde wrote:
+>>>>> On 11.11.2021 22:13:12, Aswath Govindraju wrote:
+>>>>>> On some boards, for routing CAN signals from controller to transceiver,
+>>>>>> muxes might need to be set. Therefore, add support for setting the mux by
+>>>>>> reading the mux-controls property from the device tree node.
+>>>>>>
+>>>>>> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+>>>>>> ---
+>>>>>>  drivers/phy/phy-can-transceiver.c | 21 +++++++++++++++++++++
+>>>>>>  1 file changed, 21 insertions(+)
+>>>>>>
+>>>>>> diff --git a/drivers/phy/phy-can-transceiver.c b/drivers/phy/phy-can-transceiver.c
+>>>>>> index 6f3fe37dee0e..3d8da5226e27 100644
+>>>>>> --- a/drivers/phy/phy-can-transceiver.c
+>>>>>> +++ b/drivers/phy/phy-can-transceiver.c
+>>>>>> @@ -10,6 +10,7 @@
+>>>>>>  #include<linux/module.h>
+>>>>>>  #include<linux/gpio.h>
+>>>>>>  #include<linux/gpio/consumer.h>
+>>>>>> +#include <linux/mux/consumer.h>
+>>>>>>  
+>>>>>>  struct can_transceiver_data {
+>>>>>>  	u32 flags;
+>>>>>> @@ -21,13 +22,22 @@ struct can_transceiver_phy {
+>>>>>>  	struct phy *generic_phy;
+>>>>>>  	struct gpio_desc *standby_gpio;
+>>>>>>  	struct gpio_desc *enable_gpio;
+>>>>>> +	struct mux_control *mux_ctrl;
+>>>>>>  };
+>>>>>>  
+>>>>>>  /* Power on function */
+>>>>>>  static int can_transceiver_phy_power_on(struct phy *phy)
+>>>>>>  {
+>>>>>> +	int ret;
+>>>>>>  	struct can_transceiver_phy *can_transceiver_phy = phy_get_drvdata(phy);
+>>>>>>  
+>>>>>> +	if (can_transceiver_phy->mux_ctrl) {
+>>>>>> +		ret = mux_control_select(can_transceiver_phy->mux_ctrl, 1);
+>>>>>
+>>>>> Hard coding the "1" looks wrong here. I have seen some boards where you
+>>>>> can select between a CAN-2.0 and a single wire CAN transceiver with a
+>>>>> mux. So I think we cannot hard code the "1" here.
+>>>>>
+>>>>
+>>>> Yes, as you mentioned it is not ideal to hard code "1". I feel that, it
+>>>> would be much better to read the state of the mux to be set from the
+>>>> mux-controls property. The issue that I see with this approach is that
+>>>> the current implementation in the mux framework only allows for one
+>>>> argument, which is for indicating the line to be toggled in the mux. If
+>>>> more arguments are added then an error is returned from the
+>>>> "mux_control_get". I am not sure why this limitation was added.
+>>>
+>>> The only current use of the first argument is for mux chips that contain
+>>> more than one mux control. The limit in the mux core is there since no
+>>> mux driver need more than this one argument. The number of mux-control
+>>> property arguments is fixed by the #mux-control-cells property in the
+>>> mux-control node. I don't see any way to and a new optional mux-control
+>>> property argument that specifies a specific state. How would that not
+>>> break all existing users?
+>>>
+>>
+>> My idea was to use the second argument for reading the state of mux to
+>> be set after increasing the #mux-control-cells value to 2. I don't think
+>> this will break the existing mux controller users as the second argument
+>> was not used till now, would be equivalent to adding an additional feature.
+> 
+> Ok, I see what you mean now, sorry for being dense. If we allow this then
+> there is a need to add a special value that means all/many states (such as
+> -1 or something such) so that a mux-control can be used simultaneously by
+> drivers "pointing at" a specific state like you want to do, and by the
+> existing "application" style drivers that wraps the whole mux control.
+> 
+> I.e. something like this
+> 
+> 	mux: mux {
+> 		compatible = "mux-gpio";
+> 		...
+> 
+> 		#mux-control-cells = <1>; /* one more than previously */
+> 	};
+> 
+> 	phy {
+> 		...
+> 
+> 		mux-control = <&mux 3>; /* point to specific state */
+> 	};
+> 
+> 	i2c-mux {
+> 		compatible = "i2c-mux-gpmux";
+> 		parent = <&i2c0>
+> 		mux-control = <&mux (-1)>; /* many states needed */
+> 
+> 		...
+> 
+> 		i2c@1 {
+> 			eeprom@50 {
+> 				...
+> 			};
+> 		};
+> 
+> 		i2c@2 {
+> 			...
+> 		};
+> 	};
+> 
+> Yes, I realize that accesses to the eeprom cannot happen if the mux is
+> constantly selected and locked in state 3 by the phy, and that a mux with
+> one channel being a phy and other channels being I2C might not be
+> realistic, but the same gpio lines might control several muxes that are
+> used for separate signals solving at least the latter "problem" with this
+> completely made up example. Anyway, the above is in principle, and HW
+> designs are sometimes too weird for words.
+> 
 
-1 - we were inspired by the existing in some socket-can drivers
-2 - these identifiers are not literally stored in an eeprom
-3 - the memory storage address is not necessarily an information known by t=
-he user, is different depending on the CAN-USB interface and can be subject=
- to change over time
-4 - reading sysfs makes the assignment of an interface name much easier IMH=
-O
+This is almost exactly what I was intending to implement except for one
+more change. The state of the mux will always be represented using the
+second argument(i.e. #mux-control-cells = <2>).
 
-Maybe you have another suggestion for the location of this entry in sysfs?
-
-Stephane
+For example,
+mux-controls = <&mux 0 1>, <&mux 1 0>;
 
 
+With this I think we wouldn't need a special value for all or many states.
+
+>> One more question that I had is, if the number of arguments match the
+>> #mux-control-cells and if the number of arguments are greater than 1 why
+>> is an error being returned?
+> 
+> Changing that would require a bindings update anyway, so I simply
+> disallowed it as an error. Not much thought went into the decision,
+> as it couldn't be wrong to do what is being done with the bindings
+> that exist. That said, I have no problem lifting this restriction,
+> if there's a matching bindings update that makes it all fit.
+> 
+
+Sure, I think making a change in
+
+Documentation/devicetree/bindings/mux/gpio-mux.yaml, should be good
+enough I assume.
 
 
-            De: Marc Kleine-Budde
-Envoy=E9: Mercredi 17 novembre 2021 16:16
-=C0: St=E9phane Grosjean
-Cc: linux-can Mailing List
-Objet: Re: [PATCH 6/6] can: peak_usb: add sysfs interface to internal devic=
-e user value
+Thank you for the comments. I'll post a respin of this series, with the
+above changes.
 
+Thanks,
+Aswath
 
+>>> The current mux interface is designed around the idea that you wrap a
+>>> mux control in a mux (lacking better name) application. There are
+>>> several such mux applications in the tree, those for I2C, IIO and SPI
+>>> pops into my head, and that you then tie the end user consumer to this
+>>> muxing application. The mux state comes as a part of how you have tied
+>>> the end user consumer to the mux application and is not really something
+>>> that the mux-control is involved in.
+>>>
+>>> In other words, a mux-control is not really designed to be used directly
+>>> by a driver that needs only one of the states.
+>>>
+>>> However, I'm not saying that doing so isn't also a useful model. It
+>>> cetainly sound like it could be. However, the reason it's not done that
+>>> way is that I did not want to add muxing code to *all* drivers. I.e. it
+>>> would not be flexible to have to add boilerplate mux code to each and
+>>> every IIO driver that happen to be connected in a way that a mux has to
+>>> be in a certain state for the signal to reach the ADC (or whatever).
+>>> Instead, new IIO channels are created for the appropriate mux states
+>>> and the IIO mux is connected to the parent IIO channel. When one of the
+>>> muxed channels is accessed the mux is selected as needed, and the ADC
+>>> driver needs to know nothing about it. If two muxes need to be in a
+>>> certain position, you again have no need to "pollute" drivers with
+>>> double builerplate mux code. Instead, you simply add two levels of
+>>> muxing to the muxed IIO channel.
+>>>
+>>> I think the same is probably true in this case too, and that it would
+>>> perhaps be better to create a mux application for phys? But I don't know
+>>> what the phy structure looks like, so I'm not in a position to say for
+>>> sure if this model fits. But I imagine that phys have providers and
+>>> consumers and that a mux can be jammed in there in some way and
+>>> intercept some api such that the needed mux state can be selected when
+>>> needed.
+>>>
+>>
+>> Yes, I understand that reading the state of the mux in drivers would not
+>> be efficient as it would adding the boiler plate code in each of the
+>> drivers. However, for phys as each of them can be used for a different
+>> interface, I am not sure if a common mux phy wrapper can be introduced.
+>> This is reason why I felt that drivers should be allowed to read the
+>> state of the mux directly, when no mux wrapper application is suitable
+>> for it.
+> 
+> It need not be one grand unifying phy mux, it could be one for each
+> kind of phy interface. But again, I don't know much about how phys
+> work nor their interfaces, not event roughly how many drivers there
+> are etc etc. I have simply never needed to look.
+> 
+> Hmm, wild idea, maybe there could be a mux "application" for pinctrl?
+> I mean such that you could tie pinctrl states to mux states. It doesn't
+> sound like too bad of a match to me?
+> 
+> Cheers,
+> Peter
+> 
 
-
-On 17.11.2021 16:01:32, Stephane Grosjean wrote:
-
-> This patch adds under /sys/class/net/canX a new group named "peak_usb"
-
-> which contains a "dev_num" entry accessible for reading (display in
-
-> decimal of the numerical value stored in non-volatile memory of the USB
-
-> device) and also for writing (modification by the user of this value).
-
->
-
-> Signed-off-by: Stephane Grosjean <s.grosjean@peak-system.com>
-
-
-
-Please have a look at the ethtool eeprom interface:
-
-
-
-| ethtool -e|--eeprom-dump devname [raw on|off] [offset N] [length N]
-
-| ethtool -E|--change-eeprom devname [magic N] [offset N] [length N] [value=
- N]
-
-
-
-That looks better than adding a custom sysfs entry.
-
-
-
-Marc
-
-
-
---
-
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-
-Embedded Linux                   | https://www.pengutronix.de  |
-
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
-
---
-PEAK-System Technik GmbH
-Sitz der Gesellschaft Darmstadt - HRB 9183
-Geschaeftsfuehrung: Alexander Gach / Uwe Wilhelm
-Unsere Datenschutzerklaerung mit wichtigen Hinweisen
-zur Behandlung personenbezogener Daten finden Sie unter
-www.peak-system.com/Datenschutz.483.0.html
