@@ -2,74 +2,197 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20118457AAC
-	for <lists+linux-can@lfdr.de>; Sat, 20 Nov 2021 04:06:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97EFD4585E9
+	for <lists+linux-can@lfdr.de>; Sun, 21 Nov 2021 19:28:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbhKTDJi (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 19 Nov 2021 22:09:38 -0500
-Received: from smtp04.smtpout.orange.fr ([80.12.242.126]:57495 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236697AbhKTDJh (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 19 Nov 2021 22:09:37 -0500
-Received: from tomoyo.flets-east.jp ([114.149.34.46])
-        by smtp.orange.fr with ESMTPA
-        id oGhtmfkqZWUfjoGi0mA8Xc; Sat, 20 Nov 2021 04:06:34 +0100
-X-ME-Helo: tomoyo.flets-east.jp
-X-ME-Auth: MDU0YmViZGZmMDIzYiBlMiM2NTczNTRjNWZkZTMwOGRiOGQ4ODf3NWI1ZTMyMzdiODlhOQ==
-X-ME-Date: Sat, 20 Nov 2021 04:06:34 +0100
-X-ME-IP: 114.149.34.46
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     extja@kvaser.com, linux-can@vger.kernel.org
-Cc:     jimmyassarsson@gmail.com,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: Re: [PATCH v1 1/5] can: kvaser_pciefd: Do not increase stats->rx_{packets,bytes} for error frames
-Date:   Sat, 20 Nov 2021 12:06:04 +0900
-Message-Id: <20211120030604.217665-1-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211119131915.2033234-2-extja@kvaser.com>
-References: <20211119131915.2033234-2-extja@kvaser.com>
+        id S238512AbhKUSbF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 21 Nov 2021 13:31:05 -0500
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.50]:26382 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237990AbhKUSbF (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 21 Nov 2021 13:31:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1637519274;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=HDLQePCss32+izVjtARSwnNLX22dM+LKVoLBVr7VLwg=;
+    b=R3XMgEOsSkFL2uueOAFUXcwC3yBdxX7UOAmDSN5vlYbQ/2W5Z76kFVsvVQtdRuAw5/
+    6yUiSTMgSkXiVup6V/HGErzBbdJZrkCOmgBgWxpdC4dSJqKv4tS8QrvAkaAzrmcafand
+    kBY+fboXySA5sVBISuic4FBgHX9xxrHCaTLCNm3RQ/PPn0PRIfhaHMTkCfDszjh6hoYa
+    mLuL6zNTgS8Ak7NOYTU+rY5/q9R+KJRg8y3u6ehedhSXGJo8pNc3DfbI9vvyUndGy0kz
+    JN9QUmUZMBr5x5BMcbpNBLsluASbM04lYoI/vFFLwMFKWLktyrPbwfbxFj1tacfgr1KC
+    PiAg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdd0DIgVuBOfXW6v7w=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPv6:2a00:6020:1cfa:f900::b82]
+    by smtp.strato.de (RZmta 47.34.5 AUTH)
+    with ESMTPSA id 40acd5xALIRrdH6
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Sun, 21 Nov 2021 19:27:53 +0100 (CET)
+Subject: Re: [PATCH] can: bittiming: replace CAN units with the SI metric
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can@vger.kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jimmy Assarsson <extja@kvaser.com>
+References: <20211119161850.202094-1-mailhol.vincent@wanadoo.fr>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <38544770-9e5f-1b1b-1f0a-a7ff1719327d@hartkopp.net>
+Date:   Sun, 21 Nov 2021 19:27:47 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211119161850.202094-1-mailhol.vincent@wanadoo.fr>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri. 19 Nov 2021 at 05:20, Jimmy Assarsson <extja@kvaser.com> wrote:
-> Do not increase net_device_stats rx_{packets,bytes} when receiving
-> error frames.
+
+
+On 19.11.21 17:18, Vincent Mailhol wrote:
+> In [1], we introduced a set of units in linux/can/bittiming.h. Since
+> then, generic SI prefix were added to linux/units.h in [2]. Those new
+> prefix can perfectly replace the CAN specific units.
 > 
-> Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
+> This patch replaces all occurrences of the CAN units with their
+> corresponding prefix according to below table.
+> 
+>   CAN units	SI metric prefix
+>   -------------------------------
+>   CAN_KBPS	KILO
+>   CAN_MBPS	MEGA
+>   CAM_MHZ	MEGA
+> 
+> The macro declarations are then removed from linux/can/bittiming.h
+> 
+> [1] commit 1d7750760b70 ("can: bittiming: add CAN_KBPS, CAN_MBPS and
+> CAN_MHZ macros")
+> 
+> [2] commit 26471d4a6cf8 ("units: Add SI metric prefix definitions")
+> 
+> Suggested-by: Jimmy Assarsson <extja@kvaser.com>
+> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 > ---
->  drivers/net/can/kvaser_pciefd.c | 3 ---
->  1 file changed, 3 deletions(-)
+>   drivers/net/can/dev/bittiming.c           | 5 +++--
+>   drivers/net/can/usb/etas_es58x/es581_4.c  | 5 +++--
+>   drivers/net/can/usb/etas_es58x/es58x_fd.c | 5 +++--
+>   include/linux/can/bittiming.h             | 7 -------
+>   4 files changed, 9 insertions(+), 13 deletions(-)
 > 
-> diff --git a/drivers/net/can/kvaser_pciefd.c b/drivers/net/can/kvaser_pciefd.c
-> index 74d9899fc904..2c98befcf2a0 100644
-> --- a/drivers/net/can/kvaser_pciefd.c
-> +++ b/drivers/net/can/kvaser_pciefd.c
-> @@ -1304,9 +1304,6 @@ static int kvaser_pciefd_rx_error_frame(struct kvaser_pciefd_can *can,
->  	cf->data[6] = bec.txerr;
->  	cf->data[7] = bec.rxerr;
->  
-> -	stats->rx_packets++;
-> -	stats->rx_bytes += cf->len;
+> diff --git a/drivers/net/can/dev/bittiming.c b/drivers/net/can/dev/bittiming.c
+> index 0509625c3082..a5c9f973802a 100644
+> --- a/drivers/net/can/dev/bittiming.c
+> +++ b/drivers/net/can/dev/bittiming.c
+> @@ -4,6 +4,7 @@
+>    * Copyright (C) 2008-2009 Wolfgang Grandegger <wg@grandegger.com>
+>    */
+>   
+> +#include <linux/units.h>
+>   #include <linux/can/dev.h>
+>   
+>   #ifdef CONFIG_CAN_CALC_BITTIMING
+> @@ -81,9 +82,9 @@ int can_calc_bittiming(struct net_device *dev, struct can_bittiming *bt,
+>   	if (bt->sample_point) {
+>   		sample_point_nominal = bt->sample_point;
+>   	} else {
+> -		if (bt->bitrate > 800 * CAN_KBPS)
+> +		if (bt->bitrate > 800 * KILO)
+>   			sample_point_nominal = 750;
+> -		else if (bt->bitrate > 500 * CAN_KBPS)
+> +		else if (bt->bitrate > 500 * KILO)
+>   			sample_point_nominal = 800;
+>   		else
+>   			sample_point_nominal = 875;
+> diff --git a/drivers/net/can/usb/etas_es58x/es581_4.c b/drivers/net/can/usb/etas_es58x/es581_4.c
+> index 14e360c9f2c9..ed340141c712 100644
+> --- a/drivers/net/can/usb/etas_es58x/es581_4.c
+> +++ b/drivers/net/can/usb/etas_es58x/es581_4.c
+> @@ -10,6 +10,7 @@
+>    */
+>   
+>   #include <linux/kernel.h>
+> +#include <linux/units.h>
+>   #include <asm/unaligned.h>
+>   
+>   #include "es58x_core.h"
+> @@ -469,8 +470,8 @@ const struct es58x_parameters es581_4_param = {
+>   	.bittiming_const = &es581_4_bittiming_const,
+>   	.data_bittiming_const = NULL,
+>   	.tdc_const = NULL,
+> -	.bitrate_max = 1 * CAN_MBPS,
+> -	.clock = {.freq = 50 * CAN_MHZ},
+> +	.bitrate_max = 1 * MEGA,
+> +	.clock = {.freq = 50 * MEGA},
+
+IMO we are losing information here.
+
+It feels you suggest to replace MHz with M.
+
+So where is the Hz information then?
+
+>   	.ctrlmode_supported = CAN_CTRLMODE_CC_LEN8_DLC,
+>   	.tx_start_of_frame = 0xAFAF,
+>   	.rx_start_of_frame = 0xFAFA,
+> diff --git a/drivers/net/can/usb/etas_es58x/es58x_fd.c b/drivers/net/can/usb/etas_es58x/es58x_fd.c
+> index 4f0cae29f4d8..aec299bed6dc 100644
+> --- a/drivers/net/can/usb/etas_es58x/es58x_fd.c
+> +++ b/drivers/net/can/usb/etas_es58x/es58x_fd.c
+> @@ -12,6 +12,7 @@
+>    */
+>   
+>   #include <linux/kernel.h>
+> +#include <linux/units.h>
+>   #include <asm/unaligned.h>
+>   
+>   #include "es58x_core.h"
+> @@ -522,8 +523,8 @@ const struct es58x_parameters es58x_fd_param = {
+>   	 * Mbps work in an optimal environment but are not recommended
+>   	 * for production environment.
+>   	 */
+> -	.bitrate_max = 8 * CAN_MBPS,
+> -	.clock = {.freq = 80 * CAN_MHZ},
+> +	.bitrate_max = 8 * MEGA,
+> +	.clock = {.freq = 80 * MEGA},
+>   	.ctrlmode_supported = CAN_CTRLMODE_LOOPBACK | CAN_CTRLMODE_LISTENONLY |
+>   	    CAN_CTRLMODE_3_SAMPLES | CAN_CTRLMODE_FD | CAN_CTRLMODE_FD_NON_ISO |
+>   	    CAN_CTRLMODE_CC_LEN8_DLC | CAN_CTRLMODE_TDC_AUTO,
+> diff --git a/include/linux/can/bittiming.h b/include/linux/can/bittiming.h
+> index 20b50baf3a02..a81652d1c6f3 100644
+> --- a/include/linux/can/bittiming.h
+> +++ b/include/linux/can/bittiming.h
+> @@ -12,13 +12,6 @@
+>   #define CAN_SYNC_SEG 1
+>   
+>   
+> -/* Kilobits and Megabits per second */
+> -#define CAN_KBPS 1000UL
+> -#define CAN_MBPS 1000000UL
 > -
->  	netif_rx(skb);
->  	return 0;
->  }
+> -/* Megahertz */
+> -#define CAN_MHZ 1000000UL
 
-I think that this patch makes sense because the CAN error frames do
-not exists on the wire: only an error flag is transmitted.
+So what about
 
-However, the current consensus is that the rx_packets and rx_bytes
-statistics should be incremented for CAN error frames. And I think
-that consistency between the drivers is the first priority.
+#define CAN_KBPS KILO /* kilo bits per second */
+#define CAN_MBPS MEGA /* mega bits per second */
 
-I inquired here in the past to ask if it made sense to stop increasing
-the rx stats for CAN error frames:
+#define CAN_MHZ MEGA /* mega hertz */
 
-https://lore.kernel.org/linux-can/CAMZ6Rq+8YSRqXU7CPrT9FKnWZ1G9xkSr3wt185r2CswmxhXPVg@mail.gmail.com/t/#u
 
-But the discussion did not raise interest. I am fine to send a tree
-wide cleaning patch, but first, I would like to have people agree on
-this.
+??
+
+Regards,
+Oliver
+
+
+> -
+>   #define CAN_CTRLMODE_TDC_MASK					\
+>   	(CAN_CTRLMODE_TDC_AUTO | CAN_CTRLMODE_TDC_MANUAL)
+>   
+> 
