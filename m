@@ -2,40 +2,40 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F27D458ECE
-	for <lists+linux-can@lfdr.de>; Mon, 22 Nov 2021 13:57:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59AA5458ED1
+	for <lists+linux-can@lfdr.de>; Mon, 22 Nov 2021 13:57:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239693AbhKVNAF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 22 Nov 2021 08:00:05 -0500
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:33668 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239689AbhKVNAE (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 22 Nov 2021 08:00:04 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1AMCuls8116345;
-        Mon, 22 Nov 2021 06:56:47 -0600
+        id S239709AbhKVNAJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 22 Nov 2021 08:00:09 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:52426 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239702AbhKVNAI (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 22 Nov 2021 08:00:08 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1AMCuqUj088078;
+        Mon, 22 Nov 2021 06:56:52 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1637585807;
-        bh=eVWmINi4lrTAVn2s9bs20xrtU+Q+mEUZO+xNmE4+t6I=;
+        s=ti-com-17Q1; t=1637585812;
+        bh=201VFbQiGQ4XtlfCzVLgxMzLOwwlv2IozZLdJGUR3dY=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=y1yvVryoYzJrK7Rmy9jxlGw6WFPs4QALqtfqOk//IDdtrZ1JZ+/jttiZNDfRsBPm+
-         5cvDIUsLqCz92Ct7I81GUebWqHquPcN8uZm8TchIN3noAFPk+Ky9xoafpqd3244g/R
-         GztTF93h+DgeLVrROU9e7ebO7Ea1h/7MfbqFVato=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1AMCulL3066716
+        b=yGiyvmXC0PSldBAXjpXtnmUOk45cjVLyYoC1hkBmf652NJv7lreIyfnkaYZ9dbA3m
+         tdh49N0z4KReD75RUQ2sL3uJXucQjHCZEmhTBBEQO894/dxnC0B/T/Yr96cMXRwp5Z
+         bLiwJQzchQXJgDW8Qovx1YynpP5q4cbb38HGSO9Y=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1AMCuqYa118761
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 22 Nov 2021 06:56:47 -0600
-Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 22 Nov 2021 06:56:52 -0600
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 22
- Nov 2021 06:56:46 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ Nov 2021 06:56:51 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 22 Nov 2021 06:56:46 -0600
+ Frontend Transport; Mon, 22 Nov 2021 06:56:51 -0600
 Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1AMCuQi2109786;
-        Mon, 22 Nov 2021 06:56:43 -0600
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1AMCuQi3109786;
+        Mon, 22 Nov 2021 06:56:48 -0600
 From:   Aswath Govindraju <a-govindraju@ti.com>
 CC:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
         Aswath Govindraju <a-govindraju@ti.com>,
@@ -47,9 +47,9 @@ CC:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
         Vinod Koul <vkoul@kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-can@vger.kernel.org>,
         <linux-phy@lists.infradead.org>
-Subject: [PATCH RFC v2 3/4] mux: Add support for reading mux enable state from DT
-Date:   Mon, 22 Nov 2021 18:26:23 +0530
-Message-ID: <20211122125624.6431-4-a-govindraju@ti.com>
+Subject: [PATCH RFC v2 4/4] phy: phy-can-transceiver: Add support for setting mux
+Date:   Mon, 22 Nov 2021 18:26:24 +0530
+Message-ID: <20211122125624.6431-5-a-govindraju@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20211122125624.6431-1-a-govindraju@ti.com>
 References: <20211122125624.6431-1-a-govindraju@ti.com>
@@ -61,96 +61,80 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-In some cases, we might need to provide the state of the mux to be set for
-the operation of a given peripheral. Therefore, pass this information using
-the second argument of the mux-controls property.
+On some boards, for routing CAN signals from controller to transceiver,
+muxes might need to be set. Therefore, add support for setting the mux by
+reading the mux-controls property from the device tree node.
 
 Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
 ---
+ drivers/phy/phy-can-transceiver.c | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-Notes:
-- The function mux_control_get() always return the mux_control for a single
-  line. So, control for mutiple lines cannot be represented in the
-  mux-controls property.
-- For representing multiple lines of control, multiple entries need to be
-  used along with mux-names for reading them.
-- If a device uses both the states of the mux line then #mux-control-cells
-  can be set to 1 and enable_state will not be set in this case.
-
- drivers/mux/core.c           | 20 ++++++++++++++++++--
- include/linux/mux/consumer.h |  1 +
- include/linux/mux/driver.h   |  1 +
- 3 files changed, 20 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/mux/core.c b/drivers/mux/core.c
-index 22f4709768d1..51140748d2d6 100644
---- a/drivers/mux/core.c
-+++ b/drivers/mux/core.c
-@@ -294,6 +294,18 @@ unsigned int mux_control_states(struct mux_control *mux)
+diff --git a/drivers/phy/phy-can-transceiver.c b/drivers/phy/phy-can-transceiver.c
+index 6f3fe37dee0e..15056b9d68ba 100644
+--- a/drivers/phy/phy-can-transceiver.c
++++ b/drivers/phy/phy-can-transceiver.c
+@@ -10,6 +10,7 @@
+ #include<linux/module.h>
+ #include<linux/gpio.h>
+ #include<linux/gpio/consumer.h>
++#include <linux/mux/consumer.h>
+ 
+ struct can_transceiver_data {
+ 	u32 flags;
+@@ -21,13 +22,23 @@ struct can_transceiver_phy {
+ 	struct phy *generic_phy;
+ 	struct gpio_desc *standby_gpio;
+ 	struct gpio_desc *enable_gpio;
++	struct mux_control *mux_ctrl;
+ };
+ 
+ /* Power on function */
+ static int can_transceiver_phy_power_on(struct phy *phy)
+ {
++	int ret;
+ 	struct can_transceiver_phy *can_transceiver_phy = phy_get_drvdata(phy);
+ 
++	if (can_transceiver_phy->mux_ctrl) {
++		ret = mux_control_select(can_transceiver_phy->mux_ctrl,
++					 mux_control_enable_state(can_transceiver_phy->mux_ctrl));
++		if (ret) {
++			dev_err(&phy->dev, "Failed to select CAN mux: %d\n", ret);
++			return ret;
++		}
++	}
+ 	if (can_transceiver_phy->standby_gpio)
+ 		gpiod_set_value_cansleep(can_transceiver_phy->standby_gpio, 0);
+ 	if (can_transceiver_phy->enable_gpio)
+@@ -45,6 +56,8 @@ static int can_transceiver_phy_power_off(struct phy *phy)
+ 		gpiod_set_value_cansleep(can_transceiver_phy->standby_gpio, 1);
+ 	if (can_transceiver_phy->enable_gpio)
+ 		gpiod_set_value_cansleep(can_transceiver_phy->enable_gpio, 0);
++	if (can_transceiver_phy->mux_ctrl)
++		mux_control_deselect(can_transceiver_phy->mux_ctrl);
+ 
+ 	return 0;
  }
- EXPORT_SYMBOL_GPL(mux_control_states);
+@@ -95,6 +108,19 @@ static int can_transceiver_phy_probe(struct platform_device *pdev)
+ 	match = of_match_node(can_transceiver_phy_ids, pdev->dev.of_node);
+ 	drvdata = match->data;
  
-+/**
-+ * mux_control_enable_state() - Query for the enable state.
-+ * @mux: The mux-control to query.
-+ *
-+ * Return: State to be set in the mux to enable a given device
-+ */
-+unsigned int mux_control_enable_state(struct mux_control *mux)
-+{
-+	return mux->enable_state;
-+}
-+EXPORT_SYMBOL_GPL(mux_control_enable_state);
++	if (of_property_read_bool(dev->of_node, "mux-controls")) {
++		struct mux_control *control;
++		int ret;
 +
- /*
-  * The mux->lock must be down when calling this function.
-  */
-@@ -481,8 +493,7 @@ struct mux_control *mux_control_get(struct device *dev, const char *mux_name)
- 	if (!mux_chip)
- 		return ERR_PTR(-EPROBE_DEFER);
- 
--	if (args.args_count > 1 ||
--	    (!args.args_count && (mux_chip->controllers > 1))) {
-+	if (!args.args_count && mux_chip->controllers > 1) {
- 		dev_err(dev, "%pOF: wrong #mux-control-cells for %pOF\n",
- 			np, args.np);
- 		put_device(&mux_chip->dev);
-@@ -500,6 +511,11 @@ struct mux_control *mux_control_get(struct device *dev, const char *mux_name)
- 		return ERR_PTR(-EINVAL);
- 	}
- 
-+	if (args.args_count == 2) {
-+		mux_chip->mux[controller].enable_state = args.args[1];
-+		mux_chip->mux[controller].idle_state = !args.args[1];
++		control = devm_mux_control_get(dev, NULL);
++		if (IS_ERR(control)) {
++			ret = PTR_ERR(control);
++			dev_err_probe(&pdev->dev, ret, "failed to get mux\n");
++			return PTR_ERR(control);
++		}
++		can_transceiver_phy->mux_ctrl = control;
 +	}
 +
- 	return &mux_chip->mux[controller];
- }
- EXPORT_SYMBOL_GPL(mux_control_get);
-diff --git a/include/linux/mux/consumer.h b/include/linux/mux/consumer.h
-index 7a09b040ac39..cb861eab8aad 100644
---- a/include/linux/mux/consumer.h
-+++ b/include/linux/mux/consumer.h
-@@ -16,6 +16,7 @@ struct device;
- struct mux_control;
- 
- unsigned int mux_control_states(struct mux_control *mux);
-+unsigned int mux_control_enable_state(struct mux_control *mux);
- int __must_check mux_control_select_delay(struct mux_control *mux,
- 					  unsigned int state,
- 					  unsigned int delay_us);
-diff --git a/include/linux/mux/driver.h b/include/linux/mux/driver.h
-index 18824064f8c0..7db378dabdb2 100644
---- a/include/linux/mux/driver.h
-+++ b/include/linux/mux/driver.h
-@@ -48,6 +48,7 @@ struct mux_control {
- 	int cached_state;
- 
- 	unsigned int states;
-+	unsigned int enable_state;
- 	int idle_state;
- 
- 	ktime_t last_change;
+ 	phy = devm_phy_create(dev, dev->of_node,
+ 			      &can_transceiver_phy_ops);
+ 	if (IS_ERR(phy)) {
 -- 
 2.17.1
 
