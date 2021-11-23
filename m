@@ -2,65 +2,51 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7670045ADB8
-	for <lists+linux-can@lfdr.de>; Tue, 23 Nov 2021 22:01:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF2845AE11
+	for <lists+linux-can@lfdr.de>; Tue, 23 Nov 2021 22:10:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231892AbhKWVEW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 23 Nov 2021 16:04:22 -0500
-Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.83]:32440 "EHLO
+        id S236973AbhKWVNV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 23 Nov 2021 16:13:21 -0500
+Received: from mo4-p02-ob.smtp.rzone.de ([81.169.146.168]:18995 "EHLO
         mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbhKWVEW (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 23 Nov 2021 16:04:22 -0500
-X-Greylist: delayed 461 seconds by postgrey-1.27 at vger.kernel.org; Tue, 23 Nov 2021 16:04:21 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1637701266;
+        with ESMTP id S233389AbhKWVNU (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 23 Nov 2021 16:13:20 -0500
+X-Greylist: delayed 1658 seconds by postgrey-1.27 at vger.kernel.org; Tue, 23 Nov 2021 16:13:20 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1637701809;
     s=strato-dkim-0002; d=hartkopp.net;
     h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
     From:Subject:Sender;
-    bh=mg4VWecMO36Enlno6yIYtnHI//ggzrvLe9u3FrxrYmg=;
-    b=nX9hY+fbYWczN0YtaeWpolPbXSvoNcvtrHEapO3PR+95xLVH1Ugb9M6ljGobYozU2t
-    YJm1jl5JK9YN+jv96BfMiDTOZzKVyqb76oRbA0JzfQCWlpBt70lNiNA5GOrK6mMfVWw2
-    eElOI70yselad6aMhMS+3QvNwAwUWe9pZW57BuufAPpUV5UE0Qu4DDvpKjg1xINY7Slr
-    +oPxM0yGnTBgqAUCSfgIYyP9RPnye2HL3ekaDJPLqak9vlNARgDMfMtlo+anPb+IdkcM
-    vORpzXeW/0KBf6WyNdSyw+WE6ssUABSINlt7prGVgMhq1Uhh1FJb+6CJSwdZK6xODYWq
-    gOjg==
+    bh=3oNYpWlA+i2uiKkkfogiuDtNFkcFf0oANh+xeOwrb4Q=;
+    b=qpPptg68PmQcJGTTHkFIHzJ68m5ujWrGdwfHP2Te4J9IseNiAcuLvGm2SPLfnKnWaz
+    0pBoIaXS6aOE9yfa9litHXm5r+uWv7MJBL9oM/DGAnNI0lrT9w4NieY+bNyI4AQF8Qc2
+    DuOVjed5SZz3tgnT8Eup9nIEEitfRFSOp9JLV9KxtSQ72Co0JwCPtEuQdOX7gFtRmZqu
+    m9BpDDfzEhIXFZKtMDiRVeUbdas+zYbo0yVImQ9k5qSQs0Nqdhc/6U4c+DBt6EfvKPp5
+    w01tyAA2MR3bU17UGYcKrn8G+lIAa459tlQE6/v18sPNS5/UhRjWXRqd07oa049At1/Q
+    +E8w==
 Authentication-Results: strato.com;
     dkim=none
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdd0DIgVuBOfXW6v7w=="
 X-RZG-CLASS-ID: mo00
 Received: from [IPv6:2a00:6020:1cfa:f900::b82]
     by smtp.strato.de (RZmta 47.34.6 AUTH)
-    with ESMTPSA id a04d59xANL146aE
+    with ESMTPSA id a04d59xANLA86ap
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-    Tue, 23 Nov 2021 22:01:04 +0100 (CET)
-Subject: Re: [PATCH v1 1/2] can: do not increase rx statistics when receiving
- CAN error frames
+    Tue, 23 Nov 2021 22:10:08 +0100 (CET)
+Subject: Re: [PATCH v1 0/2] fix statistics for CAN RTR and Error frames
 To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         linux-can@vger.kernel.org
 Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        Jimmy Assarsson <extja@kvaser.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
-        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Stephane Grosjean <s.grosjean@peak-system.com>
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
 References: <20211123115333.624335-1-mailhol.vincent@wanadoo.fr>
- <20211123115333.624335-2-mailhol.vincent@wanadoo.fr>
 From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <aafec053-1054-4797-e1f1-e89586fe326f@hartkopp.net>
-Date:   Tue, 23 Nov 2021 22:01:04 +0100
+Message-ID: <bc682dbe-c74e-cd8a-ab05-78a6b4079ebf@hartkopp.net>
+Date:   Tue, 23 Nov 2021 22:10:08 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <20211123115333.624335-2-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20211123115333.624335-1-mailhol.vincent@wanadoo.fr>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -71,56 +57,71 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 
 On 23.11.21 12:53, Vincent Mailhol wrote:
-> CAN error skb is an interface specific to socket CAN. The CAN error
-> skb does not correspond to any actual CAN frame sent on the wire. Only
-> an error flag and a delimiter are transmitted when an error occurs
-> (c.f. ISO 11898-1 section 10.4.4.2 "Error flag").
+> There are two common errors which are made when reporting the CAN RX
+> statistics:
 > 
-> For this reason, it makes no sense to increment the rx_packets and
-> rx_bytes fields of struct net_device_stats because no actual payload
-> were transmitted on the wire.
+>    1. Incrementing the "normal" RX stats when receiving an Error
+>    frame. Error frames is an abstraction of Socket CAN and does not
+>    exist on the wire.
 > 
+>    2. Counting the length of the Remote Transmission Frames (RTR). The
+>    length of an RTR frame is the length of the requested frame not the
+>    actual payload. In reality the payload of an RTR frame is always 0
+>    bytes long.
+> 
+> This patch series fix those two issues for all CAN drivers.
+> 
+> Vincent Mailhol (2):
+>    can: do not increase rx statistics when receiving CAN error frames
+>    can: do not increase rx_bytes statistics for RTR frames
 
-(..)
+I would suggest to upstream this change without bringing it to older 
+(stable) trees.
 
-> diff --git a/drivers/net/can/dev/rx-offload.c b/drivers/net/can/dev/rx-offload.c
-> index 37b0cc65237b..bb47e9a49240 100644
-> --- a/drivers/net/can/dev/rx-offload.c
-> +++ b/drivers/net/can/dev/rx-offload.c
-> @@ -54,8 +54,10 @@ static int can_rx_offload_napi_poll(struct napi_struct *napi, int quota)
->   		struct can_frame *cf = (struct can_frame *)skb->data;
->   
->   		work_done++;
-> -		stats->rx_packets++;
-> -		stats->rx_bytes += cf->len;
-> +		if (!(cf->can_id & CAN_ERR_MASK)) {
+It doesn't fix any substantial flaw which needs to be backported IMHO.
 
-This looks wrong.
+Btw. can you please change 'error frames' to 'error message frames'?
 
-Did you think of CAN_ERR_FLAG ??
+We had a discussion some years ago that the 'error frames' are used as 
+term inside the CAN protocol.
+
+Thanks,
+Oliver
 
 
-> +			stats->rx_packets++;
-> +			stats->rx_bytes += cf->len;
-> +		}
->   		netif_receive_skb(skb);
-
-(..)
-
-> diff --git a/drivers/net/can/usb/ucan.c b/drivers/net/can/usb/ucan.c
-> index 1679cbe45ded..d582c39fc8d0 100644
-> --- a/drivers/net/can/usb/ucan.c
-> +++ b/drivers/net/can/usb/ucan.c
-> @@ -621,8 +621,10 @@ static void ucan_rx_can_msg(struct ucan_priv *up, struct ucan_message_in *m)
->   		memcpy(cf->data, m->msg.can_msg.data, cf->len);
->   
->   	/* don't count error frames as real packets */
-> -	stats->rx_packets++;
-> -	stats->rx_bytes += cf->len;
-> +	if (!(cf->can_id & CAN_ERR_FLAG)) {
-
-Ah, here we are :-)
-
-> +		stats->rx_packets++;
-> +		stats->rx_bytes += cf->len;
-> +	}
+> 
+>   drivers/net/can/at91_can.c                      |  9 ++-------
+>   drivers/net/can/c_can/c_can_main.c              |  8 ++------
+>   drivers/net/can/cc770/cc770.c                   |  6 ++----
+>   drivers/net/can/dev/dev.c                       |  4 ----
+>   drivers/net/can/dev/rx-offload.c                |  7 +++++--
+>   drivers/net/can/grcan.c                         |  3 ++-
+>   drivers/net/can/ifi_canfd/ifi_canfd.c           |  8 ++------
+>   drivers/net/can/janz-ican3.c                    |  3 ++-
+>   drivers/net/can/kvaser_pciefd.c                 |  8 ++------
+>   drivers/net/can/m_can/m_can.c                   | 10 ++--------
+>   drivers/net/can/mscan/mscan.c                   | 10 ++++++----
+>   drivers/net/can/pch_can.c                       |  6 ++----
+>   drivers/net/can/peak_canfd/peak_canfd.c         |  7 ++-----
+>   drivers/net/can/rcar/rcar_can.c                 |  9 +++------
+>   drivers/net/can/rcar/rcar_canfd.c               |  7 ++-----
+>   drivers/net/can/sja1000/sja1000.c               |  5 ++---
+>   drivers/net/can/slcan.c                         |  3 ++-
+>   drivers/net/can/spi/hi311x.c                    |  3 ++-
+>   drivers/net/can/spi/mcp251x.c                   |  3 ++-
+>   drivers/net/can/sun4i_can.c                     | 10 ++++------
+>   drivers/net/can/usb/ems_usb.c                   |  5 ++---
+>   drivers/net/can/usb/esd_usb2.c                  |  5 ++---
+>   drivers/net/can/usb/etas_es58x/es58x_core.c     |  7 -------
+>   .../net/can/usb/kvaser_usb/kvaser_usb_core.c    |  2 --
+>   .../net/can/usb/kvaser_usb/kvaser_usb_hydra.c   | 14 ++++----------
+>   .../net/can/usb/kvaser_usb/kvaser_usb_leaf.c    |  7 ++-----
+>   drivers/net/can/usb/mcba_usb.c                  |  3 ++-
+>   drivers/net/can/usb/peak_usb/pcan_usb.c         |  5 ++---
+>   drivers/net/can/usb/peak_usb/pcan_usb_fd.c      | 11 ++++-------
+>   drivers/net/can/usb/peak_usb/pcan_usb_pro.c     | 11 +++++------
+>   drivers/net/can/usb/ucan.c                      |  7 +++++--
+>   drivers/net/can/usb/usb_8dev.c                  | 10 ++++------
+>   drivers/net/can/xilinx_can.c                    | 17 ++++++-----------
+>   33 files changed, 86 insertions(+), 147 deletions(-)
+> 
