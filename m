@@ -2,104 +2,65 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08F9F459D99
-	for <lists+linux-can@lfdr.de>; Tue, 23 Nov 2021 09:14:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74CFE45A120
+	for <lists+linux-can@lfdr.de>; Tue, 23 Nov 2021 12:17:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbhKWIRr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 23 Nov 2021 03:17:47 -0500
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:35762 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbhKWIRr (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 23 Nov 2021 03:17:47 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1AN8ESHh024421;
-        Tue, 23 Nov 2021 02:14:28 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1637655268;
-        bh=y5EkiJ7SMkpoSDDEcOeXgHBrlYWqeQNdWDeIJEVvZYk=;
-        h=Subject:CC:References:From:Date:In-Reply-To;
-        b=mY19MsNzNTLzrQNmAD4U70WVMUmzGu2bPhSaBnORwJOzyAn2lRd35+qIZrpHgje9L
-         K+aFWfRsiiIrA7/B0C8OCETvcMbLK+rZ2JPhlZX7Bqjy67cTzPb1xNoQdAYGnvBTG9
-         RMsVJ7yBee1vEZds0EkmVk7rfAndG9pMLAI94TRA=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1AN8ES1C006944
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 23 Nov 2021 02:14:28 -0600
-Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 23
- Nov 2021 02:14:28 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 23 Nov 2021 02:14:28 -0600
-Received: from [10.250.232.185] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1AN8EOPw107046;
-        Tue, 23 Nov 2021 02:14:25 -0600
-Subject: Re: [PATCH RFC v2 0/4] MUX: Add support for reading enable state from
- DT
-CC:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Peter Rosin <peda@axentia.se>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-can@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>
-References: <20211122125624.6431-1-a-govindraju@ti.com>
-From:   Aswath Govindraju <a-govindraju@ti.com>
-Message-ID: <b9ad641d-e697-fcd7-a113-685d371bb0ba@ti.com>
-Date:   Tue, 23 Nov 2021 13:44:23 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S235898AbhKWLUP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 23 Nov 2021 06:20:15 -0500
+Received: from smtp07.smtpout.orange.fr ([80.12.242.129]:60698 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234572AbhKWLUP (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 23 Nov 2021 06:20:15 -0500
+Received: from tomoyo.flets-east.jp ([114.149.34.46])
+        by smtp.orange.fr with ESMTPA
+        id pTnEmyRN42lVYpTnLmed4t; Tue, 23 Nov 2021 12:17:06 +0100
+X-ME-Helo: tomoyo.flets-east.jp
+X-ME-Auth: MDU0YmViZGZmMDIzYiBlMiM2NTczNTRjNWZkZTMwOGRiOGQ4ODf3NWI1ZTMyMzdiODlhOQ==
+X-ME-Date: Tue, 23 Nov 2021 12:17:06 +0100
+X-ME-IP: 114.149.34.46
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH] can: pch_can: pch_can_rx_normal: fix use after free
+Date:   Tue, 23 Nov 2021 20:16:54 +0900
+Message-Id: <20211123111654.621610-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <20211122125624.6431-1-a-govindraju@ti.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi All,
+After calling netif_receive_skb(skb), dereferencing skb is unsafe.
+Especially, the can_frame cf which aliases skb memory is dereferenced
+just after the call netif_receive_skb(skb).
 
-On 22/11/21 6:26 pm, Aswath Govindraju wrote:
-> - The following series of patches add support for reading the state of the
->   mux to be set for enabling given device.
-> - As these are RFC patches I have combined them into a single series for
->   better understanding of the reason behind making this change.
-> 
-> Changes since v1:
-> - Added support for reading the enable state from DT instead of hardcoding
->   the state to be set to 1.
-> - Made relavent changes in the bindings
-> 
-> Link to v1,
-> - https://patchwork.kernel.org/project/linux-phy/list/?series=578863&state=*
-> 
-> Aswath Govindraju (4):
->   dt-bindings: mux: Increase the number of arguments in mux-controls
->   dt-bindings: phy: ti,tcan104x-can: Document mux-controls property
->   mux: Add support for reading mux enable state from DT
->   phy: phy-can-transceiver: Add support for setting mux
-> 
+Reordering the lines solves the issue.
 
-Thank you for the comments. I have made changes based on the comments
-received and posted a v3 of this series.
+Fixes: b21d18b51b31 ("can: Topcliff: Add PCH_CAN driver.")
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+---
+ drivers/net/can/pch_can.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Regards,
-Aswath
-
->  .../devicetree/bindings/mux/gpio-mux.yaml     |  2 +-
->  .../bindings/mux/mux-controller.yaml          |  2 +-
->  .../bindings/phy/ti,tcan104x-can.yaml         |  8 ++++++
->  drivers/mux/core.c                            | 20 ++++++++++++--
->  drivers/phy/phy-can-transceiver.c             | 26 +++++++++++++++++++
->  include/linux/mux/consumer.h                  |  1 +
->  include/linux/mux/driver.h                    |  1 +
->  7 files changed, 56 insertions(+), 4 deletions(-)
-> 
+diff --git a/drivers/net/can/pch_can.c b/drivers/net/can/pch_can.c
+index 92a54a5fd4c5..964c8a09226a 100644
+--- a/drivers/net/can/pch_can.c
++++ b/drivers/net/can/pch_can.c
+@@ -692,11 +692,11 @@ static int pch_can_rx_normal(struct net_device *ndev, u32 obj_num, int quota)
+ 			cf->data[i + 1] = data_reg >> 8;
+ 		}
+ 
+-		netif_receive_skb(skb);
+ 		rcv_pkts++;
+ 		stats->rx_packets++;
+ 		quota--;
+ 		stats->rx_bytes += cf->len;
++		netif_receive_skb(skb);
+ 
+ 		pch_fifo_thresh(priv, obj_num);
+ 		obj_num++;
+-- 
+2.32.0
 
