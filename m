@@ -2,123 +2,84 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ABC745B00F
-	for <lists+linux-can@lfdr.de>; Wed, 24 Nov 2021 00:26:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A56E45B042
+	for <lists+linux-can@lfdr.de>; Wed, 24 Nov 2021 00:35:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234887AbhKWX37 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Tue, 23 Nov 2021 18:29:59 -0500
-Received: from mail-yb1-f176.google.com ([209.85.219.176]:39864 "EHLO
-        mail-yb1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbhKWX35 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 23 Nov 2021 18:29:57 -0500
-Received: by mail-yb1-f176.google.com with SMTP id v203so1848138ybe.6;
-        Tue, 23 Nov 2021 15:26:48 -0800 (PST)
+        id S230442AbhKWXi1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 23 Nov 2021 18:38:27 -0500
+Received: from mail-yb1-f173.google.com ([209.85.219.173]:33445 "EHLO
+        mail-yb1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240585AbhKWXiY (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 23 Nov 2021 18:38:24 -0500
+Received: by mail-yb1-f173.google.com with SMTP id v7so2027930ybq.0;
+        Tue, 23 Nov 2021 15:35:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=MGa8R8PmTZ9AIUNlXC04NS72g29Wm45DV8iml8HYRbA=;
-        b=4I6NlNVulS9Ozd2HgVIjC8VZ3GY5nS1nbpYoxkPyK++n0ELrrOfIRzQuTXzwLN6mPo
-         vDOPSxbecUDWVE4JnFDCcP1hrDkzWE2o/pZVo1hBAlbeJ2u0WGOMsdhNFnaR2jTBjhQu
-         01J12YEePvpwyBuYrL+rJXpR1PSB2bRUoU4As4N1wrNPsvec1poY15F+OJfmzeSIVqb+
-         CucYvcKNsURvMXFOCVSDC+9bV8aKpsb30Ld3hzqbWXZV/6gUEqK4FmTpQ8HoLKPfmZRY
-         AFJhQMsoFX4AZlTJmw5xI1zcKvtkhwDlU2nCOfiY7JwzZ4W5EjVGX974ylZVKCKCI6ee
-         80PQ==
-X-Gm-Message-State: AOAM533haSZ4vf/sj2D6Wof4rK+6PsFEyZinaUcndH6m381jnnbWmfrF
-        7jm69YdkuUAqk8amNfMAhRnq0c6YefW3JbRvwqajZl5whsU=
-X-Google-Smtp-Source: ABdhPJxRKWRo7oLdXDrow4b4fFm2faOVEKoLcb3Qp7VSqWqi7Tc0iYe6CUYAU7gvwP3x4nCmeGms+iDChov2Slw7MRE=
-X-Received: by 2002:a25:ba0f:: with SMTP id t15mr11523358ybg.62.1637710008392;
- Tue, 23 Nov 2021 15:26:48 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=5HVBVN9+sTrLodgeig4D1EWIc9RQ5SNWBFmWu98vXL0=;
+        b=f6kvHWRyM1JdQRC8Kmh9zPO+ZORff5Td+7YonaI/Q7uHsGt8z7iJ6w6S/DTMTPv2bh
+         Mc5eidWUAlcvPoZcsH/W0pURMeBgWh9uZ8tO/CRsiP3UZX1QQRhMdlFeXSLpEhiD+FlI
+         9Jenj1j00ZMv4CI6Id3dr3129EwDWugT0XU1Sp+g+9kUAZqQ27vZboRYWd/+PZiLtCpM
+         iQ80AL+T0MRuvyK8DY/jW5g7DHn7yRypjWKeOM/1GZNDYjUrjl6kiaSD9zNzMfKwpKxz
+         a+Iu1fUX2nd5dD8/y4dPbYqRA0mSEajH1eiQKyKuYbd/LuItiPLDVfd4lHjd1RCqPwRF
+         h4dQ==
+X-Gm-Message-State: AOAM530N9fkHw9Qn+aHZkaELGCY/MICwcYWp+Arg6TeotNYyhkC8cdu+
+        bCn3j/CRho2BvkYw09bygcxHdN5xefV3Kch+CSU=
+X-Google-Smtp-Source: ABdhPJw/S8b+4DBi3I9No3zeqKoBNlDBHhzozk6T4jzYhC+n6oU4VdXxRo1GxJXjZxWTLDQlmooFebwqfimrYkzrznk=
+X-Received: by 2002:a25:d214:: with SMTP id j20mr10478211ybg.536.1637710515640;
+ Tue, 23 Nov 2021 15:35:15 -0800 (PST)
 MIME-Version: 1.0
-References: <20211119161850.202094-1-mailhol.vincent@wanadoo.fr>
- <38544770-9e5f-1b1b-1f0a-a7ff1719327d@hartkopp.net> <CAMZ6RqJobmUnAMUjnaqYh0jsOPw7-PwiF+bF79hy6h+8SCuuDg@mail.gmail.com>
- <73c3b9cb-3b46-1523-d926-4bdf86de3fb8@hartkopp.net>
-In-Reply-To: <73c3b9cb-3b46-1523-d926-4bdf86de3fb8@hartkopp.net>
+References: <20211123115333.624335-1-mailhol.vincent@wanadoo.fr> <bc682dbe-c74e-cd8a-ab05-78a6b4079ebf@hartkopp.net>
+In-Reply-To: <bc682dbe-c74e-cd8a-ab05-78a6b4079ebf@hartkopp.net>
 From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Wed, 24 Nov 2021 08:26:37 +0900
-Message-ID: <CAMZ6RqKiy0FXa0RLhAeG+=R37WhFAmLamXCJM_T1f7TaSrs-gw@mail.gmail.com>
-Subject: Re: [PATCH] can: bittiming: replace CAN units with the SI metric
+Date:   Wed, 24 Nov 2021 08:35:04 +0900
+Message-ID: <CAMZ6RqJ_Kj48Zuv=zzPawcQw4qkgxa=u9aHgH8Ggq9MQZosS_Q@mail.gmail.com>
+Subject: Re: [PATCH v1 0/2] fix statistics for CAN RTR and Error frames
 To:     Oliver Hartkopp <socketcan@hartkopp.net>
 Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jimmy Assarsson <extja@kvaser.com>
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed. 24 Nov. 2021 à 05:53, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
-> Hi Vincent,
-> On 22.11.21 03:22, Vincent MAILHOL wrote:
-> > Le lun. 22 nov. 2021 à 03:27, Oliver Hartkopp <socketcan@hartkopp.net> a écrit :
->
->
-> >>>    #include <linux/kernel.h>
-> >>> +#include <linux/units.h>
-> >>>    #include <asm/unaligned.h>
-> >>>
-> >>>    #include "es58x_core.h"
-> >>> @@ -469,8 +470,8 @@ const struct es58x_parameters es581_4_param = {
-> >>>        .bittiming_const = &es581_4_bittiming_const,
-> >>>        .data_bittiming_const = NULL,
-> >>>        .tdc_const = NULL,
-> >>> -     .bitrate_max = 1 * CAN_MBPS,
-> >>> -     .clock = {.freq = 50 * CAN_MHZ},
-> >>> +     .bitrate_max = 1 * MEGA,
-> >>> +     .clock = {.freq = 50 * MEGA},
-> >>
-> >> IMO we are losing information here.
-> >>
-> >> It feels you suggest to replace MHz with M.
+On Wed. 24 Nov. 2021 at 06:10, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
+> On 23.11.21 12:53, Vincent Mailhol wrote:
+> > There are two common errors which are made when reporting the CAN RX
+> > statistics:
 > >
-> > When I introduced the CAN_{K,M}BPS and CAN_MHZ macros, my primary
-> > intent was to avoid having to write more than five zeros in a
-> > row (because the human brain is bad at counting those). And the
-> > KILO/MEGA prefixes perfectly cover that intent.
+> >    1. Incrementing the "normal" RX stats when receiving an Error
+> >    frame. Error frames is an abstraction of Socket CAN and does not
+> >    exist on the wire.
 > >
-> > You are correct to say that the information of the unit is
-> > lost. But I assume this information to be implicit (frequencies
-> > are in Hz, baudrate are in bits/second). So yes, I suggest
-> > replacing MHz with M.
+> >    2. Counting the length of the Remote Transmission Frames (RTR). The
+> >    length of an RTR frame is the length of the requested frame not the
+> >    actual payload. In reality the payload of an RTR frame is always 0
+> >    bytes long.
 > >
-> > Do you really think that people will be confused by this change?
->
-> It is not about confusing people but about the quality of documentation
-> and readability.
->
+> > This patch series fix those two issues for all CAN drivers.
 > >
-> > I am not strongly opposed to keeping it either (hey, I was the
-> > one who introduced it in the first place). I just think that
-> > using linux/units.h is sufficient.
-> >
-> >> So where is the Hz information then?
-> >
-> > It is in the comment of can_clock:freq :)
-> >
-> > https://elixir.bootlin.com/linux/v5.15/source/include/uapi/linux/can/netlink.h#L63
+> > Vincent Mailhol (2):
+> >    can: do not increase rx statistics when receiving CAN error frames
+> >    can: do not increase rx_bytes statistics for RTR frames
 >
-> Haha, you are funny ;-)
+> I would suggest to upstream this change without bringing it to older
+> (stable) trees.
 >
-> But the fact that you provide this URL shows that the information is not
-> found or easily accessible when someone reads the code here.
->
-> >>> -     .bitrate_max = 8 * CAN_MBPS,
-> >>> -     .clock = {.freq = 80 * CAN_MHZ},
-> >>> +     .bitrate_max = 8 * MEGA,
-> >>> +     .clock = {.freq = 80 * MEGA},
->
-> What about
->
-> +     .bitrate_max = 8 * MEGA, /* bits per second */
-> +     .clock = {.freq = 80 * MEGA}, /* Hz */
->
-> which uses the SI constants but maintains the unit?
+> It doesn't fix any substantial flaw which needs to be backported IMHO.
 
-This works with. Actually, I also hesitated to add such comments
-when writing this patch. For the sake of the quality of the
-documentation, I will prepare a v2.
+I fully agree. Bringing it to the stable trees would be a
+considerable effort and was not my intent either (thus the
+absence of "Fixes" tags).
 
+> Btw. can you please change 'error frames' to 'error message frames'?
+>
+> We had a discussion some years ago that the 'error frames' are used as
+> term inside the CAN protocol.
+
+ACK. Thanks for the clarification on the vocabulary.
 
 Yours sincerely,
 Vincent Mailhol
