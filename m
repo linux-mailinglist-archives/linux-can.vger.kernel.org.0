@@ -2,123 +2,100 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3913459D00
-	for <lists+linux-can@lfdr.de>; Tue, 23 Nov 2021 08:44:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87821459D83
+	for <lists+linux-can@lfdr.de>; Tue, 23 Nov 2021 09:13:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234359AbhKWHsC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 23 Nov 2021 02:48:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53710 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234323AbhKWHsC (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 23 Nov 2021 02:48:02 -0500
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9A4C061574
-        for <linux-can@vger.kernel.org>; Mon, 22 Nov 2021 23:44:53 -0800 (PST)
-Received: by mail-lj1-x244.google.com with SMTP id e11so9208506ljo.13
-        for <linux-can@vger.kernel.org>; Mon, 22 Nov 2021 23:44:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kvaser.com; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ShB++p14c8j5+vg5qZac1I23gQHD4cxLW7Jx/ndA85Q=;
-        b=BNtYz/BrWPi3cfMHjt2nTFlH06HIIwlbcWBHcaG2MDoXDYQQOc3+YrfRol3y+k6MR3
-         SJF35UFsRkuPTQCTvKOQq3tkTesRdLnBSOOQCHc0xVapk21pcOiy1C/ZfEzWDe+gtYQc
-         GiNBjVL8RXzN7pMC5CqcwArxe2EOm55rQfSQt3vlf76AKZJhKf5RpD5ElUBiLwDQlP77
-         LdLEL7zm0xMOUXzR0eYDJhAsEhjCZzgpy4O1ffcvDMGU8U7l/er7W+0gQLZsanHTGQhc
-         NhI3FotWCRZpnE+LPyAKuz5UF+xQjkyuca6TWBi8DyH8U2bfl4YfpNVklBeSvSB+yXzU
-         Ibbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ShB++p14c8j5+vg5qZac1I23gQHD4cxLW7Jx/ndA85Q=;
-        b=J/OmjWdtsBBmZuOVnPEi2tOZdRn6QGXL4HXwKlOxpoiwcp93rVymxQSYV4GKbI+pwB
-         qWjJDGH2+wGU05ehoB2lUSBbfbvKNRu0yeJ7Cv6NCFatNMJUW4Tdn4698G24vW5a/H3e
-         PQQiyMLou/NMojdKHXZuvMGcDCuW8YwLW8Xi1t8cZVhOov98fLaAwaaPyfx12jFrdK/6
-         EIUaHWPenY+sfKghCAEgNH2036YFBKkt8iOSgnkd9l95q0iQOCYm6XviB5AWjyRZgYgE
-         ohQ4jv2xPzvLNLwQQZsE/NwOHPyrXYalNLul3FqMHMjd8XK6JGRvw/nZHMgN9jdGTKEI
-         w7ag==
-X-Gm-Message-State: AOAM532mfbAioGa4UgcW56EBrvNT/8kSfk5peY11ILaS9D9olUgempqO
-        ROEMweEepaSa6A5NfKhC7gZuGcka30S0FA8x
-X-Google-Smtp-Source: ABdhPJzmPuIz6jJG/Tt5usex62U+4ba2J09gMmnzUhml80/LKhNOTcdb1QrfADwlLwAZzF34MOmaNA==
-X-Received: by 2002:a2e:a785:: with SMTP id c5mr2856285ljf.384.1637653492092;
-        Mon, 22 Nov 2021 23:44:52 -0800 (PST)
-Received: from [10.0.6.3] (rota.kvaser.com. [195.22.86.90])
-        by smtp.gmail.com with ESMTPSA id f22sm1203590lfm.261.2021.11.22.23.44.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Nov 2021 23:44:51 -0800 (PST)
-Subject: Re: [PATCH v1 1/5] can: kvaser_pciefd: Do not increase
- stats->rx_{packets,bytes} for error frames
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        linux-can@vger.kernel.org
-Cc:     jimmyassarsson@gmail.com
-References: <20211119131915.2033234-2-extja@kvaser.com>
- <20211120030604.217665-1-mailhol.vincent@wanadoo.fr>
-From:   Jimmy Assarsson <extja@kvaser.com>
-Message-ID: <e7bc40c3-e372-48ac-5cc3-d2348caa908f@kvaser.com>
-Date:   Tue, 23 Nov 2021 08:44:51 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S232270AbhKWIQN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 23 Nov 2021 03:16:13 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:40298 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229853AbhKWIQK (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 23 Nov 2021 03:16:10 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1AN8CofF036460;
+        Tue, 23 Nov 2021 02:12:50 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1637655170;
+        bh=PhU8+RbRCaEcbY4Y/99QKnNNouSYkie7CFmexJUpGSI=;
+        h=From:To:CC:Subject:Date;
+        b=ME3pO5yhlh10eYrARjfuVH+AHuSTNWWfkkU1Xo0aixzkNIfFbQ4hFrpx6HUyF3O5p
+         eKb3nkoy8Es49Wy7eNVchCZOywXqsWxebM/cBd0DyXKpj4Is5SDvbOMKm4A7UqtdUD
+         SoDF04/1u5y1QGZAGWLJS1hDxWmqnlTKF8BZonJQ=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1AN8CopR010617
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 23 Nov 2021 02:12:50 -0600
+Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 23
+ Nov 2021 02:12:28 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 23 Nov 2021 02:12:28 -0600
+Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1AN8CNdw101399;
+        Tue, 23 Nov 2021 02:12:24 -0600
+From:   Aswath Govindraju <a-govindraju@ti.com>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>, Nishanth Menon <nm@ti.com>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Peter Rosin <peda@axentia.se>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-can@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>
+Subject: [PATCH RFC v3 0/4] MUX: Add support for reading enable state from DT
+Date:   Tue, 23 Nov 2021 13:42:17 +0530
+Message-ID: <20211123081222.27979-1-a-govindraju@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <20211120030604.217665-1-mailhol.vincent@wanadoo.fr>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 2021-11-20 04:06, Vincent Mailhol wrote:
-> On Fri. 19 Nov 2021 at 05:20, Jimmy Assarsson <extja@kvaser.com> wrote:
->> Do not increase net_device_stats rx_{packets,bytes} when receiving
->> error frames.
->>
->> Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
->> ---
->>   drivers/net/can/kvaser_pciefd.c | 3 ---
->>   1 file changed, 3 deletions(-)
->>
->> diff --git a/drivers/net/can/kvaser_pciefd.c b/drivers/net/can/kvaser_pciefd.c
->> index 74d9899fc904..2c98befcf2a0 100644
->> --- a/drivers/net/can/kvaser_pciefd.c
->> +++ b/drivers/net/can/kvaser_pciefd.c
->> @@ -1304,9 +1304,6 @@ static int kvaser_pciefd_rx_error_frame(struct kvaser_pciefd_can *can,
->>   	cf->data[6] = bec.txerr;
->>   	cf->data[7] = bec.rxerr;
->>   
->> -	stats->rx_packets++;
->> -	stats->rx_bytes += cf->len;
->> -
->>   	netif_rx(skb);
->>   	return 0;
->>   }
-> 
-> I think that this patch makes sense because the CAN error frames do
-> not exists on the wire: only an error flag is transmitted.
-> 
-> However, the current consensus is that the rx_packets and rx_bytes
-> statistics should be incremented for CAN error frames. And I think
-> that consistency between the drivers is the first priority.
-> 
-> I inquired here in the past to ask if it made sense to stop increasing
-> the rx stats for CAN error frames:
-> 
-> https://lore.kernel.org/linux-can/CAMZ6Rq+8YSRqXU7CPrT9FKnWZ1G9xkSr3wt185r2CswmxhXPVg@mail.gmail.com/t/#u
-> 
-> But the discussion did not raise interest. I am fine to send a tree
-> wide cleaning patch, but first, I would like to have people agree on
-> this.
+- The following series of patches add support for reading the state of the
+  mux to be set for enabling given device.
+- As these are RFC patches I have combined them into a single series for
+  better understanding of the reason behind making this change.
 
-Thanks, I've not seen that discussion.
-I agree, it doesn't make sense for a user to see the rx_packets and
-rx_bytes increase, when in reality they didn't receive any valid frames.
+Changes since v2:
+- Fixed changes in phy-can-transceiver based on comments
+- added select MULTIPLEXER in drivers/phy/Kconfig
+- Changed the implemetation of getting state by adding new apis
 
-This change started as a request from one of our customers, that got
-confused by the increase of rx_packets, when connected to a bus with
-wrong bitrate.
+Changes since v1:
+- Added support for reading the enable state from DT instead of hardcoding
+  the state to be set to 1.
+- Made relavent changes in the bindings
 
-I'm in favour of a tree wide patch.
+Link to v2:
+- https://patchwork.kernel.org/project/linux-phy/list/?series=583917
 
-Best regards,
-jimmy
+Link to v1,
+- https://patchwork.kernel.org/project/linux-phy/list/?series=578863&state=*
+
+Aswath Govindraju (4):
+  dt-bindings: mux: Increase the number of arguments in mux-controls
+  dt-bindings: phy: ti,tcan104x-can: Document mux-controls property
+  mux: Add support for reading mux enable state from DT
+  phy: phy-can-transceiver: Add support for setting mux
+
+ .../devicetree/bindings/mux/gpio-mux.yaml     |   2 +-
+ .../bindings/mux/mux-controller.yaml          |   2 +-
+ .../bindings/phy/ti,tcan104x-can.yaml         |   8 +
+ drivers/mux/core.c                            | 146 +++++++++++++++++-
+ drivers/phy/Kconfig                           |   1 +
+ drivers/phy/phy-can-transceiver.c             |  22 +++
+ include/linux/mux/consumer.h                  |  19 ++-
+ include/linux/mux/driver.h                    |  13 ++
+ 8 files changed, 206 insertions(+), 7 deletions(-)
+
+-- 
+2.17.1
+
