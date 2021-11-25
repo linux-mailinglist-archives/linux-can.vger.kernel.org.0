@@ -2,49 +2,49 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CC5C45DBB5
-	for <lists+linux-can@lfdr.de>; Thu, 25 Nov 2021 14:54:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8F9145DBFF
+	for <lists+linux-can@lfdr.de>; Thu, 25 Nov 2021 15:09:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351766AbhKYN5W (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 25 Nov 2021 08:57:22 -0500
-Received: from mail-eopbgr40099.outbound.protection.outlook.com ([40.107.4.99]:47413
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
+        id S1354834AbhKYOMj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 25 Nov 2021 09:12:39 -0500
+Received: from mail-eopbgr60129.outbound.protection.outlook.com ([40.107.6.129]:31237
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1355407AbhKYNzV (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Thu, 25 Nov 2021 08:55:21 -0500
+        id S1350362AbhKYOKi (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Thu, 25 Nov 2021 09:10:38 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=A4uGZKfjXiU+m7/0q+Fy3jrIxRTt2W0qnMDs0QyeuQhPTgZcwdLjo9vXWMgIasaSE6f3NKEuj+VK9V+yt4Ir2/mb2jW9RpLcV/sW9FAJUmVjSCaRZU/T9kDVWgqNhjGVL6plOBYkkOpg9j5ildtp+tjrFCSmduIvrcjp+EOYUvOsaGFqRa6/wpzsFkFbGUYS98QOkpfq9cy3rHpdTWj7Lml0wH3b72kFxBdac2g9/5O29Hbsyi+7bXXY5IK4hd41psqHYx+aLqIXewfv/LZ2o6BuI8+MAZMb9Oc+m083ymoC/GoVk9HFL7aMeReYQ+rfUg0W/NHMoHxikLGaAoU+vw==
+ b=VD1HPPrHgzF0gJrDyqXEQHzpBde58WFltUUUb0BxvHHLR809+D3rFnoni/WNjNzsiDVHuzCziyN+PpLgJvVTOJkbwc9y486s1sIBDtK4vk28NkML+IHFmPkmDir7jXhQglIPORH/8tLKgrALBdXZKg7rHFf3WN1M3oi+E0h2yc0pjU4hNFlRTqentLdcLyA89WFGRiVOYuNvbApD4zGceoYbVCwAl7FhahK3jXId0VsXK15oB7DBW6IPA85v8rUiSmJiIDsB8RUFAXTeIfhwYMaPkqx/4G2hs9vnppBtIK172mOJOc5dYab16gIaQ0NSG5RX4VyiDWX3rj5Z57s5nQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YTaNiTNICT4V48/a7W8G1l3Ub5UpC0xxy+3nSuaWsmE=;
- b=nDsB5KfXKaNOs8EADQk9uaRvXZDKXaLq97HAlZkftChpuUFj1vFtcihdpDG6WvNH83BSYnezg2ES7f591emMYqNCnWIWMawOj4OmP11XBOtayixxglEtegNXwPupj7Zle0gCU4ngXNvH+HEagoU80sjCappP8LIYBccJCzAjQW+KwDP0yLSSPNRVXtXvWosJGws/4f0gNw0pJFu6KsE/9rUQw1NYcwZPLX88vC/vNDdLc8tAHkCtbTu5J69DY7k5Zz0b7Qksj+d38ZBVH7NdCO/PvqFpZkDPIEHa3dv0vxmsj9nV2usKN+wORVsUBjEjfV/B77CkdWpV2SmRSBtXnA==
+ bh=WdUj6DxSTarx5xrCjuoHe2Cx31QG+h+fAme1K/+ElPw=;
+ b=ZcrTM9tHfMRFpDcAP8sav0o1TuhGH9TlDy2I/YLL6ZGTJRslHflBPf5N8qZcAkQ392MqtQMR/d6Ml/1dOHeEaQ3099ExJ3EHTwv/v8jZVxp3BXRZdwRpdOEBwMQ7G6Tpc3DMg5aRmzsJ6j15XO16WkaqqjLVLo64GZE9Xn0OT8iT6PbXkuf0HnIQSJEcesU4yVJrGJelezEviYNb9SMJuJrUL03mC+NaK/kRzmOkUwd3JEW5oiZaVcSbVixBxCMHuU/OxzfRCiK3QBt8Fjeouobhyw/yaxwuMEvyhE6c1NmmPEIr4kWJ43eGyb0N+iXKciTGFEPRISHOJpxXIts2Hw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
  dkim=pass header.d=axentia.se; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YTaNiTNICT4V48/a7W8G1l3Ub5UpC0xxy+3nSuaWsmE=;
- b=ZxEFlNqxgG6rMxW0Ci7SCZKT/VsmX+LExBLyooQEyfiy72/n7k2jcoCfqxhjeFWsd266BOXZrv2lnnBITu4pMrQFl86fuO0192eyZ8RANBVEv9+SIynTnKcW6bg7t/9ZgRsN+IrsmfnPbza0n3UZwk5ZQk/BV7TW683lxHOopHE=
+ bh=WdUj6DxSTarx5xrCjuoHe2Cx31QG+h+fAme1K/+ElPw=;
+ b=H/mcEQgO8tCqRJ7hFUU1H3EPx9bXxoA1sEqLI9iZZKOq1zFc+/AULt0RooNSq2cJflw2zfvRwmTPr4gtbjCB2mQM90RZMPPB3Izdunp9CSsB2buMMFQ1kPU49+m+rTQPA1WRNC6nMnlSkO4DC31AZHgxVVnoAWeYlFEzyAnstlA=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=axentia.se;
 Received: from DB8PR02MB5482.eurprd02.prod.outlook.com (2603:10a6:10:eb::29)
- by DB3PR0202MB3402.eurprd02.prod.outlook.com (2603:10a6:8:6::29) with
+ by DB7PR02MB4475.eurprd02.prod.outlook.com (2603:10a6:10:68::30) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4713.24; Thu, 25 Nov
- 2021 13:52:07 +0000
+ 2021 14:07:25 +0000
 Received: from DB8PR02MB5482.eurprd02.prod.outlook.com
  ([fe80::7519:c72c:98b1:a39]) by DB8PR02MB5482.eurprd02.prod.outlook.com
  ([fe80::7519:c72c:98b1:a39%4]) with mapi id 15.20.4713.027; Thu, 25 Nov 2021
- 13:52:07 +0000
-Message-ID: <5a530528-27a9-f5c8-abd4-025897a1c197@axentia.se>
-Date:   Thu, 25 Nov 2021 14:52:04 +0100
+ 14:07:25 +0000
+Message-ID: <a1d9d0c6-e0df-2e06-d8e8-8770a9eb4b4a@axentia.se>
+Date:   Thu, 25 Nov 2021 15:07:21 +0100
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.0
-Subject: Re: [PATCH RFC v3 3/4] mux: Add support for reading mux enable state
- from DT
-Content-Language: en-US
+Subject: Re: [PATCH RFC v3 4/4] phy: phy-can-transceiver: Add support for
+ setting mux
+Content-Language: sv-SE
 To:     Aswath Govindraju <a-govindraju@ti.com>
 Cc:     Vignesh Raghavendra <vigneshr@ti.com>, Nishanth Menon <nm@ti.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -55,74 +55,74 @@ Cc:     Vignesh Raghavendra <vigneshr@ti.com>, Nishanth Menon <nm@ti.com>,
         linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
         linux-phy@lists.infradead.org
 References: <20211123081222.27979-1-a-govindraju@ti.com>
- <20211123081222.27979-4-a-govindraju@ti.com>
+ <20211123081222.27979-5-a-govindraju@ti.com>
 From:   Peter Rosin <peda@axentia.se>
 Organization: Axentia Technologies AB
-In-Reply-To: <20211123081222.27979-4-a-govindraju@ti.com>
+In-Reply-To: <20211123081222.27979-5-a-govindraju@ti.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-ClientProxiedBy: GV3P280CA0043.SWEP280.PROD.OUTLOOK.COM (2603:10a6:150:9::7)
  To DB8PR02MB5482.eurprd02.prod.outlook.com (2603:10a6:10:eb::29)
 MIME-Version: 1.0
-Received: from [192.168.13.3] (185.178.140.238) by GV3P280CA0043.SWEP280.PROD.OUTLOOK.COM (2603:10a6:150:9::7) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.20 via Frontend Transport; Thu, 25 Nov 2021 13:52:06 +0000
+Received: from [192.168.13.3] (185.178.140.238) by GV3P280CA0043.SWEP280.PROD.OUTLOOK.COM (2603:10a6:150:9::7) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.20 via Frontend Transport; Thu, 25 Nov 2021 14:07:23 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 75c251f5-3e7c-4781-bfec-08d9b01ac555
-X-MS-TrafficTypeDiagnostic: DB3PR0202MB3402:
-X-Microsoft-Antispam-PRVS: <DB3PR0202MB340219C7623D0BFAFC8F31E1BC629@DB3PR0202MB3402.eurprd02.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
+X-MS-Office365-Filtering-Correlation-Id: 01d79ece-7c37-4a44-a5cb-08d9b01ce820
+X-MS-TrafficTypeDiagnostic: DB7PR02MB4475:
+X-Microsoft-Antispam-PRVS: <DB7PR02MB44752299CFFB6718CF733213BC629@DB7PR02MB4475.eurprd02.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PgyXWqERHqJdba888DTDD9ss+YpzNT0Uw8a1qnCK77lUDd/0znxdwyhG/1TNmE/9h3gmI72Mpywct1Hp5OI516ZvLour5vX6679R4pAX+iTAy0LKwKyh+q2qCIdVmYZs2rO+preRmjGmlaJJL1pMe+eHLDRcQ2Om3alEa2kPYE+onwk1lEYE9ioSFezOvUYZjIDJtN3UMRA4/Paz0270ZgCTWCOW6zKVPOJvGkQCOEP3Tr3ETkHBuMtFFl3ImkU9dnbExa3Tk38TM9kH+wWyuPWP8EhVSu0AJxWNoq93LUigKLwyaebk/P+3YVqgUvF+bHIXE1cqr1GnGYeBeXsc0bIVbYKuffel56WIgxZxA/fSvDZ9SV1xQBtjoTDJ+kdVq6GNXVEgrwGX1FkruecilLZuoSYPjTSZFeVyMqLcjUNeoGzaBoacGgmy4sgvotWroUnWv4cDuL9YE2oOGPEkl5COLVpNjUPnf2sltqDqyiv+TkuxR7P3Ol9SlmE89YCRjfdJJ+FXsUuSEdU572pSFGTirQyb4FRbOkLB+PLO5hvGE4yoN7FFKTnefzTbFCSwIdt+giUKEqJetmI6+hk0E5n0IG4iEWjNOePuVecxW8Aw0g+Cu6aVXsHjNE7inJ2RDel4XEyJmCMWf097O5cJNZJHtG9be3qa5l+PWsBbHihdzyRFqPp3iBtPE7jwjzgu4PHT/oWIF73X0Pm0ZahkkduaNU928e16zQB2swJePjIcXBTdMIQ81EguWpNW7b45
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR02MB5482.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(376002)(136003)(366004)(396003)(39840400004)(53546011)(5660300002)(4001150100001)(8676002)(26005)(186003)(316002)(54906003)(4326008)(7416002)(36916002)(8936002)(2906002)(16576012)(83380400001)(6916009)(38100700002)(31696002)(86362001)(36756003)(66476007)(66946007)(31686004)(6486002)(508600001)(2616005)(30864003)(956004)(66556008)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: AGfWycsL+w5DDiHtLrS9TzsJq/zPt76wREIQlTkWZwlETdJ1gQKu8/NSXBTuFjfeIE4DKiJB72iOx4z+tZYVBU0O+KUhRIPteEqlBO/vu2Mt4GBkCBo46K/BhU1Jr8pJyjzz1ZajixmEU2e0ComnpwV3U36HbkEL4fcao64t5CD5Jkt9Pmo0M3fCPqtUrVZ71FNq3BrYvGuxYOdCSrE6M5s0njnwgUlyMgEFwyQXRqqPScyyUBS/ka+7NaAWjuRX85xwhqZkp6v3pMVH6iDfU6l/jVvrNltyyD7uPJUBw1oF7eokadXImDNiApkLqGJuwbmmKulRpkgh0ONz0mnU6gBpwqbKhIFphIpGGEMhCgQt+FcU1TOrRSXN8NDJrnL892qO+PeagJSpCcWSoX6V3V3zOfxf+NiQTg7CkYcarfBgUmieKRELBLqHBrJCzMWeEKKC+dyjH50Cnu9bceyn2xx6ALvW37zZyDk0QR/WAA2W8UVTh3W6cL22AuhhVwIi+6rJPF9/6CjAfTA0u3nZy4Bxtk9FGXVYo5uBmuGehm0/78iOet+TVL4f2PhOX2NfeIJXUH7xOXQ/MnQ7Ep5TtIFrZL0TYmcwU10Bk/z1OEGfqiG/HAXNOcvIjX2rK3fQbvY3yk3inFXnrx4YmAx/OvGABI4yxs5PS9YtyO4q266XMSR+nHi5EOhb2PUki9RWz4c0nq2qr2qnazlNLuGvHpp/cEQl/jXBnb+vBfxn/ulpOGwLjAJ7N/jMOW74F3Wt
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR02MB5482.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(136003)(39830400003)(396003)(376002)(366004)(346002)(956004)(8676002)(6486002)(38100700002)(26005)(186003)(6916009)(508600001)(8936002)(4326008)(2616005)(31696002)(16576012)(54906003)(66556008)(66476007)(316002)(86362001)(66946007)(83380400001)(2906002)(53546011)(5660300002)(36916002)(4001150100001)(36756003)(31686004)(7416002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dktQWjIwSDlKM29rb0NKNVNoZjE3b05GTmZWZ1ZpTTJLMXRFUnFXUFlGaXR4?=
- =?utf-8?B?MTZCMDBiblp5NFZUWlVueHUyRGZNOCtNZ1VodkFaOGNYcWVDdzRCNjJ0MGZR?=
- =?utf-8?B?dUJjWmFBc1gvRGJtYk5HM3lhTngzM2tXMkRsQm5IWG5EVERwTU5zV09FbXoy?=
- =?utf-8?B?OHd5Q0E1OTFZcHVmVERtUUJHUk9vMG9UZExoNFlmUG9ZTzg4Um56MDRRQzNj?=
- =?utf-8?B?WkgyRWpGdkxIWFoyb1JBdUpERVkxcm9JcWQ2dFZjd2x2cXl5WE9VOXdlT0VI?=
- =?utf-8?B?U3Z5aUtqclJsT3JSUkJSeHpScW9HSTJVTVRFN3NWbXZ0U1FkK0xqYm4yQkRk?=
- =?utf-8?B?Tks5UlRyMFdhclNPYzYybnFBRkMzK3RsY2hxMGRhdjFTMXpnMU0rdHpJRXdu?=
- =?utf-8?B?UkFTNEFXMExFa2hEckwycWNML2VHSE8wZjBBeXkyVmFSakVRaWZsSjh6RWR6?=
- =?utf-8?B?U2dkVytndXFoalZwUDY0VXd1U3VyR0o1VWJLSTlGcTRtWTFWQnVqOXgveUlW?=
- =?utf-8?B?WVY4OGhLczNKZmszTGIyamZWUnY2bDVsOFliUEYwVkZ4OHZJdGtIbjR0L0h1?=
- =?utf-8?B?Z3RtZmRZSENsNDg2STFMNU5XTENKY2I4M3lialdIcVNhL3I4U3o4NElJVUQ0?=
- =?utf-8?B?eDR4SlhBd2RlZGU0NG9ONnkzNFMrdEdhZTZvT0I1VkFyQk0yQmgzQlhlbm9i?=
- =?utf-8?B?QWpnZmJlck9oL3VzcFRtOHJBaFV3bGU3dEcyaGhjMkJPMGN2ZFBWRFV0bmVI?=
- =?utf-8?B?SnN4Y0pDWnM0Qm14NGVXb0lwNjlvQkx1a2xmUzhPREpNbUtaL2tGenJUWHAw?=
- =?utf-8?B?dzRBc0RYc0QxTk1xMlhaYVU1K1lnNklhRGViNTdKblh2NVZ4cWVwcVBoTkFy?=
- =?utf-8?B?dWZlS25zSkd3eThBVGwzanEvVXpDNUE4STZDZnhvV2FpUjZ4Q0l5bklOSzM3?=
- =?utf-8?B?UTZlL0FNelVRS1FOVEg5WUdUd1A4bExEKzZIbHZjWi95bFNSaCtUdHFQSFRQ?=
- =?utf-8?B?RitnV3UrUmMxWm1mV1V1VU1YYlQzRlhzRjU4b042WFdqOUlybmw1M2NPOE9i?=
- =?utf-8?B?bkFqYlpsamlPR1lGOG93Ly9Cd2JMYmxXUXduTmRmdUdhZ01La3dEN3d4czlM?=
- =?utf-8?B?bHJZWEoxM0FlbUQ5VEZTemU3S1RTRkthOWVnQS9HajFkZGpmVWxqMDFZWCtr?=
- =?utf-8?B?Qi9rMll6U2NHNThqQnZxeDRiNFpPWUU1NlVoZlFERTEvL2hGenEwSHlHKzZq?=
- =?utf-8?B?UHIxK25aeG1WNUdIcE5lMnFCaU1ZWVBxSEw3cWlzaE9aYjRNRnNpNjdSNXBp?=
- =?utf-8?B?aVl0cVRIamVQcFB3VHhnc0NXTkJ0djZ2ZWFOMjRyekRGanZOZVE4UmVWS1Ra?=
- =?utf-8?B?alF1S2cvUzdndTFSNHN5WG03YW5BMjhLdis1cGx5OXhDOUlyam40NS9nRWdq?=
- =?utf-8?B?MnBOaFZuNXoyb0xyZGo3aDh5UFJpRlE2c0NZMnZrY0Y2WVNvQlU0aGVkejg3?=
- =?utf-8?B?SXJiTHIrNmRPT010K1BOUjc1ek5MZ2puZzQ5YXBGL0MzcFkyMi9kcmNKWllz?=
- =?utf-8?B?NU5NR2UrSGJGTk9XNmd6c1VxdlRhSEF5dTBZTFRIZExFb25PKzE2aTBmWXAr?=
- =?utf-8?B?alZ6YTZTb21LTm96Q2EzS2NtWEJqMFBMTXovVFRXQ0crdkFOOU1taGtlVlFN?=
- =?utf-8?B?UmgyTzNPSUxRQ1FZdk5RbEkyQncrYmd0L21ZaW5HZFU0VmswQlR4VEthc0JX?=
- =?utf-8?B?R25oU1oxQ1MyNWlna0RqWkVIWEhDelRrNTNad2FHM21NMXg4eFowcXJqM3Zm?=
- =?utf-8?B?RjBVQVE4U3daMnhzQ3FkYXJBUlNIcE5vM1NkTUNJQ1E5U3ZpY0QzZHlMbGxh?=
- =?utf-8?B?cEVVdWs4ci9Jbk5DTDM3aGh2U1ZHdzNEVDVObmpVY3pmZjJYVFphUTNDZnRK?=
- =?utf-8?B?WCtyemV5ajN3NmR0dlM5eE5QQ0QvdlhSV1Z3N3diLzF2NU5WMTh3U292eUdm?=
- =?utf-8?B?VmE4VFJqUy9QTFZhbWZCZzlrOVIzQ2QxYWhrUUUxMmFXK0dkVk9UWlhNeVpM?=
- =?utf-8?B?UThBTHUwcmp0b1hBUmduYXFYYkEvcUc4YXZQWGE3RjhFZnllU0EyRCtTcVU0?=
- =?utf-8?Q?Mxpc=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aXFjd2YvU1ZxcFd1N0xxMXlRc0YzSDlFUXVxNGQ2eXNCSEVySG9PSHA2UkMr?=
+ =?utf-8?B?QlV1eXB5aVdRQmhoRHNJRTM5eTkzNWZaY21YeXVvaEVKeUtCZUdERVFrM3Bp?=
+ =?utf-8?B?Zy91QXQzcmExM0ttcnQ1cllFM3JqN2JsMFpzeVYzOURHS0ZMMmM3bkZLQTJS?=
+ =?utf-8?B?LzB1VWJ6b0NrNnI1R2Z3UStVUERYd09QQVZrK2RsNDJuWEtEYW15cnRwZmdw?=
+ =?utf-8?B?UHNFK0hLM0FzTUtBOWtjS1VLSSs4RElwTFRFalFUcnhXSE1NRkdiQk1kbGNs?=
+ =?utf-8?B?S25ETDU4SE9ycTZ5cTlhZVM5TU1ndjd2WmNDbWU2UHU5a0U0QTBRNjBvSEE5?=
+ =?utf-8?B?YUxmeTFUTktlRExxQ3RPZmhtV0pXVXphWU54aWdBYVNWYjF1bUhTTWZWZ0ZN?=
+ =?utf-8?B?d29vZEQ1WDlHK3VSYXgvcDB0Z1FuRG04T2tHaUl2N3pSMFVPN0xKL0ZEdzBJ?=
+ =?utf-8?B?OVMyVHRRTm9oRDN0M3lKNEVUZEMxdkdvckhzRzFZckpMSWw3VENpMzRqdmg1?=
+ =?utf-8?B?MEtzdmpxMlJIM2g0TjdveWdQZTFqZWlUK3R5V0xjUHRLeENGNTRXTTdoL1dK?=
+ =?utf-8?B?TnJJS3ZISXQvcGJwVllEWXZ4cGpWc1JydU8zL1lhZkd4bzdXUUVIZSthR005?=
+ =?utf-8?B?YmNSM3RSOTI2SU10OTlpS001Z2x5WXEydVZ4OUw5Wk1GVXQ0N1NyV2hYRDR2?=
+ =?utf-8?B?MllUdmUwK2R1ZDZpUmJRVVZnQXhRS2o2WGZBZG9NUkUrS0FXVTRFdkljT3g2?=
+ =?utf-8?B?dUNma2pkZG40eHU0V3VyQUNKT2lsWTlhRkRadGhpQjRtUHhxVzZjUitkSkJ6?=
+ =?utf-8?B?cG5XWGNtdG9lR0ZPRmV3NHZCajBLWkpXVVd2VXdieC9LL2RWbU9NZ05MenBj?=
+ =?utf-8?B?dW9ONVZGNWVUekJ4aE9WU0dQUzMrUUEycFNnNzJHVFc1dHR6UWQrNEdpN0Y0?=
+ =?utf-8?B?Wll5UmY0Y0duNWp1L2k4amlQTkJZRCtab1cxTU50MVhPS0JJaDhmVk9iQ1Zh?=
+ =?utf-8?B?RHVCeml2aUkyckJMZ052Zi9FUk1kWUdiU3lmVmVHdGNiMWNxcGdrNy9tNnMx?=
+ =?utf-8?B?dnAwQWZ5T1dqWXp4SkZFNitueENNSnNFazVkT2ZtVUVNbDNZSDJpZ3VuZHdr?=
+ =?utf-8?B?K1hlay9wWWQyT2MrSWR6ZW1UR3VnbTJ2c2Y3TjFhOWVVV0IzZmY2VjZnMVF6?=
+ =?utf-8?B?Vjd5VzBJRHR4ZjdHYXRSVWdVVWhFdXV6YUZsRGlsQ1RFVms1UlRFbFpWa1Jp?=
+ =?utf-8?B?UUp2clUyWldud2xveUQ2eHY2M1pJMWVydmpWSmtOV3NCcWp2RnVwaHQ1UTda?=
+ =?utf-8?B?b3c0THNtSE92UDRJQnVUZ3d6T3B0ZXV5YnZhc1lqWlFpTEh3RjZPWE85V2Ir?=
+ =?utf-8?B?Yk5lOGJYZ1ZINnR3MEp6dm9iVnp1WVYxaFY1V3NVdit5S2gxbUNwbDUwT21p?=
+ =?utf-8?B?RS95UU1oUU5SdTNCcGhCcW93MUVTKzVLdENIY2lhcS9POUlvS1NMemwxK2dT?=
+ =?utf-8?B?TTU5bnVVbDVZcEVWVy9YTDFrQll1YTZoL0RZblpwUnJkaEVoUmFjNktQVUJ2?=
+ =?utf-8?B?RVVjd1k5TUhaK0V6VG9DbHoxc3ZReTBML0ZFRGV1ZTRmN2RqZXdzeVZ2MS9C?=
+ =?utf-8?B?aTl1dFdZQndoeEl3RVpKUlRpeDhFYVZmZTJmajhwSzU5RnMvLzU4OHF6Nk9m?=
+ =?utf-8?B?cTVLM005amw1TkdtSVIzcSszUWhOcW1hZ2dtMTBnOXBIQW52c0VXRjJWMTBL?=
+ =?utf-8?B?VVdOK0JnWlZ1VUVFc3Z1dWJYbk5teDd1T0U2eExvdzByOXNYYkYrQ1Y2T0tu?=
+ =?utf-8?B?OHF2Vkx0SlZVaDlZeEh4TS80ei82VGFZUjNrbFcxaFN0V2tlRGQxcGZ1NEN4?=
+ =?utf-8?B?NlZHOGZZUUNxT3kvYXRjeWNUMnZSMGZITTlBVVpTNHorb0o1QkdrVGRmbjB6?=
+ =?utf-8?B?WE9jYVRlT3VEa3VxUU90RzkwV1E2M2NHVkxRMDcvaXFWSENLZUFoV3V0aDBS?=
+ =?utf-8?B?a1RvTTZ4djducEpiRlNqbjkyWFRCV0dYVVU3UGM3NWhpcS9YYTdVUDExSU5B?=
+ =?utf-8?B?dzBiN0NtZXhGSFd1R3VqWkhhb2RPZmZ6WFZ5S0dRUzB3VlVnNUJEWXJtcW80?=
+ =?utf-8?Q?SbaA=3D?=
 X-OriginatorOrg: axentia.se
-X-MS-Exchange-CrossTenant-Network-Message-Id: 75c251f5-3e7c-4781-bfec-08d9b01ac555
+X-MS-Exchange-CrossTenant-Network-Message-Id: 01d79ece-7c37-4a44-a5cb-08d9b01ce820
 X-MS-Exchange-CrossTenant-AuthSource: DB8PR02MB5482.eurprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2021 13:52:07.7254
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2021 14:07:25.1181
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4ee68585-03e1-4785-942a-df9c1871a234
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gRStOhqv+wcrwBBWKRlVc9khvZksR644Ghy+yjZbcqk6jfei312rFOeBLI5eikyN
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0202MB3402
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5enS8dUIvi7P6oHg1C6PbJA3vBOlJkIf35alPlymiNW2M+qDNqD1h3TyF07EC29L
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR02MB4475
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
@@ -130,381 +130,113 @@ X-Mailing-List: linux-can@vger.kernel.org
 Hi!
 
 On 2021-11-23 09:12, Aswath Govindraju wrote:
-> In some cases, we might need to provide the state of the mux to be set for
-> the operation of a given peripheral. Therefore, pass this information using
-> the second argument of the mux-controls property.
+> On some boards, for routing CAN signals from controller to transceiver,
+> muxes might need to be set. Therefore, add support for setting the mux by
+> reading the mux-controls property from the device tree node.
 > 
 > Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
 > ---
->  drivers/mux/core.c           | 146 ++++++++++++++++++++++++++++++++++-
->  include/linux/mux/consumer.h |  19 ++++-
->  include/linux/mux/driver.h   |  13 ++++
->  3 files changed, 173 insertions(+), 5 deletions(-)
+>  drivers/phy/Kconfig               |  1 +
+>  drivers/phy/phy-can-transceiver.c | 22 ++++++++++++++++++++++
+>  2 files changed, 23 insertions(+)
 > 
-> diff --git a/drivers/mux/core.c b/drivers/mux/core.c
-> index 22f4709768d1..9622b98f9818 100644
-> --- a/drivers/mux/core.c
-> +++ b/drivers/mux/core.c
-> @@ -370,6 +370,29 @@ int mux_control_select_delay(struct mux_control *mux, unsigned int state,
->  }
->  EXPORT_SYMBOL_GPL(mux_control_select_delay);
+> diff --git a/drivers/phy/Kconfig b/drivers/phy/Kconfig
+> index 82b63e60c5a2..300b0f2b5f84 100644
+> --- a/drivers/phy/Kconfig
+> +++ b/drivers/phy/Kconfig
+> @@ -64,6 +64,7 @@ config USB_LGM_PHY
+>  config PHY_CAN_TRANSCEIVER
+>  	tristate "CAN transceiver PHY"
+>  	select GENERIC_PHY
+> +	select MULTIPLEXER
+>  	help
+>  	  This option enables support for CAN transceivers as a PHY. This
+>  	  driver provides function for putting the transceivers in various
+> diff --git a/drivers/phy/phy-can-transceiver.c b/drivers/phy/phy-can-transceiver.c
+> index 6f3fe37dee0e..6c94e3846410 100644
+> --- a/drivers/phy/phy-can-transceiver.c
+> +++ b/drivers/phy/phy-can-transceiver.c
+> @@ -10,6 +10,7 @@
+>  #include<linux/module.h>
+>  #include<linux/gpio.h>
+>  #include<linux/gpio/consumer.h>
+> +#include <linux/mux/consumer.h>
 >  
-> +/**
-> + * mux_state_select_delay() - Select the enable state in mux-state
-
-The terminology is that you have a "mux" with different "states" that you
-"select". What you are referring to as enabling a mux state, is elsewhere
-referred to as selecting the mux state.
-
-> + * @mux: The mux-state to request a change of state from.
-> + * @delay_us: The time to delay (in microseconds) if the mux state is changed.
-> + *
-> + * On successfully selecting the enable state, it will be locked until
-> + * there is a call to mux_state_deselect(). If the mux-control is already
-> + * selected when mux_state_select() is called, the caller will be blocked
-> + * until mux_state_deselect() is called (by someone else).
-> + *
-> + * Therefore, make sure to call mux_state_deselect() when the operation is
-> + * complete and the mux-control is free for others to use, but do not call
-> + * mux_state_deselect() if mux_state_select() fails.
-> + *
-> + * Return: 0 when the mux-state has the enable state or a negative
-> + * errno on error.
-> + */
-> +int mux_state_select_delay(struct mux_state *mux, unsigned int delay_us)
-
-I dislike the name "mux" here, that name is consistently referring to
-a struct mux-control in the mux subsystem. If mux_state is too long,
-maybe mstate or something such, just not plain mux. That goes for all
-the struct mux_state variables that follow too. I.e. pick a new name
-for variables of this type and stick to it (unless you need more than
-one such variable in a context, of course).
-
-> +{
-> +	return mux_control_select_delay(mux->mux, mux->enable_state, delay_us);
-> +}
-> +EXPORT_SYMBOL_GPL(mux_state_select_delay);
-
-Taking the above into account, I would like to see:
-
-/**
- * mux_state_select_delay() - Select the mux-state
- * @mstate: The mux-state to select.
- * @delay_us: The time to delay (in microseconds) if the mux-control changes
- *            state on select.
- *
- * On successfully selecting the mux-state, its mux-control will be locked
- * until there is a call to mux_state_deselect(). If the mux-control is
- * already selected when mux_state_select() is called, the caller will be
- * blocked until the mux-control is deselected (by someone else).
- *
- * Therefore, make sure to call mux_state_deselect() when the operation is
- * complete and the mux-control is free for others to use, but do not call
- * mux_state_deselect() if mux_state_select() fails.
- *
- * Return: 0 when the mux-state has been selected or a negative errno on
- * error.
- */
-int mux_state_select_delay(struct mux_state *mstate, unsigned int delay_us)
-
-And then similar changes for the other new mux_state_ functions.
-
-> +
->  /**
->   * mux_control_try_select_delay() - Try to select the given multiplexer state.
->   * @mux: The mux-control to request a change of state from.
-> @@ -405,6 +428,27 @@ int mux_control_try_select_delay(struct mux_control *mux, unsigned int state,
->  }
->  EXPORT_SYMBOL_GPL(mux_control_try_select_delay);
->  
-> +/**
-> + * mux_state_try_select_delay() - Try to select the multiplexer enable state.
-> + * @mux: The mux-control to request a change of state from.
-> + * @delay_us: The time to delay (in microseconds) if the mux state is changed.
-> + *
-> + * On successfully selecting the enable state, it will be locked until
-> + * mux_state_deselect() called.
-> + *
-> + * Therefore, make sure to call mux_state_deselect() when the operation is
-> + * complete and the mux-control is free for others to use, but do not call
-> + * mux_state_deselect() if mux_state_try_select() fails.
-> + *
-> + * Return: 0 when the mux-control state has the requested state or a negative
-> + * errno on error. Specifically -EBUSY if the mux-control is contended.
-> + */
-> +int mux_state_try_select_delay(struct mux_state *mux, unsigned int delay_us)
-> +{
-> +	return mux_control_try_select_delay(mux->mux, mux->enable_state, delay_us);
-> +}
-> +EXPORT_SYMBOL_GPL(mux_state_try_select_delay);
-> +
->  /**
->   * mux_control_deselect() - Deselect the previously selected multiplexer state.
->   * @mux: The mux-control to deselect.
-> @@ -431,6 +475,24 @@ int mux_control_deselect(struct mux_control *mux)
->  }
->  EXPORT_SYMBOL_GPL(mux_control_deselect);
->  
-> +/**
-> + * mux_state_deselect() - Deselect the previously selected multiplexer state.
-> + * @mux: The mux-state to deselect.
-> + *
-> + * It is required that a single call is made to mux_state_deselect() for
-> + * each and every successful call made to either of mux_state_select() or
-> + * mux_state_try_select().
-> + *
-> + * Return: 0 on success and a negative errno on error. An error can only
-> + * occur if the mux has an idle state. Note that even if an error occurs, the
-> + * mux-control is unlocked and is thus free for the next access.
-> + */
-> +int mux_state_deselect(struct mux_state *mux)
-> +{
-> +	return mux_control_deselect(mux->mux);
-> +}
-> +EXPORT_SYMBOL_GPL(mux_state_deselect);
-> +
->  /* Note this function returns a reference to the mux_chip dev. */
->  static struct mux_chip *of_find_mux_chip_by_node(struct device_node *np)
->  {
-> @@ -442,13 +504,15 @@ static struct mux_chip *of_find_mux_chip_by_node(struct device_node *np)
->  }
->  
->  /**
-> - * mux_control_get() - Get the mux-control for a device.
-> + * mux_get() - Get the mux-control for a device.
->   * @dev: The device that needs a mux-control.
->   * @mux_name: The name identifying the mux-control.
-> + * @enable_state: The variable to store the enable state for the requested device
->   *
->   * Return: A pointer to the mux-control, or an ERR_PTR with a negative errno.
->   */
-> -struct mux_control *mux_control_get(struct device *dev, const char *mux_name)
-> +static struct mux_control *mux_get(struct device *dev, const char *mux_name,
-> +				   unsigned int *enable_state)
-
-s/enable_state/state/ (goes for all of the patch).
-
->  {
->  	struct device_node *np = dev->of_node;
->  	struct of_phandle_args args;
-> @@ -481,8 +545,7 @@ struct mux_control *mux_control_get(struct device *dev, const char *mux_name)
->  	if (!mux_chip)
->  		return ERR_PTR(-EPROBE_DEFER);
->  
-> -	if (args.args_count > 1 ||
-
-It is inconsistent to allow more than 2 args, but then only allow
-digging out the state from the 2nd arg if the count is exactly 2.
-
-> -	    (!args.args_count && (mux_chip->controllers > 1))) {
-> +	if (!args.args_count && mux_chip->controllers > 1) {
->  		dev_err(dev, "%pOF: wrong #mux-control-cells for %pOF\n",
->  			np, args.np);
->  		put_device(&mux_chip->dev);
-> @@ -500,8 +563,25 @@ struct mux_control *mux_control_get(struct device *dev, const char *mux_name)
->  		return ERR_PTR(-EINVAL);
->  	}
->  
-> +	if (args.args_count == 2)
-> +		*enable_state = args.args[1];
-> +
-
-With the suggested binding in my comment for patch 1/4, you'd need to do
-either
-
-	ret = of_parse_phandle_with_args(np,
-					 "mux-controls", "#mux-control-cells",
-					 index, &args);
-
-or
-
-	ret = of_parse_phandle_with_args(np,
-					 "mux-states", "#mux-state-cells",
-					 index, &args);
-
-depending on if the mux_get helper gets a NULL (enable_)state pointer or a "real"
-address, and then...
-
->  	return &mux_chip->mux[controller];
->  }
-> +
-> +/**
-> + * mux_control_get() - Get the mux-control for a device.
-> + * @dev: The device that needs a mux-control.
-> + * @mux_name: The name identifying the mux-control.
-> + *
-> + * Return: A pointer to the mux-control, or an ERR_PTR with a negative errno.
-> + */
-> +struct mux_control *mux_control_get(struct device *dev, const char *mux_name)
-> +{
-> +	int state;
-> +
-> +	return mux_get(dev, mux_name, &state);
-
-...pass NULL as the 3rd arg here.
-
-> +}
->  EXPORT_SYMBOL_GPL(mux_control_get);
->  
->  /**
-> @@ -523,6 +603,26 @@ static void devm_mux_control_release(struct device *dev, void *res)
->  	mux_control_put(mux);
->  }
->  
-> +/**
-> + * mux_state_put() - Put away the mux-state for good.
-> + * @mux: The mux-state to put away.
-> + *
-> + * mux_control_put() reverses the effects of mux_control_get().
-> + */
-> +void mux_state_put(struct mux_state *mux_state)
-> +{
-> +	mux_control_put(mux_state->mux);
-> +	kfree(mux_state);
-> +}
-> +EXPORT_SYMBOL_GPL(mux_state_put);
-> +
-> +static void devm_mux_state_release(struct device *dev, void *res)
-> +{
-> +	struct mux_state *mux = *(struct mux_state **)res;
-> +
-> +	mux_state_put(mux);
-> +}
-> +
->  /**
->   * devm_mux_control_get() - Get the mux-control for a device, with resource
->   *			    management.
-> @@ -553,6 +653,44 @@ struct mux_control *devm_mux_control_get(struct device *dev,
->  }
->  EXPORT_SYMBOL_GPL(devm_mux_control_get);
->  
-> +/**
-> + * devm_mux_state_get() - Get the mux-state for a device, with resource
-> + *			  management.
-> + * @dev: The device that needs a mux-control.
-> + * @mux_name: The name identifying the mux-control.
-> + *
-> + * Return: Pointer to the mux-state, or an ERR_PTR with a negative errno.
-> + */
-> +struct mux_state *devm_mux_state_get(struct device *dev,
-> +				     const char *mux_name)
-> +{
-> +	struct mux_state **ptr, *mux_state;
-> +	struct mux_control *mux_ctrl;
-> +	int enable_state;
-> +
-> +	mux_state = devm_kzalloc(dev, sizeof(struct mux_state), GFP_KERNEL);
-> +	if (!mux_state)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	ptr = devres_alloc(devm_mux_state_release, sizeof(*ptr), GFP_KERNEL);
-> +	if (!ptr)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	mux_ctrl = mux_get(dev, mux_name, &enable_state);
-> +	if (IS_ERR(mux_ctrl)) {
-> +		devres_free(ptr);
-> +		return (struct mux_state *)mux_ctrl;
-> +	}
-> +
-> +	mux_state->mux = mux_ctrl;
-> +	mux_state->enable_state = enable_state;
-> +	*ptr = mux_state;
-> +	devres_add(dev, ptr);
-> +
-> +	return mux_state;
-> +}
-> +EXPORT_SYMBOL_GPL(devm_mux_state_get);
-> +
->  /*
->   * Using subsys_initcall instead of module_init here to try to ensure - for
->   * the non-modular case - that the subsystem is initialized when mux consumers
-> diff --git a/include/linux/mux/consumer.h b/include/linux/mux/consumer.h
-> index 7a09b040ac39..d0f3242e148d 100644
-> --- a/include/linux/mux/consumer.h
-> +++ b/include/linux/mux/consumer.h
-> @@ -14,33 +14,50 @@
->  
->  struct device;
->  struct mux_control;
-> +struct mux_state;
->  
->  unsigned int mux_control_states(struct mux_control *mux);
->  int __must_check mux_control_select_delay(struct mux_control *mux,
->  					  unsigned int state,
->  					  unsigned int delay_us);
-> +int __must_check mux_state_select_delay(struct mux_state *mux,
-> +					unsigned int delay_us);
->  int __must_check mux_control_try_select_delay(struct mux_control *mux,
->  					      unsigned int state,
->  					      unsigned int delay_us);
-> -
-> +int __must_check mux_state_try_select_delay(struct mux_state *mux,
-> +					    unsigned int delay_us);
->  static inline int __must_check mux_control_select(struct mux_control *mux,
->  						  unsigned int state)
->  {
->  	return mux_control_select_delay(mux, state, 0);
->  }
->  
-> +static inline int __must_check mux_state_select(struct mux_state *mux)
-> +{
-> +	return mux_state_select_delay(mux, 0);
-> +}
->  static inline int __must_check mux_control_try_select(struct mux_control *mux,
->  						      unsigned int state)
->  {
->  	return mux_control_try_select_delay(mux, state, 0);
->  }
->  
-> +static inline int __must_check mux_state_try_select(struct mux_state *mux)
-> +{
-> +	return mux_state_try_select_delay(mux, 0);
-> +}
-> +
->  int mux_control_deselect(struct mux_control *mux);
-> +int mux_state_deselect(struct mux_state *mux);
->  
->  struct mux_control *mux_control_get(struct device *dev, const char *mux_name);
->  void mux_control_put(struct mux_control *mux);
-> +void mux_state_put(struct mux_state *mux);
->  
->  struct mux_control *devm_mux_control_get(struct device *dev,
->  					 const char *mux_name);
-> +struct mux_state *devm_mux_state_get(struct device *dev,
-> +				     const char *mux_name);
->  
->  #endif /* _LINUX_MUX_CONSUMER_H */
-> diff --git a/include/linux/mux/driver.h b/include/linux/mux/driver.h
-> index 18824064f8c0..c7236f307fbd 100644
-> --- a/include/linux/mux/driver.h
-> +++ b/include/linux/mux/driver.h
-> @@ -53,6 +53,19 @@ struct mux_control {
->  	ktime_t last_change;
+>  struct can_transceiver_data {
+>  	u32 flags;
+> @@ -21,13 +22,22 @@ struct can_transceiver_phy {
+>  	struct phy *generic_phy;
+>  	struct gpio_desc *standby_gpio;
+>  	struct gpio_desc *enable_gpio;
+> +	struct mux_state *mux_state;
 >  };
 >  
-> +/**
-> + * struct mux_state -	Represents a mux controller specific to a given device
-> + * @mux:		Pointer to a mux controller
-> + * @enable_state	State of the mux to be set for enabling a device
-> + *
-> + * This structure is specific to a device that acquires it and has information
-> + * specific to the device.
-> + */
-> +struct mux_state {
-> +	struct mux_control *mux;
-> +	unsigned int enable_state;
-> +};
-> +
->  /**
->   * struct mux_chip -	Represents a chip holding mux controllers.
->   * @controllers:	Number of mux controllers handled by the chip.
-> 
+>  /* Power on function */
+>  static int can_transceiver_phy_power_on(struct phy *phy)
+>  {
+> +	int ret;
+>  	struct can_transceiver_phy *can_transceiver_phy = phy_get_drvdata(phy);
+>  
+> +	if (can_transceiver_phy->mux_state) {
+> +		ret = mux_state_select(can_transceiver_phy->mux_state);
+> +		if (ret) {
+> +			dev_err(&phy->dev, "Failed to select CAN mux: %d\n", ret);
+> +			return ret;
+> +		}
+> +	}
+>  	if (can_transceiver_phy->standby_gpio)
+>  		gpiod_set_value_cansleep(can_transceiver_phy->standby_gpio, 0);
+>  	if (can_transceiver_phy->enable_gpio)
+> @@ -45,6 +55,8 @@ static int can_transceiver_phy_power_off(struct phy *phy)
+>  		gpiod_set_value_cansleep(can_transceiver_phy->standby_gpio, 1);
+>  	if (can_transceiver_phy->enable_gpio)
+>  		gpiod_set_value_cansleep(can_transceiver_phy->enable_gpio, 0);
+> +	if (can_transceiver_phy->mux_state)
+> +		mux_state_deselect(can_transceiver_phy->mux_state);
 
-This struct does not belong in driver.h, as it's purely a consumer thing.
-That said, it need not be in consumer.h either, as there is no need to
-"expose" the struct guts in any header. Just add it directly in core.c
-which is the only file that digs around in the struct.
+Careful, it is not obvious that you are following the documentation you
+added in patch 3/4
+
++ * Therefore, make sure to call mux_state_deselect() when the operation is
++ * complete and the mux-control is free for others to use, but do not call
++ * mux_state_deselect() if mux_state_select() fails.
+
+Or, are you absolutely certain that can_transceiver_phy_power_off cannot,
+in any curcumstance, be called without a successful previous call to can_transceiver_phy_power_on? Or that can_transceiver_phy_power_on will
+never ever be called again without a can_transceiver_phy_power_off in
+between the two on calls?
+
+If there is any doubt, you need to remember if you have selected/deselected
+the mux. Maybe this should be remebered inside struct mux_state so that it
+is always safe to call mux_state_select/mux_state_deselect? That's one way
+to solve this difficulty.
+
+But then again, the phy layer might ensure that extra precaution is not
+needed. But it might also be that it for sure is intended that this is solved
+in the phy layer, but that callbacks (or whatever) has been added "after the
+fact" and that an extra "on" or "off" has just been just shrugged at.
 
 Cheers,
 Peter
+
+>  
+>  	return 0;
+>  }
+> @@ -95,6 +107,16 @@ static int can_transceiver_phy_probe(struct platform_device *pdev)
+>  	match = of_match_node(can_transceiver_phy_ids, pdev->dev.of_node);
+>  	drvdata = match->data;
+>  
+> +	if (of_property_read_bool(dev->of_node, "mux-controls")) {
+> +		struct mux_state *mux_state;
+> +
+> +		mux_state = devm_mux_state_get(dev, NULL);
+> +		if (IS_ERR(mux_state))
+> +			return dev_err_probe(&pdev->dev, PTR_ERR(mux_state),
+> +					     "failed to get mux\n");
+> +		can_transceiver_phy->mux_state = mux_state;
+> +	}
+> +
+>  	phy = devm_phy_create(dev, dev->of_node,
+>  			      &can_transceiver_phy_ops);
+>  	if (IS_ERR(phy)) {
+> 
