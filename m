@@ -2,15 +2,15 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8B845E385
-	for <lists+linux-can@lfdr.de>; Fri, 26 Nov 2021 00:46:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A96DE45E38D
+	for <lists+linux-can@lfdr.de>; Fri, 26 Nov 2021 00:54:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234125AbhKYXtd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 25 Nov 2021 18:49:33 -0500
-Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net ([165.227.154.27]:39756
+        id S232330AbhKYX6B (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 25 Nov 2021 18:58:01 -0500
+Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net ([165.227.154.27]:39121
         "HELO zg8tmty1ljiyny4xntqumjca.icoremail.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with SMTP id S1349349AbhKYXrd (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 25 Nov 2021 18:47:33 -0500
+        by vger.kernel.org with SMTP id S232344AbhKYX4B (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 25 Nov 2021 18:56:01 -0500
 Received: by ajax-webmail-mail-app2 (Coremail) ; Fri, 26 Nov 2021 07:43:53
  +0800 (GMT+08:00)
 X-Originating-IP: [115.204.154.165]
