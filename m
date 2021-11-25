@@ -2,97 +2,46 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F24F45E35C
-	for <lists+linux-can@lfdr.de>; Fri, 26 Nov 2021 00:31:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D8B845E385
+	for <lists+linux-can@lfdr.de>; Fri, 26 Nov 2021 00:46:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231370AbhKYXeU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 25 Nov 2021 18:34:20 -0500
-Received: from mail-yb1-f171.google.com ([209.85.219.171]:34798 "EHLO
-        mail-yb1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350988AbhKYXcU (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 25 Nov 2021 18:32:20 -0500
-Received: by mail-yb1-f171.google.com with SMTP id y68so15554564ybe.1;
-        Thu, 25 Nov 2021 15:29:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=blV1Fv4hcoWLPMa9NW0Mv4Ujudwc+s6b2OZ54WL07S4=;
-        b=AGfC9C5yrVJfWGUcDsLHrMXCBi/ioIjc/kbvQSQLvsyUHzKKlMKadPosETigIHMJQ7
-         RD/YHfIqbTgqqp5xkZM6BLw5m1ZVZNGh9Ttnv5AVVq6EHwsUG0JX5bMclr247vVU6czm
-         1PzigDzN8lv7df6WaIBdxfEMDz/pUZoQDXKzxa3qzN6ADd4WbaJJLeJK6Pdvew6ttTfC
-         1c6P9UwD/KeG/Tu7zH73nnKM3mTDqKK0NcEVoS2VuvcaUp5Rbxz9xfjN+v1lIx6PjbkW
-         A8XqY+8UneGqvse3VBuApfCGogJVcxL2mikGO2+fbFsZ5GuO1aGjEb5tjqHBhhh7GMjr
-         oFuQ==
-X-Gm-Message-State: AOAM533ZD1H3EFagdDlfIIRbFI3Pk8yTCKEzZC/KvIMlCILvEzBVpBFu
-        KftMhryNg9co/oHs94jVa0jy6N7v6xBsEz0K4N1+VLGraRs=
-X-Google-Smtp-Source: ABdhPJxqAoOcr1wx1llTSS3Z489P1w21Bx/evl9uijsb35Apz8cCAD32funRnACdZQbh02+XLSTjm7lel8mdyMh18Jg=
-X-Received: by 2002:a25:c987:: with SMTP id z129mr7183395ybf.62.1637882947711;
- Thu, 25 Nov 2021 15:29:07 -0800 (PST)
+        id S234125AbhKYXtd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 25 Nov 2021 18:49:33 -0500
+Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net ([165.227.154.27]:39756
+        "HELO zg8tmty1ljiyny4xntqumjca.icoremail.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with SMTP id S1349349AbhKYXrd (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 25 Nov 2021 18:47:33 -0500
+Received: by ajax-webmail-mail-app2 (Coremail) ; Fri, 26 Nov 2021 07:43:53
+ +0800 (GMT+08:00)
+X-Originating-IP: [115.204.154.165]
+Date:   Fri, 26 Nov 2021 07:43:53 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   "Lin Ma" <linma@zju.edu.cn>
+To:     "Oliver Hartkopp" <socketcan@hartkopp.net>
+Cc:     linux-can@vger.kernel.org, mkl@pengutronix.de, davem@davemloft.net,
+        kuba@kernel.org
+Subject: Re: Re: [PATCH v0] can: raw: supplement the check to prevent the
+ NPD
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2021 www.mailtech.cn zju.edu.cn
+In-Reply-To: <0801ace2-5885-d579-aa8f-177c0cc5c2da@hartkopp.net>
+References: <20211125084655.16974-1-linma@zju.edu.cn>
+ <0801ace2-5885-d579-aa8f-177c0cc5c2da@hartkopp.net>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-References: <20211125172021.976384-1-mailhol.vincent@wanadoo.fr>
- <20211125172021.976384-5-mailhol.vincent@wanadoo.fr> <ed755990-4169-604e-d982-7e4370114512@hartkopp.net>
-In-Reply-To: <ed755990-4169-604e-d982-7e4370114512@hartkopp.net>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Fri, 26 Nov 2021 08:28:56 +0900
-Message-ID: <CAMZ6RqJWdO3tvOz020Ee_zcFnJDFWO9qxM7Rtjw2+n_o79B+cw@mail.gmail.com>
-Subject: Re: [PATCH v2 4/5] can: do not increase rx_bytes statistics for RTR frames
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        Jimmy Assarsson <extja@kvaser.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Yasushi SHOJI <yashi@spacecubics.com>,
-        Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
-        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Stephane Grosjean <s.grosjean@peak-system.com>
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <7de16f2f.7a0d4.17d597bebe2.Coremail.linma@zju.edu.cn>
+X-Coremail-Locale: en_US
+X-CM-TRANSID: by_KCgAnCvW5H6BhmT8TAQ--.18323W
+X-CM-SenderInfo: qtrwiiyqvtljo62m3hxhgxhubq/1tbiAwUTElNG3EwKKwAHsk
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWUJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Oliver,
-
-On. 26 Nov. 2021 at 03:50, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
-> Hi Vincent,
->
-> On 25.11.21 18:20, Vincent Mailhol wrote:
->
-> > diff --git a/drivers/net/can/usb/ucan.c b/drivers/net/can/usb/ucan.c
-> > index d582c39fc8d0..717d4925fdb0 100644
-> > --- a/drivers/net/can/usb/ucan.c
-> > +++ b/drivers/net/can/usb/ucan.c
-> > @@ -619,12 +619,13 @@ static void ucan_rx_can_msg(struct ucan_priv *up, struct ucan_message_in *m)
-> >       /* copy the payload of non RTR frames */
-> >       if (!(cf->can_id & CAN_RTR_FLAG) || (cf->can_id & CAN_ERR_FLAG))
-> >               memcpy(cf->data, m->msg.can_msg.data, cf->len);
-> > +     /* only frames which are neither RTR nor ERR have a payload */
-> > +     else
-> > +             stats->rx_bytes += cf->len;
->
-> This 'else' path looks wrong ...
-
-Ack. I will send a v3.
-And thanks a lot for the review!
-
-> >
-> >       /* don't count error frames as real packets */
-> > -     if (!(cf->can_id & CAN_ERR_FLAG)) {
-> > +     if (!(cf->can_id & CAN_ERR_FLAG))
-> >               stats->rx_packets++;
-> > -             stats->rx_bytes += cf->len;
-> > -     }
-> >
-> >       /* pass it to Linux */
-> >       netif_rx(skb);
->
-> Regards,
-> Oliver
+SGkgT2xpdmVyLAoKT29wcywgeWVhaCBpdCBzZWVtcyB0byBiZSBhIGZhbHNlIGFsYXJtLCBzb3Jy
+eSBmb3IgdGhhdC4gWEQKCk1vcmVvdmVyLCB0aGFua3MgZm9yIHlvdXIgd2FybSByZXBseS4gVGhh
+bmtzIQoKQmVzdCByZWdhcmRzCkxpbg==
