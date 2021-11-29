@@ -2,60 +2,187 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 422E2460C03
-	for <lists+linux-can@lfdr.de>; Mon, 29 Nov 2021 02:03:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E27C460E16
+	for <lists+linux-can@lfdr.de>; Mon, 29 Nov 2021 05:39:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376785AbhK2BG4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 28 Nov 2021 20:06:56 -0500
-Received: from mail.vallenar.cl ([200.54.241.89]:43026 "EHLO mail.vallenar.cl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235331AbhK2BEz (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Sun, 28 Nov 2021 20:04:55 -0500
-X-Greylist: delayed 21421 seconds by postgrey-1.27 at vger.kernel.org; Sun, 28 Nov 2021 20:04:47 EST
-Received: from localhost (localhost [127.0.0.1])
-        by mail.vallenar.cl (Postfix) with ESMTP id 2ECA31CCA36D;
-        Sun, 28 Nov 2021 12:24:53 -0300 (-03)
-Received: from mail.vallenar.cl ([127.0.0.1])
-        by localhost (mail.vallenar.cl [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id q-MGcXXIs6xC; Sun, 28 Nov 2021 12:24:52 -0300 (-03)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.vallenar.cl (Postfix) with ESMTP id B18FD1D09F66;
-        Sun, 28 Nov 2021 11:52:42 -0300 (-03)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.vallenar.cl B18FD1D09F66
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vallenar.cl;
-        s=EC098874-C7DE-11E7-B3B1-1A9A6030413E; t=1638111162;
-        bh=IQxUcKgLaEia+DMrVj9OEHbWOH8TffrzQMeZgAxYubI=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=MNjo73r4thabIXIX17BkWiB7TZbbl86GNlruV3Alvq1cyEYsQq//83J9GyKqvyni3
-         14mzJE8eJ/lLi+A4Z1bmESveCdc6z7WWmG9c5lGgZUtuHpI6SvRKaOG+C3ZTKbrXO6
-         5A9jqRo96wRmQFBH8Qh5NWilE5Ih4nDmHTXrgWi4pERx24VrS6n2ZG6WFaA9G1DB8t
-         mOjzE94BDiot2Z4HGjwImn3n4ndzzl3TZZN1rzHe4usRgna8vvIkScOCM6agsumETr
-         uDHxjr0Y35i8WU5Oak2HYl82KOUvs2Py0ne4soi22PxSDBmF02NJOx998Xvj/LsAQ7
-         EiUKbFnm8WXVA==
-X-Virus-Scanned: amavisd-new at vallenar.cl
-Received: from mail.vallenar.cl ([127.0.0.1])
-        by localhost (mail.vallenar.cl [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id cGk2q-1z0kHg; Sun, 28 Nov 2021 11:52:42 -0300 (-03)
-Received: from [192.168.8.101] (unknown [105.0.3.102])
-        by mail.vallenar.cl (Postfix) with ESMTPSA id 5EAD11D08B7B;
-        Sun, 28 Nov 2021 11:21:37 -0300 (-03)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S236376AbhK2EmQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 28 Nov 2021 23:42:16 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:46600 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233993AbhK2EkP (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 28 Nov 2021 23:40:15 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1AT4aZVA103393;
+        Sun, 28 Nov 2021 22:36:35 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1638160595;
+        bh=T5ua16ilPFMaScWb+OoNmTXhxlYu6YduhMgRmagewJU=;
+        h=From:Subject:To:CC:References:Date:In-Reply-To;
+        b=Dql1PpzBGgHWPkere5NpJg6Vl1zEgoP5jH+keEuopHBBoh/cnvRsTQHBkDJKOBnW3
+         SIaBmnUNxTX/R3ssF28leIIXM0XiUDGY6tYBokPdQTNi4TuBU5ZnFCBIpznPwWLGVS
+         rPQgBgzSp21BcQZT3BxxIEjDapCY4eGQDiraEJ94=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1AT4aZw6033420
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Sun, 28 Nov 2021 22:36:35 -0600
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Sun, 28
+ Nov 2021 22:36:35 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Sun, 28 Nov 2021 22:36:34 -0600
+Received: from [10.250.232.185] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1AT4aVaE061174;
+        Sun, 28 Nov 2021 22:36:31 -0600
+From:   Aswath Govindraju <a-govindraju@ti.com>
+Subject: Re: [PATCH RFC v3 1/4] dt-bindings: mux: Increase the number of
+ arguments in mux-controls
+To:     Peter Rosin <peda@axentia.se>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>, Nishanth Menon <nm@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-can@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>
+References: <20211123081222.27979-1-a-govindraju@ti.com>
+ <20211123081222.27979-2-a-govindraju@ti.com>
+ <24781209-928b-dea4-de0b-b103dac8de82@axentia.se>
+Message-ID: <5f455c4d-5edb-4382-1193-a519a7a227a5@ti.com>
+Date:   Mon, 29 Nov 2021 10:06:30 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: 2.000.000,00. Euro
-To:     Recipients <yperez@vallenar.cl>
-From:   "manuel franco" <yperez@vallenar.cl>
-Date:   Sun, 28 Nov 2021 16:29:08 +0200
-Reply-To: manuelfrancospende00@gmail.com
-Message-Id: <20211128142138.5EAD11D08B7B@mail.vallenar.cl>
+In-Reply-To: <24781209-928b-dea4-de0b-b103dac8de82@axentia.se>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Sie haben eine Spende von 2.000.000,00. Euro
+Hi Peter,
 
-Mein Name ist Manuel Franco aus den Vereinigten Staaten.
-Ich habe die Amerika-Lotterie im Wert von 768 Millionen US-Dollar gewonnen =
-und spende einen Teil davon an nur 5 gl=FCckliche Menschen und ein paar Wai=
-senh=E4user als Wohlwollen f=FCr die Menschheit.
+On 25/11/21 7:05 pm, Peter Rosin wrote:
+> Hi!
+> 
+> You need to have some description on how #mux-control-cells now work.
+> The previous description is in mux-consumer.yaml and an update there
+> is needed.
+> 
+> However, I have realized that the adg792a binding uses #mux-control-cells
+> to indicate if it should expose its three muxes with one mux-control
+> and operate the muxes in parallel, or if it should be expose three
+> independent mux-controls. So, the approach in this series to always
+> have the #mux-control-cells property fixed at <2> when indicating a
+> state will not work for that binding. And I see no fix for that binding
+> without adding a new property.
+> 
+> So, I would like a different approach. Since I dislike how mux-controls
+> -after this series- is not (always) specifying a mux-control like the name
+> says, but instead optionally a specific state, the new property I would
+> like to add is #mux-state-cells such that it would always be one more
+> than #mux-control-cells.
+> 
+> 	mux: mux-controller {
+> 		compatible = "gpio-mux";
+> 		#mux-control-cells = <0>;
+> 		#mux-state-cells = <1>;
+> 
+> 		mux-gpios = <...>;
+> 	};
+> 
+> 	can-phy {
+> 		compatible = "ti,tcan1043";
+> 		...
+> 		mux-states = <&mux 1>;
+> 	};
+> 
+> That solves the naming issue, the unused argument for mux-conrtrollers
+> that previously had #mux-control-cells = <0>, and the binding for adg792a
+> need no longer be inconsistent.
+> 
+> Or, how should this be solved? I'm sure there are other options...
+> 
+
+
+I feel that the new approach using mux-state-cells seems to be
+overpopulating the device tree nodes, when the state can be represented
+using the control cells. I understand that the definition for
+mux-controls is to only specify the control line to be used in a given
+mux. Can't it now be upgraded to also represent the state at which the
+control line has to be set to?
+
+With respect to adg792a, it is inline with the current implementation
+and the only change I think would be required in the driver is,
+
+diff --git a/drivers/mux/adg792a.c b/drivers/mux/adg792a.c
+index e8fc2fc1ab09..2cd3bb8a40d4 100644
+--- a/drivers/mux/adg792a.c
++++ b/drivers/mux/adg792a.c
+@@ -73,8 +73,6 @@ static int adg792a_probe(struct i2c_client *i2c)
+        ret = device_property_read_u32(dev, "#mux-control-cells", &cells);
+        if (ret < 0)
+                return ret;
+-       if (cells >= 2)
+-               return -EINVAL;
+
+        mux_chip = devm_mux_chip_alloc(dev, cells ? 3 : 1, 0);
+        if (IS_ERR(mux_chip))
+
+And the following series should be compatible with it. If adg792a driver
+is the only issue then would there be any issue with only changing it
+and using this implementation?
+
+Thanks,
+Aswath
+
+
+
+
+> Cheers,
+> Peter
+> 
+> On 2021-11-23 09:12, Aswath Govindraju wrote:
+>> Increase the allowed number of arguments in mux-controls to add support for
+>> passing information regarding the state of the mux to be set, for a given
+>> device.
+>>
+>> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+>> ---
+>>  Documentation/devicetree/bindings/mux/gpio-mux.yaml       | 2 +-
+>>  Documentation/devicetree/bindings/mux/mux-controller.yaml | 2 +-
+>>  2 files changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/mux/gpio-mux.yaml b/Documentation/devicetree/bindings/mux/gpio-mux.yaml
+>> index 0a7c8d64981a..c810b7df39de 100644
+>> --- a/Documentation/devicetree/bindings/mux/gpio-mux.yaml
+>> +++ b/Documentation/devicetree/bindings/mux/gpio-mux.yaml
+>> @@ -26,7 +26,7 @@ properties:
+>>        List of gpios used to control the multiplexer, least significant bit first.
+>>  
+>>    '#mux-control-cells':
+>> -    const: 0
+>> +    enum: [ 0, 1, 2 ]
+>>  
+>>    idle-state:
+>>      default: -1
+>> diff --git a/Documentation/devicetree/bindings/mux/mux-controller.yaml b/Documentation/devicetree/bindings/mux/mux-controller.yaml
+>> index 736a84c3b6a5..0b4b067a97bf 100644
+>> --- a/Documentation/devicetree/bindings/mux/mux-controller.yaml
+>> +++ b/Documentation/devicetree/bindings/mux/mux-controller.yaml
+>> @@ -73,7 +73,7 @@ properties:
+>>      pattern: '^mux-controller(@.*|-[0-9a-f]+)?$'
+>>  
+>>    '#mux-control-cells':
+>> -    enum: [ 0, 1 ]
+>> +    enum: [ 0, 1, 2 ]
+>>  
+>>    idle-state:
+>>      $ref: /schemas/types.yaml#/definitions/int32
+>>
+
