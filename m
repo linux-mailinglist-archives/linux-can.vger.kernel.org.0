@@ -2,48 +2,186 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BC524679E8
-	for <lists+linux-can@lfdr.de>; Fri,  3 Dec 2021 16:01:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DA9F467A1F
+	for <lists+linux-can@lfdr.de>; Fri,  3 Dec 2021 16:16:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245082AbhLCPFO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 3 Dec 2021 10:05:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32780 "EHLO
+        id S1352776AbhLCPT6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 3 Dec 2021 10:19:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232199AbhLCPFO (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 3 Dec 2021 10:05:14 -0500
+        with ESMTP id S1381611AbhLCPT4 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 3 Dec 2021 10:19:56 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74427C061751
-        for <linux-can@vger.kernel.org>; Fri,  3 Dec 2021 07:01:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88AAC061359
+        for <linux-can@vger.kernel.org>; Fri,  3 Dec 2021 07:16:32 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1mtA4C-0002TT-Ua; Fri, 03 Dec 2021 16:01:41 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-4c70-bd43-38a4-642e.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:4c70:bd43:38a4:642e])
+        id 1mtAIZ-0004gN-1j
+        for linux-can@vger.kernel.org; Fri, 03 Dec 2021 16:16:31 +0100
+Received: from [IPv6:2a03:f580:87bc:d400:4c70:bd43:38a4:642e] (2a03-f580-87bc-d400-4c70-bd43-38a4-642e.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:4c70:bd43:38a4:642e])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 67A296BBBD3
+        for <linux-can@vger.kernel.org>; Fri,  3 Dec 2021 15:16:30 +0000 (UTC)
+Received: from bjornoya.blackshift.org
+        by bjornoya with LMTP
+        id EJSdAIw0qmGxJgAAs6a69A
+        (envelope-from <dan.carpenter@oracle.com>)
+        for <mkl-all@blackshift.org>; Fri, 03 Dec 2021 15:15:24 +0000
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id D27A86BBBCE
+        for <mkl-all@blackshift.org>; Fri,  3 Dec 2021 15:15:23 +0000 (UTC)
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 355F36BBBA2;
-        Fri,  3 Dec 2021 15:01:38 +0000 (UTC)
-Date:   Fri, 3 Dec 2021 16:01:37 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id ADCDE6BBBCD
+        for <ptx@kleine-budde.de>; Fri,  3 Dec 2021 15:15:23 +0000 (UTC)
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <dan.carpenter@oracle.com>)
+        id 1mtAHQ-0004Gm-8K
+        for mkl@pengutronix.de; Fri, 03 Dec 2021 16:15:21 +0100
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B3Ej8h1019878;
+        Fri, 3 Dec 2021 15:15:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2021-07-09;
+ bh=gBm8CSuY1RBF4kHAYp0acvKeH2FzmNqHSA3Pp4gXpKg=;
+ b=sQ1JGC3hlbIkApV5QLZV6ob8/3a1j1qhMLyjQ3fmcPplPH+0ZaM+AI8M/2oOVM6sFfA5
+ 7rFdBOv3YV9/xSCU72wtt3YCy3NBqZKB/w2RlTqW5frO2ebFMTfSUFn/GbMs/NABAef6
+ p8A+F6BT7k6BG41DukdiByzDsEv2rRrl87BjcXqN3ZkTru9EbLHt1s1Ljq7OfpWYPk1j
+ SpD5OMvSg4CqB7ySFJWWJSLAguw36WiWfuP+N8CmMGsjUwXWi+UBNjNRTXv5oU+XJzpX
+ iczgcKxfOzHJxdXkNekPbS//oaX9+PCffeGazChlO5aVy5caYYviiHKS6jfDdbsCUgYA 8w== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3cqn99g4y2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 03 Dec 2021 15:15:11 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1B3FBrol181414;
+        Fri, 3 Dec 2021 15:15:06 GMT
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2172.outbound.protection.outlook.com [104.47.57.172])
+        by aserp3020.oracle.com with ESMTP id 3cnhvjk0rk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 03 Dec 2021 15:15:06 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VLMDf0kAL3xsfJWQggFnLmCI1QPIc6Ooy/aWRBbkMppLcFebiiz7zmbcrrdrFz9Iug6tLKeWm2O9eU16zC51E0pOCvSDtlUrOOiOlF039rZ5nWxON0E4iw7vSMOilAlLz2neCQ8kuzS9GhyCGe2oO377s4COF77C0hoIpFMCk072z5ME9vXJOdPMSTYIoOVKkNttpq64O9TzcBLM/80mEP88zTt1i8hTlUhAyrE7UxOiYp+NU9XKZXtUQNCYm2eB5Mrf+P9k3fy9IYIsrxKzySG4CLAOpIyfSy/gZCXuIMQRlZazFjo3kL1R8eDEZf0CM/NisJl1cfw6+144ART2bg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gBm8CSuY1RBF4kHAYp0acvKeH2FzmNqHSA3Pp4gXpKg=;
+ b=ZaXgFmXEjWbkl4KqgzKRUbg6o3Mka4vMvuDnL/HF/vq/yTCxWw9Nx4400cr8tCxKLt+fDYEdkZJ07V0KWyndCkIpJVf6QoqY98BqzER+N1NPyJVUICGJAT0XAz44qY4EBpF0HX09W7hCY09W8cvxg4/B3JQ6cx/LqaL+rmHSDbc47DNa+W2EjSrhSyk1U5HC5jvJtYS8XIXxCxwN41VYHMRN+F56MpfJcxAziyONVVSPV8L1W19FtdyYe/YWW877o7aJGHhsa1hd9+1CEWHO4U9ZhpB+fbvfmQrY97atgZP04QZSfQMORG0RPTJC3onEZXtbkSiFFSQV6e/PJ3XWQw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gBm8CSuY1RBF4kHAYp0acvKeH2FzmNqHSA3Pp4gXpKg=;
+ b=aZNr/Sclofz8VurS0DPq/l1i/elDthUWIdwYlcRkLsTBM0Lxw9vsvZeYQnw+0mWJYjnIcyk5mi068w2R5YRIDA48yPk2BYcFcd2OeqpLldAl4RH7h97HepAVZiJBlW0sZt9OXxLi/VXPxV/5s6Zb3Jyda4Wma/UloV8MtXq+Vcg=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by MWHPR10MB1486.namprd10.prod.outlook.com
+ (2603:10b6:300:24::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.24; Fri, 3 Dec
+ 2021 15:15:04 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::7194:c377:36cc:d9f0]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::7194:c377:36cc:d9f0%6]) with mapi id 15.20.4734.027; Fri, 3 Dec 2021
+ 15:15:04 +0000
+Date:   Fri, 3 Dec 2021 18:14:44 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
 Cc:     kbuild@lists.01.org,
         Stephane Grosjean <s.grosjean@peak-system.com>, lkp@intel.com,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-can <linux-can@vger.kernel.org>
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Message-ID: <20211203151444.GK18178@kadam>
+References: <202112021833.wABxM5UN-lkp@intel.com>
+ <20211203145851.nrgmnu7c56w4vecy@pengutronix.de>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211203145851.nrgmnu7c56w4vecy@pengutronix.de>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: JNXP275CA0048.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:18::36)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+MIME-Version: 1.0
+Received: from kadam (102.222.70.114) by JNXP275CA0048.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:18::36) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11 via Frontend Transport; Fri, 3 Dec 2021 15:14:58 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a01302ed-2b29-4d7b-ff36-08d9b66faead
+X-MS-TrafficTypeDiagnostic: MWHPR10MB1486:
+X-Microsoft-Antispam-PRVS: <MWHPR10MB1486ED436C6A8755539E42618E6A9@MWHPR10MB1486.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: CBDFWPGr+4IgB1gAtVme2DnM28fbNGeR7rP7++M91V3SUixCCRCmA4cQm6j2sSmJI/8+zZ0iSaNqCZANp9UaIqOF+lIIB1qLRrUTv0hxhB5ph2XfKEdA+Y7YvTkhYTx6dpViOUz0rpcqX6iKiZkL9gN8B5D3fV77RWfYcKqNMt64JA9GO/d+AS5RUSEwoaxVccsKyFBigEw4Edy1tkYGwFcKlCKlmngFzkUMJXJiiCkh+WqLXzLMdlicZxmb43yGKxqjAXszdSFWo+MJb6/OAksm7Rn4jLaQUDWm11jTFNQ0AQJ4YY0aFbLgbtTmJBK+z+k317G69RQtVOS6pfimvAqBQZ2N3Q7y1aHBxSkoitzq+6Iy6Xrgo6Aj6jHnssSGyym743CtxAuAwGDOVS80UaEfvYgd+bELGt48nl16zJjXkxb4CUiMkZOG1HFG0YFnj+93jobpeQcGZ4TVOoyICVA3vaSn8t5OwXXagq93m8aiixHFY2J04xpmLg87POj3qxiDMYq8C7ksbRq7e/H6uRMKchTvnudlQ0frjuoniPU1ADnSfLTsNH0mX9RhhAPPCZT1Hg0mUUGryZMtt3/dkrIcWsSotP0XiahagfykXvGApvJcavyl6CoXw25PbXgFwR4ZxAz1s6mGpqc/efA5+D1MRVNynKKlndp49SNsVTJZPUIWK+ZewhmKzJQWNzQHR8hUYmDWUXeYrW3OJyxQ2w231sJDqBo/ca8/lfFMFN87DosbzUGgC3iC6OjBUv9JyerWsHbbk2q9YNUx9QOzUlIZ8A2EkQ7m58ibyhL4rvo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(8676002)(508600001)(6666004)(44832011)(5660300002)(8936002)(316002)(66946007)(33656002)(66476007)(9576002)(66556008)(4326008)(38100700002)(38350700002)(86362001)(186003)(26005)(956004)(966005)(55016003)(33716001)(6916009)(2906002)(1076003)(52116002)(9686003)(6496006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PLZIMBiuS8VtN1DH24q1TpzQ2JjjkQ8iaZuzmOl82z7d2eFPZRYv8wt7OKKH?=
+ =?us-ascii?Q?rgOscxHwLc/1xTpu4NoSZB8xPYvpT3WgsFw2fsjiVfTpJZ5jVZDLSZCOh6xn?=
+ =?us-ascii?Q?r1jx9H+wxoInS7WVDZGcIAFmaUXnVsSRxD1432Bw4dxLyqRZUZZJxML/qPFE?=
+ =?us-ascii?Q?RV1s7Bzye0U+2sfUe+y18Le94RK6r3pOPBxWyr193lN0rAPLsjYXDoInPrVh?=
+ =?us-ascii?Q?LBAysr15kxXm4oDjb5v4iK6yHB3spEfrLjmkmqHNOYI00VVSri9/uQRvP389?=
+ =?us-ascii?Q?U+u13ETs4S+NSMCWByFjaecGckcfWzkG7IMCp2AzsZS8r8ZoARgsvNeFadFo?=
+ =?us-ascii?Q?azOmpmACuUBlJO9JVx7sX/lGk00Mj37L340X7EmEBHJGMnzxb1wa8p0cjeA8?=
+ =?us-ascii?Q?fvyjiW/iHqgLLEwcxzsypKRDPio3tpOQecALxD8rrRGf/0JSCEUaHh7U3B/P?=
+ =?us-ascii?Q?uDLien2Tabkzjw0+UUQHQAroKrjV0jhXcPUCA/0Ks/gKtzevHmNpFXzk/ppe?=
+ =?us-ascii?Q?Rgs5wvFswGgDF0elXU7v3ErcBw6fuzfKDlcBpbWmrmRkIe44m8S2BdzBm5YB?=
+ =?us-ascii?Q?oqI85yCHkMbGWpwgnczFO7iMWAz/6u00R7WJMJeQRX3L31zlMFwyClmSrNER?=
+ =?us-ascii?Q?u/CN097KR1R2YWZOc8p62CQF+ZEHtKy6v1pa+J8dQAvDl3mSemcHcB/ZUvmF?=
+ =?us-ascii?Q?Lgjba9hYuUg6ZClGoQcMsjpYl93Mxfk9s4ya/O1RtLTXkNHJ4K29YbIzlGsa?=
+ =?us-ascii?Q?4lHmQ5ASCUApxv7qZTt/vlYcBgMkULeVMQdXhgaZY87OzpQ34OQI47m7lh66?=
+ =?us-ascii?Q?xVWvlnzzCrbmJzhguuUePMVUNE3ndMf+znmisLa0RsBBWG3JdXG0fcedAP1P?=
+ =?us-ascii?Q?mJ0DHSTK/H0U3ivAnVB7KMA1QOpNVsEaaP3QzbJHnLHuVlhxP46HaWq0qXNV?=
+ =?us-ascii?Q?fiNQv8V8QcsLZszRj66/EomGJLFAF8vwOBuypMH7NuLvSysTprj2TSqXHhni?=
+ =?us-ascii?Q?QfLn9E821BWfHfrdS+CPxA74Htb8/7AsX8bQVbwHLLsJ3yeqQ3Y8D5Ja5U69?=
+ =?us-ascii?Q?OTXkjXVpEswaoKa/0WilNJlfAdL3ufowxJEcgCFP/yeGH22+8cBO52cI/njE?=
+ =?us-ascii?Q?BAPzJ4M6+iCV54uZjlMj1wNSuJ0CXhRXOVFhlLpzacqDYxOjPm5aFummxcF3?=
+ =?us-ascii?Q?I9l8ODVuqHlwPMOV4k+fkkwXVvOuVLvsWCkGl+035i/Q5OyT/KwnNjjQc44G?=
+ =?us-ascii?Q?XYQoS4fXCRpJp9RrMIIFPkExNVGFTn4lyiirdLI7vtbm5YDVTs1nUJEWkTbv?=
+ =?us-ascii?Q?US/fPj0Jln5E9EA1CfPYOlFLUuCcmH4I4CoW3q9B14oarxS89cjppPe/1Rgr?=
+ =?us-ascii?Q?ABudX7uK+AKhugzq958VnG6CC4rTjMljSSFudWB2I4I+GVMOO0/MUtjEhLur?=
+ =?us-ascii?Q?HFZo63/of9AfrsL4LvQ4k+bxc3Y/LoppIndiSGtKerUvBhX/WQDzVjBusVLk?=
+ =?us-ascii?Q?HFZnj7ukjX21ORCCAtRrljCSIMI28jfEQg9MjVpBeMr5YrDjS5iX6+IXpaXD?=
+ =?us-ascii?Q?NXeY+O6Z+wOUwDFa3gGp1XAIw/mK4ICQi9wQ00RA/cjBjti3qd3ZfULSUZEO?=
+ =?us-ascii?Q?OAMZnfmgM853Bl7U7+VDOYy4idCOvYa0CJE/KhEcCJ/aZ85TnkWomw+kB0K0?=
+ =?us-ascii?Q?1+kFiGx7yOLs/D9nvboX79UAK5s=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a01302ed-2b29-4d7b-ff36-08d9b66faead
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Dec 2021 15:15:03.9808
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: IDyTR2tI+Jrb45SF+H6eSMbAh9V/3tBGdwLMCQFfAHqUP/uULOoTgCqb6gkIwtsLuXCwF22pHYNEifb24dss5S7pwJx2UznxMO+ojMZ7QNA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1486
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10186 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 spamscore=0 adultscore=0
+ bulkscore=0 malwarescore=0 mlxlogscore=967 mlxscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2112030096
+X-Proofpoint-ORIG-GUID: ifRFpePmkUmM2b9FDpWoLWB7igoRz76o
+X-Proofpoint-GUID: ifRFpePmkUmM2b9FDpWoLWB7igoRz76o
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
+        metis.ext.pengutronix.de
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.3 required=4.0 tests=AWL,BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MSGID_FROM_MTA_HEADER,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.2
 Subject: Re: drivers/net/can/usb/peak_usb/pcan_usb.c:523
  pcan_usb_decode_error() error: we previously assumed 'cf' could be null (see
  line 503)
-Message-ID: <20211203150137.xaelavizpjm7v5ir@pengutronix.de>
-References: <202112021833.wABxM5UN-lkp@intel.com>
- <20211203145851.nrgmnu7c56w4vecy@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="eaqoalpqzs7tr7z2"
-Content-Disposition: inline
-In-Reply-To: <20211203145851.nrgmnu7c56w4vecy@pengutronix.de>
+X-PTX-Original-Recipient: mkl@pengutronix.de
+X-PTX-Original-Recipient: ptx@kleine-budde.de
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -52,83 +190,37 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-
---eaqoalpqzs7tr7z2
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 03.12.2021 15:58:52, Marc Kleine-Budde wrote:
-> On 03.12.2021 17:09:55, Dan Carpenter wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.=
-git master
-> > head:   58e1100fdc5990b0cc0d4beaf2562a92e621ac7d
-> > commit: c11dcee758302702a83c6e85e4c4c3d9af42d2b3 can: peak_usb: pcan_us=
-b_decode_error(): upgrade handling of bus state changes
-> > config: x86_64-randconfig-m001-20211202 (https://download.01.org/0day-c=
-i/archive/20211202/202112021833.wABxM5UN-lkp@intel.com/config)
-> > compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-> >=20
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> >=20
-> > smatch warnings:
-> > drivers/net/can/usb/peak_usb/pcan_usb.c:523 pcan_usb_decode_error() err=
-or: we previously assumed 'cf' could be null (see line 503)
-> >=20
-> > vim +/cf +523 drivers/net/can/usb/peak_usb/pcan_usb.c
-> >=20
-> > 46be265d338833 Stephane Grosjean 2012-03-02  450  static int pcan_usb_d=
-ecode_error(struct pcan_usb_msg_context *mc, u8 n,
+On Fri, Dec 03, 2021 at 03:58:51PM +0100, Marc Kleine-Budde wrote:
+> > 
+> > 46be265d338833 Stephane Grosjean 2012-03-02  450  static int pcan_usb_decode_error(struct pcan_usb_msg_context *mc, u8 n,
 > > 46be265d338833 Stephane Grosjean 2012-03-02  451  				 u8 status_len)
 > > 46be265d338833 Stephane Grosjean 2012-03-02  452  {
 > > 46be265d338833 Stephane Grosjean 2012-03-02  453  	struct sk_buff *skb;
 > > 46be265d338833 Stephane Grosjean 2012-03-02  454  	struct can_frame *cf;
-> > c11dcee7583027 Stephane Grosjean 2021-07-15  455  	enum can_state new_s=
-tate =3D CAN_STATE_ERROR_ACTIVE;
-> > 46be265d338833 Stephane Grosjean 2012-03-02  456 =20
-> > 46be265d338833 Stephane Grosjean 2012-03-02  457  	/* ignore this error=
- until 1st ts received */
-> > 46be265d338833 Stephane Grosjean 2012-03-02  458  	if (n =3D=3D PCAN_US=
-B_ERROR_QOVR)
-> > 46be265d338833 Stephane Grosjean 2012-03-02  459  		if (!mc->pdev->time=
-_ref.tick_count)
+> > c11dcee7583027 Stephane Grosjean 2021-07-15  455  	enum can_state new_state = CAN_STATE_ERROR_ACTIVE;
+> > 46be265d338833 Stephane Grosjean 2012-03-02  456  
+> > 46be265d338833 Stephane Grosjean 2012-03-02  457  	/* ignore this error until 1st ts received */
+> > 46be265d338833 Stephane Grosjean 2012-03-02  458  	if (n == PCAN_USB_ERROR_QOVR)
+> > 46be265d338833 Stephane Grosjean 2012-03-02  459  		if (!mc->pdev->time_ref.tick_count)
 > > 46be265d338833 Stephane Grosjean 2012-03-02  460  			return 0;
-> > 46be265d338833 Stephane Grosjean 2012-03-02  461 =20
-> > c11dcee7583027 Stephane Grosjean 2021-07-15  462  	/* allocate an skb t=
-o store the error frame */
-> > c11dcee7583027 Stephane Grosjean 2021-07-15  463  	skb =3D alloc_can_er=
-r_skb(mc->netdev, &cf);
->=20
+> > 46be265d338833 Stephane Grosjean 2012-03-02  461  
+> > c11dcee7583027 Stephane Grosjean 2021-07-15  462  	/* allocate an skb to store the error frame */
+> > c11dcee7583027 Stephane Grosjean 2021-07-15  463  	skb = alloc_can_err_skb(mc->netdev, &cf);
+> 
 > alloc_can_err_skb() ->
 > alloc_canfd_skb()
+> 
+> https://elixir.bootlin.com/linux/v5.15/source/drivers/net/can/dev/skb.c#L210
+> 
+> If skb is NULL, cf is set to NULL, too.
 
-Doh! It calls alloc_can_skb()
+Yeah.  Sorry about that.  The kbuild-bot doesn't do much cross function
+analysis (none for functions that are not inline).  I saw that this
+patch was old and could easily have checked it on my system which has
+the cross function DB but I was in a rush.  :/  My bad.  Will try be a
+more diligent person next time.
 
-https://elixir.bootlin.com/linux/v5.15/source/drivers/net/can/dev/skb.c#L180
+regards,
+dan carpenter
 
-Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---eaqoalpqzs7tr7z2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmGqMU4ACgkQqclaivrt
-76m4Hgf/QGQcpnkuAvX73JirejUw2l9aH3v/wn+oR5uPijQUr+ScCf9i/0kuw3Iu
-D5vLtTfUNqW+xJxo+AeWrdtTYMLD1KdN4I5VkmgsnO4sq45yvKRIB3fjQaeOfMY7
-S9AJ/ry/HTddebS54Dh8iJlYhw880Qy4NaTYQ1LYKRry+RIx2Vge1Zlh7LAkiZTk
-LjxSlu3PO7NkiUr5LpAPPhlxj1ZHBXyv20i1figZ5oJ62jCRcx4lZSYWxOAjpF7Y
-msYFYJWiW9XuY9CWamRAsj3evyqsp69WyI4X+qrKpw6QLJ7cUCteCydYk5KEWaRi
-ZJRLorFfBHwF6lCnng+VuLWval3DTA==
-=2OpR
------END PGP SIGNATURE-----
-
---eaqoalpqzs7tr7z2--
