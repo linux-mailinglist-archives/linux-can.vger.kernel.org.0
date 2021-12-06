@@ -2,61 +2,107 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B397D46A1CA
-	for <lists+linux-can@lfdr.de>; Mon,  6 Dec 2021 17:49:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F36F46A216
+	for <lists+linux-can@lfdr.de>; Mon,  6 Dec 2021 18:05:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239157AbhLFQwr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 6 Dec 2021 11:52:47 -0500
-Received: from mga18.intel.com ([134.134.136.126]:15444 "EHLO mga18.intel.com"
+        id S241961AbhLFRIc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 6 Dec 2021 12:08:32 -0500
+Received: from mga03.intel.com ([134.134.136.65]:14428 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239044AbhLFQwq (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Mon, 6 Dec 2021 11:52:46 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="224222787"
+        id S236252AbhLFQ7J (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 6 Dec 2021 11:59:09 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="237299818"
 X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
-   d="scan'208";a="224222787"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 08:49:17 -0800
+   d="scan'208";a="237299818"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 08:55:40 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
-   d="scan'208";a="461905691"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 08:49:15 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1muH9y-002qzn-H6;
-        Mon, 06 Dec 2021 18:48:14 +0200
-Date:   Mon, 6 Dec 2021 18:48:14 +0200
+   d="scan'208";a="605096994"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 06 Dec 2021 08:55:37 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 14A7D144; Mon,  6 Dec 2021 18:55:42 +0200 (EET)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: Re: [PATCH v1 2/4] can: hi311x: try to get crystal clock rate from
- property
-Message-ID: <Ya4+zveKTTtfHNw+@smile.fi.intel.com>
-References: <20211206162323.29281-1-andriy.shevchenko@linux.intel.com>
- <20211206162323.29281-2-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 1/4] can: hi311x: Use devm_clk_get_optional() to get the input clock
+Date:   Mon,  6 Dec 2021 18:55:39 +0200
+Message-Id: <20211206165542.69887-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211206162323.29281-2-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 06:23:21PM +0200, Andy Shevchenko wrote:
-> In some configurations, mainly ACPI-based, the clock frequency of the
-> device is supplied by very well established 'clock-frequency'
-> property. Hence, try to get it from the property at last if no other
-> providers are available.
+It's not clear what was the intention of redundant usage of IS_ERR()
+around the clock pointer since with the error check of devm_clk_get()
+followed by bailout it can't be invalid,
 
-Sorry, this shouldn't be like this.
-Wrongly rebased version. I will redo v2.
+Simplify the code which fetches the input clock by using
+devm_clk_get_optional(). It will allow to switch to device properties
+approach in the future.
 
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v2: no changes
+ drivers/net/can/spi/hi311x.c | 16 ++++++----------
+ 1 file changed, 6 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/net/can/spi/hi311x.c b/drivers/net/can/spi/hi311x.c
+index 89d9c986a229..13fb979645cf 100644
+--- a/drivers/net/can/spi/hi311x.c
++++ b/drivers/net/can/spi/hi311x.c
+@@ -835,7 +835,7 @@ static int hi3110_can_probe(struct spi_device *spi)
+ 	struct clk *clk;
+ 	int freq, ret;
+ 
+-	clk = devm_clk_get(&spi->dev, NULL);
++	clk = devm_clk_get_optional(&spi->dev, NULL);
+ 	if (IS_ERR(clk)) {
+ 		dev_err(&spi->dev, "no CAN clock source defined\n");
+ 		return PTR_ERR(clk);
+@@ -851,11 +851,9 @@ static int hi3110_can_probe(struct spi_device *spi)
+ 	if (!net)
+ 		return -ENOMEM;
+ 
+-	if (!IS_ERR(clk)) {
+-		ret = clk_prepare_enable(clk);
+-		if (ret)
+-			goto out_free;
+-	}
++	ret = clk_prepare_enable(clk);
++	if (ret)
++		goto out_free;
+ 
+ 	net->netdev_ops = &hi3110_netdev_ops;
+ 	net->flags |= IFF_ECHO;
+@@ -938,8 +936,7 @@ static int hi3110_can_probe(struct spi_device *spi)
+ 	hi3110_power_enable(priv->power, 0);
+ 
+  out_clk:
+-	if (!IS_ERR(clk))
+-		clk_disable_unprepare(clk);
++	clk_disable_unprepare(clk);
+ 
+  out_free:
+ 	free_candev(net);
+@@ -957,8 +954,7 @@ static int hi3110_can_remove(struct spi_device *spi)
+ 
+ 	hi3110_power_enable(priv->power, 0);
+ 
+-	if (!IS_ERR(priv->clk))
+-		clk_disable_unprepare(priv->clk);
++	clk_disable_unprepare(priv->clk);
+ 
+ 	free_candev(net);
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.33.0
 
