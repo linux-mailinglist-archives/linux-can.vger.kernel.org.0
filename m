@@ -2,95 +2,117 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BC7A46A214
-	for <lists+linux-can@lfdr.de>; Mon,  6 Dec 2021 18:05:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A40046B8D5
+	for <lists+linux-can@lfdr.de>; Tue,  7 Dec 2021 11:24:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232686AbhLFRIc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 6 Dec 2021 12:08:32 -0500
-Received: from mga12.intel.com ([192.55.52.136]:21821 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1347476AbhLFQ7I (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Mon, 6 Dec 2021 11:59:08 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10190"; a="217381108"
-X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
-   d="scan'208";a="217381108"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 08:55:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,292,1631602800"; 
-   d="scan'208";a="514829909"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 06 Dec 2021 08:55:37 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 3751415C; Mon,  6 Dec 2021 18:55:43 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH v2 4/4] can: hi311x: Convert to use dev_err_probe()
-Date:   Mon,  6 Dec 2021 18:55:42 +0200
-Message-Id: <20211206165542.69887-4-andriy.shevchenko@linux.intel.com>
+        id S235038AbhLGK2S (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 7 Dec 2021 05:28:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43654 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229528AbhLGK2R (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 7 Dec 2021 05:28:17 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABCE4C061574
+        for <linux-can@vger.kernel.org>; Tue,  7 Dec 2021 02:24:47 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1muXeQ-0003ES-5t
+        for linux-can@vger.kernel.org; Tue, 07 Dec 2021 11:24:46 +0100
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id A15F06BE8AC
+        for <linux-can@vger.kernel.org>; Tue,  7 Dec 2021 10:24:43 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id D22526BE8A0;
+        Tue,  7 Dec 2021 10:24:42 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id d69f9be4;
+        Tue, 7 Dec 2021 10:24:26 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH net 0/9] pull-request: can 2021-12-07
+Date:   Tue,  7 Dec 2021 11:24:11 +0100
+Message-Id: <20211207102420.120131-1-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211206165542.69887-1-andriy.shevchenko@linux.intel.com>
-References: <20211206165542.69887-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-When deferred the reason is saved for further debugging. Besides that,
-it's fine to call dev_err_probe() in ->probe() when error code is known.
-Convert the driver to use dev_err_probe().
+Hello Jakub, hello David,
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+this is a pull request of 9 patches for net/master.
+
+The 1st patch is by Vincent Mailhol and fixes a use after free in the
+pch_can driver.
+
+Dan Carpenter fixes a use after free in the ems_pcmcia sja1000 driver.
+
+The remaining 7 patches target the m_can driver. Brian Silverman
+contributes a patch to disable and ignore the ELO interrupt, which is
+currently not handled in the driver and may lead to an interrupt
+storm. Vincent Mailhol's patch fixes a memory leak in the error path
+of the m_can_read_fifo() function. The remaining patches are
+contributed by Matthias Schiffer, first a iomap_read_fifo() and
+iomap_write_fifo() functions are fixed in the PCI glue driver, then
+the clock rate for the Intel Ekhart Lake platform is fixed, the last 3
+patches add support for the custom bit timings on the Elkhart Lake
+platform.
+
+regards,
+Marc
+
 ---
-v2: no changes
- drivers/net/can/spi/hi311x.c | 13 ++++---------
- 1 file changed, 4 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/net/can/spi/hi311x.c b/drivers/net/can/spi/hi311x.c
-index 78044ec24575..a17641d36468 100644
---- a/drivers/net/can/spi/hi311x.c
-+++ b/drivers/net/can/spi/hi311x.c
-@@ -837,10 +837,8 @@ static int hi3110_can_probe(struct spi_device *spi)
- 	int ret;
- 
- 	clk = devm_clk_get_optional(&spi->dev, NULL);
--	if (IS_ERR(clk)) {
--		dev_err(&spi->dev, "no CAN clock source defined\n");
--		return PTR_ERR(clk);
--	}
-+	if (IS_ERR(clk))
-+		return dev_err_probe(dev, PTR_ERR(clk), "no CAN clock source defined\n");
- 
- 	if (clk) {
- 		freq = clk_get_rate(clk);
-@@ -925,9 +923,7 @@ static int hi3110_can_probe(struct spi_device *spi)
- 
- 	ret = hi3110_hw_probe(spi);
- 	if (ret) {
--		if (ret == -ENODEV)
--			dev_err(&spi->dev, "Cannot initialize %x. Wrong wiring?\n",
--				priv->model);
-+		dev_err_probe(dev, ret, "Cannot initialize %x. Wrong wiring?\n", priv->model);
- 		goto error_probe;
- 	}
- 	hi3110_hw_sleep(spi);
-@@ -950,8 +946,7 @@ static int hi3110_can_probe(struct spi_device *spi)
-  out_free:
- 	free_candev(net);
- 
--	dev_err(&spi->dev, "Probe failed, err=%d\n", -ret);
--	return ret;
-+	return dev_err_probe(dev, ret, "Probe failed\n");
- }
- 
- static int hi3110_can_remove(struct spi_device *spi)
--- 
-2.33.0
+The following changes since commit 4dbb0dad8e63fcd0b5a117c2861d2abe7ff5f186:
+
+  devlink: fix netns refcount leak in devlink_nl_cmd_reload() (2021-12-06 16:56:32 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-5.16-20211207
+
+for you to fetch changes up to ea4c1787685dbf9842046f05b6390b6901ee6ba2:
+
+  can: m_can: pci: use custom bit timings for Elkhart Lake (2021-12-07 09:51:41 +0100)
+
+----------------------------------------------------------------
+linux-can-fixes-for-5.16-20211207
+
+----------------------------------------------------------------
+Brian Silverman (1):
+      can: m_can: Disable and ignore ELO interrupt
+
+Dan Carpenter (1):
+      can: sja1000: fix use after free in ems_pcmcia_add_card()
+
+Matthias Schiffer (5):
+      can: m_can: pci: fix iomap_read_fifo() and iomap_write_fifo()
+      can: m_can: pci: fix incorrect reference clock rate
+      Revert "can: m_can: remove support for custom bit timing"
+      can: m_can: make custom bittiming fields const
+      can: m_can: pci: use custom bit timings for Elkhart Lake
+
+Vincent Mailhol (2):
+      can: pch_can: pch_can_rx_normal: fix use after free
+      can: m_can: m_can_read_fifo: fix memory leak in error branch
+
+ drivers/net/can/m_can/m_can.c        | 42 +++++++++++++++---------
+ drivers/net/can/m_can/m_can.h        |  3 ++
+ drivers/net/can/m_can/m_can_pci.c    | 62 ++++++++++++++++++++++++++++++++----
+ drivers/net/can/pch_can.c            |  2 +-
+ drivers/net/can/sja1000/ems_pcmcia.c |  7 +++-
+ 5 files changed, 93 insertions(+), 23 deletions(-)
+
 
