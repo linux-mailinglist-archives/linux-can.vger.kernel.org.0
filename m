@@ -2,170 +2,164 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C477946B8EC
-	for <lists+linux-can@lfdr.de>; Tue,  7 Dec 2021 11:25:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2904246BAC2
+	for <lists+linux-can@lfdr.de>; Tue,  7 Dec 2021 13:12:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235082AbhLGK2n (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 7 Dec 2021 05:28:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235118AbhLGK2e (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 7 Dec 2021 05:28:34 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD6DC061A83
-        for <linux-can@vger.kernel.org>; Tue,  7 Dec 2021 02:24:56 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1muXeZ-0003Qk-13
-        for linux-can@vger.kernel.org; Tue, 07 Dec 2021 11:24:55 +0100
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 1EFA36BE8F7
-        for <linux-can@vger.kernel.org>; Tue,  7 Dec 2021 10:24:48 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 406B56BE8B5;
-        Tue,  7 Dec 2021 10:24:44 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id ba47db34;
-        Tue, 7 Dec 2021 10:24:27 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net 9/9] can: m_can: pci: use custom bit timings for Elkhart Lake
-Date:   Tue,  7 Dec 2021 11:24:20 +0100
-Message-Id: <20211207102420.120131-10-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211207102420.120131-1-mkl@pengutronix.de>
-References: <20211207102420.120131-1-mkl@pengutronix.de>
+        id S236110AbhLGMPp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 7 Dec 2021 07:15:45 -0500
+Received: from mail-yb1-f169.google.com ([209.85.219.169]:38463 "EHLO
+        mail-yb1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231564AbhLGMPo (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 7 Dec 2021 07:15:44 -0500
+Received: by mail-yb1-f169.google.com with SMTP id v64so40289845ybi.5;
+        Tue, 07 Dec 2021 04:12:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bWz9cT1wHHkhENXTpIc1LB3aIV6a/yhKqCUIe73/xDw=;
+        b=QsvbDCgBSmV1iKgaIxRJVZZByRjhlUCvWEwFxb0F9NqQrojMzIEPtGUUaoADZu60Sp
+         SPDRvkClZqJwPJ9hV+lfbMvZQhIpYd0XNrMtbm9LHRFerrIa1J3GhEg8y40aL8s8GVNp
+         fPcWML9U9VhXN7JdGvP2N7xM1ZkdH8io76j6ZCuV9s0y5IyFMwCjpC65r3hRVcO1x2HY
+         sXvF/LSL8tyaQwaUR0xYXYCtnQvetxFgLES8wCYchMwAor5Ar3W02LYI9TLVdnzQb2kR
+         eDfscIZ5hBwjetIM1Q63nFroymFKXRiDVIJ5055tpdEosPMgQO1CsXSx9FmKI4j0NoCI
+         ctpw==
+X-Gm-Message-State: AOAM533RuCiB5TJ+LkH2WyP5W3T3iHmkPZ7/Yeqz9KHoZ7BH3B820QWU
+        MlvUqMIOxsS/OJY6fZjvYlRxLw8JKlGD2tSlIAI=
+X-Google-Smtp-Source: ABdhPJwOqYQBJ+s984DwvdmPbLsW9oaqpv1vu0U079pgVY+khqLyUYYKEwfZS5eb3R/7oX0IbTI7hDJPacC3G+Dqn7o=
+X-Received: by 2002:a25:3045:: with SMTP id w66mr53150761ybw.578.1638879133893;
+ Tue, 07 Dec 2021 04:12:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+References: <20211203131808.2380042-1-mailhol.vincent@wanadoo.fr>
+ <20211203131808.2380042-6-mailhol.vincent@wanadoo.fr> <20211206141940.o3g4uydg6ibspqyq@pengutronix.de>
+In-Reply-To: <20211206141940.o3g4uydg6ibspqyq@pengutronix.de>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Tue, 7 Dec 2021 21:12:02 +0900
+Message-ID: <CAMZ6RqKefpH73tffY-DrXasU-UCm-UvwCbjtPhMJ_9PmfnBUQw@mail.gmail.com>
+Subject: Re: [PATCH v4 5/5] can: do not increase tx_bytes statistics for RTR frames
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Jimmy Assarsson <extja@kvaser.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Yasushi SHOJI <yashi@spacecubics.com>,
+        Stephane Grosjean <s.grosjean@peak-system.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+On Mon. 6 Dec 2021 at 23:19, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> On 03.12.2021 22:18:08, Vincent Mailhol wrote:
+> > The actual payload length of the CAN Remote Transmission Request (RTR)
+> > frames is always 0, i.e. nothing is transmitted on the wire. However,
+> > those RTR frames still use the DLC to indicate the length of the
+> > requested frame.
+> >
+> > As such, net_device_stats:tx_bytes should not be increased when
+> > sending RTR frames.
+> >
+> > The function can_get_echo_skb() already returns the correct length,
+> > even for RTR frames (c.f. [1]). However, for historical reasons, the
+> > drivers do not use can_get_echo_skb()'s return value and instead, most
+> > of them store a temporary length (or dlc) in some local structure or
+> > array. Using the return value of can_get_echo_skb() solves the
+> > issue. After doing this, such length/dlc fields become unused and so
+> > this patch does the adequate cleaning when needed.
+> >
+> > This patch fixes all the CAN drivers.
+> >
+> > Finally, can_get_echo_skb() is decorated with the __must_check
+> > attribute in order to force future drivers to correctly use its return
+> > value (else the compiler would emit a warning).
+> >
+> > [1] commit ed3320cec279 ("can: dev: __can_get_echo_skb():
+> > fix real payload length return value for RTR frames")
+> >
+> > CC: Nicolas Ferre <nicolas.ferre@microchip.com>
+> > CC: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> > CC: Ludovic Desroches <ludovic.desroches@microchip.com>
+> > CC: Maxime Ripard <mripard@kernel.org>
+> > CC: Chen-Yu Tsai <wens@csie.org>
+> > CC: Jernej Skrabec <jernej.skrabec@gmail.com>
+> > CC: Yasushi SHOJI <yashi@spacecubics.com>
+> > CC: Oliver Hartkopp <socketcan@hartkopp.net>
+> > CC: Stephane Grosjean <s.grosjean@peak-system.com>
+> > Tested-by: Jimmy Assarsson <extja@kvaser.com>
+> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > ---
+> >  drivers/net/can/at91_can.c                    |  8 ++--
+> >  drivers/net/can/c_can/c_can.h                 |  1 -
+> >  drivers/net/can/c_can/c_can_main.c            |  7 +---
+> >  drivers/net/can/cc770/cc770.c                 |  8 +---
+> >  drivers/net/can/janz-ican3.c                  |  3 +-
+> >  drivers/net/can/mscan/mscan.c                 |  4 +-
+> >  drivers/net/can/pch_can.c                     |  9 ++--
+> >  drivers/net/can/peak_canfd/peak_canfd.c       |  3 +-
+> >  drivers/net/can/rcar/rcar_can.c               | 11 +++--
+> >  drivers/net/can/rcar/rcar_canfd.c             |  6 +--
+> >  drivers/net/can/sja1000/sja1000.c             |  4 +-
+> >  drivers/net/can/slcan.c                       |  3 +-
+> >  drivers/net/can/softing/softing_main.c        |  8 ++--
+> >  drivers/net/can/spi/hi311x.c                  | 24 +++++------
+> >  drivers/net/can/spi/mcp251x.c                 | 25 +++++------
+> >  drivers/net/can/sun4i_can.c                   |  5 +--
+> >  drivers/net/can/usb/ems_usb.c                 |  7 +---
+> >  drivers/net/can/usb/esd_usb2.c                |  6 +--
+> >  drivers/net/can/usb/gs_usb.c                  |  7 ++--
+> >  drivers/net/can/usb/kvaser_usb/kvaser_usb.h   |  5 +--
+> >  .../net/can/usb/kvaser_usb/kvaser_usb_core.c  |  2 +-
+> >  .../net/can/usb/kvaser_usb/kvaser_usb_hydra.c | 42 +++++++++----------
+> >  .../net/can/usb/kvaser_usb/kvaser_usb_leaf.c  | 13 +++---
+> >  drivers/net/can/usb/mcba_usb.c                | 12 ++----
+> >  drivers/net/can/usb/peak_usb/pcan_usb_core.c  | 20 ++++-----
+> >  drivers/net/can/usb/peak_usb/pcan_usb_core.h  |  1 -
+> >  drivers/net/can/usb/ucan.c                    | 10 ++---
+> >  drivers/net/can/usb/usb_8dev.c                |  6 +--
+> >  drivers/net/can/vcan.c                        |  7 ++--
+> >  drivers/net/can/vxcan.c                       |  2 +-
+> >  include/linux/can/skb.h                       |  5 ++-
+> >  31 files changed, 114 insertions(+), 160 deletions(-)
+> >
+> > diff --git a/drivers/net/can/at91_can.c b/drivers/net/can/at91_can.c
+> > index 97f1d08b4133..b37d9b4f508e 100644
+> > --- a/drivers/net/can/at91_can.c
+> > +++ b/drivers/net/can/at91_can.c
+> > @@ -448,7 +448,6 @@ static void at91_chip_stop(struct net_device *dev, enum can_state state)
+> >  static netdev_tx_t at91_start_xmit(struct sk_buff *skb, struct net_device *dev)
+> >  {
+> >       struct at91_priv *priv = netdev_priv(dev);
+> > -     struct net_device_stats *stats = &dev->stats;
+> >       struct can_frame *cf = (struct can_frame *)skb->data;
+> >       unsigned int mb, prio;
+> >       u32 reg_mid, reg_mcr;
+> > @@ -480,8 +479,6 @@ static netdev_tx_t at91_start_xmit(struct sk_buff *skb, struct net_device *dev)
+> >       /* This triggers transmission */
+> >       at91_write(priv, AT91_MCR(mb), reg_mcr);
+> >
+> > -     stats->tx_bytes += cf->len;
+> > -
+> >       /* _NOTE_: subtract AT91_MB_TX_FIRST offset from mb! */
+> >       can_put_echo_skb(skb, dev, mb - get_mb_tx_first(priv), 0);
+> >
+> > @@ -852,7 +849,10 @@ static void at91_irq_tx(struct net_device *dev, u32 reg_sr)
+> >               if (likely(reg_msr & AT91_MSR_MRDY &&
+> >                          ~reg_msr & AT91_MSR_MABT)) {
+> >                       /* _NOTE_: subtract AT91_MB_TX_FIRST offset from mb! */
+> > -                     can_get_echo_skb(dev, mb - get_mb_tx_first(priv), NULL);
+> > +                     dev->stats.tx_bytes =
+>                                             += ?
 
-The relevant datasheet [1] specifies nonstandard limits for the bit timing
-parameters. While it is unclear what the exact effect of violating these
-limits is, it seems like a good idea to adhere to the documentation.
-
-[1] Intel Atom® x6000E Series, and Intel® Pentium® and Celeron® N and J
-    Series Processors for IoT Applications Datasheet,
-    Volume 2 (Book 3 of 3), July 2021, Revision 001
-
-Fixes: cab7ffc0324f ("can: m_can: add PCI glue driver for Intel Elkhart Lake")
-Link: https://lore.kernel.org/all/9eba5d7c05a48ead4024ffa6e5926f191d8c6b38.1636967198.git.matthias.schiffer@ew.tq-group.com
-Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/m_can/m_can_pci.c | 48 ++++++++++++++++++++++++++++---
- 1 file changed, 44 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/net/can/m_can/m_can_pci.c b/drivers/net/can/m_can/m_can_pci.c
-index 8f184a852a0a..b56a54d6c5a9 100644
---- a/drivers/net/can/m_can/m_can_pci.c
-+++ b/drivers/net/can/m_can/m_can_pci.c
-@@ -18,9 +18,14 @@
- 
- #define M_CAN_PCI_MMIO_BAR		0
- 
--#define M_CAN_CLOCK_FREQ_EHL		200000000
- #define CTL_CSR_INT_CTL_OFFSET		0x508
- 
-+struct m_can_pci_config {
-+	const struct can_bittiming_const *bit_timing;
-+	const struct can_bittiming_const *data_timing;
-+	unsigned int clock_freq;
-+};
-+
- struct m_can_pci_priv {
- 	struct m_can_classdev cdev;
- 
-@@ -84,9 +89,40 @@ static struct m_can_ops m_can_pci_ops = {
- 	.read_fifo = iomap_read_fifo,
- };
- 
-+static const struct can_bittiming_const m_can_bittiming_const_ehl = {
-+	.name = KBUILD_MODNAME,
-+	.tseg1_min = 2,		/* Time segment 1 = prop_seg + phase_seg1 */
-+	.tseg1_max = 64,
-+	.tseg2_min = 1,		/* Time segment 2 = phase_seg2 */
-+	.tseg2_max = 128,
-+	.sjw_max = 128,
-+	.brp_min = 1,
-+	.brp_max = 512,
-+	.brp_inc = 1,
-+};
-+
-+static const struct can_bittiming_const m_can_data_bittiming_const_ehl = {
-+	.name = KBUILD_MODNAME,
-+	.tseg1_min = 2,		/* Time segment 1 = prop_seg + phase_seg1 */
-+	.tseg1_max = 16,
-+	.tseg2_min = 1,		/* Time segment 2 = phase_seg2 */
-+	.tseg2_max = 8,
-+	.sjw_max = 4,
-+	.brp_min = 1,
-+	.brp_max = 32,
-+	.brp_inc = 1,
-+};
-+
-+static const struct m_can_pci_config m_can_pci_ehl = {
-+	.bit_timing = &m_can_bittiming_const_ehl,
-+	.data_timing = &m_can_data_bittiming_const_ehl,
-+	.clock_freq = 200000000,
-+};
-+
- static int m_can_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
- {
- 	struct device *dev = &pci->dev;
-+	const struct m_can_pci_config *cfg;
- 	struct m_can_classdev *mcan_class;
- 	struct m_can_pci_priv *priv;
- 	void __iomem *base;
-@@ -114,6 +150,8 @@ static int m_can_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
- 	if (!mcan_class)
- 		return -ENOMEM;
- 
-+	cfg = (const struct m_can_pci_config *)id->driver_data;
-+
- 	priv = cdev_to_priv(mcan_class);
- 
- 	priv->base = base;
-@@ -125,7 +163,9 @@ static int m_can_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
- 	mcan_class->dev = &pci->dev;
- 	mcan_class->net->irq = pci_irq_vector(pci, 0);
- 	mcan_class->pm_clock_support = 1;
--	mcan_class->can.clock.freq = id->driver_data;
-+	mcan_class->bit_timing = cfg->bit_timing;
-+	mcan_class->data_timing = cfg->data_timing;
-+	mcan_class->can.clock.freq = cfg->clock_freq;
- 	mcan_class->ops = &m_can_pci_ops;
- 
- 	pci_set_drvdata(pci, mcan_class);
-@@ -178,8 +218,8 @@ static SIMPLE_DEV_PM_OPS(m_can_pci_pm_ops,
- 			 m_can_pci_suspend, m_can_pci_resume);
- 
- static const struct pci_device_id m_can_pci_id_table[] = {
--	{ PCI_VDEVICE(INTEL, 0x4bc1), M_CAN_CLOCK_FREQ_EHL, },
--	{ PCI_VDEVICE(INTEL, 0x4bc2), M_CAN_CLOCK_FREQ_EHL, },
-+	{ PCI_VDEVICE(INTEL, 0x4bc1), (kernel_ulong_t)&m_can_pci_ehl, },
-+	{ PCI_VDEVICE(INTEL, 0x4bc2), (kernel_ulong_t)&m_can_pci_ehl, },
- 	{  }	/* Terminating Entry */
- };
- MODULE_DEVICE_TABLE(pci, m_can_pci_id_table);
--- 
-2.33.0
+Absolutely. I will check that the other assignments are also correct
+and send a v5.
 
 
+Yours sincerely,
+Vincent Mailhol
