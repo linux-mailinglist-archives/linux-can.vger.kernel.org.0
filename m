@@ -2,94 +2,92 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A0E446C2FA
-	for <lists+linux-can@lfdr.de>; Tue,  7 Dec 2021 19:40:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9543946CC2E
+	for <lists+linux-can@lfdr.de>; Wed,  8 Dec 2021 05:13:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240199AbhLGSnq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 7 Dec 2021 13:43:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49150 "EHLO
+        id S238360AbhLHERS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 7 Dec 2021 23:17:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231241AbhLGSnp (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 7 Dec 2021 13:43:45 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B9AC061574;
-        Tue,  7 Dec 2021 10:40:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 006C7CE1D8F;
-        Tue,  7 Dec 2021 18:40:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E7E5AC341C7;
-        Tue,  7 Dec 2021 18:40:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638902411;
-        bh=ILmDEX7ThAV4WS/jNr/jBBecP8tMHp+dApEK+/6VC8Y=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=D806Oot+ukqAe2IOOu/ymmRPC5f8qmg0736iQbtTQjlCRNKCLI7GyD2agVcBFjQH8
-         44SNDgxSXkltVzgGR/CDGB7c3F7S+9MlboSbX9J2KK5H7XAeoTaH3i7wImVodj8CYJ
-         fChei1+kXe94q44uxVbzUM8KF3h7HlCCNJXAmSECJe+MVxBm6JAP+JZHgSMugi/kiQ
-         PHC15RK+aEMJ0d6i9puiZYaGa73LZLsQh2EhnKGwRli0wzIP6LjH0J//JDopMFrbek
-         UjfFdt8Vu4oKUa9MqoBOcBJozqMfOM+tLipViATF3/a/8FvUE2qUmyJVlwMEVCub3f
-         XMudnn/hcWHRw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id BEFF3609D8;
-        Tue,  7 Dec 2021 18:40:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S238483AbhLHERR (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 7 Dec 2021 23:17:17 -0500
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC122C061746
+        for <linux-can@vger.kernel.org>; Tue,  7 Dec 2021 20:13:46 -0800 (PST)
+Received: by mail-io1-xd44.google.com with SMTP id m9so1546938iop.0
+        for <linux-can@vger.kernel.org>; Tue, 07 Dec 2021 20:13:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=w0n14T57zPuvlg1YaFYy3gRfrUPFN1bDHGIrct+fXgc=;
+        b=cGWxDwe8B66FlIrZtrergIqE5+JvdqJ48sEvPTrvhBJ9xEqZLGyWZmuSPdCEFce/7D
+         /sVR44uqtlb2dmBH+iwgt0kboAu4/HTy3OZt9J6nwOu1H5twbKwVBnMykOKrBLHcBBEb
+         cgMJ7/59oMUtMggaQ9x/N1xe+U0YzN1k+xfCXkO5L7YIW30RFDnvCB0PrD7sMExliX7S
+         joeNtgfdJmxv3l42BA4cQp1HveXj/LpauGoYMsZKrrlYurvW6FC9Nrn9v/z7yklCLUv+
+         2uZJGSHlx+O0Rg+LxyFVcXJ8erZC2O96QnEFLkA1QmSl94RBUxOevwSkF8rG8CDqN06m
+         KdcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=w0n14T57zPuvlg1YaFYy3gRfrUPFN1bDHGIrct+fXgc=;
+        b=sjxTpzTUhO5n0BhMLpdS7yNegmHvHKCEJsCHF8pFjMKd7g3gt+vO5GAFEHzUuQDS7n
+         0q/oqQ3CZTMQUeiSstoZsp4994p9RtO3d5KIpiGM1l2nwmf7ACr+6pytf+XiyVfLAFyD
+         gLzqWyI6JvSxbwNeonZ4AhMs6i/eiVVUoxRYwp6b/WDH/KtCWQnCVsC8H78sApIT1PTr
+         iOo1FWH/XJexdbWClvQcDRBOHQEPC/qAsUbPlBwqlcprEl89A9Cnxm+hTl9zLyel4RrK
+         8UTkbk591C1t0rd8sDnDd/bSpHLN/7x3pFWNVKz6x5lU0eZ7oGhSlY6HsHe9YNgUfizS
+         qTsQ==
+X-Gm-Message-State: AOAM530KHkftl4X7bkPv8AnG248G323RSYgW2kp6eFr2GF3dv8zB4QeS
+        1lZyIDLriaaTzDUwJpQ+covH9oEZyfIslXkdgOrfnxQxu1ywoQ==
+X-Google-Smtp-Source: ABdhPJx498jQ3rDCAEAukf875uPMCUUvAAHHJyp/169nhahBv8dg1ZTt80/LmlBc7j967yPpWx87fZn4PQyrL4JX27A=
+X-Received: by 2002:a92:600f:: with SMTP id u15mr3954317ilb.292.1638936815828;
+ Tue, 07 Dec 2021 20:13:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 1/9] can: pch_can: pch_can_rx_normal: fix use after free
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163890241077.29949.3491385738739624114.git-patchwork-notify@kernel.org>
-Date:   Tue, 07 Dec 2021 18:40:10 +0000
-References: <20211207102420.120131-2-mkl@pengutronix.de>
-In-Reply-To: <20211207102420.120131-2-mkl@pengutronix.de>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, kernel@pengutronix.de,
-        mailhol.vincent@wanadoo.fr, stable@vger.kernel.org
+Received: by 2002:a05:6e02:1a07:0:0:0:0 with HTTP; Tue, 7 Dec 2021 20:13:35
+ -0800 (PST)
+Reply-To: dj0015639@gmail.com
+From:   David Jackson <enkenpaul@gmail.com>
+Date:   Wed, 8 Dec 2021 05:13:35 +0100
+Message-ID: <CAG7-cQ_JEx-8fDdxn0Ex314ViSE32kaUjoR=sUvV7wmCUiKRGw@mail.gmail.com>
+Subject: FEDERAL BUREAU OF INVESTIGATION
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello:
+Our Ref: RTB /SNT/STB
+To: Beneficiary
 
-This series was applied to netdev/net.git (master)
-by Marc Kleine-Budde <mkl@pengutronix.de>:
+This is FBI special agents, David Jackson. I was delegated along side
+others by the United Nations to investigate scammers who has been in
+the business of swindling foreigners especially those that has one
+form of transaction/contracts and another. Please be informed that in
+the course of our investigation, we detected that your name and
+details in our Scammed Monitoring Network. We also found out that you
+were scammed of a huge sum of money by scammers via Western union and
+MoneyGram. Be informed here that in a bid to alleviate the suffering
+of scammed victims, the United Nations initiated this compensation
+program and therefore, you are entitled to the sum of Five Million Two
+Hundred Thousand United States Dollars ($5,200,000.00 USD) for being a
+victim.
 
-On Tue,  7 Dec 2021 11:24:12 +0100 you wrote:
-> From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> 
-> After calling netif_receive_skb(skb), dereferencing skb is unsafe.
-> Especially, the can_frame cf which aliases skb memory is dereferenced
-> just after the call netif_receive_skb(skb).
-> 
-> Reordering the lines solves the issue.
-> 
-> [...]
+Note that the said fund will be transfer to you via the Citibank being
+the paying bank mandated by the United Nations officials.
 
-Here is the summary with links:
-  - [net,1/9] can: pch_can: pch_can_rx_normal: fix use after free
-    https://git.kernel.org/netdev/net/c/94cddf1e9227
-  - [net,2/9] can: sja1000: fix use after free in ems_pcmcia_add_card()
-    https://git.kernel.org/netdev/net/c/3ec6ca6b1a8e
-  - [net,3/9] can: m_can: Disable and ignore ELO interrupt
-    https://git.kernel.org/netdev/net/c/f58ac1adc76b
-  - [net,4/9] can: m_can: m_can_read_fifo: fix memory leak in error branch
-    https://git.kernel.org/netdev/net/c/31cb32a590d6
-  - [net,5/9] can: m_can: pci: fix iomap_read_fifo() and iomap_write_fifo()
-    https://git.kernel.org/netdev/net/c/d737de2d7cc3
-  - [net,6/9] can: m_can: pci: fix incorrect reference clock rate
-    https://git.kernel.org/netdev/net/c/8c03b8bff765
-  - [net,7/9] Revert "can: m_can: remove support for custom bit timing"
-    https://git.kernel.org/netdev/net/c/ea768b2ffec6
-  - [net,8/9] can: m_can: make custom bittiming fields const
-    https://git.kernel.org/netdev/net/c/ea22ba40debe
-  - [net,9/9] can: m_can: pci: use custom bit timings for Elkhart Lake
-    https://git.kernel.org/netdev/net/c/ea4c1787685d
+However, we have to inform you that we have been able to arrest some
+of the swindlers who has been in this illicit business and will all be
+prosecuted accordingly. Be informed as well that we have limited time
+to stay back here, so we will advice that you urgently respond to this
+message ASAP. And do not inform any of the people that collected money
+from you before now about this new development to avoid jeopardizing
+our investigation. All you need to do is to follow our instruction and
+receive your compensation accordingly as directed by the United
+Nations.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+We urgently wait to receive your response.
 
-
+Regards,
+DAVID JACKSON
+FEDERAL BUREAU OF INVESTIGATION
+INVESTIGATION ON ALL ONLINE WIRE TRANSFER
