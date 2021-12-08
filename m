@@ -2,92 +2,133 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9543946CC2E
-	for <lists+linux-can@lfdr.de>; Wed,  8 Dec 2021 05:13:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC41046CF86
+	for <lists+linux-can@lfdr.de>; Wed,  8 Dec 2021 09:54:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238360AbhLHERS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 7 Dec 2021 23:17:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41586 "EHLO
+        id S229927AbhLHI6W (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 8 Dec 2021 03:58:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238483AbhLHERR (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 7 Dec 2021 23:17:17 -0500
-Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC122C061746
-        for <linux-can@vger.kernel.org>; Tue,  7 Dec 2021 20:13:46 -0800 (PST)
-Received: by mail-io1-xd44.google.com with SMTP id m9so1546938iop.0
-        for <linux-can@vger.kernel.org>; Tue, 07 Dec 2021 20:13:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=w0n14T57zPuvlg1YaFYy3gRfrUPFN1bDHGIrct+fXgc=;
-        b=cGWxDwe8B66FlIrZtrergIqE5+JvdqJ48sEvPTrvhBJ9xEqZLGyWZmuSPdCEFce/7D
-         /sVR44uqtlb2dmBH+iwgt0kboAu4/HTy3OZt9J6nwOu1H5twbKwVBnMykOKrBLHcBBEb
-         cgMJ7/59oMUtMggaQ9x/N1xe+U0YzN1k+xfCXkO5L7YIW30RFDnvCB0PrD7sMExliX7S
-         joeNtgfdJmxv3l42BA4cQp1HveXj/LpauGoYMsZKrrlYurvW6FC9Nrn9v/z7yklCLUv+
-         2uZJGSHlx+O0Rg+LxyFVcXJ8erZC2O96QnEFLkA1QmSl94RBUxOevwSkF8rG8CDqN06m
-         KdcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=w0n14T57zPuvlg1YaFYy3gRfrUPFN1bDHGIrct+fXgc=;
-        b=sjxTpzTUhO5n0BhMLpdS7yNegmHvHKCEJsCHF8pFjMKd7g3gt+vO5GAFEHzUuQDS7n
-         0q/oqQ3CZTMQUeiSstoZsp4994p9RtO3d5KIpiGM1l2nwmf7ACr+6pytf+XiyVfLAFyD
-         gLzqWyI6JvSxbwNeonZ4AhMs6i/eiVVUoxRYwp6b/WDH/KtCWQnCVsC8H78sApIT1PTr
-         iOo1FWH/XJexdbWClvQcDRBOHQEPC/qAsUbPlBwqlcprEl89A9Cnxm+hTl9zLyel4RrK
-         8UTkbk591C1t0rd8sDnDd/bSpHLN/7x3pFWNVKz6x5lU0eZ7oGhSlY6HsHe9YNgUfizS
-         qTsQ==
-X-Gm-Message-State: AOAM530KHkftl4X7bkPv8AnG248G323RSYgW2kp6eFr2GF3dv8zB4QeS
-        1lZyIDLriaaTzDUwJpQ+covH9oEZyfIslXkdgOrfnxQxu1ywoQ==
-X-Google-Smtp-Source: ABdhPJx498jQ3rDCAEAukf875uPMCUUvAAHHJyp/169nhahBv8dg1ZTt80/LmlBc7j967yPpWx87fZn4PQyrL4JX27A=
-X-Received: by 2002:a92:600f:: with SMTP id u15mr3954317ilb.292.1638936815828;
- Tue, 07 Dec 2021 20:13:35 -0800 (PST)
+        with ESMTP id S229901AbhLHI6V (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 8 Dec 2021 03:58:21 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66BEEC061746
+        for <linux-can@vger.kernel.org>; Wed,  8 Dec 2021 00:54:50 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1musit-0000Ex-Vq; Wed, 08 Dec 2021 09:54:48 +0100
+Received: from pengutronix.de (2a03-f580-87bc-d400-e45e-c028-b01c-c307.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:e45e:c028:b01c:c307])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id B614C6BF96B;
+        Wed,  8 Dec 2021 08:54:45 +0000 (UTC)
+Date:   Wed, 8 Dec 2021 09:54:44 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     "Modilaynen, Pavel" <pavel.modilaynen@volvocars.com>
+Cc:     "drew@beagleboard.org" <drew@beagleboard.org>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        "menschel.p@posteo.de" <menschel.p@posteo.de>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "will@macchina.cc" <will@macchina.cc>
+Subject: Re: [net-next 6/6] can: mcp251xfd: mcp251xfd_regmap_crc_read(): work
+ around broken CRC on TBC register
+Message-ID: <20211208085444.j47kse2b7vnde2xd@pengutronix.de>
+References: <20210510074334.el2yxp3oy2pmbs7d@pengutronix.de>
+ <PR3P174MB0112D073D0E5E080FAAE8510846E9@PR3P174MB0112.EURP174.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-Received: by 2002:a05:6e02:1a07:0:0:0:0 with HTTP; Tue, 7 Dec 2021 20:13:35
- -0800 (PST)
-Reply-To: dj0015639@gmail.com
-From:   David Jackson <enkenpaul@gmail.com>
-Date:   Wed, 8 Dec 2021 05:13:35 +0100
-Message-ID: <CAG7-cQ_JEx-8fDdxn0Ex314ViSE32kaUjoR=sUvV7wmCUiKRGw@mail.gmail.com>
-Subject: FEDERAL BUREAU OF INVESTIGATION
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4lwcklrvy4hwyxiu"
+Content-Disposition: inline
+In-Reply-To: <PR3P174MB0112D073D0E5E080FAAE8510846E9@PR3P174MB0112.EURP174.PROD.OUTLOOK.COM>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Our Ref: RTB /SNT/STB
-To: Beneficiary
 
-This is FBI special agents, David Jackson. I was delegated along side
-others by the United Nations to investigate scammers who has been in
-the business of swindling foreigners especially those that has one
-form of transaction/contracts and another. Please be informed that in
-the course of our investigation, we detected that your name and
-details in our Scammed Monitoring Network. We also found out that you
-were scammed of a huge sum of money by scammers via Western union and
-MoneyGram. Be informed here that in a bid to alleviate the suffering
-of scammed victims, the United Nations initiated this compensation
-program and therefore, you are entitled to the sum of Five Million Two
-Hundred Thousand United States Dollars ($5,200,000.00 USD) for being a
-victim.
+--4lwcklrvy4hwyxiu
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Note that the said fund will be transfer to you via the Citibank being
-the paying bank mandated by the United Nations officials.
+On 07.12.2021 16:53:12, Modilaynen, Pavel wrote:
+> Hello Marc,
+>=20
+> We observe the very similar issue with MCP2517FD.
+>=20
+> >The CRC errors the patch works around are CRC errors introduced by a
+> >chip erratum, not by electromagnetic interference. In my observation
+>=20
+> Are you referring this errata doc
+> https://datasheet.octopart.com/MCP2517FD-H-JHA-Microchip-datasheet-136609=
+045.pdf ?
 
-However, we have to inform you that we have been able to arrest some
-of the swindlers who has been in this illicit business and will all be
-prosecuted accordingly. Be informed as well that we have limited time
-to stay back here, so we will advice that you urgently respond to this
-message ASAP. And do not inform any of the people that collected money
-from you before now about this new development to avoid jeopardizing
-our investigation. All you need to do is to follow our instruction and
-receive your compensation accordingly as directed by the United
-Nations.
+ACK - although there are newer versions available. The newest erratum
+for the mcp2517fd is the "C" issue:
 
-We urgently wait to receive your response.
+| https://ww1.microchip.com/downloads/en/DeviceDoc/MCP2517FD-Silicon-Errata=
+-and-Data-Sheet-Clarification-DS80000792C.pdf
 
-Regards,
-DAVID JACKSON
-FEDERAL BUREAU OF INVESTIGATION
-INVESTIGATION ON ALL ONLINE WIRE TRANSFER
+The mpc2518fd can be downloaded here:
+
+| https://ww1.microchip.com/downloads/en/DeviceDoc/MCP2518FD-Silicon-Errata=
+-and-Data-Sheet-Clarification-DS80000789C.pdf
+
+> We have the similar CRC read errors but
+> the lowest byte is not 0x00 and 0x80, it's actually 0x0x or 0x8x, e.g.
+>=20
+> mcp251xfd spi0.0 can0: CRC read error at address 0x0010 (length=3D4, data=
+=3D82 d1 fa 6c, CRC=3D0xd9c2) retrying.
+>=20
+> 0xb0 0x10 0x04 0x82 0xd1 0xfa 0x6c =3D> 0x59FD (not matching)
+>=20
+> but if I flip the first received bit  (highest bit in the lowest byte):
+> 0xb0 0x10 0x04 0x02 0xd1 0xfa 0x6c =3D> 0xD9C2 (matching!)
+>=20
+> So, your fix covers only the case of 0x00 and 0x80,=20
+> do you think that the workaround should be extended so check
+>      (buf_rx->data[0] =3D=3D 0x0 || buf_rx->data[0] =3D=3D 0x80)) {
+> turns into=20
+>      ((buf_rx->data[0] & 0xf0) =3D=3D 0x0 || (buf_rx->data[0] & 0xf0) =3D=
+=3D 0x80)) {
+>=20
+> Errata, actually says
+> "Only bits 7/15/23/31 of the following registers can be affected:"
+>=20
+> So, we could basically, in simplest case flip bit 31 and re-check CRC
+> without any check of rx->data[0]....
+
+Can you send a patch that updates the workaround and description.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--4lwcklrvy4hwyxiu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmGwctIACgkQqclaivrt
+76nEaAgAsPQpUDk019EElxIJvT/tejKNWXdP1as3EyE/qpEQZLZ9gIvnQCEFKA64
+ndw02h69iFMZwWbSdqL7Q+jjTHCBjb21dADY0z90zY5P9p3A2hSWtJPu8WWwUZER
+fGfiBmUqJ+0hfajoToFTeaxvSHDHsdjs7Lg3fW+oG2Yw9g5EK4m9AEYilQVNuq+B
+P3JZZmujeqB/uLL5FHmyEHKl0QJRzWflgSpJ4D0T+9yLFavr8KEHAmqNS+3mShwG
+s0SJoa9ou9emt3nCxiyzjcNlzdtMU2rRSZ+5KDUq3nFSbHADqgi04o9yJH45JTzN
+eBrkCY/KT7kQIvY2mLIiXa9MyPw7YQ==
+=qSKS
+-----END PGP SIGNATURE-----
+
+--4lwcklrvy4hwyxiu--
