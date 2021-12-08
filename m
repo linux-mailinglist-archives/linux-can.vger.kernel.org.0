@@ -2,45 +2,46 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA6846D39E
-	for <lists+linux-can@lfdr.de>; Wed,  8 Dec 2021 13:48:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C08C146D3A6
+	for <lists+linux-can@lfdr.de>; Wed,  8 Dec 2021 13:51:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232041AbhLHMvq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 8 Dec 2021 07:51:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45728 "EHLO
+        id S233750AbhLHMye (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 8 Dec 2021 07:54:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231773AbhLHMvq (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 8 Dec 2021 07:51:46 -0500
+        with ESMTP id S230162AbhLHMyd (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 8 Dec 2021 07:54:33 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D68C061746
-        for <linux-can@vger.kernel.org>; Wed,  8 Dec 2021 04:48:14 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06BE2C061746
+        for <linux-can@vger.kernel.org>; Wed,  8 Dec 2021 04:51:02 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1muwMm-0002jr-DX; Wed, 08 Dec 2021 13:48:12 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-e45e-c028-b01c-c307.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:e45e:c028:b01c:c307])
+        id 1muwPU-0003Ax-HS
+        for linux-can@vger.kernel.org; Wed, 08 Dec 2021 13:51:00 +0100
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id B1D5D6BFBD2
+        for <linux-can@vger.kernel.org>; Wed,  8 Dec 2021 12:50:58 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 6A6106BFBBB;
-        Wed,  8 Dec 2021 12:48:11 +0000 (UTC)
-Date:   Wed, 8 Dec 2021 13:48:10 +0100
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 0F4456BFBC7;
+        Wed,  8 Dec 2021 12:50:58 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 678ed954;
+        Wed, 8 Dec 2021 12:50:57 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Jimmy Assarsson <extja@kvaser.com>
-Cc:     linux-can@vger.kernel.org,
-        Jimmy Assarsson <jimmyassarsson@gmail.com>
-Subject: Re: [PATCH v3 4/4] can: kvaser_usb: Get CAN clock frequency from
- device
-Message-ID: <20211208124810.umnfw3f3fvev3rxw@pengutronix.de>
-References: <20211208115607.202859-1-extja@kvaser.com>
- <20211208115607.202859-5-extja@kvaser.com>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH net-next 0/8] pull-request: can-next 2021-12-08
+Date:   Wed,  8 Dec 2021 13:50:47 +0100
+Message-Id: <20211208125055.223141-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="z67st3afbqut6zhk"
-Content-Disposition: inline
-In-Reply-To: <20211208115607.202859-5-extja@kvaser.com>
+Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -49,41 +50,62 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello Jakub, hello David,
 
---z67st3afbqut6zhk
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+this is a pull request of 8 patches for net-next/master.
 
-On 08.12.2021 12:56:07, Jimmy Assarsson wrote:
-> Get the CAN clock frequency from device, since the various Kvaser Leaf
-> products use different CAN clocks.
+The first patch is by Vincent Mailhol and replaces the custom CAN
+units with generic one form linux/units.h.
 
-Help me classify this patch. Is existing hardware that uses this driver
-broken without that patch?
+The next 3 patches are by Evgeny Boger and add Allwinner R40 support
+to the sun4i CAN driver.
+
+Andy Shevchenko contributes 4 patches to the hi311x CAN driver,
+consisting of cleanups and converting the driver to the device
+property API.
 
 regards,
 Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+---
+The following changes since commit 1fe5b01262844be03de98afdd56d1d393df04d7e:
 
---z67st3afbqut6zhk
-Content-Type: application/pgp-signature; name="signature.asc"
+  Merge branch 's390-net-updates-2021-12-06' (2021-12-07 22:01:08 -0800)
 
------BEGIN PGP SIGNATURE-----
+are available in the Git repository at:
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmGwqYgACgkQqclaivrt
-76keBwf+JzU1hd1xm2qply6Lc1TjxCjA/iOVT8wXogls+62sAz4g8ErsS1eqpgp+
-F1k0W9pLxiD/5ArEo2b5KF+AKBTv4whynNqF8oSEEvpWsDIdJ4Gn0uYk19RCASum
-UOrB9VOODbdRTYw/uEXsYfd/X3MTiAEJvRKTx4Ln/R1IC6u/hSIt5F0HV8/OO0lZ
-OZZHAuhxLRDZnunLoKBsT3Gh+ocoP5LrrzZRL8WxhlymYFD1igNxR8WRsc93ohwp
-aV+oVczzthzqyu+YrXzUMBAWL9oWDzIHpC4CDwuy31/jPpT8wdfYuD/LE9z0sI3q
-5YVe5/lfUnfQH7wVWPrKBBk3SdGugw==
-=EptW
------END PGP SIGNATURE-----
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git tags/linux-can-next-for-5.17-20211208
 
---z67st3afbqut6zhk--
+for you to fetch changes up to 6a93ea38217706ef8318efba672b960bcd5d0642:
+
+  can: hi311x: hi3110_can_probe(): convert to use dev_err_probe() (2021-12-08 10:20:33 +0100)
+
+----------------------------------------------------------------
+linux-can-next-for-5.17-20211208
+
+----------------------------------------------------------------
+Andy Shevchenko (4):
+      can: hi311x: hi3110_can_probe(): use devm_clk_get_optional() to get the input clock
+      can: hi311x: hi3110_can_probe(): try to get crystal clock rate from property
+      can: hi311x: hi3110_can_probe(): make use of device property API
+      can: hi311x: hi3110_can_probe(): convert to use dev_err_probe()
+
+Evgeny Boger (3):
+      dt-bindings: net: can: add support for Allwinner R40 CAN controller
+      can: sun4i_can: add support for R40 CAN controller
+      ARM: dts: sun8i: r40: add node for CAN controller
+
+Vincent Mailhol (1):
+      can: bittiming: replace CAN units with the generic ones from linux/units.h
+
+ .../bindings/net/can/allwinner,sun4i-a10-can.yaml  | 24 +++++++++
+ arch/arm/boot/dts/sun8i-r40.dtsi                   | 19 +++++++
+ drivers/net/can/dev/bittiming.c                    |  5 +-
+ drivers/net/can/spi/hi311x.c                       | 52 +++++++++---------
+ drivers/net/can/sun4i_can.c                        | 62 +++++++++++++++++++++-
+ drivers/net/can/usb/etas_es58x/es581_4.c           |  5 +-
+ drivers/net/can/usb/etas_es58x/es58x_fd.c          |  5 +-
+ include/linux/can/bittiming.h                      |  7 ---
+ 8 files changed, 138 insertions(+), 41 deletions(-)
+
+
