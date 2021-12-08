@@ -2,95 +2,94 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E342046D012
-	for <lists+linux-can@lfdr.de>; Wed,  8 Dec 2021 10:27:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C427546D1B0
+	for <lists+linux-can@lfdr.de>; Wed,  8 Dec 2021 12:09:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229528AbhLHJb1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 8 Dec 2021 04:31:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55574 "EHLO
+        id S229677AbhLHLN1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 8 Dec 2021 06:13:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbhLHJb0 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 8 Dec 2021 04:31:26 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC09C061746
-        for <linux-can@vger.kernel.org>; Wed,  8 Dec 2021 01:27:54 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1mutEu-0004Fx-LL; Wed, 08 Dec 2021 10:27:52 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-e45e-c028-b01c-c307.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:e45e:c028:b01c:c307])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 928E56BF9B9;
-        Wed,  8 Dec 2021 09:27:51 +0000 (UTC)
-Date:   Wed, 8 Dec 2021 10:27:50 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Jimmy Assarsson <extja@kvaser.com>
-Cc:     linux-can@vger.kernel.org,
-        Jimmy Assarsson <jimmyassarsson@gmail.com>
-Subject: Re: [PATCH v1 0/5] kvaser_{pciefd,usb} fixes
-Message-ID: <20211208092750.mgeve7zlmpmivdnf@pengutronix.de>
-References: <20211119131915.2033234-1-extja@kvaser.com>
+        with ESMTP id S229478AbhLHLN1 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 8 Dec 2021 06:13:27 -0500
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C18C061746
+        for <linux-can@vger.kernel.org>; Wed,  8 Dec 2021 03:09:55 -0800 (PST)
+Received: by mail-lf1-x141.google.com with SMTP id k37so4925424lfv.3
+        for <linux-can@vger.kernel.org>; Wed, 08 Dec 2021 03:09:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kvaser.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kDXYZPU9Seu9Tz6bOkb6n4y6+m/OXUKrCQUqOJP4QCg=;
+        b=qClIzsag8pxw50DNvpuYczqrTY5ng9Cw4KNVJhyAAGqubRBJ3TEEmqWlq7lOjxOSu/
+         AbjtYXUs8IwerBl7hlOmfz8WtNr4nMH7v2ajJOBPAa+ElZ8KOm1BMuZ6c9h0rQQNWPSQ
+         uOgY+G5IgmtDjxEf0IgldpqlScprP9FNtRaV3dUDccEjB8GaprH1bUDcNNFHC+YyrZfy
+         b6qurGNj1bQoD8tLNsW948E4HPy7Nz8l71z67KyO7TJxgDINoOlLPhQ8p5BYb8CPsLNU
+         R67W/8KsDEjYgTdCLueXfuJDHq0smHBp8U3IfdqTDyw4hu0qMMpn3+6A4UzxATGngZy0
+         gjhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kDXYZPU9Seu9Tz6bOkb6n4y6+m/OXUKrCQUqOJP4QCg=;
+        b=xvtAboqV2+Y15xYHbdQfbauUcXSb3SQLw2TQM9CJp3NhDwXZaMTEjOUe/MNoNNzJ2t
+         msBpGN7HD8lR6BZ5I982oiCKrSHyJDdgh3zRhnGlfP3Xp4e7Qoaipo6WSeRbzmPGOlFl
+         nhNyxhT7zu08Kbg5/Ego0APizJjjoGYEw+fuX1OKQ0T3HKKuEP0D87tmC1WVCibcp3vR
+         CrKcHC9Q6rsUrspSr5kUqssiYzZMES7r2BCPAh0RfluaA/bHyiJ0LMTFoS4O6rMBp6c4
+         yrO7XVEwvsNUbW6HBfH9tFRiZdk+cTrm7WC22+PaBAZH21G4qFTvZFqmSjj6UMugkVY3
+         mEIw==
+X-Gm-Message-State: AOAM531hFsUhQ2Dv3JJnnjC2XBTjYYvI5/hO9FFFqF5bq0Ma4mCcrIEb
+        KzeHs8L/VvNjhaJFPs4KfcMNpX9UXAm5wnnC
+X-Google-Smtp-Source: ABdhPJxF2pKaEjeoIm5BpBTFpff+ul3czU8eDQ7ZjTAvzxzxgEvad6LQkKbDR2PmN7WHnHXimXEYfQ==
+X-Received: by 2002:a05:6512:b1f:: with SMTP id w31mr46659595lfu.240.1638961793303;
+        Wed, 08 Dec 2021 03:09:53 -0800 (PST)
+Received: from freke.kvaser.se (rota.kvaser.com. [195.22.86.90])
+        by smtp.gmail.com with ESMTPSA id q6sm223786lfa.133.2021.12.08.03.09.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 03:09:52 -0800 (PST)
+From:   Jimmy Assarsson <extja@kvaser.com>
+To:     linux-can@vger.kernel.org
+Cc:     Jimmy Assarsson <jimmyassarsson@gmail.com>,
+        Jimmy Assarsson <extja@kvaser.com>
+Subject: [PATCH v2 0/3] kvaser_{pciefd,usb} fixes
+Date:   Wed,  8 Dec 2021 12:09:37 +0100
+Message-Id: <20211208110940.185629-1-extja@kvaser.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="66qhts3p4p5rlxil"
-Content-Disposition: inline
-In-Reply-To: <20211119131915.2033234-1-extja@kvaser.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+The first patch fix increase of the correct
+net_device_stats {rx,tx}_errors counter, for kvaser_pciefd.
+The last two patches fix the CAN clock frequency for Kvaser Leaf devices,
+for kvaser_usb.
 
---66qhts3p4p5rlxil
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Note that this series contains patches for both kvaser_usb and
+kvaser_pciefd driver.
 
-On 19.11.2021 14:19:10, Jimmy Assarsson wrote:
-> The first patches fix net_device_stats when receiving error frames.
-> The last two patches fix the CAN clock frequency for Kvaser Leaf devices.
->=20
-> Note that this series contains patches for both kvaser_usb and
-> kvaser_pciefd driver.
-
-What's left of this series, after applying Vincent's stats cleanup [1]
-series?
+Dropped patches;
+[PATCH v1 1_5] can: kvaser_pciefd: Do not increase
+stats->rx_{packets,bytes} for error frames
+[PATCH v1 3_5] can: kvaser_usb: Do not increase
+stats->rx_{packets,bytes} for error frames
+and rebased on [PATCH v5 0/5] fix statistics and payload issues for
+error [1] series.
 
 [1]
-https://lore.kernel.org/all/20211207121531.42941-1-mailhol.vincent@wanadoo.=
-fr/
+https://lore.kernel.org/all/20211207121531.42941-1-mailhol.vincent@wanadoo.fr
 
-Can you send a series only containing the remaining patches?
+Jimmy Assarsson (3):
+  can: kvaser_pciefd: Increase correct stats->{rx,tx}_errors counter
+  can: kvaser_usb: Use CAN_MHZ define in assignment of frequency
+  can: kvaser_usb: Get CAN clock frequency from device
 
-regards,
-Marc
+ drivers/net/can/kvaser_pciefd.c               |  8 ++-
+ .../net/can/usb/kvaser_usb/kvaser_usb_hydra.c |  7 +-
+ .../net/can/usb/kvaser_usb/kvaser_usb_leaf.c  | 70 ++++++++++++++++---
+ 3 files changed, 72 insertions(+), 13 deletions(-)
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+-- 
+2.34.1
 
---66qhts3p4p5rlxil
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmGwepQACgkQqclaivrt
-76mUsAf/QFcFGYCWTF6ZVSqT0xqCbCAHxSX+OYIBT1JXrRmfVuDNqv15o2aF7IZ2
-/DrEzFIPbRd+vxazTcv9y6C+2eBatmK2HQwCQzBv8qa2CI6N1XVDM/DyPyQeYs7N
-igRFYfQ5dwoLXtxdmLLLMwBTeem84VdUm5q7UwE097XGy2uus5vSzCZ8rDt1aIjf
-j0/Otcf4PPQF5uIDdsyri5DgPtgWqRgO545EjtUAADFgN2hSJeXbM8PBJ31sfyDU
-vshD+gLV2i71CaYXtWI3fC6BIatscgMGjQbPwGUWPGfycWiFLAl8/VdvJPGvrkib
-KtVEV9lcSA7962OaNlDBpWVAW3N3aw==
-=1g2m
------END PGP SIGNATURE-----
-
---66qhts3p4p5rlxil--
