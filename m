@@ -2,43 +2,43 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2962746D4C7
+	by mail.lfdr.de (Postfix) with ESMTP id 9676F46D4C8
 	for <lists+linux-can@lfdr.de>; Wed,  8 Dec 2021 14:49:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233007AbhLHNwr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        id S231409AbhLHNwr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
         Wed, 8 Dec 2021 08:52:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231409AbhLHNwq (ORCPT
+        with ESMTP id S232916AbhLHNwq (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Wed, 8 Dec 2021 08:52:46 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D52C061746
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4E0C0617A1
         for <linux-can@vger.kernel.org>; Wed,  8 Dec 2021 05:49:14 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1muxJo-0002JO-Qx
-        for linux-can@vger.kernel.org; Wed, 08 Dec 2021 14:49:12 +0100
+        id 1muxJp-0002JQ-12
+        for linux-can@vger.kernel.org; Wed, 08 Dec 2021 14:49:13 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id C7F336BFCE8
+        by bjornoya.blackshift.org (Postfix) with SMTP id E72486BFCEA
         for <linux-can@vger.kernel.org>; Wed,  8 Dec 2021 13:49:11 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 68FA86BFCE2;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 7EEB56BFCE4;
         Wed,  8 Dec 2021 13:49:11 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id c54c71db;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 2c38194d;
         Wed, 8 Dec 2021 13:49:10 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     linux-can@vger.kernel.org
 Cc:     Jimmy Assarsson <extja@kvaser.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH v4 1/2] can: kvaser_pciefd: kvaser_pciefd_rx_error_frame(): increase correct stats->{rx,tx}_errors counter
-Date:   Wed,  8 Dec 2021 14:49:09 +0100
-Message-Id: <20211208134910.263352-2-mkl@pengutronix.de>
+Subject: [PATCH v4 2/2] can: kvaser_usb: get CAN clock frequency from device
+Date:   Wed,  8 Dec 2021 14:49:10 +0100
+Message-Id: <20211208134910.263352-3-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211208134910.263352-1-mkl@pengutronix.de>
 References: <20211208134910.263352-1-mkl@pengutronix.de>
@@ -54,43 +54,178 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 From: Jimmy Assarsson <extja@kvaser.com>
 
-Check the direction bit in the error frame packet (EPACK) to determine
-which net_device_stats {rx,tx}_errors counter to increase.
+Get the CAN clock frequency from device, since the various Kvaser Leaf
+products use different CAN clocks.
 
-Link: https://lore.kernel.org/all/20211208115607.202859-2-extja@kvaser.com
-Fixes: 26ad340e582d ("can: kvaser_pciefd: Add driver for Kvaser PCIEcan devices")
+Link: https://lore.kernel.org/all/20211208115607.202859-5-extja@kvaser.com
+Fixes: 080f40a6fa28 ("can: kvaser_usb: Add support for Kvaser CAN/USB devices")
 Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/kvaser_pciefd.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ .../net/can/usb/kvaser_usb/kvaser_usb_leaf.c  | 101 +++++++++++++-----
+ 1 file changed, 73 insertions(+), 28 deletions(-)
 
-diff --git a/drivers/net/can/kvaser_pciefd.c b/drivers/net/can/kvaser_pciefd.c
-index 74d9899fc904..eb74cdf26b88 100644
---- a/drivers/net/can/kvaser_pciefd.c
-+++ b/drivers/net/can/kvaser_pciefd.c
-@@ -248,6 +248,9 @@ MODULE_DESCRIPTION("CAN driver for Kvaser CAN/PCIe devices");
- #define KVASER_PCIEFD_SPACK_EWLR BIT(23)
- #define KVASER_PCIEFD_SPACK_EPLR BIT(24)
+diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+index 59ba7c7beec0..f7af1bf5ab46 100644
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+@@ -28,10 +28,6 @@
  
-+/* Kvaser KCAN_EPACK second word */
-+#define KVASER_PCIEFD_EPACK_DIR_TX BIT(0)
+ #include "kvaser_usb.h"
+ 
+-/* Forward declaration */
+-static const struct kvaser_usb_dev_cfg kvaser_usb_leaf_dev_cfg;
+-
+-#define CAN_USB_CLOCK			8000000
+ #define MAX_USBCAN_NET_DEVICES		2
+ 
+ /* Command header size */
+@@ -80,6 +76,12 @@ static const struct kvaser_usb_dev_cfg kvaser_usb_leaf_dev_cfg;
+ 
+ #define CMD_LEAF_LOG_MESSAGE		106
+ 
++/* Leaf frequency options */
++#define KVASER_USB_LEAF_SWOPTION_FREQ_MASK 0x60
++#define KVASER_USB_LEAF_SWOPTION_FREQ_16_MHZ_CLK 0
++#define KVASER_USB_LEAF_SWOPTION_FREQ_32_MHZ_CLK BIT(5)
++#define KVASER_USB_LEAF_SWOPTION_FREQ_24_MHZ_CLK BIT(6)
 +
- struct kvaser_pciefd;
+ /* error factors */
+ #define M16C_EF_ACKE			BIT(0)
+ #define M16C_EF_CRCE			BIT(1)
+@@ -340,6 +342,50 @@ struct kvaser_usb_err_summary {
+ 	};
+ };
  
- struct kvaser_pciefd_can {
-@@ -1285,7 +1288,10 @@ static int kvaser_pciefd_rx_error_frame(struct kvaser_pciefd_can *can,
++static const struct can_bittiming_const kvaser_usb_leaf_bittiming_const = {
++	.name = "kvaser_usb",
++	.tseg1_min = KVASER_USB_TSEG1_MIN,
++	.tseg1_max = KVASER_USB_TSEG1_MAX,
++	.tseg2_min = KVASER_USB_TSEG2_MIN,
++	.tseg2_max = KVASER_USB_TSEG2_MAX,
++	.sjw_max = KVASER_USB_SJW_MAX,
++	.brp_min = KVASER_USB_BRP_MIN,
++	.brp_max = KVASER_USB_BRP_MAX,
++	.brp_inc = KVASER_USB_BRP_INC,
++};
++
++static const struct kvaser_usb_dev_cfg kvaser_usb_leaf_dev_cfg_8mhz = {
++	.clock = {
++		.freq = 8000000,
++	},
++	.timestamp_freq = 1,
++	.bittiming_const = &kvaser_usb_leaf_bittiming_const,
++};
++
++static const struct kvaser_usb_dev_cfg kvaser_usb_leaf_dev_cfg_16mhz = {
++	.clock = {
++		.freq = 16000000,
++	},
++	.timestamp_freq = 1,
++	.bittiming_const = &kvaser_usb_leaf_bittiming_const,
++};
++
++static const struct kvaser_usb_dev_cfg kvaser_usb_leaf_dev_cfg_24mhz = {
++	.clock = {
++		.freq = 24000000,
++	},
++	.timestamp_freq = 1,
++	.bittiming_const = &kvaser_usb_leaf_bittiming_const,
++};
++
++static const struct kvaser_usb_dev_cfg kvaser_usb_leaf_dev_cfg_32mhz = {
++	.clock = {
++		.freq = 32000000,
++	},
++	.timestamp_freq = 1,
++	.bittiming_const = &kvaser_usb_leaf_bittiming_const,
++};
++
+ static void *
+ kvaser_usb_leaf_frame_to_cmd(const struct kvaser_usb_net_priv *priv,
+ 			     const struct sk_buff *skb, int *frame_len,
+@@ -471,6 +517,27 @@ static int kvaser_usb_leaf_send_simple_cmd(const struct kvaser_usb *dev,
+ 	return rc;
+ }
  
- 	can->err_rep_cnt++;
- 	can->can.can_stats.bus_error++;
--	stats->rx_errors++;
-+	if (p->header[1] & KVASER_PCIEFD_EPACK_DIR_TX)
-+		stats->tx_errors++;
-+	else
-+		stats->rx_errors++;
++static void kvaser_usb_leaf_get_software_info_leaf(struct kvaser_usb *dev,
++						   const struct leaf_cmd_softinfo *softinfo)
++{
++	u32 sw_options = le32_to_cpu(softinfo->sw_options);
++
++	dev->fw_version = le32_to_cpu(softinfo->fw_version);
++	dev->max_tx_urbs = le16_to_cpu(softinfo->max_outstanding_tx);
++
++	switch (sw_options & KVASER_USB_LEAF_SWOPTION_FREQ_MASK) {
++	case KVASER_USB_LEAF_SWOPTION_FREQ_16_MHZ_CLK:
++		dev->cfg = &kvaser_usb_leaf_dev_cfg_16mhz;
++		break;
++	case KVASER_USB_LEAF_SWOPTION_FREQ_24_MHZ_CLK:
++		dev->cfg = &kvaser_usb_leaf_dev_cfg_24mhz;
++		break;
++	case KVASER_USB_LEAF_SWOPTION_FREQ_32_MHZ_CLK:
++		dev->cfg = &kvaser_usb_leaf_dev_cfg_32mhz;
++		break;
++	}
++}
++
+ static int kvaser_usb_leaf_get_software_info_inner(struct kvaser_usb *dev)
+ {
+ 	struct kvaser_cmd cmd;
+@@ -486,14 +553,13 @@ static int kvaser_usb_leaf_get_software_info_inner(struct kvaser_usb *dev)
  
- 	can->bec.txerr = bec.txerr;
- 	can->bec.rxerr = bec.rxerr;
+ 	switch (dev->card_data.leaf.family) {
+ 	case KVASER_LEAF:
+-		dev->fw_version = le32_to_cpu(cmd.u.leaf.softinfo.fw_version);
+-		dev->max_tx_urbs =
+-			le16_to_cpu(cmd.u.leaf.softinfo.max_outstanding_tx);
++		kvaser_usb_leaf_get_software_info_leaf(dev, &cmd.u.leaf.softinfo);
+ 		break;
+ 	case KVASER_USBCAN:
+ 		dev->fw_version = le32_to_cpu(cmd.u.usbcan.softinfo.fw_version);
+ 		dev->max_tx_urbs =
+ 			le16_to_cpu(cmd.u.usbcan.softinfo.max_outstanding_tx);
++		dev->cfg = &kvaser_usb_leaf_dev_cfg_8mhz;
+ 		break;
+ 	}
+ 
+@@ -1225,24 +1291,11 @@ static int kvaser_usb_leaf_init_card(struct kvaser_usb *dev)
+ {
+ 	struct kvaser_usb_dev_card_data *card_data = &dev->card_data;
+ 
+-	dev->cfg = &kvaser_usb_leaf_dev_cfg;
+ 	card_data->ctrlmode_supported |= CAN_CTRLMODE_3_SAMPLES;
+ 
+ 	return 0;
+ }
+ 
+-static const struct can_bittiming_const kvaser_usb_leaf_bittiming_const = {
+-	.name = "kvaser_usb",
+-	.tseg1_min = KVASER_USB_TSEG1_MIN,
+-	.tseg1_max = KVASER_USB_TSEG1_MAX,
+-	.tseg2_min = KVASER_USB_TSEG2_MIN,
+-	.tseg2_max = KVASER_USB_TSEG2_MAX,
+-	.sjw_max = KVASER_USB_SJW_MAX,
+-	.brp_min = KVASER_USB_BRP_MIN,
+-	.brp_max = KVASER_USB_BRP_MAX,
+-	.brp_inc = KVASER_USB_BRP_INC,
+-};
+-
+ static int kvaser_usb_leaf_set_bittiming(struct net_device *netdev)
+ {
+ 	struct kvaser_usb_net_priv *priv = netdev_priv(netdev);
+@@ -1348,11 +1401,3 @@ const struct kvaser_usb_dev_ops kvaser_usb_leaf_dev_ops = {
+ 	.dev_read_bulk_callback = kvaser_usb_leaf_read_bulk_callback,
+ 	.dev_frame_to_cmd = kvaser_usb_leaf_frame_to_cmd,
+ };
+-
+-static const struct kvaser_usb_dev_cfg kvaser_usb_leaf_dev_cfg = {
+-	.clock = {
+-		.freq = CAN_USB_CLOCK,
+-	},
+-	.timestamp_freq = 1,
+-	.bittiming_const = &kvaser_usb_leaf_bittiming_const,
+-};
 -- 
 2.33.0
 
