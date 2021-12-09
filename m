@@ -2,44 +2,47 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDCAB46E3E6
-	for <lists+linux-can@lfdr.de>; Thu,  9 Dec 2021 09:13:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B069146E3E8
+	for <lists+linux-can@lfdr.de>; Thu,  9 Dec 2021 09:13:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234487AbhLIIRC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 9 Dec 2021 03:17:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58498 "EHLO
+        id S234503AbhLIIRE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 9 Dec 2021 03:17:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234522AbhLIIQ7 (ORCPT
+        with ESMTP id S234541AbhLIIQ7 (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Thu, 9 Dec 2021 03:16:59 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F2CC0617A1
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED1FC061A72
         for <linux-can@vger.kernel.org>; Thu,  9 Dec 2021 00:13:25 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1mvEYM-0001hJ-0F
+        id 1mvEYM-0001he-L1
         for linux-can@vger.kernel.org; Thu, 09 Dec 2021 09:13:22 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 50A5B6C064E
+        by bjornoya.blackshift.org (Postfix) with SMTP id B939A6C0655
         for <linux-can@vger.kernel.org>; Thu,  9 Dec 2021 08:13:20 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id A899B6C0645;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id BFA456C0646;
         Thu,  9 Dec 2021 08:13:19 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 2a011003;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id efe1c367;
         Thu, 9 Dec 2021 08:13:19 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: [PATCH net 0/2] pull-request: can 2021-12-09
-Date:   Thu,  9 Dec 2021 09:13:10 +0100
-Message-Id: <20211209081312.301036-1-mkl@pengutronix.de>
+        kernel@pengutronix.de, Jimmy Assarsson <extja@kvaser.com>,
+        stable@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH net 1/2] can: kvaser_pciefd: kvaser_pciefd_rx_error_frame(): increase correct stats->{rx,tx}_errors counter
+Date:   Thu,  9 Dec 2021 09:13:11 +0100
+Message-Id: <20211209081312.301036-2-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20211209081312.301036-1-mkl@pengutronix.de>
+References: <20211209081312.301036-1-mkl@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
@@ -50,41 +53,49 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Jakub, hello David,
+From: Jimmy Assarsson <extja@kvaser.com>
 
-this is a pull request of 2 patches for net/master.
+Check the direction bit in the error frame packet (EPACK) to determine
+which net_device_stats {rx,tx}_errors counter to increase.
 
-Both patches are by Jimmy Assarsson. The first one fixes the
-incrementing of the rx/tx error counters in the Kvaser PCIe FD driver.
-The second one fixes the Kvaser USB driver by using the CAN clock
-frequency provided by the device instead of using a hard coded value.
-
-regards,
-Marc
-
+Fixes: 26ad340e582d ("can: kvaser_pciefd: Add driver for Kvaser PCIEcan devices")
+Link: https://lore.kernel.org/all/20211208152122.250852-1-extja@kvaser.com
+Cc: stable@vger.kernel.org
+Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
-The following changes since commit a50e659b2a1be14784e80f8492aab177e67c53a2:
+ drivers/net/can/kvaser_pciefd.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-  net: mvpp2: fix XDP rx queues registering (2021-12-08 18:29:37 -0800)
+diff --git a/drivers/net/can/kvaser_pciefd.c b/drivers/net/can/kvaser_pciefd.c
+index 74d9899fc904..eb74cdf26b88 100644
+--- a/drivers/net/can/kvaser_pciefd.c
++++ b/drivers/net/can/kvaser_pciefd.c
+@@ -248,6 +248,9 @@ MODULE_DESCRIPTION("CAN driver for Kvaser CAN/PCIe devices");
+ #define KVASER_PCIEFD_SPACK_EWLR BIT(23)
+ #define KVASER_PCIEFD_SPACK_EPLR BIT(24)
+ 
++/* Kvaser KCAN_EPACK second word */
++#define KVASER_PCIEFD_EPACK_DIR_TX BIT(0)
++
+ struct kvaser_pciefd;
+ 
+ struct kvaser_pciefd_can {
+@@ -1285,7 +1288,10 @@ static int kvaser_pciefd_rx_error_frame(struct kvaser_pciefd_can *can,
+ 
+ 	can->err_rep_cnt++;
+ 	can->can.can_stats.bus_error++;
+-	stats->rx_errors++;
++	if (p->header[1] & KVASER_PCIEFD_EPACK_DIR_TX)
++		stats->tx_errors++;
++	else
++		stats->rx_errors++;
+ 
+ 	can->bec.txerr = bec.txerr;
+ 	can->bec.rxerr = bec.rxerr;
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-5.16-20211209
-
-for you to fetch changes up to fb12797ab1fef480ad8a32a30984844444eeb00d:
-
-  can: kvaser_usb: get CAN clock frequency from device (2021-12-09 09:01:43 +0100)
-
-----------------------------------------------------------------
-linux-can-fixes-for-5.16-20211209
-
-----------------------------------------------------------------
-Jimmy Assarsson (2):
-      can: kvaser_pciefd: kvaser_pciefd_rx_error_frame(): increase correct stats->{rx,tx}_errors counter
-      can: kvaser_usb: get CAN clock frequency from device
-
- drivers/net/can/kvaser_pciefd.c                  |   8 +-
- drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c | 101 ++++++++++++++++-------
- 2 files changed, 80 insertions(+), 29 deletions(-)
+base-commit: a50e659b2a1be14784e80f8492aab177e67c53a2
+-- 
+2.33.0
 
 
