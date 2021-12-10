@@ -2,33 +2,31 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E17D3470145
-	for <lists+linux-can@lfdr.de>; Fri, 10 Dec 2021 14:06:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CF8147016C
+	for <lists+linux-can@lfdr.de>; Fri, 10 Dec 2021 14:20:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236018AbhLJNJy (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 10 Dec 2021 08:09:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36552 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233408AbhLJNJx (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 10 Dec 2021 08:09:53 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8BDBC061746
-        for <linux-can@vger.kernel.org>; Fri, 10 Dec 2021 05:06:18 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1mvfbG-0004nA-Sw; Fri, 10 Dec 2021 14:06:10 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-5708-5a2a-1200-a3e0.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:5708:5a2a:1200:a3e0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 9DAFF6C145E;
-        Fri, 10 Dec 2021 13:06:08 +0000 (UTC)
-Date:   Fri, 10 Dec 2021 14:06:07 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        id S241591AbhLJNYH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 10 Dec 2021 08:24:07 -0500
+Received: from mga09.intel.com ([134.134.136.24]:16005 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241521AbhLJNYG (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Fri, 10 Dec 2021 08:24:06 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="238146111"
+X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
+   d="scan'208";a="238146111"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 05:20:31 -0800
+X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
+   d="scan'208";a="463663341"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 05:20:29 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1mvfoB-004VJe-30;
+        Fri, 10 Dec 2021 15:19:31 +0200
+Date:   Fri, 10 Dec 2021 15:19:30 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
 Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Wolfgang Grandegger <wg@grandegger.com>,
@@ -36,62 +34,33 @@ Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
         Jakub Kicinski <kuba@kernel.org>
 Subject: Re: [PATCH v1 1/1] can: mcp251x: Get rid of duplicate of_node
  assignment
-Message-ID: <20211210130607.rajkkzr7lf6l4tok@pengutronix.de>
+Message-ID: <YbNT4iOj+jfMiIDu@smile.fi.intel.com>
 References: <20211202205855.76946-1-andriy.shevchenko@linux.intel.com>
  <YbHvcDhtZFTyfThT@smile.fi.intel.com>
+ <20211210130607.rajkkzr7lf6l4tok@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fb4ksewdxxpcboug"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YbHvcDhtZFTyfThT@smile.fi.intel.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <20211210130607.rajkkzr7lf6l4tok@pengutronix.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Fri, Dec 10, 2021 at 02:06:07PM +0100, Marc Kleine-Budde wrote:
+> On 09.12.2021 13:58:40, Andy Shevchenko wrote:
+> > On Thu, Dec 02, 2021 at 10:58:55PM +0200, Andy Shevchenko wrote:
 
---fb4ksewdxxpcboug
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+...
 
-On 09.12.2021 13:58:40, Andy Shevchenko wrote:
-> On Thu, Dec 02, 2021 at 10:58:55PM +0200, Andy Shevchenko wrote:
-> > GPIO library does copy the of_node from the parent device of
-> > the GPIO chip, there is no need to repeat this in the individual
-> > drivers. Remove assignment here.
-> >=20
-> > For the details one may look into the of_gpio_dev_init() implementation.
->=20
-> Marc, what do you think about this change?
+> > Marc, what do you think about this change?
+> 
+> LGTM, added to linux-can-next/testing.
 
-LGTM, added to linux-can-next/testing.
+Thanks for applying this and hi311x patches!
 
-regards,
-Marc
+-- 
+With Best Regards,
+Andy Shevchenko
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---fb4ksewdxxpcboug
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmGzUL0ACgkQqclaivrt
-76k2agf/VDkthQ3EX6w8ojh5XG3RmQvB02hlee7wKWddkh9TAjodcKad1d/luhR2
-MBPm2CBv/+1zNv2KCVltjPt8oQhugqTKu+SRJBjwWXZfWI39ITgxrZf9VNY/h8z1
-XM1HVoKCrAT6KycD4B5ikx3wmZ+QkFO/JQDh9UjNI8VJqEMi/V7ThpO8sv4uFpR4
-vzchtj/RmLgyPLfNvEUiQ0sVKBm0ry/CPC41qpRlA3pHVGJwU1oEbPtEwoGlAqsc
-gYyC3ZCIVwCN8weKmHD5RT8JXPammO5fQDrvTeqkoXrrSjCepbIym5noMyaZ6Kw7
-SXWWR08GGaibJcXKBthF/Z8dnKZ8Rg==
-=eJaK
------END PGP SIGNATURE-----
-
---fb4ksewdxxpcboug--
