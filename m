@@ -2,92 +2,182 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C009C46FC3E
-	for <lists+linux-can@lfdr.de>; Fri, 10 Dec 2021 09:02:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E91646FC4C
+	for <lists+linux-can@lfdr.de>; Fri, 10 Dec 2021 09:06:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238063AbhLJIFr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 10 Dec 2021 03:05:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50338 "EHLO
+        id S229989AbhLJIKP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 10 Dec 2021 03:10:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231806AbhLJIFq (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 10 Dec 2021 03:05:46 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 571BBC061746
-        for <linux-can@vger.kernel.org>; Fri, 10 Dec 2021 00:02:11 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1mvar0-0004Ti-8Q; Fri, 10 Dec 2021 09:02:06 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-5708-5a2a-1200-a3e0.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:5708:5a2a:1200:a3e0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id A68856C11AD;
-        Fri, 10 Dec 2021 08:02:04 +0000 (UTC)
-Date:   Fri, 10 Dec 2021 09:02:03 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Jimmy Assarsson <extja@kvaser.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, Yasushi SHOJI <yashi@spacecubics.com>
-Subject: Re: [PATCH v5 3/5] can: do not copy the payload of RTR frames
-Message-ID: <20211210080203.sydpxiczjq3etxzm@pengutronix.de>
-References: <20211207121531.42941-1-mailhol.vincent@wanadoo.fr>
- <20211207121531.42941-4-mailhol.vincent@wanadoo.fr>
- <20211210073545.qdldwmaykts5dr4u@pengutronix.de>
+        with ESMTP id S229575AbhLJIKP (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 10 Dec 2021 03:10:15 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FDC4C061746
+        for <linux-can@vger.kernel.org>; Fri, 10 Dec 2021 00:06:40 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id u22so12559923lju.7
+        for <linux-can@vger.kernel.org>; Fri, 10 Dec 2021 00:06:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kvaser.com; s=google;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=6n2ggLUO7Wphn+PMZVpLwuv+ZnMRi8Qo+3lecm2wx4w=;
+        b=B4cWgv1+ZNylZ17uptVAhrmH+iPT7hYzo9LGqfSHqMgHkuev7U1DsiHa3kcF6akc+d
+         h5RhP5RApTXavrhxe/XpbQ+TwTJnbb3hbZl7FmN8mALhTrO1TaVCG4GZvS7oX09o1gK4
+         JzoUYHO5UDa0plOy+WxYXFAmyPX4WxgC69yKuXRrBF8kk/8+GVnCjQbCNatAW8IvI/Qy
+         ElPkBdMXjl+rhIg4Z3SOZ5jOAlc29huIloCZxlr5QwnbBogHRe2GHmxMfNJkRflLJro/
+         3TnlrnwIMHrIFrMvj3p8TpCHKLLPAxfTzJuiIh5A51fH7+8CN41yEEirBX6Or7QiBJk9
+         P4bA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=6n2ggLUO7Wphn+PMZVpLwuv+ZnMRi8Qo+3lecm2wx4w=;
+        b=WwRpb8A9Iyczysyv3dzWGLaITzv6JOy0kgY7i+dK1EPpf1xNteoAQRpbk4Czo8qevn
+         7tgcZPD5siZ20beiAaR6fS530eSJQMbbIUETKnPq9cOW52qm0c9n29J4lmbMiYjLluP8
+         Sqg/a7UWkyhohhaBpNykvDssNzhCKwn09GC1Qaft9o2Ka6flbalrv6eqcoLJkWyMZmsl
+         tilPMwNPFYfOFRpqLnH3tyLXcfkgjnQFNY5z5rqbfw5DCC1Aky4cvS24ZzF9+k4P6gRJ
+         OZ0mZgdV2FDpwZUfIe7yvTrDYYK616F1m3V4QkIcbfbYzANJigwsUVUmiGQnpDdc0haB
+         YJ1w==
+X-Gm-Message-State: AOAM5317hnyBVsO+kXZM8wyh9Y5H0e8YwwNgksHkBDehf97wvi4LTytN
+        o7G861me6GxYja4o0qtJ1onarPkyO9IB0J1U
+X-Google-Smtp-Source: ABdhPJz3z5+6C1Qg50wKfUqSXADSCm6UQDeiuLUvjRBnAOZMo0O9CmOlIQnbzwk2P8346m9l5OCnLA==
+X-Received: by 2002:a2e:a54d:: with SMTP id e13mr11047398ljn.319.1639123598388;
+        Fri, 10 Dec 2021 00:06:38 -0800 (PST)
+Received: from [10.0.6.3] (rota.kvaser.com. [195.22.86.90])
+        by smtp.gmail.com with ESMTPSA id l11sm236326lfe.22.2021.12.10.00.06.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Dec 2021 00:06:38 -0800 (PST)
+Subject: Re: [PATCH v6] can: kvaser_usb: make use of units.h in assignment of
+ frequency
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+References: <20211210075803.343841-1-mkl@pengutronix.de>
+From:   Jimmy Assarsson <extja@kvaser.com>
+Message-ID: <7de7ffcd-9ba6-fac2-0c34-7e64897904c1@kvaser.com>
+Date:   Fri, 10 Dec 2021 09:06:37 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="g4sbyd7w37o5qcbj"
-Content-Disposition: inline
-In-Reply-To: <20211210073545.qdldwmaykts5dr4u@pengutronix.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <20211210075803.343841-1-mkl@pengutronix.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On 2021-12-10 08:58, Marc Kleine-Budde wrote:
+> From: Jimmy Assarsson <extja@kvaser.com>
+> 
+> Use the MEGA define plus the comment /* Hz */ when assigning
+> frequencies.
+> 
+> Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> ---
+> Hello Jimmy,
+> 
+> now that net/master has been merged into net-next/master, I think this
+> is the remaining patch of your series. Right?
+> 
+> regards,
+> Marc
 
---g4sbyd7w37o5qcbj
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yes.
 
-On 10.12.2021 08:35:45, Marc Kleine-Budde wrote:
-> On 07.12.2021 21:15:29, Vincent Mailhol wrote:
-> > The actual payload length of the CAN Remote Transmission Request (RTR)
-> > frames is always 0, i.e. nothing is transmitted on the wire. However,
->                            ^^^^^^^
-> I've changed this to "no payload" to make it more unambiguous.
+Thanks!
+jimmy
 
-Same for the other patches.
 
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---g4sbyd7w37o5qcbj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmGzCXkACgkQqclaivrt
-76kh8Af/ahVBiyHkUsLlsXLUzg8gKGy94jUBzOO68kzADSNEES/sS1ckCY+QAEwA
-WgmRffiBL+0f0CVZGcpDKxBdF1SYTIq447RW8Ig5XOOxaop0/E/Tq4vGbchuPXGt
-NgEvUUDAFGykCCztepDDvbLHaaZQbdeESBry6HdumxJY1ak9c6f4dt0GzM9aUkAq
-6QM9TlGHFBcriqt42dkGdFrY/01fbQwEo0BFAuJs0ocGl87/D1p8MzsTAycdwdzo
-JJv7Md+Z1/P2LOoyG++4dGsqc80lVKZYv+K+Oym8rDZhQak/+sH/Uc9JaP/iaG30
-Z5I8UV+TMDvk1FzY1vViA/12IWiLjA==
-=zD6b
------END PGP SIGNATURE-----
-
---g4sbyd7w37o5qcbj--
+>   drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c | 7 ++++---
+>   drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c  | 9 +++++----
+>   2 files changed, 9 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
+> index dcee8dc828ec..cec36295fdc5 100644
+> --- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
+> +++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
+> @@ -22,6 +22,7 @@
+>   #include <linux/spinlock.h>
+>   #include <linux/string.h>
+>   #include <linux/types.h>
+> +#include <linux/units.h>
+>   #include <linux/usb.h>
+>   
+>   #include <linux/can.h>
+> @@ -2040,7 +2041,7 @@ const struct kvaser_usb_dev_ops kvaser_usb_hydra_dev_ops = {
+>   
+>   static const struct kvaser_usb_dev_cfg kvaser_usb_hydra_dev_cfg_kcan = {
+>   	.clock = {
+> -		.freq = 80000000,
+> +		.freq = 80 * MEGA /* Hz */,
+>   	},
+>   	.timestamp_freq = 80,
+>   	.bittiming_const = &kvaser_usb_hydra_kcan_bittiming_c,
+> @@ -2049,7 +2050,7 @@ static const struct kvaser_usb_dev_cfg kvaser_usb_hydra_dev_cfg_kcan = {
+>   
+>   static const struct kvaser_usb_dev_cfg kvaser_usb_hydra_dev_cfg_flexc = {
+>   	.clock = {
+> -		.freq = 24000000,
+> +		.freq = 24 * MEGA /* Hz */,
+>   	},
+>   	.timestamp_freq = 1,
+>   	.bittiming_const = &kvaser_usb_hydra_flexc_bittiming_c,
+> @@ -2057,7 +2058,7 @@ static const struct kvaser_usb_dev_cfg kvaser_usb_hydra_dev_cfg_flexc = {
+>   
+>   static const struct kvaser_usb_dev_cfg kvaser_usb_hydra_dev_cfg_rt = {
+>   	.clock = {
+> -		.freq = 80000000,
+> +		.freq = 80 * MEGA /* Hz */,
+>   	},
+>   	.timestamp_freq = 24,
+>   	.bittiming_const = &kvaser_usb_hydra_rt_bittiming_c,
+> diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+> index f7af1bf5ab46..aed271d5f3bb 100644
+> --- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+> +++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+> @@ -19,6 +19,7 @@
+>   #include <linux/spinlock.h>
+>   #include <linux/string.h>
+>   #include <linux/types.h>
+> +#include <linux/units.h>
+>   #include <linux/usb.h>
+>   
+>   #include <linux/can.h>
+> @@ -356,7 +357,7 @@ static const struct can_bittiming_const kvaser_usb_leaf_bittiming_const = {
+>   
+>   static const struct kvaser_usb_dev_cfg kvaser_usb_leaf_dev_cfg_8mhz = {
+>   	.clock = {
+> -		.freq = 8000000,
+> +		.freq = 8 * MEGA /* Hz */,
+>   	},
+>   	.timestamp_freq = 1,
+>   	.bittiming_const = &kvaser_usb_leaf_bittiming_const,
+> @@ -364,7 +365,7 @@ static const struct kvaser_usb_dev_cfg kvaser_usb_leaf_dev_cfg_8mhz = {
+>   
+>   static const struct kvaser_usb_dev_cfg kvaser_usb_leaf_dev_cfg_16mhz = {
+>   	.clock = {
+> -		.freq = 16000000,
+> +		.freq = 16 * MEGA /* Hz */,
+>   	},
+>   	.timestamp_freq = 1,
+>   	.bittiming_const = &kvaser_usb_leaf_bittiming_const,
+> @@ -372,7 +373,7 @@ static const struct kvaser_usb_dev_cfg kvaser_usb_leaf_dev_cfg_16mhz = {
+>   
+>   static const struct kvaser_usb_dev_cfg kvaser_usb_leaf_dev_cfg_24mhz = {
+>   	.clock = {
+> -		.freq = 24000000,
+> +		.freq = 24 * MEGA /* Hz */,
+>   	},
+>   	.timestamp_freq = 1,
+>   	.bittiming_const = &kvaser_usb_leaf_bittiming_const,
+> @@ -380,7 +381,7 @@ static const struct kvaser_usb_dev_cfg kvaser_usb_leaf_dev_cfg_24mhz = {
+>   
+>   static const struct kvaser_usb_dev_cfg kvaser_usb_leaf_dev_cfg_32mhz = {
+>   	.clock = {
+> -		.freq = 32000000,
+> +		.freq = 32 * MEGA /* Hz */,
+>   	},
+>   	.timestamp_freq = 1,
+>   	.bittiming_const = &kvaser_usb_leaf_bittiming_const,
+> 
