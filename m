@@ -2,177 +2,85 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6F57473129
-	for <lists+linux-can@lfdr.de>; Mon, 13 Dec 2021 17:03:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D83F847314F
+	for <lists+linux-can@lfdr.de>; Mon, 13 Dec 2021 17:11:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240397AbhLMQDP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 13 Dec 2021 11:03:15 -0500
-Received: from smtp04.smtpout.orange.fr ([80.12.242.126]:51622 "EHLO
+        id S240492AbhLMQLR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 13 Dec 2021 11:11:17 -0500
+Received: from smtp04.smtpout.orange.fr ([80.12.242.126]:51175 "EHLO
         smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240443AbhLMQDH (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 13 Dec 2021 11:03:07 -0500
+        with ESMTP id S240491AbhLMQLQ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 13 Dec 2021 11:11:16 -0500
 Received: from localhost.localdomain ([106.133.22.31])
         by smtp.orange.fr with ESMTPA
-        id wnmbm1mzFk3HQwnn5mkNfk; Mon, 13 Dec 2021 17:03:06 +0100
+        id wnuom1qs4k3HQwnuxmkP2j; Mon, 13 Dec 2021 17:11:15 +0100
 X-ME-Helo: localhost.localdomain
 X-ME-Auth: MDU0YmViZGZmMDIzYiBlMiM2NTczNTRjNWZkZTMwOGRiOGQ4ODf3NWI1ZTMyMzdiODlhOQ==
-X-ME-Date: Mon, 13 Dec 2021 17:03:06 +0100
+X-ME-Date: Mon, 13 Dec 2021 17:11:15 +0100
 X-ME-IP: 106.133.22.31
 From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
 Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v6 4/4] can: netlink: report the CAN controller mode supported flags
-Date:   Tue, 14 Dec 2021 01:02:26 +0900
-Message-Id: <20211213160226.56219-5-mailhol.vincent@wanadoo.fr>
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Lukas Magel <lukas.magel@escrypt.com>
+Subject: [RESEND PATCH v1] can: etas_es58x: es58x_init_netdev: populate net_device::dev_port
+Date:   Tue, 14 Dec 2021 01:10:58 +0900
+Message-Id: <20211213161058.56599-1-mailhol.vincent@wanadoo.fr>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211213160226.56219-1-mailhol.vincent@wanadoo.fr>
-References: <20211213160226.56219-1-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20211029111829.crrwdjizlflzzhq2@pengutronix.de>
+References: <20211029111829.crrwdjizlflzzhq2@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Currently, the CAN netlink interface provides no easy ways to check
-the capabilities of a given controller. The only method from the
-command line is to try each CAN_CTRLMODE_* individually to check
-whether the netlink interface returns an -EOPNOTSUPP error or not
-(alternatively, one may find it easier to directly check the source
-code of the driver instead...)
+The field dev_port of struct net_device indicates the port number of a
+network device [1]. This patch populates this field.
 
-This patch introduces a method for the user to check both the
-supported and the static capabilities. The proposed method introduces
-a new IFLA nest: IFLA_CAN_CTRLMODE_EXT which extends the current
-IFLA_CAN_CTRLMODE. This is done to guaranty a full forward and
-backward compatibility between the kernel and the user land
-applications.
+This field can be helpful to distinguish between the two network
+interfaces of a dual channel device (i.e. ES581.4 or ES582.1). Indeed,
+at the moment, all the network interfaces of a same device share the
+same static udev attributes c.f. output of:
 
-The IFLA_CAN_CTRLMODE_EXT nest contains one single entry:
-IFLA_CAN_CTRLMODE_SUPPORTED. Because this entry is only used in one
-direction: kernel to userland, no new struct nla_policy are
-introduced.
+| udevadm info --attribute-walk /sys/class/net/canX
 
-Below table explains how IFLA_CAN_CTRLMODE_SUPPORTED (hereafter:
-"supported") and can_ctrlmode::flags (hereafter: "flags") allow us to
-identify both the supported and the static capabilities, when masked
-with any of the CAN_CTRLMODE_* bit flags:
+The dev_port attribute can then be used to write some udev rules to,
+for example, assign a permanent name to each network interface based
+on the serial/dev_port pair (which is convenient when you have a test
+bench with several CAN devices connected simultaneously and wish to
+keep consistent interface names upon reboot).
 
- supported &	flags &		Controller capabilities
- CAN_CTRLMODE_*	CAN_CTRLMODE_*
- -----------------------------------------------------------------------
- false		false		Feature not supported (always disabled)
- false		true		Static feature (always enabled)
- true		false		Feature supported but disabled
- true		true		Feature supported and enabled
+[1] https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-class-net
 
+Suggested-by: Lukas Magel <lukas.magel@escrypt.com>
 Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 ---
- drivers/net/can/dev/netlink.c    | 31 ++++++++++++++++++++++++++++++-
- include/uapi/linux/can/netlink.h | 13 +++++++++++++
- 2 files changed, 43 insertions(+), 1 deletion(-)
+Hi Marc,
 
-diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlink.c
-index 26c336808be5..7633d98e3912 100644
---- a/drivers/net/can/dev/netlink.c
-+++ b/drivers/net/can/dev/netlink.c
-@@ -21,6 +21,7 @@ static const struct nla_policy can_policy[IFLA_CAN_MAX + 1] = {
- 	[IFLA_CAN_DATA_BITTIMING_CONST]	= { .len = sizeof(struct can_bittiming_const) },
- 	[IFLA_CAN_TERMINATION] = { .type = NLA_U16 },
- 	[IFLA_CAN_TDC] = { .type = NLA_NESTED },
-+	[IFLA_CAN_CTRLMODE_EXT] = { .type = NLA_NESTED },
- };
+At one point, this patch was applied to linux-can-next/testing but was
+then removed. I guess it just went off your radar. Resending it :)
+
+
+Yours sincerely,
+Vincent Mailhol
+
+---
+ drivers/net/can/usb/etas_es58x/es58x_core.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/usb/etas_es58x/es58x_core.c
+index 96a13c770e4a..403de7e9d084 100644
+--- a/drivers/net/can/usb/etas_es58x/es58x_core.c
++++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
+@@ -2096,6 +2096,7 @@ static int es58x_init_netdev(struct es58x_device *es58x_dev, int channel_idx)
  
- static const struct nla_policy can_tdc_policy[IFLA_CAN_TDC_MAX + 1] = {
-@@ -383,6 +384,12 @@ static size_t can_tdc_get_size(const struct net_device *dev)
- 	return size;
- }
+ 	netdev->netdev_ops = &es58x_netdev_ops;
+ 	netdev->flags |= IFF_ECHO;	/* We support local echo */
++	netdev->dev_port = channel_idx;
  
-+static size_t can_ctrlmode_ext_get_size(void)
-+{
-+	return nla_total_size(0) +		/* nest IFLA_CAN_CTRLMODE_EXT */
-+		nla_total_size(sizeof(u32));	/* IFLA_CAN_CTRLMODE_SUPPORTED */
-+}
-+
- static size_t can_get_size(const struct net_device *dev)
- {
- 	struct can_priv *priv = netdev_priv(dev);
-@@ -415,6 +422,7 @@ static size_t can_get_size(const struct net_device *dev)
- 				       priv->data_bitrate_const_cnt);
- 	size += sizeof(priv->bitrate_max);			/* IFLA_CAN_BITRATE_MAX */
- 	size += can_tdc_get_size(dev);				/* IFLA_CAN_TDC */
-+	size += can_ctrlmode_ext_get_size();			/* IFLA_CAN_CTRLMODE_EXT */
- 
- 	return size;
- }
-@@ -472,6 +480,25 @@ static int can_tdc_fill_info(struct sk_buff *skb, const struct net_device *dev)
- 	return -EMSGSIZE;
- }
- 
-+static int can_ctrlmode_ext_fill_info(struct sk_buff *skb,
-+				      const struct can_priv *priv)
-+{
-+	struct nlattr *nest;
-+
-+	nest = nla_nest_start(skb, IFLA_CAN_CTRLMODE_EXT);
-+	if (!nest)
-+		return -EMSGSIZE;
-+
-+	if (nla_put_u32(skb, IFLA_CAN_CTRLMODE_SUPPORTED,
-+			priv->ctrlmode_supported)) {
-+		nla_nest_cancel(skb, nest);
-+		return -EMSGSIZE;
-+	}
-+
-+	nla_nest_end(skb, nest);
-+	return 0;
-+}
-+
- static int can_fill_info(struct sk_buff *skb, const struct net_device *dev)
- {
- 	struct can_priv *priv = netdev_priv(dev);
-@@ -531,7 +558,9 @@ static int can_fill_info(struct sk_buff *skb, const struct net_device *dev)
- 		     sizeof(priv->bitrate_max),
- 		     &priv->bitrate_max)) ||
- 
--	    (can_tdc_fill_info(skb, dev))
-+	    can_tdc_fill_info(skb, dev) ||
-+
-+	    can_ctrlmode_ext_fill_info(skb, priv)
- 	    )
- 
- 		return -EMSGSIZE;
-diff --git a/include/uapi/linux/can/netlink.h b/include/uapi/linux/can/netlink.h
-index 75b85c60efb2..02ec32d69474 100644
---- a/include/uapi/linux/can/netlink.h
-+++ b/include/uapi/linux/can/netlink.h
-@@ -137,6 +137,7 @@ enum {
- 	IFLA_CAN_DATA_BITRATE_CONST,
- 	IFLA_CAN_BITRATE_MAX,
- 	IFLA_CAN_TDC,
-+	IFLA_CAN_CTRLMODE_EXT,
- 
- 	/* add new constants above here */
- 	__IFLA_CAN_MAX,
-@@ -166,6 +167,18 @@ enum {
- 	IFLA_CAN_TDC_MAX = __IFLA_CAN_TDC - 1
- };
- 
-+/*
-+ * IFLA_CAN_CTRLMODE_EXT nest: controller mode extended parameters
-+ */
-+enum {
-+	IFLA_CAN_CTRLMODE_UNSPEC,
-+	IFLA_CAN_CTRLMODE_SUPPORTED,	/* u32 */
-+
-+	/* add new constants above here */
-+	__IFLA_CAN_CTRLMODE,
-+	IFLA_CAN_CTRLMODE_MAX = __IFLA_CAN_CTRLMODE - 1
-+};
-+
- /* u16 termination range: 1..65535 Ohms */
- #define CAN_TERMINATION_DISABLED 0
- 
+ 	ret = register_candev(netdev);
+ 	if (ret)
 -- 
 2.32.0
 
