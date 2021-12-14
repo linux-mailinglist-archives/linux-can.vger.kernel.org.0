@@ -2,149 +2,139 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4783473745
-	for <lists+linux-can@lfdr.de>; Mon, 13 Dec 2021 23:12:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47203473A21
+	for <lists+linux-can@lfdr.de>; Tue, 14 Dec 2021 02:23:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241794AbhLMWMw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 13 Dec 2021 17:12:52 -0500
-Received: from mail-eopbgr70109.outbound.protection.outlook.com ([40.107.7.109]:55751
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S240321AbhLMWMv (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Mon, 13 Dec 2021 17:12:51 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZklHodCJ95j0gYJjLPm5xGo0fFUVEFROP8xoNQuTj4t0PrGKiAsNdCf4BlcsoavbajfTclWgjVMRhm0lNvpbczGfXPiAk0RjuJK8wvA+WyOA58yG27cdLg1nP44r+69S8P9SMPWYpHyd7cZx9Yw4+tEgU/zotB3/JnR8USVOo8fmfIS+6Cg4p/Zg7FiahjNPP5xHEcRi48gUfNCb23qjmFnyWxLjDxvTCTuVLAPRD2b278iE2xYbDcy6puZCvWTa6AszfI7vcAlb+djNAfCd3J4c27izzuHjNNkjLhQqJIJKzc5+MtWwdkIt3hazI377cAUCCZu18M7bpecCoTzNdw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9bWqqG6WxHZVUTXi7doKFORiLSmS8e18I8Elto4gELE=;
- b=K7BLe05vsaFCCzOdLKL1/28Bn38u+Z7Alhw86cTOyAWJFlJw+W2RCbY2P7o4pAq9uiNLDkI75tpDJGbb+jrHPmyFtKo5D5UsgNhDdShSDibloGzBkvSi+H5AY+NIpiWcPdOe5WIWlpLKb9YMs8pi6XDQBfP5T74uKlRufCp29mnMcdznWPtm8J6dPRjUlBUdY11Dq/poctqClpReZ3acWnrwflt9AQJ1F5goIGEoz5ydU9Wyd9wATWyQeVfnqmra8Nr0fNxah9bGQCMv84RT0Gx+E7EBW6msa51xf4anyWyCqpKcK28Y9qdVld2LHyX5Dg70FS0/QSH1kK/xsLgtdA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=volvocars.com; dmarc=pass action=none
- header.from=volvocars.com; dkim=pass header.d=volvocars.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=volvocars.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9bWqqG6WxHZVUTXi7doKFORiLSmS8e18I8Elto4gELE=;
- b=ebv9IPC9CAU96DwUK/Rhv9qh5oDkGJg1kE30yWTKlRIcYVVVTi9j+7ZfhpLc4SMLcpHcPxj4hMIeuic/kgGLwIj4O6/FxtPIMUq0CjopJcyCaoS7nPOiuL9jL6JwhjU7YJ9BUgS4N1u9JjjbfcznFgMTSZVSn8YP+NA6yKAL2cQFX2hPTERTq7Fjs+LINt3Zp1sIChTWlD/L3lxafiexsdLKzshN2DNoo0bWFx7muL7s/VwC1QHFcvcwfQORCc7mCoa7bfxR4LVZuits60HoGSvrgiUgSUwVK7k9bya27PAfPzT55JNsJgG3T88PW9WWQzB6Wz5MlLlkx62r14uGqA==
-Received: from PR3P174MB0112.EURP174.PROD.OUTLOOK.COM (2603:10a6:102:b3::13)
- by PR3P174MB0110.EURP174.PROD.OUTLOOK.COM (2603:10a6:102:5b::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.21; Mon, 13 Dec
- 2021 22:12:49 +0000
-Received: from PR3P174MB0112.EURP174.PROD.OUTLOOK.COM
- ([fe80::11e1:ae68:3684:6804]) by PR3P174MB0112.EURP174.PROD.OUTLOOK.COM
- ([fe80::11e1:ae68:3684:6804%6]) with mapi id 15.20.4778.017; Mon, 13 Dec 2021
- 22:12:49 +0000
-From:   "Modilaynen, Pavel" <pavel.modilaynen@volvocars.com>
-To:     "Thomas.Kopp@microchip.com" <Thomas.Kopp@microchip.com>,
-        "mkl@pengutronix.de" <mkl@pengutronix.de>
-CC:     "drew@beagleboard.org" <drew@beagleboard.org>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "menschel.p@posteo.de" <menschel.p@posteo.de>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "will@macchina.cc" <will@macchina.cc>
-Subject: Re: [net-next 6/6] can: mcp251xfd: mcp251xfd_regmap_crc_read(): work
- around broken CRC on TBC register
-Thread-Topic: [net-next 6/6] can: mcp251xfd: mcp251xfd_regmap_crc_read(): work
- around broken CRC on TBC register
-Thread-Index: AQHX63m5RC9thyxmT0S34SqWhDegYawp9YdggAADTb4=
-Date:   Mon, 13 Dec 2021 22:12:49 +0000
-Message-ID: <PR3P174MB01124C085C0E0A0220F2B11584709@PR3P174MB0112.EURP174.PROD.OUTLOOK.COM>
-References: <PR3P174MB0112D073D0E5E080FAAE8510846E9@PR3P174MB0112.EURP174.PROD.OUTLOOK.COM>
- <DM4PR11MB5390BA1C370A5AF90E666F1EFB709@DM4PR11MB5390.namprd11.prod.outlook.com>
-In-Reply-To: <DM4PR11MB5390BA1C370A5AF90E666F1EFB709@DM4PR11MB5390.namprd11.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_7fea2623-af8f-4fb8-b1cf-b63cc8e496aa_Enabled=True;MSIP_Label_7fea2623-af8f-4fb8-b1cf-b63cc8e496aa_SiteId=81fa766e-a349-4867-8bf4-ab35e250a08f;MSIP_Label_7fea2623-af8f-4fb8-b1cf-b63cc8e496aa_SetDate=2021-12-13T22:12:48.726Z;MSIP_Label_7fea2623-af8f-4fb8-b1cf-b63cc8e496aa_Name=Proprietary;MSIP_Label_7fea2623-af8f-4fb8-b1cf-b63cc8e496aa_ContentBits=0;MSIP_Label_7fea2623-af8f-4fb8-b1cf-b63cc8e496aa_Method=Standard;
-suggested_attachment_session_id: c493dd9e-675b-cff0-5ea2-efdd9be01665
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=volvocars.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8d1f4f42-ad07-4e89-e5b9-08d9be85b2e9
-x-ms-traffictypediagnostic: PR3P174MB0110:
-x-microsoft-antispam-prvs: <PR3P174MB01104991B2ABD864B87A184284749@PR3P174MB0110.EURP174.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: EaAwmQjCdpCXb5tOQr5KNmzotjd7Hv2jUKy7+olCtl94Tdv/NZED0y+FUEszCwpguyk3J9RTPFoOlb1RphuVehjVHJ57jyJ9f7INsTcagr6hz1p9zrQ9PlSJbCJjsUmM0n/m45d534rgw+VMF9aXAIXKC8gb1Qov9l1jL02EeSAXUeS27R5fYOQDoiUgKvFhwfByjT0+bhrjnglAGF0noGMpK1+3zSmPmqC4ThpOmVwNPvaUSHypapXm7jL378WkLjwv7xaXL4A6ow1l70uNQDqpiPz/M+j+25tRZBpDLCbrGXBYfHecXgnWwFs1yFyCOC0hDmriiT5eR113ALXjIJMERGNTVFzDDamPLnYzPM829IHkYPc3EyFdJuu6I0g4riQWaOMj/UKmninCQ1gbOQTm5TgkLc9VQCYzEV6KfN54jEW7/c1P4VkvgzEea6ufVLxbFRm7ji7Sj0zXS0s03nYSJEt9S5GLePFisHoa32xCQd9gGFooIm2x+NFYKQtIrOQiwuYKCGaf2YkibkEE8NiOxqDu0pD5/S3xWvLwpCDe8JTJI+Xrz7M8zf5C50N+jnvf3ixkrrB4fe5uYAWokTvxTgrF0sjFBEt662OD38PDv5hJhGmrRMMO2PhmLyHKPRr5iwpS1naHr0wTBdwjUH41tEQp6WD5eZNorKUshvHMSkWBY8AYbgD0cIX6D7GN8voYTDwkd2h1GRtn394pTg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PR3P174MB0112.EURP174.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(66476007)(4326008)(66446008)(7696005)(66556008)(5660300002)(76116006)(38070700005)(508600001)(55016003)(52536014)(4744005)(83380400001)(2906002)(9686003)(64756008)(33656002)(8936002)(8676002)(6506007)(66946007)(110136005)(38100700002)(82960400001)(316002)(54906003)(86362001)(71200400001)(122000001)(186003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?n/qti1NbzS9OQReq7rCsoeA9QlYUSzeKPNGSjWo/4SiVuQMRVOQtdq0H+5?=
- =?iso-8859-1?Q?mHR0KwHdjD3dHHniaRCvAwC+lPcMWP7yashLTBueT6e1TozT4RLF6F4sHE?=
- =?iso-8859-1?Q?6oH3qS3bNwtpMH5nAumj9jSHl6c2kFNnJGe5WQOVwB2pHkx7uKDwPxlOkN?=
- =?iso-8859-1?Q?Y+aX8v/nuQBCgXnCCHL26iu85P7ErkDSeBCeKclvT34UJ9+4e3pzssrGzL?=
- =?iso-8859-1?Q?O7FcL4HEO8VVrMmGp8hyuYnjgE+kT5Twbll6nij5IDTgAJKKzIhuuiTOC4?=
- =?iso-8859-1?Q?C/nKsVwQXPjfLsrR+Eq3hnOuYFyevVzbxdTqigyEYbVBGOYS4vy8rye8jv?=
- =?iso-8859-1?Q?/4Xzap0gHhxDWKJCtbaRyh4GLg+ZJjwVxtBb14Cqsv4FpklpsjeciWwT6o?=
- =?iso-8859-1?Q?4VRfLIgqsuHhvtTbeAHsGGhJliFO3Nj9GmvO9bXmAiufoUJ2VklMOq7DwK?=
- =?iso-8859-1?Q?5iwy5PohwXPIsQYrIaa6UyCW+lwj6xN8PCk0Msq7jc5Akv/2SnYraqQMon?=
- =?iso-8859-1?Q?MV2CHDafypLh1QHQ/72AlgS4koU0RA60WHjYMq2GX7dSNJnO+qun/OTldO?=
- =?iso-8859-1?Q?QDeStWGFnoKLJoZ3JF2pNcnSHzPRIZBeiBjZBdCDTYHiwR1qf1aTZY+4RT?=
- =?iso-8859-1?Q?dzKOuk+kPiF2gEZk+lxX9EWfEAHNsdOrw+m1XuTNtnqV8eD/tzg6J6S3x+?=
- =?iso-8859-1?Q?B9RFhpuoz0dNo6a5tNDF29t4lsDAK8UGucyqEwcw2SpDCOSeSlBD+OATfk?=
- =?iso-8859-1?Q?u7tUC2XQHrBbMCJ8ndXpXUbt5f5GekBmjV4XBlX85kx1U3p2vCZ8hkowle?=
- =?iso-8859-1?Q?QBO/5pDJwKZfqxr/KIM9oM/UTijJAJulPStfBcAnIyfvSY5l3/OEhfz16+?=
- =?iso-8859-1?Q?UeOpCt2WHPAi3QnF+KvoiMq13j+jRYFTL+ELB5eJiOXFt0ejNvYYjNDVsY?=
- =?iso-8859-1?Q?UyC5w8Ooq2jY1RdMhe+bsmM6kjVIQFaQsHfgn7CdiRtQm6KCgvnZLi5501?=
- =?iso-8859-1?Q?jqQ11ndIkSIfSQKmwvfwiDyXn7dtYH3tmftF96OYupMMh7z2YookaEVXn9?=
- =?iso-8859-1?Q?YPDIvjh3M0Tqox3xPqcJCXH0711n0ceVneJoj624iCXuA2KByC9jXq3TJz?=
- =?iso-8859-1?Q?U1dNVQYgeakDNCPXtC34q0CZCV/bXnilMnij+t8fKRgF7am2HpumsvwF3Z?=
- =?iso-8859-1?Q?fQLpBOUDgEn61+Sc2kMtxv+VotE0LpKEqz1+Td+yd1tAkKPyn45DaWbeaK?=
- =?iso-8859-1?Q?qrrCeCe5ZAOVTuZQ85GLMRASE56+xl0NAetRRE/49vrVUsqWHQ8qwH87+p?=
- =?iso-8859-1?Q?9AhIK2NVgBcIz4+U66n4RG+c8NnE5vgepreA1LbTdx5fIyQHGT9FajpJYb?=
- =?iso-8859-1?Q?rpd5zV9/B84uRfnBZyP/9PZ4CzyQI8KRX3wKXXNFfPbK8XT4Thg+EKGXZj?=
- =?iso-8859-1?Q?biSGfp2fh7jCOC12QDVDSQM9ggqrdB0wjtHHVzPLWXg2HrX5eFqISG1KsM?=
- =?iso-8859-1?Q?uuTSaSaxnJZJj4jYFY6NQSMpj56g7IkGvffOqnpUqVqO3RxzesrnEKfQ1e?=
- =?iso-8859-1?Q?3gnlxGv4aL2elEAxE1PGF0q4mRnh7sO1+P34tqV8L2op5u5OHkuSM8+sjD?=
- =?iso-8859-1?Q?gHj0WTzPz4GSS2TWrKKOo7PqMSBI8WtXN423n9iCR83JbuBPUVmynQOoKX?=
- =?iso-8859-1?Q?kxJH6jsNmmR6UkZVKmYrD/sZn//rvyxYoFv5XaTdJ4iSAV3ZQab7SpczEp?=
- =?iso-8859-1?Q?GlI0ULBux6wNDkBuhjQaXqIic=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        id S238334AbhLNBXI convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Mon, 13 Dec 2021 20:23:08 -0500
+Received: from mail-yb1-f178.google.com ([209.85.219.178]:43997 "EHLO
+        mail-yb1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237215AbhLNBXI (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 13 Dec 2021 20:23:08 -0500
+Received: by mail-yb1-f178.google.com with SMTP id f9so42646181ybq.10;
+        Mon, 13 Dec 2021 17:23:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=YOnbhkb5rD+M/xTJPuPJV6KIC2CBbKF/2ZjwGXPRnmQ=;
+        b=C1hA5y6n+ze4+r9Na8Gv8+xZ3idkFw0XXBisWhDmHw2eHb9Nwv7faZSm+/P8Jb1CvL
+         1xdlIAMnQqqy3SJG053U2+iHWtX4ENFaoAA8M53wKPaYg7lvEhbKV6E7i9I+QZ7zFHk7
+         RKE9O6z3lusVqHy/RgNkw8iTI0erpU//0fyJ53Chr0U9Gf2WecJR/S29QZI/u6mM3f0/
+         dTsqFiy2maP/IoVMH6Rlm2r8uwJvgzWixxuYNUGrSRUMwgLJzyzyKoikILA446oPJBJY
+         yWHEgxEhKPRfqn5me6lKpq3qQzGDsfty32GqbpG+SWKdvJP6UTFJQIJvbtmVWUMbbThm
+         33IA==
+X-Gm-Message-State: AOAM5318RydJadlGRQJcnej6pb/RghL3BrzOxfVMr/cz4T1/k9P259ok
+        9Xd6w/XccusikmPkzxSjoVaL3c04ZAHORyagLqLL2O0RVT4=
+X-Google-Smtp-Source: ABdhPJxh0ee0v7OGTamylymH+rr74w1FeClp0ennIBJ7BobNJcKlq7EBM/H5MkG16mLesjrqjrkn/xZlhoQeq0uMTBg=
+X-Received: by 2002:a25:b3c3:: with SMTP id x3mr2480192ybf.25.1639444987305;
+ Mon, 13 Dec 2021 17:23:07 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: volvocars.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PR3P174MB0112.EURP174.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8d1f4f42-ad07-4e89-e5b9-08d9be85b2e9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Dec 2021 22:12:49.0611
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 81fa766e-a349-4867-8bf4-ab35e250a08f
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: FI8VTEx16n7OsIQFv6QaxcsJMtMdQTrHtOv9KWMDL1BwF2QMF9J/hVOjwWYcnPE2fbe21XEeY9HjAkZB6QxNow==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3P174MB0110
+References: <20211213160226.56219-1-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20211213160226.56219-1-mailhol.vincent@wanadoo.fr>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Tue, 14 Dec 2021 10:22:57 +0900
+Message-ID: <CAMZ6RqLZA55W-fm3393_Fh-q3sxUpvzFdC+jMTEOo4+9r5yybA@mail.gmail.com>
+Subject: Re: [PATCH v6 0/4] report the controller capabilities through the
+ netlink interface
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Thomas,=0A=
-=0A=
->=A0> We have the similar CRC read errors but=0A=
-> > the lowest byte is not 0x00 and 0x80, it's actually 0x0x or 0x8x, e.g.=
-=0A=
-> >=0A=
->=A0> mcp251xfd spi0.0 can0: CRC read error at address 0x0010 (length=3D4,=
-=0A=
->=A0> data=3D82 d1 fa 6c, CRC=3D0xd9c2) retrying.=0A=
->=A0> =0A=
->=A0> 0xb0 0x10 0x04 0x82 0xd1 0xfa 0x6c =3D> 0x59FD (not matching)=0A=
->=A0> =0A=
->=A0> but if I flip the first received bit=A0 (highest bit in the lowest by=
-te):=0A=
->=A0> 0xb0 0x10 0x04 0x02 0xd1 0xfa 0x6c =3D> 0xD9C2 (matching!)=0A=
-=0A=
->=A0What settings do you have on your setup? Can you please print the dmesg=
- output from the init? I'm especially interested in Sysclk and SPI speed.=
-=0A=
-=0A=
-mcp251xfd spi0.0 can0: MCP2517FD rev0.0 (-RX_INT +MAB_NO_WARN +CRC_REG +CRC=
-_RX +CRC_TX +ECC -HD c:40.00MHz m:10.00MHz r:10.00MHz e:10.00MHz) successfu=
-lly initialized.=0A=
-...=0A=
-=0A=
-Regards,=0A=
-Pavel=
+On Tue. 14 Dec 2021 at 01:02, Vincent Mailhol
+<mailhol.vincent@wanadoo.fr> wrote:
+> The main purpose of this series is to report the CAN controller
+> capabilities. The proposed method reuses the existing struct
+> can_ctrlmode and thus do not need a new IFLA_CAN_* entry.
+
+I forgot to update this part of the cover letter since v4.
+This paragraph is outdated and should now be:
+
+| The main purpose of this series is to report the CAN controller
+| capabilities. To do so, a new IFLA_CAN_* entry is
+| added: IFLA_CAN_CTRLMODE_EXT. This is done to guarantee forward
+| and backward compatibility in the netlink interface.
+
+N.B. I do not plan to send a v7 because the patch descriptions
+are correct (only the cover letter was outdated).
+
+> While doing so, I also realized that can_priv::ctrlmode_static could
+> actually be derived from the other ctrlmode fields. So I added three
+> extra patches to the series: one to replace that field with a
+> function, one to add a safeguard on can_set_static_ctrlmode() and one
+> to repack struct can_priv and fill the hole created after removing
+> can_priv::ctrlmode_priv.
+>
+> Please note that the first three patches are not required by the
+> fourth one. I am just grouping everything in the same series because
+> the patches all revolve around the controller modes.
+>
+>
+> ** Changelog **
+>
+> v5 -> v6:
+>
+>   - Add back patches 1, 2 and 3 because those were removed from the
+>     testing branch of linux-can-next since.
+>
+>   - Rebase the series on the latest version of net-next.
+>
+>   - Fix a typo in the comments of the forth patch: guaruanty ->
+>     guaranty.
+>
+> v4 -> v5:
+>
+>   - Implement IFLA_CAN_CTRLMODE_EXT in order to fix forward
+>     compatibility issues as suggested by Marc in:
+>     https://lore.kernel.org/linux-can/20211029124608.u7zbprvojifjpa7j@pengutronix.de/T/#m78118c94072083a6f8d2f0f769b120f847ac1384
+>
+> v3 -> v4:
+>
+>   - Tag the union in struct can_ctrlmode as packed.
+>
+>   - Remove patch 1, 2 and 3 from the series because those were already
+>     added to the testing branch of linux-can-next (and no changes
+>     occurred on those first three patches).
+>
+> v2 -> v3:
+>
+>   - Make can_set_static_ctrlmode() return an error and adjust the
+>     drivers which use this helper function accordingly.
+>
+> v1 -> v2:
+>
+>   - Add a first patch to replace can_priv::ctrlmode_static by the
+>     inline function can_get_static_ctrlmode()
+>
+>   - Add a second patch to reorder the fields of struct can_priv for
+>     better packing (save eight bytes on x86_64 \o/)
+>
+>   - Rewrite the comments of the third patch "can: netlink: report the
+>     CAN controller mode supported flags" (no changes on the code
+>     itself).
+>
+> Vincent Mailhol (4):
+>   can: dev: replace can_priv::ctrlmode_static by
+>     can_get_static_ctrlmode()
+>   can: dev: add sanity check in can_set_static_ctrlmode()
+>   can: dev: reorder struct can_priv members for better packing
+>   can: netlink: report the CAN controller mode supported flags
+>
+>  drivers/net/can/dev/dev.c         |  5 +++--
+>  drivers/net/can/dev/netlink.c     | 33 +++++++++++++++++++++++++++++--
+>  drivers/net/can/m_can/m_can.c     | 10 +++++++---
+>  drivers/net/can/rcar/rcar_canfd.c |  4 +++-
+>  include/linux/can/dev.h           | 24 +++++++++++++++-------
+>  include/uapi/linux/can/netlink.h  | 13 ++++++++++++
+>  6 files changed, 74 insertions(+), 15 deletions(-)
+>
+>
+> base-commit: 64445dda9d8384975eca54e3f01886fca61e1db6
+> prerequisite-patch-id: 84ffb60366d113cfbf6fb8e415217d9e09fadefd
+> --
+> 2.32.0
+>
