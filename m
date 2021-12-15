@@ -2,90 +2,105 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BB4C47451C
-	for <lists+linux-can@lfdr.de>; Tue, 14 Dec 2021 15:32:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3FFE47638B
+	for <lists+linux-can@lfdr.de>; Wed, 15 Dec 2021 21:41:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233939AbhLNOcF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 14 Dec 2021 09:32:05 -0500
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:38816 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234226AbhLNOcC (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 14 Dec 2021 09:32:02 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1BEEVscT093615;
-        Tue, 14 Dec 2021 08:31:54 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1639492314;
-        bh=RPYr9UpoyawkvTrP01Q5C0GP+NxGEo484fZSWJiwrsg=;
-        h=Subject:CC:References:From:Date:In-Reply-To;
-        b=ZyWteVf0Vqt0w0IjxBMQI6lUm9WDUZG6QSxAZNvwJM64HOT7Ck8+c7d5a7nrCch7i
-         TjKZZVB9Rntiu3c2eU9KmJq9UFdxz8jwQIe7bBfsNe7gygvttLE+UwjwNuWxJ0cHak
-         ajPMJ6smSQpr3fEGlWDSq+URR9XFPwaLwnZQMECQ=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1BEEVspX028562
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 14 Dec 2021 08:31:54 -0600
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 14
- Dec 2021 08:31:54 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 14 Dec 2021 08:31:54 -0600
-Received: from [10.250.232.185] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1BEEVpVu029051;
-        Tue, 14 Dec 2021 08:31:52 -0600
-Subject: Re: [PATCH 0/2] CAN: Add support for setting mux
-CC:     Wolfgang Grandegger <wg@grandegger.com>,
+        id S236359AbhLOUkp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 15 Dec 2021 15:40:45 -0500
+Received: from mail-oo1-f42.google.com ([209.85.161.42]:39682 "EHLO
+        mail-oo1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236341AbhLOUkp (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 15 Dec 2021 15:40:45 -0500
+Received: by mail-oo1-f42.google.com with SMTP id d1-20020a4a3c01000000b002c2612c8e1eso6271395ooa.6;
+        Wed, 15 Dec 2021 12:40:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tCm31AopJqJh3IGAGVf/dCMDar4WQOTuKl/qvZkribo=;
+        b=nQUmzxps9q0yOZEvAWHhZ1XAPFmYbT5E+EuqW8XkaH8mUaVzsabPKzfsZRV2iS9jGW
+         VUQOdUP92kNIuY0ntzZygMXKEzWEgxx4WUi9kv7GXOqC/79IOMLbnR6CuISgEXbWCS+H
+         65gTSxwV543QCfEtgxtfSaPCaEgSKH9Gaad9FNSOJREOHr4u3P7dlLv/QEIn946osvzC
+         r1WrgrRYASGjk+CC/J5FwL5udXRRK0wBSJXa7n9Ya7fi7LMGUiTlHYsEPUbZtqyTB+BQ
+         ewEy7+TddGfsgRRwH6b69LkApr4L4+FtA4a3B8bkOBjXIlg2o7T3rKrcfN5zwqSmCfvG
+         QFwQ==
+X-Gm-Message-State: AOAM532d8eSNMh9W3t0Lc1o7ZuQHo7UZtMDKdKwik610WN6Ke4ZvQef4
+        SAjWriYWowpob7xSh6i0HQ==
+X-Google-Smtp-Source: ABdhPJwkO6XUr282lpbyRQWgyGURMsV/N5cuswo4uKTuUZTRW3m+/Apo0eeSYdMnHWOq88WSqW/wmw==
+X-Received: by 2002:a4a:3110:: with SMTP id k16mr8722917ooa.64.1639600844654;
+        Wed, 15 Dec 2021 12:40:44 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id b22sm527081oib.41.2021.12.15.12.40.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 12:40:44 -0800 (PST)
+Received: (nullmailer pid 1801237 invoked by uid 1000);
+        Wed, 15 Dec 2021 20:40:43 -0000
+Date:   Wed, 15 Dec 2021 14:40:43 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Aswath Govindraju <a-govindraju@ti.com>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, <linux-can@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20211202131002.12217-1-a-govindraju@ti.com>
-From:   Aswath Govindraju <a-govindraju@ti.com>
-Message-ID: <7c3a0ac9-308c-2ef1-b8ae-6aa4e1a10d73@ti.com>
-Date:   Tue, 14 Dec 2021 20:01:50 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Vinod Koul <vkoul@kernel.org>, linux-can@vger.kernel.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: phy: ti,tcan104x-can: Document
+ mux-states property
+Message-ID: <YbpSy0+x/SnTYUzb@robh.at.kernel.org>
+References: <20211214142908.27940-1-a-govindraju@ti.com>
+ <20211214142908.27940-2-a-govindraju@ti.com>
 MIME-Version: 1.0
-In-Reply-To: <20211202131002.12217-1-a-govindraju@ti.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211214142908.27940-2-a-govindraju@ti.com>
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi All,
-
-On 02/12/21 6:40 pm, Aswath Govindraju wrote:
-> The following series of patches add support for setting
-> muxes to route signals from CAN controller to transceiver
-> by reading the property mux-states from the device tree
-> node
+On Tue, Dec 14, 2021 at 07:59:07PM +0530, Aswath Govindraju wrote:
+> On some boards, for routing CAN signals from controller to transceivers,
+> muxes might need to be set. This can be implemented using mux-states
+> property. Therefore, document the same in the respective bindings.
 > 
-> The following series of patches are dependent on,
-> - https://lkml.org/lkml/2021/12/2/423
+> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+> ---
+>  .../devicetree/bindings/phy/ti,tcan104x-can.yaml       | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
+> diff --git a/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+> index 6107880e5246..7b9216e43b58 100644
+> --- a/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+> +++ b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+> @@ -37,6 +37,15 @@ properties:
+>        max bit rate supported in bps
+>      minimum: 1
+>  
+> +  mux-states:
+> +    description:
+> +      mux controller node to route the signals from controller to
+> +      transceiver. Two arguments can be present depending on the
+> +      mux chip. If one argument is used then it represents the state
+> +      to be set on the mux-chip. If there are two arguments then the
+> +      first argument is the control line and the second argument is
+> +      its corresponding state to be set, on the mux-chip.
+> +
 
-Thank you for the comments. I have posted a respin(v2) for this series
-after making the fixes.
+You are still describing how the mux-states works. What the cells 
+contain and how many are opaque to this binding. Here you need to 
+describe how many muxes you have and what they are controlling as that 
+is what is specific to this binding. If there is only one, this boils 
+down to 'maxItems: 1'. It's just like reg, interrupts, clocks, etc.
 
-Thanks,
-Aswath
-
-> Aswath Govindraju (2):
->   dt-bindings: phy: ti,tcan104x-can: Document mux-states property
->   phy: phy-can-transceiver: Add support for setting mux
+>  required:
+>    - compatible
+>    - '#phy-cells'
+> @@ -53,4 +62,5 @@ examples:
+>        max-bitrate = <5000000>;
+>        standby-gpios = <&wakeup_gpio1 16 GPIO_ACTIVE_LOW>;
+>        enable-gpios = <&main_gpio1 67 GPIO_ACTIVE_HIGH>;
+> +      mux-states = <&mux0 1>;
+>      };
+> -- 
+> 2.17.1
 > 
->  .../bindings/phy/ti,tcan104x-can.yaml         | 13 +++++++++++
->  drivers/phy/Kconfig                           |  1 +
->  drivers/phy/phy-can-transceiver.c             | 22 +++++++++++++++++++
->  3 files changed, 36 insertions(+)
 > 
-
