@@ -2,85 +2,70 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A74D477084
-	for <lists+linux-can@lfdr.de>; Thu, 16 Dec 2021 12:42:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17284477DAF
+	for <lists+linux-can@lfdr.de>; Thu, 16 Dec 2021 21:33:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232650AbhLPLmU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 16 Dec 2021 06:42:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60044 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233209AbhLPLmS (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 16 Dec 2021 06:42:18 -0500
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A30C0617A2
-        for <linux-can@vger.kernel.org>; Thu, 16 Dec 2021 03:42:17 -0800 (PST)
-Received: by mail-qk1-x72c.google.com with SMTP id d2so22954617qki.12
-        for <linux-can@vger.kernel.org>; Thu, 16 Dec 2021 03:42:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=xre5um49Rnqa1tZMCD58Cd6UlD4MleswKAp3tzt2gjo=;
-        b=RYToo8NyNPhlgiHYmZ1ikup312GHYFKKh+SoiQn5DFM08VhX1fCTukNf+Ub7gXZH+R
-         Fdt5I+ZO38LiZ7aX4HrBDtCguvWjGt4+jG/EN+k0G3h02B6emUjwzPzxnL4uWQz6AWTD
-         WqO7wKZcX2hj88TEq1skHq9q03JmZTMsDYFAuzRyTE65aq8YfmTLKW6klN/Aemrjl5Su
-         VOqZm/oCKsPxxvibvSdyBq0qcyBC7yt8asycNVxLymhtuzVbvkdkv8HRw/7WHA5ZhBTe
-         lfMRM7TjowGzvp5BFYZjQfF4jcwfD0Oa7xMNuJL1tGpMndUewyeeM3+DNYanGu61M7GC
-         kNpg==
+        id S238883AbhLPUdh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 16 Dec 2021 15:33:37 -0500
+Received: from mail-ot1-f41.google.com ([209.85.210.41]:47015 "EHLO
+        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236123AbhLPUde (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 16 Dec 2021 15:33:34 -0500
+Received: by mail-ot1-f41.google.com with SMTP id x3-20020a05683000c300b0057a5318c517so288066oto.13;
+        Thu, 16 Dec 2021 12:33:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=xre5um49Rnqa1tZMCD58Cd6UlD4MleswKAp3tzt2gjo=;
-        b=URBTSQzhqiXmcG+1DHWRXIeQAMSzy7u8zrTSVMJfcdwlToTwh6Tma6vFvYlmtzU2zN
-         Xpb3ME082zXSQo0QSL9yNXBfYwPkyXA9li5csgkAuUvTGExVqfwjJCRIFOEBd7HiY322
-         8FSZTWFMJwg5gkuxQ2rM23LBeB7PEAdpfImtzHq2RYaNAsTjCMNMjNA51nVMAwuPT8uV
-         Av6LgA/T7x3Z894pRRyHkdbRr2fALspI1TpKaWFoVnfhWlhLbC9kaLuJEZX95pA+N9PT
-         xD/EzLxq66zc1ybaUhol08SChZAZ/G/JnjXNwqT0QSBW/ybG9LsV8rc2k06HLFkmJF/K
-         1XHQ==
-X-Gm-Message-State: AOAM532Mq69KwZjKH/TzGCU6n3Y8OaGC0fdi+SlbkVl+rjbaaQ4ovMcL
-        JeezQfdeZfjPAf1U720bNwrFEmariR6wmAHgC0A=
-X-Google-Smtp-Source: ABdhPJxYJ2zBl8EMgF/vH/Si0uACMgpOTf1urUCOAwYb4fXYvwfKJa3PKYFOZBbaDpp9AFOjwJ3sIeVfeVjNcnbyBfg=
-X-Received: by 2002:a05:620a:bc3:: with SMTP id s3mr11727889qki.197.1639654936129;
- Thu, 16 Dec 2021 03:42:16 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hfg8ACYlikMDDEUu3EXFo+9JtNm0KhnPtElu4BGn4Jw=;
+        b=jGFDubQtTgLbgdk6gzHkhzpvhVTbIbfuaBdqJtUAwUnJYEd5gjLYZhonq8EuRFneng
+         ci1f/jmL4ZgMWUlbTFkAwr5teyPgODGmQT8ZWzSR/pKRSBMzrcNYYNiUwV7ZXNEpEXIr
+         JydPaVGAhMLmDnYtEvQz52NNFLBffAlQYoN/YXUhT9Th6uWLDGoK+uRGDuzXlR8Ms5j1
+         Ra9KLhP88KRHnfKjsgsugJTRqpymFCN0ebLsz/fCV0QN/qEDTR+D5pTgNhoFeXI2K/px
+         7tkTmw2gXF/Rm9Dw3IvFiLKcW9Dj+h7mS1TLbUU5T2CZ1HpWGfgUMKRjO6tfMW/aBMUo
+         OKSw==
+X-Gm-Message-State: AOAM531OEs+oz/ic1DjxlQA1IEC4x8QNbB8+qiTUrsJYAv50wGzz6Br6
+        0u7tdAPVcxR9KDWC3bWc9mwODlb10w==
+X-Google-Smtp-Source: ABdhPJyFHwjvpklpQVesYfYXxrlFzdhuIejqiguu1DyewZF/CSRFpeDC3+bPOv0TWVjolIjQnoArTg==
+X-Received: by 2002:a05:6830:4389:: with SMTP id s9mr14117622otv.97.1639686813783;
+        Thu, 16 Dec 2021 12:33:33 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id t11sm1227217otj.24.2021.12.16.12.33.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Dec 2021 12:33:33 -0800 (PST)
+Received: (nullmailer pid 708667 invoked by uid 1000);
+        Thu, 16 Dec 2021 20:33:32 -0000
+Date:   Thu, 16 Dec 2021 14:33:32 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Aswath Govindraju <a-govindraju@ti.com>
+Cc:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v3 1/2] dt-bindings: phy: ti,tcan104x-can: Document
+ mux-states property
+Message-ID: <YbuinMnaJHW/hUVQ@robh.at.kernel.org>
+References: <20211216041012.16892-1-a-govindraju@ti.com>
+ <20211216041012.16892-2-a-govindraju@ti.com>
 MIME-Version: 1.0
-Received: by 2002:a05:622a:199c:0:0:0:0 with HTTP; Thu, 16 Dec 2021 03:42:15
- -0800 (PST)
-Reply-To: selviasantiago1@gmail.com
-From:   Selvia Santiago <mariamatinez119@gmail.com>
-Date:   Thu, 16 Dec 2021 11:42:15 +0000
-Message-ID: <CAONDhKPUij_8sWOmcDAVKuHSL7avy+Ti7bOVRu6x__3ouvD7kw@mail.gmail.com>
-Subject: Urgent
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211216041012.16892-2-a-govindraju@ti.com>
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
--- 
-Urgent
+On Thu, 16 Dec 2021 09:40:11 +0530, Aswath Govindraju wrote:
+> On some boards, for routing CAN signals from controller to transceivers,
+> muxes might need to be set. This can be implemented using mux-states
+> property. Therefore, document the same in the respective bindings.
+> 
+> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+> ---
+>  Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
 
-I am Mrs. Selvia Santiago from Abidjan, Cote D'Ivoire, I am a widow
-suffering from long time illness (Cancer), there is funds I inherited
-from my late loving husband Mr. Santiago Carlos, the sum of (US$2.7
-Million Dollars) which he deposited in bank before his death, I need a
-honest and Faithful person that can use these funds for humanity work.
-
-I took this decision because I don't have any child that will inherit
-this money and I don't want a situation where this money will be used
-in an ungodly way. That is why I am taking this decision, and my
-doctor has confirmed to me that I have less than two weeks to live,
-having known my condition I decided to donate this fund to a charity
-or individual that will utilize this money to assist the poor and the
-needy in accordance to my instructions.
-
-I want you to use 70% of this funds for orphanages, school, church,
-widows, propagating the word and other humanity works,The remaining
-30% should be yours for your efforts as the new beneficiary.
-
-Please if you would be able to use these funds for humanity work
-kindly reply me. As soon as I have received your response, I will give
-you further directives on how you are to go about the claims of the
-said funds.
-
-Remain blessed.
-Mrs Selvia Santiago.
+Reviewed-by: Rob Herring <robh@kernel.org>
