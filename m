@@ -2,186 +2,95 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E0D547A6CD
-	for <lists+linux-can@lfdr.de>; Mon, 20 Dec 2021 10:23:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E630D47A825
+	for <lists+linux-can@lfdr.de>; Mon, 20 Dec 2021 12:02:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231767AbhLTJXS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 20 Dec 2021 04:23:18 -0500
-Received: from mx1.tq-group.com ([93.104.207.81]:58435 "EHLO mx1.tq-group.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231598AbhLTJXP (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Mon, 20 Dec 2021 04:23:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1639992195; x=1671528195;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=wl9Rqy+TKAE8RR3C1C5wy5Vb2TL1BeN8BoibLPNcVMA=;
-  b=MgOYIBj69eDSgKqU1/ofDYfSnZti9ca7Wb0EMycFS/Xvgq261WYa9WMk
-   ZviVivaPl39h/07G366OH7Y2tJh8vhs+aZjaaS/i8yzp1zfU3LJmBeQ/V
-   ogKEbsaDirmh57MyfbOGg01H0xb696E29/w0UY1RJ3UIoG0fvzeJg4Hh+
-   j3ag+S8AxS23wQtkdezfVzxHTGFSt1CqVWKgYK1MJCPsr2IPAyhQBKtRL
-   6xRw5epGuKD3Akkj5otvPmfq0e1olYFg4CLt91Zz7q79ojoLmcO6dT31h
-   D2HAWj3+krxDSRse/JNiNGTCZ4H5WD1bjfXHHj3dz6khZCh6NaBKEOef3
-   g==;
-X-IronPort-AV: E=Sophos;i="5.88,220,1635199200"; 
-   d="scan'208";a="21148425"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 20 Dec 2021 10:23:11 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Mon, 20 Dec 2021 10:23:11 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Mon, 20 Dec 2021 10:23:11 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1639992191; x=1671528191;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=wl9Rqy+TKAE8RR3C1C5wy5Vb2TL1BeN8BoibLPNcVMA=;
-  b=OsbcBDu9rY2fsYjDG1598JGNeUnIs06caT3D09pTVBqMGnGa2kSZftcT
-   HTkJxf/MDz/57uZC+TBElD9Qvpb3U5iF8taqqttwe9BpnlhAkViOGTGt3
-   MjKXL11OqYtH0tZXKRFzIoBmFa/XwEb0JbHrgbzkh/EVnhkvwpC/8ansc
-   RH1WyBd0D9z+1CQpMiaOalu4EWSxe7nZn6eZXG45v33HmxWhxhnhxpDiB
-   cRZgxoaDyvSwmO5cLtWANXFmjo42CClzjp8JHdHS5ekb6DjFQhkG2UXYl
-   lUA0W2lyCt6u3MpEHuQiRdALPO6MAFKhZdCfCLCOYxng+Nkmk4ab37YOa
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.88,220,1635199200"; 
-   d="scan'208";a="21148424"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 20 Dec 2021 10:23:11 +0100
-Received: from localhost.localdomain (SCHIFFERM-M2.tq-net.de [10.121.201.15])
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id 5BCC4280078;
-        Mon, 20 Dec 2021 10:23:11 +0100 (CET)
-From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-To:     stable@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        davem@davemloft.net, kuba@kernel.org,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Subject: [PATCH 5.15 3/3] can: m_can: pci: use custom bit timings for Elkhart Lake
-Date:   Mon, 20 Dec 2021 10:22:17 +0100
-Message-Id: <84123eb125bcd05458f2da0280536cff1a5ca284.1639990483.git.matthias.schiffer@ew.tq-group.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1639990483.git.matthias.schiffer@ew.tq-group.com>
+        id S231438AbhLTLCn (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 20 Dec 2021 06:02:43 -0500
+Received: from new3-smtp.messagingengine.com ([66.111.4.229]:57267 "EHLO
+        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230116AbhLTLCm (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 20 Dec 2021 06:02:42 -0500
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 4186F580726;
+        Mon, 20 Dec 2021 06:02:42 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Mon, 20 Dec 2021 06:02:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm2; bh=SYYa6YsTGSR/I0GH13kqb+HYdm9
+        OONiz3cbnv97oGII=; b=pq5JbqII0DG1nlui9KuHHJyFhoHCPhIpvInQXFreib4
+        MowLWD0PiKk1vOiclXL9SZwW132/0PB+0CM4QJEDFfZpJNu9pFb966Dduqkj1Gkm
+        aK4qAyukFOzaJBLaw4v6jSLBJiub/DzpTX6MCIDdgWKc7FxAY+3I3boq/TwyQvZI
+        COvclSMileKI0Lz/6mEELTzxc+nREe6wlgYRvEQvpJ5Mon+vNbeIi/jCvt4XpXDL
+        qT3Rghq6mxFyatdquMzqXODoazHkRzc+hxqpGtUg6UIV9BBPtWbwI1YXF0hQqU+Q
+        y1Zv3LaBSM+nd4BTeOUAJpAgOdEQoBAh+DtEuuKH8rw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=SYYa6Y
+        sTGSR/I0GH13kqb+HYdm9OONiz3cbnv97oGII=; b=m1JtNBB9nemQLbkYlGrcxI
+        OBaGF0rsA1hASxzSN1V10IFbJv/Dx4RMw+KeMMXdSVasFAgSCz1PJxe75PPDP43t
+        KyPqyzQKWDKlWqD6NJAPMrLqhdvHIsEyLYKOITIQ2SAMQmHwC9QTjfoxpIR3pq2z
+        a3/jcLMqeX7BtLOT0emtGRZTqXabX45AMhqQfaV6z4v6f22Zyg9oLx4YmFAJXUi3
+        a4klRtycrA6E+YxyaCwo+RzuwZiYqzU3EYD8/kpwpyMnea9qz+fLg0VOaWk+IcJH
+        94bsDJg4+LUzrGuRCdnTEIDwZqApBixEzz4AcfwEJ9rqT7K6R2+k0swwzT8cuBBA
+        ==
+X-ME-Sender: <xms:0WLAYcfjuXObVl3M3X7Gh9au2Ss-TnBV8AJOVkZQZa1q3_bMxazcOw>
+    <xme:0WLAYePhNB4_KhD9GFLFLLUveoUskTYnk84Qkdmfiwygd6FVWkHYbQiDR_LO9rJvW
+    oTUCYVJU6pe_w>
+X-ME-Received: <xmr:0WLAYdh3Gm5cMGIH4591Lt2biZZY9wozVVka7QKzx5h6BjuhCilFksci0VQdEV9j15uwJXUnnkijpxGisRDONtxlBCt-R8wi>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddruddtvddgvdefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
+    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucevlhhushht
+    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
+    drtghomh
+X-ME-Proxy: <xmx:0mLAYR-D9LgAoe7wYKMKaD6mGls2HmgFsVnK5sJG--ENIDPjwN6wHw>
+    <xmx:0mLAYYtywWzCE8pXKBJqi_Qu7K6-WXlZJeZgrRztKz4T2OxY6aX2jQ>
+    <xmx:0mLAYYFDUb5wznYbnnp2iAL7kdy_cuRf1fmhi3Nt35qpSHBgJQw0mQ>
+    <xmx:0mLAYYEBnH74_aiAcNvkSAy5RtvsDJ5hMeZbXAsgKxnUKxwGCFil1A>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 20 Dec 2021 06:02:41 -0500 (EST)
+Date:   Mon, 20 Dec 2021 12:02:39 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        Marc Kleine-Budde <mkl@pengutronix.de>, davem@davemloft.net,
+        kuba@kernel.org
+Subject: Re: [PATCH 5.15 0/3] m_can_pci bit timings for Elkhart Lake
+Message-ID: <YcBiz/hxgxktWb2E@kroah.com>
 References: <cover.1639990483.git.matthias.schiffer@ew.tq-group.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1639990483.git.matthias.schiffer@ew.tq-group.com>
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-commit ea4c1787685dbf9842046f05b6390b6901ee6ba2 upstream.
+On Mon, Dec 20, 2021 at 10:22:14AM +0100, Matthias Schiffer wrote:
+> The automated backport of "can: m_can: pci: use custom bit timings for
+> Elkhart Lake" failed because I neglected to add Fixes tags to the other
+> two patches it depends on.
+> 
+> Matthias Schiffer (3):
+>   Revert "can: m_can: remove support for custom bit timing"
+>   can: m_can: make custom bittiming fields const
+>   can: m_can: pci: use custom bit timings for Elkhart Lake
+> 
+>  drivers/net/can/m_can/m_can.c     | 24 ++++++++++++----
+>  drivers/net/can/m_can/m_can.h     |  3 ++
+>  drivers/net/can/m_can/m_can_pci.c | 48 ++++++++++++++++++++++++++++---
+>  3 files changed, 65 insertions(+), 10 deletions(-)
+> 
+> -- 
+> 2.25.1
+> 
 
-The relevant datasheet [1] specifies nonstandard limits for the bit timing
-parameters. While it is unclear what the exact effect of violating these
-limits is, it seems like a good idea to adhere to the documentation.
+All now queued up, thanks.
 
-[1] Intel Atom® x6000E Series, and Intel® Pentium® and Celeron® N and J
-    Series Processors for IoT Applications Datasheet,
-    Volume 2 (Book 3 of 3), July 2021, Revision 001
-
-Fixes: cab7ffc0324f ("can: m_can: add PCI glue driver for Intel Elkhart Lake")
-Link: https://lore.kernel.org/all/9eba5d7c05a48ead4024ffa6e5926f191d8c6b38.1636967198.git.matthias.schiffer@ew.tq-group.com
-Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/m_can/m_can_pci.c | 48 ++++++++++++++++++++++++++++---
- 1 file changed, 44 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/net/can/m_can/m_can_pci.c b/drivers/net/can/m_can/m_can_pci.c
-index 8f184a852a0a..b56a54d6c5a9 100644
---- a/drivers/net/can/m_can/m_can_pci.c
-+++ b/drivers/net/can/m_can/m_can_pci.c
-@@ -18,9 +18,14 @@
- 
- #define M_CAN_PCI_MMIO_BAR		0
- 
--#define M_CAN_CLOCK_FREQ_EHL		200000000
- #define CTL_CSR_INT_CTL_OFFSET		0x508
- 
-+struct m_can_pci_config {
-+	const struct can_bittiming_const *bit_timing;
-+	const struct can_bittiming_const *data_timing;
-+	unsigned int clock_freq;
-+};
-+
- struct m_can_pci_priv {
- 	struct m_can_classdev cdev;
- 
-@@ -84,9 +89,40 @@ static struct m_can_ops m_can_pci_ops = {
- 	.read_fifo = iomap_read_fifo,
- };
- 
-+static const struct can_bittiming_const m_can_bittiming_const_ehl = {
-+	.name = KBUILD_MODNAME,
-+	.tseg1_min = 2,		/* Time segment 1 = prop_seg + phase_seg1 */
-+	.tseg1_max = 64,
-+	.tseg2_min = 1,		/* Time segment 2 = phase_seg2 */
-+	.tseg2_max = 128,
-+	.sjw_max = 128,
-+	.brp_min = 1,
-+	.brp_max = 512,
-+	.brp_inc = 1,
-+};
-+
-+static const struct can_bittiming_const m_can_data_bittiming_const_ehl = {
-+	.name = KBUILD_MODNAME,
-+	.tseg1_min = 2,		/* Time segment 1 = prop_seg + phase_seg1 */
-+	.tseg1_max = 16,
-+	.tseg2_min = 1,		/* Time segment 2 = phase_seg2 */
-+	.tseg2_max = 8,
-+	.sjw_max = 4,
-+	.brp_min = 1,
-+	.brp_max = 32,
-+	.brp_inc = 1,
-+};
-+
-+static const struct m_can_pci_config m_can_pci_ehl = {
-+	.bit_timing = &m_can_bittiming_const_ehl,
-+	.data_timing = &m_can_data_bittiming_const_ehl,
-+	.clock_freq = 200000000,
-+};
-+
- static int m_can_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
- {
- 	struct device *dev = &pci->dev;
-+	const struct m_can_pci_config *cfg;
- 	struct m_can_classdev *mcan_class;
- 	struct m_can_pci_priv *priv;
- 	void __iomem *base;
-@@ -114,6 +150,8 @@ static int m_can_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
- 	if (!mcan_class)
- 		return -ENOMEM;
- 
-+	cfg = (const struct m_can_pci_config *)id->driver_data;
-+
- 	priv = cdev_to_priv(mcan_class);
- 
- 	priv->base = base;
-@@ -125,7 +163,9 @@ static int m_can_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
- 	mcan_class->dev = &pci->dev;
- 	mcan_class->net->irq = pci_irq_vector(pci, 0);
- 	mcan_class->pm_clock_support = 1;
--	mcan_class->can.clock.freq = id->driver_data;
-+	mcan_class->bit_timing = cfg->bit_timing;
-+	mcan_class->data_timing = cfg->data_timing;
-+	mcan_class->can.clock.freq = cfg->clock_freq;
- 	mcan_class->ops = &m_can_pci_ops;
- 
- 	pci_set_drvdata(pci, mcan_class);
-@@ -178,8 +218,8 @@ static SIMPLE_DEV_PM_OPS(m_can_pci_pm_ops,
- 			 m_can_pci_suspend, m_can_pci_resume);
- 
- static const struct pci_device_id m_can_pci_id_table[] = {
--	{ PCI_VDEVICE(INTEL, 0x4bc1), M_CAN_CLOCK_FREQ_EHL, },
--	{ PCI_VDEVICE(INTEL, 0x4bc2), M_CAN_CLOCK_FREQ_EHL, },
-+	{ PCI_VDEVICE(INTEL, 0x4bc1), (kernel_ulong_t)&m_can_pci_ehl, },
-+	{ PCI_VDEVICE(INTEL, 0x4bc2), (kernel_ulong_t)&m_can_pci_ehl, },
- 	{  }	/* Terminating Entry */
- };
- MODULE_DEVICE_TABLE(pci, m_can_pci_id_table);
--- 
-2.25.1
-
+greg k-h
