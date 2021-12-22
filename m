@@ -2,225 +2,177 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1E9947C930
-	for <lists+linux-can@lfdr.de>; Tue, 21 Dec 2021 23:24:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92F3847CA42
+	for <lists+linux-can@lfdr.de>; Wed, 22 Dec 2021 01:29:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237854AbhLUWY4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 21 Dec 2021 17:24:56 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:16730 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230085AbhLUWYz (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 21 Dec 2021 17:24:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1640125495; x=1671661495;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=+YR86mI1y+8Ce2Z9MCbJEBnWRLKvWzw6uNFKAEHEwkI=;
-  b=0bfBXYJLfxzNwni9EkyKHJ8ldznDfQwLjV+7tFq1mNKGsYssnZuCxbBt
-   6uiGccmgm6HdqrPsRGy24gsXVFs3liiNcC7lQL9gGnJMzY1RJlwxXQuik
-   0MYLqi/KL2MiE07Fpb6D1eZ4MIGjSD4g4u27FvKHu0n+mPiKBZq0+rqQf
-   UZ9Y7XQNUyV59+p7BY4RMGQViRzEbeOj12OjzdcUQ0Ui8ukv+Ozvog2lC
-   DfUbPIhlVbq0Urk3hYxGRjswayJHlNEan0mNR9XvgkV1ewhE+GPCAZq7o
-   0jv/kkQfz1551eBiSUulxvoatW9CCvPMandXOHUP/0eY6nbBkiqTFUrdO
-   A==;
-IronPort-SDR: tT+8PBnM/gnHCaUHINrP2g9HSt6Yq/VSGIfuB1PJ6Rw/aSd5O2DytyOPcjEuUr+ubY/GfO7CHu
- p3Eu4doBWOXJ8KgQagrYRSlwnJSCY+/UOqDREyRkslQxa3q7IjupxwDc5zCcePpwCFLesgvxCY
- tG5RWhz3hFY1cU0LtrPUVi9dtxOzbT31Jnld8+GynmI/0UwVoXGrlF2reH0vwkWh3E4Bgx8ABW
- QMs5kswXI3jf1sYK7HApzph1oJFnMI6GmkdITR7vnDGwiKHHu1Ztfv6xl4705/kWul7dRCk/EW
- /pGaMIIAlX8J39E1L9J53yhQ
-X-IronPort-AV: E=Sophos;i="5.88,224,1635231600"; 
-   d="scan'208";a="143162504"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Dec 2021 15:24:54 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 21 Dec 2021 15:24:54 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17 via Frontend Transport; Tue, 21 Dec 2021 15:24:54 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=B0FxnHlm+Hsynm+VHMdlAoQ0RioFviO9UUvOYuNasAhWyZ5SnrIQ21982gbHnyN64268IokfD9s5rLgXylp0KahnrAnhEKx5A0IQyBIAoVZlgxMG1xohCgaL3ZqjeQOA0sBLbE6tWGdi3fhvDuuTICeWkifIScZKcR1XZ0q8p0chWwNZJscYGP2PuM/HJmCaamu449YuHlWDaU9B1hE1JVK8NnvbN3OpRo49GsgXlU8wTSa9Rf9jnXzYLFJHu1tqZKQz+16ofzGMTYZ7bW9Tpo9kVxThpbjnrj206j09s9p7ChREYiDOXRw5F9frzhdylp58PwtzvskbIDeUo4+LTg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=waWmqxRcAAAnHSYuivocWgxiskA0dJsTOc3qZ9/j3vs=;
- b=Sg9y6yzhsGAFm8BgxT1frIHt9JF1IMQvSHPbtbK8q0tmtnAlICrg7Yzn5qpW0Z39fHujHC0wA7QAKbLYhuNeYRpGOJv8OsaPaB4cIO/PgGl2Fhd3gELQ446xmIMtjKBsmyqsAuxP4YzIo9h9REWpJKflfpGhwsuTN3WbhHdAs2fJLSMhm/4JnavA9c9h0hi5VG/jhsS8L0M1G66nIsA3d0LS3hIMS0NwmJ3kW733ea9oMTktAqINrqW/GtMISv/NAzCJodaxr0TQvln7W83/gWwGp11P61m8dZ5AEyrBSbHAuP7grRTa/JJaZsQMC0YkfkS1SfZowz2Fu2kAtO3X8g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+        id S229814AbhLVA3v (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 21 Dec 2021 19:29:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43012 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229734AbhLVA3v (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 21 Dec 2021 19:29:51 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E488C06173F
+        for <linux-can@vger.kernel.org>; Tue, 21 Dec 2021 16:29:50 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id g11so1519854lfu.2
+        for <linux-can@vger.kernel.org>; Tue, 21 Dec 2021 16:29:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=waWmqxRcAAAnHSYuivocWgxiskA0dJsTOc3qZ9/j3vs=;
- b=nrgWDuMIZXRlNSdJGXFkcJOV0PC85FVnbax8XSTFqmPIEvlzYyPUvoHyStRzDypiv9anG5oUSxGMAiAEz2MuF9hLY4uGd5UKM+8UtKCNHF/9rMYySOXCTHhK+xgUpq5B/loqU5LFnZptJawkFWQrGYLg875ta9zc8y9Wr/jvHbM=
-Received: from DM4PR11MB5390.namprd11.prod.outlook.com (2603:10b6:5:395::13)
- by DM6PR11MB2859.namprd11.prod.outlook.com (2603:10b6:5:c9::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.15; Tue, 21 Dec
- 2021 22:24:52 +0000
-Received: from DM4PR11MB5390.namprd11.prod.outlook.com
- ([fe80::bcc4:7cdf:d47b:1ed6]) by DM4PR11MB5390.namprd11.prod.outlook.com
- ([fe80::bcc4:7cdf:d47b:1ed6%3]) with mapi id 15.20.4801.020; Tue, 21 Dec 2021
- 22:24:52 +0000
-From:   <Thomas.Kopp@microchip.com>
-To:     <pavel.modilaynen@volvocars.com>, <mkl@pengutronix.de>
-CC:     <drew@beagleboard.org>, <linux-can@vger.kernel.org>,
-        <menschel.p@posteo.de>, <netdev@vger.kernel.org>,
-        <will@macchina.cc>
-Subject: RE: [net-next 6/6] can: mcp251xfd: mcp251xfd_regmap_crc_read(): work
- around broken CRC on TBC register
-Thread-Topic: [net-next 6/6] can: mcp251xfd: mcp251xfd_regmap_crc_read(): work
- around broken CRC on TBC register
-Thread-Index: AQHX63m5RC9thyxmT0S34SqWhDegYawp9YdggAADTb6AExztoA==
-Date:   Tue, 21 Dec 2021 22:24:52 +0000
-Message-ID: <DM4PR11MB53901D49578FE265B239E55AFB7C9@DM4PR11MB5390.namprd11.prod.outlook.com>
-References: <PR3P174MB0112D073D0E5E080FAAE8510846E9@PR3P174MB0112.EURP174.PROD.OUTLOOK.COM>
- <DM4PR11MB5390BA1C370A5AF90E666F1EFB709@DM4PR11MB5390.namprd11.prod.outlook.com>
- <PR3P174MB01124C085C0E0A0220F2B11584709@PR3P174MB0112.EURP174.PROD.OUTLOOK.COM>
-In-Reply-To: <PR3P174MB01124C085C0E0A0220F2B11584709@PR3P174MB0112.EURP174.PROD.OUTLOOK.COM>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_7fea2623-af8f-4fb8-b1cf-b63cc8e496aa_Enabled=True;MSIP_Label_7fea2623-af8f-4fb8-b1cf-b63cc8e496aa_SiteId=81fa766e-a349-4867-8bf4-ab35e250a08f;MSIP_Label_7fea2623-af8f-4fb8-b1cf-b63cc8e496aa_SetDate=2021-12-13T22:12:48.726Z;MSIP_Label_7fea2623-af8f-4fb8-b1cf-b63cc8e496aa_Name=Proprietary;MSIP_Label_7fea2623-af8f-4fb8-b1cf-b63cc8e496aa_ContentBits=0;MSIP_Label_7fea2623-af8f-4fb8-b1cf-b63cc8e496aa_Method=Standard;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 9fba0477-69d1-4e66-8463-08d9c4d0b54c
-x-ms-traffictypediagnostic: DM6PR11MB2859:EE_
-x-microsoft-antispam-prvs: <DM6PR11MB285908DF90436645F02AC7B6FB7C9@DM6PR11MB2859.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: lqJ2TNS6sWm1F9cqA6eTz3F7nFK4TinRdfeTE/Q3rY+rjMTK8nh18cr+RFOo3qyuwapfF0QfV2JgyZ5c9CjZnvP/Dmz3/2NJTksu5NAHLR9yLHc7PpXkURHbYRyTmW9smysxybgmhmW7QTDIvX9sH8/NE8/n4z7k1ZjKiGmv0Ge4l24+XHUEBdva1Ygs4BS9kjdqEhot00DaHgo1y3BAKKR6Tt7EJOjr/7bVpAWvyjCvsZxkoB8Bg7dDgivJ5Jer/8hoGt6uqWte6d55b4+GOmhT++6bXDmKKxxspWBSslUCYTi7QSenIs1Ejkdn4Vxb7hBcBBQl/xhaB9vIEz8AZ8e1+Rz1DnryazHIXv0+BbRJyeHul7Ng87x3A/i0l1XZzzTqrT+i8acbkbewWene02C1jRcYhSFsjTPAfadqORmFVVAhykt8cRvw5cS2YxDCgrIAnuaCjMPFhcluAKFl77AHyROKoaMaHQzcZmkrvxAI+mHUFf9t1K7kr8WISSDEHLsVLDU8u+RjVlYuGp2pNKkw2rlXfLUoUfG68UcjNOOe4jejLT8gAEpuoDeansAVj0SNghy/ZYOFktfM+O2srxkPB/aXWz6zPBJzAQG57HEEbfgS0HCB2EwlpMU2vbJmFEJWXriy2+uzrAqXPSyMjWAz1L1WS/1uLgx71ybEHiHbOe8kpiEAgt0GOXovLPmHeBO0jDwkGM9B446b+3LgEw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5390.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(122000001)(38100700002)(76116006)(38070700005)(55016003)(83380400001)(316002)(8936002)(86362001)(4326008)(9686003)(66446008)(2906002)(7696005)(110136005)(54906003)(5660300002)(66476007)(66946007)(66556008)(64756008)(52536014)(26005)(33656002)(6506007)(186003)(71200400001)(508600001)(8676002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?DnODoBFlw6ScomaxLEKl/izWTAXJmVLYlwpepsWoTgu0zJpLi6Ck3ToGTV?=
- =?iso-8859-1?Q?5cEH5yWXO9GLuHFuws/FGJx5rXfKKAGZjHjqRuIQJYc16Jj/tWqbs0Bel0?=
- =?iso-8859-1?Q?2OhGTrKdbiqyRaxauYBRDSFFOQEwrftrpWkk1VmSMsh9218X2cOuw6K+w8?=
- =?iso-8859-1?Q?fmPKxtnYIj1ObfQxI5SYgzjalMo2rN6nYI4md9svTbkbTzMtuHsx+wFRV4?=
- =?iso-8859-1?Q?BlLYngWtnfQEP2NSwqn3wNtGbQP4frcPTaD0L8BwLfKjvSUoUnymKOs5I0?=
- =?iso-8859-1?Q?Ll8ehF7zf1ybu/qJfkwIsxFwONY0e4W7WAB7UKEQzp46qDIyBUeDa7OG24?=
- =?iso-8859-1?Q?84nGxyzvn/8v/cis4YQYCoYI//agyyISSpUgs6v8hSb73fSMXjinW5HrbA?=
- =?iso-8859-1?Q?Ut8CKQ7vmd3INIRv89a29XoCbLf0lMNNPCabS8r6TaFxRmAXral9Oz+GLF?=
- =?iso-8859-1?Q?2emft/0yorF3a96Og3DyMgE8IA2Y7vqT8ecjylrnWW/dkeMwROYm524gF4?=
- =?iso-8859-1?Q?SnTgjaFwVoY6FI7Ud/wIeh0ci1E7efxjwcTDGf0JwTOAEiE25CXLTBfiSW?=
- =?iso-8859-1?Q?BtsDC/SzxO+GuKJC2g8aoJm+YnVXc4Wsajg+E1AKH8LI8s0qCvgBRdB3vU?=
- =?iso-8859-1?Q?B1bPpIgUmv7D5VO52jhgUORmu2y1RxZLN97C0IEmm6igiFYaIJYLTQjMNL?=
- =?iso-8859-1?Q?oZZwq1451Nf15tLRKtWdsvpNJ8dTThkDds4FGJ3Jlqd0AM3tSeZYFpemsp?=
- =?iso-8859-1?Q?VxECt7TvDxro+okpOKnEoBXbgNgXPXrAOAWlSxlQHJFgU7k/ODZ0Ijsph6?=
- =?iso-8859-1?Q?mNxQoCyaNs87h1YxEibX5wY1wFe3KepJSuj5+zLsZytLY2PsEikMegbraX?=
- =?iso-8859-1?Q?B+3J8J/70DtxH+PWnkroreQYQc0NEoPgVyuF3bbz71TK8naqZhnnHUsOfy?=
- =?iso-8859-1?Q?pD9v/QrQbBTV9zXsmZSxG9KMVwV+kJ6SVEXpUCmFcweY4atcHfvIYxadtt?=
- =?iso-8859-1?Q?zA9V1GKGR3PGw2G0GIQ2Bbdcdj+VuzuchpxcpmwgJ28UgbmsTG3g4Tzzu4?=
- =?iso-8859-1?Q?id5lOykKrOKn11koCdD1tDVf5L2gFOcMEuRPdpu2YAV4qn+8z21B1GAZW4?=
- =?iso-8859-1?Q?2nf69n78xirJHvLL1GLIWT1n59qGKrZQojc4YABTN+HumdekOGoHAqaEbh?=
- =?iso-8859-1?Q?yTEItYtSYmWTar9upc6H0psfoq9PpX/83kcKoBj+wHml6hdfiZzOIZKyh2?=
- =?iso-8859-1?Q?J6Uuh0c93CTbbcYUkBdAK9nD9NwwOiiyyZ7FrV6eXx/fbVz1wtmz63PqxY?=
- =?iso-8859-1?Q?Il4IR3BHu/WbXVhOJpmmCRjAh16JBWFCqk/D4xif56Qv0vg+bNHK6ByWMT?=
- =?iso-8859-1?Q?q8BU+1QrUAYyoHLrRvnPamzygW8p4ALMf57Psek9ylhc2/A+f7LGFFJC/L?=
- =?iso-8859-1?Q?cV4klmbaaVxIi6c3klrl+Eb6t5TzYrXj+NLmI5yXu3Tu2WlAzTLKboxfMa?=
- =?iso-8859-1?Q?3+KhBTVcrmEhaid3cEI0gER2dNaJk0kIVfXlP3UikSMgUwDYnGApXKI23n?=
- =?iso-8859-1?Q?RFdpMTYMX49eYy2Bt9DQaiK7T9OW1MtJCUFRfakaTT90k/o3DVNSyWw/uQ?=
- =?iso-8859-1?Q?Bg31S3BGFL1bee0p/X7hsb3FaIfKK6VeXSbySb/eQHzLJgfntGhhPvNexf?=
- =?iso-8859-1?Q?l6mER5Ci7FrnF14utLyB5JqQkgkTNFIANAFFTdqK9lB8PM6z1hRHOz3g7P?=
- =?iso-8859-1?Q?6ubA=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        d=kvaser.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RSwt6nc97ki98nU3MI3VkFKTuYbUI1gzNkM0vpTGI20=;
+        b=kD7wDfyjQSoEnBmVAJiUgJDpoMUWebcCxJxNhQG5gSc95bZcp+05qhtvwyxhVRZKzS
+         Jl74dA1K+GIVd+BY4UZ3JC7Mp47vbie2TrCwEU30Wm2f2KNHNSmZ12oUBTnF4DTssPnd
+         8dPiux8/rna2C4W0nSHFEY0hfRk7MtOlbTlueMPIxXPKd+xLl4jh+ROsGn88KkGtnQdp
+         G8haK1meRvkm3rTveU/Yvp4iGT8a16fihfmxJ8EhutmXz6KH6CJe6OFCapmshou/s/sS
+         klv1RXg9M0JDWK3XX7EdfaRkHh54CPMI2e1Q3FjsXkzrHYoynIC3qlcRRCNIL2qJCdcC
+         XWmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RSwt6nc97ki98nU3MI3VkFKTuYbUI1gzNkM0vpTGI20=;
+        b=UBixoxgJPp35/UPJgWNNTvEuDD4H1zuP6C0u3KqJQKbcL8dfoUIWkqySopu81pCVNB
+         N68lm84DwHeF4WPTSXg0VpNboEzVltsj4Nj5+TGm1RA4Q1AV2VpyooE5BPhuExWqw//O
+         3pnZExKSU1qI3/ckqO4Zd3wcAJCDSo90XGiVqsg3sxJxMSQe7+CekVfPOZbS3zpq4gzK
+         elbztX+LmHWPMS5oJys/DA0KMCl6rtBnKeLsrA1fpMcPUnZnnqEqE8CfjW18IvJn446A
+         rMSwxV6uZ0/mtBsVXVWbjHItWL40DJ28yn8aKEorqyzTDyI2xvQBVu/RAc9h5go4TSaE
+         fJ6g==
+X-Gm-Message-State: AOAM530vi60Re/rWqpsSl+7klbq5Jyj7YwYiZelzBdWnbmAxHxf+AymW
+        PODa0sWWn25Ze9xFZhwiTBa1AuUoGi6Uaw==
+X-Google-Smtp-Source: ABdhPJz7TeQaivsFrj9w0fYgDCZ4XJJFlxatfF7o5dW2ImkDg7O0QGntZw2nmgYZ80Umx/p9xYvWCQ==
+X-Received: by 2002:a05:6512:2355:: with SMTP id p21mr592390lfu.640.1640132988753;
+        Tue, 21 Dec 2021 16:29:48 -0800 (PST)
+Received: from localhost (h-155-4-68-234.A785.priv.bahnhof.se. [155.4.68.234])
+        by smtp.gmail.com with UTF8SMTPSA id bn30sm42635ljb.29.2021.12.21.16.29.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Dec 2021 16:29:48 -0800 (PST)
+From:   Jimmy Assarsson <extja@kvaser.com>
+To:     linux-can@vger.kernel.org, stable@vger.kernel.org,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Jimmy Assarsson <jimmyassarsson@gmail.com>,
+        Jimmy Assarsson <extja@kvaser.com>
+Subject: [PATCH] can: kvaser_usb: get CAN clock frequency from device
+Date:   Wed, 22 Dec 2021 01:28:27 +0100
+Message-Id: <20211222002826.1398761-1-extja@kvaser.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5390.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9fba0477-69d1-4e66-8463-08d9c4d0b54c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Dec 2021 22:24:52.2630
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ZeK2yOAT+IR7GE6V2LlvOkGALkz/oife4zNJ+GEWYDfXzTdS5TlvzRh5mc7tVxL+nebdzw3YujtW0QYUR6T5uS4yynvhFCHsKkW+bJtevuM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB2859
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Pavel,
+commit fb12797ab1fef480ad8a32a30984844444eeb00d upstream.
 
-> >=A0> We have the similar CRC read errors but
-> > > the lowest byte is not 0x00 and 0x80, it's actually 0x0x or 0x8x, e.g=
-.
-> > >
-> >=A0> mcp251xfd spi0.0 can0: CRC read error at address 0x0010 (length=3D4=
-,
-> >=A0> data=3D82 d1 fa 6c, CRC=3D0xd9c2) retrying.
-> >=A0>
-> >=A0> 0xb0 0x10 0x04 0x82 0xd1 0xfa 0x6c =3D> 0x59FD (not matching)
-> >=A0>
-> >=A0> but if I flip the first received bit  (highest bit in the lowest by=
-te):
-> >=A0> 0xb0 0x10 0x04 0x02 0xd1 0xfa 0x6c =3D> 0xD9C2 (matching!)
->=20
-> >=A0What settings do you have on your setup? Can you please print the
-> dmesg output from the init? I'm especially interested in Sysclk and SPI
-> speed.
->=20
-> mcp251xfd spi0.0 can0: MCP2517FD rev0.0 (-RX_INT +MAB_NO_WARN
-> +CRC_REG +CRC_RX +CRC_TX +ECC -HD c:40.00MHz m:10.00MHz
-> r:10.00MHz e:10.00MHz) successfully initialized.
+The CAN clock frequency is used when calculating the CAN bittiming
+parameters. When wrong clock frequency is used, the device may end up
+with wrong bittiming parameters, depending on user requested bittiming
+parameters.
 
-Thanks for the data. I've looked into this and it seems that the second bit=
- being set in your case does not depend on the SPI-Rate (or the quirks for =
-that matter) but it seems to be hardware setup related.=20
-I'm fine with changing the driver so that it ignores set LSBs but would lim=
-it it to 2 or 3 bits:
-(buf_rx->data[0] =3D=3D 0x0 || buf_rx->data[0] =3D=3D 0x80))
-becomes
-((buf_rx->data[0] & 0xf8) =3D=3D 0x0 || (buf_rx->data[0] & 0xf8) =3D=3D 0x8=
-0)) {
+To avoid this, get the CAN clock frequency from the device. Various
+existing Kvaser Leaf products use different CAN clocks.
 
-The action also needs to be changed and the flip back of the bit needs to b=
-e removed. In this case the flipped databit that produces a matching CRC is=
- actually  correct (i.e. consistent with the 7 LSBs in that byte.)
-A patch could look like this (I'm currently not close to a setup where I ca=
-n compile/test this.)
+Fixes: 080f40a6fa28 ("can: kvaser_usb: Add support for Kvaser CAN/USB devices")
+Link: https://lore.kernel.org/all/20211208152122.250852-2-extja@kvaser.com
+Cc: stable@vger.kernel.org
+Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
+[backport note: kvaser_usb was split into multiple files in 4.19]
+---
+ drivers/net/can/usb/kvaser_usb.c | 41 ++++++++++++++++++++++++++++----
+ 1 file changed, 36 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c b/drivers/net=
-/can/spi/mcp251xfd/mcp251xfd-regmap.c
-index 297491516a26..e5bc897f37e8 100644
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
-@@ -332,12 +332,10 @@ mcp251xfd_regmap_crc_read(void *context,
-                 *
-                 * If the highest bit in the lowest byte is flipped
-                 * the transferred CRC matches the calculated one. We
--                * assume for now the CRC calculation in the chip
--                * works on wrong data and the transferred data is
--                * correct.
-+                * assume for now the CRC operates on the correct data.
-                 */
-                if (reg =3D=3D MCP251XFD_REG_TBC &&
--                   (buf_rx->data[0] =3D=3D 0x0 || buf_rx->data[0] =3D=3D 0=
-x80)) {
-+                   ((buf_rx->data[0] & 0xF8) =3D=3D 0x0 || (buf_rx->data[0=
-] & 0xF8) =3D=3D 0x80)) {
-                        /* Flip highest bit in lowest byte of le32 */
-                        buf_rx->data[0] ^=3D 0x80;
+diff --git a/drivers/net/can/usb/kvaser_usb.c b/drivers/net/can/usb/kvaser_usb.c
+index 9991ee93735a..81abb30d9ec0 100644
+--- a/drivers/net/can/usb/kvaser_usb.c
++++ b/drivers/net/can/usb/kvaser_usb.c
+@@ -31,7 +31,10 @@
+ #define USB_SEND_TIMEOUT		1000 /* msecs */
+ #define USB_RECV_TIMEOUT		1000 /* msecs */
+ #define RX_BUFFER_SIZE			3072
+-#define CAN_USB_CLOCK			8000000
++#define KVASER_USB_CAN_CLOCK_8MHZ	8000000
++#define KVASER_USB_CAN_CLOCK_16MHZ	16000000
++#define KVASER_USB_CAN_CLOCK_24MHZ	24000000
++#define KVASER_USB_CAN_CLOCK_32MHZ	32000000
+ #define MAX_NET_DEVICES			3
+ #define MAX_USBCAN_NET_DEVICES		2
+ 
+@@ -139,6 +142,12 @@ static inline bool kvaser_is_usbcan(const struct usb_device_id *id)
+ #define CMD_LEAF_USB_THROTTLE		77
+ #define CMD_LEAF_LOG_MESSAGE		106
+ 
++/* Leaf frequency options */
++#define KVASER_USB_LEAF_SWOPTION_FREQ_MASK 0x60
++#define KVASER_USB_LEAF_SWOPTION_FREQ_16_MHZ_CLK 0
++#define KVASER_USB_LEAF_SWOPTION_FREQ_32_MHZ_CLK BIT(5)
++#define KVASER_USB_LEAF_SWOPTION_FREQ_24_MHZ_CLK BIT(6)
++
+ /* error factors */
+ #define M16C_EF_ACKE			BIT(0)
+ #define M16C_EF_CRCE			BIT(1)
+@@ -469,6 +478,8 @@ struct kvaser_usb {
+ 	bool rxinitdone;
+ 	void *rxbuf[MAX_RX_URBS];
+ 	dma_addr_t rxbuf_dma[MAX_RX_URBS];
++
++	struct can_clock clock;
+ };
+ 
+ struct kvaser_usb_net_priv {
+@@ -646,6 +657,27 @@ static int kvaser_usb_send_simple_msg(const struct kvaser_usb *dev,
+ 	return rc;
+ }
+ 
++static void kvaser_usb_get_software_info_leaf(struct kvaser_usb *dev,
++					      const struct leaf_msg_softinfo *softinfo)
++{
++	u32 sw_options = le32_to_cpu(softinfo->sw_options);
++
++	dev->fw_version = le32_to_cpu(softinfo->fw_version);
++	dev->max_tx_urbs = le16_to_cpu(softinfo->max_outstanding_tx);
++
++	switch (sw_options & KVASER_USB_LEAF_SWOPTION_FREQ_MASK) {
++	case KVASER_USB_LEAF_SWOPTION_FREQ_16_MHZ_CLK:
++		dev->clock.freq = KVASER_USB_CAN_CLOCK_16MHZ;
++		break;
++	case KVASER_USB_LEAF_SWOPTION_FREQ_24_MHZ_CLK:
++		dev->clock.freq = KVASER_USB_CAN_CLOCK_24MHZ;
++		break;
++	case KVASER_USB_LEAF_SWOPTION_FREQ_32_MHZ_CLK:
++		dev->clock.freq = KVASER_USB_CAN_CLOCK_32MHZ;
++		break;
++	}
++}
++
+ static int kvaser_usb_get_software_info(struct kvaser_usb *dev)
+ {
+ 	struct kvaser_msg msg;
+@@ -661,14 +693,13 @@ static int kvaser_usb_get_software_info(struct kvaser_usb *dev)
+ 
+ 	switch (dev->family) {
+ 	case KVASER_LEAF:
+-		dev->fw_version = le32_to_cpu(msg.u.leaf.softinfo.fw_version);
+-		dev->max_tx_urbs =
+-			le16_to_cpu(msg.u.leaf.softinfo.max_outstanding_tx);
++		kvaser_usb_get_software_info_leaf(dev, &msg.u.leaf.softinfo);
+ 		break;
+ 	case KVASER_USBCAN:
+ 		dev->fw_version = le32_to_cpu(msg.u.usbcan.softinfo.fw_version);
+ 		dev->max_tx_urbs =
+ 			le16_to_cpu(msg.u.usbcan.softinfo.max_outstanding_tx);
++		dev->clock.freq = KVASER_USB_CAN_CLOCK_8MHZ;
+ 		break;
+ 	}
+ 
+@@ -1925,7 +1956,7 @@ static int kvaser_usb_init_one(struct usb_interface *intf,
+ 	kvaser_usb_reset_tx_urb_contexts(priv);
+ 
+ 	priv->can.state = CAN_STATE_STOPPED;
+-	priv->can.clock.freq = CAN_USB_CLOCK;
++	priv->can.clock.freq = dev->clock.freq;
+ 	priv->can.bittiming_const = &kvaser_usb_bittiming_const;
+ 	priv->can.do_set_bittiming = kvaser_usb_set_bittiming;
+ 	priv->can.do_set_mode = kvaser_usb_set_mode;
+-- 
+2.31.1
 
-@@ -347,10 +345,8 @@ mcp251xfd_regmap_crc_read(void *context,
-                                                                  val_len);
-                        if (!err) {
-                                /* If CRC is now correct, assume
--                                * transferred data was OK, flip bit
--                                * back to original value.
-+                                * flipped data was OK.
-                                 */
--                               buf_rx->data[0] ^=3D 0x80;
-                                goto out;
-                        }
-                }
-
-Thanks,
-Thomas
