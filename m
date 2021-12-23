@@ -2,59 +2,86 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AE3947D180
-	for <lists+linux-can@lfdr.de>; Wed, 22 Dec 2021 13:08:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CDCE47E241
+	for <lists+linux-can@lfdr.de>; Thu, 23 Dec 2021 12:28:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244796AbhLVMIJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 22 Dec 2021 07:08:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58110 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235474AbhLVMIJ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 22 Dec 2021 07:08:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A9FC061574;
-        Wed, 22 Dec 2021 04:08:09 -0800 (PST)
+        id S230306AbhLWL2b (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 23 Dec 2021 06:28:31 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:35792 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229593AbhLWL2b (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 23 Dec 2021 06:28:31 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 18A65B81C0F;
-        Wed, 22 Dec 2021 12:08:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FDADC36AE5;
-        Wed, 22 Dec 2021 12:08:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640174886;
-        bh=Bs6plq2rfuXMX74t3gcF6+hS3gsW/monRYQ0HiJmGuc=;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0DA6AB81E98;
+        Thu, 23 Dec 2021 11:28:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDAF5C36AE9;
+        Thu, 23 Dec 2021 11:28:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640258908;
+        bh=htCvpSaVrR8Gu/Gf+sfTWo3rQbsZZ8ATd3vQXhFLWYA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Gp58VR8QruknRVsqk+6Mpkg1VSGH6b6Ubw5m6s12gPooUpH3vUTARZeBK5bX1Qolu
-         isegeFZJ8mcLHgyNcsTBWK93k8OMWJJnaJKDEpVPYOiOzqDYm6iR0nqfCUdT2WVzNq
-         HpqWp5mP0Pji0Yjjn8Wt+qpVt253VpLHmk77P5UA=
-Date:   Wed, 22 Dec 2021 13:00:05 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jimmy Assarsson <jimmyassarsson@gmail.com>
-Cc:     Jimmy Assarsson <extja@kvaser.com>, linux-can@vger.kernel.org,
-        stable@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: Re: [PATCH] can: kvaser_usb: get CAN clock frequency from device
-Message-ID: <YcMTRYM9J1mjeDh6@kroah.com>
-References: <20211222002826.1398761-1-extja@kvaser.com>
- <eaefb340-6677-1fcc-83c2-dacc17360b92@gmail.com>
+        b=byI8vGwHlAIcTpT0z9s+YkHj//vmsmN8841AogPROn1/ASF83M7dUR5eb70y19tCo
+         1GRS1QoBIh4fcNd+qnx3RULTNJIH8j/TiLJ36XbVt0OnwQnyWknZ0HtXUPbCrKFzen
+         b71i9fRpUX16/xmSqI8zhfuUSQl0kJjsvxJjBVRvhkazbDgHm9aPnZ0y09EuiwpOIs
+         ci2ckdy3N6UEOOZs8nUScwaldD2qSurNn2mHLTow1yeAThwd22yk7vPaiitXlQztRj
+         EHcp9aqB3deH0OVdNGA9b96LwuD60OiGU/PNPLhhoA7jyGl8ulrDS+pA/sbwfe7SG5
+         sIgd1GgzjUOrw==
+Date:   Thu, 23 Dec 2021 16:58:24 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Aswath Govindraju <a-govindraju@ti.com>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-can@vger.kernel.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/2] CAN: Add support for setting mux
+Message-ID: <YcRdWJtREHFWXBKM@matsya>
+References: <20211216041012.16892-1-a-govindraju@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <eaefb340-6677-1fcc-83c2-dacc17360b92@gmail.com>
+In-Reply-To: <20211216041012.16892-1-a-govindraju@ti.com>
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 01:37:24AM +0100, Jimmy Assarsson wrote:
-> Hi,
+On 16-12-21, 09:40, Aswath Govindraju wrote:
+> The following series of patches add support for setting
+> muxes to route signals from CAN controller to transceiver
+> by reading the property mux-states from the device tree
+> node
+
+These look okay to me
 > 
-> I'm not familiar with the tag conventions used in the stable tree.
-> This is a backport of upstream commit fb12797ab1fef480ad8a32a30984844444eeb00d,
-> for stable 4.4, 4.9 and 4.14.
-> How to properly specify this?
+> The following series of patches are dependent on,
+> - https://lkml.org/lkml/2021/12/2/423
 
-You just did!
+Pls post when these are merged..
 
-Now all queued up, thanks.
+> 
+> Changes since v2:
+> - Fixed the bindings removing the description about
+>   the arguments in mux-states property
+> 
+> Changes since v1:
+> - Fixed the description for mux-states property in bindings
+>   file
+> - appended declaration of variable ret in the end
+> 
+> Aswath Govindraju (2):
+>   dt-bindings: phy: ti,tcan104x-can: Document mux-states property
+>   phy: phy-can-transceiver: Add support for setting mux
+> 
+>  .../bindings/phy/ti,tcan104x-can.yaml         |  7 ++++++
+>  drivers/phy/Kconfig                           |  1 +
+>  drivers/phy/phy-can-transceiver.c             | 24 ++++++++++++++++++-
+>  3 files changed, 31 insertions(+), 1 deletion(-)
+> 
+> -- 
+> 2.17.1
 
-greg k-h
+-- 
+~Vinod
