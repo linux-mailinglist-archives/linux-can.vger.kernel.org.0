@@ -2,146 +2,86 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C948047E7B4
-	for <lists+linux-can@lfdr.de>; Thu, 23 Dec 2021 19:41:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE90847EA88
+	for <lists+linux-can@lfdr.de>; Fri, 24 Dec 2021 03:13:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239424AbhLWSla convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Thu, 23 Dec 2021 13:41:30 -0500
-Received: from lelija.serveriai.lt ([194.135.87.135]:60018 "EHLO
-        lelija.serveriai.lt" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239086AbhLWSl3 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 23 Dec 2021 13:41:29 -0500
-X-Greylist: delayed 1175 seconds by postgrey-1.27 at vger.kernel.org; Thu, 23 Dec 2021 13:41:29 EST
-Received: from [78.61.95.68] (helo=smtpclient.apple)
-        by lelija.serveriai.lt with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <gediminas@rusoku.com>)
-        id 1n0Siq-0007Ge-E7
-        for linux-can@vger.kernel.org; Thu, 23 Dec 2021 20:21:52 +0200
-From:   Gediminas Simanskis <gediminas@rusoku.com>
-Content-Type: text/plain;
-        charset=utf-8
-Content-Transfer-Encoding: 8BIT
-Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.40.0.1.81\))
-Subject: Re: Dual CAN(FD) board w/ MACP251xfd
-Date:   Thu, 23 Dec 2021 20:21:52 +0200
-References: <A271F63C-FA42-4864-A621-C5195A35EC83@vanille.de>
- <d91f084a-73de-4486-548d-d39fcb1480bc@posteo.de>
- <e5acf66b-33a5-363e-5076-f42e8994ac2d@posteo.de>
-To:     linux-can@vger.kernel.org
-In-Reply-To: <e5acf66b-33a5-363e-5076-f42e8994ac2d@posteo.de>
-Message-Id: <5AB3E4E4-3DB8-4B5C-931C-6C8E2722B2EB@rusoku.com>
-X-Mailer: Apple Mail (2.3693.40.0.1.81)
-X-Sender: gediminas@rusoku.com
+        id S232127AbhLXCNw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 23 Dec 2021 21:13:52 -0500
+Received: from smtp25.cstnet.cn ([159.226.251.25]:58602 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232088AbhLXCNw (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Thu, 23 Dec 2021 21:13:52 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-05 (Coremail) with SMTP id zQCowACHjQHGLMVhFGfGBA--.1610S2;
+        Fri, 24 Dec 2021 10:13:26 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     appana.durga.rao@xilinx.com, naga.sureshkumar.relli@xilinx.com,
+        wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
+        kuba@kernel.org, michal.simek@xilinx.com
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] can: xilinx_can: Check for error irq
+Date:   Fri, 24 Dec 2021 10:13:24 +0800
+Message-Id: <20211224021324.1447494-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowACHjQHGLMVhFGfGBA--.1610S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7JF48ur15ur43CryfCF47CFg_yoWkKFX_Ca
+        1kuF4fXw48ursav3WUAw13urySyF4xGr1UXFn3WF4Iva4UCw12vr17A3ZxCF15GrW8Cryf
+        Wr98urWfCrySvjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb3xFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
+        0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1lc2xSY4AK67AK6r4UMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
+        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
+        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
+        vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1l
+        IxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvf
+        C2KfnxnUUI43ZEXa7VU1sYFtUUUUU==
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Maybe it’s not such a bad idea to use independent spi bus eq SPI0 and SPI1  ;-)
+For the possible failure of the platform_get_irq(), the returned irq
+could be error number and will finally cause the failure of the
+request_irq().
+Consider that platform_get_irq() can now in certain cases return
+-EPROBE_DEFER, and the consequences of letting request_irq() effectively
+convert that into -EINVAL, even at probe time rather than later on.
+So it might be better to check just now.
 
+Fixes: b1201e44f50b ("can: xilinx CAN controller support")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/net/can/xilinx_can.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-> On 2021-12-23, at 19:54, Patrick Menschel <menschel.p@posteo.de> wrote:
-> 
-> LOL, already found an error in my own lines. That was sluggish of me.
-> 
-> In your case udev rules should be
-> 
-> SUBSYSTEM=="net", ACTION=="add",
-> DEVPATH=="/devices/platform/soc/*/*/*/spi0.0/net/can?", NAME="mcp0"
-> SUBSYSTEM=="net", ACTION=="add",
-> DEVPATH=="/devices/platform/soc/*/*/*/spi1.0/net/can?", NAME="mcp1"
-> 
-> Best Regards,
-> Patrick
-> 
-> Am 23.12.21 um 18:49 schrieb Patrick Menschel:
->> Hello,
->> 
->> afaik Drew got that board working.
->> 
->> https://marc.info/?l=linux-can&m=160427096004578&w=2
->> 
->> Same time we did PRs for board specific overlays, not waveshare but
->> seeed while waveshare is very similar to seeed v1
->> 
->> https://github.com/raspberrypi/linux/pull/4034
->> https://github.com/raspberrypi/linux/pull/4041
->> 
->> With some reverse engineering we get back to a hopefully working set of
->> lines.
->> 
->> Please try these lines in config.txt
->> 
->> dtoverlay=mcp251xfd,spi0-0,interrupt=25
->> dtoverlay=mcp251xfd,spi1-0,interrupt=16
->> 
->> 
->> There is also a popular way to get rid of the can0 / can1 swapping, use
->> udev rules.
->> 
->> Try pasting this into /etc/udev/rules.d/70-can.rules
->> 
->> SUBSYSTEM=="net", ACTION=="add",
->> DEVPATH=="/devices/platform/soc/*/*/*/spi0.0/net/can?", NAME="mcp0"
->> SUBSYSTEM=="net", ACTION=="add",
->> DEVPATH=="/devices/platform/soc/*/*/*/spi0.1/net/can?", NAME="mcp1"
->> 
->> 
->> and correspondingly this into /etc/network/interfaces.d/70-can but you
->> may want to change bitrates
->> 
->> auto mcp0
->> iface mcp0 inet manual
->> 	pre-up /sbin/ip link set $IFACE type can bitrate 1000000 sample-point
->> 0.75 dbitrate 8000000 dsample-point 0.8 fd on
->> 	up /sbin/ifconfig $IFACE up
->> 	down /sbin/ifconfig $IFACE down
->> 
->> auto mcp1
->> iface mcp1 inet manual
->> 	pre-up /sbin/ip link set $IFACE type can bitrate 1000000 sample-point
->> 0.75 dbitrate 8000000 dsample-point 0.8 fd on
->> 	up /sbin/ifconfig $IFACE up
->> 	down /sbin/ifconfig $IFACE down
->> 
->> 
->> It may be wise to open another PR for that board.
->> 
->> Best Regards,
->> Patrick
->> 
->> Am 23.12.21 um 18:05 schrieb Dr. Michael Lauer:
->>> Please forgive me, if this is not the proper list for this message,
->>> but as far as I know the developer of the mcp251xfd driver is also reading here.
->>> 
->>> I recently acquired a Dual CAN FD HAT (https://www.waveshare.com/wiki/2-CH_CAN_FD_HAT)
->>> to run on my Raspberry PI 4. Currently, this is using kernel 5.15.11, but for some
->>> reason, only one of the two ports are recognized. Instead of detecting the 2nd port,
->>> it seems to just _renames_ the port. Here is the relevant kernel log:
->>> 
->>> [    5.495409] CAN device driver interface
->>> [    5.552660] spi_master spi1: will run message pump with realtime priority
->>> [    5.559885] mcp251xfd spi1.0 (unnamed net_device) (uninitialized): Detected MCP2518FD, but firmware specifies a MCP2517FD. Fixing up.
->>> [    5.580908] vc4-drm gpu: bound fe400000.hvs (ops vc4_hvs_ops [vc4])
->>> [    5.585428] Registered IR keymap rc-cec
->>> [    5.599117] rc rc0: vc4 as /devices/platform/soc/fef00700.hdmi/rc/rc0
->>> [    5.601698] mcp251xfd spi1.0 can0: MCP2518FD rev0.0 (-RX_INT -MAB_NO_WARN +CRC_REG +CRC_RX +CRC_TX +ECC -HD c:40.00MHz m:20.00MHz r:17.00MHz e:16.66MHz) successfully initialized.
->>> [    5.633622] input: vc4 as /devices/platform/soc/fef00700.hdmi/rc/rc0/input3
->>> [    5.677448] vc4-drm gpu: bound fef00700.hdmi (ops vc4_hdmi_ops [vc4])
->>> [    5.697059] Registered IR keymap rc-cec
->>> [    5.698682] mcp251xfd spi1.0 can1: renamed from can0
->>> 
->>> The activated overlays in config.txt are
->>> 
->>> dtoverlay=2xMCP2517FD
->>> dtoverlay=2xMCP2518FD-spi0
->>> 
->>> Perhaps anyone of you has a similar config and can tell me what could be wrong?
->>> 
->>> Best,
->>> 
->>> Mickey.
->>> 
->> 
-> 
+diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.c
+index 3b883e607d8b..a579b9b791ed 100644
+--- a/drivers/net/can/xilinx_can.c
++++ b/drivers/net/can/xilinx_can.c
+@@ -1762,7 +1762,12 @@ static int xcan_probe(struct platform_device *pdev)
+ 	spin_lock_init(&priv->tx_lock);
+ 
+ 	/* Get IRQ for the device */
+-	ndev->irq = platform_get_irq(pdev, 0);
++	ret = platform_get_irq(pdev, 0);
++	if (ret < 0)
++		goto err_free;
++
++	ndev->irq = ret;
++
+ 	ndev->flags |= IFF_ECHO;	/* We support local echo */
+ 
+ 	platform_set_drvdata(pdev, ndev);
+-- 
+2.25.1
 
