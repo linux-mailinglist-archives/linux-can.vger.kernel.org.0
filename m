@@ -2,78 +2,112 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B3E3483494
-	for <lists+linux-can@lfdr.de>; Mon,  3 Jan 2022 17:08:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0247A48365E
+	for <lists+linux-can@lfdr.de>; Mon,  3 Jan 2022 18:43:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232986AbiACQIA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 3 Jan 2022 11:08:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34562 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231648AbiACQIA (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 3 Jan 2022 11:08:00 -0500
-X-Greylist: delayed 902 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 03 Jan 2022 08:07:59 PST
-Received: from mx1.llgoewer.de (mx1.llgoewer.de [IPv6:2a01:4f8:1c1c:7d4a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41D8C061761
-        for <linux-can@vger.kernel.org>; Mon,  3 Jan 2022 08:07:59 -0800 (PST)
-DKIM-Signature: a=rsa-sha256; bh=HQTpEwrdJU/NfPTuSMV4COpU2TkOpMPJ8UuwMA7+S0E=;
- c=relaxed/relaxed; d=llgoewer.de;
- h=Subject:Subject:Sender:To:To:Cc:From:From:Date:Date:MIME-Version:MIME-Version:Content-Type:Content-Type:Content-Transfer-Encoding:Reply-To:In-Reply-To:Message-Id:Message-Id:References:Autocrypt:Openpgp;
- i=@llgoewer.de; s=default; t=1641225174; v=1; x=1641657174;
- b=GPLfrxMAzylffzZHagqluXoQaDrg0O4AjRuIVnoiyamQLrOMBbUWY457pvbXWWN80bTs4q9t
- D3qsJhQSwmnlCHXdwxlQEb4rYh/XCSujwC1TY7mXsheupRKSQJKYuvZxwyRbJBcFGBSDKofzhLV
- wLqtQrzUO/pHv6Co4HBrZsPuBwdcdWCZ444xsTJJitaLDZ/mYWyhlsxN042G1JraUxnuVQ+NXhY
- 4Y1ACNMpR7j0fYO6Mtv3L4ZS1ZzdQ6Q5xyJ2VbbUH7LmRTWYcalQKrJrXQhCkMcmCGCjuu84zop
- FjcDvg6we2+691O/zDV9e/5oMLT9qYM042VN4UoCR9MAQ==
-Received: by mx1.llgoewer.de (envelope-sender <maik@llgoewer.de>) with
- ESMTPS id 84ff44d4; Mon, 03 Jan 2022 15:52:54 +0000
-Date:   Mon, 3 Jan 2022 15:52:54 +0000
-From:   Maik =?utf-8?B?QWxsZ8O2d2Vy?= <maik@llgoewer.de>
-To:     linux-can@vger.kernel.org
-Subject: can-isotp: TX stmin violations
-Message-ID: <20220103155254.3htprmrdjur3ke3l@ganymed>
+        id S233127AbiACRnx (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 3 Jan 2022 12:43:53 -0500
+Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.22]:19113 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232142AbiACRnw (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 3 Jan 2022 12:43:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1641231647;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:Date:Message-ID:From:References:To:Subject:Cc:Date:From:
+    Subject:Sender;
+    bh=KKwxdhJOfu6SZYAp/lX7bRKFwGE5TLSfHYc9aed5P7I=;
+    b=C28zAoTdw/OqGTIqGhUNExW9xYFaYpZU9zDOCN7Io1dEr4QD+lyiHZ+jHnDz8e9XAA
+    XKsM0xFUGzT1NpPcJXoIBcn+5xXhz9PiS2N/vvhR5eMuaVrrqeba5F72VktJVpafT0jm
+    KE6pw55lWD+danNWBu++dxz2ZcvbEf4RikZDOaXCCaCF9IEUROv9P1BW8S0IDMAis+8m
+    J8lNplyof0B/ycaKwzLIU7sjGiHA8mf9IFwdkR3ORfZF3td+mCF7uM+3j3uVRzCWL+nn
+    7NaOZcwzFoAdW6keupfpIP39kgFjYqaZDvN/30CN3HHcMWZk6DoyiGpL3OeO/poPv7UW
+    ZvwA==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdd0DIgVuBOfXW6v7w=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPv6:2a00:6020:1cfa:f900::b82]
+    by smtp.strato.de (RZmta 47.35.3 AUTH)
+    with ESMTPSA id k081c3y03HelszZ
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Mon, 3 Jan 2022 18:40:47 +0100 (CET)
+Subject: Re: can-isotp: TX stmin violations
+To:     =?UTF-8?Q?Maik_Allg=c3=b6wer?= <maik@llgoewer.de>,
+        linux-can@vger.kernel.org
+References: <20220103155254.3htprmrdjur3ke3l@ganymed>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <d54c6374-bdf4-dfe8-9e9c-5547a743afdb@hartkopp.net>
+Date:   Mon, 3 Jan 2022 18:40:42 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+In-Reply-To: <20220103155254.3htprmrdjur3ke3l@ganymed>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello everyone,
+Hello Maik,
 
-I'm currently trying to get a device to do isotp.
-Sending and receiving seems to be working perfectly fine.
+On 03.01.22 16:52, Maik Allgöwer wrote:
 
-I'm having the issue that when sending a packet, I can see sporadic
-violations of the receivers requested min tx separation time.
+> Imagine the receiver requests a min tx separation time of 2 ms in a
+> control frame.
+> 
+> I then sometimes get consecutive frames with the following scheme
+> of timestamps on an externally connected logger
+> 
+> ..
+> 
+> 0.0 ms : CF#1
+> 2.5 ms : CF#2
+> 4.0 ms : CF#3
+> 
+> ..
+> 
+> 
+> In this example CF#2 is delayed by .5 ms on the wire while CF#3 is sent .5 ms too early
+> when I look at the delta between CF#2 and CF#3 .
+> 
+> To me it seems that, while the messages are put into some tx-queue at the
+> correct time, they are not actually put on the wire at that exact time leading to CF#3
+> being put on the wire too early.
 
-The pattern always seems to be the following:
+Yes. The CAN frames are sent with a 'minimum' gap which is defined with 
+STmin, see isotp_tx_timer_handler().
 
+Generally the handling and the sending of the frame is processed - and 
+*then* the offset gap of the current time is added. In your case it 
+should always be *slightly more* than 2ms, which is fine from the STmin 
+specification intention.
 
-Imagine the receiver requests a min tx separation time of 2 ms in a
-control frame.
+The 0.5ms delay of CF#2 is likely introduced on CAN driver level or CAN 
+bus level (arbitration?!).
 
-I then sometimes get consecutive frames with the following scheme
-of timestamps on an externally connected logger
+With a virtual CAN it looks like this:
 
-..
+In terminal 1 (STmin = 2ms)
 
-0.0 ms : CF#1
-2.5 ms : CF#2
-4.0 ms : CF#3
+$ isotprecv vcan0 -s 123 -d 321 -m 2
 
-..
+In terminal 2
 
+$ isotpsend vcan0 -d 123 -s 321 -D 30
 
-In this example CF#2 is delayed by .5 ms on the wire while CF#3 is sent .5 ms too early
-when I look at the delta between CF#2 and CF#3 .
+In terminal 3
 
-To me it seems that, while the messages are put into some tx-queue at the
-correct time, they are not actually put on the wire at that exact time leading to CF#3
-being put on the wire too early.
+$ candump vcan0 -td
+  (000.000000)  vcan0  321   [8]  10 1E 01 02 03 04 05 06
+  (000.000030)  vcan0  123   [3]  30 00 02
+  (000.002116)  vcan0  321   [8]  21 07 08 09 0A 0B 0C 0D
+  (000.002238)  vcan0  321   [8]  22 0E 0F 10 11 12 13 14
+  (000.002232)  vcan0  321   [8]  23 15 16 17 18 19 1A 1B
+  (000.002080)  vcan0  321   [4]  24 1C 1D 1E
 
+Which fits exactly the expectations.
 
-I'm probably completely in the wrong here, but I would greatly appreciate any input.
-
-
-Regards,
-Maik
+Best regards,
+Oliver
