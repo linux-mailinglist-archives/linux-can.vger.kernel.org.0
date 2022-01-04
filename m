@@ -2,91 +2,124 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2DD84844FC
-	for <lists+linux-can@lfdr.de>; Tue,  4 Jan 2022 16:44:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 027C04849C5
+	for <lists+linux-can@lfdr.de>; Tue,  4 Jan 2022 22:18:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233900AbiADPoZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 4 Jan 2022 10:44:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43912 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232657AbiADPoZ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 4 Jan 2022 10:44:25 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EFA8C061761
-        for <linux-can@vger.kernel.org>; Tue,  4 Jan 2022 07:44:25 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1n4lz5-0001Md-KE; Tue, 04 Jan 2022 16:44:23 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-b248-f0ee-7a95-76a1.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:b248:f0ee:7a95:76a1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id F2F576D105B;
-        Tue,  4 Jan 2022 15:44:22 +0000 (UTC)
-Date:   Tue, 4 Jan 2022 16:44:22 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org
-Cc:     dario.binacchi@amarulasolutions.com
-Subject: Re: [PATCH v2 1/3] can: flexcan: change RX-FIFO feature at runtime
-Message-ID: <20220104154422.qs5g5guggx3e4x3l@pengutronix.de>
-References: <20220104154133.848784-1-mkl@pengutronix.de>
+        id S232623AbiADVSG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 4 Jan 2022 16:18:06 -0500
+Received: from mout01.posteo.de ([185.67.36.65]:44011 "EHLO mout01.posteo.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232604AbiADVSF (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 4 Jan 2022 16:18:05 -0500
+Received: from submission (posteo.de [89.146.220.130]) 
+        by mout01.posteo.de (Postfix) with ESMTPS id 45EDF240028
+        for <linux-can@vger.kernel.org>; Tue,  4 Jan 2022 22:18:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
+        t=1641331084; bh=46G0f4xIlxWZfmN8CFXK9DuizrBElN0OGzIfWA69QP0=;
+        h=From:Subject:To:Cc:Date:From;
+        b=gWVWPGsBnYTeLhihf4eZ9hNx/7e7tnlblLqWwGO2H7F+QIi5zj6p3uKXXmoIOiJem
+         pccI6fsE2836HlmWtdhxMPlJQSc0sEQ1TG1JPHu8TXx/yGC+hClqzCsekJjNshbLpQ
+         eWVMHDyUasoIJx06hY2pi5GB/cGgPELBxtVDyCtE4zdjno2iYsHUUAVH6Y90Ir8u6R
+         udMFovjWg8+0xvKgtIulyQ2rh4ruJ64Jd1zVBRaXJejHzsyeqpAcH8Ydx5DKDyFmfC
+         liSUZfqrFL2xG/PVIJEOaKUzIelMaoz/jKI9xxnNLOl3COkXkK+BJ3ufYnTlB0/b1r
+         F07q00GeaoD+g==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4JT57H5kVVz9rxP;
+        Tue,  4 Jan 2022 22:18:03 +0100 (CET)
+From:   Patrick Menschel <menschel.p@posteo.de>
+Subject: Re: can-isotp: TX stmin violations
+To:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        =?UTF-8?Q?Maik_Allg=c3=b6wer?= <maik@llgoewer.de>
+Cc:     linux-can@vger.kernel.org
+References: <20220103155254.3htprmrdjur3ke3l@ganymed>
+ <d54c6374-bdf4-dfe8-9e9c-5547a743afdb@hartkopp.net>
+ <27389f5f-1681-7440-15bd-3c67e4e5daa9@posteo.de>
+ <c20468e2-0f9f-bcca-da0f-f3f6470d91be@hartkopp.net>
+Message-ID: <6175074d-6562-91c9-3dce-22ca99815910@posteo.de>
+Date:   Tue,  4 Jan 2022 21:18:03 +0000
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bbukhiqhkro4yy2u"
-Content-Disposition: inline
-In-Reply-To: <20220104154133.848784-1-mkl@pengutronix.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <c20468e2-0f9f-bcca-da0f-f3f6470d91be@hartkopp.net>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="V6UoKhR8NcVBHZbHPcq44c8DD7djczG9X"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--V6UoKhR8NcVBHZbHPcq44c8DD7djczG9X
+Content-Type: multipart/mixed; boundary="YF7WOSEaT8KLcZwOlcTw26QgcswhrElmm";
+ protected-headers="v1"
+From: Patrick Menschel <menschel.p@posteo.de>
+To: Oliver Hartkopp <socketcan@hartkopp.net>, =?UTF-8?Q?Maik_Allg=c3=b6wer?=
+ <maik@llgoewer.de>
+Cc: linux-can@vger.kernel.org
+Message-ID: <6175074d-6562-91c9-3dce-22ca99815910@posteo.de>
+Subject: Re: can-isotp: TX stmin violations
+References: <20220103155254.3htprmrdjur3ke3l@ganymed>
+ <d54c6374-bdf4-dfe8-9e9c-5547a743afdb@hartkopp.net>
+ <27389f5f-1681-7440-15bd-3c67e4e5daa9@posteo.de>
+ <c20468e2-0f9f-bcca-da0f-f3f6470d91be@hartkopp.net>
+In-Reply-To: <c20468e2-0f9f-bcca-da0f-f3f6470d91be@hartkopp.net>
 
---bbukhiqhkro4yy2u
+--YF7WOSEaT8KLcZwOlcTw26QgcswhrElmm
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 04.01.2022 16:41:30, Marc Kleine-Budde wrote:
+Am 04.01.22 um 13:37 schrieb Oliver Hartkopp:
+>> actually spec says *average* gap time should not fall below STMIN.
+>=20
+> I did not see this average gap recommendation so far.
+>=20
+> Only:
+>=20
+> 9.6.5.4
+> SeparationTime minimum (STmin) parameter definition
+>=20
+> The ST min parameter shall be encoded in byte #3 of the FC N_PCI.
+>=20
+> This time is specified by the receiving entity. The STmin parameter
+> value specifies the minimum time
+> gap allowed between the transmissions of two ConsecutiveFrame network
+> protocol data units (CFs).
 
-Forgot to list some changes:
+Hi,
 
-> Changes since RFC:
-> - move driver into subdir
-- replaced memcpy() by direct assignment, do this earlier
-- use priv->devtype_data.quirks where possible
-> - rename flexcan_main.c -> flexcan-core.c
->   (mcp251xfd and tcan4x5x driver have the same naming scheme)
-> - use copyright notice from flexcan.c in flexcan.h
-> - add private flag support to set rx-fifo
-> - remove drvinfo, the kernel will fall back to the default implementation
+the *average* info is from a german translation.
 
-Marc
+There is a note at the end of the section where it states that due to
+jitter in networking, *average* st's comply to STmin.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+I confirm that this note is not in the English ISO15765-2-2016.
 
---bbukhiqhkro4yy2u
-Content-Type: application/pgp-signature; name="signature.asc"
+Regards,
+Patrick
+
+
+
+
+--YF7WOSEaT8KLcZwOlcTw26QgcswhrElmm--
+
+--V6UoKhR8NcVBHZbHPcq44c8DD7djczG9X
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmHUa1MACgkQqclaivrt
-76nqawf+IRiN10DnmBf2iohV61hRf+7tz9Crj+/oB4f8Q4mIbfJBhv90ytefzkSo
-LKM3sIX+JIoi/h4BpA8Pyzb+aSPgBiwUPC5KFrDJ8ISyKfSZcua+qgHRO11s3fRc
-+zOL9Td+nV7T/+IoCjwNsSXzwfUhYBs9pGv1/bZqsBYMQIJoxovX9+w5/bMTqBeH
-FOmx19GX3SeaQlSLfYbgQE11T11UfhZAm7PwMKLzQwv2SDZlpsWpk1QzSXQXXXU1
-aWhYm/fOPmZkMyWlOcDdCTCH7YiycEUvMv94MyyWg3iBunOdbgYc0sySNNzLtt9r
-h8SyKNRaNyIK//cX3JduCxxPgfoKew==
-=dP1S
+wsF5BAABCAAjFiEE6VSgQlqXIUKDwAxHMeZuMM+vuE4FAmHUuYsFAwAAAAAACgkQMeZuMM+vuE6X
+6Q//ZzGFBAVOHaDbWUYbkcGrwLAQO56yxIKk+CYewIXwdqg6Iso5okYohXtUe8KJg16YNo4R1Qet
+7WoUJCJrmRncWyxFrimQHmXsqTMW+f8XlJmrgX2FCTDFz3o42aB1gA2DlD2/R2S7nLFbGrIXc6VH
+iekMItlaT9y6yb6cgKoTji6RivYHu5t4RvrfZJ+ShPfT5AyZMN3mSrGmec7RRSwrDHhSQXwXb4iF
+RJngc0jStHy0GwY+aVw+kYGfT3Fn0Kd5WpsbLARtrhiMU5jKbBX+z/mG3cRTQX0Z0hguJDhfVsBr
+AwisX4Dl6OuZslbXnMoHzRoP8rdPHUj5zzyV0qaJ3VTgu9BZ750FjdoUQhSFbyT2N95Saxj/qUVY
+PUNbKIWxJAGzp22/0N3MAUAliQzOfqe0oZoM/uXhgEFua9Os6V1PLPRkFChDDcMWNLWTDbZWL0CM
+N//ZvwwuWEFMx0MJ9NBGB84+Fv1nKrAhcedUK8OmaAKP7xxI3YMsZa61tX2S21byfDrWqFgEVSTx
+kiJ5K5NxPeTvPcUeaYSGNJL3ZxXf11RL+ABAw7BNDa9GphwecoVSHKaqjmW2YOrKjpKs7C5v7kWI
+VeEY1UCuYvI0JqQoWs9ZkqUedJKHb+xJG/lD7KzKO+QTW7ymyvMC+tVii/kqhhalPf303gxfx4nq
+RuU=
+=xFy9
 -----END PGP SIGNATURE-----
 
---bbukhiqhkro4yy2u--
+--V6UoKhR8NcVBHZbHPcq44c8DD7djczG9X--
