@@ -2,105 +2,88 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 100CA4841B1
-	for <lists+linux-can@lfdr.de>; Tue,  4 Jan 2022 13:37:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 045F5484240
+	for <lists+linux-can@lfdr.de>; Tue,  4 Jan 2022 14:20:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231889AbiADMh4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 4 Jan 2022 07:37:56 -0500
-Received: from mo4-p00-ob.smtp.rzone.de ([81.169.146.161]:22098 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiADMhz (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 4 Jan 2022 07:37:55 -0500
-X-Greylist: delayed 68224 seconds by postgrey-1.27 at vger.kernel.org; Tue, 04 Jan 2022 07:37:55 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1641299873;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=kowAl4l6qSQP3J49nSbfFzFFQ6Vtn2AdsSvIV3Ul8B0=;
-    b=BlUEA9vW0sdsSB3g9esWeBEpia9lUzt2dpkRrA4qYscKeIhZnoNMdwckEtWImIAF2/
-    y8ONvxUK5w9Vk3ssnYo09tk3Pyl50E9gIGd4Wz4fMiQkdmvrD0dmTbKIBd1ZhN+DhByg
-    z9TNsI9WxaLjfXVTliy7Ydu/SGCdiXbhW16NboF7n6aKDBye2UkaWnCKS2HyeU71X6II
-    JpyU37UU8ttL21Svxoe8P4gK7nHEIFj+mJ9u6MBIqWZlc2Hn/RPpihv7v/0Cp2+0BFh6
-    UUmnfb7RfXc2jXBYV7vh6ZIkIBHPH5Ouhq+YHN68xCaRhOs44G1FomeN3IJzO2NpzTIl
-    f1IQ==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdd0DIgVuBOfXW6v7w=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPv6:2a00:6020:1cfa:f900::b82]
-    by smtp.strato.de (RZmta 47.35.3 AUTH)
-    with ESMTPSA id k081c3y04Cbrvqe
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Tue, 4 Jan 2022 13:37:53 +0100 (CET)
-Subject: Re: can-isotp: TX stmin violations
-To:     Patrick Menschel <menschel.p@posteo.de>,
-        =?UTF-8?Q?Maik_Allg=c3=b6wer?= <maik@llgoewer.de>
-Cc:     linux-can@vger.kernel.org
-References: <20220103155254.3htprmrdjur3ke3l@ganymed>
- <d54c6374-bdf4-dfe8-9e9c-5547a743afdb@hartkopp.net>
- <27389f5f-1681-7440-15bd-3c67e4e5daa9@posteo.de>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <c20468e2-0f9f-bcca-da0f-f3f6470d91be@hartkopp.net>
-Date:   Tue, 4 Jan 2022 13:37:53 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S232236AbiADNUt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 4 Jan 2022 08:20:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37944 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231189AbiADNUq (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 4 Jan 2022 08:20:46 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8D8C061761
+        for <linux-can@vger.kernel.org>; Tue,  4 Jan 2022 05:20:44 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id b13so148389435edd.8
+        for <linux-can@vger.kernel.org>; Tue, 04 Jan 2022 05:20:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=w/GkwF7Da5XIamKReKsj0HsZhSVJSApc2Gxuc5P0F58=;
+        b=Orcz1Ulcpgxql5P3geTM4KS23mA4oqud5iffrm073yQbrJxGUBcEMP5qDl5yBdDLQI
+         AkkRJeK0J2hxjMSkDJ/LI0n8tZaXDcEU8IsmptJNOyU/nfjPGY6b6EPr6vi/WVV7vlPW
+         dcqTdvgIn4kjdLIVjHudOJWHuI2jvgO4PwYlA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=w/GkwF7Da5XIamKReKsj0HsZhSVJSApc2Gxuc5P0F58=;
+        b=JIJHdbtZ/mmSVtYj4MLH9C7UPCxLxFLmtUM7AOcKuJXRRzWAURNf+JNLcx2sZzCr8W
+         wPo67nxkUsa8qmkUF6CNk2yl8RbDSV/ytgtzrMkdegfbOWM2GSDZisprGLpBkfZC1z5W
+         c2V0PHWpBtMQ+YAXb+EWvIQ2WzWvu7LdFGI51UhARYOA9UzNsmGyxja4Nbe2Gcm2yzWh
+         VMdcmn4m/J2+djgOhawtQtr7MQ5jn05T1GVKo3M/Yjd/wf/greRpMeZmMIdvMfNk7UyC
+         ewkefg6lty7yiDZVNwifZBXPh3lpXxYUX13c95KyELBkIOTH7uUExIvFDP/Du19IvFr9
+         tUdA==
+X-Gm-Message-State: AOAM533nmY01ye+ayxoelVQwn5K9wv5m8F5C9xKnrnqUWmx24J+YR6IN
+        677WKv+V1GjzzhxguutE+ut8NQ==
+X-Google-Smtp-Source: ABdhPJyJMtxLvzivI2st83HvXyyfiTOFhY2WMHimu9EkqSxFO2LU/qKMIFCwsOUEHgckh0mm3Sj7Hw==
+X-Received: by 2002:a05:6402:491:: with SMTP id k17mr48221773edv.333.1641302442702;
+        Tue, 04 Jan 2022 05:20:42 -0800 (PST)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-95-244-92-231.retail.telecomitalia.it. [95.244.92.231])
+        by smtp.gmail.com with ESMTPSA id y13sm14765575edq.77.2022.01.04.05.20.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 05:20:42 -0800 (PST)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Michael Trimarchi <michael@amarulasolutions.com>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: [RFC PATCH 0/2] Change flexcan features at runtime
+Date:   Tue,  4 Jan 2022 14:20:24 +0100
+Message-Id: <20220104132026.3062763-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <27389f5f-1681-7440-15bd-3c67e4e5daa9@posteo.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Patrick,
+This series was born from the review https://lkml.org/lkml/2022/1/2/127
+by Marc Kleine-Budde. The ethtool module is minimal and lacks the
+callback to change the setting at runtime (this has yet to be defined).
+I'm certainly not an expert but might it make sense to use the
+set_features() callback? Although I understand that it belongs to
+`struct net_device_ops' and not to 'struct ethtool_ops'.
 
-On 04.01.22 13:06, Patrick Menschel wrote:
-> Am 03.01.22 um 18:40 schrieb Oliver Hartkopp:
->>> In this example CF#2 is delayed by .5 ms on the wire while CF#3 is
->>> sent .5 ms too early
->>> when I look at the delta between CF#2 and CF#3 .
->>>
->>> To me it seems that, while the messages are put into some tx-queue at the
->>> correct time, they are not actually put on the wire at that exact time
->>> leading to CF#3
->>> being put on the wire too early.
->>
->> Yes. The CAN frames are sent with a 'minimum' gap which is defined with
->> STmin, see isotp_tx_timer_handler().
->>
->> Generally the handling and the sending of the frame is processed - and
->> *then* the offset gap of the current time is added. In your case it
->> should always be *slightly more* than 2ms, which is fine from the STmin
->> specification intention.
-> 
-> Hi,
-> 
-> actually spec says *average* gap time should not fall below STMIN.
 
-I did not see this average gap recommendation so far.
+Dario Binacchi (2):
+  can: flexcan: allow to change quirks at runtime
+  can: flexcan: add ethtool support
 
-Only:
+ drivers/net/can/Makefile                      |   3 +
+ drivers/net/can/flexcan.h                     | 107 +++++++++++++
+ drivers/net/can/flexcan_ethtool.c             |  29 ++++
+ drivers/net/can/{flexcan.c => flexcan_main.c} | 144 ++++--------------
+ 4 files changed, 166 insertions(+), 117 deletions(-)
+ create mode 100644 drivers/net/can/flexcan.h
+ create mode 100644 drivers/net/can/flexcan_ethtool.c
+ rename drivers/net/can/{flexcan.c => flexcan_main.c} (92%)
 
-9.6.5.4
-SeparationTime minimum (STmin) parameter definition
+-- 
+2.32.0
 
-The ST min parameter shall be encoded in byte #3 of the FC N_PCI.
-
-This time is specified by the receiving entity. The STmin parameter 
-value specifies the minimum time
-gap allowed between the transmissions of two ConsecutiveFrame network 
-protocol data units (CFs).
-
-The term "average" can not be found in the entire ISO15765-2-2016 
-specification ...
-
-> 
-> That .5 is actually not bad at all.
-> I have seen some autosar manufacturers stretching the spec up to the
-> point where you request stmin=5 and get st=10 by design.
-> 
-
-Best regards,
-Oliver
