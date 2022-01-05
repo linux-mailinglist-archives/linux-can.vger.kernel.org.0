@@ -2,122 +2,97 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D11D048561F
-	for <lists+linux-can@lfdr.de>; Wed,  5 Jan 2022 16:44:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFDFC485673
+	for <lists+linux-can@lfdr.de>; Wed,  5 Jan 2022 17:08:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241633AbiAEPni (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 5 Jan 2022 10:43:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59276 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241644AbiAEPne (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 5 Jan 2022 10:43:34 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0F29C03400A
-        for <linux-can@vger.kernel.org>; Wed,  5 Jan 2022 07:43:11 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1n58RR-0002z1-Uf
-        for linux-can@vger.kernel.org; Wed, 05 Jan 2022 16:43:10 +0100
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 513126D1CCD
-        for <linux-can@vger.kernel.org>; Wed,  5 Jan 2022 15:43:06 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 395746D1C9E;
-        Wed,  5 Jan 2022 15:43:03 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 7a567df4;
-        Wed, 5 Jan 2022 15:43:02 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org
-Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Thomas Kopp <thomas.kopp@microchip.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 13/13] can: mcp251xfd: introduce and make use of mcp251xfd_is_fd_mode()
-Date:   Wed,  5 Jan 2022 16:43:00 +0100
-Message-Id: <20220105154300.1258636-14-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220105154300.1258636-1-mkl@pengutronix.de>
-References: <20220105154300.1258636-1-mkl@pengutronix.de>
+        id S241830AbiAEQIS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 5 Jan 2022 11:08:18 -0500
+Received: from mo4-p00-ob.smtp.rzone.de ([81.169.146.219]:41891 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241809AbiAEQIR (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 5 Jan 2022 11:08:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1641398894;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=wMOphNO2iCS4BVDTyUoxJzNBZE8Y0fpB03xFtA6ms6k=;
+    b=Y1Dq574EZaVLqZC+n/BFGsXAknMnt7dmEFMslWCJrjc0ljuidPlrpdQGqIqexymMbH
+    fRyFHt/Ob68Wfo1JmsEmX/tko42QAQeONvHybtoXWzxmJVVn6+QY8F1OKUo22iOGBiZh
+    KZyxww3wUxTp8Ls0bBeQzUE/8FadZZ+731TLYnhfEyBkjpymooP2y5w63JzZ+hTOiUuX
+    E2/eM2AJJX3Y44XpMTtdY1MM0WSu9pYjcNYxoB2kaLDnOOnXTlle6Igwb2WkcAvQOYPx
+    tGA8PSjZIate/bhLiPrseUybTdo9CuDlog721vsdFAMNQ598CbO2aiA82wq1e8Saiwuk
+    KiVA==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdd0DIgVuBOfXW6v7w=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPv6:2a00:6020:1cfa:f900::b82]
+    by smtp.strato.de (RZmta 47.37.4 AUTH)
+    with ESMTPSA id 42952fy05G8E0Tk
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Wed, 5 Jan 2022 17:08:14 +0100 (CET)
+Subject: Re: [PATCH RFC] can: isotp: convert struct tpcon::{idx,len} to
+ unsigned int
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+Cc:     syzbot+4c63f36709a642f801c5@syzkaller.appspotmail.com
+References: <20220105132429.1170627-1-mkl@pengutronix.de>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <95302dc5-3b44-dc0a-96d4-ab52584e9faa@hartkopp.net>
+Date:   Wed, 5 Jan 2022 17:08:09 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <20220105132429.1170627-1-mkl@pengutronix.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This patch replaces the open coded check, if the chip's FIFOs are
-configured for CAN-FD mode, by the newly introduced function
-mcp251xfd_is_fd_mode().
-
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/spi/mcp251xfd/mcp251xfd-chip-fifo.c | 4 ++--
- drivers/net/can/spi/mcp251xfd/mcp251xfd-ring.c      | 3 +--
- drivers/net/can/spi/mcp251xfd/mcp251xfd.h           | 6 ++++++
- 3 files changed, 9 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-chip-fifo.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-chip-fifo.c
-index ce94dd744a93..2f9a623d381d 100644
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-chip-fifo.c
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-chip-fifo.c
-@@ -34,7 +34,7 @@ mcp251xfd_chip_rx_fifo_init_one(const struct mcp251xfd_priv *priv,
- 		MCP251XFD_REG_FIFOCON_RXOVIE |
- 		MCP251XFD_REG_FIFOCON_TFNRFNIE;
- 
--	if (priv->can.ctrlmode & (CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_FD))
-+	if (mcp251xfd_is_fd_mode(priv))
- 		fifo_con |= FIELD_PREP(MCP251XFD_REG_FIFOCON_PLSIZE_MASK,
- 				       MCP251XFD_REG_FIFOCON_PLSIZE_64);
- 	else
-@@ -84,7 +84,7 @@ int mcp251xfd_chip_fifo_init(const struct mcp251xfd_priv *priv)
- 		MCP251XFD_REG_FIFOCON_TXEN |
- 		MCP251XFD_REG_FIFOCON_TXATIE;
- 
--	if (priv->can.ctrlmode & (CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_FD))
-+	if (mcp251xfd_is_fd_mode(priv))
- 		val |= FIELD_PREP(MCP251XFD_REG_FIFOCON_PLSIZE_MASK,
- 				  MCP251XFD_REG_FIFOCON_PLSIZE_64);
- 	else
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-ring.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-ring.c
-index ffb3691c4ba7..92f9e9b01289 100644
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-ring.c
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-ring.c
-@@ -209,8 +209,7 @@ int mcp251xfd_ring_alloc(struct mcp251xfd_priv *priv)
- 	int ram_free, i;
- 
- 	tef_obj_size = sizeof(struct mcp251xfd_hw_tef_obj);
--	/* listen-only mode works like FD mode */
--	if (priv->can.ctrlmode & (CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_FD)) {
-+	if (mcp251xfd_is_fd_mode(priv)) {
- 		tx_obj_num = MCP251XFD_TX_OBJ_NUM_CANFD;
- 		tx_obj_size = sizeof(struct mcp251xfd_hw_tx_obj_canfd);
- 		rx_obj_size = sizeof(struct mcp251xfd_hw_rx_obj_canfd);
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-index 597786a85621..f551c900803e 100644
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-@@ -626,6 +626,12 @@ MCP251XFD_IS(2517);
- MCP251XFD_IS(2518);
- MCP251XFD_IS(251X);
- 
-+static inline bool mcp251xfd_is_fd_mode(const struct mcp251xfd_priv *priv)
-+{
-+	/* listen-only mode works like FD mode */
-+	return priv->can.ctrlmode & (CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_FD);
-+}
-+
- static inline u8 mcp251xfd_first_byte_set(u32 mask)
- {
- 	return (mask & 0x0000ffff) ?
--- 
-2.34.1
 
 
+On 05.01.22 14:24, Marc Kleine-Budde wrote:
+> In isotp_rcv_ff() 32 bit of data received over the network is assigned
+> to struct tpcon::len. Later in that function the length is checked for
+> the maximal supported length against MAX_MSG_LENGTH.
+> 
+> As struct tpcon::len is an "int" this check does not work, if the
+> provided length overflows the "int".
+> 
+> Later on struct tpcon::idx is compared against struct tpcon::len.
+> 
+> To fix this problem this patch converts both struct tpcon::{idx,len}
+> to unsigned int.
+> 
+> Fixes: e057dd3fc20f ("can: add ISO 15765-2:2016 transport protocol")
+> \# Cc: stable@vger.kernel.org
+> Cc: Oliver Hartkopp <socketcan@hartkopp.net>
+
+Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
+
+Thanks Marc!
+
+> Reported-by: syzbot+4c63f36709a642f801c5@syzkaller.appspotmail.com
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> ---
+>   net/can/isotp.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/net/can/isotp.c b/net/can/isotp.c
+> index df6968b28bf4..02cbcb2ecf0d 100644
+> --- a/net/can/isotp.c
+> +++ b/net/can/isotp.c
+> @@ -119,8 +119,8 @@ enum {
+>   };
+>   
+>   struct tpcon {
+> -	int idx;
+> -	int len;
+> +	unsigned int idx;
+> +	unsigned int len;
+>   	u32 state;
+>   	u8 bs;
+>   	u8 sn;
+> 
