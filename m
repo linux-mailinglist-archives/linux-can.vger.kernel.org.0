@@ -2,44 +2,44 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28261485617
+	by mail.lfdr.de (Postfix) with ESMTP id BA50B485619
 	for <lists+linux-can@lfdr.de>; Wed,  5 Jan 2022 16:44:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241634AbiAEPnf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 5 Jan 2022 10:43:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59278 "EHLO
+        id S241629AbiAEPng (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 5 Jan 2022 10:43:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241653AbiAEPnU (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 5 Jan 2022 10:43:20 -0500
+        with ESMTP id S241627AbiAEPnV (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 5 Jan 2022 10:43:21 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C04DC034001
-        for <linux-can@vger.kernel.org>; Wed,  5 Jan 2022 07:43:09 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6902BC034002
+        for <linux-can@vger.kernel.org>; Wed,  5 Jan 2022 07:43:10 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1n58RP-0002wz-VT
+        id 1n58RQ-0002xi-OY
         for linux-can@vger.kernel.org; Wed, 05 Jan 2022 16:43:08 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id E86656D1CB9
-        for <linux-can@vger.kernel.org>; Wed,  5 Jan 2022 15:43:04 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id 8D2936D1CC2
+        for <linux-can@vger.kernel.org>; Wed,  5 Jan 2022 15:43:05 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 836EB6D1C93;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 9ABF16D1C95;
         Wed,  5 Jan 2022 15:43:02 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id f6a92f16;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id d5e0d015;
         Wed, 5 Jan 2022 15:43:01 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     linux-can@vger.kernel.org
 Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
         Thomas Kopp <thomas.kopp@microchip.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 06/13] can: mcp251xfd: mcp251xfd_handle_rxovif(): denote RX overflow message to debug + add rate limiting
-Date:   Wed,  5 Jan 2022 16:42:53 +0100
-Message-Id: <20220105154300.1258636-7-mkl@pengutronix.de>
+Subject: [PATCH 07/13] can: mcp251xfd: mcp251xfd.h: sort function prototypes
+Date:   Wed,  5 Jan 2022 16:42:54 +0100
+Message-Id: <20220105154300.1258636-8-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220105154300.1258636-1-mkl@pengutronix.de>
 References: <20220105154300.1258636-1-mkl@pengutronix.de>
@@ -53,43 +53,31 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-A RX overflow usually happens during high system load. Printing
-overflow messages to the kernel log, which on embedded systems often
-is outputted on the serial console, even increases the system load.
-
-To decrease the system load in these situations, denote the messages
-to debug level and wrap them with net_ratelimit().
+The .c files in the Makefile are ordered alphabetically. This patch
+groups the function prototypes by their corresponding .c file and
+brings the into the same order.
 
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ drivers/net/can/spi/mcp251xfd/mcp251xfd.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-index a01a3fc3b13c..105426dcf065 100644
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-@@ -1652,12 +1652,15 @@ static int mcp251xfd_handle_rxovif(struct mcp251xfd_priv *priv)
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
+index 0f322dabaf65..8a6e07ba66d5 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
+@@ -849,10 +849,10 @@ mcp251xfd_get_rx_linear_len(const struct mcp251xfd_rx_ring *ring)
+ 	     (n) < (priv)->rx_ring_num; \
+ 	     (n)++, (ring) = *((priv)->rx + (n)))
  
- 		/* If SERRIF is active, there was a RX MAB overflow. */
- 		if (priv->regs_status.intf & MCP251XFD_REG_INT_SERRIF) {
--			netdev_info(priv->ndev,
--				    "RX-%d: MAB overflow detected.\n",
--				    ring->nr);
-+			if (net_ratelimit())
-+				netdev_dbg(priv->ndev,
-+					   "RX-%d: MAB overflow detected.\n",
-+					   ring->nr);
- 		} else {
--			netdev_info(priv->ndev,
--				    "RX-%d: FIFO overflow.\n", ring->nr);
-+			if (net_ratelimit())
-+				netdev_dbg(priv->ndev,
-+					   "RX-%d: FIFO overflow.\n",
-+					   ring->nr);
- 		}
- 
- 		err = regmap_update_bits(priv->map_reg,
+-int mcp251xfd_regmap_init(struct mcp251xfd_priv *priv);
+ u16 mcp251xfd_crc16_compute2(const void *cmd, size_t cmd_size,
+ 			     const void *data, size_t data_size);
+ u16 mcp251xfd_crc16_compute(const void *data, size_t data_size);
++int mcp251xfd_regmap_init(struct mcp251xfd_priv *priv);
+ void mcp251xfd_skb_set_timestamp(const struct mcp251xfd_priv *priv,
+ 				 struct sk_buff *skb, u32 timestamp);
+ void mcp251xfd_timestamp_init(struct mcp251xfd_priv *priv);
 -- 
 2.34.1
 
