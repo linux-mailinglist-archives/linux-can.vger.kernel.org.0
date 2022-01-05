@@ -2,137 +2,202 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DBA84851B4
-	for <lists+linux-can@lfdr.de>; Wed,  5 Jan 2022 12:20:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 632A54851FA
+	for <lists+linux-can@lfdr.de>; Wed,  5 Jan 2022 12:44:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239640AbiAELU1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 5 Jan 2022 06:20:27 -0500
-Received: from mail-il1-f197.google.com ([209.85.166.197]:54131 "EHLO
-        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbiAELU0 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 5 Jan 2022 06:20:26 -0500
-Received: by mail-il1-f197.google.com with SMTP id x8-20020a92dc48000000b002b2abc6e1cbso21233510ilq.20
-        for <linux-can@vger.kernel.org>; Wed, 05 Jan 2022 03:20:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=V68sfoNxZdTodjvbLf8yyxMv294L7ESP0hArLZD7o74=;
-        b=Wx6cglcJ6O81DrX6+3KYNU9DLSnWfoOjXmhOUP0huu2Z0xxmI0wkZnZbReUni/V4fP
-         tcAHdbSxU8dOFmUTLU8XTlyrzqfsWBmRUkQovZ8Zlkr6WMeEMnh3h5pVaiClZUVNPDto
-         Yly9hL7w90NR8HYgI+HfVEoxP6sE9dZvF3IwkK2RYKnZR4GJCNbummHuWoQBWme2eLqU
-         m/nR1Uj0HudJPyMrkpPKo3t0UGZ/e3qBsNAT7fa/7J2GPIki8LT0DrwJumTc/fvDRJmp
-         2DdYIyLebIkWX2+V0vM4gO3/bz3PzwNP/KJXS9mv8W0506a9pfFLlJpAq236SHmwY1nm
-         THOg==
-X-Gm-Message-State: AOAM533Sgc4AVH7lg0MMdIGKh4C5wH7yWnEbiySLtkyjqXlOb7cArY4J
-        pus2UvUvjLsEaJvffBMAq9XeHSWPgMBsYLuuJGM5ELKXrpdq
-X-Google-Smtp-Source: ABdhPJzDqSYr7M4I3MlKGdtYeZtqI1DD3gKHt2IDSbbIwXVPyJ9zyNKIBETlaLBOK0a9seWxyNUx10UUue9ZVjelQfdqYsMS9Cvu
-MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:501:: with SMTP id d1mr24461933ils.285.1641381626346;
- Wed, 05 Jan 2022 03:20:26 -0800 (PST)
-Date:   Wed, 05 Jan 2022 03:20:26 -0800
-In-Reply-To: <0000000000007ea16705d0cfbb53@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c7845605d4d3f0a0@google.com>
-Subject: Re: [syzbot] kernel BUG in pskb_expand_head
-From:   syzbot <syzbot+4c63f36709a642f801c5@syzkaller.appspotmail.com>
-To:     anthony.l.nguyen@intel.com, changbin.du@intel.com,
-        christian.brauner@ubuntu.com, davem@davemloft.net,
-        edumazet@google.com, eric.dumazet@gmail.com, hawk@kernel.org,
-        hkallweit1@gmail.com, intel-wired-lan-owner@osuosl.org,
-        intel-wired-lan@lists.osuosl.org, jesse.brandeburg@intel.com,
-        kuba@kernel.org, linux-can@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mkl@pengutronix.de,
+        id S239768AbiAELok (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 5 Jan 2022 06:44:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60748 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229622AbiAELoj (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 5 Jan 2022 06:44:39 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA804C061761
+        for <linux-can@vger.kernel.org>; Wed,  5 Jan 2022 03:44:39 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1n54iF-0003Vf-RG; Wed, 05 Jan 2022 12:44:15 +0100
+Received: from pengutronix.de (2a03-f580-87bc-d400-7899-4998-133d-b4b9.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:7899:4998:133d:b4b9])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 6D7DF6D18F8;
+        Wed,  5 Jan 2022 11:44:11 +0000 (UTC)
+Date:   Wed, 5 Jan 2022 12:44:10 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     syzbot <syzbot+4c63f36709a642f801c5@syzkaller.appspotmail.com>
+Cc:     anthony.l.nguyen@intel.com, davem@davemloft.net,
+        eric.dumazet@gmail.com, hawk@kernel.org,
+        intel-wired-lan-owner@osuosl.org, intel-wired-lan@lists.osuosl.org,
+        jesse.brandeburg@intel.com, kuba@kernel.org,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
         netdev@vger.kernel.org, socketcan@hartkopp.net,
-        syzkaller-bugs@googlegroups.com, yajun.deng@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] kernel BUG in pskb_expand_head
+Message-ID: <20220105114410.brzea3f5flgn5nl2@pengutronix.de>
+References: <0000000000007ea16705d0cfbb53@google.com>
+ <0000000000000fbea205d388d749@google.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pvmbkuebz5fmhav3"
+Content-Disposition: inline
+In-Reply-To: <0000000000000fbea205d388d749@google.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
 
-HEAD commit:    c9e6606c7fe9 Linux 5.16-rc8
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=148351c3b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=32f9fa260d7413b4
-dashboard link: https://syzkaller.appspot.com/bug?extid=4c63f36709a642f801c5
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15435e2bb00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12f4508db00000
+--pvmbkuebz5fmhav3
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The issue was bisected to:
+On 19.12.2021 16:19:20, syzbot wrote:
+>  skb_over_panic net/core/skbuff.c:118 [inline]
+>  skb_over_panic net/core/skbuff.c:118 [inline] net/core/skbuff.c:1986
+>  skb_put.cold+0x24/0x24 net/core/skbuff.c:1986 net/core/skbuff.c:1986
+>  isotp_rcv_cf net/can/isotp.c:570 [inline]
+>  isotp_rcv_cf net/can/isotp.c:570 [inline] net/can/isotp.c:668
+>  isotp_rcv+0xa38/0x1e30 net/can/isotp.c:668 net/can/isotp.c:668
 
-commit e4b8954074f6d0db01c8c97d338a67f9389c042f
-Author: Eric Dumazet <edumazet@google.com>
-Date:   Tue Dec 7 01:30:37 2021 +0000
+> struct tpcon {
+> 	int idx;
+> 	int len;
+        ^^^
+> 	u32 state;
+> 	u8 bs;
+> 	u8 sn;
+> 	u8 ll_dl;
+> 	u8 buf[MAX_MSG_LENGTH + 1];
+> };
+>=20
+> static int isotp_rcv_ff(struct sock *sk, struct canfd_frame *cf, int ae)
+> {
 
-    netlink: add net device refcount tracker to struct ethnl_req_info
+[...]
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=109e6fcbb00000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=129e6fcbb00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=149e6fcbb00000
+> 	/* Check for FF_DL escape sequence supporting 32 bit PDU length */
+> 	if (so->rx.len) {
+> 		ff_pci_sz =3D FF_PCI_SZ12;
+> 	} else {
+> 		/* FF_DL =3D 0 =3D> get real length from next 4 bytes */
+> 		so->rx.len =3D cf->data[ae + 2] << 24;
+> 		so->rx.len +=3D cf->data[ae + 3] << 16;
+> 		so->rx.len +=3D cf->data[ae + 4] << 8;
+> 		so->rx.len +=3D cf->data[ae + 5];
+> 		ff_pci_sz =3D FF_PCI_SZ32;
+> 	}
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+4c63f36709a642f801c5@syzkaller.appspotmail.com
-Fixes: e4b8954074f6 ("netlink: add net device refcount tracker to struct ethnl_req_info")
+Full 32 Bit PDUs don't work with struct tpcon::len being an "int". I
+think converting it to "unsigned int" should be done.
 
-skbuff: skb_over_panic: text:ffffffff88235fb8 len:4096 put:4096 head:ffff888021cb8400 data:ffff888021cb8400 tail:0x1000 end:0xc0 dev:<NULL>
-------------[ cut here ]------------
-kernel BUG at net/core/skbuff.c:113!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 19 Comm: ksoftirqd/1 Not tainted 5.16.0-rc8-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:skb_panic+0x16c/0x16e net/core/skbuff.c:113
-Code: f8 4c 8b 4c 24 10 8b 4b 70 41 56 45 89 e8 4c 89 e2 41 57 48 89 ee 48 c7 c7 e0 4b ad 8a ff 74 24 10 ff 74 24 20 e8 6e 24 c2 ff <0f> 0b e8 74 92 38 f8 4c 8b 64 24 18 e8 da 47 7f f8 48 c7 c1 80 58
-RSP: 0018:ffffc90000d979e0 EFLAGS: 00010286
-RAX: 000000000000008b RBX: ffff888021ccb500 RCX: 0000000000000000
-RDX: ffff88801196d700 RSI: ffffffff815f0948 RDI: fffff520001b2f2e
-RBP: ffffffff8aad58c0 R08: 000000000000008b R09: 0000000000000000
-R10: ffffffff815ea6ee R11: 0000000000000000 R12: ffffffff88235fb8
-R13: 0000000000001000 R14: ffffffff8aad4ba0 R15: 00000000000000c0
-FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f886c8cc718 CR3: 000000007ad6d000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- skb_over_panic net/core/skbuff.c:118 [inline]
- skb_put.cold+0x24/0x24 net/core/skbuff.c:1990
- isotp_rcv_cf net/can/isotp.c:570 [inline]
- isotp_rcv+0xa38/0x1e30 net/can/isotp.c:668
- deliver net/can/af_can.c:574 [inline]
- can_rcv_filter+0x445/0x8d0 net/can/af_can.c:635
- can_receive+0x31d/0x580 net/can/af_can.c:665
- can_rcv+0x120/0x1c0 net/can/af_can.c:696
- __netif_receive_skb_one_core+0x114/0x180 net/core/dev.c:5465
- __netif_receive_skb+0x24/0x1b0 net/core/dev.c:5579
- process_backlog+0x2a5/0x6c0 net/core/dev.c:6455
- __napi_poll+0xaf/0x440 net/core/dev.c:7023
- napi_poll net/core/dev.c:7090 [inline]
- net_rx_action+0x801/0xb40 net/core/dev.c:7177
- __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
- run_ksoftirqd kernel/softirq.c:921 [inline]
- run_ksoftirqd+0x2d/0x60 kernel/softirq.c:913
- smpboot_thread_fn+0x645/0x9c0 kernel/smpboot.c:164
- kthread+0x405/0x4f0 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-Modules linked in:
----[ end trace 9f06028ec4daf4be ]---
-RIP: 0010:skb_panic+0x16c/0x16e net/core/skbuff.c:113
-Code: f8 4c 8b 4c 24 10 8b 4b 70 41 56 45 89 e8 4c 89 e2 41 57 48 89 ee 48 c7 c7 e0 4b ad 8a ff 74 24 10 ff 74 24 20 e8 6e 24 c2 ff <0f> 0b e8 74 92 38 f8 4c 8b 64 24 18 e8 da 47 7f f8 48 c7 c1 80 58
-RSP: 0018:ffffc90000d979e0 EFLAGS: 00010286
-RAX: 000000000000008b RBX: ffff888021ccb500 RCX: 0000000000000000
-RDX: ffff88801196d700 RSI: ffffffff815f0948 RDI: fffff520001b2f2e
-RBP: ffffffff8aad58c0 R08: 000000000000008b R09: 0000000000000000
-R10: ffffffff815ea6ee R11: 0000000000000000 R12: ffffffff88235fb8
-R13: 0000000000001000 R14: ffffffff8aad4ba0 R15: 00000000000000c0
-FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f886c8cc718 CR3: 000000007ad6d000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[...]
 
+> }
+>=20
+> static int isotp_rcv_cf(struct sock *sk, struct canfd_frame *cf, int ae,
+> 			struct sk_buff *skb)
+> {
+> 	struct isotp_sock *so =3D isotp_sk(sk);
+> 	struct sk_buff *nskb;
+> 	int i;
+>=20
+> 	if (so->rx.state !=3D ISOTP_WAIT_DATA)
+> 		return 0;
+>=20
+> 	/* drop if timestamp gap is less than force_rx_stmin nano secs */
+> 	if (so->opt.flags & CAN_ISOTP_FORCE_RXSTMIN) {
+> 		if (ktime_to_ns(ktime_sub(skb->tstamp, so->lastrxcf_tstamp)) <
+> 		    so->force_rx_stmin)
+> 			return 0;
+>=20
+> 		so->lastrxcf_tstamp =3D skb->tstamp;
+> 	}
+>=20
+> 	hrtimer_cancel(&so->rxtimer);
+>=20
+> 	/* CFs are never longer than the FF */
+> 	if (cf->len > so->rx.ll_dl)
+> 		return 1;
+>=20
+> 	/* CFs have usually the LL_DL length */
+> 	if (cf->len < so->rx.ll_dl) {
+> 		/* this is only allowed for the last CF */
+> 		if (so->rx.len - so->rx.idx > so->rx.ll_dl - ae - N_PCI_SZ)
+> 			return 1;
+> 	}
+>=20
+> 	if ((cf->data[ae] & 0x0F) !=3D so->rx.sn) {
+> 		/* wrong sn detected - report 'illegal byte sequence' */
+> 		sk->sk_err =3D EILSEQ;
+> 		if (!sock_flag(sk, SOCK_DEAD))
+> 			sk_error_report(sk);
+>=20
+> 		/* reset rx state */
+> 		so->rx.state =3D ISOTP_IDLE;
+> 		return 1;
+> 	}
+> 	so->rx.sn++;
+> 	so->rx.sn %=3D 16;
+>=20
+> 	for (i =3D ae + N_PCI_SZ; i < cf->len; i++) {
+> 		so->rx.buf[so->rx.idx++] =3D cf->data[i];
+> 		if (so->rx.idx >=3D so->rx.len)
+> 			break;
+> 	}
+>=20
+> 	if (so->rx.idx >=3D so->rx.len) {
+> 		/* we are done */
+> 		so->rx.state =3D ISOTP_IDLE;
+>=20
+> 		if ((so->opt.flags & ISOTP_CHECK_PADDING) &&
+> 		    check_pad(so, cf, i + 1, so->opt.rxpad_content)) {
+> 			/* malformed PDU - report 'not a data message' */
+> 			sk->sk_err =3D EBADMSG;
+> 			if (!sock_flag(sk, SOCK_DEAD))
+> 				sk_error_report(sk);
+> 			return 1;
+> 		}
+>=20
+> 		nskb =3D alloc_skb(so->rx.len, gfp_any());
+> 		if (!nskb)
+> 			return 1;
+>=20
+> 		memcpy(skb_put(nskb, so->rx.len), so->rx.buf,
+                       ^^^^^^^
+> 		       so->rx.len);
+
+This is where the skb_over_panic() happens.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--pvmbkuebz5fmhav3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmHVhIcACgkQqclaivrt
+76mBngf7Bm/34wnau/lFJUMXxyFtcxMVjizZum0kCMtMp2ZnYDP1z1vz0vQLYwfL
++QMi7i4lNu2Be7FLZrB4Vqh0wDrtw5nv67Bff3UnWoMlyZCr6Oq1rbEdWue+F1uk
+SE/TideImjzKVlcYze/p3dCTYPhnu2h2nvjQ7iRfApiOrGEYyRDawCG2rhcOO2ke
+og60OLmP4bv7sfGLzpGZtnAzR+GxnLFC4pa7I1QH4ry62uzBTlDHE8g1ebM2bwfB
+q/jcxK28uPZ7pU30y3DF/obRvJ1PUPBKfYr461VNHPLxg2CVh/3JJDfNAr6VcdvS
+uTcgP18dcs5u2hMK2yWlmT6Yfi4Qow==
+=30q3
+-----END PGP SIGNATURE-----
+
+--pvmbkuebz5fmhav3--
