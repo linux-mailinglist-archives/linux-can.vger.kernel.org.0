@@ -2,98 +2,84 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50825485D2B
-	for <lists+linux-can@lfdr.de>; Thu,  6 Jan 2022 01:30:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EC5A485E05
+	for <lists+linux-can@lfdr.de>; Thu,  6 Jan 2022 02:20:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343798AbiAFAaX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 5 Jan 2022 19:30:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38746 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343870AbiAFAaJ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 5 Jan 2022 19:30:09 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D029C061245
-        for <linux-can@vger.kernel.org>; Wed,  5 Jan 2022 16:30:09 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id m13so832282pji.3
-        for <linux-can@vger.kernel.org>; Wed, 05 Jan 2022 16:30:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bluerivertech.com; s=google;
-        h=from:to:cc:subject:date:message-id:reply-to:mime-version
-         :content-transfer-encoding;
-        bh=sItKhyjYiBTIjJbWyCsjJdRLFFEaR2+GFLFbvvEQQ8g=;
-        b=sXNtGJJAQGNGLYM3ZJbRzUrX2NXrOAoLBfdN4Zp/iPp+uusm2oqybEc5NfQC0PYgQB
-         969nm4Al16dFnS7Wft0RHUI16jeFwBlHYSb8qqmIvNqghC7HPdYonl/mblupKnoB2B+G
-         IEEGJKBhKx5I9IkutugK1JWF5SG9EAGZ56w/Xyb739WkGNw8CT/tzGwWBq9XWRSTeM8o
-         oXeS3kqDTqY66tlG1Mkl4b7HpuFpAyTzIU/DNL/IifBxjlURL8dlUqIRinnQdRXFvuj+
-         FXRExsJkRjEkb1FkLxTIYhxVukUdVhjiP9inogL1PaCE7I86KU3lIDFbaHPQFL34fwV8
-         bF2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :mime-version:content-transfer-encoding;
-        bh=sItKhyjYiBTIjJbWyCsjJdRLFFEaR2+GFLFbvvEQQ8g=;
-        b=ikcrF+E3LbSsuqs1EwavCi4ZiB7wkN1ppO1S3fqvIzKYQlNuyeM5flWraVufAv9Ht1
-         GkZS0RvRmifIzzBWrHBy4aDa25QsKQZ0x7m5JDjZKGLhlMa52Fbx+6Y9PzgU5H2WlFE4
-         p4n3wQkMFM8731uXiuueuxjMgqR14B7ENnYjXlYEfd/yVxbTNcgPWSOcN2eA2JICTppQ
-         IWI3fA9brpp9Dv7Ny2lPmSfwpyZG8qGP4If+IfSe5wH489NlxALzm56hyVffQ67jelPl
-         397TJPW6FkZzUlQYGnpBYS//mlLCpuApmNpqNsXhV49/qLdpbyM+3vNFcxtLVlyHBlzI
-         G2tg==
-X-Gm-Message-State: AOAM532FKGFMcbw2Si7WRcafDo1/Veh2as0SRbHfHGo4XseycigAWPa/
-        yrC2zbzlZOOvrox4gLjpvB0XMw==
-X-Google-Smtp-Source: ABdhPJxTyCrS99bXEs/Aq31tycZyMFH9/2cuo3exypyaTaOHipoMZ+y1Metycy+IFqMStfXLdiR+Rg==
-X-Received: by 2002:a17:90b:1c91:: with SMTP id oo17mr7104592pjb.58.1641429009060;
-        Wed, 05 Jan 2022 16:30:09 -0800 (PST)
-Received: from localhost.localdomain (c-73-231-33-37.hsd1.ca.comcast.net. [73.231.33.37])
-        by smtp.gmail.com with ESMTPSA id x19sm162272pgi.19.2022.01.05.16.30.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jan 2022 16:30:08 -0800 (PST)
-From:   Brian Silverman <brian.silverman@bluerivertech.com>
-Cc:     Brian Silverman <bsilver16384@gmail.com>,
-        Brian Silverman <brian.silverman@bluerivertech.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        linux-can@vger.kernel.org (open list:CAN NETWORK DRIVERS),
-        netdev@vger.kernel.org (open list:NETWORKING DRIVERS),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] can: gs_usb: Zero-initialize flags
-Date:   Wed,  5 Jan 2022 16:29:50 -0800
-Message-Id: <20220106002952.25883-1-brian.silverman@bluerivertech.com>
-X-Mailer: git-send-email 2.20.1
-Reply-To: Brian Silverman <bsilver16384@gmail.com>
+        id S1344309AbiAFBUO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 5 Jan 2022 20:20:14 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:43300 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344308AbiAFBUK (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 5 Jan 2022 20:20:10 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D21461A11;
+        Thu,  6 Jan 2022 01:20:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B41FAC36AE9;
+        Thu,  6 Jan 2022 01:20:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641432009;
+        bh=U48RtyVvcZAb11ESIWJVKP2J8q2PyXH7STc+hMqc/JI=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=oauJHd2MfyOUYEi+eNsBBH8VLAAKF1YWFruBOfceckDs6GAcZfdpgRE3rFeHwlWzS
+         /LDkZVE9jo1xIP5Uqu3JgjxBy9cxQBXzZp6K9zmchvLcrzFBwOdU51I5DDcA4izSF2
+         GcL/KWuhWyRPfMGN1UHyXt6gM1p9RzvFFiCvB3AmdrOhGXuQhPqoklfr8z6LOucACU
+         Hx3ioHbhl811L+MaCOxqKlJNeN0WTHj32hI1yVbJ4RKQDb3zE8LCpj5XYz7HsJ8eqS
+         qNJX1qvrP++8pqEpBmnRvOIhFKpj/9lxQm3s87ZmLnVjJYxMnYzMq0GVjZhctJOQS5
+         MZLbvXwlayqVA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 99D64F7940B;
+        Thu,  6 Jan 2022 01:20:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Subject: Re: [PATCH net 1/2] can: gs_usb: fix use of uninitialized variable,
+ detach device on reception of invalid USB data
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164143200962.6490.5453127499700459621.git-patchwork-notify@kernel.org>
+Date:   Thu, 06 Jan 2022 01:20:09 +0000
+References: <20220105205443.1274709-2-mkl@pengutronix.de>
+In-Reply-To: <20220105205443.1274709-2-mkl@pengutronix.de>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        linux-can@vger.kernel.org, kernel@pengutronix.de,
+        stable@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-No information is deliberately sent here in host->device communications,
-but the open-source candleLight firmware echoes it back, which can
-result in the GS_CAN_FLAG_OVERFLOW flag being set and generating
-spurious ERRORFRAMEs.
+Hello:
 
-Signed-off-by: Brian Silverman <brian.silverman@bluerivertech.com>
----
- drivers/net/can/usb/gs_usb.c | 1 +
- 1 file changed, 1 insertion(+)
+This series was applied to netdev/net.git (master)
+by Marc Kleine-Budde <mkl@pengutronix.de>:
 
-diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
-index 1b400de00f51..cc4ad8d59bd7 100644
---- a/drivers/net/can/usb/gs_usb.c
-+++ b/drivers/net/can/usb/gs_usb.c
-@@ -507,6 +507,7 @@ static netdev_tx_t gs_can_start_xmit(struct sk_buff *skb,
- 
- 	hf->echo_id = idx;
- 	hf->channel = dev->channel;
-+	hf->flags = 0;
- 
- 	cf = (struct can_frame *)skb->data;
- 
+On Wed,  5 Jan 2022 21:54:42 +0100 you wrote:
+> The received data contains the channel the received data is associated
+> with. If the channel number is bigger than the actual number of
+> channels assume broken or malicious USB device and shut it down.
+> 
+> This fixes the error found by clang:
+> 
+> | drivers/net/can/usb/gs_usb.c:386:6: error: variable 'dev' is used
+> |                                     uninitialized whenever 'if' condition is true
+> |         if (hf->channel >= GS_MAX_INTF)
+> |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> | drivers/net/can/usb/gs_usb.c:474:10: note: uninitialized use occurs here
+> |                           hf, dev->gs_hf_size, gs_usb_receive_bulk_callback,
+> |                               ^~~
+> 
+> [...]
 
-base-commit: d2f38a3c6507b2520101f9a3807ed98f1bdc545a
+Here is the summary with links:
+  - [net,1/2] can: gs_usb: fix use of uninitialized variable, detach device on reception of invalid USB data
+    https://git.kernel.org/netdev/net/c/4a8737ff0687
+  - [net,2/2] can: isotp: convert struct tpcon::{idx,len} to unsigned int
+    https://git.kernel.org/netdev/net/c/5f33a09e769a
+
+You are awesome, thank you!
 -- 
-2.20.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
