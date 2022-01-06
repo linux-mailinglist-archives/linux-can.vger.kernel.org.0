@@ -2,128 +2,262 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8739B48633B
-	for <lists+linux-can@lfdr.de>; Thu,  6 Jan 2022 11:54:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D4EF48637A
+	for <lists+linux-can@lfdr.de>; Thu,  6 Jan 2022 12:08:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238152AbiAFKyU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 6 Jan 2022 05:54:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37006 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238102AbiAFKyU (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 6 Jan 2022 05:54:20 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD4DCC061245
-        for <linux-can@vger.kernel.org>; Thu,  6 Jan 2022 02:54:19 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1n5QPR-0005B6-P5; Thu, 06 Jan 2022 11:54:17 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-fd40-da16-8525-0d68.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:fd40:da16:8525:d68])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id CC6316D2518;
-        Thu,  6 Jan 2022 10:54:16 +0000 (UTC)
-Date:   Thu, 6 Jan 2022 11:54:15 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-can@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] can: flexcan: change RX-FIFO feature at runtime
-Message-ID: <20220106105415.pdmrdgnx6p2tyff6@pengutronix.de>
-References: <20220104154133.848784-1-mkl@pengutronix.de>
- <CABGWkvo+h2CASM7q8z3UXRofrY7enVXS6njFKnKyqRUjgkbB_A@mail.gmail.com>
- <20220105101414.kg7mwp2uop6rsfbv@pengutronix.de>
- <CABGWkvo-tuYDDJv+EBzPhf5RGCyt5eMD14ePq9C9Y4de_=fX=Q@mail.gmail.com>
+        id S238272AbiAFLID (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 6 Jan 2022 06:08:03 -0500
+Received: from mail-yb1-f170.google.com ([209.85.219.170]:39883 "EHLO
+        mail-yb1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238271AbiAFLIC (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 6 Jan 2022 06:08:02 -0500
+Received: by mail-yb1-f170.google.com with SMTP id d1so6298883ybh.6;
+        Thu, 06 Jan 2022 03:08:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=akSXOJTvhkoL+q7qfV0Sgx52WY/d9LuGeFB94caA1hQ=;
+        b=k9I9G2N6jjOc6cprB2nXcIt2Sey1myjpTykRfAZ0Eb88pFIt7EovIRgMMPpFaryD9t
+         I/jJFG0ftcRZEB+uaH3FAbc0XvSZ7smHFG3cDymVYLaGhoqOsyYSHX7SQyO+tnWj9WYl
+         EM6Q/MqZKSOFODxU7YXGv4XfNf+tYcAjGAR242eMpyyAIAQHdxF4Vv1MYUxnCLM6WwG8
+         MRt0f25kLRs3x7YYyMYwq0l1GM4xOoGZYPUwcc4Lb5H7OTt7So7vxgcW7jLzmVrLozky
+         r1Ta2R/4j7ATShs/2X0oRjeIn7iL0M05hAvysy5/LFjAd121LTPyRJxn7hRqkbUjKtem
+         N7ug==
+X-Gm-Message-State: AOAM530cEXyWwad05HH/afHz/ztlLfxLSplMRCJ4KFvMK72eu5b8pLFI
+        Xt1VPgeNhCkvIc+Cuxd3+ujjBMwglOK0kDqwYpkDKuF48X4=
+X-Google-Smtp-Source: ABdhPJxHYQGGFrzqrexNXMq8ag8ZroJDK38JCp75B121Jm/aAZAzzS5sACJ3WYHSMVy5I3QW6/cnJlShZQFAo8BT2Qw=
+X-Received: by 2002:a25:9205:: with SMTP id b5mr55180742ybo.2.1641467281703;
+ Thu, 06 Jan 2022 03:08:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ty3jegmrw4f65u6z"
-Content-Disposition: inline
-In-Reply-To: <CABGWkvo-tuYDDJv+EBzPhf5RGCyt5eMD14ePq9C9Y4de_=fX=Q@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+References: <20220106102937.2824-1-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20220106102937.2824-1-mailhol.vincent@wanadoo.fr>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Thu, 6 Jan 2022 20:07:50 +0900
+Message-ID: <CAMZ6Rq+hrAu=mDPHw1yXhw9UKhQiSe3E9p6agudOzqbgo9sDtA@mail.gmail.com>
+Subject: Re: [RFC PATCH v3] iplink_can: add ctrlmode_{supported,_static} to
+ the "--details --json" output
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Ahern <dsahern@gmail.com>,
+        Stephen Hemminger <stephen@networkplumber.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi,
 
---ty3jegmrw4f65u6z
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+First of all, let me which a happy new year to the members of the
+linux-can mailing list (and to the members of the other mailings
+in CC as well).
 
-On 06.01.2022 11:40:52, Dario Binacchi wrote:
-> > I was hoping that we can find a better string that better represents
-> > what this option does.
-> >
-> > > Do you think it makes sense to explicitly RTR ("rtr-notify") instead
-> > > of RxFIFO (rx-fifo)? And if it makes sense to make it clear that it
-> > > occurs at the expense of a smaller number of messages allocated for
-> > > reception?
-> >
-> > I see it the other way round, probably biased by the existing driver :)
->=20
-> Could this change of perspective then not require the addition of a new
-> quirk that allows to change between rx-fifo and rx-mailbox mode?
+I am not fully confident of how to format the output. Above patch
+is my best shot, but I would like to gather other people's
+opinion on two topics before dropping the RFC tag.
 
-ACK - I only want to enable switching between rx-fifo and rx-mailbox
-mode for the devices that currently use rx-fifo mode. It makes no sense
-to switch from rx-mailbox to rx-fifo mode if your flexcan IP core can
-receive RTR messages in rx-mailbox mode.
+On Tue, 6 Jan. 2022 at 19:29, Vincent Mailhol
+<mailhol.vincent@wanadoo.fr> wrote:
+> This patch is the userland counterpart of [1]. Indeed, [1] allows the
+> can netlink interface to report the CAN controller capabilities.
+>
+> Previously, only the options which were switched on were reported
+> (i.e. can_priv::ctrlmode). Here, we add two additional pieces of
+> information to the json report:
+>
+>   - ctrlmode_supported: the options that can be modified by netlink
+>
+>   - ctrlmode_static: option which are statically enabled by the driver
+>     (i.e. can not be turned off)
+>
+> For your information, we borrowed the naming convention from struct
+> can_priv [2].
+>
+> Contrary to the ctrlmode, the ctrlmode_{supported,_static} are only
+> reported in the json context. The reason is that this newly added
+> information can quickly become very verbose and we do not want to
+> overload the default output. You can think of the "ip --details link
+> show canX" output as the verbose mode and the "ip --details --json
+> link show canX" output as the *very* verbose mode.
+>
+> *Example:*
+>
+> This is how the output would look like for a dummy driver which would
+> have:
+>
+>   - CAN_CTRLMODE_LOOPBACK, CAN_CTRLMODE_LISTENONLY,
+>     CAN_CTRLMODE_3_SAMPLES, CAN_CTRLMODE_FD, CAN_CTRLMODE_CC_LEN8_DLC
+>     and TDC-AUTO supported by the driver
+>
+>   - CAN_CTRLMODE_CC_LEN8_DLC turned on by the user
+>
+>   - CAN_CTRLMODE_FD_NON_ISO statically enabled by the driver
+>
+> | $ ip link set can0 type can cc-len8-dlc on
+> | $ ip --details --json --pretty link show can0
+> | [ {
+> |         "ifindex": 1,
+> |         "ifname": "can0",
+> |         "flags": [ "NOARP","ECHO" ],
+> |         "mtu": 16,
+> |         "qdisc": "noop",
+> |         "operstate": "DOWN",
+> |         "linkmode": "DEFAULT",
+> |         "group": "default",
+> |         "txqlen": 10,
+> |         "link_type": "can",
+> |         "promiscuity": 0,
+> |         "min_mtu": 0,
+> |         "max_mtu": 0,
+> |         "linkinfo": {
+> |             "info_kind": "can",
+> |             "info_data": {
+> |                 "ctrlmode": [ "FD-NON-ISO","CC-LEN8-DLC" ],
+> |                 "ctrlmode_supported": [ "LOOPBACK","LISTEN-ONLY","TRIPLE-SAMPLING","FD","CC-LEN8-DLC","TDC-AUTO" ],
+> |                 "ctrlmode_static": [ "FD-NON-ISO" ],
 
-There even is the limitation that rx-fifo mode doesn't support CAN-FD
-mode....but the driver checks for this.
+Here, I propose to just add two new members to the json
+object "info_data".
 
-> > The user wants to use more buffers at the expense of loosing the ability
-> > to receive RTR messages.
->=20
-> Can / should it be documented in some way other than the commit message?
+One alternative option I am thinking of is to group everything
+under a new json object called "ctrlmode" like that:
 
-Yes - Documentation/networking/device_drivers/can/ looks like a good place.
+|             "info_data": {
+|                 "ctrlmode": {
+|                     "enabled": [ "FD-NON-ISO","CC-LEN8-DLC" ],
+|                     "supported": [
+"LOOPBACK","LISTEN-ONLY","TRIPLE-SAMPLING","FD","CC-LEN8-DLC","TDC-AUTO"
+],
+|                     "static": [ "FD-NON-ISO" ]
+|                 },
+|                 "state": "STOPPED",
+|                 ...
 
-> > I've talked to one of my colleges and we came to the conclusion that the
-> > driver should present the user the option to opt out from RTR reception.
-> >
-> > If the user has opted out from RTR reception the driver can do internal
-> > optimization, such as switching from FIFO to mailbox mode.
->=20
-> Is it really always true? In the case of imx6 can we still remain in
-> mailbox mode
-> and enable / disable RTR reception through Remote Request Storing (CTRL2
-> [RRS]) bit?
->=20
-> > What about "rtr-rx" or "rx-rtr"?
->=20
-> I prefer "rx-rtr"
+The drawback of doing so is that it would break any tools relying
+on the current format to retrieve the ctrlmode enabled
+features. For example, this command:
 
-Ok, I'll change the patch. Can you write send a doc RFC patch. Place it
-in the path mentioned above, please use rst format.
+| ip --details --json --pretty link show can0 | jq
+'.[].linkinfo.info_data.ctrlmode'
 
-regards,
-Marc
+will yield a different result before and after the change.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+So here is my question: it is acceptable to break current format?
+If yes, I would prefer the alternate solution listed here, if
+not, I will keep things as proposed in this RFC.
 
---ty3jegmrw4f65u6z
-Content-Type: application/pgp-signature; name="signature.asc"
+> |                 "state": "STOPPED",
+> |                 "restart_ms": 0,
+> |                 "bittiming_const": {
+> |                     "name": "DUMMY_CAN_DEV",
+> |                     "tseg1": {
+> |                         "min": 2,
+> |                         "max": 256
+> |                     },
+> |                     "tseg2": {
+> |                         "min": 2,
+> |                         "max": 128
+> |                     },
+> |                     "sjw": {
+> |                         "min": 1,
+> |                         "max": 128
+> |                     },
+> |                     "brp": {
+> |                         "min": 1,
+> |                         "max": 512
+> |                     },
+> |                     "brp_inc": 1
+> |                 },
+> |                 "data_bittiming_const": {
+> |                     "name": "DUMMY_CAN_DEV",
+> |                     "tseg1": {
+> |                         "min": 2,
+> |                         "max": 32
+> |                     },
+> |                     "tseg2": {
+> |                         "min": 1,
+> |                         "max": 16
+> |                     },
+> |                     "sjw": {
+> |                         "min": 1,
+> |                         "max": 8
+> |                     },
+> |                     "brp": {
+> |                         "min": 1,
+> |                         "max": 32
+> |                     },
+> |                     "brp_inc": 1,
+> |                     "tdc": {
+> |                         "tdco": {
+> |                             "min": 0,
+> |                             "max": 127
+> |                         },
+> |                         "tdcf": {
+> |                             "min": 0,
+> |                             "max": 127
+> |                         }
+> |                     }
+> |                 },
+> |                 "clock": 80000000
+> |             }
+> |         },
+> |         "num_tx_queues": 1,
+> |         "num_rx_queues": 1,
+> |         "gso_max_size": 65536,
+> |         "gso_max_segs": 65535,
+> |         "parentbus": "usb",
+> |         "parentdev": "1-10:1.1"
+> |     } ]
+>
+> As mentioned above, the default output remains unchanged:
+>
+> | $ ip --details link show can0
+> | 1: can0: <NOARP,ECHO> mtu 16 qdisc noop state DOWN mode DEFAULT group default qlen 10
+> |     link/can  promiscuity 0 minmtu 0 maxmtu 0
+> |     can <FD-NON-ISO,CC-LEN8-DLC> state STOPPED restart-ms 0
 
------BEGIN PGP SIGNATURE-----
+If had a long thought and couldn't come with anything pretty for
+the default (non-json) output. My best idea is to use some
+suffixes, something like that:
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmHWylQACgkQqclaivrt
-76n6BwgAiWpeqUuSS4ENTLhrgEcj1qw6ivhw8zk58c0yruuVO6udRRHqVLtg43DS
-q7Ct9uL+7Npz7nhNp6zAA4H9ANvWTU4Fe+PL1GkL2thOJfzx9A9pWZ8tHJgec6p8
-Fsey0/BCgA/qi3gOfDWH4ZdgQW6FjmXwt4ZRahdaXVcQ3Q+ohaCLSwbMEhaqmzHC
-M3tmujDzaGKX0vNH1W6ePW5NqJPDDhqm7975q3p+jyIYvBoUsnR22zoVZqkqH0b7
-WH1oLdpfHXI6ajcdEcX/6nYlMnkzRKxBj+Ogv4aFBpHziJls6FkH/kBWQp7hqg2y
-3l0LcrIuI+/LptUZXkPTqWUPt1YiWg==
-=oOZn
------END PGP SIGNATURE-----
+    '-' to indicate that the feature is supported but disabled.
 
---ty3jegmrw4f65u6z--
+    '+' to indicate that the feature is supported and enabled.
+
+    '*' to indicate a static feature.
+
+If I reuse the example used in above json output, that would
+become:
+
+| $ ip --details link show can0
+| 1: can0: <NOARP,ECHO> mtu 16 qdisc noop state DOWN mode DEFAULT
+group default qlen 10
+|     link/can  promiscuity 0 minmtu 0 maxmtu 0
+|     can <LOOPBACK-,LISTEN-ONLY-,TRIPLE-SAMPLING-,FD-,FD-NON-ISO*,CC-LEN8-DLC+,TDC-AUTO->
+state STOPPED restart-ms 0
+|         DUMMY_CAN_DEV: tseg1 2..256 tseg2 2..128 sjw 1..128 brp
+1..512 brp_inc 1
+
+I don't think this is easy to read.
+
+Another option is to output three arrays, similar to the json
+output. But I think that this is too busy. So my preferred
+solution is to do no changes. Does this make sense? Or would you
+still prefer to have the enabled and static features reported in
+the normal output as well? And if yes, in which format?
+
+> |         DUMMY_CAN_DEV: tseg1 2..256 tseg2 2..128 sjw 1..128 brp 1..512 brp_inc 1
+> |         DUMMY_CAN_DEV: dtseg1 2..32 dtseg2 1..16 dsjw 1..8 dbrp 1..32 dbrp_inc 1
+> |         tdco 0..127 tdcf 0..127
+> |         clock 80000000 numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 parentbus usb parentdev 1-10:1.1
+
+That's all for my current doubts. If I receive no feedback by the
+end of the week, I will assume that everyone is happy with this
+RFC and will resend the patch without the RFC tag to have it
+included in iproute 5.17.
+
+Thank you,
+
+
+Yours sincerely,
+Vincent Mailhol
