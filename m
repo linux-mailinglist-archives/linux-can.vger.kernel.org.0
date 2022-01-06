@@ -2,109 +2,77 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9631048639A
-	for <lists+linux-can@lfdr.de>; Thu,  6 Jan 2022 12:19:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A734863E8
+	for <lists+linux-can@lfdr.de>; Thu,  6 Jan 2022 12:48:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238372AbiAFLSz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 6 Jan 2022 06:18:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42494 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238382AbiAFLSz (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 6 Jan 2022 06:18:55 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14FE8C061245
-        for <linux-can@vger.kernel.org>; Thu,  6 Jan 2022 03:18:55 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1n5QnC-0007yE-RK; Thu, 06 Jan 2022 12:18:50 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-fd40-da16-8525-0d68.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:fd40:da16:8525:d68])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 3B4226D2552;
-        Thu,  6 Jan 2022 11:18:48 +0000 (UTC)
-Date:   Thu, 6 Jan 2022 12:18:47 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Angelo Dureghello <angelo@kernel-space.org>
-Cc:     gerg@linux-m68k.org, geert@linux-m68k.org,
-        linux-m68k@vger.kernel.org, linux-can@vger.kernel.org,
-        qiangqing.zhang@nxp.com,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Subject: mcf5441x: flexcan FIFO and mailbox mode (was: Re: [PATCH v5 5/5]
- can: flexcan: add mcf5441x support)
-Message-ID: <20220106111847.zjkrghehxr7mrkkt@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zwauvc2xjplx623i"
-Content-Disposition: inline
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+        id S238525AbiAFLsN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 6 Jan 2022 06:48:13 -0500
+Received: from relmlor2.renesas.com ([210.160.252.172]:16187 "EHLO
+        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S238456AbiAFLsM (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 6 Jan 2022 06:48:12 -0500
+X-IronPort-AV: E=Sophos;i="5.88,266,1635174000"; 
+   d="scan'208";a="106230362"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie6.idc.renesas.com with ESMTP; 06 Jan 2022 20:48:11 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 9A3BF425C76E;
+        Thu,  6 Jan 2022 20:48:08 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Pavel Machek <pavel@denx.de>, linux-renesas-soc@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] can: rcar_canfd: Make sure we free CAN network device
+Date:   Thu,  6 Jan 2022 11:48:00 +0000
+Message-Id: <20220106114801.20563-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Make sure we free CAN network device in the error path. There are several
+jumps to fail label after allocating the CAN network device successfully.
+This patch places the free_candev() under fail label so that in failure
+path a jump to fail label frees the CAN network device.
 
---zwauvc2xjplx623i
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fixes: 76e9353a80e9 ("can: rcar_canfd: Add support for RZ/G2L family")
+Reported-by: Pavel Machek <pavel@denx.de>
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+ drivers/net/can/rcar/rcar_canfd.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Hello Angelo,
+diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
+index ff9d0f5ae0dd..388521e70837 100644
+--- a/drivers/net/can/rcar/rcar_canfd.c
++++ b/drivers/net/can/rcar/rcar_canfd.c
+@@ -1640,8 +1640,7 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
+ 	ndev = alloc_candev(sizeof(*priv), RCANFD_FIFO_DEPTH);
+ 	if (!ndev) {
+ 		dev_err(&pdev->dev, "alloc_candev() failed\n");
+-		err = -ENOMEM;
+-		goto fail;
++		return -ENOMEM;
+ 	}
+ 	priv = netdev_priv(ndev);
+ 
+@@ -1735,8 +1734,8 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
+ 
+ fail_candev:
+ 	netif_napi_del(&priv->napi);
+-	free_candev(ndev);
+ fail:
++	free_candev(ndev);
+ 	return err;
+ }
+ 
+-- 
+2.17.1
 
-On 02.07.2021 11:48:41, Angelo Dureghello wrote:
-> Add flexcan support for NXP ColdFire mcf5441x family.
->=20
-> This flexcan module is quite similar to imx6 flexcan module, but
-> with some exceptions:
->=20
-> - 3 separate interrupt sources, MB, BOFF and ERR,
-> - implements 16 mb only,
-> - m68k architecture is not supporting devicetrees, so a
->   platform data check/case has been added,
-> - ColdFire is m68k, so big-endian cpu, with a little-endian flexcan
->   module.
-
-we're currently discussing the option that the user of a flexcan can
-switch between RX-FIFO and RX via mailboxes.
-
-I noticed that the mcf5441x currently is configured for FIFO mode. Have
-you tested the driver in mailbox mode?
-
-The reason that some cores use the FIFO mode is, that they cannot
-receive RTR CAN frames in mailbox mode. According to the IP core
-overview table, the mcf5441x can receive RTR frames.
-
-If the IP core supports reception of RTR frames, mailbox mode should be
-used, as it makes use of more buffers (16-2) instead of 6 in FIFO mode.
-Should we activate mailbox mode for the mcf5441x?
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---zwauvc2xjplx623i
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmHW0BQACgkQqclaivrt
-76nYYgf+L7XNXnaqqxsDKE0fUL2odEuMaMlm+oatg7rgSbA5XBjG6GqTZiF3lCJJ
-Ntf2rz4XXoIFlei8QRgC6b08/66La6b/titJUijEEk5R9JB2TXfTQOK0MoOC2xcf
-3BmAOpvJ13BmuUYF/be8QwfiXJ2K7Hpfume3JNhelLyYR6sPK6PM3n5HiW7XgkXx
-eUpG9rF29c5EHd3W8+DTCMdqmNABs66AfIHKjsB2q0/iEd6jmDkmRDpmPRD9a/vS
-zmhj+SjOY25uMEEE/41f+cnT/0Xwt83UyEF1eniZJIEPbTQn7+5eQLh2G8ced7We
-BM1DC1tI3Z7O/MbE3greq85bEaM6OQ==
-=nAb5
------END PGP SIGNATURE-----
-
---zwauvc2xjplx623i--
