@@ -2,49 +2,45 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDEA0487CE9
-	for <lists+linux-can@lfdr.de>; Fri,  7 Jan 2022 20:20:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E1FE487D0D
+	for <lists+linux-can@lfdr.de>; Fri,  7 Jan 2022 20:31:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230475AbiAGTU1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 7 Jan 2022 14:20:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54450 "EHLO
+        id S230155AbiAGTbL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 7 Jan 2022 14:31:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbiAGTU1 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 7 Jan 2022 14:20:27 -0500
+        with ESMTP id S232392AbiAGTbL (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 7 Jan 2022 14:31:11 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44108C061574
-        for <linux-can@vger.kernel.org>; Fri,  7 Jan 2022 11:20:27 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0226C061574
+        for <linux-can@vger.kernel.org>; Fri,  7 Jan 2022 11:31:10 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1n5umh-00036Z-Fo; Fri, 07 Jan 2022 20:20:19 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-a092-a409-034d-fe76.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:a092:a409:34d:fe76])
+        id 1n5uxB-0004K2-Eg
+        for linux-can@vger.kernel.org; Fri, 07 Jan 2022 20:31:09 +0100
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id CA48F6D33C5
+        for <linux-can@vger.kernel.org>; Fri,  7 Jan 2022 19:31:07 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 90EC06D3397;
-        Fri,  7 Jan 2022 19:20:15 +0000 (UTC)
-Date:   Fri, 7 Jan 2022 20:20:14 +0100
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 172276D33BA;
+        Fri,  7 Jan 2022 19:31:07 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 614a271e;
+        Fri, 7 Jan 2022 19:31:06 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
-        Coiby Xu <coiby.xu@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        M Chetan Kumar <m.chetan.kumar@intel.com>,
-        linux-doc@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [RFC PATCH 0/2] Add the first documentation for a CAN driver
-Message-ID: <20220107192014.pyxgn22ztrppr7zx@pengutronix.de>
-References: <20220107081306.3681899-1-dario.binacchi@amarulasolutions.com>
+To:     linux-can@vger.kernel.org
+Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Subject: [PATCH v2 1/7] can: flexcan: change RX-FIFO feature at runtime
+Date:   Fri,  7 Jan 2022 20:30:58 +0100
+Message-Id: <20220107193105.1699523-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fzbitevbj72paz57"
-Content-Disposition: inline
-In-Reply-To: <20220107081306.3681899-1-dario.binacchi@amarulasolutions.com>
+Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -53,43 +49,52 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello,
 
---fzbitevbj72paz57
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Here's the v2 of Dario's and my patches to switch of RTR reception to
+make use of bigger RX buffer:
 
-On 07.01.2022 09:13:04, Dario Binacchi wrote:
-> The series was born from the need to document the enabling at runtime
-> reception of RTR frames for the Flexcan CAN controller.
-> For more details see https://lore.kernel.org/all/20220106105415.pdmrdgnx6=
-p2tyff6@pengutronix.de/
+Show available private flags:
 
-Thanks for the work, looks good. I've added some more text and send a
-v3.
+| $ sudo ethtool --show-priv-flags can0
+| Private flags for can0:
+| rx-rtr: on
+
+Change private flag:
+
+| $ sudo ethtool --set-priv-flags can0 rx-rtr off
+| netlink error: Device or resource busy
+
+...does not work if interface is up.
+
+Shut down interface and change "rx-rtr":
+
+| $ sudo ip link set dev can0 down
+| $ sudo ethtool --set-priv-flags can0 rx-rtr off
+| $ sudo ethtool --show-priv-flags can0
+| Private flags for can0:
+| rx-rtr: off
 
 regards,
 Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Changes since v2:
+- add missing variable initialization, tnx Dario
+- renamed flag rx-fifo -> rx-rtr
+- renamed existing quirks
+- added more quirks to describe controller
+- added Dario's documentation patches
 
---fzbitevbj72paz57
-Content-Type: application/pgp-signature; name="signature.asc"
+Changes since RFC:
+- move driver into subdir
+- replaced memcpy() by direct assignment, do this earlier
+- use priv->devtype_data.quirks where possible
+- rename flexcan_main.c -> flexcan-core.c
+  (mcp251xfd and tcan4x5x driver have the same naming scheme)
+- use copyright notice from flexcan.c in flexcan.h
+- add private flag support to set rx-fifo
+- remove drvinfo, the kernel will fall back to the default implementation
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmHYkmsACgkQqclaivrt
-76lebQf/fyVNMM16d957P9Z+Bc7bY0HlxfqFts6+IEQGJfc147sFPcsLbW2+5h2T
-/pZ09W9ff2I3S3P5b9rIg/G1UyxGs3/IKrLQPB4cWSvjIC+9b3prQ/w3NKXKJjyR
-JLrJDLr8qd8JuYIEhW/NMfbN6mJWZfmw6GCTHIpgaVaevcJpS92iQ74p9Eae43So
-w1ihZ+8/kOc0sxvejJyRwWWmOvKCmTe02EpTFApAlJFhJR+jFf5WLmx3Z8lk7K/3
-DwP03dLpYkDUuueUwgYfo4vVsnCS8qyBi+q43lR4ryvcnBt4xbxRh5QKOZzVdMf6
-XjvvXYkZ5uYpgD6G2+ZT/km8hpP6Rw==
-=MmDg
------END PGP SIGNATURE-----
 
---fzbitevbj72paz57--
+
