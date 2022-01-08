@@ -2,96 +2,106 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15C84488466
-	for <lists+linux-can@lfdr.de>; Sat,  8 Jan 2022 17:11:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2842C488551
+	for <lists+linux-can@lfdr.de>; Sat,  8 Jan 2022 19:16:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232490AbiAHQLY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Sat, 8 Jan 2022 11:11:24 -0500
-Received: from mail-yb1-f179.google.com ([209.85.219.179]:37756 "EHLO
-        mail-yb1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229883AbiAHQLY (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 8 Jan 2022 11:11:24 -0500
-Received: by mail-yb1-f179.google.com with SMTP id 127so9591728ybb.4;
-        Sat, 08 Jan 2022 08:11:24 -0800 (PST)
+        id S232348AbiAHSQp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 8 Jan 2022 13:16:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44986 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232346AbiAHSQo (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 8 Jan 2022 13:16:44 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E17DCC06173F
+        for <linux-can@vger.kernel.org>; Sat,  8 Jan 2022 10:16:39 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id k15so35420196edk.13
+        for <linux-can@vger.kernel.org>; Sat, 08 Jan 2022 10:16:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4VShwSPVfj7GfXP2tBCw17qNbBXH8y4PIVu4DylC+Yk=;
+        b=deXjQd7iwt9NyWs3LiY3Y9oI7jXD9KYC0IAF+0hRTqNmUO46HyW8ILfoOLGfgz//vh
+         bCPBuxZGgnjzyrl2hGUk+zougES865YL10Wa9bFX33dyhBpICNXBvbv61Ex2fXGdTLOW
+         js2nQ8zOWSmp/Ib607pVKzFkn2YJ6TnrNafCE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=4Ba5ev7Mc37f12MPn8Bo9MNz+S3JxhJYNwMKImyhXUw=;
-        b=kBUxGq50S7kKqYppmTZr61IPp8c5JGEltU/h3g6fLoIdKZPNFejnXj2HDLS+LDR556
-         1asDilxX2ARX03ubZo+7UMcqJXD1/jZBb3f/X62hm8wyvH4ZqMSuIUdLl5qI8Hz8o0fK
-         jSZuTV1Olaxh3OqR/q/FKV5+pxOb/ggmGM8RURXF8csNDkTHy6LtIcPa//RJDixvmJ0q
-         yFjxQSxDj+kbe/2V5qgQ+3LpuOrKvZhYg4QpZq9fplEo6ZwnhNlB2zAIs6KrYs3PAuqf
-         0wBxsTOpHqTW2aBqiEFjMBHIsVdXV0HW2SE+akv3x72A+I3YbekBT8ii5ATOXGBf+eXo
-         duYw==
-X-Gm-Message-State: AOAM530L8f/5N0+AIQwniwvKbwu3gL9gMEWslHGOETBj+3iHdjgQtY3e
-        sIigmUkBTHrdUawoEs0KQrqD6RqEyne/HjrC2ig=
-X-Google-Smtp-Source: ABdhPJwTT7jGLzi6Jaj1sdjbAD+HtmppUtGTcOIYx+ZJx6FdVXaBSRn3vcKzO1bYL/hFb9m1SolpNiXQX+pqMlhQwaQ=
-X-Received: by 2002:a25:abe3:: with SMTP id v90mr32406661ybi.25.1641658283543;
- Sat, 08 Jan 2022 08:11:23 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4VShwSPVfj7GfXP2tBCw17qNbBXH8y4PIVu4DylC+Yk=;
+        b=sjqRdCvZJKvH68EQUxKMN3MJb0+s4n33SaeP4H0ACgk9aiuDSbDxEjhR8YovorIuAc
+         fn0C7DAd5BgznDeXs+WFlRGfhCHYu8nmLalqvZGSQgH3rCOduB9i4OEQkQ0Z3p+fGKoT
+         5/fc7I12PCXnbKPVOe7A+yPgl4AYpDXtpo90sbpUPjizRF39wHb+IwzlGfy2CTrjhY4a
+         OKzpfcWHHHMBozpPgCM2pGxcqDxHsUoBAFEWpN0VgTVmE3RH4Ah7nBpKCJFDrHXzIkJa
+         KcBvsdvSFFEJh31UqYwSObW0mb77Au6NomnLQ4t1m4EfnMjmug+JTV7yHxoMoQIP2E0y
+         ownQ==
+X-Gm-Message-State: AOAM530bcGWZ4tuP9zMzQlHieTv3A3WLVnHOQJIKmDFbT2D1Dva13TgC
+        dv2b+rS3/SEwjv08hwYeKih3gw==
+X-Google-Smtp-Source: ABdhPJwV7uU0oXOSs+GBb8Le/beFcuoTyG5jHEtbobZSHjJAhyGtEFElIRca3PoA1E/tV1K+/Oy+rA==
+X-Received: by 2002:a17:906:6c1:: with SMTP id v1mr51856789ejb.638.1641665798545;
+        Sat, 08 Jan 2022 10:16:38 -0800 (PST)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-95-244-92-231.retail.telecomitalia.it. [95.244.92.231])
+        by smtp.gmail.com with ESMTPSA id cm12sm1016616edb.6.2022.01.08.10.16.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Jan 2022 10:16:38 -0800 (PST)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: [RFC PATCH] can: flexcan: add ethtool support to get rx/tx ring parameters
+Date:   Sat,  8 Jan 2022 19:16:33 +0100
+Message-Id: <20220108181633.420433-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20220108143319.3986923-1-trix@redhat.com>
-In-Reply-To: <20220108143319.3986923-1-trix@redhat.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Sun, 9 Jan 2022 01:11:12 +0900
-Message-ID: <CAMZ6RqL4iznd+Hz_J02hheFF1xGRHo9nUzTNXGD=ey=GPA1WmA@mail.gmail.com>
-Subject: Re: [PATCH] can: janz-ican3: initialize dlc variable
-To:     trix@redhat.com
-Cc:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
-        kuba@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
-        Stefan.Maetje@esd.eu, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Sat. 8 Jan 2022 à 23:33, <trix@redhat.com> wrote:
-> From: Tom Rix <trix@redhat.com>
->
-> Clang static analysis reports this problem
-> janz-ican3.c:1311:2: warning: Undefined or garbage value returned to caller
->         return dlc;
->         ^~~~~~~~~~
->
-> dlc is only set with this conditional
->         if (!(cf->can_id & CAN_RTR_FLAG))
->                 dlc = cf->len;
->
-> But is always returned.  So initialize dlc to 0.
+Adds ethtool support to get the number of message buffers configured for
+reception/transmission, which may also depends on runtime configurations
+such as the 'rx-rtr' flag state.
 
-Yes. The actual intent is to return a length of 0 for RTR frames.
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
-> Fixes: cc4b08c31b5c ("can: do not increase tx_bytes statistics for RTR frames")
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/net/can/janz-ican3.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/net/can/janz-ican3.c b/drivers/net/can/janz-ican3.c
-> index 5b677af5f2a41..808c105cf8f7e 100644
-> --- a/drivers/net/can/janz-ican3.c
-> +++ b/drivers/net/can/janz-ican3.c
-> @@ -1285,7 +1285,7 @@ static unsigned int ican3_get_echo_skb(struct ican3_dev *mod)
->  {
->         struct sk_buff *skb = skb_dequeue(&mod->echoq);
->         struct can_frame *cf;
-> -       u8 dlc;
-> +       u8 dlc = 0;
->
->         /* this should never trigger unless there is a driver bug */
->         if (!skb) {
-> --
-> 2.26.3
+---
 
-I missed that when writing the patch.
+ drivers/net/can/flexcan/flexcan-ethtool.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-I thought that I did my due diligence by running a "make W=1"
-with GCC but I did not catch the error. I should have been more
-precocious and run a "make W=2".
+diff --git a/drivers/net/can/flexcan/flexcan-ethtool.c b/drivers/net/can/flexcan/flexcan-ethtool.c
+index 5bb45653e1ac..d119bca584f6 100644
+--- a/drivers/net/can/flexcan/flexcan-ethtool.c
++++ b/drivers/net/can/flexcan/flexcan-ethtool.c
+@@ -80,7 +80,24 @@ static int flexcan_set_priv_flags(struct net_device *ndev, u32 priv_flags)
+ 	return 0;
+ }
+ 
++static void flexcan_get_ringparam(struct net_device *ndev,
++				  struct ethtool_ringparam *ring)
++{
++	struct flexcan_priv *priv = netdev_priv(ndev);
++
++	ring->rx_max_pending = priv->mb_count;
++	ring->tx_max_pending = priv->mb_count;
++
++	if (priv->devtype_data.quirks & FLEXCAN_QUIRK_USE_RX_MAILBOX)
++		ring->rx_pending = __sw_hweight64(priv->rx_mask);
++	else
++		ring->rx_pending = 6;
++
++	ring->tx_pending = __sw_hweight64(priv->tx_mask);
++}
++
+ static const struct ethtool_ops flexcan_ethtool_ops = {
++	.get_ringparam = flexcan_get_ringparam,
+ 	.get_sset_count = flexcan_get_sset_count,
+ 	.get_strings = flexcan_get_strings,
+ 	.get_priv_flags = flexcan_get_priv_flags,
+-- 
+2.32.0
 
-Thank you.
-
-Acked-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
