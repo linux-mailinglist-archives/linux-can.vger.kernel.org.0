@@ -2,136 +2,83 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16FC94886E6
-	for <lists+linux-can@lfdr.de>; Sun,  9 Jan 2022 00:25:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84CFC4886FD
+	for <lists+linux-can@lfdr.de>; Sun,  9 Jan 2022 00:42:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231816AbiAHXZK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 8 Jan 2022 18:25:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55474 "EHLO
+        id S234980AbiAHXmZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 8 Jan 2022 18:42:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbiAHXZK (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 8 Jan 2022 18:25:10 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86623C06173F
-        for <linux-can@vger.kernel.org>; Sat,  8 Jan 2022 15:25:09 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1n6L59-0005ig-8E; Sun, 09 Jan 2022 00:25:07 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-6624-65e0-1d16-9a67.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:6624:65e0:1d16:9a67])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id ADD7C6D3BA2;
-        Sat,  8 Jan 2022 23:25:04 +0000 (UTC)
-Date:   Sun, 9 Jan 2022 00:25:03 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Brian Silverman <bsilver16384@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:CAN NETWORK DRIVERS" <linux-can@vger.kernel.org>,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
-Subject: Re: [RFC PATCH] can: m_can: Add driver for M_CAN hardware in NVIDIA
- devices
-Message-ID: <20220108232503.ecwf7f4uuo7s7eni@pengutronix.de>
-References: <20220106002514.24589-1-brian.silverman@bluerivertech.com>
+        with ESMTP id S230502AbiAHXmZ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 8 Jan 2022 18:42:25 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19703C06173F
+        for <linux-can@vger.kernel.org>; Sat,  8 Jan 2022 15:42:25 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id c14-20020a17090a674e00b001b31e16749cso16003455pjm.4
+        for <linux-can@vger.kernel.org>; Sat, 08 Jan 2022 15:42:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IQ/CfdKhUZ5+/TQqUvFWiP+we14F2aVxM/rq+O7X8e8=;
+        b=JxzuVIgSRCVhbvxE6QreTw+bZ3DpN8CjujG/D9gtqUYLTdkgfYxxs+V3swGnB/RmVX
+         M23Y0BtX3NWijbGeWf7nIBmMBoo9C8XcEGBWptQG5uA37CW2OOwun1Cmnq/iiY4cVvAC
+         oU5ITE4GhrshEQKRvCyK50WU5Vi5cG5t4+UlTfnziSyk/eaOgHFe3tGAeyLHuEnjry0r
+         Do+ltI5eJkp3CZI3y+s0FBRp/9bbrIHdc2whXzGiKrETcwAvMNEA0flzvW/HJycBWacs
+         mRtUgFOpQFwzuTAYUSe/PU22iDryvPGv7FCh8R0r0miMvmH29hTHUX4dOgQz74bUtM4C
+         3WVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IQ/CfdKhUZ5+/TQqUvFWiP+we14F2aVxM/rq+O7X8e8=;
+        b=LA55v2tob9CvnKVfWQMxeGG/vu6NB2tFtAZGyrY+/lvhi2i9Lq766E0vuIK8jc4//B
+         YoTEFQGG2bSlvIkgV6RyzOJbWcxcrqsqjlpBPqjRO0h6HyJ0QEyen3MB66KjcnZclVa4
+         wp8KfBgowaX7s3r+gfXaFL6hbqOmedoUPL0g95cMpPFpK8PBBMUVGTtDcaOxhlP6hr5q
+         UQuFkvGjWlUN9IYbXBcZNvqchzoCAM+vvRKfPQczmcSyMtqHVYKeChSE5sfICx3FAyv7
+         AmTI9MHXulSQXhEo/ki0K1I5hT2qkJ0Y3K8sZTz6g0545s4njDSVtRLUa/BCaZN2prH2
+         Vcbg==
+X-Gm-Message-State: AOAM531PAriRPDnTwkCB20/IEUCKDtA/T8IJz7BkCAUyJoccbfU4Vpao
+        SrEQC3iekQFpL3GlPk+n+wHPonlDua94VvphLKORMILHosI=
+X-Google-Smtp-Source: ABdhPJzYV+0Rw+hblivnhbMXn2ywdxWIFpg+Xc0D/sSXuM1IHk68RZBUPK/bgr2GgUOhcFMUmJLp8+brf6iBiung9cM=
+X-Received: by 2002:a05:6a00:1509:b0:4ba:f004:e3af with SMTP id
+ q9-20020a056a00150900b004baf004e3afmr70911346pfu.32.1641685343646; Sat, 08
+ Jan 2022 15:42:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="j2owows65r7zjzcq"
-Content-Disposition: inline
-In-Reply-To: <20220106002514.24589-1-brian.silverman@bluerivertech.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+References: <20220106002952.25883-1-brian.silverman@bluerivertech.com>
+ <20220108222904.plwxywgmnwrwpvmt@pengutronix.de> <20220108231655.oqzfap5yvh5xdumm@pengutronix.de>
+In-Reply-To: <20220108231655.oqzfap5yvh5xdumm@pengutronix.de>
+From:   Brian Silverman <bsilver16384@gmail.com>
+Date:   Sat, 8 Jan 2022 15:41:57 -0800
+Message-ID: <CAP01z6Khm+s=HsdYh0+wUF6H3=mVYkvBE0x_g_Qw745VtNayYQ@mail.gmail.com>
+Subject: Re: [PATCH] can: gs_usb: Zero-initialize flags
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     "open list:CAN NETWORK DRIVERS" <linux-can@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Sat, Jan 8, 2022 at 3:16 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> BTW: Your brian.silverman@bluerivertech.com address fails:
+>
+> | brian.silverman@bluerivertech.com
+> |  host aspmx.l.google.com [2a00:1450:400c:c0c::1a]
+> |  SMTP error from remote mail server after RCPT TO:<brian.silverman@bluerivertech.com>:
+> |  550-5.2.1 The email account that you tried to reach is disabled. Learn more at
+> |  550 5.2.1  https://support.google.com/mail/?p=DisabledUser o10si1930223wrh.555 - gsmtp
+>
+> Should I change the author's email address to your gmail address?
 
---j2owows65r7zjzcq
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I wrote it as part of my employment by Blue River, but am currently
+moving on to another job. The policy was to have my work email on the
+patch. Seems like the same situation whenever somebody uses a work
+email and then leaves that job, just in this case the timing is
+tighter than common. I think leaving it is best.
 
-On 05.01.2022 16:25:09, Brian Silverman wrote:
-> It's a M_TTCAN with some NVIDIA-specific glue logic and clocks. The
-> existing m_can driver works with it after handling the glue logic.
->=20
-> The code is a combination of pieces from m_can_platform and NVIDIA's
-> driver [1].
->=20
-> [1] https://github.com/hartkopp/nvidia-t18x-can/blob/master/r32.2.1/nvidi=
-a/drivers/net/can/mttcan/hal/m_ttcan.c
->=20
-> Signed-off-by: Brian Silverman <brian.silverman@bluerivertech.com>
+To be clear, contributing this was definitely authorized by the
+company, I just didn't get around to sending out the patch until
+almost my last day.
 
-Thanks for your patch.
-
-> ---
-> I ran into bugs with the error handling in NVIDIA's m_ttcan driver, so I
-> switched to m_can which has been much better. I'm looking for feedback
-> on whether I should ensure rebasing hasn't broken anything, write up DT
-> documentation, and submit this patch for real. The driver works great,
-> but I've got some questions about submitting it.
->=20
-> question: This has liberal copying of GPL code from NVIDIA's
-> non-upstreamed m_ttcan driver. Is that OK?
-
-The header in the driver says it's GPLv2:
-
-| https://github.com/hartkopp/nvidia-t18x-can/blob/master/r32.2.1/nvidia/dr=
-ivers/net/can/mttcan/hal/m_ttcan.c#L5
-
-So it's OK. You should copy the original copyright notice to your glue
-driver, though.
-
-> corollary: I don't know what any of this glue logic does. I do know the
-> device doesn't work without it. I can't find any documentation of what
-> these addresses do.
-
-hmmm ok
-
-> question: There is some duplication between this and m_can_platform. It
-> doesn't seem too bad to me, but is this the preferred way to do it or is
-> there another alternative?
-
-You might merge this driver to the generic platform driver.
-
-> question: Do new DT bindings need to be in the YAML format, or is the
-> .txt one OK?
-
-YAML
-
-Please fix the checkpatch warning found by:
-
-| ./scripts/checkpatch.pl --file drivers/net/can/m_can/m_can_tegra.c
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---j2owows65r7zjzcq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmHaHUwACgkQqclaivrt
-76lrtwf/TBE40m671Kec7lv1AErSTYn7yLjVZkgZy8sHRUkiBzDfOvpFkRXfn4Yl
-RFKlGuNl1bzSNH1FP2iEQu5G6HBzougiMCff1tjL/ou7fKoGfdPiR85QWGsXHUZZ
-US1UXyMBBPWeFZeK9Fm9XmgOfDUaEvI9RDrHyUrul9T5DyKw3A1j4x43QOR++9VE
-GzitPzB8oPWPnFyi/8iFwCfkg6+j8V7VX/UmwJyvkzZT8R99dWh4OUWuwKJjFkHa
-PsOr7ToXgoKJTAOu3IMNyLrxu0tJSBEDGWTPmJ07bBJfyTLoyL4mHOAr89J4xPGG
-O6UboqJB0B5WyE1+EMaoMLNhbzy+7g==
-=BWAy
------END PGP SIGNATURE-----
-
---j2owows65r7zjzcq--
+Thanks,
+Brian
