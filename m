@@ -2,49 +2,46 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A38424888E2
-	for <lists+linux-can@lfdr.de>; Sun,  9 Jan 2022 12:37:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD6A48899C
+	for <lists+linux-can@lfdr.de>; Sun,  9 Jan 2022 14:40:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235116AbiAILhY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 9 Jan 2022 06:37:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42344 "EHLO
+        id S233696AbiAINks (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 9 Jan 2022 08:40:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235107AbiAILhY (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 9 Jan 2022 06:37:24 -0500
+        with ESMTP id S233520AbiAINks (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 9 Jan 2022 08:40:48 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB0B2C06173F
-        for <linux-can@vger.kernel.org>; Sun,  9 Jan 2022 03:37:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84A0C06173F
+        for <linux-can@vger.kernel.org>; Sun,  9 Jan 2022 05:40:47 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1n6WVj-0001G8-2u; Sun, 09 Jan 2022 12:37:19 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-a4a9-3301-a0d2-087c.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:a4a9:3301:a0d2:87c])
+        id 1n6YRC-000456-2r
+        for linux-can@vger.kernel.org; Sun, 09 Jan 2022 14:40:46 +0100
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 2ED816D3EE7
+        for <linux-can@vger.kernel.org>; Sun,  9 Jan 2022 13:40:43 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 4D0C46D3E59;
-        Sun,  9 Jan 2022 11:37:17 +0000 (UTC)
-Date:   Sun, 9 Jan 2022 12:37:16 +0100
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id D3BDA6D3ED4;
+        Sun,  9 Jan 2022 13:40:41 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id f5b05c5f;
+        Sun, 9 Jan 2022 13:40:41 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [RFC PATCH] can: flexcan: add ethtool support to get rx/tx ring
- parameters
-Message-ID: <20220109113716.r4l432ixsjbbcwtu@pengutronix.de>
-References: <20220108181633.420433-1-dario.binacchi@amarulasolutions.com>
- <20220108201650.7gp3zlduzphgcgkq@pengutronix.de>
- <CABGWkvoGs_VBGD-7dt18LY9NV=63w50OceKjmaKYeqDe_WJk9g@mail.gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH net 0/5] pull-request: can 2022-01-09
+Date:   Sun,  9 Jan 2022 14:40:35 +0100
+Message-Id: <20220109134040.1945428-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rzgzvcem3jngzhan"
-Content-Disposition: inline
-In-Reply-To: <CABGWkvoGs_VBGD-7dt18LY9NV=63w50OceKjmaKYeqDe_WJk9g@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -53,50 +50,66 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello Jakub, hello David,
 
---rzgzvcem3jngzhan
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+this is a pull request of 5 patches for net/master.
 
-On 09.01.2022 12:22:54, Dario Binacchi wrote:
-> > >  static const struct ethtool_ops flexcan_ethtool_ops =3D {
-> > > +     .get_ringparam =3D flexcan_get_ringparam,
-> > >       .get_sset_count =3D flexcan_get_sset_count,
-> > >       .get_strings =3D flexcan_get_strings,
-> > >       .get_priv_flags =3D flexcan_get_priv_flags,
-> >
-> > BTW: If you're looking for more TX performance, this can be done by
-> > using more than one TX buffer.
->=20
-> I didn't expect only one message buffer to be used for transmission
+The first patch is by Johan Hovold and fixes a mem leak in the error
+path of the softing_cs driver.
 
-It was easier to implement, but now we've sorted it out how to implement
-multiple TX buffers race free and lock-less. Have a look at the
-mcp251xfd driver.
+The next patch is by me and fixes a set but not used variable warning
+in the softing driver.
+
+Jiasheng Jiang's patch for the xilinx_can driver adds the missing
+error checking when getting the IRQ.
+
+Lad Prabhakar contributes a patch for the rcar_canfd driver to fix a
+mem leak in the error path.
+
+The last patch is by Brian Silverman and properly initializes the send
+USB messages to avoid spurious CAN error frames.
 
 regards,
 Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+---
 
---rzgzvcem3jngzhan
-Content-Type: application/pgp-signature; name="signature.asc"
+The following changes since commit 6dc9a23e29061e50c36523270de60039ccf536fa:
 
------BEGIN PGP SIGNATURE-----
+  octeontx2-af: Fix interrupt name strings (2022-01-07 19:07:06 -0800)
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmHayOgACgkQqclaivrt
-76nPQgf/an5RfIK7HvAVii+TyXj7m/vfw+8gGayLUQxfMEeCZsdHBk25wsM76unP
-Mu4faJe15cxzs3whPcdpbDfMFC2t8zXSOjf2vlCcbjmqS0IOfxFIijYodI7KCFpO
-KPa13t6DDuJRLVzKi4TEEw/GgVNKQMbjN6TDpFLxgEf6Iz7V+DWf2brvyqRDRy5M
-+2qF/6403FycAUzgyo230UXGhLxdWn8Ac1XUx84xnqzXKs7v94iN2WR0HxynEL70
-bZz2FBDCpVwSnoL3iL7Kw5gKoXmVHJHXrV/MrAbEaEovT/axW+SMNr/lX5n7tYVj
-wt03+WrvEkPkMoA3fIRWvXv3WCXUTg==
-=M/Pi
------END PGP SIGNATURE-----
+are available in the Git repository at:
 
---rzgzvcem3jngzhan--
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-5.16-20220109
+
+for you to fetch changes up to 89d58aebe14a365c25ba6645414afdbf4e41cea4:
+
+  can: gs_usb: gs_can_start_xmit(): zero-initialize hf->{flags,reserved} (2022-01-09 13:32:28 +0100)
+
+----------------------------------------------------------------
+linux-can-fixes-for-5.16-20220109
+
+----------------------------------------------------------------
+Brian Silverman (1):
+      can: gs_usb: gs_can_start_xmit(): zero-initialize hf->{flags,reserved}
+
+Jiasheng Jiang (1):
+      can: xilinx_can: xcan_probe(): check for error irq
+
+Johan Hovold (1):
+      can: softing_cs: softingcs_probe(): fix memleak on registration failure
+
+Lad Prabhakar (1):
+      can: rcar_canfd: rcar_canfd_channel_probe(): make sure we free CAN network device
+
+Marc Kleine-Budde (1):
+      can: softing: softing_startstop(): fix set but not used variable warning
+
+ drivers/net/can/rcar/rcar_canfd.c    |  5 ++---
+ drivers/net/can/softing/softing_cs.c |  2 +-
+ drivers/net/can/softing/softing_fw.c | 11 ++++++-----
+ drivers/net/can/usb/gs_usb.c         |  2 ++
+ drivers/net/can/xilinx_can.c         |  7 ++++++-
+ 5 files changed, 17 insertions(+), 10 deletions(-)
+
+
