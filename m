@@ -2,79 +2,84 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08348489456
-	for <lists+linux-can@lfdr.de>; Mon, 10 Jan 2022 09:54:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2C744899AD
+	for <lists+linux-can@lfdr.de>; Mon, 10 Jan 2022 14:16:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242250AbiAJIyO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 10 Jan 2022 03:54:14 -0500
-Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.22]:44403 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242314AbiAJIwU (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 10 Jan 2022 03:52:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1641804725;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=AFUaIzOxRV6KWtH/d8DwzpHMzOHDk6Xrb1vYKbtaK5M=;
-    b=tgQ+nrmCgPV6QzH2sgTJmZxHLTnRd8MblS4qqN3AeKB4RzfpF/6eFU31zhg1criiJw
-    V2MdAByzfIgiK1zdx/8vI56iJzMXjNB4mvxwIRpp2oazL9056BuKYazMlePsFxo1lHiB
-    qSY2T3WXQx8riacPhl1KlPOQdEP95MtF89Roq2WPPyMpjTHZpPMXGtNtvZOYAoaXxtC8
-    chN/cZ7N5eUIXT+DJIBCz5+tPr+uOyRK7vLxi6dpEs5x1ZWTE2Gll03T4Bu9H1ZU2pya
-    8rrMUrkWJt2CSswCVDaE9bkKtnU4LjR1w/tlfxuRPKWwIal3ZSSki7lhG1b7CqLh5kEF
-    KGqg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdd0DIgVuBOfXW6v7w=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPv6:2a00:6020:1cfa:f900::b82]
-    by smtp.strato.de (RZmta 47.37.6 AUTH)
-    with ESMTPSA id Rb080by0A8q47Ia
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Mon, 10 Jan 2022 09:52:04 +0100 (CET)
-Subject: Re: [PATCH] can: softing: softing_startstop(): fix set but not used
- variable warning
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Cc:     linux-can@vger.kernel.org
-References: <20220109103126.1872833-1-mkl@pengutronix.de>
- <YdstmL4KSn70ziqx@x1.vandijck-laurijssen.be>
- <20220110082618.4jhkcwe3b7cm26ko@pengutronix.de>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <bd809029-9fc2-1e04-92f8-8efbb8b87d1e@hartkopp.net>
-Date:   Mon, 10 Jan 2022 09:51:59 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S231928AbiAJNQn (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 10 Jan 2022 08:16:43 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:35598 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231664AbiAJNQm (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 10 Jan 2022 08:16:42 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 37D516118E;
+        Mon, 10 Jan 2022 13:16:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17A2BC36AE5;
+        Mon, 10 Jan 2022 13:16:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641820601;
+        bh=y6qHHVX40j4JNzuG880v2MSwzAY82M/t0XIpMUjE6o4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oWXqVBbQLSKbj+4VoM737udYizS/E/gawe9L/MhHDBJbE/KnzRzInaD++oOdL87p7
+         93/2dUrpkPWSRzyOFAxeuuhGWd/jOLWST+K+9MXAH2/l1aw2ZmQk8pSYASCJtLmQ1+
+         7UMOGgSCJxxuq9VOmy4v7FEEeZhXi14m6FMYm34E=
+Date:   Mon, 10 Jan 2022 14:16:38 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Ziyang Xuan <william.xuanziyang@huawei.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, socketcan@hartkopp.net,
+        mkl@pengutronix.de, netdev@vger.kernel.org, stable@vger.kernel.org,
+        linux-can@vger.kernel.org, tglx@linutronix.de,
+        anna-maria@linutronix.de
+Subject: Re: [PATCH net] can: bcm: switch timer to HRTIMER_MODE_SOFT and
+ remove hrtimer_tasklet
+Message-ID: <YdwxtqexaE75uCZ8@kroah.com>
+References: <20220110132322.1726106-1-william.xuanziyang@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <20220110082618.4jhkcwe3b7cm26ko@pengutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220110132322.1726106-1-william.xuanziyang@huawei.com>
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-
-
-On 10.01.22 09:26, Marc Kleine-Budde wrote:
-> On 09.01.2022 19:46:48, Kurt Van Dijck wrote:
->> Acked-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
->>
->>> out. Its stated that the functionality is not finally verified.
->>
->> The subsequent call works, but I wasn't able to produce the bus errors,
->> so I could not verify that is actually worked.
->>
->> And by now, I don't have access to the card, nor do I have a PCMCIA slot :-)
+On Mon, Jan 10, 2022 at 09:23:22PM +0800, Ziyang Xuan wrote:
+> From: Thomas Gleixner <tglx@linutronix.de>
 > 
-> I think Oliver still has a laptop with a PCMCIA slot, but I don't know
-> if he has that HW....
+> [ commit bf74aa86e111aa3b2fbb25db37e3a3fab71b5b68 upstream ]
+> 
+> Stop tx/rx cycle rely on the active state of tasklet and hrtimer
+> sequentially in bcm_remove_op(), the op object will be freed if they
+> are all unactive. Assume the hrtimer timeout is short, the hrtimer
+> cb has been excuted after tasklet conditional judgment which must be
+> false after last round tasklet_kill() and before condition
+> hrtimer_active(), it is false when execute to hrtimer_active(). Bug
+> is triggerd, because the stopping action is end and the op object
+> will be freed, but the tasklet is scheduled. The resources of the op
+> object will occur UAF bug.
 
-Huh. I can search for that card in the office when I get there next 
-time. I have no idea if someone binned the card in the meantime - as the 
-Laptops do not provide PCMCIA for years now ...
+That is not the changelog text of this commit.  Why modify it?
 
-I'll take a look.
+> 
+> ----------------------------------------------------------------------
+> 
+> This patch switches the timer to HRTIMER_MODE_SOFT, which executed the
+> timer callback in softirq context and removes the hrtimer_tasklet.
+> 
+> Reported-by: syzbot+652023d5376450cc8516@syzkaller.appspotmail.com
+> Cc: stable@vger.kernel.org # 4.19
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Anna-Maria Gleixner <anna-maria@linutronix.de>
+> Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+> ---
+>  net/can/bcm.c | 156 +++++++++++++++++---------------------------------
+>  1 file changed, 52 insertions(+), 104 deletions(-)
 
-Best,
-Oliver
+What stable kernel tree(s) are you wanting this backported to?
+
+thanks,
+
+greg k-h
