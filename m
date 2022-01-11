@@ -2,123 +2,116 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C130E48B172
-	for <lists+linux-can@lfdr.de>; Tue, 11 Jan 2022 16:57:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C933A48B1F7
+	for <lists+linux-can@lfdr.de>; Tue, 11 Jan 2022 17:21:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243649AbiAKP5j (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 11 Jan 2022 10:57:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48822 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245730AbiAKP5j (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 11 Jan 2022 10:57:39 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4AC7C061748
-        for <linux-can@vger.kernel.org>; Tue, 11 Jan 2022 07:57:38 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id k21so58025086lfu.0
-        for <linux-can@vger.kernel.org>; Tue, 11 Jan 2022 07:57:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=wirenboard-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=47xSV+aaBbv5R4/VZxIMXkl87pTBxA8gxKimR52zIw4=;
-        b=xYt51TdBtGKqbhNBcKJ1NegEp9roXnfM0Awac3Ot4lBOZrN6bU7K1mmGM7sS6IA9dk
-         PfKR/4fIe9N/K7Ysr9vbNeThsKwfkjB0/sMDMqQfQSGBXL4XD8Nln+mkIAajX5pk8c37
-         Jj+5Eq9ekE/nke1mb2yL4NfB+Y5Rbpyh5C7fjkeH7cmhU9NZoeBIxHq/a9jgGc8KQzY7
-         zg+cuKhA//SCsiHqshYQXGfx0jDQZ7scTlGVSJ2KY1UeViFPfwEgzRfKYJbvcyjrbu7T
-         X2pIVwwqPPwoJukIIWAHPeVTEJ21qh17FpLXtGsRwyemwSbrkxnCxg4Ze6MJKXa7lb4f
-         J6YQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=47xSV+aaBbv5R4/VZxIMXkl87pTBxA8gxKimR52zIw4=;
-        b=Qcsburb8SDYSQv65bP+mg7qJ5sSMpER7AxwVIudEkmcjNtNuRZJoCeIxvwR2MrmBO5
-         8cntDLdbQ4dEKtDHxPLoPgGn1+boxLDCy8C7c8TEWSEnovrhxmE77OgCtIVYOn/3Ks2h
-         56yFW+7y5bAlp5qpQfR+ou7JalhdID+zquMTKakb3BgnP9BaBENRkX7/piA1wC/pdEpo
-         z91giEZG23v+Qu42VSktG90LBSR+UotW/IAW4B/9Th+9Znv8tJxkie+4+pLqxY+BrlOR
-         34OMjj03cVxYVdzkZ9yMbvysiCS6u4z61Mf62CB5JJDww9DIfXjTO/QGyZichJnTpprz
-         j3SQ==
-X-Gm-Message-State: AOAM530Pg7/N1MgI2tbJdnimXZRXnAgogySgQyZ9ASeNgJascI01vUU8
-        kvcgX+WTBjP+QppEMl0YFMJb5A==
-X-Google-Smtp-Source: ABdhPJyO255tJMptzPXJzXNfFkOg0Wu92ztH4j40AdRIvV89TtHlMz6T2+uPCWJYvncbd5NL9VF04A==
-X-Received: by 2002:a2e:8781:: with SMTP id n1mr3408385lji.96.1641916657189;
-        Tue, 11 Jan 2022 07:57:37 -0800 (PST)
-Received: from boger-laptop.lan (81.5.110.253.dhcp.mipt-telecom.ru. [81.5.110.253])
-        by smtp.gmail.com with ESMTPSA id y7sm1370706lfa.92.2022.01.11.07.57.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 07:57:36 -0800 (PST)
-From:   Evgeny Boger <boger@wirenboard.com>
-To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Evgeny Boger <boger@wirenboard.com>, devicetree@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, linux-can@vger.kernel.org,
+        id S1343623AbiAKQVx (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 11 Jan 2022 11:21:53 -0500
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.50]:39459 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239725AbiAKQVw (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 11 Jan 2022 11:21:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1641918087;
+    s=strato-dkim-0002; d=fpond.eu;
+    h=Subject:References:In-Reply-To:Message-ID:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=HlWE7eH+IRtjW2+Vb37/ahftzfF/huNkWBYGStShLSM=;
+    b=kkz3iQAQTlluAoMy6HrAIoW8MEZWjxoVq9uR4jTh114ofG8Dvv5BnwHa4/kq2QMdH9
+    R6CL3d9v+48QIrXEv0IYkUaHt015GyCMOD5wPp5M3zv8pDBt3XgFRZEx+P+1ShN6NnfW
+    OgCbGDL2q1WjuaWY9qZFgU7LWqBH0LSDadZC+uZMKLik6W7JUTHHy5YL3J6FKfWKxiIX
+    aX43weuLKZnLyn6vHCCp7qudjsBjwOA/VxwFpjnvaXKie9WhVaBrGB7KarlrfedE0OFz
+    t4N9SbfbhNnCgfx7hsOEq4fjV/UBOJnVfxSPxy8nEws2EdaE92cH9OJOj2P24QKsFM8y
+    8nwg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":OWANVUa4dPFUgKR/3dpvnYP0Np73amq+g13rqGzvv3qxio1R8fCv/x28jVM="
+X-RZG-CLASS-ID: mo00
+Received: from oxapp06-01.back.ox.d0m.de
+    by smtp.strato.de (RZmta 47.37.6 AUTH)
+    with ESMTPSA id a48ca5y0BGLQHKh
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Tue, 11 Jan 2022 17:21:26 +0100 (CET)
+Date:   Tue, 11 Jan 2022 17:21:26 +0100 (CET)
+From:   Ulrich Hecht <uli@fpond.eu>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Ulrich Hecht <uli+renesas@fpond.eu>
+Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>, linux-can@vger.kernel.org,
+        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jeroen Hofstee <jhofstee@victronenergy.com>,
-        Gerhard Bertelsmann <info@gerhard-bertelsmann.de>
-Subject: [PATCH v2 3/3] ARM: dts: sun8i: r40: add node for CAN controller
-Date:   Tue, 11 Jan 2022 18:57:09 +0300
-Message-Id: <20220111155709.56501-4-boger@wirenboard.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220111155709.56501-1-boger@wirenboard.com>
-References: <20220111155709.56501-1-boger@wirenboard.com>
+        Jakub Kicinski <kuba@kernel.org>, mailhol.vincent@wanadoo.fr,
+        socketcan@hartkopp.net
+Message-ID: <1393112852.2793965.1641918086821@webmail.strato.com>
+In-Reply-To: <CAMuHMdXk2mZntTBe3skSVkcNVjC-PzMwEv_MbH85Mvn1ZkFpHw@mail.gmail.com>
+References: <20210924153113.10046-1-uli+renesas@fpond.eu>
+ <20210924153113.10046-2-uli+renesas@fpond.eu>
+ <CAMuHMdXk2mZntTBe3skSVkcNVjC-PzMwEv_MbH85Mvn1ZkFpHw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] can: rcar_canfd: Add support for r8a779a0 SoC
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+Importance: Normal
+X-Mailer: Open-Xchange Mailer v7.10.5-Rev33
+X-Originating-Client: open-xchange-appsuite
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Allwinner R40 (also known as A40i, T3, V40) has a CAN controller. The
-controller is the same as in earlier A10 and A20 SoCs, but needs reset
-line to be deasserted before use.
+Thank you for your review.
 
-This patch adds a CAN node and the corresponding pinctrl descriptions.
+> On 10/05/2021 3:06 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> I'm wondering if some of these IS_V3U checks can be avoided, improving
+> legibility, by storing a feature struct instead of a chip_id in
+> rcar_canfd_of_table[].data?
 
-Signed-off-by: Evgeny Boger <boger@wirenboard.com>
----
- arch/arm/boot/dts/sun8i-r40.dtsi | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+Not really. I have found perhaps three cases in which this is possible, compared to dozens where it isn't. In the end you would get virtually no change in legibility or verbosity, but an increase in complexity.
 
-diff --git a/arch/arm/boot/dts/sun8i-r40.dtsi b/arch/arm/boot/dts/sun8i-r40.dtsi
-index 1d87fc0c24ee..2ba0e681a7ac 100644
---- a/arch/arm/boot/dts/sun8i-r40.dtsi
-+++ b/arch/arm/boot/dts/sun8i-r40.dtsi
-@@ -511,6 +511,18 @@ pio: pinctrl@1c20800 {
- 			#interrupt-cells = <3>;
- 			#gpio-cells = <3>;
- 
-+			/omit-if-no-ref/
-+			can_pa_pins: can-pa-pins {
-+				pins = "PA16", "PA17";
-+				function = "can";
-+			};
-+
-+			/omit-if-no-ref/
-+			can_ph_pins: can-ph-pins {
-+				pins = "PH20", "PH21";
-+				function = "can";
-+			};
-+
- 			clk_out_a_pin: clk-out-a-pin {
- 				pins = "PI12";
- 				function = "clk_out_a";
-@@ -926,6 +938,15 @@ i2c3: i2c@1c2b800 {
- 			#size-cells = <0>;
- 		};
- 
-+		can0: can@1c2bc00 {
-+			compatible = "allwinner,sun8i-r40-can";
-+			reg = <0x01c2bc00 0x400>;
-+			interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&ccu CLK_BUS_CAN>;
-+			resets = <&ccu RST_BUS_CAN>;
-+			status = "disabled";
-+		};
-+
- 		i2c4: i2c@1c2c000 {
- 			compatible = "allwinner,sun6i-a31-i2c";
- 			reg = <0x01c2c000 0x400>;
--- 
-2.25.1
+> >  /* RSCFDnCFDRFCCx / RSCFDnRFCCx */
+> > -#define RCANFD_RFCC(x)                 (0x00b8 + (0x04 * (x)))
+> > +#define RCANFD_RFCC(x)                 ((IS_V3U ? 0x00c0 : 0x00b8) + \
+> > +                                        (0x04 * (x)))
+> >  /* RSCFDnCFDRFSTSx / RSCFDnRFSTSx */
+> > -#define RCANFD_RFSTS(x)                        (0x00d8 + (0x04 * (x)))
+> > +#define RCANFD_RFSTS(x)                        ((IS_V3U ? 0x00e0 : 0x00d8) + \
+> > +                                        (0x04 * (x)))
+> >  /* RSCFDnCFDRFPCTRx / RSCFDnRFPCTRx */
+> > -#define RCANFD_RFPCTR(x)               (0x00f8 + (0x04 * (x)))
+> > +#define RCANFD_RFPCTR(x)               ((IS_V3U ? 0x0100 : 0x00f8) + \
+> > +                                        (0x04 * (x)))
+> 
+> There's some logic in the offsets: they're 32 bytes apart, regardless
+> of IS_V3U. Can we make use of that?
 
+We can here...
+
+> >  /* Common FIFO Control registers */
+> >
+> >  /* RSCFDnCFDCFCCx / RSCFDnCFCCx */
+> > -#define RCANFD_CFCC(ch, idx)           (0x0118 + (0x0c * (ch)) + \
+> > -                                        (0x04 * (idx)))
+> > +#define RCANFD_CFCC(ch, idx)           ((IS_V3U ? 0x0120 : 0x0118) + \
+> > +                                        (0x0c * (ch)) + (0x04 * (idx)))
+> >  /* RSCFDnCFDCFSTSx / RSCFDnCFSTSx */
+> > -#define RCANFD_CFSTS(ch, idx)          (0x0178 + (0x0c * (ch)) + \
+> > -                                        (0x04 * (idx)))
+> > +#define RCANFD_CFSTS(ch, idx)          ((IS_V3U ? 0x01e0 : 0x0178) + \
+> > +                                        (0x0c * (ch)) + (0x04 * (idx)))
+> >  /* RSCFDnCFDCFPCTRx / RSCFDnCFPCTRx */
+> > -#define RCANFD_CFPCTR(ch, idx)         (0x01d8 + (0x0c * (ch)) + \
+> > -                                        (0x04 * (idx)))
+> > +#define RCANFD_CFPCTR(ch, idx)         ((IS_V3U ? 0x0240 : 0x01d8) + \
+> > +                                        (0x0c * (ch)) + (0x04 * (idx)))
+> 
+> Same here, 96 bytes spacing.
+
+...but not here. (0x1e0 - 0x120 != 0x60)
+
+CU
+Uli
