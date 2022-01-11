@@ -2,146 +2,100 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76C2A48AE13
-	for <lists+linux-can@lfdr.de>; Tue, 11 Jan 2022 14:02:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7987048B16F
+	for <lists+linux-can@lfdr.de>; Tue, 11 Jan 2022 16:57:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239994AbiAKNCl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 11 Jan 2022 08:02:41 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:17338 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239661AbiAKNCk (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 11 Jan 2022 08:02:40 -0500
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JY9n722f7z9s7R;
-        Tue, 11 Jan 2022 21:01:31 +0800 (CST)
-Received: from [10.174.179.200] (10.174.179.200) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 11 Jan 2022 21:02:38 +0800
-Subject: Re: [PATCH net] can: bcm: switch timer to HRTIMER_MODE_SOFT and
- remove hrtimer_tasklet
-To:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        Greg KH <gregkh@linuxfoundation.org>
-CC:     <davem@davemloft.net>, <kuba@kernel.org>, <mkl@pengutronix.de>,
-        <netdev@vger.kernel.org>, <stable@vger.kernel.org>,
-        <linux-can@vger.kernel.org>, <tglx@linutronix.de>,
-        <anna-maria@linutronix.de>
-References: <20220110132322.1726106-1-william.xuanziyang@huawei.com>
- <YdwxtqexaE75uCZ8@kroah.com>
- <afcc8f0c-1aa7-9f43-bf50-b404c954db8b@huawei.com>
- <ad8ed3db-b5aa-9c48-0bff-2c2623bd17fa@hartkopp.net>
-From:   "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>
-Message-ID: <fc20454f-68ee-21f5-10a4-8100407aad53@huawei.com>
-Date:   Tue, 11 Jan 2022 21:02:37 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S243870AbiAKP5g (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 11 Jan 2022 10:57:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48796 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243649AbiAKP5g (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 11 Jan 2022 10:57:36 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9986C06173F
+        for <linux-can@vger.kernel.org>; Tue, 11 Jan 2022 07:57:35 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id s30so30128307lfo.7
+        for <linux-can@vger.kernel.org>; Tue, 11 Jan 2022 07:57:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=wirenboard-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0nTUgBUzWqYITQnAEDWeHOtQPiYS2wv61d5KwBi3uYs=;
+        b=t84dYxCCv052E4gw3UFG/bbNlvC8YH8gRdSgmtYiwENmKguYf09md0nJys7744EKcC
+         Gb18/zBvF7TLIj8+vZBwHGt+hft0CIAnff82KzRuskCyFc8yQOJw6Nu6hcXE99ke0sAm
+         1tAe+v9OsXmA80J5pSeGvWogw5cMcB/vs5exZWVIINMYL8DeWujfwdVFf+RIm+suxIoS
+         6knSFycPXx9hDxLxMhOv0ymGkjJ7nd3loxPGiSTqrx6JuowFH4HxehN5hG3v84ncX3+b
+         6zqraG1VyL0SdOUHNRAtcoEqagW5t7uEvEQsqRz3VpCoWQLqQqc8XIBNZoyYoCgRAsd7
+         DQCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0nTUgBUzWqYITQnAEDWeHOtQPiYS2wv61d5KwBi3uYs=;
+        b=Ka58Sbh8JcBb00WqnhvqdTZPzVWB6F8wLVBIAYO4O3addMD9GOpTOrrWYhSawCPPx9
+         liexatsQbyBE6P7yT6w0odOKfh4rrC9AXhmEu3aLuNETr5T2s/JRmJp6E+fgDuElGynQ
+         Bqe3d9ng/IuMRYFDztjAlUYh1fcChiWDgO1AWlS3sOr/3hr23UauiAcNmTwT1ZnPy4cw
+         LlrwpCNaWWQFkV1bTBzra89V9T66l5d9ua0kSajc4G5GsfyvFMqfriH7HJUvUczc4w4v
+         ibKPMESUeoX+CcjqWyR3JCiqJV2fWk0fOD8JzymZFOA1C5h5y7Jdobpz4epS1UnzLARk
+         GiBw==
+X-Gm-Message-State: AOAM531gjK0sk2t9o3q78ZBgYPy1d+Y/eSKfmam6NvnI+uaSUHlMSHGw
+        NX2EvxJEaGzgYEBHR/rasrAa6A==
+X-Google-Smtp-Source: ABdhPJxDkpX6B9o6w77LG43w7VqtyI0FEwgWWHHETUr5EU+pxPzv92RWWzfNd7pnF/3igejqxXgdoQ==
+X-Received: by 2002:a05:651c:160c:: with SMTP id f12mr913606ljq.462.1641916654069;
+        Tue, 11 Jan 2022 07:57:34 -0800 (PST)
+Received: from boger-laptop.lan (81.5.110.253.dhcp.mipt-telecom.ru. [81.5.110.253])
+        by smtp.gmail.com with ESMTPSA id y7sm1370706lfa.92.2022.01.11.07.57.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 07:57:33 -0800 (PST)
+From:   Evgeny Boger <boger@wirenboard.com>
+To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Evgeny Boger <boger@wirenboard.com>, devicetree@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, linux-can@vger.kernel.org,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jeroen Hofstee <jhofstee@victronenergy.com>,
+        Gerhard Bertelsmann <info@gerhard-bertelsmann.de>
+Subject: [PATCH v2 0/3] add support for Allwinner R40 CAN controller
+Date:   Tue, 11 Jan 2022 18:57:06 +0300
+Message-Id: <20220111155709.56501-1-boger@wirenboard.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <ad8ed3db-b5aa-9c48-0bff-2c2623bd17fa@hartkopp.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.200]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-> On 11.01.22 03:02, Ziyang Xuan (William) wrote:
->>> On Mon, Jan 10, 2022 at 09:23:22PM +0800, Ziyang Xuan wrote:
->>>> From: Thomas Gleixner <tglx@linutronix.de>
->>>>
->>>> [ commit bf74aa86e111aa3b2fbb25db37e3a3fab71b5b68 upstream ]
->>>>
->>>> Stop tx/rx cycle rely on the active state of tasklet and hrtimer
->>>> sequentially in bcm_remove_op(), the op object will be freed if they
->>>> are all unactive. Assume the hrtimer timeout is short, the hrtimer
->>>> cb has been excuted after tasklet conditional judgment which must be
->>>> false after last round tasklet_kill() and before condition
->>>> hrtimer_active(), it is false when execute to hrtimer_active(). Bug
->>>> is triggerd, because the stopping action is end and the op object
->>>> will be freed, but the tasklet is scheduled. The resources of the op
->>>> object will occur UAF bug.
->>>
->>> That is not the changelog text of this commit.  Why modify it?
->>
->> Above statement is the reason why I want to backport the patch to
->> stable tree. Maybe I could give an extra cover-letter to explain
->> the details of the problem, but modify the original changelog. Is it?
->>
-> 
-> If you backport the bcm HRTIMER_MODE_SOFT implementation to the 4.19 stable tree the problem is not fixed for 4.14, 4.4, etc.
+Allwinner R40 (also known as A40i, T3, V40) has a CAN controller. The
+controller is the same as in earlier A10 and A20 SoCs, but needs reset
+line to be deasserted before use.
 
-This backport patch does not fit lts 4.4 and 4.9. In addition,
-I backport patch to lts for the first time. So I am going to
-backport the patch one by one.
+This patch series introduce new compatible for R40 CAN controller,
+add support for reset line in driver and add the corresponding nodes
+to the SoC .dtsi file.
 
-> 
-> HRTIMER_MODE_SOFT has been introduced in 4.16
-> 
-> The issue of a race condition at bcm op removal has already been addressed before in commit a06393ed03167 ("can: bcm: fix hrtimer/tasklet termination in bcm op removal").
-> 
-> -       hrtimer_cancel(&op->timer);
-> -       hrtimer_cancel(&op->thrtimer);
-> -
-> -       if (op->tsklet.func)
-> -               tasklet_kill(&op->tsklet);
-> +       if (op->tsklet.func) {
-> +               while (test_bit(TASKLET_STATE_SCHED, &op->tsklet.state) ||
-> +                      test_bit(TASKLET_STATE_RUN, &op->tsklet.state) ||
-> +                      hrtimer_active(&op->timer)) {
-> +                       hrtimer_cancel(&op->timer);
-> +                       tasklet_kill(&op->tsklet);
-> +               }
-> +       }
-> 
-> IMO we should better try to improve this fix and enable it for older stable trees than fixing only the 4.19.
+The CAN IP was documented in early V40 datasheet [1]. It also fully
+supported in vendor BSP. However, CAN description was removed from
+more recent A40i, T3 and R40 user manuals and datasheets.
+Anyway, we verified that the CAN controller is indeed there and tested
+it extensively on A40i-based custom hardware [2].
 
-The commit bf74aa86e111 can solve the op UAF nicely and enter mainline from v5.4.
-I prefer to backport the patch to lower lts, but other sewing and mending,
-for example move hrtimer_active() forward.
+[1] https://linux-sunxi.org/File:Allwinner_V40_Datasheet_V1.0.pdf
+[2] https://wirenboard.com/en/product/wiren-board-7/
 
-> 
-> Best regards,
-> Oliver
-> 
-> 
-> 
->>>
->>>>
->>>> ----------------------------------------------------------------------
->>>>
->>>> This patch switches the timer to HRTIMER_MODE_SOFT, which executed the
->>>> timer callback in softirq context and removes the hrtimer_tasklet.
->>>>
->>>> Reported-by: syzbot+652023d5376450cc8516@syzkaller.appspotmail.com
->>
->> This is the public problem reporter. Do I need to move it to cover-letter
->> but here?
->>
->>>> Cc: stable@vger.kernel.org # 4.19
->>
->> I want to backport the patch to linux-4.19.y stable tree. How do I need to
->> modify?
->>
->>>> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
->>>> Signed-off-by: Anna-Maria Gleixner <anna-maria@linutronix.de>
->>>> Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
->>>> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
->>>> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
->>>> ---
->>>>   net/can/bcm.c | 156 +++++++++++++++++---------------------------------
->>>>   1 file changed, 52 insertions(+), 104 deletions(-)
->>>
->>> What stable kernel tree(s) are you wanting this backported to?
->>>
->>> thanks,
->>>
->>> greg k-h
->>> .
->>>
->>
->> Thank you for your patient guidance.
->>
-> .
+Changes in v2:
+  - sort pinmux nodes alphabetically and mark them with omit-if-no-ref
+
+Evgeny Boger (3):
+  dt-bindings: net: can: add support for Allwinner R40 CAN controller
+  can: sun4i_can: add support for R40 CAN controller
+  ARM: dts: sun8i: r40: add node for CAN controller
+
+ .../net/can/allwinner,sun4i-a10-can.yaml      | 24 ++++++++
+ arch/arm/boot/dts/sun8i-r40.dtsi              | 21 +++++++
+ drivers/net/can/sun4i_can.c                   | 61 ++++++++++++++++++-
+ 3 files changed, 105 insertions(+), 1 deletion(-)
+
+-- 
+2.25.1
