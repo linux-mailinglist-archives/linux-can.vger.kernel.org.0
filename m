@@ -2,101 +2,78 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0094448C214
-	for <lists+linux-can@lfdr.de>; Wed, 12 Jan 2022 11:16:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4402F48C9F5
+	for <lists+linux-can@lfdr.de>; Wed, 12 Jan 2022 18:40:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352424AbiALKQv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 12 Jan 2022 05:16:51 -0500
-Received: from mail-ua1-f50.google.com ([209.85.222.50]:36590 "EHLO
-        mail-ua1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346644AbiALKQu (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 12 Jan 2022 05:16:50 -0500
-Received: by mail-ua1-f50.google.com with SMTP id r15so3815227uao.3;
-        Wed, 12 Jan 2022 02:16:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AaBS9lcIpGiYplkxy0SH9H40GoB4xDcu3Lw4CJ5mNt0=;
-        b=2nEbHJL9sx+xgYMcS09fY/YnmnVDsehlBC6WbvRY9oyBZ/BU84FV5Scm40SXiHtVhA
-         KVm5eLrktAxZveBdij+OCmmihbY9oo34dDvdrN2zpfiNQrLXBy/fTgxgjgk/V2YT+uFl
-         HQ3xg3iHS39EPJDJoCvLOlEcgZlFQzJQdDZ7S8OAGWz/d45padGCpO120QKrnW6iCyv6
-         19kq1fcwTTlSWkaXFZKLX9escCB28mu1lGkWDmtYqKjv2pj4QmbSUN6jGyYkV93j4iZh
-         DVKTaySX0FO8uDvCXz/FJTcP6+ebiYD6dZLMgpxx5m6xWLi6iMx4dHI+tPpW2S3Gtaps
-         BK9w==
-X-Gm-Message-State: AOAM530t5THOlWDshIQOMaslmLtABLZF9ctQNF4ahnIV4bxKWwcdoXzj
-        vn9i6OY3CgHZrTuRcSBVQ0SOQEM+tJp5BHUu
-X-Google-Smtp-Source: ABdhPJy+j2vW7lELJMM4EDnk50EdyRDggDR+FbGVROyzlSS088jjylDkMTAuYoYKNtrd5Nh+eP4gzw==
-X-Received: by 2002:a9f:354f:: with SMTP id o73mr3934081uao.115.1641982609105;
-        Wed, 12 Jan 2022 02:16:49 -0800 (PST)
-Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com. [209.85.222.42])
-        by smtp.gmail.com with ESMTPSA id a190sm2431532vkb.15.2022.01.12.02.16.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jan 2022 02:16:48 -0800 (PST)
-Received: by mail-ua1-f42.google.com with SMTP id m15so3773288uap.6;
-        Wed, 12 Jan 2022 02:16:47 -0800 (PST)
-X-Received: by 2002:a67:e905:: with SMTP id c5mr3674091vso.68.1641982607735;
- Wed, 12 Jan 2022 02:16:47 -0800 (PST)
+        id S241075AbiALRkK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 12 Jan 2022 12:40:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35350 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238188AbiALRkK (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 12 Jan 2022 12:40:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D95BC06173F;
+        Wed, 12 Jan 2022 09:40:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF59A618BC;
+        Wed, 12 Jan 2022 17:40:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5D0C4C36AEB;
+        Wed, 12 Jan 2022 17:40:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642009209;
+        bh=dH3Rgfg0dmfN/ANUSizcRBkaWwQy95/1radkCDdUdYw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=TgN6Qva+8OTqQcmmNsbCTGrHGONgFAUPqC10S2ozE5nyfouOeCeRCoICSBddxQhyF
+         LnFMoUkg3U6Anwqfh9x0/zNmeCJg0a5ZbM5kEpnSGLEzpHUNPix7Ga0XC/X+JkkBKD
+         IImI2H/p8i2zXtv+ai/gb+vcOi4AYxb/xREwJ3/ELk81N+DWx9ny5SGCV495AxMggC
+         YbGm3x61e6QahSi1Apaz+IB0oY8i+xaoAWOBuAtReeahMXu3STVGTmymXwA9Z2aqcq
+         VHA2uTHyRnUPCS6yd/eMRXbVUpWyNHRPigvZGR0MFpPMhgC80Kqin9rsbHU0fvUHqg
+         q3Nvgbl+jhVAg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 43128F60792;
+        Wed, 12 Jan 2022 17:40:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220111162231.10390-1-uli+renesas@fpond.eu> <20220111162231.10390-2-uli+renesas@fpond.eu>
- <CAMuHMdVs=NWR1bRuTku09nWT+PyyVCM6Fp1GVu5brCj=VjZZ-g@mail.gmail.com> <387311382.2900483.1641977755599@webmail.strato.com>
-In-Reply-To: <387311382.2900483.1641977755599@webmail.strato.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 12 Jan 2022 11:16:36 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUnQLKZhAvaOJKeoG7yF0kG14LX20KqehadH-gbW1B9_g@mail.gmail.com>
-Message-ID: <CAMuHMdUnQLKZhAvaOJKeoG7yF0kG14LX20KqehadH-gbW1B9_g@mail.gmail.com>
-Subject: Re: [PATCH v2 1/5] clk: renesas: r8a779a0: add CANFD module clock
-To:     Ulrich Hecht <uli@fpond.eu>
-Cc:     Ulrich Hecht <uli+renesas@fpond.eu>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>, linux-can@vger.kernel.org,
-        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Jakub Kicinski <kuba@kernel.org>, mailhol.vincent@wanadoo.fr,
-        socketcan@hartkopp.net,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH iproute2-next v4] iplink_can: add ctrlmode_{supported,_static}
+ to the "--details --json" output
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164200920926.13100.6359567854126946569.git-patchwork-notify@kernel.org>
+Date:   Wed, 12 Jan 2022 17:40:09 +0000
+References: <20220109153040.521632-1-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20220109153040.521632-1-mailhol.vincent@wanadoo.fr>
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     netdev@vger.kernel.org, dsahern@gmail.com,
+        stephen@networkplumber.org, linux-can@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mkl@pengutronix.de
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Uli,
+Hello:
 
-On Wed, Jan 12, 2022 at 9:56 AM Ulrich Hecht <uli@fpond.eu> wrote:
-> > On 01/12/2022 9:44 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > --- a/drivers/clk/renesas/r8a779a0-cpg-mssr.c
-> > > +++ b/drivers/clk/renesas/r8a779a0-cpg-mssr.c
-> > > @@ -136,6 +136,7 @@ static const struct mssr_mod_clk r8a779a0_mod_clks[] __initconst = {
-> > >         DEF_MOD("avb3",         214,    R8A779A0_CLK_S3D2),
-> > >         DEF_MOD("avb4",         215,    R8A779A0_CLK_S3D2),
-> > >         DEF_MOD("avb5",         216,    R8A779A0_CLK_S3D2),
-> > > +       DEF_MOD("canfd0",       328,    R8A779A0_CLK_CANFD),
-> >
-> > The datasheet calls this "canfd".
-> >
-> > >         DEF_MOD("csi40",        331,    R8A779A0_CLK_CSI0),
-> > >         DEF_MOD("csi41",        400,    R8A779A0_CLK_CSI0),
-> > >         DEF_MOD("csi42",        401,    R8A779A0_CLK_CSI0),
-> >
-> > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > i.e. will queue in renesas-clk-for-v5.18 with the above fixed.
->
-> Don't do that! There already is a DIV4 clock called "canfd", and using that name twice breaks stuff. The BSP calls this clock "can-fd" for that reason.
+This patch was applied to iproute2/iproute2-next.git (main)
+by David Ahern <dsahern@kernel.org>:
 
-Thanks, I stand corrected.
+On Mon, 10 Jan 2022 00:30:40 +0900 you wrote:
+> This patch is the userland counterpart of [1]. Indeed, [1] enables the
+> can netlink interface to report the CAN controller capabilities.
+> 
+> Previously, only the options which were switched on were reported
+> (i.e. can_priv::ctrlmode). Here, we add two additional pieces of
+> information to the json report:
+> 
+> [...]
 
-Gr{oetje,eeting}s,
+Here is the summary with links:
+  - [iproute2-next,v4] iplink_can: add ctrlmode_{supported,_static} to the "--details --json" output
+    https://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git/commit/?id=db5305290c2f
 
-                        Geert
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
