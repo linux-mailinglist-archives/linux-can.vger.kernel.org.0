@@ -2,100 +2,100 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1097D48BF7C
-	for <lists+linux-can@lfdr.de>; Wed, 12 Jan 2022 09:06:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 930E948C027
+	for <lists+linux-can@lfdr.de>; Wed, 12 Jan 2022 09:44:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349311AbiALIGj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 12 Jan 2022 03:06:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44414 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349140AbiALIGi (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 12 Jan 2022 03:06:38 -0500
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41966C06173F;
-        Wed, 12 Jan 2022 00:06:38 -0800 (PST)
-Received: by mail-qv1-xf2a.google.com with SMTP id iw1so2140029qvb.1;
-        Wed, 12 Jan 2022 00:06:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=s9wP9RSrgr08glKF9dncR1CuR8sUvA64NLVwaMsEmbU=;
-        b=ogcCtyIpl7XMHQhcKCT/FAzS4h1kiYH97fEBksTunkvVyezNqhSGGfvfQ9+0mWFFzd
-         7F4c1j7IADAECwYvbe8EbzKyiGBte4fvT0VyL4w56GC6/16oCim7ofaqrVx/0ujGexK1
-         +q3Ik/qv9HPUTGTRGOiTSVWK4y737fKb+fMv/iU+ND6gmsUuA9bSm8fvY9WLG1VQWliG
-         bqr5iP5Xkt6HOuXNUfP9CR4+9ZrWGIg2LJQ8mcDSMtRlsyvMoleA8jXeHNP23a76D7Be
-         rdsbuXXP35366F6F0+bRLv/jPGJdUOwTVGlQ2/Q+NTMkqZIoaEPa/VDwD0Jfr8B+9IPF
-         l1Mg==
+        id S1351722AbiALIoq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 12 Jan 2022 03:44:46 -0500
+Received: from mail-vk1-f176.google.com ([209.85.221.176]:46658 "EHLO
+        mail-vk1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351576AbiALIoq (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 12 Jan 2022 03:44:46 -0500
+Received: by mail-vk1-f176.google.com with SMTP id bj47so1149924vkb.13;
+        Wed, 12 Jan 2022 00:44:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=s9wP9RSrgr08glKF9dncR1CuR8sUvA64NLVwaMsEmbU=;
-        b=DEp8BBjjcf7w5VGwF6WxubTuZCE2Ul/AZqlx3YeO3RaDZ7HgQ/23oODewzuZjg058E
-         7ZPYxIMpg8V4QqOjQA0k7bi3JTIPugL48vU+vAz/uLlWQVEnu/TlmJVu9PVVU3spw2be
-         rW1JAQfiMaxO73aVLyG7uxBOBOuUWOxN3jihXcqcL7w48+zb9aAPUYu2Jkf5blhA6DVO
-         cXbAjAJUglLQ61DHxLXDONV3ysakWg5niRLYloxZ6mt5c2peMqEH9rov4XMYFmCvVVX8
-         wSQBWgP5i9h9knv9/5PWv86X7s86xtxXW7q3RYzY+mKlfirbHnzetcAZW4kPEpvXPWnr
-         wWaw==
-X-Gm-Message-State: AOAM530Ny1ecgTnT/TFBse4IWk1XSVjOGmYdFWabRvQAxz5gnhzNBlMi
-        jb50zF1iyhheW3oEczMaa7Q=
-X-Google-Smtp-Source: ABdhPJwm0V0bPtI8HXjfNZ/O4N0UAjpRihZIarKX3MZU85E5mJUIIZNmlXu2DRyT8OmNEh38J6JfnA==
-X-Received: by 2002:a05:6214:f25:: with SMTP id iw5mr6709778qvb.3.1641974797539;
-        Wed, 12 Jan 2022 00:06:37 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id g13sm4199068qko.34.2022.01.12.00.06.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 00:06:37 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     wg@grandegger.com
-Cc:     mkl@pengutronix.de, davem@davemloft.net, kuba@kernel.org,
-        mailhol.vincent@wanadoo.fr, jiapeng.chong@linux.alibaba.com,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>, CGEL ZTE <cgel.zte@gmail.com>
-Subject: [PATCH] drivers/net/can/softing: remove redundant ret variable
-Date:   Wed, 12 Jan 2022 08:06:29 +0000
-Message-Id: <20220112080629.667191-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LjeL6LehGBaC//OQBhfg2Gh/QedR10SATiGZ4ftla+8=;
+        b=L0mdX8iVw5XOohnCowVrl8W+ABq0oVo7CCtAQJso+xAcFlOsOJqM8O9ncx9l4jQ++S
+         9oj6EAG58lXhbZ6gYSqDN2W5WLCFlUNAOJmrIFzehnP8SsWdUcJLXAxkCovuWYRRgUXz
+         EiIoRz1+qTAwgBVnB2TmU1ubwOet/1HtFgGbF9gUoqthBZV/EJ7Up7Ba7wuf7xy0BK7n
+         FWEWjrfYR047xHukUAucH4yZpJbPQtBX5U3i35yvIL4cHWW/8EX1rVdaI9JkZ6OX3Net
+         dwGLy39wS5ngWGinekgVFVtt/Bs4GTgIm1gz/lEqK6pHSTMfn2RZ4Xepw8c6y9hwtYYx
+         cOow==
+X-Gm-Message-State: AOAM532l26YnCIesrautGA4C0M9+kl0voOLb5COPGKUy8nfN+JKOvFgz
+        TpxP1zVUhHqic2qEnXSE+Up+J3BnGSZoRYX9
+X-Google-Smtp-Source: ABdhPJwq0VAN6WUQ7EMEeUxeNu6OpL90ARgsmB+j0sGLhwa8UeLeF+59LjgHU+jFFbTUrqReBQLgEg==
+X-Received: by 2002:a05:6122:84c:: with SMTP id 12mr4150017vkk.4.1641977085230;
+        Wed, 12 Jan 2022 00:44:45 -0800 (PST)
+Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com. [209.85.222.41])
+        by smtp.gmail.com with ESMTPSA id n9sm7233455uaj.11.2022.01.12.00.44.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jan 2022 00:44:44 -0800 (PST)
+Received: by mail-ua1-f41.google.com with SMTP id i5so3331532uaq.10;
+        Wed, 12 Jan 2022 00:44:44 -0800 (PST)
+X-Received: by 2002:ab0:1861:: with SMTP id j33mr3953412uag.14.1641977084327;
+ Wed, 12 Jan 2022 00:44:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220111162231.10390-1-uli+renesas@fpond.eu> <20220111162231.10390-2-uli+renesas@fpond.eu>
+In-Reply-To: <20220111162231.10390-2-uli+renesas@fpond.eu>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 12 Jan 2022 09:44:33 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVs=NWR1bRuTku09nWT+PyyVCM6Fp1GVu5brCj=VjZZ-g@mail.gmail.com>
+Message-ID: <CAMuHMdVs=NWR1bRuTku09nWT+PyyVCM6Fp1GVu5brCj=VjZZ-g@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] clk: renesas: r8a779a0: add CANFD module clock
+To:     Ulrich Hecht <uli+renesas@fpond.eu>
+Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>, linux-can@vger.kernel.org,
+        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Jakub Kicinski <kuba@kernel.org>, mailhol.vincent@wanadoo.fr,
+        socketcan@hartkopp.net,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+Hi Uli,
 
-Return value from softing_startstop() directly instead
-of taking this in another redundant variable.
+On Tue, Jan 11, 2022 at 5:22 PM Ulrich Hecht <uli+renesas@fpond.eu> wrote:
+> Adds "canfd0" to mod clocks.
+>
+> Signed-off-by: Ulrich Hecht <uli+renesas@fpond.eu>
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
----
- drivers/net/can/softing/softing_main.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+Thanks for your patch!
 
-diff --git a/drivers/net/can/softing/softing_main.c b/drivers/net/can/softing/softing_main.c
-index cfc1325aad10..737dac5ea3b1 100644
---- a/drivers/net/can/softing/softing_main.c
-+++ b/drivers/net/can/softing/softing_main.c
-@@ -392,13 +392,10 @@ static int softing_netdev_open(struct net_device *ndev)
- 
- static int softing_netdev_stop(struct net_device *ndev)
- {
--	int ret;
--
- 	netif_stop_queue(ndev);
- 
- 	/* softing cycle does close_candev() */
--	ret = softing_startstop(ndev, 0);
--	return ret;
-+	return softing_startstop(ndev, 0);
- }
- 
- static int softing_candev_set_mode(struct net_device *ndev, enum can_mode mode)
--- 
-2.25.1
+> --- a/drivers/clk/renesas/r8a779a0-cpg-mssr.c
+> +++ b/drivers/clk/renesas/r8a779a0-cpg-mssr.c
+> @@ -136,6 +136,7 @@ static const struct mssr_mod_clk r8a779a0_mod_clks[] __initconst = {
+>         DEF_MOD("avb3",         214,    R8A779A0_CLK_S3D2),
+>         DEF_MOD("avb4",         215,    R8A779A0_CLK_S3D2),
+>         DEF_MOD("avb5",         216,    R8A779A0_CLK_S3D2),
+> +       DEF_MOD("canfd0",       328,    R8A779A0_CLK_CANFD),
 
+The datasheet calls this "canfd".
+
+>         DEF_MOD("csi40",        331,    R8A779A0_CLK_CSI0),
+>         DEF_MOD("csi41",        400,    R8A779A0_CLK_CSI0),
+>         DEF_MOD("csi42",        401,    R8A779A0_CLK_CSI0),
+
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-clk-for-v5.18 with the above fixed.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
