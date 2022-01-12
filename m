@@ -2,78 +2,132 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4402F48C9F5
-	for <lists+linux-can@lfdr.de>; Wed, 12 Jan 2022 18:40:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 501BA48CB2B
+	for <lists+linux-can@lfdr.de>; Wed, 12 Jan 2022 19:43:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241075AbiALRkK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 12 Jan 2022 12:40:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35350 "EHLO
+        id S1356411AbiALSnz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 12 Jan 2022 13:43:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238188AbiALRkK (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 12 Jan 2022 12:40:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D95BC06173F;
-        Wed, 12 Jan 2022 09:40:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF59A618BC;
-        Wed, 12 Jan 2022 17:40:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5D0C4C36AEB;
-        Wed, 12 Jan 2022 17:40:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642009209;
-        bh=dH3Rgfg0dmfN/ANUSizcRBkaWwQy95/1radkCDdUdYw=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=TgN6Qva+8OTqQcmmNsbCTGrHGONgFAUPqC10S2ozE5nyfouOeCeRCoICSBddxQhyF
-         LnFMoUkg3U6Anwqfh9x0/zNmeCJg0a5ZbM5kEpnSGLEzpHUNPix7Ga0XC/X+JkkBKD
-         IImI2H/p8i2zXtv+ai/gb+vcOi4AYxb/xREwJ3/ELk81N+DWx9ny5SGCV495AxMggC
-         YbGm3x61e6QahSi1Apaz+IB0oY8i+xaoAWOBuAtReeahMXu3STVGTmymXwA9Z2aqcq
-         VHA2uTHyRnUPCS6yd/eMRXbVUpWyNHRPigvZGR0MFpPMhgC80Kqin9rsbHU0fvUHqg
-         q3Nvgbl+jhVAg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 43128F60792;
-        Wed, 12 Jan 2022 17:40:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S1356384AbiALSnu (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 12 Jan 2022 13:43:50 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98AA5C061748
+        for <linux-can@vger.kernel.org>; Wed, 12 Jan 2022 10:43:50 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1n7iau-0002qg-OU; Wed, 12 Jan 2022 19:43:36 +0100
+Received: from pengutronix.de (unknown [195.138.59.174])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 3FC4116C67;
+        Wed, 12 Jan 2022 18:43:31 +0000 (UTC)
+Date:   Wed, 12 Jan 2022 19:43:27 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Ulrich Hecht <uli+renesas@fpond.eu>
+Cc:     linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
+        davem@davemloft.net, linux-can@vger.kernel.org,
+        prabhakar.mahadev-lad.rj@bp.renesas.com,
+        biju.das.jz@bp.renesas.com, wsa@kernel.org,
+        yoshihiro.shimoda.uh@renesas.com, wg@grandegger.com,
+        kuba@kernel.org, mailhol.vincent@wanadoo.fr,
+        socketcan@hartkopp.net, geert@linux-m68k.org,
+        kieran.bingham@ideasonboard.com
+Subject: Re: [PATCH v2 2/5] can: rcar_canfd: Add support for r8a779a0 SoC
+Message-ID: <20220112184327.f7fwzgqvle23gfzv@pengutronix.de>
+References: <20220111162231.10390-1-uli+renesas@fpond.eu>
+ <20220111162231.10390-3-uli+renesas@fpond.eu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH iproute2-next v4] iplink_can: add ctrlmode_{supported,_static}
- to the "--details --json" output
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164200920926.13100.6359567854126946569.git-patchwork-notify@kernel.org>
-Date:   Wed, 12 Jan 2022 17:40:09 +0000
-References: <20220109153040.521632-1-mailhol.vincent@wanadoo.fr>
-In-Reply-To: <20220109153040.521632-1-mailhol.vincent@wanadoo.fr>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     netdev@vger.kernel.org, dsahern@gmail.com,
-        stephen@networkplumber.org, linux-can@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mkl@pengutronix.de
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="245qoku3mnz6cen7"
+Content-Disposition: inline
+In-Reply-To: <20220111162231.10390-3-uli+renesas@fpond.eu>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello:
 
-This patch was applied to iproute2/iproute2-next.git (main)
-by David Ahern <dsahern@kernel.org>:
+--245qoku3mnz6cen7
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 10 Jan 2022 00:30:40 +0900 you wrote:
-> This patch is the userland counterpart of [1]. Indeed, [1] enables the
-> can netlink interface to report the CAN controller capabilities.
-> 
-> Previously, only the options which were switched on were reported
-> (i.e. can_priv::ctrlmode). Here, we add two additional pieces of
-> information to the json report:
-> 
-> [...]
+On 11.01.2022 17:22:28, Ulrich Hecht wrote:
+> Adds support for the CANFD IP variant in the V3U SoC.
+>=20
+> Differences to controllers in other SoCs are limited to an increase in
+> the number of channels from two to eight, an absence of dedicated
+> registers for "classic" CAN mode, and a number of differences in magic
+> numbers (register offsets and layouts).
+>=20
+> Inspired by BSP patch by Kazuya Mizuguchi.
+>=20
+> Signed-off-by: Ulrich Hecht <uli+renesas@fpond.eu>
+> ---
+>  drivers/net/can/rcar/rcar_canfd.c | 231 ++++++++++++++++++++----------
+>  1 file changed, 153 insertions(+), 78 deletions(-)
+>=20
+> diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rca=
+r_canfd.c
+> index ff9d0f5ae0dd..b1c9870d2a82 100644
+> --- a/drivers/net/can/rcar/rcar_canfd.c
+> +++ b/drivers/net/can/rcar/rcar_canfd.c
+> @@ -44,10 +44,13 @@
+>  enum rcanfd_chip_id {
+>  	RENESAS_RCAR_GEN3 =3D 0,
+>  	RENESAS_RZG2L,
+> +	RENESAS_R8A779A0,
+>  };
+> =20
+>  /* Global register bits */
+> =20
+> +#define IS_V3U (gpriv->chip_id =3D=3D RENESAS_R8A779A0)
 
-Here is the summary with links:
-  - [iproute2-next,v4] iplink_can: add ctrlmode_{supported,_static} to the "--details --json" output
-    https://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git/commit/?id=db5305290c2f
+I really don't like this macro, as it silently relies on gpriv....and
+I really don't like this use of this macro in the other macros that lead
+to 2 or even 3 ternary operators hiding inside them. Is there any chance
+to change this?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Please add at least the gpriv argument to IS_V3U().....
 
+[...]
 
+> -	of_child =3D of_get_child_by_name(pdev->dev.of_node, "channel1");
+> -	if (of_child && of_device_is_available(of_child))
+> -		channels_mask |=3D BIT(1);	/* Channel 1 */
+> +	strcpy(name, "channelX");
+
+please use strlcpy()
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--245qoku3mnz6cen7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmHfIU0ACgkQqclaivrt
+76m+ZAgAhsdBWGeR/pk4xB23D97lrg6gBfBhg50YD0P6uiwmr5F6LZTA3MrfxXQ2
+yRXaZ7zh7Bb0FWHlqCCjFWF1QCchtlVXkP2S4+Y1UpRF4Ppo4VduiQtEx/NvFHKN
+/chjFzn6lgQjvEymMzypjDo1BcfpdZUI1buvxTcuxapLcx9wAr3ZgBLgY8DnPm5x
+FhCyHBGTvpBWI2fvRwy7twrALoUhwDES3zA7aAd330F2TCi+BJGIp1uZdvEDk28v
+KWlA3huprGCKCtSse2KWOMrTPp85KlDYOPiTBRZIDvM+i5wt4hQTAub8xYDP4Wjz
+vo7NvdH6879oVvyJ1JnR37ZClFSahA==
+=QkLU
+-----END PGP SIGNATURE-----
+
+--245qoku3mnz6cen7--
