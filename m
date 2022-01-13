@@ -2,74 +2,127 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 929A648DC26
-	for <lists+linux-can@lfdr.de>; Thu, 13 Jan 2022 17:45:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD02348DEEF
+	for <lists+linux-can@lfdr.de>; Thu, 13 Jan 2022 21:30:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236875AbiAMQpU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 13 Jan 2022 11:45:20 -0500
-Received: from mo4-p01-ob.smtp.rzone.de ([81.169.146.167]:42863 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236868AbiAMQpU (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 13 Jan 2022 11:45:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1642092287;
-    s=strato-dkim-0002; d=fpond.eu;
-    h=Subject:References:In-Reply-To:Message-ID:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=eqEZwnnhqa9x5sUpmp5+dl8+luCawycK4EknAItN9o0=;
-    b=f/TX8xb4MNyOSeZTVcP3hLR3JTn+t4iOXGSwd94rgi5oH+6ahWPTCOITmKq66XbtTB
-    3XgED/0B43N+E7q95aDElRDWP1IdppfWy+f15q8l50ovEzckAQ8oJ6IW0gotcF/mwMP3
-    5+gpw8fwe/i9jnKss1cXs4rAy52GKb+QuTdQqbX71SEGPMcZuRBLG1Rexx2Q/eVqwt7c
-    gtul07yXn3vNx9LUgRfy+WQ648Xnc7JHgkunFIbxhc9Yb3fM4k//hOk2E7/O/kIKr884
-    b+Tyap5P8i6vTA0qxlwUzB8fQ0MsBmLLF2mTKXY4qdGu6vytd37cRcIzuhdvx+2mGaSP
-    //aw==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":OWANVUa4dPFUgKR/3dpvnYP0Np73amq+g13rqGzvv3qxio1R8fCs/83N2Y0="
-X-RZG-CLASS-ID: mo00
-Received: from oxapp05-01.back.ox.d0m.de
-    by smtp.strato.de (RZmta 47.37.6 AUTH)
-    with ESMTPSA id a48ca5y0DGikQkB
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Thu, 13 Jan 2022 17:44:46 +0100 (CET)
-Date:   Thu, 13 Jan 2022 17:44:46 +0100 (CET)
-From:   Ulrich Hecht <uli@fpond.eu>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
-        davem@davemloft.net, linux-can@vger.kernel.org,
-        prabhakar.mahadev-lad.rj@bp.renesas.com,
-        biju.das.jz@bp.renesas.com, wsa@kernel.org,
-        yoshihiro.shimoda.uh@renesas.com, wg@grandegger.com,
-        kuba@kernel.org, mailhol.vincent@wanadoo.fr,
-        socketcan@hartkopp.net, geert@linux-m68k.org,
-        kieran.bingham@ideasonboard.com
-Message-ID: <1933768449.3343335.1642092286817@webmail.strato.com>
-In-Reply-To: <20220112184327.f7fwzgqvle23gfzv@pengutronix.de>
-References: <20220111162231.10390-1-uli+renesas@fpond.eu>
- <20220111162231.10390-3-uli+renesas@fpond.eu>
- <20220112184327.f7fwzgqvle23gfzv@pengutronix.de>
-Subject: Re: [PATCH v2 2/5] can: rcar_canfd: Add support for r8a779a0 SoC
+        id S233071AbiAMUaM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 13 Jan 2022 15:30:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33618 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231858AbiAMUaL (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 13 Jan 2022 15:30:11 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E35C061574
+        for <linux-can@vger.kernel.org>; Thu, 13 Jan 2022 12:30:11 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1n86jZ-0003lm-Vy; Thu, 13 Jan 2022 21:30:10 +0100
+Received: from pengutronix.de (unknown [195.138.59.174])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id B752C180DC;
+        Thu, 13 Jan 2022 20:30:08 +0000 (UTC)
+Date:   Thu, 13 Jan 2022 21:30:04 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Srinivas Neeli <sneeli@xilinx.com>
+Cc:     Srinivas Goud <sgoud@xilinx.com>,
+        Naveen Kumar Gaddipati <naveenku@xilinx.com>,
+        Prasad Beer Prasad <prasadbe@xilinx.com>,
+        linux-can <linux-can@vger.kernel.org>
+Subject: Re: Queries on CAN frame work
+Message-ID: <20220113203004.jf2rqj2pirhgx72i@pengutronix.de>
+References: <DM6PR02MB538645C4ECE3BBBD3CE92A17AF539@DM6PR02MB5386.namprd02.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-Importance: Normal
-X-Mailer: Open-Xchange Mailer v7.10.5-Rev33
-X-Originating-Client: open-xchange-appsuite
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4xlilptybee4pkqi"
+Content-Disposition: inline
+In-Reply-To: <DM6PR02MB538645C4ECE3BBBD3CE92A17AF539@DM6PR02MB5386.namprd02.prod.outlook.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
-> On 01/12/2022 7:43 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> > +#define IS_V3U (gpriv->chip_id == RENESAS_R8A779A0)
-> 
-> I really don't like this macro, as it silently relies on gpriv....and
-> I really don't like this use of this macro in the other macros that lead
-> to 2 or even 3 ternary operators hiding inside them. Is there any chance
-> to change this?
+--4xlilptybee4pkqi
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Good point. I guess I should turn that into a function.
+Hello Srinivas Neeli,
 
-CU
-Uli
+On 13.01.2022 18:14:06, Srinivas Neeli wrote:
+> This mail is regarding to understand more on CAN Frame work for CANFD
+> networks.
+
+let's discuss this on the CAN mailing list (Cc'ed). Feel free to
+subscribe (http://vger.kernel.org/vger-lists.html#linux-can). Please
+post non HTML mail.
+
+> Recently we did few experiments with our CANFD network. Stuff error
+> observed with different Nominal and Dataphase prescaler configuration
+> values, which we get from the frame work.
+>=20
+>=20
+> For lower baud rates separate prescalers are working good, but when we
+> switch to high baud rates(like 4Mbps and 5Mbps) observed the BUSOFF
+> state(Due to stuff errors) on IP(Xilinx).
+>=20
+> With shared prescaler(low prescalers) we are not seeing the issue..
+>=20
+> In Iso spec also mentioned to avoid tolerance, we have to maintain
+> common TQ for Nominal and Data phase.
+>=20
+> Spec: ISO 11898-1:2015(E)  page no :50
+>=20
+> " If the same time quantum length is used in the nominal bit time and
+> in the data bit time and the positions of the sample points in the
+> nominal bit time are the same in all CAN nodes of a network, then
+> optimum clock tolerance is accomplished for networks using FD frames."
+>=20
+> CIA:
+> https://can-newsletter.org/uploads/media/raw/f6a36d1461371a2f86ef0011a513=
+712c.pdf
+>=20
+> From above CAN-newsletter also suggested the same in recommendation 2 and=
+ 3.
+>=20
+> Recommendation 2: Set the BRPA bit-rate prescaler equal BRPB
+> Recommendation 3: Choose BRPA and BRPD as low as possible
+>=20
+> Is there any possibility in framework to use shared prescalars for Nomina=
+l and Dataphase?.
+>=20
+> One more question. How to calculate TDCO ?, is there any generic formula =
+for this ?.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--4xlilptybee4pkqi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmHgi8oACgkQqclaivrt
+76lVngf+IEKFg5SXIPdJKnlfO4zPKaXm6xxtpfXLEMNg+b/idvJo3cbclQIbXqeT
+tcL7FPERg8qDbR7NpTgmpl1JlbKB6Kiul7LQLZ19sHmIbPCcGbA9RRKX8OLkRMWB
+hiIBq0l7GR4RYqTO1sGVE/jYnkRjag+LWYqZE3BAgmN9iFPATw3saFKXTbi7PEoS
+yv9x/G7EIBT3tJnID5yLPyVcYnHwQ31ug/Lg8rsvWHv/kFWp1I8ILVJXHao26aLN
+2dpiBJX2UAkky9cVWjsPzf0WEh2GytzuZMv+O818dC2C+avfLJpIJdHXYr7psZcw
+EE7J8PecWYIJDFWQ0BwzQMYNcwodjw==
+=cwDM
+-----END PGP SIGNATURE-----
+
+--4xlilptybee4pkqi--
