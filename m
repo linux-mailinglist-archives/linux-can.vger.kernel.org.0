@@ -2,307 +2,311 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F210A48EA06
-	for <lists+linux-can@lfdr.de>; Fri, 14 Jan 2022 13:41:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6030848EAFA
+	for <lists+linux-can@lfdr.de>; Fri, 14 Jan 2022 14:43:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235704AbiANMlX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 14 Jan 2022 07:41:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53638 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbiANMlX (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 14 Jan 2022 07:41:23 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5C8C061574
-        for <linux-can@vger.kernel.org>; Fri, 14 Jan 2022 04:41:23 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1n8LtR-0006t6-Ek; Fri, 14 Jan 2022 13:41:21 +0100
-Received: from pengutronix.de (unknown [195.138.59.174])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 564CD18972;
-        Fri, 14 Jan 2022 12:41:20 +0000 (UTC)
-Date:   Fri, 14 Jan 2022 13:41:16 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Markus Mirevik <markus.mirevik@dpsolutions.se>
-Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Subject: Re: MCP251xFD runs interrupt handler twice per message.
-Message-ID: <87o84e1oj1.fsf@hardanger.blackshift.org>
+        id S236619AbiANNnr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 14 Jan 2022 08:43:47 -0500
+Received: from mail-eopbgr40076.outbound.protection.outlook.com ([40.107.4.76]:6625
+        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230472AbiANNnq (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Fri, 14 Jan 2022 08:43:46 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DLY54oiV6m1jsGDpvYfHY8AinZAqix82IGoKsw0udF4iUZKcVYLYXh1FFBdAe7R2ULBFLDjvUfmfFh2hK8eUakQ27RytXgFX5BkHe/4bk/oK7Q0h5GepTKDtAPQB2orH6zqF4/U8QL5NyMzB9Q588CmmGFr5iiQToNX1xEfFMoOCU026vGi0tMBPxWiD2V+Yg0IrG2ACsJzh861J5Ogn5TT8qmimsJWjx6UIQsSYY3x2cnO5oeplC16VgOZB9ut5RykblYJcMT0MWzKcF7wE0tHwQ1NBPxqCui7GSnNtj9cBBgpdUhvoqN9uvqndvK5KHPzqqMtMFCFyjvSVSLrG2g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rCh86mUUjRNzwOx+S6g4yOkTlKoXh1ycoSWIMsL/RE8=;
+ b=MUn9mFNV/7GZn8i05USS0UdK4EhDBL3mmSSU4QMbxMpEx3HB45RxY/6Fi/jrRBi1EKW1w/Ro5c74V9ncmpbe2jJh0cMKl20nu78ESguhkYQ5ecFIl0rrC7IxDpkF1c0xfzy5S2ntchF4CNNrh9sAtoL7a4Taw9NA1+mHTlZQdkHE+geN0kh4B9LewHgFVSp8GKx41amA90Xg5ykqG5kW09SUUXilgCrHCQ3/0+1zpSwwuoy0o9J8A8jlzeAfLWN8GRnQxNCKuvtcOb6JoaqLHNbfU3ks/fUHib6GPDCRKnMF9yHv4PCbIloIXdERPADIv5bVAuiGInV//a2UB1Ko1g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=dpsolutions.se; dmarc=pass action=none
+ header.from=dpsolutions.se; dkim=pass header.d=dpsolutions.se; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=dpnorge.onmicrosoft.com; s=selector2-dpnorge-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rCh86mUUjRNzwOx+S6g4yOkTlKoXh1ycoSWIMsL/RE8=;
+ b=WgizLCmk8SzlcYNMh3+QchkqorqaSod9Tux/QY+PgnLFB/TLCMW8hyZ+E5B5eSd0QCxfmu42ca2x9bC6UFjLF08irqZESMSJTqIRqwIXR7ThlL9Wb8hUqd+42usxht+jrwir6PUGtWB+KjRS7+OA0R5DvvhoRXQwGcYGn64CQ+A=
+Received: from HE1PR04MB3100.eurprd04.prod.outlook.com (2603:10a6:7:21::21) by
+ HE1PR04MB3132.eurprd04.prod.outlook.com (2603:10a6:7:25::23) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4888.11; Fri, 14 Jan 2022 13:43:43 +0000
+Received: from HE1PR04MB3100.eurprd04.prod.outlook.com
+ ([fe80::4949:5038:5888:d0ff]) by HE1PR04MB3100.eurprd04.prod.outlook.com
+ ([fe80::4949:5038:5888:d0ff%4]) with mapi id 15.20.4867.012; Fri, 14 Jan 2022
+ 13:43:43 +0000
+From:   Markus Mirevik <markus.mirevik@dpsolutions.se>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+CC:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Subject: Sv: MCP251xFD runs interrupt handler twice per message.
+Thread-Topic: MCP251xFD runs interrupt handler twice per message.
+Thread-Index: AdgJLvj3LYiHrdzWT92Iflx1OZxh8QAFQxoAAAAoddA=
+Date:   Fri, 14 Jan 2022 13:43:42 +0000
+Message-ID: <HE1PR04MB3100B7CD240526C06FCA048EE6549@HE1PR04MB3100.eurprd04.prod.outlook.com>
 References: <HE1PR04MB310066D557C9D77FE357D90AE6549@HE1PR04MB3100.eurprd04.prod.outlook.com>
+ <87o84e1oj1.fsf@hardanger.blackshift.org>
+In-Reply-To: <87o84e1oj1.fsf@hardanger.blackshift.org>
+Accept-Language: en-US
+Content-Language: sv-SE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=dpsolutions.se;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 1e53c08a-89a3-4947-766d-08d9d763e143
+x-ms-traffictypediagnostic: HE1PR04MB3132:EE_
+x-microsoft-antispam-prvs: <HE1PR04MB3132FEECA778C2B1117FCCE6E6549@HE1PR04MB3132.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: abJHu+fg5FG7dxzRR2wi4agyXPPHKpcYuQ823pxicqzW2giwMvGc97KwQbbsEElFFqDhNDhFbR1gzHvuulu/gSGJcaBIbnNhO2Gxmz8jL1b7VJXhVggIXSD6tiZ9NLhRXzoamDIfSd/y7IIDWB0qe+CwRL0mohT7WIai9ndWZ7Q7v9PqjqzqAaevSM1K8uVNobKTWw9WVH4HdbuM6CBR2YXA6Cfc+jgm8XgV+cdz+kNSjlM2V8DgXNPLbL+am2+u3OBJcdMVmTtAJQgtwYmKzHmZOm4Ba07mG4xvHgFnsqnbsD3U/eYrsdiIzQjaVp8t7JQTHtsYXqL61LKOqus9RjfULc6G9yLq+Rr6H/q2aSWnAMWFZchocwo6b6LrU5qN1wrmA8CDusY72rh0RQwcxqr3VIRzroHHoCUCNqZvMQz9XUKRllqrgTIKfBrKP153y8UQ9r8qGdQmMaoseH5YzUJvAe0PtQmEyJ4XcVlGw4VMsH8HZgTVD0samHLURoaLYZ07evi48iKIuw/5ZMaBBHIvZ9uVTPGGImCYEXfVCz0Gz8oOV1ut3jpPNEJjMU43xlo66fQohxD6Ixo6sEhRPPFhfava7ikgV0O5gm1uFUuPkeESa0O0SYXTAfsbUEBMrPhCtiKDpDbVADcNnc7jQKKGZ2SD2zpFgq8iH+eOHFPh9Fkw5R9KeHeC1tX0dP6XUOTlqXUBLg0W/lJCCqo+bJ2SradkxwPD7WIXDbQBobNWElQkz45t4lYXPHjt78R3mZ+P+c/j4rFOldD0KvqqWLejzc4NfsHyKdPFT0TAphA=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR04MB3100.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(366004)(346002)(376002)(136003)(39840400004)(6916009)(186003)(33656002)(7696005)(26005)(4001150100001)(9686003)(71200400001)(8676002)(53546011)(38070700005)(8936002)(44832011)(966005)(6506007)(4326008)(15650500001)(64756008)(508600001)(66446008)(2906002)(52536014)(122000001)(83380400001)(86362001)(38100700002)(76116006)(55016003)(5660300002)(66946007)(66556008)(316002)(66476007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?b3ptNmJqRm92ZDIyUXNCMWFrT2FJVWZnNnBseFM3RlFpdC9VS0JSR0MzWmZo?=
+ =?utf-8?B?MGhPd0NIZ3hjY09MeDNFd2ZPT0xETW53YURtcXhnRVVUY2lFdWxQd1dGQktn?=
+ =?utf-8?B?U05icDc3b0pjdkhjZllxTU55L1FPdndiWkxKM1VYeDFMU29UbjM3eEtPalNH?=
+ =?utf-8?B?b2loL3pSUU5VaURZTXJQOXJ6UkllcExxMzJLYVBaZldvNjk5MlFaZmJvQjNw?=
+ =?utf-8?B?VSsrcDhUS29MeXRxckJNVG5FWUU2dGZPM1pKK3RvMHk1TkxreUpmVkFtSVk0?=
+ =?utf-8?B?cTJPaFVuNnF0N01iY0Z4Vkx6YXdDQ2hJK25ETkFKMUhZdDRxWXJCZkFpa3E4?=
+ =?utf-8?B?dEZmVnNKelpGKzJISW01STJlYXpXM1hTQVIyVTdYYzdDRms3enJPd00vUlpE?=
+ =?utf-8?B?aUZnOHVyNnBCYUZVV1pIQXdPWGN6ZGo1eXhtVXRseWlmNXZjbjhNa0VMdkE0?=
+ =?utf-8?B?USs5ZnNpTzdpZGFDeWFBMW9XRDJKQnNBYWxlUGxWRjcxczBnK1NaZ0t4M2Qy?=
+ =?utf-8?B?UVV0Tmx3VEx2a1gvK0kvYzNYM0xDRTY0UUpLck5WRDRkM1hHdmRkcE5LeFZk?=
+ =?utf-8?B?R0ppV3ByNHpITVBYckhhT0ZVZUV6ZkFORjBTekpGQzVTRFQxYXJ4RmF5a01G?=
+ =?utf-8?B?SXdWRHRpQjNPMkNWcWVBN0c4SzRUTzlRTlRWQWJKUlh1SDNYRGpGbDlBd29i?=
+ =?utf-8?B?YTU5TXlhQnY0WDFjb0FHM0FGSytPMlpadGR3UWJvY3pBMk5mVnBUWXRlVm1J?=
+ =?utf-8?B?cVFMSnJZOHFNLzM2YUNXVDZZaFRldG1rejJzb2UveUhmQ2NWL0VnMlUxYTVi?=
+ =?utf-8?B?RnZXV04rakw1Mmh1UHpkaUpZdFM0aHE0Wk93UjFManVUMnN3OUtHREdNRTY0?=
+ =?utf-8?B?ODB6T3g0NXpicmk3dE5HOUNmdjhWVnc1Y00yNGJtckp6YU9LdSt3QXlJbzV3?=
+ =?utf-8?B?NWkwcXBnUWJoWEplT1pJYVhoR0lvUkxLVzQ1S3VRdjlDQzcwWG5ubWtWdEZ5?=
+ =?utf-8?B?UTdMcUQwcVpKU2FXRnRSUXRiMHRmSm1yK0tCbFNUYVhYZjIrS01KME1rYnE2?=
+ =?utf-8?B?UkpRcjlIaExsQ2FCaGliaGt1TGIzVWtPYXdqdGhJTzNGRmFZb3duVVdqVEtF?=
+ =?utf-8?B?RnNaT2Q1RjU3RnlkKzdhZ1hoTW80R3NTRWdXcHpMNFdaMDlycGpycFlVbGxT?=
+ =?utf-8?B?bXdldnVoQlhMZ21IWHdNWDEzUm8rTG1kaU1qc2I2NGNSY2dPc2JnME43RUtT?=
+ =?utf-8?B?elNQZW1EamZTVk93dms1RXh5TFgrSG1jMWJ4cVhsazdIaUpNc2JTc0U4U3No?=
+ =?utf-8?B?NkszTjBNYnU5SEZXNnJnTkN3Tkd4Vm1weTVBbHI1L2ZqZ0EwYnZoV3JNZE1T?=
+ =?utf-8?B?RUVPQkd0VS9JU0o1WlZ3QUZlQWdXTGhHbjZtaHM0d0xidUlKTTljd0xrMnJ6?=
+ =?utf-8?B?bVk1WG5BZUsxQXFFKzgvbWM0dzhOOEttNUhDcW1ZUExBTFpBcHF0L0lPUVlS?=
+ =?utf-8?B?VTgxR2M1QmlVQW1ldzFKandhZTBGb1U2NWFHZzhvcjUwQ0FFRWV1QVc0RFRp?=
+ =?utf-8?B?aGRITjNhT3pSK1FZY3RkOEc0RGo0NitrY1VlcUxETVgrQ3B0U0NxQnVMUTY4?=
+ =?utf-8?B?TDJIV2RSWTFCNlNvWElycWZKRHg3VkMrYTc2QllhdnV5d094SWQvK3ZuT2lT?=
+ =?utf-8?B?dTYwTlhJdGN6NGoxb1dkMDZ3RHNLSmQ1ZHJxVUNQTC9Pd1RNNjYxaGp0VFI3?=
+ =?utf-8?B?VjBTc3hGUklhZnFoVFlnTkduQ2lHd1pqeGRvQWdrNnlSV1pjV3NLWHRKMXdW?=
+ =?utf-8?B?aUZRbi9xTHBmeFozOXRldnpIUVJOVnJEemtSOE50enZoYzFOYlpkU3dsemY1?=
+ =?utf-8?B?L0pUQ0ZEUFZKUytwMUNYV1p5aU13OE81WmhmRmI1ZzBXbjhtRWlLNDg4dzZO?=
+ =?utf-8?B?R3dZbTlramF6UERKR250d0s0STJrQkdHR3Z3bGlYZFAvTHYybW9DUVMvdndQ?=
+ =?utf-8?B?dUtSbWpSOE5SYitjMVBGN24xY0owNFQ4OE1oSGwralhFa1JmRjlzc0hjRldT?=
+ =?utf-8?B?WmxIL3BjYkl5YTE5NmJLWDlYTUNzNnBQWnNpU25PaFR6ZDZWWC84ZDZPOUha?=
+ =?utf-8?B?U1paczVxSTE0c21wV3RML0tYS1o5UG1URjdJMFErd0VFWlplcGV3clF6Y3JE?=
+ =?utf-8?B?OEZPMXYrcXlSbVpod29BM1FSdytuay9yVkhldGIxQkgwTEZDWFRDQjNiMmIy?=
+ =?utf-8?B?NXYvdjdidWxnWnZLYXd6KzVvZ2FRPT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="eu4wzxdqrcrexufs"
-Content-Disposition: inline
-In-Reply-To: <HE1PR04MB310066D557C9D77FE357D90AE6549@HE1PR04MB3100.eurprd04.prod.outlook.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-OriginatorOrg: dpsolutions.se
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: HE1PR04MB3100.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1e53c08a-89a3-4947-766d-08d9d763e143
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Jan 2022 13:43:42.9258
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3a2c5ea5-12ca-4b9d-9883-156f72a0a4ae
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: XxXHLbwpf8SWdyqQ3IFEwWvhB521pR+D9OYsdlK9jLMAVVY4IchHFOvo2IezjmbfQfqTPP8sole/uFUZZaMgNWqo+bjk3oIIXRFt4DfhSQI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR04MB3132
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-
---eu4wzxdqrcrexufs
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 14.01.2022 11:05:51, Markus Mirevik wrote:
-> I have performance problems with mcp2518fd. I have custom board based
-> of beagleboard black. (Sitara am335x) using two mcp2518fd. The can
-> communication uses a lot of CPU. irq/64-spi1.1 uses around ~20% at
-> 1000 can messages/s.
->=20
-> I have several questions but I'll start with the most confusing. I
-> have found that every can messages fires two interrupts on my board.
-
-Do you mean every RX'ed CAN frame?
-Which interrupts does increase twice?
-
-> I have tested this in several ways. If I send one normal can message
-> the counter in /proc/interrupts is increased twice. I have also put
-> some printouts in mcp251xfd-core.c that confirms that mcp251xfd_irq()
-> is run twice and the second time intf_pending is 0.
-
-You mean mcp251xfd_irq() is started twice?
-
-The big loop
-(https://elixir.bootlin.com/linux/v5.16/source/drivers/net/can/spi/mcp251xf=
-d/mcp251xfd-core.c#L2182)
-in mcp251xfd_irq() is run twice, and the IRQ handler is left only if
-there are no pending IRQs.
-
-The main IRQ handler loop (omitting the rx-int) is straight forward, and
-not optimized:
-- read pending IRQs [*]
-- exit if there are no pending IRQs
-- handle pending IRQs
-  for RX:
-  - read RX-FIFO level [*]
-  - read RX'ed CAN frames [*]
-  - mark RX'ed CAN frames as read [*]
-- loop
-
-All actions marked with a [*] require a SPI transfer, which results in 5
-SPI transfers (read pending IRQs is done twice) per RX'ed CAN frame.
-(Assuming there is only 1 RX'ed frame pending and no pending IRQs after
- the first loop.)
-
-I have some ideas how to optimize this:
-- do a single SPI transfer instead of several small ones:
-  e.g. pending IRQs + RX-FIFO level, or read RX'ed frames + mark as read
-- opportunistically assume RX'ed frame on interrupt and get rid of 1st
-  read pending IRQs
-- assume TX done IRQ, if CAN frames have been TX'ed but not marked as
-  sent hardware
-- coalesce RX IRQs
-- coalesce TX done IRQs
-- combine several TX frames into single SPI transfer
-
-> And for testing purposes I changed the interrupt config to trigger on
-> falling edge instead of level and with this configured there is only
-> one interrupt fired. But I guess this will risk locking the interrupt
-> line low if an edge isn't detected.
-
-ACK - Please don't use edge triggered IRQs, sooner or later the driver
-will miss an IRQ resulting in a handing driver. Always use level
-triggered with the mcp251xfd.
-
-> I have tried both with rx-int active and inactive. My scope shows
-> really nice signals and that rx-int and int is deactivated
-> simultaneous on incoming frames.
-
-rx-int is an optimization to skip the first get IRQ pending transfer, as
-it indicates RX'ed CAN frames.
-
-> I'm testing by sending messages from my computer through a can dongle.
->=20
-> The board is currently running Linux 5.10.79-yocto-tiny #1 SMP Tue Nov
-> 16 03:57:43 UTC 2021 armv7l armv7l armv7l GNU/Linux
-
-Newer kernels include some optimizations....
-
-> I've also tested updating the driver to the one from
-> https://github.com/marckleinebudde/linux.git from 2021-12-29 with the
-> same result (IRQ handler run twice).
-
-The newest production ready code is always net-next/master. But you can
-use the latest official kernel release (v5.16) too.
-
-> I am profoundly confused by this issue and I can not figure out why
-> it's happening. My understanding is that since the IRQ handler is
-> loaded with IRQF_ONESHOT the irq line should be masked until
-> mcp251xfd_irq() returns.
-
-ACK.
-
-> Since mcp251xfd_irq() checks that !rx_pending before exiting the int
-> signal must be high. And the interrupt should not fire again...
-
-The rx-int GPIO:
-
-| microchip,rx-int-gpios =3D <&gpio1 8 GPIO_ACTIVE_LOW>;
-
-is not used as an interrupt. The only interrupt line is:
-
-| interrupts-extended =3D <&gpio2 5 IRQ_TYPE_EDGE_FALLING>;
-
-If there is an interrupt the gpio2_5 will get active, if this is an RX
-IRQ the gpio1_8 will get active, too. But only gpio2_5 will trigger the
-interrupt handler.
-
-In the interrupt handler, as rx-int is available and active the RX
-handling is done first. If there are no more RX IRQs pending, the rx-int
-goes inactive and the big loop in the IRQ handler will be handled: read
-rx-pending IRQs, probably none pending, then leave IRQ handler.
-
-> Result from init:
-> [    4.003029] mcp251xfd spi1.0 can0: MCP2518FD rev0.0 (+RX_INT -MAB_NO_W=
-ARN +CRC_REG +CRC_RX +CRC_TX +ECC -HD c:40.00MHz m:20.00MHz r:17.00MHz e:0.=
-00MHz) successfully initialized.
-> [    4.028220] mcp251xfd spi1.1 can1: MCP2518FD rev0.0 (-RX_INT -MAB_NO_W=
-ARN +CRC_REG +CRC_RX +CRC_TX +ECC -HD c:40.00MHz m:20.00MHz r:17.00MHz e:0.=
-00MHz) successfully initialized.
->=20
-> This is the current dtsi part for the canFD chips. (With rx-pin removed o=
-n one of the devices and trigger on edge on the other for debugging purpose=
-s).=20
->=20
-> #include <dt-bindings/gpio/gpio.h>
-> #include <dt-bindings/interrupt-controller/irq.h>
->=20
-> &am33xx_pinmux{
->         pinctrl_spi1_pins: pinctrl_spi1_pins {
->                 pinctrl-single,pins =3D <
->                         AM33XX_IOPAD(0x990, PIN_INPUT | MUX_MODE3) /* (A1=
-3) mcasp0_aclkx.spi1_sclk */
->                         AM33XX_IOPAD(0x994, PIN_INPUT | MUX_MODE3) /* (B1=
-3) mcasp0_fsx.spi1_d0 */
->                         AM33XX_IOPAD(0x998, PIN_INPUT | MUX_MODE3) /* (D1=
-2) mcasp0_axr0.spi1_d1 */
->                         AM33XX_IOPAD(0x96c, PIN_OUTPUT_PULLUP | MUX_MODE5=
-) /* (E17) uart0_rtsn.spi1_cs0         CleANopen       LEFT*/
->                         AM33XX_IOPAD(0x9b0, PIN_OUTPUT_PULLUP | MUX_MODE4=
-) /* (A15) xdma_event_intr0.spi1_cs1   SAWM CAN        RIGHT*/
->                 >;
->         };
->=20
->         can0_int_pins: can0_int_pins {
->                 pinctrl-single,pins =3D <
->                 /*CleANopen*/
->                 AM33XX_IOPAD(0x89c, PIN_INPUT_PULLUP | MUX_MODE7) /* (T6)=
- gpmc_be0n_cle.gpio2[5]        nINT            */
->                 AM33XX_IOPAD(0x968, PIN_INPUT_PULLUP | MUX_MODE7) /* (E18=
-) uart0_ctsn.gpio1[8]          nINT1           */
->                 >;
->         };
->=20
->         can1_int_pins: can1_int_pins {
->                 pinctrl-single,pins =3D <
->                 /*SAWM CAN*/
->                 AM33XX_IOPAD(0x820, PIN_INPUT_PULLUP | MUX_MODE7) /* (U10=
-) gpmc_ad8.gpio0[22]           nINT            */
->                 AM33XX_IOPAD(0x8c8, PIN_INPUT_PULLUP | MUX_MODE7) /* (U3)=
- lcd_data10.gpio2[16]  nINT1           */
->                 AM33XX_IOPAD(0x8cc, PIN_INPUT_PULLUP | MUX_MODE7) /* (U4)=
- lcd_data11.gpio2[17]  nINT0 NOT USED  */
->                 >;
->         };
-> };
->=20
->=20
->=20
-> /{
->         /* external 40M oscillator of mcp2518fd on SPI1.0 */
->         mcp2518fd_can0_osc: mcp2518fd_can0_osc {
->                 compatible =3D "fixed-clock";
->                 #clock-cells =3D <0>;
->                 clock-frequency =3D <40000000>;
->         };
-> };
->=20
->=20
-> /{
->         /* external 40M oscillator of mcp2518fd on SPI1.1 */
->         mcp2518fd_can1_osc: mcp2518fd_can1_osc {
->                 compatible =3D "fixed-clock";
->                 #clock-cells =3D <0>;
->                 clock-frequency =3D <40000000>;
->         };
-> };
->=20
-> /* the spi config of the can-controller itself binding everything togethe=
-r */
-> &spi1{
->     #address-cells =3D <1>;
->     #size-cells =3D <0>;
->=20
->     status =3D "okay";
->     pinctrl-names =3D "default";
->     pinctrl-0 =3D <&pinctrl_spi1_pins>;
->=20
->     /*CleANopen*/
->     can@0 {
->         compatible =3D "microchip,mcp2518fd";
->         reg =3D <0>;
->         clocks =3D <&mcp2518fd_can0_osc>;
->         pinctrl-names =3D "default";
->         pinctrl-0 =3D <&can0_int_pins>;
->         spi-max-frequency =3D <20000000>;
->         interrupts-extended =3D <&gpio2 5 IRQ_TYPE_EDGE_FALLING>;
-
-See comment about edge IRQs above!
-
->         microchip,rx-int-gpios =3D <&gpio1 8 GPIO_ACTIVE_LOW>;
->     };
->=20
->     can@1 {
->         compatible =3D "microchip,mcp2518fd";
->         reg =3D <1>;
->         clocks =3D <&mcp2518fd_can1_osc>;
->         pinctrl-names =3D "default";
->         pinctrl-0 =3D <&can1_int_pins>;
->         spi-max-frequency =3D <20000000>;
->         interrupts-extended =3D <&gpio0 22 IRQ_TYPE_LEVEL_LOW>;
-> //        microchip,rx-int-gpios =3D <&gpio2 16 GPIO_ACTIVE_LOW>;
->     };
-> };
-
-Can you test again with IRQ_TYPE_LEVEL_LOW and no rx-int-gpios. Please
-instrument the beginning and the returns of the mcp251xfd_irq() function
-to check if it's really started twice. Please print the
-priv->regs_status.intf in every loop. Can you record the gpio2_5 with a
-scope.
-
-Make sure that you don't send any CAN frames as reaction of reception.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---eu4wzxdqrcrexufs
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmHhb2oACgkQqclaivrt
-76lvNwf/fs02lBjtDOP+xQpmZyyqVz373TCDu+mlYuWvoMfb7yxAfS2rqmzrXKPf
-knr5J6RH6m85icadtP6IBowF9Sr4QgK++TpjSbiLRYqf1YKOVwd4z113qPR+xpP+
-Vsczc54VKsL1hNWAD6pHUIGZsivRZYLTuv1PtNMFutHmDQOQ6HQHEIwWSydvrtb4
-dNF3lUdYOPrmWW6oOt6eTfcDrZ5jEFfpSH1OUf3ongygtyWixAM26HWwTpotS3P8
-Gi6nQ51g0DdAc9/oxh2bxDC9LDEt8jWxFBxkTIaUOEVdo5UHMZw8zbkN2u95tagd
-18UZzvlxeBVrhtKB4P2gMNRXZAEDfw==
-=3zJd
------END PGP SIGNATURE-----
-
---eu4wzxdqrcrexufs--
+SGkNCg0KPiBPbiAxNC4wMS4yMDIyIDExOjA1OjUxLCBNYXJrdXMgTWlyZXZpayB3cm90ZToNCj4g
+PiBJIGhhdmUgcGVyZm9ybWFuY2UgcHJvYmxlbXMgd2l0aCBtY3AyNTE4ZmQuIEkgaGF2ZSBjdXN0
+b20gYm9hcmQgYmFzZWQNCj4gPiBvZiBiZWFnbGVib2FyZCBibGFjay4gKFNpdGFyYSBhbTMzNXgp
+IHVzaW5nIHR3byBtY3AyNTE4ZmQuIFRoZSBjYW4NCj4gPiBjb21tdW5pY2F0aW9uIHVzZXMgYSBs
+b3Qgb2YgQ1BVLiBpcnEvNjQtc3BpMS4xIHVzZXMgYXJvdW5kIH4yMCUgYXQNCj4gPiAxMDAwIGNh
+biBtZXNzYWdlcy9zLg0KPiA+DQo+ID4gSSBoYXZlIHNldmVyYWwgcXVlc3Rpb25zIGJ1dCBJJ2xs
+IHN0YXJ0IHdpdGggdGhlIG1vc3QgY29uZnVzaW5nLiBJDQo+ID4gaGF2ZSBmb3VuZCB0aGF0IGV2
+ZXJ5IGNhbiBtZXNzYWdlcyBmaXJlcyB0d28gaW50ZXJydXB0cyBvbiBteSBib2FyZC4NCj4gDQo+
+IERvIHlvdSBtZWFuIGV2ZXJ5IFJYJ2VkIENBTiBmcmFtZT8NClllcywgZXZlcnkgcmVjZWl2ZWQg
+Q0FOIGZyYW1lLg0KDQo+IFdoaWNoIGludGVycnVwdHMgZG9lcyBpbmNyZWFzZSB0d2ljZT8NCg0K
+VGhpcyBvbmU6IA0KNjQ6ICA0ICA0NGUwNzAwMC5ncGlvICAyMiBMZXZlbCAgICAgc3BpMS4xDQoN
+CiANCj4gPiBJIGhhdmUgdGVzdGVkIHRoaXMgaW4gc2V2ZXJhbCB3YXlzLiBJZiBJIHNlbmQgb25l
+IG5vcm1hbCBjYW4gbWVzc2FnZQ0KPiA+IHRoZSBjb3VudGVyIGluIC9wcm9jL2ludGVycnVwdHMg
+aXMgaW5jcmVhc2VkIHR3aWNlLiBJIGhhdmUgYWxzbyBwdXQNCj4gPiBzb21lIHByaW50b3V0cyBp
+biBtY3AyNTF4ZmQtY29yZS5jIHRoYXQgY29uZmlybXMgdGhhdCBtY3AyNTF4ZmRfaXJxKCkNCj4g
+PiBpcyBydW4gdHdpY2UgYW5kIHRoZSBzZWNvbmQgdGltZSBpbnRmX3BlbmRpbmcgaXMgMC4NCj4g
+DQo+IFlvdSBtZWFuIG1jcDI1MXhmZF9pcnEoKSBpcyBzdGFydGVkIHR3aWNlPw0KDQpZZXMuDQoN
+Cj4gDQo+IFRoZSBiaWcgbG9vcA0KPiAoaHR0cHM6Ly9lbGl4aXIuYm9vdGxpbi5jb20vbGludXgv
+djUuMTYvc291cmNlL2RyaXZlcnMvbmV0L2Nhbi9zcGkvbWNwMjUxeGYNCj4gZC9tY3AyNTF4ZmQt
+Y29yZS5jI0wyMTgyKQ0KPiBpbiBtY3AyNTF4ZmRfaXJxKCkgaXMgcnVuIHR3aWNlLCBhbmQgdGhl
+IElSUSBoYW5kbGVyIGlzIGxlZnQgb25seSBpZiB0aGVyZSBhcmUNCj4gbm8gcGVuZGluZyBJUlFz
+Lg0KPiANCj4gVGhlIG1haW4gSVJRIGhhbmRsZXIgbG9vcCAob21pdHRpbmcgdGhlIHJ4LWludCkg
+aXMgc3RyYWlnaHQgZm9yd2FyZCwgYW5kIG5vdA0KPiBvcHRpbWl6ZWQ6DQo+IC0gcmVhZCBwZW5k
+aW5nIElSUXMgWypdDQo+IC0gZXhpdCBpZiB0aGVyZSBhcmUgbm8gcGVuZGluZyBJUlFzDQo+IC0g
+aGFuZGxlIHBlbmRpbmcgSVJRcw0KPiAgIGZvciBSWDoNCj4gICAtIHJlYWQgUlgtRklGTyBsZXZl
+bCBbKl0NCj4gICAtIHJlYWQgUlgnZWQgQ0FOIGZyYW1lcyBbKl0NCj4gICAtIG1hcmsgUlgnZWQg
+Q0FOIGZyYW1lcyBhcyByZWFkIFsqXQ0KPiAtIGxvb3ANCj4gDQo+IEFsbCBhY3Rpb25zIG1hcmtl
+ZCB3aXRoIGEgWypdIHJlcXVpcmUgYSBTUEkgdHJhbnNmZXIsIHdoaWNoIHJlc3VsdHMgaW4gNSBT
+UEkNCj4gdHJhbnNmZXJzIChyZWFkIHBlbmRpbmcgSVJRcyBpcyBkb25lIHR3aWNlKSBwZXIgUlgn
+ZWQgQ0FOIGZyYW1lLg0KPiAoQXNzdW1pbmcgdGhlcmUgaXMgb25seSAxIFJYJ2VkIGZyYW1lIHBl
+bmRpbmcgYW5kIG5vIHBlbmRpbmcgSVJRcyBhZnRlcg0KPiB0aGUgZmlyc3QgbG9vcC4pDQo+IA0K
+PiBJIGhhdmUgc29tZSBpZGVhcyBob3cgdG8gb3B0aW1pemUgdGhpczoNCj4gLSBkbyBhIHNpbmds
+ZSBTUEkgdHJhbnNmZXIgaW5zdGVhZCBvZiBzZXZlcmFsIHNtYWxsIG9uZXM6DQo+ICAgZS5nLiBw
+ZW5kaW5nIElSUXMgKyBSWC1GSUZPIGxldmVsLCBvciByZWFkIFJYJ2VkIGZyYW1lcyArIG1hcmsg
+YXMgcmVhZA0KPiAtIG9wcG9ydHVuaXN0aWNhbGx5IGFzc3VtZSBSWCdlZCBmcmFtZSBvbiBpbnRl
+cnJ1cHQgYW5kIGdldCByaWQgb2YgMXN0DQo+ICAgcmVhZCBwZW5kaW5nIElSUXMNCj4gLSBhc3N1
+bWUgVFggZG9uZSBJUlEsIGlmIENBTiBmcmFtZXMgaGF2ZSBiZWVuIFRYJ2VkIGJ1dCBub3QgbWFy
+a2VkIGFzDQo+ICAgc2VudCBoYXJkd2FyZQ0KPiAtIGNvYWxlc2NlIFJYIElSUXMNCj4gLSBjb2Fs
+ZXNjZSBUWCBkb25lIElSUXMNCj4gLSBjb21iaW5lIHNldmVyYWwgVFggZnJhbWVzIGludG8gc2lu
+Z2xlIFNQSSB0cmFuc2Zlcg0KPiANCg0KSW5kZWVkIHRoZXJlIGlzIGEgbG90IHRvIHdvcmsgb24s
+IEknbSBhIGJpdCBvdXQgb2YgbXkgZGVwdGggaGVyZSBhbmQgYXMgSSBzYWlkIHRoZSBmaXJzdCBx
+dWVzdGlvbiBpcyBhYm91dCB3aHkgaXQgaW50ZXJydXB0IGlzIGZpcmVkIHR3aWNlLiANCkl0J3Mg
+bm90IG9ubHkgdGhlIGJpZyBsb29wIHRoYXQgaXMgcnVuIHR3aWNlLiANCldpdGggcngtaW50IGFj
+dGl2ZSB3aGF0IEkgY2FuIG9ic2VydmUgaXMgdGhpczoNCg0KLSByZWFkIFJYLUZJRk8gbGV2ZWwg
+WypdDQotIHJlYWQgUlgnZWQgQ0FOIGZyYW1lcyBbKl0NCi0gbWFyayBSWCdlZCBDQU4gZnJhbWVz
+IGFzIHJlYWQgWypdDQotIHJlYWQgcGVuZGluZyBJUlFzIFsqXQ0KLSBleGl0IGlmIHRoZXJlIGFy
+ZSBubyBwZW5kaW5nIElSUXMNCiAtPiBObyBQZW5kaW5nIElSUSdzIEV4aXRpbmcuIA0KIC0gcmVh
+ZCBwZW5kaW5nIElSUXMgWypdDQogLSBleGl0IGlmIHRoZXJlIGFyZSBubyBwZW5kaW5nIElSUXMN
+Ci0+IE5vIFBlbmRpbmcgSVJRJ3MgRXhpdGluZy4NCg0KPiA+IEFuZCBmb3IgdGVzdGluZyBwdXJw
+b3NlcyBJIGNoYW5nZWQgdGhlIGludGVycnVwdCBjb25maWcgdG8gdHJpZ2dlciBvbg0KPiA+IGZh
+bGxpbmcgZWRnZSBpbnN0ZWFkIG9mIGxldmVsIGFuZCB3aXRoIHRoaXMgY29uZmlndXJlZCB0aGVy
+ZSBpcyBvbmx5DQo+ID4gb25lIGludGVycnVwdCBmaXJlZC4gQnV0IEkgZ3Vlc3MgdGhpcyB3aWxs
+IHJpc2sgbG9ja2luZyB0aGUgaW50ZXJydXB0DQo+ID4gbGluZSBsb3cgaWYgYW4gZWRnZSBpc24n
+dCBkZXRlY3RlZC4NCj4gDQo+IEFDSyAtIFBsZWFzZSBkb24ndCB1c2UgZWRnZSB0cmlnZ2VyZWQg
+SVJRcywgc29vbmVyIG9yIGxhdGVyIHRoZSBkcml2ZXIgd2lsbA0KPiBtaXNzIGFuIElSUSByZXN1
+bHRpbmcgaW4gYSBoYW5kaW5nIGRyaXZlci4gQWx3YXlzIHVzZSBsZXZlbCB0cmlnZ2VyZWQgd2l0
+aCB0aGUNCj4gbWNwMjUxeGZkLg0KPiANCg0KWWVzLCBJIGZpZ3VyZWQgdGhhdC4gDQoNCj4gPiBJ
+IGhhdmUgdHJpZWQgYm90aCB3aXRoIHJ4LWludCBhY3RpdmUgYW5kIGluYWN0aXZlLiBNeSBzY29w
+ZSBzaG93cw0KPiA+IHJlYWxseSBuaWNlIHNpZ25hbHMgYW5kIHRoYXQgcngtaW50IGFuZCBpbnQg
+aXMgZGVhY3RpdmF0ZWQNCj4gPiBzaW11bHRhbmVvdXMgb24gaW5jb21pbmcgZnJhbWVzLg0KPiAN
+Cj4gcngtaW50IGlzIGFuIG9wdGltaXphdGlvbiB0byBza2lwIHRoZSBmaXJzdCBnZXQgSVJRIHBl
+bmRpbmcgdHJhbnNmZXIsIGFzIGl0DQo+IGluZGljYXRlcyBSWCdlZCBDQU4gZnJhbWVzLg0KDQpP
+RkZUT1BJQzoNClNob3VsZG7igJl0IGEgcmV0dXJuIGFmdGVyIHRoZSByeC1pbnQgcGFydCBiZSBv
+ayB0byBza2lwIHRoZSBuZXh0IGdldCBJUlEgcGVuZGluZyB0cmFuc2ZlciBhcyB3ZWxsPyANCg0K
+aWYgKHByaXYtPnJ4X2ludCkgew0KICBkbyB7DQogICAgaW50IHJ4X3BlbmRpbmc7DQogICAgcnhf
+cGVuZGluZyA9IGdwaW9kX2dldF92YWx1ZV9jYW5zbGVlcChwcml2LT5yeF9pbnQpOw0KICAgIA0K
+ICAgIGlmICghcnhfcGVuZGluZykNCiAgICAgIGJyZWFrOw0KDQogICAgZXJyID0gbWNwMjUxeGZk
+X2hhbmRsZShwcml2LCByeGlmKTsNCiAgICBpZiAoZXJyKQ0KICAgICAgZ290byBvdXRfZmFpbDsN
+Cg0KICAgIGhhbmRsZWQgPSBJUlFfSEFORExFRDsNCiAgfSB3aGlsZSAoMSk7DQogIA0KICBpZiAo
+aGFuZGxlZCA9PSBJUlFfSEFORExFRCkgew0KICAgIHJldHVybiBoYW5kbGVkOw0KICB9DQp9DQou
+Li4NCg0KRXZlbiBiZXR0ZXIgd291bGQgYmUgdG8gY2hlY2sgaWYgIChJUlEuVkFMVUUgPT0gSU5B
+Q1RJVkUpIGJ1dCBJIGRvbiBrbm93IGhvdyB0byB0aGF0Li4gDQoNCg0KPiANCj4gPiBJJ20gdGVz
+dGluZyBieSBzZW5kaW5nIG1lc3NhZ2VzIGZyb20gbXkgY29tcHV0ZXIgdGhyb3VnaCBhIGNhbiBk
+b25nbGUuDQo+ID4NCj4gPiBUaGUgYm9hcmQgaXMgY3VycmVudGx5IHJ1bm5pbmcgTGludXggNS4x
+MC43OS15b2N0by10aW55ICMxIFNNUCBUdWUgTm92DQo+ID4gMTYgMDM6NTc6NDMgVVRDIDIwMjEg
+YXJtdjdsIGFybXY3bCBhcm12N2wgR05VL0xpbnV4DQo+IA0KPiBOZXdlciBrZXJuZWxzIGluY2x1
+ZGUgc29tZSBvcHRpbWl6YXRpb25zLi4uLg0KPiANCj4gPiBJJ3ZlIGFsc28gdGVzdGVkIHVwZGF0
+aW5nIHRoZSBkcml2ZXIgdG8gdGhlIG9uZSBmcm9tDQo+ID4gaHR0cHM6Ly9naXRodWIuY29tL21h
+cmNrbGVpbmVidWRkZS9saW51eC5naXQgZnJvbSAyMDIxLTEyLTI5IHdpdGggdGhlDQo+ID4gc2Ft
+ZSByZXN1bHQgKElSUSBoYW5kbGVyIHJ1biB0d2ljZSkuDQo+IA0KPiBUaGUgbmV3ZXN0IHByb2R1
+Y3Rpb24gcmVhZHkgY29kZSBpcyBhbHdheXMgbmV0LW5leHQvbWFzdGVyLiBCdXQgeW91IGNhbg0K
+PiB1c2UgdGhlIGxhdGVzdCBvZmZpY2lhbCBrZXJuZWwgcmVsZWFzZSAodjUuMTYpIHRvby4NCj4g
+DQo+ID4gSSBhbSBwcm9mb3VuZGx5IGNvbmZ1c2VkIGJ5IHRoaXMgaXNzdWUgYW5kIEkgY2FuIG5v
+dCBmaWd1cmUgb3V0IHdoeQ0KPiA+IGl0J3MgaGFwcGVuaW5nLiBNeSB1bmRlcnN0YW5kaW5nIGlz
+IHRoYXQgc2luY2UgdGhlIElSUSBoYW5kbGVyIGlzDQo+ID4gbG9hZGVkIHdpdGggSVJRRl9PTkVT
+SE9UIHRoZSBpcnEgbGluZSBzaG91bGQgYmUgbWFza2VkIHVudGlsDQo+ID4gbWNwMjUxeGZkX2ly
+cSgpIHJldHVybnMuDQo+IA0KPiBBQ0suDQo+IA0KPiA+IFNpbmNlIG1jcDI1MXhmZF9pcnEoKSBj
+aGVja3MgdGhhdCAhcnhfcGVuZGluZyBiZWZvcmUgZXhpdGluZyB0aGUgaW50DQo+ID4gc2lnbmFs
+IG11c3QgYmUgaGlnaC4gQW5kIHRoZSBpbnRlcnJ1cHQgc2hvdWxkIG5vdCBmaXJlIGFnYWluLi4u
+DQo+IA0KPiBUaGUgcngtaW50IEdQSU86DQo+IA0KPiB8IG1pY3JvY2hpcCxyeC1pbnQtZ3Bpb3Mg
+PSA8JmdwaW8xIDggR1BJT19BQ1RJVkVfTE9XPjsNCj4gDQo+IGlzIG5vdCB1c2VkIGFzIGFuIGlu
+dGVycnVwdC4gVGhlIG9ubHkgaW50ZXJydXB0IGxpbmUgaXM6DQo+IA0KPiB8IGludGVycnVwdHMt
+ZXh0ZW5kZWQgPSA8JmdwaW8yIDUgSVJRX1RZUEVfRURHRV9GQUxMSU5HPjsNCj4gDQo+IElmIHRo
+ZXJlIGlzIGFuIGludGVycnVwdCB0aGUgZ3BpbzJfNSB3aWxsIGdldCBhY3RpdmUsIGlmIHRoaXMg
+aXMgYW4gUlggSVJRIHRoZQ0KPiBncGlvMV84IHdpbGwgZ2V0IGFjdGl2ZSwgdG9vLiBCdXQgb25s
+eSBncGlvMl81IHdpbGwgdHJpZ2dlciB0aGUgaW50ZXJydXB0DQo+IGhhbmRsZXIuDQo+IA0KPiBJ
+biB0aGUgaW50ZXJydXB0IGhhbmRsZXIsIGFzIHJ4LWludCBpcyBhdmFpbGFibGUgYW5kIGFjdGl2
+ZSB0aGUgUlggaGFuZGxpbmcgaXMNCj4gZG9uZSBmaXJzdC4gSWYgdGhlcmUgYXJlIG5vIG1vcmUg
+UlggSVJRcyBwZW5kaW5nLCB0aGUgcngtaW50IGdvZXMgaW5hY3RpdmUgYW5kDQo+IHRoZSBiaWcg
+bG9vcCBpbiB0aGUgSVJRIGhhbmRsZXIgd2lsbCBiZSBoYW5kbGVkOiByZWFkIHJ4LXBlbmRpbmcg
+SVJRcywNCj4gcHJvYmFibHkgbm9uZSBwZW5kaW5nLCB0aGVuIGxlYXZlIElSUSBoYW5kbGVyLg0K
+PiANCg0KT2suDQoNCj4gPiBSZXN1bHQgZnJvbSBpbml0Og0KPiA+IFsgICAgNC4wMDMwMjldIG1j
+cDI1MXhmZCBzcGkxLjAgY2FuMDogTUNQMjUxOEZEIHJldjAuMCAoK1JYX0lOVCAtDQo+IE1BQl9O
+T19XQVJOICtDUkNfUkVHICtDUkNfUlggK0NSQ19UWCArRUNDIC1IRCBjOjQwLjAwTUh6DQo+IG06
+MjAuMDBNSHogcjoxNy4wME1IeiBlOjAuMDBNSHopIHN1Y2Nlc3NmdWxseSBpbml0aWFsaXplZC4N
+Cj4gPiBbICAgIDQuMDI4MjIwXSBtY3AyNTF4ZmQgc3BpMS4xIGNhbjE6IE1DUDI1MThGRCByZXYw
+LjAgKC1SWF9JTlQgLQ0KPiBNQUJfTk9fV0FSTiArQ1JDX1JFRyArQ1JDX1JYICtDUkNfVFggK0VD
+QyAtSEQgYzo0MC4wME1Ieg0KPiBtOjIwLjAwTUh6IHI6MTcuMDBNSHogZTowLjAwTUh6KSBzdWNj
+ZXNzZnVsbHkgaW5pdGlhbGl6ZWQuDQo+ID4NCj4gPiBUaGlzIGlzIHRoZSBjdXJyZW50IGR0c2kg
+cGFydCBmb3IgdGhlIGNhbkZEIGNoaXBzLiAoV2l0aCByeC1waW4gcmVtb3ZlZCBvbg0KPiBvbmUg
+b2YgdGhlIGRldmljZXMgYW5kIHRyaWdnZXIgb24gZWRnZSBvbiB0aGUgb3RoZXIgZm9yIGRlYnVn
+Z2luZw0KPiBwdXJwb3NlcykuDQo+ID4NCj4gPiAjaW5jbHVkZSA8ZHQtYmluZGluZ3MvZ3Bpby9n
+cGlvLmg+DQo+ID4gI2luY2x1ZGUgPGR0LWJpbmRpbmdzL2ludGVycnVwdC1jb250cm9sbGVyL2ly
+cS5oPg0KPiA+DQo+ID4gJmFtMzN4eF9waW5tdXh7DQo+ID4gICAgICAgICBwaW5jdHJsX3NwaTFf
+cGluczogcGluY3RybF9zcGkxX3BpbnMgew0KPiA+ICAgICAgICAgICAgICAgICBwaW5jdHJsLXNp
+bmdsZSxwaW5zID0gPA0KPiA+ICAgICAgICAgICAgICAgICAgICAgICAgIEFNMzNYWF9JT1BBRCgw
+eDk5MCwgUElOX0lOUFVUIHwgTVVYX01PREUzKSAvKiAoQTEzKQ0KPiBtY2FzcDBfYWNsa3guc3Bp
+MV9zY2xrICovDQo+ID4gICAgICAgICAgICAgICAgICAgICAgICAgQU0zM1hYX0lPUEFEKDB4OTk0
+LCBQSU5fSU5QVVQgfCBNVVhfTU9ERTMpIC8qIChCMTMpDQo+IG1jYXNwMF9mc3guc3BpMV9kMCAq
+Lw0KPiA+ICAgICAgICAgICAgICAgICAgICAgICAgIEFNMzNYWF9JT1BBRCgweDk5OCwgUElOX0lO
+UFVUIHwgTVVYX01PREUzKSAvKiAoRDEyKQ0KPiBtY2FzcDBfYXhyMC5zcGkxX2QxICovDQo+ID4g
+ICAgICAgICAgICAgICAgICAgICAgICAgQU0zM1hYX0lPUEFEKDB4OTZjLCBQSU5fT1VUUFVUX1BV
+TExVUCB8IE1VWF9NT0RFNSkNCj4gLyogKEUxNykgdWFydDBfcnRzbi5zcGkxX2NzMCAgICAgICAg
+IENsZUFOb3BlbiAgICAgICBMRUZUKi8NCj4gPiAgICAgICAgICAgICAgICAgICAgICAgICBBTTMz
+WFhfSU9QQUQoMHg5YjAsIFBJTl9PVVRQVVRfUFVMTFVQIHwNCj4gTVVYX01PREU0KSAvKiAoQTE1
+KSB4ZG1hX2V2ZW50X2ludHIwLnNwaTFfY3MxICAgU0FXTSBDQU4NCj4gUklHSFQqLw0KPiA+ICAg
+ICAgICAgICAgICAgICA+Ow0KPiA+ICAgICAgICAgfTsNCj4gPg0KPiA+ICAgICAgICAgY2FuMF9p
+bnRfcGluczogY2FuMF9pbnRfcGlucyB7DQo+ID4gICAgICAgICAgICAgICAgIHBpbmN0cmwtc2lu
+Z2xlLHBpbnMgPSA8DQo+ID4gICAgICAgICAgICAgICAgIC8qQ2xlQU5vcGVuKi8NCj4gPiAgICAg
+ICAgICAgICAgICAgQU0zM1hYX0lPUEFEKDB4ODljLCBQSU5fSU5QVVRfUFVMTFVQIHwgTVVYX01P
+REU3KSAvKg0KPiAoVDYpIGdwbWNfYmUwbl9jbGUuZ3BpbzJbNV0gICAgICAgIG5JTlQgICAgICAg
+ICAgICAqLw0KPiA+ICAgICAgICAgICAgICAgICBBTTMzWFhfSU9QQUQoMHg5NjgsIFBJTl9JTlBV
+VF9QVUxMVVAgfCBNVVhfTU9ERTcpIC8qDQo+IChFMTgpIHVhcnQwX2N0c24uZ3BpbzFbOF0gICAg
+ICAgICAgbklOVDEgICAgICAgICAgICovDQo+ID4gICAgICAgICAgICAgICAgID47DQo+ID4gICAg
+ICAgICB9Ow0KPiA+DQo+ID4gICAgICAgICBjYW4xX2ludF9waW5zOiBjYW4xX2ludF9waW5zIHsN
+Cj4gPiAgICAgICAgICAgICAgICAgcGluY3RybC1zaW5nbGUscGlucyA9IDwNCj4gPiAgICAgICAg
+ICAgICAgICAgLypTQVdNIENBTiovDQo+ID4gICAgICAgICAgICAgICAgIEFNMzNYWF9JT1BBRCgw
+eDgyMCwgUElOX0lOUFVUX1BVTExVUCB8IE1VWF9NT0RFNykgLyoNCj4gKFUxMCkgZ3BtY19hZDgu
+Z3BpbzBbMjJdICAgICAgICAgICBuSU5UICAgICAgICAgICAgKi8NCj4gPiAgICAgICAgICAgICAg
+ICAgQU0zM1hYX0lPUEFEKDB4OGM4LCBQSU5fSU5QVVRfUFVMTFVQIHwgTVVYX01PREU3KSAvKg0K
+PiAoVTMpIGxjZF9kYXRhMTAuZ3BpbzJbMTZdICBuSU5UMSAgICAgICAgICAgKi8NCj4gPiAgICAg
+ICAgICAgICAgICAgQU0zM1hYX0lPUEFEKDB4OGNjLCBQSU5fSU5QVVRfUFVMTFVQIHwgTVVYX01P
+REU3KSAvKg0KPiAoVTQpIGxjZF9kYXRhMTEuZ3BpbzJbMTddICBuSU5UMCBOT1QgVVNFRCAgKi8N
+Cj4gPiAgICAgICAgICAgICAgICAgPjsNCj4gPiAgICAgICAgIH07DQo+ID4gfTsNCj4gPg0KPiA+
+DQo+ID4NCj4gPiAvew0KPiA+ICAgICAgICAgLyogZXh0ZXJuYWwgNDBNIG9zY2lsbGF0b3Igb2Yg
+bWNwMjUxOGZkIG9uIFNQSTEuMCAqLw0KPiA+ICAgICAgICAgbWNwMjUxOGZkX2NhbjBfb3NjOiBt
+Y3AyNTE4ZmRfY2FuMF9vc2Mgew0KPiA+ICAgICAgICAgICAgICAgICBjb21wYXRpYmxlID0gImZp
+eGVkLWNsb2NrIjsNCj4gPiAgICAgICAgICAgICAgICAgI2Nsb2NrLWNlbGxzID0gPDA+Ow0KPiA+
+ICAgICAgICAgICAgICAgICBjbG9jay1mcmVxdWVuY3kgPSA8NDAwMDAwMDA+Ow0KPiA+ICAgICAg
+ICAgfTsNCj4gPiB9Ow0KPiA+DQo+ID4NCj4gPiAvew0KPiA+ICAgICAgICAgLyogZXh0ZXJuYWwg
+NDBNIG9zY2lsbGF0b3Igb2YgbWNwMjUxOGZkIG9uIFNQSTEuMSAqLw0KPiA+ICAgICAgICAgbWNw
+MjUxOGZkX2NhbjFfb3NjOiBtY3AyNTE4ZmRfY2FuMV9vc2Mgew0KPiA+ICAgICAgICAgICAgICAg
+ICBjb21wYXRpYmxlID0gImZpeGVkLWNsb2NrIjsNCj4gPiAgICAgICAgICAgICAgICAgI2Nsb2Nr
+LWNlbGxzID0gPDA+Ow0KPiA+ICAgICAgICAgICAgICAgICBjbG9jay1mcmVxdWVuY3kgPSA8NDAw
+MDAwMDA+Ow0KPiA+ICAgICAgICAgfTsNCj4gPiB9Ow0KPiA+DQo+ID4gLyogdGhlIHNwaSBjb25m
+aWcgb2YgdGhlIGNhbi1jb250cm9sbGVyIGl0c2VsZiBiaW5kaW5nIGV2ZXJ5dGhpbmcNCj4gPiB0
+b2dldGhlciAqLyAmc3BpMXsNCj4gPiAgICAgI2FkZHJlc3MtY2VsbHMgPSA8MT47DQo+ID4gICAg
+ICNzaXplLWNlbGxzID0gPDA+Ow0KPiA+DQo+ID4gICAgIHN0YXR1cyA9ICJva2F5IjsNCj4gPiAg
+ICAgcGluY3RybC1uYW1lcyA9ICJkZWZhdWx0IjsNCj4gPiAgICAgcGluY3RybC0wID0gPCZwaW5j
+dHJsX3NwaTFfcGlucz47DQo+ID4NCj4gPiAgICAgLypDbGVBTm9wZW4qLw0KPiA+ICAgICBjYW5A
+MCB7DQo+ID4gICAgICAgICBjb21wYXRpYmxlID0gIm1pY3JvY2hpcCxtY3AyNTE4ZmQiOw0KPiA+
+ICAgICAgICAgcmVnID0gPDA+Ow0KPiA+ICAgICAgICAgY2xvY2tzID0gPCZtY3AyNTE4ZmRfY2Fu
+MF9vc2M+Ow0KPiA+ICAgICAgICAgcGluY3RybC1uYW1lcyA9ICJkZWZhdWx0IjsNCj4gPiAgICAg
+ICAgIHBpbmN0cmwtMCA9IDwmY2FuMF9pbnRfcGlucz47DQo+ID4gICAgICAgICBzcGktbWF4LWZy
+ZXF1ZW5jeSA9IDwyMDAwMDAwMD47DQo+ID4gICAgICAgICBpbnRlcnJ1cHRzLWV4dGVuZGVkID0g
+PCZncGlvMiA1IElSUV9UWVBFX0VER0VfRkFMTElORz47DQo+IA0KPiBTZWUgY29tbWVudCBhYm91
+dCBlZGdlIElSUXMgYWJvdmUhDQoNCkFDSy4NCg0KPiANCj4gPiAgICAgICAgIG1pY3JvY2hpcCxy
+eC1pbnQtZ3Bpb3MgPSA8JmdwaW8xIDggR1BJT19BQ1RJVkVfTE9XPjsNCj4gPiAgICAgfTsNCj4g
+Pg0KPiA+ICAgICBjYW5AMSB7DQo+ID4gICAgICAgICBjb21wYXRpYmxlID0gIm1pY3JvY2hpcCxt
+Y3AyNTE4ZmQiOw0KPiA+ICAgICAgICAgcmVnID0gPDE+Ow0KPiA+ICAgICAgICAgY2xvY2tzID0g
+PCZtY3AyNTE4ZmRfY2FuMV9vc2M+Ow0KPiA+ICAgICAgICAgcGluY3RybC1uYW1lcyA9ICJkZWZh
+dWx0IjsNCj4gPiAgICAgICAgIHBpbmN0cmwtMCA9IDwmY2FuMV9pbnRfcGlucz47DQo+ID4gICAg
+ICAgICBzcGktbWF4LWZyZXF1ZW5jeSA9IDwyMDAwMDAwMD47DQo+ID4gICAgICAgICBpbnRlcnJ1
+cHRzLWV4dGVuZGVkID0gPCZncGlvMCAyMiBJUlFfVFlQRV9MRVZFTF9MT1c+Ow0KPiA+IC8vICAg
+ICAgICBtaWNyb2NoaXAscngtaW50LWdwaW9zID0gPCZncGlvMiAxNiBHUElPX0FDVElWRV9MT1c+
+Ow0KPiA+ICAgICB9Ow0KPiA+IH07DQo+IA0KPiBDYW4geW91IHRlc3QgYWdhaW4gd2l0aCBJUlFf
+VFlQRV9MRVZFTF9MT1cgYW5kIG5vIHJ4LWludC1ncGlvcy4gUGxlYXNlDQo+IGluc3RydW1lbnQg
+dGhlIGJlZ2lubmluZyBhbmQgdGhlIHJldHVybnMgb2YgdGhlIG1jcDI1MXhmZF9pcnEoKSBmdW5j
+dGlvbiB0bw0KPiBjaGVjayBpZiBpdCdzIHJlYWxseSBzdGFydGVkIHR3aWNlLiBQbGVhc2UgcHJp
+bnQgdGhlDQo+IHByaXYtPnJlZ3Nfc3RhdHVzLmludGYgaW4gZXZlcnkgbG9vcC4gQ2FuIHlvdSBy
+ZWNvcmQgdGhlIGdwaW8yXzUgd2l0aCBhDQo+IHNjb3BlLg0KDQpZZXMgSSBjYW4gYnV0IHdoYXQg
+ZG8geW91IG1lYW4gd2l0aCBJbnN0cnVtZW50PyANCkFuZCBubyBzY29wZSB1bnRpbCBNb25kYXku
+IA0KDQoNCj4gTWFrZSBzdXJlIHRoYXQgeW91IGRvbid0IHNlbmQgYW55IENBTiBmcmFtZXMgYXMg
+cmVhY3Rpb24gb2YgcmVjZXB0aW9uLg0KDQpIb3cgZG8gSSBtYWtlIHN1cmUgb2YgdGhhdD8gOi8g
+DQoNCg0KPiANCj4gcmVnYXJkcywNCj4gTWFyYw0KPiANCj4gLS0NCj4gUGVuZ3V0cm9uaXggZS5L
+LiAgICAgICAgICAgICAgICAgfCBNYXJjIEtsZWluZS1CdWRkZSAgICAgICAgICAgfA0KPiBFbWJl
+ZGRlZCBMaW51eCAgICAgICAgICAgICAgICAgICB8IGh0dHBzOi8vd3d3LnBlbmd1dHJvbml4LmRl
+ICB8DQo+IFZlcnRyZXR1bmcgV2VzdC9Eb3J0bXVuZCAgICAgICAgIHwgUGhvbmU6ICs0OS0yMzEt
+MjgyNi05MjQgICAgIHwNCj4gQW10c2dlcmljaHQgSGlsZGVzaGVpbSwgSFJBIDI2ODYgfCBGYXg6
+ICAgKzQ5LTUxMjEtMjA2OTE3LTU1NTUgfA0KDQpUaGFuayB5b3UgZm9yIHlvdXIgdGltZQ0KTWFy
+a3VzIA0K
