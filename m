@@ -2,235 +2,225 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D290490986
-	for <lists+linux-can@lfdr.de>; Mon, 17 Jan 2022 14:27:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6972490ACE
+	for <lists+linux-can@lfdr.de>; Mon, 17 Jan 2022 15:55:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232759AbiAQN1X (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 17 Jan 2022 08:27:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52432 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232371AbiAQN1X (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 17 Jan 2022 08:27:23 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80904C061574
-        for <linux-can@vger.kernel.org>; Mon, 17 Jan 2022 05:27:22 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1n9S2b-0005bI-1h; Mon, 17 Jan 2022 14:27:21 +0100
-Received: from pengutronix.de (unknown [195.138.59.174])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 416711A958;
-        Mon, 17 Jan 2022 13:27:20 +0000 (UTC)
-Date:   Mon, 17 Jan 2022 14:27:16 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Markus Mirevik <markus.mirevik@dpsolutions.se>
-Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Subject: Re: MCP251xFD runs interrupt handler twice per message.
-Message-ID: <20220117132716.y5q3vuayjgqhwpro@pengutronix.de>
+        id S234642AbiAQOx7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 17 Jan 2022 09:53:59 -0500
+Received: from mail-eopbgr50060.outbound.protection.outlook.com ([40.107.5.60]:62854
+        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S237192AbiAQOxu (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 17 Jan 2022 09:53:50 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XjvMekcCyl1aCFqSSCArfkI6Tdi+oHZqbi90Qrfp23XvBGQqPU4rlKZXqC84Z9U4iEq0p8540bvoS3wW0mBGNNdDE2iWwcvwClzra899b1/5XCTawVr8itMfM+vU9d+8y/TX4fMCOQN6jdFHf485dUVPXMILXEyBGcDTfAonuSZDvNLibrm8W4y34/X8ozhhHzyEqFxQ0B9mHgNmapPk4Z0uWJmz2KbTPQrV/9M7ix2XV5n0qe+irWF4HVTIW95e1F2tmf8fVxGFctIW30qt3RnspbqqW39fAsjcnzSe98NmdKzULMN8wfPBvdXAD33gPYk1TPKSKOsxubl7UTSr2g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/mViSw1GzllzN1cOz1RY2PidjxpPU3RQXMZyNFTpK4M=;
+ b=N7H8dAsA4cXwpcNwHrFlQJGW/trqQnbUtMFyfFINfQvd1mMf+yD9m/woiaIDqxs4iXTFwfE0k1SaWXfbyNr5q2w7CnY3te8+carR4z4u93Z1CJP3vPW1QoEsilE6kkEJOVFK7+GzfcoNkOsaCY1jH3Qy28Et96jPjpIVnN84PWpT5stjG9/449BQvw4eWyGb14L16UsulizfN/tMtmqogmi0kw4GDW29i+KFFNXGP5afCPXfjqw2y8hGDeMS4SkaLs4008bzD9Fl6EoK9ZaOuOWDdMUzHw+pWNMIohwCt/VErUOR2kBFV0Uc+mDQUUdsJRfhdkhCqLhMa6rWr+sTeQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=dpsolutions.se; dmarc=pass action=none
+ header.from=dpsolutions.se; dkim=pass header.d=dpsolutions.se; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=dpnorge.onmicrosoft.com; s=selector2-dpnorge-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/mViSw1GzllzN1cOz1RY2PidjxpPU3RQXMZyNFTpK4M=;
+ b=oBlvj4o2ANiWc/ZKLSDuwGSJcjVzwLS2600ayxIgWFHn43Tal7yve9VH6ZQZbYObWyUjQQAIceSipKCJKjZ/fFAJZw3lKyJkSlZZxntQ8GfQRw1Qj+V2IlIvvIsWeA496OGIPRoviELdGjlzYOqLH97j2N9fpAEeOkDanMR57cg=
+Received: from HE1PR04MB3100.eurprd04.prod.outlook.com (2603:10a6:7:21::21) by
+ VI1PR04MB5007.eurprd04.prod.outlook.com (2603:10a6:803:59::21) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4888.12; Mon, 17 Jan 2022 14:53:46 +0000
+Received: from HE1PR04MB3100.eurprd04.prod.outlook.com
+ ([fe80::4949:5038:5888:d0ff]) by HE1PR04MB3100.eurprd04.prod.outlook.com
+ ([fe80::4949:5038:5888:d0ff%5]) with mapi id 15.20.4888.013; Mon, 17 Jan 2022
+ 14:53:46 +0000
+From:   Markus Mirevik <markus.mirevik@dpsolutions.se>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+CC:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Subject: Sv: MCP251xFD runs interrupt handler twice per message.
+Thread-Topic: MCP251xFD runs interrupt handler twice per message.
+Thread-Index: AdgJLvj3LYiHrdzWT92Iflx1OZxh8QAFQxoAAAAoddAAYTnugAAzWo6wAAO+JAAAAXHvwA==
+Date:   Mon, 17 Jan 2022 14:53:46 +0000
+Message-ID: <HE1PR04MB310040456777CCDE2DF03FEAE6579@HE1PR04MB3100.eurprd04.prod.outlook.com>
 References: <HE1PR04MB310066D557C9D77FE357D90AE6549@HE1PR04MB3100.eurprd04.prod.outlook.com>
  <87o84e1oj1.fsf@hardanger.blackshift.org>
  <HE1PR04MB3100B7CD240526C06FCA048EE6549@HE1PR04MB3100.eurprd04.prod.outlook.com>
  <20220116110941.6cqzm3skp57pnvth@pengutronix.de>
  <HE1PR04MB3100E5991C6FB420821F1F54E6579@HE1PR04MB3100.eurprd04.prod.outlook.com>
+ <20220117132716.y5q3vuayjgqhwpro@pengutronix.de>
+In-Reply-To: <20220117132716.y5q3vuayjgqhwpro@pengutronix.de>
+Accept-Language: en-US
+Content-Language: sv-SE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=dpsolutions.se;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 6421a79e-eb6e-48fb-d659-08d9d9c92a0e
+x-ms-traffictypediagnostic: VI1PR04MB5007:EE_
+x-microsoft-antispam-prvs: <VI1PR04MB50074D8383A1B95A7E515125E6579@VI1PR04MB5007.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 8epcy2E4r3uEYgIuMk+VZ4HSOZYZElR6CDmdVJxP6k4TMx4OZYcX4aVAY9lx1XXcvRNA4U4d6lXgBU1kEqn5PywSKK/iJGJVZQWnGsjZDb6SGxOMoRL5cYQoZDm3PG4SKFt+C+qmiN1IQv8DIqpadPSgO87lQayaFVyDctf5sQwjChOYBnhKYkQLnfpnHtGV5RQo7kVvJrKmf2gKDlDkXaeyQSu34rikqsev3GP9G5vOshydcrZ2mgeS87GNwyW35raZR+fKwiZ5CUEH46cTg+3OVEWJLgqsx/phHZw3jXVJdDLP9Z1dPRJEsjfuElkjdL5kE8PFokSesbwvSclxkrP3YU1qX77HXiJbhZfu7j/jL+t3VNjCcWwZeZ92ltMpIB2gHtJRJfGa9AdaxyiNgTylXep8x0G4xjEMuMLL7ZEqSYEeFp3V0IdxPXRxLSZPohIvH+aBMnYx3kaalES8Bei/cnU4NgUoj++xmLyJ0/W0HdXUnQcfdntSJM2TL1Jvek2+1R1yz4H7ujRs0ZxWzcuE3yOaRnJcfHLsrijVZREHSgq/zniPKAH3HD/taxDR68t+duZ0bPCaNfutxZWC9vjowa/tc8dfEtod8abZuc2X/pZ76hQtF539KFl0i4ScL7h1nw74X4sRm+lCZKxeDl3fSWdqCL/h/Bn+A47+pyux7S1+5w2qVfIF0B7KHIPazUfE+sTVBCoeybdz8eqNcQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR04MB3100.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(136003)(366004)(346002)(376002)(39840400004)(396003)(66946007)(76116006)(66446008)(64756008)(122000001)(38100700002)(186003)(26005)(86362001)(44832011)(508600001)(5660300002)(15650500001)(8676002)(316002)(8936002)(9686003)(66476007)(4326008)(33656002)(38070700005)(6506007)(55016003)(71200400001)(7696005)(2906002)(52536014)(83380400001)(66556008)(6916009);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?emphdmJ3aE9MOHpwOGxvT2ZEcndQdjhLVmxmdmhBeGJ5MEpIdDBsSlN6eDFp?=
+ =?utf-8?B?WE5rTEl0bG1VcEp5Zi90NUM3TjdVV2dma0RuM3lwTkg5allDVGdpenZqRkZu?=
+ =?utf-8?B?S3g2UEJhTzRxeVdIMUFaZk8zd3lmT21sWWdsLzZsMkZCeW9OMlZ4aVVHLzZ0?=
+ =?utf-8?B?Uncrb3V6TXdmOEJ0bHlLTWhrVlovejJaclZoWjZ0TlF2ckRRYVZWKzdSY2lQ?=
+ =?utf-8?B?aDRnL0ptaHBKTkpTM0s3WnZraXFTL1RKRTRQdE5ONDV3ZVREeEJnanl5MVJV?=
+ =?utf-8?B?RlFndDZFelh5L0VYVFZacjRZQjJPU3lwbkVNaWIwbGNPdENmNGVYTndzbjN0?=
+ =?utf-8?B?cklGUE9LRk1BZGtyNmw3M25VYmpCMzVXRUFxTUlpdVJid2JqcGNLL0tsV3FK?=
+ =?utf-8?B?V0pycmRJeUVpWSt0MHE2eDhQd3BDamVpellGZUZONDQyVFoyUkgwQnBrSTRz?=
+ =?utf-8?B?ZmdsVHpNYytNZHNJZ3dtNG43dEc2SWE1UW5Pa3BEWWhKQmI4WHBVRUx4bDBK?=
+ =?utf-8?B?c0ErTERRVEZTRE1melVRbUpGYkJjYnQxdUdKdUJWMWdrOFBZSlZPWjRpUVFJ?=
+ =?utf-8?B?SHNqQXJKL1YxN2c4cmtjS21mbG5tK2tveG5USm5BaENjZ1I2NzU1dkt1UHZx?=
+ =?utf-8?B?VUttTEpzWTFRaWlrOXpyZnBFelVHTFVsWkZqL1N4VU1kVHZoejNISjNtdGFD?=
+ =?utf-8?B?cjJDK2tqdFJ5bTRaNlJIaUhVMmdBeEdsRUNJNS9hM20weE9RV2xjRWlSdExF?=
+ =?utf-8?B?dVlsVytIUkFuWDVjak1QUVVHYVVET1ZHemNqc1ZHY2FZZG5uUnd4M0hTek1H?=
+ =?utf-8?B?THFGd1h0Nkl5WjdqNFUzUmRLangxZmFYZ3E0VHJMSy9XWVUvV293QVlDRERo?=
+ =?utf-8?B?ZHluSmRRMW9SZE1pS0tUTjNIYUkvVFFWNXF5N0t4Sk5nZnljSzVqVUlCSVJQ?=
+ =?utf-8?B?UlB0TmxKVTFJYkdMemM5M0hxTlR5Tk1Fcy8yUHVmUTlQWFcvUVpWN0x4NnJ5?=
+ =?utf-8?B?V3QwNG84SE5kYnlNZnVjdFZ6NVV6VWNyNk1adWtqSVphbGpnL0ZHOTZjVmM5?=
+ =?utf-8?B?b2VEWGVXOThpL3FQR0dmQU1lOWFZMTRXWmcrNTE4ckZ0ZE9zYmdXWW8zUElB?=
+ =?utf-8?B?L0tjZkR2enFFb3AraklNNFZ2RHNPcGJMakttdWJFUm04THF6dU9DSFVVcjBN?=
+ =?utf-8?B?VmtWUGJHdjNCN3JVWm0yRmMyM0FYU0FXQXZZZGVsVEJoOTlVdGhBamU4aXdQ?=
+ =?utf-8?B?QzhPU1BPRWUyR29UM1NYa0R0bWUraHR3SU1PWEcrMEFPd2dQU3ZaaXY5TGNR?=
+ =?utf-8?B?Z0diWWk1eGhIM2RkaklBK3VsMFhQTlVhRVdNbi9NVjlsOXpBTk1WZlVBaC9q?=
+ =?utf-8?B?V1BzTHV3K1pZM2Jnc3pDbXIxa3QrTEFBSWNRQms0eTZSbzNDVnVhNjdaNnIy?=
+ =?utf-8?B?M3J4ZkxKWFhWTVp5aHhYUUpBSldDdkg1N1pKZlpBUUw4eXdPVW93dkdzVWNG?=
+ =?utf-8?B?OThpQnk2QmZibFpiNEROS3N2WHlub1czZ25PTzFwNTdGNTh6WHVNNFNUby9q?=
+ =?utf-8?B?VStwLzVxME95enJPTkgrSWVkbXR3blErbENJQWVJek1HbDBTVFlPUkFMY05O?=
+ =?utf-8?B?Ykh6ald2UTkrS0dnYVVTTFEzVFpmYU5WMjVvNnpTa3l1RndES0RiRHpKbjMz?=
+ =?utf-8?B?aG5WS2ZQT0w2WFBNNnZiTHJGRWE1Wm9ja2ovTnZyYWdGN0s1UWt4dUI4aFE0?=
+ =?utf-8?B?ZldoUE1ETTVIbGVFcm9PS2VadTRIblpBUVVIY0JyQ0xGa0xVeHlSWnFCUFpk?=
+ =?utf-8?B?YlNXWTA2SzNBSTBEVkRtaHlxL1RocGZ5dCt0d21pby9BUlJMaHpFaVhVUVFh?=
+ =?utf-8?B?OFRxM3poSWRJeUVkK01YZGtwL2xycVZsb0xPelpkbVpWSkFDYUt5TkJxOUdP?=
+ =?utf-8?B?NTlsOGgyT3FhK1lhaUNEclo5Z0sxTXBkUkFlVjQ4Y1orOXBmVU5vK1F0R3Jn?=
+ =?utf-8?B?ZTY0YTQ3MkJZbFNoaklhNjRybW96WjkyVmdwQ0tjbElEYWtFcjAzb0pqMFdL?=
+ =?utf-8?B?Z1NGL3dISmwvR0NzemRGVlVGNW0xbHQzWjdraGdHVGNNRW5OZVdpTUFPMk1H?=
+ =?utf-8?B?cWovQ0JrZiszSlZIUVJ1ei9XWXMyaGtGSjJxNWZrSFZzaGc0QVZxYUNQdlRY?=
+ =?utf-8?B?OVJPUmkxd3FiWEZzL2txYTFRbkNXL2FPMEhOU1BCQTFRVDFCSDJidTFRakdV?=
+ =?utf-8?B?bzNEUTVBaDlOR3MzcTNpOE16V2lnPT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="radlh4hdcrkf5vgf"
-Content-Disposition: inline
-In-Reply-To: <HE1PR04MB3100E5991C6FB420821F1F54E6579@HE1PR04MB3100.eurprd04.prod.outlook.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-OriginatorOrg: dpsolutions.se
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: HE1PR04MB3100.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6421a79e-eb6e-48fb-d659-08d9d9c92a0e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jan 2022 14:53:46.5655
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3a2c5ea5-12ca-4b9d-9883-156f72a0a4ae
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6czgoPXLwL3LTFeZD5WYwrzWkR2xPglZaLv0bawDdGO9yq81NMbmYyX2mDjfqSuKk6N2RXMmpjVbL1cNOvDq6lmEfod8gO7H0Z+hPTBKLMo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5007
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-
---radlh4hdcrkf5vgf
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 17.01.2022 11:55:31, Markus Mirevik wrote:
-> > > > You mean mcp251xfd_irq() is started twice?
-> > >
-> > > Yes.
-> >=20
-> > That's not the way it's supposed to be. Maybe it's a limitation of the =
-am335x
-> > IRQ controller.
->=20
-> What kind of limitation could that be?
-
-Some kind of limitation of the hardware. Don't know, SoC may have all
-kinds of bugs :)
-
-[...]
-
-> > > > Can you test again with IRQ_TYPE_LEVEL_LOW and no rx-int-gpios.
-> > > > Please instrument the beginning and the returns of the
-> > > > mcp251xfd_irq() function to check if it's really started twice.
-> > > > Please print the
-> > > > priv->regs_status.intf in every loop. Can you record the gpio2_5
-> > > > priv->with a
-> > > > scope.
-> > >
-> > > Yes I can but what do you mean with Instrument?
-> >=20
-> > That's a fancy way of saying: please add printk() :)
-> >=20
-> > > And no scope until Monday.
-> >=20
-> > no problem
-> >=20
-> > > > Make sure that you don't send any CAN frames as reaction of recepti=
-on.
-> > >
-> > > How do I make sure of that? :/
-> >=20
-> > The Linux kernel doesn't send any CAN frames on its own. You need a user
-> > space program to do so. Make sure you don't have any user space program
-> > running that's sending CAN frames.
-> >=20
->=20
-> No user space program running that would send can frames. And no can fram=
-es received on the other side. =20
->=20
-> With IRQ_TYPE_LEVEL_LOW and the rx-int-gpios disabled I have added a
-> call to netdev_info at the top of the function:
-
-For better readability register values are usually printed in hex
-(0x%08x).
-
-> ...
->         netdev_info(priv->ndev, "mcp251xfd_irq mcp251xfd_regs_status.intf=
-: %d", priv->regs_status.intf );
-
-Note: the "intf" contains old information here, because in this run of
-the interrupt handler the intf has not been read so far.
-
->         if (priv->rx_int) {
-> ...
->=20
-> and here:
-> ...=20
->                if (!(intf_pending)) {
->                         netdev_info(priv->ndev, "!intf_pending mcp251xfd_=
-regs_status.intf: %d", priv->regs_status.intf );
->                         return handled;
->                 }
->                 netdev_info(priv->ndev, "intf_pending mcp251xfd_regs_stat=
-us.intf: %d", priv->regs_status.intf );
-> ...
->=20
-> Resulting in this when receiving one can message:=20
->=20
-> [  987.486691] mcp251xfd spi1.1 can1: mcp251xfd_irq mcp251xfd_regs_status=
-=2Eintf: -1088815100
-> [  987.494987] mcp251xfd spi1.1 can1: intf_pending mcp251xfd_regs_status.=
-intf:  -1088815098
-> [  987.503239] mcp251xfd spi1.1 can1: !intf_pending mcp251xfd_regs_status=
-=2Eintf: -1088815100
-
-2nd loop starts here:
-
-> [  987.511423] mcp251xfd spi1.1 can1: mcp251xfd_irq mcp251xfd_regs_status=
-=2Eintf: -1088815100
-> [  987.519603] mcp251xfd spi1.1 can1: !intf_pending mcp251xfd_regs_status=
-=2Eintf: -1088815100
->=20
-> mcp251xfd_regs_status.intf translated to binary=20
-> 1	1111 1111 1111 1111 1111 1111 1111 1111 1011 1111 0001 1010 0000 0000 0=
-000 0100
-> 2	1111 1111 1111 1111 1111 1111 1111 1111 1011 1111 0001 1010 0000 0000 0=
-000 0110
-> 3	1111 1111 1111 1111 1111 1111 1111 1111 1011 1111 0001 1010 0000 0000 0=
-000 0100
-
-2nd loop starts here:
-
-> 4	1111 1111 1111 1111 1111 1111 1111 1111 1011 1111 0001 1010 0000 0000 0=
-000 0100
-> 5	1111 1111 1111 1111 1111 1111 1111 1111 1011 1111 0001 1010 0000 0000 0=
-000 0100
->=20
-> I have also attached a scope picture, this is without the printouts.
-
-good idea, the printk usually takes much time.
-
-That scope picture looks good! Can you include both runs of the IRQ
-handler in one scope picture? I'm interested if there is activity or a
-glich on IRQ line.
-
-After you've that picture, you can try to catch glitches on the IRQ
-line. If your scope allows this, setup a trigger on the INT channel that
-triggers if the channel is low for considerably less then it takes to
-clear the IRQ.
-
-Currently it takes about 160=C2=B5s to clear the IRQ, so setup a trigger for
-less than 50=C2=B5s.
-
-> And if I'm reading it correctly it confirms that it runs twice.=20
-
-ACK
-
-> 1 read pending IRQs [*]
-> -RXIF-
-> 2 read RX-FIFO level [*]
-> 3 read RX'ed CAN frames [*]
-> 4 and 5 mark RX'ed CAN frames as read [*]
-> (This is the 5.10.79 version that uses regmap_update_bits which I
->  assume uses one read and one write instruction.)
-
-ACK - in the CRC mode (which is default) the regmap_update_bits has not
-been optimized, it does a read/modify/write.
-
-> -loop-
-> 6 read pending IRQs [*]
-> -Exit-
-> 7 read pending IRQs [*]
->=20
-> Confirmd with printouts:
-> [   26.990324] mcp251xfd spi1.1 can1: mcp251xfd_irq()
-> [   26.995173] mcp251xfd spi1.1 can1: * Bulk read MCP251XFD_REG_INT
-> [   27.001371] mcp251xfd spi1.1 can1: Interrupts pending, handling.
-> [   27.007435] mcp251xfd spi1.1 can1: * Read RX MCP251XFD_REG_FIFOSTA
-> [   27.013676] mcp251xfd spi1.1 can1: * Bulk read. Register: 1248 count: 5
-> [   27.020226] mcp251xfd spi1.1 can1: * Update bits MCP251XFD_REG_FIFOCON=
-_UINC
-> [   27.027318] mcp251xfd spi1.1 can1: * Bulk read MCP251XFD_REG_INT
-> [   27.033378] mcp251xfd spi1.1 can1: No interrupts pending, returning.
-> [   27.039805] mcp251xfd spi1.1 can1: mcp251xfd_irq()
-> [   27.044617] mcp251xfd spi1.1 can1: * Bulk read MCP251XFD_REG_INT
-> [   27.050693] mcp251xfd spi1.1 can1: No interrupts pending, returning.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---radlh4hdcrkf5vgf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmHlbrIACgkQqclaivrt
-76mwvAf/V1ZsZO8PpDwmzoGYLDyTE5yVJiwpqBKmZnjjkrJNAwJNWl9Rqaa0mKaw
-hMnzabkpV6y9tccUmRK6ObrNrMVwadzVgb+76Q9M8txaMr7VF+5vLW4nOXyZeYUQ
-uYAIvkTgscIpJaLEdRmmrTwvUc0t43UYhqngOsNWP3JAYVMkbvjmxgyfnYCmfPZY
-ZED929+jz0LiKKTI03vJ1ySNRXm8DIk402SO0HaarNJV5p2PHq8SzBrs2qvA4ORb
-iW21fn3YxuFIr8YZRDDb3Tq8bGz6s/CuvCEtyTwVTUwTQt9il+KgnXYWy2A14bXu
-VKGsIhesPbjCihEhXv8jO2A2I9+qNA==
-=7Fu3
------END PGP SIGNATURE-----
-
---radlh4hdcrkf5vgf--
+PiA+ID4gPiA+IFlvdSBtZWFuIG1jcDI1MXhmZF9pcnEoKSBpcyBzdGFydGVkIHR3aWNlPw0KPiA+
+ID4gPg0KPiA+ID4gPiBZZXMuDQo+ID4gPg0KPiA+ID4gVGhhdCdzIG5vdCB0aGUgd2F5IGl0J3Mg
+c3VwcG9zZWQgdG8gYmUuIE1heWJlIGl0J3MgYSBsaW1pdGF0aW9uIG9mDQo+ID4gPiB0aGUgYW0z
+MzV4IElSUSBjb250cm9sbGVyLg0KPiA+DQo+ID4gV2hhdCBraW5kIG9mIGxpbWl0YXRpb24gY291
+bGQgdGhhdCBiZT8NCj4gDQo+IFNvbWUga2luZCBvZiBsaW1pdGF0aW9uIG9mIHRoZSBoYXJkd2Fy
+ZS4gRG9uJ3Qga25vdywgU29DIG1heSBoYXZlIGFsbCBraW5kcw0KPiBvZiBidWdzIDopDQo+DQoN
+Cg0KDQogDQo+IFsuLi5dDQo+IA0KPiA+ID4gPiA+IENhbiB5b3UgdGVzdCBhZ2FpbiB3aXRoIElS
+UV9UWVBFX0xFVkVMX0xPVyBhbmQgbm8gcngtaW50LWdwaW9zLg0KPiA+ID4gPiA+IFBsZWFzZSBp
+bnN0cnVtZW50IHRoZSBiZWdpbm5pbmcgYW5kIHRoZSByZXR1cm5zIG9mIHRoZQ0KPiA+ID4gPiA+
+IG1jcDI1MXhmZF9pcnEoKSBmdW5jdGlvbiB0byBjaGVjayBpZiBpdCdzIHJlYWxseSBzdGFydGVk
+IHR3aWNlLg0KPiA+ID4gPiA+IFBsZWFzZSBwcmludCB0aGUNCj4gPiA+ID4gPiBwcml2LT5yZWdz
+X3N0YXR1cy5pbnRmIGluIGV2ZXJ5IGxvb3AuIENhbiB5b3UgcmVjb3JkIHRoZSBncGlvMl81DQo+
+ID4gPiA+ID4gcHJpdi0+d2l0aCBhDQo+ID4gPiA+ID4gc2NvcGUuDQo+ID4gPiA+DQo+ID4gPiA+
+IFllcyBJIGNhbiBidXQgd2hhdCBkbyB5b3UgbWVhbiB3aXRoIEluc3RydW1lbnQ/DQo+ID4gPg0K
+PiA+ID4gVGhhdCdzIGEgZmFuY3kgd2F5IG9mIHNheWluZzogcGxlYXNlIGFkZCBwcmludGsoKSA6
+KQ0KPiA+ID4NCj4gPiA+ID4gQW5kIG5vIHNjb3BlIHVudGlsIE1vbmRheS4NCj4gPiA+DQo+ID4g
+PiBubyBwcm9ibGVtDQo+ID4gPg0KPiA+ID4gPiA+IE1ha2Ugc3VyZSB0aGF0IHlvdSBkb24ndCBz
+ZW5kIGFueSBDQU4gZnJhbWVzIGFzIHJlYWN0aW9uIG9mDQo+IHJlY2VwdGlvbi4NCj4gPiA+ID4N
+Cj4gPiA+ID4gSG93IGRvIEkgbWFrZSBzdXJlIG9mIHRoYXQ/IDovDQo+ID4gPg0KPiA+ID4gVGhl
+IExpbnV4IGtlcm5lbCBkb2Vzbid0IHNlbmQgYW55IENBTiBmcmFtZXMgb24gaXRzIG93bi4gWW91
+IG5lZWQgYQ0KPiA+ID4gdXNlciBzcGFjZSBwcm9ncmFtIHRvIGRvIHNvLiBNYWtlIHN1cmUgeW91
+IGRvbid0IGhhdmUgYW55IHVzZXIgc3BhY2UNCj4gPiA+IHByb2dyYW0gcnVubmluZyB0aGF0J3Mg
+c2VuZGluZyBDQU4gZnJhbWVzLg0KPiA+ID4NCj4gPg0KPiA+IE5vIHVzZXIgc3BhY2UgcHJvZ3Jh
+bSBydW5uaW5nIHRoYXQgd291bGQgc2VuZCBjYW4gZnJhbWVzLiBBbmQgbm8gY2FuDQo+IGZyYW1l
+cyByZWNlaXZlZCBvbiB0aGUgb3RoZXIgc2lkZS4NCj4gPg0KPiA+IFdpdGggSVJRX1RZUEVfTEVW
+RUxfTE9XIGFuZCB0aGUgcngtaW50LWdwaW9zIGRpc2FibGVkIEkgaGF2ZSBhZGRlZCBhDQo+ID4g
+Y2FsbCB0byBuZXRkZXZfaW5mbyBhdCB0aGUgdG9wIG9mIHRoZSBmdW5jdGlvbjoNCj4gDQo+IEZv
+ciBiZXR0ZXIgcmVhZGFiaWxpdHkgcmVnaXN0ZXIgdmFsdWVzIGFyZSB1c3VhbGx5IHByaW50ZWQg
+aW4gaGV4ICgweCUwOHgpLg0KPiANCg0KTm90ZWQuIA0KDQo+ID4gLi4uDQo+ID4gICAgICAgICBu
+ZXRkZXZfaW5mbyhwcml2LT5uZGV2LCAibWNwMjUxeGZkX2lycQ0KPiA+IG1jcDI1MXhmZF9yZWdz
+X3N0YXR1cy5pbnRmOiAlZCIsIHByaXYtPnJlZ3Nfc3RhdHVzLmludGYgKTsNCj4gDQo+IE5vdGU6
+IHRoZSAiaW50ZiIgY29udGFpbnMgb2xkIGluZm9ybWF0aW9uIGhlcmUsIGJlY2F1c2UgaW4gdGhp
+cyBydW4gb2YgdGhlDQo+IGludGVycnVwdCBoYW5kbGVyIHRoZSBpbnRmIGhhcyBub3QgYmVlbiBy
+ZWFkIHNvIGZhci4NCj4gDQoNCk5vdGVkLiANCg0KPiA+ICAgICAgICAgaWYgKHByaXYtPnJ4X2lu
+dCkgew0KPiA+IC4uLg0KPiA+DQo+ID4gYW5kIGhlcmU6DQo+ID4gLi4uDQo+ID4gICAgICAgICAg
+ICAgICAgaWYgKCEoaW50Zl9wZW5kaW5nKSkgew0KPiA+ICAgICAgICAgICAgICAgICAgICAgICAg
+IG5ldGRldl9pbmZvKHByaXYtPm5kZXYsICIhaW50Zl9wZW5kaW5nDQo+IG1jcDI1MXhmZF9yZWdz
+X3N0YXR1cy5pbnRmOiAlZCIsIHByaXYtPnJlZ3Nfc3RhdHVzLmludGYgKTsNCj4gPiAgICAgICAg
+ICAgICAgICAgICAgICAgICByZXR1cm4gaGFuZGxlZDsNCj4gPiAgICAgICAgICAgICAgICAgfQ0K
+PiA+ICAgICAgICAgICAgICAgICBuZXRkZXZfaW5mbyhwcml2LT5uZGV2LCAiaW50Zl9wZW5kaW5n
+DQo+ID4gbWNwMjUxeGZkX3JlZ3Nfc3RhdHVzLmludGY6ICVkIiwgcHJpdi0+cmVnc19zdGF0dXMu
+aW50ZiApOyAuLi4NCj4gPg0KPiA+IFJlc3VsdGluZyBpbiB0aGlzIHdoZW4gcmVjZWl2aW5nIG9u
+ZSBjYW4gbWVzc2FnZToNCj4gPg0KPiA+IFsgIDk4Ny40ODY2OTFdIG1jcDI1MXhmZCBzcGkxLjEg
+Y2FuMTogbWNwMjUxeGZkX2lycQ0KPiA+IG1jcDI1MXhmZF9yZWdzX3N0YXR1cy5pbnRmOiAtMTA4
+ODgxNTEwMCBbICA5ODcuNDk0OTg3XSBtY3AyNTF4ZmQNCj4gPiBzcGkxLjEgY2FuMTogaW50Zl9w
+ZW5kaW5nIG1jcDI1MXhmZF9yZWdzX3N0YXR1cy5pbnRmOiAgLTEwODg4MTUwOTggWw0KPiA+IDk4
+Ny41MDMyMzldIG1jcDI1MXhmZCBzcGkxLjEgY2FuMTogIWludGZfcGVuZGluZw0KPiA+IG1jcDI1
+MXhmZF9yZWdzX3N0YXR1cy5pbnRmOiAtMTA4ODgxNTEwMA0KPiANCj4gMm5kIGxvb3Agc3RhcnRz
+IGhlcmU6DQo+IA0KPiA+IFsgIDk4Ny41MTE0MjNdIG1jcDI1MXhmZCBzcGkxLjEgY2FuMTogbWNw
+MjUxeGZkX2lycQ0KPiA+IG1jcDI1MXhmZF9yZWdzX3N0YXR1cy5pbnRmOiAtMTA4ODgxNTEwMCBb
+ICA5ODcuNTE5NjAzXSBtY3AyNTF4ZmQNCj4gPiBzcGkxLjEgY2FuMTogIWludGZfcGVuZGluZyBt
+Y3AyNTF4ZmRfcmVnc19zdGF0dXMuaW50ZjogLTEwODg4MTUxMDANCj4gPg0KPiA+IG1jcDI1MXhm
+ZF9yZWdzX3N0YXR1cy5pbnRmIHRyYW5zbGF0ZWQgdG8gYmluYXJ5DQo+ID4gMQkxMTExIDExMTEg
+MTExMSAxMTExIDExMTEgMTExMSAxMTExIDExMTEgMTAxMSAxMTExIDAwMDEgMTAxMA0KPiAwMDAw
+IDAwMDAgMDAwMCAwMTAwDQo+ID4gMgkxMTExIDExMTEgMTExMSAxMTExIDExMTEgMTExMSAxMTEx
+IDExMTEgMTAxMSAxMTExIDAwMDEgMTAxMA0KPiAwMDAwIDAwMDAgMDAwMCAwMTEwDQo+ID4gMwkx
+MTExIDExMTEgMTExMSAxMTExIDExMTEgMTExMSAxMTExIDExMTEgMTAxMSAxMTExIDAwMDEgMTAx
+MA0KPiAwMDAwIDAwMDAgMDAwMCAwMTAwDQo+IA0KPiAybmQgbG9vcCBzdGFydHMgaGVyZToNCj4g
+DQo+ID4gNAkxMTExIDExMTEgMTExMSAxMTExIDExMTEgMTExMSAxMTExIDExMTEgMTAxMSAxMTEx
+IDAwMDEgMTAxMA0KPiAwMDAwIDAwMDAgMDAwMCAwMTAwDQo+ID4gNQkxMTExIDExMTEgMTExMSAx
+MTExIDExMTEgMTExMSAxMTExIDExMTEgMTAxMSAxMTExIDAwMDEgMTAxMA0KPiAwMDAwIDAwMDAg
+MDAwMCAwMTAwDQo+ID4NCj4gPiBJIGhhdmUgYWxzbyBhdHRhY2hlZCBhIHNjb3BlIHBpY3R1cmUs
+IHRoaXMgaXMgd2l0aG91dCB0aGUgcHJpbnRvdXRzLg0KPiANCj4gZ29vZCBpZGVhLCB0aGUgcHJp
+bnRrIHVzdWFsbHkgdGFrZXMgbXVjaCB0aW1lLg0KPiANCj4gVGhhdCBzY29wZSBwaWN0dXJlIGxv
+b2tzIGdvb2QhIENhbiB5b3UgaW5jbHVkZSBib3RoIHJ1bnMgb2YgdGhlIElSUSBoYW5kbGVyDQo+
+IGluIG9uZSBzY29wZSBwaWN0dXJlPyBJJ20gaW50ZXJlc3RlZCBpZiB0aGVyZSBpcyBhY3Rpdml0
+eSBvciBhIGdsaWNoIG9uIElSUSBsaW5lLg0KIA0KQm90aCBhcmUgaW5jbHVkZWQuIFRoZSBsYXN0
+IChudW1iZXIgNykgaXMgdGhlIG9uZSBleHRyYSByZWFkaW5nIG9mIHRoZSByZWdpc3RlciE/DQoN
+Cj4gQWZ0ZXIgeW91J3ZlIHRoYXQgcGljdHVyZSwgeW91IGNhbiB0cnkgdG8gY2F0Y2ggZ2xpdGNo
+ZXMgb24gdGhlIElSUSBsaW5lLiBJZiB5b3VyDQo+IHNjb3BlIGFsbG93cyB0aGlzLCBzZXR1cCBh
+IHRyaWdnZXIgb24gdGhlIElOVCBjaGFubmVsIHRoYXQgdHJpZ2dlcnMgaWYgdGhlDQo+IGNoYW5u
+ZWwgaXMgbG93IGZvciBjb25zaWRlcmFibHkgbGVzcyB0aGVuIGl0IHRha2VzIHRvIGNsZWFyIHRo
+ZSBJUlEuDQo+IA0KPiBDdXJyZW50bHkgaXQgdGFrZXMgYWJvdXQgMTYwwrVzIHRvIGNsZWFyIHRo
+ZSBJUlEsIHNvIHNldHVwIGEgdHJpZ2dlciBmb3IgbGVzcyB0aGFuDQo+IDUwwrVzLg0KPiANCg0K
+Tm8gZ2xpdGNoZXMuIFRoZSBzY29wZSBjYW4gdHJpZ2dlciBvbiBnbGl0Y2ggYnV0IG5vIG9uZSBp
+cyB0byBiZSBmb3VuZC4gDQoNCj4gPiBBbmQgaWYgSSdtIHJlYWRpbmcgaXQgY29ycmVjdGx5IGl0
+IGNvbmZpcm1zIHRoYXQgaXQgcnVucyB0d2ljZS4NCj4gDQo+IEFDSw0KPiANCj4gPiAxIHJlYWQg
+cGVuZGluZyBJUlFzIFsqXQ0KPiA+IC1SWElGLQ0KPiA+IDIgcmVhZCBSWC1GSUZPIGxldmVsIFsq
+XQ0KPiA+IDMgcmVhZCBSWCdlZCBDQU4gZnJhbWVzIFsqXQ0KPiA+IDQgYW5kIDUgbWFyayBSWCdl
+ZCBDQU4gZnJhbWVzIGFzIHJlYWQgWypdIChUaGlzIGlzIHRoZSA1LjEwLjc5IHZlcnNpb24NCj4g
+PiB0aGF0IHVzZXMgcmVnbWFwX3VwZGF0ZV9iaXRzIHdoaWNoIEkgIGFzc3VtZSB1c2VzIG9uZSBy
+ZWFkIGFuZCBvbmUNCj4gPiB3cml0ZSBpbnN0cnVjdGlvbi4pDQo+IA0KPiBBQ0sgLSBpbiB0aGUg
+Q1JDIG1vZGUgKHdoaWNoIGlzIGRlZmF1bHQpIHRoZSByZWdtYXBfdXBkYXRlX2JpdHMgaGFzIG5v
+dA0KPiBiZWVuIG9wdGltaXplZCwgaXQgZG9lcyBhIHJlYWQvbW9kaWZ5L3dyaXRlLg0KPiANCj4g
+PiAtbG9vcC0NCj4gPiA2IHJlYWQgcGVuZGluZyBJUlFzIFsqXQ0KPiA+IC1FeGl0LQ0KPiA+IDcg
+cmVhZCBwZW5kaW5nIElSUXMgWypdDQo+ID4NCj4gPiBDb25maXJtZCB3aXRoIHByaW50b3V0czoN
+Cj4gPiBbICAgMjYuOTkwMzI0XSBtY3AyNTF4ZmQgc3BpMS4xIGNhbjE6IG1jcDI1MXhmZF9pcnEo
+KQ0KPiA+IFsgICAyNi45OTUxNzNdIG1jcDI1MXhmZCBzcGkxLjEgY2FuMTogKiBCdWxrIHJlYWQg
+TUNQMjUxWEZEX1JFR19JTlQNCj4gPiBbICAgMjcuMDAxMzcxXSBtY3AyNTF4ZmQgc3BpMS4xIGNh
+bjE6IEludGVycnVwdHMgcGVuZGluZywgaGFuZGxpbmcuDQo+ID4gWyAgIDI3LjAwNzQzNV0gbWNw
+MjUxeGZkIHNwaTEuMSBjYW4xOiAqIFJlYWQgUlggTUNQMjUxWEZEX1JFR19GSUZPU1RBDQo+ID4g
+WyAgIDI3LjAxMzY3Nl0gbWNwMjUxeGZkIHNwaTEuMSBjYW4xOiAqIEJ1bGsgcmVhZC4gUmVnaXN0
+ZXI6IDEyNDggY291bnQ6IDUNCj4gPiBbICAgMjcuMDIwMjI2XSBtY3AyNTF4ZmQgc3BpMS4xIGNh
+bjE6ICogVXBkYXRlIGJpdHMgTUNQMjUxWEZEX1JFR19GSUZPQ09OX1VJTkMNCj4gPiBbICAgMjcu
+MDI3MzE4XSBtY3AyNTF4ZmQgc3BpMS4xIGNhbjE6ICogQnVsayByZWFkIE1DUDI1MVhGRF9SRUdf
+SU5UDQo+ID4gWyAgIDI3LjAzMzM3OF0gbWNwMjUxeGZkIHNwaTEuMSBjYW4xOiBObyBpbnRlcnJ1
+cHRzIHBlbmRpbmcsIHJldHVybmluZy4NCj4gPiBbICAgMjcuMDM5ODA1XSBtY3AyNTF4ZmQgc3Bp
+MS4xIGNhbjE6IG1jcDI1MXhmZF9pcnEoKQ0KPiA+IFsgICAyNy4wNDQ2MTddIG1jcDI1MXhmZCBz
+cGkxLjEgY2FuMTogKiBCdWxrIHJlYWQgTUNQMjUxWEZEX1JFR19JTlQNCj4gPiBbICAgMjcuMDUw
+NjkzXSBtY3AyNTF4ZmQgc3BpMS4xIGNhbjE6IE5vIGludGVycnVwdHMgcGVuZGluZywgcmV0dXJu
+aW5nLg0KDQpSZWdhcmRzDQpNYXJrdXMNCg==
