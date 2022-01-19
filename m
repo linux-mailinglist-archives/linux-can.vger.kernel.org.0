@@ -2,275 +2,170 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E74E049329F
-	for <lists+linux-can@lfdr.de>; Wed, 19 Jan 2022 02:56:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C86449349C
+	for <lists+linux-can@lfdr.de>; Wed, 19 Jan 2022 06:48:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350821AbiASB4h (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 18 Jan 2022 20:56:37 -0500
-Received: from mail-oi1-f180.google.com ([209.85.167.180]:39838 "EHLO
-        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343660AbiASB4h (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 18 Jan 2022 20:56:37 -0500
-Received: by mail-oi1-f180.google.com with SMTP id e81so1797550oia.6;
-        Tue, 18 Jan 2022 17:56:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wf3QfWa0o4iQEIPew7kPqgEBCS1aITPaR6wQQYpPFcE=;
-        b=ANKLwyGRj9c2JbPwC8b3bskU6/U/QzPM3QK8g+48aBoztvxIVNdW9u38VDK6XgSAlA
-         rYFjAlD+Le8ZecD3rLVQMsUmAqZFE8D6apAEmkgmLJuggdNmON57Q+ePT7/xCutSJ6Rk
-         960Xprr7uwO65VmbEsF4hKqHh6RYiyk8206xNCQU8Cds9TrnzdU/+jInpflzgXnRBCnA
-         /hBar71+HuflptXPambv0/D27WQacKJTJsLqASYPW19oi9Z5ZgyDaK2rl23Ipon6PF8p
-         9WwG5JxrkOs05LLVWrNFi82dOFk+FdqQQ6eJXoCB5pV1n4Zh7mN0CTcXRjCICwC92nzJ
-         xkUA==
-X-Gm-Message-State: AOAM532MbV96XmpV4N8QekZcepWQND/BkBtfimiEyMZf/HXDauSqnJI/
-        TsWteRcpd/LRxDUd7BhT1g==
-X-Google-Smtp-Source: ABdhPJygcWIZ8vtMALAbJS4CYqdRCdtB02s/KRTBFTnN1u7t+XEdKdjiET5AluiBIzT3XI7OU09Xxg==
-X-Received: by 2002:aca:1a08:: with SMTP id a8mr1148354oia.22.1642557396376;
-        Tue, 18 Jan 2022 17:56:36 -0800 (PST)
-Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id e69sm7912096ote.1.2022.01.18.17.56.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jan 2022 17:56:35 -0800 (PST)
-From:   Rob Herring <robh@kernel.org>
-To:     Rui Miguel Silva <rmfrfs@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Sriram Dash <sriram.dash@samsung.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH] dt-bindings: Fix array schemas encoded as matrices
-Date:   Tue, 18 Jan 2022 19:56:26 -0600
-Message-Id: <20220119015627.2443334-1-robh@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        id S1346424AbiASFsj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 19 Jan 2022 00:48:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38896 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234835AbiASFsj (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 19 Jan 2022 00:48:39 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3415AC061574
+        for <linux-can@vger.kernel.org>; Tue, 18 Jan 2022 21:48:39 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nA3pj-00043p-Ry; Wed, 19 Jan 2022 06:48:35 +0100
+Received: from pengutronix.de (unknown [195.138.59.174])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 267D31D285;
+        Wed, 19 Jan 2022 05:48:35 +0000 (UTC)
+Date:   Wed, 19 Jan 2022 06:48:31 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        linux-can@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Improve phandle-array schemas
+Message-ID: <20220119054831.wvizk2dg5oomvppe@pengutronix.de>
+References: <20220119015038.2433585-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="cd724kalvprkppp2"
+Content-Disposition: inline
+In-Reply-To: <20220119015038.2433585-1-robh@kernel.org>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The YAML DT encoding has leaked into some array properties. Properties
-which are defined as an array should have a schema that's just an array.
-That means there should only be a single level of 'minItems',
-'maxItems', and/or 'items'.
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- .../bindings/media/nxp,imx7-mipi-csi2.yaml    | 12 ++--
- .../bindings/media/nxp,imx8mq-mipi-csi2.yaml  | 12 ++--
- .../bindings/net/can/bosch,m_can.yaml         | 52 ++++++++--------
- .../bindings/net/ethernet-controller.yaml     | 59 +++++++++----------
- 4 files changed, 62 insertions(+), 73 deletions(-)
+--cd724kalvprkppp2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml b/Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml
-index 1ef849dc74d7..e2e6e9aa0fe6 100644
---- a/Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml
-+++ b/Documentation/devicetree/bindings/media/nxp,imx7-mipi-csi2.yaml
-@@ -81,14 +81,12 @@ properties:
-               data-lanes:
-                 description:
-                   Note that 'fsl,imx7-mipi-csi2' only supports up to 2 data lines.
-+                minItems: 1
-                 items:
--                  minItems: 1
--                  maxItems: 4
--                  items:
--                    - const: 1
--                    - const: 2
--                    - const: 3
--                    - const: 4
-+                  - const: 1
-+                  - const: 2
-+                  - const: 3
-+                  - const: 4
- 
-             required:
-               - data-lanes
-diff --git a/Documentation/devicetree/bindings/media/nxp,imx8mq-mipi-csi2.yaml b/Documentation/devicetree/bindings/media/nxp,imx8mq-mipi-csi2.yaml
-index d13c9233a7c8..2a14e3b0e004 100644
---- a/Documentation/devicetree/bindings/media/nxp,imx8mq-mipi-csi2.yaml
-+++ b/Documentation/devicetree/bindings/media/nxp,imx8mq-mipi-csi2.yaml
-@@ -87,14 +87,12 @@ properties:
- 
-             properties:
-               data-lanes:
-+                minItems: 1
-                 items:
--                  minItems: 1
--                  maxItems: 4
--                  items:
--                    - const: 1
--                    - const: 2
--                    - const: 3
--                    - const: 4
-+                  - const: 1
-+                  - const: 2
-+                  - const: 3
-+                  - const: 4
- 
-             required:
-               - data-lanes
-diff --git a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-index fb547e26c676..401ab7cdb379 100644
---- a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-+++ b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-@@ -76,33 +76,31 @@ properties:
-       M_CAN user manual for details.
-     $ref: /schemas/types.yaml#/definitions/int32-array
-     items:
--      items:
--        - description: The 'offset' is an address offset of the Message RAM where
--            the following elements start from. This is usually set to 0x0 if
--            you're using a private Message RAM.
--          default: 0
--        - description: 11-bit Filter 0-128 elements / 0-128 words
--          minimum: 0
--          maximum: 128
--        - description: 29-bit Filter 0-64 elements / 0-128 words
--          minimum: 0
--          maximum: 64
--        - description: Rx FIFO 0 0-64 elements / 0-1152 words
--          minimum: 0
--          maximum: 64
--        - description: Rx FIFO 1 0-64 elements / 0-1152 words
--          minimum: 0
--          maximum: 64
--        - description: Rx Buffers 0-64 elements / 0-1152 words
--          minimum: 0
--          maximum: 64
--        - description: Tx Event FIFO 0-32 elements / 0-64 words
--          minimum: 0
--          maximum: 32
--        - description: Tx Buffers 0-32 elements / 0-576 words
--          minimum: 0
--          maximum: 32
--    maxItems: 1
-+      - description: The 'offset' is an address offset of the Message RAM where
-+          the following elements start from. This is usually set to 0x0 if
-+          you're using a private Message RAM.
-+        default: 0
-+      - description: 11-bit Filter 0-128 elements / 0-128 words
-+        minimum: 0
-+        maximum: 128
-+      - description: 29-bit Filter 0-64 elements / 0-128 words
-+        minimum: 0
-+        maximum: 64
-+      - description: Rx FIFO 0 0-64 elements / 0-1152 words
-+        minimum: 0
-+        maximum: 64
-+      - description: Rx FIFO 1 0-64 elements / 0-1152 words
-+        minimum: 0
-+        maximum: 64
-+      - description: Rx Buffers 0-64 elements / 0-1152 words
-+        minimum: 0
-+        maximum: 64
-+      - description: Tx Event FIFO 0-32 elements / 0-64 words
-+        minimum: 0
-+        maximum: 32
-+      - description: Tx Buffers 0-32 elements / 0-576 words
-+        minimum: 0
-+        maximum: 32
- 
-   power-domains:
-     description:
-diff --git a/Documentation/devicetree/bindings/net/ethernet-controller.yaml b/Documentation/devicetree/bindings/net/ethernet-controller.yaml
-index 47b5f728701d..34c5463abcec 100644
---- a/Documentation/devicetree/bindings/net/ethernet-controller.yaml
-+++ b/Documentation/devicetree/bindings/net/ethernet-controller.yaml
-@@ -17,9 +17,8 @@ properties:
-     description:
-       Specifies the MAC address that was assigned to the network device.
-     $ref: /schemas/types.yaml#/definitions/uint8-array
--    items:
--      - minItems: 6
--        maxItems: 6
-+    minItems: 6
-+    maxItems: 6
- 
-   mac-address:
-     description:
-@@ -28,9 +27,8 @@ properties:
-       to the device by the boot program is different from the
-       local-mac-address property.
-     $ref: /schemas/types.yaml#/definitions/uint8-array
--    items:
--      - minItems: 6
--        maxItems: 6
-+    minItems: 6
-+    maxItems: 6
- 
-   max-frame-size:
-     $ref: /schemas/types.yaml#/definitions/uint32
-@@ -164,33 +162,30 @@ properties:
-           type: array
-         then:
-           deprecated: true
--          minItems: 1
--          maxItems: 1
-           items:
--            items:
--              - minimum: 0
--                maximum: 31
--                description:
--                  Emulated PHY ID, choose any but unique to the all
--                  specified fixed-links
--
--              - enum: [0, 1]
--                description:
--                  Duplex configuration. 0 for half duplex or 1 for
--                  full duplex
--
--              - enum: [10, 100, 1000, 2500, 10000]
--                description:
--                  Link speed in Mbits/sec.
--
--              - enum: [0, 1]
--                description:
--                  Pause configuration. 0 for no pause, 1 for pause
--
--              - enum: [0, 1]
--                description:
--                  Asymmetric pause configuration. 0 for no asymmetric
--                  pause, 1 for asymmetric pause
-+            - minimum: 0
-+              maximum: 31
-+              description:
-+                Emulated PHY ID, choose any but unique to the all
-+                specified fixed-links
-+
-+            - enum: [0, 1]
-+              description:
-+                Duplex configuration. 0 for half duplex or 1 for
-+                full duplex
-+
-+            - enum: [10, 100, 1000, 2500, 10000]
-+              description:
-+                Link speed in Mbits/sec.
-+
-+            - enum: [0, 1]
-+              description:
-+                Pause configuration. 0 for no pause, 1 for pause
-+
-+            - enum: [0, 1]
-+              description:
-+                Asymmetric pause configuration. 0 for no asymmetric
-+                pause, 1 for asymmetric pause
- 
- 
-       - if:
--- 
-2.32.0
+On 18.01.2022 19:50:38, Rob Herring wrote:
+> The 'phandle-array' type is a bit ambiguous. It can be either just an
+> array of phandles or an array of phandles plus args. Many schemas for
+> phandle-array properties aren't clear in the schema which case applies
+> though the description usually describes it.
+>=20
+> The array of phandles case boils down to needing:
+>=20
+> items:
+>   maxItems: 1
+>=20
+> The phandle plus args cases should typically take this form:
+>=20
+> items:
+>   - items:
+>       - description: A phandle
+>       - description: 1st arg cell
+>       - description: 2nd arg cell
+>=20
+> With this change, some examples need updating so that the bracketing of
+> property values matches the schema.
+>=20
+> Cc: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Cc: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Georgi Djakov <djakov@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Joerg Roedel <joro@8bytes.org>
+> Cc: Lee Jones <lee.jones@linaro.org>
+> Cc: Daniel Thompson <daniel.thompson@linaro.org>
+> Cc: Jingoo Han <jingoohan1@gmail.com>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Wolfgang Grandegger <wg@grandegger.com>
+> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+> Cc: Andrew Lunn <andrew@lunn.ch>
+> Cc: Vivien Didelot <vivien.didelot@gmail.com>
+> Cc: Florian Fainelli <f.fainelli@gmail.com>
+> Cc: Vladimir Oltean <olteanv@gmail.com>
+> Cc: Kalle Valo <kvalo@kernel.org>
+> Cc: Viresh Kumar <vireshk@kernel.org>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: Kishon Vijay Abraham I <kishon@ti.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Kevin Hilman <khilman@kernel.org>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Zhang Rui <rui.zhang@intel.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Jonathan Hunter <jonathanh@nvidia.com>
+> Cc: Sudeep Holla <sudeep.holla@arm.com>
+> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
+> Cc: linux-ide@vger.kernel.org
+> Cc: linux-crypto@vger.kernel.org
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: dmaengine@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: iommu@lists.linux-foundation.org
+> Cc: linux-leds@vger.kernel.org
+> Cc: linux-media@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-can@vger.kernel.org
+> Cc: linux-wireless@vger.kernel.org
+> Cc: linux-phy@lists.infradead.org
+> Cc: linux-gpio@vger.kernel.org
+> Cc: linux-riscv@lists.infradead.org
+> Cc: linux-remoteproc@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+[...]
+>  .../bindings/net/can/bosch,c_can.yaml         |  8 +-
+>  .../bindings/net/can/fsl,flexcan.yaml         | 12 +--
 
+For the net/can/ bindings:
+Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--cd724kalvprkppp2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmHnpi0ACgkQqclaivrt
+76niRAgArtrlVdIp1DLKdBWjiyWc6ZbIz9jdFaprFVg47/TzkaBd3ZTT9a1FpjlF
+gCq8qOr7hLGYkROnpZ8/6H4wmf0/NXDNE4GsUG3nUD7PliT9YD7AX9cJUITYPGap
+dVK64wzh6SRKWuing9Os5pav0Y/U5Z5cApzNqe4EcU2bdKD6SPYBJxetQAIqABTH
+fFMmUiOf4v0uaAR7PRVxofrkLaU24WIp1G/ub648XP8aw2y+j8p5/A4GX9b7CpEv
+lyotcksJ1BWdzMOYrLTJYaXsHz4z5YLAdzZOdE9rScNDHT3PtbYlO8dSB2q6idHh
+/yQMBLl1AugbG627kBlt2tXau5JJjA==
+=+LO6
+-----END PGP SIGNATURE-----
+
+--cd724kalvprkppp2--
