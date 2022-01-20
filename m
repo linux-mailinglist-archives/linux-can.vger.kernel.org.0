@@ -2,83 +2,181 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E306E495361
-	for <lists+linux-can@lfdr.de>; Thu, 20 Jan 2022 18:37:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4240C495707
+	for <lists+linux-can@lfdr.de>; Fri, 21 Jan 2022 00:35:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231835AbiATRgm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 20 Jan 2022 12:36:42 -0500
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:44613 "EHLO
-        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231818AbiATRgl (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 20 Jan 2022 12:36:41 -0500
-Received: by mail-ot1-f43.google.com with SMTP id a10-20020a9d260a000000b005991bd6ae3eso8456217otb.11;
-        Thu, 20 Jan 2022 09:36:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WrX4RV5ysW0eX2CGJIXQSl/WeTomxdQMP58KeR+spxE=;
-        b=I9OX+pEOqCIGnHNJ4+9sFjgWb1cKv9Jp+HnNOhFqQ40IvHxk/SLubcNmfRayl2rTMo
-         m3uDqQbmVSzLPaG1Ay/PFOL1j38m+Njzu66Z0HtbXr4fld2AxEOFUaPwrbYre1Wugg6a
-         0wPzwAj+EkCNROqR2UhVgBoNweqVbwwBdoBAcqwKfTTTxwV6ldCwzImUMo2uAhKOClAN
-         CzFrDcP99ftupja08jUO6k4TGqX4TvPVAEQ7CwB0N7ohE0eIR+I/x5PjKfgwn9ZisU8d
-         LReZp2eom3c44GQ7zolnD3SVdqaToROjM3Imi/H+NWWnWAUOZ69DZkEV6zkcMmTsX6aF
-         j12w==
-X-Gm-Message-State: AOAM533wLTARc7WbMK1xaGtjlZw9F/ktjt05hqmM+MfXTSOozhYzPqJL
-        p7ZW0c6Vbt5Bt4TwrWWMjQ==
-X-Google-Smtp-Source: ABdhPJxDTZOBw8MHBl2N7Vjg2CtBXyfBif+NH70e74zuFxGUs8bgC25UKRzfIjDXQ/+mTARQ5fTp6w==
-X-Received: by 2002:a9d:75d6:: with SMTP id c22mr9166540otl.273.1642700200671;
-        Thu, 20 Jan 2022 09:36:40 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id h5sm1446668oor.4.2022.01.20.09.36.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jan 2022 09:36:39 -0800 (PST)
-Received: (nullmailer pid 1649046 invoked by uid 1000);
-        Thu, 20 Jan 2022 17:36:38 -0000
-Date:   Thu, 20 Jan 2022 11:36:38 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     netdev@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
-        linux-kernel@vger.kernel.org, Rui Miguel Silva <rmfrfs@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
-        Sriram Dash <sriram.dash@samsung.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-arm-kernel@lists.infradead.org,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can@vger.kernel.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Fix array schemas encoded as matrices
-Message-ID: <YemdpgQqS8FX9/5g@robh.at.kernel.org>
-References: <20220119015627.2443334-1-robh@kernel.org>
+        id S1348129AbiATXfz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 20 Jan 2022 18:35:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43198 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348117AbiATXfy (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 20 Jan 2022 18:35:54 -0500
+Received: from mail.kernel-space.org (unknown [IPv6:2a01:4f8:c2c:5a84::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2CCCC061574;
+        Thu, 20 Jan 2022 15:35:53 -0800 (PST)
+Received: from ziongate (localhost [127.0.0.1])
+        by ziongate (OpenSMTPD) with ESMTP id 993447b7;
+        Thu, 20 Jan 2022 23:35:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha1; c=simple; d=kernel-space.org; h=date
+        :from:to:cc:subject:in-reply-to:message-id:references
+        :mime-version:content-type; s=default; bh=jrHEeKBu4luCXoGQ2nSVXI
+        84rwI=; b=FJptuwXtRten4amypX1XFYwxdgfqthzdOY2v10t6QThkcouHUv6/UW
+        C0E4WgvPbMk2FSjycbwMUp4um3g7wucatjN7K5Ju9+A47hPOiafDzLtgdAdKK1tn
+        +9IwWzyxx3OazSsRmS3L1H/8+U20WIxrelR+hMPViUqoCCYDKtpW4=
+DomainKey-Signature: a=rsa-sha1; c=simple; d=kernel-space.org; h=date
+        :from:to:cc:subject:in-reply-to:message-id:references
+        :mime-version:content-type; q=dns; s=default; b=sGs9c8FJXdKjXh85
+        NOvuJfGa5nUvkLD89Q/uwVLcsFFSt5GUc9hPmTjZloNfusPa+YZPJ3vaVJrFsCDl
+        v8OgKWlxoBwiKsBjpbd25qI3axT5YkfT0FvvcJBgzxwxvAx3kAAyfHpZI3X+JBYw
+        KNoCFavnlQPTlCbq8jTaAEvHbz0=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel-space.org;
+        s=20190913; t=1642721750;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=IIcAySSBxcKIsYGdWnpwGBQ8cXvcrTisXWajSTPD6sg=;
+        b=I4+PS8QkND7brfk5Co7uH5XIBBKP6RvVrRTN+XgdZpSMS1/vlFqiuw1EyrkTxIu4dYLgt5
+        V0AkMqmlmYXZdtfFPEALd/X9bA1bPiXl+lECJvWeDZO71bzQQCPDdZuYnfqvW+wN+roaK+
+        Oc/gYJxouVkXTN3NiS16WJA4VTm9l7w=
+Received: from dfj (host-79-40-232-124.business.telecomitalia.it [79.40.232.124])
+        by ziongate (OpenSMTPD) with ESMTPSA id d245c478 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Thu, 20 Jan 2022 23:35:50 +0000 (UTC)
+Date:   Fri, 21 Jan 2022 00:35:43 +0100 (CET)
+From:   Angelo Dureghello <angelo@kernel-space.org>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+cc:     gerg@linux-m68k.org, geert@linux-m68k.org,
+        linux-m68k@vger.kernel.org, linux-can@vger.kernel.org,
+        qiangqing.zhang@nxp.com,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Subject: Re: mcf5441x: flexcan FIFO and mailbox mode (was: Re: [PATCH v5 5/5]
+ can: flexcan: add mcf5441x support)
+In-Reply-To: <20220119063837.idsiq72xrv4fvtih@pengutronix.de>
+Message-ID: <9ea16c48-b4bc-0c1-13c8-85e985ab86b1@kernel-space.org>
+References: <20220106111847.zjkrghehxr7mrkkt@pengutronix.de> <1cf937d1-1e26-e611-c85f-f9e2128c225@kernel-space.org> <20220119063837.idsiq72xrv4fvtih@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220119015627.2443334-1-robh@kernel.org>
+Content-Type: text/plain; charset=US-ASCII; format=flowed
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue, 18 Jan 2022 19:56:26 -0600, Rob Herring wrote:
-> The YAML DT encoding has leaked into some array properties. Properties
-> which are defined as an array should have a schema that's just an array.
-> That means there should only be a single level of 'minItems',
-> 'maxItems', and/or 'items'.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../bindings/media/nxp,imx7-mipi-csi2.yaml    | 12 ++--
->  .../bindings/media/nxp,imx8mq-mipi-csi2.yaml  | 12 ++--
->  .../bindings/net/can/bosch,m_can.yaml         | 52 ++++++++--------
->  .../bindings/net/ethernet-controller.yaml     | 59 +++++++++----------
->  4 files changed, 62 insertions(+), 73 deletions(-)
-> 
+Hi Marc,
 
-Applied, thanks!
+On Wed, 19 Jan 2022, Marc Kleine-Budde wrote:
+
+> On 19.01.2022 07:25:21, Angelo Dureghello wrote:
+>>> we're currently discussing the option that the user of a flexcan can
+>>> switch between RX-FIFO and RX via mailboxes.
+>>>
+>>> I noticed that the mcf5441x currently is configured for FIFO mode. Have
+>>> you tested the driver in mailbox mode?
+>>>
+>>> The reason that some cores use the FIFO mode is, that they cannot
+>>> receive RTR CAN frames in mailbox mode. According to the IP core
+>>> overview table, the mcf5441x can receive RTR frames.
+>>>
+>>> If the IP core supports reception of RTR frames, mailbox mode should be
+>>> used, as it makes use of more buffers (16-2) instead of 6 in FIFO mode.
+>>> Should we activate mailbox mode for the mcf5441x?
+>>
+>> Ok, not sure why i selected FIFO mode initially, my application
+>> actually is quite simple. Will try the switch to mailbox, sure,
+>> looking into this.
+>
+> Thanks for coming back to me. The mailbox mode performs better under
+> heavy load, as you have more buffers available.
+>
+> If you're using a recent kernel, the flexcan driver has been moved to:
+> | drivers/net/can/flexcan/flexcan-core.c
+>
+> diff --git a/drivers/net/can/flexcan/flexcan-core.c b/drivers/net/can/flexcan/flexcan-core.c
+> index 0bff1884d5cc..aa0b7efb5ca6 100644
+> --- a/drivers/net/can/flexcan/flexcan-core.c
+> +++ b/drivers/net/can/flexcan/flexcan-core.c
+> @@ -296,7 +296,8 @@ static_assert(sizeof(struct flexcan_regs) ==  0x4 * 18 + 0xfb8);
+> static const struct flexcan_devtype_data fsl_mcf5441x_devtype_data = {
+>        .quirks = FLEXCAN_QUIRK_BROKEN_PERR_STATE |
+>                FLEXCAN_QUIRK_NR_IRQ_3 | FLEXCAN_QUIRK_NR_MB_16 |
+> -               FLEXCAN_QUIRK_SUPPPORT_RX_FIFO,
+> +               FLEXCAN_QUIRK_SUPPPORT_RX_MAILBOX |
+> +               FLEXCAN_QUIRK_SUPPPORT_RX_MAILBOX_RTR,
+> };
+>
+> On older kernel with drivers/net/can/flexcan.c you need:
+>
+> diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
+> index 7734229aa078..538b26619460 100644
+> --- a/drivers/net/can/flexcan.c
+> +++ b/drivers/net/can/flexcan.c
+> @@ -382,7 +382,8 @@ struct flexcan_priv {
+>
+> static const struct flexcan_devtype_data fsl_mcf5441x_devtype_data = {
+>        .quirks = FLEXCAN_QUIRK_BROKEN_PERR_STATE |
+> -               FLEXCAN_QUIRK_NR_IRQ_3 | FLEXCAN_QUIRK_NR_MB_16,
+> +               FLEXCAN_QUIRK_NR_IRQ_3 | FLEXCAN_QUIRK_NR_MB_16 |
+> +               FLEXCAN_QUIRK_USE_OFF_TIMESTAMP,
+> };
+>
+> static const struct flexcan_devtype_data fsl_p1010_devtype_data = {
+>
+> Please apply appropriate change and check if the driver still works if
+> you RX with full CAN bus load. Please also test if you can still receive
+> RTR frames.
+>
+
+I tested this patch:
+
+-------------------- drivers/net/can/flexcan/flexcan-core.c 
+index 0bff1884d5cc..daeeb6250347 100644
+@@ -296,7 +296,10 @@ static_assert(sizeof(struct flexcan_regs) ==  0x4 * 
+18 + 0xfb8);
+  static const struct flexcan_devtype_data fsl_mcf5441x_devtype_data = {
+  	.quirks = FLEXCAN_QUIRK_BROKEN_PERR_STATE |
+  		FLEXCAN_QUIRK_NR_IRQ_3 | FLEXCAN_QUIRK_NR_MB_16 |
+-		FLEXCAN_QUIRK_SUPPPORT_RX_FIFO,
++		FLEXCAN_QUIRK_USE_RX_MAILBOX |
++		FLEXCAN_QUIRK_SUPPPORT_RX_FIFO |
++		FLEXCAN_QUIRK_SUPPPORT_RX_MAILBOX |
++		FLEXCAN_QUIRK_SUPPPORT_RX_MAILBOX_RTR,
+  };
+
+  static const struct flexcan_devtype_data fsl_p1010_devtype_data = {
+
+Bus load PC -> mcf5441x tested by
+
+ip link set can0 type can bitrate 1000000
+ip link set can0 up
+cangen can0 -g 0
+
+On target (mcf54415)
+candump can0
+
+It works, even better then FIFO mode.
+
+While unfortunately, RTR rx does not work. Tested it by putting
+a trace in flexcan_mailbox_read()
+
+ 	if (reg_ctrl & FLEXCAN_MB_CNT_RTR) {
+ 		printk("%s() RX RTR frame\n", __func__);
+ 		cfd->can_id |= CAN_RTR_FLAG;
+ 	}
+
+on host pc i used:
+
+cangen can0 -R
+
+No sign of RTR in rx. While in FIFO mode i can see it.
+
+
+> regards,
+> Marc
+>
+
+Regards,
+angelo
+
+> -- 
+> Pengutronix e.K.                 | Marc Kleine-Budde           |
+> Embedded Linux                   | https://www.pengutronix.de  |
+> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+>
