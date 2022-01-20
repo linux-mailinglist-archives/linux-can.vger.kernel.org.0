@@ -2,37 +2,34 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78770493D84
-	for <lists+linux-can@lfdr.de>; Wed, 19 Jan 2022 16:45:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD49649467B
+	for <lists+linux-can@lfdr.de>; Thu, 20 Jan 2022 05:39:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355868AbiASPpv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 19 Jan 2022 10:45:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34686 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242199AbiASPps (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 19 Jan 2022 10:45:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF250C061574;
-        Wed, 19 Jan 2022 07:45:47 -0800 (PST)
+        id S234711AbiATEjA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 19 Jan 2022 23:39:00 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:35036 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233536AbiATEjA (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 19 Jan 2022 23:39:00 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 97A37B81A0D;
-        Wed, 19 Jan 2022 15:45:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1238AC004E1;
-        Wed, 19 Jan 2022 15:45:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0F266B81A7F;
+        Thu, 20 Jan 2022 04:38:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88872C340E0;
+        Thu, 20 Jan 2022 04:38:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642607145;
-        bh=lGvpU5SU2oeO2Gj2gUOdONvIDUBxvoCyLVrP9LdAyK0=;
+        s=k20201202; t=1642653535;
+        bh=htKcbIrjG0vVOoiPk/qRtlgHN478W8928ENhwhjbOV8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uFHSCn+eRhus5s0gMFtlk4M/7JhocnfANlW1cVHA0G6W01cpJd8F+h8fndGiFBKZn
-         nCZZCtAQC4k7abNvVhvbVvzHZ7dwbuD74/T+NiX/IT3CWwnmAbzJ0EI/MN3ouRA4NK
-         JcMa2vYnHRlxojVgmRVHQy8kAseKCb6RYvwbbz/tuDQ+FYrQPMEKinDs+/J/QCmOle
-         OH44fC1gV0pSNhO5CC8MUprlf5WJ73QIy9YW2JqYDexDIA+m9Gz2JyKjFMMikgheJ8
-         PhLYlTQI+6mhi8SuY2B8vNy7F68ziMiWUL/NDEe4veZOx2TcwQKBwmk2W+zhD/Bwkn
-         UzTQKF64F/eMw==
-Date:   Wed, 19 Jan 2022 15:45:29 +0000
-From:   Mark Brown <broonie@kernel.org>
+        b=tcjQQaQOiKyW2rup4+boNuKbOg3E4wRGo65VzR07gC+38qSCzvueDNKsXw0qo25YC
+         FSd0ZcH2wQg6ndifOdoQOkK2AJmdoc/+4rI6MmV2c/JFq5Pexryrmw1KB1d/0gPVBl
+         sWawaQ0ExefWlf40mUq9Bc8b+b0Qb2Q5qMv7yPvuNl/Oofe4bBEX/PiYiXEeBZKR0X
+         EjFvQKQ1CgVK+xoQIHG870JcNdkXhCEh0WjV8YV/fIr1+Jk++MmTcC3rf6PE8hP7MQ
+         G3IiXEurawyW3OC2zMo29dGuuRnBtF45ciDi4rN7el/r42r9B4pcaecJpdXwaUbl+p
+         usDTqhZxOraiQ==
+Date:   Thu, 20 Jan 2022 10:08:51 +0530
+From:   Vinod Koul <vkoul@kernel.org>
 To:     Rob Herring <robh@kernel.org>
 Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Damien Le Moal <damien.lemoal@opensource.wdc.com>,
@@ -42,7 +39,6 @@ Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Vinod Koul <vkoul@kernel.org>,
         Georgi Djakov <djakov@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
@@ -67,6 +63,7 @@ Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Kevin Hilman <khilman@kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
         Mathieu Poirier <mathieu.poirier@linaro.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Zhang Rui <rui.zhang@intel.com>,
@@ -85,44 +82,39 @@ Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-remoteproc@vger.kernel.org, alsa-devel@alsa-project.org,
         linux-usb@vger.kernel.org
 Subject: Re: [PATCH] dt-bindings: Improve phandle-array schemas
-Message-ID: <YegyGbGcwSNo49gY@sirena.org.uk>
+Message-ID: <YejnW2sEV4Rc8GVO@matsya>
 References: <20220119015038.2433585-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="czK8d+IES+j+3Pl3"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20220119015038.2433585-1-robh@kernel.org>
-X-Cookie: This bag is recyclable.
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-
---czK8d+IES+j+3Pl3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Tue, Jan 18, 2022 at 07:50:38PM -0600, Rob Herring wrote:
+On 18-01-22, 19:50, Rob Herring wrote:
 > The 'phandle-array' type is a bit ambiguous. It can be either just an
 > array of phandles or an array of phandles plus args. Many schemas for
 > phandle-array properties aren't clear in the schema which case applies
 > though the description usually describes it.
+> 
+> The array of phandles case boils down to needing:
+> 
+> items:
+>   maxItems: 1
+> 
+> The phandle plus args cases should typically take this form:
+> 
+> items:
+>   - items:
+>       - description: A phandle
+>       - description: 1st arg cell
+>       - description: 2nd arg cell
+> 
+> With this change, some examples need updating so that the bracketing of
+> property values matches the schema.
 
-Acked-by: Mark Brown <broonie@kernel.org>
+Acked-By: Vinod Koul <vkoul@kernel.org>
 
---czK8d+IES+j+3Pl3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHoMhgACgkQJNaLcl1U
-h9AndQf6AqqY9YG2aSYiiYYVIPZoOOjUX2h6CnkvjYCVewt5gN+SxENXpgaLc0p7
-vUq1Rp5AXTu7uFjL2ebgJ8UZPO5cjNIcj81k5OTqRYCvRBqWrPJpsacwSvuNAIUC
-wrrUMNkFdRa0zaMGhMzVeaIAH9o5nqER6z2qXqGG9ccVbPBok8wg6W1xQCDlmyp8
-wzYMD1gLPXMihGy7mzkZd/BHFVdUjKVmYlGiUNl7GI9MVp6v8wt8BbDP4qng30Yz
-BLjhS3YyPDXdeYumU5Mvht+JzYmhn8Ihggw6dbQf6dO/UjwL+5ApN6em8mMhc0VH
-9cXSuI+tv6I8BrIvDkVLV+hVCpjdBg==
-=GpmZ
------END PGP SIGNATURE-----
-
---czK8d+IES+j+3Pl3--
+-- 
+~Vinod
