@@ -2,156 +2,126 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F508495D8A
-	for <lists+linux-can@lfdr.de>; Fri, 21 Jan 2022 11:16:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B5D14965C7
+	for <lists+linux-can@lfdr.de>; Fri, 21 Jan 2022 20:37:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379961AbiAUKQY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 21 Jan 2022 05:16:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43496 "EHLO
+        id S231910AbiAUThJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 21 Jan 2022 14:37:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379955AbiAUKQX (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 21 Jan 2022 05:16:23 -0500
-Received: from mail.kernel-space.org (unknown [IPv6:2a01:4f8:c2c:5a84::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA265C061401;
-        Fri, 21 Jan 2022 02:16:22 -0800 (PST)
-Received: from ziongate (localhost [127.0.0.1])
-        by ziongate (OpenSMTPD) with ESMTP id 9d8f87a6;
-        Fri, 21 Jan 2022 10:16:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha1; c=simple; d=kernel-space.org; h=date
-        :from:to:cc:subject:in-reply-to:message-id:references
-        :mime-version:content-type; s=default; bh=AhpObT7A0b/qpwu9eTMTst
-        FSMo0=; b=hJllvZNUKw+FmV+d8hqNnYjd9f7Gt2lhjsnpjCocJ3LDh4gE+nnerR
-        cVIgId0i3GBb00hqJU3+Kbt93GwvWO9LgF8cuXkKQbkz3WukRyF2926iJgWg9m6V
-        zNNKXejrkmE+4MMLkrn05VjBiZxCI8haYq8NFFK5b6QzmQ/23laig=
-DomainKey-Signature: a=rsa-sha1; c=simple; d=kernel-space.org; h=date
-        :from:to:cc:subject:in-reply-to:message-id:references
-        :mime-version:content-type; q=dns; s=default; b=pboqxCei+Hc2jRm7
-        58yDcaUZYG2qoKEwKkWIwMZmOWhgSVIiL9VGv5sWgc+2RWdy+HuFo5LaSREAUR2V
-        u3N/dIW3DUYw6Ztmjjsw4huj3kEOyY2b+jWcDZyRuKjyki2TwVUOTQZlULn/F9tc
-        WkYPZoFLm5Jsdcf+phJcJ8n05P0=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel-space.org;
-        s=20190913; t=1642760180;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=977NVgy6ZgfTNsnlkwz7B+7C1uPBelrZdQpdDU/M87o=;
-        b=XhJgH/zKOWCNSxW8/EQkMLJ4WPsBHybWvH/q2l2eyt36X8/SvMr2gm8l0es/oQZICrZqsC
-        EMWRZzzI87umA2ChUcVINgC3X2rjF4vr8NdHUyCobpsWclbxAMhnV+jh7Uv0D2xXZC5oIb
-        rpQzyvJgV5Ss4Nh3D0OK8IrQ2M02A9w=
-Received: from dfj (host-79-40-232-124.business.telecomitalia.it [79.40.232.124])
-        by ziongate (OpenSMTPD) with ESMTPSA id f1307ad8 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Fri, 21 Jan 2022 10:16:20 +0000 (UTC)
-Date:   Fri, 21 Jan 2022 11:16:16 +0100 (CET)
-From:   Angelo Dureghello <angelo@kernel-space.org>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-cc:     gerg@linux-m68k.org, geert@linux-m68k.org,
-        linux-m68k@vger.kernel.org, linux-can@vger.kernel.org,
-        qiangqing.zhang@nxp.com,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Subject: Re: mcf5441x: flexcan FIFO and mailbox mode (was: Re: [PATCH v5 5/5]
- can: flexcan: add mcf5441x support)
-In-Reply-To: <20220121084931.llxryhizdaeb4ph4@pengutronix.de>
-Message-ID: <d67c4bbf-1c39-323-2a4-3167d6febe64@kernel-space.org>
-References: <20220106111847.zjkrghehxr7mrkkt@pengutronix.de> <1cf937d1-1e26-e611-c85f-f9e2128c225@kernel-space.org> <20220119063837.idsiq72xrv4fvtih@pengutronix.de> <9ea16c48-b4bc-0c1-13c8-85e985ab86b1@kernel-space.org>
- <20220121084931.llxryhizdaeb4ph4@pengutronix.de>
+        with ESMTP id S232697AbiAUTgy (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 21 Jan 2022 14:36:54 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92630C061749;
+        Fri, 21 Jan 2022 11:36:48 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id u6so4219674lfm.10;
+        Fri, 21 Jan 2022 11:36:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=yWQRw+9myUJERoCWU8cKt3zBqGh8K1JdfKd6Yv9H6iw=;
+        b=g8lPO+Ver5WayaHmKoe+WMYVRUKrxEOGEYTvl6bnqTrKeMA6mODc3PhoacZy4YPoug
+         3SRTkkeNjJnzc+76tdwyqSkN30VUmB7cWRou503RvYaBMIvWcv/Nyt8+nOwWFrY6GKxr
+         80rWO/hipWLcEW2Ttpruszvf33EVjaEks0eCjnsGfTKSdhx6KGN2LZVStUz4x4OeVJy6
+         j2esl7SmliqdmKyxU0f4UJpDjRAodOmygrtnnJt4u8e8kGIdb0xSfwq856h2Rn9EGFuh
+         ZeLcAifdCzFibwNu/uZLJFwpoYpVc64PnGYkQfucMGxU8HWd6goRuNrraZt8VMOBqRRq
+         US8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=yWQRw+9myUJERoCWU8cKt3zBqGh8K1JdfKd6Yv9H6iw=;
+        b=1l+HiL49eMbWqNBZAizUVCNGytRuqTD3GXPUfNADOFfMdArJevtuCxuORvj6wYnUDU
+         70rXUN42lJzhmA45hk6mSywnYIuHFGEAU8OxLRvEBeG9psl9WIW5aoWpYVvEDnkbdZmy
+         POAZpZoZtVK3jzsTo+13Yspx2xaThMim++2Iw3SdAnMSIrq7b0dpnAKZhPdW4tc8Okg0
+         PiuvDN6GbWuSMosdWFhpYsFKTUPlom3d7CC8Gf0Ti8bfz2YUB0f3QGaqxNQmd6KL/dHe
+         0oErjet/6xgslyZmHPG09ca7ytl1a+K3s/+rnKG2FtbWA3xEBiPTIP4IL6ShjxVCg4Ch
+         uxzQ==
+X-Gm-Message-State: AOAM531vc5Zins4eOYhn95ybvf3DxH6J9qlYaRHUojOwCpPPiaEy9knK
+        bB5a0D4YlkT8RkJRgIQsuHg=
+X-Google-Smtp-Source: ABdhPJy5q3FcsbCox7Ny7uElmyq4AThFqH2Jsl8c+ySR3rXqyN+VuY68ZkDVoU5xkBHTYst4laiVaw==
+X-Received: by 2002:a05:6512:32ca:: with SMTP id f10mr4873822lfg.384.1642793806730;
+        Fri, 21 Jan 2022 11:36:46 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.227.208])
+        by smtp.gmail.com with ESMTPSA id t12sm345280lfr.197.2022.01.21.11.36.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Jan 2022 11:36:46 -0800 (PST)
+Message-ID: <8d4b0822-4e94-d124-e191-bec3effaf97c@gmail.com>
+Date:   Fri, 21 Jan 2022 22:36:45 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] drivers: net: remove a dangling pointer in
+ peak_usb_create_dev
+Content-Language: en-US
+To:     Dongliang Mu <mudongliangabcd@gmail.com>
+Cc:     Dongliang Mu <dzm91@hust.edu.cn>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Stephane Grosjean <s.grosjean@peak-system.com>,
+        =?UTF-8?Q?Stefan_M=c3=a4tje?= <stefan.maetje@esd.eu>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        linux-can@vger.kernel.org,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20220120130605.55741-1-dzm91@hust.edu.cn>
+ <b5cb1132-2f6b-e2da-78c7-1828b3617bc3@gmail.com>
+ <CAD-N9QWvfoo_HtQ+KT-7JNFumQMaq8YqMkHGR2t7pDKsDW0hkQ@mail.gmail.com>
+ <CAD-N9QUfiTNqs7uOH3C99oMNdqFXh+MKLQ94BkQou_T7-yU_mg@mail.gmail.com>
+ <CAD-N9QUZ95zqboe=58gybue6ssSO-M-raijd3XnGXkXnp3wiqQ@mail.gmail.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <CAD-N9QUZ95zqboe=58gybue6ssSO-M-raijd3XnGXkXnp3wiqQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Marc,
+Hi Dongliang,
 
-On Fri, 21 Jan 2022, Marc Kleine-Budde wrote:
+On 1/21/22 08:58, Dongliang Mu wrote:
+[...]>> BTW, as you mentioned, dev->next_siblings is used in struct
+>> peak_usb_adapter::dev_free() (i.e., pcan_usb_fd_free or
+>> pcan_usb_pro_free), how about the following path?
+>>
+>> peak_usb_probe
+>> -> peak_usb_create_dev (goto adap_dev_free;)
+>>    -> dev->adapter->dev_free()
+>>       -> pcan_usb_fd_free or pcan_usb_pro_free (This function uses
+>> next_siblings as condition elements)
+>>
+>> static void pcan_usb_fd_free(struct peak_usb_device *dev)
+>> {
+>>         /* last device: can free shared objects now */
+>>         if (!dev->prev_siblings && !dev->next_siblings) {
+>>                 struct pcan_usb_fd_device *pdev =
+>>                         container_of(dev, struct pcan_usb_fd_device, dev);
+>>
+>>                 /* free commands buffer */
+>>                 kfree(pdev->cmd_buffer_addr);
+>>
+>>                 /* free usb interface object */
+>>                 kfree(pdev->usb_if);
+>>         }
+>> }
+>>
+>> If next_siblings is not NULL, will it lead to the missing free of
+>> cmd_buffer_addr and usb_if?
+> 
+> The answer is No. Forget my silly thought.
+> 
 
-> On 21.01.2022 00:35:43, Angelo Dureghello wrote:
->>> Please apply appropriate change and check if the driver still works if
->>> you RX with full CAN bus load. Please also test if you can still receive
->>> RTR frames.
->>>
->>
->> I tested this patch:
->>
->> -------------------- drivers/net/can/flexcan/flexcan-core.c index
->> 0bff1884d5cc..daeeb6250347 100644
->> @@ -296,7 +296,10 @@ static_assert(sizeof(struct flexcan_regs) ==  0x4 * 18
->> + 0xfb8);
->>  static const struct flexcan_devtype_data fsl_mcf5441x_devtype_data = {
->>  	.quirks = FLEXCAN_QUIRK_BROKEN_PERR_STATE |
->>  		FLEXCAN_QUIRK_NR_IRQ_3 | FLEXCAN_QUIRK_NR_MB_16 |
->> -		FLEXCAN_QUIRK_SUPPPORT_RX_FIFO,
->> +		FLEXCAN_QUIRK_USE_RX_MAILBOX |
->> +		FLEXCAN_QUIRK_SUPPPORT_RX_FIFO |
->> +		FLEXCAN_QUIRK_SUPPPORT_RX_MAILBOX |
->> +		FLEXCAN_QUIRK_SUPPPORT_RX_MAILBOX_RTR,
->>  };
->>
->>  static const struct flexcan_devtype_data fsl_p1010_devtype_data = {
->>
->> Bus load PC -> mcf5441x tested by
->>
->> ip link set can0 type can bitrate 1000000
->> ip link set can0 up
->> cangen can0 -g 0
->>
->> On target (mcf54415)
->> candump can0
->>
->> It works, even better then FIFO mode.
->
-> What's the difference, does it produce less overruns?
->
+Yeah, it seems like (at least based on code), that this dangling pointer 
+is not dangerous, since nothing accesses it. And next_siblings 
+_guaranteed_ to be NULL, since dev->next_siblings is set NULL in 
+disconnect()
 
-In FIFO mode, i had a conditions where the mcf system
-was stuck. Had to reboot. Not clear what's happen btw, should try to 
-reproduce this.
 
->> While unfortunately, RTR rx does not work. Tested it by putting
->> a trace in flexcan_mailbox_read()
->>
->> 	if (reg_ctrl & FLEXCAN_MB_CNT_RTR) {
->> 		printk("%s() RX RTR frame\n", __func__);
->> 		cfd->can_id |= CAN_RTR_FLAG;
->> 	}
->>
->> on host pc i used:
->>
->> cangen can0 -R
->>
->> No sign of RTR in rx. While in FIFO mode i can see it.
->
-> Ok, then I enable the mailbox support for the mcf5441x and fix the note
-> that the IP core doesn't support RTR reception via mailboxes. See the
-> following patch:
->
-> | https://lore.kernel.org/all/20220121084425.3141218-1-mkl@pengutronix.de
->
-> If you have time, please test and add your Tested-by.
->
-> You can switch to mailbox mode during runtime, if the interface is down:
->
-> | ethtool --set-priv-flags can0 rx-rtr off
->
-> With ethtool you can query the number of used RX and TX buffers:
->
-> | ethtool --show-ring can0
->
-> The FIFO mode uses 6 RX buffers, while mailbox mode will probably use
-> 14.
->
 
-My mcf5441x small system does not have ethtool available
-right now. Will test this as soon as i can.
 
-> regards,
-> Marc
-
-regards,
-angelo
->
-> -- 
-> Pengutronix e.K.                 | Marc Kleine-Budde           |
-> Embedded Linux                   | https://www.pengutronix.de  |
-> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
->
+With regards,
+Pavel Skripkin
