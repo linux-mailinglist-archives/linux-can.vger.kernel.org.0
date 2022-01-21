@@ -2,188 +2,155 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 192E54957F7
-	for <lists+linux-can@lfdr.de>; Fri, 21 Jan 2022 02:50:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A3B949588F
+	for <lists+linux-can@lfdr.de>; Fri, 21 Jan 2022 04:37:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378158AbiAUBul (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 20 Jan 2022 20:50:41 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:16727 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245241AbiAUBul (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 20 Jan 2022 20:50:41 -0500
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Jg2L32dzPzZfJv;
-        Fri, 21 Jan 2022 09:46:51 +0800 (CST)
-Received: from [10.174.179.200] (10.174.179.200) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 21 Jan 2022 09:50:38 +0800
-Subject: Re: [PATCH net] can: isotp: isotp_rcv_cf(): fix so->rx race problem
-To:     Oliver Hartkopp <socketcan@hartkopp.net>, <mkl@pengutronix.de>
-CC:     <davem@davemloft.net>, <kuba@kernel.org>,
-        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220117120102.2395157-1-william.xuanziyang@huawei.com>
- <53279d6d-298c-5a85-4c16-887c95447825@hartkopp.net>
- <280e10c1-d1f4-f39e-fa90-debd56f1746d@huawei.com>
- <eaafaca3-f003-ca56-c04c-baf6cf4f7627@hartkopp.net>
- <890d8209-f400-a3b0-df9c-3e198e3834d6@huawei.com>
- <1fb4407a-1269-ec50-0ad5-074e49f91144@hartkopp.net>
- <2aba02d4-0597-1d55-8b3e-2c67386f68cf@huawei.com>
- <64695483-ff75-4872-db81-ca55763f95cf@hartkopp.net>
-From:   "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>
-Message-ID: <d7e69278-d741-c706-65e1-e87623d9a8e8@huawei.com>
-Date:   Fri, 21 Jan 2022 09:50:38 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S233343AbiAUDhV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 20 Jan 2022 22:37:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39370 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233319AbiAUDhU (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 20 Jan 2022 22:37:20 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F761C061574;
+        Thu, 20 Jan 2022 19:37:20 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id m4so37224331edb.10;
+        Thu, 20 Jan 2022 19:37:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BHIQ0MW6h8rjtE5Oq3hSn4Eblt6AqDGPbgHQG8CkaDA=;
+        b=iB9tW1I440c8OG4kQaKQuf2iWv4Fj9BrT7H+enBXSn6kKaGKkutwCx5LWUTp8ynPNC
+         rTUfhvY9Kf4uh5TKXfzb4+YkZP5/PN0CtLnLRhT2PXY+A5cpkxA7z55Eu2bxEIrjPIPM
+         UFLMBrsvRRy98ZcIuKAAVNk2qC59FtOAH6KW1EvOvTC2QsF2GPtLEasZ+741JJOX8/na
+         h/a/e0SKBovLrEMtPcWSU6nfxkOyKPO0U1AWYqmhNr03oiSmuD9m/24KF389O6m9Hmdt
+         erjUeRZKmTmsCwU1w6dKNWyVnHZHxZIZw4yvKy76IAqC1BzMi60X1sVqtg1ydMF8/udh
+         Ay8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BHIQ0MW6h8rjtE5Oq3hSn4Eblt6AqDGPbgHQG8CkaDA=;
+        b=3xmfoiskcTtqZHPZKy6GNybqlKeKNrWV3l6M239Px70CQFK7dsbWZUmzyN9Cr4R23Y
+         Tw3rwRW6y3iwGSb5qq/kZK9jJtTcYqyuPzfiaNjlaThsVcxFzGQpv/lIoqztDqOkvgPI
+         NgIu6hky5jhsv76mKUHvW+NJRnPuwpa/UN47W0HM3bKTnSpoCT3PArOKO2UNazoa9h9h
+         cv8WXXNttHS0Q2ShvB6oRVCvhhfzdDj7vWMpoSQMw77EWOoVjnTwuSTNi+pQV9aqU+2x
+         WvlviT9mqDb9jBsbGykCC51IJ0m3pMpy421afoGiDXTukfL4Zf60Ud0dD+rLmheivGhn
+         4+9w==
+X-Gm-Message-State: AOAM533hB3U1hmN2vSikOdWIVsHpOQhMhHXoBdzVY21dbxHgMsdk62hK
+        X/wHNm5HkXIZVnlZsvIpVXyqmvHnShynBG2qcWc=
+X-Google-Smtp-Source: ABdhPJxE6kdVV19XTr81YBYieso0BRxSR2fu3rz/08k9+FJ+iiOMrC54l9/BhOYu6V04Zy90eN2pDvY8YHpIn9gBahc=
+X-Received: by 2002:a17:906:2f08:: with SMTP id v8mr1706188eji.708.1642736238541;
+ Thu, 20 Jan 2022 19:37:18 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <64695483-ff75-4872-db81-ca55763f95cf@hartkopp.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.200]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
+References: <20220120130605.55741-1-dzm91@hust.edu.cn> <b5cb1132-2f6b-e2da-78c7-1828b3617bc3@gmail.com>
+ <CAD-N9QWvfoo_HtQ+KT-7JNFumQMaq8YqMkHGR2t7pDKsDW0hkQ@mail.gmail.com>
+In-Reply-To: <CAD-N9QWvfoo_HtQ+KT-7JNFumQMaq8YqMkHGR2t7pDKsDW0hkQ@mail.gmail.com>
+From:   Dongliang Mu <mudongliangabcd@gmail.com>
+Date:   Fri, 21 Jan 2022 11:36:52 +0800
+Message-ID: <CAD-N9QUfiTNqs7uOH3C99oMNdqFXh+MKLQ94BkQou_T7-yU_mg@mail.gmail.com>
+Subject: Re: [PATCH] drivers: net: remove a dangling pointer in peak_usb_create_dev
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     Dongliang Mu <dzm91@hust.edu.cn>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Stephane Grosjean <s.grosjean@peak-system.com>,
+        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        linux-can@vger.kernel.org,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-> 
-> On 20.01.22 12:28, Ziyang Xuan (William) wrote:
->>>
->>> On 20.01.22 07:24, Ziyang Xuan (William) wrote:
->>>
->>>> I have reproduced the syz problem with Marc's commit, the commit can not fix the panic problem.
->>>> So I tried to find the root cause for panic and gave my solution.
->>>>
->>>> Marc's commit just fix the condition that packet size bigger than INT_MAX which trigger
->>>> tpcon::{idx,len} integer overflow, but the packet size is 4096 in the syz problem.
->>>>
->>>> so->rx.len is 0 after the following logic in isotp_rcv_ff():
->>>>
->>>> /* get the FF_DL */
->>>> so->rx.len = (cf->data[ae] & 0x0F) << 8;
->>>> so->rx.len += cf->data[ae + 1];
->>>>
->>>> so->rx.len is 4096 after the following logic in isotp_rcv_ff():
->>>>
->>>> /* FF_DL = 0 => get real length from next 4 bytes */
->>>> so->rx.len = cf->data[ae + 2] << 24;
->>>> so->rx.len += cf->data[ae + 3] << 16;
->>>> so->rx.len += cf->data[ae + 4] << 8;
->>>> so->rx.len += cf->data[ae + 5];
->>>>
->>>
->>> In these cases the values 0 could be the minimum value in so->rx.len - but e.g. the value 0 can not show up in isotp_rcv_cf() as this function requires so->rx.state to be ISOTP_WAIT_DATA.
->>
->> Consider the scenario that isotp_rcv_cf() and isotp_rcv_cf() are concurrent for the same isotp_sock as following sequence:
-> 
-> o_O
-> 
-> Sorry but the receive path is not designed to handle concurrent receptions that would run isotp_rcv_cf() and isotp_rcv_ff() simultaneously.
-> 
->> isotp_rcv_cf()
->> if (so->rx.state != ISOTP_WAIT_DATA) [false]
->>                         isotp_rcv_ff()
->>                         so->rx.state = ISOTP_IDLE
->>                         /* get the FF_DL */ [so->rx.len == 0]
->> alloc_skb() [so->rx.len == 0]
->>                         /* FF_DL = 0 => get real length from next 4 bytes */ [so->rx.len == 4096]
->> skb_put(nskb, so->rx.len) [so->rx.len == 4096]
->> skb_over_panic()
->>
-> 
-> Even though this case is not possible with a real CAN bus due to the CAN frame transmission times we could introduce some locking (or dropping of concurrent CAN frames) in isotp_rcv() - but this code runs in net softirq context ...
+On Fri, Jan 21, 2022 at 8:09 AM Dongliang Mu <mudongliangabcd@gmail.com> wrote:
 >
+> On Thu, Jan 20, 2022 at 10:27 PM Pavel Skripkin <paskripkin@gmail.com> wrote:
+> >
+> > Hi Dongliang,
+> >
+> > On 1/20/22 16:05, Dongliang Mu wrote:
+> > > From: Dongliang Mu <mudongliangabcd@gmail.com>
+> > >
+> > > The error handling code of peak_usb_create_dev forgets to reset the
+> > > next_siblings of previous entry.
+> > >
+> > > Fix this by nullifying the (dev->prev_siblings)->next_siblings in the
+> > > error handling code.
+> > >
+> > > Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+> > > ---
+> > >   drivers/net/can/usb/peak_usb/pcan_usb_core.c | 3 +++
+> > >   1 file changed, 3 insertions(+)
+> > >
+> > > diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.c b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+> > > index b850ff8fe4bd..f858810221b6 100644
+> > > --- a/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+> > > +++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+> > > @@ -894,6 +894,9 @@ static int peak_usb_create_dev(const struct peak_usb_adapter *peak_usb_adapter,
+> > >               dev->adapter->dev_free(dev);
+> > >
+> > >   lbl_unregister_candev:
+> > > +     /* remove the dangling pointer in next_siblings */
+> > > +     if (dev->prev_siblings)
+> > > +             (dev->prev_siblings)->next_siblings = NULL;
+> > >       unregister_candev(netdev);
+> > >
+> > >   lbl_restore_intf_data:
+> >
+> >
+> > Is this pointer used somewhere? I see, that couple of
+> > struct peak_usb_adapter::dev_free() functions use it, but
+> > peak_usb_disconnect() sets dev->next_siblings to NULL before calling
+> > ->dev_free().
+> >
+> > Do you have a calltrace or oops log?
+>
+> Hi Pavel,
+>
+> I have no calltrace or log since this dangling pointer may not be
+> dereferenced in the following code. But I am not sure. So the commit
+> title of this patch is "remove a dangling pointer in
+> peak_usb_create_dev".
 
-I thought the kernel code logic should make sure the kernel availability no matter what happens in
-user space code. And tx path has considered so->tx race condition actually but rx path for so->rx.
+BTW, as you mentioned, dev->next_siblings is used in struct
+peak_usb_adapter::dev_free() (i.e., pcan_usb_fd_free or
+pcan_usb_pro_free), how about the following path?
 
-> Regards,
-> Oliver
-> 
-> 
->>>
->>> And when so->rx.len is 0 in isotp_rcv_ff() this check
->>>
->>> if (so->rx.len + ae + off + ff_pci_sz < so->rx.ll_dl)
->>>          return 1;
->>>
->>> will return from isotp_rcv_ff() before ISOTP_WAIT_DATA is set at the end. So after that above check we are still in ISOTP_IDLE state.
->>>
->>> Or did I miss something here?
->>>
->>>> so->rx.len is 0 before alloc_skb() and is 4096 after alloc_skb() in isotp_rcv_cf(). The following
->>>> skb_put() will trigger panic.
->>>>
->>>> The following log is my reproducing log with Marc's commit and my debug modification in isotp_rcv_cf().
->>>>
->>>> [  150.605776][    C6] isotp_rcv_cf: before alloc_skb so->rc.len: 0, after alloc_skb so->rx.len: 4096
->>>
->>>
->>> But so->rx_len is not a value that is modified by alloc_skb():
->>>
->>>                  nskb = alloc_skb(so->rx.len, gfp_any());
->>>                  if (!nskb)
->>>                          return 1;
->>>
->>>                  memcpy(skb_put(nskb, so->rx.len), so->rx.buf,
->>>                         so->rx.len);
->>>
->>>
->>> Can you send your debug modification changes please?
->>
->> My reproducing debug as attachment and following:
->>
->> diff --git a/net/can/isotp.c b/net/can/isotp.c
->> index df6968b28bf4..8b12d63b4d59 100644
->> --- a/net/can/isotp.c
->> +++ b/net/can/isotp.c
->> @@ -119,8 +119,8 @@ enum {
->>   };
->>
->>   struct tpcon {
->> -       int idx;
->> -       int len;
->> +       unsigned int idx;
->> +       unsigned int len;
->>          u32 state;
->>          u8 bs;
->>          u8 sn;
->> @@ -505,6 +505,7 @@ static int isotp_rcv_cf(struct sock *sk, struct canfd_frame *cf, int ae,
->>          struct isotp_sock *so = isotp_sk(sk);
->>          struct sk_buff *nskb;
->>          int i;
->> +       bool unexpection = false;
->>
->>          if (so->rx.state != ISOTP_WAIT_DATA)
->>                  return 0;
->> @@ -562,11 +563,13 @@ static int isotp_rcv_cf(struct sock *sk, struct canfd_frame *cf, int ae,
->>                                  sk_error_report(sk);
->>                          return 1;
->>                  }
->> -
->> +               if (so->rx.len == 0)
->> +                       unexpection = true;
->>                  nskb = alloc_skb(so->rx.len, gfp_any());
->>                  if (!nskb)
->>                          return 1;
->> -
->> +               if (unexpection)
->> +                       printk("%s: before alloc_skb so->rc.len: 0, after alloc_skb so->rx.len: %u\n", __func__, so->rx.len);
->>                  memcpy(skb_put(nskb, so->rx.len), so->rx.buf,
->>                         so->rx.len);
->>
->>
->>>
->>> Best regards,
->>> Oliver
->>>
->>>> [  150.611477][    C6] skbuff: skb_over_panic: text:ffffffff881ff7be len:4096 put:4096 head:ffff88807f93a800 data:ffff88807f93a800 tail:0x1000 end:0xc0 dev:<NULL>
->>>> [  150.615837][    C6] ------------[ cut here ]------------
->>>> [  150.617238][    C6] kernel BUG at net/core/skbuff.c:113!
->>>>
->>>
->>> .
-> .
+peak_usb_probe
+-> peak_usb_create_dev (goto adap_dev_free;)
+   -> dev->adapter->dev_free()
+      -> pcan_usb_fd_free or pcan_usb_pro_free (This function uses
+next_siblings as condition elements)
+
+static void pcan_usb_fd_free(struct peak_usb_device *dev)
+{
+        /* last device: can free shared objects now */
+        if (!dev->prev_siblings && !dev->next_siblings) {
+                struct pcan_usb_fd_device *pdev =
+                        container_of(dev, struct pcan_usb_fd_device, dev);
+
+                /* free commands buffer */
+                kfree(pdev->cmd_buffer_addr);
+
+                /* free usb interface object */
+                kfree(pdev->usb_if);
+        }
+}
+
+If next_siblings is not NULL, will it lead to the missing free of
+cmd_buffer_addr and usb_if?
+
+Please let me know if I made any mistakes.
+
+> >
+> >
+> >
+> >
+> > With regards,
+> > Pavel Skripkin
