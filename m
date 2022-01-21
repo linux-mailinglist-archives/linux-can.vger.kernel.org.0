@@ -2,46 +2,49 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DDE1495C36
-	for <lists+linux-can@lfdr.de>; Fri, 21 Jan 2022 09:45:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98908495C53
+	for <lists+linux-can@lfdr.de>; Fri, 21 Jan 2022 09:49:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234764AbiAUIo7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 21 Jan 2022 03:44:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51120 "EHLO
+        id S231656AbiAUItk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 21 Jan 2022 03:49:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379662AbiAUIo3 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 21 Jan 2022 03:44:29 -0500
+        with ESMTP id S231549AbiAUItk (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 21 Jan 2022 03:49:40 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49140C061749
-        for <linux-can@vger.kernel.org>; Fri, 21 Jan 2022 00:44:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DCC2C061574
+        for <linux-can@vger.kernel.org>; Fri, 21 Jan 2022 00:49:40 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1nApX1-0007sK-Pk
-        for linux-can@vger.kernel.org; Fri, 21 Jan 2022 09:44:27 +0100
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 485B31EE9A
-        for <linux-can@vger.kernel.org>; Fri, 21 Jan 2022 08:44:27 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        id 1nApc0-0000Va-Ad; Fri, 21 Jan 2022 09:49:36 +0100
+Received: from pengutronix.de (unknown [195.138.59.174])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 2A7B91EE97;
-        Fri, 21 Jan 2022 08:44:27 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id f663cfa2;
-        Fri, 21 Jan 2022 08:44:26 +0000 (UTC)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 295411EEB7;
+        Fri, 21 Jan 2022 08:49:35 +0000 (UTC)
+Date:   Fri, 21 Jan 2022 09:49:31 +0100
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Angelo Dureghello <angelo@kernel-space.org>
-Subject: [PATCH] can: flexcan: mark RX via mailboxes as supported on MCF5441X
-Date:   Fri, 21 Jan 2022 09:44:25 +0100
-Message-Id: <20220121084425.3141218-1-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.34.1
+To:     Angelo Dureghello <angelo@kernel-space.org>
+Cc:     gerg@linux-m68k.org, geert@linux-m68k.org,
+        linux-m68k@vger.kernel.org, linux-can@vger.kernel.org,
+        qiangqing.zhang@nxp.com,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Subject: Re: mcf5441x: flexcan FIFO and mailbox mode (was: Re: [PATCH v5 5/5]
+ can: flexcan: add mcf5441x support)
+Message-ID: <20220121084931.llxryhizdaeb4ph4@pengutronix.de>
+References: <20220106111847.zjkrghehxr7mrkkt@pengutronix.de>
+ <1cf937d1-1e26-e611-c85f-f9e2128c225@kernel-space.org>
+ <20220119063837.idsiq72xrv4fvtih@pengutronix.de>
+ <9ea16c48-b4bc-0c1-13c8-85e985ab86b1@kernel-space.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tywnvm2cgr5g4hev"
+Content-Disposition: inline
+In-Reply-To: <9ea16c48-b4bc-0c1-13c8-85e985ab86b1@kernel-space.org>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -50,55 +53,105 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Most flexcan IP cores support 2 RX modes:
-- FIFO
-- mailbox
 
-The flexcan IP core on the MCF5441X cannot receive CAN RTR messages
-via mailboxes. However the mailbox mode is more performant. The commit
+--tywnvm2cgr5g4hev
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-| 1c45f5778a3b ("can: flexcan: add ethtool support to change rx-rtr setting during runtime")
+On 21.01.2022 00:35:43, Angelo Dureghello wrote:
+> > Please apply appropriate change and check if the driver still works if
+> > you RX with full CAN bus load. Please also test if you can still receive
+> > RTR frames.
+> >=20
+>=20
+> I tested this patch:
+>=20
+> -------------------- drivers/net/can/flexcan/flexcan-core.c index
+> 0bff1884d5cc..daeeb6250347 100644
+> @@ -296,7 +296,10 @@ static_assert(sizeof(struct flexcan_regs) =3D=3D  0x=
+4 * 18
+> + 0xfb8);
+>  static const struct flexcan_devtype_data fsl_mcf5441x_devtype_data =3D {
+>  	.quirks =3D FLEXCAN_QUIRK_BROKEN_PERR_STATE |
+>  		FLEXCAN_QUIRK_NR_IRQ_3 | FLEXCAN_QUIRK_NR_MB_16 |
+> -		FLEXCAN_QUIRK_SUPPPORT_RX_FIFO,
+> +		FLEXCAN_QUIRK_USE_RX_MAILBOX |
+> +		FLEXCAN_QUIRK_SUPPPORT_RX_FIFO |
+> +		FLEXCAN_QUIRK_SUPPPORT_RX_MAILBOX |
+> +		FLEXCAN_QUIRK_SUPPPORT_RX_MAILBOX_RTR,
+>  };
+>=20
+>  static const struct flexcan_devtype_data fsl_p1010_devtype_data =3D {
+>=20
+> Bus load PC -> mcf5441x tested by
+>=20
+> ip link set can0 type can bitrate 1000000
+> ip link set can0 up
+> cangen can0 -g 0
+>=20
+> On target (mcf54415)
+> candump can0
+>=20
+> It works, even better then FIFO mode.
 
-added support to switch from FIFO to mailbox mode on these cores.
+What's the difference, does it produce less overruns?
 
-After testing the mailbox mode on the MCF5441X by MCF5441X, this patch
-marks it (without RTR capability) as supported. Further the IP core
-overview table is updated, that RTR reception via mailboxes is not
-supported.
+> While unfortunately, RTR rx does not work. Tested it by putting
+> a trace in flexcan_mailbox_read()
+>=20
+> 	if (reg_ctrl & FLEXCAN_MB_CNT_RTR) {
+> 		printk("%s() RX RTR frame\n", __func__);
+> 		cfd->can_id |=3D CAN_RTR_FLAG;
+> 	}
+>=20
+> on host pc i used:
+>=20
+> cangen can0 -R
+>=20
+> No sign of RTR in rx. While in FIFO mode i can see it.
 
-Cc: Angelo Dureghello <angelo@kernel-space.org>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/flexcan/flexcan-core.c | 1 +
- drivers/net/can/flexcan/flexcan.h      | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+Ok, then I enable the mailbox support for the mcf5441x and fix the note
+that the IP core doesn't support RTR reception via mailboxes. See the
+following patch:
 
-diff --git a/drivers/net/can/flexcan/flexcan-core.c b/drivers/net/can/flexcan/flexcan-core.c
-index 0bff1884d5cc..74d7fcbfd065 100644
---- a/drivers/net/can/flexcan/flexcan-core.c
-+++ b/drivers/net/can/flexcan/flexcan-core.c
-@@ -296,6 +296,7 @@ static_assert(sizeof(struct flexcan_regs) ==  0x4 * 18 + 0xfb8);
- static const struct flexcan_devtype_data fsl_mcf5441x_devtype_data = {
- 	.quirks = FLEXCAN_QUIRK_BROKEN_PERR_STATE |
- 		FLEXCAN_QUIRK_NR_IRQ_3 | FLEXCAN_QUIRK_NR_MB_16 |
-+		FLEXCAN_QUIRK_SUPPPORT_RX_MAILBOX |
- 		FLEXCAN_QUIRK_SUPPPORT_RX_FIFO,
- };
- 
-diff --git a/drivers/net/can/flexcan/flexcan.h b/drivers/net/can/flexcan/flexcan.h
-index fccdff8b1f0f..23fc09a7e10f 100644
---- a/drivers/net/can/flexcan/flexcan.h
-+++ b/drivers/net/can/flexcan/flexcan.h
-@@ -21,7 +21,7 @@
-  * Below is some version info we got:
-  *    SOC   Version   IP-Version  Glitch- [TR]WRN_INT IRQ Err Memory err RTR rece-   FD Mode     MB
-  *                                Filter? connected?  Passive detection  ption in MB Supported?
-- * MCF5441X FlexCAN2  ?               no       yes        no       no       yes           no     16
-+ * MCF5441X FlexCAN2  ?               no       yes        no       no        no           no     16
-  *    MX25  FlexCAN2  03.00.00.00     no        no        no       no        no           no     64
-  *    MX28  FlexCAN2  03.00.04.00    yes       yes        no       no        no           no     64
-  *    MX35  FlexCAN2  03.00.00.00     no        no        no       no        no           no     64
--- 
-2.34.1
+| https://lore.kernel.org/all/20220121084425.3141218-1-mkl@pengutronix.de
 
+If you have time, please test and add your Tested-by.
 
+You can switch to mailbox mode during runtime, if the interface is down:
+
+| ethtool --set-priv-flags can0 rx-rtr off
+
+With ethtool you can query the number of used RX and TX buffers:
+
+| ethtool --show-ring can0
+
+The FIFO mode uses 6 RX buffers, while mailbox mode will probably use
+14.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--tywnvm2cgr5g4hev
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmHqc5gACgkQqclaivrt
+76m4uAgAjiiSGq36HKijDuq23TwRak0vWlaoSG4J+4+LRpbVWGs5G5+QCdeahtlK
+HUfvavApuJmI47DoWjuDR1TSvS1hPmoJ76w/jesel4kcmwZqM/TI16JuTJIg2Z/j
+lAz5v7WoAtGGsHVVVsrZ3WnoHvCM8Icqlo2RjZ3k7EB4wF3XiEKCw3+dmoD0vOzF
+e+2hAsgQ0GVwsGGeQYwPP92f2q85hAhcay3y63Pzp0qUKf7Q+EhGUcTOkWLJocDe
+4uZEACD6RVpaK+jBG8oV8v5Avvq+e4oPsP97A7j/HlHHelB7gOM7g8tbsJM/6jWC
+iUFZRczVyLQYeksi/c+ZrINENNFe+w==
+=ob2y
+-----END PGP SIGNATURE-----
+
+--tywnvm2cgr5g4hev--
