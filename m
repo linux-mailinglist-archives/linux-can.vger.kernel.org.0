@@ -2,122 +2,102 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D028F4971B8
-	for <lists+linux-can@lfdr.de>; Sun, 23 Jan 2022 14:48:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 609254971E2
+	for <lists+linux-can@lfdr.de>; Sun, 23 Jan 2022 15:10:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236491AbiAWNsY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 23 Jan 2022 08:48:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42840 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236493AbiAWNsX (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 23 Jan 2022 08:48:23 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F3CC06173B;
-        Sun, 23 Jan 2022 05:48:23 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id br17so43903132lfb.6;
-        Sun, 23 Jan 2022 05:48:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=tT2QsM3sOU580118+Y+fw5XqnLQNgWoMgfe/Dm4461M=;
-        b=WnZzxJs3kLiXg2qX/fHVvRJ6dSgPkl/UdgR8Ru2VwL728msT1somaEusBekyTJYtpd
-         OefTD6jywZZA81pTC3dlmLrx4LG4cAk138DzYBwfY/tPgcbvTIf9gPSP3Pf6KOCat06E
-         Bc08p+cZEoYERzUH0oRHJXFNTH5qrSC9DUYsE4SiwgOcm/GqDWrO+peWlUGxt4VJlgqW
-         FoaOSbTHRHQ0J/8z/rWWfcqofl9tdaosurcHMMVNFhkaH+tLKD9aQTEGsZ5Me/SF7tOH
-         Ukih3vmJ6ucynwyJSVEvsj6c5EKDggFn6j16XiU46zEmdj1RjpLrk/zIN7gy9+hxy0wd
-         Pn9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=tT2QsM3sOU580118+Y+fw5XqnLQNgWoMgfe/Dm4461M=;
-        b=IRfPbZ9DMI4IPYIsdAoDh9+aal+7/i9yicygFQgVmhqjgHPPh/zQ7NWAIzPutCnF2W
-         rkP09ZTWNPxWEi16B6z001y8iRhn6PvYrrxzrCo5TkYTmXPnvzIa6oZPkFRL3zzRyYCF
-         zVY/LeYCpw0bJLqBmfQbZy96SbVKdr1K781MqKUOgKG+TEvey9Z9eTnvp7pPyh+xp/2U
-         AytVEvmPkHe0DFKFG+WDtBGNAhuqgQMZdsNGGT19yNzAf4CvXLBTMHrq3qZfL6KWgraW
-         S8zgqU+pgF62MyRhPn8MHSMQqvY1mhJrAy677JrmDygAGvJmvOCyi4GC9ICaAafVlBxa
-         3boQ==
-X-Gm-Message-State: AOAM530Kwv7xC6wZHTpoWKONrgmD92QKo3NHFQhbOzezZtJkZuVFrh1+
-        kbvcbaMWTyQP3O2mtoHxEjA=
-X-Google-Smtp-Source: ABdhPJxCat9CBAklA6IWceY3oZF62+seQ6TBE1nFUXX8xff7baTG41pFN+oo2iwzXcUMfbzMSlLDdA==
-X-Received: by 2002:a05:6512:16a6:: with SMTP id bu38mr9890501lfb.168.1642945701265;
-        Sun, 23 Jan 2022 05:48:21 -0800 (PST)
-Received: from [192.168.1.11] ([94.103.227.208])
-        by smtp.gmail.com with ESMTPSA id k14sm664406ljh.82.2022.01.23.05.48.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 23 Jan 2022 05:48:20 -0800 (PST)
-Message-ID: <192d9115-864f-d2c1-d11b-d75c23c26102@gmail.com>
-Date:   Sun, 23 Jan 2022 16:48:19 +0300
+        id S236686AbiAWOKP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 23 Jan 2022 09:10:15 -0500
+Received: from mo4-p01-ob.smtp.rzone.de ([81.169.146.165]:39879 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233169AbiAWOKP (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 23 Jan 2022 09:10:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1642947009;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=J2oWFlT79qzBZRqQlQFG00cyNcRSTH+u8Kb4UO8Elqs=;
+    b=QSn/57BB3ttJknsug9A2WZesRpKEt4hALpRIl/j0rMLlyS1O4J437ZLvy8fCRTu3tI
+    rYrPXxnorv0Dw8vruD8sYKtehwXLqmgaJ7+23gsRZA+GaR6vR7YR0TnGfu1FjZS/zsjT
+    C80F9cVm9wfoZV7fu0SGpDnRbpDtCAgHHe0GbdwawOpfEoDHNsLgONfuMnwM9uqm2d24
+    BsjQRDN7n0LV+Oirvf3m5g9LRgazS94iEKsV5hmyyqwiitSfvo/fD8ggjXXYDkreZ0wo
+    CbQMdRH1yL70Z7v/0uh1yQIF7xd6iLSzaLc/c5ymDt1u6Ew5MwHFcsUHNDWF3n3qd4gw
+    tceg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdd0DIgVuBOfXTKq7w=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a00:6020:1cfa:f900::bd7]
+    by smtp.strato.de (RZmta 47.38.0 AUTH)
+    with ESMTPSA id zaacbfy0NEA88WV
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Sun, 23 Jan 2022 15:10:08 +0100 (CET)
+Message-ID: <f1e819b6-d37b-286f-85d5-9893a6fdb83e@hartkopp.net>
+Date:   Sun, 23 Jan 2022 15:10:01 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH] drivers: net: remove a dangling pointer in
- peak_usb_create_dev
+Subject: Re: [PATCH 4.14] can: bcm: fix UAF of bcm op
 Content-Language: en-US
-To:     Dongliang Mu <mudongliangabcd@gmail.com>
-Cc:     Dongliang Mu <dzm91@hust.edu.cn>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Stephane Grosjean <s.grosjean@peak-system.com>,
-        =?UTF-8?Q?Stefan_M=c3=a4tje?= <stefan.maetje@esd.eu>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        linux-can@vger.kernel.org,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20220120130605.55741-1-dzm91@hust.edu.cn>
- <b5cb1132-2f6b-e2da-78c7-1828b3617bc3@gmail.com>
- <CAD-N9QWvfoo_HtQ+KT-7JNFumQMaq8YqMkHGR2t7pDKsDW0hkQ@mail.gmail.com>
- <CAD-N9QUfiTNqs7uOH3C99oMNdqFXh+MKLQ94BkQou_T7-yU_mg@mail.gmail.com>
- <CAD-N9QUZ95zqboe=58gybue6ssSO-M-raijd3XnGXkXnp3wiqQ@mail.gmail.com>
- <8d4b0822-4e94-d124-e191-bec3effaf97c@gmail.com>
- <CAD-N9QUATFcaOO2reg=Y0jum83UJGOzMhcX3ukCY+cY-XCJaPA@mail.gmail.com>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <CAD-N9QUATFcaOO2reg=Y0jum83UJGOzMhcX3ukCY+cY-XCJaPA@mail.gmail.com>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Ziyang Xuan <william.xuanziyang@huawei.com>
+Cc:     mkl@pengutronix.de, davem@davemloft.net, stable@vger.kernel.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org
+References: <20220122102506.2898032-1-william.xuanziyang@huawei.com>
+ <Yevc134xM9BDEyNd@kroah.com>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <Yevc134xM9BDEyNd@kroah.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Dongliang,
 
-On 1/22/22 09:45, Dongliang Mu wrote:
-[...]
 
->> Yeah, it seems like (at least based on code), that this dangling pointer
->> is not dangerous, since nothing accesses it. And next_siblings
->> _guaranteed_ to be NULL, since dev->next_siblings is set NULL in
->> disconnect()
+On 22.01.22 11:30, Greg KH wrote:
+> On Sat, Jan 22, 2022 at 06:25:06PM +0800, Ziyang Xuan wrote:
+>> Stopping tasklet and hrtimer rely on the active state of tasklet and
+>> hrtimer sequentially in bcm_remove_op(), the op object will be freed
+>> if they are all unactive. Assume the hrtimer timeout is short, the
+>> hrtimer cb has been excuted after tasklet conditional judgment which
+>> must be false after last round tasklet_kill() and before condition
+>> hrtimer_active(), it is false when execute to hrtimer_active(). Bug
+>> is triggerd, because the stopping action is end and the op object
+>> will be freed, but the tasklet is scheduled. The resources of the op
+>> object will occur UAF bug.
+>>
+>> Move hrtimer_cancel() behind tasklet_kill() and switch 'while () {...}'
+>> to 'do {...} while ()' to fix the op UAF problem.
+>>
+>> Fixes: a06393ed0316 ("can: bcm: fix hrtimer/tasklet termination in bcm op removal")
+>> Reported-by: syzbot+5ca851459ed04c778d1d@syzkaller.appspotmail.com
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+>> ---
+>>   net/can/bcm.c | 20 ++++++++++----------
+>>   1 file changed, 10 insertions(+), 10 deletions(-)
 > 
-> Yes, you're right. As a security researcher, I am sensitive to such
-> dangling pointers.
+> What is the git commit id of this change in Linus's tree?
+
+Linus' tree has been fixed by removing the tasklet implementation and 
+replacing it with a HRTIMER_MODE_SOFT approach here:
+
+commit bf74aa86e111a ("can: bcm: switch timer to HRTIMER_MODE_SOFT and 
+remove hrtimer_tasklet")
+
+This patch from Ziyang Xuan fixes the 'old' tasklet implementation for 
+'old' stable kernels that lack the HRTIMER_MODE_SOFT infrastructure.
+
+Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
+
+Best regards,
+Oliver
+
+
+
+
 > 
-> As its nullifying site is across functions, I suggest developers
-> remove this dangling pointer in case that any newly added code in this
-> function or before the nullifying location would touch next_siblings.
+> thanks,
 > 
-
-Based on git blame this driver is very old (was added in 2012), so, I 
-guess, nothing really new will come up.
-
-Anyway, I am absolutely not a security person and if you think, that 
-this dangling pointer can be somehow used in exploitation you should 
-state it in commit message.
-
-
-> If Pavel and others think it's fine, then it's time to close this patch.
-> 
-
-I don't have any big objections on the code itself. Maybe only 'if' can 
-be removed to just speed up the code, but I don't see why this change is 
-needed :)
-
-
-
-
-With regards,
-Pavel Skripkin
+> greg k-h
