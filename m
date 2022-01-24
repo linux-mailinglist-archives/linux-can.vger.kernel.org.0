@@ -2,44 +2,47 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B2AA49876E
-	for <lists+linux-can@lfdr.de>; Mon, 24 Jan 2022 19:00:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D243F498772
+	for <lists+linux-can@lfdr.de>; Mon, 24 Jan 2022 19:00:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244781AbiAXSAE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 24 Jan 2022 13:00:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59022 "EHLO
+        id S244827AbiAXSAG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 24 Jan 2022 13:00:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244803AbiAXSAB (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 24 Jan 2022 13:00:01 -0500
+        with ESMTP id S244806AbiAXSAD (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 24 Jan 2022 13:00:03 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64834C061401
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A84C061749
         for <linux-can@vger.kernel.org>; Mon, 24 Jan 2022 10:00:01 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1nC3dG-00059c-79
-        for linux-can@vger.kernel.org; Mon, 24 Jan 2022 18:59:58 +0100
+        id 1nC3dH-0005AL-TR
+        for linux-can@vger.kernel.org; Mon, 24 Jan 2022 18:59:59 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 74A7E21094
+        by bjornoya.blackshift.org (Postfix) with SMTP id 8D98E210A1
         for <linux-can@vger.kernel.org>; Mon, 24 Jan 2022 17:59:56 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 4120421084;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 485A521085;
         Mon, 24 Jan 2022 17:59:56 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id d1bae3cb;
-        Mon, 24 Jan 2022 17:59:55 +0000 (UTC)
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 7a0f92b9;
+        Mon, 24 Jan 2022 17:59:56 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: [PATCH net 0/5] pull-request: can 2022-01-24
-Date:   Mon, 24 Jan 2022 18:59:50 +0100
-Message-Id: <20220124175955.3464134-1-mkl@pengutronix.de>
+        kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Brian Silverman <bsilver16384@gmail.com>
+Subject: [PATCH net 1/5] mailmap: update email address of Brian Silverman
+Date:   Mon, 24 Jan 2022 18:59:51 +0100
+Message-Id: <20220124175955.3464134-2-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220124175955.3464134-1-mkl@pengutronix.de>
+References: <20220124175955.3464134-1-mkl@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
@@ -50,60 +53,31 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Jakub, hello David,
+Brian Silverman's address at bluerivertech.com is not valid anymore,
+use Brian's private email address instead.
 
-this is a pull request of 5 patches for net/master. All patches are
-by me.
-
-The first patch updates the email address of Brian Silverman from his
-former employer to his private address.
-
-The next patch fixes DT bindings information for the tcan4x5x SPI CAN
-driver.
-
-The following patch targets the m_can driver and fixes the
-introduction of FIFO bulk read support.
-
-Another patch for the tcan4x5x driver, which fixes the max register
-value for the regmap config.
-
-The last patch for the flexcan driver marks the RX mailbox support for
-the MCF5441X as support.
-
-regards,
-Marc
-
+Link: https://lore.kernel.org/all/20220110082359.2019735-1-mkl@pengutronix.de
+Cc: Brian Silverman <bsilver16384@gmail.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
+ .mailmap | 1 +
+ 1 file changed, 1 insertion(+)
 
-The following changes since commit c0bf3d8a943b6f2e912b7c1de03e2ef28e76f760:
+diff --git a/.mailmap b/.mailmap
+index b157f88ce26a..b76e520809d0 100644
+--- a/.mailmap
++++ b/.mailmap
+@@ -70,6 +70,7 @@ Boris Brezillon <bbrezillon@kernel.org> <boris.brezillon@bootlin.com>
+ Boris Brezillon <bbrezillon@kernel.org> <boris.brezillon@free-electrons.com>
+ Brian Avery <b.avery@hp.com>
+ Brian King <brking@us.ibm.com>
++Brian Silverman <bsilver16384@gmail.com> <brian.silverman@bluerivertech.com>
+ Changbin Du <changbin.du@intel.com> <changbin.du@gmail.com>
+ Changbin Du <changbin.du@intel.com> <changbin.du@intel.com>
+ Chao Yu <chao@kernel.org> <chao2.yu@samsung.com>
 
-  net/smc: Transitional solution for clcsock race issue (2022-01-24 12:06:08 +0000)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-5.17-20220124
-
-for you to fetch changes up to f04aefd4659b7959e50e6d0d649936c6940f9d34:
-
-  can: flexcan: mark RX via mailboxes as supported on MCF5441X (2022-01-24 18:27:43 +0100)
-
-----------------------------------------------------------------
-linux-can-fixes-for-5.17-20220124
-
-----------------------------------------------------------------
-Marc Kleine-Budde (5):
-      mailmap: update email address of Brian Silverman
-      dt-bindings: can: tcan4x5x: fix mram-cfg RX FIFO config
-      can: m_can: m_can_fifo_{read,write}: don't read or write from/to FIFO if length is 0
-      can: tcan4x5x: regmap: fix max register value
-      can: flexcan: mark RX via mailboxes as supported on MCF5441X
-
- .mailmap                                               | 1 +
- Documentation/devicetree/bindings/net/can/tcan4x5x.txt | 2 +-
- drivers/net/can/flexcan/flexcan-core.c                 | 1 +
- drivers/net/can/flexcan/flexcan.h                      | 2 +-
- drivers/net/can/m_can/m_can.c                          | 6 ++++++
- drivers/net/can/m_can/tcan4x5x-regmap.c                | 2 +-
- 6 files changed, 11 insertions(+), 3 deletions(-)
+base-commit: c0bf3d8a943b6f2e912b7c1de03e2ef28e76f760
+-- 
+2.34.1
 
 
