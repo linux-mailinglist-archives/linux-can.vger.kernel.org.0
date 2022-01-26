@@ -2,53 +2,51 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D8449C9F9
-	for <lists+linux-can@lfdr.de>; Wed, 26 Jan 2022 13:47:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6264049CA6E
+	for <lists+linux-can@lfdr.de>; Wed, 26 Jan 2022 14:11:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241476AbiAZMrC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 26 Jan 2022 07:47:02 -0500
-Received: from mail-vk1-f176.google.com ([209.85.221.176]:43910 "EHLO
-        mail-vk1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234178AbiAZMrC (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 26 Jan 2022 07:47:02 -0500
-Received: by mail-vk1-f176.google.com with SMTP id w206so14418723vkd.10;
-        Wed, 26 Jan 2022 04:47:01 -0800 (PST)
+        id S235047AbiAZNLW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 26 Jan 2022 08:11:22 -0500
+Received: from mail-vk1-f182.google.com ([209.85.221.182]:43841 "EHLO
+        mail-vk1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234995AbiAZNLV (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 26 Jan 2022 08:11:21 -0500
+Received: by mail-vk1-f182.google.com with SMTP id w206so14582814vkd.10;
+        Wed, 26 Jan 2022 05:11:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=u63OEq+WTaU4bt+o2rdnm1n2f6yhuqtltDfZWHomT0A=;
-        b=3vzUVn4MkJk3XLqBN/95M4qHpuHkkzhZNSMMWcJrRYQA+oKJ11RY5gEfLsVbBhrepa
-         yGObqNizypa39gCSaL6G8Jh4WPLosp4y/fwbPrXo092Rj+6Kk4/IscYgIgwz/7XSL7Il
-         x4+8ZYaqagaDxDVfrM78CRnENwWP/SfkqPQOVOuy7ugyF6UJFs2W4QvSIdhjrOaZ4gUz
-         ydfsxW6O/1PStp3kBh5rTYR9uoBC27muwKDtov2wGe9qBAPy5d+GRW+9TzX543nYNTf9
-         i1PLjfTpiXNGzPyeQSM/G2YPjXhYbQ6vyb8uowY05btA13qK6q0YiILwUCq1vpSr0kr+
-         nb9Q==
-X-Gm-Message-State: AOAM532MrewOXZJQrp9/ziahSH25WJ5tr0NuwmM9tWIa3jwFgXTy795D
-        TpchtDXiCgPJ+1maKXCxPGmPXyRDP9Zq9Z5L
-X-Google-Smtp-Source: ABdhPJxHhT0gAKj7WdPBtV0JaPrgY6JbYCu3UZYn6iJtYxqiNJfjiN6H0QQNNeL7O9LNoYyPDSiWrQ==
-X-Received: by 2002:a1f:1953:: with SMTP id 80mr9461612vkz.8.1643201221157;
-        Wed, 26 Jan 2022 04:47:01 -0800 (PST)
-Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com. [209.85.221.170])
-        by smtp.gmail.com with ESMTPSA id j6sm392837uae.4.2022.01.26.04.46.59
+        bh=bFbkuijaiH0+MDZA4Nt3F0F0GOCS29abOfcWN2LnmLk=;
+        b=vCHiMZt2GrX5lP0b7SdEor9Uc+4TaILxDeyU5RO4YGMMfIboXKvEwVy42LAAmSNwgh
+         GKMHhr2XL77cDLLhP4nehGaY1lzubF5lTUyoZpSXcp8u1Bgx2h2/blC/+JnG+6ywGe/x
+         GtzonZNWc7rb1XTLPsdR0laotPEWr5yhklC+NEUgRWcOIhzyAv74mrcBwOty2BWmudTq
+         5Z088DrLV31uYH46J+NCXoYRpP1sf8dKBoUvxwm1eq5KPDHc1o5gr2+KW6GUANSJ0WDj
+         +2v63hu8khxkv1NJt4QRMQyC6loBzScKOfSGknOo8TnQOI+hQLIxN3Ng3bzazQM8fO6l
+         1Cxw==
+X-Gm-Message-State: AOAM53215CNTn5LJubsWkfvDt7XF6S6Id9sVME9EacBTrztDIfWdZXjR
+        W1fDA6Ofs2FFry9GgbV+xBUm9/n5qXRO8pIN
+X-Google-Smtp-Source: ABdhPJw5Mk5lYt+TZxvBcMTycifX3o3UUk0lve1vmTcBehPPAAWwN5Vw3MYi0VLAaRvDfim0BP5i0w==
+X-Received: by 2002:a67:c885:: with SMTP id v5mr662538vsk.39.1643202680766;
+        Wed, 26 Jan 2022 05:11:20 -0800 (PST)
+Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com. [209.85.221.181])
+        by smtp.gmail.com with ESMTPSA id u12sm4325550vku.9.2022.01.26.05.11.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jan 2022 04:47:00 -0800 (PST)
-Received: by mail-vk1-f170.google.com with SMTP id n14so14341649vkk.6;
-        Wed, 26 Jan 2022 04:46:59 -0800 (PST)
-X-Received: by 2002:a67:c18e:: with SMTP id h14mr5732650vsj.5.1643201219525;
- Wed, 26 Jan 2022 04:46:59 -0800 (PST)
+        Wed, 26 Jan 2022 05:11:19 -0800 (PST)
+Received: by mail-vk1-f181.google.com with SMTP id w206so14582569vkd.10;
+        Wed, 26 Jan 2022 05:11:18 -0800 (PST)
+X-Received: by 2002:ab0:13f1:: with SMTP id n46mr6555392uae.14.1643202678231;
+ Wed, 26 Jan 2022 05:11:18 -0800 (PST)
 MIME-Version: 1.0
-References: <20220111162231.10390-1-uli+renesas@fpond.eu> <20220111162231.10390-3-uli+renesas@fpond.eu>
- <20220112184327.f7fwzgqvle23gfzv@pengutronix.de>
-In-Reply-To: <20220112184327.f7fwzgqvle23gfzv@pengutronix.de>
+References: <20220111162231.10390-1-uli+renesas@fpond.eu> <20220111162231.10390-4-uli+renesas@fpond.eu>
+In-Reply-To: <20220111162231.10390-4-uli+renesas@fpond.eu>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 26 Jan 2022 13:46:48 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWhRULedk1GCav+8=DMc9OqKTtuaG1XHNqxurF9S=s18w@mail.gmail.com>
-Message-ID: <CAMuHMdWhRULedk1GCav+8=DMc9OqKTtuaG1XHNqxurF9S=s18w@mail.gmail.com>
-Subject: Re: [PATCH v2 2/5] can: rcar_canfd: Add support for r8a779a0 SoC
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Ulrich Hecht <uli+renesas@fpond.eu>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+Date:   Wed, 26 Jan 2022 14:11:06 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUAvWTG2kqRkU2Ee=dVQa8K8b4ixu63V-ADESAo676__g@mail.gmail.com>
+Message-ID: <CAMuHMdUAvWTG2kqRkU2Ee=dVQa8K8b4ixu63V-ADESAo676__g@mail.gmail.com>
+Subject: Re: [PATCH v2 3/5] arm64: dts: renesas: r8a779a0: Add CANFD device node
+To:     Ulrich Hecht <uli+renesas@fpond.eu>
+Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
         netdev <netdev@vger.kernel.org>,
         "David S. Miller" <davem@davemloft.net>, linux-can@vger.kernel.org,
         "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
@@ -56,6 +54,7 @@ Cc:     Ulrich Hecht <uli+renesas@fpond.eu>,
         Wolfram Sang <wsa@kernel.org>,
         Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
         Jakub Kicinski <kuba@kernel.org>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
         socketcan@hartkopp.net,
@@ -65,39 +64,14 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Marc,
-
-On Wed, Jan 12, 2022 at 7:43 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> On 11.01.2022 17:22:28, Ulrich Hecht wrote:
-> > Adds support for the CANFD IP variant in the V3U SoC.
-> >
-> > Differences to controllers in other SoCs are limited to an increase in
-> > the number of channels from two to eight, an absence of dedicated
-> > registers for "classic" CAN mode, and a number of differences in magic
-> > numbers (register offsets and layouts).
-> >
-> > Inspired by BSP patch by Kazuya Mizuguchi.
-> >
-> > Signed-off-by: Ulrich Hecht <uli+renesas@fpond.eu>
-
-> > --- a/drivers/net/can/rcar/rcar_canfd.c
-> > +++ b/drivers/net/can/rcar/rcar_canfd.c
-
-> > -     of_child = of_get_child_by_name(pdev->dev.of_node, "channel1");
-> > -     if (of_child && of_device_is_available(of_child))
-> > -             channels_mask |= BIT(1);        /* Channel 1 */
-> > +     strcpy(name, "channelX");
+On Tue, Jan 11, 2022 at 5:22 PM Ulrich Hecht <uli+renesas@fpond.eu> wrote:
+> This patch adds a CANFD device node for r8a779a0.
 >
-> please use strlcpy()
+> Based on patch by Kazuya Mizuguchi.
+>
+> Signed-off-by: Ulrich Hecht <uli+renesas@fpond.eu>
 
-Why? To cause a silent failure instead of a possible crash, in the unlikely
-case the buffer is shrinked or the string is enlarged?
-
-What about preinitializing it at declaration time instead:
-
-    char name[9] = "channelX";
-
-?
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
 Gr{oetje,eeting}s,
 
