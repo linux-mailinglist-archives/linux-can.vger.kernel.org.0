@@ -2,85 +2,94 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B938149CA77
-	for <lists+linux-can@lfdr.de>; Wed, 26 Jan 2022 14:13:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28B1F49E516
+	for <lists+linux-can@lfdr.de>; Thu, 27 Jan 2022 15:49:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237710AbiAZNNa (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 26 Jan 2022 08:13:30 -0500
-Received: from mail-vk1-f171.google.com ([209.85.221.171]:33603 "EHLO
-        mail-vk1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234991AbiAZNN3 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 26 Jan 2022 08:13:29 -0500
-Received: by mail-vk1-f171.google.com with SMTP id 48so11452818vki.0;
-        Wed, 26 Jan 2022 05:13:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xkGtktozf/u1g5YQKQwaOxUHOjH3v3y6pWsIirGR8fY=;
-        b=n8eUWLfE+wUWr+SSr5K6HYOkXUdUuSwVpGSm6ag37fPVTfoJjPINxMXmSNZeHOppvn
-         lXZRha4H0/JitxCJItN5nVe+aNOkpuYANImjF6WV+oFJQGMhRTIOVx0Zx+5z7IX8j4q0
-         xFK4dH5y/XMg1QS+dq0F+DKAj7DhafKjI6cOP8QTvAyvmqlqcByxnVk+PPyYc2M11AEv
-         Qi5HKSXkbOV0VtWh/r3Si9siQgDDrdn7yuLPtwSiqW2LnWrpCFPvr1URtwu7Y3zFJtGX
-         HWuBfurwY3g2/j53dbjKFSt30UEAiaMlq5Y6uhT9a0hhf5zIBLjwG5nKcK62FpDj9c5l
-         4u3A==
-X-Gm-Message-State: AOAM533tkVGa7aIQtJQG5yMbXkLvncGp8+TpK0ZqfAlV3/Yqr6X5Pqzp
-        MKRRWfdFMOGdjLv4z1BJbfAGrFnR/MkNGlDY
-X-Google-Smtp-Source: ABdhPJzGl2EBxYDe7IgmZQw3RRrTPqh2pUBu7x2sbY9UmFop9FH1/THiOtcH4EyVP7/TUFR8A+5rnQ==
-X-Received: by 2002:a67:d317:: with SMTP id a23mr9116989vsj.50.1643202808688;
-        Wed, 26 Jan 2022 05:13:28 -0800 (PST)
-Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com. [209.85.221.172])
-        by smtp.gmail.com with ESMTPSA id u8sm419935uaa.12.2022.01.26.05.13.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jan 2022 05:13:27 -0800 (PST)
-Received: by mail-vk1-f172.google.com with SMTP id w17so10476861vko.9;
-        Wed, 26 Jan 2022 05:13:26 -0800 (PST)
-X-Received: by 2002:a05:6102:34e:: with SMTP id e14mr2483928vsa.68.1643202806127;
- Wed, 26 Jan 2022 05:13:26 -0800 (PST)
+        id S238121AbiA0Ota (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 27 Jan 2022 09:49:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54252 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242673AbiA0OtZ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 27 Jan 2022 09:49:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E3A0C06173B;
+        Thu, 27 Jan 2022 06:49:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C15B6B821EE;
+        Thu, 27 Jan 2022 14:49:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0155EC340E4;
+        Thu, 27 Jan 2022 14:49:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643294962;
+        bh=7GUpIIjT3Y6Ka+9rlNQeh5Ll/mUbH+UHkWafLK84ylY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fqWaM6v6BABqrDPDtsu+lltqDV7JSlhx2rU5pFaEifYFVODfWgYimo6/zcHO222vX
+         kNR0ydUBY2DStqVQGhXFTKrdDO4e561hbTIHOuuUKTmSeCtQHwLTJSDYWoZ+g8uWm2
+         DgR+O8A5+WlUkT/slecOK3qxuYvfvaEffB9x66Is=
+Date:   Thu, 27 Jan 2022 15:49:19 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     Ziyang Xuan <william.xuanziyang@huawei.com>, mkl@pengutronix.de,
+        davem@davemloft.net, stable@vger.kernel.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org
+Subject: Re: [PATCH 4.14] can: bcm: fix UAF of bcm op
+Message-ID: <YfKw7+TVJDJGHpoP@kroah.com>
+References: <20220122102506.2898032-1-william.xuanziyang@huawei.com>
+ <Yevc134xM9BDEyNd@kroah.com>
+ <f1e819b6-d37b-286f-85d5-9893a6fdb83e@hartkopp.net>
 MIME-Version: 1.0
-References: <20220111162231.10390-1-uli+renesas@fpond.eu> <20220111162231.10390-6-uli+renesas@fpond.eu>
-In-Reply-To: <20220111162231.10390-6-uli+renesas@fpond.eu>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 26 Jan 2022 14:13:14 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUu_K5k_C1O54=4b7wv+92XVc2esisv3+xvVD4F_nZQgA@mail.gmail.com>
-Message-ID: <CAMuHMdUu_K5k_C1O54=4b7wv+92XVc2esisv3+xvVD4F_nZQgA@mail.gmail.com>
-Subject: Re: [PATCH v2 5/5] dt-bindings: can: renesas,rcar-canfd: Document
- r8a779a0 support
-To:     Ulrich Hecht <uli+renesas@fpond.eu>
-Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>, linux-can@vger.kernel.org,
-        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        socketcan@hartkopp.net,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f1e819b6-d37b-286f-85d5-9893a6fdb83e@hartkopp.net>
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 5:22 PM Ulrich Hecht <uli+renesas@fpond.eu> wrote:
-> Document support for rcar_canfd on R8A779A0 (V3U) SoCs.
+On Sun, Jan 23, 2022 at 03:10:01PM +0100, Oliver Hartkopp wrote:
+> 
+> 
+> On 22.01.22 11:30, Greg KH wrote:
+> > On Sat, Jan 22, 2022 at 06:25:06PM +0800, Ziyang Xuan wrote:
+> > > Stopping tasklet and hrtimer rely on the active state of tasklet and
+> > > hrtimer sequentially in bcm_remove_op(), the op object will be freed
+> > > if they are all unactive. Assume the hrtimer timeout is short, the
+> > > hrtimer cb has been excuted after tasklet conditional judgment which
+> > > must be false after last round tasklet_kill() and before condition
+> > > hrtimer_active(), it is false when execute to hrtimer_active(). Bug
+> > > is triggerd, because the stopping action is end and the op object
+> > > will be freed, but the tasklet is scheduled. The resources of the op
+> > > object will occur UAF bug.
+> > > 
+> > > Move hrtimer_cancel() behind tasklet_kill() and switch 'while () {...}'
+> > > to 'do {...} while ()' to fix the op UAF problem.
+> > > 
+> > > Fixes: a06393ed0316 ("can: bcm: fix hrtimer/tasklet termination in bcm op removal")
+> > > Reported-by: syzbot+5ca851459ed04c778d1d@syzkaller.appspotmail.com
+> > > Cc: stable@vger.kernel.org
+> > > Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+> > > ---
+> > >   net/can/bcm.c | 20 ++++++++++----------
+> > >   1 file changed, 10 insertions(+), 10 deletions(-)
+> > 
+> > What is the git commit id of this change in Linus's tree?
+> 
+> Linus' tree has been fixed by removing the tasklet implementation and
+> replacing it with a HRTIMER_MODE_SOFT approach here:
+> 
+> commit bf74aa86e111a ("can: bcm: switch timer to HRTIMER_MODE_SOFT and
+> remove hrtimer_tasklet")
+> 
+> This patch from Ziyang Xuan fixes the 'old' tasklet implementation for 'old'
+> stable kernels that lack the HRTIMER_MODE_SOFT infrastructure.
+> 
+> Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
 
-R-Car V3U
+Thanks, I'll queue this up for 4.14.
 
-> Signed-off-by: Ulrich Hecht <uli+renesas@fpond.eu>
+Ziyang, can I get a version for 4.19.y as well?
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+thanks,
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+greg k-h
