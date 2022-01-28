@@ -2,193 +2,108 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 471C549F4CA
-	for <lists+linux-can@lfdr.de>; Fri, 28 Jan 2022 09:01:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF9D49F4E2
+	for <lists+linux-can@lfdr.de>; Fri, 28 Jan 2022 09:07:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347083AbiA1IBm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 28 Jan 2022 03:01:42 -0500
-Received: from mo4-p01-ob.smtp.rzone.de ([81.169.146.164]:35363 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242948AbiA1IBl (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 28 Jan 2022 03:01:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1643356894;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=SXWQbdv7n9eGH3R2pXxo3em0xAzOLFXJc61MSR7OjVY=;
-    b=lVOHvror/SLqs9qAyjew2OfSq1y++69MoFvZlXj/bGq4XqSkZo9xZigwgdNIV2sE65
-    jHJVdbmmzgTu26I2w0MqTw6GUoLLEONv4OGr+5p3ND2Tg/P6th+RzNJnbhTHdf1u0kAL
-    8NYeKKYGpnCFVbyD9IvllegDgx2mVCOR19iSMrLSEmg2ipb+wGeI3bsL7CBnZF+7l+xG
-    4Fj7J7jhJ+S9uTYd2VHLoPrqwhF9hRjfjb4Bo2quRmesOg83AOPo1ohvMIyuvVa2sXsl
-    VjUkLO4JuIN4WOdIZICpmiBze9KtiwQTC9T17p6VgnUSm2iqeT5ZtW9RY8KJ8aMgSD1D
-    sucw==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdd0DIgVuBOfXW6v7w=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a00:6020:1cfa:f900::b82]
-    by smtp.strato.de (RZmta 47.38.0 AUTH)
-    with ESMTPSA id zaacbfy0S81YPx6
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Fri, 28 Jan 2022 09:01:34 +0100 (CET)
-Message-ID: <476fedec-295c-cf14-2bfe-1d7369dcb0ef@hartkopp.net>
-Date:   Fri, 28 Jan 2022 09:01:34 +0100
+        id S238452AbiA1IHV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 28 Jan 2022 03:07:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38430 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237542AbiA1IHU (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 28 Jan 2022 03:07:20 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D81AC061714
+        for <linux-can@vger.kernel.org>; Fri, 28 Jan 2022 00:07:20 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nDMHn-0008MM-VU; Fri, 28 Jan 2022 09:07:12 +0100
+Received: from pengutronix.de (unknown [195.138.59.174])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 1FB97258C1;
+        Fri, 28 Jan 2022 08:07:10 +0000 (UTC)
+Date:   Fri, 28 Jan 2022 09:07:04 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>,
+        davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] can: isotp: isotp_rcv_cf(): fix so->rx race problem
+Message-ID: <20220128080704.ns5fzbyn72wfoqmx@pengutronix.de>
+References: <53279d6d-298c-5a85-4c16-887c95447825@hartkopp.net>
+ <280e10c1-d1f4-f39e-fa90-debd56f1746d@huawei.com>
+ <eaafaca3-f003-ca56-c04c-baf6cf4f7627@hartkopp.net>
+ <890d8209-f400-a3b0-df9c-3e198e3834d6@huawei.com>
+ <1fb4407a-1269-ec50-0ad5-074e49f91144@hartkopp.net>
+ <2aba02d4-0597-1d55-8b3e-2c67386f68cf@huawei.com>
+ <64695483-ff75-4872-db81-ca55763f95cf@hartkopp.net>
+ <d7e69278-d741-c706-65e1-e87623d9a8e8@huawei.com>
+ <97339463-b357-3e0e-1cbf-c66415c08129@hartkopp.net>
+ <24e6da96-a3e5-7b4e-102b-b5676770b80e@hartkopp.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC][PATCH v2] can: isotp: fix CAN frame reception race in
- isotp_rcv()
-Content-Language: en-US
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        william.xuanziyang@huawei.com,
-        syzbot+4c63f36709a642f801c5@syzkaller.appspotmail.com
-References: <20220128074327.52229-1-socketcan@hartkopp.net>
- <20220128075632.ixy33y3cmbcmgh6f@pengutronix.de>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20220128075632.ixy33y3cmbcmgh6f@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="okf44ik46sxcmcxb"
+Content-Disposition: inline
+In-Reply-To: <24e6da96-a3e5-7b4e-102b-b5676770b80e@hartkopp.net>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
+--okf44ik46sxcmcxb
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 28.01.22 08:56, Marc Kleine-Budde wrote:
-> On 28.01.2022 08:43:27, Oliver Hartkopp wrote:
->> When receiving a CAN frame the current code logic does not consider
->> concurrently receiving processes which do not show up in real world
->> usage.
->>
->> Ziyang Xuan writes:
->>
->> The following syz problem is one of the scenarios. so->rx.len is
->> changed by isotp_rcv_ff() during isotp_rcv_cf(), so->rx.len equals
->> 0 before alloc_skb() and equals 4096 after alloc_skb(). That will
->> trigger skb_over_panic() in skb_put().
->>
->> =======================================================
->> CPU: 1 PID: 19 Comm: ksoftirqd/1 Not tainted 5.16.0-rc8-syzkaller #0
->> RIP: 0010:skb_panic+0x16c/0x16e net/core/skbuff.c:113
->> Call Trace:
->>   <TASK>
->>   skb_over_panic net/core/skbuff.c:118 [inline]
->>   skb_put.cold+0x24/0x24 net/core/skbuff.c:1990
->>   isotp_rcv_cf net/can/isotp.c:570 [inline]
->>   isotp_rcv+0xa38/0x1e30 net/can/isotp.c:668
->>   deliver net/can/af_can.c:574 [inline]
->>   can_rcv_filter+0x445/0x8d0 net/can/af_can.c:635
->>   can_receive+0x31d/0x580 net/can/af_can.c:665
->>   can_rcv+0x120/0x1c0 net/can/af_can.c:696
->>   __netif_receive_skb_one_core+0x114/0x180 net/core/dev.c:5465
->>   __netif_receive_skb+0x24/0x1b0 net/core/dev.c:5579
->>
->> Therefore we make sure the state changes and data structures stay
->> consistent at CAN frame reception time by adding a spin_lock in
->> isotp_rcv(). This fixes the issue reported by syzkaller but does not
->> affect real world operation.
->>
->> Link: https://lore.kernel.org/linux-can/d7e69278-d741-c706-65e1-e87623d9a8e8@huawei.com/T/
->> Fixes: e057dd3fc20f ("can: add ISO 15765-2:2016 transport protocol")
->> Reported-by: syzbot+4c63f36709a642f801c5@syzkaller.appspotmail.com
->> Reported-by: Ziyang Xuan <william.xuanziyang@huawei.com>
->> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
->> ---
->>   net/can/isotp.c | 14 ++++++++++++++
->>   1 file changed, 14 insertions(+)
->>
->> diff --git a/net/can/isotp.c b/net/can/isotp.c
->> index 02cbcb2ecf0d..b5ba1a9a9e3b 100644
->> --- a/net/can/isotp.c
->> +++ b/net/can/isotp.c
->> @@ -54,10 +54,11 @@
->>    */
->>   
->>   #include <linux/module.h>
->>   #include <linux/init.h>
->>   #include <linux/interrupt.h>
->> +#include <linux/spinlock.h>
->>   #include <linux/hrtimer.h>
->>   #include <linux/wait.h>
->>   #include <linux/uio.h>
->>   #include <linux/net.h>
->>   #include <linux/netdevice.h>
->> @@ -143,10 +144,11 @@ struct isotp_sock {
->>   	u32 force_tx_stmin;
->>   	u32 force_rx_stmin;
->>   	struct tpcon rx, tx;
->>   	struct list_head notifier;
->>   	wait_queue_head_t wait;
->> +	spinlock_t rx_lock;
-> 
-> I think checkpatch wants to have a comment describing the lock.
+On 28.01.2022 08:56:19, Oliver Hartkopp wrote:
+> I've seen the frame processing sometimes freezes for one second when
+> stressing the isotp_rcv() from multiple sources. This finally freezes
+> the entire softirq which is either not good and not needed as we only
+> need to fix this race for stress tests - and not for real world usage
+> that does not create this case.
 
-Ok.
-> 
->>   };
->>   
->>   static LIST_HEAD(isotp_notifier_list);
->>   static DEFINE_SPINLOCK(isotp_notifier_lock);
->>   static struct isotp_sock *isotp_busy_notifier;
->> @@ -613,10 +615,19 @@ static void isotp_rcv(struct sk_buff *skb, void *data)
->>   	if (ae && cf->data[0] != so->opt.rx_ext_address)
->>   		return;
->>   
->>   	n_pci_type = cf->data[ae] & 0xF0;
->>   
->> +	/* Make sure the state changes and data structures stay consistent at
->> +	 * CAN frame reception time. This locking is not needed in real world
->> +	 * use cases but the inconsistency can be triggered with syzkaller.
->> +	 *
->> +	 * To not lock up the softirq just drop the frame in syzcaller case.
->> +	 */
->> +	if (!spin_trylock(&so->rx_lock))
->> +		return;
->> +
->>   	if (so->opt.flags & CAN_ISOTP_HALF_DUPLEX) {
->>   		/* check rx/tx path half duplex expectations */
->>   		if ((so->tx.state != ISOTP_IDLE && n_pci_type != N_PCI_FC) ||
->>   		    (so->rx.state != ISOTP_IDLE && n_pci_type == N_PCI_FC))
->>   			return;
->                          ^^^^^^
->                          goto out_unlock;
-> 
-> Maybe there are more returns, which are not shown in the context of this
-> patch.
-> 
+Hmmm, this doesn't sound good. Can you test with LOCKDEP enabled?
 
-Oh, yes! Thanks!
+>=20
+> Therefore I created a V2 patch which uses the spin_trylock() to simply dr=
+op
+> the incomming frame in the race condition.
+>=20
+> https://lore.kernel.org/linux-can/20220128074327.52229-1-socketcan@hartko=
+pp.net/T/
+>=20
+> Please take a look, if it also fixes the issue in your test setup.
 
-Will send a V3 soon.
+regards,
+Marc
 
->> @@ -666,10 +677,12 @@ static void isotp_rcv(struct sk_buff *skb, void *data)
->>   	case N_PCI_CF:
->>   		/* rx path: consecutive frame */
->>   		isotp_rcv_cf(sk, cf, ae, skb);
->>   		break;
->>   	}
->> +
-> out_unlock:
->> +	spin_unlock(&so->rx_lock);
->>   }
->>   
->>   static void isotp_fill_dataframe(struct canfd_frame *cf, struct isotp_sock *so,
->>   				 int ae, int off)
->>   {
->> @@ -1442,10 +1455,11 @@ static int isotp_init(struct sock *sk)
->>   	so->rxtimer.function = isotp_rx_timer_handler;
->>   	hrtimer_init(&so->txtimer, CLOCK_MONOTONIC, HRTIMER_MODE_REL_SOFT);
->>   	so->txtimer.function = isotp_tx_timer_handler;
->>   
->>   	init_waitqueue_head(&so->wait);
->> +	spin_lock_init(&so->rx_lock);
->>   
->>   	spin_lock(&isotp_notifier_lock);
->>   	list_add_tail(&so->notifier, &isotp_notifier_list);
->>   	spin_unlock(&isotp_notifier_lock);
-> 
-> regards,
-> Marc
-> 
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--okf44ik46sxcmcxb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmHzpCUACgkQqclaivrt
+76keTwf8DTeqV+BuWMfRr0sG/Kf+YqVkvDMJEAp9BOhrDmAB6eGQJT+NMkuSbxTm
+gSKhG19jokryR+ASqS6HEyO9AOa/A+bRi10fB2rGaL8dh0uuOgLkQ0SavIF3cmRg
+ngWB0m8SpNuNXsVlC9sW3+oS8wAZWRq4Rqm17oT+clPWfkWOCYK4cYa8kgggUJxr
+Wv6T88+Px5s6A5T1vJuWgmdpor+kRwd8XqQAuo5Co/FSS+9/8XDqTCeojq78I0Rj
+4U1GqShTYups/UBgAQbQ8my8hg2YKVtcYMlCEMpceL5bXwpJCA75P3DIrJbp6jO0
+2UdFQmbulB0gcl6MYbA/X3bdhcIN7w==
+=WjFN
+-----END PGP SIGNATURE-----
+
+--okf44ik46sxcmcxb--
