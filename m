@@ -2,36 +2,36 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 290F749F230
-	for <lists+linux-can@lfdr.de>; Fri, 28 Jan 2022 04:58:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA8649F37A
+	for <lists+linux-can@lfdr.de>; Fri, 28 Jan 2022 07:22:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345936AbiA1D6L (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 27 Jan 2022 22:58:11 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:16931 "EHLO
+        id S1346311AbiA1GWs (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 28 Jan 2022 01:22:48 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:35880 "EHLO
         szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236975AbiA1D6L (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 27 Jan 2022 22:58:11 -0500
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JlNqm3nbQzZf98;
-        Fri, 28 Jan 2022 11:54:12 +0800 (CST)
+        with ESMTP id S230048AbiA1GWr (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 28 Jan 2022 01:22:47 -0500
+Received: from canpemm500006.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JlS6B3261zcZxc;
+        Fri, 28 Jan 2022 14:21:54 +0800 (CST)
 Received: from localhost.localdomain (10.175.104.82) by
  canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 28 Jan 2022 11:58:09 +0800
+ 15.1.2308.21; Fri, 28 Jan 2022 14:22:45 +0800
 From:   Ziyang Xuan <william.xuanziyang@huawei.com>
 To:     <gregkh@linuxfoundation.org>, <socketcan@hartkopp.net>,
         <mkl@pengutronix.de>, <davem@davemloft.net>,
         <stable@vger.kernel.org>
 CC:     <netdev@vger.kernel.org>, <linux-can@vger.kernel.org>
-Subject: [PATCH 4.4] can: bcm: fix UAF of bcm op
-Date:   Fri, 28 Jan 2022 12:16:17 +0800
-Message-ID: <20220128041617.2328561-1-william.xuanziyang@huawei.com>
+Subject: [PATCH 4.9] can: bcm: fix UAF of bcm op
+Date:   Fri, 28 Jan 2022 14:40:54 +0800
+Message-ID: <20220128064054.2434068-1-william.xuanziyang@huawei.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
 X-Originating-IP: [10.175.104.82]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
  canpemm500006.china.huawei.com (7.192.105.130)
 X-CFilter-Loop: Reflected
 Precedence: bulk
@@ -60,10 +60,10 @@ Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
  1 file changed, 10 insertions(+), 10 deletions(-)
 
 diff --git a/net/can/bcm.c b/net/can/bcm.c
-index 3e131dc5f0e5..549ee0de456f 100644
+index 369326715b9c..bfb507223468 100644
 --- a/net/can/bcm.c
 +++ b/net/can/bcm.c
-@@ -737,21 +737,21 @@ static struct bcm_op *bcm_find_op(struct list_head *ops, canid_t can_id,
+@@ -761,21 +761,21 @@ static struct bcm_op *bcm_find_op(struct list_head *ops,
  static void bcm_remove_op(struct bcm_op *op)
  {
  	if (op->tsklet.func) {
