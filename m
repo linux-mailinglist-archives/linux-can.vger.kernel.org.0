@@ -2,99 +2,164 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BA8649F37A
-	for <lists+linux-can@lfdr.de>; Fri, 28 Jan 2022 07:22:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EABEE49F491
+	for <lists+linux-can@lfdr.de>; Fri, 28 Jan 2022 08:44:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346311AbiA1GWs (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 28 Jan 2022 01:22:48 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:35880 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230048AbiA1GWr (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 28 Jan 2022 01:22:47 -0500
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JlS6B3261zcZxc;
-        Fri, 28 Jan 2022 14:21:54 +0800 (CST)
-Received: from localhost.localdomain (10.175.104.82) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 28 Jan 2022 14:22:45 +0800
-From:   Ziyang Xuan <william.xuanziyang@huawei.com>
-To:     <gregkh@linuxfoundation.org>, <socketcan@hartkopp.net>,
-        <mkl@pengutronix.de>, <davem@davemloft.net>,
-        <stable@vger.kernel.org>
-CC:     <netdev@vger.kernel.org>, <linux-can@vger.kernel.org>
-Subject: [PATCH 4.9] can: bcm: fix UAF of bcm op
-Date:   Fri, 28 Jan 2022 14:40:54 +0800
-Message-ID: <20220128064054.2434068-1-william.xuanziyang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        id S1345613AbiA1HoI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 28 Jan 2022 02:44:08 -0500
+Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.24]:38719 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345403AbiA1HoI (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 28 Jan 2022 02:44:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1643355837;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=ILmWpONKz/8ibcQzKN1YtBaQrZ3n3cjfdkSgSRkAx5M=;
+    b=izCqrHtsR9P/HktP6t5kMnZzBNxcjHKms1OuHvdb7HHxxQOPEDegQ31gJoSOZhHYV2
+    GHZsJ+1n68Kt9EwuxXi9Hge8GGq85qerc6Y3TClkWgYNTdi0/feQJ5KEXZ5idm5rIwab
+    ALjtqDsJuZnVcusydFMoPvYtBYuFDSzuneX1y2cNMCJgexg8euX6s0LRgGNgraifu58Q
+    k69w5McYsSBK4ayDI/0u51qvszOzykXpN++ZGnTdbAqix6l81bKrwb0Ihc+7TrFKEaBH
+    Kp4pXW08okuw5qsRP3/I8lGei3vuLBTstUS5gMC8XCmhjhez2+O1iEzrrdvZq7g4DudF
+    gzNA==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS/xvEBL7X5sbo3UIh9IyLecSWJafUvprl4"
+X-RZG-CLASS-ID: mo00
+Received: from silver.lan
+    by smtp.strato.de (RZmta 47.38.0 AUTH)
+    with ESMTPSA id zaacbfy0S7hvPsn
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Fri, 28 Jan 2022 08:43:57 +0100 (CET)
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+To:     netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        william.xuanziyang@huawei.com
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        syzbot+4c63f36709a642f801c5@syzkaller.appspotmail.com
+Subject: [RFC][PATCH v2] can: isotp: fix CAN frame reception race in isotp_rcv()
+Date:   Fri, 28 Jan 2022 08:43:27 +0100
+Message-Id: <20220128074327.52229-1-socketcan@hartkopp.net>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.82]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Stopping tasklet and hrtimer rely on the active state of tasklet and
-hrtimer sequentially in bcm_remove_op(), the op object will be freed
-if they are all unactive. Assume the hrtimer timeout is short, the
-hrtimer cb has been excuted after tasklet conditional judgment which
-must be false after last round tasklet_kill() and before condition
-hrtimer_active(), it is false when execute to hrtimer_active(). Bug
-is triggerd, because the stopping action is end and the op object
-will be freed, but the tasklet is scheduled. The resources of the op
-object will occur UAF bug.
+When receiving a CAN frame the current code logic does not consider
+concurrently receiving processes which do not show up in real world
+usage.
 
-Move hrtimer_cancel() behind tasklet_kill() and switch 'while () {...}'
-to 'do {...} while ()' to fix the op UAF problem.
+Ziyang Xuan writes:
 
-Fixes: a06393ed0316 ("can: bcm: fix hrtimer/tasklet termination in bcm op removal")
-Reported-by: syzbot+5ca851459ed04c778d1d@syzkaller.appspotmail.com
-Cc: stable@vger.kernel.org
-Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+The following syz problem is one of the scenarios. so->rx.len is
+changed by isotp_rcv_ff() during isotp_rcv_cf(), so->rx.len equals
+0 before alloc_skb() and equals 4096 after alloc_skb(). That will
+trigger skb_over_panic() in skb_put().
+
+=======================================================
+CPU: 1 PID: 19 Comm: ksoftirqd/1 Not tainted 5.16.0-rc8-syzkaller #0
+RIP: 0010:skb_panic+0x16c/0x16e net/core/skbuff.c:113
+Call Trace:
+ <TASK>
+ skb_over_panic net/core/skbuff.c:118 [inline]
+ skb_put.cold+0x24/0x24 net/core/skbuff.c:1990
+ isotp_rcv_cf net/can/isotp.c:570 [inline]
+ isotp_rcv+0xa38/0x1e30 net/can/isotp.c:668
+ deliver net/can/af_can.c:574 [inline]
+ can_rcv_filter+0x445/0x8d0 net/can/af_can.c:635
+ can_receive+0x31d/0x580 net/can/af_can.c:665
+ can_rcv+0x120/0x1c0 net/can/af_can.c:696
+ __netif_receive_skb_one_core+0x114/0x180 net/core/dev.c:5465
+ __netif_receive_skb+0x24/0x1b0 net/core/dev.c:5579
+
+Therefore we make sure the state changes and data structures stay
+consistent at CAN frame reception time by adding a spin_lock in
+isotp_rcv(). This fixes the issue reported by syzkaller but does not
+affect real world operation.
+
+Link: https://lore.kernel.org/linux-can/d7e69278-d741-c706-65e1-e87623d9a8e8@huawei.com/T/
+Fixes: e057dd3fc20f ("can: add ISO 15765-2:2016 transport protocol")
+Reported-by: syzbot+4c63f36709a642f801c5@syzkaller.appspotmail.com
+Reported-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 ---
- net/can/bcm.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ net/can/isotp.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/net/can/bcm.c b/net/can/bcm.c
-index 369326715b9c..bfb507223468 100644
---- a/net/can/bcm.c
-+++ b/net/can/bcm.c
-@@ -761,21 +761,21 @@ static struct bcm_op *bcm_find_op(struct list_head *ops,
- static void bcm_remove_op(struct bcm_op *op)
+diff --git a/net/can/isotp.c b/net/can/isotp.c
+index 02cbcb2ecf0d..b5ba1a9a9e3b 100644
+--- a/net/can/isotp.c
++++ b/net/can/isotp.c
+@@ -54,10 +54,11 @@
+  */
+ 
+ #include <linux/module.h>
+ #include <linux/init.h>
+ #include <linux/interrupt.h>
++#include <linux/spinlock.h>
+ #include <linux/hrtimer.h>
+ #include <linux/wait.h>
+ #include <linux/uio.h>
+ #include <linux/net.h>
+ #include <linux/netdevice.h>
+@@ -143,10 +144,11 @@ struct isotp_sock {
+ 	u32 force_tx_stmin;
+ 	u32 force_rx_stmin;
+ 	struct tpcon rx, tx;
+ 	struct list_head notifier;
+ 	wait_queue_head_t wait;
++	spinlock_t rx_lock;
+ };
+ 
+ static LIST_HEAD(isotp_notifier_list);
+ static DEFINE_SPINLOCK(isotp_notifier_lock);
+ static struct isotp_sock *isotp_busy_notifier;
+@@ -613,10 +615,19 @@ static void isotp_rcv(struct sk_buff *skb, void *data)
+ 	if (ae && cf->data[0] != so->opt.rx_ext_address)
+ 		return;
+ 
+ 	n_pci_type = cf->data[ae] & 0xF0;
+ 
++	/* Make sure the state changes and data structures stay consistent at
++	 * CAN frame reception time. This locking is not needed in real world
++	 * use cases but the inconsistency can be triggered with syzkaller.
++	 *
++	 * To not lock up the softirq just drop the frame in syzcaller case.
++	 */
++	if (!spin_trylock(&so->rx_lock))
++		return;
++
+ 	if (so->opt.flags & CAN_ISOTP_HALF_DUPLEX) {
+ 		/* check rx/tx path half duplex expectations */
+ 		if ((so->tx.state != ISOTP_IDLE && n_pci_type != N_PCI_FC) ||
+ 		    (so->rx.state != ISOTP_IDLE && n_pci_type == N_PCI_FC))
+ 			return;
+@@ -666,10 +677,12 @@ static void isotp_rcv(struct sk_buff *skb, void *data)
+ 	case N_PCI_CF:
+ 		/* rx path: consecutive frame */
+ 		isotp_rcv_cf(sk, cf, ae, skb);
+ 		break;
+ 	}
++
++	spin_unlock(&so->rx_lock);
+ }
+ 
+ static void isotp_fill_dataframe(struct canfd_frame *cf, struct isotp_sock *so,
+ 				 int ae, int off)
  {
- 	if (op->tsklet.func) {
--		while (test_bit(TASKLET_STATE_SCHED, &op->tsklet.state) ||
--		       test_bit(TASKLET_STATE_RUN, &op->tsklet.state) ||
--		       hrtimer_active(&op->timer)) {
--			hrtimer_cancel(&op->timer);
-+		do {
- 			tasklet_kill(&op->tsklet);
--		}
-+			hrtimer_cancel(&op->timer);
-+		} while (test_bit(TASKLET_STATE_SCHED, &op->tsklet.state) ||
-+			 test_bit(TASKLET_STATE_RUN, &op->tsklet.state) ||
-+			 hrtimer_active(&op->timer));
- 	}
+@@ -1442,10 +1455,11 @@ static int isotp_init(struct sock *sk)
+ 	so->rxtimer.function = isotp_rx_timer_handler;
+ 	hrtimer_init(&so->txtimer, CLOCK_MONOTONIC, HRTIMER_MODE_REL_SOFT);
+ 	so->txtimer.function = isotp_tx_timer_handler;
  
- 	if (op->thrtsklet.func) {
--		while (test_bit(TASKLET_STATE_SCHED, &op->thrtsklet.state) ||
--		       test_bit(TASKLET_STATE_RUN, &op->thrtsklet.state) ||
--		       hrtimer_active(&op->thrtimer)) {
--			hrtimer_cancel(&op->thrtimer);
-+		do {
- 			tasklet_kill(&op->thrtsklet);
--		}
-+			hrtimer_cancel(&op->thrtimer);
-+		} while (test_bit(TASKLET_STATE_SCHED, &op->thrtsklet.state) ||
-+			 test_bit(TASKLET_STATE_RUN, &op->thrtsklet.state) ||
-+			 hrtimer_active(&op->thrtimer));
- 	}
+ 	init_waitqueue_head(&so->wait);
++	spin_lock_init(&so->rx_lock);
  
- 	if ((op->frames) && (op->frames != &op->sframe))
+ 	spin_lock(&isotp_notifier_lock);
+ 	list_add_tail(&so->notifier, &isotp_notifier_list);
+ 	spin_unlock(&isotp_notifier_lock);
+ 
 -- 
-2.25.1
+2.30.2
 
