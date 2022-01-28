@@ -2,51 +2,40 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B856249F524
-	for <lists+linux-can@lfdr.de>; Fri, 28 Jan 2022 09:32:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97A5149F58C
+	for <lists+linux-can@lfdr.de>; Fri, 28 Jan 2022 09:47:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237807AbiA1Icz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 28 Jan 2022 03:32:55 -0500
-Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.80]:39969 "EHLO
-        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232312AbiA1Ics (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 28 Jan 2022 03:32:48 -0500
-X-Greylist: delayed 2177 seconds by postgrey-1.27 at vger.kernel.org; Fri, 28 Jan 2022 03:32:48 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1643358761;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=nvSJZBBJT2q+vUwqNK0O/1viTFb58vvMn1effcu24RM=;
-    b=DIXenEET2Dy7Gbverr5Plo+LymUUpRURXYTLhcjzPje2u041fiNKKxbK6eeN1GiSu+
-    m8B9dxri2+AzmCDFIYSpl+iN/nWWjSHHRyID25wbGI/A8JVOzZ9kidZyXRH1s52M11aJ
-    PGzHyjEMPkapkgdYKfa4Tvu3HBerpV8I2rG5IJDkL2ymH65D4QjXh5yrfaFY2DI508Im
-    7SDkeCWw/GVhe+tv/HWNJpep7NfIPtJ0+eZrq08qIfwleii0anH8mMOOXxVfuwiJdD+F
-    okDtiE/ehB4TbVcRSgzpXenlHqvIHYVFxgPMgijxCf1dVsfFdbq87f0W9ol3aYkVCmey
-    /sAA==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdd0DIgVuBOfXW6v7w=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a00:6020:1cfa:f900::b82]
-    by smtp.strato.de (RZmta 47.38.0 AUTH)
-    with ESMTPSA id zaacbfy0S8WeQ4Z
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Fri, 28 Jan 2022 09:32:40 +0100 (CET)
-Message-ID: <72419ca8-b0cb-1e9d-3fcc-655defb662df@hartkopp.net>
-Date:   Fri, 28 Jan 2022 09:32:40 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH net] can: isotp: isotp_rcv_cf(): fix so->rx race problem
-Content-Language: en-US
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
+        id S243118AbiA1Iq7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 28 Jan 2022 03:46:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47548 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240484AbiA1Iq7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 28 Jan 2022 03:46:59 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C70BC061714
+        for <linux-can@vger.kernel.org>; Fri, 28 Jan 2022 00:46:59 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nDMuC-0005Wn-Kn; Fri, 28 Jan 2022 09:46:52 +0100
+Received: from pengutronix.de (unknown [195.138.59.174])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 38F9925934;
+        Fri, 28 Jan 2022 08:46:51 +0000 (UTC)
+Date:   Fri, 28 Jan 2022 09:46:47 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
 Cc:     "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>,
         davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <53279d6d-298c-5a85-4c16-887c95447825@hartkopp.net>
- <280e10c1-d1f4-f39e-fa90-debd56f1746d@huawei.com>
- <eaafaca3-f003-ca56-c04c-baf6cf4f7627@hartkopp.net>
+Subject: Re: [PATCH net] can: isotp: isotp_rcv_cf(): fix so->rx race problem
+Message-ID: <20220128084603.jvrvapqf5dt57yiq@pengutronix.de>
+/From:  Marc Kleine-Budde <mkl@pengutronix.de>
+References: <eaafaca3-f003-ca56-c04c-baf6cf4f7627@hartkopp.net>
  <890d8209-f400-a3b0-df9c-3e198e3834d6@huawei.com>
  <1fb4407a-1269-ec50-0ad5-074e49f91144@hartkopp.net>
  <2aba02d4-0597-1d55-8b3e-2c67386f68cf@huawei.com>
@@ -55,101 +44,143 @@ References: <53279d6d-298c-5a85-4c16-887c95447825@hartkopp.net>
  <97339463-b357-3e0e-1cbf-c66415c08129@hartkopp.net>
  <24e6da96-a3e5-7b4e-102b-b5676770b80e@hartkopp.net>
  <20220128080704.ns5fzbyn72wfoqmx@pengutronix.de>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20220128080704.ns5fzbyn72wfoqmx@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+ <72419ca8-b0cb-1e9d-3fcc-655defb662df@hartkopp.net>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ietkikogqwqnu463"
+Content-Disposition: inline
+In-Reply-To: <72419ca8-b0cb-1e9d-3fcc-655defb662df@hartkopp.net>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
+--ietkikogqwqnu463
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 28.01.22 09:07, Marc Kleine-Budde wrote:
-> On 28.01.2022 08:56:19, Oliver Hartkopp wrote:
->> I've seen the frame processing sometimes freezes for one second when
->> stressing the isotp_rcv() from multiple sources. This finally freezes
->> the entire softirq which is either not good and not needed as we only
->> need to fix this race for stress tests - and not for real world usage
->> that does not create this case.
-> 
-> Hmmm, this doesn't sound good. Can you test with LOCKDEP enabled?
+On 28.01.2022 09:32:40, Oliver Hartkopp wrote:
+>=20
+>=20
+> On 28.01.22 09:07, Marc Kleine-Budde wrote:
+> > On 28.01.2022 08:56:19, Oliver Hartkopp wrote:
+> > > I've seen the frame processing sometimes freezes for one second when
+> > > stressing the isotp_rcv() from multiple sources. This finally freezes
+> > > the entire softirq which is either not good and not needed as we only
+> > > need to fix this race for stress tests - and not for real world usage
+> > > that does not create this case.
+> >=20
+> > Hmmm, this doesn't sound good. Can you test with LOCKDEP enabled?
 
-In kernel config? I enabled almost everything with LOCKing ;-)
+> In kernel config? I enabled almost everything with LOCKing ;-)
+>=20
+>=20
+> CONFIG_LOCKDEP_SUPPORT=3Dy
+>=20
+> CONFIG_HAVE_HARDLOCKUP_DETECTOR_PERF=3Dy
+>=20
+> CONFIG_ASN1=3Dy
+> CONFIG_UNINLINE_SPIN_UNLOCK=3Dy
+> CONFIG_ARCH_SUPPORTS_ATOMIC_RMW=3Dy
+> CONFIG_MUTEX_SPIN_ON_OWNER=3Dy
+> CONFIG_RWSEM_SPIN_ON_OWNER=3Dy
+> CONFIG_LOCK_SPIN_ON_OWNER=3Dy
+> CONFIG_ARCH_USE_QUEUED_SPINLOCKS=3Dy
+> CONFIG_QUEUED_SPINLOCKS=3Dy
+> CONFIG_ARCH_USE_QUEUED_RWLOCKS=3Dy
+> CONFIG_QUEUED_RWLOCKS=3Dy
+> CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE=3Dy
+> CONFIG_ARCH_HAS_SYNC_CORE_BEFORE_USERMODE=3Dy
+> CONFIG_ARCH_HAS_SYSCALL_WRAPPER=3Dy
+> CONFIG_FREEZER=3Dy
+>=20
+> CONFIG_HWSPINLOCK=3Dy
+>=20
+> CONFIG_I8253_LOCK=3Dy
+>=20
+> #
+> # Debug Oops, Lockups and Hangs
+> #
+> # CONFIG_PANIC_ON_OOPS is not set
+> CONFIG_PANIC_ON_OOPS_VALUE=3D0
+> CONFIG_PANIC_TIMEOUT=3D0
+> CONFIG_LOCKUP_DETECTOR=3Dy
+> CONFIG_SOFTLOCKUP_DETECTOR=3Dy
+> # CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC is not set
+> CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC_VALUE=3D0
+> CONFIG_HARDLOCKUP_DETECTOR_PERF=3Dy
+> CONFIG_HARDLOCKUP_CHECK_TIMESTAMP=3Dy
+> CONFIG_HARDLOCKUP_DETECTOR=3Dy
+> # CONFIG_BOOTPARAM_HARDLOCKUP_PANIC is not set
+> CONFIG_BOOTPARAM_HARDLOCKUP_PANIC_VALUE=3D0
+> CONFIG_DETECT_HUNG_TASK=3Dy
+> CONFIG_DEFAULT_HUNG_TASK_TIMEOUT=3D120 <--- the isotp timeout is 1000 ms =
+what
+> I can observe here with v1 patch
+>=20
+> # CONFIG_BOOTPARAM_HUNG_TASK_PANIC is not set
+> CONFIG_BOOTPARAM_HUNG_TASK_PANIC_VALUE=3D0
+> # CONFIG_WQ_WATCHDOG is not set
+> # CONFIG_TEST_LOCKUP is not set
+> # end of Debug Oops, Lockups and Hangs
+>=20
+> Only this debugging stuff is not really enabled:
+>=20
+> #
+> # Lock Debugging (spinlocks, mutexes, etc...)
+> #
+> CONFIG_LOCK_DEBUGGING_SUPPORT=3Dy
+> # CONFIG_PROVE_LOCKING is not set
+CONFIG_PROVE_LOCKING=3Dy
 
+Marc
 
-CONFIG_LOCKDEP_SUPPORT=y
+> # CONFIG_LOCK_STAT is not set
+> # CONFIG_DEBUG_RT_MUTEXES is not set
+> # CONFIG_DEBUG_SPINLOCK is not set
+> # CONFIG_DEBUG_MUTEXES is not set
+> # CONFIG_DEBUG_WW_MUTEX_SLOWPATH is not set
+> # CONFIG_DEBUG_RWSEMS is not set
+> # CONFIG_DEBUG_LOCK_ALLOC is not set
+> # CONFIG_DEBUG_ATOMIC_SLEEP is not set
+> # CONFIG_DEBUG_LOCKING_API_SELFTESTS is not set
+> # CONFIG_LOCK_TORTURE_TEST is not set
+> # CONFIG_WW_MUTEX_SELFTEST is not set
+> # CONFIG_SCF_TORTURE_TEST is not set
+> # CONFIG_CSD_LOCK_WAIT_DEBUG is not set
+> # end of Lock Debugging (spinlocks, mutexes, etc...)
+>=20
+> Would this help to be enabled for this test (of the v1 patch?
+>=20
+> Best regards,
+> Oliver
+>=20
+>=20
 
-CONFIG_HAVE_HARDLOCKUP_DETECTOR_PERF=y
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-CONFIG_ASN1=y
-CONFIG_UNINLINE_SPIN_UNLOCK=y
-CONFIG_ARCH_SUPPORTS_ATOMIC_RMW=y
-CONFIG_MUTEX_SPIN_ON_OWNER=y
-CONFIG_RWSEM_SPIN_ON_OWNER=y
-CONFIG_LOCK_SPIN_ON_OWNER=y
-CONFIG_ARCH_USE_QUEUED_SPINLOCKS=y
-CONFIG_QUEUED_SPINLOCKS=y
-CONFIG_ARCH_USE_QUEUED_RWLOCKS=y
-CONFIG_QUEUED_RWLOCKS=y
-CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE=y
-CONFIG_ARCH_HAS_SYNC_CORE_BEFORE_USERMODE=y
-CONFIG_ARCH_HAS_SYSCALL_WRAPPER=y
-CONFIG_FREEZER=y
+--ietkikogqwqnu463
+Content-Type: application/pgp-signature; name="signature.asc"
 
-CONFIG_HWSPINLOCK=y
+-----BEGIN PGP SIGNATURE-----
 
-CONFIG_I8253_LOCK=y
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmHzrXUACgkQqclaivrt
+76lhiwf/Sf3BTE/OLrbN+FrqZYpMlDwxI76aKnZ2lhZ3fw7ZKMii93hEkMDD06v+
+FdrlyOSGL5xSDHgq1oZ1qMJ6nWrj9V8bzyR8XAAWKVX8JvBAJQAK5FMV/Qi9xOD/
+xrNChkcYYDHvu8DSpOl4nXmjtcfBy8qKuzUJCuEY27+DRM4eDgiwz79Zhk6yQYXO
+iD1JqqmDaQpsO9MEA6T03tSZUyTiH38lVrGZ6AhR2wku2Qj0W/bAp3iY60CvUc6S
+ggWK4uDhEg3qOSNMBx+Eviw7WyxuXUjqb+c3GH+2REPjPjaqRc/FYV7hFEkyDI6x
+Nt752v1DpyhZ0OAqKYQOtgyGIuJx2w==
+=99pL
+-----END PGP SIGNATURE-----
 
-#
-# Debug Oops, Lockups and Hangs
-#
-# CONFIG_PANIC_ON_OOPS is not set
-CONFIG_PANIC_ON_OOPS_VALUE=0
-CONFIG_PANIC_TIMEOUT=0
-CONFIG_LOCKUP_DETECTOR=y
-CONFIG_SOFTLOCKUP_DETECTOR=y
-# CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC is not set
-CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC_VALUE=0
-CONFIG_HARDLOCKUP_DETECTOR_PERF=y
-CONFIG_HARDLOCKUP_CHECK_TIMESTAMP=y
-CONFIG_HARDLOCKUP_DETECTOR=y
-# CONFIG_BOOTPARAM_HARDLOCKUP_PANIC is not set
-CONFIG_BOOTPARAM_HARDLOCKUP_PANIC_VALUE=0
-CONFIG_DETECT_HUNG_TASK=y
-CONFIG_DEFAULT_HUNG_TASK_TIMEOUT=120 <--- the isotp timeout is 1000 ms 
-what I can observe here with v1 patch
-
-# CONFIG_BOOTPARAM_HUNG_TASK_PANIC is not set
-CONFIG_BOOTPARAM_HUNG_TASK_PANIC_VALUE=0
-# CONFIG_WQ_WATCHDOG is not set
-# CONFIG_TEST_LOCKUP is not set
-# end of Debug Oops, Lockups and Hangs
-
-Only this debugging stuff is not really enabled:
-
-#
-# Lock Debugging (spinlocks, mutexes, etc...)
-#
-CONFIG_LOCK_DEBUGGING_SUPPORT=y
-# CONFIG_PROVE_LOCKING is not set
-# CONFIG_LOCK_STAT is not set
-# CONFIG_DEBUG_RT_MUTEXES is not set
-# CONFIG_DEBUG_SPINLOCK is not set
-# CONFIG_DEBUG_MUTEXES is not set
-# CONFIG_DEBUG_WW_MUTEX_SLOWPATH is not set
-# CONFIG_DEBUG_RWSEMS is not set
-# CONFIG_DEBUG_LOCK_ALLOC is not set
-# CONFIG_DEBUG_ATOMIC_SLEEP is not set
-# CONFIG_DEBUG_LOCKING_API_SELFTESTS is not set
-# CONFIG_LOCK_TORTURE_TEST is not set
-# CONFIG_WW_MUTEX_SELFTEST is not set
-# CONFIG_SCF_TORTURE_TEST is not set
-# CONFIG_CSD_LOCK_WAIT_DEBUG is not set
-# end of Lock Debugging (spinlocks, mutexes, etc...)
-
-Would this help to be enabled for this test (of the v1 patch?
-
-Best regards,
-Oliver
-
+--ietkikogqwqnu463--
