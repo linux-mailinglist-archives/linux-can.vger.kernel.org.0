@@ -2,197 +2,68 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D010C49FC5B
-	for <lists+linux-can@lfdr.de>; Fri, 28 Jan 2022 16:02:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12D014A2E50
+	for <lists+linux-can@lfdr.de>; Sat, 29 Jan 2022 12:41:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343959AbiA1PC3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 28 Jan 2022 10:02:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50818 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245734AbiA1PC3 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 28 Jan 2022 10:02:29 -0500
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA5AC061714
-        for <linux-can@vger.kernel.org>; Fri, 28 Jan 2022 07:02:29 -0800 (PST)
-Received: from localhost.localdomain (unknown [89.158.146.116])
-        (Authenticated sender: stephane.grosjean@free.fr)
-        by smtp2-g21.free.fr (Postfix) with ESMTPSA id BC917200414;
-        Fri, 28 Jan 2022 16:02:25 +0100 (CET)
-From:   Stephane Grosjean <s.grosjean@peak-system.com>
-To:     linux-can Mailing List <linux-can@vger.kernel.org>
-Cc:     Stephane Grosjean <s.grosjean@peak-system.com>
-Subject: [PATCH 6/6] can: peak_usb: add ethtool interface to user defined flashed device number
-Date:   Fri, 28 Jan 2022 16:01:57 +0100
-Message-Id: <20220128150157.1222850-7-s.grosjean@peak-system.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220128150157.1222850-1-s.grosjean@peak-system.com>
-References: <20220128150157.1222850-1-s.grosjean@peak-system.com>
+        id S237728AbiA2Ll5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 29 Jan 2022 06:41:57 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:36758 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234688AbiA2Ll4 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 29 Jan 2022 06:41:56 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 90F27B827AB;
+        Sat, 29 Jan 2022 11:41:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B411AC340E5;
+        Sat, 29 Jan 2022 11:41:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643456514;
+        bh=++Zd6EN2TNR4Zau6rFyThIqLoRILUgq3HW8r82o/PGE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NhohHItrsU/lkDPvetPAUhNMgILa9xFy4XlXV60T0KSo8bbxVUhCQNFyVtV9khNOT
+         prvPsA6zTyOckgG5ZiP7JLv1kjwjLmt9p9Xm/wiTk0ez2hn2aE1FWhxgG25DiGgYX6
+         7ZRZwWQHQwfPaVrzDf44CANsMOeeOk1Crr1Jd2q4=
+Date:   Sat, 29 Jan 2022 12:41:51 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Ziyang Xuan <william.xuanziyang@huawei.com>
+Cc:     socketcan@hartkopp.net, mkl@pengutronix.de, davem@davemloft.net,
+        stable@vger.kernel.org, netdev@vger.kernel.org,
+        linux-can@vger.kernel.org
+Subject: Re: [PATCH 4.9] can: bcm: fix UAF of bcm op
+Message-ID: <YfUn/++keVx5/ez/@kroah.com>
+References: <20220128064054.2434068-1-william.xuanziyang@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220128064054.2434068-1-william.xuanziyang@huawei.com>
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This patch introduces 3 new functions implementing support for eeprom
-access of USB - CAN network interfaces managed by the driver, through the
-ethtool interface. All of them (except the PCAN-USB interface) interpret
-the 4 data bytes as a 32-bit value to be read/write in the non-volatile
-memory of the device. The PCAN-USB only manages a single byte value.
+On Fri, Jan 28, 2022 at 02:40:54PM +0800, Ziyang Xuan wrote:
+> Stopping tasklet and hrtimer rely on the active state of tasklet and
+> hrtimer sequentially in bcm_remove_op(), the op object will be freed
+> if they are all unactive. Assume the hrtimer timeout is short, the
+> hrtimer cb has been excuted after tasklet conditional judgment which
+> must be false after last round tasklet_kill() and before condition
+> hrtimer_active(), it is false when execute to hrtimer_active(). Bug
+> is triggerd, because the stopping action is end and the op object
+> will be freed, but the tasklet is scheduled. The resources of the op
+> object will occur UAF bug.
+> 
+> Move hrtimer_cancel() behind tasklet_kill() and switch 'while () {...}'
+> to 'do {...} while ()' to fix the op UAF problem.
+> 
+> Fixes: a06393ed0316 ("can: bcm: fix hrtimer/tasklet termination in bcm op removal")
+> Reported-by: syzbot+5ca851459ed04c778d1d@syzkaller.appspotmail.com
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+> ---
+>  net/can/bcm.c | 20 ++++++++++----------
+>  1 file changed, 10 insertions(+), 10 deletions(-)
 
-Signed-off-by: Stephane Grosjean <s.grosjean@peak-system.com>
----
- drivers/net/can/usb/peak_usb/pcan_usb.c      |  9 +++
- drivers/net/can/usb/peak_usb/pcan_usb_core.c | 69 ++++++++++++++++++++
- drivers/net/can/usb/peak_usb/pcan_usb_core.h |  6 ++
- drivers/net/can/usb/peak_usb/pcan_usb_fd.c   |  3 +
- drivers/net/can/usb/peak_usb/pcan_usb_pro.c  |  3 +
- 5 files changed, 90 insertions(+)
+Both now queued up, thanks.
 
-diff --git a/drivers/net/can/usb/peak_usb/pcan_usb.c b/drivers/net/can/usb/peak_usb/pcan_usb.c
-index b29daaab2e6e..60c9329701a5 100644
---- a/drivers/net/can/usb/peak_usb/pcan_usb.c
-+++ b/drivers/net/can/usb/peak_usb/pcan_usb.c
-@@ -981,8 +981,17 @@ static int pcan_usb_set_phys_id(struct net_device *netdev,
- 	return err;
- }
- 
-+/* This device only handles 8-bit user device id. */
-+static int pcan_usb_get_eeprom_len(struct net_device *netdev)
-+{
-+	return sizeof(u8);
-+}
-+
- static const struct ethtool_ops pcan_usb_ethtool_ops = {
- 	.set_phys_id = pcan_usb_set_phys_id,
-+	.get_eeprom_len	= pcan_usb_get_eeprom_len,
-+	.get_eeprom = peak_usb_get_eeprom,
-+	.set_eeprom = peak_usb_set_eeprom,
- };
- 
- /*
-diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.c b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
-index aa8bcdcfa2fb..4e858d592e59 100644
---- a/drivers/net/can/usb/peak_usb/pcan_usb_core.c
-+++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
-@@ -782,6 +782,75 @@ static const struct net_device_ops peak_usb_netdev_ops = {
- 	.ndo_change_mtu = can_change_mtu,
- };
- 
-+/* CAN-USB devices generally handle 32-bit user device id.
-+ * In case one doesn't, then it have to overload this function.
-+ */
-+int peak_usb_get_eeprom_len(struct net_device *netdev)
-+{
-+	return sizeof(u32);
-+}
-+
-+/* Every CAN-USB device exports the dev_get_user_devid() operation. It is used
-+ * here to fill the data buffer with the user defined device number.
-+ */
-+int peak_usb_get_eeprom(struct net_device *netdev,
-+			struct ethtool_eeprom *eeprom, u8 *data)
-+{
-+	struct peak_usb_device *dev = netdev_priv(netdev);
-+	u32 devid;
-+	int err;
-+
-+	if (!eeprom->len)
-+		return -EINVAL;
-+
-+	err = dev->adapter->dev_get_user_devid(dev, &devid);
-+	if (!err) {
-+		memcpy(data, (u8 *)&devid + eeprom->offset, eeprom->len);
-+
-+		/* update cached value */
-+		dev->device_number = devid;
-+	}
-+
-+	return err;
-+}
-+
-+/* Every CAN-USB device exports the dev_get_user_devid()/dev_set_user_devid()
-+ * operations. They are used here to set the new user defined device number.
-+ */
-+int peak_usb_set_eeprom(struct net_device *netdev,
-+			struct ethtool_eeprom *eeprom, u8 *data)
-+{
-+	struct peak_usb_device *dev = netdev_priv(netdev);
-+	u32 devid;
-+	int err;
-+
-+	if (!eeprom->len)
-+		return -EINVAL;
-+
-+	/* first, read the current user defined device value number */
-+	err = dev->adapter->dev_get_user_devid(dev, &devid);
-+	if (err) {
-+		netdev_err(netdev, "Failed to init device id (err %d)\n", err);
-+		return err;
-+	}
-+
-+	/* do update the value with user given bytes */
-+	memcpy((u8 *)&devid + eeprom->offset, data, eeprom->len);
-+
-+	/* flash the new value now */
-+	err = dev->adapter->dev_set_user_devid(dev, devid);
-+	if (err) {
-+		netdev_err(netdev, "Failed to write new device id (err %d)\n",
-+			   err);
-+		return err;
-+	}
-+
-+	/* update cached value with the new one */
-+	dev->device_number = devid;
-+
-+	return 0;
-+}
-+
- /*
-  * create one device which is attached to CAN controller #ctrl_idx of the
-  * usb adapter.
-diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.h b/drivers/net/can/usb/peak_usb/pcan_usb_core.h
-index 7fdc779986f0..4f4394733208 100644
---- a/drivers/net/can/usb/peak_usb/pcan_usb_core.h
-+++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.h
-@@ -147,4 +147,10 @@ int peak_usb_netif_rx_64(struct sk_buff *skb, u32 ts_low, u32 ts_high);
- void peak_usb_async_complete(struct urb *urb);
- void peak_usb_restart_complete(struct peak_usb_device *dev);
- 
-+/* common 32-bit devid ethtool management */
-+int peak_usb_get_eeprom_len(struct net_device *netdev);
-+int peak_usb_get_eeprom(struct net_device *netdev,
-+			struct ethtool_eeprom *eeprom, u8 *data);
-+int peak_usb_set_eeprom(struct net_device *netdev,
-+			struct ethtool_eeprom *eeprom, u8 *data);
- #endif
-diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-index 7440d5b145b5..cec09c7ffce2 100644
---- a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-+++ b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-@@ -1072,6 +1072,9 @@ static int pcan_usb_fd_set_phys_id(struct net_device *netdev,
- 
- static const struct ethtool_ops pcan_usb_fd_ethtool_ops = {
- 	.set_phys_id = pcan_usb_fd_set_phys_id,
-+	.get_eeprom_len	= peak_usb_get_eeprom_len,
-+	.get_eeprom = peak_usb_get_eeprom,
-+	.set_eeprom = peak_usb_set_eeprom,
- };
- 
- /* describes the PCAN-USB FD adapter */
-diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_pro.c b/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
-index e98b08746e04..35177a3d1eba 100644
---- a/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
-+++ b/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
-@@ -1036,6 +1036,9 @@ static int pcan_usb_pro_set_phys_id(struct net_device *netdev,
- 
- static const struct ethtool_ops pcan_usb_pro_ethtool_ops = {
- 	.set_phys_id = pcan_usb_pro_set_phys_id,
-+	.get_eeprom_len	= peak_usb_get_eeprom_len,
-+	.get_eeprom = peak_usb_get_eeprom,
-+	.set_eeprom = peak_usb_set_eeprom,
- };
- 
- /*
--- 
-2.25.1
-
+greg k-h
