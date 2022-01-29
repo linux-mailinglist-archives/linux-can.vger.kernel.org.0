@@ -2,68 +2,120 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12D014A2E50
-	for <lists+linux-can@lfdr.de>; Sat, 29 Jan 2022 12:41:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 836684A2FD8
+	for <lists+linux-can@lfdr.de>; Sat, 29 Jan 2022 14:48:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237728AbiA2Ll5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 29 Jan 2022 06:41:57 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:36758 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234688AbiA2Ll4 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 29 Jan 2022 06:41:56 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 90F27B827AB;
-        Sat, 29 Jan 2022 11:41:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B411AC340E5;
-        Sat, 29 Jan 2022 11:41:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643456514;
-        bh=++Zd6EN2TNR4Zau6rFyThIqLoRILUgq3HW8r82o/PGE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NhohHItrsU/lkDPvetPAUhNMgILa9xFy4XlXV60T0KSo8bbxVUhCQNFyVtV9khNOT
-         prvPsA6zTyOckgG5ZiP7JLv1kjwjLmt9p9Xm/wiTk0ez2hn2aE1FWhxgG25DiGgYX6
-         7ZRZwWQHQwfPaVrzDf44CANsMOeeOk1Crr1Jd2q4=
-Date:   Sat, 29 Jan 2022 12:41:51 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Ziyang Xuan <william.xuanziyang@huawei.com>
-Cc:     socketcan@hartkopp.net, mkl@pengutronix.de, davem@davemloft.net,
-        stable@vger.kernel.org, netdev@vger.kernel.org,
-        linux-can@vger.kernel.org
-Subject: Re: [PATCH 4.9] can: bcm: fix UAF of bcm op
-Message-ID: <YfUn/++keVx5/ez/@kroah.com>
-References: <20220128064054.2434068-1-william.xuanziyang@huawei.com>
+        id S232957AbiA2Nsr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 29 Jan 2022 08:48:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44106 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230487AbiA2Nsq (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 29 Jan 2022 08:48:46 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D25C061714
+        for <linux-can@vger.kernel.org>; Sat, 29 Jan 2022 05:48:45 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nDo5p-0000jy-Ue; Sat, 29 Jan 2022 14:48:42 +0100
+Received: from pengutronix.de (unknown [195.138.59.174])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id E3D7F26591;
+        Sat, 29 Jan 2022 13:48:39 +0000 (UTC)
+Date:   Sat, 29 Jan 2022 14:48:32 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Stephane Grosjean <s.grosjean@peak-system.com>
+Cc:     linux-can Mailing List <linux-can@vger.kernel.org>
+Subject: Re: [PATCH 2/6] can: peak_usb: add callback to read user value of
+ CANFD devices
+Message-ID: <20220129134832.ig44ibvgcokj6g77@pengutronix.de>
+References: <20220128150157.1222850-1-s.grosjean@peak-system.com>
+ <20220128150157.1222850-3-s.grosjean@peak-system.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rxgtfox6awwjgufs"
 Content-Disposition: inline
-In-Reply-To: <20220128064054.2434068-1-william.xuanziyang@huawei.com>
+In-Reply-To: <20220128150157.1222850-3-s.grosjean@peak-system.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 02:40:54PM +0800, Ziyang Xuan wrote:
-> Stopping tasklet and hrtimer rely on the active state of tasklet and
-> hrtimer sequentially in bcm_remove_op(), the op object will be freed
-> if they are all unactive. Assume the hrtimer timeout is short, the
-> hrtimer cb has been excuted after tasklet conditional judgment which
-> must be false after last round tasklet_kill() and before condition
-> hrtimer_active(), it is false when execute to hrtimer_active(). Bug
-> is triggerd, because the stopping action is end and the op object
-> will be freed, but the tasklet is scheduled. The resources of the op
-> object will occur UAF bug.
-> 
-> Move hrtimer_cancel() behind tasklet_kill() and switch 'while () {...}'
-> to 'do {...} while ()' to fix the op UAF problem.
-> 
-> Fixes: a06393ed0316 ("can: bcm: fix hrtimer/tasklet termination in bcm op removal")
-> Reported-by: syzbot+5ca851459ed04c778d1d@syzkaller.appspotmail.com
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+
+--rxgtfox6awwjgufs
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 28.01.2022 16:01:53, Stephane Grosjean wrote:
+> This patch adds the specific function that allows to read a user defined
+> value from the non volatile memory of the USB CANFD interfaces of
+> PEAK-System.
+>=20
+> Signed-off-by: Stephane Grosjean <s.grosjean@peak-system.com>
 > ---
->  net/can/bcm.c | 20 ++++++++++----------
->  1 file changed, 10 insertions(+), 10 deletions(-)
+>  drivers/net/can/usb/peak_usb/pcan_usb_fd.c | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+>=20
+> diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c b/drivers/net/can=
+/usb/peak_usb/pcan_usb_fd.c
+> index 65487ec33566..ab1a8b797ece 100644
+> --- a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
+> +++ b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
+> @@ -420,6 +420,24 @@ static int pcan_usb_fd_set_bittiming_fast(struct pea=
+k_usb_device *dev,
+>  	return pcan_usb_fd_send_cmd(dev, ++cmd);
+>  }
+> =20
+> +/* read user device id from device */
+> +static int pcan_usb_fd_get_user_devid(struct peak_usb_device *dev,
+> +				      u32 *device_id)
+> +{
+> +	struct pcan_usb_fd_device *pdev =3D
+> +		container_of(dev, struct pcan_usb_fd_device, dev);
+> +	struct pcan_ufd_fw_info *fw_info =3D &pdev->usb_if->fw_info;
+> +	int err;
+> +
+> +	err =3D pcan_usb_pro_send_req(dev, PCAN_USBPRO_REQ_INFO,
+> +				    PCAN_USBPRO_INFO_FW,
+> +				    fw_info, sizeof(*fw_info));
+> +	if (!err)
+> +		*device_id =3D le32_to_cpu(fw_info->dev_id[dev->ctrl_idx]);
 
-Both now queued up, thanks.
+Nitpick: please use the more common return on error:
 
-greg k-h
+        if (err)
+                return err;
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--rxgtfox6awwjgufs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmH1Ra0ACgkQqclaivrt
+76lyVgf8CEUJaQ8rh5L0Jv9T9KjXbqVljh7dKk1W46ibgrfJFmP8r0y+VrgdHeIc
+3NR9YEnuHH2ULU9cF5A+qkkO9QfyMJmOxZ4zqmWVyBikYWX0n/+vJykU4TS+Epx9
+16dNZ2imhnqeEZLBVF2eVCWEe0E0sljLcSiDZkAAgU0+u8oXpe2ylX35u9KpKpHv
+xSz333Y6zLjfHh+Bpl4UoQQImabr2TqUqYBVqqF4yz5gcJCJbG+GCAqsUI7v4ti0
+mDv8cRk2tkgPEb8xcsYHHr7aEGod2K6+PA3V3H1uAp9NIUDe59CtDxUz8/L33SVE
+Dw8tyu/gwPseyKTc3lsUA9DY0naiPA==
+=2+Ul
+-----END PGP SIGNATURE-----
+
+--rxgtfox6awwjgufs--
