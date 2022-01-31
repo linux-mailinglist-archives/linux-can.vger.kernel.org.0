@@ -2,150 +2,86 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55FE34A41BD
-	for <lists+linux-can@lfdr.de>; Mon, 31 Jan 2022 12:05:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 555F04A476E
+	for <lists+linux-can@lfdr.de>; Mon, 31 Jan 2022 13:44:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359525AbiAaLFr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 31 Jan 2022 06:05:47 -0500
-Received: from mail-yb1-f178.google.com ([209.85.219.178]:38507 "EHLO
-        mail-yb1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359071AbiAaLES (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 31 Jan 2022 06:04:18 -0500
-Received: by mail-yb1-f178.google.com with SMTP id i62so39136141ybg.5;
-        Mon, 31 Jan 2022 03:04:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=53rlh+7XFoapmofgJ2m8CThJPRXRbfFhRqyaBk2y+/g=;
-        b=VAYDJkguc9e3DZ6aGxEk+NuUp5xGgQ9ShP3X1+B3UPauiOq1lk/NeEdTwBkYi+TJYZ
-         pXkEMdE66Cte+ZGIFVKd25WYasy3Qvo+lJ4m9/VO1wTnx29lowBJsec+oLLDPqiXpDQT
-         uKdWeWs8RrQZqtTnpAIbVYFhULSGlD+7ewhd5ftMW9HBZ8oXmsx+Zlrbiasg/9sH1UpX
-         PmpnO+p1XQ1UorqwCs+jwSngsQs07J/WAmtzAB0yLS3GgzIDKhe26wBTb8aQ/zGXGxVn
-         Gx33XMPUK9EbWkXiiGlFrfMcDEajpN5fOQ3+Z4pOi0v/RRe9vwIJ0mjNaJw37Bbmq8T7
-         Qcug==
-X-Gm-Message-State: AOAM533r0d8YJmqHsIU/i0aZG2Sx0M1+ziCRwv0rTwCYsX6gMvJAb2YM
-        mawjd9MZ1u45Rj+5KGCXJBnHGT4lXIJt84iaX/0=
-X-Google-Smtp-Source: ABdhPJyiHUKvUmZG+u0eCM0vjpo1ftDYzQS7yLTfUWnkKtL4TBWnAWvJScPQrzEn9tyqpLhFOh3OE7FMM7c8sUh5mlI=
-X-Received: by 2002:a5b:3cc:: with SMTP id t12mr7194072ybp.397.1643627057630;
- Mon, 31 Jan 2022 03:04:17 -0800 (PST)
+        id S234545AbiAaMoa (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 31 Jan 2022 07:44:30 -0500
+Received: from dd15738.kasserver.com ([85.13.151.39]:46630 "EHLO
+        dd15738.kasserver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234026AbiAaMoa (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 31 Jan 2022 07:44:30 -0500
+Received: from dd15738.kasserver.com (dd0802.kasserver.com [85.13.143.1])
+        by dd15738.kasserver.com (Postfix) with ESMTPSA id B17CE5B0007E;
+        Mon, 31 Jan 2022 13:44:28 +0100 (CET)
+Subject: Re: MCP2518FD : Failed to detect MCP2518FD (osc=0x00000000)
+To:     mkl@pengutronix.de
+References: <20220131083304.122C45B0007E@dd15738.kasserver.com>
+ <20220131084205.53otmukeyt2dt4zj@pengutronix.de>
+ <20220131093554.505C65B0025F@dd15738.kasserver.com><20220131095849.5iw4jgeexc3egnb6@pengutronix.de>
+Cc:     linux-can@vger.kernel.org
+From:   petter@ka-long.de
+User-Agent: ALL-INKL Webmail 2.11
+X-SenderIP: 95.223.83.221
 MIME-Version: 1.0
-References: <20220111162231.10390-1-uli+renesas@fpond.eu> <20220111162231.10390-3-uli+renesas@fpond.eu>
-In-Reply-To: <20220111162231.10390-3-uli+renesas@fpond.eu>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Mon, 31 Jan 2022 20:04:06 +0900
-Message-ID: <CAMZ6Rq+o6Di8wAQeAB4_yq+jNBoWvGTZ297+5jCc1=KSC9f0EA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/5] can: rcar_canfd: Add support for r8a779a0 SoC
-To:     Ulrich Hecht <uli+renesas@fpond.eu>
-Cc:     linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
-        davem@davemloft.net, linux-can@vger.kernel.org,
-        prabhakar.mahadev-lad.rj@bp.renesas.com,
-        biju.das.jz@bp.renesas.com, wsa@kernel.org,
-        yoshihiro.shimoda.uh@renesas.com, wg@grandegger.com,
-        mkl@pengutronix.de, kuba@kernel.org, socketcan@hartkopp.net,
-        geert@linux-m68k.org, kieran.bingham@ideasonboard.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20220131095849.5iw4jgeexc3egnb6@pengutronix.de>
+Content-Type:   text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7BIT
+Message-Id: <20220131124428.B17CE5B0007E@dd15738.kasserver.com>
+Date:   Mon, 31 Jan 2022 13:44:28 +0100 (CET)
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
- Two more comments!
+Hi,
 
-On Mon. 12 Jan 2022 at 01:22, Ulrich Hecht <uli+renesas@fpond.eu> wrote:
-> Adds support for the CANFD IP variant in the V3U SoC.
->
-> Differences to controllers in other SoCs are limited to an increase in
-> the number of channels from two to eight, an absence of dedicated
-> registers for "classic" CAN mode, and a number of differences in magic
-> numbers (register offsets and layouts).
->
-> Inspired by BSP patch by Kazuya Mizuguchi.
->
-> Signed-off-by: Ulrich Hecht <uli+renesas@fpond.eu>
-> ---
->  drivers/net/can/rcar/rcar_canfd.c | 231 ++++++++++++++++++++----------
->  1 file changed, 153 insertions(+), 78 deletions(-)
->
-> diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-> index ff9d0f5ae0dd..b1c9870d2a82 100644
-> --- a/drivers/net/can/rcar/rcar_canfd.c
-> +++ b/drivers/net/can/rcar/rcar_canfd.c
+DMA is disabled. CLK and MOSI are looking fine.
 
-...
+Very interessing, CSs are not asserted when loading driver (on old kernel it does), but I can measure "high" after HW initialisation.
 
-> @@ -1488,22 +1543,29 @@ static netdev_tx_t rcar_canfd_start_xmit(struct sk_buff *skb,
->  static void rcar_canfd_rx_pkt(struct rcar_canfd_channel *priv)
->  {
->         struct net_device_stats *stats = &priv->ndev->stats;
-> +       struct rcar_canfd_global *gpriv = priv->gpriv;
->         struct canfd_frame *cf;
->         struct sk_buff *skb;
->         u32 sts = 0, id, dlc;
->         u32 ch = priv->channel;
->         u32 ridx = ch + RCANFD_RFFIFO_IDX;
->
-> -       if (priv->can.ctrlmode & CAN_CTRLMODE_FD) {
-> +       if ((priv->can.ctrlmode & CAN_CTRLMODE_FD) ||
-> +           gpriv->chip_id == RENESAS_R8A779A0) {
->                 id = rcar_canfd_read(priv->base, RCANFD_F_RFID(ridx));
->                 dlc = rcar_canfd_read(priv->base, RCANFD_F_RFPTR(ridx));
->
->                 sts = rcar_canfd_read(priv->base, RCANFD_F_RFFDSTS(ridx));
-> -               if (sts & RCANFD_RFFDSTS_RFFDF)
-> -                       skb = alloc_canfd_skb(priv->ndev, &cf);
-> -               else
-> +               if (priv->can.ctrlmode & CAN_CTRLMODE_FD) {
-> +                       if (sts & RCANFD_RFFDSTS_RFFDF)
-> +                               skb = alloc_canfd_skb(priv->ndev, &cf);
-> +                       else
-> +                               skb = alloc_can_skb(priv->ndev,
-> +                                                   (struct can_frame **)&cf);
-> +               } else {
->                         skb = alloc_can_skb(priv->ndev,
->                                             (struct can_frame **)&cf);
-
-It seems to me that we can factorize the two alloc_can_skb() calls:
-
-+               if ((priv->can.ctrlmode & CAN_CTRLMODE_FD) &&
-+                   sts & RCANFD_RFFDSTS_RFFDF)
-+                       skb = alloc_canfd_skb(priv->ndev, &cf);
-+               else
-+                       skb = alloc_can_skb(priv->ndev, (struct
-can_frame **)&cf);
-
-> +               }
->         } else {
->                 id = rcar_canfd_read(priv->base, RCANFD_C_RFID(ridx));
->                 dlc = rcar_canfd_read(priv->base, RCANFD_C_RFPTR(ridx));
-> @@ -1541,10 +1603,16 @@ static void rcar_canfd_rx_pkt(struct rcar_canfd_channel *priv)
->                 }
->         } else {
->                 cf->len = can_cc_dlc2len(RCANFD_RFPTR_RFDLC(dlc));
-> -               if (id & RCANFD_RFID_RFRTR)
-> +               if (id & RCANFD_RFID_RFRTR) {
->                         cf->can_id |= CAN_RTR_FLAG;
-> -               else
-> -                       rcar_canfd_get_data(priv, cf, RCANFD_C_RFDF(ridx, 0));
-> +               } else {
-> +                       if (gpriv->chip_id == RENESAS_R8A779A0)
-> +                               rcar_canfd_get_data(priv, cf,
-> +                                                   RCANFD_F_RFDF(ridx, 0));
-> +                       else
-> +                               rcar_canfd_get_data(priv, cf,
-> +                                                   RCANFD_C_RFDF(ridx, 0));
-> +               }
-
-Put the else if on a single line and remove one level of indentation:
-
-+               else if (gpriv->chip_id == RENESAS_R8A779A0)
-+                       rcar_canfd_get_data(priv, cf, RCANFD_F_RFDF(ridx, 0));
-+               else
-+                       rcar_canfd_get_data(priv, cf, RCANFD_C_RFDF(ridx, 0));
-
-Also, a global comment, once you turn IS_V3U to an inline
-function, you can use it in place of the many
-"gpriv->chip_id == RENESAS_R8A779A0" checks.
+Since I did not change the IOs between the old and new device tree assuming the "high" on CS also showing correct PAD / GPIO configuration there seems a problem asserting the CS.
 
 
-Yours sincerely,
-Vincent Mailhol
+
+
+cat /sys/kernel/debug/gpio looks good (gpio-3 and gpio-129)
+
+
+gpiochip0: GPIOs 0-31, parent: platform/30200000.gpio, 30200000.gpio:
+ gpio-3   (                    |spi1 CS1            ) out hi ACTIVE LOW
+ gpio-5   (                    |regulator-vbus      ) out lo
+
+gpiochip1: GPIOs 64-95, parent: platform/30220000.gpio, 30220000.gpio:
+ gpio-67  (                    |spi3 CS0            ) out hi ACTIVE LOW
+
+gpiochip2: GPIOs 96-127, parent: platform/30230000.gpio, 30230000.gpio:
+
+gpiochip3: GPIOs 128-159, parent: platform/30240000.gpio, 30240000.gpio:
+ gpio-128 (                    |cd                  ) in  hi IRQ ACTIVE LOW
+ gpio-129 (                    |spi1 CS0            ) out hi ACTIVE LOW
+
+
+BR
+Niels
+
+Marc Kleine-Budde schrieb am 31.01.2022 09:58 (GMT +00:00):
+
+> On 31.01.2022 10:35:54, petter@ka-long.de wrote:
+>> I have disabled DMAs in imx7s.dtsi for all ecspis and recompile the
+>> device tree. Still get the same failure.
+> 
+> You can check if that really works by looking at the used DT:
+> 
+> $ dtc -I fs /proc/device-tree
+> 
+> Next step would be to get a scope and attach it to the MISO/MOSI/CLk/CS
+> pins.
+> 
+> Marc
+> 
+> -- 
+> Pengutronix e.K.                 | Marc Kleine-Budde           |
+> Embedded Linux                   | https://www.pengutronix.de  |
+> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+> 
