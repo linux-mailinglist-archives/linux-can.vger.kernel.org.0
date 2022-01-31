@@ -2,92 +2,90 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 424BD4A3F50
-	for <lists+linux-can@lfdr.de>; Mon, 31 Jan 2022 10:36:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 691484A3F9B
+	for <lists+linux-can@lfdr.de>; Mon, 31 Jan 2022 10:58:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237213AbiAaJf6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 31 Jan 2022 04:35:58 -0500
-Received: from dd15738.kasserver.com ([85.13.151.39]:60570 "EHLO
-        dd15738.kasserver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237158AbiAaJf4 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 31 Jan 2022 04:35:56 -0500
-Received: from dd15738.kasserver.com (dd0802.kasserver.com [85.13.143.1])
-        by dd15738.kasserver.com (Postfix) with ESMTPSA id 505C65B0025F;
-        Mon, 31 Jan 2022 10:35:54 +0100 (CET)
+        id S242276AbiAaJ64 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 31 Jan 2022 04:58:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57010 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244400AbiAaJ6z (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 31 Jan 2022 04:58:55 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92002C061714
+        for <linux-can@vger.kernel.org>; Mon, 31 Jan 2022 01:58:54 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nETSX-0004Sh-3K; Mon, 31 Jan 2022 10:58:53 +0100
+Received: from pengutronix.de (unknown [195.138.59.174])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 9A6B428389;
+        Mon, 31 Jan 2022 09:58:52 +0000 (UTC)
+Date:   Mon, 31 Jan 2022 10:58:49 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     petter@ka-long.de
+Cc:     linux-can@vger.kernel.org
 Subject: Re: MCP2518FD : Failed to detect MCP2518FD (osc=0x00000000)
-To:     linux-can@vger.kernel.org
-References: <20220131083304.122C45B0007E@dd15738.kasserver.com><20220131084205.53otmukeyt2dt4zj@pengutronix.de>
-Cc:     mkl@pengutronix.de
-From:   petter@ka-long.de
-User-Agent: ALL-INKL Webmail 2.11
-X-SenderIP: 95.223.83.221
+Message-ID: <20220131095849.5iw4jgeexc3egnb6@pengutronix.de>
+References: <20220131083304.122C45B0007E@dd15738.kasserver.com>
+ <20220131084205.53otmukeyt2dt4zj@pengutronix.de>
+ <20220131093554.505C65B0025F@dd15738.kasserver.com>
 MIME-Version: 1.0
-In-Reply-To: <20220131084205.53otmukeyt2dt4zj@pengutronix.de>
-Content-Type:   text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7BIT
-Message-Id: <20220131093554.505C65B0025F@dd15738.kasserver.com>
-Date:   Mon, 31 Jan 2022 10:35:54 +0100 (CET)
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="j72aytm56jg2y5uh"
+Content-Disposition: inline
+In-Reply-To: <20220131093554.505C65B0025F@dd15738.kasserver.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
-Hi Marc,
+--j72aytm56jg2y5uh
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I have disabled DMAs in imx7s.dtsi for all ecspis and recompile the device tree.
-Still get the same failure.
+On 31.01.2022 10:35:54, petter@ka-long.de wrote:
+> I have disabled DMAs in imx7s.dtsi for all ecspis and recompile the
+> device tree. Still get the same failure.
 
-Thanks
-Niels
+You can check if that really works by looking at the used DT:
 
+$ dtc -I fs /proc/device-tree
 
-                                ecspi2: spi@30830000 {
-                                        #address-cells = <1>;
-                                        #size-cells = <0>;
-                                        compatible = "fsl,imx7d-ecspi", "fsl,imx51-ecspi";
-                                        reg = <0x30830000 0x10000>;
-                                        interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_HIGH>;
-                                        clocks = <&clks IMX7D_ECSPI2_ROOT_CLK>,
-                                                <&clks IMX7D_ECSPI2_ROOT_CLK>;
-                                        clock-names = "ipg", "per";
-                                        /*
-                                        dmas = <&sdma 2 7 1>, <&sdma 3 7 2>;
-                                        dma-names = "rx", "tx";
-                                        */
-                                        status = "disabled";
-                                };
+Next step would be to get a scope and attach it to the MISO/MOSI/CLk/CS
+pins.
 
+Marc
 
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
+--j72aytm56jg2y5uh
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Marc Kleine-Budde schrieb am 31.01.2022 08:42 (GMT +00:00):
+-----BEGIN PGP SIGNATURE-----
 
-> On 31.01.2022 09:33:04, petter@ka-long.de wrote:
->> I am working on an IMX7D board. Some time ago I have back-ported the
->> MCP2518FD driver to the official 5.4.70 NXP kernel and it works fine.
->> 
->> I am struggleing to get the mcp driver working on the latest nxp
->> kernel 5.10.72.
->> 
->> Same hardware.
->> 
->> I did not find any unusal in the logs. pinctrl did not complain, spi
->> seems to initialize normal.
->> 
->> The old kernel with the new (almost old one) device tree works. The
->> new kernel did not work with the old or new device tree.
->> 
->> At the moment I am stuck. Could be anything. Must not be the driver
->> itself.
-> 
-> Is SPI DMA enabled? Try disabling it.
-> 
-> regards,
-> Marc
-> 
-> -- 
-> Pengutronix e.K.                 | Marc Kleine-Budde           |
-> Embedded Linux                   | https://www.pengutronix.de  |
-> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-> 
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmH3stYACgkQqclaivrt
+76lSKwf+NCyaWaYU6y1mE7g6x50pXGUVzBsYUfqg/VzqbeZsTVT9mVuVYLa8ghJj
+Z3+ePoLrcNRdZQxXw0CR6ioBz2x/iKsWAmye5H7vqfgJtDPUdMeuYmPxZDwLwdfC
+6maMf0qgUog52GQmExZelLKLBgFuJ1VOFwRYZI+EAsM9I49I5CKu6Crw97xO1N83
+YdBpw22vGzs1S9dYfsl3HMTx1WjHTcEbLvMNzXKT986s2Q8eQXkC48IdsstIcqRe
+oK/WAlc5mlLCKW2oKnqQMRSFUu2d4kXKOISbgTdIqJ90xb24iNNSPTfzxuo7q3RW
+SAH3hKvIN2/iu4R1DHd0pbSx9NKTAw==
+=xBsG
+-----END PGP SIGNATURE-----
+
+--j72aytm56jg2y5uh--
