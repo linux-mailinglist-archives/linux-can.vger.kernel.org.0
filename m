@@ -2,79 +2,150 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B480F4A4102
-	for <lists+linux-can@lfdr.de>; Mon, 31 Jan 2022 12:01:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55FE34A41BD
+	for <lists+linux-can@lfdr.de>; Mon, 31 Jan 2022 12:05:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358818AbiAaLBl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 31 Jan 2022 06:01:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43026 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358512AbiAaLAg (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 31 Jan 2022 06:00:36 -0500
-Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0123EC0613F7
-        for <linux-can@vger.kernel.org>; Mon, 31 Jan 2022 02:59:47 -0800 (PST)
-Received: by mail-io1-xd44.google.com with SMTP id h7so16349155iof.3
-        for <linux-can@vger.kernel.org>; Mon, 31 Jan 2022 02:59:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=FANIUiWvB3mdY3zLX2DODg2pUIL5eGT5wlydl6jYk40=;
-        b=OjUeAkMVzEddLMMo5PnTCjKyhCs1ageGmC5+cFdXpsSEtg6JbUDTvXCRmwfTUCSofJ
-         slj36zZmhn3J4uwPw0DJBjnv3hUS5m+nEauuYDUNcCWjc1f+d0I+yOjKIUc0Pgz+j5Ue
-         rRdRGfWkjcSXGfwT+M+UDneKFOQe0c6aLr+5TauC2FupNgb1qyGc5yiIkJ8k0NAmHZhf
-         anrjd59/OgrastnWs4ZkrvFaIDjw5pd3eh107tNZ/TuMjnW3micCxNZKM2MDkg13GKwm
-         O5Q6tfm8j18o2CLpoCl1kG865M+uxrSOQqgPJI+OJu79ECke4sTf94bEwDsB5fZLVwuG
-         tdrw==
+        id S1359525AbiAaLFr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 31 Jan 2022 06:05:47 -0500
+Received: from mail-yb1-f178.google.com ([209.85.219.178]:38507 "EHLO
+        mail-yb1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359071AbiAaLES (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 31 Jan 2022 06:04:18 -0500
+Received: by mail-yb1-f178.google.com with SMTP id i62so39136141ybg.5;
+        Mon, 31 Jan 2022 03:04:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=FANIUiWvB3mdY3zLX2DODg2pUIL5eGT5wlydl6jYk40=;
-        b=WzHfFTW7omDmi8RbqssUkBc5xo1FXL/XmcKs+/GIYaSdY6Bw6N1g9mjjq5He/7BU2q
-         WU7yOLKgtQRCyoYTaaEEU2MTnWskN/9CLmm70gw6J/U+VeEiSlAvh8w6CXGkH05JgGxD
-         xQuF9cod73FzvPEo8NGHHUQ28rTEE0cSOYD+1N7YNkCY7OQAaG+jNgUqmFIjSau5dlby
-         V7P5HiOCbjGLsPGAWLt041D1bObKNoofycXetI0673MtEWHPjp1OyNsKdMqWRTCA95cC
-         iFlT1/CiOApPL7IEzPQvRttvkcJMD/37trB8dS8TE2Q3MIRisMPlRZ+gzvTecnTzfx+s
-         w2eg==
-X-Gm-Message-State: AOAM5314wwUpq3OL1iHnBDCEIOUGK7qe7W+vgMr/lOXODVnIoaR95GuF
-        M6qRj3yWlJJk1ulU81hPjw+GtrsZBU7pQLSRdMQ=
-X-Google-Smtp-Source: ABdhPJx07OLMUPeEc0ImjaiJBKF2Mcc3ZmsWTIoSvX2FNfz03c1HE0RFqesREnjvPqYHKyL/ALkhu5ugV57XI3T5t/k=
-X-Received: by 2002:a6b:441a:: with SMTP id r26mr10856124ioa.211.1643626786286;
- Mon, 31 Jan 2022 02:59:46 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=53rlh+7XFoapmofgJ2m8CThJPRXRbfFhRqyaBk2y+/g=;
+        b=VAYDJkguc9e3DZ6aGxEk+NuUp5xGgQ9ShP3X1+B3UPauiOq1lk/NeEdTwBkYi+TJYZ
+         pXkEMdE66Cte+ZGIFVKd25WYasy3Qvo+lJ4m9/VO1wTnx29lowBJsec+oLLDPqiXpDQT
+         uKdWeWs8RrQZqtTnpAIbVYFhULSGlD+7ewhd5ftMW9HBZ8oXmsx+Zlrbiasg/9sH1UpX
+         PmpnO+p1XQ1UorqwCs+jwSngsQs07J/WAmtzAB0yLS3GgzIDKhe26wBTb8aQ/zGXGxVn
+         Gx33XMPUK9EbWkXiiGlFrfMcDEajpN5fOQ3+Z4pOi0v/RRe9vwIJ0mjNaJw37Bbmq8T7
+         Qcug==
+X-Gm-Message-State: AOAM533r0d8YJmqHsIU/i0aZG2Sx0M1+ziCRwv0rTwCYsX6gMvJAb2YM
+        mawjd9MZ1u45Rj+5KGCXJBnHGT4lXIJt84iaX/0=
+X-Google-Smtp-Source: ABdhPJyiHUKvUmZG+u0eCM0vjpo1ftDYzQS7yLTfUWnkKtL4TBWnAWvJScPQrzEn9tyqpLhFOh3OE7FMM7c8sUh5mlI=
+X-Received: by 2002:a5b:3cc:: with SMTP id t12mr7194072ybp.397.1643627057630;
+ Mon, 31 Jan 2022 03:04:17 -0800 (PST)
 MIME-Version: 1.0
-Reply-To: daniellakyle60@gmail.com
-Sender: drdanielmorris11111@gmail.com
-Received: by 2002:a05:6638:1248:0:0:0:0 with HTTP; Mon, 31 Jan 2022 02:59:45
- -0800 (PST)
-From:   Mrs daniell akyle <daniellakyle60@gmail.com>
-Date:   Mon, 31 Jan 2022 11:59:45 +0100
-X-Google-Sender-Auth: xE_x512-NJSetLeK1z_d90RC9Q0
-Message-ID: <CAKFcj-P8h0HeDMtZZnog7Sh8cFMKV7095BN2fQnUMpCGPgmhFg@mail.gmail.com>
-Subject: Ahoj
-To:     undisclosed-recipients:;
+References: <20220111162231.10390-1-uli+renesas@fpond.eu> <20220111162231.10390-3-uli+renesas@fpond.eu>
+In-Reply-To: <20220111162231.10390-3-uli+renesas@fpond.eu>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Mon, 31 Jan 2022 20:04:06 +0900
+Message-ID: <CAMZ6Rq+o6Di8wAQeAB4_yq+jNBoWvGTZ297+5jCc1=KSC9f0EA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/5] can: rcar_canfd: Add support for r8a779a0 SoC
+To:     Ulrich Hecht <uli+renesas@fpond.eu>
+Cc:     linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
+        davem@davemloft.net, linux-can@vger.kernel.org,
+        prabhakar.mahadev-lad.rj@bp.renesas.com,
+        biju.das.jz@bp.renesas.com, wsa@kernel.org,
+        yoshihiro.shimoda.uh@renesas.com, wg@grandegger.com,
+        mkl@pengutronix.de, kuba@kernel.org, socketcan@hartkopp.net,
+        geert@linux-m68k.org, kieran.bingham@ideasonboard.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Pozdravy
-Jmenuji se pan=C3=AD Daniella Kyleov=C3=A1, je mi 58 let
-Filip=C3=ADny. V sou=C4=8Dasn=C3=A9 dob=C4=9B jsem hospitalizov=C3=A1n na F=
-ilip=C3=ADn=C3=A1ch, kde jsem
-podstupuje l=C3=A9=C4=8Dbu akutn=C3=ADho karcinomu j=C3=ADcnu. jsem um=C3=
-=ADraj=C3=ADc=C3=AD,
-vdova, kter=C3=A1 se rozhodla darovat =C4=8D=C3=A1st sv=C3=A9ho majetku spo=
-lehliv=C3=A9 osob=C4=9B
-kter=C3=A1 tyto pen=C3=ADze pou=C5=BEije na pomoc chud=C3=BDm a m=C3=A9n=C4=
-=9B privilegovan=C3=BDm. Chci
-poskytnout dar ve v=C3=BD=C5=A1i 3 700 000 =C2=A3 na sirotky nebo charitati=
-vn=C3=AD organizace
-ve va=C5=A1=C3=AD oblasti. Zvl=C3=A1dne=C5=A1 to? Pokud jste ochotni tuto n=
-ab=C3=ADdku p=C5=99ijmout
-a ud=C4=9Blejte p=C5=99esn=C4=9B tak, jak v=C3=A1m =C5=99=C3=ADk=C3=A1m, pa=
-k se mi vra=C5=A5te pro dal=C5=A1=C3=AD vysv=C4=9Btlen=C3=AD.
-pozdravy
-Pan=C3=AD Daniella Kyleov=C3=A1
+ Two more comments!
+
+On Mon. 12 Jan 2022 at 01:22, Ulrich Hecht <uli+renesas@fpond.eu> wrote:
+> Adds support for the CANFD IP variant in the V3U SoC.
+>
+> Differences to controllers in other SoCs are limited to an increase in
+> the number of channels from two to eight, an absence of dedicated
+> registers for "classic" CAN mode, and a number of differences in magic
+> numbers (register offsets and layouts).
+>
+> Inspired by BSP patch by Kazuya Mizuguchi.
+>
+> Signed-off-by: Ulrich Hecht <uli+renesas@fpond.eu>
+> ---
+>  drivers/net/can/rcar/rcar_canfd.c | 231 ++++++++++++++++++++----------
+>  1 file changed, 153 insertions(+), 78 deletions(-)
+>
+> diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
+> index ff9d0f5ae0dd..b1c9870d2a82 100644
+> --- a/drivers/net/can/rcar/rcar_canfd.c
+> +++ b/drivers/net/can/rcar/rcar_canfd.c
+
+...
+
+> @@ -1488,22 +1543,29 @@ static netdev_tx_t rcar_canfd_start_xmit(struct sk_buff *skb,
+>  static void rcar_canfd_rx_pkt(struct rcar_canfd_channel *priv)
+>  {
+>         struct net_device_stats *stats = &priv->ndev->stats;
+> +       struct rcar_canfd_global *gpriv = priv->gpriv;
+>         struct canfd_frame *cf;
+>         struct sk_buff *skb;
+>         u32 sts = 0, id, dlc;
+>         u32 ch = priv->channel;
+>         u32 ridx = ch + RCANFD_RFFIFO_IDX;
+>
+> -       if (priv->can.ctrlmode & CAN_CTRLMODE_FD) {
+> +       if ((priv->can.ctrlmode & CAN_CTRLMODE_FD) ||
+> +           gpriv->chip_id == RENESAS_R8A779A0) {
+>                 id = rcar_canfd_read(priv->base, RCANFD_F_RFID(ridx));
+>                 dlc = rcar_canfd_read(priv->base, RCANFD_F_RFPTR(ridx));
+>
+>                 sts = rcar_canfd_read(priv->base, RCANFD_F_RFFDSTS(ridx));
+> -               if (sts & RCANFD_RFFDSTS_RFFDF)
+> -                       skb = alloc_canfd_skb(priv->ndev, &cf);
+> -               else
+> +               if (priv->can.ctrlmode & CAN_CTRLMODE_FD) {
+> +                       if (sts & RCANFD_RFFDSTS_RFFDF)
+> +                               skb = alloc_canfd_skb(priv->ndev, &cf);
+> +                       else
+> +                               skb = alloc_can_skb(priv->ndev,
+> +                                                   (struct can_frame **)&cf);
+> +               } else {
+>                         skb = alloc_can_skb(priv->ndev,
+>                                             (struct can_frame **)&cf);
+
+It seems to me that we can factorize the two alloc_can_skb() calls:
+
++               if ((priv->can.ctrlmode & CAN_CTRLMODE_FD) &&
++                   sts & RCANFD_RFFDSTS_RFFDF)
++                       skb = alloc_canfd_skb(priv->ndev, &cf);
++               else
++                       skb = alloc_can_skb(priv->ndev, (struct
+can_frame **)&cf);
+
+> +               }
+>         } else {
+>                 id = rcar_canfd_read(priv->base, RCANFD_C_RFID(ridx));
+>                 dlc = rcar_canfd_read(priv->base, RCANFD_C_RFPTR(ridx));
+> @@ -1541,10 +1603,16 @@ static void rcar_canfd_rx_pkt(struct rcar_canfd_channel *priv)
+>                 }
+>         } else {
+>                 cf->len = can_cc_dlc2len(RCANFD_RFPTR_RFDLC(dlc));
+> -               if (id & RCANFD_RFID_RFRTR)
+> +               if (id & RCANFD_RFID_RFRTR) {
+>                         cf->can_id |= CAN_RTR_FLAG;
+> -               else
+> -                       rcar_canfd_get_data(priv, cf, RCANFD_C_RFDF(ridx, 0));
+> +               } else {
+> +                       if (gpriv->chip_id == RENESAS_R8A779A0)
+> +                               rcar_canfd_get_data(priv, cf,
+> +                                                   RCANFD_F_RFDF(ridx, 0));
+> +                       else
+> +                               rcar_canfd_get_data(priv, cf,
+> +                                                   RCANFD_C_RFDF(ridx, 0));
+> +               }
+
+Put the else if on a single line and remove one level of indentation:
+
++               else if (gpriv->chip_id == RENESAS_R8A779A0)
++                       rcar_canfd_get_data(priv, cf, RCANFD_F_RFDF(ridx, 0));
++               else
++                       rcar_canfd_get_data(priv, cf, RCANFD_C_RFDF(ridx, 0));
+
+Also, a global comment, once you turn IS_V3U to an inline
+function, you can use it in place of the many
+"gpriv->chip_id == RENESAS_R8A779A0" checks.
+
+
+Yours sincerely,
+Vincent Mailhol
