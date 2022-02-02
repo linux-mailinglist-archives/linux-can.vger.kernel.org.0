@@ -1,43 +1,43 @@
 Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41F614A625A
-	for <lists+linux-can@lfdr.de>; Tue,  1 Feb 2022 18:27:15 +0100 (CET)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id A05684A709F
+	for <lists+linux-can@lfdr.de>; Wed,  2 Feb 2022 13:22:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241463AbiBAR1O (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 1 Feb 2022 12:27:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
+        id S1344094AbiBBMVp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 2 Feb 2022 07:21:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230504AbiBAR1O (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Feb 2022 12:27:14 -0500
+        with ESMTP id S231400AbiBBMVo (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 2 Feb 2022 07:21:44 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33107C061714
-        for <linux-can@vger.kernel.org>; Tue,  1 Feb 2022 09:27:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B481C061714
+        for <linux-can@vger.kernel.org>; Wed,  2 Feb 2022 04:21:44 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1nEwvu-0000a4-Pv; Tue, 01 Feb 2022 18:27:10 +0100
+        id 1nFEdp-0002oV-EN; Wed, 02 Feb 2022 13:21:41 +0100
 Received: from pengutronix.de (unknown [195.138.59.174])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 2726D29431;
-        Tue,  1 Feb 2022 17:27:10 +0000 (UTC)
-Date:   Tue, 1 Feb 2022 18:27:06 +0100
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 9523829C05;
+        Wed,  2 Feb 2022 12:21:39 +0000 (UTC)
+Date:   Wed, 2 Feb 2022 13:21:36 +0100
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>
 Cc:     linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v6 0/4] can: esd: add support for esd GmbH PCIe/402 CAN
  interface
-Message-ID: <20220201172706.dprwxzx3qbsmpuwm@pengutronix.de>
+Message-ID: <20220202122136.nmrza36tfqb6zfh6@pengutronix.de>
 References: <20211201220328.3079270-1-stefan.maetje@esd.eu>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ye7jseyqjijendkb"
+        protocol="application/pgp-signature"; boundary="fhgf3yvjppidpmlv"
 Content-Disposition: inline
 In-Reply-To: <20211201220328.3079270-1-stefan.maetje@esd.eu>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
@@ -49,7 +49,7 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---ye7jseyqjijendkb
+--fhgf3yvjppidpmlv
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
@@ -78,21 +78,8 @@ On 01.12.2021 23:03:24, Stefan M=C3=A4tje wrote:
 >   - esdacc.h:255: The irq_cnt pointer is still declared volatile and
 >     this has a reason and is explained in detail in the header
 >     referencing the exception noted in volatile-considered-harmful.rst.
->=20
-> The patch is based on the linux-can-next testing branch.
->=20
-> Changes in v6:
->   - Fixed the statistic handling of RX overrun errors and increase=20
->     net_device_stats::rx_errors instead of net_device_stats::rx_dropped.
->   - Added a patch to not increase rx statistics when generating a CAN
->     rx error message frame as suggested on the linux-can list.
->   - Added a patch to not not increase rx_bytes statistics for RTR frames
->     as suggested on the linux-can list.
->=20
->     The last two patches change the statistics handling from the previous
->     style used in other drivers to the newly suggested one.
 
-Please squash the last 2 patches into patch 2.
+I think you can use READ_ONCE() instead of the volatile.
 
 Marc
 
@@ -102,19 +89,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---ye7jseyqjijendkb
+--fhgf3yvjppidpmlv
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmH5bWgACgkQrX5LkNig
-010S8wgAovHOINwKd4/UH0T42MLFNZrrQYUFWaQIlnnRAbje5V9tGlqrtQmF8IA7
-ucwgawlbC0063+XhOEnKrQqpMXaf1vBycauzWjEggXgYOF2Urzq2Smt67m6AwEVT
-OT9004cLMMbR6d2oUrdNw4XOQVWsPlDzhqu+YA7W2O3YUJuXrCImSH7EA5TIfIzW
-r/VfJVhT54fzsvA8JycDVYPkkB6dg80lEcrsKKLKyfuswhndJgrW49xA2R0/AhS7
-1Om1QLkYSq0wJJ6+gfbVnQqOi1IJSUvkAuveAbsWykNhtSVuiwNsn5X8/EhAVNYk
-FdLrhCfdI8rwIWBgEYPjDfRJL3WJKQ==
-=/JQP
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmH6d00ACgkQrX5LkNig
+010MYwf/anJrAUZWGxxmww7+YQW3Wo3HGQ97tBtPfQxkrhr2y+vRkrksvbqGPFkN
+U8XILWMYZs1LIZfGsOVgSpLeQyF0kE8XDMyTshNkQ1edN/1EX+SVMqn366RBIA2+
+f3J7FkRYIvru8QoggP/K2bTITR0jI6o/5kNscAXfpWJB+kQElots345EFM0K1Bq5
+Ajd1mzlvagLvI+p0I736cfpYkrrO9xVNo76OLC1qj+VqfVavCmKQeGEbK+JadyUJ
+uhEWtRfxmBLfI4A2+gA6kZvwhb8GQGlbmswdG7rrlpDmDZZ5neNYEURAMJ71fWWx
+2wvTy6p383k+phq+0fHKUrWW2rZAFg==
+=l77b
 -----END PGP SIGNATURE-----
 
---ye7jseyqjijendkb--
+--fhgf3yvjppidpmlv--
