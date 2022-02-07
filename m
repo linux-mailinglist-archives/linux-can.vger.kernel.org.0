@@ -2,44 +2,44 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BB3A4ABFF2
-	for <lists+linux-can@lfdr.de>; Mon,  7 Feb 2022 14:49:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 034104ABFF4
+	for <lists+linux-can@lfdr.de>; Mon,  7 Feb 2022 14:49:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344428AbiBGNrr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        id S1385304AbiBGNrr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
         Mon, 7 Feb 2022 08:47:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49252 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377717AbiBGNLY (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 7 Feb 2022 08:11:24 -0500
+        with ESMTP id S1377705AbiBGNLX (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 7 Feb 2022 08:11:23 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F50BC0401DC
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA43C0401DB
         for <linux-can@vger.kernel.org>; Mon,  7 Feb 2022 05:10:54 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1nH3nA-0003j4-BL
+        id 1nH3nA-0003jF-9C
         for linux-can@vger.kernel.org; Mon, 07 Feb 2022 14:10:52 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 3916F2D7A0
+        by bjornoya.blackshift.org (Postfix) with SMTP id 45F542D7A5
         for <linux-can@vger.kernel.org>; Mon,  7 Feb 2022 13:10:49 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id F2D6E2D787;
-        Mon,  7 Feb 2022 13:10:48 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 0829F2D78A;
+        Mon,  7 Feb 2022 13:10:49 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id e48a6fd0;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 9e4c5ab3;
         Mon, 7 Feb 2022 13:10:48 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     linux-can@vger.kernel.org
 Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
         Thomas Kopp <thomas.kopp@microchip.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 03/15] can: mcp251xfd: mcp251xfd_unregister(): simplify runtime PM handling
-Date:   Mon,  7 Feb 2022 14:10:35 +0100
-Message-Id: <20220207131047.282110-4-mkl@pengutronix.de>
+Subject: [PATCH 04/15] can: mcp251xfd: mcp251xfd_chip_sleep(): introduce function to bring chip into sleep mode
+Date:   Mon,  7 Feb 2022 14:10:36 +0100
+Message-Id: <20220207131047.282110-5-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220207131047.282110-1-mkl@pengutronix.de>
 References: <20220207131047.282110-1-mkl@pengutronix.de>
@@ -58,38 +58,83 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The mcp251xfd driver supports runtime PM enabled kernels, but also
-works on !CONFIG_PM configurations.
-
-This patch simplifies the runtime PM handling in the
-mcp251xfd_unregister(). In the CONFIG_PM case, runtime PM has been
-enabled in the mcp251xfd_probe() function, so we can disable it here.
-For !CONFIG_PM builds call mcp251xfd_clks_and_vdd_disable() directly.
+This patch adds a new function to bring the chip into sleep mode, and
+replaces several occurrences of open coded variants.
 
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ .../net/can/spi/mcp251xfd/mcp251xfd-core.c    | 21 ++++++++++++-------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-index 7e0c4e662381..49ce5ff34903 100644
+index 49ce5ff34903..5794400c42b1 100644
 --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
 +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-@@ -1768,10 +1768,10 @@ static inline void mcp251xfd_unregister(struct mcp251xfd_priv *priv)
- 
- 	unregister_candev(ndev);
- 
--	pm_runtime_get_sync(ndev->dev.parent);
--	pm_runtime_put_noidle(ndev->dev.parent);
--	mcp251xfd_clks_and_vdd_disable(priv);
--	pm_runtime_disable(ndev->dev.parent);
-+	if (pm_runtime_enabled(ndev->dev.parent))
-+		pm_runtime_disable(ndev->dev.parent);
-+	else
-+		mcp251xfd_clks_and_vdd_disable(priv);
+@@ -289,6 +289,11 @@ static int mcp251xfd_chip_clock_enable(const struct mcp251xfd_priv *priv)
+ 	return err;
  }
  
- static const struct of_device_id mcp251xfd_of_match[] = {
++static inline int mcp251xfd_chip_sleep(const struct mcp251xfd_priv *priv)
++{
++	return mcp251xfd_chip_set_mode(priv, MCP251XFD_REG_CON_MODE_SLEEP);
++}
++
+ static int mcp251xfd_chip_softreset_do(const struct mcp251xfd_priv *priv)
+ {
+ 	const __be16 cmd = mcp251xfd_cmd_reset();
+@@ -635,7 +640,7 @@ static int mcp251xfd_chip_stop(struct mcp251xfd_priv *priv,
+ 
+ 	mcp251xfd_chip_interrupts_disable(priv);
+ 	mcp251xfd_chip_rx_int_disable(priv);
+-	return mcp251xfd_chip_set_mode(priv, MCP251XFD_REG_CON_MODE_SLEEP);
++	mcp251xfd_chip_sleep(priv);
+ }
+ 
+ static int mcp251xfd_chip_start(struct mcp251xfd_priv *priv)
+@@ -1719,19 +1724,19 @@ static int mcp251xfd_register(struct mcp251xfd_priv *priv)
+ 	if (err == -ENODEV)
+ 		goto out_runtime_disable;
+ 	if (err)
+-		goto out_chip_set_mode_sleep;
++		goto out_chip_sleep;
+ 
+ 	err = mcp251xfd_register_chip_detect(priv);
+ 	if (err)
+-		goto out_chip_set_mode_sleep;
++		goto out_chip_sleep;
+ 
+ 	err = mcp251xfd_register_check_rx_int(priv);
+ 	if (err)
+-		goto out_chip_set_mode_sleep;
++		goto out_chip_sleep;
+ 
+ 	err = register_candev(ndev);
+ 	if (err)
+-		goto out_chip_set_mode_sleep;
++		goto out_chip_sleep;
+ 
+ 	err = mcp251xfd_register_done(priv);
+ 	if (err)
+@@ -1741,7 +1746,7 @@ static int mcp251xfd_register(struct mcp251xfd_priv *priv)
+ 	 * disable the clocks and vdd. If CONFIG_PM is not enabled,
+ 	 * the clocks and vdd will stay powered.
+ 	 */
+-	err = mcp251xfd_chip_set_mode(priv, MCP251XFD_REG_CON_MODE_SLEEP);
++	err = mcp251xfd_chip_sleep(priv);
+ 	if (err)
+ 		goto out_unregister_candev;
+ 
+@@ -1751,8 +1756,8 @@ static int mcp251xfd_register(struct mcp251xfd_priv *priv)
+ 
+  out_unregister_candev:
+ 	unregister_candev(ndev);
+- out_chip_set_mode_sleep:
+-	mcp251xfd_chip_set_mode(priv, MCP251XFD_REG_CON_MODE_SLEEP);
++ out_chip_sleep:
++	mcp251xfd_chip_sleep(priv);
+  out_runtime_disable:
+ 	pm_runtime_disable(ndev->dev.parent);
+  out_runtime_put_noidle:
 -- 
 2.34.1
 
