@@ -2,147 +2,178 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09E834ADE2F
-	for <lists+linux-can@lfdr.de>; Tue,  8 Feb 2022 17:21:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE0254AE3DC
+	for <lists+linux-can@lfdr.de>; Tue,  8 Feb 2022 23:24:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382878AbiBHQVO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 8 Feb 2022 11:21:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50490 "EHLO
+        id S1386517AbiBHWYa (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 8 Feb 2022 17:24:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242890AbiBHQVN (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 8 Feb 2022 11:21:13 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2059.outbound.protection.outlook.com [40.107.220.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E47C061576;
-        Tue,  8 Feb 2022 08:21:12 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mgfE+bYbFTTsxBr9nepR/X8C6jsiioi/2wVztZDTFBbK1JR5Yp8skm5RXGwjigdGlEsDxuHjWNuh54XIpYxhoWXwx1gV75RmwJfKWMFKOsUY6+iGLwbFbonYLzeup8bHwD16AjEkGJMSBH1a9VVXSXZpOziypOLVckCe8dVaj3Dmre32EzfXmR1MxDDhhfZsz/FFNS5Qj8MUikncteMYix5efyN8ZdT7ybqDMccLmUmL/ee/WKKOq2JMqK7naOqisX2qH8H7QNuFNi5rM7w0s6wK462Uzzzx1MDf5iIFZUQIJkRPmh9kMA0DfclDLZIJVYlsItON3153OwTYKu3JSw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KV77AyTYrq1N3BVVXWddRdBtpYm6pxa59m07DcnRDkI=;
- b=TsNKswBdl85+sg7VlnG0ckhQz/6emv7yszVhjVA+mzYm4U/L8MZz8RGHDg+Bajjf90Hl5RhohRnIyNF+ZGp4xarKw5sWpwk04bK4Y7bLlXJmZ8LKhtCvRcv/qQvMWcTgxULu1ZCIe6NzkkQyWarJsLqVxJUV3dZ8cnH8o0WK+31bpGhUjmLRslIbJQLucIhxG48gpxolgVweHfK918LuQCGS3f8S2KUrAbQWRbs3nyzy/WtettQF79KKtphm+WNud84Dqqn6lJIbwiziff0eW4BXSDOMNvgHMYOo6tOG+9jF8tlmGB8n6Hhbx6QMwGArcW1d1Mzk+dFsQY/sSOL7rA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=grandegger.com smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KV77AyTYrq1N3BVVXWddRdBtpYm6pxa59m07DcnRDkI=;
- b=BTjlklLRxQrW0hdLRDiKzLS2/VsaFyosEMsTILXpqF0ajFMtknhL0+558kUAHFdW1ej4TET6jYMpjFCWJ6FKw7+tIhH3+De28rBlhDWJduQIrdiGE7pCkUT+uSu9m2ug038CPV2GAMhRxaZWcDpZmO6e3v/QMuZf83E/4UaGiKM=
-Received: from BN9PR03CA0987.namprd03.prod.outlook.com (2603:10b6:408:109::32)
- by BY5PR02MB6180.namprd02.prod.outlook.com (2603:10b6:a03:1fd::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Tue, 8 Feb
- 2022 16:21:10 +0000
-Received: from BN1NAM02FT031.eop-nam02.prod.protection.outlook.com
- (2603:10b6:408:109:cafe::41) by BN9PR03CA0987.outlook.office365.com
- (2603:10b6:408:109::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12 via Frontend
- Transport; Tue, 8 Feb 2022 16:21:10 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- BN1NAM02FT031.mail.protection.outlook.com (10.13.2.145) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4951.12 via Frontend Transport; Tue, 8 Feb 2022 16:21:09 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Tue, 8 Feb 2022 08:21:02 -0800
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Tue, 8 Feb 2022 08:21:02 -0800
-Envelope-to: git@xilinx.com,
- wg@grandegger.com,
- mkl@pengutronix.de,
- davem@davemloft.net,
- kuba@kernel.org,
- linux-can@vger.kernel.org,
- netdev@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org
-Received: from [172.23.66.193] (port=57446 helo=xhdsneeli40u.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <srinivas.neeli@xilinx.com>)
-        id 1nHTEj-0007jF-Dk; Tue, 08 Feb 2022 08:21:01 -0800
-From:   Srinivas Neeli <srinivas.neeli@xilinx.com>
-To:     <wg@grandegger.com>, <mkl@pengutronix.de>, <davem@davemloft.net>,
-        <kuba@kernel.org>
-CC:     <michal.simek@xilinx.com>, <linux-can@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <appana.durga.rao@xilinx.com>,
-        <sgoud@xilinx.com>, <git@xilinx.com>,
-        Srinivas Neeli <srinivas.neeli@xilinx.com>
-Subject: [PATCH] can: xilinx_can: Add check for NAPI Poll function
-Date:   Tue, 8 Feb 2022 21:50:53 +0530
-Message-ID: <20220208162053.39896-1-srinivas.neeli@xilinx.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S1386316AbiBHUGu (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 8 Feb 2022 15:06:50 -0500
+X-Greylist: delayed 181 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 12:06:49 PST
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334C9C0613CB
+        for <linux-can@vger.kernel.org>; Tue,  8 Feb 2022 12:06:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1644350446;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=4AfHIdTHwEnkximOkz9mpc8bmI4/bQHur8BV8sweVH0=;
+    b=VwGXCkscGHkvqWP2vSJaW9XHZi7e8X3YGh18pPV4An8RTTmPVnx0wdr+CEhRI2ZbI3
+    5Thk3pqoxYok1MN6lTJxIuP8zHVHB1IuSmu2d+WeNpDc8g2IHMYB/5Yu4d5mz9JQLDlE
+    NKF4WuCnf1gyV4RVISm2/iwSVXf1FlYeE8m/a+TzEj7kgoaE+1Hbl7opQhImirkaRpJc
+    /mhTCwZemLj4cGxYhfBNzTHDSLtPaChfYDBVRZdxkSvo8hXZSDU4J18+ualBT9GlflYY
+    a/sUcFobt9a7FP0xwGMHxCu5B8aKtzTJ3ogx3W+iDU8Mj3ftVW0HoP/tyeE4tOR9Dbl8
+    1mdg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS/xvEBL7X5sbo3UIh9IyLecSWJafUv+rx4"
+X-RZG-CLASS-ID: mo00
+Received: from silver.lan
+    by smtp.strato.de (RZmta 47.39.0 AUTH)
+    with ESMTPSA id L7379cy18K0jNDP
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Tue, 8 Feb 2022 21:00:45 +0100 (CET)
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+To:     netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        william.xuanziyang@huawei.com, mkl@pengutronix.de
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        syzbot+4c63f36709a642f801c5@syzkaller.appspotmail.com
+Subject: [PATCH] can: isotp: fix potential CAN frame reception race in isotp_rcv()
+Date:   Tue,  8 Feb 2022 21:00:26 +0100
+Message-Id: <20220208200026.13783-1-socketcan@hartkopp.net>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 47bc9d20-cab7-4cee-0889-08d9eb1f047c
-X-MS-TrafficTypeDiagnostic: BY5PR02MB6180:EE_
-X-Microsoft-Antispam-PRVS: <BY5PR02MB6180E94838D4D4856FF9416BAF2D9@BY5PR02MB6180.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:2803;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kKCsIs7f0v+QjhgdFrHuJcD6lYk5o62m93I48Qx27bsrgVorn9XRkcuUSljDqbdQAnabDbXmS/VGCd7iQu8VmhMJmk6ZRcylhTUbDWFzOrmtMY46vBaMB7YCNTjsAn2JoHzxW5msQ4L30XhfvEKCzeWx3cxnhBoqg1TYiFxt4+uXUYwMZdnuZVhH5tm+lrZ+Ws4E658kIo9mBx6l5mL/Q0KYv/bcRaSfGxLTvF7uNdTAR6kNFpdNIj04dXnLeEzxhl5SRwPAmsizRENmRw+pU+P2iI1k/IltuuTkn3cIiRo/BQyot7psFoyJdAmmq5v0z/nBs+1Wo5tpoQcxS0FUwyEQipWzvYPbDjIFOrL8dOnoZA+Dq37Z5v8XtTQ1VNzLACUygxqX/9ZrI7yK/Zt/EUky1qCpGMsboJOS9RwNgbi95P+PKPvNf01cdu8WuAKT6PzkXhOJZsHGHjN1EtePkFz/eopxNvTR2nI6EcRzV7q00dLb7+Qy2Xa8XZ+O4g2aCuuXeN1VU1Qg6OsBkPyYD7L690qtxCFKk4V9ds+2gxh+jVbasCSdy1GcvFIeGKTmHHxvgWLsEp0/R0sU8rZ68IfX+0KkN3TkSatCKuzDalTl8g3OZtPOq5OzdhUL67bhBgwc2ubcGwGzv9uRt8IcrpdL/owKN/m6jMaPXJ0Rofk=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(316002)(508600001)(54906003)(7696005)(6666004)(36756003)(110136005)(82310400004)(107886003)(186003)(26005)(426003)(336012)(8676002)(2906002)(47076005)(8936002)(4326008)(1076003)(2616005)(70586007)(36860700001)(5660300002)(356005)(9786002)(70206006)(83380400001)(4744005)(44832011)(7636003)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2022 16:21:09.9980
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 47bc9d20-cab7-4cee-0889-08d9eb1f047c
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT031.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR02MB6180
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Add check for NAPI poll function to avoid enabling interrupts
-with out completing the NAPI call.
+When receiving a CAN frame the current code logic does not consider
+concurrently receiving processes which do not show up in real world
+usage.
 
-Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
+Ziyang Xuan writes:
+
+The following syz problem is one of the scenarios. so->rx.len is
+changed by isotp_rcv_ff() during isotp_rcv_cf(), so->rx.len equals
+0 before alloc_skb() and equals 4096 after alloc_skb(). That will
+trigger skb_over_panic() in skb_put().
+
+=======================================================
+CPU: 1 PID: 19 Comm: ksoftirqd/1 Not tainted 5.16.0-rc8-syzkaller #0
+RIP: 0010:skb_panic+0x16c/0x16e net/core/skbuff.c:113
+Call Trace:
+ <TASK>
+ skb_over_panic net/core/skbuff.c:118 [inline]
+ skb_put.cold+0x24/0x24 net/core/skbuff.c:1990
+ isotp_rcv_cf net/can/isotp.c:570 [inline]
+ isotp_rcv+0xa38/0x1e30 net/can/isotp.c:668
+ deliver net/can/af_can.c:574 [inline]
+ can_rcv_filter+0x445/0x8d0 net/can/af_can.c:635
+ can_receive+0x31d/0x580 net/can/af_can.c:665
+ can_rcv+0x120/0x1c0 net/can/af_can.c:696
+ __netif_receive_skb_one_core+0x114/0x180 net/core/dev.c:5465
+ __netif_receive_skb+0x24/0x1b0 net/core/dev.c:5579
+
+Therefore we make sure the state changes and data structures stay
+consistent at CAN frame reception time by adding a spin_lock in
+isotp_rcv(). This fixes the issue reported by syzkaller but does not
+affect real world operation.
+
+Link: https://lore.kernel.org/linux-can/d7e69278-d741-c706-65e1-e87623d9a8e8@huawei.com/T/
+Fixes: e057dd3fc20f ("can: add ISO 15765-2:2016 transport protocol")
+Reported-by: syzbot+4c63f36709a642f801c5@syzkaller.appspotmail.com
+Reported-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 ---
- drivers/net/can/xilinx_can.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ net/can/isotp.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.c
-index 1674b561c9a2..e562c5ab1149 100644
---- a/drivers/net/can/xilinx_can.c
-+++ b/drivers/net/can/xilinx_can.c
-@@ -1215,10 +1215,11 @@ static int xcan_rx_poll(struct napi_struct *napi, int quota)
+diff --git a/net/can/isotp.c b/net/can/isotp.c
+index 02cbcb2ecf0d..9149e8d8aefc 100644
+--- a/net/can/isotp.c
++++ b/net/can/isotp.c
+@@ -54,10 +54,11 @@
+  */
+ 
+ #include <linux/module.h>
+ #include <linux/init.h>
+ #include <linux/interrupt.h>
++#include <linux/spinlock.h>
+ #include <linux/hrtimer.h>
+ #include <linux/wait.h>
+ #include <linux/uio.h>
+ #include <linux/net.h>
+ #include <linux/netdevice.h>
+@@ -143,10 +144,11 @@ struct isotp_sock {
+ 	u32 force_tx_stmin;
+ 	u32 force_rx_stmin;
+ 	struct tpcon rx, tx;
+ 	struct list_head notifier;
+ 	wait_queue_head_t wait;
++	spinlock_t rx_lock; /* protect single thread state machine */
+ };
+ 
+ static LIST_HEAD(isotp_notifier_list);
+ static DEFINE_SPINLOCK(isotp_notifier_lock);
+ static struct isotp_sock *isotp_busy_notifier;
+@@ -613,15 +615,21 @@ static void isotp_rcv(struct sk_buff *skb, void *data)
+ 	if (ae && cf->data[0] != so->opt.rx_ext_address)
+ 		return;
+ 
+ 	n_pci_type = cf->data[ae] & 0xF0;
+ 
++	/* Make sure the state changes and data structures stay consistent at
++	 * CAN frame reception time. This locking is not needed in real world
++	 * use cases but the inconsistency can be triggered with syzkaller.
++	 */
++	spin_lock(&so->rx_lock);
++
+ 	if (so->opt.flags & CAN_ISOTP_HALF_DUPLEX) {
+ 		/* check rx/tx path half duplex expectations */
+ 		if ((so->tx.state != ISOTP_IDLE && n_pci_type != N_PCI_FC) ||
+ 		    (so->rx.state != ISOTP_IDLE && n_pci_type == N_PCI_FC))
+-			return;
++			goto out_unlock;
  	}
  
- 	if (work_done < quota) {
--		napi_complete_done(napi, work_done);
--		ier = priv->read_reg(priv, XCAN_IER_OFFSET);
--		ier |= xcan_rx_int_mask(priv);
--		priv->write_reg(priv, XCAN_IER_OFFSET, ier);
-+		if (napi_complete_done(napi, work_done)) {
-+			ier = priv->read_reg(priv, XCAN_IER_OFFSET);
-+			ier |= xcan_rx_int_mask(priv);
-+			priv->write_reg(priv, XCAN_IER_OFFSET, ier);
-+		}
+ 	switch (n_pci_type) {
+ 	case N_PCI_FC:
+ 		/* tx path: flow control frame containing the FC parameters */
+@@ -666,10 +674,13 @@ static void isotp_rcv(struct sk_buff *skb, void *data)
+ 	case N_PCI_CF:
+ 		/* rx path: consecutive frame */
+ 		isotp_rcv_cf(sk, cf, ae, skb);
+ 		break;
  	}
- 	return work_done;
++
++out_unlock:
++	spin_unlock(&so->rx_lock);
  }
+ 
+ static void isotp_fill_dataframe(struct canfd_frame *cf, struct isotp_sock *so,
+ 				 int ae, int off)
+ {
+@@ -1442,10 +1453,11 @@ static int isotp_init(struct sock *sk)
+ 	so->rxtimer.function = isotp_rx_timer_handler;
+ 	hrtimer_init(&so->txtimer, CLOCK_MONOTONIC, HRTIMER_MODE_REL_SOFT);
+ 	so->txtimer.function = isotp_tx_timer_handler;
+ 
+ 	init_waitqueue_head(&so->wait);
++	spin_lock_init(&so->rx_lock);
+ 
+ 	spin_lock(&isotp_notifier_lock);
+ 	list_add_tail(&so->notifier, &isotp_notifier_list);
+ 	spin_unlock(&isotp_notifier_lock);
+ 
 -- 
-2.17.1
+2.30.2
 
