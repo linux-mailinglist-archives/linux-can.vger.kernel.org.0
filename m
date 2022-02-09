@@ -2,57 +2,57 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52DB34AF14F
-	for <lists+linux-can@lfdr.de>; Wed,  9 Feb 2022 13:20:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2CC74AF702
+	for <lists+linux-can@lfdr.de>; Wed,  9 Feb 2022 17:42:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232705AbiBIMUN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 9 Feb 2022 07:20:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37720 "EHLO
+        id S237384AbiBIQlZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 9 Feb 2022 11:41:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233105AbiBIMUE (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 9 Feb 2022 07:20:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CA7E03A43C;
-        Wed,  9 Feb 2022 04:10:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 61E62B8207D;
-        Wed,  9 Feb 2022 12:10:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 24A47C340EB;
-        Wed,  9 Feb 2022 12:10:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644408609;
-        bh=OmFyowaarOAXDYzcFG0p3/lKYpAZz6ILFbXsPwcShv8=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=tA9yIWuBh6U+H9Ynq/jXBNLKIgsqux2NlFXDM3agTpyylvh493Zr3T2PxHLsFcB3F
-         4bWS8bkoCvpAS7kWF/51nK5c8FNrQe27PshP1CmTp55NbWLMqMLAokISWJhmKEU+5m
-         8Gl8MTq1HjxudQXm/jMta97hZHL1Y9MJUNnkQGxeI34uDlTcUiO2C5uD3KRIDwZVaY
-         8Dsuh30mCnV5lhrEbefCEDh+08ST6C+LAcd+SC1iKlV73CYBQXJ713klbETQlP8VhJ
-         KtC1xN8t/ODhDXipfBnrkuWyeKvgYMzMvBhSOjSL7+xKr6taCtcn4NKYZzUKv0oL/6
-         P9OrMtI9YcUxg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0885EE5D07D;
-        Wed,  9 Feb 2022 12:10:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S237389AbiBIQlU (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 9 Feb 2022 11:41:20 -0500
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1D5C05CB82;
+        Wed,  9 Feb 2022 08:41:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1644424696;
+    s=strato-dkim-0002; d=fpond.eu;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=GWoW+C14An674JYgH1kVI2DMXd0W/O9lGw79zuetDYY=;
+    b=jbDOrriwEGEuai39q/GjMKSBj/3M+zTQTKyMexAp4JH3DfVQH7HZilCdVPk99yWC3y
+    gaffGex0k1uwW0IPLL+U+jG1/5lN2RZLeoNTAevVfw3xq0dgiVljaydU53VH5/uZ5nsG
+    mRy92TlQwQot2qgc02h3pzWhzDfu2ZIBDEIIFW8pneZerZLq7HyelUqFJtfy/EynPW+E
+    PCjQLn/nOGjY4Q8jh1CT7VLTubBFxdIo96m4khgtjqOAjW4oMqxvf+u9R9XmL8prX64r
+    rJfXarNw2NS/fW/oq4luix27hXSdv8XHklKbZftkmyJq9WVrwXGVB7vPD8n4YAkA//5H
+    TJEg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":OWANVUa4dPFUgKR/3dpvnYP0Np73dmm4I5W0/AvA67Ot4fvR82dfdzLc5sE="
+X-RZG-CLASS-ID: mo00
+Received: from gummo.fritz.box
+    by smtp.strato.de (RZmta 47.39.0 DYNA|AUTH)
+    with ESMTPSA id ufcb0fy19GcE7bt
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Wed, 9 Feb 2022 17:38:14 +0100 (CET)
+From:   Ulrich Hecht <uli+renesas@fpond.eu>
+To:     linux-renesas-soc@vger.kernel.org
+Cc:     netdev@vger.kernel.org, davem@davemloft.net,
+        linux-can@vger.kernel.org, prabhakar.mahadev-lad.rj@bp.renesas.com,
+        biju.das.jz@bp.renesas.com, wsa@kernel.org,
+        yoshihiro.shimoda.uh@renesas.com, wg@grandegger.com,
+        mkl@pengutronix.de, kuba@kernel.org, mailhol.vincent@wanadoo.fr,
+        socketcan@hartkopp.net, geert@linux-m68k.org,
+        kieran.bingham@ideasonboard.com,
+        Ulrich Hecht <uli+renesas@fpond.eu>
+Subject: [PATCH v3 0/4] can: rcar_canfd: Add support for V3U flavor
+Date:   Wed,  9 Feb 2022 17:38:02 +0100
+Message-Id: <20220209163806.18618-1-uli+renesas@fpond.eu>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 1/2] can: isotp: fix potential CAN frame reception race in
- isotp_rcv()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164440860903.17005.14991566915194907951.git-patchwork-notify@kernel.org>
-Date:   Wed, 09 Feb 2022 12:10:09 +0000
-References: <20220209080154.315214-2-mkl@pengutronix.de>
-In-Reply-To: <20220209080154.315214-2-mkl@pengutronix.de>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, kernel@pengutronix.de,
-        socketcan@hartkopp.net, stable@vger.kernel.org,
-        syzbot+4c63f36709a642f801c5@syzkaller.appspotmail.com,
-        william.xuanziyang@huawei.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,31 +60,63 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello:
+Hi!
 
-This series was applied to netdev/net.git (master)
-by Marc Kleine-Budde <mkl@pengutronix.de>:
+This adds CANFD support for V3U (R8A779A0) SoCs. The V3U's IP supports up
+to eight channels and has some other minor differences to the Gen3 variety:
 
-On Wed,  9 Feb 2022 09:01:53 +0100 you wrote:
-> From: Oliver Hartkopp <socketcan@hartkopp.net>
-> 
-> When receiving a CAN frame the current code logic does not consider
-> concurrently receiving processes which do not show up in real world
-> usage.
-> 
-> Ziyang Xuan writes:
-> 
-> [...]
+- changes to some register offsets and layouts
+- absence of "classic CAN" registers, both modes are handled through the
+  CANFD register set
 
-Here is the summary with links:
-  - [net,1/2] can: isotp: fix potential CAN frame reception race in isotp_rcv()
-    https://git.kernel.org/netdev/net/c/7c759040c1dd
-  - [net,2/2] can: isotp: fix error path in isotp_sendmsg() to unlock wait queue
-    https://git.kernel.org/netdev/net/c/8375dfac4f68
+This patch set tries to accommodate these changes in a minimally intrusive
+way.
 
-You are awesome, thank you!
+This revision tries to address all issues raised by reviewers, and drops
+the clock patch that has since been picked up; see below for details.
+Thanks to Vincent, Marc and Geert for their reviews and suggestions.
+
+It has been successfully tested remotely on a V3U Falcon board, but only
+with channels 0 and 1. We were not able to get higher channels to work in
+both directions yet. It is not currently clear if this is an issue with the
+driver, the board or the silicon, but the BSP vendor driver only works with
+channels 0 and 1 as well, so my bet is on one of the latter. For this
+reason, this series only enables known-working channels 0 and 1 on Falcon.
+
+CU
+Uli
+
+
+Changes since v2:
+- dropped upstreamed clock patch
+- replaced bracket/ternary maze with inline functions
+- improved indentation to better reflect the logic
+- removed redundant CAN mode check
+- replaced strcpy() with initializer
+- minor refactoring
+- add Reviewed-Bys
+
+Changes since v1:
+- clk: added missing CANFD module clock
+- driver: fixed tests for RZ/G2L so they won't break V3U
+- driver: simplified two macros
+- DT: enabled devices 0 and 1 on Falcon board
+- DT: changed assigned-clock-rates to 80000000
+- DT: added interrupt names
+
+
+Ulrich Hecht (4):
+  can: rcar_canfd: Add support for r8a779a0 SoC
+  arm64: dts: renesas: r8a779a0: Add CANFD device node
+  arm64: dts: renesas: r8a779a0-falcon: enable CANFD 0 and 1
+  dt-bindings: can: renesas,rcar-canfd: Document r8a779a0 support
+
+ .../bindings/net/can/renesas,rcar-canfd.yaml  |   2 +
+ .../boot/dts/renesas/r8a779a0-falcon.dts      |  24 ++
+ arch/arm64/boot/dts/renesas/r8a779a0.dtsi     |  56 +++++
+ drivers/net/can/rcar/rcar_canfd.c             | 219 ++++++++++++------
+ 4 files changed, 228 insertions(+), 73 deletions(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.20.1
 
