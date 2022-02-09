@@ -2,53 +2,55 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE0254AE3DC
-	for <lists+linux-can@lfdr.de>; Tue,  8 Feb 2022 23:24:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 152EA4AE5DC
+	for <lists+linux-can@lfdr.de>; Wed,  9 Feb 2022 01:21:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386517AbiBHWYa (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 8 Feb 2022 17:24:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48688 "EHLO
+        id S239689AbiBIAVw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 8 Feb 2022 19:21:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386316AbiBHUGu (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 8 Feb 2022 15:06:50 -0500
-X-Greylist: delayed 181 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 12:06:49 PST
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334C9C0613CB
-        for <linux-can@vger.kernel.org>; Tue,  8 Feb 2022 12:06:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1644350446;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=4AfHIdTHwEnkximOkz9mpc8bmI4/bQHur8BV8sweVH0=;
-    b=VwGXCkscGHkvqWP2vSJaW9XHZi7e8X3YGh18pPV4An8RTTmPVnx0wdr+CEhRI2ZbI3
-    5Thk3pqoxYok1MN6lTJxIuP8zHVHB1IuSmu2d+WeNpDc8g2IHMYB/5Yu4d5mz9JQLDlE
-    NKF4WuCnf1gyV4RVISm2/iwSVXf1FlYeE8m/a+TzEj7kgoaE+1Hbl7opQhImirkaRpJc
-    /mhTCwZemLj4cGxYhfBNzTHDSLtPaChfYDBVRZdxkSvo8hXZSDU4J18+ualBT9GlflYY
-    a/sUcFobt9a7FP0xwGMHxCu5B8aKtzTJ3ogx3W+iDU8Mj3ftVW0HoP/tyeE4tOR9Dbl8
-    1mdg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS/xvEBL7X5sbo3UIh9IyLecSWJafUv+rx4"
-X-RZG-CLASS-ID: mo00
-Received: from silver.lan
-    by smtp.strato.de (RZmta 47.39.0 AUTH)
-    with ESMTPSA id L7379cy18K0jNDP
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Tue, 8 Feb 2022 21:00:45 +0100 (CET)
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-To:     netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        william.xuanziyang@huawei.com, mkl@pengutronix.de
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        syzbot+4c63f36709a642f801c5@syzkaller.appspotmail.com
-Subject: [PATCH] can: isotp: fix potential CAN frame reception race in isotp_rcv()
-Date:   Tue,  8 Feb 2022 21:00:26 +0100
-Message-Id: <20220208200026.13783-1-socketcan@hartkopp.net>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S232503AbiBIAVu (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 8 Feb 2022 19:21:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8890DC061576;
+        Tue,  8 Feb 2022 16:21:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 233316181A;
+        Wed,  9 Feb 2022 00:21:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43561C004E1;
+        Wed,  9 Feb 2022 00:21:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644366109;
+        bh=vxqRvGYYVd1oVMFwBKGEjIrETwUfpQEIcQwo8Bn3Yyg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VNk+zY9TooI97vm1g6CSEOyMtdeur7X1bGukDDzAKVET9usjeCchHmZXaLdlyu7un
+         +UAyNRfdpROhVPeoZ3Lm2vFUayXL4RFDOrs8J4c8090tK0KO8/6ka/lDwOnKfMho0N
+         qnOoNQM11XV/a8+0I2akxWPDLInY3JX+TVtnMIjD8ciEjx3d7Qr25+zOn5MVliC1T8
+         mgSJbnFry3Wtu422jDZpVG3VyLEpmZHWyvGJU7/aDf/SZRHBy94n6A8aHQ5jf3Ht+i
+         FdUJfH2ZXS13PgsmWcgCt+kAp3hJJldQy5tFlJtJ58Qd9F0Svy/x9mTlwZYxI5eQO6
+         mWX4KAcuRAOHg==
+Date:   Tue, 8 Feb 2022 16:21:48 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Eric Dumazet <eric.dumazet@gmail.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        netdev <netdev@vger.kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can@vger.kernel.org
+Subject: Re: [PATCH net-next] can: gw: use call_rcu() instead of costly
+ synchronize_rcu()
+Message-ID: <20220208162148.285b5432@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20220207190706.1499190-1-eric.dumazet@gmail.com>
+References: <20220207190706.1499190-1-eric.dumazet@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,124 +58,21 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-When receiving a CAN frame the current code logic does not consider
-concurrently receiving processes which do not show up in real world
-usage.
+On Mon,  7 Feb 2022 11:07:06 -0800 Eric Dumazet wrote:
+> From: Eric Dumazet <edumazet@google.com>
+> 
+> Commit fb8696ab14ad ("can: gw: synchronize rcu operations
+> before removing gw job entry") added three synchronize_rcu() calls
+> to make sure one rcu grace period was observed before freeing
+> a "struct cgw_job" (which are tiny objects).
+> 
+> This should be converted to call_rcu() to avoid adding delays
+> in device / network dismantles.
+> 
+> Use the rcu_head that was already in struct cgw_job,
+> not yet used.
+> 
+> Signed-off-by: Eric Dumazet <edumazet@google.com>
+> Cc: Oliver Hartkopp <socketcan@hartkopp.net>
 
-Ziyang Xuan writes:
-
-The following syz problem is one of the scenarios. so->rx.len is
-changed by isotp_rcv_ff() during isotp_rcv_cf(), so->rx.len equals
-0 before alloc_skb() and equals 4096 after alloc_skb(). That will
-trigger skb_over_panic() in skb_put().
-
-=======================================================
-CPU: 1 PID: 19 Comm: ksoftirqd/1 Not tainted 5.16.0-rc8-syzkaller #0
-RIP: 0010:skb_panic+0x16c/0x16e net/core/skbuff.c:113
-Call Trace:
- <TASK>
- skb_over_panic net/core/skbuff.c:118 [inline]
- skb_put.cold+0x24/0x24 net/core/skbuff.c:1990
- isotp_rcv_cf net/can/isotp.c:570 [inline]
- isotp_rcv+0xa38/0x1e30 net/can/isotp.c:668
- deliver net/can/af_can.c:574 [inline]
- can_rcv_filter+0x445/0x8d0 net/can/af_can.c:635
- can_receive+0x31d/0x580 net/can/af_can.c:665
- can_rcv+0x120/0x1c0 net/can/af_can.c:696
- __netif_receive_skb_one_core+0x114/0x180 net/core/dev.c:5465
- __netif_receive_skb+0x24/0x1b0 net/core/dev.c:5579
-
-Therefore we make sure the state changes and data structures stay
-consistent at CAN frame reception time by adding a spin_lock in
-isotp_rcv(). This fixes the issue reported by syzkaller but does not
-affect real world operation.
-
-Link: https://lore.kernel.org/linux-can/d7e69278-d741-c706-65e1-e87623d9a8e8@huawei.com/T/
-Fixes: e057dd3fc20f ("can: add ISO 15765-2:2016 transport protocol")
-Reported-by: syzbot+4c63f36709a642f801c5@syzkaller.appspotmail.com
-Reported-by: Ziyang Xuan <william.xuanziyang@huawei.com>
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
----
- net/can/isotp.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
-
-diff --git a/net/can/isotp.c b/net/can/isotp.c
-index 02cbcb2ecf0d..9149e8d8aefc 100644
---- a/net/can/isotp.c
-+++ b/net/can/isotp.c
-@@ -54,10 +54,11 @@
-  */
- 
- #include <linux/module.h>
- #include <linux/init.h>
- #include <linux/interrupt.h>
-+#include <linux/spinlock.h>
- #include <linux/hrtimer.h>
- #include <linux/wait.h>
- #include <linux/uio.h>
- #include <linux/net.h>
- #include <linux/netdevice.h>
-@@ -143,10 +144,11 @@ struct isotp_sock {
- 	u32 force_tx_stmin;
- 	u32 force_rx_stmin;
- 	struct tpcon rx, tx;
- 	struct list_head notifier;
- 	wait_queue_head_t wait;
-+	spinlock_t rx_lock; /* protect single thread state machine */
- };
- 
- static LIST_HEAD(isotp_notifier_list);
- static DEFINE_SPINLOCK(isotp_notifier_lock);
- static struct isotp_sock *isotp_busy_notifier;
-@@ -613,15 +615,21 @@ static void isotp_rcv(struct sk_buff *skb, void *data)
- 	if (ae && cf->data[0] != so->opt.rx_ext_address)
- 		return;
- 
- 	n_pci_type = cf->data[ae] & 0xF0;
- 
-+	/* Make sure the state changes and data structures stay consistent at
-+	 * CAN frame reception time. This locking is not needed in real world
-+	 * use cases but the inconsistency can be triggered with syzkaller.
-+	 */
-+	spin_lock(&so->rx_lock);
-+
- 	if (so->opt.flags & CAN_ISOTP_HALF_DUPLEX) {
- 		/* check rx/tx path half duplex expectations */
- 		if ((so->tx.state != ISOTP_IDLE && n_pci_type != N_PCI_FC) ||
- 		    (so->rx.state != ISOTP_IDLE && n_pci_type == N_PCI_FC))
--			return;
-+			goto out_unlock;
- 	}
- 
- 	switch (n_pci_type) {
- 	case N_PCI_FC:
- 		/* tx path: flow control frame containing the FC parameters */
-@@ -666,10 +674,13 @@ static void isotp_rcv(struct sk_buff *skb, void *data)
- 	case N_PCI_CF:
- 		/* rx path: consecutive frame */
- 		isotp_rcv_cf(sk, cf, ae, skb);
- 		break;
- 	}
-+
-+out_unlock:
-+	spin_unlock(&so->rx_lock);
- }
- 
- static void isotp_fill_dataframe(struct canfd_frame *cf, struct isotp_sock *so,
- 				 int ae, int off)
- {
-@@ -1442,10 +1453,11 @@ static int isotp_init(struct sock *sk)
- 	so->rxtimer.function = isotp_rx_timer_handler;
- 	hrtimer_init(&so->txtimer, CLOCK_MONOTONIC, HRTIMER_MODE_REL_SOFT);
- 	so->txtimer.function = isotp_tx_timer_handler;
- 
- 	init_waitqueue_head(&so->wait);
-+	spin_lock_init(&so->rx_lock);
- 
- 	spin_lock(&isotp_notifier_lock);
- 	list_add_tail(&so->notifier, &isotp_notifier_list);
- 	spin_unlock(&isotp_notifier_lock);
- 
--- 
-2.30.2
-
+Adding Marc and linux-can to CC.
