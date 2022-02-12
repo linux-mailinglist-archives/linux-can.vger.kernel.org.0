@@ -2,334 +2,176 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1496B4B2B3A
-	for <lists+linux-can@lfdr.de>; Fri, 11 Feb 2022 18:05:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD56F4B34A2
+	for <lists+linux-can@lfdr.de>; Sat, 12 Feb 2022 12:27:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351894AbiBKRFP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 11 Feb 2022 12:05:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59500 "EHLO
+        id S233267AbiBLL1y (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 12 Feb 2022 06:27:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233562AbiBKRFP (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 11 Feb 2022 12:05:15 -0500
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE042E8;
-        Fri, 11 Feb 2022 09:05:14 -0800 (PST)
-Received: by mail-qk1-f174.google.com with SMTP id w8so8796927qkw.8;
-        Fri, 11 Feb 2022 09:05:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=A0rsxyCKiEPTG/yOoCpeNt/bjbfTqQzLZ284uO4r9hw=;
-        b=Bz/puL50spzk9UNrbQG6bSfsP9pknmd15C9aRtUNmp0TiNN0CJx+VQJU3YvznrHCh0
-         MiNcdGSkVLE/N3MKIYBxuRpG7Udvv+fgSyu/0AFJxjbc+NICAr0g4dJiyRt2qKZGspEn
-         UL2nHYTHw9mOGGs1YhG+ptTDmRM+6BLrZCEtOUwpylD5aWZpTFMaCSARQp3PnCn8l3qc
-         h38mxTpl/RBYJTH28zdc5jdlMIP1vInoHNrLKPo3nm6oTVXp9zi0enCHuhfRJxmFNRht
-         WIGNdv+U2M5WfONrjo0mmFnNows/dyLTwoWEwCa+VjtwxHlrMuBFwIMrSKFNJ8R8kMnF
-         Ys/w==
-X-Gm-Message-State: AOAM531PygbC+WkZU4JHoETLDfSGm/+CHEwjLJGQCvOD2kys5cQLT8VC
-        61lRktPRo/k+c8S/xPmWnQ==
-X-Google-Smtp-Source: ABdhPJyL0niGFbJu1UNkqwv2jHojuHZH8sLOcu5Sjz8Cagoxul79VxkeT7NryBFMG7nqlregF4M2Qg==
-X-Received: by 2002:a37:9443:: with SMTP id w64mr1246729qkd.545.1644599113088;
-        Fri, 11 Feb 2022 09:05:13 -0800 (PST)
-Received: from robh.at.kernel.org ([2607:fb90:5fee:dfce:b6df:c3e1:b1e5:d6d8])
-        by smtp.gmail.com with ESMTPSA id h1sm12171190qkn.71.2022.02.11.09.05.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 09:05:12 -0800 (PST)
-Received: (nullmailer pid 526578 invoked by uid 1000);
-        Fri, 11 Feb 2022 17:05:09 -0000
-Date:   Fri, 11 Feb 2022 11:05:09 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
-Cc:     appana.durga.rao@xilinx.com, naga.sureshkumar.relli@xilinx.com,
-        wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
-        kuba@kernel.org, git@xilinx.com, michal.simek@xilinx.com,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] dt-bindings: can: xilinx_can: Convert Xilinx CAN
- binding to YAML
-Message-ID: <YgaXReRxU/uAhEP7@robh.at.kernel.org>
-References: <20220209174850.32360-1-amit.kumar-mahapatra@xilinx.com>
+        with ESMTP id S231650AbiBLL1y (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 12 Feb 2022 06:27:54 -0500
+Received: from smtp.smtpout.orange.fr (smtp10.smtpout.orange.fr [80.12.242.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F18826AED
+        for <linux-can@vger.kernel.org>; Sat, 12 Feb 2022 03:27:49 -0800 (PST)
+Received: from localhost.localdomain ([124.33.176.97])
+        by smtp.orange.fr with ESMTPA
+        id IqYqn14uLIz5VIqZ6nyZ5I; Sat, 12 Feb 2022 12:27:47 +0100
+X-ME-Helo: localhost.localdomain
+X-ME-Auth: MDU0YmViZGZmMDIzYiBlMiM2NTczNTRjNWZkZTMwOGRiOGQ4ODf3NWI1ZTMyMzdiODlhOQ==
+X-ME-Date: Sat, 12 Feb 2022 12:27:47 +0100
+X-ME-IP: 124.33.176.97
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     netdev@vger.kernel.org, linux-can@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: [PATCH] can: etas_es58x: change opened_channel_cnt's type from atomic_t to u8
+Date:   Sat, 12 Feb 2022 20:27:13 +0900
+Message-Id: <20220212112713.577957-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220209174850.32360-1-amit.kumar-mahapatra@xilinx.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 11:18:50PM +0530, Amit Kumar Mahapatra wrote:
-> Convert Xilinx CAN binding documentation to YAML.
-> 
-> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
-> ---
-> BRANCH: yaml
-> 
-> Changes in v2:
->  - Added reference to can-controller.yaml
->  - Added example node for canfd-2.0
-> ---
->  .../bindings/net/can/xilinx_can.txt           |  61 -------
->  .../bindings/net/can/xilinx_can.yaml          | 160 ++++++++++++++++++
->  2 files changed, 160 insertions(+), 61 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/net/can/xilinx_can.txt
->  create mode 100644 Documentation/devicetree/bindings/net/can/xilinx_can.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/net/can/xilinx_can.txt b/Documentation/devicetree/bindings/net/can/xilinx_can.txt
-> deleted file mode 100644
-> index 100cc40b8510..000000000000
-> --- a/Documentation/devicetree/bindings/net/can/xilinx_can.txt
-> +++ /dev/null
-> @@ -1,61 +0,0 @@
-> -Xilinx Axi CAN/Zynq CANPS controller Device Tree Bindings
-> ----------------------------------------------------------
-> -
-> -Required properties:
-> -- compatible		: Should be:
-> -			  - "xlnx,zynq-can-1.0" for Zynq CAN controllers
-> -			  - "xlnx,axi-can-1.00.a" for Axi CAN controllers
-> -			  - "xlnx,canfd-1.0" for CAN FD controllers
-> -			  - "xlnx,canfd-2.0" for CAN FD 2.0 controllers
-> -- reg			: Physical base address and size of the controller
-> -			  registers map.
-> -- interrupts		: Property with a value describing the interrupt
-> -			  number.
-> -- clock-names		: List of input clock names
-> -			  - "can_clk", "pclk" (For CANPS),
-> -			  - "can_clk", "s_axi_aclk" (For AXI CAN and CAN FD).
-> -			  (See clock bindings for details).
-> -- clocks		: Clock phandles (see clock bindings for details).
-> -- tx-fifo-depth		: Can Tx fifo depth (Zynq, Axi CAN).
-> -- rx-fifo-depth		: Can Rx fifo depth (Zynq, Axi CAN, CAN FD in
-> -                          sequential Rx mode).
-> -- tx-mailbox-count	: Can Tx mailbox buffer count (CAN FD).
-> -- rx-mailbox-count	: Can Rx mailbox buffer count (CAN FD in mailbox Rx
-> -			  mode).
-> -
-> -
-> -Example:
-> -
-> -For Zynq CANPS Dts file:
-> -	zynq_can_0: can@e0008000 {
-> -			compatible = "xlnx,zynq-can-1.0";
-> -			clocks = <&clkc 19>, <&clkc 36>;
-> -			clock-names = "can_clk", "pclk";
-> -			reg = <0xe0008000 0x1000>;
-> -			interrupts = <0 28 4>;
-> -			interrupt-parent = <&intc>;
-> -			tx-fifo-depth = <0x40>;
-> -			rx-fifo-depth = <0x40>;
-> -		};
-> -For Axi CAN Dts file:
-> -	axi_can_0: axi-can@40000000 {
-> -			compatible = "xlnx,axi-can-1.00.a";
-> -			clocks = <&clkc 0>, <&clkc 1>;
-> -			clock-names = "can_clk","s_axi_aclk" ;
-> -			reg = <0x40000000 0x10000>;
-> -			interrupt-parent = <&intc>;
-> -			interrupts = <0 59 1>;
-> -			tx-fifo-depth = <0x40>;
-> -			rx-fifo-depth = <0x40>;
-> -		};
-> -For CAN FD Dts file:
-> -	canfd_0: canfd@40000000 {
-> -			compatible = "xlnx,canfd-1.0";
-> -			clocks = <&clkc 0>, <&clkc 1>;
-> -			clock-names = "can_clk", "s_axi_aclk";
-> -			reg = <0x40000000 0x2000>;
-> -			interrupt-parent = <&intc>;
-> -			interrupts = <0 59 1>;
-> -			tx-mailbox-count = <0x20>;
-> -			rx-fifo-depth = <0x20>;
-> -		};
-> diff --git a/Documentation/devicetree/bindings/net/can/xilinx_can.yaml b/Documentation/devicetree/bindings/net/can/xilinx_can.yaml
-> new file mode 100644
-> index 000000000000..50ff9b40fe87
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/can/xilinx_can.yaml
-> @@ -0,0 +1,160 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/can/xilinx_can.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title:
-> +  Xilinx Axi CAN/Zynq CANPS controller Binding
-> +
-> +maintainers:
-> +  - Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - const: xlnx,zynq-can-1.0
-> +        description: For Zynq CAN controller
-> +      - const: xlnx,axi-can-1.00.a
-> +        description: For Axi CAN controller
-> +      - const: xlnx,canfd-1.0
-> +        description: For CAN FD controller
-> +      - const: xlnx,canfd-2.0
-> +        description: For CAN FD 2.0 controller
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    description: |
-> +      CAN functional clock phandle
+The driver uses an atomic_t variable: es58x_device:opened_channel_cnt
+to keep track of the number of opened channels in order to only
+allocate memory for the URBs when this count changes from zero to one.
 
-Drop.
+While the intent was to prevent race conditions, the choice of an
+atomic_t turns out to be a bad idea for several reasons:
 
-> +    maxItems: 2
+  - implementation is incorrect and fails to decrement
+    opened_channel_cnt when the URB allocation fails as reported in
+    [1].
 
-> +
-> +  tx-fifo-depth:
-> +    description: |
-> +      CAN Tx fifo depth (Zynq, Axi CAN).
-> +
-> +  rx-fifo-depth:
-> +    description: |
-> +      CAN Rx fifo depth (Zynq, Axi CAN, CAN FD in sequential Rx mode)
-> +
-> +  tx-mailbox-count:
-> +    description: |
-> +      CAN Tx mailbox buffer count (CAN FD)
-> +
-> +  rx-mailbox-count:
-> +    description: |
-> +      CAN Rx mailbox buffer count (CAN FD in mailbox Rx  mode)
+  - even if opened_channel_cnt were to be correctly decremented,
+    atomic_t is insufficient to cover edge cases: there can be a race
+    condition in which 1/ a first process fails to allocate URBs
+    memory 2/ a second process enters es58x_open() before the first
+    process does its cleanup and decrements opened_channed_cnt. In
+    which case, the second process would successfully return despite
+    the URBs memory not being allocated.
 
-All these need a type $ref.
+  - actually, any kind of locking mechanism was useless here because
+    it is redundant with the network stack big kernel lock
+    (a.k.a. rtnl_lock) which is being hold by all the callers of
+    net_device_ops:ndo_open() and net_device_ops:ndo_close(). c.f. the
+    ASSERST_RTNL() calls in __dev_open() [2] and __dev_close_many()
+    [3].
 
-> +
-> +  clock-names:
-> +    maxItems: 2
+The atmomic_t is thus replaced by a simple u8 type and the logic to
+increment and decrement es58x_device:opened_channel_cnt is simplified
+accordingly fixing the bug reported in [1]. We do not check again for
+ASSERST_RTNL() as this is already done by the callers.
 
-Group with 'clocks'.
+[1] https://lore.kernel.org/linux-can/20220201140351.GA2548@kili/T/#u
+[2] https://elixir.bootlin.com/linux/v5.16/source/net/core/dev.c#L1463
+[3] https://elixir.bootlin.com/linux/v5.16/source/net/core/dev.c#L1541
 
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +
-> +additionalProperties: false
-> +
-> +allOf:
-> +  - $ref: can-controller.yaml#
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: xlnx,zynq-can-1.0
-> +
-> +    then:
-> +      properties:
-> +        clock-names:
-> +          items:
-> +            - const: can_clk
-> +            - const: pclk
-> +      required:
-> +        - tx-fifo-depth
-> +        - rx-fifo-depth
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: xlnx,axi-can-1.00.a
-> +
-> +    then:
-> +      properties:
-> +        clock-names:
-> +          items:
-> +            - const: can_clk
-> +            - const: s_axi_aclk
-> +      required:
-> +        - tx-fifo-depth
-> +        - rx-fifo-depth
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            anyOf:
-> +              - const: xlnx,canfd-1.0
-> +              - const: xlnx,canfd-2.0
-> +
-> +    then:
-> +      properties:
-> +        clock-names:
-> +          items:
-> +            - const: can_clk
-> +            - const: s_axi_aclk
-> +      required:
-> +        - tx-mailbox-count
-> +        - rx-fifo-depth
-> +
-> +examples:
-> +  - |
-> +    zynq_can_0: can@e0008000 {
+Fixes: 8537257874e9 ("can: etas_es58x: add core support for ETAS ES58X
+CAN USB interfaces")
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+---
+ drivers/net/can/usb/etas_es58x/es58x_core.c | 9 +++++----
+ drivers/net/can/usb/etas_es58x/es58x_core.h | 8 +++++---
+ 2 files changed, 10 insertions(+), 7 deletions(-)
 
-Drop unused labels.
+diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/usb/etas_es58x/es58x_core.c
+index 2ed2370a3166..2d73ebbf3836 100644
+--- a/drivers/net/can/usb/etas_es58x/es58x_core.c
++++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
+@@ -1787,7 +1787,7 @@ static int es58x_open(struct net_device *netdev)
+ 	struct es58x_device *es58x_dev = es58x_priv(netdev)->es58x_dev;
+ 	int ret;
+ 
+-	if (atomic_inc_return(&es58x_dev->opened_channel_cnt) == 1) {
++	if (!es58x_dev->opened_channel_cnt) {
+ 		ret = es58x_alloc_rx_urbs(es58x_dev);
+ 		if (ret)
+ 			return ret;
+@@ -1805,12 +1805,13 @@ static int es58x_open(struct net_device *netdev)
+ 	if (ret)
+ 		goto free_urbs;
+ 
++	es58x_dev->opened_channel_cnt++;
+ 	netif_start_queue(netdev);
+ 
+ 	return ret;
+ 
+  free_urbs:
+-	if (atomic_dec_and_test(&es58x_dev->opened_channel_cnt))
++	if (!es58x_dev->opened_channel_cnt)
+ 		es58x_free_urbs(es58x_dev);
+ 	netdev_err(netdev, "%s: Could not open the network device: %pe\n",
+ 		   __func__, ERR_PTR(ret));
+@@ -1845,7 +1846,8 @@ static int es58x_stop(struct net_device *netdev)
+ 
+ 	es58x_flush_pending_tx_msg(netdev);
+ 
+-	if (atomic_dec_and_test(&es58x_dev->opened_channel_cnt))
++	es58x_dev->opened_channel_cnt--;
++	if (!es58x_dev->opened_channel_cnt)
+ 		es58x_free_urbs(es58x_dev);
+ 
+ 	return 0;
+@@ -2215,7 +2217,6 @@ static struct es58x_device *es58x_init_es58x_dev(struct usb_interface *intf,
+ 	init_usb_anchor(&es58x_dev->tx_urbs_idle);
+ 	init_usb_anchor(&es58x_dev->tx_urbs_busy);
+ 	atomic_set(&es58x_dev->tx_urbs_idle_cnt, 0);
+-	atomic_set(&es58x_dev->opened_channel_cnt, 0);
+ 	usb_set_intfdata(intf, es58x_dev);
+ 
+ 	es58x_dev->rx_pipe = usb_rcvbulkpipe(es58x_dev->udev,
+diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.h b/drivers/net/can/usb/etas_es58x/es58x_core.h
+index 826a15871573..e5033cb5e695 100644
+--- a/drivers/net/can/usb/etas_es58x/es58x_core.h
++++ b/drivers/net/can/usb/etas_es58x/es58x_core.h
+@@ -373,8 +373,6 @@ struct es58x_operators {
+  *	queue wake/stop logic should prevent this URB from getting
+  *	empty. Please refer to es58x_get_tx_urb() for more details.
+  * @tx_urbs_idle_cnt: number of urbs in @tx_urbs_idle.
+- * @opened_channel_cnt: number of channels opened (c.f. es58x_open()
+- *	and es58x_stop()).
+  * @ktime_req_ns: kernel timestamp when es58x_set_realtime_diff_ns()
+  *	was called.
+  * @realtime_diff_ns: difference in nanoseconds between the clocks of
+@@ -384,6 +382,10 @@ struct es58x_operators {
+  *	in RX branches.
+  * @rx_max_packet_size: Maximum length of bulk-in URB.
+  * @num_can_ch: Number of CAN channel (i.e. number of elements of @netdev).
++ * @opened_channel_cnt: number of channels opened. Free of race
++ *	conditions because its two users (net_device_ops:ndo_open()
++ *	and net_device_ops:ndo_close()) guarantee that the network
++ *	stack big kernel lock (a.k.a. rtnl_mutex) is being hold.
+  * @rx_cmd_buf_len: Length of @rx_cmd_buf.
+  * @rx_cmd_buf: The device might split the URB commands in an
+  *	arbitrary amount of pieces. This buffer is used to concatenate
+@@ -406,7 +408,6 @@ struct es58x_device {
+ 	struct usb_anchor tx_urbs_busy;
+ 	struct usb_anchor tx_urbs_idle;
+ 	atomic_t tx_urbs_idle_cnt;
+-	atomic_t opened_channel_cnt;
+ 
+ 	u64 ktime_req_ns;
+ 	s64 realtime_diff_ns;
+@@ -415,6 +416,7 @@ struct es58x_device {
+ 
+ 	u16 rx_max_packet_size;
+ 	u8 num_can_ch;
++	u8 opened_channel_cnt;
+ 
+ 	u16 rx_cmd_buf_len;
+ 	union es58x_urb_cmd rx_cmd_buf;
+-- 
+2.34.1
 
-> +        compatible = "xlnx,zynq-can-1.0";
-> +        clocks = <&clkc 19>, <&clkc 36>;
-> +        clock-names = "can_clk", "pclk";
-> +        reg = <0xe0008000 0x1000>;
-> +        interrupts = <0 28 4>;
-> +        interrupt-parent = <&intc>;
-> +        tx-fifo-depth = <0x40>;
-> +        rx-fifo-depth = <0x40>;
-> +    };
-> +  - |
-> +    axi_can_0: can@40000000 {
-> +        compatible = "xlnx,axi-can-1.00.a";
-> +        clocks = <&clkc 0>, <&clkc 1>;
-> +        clock-names = "can_clk","s_axi_aclk" ;
-> +        reg = <0x40000000 0x10000>;
-> +        interrupt-parent = <&intc>;
-> +        interrupts = <0 59 1>;
-> +        tx-fifo-depth = <0x40>;
-> +        rx-fifo-depth = <0x40>;
-> +    };
-> +  - |
-> +    canfd_0: can@40000000 {
-> +        compatible = "xlnx,canfd-1.0";
-> +        clocks = <&clkc 0>, <&clkc 1>;
-> +        clock-names = "can_clk", "s_axi_aclk";
-> +        reg = <0x40000000 0x2000>;
-> +        interrupt-parent = <&intc>;
-> +        interrupts = <0 59 1>;
-> +        tx-mailbox-count = <0x20>;
-> +        rx-fifo-depth = <0x20>;
-> +    };
-> +  - |
-> +    canfd_1: can@ff060000 {
-> +        compatible = "xlnx,canfd-2.0";
-> +        clocks = <&clkc 0>, <&clkc 1>;
-> +        clock-names = "can_clk", "s_axi_aclk";
-> +        reg = <0xff060000 0x6000>;
-> +        interrupt-parent = <&intc>;
-> +        interrupts = <0 59 1>;
-> +        tx-mailbox-count = <0x20>;
-> +        rx-fifo-depth = <0x40>;
-> +    };
-> -- 
-> 2.17.1
-> 
-> 
