@@ -2,156 +2,69 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 762A94B3548
-	for <lists+linux-can@lfdr.de>; Sat, 12 Feb 2022 14:28:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AC8D4B3572
+	for <lists+linux-can@lfdr.de>; Sat, 12 Feb 2022 15:18:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234059AbiBLN2A (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 12 Feb 2022 08:28:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47378 "EHLO
+        id S231852AbiBLOSv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 12 Feb 2022 09:18:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbiBLN17 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 12 Feb 2022 08:27:59 -0500
-Received: from smtp.smtpout.orange.fr (smtp01.smtpout.orange.fr [80.12.242.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BDCA2623
-        for <linux-can@vger.kernel.org>; Sat, 12 Feb 2022 05:27:55 -0800 (PST)
-Received: from localhost.localdomain ([124.33.176.97])
-        by smtp.orange.fr with ESMTPA
-        id IsR7niVP1u3WEIsRKn94XY; Sat, 12 Feb 2022 14:27:53 +0100
-X-ME-Helo: localhost.localdomain
-X-ME-Auth: MDU0YmViZGZmMDIzYiBlMiM2NTczNTRjNWZkZTMwOGRiOGQ4ODf3NWI1ZTMyMzdiODlhOQ==
-X-ME-Date: Sat, 12 Feb 2022 14:27:53 +0100
-X-ME-IP: 124.33.176.97
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     netdev@vger.kernel.org, David Ahern <dsahern@gmail.com>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        linux-can@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH iproute2] iplink_can: print_usage: typo fix, add missing spaces
-Date:   Sat, 12 Feb 2022 22:27:27 +0900
-Message-Id: <20220212132727.3710-1-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S230193AbiBLOSu (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 12 Feb 2022 09:18:50 -0500
+X-Greylist: delayed 591 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 12 Feb 2022 06:18:44 PST
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652A4245AF
+        for <linux-can@vger.kernel.org>; Sat, 12 Feb 2022 06:18:44 -0800 (PST)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout02.posteo.de (Postfix) with ESMTPS id 46736240101
+        for <linux-can@vger.kernel.org>; Sat, 12 Feb 2022 15:08:51 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
+        t=1644674931; bh=Q3dZJXi1GM9ArUASm6QEs5f20j9tFqyY6+Us/BftEPA=;
+        h=Date:To:From:Subject:From;
+        b=i7EFzKb80abLTilUhlP/nZ6TbawOqW8CWJ+XiwEAKCCv/Ry1YiqASQsE76VSWZ+kd
+         s5Wz3B4vsrfjD9mUaOvBGmX94KCARA5l26xVy0y/b9j7i5Dla4gqiFn9XskNIohXKg
+         mj1dTyFKFLQsnxj7vnA6yfvwU6nlLbQjqRqbC1+kLtHP8Mmiaotn8jytwjNqfb+uhs
+         KAZxt9q6Gd7M7Tk9rVscjTHAT2X64X2ioF5wL+i/pXp1Um5cREhYAa9YqjmMMyGwq9
+         x9THx7TcUJycqvwC0eASnSdwJcQPZn3Gf8Y78xcGsG9kWzBKlNGx8rRZgFaCJVZiC5
+         plcNWj03udLkw==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4Jwsm25zQfz6tp9
+        for <linux-can@vger.kernel.org>; Sat, 12 Feb 2022 15:08:50 +0100 (CET)
+Message-ID: <74db45d1-e59a-d4b3-239a-b919b6211ab4@posteo.de>
+Date:   Sat, 12 Feb 2022 14:08:50 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Language: en-US
+To:     linux-can <linux-can@vger.kernel.org>
+From:   Patrick Menschel <menschel.p@posteo.de>
+Subject: can-bcm: EINVAL when TX_DELETE a cyclic CAN FD transmit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The can help menu misses three spaces for the TDCV, TDCO and TDCF
-parameters, making the closing curly bracket unaligned.
+Hello,
 
-For reference, before this patch:
+I'd like to report a strange phenomena that I found while testing BCM
+with CAN FD related stuff.
 
-| $ ip link help can
-| Usage: ip link set DEVICE type can
-| 	[ bitrate BITRATE [ sample-point SAMPLE-POINT] ] |
-| 	[ tq TQ prop-seg PROP_SEG phase-seg1 PHASE-SEG1
-|  	  phase-seg2 PHASE-SEG2 [ sjw SJW ] ]
-|
-| 	[ dbitrate BITRATE [ dsample-point SAMPLE-POINT] ] |
-| 	[ dtq TQ dprop-seg PROP_SEG dphase-seg1 PHASE-SEG1
-|  	  dphase-seg2 PHASE-SEG2 [ dsjw SJW ] ]
-| 	[ tdcv TDCV tdco TDCO tdcf TDCF ]
-|
-| 	[ loopback { on | off } ]
-| 	[ listen-only { on | off } ]
-| 	[ triple-sampling { on | off } ]
-| 	[ one-shot { on | off } ]
-| 	[ berr-reporting { on | off } ]
-| 	[ fd { on | off } ]
-| 	[ fd-non-iso { on | off } ]
-| 	[ presume-ack { on | off } ]
-| 	[ cc-len8-dlc { on | off } ]
-| 	[ tdc-mode { auto | manual | off } ]
-|
-| 	[ restart-ms TIME-MS ]
-| 	[ restart ]
-|
-| 	[ termination { 0..65535 } ]
-|
-| 	Where: BITRATE	:= { NUMBER in bps }
-| 		  SAMPLE-POINT	:= { 0.000..0.999 }
-| 		  TQ		:= { NUMBER in ns }
-| 		  PROP-SEG	:= { NUMBER in tq }
-| 		  PHASE-SEG1	:= { NUMBER in tq }
-| 		  PHASE-SEG2	:= { NUMBER in tq }
-| 		  SJW		:= { NUMBER in tq }
-| 		  TDCV		:= { NUMBER in tc}
-| 		  TDCO		:= { NUMBER in tc}
-| 		  TDCF		:= { NUMBER in tc}
-| 		  RESTART-MS	:= { 0 | NUMBER in ms }
+When I have set up a CAN FD frame for a cyclic transmit, and then delete
+it with a TX_DELETE bcm msg, I run into EINVAL due to the fact that I
+did not set the CAN_FD flag in bcm flags. I did set bcm flags to 0 like
+I do for classic can frames.
 
-... and after this patch:
+I'm not sure if that EINVAL actually makes sense because afaik that
+CAN_FD flag was introduced to switch the size of the following frames,
+which are not present with TX_DELETE.
 
-| $ ip link help can
-| Usage: ip link set DEVICE type can
-| 	[ bitrate BITRATE [ sample-point SAMPLE-POINT] ] |
-| 	[ tq TQ prop-seg PROP_SEG phase-seg1 PHASE-SEG1
-|  	  phase-seg2 PHASE-SEG2 [ sjw SJW ] ]
-|
-| 	[ dbitrate BITRATE [ dsample-point SAMPLE-POINT] ] |
-| 	[ dtq TQ dprop-seg PROP_SEG dphase-seg1 PHASE-SEG1
-|  	  dphase-seg2 PHASE-SEG2 [ dsjw SJW ] ]
-| 	[ tdcv TDCV tdco TDCO tdcf TDCF ]
-|
-| 	[ loopback { on | off } ]
-| 	[ listen-only { on | off } ]
-| 	[ triple-sampling { on | off } ]
-| 	[ one-shot { on | off } ]
-| 	[ berr-reporting { on | off } ]
-| 	[ fd { on | off } ]
-| 	[ fd-non-iso { on | off } ]
-| 	[ presume-ack { on | off } ]
-| 	[ cc-len8-dlc { on | off } ]
-| 	[ tdc-mode { auto | manual | off } ]
-|
-| 	[ restart-ms TIME-MS ]
-| 	[ restart ]
-|
-| 	[ termination { 0..65535 } ]
-|
-| 	Where: BITRATE	:= { NUMBER in bps }
-| 		  SAMPLE-POINT	:= { 0.000..0.999 }
-| 		  TQ		:= { NUMBER in ns }
-| 		  PROP-SEG	:= { NUMBER in tq }
-| 		  PHASE-SEG1	:= { NUMBER in tq }
-| 		  PHASE-SEG2	:= { NUMBER in tq }
-| 		  SJW		:= { NUMBER in tq }
-| 		  TDCV		:= { NUMBER in tc }
-| 		  TDCO		:= { NUMBER in tc }
-| 		  TDCF		:= { NUMBER in tc }
-| 		  RESTART-MS	:= { 0 | NUMBER in ms }
+I already fixed that issue in my Python module, so it works for me.
 
-Fixes: 0c263d7c36ff ("iplink_can: add new CAN FD bittiming parameters:
-Transmitter Delay Compensat ion (TDC)")
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- ip/iplink_can.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/ip/iplink_can.c b/ip/iplink_can.c
-index 6ea02a2a..0e670a6c 100644
---- a/ip/iplink_can.c
-+++ b/ip/iplink_can.c
-@@ -53,9 +53,9 @@ static void print_usage(FILE *f)
- 		"\t	  PHASE-SEG1	:= { NUMBER in tq }\n"
- 		"\t	  PHASE-SEG2	:= { NUMBER in tq }\n"
- 		"\t	  SJW		:= { NUMBER in tq }\n"
--		"\t	  TDCV		:= { NUMBER in tc}\n"
--		"\t	  TDCO		:= { NUMBER in tc}\n"
--		"\t	  TDCF		:= { NUMBER in tc}\n"
-+		"\t	  TDCV		:= { NUMBER in tc }\n"
-+		"\t	  TDCO		:= { NUMBER in tc }\n"
-+		"\t	  TDCF		:= { NUMBER in tc }\n"
- 		"\t	  RESTART-MS	:= { 0 | NUMBER in ms }\n"
- 		);
- }
--- 
-2.34.1
+Kind Regards,
+Patrick
 
