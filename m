@@ -2,47 +2,47 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93BFA4BAAAD
-	for <lists+linux-can@lfdr.de>; Thu, 17 Feb 2022 21:17:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCC054BAAAF
+	for <lists+linux-can@lfdr.de>; Thu, 17 Feb 2022 21:17:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243658AbiBQURX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 17 Feb 2022 15:17:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40078 "EHLO
+        id S243775AbiBQURw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 17 Feb 2022 15:17:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231553AbiBQURW (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 17 Feb 2022 15:17:22 -0500
+        with ESMTP id S241812AbiBQURv (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 17 Feb 2022 15:17:51 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF71BBAB80
-        for <linux-can@vger.kernel.org>; Thu, 17 Feb 2022 12:17:06 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4FABAB80
+        for <linux-can@vger.kernel.org>; Thu, 17 Feb 2022 12:17:36 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1nKnD2-0004Rs-3s; Thu, 17 Feb 2022 21:17:00 +0100
+        id 1nKnDX-0004UJ-QC; Thu, 17 Feb 2022 21:17:31 +0100
 Received: from pengutronix.de (unknown [195.138.59.174])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id D2C923686C;
-        Thu, 17 Feb 2022 20:16:56 +0000 (UTC)
-Date:   Thu, 17 Feb 2022 21:16:53 +0100
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 455B036871;
+        Thu, 17 Feb 2022 20:17:31 +0000 (UTC)
+Date:   Thu, 17 Feb 2022 21:17:28 +0100
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     Chandrasekar R <rcsekar@samsung.com>
 Cc:     linux-can@vger.kernel.org, 'Rob Herring' <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org,
-        'Benjamin Gaignard' <benjamin.gaignard@st.com>
-Subject: Re: [PATCH net-next] dt-binding: can: m_can: fix indention of table
- in bosch,mram-cfg description
-Message-ID: <20220217201653.gq7e2vsblvdrl2mz@pengutronix.de>
-References: <CGME20220217130613epcas5p148a75f63b455ad14decf075f1842114b@epcas5p1.samsung.com>
- <20220217101111.2291151-1-mkl@pengutronix.de>
- <006f01d82417$39d94e20$ad8bea60$@samsung.com>
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 3/9] dt-binding: can: m_can: include common CAN
+ controller bindings
+Message-ID: <20220217201728.x7rrj3qeoj67wevt@pengutronix.de>
+References: <20220124215642.3474154-1-mkl@pengutronix.de>
+ <CGME20220217130709epcas5p4a339ca58cc485aa1732eaa3b4b0409cb@epcas5p4.samsung.com>
+ <20220124215642.3474154-4-mkl@pengutronix.de>
+ <007001d82418$2c5fcac0$851f6040$@samsung.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="g7w27xgijfezubhe"
+        protocol="application/pgp-signature"; boundary="7nhneshlxj7zhrgb"
 Content-Disposition: inline
-In-Reply-To: <006f01d82417$39d94e20$ad8bea60$@samsung.com>
+In-Reply-To: <007001d82418$2c5fcac0$851f6040$@samsung.com>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -57,31 +57,34 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---g7w27xgijfezubhe
+--7nhneshlxj7zhrgb
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 17.02.2022 21:28:35, Chandrasekar R wrote:
-> > Subject: [PATCH net-next] dt-binding: can: m_can: fix indention of table
-> in
-> > bosch,mram-cfg description
+On 17.02.2022 21:35:22, Chandrasekar R wrote:
+> > -----Original Message-----
+> > From: Marc Kleine-Budde <mkl@pengutronix.de>
+> > Sent: 25 January 2022 03:27
+> > To: linux-can@vger.kernel.org
+> > Cc: Marc Kleine-Budde <mkl@pengutronix.de>; Chandrasekar Ramakrishnan
+> > <rcsekar@samsung.com>
+> > Subject: [PATCH 3/9] dt-binding: can: m_can: include common CAN control=
+ler
+> > bindings
 > >=20
-> > This patch fixes the indention of the table in the description of the
-> > bosch,mram-cfg property.
+> > Since commit
 > >=20
-> > Cc: Sriram Dash <sriram.dash@samsung.com>
-> This id does not exists anymore.
-
-Thanks, already removed.
-
-> > Cc: Benjamin Gaignard <benjamin.gaignard@st.com>
+> > | 1f9234401ce0 ("dt-bindings: can: add can-controller.yaml")
+> >=20
+> > there is a common CAN controller binding. Add this to the m_can binding.
+> >=20
+> > Cc: Chandrasekar Ramakrishnan <rcsekar@samsung.com>
 > > Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 > > ---
-> Changes looks fine,=20
 > Reviewed-by: Chandrasekar Ramakrishnan <rcsekar@samsung.com>
 
-Added to the patch.
+Thanks for you review.
 
 regards,
 Marc
@@ -92,19 +95,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---g7w27xgijfezubhe
+--7nhneshlxj7zhrgb
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmIOrTIACgkQrX5LkNig
-010WGgf9GTX2GfPQx5aPLu81at7VKKCIrJLe+Pt8nXQVKyHPrgJki1siY6evOx2E
-vs6E2uPe4oP++oIfud9EN5GVm49T0dkkxadX2X6Tk7sNnarOzcBbdG/YrphPEiIz
-jJOE7VTv44JNpEMLx+VKXQOa9004nWNXL4EXMUtfQ8XQhxsVF0+GHkxT1h4n1LQK
-fmp4FLMDBy/gkjK4sRpOjFMDdVQ8rPOMJPqXp1Z/PxEoQfnMxph2Y7GREbduB2QV
-E9TRzEwYjlTXeKBLMRYatgrqKowaGsH/EPejQft/OWuzWxI2r3U1BG6PGJFKl0zM
-Vh8UaNI9c+5iV7K+G3Ftvtk2pBzAHg==
-=5/As
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmIOrVUACgkQrX5LkNig
+013Dxgf/VwK2eRM5pVq4OIu9yEnx6DIb3aQT7MCQnk6cWiRUbSvHxQ4S/e05JY6G
+B9nfXLZlN6yoB8DX9XtkyCaDxpX3lVdp+1F+cA7pMH3jw7CNY1sGsBWxiTlQmwz8
+9tQs7pwoCsnWtt1azqcg1fZb3GafsN58xW4mU61T3TvVyj7NHY+eTEJbwyUn0Zyj
+nitegv+fSVqEHcuu+ARpcXrGy8bqSSN4uVgIduB/Km7Vhth84c9JLQzpy6uUZZcr
+bToqG7rdXcVZu2iheg/aBtGvlyzv7Rk2o16VMOzlKF7+PBEsULBMFzOlH262MRVH
+MAk2CDnh3rMwGFZP5JNyvdnamI67EA==
+=aOhB
 -----END PGP SIGNATURE-----
 
---g7w27xgijfezubhe--
+--7nhneshlxj7zhrgb--
