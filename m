@@ -2,315 +2,191 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C3E14BB946
-	for <lists+linux-can@lfdr.de>; Fri, 18 Feb 2022 13:38:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 613F84BDDB5
+	for <lists+linux-can@lfdr.de>; Mon, 21 Feb 2022 18:45:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235284AbiBRMik (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 18 Feb 2022 07:38:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54596 "EHLO
+        id S1352890AbiBUKFJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 21 Feb 2022 05:05:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234830AbiBRMij (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 18 Feb 2022 07:38:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49441738F2;
-        Fri, 18 Feb 2022 04:38:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6D27EB8261C;
-        Fri, 18 Feb 2022 12:38:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38114C340E9;
-        Fri, 18 Feb 2022 12:37:52 +0000 (UTC)
-Message-ID: <c70113dc-d017-b5bc-1466-02530f4707e2@xs4all.nl>
-Date:   Fri, 18 Feb 2022 13:37:50 +0100
+        with ESMTP id S1352224AbiBUKE2 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 21 Feb 2022 05:04:28 -0500
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70070.outbound.protection.outlook.com [40.107.7.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77A545131C
+        for <linux-can@vger.kernel.org>; Mon, 21 Feb 2022 01:29:59 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JKarXoHh+OYM/IU+znoaOoSCik3s+mK4LMqW1r8JB9PshHmElY3ZOn4AF6VtJXF1WHjJsNbsyRZxQmyui7IcjReyAuqznF3SahZWzm3yJJxSdOTM9KzeTqAn7jNhlYzVuxZYRIMl0o+nxHoAp0JM68y1GqPC42xXuKCXa5Znb6qy4O6IqDYJbpFIBDURq8IkBhBOEmYevphqkg2v2e84srizpU+R1STiawh0ZbcRqUxStC5MNHpmT143T44y3qRlR7r7YR8az+VJJOa3arPg0cycM2J30QAU4tE7Ufh+4L+HDxXFMgoihdgkK0tvKxcOrklF1mMLLIT1ZIPnso0HNg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2xH446WG6aEldbLicukGixyJ0Ge8hinepiOYpfU9vWc=;
+ b=g1EMztGZuAwkzMZQRrQzZ7/5d2HdiDTRAvSanOjX4fjaCBi0LuRiQQZdyQQxTPpxinoLqjzaW7AfP4hUSJE5ew/7rsucwf2teqk742LVEEiB2m9C3m04Njql5Jh+UYUlL/uNnsGEHVLBScwrWp0UYHuCDXsd9WVhCgjrDb320ja6KVo1PBXGsG4yujCoaeilhdWFkgpKTFlcJzoYYFgs/MkmxqNMAIOg1vZvVKUAjIhclPwabMlW0UCWAFNZeiaZBqhTivQId37mRjXZL4hvnVjd38nuoFhmUcM/3Cfbpjv8C7PC78qAoze1y3XARkewgqAHMC/1g2wL6odzMrIPwg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=peak-system.com; dmarc=pass action=none
+ header.from=peak-system.com; dkim=pass header.d=peak-system.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=itpeak.onmicrosoft.com; s=selector2-itpeak-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2xH446WG6aEldbLicukGixyJ0Ge8hinepiOYpfU9vWc=;
+ b=sFhndHtZidcfVc8OUb2UJ0hk+bgPJKatqqc1QYHEh1FMoT/7JvJDFNGcuYhzLTABaYOi+JOlRuQwu8/iKFDjkQ5oD5o+GkiMjtMiL8lDSBR6+DZHAT7BF3ZTCqqsgNnb08dKtdoQyYhfSB63QWIA3PLw/njXvjvkNkYi1xd9kIw=
+Received: from PA4PR03MB6797.eurprd03.prod.outlook.com (2603:10a6:102:f1::9)
+ by VE1PR03MB5743.eurprd03.prod.outlook.com (2603:10a6:803:121::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.26; Mon, 21 Feb
+ 2022 09:29:55 +0000
+Received: from PA4PR03MB6797.eurprd03.prod.outlook.com
+ ([fe80::3460:fc17:db04:a018]) by PA4PR03MB6797.eurprd03.prod.outlook.com
+ ([fe80::3460:fc17:db04:a018%7]) with mapi id 15.20.4995.016; Mon, 21 Feb 2022
+ 09:29:55 +0000
+From:   =?utf-8?B?U3TDqXBoYW5lIEdyb3NqZWFu?= <s.grosjean@peak-system.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+CC:     linux-can Mailing List <linux-can@vger.kernel.org>
+Subject: RE: [PATCH 6/6] can: peak_usb: add ethtool interface to user defined
+ flashed device number
+Thread-Topic: [PATCH 6/6] can: peak_usb: add ethtool interface to user defined
+ flashed device number
+Thread-Index: AQHYJwIL1m3wS4zZTUumITpN1+oOHA==
+Date:   Mon, 21 Feb 2022 09:29:55 +0000
+Message-ID: <PA4PR03MB67970BDE7AB5545F3425264AD63A9@PA4PR03MB6797.eurprd03.prod.outlook.com>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+suggested_attachment_session_id: a8c46a83-9e9d-16ff-ffa4-3e16497b838e
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=peak-system.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 507c525a-4f4b-4be1-3b92-08d9f51cb872
+x-ms-traffictypediagnostic: VE1PR03MB5743:EE_
+x-microsoft-antispam-prvs: <VE1PR03MB5743110051ABF3F84055CE2BD63A9@VE1PR03MB5743.eurprd03.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: yxLlLQrrMRBRBWPQsYlbalDehv1wOUMXayQABLhlD4FJ7sh3egCdA3zuPEWdm45ot8bJP6IVjzWlf+ckauQ3REDgq+MR604qwnvx8GRWnLKAotELtxMxwj42GpcvNKOCTRRCxZJN3Iq7b0Xotqy1QLWBoEDqsksqOM07Dcq0ItuUOv0kt5/IG8ql5rKf7CyxiK8yaBvDDHSstUcCsrRDuXCHL2b4oyaC+t/jk/h43DZpTkjcJVFC9/HSCgMI1+U+JWv8ZA/dzEYUnI3FYbSe3CamSThiW+03HFFE4OFnWRW4ohHDFgISMRC3Bz+y+8rHTjfvHpbh0HSAnc+/ASJ0GIb3vpnPNuUOg3RlSjD4qkC5BcmiME1Htxnjjjgu7g2utZlFE1uQ3Jh2RgTO8gEXlD9ySrKBcvUAoph29/9o4yQpy2xReTOQ8c+GF6doAmhfS535+NKvCh+gikh+YdZl+MO3VG19yW//F3xy8xf/X/hGtRdn0/bt8h8RFR5Il24oQ10EqVmalP3Axx6fv9NTnf+/4nWlHg4t2kLR46P0Z0jjV3ScPxbb2T3y282QuRmDHOz73tHiDb6hCJ60KQOvSWpvmk7L/pJAHkfFZrqn1DLlKJONlnlnf9OJZBZ4bncXPaR/c13LIJc0rkRd19c8qrot9MkrDPbO+/XCe1wmnIEA+pU6rFkP57FKGlHNQlIvrAV4iLjDghRYEsubWZTFB07iOyo1HxGGXRGYaQMs2YJFf6B3Y/8Q8CLsqXC/3hNu3nx/aRad9ka2H2wOQDkgJzdZ4iY7DgtnXs63FjhEVPA=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR03MB6797.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(376002)(39840400004)(136003)(366004)(396003)(346002)(64756008)(66946007)(66476007)(66446008)(66556008)(76116006)(8676002)(4326008)(2906002)(83380400001)(15974865002)(33656002)(38100700002)(5660300002)(52536014)(53546011)(6506007)(7696005)(8936002)(186003)(966005)(122000001)(9686003)(71200400001)(26005)(55016003)(86362001)(66574015)(6916009)(508600001)(85182001)(85202003)(38070700005)(316002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RnJudzdIY2Q1Vzc4Z0hXbnB0Yk1IcjZZVEJQTFBtQkFnQzBiS1JGSDRZZVlK?=
+ =?utf-8?B?ZlNnZytmQmtYQ1FMZHZ5am1acE9uVDZCMG0rY2l3VHBac1VHRUt2MzBMZ3Q3?=
+ =?utf-8?B?SHBvSVFKaFNkSlk4WER4NGtBY3JNdyt6UURUUy85VlltLzNRUVpCdFFqMEc0?=
+ =?utf-8?B?S3prRi9RWktRdVVJWm5IdG9kb0VXdnVtbHJiZHdwRmhFZVZUT1R3SVlpT2t3?=
+ =?utf-8?B?SmhUak5HWlJidkErcjN5Q1JUMlpadGhpTWkvbnEzVmFRQkVHRlpqeU9HKzhN?=
+ =?utf-8?B?eS9oa0tHZ3dPaDNNbWxxVTVJZEh1QWtBckpRVE84Q2VGZXRLMzVRMlNvcXpM?=
+ =?utf-8?B?a1BrZzVtSCtSeTZEU3VkUC9UcG5GbkhQVjZSWHlsb09lVHJxWUV6MmFZamZn?=
+ =?utf-8?B?NDJSUlo1ZE91dEJPTTNhRmpqQUxVb0hmSk9ROFZaU0tsMllHd2t1OSsrU21W?=
+ =?utf-8?B?QWZaRnZVQloralBuQ29ZTHgvR0hoMFhGcWd5OXQ2UG1ha0czaWR1RzhSYTZL?=
+ =?utf-8?B?U2N5eXlaNTNJN0dOdTBJYjEyWXVISlcxakVybmQ1WXVLL2xjMFNmTFFhUGNv?=
+ =?utf-8?B?RHF4UnAwU0llT2RjRExKU293Zlk5WTRnZmdaalZSRmw5VW5SdGNGL00yTlFt?=
+ =?utf-8?B?bzlub2F2WnhWMjViV2hyWUczS2s4dVV1MENhenlQT2V2TnZ1QnNwM05RU3Y1?=
+ =?utf-8?B?TzY2N2RVaGZVRkdlRmpFQ0hCRkF1a200VVZDNU82TGNlcGJEbDVXU0p5ODIy?=
+ =?utf-8?B?Q3Z1NzI0MjIwby90eGxMNlFpZFpTVzAvUjBvV2xxWVI1Smd4ZnM3eE9aREZz?=
+ =?utf-8?B?QWR4M1dnV3NyTzJNMVdUaTBaaFhyK0Q0aDU0UWV0dGZ2bGdwU0Y0cUlHRkVS?=
+ =?utf-8?B?ejhselpJdk9PVnZWLzhnL0htUDBTbGE2ZzViK096Qm91SEVJU0JJYjVWV1hj?=
+ =?utf-8?B?Mjd4NGNDZWorMzZqMHFXZWlVUWd5dTB5QTQycHFLdWhiK09rZWQ5SFVmdktD?=
+ =?utf-8?B?bkZkWGxVc2FLODZpZ3dqWDl0WHkxS0o0ZjZWTGpMUzlyNmZUVnVPTDJYYjFV?=
+ =?utf-8?B?U2ZlTnI2THNyLzliUlZ5WElEQzkvNFFzZEpnZG43UnI1WEpIVDVrSTMrUThz?=
+ =?utf-8?B?WWRNbHdXV1gvbGdNbWxsUDlEby83cGVvZzdMdEpsT25qa3J0TEt2TG01alRR?=
+ =?utf-8?B?QTVSN283WjI0QXgrdmtIU0Nwb2JDa2Q3aWlCQy9uU3N6cnpsdEdiQUhUSXRX?=
+ =?utf-8?B?Z3VkK2l2cnZEaitMbDlGdDNNVlVPN3pzdUhQcDJzdUx2UGlLNmFGUjhJSWlS?=
+ =?utf-8?B?bEkyNVh3VmxKWFFxc1dzMktMK3hNQWZIQ1lCVkZaTDlCSWI0eWhST2VsZURq?=
+ =?utf-8?B?RjNyYjFPRGdkVSs1L0lrZWxBT1hXZmVVTzh4NWgwM1FPYytXdzFWaTRIa2tG?=
+ =?utf-8?B?ck5HSHVxczZ6WStieXdrOWkvQmdnNysySmIvL05pWFllSXRqWHZ1RVhrbVZP?=
+ =?utf-8?B?QjdmTGc1S0Y3anQ3RE0vODFEaWUxVTN0c2FrY1NjeURTbG5USGxSUkJPMnph?=
+ =?utf-8?B?SkkzVFEvYng0MERiejVsNFluM2JZYmZHQXQxdkN0UjByaEpPS2JOczFJaStY?=
+ =?utf-8?B?Kytsd1luLy9CcFNVK1NZaGZjdG9wYlBsMVZTc3FGSUd2S294Vm81L1UvVHhK?=
+ =?utf-8?B?YWVoY0hWSm0wWGZocm92WVQ4U2t4d1M1aW1JOXBZa3dsYnZPaTlsaGQ4VzVo?=
+ =?utf-8?B?dFhRekt4ZWU4cklKdmhtVlNHSGc2V0RpQmN0WC90NytFcURXYXBMc29FYWNP?=
+ =?utf-8?B?WWxieTlmT2dERjRJRVlwaWxRQVpsTmZ4dUdRalZWYmo0ckNsaW5qS0hEUzVy?=
+ =?utf-8?B?Mk1GenhVbDVzTDBteEcyQVd5SkFHVVdMSy9IU2lmMytaUmxIeE9hcmN4d2c5?=
+ =?utf-8?B?UDFXUE9MbGVlOURiWVl1K0NLK2dJLzk5K1MwVkliMGdvcTdrSXlBdWFnckZY?=
+ =?utf-8?B?clU2ZEFIWEM1WUxrcERubFkyUmowaEw5MVJuRTlPRGZoejZqMVZ3TDhxV25V?=
+ =?utf-8?B?M0dpdEllUk9oZ25DUWJIN0dXSFdjQlJwc2c1NHVlR1NlWkNOZDVmM0RGcVl4?=
+ =?utf-8?B?clkzeW1iTmQ1UWpPSm5CYm9kRlRjOEpjdXAvMWsrbnZlaUV1alVTelIyNjNG?=
+ =?utf-8?B?ckk2RUtlaTZoSS9zM3FnbUFXWFZCRTFpQ3IwU3lIMnN3MHBLM1pmSmllUmx2?=
+ =?utf-8?B?aG5tdDNSUk5WU1Z1TExlcjJtQU5RPT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH 5/5] spi: make remove callback a void function
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>
-Cc:     =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Markuss Broks <markuss.broks@gmail.com>,
-        Emma Anholt <emma@anholt.net>,
-        David Lechner <david@lechnology.com>,
-        Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dan Robertson <dan@dlrobertson.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Marcus Folkesson <marcus.folkesson@gmail.com>,
-        Kent Gustavsson <kent@minoris.se>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Yasunari Takiguchi <Yasunari.Takiguchi@sony.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Charles-Antoine Couret <charles-antoine.couret@nexvision.fr>,
-        Antti Palosaari <crope@iki.fi>,
-        Lee Jones <lee.jones@linaro.org>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Eric Piel <eric.piel@tremplin-utc.net>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Thomas Kopp <thomas.kopp@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        =?UTF-8?Q?=c5=81ukasz_Stelmach?= <l.stelmach@samsung.com>,
-        Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Harry Morris <h.morris@cascoda.com>,
-        Varka Bhadram <varkabhadram@gmail.com>,
-        Xue Liu <liuxuenetmail@gmail.com>, Alan Ott <alan@signal11.us>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Ajay Singh <ajay.kathat@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Solomon Peachy <pizza@shaftnet.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Mark Greer <mgreer@animalcreek.com>,
-        Benson Leung <bleung@chromium.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jerome.pouiller@silabs.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        James Schulman <james.schulman@cirrus.com>,
-        David Rhodes <david.rhodes@cirrus.com>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        =?UTF-8?Q?Nuno_S=c3=a1?= <nuno.sa@analog.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Alexandru Ardelean <ardeleanalex@gmail.com>,
-        Mike Looijmans <mike.looijmans@topic.nl>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Antoniu Miclaus <antoniu.miclaus@analog.com>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        =?UTF-8?Q?Ronald_Tschal=c3=a4r?= <ronald@innovation.ch>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
-        Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Heiko Schocher <hs@denx.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Matt Kline <matt@bitbashing.io>,
-        Torin Cooper-Bennun <torin@maxiluxsystems.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        =?UTF-8?Q?Stefan_M=c3=a4tje?= <stefan.maetje@esd.eu>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Wei Yongjun <weiyongjun1@huawei.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Nanyong Sun <sunnanyong@huawei.com>,
-        Yang Shen <shenyang39@huawei.com>,
-        dingsenjie <dingsenjie@yulong.com>,
-        Aditya Srivastava <yashsri421@gmail.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michael Walle <michael@walle.cc>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        wengjianfeng <wengjianfeng@yulong.com>,
-        Sidong Yang <realwakka@gmail.com>,
-        Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>,
-        Zhang Qilong <zhangqilong3@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>,
-        Davidlohr Bueso <dbueso@suse.de>, Claudius Heine <ch@denx.de>,
-        Jiri Prchal <jiri.prchal@aksignal.cz>,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-wpan@vger.kernel.org,
-        linux-wireless@vger.kernel.org, libertas-dev@lists.infradead.org,
-        platform-driver-x86@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
-        kernel@pengutronix.de
-References: <20220123175201.34839-1-u.kleine-koenig@pengutronix.de>
- <20220123175201.34839-6-u.kleine-koenig@pengutronix.de>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20220123175201.34839-6-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: peak-system.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR03MB6797.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 507c525a-4f4b-4be1-3b92-08d9f51cb872
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Feb 2022 09:29:55.1237
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: e31dcbd8-3f8b-4c5c-8e73-a066692b30a1
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 11pQvMD5HLSMZWTrYVnle+yl9IX7bFHxqnz5rqWC1lcHKHeW8z8RKXTFwDsRe/1ZG2H9TE1BV891zQ7tmRLCd6q6LGDBHUYas5z4/DD0xw4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR03MB5743
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 23/01/2022 18:52, Uwe Kleine-König wrote:
-> The value returned by an spi driver's remove function is mostly ignored.
-> (Only an error message is printed if the value is non-zero that the
-> error is ignored.)
-> 
-> So change the prototype of the remove function to return no value. This
-> way driver authors are not tempted to assume that passing an error to
-> the upper layer is a good idea. All drivers are adapted accordingly.
-> There is no intended change of behaviour, all callbacks were prepared to
-> return 0 before.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
->  drivers/bus/moxtet.c                                  |  4 +---
->  drivers/char/tpm/st33zp24/spi.c                       |  4 +---
->  drivers/char/tpm/tpm_tis_spi_main.c                   |  3 +--
->  drivers/clk/clk-lmk04832.c                            |  4 +---
->  drivers/gpio/gpio-74x164.c                            |  4 +---
->  drivers/gpio/gpio-max3191x.c                          |  4 +---
->  drivers/gpio/gpio-max7301.c                           |  4 +---
->  drivers/gpio/gpio-mc33880.c                           |  4 +---
->  drivers/gpio/gpio-pisosr.c                            |  4 +---
->  drivers/gpu/drm/panel/panel-abt-y030xx067a.c          |  4 +---
->  drivers/gpu/drm/panel/panel-ilitek-ili9322.c          |  4 +---
->  drivers/gpu/drm/panel/panel-ilitek-ili9341.c          |  3 +--
->  drivers/gpu/drm/panel/panel-innolux-ej030na.c         |  4 +---
->  drivers/gpu/drm/panel/panel-lg-lb035q02.c             |  4 +---
->  drivers/gpu/drm/panel/panel-lg-lg4573.c               |  4 +---
->  drivers/gpu/drm/panel/panel-nec-nl8048hl11.c          |  4 +---
->  drivers/gpu/drm/panel/panel-novatek-nt39016.c         |  4 +---
->  drivers/gpu/drm/panel/panel-samsung-db7430.c          |  3 +--
->  drivers/gpu/drm/panel/panel-samsung-ld9040.c          |  4 +---
->  drivers/gpu/drm/panel/panel-samsung-s6d27a1.c         |  3 +--
->  drivers/gpu/drm/panel/panel-samsung-s6e63m0-spi.c     |  3 +--
->  drivers/gpu/drm/panel/panel-sitronix-st7789v.c        |  4 +---
->  drivers/gpu/drm/panel/panel-sony-acx565akm.c          |  4 +---
->  drivers/gpu/drm/panel/panel-tpo-td028ttec1.c          |  4 +---
->  drivers/gpu/drm/panel/panel-tpo-td043mtea1.c          |  4 +---
->  drivers/gpu/drm/panel/panel-tpo-tpg110.c              |  3 +--
->  drivers/gpu/drm/panel/panel-widechips-ws2401.c        |  3 +--
->  drivers/gpu/drm/tiny/hx8357d.c                        |  4 +---
->  drivers/gpu/drm/tiny/ili9163.c                        |  4 +---
->  drivers/gpu/drm/tiny/ili9225.c                        |  4 +---
->  drivers/gpu/drm/tiny/ili9341.c                        |  4 +---
->  drivers/gpu/drm/tiny/ili9486.c                        |  4 +---
->  drivers/gpu/drm/tiny/mi0283qt.c                       |  4 +---
->  drivers/gpu/drm/tiny/repaper.c                        |  4 +---
->  drivers/gpu/drm/tiny/st7586.c                         |  4 +---
->  drivers/gpu/drm/tiny/st7735r.c                        |  4 +---
->  drivers/hwmon/adcxx.c                                 |  4 +---
->  drivers/hwmon/adt7310.c                               |  3 +--
->  drivers/hwmon/max1111.c                               |  3 +--
->  drivers/hwmon/max31722.c                              |  4 +---
->  drivers/iio/accel/bma400_spi.c                        |  4 +---
->  drivers/iio/accel/bmc150-accel-spi.c                  |  4 +---
->  drivers/iio/accel/bmi088-accel-spi.c                  |  4 +---
->  drivers/iio/accel/kxsd9-spi.c                         |  4 +---
->  drivers/iio/accel/mma7455_spi.c                       |  4 +---
->  drivers/iio/accel/sca3000.c                           |  4 +---
->  drivers/iio/adc/ad7266.c                              |  4 +---
->  drivers/iio/adc/ltc2496.c                             |  4 +---
->  drivers/iio/adc/mcp320x.c                             |  4 +---
->  drivers/iio/adc/mcp3911.c                             |  4 +---
->  drivers/iio/adc/ti-adc12138.c                         |  4 +---
->  drivers/iio/adc/ti-ads7950.c                          |  4 +---
->  drivers/iio/adc/ti-ads8688.c                          |  4 +---
->  drivers/iio/adc/ti-tlc4541.c                          |  4 +---
->  drivers/iio/amplifiers/ad8366.c                       |  4 +---
->  drivers/iio/common/ssp_sensors/ssp_dev.c              |  4 +---
->  drivers/iio/dac/ad5360.c                              |  4 +---
->  drivers/iio/dac/ad5380.c                              |  4 +---
->  drivers/iio/dac/ad5446.c                              |  4 +---
->  drivers/iio/dac/ad5449.c                              |  4 +---
->  drivers/iio/dac/ad5504.c                              |  4 +---
->  drivers/iio/dac/ad5592r.c                             |  4 +---
->  drivers/iio/dac/ad5624r_spi.c                         |  4 +---
->  drivers/iio/dac/ad5686-spi.c                          |  4 +---
->  drivers/iio/dac/ad5761.c                              |  4 +---
->  drivers/iio/dac/ad5764.c                              |  4 +---
->  drivers/iio/dac/ad5791.c                              |  4 +---
->  drivers/iio/dac/ad8801.c                              |  4 +---
->  drivers/iio/dac/ltc1660.c                             |  4 +---
->  drivers/iio/dac/ltc2632.c                             |  4 +---
->  drivers/iio/dac/mcp4922.c                             |  4 +---
->  drivers/iio/dac/ti-dac082s085.c                       |  4 +---
->  drivers/iio/dac/ti-dac7311.c                          |  3 +--
->  drivers/iio/frequency/adf4350.c                       |  4 +---
->  drivers/iio/gyro/bmg160_spi.c                         |  4 +---
->  drivers/iio/gyro/fxas21002c_spi.c                     |  4 +---
->  drivers/iio/health/afe4403.c                          |  4 +---
->  drivers/iio/magnetometer/bmc150_magn_spi.c            |  4 +---
->  drivers/iio/magnetometer/hmc5843_spi.c                |  4 +---
->  drivers/iio/potentiometer/max5487.c                   |  4 +---
->  drivers/iio/pressure/ms5611_spi.c                     |  4 +---
->  drivers/iio/pressure/zpa2326_spi.c                    |  4 +---
->  drivers/input/keyboard/applespi.c                     |  4 +---
->  drivers/input/misc/adxl34x-spi.c                      |  4 +---
->  drivers/input/touchscreen/ads7846.c                   |  4 +---
->  drivers/input/touchscreen/cyttsp4_spi.c               |  4 +---
->  drivers/input/touchscreen/tsc2005.c                   |  4 +---
->  drivers/leds/leds-cr0014114.c                         |  4 +---
->  drivers/leds/leds-dac124s085.c                        |  4 +---
->  drivers/leds/leds-el15203000.c                        |  4 +---
->  drivers/leds/leds-spi-byte.c                          |  4 +---
->  drivers/media/spi/cxd2880-spi.c                       |  4 +---
->  drivers/media/spi/gs1662.c                            |  4 +---
->  drivers/media/tuners/msi001.c                         |  3 +--
-
-A bit late, but for drivers/media:
-
-Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-
-Thanks!
-
-	Hans
+SGkgTWFyYywNCg0KPk9uIDE1LjAyLjIwMjIgMTY6MTA6NDUsIE1hcmMgS2xlaW5lLUJ1ZGRlIHdy
+b3RlOg0KPj4gT24gMTEuMDIuMjAyMiAxMDo1NzozNCwgU3TDqXBoYW5lIEdyb3NqZWFuIHdyb3Rl
+Og0KPj4gPiBlbmRpYW5lc3MgaXMgaGFuZGxlZCBieSBsb3dlciBsZXZlbCBmdW5jdGlvbnMgKHNl
+ZSBmb3IgZXgNCj4+ID4gcGNhbl91c2JfZmRfZ2V0X3VzZXJfZGV2aWQoKS9wY2FuX3VzYl9mZF9z
+ZXRfdXNlcl9kZXZpZCgpIGluIFBBVENIDQo+PiA+IDIvNikuDQo+PiA+DQo+PiA+IFRoaXMgZGF0
+YSBpcyByZWFsbHkgYSBudW1iZXIgYW5kIG11c3QgYmUgdHJlYXRlZCBhcyBzdWNoLg0KPj4NCj4+
+IFdoYXQncyB0aGUgdXNlIGNhc2UgZm9yIHRoZSBkYXRhL251bWJlcj8gV2hhdCdzIHRoZSBiaWcg
+cGljdHVyZT8NCg0KPnwgSmFuIDAxIDA1OjE2OjIxIERpc3Ryb0tpdCBrZXJuZWw6IHBlYWtfdXNi
+IDEtMToxLjA6IFBFQUstU3lzdGVtIFBDQU4tVVNCIEZEIHYxIGZ3IHYzLjIuMCAoMSBjaGFubmVs
+cykNCj58IEphbiAwMSAwNToxNjoyMSBEaXN0cm9LaXQga2VybmVsOiBwZWFrX3VzYiAxLTE6MS4w
+IGNhbjA6IGF0dGFjaGVkIHRvIFBDQU4tVVNCIEZEIGNoYW5uZWwgMCAoZGV2aWNlIDExNDQyMDE3
+NDUpDQo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBeXl5eXl5e
+Xl5eDQoNCj5CdXQgdGhhdCBpcyBzb21ldGhpbmcgZGlmZmVyZW50IHRoYW4gdGhlIHNlcmlhbCBu
+dW1iZXIsIHJpZ2h0Pw0KDQpZZXAhIFRoaXMgaXMgYSBudW1iZXIgdGhhdCBjYW4gYmUgdXNlZCB0
+byB1bmlxdWVseSBpZGVudGlmeSB0aGUgZGV2aWNlLCByZWdhcmRsZXNzIG9mIHRoZSBVU0IgcG9y
+dCBvciB0aGUgb3JkZXIgaW4gd2hpY2ggaXQgaXMgY29ubmVjdGVkLiBUaGUgcHVycG9zZSBpcyB0
+byBhbGxvdyB0aGUgdXNlciB0byBuYW1lIHRoZSBuZXR3b3JrIGludGVyZmFjZSBhY2NvcmRpbmcg
+dG8gdGhpcyBudW1iZXIuIFRoaXMgaXMgZm9yIGV4YW1wbGUgd2hhdCBpcyBkb25lIGJ5IHRoZSAi
+aGlzdG9yaWNhbCIgZHJpdmVyICJwY2FuIiB3aGljaCBpcyBmcmVlbHkgZG93bmxvYWRhYmxlIGZy
+b20gd3d3LnBlYWstc3lzdGVtLmNvbS4NCg0KPk9uIGEgbGl0dGxlIGVuZGlhbiBzeXN0ZW0gdGhp
+cyBnaXZlczoNCj4NCj58IOKenCAocHRzLzApIGZyb2dnZXJAcnBpNGI0On4gKG1hc3Rlcikgc3Vk
+byBldGh0b29sIC1lIGNhbjANCj58IE9mZnNldCAgICAgICAgICBWYWx1ZXMNCj58IC0tLS0tLSAg
+ICAgICAgICAtLS0tLS0NCj58IDB4MDAwMDogICAgICAgICAxMSAyMiAzMyA0NA0KPg0KPk9uIGEg
+YmlnIGVuZGlhbiB3ZSBzZWU6DQo+DQo+fCByb290QERpc3Ryb0tpdDp+IGV0aHRvb2wgLWUgY2Fu
+MA0KPnwgT2Zmc2V0ICAgICAgICAgICAgICAgIFZhbHVlcw0KPnwgLS0tLS0tICAgICAgICAgICAg
+ICAgIC0tLS0tLQ0KPnwgMHgwMDAwOiAgICAgICAgICAgICAgIDQ0IDMzIDIyIDExDQoNCkkgYWRt
+aXQgdGhhdCBpdCBpcyBxdWl0ZSBkaXN0dXJiaW5nIGluZGVlZCB0byBpbWFnaW5lIHRoYXQgMHgx
+MSBpcyBub3QgbmVjZXNzYXJpbHkgaW4gZWVwcm9tWzBdLi4uIEJ1dDoNCg0KPnwgcm9vdEBEaXN0
+cm9LaXQ6fiBldGh0b29sIC1lIGNhbjAgcmF3IG9ufGhleGR1bXAgLXYgLWUgJzEgIiV1XG4iJw0K
+PnwgMTE0NDIwMTc0NQ0KPnwg4p6cIChwdHMvMCkgZnJvZ2dlckBycGk0YjQ6fiAobWFzdGVyKSBz
+dWRvIGV0aHRvb2wgLWUgY2FuMCByYXcgb258aGV4ZHVtcCAtdiAtZSAnMSAiJXVcbiInDQo+fCAx
+MTQ0MjAxNzQ1DQoNCmlzIHRoZSBnb2FsOiBjYW4gaW50ZXJmYWNlIG5hbWUgd2lsbCBiZSB0aGUg
+c2FtZSBpbiBib3RoIHN5c3RlbXMuDQoNCkluIGFueSBjYXNlLCB0aGFua3MgZm9yIHRoZSB0ZXN0
+cy4NCg0KLS0tIFN0ZXBoYW5lDQoNCg0KICAgICAgICAgICAgRGU6IE1hcmMgS2xlaW5lLUJ1ZGRl
+DQpFbnZvecOpOiBNZXJjcmVkaSAxNiBmw6l2cmllciAyMDIyIDEwOjUxDQrDgDogU3TDqXBoYW5l
+IEdyb3NqZWFuDQpDYzogbGludXgtY2FuIE1haWxpbmcgTGlzdA0KT2JqZXQ6IFJlOiBbUEFUQ0gg
+Ni82XSBjYW46IHBlYWtfdXNiOiBhZGQgZXRodG9vbCBpbnRlcmZhY2UgdG8gdXNlciBkZWZpbmVk
+IGZsYXNoZWQgZGV2aWNlIG51bWJlcg0KDQoNCg0KDQpPbiAxNS4wMi4yMDIyIDE2OjEwOjQ1LCBN
+YXJjIEtsZWluZS1CdWRkZSB3cm90ZToNCg0KPiBPbiAxMS4wMi4yMDIyIDEwOjU3OjM0LCBTdMOp
+cGhhbmUgR3Jvc2plYW4gd3JvdGU6DQoNCj4gPiBlbmRpYW5lc3MgaXMgaGFuZGxlZCBieSBsb3dl
+ciBsZXZlbCBmdW5jdGlvbnMgKHNlZSBmb3IgZXgNCg0KPiA+IHBjYW5fdXNiX2ZkX2dldF91c2Vy
+X2RldmlkKCkvcGNhbl91c2JfZmRfc2V0X3VzZXJfZGV2aWQoKSBpbiBQQVRDSA0KDQo+ID4gMi82
+KS4NCg0KPiA+DQoNCj4gPiBUaGlzIGRhdGEgaXMgcmVhbGx5IGEgbnVtYmVyIGFuZCBtdXN0IGJl
+IHRyZWF0ZWQgYXMgc3VjaC4NCg0KPg0KDQo+IFdoYXQncyB0aGUgdXNlIGNhc2UgZm9yIHRoZSBk
+YXRhL251bWJlcj8gV2hhdCdzIHRoZSBiaWcgcGljdHVyZT8NCg0KDQoNCnwgSmFuIDAxIDA1OjE2
+OjIxIERpc3Ryb0tpdCBrZXJuZWw6IHBlYWtfdXNiIDEtMToxLjA6IFBFQUstU3lzdGVtIFBDQU4t
+VVNCIEZEIHYxIGZ3IHYzLjIuMCAoMSBjaGFubmVscykNCg0KfCBKYW4gMDEgMDU6MTY6MjEgRGlz
+dHJvS2l0IGtlcm5lbDogcGVha191c2IgMS0xOjEuMCBjYW4wOiBhdHRhY2hlZCB0byBQQ0FOLVVT
+QiBGRCBjaGFubmVsIDAgKGRldmljZSAxMTQ0MjAxNzQ1KQ0KDQogICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIF5eXl5eXl5eXl4NCg0KDQoNCkJ1dCB0aGF0IGlzIHNv
+bWV0aGluZyBkaWZmZXJlbnQgdGhhbiB0aGUgc2VyaWFsIG51bWJlciwgcmlnaHQ/DQoNCg0KDQpy
+ZWdhcmRzLA0KDQpNYXJjDQoNCg0KDQotLQ0KDQpQZW5ndXRyb25peCBlLksuICAgICAgICAgICAg
+ICAgICB8IE1hcmMgS2xlaW5lLUJ1ZGRlICAgICAgICAgICB8DQoNCkVtYmVkZGVkIExpbnV4ICAg
+ICAgICAgICAgICAgICAgIHwgaHR0cHM6Ly93d3cucGVuZ3V0cm9uaXguZGUgIHwNCg0KVmVydHJl
+dHVuZyBXZXN0L0RvcnRtdW5kICAgICAgICAgfCBQaG9uZTogKzQ5LTIzMS0yODI2LTkyNCAgICAg
+fA0KDQpBbXRzZ2VyaWNodCBIaWxkZXNoZWltLCBIUkEgMjY4NiB8IEZheDogICArNDktNTEyMS0y
+MDY5MTctNTU1NSB8DQoNCg0KLS0NClBFQUstU3lzdGVtIFRlY2huaWsgR21iSA0KU2l0eiBkZXIg
+R2VzZWxsc2NoYWZ0IERhcm1zdGFkdCAtIEhSQiA5MTgzDQpHZXNjaGFlZnRzZnVlaHJ1bmc6IEFs
+ZXhhbmRlciBHYWNoIC8gVXdlIFdpbGhlbG0NClVuc2VyZSBEYXRlbnNjaHV0emVya2xhZXJ1bmcg
+bWl0IHdpY2h0aWdlbiBIaW53ZWlzZW4NCnp1ciBCZWhhbmRsdW5nIHBlcnNvbmVuYmV6b2dlbmVy
+IERhdGVuIGZpbmRlbiBTaWUgdW50ZXINCnd3dy5wZWFrLXN5c3RlbS5jb20vRGF0ZW5zY2h1dHou
+NDgzLjAuaHRtbA0K
