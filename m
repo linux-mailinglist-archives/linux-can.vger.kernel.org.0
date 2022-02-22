@@ -2,112 +2,84 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEBEC4BFB0D
-	for <lists+linux-can@lfdr.de>; Tue, 22 Feb 2022 15:45:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FBD24BFB40
+	for <lists+linux-can@lfdr.de>; Tue, 22 Feb 2022 15:54:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231468AbiBVOpt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 22 Feb 2022 09:45:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35330 "EHLO
+        id S231643AbiBVOzD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 22 Feb 2022 09:55:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232761AbiBVOps (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 22 Feb 2022 09:45:48 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3324765427
-        for <linux-can@vger.kernel.org>; Tue, 22 Feb 2022 06:45:22 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nMWPo-0007k6-JQ; Tue, 22 Feb 2022 15:45:20 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-1557-4bd7-bf13-be70.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:1557:4bd7:bf13:be70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id E67C43A8C6;
-        Tue, 22 Feb 2022 14:45:19 +0000 (UTC)
-Date:   Tue, 22 Feb 2022 15:45:18 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Michael Anochin <anochin@photo-meter.com>
-Cc:     linux-can@vger.kernel.org
+        with ESMTP id S229679AbiBVOzD (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 22 Feb 2022 09:55:03 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9991610C513
+        for <linux-can@vger.kernel.org>; Tue, 22 Feb 2022 06:54:36 -0800 (PST)
+Received: from photo-meter.com ([62.157.68.154]) by mrelayeu.kundenserver.de
+ (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MyseA-1o9FbH1X5W-00vuUz; Tue, 22 Feb 2022 15:54:33 +0100
+Received: from [192.168.100.109] (MICHA.fritz.box [192.168.100.109])
+        by photo-meter.com (Postfix) with ESMTP id C9E143B08B7;
+        Tue, 22 Feb 2022 15:52:26 +0100 (CET)
+Message-ID: <cde7fa96-adc6-d9ca-72a3-056569623936@photo-meter.com>
+Date:   Tue, 22 Feb 2022 15:54:32 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Reply-To: anochin@photo-meter.com
 Subject: Re: can: m_can: tcan4x5x m_can_isr do not handle tx if rx fails
-Message-ID: <20220222144518.j4swrtcv4rsyagem@pengutronix.de>
+Content-Language: en-US
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
 References: <93aa0ce4-8df2-bcad-237b-c6ce1bdcff0e@photo-meter.com>
  <20220222132000.xiopvrtu5fmuanbz@pengutronix.de>
  <c2651e9c-d3e7-815a-6e18-8ddffc04d3d7@photo-meter.com>
  <20220222134419.zmycnlmhrrrewggf@pengutronix.de>
  <e3504807-06fc-b6d9-3fb1-bf8d94e2b444@photo-meter.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5fnsgswmsbevi6ed"
-Content-Disposition: inline
-In-Reply-To: <e3504807-06fc-b6d9-3fb1-bf8d94e2b444@photo-meter.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+ <20220222144518.j4swrtcv4rsyagem@pengutronix.de>
+Cc:     linux-can@vger.kernel.org
+From:   Michael Anochin <anochin@photo-meter.com>
+Organization: Czibula und Grundmann GmbH
+In-Reply-To: <20220222144518.j4swrtcv4rsyagem@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:mOC9BRgRXr4of8z5byNr0kh/b3gP73hVZH77TIZMWGkEVjBXlmF
+ wwgbf1EkycFr3ugeIueFzytyfq9Nzwd45eIBLjg7uDid8cpMcXopdMvsEI4z7SF1PHSJcU1
+ IQoxVyR0FMb6ROf6X8Knbp2YQLibK6oDWEhlDi+3NWP8PQ/cZb/nFNW59zTbClkn4va8AFb
+ YdKJd8IPYHuaDJRzEHvGg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:e5kN4xMpzW4=:tTl8BtvOHgwsD1OVeQMHPL
+ nRCmS35Dac2hy7ujhiZdecw3ZYip96z6kQEdquTgpxS0d79Mf8nC+jdu/2RYXk8w6FNCYAyb0
+ u2XqUejR/vgVGYJ10ngzZdxwRDKF2DF+L//L0XfTihCR74urHNf7AqnWcQYXxs3auW33azVFw
+ 0rxx4cw+U88/lBG7RCaj4/6q6Rr7E59GeyzyyRiMv8aAZuVisjvklGAUOVioTgTPMOLbQXJJS
+ n5XeXGbWVacUucCy9QZl+oU4BOHJM4lbsbcysoPQjx68XDaKjy6WEuH1wLF5ynU/8FEKiz4Ec
+ iF/mbu5SgbS6e2g2L1RUdrRNataL1dGoL3weptlcJNIP5FApovPqmhzoPQONVCc63ubk7uFoJ
+ /+yrmPcdYedcBWB0sZNfUWztJS2gim5O1YboAm3nL/UVfnRr8S64bUR36lJo89sBW3xfmpUuB
+ KoYLnz2Ok/4RCb2s51QqM6z4VYtovfYLZVy4LBd4TpluaSqEBT1m6D56duAxlBD5WOYG1XMnq
+ +a42zuY4ClYL4XAgvTCxVROMEif7LoSRmKEjOKHrNklRRvi/5nAqNdPNtpNucjQRPHx1YsNRv
+ 3WPSexe5pOHXIx4Bo5bphRj/YIcgGXUvohaUIpbhE38cAHpJ04s29fMnTaCGrS9UAuVw+FKnE
+ BZH159Q8XDlaHsEstJyliwiKuApIVnh7B96qUAQWYd3LUasCalfx3mlb2nacU61ugkjBxWBeO
+ dRWsjjj4bVQADMUE
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+> 
+> This should not happen. Especially with the tcan driver. In a previous
+> mail you stated that you are using the following mram config:
+> 
+> | bosch,mram-cfg =  <0x0 0 0 16 0 0 1 1>;
+> 
+> is this still the case? This is inconsistent with the above error
+> message.
+> I have tried many bosch,mram-cfg. This makes almost no difference
 
---5fnsgswmsbevi6ed
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+bosch,mram-cfg =  <0x0 0 0 16 0 0 1 1> is from Mainstream
+bosch,mram-cfg =  <0x0 0 0 10 0 0 16 16> is from Mainstream
+bosch,mram-cfg =  <0x0 0 0 16 0 0 8 8> is from Mainstream
 
-Please don't forget to keep the mailing list on Cc!
-
-On 22.02.2022 15:30:33, Michael Anochin wrote:
->=20
-> > You can add a netdev_error() to report the error if
-> Done, m_can_rx_peripheral(dev) returns each time normally with 0.
-> I added netdev_err also after out_fail in m_can_isr, but it fires no error
-> in dmesg after NOBUFS.
->=20
-> The curious thing is that it fails in the other place.
->=20
-> Sometimes I see
-> [ 9945.908861] tcan4x5x spi4.0 can1: can_put_echo_skb: BUG! echo_skb 11 is
-> occupied!
->=20
-> But I think, it is not my problem.
-
-This should not happen. Especially with the tcan driver. In a previous
-mail you stated that you are using the following mram config:
-
-| bosch,mram-cfg =3D  <0x0 0 0 16 0 0 1 1>;
-
-is this still the case? This is inconsistent with the above error
-message.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---5fnsgswmsbevi6ed
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmIU9vsACgkQrX5LkNig
-010n9Af+K8USX/+5DfFZjEASICP0+Ls07/CgG11Xz4R+5t25iJ/9H1js/NJGpH9Q
-yeVYAaJYeyg4qP3c5E7uprJmW9NWNvGe7sv9VEl02ZCqFFXxJ/3sdgk2m3FKQ6Zg
-m4INBTiX8NfO1WuLI3xsElDoMdNzMvHIOXSPD6xDW6MyczDaqBHh/On+6zdd8NAy
-Oz2tGpvTxdwWnm49dCTpGCxJu0J81rEz2RWI6TwUHly0c545yV7apvxifR5rHLYG
-mEBpHBSQILHmc0zPxHW6d/j4LamCdlv7lXTIsSnXo3NOaKBHr4wE3xmlfNArnDKG
-xEvlZInQozPYjZ/N4quF5oM8ZEoexQ==
-=lErs
------END PGP SIGNATURE-----
-
---5fnsgswmsbevi6ed--
+I recognized, that no RXFIFO_1 is used, only RXFIFO_0.  On 
+TXFIFO/TXEFIFO may be only one element is used by driver. I am not sure.
