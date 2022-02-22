@@ -2,83 +2,111 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 247E04BFCA4
-	for <lists+linux-can@lfdr.de>; Tue, 22 Feb 2022 16:32:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48F124BFCA8
+	for <lists+linux-can@lfdr.de>; Tue, 22 Feb 2022 16:33:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232506AbiBVPcj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 22 Feb 2022 10:32:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60526 "EHLO
+        id S233488AbiBVPd1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 22 Feb 2022 10:33:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230478AbiBVPcj (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 22 Feb 2022 10:32:39 -0500
-Received: from first.geanix.com (first.geanix.com [116.203.34.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD8AC792D
-        for <linux-can@vger.kernel.org>; Tue, 22 Feb 2022 07:32:13 -0800 (PST)
-Received: from skn-laptop.hadsten (_gateway [172.25.0.1])
-        by first.geanix.com (Postfix) with ESMTPSA id 21C6A1296D9;
-        Tue, 22 Feb 2022 15:32:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1645543931; bh=hCU/7EfQ6WOIpnsBhpqeYJ0/YCqfqvi9DhS2RbAuP38=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=aBlAJHhbP9RTPtSzDJG4sWpXOubMmQxYO2smGI8Sng9CZ2mKni6vB033uhRi+UL/N
-         UmgX7I2LQ3gu3fcrR1df2Yzp6BBe+JLmtmy/IhupWNlF/jq3xj58EOYTNot8VXjAtJ
-         ULc9H72uarxMKYeO0b7sd5/+QGdiU3mf9oqqFhYiOQi0Bc7m3NNdEz5vyyCxRsFkkr
-         PnC5j/+jsEBbbgcVqjtrW/80v32wiimKrHcY+wWSi2naq+HE/UdQ549IUFqMBmotjy
-         aJe2gW2/6fSlnHxgK9jcwoTaDYXfzovynWiSSmYqdYxg93EvgrqJs4nhhJfBEBdGqt
-         qFFBC1g8tZ0ww==
-Date:   Tue, 22 Feb 2022 16:32:10 +0100
-From:   Sean Nyekjaer <sean@geanix.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
+        with ESMTP id S230478AbiBVPd0 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 22 Feb 2022 10:33:26 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EBADC7C13
+        for <linux-can@vger.kernel.org>; Tue, 22 Feb 2022 07:33:00 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nMX9u-0006ks-Su; Tue, 22 Feb 2022 16:32:58 +0100
+Received: from pengutronix.de (2a03-f580-87bc-d400-1557-4bd7-bf13-be70.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:1557:4bd7:bf13:be70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id EAF793A95A;
+        Tue, 22 Feb 2022 15:32:57 +0000 (UTC)
+Date:   Tue, 22 Feb 2022 16:32:57 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Michael Anochin <anochin@photo-meter.com>
 Cc:     linux-can@vger.kernel.org
-Subject: Re: can: m_can: tcan4x5x: wake pin
-Message-ID: <20220222153210.32ro3rmdpi7a3f2a@skn-laptop.hadsten>
-References: <20220222150334.rbhm3uzbh4jp4ap4@skn-laptop.hadsten>
- <20220222151901.tn5sq6ihbaycwiuo@pengutronix.de>
+Subject: Re: can: m_can: tcan4x5x m_can_isr do not handle tx if rx fails
+Message-ID: <20220222153257.34kb6zugqxj4vdhu@pengutronix.de>
+References: <93aa0ce4-8df2-bcad-237b-c6ce1bdcff0e@photo-meter.com>
+ <20220222132000.xiopvrtu5fmuanbz@pengutronix.de>
+ <c2651e9c-d3e7-815a-6e18-8ddffc04d3d7@photo-meter.com>
+ <20220222134419.zmycnlmhrrrewggf@pengutronix.de>
+ <e3504807-06fc-b6d9-3fb1-bf8d94e2b444@photo-meter.com>
+ <20220222144518.j4swrtcv4rsyagem@pengutronix.de>
+ <eaa035dc-d6d9-182c-5ee9-fba4012ccba1@photo-meter.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hbuf4caur5g7fzpf"
 Content-Disposition: inline
-In-Reply-To: <20220222151901.tn5sq6ihbaycwiuo@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <eaa035dc-d6d9-182c-5ee9-fba4012ccba1@photo-meter.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 04:19:01PM +0100, Marc Kleine-Budde wrote:
-> On 22.02.2022 16:03:34, Sean Nyekjaer wrote:
-> > The TCAN4x5x device have 2 wake pins. One for waking the host controller
-> > and one for waking the tcan controller it self.
-> > 
-> > We only have the wake for the tcan controller it self implemented
-> > right?
-> 
-> Sort of. The tcan driver contains handling for the device_state_gpio. I
-> think should be the pin from the tcan to SoC. The handling of this pin
-> looks fishy.
 
-Ah, Okay so state-gpio maps to nWKRQ and wake-gpio maps to WAKE.
-I don't think one should wire the WAKE pin to the SoC.
+--hbuf4caur5g7fzpf
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> > I have a task that would enable our host to wake-on-can traffic.
-> 
-> Due to lack of time, I haven't looked deeply into the sleep and wakeup
-> of the tcan and the wake from the tcan towards the SoC. As said above,
-> the device_state_gpio handling looks fishy. Probably first remove the
-> device_state_gpio handling from the driver, add missing power management
-> to the m_can and tcan driver, then add wakeup support.
+On 22.02.2022 16:11:52, Michael Anochin wrote:
+> With netdev_warn() in m_can_tx_handler I found,
+> that before "BUG! echo_skb N" appears,
+>=20
+> m_can_next_echo_skb_occupied(dev, putidx) is true with putidx=3DN-1
+>=20
+> [11676.933800] tcan4x5x spi4.0 can1: m_can_tx_handler m_can_tx_fifo_full =
+or
+> m_can_next_echo_skb_occupied, putidx=3D12
+>=20
+> [11676.934735] tcan4x5x spi4.0 can1: m_can_start_xmit: enter
+>=20
+> [11676.934744] tcan4x5x spi4.0 can1: m_can_start_xmit netif_stop_queue do=
+ne
+>=20
+> [11676.934911] tcan4x5x spi4.0 can1: can_put_echo_skb: BUG! echo_skb 13 is
+> occupied!
 
-The task just grew, will see when I get time ...
+The tcan driver is probably not tested with more than 1 TX element.
+Please use the following mram config for now:
 
-> 
-> Have a look at this series, I haven't reviewed it in detail, but it
-> looks good at the first glance.
-> 
-> | https://lore.kernel.org/all/20220111002109.927308-1-phil@quantulum.co.uk
+| bosch,mram-cfg =3D <0x0 0 0 16 0 0 1 1>;
 
-Thanks
+Marc
 
-/Sean
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--hbuf4caur5g7fzpf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmIVAiYACgkQrX5LkNig
+013f9gf/UFnjMiCC35SR7k0KFlbju6TT5TG9csJWqSKxrTEdOf0bdz+ASTPB7eF/
+ckvYWbpwVLS58QD/btJS/ZkXNdlWeSyBeVidnKg9gK8XPW1N4nbL8k+omVSC7HUp
+lBXvoLR+hfG/me5oK9/KzwghIGL4Lb/Yr7V8rxfsLwybXQ9j1YLk1QwUnFw5F23w
+gzDebG6A5tgSc1QiMF1d7gfQL+hAGzndJnThP1g1SbdrkdDbKamEQXWrkFIwmNAl
+GTvPYu+lfL283IbJkwwreCUiTXTj4Za713x1Z45VB2pcV2sWI4WmjD78Aamwogpy
+NrqfmdkoYgTM8bsnvIMq5xToF/4PsA==
+=6UNg
+-----END PGP SIGNATURE-----
+
+--hbuf4caur5g7fzpf--
