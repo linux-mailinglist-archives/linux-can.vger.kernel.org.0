@@ -2,49 +2,44 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22C084BF922
-	for <lists+linux-can@lfdr.de>; Tue, 22 Feb 2022 14:20:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68CFD4BF9BB
+	for <lists+linux-can@lfdr.de>; Tue, 22 Feb 2022 14:44:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231223AbiBVNU3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 22 Feb 2022 08:20:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52132 "EHLO
+        id S231400AbiBVNo3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 22 Feb 2022 08:44:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232299AbiBVNU3 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 22 Feb 2022 08:20:29 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E93BC334E
-        for <linux-can@vger.kernel.org>; Tue, 22 Feb 2022 05:20:03 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nMV5F-0005Sq-V8; Tue, 22 Feb 2022 14:20:02 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-1557-4bd7-bf13-be70.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:1557:4bd7:bf13:be70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 18F703A7B2;
-        Tue, 22 Feb 2022 13:20:01 +0000 (UTC)
-Date:   Tue, 22 Feb 2022 14:20:00 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Michael Anochin <anochin@photo-meter.com>
-Cc:     linux-can@vger.kernel.org
-Subject: Re: can: m_can: tcan4x5x m_can_isr do not handle tx if rx fails
-Message-ID: <20220222132000.xiopvrtu5fmuanbz@pengutronix.de>
-References: <93aa0ce4-8df2-bcad-237b-c6ce1bdcff0e@photo-meter.com>
+        with ESMTP id S232545AbiBVNo1 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 22 Feb 2022 08:44:27 -0500
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E325A11EF14;
+        Tue, 22 Feb 2022 05:44:01 -0800 (PST)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 0AAB51C0BA1; Tue, 22 Feb 2022 14:43:59 +0100 (CET)
+Date:   Tue, 22 Feb 2022 14:43:58 +0100
+From:   Pavel Machek <pavel@denx.de>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-can@vger.kernel.org,
+        Pavel Machek <pavel@denx.de>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Ulrich Hecht <uli+renesas@fpond.eu>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH] can: rcar_canfd: Register the CAN device when fully ready
+Message-ID: <20220222134358.GA7037@duo.ucw.cz>
+References: <20220221225935.12300-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gn6jyhuhgekkh2a2"
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="HlL+5n6rz5pIUxbD"
 Content-Disposition: inline
-In-Reply-To: <93aa0ce4-8df2-bcad-237b-c6ce1bdcff0e@photo-meter.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220221225935.12300-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -52,41 +47,36 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---gn6jyhuhgekkh2a2
-Content-Type: text/plain; charset=utf-8
+--HlL+5n6rz5pIUxbD
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 22.02.2022 12:14:23, Michael Anochin wrote:
-> In the context of the ENOBUFS problem by using can interfaces under higher
-> load:
->=20
-> In m_can_isr handler, if rx fails (m_can_rx_peripheral), then no
-> netif_wake_queue(dev) will be called. Can this lead to ENOBUFS?
+On Mon 2022-02-21 22:59:35, Lad Prabhakar wrote:
+> Register the CAN device only when all the necessary initialization
+> is completed. This patch makes sure all the data structures and locks are
+> initialized before registering the CAN device.
 
-Yes - Can you send a fix?
+Reviewed-by: Pavel Machek <pavel@denx.de>
 
-Marc
+I guess it will go to mainline and then -stable so that we don't have
+to do anything special?
 
+Best regards,
+
+								Pavel
 --=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
 
---gn6jyhuhgekkh2a2
+--HlL+5n6rz5pIUxbD
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmIU4v4ACgkQrX5LkNig
-011xBAf/R+QiOwepN6gWnQFbmSRh88tSfzma82TWBiWUlRL+ddT5qVqgjhddwxoc
-VS267fY8VLo6UKtSO9lY+NjXX6sfMTE7FVrg+BAXheQnqPKR9aeuWI0hW0Xls4ZN
-L3c2eIAxWaQ3v/rOPOlN10oOpnQPgur7gpVTfdAaw5OS76ihNCmgVaSItl9BRlpn
-f7EB+qS3cMwQ32sj4M7jI2jylV4bFogym0iLimGNdV+/CKNRhV3qnAhhELKcjLYg
-S//Ir2YKy7UcIztCrxjJ6AcZIaWGX51FuFLNHz3EzvL/YyeIL4VuIgkdnVj5AIi7
-IubTKy5FiceZZYZbBKA9Wsqt11ZYpQ==
-=zaYu
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYhTongAKCRAw5/Bqldv6
+8mIWAJ98FJJH5ouSpkP9gaSrTyx+Iv4+CACgj4UJT+tTBbsHMy/iQ1QYWMZJ91E=
+=rWL/
 -----END PGP SIGNATURE-----
 
---gn6jyhuhgekkh2a2--
+--HlL+5n6rz5pIUxbD--
