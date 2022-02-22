@@ -2,67 +2,57 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C585B4BF532
-	for <lists+linux-can@lfdr.de>; Tue, 22 Feb 2022 10:56:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC4974BF722
+	for <lists+linux-can@lfdr.de>; Tue, 22 Feb 2022 12:19:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbiBVJ5C (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 22 Feb 2022 04:57:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51584 "EHLO
+        id S231637AbiBVLT4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 22 Feb 2022 06:19:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiBVJ5B (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 22 Feb 2022 04:57:01 -0500
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FFF5109A;
-        Tue, 22 Feb 2022 01:56:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1645523606;
-    s=strato-dkim-0002; d=fpond.eu;
-    h=Subject:References:In-Reply-To:Message-ID:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=dWKZOFQ+HIvrBNvfir4obwb7uVDZZb0beIIECXtlDkQ=;
-    b=exfJhR7jvCtg4CEw/NPhwh4CrS/VHlNeZhrary/CFZIVX0kpWMYhA10vK6naSw4iMY
-    nYyBeUC8Afyiu/qE7odMcG7NAQIFB9J41nU7dVAbQVLO3QmiY9cqp8faFxXIuGMFbzYw
-    KziTMkmXEwB0XAmjIkyE1GVV2nH4Qns92uFRI3zyIg3TuW0nw4D9ww1mn7FyJAorGnHE
-    yhJOqiyDQWnA+5Ll8RxVVFOQynKJ4EfD8iKLZPtJud/ZaaItB2dsBwDSW1j7BsbqkEv2
-    vRPmVu+o5PWG/mzREGV0C/+iZQ7OS3P/V0Qs4GgJCXRDBdkQbYoJK/vPtVecD9MMkLpF
-    EA5A==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":OWANVUa4dPFUgKR/3dpvnYP0Np73amq+g13rqGzvv3qxio1R8fCs/87J2o0="
-X-RZG-CLASS-ID: mo00
-Received: from oxapp05-05.back.ox.d0m.de
-    by smtp-ox.front (RZmta 47.40.0 AUTH)
-    with ESMTPSA id 6c30c7y1M9rQ2KB
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Tue, 22 Feb 2022 10:53:26 +0100 (CET)
-Date:   Tue, 22 Feb 2022 10:53:26 +0100 (CET)
-From:   Ulrich Hecht <uli@fpond.eu>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-can@vger.kernel.org,
-        Pavel Machek <pavel@denx.de>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Ulrich Hecht <uli+renesas@fpond.eu>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Message-ID: <1103141484.974980.1645523606875@webmail.strato.com>
-In-Reply-To: <20220221225935.12300-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20220221225935.12300-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH] can: rcar_canfd: Register the CAN device when fully
- ready
+        with ESMTP id S231623AbiBVLTz (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 22 Feb 2022 06:19:55 -0500
+X-Greylist: delayed 303 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 22 Feb 2022 03:19:29 PST
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9ADCEA2D
+        for <linux-can@vger.kernel.org>; Tue, 22 Feb 2022 03:19:28 -0800 (PST)
+Received: from photo-meter.com ([62.157.68.154]) by mrelayeu.kundenserver.de
+ (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MF3Y8-1nT82J36LY-00FSnP for <linux-can@vger.kernel.org>; Tue, 22 Feb 2022
+ 12:14:23 +0100
+Received: from [192.168.100.109] (MICHA.fritz.box [192.168.100.109])
+        by photo-meter.com (Postfix) with ESMTP id 5013C3B08B7
+        for <linux-can@vger.kernel.org>; Tue, 22 Feb 2022 12:12:17 +0100 (CET)
+Message-ID: <93aa0ce4-8df2-bcad-237b-c6ce1bdcff0e@photo-meter.com>
+Date:   Tue, 22 Feb 2022 12:14:23 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Reply-To: anochin@photo-meter.com
+Content-Language: en-US
+To:     linux-can@vger.kernel.org
+From:   Michael Anochin <anochin@photo-meter.com>
+Subject: can: m_can: tcan4x5x m_can_isr do not handle tx if rx fails
+Organization: Czibula und Grundmann GmbH
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Priority: 3
-Importance: Normal
-X-Mailer: Open-Xchange Mailer v7.10.5-Rev38
-X-Originating-Client: open-xchange-appsuite
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+X-Provags-ID: V03:K1:jGoR+s25XrIlENuh3ZsAhbJ6feWOsn5oD13IXGOr7b23sapTKUd
+ qkZEL6suv1HfVrsT44ArqEMHsWyVrwKkF09Ai6H4KfyJHJmdiaHNwgJDkrqydXAUoSy+enz
+ Y9O3o4qjbopq6DGBLgM3536usB0zMKqHW9LxBwnLJ4KuZ+Yy1bV6m7OMUx2lKsovLrTrdwD
+ RxRyeoNg1QKhY+gp3FGCg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:rwSWLuc384Q=:W+GSF7ckdvoGMFv4htd4Xw
+ xIGPKGFbp6AU0pepBkla/fVZ0IUmyDXKhwr9zJEdp46/O+wla/7jGG+QBmcubqXyK4rwchQiP
+ jC8D1NkhxcxVhpjfSWFMMG7wQjrTdFFwaEnV6hSrdHu6ogMp08fjJnt0jqMlt8ovJxxaRvCax
+ WWUrR7ztZXUXCqHwtnCQ0KgBzmSCI4BXIUPB/4UXPPKkNlFnhtdJa/ErWfp42SMexs6BBglXs
+ OJWXyOnosFKdM0yZ4BNzBQKD5yQan5A4QZDXnY3RyXPguTt3UokuRAt+4eDuNWPk8qRGq2uyf
+ +o0AhxOLc8/5VD3jCqzmBKAMWCx3WbuAEZrRXJ693LGPQP3IWpPJpZxKBV+K8ATmoQCk64lVQ
+ P80jv1bFkLRZNoeToNkOE9HV3dHU751T2AVTw9cI4Pg+Sfx9xyzI422BU0rkZUJd92XLpF36f
+ ZjPjoUy+83QxoKm1g30b78KEzHm89auAsbio56nIl3jp70Dsp9/2nfL3vFJFI/SOCw9+ysgrh
+ HNcr5A9pYloufq75EEFaCi0VrYT7O7opq3EAgZxQfbN9PuOKCQaQ+cCqU39fnjz0oCLz8ZfCz
+ o2UMFXhL8H+AnzNvsvANR2A1bZCDSAe7uu3HS0vhTrtLUe4kEwR7jxqDCGy0Q7lVymDLCca+q
+ 916Q9Ko1D5Bipq29Zex7jFN6gPUGhmQVMFVc2dAANSBHJeTRG5WQ+M2Sxh1b3Gclx9hITKb7o
+ mr9jB/vjiJAiMfKs
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,47 +60,9 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+In the context of the ENOBUFS problem by using can interfaces under 
+higher load:
 
-> On 02/21/2022 11:59 PM Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> 
->  
-> Register the CAN device only when all the necessary initialization
-> is completed. This patch makes sure all the data structures and locks are
-> initialized before registering the CAN device.
-> 
-> Reported-by: Pavel Machek <pavel@denx.de>
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
->  drivers/net/can/rcar/rcar_canfd.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-> index 3ad3a6f6a1dd..8c378b20b2aa 100644
-> --- a/drivers/net/can/rcar/rcar_canfd.c
-> +++ b/drivers/net/can/rcar/rcar_canfd.c
-> @@ -1783,15 +1783,15 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
->  
->  	netif_napi_add(ndev, &priv->napi, rcar_canfd_rx_poll,
->  		       RCANFD_NAPI_WEIGHT);
-> +	spin_lock_init(&priv->tx_lock);
-> +	devm_can_led_init(ndev);
-> +	gpriv->ch[priv->channel] = priv;
->  	err = register_candev(ndev);
->  	if (err) {
->  		dev_err(&pdev->dev,
->  			"register_candev() failed, error %d\n", err);
->  		goto fail_candev;
->  	}
-> -	spin_lock_init(&priv->tx_lock);
-> -	devm_can_led_init(ndev);
-> -	gpriv->ch[priv->channel] = priv;
->  	dev_info(&pdev->dev, "device registered (channel %u)\n", priv->channel);
->  	return 0;
->  
-> -- 
-> 2.17.1
+In m_can_isr handler, if rx fails (m_can_rx_peripheral), then no 
+netif_wake_queue(dev) will be called. Can this lead to ENOBUFS?
 
-Reviewed-by: Ulrich Hecht <uli+renesas@fpond.eu>
-
-CU
-Uli
