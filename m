@@ -2,36 +2,34 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 529DC4BFD49
-	for <lists+linux-can@lfdr.de>; Tue, 22 Feb 2022 16:43:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0E904BFD6E
+	for <lists+linux-can@lfdr.de>; Tue, 22 Feb 2022 16:48:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233272AbiBVPnm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 22 Feb 2022 10:43:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42520 "EHLO
+        id S230468AbiBVPtF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 22 Feb 2022 10:49:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231670AbiBVPnm (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 22 Feb 2022 10:43:42 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF08A32ED6
-        for <linux-can@vger.kernel.org>; Tue, 22 Feb 2022 07:43:16 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nMXJr-0008PM-Ex; Tue, 22 Feb 2022 16:43:15 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-1557-4bd7-bf13-be70.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:1557:4bd7:bf13:be70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id E39103A9B3;
-        Tue, 22 Feb 2022 15:43:14 +0000 (UTC)
-Date:   Tue, 22 Feb 2022 16:43:14 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Michael Anochin <anochin@photo-meter.com>
-Cc:     linux-can@vger.kernel.org
+        with ESMTP id S229999AbiBVPtE (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 22 Feb 2022 10:49:04 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A7F33A29
+        for <linux-can@vger.kernel.org>; Tue, 22 Feb 2022 07:48:39 -0800 (PST)
+Received: from photo-meter.com ([62.157.68.154]) by mrelayeu.kundenserver.de
+ (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MfHMj-1ntyTX28y3-00grtV; Tue, 22 Feb 2022 16:48:36 +0100
+Received: from [192.168.100.109] (MICHA.fritz.box [192.168.100.109])
+        by photo-meter.com (Postfix) with ESMTP id E2D343B08B7;
+        Tue, 22 Feb 2022 16:46:29 +0100 (CET)
+Message-ID: <00d47d39-7f93-6151-5e1a-572e75768eec@photo-meter.com>
+Date:   Tue, 22 Feb 2022 16:48:35 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Reply-To: anochin@photo-meter.com
 Subject: Re: can: m_can: tcan4x5x m_can_isr do not handle tx if rx fails
-Message-ID: <20220222154314.y4scgsssl4mx5z2n@pengutronix.de>
+Content-Language: de-DE
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org
 References: <93aa0ce4-8df2-bcad-237b-c6ce1bdcff0e@photo-meter.com>
  <20220222132000.xiopvrtu5fmuanbz@pengutronix.de>
  <c2651e9c-d3e7-815a-6e18-8ddffc04d3d7@photo-meter.com>
@@ -41,59 +39,38 @@ References: <93aa0ce4-8df2-bcad-237b-c6ce1bdcff0e@photo-meter.com>
  <cde7fa96-adc6-d9ca-72a3-056569623936@photo-meter.com>
  <20220222150619.sqyagvuspbipywxl@pengutronix.de>
  <1c9764e5-dd8b-853a-08e2-547acf7e9e76@photo-meter.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ayikgltlfzst46w3"
-Content-Disposition: inline
-In-Reply-To: <1c9764e5-dd8b-853a-08e2-547acf7e9e76@photo-meter.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+ <20220222154314.y4scgsssl4mx5z2n@pengutronix.de>
+From:   Michael Anochin <anochin@photo-meter.com>
+Organization: Czibula und Grundmann GmbH
+In-Reply-To: <20220222154314.y4scgsssl4mx5z2n@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:fipXGqmDRvrVZFNh/nNSjgs+5sZXn+yFWS1WiF8o3zaczyp0N9q
+ r7Wiy8QtsX8THTfKPlWMURdqqOQpIqrCoYeAS32RRaHUvqsolUPdNIV8X5mDsjT/O17KzKG
+ 2aNzk7lCTtJi6S2X9UVbKPVWQ1OJEpLGPR4AW1BEOmUYu+KOa1xGJyav7JNK3csXDiWQTk6
+ FDppam42pHnCCRd5BLtqA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:byWNj4r987M=:F5Lo9zysbA/j+lsEpjtfZ/
+ lmWoD7D1PUR63wIt2mp+JDnv98MYJMRmnlZypg0+TSCLucBjtbVdkX6y9wyP8dK+vjFyDSf1m
+ 40jEmJt55In5WS6HMPog3cGadafTYxVzvtYhBPG6z6IMovp7QLGuVuqXhGE1sbuNI+7jsW5+z
+ iXcQv5JettJ2Mm8YKZ0ziOooWaIbG/a4UyNHs9yCuJGAyPnPkxd/fg6VQtqznbKgcssjQgzzg
+ qqv2hDFsDj1AHV8Md0ec2IokpxmOAdw0mV/M6b69wzpKpMxIC1d9Ta6terPJtWhynz9U3N/4A
+ qNJ1seIcf8VRDhrp5V/FrZnYWFvkOacPbiWMxb4oF18fNDfqLBlEBS6HtehvEjC2cgE6QHjOe
+ MIMqAGhTXEzIU0h6mu7nNaHOw6o8uHAsy7ZMbA+Q7kHCgFKs228dwWQnvED/7ipbCB9INlElJ
+ 56dUABzFJTUxKOxYNPvjDBLSvLiek7LewES/53FNvpFfq/32qLOP1WJ5rM9HR060BuCg5E1bk
+ eaYJJB5YoRyANt6QX6vdHWjrZpV+Cd8O7pXsFGrkgR3/2GHSQJhiEkp0rtoEwc3CouQkJ8XTw
+ IVF1y2mzLvsrDNFIRRHLRcu4FA2mkG3dzFwoJz+osz2QfYgNYHQmpNmwvsAR77KF6IX8Z7pmM
+ VNFK6fCSLzSMIu2b6Q/Oa8F5a0UV/Hiwejw3CfgCIvNSATN3i5V4TRYu4yjdx5PloYdeTus8t
+ DbWQ7zXhfPzwhgDa
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-
---ayikgltlfzst46w3
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 22.02.2022 16:40:55, Michael Anochin wrote:
-> The "BUG! echo_skb " Message was with mram-cfg=3D<0x0 0 0 10 0 0 16 16>.
-> Sorry for copypaste error.
->=20
-> I changed now to <0x0 0 0 16 0 0 1 1>. Thank you for information.
-
-Keep us informed if that helps.
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---ayikgltlfzst46w3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEyBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmIVBJAACgkQrX5LkNig
-01097Af2JLLIBjdvwnNd5fYDF5OurR30X3WAC2/w2zTZOC/Qpdrr7Q6qqbmqz2HQ
-veEq0Y9mSvZt4Eu794DJLEGDPNTtHp6F1pmVoQMx71TMs44hrsnm8HMQO8cpGpwr
-BXmh81GP9VpOEigB2a1c+5mNCrGcZpLnxYqnBK1dm2VZ6WtOYKiiUEIj2INylTd4
-alKpGHM8Z7hcIixHbBtjHppY4w5GP1vm299uKfzgNejQ74lnYy3fVEkskrlHC3Fb
-UPzd8WLtgS0FtNyHJB6Fc4cRI8zHvxhSIsefR/eAJblaRuPtb5yAT/j117EH3rQP
-DS687vBA9BVkQKAWeSPaZ99aCJv+
-=GyeF
------END PGP SIGNATURE-----
-
---ayikgltlfzst46w3--
+> Keep us informed if that helps.
+No, this does not help. It was my start-point with <0x0 0 0 16 0 0 1 1>
+I continue to dive in with debug-printing.
