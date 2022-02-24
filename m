@@ -2,45 +2,44 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 705514C25FE
-	for <lists+linux-can@lfdr.de>; Thu, 24 Feb 2022 09:30:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 459974C25F6
+	for <lists+linux-can@lfdr.de>; Thu, 24 Feb 2022 09:30:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231951AbiBXIaZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 24 Feb 2022 03:30:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37122 "EHLO
+        id S231902AbiBXIa0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 24 Feb 2022 03:30:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231902AbiBXI3p (ORCPT
+        with ESMTP id S232040AbiBXI3p (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Thu, 24 Feb 2022 03:29:45 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7955127908C
-        for <linux-can@vger.kernel.org>; Thu, 24 Feb 2022 00:29:01 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465D327909C
+        for <linux-can@vger.kernel.org>; Thu, 24 Feb 2022 00:29:02 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1nN9Uh-0004ec-Kz
-        for linux-can@vger.kernel.org; Thu, 24 Feb 2022 09:28:59 +0100
+        id 1nN9Ui-0004fM-Ih
+        for linux-can@vger.kernel.org; Thu, 24 Feb 2022 09:29:00 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id C78313C214
+        by bjornoya.blackshift.org (Postfix) with SMTP id CF6183C21C
         for <linux-can@vger.kernel.org>; Thu, 24 Feb 2022 08:27:28 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 60DD43C1CE;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 716803C1D3;
         Thu, 24 Feb 2022 08:27:28 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id d2d48553;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 123d8d7f;
         Thu, 24 Feb 2022 08:27:28 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
         kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: [PATCH net-next 03/36] dt-binding: can: m_can: list Chandrasekar Ramakrishnan as maintainer
-Date:   Thu, 24 Feb 2022 09:26:53 +0100
-Message-Id: <20220224082726.3000007-4-mkl@pengutronix.de>
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>
+Subject: [PATCH net-next 04/36] dt-binding: can: m_can: fix indention of table in bosch,mram-cfg description
+Date:   Thu, 24 Feb 2022 09:26:54 +0100
+Message-Id: <20220224082726.3000007-5-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220224082726.3000007-1-mkl@pengutronix.de>
 References: <20220224082726.3000007-1-mkl@pengutronix.de>
@@ -59,31 +58,31 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Since Sriram Dash's email bounces, change the maintainer entry to
-Chandrasekar Ramakrishnan. Chandrasekar Ramakrishnan is already listed
-as a maintainer in the MAINTAINERS file.
+This patch fixes the indention of the table in the description of the
+bosch,mram-cfg property.
 
-Link: https://lore.kernel.org/all/20220217113839.2311417-1-mkl@pengutronix.de
-Cc: Chandrasekar Ramakrishnan <rcsekar@samsung.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Link: https://lore.kernel.org/all/20220217101111.2291151-1-mkl@pengutronix.de
+Reviewed-by: Chandrasekar Ramakrishnan <rcsekar@samsung.com>
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- Documentation/devicetree/bindings/net/can/bosch,m_can.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/devicetree/bindings/net/can/bosch,m_can.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-index 401ab7cdb379..f8f504953e78 100644
+index f8f504953e78..fd4d291fe4c1 100644
 --- a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
 +++ b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-@@ -9,7 +9,7 @@ title: Bosch MCAN controller Bindings
- description: Bosch MCAN controller for CAN bus
- 
- maintainers:
--  - Sriram Dash <sriram.dash@samsung.com>
-+  - Chandrasekar Ramakrishnan <rcsekar@samsung.com>
- 
- properties:
-   compatible:
+@@ -66,8 +66,8 @@ properties:
+       M_CAN includes the following elements according to user manual:
+       11-bit Filter	0-128 elements / 0-128 words
+       29-bit Filter	0-64 elements / 0-128 words
+-      Rx FIFO 0	0-64 elements / 0-1152 words
+-      Rx FIFO 1	0-64 elements / 0-1152 words
++      Rx FIFO 0		0-64 elements / 0-1152 words
++      Rx FIFO 1		0-64 elements / 0-1152 words
+       Rx Buffers	0-64 elements / 0-1152 words
+       Tx Event FIFO	0-32 elements / 0-64 words
+       Tx Buffers	0-32 elements / 0-576 words
 -- 
 2.34.1
 
