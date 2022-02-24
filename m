@@ -2,43 +2,43 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87C5F4C263C
-	for <lists+linux-can@lfdr.de>; Thu, 24 Feb 2022 09:30:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF5144C2605
+	for <lists+linux-can@lfdr.de>; Thu, 24 Feb 2022 09:30:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231899AbiBXI3X (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 24 Feb 2022 03:29:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36900 "EHLO
+        id S231901AbiBXI31 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 24 Feb 2022 03:29:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231896AbiBXI3R (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 24 Feb 2022 03:29:17 -0500
+        with ESMTP id S231522AbiBXI3S (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 24 Feb 2022 03:29:18 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8559C277918
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D30727791A
         for <linux-can@vger.kernel.org>; Thu, 24 Feb 2022 00:28:47 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1nN9UT-00040S-Kw
-        for linux-can@vger.kernel.org; Thu, 24 Feb 2022 09:28:45 +0100
+        id 1nN9UT-000415-W8
+        for linux-can@vger.kernel.org; Thu, 24 Feb 2022 09:28:46 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 3DAE63C359
+        by bjornoya.blackshift.org (Postfix) with SMTP id 43D9D3C361
         for <linux-can@vger.kernel.org>; Thu, 24 Feb 2022 08:27:30 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 11F343C329;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 1C2E53C337;
         Thu, 24 Feb 2022 08:27:30 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id c6210d3a;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 10195273;
         Thu, 24 Feb 2022 08:27:28 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
         kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next 26/36] can: mcp251xfd: mcp251xfd_chip_clock_init(): prepare for PLL support, wait for OSC ready
-Date:   Thu, 24 Feb 2022 09:27:16 +0100
-Message-Id: <20220224082726.3000007-27-mkl@pengutronix.de>
+Subject: [PATCH net-next 27/36] can: mcp251xfd: mcp251xfd_register(): prepare to activate PLL after softreset
+Date:   Thu, 24 Feb 2022 09:27:17 +0100
+Message-Id: <20220224082726.3000007-28-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220224082726.3000007-1-mkl@pengutronix.de>
 References: <20220224082726.3000007-1-mkl@pengutronix.de>
@@ -57,50 +57,32 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This patch prepares the mcp251xfd_chip_clock_init() function for PLL
-support.
+If the PLL is needed it must be switched on after chip reset. This
+patch adds the required call to mcp251xfd_register().
 
-If the PLL is needed is must be switched on after chip reset. This
-should be done in the mcp251xfd_chip_clock_init() function. Prepare
-this function to wait for the OSC and PLL to be ready.
-
-Link: https://lore.kernel.org/all/20220207131047.282110-14-mkl@pengutronix.de
+Link: https://lore.kernel.org/all/20220207131047.282110-15-mkl@pengutronix.de
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-index d08e0481df35..937424e5ac2b 100644
+index 937424e5ac2b..1086c8974f89 100644
 --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
 +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-@@ -429,7 +429,7 @@ static int mcp251xfd_chip_softreset(const struct mcp251xfd_priv *priv)
- 
- static int mcp251xfd_chip_clock_init(const struct mcp251xfd_priv *priv)
- {
--	u32 osc;
-+	u32 osc, osc_reference, osc_mask;
- 	int err;
- 
- 	/* Activate Low Power Mode on Oscillator Disable. This only
-@@ -439,10 +439,17 @@ static int mcp251xfd_chip_clock_init(const struct mcp251xfd_priv *priv)
- 	osc = MCP251XFD_REG_OSC_LPMEN |
- 		FIELD_PREP(MCP251XFD_REG_OSC_CLKODIV_MASK,
- 			   MCP251XFD_REG_OSC_CLKODIV_10);
-+	osc_reference = MCP251XFD_REG_OSC_OSCRDY;
-+	osc_mask = MCP251XFD_REG_OSC_OSCRDY | MCP251XFD_REG_OSC_PLLRDY;
-+
- 	err = regmap_write(priv->map_reg, MCP251XFD_REG_OSC, osc);
+@@ -1792,6 +1792,12 @@ static int mcp251xfd_register(struct mcp251xfd_priv *priv)
  	if (err)
- 		return err;
+ 		goto out_chip_sleep;
  
-+	err = mcp251xfd_chip_wait_for_osc_ready(priv, osc_reference, osc_mask);
++	err = mcp251xfd_chip_clock_init(priv);
++	if (err == -ENODEV)
++		goto out_runtime_disable;
 +	if (err)
-+		return err;
++		goto out_chip_sleep;
 +
- 	return 0;
- }
- 
+ 	err = mcp251xfd_register_chip_detect(priv);
+ 	if (err)
+ 		goto out_chip_sleep;
 -- 
 2.34.1
 
