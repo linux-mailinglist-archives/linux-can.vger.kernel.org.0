@@ -2,154 +2,68 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1666B4C2A10
-	for <lists+linux-can@lfdr.de>; Thu, 24 Feb 2022 12:01:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E25864C2DA7
+	for <lists+linux-can@lfdr.de>; Thu, 24 Feb 2022 14:55:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233477AbiBXLAt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 24 Feb 2022 06:00:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58106 "EHLO
+        id S233949AbiBXNyw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 24 Feb 2022 08:54:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbiBXLAt (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 24 Feb 2022 06:00:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62A3127AA07;
-        Thu, 24 Feb 2022 03:00:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F10A8616BB;
-        Thu, 24 Feb 2022 11:00:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4C690C340EB;
-        Thu, 24 Feb 2022 11:00:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645700418;
-        bh=AnnVq5c6p6dC9n9JQe1mQGwsddizXP0V8aCqa1cu3xM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=BHqLEkcrrObbk2szVmmRjHm7Gr1kgYt/EIPMYkUlW44Mxk19HmZM7QPetJ51nF3c1
-         U1Xu3jnLXCOQ6oB00Ev68DhR+v9LgGWH5MNE/cApPFpOK1MGRKwPqESYxhEzupnfVe
-         c310uxkdcp7O5ZsuYpuCPrwm8g2nMOAZdUS2fRdTTTtlKhU6G1e6RwQN6r2yb48jVa
-         hIxaoT024FlbmF+dgrsu28ctwoaCmCq7ZDW8vJov68hCoS4XdLtRsmaSscOuYuMxlr
-         0IoXnaCyJhMVD97nN7mdA8NxndUCeCwfz0pjHwSRAgQGFVpfFo+x4NFjoL4p9C/Wer
-         T6J+HgoMg0U/A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3024EE5D09D;
-        Thu, 24 Feb 2022 11:00:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S233584AbiBXNyv (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 24 Feb 2022 08:54:51 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F1291B7197
+        for <linux-can@vger.kernel.org>; Thu, 24 Feb 2022 05:54:21 -0800 (PST)
+Received: from photo-meter.com ([62.157.68.154]) by mrelayeu.kundenserver.de
+ (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MyK9U-1oAfQs1oo0-00yiaK; Thu, 24 Feb 2022 14:54:18 +0100
+Received: from [192.168.100.109] (MICHA.fritz.box [192.168.100.109])
+        by photo-meter.com (Postfix) with ESMTP id 1E7963B08B7;
+        Thu, 24 Feb 2022 14:52:10 +0100 (CET)
+Message-ID: <7c5b3abc-0836-1840-a322-0c582abf9692@photo-meter.com>
+Date:   Thu, 24 Feb 2022 14:54:17 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 01/36] dt-binding: can: mcp251xfd: include common CAN
- controller bindings
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164570041818.27281.14522433366383159924.git-patchwork-notify@kernel.org>
-Date:   Thu, 24 Feb 2022 11:00:18 +0000
-References: <20220224082726.3000007-2-mkl@pengutronix.de>
-In-Reply-To: <20220224082726.3000007-2-mkl@pengutronix.de>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, kernel@pengutronix.de, mani@kernel.org,
-        thomas.kopp@microchip.com, robh@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Reply-To: anochin@photo-meter.com
+Content-Language: en-US
+To:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
+From:   Michael Anochin <anochin@photo-meter.com>
+Subject: can: m_can: m_can_isr IR_ERR_ALL_30X
+Organization: Czibula und Grundmann GmbH
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:VaI+8RSx5MQ9ix/cvQQaH3tqvzuogqOVHpIr3K2G7XNVW1Sn7d+
+ 3GM9ydxc5fryEjZnh3vlfKEW6TPJhciPiCEokHA3hNuJmtteHPGiHepAggARVI3YWQxoAT6
+ A91cVfn9vFacKBEMo7+uMgoinP0gWLjm8BrmXw/ty2AX5b+UovZXODCesMcVudZyz7stnae
+ T/LgSqPMrgLS6pvWG4AQg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:YwQ8wwE6qiY=:swdkd2dE7yJW6g1oTDlVN8
+ ka7nEXNDyUh5mAn0HzjcHSqsve7r2s3hRDswxQhnruHZz087NKXrVUcVeul6xRpJMoe3Z0ASF
+ nHAJoxXh4CeRs8gZR28l+gxfZuLWv62SSxKwDQCEUnnXwWem6C3fEUCI6kCD5SszO14Wqi8kC
+ g9lIAbF7dL0VRWvgBW/M4YhRfvR6WdeMFcql1mb4poWfeCeAfL811X0YgjZxpYPpAOR6Es2d4
+ /vEMKEnron1lc6eTRv52kHMJzNy+CQGA1U7KkXd1AlUSR+zqyd3SNJ20B1UxT2rHzQ2VTPlG/
+ f2knQe0NZpRUhYrN4mZayH36dND/H+U+h8PC6Wxk9hzvUE0ngB9JpnSGWj6TqDLhkdJgJaRWA
+ D3cmRAf/MWRmLZzVWykHcBmNe3C/7sWVFYCP8J9OlJH3zYsh8CSBYywxVT7dUQLAibVt0l55t
+ +Q7Z9zIn6AJwaTA4f/hAxxKWzIeNmX1F0q2/LwhOXA/Uo0MhcK2bXRQMS9smhD586WQvJ/FYp
+ ljdCvYbNOpLZM+CwfS5bOuJgMxuuUOXBp3PKN61ltCIeZDBDIeEqdzLMkYXBEdmrQ9Q345bfl
+ dSBhsgfVVv5CewziMI/ROWgmiRbf6c6OP9ky/DMwA4tGvdjUMfL/wx4jY4BLZKBj8HNy3bT2D
+ WfZZvVlLHH1ELQz4wGqlWHoafCVuTdx7il/otcDcuaO2IgZ0jPpHm7d6C+ONukFeM0bWQle9J
+ gh+h1pGiaSTiCV3r
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello:
 
-This series was applied to netdev/net-next.git (master)
-by Marc Kleine-Budde <mkl@pengutronix.de>:
+In m_can_isr, in  rx handling the IR_ERR_ALL_30X is used without 
+checking cdev->version > 30
 
-On Thu, 24 Feb 2022 09:26:51 +0100 you wrote:
-> Since commit
-> 
-> | 1f9234401ce0 ("dt-bindings: can: add can-controller.yaml")
-> 
-> there is a common CAN controller binding. Add this to the mcp251xfd
-> binding.
-> 
-> [...]
+if ((ir & IR_RF0N) || (ir & IR_ERR_ALL_30X))
+{}
 
-Here is the summary with links:
-  - [net-next,01/36] dt-binding: can: mcp251xfd: include common CAN controller bindings
-    https://git.kernel.org/netdev/net-next/c/66224f6656d1
-  - [net-next,02/36] dt-binding: can: sun4i_can: include common CAN controller bindings
-    https://git.kernel.org/netdev/net-next/c/d931686dc21f
-  - [net-next,03/36] dt-binding: can: m_can: list Chandrasekar Ramakrishnan as maintainer
-    https://git.kernel.org/netdev/net-next/c/edd056a109ee
-  - [net-next,04/36] dt-binding: can: m_can: fix indention of table in bosch,mram-cfg description
-    https://git.kernel.org/netdev/net-next/c/bffd5217ca2e
-  - [net-next,05/36] dt-binding: can: m_can: include common CAN controller bindings
-    https://git.kernel.org/netdev/net-next/c/58212e03e5ec
-  - [net-next,06/36] can: gw: use call_rcu() instead of costly synchronize_rcu()
-    https://git.kernel.org/netdev/net-next/c/181d4447905d
-  - [net-next,07/36] can: bittiming: can_validate_bitrate(): simplify bit rate checking
-    https://git.kernel.org/netdev/net-next/c/5b60d334e42a
-  - [net-next,08/36] can: bittiming: mark function arguments and local variables as const
-    https://git.kernel.org/netdev/net-next/c/5597f082fcaf
-  - [net-next,09/36] can: kvaser_usb: kvaser_usb_send_cmd(): remove redundant variable actual_len
-    https://git.kernel.org/netdev/net-next/c/1c256e3a2c76
-  - [net-next,10/36] can: c_can: ethtool: use default drvinfo
-    https://git.kernel.org/netdev/net-next/c/8d0a82e1f42f
-  - [net-next,11/36] can: softing: softing_netdev_open(): remove redundant ret variable
-    https://git.kernel.org/netdev/net-next/c/51ae468aa7e4
-  - [net-next,12/36] can: xilinx_can: Add check for NAPI Poll function
-    https://git.kernel.org/netdev/net-next/c/2206fcbc1090
-  - [net-next,13/36] can: etas_es58x: use BITS_PER_TYPE() instead of manual calculation
-    https://git.kernel.org/netdev/net-next/c/2ae9856d70b6
-  - [net-next,14/36] can: mcp251xfd: mcp251xfd_reg_invalid(): rename from mcp251xfd_osc_invalid()
-    https://git.kernel.org/netdev/net-next/c/3f5c91b4ce8f
-  - [net-next,15/36] can: mcp251xfd: mcp251xfd_regmap_crc_read(): ignore CRC error only if solely OSC register is read
-    https://git.kernel.org/netdev/net-next/c/25386c9a0100
-  - [net-next,16/36] can: mcp251xfd: mcp251xfd_unregister(): simplify runtime PM handling
-    https://git.kernel.org/netdev/net-next/c/72362dcdf654
-  - [net-next,17/36] can: mcp251xfd: mcp251xfd_chip_sleep(): introduce function to bring chip into sleep mode
-    https://git.kernel.org/netdev/net-next/c/1ba3690fa2c6
-  - [net-next,18/36] can: mcp251xfd: mcp251xfd_chip_stop(): convert to a void function
-    https://git.kernel.org/netdev/net-next/c/13c54a1ee12f
-  - [net-next,19/36] can: mcp251xfd: mcp251xfd_chip_wait_for_osc_ready(): factor out into separate function
-    https://git.kernel.org/netdev/net-next/c/0445e5ff55cc
-  - [net-next,20/36] can: mcp251xfd: mcp251xfd_chip_wait_for_osc_ready(): improve chip detection and error handling
-    https://git.kernel.org/netdev/net-next/c/197656de8d1e
-  - [net-next,21/36] can: mcp251xfd: mcp251xfd_chip_wait_for_osc_ready(): prepare for PLL support
-    https://git.kernel.org/netdev/net-next/c/06db5dbc8ebf
-  - [net-next,22/36] can: mcp251xfd: mcp251xfd_chip_softreset_check(): wait for OSC ready before accessing chip
-    https://git.kernel.org/netdev/net-next/c/01a80d688a41
-  - [net-next,23/36] can: mcp251xfd: mcp251xfd_chip_timestamp_init(): factor out into separate function
-    https://git.kernel.org/netdev/net-next/c/14193ea2bfee
-  - [net-next,24/36] can: mcp251xfd: mcp251xfd_chip_wake(): renamed from mcp251xfd_chip_clock_enable()
-    https://git.kernel.org/netdev/net-next/c/1a4abba64011
-  - [net-next,25/36] can: mcp251xfd: __mcp251xfd_chip_set_mode(): prepare for PLL support: improve error handling and diagnostics
-    https://git.kernel.org/netdev/net-next/c/a10fd91e42e8
-  - [net-next,26/36] can: mcp251xfd: mcp251xfd_chip_clock_init(): prepare for PLL support, wait for OSC ready
-    https://git.kernel.org/netdev/net-next/c/e39ea1360ca7
-  - [net-next,27/36] can: mcp251xfd: mcp251xfd_register(): prepare to activate PLL after softreset
-    https://git.kernel.org/netdev/net-next/c/445dd72a6d63
-  - [net-next,28/36] can: mcp251xfd: add support for internal PLL
-    https://git.kernel.org/netdev/net-next/c/2a68dd8663ea
-  - [net-next,29/36] can: mcp251xfd: introduce struct mcp251xfd_tx_ring::nr and ::fifo_nr and make use of it
-    https://git.kernel.org/netdev/net-next/c/c912f19ee382
-  - [net-next,30/36] can: mcp251xfd: mcp251xfd_ring_init(): split ring_init into separate functions
-    https://git.kernel.org/netdev/net-next/c/d2d5397fcae1
-  - [net-next,31/36] can: mcp251xfd: ring: prepare to change order of TX and RX FIFOs
-    https://git.kernel.org/netdev/net-next/c/617283b9c4db
-  - [net-next,32/36] can: mcp251xfd: ring: change order of TX and RX FIFOs
-    https://git.kernel.org/netdev/net-next/c/62713f0d9a38
-  - [net-next,33/36] can: mcp251xfd: ring: mcp251xfd_ring_init(): checked RAM usage of ring setup
-    https://git.kernel.org/netdev/net-next/c/fa0b68df7c95
-  - [net-next,34/36] can: mcp251xfd: ring: update FIFO setup debug info
-    https://git.kernel.org/netdev/net-next/c/83daa863f16b
-  - [net-next,35/36] can: mcp251xfd: prepare for multiple RX-FIFOs
-    https://git.kernel.org/netdev/net-next/c/887e359d6cce
-  - [net-next,36/36] can: mcp251xfd: mcp251xfd_priv: introduce macros specifying the number of supported TEF/RX/TX rings
-    https://git.kernel.org/netdev/net-next/c/aada74220f00
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+May be it is better to use IR_ERR_ALL_31X as mask for m_can_ver>30?
 
