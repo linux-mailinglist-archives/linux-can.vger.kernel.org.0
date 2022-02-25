@@ -2,58 +2,55 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3472A4C4B7D
-	for <lists+linux-can@lfdr.de>; Fri, 25 Feb 2022 17:56:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 160254C51EF
+	for <lists+linux-can@lfdr.de>; Sat, 26 Feb 2022 00:10:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243368AbiBYQ5C (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 25 Feb 2022 11:57:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47412 "EHLO
+        id S231376AbiBYXKq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 25 Feb 2022 18:10:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243370AbiBYQ5B (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 25 Feb 2022 11:57:01 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44AFE1EE9D8
-        for <linux-can@vger.kernel.org>; Fri, 25 Feb 2022 08:56:28 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nNdtK-0004Ey-O1
-        for linux-can@vger.kernel.org; Fri, 25 Feb 2022 17:56:26 +0100
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id CFA093D889
-        for <linux-can@vger.kernel.org>; Fri, 25 Feb 2022 16:56:23 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 7E8CE3D872;
-        Fri, 25 Feb 2022 16:56:23 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 81f2b6aa;
-        Fri, 25 Feb 2022 16:56:23 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Pavel Machek <pavel@denx.de>,
-        Ulrich Hecht <uli+renesas@fpond.eu>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net 3/3] can: rcar_canfd: rcar_canfd_channel_probe(): register the CAN device when fully ready
-Date:   Fri, 25 Feb 2022 17:56:22 +0100
-Message-Id: <20220225165622.3231809-4-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220225165622.3231809-1-mkl@pengutronix.de>
-References: <20220225165622.3231809-1-mkl@pengutronix.de>
+        with ESMTP id S230190AbiBYXKo (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 25 Feb 2022 18:10:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B00A1D2B78;
+        Fri, 25 Feb 2022 15:10:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 96CDA61CF4;
+        Fri, 25 Feb 2022 23:10:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EADE5C340E8;
+        Fri, 25 Feb 2022 23:10:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645830611;
+        bh=5bixtJmcdqWFbLnn9WzL9G3H37OpVlKkSC4XpWjBuOU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=NhfQGG8gaJr66jJsbGvzZcxoc+RU4ay1407pHsk6FPRz/euX3mfLPCibwmo0KIJ2R
+         TAtfkIVVWZom7hA8Zy81Jfzm2pc7s5OYRkb0dwqbr6Tw4Vj2yMBj7hcpPRzlpXYth5
+         tuPRA4ecuCWuLkCL8bi6Xvg20oQHfgS+Dphxn7V/qli0Jsu9eqax1mktepFmIgjdgy
+         6J8m8FAckykMLvskJBCdLn9LVjhaPbQllYxkBK74GAL8aS+YKn9HxMIN391lk5aunY
+         Yzl1M7MnlE297mi8FaoIzRn2IZhOx6BIZbkQOpMN/n99gmcBAccuTYXHMFXdwNrmr4
+         qLNCuqH4xMMFQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CEBBDEAC09A;
+        Fri, 25 Feb 2022 23:10:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Subject: Re: [PATCH net 1/3] can: etas_es58x: change opened_channel_cnt's type
+ from atomic_t to u8
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164583061084.3517.5069364779371997975.git-patchwork-notify@kernel.org>
+Date:   Fri, 25 Feb 2022 23:10:10 +0000
+References: <20220225165622.3231809-2-mkl@pengutronix.de>
+In-Reply-To: <20220225165622.3231809-2-mkl@pengutronix.de>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        linux-can@vger.kernel.org, kernel@pengutronix.de,
+        mailhol.vincent@wanadoo.fr, dan.carpenter@oracle.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,46 +58,32 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Hello:
 
-Register the CAN device only when all the necessary initialization is
-completed. This patch makes sure all the data structures and locks are
-initialized before registering the CAN device.
+This series was applied to netdev/net.git (master)
+by Marc Kleine-Budde <mkl@pengutronix.de>:
 
-Link: https://lore.kernel.org/all/20220221225935.12300-1-prabhakar.mahadev-lad.rj@bp.renesas.com
-Reported-by: Pavel Machek <pavel@denx.de>
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Pavel Machek <pavel@denx.de>
-Reviewed-by: Ulrich Hecht <uli+renesas@fpond.eu>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/rcar/rcar_canfd.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On Fri, 25 Feb 2022 17:56:20 +0100 you wrote:
+> From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> 
+> The driver uses an atomic_t variable: struct
+> es58x_device::opened_channel_cnt to keep track of the number of opened
+> channels in order to only allocate memory for the URBs when this count
+> changes from zero to one.
+> 
+> [...]
 
-diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index b7dc1c32875f..acd74725831f 100644
---- a/drivers/net/can/rcar/rcar_canfd.c
-+++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -1715,15 +1715,15 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
- 
- 	netif_napi_add(ndev, &priv->napi, rcar_canfd_rx_poll,
- 		       RCANFD_NAPI_WEIGHT);
-+	spin_lock_init(&priv->tx_lock);
-+	devm_can_led_init(ndev);
-+	gpriv->ch[priv->channel] = priv;
- 	err = register_candev(ndev);
- 	if (err) {
- 		dev_err(&pdev->dev,
- 			"register_candev() failed, error %d\n", err);
- 		goto fail_candev;
- 	}
--	spin_lock_init(&priv->tx_lock);
--	devm_can_led_init(ndev);
--	gpriv->ch[priv->channel] = priv;
- 	dev_info(&pdev->dev, "device registered (channel %u)\n", priv->channel);
- 	return 0;
- 
+Here is the summary with links:
+  - [net,1/3] can: etas_es58x: change opened_channel_cnt's type from atomic_t to u8
+    https://git.kernel.org/netdev/net/c/f4896248e902
+  - [net,2/3] can: gs_usb: change active_channels's type from atomic_t to u8
+    https://git.kernel.org/netdev/net/c/035b0fcf0270
+  - [net,3/3] can: rcar_canfd: rcar_canfd_channel_probe(): register the CAN device when fully ready
+    https://git.kernel.org/netdev/net/c/c5048a7b2c23
+
+You are awesome, thank you!
 -- 
-2.34.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
