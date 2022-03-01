@@ -2,91 +2,113 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54D244C6751
-	for <lists+linux-can@lfdr.de>; Mon, 28 Feb 2022 11:47:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DDEB4C8632
+	for <lists+linux-can@lfdr.de>; Tue,  1 Mar 2022 09:17:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234856AbiB1KsY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 28 Feb 2022 05:48:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38710 "EHLO
+        id S233297AbiCAIRm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 1 Mar 2022 03:17:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234899AbiB1KsX (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 28 Feb 2022 05:48:23 -0500
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDBD7117D;
-        Mon, 28 Feb 2022 02:47:44 -0800 (PST)
-Received: by mail-pf1-x442.google.com with SMTP id z16so10806067pfh.3;
-        Mon, 28 Feb 2022 02:47:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=dmv2wxlTh57NFmjOyo6WM3d2dcwIoJ6zIPvnRBUGp4M=;
-        b=U5BsIH37v6iIZb68WkEqkFN38nlgyEfhAuwS3ds3q8JucqnUczKGRqVfo6pCP8ij8Y
-         OAsHlGBb9GCd8bzEkjfGhHrAScexB02Rp/b3aivFudpFOBNxaur5L16KpKGJsOssAggE
-         /W7EW/rWQBFTpn7bgaU0mcfvSn2yjbSlIIUSx3AdCmgWgKZ7t4267ZRoR+9D6Bf+uUWc
-         6nHK1rdhSROMYqOUee7ImFVjlvhFkGyZPYVsnLHZPn3F4YEcncYWQiMDrHZ1+FCu1+6R
-         85ckuIiCa4mcQrTJnx5V9cIWPy5XXkOdFd0UVhk7T6o0uiOTt9lXKHvn55+EUbafVZvE
-         0ZwQ==
+        with ESMTP id S233316AbiCAIRl (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Mar 2022 03:17:41 -0500
+Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com [209.85.217.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70BAB83031;
+        Tue,  1 Mar 2022 00:17:00 -0800 (PST)
+Received: by mail-vs1-f51.google.com with SMTP id g20so15700248vsb.9;
+        Tue, 01 Mar 2022 00:17:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=dmv2wxlTh57NFmjOyo6WM3d2dcwIoJ6zIPvnRBUGp4M=;
-        b=l6Z4IIgoejPcQ3mu8Nt5afwakXlQfNjjV5q+3TY9ADgvbyw/mtxR/bjPtqyggxIYqJ
-         NPo3mzCF/NCOlPCOdFohEtitSQepxAz67iOTPnuIDwmk1Ug3t/v4Lt+rsxvjzYsMQv48
-         LkIouGxoQgpBWAevfTjrJwgPYcT+g233eiGc5ELNt2orx7FntigHWnZ5wciBWFw44wiQ
-         MeRdPCpjOjzqyM5qDISzFbtq2q50ByGV7/cfblP0lgL3zRSwYffnhOWQC2rlUUqKkHza
-         ZHToHxzReuP57oJBbaLe9V8kNiKa7y9BtpjZ0soqvhp775G3ZzkGCVr/txFKyp9NFJAV
-         ZcoQ==
-X-Gm-Message-State: AOAM532gmv9HNWcrCzJcJ711WQ3eZ3U6kjwiimlVQ6QYiazQsJkeO0GL
-        dESePnAzJmW1O8TOJ65zrwI=
-X-Google-Smtp-Source: ABdhPJzcudyeDv250wamHY6BmPBvsgMjr2JcoJJTkLbIxAkyl45iOpALVBROybJ3VGkMT7U1y2BAGw==
-X-Received: by 2002:aa7:8d54:0:b0:4e0:bd6:cfb9 with SMTP id s20-20020aa78d54000000b004e00bd6cfb9mr21014314pfe.60.1646045264545;
-        Mon, 28 Feb 2022 02:47:44 -0800 (PST)
-Received: from [10.11.37.162] ([103.84.139.53])
-        by smtp.gmail.com with ESMTPSA id s4-20020a056a00194400b004f0fbeb6006sm13028078pfk.88.2022.02.28.02.47.41
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dXYHl0PObkcXtthmu/EYhU2xFq7l25BTUZ/mPLnw+sA=;
+        b=HuSwu0ORNfnaPZQ4jBjHYDAHjh3pGts3F/I9S83ejZaAiaCh5XToRUP3+s/Wrbpk6A
+         XBwoRV5dAlyuOLcbTCnpk4oagy5zYqzoyoPk7DOAa6wW8ZsuW+B8lXtJd14uFAkSf4VD
+         nTn1EtKKh1iENje0zAxoUnvKcaR9GE6od++GxSPq4BCEUNYtgY5EHIoQy3TfSWNxgZYK
+         qj5nz1HGcgQwZfE0kGA5A42bZFzXnGtPxfKxQBSjyVgwvHm30aYyxDTDJ+lpXKn1F5O4
+         NIJx/fiuQ2VHF5uQCJVfbWC9cQyM44wkkFMW/Nj74wTVH1iDCm/j67GkaRX29BXew+oG
+         xpLg==
+X-Gm-Message-State: AOAM530rOAqUYAKIDluwSlVWbz19EXlh0lsDIVgyakSHm/4hNDN2ZChM
+        u4dMlUGxccKSfmb/4OIrAIxHemn7GnqQ4g==
+X-Google-Smtp-Source: ABdhPJwOnmS22BMtwaEoriYcL4mRAi8+oO25Bxyh2nJSr/GS+QKGG5N9WYZz8FAORHdVvJG/eOPDwQ==
+X-Received: by 2002:a67:c282:0:b0:31b:e2cb:34ed with SMTP id k2-20020a67c282000000b0031be2cb34edmr9036672vsj.16.1646122619433;
+        Tue, 01 Mar 2022 00:16:59 -0800 (PST)
+Received: from mail-vk1-f173.google.com (mail-vk1-f173.google.com. [209.85.221.173])
+        by smtp.gmail.com with ESMTPSA id s18-20020a05612204d200b00332f05df61bsm1776243vkn.49.2022.03.01.00.16.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 02:47:44 -0800 (PST)
-Message-ID: <f0e068ce-49bf-a13d-53ff-d81b4f5a8a65@gmail.com>
-Date:   Mon, 28 Feb 2022 18:47:38 +0800
+        Tue, 01 Mar 2022 00:16:59 -0800 (PST)
+Received: by mail-vk1-f173.google.com with SMTP id bj24so6455245vkb.8;
+        Tue, 01 Mar 2022 00:16:58 -0800 (PST)
+X-Received: by 2002:a05:6122:114e:b0:32d:4662:65a8 with SMTP id
+ p14-20020a056122114e00b0032d466265a8mr9528539vko.0.1646122618726; Tue, 01 Mar
+ 2022 00:16:58 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] can: usb: delete a redundant dev_kfree_skb() in
- ems_usb_start_xmit()
-Content-Language: en-US
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     wg@grandegger.com, davem@davemloft.net, kuba@kernel.org,
-        stefan.maetje@esd.eu, mailhol.vincent@wanadoo.fr,
-        paskripkin@gmail.com, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220228083639.38183-1-hbh25y@gmail.com>
- <20220228085536.pa5wdq3w4ul5wqn5@pengutronix.de>
- <75c14302-b928-1e09-7cd1-78b8c2695f06@gmail.com>
- <20220228104514.der655r4jkl42e7o@pengutronix.de>
-From:   Hangyu Hua <hbh25y@gmail.com>
-In-Reply-To: <20220228104514.der655r4jkl42e7o@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220227213250.23637-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220227213250.23637-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 1 Mar 2022 09:16:47 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXy4H03=rQKtZG9qrV14XA9j_S21+kRXkHsP3GA+gY-OQ@mail.gmail.com>
+Message-ID: <CAMuHMdXy4H03=rQKtZG9qrV14XA9j_S21+kRXkHsP3GA+gY-OQ@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: net: can: renesas,rcar-canfd: Document
+ RZ/V2L SoC
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        linux-can@vger.kernel.org, netdev <netdev@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-All right. :)
+Hi Prabhakar,
 
-On 2022/2/28 18:45, Marc Kleine-Budde wrote:
-> On 28.02.2022 18:44:06, Hangyu Hua wrote:
->> I get it. I'll remake a patch that matches your suggestions.
-> 
-> Not needed, it's already applied:
->>> Added patch to can/testing.
-> 
-> Marc
-> 
+On Sun, Feb 27, 2022 at 10:33 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> Document RZ/V2L CANFD bindings. RZ/V2L CANFD is identical to one found on
+> the RZ/G2L SoC. No driver changes are required as generic compatible
+> string "renesas,rzg2l-canfd" will be used as a fallback.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+
+Thanks for your patch!
+
+> --- a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
+> +++ b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
+> @@ -33,6 +33,7 @@ properties:
+>        - items:
+>            - enum:
+>                - renesas,r9a07g044-canfd    # RZ/G2{L,LC}
+> +              - renesas,r9a07g054-canfd    # RZ/V2L
+>            - const: renesas,rzg2l-canfd     # RZ/G2L family
+
+The last comment looks a bit strange, unless you consider RZ/V2L to be
+part of the RZ/G2L family, so perhaps drop it?
+
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
