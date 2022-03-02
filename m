@@ -2,190 +2,56 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8763D4C9E65
-	for <lists+linux-can@lfdr.de>; Wed,  2 Mar 2022 08:30:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 674A44CA553
+	for <lists+linux-can@lfdr.de>; Wed,  2 Mar 2022 13:57:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234255AbiCBHbE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 2 Mar 2022 02:31:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36214 "EHLO
+        id S236126AbiCBM5z (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 2 Mar 2022 07:57:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231681AbiCBHbD (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 2 Mar 2022 02:31:03 -0500
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7EE51E51;
-        Tue,  1 Mar 2022 23:30:21 -0800 (PST)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id B8E6F1C0B81; Wed,  2 Mar 2022 08:30:18 +0100 (CET)
-Date:   Wed, 2 Mar 2022 08:30:16 +0100
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Markuss Broks <markuss.broks@gmail.com>,
-        Emma Anholt <emma@anholt.net>,
-        David Lechner <david@lechnology.com>,
-        Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
-        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dan Robertson <dan@dlrobertson.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Marcus Folkesson <marcus.folkesson@gmail.com>,
-        Kent Gustavsson <kent@minoris.se>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Yasunari Takiguchi <Yasunari.Takiguchi@sony.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Charles-Antoine Couret <charles-antoine.couret@nexvision.fr>,
-        Antti Palosaari <crope@iki.fi>,
-        Lee Jones <lee.jones@linaro.org>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Eric Piel <eric.piel@tremplin-utc.net>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Thomas Kopp <thomas.kopp@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        =?utf-8?Q?=C5=81ukasz?= Stelmach <l.stelmach@samsung.com>,
-        Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Harry Morris <h.morris@cascoda.com>,
-        Varka Bhadram <varkabhadram@gmail.com>,
-        Xue Liu <liuxuenetmail@gmail.com>, Alan Ott <alan@signal11.us>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Ajay Singh <ajay.kathat@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Solomon Peachy <pizza@shaftnet.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Mark Greer <mgreer@animalcreek.com>,
-        Benson Leung <bleung@chromium.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?iso-8859-1?B?Suly9G1l?= Pouiller <jerome.pouiller@silabs.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        James Schulman <james.schulman@cirrus.com>,
-        David Rhodes <david.rhodes@cirrus.com>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Alexandru Ardelean <ardeleanalex@gmail.com>,
-        Mike Looijmans <mike.looijmans@topic.nl>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Antoniu Miclaus <antoniu.miclaus@analog.com>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        Ronald =?iso-8859-1?Q?Tschal=E4r?= <ronald@innovation.ch>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-        Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Heiko Schocher <hs@denx.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Matt Kline <matt@bitbashing.io>,
-        Torin Cooper-Bennun <torin@maxiluxsystems.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Stefan =?iso-8859-1?Q?M=E4tje?= <stefan.maetje@esd.eu>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Wei Yongjun <weiyongjun1@huawei.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Nanyong Sun <sunnanyong@huawei.com>,
-        Yang Shen <shenyang39@huawei.com>,
-        dingsenjie <dingsenjie@yulong.com>,
-        Aditya Srivastava <yashsri421@gmail.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michael Walle <michael@walle.cc>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        wengjianfeng <wengjianfeng@yulong.com>,
-        Sidong Yang <realwakka@gmail.com>,
-        Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>,
-        Zhang Qilong <zhangqilong3@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>,
-        Davidlohr Bueso <dbueso@suse.de>, Claudius Heine <ch@denx.de>,
-        Jiri Prchal <jiri.prchal@aksignal.cz>,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-wpan@vger.kernel.org,
-        linux-wireless@vger.kernel.org, libertas-dev@lists.infradead.org,
-        platform-driver-x86@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH 5/5] spi: make remove callback a void function
-Message-ID: <20220302073016.GB32222@amd>
-References: <20220123175201.34839-1-u.kleine-koenig@pengutronix.de>
- <20220123175201.34839-6-u.kleine-koenig@pengutronix.de>
+        with ESMTP id S242013AbiCBM5x (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 2 Mar 2022 07:57:53 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF957C2496
+        for <linux-can@vger.kernel.org>; Wed,  2 Mar 2022 04:57:09 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nPOXU-0003e2-CL
+        for linux-can@vger.kernel.org; Wed, 02 Mar 2022 13:57:08 +0100
+Received: from [IPv6:2a03:f580:87bc:d400:5c51:3418:45e9:21d0] (2a03-f580-87bc-d400-5c51-3418-45e9-21d0.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:5c51:3418:45e9:21d0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id DDBEC40CA3
+        for <linux-can@vger.kernel.org>; Wed,  2 Mar 2022 12:57:07 +0000 (UTC)
+Date:   Wed, 2 Mar 2022 11:32:19 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     kernel test robot <yujie.liu@intel.com>
+Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        kbuild-all@lists.01.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
+Subject: Re: drivers/net/can/usb/etas_es58x/es58x_fd.c:174:8: warning:
+ Uninitialized variable: rx_event_msg [uninitvar]
+Message-ID: <20220302103219.kvpfhc6qz42t3pvv@pengutronix.de>
+References: <202203021333.mMJpWPzx-lkp@intel.com>
+ <5f13b914-e309-49ee-4f98-c81780c478b9@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="xXmbgvnjoT4axfJE"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="es7shakc2uxqunjk"
 Content-Disposition: inline
-In-Reply-To: <20220123175201.34839-6-u.kleine-koenig@pengutronix.de>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <5f13b914-e309-49ee-4f98-c81780c478b9@intel.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -193,38 +59,104 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---xXmbgvnjoT4axfJE
-Content-Type: text/plain; charset=us-ascii
+--es7shakc2uxqunjk
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi!
-
-> The value returned by an spi driver's remove function is mostly ignored.
-> (Only an error message is printed if the value is non-zero that the
-> error is ignored.)
+On 02.03.2022 17:47:08, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
+t master
+> head:   575115360652e9920cc56a028a286ebe9bf82694
+> commit: c664e2137a27680922d8aeb64fb10313416b254f can: etas_es58x: add sup=
+port for the ETAS ES58X_FD CAN USB interfaces
+> date:   11 months ago
+> compiler: powerpc64-linux-gcc (GCC) 11.2.0
 >=20
-> So change the prototype of the remove function to return no value. This
-> way driver authors are not tempted to assume that passing an error to
-> the upper layer is a good idea. All drivers are adapted accordingly.
-> There is no intended change of behaviour, all callbacks were prepared to
-> return 0 before.
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <yujie.liu@intel.com>
+>=20
+>=20
+> cppcheck possible warnings: (new ones prefixed by >>, may not be real pro=
+blems)
+>=20
+>    In file included from drivers/net/can/usb/etas_es58x/es58x_fd.c:
+> >> drivers/net/can/usb/etas_es58x/es58x_fd.c:174:8: warning: Uninitialize=
+d variable: rx_event_msg [uninitvar]
+>     ret =3D es58x_check_msg_len(es58x_dev->dev, *rx_event_msg, msg_len);
+>           ^
+>=20
+> vim +174 drivers/net/can/usb/etas_es58x/es58x_fd.c
+>=20
+> c664e2137a2768 Vincent Mailhol 2021-04-10  165
+> c664e2137a2768 Vincent Mailhol 2021-04-10  166  static int es58x_fd_rx_ev=
+ent_msg(struct net_device *netdev,
+> c664e2137a2768 Vincent Mailhol 2021-04-10  167  				 const struct es58x_f=
+d_urb_cmd *es58x_fd_urb_cmd)
+> c664e2137a2768 Vincent Mailhol 2021-04-10  168  {
+> c664e2137a2768 Vincent Mailhol 2021-04-10  169  	struct es58x_device *es5=
+8x_dev =3D es58x_priv(netdev)->es58x_dev;
+> c664e2137a2768 Vincent Mailhol 2021-04-10  170  	u16 msg_len =3D get_unal=
+igned_le16(&es58x_fd_urb_cmd->msg_len);
+> c664e2137a2768 Vincent Mailhol 2021-04-10 @171  	const struct es58x_fd_rx=
+_event_msg *rx_event_msg;
+> c664e2137a2768 Vincent Mailhol 2021-04-10  172  	int ret;
+> c664e2137a2768 Vincent Mailhol 2021-04-10  173
+> c664e2137a2768 Vincent Mailhol 2021-04-10 @174  	ret =3D es58x_check_msg_=
+len(es58x_dev->dev, *rx_event_msg, msg_len);
+> c664e2137a2768 Vincent Mailhol 2021-04-10  175  	if (ret)
+> c664e2137a2768 Vincent Mailhol 2021-04-10  176  		return ret;
+> c664e2137a2768 Vincent Mailhol 2021-04-10  177
+> c664e2137a2768 Vincent Mailhol 2021-04-10  178  	rx_event_msg =3D &es58x_=
+fd_urb_cmd->rx_event_msg;
+> c664e2137a2768 Vincent Mailhol 2021-04-10  179
+> c664e2137a2768 Vincent Mailhol 2021-04-10  180  	return es58x_rx_err_msg(=
+netdev, rx_event_msg->error_code,
+> c664e2137a2768 Vincent Mailhol 2021-04-10  181  				rx_event_msg->event_c=
+ode,
+> c664e2137a2768 Vincent Mailhol 2021-04-10  182  				get_unaligned_le64(&r=
+x_event_msg->timestamp));
+> c664e2137a2768 Vincent Mailhol 2021-04-10  183  }
+> c664e2137a2768 Vincent Mailhol 2021-04-10  184
 
-Acked-by: Pavel Machek <pavel@ucw.cz>
-									Pavel
+Thanks for the report.
+
+This looks like a false positive to me, as es58x_check_msg_len() is not
+a function, but a macro:
+
+| #define es58x_check_msg_len(dev, msg, actual_len)			\
+| 	__es58x_check_msg_len(dev, __stringify(msg),			\
+| 			      actual_len, sizeof(msg))
+
+__es58x_check_msg_len() don't use "rx_event_msg" directly, but only a
+string representation of it and a "sizeof()".
+
+I think it's possible to assign rx_event_msg before the
+es58x_check_msg_len(). I think (hope?) the compiler will not optimize
+anything away. :)
+
+regards,
+Marc
+
 --=20
-http://www.livejournal.com/~pavelmachek
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---xXmbgvnjoT4axfJE
+--es7shakc2uxqunjk
 Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
 
 -----BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
 
-iEYEARECAAYFAmIfHQgACgkQMOfwapXb+vLxcgCghFIMSLkgbmU4bCcL4+4sOBXY
-b1QAoKETSRxn6hbtUUF5RsaX43sun2ct
-=6C0C
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmIfR7AACgkQrX5LkNig
+013QCQgAqK9CFYzDpArq0c7Bm8GbARd+F9DP/5Ir6bmH34+nSEvwBXvIB2bqDlLS
+5O6vzlP32gdyQTiUj7wZE9urPrtXkRcxrewMeoezOVuTNVfH32hwWANBYeyfP0g+
+8h1ePZHny0wbhGuGMzR7GRyEwtAfDQMpkfnzwrsY0AA6T5tshvWE/ToMVjtR6iqz
+kIyok2Q01jbLYyqoFjHMYDXhyLIS3kKxt8tUYiUKmxeqvdMW9Azw1eUuBWCRoJ9z
+feAmwJS6+BXnmOAvX9CLIlFo1asRCZKikRgPjDiEkcX8/Kc5OLeItu4+bYZx5cEk
+UdTZSPc0DW5omA7gnaBoOQiufTPk+Q==
+=t9ZQ
 -----END PGP SIGNATURE-----
 
---xXmbgvnjoT4axfJE--
+--es7shakc2uxqunjk--
