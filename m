@@ -2,72 +2,54 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8022E4CE763
-	for <lists+linux-can@lfdr.de>; Sat,  5 Mar 2022 23:13:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DD8A4CE75D
+	for <lists+linux-can@lfdr.de>; Sat,  5 Mar 2022 23:13:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232717AbiCEWOL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        id S232712AbiCEWOL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
         Sat, 5 Mar 2022 17:14:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50922 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232707AbiCEWOJ (ORCPT
+        with ESMTP id S232709AbiCEWOJ (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Sat, 5 Mar 2022 17:14:09 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0B651E72;
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B53A517FB;
         Sat,  5 Mar 2022 14:13:18 -0800 (PST)
 From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1646518395;
+        s=2020; t=1646518396;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=K6RsnwD/BCzH5WC8kzG/RcEEnIxeuBZkPWilYKAkaIA=;
-        b=19SAR6XmxUBramFZyCy1np5zMmBB3Gw5a/tfCzzKpkbCigHriL+nnH5cgsgk/pe2IMWmO3
-        QU8pqgK5jlQ34nP8ofDcByl3d0bNcmOl9fl5Pkay3kaMDBsaZdNGLGlMwnBH73D2hgJeSj
-        s86UAJXgvzBCpKie+0oPVJf/h51lSPBKf4BjdQfXL4OCwIICEoDhb6tO9M/Eq/KUADzQaw
-        x06b2X+fKTPlromrFZLilV573RI6/2PHFYy9x8Tr1yi7VyrpKUVs1RXomYc92DD2pkNhRP
-        jrhXMQGSqpTSuihSBS3fLupM0XWwEelKOl6kWmzJL+BRWN74HzCG96iXwBfAxA==
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7uGNP9Djz1TwgueFOo46UUQ187Tk4tNDpxEJOSudrzs=;
+        b=qaqgVU36NS1iGqgj6SBekZsPSycB/xGOV9gwhRL6eIAGO8hDshPhdLLU7V2CMxOVI8fSjs
+        YAsqdk34Lr9WwKQF+VBc6QcAjO5bkYjMBkYYmWyFm2V+YLX004SZdBJMU51HkD68VtMaxy
+        ARIXg4Xg3eN29SnPpo6DzXeO1C8fKAMCVb2vht9H+vq0+s4DcVUem0O35DmCUa8IqR0Ax7
+        RHY4KcRBewCnJ7yI0CH7g4/Oof+v88WPVGCBluk9O/z3zrsYWGCwKQO/RS9Fqb8eNwWlTd
+        e6Chtp2IXkIaJZcs05bhbJo+He4lX06D9z8Rqws9WT8sJryTxiA2LNL0GgN19g==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1646518395;
+        s=2020e; t=1646518396;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=K6RsnwD/BCzH5WC8kzG/RcEEnIxeuBZkPWilYKAkaIA=;
-        b=0b628Q7I/sf6Ay3zX05/3px2i3BWkvu3PAZfEOkGogLsjLNBGytZf+tzG5fkg4GDbuAc+1
-        Ahs7B8uSJWPVcVAQ==
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7uGNP9Djz1TwgueFOo46UUQ187Tk4tNDpxEJOSudrzs=;
+        b=pws7mI33hXL1DuQuAxslfc/xTZQOEqJ0rocE3Ni5uHecn3u2hK/C1uD74heb1vrt8POzAG
+        DDT8jgA8d3M2yJDA==
 To:     netdev@vger.kernel.org
 Cc:     "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Amitkumar Karwar <amitkarwar@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Arend van Spriel <aspriel@gmail.com>,
-        brcm80211-dev-list.pdl@broadcom.com,
-        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
-        Chung-hsien Hsu <chung-hsien.hsu@infineon.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Ganapathi Bhat <ganapathi017@gmail.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Kalle Valo <kvalo@kernel.org>,
-        libertas-dev@lists.infradead.org, linux-can@vger.kernel.org,
-        linux-wireless@vger.kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
-        Matt Johnston <matt@codeconstruct.com.au>,
-        Maya Erez <merez@codeaurora.org>,
         Oliver Hartkopp <socketcan@hartkopp.net>,
-        Radu Pirea <radu-nicolae.pirea@oss.nxp.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        SHA-cyfmac-dev-list@infineon.com,
-        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
-        wil6210@qti.qualcomm.com, Wolfgang Grandegger <wg@grandegger.com>,
-        Wright Feng <wright.feng@infineon.com>,
-        Xinming Hu <huxinming820@gmail.com>
-Subject: [PATCH net-next 0/8] net: Convert user to netif_rx(), part 2.
-Date:   Sat,  5 Mar 2022 23:12:44 +0100
-Message-Id: <20220305221252.3063812-1-bigeasy@linutronix.de>
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org
+Subject: [PATCH net-next 2/8] can: Use netif_rx().
+Date:   Sat,  5 Mar 2022 23:12:46 +0100
+Message-Id: <20220305221252.3063812-3-bigeasy@linutronix.de>
+In-Reply-To: <20220305221252.3063812-1-bigeasy@linutronix.de>
+References: <20220305221252.3063812-1-bigeasy@linutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,44 +62,152 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is the second batch of converting netif_rx_ni() caller to
-netif_rx(). The change making this possible is net-next and
-netif_rx_ni() is a wrapper around netif_rx(). This is a clean up in
-order to remove netif_rx_ni().
+Since commit
+   baebdf48c3600 ("net: dev: Makes sure netif_rx() can be invoked in any co=
+ntext.")
 
-The brcmfmac changes are slilghtly larger because the inirq parameter
-can be removed.
+the function netif_rx() can be used in preemptible/thread context as
+well as in interrupt context.
 
-Cc: Amitkumar Karwar <amitkarwar@gmail.com>
-Cc: Andrew Lunn <andrew@lunn.ch>
-Cc: Arend van Spriel <aspriel@gmail.com>
-Cc: brcm80211-dev-list.pdl@broadcom.com
-Cc: Chi-hsien Lin <chi-hsien.lin@infineon.com>
-Cc: Chung-hsien Hsu <chung-hsien.hsu@infineon.com>
-Cc: Franky Lin <franky.lin@broadcom.com>
-Cc: Ganapathi Bhat <ganapathi017@gmail.com>
-Cc: Hante Meuleman <hante.meuleman@broadcom.com>
-Cc: Heiner Kallweit <hkallweit1@gmail.com>
-Cc: Jeremy Kerr <jk@codeconstruct.com.au>
-Cc: Johannes Berg <johannes@sipsolutions.net>
-Cc: Kalle Valo <kvalo@kernel.org>
-Cc: libertas-dev@lists.infradead.org
-Cc: linux-can@vger.kernel.org
-Cc: linux-wireless@vger.kernel.org
+Use netif_rx().
+
 Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: Matt Johnston <matt@codeconstruct.com.au>
-Cc: Maya Erez <merez@codeaurora.org>
 Cc: Oliver Hartkopp <socketcan@hartkopp.net>
-Cc: Radu Pirea <radu-nicolae.pirea@oss.nxp.com>
-Cc: Richard Cochran <richardcochran@gmail.com>
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: SHA-cyfmac-dev-list@infineon.com
-Cc: Sharvari Harisangam <sharvari.harisangam@nxp.com>
-Cc: wil6210@qti.qualcomm.com
 Cc: Wolfgang Grandegger <wg@grandegger.com>
-Cc: Wright Feng <wright.feng@infineon.com>
-Cc: Xinming Hu <huxinming820@gmail.com>
+Cc: linux-can@vger.kernel.org
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+---
+ drivers/net/can/dev/dev.c     | 2 +-
+ drivers/net/can/slcan.c       | 2 +-
+ drivers/net/can/spi/hi311x.c  | 6 +++---
+ drivers/net/can/spi/mcp251x.c | 4 ++--
+ drivers/net/can/vcan.c        | 2 +-
+ drivers/net/can/vxcan.c       | 2 +-
+ net/can/af_can.c              | 2 +-
+ 7 files changed, 10 insertions(+), 10 deletions(-)
 
-
-Sebastian
+diff --git a/drivers/net/can/dev/dev.c b/drivers/net/can/dev/dev.c
+index c192f25f96956..e7ab45f1c43b2 100644
+--- a/drivers/net/can/dev/dev.c
++++ b/drivers/net/can/dev/dev.c
+@@ -154,7 +154,7 @@ static void can_restart(struct net_device *dev)
+=20
+ 	cf->can_id |=3D CAN_ERR_RESTARTED;
+=20
+-	netif_rx_ni(skb);
++	netif_rx(skb);
+=20
+ restart:
+ 	netdev_dbg(dev, "restarted\n");
+diff --git a/drivers/net/can/slcan.c b/drivers/net/can/slcan.c
+index 27783fbf011fc..ec294d0c5722c 100644
+--- a/drivers/net/can/slcan.c
++++ b/drivers/net/can/slcan.c
+@@ -221,7 +221,7 @@ static void slc_bump(struct slcan *sl)
+ 	if (!(cf.can_id & CAN_RTR_FLAG))
+ 		sl->dev->stats.rx_bytes +=3D cf.len;
+=20
+-	netif_rx_ni(skb);
++	netif_rx(skb);
+ }
+=20
+ /* parse tty input stream */
+diff --git a/drivers/net/can/spi/hi311x.c b/drivers/net/can/spi/hi311x.c
+index 664b8f14d7b05..a5b2952b8d0ff 100644
+--- a/drivers/net/can/spi/hi311x.c
++++ b/drivers/net/can/spi/hi311x.c
+@@ -356,7 +356,7 @@ static void hi3110_hw_rx(struct spi_device *spi)
+=20
+ 	can_led_event(priv->net, CAN_LED_EVENT_RX);
+=20
+-	netif_rx_ni(skb);
++	netif_rx(skb);
+ }
+=20
+ static void hi3110_hw_sleep(struct spi_device *spi)
+@@ -677,7 +677,7 @@ static irqreturn_t hi3110_can_ist(int irq, void *dev_id)
+ 			tx_state =3D txerr >=3D rxerr ? new_state : 0;
+ 			rx_state =3D txerr <=3D rxerr ? new_state : 0;
+ 			can_change_state(net, cf, tx_state, rx_state);
+-			netif_rx_ni(skb);
++			netif_rx(skb);
+=20
+ 			if (new_state =3D=3D CAN_STATE_BUS_OFF) {
+ 				can_bus_off(net);
+@@ -718,7 +718,7 @@ static irqreturn_t hi3110_can_ist(int irq, void *dev_id)
+ 				cf->data[6] =3D hi3110_read(spi, HI3110_READ_TEC);
+ 				cf->data[7] =3D hi3110_read(spi, HI3110_READ_REC);
+ 				netdev_dbg(priv->net, "Bus Error\n");
+-				netif_rx_ni(skb);
++				netif_rx(skb);
+ 			}
+ 		}
+=20
+diff --git a/drivers/net/can/spi/mcp251x.c b/drivers/net/can/spi/mcp251x.c
+index d23edaf224204..fc747bff5eeb2 100644
+--- a/drivers/net/can/spi/mcp251x.c
++++ b/drivers/net/can/spi/mcp251x.c
+@@ -740,7 +740,7 @@ static void mcp251x_hw_rx(struct spi_device *spi, int b=
+uf_idx)
+=20
+ 	can_led_event(priv->net, CAN_LED_EVENT_RX);
+=20
+-	netif_rx_ni(skb);
++	netif_rx(skb);
+ }
+=20
+ static void mcp251x_hw_sleep(struct spi_device *spi)
+@@ -987,7 +987,7 @@ static void mcp251x_error_skb(struct net_device *net, i=
+nt can_id, int data1)
+ 	if (skb) {
+ 		frame->can_id |=3D can_id;
+ 		frame->data[1] =3D data1;
+-		netif_rx_ni(skb);
++		netif_rx(skb);
+ 	} else {
+ 		netdev_err(net, "cannot allocate error skb\n");
+ 	}
+diff --git a/drivers/net/can/vcan.c b/drivers/net/can/vcan.c
+index c42f18845b02a..a15619d883ec2 100644
+--- a/drivers/net/can/vcan.c
++++ b/drivers/net/can/vcan.c
+@@ -80,7 +80,7 @@ static void vcan_rx(struct sk_buff *skb, struct net_devic=
+e *dev)
+ 	skb->dev       =3D dev;
+ 	skb->ip_summed =3D CHECKSUM_UNNECESSARY;
+=20
+-	netif_rx_ni(skb);
++	netif_rx(skb);
+ }
+=20
+ static netdev_tx_t vcan_tx(struct sk_buff *skb, struct net_device *dev)
+diff --git a/drivers/net/can/vxcan.c b/drivers/net/can/vxcan.c
+index 47ccc15a3486b..556f1a12ec9a0 100644
+--- a/drivers/net/can/vxcan.c
++++ b/drivers/net/can/vxcan.c
+@@ -63,7 +63,7 @@ static netdev_tx_t vxcan_xmit(struct sk_buff *skb, struct=
+ net_device *dev)
+ 	skb->ip_summed  =3D CHECKSUM_UNNECESSARY;
+=20
+ 	len =3D cfd->can_id & CAN_RTR_FLAG ? 0 : cfd->len;
+-	if (netif_rx_ni(skb) =3D=3D NET_RX_SUCCESS) {
++	if (netif_rx(skb) =3D=3D NET_RX_SUCCESS) {
+ 		srcstats->tx_packets++;
+ 		srcstats->tx_bytes +=3D len;
+ 		peerstats =3D &peer->stats;
+diff --git a/net/can/af_can.c b/net/can/af_can.c
+index cce2af10eb3ea..1fb49d51b25d6 100644
+--- a/net/can/af_can.c
++++ b/net/can/af_can.c
+@@ -284,7 +284,7 @@ int can_send(struct sk_buff *skb, int loop)
+ 	}
+=20
+ 	if (newskb)
+-		netif_rx_ni(newskb);
++		netif_rx(newskb);
+=20
+ 	/* update statistics */
+ 	pkg_stats->tx_frames++;
+--=20
+2.35.1
 
