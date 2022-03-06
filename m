@@ -2,212 +2,75 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DD8A4CE75D
-	for <lists+linux-can@lfdr.de>; Sat,  5 Mar 2022 23:13:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79E134CE991
+	for <lists+linux-can@lfdr.de>; Sun,  6 Mar 2022 07:50:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232712AbiCEWOL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 5 Mar 2022 17:14:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50920 "EHLO
+        id S233043AbiCFGvp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 6 Mar 2022 01:51:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232709AbiCEWOJ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 5 Mar 2022 17:14:09 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B53A517FB;
-        Sat,  5 Mar 2022 14:13:18 -0800 (PST)
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1646518396;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7uGNP9Djz1TwgueFOo46UUQ187Tk4tNDpxEJOSudrzs=;
-        b=qaqgVU36NS1iGqgj6SBekZsPSycB/xGOV9gwhRL6eIAGO8hDshPhdLLU7V2CMxOVI8fSjs
-        YAsqdk34Lr9WwKQF+VBc6QcAjO5bkYjMBkYYmWyFm2V+YLX004SZdBJMU51HkD68VtMaxy
-        ARIXg4Xg3eN29SnPpo6DzXeO1C8fKAMCVb2vht9H+vq0+s4DcVUem0O35DmCUa8IqR0Ax7
-        RHY4KcRBewCnJ7yI0CH7g4/Oof+v88WPVGCBluk9O/z3zrsYWGCwKQO/RS9Fqb8eNwWlTd
-        e6Chtp2IXkIaJZcs05bhbJo+He4lX06D9z8Rqws9WT8sJryTxiA2LNL0GgN19g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1646518396;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7uGNP9Djz1TwgueFOo46UUQ187Tk4tNDpxEJOSudrzs=;
-        b=pws7mI33hXL1DuQuAxslfc/xTZQOEqJ0rocE3Ni5uHecn3u2hK/C1uD74heb1vrt8POzAG
-        DDT8jgA8d3M2yJDA==
-To:     netdev@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org
-Subject: [PATCH net-next 2/8] can: Use netif_rx().
-Date:   Sat,  5 Mar 2022 23:12:46 +0100
-Message-Id: <20220305221252.3063812-3-bigeasy@linutronix.de>
-In-Reply-To: <20220305221252.3063812-1-bigeasy@linutronix.de>
-References: <20220305221252.3063812-1-bigeasy@linutronix.de>
+        with ESMTP id S231860AbiCFGvn (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 6 Mar 2022 01:51:43 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABE431930
+        for <linux-can@vger.kernel.org>; Sat,  5 Mar 2022 22:50:50 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id bn33so16297373ljb.6
+        for <linux-can@vger.kernel.org>; Sat, 05 Mar 2022 22:50:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=VaaSLAJ+hgNGNq49WyPsh3ndDLo+mnrYcswrOHpJSv8=;
+        b=KDgAx1nMZI4VA0728iAuqALj69hyn7X0WLLUiz2m+OH09NDtWJqkn0K0IjhaqXccDL
+         nYA9IS56U+BvEYDp5ZuYOTDJ28DkbGQXOo4nCoFRXwOq8btCUGBKve+nLdvXGAtQGfZd
+         8/3HmQyIohZytZNIAaZ2YSJ+VGfF2cuAbX+92kqJIy7dPjcCYPV+qxcIVHj5OJkNioe8
+         RnnPJV63I7FofbcYlKCR7cawwHR+Gyj/OksLFoNh7LOBENUnMHRRrWfgS+R5N0DbQgRd
+         FM7OvtlHYW5haJ9bCovh/xFv8pj40s/F/HFWyLhlvxnDTkjGlvvz7xTkeBicCtgptiHh
+         fIkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=VaaSLAJ+hgNGNq49WyPsh3ndDLo+mnrYcswrOHpJSv8=;
+        b=jpDCwAOAbXk2mawy2iXTWEDr5XsymtvNsulHcGKRL3H2upfpibDA3bG5uq4U3BhJm/
+         sdQT5uXUkXmWrsWgqFEVQtvso3m2Pkvqh0PJNhLvgS3Dsw5UwrgT36bn8R6j+6YfSxdb
+         8s7w7JVLpZJ+JW+ID/scwrg7le1MQknxzeQh6g3ECB0QkLMT4v/0Q2tmVWEhYO494pFj
+         CmWDfbnGeXystaFdIjn9OPJOeqpwvH05zwptgLhoInTdQV01yinmFiWDbmylTfxpUlU4
+         LkPYSca8UJTPi6nNGkZrMt5z+o7sf0XJC4SMnD+db0VH++3Yq7vfR1fJuARSgg6lTlKm
+         gstw==
+X-Gm-Message-State: AOAM530hi1hVI5Q4Sx5pe0UprpCVQNOrMLjy/RfsWUFPIiWjBe6EzpOk
+        wYSVrpVi6hkY4pVdm85kOdgOLVROGY4sy1nD/N7tLmlQP7Y=
+X-Google-Smtp-Source: ABdhPJzq04i8VJyC6uwySEx5tzgrtxCg/XL0hqdBTWFWm66/zQAuy3m2ubrZV75jrYUP9jvmG0PdhfRUhLuebg8/B7w=
+X-Received: by 2002:a2e:94c7:0:b0:247:de4e:e9bc with SMTP id
+ r7-20020a2e94c7000000b00247de4ee9bcmr2397951ljh.397.1646549448778; Sat, 05
+ Mar 2022 22:50:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Reply-To: mrs.susanelwoodhara17@gmail.com
+Sender: mrs.arawyann@gmail.com
+Received: by 2002:ab3:7d89:0:0:0:0:0 with HTTP; Sat, 5 Mar 2022 22:50:48 -0800 (PST)
+From:   Mrs Susan Elwood Hara <mrs.susanelwoodhara17@gmail.com>
+Date:   Sun, 6 Mar 2022 06:50:48 +0000
+X-Google-Sender-Auth: NOWRSnt_sskMD3s295a30bcHvEs
+Message-ID: <CACppo47TD9J4Sy+vaJu1wXHqd88WqFwMNn6OdkY1khwXu3TuFw@mail.gmail.com>
+Subject: GOD BLESS YOU AS YOU REPLY URGENTLY
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        SUBJ_ALL_CAPS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Since commit
-   baebdf48c3600 ("net: dev: Makes sure netif_rx() can be invoked in any co=
-ntext.")
+GOD BLESS YOU AS YOU REPLY URGENTLY
 
-the function netif_rx() can be used in preemptible/thread context as
-well as in interrupt context.
-
-Use netif_rx().
-
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>
-Cc: Wolfgang Grandegger <wg@grandegger.com>
-Cc: linux-can@vger.kernel.org
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
- drivers/net/can/dev/dev.c     | 2 +-
- drivers/net/can/slcan.c       | 2 +-
- drivers/net/can/spi/hi311x.c  | 6 +++---
- drivers/net/can/spi/mcp251x.c | 4 ++--
- drivers/net/can/vcan.c        | 2 +-
- drivers/net/can/vxcan.c       | 2 +-
- net/can/af_can.c              | 2 +-
- 7 files changed, 10 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/net/can/dev/dev.c b/drivers/net/can/dev/dev.c
-index c192f25f96956..e7ab45f1c43b2 100644
---- a/drivers/net/can/dev/dev.c
-+++ b/drivers/net/can/dev/dev.c
-@@ -154,7 +154,7 @@ static void can_restart(struct net_device *dev)
-=20
- 	cf->can_id |=3D CAN_ERR_RESTARTED;
-=20
--	netif_rx_ni(skb);
-+	netif_rx(skb);
-=20
- restart:
- 	netdev_dbg(dev, "restarted\n");
-diff --git a/drivers/net/can/slcan.c b/drivers/net/can/slcan.c
-index 27783fbf011fc..ec294d0c5722c 100644
---- a/drivers/net/can/slcan.c
-+++ b/drivers/net/can/slcan.c
-@@ -221,7 +221,7 @@ static void slc_bump(struct slcan *sl)
- 	if (!(cf.can_id & CAN_RTR_FLAG))
- 		sl->dev->stats.rx_bytes +=3D cf.len;
-=20
--	netif_rx_ni(skb);
-+	netif_rx(skb);
- }
-=20
- /* parse tty input stream */
-diff --git a/drivers/net/can/spi/hi311x.c b/drivers/net/can/spi/hi311x.c
-index 664b8f14d7b05..a5b2952b8d0ff 100644
---- a/drivers/net/can/spi/hi311x.c
-+++ b/drivers/net/can/spi/hi311x.c
-@@ -356,7 +356,7 @@ static void hi3110_hw_rx(struct spi_device *spi)
-=20
- 	can_led_event(priv->net, CAN_LED_EVENT_RX);
-=20
--	netif_rx_ni(skb);
-+	netif_rx(skb);
- }
-=20
- static void hi3110_hw_sleep(struct spi_device *spi)
-@@ -677,7 +677,7 @@ static irqreturn_t hi3110_can_ist(int irq, void *dev_id)
- 			tx_state =3D txerr >=3D rxerr ? new_state : 0;
- 			rx_state =3D txerr <=3D rxerr ? new_state : 0;
- 			can_change_state(net, cf, tx_state, rx_state);
--			netif_rx_ni(skb);
-+			netif_rx(skb);
-=20
- 			if (new_state =3D=3D CAN_STATE_BUS_OFF) {
- 				can_bus_off(net);
-@@ -718,7 +718,7 @@ static irqreturn_t hi3110_can_ist(int irq, void *dev_id)
- 				cf->data[6] =3D hi3110_read(spi, HI3110_READ_TEC);
- 				cf->data[7] =3D hi3110_read(spi, HI3110_READ_REC);
- 				netdev_dbg(priv->net, "Bus Error\n");
--				netif_rx_ni(skb);
-+				netif_rx(skb);
- 			}
- 		}
-=20
-diff --git a/drivers/net/can/spi/mcp251x.c b/drivers/net/can/spi/mcp251x.c
-index d23edaf224204..fc747bff5eeb2 100644
---- a/drivers/net/can/spi/mcp251x.c
-+++ b/drivers/net/can/spi/mcp251x.c
-@@ -740,7 +740,7 @@ static void mcp251x_hw_rx(struct spi_device *spi, int b=
-uf_idx)
-=20
- 	can_led_event(priv->net, CAN_LED_EVENT_RX);
-=20
--	netif_rx_ni(skb);
-+	netif_rx(skb);
- }
-=20
- static void mcp251x_hw_sleep(struct spi_device *spi)
-@@ -987,7 +987,7 @@ static void mcp251x_error_skb(struct net_device *net, i=
-nt can_id, int data1)
- 	if (skb) {
- 		frame->can_id |=3D can_id;
- 		frame->data[1] =3D data1;
--		netif_rx_ni(skb);
-+		netif_rx(skb);
- 	} else {
- 		netdev_err(net, "cannot allocate error skb\n");
- 	}
-diff --git a/drivers/net/can/vcan.c b/drivers/net/can/vcan.c
-index c42f18845b02a..a15619d883ec2 100644
---- a/drivers/net/can/vcan.c
-+++ b/drivers/net/can/vcan.c
-@@ -80,7 +80,7 @@ static void vcan_rx(struct sk_buff *skb, struct net_devic=
-e *dev)
- 	skb->dev       =3D dev;
- 	skb->ip_summed =3D CHECKSUM_UNNECESSARY;
-=20
--	netif_rx_ni(skb);
-+	netif_rx(skb);
- }
-=20
- static netdev_tx_t vcan_tx(struct sk_buff *skb, struct net_device *dev)
-diff --git a/drivers/net/can/vxcan.c b/drivers/net/can/vxcan.c
-index 47ccc15a3486b..556f1a12ec9a0 100644
---- a/drivers/net/can/vxcan.c
-+++ b/drivers/net/can/vxcan.c
-@@ -63,7 +63,7 @@ static netdev_tx_t vxcan_xmit(struct sk_buff *skb, struct=
- net_device *dev)
- 	skb->ip_summed  =3D CHECKSUM_UNNECESSARY;
-=20
- 	len =3D cfd->can_id & CAN_RTR_FLAG ? 0 : cfd->len;
--	if (netif_rx_ni(skb) =3D=3D NET_RX_SUCCESS) {
-+	if (netif_rx(skb) =3D=3D NET_RX_SUCCESS) {
- 		srcstats->tx_packets++;
- 		srcstats->tx_bytes +=3D len;
- 		peerstats =3D &peer->stats;
-diff --git a/net/can/af_can.c b/net/can/af_can.c
-index cce2af10eb3ea..1fb49d51b25d6 100644
---- a/net/can/af_can.c
-+++ b/net/can/af_can.c
-@@ -284,7 +284,7 @@ int can_send(struct sk_buff *skb, int loop)
- 	}
-=20
- 	if (newskb)
--		netif_rx_ni(newskb);
-+		netif_rx(newskb);
-=20
- 	/* update statistics */
- 	pkg_stats->tx_frames++;
---=20
-2.35.1
-
+ Hello Dear,
+Greetings, I am contacting you regarding an important information i
+have for you please reply to confirm your email address and for more
+details Thanks
+Regards
+Mrs Susan Elwood Hara.
