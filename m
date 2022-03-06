@@ -2,99 +2,107 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90AD14CEA75
-	for <lists+linux-can@lfdr.de>; Sun,  6 Mar 2022 11:13:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 543974CEA81
+	for <lists+linux-can@lfdr.de>; Sun,  6 Mar 2022 11:32:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233093AbiCFKOQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 6 Mar 2022 05:14:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43428 "EHLO
+        id S233215AbiCFKdG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 6 Mar 2022 05:33:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233086AbiCFKOP (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 6 Mar 2022 05:14:15 -0500
-Received: from smtp.smtpout.orange.fr (smtp09.smtpout.orange.fr [80.12.242.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3DE941F85
-        for <linux-can@vger.kernel.org>; Sun,  6 Mar 2022 02:13:22 -0800 (PST)
-Received: from localhost.localdomain ([106.133.32.90])
-        by smtp.orange.fr with ESMTPA
-        id Qnsun8hn1tSo5Qnt6nrJUj; Sun, 06 Mar 2022 11:13:20 +0100
-X-ME-Helo: localhost.localdomain
-X-ME-Auth: MDU0YmViZGZmMDIzYiBlMiM2NTczNTRjNWZkZTMwOGRiOGQ4ODf3NWI1ZTMyMzdiODlhOQ==
-X-ME-Date: Sun, 06 Mar 2022 11:13:20 +0100
-X-ME-IP: 106.133.32.90
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        kernel test robot <yujie.liu@intel.com>
-Subject: [PATCH] can: etas_es58x: initialize rx_event_msg before calling es58x_check_msg_len()
-Date:   Sun,  6 Mar 2022 19:13:02 +0900
-Message-Id: <20220306101302.708783-1-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S230004AbiCFKdF (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 6 Mar 2022 05:33:05 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3E72E08F
+        for <linux-can@vger.kernel.org>; Sun,  6 Mar 2022 02:32:13 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nQoBF-0004LB-VG; Sun, 06 Mar 2022 11:32:02 +0100
+Received: from pengutronix.de (2a03-f580-87bc-d400-8f62-2f8a-935c-c311.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:8f62:2f8a:935c:c311])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 2747C4379C;
+        Sun,  6 Mar 2022 10:32:00 +0000 (UTC)
+Date:   Sun, 6 Mar 2022 11:31:59 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org
+Subject: Re: [PATCH net-next 2/8] can: Use netif_rx().
+Message-ID: <20220306103159.finurle6fsuuh3dr@pengutronix.de>
+References: <20220305221252.3063812-1-bigeasy@linutronix.de>
+ <20220305221252.3063812-3-bigeasy@linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="37qpbsa3ilj53aqo"
+Content-Disposition: inline
+In-Reply-To: <20220305221252.3063812-3-bigeasy@linutronix.de>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Function es58x_fd_rx_event() invokes the es58x_check_msg_len() macro:
-| 	ret = es58x_check_msg_len(es58x_dev->dev, *rx_event_msg, msg_len);
-While doing so, it deferences an uninitialized variable: *rx_event_msg.
 
-This is actually harmless because es58x_check_msg_len() only uses
-preprocessors macro (sizeof() and __stringify()) on
-*rx_event_msg. c.f. [1].
+--37qpbsa3ilj53aqo
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Nonetheless, this pattern is confusing so the lines are reordered to
-make sure that rx_event_msg is correctly initialized.
+On 05.03.2022 23:12:46, Sebastian Andrzej Siewior wrote:
+> Since commit
+>    baebdf48c3600 ("net: dev: Makes sure netif_rx() can be invoked in any =
+context.")
+>=20
+> the function netif_rx() can be used in preemptible/thread context as
+> well as in interrupt context.
+>=20
+> Use netif_rx().
+>=20
+> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+> Cc: Oliver Hartkopp <socketcan@hartkopp.net>
+> Cc: Wolfgang Grandegger <wg@grandegger.com>
+> Cc: linux-can@vger.kernel.org
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 
-This patch also fixes a false positive warning reported by cppcheck:
+Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
 
-| cppcheck possible warnings: (new ones prefixed by >>, may not be real problems)
-|
-|     In file included from drivers/net/can/usb/etas_es58x/es58x_fd.c:
-|  >> drivers/net/can/usb/etas_es58x/es58x_fd.c:174:8: warning: Uninitialized variable: rx_event_msg [uninitvar]
-|      ret = es58x_check_msg_len(es58x_dev->dev, *rx_event_msg, msg_len);
-|            ^
+regards,
+Marc
 
-[1] https://elixir.bootlin.com/linux/latest/source/drivers/net/can/usb/etas_es58x/es58x_core.h#L467
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-Reported-by: kernel test robot <yujie.liu@intel.com>
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
-As discussed in
-https://lore.kernel.org/linux-can/20220302130423.ddd2ulldffpo5lb2@pengutronix.de/T/#u,
-no need to backport this patch because this is not a fix.
+--37qpbsa3ilj53aqo
+Content-Type: application/pgp-signature; name="signature.asc"
 
-@Yujie Liu: I added the "Reported-by: kernel test robot". This being a
-false positive, let me know if you would like to remove the tag in
-order not to mess with you statistics.
----
- drivers/net/can/usb/etas_es58x/es58x_fd.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/drivers/net/can/usb/etas_es58x/es58x_fd.c b/drivers/net/can/usb/etas_es58x/es58x_fd.c
-index 88d2540abbbe..c97ffa71fd75 100644
---- a/drivers/net/can/usb/etas_es58x/es58x_fd.c
-+++ b/drivers/net/can/usb/etas_es58x/es58x_fd.c
-@@ -173,12 +173,11 @@ static int es58x_fd_rx_event_msg(struct net_device *netdev,
- 	const struct es58x_fd_rx_event_msg *rx_event_msg;
- 	int ret;
- 
-+	rx_event_msg = &es58x_fd_urb_cmd->rx_event_msg;
- 	ret = es58x_check_msg_len(es58x_dev->dev, *rx_event_msg, msg_len);
- 	if (ret)
- 		return ret;
- 
--	rx_event_msg = &es58x_fd_urb_cmd->rx_event_msg;
--
- 	return es58x_rx_err_msg(netdev, rx_event_msg->error_code,
- 				rx_event_msg->event_code,
- 				get_unaligned_le64(&rx_event_msg->timestamp));
--- 
-2.34.1
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmIkjZ0ACgkQrX5LkNig
+010akQf+Pe/ERk+OrCqRrKodP5Ic/V8uImPdpETHM9mTPUP9lhYNiFQGW25qEhAe
+8SXMU5GqMaVVdTYSgCoIejNGxAC7HeVJL9/H8HOkQBq83AQFvikGYTWKLZ8hn/q1
+2WXLGKAPyGjZ0ra9kNszQrjD2YRu0fe0W5MgmVPtreDczRMq4OuO4DbWAPoc5pqi
+FI/FxRMLaZgIWcacodMtATBlaxi9pQ7x7SWAPYriFgLJJ+S95hVVWqVI5i+XgQHR
+3h4SCTQ6gfsJXg8mwkGrAIENy9p4Nea9TQu7WmlAuHRgqSVmHgxWCs8RQIBpDQvn
+nS8e5yVP36DeXsR1OcyC2h1j9gnKlw==
+=c2C9
+-----END PGP SIGNATURE-----
 
+--37qpbsa3ilj53aqo--
