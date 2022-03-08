@@ -2,66 +2,157 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF3704D0A6B
-	for <lists+linux-can@lfdr.de>; Mon,  7 Mar 2022 23:00:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BA0C4D0CB6
+	for <lists+linux-can@lfdr.de>; Tue,  8 Mar 2022 01:23:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235014AbiCGWBT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 7 Mar 2022 17:01:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49670 "EHLO
+        id S235096AbiCHAYi (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 7 Mar 2022 19:24:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234197AbiCGWBT (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 7 Mar 2022 17:01:19 -0500
-X-Greylist: delayed 1008 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Mar 2022 14:00:24 PST
-Received: from mail.enpas.org (zhong.enpas.org [IPv6:2a03:4000:2:537::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1A557561A;
-        Mon,  7 Mar 2022 14:00:23 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        by mail.enpas.org (Postfix) with ESMTPSA id 1E2E51000CB;
-        Mon,  7 Mar 2022 22:00:23 +0000 (UTC)
-Date:   Mon, 7 Mar 2022 23:00:17 +0100
-From:   Max Staudt <max@enpas.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can@vger.kernel.org, Oliver Neukum <oneukum@suse.com>,
-        linux-kernel@vger.kernel.org, Jiri Slaby <jslaby@suse.com>
-Subject: Re: [PATCH v3] can, tty: elmcan CAN/ldisc driver for ELM327 based
- OBD-II adapters
-Message-ID: <20220307230017.4332d602.max@enpas.org>
-In-Reply-To: <YiZ/5WaNHhaONjX1@kroah.com>
-References: <20220307214303.1822590-1-max@enpas.org>
-        <YiZ/5WaNHhaONjX1@kroah.com>
+        with ESMTP id S233945AbiCHAYh (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 7 Mar 2022 19:24:37 -0500
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE89525C77;
+        Mon,  7 Mar 2022 16:23:41 -0800 (PST)
+Received: by mail-yb1-f177.google.com with SMTP id w16so34443597ybi.12;
+        Mon, 07 Mar 2022 16:23:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=03ctwj9JfxishKI39lNFiwkYLQyUapkTIk7JVqkzfkU=;
+        b=zKJGEt9vPbDi9AxSJRPEiXt54gw8S06NkdAlIKo9thJOASWmbWUoIYKT25YEGbZKW5
+         ZfAXDXcaE8lLUDxqqcOl76yiXbb1+tNuMmhKdCAzR+uE0Mci0n527YQsNOZ/5heRl87+
+         YjOOvesXiDKiTd1dhvRuMjIFUa84RLRRFsbi/wGv2oeD7QEd79Eq/dRKuLMdddJVq1jK
+         iNP+epzZZdKBxmWkKbr5Fu5Svp8eaZKuFdIP+E47Rd1Oy4HNolIrdbU81gW56mVEtEr4
+         rn2NZdEZa0w8F7IP2vSxYwxTXRgJgKNzNXjsM6wm+8Xw4oRjYx9sAUjYJIfCH9dIkBFh
+         l36g==
+X-Gm-Message-State: AOAM531+uC+Al/hbKS/FwUpS9jg/2bXDEQ75+TB4fgEcDDWMTE/bUdT7
+        UUhrNhVZEWU0Eg4UE/jCBfmUPE7nqV/d/bpkkeobEtylCGSHEjkM
+X-Google-Smtp-Source: ABdhPJxLu300z9a/o98cTmbZ2qcZxeyW0M8rKMBVCZB7FHLVKHRM6U9Mf+BY2vrb6JX3S422aKKaYaDnQfSrOvYSiGI=
+X-Received: by 2002:a25:d10d:0:b0:628:f428:dafe with SMTP id
+ i13-20020a25d10d000000b00628f428dafemr9423935ybg.630.1646699020879; Mon, 07
+ Mar 2022 16:23:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220307185314.11228-1-paskripkin@gmail.com>
+In-Reply-To: <20220307185314.11228-1-paskripkin@gmail.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Tue, 8 Mar 2022 09:23:31 +0900
+Message-ID: <CAMZ6RqKEALqGSh-tr_jTbQWca0wHK7t96yR3N-r625pbM4cUSw@mail.gmail.com>
+Subject: Re: [PATCH RFT] can: mcba_usb: properly check endpoint type
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     Yasushi SHOJI <yashi@spacecubics.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-can <linux-can@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        syzbot+3bc1dce0cc0052d60fde@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, 7 Mar 2022 22:57:57 +0100
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+Hi Pavel,
 
-> On Mon, Mar 07, 2022 at 10:43:03PM +0100, Max Staudt wrote:
-> > +    sudo ldattach \
-> > +           --debug \
-> > +           --speed 38400 \
-> > +           --eightbits \
-> > +           --noparity \
-> > +           --onestopbit \
-> > +           --iflag -ICRNL,INLCR,-IXOFF \
-> > +           29 \
-> > +           /dev/ttyUSB0  
-> 
-> I think you mean "30" here, not "29", right?
-
-Right.  m-(
-
-Thanks for catching this. I'll wait for more updates before sending v4.
+> [PATCH RFT] can: mcba_usb: properly check endpoint type
+It is RFC, not RFT :)
+I guess you went on some manual editing. Next time, you can just let
+git add the tag for you by doing:
+| git format-patch --rfc ...
 
 
-Max
+On Tue. 8 Mar 2022, 03:53, Pavel Skripkin <paskripkin@gmail.com> wrote:
+> Syzbot reported warning in usb_submit_urb() which is caused by wrong
+> endpoint type. We should check that in endpoint is actually present to
+> prevent this warning
+>
+> Fail log:
+>
+> usb 5-1: BOGUS urb xfer, pipe 3 != type 1
+> WARNING: CPU: 1 PID: 49 at drivers/usb/core/urb.c:502 usb_submit_urb+0xed2/0x18a0 drivers/usb/core/urb.c:502
+> Modules linked in:
+> CPU: 1 PID: 49 Comm: kworker/1:2 Not tainted 5.17.0-rc6-syzkaller-00184-g38f80f42147f #0
+> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+> Workqueue: usb_hub_wq hub_event
+> RIP: 0010:usb_submit_urb+0xed2/0x18a0 drivers/usb/core/urb.c:502
+> ...
+> Call Trace:
+>  <TASK>
+>  mcba_usb_start drivers/net/can/usb/mcba_usb.c:662 [inline]
+>  mcba_usb_probe+0x8a3/0xc50 drivers/net/can/usb/mcba_usb.c:858
+>  usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:396
+>  call_driver_probe drivers/base/dd.c:517 [inline]
+>
+> Reported-and-tested-by: syzbot+3bc1dce0cc0052d60fde@syzkaller.appspotmail.com
+> Fixes: 51f3baad7de9 ("can: mcba_usb: Add support for Microchip CAN BUS Analyzer")
+> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+> ---
+>
+> Meta comments:
+>
+> I am not an usb expert, but looks like this driver uses one
+> endpoint for in and out transactions:
+>
+> /* MCBA endpoint numbers */
+> #define MCBA_USB_EP_IN 1
+> #define MCBA_USB_EP_OUT 1
+>
+> That's why check only for in endpoint is added
+
+MCBA_USB_EP_{IN,OUT} are respectively used in usb_rcvbulkpipe()
+and usb_sndbulkpipe().  I invite you to have a look at what those
+macros do and you will understand that these returns two different
+pipes:
+
+https://elixir.bootlin.com/linux/latest/source/include/linux/usb.h#L1964
+
+In other words, ep_in and ep_out are some indexes of a different
+entity and do not conflict with each other.
+
+> ---
+>  drivers/net/can/usb/mcba_usb.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/drivers/net/can/usb/mcba_usb.c b/drivers/net/can/usb/mcba_usb.c
+> index 77bddff86252..646aac1a8684 100644
+> --- a/drivers/net/can/usb/mcba_usb.c
+> +++ b/drivers/net/can/usb/mcba_usb.c
+> @@ -807,6 +807,13 @@ static int mcba_usb_probe(struct usb_interface *intf,
+>         struct mcba_priv *priv;
+>         int err;
+>         struct usb_device *usbdev = interface_to_usbdev(intf);
+> +       struct usb_endpoint_descriptor *in;
+> +
+> +       err = usb_find_common_endpoints(intf->cur_altsetting, &in, NULL, NULL, NULL);
+
+If you go this direction, then please use
+usb_find_common_endpoint() to retrieve the value of both ep_in
+and ep_out and use them instead of MCBA_USB_EP_{IN,OUT}
+
+> +       if (err) {
+> +               dev_err(&intf->dev, "Can't find endpoints\n");
+> +               return -ENODEV;
+
+return ret;
+
+Please keep the error code of usb_find_common_endpoint().
+
+> +       }
+>
+>
+>
+>         netdev = alloc_candev(sizeof(struct mcba_priv), MCBA_MAX_TX_URBS);
+>         if (!netdev) {
+
+
+Yours sincerely,
+Vincent Mailhol
