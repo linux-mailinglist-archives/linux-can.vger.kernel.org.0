@@ -2,112 +2,232 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A86534D2C8B
-	for <lists+linux-can@lfdr.de>; Wed,  9 Mar 2022 10:52:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BBA64D2D84
+	for <lists+linux-can@lfdr.de>; Wed,  9 Mar 2022 11:58:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232320AbiCIJxY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 9 Mar 2022 04:53:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59596 "EHLO
+        id S230166AbiCIK7A (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 9 Mar 2022 05:59:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232299AbiCIJxW (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 9 Mar 2022 04:53:22 -0500
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.160])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D29016F970
-        for <linux-can@vger.kernel.org>; Wed,  9 Mar 2022 01:52:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1646819540;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
-    Subject:Sender;
-    bh=Sxyu7pT0DRtQyYtBI30fb6eG2ccUMgFn+gbNaI/zgwM=;
-    b=j96B9E70Mz1UQEbQtej7VMKCSgQ6dJmDUAkRVC8wlivj1ujT4mZbwECAHQOMavkkel
-    1qe3EeAbq9o/VutYgZM9boTTU3tnF+HxFwLZ7HnBpNxERDgnLPVTuSRgXN1YMcl948nN
-    x7GjhKOJhIMKkZPMyYGvx8W21uRCVIF2sWJYBkaafCwtqECFH9MraLyP17+/Xtf8XLVA
-    dswyLY1jw7JYIUG7OmgZGZrEgh+MIKxFD3Upg95erd+r/zA0Ok9EGOKQftPg+Mb0CXaV
-    X2K7aPIOBTU6hnOknCVu3nplT/ZkvD3EJD7LbBqZIJCioWvrmgpn+Fn79KsZoITwL8O4
-    nx8w==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdd0DIgVuBOfXW6v7w=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a00:6020:1cfa:f900::b82]
-    by smtp.strato.de (RZmta 47.40.1 AUTH)
-    with ESMTPSA id 6c57e6y299qJDlO
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Wed, 9 Mar 2022 10:52:19 +0100 (CET)
-Message-ID: <c493eb1a-4d4f-a21d-a0ab-2d2117c540e3@hartkopp.net>
-Date:   Wed, 9 Mar 2022 10:52:14 +0100
+        with ESMTP id S229596AbiCIK66 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 9 Mar 2022 05:58:58 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EEDC180
+        for <linux-can@vger.kernel.org>; Wed,  9 Mar 2022 02:57:57 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nRu0y-0005NA-9p
+        for linux-can@vger.kernel.org; Wed, 09 Mar 2022 11:57:56 +0100
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id B7A1D469AF
+        for <linux-can@vger.kernel.org>; Wed,  9 Mar 2022 10:57:55 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 458C4469AA;
+        Wed,  9 Mar 2022 10:57:55 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id c5feefab;
+        Wed, 9 Mar 2022 10:57:54 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     linux-can@vger.kernel.org
+Cc:     kernel@pengutronix.de,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Thomas Kopp <thomas.kopp@microchip.com>
+Subject: [RFC]: can: mcp251xfd: coalescing support
+Date:   Wed,  9 Mar 2022 11:57:40 +0100
+Message-Id: <20220309105753.267264-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [can-next 2/3] can: isotp: set default value for N_As to 50 micro
- seconds
-Content-Language: en-US
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can <linux-can@vger.kernel.org>
-References: <20220306193454.33158-1-socketcan@hartkopp.net>
- <20220306193454.33158-2-socketcan@hartkopp.net>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20220306193454.33158-2-socketcan@hartkopp.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Marc,
+Hello,
 
-I had an additional idea on this patch to prevent the unintentional 
-setting of 'zero' by common applications.
+this is a preview series for the mcp251xfd which adds IRQ coalescing
+support.
 
-Will send a V2 patchset including all my (five) suggestions for can-next 
-later today.
+- What is IRQ coalescing and how does the mcp251xfd driver implement it?
 
-Thanks,
-Oliver
+The idea behind IRQ coalescing is to not serve every interrupt (CAN
+frame RX'ed and CAN frame TX complete) as soon as possible, but to
+delay it and handle several RX/TX complete frames at once. This
+reduces the number of IRQs and SPI transfers.
+
+With activated RX IRQ coalescing, the RX IRQ handler deactivated the
+"RX FIFO not empty interrupt" and activated the "FIFO half full" (or
+"FIFO full IRQ" - depending on configuration) instead.
+
+To ensure that a single RX'ed CAN frame (which doesn't trigger the
+FIFO half full IRQ) doesn't starve in the FIFO, a hrtimer is started
+that activates the "FIFO not empty" IRQ after a configurable delay.
+
+TX IRQ coalescing does the same thing, but for TX complete IRQs
+
+- How to configure this?
+
+Configuration is a bit tricky, it consists of several parameters,
+which are all influencing each other and the number of buffers is
+limited to power-of-two, to up to 32 per FIFO.
+
+1) Configure the CAN mode (classical CAN-2.0 or CAN-FD) mode. Do not
+   bring the interface up.
+
+2) Configure RX and TX FIFOs. In ethtool's speak this is called "ring"
+   configuration. The current ring configuration is shown with the
+   "-g" parameter:
+
+| $ ethtool -g mcp251xfd1
+|
+| Ring parameters for mcp251xfd1:
+| Pre-set maximums:
+| RX:             96
+| RX Mini:        n/a
+| RX Jumbo:       n/a
+| TX:             16
+| Current hardware settings:
+| RX:             80
+| RX Mini:        n/a
+| RX Jumbo:       n/a
+| TX:             8
+
+   For TX, 1 FIFO is used with the default depth 8 (CAN-2.0 mode) and
+   4 (CAN-FD mode). In default configuration the driver uses the
+   remaining space for RX. In CAN-2.0 mode, this leads to 80 RX
+   buffers and 8 TX buffers. A more detailed overview is printed when
+   the interface is brought up:
+
+| FIFO setup: TEF:         0x400:  8*12 bytes =   96 bytes
+| FIFO setup: RX-0: FIFO 1/0x460: 32*20 bytes =  640 bytes
+| FIFO setup: RX-1: FIFO 2/0x6e0: 32*20 bytes =  640 bytes
+| FIFO setup: RX-2: FIFO 3/0x960: 16*20 bytes =  320 bytes
+| FIFO setup: TX:   FIFO 4/0xaa0:  8*16 bytes =  128 bytes
+| FIFO setup: free:                              224 bytes
+
+   Note:
+   - The number of RX buffers takes more priority than the number of
+     TX buffers.
+   - Ring configuration is reset by CAN mode configuration.
+   - Ring configuration resets coalescing configuration.
+   - Configuration is only possible if the interface is down.
+
+   Let's increase the number of RX buffers to the max of 96.
+
+| $ ethtool -G mcp251xfd1 rx 96 tx 4
+
+   Check config with "-g":
+
+| $ sudo ethtool -g mcp251xfd1
+| Ring parameters for mcp251xfd1:
+| Pre-set maximums:
+| RX:             96
+| RX Mini:        n/a
+| RX Jumbo:       n/a
+| TX:             16
+| Current hardware settings:
+| RX:             96
+| RX Mini:        n/a
+| RX Jumbo:       n/a
+| TX:             4
+
+   The detailed output during ifup:
+
+| FIFO setup: TEF:         0x400:  4*12 bytes =   48 bytes
+| FIFO setup: RX-0: FIFO 1/0x430: 32*20 bytes =  640 bytes
+| FIFO setup: RX-1: FIFO 2/0x6b0: 32*20 bytes =  640 bytes
+| FIFO setup: RX-2: FIFO 3/0x930: 32*20 bytes =  640 bytes
+| FIFO setup: TX:   FIFO 4/0xbb0:  4*16 bytes =   64 bytes
+| FIFO setup: free:                               16 bytes
+
+3) Configure the RX/TX IRQ coalescing.
+   The driver supports both RX and TX coalescing. The configuration is
+   done again with ethtool, the interface must be down for this.
+
+   There are 2 parameters to configure:
+   1) FIFO fill level that triggers IRQ
+   2) Delay after IRQ processing to enable FIFO not empty IRQ
+
+   In this example we configure RX coalescing for 32 buffers with a
+   delay of 10ms:
+
+| $ ethtool -C mcp251xfd1 rx-usecs-irq 10000 rx-frames-irq 32
+
+   Check with "-c":
+
+| $ ethtool -c mcp251xfd1
+|
+| Coalesce parameters for mcp251xfd1:
+| Adaptive RX: n/a  TX: n/a
+| stats-block-usecs: n/a
+| sample-interval: n/a
+| pkt-rate-low: n/a
+| pkt-rate-high: n/a
+|
+| rx-usecs: n/a
+| rx-frames: n/a
+| rx-usecs-irq: 10000
+| rx-frames-irq: 32
+|
+| tx-usecs: n/a
+| tx-frames: n/a
+| tx-usecs-irq: 0
+| tx-frames-irq: 1
+|
+| rx-usecs-low: n/a
+| rx-frame-low: n/a
+| tx-usecs-low: n/a
+| tx-frame-low: n/a
+|
+| rx-usecs-high: n/a
+| rx-frame-high: n/a
+| tx-usecs-high: n/a
+| tx-frame-high: n/a
+
+   The TX IRQ coalescing parameters we see in this example output are
+   "tx-usecs-irq=0" and "tx-frames-irq=1". This means no coalescing,
+   i.e. every TX complete event triggers an IRQ and is directly served
+   in the driver.
+
+   Note:
+   - Use "rx-usecs-irq=0" and "rx-frames-irq=1" to switch off RX
+     coalescing, accordingly for TX.
+   - Coalescing configuration is reset by ring configuration.
+   - Configuration is only possible if the interface is down.
+
+Known issues:
+- ifup with RX-coalescing configuration sometimes leads to RX stopping
+  after a few CAN frames on heavy loaded busses.
+- Patches need proper description.
+
+Happy testing. I'm especially interested in numbers regarding
+reduction of system load and max CAN bus utilization. Further numbers
+to look at is the number of IRQs from the mcp251xfd chip and number of
+SPI host controller IRQs.
+
+Note: small transfers on the rapi don't use IRQ mode per default, you
+might see an increase of SPI IRQs if the driver reads a lot of CAN
+frames from the FIFO in one transfer.
+
+regards,
+Marc
+
+PS: The patches are available as a git branch on kernel.org:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/log/?h=mcp251xfd-coalesce
 
 
-On 06.03.22 20:34, Oliver Hartkopp wrote:
-> The N_As value describes the time a CAN frame needs on the wire when
-> transmitted by the CAN controller. Even very short CAN FD frames need
-> arround 100 usecs (bitrate 1Mbit/s, data bitrate 8Mbit/s).
-> 
-> Having N_As to be zero (the former default) leads to 'no CAN frame
-> separation' when STmin is set to zero by the receiving node. This 'burst
-> mode' should not be enabled by default as it could potentially dump a high
-> number of CAN frames into the netdevice queue from the soft hrtimer context.
-> This does not affect the system stability but is just not nice and
-> cooperative.
-> 
-> With this N_As (frame_txtime) value the 'burst mode' is disabled by default.
-> For testing or (preformance) measurements the frame tx time can be set to
-> zero by setting the frame_txtime value in the CAN_ISOTP_OPTS sockopts.
-> 
-> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-> ---
->   include/uapi/linux/can/isotp.h | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/uapi/linux/can/isotp.h b/include/uapi/linux/can/isotp.h
-> index c55935b64ccc..3e6e20028969 100644
-> --- a/include/uapi/linux/can/isotp.h
-> +++ b/include/uapi/linux/can/isotp.h
-> @@ -140,11 +140,11 @@ struct can_isotp_ll_options {
->   /* default values */
->   
->   #define CAN_ISOTP_DEFAULT_FLAGS		0
->   #define CAN_ISOTP_DEFAULT_EXT_ADDRESS	0x00
->   #define CAN_ISOTP_DEFAULT_PAD_CONTENT	0xCC /* prevent bit-stuffing */
-> -#define CAN_ISOTP_DEFAULT_FRAME_TXTIME	0
-> +#define CAN_ISOTP_DEFAULT_FRAME_TXTIME	50000 /* 50 micro seconds */
->   #define CAN_ISOTP_DEFAULT_RECV_BS	0
->   #define CAN_ISOTP_DEFAULT_RECV_STMIN	0x00
->   #define CAN_ISOTP_DEFAULT_RECV_WFTMAX	0
->   
->   #define CAN_ISOTP_DEFAULT_LL_MTU	CAN_MTU
+
