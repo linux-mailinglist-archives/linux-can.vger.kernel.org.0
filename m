@@ -2,64 +2,59 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 768F84D3076
-	for <lists+linux-can@lfdr.de>; Wed,  9 Mar 2022 14:51:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C4DB4D30CB
+	for <lists+linux-can@lfdr.de>; Wed,  9 Mar 2022 15:06:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231383AbiCINvB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 9 Mar 2022 08:51:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58940 "EHLO
+        id S233059AbiCIOHM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 9 Mar 2022 09:07:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230288AbiCINvA (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 9 Mar 2022 08:51:00 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F1D15040D;
-        Wed,  9 Mar 2022 05:50:01 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id x200so4458396ybe.6;
-        Wed, 09 Mar 2022 05:50:01 -0800 (PST)
+        with ESMTP id S232445AbiCIOHM (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 9 Mar 2022 09:07:12 -0500
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9986117CC72
+        for <linux-can@vger.kernel.org>; Wed,  9 Mar 2022 06:06:09 -0800 (PST)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-2db569555d6so23600987b3.12
+        for <linux-can@vger.kernel.org>; Wed, 09 Mar 2022 06:06:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=OrtQgExP6/KGNZe+vOK3wRMpwvlZoou7SgFiBOAfw8s=;
-        b=QoT5mcZE5tMyNjKM/83OEXhrdq3PQK46qinahRYJ5Nt7bCWUZb07va0meMzUZ4GS9M
-         6G/3skJ7A+DDiiqH8L78vSDBGFcIIp/lnZxyhGrTKGNp/bNiTsyCvut2LCcktTkfFpf9
-         MCYMYk2HSOd/HzigmXL3yM+S0jFZw9Z1yAlUF+G17pXP0hE1Po23eo/M0O6TnRg3et5t
-         ywzLOQ+jU1eSTm+iZ6gLOTzoRwmHrHI1DSg2i0K23mDbfufUFPvzthbgNF5gvgBDN56G
-         rWh5XPbn/L7Qp6nC7efi1CKbVAD7Gl5nyoMGhc7gL1TA3AN1TCsppM8JJg9N2gidlAp6
-         X20g==
+        bh=qS2KIfBzApn+HZZ2Xl8DU6y5zhsrZJNVqjgCAalUK+Q=;
+        b=WSHLUlwzt3ID5QDIQ0jXOzA1gTFCNoBouFsZyNxOA1r+HowWwxo01DDcZxS4IaVYFL
+         O11Gzx8dNsg/ycay15uF2ukIPzrDieUU9hd0g61uTgEBTGLZbuhp70NFUK8Qm64XLSNs
+         5SyF7hN/YDiXKVb+Yd0Ay+BNAOZOGM/Y/y0rBLM9iAlDrE+i2/UtjZHeLUq9Vm/uL+BZ
+         EqeZo4wcp0njRd3UPZM6DRr8VskOzcOkRgv1JAwHc+p8YnFPnlkGpAVyc80kCn9BNBHx
+         6MeWCz6BRpqbIifV89un9wg/vo7p394fgvrxni2mfNpgXs/NICb1oT0OHH8Uxi0DCv2t
+         Rsew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=OrtQgExP6/KGNZe+vOK3wRMpwvlZoou7SgFiBOAfw8s=;
-        b=U4dvyFflc9kFcJcFtW9blEkQcuqVEYwX845yMCrR8UE7sYLuU5t4Xv86952sm4AV71
-         +Ad+hkzDQbdz5cj4y/sFyLw8Dvw/iIQOI1wcQg3QYBf3Sc+lFZCThSGicOVkfMf2jZ0U
-         rfvigmxHFUcnuhiJobt07W+HDJGdZHVKqqNITfiREDerzPgEVXihHfz4qWFBCCYHTFjp
-         gIHKxg5OX2a3pPcawOBeAugemO4E+kWuIcpujh5IlhY9qzLq9znGqzb5LIV1By3NZnJU
-         uDoX8M9YTPj1HiSlUfKGWJUID2ysX6nqSawF6/lWsvn88sXaJ7UcXw6T8hp0xRdlhFc+
-         ruXQ==
-X-Gm-Message-State: AOAM532fJMY6jhzecqgwXGXDlVgR8grIBe6GNfyTSmzJVEKdUtiqFjeI
-        RtsSHS6p2GS65lRv00PHVsOMNUw3hLo7dGHqYKA=
-X-Google-Smtp-Source: ABdhPJw69v6Zg6XPfiTCu+6z6/HscwUMgFfaB5ymMuufT2DApxnvYz/KwY0EjKUM3Z+q+nmjxH/Nis35H8yc/g1dhwI=
-X-Received: by 2002:a25:4c3:0:b0:629:2692:5a46 with SMTP id
- 186-20020a2504c3000000b0062926925a46mr13442909ybe.500.1646833800621; Wed, 09
- Mar 2022 05:50:00 -0800 (PST)
+        bh=qS2KIfBzApn+HZZ2Xl8DU6y5zhsrZJNVqjgCAalUK+Q=;
+        b=POMNdKrNPGqxx1dK87YZronkpI0TXqKkWdp4y+A25W9UQfM0UiAYpwiJXJSAP92lHC
+         eVvcHglq9zJidlU9zyX5PngL6kSv3vyIhxKjZWwPoy9TQVKT6pQm9vRvFk2kYZWo9QSX
+         x6kGEaENj/JfsXE6WK/mbCRk/F1VV5c+o7PN+86/Ros1kw9btEpv4mFAzjJgERWYryB2
+         LymxGEYLNPzbzic9HRUS26jxtw9UEvHTDnbk4XTNdndo73B89xb26FkfNI7t8R842Q5w
+         qVyo3C20dg/0bYf5Ycrp2yZ3Xh0dD7K3As8rGshHKRGc0ew1cZM2gW/Cai3TxCriWQRL
+         2Alg==
+X-Gm-Message-State: AOAM531v/4UgLhCNj89LDUwMqrQj2DlHyoKA7geuU1aw1oeWJudWp6sm
+        A/49Jt70iYy8Sr1sr8gsqJRLHmlOd0TQOd8fDyY=
+X-Google-Smtp-Source: ABdhPJxGM639Tf6BoxeN6hZEbWCFOzXo9fpuycZzbXLKR4FRRXiyB4u19xEzfiA2aZ54JQdoYBjQW5tk6wGwOly5UVM=
+X-Received: by 2002:a81:ff12:0:b0:2db:2d8a:9769 with SMTP id
+ k18-20020a81ff12000000b002db2d8a9769mr17305112ywn.172.1646834768695; Wed, 09
+ Mar 2022 06:06:08 -0800 (PST)
 MIME-Version: 1.0
-References: <20220307214303.1822590-1-max@enpas.org> <CAMZ6RqJZObevKPc29jW+m6i0eAgestTbw8KCPXxSGHzSXK7cRg@mail.gmail.com>
- <20220309135414.34f77251.max@enpas.org>
-In-Reply-To: <20220309135414.34f77251.max@enpas.org>
+References: <20220309124132.291861-1-mkl@pengutronix.de> <20220309124132.291861-15-mkl@pengutronix.de>
+In-Reply-To: <20220309124132.291861-15-mkl@pengutronix.de>
 From:   Vincent Mailhol <vincent.mailhol@gmail.com>
-Date:   Wed, 9 Mar 2022 22:49:49 +0900
-Message-ID: <CAMZ6RqJJ-PO=WeFeuXk4iC9GHLXz_ZMWtsVCm6sGVGbmeE5U1Q@mail.gmail.com>
-Subject: Re: [PATCH v3] can, tty: elmcan CAN/ldisc driver for ELM327 based
- OBD-II adapters
-To:     Max Staudt <max@enpas.org>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can@vger.kernel.org, Oliver Neukum <oneukum@suse.com>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>
+Date:   Wed, 9 Mar 2022 23:05:57 +0900
+Message-ID: <CAMZ6Rq+R-yxYm4Kk+aoaQXNedKkmq0LbwDSxs0nXdJMn6t+=bw@mail.gmail.com>
+Subject: Re: [can-next-rfc 14/21] can: gs_usb: use union and FLEX_ARRAY for
+ data in struct gs_host_frame
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org, kernel@pengutronix.de,
+        Peter Fink <pfink@christ-es.de>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,228 +67,206 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed. 9 Mar 2022 at 21:54, Max Staudt <max@enpas.org> wrote:
-> Thanks a lot Vincent for your review!
+On Wed. 9 Mar 2022 =C3=A0 22:39, Marc Kleine-Budde <mkl@pengutronix.de> wro=
+te:
+> From: Peter Fink <pfink@christ-es.de>
 >
-> Most points are self explanatory, for the others I've added replies
-> below.
+> Modify struct gs_host_frame to make use of a union and
+> DECLARE_FLEX_ARRAY to be able to store different data (lengths), which
+> will be added in later commits.
 >
+> Store the gs_host_frame length in TX direction (host -> device) in
+> struct gs_can::hf_size_tx and RX direction (device -> host) in struct
+> gs_usb::hf_size_rx so it must be calculated only once.
 >
+> Signed-off-by: Peter Fink <pfink@christ-es.de>
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> ---
+>  drivers/net/can/usb/gs_usb.c | 37 +++++++++++++++++++++++++-----------
+>  1 file changed, 26 insertions(+), 11 deletions(-)
 >
-> On Tue, 8 Mar 2022 16:01:12 +0900
-> Vincent Mailhol <vincent.mailhol@gmail.com> wrote:
+> diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
+> index 4bc10264005b..1fe9d9f08c17 100644
+> --- a/drivers/net/can/usb/gs_usb.c
+> +++ b/drivers/net/can/usb/gs_usb.c
+> @@ -146,6 +146,10 @@ struct gs_device_bt_const {
 >
-> > Hi Max, this is a partial review.
-> >
-> > > +/* Bits in elm->cmds_todo */
-> > > +enum ELM_TODO {
-> > > +       TODO_CAN_DATA =3D 0,
-> > > +       TODO_CANID_11BIT,
-> > > +       TODO_CANID_29BIT_LOW,
-> > > +       TODO_CANID_29BIT_HIGH,
-> > > +       TODO_CAN_CONFIG_PART2,
-> > > +       TODO_CAN_CONFIG,
-> > > +       TODO_RESPONSES,
-> > > +       TODO_SILENT_MONITOR,
-> > > +       TODO_INIT
-> >
-> > Nitpick but the TODO name is bugging me. What does this acronym mean?
-> > Is it possible to change this so it doesn't look like a FIXME tag?
+>  #define GS_CAN_FLAG_OVERFLOW BIT(0)
 >
-> Good point, I'll change it.
+> +struct classic_can {
+> +       u8 data[8];
+> +} __packed;
+> +
+>  struct gs_host_frame {
+>         u32 echo_id;
+>         __le32 can_id;
+> @@ -155,7 +159,9 @@ struct gs_host_frame {
+>         u8 flags;
+>         u8 reserved;
 >
-> It's an ordered list of things to send next to the adapter.
+> -       u8 data[8];
+> +       union {
+> +               DECLARE_FLEX_ARRAY(struct classic_can, classic_can);
+> +       };
+>  } __packed;
+>  /* The GS USB devices make use of the same flags and masks as in
+>   * linux/can.h and linux/can/error.h, and no additional mapping is neces=
+sary.
+> @@ -187,6 +193,8 @@ struct gs_can {
+>         struct can_bittiming_const bt_const;
+>         unsigned int channel;   /* channel number */
+>
+> +       unsigned int hf_size_tx;
+> +
+>         /* This lock prevents a race condition between xmit and receive. =
+*/
+>         spinlock_t tx_ctx_lock;
+>         struct gs_tx_context tx_context[GS_MAX_TX_URBS];
+> @@ -200,6 +208,7 @@ struct gs_usb {
+>         struct gs_can *canch[GS_MAX_INTF];
+>         struct usb_anchor rx_submitted;
+>         struct usb_device *udev;
+> +       unsigned int hf_size_rx;
+>         u8 active_channels;
+>  };
+>
+> @@ -343,7 +352,7 @@ static void gs_usb_receive_bulk_callback(struct urb *=
+urb)
+>                 cf->can_id =3D le32_to_cpu(hf->can_id);
+>
+>                 can_frame_set_cc_len(cf, hf->can_dlc, dev->can.ctrlmode);
+> -               memcpy(cf->data, hf->data, 8);
+> +               memcpy(cf->data, hf->classic_can->data, 8);
+>
+>                 /* ERROR frames tell us information about the controller =
+*/
+>                 if (le32_to_cpu(hf->can_id) & CAN_ERR_FLAG)
+> @@ -398,7 +407,7 @@ static void gs_usb_receive_bulk_callback(struct urb *=
+urb)
+>   resubmit_urb:
+>         usb_fill_bulk_urb(urb, usbcan->udev,
+>                           usb_rcvbulkpipe(usbcan->udev, GSUSB_ENDPOINT_IN=
+),
+> -                         hf, sizeof(struct gs_host_frame),
+> +                         hf, dev->parent->hf_size_rx,
+>                           gs_usb_receive_bulk_callback, usbcan);
+>
+>         rc =3D usb_submit_urb(urb, GFP_ATOMIC);
+> @@ -485,7 +494,7 @@ static netdev_tx_t gs_can_start_xmit(struct sk_buff *=
+skb,
+>         if (!urb)
+>                 goto nomem_urb;
+>
+> -       hf =3D usb_alloc_coherent(dev->udev, sizeof(*hf), GFP_ATOMIC,
+> +       hf =3D usb_alloc_coherent(dev->udev, dev->hf_size_tx, GFP_ATOMIC,
+>                                 &urb->transfer_dma);
+>         if (!hf) {
+>                 netdev_err(netdev, "No memory left for USB buffer\n");
+> @@ -509,11 +518,11 @@ static netdev_tx_t gs_can_start_xmit(struct sk_buff=
+ *skb,
+>         hf->can_id =3D cpu_to_le32(cf->can_id);
+>         hf->can_dlc =3D can_get_cc_dlc(cf, dev->can.ctrlmode);
+>
+> -       memcpy(hf->data, cf->data, cf->len);
+> +       memcpy(hf->classic_can->data, cf->data, cf->len);
+>
+>         usb_fill_bulk_urb(urb, dev->udev,
+>                           usb_sndbulkpipe(dev->udev, GSUSB_ENDPOINT_OUT),
+> -                         hf, sizeof(*hf),
+> +                         hf, dev->hf_size_tx,
+>                           gs_usb_xmit_callback, txc);
+>
+>         urb->transfer_flags |=3D URB_NO_TRANSFER_DMA_MAP;
+> @@ -531,8 +540,8 @@ static netdev_tx_t gs_can_start_xmit(struct sk_buff *=
+skb,
+>                 gs_free_tx_context(txc);
+>
+>                 usb_unanchor_urb(urb);
+> -               usb_free_coherent(dev->udev,
+> -                                 sizeof(*hf), hf, urb->transfer_dma);
+> +               usb_free_coherent(dev->udev, urb->transfer_buffer_length,
+> +                                 urb->transfer_buffer, urb->transfer_dma=
+);
+>
+>                 if (rc =3D=3D -ENODEV) {
+>                         netif_device_detach(netdev);
+> @@ -552,7 +561,8 @@ static netdev_tx_t gs_can_start_xmit(struct sk_buff *=
+skb,
+>         return NETDEV_TX_OK;
+>
+>   badidx:
+> -       usb_free_coherent(dev->udev, sizeof(*hf), hf, urb->transfer_dma);
+> +       usb_free_coherent(dev->udev, urb->transfer_buffer_length,
+> +                         urb->transfer_buffer, urb->transfer_dma);
+>   nomem_hf:
+>         usb_free_urb(urb);
+>
+> @@ -569,6 +579,7 @@ static int gs_can_open(struct net_device *netdev)
+>         struct gs_usb *parent =3D dev->parent;
+>         int rc, i;
+>         struct gs_device_mode *dm;
+> +       struct gs_host_frame *hf;
+>         u32 ctrlmode;
+>         u32 flags =3D 0;
+>
+> @@ -576,6 +587,8 @@ static int gs_can_open(struct net_device *netdev)
+>         if (rc)
+>                 return rc;
+>
+> +       dev->hf_size_tx =3D struct_size(hf, classic_can, 1);
 
-Then TX_QUEUE or TX_FIFO sounds like a better name then.
+struct_size(hf, classic_can, 1) is a constant value, isn't it?
+Why not make this a macro?
+Also, what is the purpose of the FLEX_ARRAY if it contains only one element=
+?
 
-> For
-> example, whenever the sending CAN ID needs to be changed, the relevant
-> TODO_* bits are set, and the new CAN ID is sent down the UART before a
-> payload (*_DATA) is ever sent.
->
+I do not understand the logic. Sorry if I am wrong.
 
-Also, prefix the enum entries with your module name.
-e.g. ELM327_
+> +
+>         if (!parent->active_channels) {
+>                 for (i =3D 0; i < GS_MAX_RX_URBS; i++) {
+>                         struct urb *urb;
+> @@ -588,7 +601,7 @@ static int gs_can_open(struct net_device *netdev)
+>
+>                         /* alloc rx buffer */
+>                         buf =3D usb_alloc_coherent(dev->udev,
+> -                                                sizeof(struct gs_host_fr=
+ame),
+> +                                                dev->parent->hf_size_rx,
+>                                                  GFP_KERNEL,
+>                                                  &urb->transfer_dma);
+>                         if (!buf) {
+> @@ -604,7 +617,7 @@ static int gs_can_open(struct net_device *netdev)
+>                                           usb_rcvbulkpipe(dev->udev,
+>                                                           GSUSB_ENDPOINT_=
+IN),
+>                                           buf,
+> -                                         sizeof(struct gs_host_frame),
+> +                                         dev->parent->hf_size_rx,
+>                                           gs_usb_receive_bulk_callback, p=
+arent);
+>                         urb->transfer_flags |=3D URB_NO_TRANSFER_DMA_MAP;
+>
+> @@ -886,6 +899,7 @@ static int gs_usb_probe(struct usb_interface *intf,
+>                         const struct usb_device_id *id)
+>  {
+>         struct usb_device *udev =3D interface_to_usbdev(intf);
+> +       struct gs_host_frame *hf;
+>         struct gs_usb *dev;
+>         int rc =3D -ENOMEM;
+>         unsigned int icount, i;
+> @@ -947,6 +961,7 @@ static int gs_usb_probe(struct usb_interface *intf,
+>         }
+>
+>         init_usb_anchor(&dev->rx_submitted);
+> +       dev->hf_size_rx =3D struct_size(hf, classic_can, 1);
 
->
-> > > +       frame.can_id =3D CAN_ERR_FLAG;
-> > > +       frame.can_dlc =3D CAN_ERR_DLC;
-> > > +       frame.data[5] =3D 'R';
-> > > +       frame.data[6] =3D 'I';
-> > > +       frame.data[7] =3D 'P';
-> > > +       elm327_feed_frame_to_netdev(elm, &frame);
-> >
-> > There is a framework to notify a bus off. Refer to:
-> > https://elixir.bootlin.com/linux/latest/source/drivers/net/can/usb/etas=
-_es58x/es58x_core.c#L815
->
-> Thanks, will do.
->
->
-> > > +/* Compare a buffer to a fixed string */
-> > > +static inline int _memstrcmp(const u8 *mem, const char *str)
-> > > +{
-> > > +       return memcmp(mem, str, strlen(str));
-> >
-> > strcpy()?
-
-I think you got it but I meant strcmp()=E2=80=A6
-
-> > Did you check for buffer overflow?
->
-> There is no buffer overflow, as this only ever takes string constants
-> as *str. The compiler figures out the strlen() and can generate an
-> optimised memcmp() for this given string length.
-
-Are you sure that the compiler does not already produce optimized
-code for strcmp()? Did you check the assembly output?
-
-> It's the caller's job to ensure that *mem is large enough.
->
->
-> > > +
-> > > +       /* Use spaces in CAN ID to distinguish 29 or 11 bit address
-> > > length.
-> > > +        * No out-of-bounds access:
-> > > +        * We use the fact that we can always read from elm->rxbuf.
-> > > +        */
-> > > +       if (elm->rxbuf[2] =3D=3D ' ' && elm->rxbuf[5] =3D=3D ' ' &&
-> > > +           elm->rxbuf[8] =3D=3D ' ' && elm->rxbuf[11] =3D=3D ' ' &&
-> > > +           elm->rxbuf[13] =3D=3D ' ') {
-> >
-> > Define an inline function elm327_is_eff().
->
-> It would only be used this one time, so I don't see the utility? It'd
-> just make it harder to read, IMHO.
->
-> It's ASCII lexer/parser code, so it's bound to be ugly... :(
-
-That comment was a nitpick, and it is about colors and taste. So
-I won't insist more.
-
->
-> > > +       /* Read CAN ID */
-> > > +       if (frame.can_id & CAN_EFF_FLAG) {
-> > > +               frame.can_id |=3D (hex_to_bin(elm->rxbuf[0]) << 28)
-> > > +                             | (hex_to_bin(elm->rxbuf[1]) << 24)
-> > > +                             | (hex_to_bin(elm->rxbuf[3]) << 20)
-> > > +                             | (hex_to_bin(elm->rxbuf[4]) << 16)
-> > > +                             | (hex_to_bin(elm->rxbuf[6]) << 12)
-> > > +                             | (hex_to_bin(elm->rxbuf[7]) << 8)
-> > > +                             | (hex_to_bin(elm->rxbuf[9]) << 4)
-> > > +                             | (hex_to_bin(elm->rxbuf[10]) << 0);
-> > > +       } else {
-> > > +               frame.can_id |=3D (hex_to_bin(elm->rxbuf[0]) << 8)
-> > > +                             | (hex_to_bin(elm->rxbuf[1]) << 4)
-> > > +                             | (hex_to_bin(elm->rxbuf[2]) << 0);
-> >
-> > hex2bin()?
->
-> Good idea!
->
->
-> > > +       /* Parse the data nibbles. */
-> > > +       for (i =3D 0; i < frame.can_dlc; i++) {
-> >
-> > frame.can_dlc is deprecated. Use frame.len instead.
->
-> Thanks!
->
->
-> [ ... snip self explanatory stuff ... ]
->
->
-> > > +       case ELM_RECEIVING:
-> > > +               /* Find <CR> delimiting feedback lines. */
-> > > +               for (len =3D 0;
-> > > +                    (len < elm->rxfill) && (elm->rxbuf[len] !=3D
-> > > '\r');
-> >
-> > Did you use ./script/checkpath?
->
-> checkpatch? Yes I did (and kudos to whoever wrote it).
->
-> Why?
-
-Because I thought that checkpath would have spotted some
-unnecessary parentheses... But I was wrong.
-
-For reference, if put in an "if" statement, you would have got this output:
-
-CHECK: Unnecessary parentheses around 'len < elm->rxfill'
-+    if ((len < elm->rxfill) && (elm->rxbuf[len] !=3D '\r')) {
-
-I was expecting the for loop to yield the same.
-
->
-> > > +/* Dummy needed to use can_rx_offload */
-> > > +static struct sk_buff *elmcan_mailbox_read(struct can_rx_offload
-> > > *offload,
-> > > +                                          unsigned int n, u32
-> > > *timestamp,
-> > > +                                          bool drop)
-> > > +{
-> > > +       WARN_ON_ONCE(1); /* This function is a dummy, so don't call
-> > > it! */ +
-> > > +       return ERR_PTR(-ENOBUFS);
-> > > +}
-> >
-> > Could you elaborate on why you need can_rx_offload if the mailbox
-> > feature is not needed?
->
-> The code previously used netif_rx_ni(), and Marc noted that it may
-> reorder packets. To avoid that, he suggested rx_offload:
->
->   Message-ID: 88c08b2c-aa4a-8858-6267-deeeac2796df@pengutronix.de
->
->   https://www.spinics.net/lists/linux-can/msg01859.html
->
->
-> But rx_offload needs the mailbox_read function, even if it's a dummy,
-> because can_rx_offload_add_fifo() checks:
->
->         if (!offload->mailbox_read)
->                 return -EINVAL;
-
-I think that there should not be a dummy functions like this one.
-
-Either we agree that using can_rx_offload without implementing
-the mailbox_read() is OK and in that case, the can_rx_offload
-framework should be modified to allow mailbox_read() to be a NULL
-pointer.
-
-Either it is not the case and you use the more classic
-netif_rx().
-
-And I do not have the answer. I haven't studied can_rx_offload
-enough to be a judge here. Sorry.
-
-@Marc, any thoughts?
+Same comment as hf_size_tx.
 
 >
-> > > +/* Send a can_frame to a TTY. */
-> > > +static netdev_tx_t elmcan_netdev_start_xmit(struct sk_buff *skb,
-> > > +                                           struct net_device *dev)
-> > > +{
-> > > +       struct elmcan *elm =3D netdev_priv(dev);
-> > > +       struct can_frame *frame =3D (struct can_frame *)skb->data;
-> > > +
-> > > +       if (skb->len !=3D sizeof(struct can_frame))
-> > > +               goto out;
-> >
-> > Isn=E2=80=99t this aleardy guaranteed by the upper layers?
+>         usb_set_intfdata(intf, dev);
+>         dev->udev =3D udev;
+> --
+> 2.34.1
 >
-> Copy-pasta from slcan.c - will look into it.
-
-Also give a look at can_dropped_invalid_skb().
-
 >
-> > > +       if (!netif_running(dev))  {
-> > > +               netdev_warn(elm->dev, "xmit: iface is down.\n");
-> > > +               goto out;
-> > > +       }
-> >
-> > Even if this check succeeds, interface might still go down at the
-> > next cycle. What is the purpose of checking if interface is up here?
->
-> No purpose. It's copy-pasta from slip.c via slcan.c.
