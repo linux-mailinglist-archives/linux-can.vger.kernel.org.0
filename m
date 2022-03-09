@@ -2,52 +2,52 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E6DB4D2EA4
-	for <lists+linux-can@lfdr.de>; Wed,  9 Mar 2022 13:04:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B8884D2EA7
+	for <lists+linux-can@lfdr.de>; Wed,  9 Mar 2022 13:04:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231740AbiCIMFY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 9 Mar 2022 07:05:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49504 "EHLO
+        id S232607AbiCIMF0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 9 Mar 2022 07:05:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230288AbiCIMFY (ORCPT
+        with ESMTP id S232448AbiCIMFY (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Wed, 9 Mar 2022 07:05:24 -0500
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CADF51712BA
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.161])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 261F3171EE9
         for <linux-can@vger.kernel.org>; Wed,  9 Mar 2022 04:04:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1646827462;
     s=strato-dkim-0002; d=hartkopp.net;
     h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=RYm+YQaZ/F/2/N0zQBO5PCdtH54eom7Xka3a3kDAbU8=;
-    b=KEB081Cu3A1UIcX/Csy3vczPDceL5xuJODD5VWfxwaY37hayanGud1OmggKRnAJJlS
-    VTCHIn5tZD0gplPnGOr67g6Yo6ppWCiMBQgGpeY6NsLALwRQ9D75XUcPjT3J/39s00qS
-    ib1JAJWOG9XhtkNBva0nCI01outfDuoGMs+HO47lqstuVEDuP6XO7ddNfS4AWhUjFXOH
-    fh93UKhCGDlazPHO+y1Hjf6KkABsZFMcvauliRo8ebinkau5JzHrhLWrDoFKa5jEGYbr
-    9PK9RqVBZ4xGb5AgSGfMqHFhlMhSYYzVqS0pHuq0tntj9sZbZv8G5CK3EynibbYNcjyY
-    iSiQ==
+    bh=PuxF4EHph6uDUcP+CDCd3bjU87veCY6Sc6q8zS/Znnk=;
+    b=HFa+SpCs75NU2zvkfWgQaNiWV7tIRqTJ3XdwBoLaJXdE/3kVEX1BFslvxi8jE9z0Vj
+    8sTtBoGB7x0GuO4j0yjXtpHzvodJvRUA7zwNS8gzqMAcTrMHRNjyyB6HQ1G7hWjjp5l1
+    Ue7CVzxiICrCQ4ZETKhat4gdVaFcZbF9S1jOXS1FZ+FxnqeJ7qS1hDJp0PFXJUI4qTk9
+    aQOxHaDU8J9gHMyhO5rbEhB3+UrCUvL7/jMvb4xgrQ/23IQOzsvK4skIijexeioeqUXR
+    761p67tonro/3ZIsKs3MkseoYw10e79xrDKL0b2RuCp41Ud4G5Vaf3U3q9jY7kk+9yaI
+    51wA==
 Authentication-Results: strato.com;
     dkim=none
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS/xvEBL7X5sbo3UIh9IyLecSWJafUvprl4"
 X-RZG-CLASS-ID: mo00
 Received: from silver.lan
     by smtp.strato.de (RZmta 47.40.1 AUTH)
-    with ESMTPSA id 6c57e6y29C4MEQ8
+    with ESMTPSA id 6c57e6y29C4MEQ9
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
     Wed, 9 Mar 2022 13:04:22 +0100 (CET)
 From:   Oliver Hartkopp <socketcan@hartkopp.net>
 To:     linux-can@vger.kernel.org
 Cc:     Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: [can-next v2 2/5] can: isotp: set default value for N_As to 50 micro seconds
-Date:   Wed,  9 Mar 2022 13:04:13 +0100
-Message-Id: <20220309120416.83514-2-socketcan@hartkopp.net>
+Subject: [can-next v2 3/5] can: isotp: set max PDU size to 64 kByte
+Date:   Wed,  9 Mar 2022 13:04:14 +0100
+Message-Id: <20220309120416.83514-3-socketcan@hartkopp.net>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220309120416.83514-1-socketcan@hartkopp.net>
 References: <20220309120416.83514-1-socketcan@hartkopp.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,151 +56,42 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The N_As value describes the time a CAN frame needs on the wire when
-transmitted by the CAN controller. Even very short CAN FD frames need
-arround 100 usecs (bitrate 1Mbit/s, data bitrate 8Mbit/s).
+The reason to extend the max PDU size from 4095 Byte (12 bit length value)
+to a 32 bit value (up to 4 GByte) was to be able to flash 64 kByte
+bootloaders with a single ISO-TP PDU. The max PDU size in the Linux kernel
+implementation was set to 8200 Bytes to be able to test the length
+information escape sequence.
 
-Having N_As to be zero (the former default) leads to 'no CAN frame
-separation' when STmin is set to zero by the receiving node. This 'burst
-mode' should not be enabled by default as it could potentially dump a high
-number of CAN frames into the netdev queue from the soft hrtimer context.
-This does not affect the system stability but is just not nice and
-cooperative.
+It turns out that the demand for 64 kByte PDUs is real so the value for
+MAX_MSG_LENGTH is set to 66000 to be able to potentially add some checksums
+to the 65.536 Byte block.
 
-With this N_As/frame_txtime value the 'burst mode' is disabled by default.
-
-As user space applications usually do not set the frame_txtime element
-of struct can_isotp_options the new in-kernel default is very likely
-overwritten with zero when the sockopt() CAN_ISOTP_OPTS is invoked.
-To make sure that a N_As value of zero is only set intentional the
-value '0' is now interpreted as 'do not change the current value'.
-When a frame_txtime of zero is required for testing purposes this
-CAN_ISOTP_FRAME_TXTIME_ZERO u32 value has to be set in frame_txtime.
-
+Link: https://github.com/linux-can/can-utils/issues/347#issuecomment-1056142301
 Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 ---
- include/uapi/linux/can/isotp.h | 28 ++++++++++++++++++++++------
- net/can/isotp.c                | 12 +++++++++++-
- 2 files changed, 33 insertions(+), 7 deletions(-)
+ net/can/isotp.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/uapi/linux/can/isotp.h b/include/uapi/linux/can/isotp.h
-index c55935b64ccc..590f8aea2b6d 100644
---- a/include/uapi/linux/can/isotp.h
-+++ b/include/uapi/linux/can/isotp.h
-@@ -135,24 +135,20 @@ struct can_isotp_ll_options {
- #define CAN_ISOTP_FORCE_RXSTMIN	0x100	/* ignore CFs depending on rx stmin */
- #define CAN_ISOTP_RX_EXT_ADDR	0x200	/* different rx extended addressing */
- #define CAN_ISOTP_WAIT_TX_DONE	0x400	/* wait for tx completion */
- #define CAN_ISOTP_SF_BROADCAST	0x800	/* 1-to-N functional addressing */
- 
--/* default values */
-+/* protocol machine default values */
- 
- #define CAN_ISOTP_DEFAULT_FLAGS		0
- #define CAN_ISOTP_DEFAULT_EXT_ADDRESS	0x00
- #define CAN_ISOTP_DEFAULT_PAD_CONTENT	0xCC /* prevent bit-stuffing */
--#define CAN_ISOTP_DEFAULT_FRAME_TXTIME	0
-+#define CAN_ISOTP_DEFAULT_FRAME_TXTIME	50000 /* 50 micro seconds */
- #define CAN_ISOTP_DEFAULT_RECV_BS	0
- #define CAN_ISOTP_DEFAULT_RECV_STMIN	0x00
- #define CAN_ISOTP_DEFAULT_RECV_WFTMAX	0
- 
--#define CAN_ISOTP_DEFAULT_LL_MTU	CAN_MTU
--#define CAN_ISOTP_DEFAULT_LL_TX_DL	CAN_MAX_DLEN
--#define CAN_ISOTP_DEFAULT_LL_TX_FLAGS	0
--
- /*
-  * Remark on CAN_ISOTP_DEFAULT_RECV_* values:
-  *
-  * We can strongly assume, that the Linux Kernel implementation of
-  * CAN_ISOTP is capable to run with BS=0, STmin=0 and WFTmax=0.
-@@ -160,6 +156,26 @@ struct can_isotp_ll_options {
-  * these default settings can be changed via sockopts.
-  * For that reason the STmin value is intentionally _not_ checked for
-  * consistency and copied directly into the flow control (FC) frame.
-  */
- 
-+/* link layer default values => make use of Classical CAN frames */
-+
-+#define CAN_ISOTP_DEFAULT_LL_MTU	CAN_MTU
-+#define CAN_ISOTP_DEFAULT_LL_TX_DL	CAN_MAX_DLEN
-+#define CAN_ISOTP_DEFAULT_LL_TX_FLAGS	0
-+
-+/*
-+ * The CAN_ISOTP_DEFAULT_FRAME_TXTIME has become a non-zero value as
-+ * it only makes sense for isotp implementation tests to run without
-+ * a N_As value. As user space applications usually do not set the
-+ * frame_txtime element of struct can_isotp_options the new in-kernel
-+ * default is very likely overwritten with zero when the sockopt()
-+ * CAN_ISOTP_OPTS is invoked.
-+ * To make sure that a N_As value of zero is only set intentional the
-+ * value '0' is now interpreted as 'do not change the current value'.
-+ * When a frame_txtime of zero is required for testing purposes this
-+ * CAN_ISOTP_FRAME_TXTIME_ZERO u32 value has to be set in frame_txtime.
-+ */
-+#define CAN_ISOTP_FRAME_TXTIME_ZERO	0xFFFFFFFF
-+
- #endif /* !_UAPI_CAN_ISOTP_H */
 diff --git a/net/can/isotp.c b/net/can/isotp.c
-index d59f1758ac9c..47404ba59981 100644
+index 47404ba59981..d4c0b4704987 100644
 --- a/net/can/isotp.c
 +++ b/net/can/isotp.c
-@@ -138,10 +138,11 @@ struct isotp_sock {
- 	ktime_t lastrxcf_tstamp;
- 	struct hrtimer rxtimer, txtimer;
- 	struct can_isotp_options opt;
- 	struct can_isotp_fc_options rxfc, txfc;
- 	struct can_isotp_ll_options ll;
-+	u32 frame_txtime;
- 	u32 force_tx_stmin;
- 	u32 force_rx_stmin;
- 	u32 cfecho; /* consecutive frame echo tag */
- 	struct tpcon rx, tx;
- 	struct list_head notifier;
-@@ -358,11 +359,11 @@ static int isotp_rcv_fc(struct isotp_sock *so, struct canfd_frame *cf, int ae)
- 		    (so->txfc.stmin < 0xF1 || so->txfc.stmin > 0xF9))
- 			so->txfc.stmin = 0x7F;
+@@ -84,13 +84,13 @@ MODULE_ALIAS("can-proto-6");
+ 			 (CAN_SFF_MASK | CAN_EFF_FLAG | CAN_RTR_FLAG))
  
- 		so->tx_gap = ktime_set(0, 0);
- 		/* add transmission time for CAN frame N_As */
--		so->tx_gap = ktime_add_ns(so->tx_gap, so->opt.frame_txtime);
-+		so->tx_gap = ktime_add_ns(so->tx_gap, so->frame_txtime);
- 		/* add waiting time for consecutive frames N_Cs */
- 		if (so->opt.flags & CAN_ISOTP_FORCE_TXSTMIN)
- 			so->tx_gap = ktime_add_ns(so->tx_gap,
- 						  so->force_tx_stmin);
- 		else if (so->txfc.stmin < 0x80)
-@@ -1291,10 +1292,18 @@ static int isotp_setsockopt_locked(struct socket *sock, int level, int optname,
- 			return -EFAULT;
+ /* ISO 15765-2:2016 supports more than 4095 byte per ISO PDU as the FF_DL can
+  * take full 32 bit values (4 Gbyte). We would need some good concept to handle
+  * this between user space and kernel space. For now increase the static buffer
+- * to something about 8 kbyte to be able to test this new functionality.
++ * to something about 64 kbyte to be able to test this new functionality.
+  */
+-#define MAX_MSG_LENGTH 8200
++#define MAX_MSG_LENGTH 66000
  
- 		/* no separate rx_ext_address is given => use ext_address */
- 		if (!(so->opt.flags & CAN_ISOTP_RX_EXT_ADDR))
- 			so->opt.rx_ext_address = so->opt.ext_address;
-+
-+		/* check for frame_txtime changes (0 => no changes) */
-+		if (so->opt.frame_txtime) {
-+			if (so->opt.frame_txtime == CAN_ISOTP_FRAME_TXTIME_ZERO)
-+				so->frame_txtime = 0;
-+			else
-+				so->frame_txtime = so->opt.frame_txtime;
-+		}
- 		break;
- 
- 	case CAN_ISOTP_RECV_FC:
- 		if (optlen != sizeof(struct can_isotp_fc_options))
- 			return -EINVAL;
-@@ -1496,10 +1505,11 @@ static int isotp_init(struct sock *sk)
- 	so->opt.ext_address = CAN_ISOTP_DEFAULT_EXT_ADDRESS;
- 	so->opt.rx_ext_address = CAN_ISOTP_DEFAULT_EXT_ADDRESS;
- 	so->opt.rxpad_content = CAN_ISOTP_DEFAULT_PAD_CONTENT;
- 	so->opt.txpad_content = CAN_ISOTP_DEFAULT_PAD_CONTENT;
- 	so->opt.frame_txtime = CAN_ISOTP_DEFAULT_FRAME_TXTIME;
-+	so->frame_txtime = CAN_ISOTP_DEFAULT_FRAME_TXTIME;
- 	so->rxfc.bs = CAN_ISOTP_DEFAULT_RECV_BS;
- 	so->rxfc.stmin = CAN_ISOTP_DEFAULT_RECV_STMIN;
- 	so->rxfc.wftmax = CAN_ISOTP_DEFAULT_RECV_WFTMAX;
- 	so->ll.mtu = CAN_ISOTP_DEFAULT_LL_MTU;
- 	so->ll.tx_dl = CAN_ISOTP_DEFAULT_LL_TX_DL;
+ /* N_PCI type values in bits 7-4 of N_PCI bytes */
+ #define N_PCI_SF 0x00	/* single frame */
+ #define N_PCI_FF 0x10	/* first frame */
+ #define N_PCI_CF 0x20	/* consecutive frame */
 -- 
 2.30.2
 
