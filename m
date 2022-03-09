@@ -2,95 +2,171 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE51A4D26B3
-	for <lists+linux-can@lfdr.de>; Wed,  9 Mar 2022 05:06:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A1E4D28AB
+	for <lists+linux-can@lfdr.de>; Wed,  9 Mar 2022 07:05:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231565AbiCIDAC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 8 Mar 2022 22:00:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35570 "EHLO
+        id S229541AbiCIGF7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 9 Mar 2022 01:05:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231566AbiCIDAC (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 8 Mar 2022 22:00:02 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018E5134DE0
-        for <linux-can@vger.kernel.org>; Tue,  8 Mar 2022 18:59:04 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id mg21-20020a17090b371500b001bef9e4657cso4019155pjb.0
-        for <linux-can@vger.kernel.org>; Tue, 08 Mar 2022 18:59:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=spacecubics-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=g5MHqhyRAvMJEIygnpqs4s9C8dwI28dlr5hbuf+tGdY=;
-        b=w45iZX907cG/aaBaR/56rFZNCTIi99WnfB+0ACkYqOiNvywwJF0JgdbOQg7Z6KsLfe
-         Z8b2IizBvB0OE3LcnE+yNWFkrk7zhyHvs936KLO1kk6KR+rXPDmWHrtIIwCBkkmp0Kou
-         f4NOP7/Utuq9x75690VJOtL7Q4s9uTpYESLYsH6tBUHxf/oUQas1IcJUPnPJZ9tXwMJZ
-         n8GoQDnEn0P7Xj1vXaffjsouIqStgDoeO1p1D2aNn/18QlE3OiGes5uZzPBU6UWWDiNr
-         BZPZzzIsVgzpEpY8bmDff8kIQrc+VRAjSBbbnIZizwfrC80r0SVVotYm4tpSLVABtbvu
-         bKUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=g5MHqhyRAvMJEIygnpqs4s9C8dwI28dlr5hbuf+tGdY=;
-        b=GJ2UVtwnlZUA+HPrka9wT8QXpGLNUT63vmLpWJJxyys1E1QvGj7BHe4BFNtK6wriw8
-         TGTbdpmeWe5sL3M1T7BIULLTdn4qXGLLivVRgQbGLZ82kg5sfkU5D3mUHY7ANmnSBqk8
-         2XNjW1ZQ4N/q7UzNJACxvVKy2VQLkflCtUXjAQHVbrFZFeXjR9CfNE/q14PTbUtHgAuE
-         XHZiGqFrObpBM2b7/5VuY0XRyZxuUD+ELdx37+SwCAYdsiG81SIhAjCu4IfPdViiprrl
-         cFcLfasoKxi98zoeIYblu6mirAJm4DC+9rfvmjlBIQhSwgPPq0nG6UBZDKO+VGoco9MM
-         Nz5g==
-X-Gm-Message-State: AOAM531sAukBr63xDWN3MAP0z3SsTHZrP9s851Smrlt3Cqbxj34AO41A
-        nHVItWizaK6JifLHnzcYKtc8Kfx5pixcR0MwQIp9ow==
-X-Google-Smtp-Source: ABdhPJx6gIuB0ETKC5IdKG3N0AifUmdKV55gnSE4Xr4Buukiwf3ar64hKVfVW22ZPivJHacPqRfEJMAPvffMOT9QvXI=
-X-Received: by 2002:a17:903:2c7:b0:14f:fc47:5a2f with SMTP id
- s7-20020a17090302c700b0014ffc475a2fmr20654160plk.112.1646794743333; Tue, 08
- Mar 2022 18:59:03 -0800 (PST)
-MIME-Version: 1.0
-References: <20220307185314.11228-1-paskripkin@gmail.com> <CAMZ6RqKEALqGSh-tr_jTbQWca0wHK7t96yR3N-r625pbM4cUSw@mail.gmail.com>
- <52da93cd-6a78-1b77-6a86-c338c7cb11e9@gmail.com>
-In-Reply-To: <52da93cd-6a78-1b77-6a86-c338c7cb11e9@gmail.com>
-From:   Yasushi SHOJI <yashi@spacecubics.com>
-Date:   Wed, 9 Mar 2022 11:58:52 +0900
-Message-ID: <CAGLTpn+p=bJUe14qpP664JMY9_xKTr5UQ3bEmpiOXFvK5S3prg@mail.gmail.com>
-Subject: Re: [PATCH RFT] can: mcba_usb: properly check endpoint type
-To:     Pavel Skripkin <paskripkin@gmail.com>
-Cc:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        with ESMTP id S229509AbiCIGF7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 9 Mar 2022 01:05:59 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123947C789;
+        Tue,  8 Mar 2022 22:05:00 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 22964ie1029513;
+        Wed, 9 Mar 2022 00:04:44 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1646805884;
+        bh=tFs5PFMWcC0txVuAfsKe7VrAX6diWqLbUfTm5GvmMME=;
+        h=From:To:CC:Subject:Date;
+        b=h54dv5iNtqQuaFAAI0Zfe/ukpi3/9ahSpim8Wjd2zTYX4CEylNbsOX7/l+EjYikL8
+         tdaaetS8pc5I4pQZooinYPNn6FQtZCbsoi6s+a5M1PZU7slW+sqnMEXwUwrOOnueEf
+         WeVTXBavaKUzWXXDT4wi1K6wN9H3mG17bWXxaNTU=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 22964iqE037203
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 9 Mar 2022 00:04:44 -0600
+Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 9
+ Mar 2022 00:04:44 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 9 Mar 2022 00:04:44 -0600
+Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 22964eNu098487;
+        Wed, 9 Mar 2022 00:04:41 -0600
+From:   Aswath Govindraju <a-govindraju@ti.com>
+CC:     Aswath Govindraju <a-govindraju@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
         Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-can <linux-can@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        syzbot+3bc1dce0cc0052d60fde@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-can@vger.kernel.org>
+Subject: [PATCH v4] phy: phy-can-transceiver: Add support for setting mux
+Date:   Wed, 9 Mar 2022 11:34:29 +0530
+Message-ID: <20220309060429.26366-1-a-govindraju@ti.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Pavel,
+On some boards, for routing CAN signals from controller to transceiver,
+muxes might need to be set. Therefore, add support for setting the mux by
+reading the mux-states property from the device tree node.
 
-On Tue, Mar 8, 2022 at 5:06 PM Pavel Skripkin <paskripkin@gmail.com> wrote:
-> On 3/8/22 03:23, Vincent MAILHOL wrote:
-> >> [PATCH RFT] can: mcba_usb: properly check endpoint type
-> > It is RFC, not RFT :)
-> > I guess you went on some manual editing. Next time, you can just let
-> > git add the tag for you by doing:
-> > | git format-patch --rfc ...
-> >
->
-> I marked it as RFT, because I wanted someone to test it. But indeed with
-> my lack of usb knowledge it should have been RFC :)
+Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+---
 
-l didn't know RFT to mean "Request for Testing" :D
+Changes since v3:
+- Rebased on top of the linux-next head
+- Dependencies are now merged in linux next.
+  84564481bc45 (mux: Add support for reading mux state from consumer DT node)
+- Dropped bindings patch from the series since it has been
+  picked up from the earlier version
+  https://lore.kernel.org/all/YieG22mgIzsL7TMn@robh.at.kernel.org/
 
-I have the device and do testing.  Do you have test code I can run?
+Changes since v2:
+- Fixed the bindings removing the description about
+  the arguments in mux-states property
 
-Best Regards,
+Changes since v1:
+- Fixed the description for mux-states property in bindings
+  file
+- appended declaration of variable ret in the end
+
+ drivers/phy/Kconfig               |  1 +
+ drivers/phy/phy-can-transceiver.c | 24 +++++++++++++++++++++++-
+ 2 files changed, 24 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/phy/Kconfig b/drivers/phy/Kconfig
+index 82b63e60c5a2..300b0f2b5f84 100644
+--- a/drivers/phy/Kconfig
++++ b/drivers/phy/Kconfig
+@@ -64,6 +64,7 @@ config USB_LGM_PHY
+ config PHY_CAN_TRANSCEIVER
+ 	tristate "CAN transceiver PHY"
+ 	select GENERIC_PHY
++	select MULTIPLEXER
+ 	help
+ 	  This option enables support for CAN transceivers as a PHY. This
+ 	  driver provides function for putting the transceivers in various
+diff --git a/drivers/phy/phy-can-transceiver.c b/drivers/phy/phy-can-transceiver.c
+index 6f3fe37dee0e..95c6dbb52da7 100644
+--- a/drivers/phy/phy-can-transceiver.c
++++ b/drivers/phy/phy-can-transceiver.c
+@@ -10,6 +10,7 @@
+ #include<linux/module.h>
+ #include<linux/gpio.h>
+ #include<linux/gpio/consumer.h>
++#include <linux/mux/consumer.h>
+ 
+ struct can_transceiver_data {
+ 	u32 flags;
+@@ -21,13 +22,22 @@ struct can_transceiver_phy {
+ 	struct phy *generic_phy;
+ 	struct gpio_desc *standby_gpio;
+ 	struct gpio_desc *enable_gpio;
++	struct mux_state *mux_state;
+ };
+ 
+ /* Power on function */
+ static int can_transceiver_phy_power_on(struct phy *phy)
+ {
+ 	struct can_transceiver_phy *can_transceiver_phy = phy_get_drvdata(phy);
+-
++	int ret;
++
++	if (can_transceiver_phy->mux_state) {
++		ret = mux_state_select(can_transceiver_phy->mux_state);
++		if (ret) {
++			dev_err(&phy->dev, "Failed to select CAN mux: %d\n", ret);
++			return ret;
++		}
++	}
+ 	if (can_transceiver_phy->standby_gpio)
+ 		gpiod_set_value_cansleep(can_transceiver_phy->standby_gpio, 0);
+ 	if (can_transceiver_phy->enable_gpio)
+@@ -45,6 +55,8 @@ static int can_transceiver_phy_power_off(struct phy *phy)
+ 		gpiod_set_value_cansleep(can_transceiver_phy->standby_gpio, 1);
+ 	if (can_transceiver_phy->enable_gpio)
+ 		gpiod_set_value_cansleep(can_transceiver_phy->enable_gpio, 0);
++	if (can_transceiver_phy->mux_state)
++		mux_state_deselect(can_transceiver_phy->mux_state);
+ 
+ 	return 0;
+ }
+@@ -95,6 +107,16 @@ static int can_transceiver_phy_probe(struct platform_device *pdev)
+ 	match = of_match_node(can_transceiver_phy_ids, pdev->dev.of_node);
+ 	drvdata = match->data;
+ 
++	if (of_property_read_bool(dev->of_node, "mux-states")) {
++		struct mux_state *mux_state;
++
++		mux_state = devm_mux_state_get(dev, NULL);
++		if (IS_ERR(mux_state))
++			return dev_err_probe(&pdev->dev, PTR_ERR(mux_state),
++					     "failed to get mux\n");
++		can_transceiver_phy->mux_state = mux_state;
++	}
++
+ 	phy = devm_phy_create(dev, dev->of_node,
+ 			      &can_transceiver_phy_ops);
+ 	if (IS_ERR(phy)) {
 -- 
-              yashi
+2.17.1
+
