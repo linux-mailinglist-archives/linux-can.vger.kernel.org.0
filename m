@@ -2,35 +2,35 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 437EA4D35B7
-	for <lists+linux-can@lfdr.de>; Wed,  9 Mar 2022 18:42:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BC7E4D3673
+	for <lists+linux-can@lfdr.de>; Wed,  9 Mar 2022 18:43:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236432AbiCIQgn (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 9 Mar 2022 11:36:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42132 "EHLO
+        id S235939AbiCIQgl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 9 Mar 2022 11:36:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237676AbiCIQbE (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 9 Mar 2022 11:31:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D89EF145E25;
-        Wed,  9 Mar 2022 08:24:58 -0800 (PST)
+        with ESMTP id S238569AbiCIQbc (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 9 Mar 2022 11:31:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5916C199D75;
+        Wed,  9 Mar 2022 08:25:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 34E41B82222;
-        Wed,  9 Mar 2022 16:24:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A1D2C340E8;
-        Wed,  9 Mar 2022 16:24:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AA2AEB821FD;
+        Wed,  9 Mar 2022 16:25:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F267FC340F9;
+        Wed,  9 Mar 2022 16:25:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646843072;
-        bh=DS1Q7YDfa5cQlvAG52m1EPyp6K26+bOqkCOC/XXA3n4=;
+        s=k20201202; t=1646843154;
+        bh=nJtRHfaLe5NTL07RaKpu2Xj7ndP+2DVwsE9w+qaCDaI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kA2lHJ6Q32Jvls1JeatYX9xhAA9MxTDF8xkna06AD/4Hg+doT4OgoFOwDIg49tg3Z
-         GFY6HfuIRPZNl9F7nWetdvpuGIpya8iOC2HsDBmQHccQSMfhziXDQBrxE+3GlJelpT
-         a44yCqhtQXYyLWzlu8sO9sGbK3zyvGBAJU8xNGYP5+QPrzTI7g/MjZoiRtIHer7fqj
-         4QYiEk48+bHuZZC2VpD1SnE2kATaBJYJ/X7sXbTk2jXqMr9ZKUabE+Ki2ds70n7+Nc
-         LqHseJJPsL47xw02LxUnMOSBgvx4BvwdmYVZtO4Sj8wvh3JxbrF58cO9xGN2SM8oqY
-         v245og4FR/UeQ==
+        b=AVRVCY4gDjwIT56WAXJo1HIXXGcVsbs4DahHXhvYrh+gzZmogWGGkazFZT1kl5Yfi
+         RZU5Cjc4PzfvPspxfU4vdGCqd84tm8ZST2KUDtzN0bTkbxvNxu+W+M2ON57+tDcDH5
+         R3wZKrjTm1mrYqY4sYsdp69Hl7VeNTTFDPtmetMnpqspyC31Sw+zMpxuJyE8wbCA0Q
+         63DrgSzqE7wO1SbO24xoFYfxhG1t2F0AmDHPy9f2MOW1KuNA60K8PUQxqdE/K6Eqt9
+         s5p49COjSTz/M7cMSYtJYmTVhGzM+abddqaGTQ3pR2I9B/Ir2VO0gMV6SHnFD23kkM
+         mLA4eb1wcjVPA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
@@ -38,15 +38,15 @@ Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Ulrich Hecht <uli+renesas@fpond.eu>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         Sasha Levin <sashal@kernel.org>, wg@grandegger.com,
-        davem@davemloft.net, kuba@kernel.org, mailhol.vincent@wanadoo.fr,
-        stefan.maetje@esd.eu, linux-can@vger.kernel.org,
+        davem@davemloft.net, kuba@kernel.org, stefan.maetje@esd.eu,
+        mailhol.vincent@wanadoo.fr, linux-can@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 11/19] can: rcar_canfd: rcar_canfd_channel_probe(): register the CAN device when fully ready
-Date:   Wed,  9 Mar 2022 11:23:28 -0500
-Message-Id: <20220309162337.136773-11-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 08/14] can: rcar_canfd: rcar_canfd_channel_probe(): register the CAN device when fully ready
+Date:   Wed,  9 Mar 2022 11:25:01 -0500
+Message-Id: <20220309162508.137035-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220309162337.136773-1-sashal@kernel.org>
-References: <20220309162337.136773-1-sashal@kernel.org>
+In-Reply-To: <20220309162508.137035-1-sashal@kernel.org>
+References: <20220309162508.137035-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -81,10 +81,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index edaa1ca972c1..d4e9815ca26f 100644
+index 786d852a70d5..a1634834b640 100644
 --- a/drivers/net/can/rcar/rcar_canfd.c
 +++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -1598,15 +1598,15 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
+@@ -1602,15 +1602,15 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
  
  	netif_napi_add(ndev, &priv->napi, rcar_canfd_rx_poll,
  		       RCANFD_NAPI_WEIGHT);
