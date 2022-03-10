@@ -2,84 +2,115 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C7F4D4298
-	for <lists+linux-can@lfdr.de>; Thu, 10 Mar 2022 09:33:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 728E84D42D0
+	for <lists+linux-can@lfdr.de>; Thu, 10 Mar 2022 09:46:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240382AbiCJIeZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 10 Mar 2022 03:34:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54164 "EHLO
+        id S240479AbiCJIrJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 10 Mar 2022 03:47:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240371AbiCJIeY (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 10 Mar 2022 03:34:24 -0500
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C448B6007C;
-        Thu, 10 Mar 2022 00:33:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1646901164;
-    s=strato-dkim-0002; d=fpond.eu;
-    h=Subject:References:In-Reply-To:Message-ID:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=FiKLOzBJqZeT14/Dwh8Jsps9hv2dGAai/3016irFtbc=;
-    b=su15oql55v8tofUD893dgSsq0fPpXxNCJJHApdT7szUBcYJHUWxczku93lIPDoMdA1
-    lk3QftHF7RhSIY0NnIXX53XoRqfeOfVFbcrM9YXZSwRPCCfQMSsY5Pggkbu5PSlsFRJD
-    yAq//o4nTdA8TBUKD5bppT3DTSQvC7BAZXNyjOzDESGGZX4InBvAe7jd+VC8WqK2mPT/
-    GVKa7wN3tcgmhh+A8GevFdH5GA7+RvDXV7tXuMcIFOyB4sh5KUhjpXMtT6qNkvHo136k
-    yQ1eqWB5v7eTnLKWl/+lnoyS3kcrE8UApWSRKYyuAmNjyoSP3b8+vXNZU/NL8k0voO7K
-    ny0A==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":OWANVUa4dPFUgKR/3dpvnYP0Np73amq+g13rqGzvv3qxio1R8fCs/87J3I0="
-X-RZG-CLASS-ID: mo00
-Received: from oxapp05-03.back.ox.d0m.de
-    by smtp-ox.front (RZmta 47.40.1 AUTH)
-    with ESMTPSA id 646b0ey2A8WiKzS
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Thu, 10 Mar 2022 09:32:44 +0100 (CET)
-Date:   Thu, 10 Mar 2022 09:32:44 +0100 (CET)
-From:   Ulrich Hecht <uli@fpond.eu>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Ulrich Hecht <uli+renesas@fpond.eu>
-Cc:     linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
-        davem@davemloft.net, linux-can@vger.kernel.org,
-        prabhakar.mahadev-lad.rj@bp.renesas.com,
-        biju.das.jz@bp.renesas.com, wsa@kernel.org,
-        yoshihiro.shimoda.uh@renesas.com, wg@grandegger.com,
-        kuba@kernel.org, mailhol.vincent@wanadoo.fr,
-        socketcan@hartkopp.net, geert@linux-m68k.org,
-        kieran.bingham@ideasonboard.com, horms@verge.net.au
-Message-ID: <697549723.108632.1646901164630@webmail.strato.com>
-In-Reply-To: <20220310082545.rt6yp3wqsig52qoi@pengutronix.de>
-References: <20220309162609.3726306-1-uli+renesas@fpond.eu>
- <20220310082545.rt6yp3wqsig52qoi@pengutronix.de>
-Subject: Re: [PATCH v4 0/4] can: rcar_canfd: Add support for V3U flavor
+        with ESMTP id S240487AbiCJIrI (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 10 Mar 2022 03:47:08 -0500
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FEC9CB650;
+        Thu, 10 Mar 2022 00:46:04 -0800 (PST)
+Received: by mail-qk1-f174.google.com with SMTP id q4so3820853qki.11;
+        Thu, 10 Mar 2022 00:46:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=J7GSNPJ4GM9l2nh+oqbBhxcVq5NkjrY7b8iiK6Um5AI=;
+        b=MzkE3T+aQX2jYRy+q8flgPYAFk3GVMz5SRWgKc5cTEIIOFe7QM5Ieaz2OjN4voUEmD
+         BBLb9OP+uyGIj/WfS4UabMfOAoyNF5NSVgCWmhCBV5IXRTNAVMcd5a4vepntTnkD0TX2
+         jmFKONaIFD73fVcBEuCpnjeVBKE9ikOuZGb7EXwK10dEKd+ny57zye6BLSB7MRt797LL
+         DM46JWGDhNRg4qRKdNRJzPEm6Mi6Z3YlzmFMlx/VH+BItQr4Q5w7eraQCxgwrTs5u9fk
+         k1yn9qdF4hdEifJr2FoQszJ0mVEa9qmykHMjgsX4DHOdLlBvxifMcs6Dsvv4V87XwYQc
+         Yqfw==
+X-Gm-Message-State: AOAM532xlTSQVcV88jeq/X6m9YmigOFC8kUKmPygZ4FJ4RrI0WhtVqvx
+        cfo+KfPM2whPesOQpUnWkQitvFsNHzzq/Q==
+X-Google-Smtp-Source: ABdhPJxYd3kTrw239ed2Dte664Bd68svX4CS3BVdHXuVNwGLSZGdU2pX3jRcbVs/dybjfviY5V/FxA==
+X-Received: by 2002:a05:620a:240a:b0:67d:5514:eec6 with SMTP id d10-20020a05620a240a00b0067d5514eec6mr858108qkn.324.1646901963132;
+        Thu, 10 Mar 2022 00:46:03 -0800 (PST)
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
+        by smtp.gmail.com with ESMTPSA id d26-20020a05620a159a00b0067d4f5637d7sm678945qkk.14.2022.03.10.00.46.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Mar 2022 00:46:02 -0800 (PST)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-2d07ae0b1c4so49774057b3.11;
+        Thu, 10 Mar 2022 00:46:01 -0800 (PST)
+X-Received: by 2002:a81:c703:0:b0:2d0:cc6b:3092 with SMTP id
+ m3-20020a81c703000000b002d0cc6b3092mr2975365ywi.449.1646901961623; Thu, 10
+ Mar 2022 00:46:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-Importance: Normal
-X-Mailer: Open-Xchange Mailer v7.10.5-Rev39
-X-Originating-Client: open-xchange-appsuite
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220309162609.3726306-1-uli+renesas@fpond.eu> <20220310082545.rt6yp3wqsig52qoi@pengutronix.de>
+In-Reply-To: <20220310082545.rt6yp3wqsig52qoi@pengutronix.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 10 Mar 2022 09:45:50 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVoEm+0MZS-wMChS45YfPamfnBdM0CH5Rv-F_C4uAx0Kw@mail.gmail.com>
+Message-ID: <CAMuHMdVoEm+0MZS-wMChS45YfPamfnBdM0CH5Rv-F_C4uAx0Kw@mail.gmail.com>
+Subject: Re: [PATCH v4 0/4] can: rcar_canfd: Add support for V3U flavor
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Ulrich Hecht <uli+renesas@fpond.eu>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>, linux-can@vger.kernel.org,
+        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        socketcan@hartkopp.net,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Simon Horman <horms@verge.net.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi Marc,
 
-> On 03/10/2022 9:25 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> 
->  
+On Thu, Mar 10, 2022 at 9:26 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
 > On 09.03.2022 17:26:05, Ulrich Hecht wrote:
 > > This adds CANFD support for V3U (R8A779A0) SoCs. The V3U's IP supports up
 > > to eight channels and has some other minor differences to the Gen3 variety:
-> 
+> >
+> > - changes to some register offsets and layouts
+> > - absence of "classic CAN" registers, both modes are handled through the
+> >   CANFD register set
+> >
+> > This patch set tries to accommodate these changes in a minimally intrusive
+> > way.
+> >
+> > This revision tries to address the remaining style issues raised by
+> > reviewers. Thanks to Vincent, Marc and Simon for their reviews and
+> > suggestions.
+> >
+> > It has been successfully tested remotely on a V3U Falcon board, but only
+> > with channels 0 and 1. We were not able to get higher channels to work in
+> > both directions yet. It is not currently clear if this is an issue with the
+> > driver, the board or the silicon, but the BSP vendor driver only works with
+> > channels 0 and 1 as well, so my bet is on one of the latter. For this
+> > reason, this series only enables known-working channels 0 and 1 on Falcon.
+>
 > Should I take the whole series via linux-can/next?
 
-That would be great, thanks.
+Please don't take the DTS changes.
 
-CU
-Uli
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
