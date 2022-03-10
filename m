@@ -2,45 +2,44 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E4224D4AB8
-	for <lists+linux-can@lfdr.de>; Thu, 10 Mar 2022 15:55:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FDF04D4C04
+	for <lists+linux-can@lfdr.de>; Thu, 10 Mar 2022 16:01:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244010AbiCJOcj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 10 Mar 2022 09:32:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48192 "EHLO
+        id S244211AbiCJOdH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 10 Mar 2022 09:33:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344042AbiCJObi (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 10 Mar 2022 09:31:38 -0500
+        with ESMTP id S1343957AbiCJObc (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 10 Mar 2022 09:31:32 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BE50EBBB8
-        for <linux-can@vger.kernel.org>; Thu, 10 Mar 2022 06:29:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59663BD7F7
+        for <linux-can@vger.kernel.org>; Thu, 10 Mar 2022 06:29:11 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1nSJnD-0006PO-MK
-        for linux-can@vger.kernel.org; Thu, 10 Mar 2022 15:29:27 +0100
+        id 1nSJmv-0005pc-F6
+        for linux-can@vger.kernel.org; Thu, 10 Mar 2022 15:29:09 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 845C647E4E
-        for <linux-can@vger.kernel.org>; Thu, 10 Mar 2022 14:29:14 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id 4628A47D7D
+        for <linux-can@vger.kernel.org>; Thu, 10 Mar 2022 14:29:07 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id DE53C47E32;
-        Thu, 10 Mar 2022 14:29:13 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id B972447D72;
+        Thu, 10 Mar 2022 14:29:06 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 73191783;
-        Thu, 10 Mar 2022 14:29:05 +0000 (UTC)
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 26e89d59;
+        Thu, 10 Mar 2022 14:29:04 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Ben Evans <benny.j.evans92@gmail.com>,
-        Peter Fink <pfink@christ-es.de>,
+        kernel@pengutronix.de, Oliver Hartkopp <socketcan@hartkopp.net>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next 29/29] can: gs_usb: add VID/PID for ABE CAN Debugger devices
-Date:   Thu, 10 Mar 2022 15:29:03 +0100
-Message-Id: <20220310142903.341658-30-mkl@pengutronix.de>
+Subject: [PATCH net-next 04/29] vxcan: remove sk reference in peer skb
+Date:   Thu, 10 Mar 2022 15:28:38 +0100
+Message-Id: <20220310142903.341658-5-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220310142903.341658-1-mkl@pengutronix.de>
 References: <20220310142903.341658-1-mkl@pengutronix.de>
@@ -51,7 +50,7 @@ X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,41 +58,67 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Ben Evans <benny.j.evans92@gmail.com>
+From: Oliver Hartkopp <socketcan@hartkopp.net>
 
-Add support for ABE CAN Debugger devices using the gs_usb driver.
+With can_create_echo_skb() the skb which is forwarded to the peer CAN
+interface shares the sk pointer from the originating socket.
+This makes the CAN frame show up in the peer namespace as a TX packet.
 
-Link: https://lore.kernel.org/all/20220309124132.291861-22-mkl@pengutronix.de
-Signed-off-by: Ben Evans <benny.j.evans92@gmail.com>
-Signed-off-by: Peter Fink <pfink@christ-es.de>
+With the use of skb_clone() analogue to the handling in gw.c the peer
+skb gets a new start in the peer namespace and correctly appears as
+a RX packet.
+
+Link: https://lore.kernel.org/all/20220309120416.83514-4-socketcan@hartkopp.net
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/usb/gs_usb.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/net/can/vxcan.c | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
-index 816b4d8b1182..67408e316062 100644
---- a/drivers/net/can/usb/gs_usb.c
-+++ b/drivers/net/can/usb/gs_usb.c
-@@ -31,6 +31,9 @@
- #define USB_CES_CANEXT_FD_VENDOR_ID 0x1cd2
- #define USB_CES_CANEXT_FD_PRODUCT_ID 0x606f
- 
-+#define USB_ABE_CANDEBUGGER_FD_VENDOR_ID 0x16d0
-+#define USB_ABE_CANDEBUGGER_FD_PRODUCT_ID 0x10b8
-+
- #define GSUSB_ENDPOINT_IN 1
- #define GSUSB_ENDPOINT_OUT 2
- 
-@@ -1238,6 +1241,8 @@ static const struct usb_device_id gs_usb_table[] = {
- 				      USB_CANDLELIGHT_PRODUCT_ID, 0) },
- 	{ USB_DEVICE_INTERFACE_NUMBER(USB_CES_CANEXT_FD_VENDOR_ID,
- 				      USB_CES_CANEXT_FD_PRODUCT_ID, 0) },
-+	{ USB_DEVICE_INTERFACE_NUMBER(USB_ABE_CANDEBUGGER_FD_VENDOR_ID,
-+				      USB_ABE_CANDEBUGGER_FD_PRODUCT_ID, 0) },
- 	{} /* Terminating entry */
+diff --git a/drivers/net/can/vxcan.c b/drivers/net/can/vxcan.c
+index 556f1a12ec9a..51501af8d9fc 100644
+--- a/drivers/net/can/vxcan.c
++++ b/drivers/net/can/vxcan.c
+@@ -33,28 +33,33 @@ struct vxcan_priv {
+ 	struct net_device __rcu	*peer;
  };
  
+-static netdev_tx_t vxcan_xmit(struct sk_buff *skb, struct net_device *dev)
++static netdev_tx_t vxcan_xmit(struct sk_buff *oskb, struct net_device *dev)
+ {
+ 	struct vxcan_priv *priv = netdev_priv(dev);
+ 	struct net_device *peer;
+-	struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
++	struct canfd_frame *cfd = (struct canfd_frame *)oskb->data;
+ 	struct net_device_stats *peerstats, *srcstats = &dev->stats;
++	struct sk_buff *skb;
+ 	u8 len;
+ 
+-	if (can_dropped_invalid_skb(dev, skb))
++	if (can_dropped_invalid_skb(dev, oskb))
+ 		return NETDEV_TX_OK;
+ 
+ 	rcu_read_lock();
+ 	peer = rcu_dereference(priv->peer);
+ 	if (unlikely(!peer)) {
+-		kfree_skb(skb);
++		kfree_skb(oskb);
+ 		dev->stats.tx_dropped++;
+ 		goto out_unlock;
+ 	}
+ 
+-	skb = can_create_echo_skb(skb);
+-	if (!skb)
++	skb = skb_clone(oskb, GFP_ATOMIC);
++	if (skb) {
++		consume_skb(oskb);
++	} else {
++		kfree(oskb);
+ 		goto out_unlock;
++	}
+ 
+ 	/* reset CAN GW hop counter */
+ 	skb->csum_start = 0;
 -- 
 2.35.1
 
