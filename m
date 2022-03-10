@@ -2,44 +2,44 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DFE14D4B0F
-	for <lists+linux-can@lfdr.de>; Thu, 10 Mar 2022 15:56:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B1694D4BA8
+	for <lists+linux-can@lfdr.de>; Thu, 10 Mar 2022 16:01:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244014AbiCJOck (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 10 Mar 2022 09:32:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51970 "EHLO
+        id S244193AbiCJOdF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 10 Mar 2022 09:33:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343956AbiCJObc (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 10 Mar 2022 09:31:32 -0500
+        with ESMTP id S1343967AbiCJObd (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 10 Mar 2022 09:31:33 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B24B91D3
-        for <linux-can@vger.kernel.org>; Thu, 10 Mar 2022 06:29:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F608BECD2
+        for <linux-can@vger.kernel.org>; Thu, 10 Mar 2022 06:29:13 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1nSJmv-0005pN-44
-        for linux-can@vger.kernel.org; Thu, 10 Mar 2022 15:29:09 +0100
+        id 1nSJmx-0005rL-8M
+        for linux-can@vger.kernel.org; Thu, 10 Mar 2022 15:29:11 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id C52BB47D75
-        for <linux-can@vger.kernel.org>; Thu, 10 Mar 2022 14:29:06 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id B436747D85
+        for <linux-can@vger.kernel.org>; Thu, 10 Mar 2022 14:29:07 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 4C27F47D69;
-        Thu, 10 Mar 2022 14:29:06 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 3608F47D7A;
+        Thu, 10 Mar 2022 14:29:07 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id fbd767b5;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id c2de6301;
         Thu, 10 Mar 2022 14:29:04 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
         kernel@pengutronix.de, Oliver Hartkopp <socketcan@hartkopp.net>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next 03/29] can: isotp: set max PDU size to 64 kByte
-Date:   Thu, 10 Mar 2022 15:28:37 +0100
-Message-Id: <20220310142903.341658-4-mkl@pengutronix.de>
+Subject: [PATCH net-next 05/29] vxcan: enable local echo for sent CAN frames
+Date:   Thu, 10 Mar 2022 15:28:39 +0100
+Message-Id: <20220310142903.341658-6-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220310142903.341658-1-mkl@pengutronix.de>
 References: <20220310142903.341658-1-mkl@pengutronix.de>
@@ -50,7 +50,7 @@ X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,40 +60,39 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 From: Oliver Hartkopp <socketcan@hartkopp.net>
 
-The reason to extend the max PDU size from 4095 Byte (12 bit length value)
-to a 32 bit value (up to 4 GByte) was to be able to flash 64 kByte
-bootloaders with a single ISO-TP PDU. The max PDU size in the Linux kernel
-implementation was set to 8200 Bytes to be able to test the length
-information escape sequence.
+The vxcan driver provides a pair of virtual CAN interfaces to exchange
+CAN traffic between different namespaces - analogue to veth.
 
-It turns out that the demand for 64 kByte PDUs is real so the value for
-MAX_MSG_LENGTH is set to 66000 to be able to potentially add some checksums
-to the 65.536 Byte block.
+In opposite to the vcan driver the local sent CAN traffic on this interface
+is not echo'ed back but only sent to the remote peer. This is unusual and
+can be easily fixed by removing IFF_ECHO from the netdevice flags that
+are set for vxcan interfaces by default at startup.
 
-Link: https://github.com/linux-can/can-utils/issues/347#issuecomment-1056142301
-Link: https://lore.kernel.org/all/20220309120416.83514-3-socketcan@hartkopp.net
+Without IFF_ECHO set on driver level, the local sent CAN frames are echo'ed
+in af_can.c in can_send(). This patch makes vxcan interfaces adopt the
+same local echo behavior and procedures as known from the vcan interfaces.
+
+Fixes: a8f820a380a2 ("can: add Virtual CAN Tunnel driver (vxcan)")
+Link: https://lore.kernel.org/all/20220309120416.83514-5-socketcan@hartkopp.net
 Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- net/can/isotp.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/can/vxcan.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/can/isotp.c b/net/can/isotp.c
-index 47404ba59981..d4c0b4704987 100644
---- a/net/can/isotp.c
-+++ b/net/can/isotp.c
-@@ -86,9 +86,9 @@ MODULE_ALIAS("can-proto-6");
- /* ISO 15765-2:2016 supports more than 4095 byte per ISO PDU as the FF_DL can
-  * take full 32 bit values (4 Gbyte). We would need some good concept to handle
-  * this between user space and kernel space. For now increase the static buffer
-- * to something about 8 kbyte to be able to test this new functionality.
-+ * to something about 64 kbyte to be able to test this new functionality.
-  */
--#define MAX_MSG_LENGTH 8200
-+#define MAX_MSG_LENGTH 66000
+diff --git a/drivers/net/can/vxcan.c b/drivers/net/can/vxcan.c
+index 51501af8d9fc..94a0c9c6a509 100644
+--- a/drivers/net/can/vxcan.c
++++ b/drivers/net/can/vxcan.c
+@@ -153,7 +153,7 @@ static void vxcan_setup(struct net_device *dev)
+ 	dev->hard_header_len	= 0;
+ 	dev->addr_len		= 0;
+ 	dev->tx_queue_len	= 0;
+-	dev->flags		= (IFF_NOARP|IFF_ECHO);
++	dev->flags		= IFF_NOARP;
+ 	dev->netdev_ops		= &vxcan_netdev_ops;
+ 	dev->needs_free_netdev	= true;
  
- /* N_PCI type values in bits 7-4 of N_PCI bytes */
- #define N_PCI_SF 0x00	/* single frame */
 -- 
 2.35.1
 
