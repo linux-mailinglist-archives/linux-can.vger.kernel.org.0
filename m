@@ -2,112 +2,121 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F6144D700B
-	for <lists+linux-can@lfdr.de>; Sat, 12 Mar 2022 17:56:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA2174D7102
+	for <lists+linux-can@lfdr.de>; Sat, 12 Mar 2022 22:21:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232210AbiCLQ4e (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 12 Mar 2022 11:56:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44562 "EHLO
+        id S231760AbiCLVW6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 12 Mar 2022 16:22:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232193AbiCLQ4e (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 12 Mar 2022 11:56:34 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1AF270854
-        for <linux-can@vger.kernel.org>; Sat, 12 Mar 2022 08:55:26 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id a1-20020a927f01000000b002c76f4191c5so3876931ild.0
-        for <linux-can@vger.kernel.org>; Sat, 12 Mar 2022 08:55:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=mMqMjZRMdNsB5TgI8nqWKShNVoqokosTf5CqHmMYKW8=;
-        b=15QBdfxoUNM81qVX/MSe4GMiSvnBaASds1rIsYAaAPI3uDeddnZDnrvmgZqxxENJJN
-         FB7I7iIZsGDN27UkVWYU40r73g8oolNwr0lBU7+O6frrUupU42WFgvom2XhEXVRwkHpK
-         uYjNXa9yE67ETl+bsGzbHL2BY3HMcabb3wQ5956UXLKm6oEfzJWvWYbLYGAXoMJtPVuv
-         +nWmKPTJPRfrv52fJ4cNJqtQU7Omjo+wY9FFUY3wA9Hgm/w8opwgIuecdO6vnk71towH
-         RqjQzUitVaP05sVj0HcdbijH9dkMSLGf2sNkq2XBHwtpHiINmgmt9K+tzOWsmPTTJTts
-         ehag==
-X-Gm-Message-State: AOAM531j5F+FZ4Ncde0/Ar5tjchnOI3FA64U/wMOcayKNidk2fgGUH5l
-        BRPV5/SRSnUmaHQHaGJbmvNl9zTPehqnAX83XcENVZFXISJi
-X-Google-Smtp-Source: ABdhPJxatX9MYmENW7/94qECJTfa+7KlO9kOOWvXR4aTZaOb1avXBVgGLdJ3rGX8IoMA+/oNkZ1Mq6I5lb6/1LYJXsrfVD1KFGgg
+        with ESMTP id S229803AbiCLVW6 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 12 Mar 2022 16:22:58 -0500
+Received: from mail.enpas.org (zhong.enpas.org [IPv6:2a03:4000:2:537::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D8F9C184B53;
+        Sat, 12 Mar 2022 13:21:50 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        by mail.enpas.org (Postfix) with ESMTPSA id DEE0F101CB4;
+        Sat, 12 Mar 2022 21:21:48 +0000 (UTC)
+Date:   Sat, 12 Mar 2022 22:21:42 +0100
+From:   Max Staudt <max@enpas.org>
+To:     Vincent Mailhol <vincent.mailhol@gmail.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>, linux-can@vger.kernel.org,
+        Oliver Neukum <oneukum@suse.com>, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>
+Subject: Re: [PATCH v3] can, tty: elmcan CAN/ldisc driver for ELM327 based
+ OBD-II adapters
+Message-ID: <20220312222142.21591629.max@enpas.org>
+In-Reply-To: <CAMZ6RqJJ-PO=WeFeuXk4iC9GHLXz_ZMWtsVCm6sGVGbmeE5U1Q@mail.gmail.com>
+References: <20220307214303.1822590-1-max@enpas.org>
+        <CAMZ6RqJZObevKPc29jW+m6i0eAgestTbw8KCPXxSGHzSXK7cRg@mail.gmail.com>
+        <20220309135414.34f77251.max@enpas.org>
+        <CAMZ6RqJJ-PO=WeFeuXk4iC9GHLXz_ZMWtsVCm6sGVGbmeE5U1Q@mail.gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:490:b0:2c7:94bc:8f1f with SMTP id
- b16-20020a056e02049000b002c794bc8f1fmr978692ils.227.1647104125455; Sat, 12
- Mar 2022 08:55:25 -0800 (PST)
-Date:   Sat, 12 Mar 2022 08:55:25 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004e53a505da08501e@google.com>
-Subject: [syzbot] WARNING in isotp_tx_timer_handler (2)
-From:   syzbot <syzbot+2339c27f5c66c652843e@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mkl@pengutronix.de,
-        netdev@vger.kernel.org, socketcan@hartkopp.net,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello,
+Hi Vincent,
+(Hi Marc,)
 
-syzbot found the following issue on:
-
-HEAD commit:    46b348fd2d81 alx: acquire mutex for alx_reinit in alx_chan..
-git tree:       net
-console output: https://syzkaller.appspot.com/x/log.txt?x=15da96e5700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=442f8ac61e60a75e
-dashboard link: https://syzkaller.appspot.com/bug?extid=2339c27f5c66c652843e
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=165c76ad700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=143da461700000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+2339c27f5c66c652843e@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 19 at net/can/isotp.c:852 isotp_tx_timer_handler+0x717/0xcd0 net/can/isotp.c:852
-Modules linked in:
-CPU: 1 PID: 19 Comm: ksoftirqd/1 Not tainted 5.17.0-rc7-syzkaller-00198-g46b348fd2d81 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:isotp_tx_timer_handler+0x717/0xcd0 net/can/isotp.c:852
-Code: f9 44 0f b6 25 3b 23 56 05 31 ff 44 89 e6 e8 f0 56 4f f9 45 84 e4 0f 85 9d fa ff ff e9 4e 01 20 01 85 ed 75 52 e8 59 54 4f f9 <0f> 0b 45 31 e4 e8 4f 54 4f f9 48 8b 74 24 40 48 b8 00 00 00 00 00
-RSP: 0018:ffffc90000d97c40 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: ffff88806f490568 RCX: 0000000000000100
-RDX: ffff888011945700 RSI: ffffffff88296bd7 RDI: 0000000000000003
-RBP: 0000000000000000 R08: ffffffff8ac3c440 R09: ffffffff8829656f
-R10: 0000000000000003 R11: 0000000000000000 R12: 0000000000000000
-R13: ffff8880b9d2a880 R14: ffff8880b9d2a600 R15: ffffffff882964c0
-FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f5c3133d1d8 CR3: 000000006b70d000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __run_hrtimer kernel/time/hrtimer.c:1685 [inline]
- __hrtimer_run_queues+0x609/0xe50 kernel/time/hrtimer.c:1749
- hrtimer_run_softirq+0x17b/0x360 kernel/time/hrtimer.c:1766
- __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
- run_ksoftirqd kernel/softirq.c:921 [inline]
- run_ksoftirqd+0x2d/0x60 kernel/softirq.c:913
- smpboot_thread_fn+0x645/0x9c0 kernel/smpboot.c:164
- kthread+0x2e9/0x3a0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
+Thank you for your in-depth look at it - especially regarding stale
+things that reflect its age, such as cf->can_dlc vs. cf->len. This
+driver has been gathering some dust. I've reworked the code according
+to your review.
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+@Marc - could you please have a look at this?
+
+The elmcan code currently has a dummy mailbox_read() function for
+rx_offload because can_rx_offload_add_fifo() requires it - is this
+intentional?
+
+
+
+
+@Vincent - two more things have remained, and I hope it's okay once I
+explain them:
+
+1. _memstrcmp() - memcmp() vs. str(n)cmp()
+
+The _memstrcmp() function does not compare strings, it compares raw
+buffers. I am just using C strings for the fixed buffers to compare
+against, as that allows for shorter and easier to read code. The NUL
+byte at the end of those strings goes unused.
+
+Also, I have not looked at the assembly produced, since the semantics
+are different: str(n)cmp() needs to look for NUL bytes in the buffer(s),
+which is unnecessary here. As a bonus, NUL will never even occur
+because my code filters those bytes out upon reception from the UART
+(it's a documented quirk of the ELM327).
+
+Finally, even if I were to use strcmp(), the code would still look just
+as ugly. Except the machine would also look for NUL bytes, and the next
+human to read the code would wonder why I'm comparing strings and not
+buffers.
+
+Hence memcmp(), to help the code self-document and the compiler
+optimise - I hope that's okay.
+
+
+
+2. Useless parentheses in a for loop's condition:
+
+I left those in there because it gets hard to read otherwise, IMHO.
+It's really a matter of taste though, and if you insist, I'll remove
+them. With if, it's easier to keep it readable:
+
+	if (a == 1
+         && b == 2) {
+		...
+	}
+
+Whereas with for, I've already used multiple lines to visually separate
+the initialiser, the condition, and the incrementer. Hence the
+parentheses to visually separate the two subconditions.
+
+Matter of taste really, and I'll change it if you insist.
+
+
+
+
+That's it!
+Everything else is already patched for a future v4 of the code. I'll CC
+you once I send that out. But I'd like to wait for Marc's feedback
+first.
+
+
+
+Thanks,
+
+Max
