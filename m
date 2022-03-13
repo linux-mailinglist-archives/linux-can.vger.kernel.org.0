@@ -2,48 +2,44 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B5C14D73BE
-	for <lists+linux-can@lfdr.de>; Sun, 13 Mar 2022 09:36:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32D2A4D73C6
+	for <lists+linux-can@lfdr.de>; Sun, 13 Mar 2022 09:51:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232259AbiCMIiB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 13 Mar 2022 04:38:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42276 "EHLO
+        id S234042AbiCMIwv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 13 Mar 2022 04:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233944AbiCMIh4 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 13 Mar 2022 04:37:56 -0400
+        with ESMTP id S233979AbiCMIwt (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 13 Mar 2022 04:52:49 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272B91AC2A7
-        for <linux-can@vger.kernel.org>; Sun, 13 Mar 2022 00:36:49 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639C3205D5
+        for <linux-can@vger.kernel.org>; Sun, 13 Mar 2022 00:51:42 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1nTJiZ-00077g-GK
-        for linux-can@vger.kernel.org; Sun, 13 Mar 2022 09:36:47 +0100
+        id 1nTJwx-0000Pe-Od
+        for linux-can@vger.kernel.org; Sun, 13 Mar 2022 09:51:39 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id C330949AC8
-        for <linux-can@vger.kernel.org>; Sun, 13 Mar 2022 08:36:41 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id 263AC49B21
+        for <linux-can@vger.kernel.org>; Sun, 13 Mar 2022 08:51:39 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 8259A49AB2;
-        Sun, 13 Mar 2022 08:36:41 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id F059149B1C;
+        Sun, 13 Mar 2022 08:51:38 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 05429c91;
-        Sun, 13 Mar 2022 08:36:41 +0000 (UTC)
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 8667d1ad;
+        Sun, 13 Mar 2022 08:51:38 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org
-Cc:     kernel@pengutronix.de,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Thomas Kopp <thomas.kopp@microchip.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [can-next-rfc 12/12] can: mcp251xfd: ring: increase number of RX-FIFOs to 3 and increase max TX-FIFO depth to 16
-Date:   Sun, 13 Mar 2022 09:36:40 +0100
-Message-Id: <20220313083640.501791-13-mkl@pengutronix.de>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH net-next 0/13] pull-request: can-next 2022-03-13
+Date:   Sun, 13 Mar 2022 09:51:25 +0100
+Message-Id: <20220313085138.507062-1-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220313083640.501791-1-mkl@pengutronix.de>
-References: <20220313083640.501791-1-mkl@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
@@ -51,7 +47,7 @@ X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,57 +55,67 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This patch increases the number of RX-FIFOs to 3 and the max TX-FIFO
-depth to 16. This leads to the following default ring configuration.
+Hello Jakub, hello David,
 
-CAN-2.0 mode:
+this is a pull request of 13 patches for net-next/master.
 
-| FIFO setup: TEF:         0x400:  8*12 bytes =   96 bytes
-| FIFO setup: RX-0: FIFO 1/0x460: 32*20 bytes =  640 bytes
-| FIFO setup: RX-1: FIFO 2/0x6e0: 32*20 bytes =  640 bytes
-| FIFO setup: RX-2: FIFO 3/0x960: 16*20 bytes =  320 bytes
-| FIFO setup: TX:   FIFO 4/0xaa0:  8*16 bytes =  128 bytes
-| FIFO setup: free:                              224 bytes
+The 1st patch is by me and fixes the freeing of a skb in the vxcan
+driver (initially added in this net-next window).
 
-CAN-FD mode:
+The remaining 12 patches are also by me and target the mcp251xfd
+driver. The first patch fixes a printf modifier (initially added in
+this net-next window). The remaining patches add ethtool based ring
+and RX/TX IRQ coalescing support to the driver.
 
-| FIFO setup: TEF:         0x400:  4*12 bytes =   48 bytes
-| FIFO setup: RX-0: FIFO 1/0x430: 16*76 bytes = 1216 bytes
-| FIFO setup: RX-1: FIFO 2/0x8f0:  4*76 bytes =  304 bytes
-| FIFO setup: TX:   FIFO 3/0xa20:  4*72 bytes =  288 bytes
-| FIFO setup: free:                              192 bytes
+regards,
+Marc
 
-With the previously added ethtool ring configuration support the RAM
-on the chip can now be runtime configured between RX and TX buffers.
-
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/spi/mcp251xfd/mcp251xfd.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-index c6cb8c3391b3..9cb6b5ad8dda 100644
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-@@ -398,7 +398,7 @@ static_assert(MCP251XFD_TIMESTAMP_WORK_DELAY_SEC <
- 
- /* FIFO and Ring */
- #define MCP251XFD_FIFO_TEF_NUM 1U
--#define MCP251XFD_FIFO_RX_NUM 1U
-+#define MCP251XFD_FIFO_RX_NUM 3U
- #define MCP251XFD_FIFO_TX_NUM 1U
- 
- #define MCP251XFD_FIFO_DEPTH 32U
-@@ -409,7 +409,7 @@ static_assert(MCP251XFD_TIMESTAMP_WORK_DELAY_SEC <
- #define MCP251XFD_RX_FIFO_DEPTH_COALESCE_MIN 8U
- 
- #define MCP251XFD_TX_OBJ_NUM_MIN 2U
--#define MCP251XFD_TX_OBJ_NUM_MAX 8U
-+#define MCP251XFD_TX_OBJ_NUM_MAX 16U
- #define MCP251XFD_TX_OBJ_NUM_CAN_DEFAULT 8U
- #define MCP251XFD_TX_OBJ_NUM_CANFD_DEFAULT 4U
- #define MCP251XFD_TX_FIFO_DEPTH_MIN 2U
--- 
-2.35.1
+The following changes since commit 97aeb877de7f14f819fc2cf8388d7a2d8090489d:
+
+  Merge branch '100GbE' of git://git.kernel.org/pub/scm/linux/kernel/git/tnguy/next-queue (2022-03-12 11:54:29 +0000)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git tags/linux-can-next-for-5.18-20220313
+
+for you to fetch changes up to aa66ae9b241eadd5d31077f869f298444c98a85f:
+
+  can: mcp251xfd: ring: increase number of RX-FIFOs to 3 and increase max TX-FIFO depth to 16 (2022-03-13 09:45:36 +0100)
+
+----------------------------------------------------------------
+linux-can-next-for-5.18-20220313
+
+----------------------------------------------------------------
+Marc Kleine-Budde (13):
+      can: vxcan: vxcan_xmit(): use kfree_skb() instead of kfree() to free skb
+      can: mcp251xfd: mcp251xfd_ring_init(): use %d to print free RAM
+      can: mcp251xfd: ram: add helper function for runtime ring size calculation
+      can: mcp251xfd: ram: coalescing support
+      can: mcp251xfd: ethtool: add support
+      can: mcp251xfd: ring: prepare support for runtime configurable RX/TX ring parameters
+      can: mcp251xfd: update macros describing ring, FIFO and RAM layout
+      can: mcp251xfd: ring: add support for runtime configurable RX/TX ring parameters
+      can: mcp251xfd: add RX IRQ coalescing support
+      can: mcp251xfd: add RX IRQ coalescing ethtool support
+      can: mcp251xfd: add TX IRQ coalescing support
+      can: mcp251xfd: add TX IRQ coalescing ethtool support
+      can: mcp251xfd: ring: increase number of RX-FIFOs to 3 and increase max TX-FIFO depth to 16
+
+ drivers/net/can/spi/mcp251xfd/Makefile            |   2 +
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c    |   7 +
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-ethtool.c | 143 +++++++++++++
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-ram.c     | 153 ++++++++++++++
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-ram.h     |  62 ++++++
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-ring.c    | 244 ++++++++++++++++++----
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-rx.c      |  12 +-
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-tef.c     |   6 +
+ drivers/net/can/spi/mcp251xfd/mcp251xfd.h         |  71 +++++--
+ drivers/net/can/vxcan.c                           |   2 +-
+ 10 files changed, 644 insertions(+), 58 deletions(-)
+ create mode 100644 drivers/net/can/spi/mcp251xfd/mcp251xfd-ethtool.c
+ create mode 100644 drivers/net/can/spi/mcp251xfd/mcp251xfd-ram.c
+ create mode 100644 drivers/net/can/spi/mcp251xfd/mcp251xfd-ram.h
 
 
