@@ -2,111 +2,101 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C591A4D743E
-	for <lists+linux-can@lfdr.de>; Sun, 13 Mar 2022 11:30:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C520C4D7D5E
+	for <lists+linux-can@lfdr.de>; Mon, 14 Mar 2022 09:09:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232622AbiCMKbZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 13 Mar 2022 06:31:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52434 "EHLO
+        id S236130AbiCNILA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 14 Mar 2022 04:11:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231672AbiCMKbY (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 13 Mar 2022 06:31:24 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B495A92D2C;
-        Sun, 13 Mar 2022 03:30:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 04BD8CE0F7F;
-        Sun, 13 Mar 2022 10:30:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F0106C340F4;
-        Sun, 13 Mar 2022 10:30:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647167413;
-        bh=yZRakI9TBNyMLlv9s/p5GfN7xSbI6G1mtsA3O7abnzU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=M5ZbfX7EcFuhEPKjJktSg5sAqriRIOL640X6NXn/tvtupO3n41TIrXgHm2yntFqqw
-         coRAJ9cRjFxoPDjwir59m86qnZRveLLkZVlhhyRStMcnEPuiCFeAOfKe+5K+St91/o
-         SH4DeqHvodXja6l14niUS5iYSPKiGxn+lZVfVIkppJFWwONN9aUEfFYOqI62jjRXVo
-         TqYWg7RcW8Qj+9fVvNW36a8D0g63i140FS2jU7461JbjfkrfavrADiJal0CSR0CCKH
-         GvwFGp1vzZn9/8NlWYb0XazOQD1Mb7TGVBPdBGPKdpvjFJzywguOD/S6u0z7y8RmBS
-         MXQJ0NttnyXXA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D3A41E6D3DD;
-        Sun, 13 Mar 2022 10:30:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S233749AbiCNIK7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 14 Mar 2022 04:10:59 -0400
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258532BE6;
+        Mon, 14 Mar 2022 01:09:50 -0700 (PDT)
+Received: by mail-qt1-f170.google.com with SMTP id g7so5829553qtg.7;
+        Mon, 14 Mar 2022 01:09:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=08Cq6sAqtL7e5hp/9ndQMfCAbW7RoUh3nfCkJLMngb8=;
+        b=Rpta1+dbExJJYo9L8CHaWcJoaqFkp+NPEzSqTstaO3DtcLJQJLF/z5LXy0+nYdpW4s
+         uho3sadF4eptv8rqiiG1BWjYsgZhgzJIXjyvb2iCtHIxiVQgsgSIJFg5Ly6CAwMAw2Gj
+         fN8eYrIpwIB0n0TmJq+pGl2PKMUe5NGfCx6AIOrJ89yY16rsK9speNwKeng2A5+h38iI
+         iid6tMf45hgNbGkqlBfuwHR0FRuH5naEWggmVRH02+bT9hn5gzp1FvVt5T6o62S2aNFi
+         GlZA7LYrzycKZuQyc5LHZJ3W8R1Z+huLXcpGM1RVysvOf1ZyXKEqS8J7MC4IrfzAqvMj
+         bkzg==
+X-Gm-Message-State: AOAM531BJwm6agjWURWXA5hFd3kcCZ+U36fSMS1i21XLSVJk+UJ+Mixn
+        +PpIIigVM2Rm0HGjGKHs+RF/HNXxwqIVgQ==
+X-Google-Smtp-Source: ABdhPJx7h5gqIcM3e/AHlw5qbiSRk2nqi1/CDkfItl8tOeiJe1XH0dZmXCcQQG7nUl0/BXavn0fozQ==
+X-Received: by 2002:a05:622a:1015:b0:2e0:6cd5:7ee1 with SMTP id d21-20020a05622a101500b002e06cd57ee1mr17033493qte.485.1647245388961;
+        Mon, 14 Mar 2022 01:09:48 -0700 (PDT)
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
+        by smtp.gmail.com with ESMTPSA id e12-20020ac8130c000000b002e1d84f118dsm299774qtj.39.2022.03.14.01.09.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Mar 2022 01:09:48 -0700 (PDT)
+Received: by mail-yb1-f174.google.com with SMTP id j2so29249859ybu.0;
+        Mon, 14 Mar 2022 01:09:48 -0700 (PDT)
+X-Received: by 2002:a0d:f1c7:0:b0:2db:d2bc:be11 with SMTP id
+ a190-20020a0df1c7000000b002dbd2bcbe11mr17825798ywf.62.1647245083313; Mon, 14
+ Mar 2022 01:04:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 01/13] can: vxcan: vxcan_xmit(): use kfree_skb()
- instead of kfree() to free skb
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164716741286.31331.17220555710715399821.git-patchwork-notify@kernel.org>
-Date:   Sun, 13 Mar 2022 10:30:12 +0000
-References: <20220313085138.507062-2-mkl@pengutronix.de>
-In-Reply-To: <20220313085138.507062-2-mkl@pengutronix.de>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, kernel@pengutronix.de,
-        socketcan@hartkopp.net, lkp@intel.com, dan.carpenter@oracle.com
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220309162609.3726306-1-uli+renesas@fpond.eu>
+ <20220309162609.3726306-4-uli+renesas@fpond.eu> <CAMuHMdW+_5UDRYUQ0aSymgXO1BUryc+AV8SAjSS4F-Lna5B_UQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdW+_5UDRYUQ0aSymgXO1BUryc+AV8SAjSS4F-Lna5B_UQ@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 14 Mar 2022 09:04:31 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXyb8TddJwOfZOg4g8uxAe6EQNXM2y+fe=EVMydg1CN4Q@mail.gmail.com>
+Message-ID: <CAMuHMdXyb8TddJwOfZOg4g8uxAe6EQNXM2y+fe=EVMydg1CN4Q@mail.gmail.com>
+Subject: Re: [PATCH v4 3/4] arm64: dts: renesas: r8a779a0-falcon: enable CANFD
+ 0 and 1
+To:     Ulrich Hecht <uli+renesas@fpond.eu>
+Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>, linux-can@vger.kernel.org,
+        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        socketcan@hartkopp.net,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Simon Horman <horms@verge.net.au>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello:
+On Fri, Mar 11, 2022 at 6:04 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> On Wed, Mar 9, 2022 at 5:26 PM Ulrich Hecht <uli+renesas@fpond.eu> wrote:
+> > Enables confirmed-working CAN interfaces 0 and 1 on the Falcon board.
+> >
+> > Signed-off-by: Ulrich Hecht <uli+renesas@fpond.eu>
+> > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>
+> Thanks, will queue in renesas-devel for v5.19.
 
-This series was applied to netdev/net-next.git (master)
-by Marc Kleine-Budde <mkl@pengutronix.de>:
+... with the canfd moved up, to preserve sort order.
 
-On Sun, 13 Mar 2022 09:51:26 +0100 you wrote:
-> This patch fixes the freeing of the "oskb", by using kfree_skb()
-> instead of kfree().
-> 
-> Fixes: 1574481bb3de ("vxcan: remove sk reference in peer skb")
-> Link: https://lore.kernel.org/all/20220311123741.382618-1-mkl@pengutronix.de
-> Cc: Oliver Hartkopp <socketcan@hartkopp.net>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> 
-> [...]
+Gr{oetje,eeting}s,
 
-Here is the summary with links:
-  - [net-next,01/13] can: vxcan: vxcan_xmit(): use kfree_skb() instead of kfree() to free skb
-    https://git.kernel.org/netdev/net-next/c/fc7dcd05f4c2
-  - [net-next,02/13] can: mcp251xfd: mcp251xfd_ring_init(): use %d to print free RAM
-    https://git.kernel.org/netdev/net-next/c/c47675b11ba1
-  - [net-next,03/13] can: mcp251xfd: ram: add helper function for runtime ring size calculation
-    https://git.kernel.org/netdev/net-next/c/a1439a5add62
-  - [net-next,04/13] can: mcp251xfd: ram: coalescing support
-    https://git.kernel.org/netdev/net-next/c/b8123d94f58c
-  - [net-next,05/13] can: mcp251xfd: ethtool: add support
-    https://git.kernel.org/netdev/net-next/c/d86ba8db6af3
-  - [net-next,06/13] can: mcp251xfd: ring: prepare support for runtime configurable RX/TX ring parameters
-    https://git.kernel.org/netdev/net-next/c/0a1f2e6502a1
-  - [net-next,07/13] can: mcp251xfd: update macros describing ring, FIFO and RAM layout
-    https://git.kernel.org/netdev/net-next/c/c9e6b80dfd48
-  - [net-next,08/13] can: mcp251xfd: ring: add support for runtime configurable RX/TX ring parameters
-    https://git.kernel.org/netdev/net-next/c/9263c2e92be9
-  - [net-next,09/13] can: mcp251xfd: add RX IRQ coalescing support
-    https://git.kernel.org/netdev/net-next/c/60a848c50d2d
-  - [net-next,10/13] can: mcp251xfd: add RX IRQ coalescing ethtool support
-    https://git.kernel.org/netdev/net-next/c/846990e0ed82
-  - [net-next,11/13] can: mcp251xfd: add TX IRQ coalescing support
-    https://git.kernel.org/netdev/net-next/c/169d00a25658
-  - [net-next,12/13] can: mcp251xfd: add TX IRQ coalescing ethtool support
-    https://git.kernel.org/netdev/net-next/c/656fc12ddaf8
-  - [net-next,13/13] can: mcp251xfd: ring: increase number of RX-FIFOs to 3 and increase max TX-FIFO depth to 16
-    https://git.kernel.org/netdev/net-next/c/aa66ae9b241e
+                        Geert
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
