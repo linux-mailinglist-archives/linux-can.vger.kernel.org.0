@@ -2,31 +2,31 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 365254D8F2B
-	for <lists+linux-can@lfdr.de>; Mon, 14 Mar 2022 23:00:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52A184D8F3A
+	for <lists+linux-can@lfdr.de>; Mon, 14 Mar 2022 23:04:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245428AbiCNWB6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 14 Mar 2022 18:01:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42826 "EHLO
+        id S233493AbiCNWFY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 14 Mar 2022 18:05:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238329AbiCNWB5 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 14 Mar 2022 18:01:57 -0400
+        with ESMTP id S236503AbiCNWFX (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 14 Mar 2022 18:05:23 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C753BF8A
-        for <linux-can@vger.kernel.org>; Mon, 14 Mar 2022 15:00:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376BC3D1E2
+        for <linux-can@vger.kernel.org>; Mon, 14 Mar 2022 15:04:13 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1nTsk7-0002oU-No; Mon, 14 Mar 2022 23:00:43 +0100
+        id 1nTsnR-0003Aq-9a; Mon, 14 Mar 2022 23:04:09 +0100
 Received: from pengutronix.de (2a03-f580-87bc-d400-6399-440a-c2a2-bdf7.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:6399:440a:c2a2:bdf7])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 7614A4B406;
-        Mon, 14 Mar 2022 22:00:42 +0000 (UTC)
-Date:   Mon, 14 Mar 2022 23:00:42 +0100
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 631184B40D;
+        Mon, 14 Mar 2022 22:04:08 +0000 (UTC)
+Date:   Mon, 14 Mar 2022 23:04:08 +0100
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     Vincent Mailhol <vincent.mailhol@gmail.com>
 Cc:     Max Staudt <max@enpas.org>,
@@ -37,14 +37,16 @@ Cc:     Max Staudt <max@enpas.org>,
         Jiri Slaby <jslaby@suse.com>
 Subject: Re: [PATCH v3] can, tty: elmcan CAN/ldisc driver for ELM327 based
  OBD-II adapters
-Message-ID: <20220314220042.vpicmcrwvexxwk3c@pengutronix.de>
+Message-ID: <20220314220408.hn4vdohtjdbfoaqo@pengutronix.de>
 References: <20220307214303.1822590-1-max@enpas.org>
  <CAMZ6RqJZObevKPc29jW+m6i0eAgestTbw8KCPXxSGHzSXK7cRg@mail.gmail.com>
+ <20220309135414.34f77251.max@enpas.org>
+ <CAMZ6RqJJ-PO=WeFeuXk4iC9GHLXz_ZMWtsVCm6sGVGbmeE5U1Q@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3ycyvbpbhbranjzf"
+        protocol="application/pgp-signature"; boundary="jairfwongtmk2mz3"
 Content-Disposition: inline
-In-Reply-To: <CAMZ6RqJZObevKPc29jW+m6i0eAgestTbw8KCPXxSGHzSXK7cRg@mail.gmail.com>
+In-Reply-To: <CAMZ6RqJJ-PO=WeFeuXk4iC9GHLXz_ZMWtsVCm6sGVGbmeE5U1Q@mail.gmail.com>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -59,28 +61,53 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---3ycyvbpbhbranjzf
+--jairfwongtmk2mz3
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 08.03.2022 16:01:12, Vincent Mailhol wrote:
-> > +/* Send a can_frame to a TTY. */
-> > +static netdev_tx_t elmcan_netdev_start_xmit(struct sk_buff *skb,
-> > +                                           struct net_device *dev)
-> > +{
-> > +       struct elmcan *elm =3D netdev_priv(dev);
-> > +       struct can_frame *frame =3D (struct can_frame *)skb->data;
-> > +
-> > +       if (skb->len !=3D sizeof(struct can_frame))
-> > +               goto out;
+On 09.03.2022 22:49:49, Vincent Mailhol wrote:
+> > But rx_offload needs the mailbox_read function, even if it's a dummy,
+> > because can_rx_offload_add_fifo() checks:
+> >
+> >         if (!offload->mailbox_read)
+> >                 return -EINVAL;
 >=20
-> Isn=E2=80=99t this aleardy guaranteed by the upper layers?
+> I think that there should not be a dummy functions like this one.
+>=20
+> Either we agree that using can_rx_offload without implementing
+> the mailbox_read() is OK and in that case, the can_rx_offload
+> framework should be modified to allow mailbox_read() to be a NULL
+> pointer.
+>=20
+> Either it is not the case and you use the more classic
+> netif_rx().
+>=20
+> And I do not have the answer. I haven't studied can_rx_offload
+> enough to be a judge here. Sorry.
+>=20
+> @Marc, any thoughts?
 
-You can always inject packets via the packet socket into the kernel,
-bypassing e.g. the CAN RAW layer.
+Use can_rx_offload_add_manual() instead.
 
-regards,
+> > > > +/* Send a can_frame to a TTY. */
+> > > > +static netdev_tx_t elmcan_netdev_start_xmit(struct sk_buff *skb,
+> > > > +                                           struct net_device *dev)
+> > > > +{
+> > > > +       struct elmcan *elm =3D netdev_priv(dev);
+> > > > +       struct can_frame *frame =3D (struct can_frame *)skb->data;
+> > > > +
+> > > > +       if (skb->len !=3D sizeof(struct can_frame))
+> > > > +               goto out;
+> > >
+> > > Isn=E2=80=99t this aleardy guaranteed by the upper layers?
+> >
+> > Copy-pasta from slcan.c - will look into it.
+>=20
+> Also give a look at can_dropped_invalid_skb().
+
+ACK
+
 Marc
 
 --=20
@@ -89,19 +116,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---3ycyvbpbhbranjzf
+--jairfwongtmk2mz3
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmIvuwcACgkQrX5LkNig
-011hxQf/RQ/sycT5AgFovH7C118vWmXWvYLZt9R+LGEiU/9AfY3b3IChu/WIVZBJ
-ZbdnY7Wb9l/KVBGE7KTnpeUNdX3qwgQ4Xfbt+9eFUCFqEyAzUzWgN92NyVDlR3R2
-JOowtZ30+EdcjRSGJ5CHOp/VWS4Flc7gHYfLWvC+ef5+IIN3xL47jcD8PjKgvC30
-dNLfkxkt2YZo1niaUSNnD49vUqMHin7YDbpgNGv85iYQG0Iz2YU6ORUqCsgoaxd4
-nGYj3ImRUFOxxu+c7cMBq7injzXVJlAnci6FIUAoOdmsy8cleNmoz1J6X5d2m+qu
-f1UX3f1r6274L20mKBLVKACSdPCp2g==
-=H7ZN
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmIvu9UACgkQrX5LkNig
+010z+wf8COaZnIFyF/cDQMT+ve8a0iwBPignONvdZYfNxHc+rLtj3801S/p2AaDj
+oI8HTmCwRyl2HBIXPCyBIiy3YgqiY0kb54FDZqZ9JuvNxTgAj0HtWqS6EW32DYdB
+cs7da4RXLR2xyQMr4YizVUePiETHQwu4y4wof3rg2ghdfIBcfZJwqpnm6LfNG9Jn
+n2IEY3ntpULQrA08ittg0kvPQAVehJZ0h/1OARpsxyK7P1yrEgdOxgEG1KsIfrfu
+RcjRqLhX/h9iu619oTuofcCSzvZgieyXawWgBbP13bgue8fHjKbibKr93Hnv8orp
+Bd5CPt6oULFdq775Wu36VSvqJjyMmg==
+=KNPb
 -----END PGP SIGNATURE-----
 
---3ycyvbpbhbranjzf--
+--jairfwongtmk2mz3--
