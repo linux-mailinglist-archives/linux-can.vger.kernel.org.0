@@ -2,52 +2,56 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D1EB4D8594
-	for <lists+linux-can@lfdr.de>; Mon, 14 Mar 2022 14:03:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 419084D8609
+	for <lists+linux-can@lfdr.de>; Mon, 14 Mar 2022 14:36:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236350AbiCNNET (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 14 Mar 2022 09:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42872 "EHLO
+        id S236436AbiCNNhl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 14 Mar 2022 09:37:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231416AbiCNNET (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 14 Mar 2022 09:04:19 -0400
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C4B2BC8;
-        Mon, 14 Mar 2022 06:03:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=sZGCWDh0dfZ+WLDvLb/SCotSw5Z7sq0gZZDxSTkfyJo=;
-  b=fbq7d3sCUpERkXkj8lEkFFwZhvtPpyB6uiTLBhL/3Gt9IccehSvO7YZ6
-   2bm/d2XdrHaIEMdFLEUG7C5x1PmbMJ9nLezz+kaCvFDfuQvyPOCrSpEEq
-   6B4zaFZUvtvqoiJNjH1x5r6OgT0kGVUAwn3wXOYIGzj5tafxGl606BVWK
-   c=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.90,180,1643670000"; 
-   d="scan'208";a="26014036"
-Received: from dt-lawall.paris.inria.fr ([128.93.67.65])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 14:03:02 +0100
-Date:   Mon, 14 Mar 2022 14:03:01 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: julia@hadrien
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        with ESMTP id S233160AbiCNNhl (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 14 Mar 2022 09:37:41 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB4C24F22
+        for <linux-can@vger.kernel.org>; Mon, 14 Mar 2022 06:36:31 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nTks5-0008Up-Gm; Mon, 14 Mar 2022 14:36:25 +0100
+Received: from pengutronix.de (2a03-f580-87bc-d400-cd06-1d72-9fa6-b58a.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:cd06:1d72:9fa6:b58a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id F37984AF3E;
+        Mon, 14 Mar 2022 13:36:23 +0000 (UTC)
+Date:   Mon, 14 Mar 2022 14:36:23 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
         kernel-janitors@vger.kernel.org,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>, linux-can@vger.kernel.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 27/30] can: ucan: fix typos in comments
-In-Reply-To: <20220314120502.kpc27kzk2dnou2td@pengutronix.de>
-Message-ID: <alpine.DEB.2.22.394.2203141402480.2561@hadrien>
-References: <20220314115354.144023-1-Julia.Lawall@inria.fr> <20220314115354.144023-28-Julia.Lawall@inria.fr> <20220314120502.kpc27kzk2dnou2td@pengutronix.de>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+Message-ID: <20220314133623.76gzah6hidfvvtto@pengutronix.de>
+References: <20220314115354.144023-1-Julia.Lawall@inria.fr>
+ <20220314115354.144023-28-Julia.Lawall@inria.fr>
+ <20220314120502.kpc27kzk2dnou2td@pengutronix.de>
+ <alpine.DEB.2.22.394.2203141402480.2561@hadrien>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dcy3gzpbwvxexksz"
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.22.394.2203141402480.2561@hadrien>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -55,30 +59,52 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
+--dcy3gzpbwvxexksz
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 14 Mar 2022, Marc Kleine-Budde wrote:
-
-> On 14.03.2022 12:53:51, Julia Lawall wrote:
-> > Various spelling mistakes in comments.
-> > Detected with the help of Coccinelle.
+On 14.03.2022 14:03:01, Julia Lawall wrote:
+>=20
+>=20
+> On Mon, 14 Mar 2022, Marc Kleine-Budde wrote:
+>=20
+> > On 14.03.2022 12:53:51, Julia Lawall wrote:
+> > > Various spelling mistakes in comments.
+> > > Detected with the help of Coccinelle.
+> > >
+> > > Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 > >
-> > Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
->
-> Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
->
-> Should I take this, or are you going to upstream this?
+> > Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> >
+> > Should I take this, or are you going to upstream this?
+>=20
+> You can take it.
 
-You can take it.
+Added to linux-can-next/testing.
 
-thanks,
-julia
+Thanks,
+Marc
 
->
-> Marc
->
-> --
-> Pengutronix e.K.                 | Marc Kleine-Budde           |
-> Embedded Linux                   | https://www.pengutronix.de  |
-> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
->
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--dcy3gzpbwvxexksz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmIvRNQACgkQrX5LkNig
+013LcAf+MtDL13gETAZZ09eOdGZRta5+/qsmzl9CxkS37+Ix/AwgGdNZ29U+C4fj
+LNxzGGgOm0fPIBld2oNeMLJsnwRQcB44HCn52ZdRWCqv7ttciTr7IZoCfRfFXzeO
+YIgqwmIx9ioPnqXhU8dsfvuX2ZyAMQIWHKBF/dFGZkD/24hlosQMRJ//0mYwpKIq
+ho4tBNiPSKijnXURZuzhyDFswqdZf4H1I7xzRFAcTA/2irWwtGHCI64KBkYIwyjP
+SP4fuWkao4B70/3tEf2Rkku4jckASHTzB4e/DQE+POXsfv/V8HaLS5Q9rJLRmqEG
+zDqrpJpGIGQs9HAO1yDQmW7KgQ8EuA==
+=EBS7
+-----END PGP SIGNATURE-----
+
+--dcy3gzpbwvxexksz--
