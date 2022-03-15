@@ -2,214 +2,149 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 469B44D953A
-	for <lists+linux-can@lfdr.de>; Tue, 15 Mar 2022 08:26:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 297C34D989D
+	for <lists+linux-can@lfdr.de>; Tue, 15 Mar 2022 11:22:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345394AbiCOH1s (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 15 Mar 2022 03:27:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59484 "EHLO
+        id S1347161AbiCOKXU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 15 Mar 2022 06:23:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345398AbiCOH1q (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 15 Mar 2022 03:27:46 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5EA04B1CE
-        for <linux-can@vger.kernel.org>; Tue, 15 Mar 2022 00:26:34 -0700 (PDT)
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
+        with ESMTP id S241018AbiCOKWy (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 15 Mar 2022 06:22:54 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E6D84DF5A
+        for <linux-can@vger.kernel.org>; Tue, 15 Mar 2022 03:21:42 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nU4J7-0000Us-KI; Tue, 15 Mar 2022 11:21:37 +0100
+Received: from pengutronix.de (2a03-f580-87bc-d400-97f1-7654-c271-bcb4.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:97f1:7654:c271:bcb4])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 0C28F444B0
-        for <linux-can@vger.kernel.org>; Tue, 15 Mar 2022 07:26:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1647329193;
-        bh=6W+HqHw1FUgoLMsYmyHiWYylWMCDG3fxoibhab4YrX8=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=m+KJCVZh9JPnu4nYwprZ35sFH0nReBPlc7tQ7ey8W0S6mS7h8oS5yvjwv52j5WtdV
-         QZd0YJa5iI+D2wFkfVWOl/sUeZbpiHims2GjJUDJU/PF8G6EyF9LevUnFxcGyAZfeh
-         YHplgW55G2tHW5n3TWHZdVToss6McaMtf60yu09EX1AUTfUAPe7B4UtYYjnCxA6z3q
-         DBcyqNWCPDDk6uR97VzGHDY7QZpEFQwpIQaBoh/TXzN0thdyiX3FO1pvIsGa6kPo4d
-         jZByh5CKu2mSaRjF5S92QKlMloXTCL5CkoE+kFU/2w78ay5Odbumr2hhlLvO7r0iEk
-         oZCK8HExVOSdA==
-Received: by mail-ej1-f69.google.com with SMTP id r18-20020a17090609d200b006a6e943d09eso9149566eje.20
-        for <linux-can@vger.kernel.org>; Tue, 15 Mar 2022 00:26:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=6W+HqHw1FUgoLMsYmyHiWYylWMCDG3fxoibhab4YrX8=;
-        b=Aeh3McHz0MuU5fTT3ULKAP/UXPwU8RC938+J7BwjksOyUMqhnAZRRyA5lenrNoOXqY
-         /IEIixpgDejR/njZKDuyT8gEuXFVgknwY4mYQ9S9H/XpRvWrpGIdhO1kTD1Vh40tKIFZ
-         aTvv7CPYuO7Wa91QwLh582dM6WWieCMLzN3oAH/KDugyZgdpmc4MJM1PyClQdBDh1WV/
-         sUcFtsHrCvfOVFPTYsSXWp4UGgezU48Uo49z+YBfDBiMP/aZkRLKseQ2xTLEr4PRQUSA
-         4+Kss3DcbJuFL4b9lZ4VwTnWWlRvSgu5SvxssRr4CL8nRHzx1FaZbPbXtim4kxmPHQlR
-         ANSw==
-X-Gm-Message-State: AOAM532pazQde4u2lGRaV7l78ffwiv98QVcF+rR/aW4Gk3sJGszToxQC
-        9ja7cTrPmkA6Uowc8r+05ZLwlXNPSuUu3NLcCwMe6sQYuM8AiyQRWaLbatS2b55JDrynpiI6YPK
-        TRrqttiXeF6LwyPztMWBy3A9sehoknAwJjqTJ1Q==
-X-Received: by 2002:a17:906:58d6:b0:6da:bc08:af7 with SMTP id e22-20020a17090658d600b006dabc080af7mr21802602ejs.537.1647329192716;
-        Tue, 15 Mar 2022 00:26:32 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxnDbQYJVjdkAqS6JFlxy5WBRyCf0iSai3h0i7BrJoEZsIL3UYorPiU2igHiXhm8YdBNZmxXQ==
-X-Received: by 2002:a17:906:58d6:b0:6da:bc08:af7 with SMTP id e22-20020a17090658d600b006dabc080af7mr21802587ejs.537.1647329192504;
-        Tue, 15 Mar 2022 00:26:32 -0700 (PDT)
-Received: from [192.168.0.153] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.googlemail.com with ESMTPSA id si13-20020a170906cecd00b006cded0c5ee2sm7866659ejb.61.2022.03.15.00.26.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Mar 2022 00:26:31 -0700 (PDT)
-Message-ID: <ed530a57-b339-a8c4-93a6-5666e95f104e@canonical.com>
-Date:   Tue, 15 Mar 2022 08:26:30 +0100
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 65C964BA0A;
+        Tue, 15 Mar 2022 10:21:35 +0000 (UTC)
+Date:   Tue, 15 Mar 2022 11:21:35 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Max Staudt <max@enpas.org>
+Cc:     Vincent Mailhol <vincent.mailhol@gmail.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, Oliver Neukum <oneukum@suse.com>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>
+Subject: Re: [PATCH v3] can, tty: elmcan CAN/ldisc driver for ELM327 based
+ OBD-II adapters
+Message-ID: <20220315102135.evgt4es7yb23sabb@pengutronix.de>
+References: <20220307214303.1822590-1-max@enpas.org>
+ <CAMZ6RqJZObevKPc29jW+m6i0eAgestTbw8KCPXxSGHzSXK7cRg@mail.gmail.com>
+ <20220309135414.34f77251.max@enpas.org>
+ <CAMZ6RqJJ-PO=WeFeuXk4iC9GHLXz_ZMWtsVCm6sGVGbmeE5U1Q@mail.gmail.com>
+ <20220312222142.21591629.max@enpas.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3] dt-bindings: can: xilinx_can: Convert Xilinx CAN
- binding to YAML
-Content-Language: en-US
-To:     Amit Kumar Kumar Mahapatra <akumarma@xilinx.com>,
-        "wg@grandegger.com" <wg@grandegger.com>,
-        "mkl@pengutronix.de" <mkl@pengutronix.de>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        Appana Durga Kedareswara Rao <appanad@xilinx.com>
-Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Michal Simek <michals@xilinx.com>, git <git@xilinx.com>
-References: <20220310153909.30933-1-amit.kumar-mahapatra@xilinx.com>
- <78c7b777-1527-759f-41f7-bd8422cb4eb0@canonical.com>
- <DM8PR02MB7926512883E8C0AF954AE2F6BA109@DM8PR02MB7926.namprd02.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <DM8PR02MB7926512883E8C0AF954AE2F6BA109@DM8PR02MB7926.namprd02.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ljfp3hdtlvkt5bva"
+Content-Disposition: inline
+In-Reply-To: <20220312222142.21591629.max@enpas.org>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 15/03/2022 06:38, Amit Kumar Kumar Mahapatra wrote:
-> Hello Krzysztof,
-> 
->> -----Original Message-----
->> From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->> Sent: Thursday, March 10, 2022 10:25 PM
->> To: Amit Kumar Kumar Mahapatra <akumarma@xilinx.com>;
->> wg@grandegger.com; mkl@pengutronix.de; kuba@kernel.org;
->> robh+dt@kernel.org; Appana Durga Kedareswara Rao
->> <appanad@xilinx.com>
->> Cc: linux-can@vger.kernel.org; netdev@vger.kernel.org;
->> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
->> kernel@vger.kernel.org; Michal Simek <michals@xilinx.com>; git
->> <git@xilinx.com>; Amit Kumar Kumar Mahapatra <akumarma@xilinx.com>
->> Subject: Re: [PATCH v3] dt-bindings: can: xilinx_can: Convert Xilinx CAN
->> binding to YAML
->>
->> On 10/03/2022 16:39, Amit Kumar Mahapatra wrote:
->>> Convert Xilinx CAN binding documentation to YAML.
->>>
->>> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-
->> mahapatra@xilinx.com>
->>> ---
->>> BRANCH: yaml
->>>
->>> Changes in v2:
->>>  - Added reference to can-controller.yaml
->>>  - Added example node for canfd-2.0
->>>
->>> Changes in v3:
->>>  - Changed yaml file name from xilinx_can.yaml to xilinx,can.yaml
->>>  - Added "power-domains" to fix dts_check warnings
->>>  - Grouped "clock-names" and "clocks" together
->>>  - Added type $ref for all non-standard fields
->>>  - Defined compatible strings as enum
->>>  - Used defines,instead of hard-coded values, for GIC interrupts
->>>  - Droped unused labels in examples
->>>  - Droped description for standard feilds
->>> ---
->>>  .../bindings/net/can/xilinx,can.yaml          | 161 ++++++++++++++++++
->>>  .../bindings/net/can/xilinx_can.txt           |  61 -------
->>>  2 files changed, 161 insertions(+), 61 deletions(-)  create mode
->>> 100644 Documentation/devicetree/bindings/net/can/xilinx,can.yaml
->>>  delete mode 100644
->>> Documentation/devicetree/bindings/net/can/xilinx_can.txt
->>>
->>> diff --git a/Documentation/devicetree/bindings/net/can/xilinx,can.yaml
->>> b/Documentation/devicetree/bindings/net/can/xilinx,can.yaml
->>> new file mode 100644
->>> index 000000000000..78398826677d
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/net/can/xilinx,can.yaml
->>> @@ -0,0 +1,161 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) %YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/net/can/xilinx,can.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title:
->>> +  Xilinx Axi CAN/Zynq CANPS controller
->>> +
->>> +maintainers:
->>> +  - Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
->>> +
->>> +properties:
->>> +  compatible:
->>> +    enum:
->>> +      - xlnx,zynq-can-1.0
->>> +      - xlnx,axi-can-1.00.a
->>> +      - xlnx,canfd-1.0
->>> +      - xlnx,canfd-2.0
->>> +
->>> +  reg:
->>> +    maxItems: 1
->>> +
->>> +  interrupts:
->>> +    maxItems: 1
->>> +
->>> +  clocks:
->>> +    minItems: 1
->>> +    maxItems: 2
->>> +
->>> +  clock-names:
->>> +    maxItems: 2
->>> +
->>> +  power-domains:
->>> +    maxItems: 1
->>> +
->>> +  tx-fifo-depth:
->>> +    $ref: "/schemas/types.yaml#/definitions/uint32"
->>> +    description: CAN Tx fifo depth (Zynq, Axi CAN).
->>> +
->>> +  rx-fifo-depth:
->>> +    $ref: "/schemas/types.yaml#/definitions/uint32"
->>> +    description: CAN Rx fifo depth (Zynq, Axi CAN, CAN FD in
->>> + sequential Rx mode)
->>> +
->>> +  tx-mailbox-count:
->>> +    $ref: "/schemas/types.yaml#/definitions/uint32"
->>> +    description: CAN Tx mailbox buffer count (CAN FD)
->>
->> I asked about vendor prefix and I think I did not get an answer from you
->> about skipping it. Do you think it is not needed?
-> 
-> Sorry, I went through all your previous comments but I couldn't find the 
-> comment where you had asked about vendor prefix. Could you please point
-> me to it ?
-> We can add vendor prefix to non-standard fields, but we need to update 
-> driver to be aligned with it and deprecate original property which has been 
-> added in 2018 and acked by Rob and Marc at that time.
-> https://github.com/torvalds/linux/commit/7cb0f17f5252874ba0ecbda964e7e01587bf828e
 
-Ah, I am sorry, apologies. I have never asked for the prefix and I
-should not mention it here. I think I got confused with different
-patchset but this one here is conversion. The prefix is not needed.
+--ljfp3hdtlvkt5bva
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-Krzysztof
+On 12.03.2022 22:21:42, Max Staudt wrote:
+> @Vincent - two more things have remained, and I hope it's okay once I
+> explain them:
+>=20
+> 1. _memstrcmp() - memcmp() vs. str(n)cmp()
+>=20
+> The _memstrcmp() function does not compare strings, it compares raw
+> buffers. I am just using C strings for the fixed buffers to compare
+> against, as that allows for shorter and easier to read code. The NUL
+> byte at the end of those strings goes unused.
+>=20
+> Also, I have not looked at the assembly produced, since the semantics
+> are different: str(n)cmp() needs to look for NUL bytes in the buffer(s),
+> which is unnecessary here. As a bonus, NUL will never even occur
+> because my code filters those bytes out upon reception from the UART
+> (it's a documented quirk of the ELM327).
+>=20
+> Finally, even if I were to use strcmp(), the code would still look just
+> as ugly. Except the machine would also look for NUL bytes, and the next
+> human to read the code would wonder why I'm comparing strings and not
+> buffers.
+>=20
+> Hence memcmp(), to help the code self-document and the compiler
+> optimise - I hope that's okay.
+
+Looking at the code:
+
+> +/* Compare a buffer to a fixed string */
+> +static inline int _memstrcmp(const u8 *mem, const char *str)
+> +{
+> +     return memcmp(mem, str, strlen(str));
+
+The _memstrcmp is sometimes directly used. Where's the check that mem is
+valid for strlen(len)? Better only use _len_memstrcmp().
+
+> +}
+> +
+> +/* Compare buffer to string length, then compare buffer to fixed string.
+> + * This ensures two things:
+> + *  - It flags cases where the fixed string is only the start of the
+> + *    buffer, rather than exactly all of it.
+> + *  - It avoids byte comparisons in case the length doesn't match.
+> + */
+> +static inline int _len_memstrcmp(const u8 *mem, size_t mem_len, const ch=
+ar *str)
+
+make it a bool.
+
+> +{
+> + 	size_t str_len =3D strlen(str);
+> +
+> +	return (mem_len !=3D str_len) || memcmp(mem, str, str_len);
+> +}
+
+Can you rename _len_memstrcmp into something like elm327_match() or so?
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--ljfp3hdtlvkt5bva
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmIwaKwACgkQrX5LkNig
+011f3QgAtpKD3azoXiCk8tqsByeX0+JujrYl+eg2jXCOuE3dpOEYGnnewW+Elq7H
+aoXZ/mTc5iLcoF7FSTz5OH8joUS4bTk65wxRHVAKXmAA9kyDHQzeg/intLsyKX5f
+mgKJszUXl3JGcZtmUDDTK40/IbFCpAeuFHhTFKLinPdg29wuk0iGyUCQVWb/m6L5
+ts5AKaNqfGk2dxPZ+cKWDsJXhRBr7B4BjmS9kr03ddGPtPUDSFM5cHEP8ZjaspYc
+jFQb4lf4H/SNYpuq9VEVXubQkcqNkio+zp3iyWuZ1NOxqLWRv1rBBvE/QAaLtxVQ
+8HGNMMnJyWtJKZE91Byr9o6ZLX0Sng==
+=llkR
+-----END PGP SIGNATURE-----
+
+--ljfp3hdtlvkt5bva--
