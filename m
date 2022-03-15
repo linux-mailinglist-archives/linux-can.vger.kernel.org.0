@@ -2,149 +2,109 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 297C34D989D
-	for <lists+linux-can@lfdr.de>; Tue, 15 Mar 2022 11:22:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E84BC4D9C6F
+	for <lists+linux-can@lfdr.de>; Tue, 15 Mar 2022 14:41:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347161AbiCOKXU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 15 Mar 2022 06:23:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39832 "EHLO
+        id S1348762AbiCONmS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 15 Mar 2022 09:42:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241018AbiCOKWy (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 15 Mar 2022 06:22:54 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E6D84DF5A
-        for <linux-can@vger.kernel.org>; Tue, 15 Mar 2022 03:21:42 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nU4J7-0000Us-KI; Tue, 15 Mar 2022 11:21:37 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-97f1-7654-c271-bcb4.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:97f1:7654:c271:bcb4])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 65C964BA0A;
-        Tue, 15 Mar 2022 10:21:35 +0000 (UTC)
-Date:   Tue, 15 Mar 2022 11:21:35 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Max Staudt <max@enpas.org>
-Cc:     Vincent Mailhol <vincent.mailhol@gmail.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, Oliver Neukum <oneukum@suse.com>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>
-Subject: Re: [PATCH v3] can, tty: elmcan CAN/ldisc driver for ELM327 based
- OBD-II adapters
-Message-ID: <20220315102135.evgt4es7yb23sabb@pengutronix.de>
-References: <20220307214303.1822590-1-max@enpas.org>
- <CAMZ6RqJZObevKPc29jW+m6i0eAgestTbw8KCPXxSGHzSXK7cRg@mail.gmail.com>
- <20220309135414.34f77251.max@enpas.org>
- <CAMZ6RqJJ-PO=WeFeuXk4iC9GHLXz_ZMWtsVCm6sGVGbmeE5U1Q@mail.gmail.com>
- <20220312222142.21591629.max@enpas.org>
+        with ESMTP id S1348757AbiCONmS (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 15 Mar 2022 09:42:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45DA152E66;
+        Tue, 15 Mar 2022 06:41:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AD8FFB81677;
+        Tue, 15 Mar 2022 13:41:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07A13C340E8;
+        Tue, 15 Mar 2022 13:40:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647351662;
+        bh=gvl9SFrDd+2JfY4XpOU21w5Fgp3RnrxgO3xzRNMW3ig=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=FpIzPAInqwcWVe7lVXyZMo10uysAvQH5/+0FSS06nOQud/sjKtVu2eXUrgVVwDtnS
+         K9saXWWZ1hCdhU07mL3gP1lbyLMM5ncodj0hAGG1sCe8guzPWwUCxCvCMd4UnYk0ij
+         MiKnX5ElR8cklFLsknUpJxfH63KChYC/OCTeoHADKe2d7sJJxnj+KlqJSXMWCfA0RW
+         7IMl8VYJBtsy0LvBdpwYawlVvfm1y/uovTsdBOXZktA8NvrkBJg6F9XHpbVdi97yvv
+         ktn0TMEJDT+qVku5scquwwLC4arp4ujY52Gxd5XtzcUD53EHdZUC9sEswg4SOYFru/
+         p422dM8tR7ngQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Julia Lawall <Julia.Lawall@inria.fr>, linux-can@vger.kernel.org
+Cc:     netdev@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        linux-media@vger.kernel.org,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-perf-users@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Sean Wang <sean.wang@mediatek.com>,
+        linux-arm-msm@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        platform-driver-x86@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        target-devel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-s390@vger.kernel.org,
+        Jonas Karlman <jonas@kwiboo.se>, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-power@fi.rohmeurope.com,
+        linux-omap@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-leds@vger.kernel.org, linux-spi@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, linux-clk@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Namhyung Kim <namhyung@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-wireless@vger.kernel.org
+In-Reply-To: <20220314115354.144023-1-Julia.Lawall@inria.fr>
+References: <20220314115354.144023-1-Julia.Lawall@inria.fr>
+Subject: Re: (subset) [PATCH 00/30] fix typos in comments
+Message-Id: <164735165474.3687547.1964402001196947729.b4-ty@kernel.org>
+Date:   Tue, 15 Mar 2022 13:40:54 +0000
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ljfp3hdtlvkt5bva"
-Content-Disposition: inline
-In-Reply-To: <20220312222142.21591629.max@enpas.org>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Mon, 14 Mar 2022 12:53:24 +0100, Julia Lawall wrote:
+> Various spelling mistakes in comments.
+> Detected with the help of Coccinelle.
+> 
 
---ljfp3hdtlvkt5bva
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On 12.03.2022 22:21:42, Max Staudt wrote:
-> @Vincent - two more things have remained, and I hope it's okay once I
-> explain them:
->=20
-> 1. _memstrcmp() - memcmp() vs. str(n)cmp()
->=20
-> The _memstrcmp() function does not compare strings, it compares raw
-> buffers. I am just using C strings for the fixed buffers to compare
-> against, as that allows for shorter and easier to read code. The NUL
-> byte at the end of those strings goes unused.
->=20
-> Also, I have not looked at the assembly produced, since the semantics
-> are different: str(n)cmp() needs to look for NUL bytes in the buffer(s),
-> which is unnecessary here. As a bonus, NUL will never even occur
-> because my code filters those bytes out upon reception from the UART
-> (it's a documented quirk of the ELM327).
->=20
-> Finally, even if I were to use strcmp(), the code would still look just
-> as ugly. Except the machine would also look for NUL bytes, and the next
-> human to read the code would wonder why I'm comparing strings and not
-> buffers.
->=20
-> Hence memcmp(), to help the code self-document and the compiler
-> optimise - I hope that's okay.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Looking at the code:
+Thanks!
 
-> +/* Compare a buffer to a fixed string */
-> +static inline int _memstrcmp(const u8 *mem, const char *str)
-> +{
-> +     return memcmp(mem, str, strlen(str));
+[21/30] spi: sun4i: fix typos in comments
+        commit: 2002c13243d595e211c0dad6b8e2e87f906f474b
 
-The _memstrcmp is sometimes directly used. Where's the check that mem is
-valid for strlen(len)? Better only use _len_memstrcmp().
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-> +}
-> +
-> +/* Compare buffer to string length, then compare buffer to fixed string.
-> + * This ensures two things:
-> + *  - It flags cases where the fixed string is only the start of the
-> + *    buffer, rather than exactly all of it.
-> + *  - It avoids byte comparisons in case the length doesn't match.
-> + */
-> +static inline int _len_memstrcmp(const u8 *mem, size_t mem_len, const ch=
-ar *str)
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-make it a bool.
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-> +{
-> + 	size_t str_len =3D strlen(str);
-> +
-> +	return (mem_len !=3D str_len) || memcmp(mem, str, str_len);
-> +}
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-Can you rename _len_memstrcmp into something like elm327_match() or so?
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---ljfp3hdtlvkt5bva
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmIwaKwACgkQrX5LkNig
-011f3QgAtpKD3azoXiCk8tqsByeX0+JujrYl+eg2jXCOuE3dpOEYGnnewW+Elq7H
-aoXZ/mTc5iLcoF7FSTz5OH8joUS4bTk65wxRHVAKXmAA9kyDHQzeg/intLsyKX5f
-mgKJszUXl3JGcZtmUDDTK40/IbFCpAeuFHhTFKLinPdg29wuk0iGyUCQVWb/m6L5
-ts5AKaNqfGk2dxPZ+cKWDsJXhRBr7B4BjmS9kr03ddGPtPUDSFM5cHEP8ZjaspYc
-jFQb4lf4H/SNYpuq9VEVXubQkcqNkio+zp3iyWuZ1NOxqLWRv1rBBvE/QAaLtxVQ
-8HGNMMnJyWtJKZE91Byr9o6ZLX0Sng==
-=llkR
------END PGP SIGNATURE-----
-
---ljfp3hdtlvkt5bva--
+Thanks,
+Mark
