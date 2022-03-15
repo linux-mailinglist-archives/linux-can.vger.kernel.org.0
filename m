@@ -2,109 +2,143 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E84BC4D9C6F
-	for <lists+linux-can@lfdr.de>; Tue, 15 Mar 2022 14:41:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AB774DA436
+	for <lists+linux-can@lfdr.de>; Tue, 15 Mar 2022 21:49:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348762AbiCONmS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 15 Mar 2022 09:42:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44524 "EHLO
+        id S1351798AbiCOUuQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 15 Mar 2022 16:50:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348757AbiCONmS (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 15 Mar 2022 09:42:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45DA152E66;
-        Tue, 15 Mar 2022 06:41:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AD8FFB81677;
-        Tue, 15 Mar 2022 13:41:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07A13C340E8;
-        Tue, 15 Mar 2022 13:40:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647351662;
-        bh=gvl9SFrDd+2JfY4XpOU21w5Fgp3RnrxgO3xzRNMW3ig=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=FpIzPAInqwcWVe7lVXyZMo10uysAvQH5/+0FSS06nOQud/sjKtVu2eXUrgVVwDtnS
-         K9saXWWZ1hCdhU07mL3gP1lbyLMM5ncodj0hAGG1sCe8guzPWwUCxCvCMd4UnYk0ij
-         MiKnX5ElR8cklFLsknUpJxfH63KChYC/OCTeoHADKe2d7sJJxnj+KlqJSXMWCfA0RW
-         7IMl8VYJBtsy0LvBdpwYawlVvfm1y/uovTsdBOXZktA8NvrkBJg6F9XHpbVdi97yvv
-         ktn0TMEJDT+qVku5scquwwLC4arp4ujY52Gxd5XtzcUD53EHdZUC9sEswg4SOYFru/
-         p422dM8tR7ngQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Julia Lawall <Julia.Lawall@inria.fr>, linux-can@vger.kernel.org
-Cc:     netdev@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        linux-media@vger.kernel.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-perf-users@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Sean Wang <sean.wang@mediatek.com>,
-        linux-arm-msm@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        platform-driver-x86@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        target-devel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-s390@vger.kernel.org,
-        Jonas Karlman <jonas@kwiboo.se>, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-power@fi.rohmeurope.com,
-        linux-omap@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-leds@vger.kernel.org, linux-spi@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, linux-clk@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Namhyung Kim <namhyung@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-wireless@vger.kernel.org
-In-Reply-To: <20220314115354.144023-1-Julia.Lawall@inria.fr>
-References: <20220314115354.144023-1-Julia.Lawall@inria.fr>
-Subject: Re: (subset) [PATCH 00/30] fix typos in comments
-Message-Id: <164735165474.3687547.1964402001196947729.b4-ty@kernel.org>
-Date:   Tue, 15 Mar 2022 13:40:54 +0000
+        with ESMTP id S1351743AbiCOUuO (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 15 Mar 2022 16:50:14 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B69624F06;
+        Tue, 15 Mar 2022 13:48:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1647377335;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
+    Subject:Sender;
+    bh=mfqGnB/NorIrBYocK370TVdnZ90hKH4/cEEo32hkWwY=;
+    b=BGDAm1EZRYfYZ4KX1kNZ5aurOwJ7JMSKWmS1K0SMwjlZ5on3oITcZJy9WqgHYP/Es7
+    2Fb6FwO/kXt1K6J0eWpdSnNDf0VHUGbe+58QPyWnluDsVJQLPrOmjINwCJeAk6ff/0mc
+    8yocIlUDGyyVUI263MSiGKA8HqLvMP1qwIHaHqoUOqwhkCrUQeGFa8iQVL0pRNKKl4zz
+    H31elYe2yV4yEgS/Lyly2mvv+uVTSzUISksYPG4yMSiUXigsarTkg1flX92Nlq5PDKh3
+    oDInwP2sO/zigM77E8oc1Iqr55l6bwTIafIBAduGrC7B3LyriTEs79hD/veDgih3BODu
+    LkeQ==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdd0DIgVuBOfXW6v7w=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a00:6020:1cfa:f900::b82]
+    by smtp.strato.de (RZmta 47.41.0 AUTH)
+    with ESMTPSA id a046a1y2FKms13o
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Tue, 15 Mar 2022 21:48:54 +0100 (CET)
+Message-ID: <9bdaf3f2-3edc-5cd5-1184-55387344881d@hartkopp.net>
+Date:   Tue, 15 Mar 2022 21:48:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: net-next Re: [syzbot] WARNING in isotp_tx_timer_handler (2)
+Content-Language: en-US
+To:     syzbot <syzbot+2339c27f5c66c652843e@syzkaller.appspotmail.com>,
+        davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mkl@pengutronix.de,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <0000000000004e53a505da08501e@google.com>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <0000000000004e53a505da08501e@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, 14 Mar 2022 12:53:24 +0100, Julia Lawall wrote:
-> Various spelling mistakes in comments.
-> Detected with the help of Coccinelle.
+Hi all,
+
+thanks for the report!
+
+A patch to fix the issue has been posted for the "net-next" tree here:
+
+https://lore.kernel.org/netdev/20220315203748.1892-1-socketcan@hartkopp.net/T/#u
+
+I sent it to the net-next tree as it fits best to get it into upstream 
+before the merge window opens IMO.
+
+Linus' tree (and the stable kernels) need a different patch due to 
+current changes in net-next. A patch for the non net-next kernels is 
+available too.
+
+The fix is not critical. So there's no hurry to get it into Linus' tree 
+and the stable trees.
+
+Best regards,
+Oliver
+
+
+On 12.03.22 17:55, syzbot wrote:
+> Hello,
 > 
-
-Applied to
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-
-Thanks!
-
-[21/30] spi: sun4i: fix typos in comments
-        commit: 2002c13243d595e211c0dad6b8e2e87f906f474b
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+> syzbot found the following issue on:
+> 
+> HEAD commit:    46b348fd2d81 alx: acquire mutex for alx_reinit in alx_chan..
+> git tree:       net
+> console output: https://syzkaller.appspot.com/x/log.txt?x=15da96e5700000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=442f8ac61e60a75e
+> dashboard link: https://syzkaller.appspot.com/bug?extid=2339c27f5c66c652843e
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=165c76ad700000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=143da461700000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+2339c27f5c66c652843e@syzkaller.appspotmail.com
+> 
+> ------------[ cut here ]------------
+> WARNING: CPU: 1 PID: 19 at net/can/isotp.c:852 isotp_tx_timer_handler+0x717/0xcd0 net/can/isotp.c:852
+> Modules linked in:
+> CPU: 1 PID: 19 Comm: ksoftirqd/1 Not tainted 5.17.0-rc7-syzkaller-00198-g46b348fd2d81 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> RIP: 0010:isotp_tx_timer_handler+0x717/0xcd0 net/can/isotp.c:852
+> Code: f9 44 0f b6 25 3b 23 56 05 31 ff 44 89 e6 e8 f0 56 4f f9 45 84 e4 0f 85 9d fa ff ff e9 4e 01 20 01 85 ed 75 52 e8 59 54 4f f9 <0f> 0b 45 31 e4 e8 4f 54 4f f9 48 8b 74 24 40 48 b8 00 00 00 00 00
+> RSP: 0018:ffffc90000d97c40 EFLAGS: 00010246
+> RAX: 0000000000000000 RBX: ffff88806f490568 RCX: 0000000000000100
+> RDX: ffff888011945700 RSI: ffffffff88296bd7 RDI: 0000000000000003
+> RBP: 0000000000000000 R08: ffffffff8ac3c440 R09: ffffffff8829656f
+> R10: 0000000000000003 R11: 0000000000000000 R12: 0000000000000000
+> R13: ffff8880b9d2a880 R14: ffff8880b9d2a600 R15: ffffffff882964c0
+> FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f5c3133d1d8 CR3: 000000006b70d000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>   <TASK>
+>   __run_hrtimer kernel/time/hrtimer.c:1685 [inline]
+>   __hrtimer_run_queues+0x609/0xe50 kernel/time/hrtimer.c:1749
+>   hrtimer_run_softirq+0x17b/0x360 kernel/time/hrtimer.c:1766
+>   __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
+>   run_ksoftirqd kernel/softirq.c:921 [inline]
+>   run_ksoftirqd+0x2d/0x60 kernel/softirq.c:913
+>   smpboot_thread_fn+0x645/0x9c0 kernel/smpboot.c:164
+>   kthread+0x2e9/0x3a0 kernel/kthread.c:377
+>   ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+>   </TASK>
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> syzbot can test patches for this issue, for details see:
+> https://goo.gl/tpsmEJ#testing-patches
