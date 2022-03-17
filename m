@@ -2,45 +2,46 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 835814DC0B6
-	for <lists+linux-can@lfdr.de>; Thu, 17 Mar 2022 09:12:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 895964DC0BB
+	for <lists+linux-can@lfdr.de>; Thu, 17 Mar 2022 09:13:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230478AbiCQINP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 17 Mar 2022 04:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42164 "EHLO
+        id S229714AbiCQIO1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 17 Mar 2022 04:14:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbiCQINO (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 17 Mar 2022 04:13:14 -0400
+        with ESMTP id S230507AbiCQIO0 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 17 Mar 2022 04:14:26 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03EA21C5919
-        for <linux-can@vger.kernel.org>; Thu, 17 Mar 2022 01:11:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3E5135094
+        for <linux-can@vger.kernel.org>; Thu, 17 Mar 2022 01:13:09 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1nUlEd-00049d-0F; Thu, 17 Mar 2022 09:11:51 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-5ff9-b2f4-7100-5120.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:5ff9:b2f4:7100:5120])
+        id 1nUlFr-0004It-Oc
+        for linux-can@vger.kernel.org; Thu, 17 Mar 2022 09:13:07 +0100
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 3F4B14CFEA
+        for <linux-can@vger.kernel.org>; Thu, 17 Mar 2022 08:13:07 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 30E074CFDE;
-        Thu, 17 Mar 2022 08:11:49 +0000 (UTC)
-Date:   Thu, 17 Mar 2022 09:11:48 +0100
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 2D0BF4CFE7;
+        Thu, 17 Mar 2022 08:13:07 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 30025072;
+        Thu, 17 Mar 2022 08:13:07 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Hangyu Hua <hbh25y@gmail.com>
-Cc:     rcsekar@samsung.com, wg@grandegger.com, davem@davemloft.net,
-        kuba@kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] can: m_can: fix a possible use after free in
- m_can_tx_handler()
-Message-ID: <20220317081148.rdnacm4bry76rny4@pengutronix.de>
-References: <20220317030143.14668-1-hbh25y@gmail.com>
+To:     linux-can@vger.kernel.org
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Hangyu Hua <hbh25y@gmail.com>
+Subject: [PATCH v2] can: m_can: m_can_tx_handler(): fix use after free of skb
+Date:   Thu, 17 Mar 2022 09:13:05 +0100
+Message-Id: <20220317081305.739554-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nbv2ga6m4oauj6bi"
-Content-Disposition: inline
-In-Reply-To: <20220317030143.14668-1-hbh25y@gmail.com>
+Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -54,40 +55,52 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+can_put_echo_skb() will clone skb then free the skb. Move the
+can_put_echo_skb() for the m_can version 3.0.x directly before the
+start of the xmit in hardware, similar to the 3.1.x branch.
 
---nbv2ga6m4oauj6bi
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reported-by: Hangyu Hua <hbh25y@gmail.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
 
-On 17.03.2022 11:01:43, Hangyu Hua wrote:
-> can_put_echo_skb will clone skb then free the skb. It is better to avoid =
-using
-> skb after can_put_echo_skb.
+Hello,
 
-Why not move the can_put_echo_skb() instead? I'll send a patch.
+picking up Hangyu Hua's work from:
 
+| https://lore.kernel.org/all/20220317030143.14668-1-hbh25y@gmail.com/
+
+Instead of using a temporary variable, move the can_put_echo_skb() instead.
+
+regads,
 Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+ drivers/net/can/m_can/m_can.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---nbv2ga6m4oauj6bi
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+index 1a4b56f6fa8c..b3b5bc1c803b 100644
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -1637,8 +1637,6 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
+ 		if (err)
+ 			goto out_fail;
+ 
+-		can_put_echo_skb(skb, dev, 0, 0);
+-
+ 		if (cdev->can.ctrlmode & CAN_CTRLMODE_FD) {
+ 			cccr = m_can_read(cdev, M_CAN_CCCR);
+ 			cccr &= ~CCCR_CMR_MASK;
+@@ -1655,6 +1653,9 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
+ 			m_can_write(cdev, M_CAN_CCCR, cccr);
+ 		}
+ 		m_can_write(cdev, M_CAN_TXBTIE, 0x1);
++
++		can_put_echo_skb(skb, dev, 0, 0);
++
+ 		m_can_write(cdev, M_CAN_TXBAR, 0x1);
+ 		/* End of xmit function for version 3.0.x */
+ 	} else {
+-- 
+2.35.1
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmIy7UIACgkQrX5LkNig
-0126egf/eXMrD3xPjDnj4X60OnWYTRdu7/JjPrpV+l7EWntc/GElPXfB2IHoGhNJ
-yHrEWYruDHUtmYug48mqvaysS+vvCtZ/U1pLyMqueKYEidkgQTmorSudgYUOZny/
-y25MOIXTjNgl9p/BBwv5aezPXhUFZufPX/G1D+LB7CJGO9W8K9k/O4AKLtNPAlTf
-ElnfT7sjXo/Cr+XPiSJXr0h4lAhXglR6+KhsxZwoP+41nzIM6G2z/f0nDQ7ShQGY
-tGJN+icRxf8izwPanROz+74zIlOKEwn9uHPl5U35CcN8cyzk9A1PMm8DS+tdazh7
-Gz5zi+xJChAkYuXXrPTuW3y39SfZGQ==
-=5dNZ
------END PGP SIGNATURE-----
-
---nbv2ga6m4oauj6bi--
