@@ -2,54 +2,46 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0B924DDB14
-	for <lists+linux-can@lfdr.de>; Fri, 18 Mar 2022 14:58:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB4C44DDC29
+	for <lists+linux-can@lfdr.de>; Fri, 18 Mar 2022 15:49:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236709AbiCRN7T (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 18 Mar 2022 09:59:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42316 "EHLO
+        id S233945AbiCROvE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 18 Mar 2022 10:51:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230256AbiCRN7S (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 18 Mar 2022 09:59:18 -0400
+        with ESMTP id S237795AbiCROu6 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 18 Mar 2022 10:50:58 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2538EE028
-        for <linux-can@vger.kernel.org>; Fri, 18 Mar 2022 06:57:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1721A8FC9
+        for <linux-can@vger.kernel.org>; Fri, 18 Mar 2022 07:49:17 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1nVD77-0008BT-Ad; Fri, 18 Mar 2022 14:57:57 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-1ddb-5eff-56d9-d971.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:1ddb:5eff:56d9:d971])
+        id 1nVDul-0006qz-Bq
+        for linux-can@vger.kernel.org; Fri, 18 Mar 2022 15:49:15 +0100
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id D08E04EAF9
+        for <linux-can@vger.kernel.org>; Fri, 18 Mar 2022 14:49:14 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 043D34EA7D;
-        Fri, 18 Mar 2022 13:57:55 +0000 (UTC)
-Date:   Fri, 18 Mar 2022 14:57:55 +0100
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id B83554EAF7;
+        Fri, 18 Mar 2022 14:49:14 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 0ad50920;
+        Fri, 18 Mar 2022 14:49:14 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Srinivas Neeli <sneeli@xilinx.com>
-Cc:     Srinivas Goud <sgoud@xilinx.com>,
-        Naveen Kumar Gaddipati <naveenku@xilinx.com>,
-        Prasad Beer Prasad <prasadbe@xilinx.com>,
-        linux-can <linux-can@vger.kernel.org>,
-        Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
-        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Subject: Re: Queries on CAN frame work
-Message-ID: <20220318135755.2g7262fvco5f6uf5@pengutronix.de>
-References: <DM6PR02MB538645C4ECE3BBBD3CE92A17AF539@DM6PR02MB5386.namprd02.prod.outlook.com>
- <20220113203004.jf2rqj2pirhgx72i@pengutronix.de>
- <20220113211018.tqddyiix3vy5q3eq@pengutronix.de>
- <20220115232621.4ybmmrmgogies3o5@pengutronix.de>
- <DM6PR02MB538689AA158B340FE287CF05AF3A9@DM6PR02MB5386.namprd02.prod.outlook.com>
- <20220317225058.3gdvlqnwu5arzbfj@pengutronix.de>
- <DM6PR02MB538652DBE943788F4686531BAF139@DM6PR02MB5386.namprd02.prod.outlook.com>
- <20220318091518.sxumfvkbj4c224im@pengutronix.de>
+To:     linux-can@vger.kernel.org
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Srinivas Neeli <sneeli@xilinx.com>
+Subject: [PATCH] can: bittiming: can_calc_bittiming(): prefer small bit rate pre-scalers over larger ones
+Date:   Fri, 18 Mar 2022 15:49:13 +0100
+Message-Id: <20220318144913.873614-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="o2zw3prq6r55lixq"
-Content-Disposition: inline
-In-Reply-To: <20220318091518.sxumfvkbj4c224im@pengutronix.de>
+Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -63,105 +55,80 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+The CiA (CAN into Automation) lists in their Newsletter 1/2018 in the
+"Recommendation for the CAN FD bit-timing" [1] article several
+recommendations, one of them is:
 
---o2zw3prq6r55lixq
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+| Recommendation 3: Choose BRPA and BRPD as low as possible
 
-On 18.03.2022 10:15:18, Marc Kleine-Budde wrote:
-> > > | $ ./can-calc-bit-timing --alg=3Dcan-next xilinx_dwnstrm -c 79999999=
- Bit
-> > > | timing parameters for xilinx_dwnstrm with 79.999999 MHz ref clock (=
-cmd-
-> > > line) using algo 'can-next'
-> > > |  nominal                                  real  Bitrt    nom   real=
-  SampP
-> > > |  Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP  Bitrate  Error  SampP  SampP=
-  Error
-> > > |  1000000     12  29   30   20   1   1   999999   0.0%  75.0%  75.0%=
-   0.0%
-> >=20
-> > Observed different BRP values for 1Mbps in here and below list for
-> > same sampling point.
->=20
-> Yes. Seems I should update the table to clarify what they output.
+[1] https://can-newsletter.org/uploads/media/raw/f6a36d1461371a2f86ef0011a513712c.pdf
 
-Here's the updated output. It says now "Data" Bit timing parameters in
-the 2nd table.
+With the current bit timing algorithm Srinivas Neeli noticed that on
+the Xilinx Versal ACAP board the CAN data bit timing parameters are
+not calculated optimally. For most bit rates, the bit rate
+prescaler (BRP) is != 1, although it's possible to configure the
+requested with a bit rate with a prescaler of 1:
 
-| Bit timing parameters for xilinx_can_fd2i with 79.999999 MHz ref clock (c=
-md-line) using algo 'can-next'
+| Data Bit timing parameters for xilinx_can_fd2i with 79.999999 MHz ref clock (cmd-line) using algo 'v4.8'
 |  nominal                                  real  Bitrt    nom   real  SampP
-|  Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP  Bitrate  Error  SampP  SampP  Erro=
-r  =20
-|  1000000     12  29   30   20   1   1   999999   0.0%  75.0%  75.0%   0.0=
-%  =20
-|   800000     12  39   40   20   1   1   799999   0.0%  80.0%  80.0%   0.0=
-%  =20
-|   666666     12  47   48   24   1   1   666666   0.0%  80.0%  80.0%   0.0=
-%  =20
-|   500000     12  69   70   20   1   1   499999   0.0%  87.5%  87.5%   0.0=
-%  =20
-|   250000     25  69   70   20   1   2   249999   0.0%  87.5%  87.5%   0.0=
-%  =20
-|   125000     50  69   70   20   1   4   124999   0.0%  87.5%  87.5%   0.0=
-%  =20
-|   100000     50  87   87   25   1   4    99999   0.0%  87.5%  87.5%   0.0=
-%  =20
-|    83333     50 104  105   30   1   4    83333   0.0%  87.5%  87.5%   0.0=
-%  =20
-|    50000    100  87   87   25   1   8    49999   0.0%  87.5%  87.5%   0.0=
-%  =20
-|    33333    125 104  105   30   1  10    33333   0.0%  87.5%  87.5%   0.0=
-%  =20
-|    20000    250  87   87   25   1  20    19999   0.0%  87.5%  87.5%   0.0=
-%  =20
-|    10000    500  87   87   25   1  40     9999   0.0%  87.5%  87.5%   0.0=
-%  =20
-|=20
-| Data Bit timing parameters for xilinx_can_fd2i with 79.999999 MHz ref clo=
-ck (cmd-line) using algo 'can-next'
+|  Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP  Bitrate  Error  SampP  SampP  Error
+| 12000000     12   2    2    2   1   1 11428571   4.8%  75.0%  71.4%   4.8%
+| 10000000     25   1    1    1   1   2  9999999   0.0%  75.0%  75.0%   0.0%
+|  8000000     12   3    3    3   1   1  7999999   0.0%  75.0%  70.0%   6.7%
+|  5000000     50   1    1    1   1   4  4999999   0.0%  75.0%  75.0%   0.0%
+|  4000000     62   1    1    1   1   5  3999999   0.0%  75.0%  75.0%   0.0%
+|  2000000    125   1    1    1   1  10  1999999   0.0%  75.0%  75.0%   0.0%
+|  1000000    250   1    1    1   1  20   999999   0.0%  75.0%  75.0%   0.0%
+
+The bit timing parameter calculation algorithm iterates effectively
+from low to high BRP values. It selects a new best parameter set, if
+the sample point error of the current parameter set is equal or less
+to old best parameter set.
+
+If the given hardware constraints (clock rate and bit timing parameter
+constants) don't allow a sample point error of 0, the algorithm fill
+first find a valid bit timing parameter set with a low BRP, but then
+accept parameter sets with higher BRPs, that have the same sample
+point error.
+
+This patch changes the algorithm to only accept a new parameter set,
+if the resulting sample point error is lower. This leads to the
+following data bit timing parameter for the Versal ACAP board:
+
+| Data Bit timing parameters for xilinx_can_fd2i with 79.999999 MHz ref clock (cmd-line) using algo 'can-next'
 |  nominal                                  real  Bitrt    nom   real  SampP
-|  Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP  Bitrate  Error  SampP  SampP  Erro=
-r  =20
-| 12000000     12   2    2    2   1   1 11428571   4.8%  75.0%  71.4%   4.8=
-%  =20
-| 10000000     12   2    3    2   1   1  9999999   0.0%  75.0%  75.0%   0.0=
-%  =20
-|  8000000     12   3    3    3   1   1  7999999   0.0%  75.0%  70.0%   6.7=
-%  =20
-|  5000000     12   5    6    4   1   1  4999999   0.0%  75.0%  75.0%   0.0=
-%  =20
-|  4000000     12   7    7    5   1   1  3999999   0.0%  75.0%  75.0%   0.0=
-%  =20
-|  2000000     12  14   15   10   1   1  1999999   0.0%  75.0%  75.0%   0.0=
-%  =20
-|  1000000     25  14   15   10   1   2   999999   0.0%  75.0%  75.0%   0.0=
-%  =20
+|  Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP  Bitrate  Error  SampP  SampP  Error
+| 12000000     12   2    2    2   1   1 11428571   4.8%  75.0%  71.4%   4.8%
+| 10000000     12   2    3    2   1   1  9999999   0.0%  75.0%  75.0%   0.0%
+|  8000000     12   3    3    3   1   1  7999999   0.0%  75.0%  70.0%   6.7%
+|  5000000     12   5    6    4   1   1  4999999   0.0%  75.0%  75.0%   0.0%
+|  4000000     12   7    7    5   1   1  3999999   0.0%  75.0%  75.0%   0.0%
+|  2000000     12  14   15   10   1   1  1999999   0.0%  75.0%  75.0%   0.0%
+|  1000000     25  14   15   10   1   2   999999   0.0%  75.0%  75.0%   0.0%
 
-regards,
-Marc
+Note: Due to HW constraints a data bit rate of 1 MBit/s with BRP = 1 is not possible.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Link: https://lore.kernel.org/all/20220113203004.jf2rqj2pirhgx72i@pengutronix.de
+Cc: Srinivas Neeli <sneeli@xilinx.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+ drivers/net/can/dev/bittiming.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---o2zw3prq6r55lixq
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/drivers/net/can/dev/bittiming.c b/drivers/net/can/dev/bittiming.c
+index 2103bcca9012..c1e76f0a5064 100644
+--- a/drivers/net/can/dev/bittiming.c
++++ b/drivers/net/can/dev/bittiming.c
+@@ -116,7 +116,7 @@ int can_calc_bittiming(const struct net_device *dev, struct can_bittiming *bt,
+ 
+ 		can_update_sample_point(btc, sample_point_nominal, tseg / 2,
+ 					&tseg1, &tseg2, &sample_point_error);
+-		if (sample_point_error > best_sample_point_error)
++		if (sample_point_error >= best_sample_point_error)
+ 			continue;
+ 
+ 		best_sample_point_error = sample_point_error;
+-- 
+2.35.1
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmI0j+AACgkQrX5LkNig
-012m1QgAnw37L5MymW14ox08xvXClOimDeMgTxh9HS/gwFohWunwRR3+H+ScEZ/o
-nFQ742bwH1lslmxu54YieSG5YVOdCoVadsdw9PIKwl+AInhLqD2hIlMfw51XdbQm
-N95L6fxHgdLouu5QHky1ceRWtlpJ7lDF0OUrclCQi8DCaCuNf21FJjqL4r2V6U4F
-ZdEgiXEeyyH4mOL/IynYCKSI5+RI81E6UotHYa11L59vKn+yYVdBdlpKlET1ORhx
-jM0JR9I4EQSjQnknGHKCXzsUjML/zS+lHRRWqRVwWANv9WyWH11g7/sQWwYCkX2D
-EbNpCdsHsm0D5IZ97BeIXFNYHOCCpQ==
-=W0kh
------END PGP SIGNATURE-----
-
---o2zw3prq6r55lixq--
