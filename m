@@ -2,196 +2,103 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 931D94DE934
-	for <lists+linux-can@lfdr.de>; Sat, 19 Mar 2022 17:04:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC554E1EDF
+	for <lists+linux-can@lfdr.de>; Mon, 21 Mar 2022 02:47:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239581AbiCSQGD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 19 Mar 2022 12:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51024 "EHLO
+        id S234768AbiCUBtD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 20 Mar 2022 21:49:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239355AbiCSQGB (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 19 Mar 2022 12:06:01 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A6AA1D2532
-        for <linux-can@vger.kernel.org>; Sat, 19 Mar 2022 09:04:40 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nVbZF-0003va-HR; Sat, 19 Mar 2022 17:04:37 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-5e0d-31a6-08b1-9333.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:5e0d:31a6:8b1:9333])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id B50084F322;
-        Sat, 19 Mar 2022 16:04:35 +0000 (UTC)
-Date:   Sat, 19 Mar 2022 17:04:35 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Pavel Pisa <pisa@cmp.felk.cvut.cz>
-Cc:     linux-can@vger.kernel.org, Srinivas Neeli <sneeli@xilinx.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: Re: [PATCH] can: bittiming: can_calc_bittiming(): prefer small bit
- rate pre-scalers over larger ones
-Message-ID: <20220319160435.fzjqtpjxbmce4c4z@pengutronix.de>
-References: <20220318144913.873614-1-mkl@pengutronix.de>
- <202203191346.42561.pisa@cmp.felk.cvut.cz>
+        with ESMTP id S1343763AbiCUBtB (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 20 Mar 2022 21:49:01 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D214717E368;
+        Sun, 20 Mar 2022 18:47:37 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id c11so9277578pgu.11;
+        Sun, 20 Mar 2022 18:47:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=SOfMbm5RJKvVdhj3M5lguM9j4PPbRfpyMx1l0V2G0sM=;
+        b=YD/sFWwZJgwFHupdzTKj19DesWJPVhibD5xUNFAr41Iqcb6q/n0EE5JL2i88wqugvJ
+         4P7CEEMqcrkZn+e2GwMvW939nl+0L9xEqXL6v66kx4bnHGgsGuxfKBFA6ry8pUpLBjYN
+         8Q3qT/gTYFKbTpr5ULNEEk6WYj1/ki32mjXXf7zXMQBRjcmGvSES4dXo52rP8lyw0S2h
+         LbPbzP51hsLEGsEuA2T147IXbc7vPpnuZIxEue6vbPa4VYqlapiC02AOyEU12FvZal3U
+         eR5PjYfw7wdGi4rQ/EZrWq0/KkiBeyfYD6tCJ7RC67oPXtLAf60dkH0rFM6UCK71gql1
+         HDRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=SOfMbm5RJKvVdhj3M5lguM9j4PPbRfpyMx1l0V2G0sM=;
+        b=UCqYm7nQXJrUQxWGrkSRZNQovqspnb0KB3N6sA3JRAI/4KRLru9xNKUGTz+pLrjdev
+         JKzLnQCAUNvxhctqGyZeY0Gfk/jABRhmZpdtVp/gvzfnF4ioIx1sE1oLL/i0W/vGtmyT
+         bbRGlQI5Z3rbQHXHdGbHgvy7Sm4Er8dX9eOT0rSRwavSs/3XTLHO35pwhk2sazh52muE
+         WNGKN9RcpeD10k400uLztwdwZy2161XrNREXJrmTfgvcgr5/mbi+IbLTKke5MQcstKx+
+         z1yO0btSGDrFV9yBTt1y0HRChrEHX4Aij1Ekai/H/kCiW4lEaNK1QtxSIuJS6+kryoBY
+         +AGw==
+X-Gm-Message-State: AOAM53033oKnmSLw0dC5GslGfI2tCKSxy6UvJoGEwZEmRxrgeXFScLTZ
+        qGKhorkpuUPbRqiTwBxRWSw=
+X-Google-Smtp-Source: ABdhPJy9vF2yPyOMLUrz5Shpq535MiBZLAqZb32nSc0lGiBI8aK2dWSqx66kmayAta6/+ktf1Ye3MQ==
+X-Received: by 2002:a05:6a00:889:b0:4e0:dcc3:5e06 with SMTP id q9-20020a056a00088900b004e0dcc35e06mr21497904pfj.29.1647827257386;
+        Sun, 20 Mar 2022 18:47:37 -0700 (PDT)
+Received: from [10.11.37.162] ([103.84.139.53])
+        by smtp.gmail.com with ESMTPSA id q12-20020a17090a178c00b001bd036e11fdsm18080673pja.42.2022.03.20.18.47.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 20 Mar 2022 18:47:36 -0700 (PDT)
+Message-ID: <0d2f9980-fb1d-4068-7868-effc77892a97@gmail.com>
+Date:   Mon, 21 Mar 2022 09:47:30 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gv4altgetdapz6ua"
-Content-Disposition: inline
-In-Reply-To: <202203191346.42561.pisa@cmp.felk.cvut.cz>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] can: mcba_usb: fix possible double dev_kfree_skb in
+ mcba_usb_start_xmit
+Content-Language: en-US
+To:     yashi@spacecubics.com, wg@grandegger.com, mkl@pengutronix.de,
+        davem@davemloft.net, kuba@kernel.org, mailhol.vincent@wanadoo.fr,
+        stefan.maetje@esd.eu, paskripkin@gmail.com,
+        remigiusz.kollataj@mobica.com
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220311080208.45047-1-hbh25y@gmail.com>
+From:   Hangyu Hua <hbh25y@gmail.com>
+In-Reply-To: <20220311080208.45047-1-hbh25y@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Gentle ping.
 
---gv4altgetdapz6ua
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 19.03.2022 13:46:42, Pavel Pisa wrote:
-> On Friday 18 of March 2022 15:49:13 Marc Kleine-Budde wrote:
-> > The CiA (CAN into Automation) lists in their Newsletter 1/2018 in the
-> > "Recommendation for the CAN FD bit-timing" [1] article several
-> >
-> > recommendations, one of them is:
-> > | Recommendation 3: Choose BRPA and BRPD as low as possible
-> >
-> > [1]
-> > https://can-newsletter.org/uploads/media/raw/f6a36d1461371a2f86ef0011a5=
-1371
-> >2c.pdf
-> >
-> > With the current bit timing algorithm Srinivas Neeli noticed that on
-> > the Xilinx Versal ACAP board the CAN data bit timing parameters are
-> > not calculated optimally. For most bit rates, the bit rate
-> > prescaler (BRP) is !=3D 1, although it's possible to configure the
->=20
-> I have already thought about algorithm and optimal number of bitquanta
-> per bittime. In the fact, I think than original LinCAN algorithm version
-> which I have provided for SocketCAN used reversed preference for BPR.
-
-It's complicated, at least for all evolutions of the algorithm we had in
-the Linux kernel.
-
-Side note: I've imported all Linux mainline algorithms into the
-           can-calc-bit-timing tool available on my github:
-           https://github.com/marckleinebudde/can-utils/tree/improve-can-ca=
-lc-bit-timing
-           Use the "--algo=3D" parameter to select the actual algorithm.
-           Use diff to compare the bit timing:
-           diff -u <(./can-calc-bit-timing --alg=3Dv2.6.31 mcan-v3.1+) <(./=
-can-calc-bit-timing --alg=3Dv4.8 mcan-v3.1+)
-
-For CAN bitrate/CAN clock rate/bit timing constant parameter
-combinations where exact solutions are possible (no bit rate error and
-no sample point errors are possible), the original algorithm will select
-the solution with the lowest BRP. However, where exact solutions are not
-possible, it will prefer those with larger BRP. With my proposed fix,
-the behavior in the same for both cases.
-
-> But I think that too small or too big ratio is bad.
-
-It's complicated.
-
-Valid solutions with the same (even optimal) bit rate and sample point
-but with different BRPs are not equal. Why? All evolutions of the
-algorithm use a default SJW of 1 (if no value if provided by the user -
-the original algorithm even forces a fixed value of 1).
-
-SJW =3D=3D 1 means the SJW has the length of one Time Quanta (TQ). The leng=
-th
-of a TQ directly depends on the BRP:
-
-    TQ =3D BRP / CAN Clock Frequency
-
-This results in the SJW measured in time units, is not the same for
-different BRPs and thus not the same for valid bit timing parameters
-with different BRPs. So your statement is correct, at least while using
-a fixed SJW =3D=3D 1.
-
-But, for CAN-FD we should use the same BRP for the arbitration and
-data bit timing parameters. Why is that the case?
-- Some controllers use the same BRP for the arbitration and the data bit
-  timing.
-- Different BRPs can result in a phase error when switching from
-  arbitration to data bit timing
-- For Transceiver Delay Compensation (TDC) to work, both BRPs must be 1.
-  Although some controllers support 2, aswell.
-- The CiA recommends it. See Recommendation 2:
-  https://can-newsletter.org/uploads/media/raw/f6a36d1461371a2f86ef0011a513=
-712c.pdf
-
-> So for our actual NuttX ESP32C3 driver developed by our studnet Jan
-> Charvat, I consider to add some mechanism how to specify optimal
-> bitquanta per bittime ratio.
-
-As elaborated above, this indirectly influences the size of the SJW. The
-CiA has also a recommendation regarding SJW (same paper as above):
-
-| Recommendation 5: Chose sjw D and sjw A as large as possible
-|
-| The maximal possible values are min(ps1 A/D, ps2 A/D). A large sjw A
-| value allows the CAN node to resynchronize quickly to the transmitting
-| node. A large sjw D value maximizes the CAN clock tolerance.
-
-> The question is if that should be additional parameter in the struct
-> can_bittiming_const
->=20
->   https://elixir.bootlin.com/linux/latest/source/include/uapi/linux/can/n=
-etlink.h#L47
->=20
-> or if that should be some constant defined for data bitrate and
-> probably the second for arbitration bitrate.
-
-The struct can_bittiming_const is user space API and cannot be changed.
-If we need more parameters we would first convert the struct
-can_bittiming_const based netlink type into a nested type. The nested
-type then can be extended at will without breaking the API.
-
-But this is independent if the enhancement of the bit timing algorithm.
-
-> If there is interrest I try to provide some patch which would prefer
-> the nearest suitable BPR to optimal timequanta to bittime ratio.
-
-I'm really interested in your thoughts and patches. For easier testing,
-I'm developing the algorithm in the can-calc-bit-timing tool, it can
-easily be extended for more variants. Feel free to add a new variant.
-Send me a PR on github or patches on this list.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---gv4altgetdapz6ua
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmI1/xAACgkQrX5LkNig
-011EHQgAlB/uLsBIeebtkGHEJ48/foe7Qm+ZQ365KYFNTx8cRG4f1A5oB1OXo0n0
-TrVvFrkjkcp+QklZOvAP8EybTaIgTK7la0TIqX1qRE1DiZormoCDMPW5f3qoT9h2
-B/opZS4FGjwIoNu1TCKbGGFavOEyQwJbtmJ8a0OOXV8iq7cPDNP3krc+zQlpGWfs
-X7WgjJEwWmaQ1m8Ph+9Zs2YpmNJwXeiuy6KTo6pvf9fNTf7OvaCAfY4CYym5WS36
-msEatkRA7bvdVvqaVZTNm0NTzbHuR6XzSnA6qH3wqAbw8dSqR3ArtV4EqIr5Lc0n
-3EyW4gcHBVxi20R1hPogKXMAIiZJ0w==
-=WEIT
------END PGP SIGNATURE-----
-
---gv4altgetdapz6ua--
+On 2022/3/11 16:02, Hangyu Hua wrote:
+> There is no need to call dev_kfree_skb when usb_submit_urb fails beacause
+> can_put_echo_skb deletes original skb and can_free_echo_skb deletes the cloned
+> skb.
+> 
+> Fixes: 51f3baad7de9 ("can: mcba_usb: Add support for Microchip CAN BUS Analyzer")
+> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+> ---
+>   drivers/net/can/usb/mcba_usb.c | 1 -
+>   1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/net/can/usb/mcba_usb.c b/drivers/net/can/usb/mcba_usb.c
+> index 77bddff86252..7c198eb5bc9c 100644
+> --- a/drivers/net/can/usb/mcba_usb.c
+> +++ b/drivers/net/can/usb/mcba_usb.c
+> @@ -364,7 +364,6 @@ static netdev_tx_t mcba_usb_start_xmit(struct sk_buff *skb,
+>   xmit_failed:
+>   	can_free_echo_skb(priv->netdev, ctx->ndx, NULL);
+>   	mcba_usb_free_ctx(ctx);
+> -	dev_kfree_skb(skb);
+>   	stats->tx_dropped++;
+>   
+>   	return NETDEV_TX_OK;
