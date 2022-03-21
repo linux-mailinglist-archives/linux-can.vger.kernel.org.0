@@ -2,138 +2,234 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB4184E1EE2
-	for <lists+linux-can@lfdr.de>; Mon, 21 Mar 2022 02:48:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 392684E1EF3
+	for <lists+linux-can@lfdr.de>; Mon, 21 Mar 2022 03:06:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343763AbiCUBtc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 20 Mar 2022 21:49:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36288 "EHLO
+        id S241048AbiCUCHe (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 20 Mar 2022 22:07:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344077AbiCUBtb (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 20 Mar 2022 21:49:31 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48C233E27;
-        Sun, 20 Mar 2022 18:48:05 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id o68-20020a17090a0a4a00b001c686a48263so6591659pjo.1;
-        Sun, 20 Mar 2022 18:48:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=MXaHjSqW1X8Va2iXmuY0GdSIMSz0sws/QMoV4WVeEt8=;
-        b=bXw8LgDE+o11taz8NT95gJXNCd0JYnAVosKlZ3yFvjmLg4jhiTCWKd4sVOsYzNyMiI
-         E5W3oHErXcbJ1uLYklqrhWXpDnrKsGsJ86cZ/D9THR6l11pkUeHqWULGsoYipq1Q8Aug
-         YaO66Ox26YrcTvAk/VxszYXDHxdoENQC7D4s+y9H+//iYhOhv5rpdSDqyMCVbDtY1wgJ
-         y/tABDaGrswWJZ59x9Df5+1b9Nuo7Hr1Rqsr5/DZSvybQAgQldym+nQFev4VJbkISgGR
-         9cqyfmYHh0ogOifKOY2WbpNfXr3+Yw3uHpz5vLKtlYDaWnEjPJCSDccMHKKYjotvd8rj
-         pQug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=MXaHjSqW1X8Va2iXmuY0GdSIMSz0sws/QMoV4WVeEt8=;
-        b=wY0n0t4a8WpdqKxtVyT4dsN7/3gPZ1EqnIDxZcIvCGRx4TbkdYKwbJ9OWYe5/kzf4l
-         bLNSiWwlYWg8mEB79HjyjDquBZ1avo7iVRB+z98PmUlK7iipKrSyG3pi6w4aY2suZlQn
-         AN0pa75yaxKjpELuMNoZpX+4oML/5wWJcDIxpISBojD9GKXSUME7x6dlMHb7UATIbjbu
-         thwIo8L39v9I3aXJ6muc26kxKYP0Wr5ybwj5PToeYnQl1qla3HM+ASVD0Q75sJZFBJ9+
-         4a9705sE+R/Sxe2Q0AIeIkhUUj3J56QSP1xvf/ByWsrdpwMPvbNFDr9zIwY99k65MhBc
-         Rd4w==
-X-Gm-Message-State: AOAM533e8VDSUNPOtTgP7gX1+DOoT43gh+EV4Uu+i1nHdaskcd7gOEcG
-        /XfX+wiMMVQmgUxTKMsNYdXcA+iZT+jXTw==
-X-Google-Smtp-Source: ABdhPJzwqjSayPfEdLMbnZ9hl+6ggCJT03NPCSGkybxAu1cj53SWeZ32/CQmZb6HD69avg0sPg8YnQ==
-X-Received: by 2002:a17:903:1205:b0:151:8ae9:93ea with SMTP id l5-20020a170903120500b001518ae993eamr10752168plh.37.1647827285428;
-        Sun, 20 Mar 2022 18:48:05 -0700 (PDT)
-Received: from [10.11.37.162] ([103.84.139.53])
-        by smtp.gmail.com with ESMTPSA id h2-20020a056a00218200b004f6519ce666sm17329005pfi.170.2022.03.20.18.48.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Mar 2022 18:48:05 -0700 (PDT)
-Message-ID: <de416319-c027-837d-4b8c-b8c3c37ed88e@gmail.com>
-Date:   Mon, 21 Mar 2022 09:47:58 +0800
+        with ESMTP id S238328AbiCUCHe (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 20 Mar 2022 22:07:34 -0400
+Received: from mail.enpas.org (zhong.enpas.org [46.38.239.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E9A627CF9;
+        Sun, 20 Mar 2022 19:06:07 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        by mail.enpas.org (Postfix) with ESMTPSA id D8ADBFF93C;
+        Mon, 21 Mar 2022 02:06:05 +0000 (UTC)
+Date:   Mon, 21 Mar 2022 03:06:03 +0100
+From:   Max Staudt <max@enpas.org>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>, linux-can@vger.kernel.org,
+        Oliver Neukum <oneukum@suse.com>, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>
+Subject: Re: [PATCH v3] can, tty: elmcan CAN/ldisc driver for ELM327 based
+ OBD-II adapters
+Message-ID: <20220321030603.2feac810.max@enpas.org>
+In-Reply-To: <20220317205542.2re5x73gqys5fl2n@pengutronix.de>
+References: <20220307214303.1822590-1-max@enpas.org>
+        <20220314215843.xxf6rdxxfwb255s4@pengutronix.de>
+        <20220317211822.7d74b49c.max@enpas.org>
+        <20220317205542.2re5x73gqys5fl2n@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] can: usb_8dev: fix possible double dev_kfree_skb in
- usb_8dev_start_xmit
-Content-Language: en-US
-To:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
-        kuba@kernel.org, stefan.maetje@esd.eu, mailhol.vincent@wanadoo.fr,
-        paskripkin@gmail.com, b.krumboeck@gmail.com
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220311080614.45229-1-hbh25y@gmail.com>
-From:   Hangyu Hua <hbh25y@gmail.com>
-In-Reply-To: <20220311080614.45229-1-hbh25y@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Gentle ping.
+On Thu, 17 Mar 2022 21:55:42 +0100
+Marc Kleine-Budde <mkl@pengutronix.de> wrote:
 
-On 2022/3/11 16:06, Hangyu Hua wrote:
-> There is no need to call dev_kfree_skb when usb_submit_urb fails beacause
-> can_put_echo_skb deletes original skb and can_free_echo_skb deletes the cloned
-> skb.
+> On 17.03.2022 21:18:22, Max Staudt wrote:
+> > > > +/* Bits in elm->cmds_todo */
+> > > > +enum ELM_TODO {    
+> > >         ^^^^^^^^
+> > > small caps please, and Vincent alreadt commented on the name.  
+> > 
+> > Small caps? Sorry, that's not possible in plain ASCII.
+> > You probably mean something else, but I'm not sure what?  
 > 
-> Fixes: 0024d8ad1639 ("can: usb_8dev: Add support for USB2CAN interface from 8 devices")
-> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-> ---
->   drivers/net/can/usb/usb_8dev.c | 30 ++++++++++++++----------------
->   1 file changed, 14 insertions(+), 16 deletions(-)
+> I meant to say lowercase, sorry for the confusion.
+
+Ah, thanks for the clarification!
+
+
+> > > > +	/* Regular parsing */
+> > > > +	switch (elm->state) {
+> > > > +	case ELM_RECEIVING:
+> > > > +		if (elm327_parse_frame(elm, len)) {
+> > > > +			/* Parse an error line. */
+> > > > +			elm327_parse_error(elm, len);
+> > > > +
+> > > > +			/* Start afresh. */
+> > > > +			elm327_kick_into_cmd_mode(elm);
+> > > > +		}
+> > > > +		break;
+> > > > +	default:
+> > > > +		break;
+> > > > +	}
+> > > > +}
+> > > > +
+> > > > +/* Assumes elm->lock taken. */
+> > > > +static void elm327_handle_prompt(struct elmcan *elm)
+> > > > +{
+> > > > +	struct can_frame *frame = &elm->can_frame;
+> > > > +	char local_txbuf[20];    
+> > > 
+> > > How can you be sure, that the local_txbuf is large enough?  
+> > 
+> > It's filled in this very same function, with sprintf() or a strcpy()
+> > from one of the short strings in elm327_init_script (see next quote
+> > below). I've calculated the maximum length that can occur out of all
+> > these possibilities in the current code, and set that as the length
+> > of local_txbuf.  
 > 
-> diff --git a/drivers/net/can/usb/usb_8dev.c b/drivers/net/can/usb/usb_8dev.c
-> index 431af1ec1e3c..b638604bf1ee 100644
-> --- a/drivers/net/can/usb/usb_8dev.c
-> +++ b/drivers/net/can/usb/usb_8dev.c
-> @@ -663,9 +663,20 @@ static netdev_tx_t usb_8dev_start_xmit(struct sk_buff *skb,
->   	atomic_inc(&priv->active_tx_urbs);
->   
->   	err = usb_submit_urb(urb, GFP_ATOMIC);
-> -	if (unlikely(err))
-> -		goto failed;
-> -	else if (atomic_read(&priv->active_tx_urbs) >= MAX_TX_URBS)
-> +	if (unlikely(err)) {
-> +		can_free_echo_skb(netdev, context->echo_index, NULL);
-> +
-> +		usb_unanchor_urb(urb);
-> +		usb_free_coherent(priv->udev, size, buf, urb->transfer_dma);
-> +
-> +		atomic_dec(&priv->active_tx_urbs);
-> +
-> +		if (err == -ENODEV)
-> +			netif_device_detach(netdev);
-> +		else
-> +			netdev_warn(netdev, "failed tx_urb %d\n", err);
-> +		stats->tx_dropped++;
-> +	} else if (atomic_read(&priv->active_tx_urbs) >= MAX_TX_URBS)
->   		/* Slow down tx path */
->   		netif_stop_queue(netdev);
->   
-> @@ -684,19 +695,6 @@ static netdev_tx_t usb_8dev_start_xmit(struct sk_buff *skb,
->   
->   	return NETDEV_TX_BUSY;
->   
-> -failed:
-> -	can_free_echo_skb(netdev, context->echo_index, NULL);
-> -
-> -	usb_unanchor_urb(urb);
-> -	usb_free_coherent(priv->udev, size, buf, urb->transfer_dma);
-> -
-> -	atomic_dec(&priv->active_tx_urbs);
-> -
-> -	if (err == -ENODEV)
-> -		netif_device_detach(netdev);
-> -	else
-> -		netdev_warn(netdev, "failed tx_urb %d\n", err);
-> -
->   nomembuf:
->   	usb_free_urb(urb);
->   
+> You can use something like "local_txbuf[sizeof("ATZ;ATDT0815;ATH")]"
+> with the longest ATZ command you can produce here.
+
+That's a great idea, thanks!
+
+
+> > > > +	/* Reconfigure ELM327 step by step as indicated by
+> > > > elm->cmds_todo */
+> > > > +	if (test_bit(TODO_INIT, &elm->cmds_todo)) {
+> > > > +		strcpy(local_txbuf, *elm->next_init_cmd);    
+> > > 
+> > > strncpy()  
+> > 
+> > For this, there would have to be an entry in elm327_init_script
+> > that is longer than sizeof(local_txbuf) - 1. I highly doubt there
+> > ever will be, and even if someone does come up with one (maybe a
+> > huge new command in a future ELM327 revision), then strncpy would
+> > silently cut off the end and induce unexpected failure. Most
+> > importantly, this failure would be silent - the driver doesn't
+> > check the ELM's responses by design!
+> > 
+> > I suggest an assert here. How about something like this?
+> > 
+> > 	if (strlen(*elm->next_init_cmd) < sizeof(local_txbuf))
+> > 		strcpy(local_txbuf, *elm->next_init_cmd);
+> > 	else
+> > 		WARN_ONCE(...)
+> >
+> > If elm327_init_script contains an item longer than this buffer, then
+> > the buffer size needs to be increased. Simple programming error
+> > IMHO. I'd also add a comment to state this, next to
+> > elm327_init_script.
+> > 
+> > What do you think?  
+> 
+> You can use BUILD_BUG_ON() (see linux/build_bug.h) inside your C
+> function to make a compile time check, or static_assert() outside of C
+> functions.
+
+Thanks! But... what would be the expression being checked? The desire
+is to compare the size of local_txbuf against the size of each member
+of elm327_init_script - it seems counterintuitive to me to loop over
+them all and have a BUILD_BUG_ON() as the loop body. Does the compiler
+optimise that away?
+
+
+> > > > +	} else if (test_and_clear_bit(TODO_SILENT_MONITOR,
+> > > > &elm->cmds_todo)) {
+> > > > +		sprintf(local_txbuf, "ATCSM%i\r",
+> > > > +			!(!(elm->can.ctrlmode &
+> > > > CAN_CTRLMODE_LISTENONLY)));    
+> > > 
+> > > snprintf()  
+> > 
+> > See above. This size is predictable, and used to size local_txbuf.
+> > 
+> > Thinking about it, since this size is easily predictable, the
+> > compiler could also do it, and that would turn snprintf() into a
+> > compile time check.
+> > 
+> > Unfortunately I couldn't make GCC shout at me for giving snprintf()
+> > too small a buffer to fit all possible expansions of this format
+> > string. Is this even possible?  
+> 
+> In user space, I've seen warnings like that, not sure about the
+> kernel.
+
+Ditto.
+
+Okay, then I can plop in snprintf() anyway, and maybe the compiler will
+start shouting a few years down the road when this kind of warning is
+enabled in kernel builds. Unless you no longer see the need :)
+
+
+> > > > +static int elmcan_netdev_open(struct net_device *dev)
+> > > > +{
+> > > > +	struct elmcan *elm = netdev_priv(dev);
+> > > > +	int err;
+> > > > +
+> > > > +	spin_lock_bh(&elm->lock);
+> > > > +	if (elm->hw_failure) {
+> > > > +		netdev_err(elm->dev, "Refusing to open
+> > > > interface after a hardware fault has been detected.\n");
+> > > > +		spin_unlock_bh(&elm->lock);
+> > > > +		return -EIO;
+> > > > +	}    
+> > > 
+> > > How to recover from this error?  
+> > 
+> > The user can detach and reattach the ldisc as often as desired.
+> > 
+> > There is currently no intention to recover automatically. Once
+> > elm->hw_failure is set, something really weird must have happened
+> > such as unexpected characters on the UART. Since these devices are
+> > usually a PIC right next to a UART-USB bridge chip, which is why I
+> > deem this indicative of hardware too faulty to be trusted in any
+> > way.
+> > 
+> > Regular "expected" errors are parsed and dealt with by sending error
+> > frames in elm327_parse_error(). These do not trigger hw_failure.  
+> 
+> Ok, in other drivers I usually do a full reset during an ifdown/ifup
+> cycle....at least for non hot plug-able devices.
+
+Yeah, this one is hotpluggable by definition, and I'm not sure that
+resuming communications is a good idea once a UART sanity test in the
+driver has failed. In case the UART is unreliable, trying to reset the
+interface may do more harm than good.
+
+And if anyone builds this interface internally into their product,
+non-hotpluggable and with this driver, then may mercy be upon them.
+This driver really isn't meant for them. All ELM327 devices I've ever
+seen are a UART via RS232, USB, BT, or TCP, and hot-pluggable by the
+user.
+
+I have thought about a reset as a thing to maybe implement later down
+the road, but so far when I tried to implement more lenient error
+handling, I got a bad feeling about it.
+
+Fun fact: elm327_hw_failure() used to be called elm327_panic() in early
+versions of the driver, because I just give up on UART errors :)
+
+
+> > > > +	elm->txbuf = kmalloc(ELM327_SIZE_TXBUF, GFP_KERNEL);
+> > > >  
+> > > 
+> > > Why do you allocate an extra buffer?  
+> > 
+> > If I remember correctly, I was told that this is preferred because
+> > drivers can DMA out of the aligned buffer. I didn't question that. I
+> > can simply allocate a buffer as part of struct elmcan if you
+> > prefer.  
+> 
+> You can force proper alignment with marking the memory as
+> ____cacheline_aligned. Extra bonus for checking (and optimizing)
+> structure packing with the "pahole" tool.
+
+Thanks! Will do then, this simplifies things.
+
+
+
+Max
