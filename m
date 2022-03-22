@@ -2,62 +2,60 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EF4B4E39D6
-	for <lists+linux-can@lfdr.de>; Tue, 22 Mar 2022 08:47:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C6354E3A4F
+	for <lists+linux-can@lfdr.de>; Tue, 22 Mar 2022 09:12:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229472AbiCVHsN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 22 Mar 2022 03:48:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45854 "EHLO
+        id S230225AbiCVIN0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 22 Mar 2022 04:13:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiCVHsL (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 22 Mar 2022 03:48:11 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404EFC27
-        for <linux-can@vger.kernel.org>; Tue, 22 Mar 2022 00:46:44 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nWZDl-0000k1-JB; Tue, 22 Mar 2022 08:46:25 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-7c76-e54b-1dbb-9ff1.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:7c76:e54b:1dbb:9ff1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 3DBDF511F6;
-        Tue, 22 Mar 2022 07:46:23 +0000 (UTC)
-Date:   Tue, 22 Mar 2022 08:46:22 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Pavel Pisa <pisa@cmp.felk.cvut.cz>
-Cc:     linux-can@vger.kernel.org, devicetree@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        David Miller <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>, mark.rutland@arm.com,
-        Carsten Emde <c.emde@osadl.org>, armbru@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marin Jerabek <martin.jerabek01@gmail.com>,
-        Ondrej Ille <ondrej.ille@gmail.com>,
-        Jiri Novak <jnovak@fel.cvut.cz>,
-        Jaroslav Beran <jara.beran@gmail.com>,
-        Petr Porazil <porazil@pikron.com>, Pavel Machek <pavel@ucw.cz>,
-        Drew Fustini <pdp7pdp7@gmail.com>
-Subject: Re: [PATCH v8 0/7] CTU CAN FD open-source IP core SocketCAN driver,
- PCI, platform integration and documentation
-Message-ID: <20220322074622.5gkjhs25epurecvx@pengutronix.de>
-References: <cover.1647904780.git.pisa@cmp.felk.cvut.cz>
+        with ESMTP id S230208AbiCVINZ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 22 Mar 2022 04:13:25 -0400
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D167DF03;
+        Tue, 22 Mar 2022 01:11:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1647936714;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=hNp8yDlEQPqE3EPVW7S4rvLP+Xs41OUZDqDWILoqWac=;
+    b=Z1OxvbJImZM9vEF6DtdMG0izZkkovQFkCOZihvbk2u8Uuv0cSW+77NTa4E+0eIgRuJ
+    +25fEPG7wjVjV3UERRV4Of9zEycMcdQ7iGeqEAJCwvjAjuJUW3e2d43PmAPgeC3q29TP
+    MLN91212ZPiOS/vofXrPTGM988zOV5uDQR5K/bQp03soEASrKGS0yXvxPFeuu8ZBG4tx
+    E5WpTw/CJrBVF5x5QbLLSpC65WgdXSnZIxiDwPuuLD+XqQsr4aqVyDa6za7V9r58edZx
+    lIMsUP2TeBIGpOceKfP8l7H8hW6Fbe22rjqDYhLKXbfG2oXsIfMXht8Reob6XpiCgaBz
+    eq/g==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdd0DIgVuBOfXW6v7w=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a00:6020:1cfa:f900::b82]
+    by smtp.strato.de (RZmta 47.41.1 AUTH)
+    with ESMTPSA id cc2803y2M8BsDgH
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Tue, 22 Mar 2022 09:11:54 +0100 (CET)
+Message-ID: <5d550eea-21ae-c495-6936-1747b9619304@hartkopp.net>
+Date:   Tue, 22 Mar 2022 09:11:48 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="36z23q6udvpbfk4u"
-Content-Disposition: inline
-In-Reply-To: <cover.1647904780.git.pisa@cmp.felk.cvut.cz>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH net-next v2] net: remove noblock parameter from
+ skb_recv_datagram()
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+References: <20220319094138.84637-1-socketcan@hartkopp.net>
+ <20220321145613.5ebd85ec@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20220321145613.5ebd85ec@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -65,66 +63,38 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---36z23q6udvpbfk4u
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On 22.03.2022 00:32:27, Pavel Pisa wrote:
-> This driver adds support for the CTU CAN FD open-source IP core.
-> More documentation and core sources at project page
-> (https://gitlab.fel.cvut.cz/canbus/ctucanfd_ip_core).
-> The core integration to Xilinx Zynq system as platform driver
-> is available (https://gitlab.fel.cvut.cz/canbus/zynq/zynq-can-sja1000-top=
-).
-> Implementation on Intel FPGA based PCI Express board is available
-> from project (https://gitlab.fel.cvut.cz/canbus/pcie-ctucanfd).
-> The CTU CAN FD core emulation send for review for QEMU mainline.
-> Development repository for QEMU emulation - ctu-canfd branch of
->   https://gitlab.fel.cvut.cz/canbus/qemu-canbus
->=20
-> More about CAN bus related projects used and developed at CTU FEE
-> on the guidepost page http://canbus.pages.fel.cvut.cz/ .
+On 21.03.22 22:56, Jakub Kicinski wrote:
+> On Sat, 19 Mar 2022 10:41:38 +0100 Oliver Hartkopp wrote:
+>> skb_recv_datagram() has two parameters 'flags' and 'noblock' that are
+>> merged inside skb_recv_datagram() by 'flags | (noblock ? MSG_DONTWAIT : 0)'
+>>
+>> As 'flags' may contain MSG_DONTWAIT as value most callers split the 'flags'
+>> into 'flags' and 'noblock' with finally obsolete bit operations like this:
+>>
+>> skb_recv_datagram(sk, flags & ~MSG_DONTWAIT, flags & MSG_DONTWAIT, &rc);
+>>
+>> And this is not even done consistently with the 'flags' parameter.
+>>
+>> This patch removes the obsolete and costly splitting into two parameters
+>> and only performs bit operations when really needed on the caller side.
+>>
+>> One missing conversion thankfully reported by kernel test robot. I missed
+>> to enable kunit tests to build the mctp code.
+> 
+> net/vmw_vsock/vmci_transport.c: In function ‘vmci_transport_dgram_dequeue’:
+> net/vmw_vsock/vmci_transport.c:1735:13: warning: unused variable ‘noblock’ [-Wunused-variable]
+>   1735 |         int noblock;
+>        |             ^~~~~~~
 
-The driver looks much better now. Good work. Please have a look at the
-TX path of the mcp251xfd driver, especially the tx_stop_queue and
-tx_wake_queue in mcp251xfd_start_xmit() and mcp251xfd_handle_tefif(). A
-lockless implementation should work in your hardware, too.
+Sorry. Double checked that really all touched files are now built on my 
+machine.
 
-BTW: The PROP_SEG/PHASE_SEG1 issue is known:
+(Except in af_iucv.c which depends on S390 - but double checked the 
+changes 4 times).
 
-> +A curious reader will notice that the durations of the segments PROP_SEG
-> +and PHASE_SEG1 are not determined separately but rather combined and
-> +then, by default, the resulting TSEG1 is evenly divided between PROP_SEG
-> +and PHASE_SEG1.
+v3 is already posted:
+https://lore.kernel.org/netdev/20220322080317.54887-1-socketcan@hartkopp.net/T/#u
 
-and the flexcan IP core in CAN-FD mode has the same problem. When
-working on the bit timing parameter, I'll plan to have separate
-PROP_SEG/PHASE_SEG1 min/max in the kernel, so that the bit timing
-algorithm can take care of this.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---36z23q6udvpbfk4u
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmI5fswACgkQrX5LkNig
-013PMQgAry/PkuGGU7GSA3xJRLELcIKOAuwmQaJF/J1/IKeEaZOtD6W/7ml1q9OX
-jpiKdNr/4kgkkEbmF4RpUJcu47Q3R4pYsKdu02b80vbul8tz+pc1vSrJdectiZgN
-2Ni1L+fR78bnICKivXNyPBFRhmbwakBkEUihKIMipb9+r6i7EhzuEt2f9B7ENyin
-3OtnjT9ilKigKGyWhzFgpVE1OVpZA6JuU4FeI5Tn1W1hq3oR7285Z9pI78++mC5a
-2YRreiqXhywLExr46RWqEnnAqhQApJr8TLB323llhmzeYQcb/uz5RZhXKull3Lzx
-lAkWRDnyip0aWFAvXdpaSva9WQoFCg==
-=VfJn
------END PGP SIGNATURE-----
-
---36z23q6udvpbfk4u--
+Best regards,
+Oliver
