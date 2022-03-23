@@ -2,119 +2,164 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6F624E4CC2
-	for <lists+linux-can@lfdr.de>; Wed, 23 Mar 2022 07:32:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C5574E5321
+	for <lists+linux-can@lfdr.de>; Wed, 23 Mar 2022 14:28:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241895AbiCWGdj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 23 Mar 2022 02:33:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49922 "EHLO
+        id S244197AbiCWNaA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 23 Mar 2022 09:30:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231629AbiCWGdj (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 23 Mar 2022 02:33:39 -0400
-Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800E0716E8
-        for <linux-can@vger.kernel.org>; Tue, 22 Mar 2022 23:32:10 -0700 (PDT)
-Received: by mail-oi1-x244.google.com with SMTP id q129so764046oif.4
-        for <linux-can@vger.kernel.org>; Tue, 22 Mar 2022 23:32:10 -0700 (PDT)
+        with ESMTP id S231694AbiCWN36 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 23 Mar 2022 09:29:58 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC55E4B411
+        for <linux-can@vger.kernel.org>; Wed, 23 Mar 2022 06:28:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1648042105; x=1679578105;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=01xcpN05wBL5LdIWcxMNzVKuUFj+3p5ZhOSEd9Xusxw=;
+  b=X9iFgy2XM3n0QP71Kxx4PQhfVKklDseiRoTDYcUhNm9/J8GdBhxsirU7
+   jNSAo/XtKZCJveG1PGclfW6H1XlPfqcEFNLT1ve2VaRtzOWIhEX9d/elx
+   vneg+GYkFmQd1BH0dR2y8iZ3NX8FN+qn8rZOuj/X8ZAPr0cFiGF9q8BXy
+   3KW25TnIBzPCwAwV7z9jzrwC/Hw2RA6NUpmvFC8mYc54SgfHMzY7BJN9T
+   No8vZsvkmdfRjMXHqpJz8re143dqSMkuj8jzOz5WKUjUPnCGKIDNgOuO/
+   TExMoA/8gJwXfMIOpO4KBo+KmIwl2Aq1ioHkAiL+y4cG4iiTsFmv5FS/R
+   A==;
+X-IronPort-AV: E=Sophos;i="5.90,204,1643698800"; 
+   d="scan'208";a="157886468"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Mar 2022 06:28:25 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 23 Mar 2022 06:28:25 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17 via Frontend Transport; Wed, 23 Mar 2022 06:28:24 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Pliq1aUWV49Yf0lF7oIudGB/25UtV5nor7c+qlrP5V5vrqW9bBFBqpT0K60Gemhpycy9Jy/rO3MbjAhQ54gxr5W9oZF6282Lma0EUXju7G2WXO/f40RBOHWcih3PUEM2Ni8AlkKkWsQIZsZSt8dabObpPMhbwBFvl3jCj/Gc408SGhcvag2u8e09l5/zJy4Q+BBMjbIEIBoOgFRgkTxmCmY1LlaRoEP4q1McO7KFW+j9YtwMNvNPVtqHYlPk3p/5T9IeLTS9joXG/8NaI01uZWD7Jo+QQDnm9d/JMMng7SrWzgOS+KFdQiGNzz60wjzsvX0TS/aGjwYU434Nly3TiQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cF7lfkUdHbNrPR05v+jQM+CSJOX6jhHlSObkcwG6XOc=;
+ b=XVZLBcSiIQ37bYc6l574hjFw+DdXYRR+fnZ4TONkcc7+bg37jgHF/QBeYvjZPonoAHHWjouIFo1uJpwKfLO1MnSHAtm//GNRg8Yv/5H+7/NqbJB8FZ8TMF12HTPskhVJ6FcshZtjJZo1foO0jkitVMte8M31Q3brcwEOTVqiTloBLcrDBpqGuIBM/1a6VGTH/b1UurNr45+lt4kpGpgtw463TI48I43r15le9mWFJ8tUkwuqqygB3jjKJtCWHqejcvgTSJ2Kfex6cqy+X6Gi1VVe2jNu875LUCiow52idOfmrV7mdRqsXa0+QiYahQzGmkKGQPToOUjQflGOLAfS0Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=CNNPGySxSq7bZ1La6vvay1kp1T7RaMnfdFjrr49KhAk=;
-        b=ELHNnFp6MqSbFWD5yohJR2P6geJrnoRmAy99u/wb2i3YgbuP4pWakoRgQfTsGVZlvn
-         zLTN0T624N4/lL25GMK9qfuRfPiJigFyNydERiaTexgqTI/XwdMF2uLn+oQY6Yv0SKPc
-         9fDM/dzuYRq6DHijqM7s8dRKZ9B3qFT9YVKfGvkubS9pzTFGp+ptWDJ1xbaW35dktUYS
-         vQMaYGrLqckC16Dn5dH0kAKCcO9G9lvi+YvGK4hyOnMiksWl+nkM2HvljeUfWO+bKqus
-         e2w3/545UcSrcuUhEibwm9A9M8Z8TNTBNiSvHJqQS8nG/7p9h98oX7Y3hECJg4ch8kNB
-         OmQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=CNNPGySxSq7bZ1La6vvay1kp1T7RaMnfdFjrr49KhAk=;
-        b=eHMTTw8pX1MLrOxp/kX96IdD/Iji94CgnFxO64W5H/SCtt4+VATmLcBfnpgwso2M1o
-         jWMPoLBvcUPZKal5eT4tTwB48Gna1MHF2t0RdWYPhGdBebG9lKp2hgr5Rnm1MhUMySkP
-         Y9Yw47Slt+R3BvYxS6It7EvbM7Mfmy0QXike9IK3NNl0EqrEJcpU5RGbDODYvwpxhkLV
-         vWr9OGSqA8qSb18QZXy/70G7IC0HDK8gW0iaqqAqCTEdXfRZRhvUGVfiVM4X/TdKSgtf
-         +y06dLo+coHAo5bimbAB1fedYfNc4iYsD82Yri3mgeGO4YZqbjgpZ8JSGCXNY3aElv2A
-         WoOw==
-X-Gm-Message-State: AOAM530BExLqveEKEvPG3/xRSVgom9kDGUf9L+cZUHQDZRqIyEcTwvd9
-        k0oElij+MVwyGgywdowoauv4dmBfinsJk0buFpk=
-X-Google-Smtp-Source: ABdhPJxwyT/N30ellZDc2KKS1Sx/fwQoRUjXkm5cAsQUvi6gnhJRO0h3xobcDWI8XIWK3kmGB7T+ggZxEkBhcyOBm/8=
-X-Received: by 2002:a05:6808:e8b:b0:2d9:d744:1eee with SMTP id
- k11-20020a0568080e8b00b002d9d7441eeemr3868008oil.129.1648017129784; Tue, 22
- Mar 2022 23:32:09 -0700 (PDT)
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cF7lfkUdHbNrPR05v+jQM+CSJOX6jhHlSObkcwG6XOc=;
+ b=J6reR8qP5ZBk1DsYNSPS6IiCrtTq54emG1wVZxMqu8L3Cs/QaUj/RgTqE6QS2MHYiyKd7WOR0goMhijqVczlWRpjPemma7nmzOjUtCiV0s3ZqCenhW1cuJhnKVx5GLOgd4BMjU0Co0Vmu1cNXHQ5FCYIiPBqGkoWZV3kCJxcYGU=
+Received: from DM4PR11MB5390.namprd11.prod.outlook.com (2603:10b6:5:395::13)
+ by BN6PR11MB1827.namprd11.prod.outlook.com (2603:10b6:404:fb::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.15; Wed, 23 Mar
+ 2022 13:28:20 +0000
+Received: from DM4PR11MB5390.namprd11.prod.outlook.com
+ ([fe80::815f:c1cc:e819:cda6]) by DM4PR11MB5390.namprd11.prod.outlook.com
+ ([fe80::815f:c1cc:e819:cda6%9]) with mapi id 15.20.5102.016; Wed, 23 Mar 2022
+ 13:28:20 +0000
+From:   <Thomas.Kopp@microchip.com>
+To:     <mkl@pengutronix.de>, <linux-can@vger.kernel.org>
+CC:     <kernel@pengutronix.de>, <manivannan.sadhasivam@linaro.org>
+Subject: RE: can-next 2022-03-13: mcp251xfd: add 
+Thread-Topic: can-next 2022-03-13: mcp251xfd: add 
+Thread-Index: AQHYNrV85eXBoW8fO0uqUGXLZ/3mU6zNAK7w
+Date:   Wed, 23 Mar 2022 13:28:20 +0000
+Message-ID: <DM4PR11MB539016D37DC0A025799B809BFB189@DM4PR11MB5390.namprd11.prod.outlook.com>
+References: <20220313083640.501791-1-mkl@pengutronix.de>
+In-Reply-To: <20220313083640.501791-1-mkl@pengutronix.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 65e7bcb3-27af-4da1-eba5-08da0cd0ff3b
+x-ms-traffictypediagnostic: BN6PR11MB1827:EE_
+x-microsoft-antispam-prvs: <BN6PR11MB1827825EA4D065AA1A4F7820FB189@BN6PR11MB1827.namprd11.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: bzpSJdag0ttapbRao2pSJbvaf7bN++H8Q53Mf6twQa3e9xm1KZuCED0z19NaAgPXi+pCZKw/axCjqcUNLICLtFhrk4b9ccO3oTjuhWeYdFufrI5Ywl7mqT6Qhl8iN1/sgD9Z6UIM3LaNxEIeY5sSUiywBxvBvmZK7Ev1ijTsWGGWohaWlCNOh0gNTHY/+mJZxs1I/V++bIMoTiMqfPnQmzBrTv612bAEz5rd9Zxblb/VCh297udxyoiEQUoh7C38PC9jRYnwHyNlbjLufpm2HuFPCxVIF6blw9JYdW1TAw1anEk+JjX1BnemRD14ggjHMmN6oK5e761vCpMZvxjSiJZascc8q4nmfma5HBVni34/t5XaM1T2IXSjIfdurkKVkrALpT3cFETv/IN8QmKX0VyoQEqCcIbQ/HnV8lUmUFtp/wn3M0Okso2b9fEsgeQ60uGzEjZ398LH5WvCWnwXB/+5bQCW6dQyM3LnEwLsK3mX1zp4EEudTCEpUQ1o4INqxVoTN3GlO+kUdZ+DIuJ7UWQjFubqCEr69MKPXGBU51JmKnOZKfSmWqeq+Fwz1XfDMTaagMsY8RbcBRyAoVRXKUhvsdBnp+XeeOL4ktK+hqZBoU2phvuLEaWVTa0mTizwRj0nt63DXGsW2Ak2kySMmqGbLXr8czunuhglWu7/hcOthIK5dV091fdMehVaH9q4YcmjJ+dT1c9Dvu9GA7DROg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5390.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(83380400001)(316002)(26005)(186003)(86362001)(110136005)(54906003)(66946007)(66476007)(76116006)(66556008)(5660300002)(4326008)(66446008)(52536014)(64756008)(4744005)(8936002)(38100700002)(38070700005)(8676002)(122000001)(2906002)(508600001)(9686003)(33656002)(4743002)(71200400001)(55016003)(7696005)(6506007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Q/DKBs74vSA0ahVuiwuCYH/Ndw2saNqcum0GUTE7Mxfx+hAkdUhgNXur3sbH?=
+ =?us-ascii?Q?X4qUE4NPd9SrH4H8MtgE080k1X5rY1rGdb5YJwrWpwd22rQ4bnEvbQe0Rr8x?=
+ =?us-ascii?Q?a9hv2DOxB+oS5CbZlbE14bX9srDR2mtFBepcFI9tb9NxNA7EjsVCgrSvh88M?=
+ =?us-ascii?Q?VdWWoOTP8zdOYvV0RcuHQ8UgbRaQHY9dbv0Gac5kFM8fBxBR6HA+VuR7wqp5?=
+ =?us-ascii?Q?cK+t3PQdT/wPr6MCgVApNROJj2CU9kIFy++PamP6pErsUxZk+qwpZjR0ivu9?=
+ =?us-ascii?Q?79XHqNmb0N7otfIgwcH/yVrX9evjnozo+z2ceP5KOMd60RrOIr/XytuTTJ++?=
+ =?us-ascii?Q?iiU4p8k9Z0oL7AXyqYJFtSjJ9e28zYa1poTe/9BAR+MxQm7AQ578G8iF3vn0?=
+ =?us-ascii?Q?YixDjVe+80/A9qzzoehttoV70gZt2MetJwwM9p0xQf1Wp7ytMWtEsmoU6j96?=
+ =?us-ascii?Q?0PKw2qyc/PuC0TH/SwsW+MWPqRU7Rl1tpqK1rCeS42FavofJQa599qI8G+v6?=
+ =?us-ascii?Q?VR2tPx/Aa50fCLofazdkuPuTfT1IejdGQc4hn1+VqA5YQ4q+Hw+J0mbAFGhm?=
+ =?us-ascii?Q?QWW7nj9orjHgH5yghAXOOET8y1A5eD3ri/KBOIDd9Kuxq3VlKOign+HZrnn0?=
+ =?us-ascii?Q?16rOpPwHsgYYcQzCbDbwRq0EhlHbPq+V1Qvt1f6nQ+Z4f1XuyZq2iqPGVz9Y?=
+ =?us-ascii?Q?gtRORbbirAVJrzBx4tmEoFHoAr5sg4vk6l//6YEP/DcKt1JxgfQZMcDwYAXf?=
+ =?us-ascii?Q?A3vHgX17SrjAcfS5RpQiuDU1ch+lOACyV5xP1QW+NbSPabiiDtunEPGH1nUN?=
+ =?us-ascii?Q?ZGnAXq36cUm87mjVRUAPaHV1jBwDl2gmLTVzebRNA5zV6lzLEKCJwqU0U7sg?=
+ =?us-ascii?Q?UunPJuJy8Q7D+J+Z4GHAHX9ohFm1IEEQFTPJMrPgAuDKhfROvxQHaeBgswoe?=
+ =?us-ascii?Q?VP9+xoDgyAS10HPM0FkP7Ihhy6MZkPhJLeZQpSG+/2nVIP8Va0iA1cfa8wjf?=
+ =?us-ascii?Q?PjJ42+B/GrPA+h46GNtM3A6L6IY12MTktM74fbY9PYf67TqCw3T2Bm+RyEc9?=
+ =?us-ascii?Q?n0neQO8/MHCBCBdYtCmSBgEdSZ1ucEv6x18AcqCPe5K+nhNN4HHgPAkWj0fM?=
+ =?us-ascii?Q?wKLH3/pBebSVQafwTmOM73pwGqliKPelaaJ4nwA/Vd6uTWml1QKkWNm++tiT?=
+ =?us-ascii?Q?ReTpW66nguE+KP8DA8603Mr6u78CtHYVxU7d1VORVz18hGoVSkWdoEr9beEl?=
+ =?us-ascii?Q?s0Bfyr48awGWFS786rtwsA0gqe4u/+S1RsBnifs3KquzeHW9803bMpb4Zcvu?=
+ =?us-ascii?Q?Oh/OSKLHSuJiy3kT8psTz6NKGSQLkOK85PBbpIYUoXOUfr20lmaEgSzI1ET+?=
+ =?us-ascii?Q?prGWEbMscA0zE5XXp5wlwlVCQupgiR9tvampZ426Pvy9oMTOaR21Uqkh06jc?=
+ =?us-ascii?Q?jhsxZOnBmy2H8l2OnIkP7HGrW4feDUKA?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Sender: mrslila88haber@gmail.com
-Received: by 2002:a4a:e08f:0:0:0:0:0 with HTTP; Tue, 22 Mar 2022 23:32:09
- -0700 (PDT)
-From:   "Dr. Nance Terry Lee" <nance173terry@gmail.com>
-Date:   Wed, 23 Mar 2022 06:32:09 +0000
-X-Google-Sender-Auth: VggOCyHB4u8Az8-7N0FAK_YFxMA
-Message-ID: <CAODWenbVoYBDWP2tVL33-r+qC_C2ZzXk1s3bv0Kdd_yszEWk7g@mail.gmail.com>
-Subject: Hello My Dear Friend
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_SCAM,
-        LOTS_OF_MONEY,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:244 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mrslila88haber[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.0 HK_SCAM No description available.
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.8 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  2.9 MONEY_FRAUD_5 Lots of money and many fraud phrases
-X-Spam-Level: *******
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5390.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 65e7bcb3-27af-4da1-eba5-08da0cd0ff3b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Mar 2022 13:28:20.0413
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: VJDVC9ac6f/+Bwsc0oPQGgHbVesEuXxWG+x75LztbHt0Aul9gb2/6uaXYLH6spy7vkC8FW6QMqBijf75PZ2q+sFz07Sf58hlNFBtgW+M+K8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB1827
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello My Dear Friend,
+Hi Marc,
 
-I am Dr. Nance Terry Lee, the United Nations Representative Washington
--DC - USA.
-I hereby inform you that your UN pending compensation funds the sum of
-$4.2million has been approved to be released to you through Diplomatic
-Courier Service.
+> this series for the mcp251xfd adds IRQ coalescing support.
+>=20
 
-In the light of the above, you are advised to send your full receiving
-information as below:
+Thanks for these patches, the performance gains with activated coalescing l=
+ook awesome!
+Testing on a Pi4 mostly 1 channel RX-only Full busload scenarios I see sign=
+ificantly reduced CPU utilization. This is both for CAN 2.0 and CAN-FD use-=
+cases.
 
-1. Your full name
-2. Full receiving address
-3. Your mobile number
-4. Nearest airport
+I tested this patch series against 5.17 mainline and I think the performanc=
+e when NOT using coalescing regressed slightly ("measured"  via sar -u 1, n=
+ot sure if that is a valid benchmark?)
+I had both driver versions configured for the same fifo sizes and coalescin=
+g turned off. The mainline driver actually generates slighty more SPI inter=
+rupts in this scenario (20k CAN 2.0 Frames RXed in CAN-FD mode). Not really=
+ sure what causes the higher CPU utilization or if it's even relevant (mayb=
+e on smaller systems than a Pi4)
 
-Upon the receipt of the above information, I will proceed with the
-delivery process of your compensation funds to your door step through
-our special agent, if you have any questions, don't hesitate to ask
-me.
+Best Regards,
+Thomas
 
-Kindly revert back to this office immediately.
 
-Thanks.
-Dr. Nance Terry Lee.
-United Nations Representative
-Washington-DC USA.
-Tel: +1-703-9877 5463
-Fax: +1-703-9268 5422
+
