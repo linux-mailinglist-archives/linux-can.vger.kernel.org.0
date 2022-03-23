@@ -2,104 +2,150 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A28EE4E5922
-	for <lists+linux-can@lfdr.de>; Wed, 23 Mar 2022 20:29:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2B0A4E59F0
+	for <lists+linux-can@lfdr.de>; Wed, 23 Mar 2022 21:35:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245548AbiCWTae (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 23 Mar 2022 15:30:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60908 "EHLO
+        id S239966AbiCWUgs (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 23 Mar 2022 16:36:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236043AbiCWTad (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 23 Mar 2022 15:30:33 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F2E31372
-        for <linux-can@vger.kernel.org>; Wed, 23 Mar 2022 12:29:03 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nX6fD-0001lb-Ue; Wed, 23 Mar 2022 20:28:59 +0100
-Received: from pengutronix.de (2a03-f580-87bc-d400-8a32-3c37-3138-10d6.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:8a32:3c37:3138:10d6])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 84789523AF;
-        Wed, 23 Mar 2022 19:28:58 +0000 (UTC)
-Date:   Wed, 23 Mar 2022 20:28:58 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Thomas.Kopp@microchip.com
-Cc:     linux-can@vger.kernel.org, kernel@pengutronix.de,
-        manivannan.sadhasivam@linaro.org
-Subject: Re: can-next 2022-03-13: mcp251xfd: add
-Message-ID: <20220323192858.pixhyf2jzah7eqiv@pengutronix.de>
-References: <20220313083640.501791-1-mkl@pengutronix.de>
- <DM4PR11MB539016D37DC0A025799B809BFB189@DM4PR11MB5390.namprd11.prod.outlook.com>
- <20220323140347.hkuklvkefvb4l6l5@pengutronix.de>
- <DM4PR11MB5390224F4ABAED6DFC430266FB189@DM4PR11MB5390.namprd11.prod.outlook.com>
+        with ESMTP id S235348AbiCWUgr (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 23 Mar 2022 16:36:47 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F4A269;
+        Wed, 23 Mar 2022 13:35:15 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id bu29so4730526lfb.0;
+        Wed, 23 Mar 2022 13:35:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to;
+        bh=yvypnLVjCrWy5spCJBsgRPFJn4U1BSlCRE6N0KMRzWU=;
+        b=TLCkjNe8KY46ih5qA1GtmMXB57U6LTd+kdCmexWzAF2WwlSu8eaRgtGVcQ78s6Fxt6
+         v3FksA3mvB8IXngY9316GUf0riflRzNyWD1veXCWM2cC7Vn02ybuO77PPQ969CAXZrCv
+         7HCFbAahuIavcEEGqYQFW0cuBrQ0Rb1pI9yx0NXRvNLb8ZHShXFgwtM+LQi5O9Lo/NrC
+         GcQ/l45g21PIH0SUSMRE2WQ+V5Jmalr/RudVM9cakXi/HUzxTCNwVaN/h+g/rcgn4KU7
+         lRy0nlzgOAlS31WeN6/eSk+qukjydsyO4D/XKLkVZBJA3jhXhMpM0KjjJoztSuka612j
+         guBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to;
+        bh=yvypnLVjCrWy5spCJBsgRPFJn4U1BSlCRE6N0KMRzWU=;
+        b=bK+FxVho9ywvRsjK3JR5BcQf+wk0ab+O7oOskBVC0pcb+HrOv/OrFDHqoAtA0zFS4+
+         veWKXmbJpRvMlirO+FxotVxKWJelZK48MxBTPsztoK3iephnjclWfe4llvZliMt3w9tI
+         U6wx54hNJ5wYJIUMvrrDhfglJO+d2Wh1iQRkEIbHWlqNJW9b/42g5uVwT9QG8jdDYlGi
+         xdr02DSv39Y+E3Fksw7ivN+8akyusQh9FoFJLjOXuAKkwpip0cBgUARzMfo1mNuWX5rQ
+         xb7YiOtGL3O/vXpLE+kR70gJn88eeXnTPSoebqcAN/RHGT0NOxHnVDpNwmVT+jiG7vXQ
+         4f7w==
+X-Gm-Message-State: AOAM531xR3YlZ6bJLSoA6HwyrUSHxKrhAQAW4QiwC+0sNIgqwpok56zh
+        AEwsKzGvohThS2jfF64YwAg=
+X-Google-Smtp-Source: ABdhPJwfztJuCDhkEzxS/JcI1aU8U4w5CymWH04dRCfYpin0MrgEuXHRoMGZo+rV0KHOBUfj7AIzAg==
+X-Received: by 2002:a05:6512:2348:b0:44a:3134:7d52 with SMTP id p8-20020a056512234800b0044a31347d52mr1164464lfu.207.1648067713945;
+        Wed, 23 Mar 2022 13:35:13 -0700 (PDT)
+Received: from [192.168.1.11] ([46.235.67.145])
+        by smtp.gmail.com with ESMTPSA id c22-20020ac24156000000b0044846901eabsm89637lfi.24.2022.03.23.13.35.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Mar 2022 13:35:13 -0700 (PDT)
+Message-ID: <f35435f3-13bd-2985-bfdd-b693388e49a0@gmail.com>
+Date:   Wed, 23 Mar 2022 23:35:11 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qbos6cmobxlo5c73"
-Content-Disposition: inline
-In-Reply-To: <DM4PR11MB5390224F4ABAED6DFC430266FB189@DM4PR11MB5390.namprd11.prod.outlook.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v3] can: mcba_usb: properly check endpoint type
+Content-Language: en-US
+To:     yashi@spacecubics.com, wg@grandegger.com, mkl@pengutronix.de,
+        davem@davemloft.net, kuba@kernel.org, mailhol.vincent@wanadoo.fr
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+3bc1dce0cc0052d60fde@syzkaller.appspotmail.com
+References: <CAMZ6RqKn4E9wstZF1xbefBaR3AbcORq60KXvxUTCSH8dZ+Cxag@mail.gmail.com>
+ <20220313100903.10868-1-paskripkin@gmail.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <20220313100903.10868-1-paskripkin@gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------wuJb3knIS3Bcn2sAl3RLDNAC"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------wuJb3knIS3Bcn2sAl3RLDNAC
+Content-Type: multipart/mixed; boundary="------------zMAyY88wsciZQYHPRhRowlKy";
+ protected-headers="v1"
+From: Pavel Skripkin <paskripkin@gmail.com>
+To: yashi@spacecubics.com, wg@grandegger.com, mkl@pengutronix.de,
+ davem@davemloft.net, kuba@kernel.org, mailhol.vincent@wanadoo.fr
+Cc: linux-can@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ syzbot+3bc1dce0cc0052d60fde@syzkaller.appspotmail.com
+Message-ID: <f35435f3-13bd-2985-bfdd-b693388e49a0@gmail.com>
+Subject: Re: [PATCH v3] can: mcba_usb: properly check endpoint type
+References: <CAMZ6RqKn4E9wstZF1xbefBaR3AbcORq60KXvxUTCSH8dZ+Cxag@mail.gmail.com>
+ <20220313100903.10868-1-paskripkin@gmail.com>
+In-Reply-To: <20220313100903.10868-1-paskripkin@gmail.com>
 
---qbos6cmobxlo5c73
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+--------------zMAyY88wsciZQYHPRhRowlKy
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-On 23.03.2022 15:00:31, Thomas.Kopp@microchip.com wrote:
-> > For better reproducibility I set the scaling_governor to performance:
-> >=20
-> > | echo performance | sudo tee
-> > /sys/devices/system/cpu/cpufreq/policy0/scaling_governor
-> >=20
-> > I've no idea why an unpachted v5.17 generates more SPI IRQs.
-> >=20
-> > Can you re-test with performance mode activated, I'm not sure when I
-> > find time to look into this.
-> >=20
-> Yes, will do. For the record, the difference was really marginal. On
-> 20k frames I had 39182 vs. 39139 SPI interrupts.
+T24gMy8xMy8yMiAxMzowOSwgUGF2ZWwgU2tyaXBraW4gd3JvdGU6DQo+IFN5emJvdCByZXBv
+cnRlZCB3YXJuaW5nIGluIHVzYl9zdWJtaXRfdXJiKCkgd2hpY2ggaXMgY2F1c2VkIGJ5IHdy
+b25nDQo+IGVuZHBvaW50IHR5cGUuIFdlIHNob3VsZCBjaGVjayB0aGF0IGluIGVuZHBvaW50
+IGlzIGFjdHVhbGx5IHByZXNlbnQgdG8NCj4gcHJldmVudCB0aGlzIHdhcm5pbmcNCj4gDQo+
+IEZvdW5kIHBpcGVzIGFyZSBub3cgc2F2ZWQgdG8gc3RydWN0IG1jYmFfcHJpdiBhbmQgY29k
+ZSB1c2VzIHRoZW0gZGlyZWN0bHkNCj4gaW5zdGVhZCBvZiBtYWtpbmcgcGlwZXMgaW4gcGxh
+Y2UuDQo+IA0KPiBGYWlsIGxvZzoNCj4gDQo+IHVzYiA1LTE6IEJPR1VTIHVyYiB4ZmVyLCBw
+aXBlIDMgIT0gdHlwZSAxDQo+IFdBUk5JTkc6IENQVTogMSBQSUQ6IDQ5IGF0IGRyaXZlcnMv
+dXNiL2NvcmUvdXJiLmM6NTAyIHVzYl9zdWJtaXRfdXJiKzB4ZWQyLzB4MThhMCBkcml2ZXJz
+L3VzYi9jb3JlL3VyYi5jOjUwMg0KPiBNb2R1bGVzIGxpbmtlZCBpbjoNCj4gQ1BVOiAxIFBJ
+RDogNDkgQ29tbToga3dvcmtlci8xOjIgTm90IHRhaW50ZWQgNS4xNy4wLXJjNi1zeXprYWxs
+ZXItMDAxODQtZzM4ZjgwZjQyMTQ3ZiAjMA0KPiBIYXJkd2FyZSBuYW1lOiBRRU1VIFN0YW5k
+YXJkIFBDIChRMzUgKyBJQ0g5LCAyMDA5KSwgQklPUyAxLjE0LjAtMiAwNC8wMS8yMDE0DQo+
+IFdvcmtxdWV1ZTogdXNiX2h1Yl93cSBodWJfZXZlbnQNCj4gUklQOiAwMDEwOnVzYl9zdWJt
+aXRfdXJiKzB4ZWQyLzB4MThhMCBkcml2ZXJzL3VzYi9jb3JlL3VyYi5jOjUwMg0KPiAuLi4N
+Cj4gQ2FsbCBUcmFjZToNCj4gICA8VEFTSz4NCj4gICBtY2JhX3VzYl9zdGFydCBkcml2ZXJz
+L25ldC9jYW4vdXNiL21jYmFfdXNiLmM6NjYyIFtpbmxpbmVdDQo+ICAgbWNiYV91c2JfcHJv
+YmUrMHg4YTMvMHhjNTAgZHJpdmVycy9uZXQvY2FuL3VzYi9tY2JhX3VzYi5jOjg1OA0KPiAg
+IHVzYl9wcm9iZV9pbnRlcmZhY2UrMHgzMTUvMHg3ZjAgZHJpdmVycy91c2IvY29yZS9kcml2
+ZXIuYzozOTYNCj4gICBjYWxsX2RyaXZlcl9wcm9iZSBkcml2ZXJzL2Jhc2UvZGQuYzo1MTcg
+W2lubGluZV0NCj4gDQo+IFJlcG9ydGVkLWFuZC10ZXN0ZWQtYnk6IHN5emJvdCszYmMxZGNl
+MGNjMDA1MmQ2MGZkZUBzeXprYWxsZXIuYXBwc3BvdG1haWwuY29tDQo+IEZpeGVzOiA1MWYz
+YmFhZDdkZTkgKCJjYW46IG1jYmFfdXNiOiBBZGQgc3VwcG9ydCBmb3IgTWljcm9jaGlwIENB
+TiBCVVMgQW5hbHl6ZXIiKQ0KPiBTaWduZWQtb2ZmLWJ5OiBQYXZlbCBTa3JpcGtpbiA8cGFz
+a3JpcGtpbkBnbWFpbC5jb20+DQo+IFJldmlld2VkLWJ5OiBWaW5jZW50IE1haWxob2wgPG1h
+aWxob2wudmluY2VudEB3YW5hZG9vLmZyPg0KDQpnZW50bGUgcGluZy4gbG9va3MgbGlrZSB0
+aGlzIHBhdGNoIGdvdCBzb21laG93IGxvc3QNCg0KDQoNCg0KV2l0aCByZWdhcmRzLA0KUGF2
+ZWwgU2tyaXBraW4NCg==
 
-I assume in some case the RX processing took so long that there was
-another RX CAN frame ready in the same IRQ handler run.
+--------------zMAyY88wsciZQYHPRhRowlKy--
 
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---qbos6cmobxlo5c73
-Content-Type: application/pgp-signature; name="signature.asc"
+--------------wuJb3knIS3Bcn2sAl3RLDNAC
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmI7dPcACgkQrX5LkNig
-013J0wf/dB6VKDgqPubet1bjnLf8VVhyYmwr2gccgir7nHokJzZqARQNtqTbzxqm
-T4fZwZIislugH58QuRfdDel/aup9PzjkWtCmikKgYNt2/G1M+bT1T68u5Mo3rJyP
-RG2YPmtEb2a38+1nxoM0jMqwcBAE5Xr5WK633pFQk5P+CX6PWa7D/34coBViKb0I
-1Oc7HiIoYwc66FO2xFcbx3uDVjPIMty90LzdSi1SqX4ybahVrQm3RDZjU8LGDmxX
-946PQ4eHgZGPUWS/nKVD7Sg34fk3lrmmgzXwNMypfD/iG7H9TTRoX/Ubbwf8MNPi
-YMTwq38mLAcMHJ22BsSts24DPh1Mwg==
-=FX01
+wsF5BAABCAAjFiEER3XL3TplLQE8Qi40bk1w61LbBA0FAmI7hH8FAwAAAAAACgkQbk1w61LbBA2A
+7w//UDuGW6KEDfBJmFHbEIeC19pI4v2v1q8B6LWq0TEhvK9afaiDdereDT4g36kpAJQdq36oHr5m
+WychvLnb9QWMZaGR/vT4UyRIlC7G+LRcdJZP0aIhaLMr2QxQzlZ+WeGHVP5vlNUaByCeCjO7r79O
+f0OB9G3TyBA976RkG2kY1TxutGEH537aEC8+VllnBibB8ysKRfU1bNBd8kcoN0zmcvcXkVfvxYIW
+wtc4nLaKUzQmT3RbIiIxkZylK04e1XR0cAeGeZG0TC9sv+ASXlZLLb6wUsGMox4LvSMp9InuT9JX
+AqXjK3cTbSIOW5NMy27w14nFFVTX3eBX0X9Z/nquwEojo9IiRwZwrC5ZRb742X/nQsoFa/Ou9IQM
+VZRRgWWBMMh5e2NvmxcKiIHMgIoXHq+pOMaSH7rpxb1fNl1CihgrmixKdfxVVz8EAmclzf1csOVh
+QEBdl2Uvhyr5kYq/Yw0hoi6FHhCxL/FHZHp7KFaGpRBXH3akzq/6yS1OPn/Q8fhnJpiIOWobwR95
+0dwI+3N8O+e9bYzcxfH34qZcFYrlCiuh/Xdnpwdu3i1Eq1XmYitrYJ6KcvHfpxgjBH+wmJB7I8/s
+HqDThr1md9FM6N27zRL9po77M3qit1+krSvYxlhnrz2KiDYBVn8Idj8n1jJUmPwHZG812gqFYR2k
+Ens=
+=RjdE
 -----END PGP SIGNATURE-----
 
---qbos6cmobxlo5c73--
+--------------wuJb3knIS3Bcn2sAl3RLDNAC--
