@@ -2,94 +2,93 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D13604E64EF
-	for <lists+linux-can@lfdr.de>; Thu, 24 Mar 2022 15:18:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 128AC4E9558
+	for <lists+linux-can@lfdr.de>; Mon, 28 Mar 2022 13:40:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350828AbiCXOTq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 24 Mar 2022 10:19:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55430 "EHLO
+        id S241898AbiC1Ll0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 28 Mar 2022 07:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350818AbiCXOTp (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 24 Mar 2022 10:19:45 -0400
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B53413DD5;
-        Thu, 24 Mar 2022 07:18:13 -0700 (PDT)
-Received: by mail-oo1-f53.google.com with SMTP id v19-20020a056820101300b0032488bb70f5so796303oor.5;
-        Thu, 24 Mar 2022 07:18:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=GawCp05khlhl7cBgGdUQSxdDX5kHWZ23Unif+NFb2E8=;
-        b=uSU7SaPpc57OK5eRwSRa5AWGQ6OTGB2XSRXrlbH0NhzQsylA3ArsRpAzKzWJt/XNyv
-         FolpoHBgh8OcWtKznI4MMAYtaEO502U8lZddy6ikEhByDliA7Fd/e1KjApVYl40GMpIU
-         AeJLNxdqfjSIjOsknhZoIY1MNuKp2tgaAug5bxKMugbbWzU7pMgILj7ib/rnZ+GmGwIS
-         LrQYEpICG1xs+EcpuLQuhgyahYZe5JSGXv9szPGQtRtTRGKGkg7+H0MkNjbQdJs4O5l8
-         tau9pUMQeOWxrv30d1AxKxPbZvk9aUZXVOnOpu9mOOPjRhckKU0dM88QWmbGER1t++wo
-         0Nxg==
-X-Gm-Message-State: AOAM531FZN72GR0g/npjnQGfgoDMkSJvSyb5COkioCT/H6LQcapwP6wL
-        lRZBtEMeoyeE5IMRcd861w==
-X-Google-Smtp-Source: ABdhPJydWUBur9AjgFjFMbYu94DYLhx4H4z8qP983Tnwv9mK3HmPPALKdMbgHx4/yMucmO12mRUMMQ==
-X-Received: by 2002:a4a:dd15:0:b0:320:da3c:c342 with SMTP id m21-20020a4add15000000b00320da3cc342mr2033346oou.7.1648131492569;
-        Thu, 24 Mar 2022 07:18:12 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r129-20020acac187000000b002ef358c6e0esm1407558oif.49.2022.03.24.07.18.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Mar 2022 07:18:11 -0700 (PDT)
-Received: (nullmailer pid 1995387 invoked by uid 1000);
-        Thu, 24 Mar 2022 14:18:08 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     pabeni@redhat.com, devicetree@vger.kernel.org,
-        qiangqing.zhang@nxp.com, wg@grandegger.com, krzk+dt@kernel.org,
-        festevam@gmail.com, davem@davemloft.net, kernel@pengutronix.de,
-        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        ulf.hansson@linaro.org, mkl@pengutronix.de,
-        Peng Fan <peng.fan@nxp.com>, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, robh+dt@kernel.org,
-        linux-mmc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-imx@nxp.com
-In-Reply-To: <20220324042024.26813-5-peng.fan@oss.nxp.com>
-References: <20220324042024.26813-1-peng.fan@oss.nxp.com> <20220324042024.26813-5-peng.fan@oss.nxp.com>
-Subject: Re: [PATCH 4/4] dt-bindings: net: imx-dwmac: introduce nvmem property
-Date:   Thu, 24 Mar 2022 09:18:08 -0500
-Message-Id: <1648131488.621544.1995386.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S245058AbiC1Lik (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 28 Mar 2022 07:38:40 -0400
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.216])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C2FC3
+        for <linux-can@vger.kernel.org>; Mon, 28 Mar 2022 04:36:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1648467384;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=UUda1Ase6POUEiPeAv8aGAFt0YeYA3hCqadxM5jbnXo=;
+    b=Xyg6rfhrUTkhwbBKVBUN3FhGmxknv9iyVBI3jdggDBgO07KQRse0TTZQDOfRcfJMzI
+    L9LDcszIyT2PxgWrykF9UTVV0REPBruWc7H7hTYet5fPEjIApL4+V9YUXt4l0P4wl6Ee
+    NVT7hnJOMTlt84NMIIkx7IyTXc0NtkwJrKgN+xKN4Dmf9yv39BqO+muiIHpmk6v+Z2uw
+    +xomRm3o1ocBtxzKxC/7QrKgYnZhgZRn5Ofbfk5ZqpInX8o7jBc/zlaSmQaVxPeo6zv+
+    WTEC3e4777UuQGMV48Yt0NcTf4RfJzESGZe6QHDQ6rHBD23GlvBZ93UuZOc+az/0eXNz
+    /+AQ==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS/xvEBL7X5sbo3UIh9IyLecSWJafUvprl4"
+X-RZG-CLASS-ID: mo00
+Received: from silver.lan
+    by smtp.strato.de (RZmta 47.42.1 AUTH)
+    with ESMTPSA id ed8ce5y2SBaO22p
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Mon, 28 Mar 2022 13:36:24 +0200 (CEST)
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+To:     linux-can@vger.kernel.org
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        Derek Will <derekrobertwill@gmail.com>
+Subject: [PATCH] can: isotp: restore accidentally removed MSG_PEEK feature
+Date:   Mon, 28 Mar 2022 13:36:11 +0200
+Message-Id: <20220328113611.3691-1-socketcan@hartkopp.net>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Thu, 24 Mar 2022 12:20:24 +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> To i.MX8M Family variants, dwmac maybe fused out. Bootloader could use
-> this property to read out the fuse value and mark the node status
-> at runtime.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  Documentation/devicetree/bindings/net/nxp,dwmac-imx.yaml | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
+In commit 42bf50a1795a ("can: isotp: support MSG_TRUNC flag when reading
+from socket") a new check for recvmsg flags has been introduced that
+only checked for the flags that are handled in isotp_recvmsg() itself.
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+This accidentally removed the MSG_PEEK feature flag which is processed
+later in the call chain in __skb_try_recv_from_queue().
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+Add MSG_PEEK to the set of valid flags to restore the feature.
 
-Full log is available here: https://patchwork.ozlabs.org/patch/1608879
+Fixes: 42bf50a1795a ("can: isotp: support MSG_TRUNC flag when reading from socket")
+Link: https://github.com/linux-can/can-utils/issues/347#issuecomment-1079554254
+From: Derek Will <derekrobertwill@gmail.com>
+Tested-by: Derek Will <derekrobertwill@gmail.com>
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+---
+ net/can/isotp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-ethernet@30bf0000: nvmem-cell-names:0: 'fused' was expected
-	arch/arm64/boot/dts/freescale/imx8mp-evk.dt.yaml
-	arch/arm64/boot/dts/freescale/imx8mp-phyboard-pollux-rdk.dt.yaml
+diff --git a/net/can/isotp.c b/net/can/isotp.c
+index f6f8ba1f816d..bafb0fb5f0e0 100644
+--- a/net/can/isotp.c
++++ b/net/can/isotp.c
+@@ -1048,11 +1048,11 @@ static int isotp_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
+ 	struct sk_buff *skb;
+ 	struct isotp_sock *so = isotp_sk(sk);
+ 	int noblock = flags & MSG_DONTWAIT;
+ 	int ret = 0;
+ 
+-	if (flags & ~(MSG_DONTWAIT | MSG_TRUNC))
++	if (flags & ~(MSG_DONTWAIT | MSG_TRUNC | MSG_PEEK))
+ 		return -EINVAL;
+ 
+ 	if (!so->bound)
+ 		return -EADDRNOTAVAIL;
+ 
+-- 
+2.30.2
 
