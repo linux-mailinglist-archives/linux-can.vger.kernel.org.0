@@ -2,96 +2,85 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 504D64EB1E7
-	for <lists+linux-can@lfdr.de>; Tue, 29 Mar 2022 18:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F7964EB427
+	for <lists+linux-can@lfdr.de>; Tue, 29 Mar 2022 21:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239691AbiC2Qko (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 29 Mar 2022 12:40:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51310 "EHLO
+        id S240979AbiC2Tgk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 29 Mar 2022 15:36:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234114AbiC2Qkm (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 29 Mar 2022 12:40:42 -0400
-Received: from smtp-out3.electric.net (smtp-out3.electric.net [208.70.128.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227E1BF01F;
-        Tue, 29 Mar 2022 09:38:59 -0700 (PDT)
-Received: from 1nZEru-0004Rr-Vx by out3b.electric.net with emc1-ok (Exim 4.94.2)
-        (envelope-from <kris@embeddedTS.com>)
-        id 1nZErw-0004Vp-V0; Tue, 29 Mar 2022 09:38:56 -0700
-Received: by emcmailer; Tue, 29 Mar 2022 09:38:56 -0700
-Received: from [66.210.251.27] (helo=mail.embeddedts.com)
-        by out3b.electric.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <kris@embeddedTS.com>)
-        id 1nZEru-0004Rr-Vx; Tue, 29 Mar 2022 09:38:54 -0700
-Received: from tsdebian (unknown [75.164.75.221])
-        by mail.embeddedts.com (Postfix) with ESMTPSA id 2B89219E96;
-        Tue, 29 Mar 2022 09:38:54 -0700 (MST)
-Message-ID: <1648571918.2364.1.camel@embeddedTS.com>
-Subject: Re: [PATCH] drivers: Fix Links to Technologic Systems web resources
-From:   Kris Bahnsen <kris@embeddedTS.com>
-Reply-To: kris@embeddedTS.com
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Linus Walleij <linus.walleij@linaro.org>, wg@grandegger.com,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-can@vger.kernel.org
-Date:   Tue, 29 Mar 2022 09:38:38 -0700
-In-Reply-To: <CAMRc=MdZm1HU3vZcYK=cStmCE6+tQ6R4-ya5t3ZRovf0RZHJQQ@mail.gmail.com>
-References: <20220303225525.29846-1-kris@embeddedTS.com>
-         <CAMRc=McesjKviO=5gK3GN+XukZfSr=um9W8+sqXw9GSFX0QTgw@mail.gmail.com>
-         <1648489760.3393.6.camel@embeddedTS.com>
-         <20220328175857.dvmvh5knabc6sq3x@pengutronix.de>
-         <CAMRc=MdZm1HU3vZcYK=cStmCE6+tQ6R4-ya5t3ZRovf0RZHJQQ@mail.gmail.com>
-Organization: embeddedTS
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.22.6-1+deb9u2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Outbound-IP: 66.210.251.27
-X-Env-From: kris@embeddedTS.com
-X-Proto: esmtps
-X-Revdns: wsip-66-210-251-27.ph.ph.cox.net
-X-HELO: mail.embeddedts.com
-X-TLS:  TLS1.2:ECDHE-RSA-AES256-GCM-SHA384:256
-X-Authenticated_ID: 
-X-Virus-Status: Scanned by VirusSMART (c)
-X-Virus-Status: Scanned by VirusSMART (b)
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=embeddedTS.com; s=mailanyone20220121;h=Mime-Version:References:In-Reply-To:Date:To:From:Message-ID; bh=R5FWcDFV1//6o1fZx2FXeDZPUb1MDiE+Q32sF2zL76w=;b=bUIrVpm99KX9/zh6Nmr3jutGAMA+7vvp4ghqal8KKdnbNwECcn/sD0MreaFL3N2YFUA4ZDjbHuIMIdt7UI0qm/7OKYwK78z6VO0AN9Gfp3UaXpuLg6f/lcy3gVYileLDN84uL406Hy7+8GdKE01ypf+Dnmw5aiyADL05CfqgJuxdzg9evCY8QkAXnKn1CJ++ZnKGZZeMxxdivByjXMXROWwmwYizY8L+fjvM+Kt12rCLPb61MTYmHERvF4EgV81tu2VvmRQspw6p2NHZZr5C5lNfAPosQPE7d6Ab7I+lFVIdk93n5wAAJpltoVAnuQhim0g5yU3B14Nj14MepQzTrw==;
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S234102AbiC2Tgj (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 29 Mar 2022 15:36:39 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F22986DB
+        for <linux-can@vger.kernel.org>; Tue, 29 Mar 2022 12:34:56 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nZHcE-0005hr-NA
+        for linux-can@vger.kernel.org; Tue, 29 Mar 2022 21:34:54 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 266475670A
+        for <linux-can@vger.kernel.org>; Tue, 29 Mar 2022 19:34:54 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 1105156707;
+        Tue, 29 Mar 2022 19:34:54 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id fd933fde;
+        Tue, 29 Mar 2022 19:34:53 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     linux-can@vger.kernel.org
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        syzbot+4d0ae90a195b269f102d@syzkaller.appspotmail.com
+Subject: [PATCH] can: gs_usb: gs_make_candev(): fix memory leak for devices with extended bit timing configuration
+Date:   Tue, 29 Mar 2022 21:34:50 +0200
+Message-Id: <20220329193450.659726-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue, 2022-03-29 at 15:18 +0200, Bartosz Golaszewski wrote:
-> On Mon, Mar 28, 2022 at 7:58 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> > 
-> > I'm taking the CAN part. I think it's best to repost the GPIO part as a
-> > separate patch.
-> > 
-> 
-> Yes please, and for the future: if possible separate such changes into
-> patches aimed at different maintainers.
-> 
-> Bart
-> 
+Some CAN-FD capable devices offer extended bit timing information for
+the data bit timing. The information must be read with an USB control
+message. The memory for this message is allocated but not free()ed (in
+the non error case). This patch adds the missing free.
 
-Understood. Thank you for the information.
+Fixes: 6679f4c5e5a6 ("can: gs_usb: add extended bt_const feature")
+Reported-by: syzbot+4d0ae90a195b269f102d@syzkaller.appspotmail.com
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+ drivers/net/can/usb/gs_usb.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Kris
+diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
+index 67408e316062..b29ba9138866 100644
+--- a/drivers/net/can/usb/gs_usb.c
++++ b/drivers/net/can/usb/gs_usb.c
+@@ -1092,6 +1092,8 @@ static struct gs_can *gs_make_candev(unsigned int channel,
+ 		dev->data_bt_const.brp_inc = le32_to_cpu(bt_const_extended->dbrp_inc);
+ 
+ 		dev->can.data_bittiming_const = &dev->data_bt_const;
++
++		kfree(bt_const_extended);
+ 	}
+ 
+ 	SET_NETDEV_DEV(netdev, &intf->dev);
+-- 
+2.35.1
+
+
