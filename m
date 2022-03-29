@@ -2,30 +2,30 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6D774EB470
-	for <lists+linux-can@lfdr.de>; Tue, 29 Mar 2022 22:09:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E0F4EB484
+	for <lists+linux-can@lfdr.de>; Tue, 29 Mar 2022 22:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbiC2UKv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 29 Mar 2022 16:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49492 "EHLO
+        id S229564AbiC2UOm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 29 Mar 2022 16:14:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiC2UKu (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 29 Mar 2022 16:10:50 -0400
-Received: from smtp-out3.electric.net (smtp-out3.electric.net [208.70.128.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0537D205F4;
-        Tue, 29 Mar 2022 13:09:03 -0700 (PDT)
-Received: from 1nZI9D-000AzV-W6 by out3d.electric.net with emc1-ok (Exim 4.94.2)
+        with ESMTP id S229512AbiC2UOl (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 29 Mar 2022 16:14:41 -0400
+Received: from smtp-out3.electric.net (smtp-out3.electric.net [208.70.128.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B790239311;
+        Tue, 29 Mar 2022 13:12:55 -0700 (PDT)
+Received: from 1nZICx-0007HB-V6 by out3c.electric.net with emc1-ok (Exim 4.94.2)
         (envelope-from <kris@embeddedTS.com>)
-        id 1nZI9F-000B2y-TT; Tue, 29 Mar 2022 13:09:01 -0700
-Received: by emcmailer; Tue, 29 Mar 2022 13:09:01 -0700
+        id 1nZICy-0007J1-Va; Tue, 29 Mar 2022 13:12:52 -0700
+Received: by emcmailer; Tue, 29 Mar 2022 13:12:52 -0700
 Received: from [66.210.251.27] (helo=mail.embeddedts.com)
-        by out3d.electric.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        by out3c.electric.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <kris@embeddedTS.com>)
-        id 1nZI9D-000AzV-W6; Tue, 29 Mar 2022 13:09:00 -0700
+        id 1nZICx-0007HB-V6; Tue, 29 Mar 2022 13:12:51 -0700
 Received: from tsdebian.Massive (unknown [75.164.75.221])
-        by mail.embeddedts.com (Postfix) with ESMTPSA id 3179C1A4A6;
-        Tue, 29 Mar 2022 13:08:59 -0700 (MST)
+        by mail.embeddedts.com (Postfix) with ESMTPSA id D61591A26E;
+        Tue, 29 Mar 2022 13:12:50 -0700 (MST)
 From:   Kris Bahnsen <kris@embeddedTS.com>
 To:     linux-kernel@vger.kernel.org,
         Wolfgang Grandegger <wg@grandegger.com>,
@@ -33,9 +33,9 @@ To:     linux-kernel@vger.kernel.org,
         linux-can@vger.kernel.org
 Cc:     Mark Featherston <mark@embeddedTS.com>,
         Kris Bahnsen <kris@embeddedTS.com>
-Subject: [PATCH 1/2] can: Fix Links to Technologic Systems web resources
-Date:   Tue, 29 Mar 2022 13:08:44 -0700
-Message-Id: <20220329200844.16073-1-kris@embeddedTS.com>
+Subject: [PATCH RESEND] can: Fix Links to Technologic Systems web resources
+Date:   Tue, 29 Mar 2022 13:12:29 -0700
+Message-Id: <20220329201229.16279-1-kris@embeddedTS.com>
 X-Mailer: git-send-email 2.11.0
 X-Outbound-IP: 66.210.251.27
 X-Env-From: kris@embeddedTS.com
@@ -48,7 +48,7 @@ X-Virus-Status: Scanned by VirusSMART (c)
 X-Virus-Status: Scanned by VirusSMART (b)
 X-FM-Delivery-Delay: 15749372,23518412
 X-PolicySMART: 13164782, 15749372, 26810492
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=embeddedTS.com; s=mailanyone20220121;h=Message-Id:Date:To:From; bh=JNdbgRoUfWZLQJBtZuhC+ncgaaoQIfxSElXYcdEKvd0=;b=FUdhajRHHjeiHlt1lD4lDFI4YIzg70BFuuBk/XXpcUD4UDElcaNCWPDiFxlvTnch0KvtQN59Dxg4H4/Z2AsHG9eEFuiFjpaSgwMVUVGH5FoIvtjf7mPvlaudY/+NXpLfg2u9U9WrUkP8LPRmnUFRd5PxAavRJ+1pCNp/dCU7uOyIiItTEfs1ArqAlsPszeeQYLBTCL5dFxPNOHcSFQKizOjF2JN+2JBbkaAkMXVXH+HLplYpPXZ1X0yP0eIgQ+nil1ooMXFtNYfjcxZS5Js0bm1dP+0jIgYxQaopIJgYghm6vVE1ZNlI1VcYfn+m9Zibvv8OoLkIMNyjg+YakGqvSg==;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=embeddedTS.com; s=mailanyone20220121;h=Message-Id:Date:To:From; bh=1AF4SMujYEjsxrPiY/0MQSh8GtDisDk4QVhRBaTaEE0=;b=QxQNSvsXs/FaPwYkm/bZrGiCV3TX3U/bmhlBAs7XrTuAaIXvAAbngMivse9lVCZbFLczhVXjYAEYoGvRrBa4ffnecqzbXzo38UYq8kf9Vpf41yuL4MAObXr46c5Ue0DNJvVwdjzk6km4C8PMLW1VrAXvDPEJ/wmwZjXmn9ZIPGvA7UxCzXiHBzW10+cbgLimHbqZArZcIUvTS3yMFlPUA+ZrKAiAhQdwkJzY3C4ISk99T7XBMN2rTEfGbMRPBR1HYTeElgprh9Q0lVMyo8nL9dUj2Altv5sp9DM8SYihiSY6jRBnf9UJQQgTDU9PA8FoMyTJbXEAyzlP9SQaVKSqmw==;
 X-FM-Delivery-Delay: 15749372,23518412
 X-PolicySMART: 13164782, 15749372, 26810492
 X-FM-Delivery-Delay: 15749372,23518412
@@ -71,6 +71,8 @@ resource locations.
 
 Signed-off-by: Kris Bahnsen <kris@embeddedTS.com>
 ---
+This is a resend as the prior patch was accidentally marked as a series
+
  drivers/net/can/sja1000/Kconfig  | 2 +-
  drivers/net/can/sja1000/tscan1.c | 7 +++----
  2 files changed, 4 insertions(+), 5 deletions(-)
