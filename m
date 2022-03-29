@@ -2,142 +2,96 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75AFA4EB023
-	for <lists+linux-can@lfdr.de>; Tue, 29 Mar 2022 17:22:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 504D64EB1E7
+	for <lists+linux-can@lfdr.de>; Tue, 29 Mar 2022 18:39:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238458AbiC2PYH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 29 Mar 2022 11:24:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60462 "EHLO
+        id S239691AbiC2Qko (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 29 Mar 2022 12:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238461AbiC2PYG (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 29 Mar 2022 11:24:06 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB6B205BD7
-        for <linux-can@vger.kernel.org>; Tue, 29 Mar 2022 08:22:21 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id 5-20020a92c645000000b002c99d83806dso4258879ill.13
-        for <linux-can@vger.kernel.org>; Tue, 29 Mar 2022 08:22:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=rJF02FUqA+BGhfpQq15X1gdE3Vmrsf58Y4lCUEm8TvI=;
-        b=R47xhKAmCZfoPH85hVK60PrABx5BddgIuMoOzJksZ6GnjR2UKZ/4P/osB8TYywkXVP
-         nrg1/SLP6CEqZ1e6ga1KFhLXbxkbxenm68ZTDP1kH55//RZHTYg7RO9toEgsnddesZ6Q
-         JM1t/kzmudKpPMf7faRIDcENo0M0twqtBit2uoQMGrntkeNSBUqis1L4XNQDvPfqPyt4
-         FO8es/A55I1i/POtcaO3+MjTnrlznI+qTwiF0lNWeIHbhENzgGI2O//q7OuoyIdIKvHd
-         kJmN0NiHAGATNFOFwG3JjWRYyCILMyXLW8vsncjJWztMFE+fuRbLm+rlbHY54tVstQRh
-         eKyA==
-X-Gm-Message-State: AOAM533PMAsM5OrrWToTGpdaHsmFH8cDRYwRsi7lP9BUq237znd18aDK
-        ntD9jQQoIZnSisnEfwd0yl+XBD5Ia1JBrWDPtNLVrLCApZF4
-X-Google-Smtp-Source: ABdhPJwEhecZIWBhxu8UENb5AeqD1ufIoK+sgyDfNUmc7z61COVL6a53khHIMSakMoWjBb+RJewOyFGLdk2Xc4iTXNnNiCEpnWLN
-MIME-Version: 1.0
-X-Received: by 2002:a02:5b85:0:b0:319:ff85:ff5 with SMTP id
- g127-20020a025b85000000b00319ff850ff5mr17038951jab.250.1648567340853; Tue, 29
- Mar 2022 08:22:20 -0700 (PDT)
-Date:   Tue, 29 Mar 2022 08:22:20 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000bd6ee505db5cfec6@google.com>
-Subject: [syzbot] memory leak in gs_usb_probe
-From:   syzbot <syzbot+4d0ae90a195b269f102d@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mkl@pengutronix.de,
-        netdev@vger.kernel.org, pabeni@redhat.com, pfink@christ-es.de,
-        syzkaller-bugs@googlegroups.com, wg@grandegger.com
+        with ESMTP id S234114AbiC2Qkm (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 29 Mar 2022 12:40:42 -0400
+Received: from smtp-out3.electric.net (smtp-out3.electric.net [208.70.128.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227E1BF01F;
+        Tue, 29 Mar 2022 09:38:59 -0700 (PDT)
+Received: from 1nZEru-0004Rr-Vx by out3b.electric.net with emc1-ok (Exim 4.94.2)
+        (envelope-from <kris@embeddedTS.com>)
+        id 1nZErw-0004Vp-V0; Tue, 29 Mar 2022 09:38:56 -0700
+Received: by emcmailer; Tue, 29 Mar 2022 09:38:56 -0700
+Received: from [66.210.251.27] (helo=mail.embeddedts.com)
+        by out3b.electric.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <kris@embeddedTS.com>)
+        id 1nZEru-0004Rr-Vx; Tue, 29 Mar 2022 09:38:54 -0700
+Received: from tsdebian (unknown [75.164.75.221])
+        by mail.embeddedts.com (Postfix) with ESMTPSA id 2B89219E96;
+        Tue, 29 Mar 2022 09:38:54 -0700 (MST)
+Message-ID: <1648571918.2364.1.camel@embeddedTS.com>
+Subject: Re: [PATCH] drivers: Fix Links to Technologic Systems web resources
+From:   Kris Bahnsen <kris@embeddedTS.com>
+Reply-To: kris@embeddedTS.com
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Linus Walleij <linus.walleij@linaro.org>, wg@grandegger.com,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-can@vger.kernel.org
+Date:   Tue, 29 Mar 2022 09:38:38 -0700
+In-Reply-To: <CAMRc=MdZm1HU3vZcYK=cStmCE6+tQ6R4-ya5t3ZRovf0RZHJQQ@mail.gmail.com>
+References: <20220303225525.29846-1-kris@embeddedTS.com>
+         <CAMRc=McesjKviO=5gK3GN+XukZfSr=um9W8+sqXw9GSFX0QTgw@mail.gmail.com>
+         <1648489760.3393.6.camel@embeddedTS.com>
+         <20220328175857.dvmvh5knabc6sq3x@pengutronix.de>
+         <CAMRc=MdZm1HU3vZcYK=cStmCE6+tQ6R4-ya5t3ZRovf0RZHJQQ@mail.gmail.com>
+Organization: embeddedTS
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Mailer: Evolution 3.22.6-1+deb9u2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Outbound-IP: 66.210.251.27
+X-Env-From: kris@embeddedTS.com
+X-Proto: esmtps
+X-Revdns: wsip-66-210-251-27.ph.ph.cox.net
+X-HELO: mail.embeddedts.com
+X-TLS:  TLS1.2:ECDHE-RSA-AES256-GCM-SHA384:256
+X-Authenticated_ID: 
+X-Virus-Status: Scanned by VirusSMART (c)
+X-Virus-Status: Scanned by VirusSMART (b)
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=embeddedTS.com; s=mailanyone20220121;h=Mime-Version:References:In-Reply-To:Date:To:From:Message-ID; bh=R5FWcDFV1//6o1fZx2FXeDZPUb1MDiE+Q32sF2zL76w=;b=bUIrVpm99KX9/zh6Nmr3jutGAMA+7vvp4ghqal8KKdnbNwECcn/sD0MreaFL3N2YFUA4ZDjbHuIMIdt7UI0qm/7OKYwK78z6VO0AN9Gfp3UaXpuLg6f/lcy3gVYileLDN84uL406Hy7+8GdKE01ypf+Dnmw5aiyADL05CfqgJuxdzg9evCY8QkAXnKn1CJ++ZnKGZZeMxxdivByjXMXROWwmwYizY8L+fjvM+Kt12rCLPb61MTYmHERvF4EgV81tu2VvmRQspw6p2NHZZr5C5lNfAPosQPE7d6Ab7I+lFVIdk93n5wAAJpltoVAnuQhim0g5yU3B14Nj14MepQzTrw==;
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello,
+On Tue, 2022-03-29 at 15:18 +0200, Bartosz Golaszewski wrote:
+> On Mon, Mar 28, 2022 at 7:58 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> > 
+> > I'm taking the CAN part. I think it's best to repost the GPIO part as a
+> > separate patch.
+> > 
+> 
+> Yes please, and for the future: if possible separate such changes into
+> patches aimed at different maintainers.
+> 
+> Bart
+> 
 
-syzbot found the following issue on:
+Understood. Thank you for the information.
 
-HEAD commit:    52deda9551a0 Merge branch 'akpm' (patches from Andrew)
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=12b472dd700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9ca2a67ddb20027f
-dashboard link: https://syzkaller.appspot.com/bug?extid=4d0ae90a195b269f102d
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12e96e1d700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12f8b513700000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+4d0ae90a195b269f102d@syzkaller.appspotmail.com
-
-BUG: memory leak
-unreferenced object 0xffff88810e4fc300 (size 96):
-  comm "kworker/1:1", pid 25, jiffies 4294948102 (age 15.080s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff843fcc08>] kmalloc include/linux/slab.h:581 [inline]
-    [<ffffffff843fcc08>] gs_make_candev drivers/net/can/usb/gs_usb.c:1065 [inline]
-    [<ffffffff843fcc08>] gs_usb_probe.cold+0x69e/0x8b8 drivers/net/can/usb/gs_usb.c:1191
-    [<ffffffff82d0a687>] usb_probe_interface+0x177/0x370 drivers/usb/core/driver.c:396
-    [<ffffffff82712d87>] call_driver_probe drivers/base/dd.c:517 [inline]
-    [<ffffffff82712d87>] really_probe.part.0+0xe7/0x380 drivers/base/dd.c:596
-    [<ffffffff8271312c>] really_probe drivers/base/dd.c:558 [inline]
-    [<ffffffff8271312c>] __driver_probe_device+0x10c/0x1e0 drivers/base/dd.c:755
-    [<ffffffff8271322a>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:785
-    [<ffffffff82713a96>] __device_attach_driver+0xf6/0x140 drivers/base/dd.c:902
-    [<ffffffff8270fcf7>] bus_for_each_drv+0xb7/0x100 drivers/base/bus.c:427
-    [<ffffffff82713612>] __device_attach+0x122/0x260 drivers/base/dd.c:973
-    [<ffffffff82711966>] bus_probe_device+0xc6/0xe0 drivers/base/bus.c:487
-    [<ffffffff8270dd4b>] device_add+0x5fb/0xdf0 drivers/base/core.c:3405
-    [<ffffffff82d07ac2>] usb_set_configuration+0x8f2/0xb80 drivers/usb/core/message.c:2170
-    [<ffffffff82d181ac>] usb_generic_driver_probe+0x8c/0xc0 drivers/usb/core/generic.c:238
-    [<ffffffff82d09d5c>] usb_probe_device+0x5c/0x140 drivers/usb/core/driver.c:293
-    [<ffffffff82712d87>] call_driver_probe drivers/base/dd.c:517 [inline]
-    [<ffffffff82712d87>] really_probe.part.0+0xe7/0x380 drivers/base/dd.c:596
-    [<ffffffff8271312c>] really_probe drivers/base/dd.c:558 [inline]
-    [<ffffffff8271312c>] __driver_probe_device+0x10c/0x1e0 drivers/base/dd.c:755
-    [<ffffffff8271322a>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:785
-
-BUG: memory leak
-unreferenced object 0xffff88810e4fc280 (size 96):
-  comm "kworker/1:1", pid 25, jiffies 4294948819 (age 7.910s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff843fcc08>] kmalloc include/linux/slab.h:581 [inline]
-    [<ffffffff843fcc08>] gs_make_candev drivers/net/can/usb/gs_usb.c:1065 [inline]
-    [<ffffffff843fcc08>] gs_usb_probe.cold+0x69e/0x8b8 drivers/net/can/usb/gs_usb.c:1191
-    [<ffffffff82d0a687>] usb_probe_interface+0x177/0x370 drivers/usb/core/driver.c:396
-    [<ffffffff82712d87>] call_driver_probe drivers/base/dd.c:517 [inline]
-    [<ffffffff82712d87>] really_probe.part.0+0xe7/0x380 drivers/base/dd.c:596
-    [<ffffffff8271312c>] really_probe drivers/base/dd.c:558 [inline]
-    [<ffffffff8271312c>] __driver_probe_device+0x10c/0x1e0 drivers/base/dd.c:755
-    [<ffffffff8271322a>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:785
-    [<ffffffff82713a96>] __device_attach_driver+0xf6/0x140 drivers/base/dd.c:902
-    [<ffffffff8270fcf7>] bus_for_each_drv+0xb7/0x100 drivers/base/bus.c:427
-    [<ffffffff82713612>] __device_attach+0x122/0x260 drivers/base/dd.c:973
-    [<ffffffff82711966>] bus_probe_device+0xc6/0xe0 drivers/base/bus.c:487
-    [<ffffffff8270dd4b>] device_add+0x5fb/0xdf0 drivers/base/core.c:3405
-    [<ffffffff82d07ac2>] usb_set_configuration+0x8f2/0xb80 drivers/usb/core/message.c:2170
-    [<ffffffff82d181ac>] usb_generic_driver_probe+0x8c/0xc0 drivers/usb/core/generic.c:238
-    [<ffffffff82d09d5c>] usb_probe_device+0x5c/0x140 drivers/usb/core/driver.c:293
-    [<ffffffff82712d87>] call_driver_probe drivers/base/dd.c:517 [inline]
-    [<ffffffff82712d87>] really_probe.part.0+0xe7/0x380 drivers/base/dd.c:596
-    [<ffffffff8271312c>] really_probe drivers/base/dd.c:558 [inline]
-    [<ffffffff8271312c>] __driver_probe_device+0x10c/0x1e0 drivers/base/dd.c:755
-    [<ffffffff8271322a>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:785
-
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Kris
