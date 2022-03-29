@@ -2,113 +2,110 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A1C4EB42A
-	for <lists+linux-can@lfdr.de>; Tue, 29 Mar 2022 21:36:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6D774EB470
+	for <lists+linux-can@lfdr.de>; Tue, 29 Mar 2022 22:09:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240987AbiC2Tid (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 29 Mar 2022 15:38:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42616 "EHLO
+        id S230012AbiC2UKv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 29 Mar 2022 16:10:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234102AbiC2Tic (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 29 Mar 2022 15:38:32 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F2A986E0
-        for <linux-can@vger.kernel.org>; Tue, 29 Mar 2022 12:36:49 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nZHdw-0005xZ-Qf; Tue, 29 Mar 2022 21:36:40 +0200
-Received: from pengutronix.de (2a03-f580-87bc-d400-363f-4dd9-8273-6da4.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:363f:4dd9:8273:6da4])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id AE8B456710;
-        Tue, 29 Mar 2022 19:36:38 +0000 (UTC)
-Date:   Tue, 29 Mar 2022 21:36:38 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     syzbot <syzbot+4d0ae90a195b269f102d@syzkaller.appspotmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, pfink@christ-es.de,
-        syzkaller-bugs@googlegroups.com, wg@grandegger.com
-Subject: Re: [syzbot] memory leak in gs_usb_probe
-Message-ID: <20220329193638.34h7nczdrr7pdful@pengutronix.de>
-References: <000000000000bd6ee505db5cfec6@google.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ggxulcklerfpozv7"
-Content-Disposition: inline
-In-Reply-To: <000000000000bd6ee505db5cfec6@google.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229472AbiC2UKu (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 29 Mar 2022 16:10:50 -0400
+Received: from smtp-out3.electric.net (smtp-out3.electric.net [208.70.128.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0537D205F4;
+        Tue, 29 Mar 2022 13:09:03 -0700 (PDT)
+Received: from 1nZI9D-000AzV-W6 by out3d.electric.net with emc1-ok (Exim 4.94.2)
+        (envelope-from <kris@embeddedTS.com>)
+        id 1nZI9F-000B2y-TT; Tue, 29 Mar 2022 13:09:01 -0700
+Received: by emcmailer; Tue, 29 Mar 2022 13:09:01 -0700
+Received: from [66.210.251.27] (helo=mail.embeddedts.com)
+        by out3d.electric.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <kris@embeddedTS.com>)
+        id 1nZI9D-000AzV-W6; Tue, 29 Mar 2022 13:09:00 -0700
+Received: from tsdebian.Massive (unknown [75.164.75.221])
+        by mail.embeddedts.com (Postfix) with ESMTPSA id 3179C1A4A6;
+        Tue, 29 Mar 2022 13:08:59 -0700 (MST)
+From:   Kris Bahnsen <kris@embeddedTS.com>
+To:     linux-kernel@vger.kernel.org,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can@vger.kernel.org
+Cc:     Mark Featherston <mark@embeddedTS.com>,
+        Kris Bahnsen <kris@embeddedTS.com>
+Subject: [PATCH 1/2] can: Fix Links to Technologic Systems web resources
+Date:   Tue, 29 Mar 2022 13:08:44 -0700
+Message-Id: <20220329200844.16073-1-kris@embeddedTS.com>
+X-Mailer: git-send-email 2.11.0
+X-Outbound-IP: 66.210.251.27
+X-Env-From: kris@embeddedTS.com
+X-Proto: esmtps
+X-Revdns: wsip-66-210-251-27.ph.ph.cox.net
+X-HELO: mail.embeddedts.com
+X-TLS:  TLS1.2:ECDHE-RSA-AES256-GCM-SHA384:256
+X-Authenticated_ID: 
+X-Virus-Status: Scanned by VirusSMART (c)
+X-Virus-Status: Scanned by VirusSMART (b)
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=embeddedTS.com; s=mailanyone20220121;h=Message-Id:Date:To:From; bh=JNdbgRoUfWZLQJBtZuhC+ncgaaoQIfxSElXYcdEKvd0=;b=FUdhajRHHjeiHlt1lD4lDFI4YIzg70BFuuBk/XXpcUD4UDElcaNCWPDiFxlvTnch0KvtQN59Dxg4H4/Z2AsHG9eEFuiFjpaSgwMVUVGH5FoIvtjf7mPvlaudY/+NXpLfg2u9U9WrUkP8LPRmnUFRd5PxAavRJ+1pCNp/dCU7uOyIiItTEfs1ArqAlsPszeeQYLBTCL5dFxPNOHcSFQKizOjF2JN+2JBbkaAkMXVXH+HLplYpPXZ1X0yP0eIgQ+nil1ooMXFtNYfjcxZS5Js0bm1dP+0jIgYxQaopIJgYghm6vVE1ZNlI1VcYfn+m9Zibvv8OoLkIMNyjg+YakGqvSg==;
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Technologic Systems has rebranded as embeddedTS with the current
+domain eventually going offline. Update web/doc URLs to correct
+resource locations.
 
---ggxulcklerfpozv7
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Kris Bahnsen <kris@embeddedTS.com>
+---
+ drivers/net/can/sja1000/Kconfig  | 2 +-
+ drivers/net/can/sja1000/tscan1.c | 7 +++----
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-On 29.03.2022 08:22:20, syzbot wrote:
-> Hello,
->=20
-> syzbot found the following issue on:
->=20
-> HEAD commit:    52deda9551a0 Merge branch 'akpm' (patches from Andrew)
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=3D12b472dd700000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D9ca2a67ddb200=
-27f
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3D4d0ae90a195b269=
-f102d
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binuti=
-ls for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D12e96e1d700=
-000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D12f8b513700000
->=20
-> IMPORTANT: if you fix the issue, please add the following tag to the comm=
-it:
-> Reported-by: syzbot+4d0ae90a195b269f102d@syzkaller.appspotmail.com
+diff --git a/drivers/net/can/sja1000/Kconfig b/drivers/net/can/sja1000/Kconfig
+index 110071b26921..4b2f9cb17fc3 100644
+--- a/drivers/net/can/sja1000/Kconfig
++++ b/drivers/net/can/sja1000/Kconfig
+@@ -107,7 +107,7 @@ config CAN_TSCAN1
+ 	depends on ISA
+ 	help
+ 	  This driver is for Technologic Systems' TSCAN-1 PC104 boards.
+-	  http://www.embeddedarm.com/products/board-detail.php?product=TS-CAN1
++	  https://www.embeddedts.com/products/TS-CAN1
+ 	  The driver supports multiple boards and automatically configures them:
+ 	  PLD IO base addresses are read from jumpers JP1 and JP2,
+ 	  IRQ numbers are read from jumpers JP4 and JP5,
+diff --git a/drivers/net/can/sja1000/tscan1.c b/drivers/net/can/sja1000/tscan1.c
+index 3dbba8d61afb..f3862bed3d40 100644
+--- a/drivers/net/can/sja1000/tscan1.c
++++ b/drivers/net/can/sja1000/tscan1.c
+@@ -5,10 +5,9 @@
+  * Copyright 2010 Andre B. Oliveira
+  */
+ 
+-/*
+- * References:
+- * - Getting started with TS-CAN1, Technologic Systems, Jun 2009
+- *	http://www.embeddedarm.com/documentation/ts-can1-manual.pdf
++/* References:
++ * - Getting started with TS-CAN1, Technologic Systems, Feb 2022
++ *	https://docs.embeddedts.com/TS-CAN1
+  */
+ 
+ #include <linux/init.h>
+-- 
+2.11.0
 
-Good Bot!
-
-Fixed:
-https://lore.kernel.org/all/20220329193450.659726-1-mkl@pengutronix.de
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---ggxulcklerfpozv7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJDX8MACgkQrX5LkNig
-010OZQf+IJFjX8rqOFRI9q1xLxEcaOBCkM8n360aEkwlSzvXRJZOLLM4ru27deZq
-qPcNRPHPtJv/siB7FsZtb5XDRl7aZJwFqGkr2sShlipEUBtHgk2u/Nkj0OGMe14E
-of43LQ267hoD2dk4RHvXbUBMzTV52U07c4tes68DY7c6uY4vJ8xQjLCSbBhN6vAG
-xvF2tqkypG6j8PPIqOI7BzvXuuP08At/xiHsKeXnBELYy+WP0Duby/SourWok8Au
-kdC5hGh1vdGj+bCxeyde78B+DaR+oVsdaAVdGt2M4oXuOYfsehd07ki1FiJuRKXt
-zdZpmly9+GQLFrK2kQuXeDzyeZFMzA==
-=yXC7
------END PGP SIGNATURE-----
-
---ggxulcklerfpozv7--
