@@ -2,261 +2,160 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E52154E9EEE
-	for <lists+linux-can@lfdr.de>; Mon, 28 Mar 2022 20:25:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 154334EAA22
+	for <lists+linux-can@lfdr.de>; Tue, 29 Mar 2022 11:08:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244862AbiC1S1J (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 28 Mar 2022 14:27:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43726 "EHLO
+        id S233348AbiC2JJ7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 29 Mar 2022 05:09:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244418AbiC1S1I (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 28 Mar 2022 14:27:08 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3A94ECEF
-        for <linux-can@vger.kernel.org>; Mon, 28 Mar 2022 11:25:26 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id h14-20020a05660208ce00b00645c339411bso10892447ioz.8
-        for <linux-can@vger.kernel.org>; Mon, 28 Mar 2022 11:25:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=RBDHVALQi6in3MzmSvksdqiyNF+gV4JupE/OPsrZyog=;
-        b=HHwuCGldA2a+MEVp8gxUb7VqOltYeVwlg38K/p4Io061dioH3b8T/q5nCbC9A83Rdj
-         0vxzngNZk3c04cIxRtNWDvLDMZhHRJxJAXlozyfT9JE943FK0V+W5eINawHO1E5F2n9o
-         aG7btqlpuw3HOa9eExb8zq0fYFy8darjOxDn2+eThtVr6YhuwgsfIwwohEeGc2Y4zmvz
-         FHTnb97q3AVNiPpukLfA7dnFwICc1GY6BCzyfzW5AdvP5Rl9w4x5CDKzSUzmSTTq7gTl
-         hh7hAPQ1zxRXz6YmBqYZpSkAMqxV/XUT5/RTdfBUKHXxNRlhRlxKZ5ulgWMcgHXqygm9
-         OOFQ==
-X-Gm-Message-State: AOAM530jIGbFiwlfcoxCWaxFGu2Mn1qjiPns+GKFXwdxr1MkJWRkzMFh
-        Q7Kp41d/EZZtrI7f05aeVR7O+8UVhL4Y+XKIn5MSD+Bbk9Gl
-X-Google-Smtp-Source: ABdhPJzab1QKPQlFRWArIzNIbpMntnS0NX/WKJ497m2G15az2oVdICT7J0yPXysaW+n9iW88CC3NNPoZl6AWsrT/5eol+ZNCU12C
+        with ESMTP id S234458AbiC2JJ6 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 29 Mar 2022 05:09:58 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1711DC2E
+        for <linux-can@vger.kernel.org>; Tue, 29 Mar 2022 02:08:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1648544894; x=1680080894;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=iiBly4Au/suhfIA8cvjFAd2jIydac2le3HF513GNy5U=;
+  b=sKnc1DtvpNF8kBqlbzzV+ZSO+tx9G0QdnHCzcrTM0XkJQHHkhSeVuYnE
+   kGUYDpajVsUKBoAdh4JtD374GijfvBfuIzMJ0EGBHSHiP1yV/jXyZlZdX
+   2TDrbkgHRbdiVjsUlGIvMuYJm1bA3q/sZlDhJh48SiBv2d/NTZT7DDxtP
+   2YqHi7WI3dyCvgdomh+YNpgBabJh4GvB1yM97E3E56pGrDCzOpc5QV8zA
+   sF5i8Ei1HJ2LxJaq5KBVlNqoEcE7l3PFy8wY6XK8myHq5xXauLS9Umfuh
+   FnnOXu4TYwb53BJl8CKA05a5E1p+GJJPkvPesjrre/D4AcS2J0/URCYD5
+   A==;
+X-IronPort-AV: E=Sophos;i="5.90,219,1643698800"; 
+   d="scan'208";a="90471520"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Mar 2022 02:08:13 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 29 Mar 2022 02:08:12 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17 via Frontend Transport; Tue, 29 Mar 2022 02:08:12 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hb56iMf/49K3qWyyIQdLzDhZX5Diqm8RlH76ppsVUYWYt+AIJstskNUFQTmSt5eIfRIU2WkhrqZQUcpV/WejQNWg40YFRH3N/t5mLruE2A0sl7Zs0FKNBjWg6cvenGesMoTV0MVPUZiM+PBYvB2Du522wU4nagbzm0xhcNdVxc6/u/JgUGge7iXTlvCXqS/sFnsdNUI3IzP2Q1uK/4axwbTgRCwmC5RMQmV15qd1SF6aJ3jqkS4tfa84b/SshPHNYt3THV9lpN8NpBKwZkUFVqAjgbK+8oykY8g4nKZKlOwcNaMltpg1UkDLj4C9Rt/MVwEqAB9Isf+/H87NjQqEWg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iiBly4Au/suhfIA8cvjFAd2jIydac2le3HF513GNy5U=;
+ b=fasgGQZteUcDBfWKdWJRzifzpvGHdQMU3aS+FOfR2yb77NeKhlklAE5bnud3pDni31GVlI9S/qi7Q9VTM3TMPmK9ECmOmaSins4ThU/Ty8HuUw67WpVESsp9BKCNQ5v715S45p8XAvHjsytzZbL+IHmWRlJdZVNuCMD6gdCPahBqn/w626HD1K8GpCYCSI7YOVXkQp73vzKtBVj9nQlSJaoRbHKQ+h+Wf3xmN3r8zcmVwujqPvOiGMPnxzJ3IycCli/JbwirJ5mAG5SoAB+o3+Eqe2o+gfUe0qVVHvBa80mOCMj2gW4YrS/Wl4cYiqbg5AA7IhaCzPxibEKJjP+neA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iiBly4Au/suhfIA8cvjFAd2jIydac2le3HF513GNy5U=;
+ b=P6KyE1BlMMKiVukumcbLETH4RLuQ9OL1rYRvfi7UBi0EzlrisHdlpl9L6qTHQ/58x9gxCZeuRM5KfAOLrUVyFx6GC3s7Azusn0LsO8A5lkN4ITvV0f10kpCbYAOsYuO2vtgU3CPaVVN7OdYFRnVkPbFLAB31nwZoaLOV0gUteqY=
+Received: from DM4PR11MB5390.namprd11.prod.outlook.com (2603:10b6:5:395::13)
+ by MW3PR11MB4730.namprd11.prod.outlook.com (2603:10b6:303:58::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.16; Tue, 29 Mar
+ 2022 09:08:11 +0000
+Received: from DM4PR11MB5390.namprd11.prod.outlook.com
+ ([fe80::815f:c1cc:e819:cda6]) by DM4PR11MB5390.namprd11.prod.outlook.com
+ ([fe80::815f:c1cc:e819:cda6%9]) with mapi id 15.20.5102.023; Tue, 29 Mar 2022
+ 09:08:11 +0000
+From:   <Thomas.Kopp@microchip.com>
+To:     <mkl@pengutronix.de>, <linux-can@vger.kernel.org>
+CC:     <kernel@pengutronix.de>, <manivannan.sadhasivam@linaro.org>
+Subject: RE: can-next 2022-03-13: mcp251xfd: add 
+Thread-Topic: can-next 2022-03-13: mcp251xfd: add 
+Thread-Index: AQHYNrV85eXBoW8fO0uqUGXLZ/3mU6zWKuHA
+Date:   Tue, 29 Mar 2022 09:08:11 +0000
+Message-ID: <DM4PR11MB5390EB2EA594AFC4721017E8FB1E9@DM4PR11MB5390.namprd11.prod.outlook.com>
+References: <20220313083640.501791-1-mkl@pengutronix.de>
+In-Reply-To: <20220313083640.501791-1-mkl@pengutronix.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 4c57091c-8a8a-483f-0fd2-08da1163a657
+x-ms-traffictypediagnostic: MW3PR11MB4730:EE_
+x-microsoft-antispam-prvs: <MW3PR11MB473075636F9CFC6BE91EAD99FB1E9@MW3PR11MB4730.namprd11.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: FDpucjwQ7rdML5c96rxc4K01mHxWek3UyeLbyW60U/Fhmxw5FM33HXobo8ZYGogxi0PPNjkX67W+aBha8kGAJuWawwGXiDSM2iQBOqv0hMKggR6kRTDvplqlBwUmAwLes1xMhA53oKsH6ZoikWj7b2D8jYl7opGide4Yy1JLMNuc38tLsMXISPpRajqmzRwz9hBcfXonmAqILAZeFdkOg9kazGjXWLiKVZjXEuF4tmrLlp/ZqO+GIA/K6KfelkqunmRTwPcDdDv/IB3xD/t3ptzVrDlmFcNoW0/c7tgT1xHvHc5zY896uqUIt/LXkP01graJXJUOTgkrsNZE7kJ4lCmkmmKigZEDAoLfeUJSugs7QEh3rtPYPYjzGsyiQ8+vPjj2jVQtS826+6KNoW+9VlII3ZDSsKH8/8J0KB6h9MCfmPsHtUZ1MNy1bWHOSVKDYZqhuXfFIZSwFyKUq+Yz0ibtg5sh+7XrqouMES755JTybHuYmtJlFDJDh0tB+0dxeedAk6GanaWCQu8aXM2DIMxbrZZeY3IeJs6xmpNdUhbTFUQGW+YaYJ/Qzt/Dk/KbiOT4keU9DSGNvzXNiBlZ2TiMQOADsa7Icd9ugWJMRPCjCJULxrE121XfTPRmBHKxHRZc0TwPwZNhM4Frz7lIdYOccE9mAVG24UvEzq2HZtoo3iyvUez4UloHJH3c6K/O6eKbox9H6zePP7Hcpp7kMg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5390.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(110136005)(508600001)(26005)(316002)(2906002)(186003)(4743002)(86362001)(5660300002)(33656002)(55016003)(52536014)(122000001)(4744005)(9686003)(38070700005)(7696005)(6506007)(66556008)(8936002)(66476007)(38100700002)(66946007)(71200400001)(8676002)(4326008)(76116006)(54906003)(66446008)(64756008);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?G7q4fSbZwzPxjDvgv4GX+IzMLmgnIxDhivAp9MgvwWByHMFB/vKeGSe919+r?=
+ =?us-ascii?Q?ZQypW7xIQTSeqMeoOmTSlySJvc5axeBXhRJNj43numycdFjySNPVg+FW18i0?=
+ =?us-ascii?Q?nm1V6t6YgW1D6jR/KyLyjeB0OrLWs2SPNl0k3W9rvrv0fd/ygkXok/k/3dSk?=
+ =?us-ascii?Q?Ib3lCSjcEeK32MPiTeMNT1MSYiMP/j15FL4UVkkZ1Kifk/HzVKIioxnY+ugp?=
+ =?us-ascii?Q?9u0SO1N5ngfOAY12qkiTMjfrOdZBqQZzoLysP7pWqsgRSEwcscHOtLw1yRkO?=
+ =?us-ascii?Q?MrIrWJ7kLF8j2RS1rw8+zEv8JPXHuFggTu9BG2f1S8JIrUkLqTkZNZ8607rA?=
+ =?us-ascii?Q?JtKoE1QmTUqWgUAk26OhZZkdKl2e/j+E6zZ2IVRO3Y++eWde93ST4vLNbdNK?=
+ =?us-ascii?Q?CwJvfFODvdnnL8lGkfZP9xL57hX8i8aC5RfuCOh5GPFtuj7LbqoLUUfJKSRZ?=
+ =?us-ascii?Q?CEMirFDMVOVNlK4ZjfgMS+cqhe81Qj39Z57MxasnPriF0wYV9rV+U2uEm+o5?=
+ =?us-ascii?Q?d5S+vsEz2q9kf2jKq59CrYozty2WupMvYLzYLMTAfp2pqs98Co7dMO1JDJf+?=
+ =?us-ascii?Q?GZ2ZW0/WeSaHK59JkL9CVb7tNtX7Ksz4R+KOYb1H55TZeUyECG2xvAGmSRpo?=
+ =?us-ascii?Q?gRxfagq1/0c7fOo1hwpJFRB3P+rOqCP8N+qJYbJ99NqKuf1+ohJihfWRIAXK?=
+ =?us-ascii?Q?R959c6LVDC2slPY/6Sd3ZuHw3DB/0GtZtHqnqr6VJ0W89HfTxRzU+c4t5IEd?=
+ =?us-ascii?Q?4ESXAB6xJ3l66vmDWC89r9I1y/amdwbLDlYVle2WhOHpOXfBXS/WKn8mbrRX?=
+ =?us-ascii?Q?OdOhBeBjgXaFJm2Sa88wzkSOZrf0duy0shrcidKekQz2YadL7Wung0IdC47f?=
+ =?us-ascii?Q?ryY6OvG2+DsvER9IRImYOrpTuUHzeY1PG1ysHH8XZvCylcOW20cHiX18x2Rl?=
+ =?us-ascii?Q?HExV/MtxijfcQ6swV2S2imD++zTctRiYo5ktMrdSnhrQ1svA+W+ru+PnnxlA?=
+ =?us-ascii?Q?05jjVHblMd3KDs4U+P2GJph/71/dfpR8ErJHzdxTMtlKV8mbviJUgSBwiREF?=
+ =?us-ascii?Q?lwMWIk9l+aX2TMr5gZoEbvtZ9pch5IhPCS5qOPy/tiOc//PGHPSrwXSApzwW?=
+ =?us-ascii?Q?lrGCtaj/L3rk4eT9j2Z/K223TWS0GTamQ7LSVTV42sO0YJ1aPd8ktxpX9aLW?=
+ =?us-ascii?Q?aZtgt3SptqVLiT2w2yZXvv62JL3/6PuAJcvxQymm9y0TLK5mA8LZ+UlBBd/D?=
+ =?us-ascii?Q?dK/zWAm8J5K4QJbh7cyCSBa3q5CautY8XO0ycdkUaDE/qL1OaWRRK9AO/IyC?=
+ =?us-ascii?Q?ePXDfHrAP+xrPmNgvMyM3BAcGsbH3QjVtttyjJ+rFsW1r/2DbsVSoPMjepER?=
+ =?us-ascii?Q?1tg7kb8rHcsw7VY/CvtJeN2FdCZiIDhTWDYF2KO627Wj9NCEQ6wnAv2mnYn0?=
+ =?us-ascii?Q?/1Mcqe9yw6SZCwtkpx7ekT4Ng57rFGjaPkIRB7gGlrvIWbm0+yyqax6xXLIu?=
+ =?us-ascii?Q?8iALlOvHbeLEa0rd67HWD2E0OQWyvU4hzcN00j0iTT9azwRq4cgQXmJAoFhL?=
+ =?us-ascii?Q?BFDVGJ11nGnCaniqsmnLyPEDIlFaT6F2ZOoVIO9H4pEZLrAx7tkF5OZH5pLZ?=
+ =?us-ascii?Q?7XkynFgkQgMbSiHPSuEcO2R/in1qQkxDKX08QKqKk9kdozBtSthtEJ2ZAqHZ?=
+ =?us-ascii?Q?3BeVb4zBorwmLVbrBw2V9bhmHTockGUtOp/KRyN/aYNklyXBTPPWHtizgayw?=
+ =?us-ascii?Q?X7dMTLn2LZ529QMuK4Kz9cR22O9KcEo=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-Received: by 2002:a5e:dc05:0:b0:645:d2cc:3e92 with SMTP id
- b5-20020a5edc05000000b00645d2cc3e92mr7186171iok.72.1648491926259; Mon, 28 Mar
- 2022 11:25:26 -0700 (PDT)
-Date:   Mon, 28 Mar 2022 11:25:26 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ae0adf05db4b6f66@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in j1939_xtp_rx_dat_one (3)
-From:   syzbot <syzbot+a9dce1ff45c3bbeceb3a@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, kernel@pengutronix.de, kuba@kernel.org,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux@rempel-privat.de, mkl@pengutronix.de, netdev@vger.kernel.org,
-        pabeni@redhat.com, robin@protonic.nl, socketcan@hartkopp.net,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5390.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4c57091c-8a8a-483f-0fd2-08da1163a657
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Mar 2022 09:08:11.5723
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: HeX93UbnMIq+hQnMASohkKTM9thG65S9GLW9xZdhdUGMkM3yRnS45j5eUVHY9gubK1hgRZMOZINCovNYtKrkgFQJaq0j1vzeHphD2TBmdj8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR11MB4730
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello,
+Hi Marc,
 
-syzbot found the following issue on:
+> From: Marc Kleine-Budde <mkl@pengutronix.de>
+> Subject: can-next 2022-03-13: mcp251xfd: add
+> Hello,
+>=20
+> this series for the mcp251xfd adds IRQ coalescing support.
+>=20
 
-HEAD commit:    ae085d7f9365 mm: kfence: fix missing objcg housekeeping fo..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=17656105700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6bae4cd50262530e
-dashboard link: https://syzkaller.appspot.com/bug?extid=a9dce1ff45c3bbeceb3a
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12529653700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14b64ea5700000
+For the patch series: tested-by Thomas Kopp <thomas.kopp@microchip.com>
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a9dce1ff45c3bbeceb3a@syzkaller.appspotmail.com
+I'm fine with the default min values for the FIFOs changing them didn't yie=
+ld a significant improvement.
 
-vcan0: j1939_xtp_rx_dat_one: 0xffff88801fe31400: last 00
-vcan0: j1939_xtp_rx_dat_one: 0xffff88801fe31800: last 00
-vcan0: j1939_xtp_rx_dat_one: 0xffff88801fe31800: Data of RX-looped back packet (00 ff ff ff ff ff ff) doesn't match TX data (00 00 00 00 00 00 00)!
-==================================================================
-BUG: KASAN: use-after-free in j1939_xtp_rx_dat_one+0xe15/0xee0 net/can/j1939/transport.c:1877
-Read of size 1 at addr ffff88802304ab8e by task ksoftirqd/1/21
-
-CPU: 1 PID: 21 Comm: ksoftirqd/1 Tainted: G        W         5.17.0-syzkaller-11407-gae085d7f9365 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0xeb/0x495 mm/kasan/report.c:313
- print_report mm/kasan/report.c:429 [inline]
- kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
- j1939_xtp_rx_dat_one+0xe15/0xee0 net/can/j1939/transport.c:1877
- j1939_xtp_rx_dat net/can/j1939/transport.c:1929 [inline]
- j1939_tp_recv+0x6de/0xcb0 net/can/j1939/transport.c:2123
- j1939_can_recv+0x6ff/0x9a0 net/can/j1939/main.c:108
- deliver net/can/af_can.c:574 [inline]
- can_rcv_filter+0x5d4/0x8d0 net/can/af_can.c:608
- can_receive+0x31d/0x580 net/can/af_can.c:665
- can_rcv+0x120/0x1c0 net/can/af_can.c:696
- __netif_receive_skb_one_core+0x114/0x180 net/core/dev.c:5405
- __netif_receive_skb+0x24/0x1b0 net/core/dev.c:5519
- process_backlog+0x3a0/0x7c0 net/core/dev.c:5847
- __napi_poll+0xb3/0x6e0 net/core/dev.c:6413
- napi_poll net/core/dev.c:6480 [inline]
- net_rx_action+0x8ec/0xc60 net/core/dev.c:6567
- __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
- run_ksoftirqd kernel/softirq.c:921 [inline]
- run_ksoftirqd+0x2d/0x60 kernel/softirq.c:913
- smpboot_thread_fn+0x645/0x9c0 kernel/smpboot.c:164
- kthread+0x2e9/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
- </TASK>
-
-Allocated by task 3606:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:436 [inline]
- __kasan_slab_alloc+0x90/0xc0 mm/kasan/common.c:469
- kasan_slab_alloc include/linux/kasan.h:224 [inline]
- slab_post_alloc_hook mm/slab.h:749 [inline]
- slab_alloc_node mm/slub.c:3217 [inline]
- kmem_cache_alloc_node+0x255/0x3f0 mm/slub.c:3267
- __alloc_skb+0x215/0x340 net/core/skbuff.c:414
- alloc_skb include/linux/skbuff.h:1300 [inline]
- alloc_skb_with_frags+0x93/0x730 net/core/skbuff.c:5988
- sock_alloc_send_pskb+0x793/0x920 net/core/sock.c:2600
- j1939_sk_alloc_skb net/can/j1939/socket.c:861 [inline]
- j1939_sk_send_loop net/can/j1939/socket.c:1118 [inline]
- j1939_sk_sendmsg+0x6eb/0x13f0 net/can/j1939/socket.c:1253
- sock_sendmsg_nosec net/socket.c:705 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:725
- sock_no_sendpage+0xf6/0x140 net/core/sock.c:3106
- kernel_sendpage.part.0+0x1ff/0x7b0 net/socket.c:3492
- kernel_sendpage net/socket.c:3489 [inline]
- sock_sendpage+0xdf/0x140 net/socket.c:1007
- pipe_to_sendpage+0x2ad/0x380 fs/splice.c:364
- splice_from_pipe_feed fs/splice.c:418 [inline]
- __splice_from_pipe+0x43e/0x8a0 fs/splice.c:562
- splice_from_pipe fs/splice.c:597 [inline]
- generic_splice_sendpage+0xd4/0x140 fs/splice.c:746
- do_splice_from fs/splice.c:767 [inline]
- direct_splice_actor+0x110/0x180 fs/splice.c:936
- splice_direct_to_actor+0x34b/0x8c0 fs/splice.c:891
- do_splice_direct+0x1a7/0x270 fs/splice.c:979
- do_sendfile+0xae0/0x1240 fs/read_write.c:1246
- __do_sys_sendfile64 fs/read_write.c:1311 [inline]
- __se_sys_sendfile64 fs/read_write.c:1297 [inline]
- __x64_sys_sendfile64+0x1cc/0x210 fs/read_write.c:1297
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0x80 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Freed by task 15:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track+0x21/0x30 mm/kasan/common.c:45
- kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
- ____kasan_slab_free mm/kasan/common.c:366 [inline]
- ____kasan_slab_free+0x166/0x1a0 mm/kasan/common.c:328
- kasan_slab_free include/linux/kasan.h:200 [inline]
- slab_free_hook mm/slub.c:1728 [inline]
- slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1754
- slab_free mm/slub.c:3510 [inline]
- kmem_cache_free+0xdd/0x5a0 mm/slub.c:3527
- kfree_skbmem+0xef/0x1b0 net/core/skbuff.c:700
- kfree_skb_reason+0x85/0x110 include/linux/refcount.h:279
- kfree_skb include/linux/skbuff.h:1250 [inline]
- j1939_session_skb_drop_old net/can/j1939/transport.c:340 [inline]
- j1939_xtp_rx_cts_one net/can/j1939/transport.c:1434 [inline]
- j1939_xtp_rx_cts+0xbdb/0x1170 net/can/j1939/transport.c:1473
- j1939_tp_cmd_recv net/can/j1939/transport.c:2061 [inline]
- j1939_tp_recv+0x83c/0xcb0 net/can/j1939/transport.c:2133
- j1939_can_recv+0x6ff/0x9a0 net/can/j1939/main.c:108
- deliver net/can/af_can.c:574 [inline]
- can_rcv_filter+0x5d4/0x8d0 net/can/af_can.c:608
- can_receive+0x31d/0x580 net/can/af_can.c:665
- can_rcv+0x120/0x1c0 net/can/af_can.c:696
- __netif_receive_skb_one_core+0x114/0x180 net/core/dev.c:5405
- __netif_receive_skb+0x24/0x1b0 net/core/dev.c:5519
- process_backlog+0x3a0/0x7c0 net/core/dev.c:5847
- __napi_poll+0xb3/0x6e0 net/core/dev.c:6413
- napi_poll net/core/dev.c:6480 [inline]
- net_rx_action+0x8ec/0xc60 net/core/dev.c:6567
- __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
-
-The buggy address belongs to the object at ffff88802304ab40
- which belongs to the cache skbuff_head_cache of size 232
-The buggy address is located 78 bytes inside of
- 232-byte region [ffff88802304ab40, ffff88802304ac28)
-
-The buggy address belongs to the physical page:
-page:ffffea00008c1280 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x2304a
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000200 0000000000000000 dead000000000122 ffff888140b8d500
-raw: 0000000000000000 00000000000c000c 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12a20(GFP_ATOMIC|__GFP_NOWARN|__GFP_NORETRY), pid 3590, tgid 3590 (kworker/1:3), ts 33637485571, free_ts 33296379898
- prep_new_page mm/page_alloc.c:2438 [inline]
- get_page_from_freelist+0xba2/0x3df0 mm/page_alloc.c:4179
- __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5405
- alloc_pages+0x1aa/0x310 mm/mempolicy.c:2262
- alloc_slab_page mm/slub.c:1799 [inline]
- allocate_slab+0x26c/0x3c0 mm/slub.c:1944
- new_slab mm/slub.c:2004 [inline]
- ___slab_alloc+0x8df/0xf20 mm/slub.c:3005
- __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3092
- slab_alloc_node mm/slub.c:3183 [inline]
- kmem_cache_alloc_node+0x122/0x3f0 mm/slub.c:3267
- __alloc_skb+0x215/0x340 net/core/skbuff.c:414
- alloc_skb include/linux/skbuff.h:1300 [inline]
- ndisc_alloc_skb+0x134/0x320 net/ipv6/ndisc.c:420
- ndisc_send_rs+0x37f/0x6f0 net/ipv6/ndisc.c:701
- addrconf_dad_completed+0x37a/0xd30 net/ipv6/addrconf.c:4231
- addrconf_dad_work+0x79f/0x1340 net/ipv6/addrconf.c:4141
- process_one_work+0x996/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e9/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1353 [inline]
- free_pcp_prepare+0x549/0xd20 mm/page_alloc.c:1403
- free_unref_page_prepare mm/page_alloc.c:3325 [inline]
- free_unref_page+0x19/0x690 mm/page_alloc.c:3420
- qlink_free mm/kasan/quarantine.c:157 [inline]
- qlist_free_all+0x6a/0x170 mm/kasan/quarantine.c:176
- kasan_quarantine_reduce+0x180/0x200 mm/kasan/quarantine.c:283
- __kasan_slab_alloc+0xa2/0xc0 mm/kasan/common.c:446
- kasan_slab_alloc include/linux/kasan.h:224 [inline]
- slab_post_alloc_hook mm/slab.h:749 [inline]
- slab_alloc_node mm/slub.c:3217 [inline]
- kmem_cache_alloc_node+0x255/0x3f0 mm/slub.c:3267
- __alloc_skb+0x215/0x340 net/core/skbuff.c:414
- alloc_skb include/linux/skbuff.h:1300 [inline]
- alloc_skb_with_frags+0x93/0x730 net/core/skbuff.c:5988
- sock_alloc_send_pskb+0x793/0x920 net/core/sock.c:2600
- mld_newpack.isra.0+0x1be/0x750 net/ipv6/mcast.c:1746
- add_grhead+0x283/0x360 net/ipv6/mcast.c:1849
- add_grec+0x106a/0x1530 net/ipv6/mcast.c:1987
- mld_send_initial_cr.part.0+0xf6/0x230 net/ipv6/mcast.c:2234
- mld_send_initial_cr net/ipv6/mcast.c:1232 [inline]
- ipv6_mc_dad_complete+0x1d0/0x690 net/ipv6/mcast.c:2245
- addrconf_dad_completed+0x9e8/0xd30 net/ipv6/addrconf.c:4211
- addrconf_dad_work+0x79f/0x1340 net/ipv6/addrconf.c:4141
-
-Memory state around the buggy address:
- ffff88802304aa80: 00 00 00 00 00 00 00 00 00 00 00 00 00 fc fc fc
- ffff88802304ab00: fc fc fc fc fc fc fc fc fa fb fb fb fb fb fb fb
->ffff88802304ab80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                      ^
- ffff88802304ac00: fb fb fb fb fb fc fc fc fc fc fc fc fc fc fc fc
- ffff88802304ac80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Thanks,
+Thomas
