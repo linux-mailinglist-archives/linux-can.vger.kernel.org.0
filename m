@@ -2,93 +2,136 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 733E44EBA8D
-	for <lists+linux-can@lfdr.de>; Wed, 30 Mar 2022 08:04:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBCD74EBBDE
+	for <lists+linux-can@lfdr.de>; Wed, 30 Mar 2022 09:38:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243123AbiC3GFm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 30 Mar 2022 02:05:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33444 "EHLO
+        id S236609AbiC3Hjk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 30 Mar 2022 03:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238352AbiC3GFl (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 30 Mar 2022 02:05:41 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A224212A82
-        for <linux-can@vger.kernel.org>; Tue, 29 Mar 2022 23:03:52 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id k25-20020a056830151900b005b25d8588dbso14275788otp.4
-        for <linux-can@vger.kernel.org>; Tue, 29 Mar 2022 23:03:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aq+OzWeIFRkkRRT07IOL6fpDOZAN+0UpnNUMJ10opGo=;
-        b=rcuU5GSO/p4ngC1HW0OS3dKNLYvVwSlavLvaBVYLVcoY2QdTvoiJCS2gFLFa4Jgz//
-         UXnnWqWobQ1J1oaUfgKY1IhAkXe/v4SWv5uGBjBC++yX7QpZLcdKdmDS7JLjxgFK2XHy
-         QlcDUQuWjqjooNv9+Nm8h/8vm5deaQHDIhQgamxddB+hrW5GuLGgBu5uA+kfzlEadqZD
-         XV+/r+ZnSGU1VlblVt1btHFEUkS7K4KpJdM4ki4WXwdQyZxrwolgDMumOZwqYS/oWh6D
-         sADdeMIwYQa85hV6kf0ieQQyk2gKDLlrFdYuMbORd43RGmbu2S5lfvhKGSXbEJxfEaN1
-         R/ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aq+OzWeIFRkkRRT07IOL6fpDOZAN+0UpnNUMJ10opGo=;
-        b=cYbw8xTC+E7kjSNKkqj0QGiBbgavILQ6uXMywGlWeq/1zhGenHrahV0yRstZd49JQ/
-         4BnQe4d5JAxWNmovLvrI+X99iKTlxwcY7IpKm9Giz85bNEODOEm7cpSXRyFhXHss3qGJ
-         WGD1Zso6QTjez5/jxvfs67hi/nblRgS3inXaSv0FFZPMOAijCKdBNrPwoq+8TKK5ElQD
-         IXL3tVOHzXKmYYmxAJ+AbIcm4a0DFMOoI0NJ1p+6XAOzWwnOrxSrw6YgcKoK4++Wesjk
-         0hu8a96DwWMfFcokjtc/7mCxvq7pcJcGmRVqDz+mM+0Tx3f2p4qZWx0E1gxADkQN4UjI
-         OK7A==
-X-Gm-Message-State: AOAM5323ctWIMLHpTZCVOo40pLa6pu16sbY1zHfb/gLnv2wTbwQJZ1v3
-        VS0Bd3zPkpPyW/YHAW+g+wV6MMOMxHDUQvwH7TNP5w==
-X-Google-Smtp-Source: ABdhPJyuufzWhLHE6tJFTxrkg49Qd+LCgw6pvVMKdQBsc6AbpalZGrOCQLCdeOBA00Sb+fFBCx87aYD0JH1+gPKPnAw=
-X-Received: by 2002:a05:6830:23b6:b0:5b2:4ac0:9130 with SMTP id
- m22-20020a05683023b600b005b24ac09130mr2628580ots.196.1648620231635; Tue, 29
- Mar 2022 23:03:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <PH0PR11MB588040F5F12E2E4A3432583CDA1F9@PH0PR11MB5880.namprd11.prod.outlook.com>
- <000000000000f3087f05db668ff8@google.com>
-In-Reply-To: <000000000000f3087f05db668ff8@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Wed, 30 Mar 2022 08:03:39 +0200
-Message-ID: <CACT4Y+b0viS3dSbHvV3_O6gPpOw+1qqJeYh1sCChhj3CmaZuaA@mail.gmail.com>
+        with ESMTP id S236435AbiC3Hjh (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 30 Mar 2022 03:39:37 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60BD2DFA2
+        for <linux-can@vger.kernel.org>; Wed, 30 Mar 2022 00:37:50 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nZSte-0004cO-Sb; Wed, 30 Mar 2022 09:37:38 +0200
+Received: from pengutronix.de (2a03-f580-87bc-d400-5314-bece-822a-622d.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:5314:bece:822a:622d])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 585F256C47;
+        Wed, 30 Mar 2022 07:37:36 +0000 (UTC)
+Date:   Wed, 30 Mar 2022 09:37:35 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
+Cc:     syzbot <syzbot+4d0ae90a195b269f102d@syzkaller.appspotmail.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "pfink@christ-es.de" <pfink@christ-es.de>,
+        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
+        "wg@grandegger.com" <wg@grandegger.com>
 Subject: Re: [syzbot] memory leak in gs_usb_probe
-To:     syzbot <syzbot+4d0ae90a195b269f102d@syzkaller.appspotmail.com>
-Cc:     linux-can@vger.kernel.org, qiang1.zhang@intel.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <20220330073735.tqfmyfgzyfbqmkpn@pengutronix.de>
+References: <000000000000bd6ee505db5cfec6@google.com>
+ <PH0PR11MB5880D90EDFAA0A190D927914DA1F9@PH0PR11MB5880.namprd11.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="u2qbbpeazfhzmyv4"
+Content-Disposition: inline
+In-Reply-To: <PH0PR11MB5880D90EDFAA0A190D927914DA1F9@PH0PR11MB5880.namprd11.prod.outlook.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed, 30 Mar 2022 at 04:47, syzbot
-<syzbot+4d0ae90a195b269f102d@syzkaller.appspotmail.com> wrote:
->
+
+--u2qbbpeazfhzmyv4
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 30.03.2022 01:57:08, Zhang, Qiang1 wrote:
 > Hello,
->
-> syzbot tried to test the proposed patch but the build/boot failed:
->
-> failed to apply patch:
-> checking file drivers/net/can/usb/gs_usb.c
-> patch: **** unexpected end of file in patch
+>=20
+> syzbot found the following issue on:
+>=20
+> HEAD commit:    52deda9551a0 Merge branch 'akpm' (patches from Andrew)
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=3D12b472dd700000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D9ca2a67ddb200=
+27f
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3D4d0ae90a195b269=
+f102d
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binuti=
+ls for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D12e96e1d700=
+000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D12f8b513700000
+>=20
+> IMPORTANT: if you fix the issue, please add the following tag to the comm=
+it:
+> Reported-by: syzbot+4d0ae90a195b269f102d@syzkaller.appspotmail.com
 
-Hi Zhang,
+[...]
 
-It seems that your mail client messes up whitespaces and breaks patches,
-you may attach the patch as an attachment then, it's more reliable.
+> diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
+> index 67408e316062..5234cfff84b8 100644
+> --- a/drivers/net/can/usb/gs_usb.c
+> +++ b/drivers/net/can/usb/gs_usb.c
+> @@ -1092,6 +1092,7 @@ static struct gs_can *gs_make_candev(unsigned int c=
+hannel,
+>                 dev->data_bt_const.brp_inc =3D le32_to_cpu(bt_const_exten=
+ded->dbrp_inc);
+>=20
+>                 dev->can.data_bittiming_const =3D &dev->data_bt_const;
+> +               kfree(bt_const_extended);
+>         }
+>=20
+>         SET_NETDEV_DEV(netdev, &intf->dev);
 
+I have already send a similar fix:
 
->
-> Tested on:
->
-> commit:         c2528a0c Add linux-next specific files for 20220329
-> git tree:       linux-next
-> dashboard link: https://syzkaller.appspot.com/bug?extid=4d0ae90a195b269f102d
-> compiler:
-> patch:          https://syzkaller.appspot.com/x/patch.diff?x=15dc8777700000
+| https://lore.kernel.org/all/20220329193450.659726-1-mkl@pengutronix.de
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--u2qbbpeazfhzmyv4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJECL0ACgkQrX5LkNig
+010Jigf/UYHDKXYUu5jFycIr7rrBq8r5VIcDaqmDlplnJPSKchZQPkm8fh90b2yu
+jOzjOuWc7KPzuG6RQczoTAKnFP7kZDaCyTEnsIsoE9sdOmN/mpriPLADvRVt24Xq
+mdGz3n5YeqEjaX6Sc4qXOK2NuzDljYia+rN29+2hiTAehZ/ozKk+L4FDbOTqdA0+
+p7onZyyAK1o9Gd0dj6oJ8uNXLuItZQpo+NiUZgfaHgbbcBNhjySxCiB/XPx1TkCw
+bh3EVHr76BVZ/81Vi2boNxNOLNSrVpe7PKPLf5VRVR/yED/9GVopYwiWJWT9TW28
+yj1X0NbloZxb4RBfmBy2pnMwPe1J3g==
+=wJB8
+-----END PGP SIGNATURE-----
+
+--u2qbbpeazfhzmyv4--
