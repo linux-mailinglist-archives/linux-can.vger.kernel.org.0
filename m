@@ -2,130 +2,113 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 354134EBC2D
-	for <lists+linux-can@lfdr.de>; Wed, 30 Mar 2022 09:55:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED61E4ECC02
+	for <lists+linux-can@lfdr.de>; Wed, 30 Mar 2022 20:25:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239551AbiC3H41 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 30 Mar 2022 03:56:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43856 "EHLO
+        id S1350110AbiC3S0h (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 30 Mar 2022 14:26:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243123AbiC3H4Z (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 30 Mar 2022 03:56:25 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B3ED2018C
-        for <linux-can@vger.kernel.org>; Wed, 30 Mar 2022 00:54:41 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nZT9t-0006Qu-Jg; Wed, 30 Mar 2022 09:54:25 +0200
-Received: from pengutronix.de (2a03-f580-87bc-d400-5314-bece-822a-622d.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:5314:bece:822a:622d])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id BC4C956C76;
-        Wed, 30 Mar 2022 07:54:22 +0000 (UTC)
-Date:   Wed, 30 Mar 2022 09:54:22 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Ondrej Ille <ondrej.ille@gmail.com>
-Cc:     Pavel Pisa <pisa@cmp.felk.cvut.cz>, linux-can@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        David Miller <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>, mark.rutland@arm.com,
-        Carsten Emde <c.emde@osadl.org>, armbru@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marin Jerabek <martin.jerabek01@gmail.com>,
-        Jiri Novak <jnovak@fel.cvut.cz>,
-        Jaroslav Beran <jara.beran@gmail.com>,
-        Petr Porazil <porazil@pikron.com>, Pavel Machek <pavel@ucw.cz>,
-        Drew Fustini <pdp7pdp7@gmail.com>
-Subject: Re: [PATCH v8 0/7] CTU CAN FD open-source IP core SocketCAN driver,
- PCI, platform integration and documentation
-Message-ID: <20220330075422.4kxnayrdcxz7o5lo@pengutronix.de>
-References: <cover.1647904780.git.pisa@cmp.felk.cvut.cz>
- <202203220918.33033.pisa@cmp.felk.cvut.cz>
- <20220322092212.f5eaxm5k45j5khra@pengutronix.de>
- <202203221419.23089.pisa@cmp.felk.cvut.cz>
- <CAA7ZjpZbppBy_C+NyN4LWQF2-a-ktfjYeNELTzwsz4B-fBiTpw@mail.gmail.com>
+        with ESMTP id S1350602AbiC3S0L (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 30 Mar 2022 14:26:11 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB5D4925D
+        for <linux-can@vger.kernel.org>; Wed, 30 Mar 2022 11:23:39 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id j13so21232204plj.8
+        for <linux-can@vger.kernel.org>; Wed, 30 Mar 2022 11:23:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=6PnxJaVdYHTfEoSreao3ANO+XeqxY/p/4dxKSObIH1I=;
+        b=U1oUia1Thamt6Z7oWm6PGNKOk9RXK6Jv76DGrI1cLcYRcY5/d1Tt5qepQRdZm6lsyq
+         RBa/xpJM28ShOu5ibphzafHjPKptRC4OMeOVco0xYKihrCNFhnaGQOBDSvUdgHWgE3gf
+         cWTbx+dPO2nv/wujOZrrbxfJpePUzp7QZ1RCloUPxJhGXTvBKUziPieC1LSkK8oSaB+t
+         E85QJNBGnQK8HE8wei7Zq5jQSpeI5JY8kzofCGcJSUHLIHQXWsBy6ta+brl9WPLZzyWA
+         2jPBZlOFyxLxFI8awBJCcZtcLmSyu35IRMr8cJ72zb2pokIUUqe6EUB9pKUwVKwbq4my
+         ou5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=6PnxJaVdYHTfEoSreao3ANO+XeqxY/p/4dxKSObIH1I=;
+        b=zawte3Wk1i/t8jSHAp3bHWfapcroUkk9vI+j31k0JcsA/X1wpyOAHGsfYO9Fu4VxSG
+         Ywn31tXByQUzBfoRC1HYob72ZK0mdcQTrnDzW4+3FYe4sLWaciioHktLf/sWLqbKK60b
+         /y8Uxg95dgCHBeEYQOyaVS/BF9kVz7Bjb/5QHrcHASEL+XBNMq3MlDTjSVERLGww4M1X
+         RR4vf/uNSAYaQGYYwIma8YkqWaqkYe6t+4hrEqOiVuvg5x/X7+lsZyc444vOjQLTfGMW
+         fvUDvK7zx6bAzL5FZrwARKclI0cKq0LhM2jlD4DbPEDhHUgNQPcktdeQkA79A2xxJR1U
+         5PXQ==
+X-Gm-Message-State: AOAM530f8ocqzU+r3796RSThe4xKNlRqQ1m8It+8d2VNePsb3J2Tf28p
+        DdBVQnkGgdJHd/ZDOePaxxeDyw9YRxP5eYv3uw==
+X-Google-Smtp-Source: ABdhPJzkTl+tJbylc9dRvis6ZhULbTl7j4ynIkLgm4b/Lu4YSrf6PCWjehKBvofPJCmWKHUKJGD0xbE01MjL0VC50Jo=
+X-Received: by 2002:a17:90b:3143:b0:1c7:5cee:3948 with SMTP id
+ ip3-20020a17090b314300b001c75cee3948mr852445pjb.140.1648664618224; Wed, 30
+ Mar 2022 11:23:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cn4afc3s4rdrhxit"
-Content-Disposition: inline
-In-Reply-To: <CAA7ZjpZbppBy_C+NyN4LWQF2-a-ktfjYeNELTzwsz4B-fBiTpw@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Reply-To: isabellasayouba0@gmail.com
+Sender: 040stherchurch@gmail.com
+Received: by 2002:a05:6a20:691d:b0:76:6cf5:d552 with HTTP; Wed, 30 Mar 2022
+ 11:23:37 -0700 (PDT)
+From:   Mrs Isabella Sayouba <isabellasayouba0@gmail.com>
+Date:   Wed, 30 Mar 2022 18:23:37 +0000
+X-Google-Sender-Auth: _Xe1kByDkvq-Dn04BagO7gok_qM
+Message-ID: <CAAzQq761QVaWKiKernxpKjqNCK+6V9mRKHBnOcqF8rXJO9Y+aA@mail.gmail.com>
+Subject: =?UTF-8?B?44GC44GE44GV44Gk44CC?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_99,BAYES_999,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-
---cn4afc3s4rdrhxit
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 30.03.2022 09:46:08, Ondrej Ille wrote:
-> sorry for the late reply, my work duties are keeping me very busy.
-
-Known problem :)
-
-> Let me just quickly comment on topics discussed in the emails above.
->=20
-> *1. Separation of PROP and TSEG1*
->=20
-> IMHO there is no real benefit. The reason why CTU CAN FD has this
-> split is legacy. First implementation back in 2015 had this split
-> since I wanted to follow the standard. In HW, the first thing done in
-> bit timing logic (prescaler module), these two numbers are added, and
-> all further resynchronization/hard-synchronization is done with TSEG1
-> value...
-
-Thanks for the insight. It's not easy to get in touch with the
-developers of the proprietary IP cores :)
-
-Never the less, there's another IP core which has different sizes for
-the prop and tseg1 register. So an update of the bit timing constant
-would help both.
-
-> *2. Number of TXT Buffers and RX Buffer size:*
->=20
-> Pavel already replied with TXTB_INFO. The same role has the RX_MEM_INFO
-> register, when it comes to RX side.
-
-Thanks for the clarification.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---cn4afc3s4rdrhxit
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJEDKsACgkQrX5LkNig
-011BUgf+NqPIJ6CCygkw/buy31ULqwkYdG2fEk72GHxm3xFCjGQ7hVGBD5VKA03s
-t4Phc2iZYEmQhKIOtHRVV73LGLW7lTQoJoMfbrMZNSxZy0JVS+4W5a82U3f5+2BL
-QW0OHSJ70ChwrMpprbA0Ziko/ij7eSYhliD5gJ5JN4xXNzx4QjGuxKe6s8n4FhUg
-NA0uZueotu5rWScNkquy9GsE1Va1Nnrc0/a298V3ycjiSKTrWDJ9UXmBNHKyGohr
-bJNUutzmGSdI9eLQHj/LbvGjPjnPV71maQKG2eGNgr4YNq2dA+cKGxnfoTFFmJOv
-DjDdy0Mke7BS8jWrTnSpZWOnXXCirw==
-=g9uh
------END PGP SIGNATURE-----
-
---cn4afc3s4rdrhxit--
+44GC44GE44GV44Gk44CCDQoNCua2meOCkua1geOBl+OBquOBjOOCieOBk+OBruODoeODvOODq+OC
+kuabuOOBhOOBpuOBhOOBvuOBmeOAguengeOBruebruOBq+OBr+Wkp+OBjeOBquaCsuOBl+OBv+OB
+jOOBguOCiuOBvuOBmeOAguengeOBruWQjeWJjeOBr+OCpOOCtuODmeODqeODu+OCteODqOOCpuOD
+kOOBleOCk+OBp+OBmeOAguODgeODpeODi+OCuOOCouWHuui6q+OBp+OAgeODluODq+OCreODiuOD
+leOCoeOCveOBrueXhemZouOBi+OCiemAo+e1oeOCkuWPluOCiuOBvuOBmeOAguengeOBr+OBguOB
+quOBn+OBq+W/g+OCkumWi+OBhOOBpuaEn+WLleOBl+OBn+OBruOBp+OAgeOBguOBquOBn+OBq+ip
+seOBmeS7peWkluOBq+mBuOaKnuiCouOBr+OBguOCiuOBvuOBm+OCk+OAguengeOBr+OAgTIwMTHl
+ubTjgavkuqHjgY/jgarjgovliY3jgavjg5bjg6vjgq3jg4rjg5XjgqHjgr3jga7jg4Hjg6Xjg4vj
+grjjgqLlpKfkvb/jgag55bm06ZaT5YON44GE44Gm44GE44GfU2F5b3ViYQ0KQnJvd27msI/jgajn
+tZDlqZrjgZfjgb7jgZfjgZ/jgILlrZDkvpvjgarjgZfjgacxMeW5tOmWk+e1kOWpmuOBl+OBn+OA
+gg0KDQrlvbzjga/jgZ/jgaPjgZ815pel6ZaT57aa44GE44Gf55+t44GE55eF5rCX44Gu5b6M44Gn
+5q2744Gr44G+44GX44Gf44CC5b2844Gu5q275b6M44CB56eB44Gv5YaN5ama44GX44Gq44GE44GT
+44Go44Gr5rG644KB44G+44GX44Gf44CC5Lqh44GP44Gq44Gj44Gf5aSr44GM55Sf44GN44Gm44GE
+44Gf44Go44GN44CB5b2844Gv57eP6aGNODUw5LiH44OJ44Or44KS6aCQ44GR44G+44GX44Gf44CC
+DQrvvIg4MDDkuIc1MDAw44OJ44Or77yJ6KW/44Ki44OV44Oq44Kr44Gu44OW44Or44Kt44OK44OV
+44Kh44K944Gu6aaW6YO944Ov44Ks44OJ44Kl44Kw44O844Gu6YqA6KGM44Gn44CC54++5Zyo44CB
+44GT44Gu44GK6YeR44Gv44G+44Gg6YqA6KGM44Gr44GC44KK44G+44GZ44CC5b2844Gv44GT44Gu
+44GK6YeR44KS44OW44Or44Kt44OK44OV44Kh44K944Gu6Ymx5qWt44GL44KJ44Gu6YeR44Gu6Ly4
+5Ye644Gr5Yip55So44Gn44GN44KL44KI44GG44Gr44GX44G+44GX44Gf44CCDQoNCuacgOi/keOA
+geengeOBruWMu+iAheOBr+engeOBjOeZjOOBqOiEs+WNkuS4reOBruWVj+mhjOOBruOBn+OCgeOB
+qzfjg7bmnIjplpPjga/ntprjgYvjgarjgYTjgaDjgo3jgYbjgajnp4HjgavoqIDjgYTjgb7jgZfj
+gZ/jgILnp4HjgpLmnIDjgoLmgqnjgb7jgZvjgabjgYTjgovjga7jga/ohLPljZLkuK3jga7nl4Xm
+sJfjgafjgZnjgILnp4Hjga7nirbmhYvjgpLnn6XjgaPjgZ/jga7jgafjgIHnp4Hjga/jgZPjga7j
+gYrph5HjgpLjgYLjgarjgZ/jgavmuKHjgZfjgabjgIHmgbXjgb7jgozjgarjgYTkurrjgIXjga7k
+uJboqbHjgpLjgZnjgovjgZPjgajjgavjgZfjgb7jgZfjgZ/jgILjgYLjgarjgZ/jga/jgZPjga7j
+gYrph5HjgpLnp4HjgYzjgZPjgZPjgafmjIfnpLrjgZnjgovmlrnms5XjgafliKnnlKjjgZnjgovj
+gafjgZfjgofjgYbjgILnp4Hjga/jgYLjgarjgZ/jgavjgYLjgarjgZ/jga7lgIvkurrnmoTjgark
+vb/nlKjjga7jgZ/jgoHjgavnt4/jgYrph5Hjga4zMOODkeODvOOCu+ODs+ODiOOCkuWPluOBo+OB
+puassuOBl+OBhOOBp+OBmeOAguOBiumHkeOBrjcw77yF44Gv56eB44Gu5ZCN5YmN44Gn5a2k5YWQ
+6Zmi44KS5bu644Gm44CB6YCa44KK44Gu6LKn44GX44GE5Lq644CF44KS5Yqp44GR44KL44Gf44KB
+44Gr5L2/44GG44Gn44GX44KH44GG44CC56eB44Gv5a2k5YWQ44Go44GX44Gm6IKy44Gh44G+44GX
+44Gf44GM44CB56We44Gu5a6244KS57at5oyB44GZ44KL44Gf44KB44Gg44GR44Gr44CB5a625peP
+44Gr44Gv6Kqw44KC44GE44G+44Gb44KT44CC44GT44Gu55eF5rCX44GM56eB44KS44Go44Gm44KC
+6Ium44GX44KB44Gf44Gu44Gn44CB56We44GM56eB44Gu572q44KS6LWm44GX44CB5qW95ZyS44Gn
+56eB44Gu6a2C44KS5Y+X44GR5YWl44KM44KL44KI44GG44Gr44GT44KM44KS44GX44Gm44GE44KL
+44Gu44Gn44GZ44CCDQoNCui/lOS/oeOCkuWPl+OBkeWPluOCiuasoeesrOOAgeODluODq+OCreOD
+iuODleOCoeOCveOBrumKgOihjOOBrumAo+e1oeWFiOOCkuOBiuefpeOCieOBm+OBl+OBvuOBmeOA
+guOBvuOBn+OAgemKgOihjOOBruePvuWcqOOBruWPl+WPluS6uuOBp+OBguOCi+OBk+OBqOOCkuio
+vOaYjuOBmeOCi+aoqemZkOabuOOCkueZuuihjOOBmeOCi+OCiOOBhumKgOihjOmVt+OBq+aMh+ek
+uuOBl+OBvuOBmeOAguengeOBjOOBk+OBk+OBp+i/sOOBueOBn+OCiOOBhuOBq+OBguOBquOBn+OB
+jOOBneOCjOOBq+W/nOOBmOOBpuihjOWLleOBmeOCi+OBk+OBqOOCkuengeOBq+S/neiovOOBl+OB
+puOBj+OBoOOBleOBhOOAgg0KDQrjgqTjgrbjg5njg6njg7vjgrXjg6jjgqbjg5DlpKvkurrjgYvj
+gonjgIINCg==
