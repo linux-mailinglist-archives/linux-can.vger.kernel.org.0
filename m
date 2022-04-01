@@ -2,135 +2,145 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D57914EE523
-	for <lists+linux-can@lfdr.de>; Fri,  1 Apr 2022 02:15:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CE214EEE02
+	for <lists+linux-can@lfdr.de>; Fri,  1 Apr 2022 15:23:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243314AbiDAARV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 31 Mar 2022 20:17:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47500 "EHLO
+        id S237846AbiDANZh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 1 Apr 2022 09:25:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243312AbiDAARU (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 31 Mar 2022 20:17:20 -0400
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1893C72B;
-        Thu, 31 Mar 2022 17:15:32 -0700 (PDT)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-dacc470e03so1062975fac.5;
-        Thu, 31 Mar 2022 17:15:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=kgDedcBJcc+tv/OOgxKjgk/SoshOh6AR9hwsk4pYsLw=;
-        b=1xsJ2ZfiQ5wEvzuC8CYkkWA4D4dVF0QRHSFazuz+YXFKE5EzIyjEAw6b1fL6qza+Qt
-         fw2yGZq0WPJb2gWYQ3fqEaXXXc0y0anUChlWOorELWDjKiK+MjQ61b9sEcJFAzO/jM6w
-         aJcw6qgbYLExQjGR3rPTvnuOMfHFHNwsYlMKzxr0I2QfIdcvIPblwCq0mXw+/5HoLTQP
-         Q31fc2BeGpKxknfxoF93kbH6AIRM7ms7UGDj4/NlmaO48b13p7bORa5zv/Oo8kH2YR47
-         UcAW4OhGkAy0L+ncUSt1pQgVyejNLLzsu+8sUDIygz+AEUvEfa2dTFaXbVcp/mHgPdTa
-         kSxQ==
-X-Gm-Message-State: AOAM532umhlA9LeJ2JStM71lg8gE6MJuCmDi2iDbprDLPjjRtiUuIY7Y
-        aCvRcz6PtJCvz+cFSS9qnw==
-X-Google-Smtp-Source: ABdhPJxOduw+Z9X08dI1UdH+GcjThmH7U3p+ZG1PL2p1hT2KQYDpoCnYsTC2oy0JMhvgskl1k1Dz6g==
-X-Received: by 2002:a05:6870:f71f:b0:d7:5f1b:534f with SMTP id ej31-20020a056870f71f00b000d75f1b534fmr3922617oab.109.1648772131730;
-        Thu, 31 Mar 2022 17:15:31 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g8-20020a9d2d88000000b005b238f7551csm462301otb.53.2022.03.31.17.15.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 17:15:30 -0700 (PDT)
-Received: (nullmailer pid 1762367 invoked by uid 1000);
-        Fri, 01 Apr 2022 00:15:29 -0000
-Date:   Thu, 31 Mar 2022 19:15:29 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, ulf.hansson@linaro.org,
-        krzk+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com, qiangqing.zhang@nxp.com,
-        devicetree@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
-        netdev@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-imx@nxp.com, kernel@pengutronix.de, festevam@gmail.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 0/4] dt-bindings: imx: add nvmem property
-Message-ID: <YkZEIR1XqJ6sseto@robh.at.kernel.org>
-References: <20220324042024.26813-1-peng.fan@oss.nxp.com>
- <20220324111104.cd7clpkzzedtcrja@pengutronix.de>
+        with ESMTP id S244750AbiDANZg (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 1 Apr 2022 09:25:36 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60129.outbound.protection.outlook.com [40.107.6.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD97A17A9B
+        for <linux-can@vger.kernel.org>; Fri,  1 Apr 2022 06:23:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GUuj4N+esadL1JBsnPPGo+IbUpU8m9o4hgCZuyWOvCHnUGvjmQmrkC1UR6cTQgxJycZmMXBF3nDawqV6sxVnoKtx55CTno2E3o0NFHXH8FT7gQfGedr04i9D4biheo7nCDksY12rmnnnN5x2yUFusQxHsqHFtqnqNm9TriDJRJEuYFIve6wo6LXVMGi4jxU5641noYmHpBzwOK/3Eu/UfKkC4497OgjrrxkjS0eLDYu456t8tq53PmIiAApxjq0SpoiDvSvk1vdlrecAU3GJkD2Glm137E8qTh/hooEJP8F0bteSRw2gTUZG4SupXU9VmsCYiwv3BVvenzDm7wu3uA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eGtaP64XkAPXwLy/ACJjqjdoMaziF8pj5xDHX3vWPU8=;
+ b=FWRUC2Egr22+HSpNgaVZs7aTT2fOuxi41EjQ2Ptzm9zdYngvR54IIqbUH8wGBdcMC2836IqBap8gRLhXk5DWHPT6YBvlFBCVMu2JpB93J0bDGpF25DQtmO0tNzcZhutuZ7rgCGzm+jNMScTFSHgrwwKWQ5golcdxSaLXOGkem5+l/PqIEEfrDb4vGwK+5/h3NfXT7c5MeZgrHEafi5m0z+UKYI75misllvap0KfT6bcrEWGXUOio28NaScERQ9kK3MGnM39cTnMqn711cPWVp+bN6f2yBvCteFc3A0vOmlKGIKDbRRkeeTNAShEfCtgyINoW0x46cKk0mnF7ng6fcQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=prodrive-technologies.com; dmarc=pass action=none
+ header.from=prodrive-technologies.com; dkim=pass
+ header.d=prodrive-technologies.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=prodrive-technologies.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eGtaP64XkAPXwLy/ACJjqjdoMaziF8pj5xDHX3vWPU8=;
+ b=dWI2L/WW6UeyjkhKFnv9JxPGWmXHhxrMsZG8MnDipyKpZ9aXivlhzTbImdCjBv0xOnOu6e8GyKz5wJQAIvKcclNwtExqjw4u0e1AKylZpR06lxUip+R7S8JHy+Zi8i1cRXYnMx6wKxTaVyjDRPlahvo7rbRJW3Ui/h1f/+6i/H0=
+Received: from AM0PR02MB5923.eurprd02.prod.outlook.com (2603:10a6:208:187::17)
+ by DU0PR02MB7851.eurprd02.prod.outlook.com (2603:10a6:10:343::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.21; Fri, 1 Apr
+ 2022 13:23:43 +0000
+Received: from AM0PR02MB5923.eurprd02.prod.outlook.com
+ ([fe80::ec30:e2aa:61fb:7f3e]) by AM0PR02MB5923.eurprd02.prod.outlook.com
+ ([fe80::ec30:e2aa:61fb:7f3e%2]) with mapi id 15.20.5123.025; Fri, 1 Apr 2022
+ 13:23:43 +0000
+From:   Wouter van Herpen <wouter.van.herpen@prodrive-technologies.com>
+To:     "mkl@pengutronix.de" <mkl@pengutronix.de>
+CC:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Subject: PROBLEM: tcan4x5x nINT stays asserted under high RX/TX interrupt load
+Thread-Topic: PROBLEM: tcan4x5x nINT stays asserted under high RX/TX interrupt
+ load
+Thread-Index: AdhFyuJj1zOoVQ3MQF6tNgMHZCJ37Q==
+Date:   Fri, 1 Apr 2022 13:23:43 +0000
+Message-ID: <AM0PR02MB592368F53A7BEA4154D24A87EAE09@AM0PR02MB5923.eurprd02.prod.outlook.com>
+Accept-Language: nl-NL, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=prodrive-technologies.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 421d12ad-23c1-4614-9ccb-08da13e2d842
+x-ms-traffictypediagnostic: DU0PR02MB7851:EE_
+x-microsoft-antispam-prvs: <DU0PR02MB7851E8004FEC0DFDE2D12968EAE09@DU0PR02MB7851.eurprd02.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ysXf+PeouVB8scTk1iV71eBOHbByOJXzFdlJhy9Y0cdp1WJK44W+w3zyCCVHUSZPhOSNGtefc6PbDFQGBOSpqER38LXDDosszacX0tyziyVRK1pg1nYKqz6tBJGKL1AoL+FLCUFHAhbjLdjjvaC3poh13+xuAvV3Pm0azC9lM6slPWxjMS0JVXMCXPnKxf8384R9qCw2iu8D8Bb56VG7Ed2ZazBmC4vMyl18Ail8SRCjQp8LNKq7xOvEAEaLbglzNV7Uo2T/SoxT4lw8EIqkVaWUrJ43gQk9YNN1vcMnTmJD0ttvbonwXitpVmWy+SDkxoX5VYQbt9YOPJCCm9JpaU7tOYp2Q88QTw85tSVbV92YzP3dhlONBMDKjUtaMNJtr3+U7aq3s3Z6AtmvUPp0kMXouXpmCVA4TEmfM2hq1UQGmBQysqErjcLISkO5mYiHcn0Y4GpraGr6kzForrlHjXP3Yj4QAWOT1P1f9S0nKiej7oMivzrgsND5gfOFXRKYul/o4ZO+3ORqKu0uF7htETlh0mDcFafBGADdzbTGoAssFzs/uNvxq7vHbzUsmR6KowgkocJ1hTj6+58fWSs3HSSC/39LrrpC4FMitilkGrXdOZxOXEi+lt75TOFugI3aqrawpJmujaXdaYcRDnAVg+MVOL02UOQrZX3dUIggpBcAK0Hwj9LDvSJ7LfonC+/4AP+6OeBelDV7+awzV0Us/A==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR02MB5923.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(122000001)(4326008)(26005)(83380400001)(186003)(8936002)(33656002)(38100700002)(55016003)(4744005)(2906002)(52536014)(6506007)(66556008)(66946007)(64756008)(76116006)(66446008)(8676002)(66476007)(6916009)(9686003)(316002)(7696005)(71200400001)(508600001)(86362001)(38070700005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 2
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?l8H1m074lw7+TCUjAp15uxW00aEJPe0BtdrX51bYDN9DS2QYAObojQ80VQSa?=
+ =?us-ascii?Q?vuiYRXn+t1ARg4PoxPSXBpVcPQsHg0gLG6CcFy/yhwQimfNN6ygs8EgVmoRv?=
+ =?us-ascii?Q?+CMXgepUAZCPx2mfN7SylQNLk3CP7EcT2ejPnTHagA/1JRWzdn0ZYPYP6/T8?=
+ =?us-ascii?Q?DR8SydZBaoCWHI7TwLcNtBBzDZzdR64brk3NZcO7ckk+w9ezENjdrB6WDwhW?=
+ =?us-ascii?Q?77DxWEZiGsMajWhhqt5uCI/1MHIGIkopdd6Zz7FTp3V9hHns3lUoSfRtTu3g?=
+ =?us-ascii?Q?CzAy3wj+ULx6bAqF3GF/ac2B/DV9Vkpr+vb/DFXi2MCbwSsHzhkeZzPSU4Fo?=
+ =?us-ascii?Q?4V26Hg6saW5VYNGxE02DS/o6tPcQl4KWR45T/PZ6q3tKsmgU99CajN2z5Lde?=
+ =?us-ascii?Q?81TtS5AsPFd6bLngefOIZ8ylxxucHEjQ2pdYchLH7fzp3FRFEnP4ctXqpbcg?=
+ =?us-ascii?Q?ZrG9H8ULe+R9cr7PfVPrNQPb3lymeeGhaICDXZYhRgrcKGJvYu3WkhdUZC1v?=
+ =?us-ascii?Q?s8g7wOA9Kh72qlxt+WpT2lfhdc29k76IAMNNcLXbgkt07xu8890RhPcnr9dM?=
+ =?us-ascii?Q?IRQ93mWexosehEOIvp2A05bQ4qs/hHXeyY0shylfuLTaQ129xgKmDZEXkRx5?=
+ =?us-ascii?Q?79kvLhCchEPb6iyrka1xXB+zn7ijfWHKuOMhvq9thFYWgxAK8NkWwMybn/dV?=
+ =?us-ascii?Q?j0MZw6CqCGhnSY8qzlArgOSyCJLkSGMqkjfqUeh/l8WwDhnOMqaQJ3KOMBpk?=
+ =?us-ascii?Q?LKXPa24eY2rgupyVKNtuIgJLgOUKuUtJNlE0q5tGgV6VRymf5bi28pxHSXie?=
+ =?us-ascii?Q?4syOdZK0O+UCtcB/yKik0qb3WL6mObjfHoxfx/C/r9AyzQS7U/OZWiN5T07w?=
+ =?us-ascii?Q?HFOI0kpvMzZkb7zGK9spKlzD/op4S6IA58+bnF+bRckLo1VZzEVrsWiFAgiz?=
+ =?us-ascii?Q?DGbjFJjvASAHzdGd7wBc+oKsiAqCFdMkiIfZmbsO29coCwpLwa0teGSoOVyk?=
+ =?us-ascii?Q?r4jqU5xooI5Y4W3nAXbCzsALgDeN4US4ieZahF+4ypSvxT/jPorVV3r/JKEh?=
+ =?us-ascii?Q?ASrZOB+C/2K80lvDqpHw8gBGrr0mUW8joioVz6alXyplLE87a2dSQ1M/4EKW?=
+ =?us-ascii?Q?JU7LCAnpBTcbWVZgs1IoznZxh/eSqbwuGoqLSDbDVVULVj8br0b6Jp/HhSvi?=
+ =?us-ascii?Q?xkBRG06gMq/mZ8spq6ZhJTuMR2Dlm11kLS6yU9xppI++zoj6xa+sE3HGJepp?=
+ =?us-ascii?Q?fTFcGlcgC3QxX19aZXZV+CXIWIoEKNdYj7eQgHTOH2/fCgUxbBU4XPEfH1Zo?=
+ =?us-ascii?Q?90XEx9tAagheVA8LDMEOLEqhDSB/5aYMFikpBWypVTMSfPshj4mxam4Jh03w?=
+ =?us-ascii?Q?rSiPT/BtFJVm3eoI3YKxRlgJXIDjg4cpzCdNM5Ud0q4vNV/p9E+0IgwzVmAF?=
+ =?us-ascii?Q?8fFfR+CkVU2aIMIfrtgYl225IWZD1U6PvKYX/XpBa19j7nmqTss2orTbjxPd?=
+ =?us-ascii?Q?3mxvPheczEM785eNxeNioBt6hNPDNVeL6nw/gU0oNir8Nv4DFqTCPUK6WPie?=
+ =?us-ascii?Q?GgBTsuNjKjVJxwCdISWS7Etso9pGGn7Bk2O2PCNlyTs5YnH8LFQHtT4vu1XF?=
+ =?us-ascii?Q?0gQsQcxcglz40KQHkp261dTUMlJQIEbttv4AmyKS0g4dyO8BkF9W8r+vEP5c?=
+ =?us-ascii?Q?GjEKlTbyimovldHdpkU4F4r/Fq+YzYIyNpdp1DDtONwxon2pPSowx7FQVY2Y?=
+ =?us-ascii?Q?/nwjPO00B3swuWtzoMKi1ucEHCtIgcd0SbAd5tDxCaXrqm+PJQaqdHaLJgfO?=
+x-ms-exchange-antispam-messagedata-1: H50/eJRl8i1wdQ==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220324111104.cd7clpkzzedtcrja@pengutronix.de>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-OriginatorOrg: prodrive-technologies.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR02MB5923.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 421d12ad-23c1-4614-9ccb-08da13e2d842
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Apr 2022 13:23:43.7346
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 612607c9-5af7-4e7f-8976-faf1ae77be60
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: dvHl1KigXhfNWniX+0j4EJfmvgSScCBkavTmkjPbrzg8W+8Nt+r7MaLiiTG4rWscIgkT0K9+cNxLRdnUeu2aXLZpWxtLP65pOpd6IBPpcBZVYM7ZHF78JKWysIrWdWZ8zab5U5fSBhEpbnKOu5erjA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR02MB7851
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 12:11:04PM +0100, Uwe Kleine-König wrote:
-> Hello,
-> 
-> On Thu, Mar 24, 2022 at 12:20:20PM +0800, Peng Fan (OSS) wrote:
-> > From: Peng Fan <peng.fan@nxp.com>
-> > 
-> > To i.MX SoC, there are many variants, such as i.MX8M Plus which
-> > feature 4 A53, GPU, VPU, SDHC, FLEXCAN, FEC, eQOS and etc.
-> > But i.MX8M Plus has many parts, one part may not have FLEXCAN,
-> > the other part may not have eQOS or GPU.
-> > But we use one device tree to support i.MX8MP including its parts,
-> > then we need update device tree to mark the disabled IP status "disabled".
-> > 
-> > In NXP U-Boot, we hardcoded node path and runtime update device tree
-> > status in U-Boot according to fuse value. But this method is not
-> > scalable and need encoding all the node paths that needs check.
-> > 
-> > By introducing nvmem property for each node that needs runtime update
-> > status property accoridng fuse value, we could use one Bootloader
-> > code piece to support all i.MX SoCs.
-> > 
-> > The drawback is we need nvmem property for all the nodes which maybe
-> > fused out.
-> 
-> I'd rather not have that in an official binding as the syntax is
-> orthogonal to status = "..." but the semantic isn't. Also if we want
-> something like that, I'd rather not want to adapt all bindings, but
-> would like to see this being generic enough to be described in a single
-> catch-all binding.
-> 
-> I also wonder if it would be nicer to abstract that as something like:
-> 
-> 	/ {
-> 		fuse-info {
-> 			compatible = "otp-fuse-info";
-> 
-> 			flexcan {
-> 				devices = <&flexcan1>, <&flexcan2>;
-> 				nvmem-cells = <&flexcan_disabled>;
-> 				nvmem-cell-names = "disabled";
-> 			};
-> 
-> 			m7 {
-> 				....
-> 			};
-> 		};
-> 	};
-> 
-> as then the driver evaluating this wouldn't need to iterate over the
-> whole dtb but just over this node. But I'd still keep this private to
-> the bootloader and not describe it in the generic binding.
+When using the tcan4x5x under high load of both RX/TX interrupts, at some p=
+oint the nINT signal stays asserted, causing the socket to block in user sp=
+ace.
 
-There's been discussions (under the system DT umbrella mostly) about 
-bindings for peripheral enable/disable control/status. Most of the time 
-it is in context of device assignment to secure/non-secure world or 
-partitions in a system (via a partitioning hypervisor).
+This reproduces very reliably (in my system) when both reading/writing at 1=
+ms intervals at CAN bus speed 1Mbps.
+When it occurs, M_CAN_IR is set to 0x580d and never recovers (causing nINT =
+to stay asserted).
+The problem does not occur when only reading or only writing.
 
-This feels like the same thing and could use the same binding. But 
-someone has to take into account all the uses and come up with 
-something. One off solutions are a NAK.
+After checking the m_can_isr() function from drivers/net/can/m_can/m_can.c,=
+ I noticed that MCAN interrupts are disabled while processing the IR_RF0N f=
+lag, but not while processing IR_TEFN.
+I'm not sure why, aren't both handlers running from the same interrupt cont=
+ext and communicating to MRAM via SPI?
 
-Rob
+I'm running kernel version 5.4.24 but I can see that in e.g. 5.17.0 this st=
+ill applies.
+When I disable interrupts during IR_TEFN handling, the blocking socket / nI=
+NT issue is gone.
+
+Met vriendelijke groet / Kind regards,
+
+Wouter van Herpen=20
+Designer
