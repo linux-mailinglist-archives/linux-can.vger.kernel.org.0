@@ -2,145 +2,192 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CE214EEE02
-	for <lists+linux-can@lfdr.de>; Fri,  1 Apr 2022 15:23:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B43814EF0EA
+	for <lists+linux-can@lfdr.de>; Fri,  1 Apr 2022 16:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237846AbiDANZh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 1 Apr 2022 09:25:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51158 "EHLO
+        id S1348133AbiDAOhd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 1 Apr 2022 10:37:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244750AbiDANZg (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 1 Apr 2022 09:25:36 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60129.outbound.protection.outlook.com [40.107.6.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD97A17A9B
-        for <linux-can@vger.kernel.org>; Fri,  1 Apr 2022 06:23:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GUuj4N+esadL1JBsnPPGo+IbUpU8m9o4hgCZuyWOvCHnUGvjmQmrkC1UR6cTQgxJycZmMXBF3nDawqV6sxVnoKtx55CTno2E3o0NFHXH8FT7gQfGedr04i9D4biheo7nCDksY12rmnnnN5x2yUFusQxHsqHFtqnqNm9TriDJRJEuYFIve6wo6LXVMGi4jxU5641noYmHpBzwOK/3Eu/UfKkC4497OgjrrxkjS0eLDYu456t8tq53PmIiAApxjq0SpoiDvSvk1vdlrecAU3GJkD2Glm137E8qTh/hooEJP8F0bteSRw2gTUZG4SupXU9VmsCYiwv3BVvenzDm7wu3uA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eGtaP64XkAPXwLy/ACJjqjdoMaziF8pj5xDHX3vWPU8=;
- b=FWRUC2Egr22+HSpNgaVZs7aTT2fOuxi41EjQ2Ptzm9zdYngvR54IIqbUH8wGBdcMC2836IqBap8gRLhXk5DWHPT6YBvlFBCVMu2JpB93J0bDGpF25DQtmO0tNzcZhutuZ7rgCGzm+jNMScTFSHgrwwKWQ5golcdxSaLXOGkem5+l/PqIEEfrDb4vGwK+5/h3NfXT7c5MeZgrHEafi5m0z+UKYI75misllvap0KfT6bcrEWGXUOio28NaScERQ9kK3MGnM39cTnMqn711cPWVp+bN6f2yBvCteFc3A0vOmlKGIKDbRRkeeTNAShEfCtgyINoW0x46cKk0mnF7ng6fcQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=prodrive-technologies.com; dmarc=pass action=none
- header.from=prodrive-technologies.com; dkim=pass
- header.d=prodrive-technologies.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=prodrive-technologies.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eGtaP64XkAPXwLy/ACJjqjdoMaziF8pj5xDHX3vWPU8=;
- b=dWI2L/WW6UeyjkhKFnv9JxPGWmXHhxrMsZG8MnDipyKpZ9aXivlhzTbImdCjBv0xOnOu6e8GyKz5wJQAIvKcclNwtExqjw4u0e1AKylZpR06lxUip+R7S8JHy+Zi8i1cRXYnMx6wKxTaVyjDRPlahvo7rbRJW3Ui/h1f/+6i/H0=
-Received: from AM0PR02MB5923.eurprd02.prod.outlook.com (2603:10a6:208:187::17)
- by DU0PR02MB7851.eurprd02.prod.outlook.com (2603:10a6:10:343::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.21; Fri, 1 Apr
- 2022 13:23:43 +0000
-Received: from AM0PR02MB5923.eurprd02.prod.outlook.com
- ([fe80::ec30:e2aa:61fb:7f3e]) by AM0PR02MB5923.eurprd02.prod.outlook.com
- ([fe80::ec30:e2aa:61fb:7f3e%2]) with mapi id 15.20.5123.025; Fri, 1 Apr 2022
- 13:23:43 +0000
-From:   Wouter van Herpen <wouter.van.herpen@prodrive-technologies.com>
-To:     "mkl@pengutronix.de" <mkl@pengutronix.de>
-CC:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Subject: PROBLEM: tcan4x5x nINT stays asserted under high RX/TX interrupt load
-Thread-Topic: PROBLEM: tcan4x5x nINT stays asserted under high RX/TX interrupt
- load
-Thread-Index: AdhFyuJj1zOoVQ3MQF6tNgMHZCJ37Q==
-Date:   Fri, 1 Apr 2022 13:23:43 +0000
-Message-ID: <AM0PR02MB592368F53A7BEA4154D24A87EAE09@AM0PR02MB5923.eurprd02.prod.outlook.com>
-Accept-Language: nl-NL, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=prodrive-technologies.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 421d12ad-23c1-4614-9ccb-08da13e2d842
-x-ms-traffictypediagnostic: DU0PR02MB7851:EE_
-x-microsoft-antispam-prvs: <DU0PR02MB7851E8004FEC0DFDE2D12968EAE09@DU0PR02MB7851.eurprd02.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ysXf+PeouVB8scTk1iV71eBOHbByOJXzFdlJhy9Y0cdp1WJK44W+w3zyCCVHUSZPhOSNGtefc6PbDFQGBOSpqER38LXDDosszacX0tyziyVRK1pg1nYKqz6tBJGKL1AoL+FLCUFHAhbjLdjjvaC3poh13+xuAvV3Pm0azC9lM6slPWxjMS0JVXMCXPnKxf8384R9qCw2iu8D8Bb56VG7Ed2ZazBmC4vMyl18Ail8SRCjQp8LNKq7xOvEAEaLbglzNV7Uo2T/SoxT4lw8EIqkVaWUrJ43gQk9YNN1vcMnTmJD0ttvbonwXitpVmWy+SDkxoX5VYQbt9YOPJCCm9JpaU7tOYp2Q88QTw85tSVbV92YzP3dhlONBMDKjUtaMNJtr3+U7aq3s3Z6AtmvUPp0kMXouXpmCVA4TEmfM2hq1UQGmBQysqErjcLISkO5mYiHcn0Y4GpraGr6kzForrlHjXP3Yj4QAWOT1P1f9S0nKiej7oMivzrgsND5gfOFXRKYul/o4ZO+3ORqKu0uF7htETlh0mDcFafBGADdzbTGoAssFzs/uNvxq7vHbzUsmR6KowgkocJ1hTj6+58fWSs3HSSC/39LrrpC4FMitilkGrXdOZxOXEi+lt75TOFugI3aqrawpJmujaXdaYcRDnAVg+MVOL02UOQrZX3dUIggpBcAK0Hwj9LDvSJ7LfonC+/4AP+6OeBelDV7+awzV0Us/A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR02MB5923.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(122000001)(4326008)(26005)(83380400001)(186003)(8936002)(33656002)(38100700002)(55016003)(4744005)(2906002)(52536014)(6506007)(66556008)(66946007)(64756008)(76116006)(66446008)(8676002)(66476007)(6916009)(9686003)(316002)(7696005)(71200400001)(508600001)(86362001)(38070700005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 2
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?l8H1m074lw7+TCUjAp15uxW00aEJPe0BtdrX51bYDN9DS2QYAObojQ80VQSa?=
- =?us-ascii?Q?vuiYRXn+t1ARg4PoxPSXBpVcPQsHg0gLG6CcFy/yhwQimfNN6ygs8EgVmoRv?=
- =?us-ascii?Q?+CMXgepUAZCPx2mfN7SylQNLk3CP7EcT2ejPnTHagA/1JRWzdn0ZYPYP6/T8?=
- =?us-ascii?Q?DR8SydZBaoCWHI7TwLcNtBBzDZzdR64brk3NZcO7ckk+w9ezENjdrB6WDwhW?=
- =?us-ascii?Q?77DxWEZiGsMajWhhqt5uCI/1MHIGIkopdd6Zz7FTp3V9hHns3lUoSfRtTu3g?=
- =?us-ascii?Q?CzAy3wj+ULx6bAqF3GF/ac2B/DV9Vkpr+vb/DFXi2MCbwSsHzhkeZzPSU4Fo?=
- =?us-ascii?Q?4V26Hg6saW5VYNGxE02DS/o6tPcQl4KWR45T/PZ6q3tKsmgU99CajN2z5Lde?=
- =?us-ascii?Q?81TtS5AsPFd6bLngefOIZ8ylxxucHEjQ2pdYchLH7fzp3FRFEnP4ctXqpbcg?=
- =?us-ascii?Q?ZrG9H8ULe+R9cr7PfVPrNQPb3lymeeGhaICDXZYhRgrcKGJvYu3WkhdUZC1v?=
- =?us-ascii?Q?s8g7wOA9Kh72qlxt+WpT2lfhdc29k76IAMNNcLXbgkt07xu8890RhPcnr9dM?=
- =?us-ascii?Q?IRQ93mWexosehEOIvp2A05bQ4qs/hHXeyY0shylfuLTaQ129xgKmDZEXkRx5?=
- =?us-ascii?Q?79kvLhCchEPb6iyrka1xXB+zn7ijfWHKuOMhvq9thFYWgxAK8NkWwMybn/dV?=
- =?us-ascii?Q?j0MZw6CqCGhnSY8qzlArgOSyCJLkSGMqkjfqUeh/l8WwDhnOMqaQJ3KOMBpk?=
- =?us-ascii?Q?LKXPa24eY2rgupyVKNtuIgJLgOUKuUtJNlE0q5tGgV6VRymf5bi28pxHSXie?=
- =?us-ascii?Q?4syOdZK0O+UCtcB/yKik0qb3WL6mObjfHoxfx/C/r9AyzQS7U/OZWiN5T07w?=
- =?us-ascii?Q?HFOI0kpvMzZkb7zGK9spKlzD/op4S6IA58+bnF+bRckLo1VZzEVrsWiFAgiz?=
- =?us-ascii?Q?DGbjFJjvASAHzdGd7wBc+oKsiAqCFdMkiIfZmbsO29coCwpLwa0teGSoOVyk?=
- =?us-ascii?Q?r4jqU5xooI5Y4W3nAXbCzsALgDeN4US4ieZahF+4ypSvxT/jPorVV3r/JKEh?=
- =?us-ascii?Q?ASrZOB+C/2K80lvDqpHw8gBGrr0mUW8joioVz6alXyplLE87a2dSQ1M/4EKW?=
- =?us-ascii?Q?JU7LCAnpBTcbWVZgs1IoznZxh/eSqbwuGoqLSDbDVVULVj8br0b6Jp/HhSvi?=
- =?us-ascii?Q?xkBRG06gMq/mZ8spq6ZhJTuMR2Dlm11kLS6yU9xppI++zoj6xa+sE3HGJepp?=
- =?us-ascii?Q?fTFcGlcgC3QxX19aZXZV+CXIWIoEKNdYj7eQgHTOH2/fCgUxbBU4XPEfH1Zo?=
- =?us-ascii?Q?90XEx9tAagheVA8LDMEOLEqhDSB/5aYMFikpBWypVTMSfPshj4mxam4Jh03w?=
- =?us-ascii?Q?rSiPT/BtFJVm3eoI3YKxRlgJXIDjg4cpzCdNM5Ud0q4vNV/p9E+0IgwzVmAF?=
- =?us-ascii?Q?8fFfR+CkVU2aIMIfrtgYl225IWZD1U6PvKYX/XpBa19j7nmqTss2orTbjxPd?=
- =?us-ascii?Q?3mxvPheczEM785eNxeNioBt6hNPDNVeL6nw/gU0oNir8Nv4DFqTCPUK6WPie?=
- =?us-ascii?Q?GgBTsuNjKjVJxwCdISWS7Etso9pGGn7Bk2O2PCNlyTs5YnH8LFQHtT4vu1XF?=
- =?us-ascii?Q?0gQsQcxcglz40KQHkp261dTUMlJQIEbttv4AmyKS0g4dyO8BkF9W8r+vEP5c?=
- =?us-ascii?Q?GjEKlTbyimovldHdpkU4F4r/Fq+YzYIyNpdp1DDtONwxon2pPSowx7FQVY2Y?=
- =?us-ascii?Q?/nwjPO00B3swuWtzoMKi1ucEHCtIgcd0SbAd5tDxCaXrqm+PJQaqdHaLJgfO?=
-x-ms-exchange-antispam-messagedata-1: H50/eJRl8i1wdQ==
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S1348305AbiDAOdy (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 1 Apr 2022 10:33:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72968BF58;
+        Fri,  1 Apr 2022 07:32:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 20CD6B8240E;
+        Fri,  1 Apr 2022 14:32:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2472C2BBE4;
+        Fri,  1 Apr 2022 14:31:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648823519;
+        bh=hffhfGZggXIZrzhWpnf/mKyIGXVLLu+mdlXrm1Va7YI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=im9ydIe5mdqov0JvAXgbmSQYLVx/xqUNe8hNGBl0xwNt5ZMaWut5es/20/9+EMXv8
+         oycBbbeqypj+FD46SlIEZQZxYJpZSZgQTQJUsG538H8uqnO292ZsTGs8kuhVwn5p1C
+         FbFj1E5BkrSI7ifTR6X9lRRE35YS6rawV2QR8rDooacv7vpi4ei2XrNheCOq32HTTh
+         tIwJqa2gsbggT0Q84PCbH+DFn/D11+oDseYy7uoQvxhKs980xarBI5Jo3qHPNi0Rwx
+         6dhjbFpHWTG5aVXmM0+Ttf6RTtqnJVlMPXIkUkBxDyhW4dVZDSluXkrBwC9qBHILUe
+         2n4TaZJCoC7fQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.17 127/149] can: isotp: set default value for N_As to 50 micro seconds
+Date:   Fri,  1 Apr 2022 10:25:14 -0400
+Message-Id: <20220401142536.1948161-127-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220401142536.1948161-1-sashal@kernel.org>
+References: <20220401142536.1948161-1-sashal@kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: prodrive-technologies.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR02MB5923.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 421d12ad-23c1-4614-9ccb-08da13e2d842
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Apr 2022 13:23:43.7346
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 612607c9-5af7-4e7f-8976-faf1ae77be60
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: dvHl1KigXhfNWniX+0j4EJfmvgSScCBkavTmkjPbrzg8W+8Nt+r7MaLiiTG4rWscIgkT0K9+cNxLRdnUeu2aXLZpWxtLP65pOpd6IBPpcBZVYM7ZHF78JKWysIrWdWZ8zab5U5fSBhEpbnKOu5erjA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR02MB7851
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-When using the tcan4x5x under high load of both RX/TX interrupts, at some p=
-oint the nINT signal stays asserted, causing the socket to block in user sp=
-ace.
+From: Oliver Hartkopp <socketcan@hartkopp.net>
 
-This reproduces very reliably (in my system) when both reading/writing at 1=
-ms intervals at CAN bus speed 1Mbps.
-When it occurs, M_CAN_IR is set to 0x580d and never recovers (causing nINT =
-to stay asserted).
-The problem does not occur when only reading or only writing.
+[ Upstream commit 530e0d46c61314c59ecfdb8d3bcb87edbc0f85d3 ]
 
-After checking the m_can_isr() function from drivers/net/can/m_can/m_can.c,=
- I noticed that MCAN interrupts are disabled while processing the IR_RF0N f=
-lag, but not while processing IR_TEFN.
-I'm not sure why, aren't both handlers running from the same interrupt cont=
-ext and communicating to MRAM via SPI?
+The N_As value describes the time a CAN frame needs on the wire when
+transmitted by the CAN controller. Even very short CAN FD frames need
+arround 100 usecs (bitrate 1Mbit/s, data bitrate 8Mbit/s).
 
-I'm running kernel version 5.4.24 but I can see that in e.g. 5.17.0 this st=
-ill applies.
-When I disable interrupts during IR_TEFN handling, the blocking socket / nI=
-NT issue is gone.
+Having N_As to be zero (the former default) leads to 'no CAN frame
+separation' when STmin is set to zero by the receiving node. This 'burst
+mode' should not be enabled by default as it could potentially dump a high
+number of CAN frames into the netdev queue from the soft hrtimer context.
+This does not affect the system stability but is just not nice and
+cooperative.
 
-Met vriendelijke groet / Kind regards,
+With this N_As/frame_txtime value the 'burst mode' is disabled by default.
 
-Wouter van Herpen=20
-Designer
+As user space applications usually do not set the frame_txtime element
+of struct can_isotp_options the new in-kernel default is very likely
+overwritten with zero when the sockopt() CAN_ISOTP_OPTS is invoked.
+To make sure that a N_As value of zero is only set intentional the
+value '0' is now interpreted as 'do not change the current value'.
+When a frame_txtime of zero is required for testing purposes this
+CAN_ISOTP_FRAME_TXTIME_ZERO u32 value has to be set in frame_txtime.
+
+Link: https://lore.kernel.org/all/20220309120416.83514-2-socketcan@hartkopp.net
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ include/uapi/linux/can/isotp.h | 28 ++++++++++++++++++++++------
+ net/can/isotp.c                | 12 +++++++++++-
+ 2 files changed, 33 insertions(+), 7 deletions(-)
+
+diff --git a/include/uapi/linux/can/isotp.h b/include/uapi/linux/can/isotp.h
+index c55935b64ccc..590f8aea2b6d 100644
+--- a/include/uapi/linux/can/isotp.h
++++ b/include/uapi/linux/can/isotp.h
+@@ -137,20 +137,16 @@ struct can_isotp_ll_options {
+ #define CAN_ISOTP_WAIT_TX_DONE	0x400	/* wait for tx completion */
+ #define CAN_ISOTP_SF_BROADCAST	0x800	/* 1-to-N functional addressing */
+ 
+-/* default values */
++/* protocol machine default values */
+ 
+ #define CAN_ISOTP_DEFAULT_FLAGS		0
+ #define CAN_ISOTP_DEFAULT_EXT_ADDRESS	0x00
+ #define CAN_ISOTP_DEFAULT_PAD_CONTENT	0xCC /* prevent bit-stuffing */
+-#define CAN_ISOTP_DEFAULT_FRAME_TXTIME	0
++#define CAN_ISOTP_DEFAULT_FRAME_TXTIME	50000 /* 50 micro seconds */
+ #define CAN_ISOTP_DEFAULT_RECV_BS	0
+ #define CAN_ISOTP_DEFAULT_RECV_STMIN	0x00
+ #define CAN_ISOTP_DEFAULT_RECV_WFTMAX	0
+ 
+-#define CAN_ISOTP_DEFAULT_LL_MTU	CAN_MTU
+-#define CAN_ISOTP_DEFAULT_LL_TX_DL	CAN_MAX_DLEN
+-#define CAN_ISOTP_DEFAULT_LL_TX_FLAGS	0
+-
+ /*
+  * Remark on CAN_ISOTP_DEFAULT_RECV_* values:
+  *
+@@ -162,4 +158,24 @@ struct can_isotp_ll_options {
+  * consistency and copied directly into the flow control (FC) frame.
+  */
+ 
++/* link layer default values => make use of Classical CAN frames */
++
++#define CAN_ISOTP_DEFAULT_LL_MTU	CAN_MTU
++#define CAN_ISOTP_DEFAULT_LL_TX_DL	CAN_MAX_DLEN
++#define CAN_ISOTP_DEFAULT_LL_TX_FLAGS	0
++
++/*
++ * The CAN_ISOTP_DEFAULT_FRAME_TXTIME has become a non-zero value as
++ * it only makes sense for isotp implementation tests to run without
++ * a N_As value. As user space applications usually do not set the
++ * frame_txtime element of struct can_isotp_options the new in-kernel
++ * default is very likely overwritten with zero when the sockopt()
++ * CAN_ISOTP_OPTS is invoked.
++ * To make sure that a N_As value of zero is only set intentional the
++ * value '0' is now interpreted as 'do not change the current value'.
++ * When a frame_txtime of zero is required for testing purposes this
++ * CAN_ISOTP_FRAME_TXTIME_ZERO u32 value has to be set in frame_txtime.
++ */
++#define CAN_ISOTP_FRAME_TXTIME_ZERO	0xFFFFFFFF
++
+ #endif /* !_UAPI_CAN_ISOTP_H */
+diff --git a/net/can/isotp.c b/net/can/isotp.c
+index d2a430b6a13b..ea8e932008a3 100644
+--- a/net/can/isotp.c
++++ b/net/can/isotp.c
+@@ -141,6 +141,7 @@ struct isotp_sock {
+ 	struct can_isotp_options opt;
+ 	struct can_isotp_fc_options rxfc, txfc;
+ 	struct can_isotp_ll_options ll;
++	u32 frame_txtime;
+ 	u32 force_tx_stmin;
+ 	u32 force_rx_stmin;
+ 	struct tpcon rx, tx;
+@@ -360,7 +361,7 @@ static int isotp_rcv_fc(struct isotp_sock *so, struct canfd_frame *cf, int ae)
+ 
+ 		so->tx_gap = ktime_set(0, 0);
+ 		/* add transmission time for CAN frame N_As */
+-		so->tx_gap = ktime_add_ns(so->tx_gap, so->opt.frame_txtime);
++		so->tx_gap = ktime_add_ns(so->tx_gap, so->frame_txtime);
+ 		/* add waiting time for consecutive frames N_Cs */
+ 		if (so->opt.flags & CAN_ISOTP_FORCE_TXSTMIN)
+ 			so->tx_gap = ktime_add_ns(so->tx_gap,
+@@ -1238,6 +1239,14 @@ static int isotp_setsockopt_locked(struct socket *sock, int level, int optname,
+ 		/* no separate rx_ext_address is given => use ext_address */
+ 		if (!(so->opt.flags & CAN_ISOTP_RX_EXT_ADDR))
+ 			so->opt.rx_ext_address = so->opt.ext_address;
++
++		/* check for frame_txtime changes (0 => no changes) */
++		if (so->opt.frame_txtime) {
++			if (so->opt.frame_txtime == CAN_ISOTP_FRAME_TXTIME_ZERO)
++				so->frame_txtime = 0;
++			else
++				so->frame_txtime = so->opt.frame_txtime;
++		}
+ 		break;
+ 
+ 	case CAN_ISOTP_RECV_FC:
+@@ -1439,6 +1448,7 @@ static int isotp_init(struct sock *sk)
+ 	so->opt.rxpad_content = CAN_ISOTP_DEFAULT_PAD_CONTENT;
+ 	so->opt.txpad_content = CAN_ISOTP_DEFAULT_PAD_CONTENT;
+ 	so->opt.frame_txtime = CAN_ISOTP_DEFAULT_FRAME_TXTIME;
++	so->frame_txtime = CAN_ISOTP_DEFAULT_FRAME_TXTIME;
+ 	so->rxfc.bs = CAN_ISOTP_DEFAULT_RECV_BS;
+ 	so->rxfc.stmin = CAN_ISOTP_DEFAULT_RECV_STMIN;
+ 	so->rxfc.wftmax = CAN_ISOTP_DEFAULT_RECV_WFTMAX;
+-- 
+2.34.1
+
