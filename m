@@ -2,53 +2,59 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CFD74F1DC9
+	by mail.lfdr.de (Postfix) with ESMTP id 992104F1DCA
 	for <lists+linux-can@lfdr.de>; Mon,  4 Apr 2022 23:43:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383012AbiDDVlT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 4 Apr 2022 17:41:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48692 "EHLO
+        id S1383087AbiDDVlW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 4 Apr 2022 17:41:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380342AbiDDTgG (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 4 Apr 2022 15:36:06 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C57413EA3
-        for <linux-can@vger.kernel.org>; Mon,  4 Apr 2022 12:34:10 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nbSSl-0005DZ-JF; Mon, 04 Apr 2022 21:34:07 +0200
-Received: from pengutronix.de (2a03-f580-87bc-d400-3524-91ca-8473-ba45.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:3524:91ca:8473:ba45])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id D56DE5A455;
-        Mon,  4 Apr 2022 19:34:06 +0000 (UTC)
-Date:   Mon, 4 Apr 2022 21:34:06 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     mkl@blackshift.org,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-can@vger.kernel.org,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH] dt-bindings: can: renesas,rcar-canfd: Document r8a77961
- support
-Message-ID: <20220404193406.dxn6m5xl5jcxlxqg@pengutronix.de>
-References: <20220401153743.77871-1-wsa+renesas@sang-engineering.com>
- <20220403110534.2k3ojnkkrsdjzimb@pengutronix.de>
- <CAMuHMdX2Ut9A57UkOO4f+q8Awu0K9Oek2Qhujr+TaKNTpkVU=g@mail.gmail.com>
+        with ESMTP id S1380400AbiDDUCS (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 4 Apr 2022 16:02:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0EF30576;
+        Mon,  4 Apr 2022 13:00:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 84BDBB819DC;
+        Mon,  4 Apr 2022 20:00:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48557C340F3;
+        Mon,  4 Apr 2022 20:00:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649102418;
+        bh=UnyFj8CQeTLpyLgUK0Q+kXJzH9zPVxCwJuLgHavoWvE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=A1oDYnj2Q3HEO8kAOG2E7zNw8Zqiex/H6fwLixIdABdPaOMBMB6YZY9aRLMdkR1VP
+         jDhECmzqeQECXvVpjM/MqTrZVE6k+hXqNXGg8Jtlw/rt91YrevQaFRBLzoNFA1+4gA
+         qp9k9cU/ne9vMy5koCF5m3fO2nQbmetPcJS+WOf4ViZ7cwenI9rYgKbkBH/yg626QN
+         0pLMDJp835CfxwqDRe+R5FJjOsz/E40/1pfp7s64ZbcfyK01baX/rVvEXMBY9WdKbX
+         MYZaB/lYiSJdXiylUIgvQhItnBpP6x4cCakUC6InD5hnlYGL5iSCBg1BIj7Y8wvswL
+         0yxcwmN+nWevA==
+Received: by mail-il1-f182.google.com with SMTP id y16so7691170ilq.6;
+        Mon, 04 Apr 2022 13:00:18 -0700 (PDT)
+X-Gm-Message-State: AOAM532ApUfzpSkt68elZ3JU+1Mwcy3AiDD4NRHxboJzCWDG3wsK9kvN
+        nzI1T77TxwI09ya1DlfKG5rHxt1EVJhKQvRv5A==
+X-Google-Smtp-Source: ABdhPJy2I+THynd3YKwgtuqP1Z+qNUJvNfI+KxmiDjCSv83RkgMVAwjROABfaejv1c+IbVRz1hHVNh3x5d/12zN6G3A=
+X-Received: by 2002:a05:6e02:1685:b0:2c9:a9e9:846 with SMTP id
+ f5-20020a056e02168500b002c9a9e90846mr696618ila.273.1649102417418; Mon, 04 Apr
+ 2022 13:00:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wpphrtucuuhblxqu"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdX2Ut9A57UkOO4f+q8Awu0K9Oek2Qhujr+TaKNTpkVU=g@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+References: <20220401153743.77871-1-wsa+renesas@sang-engineering.com> <20220404193101.nqe2s4rin3bzp6vx@pengutronix.de>
+In-Reply-To: <20220404193101.nqe2s4rin3bzp6vx@pengutronix.de>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 4 Apr 2022 15:00:06 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJCZKFrucY_JJOZ-px0js82Dkgmbz7KmvDnwhU9UFyS5g@mail.gmail.com>
+Message-ID: <CAL_JsqJCZKFrucY_JJOZ-px0js82Dkgmbz7KmvDnwhU9UFyS5g@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: can: renesas,rcar-canfd: Document r8a77961 support
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-can@vger.kernel.org,
+        "open list:MEDIA DRIVERS FOR RENESAS - FCP" 
+        <linux-renesas-soc@vger.kernel.org>, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,64 +63,14 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Mon, Apr 4, 2022 at 2:31 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+>
+> Cc += Rob, devicetree
 
---wpphrtucuuhblxqu
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+That's a roll of the dice whether I see it, but for compatible string
+additions I don't really need to.
 
-On 04.04.2022 14:02:52, Geert Uytterhoeven wrote:
-> Hi Marc,
->=20
-> On Sun, Apr 3, 2022 at 1:05 PM Marc Kleine-Budde <mkl@blackshift.org> wro=
-te:
-> > On 01.04.2022 17:37:43, Wolfram Sang wrote:
-> > > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
->=20
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
->=20
-> > Wolfram, thanks for the patch. I think usually Geert takes the renesas
-> > DT binding patches. (If it would go via the CAN and net tree, that patch
->=20
-> Usually only for Renesas core patches, unless the I/O maintainers
-> are unresponsive...
+In any case, the only way automated checks run is if the patch goes to
+the DT list. IOW, use get_maintainers.pl.
 
-Ok, I wasn't sure. I'm taking this patch.
-
-> > should get a patch description, my upstream doesn't take patches
-> > without.)
-
-I've added a patch description while applying.
-
-> The other usual suspects are the DT people, but they weren't CCed?
-
-I've added them on Cc.
-
-> Of course I can take it, too. Are you willing to provide an Acked-by?
-> Thanks!
-
-regard,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---wpphrtucuuhblxqu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJLSCwACgkQrX5LkNig
-011u+Qf/YButwC5LuxJ0EjEWyTxSUsWfcn8Uw5jZf8AQXQQ09WycP2s3Ct4WcRZT
-7ruaJh/uShoQ2OYv6s4+wKRC8nR+/KXL0cjJxU15PhPbYHjpUZfUYq4JeZfEILPz
-7gbW5QeevJyFAMjyQ2dmdKx9um03oIsWSI2Uu+sEHd9MrBwRy0xfDqHgEuu3yKEB
-W/7WrGEj9/DFgDtN7txpahsas6LGbWwkPs/iltDRLjKh9c2Zqtbk9qOE8no7wFXh
-l61DNgKLBl3D1U7NdoAK1E+xf8WxelJ0FM7pijD6Opkupxn2XzMw0vinH9KWN4A1
-6xMFoAjOPnvfw4A9lKCU+040GU2nCw==
-=NL01
------END PGP SIGNATURE-----
-
---wpphrtucuuhblxqu--
+Rob
