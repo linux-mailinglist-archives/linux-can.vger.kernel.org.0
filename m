@@ -2,50 +2,54 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97FD94F1DCC
-	for <lists+linux-can@lfdr.de>; Mon,  4 Apr 2022 23:43:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CFD74F1DC9
+	for <lists+linux-can@lfdr.de>; Mon,  4 Apr 2022 23:43:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383107AbiDDVlZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 4 Apr 2022 17:41:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45662 "EHLO
+        id S1383012AbiDDVlT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 4 Apr 2022 17:41:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380323AbiDDTdE (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 4 Apr 2022 15:33:04 -0400
+        with ESMTP id S1380342AbiDDTgG (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 4 Apr 2022 15:36:06 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6593E20F41
-        for <linux-can@vger.kernel.org>; Mon,  4 Apr 2022 12:31:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C57413EA3
+        for <linux-can@vger.kernel.org>; Mon,  4 Apr 2022 12:34:10 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1nbSPn-0004qD-18; Mon, 04 Apr 2022 21:31:03 +0200
+        id 1nbSSl-0005DZ-JF; Mon, 04 Apr 2022 21:34:07 +0200
 Received: from pengutronix.de (2a03-f580-87bc-d400-3524-91ca-8473-ba45.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:3524:91ca:8473:ba45])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 42D935A452;
-        Mon,  4 Apr 2022 19:31:02 +0000 (UTC)
-Date:   Mon, 4 Apr 2022 21:31:01 +0200
+        by smtp.blackshift.org (Postfix) with ESMTPSA id D56DE5A455;
+        Mon,  4 Apr 2022 19:34:06 +0000 (UTC)
+Date:   Mon, 4 Apr 2022 21:34:06 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-can@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     mkl@blackshift.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-can@vger.kernel.org,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
 Subject: Re: [PATCH] dt-bindings: can: renesas,rcar-canfd: Document r8a77961
  support
-Message-ID: <20220404193101.nqe2s4rin3bzp6vx@pengutronix.de>
+Message-ID: <20220404193406.dxn6m5xl5jcxlxqg@pengutronix.de>
 References: <20220401153743.77871-1-wsa+renesas@sang-engineering.com>
+ <20220403110534.2k3ojnkkrsdjzimb@pengutronix.de>
+ <CAMuHMdX2Ut9A57UkOO4f+q8Awu0K9Oek2Qhujr+TaKNTpkVU=g@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fugieqbaghi4eddp"
+        protocol="application/pgp-signature"; boundary="wpphrtucuuhblxqu"
 Content-Disposition: inline
-In-Reply-To: <20220401153743.77871-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <CAMuHMdX2Ut9A57UkOO4f+q8Awu0K9Oek2Qhujr+TaKNTpkVU=g@mail.gmail.com>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,36 +58,43 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---fugieqbaghi4eddp
+--wpphrtucuuhblxqu
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Cc +=3D Rob, devicetree
+On 04.04.2022 14:02:52, Geert Uytterhoeven wrote:
+> Hi Marc,
+>=20
+> On Sun, Apr 3, 2022 at 1:05 PM Marc Kleine-Budde <mkl@blackshift.org> wro=
+te:
+> > On 01.04.2022 17:37:43, Wolfram Sang wrote:
+> > > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+>=20
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>=20
+> > Wolfram, thanks for the patch. I think usually Geert takes the renesas
+> > DT binding patches. (If it would go via the CAN and net tree, that patch
+>=20
+> Usually only for Renesas core patches, unless the I/O maintainers
+> are unresponsive...
 
-On 01.04.2022 17:37:43, Wolfram Sang wrote:
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->  .../devicetree/bindings/net/can/renesas,rcar-canfd.yaml          | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd=
-=2Eyaml b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-> index f98c53dc1894..648740270731 100644
-> --- a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-> +++ b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-> @@ -23,6 +23,7 @@ properties:
->                - renesas,r8a774e1-canfd     # RZ/G2H
->                - renesas,r8a7795-canfd      # R-Car H3
->                - renesas,r8a7796-canfd      # R-Car M3-W
-> +              - renesas,r8a77961-canfd     # R-Car M3-W+
->                - renesas,r8a77965-canfd     # R-Car M3-N
->                - renesas,r8a77970-canfd     # R-Car V3M
->                - renesas,r8a77980-canfd     # R-Car V3H
-> --=20
-> 2.30.2
->=20
->=20
+Ok, I wasn't sure. I'm taking this patch.
+
+> > should get a patch description, my upstream doesn't take patches
+> > without.)
+
+I've added a patch description while applying.
+
+> The other usual suspects are the DT people, but they weren't CCed?
+
+I've added them on Cc.
+
+> Of course I can take it, too. Are you willing to provide an Acked-by?
+> Thanks!
+
+regard,
+Marc
 
 --=20
 Pengutronix e.K.                 | Marc Kleine-Budde           |
@@ -91,19 +102,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---fugieqbaghi4eddp
+--wpphrtucuuhblxqu
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJLR3MACgkQrX5LkNig
-011X+AgAiCJkEoJcNFDfdclM7aFsnahPjO0F6AZyf9JxWe6wwRhyLxCQOcI56foc
-sK4h7uU2EmkFQQRSHXgkZvbAZwooe1kT+lqh6MQy8Lbu1L++oLF7rYjkfhDh4sOr
-lmK2hS/Gmz+SSQQ9o4Re2FI0soVPL8td1nQV+EtXP/qkeWyl7p3jKKoV36CfcGXU
-C0R6Aw+PLzRY+5PxARcYh+2fEtf44t/be/OziTKQX60cZVVSvHA8FKfqrj9uyX2R
-sQUMtkIyyZndFGCCvgxl9GWh/oIgQab3wV5DewePPjEaQ5R1CSSOAqX9J8TP+v3V
-CPiJdjrtYSIjJOZNPdLoxLfBb2B3rA==
-=8ytH
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJLSCwACgkQrX5LkNig
+011u+Qf/YButwC5LuxJ0EjEWyTxSUsWfcn8Uw5jZf8AQXQQ09WycP2s3Ct4WcRZT
+7ruaJh/uShoQ2OYv6s4+wKRC8nR+/KXL0cjJxU15PhPbYHjpUZfUYq4JeZfEILPz
+7gbW5QeevJyFAMjyQ2dmdKx9um03oIsWSI2Uu+sEHd9MrBwRy0xfDqHgEuu3yKEB
+W/7WrGEj9/DFgDtN7txpahsas6LGbWwkPs/iltDRLjKh9c2Zqtbk9qOE8no7wFXh
+l61DNgKLBl3D1U7NdoAK1E+xf8WxelJ0FM7pijD6Opkupxn2XzMw0vinH9KWN4A1
+6xMFoAjOPnvfw4A9lKCU+040GU2nCw==
+=NL01
 -----END PGP SIGNATURE-----
 
---fugieqbaghi4eddp--
+--wpphrtucuuhblxqu--
