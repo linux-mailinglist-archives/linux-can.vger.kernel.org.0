@@ -2,124 +2,124 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB5314F5397
-	for <lists+linux-can@lfdr.de>; Wed,  6 Apr 2022 06:35:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89D814F5C87
+	for <lists+linux-can@lfdr.de>; Wed,  6 Apr 2022 13:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236702AbiDFDtt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 5 Apr 2022 23:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44290 "EHLO
+        id S229538AbiDFLem (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 6 Apr 2022 07:34:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573080AbiDERxa (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 5 Apr 2022 13:53:30 -0400
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.161])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECCBDE098
-        for <linux-can@vger.kernel.org>; Tue,  5 Apr 2022 10:51:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1649181088;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=puLez7TQYKOrkK2OoEMVI7H8q7SKXTqsmVL0/NYnldM=;
-    b=aRkhbb7+9aruzrVFqUpJGysDEF0tUzVi5e2OOWDmAp1lDLyWtkPhU033hjoFexCFr+
-    2y5GGC7Qc5StTvU6R7ucugxLs3+ijOqamhIQHDBr/RU9T4eD7b45XTTFNhHv8oQNl1Vo
-    MdAEugtGJvKrtu5spfXwuAOeqpzch541jI/KOqOKIv9VVFnJ4eZptavy+JThgSxY6PxJ
-    u39zogtsev7tLbZqDXk3xnoTKi/yEF6Q61BC6uXs4mPefzIIoU2xPALaVzL6Cbnd34K0
-    44Sm/G7tGwlUQHLs+yPuAsnd5VWel4zzfXLATnTzwVAlDiuy/Ga0JeEdh/J5MtvKscCZ
-    oETA==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS/xvEBL7X5sbo3UIh9IyLecSWNadSQUT9H"
-X-RZG-CLASS-ID: mo00
-Received: from silver.lan
-    by smtp.strato.de (RZmta 47.42.2 AUTH)
-    with ESMTPSA id 4544c9y35HpSQz9
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Tue, 5 Apr 2022 19:51:28 +0200 (CEST)
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-To:     linux-can@vger.kernel.org
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        syzbot+2339c27f5c66c652843e@syzkaller.appspotmail.com
-Subject: [PATCH] can: isotp: stop timeout monitoring when no first frame was sent
-Date:   Tue,  5 Apr 2022 19:51:12 +0200
-Message-Id: <20220405175112.2682-1-socketcan@hartkopp.net>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S234947AbiDFLcV (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 6 Apr 2022 07:32:21 -0400
+Received: from mailgw.felk.cvut.cz (mailgw.felk.cvut.cz [147.32.82.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6CA656FD22;
+        Wed,  6 Apr 2022 01:20:47 -0700 (PDT)
+Received: from mailgw.felk.cvut.cz (localhost.localdomain [127.0.0.1])
+        by mailgw.felk.cvut.cz (Proxmox) with ESMTP id 0D75130ADE7F;
+        Wed,  6 Apr 2022 10:20:45 +0200 (CEST)
+Received: from cmp.felk.cvut.cz (haar.felk.cvut.cz [147.32.84.19])
+        by mailgw.felk.cvut.cz (Proxmox) with ESMTPS id 1D2BF30ADE4A;
+        Wed,  6 Apr 2022 10:20:44 +0200 (CEST)
+Received: from haar.felk.cvut.cz (localhost [127.0.0.1])
+        by cmp.felk.cvut.cz (8.14.0/8.12.3/SuSE Linux 0.6) with ESMTP id 2368KhCX018534;
+        Wed, 6 Apr 2022 10:20:43 +0200
+Received: (from pisa@localhost)
+        by haar.felk.cvut.cz (8.14.0/8.13.7/Submit) id 2368KhL8018533;
+        Wed, 6 Apr 2022 10:20:43 +0200
+X-Authentication-Warning: haar.felk.cvut.cz: pisa set sender to pisa@cmp.felk.cvut.cz using -f
+From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
+To:     "Marc Kleine-Budde" <mkl@pengutronix.de>
+Subject: Re: [PATCH v8 0/7] CTU CAN FD open-source IP core SocketCAN driver, PCI, platform integration and documentation
+Date:   Wed, 6 Apr 2022 10:20:42 +0200
+User-Agent: KMail/1.9.10
+Cc:     linux-can@vger.kernel.org, devicetree@vger.kernel.org,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        David Miller <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>, mark.rutland@arm.com,
+        Carsten Emde <c.emde@osadl.org>, armbru@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marin Jerabek <martin.jerabek01@gmail.com>,
+        Ondrej Ille <ondrej.ille@gmail.com>,
+        Jiri Novak <jnovak@fel.cvut.cz>,
+        Jaroslav Beran <jara.beran@gmail.com>,
+        Petr Porazil <porazil@pikron.com>, Pavel Machek <pavel@ucw.cz>,
+        Drew Fustini <pdp7pdp7@gmail.com>,
+        Mataj Vasilevski <vasilmat@fel.cvut.cz>
+References: <cover.1647904780.git.pisa@cmp.felk.cvut.cz> <202203220918.33033.pisa@cmp.felk.cvut.cz> <20220322092212.f5eaxm5k45j5khra@pengutronix.de>
+In-Reply-To: <20220322092212.f5eaxm5k45j5khra@pengutronix.de>
+X-KMail-QuotePrefix: > 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: Text/Plain;
+  charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Message-Id: <202204061020.42943.pisa@cmp.felk.cvut.cz>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The first attempt to fix a the 'impossible' WARN_ON_ONCE(1) in
-isotp_tx_timer_handler() focussed on the identical CAN IDs created by
-the syzbot reproducer and lead to upstream fix/commit 3ea566422cbd
-("can: isotp: sanitize CAN ID checks in isotp_bind()"). But this did
-not catch the root cause of the wrong tx.state in the tx_timer handler.
+Hello Marc and others,
 
-In the isotp 'first frame' case a timeout monitoring needs to be started
-before the 'first frame' is send. But when this sending failed the timeout
-monitoring for this specific frame has to be disabled too.
+On Tuesday 22 of March 2022 10:22:12 Marc Kleine-Budde wrote:
+> On 22.03.2022 09:18:32, Pavel Pisa wrote:
+> > > The driver looks much better now. Good work. Please have a look at the
+> > > TX path of the mcp251xfd driver, especially the tx_stop_queue and
+> > > tx_wake_queue in mcp251xfd_start_xmit() and mcp251xfd_handle_tefif(). A
+> > > lockless implementation should work in your hardware, too.
+> >
+> > Is this blocker for now? I would like to start with years tested base.
+>
+> Makes sense.
 
-Otherwise the tx_timer is fired with the 'warn me' tx.state of ISOTP_IDLE.
+I have missed timing for 5.18 but v5.18-rc1 is out so I would be
+happy if we do not miss 5.19 merge window at least with minimal version.
 
-Fixes: e057dd3fc20f ("can: add ISO 15765-2:2016 transport protocol")
-Reported-by: syzbot+2339c27f5c66c652843e@syzkaller.appspotmail.com
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
----
- net/can/isotp.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+If we succeeds in review reasonably early we could fit with inclusion
+or at least the first review round of Mataj Vasilevski's 
 
-diff --git a/net/can/isotp.c b/net/can/isotp.c
-index bafb0fb5f0e0..ff5d7870294e 100644
---- a/net/can/isotp.c
-+++ b/net/can/isotp.c
-@@ -904,10 +904,11 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
- 	struct sk_buff *skb;
- 	struct net_device *dev;
- 	struct canfd_frame *cf;
- 	int ae = (so->opt.flags & CAN_ISOTP_EXTEND_ADDR) ? 1 : 0;
- 	int wait_tx_done = (so->opt.flags & CAN_ISOTP_WAIT_TX_DONE) ? 1 : 0;
-+	s64 hrtimer_sec = 0;
- 	int off;
- 	int err;
- 
- 	if (!so->bound)
- 		return -EADDRNOTAVAIL;
-@@ -1002,11 +1003,13 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
- 		/* send first frame and wait for FC */
- 
- 		isotp_create_fframe(cf, so, ae);
- 
- 		/* start timeout for FC */
--		hrtimer_start(&so->txtimer, ktime_set(1, 0), HRTIMER_MODE_REL_SOFT);
-+		hrtimer_sec = 1;
-+		hrtimer_start(&so->txtimer, ktime_set(hrtimer_sec, 0),
-+			      HRTIMER_MODE_REL_SOFT);
- 	}
- 
- 	/* send the first or only CAN frame */
- 	cf->flags = so->ll.tx_flags;
- 
-@@ -1015,10 +1018,15 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
- 	err = can_send(skb, 1);
- 	dev_put(dev);
- 	if (err) {
- 		pr_notice_once("can-isotp: %s: can_send_ret %pe\n",
- 			       __func__, ERR_PTR(err));
-+
-+		/* no transmission -> no timeout monitoring */
-+		if (hrtimer_sec)
-+			hrtimer_cancel(&so->txtimer);
-+
- 		goto err_out_drop;
- 	}
- 
- 	if (wait_tx_done) {
- 		/* wait for complete transmission of current pdu */
--- 
-2.30.2
+  https://gitlab.fel.cvut.cz/canbus/ctucanfd_ip_core/-/tree/hw-timestamping
+
+Please, help us to finish this subsequent goal of our portfolio development.
+I think that our work is valuable for the community, code can be tested
+even in QEMU CAN bus subsystem which we architected as well
+
+  https://www.qemu.org/docs/master/system/devices/can.html
+
+I hope that it is usable for others. I have the last support call from
+Magdeburg University where they use CAN emulation for some Volkswagen
+projects. The Xilinx uses code for their CAN FD controllers emulation.
+Thei have whole stack including mainline driver for their CAN FD controller
+in mainline but on the other hand, their CAN FD is bound to Xilinx devices
+emulation. But CTU CAN FD provides generic PCI integration and can be used
+even on broad range of FPGAs so its emulation and matching driver provides
+valuable tool even if you do not consider use its actual design on hardware.
+
+New version of the latency tester based on CTU CAN FD timestamping
+is in preparation as upgrade of original Martin Jerabek's
+work done on Oliver Hartkopp's and Volkswagen call
+
+  
+https://gitlab.fel.cvut.cz/canbus/zynq/zynq-can-sja1000-top/wikis/uploads/56b4d27d8f81ae390fc98bdce803398f/F3-BP-2016-Jerabek-Martin-Jerabek-thesis-2016.pdf
+
+Best wishes,
+
+                Pavel
+--
+                Pavel Pisa
+    phone:      +420 603531357
+    e-mail:     pisa@cmp.felk.cvut.cz
+    Department of Control Engineering FEE CVUT
+    Karlovo namesti 13, 121 35, Prague 2
+    university: http://dce.fel.cvut.cz/
+    personal:   http://cmp.felk.cvut.cz/~pisa
+    projects:   https://www.openhub.net/accounts/ppisa
+    CAN related:http://canbus.pages.fel.cvut.cz/
+    Open Technologies Research Education and Exchange Services
+    https://gitlab.fel.cvut.cz/otrees/org/-/wikis/home
 
