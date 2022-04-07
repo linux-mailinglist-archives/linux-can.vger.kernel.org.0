@@ -2,139 +2,104 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A7FF4F7FD9
-	for <lists+linux-can@lfdr.de>; Thu,  7 Apr 2022 15:01:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82F6C4F813B
+	for <lists+linux-can@lfdr.de>; Thu,  7 Apr 2022 16:03:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245209AbiDGNDb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 7 Apr 2022 09:03:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37410 "EHLO
+        id S229758AbiDGOF4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 7 Apr 2022 10:05:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243503AbiDGNDa (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 7 Apr 2022 09:03:30 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A3D22F3C4
-        for <linux-can@vger.kernel.org>; Thu,  7 Apr 2022 06:01:28 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1ncRlI-0002Av-JA; Thu, 07 Apr 2022 15:01:20 +0200
-Received: from pengutronix.de (2a03-f580-87bc-d400-b17e-6ba8-60fd-ca2d.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:b17e:6ba8:60fd:ca2d])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id AAA2B5D40C;
-        Thu,  7 Apr 2022 13:01:18 +0000 (UTC)
-Date:   Thu, 7 Apr 2022 15:01:18 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Brian Silverman <bsilver16384@gmail.com>,
-        Brian Silverman <brian.silverman@bluerivertech.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Dan Murphy <dmurphy@ti.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:CAN NETWORK DRIVERS" <linux-can@vger.kernel.org>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
-Subject: Re: [RFC PATCH] can: m_can: Add driver for M_CAN hardware in NVIDIA
- devices
-Message-ID: <20220407130118.hp5szzhg4v6szmbq@pengutronix.de>
-References: <20220106002514.24589-1-brian.silverman@bluerivertech.com>
- <Yk2vOj8wKi4FdPg2@orome>
+        with ESMTP id S229494AbiDGOF4 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 7 Apr 2022 10:05:56 -0400
+Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 16996E09A5;
+        Thu,  7 Apr 2022 07:03:52 -0700 (PDT)
+Received: by ajax-webmail-mail-app3 (Coremail) ; Thu, 7 Apr 2022 22:03:04
+ +0800 (GMT+08:00)
+X-Originating-IP: [10.181.226.201]
+Date:   Thu, 7 Apr 2022 22:03:04 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   duoming@zju.edu.cn
+To:     "Jiri Slaby" <jirislaby@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, chris@zankel.net, jcmvbkbc@gmail.com,
+        mustafa.ismail@intel.com, shiraz.saleem@intel.com, jgg@ziepe.ca,
+        wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com, jes@trained-monkey.org,
+        gregkh@linuxfoundation.org, alexander.deucher@amd.com,
+        linux-xtensa@linux-xtensa.org, linux-rdma@vger.kernel.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-hippi@sunsite.dk, linux-staging@lists.linux.dev,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        "Russell King - ARM Linux" <linux@armlinux.org.uk>,
+        linma@zju.edu.cn, rmk@flint.arm.linux.org.uk
+Subject: Re: Re: [PATCH 01/11] drivers: tty: serial: Fix deadlock in
+ sa1100_set_termios()
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.8 build 20200806(7a9be5e8)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <656ffd1d-e7cf-d2c0-e0e6-c10215ba422b@kernel.org>
+References: <cover.1649310812.git.duoming@zju.edu.cn>
+ <e82ff9358d4ef90a7e9f624534d6d54fc193467f.1649310812.git.duoming@zju.edu.cn>
+ <656ffd1d-e7cf-d2c0-e0e6-c10215ba422b@kernel.org>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="n7sqxwpygc2d6wn2"
-Content-Disposition: inline
-In-Reply-To: <Yk2vOj8wKi4FdPg2@orome>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <2ad5aaaf.3fa1d.1800455f764.Coremail.duoming@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cC_KCgBnFvIY705iKQ2UAQ--.29015W
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgMNAVZdtZE8AAAFsb
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-
---n7sqxwpygc2d6wn2
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 06.04.2022 17:18:18, Thierry Reding wrote:
-> On Wed, Jan 05, 2022 at 04:25:09PM -0800, Brian Silverman wrote:
-> > It's a M_TTCAN with some NVIDIA-specific glue logic and clocks. The
-> > existing m_can driver works with it after handling the glue logic.
-> >=20
-> > The code is a combination of pieces from m_can_platform and NVIDIA's
-> > driver [1].
-> >=20
-> > [1] https://github.com/hartkopp/nvidia-t18x-can/blob/master/r32.2.1/nvi=
-dia/drivers/net/can/mttcan/hal/m_ttcan.c
-> >=20
-> > Signed-off-by: Brian Silverman <brian.silverman@bluerivertech.com>
-> > ---
-> > I ran into bugs with the error handling in NVIDIA's m_ttcan driver, so I
-> > switched to m_can which has been much better. I'm looking for feedback
-> > on whether I should ensure rebasing hasn't broken anything, write up DT
-> > documentation, and submit this patch for real. The driver works great,
-> > but I've got some questions about submitting it.
-> >=20
-> > question: This has liberal copying of GPL code from NVIDIA's
-> > non-upstreamed m_ttcan driver. Is that OK?
-> >=20
-> > corollary: I don't know what any of this glue logic does. I do know the
-> > device doesn't work without it. I can't find any documentation of what
-> > these addresses do.
-> >=20
-> > question: There is some duplication between this and m_can_platform. It
-> > doesn't seem too bad to me, but is this the preferred way to do it or is
-> > there another alternative?
-> >=20
-> > question: Do new DT bindings need to be in the YAML format, or is the
-> > .txt one OK?
-> >=20
-> >  drivers/net/can/m_can/Kconfig       |  10 +
-> >  drivers/net/can/m_can/Makefile      |   1 +
-> >  drivers/net/can/m_can/m_can_tegra.c | 362 ++++++++++++++++++++++++++++
-> >  3 files changed, 373 insertions(+)
-> >  create mode 100644 drivers/net/can/m_can/m_can_tegra.c
->=20
-> Sorry for the late reply, I completely missed this.
-
-Brian Silverman left the company bluerivertech, I think there'll be no
-progress on the tegra glue code. :/
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---n7sqxwpygc2d6wn2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJO4JsACgkQrX5LkNig
-0118nQf/R+gaw3X7zD28Ee0fb5e4rcIIsxL2d1wmxWL6jkgQ/kbNmDx+nKY12dBx
-pBsA69d5mP9I1RfXVOTaH6XFZd+iD2lcCrglXNaNyoo8O+p5y+nTKrVJr3yMEcHr
-8asGp052fHln6FPSNTV8mvQYadWVYxBjEQVBrHJNp8nl5dZAn6uvW/V9AzWKMLWf
-JOHv/Wu6229FlBnIcjHinPPHQFId5QaPS8sCZzGNefGZg3x1s9872bgvmBhqsQI+
-/HxHDGtSCbrYcpKT7ykpcW5hkuYO+0+kqJZ7gMAzznxnDuKZ40hVXY9x+EVudwMn
-dlYpGqn4jnFxYzDWJOr/tc1lKQF4JQ==
-=wQkw
------END PGP SIGNATURE-----
-
---n7sqxwpygc2d6wn2--
+SGVsbG8sCgpPbiBUaHUsIDcgQXByIDIwMjIgMDk6MDI6MDUgKzAyMDAgSmlyaSBTbGFieSB3cm90
+ZToKCj4gPiBUaGVyZSBpcyBhIGRlYWRsb2NrIGluIHNhMTEwMF9zZXRfdGVybWlvcygpLCB3aGlj
+aCBpcyBzaG93bgo+ID4gYmVsb3c6Cj4gPiAKPiA+ICAgICAoVGhyZWFkIDEpICAgICAgICAgICAg
+ICB8ICAgICAgKFRocmVhZCAyKQo+ID4gICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgc2Ex
+MTAwX2VuYWJsZV9tcygpCj4gPiBzYTExMDBfc2V0X3Rlcm1pb3MoKSAgICAgICB8ICBtb2RfdGlt
+ZXIoKQo+ID4gICBzcGluX2xvY2tfaXJxc2F2ZSgpIC8vKDEpIHwgICh3YWl0IGEgdGltZSkKPiA+
+ICAgLi4uICAgICAgICAgICAgICAgICAgICAgICB8IHNhMTEwMF90aW1lb3V0KCkKPiA+ICAgZGVs
+X3RpbWVyX3N5bmMoKSAgICAgICAgICB8ICBzcGluX2xvY2tfaXJxc2F2ZSgpIC8vKDIpCj4gPiAg
+ICh3YWl0IHRpbWVyIHRvIHN0b3ApICAgICAgfCAgLi4uCj4gPiAKPiA+IFdlIGhvbGQgc3BvcnQt
+PnBvcnQubG9jayBpbiBwb3NpdGlvbiAoMSkgb2YgdGhyZWFkIDEgYW5kCj4gPiB1c2UgZGVsX3Rp
+bWVyX3N5bmMoKSB0byB3YWl0IHRpbWVyIHRvIHN0b3AsIGJ1dCB0aW1lciBoYW5kbGVyCj4gPiBh
+bHNvIG5lZWQgc3BvcnQtPnBvcnQubG9jayBpbiBwb3NpdGlvbiAoMikgb2YgdGhyZWFkIDIuIEFz
+IGEgcmVzdWx0LAo+ID4gc2ExMTAwX3NldF90ZXJtaW9zKCkgd2lsbCBibG9jayBmb3JldmVyLgo+
+ID4gCj4gPiBUaGlzIHBhdGNoIGV4dHJhY3RzIGRlbF90aW1lcl9zeW5jKCkgZnJvbSB0aGUgcHJv
+dGVjdGlvbiBvZgo+ID4gc3Bpbl9sb2NrX2lycXNhdmUoKSwgd2hpY2ggY291bGQgbGV0IHRpbWVy
+IGhhbmRsZXIgdG8gb2J0YWluCj4gPiB0aGUgbmVlZGVkIGxvY2suCj4gPiAKPiA+IFNpZ25lZC1v
+ZmYtYnk6IER1b21pbmcgWmhvdSA8ZHVvbWluZ0B6anUuZWR1LmNuPgo+ID4gLS0tCj4gPiAgIGRy
+aXZlcnMvdHR5L3NlcmlhbC9zYTExMDAuYyB8IDIgKysKPiA+ICAgMSBmaWxlIGNoYW5nZWQsIDIg
+aW5zZXJ0aW9ucygrKQo+ID4gCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy90dHkvc2VyaWFsL3Nh
+MTEwMC5jIGIvZHJpdmVycy90dHkvc2VyaWFsL3NhMTEwMC5jCj4gPiBpbmRleCA1ZmU2Y2NjZmMx
+YS4uM2E1ZjEyY2VkMGIgMTAwNjQ0Cj4gPiAtLS0gYS9kcml2ZXJzL3R0eS9zZXJpYWwvc2ExMTAw
+LmMKPiA+ICsrKyBiL2RyaXZlcnMvdHR5L3NlcmlhbC9zYTExMDAuYwo+ID4gQEAgLTQ3Niw3ICs0
+NzYsOSBAQCBzYTExMDBfc2V0X3Rlcm1pb3Moc3RydWN0IHVhcnRfcG9ydCAqcG9ydCwgc3RydWN0
+IGt0ZXJtaW9zICp0ZXJtaW9zLAo+ID4gICAJCQkJVVRTUjFfVE9fU00oVVRTUjFfUk9SKTsKPiA+
+ICAgCX0KPiA+ICAgCj4gPiArCXNwaW5fdW5sb2NrX2lycXJlc3RvcmUoJnNwb3J0LT5wb3J0Lmxv
+Y2ssIGZsYWdzKTsKPiAKPiBVbmxvY2tpbmcgdGhlIGxvY2sgYXQgdGhpcyBwb2ludCBkb2Vzbid0
+IGxvb2sgc2FmZSBhdCBhbGwuIE1heWJlIG1vdmluZyAKPiB0aGUgdGltZXIgZGVsZXRpb24gYmVm
+b3JlIHRoZSBsb2NrPyBUaGVyZSBpcyBubyBjdXJyZW50IG1haW50YWluZXIgdG8gCj4gYXNrLiBN
+b3N0IG9mIHRoZSBkcml2ZXIgb3JpZ2luYXRlcyBmcm9tIHJtay4gQ2NpbmcgaGltIGp1c3QgaW4g
+Y2FzZS4KClRoYW5rcyBhIGxvdCBmb3IgeW91ciB0aW1lIGFuZCBhZHZpY2UuIEkgdGhpbmsgbW92
+aW5nIHRoZSBkZWxfdGltZXJfc3luYygpCmJlZm9yZSB0aGUgbG9jayBpcyBnb29kLiBCZWNhdXNl
+IHdlIG1heSB1c2UgInNhMTEwMF9lbmFibGVfbXMoJnNwb3J0LT5wb3J0KSIKdG8gc3RhcnQgdGhl
+IHRpbWVyIGFmdGVyIHdlIGhhdmUgc2V0IHRlcm1pb3MuCgo+IEZXSVcgdGhlIGxvY2sgd2FzIG1v
+dmVkIGJ5IHRoaXMgY29tbWl0IGFyb3VuZCBsaW51eCAyLjUuNTUgKGZyb20gCj4gZnVsbC1oaXN0
+b3J5LWxpbnV4IFsxXSkKPiBjb21taXQgZjM4YWVmM2U2MmMyNmEzM2VhMzYwYTg2ZmRlOWIyN2Ux
+ODNhMzc0OAo+IEF1dGhvcjogUnVzc2VsbCBLaW5nIDxybWtAZmxpbnQuYXJtLmxpbnV4Lm9yZy51
+az4KPiBEYXRlOiAgIEZyaSBKYW4gMyAxNTo0MjowOSAyMDAzICswMDAwCj4gCj4gICAgICBbU0VS
+SUFMXSBDb252ZXJ0IGNoYW5nZV9zcGVlZCgpIHRvIHNldHRlcm1pb3MoKQo+IAo+IFsxXSAKPiBo
+dHRwczovL2FyY2hpdmUub3JnL2Rvd25sb2FkL2dpdC1oaXN0b3J5LW9mLWxpbnV4L2Z1bGwtaGlz
+dG9yeS1saW51eC5naXQudGFyCj4gCj4gPiAgIAlkZWxfdGltZXJfc3luYygmc3BvcnQtPnRpbWVy
+KTsKPiA+ICsJc3Bpbl9sb2NrX2lycXNhdmUoJnNwb3J0LT5wb3J0LmxvY2ssIGZsYWdzKTsKPiA+
+ICAgCj4gPiAgIAkvKgo+ID4gICAJICogVXBkYXRlIHRoZSBwZXItcG9ydCB0aW1lb3V0LgoKCkJl
+c3QgcmVnYXJkcywKRHVvbWluZyBaaG91
