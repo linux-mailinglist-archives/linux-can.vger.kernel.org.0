@@ -2,85 +2,94 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 242AB4F696B
-	for <lists+linux-can@lfdr.de>; Wed,  6 Apr 2022 20:53:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2933C4F761D
+	for <lists+linux-can@lfdr.de>; Thu,  7 Apr 2022 08:34:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230317AbiDFSvG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 6 Apr 2022 14:51:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52952 "EHLO
+        id S241138AbiDGGg0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 7 Apr 2022 02:36:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbiDFStC (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 6 Apr 2022 14:49:02 -0400
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909CEE09BD;
-        Wed,  6 Apr 2022 11:06:51 -0700 (PDT)
-Received: by mail-oi1-f170.google.com with SMTP id e4so3234690oif.2;
-        Wed, 06 Apr 2022 11:06:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NV0lW1tSHUTbd+4Z35O+30iOwvDlNCjNcqdse63qw4c=;
-        b=tyvk0NnWxSwbf8RsVozVF+Mu1fAs25XU0snXP/qjIEYSV8iT/g/Gl4oGnpsvMszAmG
-         M8Gae1HcX8sXmPfAjqOYQHaydcMBSWwiZEKAn0WVj8Vr5HeQpLzOkaU3dNtFs97VBdut
-         mCdM1kpmAtwS3fAtHbQACZuRoRCri8LnGq0EVWIWKcWJpxQPxlypXkJVGqcW3WBENB6Z
-         NVYbSqmIuaaIlQIIvuxukNJSqNz2I8QZivLY8FN3oyfB7F9+4t2rKgPSGLwZ8RFgAfsN
-         1M3DU8OokYphE3H50DA0ZsvtMvrIjLcbhpe9ZvfJU9agddtSR/HY8Dcl6OGd4CYKF1x1
-         g+jA==
-X-Gm-Message-State: AOAM53002WW/CKWlCLf2TTZndAma9WHyLLLBWhMhIhPFiZ+abWk1thdu
-        uUTFdBcKX7yW2Py7uNbW3g==
-X-Google-Smtp-Source: ABdhPJzNOlkk/pDqP+Kii3ZVVph5q9A1ktnfpQ3Hz1+9rtv+SrXNyeX4ngNYHtiW+gjcFE0OqFDRCw==
-X-Received: by 2002:aca:1811:0:b0:2ef:3c0f:f169 with SMTP id h17-20020aca1811000000b002ef3c0ff169mr4206453oih.61.1649268410748;
-        Wed, 06 Apr 2022 11:06:50 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q6-20020acaf206000000b002ef960f65b3sm6644127oih.25.2022.04.06.11.06.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 11:06:50 -0700 (PDT)
-Received: (nullmailer pid 2512546 invoked by uid 1000);
-        Wed, 06 Apr 2022 18:06:49 -0000
-Date:   Wed, 6 Apr 2022 13:06:49 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org, devicetree@vger.kernel.org,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: Re: [PATCH v2] dt-bindings: can: renesas,rcar-canfd: Document
- r8a77961 support
-Message-ID: <Yk3WuULOeazcprrr@robh.at.kernel.org>
-References: <20220404200930.1249612-1-mkl@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220404200930.1249612-1-mkl@pengutronix.de>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        with ESMTP id S232836AbiDGGgY (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 7 Apr 2022 02:36:24 -0400
+Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BDA3A8B6DE;
+        Wed,  6 Apr 2022 23:34:22 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [10.15.192.164])
+        by mail-app4 (Coremail) with SMTP id cS_KCgBnKRC7hU5imJbiAA--.58581S2;
+        Thu, 07 Apr 2022 14:33:35 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-kernel@vger.kernel.org
+Cc:     chris@zankel.net, jcmvbkbc@gmail.com, mustafa.ismail@intel.com,
+        shiraz.saleem@intel.com, jgg@ziepe.ca, wg@grandegger.com,
+        mkl@pengutronix.de, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, jes@trained-monkey.org,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        alexander.deucher@amd.com, linux-xtensa@linux-xtensa.org,
+        linux-rdma@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-hippi@sunsite.dk,
+        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH 00/11] Fix deadlocks caused by del_timer_sync()
+Date:   Thu,  7 Apr 2022 14:33:16 +0800
+Message-Id: <cover.1649310812.git.duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cS_KCgBnKRC7hU5imJbiAA--.58581S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7AFWkWw1rJF47KF45KFyUJrb_yoW8GF4DpF
+        45u390kr1jvF4xu3W8tw1kZFy3Gw4xJrWrK39Fq3s5Xa4rZF43XF17GFy8WrZ5JryxGa4a
+        yF1qyw4rGF4avrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvm1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJr0_GcWl84ACjcxK6I8E
+        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
+        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
+        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
+        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
+        c2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8uw4UJr1UMxC20s026xCaFVCjc4AY6r1j6r
+        4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
+        67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
+        x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
+        z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
+        UI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgYNAVZdtZEbDgAOs8
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, 04 Apr 2022 22:09:30 +0200, Marc Kleine-Budde wrote:
-> From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> 
-> This patch adds documentation for the r8a77961 to the
-> renesas,rcar-canfd binding.
-> 
-> Link: https://lore.kernel.org/all/20220401153743.77871-1-wsa+renesas@sang-engineering.com
-> Cc: devicetree@vger.kernel.org
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> ---
-> Changes since v1:
-> - added patch description
-> - added devicetree on Cc
-> 
->  .../devicetree/bindings/net/can/renesas,rcar-canfd.yaml          | 1 +
->  1 file changed, 1 insertion(+)
-> 
+If the timer handlers need a lock owned by the thread calling 
+del_timer_sync(), then, the caller thread will block forever.
 
-Acked-by: Rob Herring <robh@kernel.org>
+Duoming Zhou (11):
+  drivers: tty: serial: Fix deadlock in sa1100_set_termios()
+  drivers: usb: host: Fix deadlock in oxu_bus_suspend()
+  drivers: staging: rtl8192u: Fix deadlock in ieee80211_beacons_stop()
+  drivers: staging: rtl8723bs: Fix deadlock in
+    rtw_surveydone_event_callback()
+  drivers: staging: rtl8192e: Fix deadlock in rtllib_beacons_stop()
+  drivers: staging: rtl8192e: Fix deadlock in
+    rtw_joinbss_event_prehandle()
+  drivers: net: hippi: Fix deadlock in rr_close()
+  drivers: net: can: Fix deadlock in grcan_close()
+  drivers: infiniband: hw: Fix deadlock in irdma_cleanup_cm_core()
+  arch: xtensa: platforms: Fix deadlock in iss_net_close()
+  arch: xtensa: platforms: Fix deadlock in rs_close()
+
+ arch/xtensa/platforms/iss/console.c                    | 4 +++-
+ arch/xtensa/platforms/iss/network.c                    | 2 ++
+ drivers/infiniband/hw/irdma/cm.c                       | 5 ++++-
+ drivers/net/can/grcan.c                                | 2 ++
+ drivers/net/hippi/rrunner.c                            | 2 ++
+ drivers/staging/rtl8192e/rtllib_softmac.c              | 2 +-
+ drivers/staging/rtl8192u/ieee80211/ieee80211_softmac.c | 2 +-
+ drivers/staging/rtl8723bs/core/rtw_mlme.c              | 4 ++++
+ drivers/tty/serial/sa1100.c                            | 2 ++
+ drivers/usb/host/oxu210hp-hcd.c                        | 2 ++
+ 10 files changed, 23 insertions(+), 4 deletions(-)
+
+-- 
+2.17.1
+
