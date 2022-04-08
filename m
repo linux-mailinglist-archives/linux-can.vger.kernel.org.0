@@ -2,39 +2,41 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 928844F9EEF
-	for <lists+linux-can@lfdr.de>; Fri,  8 Apr 2022 23:12:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 096DE4F9EF6
+	for <lists+linux-can@lfdr.de>; Fri,  8 Apr 2022 23:12:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234545AbiDHVMm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 8 Apr 2022 17:12:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56146 "EHLO
+        id S234707AbiDHVMn (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 8 Apr 2022 17:12:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239815AbiDHVMf (ORCPT
+        with ESMTP id S239816AbiDHVMf (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Fri, 8 Apr 2022 17:12:35 -0400
 Received: from smtpcmd01-sp1.aruba.it (smtpcmd01-sp1.aruba.it [62.149.158.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 601F3181160
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6032B181796
         for <linux-can@vger.kernel.org>; Fri,  8 Apr 2022 14:10:27 -0700 (PDT)
 Received: from localhost.localdomain ([93.35.164.10])
         by Aruba Outgoing Smtp  with ESMTPSA
-        id cvr9nij0B79nYcvr9nFy4n; Fri, 08 Apr 2022 23:09:24 +0200
+        id cvr9nij0B79nYcvrAnFy53; Fri, 08 Apr 2022 23:09:24 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1649452164; bh=TjYG3E/+cnICxb5g+LSNmbTgbBfI9nG8Ag6knqdfm8U=;
+        t=1649452164; bh=YSzghGkQG9IKiyCgShp4fjbw3t+wnbGnbQfbUoit2jU=;
         h=From:To:Subject:Date:MIME-Version;
-        b=I5NhBaSSfmYcQu5wOwDE89N2XVVdtJRATQJa7gu3WuuZloBeeovmy2UVDzgUZUG6s
-         nh3R+97z7MQFwQN+5SxYODrfSVOPZrVFGJStWWqimsMC05IAAgMkG1ylsJkpa3fnwi
-         ng9lt4ejgoNY40Nj769BjBWVaVhkqT+tSKSMJKKeSRTdQAMzkq7Y50hZeyDtkHpYjl
-         qSyr9a96ot/27DnlTDXKotfMWyUAtgad7X37s1rn/g/yxqIPscMnGkZa6w7tf7d22P
-         XfjDngPHSDw/Stq1yI3UHWcwCdomswqi8Xxrc4yVpBldQO6sQENGWr9wFJ47KRZKCS
-         8E3JlTRFBN7qA==
+        b=aMz/5aUKALKOkx/jeMkyvvG6Ok+h2ZAFcMaNBMt5YTpPzLf604vS54VX4Q1aXeRk8
+         TrVbTS3zCMay4v6gM4gGRP1ttXJ8zjoHxq9X09I6MAA+nUo+eoS0/nI7N1bbZGJOs8
+         0F8KbCMO10ejdVsAzX1OOmNP2Sbqh7W9FLxPyZ8MD1L6Atz2z/oh9MIwGbe86utRD/
+         tuqqOdlFK4gk8nPeYSS3pHcEtzr3YmxvZCPOLSlVP9qvxuiVjCXoSo1S+QHHQ82QXa
+         JitWCGZSvHAshaZBq9MMydhgHLsbFgjcdpb+B4wrKP1Wr7H0ldAwR94bb5tWuh+p5G
+         X/1AZ3Xtx91oA==
 From:   Devid Antonio Filoni <devid.filoni@egluetechnologies.com>
 To:     Robin van der Gracht <robin@protonic.nl>,
         Oleksij Rempel <o.rempel@pengutronix.de>
 Cc:     kernel@pengutronix.de, linux-can@vger.kernel.org,
         Devid Antonio Filoni <devid.filoni@egluetechnologies.com>
-Subject: [PATCH 0/2] j1939: make sure that sent DAT/CTL frames are marked as TX
-Date:   Fri,  8 Apr 2022 23:09:08 +0200
-Message-Id: <20220408210910.16137-1-devid.filoni@egluetechnologies.com>
+Subject: [PATCH 1/2] can: j1939: make sure that sent DAT frames are marked as TX
+Date:   Fri,  8 Apr 2022 23:09:09 +0200
+Message-Id: <20220408210910.16137-2-devid.filoni@egluetechnologies.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220408210910.16137-1-devid.filoni@egluetechnologies.com>
+References: <20220408210910.16137-1-devid.filoni@egluetechnologies.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-CMAE-Envelope: MS4xfDs1cPSwuRdiCSLtLZyqg37B4TVJbz+ZxjWCtbMZPzJozG1yKobeZbVpzXO0x9SmaEyQtcDImFttjQcqnnnv1TM3NjUCsPZE7tkOZi/JsM1kNMO6IfCb
@@ -51,31 +53,48 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello,
+Fixes: 9d71dd0 ("can: add support of SAE J1939 protocol")
+Signed-off-by: Devid Antonio Filoni <devid.filoni@egluetechnologies.com>
+---
+ net/can/j1939/transport.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-If candump -x is used to dump CAN bus traffic on an interface while a J1939
-socket is sending multi-packet messages, then the DAT and CTL frames
-show up as RX instead of TX.
-
-This patch series sets to generated struct sk_buff the owning struct sock
-pointer so that the MSG_DONTROUTE flag can be set by recv functions.
-
-I'm not sure that j1939_session_skb_get is needed, I think that session->sk
-could be directly passed as can_skb_set_owner parameter. This patch
-is based on j1939_simple_txnext function which uses j1939_session_skb_get.
-I can provide an additional patch to remove the calls to
-j1939_session_skb_get function if you think they are not needed.
-
-Thank you,
-Devid
-
-Devid Antonio Filoni (2):
-  can: j1939: make sure that sent DAT frames are marked as TX
-  can: j1939: make sure that sent CTL frames are marked as TX
-
- net/can/j1939/transport.c | 69 ++++++++++++++++++++++++++++++++-------
- 1 file changed, 57 insertions(+), 12 deletions(-)
-
+diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
+index 307ee1174a6e..030f5fe901e1 100644
+--- a/net/can/j1939/transport.c
++++ b/net/can/j1939/transport.c
+@@ -621,18 +621,30 @@ static int j1939_tp_tx_dat(struct j1939_session *session,
+ 			   const u8 *dat, int len)
+ {
+ 	struct j1939_priv *priv = session->priv;
++	struct sk_buff *se_skb;
+ 	struct sk_buff *skb;
++	int ret;
+ 
+ 	skb = j1939_tp_tx_dat_new(priv, &session->skcb,
+ 				  false, false);
+ 	if (IS_ERR(skb))
+ 		return PTR_ERR(skb);
+ 
++	se_skb = j1939_session_skb_get(session);
++	if (se_skb)
++		can_skb_set_owner(skb, se_skb->sk);
++
+ 	skb_put_data(skb, dat, len);
+ 	if (j1939_tp_padding && len < 8)
+ 		memset(skb_put(skb, 8 - len), 0xff, 8 - len);
+ 
+-	return j1939_send_one(priv, skb);
++	ret = j1939_send_one(priv, skb);
++
++	if (ret)
++		kfree_skb(se_skb);
++	else
++		consume_skb(se_skb);
++	return ret;
+ }
+ 
+ static int j1939_xtp_do_tx_ctl(struct j1939_priv *priv,
 -- 
 2.25.1
 
