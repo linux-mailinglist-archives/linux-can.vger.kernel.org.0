@@ -2,102 +2,80 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CAB84F9D2D
-	for <lists+linux-can@lfdr.de>; Fri,  8 Apr 2022 20:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 928844F9EEF
+	for <lists+linux-can@lfdr.de>; Fri,  8 Apr 2022 23:12:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbiDHSuX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 8 Apr 2022 14:50:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58192 "EHLO
+        id S234545AbiDHVMm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 8 Apr 2022 17:12:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbiDHSuW (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 8 Apr 2022 14:50:22 -0400
-X-Greylist: delayed 172 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 08 Apr 2022 11:48:17 PDT
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF7C1C5924;
-        Fri,  8 Apr 2022 11:48:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1649443511;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:Cc:From:References:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=6u1TBR7ukFAvpGgrfPifszB9b72XH9Glp8ZeFJje1tQ=;
-    b=tiF8UtTL9XVow5CXQB6UULRZqP96I1dr/SaIzPAE9XmfnHjsMNZY1hJYMOAaWG+xSl
-    MoD2JEvfgOYrkyZIX2tGJB+HSYVHa5HDJHBdPOpx2PTGWduC6/3tS41JWSt1y4EirMe0
-    duwtax0shBcD4SQL1bnrptWQ4Pwb+dFo8IMjx8TUC0W4I87zSK36cK2L1u73SQpL0k0s
-    8VvVxh8eL5TwqKvlAsqr0wjAuWTyP9h8p0P6rWuiiqlRUvFyUOx1jrcxoOPOy7QGucpe
-    BuwUe1ecLFO7sXibsPDd3ZG9Rdcm2K/9aomU47dYBrkfIw5ROfTqOLcbY7kWmFDa8IwK
-    FaZQ==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdd0DIgVuBOfXW6v7w=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a00:6020:1cfa:f900::b82]
-    by smtp.strato.de (RZmta 47.42.2 AUTH)
-    with ESMTPSA id 4544c9y38IjAdFD
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Fri, 8 Apr 2022 20:45:10 +0200 (CEST)
-Message-ID: <c2e2c7b0-cdfb-8eb0-9550-0fb59b5cd10c@hartkopp.net>
-Date:   Fri, 8 Apr 2022 20:45:02 +0200
+        with ESMTP id S239815AbiDHVMf (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 8 Apr 2022 17:12:35 -0400
+Received: from smtpcmd01-sp1.aruba.it (smtpcmd01-sp1.aruba.it [62.149.158.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 601F3181160
+        for <linux-can@vger.kernel.org>; Fri,  8 Apr 2022 14:10:27 -0700 (PDT)
+Received: from localhost.localdomain ([93.35.164.10])
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id cvr9nij0B79nYcvr9nFy4n; Fri, 08 Apr 2022 23:09:24 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+        t=1649452164; bh=TjYG3E/+cnICxb5g+LSNmbTgbBfI9nG8Ag6knqdfm8U=;
+        h=From:To:Subject:Date:MIME-Version;
+        b=I5NhBaSSfmYcQu5wOwDE89N2XVVdtJRATQJa7gu3WuuZloBeeovmy2UVDzgUZUG6s
+         nh3R+97z7MQFwQN+5SxYODrfSVOPZrVFGJStWWqimsMC05IAAgMkG1ylsJkpa3fnwi
+         ng9lt4ejgoNY40Nj769BjBWVaVhkqT+tSKSMJKKeSRTdQAMzkq7Y50hZeyDtkHpYjl
+         qSyr9a96ot/27DnlTDXKotfMWyUAtgad7X37s1rn/g/yxqIPscMnGkZa6w7tf7d22P
+         XfjDngPHSDw/Stq1yI3UHWcwCdomswqi8Xxrc4yVpBldQO6sQENGWr9wFJ47KRZKCS
+         8E3JlTRFBN7qA==
+From:   Devid Antonio Filoni <devid.filoni@egluetechnologies.com>
+To:     Robin van der Gracht <robin@protonic.nl>,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     kernel@pengutronix.de, linux-can@vger.kernel.org,
+        Devid Antonio Filoni <devid.filoni@egluetechnologies.com>
+Subject: [PATCH 0/2] j1939: make sure that sent DAT/CTL frames are marked as TX
+Date:   Fri,  8 Apr 2022 23:09:08 +0200
+Message-Id: <20220408210910.16137-1-devid.filoni@egluetechnologies.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: peak_usb: urb aborted
-Content-Language: en-US
-To:     Paul Thomas <pthomas8589@gmail.com>, linux-can@vger.kernel.org,
-        =?UTF-8?Q?St=c3=a9phane_Grosjean?= <s.grosjean@peak-system.com>
-References: <CAD56B7dMg073f56vfaxp38=dZiAFU0iCn6kmDGiNcNtCijyFoA@mail.gmail.com>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        support@peak-system.com
-In-Reply-To: <CAD56B7dMg073f56vfaxp38=dZiAFU0iCn6kmDGiNcNtCijyFoA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfDs1cPSwuRdiCSLtLZyqg37B4TVJbz+ZxjWCtbMZPzJozG1yKobeZbVpzXO0x9SmaEyQtcDImFttjQcqnnnv1TM3NjUCsPZE7tkOZi/JsM1kNMO6IfCb
+ IFFxc4/vAv66/aVNKIOmayo1RBwRlGJOm1JViFkm7PxJH55q5fT5V6Ujg2wvrXOsRGzjXmDUm4Xrt+IOEvkqCny711VJk4svtjAC08PGbq0o4urnbh2i0o7Z
+ pgmC719EQuQsFhZMjb/PLNR7t+kqtueK7+5ghMe5nICdd292A41SY2BprEDK7jVSDb79YwTHkGceCVccT7yGBR2SocN4zQ+K52CLS72/IXvXq8sSFFxI7rTJ
+ 8qAlmjUPegJgTcWd2Ky6Sdmpooc/pA==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello,
 
+If candump -x is used to dump CAN bus traffic on an interface while a J1939
+socket is sending multi-packet messages, then the DAT and CTL frames
+show up as RX instead of TX.
 
-On 08.04.22 18:35, Paul Thomas wrote:
-> Folks,
-> 
-> I'm using a PCAN-USB adapter, and it seems to have a lot of trouble
-> under medium load. I'm getting these urb aborted messages.
-> [125054.082248] peak_usb 3-2.4.4:1.0 can0: Rx urb aborted (-71)
-> [125077.886850] peak_usb 3-2.4.4:1.0 can0: Rx urb aborted (-32)
+This patch series sets to generated struct sk_buff the owning struct sock
+pointer so that the MSG_DONTROUTE flag can be set by recv functions.
 
-As I run the same hardware here it is very likely that you have a faulty 
-CAN bus setup with
+I'm not sure that j1939_session_skb_get is needed, I think that session->sk
+could be directly passed as can_skb_set_owner parameter. This patch
+is based on j1939_simple_txnext function which uses j1939_session_skb_get.
+I can provide an additional patch to remove the calls to
+j1939_session_skb_get function if you think they are not needed.
 
-- wrong bitrate setting / sample points / etc
-- wrong or no termination
-- missing or wrong configured (other) CAN nodes
+Thank you,
+Devid
 
-I added the maintainer of the PEAK USB adapter (Stephane) to the 
-recipient list.
+Devid Antonio Filoni (2):
+  can: j1939: make sure that sent DAT frames are marked as TX
+  can: j1939: make sure that sent CTL frames are marked as TX
 
-Having the linux-can mailing list and Stephane in the recipient list is 
-sufficient to answer the above details.
+ net/can/j1939/transport.c | 69 ++++++++++++++++++++++++++++++++-------
+ 1 file changed, 57 insertions(+), 12 deletions(-)
 
-Regards,
-Oliver
+-- 
+2.25.1
 
-> 
-> Is there anything that can be done about this? This is very
-> frustrating because it makes the USB adapter very difficult to use as
-> a reliable partner of an embedded CAN device.
-> 
-> I'm using Ubuntu with 5.4.0-107-generic. Any help would be appreciated.
-> 
-> -Paul
