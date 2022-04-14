@@ -2,93 +2,100 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B97484FE879
-	for <lists+linux-can@lfdr.de>; Tue, 12 Apr 2022 21:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9C19501AF9
+	for <lists+linux-can@lfdr.de>; Thu, 14 Apr 2022 20:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352699AbiDLTMv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 12 Apr 2022 15:12:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57424 "EHLO
+        id S233542AbiDNSYh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 14 Apr 2022 14:24:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356455AbiDLTMb (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 12 Apr 2022 15:12:31 -0400
-X-Greylist: delayed 437 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 12 Apr 2022 12:10:12 PDT
-Received: from mx-list-3.rrze.uni-erlangen.de (mx-list-3.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1CE4BBAF
-        for <linux-can@vger.kernel.org>; Tue, 12 Apr 2022 12:10:12 -0700 (PDT)
-Received: from mx-rz-3.rrze.uni-erlangen.de (mx-rz-3.rrze.uni-erlangen.de [131.188.11.22])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx-list-3.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4KdFV60psLz22bJ
-        for <linux-can@vger.kernel.org>; Tue, 12 Apr 2022 21:02:54 +0200 (CEST)
-Received: from mx-rz-smart.rrze.uni-erlangen.de (mx-rz-smart.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1e])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx-rz-3.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4KdFV56tl3z25SH
-        for <linux-can@vger.kernel.org>; Tue, 12 Apr 2022 21:02:53 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fau.de; s=fau-2021;
-        t=1649790173; bh=0PMiCgbHplW/h45Pc87FbUjIvQuHXkM4jNyzzuNuRzw=;
-        h=To:Subject:Date:From:Reply-To:From:To:CC:Subject;
-        b=kAWh8A3FRkpCs5zhRLMcQ7x0COhKYBwIuPM/IwQAG9Lfj+beTGywRlUngnnEr4Q+p
-         +emh+z1E1IUHCNsqE0FHOaZ6bPbsH/2PJJAVhD4+4m9QDsu1eyjaWr1fOStxiqhnmb
-         N9MI60GEYGR29McOy4gG5U9x9gdVkD3RHdrkgzpfkTBDaF/agN4ed2aHi639/hjIS3
-         CTz62AZHShAzrY/NBdnAQ+gjJP42tSiQ+hNa4WfDY4VO2nSaTRyFEwUOipJcjIjNAE
-         q8UamK8CcbITnsqoYP9v07+zsLw44nfn8oem5gj2sutjiEYHYOViVgbEBvjFyIPjHu
-         N0mY64L+xKV4Q==
-X-Quarantine-ID: <FNv2s0zQYK9d>
-X-Virus-Scanned: amavisd-new at boeck4.rrze.uni-erlangen.de (RRZE)
-X-RRZE-Flag: Possibly-Spam
-X-RRZE-Submit-IP: 10.27.20.43
-Received: from cms3.rrze.uni-erlangen.de (cms3.rrze.uni-erlangen.de [10.27.20.43])
-        by smtp.uni-erlangen.de (Postfix) with ESMTP id 4KdFV32M8zz22bJ
-        for <linux-can@vger.kernel.org>; Tue, 12 Apr 2022 21:02:51 +0200 (CEST)
-Received: by cms3.rrze.uni-erlangen.de (Postfix, from userid 33)
-        id 4EFEF64060C; Tue, 12 Apr 2022 21:02:51 +0200 (CEST)
-To:     linux-can@vger.kernel.org
-Subject: =?UTF-8?Q?Anmeldung_Pflanzenb=C3=B6rse_=E2=80=9E?=  =?UTF-8?Q?=F0=9F=A5=B0_All_the_girls_from_next_door_are_here?=  =?UTF-8?Q?_with_their_cams!_Visit_cam:_http://inx.lv/NoVW=3F?=  =?UTF-8?Q?k4v5i_=F0=9F=A5=B0=E2=80=9C?=
-X-PHP-Originating-Script: 33:PHPMailer.php
-Date:   Tue, 12 Apr 2022 19:02:51 +0000
-From:   Botanischer Garten Erlangen <webmaster-botanischer-garten@fau.de>
-Reply-To: webmaster-botanischer-garten@fau.de
-Message-ID: <fQmkoe6V0Z4NUnIMC73NLCFrfh7wydxL5wzMDIN7S6M@cms.rrze.uni-erlangen.de>
-X-Mailer: PHPMailer 6.5.3 (https://github.com/PHPMailer/PHPMailer)
+        with ESMTP id S243914AbiDNSYg (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 14 Apr 2022 14:24:36 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9005B645E;
+        Thu, 14 Apr 2022 11:22:10 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 15so7068410ljw.8;
+        Thu, 14 Apr 2022 11:22:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bZRq3oZhUdWM7gotP1i/Bzhd8FwXVmJKlpEbuaU9E70=;
+        b=RbkSxphZC1+PfPjuq7th0mCg7rl5O1p6S2Y1dozh+P1yhRJutgNhLWnAEVy1odmFFc
+         9SiuzS4AkV62jW0bMYsHo7TLHVN/c+7vFd+P7HmgLr+3PsK79uKCYNfvmrsWaN25Rw3I
+         5P3CVfuPaWCNBiDn6AMXsPR5j7CWbsBBNRuu/86rwpNb/xwJW/31iLFGaVf/qUQp9gg3
+         NlfwSRATcnBGIoLb/uUYv6ScsbJe2JbEWxHA+vgy0qZrk5uz34rnOm5YmdtI3qcIs9/k
+         H2hVr6M3zz7U2wpeiqlQLHcXuCe07uPizBv+GkIRQ4+KwUBVb1YZleMvxVcU4Jg1PAJA
+         4h5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bZRq3oZhUdWM7gotP1i/Bzhd8FwXVmJKlpEbuaU9E70=;
+        b=15V648oVigSXanTslayohCg0S/1HaFYymPj53LSLhpcBkyclEtoQc0V+KvJnv5Q0IC
+         m3Ej2xZ4HVzi0ylrciEB5/K+de5y8y0ZBtBt+ymlcAQF2ATLtfipGPgeKPLBoH0v9zC2
+         iWafwlGiJxOaX0WZ1c2UdFxlRMC3Selx26evH++T9+kRU06/YbVTToiuWnBzdBygWw/0
+         kRsb9kwjG8roTEJ+rsXe7z4YMvZu2fSm0odOScPICMus6QCsAxu5Q97JGJc8xuaGDbdw
+         jMT2wlsG8Zm6yqc5lHixQG3C2YKk6iN1PO5IDkpUoWfwt821SQIztXOPG0RtCmP5kuNV
+         q3DA==
+X-Gm-Message-State: AOAM530DtmART9QBipuTJwhCz5Z4lMoaimdQFtip3TjkDBuQHGcfZUpA
+        lp840xyhqHqTzQvcA3m2QA3K7OrGSzqefWlD4wcL4CjNF4Q=
+X-Google-Smtp-Source: ABdhPJzdR7mcr/SyAmuNMV8NMAWpk3ps0biU05hpbUXl8no8U+aWyizyZ1JvmS5AVU4ZTOANZXpj5XPBh1kNlxGGI3o=
+X-Received: by 2002:a2e:93d5:0:b0:24b:5637:bbde with SMTP id
+ p21-20020a2e93d5000000b0024b5637bbdemr2275131ljh.256.1649960529062; Thu, 14
+ Apr 2022 11:22:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PLING_QUERY,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CAD56B7dMg073f56vfaxp38=dZiAFU0iCn6kmDGiNcNtCijyFoA@mail.gmail.com>
+ <c2e2c7b0-cdfb-8eb0-9550-0fb59b5cd10c@hartkopp.net>
+In-Reply-To: <c2e2c7b0-cdfb-8eb0-9550-0fb59b5cd10c@hartkopp.net>
+From:   Paul Thomas <pthomas8589@gmail.com>
+Date:   Thu, 14 Apr 2022 14:21:57 -0400
+Message-ID: <CAD56B7ebyPr8h2J8WCV9rBXr9LFeakB6DV1Sk2hBYdY7OEJkyA@mail.gmail.com>
+Subject: Re: peak_usb: urb aborted
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     linux-can@vger.kernel.org,
+        =?UTF-8?Q?St=C3=A9phane_Grosjean?= <s.grosjean@peak-system.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        support@peak-system.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Verkäufer: 🥰 All the girls from next door are here with their cams! Visit cam: http://inx.lv/NoVW?k4v5i 🥰 
-Telefon: 945521278339
-k5sddrz
+> On 08.04.22 18:35, Paul Thomas wrote:
+> > Folks,
+> >
+> > I'm using a PCAN-USB adapter, and it seems to have a lot of trouble
+> > under medium load. I'm getting these urb aborted messages.
+> > [125054.082248] peak_usb 3-2.4.4:1.0 can0: Rx urb aborted (-71)
+> > [125077.886850] peak_usb 3-2.4.4:1.0 can0: Rx urb aborted (-32)
+>
+> As I run the same hardware here it is very likely that you have a faulty
+> CAN bus setup with
+>
+> - wrong bitrate setting / sample points / etc
+> - wrong or no termination
+> - missing or wrong configured (other) CAN nodes
+Thanks Oliver, this might have been it, I'm using 1Mbit (up from
+100kbit) on a different board, and not getting those errors.
 
-Stand:
-Tischlänge: 3 m
-Angebot: Sonstiges: 5y67p3e1
-
-Anmerkungen:
-omv1bc
-
-Beginn der Pflanzenbörse 9:00 Uhr,  Aufbau ab 7:00 Uhr möglich
-
-Die Grund-Standgebühr beträgt  pro Aussteller 12 € bei einer Standgröße bis 2 m². 
-Überweisen Sie diesen Betrag  bitte im Voraus auf das Konto des FBGE bei der Sparkasse Erlangen: 
-IBAN DE 73 7635 0000 0000 087827, BIC BYLADEM1ERH. 
-Die Anmeldung ist erst mit dem Eingang der Grund-Standgebühr gültig! Sie erhalten von uns eine Eingangs- bzw. Anmeldebestätigung.
-
-Sollte Ihr Stand größer sein, dann kostet jeder weitere m² 12 €. Diese Zusatzkosten werden vor Ort erhoben.
-
-Rückfragen und Infos unter 09131/8522969 oder botanischer-garten@fau.de
-
-Sollten Sie nicht teilnehmen können, sagen Sie Ihre Teilnahme rechtzeitig telefonisch oder per e-Mail ab.
-Bei einer Absage der Teilnahme bis 2 Wochen vor dem Veranstaltungstermin wird der bereits bezahlte Betrag zurück überwiesen. Bei späterer Absage erfolgt keine Rückerstattung.
-
--- 
-Diese E-Mail wurde von einem Kontaktformular von Botanischer Garten Erlangen (https://www.botanischer-garten.fau.de) gesendet
-
+>
+> I added the maintainer of the PEAK USB adapter (Stephane) to the
+> recipient list.
+>
+> Having the linux-can mailing list and Stephane in the recipient list is
+> sufficient to answer the above details.
+>
+> Regards,
+> Oliver
+>
