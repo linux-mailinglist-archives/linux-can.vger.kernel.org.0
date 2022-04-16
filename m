@@ -2,100 +2,106 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9C19501AF9
-	for <lists+linux-can@lfdr.de>; Thu, 14 Apr 2022 20:22:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 928EA5034C8
+	for <lists+linux-can@lfdr.de>; Sat, 16 Apr 2022 09:49:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233542AbiDNSYh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 14 Apr 2022 14:24:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58494 "EHLO
+        id S229845AbiDPHwA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 16 Apr 2022 03:52:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243914AbiDNSYg (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 14 Apr 2022 14:24:36 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9005B645E;
-        Thu, 14 Apr 2022 11:22:10 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id 15so7068410ljw.8;
-        Thu, 14 Apr 2022 11:22:10 -0700 (PDT)
+        with ESMTP id S230132AbiDPHv7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 16 Apr 2022 03:51:59 -0400
+Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D172FFFA7
+        for <linux-can@vger.kernel.org>; Sat, 16 Apr 2022 00:49:27 -0700 (PDT)
+Received: by mail-il1-x141.google.com with SMTP id r7so5894655iln.9
+        for <linux-can@vger.kernel.org>; Sat, 16 Apr 2022 00:49:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bZRq3oZhUdWM7gotP1i/Bzhd8FwXVmJKlpEbuaU9E70=;
-        b=RbkSxphZC1+PfPjuq7th0mCg7rl5O1p6S2Y1dozh+P1yhRJutgNhLWnAEVy1odmFFc
-         9SiuzS4AkV62jW0bMYsHo7TLHVN/c+7vFd+P7HmgLr+3PsK79uKCYNfvmrsWaN25Rw3I
-         5P3CVfuPaWCNBiDn6AMXsPR5j7CWbsBBNRuu/86rwpNb/xwJW/31iLFGaVf/qUQp9gg3
-         NlfwSRATcnBGIoLb/uUYv6ScsbJe2JbEWxHA+vgy0qZrk5uz34rnOm5YmdtI3qcIs9/k
-         H2hVr6M3zz7U2wpeiqlQLHcXuCe07uPizBv+GkIRQ4+KwUBVb1YZleMvxVcU4Jg1PAJA
-         4h5w==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=KeMi8W+p20zdR41YZoRj2EapY7imNsLYkAgQIQsIzqY=;
+        b=bJd2DIgtyK+bZCVQpMa9XLiI7bVnFQgVFeGzbZ6bXamjrEFIUCNaIDR9YpvR5iTRQC
+         EoRjHn2hxdGgHpTmUXoJLhLdkz8kw8CpdMkf+RjOM2yxgJf0M2w5tnzpw0NiczM9cGQm
+         aTRY2J48j2+AVBVM6ZplapTERLwB7sqpQHn0KTPy+GATyEE1HlWbU25nZewZyTln9PiO
+         eb2iuPe3VcoLkYjZ6tmC44EeIcF1BzRiek/y+/+gg720T1wEvd/5m2iOgdTIUS3isI5Z
+         q2z1OdX/gYACU6OexrbNcXzEKBC+MKUq0Bm7V68HpmeyS3D5tFhEEP1iOfnkPKJo7x6w
+         XtNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bZRq3oZhUdWM7gotP1i/Bzhd8FwXVmJKlpEbuaU9E70=;
-        b=15V648oVigSXanTslayohCg0S/1HaFYymPj53LSLhpcBkyclEtoQc0V+KvJnv5Q0IC
-         m3Ej2xZ4HVzi0ylrciEB5/K+de5y8y0ZBtBt+ymlcAQF2ATLtfipGPgeKPLBoH0v9zC2
-         iWafwlGiJxOaX0WZ1c2UdFxlRMC3Selx26evH++T9+kRU06/YbVTToiuWnBzdBygWw/0
-         kRsb9kwjG8roTEJ+rsXe7z4YMvZu2fSm0odOScPICMus6QCsAxu5Q97JGJc8xuaGDbdw
-         jMT2wlsG8Zm6yqc5lHixQG3C2YKk6iN1PO5IDkpUoWfwt821SQIztXOPG0RtCmP5kuNV
-         q3DA==
-X-Gm-Message-State: AOAM530DtmART9QBipuTJwhCz5Z4lMoaimdQFtip3TjkDBuQHGcfZUpA
-        lp840xyhqHqTzQvcA3m2QA3K7OrGSzqefWlD4wcL4CjNF4Q=
-X-Google-Smtp-Source: ABdhPJzdR7mcr/SyAmuNMV8NMAWpk3ps0biU05hpbUXl8no8U+aWyizyZ1JvmS5AVU4ZTOANZXpj5XPBh1kNlxGGI3o=
-X-Received: by 2002:a2e:93d5:0:b0:24b:5637:bbde with SMTP id
- p21-20020a2e93d5000000b0024b5637bbdemr2275131ljh.256.1649960529062; Thu, 14
- Apr 2022 11:22:09 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=KeMi8W+p20zdR41YZoRj2EapY7imNsLYkAgQIQsIzqY=;
+        b=aE7IbdI/4YcBNhvABciAScy9fumUFdF1qiAOpLWda8w6U4eBSE0+elk91ZYlgkQ1Ej
+         8+R1ZvIJhZTLgjjQCMLQmMew2V6WQ0X/E5tZpEs/166W2joQdcbeBj4IRlvIAA4Alce3
+         N6kSL79TUbLxxYVFyvFkAyk4kOTroJxEEqdMQOpLdwhx67CaeCp1Ci08aM1bH/MbJm+2
+         d59BdWgYZcBmQe01GIk03xNPpjC/4wdIsCytj4FXg36c7sA2u0LHwrwboT/IK8DAG+ED
+         3eSKs3G22tIqFGfus05HA0BUAn+t+w8HBJ1lOG24HG36fkIsQ0WW0U+OBmv31h17dWxc
+         6mpQ==
+X-Gm-Message-State: AOAM533LIN/fnPyvxxDEY/BjxWxWutsuy9M1MZNB9vj0mWtvVM2eqKo6
+        SvrG+T4mKSyNkkpvOgdQUqulgBsDs0/lS0RGalE=
+X-Google-Smtp-Source: ABdhPJzPQ782jxaaybf4v05kBQtFRTzv0MMrux20NcZ4Q10XmGrK6dnUIabFDBNBmBOv8fFyQY5zqzYAgf4Cnc3KaCc=
+X-Received: by 2002:a92:508:0:b0:2cb:ebd8:a76b with SMTP id
+ q8-20020a920508000000b002cbebd8a76bmr1009500ile.156.1650095366830; Sat, 16
+ Apr 2022 00:49:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAD56B7dMg073f56vfaxp38=dZiAFU0iCn6kmDGiNcNtCijyFoA@mail.gmail.com>
- <c2e2c7b0-cdfb-8eb0-9550-0fb59b5cd10c@hartkopp.net>
-In-Reply-To: <c2e2c7b0-cdfb-8eb0-9550-0fb59b5cd10c@hartkopp.net>
-From:   Paul Thomas <pthomas8589@gmail.com>
-Date:   Thu, 14 Apr 2022 14:21:57 -0400
-Message-ID: <CAD56B7ebyPr8h2J8WCV9rBXr9LFeakB6DV1Sk2hBYdY7OEJkyA@mail.gmail.com>
-Subject: Re: peak_usb: urb aborted
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     linux-can@vger.kernel.org,
-        =?UTF-8?Q?St=C3=A9phane_Grosjean?= <s.grosjean@peak-system.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        support@peak-system.com
+Received: by 2002:a05:6638:1309:0:0:0:0 with HTTP; Sat, 16 Apr 2022 00:49:26
+ -0700 (PDT)
+Reply-To: daniel.seyba@yahoo.com
+From:   Seyba Daniel <royhalton13@gmail.com>
+Date:   Sat, 16 Apr 2022 09:49:26 +0200
+Message-ID: <CALSxb2w9zQYotuLcRSCPns53ksvT9UrEMVx-1Cp1f8RE7er3cA@mail.gmail.com>
+Subject: Hello,
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:141 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [royhalton13[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [royhalton13[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-> On 08.04.22 18:35, Paul Thomas wrote:
-> > Folks,
-> >
-> > I'm using a PCAN-USB adapter, and it seems to have a lot of trouble
-> > under medium load. I'm getting these urb aborted messages.
-> > [125054.082248] peak_usb 3-2.4.4:1.0 can0: Rx urb aborted (-71)
-> > [125077.886850] peak_usb 3-2.4.4:1.0 can0: Rx urb aborted (-32)
->
-> As I run the same hardware here it is very likely that you have a faulty
-> CAN bus setup with
->
-> - wrong bitrate setting / sample points / etc
-> - wrong or no termination
-> - missing or wrong configured (other) CAN nodes
-Thanks Oliver, this might have been it, I'm using 1Mbit (up from
-100kbit) on a different board, and not getting those errors.
+Hello,
 
->
-> I added the maintainer of the PEAK USB adapter (Stephane) to the
-> recipient list.
->
-> Having the linux-can mailing list and Stephane in the recipient list is
-> sufficient to answer the above details.
->
-> Regards,
-> Oliver
->
+I am so sorry contacting you in this means especially when we have never
+met before. I urgently seek your service to represent me in investing in
+your region / country and you will be rewarded for your service without
+affecting your present job with very little time invested in it.
+
+My interest is in buying real estate, private schools or companies with
+potentials for rapid growth in long terms.
+
+So please confirm interest by responding back.
+
+My dearest regards
+
+Seyba Daniel
