@@ -2,48 +2,43 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64D0D504831
-	for <lists+linux-can@lfdr.de>; Sun, 17 Apr 2022 17:29:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74BCB504957
+	for <lists+linux-can@lfdr.de>; Sun, 17 Apr 2022 21:43:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234320AbiDQPcS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 17 Apr 2022 11:32:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44484 "EHLO
+        id S234927AbiDQTqW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 17 Apr 2022 15:46:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234315AbiDQPcS (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 17 Apr 2022 11:32:18 -0400
+        with ESMTP id S234925AbiDQTqV (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 17 Apr 2022 15:46:21 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C05F636E0A
-        for <linux-can@vger.kernel.org>; Sun, 17 Apr 2022 08:29:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465B165DB
+        for <linux-can@vger.kernel.org>; Sun, 17 Apr 2022 12:43:45 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1ng6qJ-0007MS-Di
-        for linux-can@vger.kernel.org; Sun, 17 Apr 2022 17:29:39 +0200
+        id 1ngAoB-0003yA-Pp
+        for linux-can@vger.kernel.org; Sun, 17 Apr 2022 21:43:43 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 4F25B64EB7
-        for <linux-can@vger.kernel.org>; Sun, 17 Apr 2022 15:29:38 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id 47F0E64F7F
+        for <linux-can@vger.kernel.org>; Sun, 17 Apr 2022 19:43:43 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id B841564EAC;
-        Sun, 17 Apr 2022 15:29:37 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id F260964F7D;
+        Sun, 17 Apr 2022 19:43:42 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 86a3c89b;
-        Sun, 17 Apr 2022 15:29:36 +0000 (UTC)
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 5092faac;
+        Sun, 17 Apr 2022 19:43:42 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Oliver Hartkopp <socketcan@hartkopp.net>,
-        syzbot+2339c27f5c66c652843e@syzkaller.appspotmail.com,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net] can: isotp: stop timeout monitoring when no first frame was sent
-Date:   Sun, 17 Apr 2022 17:29:34 +0200
-Message-Id: <20220417152934.2696539-2-mkl@pengutronix.de>
+To:     linux-can@vger.kernel.org
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH can-next] can: rx-offload: rename can_rx_offload_queue_sorted() -> can_rx_offload_queue_timestamp()
+Date:   Sun, 17 Apr 2022 21:43:28 +0200
+Message-Id: <20220417194327.2699059-1-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220417152934.2696539-1-mkl@pengutronix.de>
-References: <20220417152934.2696539-1-mkl@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
@@ -59,66 +54,169 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Oliver Hartkopp <socketcan@hartkopp.net>
+This patch renames the function can_rx_offload_queue_sorted() to
+can_rx_offload_queue_timestamp(). This better describes what the
+function does, it adds a newly RX'ed skb to the sorted queue by its
+timestamp.
 
-The first attempt to fix a the 'impossible' WARN_ON_ONCE(1) in
-isotp_tx_timer_handler() focussed on the identical CAN IDs created by
-the syzbot reproducer and lead to upstream fix/commit 3ea566422cbd
-("can: isotp: sanitize CAN ID checks in isotp_bind()"). But this did
-not catch the root cause of the wrong tx.state in the tx_timer handler.
-
-In the isotp 'first frame' case a timeout monitoring needs to be started
-before the 'first frame' is send. But when this sending failed the timeout
-monitoring for this specific frame has to be disabled too.
-
-Otherwise the tx_timer is fired with the 'warn me' tx.state of ISOTP_IDLE.
-
-Fixes: e057dd3fc20f ("can: add ISO 15765-2:2016 transport protocol")
-Link: https://lore.kernel.org/all/20220405175112.2682-1-socketcan@hartkopp.net
-Reported-by: syzbot+2339c27f5c66c652843e@syzkaller.appspotmail.com
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- net/can/isotp.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ drivers/net/can/dev/rx-offload.c               | 6 +++---
+ drivers/net/can/flexcan/flexcan-core.c         | 4 ++--
+ drivers/net/can/m_can/m_can.c                  | 2 +-
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 6 +++---
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-rx.c   | 2 +-
+ drivers/net/can/ti_hecc.c                      | 4 ++--
+ include/linux/can/rx-offload.h                 | 4 ++--
+ 7 files changed, 14 insertions(+), 14 deletions(-)
 
-diff --git a/net/can/isotp.c b/net/can/isotp.c
-index bafb0fb5f0e0..ff5d7870294e 100644
---- a/net/can/isotp.c
-+++ b/net/can/isotp.c
-@@ -906,6 +906,7 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
- 	struct canfd_frame *cf;
- 	int ae = (so->opt.flags & CAN_ISOTP_EXTEND_ADDR) ? 1 : 0;
- 	int wait_tx_done = (so->opt.flags & CAN_ISOTP_WAIT_TX_DONE) ? 1 : 0;
-+	s64 hrtimer_sec = 0;
- 	int off;
- 	int err;
+diff --git a/drivers/net/can/dev/rx-offload.c b/drivers/net/can/dev/rx-offload.c
+index 7f80d8e1e750..6d0dc18c03e7 100644
+--- a/drivers/net/can/dev/rx-offload.c
++++ b/drivers/net/can/dev/rx-offload.c
+@@ -221,7 +221,7 @@ int can_rx_offload_irq_offload_fifo(struct can_rx_offload *offload)
+ }
+ EXPORT_SYMBOL_GPL(can_rx_offload_irq_offload_fifo);
  
-@@ -1004,7 +1005,9 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
- 		isotp_create_fframe(cf, so, ae);
+-int can_rx_offload_queue_sorted(struct can_rx_offload *offload,
++int can_rx_offload_queue_timestamp(struct can_rx_offload *offload,
+ 				struct sk_buff *skb, u32 timestamp)
+ {
+ 	struct can_rx_offload_cb *cb;
+@@ -240,7 +240,7 @@ int can_rx_offload_queue_sorted(struct can_rx_offload *offload,
  
- 		/* start timeout for FC */
--		hrtimer_start(&so->txtimer, ktime_set(1, 0), HRTIMER_MODE_REL_SOFT);
-+		hrtimer_sec = 1;
-+		hrtimer_start(&so->txtimer, ktime_set(hrtimer_sec, 0),
-+			      HRTIMER_MODE_REL_SOFT);
- 	}
+ 	return 0;
+ }
+-EXPORT_SYMBOL_GPL(can_rx_offload_queue_sorted);
++EXPORT_SYMBOL_GPL(can_rx_offload_queue_timestamp);
  
- 	/* send the first or only CAN frame */
-@@ -1017,6 +1020,11 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
+ unsigned int can_rx_offload_get_echo_skb(struct can_rx_offload *offload,
+ 					 unsigned int idx, u32 timestamp,
+@@ -256,7 +256,7 @@ unsigned int can_rx_offload_get_echo_skb(struct can_rx_offload *offload,
+ 	if (!skb)
+ 		return 0;
+ 
+-	err = can_rx_offload_queue_sorted(offload, skb, timestamp);
++	err = can_rx_offload_queue_timestamp(offload, skb, timestamp);
  	if (err) {
- 		pr_notice_once("can-isotp: %s: can_send_ret %pe\n",
- 			       __func__, ERR_PTR(err));
-+
-+		/* no transmission -> no timeout monitoring */
-+		if (hrtimer_sec)
-+			hrtimer_cancel(&so->txtimer);
-+
- 		goto err_out_drop;
+ 		stats->rx_errors++;
+ 		stats->tx_fifo_errors++;
+diff --git a/drivers/net/can/flexcan/flexcan-core.c b/drivers/net/can/flexcan/flexcan-core.c
+index 74d7fcbfd065..389bd9da7e9a 100644
+--- a/drivers/net/can/flexcan/flexcan-core.c
++++ b/drivers/net/can/flexcan/flexcan-core.c
+@@ -845,7 +845,7 @@ static void flexcan_irq_bus_err(struct net_device *dev, u32 reg_esr)
+ 	if (tx_errors)
+ 		dev->stats.tx_errors++;
+ 
+-	err = can_rx_offload_queue_sorted(&priv->offload, skb, timestamp);
++	err = can_rx_offload_queue_timestamp(&priv->offload, skb, timestamp);
+ 	if (err)
+ 		dev->stats.rx_fifo_errors++;
+ }
+@@ -892,7 +892,7 @@ static void flexcan_irq_state(struct net_device *dev, u32 reg_esr)
+ 	if (unlikely(new_state == CAN_STATE_BUS_OFF))
+ 		can_bus_off(dev);
+ 
+-	err = can_rx_offload_queue_sorted(&priv->offload, skb, timestamp);
++	err = can_rx_offload_queue_timestamp(&priv->offload, skb, timestamp);
+ 	if (err)
+ 		dev->stats.rx_fifo_errors++;
+ }
+diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+index b3b5bc1c803b..2779bba390f2 100644
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -464,7 +464,7 @@ static void m_can_receive_skb(struct m_can_classdev *cdev,
+ 		struct net_device_stats *stats = &cdev->net->stats;
+ 		int err;
+ 
+-		err = can_rx_offload_queue_sorted(&cdev->offload, skb,
++		err = can_rx_offload_queue_timestamp(&cdev->offload, skb,
+ 						  timestamp);
+ 		if (err)
+ 			stats->rx_fifo_errors++;
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+index f9dd8fdba12b..230ec60003fc 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+@@ -916,7 +916,7 @@ static int mcp251xfd_handle_rxovif(struct mcp251xfd_priv *priv)
+ 	cf->can_id |= CAN_ERR_CRTL;
+ 	cf->data[1] = CAN_ERR_CRTL_RX_OVERFLOW;
+ 
+-	err = can_rx_offload_queue_sorted(&priv->offload, skb, timestamp);
++	err = can_rx_offload_queue_timestamp(&priv->offload, skb, timestamp);
+ 	if (err)
+ 		stats->rx_fifo_errors++;
+ 
+@@ -1021,7 +1021,7 @@ static int mcp251xfd_handle_ivmif(struct mcp251xfd_priv *priv)
+ 		return 0;
+ 
+ 	mcp251xfd_skb_set_timestamp(priv, skb, timestamp);
+-	err = can_rx_offload_queue_sorted(&priv->offload, skb, timestamp);
++	err = can_rx_offload_queue_timestamp(&priv->offload, skb, timestamp);
+ 	if (err)
+ 		stats->rx_fifo_errors++;
+ 
+@@ -1094,7 +1094,7 @@ static int mcp251xfd_handle_cerrif(struct mcp251xfd_priv *priv)
+ 		cf->data[7] = bec.rxerr;
  	}
  
-
-base-commit: 49aefd131739df552f83c566d0665744c30b1d70
+-	err = can_rx_offload_queue_sorted(&priv->offload, skb, timestamp);
++	err = can_rx_offload_queue_timestamp(&priv->offload, skb, timestamp);
+ 	if (err)
+ 		stats->rx_fifo_errors++;
+ 
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-rx.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-rx.c
+index d09f7fbf2ba7..ced8d9c81f8c 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-rx.c
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-rx.c
+@@ -173,7 +173,7 @@ mcp251xfd_handle_rxif_one(struct mcp251xfd_priv *priv,
+ 	}
+ 
+ 	mcp251xfd_hw_rx_obj_to_skb(priv, hw_rx_obj, skb);
+-	err = can_rx_offload_queue_sorted(&priv->offload, skb, hw_rx_obj->ts);
++	err = can_rx_offload_queue_timestamp(&priv->offload, skb, hw_rx_obj->ts);
+ 	if (err)
+ 		stats->rx_fifo_errors++;
+ 
+diff --git a/drivers/net/can/ti_hecc.c b/drivers/net/can/ti_hecc.c
+index ff31b993ab17..bb3f2e3b004c 100644
+--- a/drivers/net/can/ti_hecc.c
++++ b/drivers/net/can/ti_hecc.c
+@@ -633,7 +633,7 @@ static int ti_hecc_error(struct net_device *ndev, int int_status,
+ 			cf->data[3] = CAN_ERR_PROT_LOC_ACK;
+ 
+ 		timestamp = hecc_read(priv, HECC_CANLNT);
+-		err = can_rx_offload_queue_sorted(&priv->offload, skb,
++		err = can_rx_offload_queue_timestamp(&priv->offload, skb,
+ 						  timestamp);
+ 		if (err)
+ 			ndev->stats.rx_fifo_errors++;
+@@ -668,7 +668,7 @@ static void ti_hecc_change_state(struct net_device *ndev,
+ 	}
+ 
+ 	timestamp = hecc_read(priv, HECC_CANLNT);
+-	err = can_rx_offload_queue_sorted(&priv->offload, skb, timestamp);
++	err = can_rx_offload_queue_timestamp(&priv->offload, skb, timestamp);
+ 	if (err)
+ 		ndev->stats.rx_fifo_errors++;
+ }
+diff --git a/include/linux/can/rx-offload.h b/include/linux/can/rx-offload.h
+index c11477620403..c205c51d79c9 100644
+--- a/include/linux/can/rx-offload.h
++++ b/include/linux/can/rx-offload.h
+@@ -42,8 +42,8 @@ int can_rx_offload_add_manual(struct net_device *dev,
+ int can_rx_offload_irq_offload_timestamp(struct can_rx_offload *offload,
+ 					 u64 reg);
+ int can_rx_offload_irq_offload_fifo(struct can_rx_offload *offload);
+-int can_rx_offload_queue_sorted(struct can_rx_offload *offload,
+-				struct sk_buff *skb, u32 timestamp);
++int can_rx_offload_queue_timestamp(struct can_rx_offload *offload,
++				   struct sk_buff *skb, u32 timestamp);
+ unsigned int can_rx_offload_get_echo_skb(struct can_rx_offload *offload,
+ 					 unsigned int idx, u32 timestamp,
+ 					 unsigned int *frame_len_ptr);
 -- 
 2.35.1
 
