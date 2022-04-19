@@ -2,44 +2,45 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CC7A5071B1
-	for <lists+linux-can@lfdr.de>; Tue, 19 Apr 2022 17:26:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 905B65071AF
+	for <lists+linux-can@lfdr.de>; Tue, 19 Apr 2022 17:26:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353858AbiDSP2v (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 19 Apr 2022 11:28:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32810 "EHLO
+        id S1353877AbiDSP2w (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 19 Apr 2022 11:28:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353876AbiDSP2u (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 19 Apr 2022 11:28:50 -0400
+        with ESMTP id S1353874AbiDSP2t (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 19 Apr 2022 11:28:49 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1879313FA8
-        for <linux-can@vger.kernel.org>; Tue, 19 Apr 2022 08:26:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC71613F88
+        for <linux-can@vger.kernel.org>; Tue, 19 Apr 2022 08:26:04 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1ngpjv-0001O1-8n
+        id 1ngpju-0001NP-Vw
         for linux-can@vger.kernel.org; Tue, 19 Apr 2022 17:26:03 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id B9A6966B00
+        by bjornoya.blackshift.org (Postfix) with SMTP id B069F66AF6
         for <linux-can@vger.kernel.org>; Tue, 19 Apr 2022 15:25:56 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 3B24D66ABD;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 491EE66AC4;
         Tue, 19 Apr 2022 15:25:56 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 41dc2c5c;
-        Tue, 19 Apr 2022 15:25:55 +0000 (UTC)
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id c248e8f3;
+        Tue, 19 Apr 2022 15:25:56 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next 06/17] MAINTAINERS: rectify entry for XILINX CAN DRIVER
-Date:   Tue, 19 Apr 2022 17:25:43 +0200
-Message-Id: <20220419152554.2925353-7-mkl@pengutronix.de>
+        kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
+        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>
+Subject: [PATCH net-next 07/17] can: xilinx_can: mark bit timing constants as const
+Date:   Tue, 19 Apr 2022 17:25:44 +0200
+Message-Id: <20220419152554.2925353-8-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220419152554.2925353-1-mkl@pengutronix.de>
 References: <20220419152554.2925353-1-mkl@pengutronix.de>
@@ -58,38 +59,39 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+This patch marks the bit timing constants as const.
 
-Commit 7843d3c8e5e6 ("dt-bindings: can: xilinx_can: Convert Xilinx CAN
-binding to YAML") converts xilinx_can.txt to xilinx,can.yaml, but
-missed to adjust its reference in MAINTAINERS.
-
-Hence, ./scripts/get_maintainer.pl --self-test=patterns complains
-about a broken reference.
-
-Repair this file reference in XILINX CAN DRIVER.
-
-Fixes: 7843d3c8e5e6 ("dt-bindings: can: xilinx_can: Convert Xilinx CAN binding to YAML")
-Link: https://lore.kernel.org/all/20220321122840.17841-1-lukas.bulwahn@gmail.com
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Fixes: c223da689324 ("can: xilinx_can: Add support for CANFD FD frames")
+Link: https://lore.kernel.org/all/20220317203119.792552-1-mkl@pengutronix.de
+Cc: Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
+Cc: Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/can/xilinx_can.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 84158e08e6e9..eaa1a074bf16 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -21632,7 +21632,7 @@ M:	Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
- R:	Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>
- L:	linux-can@vger.kernel.org
- S:	Maintained
--F:	Documentation/devicetree/bindings/net/can/xilinx_can.txt
-+F:	Documentation/devicetree/bindings/net/can/xilinx,can.yaml
- F:	drivers/net/can/xilinx_can.c
+diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.c
+index e562c5ab1149..43f0c6a064ba 100644
+--- a/drivers/net/can/xilinx_can.c
++++ b/drivers/net/can/xilinx_can.c
+@@ -239,7 +239,7 @@ static const struct can_bittiming_const xcan_bittiming_const_canfd = {
+ };
  
- XILINX GPIO DRIVER
+ /* AXI CANFD Data Bittiming constants as per AXI CANFD 1.0 specs */
+-static struct can_bittiming_const xcan_data_bittiming_const_canfd = {
++static const struct can_bittiming_const xcan_data_bittiming_const_canfd = {
+ 	.name = DRIVER_NAME,
+ 	.tseg1_min = 1,
+ 	.tseg1_max = 16,
+@@ -265,7 +265,7 @@ static const struct can_bittiming_const xcan_bittiming_const_canfd2 = {
+ };
+ 
+ /* AXI CANFD 2.0 Data Bittiming constants as per AXI CANFD 2.0 spec */
+-static struct can_bittiming_const xcan_data_bittiming_const_canfd2 = {
++static const struct can_bittiming_const xcan_data_bittiming_const_canfd2 = {
+ 	.name = DRIVER_NAME,
+ 	.tseg1_min = 1,
+ 	.tseg1_max = 32,
 -- 
 2.35.1
 
