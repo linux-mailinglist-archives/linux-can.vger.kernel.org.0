@@ -2,47 +2,52 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 704B4506B3D
-	for <lists+linux-can@lfdr.de>; Tue, 19 Apr 2022 13:42:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FD255071B8
+	for <lists+linux-can@lfdr.de>; Tue, 19 Apr 2022 17:26:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351558AbiDSLog (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 19 Apr 2022 07:44:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46350 "EHLO
+        id S1353815AbiDSP2n (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 19 Apr 2022 11:28:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352299AbiDSLnJ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 19 Apr 2022 07:43:09 -0400
-Received: from mail1.wrs.com (unknown-3-146.windriver.com [147.11.3.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EEC16386;
-        Tue, 19 Apr 2022 04:39:49 -0700 (PDT)
-Received: from ala-exchng01.corp.ad.wrs.com (ala-exchng01.corp.ad.wrs.com [147.11.82.252])
-        by mail1.wrs.com (8.15.2/8.15.2) with ESMTPS id 23JBdbSx005118
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 19 Apr 2022 04:39:37 -0700
-Received: from otp-dpanait-l2.corp.ad.wrs.com (128.224.125.182) by
- ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12; Tue, 19 Apr 2022 04:39:34 -0700
-From:   Dragos-Marian Panait <dragos.panait@windriver.com>
-To:     <stable@vger.kernel.org>
-CC:     <dragos.panait@windriver.com>, <wg@grandegger.com>,
-        <mkl@pengutronix.de>, <davem@davemloft.net>,
-        <paskripkin@gmail.com>, <gregkh@linuxfoundation.org>,
-        <hbh25y@gmail.com>, <linux-can@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 4.14 1/1] can: usb_8dev: usb_8dev_start_xmit(): fix double dev_kfree_skb() in error path
-Date:   Tue, 19 Apr 2022 14:38:34 +0300
-Message-ID: <20220419113834.3116927-2-dragos.panait@windriver.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220419113834.3116927-1-dragos.panait@windriver.com>
-References: <20220419113834.3116927-1-dragos.panait@windriver.com>
+        with ESMTP id S1353814AbiDSP2m (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 19 Apr 2022 11:28:42 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8859913F6C
+        for <linux-can@vger.kernel.org>; Tue, 19 Apr 2022 08:25:59 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1ngpjp-0001Ig-Pr
+        for linux-can@vger.kernel.org; Tue, 19 Apr 2022 17:25:57 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 4186566AC1
+        for <linux-can@vger.kernel.org>; Tue, 19 Apr 2022 15:25:56 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id EC56266AAD;
+        Tue, 19 Apr 2022 15:25:55 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 0b875914;
+        Tue, 19 Apr 2022 15:25:55 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH net-next 0/17] pull-request: can-next 2022-04-19
+Date:   Tue, 19 Apr 2022 17:25:37 +0200
+Message-Id: <20220419152554.2925353-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [128.224.125.182]
-X-ClientProxiedBy: ala-exchng01.corp.ad.wrs.com (147.11.82.252) To
- ala-exchng01.corp.ad.wrs.com (147.11.82.252)
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,73 +55,133 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Hangyu Hua <hbh25y@gmail.com>
+Hello Jakub, hello David,
 
-commit 3d3925ff6433f98992685a9679613a2cc97f3ce2 upstream.
+this is a pull request of 17 patches for net-next/master.
 
-There is no need to call dev_kfree_skb() when usb_submit_urb() fails
-because can_put_echo_skb() deletes original skb and
-can_free_echo_skb() deletes the cloned skb.
+The first 2 patches are by me and target the CAN driver
+infrastructure. One patch renames a function in the rx_offload helper
+the other one updates the CAN bitrate calculation to prefer small bit
+rate pre-scalers over larger ones, which is encouraged by the CAN in
+Automation.
 
-Fixes: 0024d8ad1639 ("can: usb_8dev: Add support for USB2CAN interface from 8 devices")
-Link: https://lore.kernel.org/all/20220311080614.45229-1-hbh25y@gmail.com
-Cc: stable@vger.kernel.org
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-[DP: adjusted params of can_free_echo_skb() for 4.14 stable]
-Signed-off-by: Dragos-Marian Panait <dragos.panait@windriver.com>
+Kris Bahnsen contributes a patch to fix the links to Technologic
+Systems web resources in the sja1000 driver.
+
+Christophe Leroy's patch prepares the mpc5xxx_can driver for upcoming
+powerpc header cleanup.
+
+Minghao Chi's patch converts the flexcan driver to use
+pm_runtime_resume_and_get().
+
+The next 2 patches target the Xilinx CAN driver. Lukas Bulwahn's patch
+fixes an entry in the MAINTAINERS file. A patch by me marks the bit
+timing constants as const.
+
+Wolfram Sang's patch documents r8a77961 support on the
+renesas,rcar-canfd bindings document.
+
+The next 2 patches are by me and add support for the mcp251863 chip to
+the mcp251xfd driver.
+
+The last 7 patches are by Pavel Pisa, Martin Jerabek et al. and add
+the ctucanfd driver for the CTU CAN FD IP Core.
+
+regards,
+Marc
+
 ---
- drivers/net/can/usb/usb_8dev.c | 30 ++++++++++++++----------------
- 1 file changed, 14 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/net/can/usb/usb_8dev.c b/drivers/net/can/usb/usb_8dev.c
-index df99354ec12a..232f45f722f0 100644
---- a/drivers/net/can/usb/usb_8dev.c
-+++ b/drivers/net/can/usb/usb_8dev.c
-@@ -681,9 +681,20 @@ static netdev_tx_t usb_8dev_start_xmit(struct sk_buff *skb,
- 	atomic_inc(&priv->active_tx_urbs);
- 
- 	err = usb_submit_urb(urb, GFP_ATOMIC);
--	if (unlikely(err))
--		goto failed;
--	else if (atomic_read(&priv->active_tx_urbs) >= MAX_TX_URBS)
-+	if (unlikely(err)) {
-+		can_free_echo_skb(netdev, context->echo_index);
-+
-+		usb_unanchor_urb(urb);
-+		usb_free_coherent(priv->udev, size, buf, urb->transfer_dma);
-+
-+		atomic_dec(&priv->active_tx_urbs);
-+
-+		if (err == -ENODEV)
-+			netif_device_detach(netdev);
-+		else
-+			netdev_warn(netdev, "failed tx_urb %d\n", err);
-+		stats->tx_dropped++;
-+	} else if (atomic_read(&priv->active_tx_urbs) >= MAX_TX_URBS)
- 		/* Slow down tx path */
- 		netif_stop_queue(netdev);
- 
-@@ -702,19 +713,6 @@ static netdev_tx_t usb_8dev_start_xmit(struct sk_buff *skb,
- 
- 	return NETDEV_TX_BUSY;
- 
--failed:
--	can_free_echo_skb(netdev, context->echo_index);
--
--	usb_unanchor_urb(urb);
--	usb_free_coherent(priv->udev, size, buf, urb->transfer_dma);
--
--	atomic_dec(&priv->active_tx_urbs);
--
--	if (err == -ENODEV)
--		netif_device_detach(netdev);
--	else
--		netdev_warn(netdev, "failed tx_urb %d\n", err);
--
- nomembuf:
- 	usb_free_urb(urb);
- 
--- 
-2.17.1
+The following changes since commit cc4bdef26ecd56de16a04bc6d99aa10ff9076498:
+
+  Merge branch 'rtnetlink-improve-alt_ifname-config-and-fix-dangerous-group-usage' (2022-04-19 13:39:01 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git tags/linux-can-next-for-5.19-20220419
+
+for you to fetch changes up to cfdb2f365cb9de8f2fd1fb726d82b5bae5e042ab:
+
+  MAINTAINERS: Add maintainers for CTU CAN FD IP core driver (2022-04-19 17:12:15 +0200)
+
+----------------------------------------------------------------
+linux-can-next-for-5.19-20220419
+
+----------------------------------------------------------------
+Christophe Leroy (1):
+      can: mscan: mpc5xxx_can: Prepare cleanup of powerpc's asm/prom.h
+
+Kris Bahnsen (1):
+      can: Fix Links to Technologic Systems web resources
+
+Lukas Bulwahn (1):
+      MAINTAINERS: rectify entry for XILINX CAN DRIVER
+
+Marc Kleine-Budde (5):
+      can: rx-offload: rename can_rx_offload_queue_sorted() -> can_rx_offload_queue_timestamp()
+      can: bittiming: can_calc_bittiming(): prefer small bit rate pre-scalers over larger ones
+      can: xilinx_can: mark bit timing constants as const
+      dt-binding: can: mcp251xfd: add binding information for mcp251863
+      can: mcp251xfd: add support for mcp251863
+
+Martin Jerabek (1):
+      can: ctucanfd: add support for CTU CAN FD open-source IP core - bus independent part.
+
+Minghao Chi (1):
+      can: flexcan: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
+
+Pavel Pisa (6):
+      dt-bindings: vendor-prefix: add prefix for the Czech Technical University in Prague.
+      dt-bindings: net: can: binding for CTU CAN FD open-source IP core.
+      can: ctucanfd: CTU CAN FD open-source IP core - PCI bus support.
+      can: ctucanfd: CTU CAN FD open-source IP core - platform/SoC support.
+      docs: ctucanfd: CTU CAN FD open-source IP core documentation.
+      MAINTAINERS: Add maintainers for CTU CAN FD IP core driver
+
+Wolfram Sang (1):
+      dt-bindings: can: renesas,rcar-canfd: document r8a77961 support
+
+ .../devicetree/bindings/net/can/ctu,ctucanfd.yaml  |   63 +
+ .../bindings/net/can/microchip,mcp251xfd.yaml      |   19 +-
+ .../bindings/net/can/renesas,rcar-canfd.yaml       |    1 +
+ .../devicetree/bindings/vendor-prefixes.yaml       |    2 +
+ .../device_drivers/can/ctu/ctucanfd-driver.rst     |  639 +++++++++
+ .../device_drivers/can/ctu/fsm_txt_buffer_user.svg |  151 ++
+ MAINTAINERS                                        |   10 +-
+ drivers/net/can/Kconfig                            |    1 +
+ drivers/net/can/Makefile                           |    1 +
+ drivers/net/can/ctucanfd/Kconfig                   |   34 +
+ drivers/net/can/ctucanfd/Makefile                  |   10 +
+ drivers/net/can/ctucanfd/ctucanfd.h                |   82 ++
+ drivers/net/can/ctucanfd/ctucanfd_base.c           | 1490 ++++++++++++++++++++
+ drivers/net/can/ctucanfd/ctucanfd_kframe.h         |   77 +
+ drivers/net/can/ctucanfd/ctucanfd_kregs.h          |  325 +++++
+ drivers/net/can/ctucanfd/ctucanfd_pci.c            |  304 ++++
+ drivers/net/can/ctucanfd/ctucanfd_platform.c       |  132 ++
+ drivers/net/can/dev/bittiming.c                    |    2 +-
+ drivers/net/can/dev/rx-offload.c                   |    6 +-
+ drivers/net/can/flexcan/flexcan-core.c             |   16 +-
+ drivers/net/can/m_can/m_can.c                      |    2 +-
+ drivers/net/can/mscan/mpc5xxx_can.c                |    2 +
+ drivers/net/can/sja1000/Kconfig                    |    2 +-
+ drivers/net/can/sja1000/tscan1.c                   |    7 +-
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c     |   25 +-
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-rx.c       |    2 +-
+ drivers/net/can/spi/mcp251xfd/mcp251xfd.h          |   12 +-
+ drivers/net/can/ti_hecc.c                          |    4 +-
+ drivers/net/can/xilinx_can.c                       |    4 +-
+ include/linux/can/rx-offload.h                     |    4 +-
+ 30 files changed, 3382 insertions(+), 47 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/can/ctu,ctucanfd.yaml
+ create mode 100644 Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst
+ create mode 100644 Documentation/networking/device_drivers/can/ctu/fsm_txt_buffer_user.svg
+ create mode 100644 drivers/net/can/ctucanfd/Kconfig
+ create mode 100644 drivers/net/can/ctucanfd/Makefile
+ create mode 100644 drivers/net/can/ctucanfd/ctucanfd.h
+ create mode 100644 drivers/net/can/ctucanfd/ctucanfd_base.c
+ create mode 100644 drivers/net/can/ctucanfd/ctucanfd_kframe.h
+ create mode 100644 drivers/net/can/ctucanfd/ctucanfd_kregs.h
+ create mode 100644 drivers/net/can/ctucanfd/ctucanfd_pci.c
+ create mode 100644 drivers/net/can/ctucanfd/ctucanfd_platform.c
+
 
