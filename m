@@ -2,55 +2,50 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E41DD504E63
-	for <lists+linux-can@lfdr.de>; Mon, 18 Apr 2022 11:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C7E45065D6
+	for <lists+linux-can@lfdr.de>; Tue, 19 Apr 2022 09:28:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233551AbiDRJcw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 18 Apr 2022 05:32:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50912 "EHLO
+        id S230282AbiDSHay (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 19 Apr 2022 03:30:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbiDRJcv (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 18 Apr 2022 05:32:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9086215FFE;
-        Mon, 18 Apr 2022 02:30:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C1016119B;
-        Mon, 18 Apr 2022 09:30:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 70AC8C385A8;
-        Mon, 18 Apr 2022 09:30:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650274211;
-        bh=IqTxnwNtJXJUDGusPAvkbyyh35OmJ2YAsRP7xYuk54U=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=D5cslCjdOuqW3V6yNJd0yeShqTVKFvw62QfbrYLvh6eIVpJcd6YUm96LH015dRJ3T
-         3ygceUapvDnZm//vwRo+gwvkrMcQwCYInSLf3zPPNFcMo2mS3kr8VOv3L4vvRrUxgI
-         QJ4acKzLm2Oj2rrMd2xsSQKvNVUp2DAGWeozlNqx9j8YLACv1GmN1Zzk9Zu8XB7l3i
-         knmO8wmc6J/gUaqD7jZ/jT/hZQHXOjRpnFzpnKT7fmY2FlBKdsPnL8UvElFFJ0gZ56
-         Z3L0+FQGjlvA1Gz2UM+BsN26STQhIkW/1TqK4UDWRyALTY15CyfRGe1bt4uIVGPiUQ
-         z17AuGbBhYETQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 56A20E8DD61;
-        Mon, 18 Apr 2022 09:30:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S236225AbiDSHau (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 19 Apr 2022 03:30:50 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07DB2DEA7
+        for <linux-can@vger.kernel.org>; Tue, 19 Apr 2022 00:28:09 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1ngiHP-0004uW-H2
+        for linux-can@vger.kernel.org; Tue, 19 Apr 2022 09:28:07 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id E4EF165BAC
+        for <linux-can@vger.kernel.org>; Tue, 19 Apr 2022 07:28:06 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id BCD3565BA5;
+        Tue, 19 Apr 2022 07:28:06 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id a98dc590;
+        Tue, 19 Apr 2022 07:28:06 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     linux-can@vger.kernel.org
+Cc:     Manivannan Sadhasivam <mani@kernel.org>, kernel@pengutronix.de
+Subject: [PATCH 0/2] can: mcp251xfd: add support for mcp251863
+Date:   Tue, 19 Apr 2022 09:28:03 +0200
+Message-Id: <20220419072805.2840340-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] can: isotp: stop timeout monitoring when no first frame
- was sent
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165027421135.11239.7151679337117584143.git-patchwork-notify@kernel.org>
-Date:   Mon, 18 Apr 2022 09:30:11 +0000
-References: <20220417152934.2696539-2-mkl@pengutronix.de>
-In-Reply-To: <20220417152934.2696539-2-mkl@pengutronix.de>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, kernel@pengutronix.de,
-        socketcan@hartkopp.net,
-        syzbot+2339c27f5c66c652843e@syzkaller.appspotmail.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,29 +54,14 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello:
+Hello,
 
-This patch was applied to netdev/net.git (master)
-by Marc Kleine-Budde <mkl@pengutronix.de>:
+this patch series adds support for the mcp251863, which compatible
+with the mcp2518fd. It consists of the is a CAN-FD controller
+(MCP2518FD) and an integrated transceiver (ATA6563).
 
-On Sun, 17 Apr 2022 17:29:34 +0200 you wrote:
-> From: Oliver Hartkopp <socketcan@hartkopp.net>
-> 
-> The first attempt to fix a the 'impossible' WARN_ON_ONCE(1) in
-> isotp_tx_timer_handler() focussed on the identical CAN IDs created by
-> the syzbot reproducer and lead to upstream fix/commit 3ea566422cbd
-> ("can: isotp: sanitize CAN ID checks in isotp_bind()"). But this did
-> not catch the root cause of the wrong tx.state in the tx_timer handler.
-> 
-> [...]
+regards,
+Marc
 
-Here is the summary with links:
-  - [net] can: isotp: stop timeout monitoring when no first frame was sent
-    https://git.kernel.org/netdev/net/c/d73497081710
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
