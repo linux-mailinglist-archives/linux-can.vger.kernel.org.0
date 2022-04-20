@@ -2,115 +2,94 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCC715085ED
-	for <lists+linux-can@lfdr.de>; Wed, 20 Apr 2022 12:30:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4137E5087FD
+	for <lists+linux-can@lfdr.de>; Wed, 20 Apr 2022 14:21:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238282AbiDTKdJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 20 Apr 2022 06:33:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60294 "EHLO
+        id S243205AbiDTMYg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 20 Apr 2022 08:24:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351823AbiDTKdE (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 20 Apr 2022 06:33:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74AC93F8A5;
-        Wed, 20 Apr 2022 03:30:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1275BB81E8C;
-        Wed, 20 Apr 2022 10:30:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id ACBBCC385A8;
-        Wed, 20 Apr 2022 10:30:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650450615;
-        bh=uqhLbbl7GmOvkQnVpqLj51Rsm3L6qxhwNld5DTCBE3s=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=OjQdqqzrypUhiY8GEVLVRV2uedH+oKEz1/7UlTlZD5uO+RnQEu/fpOwhHp1VjKAlj
-         pV/cbf+S+VVL76DDn+DxpidcPjehMTLPf56HC1AeUZ8EwSRjId7HnKEpGpUv1XLK5H
-         3O2yMksQlLW+ENzbsrN/FhfgvjbdG/C/Bw4egEcZSGrErg2sDbcsfV4e7Zdjo2jTDF
-         m836Ezn9sSY4EmfLj5XxP71HZkbvS7vSucTKYFHkeNMlW/shdaonf9ucMFAgF/i4u7
-         L90vB5bkiwohH3yDRuAL/XmynZzzGUdVeBBF7ByXLOtBcV2Si76NFcdJTjlOF0Ie6m
-         QDgWUnnrBCYVg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8F31DE7399D;
-        Wed, 20 Apr 2022 10:30:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S1353140AbiDTMYf (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 20 Apr 2022 08:24:35 -0400
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341B636B49
+        for <linux-can@vger.kernel.org>; Wed, 20 Apr 2022 05:21:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1650457305;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
+    Subject:Sender;
+    bh=6yvwJTwUvO7q6gvQkS0S3qI/o++YZI4m7dYWdPD35/Q=;
+    b=O0NifV4k1oqbn+IcnDewKH4r+PdSiUZxYUmh5F7iPVgmy5CM7k0nV85zhvhQ53++3h
+    Hq0iMQMKzxkWyC5KCu4w8nWnIIvLXNARHnm2evQMOBbX2hWRQCF1fvhTCWlwmmYLIiPb
+    PuDH81GZejuVu4bMVgOwSJ5wSte3D9gfXDS9zM0UmTIAaybVWhqdmP957R5FNGCXTT33
+    JW8/aPOFrfRmR/ZiDV7NlM3oWu4jfNQ6LVex6OT4oFLqb/MOCg5SZ4Z5BDS7YkEO1i4g
+    Y/qLg7rfcwSLvrLzCWCn+6xa5cwK73LsYtPePNsEekG7Fr0mZ0+vFaq4+i7l8nUuxnBM
+    WXfg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1q3jXdVqE32oRVrGn+Gi68g=="
+X-RZG-CLASS-ID: mo00
+Received: from [100.82.11.40]
+    by smtp.strato.de (RZmta 47.42.2 AUTH)
+    with ESMTPSA id 4544c9y3KCLj367
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Wed, 20 Apr 2022 14:21:45 +0200 (CEST)
+Message-ID: <3bb95a07-1bf5-8fff-731c-221b2ae6c3d1@hartkopp.net>
+Date:   Wed, 20 Apr 2022 14:21:38 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: can-isotp: TX stmin violations
+Content-Language: en-US
+To:     =?UTF-8?Q?Maik_Allg=c3=b6wer?= <maik@llgoewer.de>,
+        linux-can@vger.kernel.org
+References: <20220103155254.3htprmrdjur3ke3l@ganymed>
+ <d54c6374-bdf4-dfe8-9e9c-5547a743afdb@hartkopp.net>
+ <27389f5f-1681-7440-15bd-3c67e4e5daa9@posteo.de>
+ <c20468e2-0f9f-bcca-da0f-f3f6470d91be@hartkopp.net>
+ <6175074d-6562-91c9-3dce-22ca99815910@posteo.de>
+ <19adffae-443c-78bc-fb8c-61ec792a7b6d@hartkopp.net>
+ <20220114141929.mz34evi65cgurgek@ganymed>
+ <20220114143113.zapz2oszjzfq6p7r@pengutronix.de>
+ <20220420093402.mjyz6lkmgavnxmc3@ganymed>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20220420093402.mjyz6lkmgavnxmc3@ganymed>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 01/17] can: rx-offload: rename
- can_rx_offload_queue_sorted() -> can_rx_offload_queue_timestamp()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165045061558.18792.15126070255101157595.git-patchwork-notify@kernel.org>
-Date:   Wed, 20 Apr 2022 10:30:15 +0000
-References: <20220419152554.2925353-2-mkl@pengutronix.de>
-In-Reply-To: <20220419152554.2925353-2-mkl@pengutronix.de>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, kernel@pengutronix.de
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello:
+Hi Maik,
 
-This series was applied to netdev/net-next.git (master)
-by Marc Kleine-Budde <mkl@pengutronix.de>:
+On 20.04.22 11:34, Maik Allgöwer wrote:
 
-On Tue, 19 Apr 2022 17:25:38 +0200 you wrote:
-> This patch renames the function can_rx_offload_queue_sorted() to
-> can_rx_offload_queue_timestamp(). This better describes what the
-> function does, it adds a newly RX'ed skb to the sorted queue by its
-> timestamp.
+> so I hoped I would not have to bother anyone with this issue again,
+> but our customer wants this fixed.
 > 
-> Link: https://lore.kernel.org/all/20220417194327.2699059-1-mkl@pengutronix.de
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> 
-> [...]
+> I am wondering whether someone could point me into the right direction?
 
-Here is the summary with links:
-  - [net-next,01/17] can: rx-offload: rename can_rx_offload_queue_sorted() -> can_rx_offload_queue_timestamp()
-    https://git.kernel.org/netdev/net-next/c/eb38c2053b67
-  - [net-next,02/17] can: bittiming: can_calc_bittiming(): prefer small bit rate pre-scalers over larger ones
-    https://git.kernel.org/netdev/net-next/c/85d4eb2a3dfe
-  - [net-next,03/17] can: Fix Links to Technologic Systems web resources
-    https://git.kernel.org/netdev/net-next/c/20c7258980e0
-  - [net-next,04/17] can: mscan: mpc5xxx_can: Prepare cleanup of powerpc's asm/prom.h
-    https://git.kernel.org/netdev/net-next/c/bb75e352d7ac
-  - [net-next,05/17] can: flexcan: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
-    https://git.kernel.org/netdev/net-next/c/e6ec83790593
-  - [net-next,06/17] MAINTAINERS: rectify entry for XILINX CAN DRIVER
-    https://git.kernel.org/netdev/net-next/c/badea4fc7025
-  - [net-next,07/17] can: xilinx_can: mark bit timing constants as const
-    https://git.kernel.org/netdev/net-next/c/ae38fda02996
-  - [net-next,08/17] dt-bindings: can: renesas,rcar-canfd: document r8a77961 support
-    https://git.kernel.org/netdev/net-next/c/44b6b105dd24
-  - [net-next,09/17] dt-binding: can: mcp251xfd: add binding information for mcp251863
-    https://git.kernel.org/netdev/net-next/c/621119764850
-  - [net-next,10/17] can: mcp251xfd: add support for mcp251863
-    https://git.kernel.org/netdev/net-next/c/c6f2a617a0a8
-  - [net-next,11/17] dt-bindings: vendor-prefix: add prefix for the Czech Technical University in Prague.
-    https://git.kernel.org/netdev/net-next/c/fb23e43a0a9c
-  - [net-next,12/17] dt-bindings: net: can: binding for CTU CAN FD open-source IP core.
-    https://git.kernel.org/netdev/net-next/c/1da9d6e35b6b
-  - [net-next,13/17] can: ctucanfd: add support for CTU CAN FD open-source IP core - bus independent part.
-    https://git.kernel.org/netdev/net-next/c/2dcb8e8782d8
-  - [net-next,14/17] can: ctucanfd: CTU CAN FD open-source IP core - PCI bus support.
-    https://git.kernel.org/netdev/net-next/c/792a5b678e81
-  - [net-next,15/17] can: ctucanfd: CTU CAN FD open-source IP core - platform/SoC support.
-    https://git.kernel.org/netdev/net-next/c/e8f0c23a2415
-  - [net-next,16/17] docs: ctucanfd: CTU CAN FD open-source IP core documentation.
-    https://git.kernel.org/netdev/net-next/c/c3a0addefbde
-  - [net-next,17/17] MAINTAINERS: Add maintainers for CTU CAN FD IP core driver
-    https://git.kernel.org/netdev/net-next/c/cfdb2f365cb9
+In the upcoming Linux 5.18 I reworked the consecutive frame transmission 
+flow in a way that the next CF is only started after the last frame has 
+been sent successfully:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4b7fe92c06901f4563af0e36d25223a5ab343782
 
+This new concept will not be back ported to the out-of-tree 
+implementation on GitHub.
 
+Are you able to build you own kernel for $CUSTOMER to probably use this 
+latest implementation?
+
+I had to go back in the mail thread to check your issue and this 
+improvement could probably fix it.
+
+Best,
+Oliver
