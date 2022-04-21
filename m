@@ -2,72 +2,69 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14BF4509CF4
-	for <lists+linux-can@lfdr.de>; Thu, 21 Apr 2022 11:57:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2BD650A9F5
+	for <lists+linux-can@lfdr.de>; Thu, 21 Apr 2022 22:29:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387966AbiDUJ6i (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 21 Apr 2022 05:58:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58174 "EHLO
+        id S245376AbiDUUbz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 21 Apr 2022 16:31:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387448AbiDUJ6f (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 21 Apr 2022 05:58:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D105252A5;
-        Thu, 21 Apr 2022 02:55:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DF281B82394;
-        Thu, 21 Apr 2022 09:55:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AF3AC385A1;
-        Thu, 21 Apr 2022 09:55:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650534943;
-        bh=Y2O1G2M/9QmAOGqr5GeEsbWJbSBwW3If9ToqHnGH7cQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M5vYEouuZXaTCdAwr7LF8/CcBmqsdYLOseV3BjxmixCeFYErSxE0cntjTCF9LqA7N
-         jnvithYWVttEa7zUs8cwLNd2nwIwwDptlxftrOgu6E22G7QtW7xGUACwlMC1flXoNM
-         tef2cbLZ4d+f3JuACCtFoPo9nRIvMKBXqo1/btgs=
-Date:   Thu, 21 Apr 2022 11:55:40 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Dragos-Marian Panait <dragos.panait@windriver.com>
-Cc:     stable@vger.kernel.org, wg@grandegger.com, mkl@pengutronix.de,
-        davem@davemloft.net, paskripkin@gmail.com, hbh25y@gmail.com,
+        with ESMTP id S1389385AbiDUUbw (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 21 Apr 2022 16:31:52 -0400
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D678E4DF59;
+        Thu, 21 Apr 2022 13:29:01 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VAhY.oD_1650572933;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VAhY.oD_1650572933)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 22 Apr 2022 04:28:58 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     pisa@cmp.felk.cvut.cz
+Cc:     ondrej.ille@gmail.com, wg@grandegger.com, mkl@pengutronix.de,
+        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
         linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4.14 0/1] can: usb_8dev: backport fix for CVE-2022-28388
-Message-ID: <YmEqHBFXsprvaTsh@kroah.com>
-References: <20220419113834.3116927-1-dragos.panait@windriver.com>
+        linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] can: ctucanfd: Remove unused including <linux/version.h>
+Date:   Fri, 22 Apr 2022 04:28:52 +0800
+Message-Id: <20220421202852.2693-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220419113834.3116927-1-dragos.panait@windriver.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 02:38:33PM +0300, Dragos-Marian Panait wrote:
-> The following commit is needed to fix CVE-2022-28388:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3d3925ff6433f98992685a9679613a2cc97f3ce2
-> 
-> Hangyu Hua (1):
->   can: usb_8dev: usb_8dev_start_xmit(): fix double dev_kfree_skb() in
->     error path
-> 
->  drivers/net/can/usb/usb_8dev.c | 30 ++++++++++++++----------------
->  1 file changed, 14 insertions(+), 16 deletions(-)
-> 
-> 
-> base-commit: 74766a973637a02c32c04c1c6496e114e4855239
-> -- 
-> 2.17.1
-> 
+Eliminate the follow versioncheck warning:
 
-All now queued up, thanks.
+./drivers/net/can/ctucanfd/ctucanfd_base.c: 34 linux/version.h not
+needed.
 
-greg k-h
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ drivers/net/can/ctucanfd/ctucanfd_base.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/net/can/ctucanfd/ctucanfd_base.c b/drivers/net/can/ctucanfd/ctucanfd_base.c
+index 7a4550f60abb..be90136be442 100644
+--- a/drivers/net/can/ctucanfd/ctucanfd_base.c
++++ b/drivers/net/can/ctucanfd/ctucanfd_base.c
+@@ -31,7 +31,6 @@
+ #include <linux/can/error.h>
+ #include <linux/can/led.h>
+ #include <linux/pm_runtime.h>
+-#include <linux/version.h>
+ 
+ #include "ctucanfd.h"
+ #include "ctucanfd_kregs.h"
+-- 
+2.20.1.7.g153144c
+
