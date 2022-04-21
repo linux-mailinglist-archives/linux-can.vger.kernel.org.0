@@ -2,168 +2,72 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AE3E509218
-	for <lists+linux-can@lfdr.de>; Wed, 20 Apr 2022 23:29:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14BF4509CF4
+	for <lists+linux-can@lfdr.de>; Thu, 21 Apr 2022 11:57:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356530AbiDTVcN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 20 Apr 2022 17:32:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41800 "EHLO
+        id S1387966AbiDUJ6i (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 21 Apr 2022 05:58:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382508AbiDTVcJ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 20 Apr 2022 17:32:09 -0400
-Received: from mailgw.felk.cvut.cz (mailgw.felk.cvut.cz [147.32.82.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 206A9488AB
-        for <linux-can@vger.kernel.org>; Wed, 20 Apr 2022 14:29:21 -0700 (PDT)
-Received: from mailgw.felk.cvut.cz (localhost.localdomain [127.0.0.1])
-        by mailgw.felk.cvut.cz (Proxmox) with ESMTP id 8A5CA30B2944;
-        Wed, 20 Apr 2022 23:28:48 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        cmp.felk.cvut.cz; h=cc:cc:content-transfer-encoding:content-type
-        :content-type:date:from:from:in-reply-to:message-id:mime-version
-        :references:reply-to:subject:subject:to:to; s=felkmail; bh=ye8gt
-        BwO4j+381uZDcBUMsVvkBfemF4Hfcgjz4T8N4M=; b=aUkGV2z83rA3oTrd2169B
-        TBYvMdtJJuf+U6HHLqn1uXsUj8yrIWZulaibHj5uuhM3v92wKmoeWsLssj2PVtcz
-        bacFaeNdi6V/PnhZz4UwSw/YbZPuRPfZUL1MKszuvv3sb2rD0WoR9JLpA6avi669
-        obklyrKYT2uwqipoS/NEABSh2jV1TmY/qQO1sGvhmJHILVA10+AFExJVVWRaCydw
-        nbOlK/IRVbnRdUlBOLI6+CUd40sUg0B8VoYtjuAxtv+RGskFlzPVjG//ukKvNOAX
-        PjTJwNGB1bIA1cN+TDGt87fVdv4viblBjz7dcUQIqGL24ARx13lfputwH9mE5tA8
-        w==
-Received: from cmp.felk.cvut.cz (haar.felk.cvut.cz [147.32.84.19])
-        by mailgw.felk.cvut.cz (Proxmox) with ESMTPS id 9BAEF30AE004;
-        Wed, 20 Apr 2022 23:28:47 +0200 (CEST)
-Received: from haar.felk.cvut.cz (localhost [127.0.0.1])
-        by cmp.felk.cvut.cz (8.14.0/8.12.3/SuSE Linux 0.6) with ESMTP id 23KLSlfo031601;
-        Wed, 20 Apr 2022 23:28:47 +0200
-Received: (from pisa@localhost)
-        by haar.felk.cvut.cz (8.14.0/8.13.7/Submit) id 23KLSlik031600;
-        Wed, 20 Apr 2022 23:28:47 +0200
-X-Authentication-Warning: haar.felk.cvut.cz: pisa set sender to pisa@cmp.felk.cvut.cz using -f
-From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: Re: [PATCH v8 0/7] CTU CAN FD open-source IP core SocketCAN driver, PCI, platform integration and documentation
-Date:   Wed, 20 Apr 2022 23:28:46 +0200
-User-Agent: KMail/1.9.10
-Cc:     "Marc Kleine-Budde" <mkl@pengutronix.de>,
-        linux-can@vger.kernel.org, Carsten Emde <c.emde@osadl.org>,
-        Marin Jerabek <martin.jerabek01@gmail.com>,
-        Ondrej Ille <ondrej.ille@gmail.com>,
-        Jiri Novak <jnovak@fel.cvut.cz>,
-        Jaroslav Beran <jara.beran@gmail.com>,
-        Petr Porazil <porazil@pikron.com>, Pavel Machek <pavel@ucw.cz>,
-        Drew Fustini <pdp7pdp7@gmail.com>,
-        Mataj Vasilevski <vasilmat@fel.cvut.cz>
-References: <cover.1647904780.git.pisa@cmp.felk.cvut.cz> <20220419153530.w2iovki72udt4o6q@pengutronix.de> <ebd3822c-9711-4125-b2a8-f1d5f15c3b65@hartkopp.net>
-In-Reply-To: <ebd3822c-9711-4125-b2a8-f1d5f15c3b65@hartkopp.net>
-X-KMail-QuotePrefix: > 
+        with ESMTP id S1387448AbiDUJ6f (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 21 Apr 2022 05:58:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D105252A5;
+        Thu, 21 Apr 2022 02:55:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DF281B82394;
+        Thu, 21 Apr 2022 09:55:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AF3AC385A1;
+        Thu, 21 Apr 2022 09:55:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1650534943;
+        bh=Y2O1G2M/9QmAOGqr5GeEsbWJbSBwW3If9ToqHnGH7cQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M5vYEouuZXaTCdAwr7LF8/CcBmqsdYLOseV3BjxmixCeFYErSxE0cntjTCF9LqA7N
+         jnvithYWVttEa7zUs8cwLNd2nwIwwDptlxftrOgu6E22G7QtW7xGUACwlMC1flXoNM
+         tef2cbLZ4d+f3JuACCtFoPo9nRIvMKBXqo1/btgs=
+Date:   Thu, 21 Apr 2022 11:55:40 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Dragos-Marian Panait <dragos.panait@windriver.com>
+Cc:     stable@vger.kernel.org, wg@grandegger.com, mkl@pengutronix.de,
+        davem@davemloft.net, paskripkin@gmail.com, hbh25y@gmail.com,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4.14 0/1] can: usb_8dev: backport fix for CVE-2022-28388
+Message-ID: <YmEqHBFXsprvaTsh@kroah.com>
+References: <20220419113834.3116927-1-dragos.panait@windriver.com>
 MIME-Version: 1.0
-Content-Type: Text/Plain;
-  charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Message-Id: <202204202328.47031.pisa@cmp.felk.cvut.cz>
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220419113834.3116927-1-dragos.panait@windriver.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Oliver,
+On Tue, Apr 19, 2022 at 02:38:33PM +0300, Dragos-Marian Panait wrote:
+> The following commit is needed to fix CVE-2022-28388:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3d3925ff6433f98992685a9679613a2cc97f3ce2
+> 
+> Hangyu Hua (1):
+>   can: usb_8dev: usb_8dev_start_xmit(): fix double dev_kfree_skb() in
+>     error path
+> 
+>  drivers/net/can/usb/usb_8dev.c | 30 ++++++++++++++----------------
+>  1 file changed, 14 insertions(+), 16 deletions(-)
+> 
+> 
+> base-commit: 74766a973637a02c32c04c1c6496e114e4855239
+> -- 
+> 2.17.1
+> 
 
-On Wednesday 20 of April 2022 18:40:18 Oliver Hartkopp wrote:
-> On 19.04.22 17:35, Marc Kleine-Budde wrote:
-> > On 06.04.2022 10:20:42, Pavel Pisa wrote:
-> >> I have missed timing for 5.18 but v5.18-rc1 is out so I would be
-> >> happy if we do not miss 5.19 merge window at least with minimal version.
-> >
-> > I've taken the patch (almost) as is, I marked both can_bittiming_const
-> > static, as sparse complained about that and I changed the order of two
-> > variable declarations to look nicer :)
-> >
-> > Looking forward for more patches!
->
-> The patches now landed in net-next \o/
+All now queued up, thanks.
 
-This is a big day...
-
-> But while checking the automatic review results from Patchwork here ...
->
-> https://patchwork.kernel.org/project/netdevbpf/list/?series=&submitter=7454
->&state=*&q=CTU+CAN+FD&archive=&delegate=
->
-> ... it looks like that at least the two red 'failed' markers should be
-> addressed in follow up patches.
->
-> The 'inline' warnings are easy to fix:
->
-> https://patchwork.hopto.org/static/nipa/633430/12818712/source_inline/stder
-
-If it means that no local function should be marked as inline if they
-are in C file then inline removal is fully OK and according to current
-compilers behavior probably comletely equivalent.
-
-> But the module_param()'s in
->
-> https://patchwork.hopto.org/static/nipa/633430/12818710/module_param/stderr
->
-> should probably be revisited, whether the parameters (PCI/MSI and
-> 'second IP core') could be handled by some automatic detection.
-
-The situation is handled automatically. The parameters are there
-only for situation when there is problem with PCIe design
-on the FPGA side to allow disable MSI interrupts and test
-if without that FPGA behaves correctly. It is great help
-to debug problems. In my case, if I remember well, problem was
-that some reference clocks has not been connected into core
-so it could sync for CPU initiated transfers and for MSI
-own initiated it failed horribly.
-
-> Or did I miss something that makes these module parameters really
-> necessary?
-
-They can go away for normal use. They are help for those who want
-to debug problems of CTU CAN FD core connection to PCIe FPGA design
-to test and identify one of possible sources problems sources in
-in the PCIe core setup and clocking. But that can be kept as separate
-patches for debugging purposes. Parameters can be connected directly
-to instances in sys or tuned some other way as well. But I think
-that they do no belong to netling or something networking
-related. It is strictly related to hardware and module load testing
-after magic sequence to get rid of broken test FPGA design
-and rescan for newly loaded Intel/Altera FPGA design
-
-https://gitlab.fel.cvut.cz/canbus/pcie-ctucanfd/-/blob/master/scripts/db4cgx15-program
-https://gitlab.fel.cvut.cz/canbus/pcie-ctucanfd/-/blob/master/scripts/test-ip-read
-
-Device reapears after
-
-echo 1 > /sys/bus/pci/rescan
-
-then driver can be connected and tested.
-
-But I prepare patch to get remove these debug options when it is preferred.
-
-I expect that we test net-next soon and Mataj Vasilevski prepares
-patches for timestamping. Probably optional/controlled by some
-compile time option. Again it is good to have option to eliminate
-possible source of problems. The base has been tested really many
-times but addons are relatively new.
-
-Best wises,
-
-                Pavel
---
-                Pavel Pisa
-    phone:      +420 603531357
-    e-mail:     pisa@cmp.felk.cvut.cz
-    Department of Control Engineering FEE CVUT
-    Karlovo namesti 13, 121 35, Prague 2
-    university: http://control.fel.cvut.cz/
-    personal:   http://cmp.felk.cvut.cz/~pisa
-    projects:   https://www.openhub.net/accounts/ppisa
-    CAN related:http://canbus.pages.fel.cvut.cz/
-    Open Technologies Research Education and Exchange Services
-    https://gitlab.fel.cvut.cz/otrees/org/-/wikis/home
-
+greg k-h
