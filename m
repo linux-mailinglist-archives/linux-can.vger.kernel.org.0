@@ -2,98 +2,103 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4A6D50CD0C
-	for <lists+linux-can@lfdr.de>; Sat, 23 Apr 2022 20:56:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9866C50D374
+	for <lists+linux-can@lfdr.de>; Sun, 24 Apr 2022 18:29:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236803AbiDWS7Y (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 23 Apr 2022 14:59:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51832 "EHLO
+        id S233688AbiDXQcp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 24 Apr 2022 12:32:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236806AbiDWS7W (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 23 Apr 2022 14:59:22 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5395329835
-        for <linux-can@vger.kernel.org>; Sat, 23 Apr 2022 11:56:24 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id a1so8444488edt.3
-        for <linux-can@vger.kernel.org>; Sat, 23 Apr 2022 11:56:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=MrTvfbh80/nABjva/CFwZXvVtFfjS4p1cdRggyuMyb0=;
-        b=ppMuSB/nzYeA11aQy1DjSqKy2Wgoy6ZkwZidEhMzkqXN4kk/dIXaw+R3AGu0AMtsv2
-         udES9lYGsq16likT9Bhj6hoAOghIycaugD3/esamC5Pm6ryIYm+9De4VlVxOz2znnj2L
-         M0bufMh81qx1LC5z3VXG5GzsoVGPcBuJ7JX74lBLXwLr9krnuq2W5FxJVEaeChYA7gfC
-         qteBQ55ZE1gFvtT82d5Bv+VuNJb0S2rfEv81V8Eui0Jlg3RhJRMWwyzBc7p0dJtmyLwR
-         AJQ8pMPjT23ME5D77zMTKVh54XReYrruQT5gaM7LX5GXGEaA220RjQJx45WmQd51jghJ
-         WEPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=MrTvfbh80/nABjva/CFwZXvVtFfjS4p1cdRggyuMyb0=;
-        b=WL90ZPbbF1IvFzdukCt5RKVbRXuc2HVVGMMoRjBM58xuxjgkyz7hHPCIIBGT+kqsNO
-         UYJpl/pX5pCOoUuz1rZaB/eMXjySi4QQXe+3ZkE9QXYk61LZbpUYT+I4kw+q8tWg+jdT
-         9ZKmuFWFHsSheGfFO2pLWcAs3DJ8BFx31K8YR/dTCAX1io5wep3TthOXw482BbDXJktC
-         Fl7ik1p2qsxzp2nk9G4as2naIRuvAqgUFmL4utNWx9rKuc2w4mlTeGCQZsgCC12CuRPX
-         SByvTkNgyZJz/Z0oB2PHQyHr/oAjlR8V1ZQuIP6gigNtaZRutn/5oVPnN8AqYXwyNV0G
-         exMQ==
-X-Gm-Message-State: AOAM530PKb2HT3xxaeZpjgYCIl5uely5L420nGQi5BrSrVB+joqNXNcU
-        m5qWy9+mt0662XI51gOmaIQEcQ==
-X-Google-Smtp-Source: ABdhPJyWCQyw2YMQrWuMvFGV/Ao0pGu3jAcyM/WTvK2mI7V2a9M8hrt1sPfK5Mwmsv2vlV/hFxVa0A==
-X-Received: by 2002:a05:6402:34cd:b0:424:793:9f65 with SMTP id w13-20020a05640234cd00b0042407939f65mr11177304edc.88.1650740182965;
-        Sat, 23 Apr 2022 11:56:22 -0700 (PDT)
-Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id fx3-20020a170906b74300b006daecedee44sm1916058ejb.220.2022.04.23.11.56.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 23 Apr 2022 11:56:22 -0700 (PDT)
-Message-ID: <da7f4830-aaeb-bb26-e58a-62e67b51645a@linaro.org>
-Date:   Sat, 23 Apr 2022 20:56:21 +0200
+        with ESMTP id S235240AbiDXQcd (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 24 Apr 2022 12:32:33 -0400
+Received: from mailgw.felk.cvut.cz (mailgw.felk.cvut.cz [147.32.82.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2F69E9E2;
+        Sun, 24 Apr 2022 09:29:29 -0700 (PDT)
+Received: from mailgw.felk.cvut.cz (localhost.localdomain [127.0.0.1])
+        by mailgw.felk.cvut.cz (Proxmox) with ESMTP id 7A27F30B2949;
+        Sun, 24 Apr 2022 18:28:56 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        cmp.felk.cvut.cz; h=cc:cc:content-transfer-encoding:date:from
+        :from:message-id:mime-version:reply-to:subject:subject:to:to; s=
+        felkmail; bh=rbdws84/pPnNeVWA2UKPTIunpmkpZDaaF/q976N9vt8=; b=psm
+        /M+3k0OMSTqMdnVsNJT2Hi+gAtjzK2pIYp2R4A2ozUuMUieIzMBpH37gm9y+CozB
+        dQuchbPBwmj5vDgAkGjapPy6uWBtkdnOzhI+oht+DmGoY8Uq8tKBVVUzS+6Jy/KR
+        WXqsn2EMSK++0tt83UeDitUzAuCYmB3eXF91ilTU8j6kNlCzTXLfBU9ykBl0PIsU
+        yVy2qPB82mmevBnq4Gpr89KTGDeqtRsJ4s+osR+jcUB5DZi81j9eUxrxsPCRop9p
+        lIGYJL1ORbrrfPuzAxv+QxctDXeKxE3ITPPd/25ipyHvxVTCiUxb9hptB1HTSRai
+        Z3Y/zAibYi1+xasua6Q==
+Received: from cmp.felk.cvut.cz (haar.felk.cvut.cz [147.32.84.19])
+        by mailgw.felk.cvut.cz (Proxmox) with ESMTPS id 04C1230ADC00;
+        Sun, 24 Apr 2022 18:28:56 +0200 (CEST)
+Received: from haar.felk.cvut.cz (localhost [127.0.0.1])
+        by cmp.felk.cvut.cz (8.14.0/8.12.3/SuSE Linux 0.6) with ESMTP id 23OGSteb030890;
+        Sun, 24 Apr 2022 18:28:55 +0200
+Received: (from pisa@localhost)
+        by haar.felk.cvut.cz (8.14.0/8.13.7/Submit) id 23OGSou2030886;
+        Sun, 24 Apr 2022 18:28:50 +0200
+From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
+To:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        David Miller <davem@davemloft.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Marin Jerabek <martin.jerabek01@gmail.com>,
+        Ondrej Ille <ondrej.ille@gmail.com>,
+        Jiri Novak <jnovak@fel.cvut.cz>,
+        Jaroslav Beran <jara.beran@gmail.com>,
+        Petr Porazil <porazil@pikron.com>, Pavel Machek <pavel@ucw.cz>,
+        Carsten Emde <c.emde@osadl.org>,
+        Drew Fustini <pdp7pdp7@gmail.com>,
+        Matej Vasilevski <matej.vasilevski@gmail.com>,
+        Pavel Pisa <pisa@cmp.felk.cvut.cz>
+Subject: [PATCH v1 0/4] can: ctucanfd: clenup acoording to the actual rules and documentation linking
+Date:   Sun, 24 Apr 2022 18:28:07 +0200
+Message-Id: <cover.1650816929.git.pisa@cmp.felk.cvut.cz>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] dt-bindings: can: renesas,rcar-canfd: Document RZ/G2UL
- support
-Content-Language: en-US
-To:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-References: <20220423130743.123198-1-biju.das.jz@bp.renesas.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220423130743.123198-1-biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 23/04/2022 15:07, Biju Das wrote:
-> Add CANFD binding documentation for Renesas R9A07G043 (RZ/G2UL) SoC.
-> 
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+The minor problems reported by actual checkpatch.pl and patchwork
+rules has been resolved at price of disable of some debugging
+options used initially to locate FPGA PCIe integration problems.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+The CTU CAN FD IP core driver documentation has been linked
+into CAN drivers index.
+
+The code has been tested on QEMU with CTU CAN FD IP core
+included functional model of PCIe integration.
+
+The Linux net-next CTU CAN FD driver has been tested on real Xilinx
+Zynq hardware by Matej Vasilevski even together with his
+timestamp support patches. Preparation for public discussion
+and mainlining is work in progress.
+
+Jiapeng Chong (2):
+  can: ctucanfd: Remove unnecessary print function dev_err()
+  can: ctucanfd: Remove unused including <linux/version.h>
+
+Pavel Pisa (2):
+  can: ctucanfd: remove PCI module debug parameters and core debug
+    statements.
+  docs: networking: device drivers: can: add ctucanfd and its author
+    e-mail update
+
+ .../can/ctu/ctucanfd-driver.rst               |  2 +-
+ .../networking/device_drivers/can/index.rst   |  1 +
+ drivers/net/can/ctucanfd/ctucanfd_base.c      | 34 ++-----------------
+ drivers/net/can/ctucanfd/ctucanfd_pci.c       | 22 ++++--------
+ drivers/net/can/ctucanfd/ctucanfd_platform.c  |  1 -
+ 5 files changed, 11 insertions(+), 49 deletions(-)
+
+-- 
+2.20.1
 
 
-Best regards,
-Krzysztof
