@@ -2,60 +2,51 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF4C350DA69
-	for <lists+linux-can@lfdr.de>; Mon, 25 Apr 2022 09:49:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8771750DAE8
+	for <lists+linux-can@lfdr.de>; Mon, 25 Apr 2022 10:13:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233426AbiDYHwI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 25 Apr 2022 03:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48612 "EHLO
+        id S234107AbiDYIO0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 25 Apr 2022 04:14:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240273AbiDYHwG (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 25 Apr 2022 03:52:06 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561E5113;
-        Mon, 25 Apr 2022 00:49:03 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2f7bb893309so59299597b3.12;
-        Mon, 25 Apr 2022 00:49:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1kjxdVxn3qHNHUInm0vSMmwIYPC1M9QvrqD0d+WZbTQ=;
-        b=O5eqZoITDAJ6lejfuyHEWeI+i1qFOqg1ZOzDvDj8K/AG0L+HZ0esRwpAkw8Ba667G7
-         RwxdMZ3IYlDsqf7fZedQJEIYF02dqY8F6TRBBGtodLwp80aipmdFH4J3Hzf4zxjlf9t8
-         3b68K+2CyP/Tohos9NI3rQhyRNbkYqxp20rmcdeKKG4gVX1CjLUKenIBsm0hzcV9+4jf
-         cQKzInXHSChdaS148AO7oF7YrzeVIavQJHZP9SZjK43a/7KEQInrla/yemkPZPRxum5v
-         0kZtiYnLGSIFZzEgArEUCRoYvVQL2nfydwK+pgsM8C3e3VYiJez2O8X3RZZKnsNpS33M
-         7bwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1kjxdVxn3qHNHUInm0vSMmwIYPC1M9QvrqD0d+WZbTQ=;
-        b=JFYvxYTypYlvIQrHsJhpyllN1s5D6WfuYHcPw70MGOOh6mQpl2ok9fOywH8AdMijR9
-         wKrt2SEXEW8xMhVbga45Hf6ZpANnvAZLyL+awT0XBteZXYZsznRQnyaTumKlxCu3j75O
-         Elblw1VXoZeXQs4qRjYltdokWdIqUlxLXXWiSUYg2gAy4INfYIpkn0DRUndgyIF7BiI6
-         4GcqA8WEfr1vVqv+um852V/fqI+4HrKuSgghMUsFGGMnizSgu/B0v3h3Ql2f/+2v2PtX
-         Jo8jX2WwHGxNvmoXds3eFuAi91T4IS4PUDyjOywM5XkwllKNT3mdYSrOju0LCiq8vpps
-         l/0g==
-X-Gm-Message-State: AOAM533MQkoQls/yEb7fR1sRAYyQaFI9lDPngFrWcyBcPIp/qm0S5QMw
-        YPkd/HYGZqhFrJQib039Nf8Z4W0E0F2Hj1BSS4Y=
-X-Google-Smtp-Source: ABdhPJwZ2a9PL4mrTCB37sZRWBIaYsqpgvtI9iNjtkS/grs0Ejxtwa8JLn/FG8jyxydu9s9tP/uqKEqlzR/4zbSR38I=
-X-Received: by 2002:a81:ff12:0:b0:2db:2d8a:9769 with SMTP id
- k18-20020a81ff12000000b002db2d8a9769mr15307492ywn.172.1650872942487; Mon, 25
- Apr 2022 00:49:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1650816929.git.pisa@cmp.felk.cvut.cz> <1fd684bcf5ddb0346aad234072f54e976a5210fb.1650816929.git.pisa@cmp.felk.cvut.cz>
-In-Reply-To: <1fd684bcf5ddb0346aad234072f54e976a5210fb.1650816929.git.pisa@cmp.felk.cvut.cz>
-From:   Vincent Mailhol <vincent.mailhol@gmail.com>
-Date:   Mon, 25 Apr 2022 16:48:51 +0900
-Message-ID: <CAMZ6RqJ1ROr-pLsJqKE=dK=cVD+-KGxSj1wPEZY-AXH9_d4xyQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/4] can: ctucanfd: remove PCI module debug parameters
- and core debug statements
-To:     Pavel Pisa <pisa@cmp.felk.cvut.cz>
-Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Wolfgang Grandegger <wg@grandegger.com>,
+        with ESMTP id S232187AbiDYIOU (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 25 Apr 2022 04:14:20 -0400
+Received: from mailgw.felk.cvut.cz (mailgw.felk.cvut.cz [147.32.82.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DA4237A37;
+        Mon, 25 Apr 2022 01:11:13 -0700 (PDT)
+Received: from mailgw.felk.cvut.cz (localhost.localdomain [127.0.0.1])
+        by mailgw.felk.cvut.cz (Proxmox) with ESMTP id C71AA30ADE61;
+        Mon, 25 Apr 2022 10:10:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        cmp.felk.cvut.cz; h=cc:cc:content-transfer-encoding:content-type
+        :content-type:date:from:from:in-reply-to:message-id:mime-version
+        :references:reply-to:subject:subject:to:to; s=felkmail; bh=acF+R
+        CFmkPfEAHQABcQxj/zPJMa//hEphvOtcoMLl24=; b=JatjlyMzKOW7PiLokLasn
+        a/MLvBd5Q0nNkMiVgZ6eyxOeZKELbk7m5A+0sR7+xJHcamCwBMZAHKNsksCt+mWc
+        TTgdb/nYKtpy5grtQ5VS4YewvSVicdkCXk/AecIGQj2hjeqamjhYZk9wVIXR/Yoo
+        4F5+qhcDRVyZUH5zSITYwJINkSabc/joWsHfQUW2UWLZDkyk+PW7X151GO41mISo
+        DbzBBdMExuTy7eCuXpu/5VAWf7ncDbrGC/IuvQqCPUDHfhO+mXckgwrXfbBTC1NO
+        zv0JXAV0m8JCyd51EHxoWqMXtkPiBWubz5RiQlgUe14MX4VF1GMYlZ/rYWbBj0zJ
+        g==
+Received: from cmp.felk.cvut.cz (haar.felk.cvut.cz [147.32.84.19])
+        by mailgw.felk.cvut.cz (Proxmox) with ESMTPS id 0AAB530ADE4B;
+        Mon, 25 Apr 2022 10:10:40 +0200 (CEST)
+Received: from haar.felk.cvut.cz (localhost [127.0.0.1])
+        by cmp.felk.cvut.cz (8.14.0/8.12.3/SuSE Linux 0.6) with ESMTP id 23P8AdcV012813;
+        Mon, 25 Apr 2022 10:10:39 +0200
+Received: (from pisa@localhost)
+        by haar.felk.cvut.cz (8.14.0/8.13.7/Submit) id 23P8AdZg012811;
+        Mon, 25 Apr 2022 10:10:39 +0200
+X-Authentication-Warning: haar.felk.cvut.cz: pisa set sender to pisa@cmp.felk.cvut.cz using -f
+From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
+To:     Vincent Mailhol <vincent.mailhol@gmail.com>,
+        linux-can@vger.kernel.org,
+        "Marc Kleine-Budde" <mkl@pengutronix.de>,
+        Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: Re: [PATCH v1 1/4] can: ctucanfd: remove PCI module debug parameters and core debug statements
+Date:   Mon, 25 Apr 2022 10:10:38 +0200
+User-Agent: KMail/1.9.10
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
         David Miller <davem@davemloft.net>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Marin Jerabek <martin.jerabek01@gmail.com>,
@@ -66,230 +57,71 @@ Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
         Carsten Emde <c.emde@osadl.org>,
         Drew Fustini <pdp7pdp7@gmail.com>,
         Matej Vasilevski <matej.vasilevski@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1650816929.git.pisa@cmp.felk.cvut.cz> <1fd684bcf5ddb0346aad234072f54e976a5210fb.1650816929.git.pisa@cmp.felk.cvut.cz> <CAMZ6RqJ1ROr-pLsJqKE=dK=cVD+-KGxSj1wPEZY-AXH9_d4xyQ@mail.gmail.com>
+In-Reply-To: <CAMZ6RqJ1ROr-pLsJqKE=dK=cVD+-KGxSj1wPEZY-AXH9_d4xyQ@mail.gmail.com>
+X-KMail-QuotePrefix: > 
+MIME-Version: 1.0
+Content-Type: Text/Plain;
+  charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Message-Id: <202204251010.39032.pisa@cmp.felk.cvut.cz>
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Pavel,
+Hello Vincent,
 
-On Mon. 25 Apr. 2022 at 14:11, Pavel Pisa <pisa@cmp.felk.cvut.cz> wrote:
-> This and remove of inline keyword from the local static functions
-> should make happy all checks in actual versions of the both checkpatch.pl
-> and patchwork tools.
+On Monday 25 of April 2022 09:48:51 Vincent Mailhol wrote:
+> On Mon. 25 Apr. 2022 at 14:11, Pavel Pisa <pisa@cmp.felk.cvut.cz> wrote:
+> > This and remove of inline keyword from the local static functions
+> > should make happy all checks in actual versions of the both checkpatch.pl
+> > and patchwork tools.
+>
+> The title and the description say two different things.
+>
+> When looking at the code, it just seemed that you squashed
+> together two different patches: one to remove the inlines and one
+> to remove the debug. I guess you should split it again.
 
-The title and the description say two different things.
+if you or somebody else confirms that the three lines change
+worth separate patch I regenerate the series.
+The changes are not based on third party patches but only
+on indications reported by static analysis tools.
+Remove of inline in the local static functions probably
+does not even change code generation by current compiler
+generation. Removed debug outputs are under local ifdef
+disabled by default, so only real change is step down from
+option to use module parameter to check for possible
+broken MSI causing the problems on PCIe CTU CAN FD integration.
+So I thought that single relatively small cleanup patch is
+less load to maintainers.
 
-When looking at the code, it just seemed that you squashed
-together two different patches: one to remove the inlines and one
-to remove the debug. I guess you should split it again.
+But I have no strong preference there and will do as confirmed.
 
-> Signed-off-by: Pavel Pisa <pisa@cmp.felk.cvut.cz>
-> ---
->  drivers/net/can/ctucanfd/ctucanfd_base.c | 33 +++---------------------
->  drivers/net/can/ctucanfd/ctucanfd_pci.c  | 22 +++++-----------
->  2 files changed, 9 insertions(+), 46 deletions(-)
->
-> diff --git a/drivers/net/can/ctucanfd/ctucanfd_base.c b/drivers/net/can/ctucanfd/ctucanfd_base.c
-> index 7a4550f60abb..a1f6d37fca11 100644
-> --- a/drivers/net/can/ctucanfd/ctucanfd_base.c
-> +++ b/drivers/net/can/ctucanfd/ctucanfd_base.c
-> @@ -133,13 +133,12 @@ static u32 ctucan_read32_be(struct ctucan_priv *priv,
->         return ioread32be(priv->mem_base + reg);
->  }
->
-> -static inline void ctucan_write32(struct ctucan_priv *priv, enum ctu_can_fd_can_registers reg,
-> -                                 u32 val)
-> +static void ctucan_write32(struct ctucan_priv *priv, enum ctu_can_fd_can_registers reg, u32 val)
->  {
->         priv->write_reg(priv, reg, val);
->  }
->
-> -static inline u32 ctucan_read32(struct ctucan_priv *priv, enum ctu_can_fd_can_registers reg)
-> +static u32 ctucan_read32(struct ctucan_priv *priv, enum ctu_can_fd_can_registers reg)
->  {
->         return priv->read_reg(priv, reg);
->  }
-> @@ -179,8 +178,6 @@ static int ctucan_reset(struct net_device *ndev)
->         struct ctucan_priv *priv = netdev_priv(ndev);
->         int i = 100;
->
-> -       ctucan_netdev_dbg(ndev, "%s\n", __func__);
-> -
->         ctucan_write32(priv, CTUCANFD_MODE, REG_MODE_RST);
->         clear_bit(CTUCANFD_FLAG_RX_FFW_BUFFERED, &priv->drv_flags);
->
-> @@ -266,8 +263,6 @@ static int ctucan_set_bittiming(struct net_device *ndev)
->         struct ctucan_priv *priv = netdev_priv(ndev);
->         struct can_bittiming *bt = &priv->can.bittiming;
->
-> -       ctucan_netdev_dbg(ndev, "%s\n", __func__);
-> -
->         /* Note that bt may be modified here */
->         return ctucan_set_btr(ndev, bt, true);
->  }
-> @@ -283,8 +278,6 @@ static int ctucan_set_data_bittiming(struct net_device *ndev)
->         struct ctucan_priv *priv = netdev_priv(ndev);
->         struct can_bittiming *dbt = &priv->can.data_bittiming;
->
-> -       ctucan_netdev_dbg(ndev, "%s\n", __func__);
-> -
->         /* Note that dbt may be modified here */
->         return ctucan_set_btr(ndev, dbt, false);
->  }
-> @@ -302,8 +295,6 @@ static int ctucan_set_secondary_sample_point(struct net_device *ndev)
->         int ssp_offset = 0;
->         u32 ssp_cfg = 0; /* No SSP by default */
->
-> -       ctucan_netdev_dbg(ndev, "%s\n", __func__);
-> -
->         if (CTU_CAN_FD_ENABLED(priv)) {
->                 netdev_err(ndev, "BUG! Cannot set SSP - CAN is enabled\n");
->                 return -EPERM;
-> @@ -390,8 +381,6 @@ static int ctucan_chip_start(struct net_device *ndev)
->         int err;
->         struct can_ctrlmode mode;
->
-> -       ctucan_netdev_dbg(ndev, "%s\n", __func__);
-> -
->         priv->txb_prio = 0x01234567;
->         priv->txb_head = 0;
->         priv->txb_tail = 0;
-> @@ -457,8 +446,6 @@ static int ctucan_do_set_mode(struct net_device *ndev, enum can_mode mode)
->  {
->         int ret;
->
-> -       ctucan_netdev_dbg(ndev, "%s\n", __func__);
-> -
->         switch (mode) {
->         case CAN_MODE_START:
->                 ret = ctucan_reset(ndev);
-> @@ -486,7 +473,7 @@ static int ctucan_do_set_mode(struct net_device *ndev, enum can_mode mode)
->   *
->   * Return: Status of TXT buffer
->   */
-> -static inline enum ctucan_txtb_status ctucan_get_tx_status(struct ctucan_priv *priv, u8 buf)
-> +static enum ctucan_txtb_status ctucan_get_tx_status(struct ctucan_priv *priv, u8 buf)
->  {
->         u32 tx_status = ctucan_read32(priv, CTUCANFD_TX_STATUS);
->         enum ctucan_txtb_status status = (tx_status >> (buf * 4)) & 0x7;
-> @@ -1123,8 +1110,6 @@ static irqreturn_t ctucan_interrupt(int irq, void *dev_id)
->         u32 imask;
->         int irq_loops;
->
-> -       ctucan_netdev_dbg(ndev, "%s\n", __func__);
-> -
->         for (irq_loops = 0; irq_loops < 10000; irq_loops++) {
->                 /* Get the interrupt status */
->                 isr = ctucan_read32(priv, CTUCANFD_INT_STAT);
-> @@ -1198,8 +1183,6 @@ static void ctucan_chip_stop(struct net_device *ndev)
->         u32 mask = 0xffffffff;
->         u32 mode;
->
-> -       ctucan_netdev_dbg(ndev, "%s\n", __func__);
-> -
->         /* Disable interrupts and disable CAN */
->         ctucan_write32(priv, CTUCANFD_INT_ENA_CLR, mask);
->         ctucan_write32(priv, CTUCANFD_INT_MASK_SET, mask);
-> @@ -1222,8 +1205,6 @@ static int ctucan_open(struct net_device *ndev)
->         struct ctucan_priv *priv = netdev_priv(ndev);
->         int ret;
->
-> -       ctucan_netdev_dbg(ndev, "%s\n", __func__);
-> -
->         ret = pm_runtime_get_sync(priv->dev);
->         if (ret < 0) {
->                 netdev_err(ndev, "%s: pm_runtime_get failed(%d)\n",
-> @@ -1283,8 +1264,6 @@ static int ctucan_close(struct net_device *ndev)
->  {
->         struct ctucan_priv *priv = netdev_priv(ndev);
->
-> -       ctucan_netdev_dbg(ndev, "%s\n", __func__);
-> -
->         netif_stop_queue(ndev);
->         napi_disable(&priv->napi);
->         ctucan_chip_stop(ndev);
-> @@ -1310,8 +1289,6 @@ static int ctucan_get_berr_counter(const struct net_device *ndev, struct can_ber
->         struct ctucan_priv *priv = netdev_priv(ndev);
->         int ret;
->
-> -       ctucan_netdev_dbg(ndev, "%s\n", __func__);
-> -
->         ret = pm_runtime_get_sync(priv->dev);
->         if (ret < 0) {
->                 netdev_err(ndev, "%s: pm_runtime_get failed(%d)\n", __func__, ret);
-> @@ -1337,8 +1314,6 @@ int ctucan_suspend(struct device *dev)
->         struct net_device *ndev = dev_get_drvdata(dev);
->         struct ctucan_priv *priv = netdev_priv(ndev);
->
-> -       ctucan_netdev_dbg(ndev, "%s\n", __func__);
-> -
->         if (netif_running(ndev)) {
->                 netif_stop_queue(ndev);
->                 netif_device_detach(ndev);
-> @@ -1355,8 +1330,6 @@ int ctucan_resume(struct device *dev)
->         struct net_device *ndev = dev_get_drvdata(dev);
->         struct ctucan_priv *priv = netdev_priv(ndev);
->
-> -       ctucan_netdev_dbg(ndev, "%s\n", __func__);
-> -
->         priv->can.state = CAN_STATE_ERROR_ACTIVE;
->
->         if (netif_running(ndev)) {
-> diff --git a/drivers/net/can/ctucanfd/ctucanfd_pci.c b/drivers/net/can/ctucanfd/ctucanfd_pci.c
-> index c37a42480533..8f2956a8ae43 100644
-> --- a/drivers/net/can/ctucanfd/ctucanfd_pci.c
-> +++ b/drivers/net/can/ctucanfd/ctucanfd_pci.c
-> @@ -45,14 +45,6 @@
->  #define CTUCAN_WITHOUT_CTUCAN_ID  0
->  #define CTUCAN_WITH_CTUCAN_ID     1
->
-> -static bool use_msi = true;
-> -module_param(use_msi, bool, 0444);
-> -MODULE_PARM_DESC(use_msi, "PCIe implementation use MSI interrupts. Default: 1 (yes)");
-> -
-> -static bool pci_use_second = true;
-> -module_param(pci_use_second, bool, 0444);
-> -MODULE_PARM_DESC(pci_use_second, "Use the second CAN core on PCIe card. Default: 1 (yes)");
-> -
->  struct ctucan_pci_board_data {
->         void __iomem *bar0_base;
->         void __iomem *cra_base;
-> @@ -117,13 +109,11 @@ static int ctucan_pci_probe(struct pci_dev *pdev,
->                 goto err_disable_device;
->         }
->
-> -       if (use_msi) {
-> -               ret = pci_enable_msi(pdev);
-> -               if (!ret) {
-> -                       dev_info(dev, "MSI enabled\n");
-> -                       pci_set_master(pdev);
-> -                       msi_ok = 1;
-> -               }
-> +       ret = pci_enable_msi(pdev);
-> +       if (!ret) {
-> +               dev_info(dev, "MSI enabled\n");
-> +               pci_set_master(pdev);
-> +               msi_ok = 1;
->         }
->
->         dev_info(dev, "ctucan BAR0 0x%08llx 0x%08llx\n",
-> @@ -184,7 +174,7 @@ static int ctucan_pci_probe(struct pci_dev *pdev,
->
->         core_i++;
->
-> -       while (pci_use_second && (core_i < num_cores)) {
-> +       while (core_i < num_cores) {
->                 addr += 0x4000;
->                 ret = ctucan_probe_common(dev, addr, irq, ntxbufs, 100000000,
->                                           0, ctucan_pci_set_drvdata);
-> --
-> 2.20.1
->
->
+By the way, what is preference for CC, should the series
+be sent to  linux-kernel and netdev or it is preferred for these
+local changes to send it only to linux-can to not load others?
+Same for CC to David Miller.
+
+Best wishes,
+
+                Pavel
+-- 
+                Pavel Pisa
+    phone:      +420 603531357
+    e-mail:     pisa@cmp.felk.cvut.cz
+    Department of Control Engineering FEE CVUT
+    Karlovo namesti 13, 121 35, Prague 2
+    university: http://control.fel.cvut.cz/
+    personal:   http://cmp.felk.cvut.cz/~pisa
+    projects:   https://www.openhub.net/accounts/ppisa
+    CAN related:http://canbus.pages.fel.cvut.cz/
+    Open Technologies Research Education and Exchange Services
+    https://gitlab.fel.cvut.cz/otrees/org/-/wikis/home
+
