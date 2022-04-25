@@ -2,145 +2,94 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1869E50DB46
-	for <lists+linux-can@lfdr.de>; Mon, 25 Apr 2022 10:35:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41A9A50E13E
+	for <lists+linux-can@lfdr.de>; Mon, 25 Apr 2022 15:12:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231948AbiDYIiC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 25 Apr 2022 04:38:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60748 "EHLO
+        id S236759AbiDYNPT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 25 Apr 2022 09:15:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231818AbiDYIhy (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 25 Apr 2022 04:37:54 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E80562A18;
-        Mon, 25 Apr 2022 01:34:50 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id j2so25778740ybu.0;
-        Mon, 25 Apr 2022 01:34:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sMct1g7Ft5UceXrNYXqhHIPwAR2NJ5Bl6cV1qu2HA+s=;
-        b=pawqGCb62CA9LZy9KYSWQr+wNtuNsvOMTzJj04AtcEKjab7zDneGzZoEhQ5tLP5+mh
-         SXoPJUr9yxbnYUesH6qGtXzF9J3hmcJkTOO5pxjH9ea0J72HG/mVuYudCVJZU7Fw/BGJ
-         S47M3gBlxYGdTPHHGZAAkC/PzdFl1s5n+RoZKbau278vsOoR9DDYr1bYl5YxtxDw1VZ7
-         4ZSfgzhuc0ckgTlTQGgp0IP0adicTfsfZc3i15EF5Gvcm3GxuGCxdQowdUbdhnq/TxPw
-         ZVWUnD7gWLLFNWJAk8JKAcjOWGD+zlprXEpd4wtIJ6EX9bKAL0/0g4J6in6cmLuVQq9H
-         i+Pw==
+        with ESMTP id S239324AbiDYNPG (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 25 Apr 2022 09:15:06 -0400
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD7936337;
+        Mon, 25 Apr 2022 06:11:54 -0700 (PDT)
+Received: by mail-qt1-f173.google.com with SMTP id t11so3311532qto.11;
+        Mon, 25 Apr 2022 06:11:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=sMct1g7Ft5UceXrNYXqhHIPwAR2NJ5Bl6cV1qu2HA+s=;
-        b=3uzSIefSwv3bx7pZiBEjNhUdd04Q8+zP+rSpKUilg1sJJNjap+55qnZKB2DWRU0O8I
-         s6dDp3dsLa4LptVcc7+xvLYviIflWqRDzsrZ+rqIy9/l2v2It/40h1XvdE4Wan/HwyiA
-         CepTxqXqqAzDM/rhNoaitoLwosGvT8aFGBid+/F+aP4WeR2myM59kbh3nwVpf+X924xu
-         ksuXZhIYteOT7WUjaVW2GsTfTL1nGiIQhDiXQ0Ll8XySg9v/uVFZqFGsg2ggqfxqK3J1
-         A02dPtrQgJtAAQFHy6XIfScOWkLzkbD5yGL72VIGT46rKjCc11nmEG01JXXKjD4bQqOi
-         fKXg==
-X-Gm-Message-State: AOAM533hVixSNL6irFPRXB7RnVMw0i/TTKoVcUybgPUdJNiWnkQh/i2B
-        J8yOQO9/OqTMQujxYXXSPU982pWaUCQqGgghu4j9+hAyzJIiLA==
-X-Google-Smtp-Source: ABdhPJwoU8fVXjAPFACL8qCTQui91owZ7n7IXVAQf6AOGhmSA/9tyl3xVm1SoRuOcqKI1C+RQSY9qsuj6BAFTlaaW+I=
-X-Received: by 2002:a25:e705:0:b0:645:781a:f870 with SMTP id
- e5-20020a25e705000000b00645781af870mr14561812ybh.630.1650875689469; Mon, 25
- Apr 2022 01:34:49 -0700 (PDT)
+        bh=EUjS5W9rwWbrvFONcfo0a44zA9TrVxWL80YbarPa1Hw=;
+        b=VbmTmyE9WXdZ94BVLAcjRfcw1SLpsd7crYCxFfd+vAl/LaJME36O3xG/H/zxb7fhIN
+         1GT6etcWOZcRdCb9XngcGfAZQzJmTeHL7p/NSXmM2UYd6SnakHf1zCjHlnSgZblv8bXc
+         4UmTVX5O1dfd2ms2TEnf+G9sGyfXPOUbQY7pfFJCYwlMyBIMawxuEdTqyHnwvNW/2k7N
+         Cbyip5CPXDb4RopWgEgyGVhyBUgyAuKgC0CbLwkQ1C1CgOz5NIJRS1MTByVe2nj0xgjm
+         rmuc9zwOaV5JPjMc630zfZbY55SiZdiBSiXVtvxo74ek4p1xVak5fRT+SJI6E+QQfS8P
+         NQjg==
+X-Gm-Message-State: AOAM530u++Zy/e1G6/+jiZaNpl+oE0YaAwjOtSKFMtWaiE/PeAUoX2WH
+        PF4plihjOcnNHQk+KF7wR4sm1pwLMAk3cA==
+X-Google-Smtp-Source: ABdhPJwQMK3+S8UZxy9uctBZ6OO5kzMujFWREZdo1hZvEPlUrVl6j8OEBcoCPtP+4bM1SMSuqSz0kg==
+X-Received: by 2002:ac8:58d1:0:b0:2f2:5a6:2ff0 with SMTP id u17-20020ac858d1000000b002f205a62ff0mr11591810qta.39.1650892313628;
+        Mon, 25 Apr 2022 06:11:53 -0700 (PDT)
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
+        by smtp.gmail.com with ESMTPSA id h11-20020ac8584b000000b002f3586f0efcsm6068264qth.88.2022.04.25.06.11.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Apr 2022 06:11:53 -0700 (PDT)
+Received: by mail-yb1-f182.google.com with SMTP id v59so14026521ybi.12;
+        Mon, 25 Apr 2022 06:11:52 -0700 (PDT)
+X-Received: by 2002:a25:d393:0:b0:648:4871:3b91 with SMTP id
+ e141-20020a25d393000000b0064848713b91mr7039896ybf.506.1650892312730; Mon, 25
+ Apr 2022 06:11:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1650816929.git.pisa@cmp.felk.cvut.cz> <1fd684bcf5ddb0346aad234072f54e976a5210fb.1650816929.git.pisa@cmp.felk.cvut.cz>
- <CAMZ6RqJ1ROr-pLsJqKE=dK=cVD+-KGxSj1wPEZY-AXH9_d4xyQ@mail.gmail.com> <202204251010.39032.pisa@cmp.felk.cvut.cz>
-In-Reply-To: <202204251010.39032.pisa@cmp.felk.cvut.cz>
-From:   Vincent Mailhol <vincent.mailhol@gmail.com>
-Date:   Mon, 25 Apr 2022 17:34:38 +0900
-Message-ID: <CAMZ6RqJsg5V-4oDpXOQiNDPCLYGE5+h54xsq2=eMJo_8iqqswQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/4] can: ctucanfd: remove PCI module debug parameters
- and core debug statements
-To:     Pavel Pisa <pisa@cmp.felk.cvut.cz>
-Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        David Miller <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Marin Jerabek <martin.jerabek01@gmail.com>,
-        Ondrej Ille <ondrej.ille@gmail.com>,
-        Jiri Novak <jnovak@fel.cvut.cz>,
-        Jaroslav Beran <jara.beran@gmail.com>,
-        Petr Porazil <porazil@pikron.com>, Pavel Machek <pavel@ucw.cz>,
-        Carsten Emde <c.emde@osadl.org>,
-        Drew Fustini <pdp7pdp7@gmail.com>,
-        Matej Vasilevski <matej.vasilevski@gmail.com>
+References: <20220423130743.123198-1-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20220423130743.123198-1-biju.das.jz@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 25 Apr 2022 15:11:40 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWGs6E4CVz_hVrWaBRDBQERWOt5Gs5y-Rk6Ffs5-q+d=A@mail.gmail.com>
+Message-ID: <CAMuHMdWGs6E4CVz_hVrWaBRDBQERWOt5Gs5y-Rk6Ffs5-q+d=A@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: can: renesas,rcar-canfd: Document RZ/G2UL support
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        linux-can@vger.kernel.org, netdev <netdev@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon. 25 Apr 2022 at 17:10, Pavel Pisa <pisa@cmp.felk.cvut.cz> wrote:
-> Hello Vincent,
+On Sat, Apr 23, 2022 at 3:07 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> Add CANFD binding documentation for Renesas R9A07G043 (RZ/G2UL) SoC.
 >
-> On Monday 25 of April 2022 09:48:51 Vincent Mailhol wrote:
-> > On Mon. 25 Apr. 2022 at 14:11, Pavel Pisa <pisa@cmp.felk.cvut.cz> wrote:
-> > > This and remove of inline keyword from the local static functions
-> > > should make happy all checks in actual versions of the both checkpatch.pl
-> > > and patchwork tools.
-> >
-> > The title and the description say two different things.
-> >
-> > When looking at the code, it just seemed that you squashed
-> > together two different patches: one to remove the inlines and one
-> > to remove the debug. I guess you should split it again.
->
-> if you or somebody else confirms that the three lines change
-> worth separate patch I regenerate the series.
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 
-I was just troubled that the title was saying "remove debug" and
-that the body was saying "remove inline". I genuinely thought
-that you inadvertently squashed two different patches
-together.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-I just expect the body of the patch to give extended explanations
-of what is in the title, not to introduce something else, and
-this regardless of the number of lines being changed.
+Gr{oetje,eeting}s,
 
-> The changes are not based on third party patches but only
-> on indications reported by static analysis tools.
-> Remove of inline in the local static functions probably
-> does not even change code generation by current compiler
-> generation. Removed debug outputs are under local ifdef
-> disabled by default, so only real change is step down from
-> option to use module parameter to check for possible
-> broken MSI causing the problems on PCIe CTU CAN FD integration.
-> So I thought that single relatively small cleanup patch is
-> less load to maintainers.
->
-> But I have no strong preference there and will do as confirmed.
->
-> By the way, what is preference for CC, should the series
-> be sent to  linux-kernel and netdev or it is preferred for these
-> local changes to send it only to linux-can to not load others?
-> Same for CC to David Miller.
+                        Geert
 
-I used to include them in the past because of
-get_maitainer.pl. But Oliver pointed out that it is not
-necessary. Now, I just sent it to linux-can and Marc (and maybe
-some driver maintainers when relevant).
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-> Best wishes,
->
->                 Pavel
-> --
->                 Pavel Pisa
->     phone:      +420 603531357
->     e-mail:     pisa@cmp.felk.cvut.cz
->     Department of Control Engineering FEE CVUT
->     Karlovo namesti 13, 121 35, Prague 2
->     university: http://control.fel.cvut.cz/
->     personal:   http://cmp.felk.cvut.cz/~pisa
->     projects:   https://www.openhub.net/accounts/ppisa
->     CAN related:http://canbus.pages.fel.cvut.cz/
->     Open Technologies Research Education and Exchange Services
->     https://gitlab.fel.cvut.cz/otrees/org/-/wikis/home
->
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
