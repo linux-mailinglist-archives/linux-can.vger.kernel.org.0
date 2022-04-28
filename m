@@ -2,98 +2,50 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8B2D512BAA
-	for <lists+linux-can@lfdr.de>; Thu, 28 Apr 2022 08:34:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF58B512BEF
+	for <lists+linux-can@lfdr.de>; Thu, 28 Apr 2022 08:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241333AbiD1Ghi (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 28 Apr 2022 02:37:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40032 "EHLO
+        id S229612AbiD1GyW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 28 Apr 2022 02:54:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244084AbiD1Ghe (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 28 Apr 2022 02:37:34 -0400
+        with ESMTP id S244534AbiD1GyR (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 28 Apr 2022 02:54:17 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDDCD7521A
-        for <linux-can@vger.kernel.org>; Wed, 27 Apr 2022 23:34:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F21985BC
+        for <linux-can@vger.kernel.org>; Wed, 27 Apr 2022 23:51:03 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1njxhg-0001Q8-Hr; Thu, 28 Apr 2022 08:32:40 +0200
+        id 1njxzP-0003Yt-Of; Thu, 28 Apr 2022 08:50:59 +0200
 Received: from pengutronix.de (2a03-f580-87bc-d400-6c64-eec7-9c08-9d9e.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:6c64:eec7:9c08:9d9e])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id D7C416F531;
-        Thu, 28 Apr 2022 06:32:11 +0000 (UTC)
-Date:   Thu, 28 Apr 2022 08:32:11 +0200
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 9798E6F68F;
+        Thu, 28 Apr 2022 06:50:58 +0000 (UTC)
+Date:   Thu, 28 Apr 2022 08:50:58 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Erin MacNeil <lnx.erin@gmail.com>
-Cc:     Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+To:     Andreas Larsson <andreas@gaisler.com>
+Cc:     linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
         Oliver Hartkopp <socketcan@hartkopp.net>,
-        Robin van der Gracht <robin@protonic.nl>,
-        Oleksij Rempel <linux@rempel-privat.de>, kernel@pengutronix.de,
-        Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Matt Johnston <matt@codeconstruct.com.au>,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-        Martynas Pumputis <m@lambda.lt>,
-        Akhmat Karakotov <hmukos@yandex-team.ru>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Wei Wang <weiwan@google.com>, Yangbo Lu <yangbo.lu@nxp.com>,
-        Florian Westphal <fw@strlen.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Richard Palethorpe <rpalethorpe@suse.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Hangbin Liu <liuhangbin@gmail.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Richard Sanger <rsanger@wand.net.nz>,
-        Yajun Deng <yajun.deng@linux.dev>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        sparclinux@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-can@vger.kernel.org, linux-wpan@vger.kernel.org,
-        linux-sctp@vger.kernel.org
-Subject: Re: [PATCH net-next v3] net: SO_RCVMARK socket option for SO_MARK
- with recvmsg()
-Message-ID: <20220428063211.4ndwg7xzudl7l7h7@pengutronix.de>
-References: <202204270907.nUUrw3dS-lkp@intel.com>
- <20220427200259.2564-1-lnx.erin@gmail.com>
+        linux-kernel@vger.kernel.org, software@gaisler.com
+Subject: Re: [PATCH 0/3] can: grcan: Bug fixes
+Message-ID: <20220428065058.mf76kmhamddsqsvk@pengutronix.de>
+References: <20220427134307.22981-1-andreas@gaisler.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="twk6owb5igwqlcml"
+        protocol="application/pgp-signature"; boundary="3ehkjv647hydu7gq"
 Content-Disposition: inline
-In-Reply-To: <20220427200259.2564-1-lnx.erin@gmail.com>
+In-Reply-To: <20220427134307.22981-1-andreas@gaisler.com>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -101,26 +53,28 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---twk6owb5igwqlcml
+--3ehkjv647hydu7gq
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 27.04.2022 16:02:37, Erin MacNeil wrote:
-> Adding a new socket option, SO_RCVMARK, to indicate that SO_MARK
-> should be included in the ancillary data returned by recvmsg().
+On 27.04.2022 15:43:04, Andreas Larsson wrote:
+> These patches
+> * makes sure that DMA memory is allocated properly
+> * avoids the tx errata workaround needlessly being applied
+> * fixes a bug where the driver can be left hanging without interrupts ena=
+bled
 >=20
-> Renamed the sock_recv_ts_and_drops() function to sock_recv_cmsgs().
+> Andreas Larsson (2):
+>   can: grcan: Fix broken system id check for errata workaround needs
+>   can: grcan: Only use the napi poll budget for rx
 >=20
-> Signed-off-by: Erin MacNeil <lnx.erin@gmail.com>
-> ---
->  net/can/bcm.c                           |  2 +-
->  net/can/j1939/socket.c                  |  2 +-
->  net/can/raw.c                           |  2 +-
+> Daniel Hellstrom (1):
+>   can: grcan: use ofdev->dev when allocating DMA memory
 
-For the net/can changes:
-
-Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Thanks for the patches. Can you please add a "Fixes:" tag to each patch.
+=46rom the description it seems they should be backported to the stable
+kernels, correct?
 
 regards,
 Marc
@@ -131,19 +85,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---twk6owb5igwqlcml
+--3ehkjv647hydu7gq
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJqNOgACgkQrX5LkNig
-010oWwf/YQtdMP9EhexK+DgW94m7NnyknIp9mL/PgS712H8tMgbdcesQGNCYJvag
-mWhVZeGq5XI/oC3he0VDrAvI+i0WVRjj4ljyd3hVnL5o6Y0+0V2kV8Te5+/qHKqp
-HG3KiLAkGO2LNKpoUXMVORu/+V4Mwl/oiggQbQ+tzAjZ4BIZ7fCHQVv39LSUDXAY
-NrrZ8oF+gi5QTRhvbvQXUlskp2Idym5ND+QevTxOX5Uo3zUV5H7ERo0iwpIZwRJw
-8/t1/a+pX6V8hgtHEgi8kmJOlw9AAWjiUFZY9ngresTMZL7pjyuz1cHTOaGt4Sve
-Y5A7ifvkLmiO+EpPJ8FsaWn53qpmgQ==
-=kyeH
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJqOU8ACgkQrX5LkNig
+0138awf8CRjYpPJ61meelWmMiISKdKDVE6fz2p/o+FqwRqxM9dOkCV+/3WCTMH4b
+EwiTOn87Q5M9qO3M4gkzJhblIvo6HzExaOCKrbHazoTcK4mpWf5T3Ly+bNvMpp10
+oeUwDvc8oE/UIUyWMLtDDcEh1KNQoY/MihhlZwbt/8QXA5gSv+b9QnKRmzAPzI0p
+jGZUINJRUu40P5ZqxZJbHnXj19mTSyTZxcRty3ipvUR99MU8/mfmErQXlMMWdPeq
+IhxM215XSIWaU8bGNkqgyDedqZu4h9mrmsYxNiGf6icKr6Ps3BiwPWl/YQ3bJa6x
+HK/+DZKQvNVP5jw1/8EI5podZHMvXw==
+=QSKS
 -----END PGP SIGNATURE-----
 
---twk6owb5igwqlcml--
+--3ehkjv647hydu7gq--
