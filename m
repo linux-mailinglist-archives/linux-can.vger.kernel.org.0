@@ -2,143 +2,320 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADDDE514A0B
-	for <lists+linux-can@lfdr.de>; Fri, 29 Apr 2022 14:56:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADB9B514B96
+	for <lists+linux-can@lfdr.de>; Fri, 29 Apr 2022 15:53:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359610AbiD2M7l (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 29 Apr 2022 08:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34184 "EHLO
+        id S1376710AbiD2N5C (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 29 Apr 2022 09:57:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359602AbiD2M7i (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 29 Apr 2022 08:59:38 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7195A94C6
-        for <linux-can@vger.kernel.org>; Fri, 29 Apr 2022 05:56:19 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nkQAU-0000AM-7J
-        for linux-can@vger.kernel.org; Fri, 29 Apr 2022 14:56:18 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 3050E70F09
-        for <linux-can@vger.kernel.org>; Fri, 29 Apr 2022 12:56:14 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id EBFAB70EEF;
-        Fri, 29 Apr 2022 12:56:13 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id e38266ba;
-        Fri, 29 Apr 2022 12:56:13 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Andreas Larsson <andreas@gaisler.com>,
-        stable@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net 5/5] can: grcan: only use the NAPI poll budget for RX
-Date:   Fri, 29 Apr 2022 14:56:12 +0200
-Message-Id: <20220429125612.1792561-6-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220429125612.1792561-1-mkl@pengutronix.de>
-References: <20220429125612.1792561-1-mkl@pengutronix.de>
+        with ESMTP id S1376720AbiD2N4W (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 29 Apr 2022 09:56:22 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 391CBCD64B;
+        Fri, 29 Apr 2022 06:51:48 -0700 (PDT)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23TDhRFg012039;
+        Fri, 29 Apr 2022 13:51:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=r0A26ZSi2OGq3odIkE3plPz0/FcnM2EA+xPgleBvJZU=;
+ b=kAEMdoE2gOvZ0qdglbECFN4QzenEPoAQpgyx2uCtLLQlF8+my3m0/vuJCsIlQc63vCvk
+ uHuVfLlKUIbybe4mte1mhUKoYf5SHcyUQZ3ArFkQ2NHR3fXyuFiyZsiiD/XStBqp7yZv
+ 7y4oa6LVXiFG/DQWUSeBfTQzwOPjRGFOQLBRkpeOKYmXX9V8/2KMJCoo3C/O1Daho+At
+ yM4obIjcUDYvMW2tGMhWdpxR01rf92hXluEC6f+WyOuwB/EiM18JO29rB9Pz5kn1m7mT
+ irYjdQ/CFhFmeHjtyU/bb1He2/xRGZxF9VqpORR2M7zUnfDIP9q0h9rM3EfgZXNTq7Tj OA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3frh5eg4bt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Apr 2022 13:51:35 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23TDnKWl029831;
+        Fri, 29 Apr 2022 13:51:34 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3frh5eg4aq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Apr 2022 13:51:34 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23TDSWZS024572;
+        Fri, 29 Apr 2022 13:51:32 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma01fra.de.ibm.com with ESMTP id 3fm938yabw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Apr 2022 13:51:31 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23TDpTjr46858512
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 29 Apr 2022 13:51:29 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 83B464C040;
+        Fri, 29 Apr 2022 13:51:29 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F27154C044;
+        Fri, 29 Apr 2022 13:51:28 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 29 Apr 2022 13:51:28 +0000 (GMT)
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        netdev@vger.kernel.org (open list:NETWORKING DRIVERS),
+        linux-can@vger.kernel.org (open list:CAN NETWORK DRIVERS),
+        intel-wired-lan@lists.osuosl.org (moderated list:INTEL ETHERNET DRIVERS)
+Subject: [PATCH 20/37] net: add HAS_IOPORT dependencies
+Date:   Fri, 29 Apr 2022 15:50:32 +0200
+Message-Id: <20220429135108.2781579-35-schnelle@linux.ibm.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220429135108.2781579-1-schnelle@linux.ibm.com>
+References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: I1jTiIsuecqpk-pdMNeUPNPX_Q3QtrUV
+X-Proofpoint-ORIG-GUID: WksVfFPmTRT8U9W2HJI2zIlDOvMAYugO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-29_06,2022-04-28_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ phishscore=0 mlxlogscore=630 clxscore=1011 impostorscore=0 suspectscore=0
+ lowpriorityscore=0 spamscore=0 priorityscore=1501 mlxscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204290078
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Andreas Larsson <andreas@gaisler.com>
+In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+not being declared. We thus need to add HAS_IOPORT as dependency for
+those drivers using them.
 
-The previous split budget between TX and RX made it return not using
-the entire budget but at the same time not having calling called
-napi_complete. This sometimes led to the poll to not be called, and at
-the same time having TX and RX interrupts disabled resulting in the
-driver getting stuck.
-
-Fixes: 6cec9b07fe6a ("can: grcan: Add device driver for GRCAN and GRHCAN cores")
-Link: https://lore.kernel.org/all/20220429084656.29788-4-andreas@gaisler.com
-Cc: stable@vger.kernel.org
-Signed-off-by: Andreas Larsson <andreas@gaisler.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 ---
- drivers/net/can/grcan.c | 22 +++++++---------------
- 1 file changed, 7 insertions(+), 15 deletions(-)
+ drivers/net/Kconfig                | 2 +-
+ drivers/net/arcnet/Kconfig         | 2 +-
+ drivers/net/can/cc770/Kconfig      | 1 +
+ drivers/net/can/sja1000/Kconfig    | 1 +
+ drivers/net/ethernet/8390/Kconfig  | 2 +-
+ drivers/net/ethernet/amd/Kconfig   | 2 +-
+ drivers/net/ethernet/intel/Kconfig | 2 +-
+ drivers/net/ethernet/sis/Kconfig   | 4 ++--
+ drivers/net/ethernet/ti/Kconfig    | 2 +-
+ drivers/net/ethernet/via/Kconfig   | 1 +
+ drivers/net/fddi/Kconfig           | 2 +-
+ drivers/net/hamradio/Kconfig       | 6 +++---
+ drivers/net/wan/Kconfig            | 2 +-
+ 13 files changed, 16 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/net/can/grcan.c b/drivers/net/can/grcan.c
-index 4ca3da56d3aa..5215bd9b2c80 100644
---- a/drivers/net/can/grcan.c
-+++ b/drivers/net/can/grcan.c
-@@ -1125,7 +1125,7 @@ static int grcan_close(struct net_device *dev)
- 	return 0;
- }
+diff --git a/drivers/net/Kconfig b/drivers/net/Kconfig
+index b2a4f998c180..0fd284103ee4 100644
+--- a/drivers/net/Kconfig
++++ b/drivers/net/Kconfig
+@@ -475,7 +475,7 @@ source "drivers/net/ipa/Kconfig"
  
--static int grcan_transmit_catch_up(struct net_device *dev, int budget)
-+static void grcan_transmit_catch_up(struct net_device *dev)
- {
- 	struct grcan_priv *priv = netdev_priv(dev);
- 	unsigned long flags;
-@@ -1133,7 +1133,7 @@ static int grcan_transmit_catch_up(struct net_device *dev, int budget)
+ config NET_SB1000
+ 	tristate "General Instruments Surfboard 1000"
+-	depends on PNP
++	depends on ISAPNP
+ 	help
+ 	  This is a driver for the General Instrument (also known as
+ 	  NextLevel) SURFboard 1000 internal
+diff --git a/drivers/net/arcnet/Kconfig b/drivers/net/arcnet/Kconfig
+index a51b9dab6d3a..d1d07a1d4fbc 100644
+--- a/drivers/net/arcnet/Kconfig
++++ b/drivers/net/arcnet/Kconfig
+@@ -4,7 +4,7 @@
+ #
  
- 	spin_lock_irqsave(&priv->lock, flags);
+ menuconfig ARCNET
+-	depends on NETDEVICES && (ISA || PCI || PCMCIA)
++	depends on NETDEVICES && (ISA || PCI || PCMCIA) && HAS_IOPORT
+ 	tristate "ARCnet support"
+ 	help
+ 	  If you have a network card of this type, say Y and check out the
+diff --git a/drivers/net/can/cc770/Kconfig b/drivers/net/can/cc770/Kconfig
+index 9ef1359319f0..467ef19de1c1 100644
+--- a/drivers/net/can/cc770/Kconfig
++++ b/drivers/net/can/cc770/Kconfig
+@@ -7,6 +7,7 @@ if CAN_CC770
  
--	work_done = catch_up_echo_skb(dev, budget, true);
-+	work_done = catch_up_echo_skb(dev, -1, true);
- 	if (work_done) {
- 		if (!priv->resetting && !priv->closing &&
- 		    !(priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY))
-@@ -1147,8 +1147,6 @@ static int grcan_transmit_catch_up(struct net_device *dev, int budget)
- 	}
+ config CAN_CC770_ISA
+ 	tristate "ISA Bus based legacy CC770 driver"
++	depends on ISA
+ 	help
+ 	  This driver adds legacy support for CC770 and AN82527 chips
+ 	  connected to the ISA bus using I/O port, memory mapped or
+diff --git a/drivers/net/can/sja1000/Kconfig b/drivers/net/can/sja1000/Kconfig
+index 110071b26921..be1943a27ed0 100644
+--- a/drivers/net/can/sja1000/Kconfig
++++ b/drivers/net/can/sja1000/Kconfig
+@@ -87,6 +87,7 @@ config CAN_PLX_PCI
  
- 	spin_unlock_irqrestore(&priv->lock, flags);
--
--	return work_done;
- }
+ config CAN_SJA1000_ISA
+ 	tristate "ISA Bus based legacy SJA1000 driver"
++	depends on ISA
+ 	help
+ 	  This driver adds legacy support for SJA1000 chips connected to
+ 	  the ISA bus using I/O port, memory mapped or indirect access.
+diff --git a/drivers/net/ethernet/8390/Kconfig b/drivers/net/ethernet/8390/Kconfig
+index a4130e643342..3e727407d8f5 100644
+--- a/drivers/net/ethernet/8390/Kconfig
++++ b/drivers/net/ethernet/8390/Kconfig
+@@ -117,7 +117,7 @@ config NE2000
  
- static int grcan_receive(struct net_device *dev, int budget)
-@@ -1230,19 +1228,13 @@ static int grcan_poll(struct napi_struct *napi, int budget)
- 	struct net_device *dev = priv->dev;
- 	struct grcan_registers __iomem *regs = priv->regs;
- 	unsigned long flags;
--	int tx_work_done, rx_work_done;
--	int rx_budget = budget / 2;
--	int tx_budget = budget - rx_budget;
-+	int work_done;
+ config NE2K_PCI
+ 	tristate "PCI NE2000 and clones support (see help)"
+-	depends on PCI
++	depends on PCI && HAS_IOPORT
+ 	select CRC32
+ 	help
+ 	  This driver is for NE2000 compatible PCI cards. It will not work
+diff --git a/drivers/net/ethernet/amd/Kconfig b/drivers/net/ethernet/amd/Kconfig
+index 899c8a2a34b6..019810eeb68d 100644
+--- a/drivers/net/ethernet/amd/Kconfig
++++ b/drivers/net/ethernet/amd/Kconfig
+@@ -56,7 +56,7 @@ config LANCE
  
--	/* Half of the budget for receiving messages */
--	rx_work_done = grcan_receive(dev, rx_budget);
-+	work_done = grcan_receive(dev, budget);
+ config PCNET32
+ 	tristate "AMD PCnet32 PCI support"
+-	depends on PCI
++	depends on PCI && HAS_IOPORT
+ 	select CRC32
+ 	select MII
+ 	help
+diff --git a/drivers/net/ethernet/intel/Kconfig b/drivers/net/ethernet/intel/Kconfig
+index 3facb55b7161..6bdce8eb689d 100644
+--- a/drivers/net/ethernet/intel/Kconfig
++++ b/drivers/net/ethernet/intel/Kconfig
+@@ -41,7 +41,7 @@ config E100
  
--	/* Half of the budget for transmitting messages as that can trigger echo
--	 * frames being received
--	 */
--	tx_work_done = grcan_transmit_catch_up(dev, tx_budget);
-+	grcan_transmit_catch_up(dev);
+ config E1000
+ 	tristate "Intel(R) PRO/1000 Gigabit Ethernet support"
+-	depends on PCI
++	depends on PCI && HAS_IOPORT
+ 	help
+ 	  This driver supports Intel(R) PRO/1000 gigabit ethernet family of
+ 	  adapters.  For more information on how to identify your adapter, go
+diff --git a/drivers/net/ethernet/sis/Kconfig b/drivers/net/ethernet/sis/Kconfig
+index 775d76d9890e..7e498bdbca73 100644
+--- a/drivers/net/ethernet/sis/Kconfig
++++ b/drivers/net/ethernet/sis/Kconfig
+@@ -19,7 +19,7 @@ if NET_VENDOR_SIS
  
--	if (rx_work_done < rx_budget && tx_work_done < tx_budget) {
-+	if (work_done < budget) {
- 		napi_complete(napi);
+ config SIS900
+ 	tristate "SiS 900/7016 PCI Fast Ethernet Adapter support"
+-	depends on PCI
++	depends on PCI && HAS_IOPORT
+ 	select CRC32
+ 	select MII
+ 	help
+@@ -35,7 +35,7 @@ config SIS900
  
- 		/* Guarantee no interference with a running reset that otherwise
-@@ -1259,7 +1251,7 @@ static int grcan_poll(struct napi_struct *napi, int budget)
- 		spin_unlock_irqrestore(&priv->lock, flags);
- 	}
+ config SIS190
+ 	tristate "SiS190/SiS191 gigabit ethernet support"
+-	depends on PCI
++	depends on PCI && HAS_IOPORT
+ 	select CRC32
+ 	select MII
+ 	help
+diff --git a/drivers/net/ethernet/ti/Kconfig b/drivers/net/ethernet/ti/Kconfig
+index affcf92cd3aa..b5cc714adda4 100644
+--- a/drivers/net/ethernet/ti/Kconfig
++++ b/drivers/net/ethernet/ti/Kconfig
+@@ -159,7 +159,7 @@ config TI_KEYSTONE_NETCP_ETHSS
  
--	return rx_work_done + tx_work_done;
-+	return work_done;
- }
+ config TLAN
+ 	tristate "TI ThunderLAN support"
+-	depends on (PCI || EISA)
++	depends on (PCI || EISA) && HAS_IOPORT
+ 	help
+ 	  If you have a PCI Ethernet network card based on the ThunderLAN chip
+ 	  which is supported by this driver, say Y here.
+diff --git a/drivers/net/ethernet/via/Kconfig b/drivers/net/ethernet/via/Kconfig
+index da287ef65be7..00773f5e4d7e 100644
+--- a/drivers/net/ethernet/via/Kconfig
++++ b/drivers/net/ethernet/via/Kconfig
+@@ -20,6 +20,7 @@ config VIA_RHINE
+ 	tristate "VIA Rhine support"
+ 	depends on PCI || (OF_IRQ && GENERIC_PCI_IOMAP)
+ 	depends on PCI || ARCH_VT8500 || COMPILE_TEST
++	depends on HAS_IOPORT
+ 	depends on HAS_DMA
+ 	select CRC32
+ 	select MII
+diff --git a/drivers/net/fddi/Kconfig b/drivers/net/fddi/Kconfig
+index 846bf41c2717..fa3f1e0fe143 100644
+--- a/drivers/net/fddi/Kconfig
++++ b/drivers/net/fddi/Kconfig
+@@ -29,7 +29,7 @@ config DEFZA
  
- /* Work tx bug by waiting while for the risky situation to clear. If that fails,
+ config DEFXX
+ 	tristate "Digital DEFTA/DEFEA/DEFPA adapter support"
+-	depends on FDDI && (PCI || EISA || TC)
++	depends on FDDI && (PCI || EISA || TC) && HAS_IOPORT
+ 	help
+ 	  This is support for the DIGITAL series of TURBOchannel (DEFTA),
+ 	  EISA (DEFEA) and PCI (DEFPA) controllers which can connect you
+diff --git a/drivers/net/hamradio/Kconfig b/drivers/net/hamradio/Kconfig
+index 441da03c23ee..61c0bc156870 100644
+--- a/drivers/net/hamradio/Kconfig
++++ b/drivers/net/hamradio/Kconfig
+@@ -117,7 +117,7 @@ config SCC_TRXECHO
+ 
+ config BAYCOM_SER_FDX
+ 	tristate "BAYCOM ser12 fullduplex driver for AX.25"
+-	depends on AX25 && !S390
++	depends on AX25 && HAS_IOPORT
+ 	select CRC_CCITT
+ 	help
+ 	  This is one of two drivers for Baycom style simple amateur radio
+@@ -137,7 +137,7 @@ config BAYCOM_SER_FDX
+ 
+ config BAYCOM_SER_HDX
+ 	tristate "BAYCOM ser12 halfduplex driver for AX.25"
+-	depends on AX25 && !S390
++	depends on AX25 && HAS_IOPORT
+ 	select CRC_CCITT
+ 	help
+ 	  This is one of two drivers for Baycom style simple amateur radio
+@@ -185,7 +185,7 @@ config BAYCOM_EPP
+ 
+ config YAM
+ 	tristate "YAM driver for AX.25"
+-	depends on AX25 && !S390
++	depends on AX25 && HAS_IOPORT
+ 	help
+ 	  The YAM is a modem for packet radio which connects to the serial
+ 	  port and includes some of the functions of a Terminal Node
+diff --git a/drivers/net/wan/Kconfig b/drivers/net/wan/Kconfig
+index 140780ac1745..e62a51098836 100644
+--- a/drivers/net/wan/Kconfig
++++ b/drivers/net/wan/Kconfig
+@@ -250,7 +250,7 @@ config C101
+ 
+ config FARSYNC
+ 	tristate "FarSync T-Series support"
+-	depends on HDLC && PCI
++	depends on HDLC && PCI && HAS_IOPORT
+ 	help
+ 	  Support for the FarSync T-Series X.21 (and V.35/V.24) cards by
+ 	  FarSite Communications Ltd.
 -- 
-2.35.1
-
+2.32.0
 
