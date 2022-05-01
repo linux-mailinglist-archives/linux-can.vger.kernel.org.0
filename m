@@ -2,76 +2,53 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47290515B3A
-	for <lists+linux-can@lfdr.de>; Sat, 30 Apr 2022 10:01:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4920A5168C9
+	for <lists+linux-can@lfdr.de>; Mon,  2 May 2022 00:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382300AbiD3IEK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 30 Apr 2022 04:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48744 "EHLO
+        id S243596AbiEAWvr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 1 May 2022 18:51:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350868AbiD3IEI (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 30 Apr 2022 04:04:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC7523BD6;
-        Sat, 30 Apr 2022 01:00:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DDE52B81CEB;
-        Sat, 30 Apr 2022 08:00:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 85970C385AA;
-        Sat, 30 Apr 2022 08:00:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651305641;
-        bh=pe08Mdjqla3FNT96mNNuQXP8ILn0+/mHR01kJNYaDic=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=kpvXG6gAXQ7u8p7VNWhLHi8OioRjTUEMNeyaytnu64Tlm3WDc+9G65aHyH17I6Diz
-         5jBIXhCOYaE9MWPbblLVP34glVbcEXDFadZeC1m/ozWT0DtLOuk2lY2OLQTqEZxjcv
-         UF1SUB7qrKBQNqJGV7DS+LErHbW5e24ev50IE4aqZ37tG1QD6bYzt2wRvMtP19xyET
-         kb+hm3gSIlqoDwVSbGXCbAfFHb5+Fm+WKfhA6RRKW2aw3Bc5cVLkCO390GaRHqO0JS
-         QYcBYGc+38fsaLliNEJEjp8cr1wYSjcYriu5X5/AHsphXMh14EX8ojqfJUpVrlLxY1
-         S/K+3C67aDB6Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5DB96E8DBDA;
-        Sat, 30 Apr 2022 08:00:41 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S234297AbiEAWvp (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 1 May 2022 18:51:45 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF6FB4349C;
+        Sun,  1 May 2022 15:48:10 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id B5CF392009E; Mon,  2 May 2022 00:48:09 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id A6C2392009D;
+        Sun,  1 May 2022 23:48:09 +0100 (BST)
+Date:   Sun, 1 May 2022 23:48:09 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Arnd Bergmann <arnd@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        "open list:CAN NETWORK DRIVERS" <linux-can@vger.kernel.org>,
+        "moderated list:INTEL ETHERNET DRIVERS" 
+        <intel-wired-lan@lists.osuosl.org>,
+        "open list:AX.25 NETWORK LAYER" <linux-hams@vger.kernel.org>
+Subject: Re: [RFC v2 21/39] net: add HAS_IOPORT dependencies
+In-Reply-To: <20220429135108.2781579-36-schnelle@linux.ibm.com>
+Message-ID: <alpine.DEB.2.21.2205012324130.9383@angie.orcam.me.uk>
+References: <20220429135108.2781579-1-schnelle@linux.ibm.com> <20220429135108.2781579-36-schnelle@linux.ibm.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v3] net: SO_RCVMARK socket option for SO_MARK with
- recvmsg()
-From:   patchwork-bot+bluetooth@kernel.org
-Message-Id: <165130564137.32506.12098247313333350008.git-patchwork-notify@kernel.org>
-Date:   Sat, 30 Apr 2022 08:00:41 +0000
-References: <20220427200259.2564-1-lnx.erin@gmail.com>
-In-Reply-To: <20220427200259.2564-1-lnx.erin@gmail.com>
-To:     Erin MacNeil <lnx.erin@gmail.com>
-Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
-        tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
-        deller@gmx.de, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, arnd@arndb.de, marcel@holtmann.org,
-        johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        socketcan@hartkopp.net, mkl@pengutronix.de, robin@protonic.nl,
-        linux@rempel-privat.de, kernel@pengutronix.de,
-        alex.aring@gmail.com, stefan@datenfreihafen.org,
-        yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
-        jk@codeconstruct.com.au, matt@codeconstruct.com.au,
-        vyasevich@gmail.com, nhorman@tuxdriver.com,
-        marcelo.leitner@gmail.com, edumazet@google.com, lmb@cloudflare.com,
-        ptikhomirov@virtuozzo.com, m@lambda.lt, hmukos@yandex-team.ru,
-        sfr@canb.auug.org.au, weiwan@google.com, yangbo.lu@nxp.com,
-        fw@strlen.de, tglx@linutronix.de, rpalethorpe@suse.com,
-        willemb@google.com, liuhangbin@gmail.com, pablo@netfilter.org,
-        rsanger@wand.net.nz, yajun.deng@linux.dev,
-        jiapeng.chong@linux.alibaba.com, linux-alpha@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
-        netdev@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-bluetooth@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,28 +56,51 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello:
+On Fri, 29 Apr 2022, Niklas Schnelle wrote:
 
-This patch was applied to bluetooth/bluetooth-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> not being declared. We thus need to add HAS_IOPORT as dependency for
+> those drivers using them. It also turns out that with HAS_IOPORT handled
+> explicitly HAMRADIO does not need the !S390 dependency and successfully
+> builds the bpqether driver.
+[...]
+> diff --git a/drivers/net/fddi/Kconfig b/drivers/net/fddi/Kconfig
+> index 846bf41c2717..fa3f1e0fe143 100644
+> --- a/drivers/net/fddi/Kconfig
+> +++ b/drivers/net/fddi/Kconfig
+> @@ -29,7 +29,7 @@ config DEFZA
+>  
+>  config DEFXX
+>  	tristate "Digital DEFTA/DEFEA/DEFPA adapter support"
+> -	depends on FDDI && (PCI || EISA || TC)
+> +	depends on FDDI && (PCI || EISA || TC) && HAS_IOPORT
+>  	help
+>  	  This is support for the DIGITAL series of TURBOchannel (DEFTA),
+>  	  EISA (DEFEA) and PCI (DEFPA) controllers which can connect you
 
-On Wed, 27 Apr 2022 16:02:37 -0400 you wrote:
-> Adding a new socket option, SO_RCVMARK, to indicate that SO_MARK
-> should be included in the ancillary data returned by recvmsg().
-> 
-> Renamed the sock_recv_ts_and_drops() function to sock_recv_cmsgs().
-> 
-> Signed-off-by: Erin MacNeil <lnx.erin@gmail.com>
-> 
-> [...]
+ NAK, this has to be sorted out differently (and I think we discussed it 
+before).
 
-Here is the summary with links:
-  - [net-next,v3] net: SO_RCVMARK socket option for SO_MARK with recvmsg()
-    https://git.kernel.org/bluetooth/bluetooth-next/c/6fd1d51cfa25
+ The driver works just fine with MMIO where available, so if `inb'/`outb' 
+do get removed, then only parts that rely on port I/O need to be disabled.  
+In fact there's already such provision there in drivers/net/fddi/defxx.c 
+for TURBOchannel systems (CONFIG_TC), which have no port I/O space either:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+#if defined(CONFIG_EISA) || defined(CONFIG_PCI)
+#define dfx_use_mmio bp->mmio
+#else
+#define dfx_use_mmio true
+#endif
 
+so I guess it's just the conditional that will have to be changed to:
 
+#ifdef CONFIG_HAS_IOPORT
+
+replacing the current explicit bus dependency list.  The compiler will 
+then optimise away all the port I/O stuff (though I suspect dummy function 
+declarations may be required for `inb'/`outb', etc.).
+
+ I can verify a suitable change with a TURBOchannel configuration once the 
+MIPS part has been sorted.
+
+  Maciej
