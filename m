@@ -2,241 +2,143 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 242A7518037
-	for <lists+linux-can@lfdr.de>; Tue,  3 May 2022 10:55:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 357BA51836D
+	for <lists+linux-can@lfdr.de>; Tue,  3 May 2022 13:44:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233030AbiECI7T (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 3 May 2022 04:59:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37676 "EHLO
+        id S234839AbiECLr4 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Tue, 3 May 2022 07:47:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233099AbiECI7B (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 3 May 2022 04:59:01 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F4820182
-        for <linux-can@vger.kernel.org>; Tue,  3 May 2022 01:55:27 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nloJK-0007st-3e; Tue, 03 May 2022 10:55:10 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id C97AA74A84;
-        Tue,  3 May 2022 08:55:06 +0000 (UTC)
-Date:   Tue, 3 May 2022 10:55:06 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
+        with ESMTP id S234783AbiECLrz (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 3 May 2022 07:47:55 -0400
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64D31F617;
+        Tue,  3 May 2022 04:44:22 -0700 (PDT)
+Received: by mail-ot1-f50.google.com with SMTP id k25-20020a056830169900b00605f215e55dso8123617otr.13;
+        Tue, 03 May 2022 04:44:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=cU3Z6ykdejESNcgy+emYbv3uxVtClhcVte+gZSY0vNY=;
+        b=q+mrMdmWF1qiQScO3xKSXJKVWB0Zh+Cm1A4P7nHU3esX5tKqr1wZqn073cdHQepmfu
+         lb1HvQMe8ZrekrcLcWIuYzTpJhwSHN+cO7dJCDKGnIl/JwuM9507zYyWTzEHyziii/4A
+         HsUPCoD3s+5EyAUrKszKV2h5C/XIiqnLwwNUNnIX5wQtbJ7VtBg+yrL9Mn0eVLi2v4us
+         5BAAoBo75ZmrHHlO2hf80LpbUi99cd+xUftIMkdrqxTuetrKxgXnAAs5CCvNCXAX2vD4
+         l8vnFa76pE3/Y+ztRy0G8xG4zPXqwPj5yFV1eY4Guw6MSjAbMeFaVoW3WOjQqBNr5d0K
+         kVFA==
+X-Gm-Message-State: AOAM532IUQWCYvQrudP38wClQ9Wbpz/aromsLlMhpH6WY0rxQ+2ijKDx
+        8+HwvMJX72DuB9dR7JM1gl6CsTXoPV0GzQ==
+X-Google-Smtp-Source: ABdhPJx9f5FEJqVlsJPj0zsNWKMHxl/aKPrh3i9MhHT6FFHZdudw6RbpQv4Hzan15Xafq4SD0Xy6dw==
+X-Received: by 2002:a9d:34b:0:b0:605:f0f1:e28e with SMTP id 69-20020a9d034b000000b00605f0f1e28emr5558412otv.304.1651578262024;
+        Tue, 03 May 2022 04:44:22 -0700 (PDT)
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com. [209.85.210.54])
+        by smtp.gmail.com with ESMTPSA id bl23-20020a056808309700b00325f4f40f9esm2033390oib.22.2022.05.03.04.44.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 May 2022 04:44:21 -0700 (PDT)
+Received: by mail-ot1-f54.google.com with SMTP id z5-20020a9d62c5000000b00606041d11f1so5659639otk.2;
+        Tue, 03 May 2022 04:44:21 -0700 (PDT)
+X-Received: by 2002:a25:6157:0:b0:645:8d0e:f782 with SMTP id
+ v84-20020a256157000000b006458d0ef782mr14366337ybb.36.1651577879447; Tue, 03
+ May 2022 04:37:59 -0700 (PDT)
+MIME-Version: 1.0
+References: <cover.1647904780.git.pisa@cmp.felk.cvut.cz> <4d5c53499bafe7717815f948801bd5aedaa05c12.1647904780.git.pisa@cmp.felk.cvut.cz>
+In-Reply-To: <4d5c53499bafe7717815f948801bd5aedaa05c12.1647904780.git.pisa@cmp.felk.cvut.cz>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 3 May 2022 13:37:46 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXY_sHw4W8_y+r1LMhGM+CF7RQtRFQzEC8wYKYSR98Daw@mail.gmail.com>
+Message-ID: <CAMuHMdXY_sHw4W8_y+r1LMhGM+CF7RQtRFQzEC8wYKYSR98Daw@mail.gmail.com>
+Subject: Re: [PATCH v8 5/7] can: ctucanfd: CTU CAN FD open-source IP core -
+ platform/SoC support.
 To:     Pavel Pisa <pisa@cmp.felk.cvut.cz>
-Cc:     Andrew Dennison <andrew.dennison@motec.com.au>,
-        linux-can@vger.kernel.org,
+Cc:     linux-can@vger.kernel.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
         Oliver Hartkopp <socketcan@hartkopp.net>,
         Wolfgang Grandegger <wg@grandegger.com>,
-        David Miller <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+        David Miller <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Carsten Emde <c.emde@osadl.org>, armbru@redhat.com,
+        netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Marin Jerabek <martin.jerabek01@gmail.com>,
         Ondrej Ille <ondrej.ille@gmail.com>,
         Jiri Novak <jnovak@fel.cvut.cz>,
         Jaroslav Beran <jara.beran@gmail.com>,
         Petr Porazil <porazil@pikron.com>, Pavel Machek <pavel@ucw.cz>,
-        Carsten Emde <c.emde@osadl.org>,
-        Drew Fustini <pdp7pdp7@gmail.com>,
-        Matej Vasilevski <matej.vasilevski@gmail.com>
-Subject: Re: [PATCH v1 0/4] can: ctucanfd: clenup acoording to the actual
- rules and documentation linking
-Message-ID: <20220503085506.d5v4xtpumr7gm7hy@pengutronix.de>
-References: <cover.1650816929.git.pisa@cmp.felk.cvut.cz>
- <CAHQrW0_bxDyTf7pNHgXwcO=-0YRWtsxscOSWWU4fDmNYo8d-9Q@mail.gmail.com>
- <20220503064626.lcc7nl3rze5txive@pengutronix.de>
- <202205030927.15558.pisa@cmp.felk.cvut.cz>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ec4ogvkdtzy55sz6"
-Content-Disposition: inline
-In-Reply-To: <202205030927.15558.pisa@cmp.felk.cvut.cz>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Drew Fustini <pdp7pdp7@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi Pavel,
 
---ec4ogvkdtzy55sz6
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue, Mar 22, 2022 at 1:06 AM Pavel Pisa <pisa@cmp.felk.cvut.cz> wrote:
+> Platform bus adaptation for CTU CAN FD open-source IP core.
+>
+> The core has been tested together with OpenCores SJA1000
+> modified to be CAN FD frames tolerant on MicroZed Zynq based
+> MZ_APO education kits designed by Petr Porazil from PiKRON.com
+> company. FPGA design
+>
+>   https://gitlab.fel.cvut.cz/canbus/zynq/zynq-can-sja1000-top.
+>
+> The kit description at the Computer Architectures course pages
+>
+>   https://cw.fel.cvut.cz/wiki/courses/b35apo/documentation/mz_apo/start .
+>
+> Kit carrier board and mechanics design source files
+>
+>   https://gitlab.com/pikron/projects/mz_apo/microzed_apo
+>
+> The work is documented in Martin Jeřábek's diploma theses
+> Open-source and Open-hardware CAN FD Protocol Support
+>
+>   https://dspace.cvut.cz/handle/10467/80366
+> .
+>
+> Signed-off-by: Pavel Pisa <pisa@cmp.felk.cvut.cz>
+> Signed-off-by: Martin Jerabek <martin.jerabek01@gmail.com>
+> Signed-off-by: Ondrej Ille <ondrej.ille@gmail.com>
 
-On 03.05.2022 09:27:15, Pavel Pisa wrote:
-> Hello Marc and Andrew,
->=20
-> On Tuesday 03 of May 2022 08:46:26 Marc Kleine-Budde wrote:
-> > On 03.05.2022 16:32:32, Andrew Dennison wrote:
-> > > > > When value is configurable then for (uncommon) number
-> > > > > of buffers which is not power of two, there will be likely
-> > > > > a problem with way how buffers queue is implemented
-> > >
-> > > Only power of 2 makes sense to me: I didn't consider those corner
-> > > cases but the driver could just round down to the next power of 2 and
-> > > warn about a misconfiguration of the IP core.
-> >
-> > +1
->=20
-> Then (n-1) mask be used instead of modulo which is what I used for these
-> kind of queues.
->=20
-> https://sourceforge.net/p/ulan/ulut/ci/master/tree/ulut/ul_dqfifo.h
+Thanks for your patch, which is now commit e8f0c23a2415fa8f ("can:
+ctucanfd: CTU CAN FD open-source IP core - platform/SoC support.") in
+linux-can-next/master.
 
-ACK
+> --- /dev/null
+> +++ b/drivers/net/can/ctucanfd/ctucanfd_platform.c
 
-> > > I added the dynamic detection because the IP core default had changed
-> > > to 2 TX buffers and this broke some hard coded assumptions in the
-> > > driver in a rather obscure way that had me debugging for a bit...
-> >
-> > The mainline driver uses a hard coded default of 4 still... Can you
-> > provide that patch soonish?
->=20
-> We discuss with Ondrej Ille final location of the bits with queue
-> length information etc... The version 3.0 of the core is in
-> development still. So I do not like to introduce something which would
-> break compatability with future revisions.
+> +/* Match table for OF platform binding */
+> +static const struct of_device_id ctucan_of_match[] = {
+> +       { .compatible = "ctu,ctucanfd-2", },
 
-Makes sense. I'm a bit nervous, as Andrew said the default number of TX
-buffers changed to 2 in the hardware.
+Do you need to match on the above compatible value?
+The driver seems to treat the hardware the same, and the DT
+bindings state the compatible value below should always be present.
 
-> Yes, we can check for version reported by IP core but when it is
-> possible I would not introduce such logic... So if it gets to 5.19 it
-> would be great but if we should risk incompatible changes or too
-> cluttered logic then it will be 5.20 material. Other option is to add
-> Kconfig option to specify maximal number of TX buffers used by the
-> driver for now.
+> +       { .compatible = "ctu,ctucanfd", },
+> +       { /* end of list */ },
+> +};
+> +MODULE_DEVICE_TABLE(of, ctucan_of_match);
 
-No Kconfig option please! The hardware should be introspectable,
-preferred a register holds the number of TX buffers. If this is not
-available use a version register and hard code the number per version.
+Gr{oetje,eeting}s,
 
-> > > > You can make use of more TX buffers, if you implement (fully
-> > > > hardware based) TX IRQ coalescing (=3D=3D handle more than one TX
-> > > > complete interrupt at a time) like in the mcp251xfd driver, or BQL
-> > > > support (=3D=3D send more than one TX CAN frame at a time). I've pl=
-ayed
-> > > > a bit with BQL support on the mcp251xfd driver (which is attached by
-> > > > SPI), but with mixed results. Probably an issue with proper
-> > > > configuration.
-> > >
-> > > Reducing CAN IRQ load would be good.
-> >
-> > IRQ coalescing comes at the price of increased latency, but if you have
-> > a timeout in hardware you can configure the latencies precisely.
->=20
-> HW coalescing not considered yet. Generally my intention for CAN use
-> is usually robotic and motion control and there is CAN and even CAN FD
-> on edge with its latencies already and SocketCAN layer adds yet
-> another level due common tasklets and threads with other often dense
-> and complex protocols on ETHERNET so to lover CPU load by IRQ
-> coalescing is not my priority.
+                        Geert
 
-For MMIO attached hardware IRQ load is a far less problem than slow
-busses like SPI.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-> We have done latencies evaluation of SocketCAN, LinCAN and RTEMS years
-> ago on Oliver Hartkopp's requests on standard and fully-preemptive
-> kernels on more targets (x86, PowerPC, ...) and I hope that we revive
-> CAN Bench project on Xilinx Zynq based MZ_APO again, see Martin
-> Jerabek's theses FPGA Based CAN Bus Channels Mutual Latency Tester and
-> Evaluation, 2016
->=20
-> https://gitlab.fel.cvut.cz/canbus/zynq/zynq-can-sja1000-top/wikis/uploads=
-/56b4d27d8f81ae390fc98bdce803398f/F3-BP-2016-Jerabek-Martin-Jerabek-thesis-=
-2016.pdf
-
-Meanwhile you can configure the NAPI to be handled in per interface
-kernel thread, which can be prioritized. This should reduce latencies
-introduced by NAPI of other network cards using the global soft IRQ.
-
-> It is actual work of Matej Vasilevski. So I hope to have again more
-> insight into latencies on CAN. By the way, I plan to speak with
-> Carsten Emde on Embedded World if these is interrest to add
-> continuous HW timestamping based CAN latencies testing into OSADL
-> QA Farm
->=20
-> https://www.osadl.org/OSADL-QA-Farm-Real-time.linux-real-time.0.html
->=20
-> Other option is to setup system and run it locally at CTU
-> as we run complete CI on CTU CAN FD.
->=20
-> > > > > We need 2 * priv->ntxbufs range to distinguish empty and full
-> > > > > queue... But modulo is not nice either so I probably come with
-> > > > > some other solution in a longer term. In the long term, I want to
-> > > > > implement virtual queues to allow multiqueue to use dynamic Tx
-> > > > > priority of up to 8 the buffers...
-> > > >
-> > > > ACK, multiqueue TX support would be nice for things like the
-> > > > Earliest TX Time First scheduler (ETF). 1 TX queue for ETF, the
-> > > > other for bulk messages.
-> > >
-> > > Would be nice, I have multi-queue in the CAN layer I wrote for a
-> > > little RTOS (predates socketcan) and have used for a while.
-> >
-> > Out of interest:
-> > What are the use cases? How did you decide which queue to use?
->=20
-> For example for CAN open there should be at least three queues
-> to prevent CAN Tx priority inversion. one for NMT (network
-> management), one for PDO (process data objects) and least priority
-> for SDO (service data objects). That such applications works
-> somehow with single queue is only matter of luck and low
-> level of the link bandwidth utilization.
->=20
-> We have done research how to use Linux networking infrastructure
-> to route application send CAN messages into multiple queues
-> according to the CAN ID priorities. There are some results in mainline
-> from that work
->=20
-> Rostislav Lisovy 2014: can: Propagate SO_PRIORITY of raw sockets to skbs
-> Rostislav Lisovy 2012: net: em_canid: Ematch rule to match CAN frames=20
-> according to their identifiers
->=20
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/n=
-et/sched/em_canid.c
->=20
-> So some enhancements and testing in this direction belongs
-> between my long horizon goals. But low priority now because
-> my company and even studnets at university are paid from
-> other projects (silicon-heaven, ESA, Bluetooth-monitoring,
-> NuttX etc.) so Linux CAN is hobby only at this moment.
-> But others have contracts for CTU CAN FD, Skoda Auto
-> testers etc. there...
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---ec4ogvkdtzy55sz6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJw7ecACgkQrX5LkNig
-011wggf9GDMsb66itcciOLFHd0+MqYRA8A21qlVvPRAiiBNxjeBGA4x6ZqPy7Vps
-XZ7TvSHspYnaRyTvWHfJV762vr6teMVozTxV6hPoSfmHQqHVGwiCAU5Ia1bigcCb
-1OuuKnOw5BUGqUkRHJUVi4ZEGp9TnhuTGLdCd6HpeIZNtAgxtye38y21c34qQ3jm
-yfVxHUfCvI3Vo8UMeixV8ug4pEJo/KWYisZchO3VPVjj5Aiqyrvuroap9LEPXSHv
-Ffj9LLtN3DSYWW6ERe8SAN2UjSBDnFThtJlNUn9TMYDRNOEV6/T5YVrJKkK0Yu0A
-/IhLsR1TfiSFnWAKjwBAIM6z0miHZQ==
-=zLxL
------END PGP SIGNATURE-----
-
---ec4ogvkdtzy55sz6--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
