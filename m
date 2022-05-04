@@ -2,109 +2,104 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FE2B51977B
-	for <lists+linux-can@lfdr.de>; Wed,  4 May 2022 08:41:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD78C51986F
+	for <lists+linux-can@lfdr.de>; Wed,  4 May 2022 09:38:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344897AbiEDGog (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 4 May 2022 02:44:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44628 "EHLO
+        id S237794AbiEDHld (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 4 May 2022 03:41:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240187AbiEDGof (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 4 May 2022 02:44:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9409818B13;
-        Tue,  3 May 2022 23:41:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 38CF46153E;
-        Wed,  4 May 2022 06:41:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 929DBC385A4;
-        Wed,  4 May 2022 06:40:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651646459;
-        bh=ZGMwwfSt9WgGcP9EzHW/QosFc70Yb/XaCBfaIMon8lM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hCMa156AuRtjnImdRRFb6sjNT7gi2K+aKH0x8uKbL7AEODCLcmpA+AldqhNahLoMc
-         Jjbn4PU2sZC0QO3tUog7PiYYrqIfJDpXhjQPR0ah9UBAo6hM2LqRyEviiRxk8BR/Z/
-         PswEhJLlhaaJETbJ+cDB+HgHVFfdIRtcQWjx3W6kmEYtvsvtdX1D61teQWllRNYd4Y
-         4rq0yVjTAy3gemypN42SU8Wvxydjxbsf9n9Yu7PohyC0omGj3kKtLN8XGs6TxWmKd5
-         RbuiHnFactE1ob6Dd26hg53PXFe++MOjqEkVBKu+OdQv2rpx3HjFyo1wUYQL3DAF3f
-         4Lj9rl6MCVe6w==
-Date:   Wed, 4 May 2022 12:10:55 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Abel Vesa <abel.vesa@nxp.com>, Stephen Boyd <sboyd@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>, Anson Huang <Anson.Huang@nxp.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Han Xu <han.xu@nxp.com>, Dario Binacchi <dariobin@libero.it>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Peter Ujfalusi <peter.ujfalusi@ti.com>,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-iio@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Drop redundant 'maxItems/minItems' in
- if/then schemas
-Message-ID: <YnIf95FnuC01qxIp@matsya>
-References: <20220503162738.3827041-1-robh@kernel.org>
+        with ESMTP id S235940AbiEDHlc (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 4 May 2022 03:41:32 -0400
+Received: from mailgw.felk.cvut.cz (mailgw.felk.cvut.cz [147.32.82.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36EE7B0E;
+        Wed,  4 May 2022 00:37:56 -0700 (PDT)
+Received: from mailgw.felk.cvut.cz (localhost.localdomain [127.0.0.1])
+        by mailgw.felk.cvut.cz (Proxmox) with ESMTP id 0ECC430B294B;
+        Wed,  4 May 2022 09:37:54 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        cmp.felk.cvut.cz; h=cc:cc:content-transfer-encoding:content-type
+        :content-type:date:from:from:in-reply-to:message-id:mime-version
+        :references:reply-to:subject:subject:to:to; s=felkmail; bh=aTah0
+        Z+PkY1vBvHcLGkzEoRPiH35qWhzUuaYXUknz+I=; b=OUSDQzJjvSS18f95oenBT
+        1hff+35t0O0jwkdX1Sr/4t7cF5vNXxRliE05gzi0MCiG8qb61uWAlO/HPNsdFmvH
+        5GBo5PptOpK7Y1Ib54fho5vpQVpEedZ8a0Fa34eKrzZNQVGHfnfMyDmrG4sfcfB8
+        GXZRETuIzm2YRhv2kD82eKhFi2CxvxM/MqCAYwvQH2oVtI9fUmy2ux1RFRJVkwam
+        slmdpJfJnKWutlewCIAvXaFon1RqX8AwS93WZrM57xJFUX1DljhLr/nlnIOXx+dk
+        WZtnBFl9sauQ/OA2iCFs0OnPMcR4QQrACC4XGzzArUQOPvi6EXvUo8bF22xAz45i
+        Q==
+Received: from cmp.felk.cvut.cz (haar.felk.cvut.cz [147.32.84.19])
+        by mailgw.felk.cvut.cz (Proxmox) with ESMTPS id 9E14830AE003;
+        Wed,  4 May 2022 09:37:53 +0200 (CEST)
+Received: from haar.felk.cvut.cz (localhost [127.0.0.1])
+        by cmp.felk.cvut.cz (8.14.0/8.12.3/SuSE Linux 0.6) with ESMTP id 2447br93015420;
+        Wed, 4 May 2022 09:37:53 +0200
+Received: (from pisa@localhost)
+        by haar.felk.cvut.cz (8.14.0/8.13.7/Submit) id 2447brCv015419;
+        Wed, 4 May 2022 09:37:53 +0200
+X-Authentication-Warning: haar.felk.cvut.cz: pisa set sender to pisa@cmp.felk.cvut.cz using -f
+From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
+To:     "Marc Kleine-Budde" <mkl@pengutronix.de>
+Subject: Re: [PATCH can-next] dt-binding: can: ctucanfd: include common CAN controller bindings
+Date:   Wed, 4 May 2022 09:37:53 +0200
+User-Agent: KMail/1.9.10
+Cc:     linux-can@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Ondrej Ille <ondrej.ille@gmail.com>
+References: <20220504062342.52529-1-mkl@pengutronix.de>
+In-Reply-To: <20220504062342.52529-1-mkl@pengutronix.de>
+X-KMail-QuotePrefix: > 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: Text/Plain;
+  charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Content-Disposition: inline
-In-Reply-To: <20220503162738.3827041-1-robh@kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-Id: <202205040937.53137.pisa@cmp.felk.cvut.cz>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 03-05-22, 11:27, Rob Herring wrote:
-> Another round of removing redundant minItems/maxItems when 'items' list is
-> specified. This time it is in if/then schemas as the meta-schema was
-> failing to check this case.
-> 
-> If a property has an 'items' list, then a 'minItems' or 'maxItems' with the
-> same size as the list is redundant and can be dropped. Note that is DT
-> schema specific behavior and not standard json-schema behavior. The tooling
-> will fixup the final schema adding any unspecified minItems/maxItems.
+Hello Marc,
 
-For phy:
+thanks for update
 
-Acked-By: Vinod Koul <vkoul@kernel.org>
+On Wednesday 04 of May 2022 08:23:42 Marc Kleine-Budde wrote:
+> Since commit
+>
+> | 1f9234401ce0 ("dt-bindings: can: add can-controller.yaml")
+>
+> there is a common CAN controller binding. Add this to the ctucanfd
+> binding.
+>
+> Cc: Pavel Pisa <pisa@cmp.felk.cvut.cz>
+> Cc: Ondrej Ille <ondrej.ille@gmail.com>
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 
--- 
-~Vinod
+if my reaction is expected then you can add my
+Acked-by: Pavel Pisa <pisa@cmp.felk.cvut.cz>
+
+> ---
+>  Documentation/devicetree/bindings/net/can/ctu,ctucanfd.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/net/can/ctu,ctucanfd.yaml
+> b/Documentation/devicetree/bindings/net/can/ctu,ctucanfd.yaml index
+> fb34d971dcb3..4635cb96fc64 100644
+> --- a/Documentation/devicetree/bindings/net/can/ctu,ctucanfd.yaml
+> +++ b/Documentation/devicetree/bindings/net/can/ctu,ctucanfd.yaml
+> @@ -25,6 +25,9 @@ maintainers:
+>    - Ondrej Ille <ondrej.ille@gmail.com>
+>    - Martin Jerabek <martin.jerabek01@gmail.com>
+>
+> +allOf:
+> +  - $ref: can-controller.yaml#
+> +
+>  properties:
+>    compatible:
+>      oneOf:
+
