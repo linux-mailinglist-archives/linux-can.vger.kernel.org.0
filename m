@@ -2,180 +2,125 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 017FB51B502
-	for <lists+linux-can@lfdr.de>; Thu,  5 May 2022 03:04:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C646651E627
+	for <lists+linux-can@lfdr.de>; Sat,  7 May 2022 11:41:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234203AbiEEBH1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 4 May 2022 21:07:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50706 "EHLO
+        id S1345933AbiEGJpP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 7 May 2022 05:45:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234124AbiEEBHV (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 4 May 2022 21:07:21 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A24348306;
-        Wed,  4 May 2022 18:03:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651712623; x=1683248623;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HOTvegPQV0wBWkw4gry8ln/1sFHr7kpC/Ihf5d3BMQE=;
-  b=PM8Y7veyYW9GteiOKFpf9TiUD8wMGx898oh4ljHlvTR8im01f7VsKrlJ
-   xo13rM41y93VTahO5/MGB133kvkgVUzpBDZgVK3zHRJwwfhyLv+3ffz6Y
-   Np/GszEqSyl0pCyXuqDDX9INiaQrOVXP9CH2PyatvAJo1vAad2x04iV31
-   L+RhsiqJrQgb5P8JwkRo+ZjFxoSqFjhMUroXY+UqL0u84dvnBhBDifRRj
-   dvLb2OpwymCojG8NQv2AJjRl4A4aGLdQbSpp9QPbNvZRKBclRMED4kuui
-   kla2o4M+WERlU9YpvWU284YR5vu9mu8uWkdI/Vy9iy3WDDTlF/swQ4U+L
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="249930897"
-X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
-   d="scan'208";a="249930897"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 18:03:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
-   d="scan'208";a="621059599"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 04 May 2022 18:03:36 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nmPu4-000Bws-2c;
-        Thu, 05 May 2022 01:03:36 +0000
-Date:   Thu, 5 May 2022 09:03:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Wolfram Sang <wsa-dev@sang-engineering.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-can@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, netdev@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Anatolij Gustschin <agust@denx.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Pantelis Antoniou <pantelis.antoniou@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v1 2/4] powerpc/mpc5xxx: Switch
- mpc5xxx_get_bus_frequency() to use fwnode
-Message-ID: <202205050858.278Tyg5Q-lkp@intel.com>
-References: <20220504134449.64473-2-andriy.shevchenko@linux.intel.com>
+        with ESMTP id S1343969AbiEGJpO (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 7 May 2022 05:45:14 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3637D14090
+        for <linux-can@vger.kernel.org>; Sat,  7 May 2022 02:41:28 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d22so9585804plr.9
+        for <linux-can@vger.kernel.org>; Sat, 07 May 2022 02:41:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=VKCKWY3pNK4bqqNossvOh9G1q+xPwVvjW+fqomdEuhg=;
+        b=bwSaD91W4iw0ewsN0wvSiMx/S3ArLT0w7S3lmz2auLs5AWWQgVEbBVuiEdmcuXRq7R
+         EVLLjsH7+c1xJFO58iht2pHBUwz3rNARJH7vvgN058RO4TR/iRDL+gIUI82t1d6cJIdw
+         KhWTOQ/MVPZmD5TIWja9GiJBhzx8HVI2Aqgqlk6uYUyP4zByHNeUNxoxXur90LR+cM/9
+         vzgYNcJuXYphBMunQ3Yw5TpnvW4y/48tpI4ro33jUn/aRn/NJbw9ZlcBUa3Iq+vpIzeX
+         s8lIdS4MUYzV9k42UUE8/+xc1pHQ2tmq/rUEv7OriUk9xlSpn+O6QGR/MNomDvPycDI3
+         Mi/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=VKCKWY3pNK4bqqNossvOh9G1q+xPwVvjW+fqomdEuhg=;
+        b=dTS7olCDKwxVHfFFA8+Yx9VwO+ElXR0fXZz1cOoEt3AqX/nimVw+lPbluBLnUduxFK
+         1wAXHIgWxJdV1uY3Iy66f8wQ5TCxtFZVzc2Pl32omXl4Mt3kzTcyDvdeHjzogoZqap4m
+         l7NRZRb/y8v/QRyD1y+lJmlR819bMghGHwdkD6S2Jc4/jUTJjZqz0XwAkZMwF0CUpbDP
+         nXQY1NN9wGzBTYD+A67NfEQ97iUWpn45uykzWXnsvBIfIaU7UYFuHwb79+w5axi7O857
+         7mB4h/uEGJ5YWUhNTevIsUqmAdc6XhIzkcb9TlbivyetppRUR5iWbKTDREA3iD3ZMnls
+         MvPQ==
+X-Gm-Message-State: AOAM5311uY7kNfu3dDEGjIhE0l4F6XHcn6AycFdySYe24Dd0LJqfAQKa
+        +Y+fcp/uGNXK0H9tYiSndQn78Zhly/WQp+ITAyY=
+X-Google-Smtp-Source: ABdhPJwM6h+3cDc7F68aaD+OJCeZTNqOrlOxridSJKIp1TW0Vh5L4kY0ZDYTWtYixMHKiYol3GAstzXiVNZ0PMCFZDk=
+X-Received: by 2002:a17:90a:408f:b0:1d1:d1ba:2abb with SMTP id
+ l15-20020a17090a408f00b001d1d1ba2abbmr17100440pjg.152.1651916487725; Sat, 07
+ May 2022 02:41:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220504134449.64473-2-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Sender: officedeskofgeneral0@gmail.com
+Received: by 2002:a17:90a:4095:0:0:0:0 with HTTP; Sat, 7 May 2022 02:41:27
+ -0700 (PDT)
+From:   "Mr. Jimmy Moore" <jimmymoore265@gmail.com>
+Date:   Sat, 7 May 2022 10:41:27 +0100
+X-Google-Sender-Auth: 3usmeHRplygODV44qk4OvNkHMRA
+Message-ID: <CAL=mczWbobeKYcd0fmQ2k93a+Vpgcd+B1KhBor8Sb-RPNchS3Q@mail.gmail.com>
+Subject: YOUR COVID-19 COMPENSATION
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLY,HK_NAME_FM_MR_MRS,LOTS_OF_MONEY,
+        LOTTO_DEPT,MILLION_USD,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:636 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [officedeskofgeneral0[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [officedeskofgeneral0[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 MILLION_USD BODY: Talks about millions of dollars
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 HK_NAME_FM_MR_MRS No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  1.0 FREEMAIL_REPLY From and body contain different freemails
+        *  2.0 LOTTO_DEPT Claims Department
+        *  1.9 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Andy,
+UNITED NATIONS COVID-19 OVERDUE COMPENSATION UNIT.
+REFERENCE PAYMENT CODE: 8525595
+BAILOUT AMOUNT:$10.5 MILLION USD
+ADDRESS: NEW YORK, NY 10017, UNITED STATES
 
-I love your patch! Yet something to improve:
+Dear award recipient, Covid-19 Compensation Funds.
 
-[auto build test ERROR on powerpc/next]
-[also build test ERROR on wsa/i2c/for-next mkl-can-next/testing broonie-spi/for-next tty/tty-testing linus/master v5.18-rc5 next-20220504]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+You are receiving this correspondence because we have finally reached
+a consensus with the UN, IRS, and IMF that your total fund worth $10.5
+Million Dollars of Covid-19 Compensation payment shall be delivered to
+your nominated mode of receipt, and you are expected to pay the sum of
+$12,000 for levies owed to authorities after receiving your funds.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/powerpc-52xx-Remove-dead-code-i-e-mpc52xx_get_xtal_freq/20220504-215701
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
-config: powerpc-pcm030_defconfig (https://download.01.org/0day-ci/archive/20220505/202205050858.278Tyg5Q-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/7bff10cee4f441153a56de337715dd4f40c55521
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/powerpc-52xx-Remove-dead-code-i-e-mpc52xx_get_xtal_freq/20220504-215701
-        git checkout 7bff10cee4f441153a56de337715dd4f40c55521
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+You have a grace period of 2 weeks to pay the $12,000 levy after you
+have received your Covid-19 Compensation total sum of $10.5 Million.
+We shall proceed with the payment of your bailout grant only if you
+agree to the terms and conditions stated.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Contact Dr. Mustafa Ali, for more information by email at:(
+mustafaliali180@gmail.com ) Your consent in this regard would be
+highly appreciated.
 
-All errors (new ones prefixed by >>):
-
-   drivers/i2c/busses/i2c-mpc.c: In function 'mpc_i2c_get_fdr_52xx':
->> drivers/i2c/busses/i2c-mpc.c:242:30: error: expected identifier or '(' before '=' token
-     242 |         struct fwnode_handle = of_fwnode_handle(node);
-         |                              ^
-   In file included from include/linux/of_address.h:6,
-                    from drivers/i2c/busses/i2c-mpc.c:14:
->> include/linux/of.h:176:10: error: expected statement before ')' token
-     176 |         })
-         |          ^
-   drivers/i2c/busses/i2c-mpc.c:242:32: note: in expansion of macro 'of_fwnode_handle'
-     242 |         struct fwnode_handle = of_fwnode_handle(node);
-         |                                ^~~~~~~~~~~~~~~~
-   drivers/i2c/busses/i2c-mpc.c:243:9: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
-     243 |         const struct mpc_i2c_divider *div = NULL;
-         |         ^~~~~
->> drivers/i2c/busses/i2c-mpc.c:250:62: error: 'fwnode' undeclared (first use in this function); did you mean 'node'?
-     250 |                 *real_clk = mpc5xxx_fwnode_get_bus_frequency(fwnode) / 2048;
-         |                                                              ^~~~~~
-         |                                                              node
-   drivers/i2c/busses/i2c-mpc.c:250:62: note: each undeclared identifier is reported only once for each function it appears in
-
-
-vim +242 drivers/i2c/busses/i2c-mpc.c
-
-   238	
-   239	static int mpc_i2c_get_fdr_52xx(struct device_node *node, u32 clock,
-   240						  u32 *real_clk)
-   241	{
- > 242		struct fwnode_handle = of_fwnode_handle(node);
-   243		const struct mpc_i2c_divider *div = NULL;
-   244		unsigned int pvr = mfspr(SPRN_PVR);
-   245		u32 divider;
-   246		int i;
-   247	
-   248		if (clock == MPC_I2C_CLOCK_LEGACY) {
-   249			/* see below - default fdr = 0x3f -> div = 2048 */
- > 250			*real_clk = mpc5xxx_fwnode_get_bus_frequency(fwnode) / 2048;
-   251			return -EINVAL;
-   252		}
-   253	
-   254		/* Determine divider value */
-   255		divider = mpc5xxx_fwnode_get_bus_frequency(fwnode) / clock;
-   256	
-   257		/*
-   258		 * We want to choose an FDR/DFSR that generates an I2C bus speed that
-   259		 * is equal to or lower than the requested speed.
-   260		 */
-   261		for (i = 0; i < ARRAY_SIZE(mpc_i2c_dividers_52xx); i++) {
-   262			div = &mpc_i2c_dividers_52xx[i];
-   263			/* Old MPC5200 rev A CPUs do not support the high bits */
-   264			if (div->fdr & 0xc0 && pvr == 0x80822011)
-   265				continue;
-   266			if (div->divider >= divider)
-   267				break;
-   268		}
-   269	
-   270		*real_clk = mpc5xxx_fwnode_get_bus_frequency(fwnode) / div->divider;
-   271		return (int)div->fdr;
-   272	}
-   273	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best Regards,
+Mr. Jimmy Moore.
+Undersecretary-General United Nations
+Office of Internal Oversight-UNIOS
+UN making the world a better place
+http://www.un.org/sg/
