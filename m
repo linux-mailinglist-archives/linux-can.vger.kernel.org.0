@@ -2,104 +2,93 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67CC2520201
-	for <lists+linux-can@lfdr.de>; Mon,  9 May 2022 18:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 681C6520328
+	for <lists+linux-can@lfdr.de>; Mon,  9 May 2022 19:05:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238850AbiEIQMo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 9 May 2022 12:12:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53788 "EHLO
+        id S239457AbiEIRIv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 9 May 2022 13:08:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238856AbiEIQMn (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 9 May 2022 12:12:43 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F81D274A3E
-        for <linux-can@vger.kernel.org>; Mon,  9 May 2022 09:08:49 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1no5w5-0006Dc-V1; Mon, 09 May 2022 18:08:38 +0200
-Received: from pengutronix.de (unknown [46.183.103.8])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 3888C792B0;
-        Mon,  9 May 2022 16:08:34 +0000 (UTC)
-Date:   Mon, 9 May 2022 18:08:29 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Pavel Pisa <pisa@cmp.felk.cvut.cz>,
-        Ondrej Ille <ondrej.ille@gmail.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
+        with ESMTP id S239563AbiEIRIL (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 9 May 2022 13:08:11 -0400
+X-Greylist: delayed 60 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 09 May 2022 10:04:12 PDT
+Received: from smtpcmd0757.aruba.it (smtpcmd0757.aruba.it [62.149.156.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6EEFC2D570C
+        for <linux-can@vger.kernel.org>; Mon,  9 May 2022 10:04:12 -0700 (PDT)
+Received: from localhost.localdomain ([213.215.163.55])
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id o6mpnGRcmrvmbo6mpnCu9c; Mon, 09 May 2022 19:03:09 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+        t=1652115789; bh=LVsltK9iEcTGK7OSkzv3VRUP3DRRbW6AQt/m9+GMyVk=;
+        h=From:To:Subject:Date:MIME-Version;
+        b=g8iJ9JJXkLCycAh349eNyL//x1EZ4ypV7vmNaaTbBnEzpJtFNSoIU2vJ5sebw2Hg0
+         kiPc1bVoRiIMfkRJeej3Rsy7yjMvEHctHqCPYYYolh7n/PNHwoiYELhe0AgZk37Fxj
+         2+DZ1IN6eB7sKj72oxdQqMMA6oAWjZJob+4jJlrZBjXuigue8iLiL3Tr++4SVdJkE1
+         XtFkShHxJpdSwLhDaqHDRpt3ukSDhmvrE5s3jgCDWvzoLMRXkxGsquTN6C6VTqFAFd
+         SdXsFSVUEj3+8ekoRhuD0/eseRCAS3eibkRcLIID9FSJVjLVRzANNFJbHutksui0rx
+         NWbCYv+NOIrqQ==
+From:   Devid Antonio Filoni <devid.filoni@egluetechnologies.com>
+To:     Robin van der Gracht <robin@protonic.nl>,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     kernel@pengutronix.de, linux-can@vger.kernel.org,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] can: ctucanfd: Let users select instead of depend on
- CAN_CTUCANFD
-Message-ID: <20220509160829.33on24zv2dzuduki@pengutronix.de>
-References: <887b7440446b6244a20a503cc6e8dc9258846706.1652104941.git.geert+renesas@glider.be>
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Jayat <maxime.jayat@mobile-devices.fr>,
+        kbuild test robot <lkp@intel.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Devid Antonio Filoni <devid.filoni@egluetechnologies.com>
+Subject: [PATCH RESEND] can: j1939: do not wait 250ms if the same addr was already claimed
+Date:   Mon,  9 May 2022 19:03:03 +0200
+Message-Id: <20220509170303.29370-1-devid.filoni@egluetechnologies.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2kgpg7mgensexdts"
-Content-Disposition: inline
-In-Reply-To: <887b7440446b6244a20a503cc6e8dc9258846706.1652104941.git.geert+renesas@glider.be>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfL3pMpetwi3Y3IAoKunxzsMB5CMuj+1LhO4mLMoLUaFmfbwFEG2Rv4e8f9BIDJC2Y4tMd+YwDb+VnqVfRAzX+jTIwP5Rfvwc3ENHeVCPfCoWW3KJz1ON
+ 4NZSj1W1woWxyQzHV6xmnGrt9L8SJiMKs4p32fLTapb/xnJG76SxsQ+2aTXLbbNH64B06SRxEW1bys+wEBrv75kPgHq6vdoV8psVYLhqdHrqbwPDZbOOs6BL
+ x7N62RW1X4QvRGhJRBqG0o4wRRf6QG5EfZ5cdqi/07wWjoJMm6jNs4UwzvSxXmtGxecBC58k12zgRxnn44veiKL6Ij2ue48/IgtPhcz8WOtSY3z9W5Cb6QEq
+ 54PFEtWwo1nViD92AW4Ojx4wtFlQcjpjVxgLql2gNisVXh4QlI35QJBlzMuQ13QFqIfGUFxfxyvdj6tbR2awlVf7VkkX8zwohPknQLGpHCRC17vno3cTIvxE
+ sbTitJCH3BXLd/OlLpPGP62T26BBRfpFMVPnlVNA1IQBw/fS9y95zLGBSWiwgIUnFaFLYN1s5PGrSjY6g2xRtZu3AW69vZBu1P/rzMYOtOJvh9+GMc7w60fx
+ 0JFp6nIqSwbgPrHhTCbLfYXhPc7u8L4Klm7BKdgBHPgJf6WIi1oTtS9+1iUp/6wEoQJhE4x8zpN5LBmlJNB5yg88HnjiyXrL57GnwYCiE9LzSg==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+This is not explicitly stated in SAE J1939-21 and some tools used for
+ISO-11783 certification do not expect this wait.
 
---2kgpg7mgensexdts
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fixes: 9d71dd0 ("can: add support of SAE J1939 protocol")
+Signed-off-by: Devid Antonio Filoni <devid.filoni@egluetechnologies.com>
+---
+ net/can/j1939/address-claim.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-On 09.05.2022 16:02:59, Geert Uytterhoeven wrote:
-> The CTU CAN-FD IP core is only useful when used with one of the
-> corresponding PCI/PCIe or platform (FPGA, SoC) drivers, which depend on
-> PCI resp. OF.
->=20
-> Hence make the users select the core driver code, instead of letting
-> then depend on it.  Keep the core code config option visible when
-> compile-testing, to maintain compile-coverage.
->=20
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+diff --git a/net/can/j1939/address-claim.c b/net/can/j1939/address-claim.c
+index f33c47327927..1d070c08edf1 100644
+--- a/net/can/j1939/address-claim.c
++++ b/net/can/j1939/address-claim.c
+@@ -165,6 +165,12 @@ static void j1939_ac_process(struct j1939_priv *priv, struct sk_buff *skb)
+ 	 * leaving this function.
+ 	 */
+ 	ecu = j1939_ecu_get_by_name_locked(priv, name);
++
++	if (ecu && ecu->addr == skcb->addr.sa) {
++		/* the address was already claimed with the same name, nothing to do */
++		goto out_ecu_put;
++	}
++
+ 	if (!ecu && j1939_address_is_unicast(skcb->addr.sa))
+ 		ecu = j1939_ecu_create_locked(priv, name);
+ 
+-- 
+2.25.1
 
-Makes sense! Applied to linux-can-next/testing.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---2kgpg7mgensexdts
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJ5PHsACgkQrX5LkNig
-010rxwf/a5jCQVKz2Pqk4Z+Yg5tynosGv++gD8deJN81C0mVRBpYgyzh1AOO/hNN
-uiTaginVvB3jBg8yWSMjX3vT8ntZZ6T5FBmWg2sh0QyzWU4wdahW77levMpyVDgh
-480So9M7jzW1ILBZL0DedERx8vOGk5L6ygsNUSzu9XZmwRUG9NXqT+1851dR1NAl
-tg7nwb6TyYp+2uaeTem4e1mkhi8Zi4kcOCLC6JrICCaGTNOTbeGGwhoRh97tZyyh
-CFbA16mk0r8sBp+xpblzlGV8KxSed8YTTOeAJjgen+KqTQTpaZAH6lYkWu1/cB65
-JY6MmxXuU9Z8uhBFojHeOgmg7IUafw==
-=FcCT
------END PGP SIGNATURE-----
-
---2kgpg7mgensexdts--
