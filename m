@@ -2,117 +2,148 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA69E52239E
-	for <lists+linux-can@lfdr.de>; Tue, 10 May 2022 20:13:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B21935224BE
+	for <lists+linux-can@lfdr.de>; Tue, 10 May 2022 21:28:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346303AbiEJSRH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 10 May 2022 14:17:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39522 "EHLO
+        id S230242AbiEJT2p (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 10 May 2022 15:28:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349429AbiEJSQo (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 10 May 2022 14:16:44 -0400
-Received: from smtpcmd13146.aruba.it (smtpcmd13146.aruba.it [62.149.156.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F1587A824
-        for <linux-can@vger.kernel.org>; Tue, 10 May 2022 11:12:36 -0700 (PDT)
-Received: from dfiloni-82ds ([213.215.163.55])
-        by Aruba Outgoing Smtp  with ESMTPSA
-        id oULYnuZc1TRWPoULZnceAZ; Tue, 10 May 2022 20:12:34 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1652206354; bh=tXg3JwEAq3x7kb47JWPESvZY0ObIuCiw9hWWWEOrXEA=;
-        h=Subject:From:To:Date:Content-Type:MIME-Version;
-        b=KsGr0LnAvr/Q7ZDjCUlzh4u1DKoPxDYKniZ5LwAuAhSpa950lhvOIc6f0RBqNed73
-         JQp6KQrEVUh6ngO/JHjfHDgWodIqdACj3bivaUXcwBSuh6Ll9iT7pCwPDNzTciqX+E
-         Y65gmQEZj6hOfk0PzFmf6d2Ffwdslfy6OxUI/M8jyFQteSRL7IQIHxYZ+OOgZv41kL
-         MKx1268R4TZyhgFe03cF/EvtrNIfa3g/CcIMseMSPxjZg1jW+1Htf1UWU3gPIlkl5i
-         CZonL3/Pm/TNfgA9YFmhBXtEOdrp4AZz6fmw15PSEbSWk4juquUbovXWm/rHdQXaxT
-         29PalAnv/+uoQ==
-Message-ID: <a8ea7199230682f3fd53e0b5975afa7287bd5ac0.camel@egluetechnologies.com>
-Subject: Re: [PATCH RESEND 0/2] j1939: make sure that sent DAT/CTL frames
- are marked as TX
-From:   Devid Antonio Filoni <devid.filoni@egluetechnologies.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Robin van der Gracht <robin@protonic.nl>, kernel@pengutronix.de,
-        linux-can@vger.kernel.org, Oleksij Rempel <linux@rempel-privat.de>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Jayat <maxime.jayat@mobile-devices.fr>,
-        kbuild test robot <lkp@intel.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 10 May 2022 20:12:32 +0200
-In-Reply-To: <20220510043406.GB10669@pengutronix.de>
-References: <20220509170746.29893-1-devid.filoni@egluetechnologies.com>
-         <20220510043406.GB10669@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        with ESMTP id S243829AbiEJT2a (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 10 May 2022 15:28:30 -0400
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21FC37BDD
+        for <linux-can@vger.kernel.org>; Tue, 10 May 2022 12:28:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1652210890;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:Cc:References:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=7jBRppHDCwNxpXHEvHO0zb9bzCtnU7DthXPDhOFN4/4=;
+    b=lpyvG9bXPgjV9UhwH1jMrBdPeJQKH5c5I1xF5/DU12138wDPMM1ZMEJCupC4+Ezz6J
+    P8HDJT8uEF8n2qHqH/dhW4nDpyo4R+27aqhDeYVGphZc6Ad6gmh1VnCc8/ZeZxjo1dTx
+    4pnwKe1hZO+7sgJ8XX1zKZ0A0OiG/osLG7JDC77SIui70eLS+UpH0tpV/O56RCfBfsmF
+    PVcbH+GCJxBlBgg7c+/sgg1PawasVhFOMOSf+M/cOhyiFZ/KOKs6oSg1vYvylkBDt0u8
+    O8nSj5A6/+43vh9mnGYmoYoaK3YCzzu2Ds40vT87U5qKRYoYZloixJsqYdsWfouHadF8
+    CvUw==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdBqPeOug2krLFRKxw=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a00:6020:1cff:5b04::b82]
+    by smtp.strato.de (RZmta 47.42.2 AUTH)
+    with ESMTPSA id 4544c9y4AJSAvX2
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Tue, 10 May 2022 21:28:10 +0200 (CEST)
+Message-ID: <03ac64dd-2332-3eb1-bd81-0f29244d774b@hartkopp.net>
+Date:   Tue, 10 May 2022 21:28:09 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfFs8gjkPKwq+M5nU/1hYGsZB+Fu5X7eaNMR/Ks5Nn6GXz/kXgxKa9okTnw2l0zl5XYXkNqHN4idPrlLjVKQO9FjAIresmAASSX6lezZRvO/h3OrKaDse
- Oy9Gu+yhVsRBPsfPr+CUJHioU204vHd79A79Lwx6HwuKPIgkb7z51okeI58PbOlMITkXKohcoww/i6a4l3Z64cFGnFZ9wprUhyu+S2IBR6jczx2dwQ+Q9sKv
- UTu46SJqNrzD6hamhkXpT6E0EB9d4JLHWx22mefp3A0Dxcl+Yo7CBee/SlYJh/dcC/O54OqR8n92kdrNOEVZvx2oTj1ceC95u/wTcjMgHe+EzsyqCkyt1379
- o/PfZBuGtErHGN1aATy9bLtA7/CBUigebEcUTKxeiGiif9DfaHmxCW89gPWCu5TldHvZBL9mzQohUhU957QqUuL68mVnse620qkaOQMeSfubH2+JFqv92agZ
- G2A3HnqRoYHvXgCF+/XPewHuDInRiw8xHFVlhRRF1ZwqYFTe9MCDmy84xiUteOwFLMaoB5aKCLV339ET6CDY/aOmHA4klpE0LApQFfHNUxVao7N3TNd+4j56
- 2FaGNnIjpx++ARNrL60byTSr+7dlzdpEnTXFjiZg1JmdzyWF4/IqRFXiA3OzVj0+AmQ=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: Can someone point me in the right direction
+Content-Language: en-US
+To:     Marcel Akkermans <akkermans.m@brabofox.nl>
+References: <d8571fc8-e020-841f-f20b-088c2ad440c3@brabofox.nl>
+ <59e12840-befd-912f-0265-295c4fb51958@hartkopp.net>
+ <11745085-d9a6-c658-ab8a-f1e3dc91b175@brabofox.nl>
+Cc:     linux-can <linux-can@vger.kernel.org>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <11745085-d9a6-c658-ab8a-f1e3dc91b175@brabofox.nl>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Oleksij,
 
-On Tue, 2022-05-10 at 06:34 +0200, Oleksij Rempel wrote:
-> Hi Devid,
-> 
-> On Mon, May 09, 2022 at 07:07:44PM +0200, Devid Antonio Filoni wrote:
-> > Hello,
-> > 
-> > If candump -x is used to dump CAN bus traffic on an interface while a J1939
-> > socket is sending multi-packet messages, then the DAT and CTL frames
-> > show up as RX instead of TX.
-> > 
-> > This patch series sets to generated struct sk_buff the owning struct sock
-> > pointer so that the MSG_DONTROUTE flag can be set by recv functions.
-> > 
-> > I'm not sure that j1939_session_skb_get is needed, I think that session->sk
-> > could be directly passed as can_skb_set_owner parameter. This patch
-> > is based on j1939_simple_txnext function which uses j1939_session_skb_get.
-> > I can provide an additional patch to remove the calls to
-> > j1939_session_skb_get function if you think they are not needed.
-> 
-> Thank you for your patches. By testing it I noticed that there is a memory
-> leak in current kernel and it seems to be even worse after this patches.
-> Found by this test:
-> https://github.com/linux-can/can-tests/blob/master/j1939/run_all.sh#L13
-> 
-> 
-> Can you please investigate it (or wait until I get time to do it).
-> 
-> Regards,
-> Oleksij
-> 
 
-I checked the test you linked and I can see that the number of the
-instances of the can_j1939 module increases on each
-j1939_ac_100k_dual_can.sh test execution (then the script exits),
-however this doesn't seem to be worse with my patches, I have the same
-results with the original kernel. Did you execute a particular test to
-verify that the memory leak is worse with my patches?
-I tried to take a look at all code that I changed in my patches but the
-used ref counters seem to be handled correctly in called functions. I
-suspected that the issue may be caused by the ref counter increased
-in can_skb_set_owner() function but, even if I remove that call from the
-j1939_simple_txnext() function in original kernel, I can still reproduce
-the memory leak.
-I think the issue is somewhere else, I'll try to give another look but I
-can't assure nothing.
+On 10.05.22 20:29, Marcel Akkermans wrote:
+> Hello Oliver,
+> 
+> Here are the output of the commands
+> 
+> rock@rockpi4b:~$  uname -a
+> Linux rockpi4b 4.4.154-116-rockchip-g86a614bc15b3 #1 SMP Mon Jan 10 
+ > 12:03:08 UTC 2022 aarch64 aarch64 aarch64 GNU/Linux
 
-Best Regards,
-Devid
+Well ... Linux 4.4.154 as expected.
 
+You probably should give this a try:
+
+https://github.com/camarel/rockpi4
+
+to finally upgrade to Linux 5.10
+
+Best,
+Oliver
+
+> rock@rockpi4b:~$ sudo ip link set can0 up type can bitrate 250000
+> [sudo] password for rock:
+> rock@rockpi4b:~$ ip -details link show
+> 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode 
+> DEFAULT group default qlen 1
+>      link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00 promiscuity 0 
+> addrgenmode eui64 numtxqueues 1 numrxqueues 1
+> 2: eth0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc fq_codel 
+> state DOWN mode DEFAULT group default qlen 1000
+>      link/ether 8a:46:ca:10:55:d9 brd ff:ff:ff:ff:ff:ff promiscuity 0 
+> addrgenmode none numtxqueues 1 numrxqueues 1
+> 3: can0: <NOARP,UP,LOWER_UP,ECHO> mtu 16 qdisc fq_codel state UNKNOWN 
+> mode DEFAULT group default qlen 10
+>      link/can  promiscuity 0
+>      can state ERROR-ACTIVE restart-ms 0
+>            bitrate 250000 sample-point 0.833
+>            tq 333 prop-seg 4 phase-seg1 5 phase-seg2 2 sjw 1
+>            mcp251x: tseg1 3..16 tseg2 2..8 sjw 1..4 brp 1..64 brp-inc 1
+>            clock 6000000 numtxqueues 1 numrxqueues 1
+> 4: wlan0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel 
+> state UP mode DORMANT group default qlen 1000
+>      link/ether 20:50:e7:d5:2a:2a brd ff:ff:ff:ff:ff:ff promiscuity 0 
+> addrgenmode none numtxqueues 1 numrxqueues 1
+> rock@rockpi4b:~$
+> 
+> Greeting Marcel
+> 
+> Op 10-May-22 om 6:52 PM schreef Oliver Hartkopp:
+>> Hi Marcel,
+>>
+>> On 10.05.22 18:12, Marcel Akkermans wrote:
+>>> I have a Raxda rockpi with waveshare 485 can Hat.
+>>> there are strange issues with the can-bus.
+>>> I need it to get it going (it's an HMI of a machine I am building)
+>>>
+>>> I have posted my test result at Raxda forum
+>>>
+>>> https://forum.radxa.com/t/rockpi-4b-canbus-fault/9784
+>>
+>> Can you please post the output of
+>>
+>>     ip -details link show
+>>
+>> and
+>>
+>>     uname -a
+>>
+>> ?
+>>
+>> I searched a bit on rockpi 4b and found these images:
+>>
+>> https://github.com/radxa/rock-pi-images-released/releases
+>>
+>> That's pretty old stuff and the mcp251x/SPI combo was not really 
+>> reliable in those old kernels IIRC ...
+>>
+>>> all hardware runs fine on raspberry 3b
+>>
+>> Where you likely used a more recent kernel too ;-)
+>>
+>> Best regards,
+>> Oliver
+> 
+> 
