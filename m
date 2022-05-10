@@ -2,32 +2,30 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00D6952051C
-	for <lists+linux-can@lfdr.de>; Mon,  9 May 2022 21:18:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 091E8520CE3
+	for <lists+linux-can@lfdr.de>; Tue, 10 May 2022 06:29:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240474AbiEITUE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 9 May 2022 15:20:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43394 "EHLO
+        id S236574AbiEJEc7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 10 May 2022 00:32:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240501AbiEITUC (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 9 May 2022 15:20:02 -0400
-X-Greylist: delayed 712 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 09 May 2022 12:16:06 PDT
-Received: from relay-b03.edpnet.be (relay-b03.edpnet.be [212.71.1.220])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0F8D68FAD
-        for <linux-can@vger.kernel.org>; Mon,  9 May 2022 12:16:03 -0700 (PDT)
-X-ASG-Debug-ID: 1652123048-15c435381a966b00001-ZXuqFv
-Received: from srv21.vandijck-laurijssen.be (77.109.97.42.adsl.dyn.edpnet.net [77.109.97.42]) by relay-b03.edpnet.be with ESMTP id evQvZkMsT4fx48c7; Mon, 09 May 2022 21:04:08 +0200 (CEST)
-X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
-X-Barracuda-Effective-Source-IP: 77.109.97.42.adsl.dyn.edpnet.net[77.109.97.42]
-X-Barracuda-Apparent-Source-IP: 77.109.97.42
-Received: from x1.vandijck-laurijssen.be (x1.vandijck-laurijssen.be [IPv6:fd01::1a1d:eaff:fe02:d339])
-        by srv21.vandijck-laurijssen.be (Postfix) with ESMTPSA id 0E1DA1063BE;
-        Mon,  9 May 2022 21:04:08 +0200 (CEST)
-Date:   Mon, 9 May 2022 21:04:06 +0200
-From:   Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-To:     Devid Antonio Filoni <devid.filoni@egluetechnologies.com>
-Cc:     Robin van der Gracht <robin@protonic.nl>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
+        with ESMTP id S236671AbiEJEbg (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 10 May 2022 00:31:36 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF174C422
+        for <linux-can@vger.kernel.org>; Mon,  9 May 2022 21:26:28 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1noHRr-00070V-Nc; Tue, 10 May 2022 06:26:11 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1noHRp-0007KV-SV; Tue, 10 May 2022 06:26:09 +0200
+Date:   Tue, 10 May 2022 06:26:09 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Devid Antonio Filoni <devid.filoni@egluetechnologies.com>,
+        Robin van der Gracht <robin@protonic.nl>,
         kernel@pengutronix.de, linux-can@vger.kernel.org,
         Oleksij Rempel <linux@rempel-privat.de>,
         Oliver Hartkopp <socketcan@hartkopp.net>,
@@ -40,66 +38,67 @@ Cc:     Robin van der Gracht <robin@protonic.nl>,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH RESEND] can: j1939: do not wait 250ms if the same addr
  was already claimed
-Message-ID: <YnllpntZ8V5CD07v@x1.vandijck-laurijssen.be>
-X-ASG-Orig-Subj: Re: [PATCH RESEND] can: j1939: do not wait 250ms if the same addr
- was already claimed
-Mail-Followup-To: Devid Antonio Filoni <devid.filoni@egluetechnologies.com>,
-        Robin van der Gracht <robin@protonic.nl>,
-        Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-can@vger.kernel.org, Oleksij Rempel <linux@rempel-privat.de>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        Maxime Jayat <maxime.jayat@mobile-devices.fr>,
-        kbuild test robot <lkp@intel.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Message-ID: <20220510042609.GA10669@pengutronix.de>
 References: <20220509170303.29370-1-devid.filoni@egluetechnologies.com>
+ <YnllpntZ8V5CD07v@x1.vandijck-laurijssen.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220509170303.29370-1-devid.filoni@egluetechnologies.com>
-X-Barracuda-Connect: 77.109.97.42.adsl.dyn.edpnet.net[77.109.97.42]
-X-Barracuda-Start-Time: 1652123048
-X-Barracuda-URL: https://212.71.1.220:443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at edpnet.be
-X-Barracuda-Scan-Msg-Size: 1034
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Spam-Score: 0.00
-X-Barracuda-Spam-Status: No, SCORE=0.00 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.97894
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YnllpntZ8V5CD07v@x1.vandijck-laurijssen.be>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 06:19:23 up 40 days, 16:49, 62 users,  load average: 0.01, 0.09,
+ 0.08
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On ma, 09 mei 2022 19:03:03 +0200, Devid Antonio Filoni wrote:
-> This is not explicitly stated in SAE J1939-21 and some tools used for
-> ISO-11783 certification do not expect this wait.
+Hi,
 
-IMHO, the current behaviour is not explicitely stated, but nor is the opposite.
-And if I'm not mistaken, this introduces a 250msec delay.
+On Mon, May 09, 2022 at 09:04:06PM +0200, Kurt Van Dijck wrote:
+> On ma, 09 mei 2022 19:03:03 +0200, Devid Antonio Filoni wrote:
+> > This is not explicitly stated in SAE J1939-21 and some tools used for
+> > ISO-11783 certification do not expect this wait.
 
-1. If you want to avoid the 250msec gap, you should avoid to contest the same address.
+It will be interesting to know which certification tool do not expect it and
+what explanation is used if it fails?
 
-2. It's a balance between predictability and flexibility, but if you try to accomplish both,
-as your patch suggests, there is slight time-window until the current owner responds,
-in which it may be confusing which node has the address. It depends on how much history
-you have collected on the bus.
+> IMHO, the current behaviour is not explicitely stated, but nor is the opposite.
+> And if I'm not mistaken, this introduces a 250msec delay.
+> 
+> 1. If you want to avoid the 250msec gap, you should avoid to contest the same address.
+> 
+> 2. It's a balance between predictability and flexibility, but if you try to accomplish both,
+> as your patch suggests, there is slight time-window until the current owner responds,
+> in which it may be confusing which node has the address. It depends on how much history
+> you have collected on the bus.
+> 
+> I'm sure that this problem decreases with increasing processing power on the nodes,
+> but bigger internal queues also increase this window.
+> 
+> It would certainly help if you describe how the current implementation fails.
+> 
+> Would decreasing the dead time to 50msec help in such case.
+> 
+> Kind regards,
+> Kurt
+> 
 
-I'm sure that this problem decreases with increasing processing power on the nodes,
-but bigger internal queues also increase this window.
-
-It would certainly help if you describe how the current implementation fails.
-
-Would decreasing the dead time to 50msec help in such case.
-
-Kind regards,
-Kurt
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
