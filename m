@@ -2,175 +2,102 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98E025233AA
-	for <lists+linux-can@lfdr.de>; Wed, 11 May 2022 15:04:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76F175233AF
+	for <lists+linux-can@lfdr.de>; Wed, 11 May 2022 15:05:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243200AbiEKNEj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 11 May 2022 09:04:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51878 "EHLO
+        id S235500AbiEKNFu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 11 May 2022 09:05:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243223AbiEKNE2 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 11 May 2022 09:04:28 -0400
-Received: from m15112.mail.126.com (m15112.mail.126.com [220.181.15.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2CC1423725D;
-        Wed, 11 May 2022 06:04:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=cA20v
-        jSQc0xTB5lj5GoeWHAPefqE6IHlE3Nbb8SvDhw=; b=eHhPo9MMLFFQdNOxPzh4R
-        dHDDNEJiYPWGiEIA/opcQbywOmTnsgv8An0DrOvcPjpt6/0guDU/RBEBF7Efdhpy
-        9BHQFyxEAGbhGNcX4VU1HX/Z5CtV00J6rOLs5ty0x1WLp5UBYxjcaLG2a16YAqif
-        PjWeOKI+AHBYdFy7rY5LPs=
-Received: from ubuntu.localdomain (unknown [58.213.83.157])
-        by smtp2 (Coremail) with SMTP id DMmowACXi_3xs3tivSKkBQ--.64503S4;
-        Wed, 11 May 2022 21:02:43 +0800 (CST)
-From:   Bernard Zhao <zhaojunkui2008@126.com>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        Bernard Zhao <zhaojunkui2008@126.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     bernard@vivo.com
-Subject: [PATCH v2] usb/peak_usb: cleanup code
-Date:   Wed, 11 May 2022 06:02:38 -0700
-Message-Id: <20220511130240.790771-1-zhaojunkui2008@126.com>
-X-Mailer: git-send-email 2.33.1
+        with ESMTP id S233629AbiEKNFu (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 11 May 2022 09:05:50 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7247125CE
+        for <linux-can@vger.kernel.org>; Wed, 11 May 2022 06:05:44 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nom29-0006Tc-Su; Wed, 11 May 2022 15:05:41 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id A93A57BCDD;
+        Wed, 11 May 2022 13:05:40 +0000 (UTC)
+Date:   Wed, 11 May 2022 15:05:40 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Devid Antonio Filoni <devid.filoni@egluetechnologies.com>,
+        kernel@pengutronix.de, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Jander <david@protonic.nl>
+Subject: Re: [PATCH 1/1] can: skb: add and set local_origin flag
+Message-ID: <20220511130540.yowjdvzftq2jutiw@pengutronix.de>
+References: <20220511121913.2696181-1-o.rempel@pengutronix.de>
+ <b631b022-72d5-9160-fd13-f33c80dbbe59@hartkopp.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DMmowACXi_3xs3tivSKkBQ--.64503S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxZr4DCry7tFWxJr45Zr4xZwb_yoW5KrWDpa
-        1rAFW7Kr4UKF1rG348tr1ku3Way3W8Ka4Skryqqw1F9r1qg393XF95CFySvrs7Z39ru3Wa
-        qa1Utr18Ar1UGr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pEv388UUUUU=
-X-Originating-IP: [58.213.83.157]
-X-CM-SenderInfo: p2kd0y5xqn3xasqqmqqrswhudrp/1tbiLRT9qlpD935HVQAAss
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="byqmtarls5bvmvxs"
+Content-Disposition: inline
+In-Reply-To: <b631b022-72d5-9160-fd13-f33c80dbbe59@hartkopp.net>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The variable fi and bi only used in branch if (!dev->prev_siblings)
-, fi & bi not kmalloc in else branch, so move kfree into branch
-if (!dev->prev_siblings),this change is to cleanup the code a bit.
 
-Signed-off-by: Bernard Zhao <zhaojunkui2008@126.com>
+--byqmtarls5bvmvxs
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
----
-Changes since V1:
-* move all the content of the if (!dev->prev_siblings) to a new
-function.
----
- drivers/net/can/usb/peak_usb/pcan_usb_pro.c | 57 +++++++++++++--------
- 1 file changed, 36 insertions(+), 21 deletions(-)
+On 11.05.2022 14:38:32, Oliver Hartkopp wrote:
+> I'm a bit unsure why we should not stick with the simple skb->sk
+> handling?
 
-diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_pro.c b/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
-index ebe087f258e3..5e472fe086a8 100644
---- a/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
-+++ b/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
-@@ -841,32 +841,28 @@ static int pcan_usb_pro_stop(struct peak_usb_device *dev)
- 	return 0;
- }
- 
--/*
-- * called when probing to initialize a device object.
-- */
--static int pcan_usb_pro_init(struct peak_usb_device *dev)
-+static int pcan_usb_pro_init_first_channel(struct peak_usb_device *dev, struct pcan_usb_pro_interface **usb_if)
- {
--	struct pcan_usb_pro_device *pdev =
--			container_of(dev, struct pcan_usb_pro_device, dev);
--	struct pcan_usb_pro_interface *usb_if = NULL;
--	struct pcan_usb_pro_fwinfo *fi = NULL;
--	struct pcan_usb_pro_blinfo *bi = NULL;
-+	struct pcan_usb_pro_interface *pusb_if = NULL;
- 	int err;
- 
- 	/* do this for 1st channel only */
- 	if (!dev->prev_siblings) {
-+		struct pcan_usb_pro_fwinfo *fi = NULL;
-+		struct pcan_usb_pro_blinfo *bi = NULL;
-+
- 		/* allocate netdevices common structure attached to first one */
--		usb_if = kzalloc(sizeof(struct pcan_usb_pro_interface),
-+		pusb_if = kzalloc(sizeof(struct pcan_usb_pro_interface),
- 				 GFP_KERNEL);
- 		fi = kmalloc(sizeof(struct pcan_usb_pro_fwinfo), GFP_KERNEL);
- 		bi = kmalloc(sizeof(struct pcan_usb_pro_blinfo), GFP_KERNEL);
--		if (!usb_if || !fi || !bi) {
-+		if (!pusb_if || !fi || !bi) {
- 			err = -ENOMEM;
- 			goto err_out;
- 		}
- 
- 		/* number of ts msgs to ignore before taking one into account */
--		usb_if->cm_ignore_count = 5;
-+		pusb_if->cm_ignore_count = 5;
- 
- 		/*
- 		 * explicit use of dev_xxx() instead of netdev_xxx() here:
-@@ -903,18 +899,14 @@ static int pcan_usb_pro_init(struct peak_usb_device *dev)
- 		     pcan_usb_pro.name,
- 		     bi->hw_rev, bi->serial_num_hi, bi->serial_num_lo,
- 		     pcan_usb_pro.ctrl_count);
-+
-+		kfree(bi);
-+		kfree(fi);
- 	} else {
--		usb_if = pcan_usb_pro_dev_if(dev->prev_siblings);
-+		pusb_if = pcan_usb_pro_dev_if(dev->prev_siblings);
- 	}
- 
--	pdev->usb_if = usb_if;
--	usb_if->dev[dev->ctrl_idx] = dev;
--
--	/* set LED in default state (end of init phase) */
--	pcan_usb_pro_set_led(dev, PCAN_USBPRO_LED_DEVICE, 1);
--
--	kfree(bi);
--	kfree(fi);
-+	*usb_if = pusb_if;
- 
- 	return 0;
- 
-@@ -926,6 +918,29 @@ static int pcan_usb_pro_init(struct peak_usb_device *dev)
- 	return err;
- }
- 
-+/*
-+ * called when probing to initialize a device object.
-+ */
-+static int pcan_usb_pro_init(struct peak_usb_device *dev)
-+{
-+	struct pcan_usb_pro_device *pdev =
-+			container_of(dev, struct pcan_usb_pro_device, dev);
-+	struct pcan_usb_pro_interface *usb_if = NULL;
-+	int err;
-+
-+	err = pcan_usb_pro_init_first_channel(dev, &usb_if);
-+	if (err)
-+		return err;
-+
-+	pdev->usb_if = usb_if;
-+	usb_if->dev[dev->ctrl_idx] = dev;
-+
-+	/* set LED in default state (end of init phase) */
-+	pcan_usb_pro_set_led(dev, PCAN_USBPRO_LED_DEVICE, 1);
-+
-+	return 0;
-+}
-+
- static void pcan_usb_pro_exit(struct peak_usb_device *dev)
- {
- 	struct pcan_usb_pro_device *pdev =
--- 
-2.33.1
+Another use where skb->sk breaks is sending CAN frames with SO_TXTIME
+with the sched_etf.
 
+I have a patched version of cangen that uses SO_TXTIME. It attaches a
+time to transmit to a CAN frame when sending it. If you send 10 frames,
+each 100ms after the other and then exit the program, the first CAN
+frames show up as TX'ed while the others (after closing the socket) show
+up as RX'ed CAN frames in candump.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--byqmtarls5bvmvxs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJ7tJoACgkQrX5LkNig
+010WOQgAn1qTEhHc8pkIFWfBgw5W+t+qG2osvmttQ6uBBEgBl3lTnJJL5ZhzvT68
+csQmMf5ZsbCTzmFZSy//7Nrguxhq8n2ZWL8+wh3o6OorNjCknWfHh1VndzHf6CwH
+ZOjVQk2kALuxQE8RXqpLUTWs9eVLoOkyB8qCffVtJyUjCt4p/i40/cQJhQ9OCHR+
+H70dhRddRvqYzUZ46bgRP9nh7beUcytGsvnVeV3TqpylYn62HTr9dyVm2h7eIC6j
+beS5BzSWqYK50SL8xJgnYhNN/dyhYlbeBMUh39Ex5sRe8TYk5atYPGbuP7SXhyJB
+GQk1IuRxFgqnTKIK4zPmVNdsZcdLPQ==
+=+1hK
+-----END PGP SIGNATURE-----
+
+--byqmtarls5bvmvxs--
