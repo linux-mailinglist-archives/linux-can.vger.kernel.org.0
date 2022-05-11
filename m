@@ -2,129 +2,123 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1E7552321B
-	for <lists+linux-can@lfdr.de>; Wed, 11 May 2022 13:48:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 070705232F7
+	for <lists+linux-can@lfdr.de>; Wed, 11 May 2022 14:20:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234374AbiEKLsV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 11 May 2022 07:48:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33482 "EHLO
+        id S242267AbiEKMTd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 11 May 2022 08:19:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233952AbiEKLsU (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 11 May 2022 07:48:20 -0400
+        with ESMTP id S242284AbiEKMT3 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 11 May 2022 08:19:29 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865EE24310B
-        for <linux-can@vger.kernel.org>; Wed, 11 May 2022 04:48:19 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D655B70932
+        for <linux-can@vger.kernel.org>; Wed, 11 May 2022 05:19:23 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1nokp7-00048f-28; Wed, 11 May 2022 13:48:09 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        id 1nolJH-0000qE-Ql; Wed, 11 May 2022 14:19:19 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ore@pengutronix.de>)
-        id 1nokp4-0000Cy-Ci; Wed, 11 May 2022 13:48:06 +0200
-Date:   Wed, 11 May 2022 13:48:06 +0200
+        id 1nolJI-001gNu-8e; Wed, 11 May 2022 14:19:18 +0200
+Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nolJG-00BJXp-Bi; Wed, 11 May 2022 14:19:18 +0200
 From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Devid Antonio Filoni <devid.filoni@egluetechnologies.com>
-Cc:     Robin van der Gracht <robin@protonic.nl>, kernel@pengutronix.de,
-        linux-can@vger.kernel.org, Oleksij Rempel <linux@rempel-privat.de>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
+To:     Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Jayat <maxime.jayat@mobile-devices.fr>,
-        kbuild test robot <lkp@intel.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND 0/2] j1939: make sure that sent DAT/CTL frames are
- marked as TX
-Message-ID: <20220511114806.GA12398@pengutronix.de>
-References: <20220509170746.29893-1-devid.filoni@egluetechnologies.com>
- <20220510043406.GB10669@pengutronix.de>
- <a8ea7199230682f3fd53e0b5975afa7287bd5ac0.camel@egluetechnologies.com>
+        Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Devid Antonio Filoni <devid.filoni@egluetechnologies.com>,
+        kernel@pengutronix.de, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Jander <david@protonic.nl>
+Subject: [PATCH 1/1] can: skb: add and set local_origin flag
+Date:   Wed, 11 May 2022 14:19:13 +0200
+Message-Id: <20220511121913.2696181-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <a8ea7199230682f3fd53e0b5975afa7287bd5ac0.camel@egluetechnologies.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 13:45:31 up 42 days, 15 min, 82 users,  load average: 0.20, 0.23,
- 0.20
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: ore@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Devid,
+Add new can_skb_priv::local_origin flag to be able detect egress
+packages even if they was sent directly from kernel and not assigned to
+some socket.
 
-On Tue, May 10, 2022 at 08:12:32PM +0200, Devid Antonio Filoni wrote:
-> Hi Oleksij,
-> 
-> On Tue, 2022-05-10 at 06:34 +0200, Oleksij Rempel wrote:
-> > Hi Devid,
-> > 
-> > On Mon, May 09, 2022 at 07:07:44PM +0200, Devid Antonio Filoni wrote:
-> > > Hello,
-> > > 
-> > > If candump -x is used to dump CAN bus traffic on an interface while a J1939
-> > > socket is sending multi-packet messages, then the DAT and CTL frames
-> > > show up as RX instead of TX.
-> > > 
-> > > This patch series sets to generated struct sk_buff the owning struct sock
-> > > pointer so that the MSG_DONTROUTE flag can be set by recv functions.
-> > > 
-> > > I'm not sure that j1939_session_skb_get is needed, I think that session->sk
-> > > could be directly passed as can_skb_set_owner parameter. This patch
-> > > is based on j1939_simple_txnext function which uses j1939_session_skb_get.
-> > > I can provide an additional patch to remove the calls to
-> > > j1939_session_skb_get function if you think they are not needed.
-> > 
-> > Thank you for your patches. By testing it I noticed that there is a memory
-> > leak in current kernel and it seems to be even worse after this patches.
-> > Found by this test:
-> > https://github.com/linux-can/can-tests/blob/master/j1939/run_all.sh#L13
-> > 
-> > 
-> > Can you please investigate it (or wait until I get time to do it).
-> > 
-> > Regards,
-> > Oleksij
-> > 
-> 
-> I checked the test you linked and I can see that the number of the
-> instances of the can_j1939 module increases on each
-> j1939_ac_100k_dual_can.sh test execution (then the script exits),
-> however this doesn't seem to be worse with my patches, I have the same
-> results with the original kernel. Did you execute a particular test to
-> verify that the memory leak is worse with my patches?
-> I tried to take a look at all code that I changed in my patches but the
-> used ref counters seem to be handled correctly in called functions. I
-> suspected that the issue may be caused by the ref counter increased
-> in can_skb_set_owner() function but, even if I remove that call from the
-> j1939_simple_txnext() function in original kernel, I can still reproduce
-> the memory leak.
-> I think the issue is somewhere else, I'll try to give another look but I
-> can't assure nothing.
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Cc: Devid Antonio Filoni <devid.filoni@egluetechnologies.com>
+---
+ drivers/net/can/dev/skb.c | 3 +++
+ include/linux/can/skb.h   | 1 +
+ net/can/raw.c             | 2 +-
+ 3 files changed, 5 insertions(+), 1 deletion(-)
 
-Suddenly detecting local frames by skb->sk will not work for all control
-packets. I'll send different patch solving it for all j1939 and raw
-variants.
-
-Regards,
-Oleksij
+diff --git a/drivers/net/can/dev/skb.c b/drivers/net/can/dev/skb.c
+index 61660248c69e..3e2357fb387e 100644
+--- a/drivers/net/can/dev/skb.c
++++ b/drivers/net/can/dev/skb.c
+@@ -63,6 +63,7 @@ int can_put_echo_skb(struct sk_buff *skb, struct net_device *dev,
+ 
+ 		/* save frame_len to reuse it when transmission is completed */
+ 		can_skb_prv(skb)->frame_len = frame_len;
++		can_skb_prv(skb)->local_origin = true;
+ 
+ 		skb_tx_timestamp(skb);
+ 
+@@ -200,6 +201,7 @@ struct sk_buff *alloc_can_skb(struct net_device *dev, struct can_frame **cf)
+ 	can_skb_reserve(skb);
+ 	can_skb_prv(skb)->ifindex = dev->ifindex;
+ 	can_skb_prv(skb)->skbcnt = 0;
++	can_skb_prv(skb)->local_origin = false;
+ 
+ 	*cf = skb_put_zero(skb, sizeof(struct can_frame));
+ 
+@@ -231,6 +233,7 @@ struct sk_buff *alloc_canfd_skb(struct net_device *dev,
+ 	can_skb_reserve(skb);
+ 	can_skb_prv(skb)->ifindex = dev->ifindex;
+ 	can_skb_prv(skb)->skbcnt = 0;
++	can_skb_prv(skb)->local_origin = false;
+ 
+ 	*cfd = skb_put_zero(skb, sizeof(struct canfd_frame));
+ 
+diff --git a/include/linux/can/skb.h b/include/linux/can/skb.h
+index fdb22b00674a..1b8a8cf2b13b 100644
+--- a/include/linux/can/skb.h
++++ b/include/linux/can/skb.h
+@@ -52,6 +52,7 @@ struct can_skb_priv {
+ 	int ifindex;
+ 	int skbcnt;
+ 	unsigned int frame_len;
++	bool local_origin;
+ 	struct can_frame cf[];
+ };
+ 
+diff --git a/net/can/raw.c b/net/can/raw.c
+index b7dbb57557f3..df2d9334b395 100644
+--- a/net/can/raw.c
++++ b/net/can/raw.c
+@@ -173,7 +173,7 @@ static void raw_rcv(struct sk_buff *oskb, void *data)
+ 	/* add CAN specific message flags for raw_recvmsg() */
+ 	pflags = raw_flags(skb);
+ 	*pflags = 0;
+-	if (oskb->sk)
++	if (can_skb_prv(skb)->local_origin)
+ 		*pflags |= MSG_DONTROUTE;
+ 	if (oskb->sk == sk)
+ 		*pflags |= MSG_CONFIRM;
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.30.2
+
