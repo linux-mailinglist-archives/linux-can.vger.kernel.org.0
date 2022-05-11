@@ -2,214 +2,130 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D01F7523575
-	for <lists+linux-can@lfdr.de>; Wed, 11 May 2022 16:29:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A271F5235AA
+	for <lists+linux-can@lfdr.de>; Wed, 11 May 2022 16:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240405AbiEKO3B (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 11 May 2022 10:29:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39814 "EHLO
+        id S240207AbiEKOg1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 11 May 2022 10:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231251AbiEKO3A (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 11 May 2022 10:29:00 -0400
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552188FD4C;
-        Wed, 11 May 2022 07:28:59 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id e12so4300750ybc.11;
-        Wed, 11 May 2022 07:28:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qTQsWzO3YZW4uR9nq/l9n7qJaYMCw4ErgRQiynA4kEg=;
-        b=ZV0Iae6vKejP0m7BWxQuZsPkeeRuFbUVZ4SDI5/u8Vdk1B5C9CwB1HSzxi3hk33WBU
-         q5DsrcsuH6Fa4pRndQk36T/x/DYCxrmnYdnY+H68/yCk27bN520vRTXQgI5EirAZZWAf
-         fgAwgrau/eEqP7nwxkZBiE1LYKR05znvEUbEX27o+WxK88L4D6fnCL5JHtIrMzV4KhXE
-         9n/jFcrM4o2civTiMod3BLQ+fYPe6H5seWtuH5mEIAmoEySBkY5swQy+gHxMzzNzvVm2
-         Vi2aMxVmzP5XApbqOZa9expa3FvdYwaodeLV/Pl4QvTKs4X7qwE2Lb+dij/wmbV3gqdf
-         An4Q==
-X-Gm-Message-State: AOAM533Ll7PzdEMWfWE9S3iYAjmxK14HCc4AOdpj9ZaXE6o8KVy4xEbG
-        jRXjTIKbwG15qZwz5ci7GyQKLZRQIeaIPhrAs3I=
-X-Google-Smtp-Source: ABdhPJzUF1Hmo7chhIyI7QmLnOOhTeYUSu+/KrSyvQOVI3jgtw6tpn8zgdQR8STtyAp27JjupRvIDytVxTu6nPU33Lw=
-X-Received: by 2002:a25:cb4b:0:b0:645:d702:eb15 with SMTP id
- b72-20020a25cb4b000000b00645d702eb15mr22026644ybg.500.1652279338443; Wed, 11
- May 2022 07:28:58 -0700 (PDT)
+        with ESMTP id S236108AbiEKOg0 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 11 May 2022 10:36:26 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D69B2DD40
+        for <linux-can@vger.kernel.org>; Wed, 11 May 2022 07:36:25 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nonRu-0002Lv-Bs; Wed, 11 May 2022 16:36:22 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id D8B317BDD4;
+        Wed, 11 May 2022 14:36:20 +0000 (UTC)
+Date:   Wed, 11 May 2022 16:36:20 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Devid Antonio Filoni <devid.filoni@egluetechnologies.com>,
+        kernel@pengutronix.de, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Jander <david@protonic.nl>
+Subject: Re: [PATCH 1/1] can: skb: add and set local_origin flag
+Message-ID: <20220511143620.kphwgp2vhjyoecs5@pengutronix.de>
+References: <20220511121913.2696181-1-o.rempel@pengutronix.de>
+ <b631b022-72d5-9160-fd13-f33c80dbbe59@hartkopp.net>
+ <20220511132421.7o5a3po32l3w2wcr@pengutronix.de>
 MIME-Version: 1.0
-References: <20220511130240.790771-1-zhaojunkui2008@126.com>
-In-Reply-To: <20220511130240.790771-1-zhaojunkui2008@126.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Wed, 11 May 2022 23:28:47 +0900
-Message-ID: <CAMZ6RqJpgUkr0i4X4w5GxYKgiu9aX8KvQ3fJ9OB0Ob3kbL2abw@mail.gmail.com>
-Subject: Re: [PATCH v2] usb/peak_usb: cleanup code
-To:     Bernard Zhao <zhaojunkui2008@126.com>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bernard@vivo.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ljoxgzahuknnbyf5"
+Content-Disposition: inline
+In-Reply-To: <20220511132421.7o5a3po32l3w2wcr@pengutronix.de>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed. 11 May 2022 at 22:02, Bernard Zhao <zhaojunkui2008@126.com> wrote:
-> The variable fi and bi only used in branch if (!dev->prev_siblings)
-> , fi & bi not kmalloc in else branch, so move kfree into branch
-> if (!dev->prev_siblings),this change is to cleanup the code a bit.
->
-> Signed-off-by: Bernard Zhao <zhaojunkui2008@126.com>
->
-> ---
-> Changes since V1:
-> * move all the content of the if (!dev->prev_siblings) to a new
-> function.
-> ---
->  drivers/net/can/usb/peak_usb/pcan_usb_pro.c | 57 +++++++++++++--------
->  1 file changed, 36 insertions(+), 21 deletions(-)
->
-> diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_pro.c b/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
-> index ebe087f258e3..5e472fe086a8 100644
-> --- a/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
-> +++ b/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
-> @@ -841,32 +841,28 @@ static int pcan_usb_pro_stop(struct peak_usb_device *dev)
->         return 0;
->  }
->
-> -/*
-> - * called when probing to initialize a device object.
-> - */
-> -static int pcan_usb_pro_init(struct peak_usb_device *dev)
-> +static int pcan_usb_pro_init_first_channel(struct peak_usb_device *dev, struct pcan_usb_pro_interface **usb_if)
->  {
-> -       struct pcan_usb_pro_device *pdev =
-> -                       container_of(dev, struct pcan_usb_pro_device, dev);
-> -       struct pcan_usb_pro_interface *usb_if = NULL;
-> -       struct pcan_usb_pro_fwinfo *fi = NULL;
-> -       struct pcan_usb_pro_blinfo *bi = NULL;
-> +       struct pcan_usb_pro_interface *pusb_if = NULL;
 
-Nitpick but I would expect the argument of the function to be named pusb_if:
+--ljoxgzahuknnbyf5
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-struct pcan_usb_pro_interface **pusb_if
+On 11.05.2022 15:24:21, Marc Kleine-Budde wrote:
+> On 11.05.2022 14:38:32, Oliver Hartkopp wrote:
+> > IMO this patch does not work as intended.
+> >=20
+> > You probably need to revisit every place where can_skb_reserve() is use=
+d,
+> > e.g. in raw_sendmsg().
+>=20
+> And the loopback for devices that don't support IFF_ECHO:
+>=20
+> | https://elixir.bootlin.com/linux/latest/source/net/can/af_can.c#L257
 
-And this variable to be call usb_if:
+BTW: There is a bug with interfaces that don't support IFF_ECHO.
 
-struct pcan_usb_pro_interface *usb_if = NULL;
+Assume an invalid CAN frame is passed to can_send() on an interface that
+doesn't support IFF_ECHO. The above mentioned code does happily generate
+an echo frame and it's send, even if the driver drops it, due to
+can_dropped_invalid_skb(dev, skb).
 
-This is to be consistent with pcan_usb_pro_init() where the single
-pointer is also named usb_if (and not pusb_if).
+The echoed back CAN frame is treated in raw_rcv() as if the headroom is val=
+id:
 
-Also, you might as well consider not using and intermediate variable
-and just do *pusb_if throughout all this helper function instead.
+| https://elixir.bootlin.com/linux/v5.17.6/source/net/can/raw.c#L138
 
->         int err;
->
->         /* do this for 1st channel only */
->         if (!dev->prev_siblings) {
-> +               struct pcan_usb_pro_fwinfo *fi = NULL;
-> +               struct pcan_usb_pro_blinfo *bi = NULL;
-> +
->                 /* allocate netdevices common structure attached to first one */
-> -               usb_if = kzalloc(sizeof(struct pcan_usb_pro_interface),
-> +               pusb_if = kzalloc(sizeof(struct pcan_usb_pro_interface),
->                                  GFP_KERNEL);
->                 fi = kmalloc(sizeof(struct pcan_usb_pro_fwinfo), GFP_KERNEL);
->                 bi = kmalloc(sizeof(struct pcan_usb_pro_blinfo), GFP_KERNEL);
-> -               if (!usb_if || !fi || !bi) {
-> +               if (!pusb_if || !fi || !bi) {
->                         err = -ENOMEM;
->                         goto err_out;
+But as far as I can see the can_skb_headroom_valid() check never has
+been done. What about this patch?
 
-Did you test that code? Here, you are keeping the original err_out
-label, correct? Aren't the variables fi and bi out of scope after the
-err_out label?
+index 1fb49d51b25d..fda4807ad165 100644
+--- a/net/can/af_can.c
++++ b/net/can/af_can.c
+@@ -255,6 +255,9 @@ int can_send(struct sk_buff *skb, int loop)
+                 */
+=20
+                if (!(skb->dev->flags & IFF_ECHO)) {
++                       if (can_dropped_invalid_skb(dev, skb))
++                               return -EINVAL;
++
+                        /* If the interface is not capable to do loopback
+                         * itself, we do it here.
+                         */
 
->                 }
->
->                 /* number of ts msgs to ignore before taking one into account */
-> -               usb_if->cm_ignore_count = 5;
-> +               pusb_if->cm_ignore_count = 5;
->
->                 /*
->                  * explicit use of dev_xxx() instead of netdev_xxx() here:
-> @@ -903,18 +899,14 @@ static int pcan_usb_pro_init(struct peak_usb_device *dev)
->                      pcan_usb_pro.name,
->                      bi->hw_rev, bi->serial_num_hi, bi->serial_num_lo,
->                      pcan_usb_pro.ctrl_count);
-> +
-> +               kfree(bi);
-> +               kfree(fi);
->         } else {
-> -               usb_if = pcan_usb_pro_dev_if(dev->prev_siblings);
-> +               pusb_if = pcan_usb_pro_dev_if(dev->prev_siblings);
->         }
+Marc
 
-Sorry if I was not clear but I was thinking of just moving the if
-block in a new function and leaving the else part of the original one
-(c.f. below). This way, you lose one level on indentation and you can
-have the declaration, the kmalloc() and the err_out label all at the
-same indentation level in the function's main block.
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-> -       pdev->usb_if = usb_if;
-> -       usb_if->dev[dev->ctrl_idx] = dev;
-> -
-> -       /* set LED in default state (end of init phase) */
-> -       pcan_usb_pro_set_led(dev, PCAN_USBPRO_LED_DEVICE, 1);
-> -
-> -       kfree(bi);
-> -       kfree(fi);
-> +       *usb_if = pusb_if;
->
->         return 0;
->
-> @@ -926,6 +918,29 @@ static int pcan_usb_pro_init(struct peak_usb_device *dev)
->         return err;
->  }
->
-> +/*
-> + * called when probing to initialize a device object.
-> + */
-> +static int pcan_usb_pro_init(struct peak_usb_device *dev)
-> +{
-> +       struct pcan_usb_pro_device *pdev =
-> +                       container_of(dev, struct pcan_usb_pro_device, dev);
-> +       struct pcan_usb_pro_interface *usb_if = NULL;
-> +       int err;
-> +
-> +       err = pcan_usb_pro_init_first_channel(dev, &usb_if);
-> +       if (err)
-> +               return err;
+--ljoxgzahuknnbyf5
+Content-Type: application/pgp-signature; name="signature.asc"
 
-I was thinking of this:
+-----BEGIN PGP SIGNATURE-----
 
-        if (!dev->prev_siblings) {
-              err = pcan_usb_pro_init_first_channel(dev, &usb_if);
-              if (err)
-                     return err;
-       } else {
-               usb_if = pcan_usb_pro_dev_if(dev->prev_siblings);
-        }
-> +
-> +       pdev->usb_if = usb_if;
-> +       usb_if->dev[dev->ctrl_idx] = dev;
-> +
-> +       /* set LED in default state (end of init phase) */
-> +       pcan_usb_pro_set_led(dev, PCAN_USBPRO_LED_DEVICE, 1);
-> +
-> +       return 0;
-> +}
-> +
->  static void pcan_usb_pro_exit(struct peak_usb_device *dev)
->  {
->         struct pcan_usb_pro_device *pdev =
-> --
-> 2.33.1
->
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJ7yeEACgkQrX5LkNig
+013sQgf9GZiV+J8h1BBY78BuX+q12pFS6uA1Ocl8Xx+dHF//nkU2y9FuYXbn8+fi
+fBFXw7jdhwMMfjSQPLHCbTXbLdrwEONAkQ1QQ6Db5M450W/8wisOgf+JqjDNM3iU
+tvZ1x3l3U/xFkFTdCm2A3IE/UMG7kaxeb/5v3Fk283gZNZ6FBhymRrxxofTfUtRJ
+G9Mn3Bhge8BFZ84kJZcYqhbAspY4MWoDKRDSysEjt0hxq37TxJw4M0JL4cPVH6s/
+8/HjzP5MZBh4Ep+dp4g5Y/KjEoLTLvbCtVHXcnJaLYJwW0vDvAKMG6dA8dQnc8fl
+9gmOJe5ZtenWSw87iMOsTEekkDFy2A==
+=sDfU
+-----END PGP SIGNATURE-----
+
+--ljoxgzahuknnbyf5--
