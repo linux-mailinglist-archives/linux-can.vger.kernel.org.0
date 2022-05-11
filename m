@@ -2,38 +2,31 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 782FA522F4B
-	for <lists+linux-can@lfdr.de>; Wed, 11 May 2022 11:23:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1E7552321B
+	for <lists+linux-can@lfdr.de>; Wed, 11 May 2022 13:48:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237629AbiEKJXE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 11 May 2022 05:23:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36144 "EHLO
+        id S234374AbiEKLsV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 11 May 2022 07:48:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237355AbiEKJXD (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 11 May 2022 05:23:03 -0400
-X-Greylist: delayed 965 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 11 May 2022 02:23:00 PDT
-Received: from smtp16.bhosted.nl (smtp16.bhosted.nl [IPv6:2a02:9e0:8000::27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911EE7A803
-        for <linux-can@vger.kernel.org>; Wed, 11 May 2022 02:22:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=protonic.nl; s=202111;
-        h=content-transfer-encoding:content-type:mime-version:references:in-reply-to:
-         message-id:subject:cc:to:from:date:from;
-        bh=n2xPqgvtWv5KMPWGWD4jNRZDCTudAr2aEHyO5J86aqQ=;
-        b=qYrSZo1cxYNIL8va3yr4DdJVks7DrzkR67viN5/7E68OKxujiGfglvzwgL5LFf0d3TNVUduU4IARg
-         phaMrIfqIkGEY+JkctXPWopo52PVZosqpf7b5LQlE2mGE8MVhBcDY8DOYTOFo8unC93HD7iK5hiwO4
-         cqlo2J/gdIPjL0fzeGx2EXQ+OjpacdlRsAVY9wl3h6xRZQDRDVZGaNNbc5QMbh38BdDJdgV5sMlf0x
-         cvJfBqHqZckdnPiCuQNr+zhmQSIVuimPN6UBNJIsSlu/hJMXCbnqNlY7ycptwzFAKRaBUxyTqAevxx
-         S9aWyHqFV4Q5tQ27FdgUAuzN9uaf5gw==
-X-MSG-ID: b1117358-d109-11ec-9896-0050569d2c73
-Date:   Wed, 11 May 2022 11:06:49 +0200
-From:   David Jander <david@protonic.nl>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Devid Antonio Filoni <devid.filoni@egluetechnologies.com>,
-        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
-        Robin van der Gracht <robin@protonic.nl>,
-        kernel@pengutronix.de, linux-can@vger.kernel.org,
-        Oleksij Rempel <linux@rempel-privat.de>,
+        with ESMTP id S233952AbiEKLsU (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 11 May 2022 07:48:20 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865EE24310B
+        for <linux-can@vger.kernel.org>; Wed, 11 May 2022 04:48:19 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nokp7-00048f-28; Wed, 11 May 2022 13:48:09 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nokp4-0000Cy-Ci; Wed, 11 May 2022 13:48:06 +0200
+Date:   Wed, 11 May 2022 13:48:06 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Devid Antonio Filoni <devid.filoni@egluetechnologies.com>
+Cc:     Robin van der Gracht <robin@protonic.nl>, kernel@pengutronix.de,
+        linux-can@vger.kernel.org, Oleksij Rempel <linux@rempel-privat.de>,
         Oliver Hartkopp <socketcan@hartkopp.net>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
@@ -42,189 +35,96 @@ Cc:     Devid Antonio Filoni <devid.filoni@egluetechnologies.com>,
         Maxime Jayat <maxime.jayat@mobile-devices.fr>,
         kbuild test robot <lkp@intel.com>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND] can: j1939: do not wait 250ms if the same addr
- was already claimed
-Message-ID: <20220511110649.21cc1f65@erd992>
-In-Reply-To: <20220511084728.GD10669@pengutronix.de>
-References: <20220509170303.29370-1-devid.filoni@egluetechnologies.com>
-        <YnllpntZ8V5CD07v@x1.vandijck-laurijssen.be>
-        <20220510042609.GA10669@pengutronix.de>
-        <ce7da10389fe448efee86d788dd5282b8022f92e.camel@egluetechnologies.com>
-        <20220511084728.GD10669@pengutronix.de>
-Organization: Protonic Holland
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Subject: Re: [PATCH RESEND 0/2] j1939: make sure that sent DAT/CTL frames are
+ marked as TX
+Message-ID: <20220511114806.GA12398@pengutronix.de>
+References: <20220509170746.29893-1-devid.filoni@egluetechnologies.com>
+ <20220510043406.GB10669@pengutronix.de>
+ <a8ea7199230682f3fd53e0b5975afa7287bd5ac0.camel@egluetechnologies.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <a8ea7199230682f3fd53e0b5975afa7287bd5ac0.camel@egluetechnologies.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 13:45:31 up 42 days, 15 min, 82 users,  load average: 0.20, 0.23,
+ 0.20
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi Devid,
 
-Hi,
+On Tue, May 10, 2022 at 08:12:32PM +0200, Devid Antonio Filoni wrote:
+> Hi Oleksij,
+> 
+> On Tue, 2022-05-10 at 06:34 +0200, Oleksij Rempel wrote:
+> > Hi Devid,
+> > 
+> > On Mon, May 09, 2022 at 07:07:44PM +0200, Devid Antonio Filoni wrote:
+> > > Hello,
+> > > 
+> > > If candump -x is used to dump CAN bus traffic on an interface while a J1939
+> > > socket is sending multi-packet messages, then the DAT and CTL frames
+> > > show up as RX instead of TX.
+> > > 
+> > > This patch series sets to generated struct sk_buff the owning struct sock
+> > > pointer so that the MSG_DONTROUTE flag can be set by recv functions.
+> > > 
+> > > I'm not sure that j1939_session_skb_get is needed, I think that session->sk
+> > > could be directly passed as can_skb_set_owner parameter. This patch
+> > > is based on j1939_simple_txnext function which uses j1939_session_skb_get.
+> > > I can provide an additional patch to remove the calls to
+> > > j1939_session_skb_get function if you think they are not needed.
+> > 
+> > Thank you for your patches. By testing it I noticed that there is a memory
+> > leak in current kernel and it seems to be even worse after this patches.
+> > Found by this test:
+> > https://github.com/linux-can/can-tests/blob/master/j1939/run_all.sh#L13
+> > 
+> > 
+> > Can you please investigate it (or wait until I get time to do it).
+> > 
+> > Regards,
+> > Oleksij
+> > 
+> 
+> I checked the test you linked and I can see that the number of the
+> instances of the can_j1939 module increases on each
+> j1939_ac_100k_dual_can.sh test execution (then the script exits),
+> however this doesn't seem to be worse with my patches, I have the same
+> results with the original kernel. Did you execute a particular test to
+> verify that the memory leak is worse with my patches?
+> I tried to take a look at all code that I changed in my patches but the
+> used ref counters seem to be handled correctly in called functions. I
+> suspected that the issue may be caused by the ref counter increased
+> in can_skb_set_owner() function but, even if I remove that call from the
+> j1939_simple_txnext() function in original kernel, I can still reproduce
+> the memory leak.
+> I think the issue is somewhere else, I'll try to give another look but I
+> can't assure nothing.
 
-On Wed, 11 May 2022 10:47:28 +0200
-Oleksij Rempel <o.rempel@pengutronix.de> wrote:
+Suddenly detecting local frames by skb->sk will not work for all control
+packets. I'll send different patch solving it for all j1939 and raw
+variants.
 
-> Hi,
->=20
-> i'll CC more J1939 users to the discussion.
-
-Thanks for the CC.
-
-> On Tue, May 10, 2022 at 01:00:41PM +0200, Devid Antonio Filoni wrote:
-> > Hi,
-> >=20
-> > On Tue, 2022-05-10 at 06:26 +0200, Oleksij Rempel wrote: =20
-> > > Hi,
-> > >=20
-> > > On Mon, May 09, 2022 at 09:04:06PM +0200, Kurt Van Dijck wrote: =20
-> > > > On ma, 09 mei 2022 19:03:03 +0200, Devid Antonio Filoni wrote: =20
-> > > > > This is not explicitly stated in SAE J1939-21 and some tools used=
- for
-> > > > > ISO-11783 certification do not expect this wait. =20
-> > >=20
-> > > It will be interesting to know which certification tool do not expect=
- it and
-> > > what explanation is used if it fails?
-> > >  =20
-> > > > IMHO, the current behaviour is not explicitely stated, but nor is t=
-he opposite.
-> > > > And if I'm not mistaken, this introduces a 250msec delay.
-> > > >=20
-> > > > 1. If you want to avoid the 250msec gap, you should avoid to contes=
-t the same address.
-> > > >=20
-> > > > 2. It's a balance between predictability and flexibility, but if yo=
-u try to accomplish both,
-> > > > as your patch suggests, there is slight time-window until the curre=
-nt owner responds,
-> > > > in which it may be confusing which node has the address. It depends=
- on how much history
-> > > > you have collected on the bus.
-> > > >=20
-> > > > I'm sure that this problem decreases with increasing processing pow=
-er on the nodes,
-> > > > but bigger internal queues also increase this window.
-> > > >=20
-> > > > It would certainly help if you describe how the current implementat=
-ion fails.
-> > > >=20
-> > > > Would decreasing the dead time to 50msec help in such case.
-> > > >=20
-> > > > Kind regards,
-> > > > Kurt
-> > > >  =20
-> > >  =20
-> >=20
-> > The test that is being executed during the ISOBUS compliance is the
-> > following: after an address has been claimed by a CF (#1), another CF
-> > (#2) sends a  message (other than address-claim) using the same address
-> > claimed by CF #1.
-> >=20
-> > As per ISO11783-5 standard, if a CF receives a message, other than the
-> > address-claimed message, which uses the CF's own SA, then the CF (#1):
-> > - shall send the address-claim message to the Global address;
-> > - shall activate a diagnostic trouble code with SPN =3D 2000+SA and FMI=
- =3D
-> > 31
-> >=20
-> > After the address-claim message is sent by CF #1, as per ISO11783-5
-> > standard:
-> > - If the name of the CF #1 has a lower priority then the one of the CF
-> > #2, the the CF #2 shall send its address-claim message and thus the CF
-> > #1 shall send the cannot-claim-address message or shall execute again
-> > the claim procedure with a new address
-> > - If the name of the CF #1 has higher priority then the of the CF #2,
-> > then the CF #2 shall send the cannot-claim-address message or shall
-> > execute the claim procedure with a new address
-> >=20
-> > Above conflict management is OK with current J1939 driver
-> > implementation, however, since the driver always waits 250ms after
-> > sending an address-claim message, the CF #1 cannot set the DTC. The DM1
-> > message which is expected to be sent each second (as per J1939-73
-> > standard) may not be sent.
-> >=20
-> > Honestly, I don't know which company is doing the ISOBUS compliance
-> > tests on our products and which tool they use as it was choosen by our
-> > customer, however they did send us some CAN traces of previously
-> > performed tests and we noticed that the DM1 message is sent 160ms after
-> > the address-claim message (but it may also be lower then that), and this
-> > is something that we cannot do because the driver blocks the application
-> > from sending it.
-> >=20
-> > 28401.127146 1  18E6FFF0x    Tx   d 8 FE 26 FF FF FF FF FF FF  //Message
-> > with other CF's address
-> > 28401.167414 1  18EEFFF0x    Rx   d 8 15 76 D1 0B 00 86 00 A0  //Address
-> > Claim - SA =3D F0
-> > 28401.349214 1  18FECAF0x    Rx   d 8 FF FF C0 08 1F 01 FF FF  //DM1
-> > 28402.155774 1  18E6FFF0x    Tx   d 8 FE 26 FF FF FF FF FF FF  //Message
-> > with other CF's address
-> > 28402.169455 1  18EEFFF0x    Rx   d 8 15 76 D1 0B 00 86 00 A0  //Address
-> > Claim - SA =3D F0
-> > 28402.348226 1  18FECAF0x    Rx   d 8 FF FF C0 08 1F 02 FF FF  //DM1
-> > 28403.182753 1  18E6FFF0x    Tx   d 8 FE 26 FF FF FF FF FF FF  //Message
-> > with other CF's address
-> > 28403.188648 1  18EEFFF0x    Rx   d 8 15 76 D1 0B 00 86 00 A0  //Address
-> > Claim - SA =3D F0
-> > 28403.349328 1  18FECAF0x    Rx   d 8 FF FF C0 08 1F 03 FF FF  //DM1
-> > 28404.349406 1  18FECAF0x    Rx   d 8 FF FF C0 08 1F 03 FF FF  //DM1
-> > 28405.349740 1  18FECAF0x    Rx   d 8 FF FF C0 08 1F 03 FF FF  //DM1
-> >=20
-> > Since the 250ms wait is not explicitly stated, IMHO it should be up to
-> > the user-space implementation to decide how to manage it.
-
-I think this is not entirely correct. AFAICS the 250ms wait is indeed
-explicitly stated.
-The following is taken from ISO 11783-5:
-
-In "4.4.4.3 Address violation" it states that "If a CF receives a message,
-other than the address-claimed message, which uses the CF=E2=80=99s own SA,=
- then the
-CF [...] shall send the address-claim message to the Global address."
-
-So the CF shall claim its address again. But further down, in "4.5.2 Address
-claim requirements" it is stated that "...No CF shall begin, or resume,
-transmission on the network until 250 ms after it has successfully claimed =
-an
-address".
-
-At this moment, the address is in dispute. The affected CFs are not allowed=
- to
-send any other messages until this dispute is resolved, and the standard
-requires a waiting time of 250ms which is minimally deemed necessary to give
-all participants time to respond and eventually dispute the address claim.
-
-If the offending CF ignores this dispute and keeps sending incorrect messag=
-es
-faster than every 250ms, then effectively the other CF has no chance to ever
-resume normal operation because its address is still disputed.
-
-According to 4.4.4.3 it is also required to set a DTC, but it will not be
-allowed to send the DM1 message unless the address dispute is resolved.
-
-This effectively leads to the offending CF to DoS the affected CF if it kee=
-ps
-sending offending messages. Unfortunately neither J1939 nor ISObus takes in=
-to
-account adversarial behavior on the CAN network, so we cannot do anything
-about this.
-
-As for the ISObus compliance tool that is mentioned by Devid, IMHO this
-compliance tool should be challenged and fixed, since it is broken.
-
-The networking layer is prohibiting the DM1 message to be sent, and the
-networking layer has precedence above all superior protocol layers, so the
-diagnostics layer is not able to operate at this moment.
-
-Best regards,
-
---=20
-David Jander
-Protonic Holland.
+Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
