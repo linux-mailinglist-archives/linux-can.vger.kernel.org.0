@@ -2,46 +2,46 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45E0A523DBD
-	for <lists+linux-can@lfdr.de>; Wed, 11 May 2022 21:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB459523F09
+	for <lists+linux-can@lfdr.de>; Wed, 11 May 2022 22:44:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242178AbiEKTmT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 11 May 2022 15:42:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44886 "EHLO
+        id S1343539AbiEKUo1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 11 May 2022 16:44:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347077AbiEKTmS (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 11 May 2022 15:42:18 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1996658E74;
-        Wed, 11 May 2022 12:42:15 -0700 (PDT)
+        with ESMTP id S242188AbiEKUoZ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 11 May 2022 16:44:25 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED8416D5EC;
+        Wed, 11 May 2022 13:44:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652298136; x=1683834136;
+  t=1652301863; x=1683837863;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=W1LEOjeMf20ykeEuno05hGbHzFwRpyP1Us2mcBeNWL0=;
-  b=nxzX7lePE2qZIhECiL/GEm0WGWDbmNQUG3V88yW0vS3sTaP5hYfXKgBS
-   QQ5SqHh0o8/BdJTHasfYTI7RLYl9rssd5fhSlr3SB/YdQL+lNmaKaev+5
-   u8tcE+ALfnHGDMCVbQXyWDudrelWQI7ukyJbKEx8RSIRNDEk4/C1g7tvA
-   5aoXRbXeUCao8Gu+ZVLL9mnV7c2hL7e8whNjN8PpxfVKL6CIIi/ICZlzB
-   NeYSSeQTCVWFf9W0NARjuNFiUUuHdZZFXXWRA9eKgpBTxHCGnh5Tk+1tH
-   D3dzmecrq/KGrlnpNRuQQfZgkUSMW7R8bp/8xX+zPvHlSCQUcPb0+3/mi
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="356220582"
+  bh=DhBsQKPFvNppevZbx5OxSYuIu8dvRbDM3tm9jFewAR0=;
+  b=YsIQ328MrYzCVK5/fqDIiRpKukkrGDiWTEhxPWixrPqNqr+RirbIKykm
+   cPIwUyWKjRx6zfLZIXMn7dpK7u/kRoG/cQ6f+tOxscbqj2/rYsR7GETMh
+   qK1dTUVJxKIXVSYjAzAHlLsY9KXebVGmPRE4vbUCn8Vfp3ph/MGPYuQYX
+   UXHHznW4nUDLPuIxoi8nCaPdOb3UaeOv+0B52tZfyEzmW8CZDh5AF9dwG
+   WLOjrn/TJmMlsHiF7EWmEVl+kFX9KLQUDp6eUHxuydqggJSaSGOrEIs3D
+   1gISM5PNps+IqoGk3jyeTP0AwZ8ZAmGgRZtatf1JDcNR3lg6NNXKOfiAK
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10344"; a="257358904"
 X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
-   d="scan'208";a="356220582"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 12:42:14 -0700
+   d="scan'208";a="257358904"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 13:44:22 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,218,1647327600"; 
-   d="scan'208";a="594294825"
+   d="scan'208";a="603086242"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 11 May 2022 12:42:11 -0700
+  by orsmga001.jf.intel.com with ESMTP; 11 May 2022 13:44:19 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nosDq-000JVE-Bc;
-        Wed, 11 May 2022 19:42:10 +0000
-Date:   Thu, 12 May 2022 03:42:04 +0800
+        id 1notBz-000JYj-3P;
+        Wed, 11 May 2022 20:44:19 +0000
+Date:   Thu, 12 May 2022 04:43:49 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Bernard Zhao <zhaojunkui2008@126.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
@@ -52,9 +52,10 @@ To:     Bernard Zhao <zhaojunkui2008@126.com>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
         Stefan =?iso-8859-1?Q?M=E4tje?= <stefan.maetje@esd.eu>,
         linux-can@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, netdev@vger.kernel.org, bernard@vivo.com
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        netdev@vger.kernel.org, bernard@vivo.com
 Subject: Re: [PATCH v2] usb/peak_usb: cleanup code
-Message-ID: <202205120331.JrfCulTC-lkp@intel.com>
+Message-ID: <202205120402.hmn6WJGb-lkp@intel.com>
 References: <20220511130240.790771-1-zhaojunkui2008@126.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -62,8 +63,9 @@ Content-Disposition: inline
 In-Reply-To: <20220511130240.790771-1-zhaojunkui2008@126.com>
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,8 +84,8 @@ https://git-scm.com/docs/git-format-patch]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Bernard-Zhao/usb-peak_usb-cleanup-code/20220511-210544
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git testing
-config: ia64-allmodconfig (https://download.01.org/0day-ci/archive/20220512/202205120331.JrfCulTC-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 11.3.0
+config: hexagon-randconfig-r023-20220509 (https://download.01.org/0day-ci/archive/20220512/202205120402.hmn6WJGb-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 18dd123c56754edf62c7042dcf23185c3727610f)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
@@ -93,26 +95,23 @@ reproduce (this is a W=1 build):
         git checkout 126e94285ae6302c0b5ef6ec5174ebc2685ff220
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/net/can/usb/peak_usb/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/net/can/usb/peak_usb/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   drivers/net/can/usb/peak_usb/pcan_usb_pro.c: In function 'pcan_usb_pro_init_first_channel':
->> drivers/net/can/usb/peak_usb/pcan_usb_pro.c:914:15: error: 'bi' undeclared (first use in this function); did you mean 'bio'?
-     914 |         kfree(bi);
-         |               ^~
-         |               bio
-   drivers/net/can/usb/peak_usb/pcan_usb_pro.c:914:15: note: each undeclared identifier is reported only once for each function it appears in
->> drivers/net/can/usb/peak_usb/pcan_usb_pro.c:915:15: error: 'fi' undeclared (first use in this function); did you mean 'fd'?
-     915 |         kfree(fi);
-         |               ^~
-         |               fd
+>> drivers/net/can/usb/peak_usb/pcan_usb_pro.c:914:8: error: use of undeclared identifier 'bi'
+           kfree(bi);
+                 ^
+>> drivers/net/can/usb/peak_usb/pcan_usb_pro.c:915:8: error: use of undeclared identifier 'fi'
+           kfree(fi);
+                 ^
+   2 errors generated.
 
 
-vim +914 drivers/net/can/usb/peak_usb/pcan_usb_pro.c
+vim +/bi +914 drivers/net/can/usb/peak_usb/pcan_usb_pro.c
 
 d8a199355f8f8a Stephane Grosjean 2012-03-02  843  
 126e94285ae630 Bernard Zhao      2022-05-11  844  static int pcan_usb_pro_init_first_channel(struct peak_usb_device *dev, struct pcan_usb_pro_interface **usb_if)
