@@ -2,94 +2,88 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62904522E56
-	for <lists+linux-can@lfdr.de>; Wed, 11 May 2022 10:28:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A043522EB5
+	for <lists+linux-can@lfdr.de>; Wed, 11 May 2022 10:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235128AbiEKI2n (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 11 May 2022 04:28:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46040 "EHLO
+        id S244050AbiEKIsY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 11 May 2022 04:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235054AbiEKI2l (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 11 May 2022 04:28:41 -0400
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F35170F2A;
-        Wed, 11 May 2022 01:28:38 -0700 (PDT)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-2f7ca2ce255so12175137b3.7;
-        Wed, 11 May 2022 01:28:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Cr6Do/TDm+VJ0R4NXV674tpi+dJjugQTOmccea4yw04=;
-        b=0U9xaAHMfrhiGbDAOKbD7r+IHTHlrWC1tAWZEJoHZ1F8/Oky8j1HjhN387eB2vqYKe
-         0gY1bqLoYkqtAgYf1SU4uOQygHUwQlTlBWOFA12bP3OdEKlLKZXlN1IcacuADY8UkR0G
-         /Nc/uJVJlmn8W47FC7uo07p+IkofYZy1d1x0O4GXpvj1leXAgHE5NL+cvUS4HlLzLKGk
-         3eqBScZESOCDXi6FtHnzfczDIXx6WiwCHcTZtP1oGrwLv7XAOblXha+i2+rucSFB7abo
-         dSsmQUdbDgeVJ2F4XCKbh0UEaKS+X92w+rXgSdK+e529AMVosJiKtAlezNzFtkfQO477
-         KvZg==
-X-Gm-Message-State: AOAM532TfL8Kb/ES+77rlJNC7iD9KvuMxYy60DLNkAVEtWsQWgMGQ7g+
-        ew4EGVpgF5jOisjzi8AdDwmF+bR5aoMSDlrZUKQ=
-X-Google-Smtp-Source: ABdhPJzeYQGMvBhE1nU1RquNSVPuKz41BjQqSGfswleYfqAENsfPxVjWWp0KdTJcrd2vNXmaSco53vBAFa247cMhopI=
-X-Received: by 2002:a81:3d43:0:b0:2f9:7d:f320 with SMTP id k64-20020a813d43000000b002f9007df320mr24659563ywa.191.1652257717437;
- Wed, 11 May 2022 01:28:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220511063850.649012-1-zhaojunkui2008@126.com>
- <20220511064450.phisxc7ztcc3qkpj@pengutronix.de> <4986975d.3de3.180b1f57189.Coremail.zhaojunkui2008@126.com>
-In-Reply-To: <4986975d.3de3.180b1f57189.Coremail.zhaojunkui2008@126.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Wed, 11 May 2022 17:28:26 +0900
-Message-ID: <CAMZ6RqKHs4gdcNjVONfOTsHh6ZFEt0qpbEaKqDM7c1Cbc1OLdQ@mail.gmail.com>
-Subject: Re: Re: [PATCH] usb/peak_usb: cleanup code
-To:     z <zhaojunkui2008@126.com>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
+        with ESMTP id S243938AbiEKIsL (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 11 May 2022 04:48:11 -0400
+Received: from m1522.mail.126.com (m1522.mail.126.com [220.181.15.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 27C74166440;
+        Wed, 11 May 2022 01:48:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=VZ+03
+        3rjL5WXbFMVjEGjHKVe/trY65VZ5/Yvfg3b3Sc=; b=HoGhgh4SdNTfJk8WFgS0E
+        tMWY/Iz74e0uNnGiWuJYxhToAsS0QYZ1b5OYVpAP8UU+XrDcKUlTMDXoS97nO3uP
+        0MRDS/qlHnAiWuQ1AX1eaRDsXNW8EIAeDRiG6X3NMBoTsuqGA56ShbT+CtVNjxPI
+        qo1AbvKUTLN4om3fBU4LvQ=
+Received: from zhaojunkui2008$126.com ( [112.80.34.205] ) by
+ ajax-webmail-wmsvr22 (Coremail) ; Wed, 11 May 2022 16:46:37 +0800 (CST)
+X-Originating-IP: [112.80.34.205]
+Date:   Wed, 11 May 2022 16:46:37 +0800 (CST)
+From:   z <zhaojunkui2008@126.com>
+To:     "Vincent MAILHOL" <mailhol.vincent@wanadoo.fr>
+Cc:     "Marc Kleine-Budde" <mkl@pengutronix.de>,
+        "Wolfgang Grandegger" <wg@grandegger.com>,
         "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>,
         =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, bernard@vivo.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Subject: Re:Re: Re: [PATCH] usb/peak_usb: cleanup code
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
+ Copyright (c) 2002-2022 www.mailtech.cn 126com
+In-Reply-To: <CAMZ6RqKHs4gdcNjVONfOTsHh6ZFEt0qpbEaKqDM7c1Cbc1OLdQ@mail.gmail.com>
+References: <20220511063850.649012-1-zhaojunkui2008@126.com>
+ <20220511064450.phisxc7ztcc3qkpj@pengutronix.de>
+ <4986975d.3de3.180b1f57189.Coremail.zhaojunkui2008@126.com>
+ <CAMZ6RqKHs4gdcNjVONfOTsHh6ZFEt0qpbEaKqDM7c1Cbc1OLdQ@mail.gmail.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
+MIME-Version: 1.0
+Message-ID: <1c7b223e.51b2.180b24c78b6.Coremail.zhaojunkui2008@126.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: FsqowABHVmLud3ti92ApAA--.2017W
+X-CM-SenderInfo: p2kd0y5xqn3xasqqmqqrswhudrp/1tbiLRn9qlpD93ryPwACs4
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed. 11 May 2022 at 16:11, z <zhaojunkui2008@126.com> wrote:
-> At 2022-05-11 14:44:50, "Marc Kleine-Budde" <mkl@pengutronix.de> wrote:
-> >On 10.05.2022 23:38:38, Bernard Zhao wrote:
-> >> The variable fi and bi only used in branch if (!dev->prev_siblings)
-> >> , fi & bi not kmalloc in else branch, so move kfree into branch
-> >> if (!dev->prev_siblings),this change is to cleanup the code a bit.
-> >
-> >Please move the variable declaration into that scope, too. Adjust the
-> >error handling accordingly.
->
-> Hi Marc:
->
-> I am not sure if there is some gap.
-> If we move the variable declaration into that scope, then each error branch has to do the kfree job, like:
-> if (err) {
->                         dev_err(dev->netdev->dev.parent,
->                                 "unable to read %s firmware info (err %d)\n",
->                                 pcan_usb_pro.name, err);
->                         kfree(bi);
->                         kfree(fi);
->                         kfree(usb_if);
->
->                        return err;
->                 }
-> I am not sure if this looks a little less clear?
-> Thanks!
-
-A cleaner way would be to move all the content of the if
-(!dev->prev_siblings) to a new function.
-
-
-Yours sincerely,
-Vincent Mailhol
+CkF0IDIwMjItMDUtMTEgMTY6Mjg6MjYsICJWaW5jZW50IE1BSUxIT0wiIDxtYWlsaG9sLnZpbmNl
+bnRAd2FuYWRvby5mcj4gd3JvdGU6Cj5PbiBXZWQuIDExIE1heSAyMDIyIGF0IDE2OjExLCB6IDx6
+aGFvanVua3VpMjAwOEAxMjYuY29tPiB3cm90ZToKPj4gQXQgMjAyMi0wNS0xMSAxNDo0NDo1MCwg
+Ik1hcmMgS2xlaW5lLUJ1ZGRlIiA8bWtsQHBlbmd1dHJvbml4LmRlPiB3cm90ZToKPj4gPk9uIDEw
+LjA1LjIwMjIgMjM6Mzg6MzgsIEJlcm5hcmQgWmhhbyB3cm90ZToKPj4gPj4gVGhlIHZhcmlhYmxl
+IGZpIGFuZCBiaSBvbmx5IHVzZWQgaW4gYnJhbmNoIGlmICghZGV2LT5wcmV2X3NpYmxpbmdzKQo+
+PiA+PiAsIGZpICYgYmkgbm90IGttYWxsb2MgaW4gZWxzZSBicmFuY2gsIHNvIG1vdmUga2ZyZWUg
+aW50byBicmFuY2gKPj4gPj4gaWYgKCFkZXYtPnByZXZfc2libGluZ3MpLHRoaXMgY2hhbmdlIGlz
+IHRvIGNsZWFudXAgdGhlIGNvZGUgYSBiaXQuCj4+ID4KPj4gPlBsZWFzZSBtb3ZlIHRoZSB2YXJp
+YWJsZSBkZWNsYXJhdGlvbiBpbnRvIHRoYXQgc2NvcGUsIHRvby4gQWRqdXN0IHRoZQo+PiA+ZXJy
+b3IgaGFuZGxpbmcgYWNjb3JkaW5nbHkuCj4+Cj4+IEhpIE1hcmM6Cj4+Cj4+IEkgYW0gbm90IHN1
+cmUgaWYgdGhlcmUgaXMgc29tZSBnYXAuCj4+IElmIHdlIG1vdmUgdGhlIHZhcmlhYmxlIGRlY2xh
+cmF0aW9uIGludG8gdGhhdCBzY29wZSwgdGhlbiBlYWNoIGVycm9yIGJyYW5jaCBoYXMgdG8gZG8g
+dGhlIGtmcmVlIGpvYiwgbGlrZToKPj4gaWYgKGVycikgewo+PiAgICAgICAgICAgICAgICAgICAg
+ICAgICBkZXZfZXJyKGRldi0+bmV0ZGV2LT5kZXYucGFyZW50LAo+PiAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICJ1bmFibGUgdG8gcmVhZCAlcyBmaXJtd2FyZSBpbmZvIChlcnIgJWQp
+XG4iLAo+PiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHBjYW5fdXNiX3Byby5uYW1l
+LCBlcnIpOwo+PiAgICAgICAgICAgICAgICAgICAgICAgICBrZnJlZShiaSk7Cj4+ICAgICAgICAg
+ICAgICAgICAgICAgICAgIGtmcmVlKGZpKTsKPj4gICAgICAgICAgICAgICAgICAgICAgICAga2Zy
+ZWUodXNiX2lmKTsKPj4KPj4gICAgICAgICAgICAgICAgICAgICAgICByZXR1cm4gZXJyOwo+PiAg
+ICAgICAgICAgICAgICAgfQo+PiBJIGFtIG5vdCBzdXJlIGlmIHRoaXMgbG9va3MgYSBsaXR0bGUg
+bGVzcyBjbGVhcj8KPj4gVGhhbmtzIQo+Cj5BIGNsZWFuZXIgd2F5IHdvdWxkIGJlIHRvIG1vdmUg
+YWxsIHRoZSBjb250ZW50IG9mIHRoZSBpZgo+KCFkZXYtPnByZXZfc2libGluZ3MpIHRvIGEgbmV3
+IGZ1bmN0aW9uLgoKSGkgVmluY2VudCBNYWlsaG9sOgoKR290IGl0LgpUaGlzIHNlZW1zIHRvIGJl
+IGEgZ29vZCBpZGVhLCBpIHdvdWxkIHJlc3VibWl0IG9uZSBwYXRjaCBWMi4KVGhhbmtzIQoKQlIv
+L0Jlcm5hcmQKPgo+WW91cnMgc2luY2VyZWx5LAo+VmluY2VudCBNYWlsaG9sCg==
