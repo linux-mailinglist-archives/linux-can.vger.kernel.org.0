@@ -2,148 +2,104 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B21935224BE
-	for <lists+linux-can@lfdr.de>; Tue, 10 May 2022 21:28:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44825522B1C
+	for <lists+linux-can@lfdr.de>; Wed, 11 May 2022 06:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbiEJT2p (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 10 May 2022 15:28:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38308 "EHLO
+        id S237186AbiEKEjY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 11 May 2022 00:39:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243829AbiEJT2a (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 10 May 2022 15:28:30 -0400
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21FC37BDD
-        for <linux-can@vger.kernel.org>; Tue, 10 May 2022 12:28:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1652210890;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:Cc:References:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=7jBRppHDCwNxpXHEvHO0zb9bzCtnU7DthXPDhOFN4/4=;
-    b=lpyvG9bXPgjV9UhwH1jMrBdPeJQKH5c5I1xF5/DU12138wDPMM1ZMEJCupC4+Ezz6J
-    P8HDJT8uEF8n2qHqH/dhW4nDpyo4R+27aqhDeYVGphZc6Ad6gmh1VnCc8/ZeZxjo1dTx
-    4pnwKe1hZO+7sgJ8XX1zKZ0A0OiG/osLG7JDC77SIui70eLS+UpH0tpV/O56RCfBfsmF
-    PVcbH+GCJxBlBgg7c+/sgg1PawasVhFOMOSf+M/cOhyiFZ/KOKs6oSg1vYvylkBDt0u8
-    O8nSj5A6/+43vh9mnGYmoYoaK3YCzzu2Ds40vT87U5qKRYoYZloixJsqYdsWfouHadF8
-    CvUw==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdBqPeOug2krLFRKxw=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a00:6020:1cff:5b04::b82]
-    by smtp.strato.de (RZmta 47.42.2 AUTH)
-    with ESMTPSA id 4544c9y4AJSAvX2
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Tue, 10 May 2022 21:28:10 +0200 (CEST)
-Message-ID: <03ac64dd-2332-3eb1-bd81-0f29244d774b@hartkopp.net>
-Date:   Tue, 10 May 2022 21:28:09 +0200
+        with ESMTP id S234634AbiEKEjW (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 11 May 2022 00:39:22 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE68214C754
+        for <linux-can@vger.kernel.org>; Tue, 10 May 2022 21:39:12 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id iq10so1159458pjb.0
+        for <linux-can@vger.kernel.org>; Tue, 10 May 2022 21:39:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=s3Cdswvtyrq8qHVwuRB9YRoTAIoD9G/2//h6WeFZHzo=;
+        b=nrkBIDyCffFbQz5WNhQU88q5l+bx8m1CoLNL/nRcxBFZRgp3B2RwRJzpJi69hjmFPQ
+         Eotn36CVTQor8sTwq84btYhQQ+OsypTpYdHIfGkC/Ekjg8a9U0HkQq0T/gbcQg5/if4Y
+         i1yzcJYhTRMm8ny1NIiOYUNRazrfloxlCC/1XVxW2+TG0ItQpx2/G3cXjgMuOALgO1Rc
+         auxKHXwS3ghK6vFFIfR8essc70JXfRi2oIpi3YT/VLqISCMTaVWCOI/Xf0rWfpfTmlnw
+         XgqCFC8jOuHD5AjsEtox3h0b9tzcHlVM0fA1RrJyDFubK9aS707t1BYf/K43qSc4slo4
+         wrQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=s3Cdswvtyrq8qHVwuRB9YRoTAIoD9G/2//h6WeFZHzo=;
+        b=cCLG3Eugo5glmbbhhNb8jcTKWa60dE/NDjRKIIzAERu0msklD1gZxKT1aogUs1x35g
+         wCeCaItc0hRJxA9meCAFS2o99axAyYTDAFvoeRYY0MkWcPClACfIPbnWV8lGAifZ8Rta
+         CHRnnvXZMyEFt3ziYIvy4B1ren8P6iNmX+m+ntSy5qZtxDlvDA5cBwPxKGYAFSUm4qm3
+         Psuct1R1rGhs9ut7diY8dBxf/Wz6Ts+D40yQPS0nYLh5jLxlnbgOTTEVNkOLi4GsMMbn
+         XZKtQJtqVjKnAjvyNn+VpmMPCUGBZyxdwfnxeKcwkjz7BvxljBhw6SokJ17qh4e7uPQ0
+         6h7w==
+X-Gm-Message-State: AOAM533jSi40Mz13wcfW7ZMEHJ15Sc4omD6VlvBRDQUxMyFDJJLZMnrm
+        5oeV7+sOMsvmu4KNH8FF4G8XyjCgEXnL+Ad0LCs=
+X-Google-Smtp-Source: ABdhPJwbKHmbnZDflMHBZCcp2YbZAAZvFdPcM4owWeuPIkoxodmwIZJ+Xpgi08ylB1RFXLrw63SQRxJzumbwJKMTxhs=
+X-Received: by 2002:a17:90b:1007:b0:1dc:9862:68af with SMTP id
+ gm7-20020a17090b100700b001dc986268afmr3261389pjb.205.1652243951499; Tue, 10
+ May 2022 21:39:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: Can someone point me in the right direction
-Content-Language: en-US
-To:     Marcel Akkermans <akkermans.m@brabofox.nl>
-References: <d8571fc8-e020-841f-f20b-088c2ad440c3@brabofox.nl>
- <59e12840-befd-912f-0265-295c4fb51958@hartkopp.net>
- <11745085-d9a6-c658-ab8a-f1e3dc91b175@brabofox.nl>
-Cc:     linux-can <linux-can@vger.kernel.org>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <11745085-d9a6-c658-ab8a-f1e3dc91b175@brabofox.nl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6a10:319:0:0:0:0 with HTTP; Tue, 10 May 2022 21:39:10
+ -0700 (PDT)
+From:   Private Mail <privatemail1961@gmail.com>
+Date:   Tue, 10 May 2022 21:39:10 -0700
+Message-ID: <CANjAOAiiVcSrSv31FjThCVmeppS54UVvGVj3SRSvMfxOB+T8DA@mail.gmail.com>
+Subject: Have you had this? It is for your Benefit
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.3 required=5.0 tests=ADVANCE_FEE_4_NEW_MONEY,
+        BAYES_50,DEAR_BENEFICIARY,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,
+        LOTS_OF_MONEY,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Our Ref: BG/WA0151/2022
 
+Dear Beneficiary
 
-On 10.05.22 20:29, Marcel Akkermans wrote:
-> Hello Oliver,
-> 
-> Here are the output of the commands
-> 
-> rock@rockpi4b:~$  uname -a
-> Linux rockpi4b 4.4.154-116-rockchip-g86a614bc15b3 #1 SMP Mon Jan 10 
- > 12:03:08 UTC 2022 aarch64 aarch64 aarch64 GNU/Linux
+Subject: An Estate of US$15.8 Million
 
-Well ... Linux 4.4.154 as expected.
+Blount and Griffin Genealogical Investigators specializes in probate
+research to locate missing heirs and beneficiaries to estates in the
+United Kingdom and Europe.
 
-You probably should give this a try:
+We can also help you find wills, obtain copies of certificates, help
+you to administer an estate, as well as calculating how an estate,
+intestacy or trust should be distributed.
 
-https://github.com/camarel/rockpi4
+You may be entitled to a large pay out for an inheritance in Europe
+worth US$15.8 million. We have discovered an estate belonging to the
+late Depositor has remained unclaimed since he died in 2011 and we
+have strong reasons to believe you are the closest living relative to
+the deceased we can find.
 
-to finally upgrade to Linux 5.10
+You may unknowingly be the heir of this person who died without
+leaving a will (intestate). We will conduct a probate research to
+prove your entitlement, and can submit a claim on your behalf all at
+no risk to yourselves.
 
-Best,
-Oliver
+Our service fee of 10% will be paid to us after you have received the estate.
 
-> rock@rockpi4b:~$ sudo ip link set can0 up type can bitrate 250000
-> [sudo] password for rock:
-> rock@rockpi4b:~$ ip -details link show
-> 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode 
-> DEFAULT group default qlen 1
->      link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00 promiscuity 0 
-> addrgenmode eui64 numtxqueues 1 numrxqueues 1
-> 2: eth0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc fq_codel 
-> state DOWN mode DEFAULT group default qlen 1000
->      link/ether 8a:46:ca:10:55:d9 brd ff:ff:ff:ff:ff:ff promiscuity 0 
-> addrgenmode none numtxqueues 1 numrxqueues 1
-> 3: can0: <NOARP,UP,LOWER_UP,ECHO> mtu 16 qdisc fq_codel state UNKNOWN 
-> mode DEFAULT group default qlen 10
->      link/can  promiscuity 0
->      can state ERROR-ACTIVE restart-ms 0
->            bitrate 250000 sample-point 0.833
->            tq 333 prop-seg 4 phase-seg1 5 phase-seg2 2 sjw 1
->            mcp251x: tseg1 3..16 tseg2 2..8 sjw 1..4 brp 1..64 brp-inc 1
->            clock 6000000 numtxqueues 1 numrxqueues 1
-> 4: wlan0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel 
-> state UP mode DORMANT group default qlen 1000
->      link/ether 20:50:e7:d5:2a:2a brd ff:ff:ff:ff:ff:ff promiscuity 0 
-> addrgenmode none numtxqueues 1 numrxqueues 1
-> rock@rockpi4b:~$
-> 
-> Greeting Marcel
-> 
-> Op 10-May-22 om 6:52 PM schreef Oliver Hartkopp:
->> Hi Marcel,
->>
->> On 10.05.22 18:12, Marcel Akkermans wrote:
->>> I have a Raxda rockpi with waveshare 485 can Hat.
->>> there are strange issues with the can-bus.
->>> I need it to get it going (it's an HMI of a machine I am building)
->>>
->>> I have posted my test result at Raxda forum
->>>
->>> https://forum.radxa.com/t/rockpi-4b-canbus-fault/9784
->>
->> Can you please post the output of
->>
->>     ip -details link show
->>
->> and
->>
->>     uname -a
->>
->> ?
->>
->> I searched a bit on rockpi 4b and found these images:
->>
->> https://github.com/radxa/rock-pi-images-released/releases
->>
->> That's pretty old stuff and the mcp251x/SPI combo was not really 
->> reliable in those old kernels IIRC ...
->>
->>> all hardware runs fine on raspberry 3b
->>
->> Where you likely used a more recent kernel too ;-)
->>
->> Best regards,
->> Oliver
-> 
-> 
+The estate transfer process should take just a matter of days as we
+have the mechanism and expertise to get this done very quickly. This
+message may come to you as a shock, however we hope to work with you
+to transfer the estate to you as quickly as possible.
+
+Feel free to email our senior case worker Mr. Malcolm Casey on email:
+malcolmcasey68@yahoo.com for further discussions.
+
+With warm regards,
+
+Mr. Blount W. Gort, CEO.
+Blount and Griffin Associates Inc
