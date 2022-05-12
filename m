@@ -2,225 +2,275 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1171524F16
-	for <lists+linux-can@lfdr.de>; Thu, 12 May 2022 15:59:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBCE352530A
+	for <lists+linux-can@lfdr.de>; Thu, 12 May 2022 18:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354858AbiELN7g (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 12 May 2022 09:59:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37402 "EHLO
+        id S1356723AbiELQzC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 12 May 2022 12:55:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354659AbiELN7f (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 12 May 2022 09:59:35 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2040.outbound.protection.outlook.com [40.107.223.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16C41ED5AC;
-        Thu, 12 May 2022 06:59:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Jlnz7NFdZy2lHsRt2Vmr/bztH+58N2skj1mzpqAHbvx4kGFdy/5em+k8wpfwI11W7EbJ1mNyPwU+Fo5+AFKOxX/dTlw7U3xiQkcwJ3loVG37/XL73xKMBTgIjeoP2J4ZOCmVvk8fxVFSAKAG9Iq5aOg/G7aS+d5jeK9HnnIzlxXO5YRuBm8gZeEndO5j92PNRZfdiwYqE1UfPhPJwL8XmHZlmuaRTfau6wDo3cufke7J1WWQH7/bfpytK0n0H2e0kK8dmwJQ+sJABXLRtYT13ASnx8kb4gVUF5ynCiMb/oEOUrzYQAjXeQmZ7UWvqLS6/ahox/aEsIb323PicNiU0g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3FgqguSY/mxh23UYLPvFkaPEAtyfteDGvHGcGhiT00w=;
- b=Bf7jwJ/K6kv+b5CtmSxYdVjCqFbVLR0+sg1E8yse6xInf13UnuYTFo/nDe5Fe/Np65wq939X22/ixokd6j9cDEU3oQ+pc6/Qp3waaaZZh0DknG4F7vyNYFQGVUx8/GhGBvwhYNf0Psv9/hh3FrwLfLnVGIn1/yxMWQmhvFu1j4J8fWMKovZkhfz9GI7CFFlN+UzJaS0d9c7ewarlaxKMXgK8qEFD/FgNeWqJT99YbRiz5iYpBCjuQ/kl5OPX62U38lv+UXMb9MVL7brSzV12U6ANAWk3ov54Q2+oFrsvzeQmA6y90LAYMWQ/1SqMnpIVifCSUhEGoM1/RwoYQ2JICg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=grandegger.com smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3FgqguSY/mxh23UYLPvFkaPEAtyfteDGvHGcGhiT00w=;
- b=WcPlo1Tpx9yvmpLXQvFPn+RDTXo/blPHpLXtfo4zzDJ4naVjWhYPuUDzHq4a+hYPJnYhnq6BGqYqVkNneqjOjrBngsqINEtYu/nC6JZmUcpxAwnUJ+7ULSLqgHCCPsiyy/PiS70GEEttTU9F3byz3Q/Cm/kQ+VXBpI6jl0HKp/4=
-Received: from DM6PR21CA0012.namprd21.prod.outlook.com (2603:10b6:5:174::22)
- by BN6PR02MB2738.namprd02.prod.outlook.com (2603:10b6:404:fc::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.22; Thu, 12 May
- 2022 13:59:30 +0000
-Received: from DM3NAM02FT010.eop-nam02.prod.protection.outlook.com
- (2603:10b6:5:174:cafe::3b) by DM6PR21CA0012.outlook.office365.com
- (2603:10b6:5:174::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.6 via Frontend
- Transport; Thu, 12 May 2022 13:59:30 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- DM3NAM02FT010.mail.protection.outlook.com (10.13.5.124) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5250.13 via Frontend Transport; Thu, 12 May 2022 13:59:30 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Thu, 12 May 2022 06:59:21 -0700
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Thu, 12 May 2022 06:59:20 -0700
-Envelope-to: git@xilinx.com,
- wg@grandegger.com,
- mkl@pengutronix.de,
- davem@davemloft.net,
- edumazet@google.com,
- kuba@kernel.org,
- pabeni@redhat.com,
- linux-can@vger.kernel.org,
- netdev@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org
-Received: from [10.140.6.39] (port=41180 helo=xhdsgoud40.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <srinivas.neeli@xilinx.com>)
-        id 1np9Lc-000BAQ-Az; Thu, 12 May 2022 06:59:20 -0700
-From:   Srinivas Neeli <srinivas.neeli@xilinx.com>
-To:     <wg@grandegger.com>, <mkl@pengutronix.de>, <davem@davemloft.net>,
-        <edumazet@google.com>, <appana.durga.rao@xilinx.com>,
-        <sgoud@xilinx.com>, <michal.simek@xilinx.com>
-CC:     <kuba@kernel.org>, <pabeni@redhat.com>,
-        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <git@xilinx.com>,
-        Srinivas Neeli <srinivas.neeli@xilinx.com>
-Subject: [PATCH] can: xilinx_can: Add Transmitter delay compensation (TDC) feature support
-Date:   Thu, 12 May 2022 19:29:01 +0530
-Message-ID: <20220512135901.1377087-1-srinivas.neeli@xilinx.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S1356716AbiELQy7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 12 May 2022 12:54:59 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECFB26E8D9;
+        Thu, 12 May 2022 09:54:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1652374492;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=eAQXUzlWzcYdtIbYzAy+zzfzGdBbbE6oDDURF63/Bm4=;
+    b=Ic5/BJ12Dyot6yj5OM5YnnUqlOmaYV5MelMg/rKgjgPmYwmTWjZXL6DYp7s7kraFmH
+    xwL6wakcIWESYsQL4vNN+g+GW72SKbzJwXzo+6p+arKx6Y3tuXIBezhYDowx4SCBKWjg
+    PoX9maNxgMBkl0NqkReecDOVqgnHTZlHM4isMntyiUq0hOX85UC1CfXK40h59TapIpIR
+    ke/dFxxXKtSm7VHT+ekRLjxNph3YM+fb/Y9/UsDA/0yn/+4eomQOo7/swfrTduk/FJsY
+    iT5+fhWQyEGBu/szu9Bz7AEBc3SjG6Xx10q1ocpT+wST2RYpZhV2ALgjPV0X/XyC/XyT
+    l/TA==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdBqPeOug2krLFRKxw=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a00:6020:1cff:5b04::b82]
+    by smtp.strato.de (RZmta 47.45.0 AUTH)
+    with ESMTPSA id R0691fy4CGsq0A1
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 12 May 2022 18:54:52 +0200 (CEST)
+Message-ID: <2cc53d1b-2e16-803f-f528-6b94a812d2d7@hartkopp.net>
+Date:   Thu, 12 May 2022 18:54:46 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d60e14ac-7576-41bb-3c99-08da341fa2a5
-X-MS-TrafficTypeDiagnostic: BN6PR02MB2738:EE_
-X-Microsoft-Antispam-PRVS: <BN6PR02MB2738FC07E17F0655148F944EAFCB9@BN6PR02MB2738.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Ob/TGesKIcimf9m0MgbgABIgPYDQseGLfbWdV9cGD+e0RZdx4zxk2MYc/SoEn8NTmkMjYsHJvg5fmRBDwJvItCx/ALEZGmDIcwu/UXL9jWnlUTOhKUqnGaN43D7SjBQxAyIam5/IkCJFiuEk+uYzdaodUOUndpaN8/M2CA9YThBQkg2Q2MVX5OYZZittvdp5RZQW5+qNLwyVjZFgcZaTjRhP8UyNZd3zSp6XIAQxsszcNMpYp+b7lZW5W5lL6QDAYcNQIUP2+xbv/EX5Cbn47d0at/llQL/70Z8g34GR8nNTbS8G22yohH2z2rPgkKy2Oltnav5EC8KMKeJISSfZQL23aIDgZTUn7MjcVyMo/68Vn6Fo3Stk0FArO+zJ5U32zzTINK7sqwFYxOlCiOdpXw7aismMtVEhfxC445T6zUUHnlW7NqgLD0/g4uSnge66s4hLaACeAQk7mUI5d1dg6WkduwBNNLQZh6Y0vK3tGaowPCMuujFkfre7eBjaJkLwJwTEKd6z1uKm2OhLoHfj4muWv78jcDwt2f8ti7HQ98DIfmdHhgQAKKBU8ELcp4wH5CHcV+5UhfowjySrq5xzhLb1GS9xkw5iEmUGbbENpQM3T3yKtCNMoGpwYZrkCKPHxf5I9OOt1MTcx1tcSAkLCWWWqnI889Yo82f17/XwWfR8jYdYTW/hJ70oR5IDnrQM8o2lllYWd825G4NxAlK3LQ==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(1076003)(6636002)(5660300002)(508600001)(316002)(8936002)(7416002)(9786002)(54906003)(426003)(107886003)(47076005)(336012)(110136005)(7636003)(186003)(36756003)(70206006)(70586007)(82310400005)(40460700003)(26005)(36860700001)(2616005)(4326008)(8676002)(6666004)(2906002)(83380400001)(356005)(44832011)(7696005)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2022 13:59:30.2777
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d60e14ac-7576-41bb-3c99-08da341fa2a5
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT010.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR02MB2738
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v2] can: skb: add extended skb support
+Content-Language: en-US
+To:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Devid Antonio Filoni <devid.filoni@egluetechnologies.com>,
+        kernel@pengutronix.de, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Jander <david@protonic.nl>
+References: <20220512125934.774836-1-o.rempel@pengutronix.de>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20220512125934.774836-1-o.rempel@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Added Transmitter delay compensation (TDC) feature support.
-In the case of higher measured loop delay with higher baud rates, observed
-bit stuff errors.
-By enabling the TDC feature in a controller, will compensate for
-the measure loop delay in the receive path.
-TDC feature requires BRP values can be 1 or 2.
-The current CAN framework does not limit the brp so while using TDC,
-have to restrict BRP values.
-Ex:
-ip link set can0 type can tq 12 prop-seg 39 phase-seg1 20 phase-seg2 20
-sjw 20 dtq 12 dprop-seg 5 dphase-seg1 6 dphase-seg2 4 dsjw 4 fd on
-loopback on tdco 12 tdc-mode auto
+Hi Oleksij,
 
-Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
----
- drivers/net/can/xilinx_can.c | 30 +++++++++++++++++++++++++-----
- 1 file changed, 25 insertions(+), 5 deletions(-)
+On 12.05.22 14:59, Oleksij Rempel wrote:
+> Add CAN specific skb extension support and add first currently needed
+> local_origin variable.
+> 
+> On the CAN stack we push same skb data in different direction depending
+> on the interface type:
+> - to the HW egress and at same time back to the stack as echo
+> - over virtual vcan/vxcan interfaces as egress on one side and ingress on other
+>    side of the vxcan tunnel.
+> We can't use skb->sk as marker of the origin, because not all packets
+> not all packets with local_origin are assigned to some socket. Some of
+> them are generate from the kernel, for example like J1939 control messages.
+> So, to properly detect flow direction is is better to store this information
+> as part of the SKB.
+> 
+> The advantage of using skb_ext is that it is options and extendable
+> without affecting other skb users. It can be shared between cloned skbs and
+> duplicated only if needed.
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> Cc: Devid Antonio Filoni <devid.filoni@egluetechnologies.com>
+> ---
+> changes v2:
+> - migrate it to SKB_EXT
 
-diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.c
-index e2b15d29d15e..7af518fbed02 100644
---- a/drivers/net/can/xilinx_can.c
-+++ b/drivers/net/can/xilinx_can.c
-@@ -1,7 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0-or-later
- /* Xilinx CAN device driver
-  *
-- * Copyright (C) 2012 - 2014 Xilinx, Inc.
-+ * Copyright (C) 2012 - 2022 Xilinx, Inc.
-  * Copyright (C) 2009 PetaLogix. All rights reserved.
-  * Copyright (C) 2017 - 2018 Sandvik Mining and Construction Oy
-  *
-@@ -133,6 +133,8 @@ enum xcan_reg {
- #define XCAN_DLCR_BRS_MASK		0x04000000 /* BRS Mask in DLC */
- 
- /* CAN register bit shift - XCAN_<REG>_<BIT>_SHIFT */
-+#define XCAN_BRPR_TDCO_SHIFT_CANFD	8  /* Transmitter Delay Compensation Offset */
-+#define XCAN_BRPR_TDCE_SHIFT_CANFD	16 /* Transmitter Delay Compensation (TDC) Enable */
- #define XCAN_BTR_SJW_SHIFT		7  /* Synchronous jump width */
- #define XCAN_BTR_TS2_SHIFT		4  /* Time segment 2 */
- #define XCAN_BTR_SJW_SHIFT_CANFD	16 /* Synchronous jump width */
-@@ -259,7 +261,7 @@ static const struct can_bittiming_const xcan_bittiming_const_canfd2 = {
- 	.tseg2_min = 1,
- 	.tseg2_max = 128,
- 	.sjw_max = 128,
--	.brp_min = 2,
-+	.brp_min = 1,
- 	.brp_max = 256,
- 	.brp_inc = 1,
- };
-@@ -272,11 +274,21 @@ static struct can_bittiming_const xcan_data_bittiming_const_canfd2 = {
- 	.tseg2_min = 1,
- 	.tseg2_max = 16,
- 	.sjw_max = 16,
--	.brp_min = 2,
-+	.brp_min = 1,
- 	.brp_max = 256,
- 	.brp_inc = 1,
- };
- 
-+/* Transmission Delay Compensation constants for CANFD2.0 and Versal  */
-+static const struct can_tdc_const xcan_tdc_const = {
-+	.tdcv_min = 0,
-+	.tdcv_max = 0, /* Manual mode not supported. */
-+	.tdco_min = 0,
-+	.tdco_max = 64,
-+	.tdcf_min = 0, /* Filter window not supported */
-+	.tdcf_max = 0,
-+};
-+
- /**
-  * xcan_write_reg_le - Write a value to the device register little endian
-  * @priv:	Driver private data structure
-@@ -425,6 +437,11 @@ static int xcan_set_bittiming(struct net_device *ndev)
- 	    priv->devtype.cantype == XAXI_CANFD_2_0) {
- 		/* Setting Baud Rate prescalar value in F_BRPR Register */
- 		btr0 = dbt->brp - 1;
-+		if (can_tdc_is_enabled(&priv->can)) {
-+			btr0 = btr0 |
-+			(priv->can.tdc.tdco) << XCAN_BRPR_TDCO_SHIFT_CANFD |
-+			1 << XCAN_BRPR_TDCE_SHIFT_CANFD;
-+		}
- 
- 		/* Setting Time Segment 1 in BTR Register */
- 		btr1 = dbt->prop_seg + dbt->phase_seg1 - 1;
-@@ -1747,13 +1764,16 @@ static int xcan_probe(struct platform_device *pdev)
- 		priv->can.data_bittiming_const =
- 			&xcan_data_bittiming_const_canfd;
- 
--	if (devtype->cantype == XAXI_CANFD_2_0)
-+	if (devtype->cantype == XAXI_CANFD_2_0) {
- 		priv->can.data_bittiming_const =
- 			&xcan_data_bittiming_const_canfd2;
-+		priv->can.tdc_const = &xcan_tdc_const;
-+	}
- 
- 	if (devtype->cantype == XAXI_CANFD ||
- 	    devtype->cantype == XAXI_CANFD_2_0)
--		priv->can.ctrlmode_supported |= CAN_CTRLMODE_FD;
-+		priv->can.ctrlmode_supported |= CAN_CTRLMODE_FD |
-+						CAN_CTRLMODE_TDC_AUTO;
- 
- 	priv->reg_base = addr;
- 	priv->tx_max = tx_max;
--- 
-2.25.1
+The use of SKB_EXT seems to be very costly to just store a boolean value.
 
+What I could see from some of the other SKB_EXT users this extension 
+(which performs alloc & COW) is used in special circumstances.
+
+With your suggestion this additional effort is needed for every CAN 
+related skb.
+
+So at least for this use-case extending struct can_skb_priv seems to be 
+more efficient.
+
+https://elixir.bootlin.com/linux/latest/source/include/linux/can/skb.h#L44
+
+We might get into problems with PF_PACKET sockets when extending the 
+can_skb_priv length beyond HH_DATA_MOD, see:
+
+https://elixir.bootlin.com/linux/latest/source/include/linux/can/skb.h#L99
+
+But for now I'm not sure that SKB_EXT isn't too heavy to store that 
+single flag.
+
+Best regards,
+Oliver
+
+
+> 
+>   drivers/net/can/vxcan.c |  4 ++++
+>   include/linux/can/skb.h |  4 ++++
+>   include/linux/skbuff.h  |  3 +++
+>   net/can/Kconfig         |  1 +
+>   net/can/af_can.c        |  5 +++++
+>   net/can/raw.c           | 10 ++++++++--
+>   net/core/skbuff.c       |  7 +++++++
+>   7 files changed, 32 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/can/vxcan.c b/drivers/net/can/vxcan.c
+> index 577a80300514..93701a698008 100644
+> --- a/drivers/net/can/vxcan.c
+> +++ b/drivers/net/can/vxcan.c
+> @@ -39,6 +39,7 @@ static netdev_tx_t vxcan_xmit(struct sk_buff *oskb, struct net_device *dev)
+>   	struct net_device *peer;
+>   	struct canfd_frame *cfd = (struct canfd_frame *)oskb->data;
+>   	struct net_device_stats *peerstats, *srcstats = &dev->stats;
+> +	struct can_skb_ext *can_ext;
+>   	struct sk_buff *skb;
+>   	u8 len;
+>   
+> @@ -66,6 +67,9 @@ static netdev_tx_t vxcan_xmit(struct sk_buff *oskb, struct net_device *dev)
+>   	skb->pkt_type   = PACKET_BROADCAST;
+>   	skb->dev        = peer;
+>   	skb->ip_summed  = CHECKSUM_UNNECESSARY;
+> +	can_ext = skb_ext_add(skb, SKB_EXT_CAN);
+> +	if (can_ext)
+> +		can_ext->local_origin = false;
+>   
+>   	len = cfd->can_id & CAN_RTR_FLAG ? 0 : cfd->len;
+>   	if (netif_rx(skb) == NET_RX_SUCCESS) {
+> diff --git a/include/linux/can/skb.h b/include/linux/can/skb.h
+> index fdb22b00674a..401b08890d74 100644
+> --- a/include/linux/can/skb.h
+> +++ b/include/linux/can/skb.h
+> @@ -55,6 +55,10 @@ struct can_skb_priv {
+>   	struct can_frame cf[];
+>   };
+>   
+> +struct can_skb_ext {
+> +	bool local_origin;
+> +};
+> +
+>   static inline struct can_skb_priv *can_skb_prv(struct sk_buff *skb)
+>   {
+>   	return (struct can_skb_priv *)(skb->head);
+> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+> index 3270cb72e4d8..d39e70e5f7f2 100644
+> --- a/include/linux/skbuff.h
+> +++ b/include/linux/skbuff.h
+> @@ -4563,6 +4563,9 @@ enum skb_ext_id {
+>   #endif
+>   #if IS_ENABLED(CONFIG_MCTP_FLOWS)
+>   	SKB_EXT_MCTP,
+> +#endif
+> +#if IS_ENABLED(CONFIG_CAN)
+> +	SKB_EXT_CAN,
+>   #endif
+>   	SKB_EXT_NUM, /* must be last */
+>   };
+> diff --git a/net/can/Kconfig b/net/can/Kconfig
+> index a9ac5ffab286..eb826e3771fe 100644
+> --- a/net/can/Kconfig
+> +++ b/net/can/Kconfig
+> @@ -5,6 +5,7 @@
+>   
+>   menuconfig CAN
+>   	tristate "CAN bus subsystem support"
+> +	select SKB_EXTENSIONS
+>   	help
+>   	  Controller Area Network (CAN) is a slow (up to 1Mbit/s) serial
+>   	  communications protocol. Development of the CAN bus started in
+> diff --git a/net/can/af_can.c b/net/can/af_can.c
+> index 1fb49d51b25d..329c540d3ddf 100644
+> --- a/net/can/af_can.c
+> +++ b/net/can/af_can.c
+> @@ -201,6 +201,7 @@ int can_send(struct sk_buff *skb, int loop)
+>   	struct sk_buff *newskb = NULL;
+>   	struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
+>   	struct can_pkg_stats *pkg_stats = dev_net(skb->dev)->can.pkg_stats;
+> +	struct can_skb_ext *can_ext;
+>   	int err = -EINVAL;
+>   
+>   	if (skb->len == CAN_MTU) {
+> @@ -240,6 +241,10 @@ int can_send(struct sk_buff *skb, int loop)
+>   	skb_reset_network_header(skb);
+>   	skb_reset_transport_header(skb);
+>   
+> +	can_ext = skb_ext_add(skb, SKB_EXT_CAN);
+> +	if (can_ext)
+> +		can_ext->local_origin = true;
+> +
+>   	if (loop) {
+>   		/* local loopback of sent CAN frames */
+>   
+> diff --git a/net/can/raw.c b/net/can/raw.c
+> index b7dbb57557f3..cba18cdf017f 100644
+> --- a/net/can/raw.c
+> +++ b/net/can/raw.c
+> @@ -121,6 +121,7 @@ static void raw_rcv(struct sk_buff *oskb, void *data)
+>   {
+>   	struct sock *sk = (struct sock *)data;
+>   	struct raw_sock *ro = raw_sk(sk);
+> +	struct can_skb_ext *can_ext;
+>   	struct sockaddr_can *addr;
+>   	struct sk_buff *skb;
+>   	unsigned int *pflags;
+> @@ -173,8 +174,13 @@ static void raw_rcv(struct sk_buff *oskb, void *data)
+>   	/* add CAN specific message flags for raw_recvmsg() */
+>   	pflags = raw_flags(skb);
+>   	*pflags = 0;
+> -	if (oskb->sk)
+> -		*pflags |= MSG_DONTROUTE;
+> +
+> +	can_ext = skb_ext_find(oskb, SKB_EXT_CAN);
+> +	if (can_ext) {
+> +		if (can_ext->local_origin)
+> +			*pflags |= MSG_DONTROUTE;
+> +	}
+> +
+>   	if (oskb->sk == sk)
+>   		*pflags |= MSG_CONFIRM;
+>   
+> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+> index 475183f37891..5a5409ccb767 100644
+> --- a/net/core/skbuff.c
+> +++ b/net/core/skbuff.c
+> @@ -61,6 +61,7 @@
+>   #include <linux/if_vlan.h>
+>   #include <linux/mpls.h>
+>   #include <linux/kcov.h>
+> +#include <linux/can/skb.h>
+>   
+>   #include <net/protocol.h>
+>   #include <net/dst.h>
+> @@ -4338,6 +4339,9 @@ static const u8 skb_ext_type_len[] = {
+>   #if IS_ENABLED(CONFIG_MCTP_FLOWS)
+>   	[SKB_EXT_MCTP] = SKB_EXT_CHUNKSIZEOF(struct mctp_flow),
+>   #endif
+> +#if IS_ENABLED(CONFIG_CAN)
+> +	[SKB_EXT_CAN] = SKB_EXT_CHUNKSIZEOF(struct can_skb_ext),
+> +#endif
+>   };
+>   
+>   static __always_inline unsigned int skb_ext_total_length(void)
+> @@ -4357,6 +4361,9 @@ static __always_inline unsigned int skb_ext_total_length(void)
+>   #endif
+>   #if IS_ENABLED(CONFIG_MCTP_FLOWS)
+>   		skb_ext_type_len[SKB_EXT_MCTP] +
+> +#endif
+> +#if IS_ENABLED(CONFIG_CAN)
+> +		skb_ext_type_len[SKB_EXT_CAN] +
+>   #endif
+>   		0;
+>   }
