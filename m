@@ -2,108 +2,95 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 028F4526174
-	for <lists+linux-can@lfdr.de>; Fri, 13 May 2022 13:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CEC852619E
+	for <lists+linux-can@lfdr.de>; Fri, 13 May 2022 14:15:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380074AbiEML4r (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 13 May 2022 07:56:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36274 "EHLO
+        id S1380147AbiEMMPH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 13 May 2022 08:15:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232249AbiEML4r (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 13 May 2022 07:56:47 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E48C23E296
-        for <linux-can@vger.kernel.org>; Fri, 13 May 2022 04:56:46 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1npTuK-0000S0-BE; Fri, 13 May 2022 13:56:32 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 2910E7D988;
-        Fri, 13 May 2022 11:56:29 +0000 (UTC)
-Date:   Fri, 13 May 2022 13:56:28 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent Mailhol <vincent.mailhol@gmail.com>
-Cc:     Srinivas Neeli <srinivas.neeli@xilinx.com>, wg@grandegger.com,
-        davem@davemloft.net, edumazet@google.com,
-        appana.durga.rao@xilinx.com, sgoud@xilinx.com,
-        michal.simek@xilinx.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        git@xilinx.com
-Subject: Re: [PATCH] can: xilinx_can: Add Transmitter delay compensation
- (TDC) feature support
-Message-ID: <20220513115628.tiplo5wtucri6hy2@pengutronix.de>
-References: <20220512135901.1377087-1-srinivas.neeli@xilinx.com>
- <CAMZ6Rq+z69CTY6Ec0n9d0-ri6pcyHtKH917M1eTD6hgkmyvGDQ@mail.gmail.com>
+        with ESMTP id S232430AbiEMMPG (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 13 May 2022 08:15:06 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1E4297400;
+        Fri, 13 May 2022 05:15:05 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id v59so14938434ybi.12;
+        Fri, 13 May 2022 05:15:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JQBMCnWhUkmS1Kvmb7DagHvvpamIAXWmn0NMCx3+qLA=;
+        b=GYf9h9piH6G12ar91nqPCTRlr6yJynVcbP33qKmbHRyPrWuO4KWr7iqH4zA25HI6zp
+         Jl5WHZy8jblsxp30bwYfSRnHwOPgMFyWEF2nmwx5t3LyY4+bHpasADyOcHn77B+A6B9J
+         dsDusq1CZqFN1dSWkeWbVxNX2X2zA3z6ReOAPQTRmPoghmKn5X6ju+Z1f+sBFlK7HGNF
+         E7tHCyqSPBSXwS/Z6V1Aos0C5kAHDJckxI2VwKBDZbuy4ZBWqN7xmaaBmc5SojqWHnWJ
+         zqLt5uq3wwPA/gPX5o1KRoP/ObmtM7xz+fe/G++foVTf2ofwMxqq+r52mrFXl9QNBIrC
+         DWzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JQBMCnWhUkmS1Kvmb7DagHvvpamIAXWmn0NMCx3+qLA=;
+        b=JjlNt55BcVCrJTbZ7UKtuVSp7G1/wEY32U3mfPGFQfruQSWUjbFlqKiA81kHw0GTGy
+         pVXoCRCa7x5TanocaudWiT11CDU9D7lNtdHs/p0np8cZOz+TDE5enyazGPbNp3ief1MX
+         e9nYsAISZy5ub3/s7472+ecvQ3tsLy+1HM7S3YzeoDYQQBN/LHpiNn2B9TiEhPIB3JBw
+         66Z1+R7cIsLmNS90o9YrOIbn5z7zVVzPMthJW7cTXedXNQIecqZbNh3nti0TpBAH2bks
+         3XryOsG7tD7IaT5uhH0EfeGkFKWYdxGbOo/wnvZmYiJtx70wu0cexgLErTJInjTA01qI
+         XjZQ==
+X-Gm-Message-State: AOAM531+QgMDqqrqNOwV2dBKo/CX73f+S0OA8hdj2xeNexLjwsap278A
+        y5ittpoU+frxr7g3Wzj0rRYR0ehQd9dgqbgF6YUP4g85RmH2/Q==
+X-Google-Smtp-Source: ABdhPJyPrLdCxQo2uPtlVdz/whujA+8NET4MY+DVwW7tY6kWx1Eec1UV29J9Gzd4jUhlRo19CMrG4KrzHgGXV1fWEEE=
+X-Received: by 2002:a25:6906:0:b0:64a:8266:cedd with SMTP id
+ e6-20020a256906000000b0064a8266ceddmr4411072ybc.151.1652444104483; Fri, 13
+ May 2022 05:15:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vddfwce3cegun5mc"
-Content-Disposition: inline
-In-Reply-To: <CAMZ6Rq+z69CTY6Ec0n9d0-ri6pcyHtKH917M1eTD6hgkmyvGDQ@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220512182921.193462-1-max@enpas.org> <CAMZ6Rq+BwL1NPTLtC5sQAd4z1Kc1TFJPPoW-i+0RZ5dnFaWYiw@mail.gmail.com>
+ <20220513115223.b56etkaejphldjok@pengutronix.de>
+In-Reply-To: <20220513115223.b56etkaejphldjok@pengutronix.de>
+From:   Vincent Mailhol <vincent.mailhol@gmail.com>
+Date:   Fri, 13 May 2022 21:14:53 +0900
+Message-ID: <CAMZ6RqLZXyiW0CZg0spocXie+2-cnyS0Ai_9qTA6UiEHdH99bA@mail.gmail.com>
+Subject: Re: [PATCH v6] can, tty: can327 CAN/ldisc driver for ELM327 based
+ OBD-II adapters
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Max Staudt <max@enpas.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Oliver Neukum <oneukum@suse.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Fri 13 May 2022 at 20:52, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> On 13.05.2022 11:38:31, Vincent Mailhol wrote:
+> > > +
+> > > +       /* We shouldn't get here after a hardware fault:
+> > > +        * can_bus_off() calls netif_carrier_off()
+> > > +        */
+> > > +       WARN_ON_ONCE(elm->uart_side_failure);
+> > > +
+> > > +       if (!elm->tty ||
+> > > +           elm->uart_side_failure ||
+> > > +           elm->can.ctrlmode & CAN_CTRLMODE_LISTENONLY) {
+> >
+> > Can the xmit function get called when CAN_CTRLMODE_LISTENONLY is on?
+>
+> I think yes. You can skip the whole CAN stack by injecting CAN frames in
+> the kernel via the packet socket. Maybe we should add a check to
+> can_dropped_invalid_skb().
 
---vddfwce3cegun5mc
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Ack. Most of the drivers do not check for it (my doesn't). So better
+to put it in can_dropped_invalid_skb().
+I can do the patch for this.
 
-On 13.05.2022 10:24:06, Vincent Mailhol wrote:
-> >  #define XCAN_BTR_SJW_SHIFT             7  /* Synchronous jump width */
-> >  #define XCAN_BTR_TS2_SHIFT             4  /* Time segment 2 */
-> >  #define XCAN_BTR_SJW_SHIFT_CANFD       16 /* Synchronous jump width */
-> > @@ -259,7 +261,7 @@ static const struct can_bittiming_const xcan_bittim=
-ing_const_canfd2 =3D {
-> >         .tseg2_min =3D 1,
-> >         .tseg2_max =3D 128,
-> >         .sjw_max =3D 128,
-> > -       .brp_min =3D 2,
-> > +       .brp_min =3D 1,
->=20
-> Was there any reason to have brp_min =3D 2 in the first place?
-> I think this change  should be a different patch. If the brp_min =3D 2
-> is just a typo, you might also want to backport it to stable branches.
-
-+1
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---vddfwce3cegun5mc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJ+R2kACgkQrX5LkNig
-011GeQf+LzltNxNz6ZYdvq6yIaIO39Yezh+I+SEnF4qsY5YaMHolOc5EEIAK93Si
-wXDfQ4v/uXWIIXTKXXzkIHShHnrtj5JBVOONGLqRr15dp+zoFWQ9cym0toL45h+J
-CYeTu+aHAoouoqxIfW5yZ9TRSrrtX6EKasrVZn8Qo3xWw+A2aom5Tx2HSPI82uNj
-uzUt2IDUG6Vbghe/WyCoA3ggaJ7D5qR3KMVrW87RjU5XiCPFUZVMx8K7RibTwn3a
-vn8HDwC2ICcnpy9HUpY9E/tKp+GGR9FazpNVVuRB7WMMNpjqgrjy91FtlW/viZh6
-ubzjc2Hy9P+9V3R5mSyd6H3ZTBDyPA==
-=Szv2
------END PGP SIGNATURE-----
-
---vddfwce3cegun5mc--
+And also noted for your previous comment on lockdep_assert_held().
+@Max: please ignore this particular remark.
