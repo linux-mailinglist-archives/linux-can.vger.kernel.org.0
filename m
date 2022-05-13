@@ -2,123 +2,89 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F11C5262AA
-	for <lists+linux-can@lfdr.de>; Fri, 13 May 2022 15:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97F7D5263D3
+	for <lists+linux-can@lfdr.de>; Fri, 13 May 2022 16:24:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379953AbiEMNKf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 13 May 2022 09:10:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42628 "EHLO
+        id S244638AbiEMOYW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 13 May 2022 10:24:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379583AbiEMNKe (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 13 May 2022 09:10:34 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA0B4E3BE
-        for <linux-can@vger.kernel.org>; Fri, 13 May 2022 06:10:32 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1npV3o-0002QY-04; Fri, 13 May 2022 15:10:24 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 5977D7DA6F;
-        Fri, 13 May 2022 13:10:19 +0000 (UTC)
-Date:   Fri, 13 May 2022 15:10:18 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     linux-can@vger.kernel.org,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Chee Hou Ong <chee.houx.ong@intel.com>,
-        Aman Kumar <aman.kumar@intel.com>,
-        Pallavi Kumari <kumari.pallavi@intel.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] Revert "can: m_can: pci: use custom bit timings for
- Elkhart Lake"
-Message-ID: <20220513131018.x4xgeqtgamo4pm43@pengutronix.de>
-References: <20220512124144.536850-1-jarkko.nikula@linux.intel.com>
+        with ESMTP id S1355218AbiEMOYU (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 13 May 2022 10:24:20 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62EE55047F;
+        Fri, 13 May 2022 07:24:19 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id x8so4222242pgr.4;
+        Fri, 13 May 2022 07:24:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DSFVvtb25vaSMEJHnBVUCbV3FpLzvNN+SMPfTZx1ihA=;
+        b=qp2pxaTyYctTFWdpw9JQdQ3QXnRJeCkCFg4wEMX0q9mrELp8Q3U2hFOfksh/v2G6wv
+         L66zZ/6JenJwKeyBZn/ABvCbA4ej2zaBfz0H3eBuxdjpd7+F3B60Rf9j9MkH8Xjbxqty
+         iwteSrHoYBgFuOR2x+p0JVGRrLt2aOnzaLRt8lNMgzOaRDRnvWlKBi29ys9x8r3Mgekh
+         QBUfqpaZ6poYs3K6Shk41nqil7NRlYV2t0b5CpjIKAOf6hwTWTb0BTZVWAYTQukEFB7u
+         o69keVEw3T6yXdtOZspZh4R05hxFVO8kL58fvMviqKGsFD/qFjJhDIf8+ikjO22KR61u
+         e1QQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=DSFVvtb25vaSMEJHnBVUCbV3FpLzvNN+SMPfTZx1ihA=;
+        b=vkJx9XJtokCFz3MTSsBACOGDOJOkL964N3XqqwqerhotNqAapkm6Azjv2pU3UfBTU8
+         utL65RfEaWBxDNK2hrg5ZWeK9P9lIVGEJ/j4gFDct0PPFHtwsSQRQr3xiYhhmVb6ZHG8
+         dcAGMr6CUn/OzrE99gYaLtyUjYdwnARV9OedyH1lbVUXt8uDcFPh29/BJHNSfoJ3FMK9
+         bjoT1FCeAkGKOLcAPRT9yfJxRIBhDWnOUXsoUq8p9C4Ewa2sxzji1Y0nXsQR/3MWXbDQ
+         XCj+WTr6O0DJWwjDDTTzY4STx4HaE5yfpem7BGUQW45Jubd+aY+NAhjTfSBpkLstEqaa
+         gFnA==
+X-Gm-Message-State: AOAM533dBdpMeCMUg++M0D9wWFBtPhEO//7XtdvDb8kOqrXYNv/IbQJv
+        Z6bwoXibBkx7/Rj1mCEtVpQ=
+X-Google-Smtp-Source: ABdhPJwkNv+XJvGA6KBWMfFKv4SevAuYmOvl9B58tgbnkLWWoNlY5QyFiEGBww3BZg8owQA4lxkLbQ==
+X-Received: by 2002:a63:6c8a:0:b0:3ab:8c07:4d93 with SMTP id h132-20020a636c8a000000b003ab8c074d93mr4259567pgc.431.1652451858778;
+        Fri, 13 May 2022 07:24:18 -0700 (PDT)
+Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
+        by smtp.gmail.com with ESMTPSA id jj10-20020a170903048a00b0015e8d4eb2ccsm1684488plb.278.2022.05.13.07.24.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 May 2022 07:24:18 -0700 (PDT)
+Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Max Staudt <max@enpas.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH 0/2] can: drop tx skb if the device is in listen only mode
+Date:   Fri, 13 May 2022 23:23:53 +0900
+Message-Id: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="noyjhbacdu6a2cvp"
-Content-Disposition: inline
-In-Reply-To: <20220512124144.536850-1-jarkko.nikula@linux.intel.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+In listen only mode, tx CAN frames can still reach the driver if
+injected via the packet socket. This series add a check toward
+CAN_CTRLMODE_LISTENONLY in can_dropped_invalid_skb() to discard such
+skb. The first patch does some preparation work and migrates
+can_dropped_invalid_skb() from skb.h to dev.h. The second and last
+patch is the actual change.
 
---noyjhbacdu6a2cvp
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Vincent Mailhol (2):
+  can: move can_dropped_invalid_skb from skb.h to dev.h
+  can: dev: drop tx skb if in listen only mode
 
-On 12.05.2022 15:41:43, Jarkko Nikula wrote:
-> This reverts commit 0e8ffdf3b86dfd44b651f91b12fcae76c25c453b.
->=20
-> Commit 0e8ffdf3b86d ("can: m_can: pci: use custom bit timings for
-> Elkhart Lake") broke the test case using bitrate switching.
->=20
-> 	ip link set can0 up type can bitrate 500000 dbitrate 4000000 fd on
-> 	ip link set can1 up type can bitrate 500000 dbitrate 4000000 fd on
-> 	candump can0 &
-> 	cangen can1 -I 0x800 -L 64 -e -fb -D 11223344deadbeef55667788feedf00daab=
-bccdd44332211 -n 1 -v -v
->=20
-> Above commit does everything correctly according to the datasheet.
-> However datasheet wasn't correct.
->=20
-> I got confirmation from hardware engineers that the actual CAN hardware
-> on Intel Elkhart Lake is based on M_CAN version v3.2.0. Datasheet was
-> mirroring values from an another specification which was based on earlier
-> M_CAN version leading to wrong bit timings.
->=20
-> Therefore revert the commit and switch back to common bit timings.
->=20
-> Fixes: 0e8ffdf3b86d ("can: m_can: pci: use custom bit timings for Elkhart=
- Lake")
-> Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-> Reported-by: Chee Hou Ong <chee.houx.ong@intel.com>
-> Reported-by: Aman Kumar <aman.kumar@intel.com>
-> Reported-by: Pallavi Kumari <kumari.pallavi@intel.com>
-> Cc: <stable@vger.kernel.org> # v5.16+
+ include/linux/can/dev.h | 35 +++++++++++++++++++++++++++++++++++
+ include/linux/can/skb.h | 28 ----------------------------
+ 2 files changed, 35 insertions(+), 28 deletions(-)
 
-Added to can/testing.
+-- 
+2.35.1
 
-Thanks,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---noyjhbacdu6a2cvp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJ+WLgACgkQrX5LkNig
-0125jQgAkUQSFWcR4lAaEI04wCZ8S9IKxFmEG+kP+Q/QTfGTbZTXMbg/5HrdjSjf
-nrC/hI0nEZsLfQzRYJVlcfiv44PS7ci0PfIKX9lfULAQV2OjppPIXYmCoYShBn1c
-2VsGi17XaYXXoJV+tNAFoh3MPv2yNrTOTmFS8qOfNfMDVNC8nPNXx/nNDo07cC+5
-bVVcIV00uvBogxNXjFIKCpTj0M4bgyV3wCqAqcu1AVl4otb9cO1NN2MJ/GBQ0DVJ
-gU2WKs246fkA+EDRcz+yk7L8Vyon9203Hao6vSITcNy11ddHUoOd8ANSaAY/s6F/
-B8Hxe8R/YDJ/PfXL5Ndehg+dkiq4JA==
-=J3St
------END PGP SIGNATURE-----
-
---noyjhbacdu6a2cvp--
