@@ -2,60 +2,60 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AB7C5263DA
-	for <lists+linux-can@lfdr.de>; Fri, 13 May 2022 16:24:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE8E45263EA
+	for <lists+linux-can@lfdr.de>; Fri, 13 May 2022 16:25:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355758AbiEMOY1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 13 May 2022 10:24:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37978 "EHLO
+        id S1358607AbiEMOZE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 13 May 2022 10:25:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355954AbiEMOY0 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 13 May 2022 10:24:26 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF37850E09;
-        Fri, 13 May 2022 07:24:25 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso7973428pjg.0;
-        Fri, 13 May 2022 07:24:25 -0700 (PDT)
+        with ESMTP id S1359467AbiEMOYs (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 13 May 2022 10:24:48 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1AD527D1;
+        Fri, 13 May 2022 07:24:45 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id c11so8064090plg.13;
+        Fri, 13 May 2022 07:24:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=mTM/kX6SVqsh/584K0OxOVMxJNbBbJojAc06+3q+noc=;
-        b=THHZJjXytAJZclhK0bpp/StN56jpSkHFqNU6fPOgzPAjO/HrVdWtKojjDJYmdwTpqH
-         JedTnC6qF6skZiX1SQBOsq9DcZs0dbUd6u0gAOMGVVTOAdG7o8qKOR6oUjko+P+nX1Bt
-         b7aRDLYP93M4BlUq85TAI4QzsYw01Ediw8szmlSpX/hBmbceGozMkjSUPdmTWaclXWxv
-         yPQuHRleIJU/1MoYGRMfJ00al1+QilC2ZQyR0ZSyzY70fjJ6GAWSZB5t3Xkg4oOWiu/O
-         nIDz8Sfbh5ur/W6wcoyntdbbw3BCMIvuvqagkxKvUGVGGWzqI9SREy2yLm4tn7TurkTc
-         MYbw==
+        bh=EXVXiPbk+krY68vv3JVFR+K7ANBpW2/j7bjI9Co2KDw=;
+        b=Lily5PBWVzsRsoKTheNp++BxMUwyzfse43IwxdM4KdKiwxr22BTE2kx3Ow2wxjOf+C
+         lH4YXnDCqazomi/ap9qEmHZRTELee86xvEOnQBuPbC8Az508qFAxZGEmkWFu97uiTAZD
+         Q6lTJx4RBjBKMO9cRXZBmzzUdoywVD62Du3xLaMjBYbgESWo9VJZ1XX4GG6o1WF0IzLM
+         6hwHVRGorDIVDB8N7Nn/c5KQO8pCIHWtYUabYbddkqX0UtY+Sl8ux8FjnuGi5vh3CnFU
+         My8cQRNntwUUEpSChBTx6GdqGKcYGwkc3mlOfz2lTrdHx+nCauRiSDnRfL3gYSbgX7YK
+         11cQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=mTM/kX6SVqsh/584K0OxOVMxJNbBbJojAc06+3q+noc=;
-        b=iC4CFiGGCJcC5BGi9GRMbMbrR1j+e5w16qzMtIprdqe5+eJ554L0JE3GsSX2Kq2x7E
-         iWeYm+4dYmlVnc9Pm7RygEq6cRN9Z6U1vNxSaqJ1223PRGuBoFOjjBMnRPDqxaC/3yOw
-         C5rJF2cTiOopNrKZdWZco4ZwrLULkF8o7ALy8CaQrlzCFLDsyDmEbh/IxwM6nxf3e2nf
-         85ghl+iS4f/vMLGzUA0hOH1u1otkvhqdtF8bsbMf+QI/V6duzlYmSfZ8YSmlmbs4k4Y3
-         9XYo8Ac4LV7J9Rkd/owI0jqP7kXPXEo0qFMjWt6885RO66HcsOitOhlxInhTpxD5Si8T
-         S6lw==
-X-Gm-Message-State: AOAM531iQe3b6dAK9tZg8pnJgSDk8LGz/kA3rXmZ2iUpJrDGO4Pf9yV3
-        AYu4Cj9p9jl9tRpYe9uAi5E=
-X-Google-Smtp-Source: ABdhPJyX8XhNTJuqpdaLK2CBnxji9ZIZ3WOnDPmRsky4JKsie/lRiYbynXtG+lsWAfSfL6cs76jHHA==
-X-Received: by 2002:a17:902:e811:b0:15e:b27b:92ef with SMTP id u17-20020a170902e81100b0015eb27b92efmr4988168plg.142.1652451865060;
-        Fri, 13 May 2022 07:24:25 -0700 (PDT)
+        bh=EXVXiPbk+krY68vv3JVFR+K7ANBpW2/j7bjI9Co2KDw=;
+        b=cRoqmhZNvnKkFlkfiEyeBjVxTQ9nZKLrnRU5N+sYwh46qw9nbVr8B0C5Hs6zc9kecQ
+         3zkjAJCQYT2T0PTroKODoudpv6R+fMBGPWeeAZm6qn9td4xNvgp2fGAtbAu1TcN+l9ht
+         cE9/Nc/+ApTgLvSeDg4cuOrV5KfpNFmFfOCBpVOZKnndcLNg7e1qyYg7SlgKakKmvFPs
+         dhq5noQ9WkT5X/+JfNYSybEO6wuHHZv+whkRcKTuSgmfEvzdrwfFyXPLy8qy3XQpaG9Y
+         z68YhfptSMaMQIfKlSb+u2qGAGyvOEwvcq55Bi9xfYl29MeydBcA4sEcqNyYecW3jxZ5
+         OBEg==
+X-Gm-Message-State: AOAM531M0v7egKx92aRkBv9BGtP96QWnkZXC3LTFJ7IJQ4lNs3THYS75
+        dBQWiJM5ERPgfjJGdoMEOj0=
+X-Google-Smtp-Source: ABdhPJwP14hRxwH8tjUgqDpmuXMdXTYtmj77UCtxNmry5UzcQ8PKGLOciYn4wKhQnTKfIIfZgjlOZA==
+X-Received: by 2002:a17:902:f542:b0:15e:b6d2:88d9 with SMTP id h2-20020a170902f54200b0015eb6d288d9mr4934948plf.128.1652451884713;
+        Fri, 13 May 2022 07:24:44 -0700 (PDT)
 Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id jj10-20020a170903048a00b0015e8d4eb2ccsm1684488plb.278.2022.05.13.07.24.23
+        by smtp.gmail.com with ESMTPSA id jj10-20020a170903048a00b0015e8d4eb2ccsm1684488plb.278.2022.05.13.07.24.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 07:24:24 -0700 (PDT)
+        Fri, 13 May 2022 07:24:44 -0700 (PDT)
 Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
 From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 To:     Marc Kleine-Budde <mkl@pengutronix.de>
 Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
         Max Staudt <max@enpas.org>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH 1/2] can: move can_dropped_invalid_skb from skb.h to dev.h
-Date:   Fri, 13 May 2022 23:23:54 +0900
-Message-Id: <20220513142355.250389-2-mailhol.vincent@wanadoo.fr>
+Subject: [PATCH 2/2] can: dev: drop tx skb if in listen only mode
+Date:   Fri, 13 May 2022 23:23:55 +0900
+Message-Id: <20220513142355.250389-3-mailhol.vincent@wanadoo.fr>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
 References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
@@ -72,104 +72,46 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is a preparation patch for next change.
+Frames can be directly injected to a can driver via the packet
+socket. By doing that, it is possible to reach the
+net_device_ops::ndo_start_xmit function even if the driver is
+configure in listen only mode.
 
-We want to introduce a check towards CAN_CTRLMODE_LISTENONLY in
-can_dopped_invalid_skb(). To do so, we would need to include
-linux/can/dev.h (for struct can_priv) and uapi/linux/can/netlink.h
-(for the definition of CAN_CTRLMODE_LISTEONLY). Instead of adding
-those header and contributing to the include hell, we prever to
-relocate can_dropped_invalid_skb() to linux/can/dev.h where all the
-needed headers are already present.
-
-While doing so, do a small cleanup: re-indent the second line of the
-function argument and add brackets around the else block.
+Add a check in can_dropped_invalid_skb() and to discard the skb if
+CAN_CTRLMODE_LISTENONLY is set.
 
 Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 ---
- include/linux/can/dev.h | 29 +++++++++++++++++++++++++++++
- include/linux/can/skb.h | 28 ----------------------------
- 2 files changed, 29 insertions(+), 28 deletions(-)
+ include/linux/can/dev.h | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
-index c2ea47f30046..bbe27e22c7a7 100644
+index bbe27e22c7a7..c3ed48e54c29 100644
 --- a/include/linux/can/dev.h
 +++ b/include/linux/can/dev.h
-@@ -156,6 +156,35 @@ static inline u32 can_get_static_ctrlmode(struct can_priv *priv)
- 	return priv->ctrlmode & ~priv->ctrlmode_supported;
- }
- 
-+/* Drop a given socketbuffer if it does not contain a valid CAN frame. */
-+static inline bool can_dropped_invalid_skb(struct net_device *dev,
-+					   struct sk_buff *skb)
-+{
-+	const struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
-+
-+	if (skb->protocol == htons(ETH_P_CAN)) {
-+		if (unlikely(skb->len != CAN_MTU ||
-+			     cfd->len > CAN_MAX_DLEN))
-+			goto inval_skb;
-+	} else if (skb->protocol == htons(ETH_P_CANFD)) {
-+		if (unlikely(skb->len != CANFD_MTU ||
-+			     cfd->len > CANFD_MAX_DLEN))
-+			goto inval_skb;
-+	} else {
-+		goto inval_skb;
-+	}
-+
-+	if (!can_skb_headroom_valid(dev, skb))
-+		goto inval_skb;
-+
-+	return false;
-+
-+inval_skb:
-+	kfree_skb(skb);
-+	dev->stats.tx_dropped++;
-+	return true;
-+}
-+
- void can_setup(struct net_device *dev);
- 
- struct net_device *alloc_candev_mqs(int sizeof_priv, unsigned int echo_skb_max,
-diff --git a/include/linux/can/skb.h b/include/linux/can/skb.h
-index fdb22b00674a..985791c84a8d 100644
---- a/include/linux/can/skb.h
-+++ b/include/linux/can/skb.h
-@@ -126,34 +126,6 @@ static inline bool can_skb_headroom_valid(struct net_device *dev,
- 	return true;
- }
- 
--/* Drop a given socketbuffer if it does not contain a valid CAN frame. */
--static inline bool can_dropped_invalid_skb(struct net_device *dev,
--					  struct sk_buff *skb)
--{
--	const struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
--
--	if (skb->protocol == htons(ETH_P_CAN)) {
--		if (unlikely(skb->len != CAN_MTU ||
--			     cfd->len > CAN_MAX_DLEN))
--			goto inval_skb;
--	} else if (skb->protocol == htons(ETH_P_CANFD)) {
--		if (unlikely(skb->len != CANFD_MTU ||
--			     cfd->len > CANFD_MAX_DLEN))
--			goto inval_skb;
--	} else
--		goto inval_skb;
--
--	if (!can_skb_headroom_valid(dev, skb))
--		goto inval_skb;
--
--	return false;
--
--inval_skb:
--	kfree_skb(skb);
--	dev->stats.tx_dropped++;
--	return true;
--}
--
- static inline bool can_is_canfd_skb(const struct sk_buff *skb)
+@@ -161,6 +161,7 @@ static inline bool can_dropped_invalid_skb(struct net_device *dev,
+ 					   struct sk_buff *skb)
  {
- 	/* the CAN specific type of skb is identified by its data length */
+ 	const struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
++	struct can_priv *priv = netdev_priv(dev);
+ 
+ 	if (skb->protocol == htons(ETH_P_CAN)) {
+ 		if (unlikely(skb->len != CAN_MTU ||
+@@ -174,8 +175,13 @@ static inline bool can_dropped_invalid_skb(struct net_device *dev,
+ 		goto inval_skb;
+ 	}
+ 
+-	if (!can_skb_headroom_valid(dev, skb))
++	if (!can_skb_headroom_valid(dev, skb)) {
++		goto inval_skb;
++	} else if (priv->ctrlmode & CAN_CTRLMODE_LISTENONLY) {
++		netdev_info_once(dev,
++				 "interface in listen only mode, dropping skb\n");
+ 		goto inval_skb;
++	}
+ 
+ 	return false;
+ 
 -- 
 2.35.1
 
