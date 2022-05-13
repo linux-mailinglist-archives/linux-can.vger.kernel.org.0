@@ -2,137 +2,80 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B41B352659E
-	for <lists+linux-can@lfdr.de>; Fri, 13 May 2022 17:06:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E5D85265EA
+	for <lists+linux-can@lfdr.de>; Fri, 13 May 2022 17:21:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358612AbiEMPGT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 13 May 2022 11:06:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41032 "EHLO
+        id S1381892AbiEMPUu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 13 May 2022 11:20:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379612AbiEMPF5 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 13 May 2022 11:05:57 -0400
-Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72212546AE
-        for <linux-can@vger.kernel.org>; Fri, 13 May 2022 08:05:54 -0700 (PDT)
-Received: from submission (posteo.de [185.67.36.169]) 
-        by mout01.posteo.de (Postfix) with ESMTPS id BD884240026
-        for <linux-can@vger.kernel.org>; Fri, 13 May 2022 17:05:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-        t=1652454352; bh=o63zwI9M0PH1z4leJhrRHzGwbpNjxPmtgU/qy+rKuOw=;
-        h=Date:From:Subject:To:From;
-        b=Zb2f4khZUVJwV3QId43QuHO48TyXcKcPlU3QZHQh5bXd1M2YKxuR55stRchnh9+cH
-         7owj++8bfG/AA7SGIHpYSLu9fZCwE/25bo5QNuOuPaVDASsUW/aUnXUjN/2EsSbOTX
-         mSl8gKyjUZpnX1P1+ookGcw4exAz/B2haVpBjNF8J09eqLg8zmqfugBqLn01djJhIw
-         QJo7mvsf6+8h/SXJGgqNRYt3sBVhE1xXN77DDscR5dpZVHhqLlk64R54zw55o+Kbna
-         ZX5qfxXB+eoQwUZGeHojElMXBFWtta/+EwRH6wvgZT+cp2UPVtcVNHNwv8VZHz+Ymv
-         Uf6l2i/kbd2ZQ==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4L0BmJ1V5rz6tmJ
-        for <linux-can@vger.kernel.org>; Fri, 13 May 2022 17:05:52 +0200 (CEST)
-Message-ID: <31fba687-5642-bedc-ece7-9f8e2543978c@posteo.de>
-Date:   Fri, 13 May 2022 15:05:51 +0000
+        with ESMTP id S1381888AbiEMPUt (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 13 May 2022 11:20:49 -0400
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 735A466ADA;
+        Fri, 13 May 2022 08:20:48 -0700 (PDT)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-2feb8eac315so15970627b3.3;
+        Fri, 13 May 2022 08:20:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FmZIoJGMrKtmX8tYXoWBlj/vP3BEUHY+bCqtu7SbDdQ=;
+        b=eRYvIy7JEGU/KpzqugeeAqcLMcWuKZc37MPdyj/9ElGSMFt+6yTo9/NQjhbIySLtAt
+         DtX4OytyLtMt9Q5ZXWhqVcYYvibTRbpCcf48beDpxKZ8wqCs1rtb5WCwRZyCZMosCrQ8
+         W03jpy++9P/f+ar+eFEAPFQIDyXrz+56i9qffinJA6Qf4NwdF+6Hj4mIRUhynxYWcug2
+         3uPilDkpbcWm4PomotAycbxGyZDVh/f4UN52vB0uPwP3tWreQtff0wnXqvtOdQy3+TNh
+         sxrvC3YscRZjw5rW3jyIi1OqH01sQEVjWu3sr0nSjcfnvjI4ZBaG0o7mlPKEqkIg41IK
+         ZnqA==
+X-Gm-Message-State: AOAM5313Ehpt/L7AUPs2RlGaUh4/ls53mAo/miaU1Vq/lAvAqMwCMr0G
+        cvQds8K5haGXSzhUHq6UiZssvipvkd5vhGK+Z+k=
+X-Google-Smtp-Source: ABdhPJz3MzTrixY89GB+xcGxbpQzk0lpihBmY9JNmCwDA9pPezWUV0vmD6nvtcsExxO6VrQwpSnoqCTtu9K5hU35MA0=
+X-Received: by 2002:a81:34f:0:b0:2f7:bbb1:1576 with SMTP id
+ 76-20020a81034f000000b002f7bbb11576mr6303681ywd.45.1652455247642; Fri, 13 May
+ 2022 08:20:47 -0700 (PDT)
 MIME-Version: 1.0
-From:   Patrick Menschel <menschel.p@posteo.de>
-Subject: can-bcm: Best practice for dynamic data in frames?
-To:     linux-can <linux-can@vger.kernel.org>
-Content-Language: en-US
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------i9PUuayMKKSX8TiPHgLxfepP"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr> <20220513144230.upuirv4ufebxvfbq@pengutronix.de>
+In-Reply-To: <20220513144230.upuirv4ufebxvfbq@pengutronix.de>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Sat, 14 May 2022 00:20:36 +0900
+Message-ID: <CAMZ6RqKBLSVmPXsdKS0F1C+9JnDJKULO9dhY00A1bRU=nMmJ2A@mail.gmail.com>
+Subject: Re: [PATCH 0/2] can: drop tx skb if the device is in listen only mode
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Max Staudt <max@enpas.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------i9PUuayMKKSX8TiPHgLxfepP
-Content-Type: multipart/mixed; boundary="------------t5Y4VCk0KDFnj30PT2Eu0xcN";
- protected-headers="v1"
-From: Patrick Menschel <menschel.p@posteo.de>
-To: linux-can <linux-can@vger.kernel.org>
-Message-ID: <31fba687-5642-bedc-ece7-9f8e2543978c@posteo.de>
-Subject: can-bcm: Best practice for dynamic data in frames?
+On Fri. 13 May 2022 at 23:42, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> On 13.05.2022 23:23:53, Vincent Mailhol wrote:
+> > In listen only mode, tx CAN frames can still reach the driver if
+> > injected via the packet socket. This series add a check toward
+> > CAN_CTRLMODE_LISTENONLY in can_dropped_invalid_skb() to discard such
+> > skb. The first patch does some preparation work and migrates
+> > can_dropped_invalid_skb() from skb.h to dev.h. The second and last
+> > patch is the actual change.
+>
+> Thanks for your quick patch!
+>
+> What about moving the function to a .c file? The
+> can_dropped_invalid_skb() grew a lot over the years, since it was added
+> to the header as a static inline function.
 
---------------t5Y4VCk0KDFnj30PT2Eu0xcN
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+OK. Will also migrate can_skb_headrom_valid() which is only used by
+can_dropped_invalid_skb().
 
-Hello,
-
-I'd like to ask about best practice to dynamically change the data bytes
-of a frame that is sent via broadcast-manager, each time after it was sen=
-t.
-
-I came up with the following concept but maybe there is a more
-"professional" way to do it.
-
-1.
-I set up my initial frame with valid data and send it with interval to
-BCM as I do with regular cyclic transmits.
-BcmOpCodes =3D TX_SETUP
-BCMFlags =3D SETTIMER | STARTTIMER
-=2E..
-
-
-APP    BCM
- | -->  |    id 123 data 00 11 22 33 44 55 66 77
-
-
-2.
-I set up a can raw socket with a filter for exactly that frame id and
-wait for the frame.
-
-APP    RAW
- | <--  |    id 123 data 00 11 22 33 44 55 66 77
-
-
-3.
-Then I change the dynamic data, in this case a message counter in the
-first byte and then update the frame in BCM.
-
-BcmOpCodes =3D TX_SETUP
-BCMFlags =3D 0
-=2E..
-
-
-APP    BCM
- | -->  |    id 123 data 01 11 22 33 44 55 66 77
-
-
-This merry-go-around goes on as long as the application is running.
-The purpose is some sort of heartbeat.
-
-
-Thanks and Best Regards,
-Patrick
-
-
---------------t5Y4VCk0KDFnj30PT2Eu0xcN--
-
---------------i9PUuayMKKSX8TiPHgLxfepP
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEE6VSgQlqXIUKDwAxHMeZuMM+vuE4FAmJ+c88FAwAAAAAACgkQMeZuMM+vuE5h
-9w//TNE55Vkj097v4KM7aHm3UsrIMd1u6hFDNpy+ImQWixV9V81zgdX7bCZhJhCg9v+LTdPy/fx7
-0qVjpmFYkqFGZu95tndmvkBOKQmOLebC0n1KlJ8DfbwX6Sw3V1Sq5/cm+++85AuHbnMCcttAeXO1
-xlr+oRwhE/u+xyhlL4Z6qKdZb4JrdYGE7fhmiNgQV4TWpnmibprQJIXC1enStAGUxP19DtZNHiSV
-AeKhkR7SDvvit3EQGTps1OBHxqv8N5eeVk2flr2ZS9eEt014bp3e74KbMTmLZVDEqVhMwo7BPoJ6
-Qe+/DP9TT4f2ACsFDPNa0dH1D+E6InLC6QBF724VJ0Xolc3nU/LoWJqDDAyjZGXr8qdMpMNhH8SW
-Ttam1hzzCqIjlhkrsHjapKfKilm99Mxv349nMRgFDur+eXFywEvxGfYh6SqU85R3Kny8aG5FfO0t
-HLQOQU/2ab76Ut11FSRP57wbAkj5iOdgtfPwOBuKimfCsj4elJCbVP5CwgpBvXpbR6pbw5xjfTDx
-oiPjsGRf5Hbe8mZE23mYRDjkL59n/faCDYaXdTlp2rK2ojOe+NRLGr+abFu8gPKOHjmQpIHIN9aX
-O1gpifZmZR90np0/bCbKQYdPd0Uqzs2D33ldkqJ1puhZGxv24SJ3MX6St7IZJl3BOHCkzsmRJf/j
-uH4=
-=E7hZ
------END PGP SIGNATURE-----
-
---------------i9PUuayMKKSX8TiPHgLxfepP--
+> Marc
+>
+> --
+> Pengutronix e.K.                 | Marc Kleine-Budde           |
+> Embedded Linux                   | https://www.pengutronix.de  |
+> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
