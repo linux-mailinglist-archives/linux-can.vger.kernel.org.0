@@ -2,125 +2,99 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3A8652663C
-	for <lists+linux-can@lfdr.de>; Fri, 13 May 2022 17:36:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 642E1526830
+	for <lists+linux-can@lfdr.de>; Fri, 13 May 2022 19:22:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382106AbiEMPgf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 13 May 2022 11:36:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46710 "EHLO
+        id S1378007AbiEMRVv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 13 May 2022 13:21:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382225AbiEMPgb (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 13 May 2022 11:36:31 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE941101C4;
-        Fri, 13 May 2022 08:36:30 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id l11so7813401pgt.13;
-        Fri, 13 May 2022 08:36:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=3SdSDF7ewAPst9Zo7lkKDOBWvOM46kArH1FoqTvHna8=;
-        b=TVp08MhCiNH0J+l+jaKpwd6/jEhJwrKLGROYxtsWMbZtxKkoazCgcygWI6LQCYJolJ
-         MAZrTo+W8GtQ3TyTDG6JrAB+JaSpBmLtNxfuQ8kNlqWUuscAKZ89Na7gxlMNG9nHJJ8d
-         aPMXuLpWESRR3NWDfWZHv0eEO6nSo9bQJHzgADVVyX6nBaLbOSK83bileRGefnX0baqD
-         aDqIb7lPh79moQXIiaNSJzPqPVBQ8dgImJ+4p81EFoGWVP9frz0eMBTYmP7WhrC2vrIU
-         EwY8bSI/U6o+3gYIhlMOWpPRyAl0dMUi2AzDPeRYqIySs/18Jdy3X4Gexw7+BpNRTDXG
-         QqwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=3SdSDF7ewAPst9Zo7lkKDOBWvOM46kArH1FoqTvHna8=;
-        b=AtUqOfWkKmSIKPBTe7yzIpL27GJnoaUgpLDjXg70qx9nJTITzcMs5qK1XQaGbfBSkn
-         8KqyAam1Zszmxv2qrTX8FGXRx8ND/B1jVjCa8Sgt9IH5yDk4B/J8QusxcEviQVgB6tJs
-         uyMaji4B9fmfqp7yCaGJSKI4k+UuidScjvBv5hchgOGjSVWNkSSN/WG7K2OcqFmOCI8r
-         jFrxRigyNZaCsSv1dVdsxV2a7IbLlkwZnKnpF53Zrmyb+tAcslmwuaN6OvivfVExT1Lz
-         Sj6ACx2ANOTIPSS/RwMyhyfpB+YxNtGJWQH18gSN8ZRGashuUys5Au3HnF2IgwGftSuE
-         r1CQ==
-X-Gm-Message-State: AOAM53082O1Z1iKT0sdiTO0q31qzwBq1FGMcZjSp0h/9t9cqFiiGRbBC
-        BtcnHKNnEZEG4ejsZ3Q+pIk=
-X-Google-Smtp-Source: ABdhPJyX8EwQoDJOQU9hERyg4fabjGQxCtwU2PZgUAgTQc7WqFpw0HyjMYWUO1X/kp/36BfSY6KelQ==
-X-Received: by 2002:a62:6410:0:b0:4f3:9654:266d with SMTP id y16-20020a626410000000b004f39654266dmr4980430pfb.59.1652456190365;
-        Fri, 13 May 2022 08:36:30 -0700 (PDT)
-Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id b10-20020a62a10a000000b0050dc762817dsm1942137pff.87.2022.05.13.08.36.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 08:36:30 -0700 (PDT)
-Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+        with ESMTP id S1348016AbiEMRVu (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 13 May 2022 13:21:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6A952B0B;
+        Fri, 13 May 2022 10:21:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D10A9B82E1E;
+        Fri, 13 May 2022 17:21:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F88AC34100;
+        Fri, 13 May 2022 17:21:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652462507;
+        bh=0Z+7A9FB8DvG9yJt2Qo5SF8MJS2WO1YD33FgZbNZGno=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=QvuV4CdZFIrIYLgtATdayymaKKNgXmGt9t6aFvX0wkXyo3/Oaqjbht1IMBE6zxR59
+         YRSHsnjuwRCA50SiCGDm+IvWnNZFLVIam7rLoUEOgpugh0tMu7h6IFxHvIzWZDvNWm
+         6X1Ai75tH+RN4WsqU5ilgj4goxEGR7luzInCKwNqpgSq0Kd31hh4S7LWC1gcpRNBup
+         Cog6etw5C+nWop6GuiVE6SK/FOBhtbm2xuLwDH8R+2xennsDP7l7VBwpjrgchOJBGg
+         8Uz3xWLmWHX1cfqIb7ePqDmDc1fz1pZTJZPoZ6kymv2st4QtzonE4nv+shDSloiFJq
+         Kof+V2RMb3eYg==
+Date:   Fri, 13 May 2022 10:21:45 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
 To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Max Staudt <max@enpas.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v2 2/2] can: dev: drop tx skb if in listen only mode
-Date:   Sat, 14 May 2022 00:36:06 +0900
-Message-Id: <20220513153606.302464-3-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220513153606.302464-1-mailhol.vincent@wanadoo.fr>
-References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
- <20220513153606.302464-1-mailhol.vincent@wanadoo.fr>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net,
+        linux-can@vger.kernel.org, kernel@pengutronix.de,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Chee Hou Ong <chee.houx.ong@intel.com>,
+        Aman Kumar <aman.kumar@intel.com>,
+        Pallavi Kumari <kumari.pallavi@intel.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH net 1/2] Revert "can: m_can: pci: use custom bit timings
+ for Elkhart Lake"
+Message-ID: <20220513102145.748db22c@kernel.org>
+In-Reply-To: <20220513130819.386012-2-mkl@pengutronix.de>
+References: <20220513130819.386012-1-mkl@pengutronix.de>
+        <20220513130819.386012-2-mkl@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Frames can be directly injected to a can driver via the packet
-socket. By doing that, it is possible to reach the
-net_device_ops::ndo_start_xmit function even if the driver is
-configure in listen only mode.
+On Fri, 13 May 2022 15:08:18 +0200 Marc Kleine-Budde wrote:
+> From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> 
+> This reverts commit 0e8ffdf3b86dfd44b651f91b12fcae76c25c453b.
+> 
+> Commit 0e8ffdf3b86d ("can: m_can: pci: use custom bit timings for
+> Elkhart Lake") broke the test case using bitrate switching.
+> 
+> | ip link set can0 up type can bitrate 500000 dbitrate 4000000 fd on
+> | ip link set can1 up type can bitrate 500000 dbitrate 4000000 fd on
+> | candump can0 &
+> | cangen can1 -I 0x800 -L 64 -e -fb \
+> |     -D 11223344deadbeef55667788feedf00daabbccdd44332211 -n 1 -v -v
+> 
+> Above commit does everything correctly according to the datasheet.
+> However datasheet wasn't correct.
+> 
+> I got confirmation from hardware engineers that the actual CAN
+> hardware on Intel Elkhart Lake is based on M_CAN version v3.2.0.
+> Datasheet was mirroring values from an another specification which was
+> based on earlier M_CAN version leading to wrong bit timings.
+> 
+> Therefore revert the commit and switch back to common bit timings.
+> 
+> Fixes: 0e8ffdf3b86d ("can: m_can: pci: use custom bit timings for Elkhart Lake")
+> Link: https://lore.kernel.org/all/20220512124144.536850-1-jarkko.nikula@linux.intel.com
+> Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> Reported-by: Chee Hou Ong <chee.houx.ong@intel.com>
+> Reported-by: Aman Kumar <aman.kumar@intel.com>
+> Reported-by: Pallavi Kumari <kumari.pallavi@intel.com>
+> Cc: <stable@vger.kernel.org> # v5.16+
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 
-Add a check in can_dropped_invalid_skb() and to discard the skb if
-CAN_CTRLMODE_LISTENONLY is set.
+nit: the hash in the fixes tag should be:
 
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- drivers/net/can/dev/skb.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+Fixes: ea4c1787685d ("can: m_can: pci: use custom bit timings for Elkhart Lake")
 
-diff --git a/drivers/net/can/dev/skb.c b/drivers/net/can/dev/skb.c
-index 8b1991130de5..f7420fc43b99 100644
---- a/drivers/net/can/dev/skb.c
-+++ b/drivers/net/can/dev/skb.c
-@@ -5,6 +5,7 @@
-  */
- 
- #include <linux/can/dev.h>
-+#include <linux/can/netlink.h>
- 
- /* Local echo of CAN messages
-  *
-@@ -286,6 +287,7 @@ static bool can_skb_headroom_valid(struct net_device *dev, struct sk_buff *skb)
- bool can_dropped_invalid_skb(struct net_device *dev, struct sk_buff *skb)
- {
- 	const struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
-+	struct can_priv *priv = netdev_priv(dev);
- 
- 	if (skb->protocol == htons(ETH_P_CAN)) {
- 		if (unlikely(skb->len != CAN_MTU ||
-@@ -299,8 +301,13 @@ bool can_dropped_invalid_skb(struct net_device *dev, struct sk_buff *skb)
- 		goto inval_skb;
- 	}
- 
--	if (!can_skb_headroom_valid(dev, skb))
-+	if (!can_skb_headroom_valid(dev, skb)) {
-+		goto inval_skb;
-+	} else if (priv->ctrlmode & CAN_CTRLMODE_LISTENONLY) {
-+		netdev_info_once(dev,
-+				 "interface in listen only mode, dropping skb\n");
- 		goto inval_skb;
-+	}
- 
- 	return false;
- 
--- 
-2.35.1
-
+Do you want to respin or is the can tree non-rebasable?
