@@ -2,116 +2,97 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE8E45263EA
-	for <lists+linux-can@lfdr.de>; Fri, 13 May 2022 16:25:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DE585264F5
+	for <lists+linux-can@lfdr.de>; Fri, 13 May 2022 16:43:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358607AbiEMOZE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 13 May 2022 10:25:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39198 "EHLO
+        id S1355655AbiEMOns (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 13 May 2022 10:43:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359467AbiEMOYs (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 13 May 2022 10:24:48 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1AD527D1;
-        Fri, 13 May 2022 07:24:45 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id c11so8064090plg.13;
-        Fri, 13 May 2022 07:24:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=EXVXiPbk+krY68vv3JVFR+K7ANBpW2/j7bjI9Co2KDw=;
-        b=Lily5PBWVzsRsoKTheNp++BxMUwyzfse43IwxdM4KdKiwxr22BTE2kx3Ow2wxjOf+C
-         lH4YXnDCqazomi/ap9qEmHZRTELee86xvEOnQBuPbC8Az508qFAxZGEmkWFu97uiTAZD
-         Q6lTJx4RBjBKMO9cRXZBmzzUdoywVD62Du3xLaMjBYbgESWo9VJZ1XX4GG6o1WF0IzLM
-         6hwHVRGorDIVDB8N7Nn/c5KQO8pCIHWtYUabYbddkqX0UtY+Sl8ux8FjnuGi5vh3CnFU
-         My8cQRNntwUUEpSChBTx6GdqGKcYGwkc3mlOfz2lTrdHx+nCauRiSDnRfL3gYSbgX7YK
-         11cQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=EXVXiPbk+krY68vv3JVFR+K7ANBpW2/j7bjI9Co2KDw=;
-        b=cRoqmhZNvnKkFlkfiEyeBjVxTQ9nZKLrnRU5N+sYwh46qw9nbVr8B0C5Hs6zc9kecQ
-         3zkjAJCQYT2T0PTroKODoudpv6R+fMBGPWeeAZm6qn9td4xNvgp2fGAtbAu1TcN+l9ht
-         cE9/Nc/+ApTgLvSeDg4cuOrV5KfpNFmFfOCBpVOZKnndcLNg7e1qyYg7SlgKakKmvFPs
-         dhq5noQ9WkT5X/+JfNYSybEO6wuHHZv+whkRcKTuSgmfEvzdrwfFyXPLy8qy3XQpaG9Y
-         z68YhfptSMaMQIfKlSb+u2qGAGyvOEwvcq55Bi9xfYl29MeydBcA4sEcqNyYecW3jxZ5
-         OBEg==
-X-Gm-Message-State: AOAM531M0v7egKx92aRkBv9BGtP96QWnkZXC3LTFJ7IJQ4lNs3THYS75
-        dBQWiJM5ERPgfjJGdoMEOj0=
-X-Google-Smtp-Source: ABdhPJwP14hRxwH8tjUgqDpmuXMdXTYtmj77UCtxNmry5UzcQ8PKGLOciYn4wKhQnTKfIIfZgjlOZA==
-X-Received: by 2002:a17:902:f542:b0:15e:b6d2:88d9 with SMTP id h2-20020a170902f54200b0015eb6d288d9mr4934948plf.128.1652451884713;
-        Fri, 13 May 2022 07:24:44 -0700 (PDT)
-Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id jj10-20020a170903048a00b0015e8d4eb2ccsm1684488plb.278.2022.05.13.07.24.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 07:24:44 -0700 (PDT)
-Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
+        with ESMTP id S1382843AbiEMOnS (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 13 May 2022 10:43:18 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DACE186FA
+        for <linux-can@vger.kernel.org>; Fri, 13 May 2022 07:42:34 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1npWUy-00006s-Jy; Fri, 13 May 2022 16:42:32 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 2CB777DB54;
+        Fri, 13 May 2022 14:42:31 +0000 (UTC)
+Date:   Fri, 13 May 2022 16:42:30 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Max Staudt <max@enpas.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH 2/2] can: dev: drop tx skb if in listen only mode
-Date:   Fri, 13 May 2022 23:23:55 +0900
-Message-Id: <20220513142355.250389-3-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
+        Max Staudt <max@enpas.org>
+Subject: Re: [PATCH 0/2] can: drop tx skb if the device is in listen only mode
+Message-ID: <20220513144230.upuirv4ufebxvfbq@pengutronix.de>
 References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="gqifvyadwdcbjat7"
+Content-Disposition: inline
+In-Reply-To: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Frames can be directly injected to a can driver via the packet
-socket. By doing that, it is possible to reach the
-net_device_ops::ndo_start_xmit function even if the driver is
-configure in listen only mode.
 
-Add a check in can_dropped_invalid_skb() and to discard the skb if
-CAN_CTRLMODE_LISTENONLY is set.
+--gqifvyadwdcbjat7
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- include/linux/can/dev.h | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+On 13.05.2022 23:23:53, Vincent Mailhol wrote:
+> In listen only mode, tx CAN frames can still reach the driver if
+> injected via the packet socket. This series add a check toward
+> CAN_CTRLMODE_LISTENONLY in can_dropped_invalid_skb() to discard such
+> skb. The first patch does some preparation work and migrates
+> can_dropped_invalid_skb() from skb.h to dev.h. The second and last
+> patch is the actual change.
 
-diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
-index bbe27e22c7a7..c3ed48e54c29 100644
---- a/include/linux/can/dev.h
-+++ b/include/linux/can/dev.h
-@@ -161,6 +161,7 @@ static inline bool can_dropped_invalid_skb(struct net_device *dev,
- 					   struct sk_buff *skb)
- {
- 	const struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
-+	struct can_priv *priv = netdev_priv(dev);
- 
- 	if (skb->protocol == htons(ETH_P_CAN)) {
- 		if (unlikely(skb->len != CAN_MTU ||
-@@ -174,8 +175,13 @@ static inline bool can_dropped_invalid_skb(struct net_device *dev,
- 		goto inval_skb;
- 	}
- 
--	if (!can_skb_headroom_valid(dev, skb))
-+	if (!can_skb_headroom_valid(dev, skb)) {
-+		goto inval_skb;
-+	} else if (priv->ctrlmode & CAN_CTRLMODE_LISTENONLY) {
-+		netdev_info_once(dev,
-+				 "interface in listen only mode, dropping skb\n");
- 		goto inval_skb;
-+	}
- 
- 	return false;
- 
--- 
-2.35.1
+Thanks for your quick patch!
 
+What about moving the function to a .c file? The
+can_dropped_invalid_skb() grew a lot over the years, since it was added
+to the header as a static inline function.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--gqifvyadwdcbjat7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJ+blQACgkQrX5LkNig
+012Bigf+OBMnCULTQxKU9B8Mkb6CCPhadQ7XNbJ+RbQVPcOSTdDHr1dK3PslcrGE
+dBtCKgNBXwKAPNyv6Xkv7WgcDcXXlHbik92UexT3q3dm8By1DtymBQ3SoK+jZ6Aa
+CANx8blpS7Pv+GFqS3gl4F/1s9/Uoq6k5oLEhp/ZCbfSuJD9VaQxgMzDFWWU0SRC
+eWoB790kCRAS7SqPUyfuPM1NCrvCSMKVoU0slhCiz2GS78sTWzxVJ4x05K5GqUTt
+yd0+zimmi/LFZ75ou2UqWtzbXtxav/35+N3lOotJMLCDkddyYHd15dOB0T2qULPk
+rCDvBHYOsHzQqXHssnoBmkFoYC55pQ==
+=PMY2
+-----END PGP SIGNATURE-----
+
+--gqifvyadwdcbjat7--
