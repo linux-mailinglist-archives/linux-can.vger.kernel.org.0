@@ -2,294 +2,298 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31DCE527039
-	for <lists+linux-can@lfdr.de>; Sat, 14 May 2022 11:18:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C31E52706A
+	for <lists+linux-can@lfdr.de>; Sat, 14 May 2022 11:59:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230400AbiENJSl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 14 May 2022 05:18:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41716 "EHLO
+        id S229717AbiENJ72 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 14 May 2022 05:59:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230148AbiENJSl (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 14 May 2022 05:18:41 -0400
-Received: from mxd2.seznam.cz (mxd2.seznam.cz [IPv6:2a02:598:2::210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9157A10B;
-        Sat, 14 May 2022 02:18:35 -0700 (PDT)
-Received: from email.seznam.cz
-        by email-smtpc4b.ng.seznam.cz (email-smtpc4b.ng.seznam.cz [10.23.13.105])
-        id 235a18fbc7f6cbc52287b995;
-        Sat, 14 May 2022 11:18:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seznam.cz; s=beta;
-        t=1652519896; bh=AfizNpjvoMPoHKW3iwxVG5iAuMNJm9Yhmt52FDD66iA=;
-        h=Received:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:Content-Disposition:In-Reply-To:
-         X-szn-frgn:X-szn-frgc;
-        b=PFc6By1n3wINAhyWOBOHgutcX2ubIhTofF/uZAQs5tOAAWcIyrZjZavv1QtIYQI8W
-         gQ7PU3UjALhiHJtrJ8azD8ktFUwsIZd46Ky8Vhn0kZziEgzFtfmWcppS+ISCqQ+eiR
-         EupogX5UpAzJJBzmnPw47N9Cyh0YKkj+fXZviV2o=
-Received: from hopium (ip-89-176-234-80.net.upcbroadband.cz [89.176.234.80])
-        by email-relay30.ng.seznam.cz (Seznam SMTPD 1.3.136) with ESMTP;
-        Sat, 14 May 2022 11:18:10 +0200 (CEST)  
-Date:   Sat, 14 May 2022 11:18:08 +0200
-From:   Matej Vasilevski <matej.vasilevski@seznam.cz>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     devicetree@vger.kernel.org, linux-can@vger.kernel.org,
-        pisa@cmp.felk.cvut.cz, ondrej.ille@gmail.com,
-        netdev@vger.kernel.org, martin.jerabek01@gmail.com
-Subject: Re: [RFC PATCH 1/3] can: ctucanfd: add HW timestamps to RX and error
- CAN frames
-Message-ID: <20220514091741.GA203806@hopium>
-References: <20220512232706.24575-1-matej.vasilevski@seznam.cz>
- <20220512232706.24575-2-matej.vasilevski@seznam.cz>
- <20220513114135.lgbda6armyiccj3o@pengutronix.de>
+        with ESMTP id S231334AbiENJ72 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 14 May 2022 05:59:28 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52E0233;
+        Sat, 14 May 2022 02:59:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1652522356;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=f4ds0C3jmGmDMdzbkIydanf/lftWvGFIc2uX0Axgl6w=;
+    b=qV9u7++LihxYulNj3+R810evchz4u+7u/KChSKmmS/rysWc89DGDKFlQnZe70rEd9q
+    LWyN76GwflFc5T1hLCV4EmvM/9TLHlCI0v+pqyT3VGP3VDn7NcW2HYrp2XcHxO/ewX+x
+    xsXdv83fLeEwb2mVbEcWheU4QQzpm8caWG6iO1sddTyUXY+oWfPmFiNEUBDSRDq0XRN1
+    hXBZkJ6DhKJWQgA8GYqpsj3MRbNM9W3/6ktLYpoCASUOal7isphJgEim+lHyIw/gV/pc
+    H8jurrOu1bCb5zSW50Btu2dyXiQ0DgRnQgPPFnE6JciV6DAaidZPosRYDUtZBSkoRUzo
+    VIcQ==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdBqPeOug2krLFRKxw=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a00:6020:1cff:5b04::b82]
+    by smtp.strato.de (RZmta 47.45.0 AUTH)
+    with ESMTPSA id R0691fy4E9xF4fo
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Sat, 14 May 2022 11:59:15 +0200 (CEST)
+Message-ID: <50077f92-9082-0adb-8daa-a33f0d38159e@hartkopp.net>
+Date:   Sat, 14 May 2022 11:59:09 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220513114135.lgbda6armyiccj3o@pengutronix.de>
-X-szn-frgn: <55922081-9227-4f02-9340-89abb6ab1c4d>
-X-szn-frgc: <0>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v2] can: skb: add extended skb support
+Content-Language: en-US
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de, David Jander <david@protonic.nl>,
+        Devid Antonio Filoni <devid.filoni@egluetechnologies.com>
+References: <20220512125934.774836-1-o.rempel@pengutronix.de>
+ <2cc53d1b-2e16-803f-f528-6b94a812d2d7@hartkopp.net>
+ <20220512174602.GA10124@pengutronix.de>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20220512174602.GA10124@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Marc,
-
-thanks for your review!
-
-I have only one comment regarding the initial timecounter value. Otherwise
-my reply is mostly ACKs.
-
-On Fri, May 13, 2022 at 01:41:35PM +0200, Marc Kleine-Budde wrote:
-> Hello Matej,
-> 
-> thanks for our patch!
-> 
-> On 13.05.2022 01:27:05, Matej Vasilevski wrote:
-> > This patch adds support for retrieving hardware timestamps to RX and
-> > error CAN frames for platform devices. It uses timecounter and
-> > cyclecounter structures, because the timestamping counter width depends
-> > on the IP core implementation (it might not always be 64-bit).
-> > To enable HW timestamps, you have to enable it in the kernel config
-> > and provide the following properties in device tree:
-> 
-> Please no Kconfig option. There is a proper interface to enable/disable
-> time stamps form the user space. IIRC it's an ioctl. But I think the
-> overhead is neglectable here.
-
-I have nothing substantial to say on this matter, the discussion should
-continue in Pavel's thread.
-I don't mind implementing the .ndo_eth_ioctl.
-> 
-> > - ts-used-bits
-> 
-> A property with "width" in the name seems to be more common. You
-> probably have to add the "ctu" vendor prefix. BTW: the bindings document
-> update should come before changing the driver.
-> 
-
-ACK, thanks for the naming suggestion.
-Commit order will be fixed.
-
-> > - add second clock phandle to 'clocks' property
-> > - create 'clock-names' property and name the second clock 'ts_clk'
-> > 
-> > Alternatively, you can set property 'ts-frequency' directly with
-> > the timestamping frequency, instead of setting second clock.
-> 
-> For now, please use a clock property only. If you need ACPI bindings add
-> them later.
-> 
-
-ACK.
-
-> > +config CAN_CTUCANFD_PLATFORM_ENABLE_HW_TIMESTAMPS
-> > +	bool "CTU CAN-FD IP core platform device hardware timestamps"
-> > +	depends on CAN_CTUCANFD_PLATFORM
-> > +	default n
-> > +	help
-> > +	  Enables reading hardware timestamps from the IP core for platform
-> > +	  devices by default. You will have to provide ts-bit-size and
-> > +	  ts-frequency/timestaping clock in device tree for CTU CAN-FD IP cores,
-> > +	  see device tree bindings for more details.
-> 
-> Please no Kconfig option, see above.
-ACK
-
-> > diff --git a/drivers/net/can/ctucanfd/Makefile b/drivers/net/can/ctucanfd/Makefile
-> >  struct ctucan_priv {
-> > @@ -51,6 +60,16 @@ struct ctucan_priv {
-> >  	u32 rxfrm_first_word;
-> >  
-> >  	struct list_head peers_on_pdev;
-> > +
-> > +	struct cyclecounter cc;
-> > +	struct timecounter tc;
-> > +	struct delayed_work timestamp;
-> > +
-> > +	struct clk *timestamp_clk;
-> 
-> > +	u32 timestamp_freq;
-> > +	u32 timestamp_bit_size;
-> 
-> These two are not needed. Fill in struct cyclecounter directly.
-> 
-
-ACK
-
-> >  
-> > +	if (priv->timestamp_enabled && (ctucan_timestamp_init(priv) < 0)) {
-> 
-> ctucan_timestamp_init() will always return 0
-
-ACK. There are some remnants from last minute changes on the work delay
-calculation code, I'll polish it.
-
-> > +	if (priv->timestamp_enabled)
-> > +		dev_info(dev, "Timestamping enabled with counter bit width %u, frequency %u, work delay in jiffies %u\n",
-> > +			 priv->timestamp_bit_size, priv->timestamp_freq, priv->work_delay_jiffies);
-> > +	else
-> > +		dev_info(dev, "Timestamping is disabled\n");
-> 
-> This is probably a bit too loud. Make it _dbg()?
-Yes, good idea.
-
-> > + * This program is distributed in the hope that it will be useful,
-> > + * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> > + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-> > + * GNU General Public License for more details.
-> 
-> With the SPDX-License-Identifier you can skip this.
-ACK.
-
-> 
-> > + ******************************************************************************/
-> > +
-> > +#include "asm-generic/bitops/builtin-ffs.h"
-> 
-> Is linux/bitops.h not enough?
-
-ACK.
-bitops.h is enough, I've just completely forgot to clean up the headers.
-I'll also delete dev_printk.h, it shouldn't be here.
-
-> 
-> > +#include "linux/dev_printk.h"
-> > +#include <linux/clocksource.h>
-> > +#include <linux/math64.h>
-> > +#include <linux/timecounter.h>
-> > +#include <linux/workqueue.h>
-> 
-> please sort alphabetically
-ACK.
-
-> > +int ctucan_calculate_and_set_work_delay(struct ctucan_priv *priv)
-> > +{
-> > +	u32 jiffies_order = fls(HZ);
-> > +	u32 max_shift_left = 63 - jiffies_order;
-> > +	s32 final_shift = (priv->timestamp_bit_size - 1) - max_shift_left;
-> > +	u64 tmp;
-> > +
-> > +	if (!priv->timestamp_freq || !priv->timestamp_bit_size)
-> > +		return -1;
-> 
-> please use proper error return values
-ACK
-
-> 
-> > +
-> > +	/* The formula is work_delay_jiffies = 2**(bit_size - 1) / ts_frequency * HZ
-> > +	 * using (bit_size - 1) instead of full bit_size to read the counter
-> > +	 * roughly twice per period
-> > +	 */
-> > +	tmp = div_u64((u64)HZ << max_shift_left, priv->timestamp_freq);
-> > +
-> > +	if (final_shift > 0)
-> > +		priv->work_delay_jiffies = tmp << final_shift;
-> > +	else
-> > +		priv->work_delay_jiffies = tmp >> -final_shift;
-> > +
-> > +	if (priv->work_delay_jiffies == 0)
-> > +		return -1;
-> > +
-> > +	if (priv->work_delay_jiffies > CTUCANFD_MAX_WORK_DELAY_SEC * HZ)
-> > +		priv->work_delay_jiffies = CTUCANFD_MAX_WORK_DELAY_SEC * HZ;
-> 
-> use min() (or min_t() if needed)
-ACK
-
-> 
-> > +	return 0;
-> > +}
-> > +
-> > +void ctucan_skb_set_timestamp(struct ctucan_priv *priv, struct sk_buff *skb, u64 timestamp)
-> 
-> Can you make the priv pointer const?
-Yes, will do.
-
-> > +int ctucan_timestamp_init(struct ctucan_priv *priv)
-> > +{
-> > +	struct cyclecounter *cc = &priv->cc;
-> > +
-> > +	cc->read = ctucan_timestamp_read;
-> > +	cc->mask = CYCLECOUNTER_MASK(priv->timestamp_bit_size);
-> > +	cc->shift = 10;
-> > +	cc->mult = clocksource_hz2mult(priv->timestamp_freq, cc->shift);
-> 
-> If you frequency and width is not known, it's probably better not to
-> hard code the shift and use clocks_calc_mult_shift() instead:
-> 
-> | https://elixir.bootlin.com/linux/v5.17.7/source/kernel/time/clocksource.c#L47
-
-Thanks for the hint, I'll look into it.
-> 
-> There's no need to do the above init on open(), especially in your case.
-> I know the mcp251xfd does it this way....In your case, as you parse data
-> from DT, it's better to do the parsing in probe and directly do all
-> needed calculations and fill the struct cyclecounter there.
-> 
-> > +
-> 
-> The following code should stay here.
-ACK
-
-> > +	timecounter_init(&priv->tc, &priv->cc, 0);
-> 
-> You here set the offset of the HW clock to 1.1.1970. The mcp driver sets
-> the offset to current time. I think it's convenient to have the current
-> time here....What do you think.
-
-I actually searched in the mailing list and read your conversation with
-Vincent on timestamps starting from 0 or synced to current time.
-https://lore.kernel.org/linux-can/CAMZ6RqL+n4tRy-B-W+fzW5B3QV6Bedrko57pU_0TE023Oxw_5w@mail.gmail.com/
-
-Then I discussed it with Pavel Pisa and he requested to start from 0.
-Reasons are that system time can change (NTP, daylight saving time,
-user settings etc.), so when it starts from 0 it is clear that it is
-"timestamp time".
-
-Are there a lot of CAN drivers synced to system time? I think this would
-be a good argument for syncing, to keep things nice and cohesive in
-the CAN subsystem.
-
-Overall I wouldn't want to block this patch over such a minutiae.
-
-> > +
-> > +	INIT_DELAYED_WORK(&priv->timestamp, ctucan_timestamp_work);
-> > +	schedule_delayed_work(&priv->timestamp, priv->work_delay_jiffies);
-> > +
-> > +	return 0;
-> 
-> make it void - it cannot fail.
-ACK
 
 
-Thanks again for your review and insights. I hope to make the next patch
-version much cleaner.
+On 12.05.22 19:46, Oleksij Rempel wrote:
+> Hi Oliver,
+> 
+> On Thu, May 12, 2022 at 06:54:46PM +0200, Oliver Hartkopp wrote:
+>> Hi Oleksij,
+>>
+>> On 12.05.22 14:59, Oleksij Rempel wrote:
+>>> Add CAN specific skb extension support and add first currently needed
+>>> local_origin variable.
+>>>
+>>> On the CAN stack we push same skb data in different direction depending
+>>> on the interface type:
+>>> - to the HW egress and at same time back to the stack as echo
+>>> - over virtual vcan/vxcan interfaces as egress on one side and ingress on other
+>>>     side of the vxcan tunnel.
+>>> We can't use skb->sk as marker of the origin, because not all packets
+>>> not all packets with local_origin are assigned to some socket. Some of
+>>> them are generate from the kernel, for example like J1939 control messages.
+>>> So, to properly detect flow direction is is better to store this information
+>>> as part of the SKB.
+>>>
+>>> The advantage of using skb_ext is that it is options and extendable
+>>> without affecting other skb users. It can be shared between cloned skbs and
+>>> duplicated only if needed.
+>>>
+>>> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+>>> Cc: Devid Antonio Filoni <devid.filoni@egluetechnologies.com>
+>>> ---
+>>> changes v2:
+>>> - migrate it to SKB_EXT
+>>
+>> The use of SKB_EXT seems to be very costly to just store a boolean value.
+>>
+>> What I could see from some of the other SKB_EXT users this extension (which
+>> performs alloc & COW) is used in special circumstances.
+>>
+>> With your suggestion this additional effort is needed for every CAN related
+>> skb.
+>>
+>> So at least for this use-case extending struct can_skb_priv seems to be more
+>> efficient.
+>>
+>> https://elixir.bootlin.com/linux/latest/source/include/linux/can/skb.h#L44
+>>
+>> We might get into problems with PF_PACKET sockets when extending the
+>> can_skb_priv length beyond HH_DATA_MOD, see:
+>>
+>> https://elixir.bootlin.com/linux/latest/source/include/linux/can/skb.h#L99
+>>
+>> But for now I'm not sure that SKB_EXT isn't too heavy to store that single
+>> flag.
+> 
+> Yes, I was thinking about potential overkill for, currently, just one
+> bit of storage. But here is my motivation:
+> CAN frameworks is currently using two ways to store metaadata (expecpt
+> of SKB):
+> 1. skb->cb. This variant is not extendable and can be used only insight
+>     of one driver.
+> 2. can_skb_priv as part of skb->data->head. Is potentially extendable
+>     but we will need to use skb_copy instead of skb_clone. Because we
+>     can't modify head for clone only. IMO, this will add potentially more
+>     overhead than SKB_EXT.
+> 
+> In long term, as soon as we will need to extend can specific meta
+> data, we will have same situation: it will be not big enough to migrate
+> to SKB_EXT. Maybe we need to move can_skb_priv to SKB_EXT as well?
 
-Kind regards,
-Matej
+I wonder if our current issue with the correct attribution of host 
+generated CAN skbs in j1939 could be solved by additionally setting 
+skb->redirected = 1 when the CAN skb is echo'ed back.
+
+Or what about creating a single socket/sk instance for the j1939 
+protocol which makes j1939 created skbs assigned to the j1939 system?
+
+Best regards,
+Oliver
+
+> 
+> 
+>>>
+>>>    drivers/net/can/vxcan.c |  4 ++++
+>>>    include/linux/can/skb.h |  4 ++++
+>>>    include/linux/skbuff.h  |  3 +++
+>>>    net/can/Kconfig         |  1 +
+>>>    net/can/af_can.c        |  5 +++++
+>>>    net/can/raw.c           | 10 ++++++++--
+>>>    net/core/skbuff.c       |  7 +++++++
+>>>    7 files changed, 32 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/net/can/vxcan.c b/drivers/net/can/vxcan.c
+>>> index 577a80300514..93701a698008 100644
+>>> --- a/drivers/net/can/vxcan.c
+>>> +++ b/drivers/net/can/vxcan.c
+>>> @@ -39,6 +39,7 @@ static netdev_tx_t vxcan_xmit(struct sk_buff *oskb, struct net_device *dev)
+>>>    	struct net_device *peer;
+>>>    	struct canfd_frame *cfd = (struct canfd_frame *)oskb->data;
+>>>    	struct net_device_stats *peerstats, *srcstats = &dev->stats;
+>>> +	struct can_skb_ext *can_ext;
+>>>    	struct sk_buff *skb;
+>>>    	u8 len;
+>>> @@ -66,6 +67,9 @@ static netdev_tx_t vxcan_xmit(struct sk_buff *oskb, struct net_device *dev)
+>>>    	skb->pkt_type   = PACKET_BROADCAST;
+>>>    	skb->dev        = peer;
+>>>    	skb->ip_summed  = CHECKSUM_UNNECESSARY;
+>>> +	can_ext = skb_ext_add(skb, SKB_EXT_CAN);
+>>> +	if (can_ext)
+>>> +		can_ext->local_origin = false;
+>>>    	len = cfd->can_id & CAN_RTR_FLAG ? 0 : cfd->len;
+>>>    	if (netif_rx(skb) == NET_RX_SUCCESS) {
+>>> diff --git a/include/linux/can/skb.h b/include/linux/can/skb.h
+>>> index fdb22b00674a..401b08890d74 100644
+>>> --- a/include/linux/can/skb.h
+>>> +++ b/include/linux/can/skb.h
+>>> @@ -55,6 +55,10 @@ struct can_skb_priv {
+>>>    	struct can_frame cf[];
+>>>    };
+>>> +struct can_skb_ext {
+>>> +	bool local_origin;
+>>> +};
+>>> +
+>>>    static inline struct can_skb_priv *can_skb_prv(struct sk_buff *skb)
+>>>    {
+>>>    	return (struct can_skb_priv *)(skb->head);
+>>> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+>>> index 3270cb72e4d8..d39e70e5f7f2 100644
+>>> --- a/include/linux/skbuff.h
+>>> +++ b/include/linux/skbuff.h
+>>> @@ -4563,6 +4563,9 @@ enum skb_ext_id {
+>>>    #endif
+>>>    #if IS_ENABLED(CONFIG_MCTP_FLOWS)
+>>>    	SKB_EXT_MCTP,
+>>> +#endif
+>>> +#if IS_ENABLED(CONFIG_CAN)
+>>> +	SKB_EXT_CAN,
+>>>    #endif
+>>>    	SKB_EXT_NUM, /* must be last */
+>>>    };
+>>> diff --git a/net/can/Kconfig b/net/can/Kconfig
+>>> index a9ac5ffab286..eb826e3771fe 100644
+>>> --- a/net/can/Kconfig
+>>> +++ b/net/can/Kconfig
+>>> @@ -5,6 +5,7 @@
+>>>    menuconfig CAN
+>>>    	tristate "CAN bus subsystem support"
+>>> +	select SKB_EXTENSIONS
+>>>    	help
+>>>    	  Controller Area Network (CAN) is a slow (up to 1Mbit/s) serial
+>>>    	  communications protocol. Development of the CAN bus started in
+>>> diff --git a/net/can/af_can.c b/net/can/af_can.c
+>>> index 1fb49d51b25d..329c540d3ddf 100644
+>>> --- a/net/can/af_can.c
+>>> +++ b/net/can/af_can.c
+>>> @@ -201,6 +201,7 @@ int can_send(struct sk_buff *skb, int loop)
+>>>    	struct sk_buff *newskb = NULL;
+>>>    	struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
+>>>    	struct can_pkg_stats *pkg_stats = dev_net(skb->dev)->can.pkg_stats;
+>>> +	struct can_skb_ext *can_ext;
+>>>    	int err = -EINVAL;
+>>>    	if (skb->len == CAN_MTU) {
+>>> @@ -240,6 +241,10 @@ int can_send(struct sk_buff *skb, int loop)
+>>>    	skb_reset_network_header(skb);
+>>>    	skb_reset_transport_header(skb);
+>>> +	can_ext = skb_ext_add(skb, SKB_EXT_CAN);
+>>> +	if (can_ext)
+>>> +		can_ext->local_origin = true;
+>>> +
+>>>    	if (loop) {
+>>>    		/* local loopback of sent CAN frames */
+>>> diff --git a/net/can/raw.c b/net/can/raw.c
+>>> index b7dbb57557f3..cba18cdf017f 100644
+>>> --- a/net/can/raw.c
+>>> +++ b/net/can/raw.c
+>>> @@ -121,6 +121,7 @@ static void raw_rcv(struct sk_buff *oskb, void *data)
+>>>    {
+>>>    	struct sock *sk = (struct sock *)data;
+>>>    	struct raw_sock *ro = raw_sk(sk);
+>>> +	struct can_skb_ext *can_ext;
+>>>    	struct sockaddr_can *addr;
+>>>    	struct sk_buff *skb;
+>>>    	unsigned int *pflags;
+>>> @@ -173,8 +174,13 @@ static void raw_rcv(struct sk_buff *oskb, void *data)
+>>>    	/* add CAN specific message flags for raw_recvmsg() */
+>>>    	pflags = raw_flags(skb);
+>>>    	*pflags = 0;
+>>> -	if (oskb->sk)
+>>> -		*pflags |= MSG_DONTROUTE;
+>>> +
+>>> +	can_ext = skb_ext_find(oskb, SKB_EXT_CAN);
+>>> +	if (can_ext) {
+>>> +		if (can_ext->local_origin)
+>>> +			*pflags |= MSG_DONTROUTE;
+>>> +	}
+>>> +
+>>>    	if (oskb->sk == sk)
+>>>    		*pflags |= MSG_CONFIRM;
+>>> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+>>> index 475183f37891..5a5409ccb767 100644
+>>> --- a/net/core/skbuff.c
+>>> +++ b/net/core/skbuff.c
+>>> @@ -61,6 +61,7 @@
+>>>    #include <linux/if_vlan.h>
+>>>    #include <linux/mpls.h>
+>>>    #include <linux/kcov.h>
+>>> +#include <linux/can/skb.h>
+>>>    #include <net/protocol.h>
+>>>    #include <net/dst.h>
+>>> @@ -4338,6 +4339,9 @@ static const u8 skb_ext_type_len[] = {
+>>>    #if IS_ENABLED(CONFIG_MCTP_FLOWS)
+>>>    	[SKB_EXT_MCTP] = SKB_EXT_CHUNKSIZEOF(struct mctp_flow),
+>>>    #endif
+>>> +#if IS_ENABLED(CONFIG_CAN)
+>>> +	[SKB_EXT_CAN] = SKB_EXT_CHUNKSIZEOF(struct can_skb_ext),
+>>> +#endif
+>>>    };
+>>>    static __always_inline unsigned int skb_ext_total_length(void)
+>>> @@ -4357,6 +4361,9 @@ static __always_inline unsigned int skb_ext_total_length(void)
+>>>    #endif
+>>>    #if IS_ENABLED(CONFIG_MCTP_FLOWS)
+>>>    		skb_ext_type_len[SKB_EXT_MCTP] +
+>>> +#endif
+>>> +#if IS_ENABLED(CONFIG_CAN)
+>>> +		skb_ext_type_len[SKB_EXT_CAN] +
+>>>    #endif
+>>>    		0;
+>>>    }
+>>
+>>
+> 
