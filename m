@@ -2,62 +2,65 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A942D526F74
-	for <lists+linux-can@lfdr.de>; Sat, 14 May 2022 09:15:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79029526E94
+	for <lists+linux-can@lfdr.de>; Sat, 14 May 2022 09:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231228AbiENDOi (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 13 May 2022 23:14:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47740 "EHLO
+        id S230339AbiENDoF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 13 May 2022 23:44:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231151AbiENDOh (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 13 May 2022 23:14:37 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 614DB3545A5;
-        Fri, 13 May 2022 20:14:36 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-2fb9a85a124so104116617b3.13;
-        Fri, 13 May 2022 20:14:36 -0700 (PDT)
+        with ESMTP id S231588AbiENDoE (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 13 May 2022 23:44:04 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F8811459;
+        Fri, 13 May 2022 20:44:00 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-2fb9a85a124so104383377b3.13;
+        Fri, 13 May 2022 20:44:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=8WSBvqMryDIwNgu/wfY0/kMuB0Kk0HwqZOwbYGWHfGo=;
-        b=YKjLuOpx4hqmXTkS1EgYbu6JMMXHxd2Xe/P2hKK8yMT9mF781cJ8rkpPKmPAQQHMa7
-         k9kCDoODBEYRzCoPlIfJIjmaAYTVgiYUBn7Gt9ef875ai3va/8Ex9WCbdSHRNLpbi8yx
-         1Qlt/VuzO5EqcAtKzF0sr6HYswS2WTbO0JJUBtlCFsdIjl1gQXFxav5tuijsnmGB/uJ4
-         Fp8HvK/QyY0Pwwjhw0Yj0uoE9/bZBXlhxE42vDKWdsEIegT3YGXsvBJCXmBn5XZ903ly
-         GHcl3o5I+2mnWI+bqIfsJeDB71YvSM8d80t8bUO4qR31/AJ/AI1L3tQmb6z7sogeaAdE
-         Iu6Q==
+        bh=sJzlF99MMJ/4VRi/5NrL6Jp0J+n+hynsI8EUWbxr3us=;
+        b=fTANJ+/WK7bsKQwvKUHQRV4wA+acsDpY2tuK2pyYJAxkynd59svNWPKUwZH2V6NW8z
+         GL9wpaqBs+bpJzK9mnA6bD+MbbH221zV6U7cIWZNWqqjwYxhpyWa/fRnOt1MFlTWZ9k9
+         aDl9ScNCvqLqu0WVFjSS0SWCRPTIxF4Y44r82FLlKodhu2PFVnkNiBVwAiSUoAzDSspX
+         eMmQjAravcS19tDiDafxdZvdRPP8Z79RIIJPFM8LoWJ6nLdIjZJrQf+8oVC9DXf1Vqn6
+         Z9Q12S4exeMiACWDbGqvrP32bByRNpZbAGs1WyaO7AGtGyfRuW9V+Sj4q2e+bo9Osqk/
+         2/gA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=8WSBvqMryDIwNgu/wfY0/kMuB0Kk0HwqZOwbYGWHfGo=;
-        b=3w3zlGI0ENnLSSRCZH74DnmX8JknVPW6VPBCh99UapF7HF5rwFQHCkxbPbS5WUinCq
-         wOhUmvtNZdJ9TK/sUv18ICMqAhPKlIaZc/T97SRGBmmI2HuzyBf70ma5x35rn/wKvTe1
-         W7A9zQbefVOnFtoIv3jHBb4px2mjKyc1EB7/VH14W+sqiRvWaOvr/kva9ei1TCXWSjuI
-         m6IAlsJlyIGmfnSdHOc7ak/TY+hR2HXLl84IMzT03BZ7acvZF9dBh3Azr9sxPx7/t1zi
-         fHq6ui1qltdo8FybtMJ110p03O/O/CmTNwyfS0So78LGcMn9JOn+TsXhn8yLMG33Eadv
-         Bc5w==
-X-Gm-Message-State: AOAM531ODVK3BT5+MH09lJbYZa7d3FcyN++x3mKjxEzMRqjGwFUFIxLz
-        SPWNdm5KzbtNCM2MrFnzMSYb5t1MR6CIBhVv3sk=
-X-Google-Smtp-Source: ABdhPJw7JrVfIitnZT9pffDpMcPH/xA/EPR9OKOOLBivUeA/+9GaciKyeWKyaWQn7n3kzGn5TQRgOr8/PlqMRoIjcMM=
-X-Received: by 2002:a81:3d43:0:b0:2f9:7d:f320 with SMTP id k64-20020a813d43000000b002f9007df320mr9319855ywa.191.1652498075592;
- Fri, 13 May 2022 20:14:35 -0700 (PDT)
+        bh=sJzlF99MMJ/4VRi/5NrL6Jp0J+n+hynsI8EUWbxr3us=;
+        b=M56TniF6pmSf0sHy4R/UdeIEpbORpQe3LSd/ENtS53Exm5RhAWsfcyAkbaz34OnUhW
+         881k3UksTywgQOh/mhc/tgr0ttOd232f6FdmvhLvVlmcPqL/YrMxKiYfNSCAmVqpqZEQ
+         t9nL2AeCFRCpgxUioDCoeKnmvUtzt0ZAYzf76L7mHxM1IJwZpob7ENMWm/mapdmvjjm1
+         /6P1kWdirdamCxyReMbQRexS5QMCLHPUBM1BfH4jwEtlzymK2FgjWpDfnugRmJqZ06+L
+         97ustL+Eg1HjJQ2Oi2s6NgtbSIkO/FJRN76SC3I4lVBaUDriv9Lg+N7bI2Ll2MhbDrkn
+         1c5g==
+X-Gm-Message-State: AOAM5314+K06e8XsJGnwazRPkeuWCABsR1TSpWLswNWcIx3TG+2sLuiI
+        OtlDei3sl59NA9h4MHOn0hWIoAgJ7BfiXBEB1785CcAOKNoY4Q==
+X-Google-Smtp-Source: ABdhPJzmix6rDFK5h3SwvbkKf0znC1BWS4iJESrC8+ST33B0hDFl9FnY/gGZ7lNI9THPgdODYfEI/44xYMJzteee+XA=
+X-Received: by 2002:a81:ff12:0:b0:2db:2d8a:9769 with SMTP id
+ k18-20020a81ff12000000b002db2d8a9769mr9224115ywn.172.1652499839751; Fri, 13
+ May 2022 20:43:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220512182921.193462-1-max@enpas.org> <CAMZ6Rq+BwL1NPTLtC5sQAd4z1Kc1TFJPPoW-i+0RZ5dnFaWYiw@mail.gmail.com>
- <CAMZ6RqKjGJyOPCQvS95ZUc6UrgaFzjunRhU=10biAAWYT_V_ZQ@mail.gmail.com> <20220513205907.6d5473ff.max@enpas.org>
-In-Reply-To: <20220513205907.6d5473ff.max@enpas.org>
+References: <20220511121913.2696181-1-o.rempel@pengutronix.de>
+ <b631b022-72d5-9160-fd13-f33c80dbbe59@hartkopp.net> <20220511132421.7o5a3po32l3w2wcr@pengutronix.de>
+ <20220511143620.kphwgp2vhjyoecs5@pengutronix.de>
+In-Reply-To: <20220511143620.kphwgp2vhjyoecs5@pengutronix.de>
 From:   Vincent Mailhol <vincent.mailhol@gmail.com>
-Date:   Sat, 14 May 2022 12:14:24 +0900
-Message-ID: <CAMZ6RqLj2eLX2UWMvGc9rH2SP6HNuqBAXnwJ6q6qvk+7QWE8pA@mail.gmail.com>
-Subject: Re: [PATCH v6] can, tty: can327 CAN/ldisc driver for ELM327 based
- OBD-II adapters
-To:     Max Staudt <max@enpas.org>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Oliver Neukum <oneukum@suse.com>, linux-kernel@vger.kernel.org
+Date:   Sat, 14 May 2022 12:43:48 +0900
+Message-ID: <CAMZ6RqL7p2Thks2RNX3CYB9XxXPJB2f5=NArzrT3O2-BjmH_dg@mail.gmail.com>
+Subject: Re: [PATCH 1/1] can: skb: add and set local_origin flag
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Devid Antonio Filoni <devid.filoni@egluetechnologies.com>,
+        kernel@pengutronix.de, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Jander <david@protonic.nl>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -69,44 +72,52 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Sat. 14 mai 2022 at 03:59, Max Staudt <max@enpas.org> wrote:
-> On Fri, 13 May 2022 15:31:20 +0900
-> Vincent Mailhol <vincent.mailhol@gmail.com> wrote:
-> > On Fri. 13 May 2022 at 11:38, Vincent Mailhol
-> > <vincent.mailhol@gmail.com> wrote: [...]
-> > > > +       case ELM327_STATE_RECEIVING:
-> > > > +               /* Find <CR> delimiting feedback lines. */
-> > > > +               for (len = 0;
-> > > > +                    (len < elm->rxfill) && (elm->rxbuf[len] !=
-> > > > '\r');
-> > > > +                    len++) {
-> > > > +                       /* empty loop */
+On Sat. 14 May 2022 at 12:29, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> On 11.05.2022 15:24:21, Marc Kleine-Budde wrote:
+> > On 11.05.2022 14:38:32, Oliver Hartkopp wrote:
+> > > IMO this patch does not work as intended.
 > > >
-> > > Question of taste but would prefer a while look with the len++ in
-> > > the body (if you prefer to do as above, no need to argue, just keep
-> > > it like it is).
+> > > You probably need to revisit every place where can_skb_reserve() is used,
+> > > e.g. in raw_sendmsg().
 > >
-> > Actually, what about this?
+> > And the loopback for devices that don't support IFF_ECHO:
 > >
-> > len = strnchr(elm->rxbuf, elm->rxfill, '\r');
+> > | https://elixir.bootlin.com/linux/latest/source/net/can/af_can.c#L257
 >
-> Actually I'd use memchr() if anything, but not really here. I do end up
-> using the actual index. And since both strchr() and mrmchr() return
-> pointers, I'd rather avoid them because I prefer to use indices
-> whenever possible.
+> BTW: There is a bug with interfaces that don't support IFF_ECHO.
+>
+> Assume an invalid CAN frame is passed to can_send() on an interface that
+> doesn't support IFF_ECHO. The above mentioned code does happily generate
+> an echo frame and it's send, even if the driver drops it, due to
+> can_dropped_invalid_skb(dev, skb).
+>
+> The echoed back CAN frame is treated in raw_rcv() as if the headroom is valid:
+>
+> | https://elixir.bootlin.com/linux/v5.17.6/source/net/can/raw.c#L138
+>
+> But as far as I can see the can_skb_headroom_valid() check never has
+> been done. What about this patch?
+>
+> index 1fb49d51b25d..fda4807ad165 100644
+> --- a/net/can/af_can.c
+> +++ b/net/can/af_can.c
+> @@ -255,6 +255,9 @@ int can_send(struct sk_buff *skb, int loop)
+>                  */
+>
+>                 if (!(skb->dev->flags & IFF_ECHO)) {
+> +                       if (can_dropped_invalid_skb(dev, skb))
+> +                               return -EINVAL;
+> +
 
-You are right. strnchr()'s result can not be used as is. I was a bit
-careless when writing my response.
+This means that can_dropped_invalid_skb() would be called twice: one
+time in can_send() and one time in the driver's xmit() function,
+right?
+It would be nice to find a trick to detect whether the skb was
+injected through the packet socket or not in order not to execute
+can_dropped_invalid_skb() twice. I guess the information of the
+provenance of the skb is available somewhere, just not sure where (not
+familiar with the packet socket).
 
-But I still think it is possible to do pointer arithmetic.
 
-len = strnchr(elm->rxbuf, elm->rxfill, '\r') - elm->rxbuf;
-(I let you check that I did not do an off by one mistake).
-
-The above should also work with memchr(). Although the C standard
-doesn't allow pointer arithmetic on void *, GNU C adds an extension
-for that: https://gcc.gnu.org/onlinedocs/gcc/Pointer-Arith.html
-
-As I said before, your for loop is not fundamentally wrong, this is
-just not my prefered approach. You have my suggestion, choose what you
-prefer.
+Yours sincerely,
+Vincent Mailhol
