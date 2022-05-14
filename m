@@ -2,127 +2,99 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57B015271DB
-	for <lists+linux-can@lfdr.de>; Sat, 14 May 2022 16:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F34E52738A
+	for <lists+linux-can@lfdr.de>; Sat, 14 May 2022 20:58:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233165AbiENOSJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 14 May 2022 10:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57498 "EHLO
+        id S229472AbiENS5s (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 14 May 2022 14:57:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233188AbiENOR4 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 14 May 2022 10:17:56 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37E0DFE9;
-        Sat, 14 May 2022 07:17:42 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id b12so1138365pju.3;
-        Sat, 14 May 2022 07:17:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ZEhSGoMoojYAD36SANNLcism31dWp4f4Nf5+aItJuTY=;
-        b=jbklFPhslW+4+HkKyrtVXePxSFmMiySYB9NlkM82qwUxV8msgdLqyTMXdM5J1D4Sj3
-         ee47pqFiYwtIU5YThhtubn4Xepiuv3+7H1I83C3XZV6H1nFWvUm3RnPZ5TNjUj+hfoq9
-         G4W+V62LmFEBFcc8Qkn2M8/ai4vSycDl7R/rfvkYvg359NOM7aUrW7kYA6QVM8vebaH8
-         0c2kVrNGpB5WMhFGulffw2N8wwhSTwgZpJYTsgVVKocnLBinHyXR4PLcc1lc6rvbY+gp
-         kc9tWTnBCojyNcT41fq6r6eRMfexRZ9Bqf+WdfcICVefWdyxaVwJNOis3qhjbbxMltva
-         BN2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=ZEhSGoMoojYAD36SANNLcism31dWp4f4Nf5+aItJuTY=;
-        b=PRZAyr4lvlZ9TTPN6qoNbCAL0dz9enMw0R7T9V2qzBi1ZVZJJDglZkBBaJKmz4KMQ7
-         fclA4oEbIAI/qfQ3E/CrE76TgazbaP7DbbXT649b5El/QaFXJ334S4ET1psw+EvkbKiv
-         ujSR6mTykx55WoPCCQxnpLddK4NiZ+vvvssX9OrVyjkhbMsr/FijPAxRyZVP/prVZ38d
-         Q4r6Z+gTSjZ7aiEWxqMjcRPAJyF5NXaBVtVsWpm4UxfcKPRbMxBbbRn3OUgfBcsMvMK/
-         G9YPtNZfVhUUXAI/HmcrF6JdWmJyNdJoNk0MRwfvfgGgrleDXZ1HWiSc7NRLqmCSctrR
-         GmQQ==
-X-Gm-Message-State: AOAM531NPEa234VDX+YOWkNWHZbeOlGUHYYHm/vxFaMJKmiAVB2dEaO7
-        1KIfwNactg+GYttW5om0lGE=
-X-Google-Smtp-Source: ABdhPJzUSRBGx8S6BfJhi0bU2llugcyFbguZzUWUlbDGCnMW6DC9OHT0oX2pZFcdesE+mCKW/C6CxA==
-X-Received: by 2002:a17:90b:4a4a:b0:1dc:4731:31a4 with SMTP id lb10-20020a17090b4a4a00b001dc473131a4mr10171413pjb.19.1652537862493;
-        Sat, 14 May 2022 07:17:42 -0700 (PDT)
-Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id x8-20020a17090a530800b001cd4989feccsm5298541pjh.24.2022.05.14.07.17.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 May 2022 07:17:42 -0700 (PDT)
-Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Max Staudt <max@enpas.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        netdev@vger.kernel.org,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v3 4/4] can: dev: drop tx skb if in listen only mode
-Date:   Sat, 14 May 2022 23:16:50 +0900
-Message-Id: <20220514141650.1109542-5-mailhol.vincent@wanadoo.fr>
+        with ESMTP id S234738AbiENS5r (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 14 May 2022 14:57:47 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567D313F08
+        for <linux-can@vger.kernel.org>; Sat, 14 May 2022 11:57:46 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1npwxU-0001yt-R3
+        for linux-can@vger.kernel.org; Sat, 14 May 2022 20:57:44 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 4CBAE7E3CB
+        for <linux-can@vger.kernel.org>; Sat, 14 May 2022 18:57:44 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id DFFFE7E3C6;
+        Sat, 14 May 2022 18:57:43 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id d42e406e;
+        Sat, 14 May 2022 18:57:43 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH net 0/2] pull-request: can 2022-05-14
+Date:   Sat, 14 May 2022 20:57:40 +0200
+Message-Id: <20220514185742.407230-1-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220514141650.1109542-1-mailhol.vincent@wanadoo.fr>
-References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
- <20220514141650.1109542-1-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Frames can be directly injected to a can driver via the packet
-socket. By doing that, it is possible to reach the
-net_device_ops::ndo_start_xmit function even if the driver is
-configured in listen only mode.
+Hello Jakub, hello David,
 
-Add a check in can_dropped_invalid_skb() to discard the skb if
-CAN_CTRLMODE_LISTENONLY is set.
+this is a pull request of 2 patches for net/master.
 
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Changes to linux-can-fixes-for-5.18-20220513:
+- adjusted Fixes: Tag on "Revert "can: m_can: pci: use custom bit timings for Elkhart Lake""
+  (Thanks Jakub)
+
+Both patches are by Jarkko Nikula, target the m_can PCI driver
+bindings, and fix usage of wrong bit timing constants for the Elkhart
+Lake platform.
+
+regards,
+Marc
+
 ---
- drivers/net/can/dev/skb.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/can/dev/skb.c b/drivers/net/can/dev/skb.c
-index 8b1991130de5..f7420fc43b99 100644
---- a/drivers/net/can/dev/skb.c
-+++ b/drivers/net/can/dev/skb.c
-@@ -5,6 +5,7 @@
-  */
- 
- #include <linux/can/dev.h>
-+#include <linux/can/netlink.h>
- 
- /* Local echo of CAN messages
-  *
-@@ -286,6 +287,7 @@ static bool can_skb_headroom_valid(struct net_device *dev, struct sk_buff *skb)
- bool can_dropped_invalid_skb(struct net_device *dev, struct sk_buff *skb)
- {
- 	const struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
-+	struct can_priv *priv = netdev_priv(dev);
- 
- 	if (skb->protocol == htons(ETH_P_CAN)) {
- 		if (unlikely(skb->len != CAN_MTU ||
-@@ -299,8 +301,13 @@ bool can_dropped_invalid_skb(struct net_device *dev, struct sk_buff *skb)
- 		goto inval_skb;
- 	}
- 
--	if (!can_skb_headroom_valid(dev, skb))
-+	if (!can_skb_headroom_valid(dev, skb)) {
-+		goto inval_skb;
-+	} else if (priv->ctrlmode & CAN_CTRLMODE_LISTENONLY) {
-+		netdev_info_once(dev,
-+				 "interface in listen only mode, dropping skb\n");
- 		goto inval_skb;
-+	}
- 
- 	return false;
- 
--- 
-2.35.1
+The following changes since commit f3f19f939c11925dadd3f4776f99f8c278a7017b:
+
+  Merge tag 'net-5.18-rc7' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2022-05-12 11:51:45 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-5.18-20220514
+
+for you to fetch changes up to d6da7881020f9b37edb80ada12ce9b50b9232dc1:
+
+  can: m_can: remove support for custom bit timing, take #2 (2022-05-14 20:53:01 +0200)
+
+----------------------------------------------------------------
+linux-can-fixes-for-5.18-20220514
+
+----------------------------------------------------------------
+Jarkko Nikula (2):
+      Revert "can: m_can: pci: use custom bit timings for Elkhart Lake"
+      can: m_can: remove support for custom bit timing, take #2
+
+ drivers/net/can/m_can/m_can.c     | 24 +++++---------------
+ drivers/net/can/m_can/m_can.h     |  3 ---
+ drivers/net/can/m_can/m_can_pci.c | 48 ++++-----------------------------------
+ 3 files changed, 10 insertions(+), 65 deletions(-)
+
 
