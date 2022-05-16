@@ -2,59 +2,54 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A098B52926B
-	for <lists+linux-can@lfdr.de>; Mon, 16 May 2022 23:08:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2233529253
+	for <lists+linux-can@lfdr.de>; Mon, 16 May 2022 23:08:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347824AbiEPUv7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 16 May 2022 16:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49070 "EHLO
+        id S1348421AbiEPVFB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 16 May 2022 17:05:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348654AbiEPUvW (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 16 May 2022 16:51:22 -0400
+        with ESMTP id S1348691AbiEPVEW (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 16 May 2022 17:04:22 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15786393D3
-        for <linux-can@vger.kernel.org>; Mon, 16 May 2022 13:26:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23365C65B
+        for <linux-can@vger.kernel.org>; Mon, 16 May 2022 13:40:04 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1nqhIh-0006Du-HY
-        for linux-can@vger.kernel.org; Mon, 16 May 2022 22:26:43 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 29ACD7FB76
-        for <linux-can@vger.kernel.org>; Mon, 16 May 2022 20:26:39 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        id 1nqhVa-0007jS-Ks; Mon, 16 May 2022 22:40:02 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 7FC8E7FB66;
-        Mon, 16 May 2022 20:26:38 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 14c0b072;
-        Mon, 16 May 2022 20:26:35 +0000 (UTC)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 860AB7FBBC;
+        Mon, 16 May 2022 20:40:01 +0000 (UTC)
+Date:   Mon, 16 May 2022 22:40:00 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Akira Yokosawa <akiyks@gmail.com>,
-        Pavel Pisa <pisa@cmp.felk.cvut.cz>,
-        Martin Jerabek <martin.jerabek01@gmail.com>,
-        Ondrej Ille <ondrej.ille@gmail.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next 9/9] docs: ctucanfd: Use 'kernel-figure' directive instead of 'figure'
-Date:   Mon, 16 May 2022 22:26:25 +0200
-Message-Id: <20220516202625.1129281-10-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220516202625.1129281-1-mkl@pengutronix.de>
-References: <20220516202625.1129281-1-mkl@pengutronix.de>
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Max Staudt <max@enpas.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v3 1/4] can: slcan: use can_dropped_invalid_skb() instead
+ of manual check
+Message-ID: <20220516204000.t7yhhtp3jtekg7ar@pengutronix.de>
+References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
+ <20220514141650.1109542-1-mailhol.vincent@wanadoo.fr>
+ <20220514141650.1109542-2-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qi7wwt46b6orgwpu"
+Content-Disposition: inline
+In-Reply-To: <20220514141650.1109542-2-mailhol.vincent@wanadoo.fr>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,63 +57,43 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Akira Yokosawa <akiyks@gmail.com>
 
-Two issues were observed in the ReST doc added by commit c3a0addefbde
-("docs: ctucanfd: CTU CAN FD open-source IP core documentation.")
-with Sphinx versions 2.4.4 and 4.5.0.
+--qi7wwt46b6orgwpu
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The plain "figure" directive broke "make pdfdocs" due to a missing
-PDF figure.  For conversion of SVG -> PDF to work, the "kernel-figure"
-directive, which is an extension for kernel documentation, should
-be used instead.
+On 14.05.2022 23:16:47, Vincent Mailhol wrote:
+> slcan does a manual check in slc_xmit() to verify if the skb is
+> valid. This check is incomplete, use instead
+> can_dropped_invalid_skb().
+>=20
+> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
-The directive of "code:: raw" causes a warning from both
-"make htmldocs" and "make pdfdocs", which reads:
+I've taken this patch into the latest pull request to net-next.
 
-    [...]/can/ctu/ctucanfd-driver.rst:75: WARNING: Pygments lexer name
-    'raw' is not known
+regards,
+Marc
 
-A plain literal-block marker should suffice where no syntax
-highlighting is intended.
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-Fix the issues by using suitable directive and marker.
+--qi7wwt46b6orgwpu
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Fixes: c3a0addefbde ("docs: ctucanfd: CTU CAN FD open-source IP core documentation.")
-Link: https://lore.kernel.org/all/5986752a-1c2a-5d64-f91d-58b1e6decd17@gmail.com
-Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
-Acked-by: Pavel Pisa <pisa@cmp.felk.cvut.cz>
-Cc: Martin Jerabek <martin.jerabek01@gmail.com>
-Cc: Ondrej Ille <ondrej.ille@gmail.com>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- .../networking/device_drivers/can/ctu/ctucanfd-driver.rst     | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst b/Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst
-index 2fde5551e756..40c92ea272af 100644
---- a/Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst
-+++ b/Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst
-@@ -72,7 +72,7 @@ it is reachable (on which bus it resides) and its configuration –
- registers address, interrupts and so on. An example of such a device
- tree is given in .
- 
--.. code:: raw
-+::
- 
-            / {
-                /* ... */
-@@ -451,7 +451,7 @@ the FIFO is maintained, together with priority rotation, is depicted in
- 
- |
- 
--.. figure:: fsm_txt_buffer_user.svg
-+.. kernel-figure:: fsm_txt_buffer_user.svg
- 
-    TX Buffer states with possible transitions
- 
--- 
-2.35.1
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKCtp4ACgkQrX5LkNig
+0112AAf9EDMHiYNZoWtjw22NJonJySrZp/LhwR3Zxjqt8dzAScwqNu7By00++gid
+y2c/5koi0tRHl3dEfYwT+JqmaS2ywuHCIaovOFR9/8XW6gz3risdRyWisdKL1QaV
+ICgGVgWr0PdlmkKzacM2VAZjLfFQTrE4pjuTexPGNv+NGwdcoPQbvnlNVkFWFaCf
+EcDZT4X7I140UPwlA+59MPQkOp0WphjudRS6PeYprC6Io3m4fvQ/LCCCt33q4b1n
+JrkRLvNA5u0do0+4rq0ygbAYZUPLeJ8i6TWTDEagLQ8EFicGrOV57DifMrxGBHJu
+0Ejnhezuqw8XE0FgkIFmfCI2cjLAWg==
+=gWnZ
+-----END PGP SIGNATURE-----
 
-
+--qi7wwt46b6orgwpu--
