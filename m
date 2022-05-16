@@ -2,45 +2,45 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA21529226
-	for <lists+linux-can@lfdr.de>; Mon, 16 May 2022 23:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AD8E52921B
+	for <lists+linux-can@lfdr.de>; Mon, 16 May 2022 23:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347095AbiEPUv6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 16 May 2022 16:51:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39270 "EHLO
+        id S1346076AbiEPUv5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 16 May 2022 16:51:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348553AbiEPUvQ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 16 May 2022 16:51:16 -0400
+        with ESMTP id S1348606AbiEPUvU (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 16 May 2022 16:51:20 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE4E2AE09
-        for <linux-can@vger.kernel.org>; Mon, 16 May 2022 13:26:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB0333A06
+        for <linux-can@vger.kernel.org>; Mon, 16 May 2022 13:26:43 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1nqhIf-0006A1-0i
-        for linux-can@vger.kernel.org; Mon, 16 May 2022 22:26:41 +0200
+        id 1nqhIf-0006Al-W2
+        for linux-can@vger.kernel.org; Mon, 16 May 2022 22:26:42 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id DCB1E7FB59
-        for <linux-can@vger.kernel.org>; Mon, 16 May 2022 20:26:37 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id 428F27FB62
+        for <linux-can@vger.kernel.org>; Mon, 16 May 2022 20:26:38 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 83E297FB4F;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id CC6B57FB56;
         Mon, 16 May 2022 20:26:37 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 299e40d6;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 5ae4276d;
         Mon, 16 May 2022 20:26:35 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
         kernel@pengutronix.de,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next 6/9] can: slcan: slc_xmit(): use can_dropped_invalid_skb() instead of manual check
-Date:   Mon, 16 May 2022 22:26:22 +0200
-Message-Id: <20220516202625.1129281-7-mkl@pengutronix.de>
+Subject: [PATCH net-next 7/9] dt-bindings: can: renesas,rcar-canfd: Make interrupt-names required
+Date:   Mon, 16 May 2022 22:26:23 +0200
+Message-Id: <20220516202625.1129281-8-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220516202625.1129281-1-mkl@pengutronix.de>
 References: <20220516202625.1129281-1-mkl@pengutronix.de>
@@ -59,33 +59,49 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+From: Geert Uytterhoeven <geert+renesas@glider.be>
 
-slcan does a manual check in slc_xmit() to verify if the skb is valid.
-This check is incomplete, use instead can_dropped_invalid_skb().
+The Renesas R-Car CAN FD Controller always uses two or more interrupts.
+Make the interrupt-names properties a required property, to make it
+easier to identify the individual interrupts.
 
-Link: https://lore.kernel.org/all/20220514141650.1109542-2-mailhol.vincent@wanadoo.fr
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Update the example accordingly.
+
+Link: https://lore.kernel.org/all/a68e65955e0df4db60233d468f348203c2e7b940.1651512451.git.geert+renesas@glider.be
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/slcan.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../devicetree/bindings/net/can/renesas,rcar-canfd.yaml        | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/can/slcan.c b/drivers/net/can/slcan.c
-index ec294d0c5722..64a3aee8a7da 100644
---- a/drivers/net/can/slcan.c
-+++ b/drivers/net/can/slcan.c
-@@ -359,8 +359,8 @@ static netdev_tx_t slc_xmit(struct sk_buff *skb, struct net_device *dev)
- {
- 	struct slcan *sl = netdev_priv(dev);
+diff --git a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
+index 9fc137fafed9..6f71fc96bc4e 100644
+--- a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
++++ b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
+@@ -88,6 +88,7 @@ required:
+   - compatible
+   - reg
+   - interrupts
++  - interrupt-names
+   - clocks
+   - clock-names
+   - power-domains
+@@ -136,7 +137,6 @@ then:
+         - const: rstc_n
  
--	if (skb->len != CAN_MTU)
--		goto out;
-+	if (can_dropped_invalid_skb(dev, skb))
-+		return NETDEV_TX_OK;
- 
- 	spin_lock(&sl->lock);
- 	if (!netif_running(dev))  {
+   required:
+-    - interrupt-names
+     - reset-names
+ else:
+   properties:
+@@ -167,6 +167,7 @@ examples:
+             reg = <0xe66c0000 0x8000>;
+             interrupts = <GIC_SPI 29 IRQ_TYPE_LEVEL_HIGH>,
+                          <GIC_SPI 30 IRQ_TYPE_LEVEL_HIGH>;
++            interrupt-names = "ch_int", "g_int";
+             clocks = <&cpg CPG_MOD 914>,
+                      <&cpg CPG_CORE R8A7795_CLK_CANFD>,
+                      <&can_clk>;
 -- 
 2.35.1
 
