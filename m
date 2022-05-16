@@ -2,39 +2,40 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0A5F528613
-	for <lists+linux-can@lfdr.de>; Mon, 16 May 2022 15:55:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B214528606
+	for <lists+linux-can@lfdr.de>; Mon, 16 May 2022 15:55:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231331AbiEPNzd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 16 May 2022 09:55:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51202 "EHLO
+        id S243906AbiEPNy5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 16 May 2022 09:54:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237808AbiEPNyz (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 16 May 2022 09:54:55 -0400
+        with ESMTP id S240151AbiEPNyi (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 16 May 2022 09:54:38 -0400
+X-Greylist: delayed 332 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 16 May 2022 06:54:35 PDT
 Received: from mail.bitwise.fi (mail.bitwise.fi [109.204.228.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AFB73915D;
-        Mon, 16 May 2022 06:54:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31065BE27;
+        Mon, 16 May 2022 06:54:35 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by mail.bitwise.fi (Postfix) with ESMTP id BA982460028;
+        by mail.bitwise.fi (Postfix) with ESMTP id 73FA7460008;
         Mon, 16 May 2022 16:48:59 +0300 (EEST)
 X-Virus-Scanned: Debian amavisd-new at 
 Received: from mail.bitwise.fi ([127.0.0.1])
         by localhost (mustetatti.dmz.bitwise.fi [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id mcG4Um4CIPgK; Mon, 16 May 2022 16:48:57 +0300 (EEST)
+        with ESMTP id s0_L6yP0QX6T; Mon, 16 May 2022 16:48:57 +0300 (EEST)
 Received: from localhost.net (fw1.dmz.bitwise.fi [192.168.69.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: anssiha)
-        by mail.bitwise.fi (Postfix) with ESMTPSA id F214B46001C;
-        Mon, 16 May 2022 16:48:56 +0300 (EEST)
+        by mail.bitwise.fi (Postfix) with ESMTPSA id 042AE460028;
+        Mon, 16 May 2022 16:48:57 +0300 (EEST)
 From:   Anssi Hannula <anssi.hannula@bitwise.fi>
 To:     Jimmy Assarsson <extja@kvaser.com>
 Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 01/12] can: kvaser_usb_leaf: Fix overread with an invalid command
-Date:   Mon, 16 May 2022 16:47:37 +0300
-Message-Id: <20220516134748.3724796-2-anssi.hannula@bitwise.fi>
+Subject: [PATCH 02/12] can: kvaser_usb: Fix use of uninitialized completion
+Date:   Mon, 16 May 2022 16:47:38 +0300
+Message-Id: <20220516134748.3724796-3-anssi.hannula@bitwise.fi>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220516134748.3724796-1-anssi.hannula@bitwise.fi>
 References: <20220516134748.3724796-1-anssi.hannula@bitwise.fi>
@@ -49,143 +50,52 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-For command events read from the device,
-kvaser_usb_leaf_read_bulk_callback() verifies that cmd->len does not
-exceed the size of the received data, but the actual kvaser_cmd handlers
-will happily read any kvaser_cmd fields without checking for cmd->len.
+flush_comp is initialized when CMD_FLUSH_QUEUE is sent to the device and
+completed when the device sends CMD_FLUSH_QUEUE_RESP.
 
-This can cause an overread if the last cmd in the buffer is shorter than
-expected for the command type (with cmd->len showing the actual short
-size).
+This causes completion of uninitialized completion if the device sends
+CMD_FLUSH_QUEUE_RESP before CMD_FLUSH_QUEUE is ever sent (e.g. as a
+response to a flush by a previously bound driver, or a misbehaving
+device).
 
-Maximum overread seems to be 22 bytes (CMD_LEAF_LOG_MESSAGE), some of
-which are delivered to userspace as-is.
+Fix that by initializing flush_comp in kvaser_usb_init_one() like the
+other completions.
 
-Fix that by verifying the length of command before handling it.
-
-This issue can only occur after RX URBs have been set up, i.e. the
+This issue is only triggerable after RX URBs have been set up, i.e. the
 interface has been opened at least once.
 
-Fixes: 080f40a6fa28 ("can: kvaser_usb: Add support for Kvaser CAN/USB devices")
+Fixes: aec5fb2268b7 ("can: kvaser_usb: Add support for Kvaser USB hydra family")
 Signed-off-by: Anssi Hannula <anssi.hannula@bitwise.fi>
-
 ---
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c  | 1 +
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-A simpler option would be to just zero-pad the data into a
-stack-allocated struct kvaser_cmd without knowledge of the needed
-minimum size (so no tables needed), though that would mean incomplete
-commands would get passed on silently.
-
- .../net/can/usb/kvaser_usb/kvaser_usb_leaf.c  | 75 +++++++++++++++++++
- 1 file changed, 75 insertions(+)
-
-diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
-index c805b999c543..d9f40b9702a5 100644
---- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
-+++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
-@@ -320,6 +320,38 @@ struct kvaser_cmd {
- 	} u;
- } __packed;
+diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
+index e67658b53d02..47bff40c36b6 100644
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
+@@ -673,6 +673,7 @@ static int kvaser_usb_init_one(struct kvaser_usb *dev,
+ 	init_usb_anchor(&priv->tx_submitted);
+ 	init_completion(&priv->start_comp);
+ 	init_completion(&priv->stop_comp);
++	init_completion(&priv->flush_comp);
+ 	priv->can.ctrlmode_supported = 0;
  
-+#define CMD_SIZE_ANY 0xff
-+#define kvaser_fsize(field) sizeof_field(struct kvaser_cmd, field)
-+
-+static const u8 kvaser_usb_leaf_cmd_sizes_leaf[] = {
-+	[CMD_START_CHIP_REPLY]		= kvaser_fsize(u.simple),
-+	[CMD_STOP_CHIP_REPLY]		= kvaser_fsize(u.simple),
-+	[CMD_GET_CARD_INFO_REPLY]	= kvaser_fsize(u.cardinfo),
-+	[CMD_TX_ACKNOWLEDGE]		= kvaser_fsize(u.tx_acknowledge_header),
-+	[CMD_GET_SOFTWARE_INFO_REPLY]	= kvaser_fsize(u.leaf.softinfo),
-+	[CMD_RX_STD_MESSAGE]		= kvaser_fsize(u.leaf.rx_can),
-+	[CMD_RX_EXT_MESSAGE]		= kvaser_fsize(u.leaf.rx_can),
-+	[CMD_LEAF_LOG_MESSAGE]		= kvaser_fsize(u.leaf.log_message),
-+	[CMD_CHIP_STATE_EVENT]		= kvaser_fsize(u.leaf.chip_state_event),
-+	[CMD_CAN_ERROR_EVENT]		= kvaser_fsize(u.leaf.error_event),
-+	/* ignored events: */
-+	[CMD_FLUSH_QUEUE_REPLY]		= CMD_SIZE_ANY,
-+};
-+
-+static const u8 kvaser_usb_leaf_cmd_sizes_usbcan[] = {
-+	[CMD_START_CHIP_REPLY]		= kvaser_fsize(u.simple),
-+	[CMD_STOP_CHIP_REPLY]		= kvaser_fsize(u.simple),
-+	[CMD_GET_CARD_INFO_REPLY]	= kvaser_fsize(u.cardinfo),
-+	[CMD_TX_ACKNOWLEDGE]		= kvaser_fsize(u.tx_acknowledge_header),
-+	[CMD_GET_SOFTWARE_INFO_REPLY]	= kvaser_fsize(u.usbcan.softinfo),
-+	[CMD_RX_STD_MESSAGE]		= kvaser_fsize(u.usbcan.rx_can),
-+	[CMD_RX_EXT_MESSAGE]		= kvaser_fsize(u.usbcan.rx_can),
-+	[CMD_CHIP_STATE_EVENT]		= kvaser_fsize(u.usbcan.chip_state_event),
-+	[CMD_CAN_ERROR_EVENT]		= kvaser_fsize(u.usbcan.error_event),
-+	/* ignored events: */
-+	[CMD_USBCAN_CLOCK_OVERFLOW_EVENT] = CMD_SIZE_ANY,
-+};
-+
- /* Summary of a kvaser error event, for a unified Leaf/Usbcan error
-  * handling. Some discrepancies between the two families exist:
-  *
-@@ -387,6 +419,43 @@ static const struct kvaser_usb_dev_cfg kvaser_usb_leaf_dev_cfg_32mhz = {
- 	.bittiming_const = &kvaser_usb_leaf_bittiming_const,
- };
- 
-+static int kvaser_usb_leaf_verify_size(const struct kvaser_usb *dev,
-+				       const struct kvaser_cmd *cmd)
-+{
-+	/* buffer size >= cmd->len ensured by caller */
-+	u8 min_size = 0;
-+
-+	switch (dev->card_data.leaf.family) {
-+	case KVASER_LEAF:
-+		if (cmd->id < ARRAY_SIZE(kvaser_usb_leaf_cmd_sizes_leaf))
-+			min_size = kvaser_usb_leaf_cmd_sizes_leaf[cmd->id];
-+		break;
-+	case KVASER_USBCAN:
-+		if (cmd->id < ARRAY_SIZE(kvaser_usb_leaf_cmd_sizes_usbcan))
-+			min_size = kvaser_usb_leaf_cmd_sizes_usbcan[cmd->id];
-+		break;
-+	}
-+
-+	if (min_size == CMD_SIZE_ANY)
-+		return 0;
-+
-+	if (min_size) {
-+		min_size += CMD_HEADER_LEN;
-+		if (cmd->len >= min_size)
-+			return 0;
-+
-+		dev_err_ratelimited(&dev->intf->dev,
-+				    "Received command %u too short (size %u, needed %u)",
-+				    cmd->id, cmd->len, min_size);
-+		return -EIO;
-+	}
-+
-+	dev_warn_ratelimited(&dev->intf->dev,
-+			     "Unhandled command (%d, size %d)\n",
-+			     cmd->id, cmd->len);
-+	return -EINVAL;
-+}
-+
- static void *
- kvaser_usb_leaf_frame_to_cmd(const struct kvaser_usb_net_priv *priv,
- 			     const struct sk_buff *skb, int *cmd_len,
-@@ -492,6 +561,9 @@ static int kvaser_usb_leaf_wait_cmd(const struct kvaser_usb *dev, u8 id,
- end:
- 	kfree(buf);
- 
-+	if (err == 0)
-+		err = kvaser_usb_leaf_verify_size(dev, cmd);
-+
- 	return err;
- }
- 
-@@ -1113,6 +1185,9 @@ static void kvaser_usb_leaf_stop_chip_reply(const struct kvaser_usb *dev,
- static void kvaser_usb_leaf_handle_command(const struct kvaser_usb *dev,
- 					   const struct kvaser_cmd *cmd)
+ 	priv->dev = dev;
+diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
+index a26823c5b62a..4e90a4b7f95a 100644
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
+@@ -1910,7 +1910,7 @@ static int kvaser_usb_hydra_flush_queue(struct kvaser_usb_net_priv *priv)
  {
-+	if (kvaser_usb_leaf_verify_size(dev, cmd) < 0)
-+		return;
-+
- 	switch (cmd->id) {
- 	case CMD_START_CHIP_REPLY:
- 		kvaser_usb_leaf_start_chip_reply(dev, cmd);
+ 	int err;
+ 
+-	init_completion(&priv->flush_comp);
++	reinit_completion(&priv->flush_comp);
+ 
+ 	err = kvaser_usb_hydra_send_simple_cmd(priv->dev, CMD_FLUSH_QUEUE,
+ 					       priv->channel);
 -- 
 2.34.1
 
