@@ -2,117 +2,158 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 559DA5286B4
-	for <lists+linux-can@lfdr.de>; Mon, 16 May 2022 16:14:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69F1B528968
+	for <lists+linux-can@lfdr.de>; Mon, 16 May 2022 18:03:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244301AbiEPONP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 16 May 2022 10:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40312 "EHLO
+        id S245547AbiEPQCz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 16 May 2022 12:02:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244080AbiEPONN (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 16 May 2022 10:13:13 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9D832066;
-        Mon, 16 May 2022 07:13:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652710392; x=1684246392;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=q8T0jBh7cGQQ4AUWl+1aBVbwpP+Txn2+ZD1GDsXUmwY=;
-  b=M49qI2RJYNeFyww4GpPEloAJZf3RvDjzRG/yy1d94WdKvwT70eNfFVah
-   rHztlRV/mWPf6deUpgZmot8zsEE3Sy4c/WuAal94+s7f8JXFx2DBmFSEJ
-   LJ/nAuUNJhgdsbdkTnhBU+aPmZqkuYbowLgerMOOuCzCnpZ7+BFG4OOUG
-   E5oQgCkYYpvy3ZH2pI4dWq1GLRVAS14Mc3vr9ZJme/SJAHxU9qCXD4JuQ
-   BDOOW2soJYlGtKzCHw7/1xW9gkEGPhH/YmvpaVjd9dorsFmN8inO1eeib
-   YgU4SB2U0qnzuooP5UuyHm64U2EzZu1f37bbqi0xs4zewgcHeRUaZ5voi
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="252906637"
-X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
-   d="scan'208";a="252906637"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 07:13:11 -0700
-X-IronPort-AV: E=Sophos;i="5.91,230,1647327600"; 
-   d="scan'208";a="638258613"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 07:13:05 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nqbQv-0006ib-VU;
-        Mon, 16 May 2022 17:10:49 +0300
-Date:   Mon, 16 May 2022 17:10:49 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Mark Brown <broonie@kernel.org>,
-        chris.packham@alliedtelesis.co.nz,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Anatolij Gustschin <agust@denx.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Pantelis Antoniou <pantelis.antoniou@gmail.com>
-Subject: Re: [PATCH v2 4/4] powerpc/52xx: Convert to use fwnode API
-Message-ID: <YoJbaTNJFV2A1Etw@smile.fi.intel.com>
-References: <20220507100147.5802-1-andriy.shevchenko@linux.intel.com>
- <20220507100147.5802-4-andriy.shevchenko@linux.intel.com>
- <877d6l7fmy.fsf@mpe.ellerman.id.au>
- <YoJaGGwfoSYhaT13@smile.fi.intel.com>
+        with ESMTP id S245548AbiEPQCx (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 16 May 2022 12:02:53 -0400
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57E6E2FFC5;
+        Mon, 16 May 2022 09:02:52 -0700 (PDT)
+Received: by mail-ot1-f52.google.com with SMTP id z5-20020a9d62c5000000b00606041d11f1so10366328otk.2;
+        Mon, 16 May 2022 09:02:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2s6RgX26JLo7sa0JrV1c49E2OU9YNnR6NzfYuC55HJw=;
+        b=kS9hMd5oGAgvNNDw9e8ghXN3l4BufDKchaXUSkHp/OOC1+LGRqemsnHA68L37DuJJi
+         33CNIJtz05HysEGaRvVeQtBJ0PqzbeOGluu/6/ULiKDB98SX68XZ4WS/RVO+8Xmt4itv
+         0IvUXtXccFqtyF72VGVaW9Xih5odEtCSBo+7RcUF4oRswrSV7W2KkXzzZxev7XnSeWi5
+         Zae+xy1aV0DyO1rzcd3UfEVVxrH4kgIyb/tUDAGo6quT47UzdEqXCWhlxQSqGvHIqtBA
+         AUg0s9SrODcBLq1kGgMGF+vnZGnbixm6/nibvItP1Ip8yjmosslwat1UeiSG3XapciyI
+         PBjA==
+X-Gm-Message-State: AOAM5319tEhEsvhTNDrZa2mV6g8GafSAoHo++BPCddyIoHL+7Bn7xvRB
+        FWMqFqPRLjsDuCf6V7kYRg==
+X-Google-Smtp-Source: ABdhPJzGWjXFNa+2sThLYEmjVccy/lfEwvFPIeNBJBksa96HNq8xHla6Fr1Cd9RUBRKO59mgX2Jdew==
+X-Received: by 2002:a05:6830:1099:b0:605:fa6e:ac2a with SMTP id y25-20020a056830109900b00605fa6eac2amr6260664oto.305.1652716971624;
+        Mon, 16 May 2022 09:02:51 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t14-20020a056870f20e00b000f15a771206sm4918661oao.36.2022.05.16.09.02.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 09:02:50 -0700 (PDT)
+Received: (nullmailer pid 2732173 invoked by uid 1000);
+        Mon, 16 May 2022 16:02:50 -0000
+Date:   Mon, 16 May 2022 11:02:50 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Matej Vasilevski <matej.vasilevski@seznam.cz>
+Cc:     linux-can@vger.kernel.org, mkl@pengutronix.de,
+        pisa@cmp.felk.cvut.cz, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org, ondrej.ille@gmail.com,
+        martin.jerabek01@gmail.com
+Subject: Re: [RFC PATCH 2/3] dt-bindings: can: ctucanfd: add properties for
+ HW timestamping
+Message-ID: <20220516160250.GA2724701-robh@kernel.org>
+References: <20220512232706.24575-1-matej.vasilevski@seznam.cz>
+ <20220512232706.24575-3-matej.vasilevski@seznam.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YoJaGGwfoSYhaT13@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220512232706.24575-3-matej.vasilevski@seznam.cz>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, May 16, 2022 at 05:05:12PM +0300, Andy Shevchenko wrote:
-> On Mon, May 16, 2022 at 11:48:05PM +1000, Michael Ellerman wrote:
-> > Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
-> > > We may convert the GPT driver to use fwnode API for the sake
-> > > of consistency of the used APIs inside the driver.
-> > 
-> > I'm not sure about this one.
-> > 
-> > It's more consistent to use fwnode in this driver, but it's very
-> > inconsistent with the rest of the powerpc code. We have basically no
-> > uses of the fwnode APIs at the moment.
+On Fri, May 13, 2022 at 01:27:06AM +0200, Matej Vasilevski wrote:
+> Extend dt-bindings for CTU CAN-FD IP core with necessary properties
+> to enable HW timestamping for platform devices. Since the timestamping
+> counter is provided by the system integrator usign those IP cores in
+> their FPGA design, we need to have the properties specified in device tree.
 > 
-> Fair point!
+> Signed-off-by: Matej Vasilevski <matej.vasilevski@seznam.cz>
+> ---
+>  .../bindings/net/can/ctu,ctucanfd.yaml        | 34 +++++++++++++++++--
+>  1 file changed, 31 insertions(+), 3 deletions(-)
+
+What's the base for this patch? Doesn't apply for me.
+
 > 
-> > It seems like a pretty straight-forward conversion, but there could
-> > easily be a bug in there, I don't have any way to test it. Do you?
+> diff --git a/Documentation/devicetree/bindings/net/can/ctu,ctucanfd.yaml b/Documentation/devicetree/bindings/net/can/ctu,ctucanfd.yaml
+> index fb34d971dcb3..c3693dadbcd8 100644
+> --- a/Documentation/devicetree/bindings/net/can/ctu,ctucanfd.yaml
+> +++ b/Documentation/devicetree/bindings/net/can/ctu,ctucanfd.yaml
+> @@ -41,9 +41,35 @@ properties:
+>  
+>    clocks:
+>      description: |
+> -      phandle of reference clock (100 MHz is appropriate
+> -      for FPGA implementation on Zynq-7000 system).
+> +      Phandle of reference clock (100 MHz is appropriate for FPGA
+> +      implementation on Zynq-7000 system). If you wish to use timestamps
+> +      from the core, add a second phandle with the clock used for timestamping
+> +      (can be the same as the first clock).
+> +    maxItems: 2
+
+With more than 1, you have to define what each entry is. IOW, use 
+'items'.
+
+> +
+> +  clock-names:
+> +    description: |
+> +      Specify clock names for the "clocks" property. The first clock name
+> +      doesn't matter, the second has to be "ts_clk". Timestamping frequency
+> +      is then obtained from the "ts_clk" clock. This takes precedence over
+> +      the ts-frequency property.
+> +      You can omit this property if you don't need timestamps.
+> +    maxItems: 2
+
+You must define what the names are as a schema.
+
+> +
+> +  ts-used-bits:
+> +    description: width of the timestamping counter
+> +    maxItems: 1
+> +    items:
+
+Not an array, so you don't need maxItems nor items.
+
+> +      minimum: 8
+> +      maximum: 64
+> +
+> +  ts-frequency:
+
+Use a standard unit suffix.
+
+> +    description: |
+> +      Frequency of the timestamping counter. Set this if you want to get
+> +      timestamps, but you didn't set the timestamping clock in clocks property.
+>      maxItems: 1
+> +    items:
+
+Not an array.
+
+
+Is timestamping a common feature for CAN or is this specific to this 
+controller? In the latter case, you need vendor prefixes on these 
+properties. In the former case, you need to define them in a common 
+schema.
+
+> +      minimum: 1
+>  
+>  required:
+>    - compatible
+> @@ -58,6 +84,8 @@ examples:
+>      ctu_can_fd_0: can@43c30000 {
+>        compatible = "ctu,ctucanfd";
+>        interrupts = <0 30 4>;
+> -      clocks = <&clkc 15>;
+> +      clocks = <&clkc 15>, <&clkc 15>;
+> +      clock-names = "can_clk", "ts_clk";
+>        reg = <0x43c30000 0x10000>;
+> +      ts-used-bits = <64>;
+>      };
+> -- 
+> 2.25.1
 > 
-> Nope, only compile testing. The important part of this series is to
-> clean up of_node from GPIO library, so since here it's a user of
-> it I want to do that. This patch is just ad-hoc conversion that I
-> noticed is possible. But there is no any requirement to do so.
 > 
-> Lemme drop this from v3.
-
-I just realize that there is no point to send a v3. You can just apply
-first 3 patches. Or is your comment against entire series?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
