@@ -2,88 +2,69 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F2C6528085
-	for <lists+linux-can@lfdr.de>; Mon, 16 May 2022 11:10:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 535AE528612
+	for <lists+linux-can@lfdr.de>; Mon, 16 May 2022 15:55:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242277AbiEPJKa (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 16 May 2022 05:10:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40440 "EHLO
+        id S244009AbiEPNzf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 16 May 2022 09:55:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242320AbiEPJKT (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 16 May 2022 05:10:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95AC2BE2B;
-        Mon, 16 May 2022 02:10:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S243592AbiEPNyz (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 16 May 2022 09:54:55 -0400
+Received: from mail.bitwise.fi (mail.bitwise.fi [109.204.228.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A166939164;
+        Mon, 16 May 2022 06:54:40 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.bitwise.fi (Postfix) with ESMTP id 4FC8E460034;
+        Mon, 16 May 2022 16:48:59 +0300 (EEST)
+X-Virus-Scanned: Debian amavisd-new at 
+Received: from mail.bitwise.fi ([127.0.0.1])
+        by localhost (mustetatti.dmz.bitwise.fi [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id snCWiBDrwSnN; Mon, 16 May 2022 16:48:56 +0300 (EEST)
+Received: from localhost.net (fw1.dmz.bitwise.fi [192.168.69.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE9846127D;
-        Mon, 16 May 2022 09:10:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3FE70C385B8;
-        Mon, 16 May 2022 09:10:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652692212;
-        bh=DLxSzkZM0MdAIAq8FKo7oy8buyuB/4oBvp6tuto9RnE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ehJ1OtavRjX+syfli6ADwGyAaZ6tetrOxIcCx7yHe5mSI2Ke3Rxh5JW3gbGTLUnZB
-         aVvCZR/ax3qfOt/T2Q9KXbTicuI09fW3ojjNyOSYOKgrKX/yjYbkNeXyBa+SNb9z5z
-         Z1aC7CvT1FDvEocByrW1X+gh/Vb4ivv8vXD3bvlCiPNfWMHLaV1FBHSD3EwTpEAJ3y
-         jj1BVKu5HEadYIyqkhawjD73bsJR619AoOe4DnNs8eTI76rNlHyHhxWe93StVACMNH
-         /lOnuJy/c6sl+DaVoIBskNgleMBGGu07QTLb9ZRiksX90q3ZabUlBHZOkE+qQP4jF2
-         TET8Ltm7IsvfA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1D618E8DBDA;
-        Mon, 16 May 2022 09:10:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        (Authenticated sender: anssiha)
+        by mail.bitwise.fi (Postfix) with ESMTPSA id DD208460008;
+        Mon, 16 May 2022 16:48:56 +0300 (EEST)
+From:   Anssi Hannula <anssi.hannula@bitwise.fi>
+To:     Jimmy Assarsson <extja@kvaser.com>
+Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 00/12] can: kvaser_usb: Various fixes
+Date:   Mon, 16 May 2022 16:47:36 +0300
+Message-Id: <20220516134748.3724796-1-anssi.hannula@bitwise.fi>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 1/2] Revert "can: m_can: pci: use custom bit timings for
- Elkhart Lake"
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165269221211.27907.1144930451900278439.git-patchwork-notify@kernel.org>
-Date:   Mon, 16 May 2022 09:10:12 +0000
-References: <20220514185742.407230-2-mkl@pengutronix.de>
-In-Reply-To: <20220514185742.407230-2-mkl@pengutronix.de>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, kernel@pengutronix.de,
-        jarkko.nikula@linux.intel.com, chee.houx.ong@intel.com,
-        aman.kumar@intel.com, kumari.pallavi@intel.com,
-        stable@vger.kernel.org
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello:
 
-This series was applied to netdev/net.git (master)
-by Marc Kleine-Budde <mkl@pengutronix.de>:
+Hi all,
 
-On Sat, 14 May 2022 20:57:41 +0200 you wrote:
-> From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-> 
-> This reverts commit 0e8ffdf3b86dfd44b651f91b12fcae76c25c453b.
-> 
-> Commit 0e8ffdf3b86d ("can: m_can: pci: use custom bit timings for
-> Elkhart Lake") broke the test case using bitrate switching.
-> 
-> [...]
+Here's a set of fixes for issues I found while testing kvaser_usb as we
+are preparing to start using it in production (with 0bfd:0124).
 
-Here is the summary with links:
-  - [net,1/2] Revert "can: m_can: pci: use custom bit timings for Elkhart Lake"
-    https://git.kernel.org/netdev/net/c/14ea4a470494
-  - [net,2/2] can: m_can: remove support for custom bit timing, take #2
-    https://git.kernel.org/netdev/net/c/d6da7881020f
+The biggest caveat is that I only have two devices to test with [1] and I
+don't have HW documentation, so there is a possibility that some of the
+fixes might not work properly on all HW variants.
+Hopefully Jimmy can confirm they look OK, or suggest alternatives.
 
-You are awesome, thank you!
+[1] Tested devices:
+- 0bfd:0017 Kvaser Memorator Professional HS/HS FW 2.0.50
+- 0bfd:0124 Kvaser Mini PCI Express 2xHS FW 4.18.778
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Anssi Hannula / Bitwise Oy
++358503803997
+
 
 
