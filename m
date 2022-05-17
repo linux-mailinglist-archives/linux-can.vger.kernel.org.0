@@ -2,39 +2,51 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E5D529FC3
-	for <lists+linux-can@lfdr.de>; Tue, 17 May 2022 12:49:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0981952A0BB
+	for <lists+linux-can@lfdr.de>; Tue, 17 May 2022 13:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343491AbiEQKtV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 17 May 2022 06:49:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59748 "EHLO
+        id S236705AbiEQLwJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 17 May 2022 07:52:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344669AbiEQKsd (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 17 May 2022 06:48:33 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 150554B1FC
-        for <linux-can@vger.kernel.org>; Tue, 17 May 2022 03:48:07 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nqukH-0000lW-37; Tue, 17 May 2022 12:48:05 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 588EC80430;
-        Tue, 17 May 2022 10:45:46 +0000 (UTC)
-Date:   Tue, 17 May 2022 12:45:45 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Max Staudt <max@enpas.org>, netdev@vger.kernel.org
+        with ESMTP id S230254AbiEQLwJ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 17 May 2022 07:52:09 -0400
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B08CE0E;
+        Tue, 17 May 2022 04:52:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1652788322;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=v4GkYgTTABh4HPSdojrqVvE6+lNCX1q0yeD6U3RA25Q=;
+    b=Hxe9PyozAcYw2b678Pt2M8Dqa4rBFAZ2vIug+BOA/nO2j+W8XHdnvY+DyFSRv8mTu6
+    BpqPOWQ5YXDHavWBs9bJpHAI9J8iTHhmt0YCkP2QH+WGZFsLDGLP7bquZEpm1JdR38Qt
+    uqBuJx1DxKWGZDb9eQhUVcZfHwiZUw7aUOc+3mA7gHOxCLDhK5y9y+GPUM8p2Id4lThf
+    TO2grjmERUqGu5H8Mwn7u+vmUGe0umbf4ac0NSHMpeKSVTNsMNolcRaazpfVb31863xS
+    3xgg1bwGLTR3jyTLnWxdcHP8kgvmItaQzbaQZl/U4ng+N05clGNKihw0rcPEuhPYmh16
+    9XHw==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdBqPeOuh2krLEWFUg=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a00:6020:1cff:5b00::b82]
+    by smtp.strato.de (RZmta 47.45.0 AUTH)
+    with ESMTPSA id R0691fy4HBq1Dq4
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Tue, 17 May 2022 13:52:01 +0200 (CEST)
+Message-ID: <e054f6d4-7ed1-98ac-8364-425f4ef0f760@hartkopp.net>
+Date:   Tue, 17 May 2022 13:51:57 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
 Subject: Re: [PATCH v3 3/4] can: skb:: move can_dropped_invalid_skb and
  can_skb_headroom_valid to skb.c
-Message-ID: <20220517104545.eslountqjppvcnz2@pengutronix.de>
+Content-Language: en-US
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Max Staudt <max@enpas.org>, netdev@vger.kernel.org
 References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
  <20220514141650.1109542-1-mailhol.vincent@wanadoo.fr>
  <20220514141650.1109542-4-mailhol.vincent@wanadoo.fr>
@@ -42,17 +54,14 @@ References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
  <CAMZ6RqKZMHXB7rQ70GrXcVE7x7kytAAGfE+MOpSgWgWgp0gD2g@mail.gmail.com>
  <20220517060821.akuqbqxro34tj7x6@pengutronix.de>
  <CAMZ6RqJ3sXYUOpw7hEfDzj14H-vXK_i+eYojBk2Lq=h=7cm7Jg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dy5lya2n3tvgocui"
-Content-Disposition: inline
-In-Reply-To: <CAMZ6RqJ3sXYUOpw7hEfDzj14H-vXK_i+eYojBk2Lq=h=7cm7Jg@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+ <20220517104545.eslountqjppvcnz2@pengutronix.de>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20220517104545.eslountqjppvcnz2@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,44 +70,33 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---dy5lya2n3tvgocui
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On 17.05.2022 16:04:53, Vincent MAILHOL wrote:
-> So slcan, v(x)can and can-dev will select can-skb, and some of the
-> hardware drivers (still have to figure out the list) will select
-> can-rx-offload (other dependencies will stay as it is today).
+On 17.05.22 12:45, Marc Kleine-Budde wrote:
+> On 17.05.2022 16:04:53, Vincent MAILHOL wrote:
+>> So slcan, v(x)can and can-dev will select can-skb, and some of the
+>> hardware drivers (still have to figure out the list) will select
+>> can-rx-offload (other dependencies will stay as it is today).
+> 
+> For rx-offload that's flexcan, ti_hecc and mcp251xfd
+> 
+>> I think that splitting the current can-dev into can-skb + can-dev +
+>> can-rx-offload is enough. Please let me know if you see a need for
+>> more.
 
-For rx-offload that's flexcan, ti_hecc and mcp251xfd
+After looking through drivers/net/can/Kconfig I would probably phrase it 
+like this:
 
-> I think that splitting the current can-dev into can-skb + can-dev +
-> can-rx-offload is enough. Please let me know if you see a need for
-> more.
+Select CAN devices (hw/sw) -> we compile a can_dev module. E.g. to 
+handle the skb stuff for vcan's.
 
-regards,
-Marc
+Select hardware CAN devices -> we compile the netlink stuff into can_dev 
+and offer CAN_CALC_BITTIMING and CAN_LEDS to be compiled into can_dev too.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+In the latter case: The selection of flexcan, ti_hecc and mcp251xfd 
+automatically selects CAN_RX_OFFLOAD which is then also compiled into 
+can_dev.
 
---dy5lya2n3tvgocui
-Content-Type: application/pgp-signature; name="signature.asc"
+Would that fit in terms of complexity?
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKDfNcACgkQrX5LkNig
-011riwf+MG2N6WIbcv9M35tGFR/qSkQ4Bn10GPfSr+mjOjaWam9XZnsHy0E8gB0+
-Cx1npRDb54aEkQ8zeVZMCl4GQQiiwgr3qlBaOwTz4N8i02D8mIDDZwTIfGpqprey
-5PAcI7Xz+xM5Pc889OHbGq3F0qIx0VEnzBLAyzW/RscpbrFrIW3gpYJHA6Qz34zD
-5kc8lW8wYb7ev2wIevJ2aDQaqGhzh0sWVHv8IDrB1hBvAy9m/uS1jhfzboVGdZ0+
-oVR+COehpBdVkcQZaKjgrO6MEdmB7Uoir0AqBOTGB4huRR5jJzawnp9vP55/A0CU
-upqO2ta1qwcIzFGw+CbtAsCjYaU06Q==
-=NtJl
------END PGP SIGNATURE-----
-
---dy5lya2n3tvgocui--
+Best,
+Oliver
