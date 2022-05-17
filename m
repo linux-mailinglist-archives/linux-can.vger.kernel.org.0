@@ -2,116 +2,98 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 378B6529A5F
-	for <lists+linux-can@lfdr.de>; Tue, 17 May 2022 09:05:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4668A529CC0
+	for <lists+linux-can@lfdr.de>; Tue, 17 May 2022 10:41:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbiEQHFI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 17 May 2022 03:05:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47696 "EHLO
+        id S241356AbiEQIla (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 17 May 2022 04:41:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiEQHFH (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 17 May 2022 03:05:07 -0400
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA0A1EC7B;
-        Tue, 17 May 2022 00:05:05 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id o130so15353888ybc.8;
-        Tue, 17 May 2022 00:05:05 -0700 (PDT)
+        with ESMTP id S243687AbiEQIlL (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 17 May 2022 04:41:11 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E9F3DDD7
+        for <linux-can@vger.kernel.org>; Tue, 17 May 2022 01:41:08 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id d15so30047727lfk.5
+        for <linux-can@vger.kernel.org>; Tue, 17 May 2022 01:41:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kvaser.com; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=42ANMWW4EhugKVyQ1qgI/ie2RkgGRo8QrOhqXcnc/jg=;
+        b=gDkwrQShT4WjlZAQ+1ixBY/pdwsApFRKl5iai6egn6aK4XJG8wIDQ/goYw3R/lwo4W
+         63PLo7dm4lVQXfR5s3cj3BLuPD8kLPHuYHdZq80WKyaARJY38DQksEfKkyHhsXdXgRGa
+         6Xf79w8SzjSHcZHoHOiiP0lwFPlcmg02tKtIhROHOEQ2WhRS7F4PKQmPVWfvqQpe1kTe
+         SJ8taKcBMEddw2FcPx13e43cwN8Vvcgt8cxS/LcMS0fWsCQsc9aH0NZBmwCuhIqOaXBt
+         GpYqJVlcuCx5iN0GOKD9pn08oCBgwmitfABQo6pMddDYqxfwgFpay83nKFTZEgzMyt0r
+         1iAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uGL6v7eQK1/0CRwWroEeXxkpUt+slToqlAa+poondV0=;
-        b=WJFzwfiTvp8Qoe/BXM3DE9JsAYNW9+ZVu9JikHZjOuUy3AbzUrBFvevljtQcwzxjLd
-         czUSSmun4yZsGEqD5Zve82sWCGI6c4bQa0xKG2DhlTRmU8UXIPFcsGcEDHr/oQ1dwtuE
-         zyBKxE6BxHYAOhsrVkHJfeDKmdD6yxfReAgRIFMr4rXRmN1JF0moOoHGvBs5sUi8jj7m
-         ObKeyW4W4y1ny4HmLUpZl/oc1e31Pl0l1pXRuZqhmw9oZc1OkK4eZ7kk4kDa7zKT0ww+
-         qNGOoBKawuq4Xv68j4JlYbHKwrJp2Sph1BKoLZp8kj7hdkNILDRLPlXlqrDsEqN0O9NC
-         Cing==
-X-Gm-Message-State: AOAM530ZaTGcsx1v6Ku4ZLqfFx7wVo8nfljnnfBzn8MeVvVx+4rv3v8f
-        tMsUmyfSVmP6+xy07wgTRT9CDQTkaNGFrC46orgWfEMw/F2pnw==
-X-Google-Smtp-Source: ABdhPJy683BW3WCcSZi2Cj9GijVHOZZd+oqshOvpXiUDGrBiMFaUyh8rHdidrsvX/lcd0qtI32pp9NMN2Z/62yAFKIY=
-X-Received: by 2002:a5b:ac4:0:b0:64b:48de:269b with SMTP id
- a4-20020a5b0ac4000000b0064b48de269bmr22306374ybr.423.1652771104753; Tue, 17
- May 2022 00:05:04 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=42ANMWW4EhugKVyQ1qgI/ie2RkgGRo8QrOhqXcnc/jg=;
+        b=sw8hK6hmqWEzHMSkpeSJxvxHNkee+X/p7COprVhO+o8GG15BVFxaBHoEnAmPGcotq6
+         ybJLGc1OvZw6dItIQhtTNqg4a4QWUzy/z9GEVe/uX3C2mBjMdLiRvMpay649BbF4MEqr
+         BXIzZgqk+/jaLKz6fNKHJ0W0qsk6CSjmHwGSiUqo5g1N++E70FuWOzHdYb4JMuJFOM6l
+         eq6W22JBlFYyexAgJM1rlb7hIA1jAmER3FFLYq2qu6ai4uTbuCe4N+qVYKuZQ8a3ObAb
+         GH20oKUu3MW5RR2igCAtssoNl8jCUtM8NmJAT+jvnRLBYTKrK7CksDlI1trpA5BvZTV8
+         ReSg==
+X-Gm-Message-State: AOAM530vUgelEX5Qy1hCiy7JhNtJeJPJlteggKnSWeyfgyXsfXgYxIya
+        JFUpDythEW+h495lZPov6DTbfA==
+X-Google-Smtp-Source: ABdhPJz4pGyHUXIiqYB7Kea1MIt/ofWggg9PWXtQtgDg9G0K5LNExUwICzkePMPuBhOPwbmrnnfm5g==
+X-Received: by 2002:a05:6512:3d26:b0:473:a5e5:1661 with SMTP id d38-20020a0565123d2600b00473a5e51661mr16765641lfv.239.1652776866385;
+        Tue, 17 May 2022 01:41:06 -0700 (PDT)
+Received: from [10.0.6.3] (rota.kvaser.com. [195.22.86.90])
+        by smtp.gmail.com with ESMTPSA id t21-20020ac24c15000000b0047255d210e6sm1522174lfq.21.2022.05.17.01.41.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 May 2022 01:41:05 -0700 (PDT)
+Subject: Re: [PATCH 00/12] can: kvaser_usb: Various fixes
+To:     Anssi Hannula <anssi.hannula@bitwise.fi>
+Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-kernel@vger.kernel.org
+References: <20220516134748.3724796-1-anssi.hannula@bitwise.fi>
+From:   Jimmy Assarsson <extja@kvaser.com>
+Message-ID: <61060501-7edb-4277-acf6-117161e8593f@kvaser.com>
+Date:   Tue, 17 May 2022 10:41:03 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
- <20220514141650.1109542-1-mailhol.vincent@wanadoo.fr> <20220514141650.1109542-4-mailhol.vincent@wanadoo.fr>
- <7b1644ad-c117-881e-a64f-35b8d8b40ef7@hartkopp.net> <CAMZ6RqKZMHXB7rQ70GrXcVE7x7kytAAGfE+MOpSgWgWgp0gD2g@mail.gmail.com>
- <20220517060821.akuqbqxro34tj7x6@pengutronix.de>
-In-Reply-To: <20220517060821.akuqbqxro34tj7x6@pengutronix.de>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Tue, 17 May 2022 16:04:53 +0900
-Message-ID: <CAMZ6RqJ3sXYUOpw7hEfDzj14H-vXK_i+eYojBk2Lq=h=7cm7Jg@mail.gmail.com>
-Subject: Re: [PATCH v3 3/4] can: skb:: move can_dropped_invalid_skb and
- can_skb_headroom_valid to skb.c
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Max Staudt <max@enpas.org>, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220516134748.3724796-1-anssi.hannula@bitwise.fi>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue. 17 May 2022 at 15:08, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> On 17.05.2022 10:50:16, Vincent MAILHOL wrote:
-> > > would it probably make sense to
-> > > introduce a new can-skb module that could be used by all CAN
-> > > virtual/software interfaces?
-> > >
-> > > Or some other split-up ... any idea?
-> >
-> > My concern is: what would be the merrit? If we do not split, the users
-> > of slcan and v(x)can would have to load the can-dev module which will
-> > be slightly bloated for their use, but is this really an issue?
->
-> If you use modprobe all required modules are loaded automatically.
+On 2022-05-16 15:47, Anssi Hannula wrote:
+> 
+> Hi all,
+> 
+> Here's a set of fixes for issues I found while testing kvaser_usb as we
+> are preparing to start using it in production (with 0bfd:0124).
 
-Yes, this, now I know. In the past, when I started developing
-etas_es58x as an out of tree module (which I inserted using insmod),
-it took me a little time to figure out the dependencies tree and which
-module I actually had to modprobe separately.
+Hi Anssi,
 
-> > I do
-> > not see how this can become a performance bottleneck, so what is the
-> > problem?
-> > I could also argue that most of the devices do not depend on
-> > rx-offload.o. So should we also split this one out of can-dev on the
-> > same basis and add another module dependency?
->
-> We can add a non user visible Kconfig symbol for rx-offload and let the
-> drivers that need it do a "select" on it. If selected the rx-offload
-> would be compiled into to can-dev module.
+Thanks for the patches!
+I will review and test your fixes before the weekend.
 
-Yes, and this remark also applies to can-skb I think.
+Best regards,
+jimmy
 
-So slcan, v(x)can and can-dev will select can-skb, and some of the
-hardware drivers (still have to figure out the list) will select
-can-rx-offload (other dependencies will stay as it is today).
 
-I think that splitting the current can-dev into can-skb + can-dev +
-can-rx-offload is enough. Please let me know if you see a need for
-more.
-
-> > The benefit (not having to load a bloated module for three drivers)
-> > does not outweigh the added complexity: all hardware modules will have
-> > one additional modprobe dependency on the tiny can-skb module.
-> >
-> > But as said above, I am not fully opposed to the split, I am just
-> > strongly divided. If we go for the split, creating a can-skb module is
-> > the natural and only option I see.
-> > If the above argument does not convince you, I will send a v3 with that split.
-
-If both you and Oliver prefer the split, then split it would be!
-
-Because this topic is related to Kbuild, there is actually one thing
-which bothered me but which I never asked: why are all the CAN devices
-under "Networking support" and not "Device Drivers" in menuconfig like
-everything else? Would it make sense to move our devices under the
-"Device Drivers" section? I can do it while working on the v3.
+> The biggest caveat is that I only have two devices to test with [1] and I
+> don't have HW documentation, so there is a possibility that some of the
+> fixes might not work properly on all HW variants.
+> Hopefully Jimmy can confirm they look OK, or suggest alternatives.
+> 
+> [1] Tested devices:
+> - 0bfd:0017 Kvaser Memorator Professional HS/HS FW 2.0.50
+> - 0bfd:0124 Kvaser Mini PCI Express 2xHS FW 4.18.778
