@@ -2,94 +2,130 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2BFD52BF5C
-	for <lists+linux-can@lfdr.de>; Wed, 18 May 2022 18:13:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C93F52BF3C
+	for <lists+linux-can@lfdr.de>; Wed, 18 May 2022 18:13:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239782AbiERQBv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 18 May 2022 12:01:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60476 "EHLO
+        id S239925AbiERQFJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 18 May 2022 12:05:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239718AbiERQBu (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 18 May 2022 12:01:50 -0400
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3101F149AA0;
-        Wed, 18 May 2022 09:01:49 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-2ec42eae76bso29306507b3.10;
-        Wed, 18 May 2022 09:01:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=exZDVy0fXYEUjJOxnnEOEY7L5w0sPe9Rc4hUPUbdQGk=;
-        b=sa9JJ91Drnl/h/V6aFyJaghUpVrkHHilaVs8lqLifbeZtMuIRau+S0JLzQd8qcLFsQ
-         WA/7/M836dhgu8bFIb9YIuLVHONKkay0njTTWDdSiiMs0cnA2hRqev3tn0NGUXLam2aM
-         gB/TtHvq+6ch2PorgvIKvTu5eVgn2PLrcCGveDbc1GiGl4EKeJ32rao0OLRN1+uh9IBG
-         biebRNp8uQ04OH/by6sROMIrnb0GDTZK7rPoSKfEiYGdrU5Fg6GkuUmfqWd3QSoG3HSN
-         jsR7uED6iEfRccCWpIVd1GZqAzRg2xPUGAeKPqpNbkctoCII6xbaRqIKt9XTyBiLAWm8
-         lzGA==
-X-Gm-Message-State: AOAM533cwyvfr4XiyRgaaljGjGU8N8yd5dtIButz0BhMgPisocbr6Gs8
-        qhXBAQ5b9mdNxD/T1/xHjB308FIyq706QzbSc1FgpZzgW8Xlig==
-X-Google-Smtp-Source: ABdhPJwTRLxPjlziJXAcADX0e0mcHrERe93V6DdVLqohRvtfXMxTR2hhhAnek8Ds9RpGjME0IHcem5bgFmCogVvrlAQ=
-X-Received: by 2002:a81:140e:0:b0:2fe:c3a3:5b19 with SMTP id
- 14-20020a81140e000000b002fec3a35b19mr91778ywu.392.1652889708371; Wed, 18 May
- 2022 09:01:48 -0700 (PDT)
+        with ESMTP id S239945AbiERQFG (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 18 May 2022 12:05:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F281A0764;
+        Wed, 18 May 2022 09:05:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 225AE614B2;
+        Wed, 18 May 2022 16:05:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19BEAC385A5;
+        Wed, 18 May 2022 16:05:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652889902;
+        bh=X3NOZZM14krYh97jlLnxREynzXhmiCcmRbnYysiRhck=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fpqRgUjNRlT1n5lCCA+scbxCmmG36DFgUgZ2Pj7Z7i3vQ1QdQv/dWCBjo54PEIzgx
+         7od1AlzDT+jsF7KNs1YzMLFC78q71QtZxm6rZtYF5QyvBbPsOXNOEDQEuZ9qtSbtTA
+         lTrTDGyIOINEjV39VmZjqR8QCIHe9UrsxGnWHvn00GZJf+L/Enr/N0hZxsgOif8m5C
+         Y7vBC+yR1rQHXNsxT6bD3uFGjTKYJ+uReckCBXs/44Bh5aO1Dp3dzz60V85TmnVkvm
+         R21d1AZjZQ+wT1oIJt6KyufK7DT+vWvCuPf0MCp8tKP0qqKQkdMdwG9gHQH4xB4e0s
+         H7JPwolJYumBg==
+Date:   Wed, 18 May 2022 09:05:00 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        linux-can@vger.kernel.org
+Subject: Re: [PATCH] can: mcp251xfd: silence clang's -Wunaligned-access
+ warning
+Message-ID: <YoUZLHIbxPu15/lN@dev-arch.thelio-3990X>
+References: <20220518070517.q53bjzo6lbnq3f2i@pengutronix.de>
+ <20220518114357.55452-1-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
-References: <e054f6d4-7ed1-98ac-8364-425f4ef0f760@hartkopp.net>
- <20220517141404.578d188a.max@enpas.org> <20220517122153.4r6n6kkbdslsa2hv@pengutronix.de>
- <20220517143921.08458f2c.max@enpas.org> <0b505b1f-1ee4-5a2c-3bbf-6e9822f78817@hartkopp.net>
- <CAMZ6RqJ0iCsHT-D5VuYQ9fk42ZEjHStU1yW0RfX1zuJpk5rVtQ@mail.gmail.com>
- <43768ff7-71f8-a6c3-18f8-28609e49eedd@hartkopp.net> <20220518132811.xfmwms2cu3bfxgrp@pengutronix.de>
- <CAMZ6RqJqeNjAtoDWADHsWocgbSXqQixcebJBhiBFS8BVeKCb3g@mail.gmail.com>
- <3dbe135e-d13c-5c5d-e7e4-b9c13b820fb8@hartkopp.net> <20220518143613.2a7alnw6vtkw7ct2@pengutronix.de>
- <482fd87a-df5a-08f7-522b-898d68c3b04a@hartkopp.net> <899706c6-0aac-b039-4b67-4e509ff0930d@hartkopp.net>
- <CAMZ6RqJ5hXwE5skJLxRVAH4-RB8UkXmQdZWW_z=jj+bXzJZY=Q@mail.gmail.com> <20220518174803.010db67d.max@enpas.org>
-In-Reply-To: <20220518174803.010db67d.max@enpas.org>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Thu, 19 May 2022 01:01:36 +0900
-Message-ID: <CAMZ6RqJzNQfS1YAEWWPmXLpTu_hKVKxswWsjmWsPU7jaUVmJGw@mail.gmail.com>
-Subject: Re: [PATCH v3 3/4] can: skb:: move can_dropped_invalid_skb and
- can_skb_headroom_valid to skb.c
-To:     Max Staudt <max@enpas.org>
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220518114357.55452-1-mailhol.vincent@wanadoo.fr>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Thu. 19 May 2022 at 00:52, Max Staudt <max@enpas.org> wrote:
-> On Thu, 19 May 2022 00:38:51 +0900
-> Vincent MAILHOL <mailhol.vincent@wanadoo.fr> wrote:
->
-> > On Wed. 18 May 2022 at 23:59, Oliver Hartkopp
-> > <socketcan@hartkopp.net> wrote:
-> > > I can send a patch for this removal too. That's an easy step which
-> > > might get into 5.19 then.
-> >
-> > OK, go ahead. On my side, I will start to work on the other changes
-> > either next week or next next week, depending on my mood.
->
-> Any wishes for the next version of can327/elmcan?
+Hi Vincent,
 
-The only thing I guess would be to remove the check against
-CAN_CTRLMODE_LISTENONLY in your xmit() function. The other things, I
-already commented :)
+On Wed, May 18, 2022 at 08:43:57PM +0900, Vincent Mailhol wrote:
+> clang emits a -Wunaligned-access warning on union
+> mcp251xfd_tx_ojb_load_buf.
+> 
+> The reason is that field hw_tx_obj (not declared as packed) is being
+> packed right after a 16 bits field inside a packed struct:
+> 
+> | union mcp251xfd_tx_obj_load_buf {
+> | 	struct __packed {
+> | 		struct mcp251xfd_buf_cmd cmd;
+> | 		  /* ^ 16 bits fields */
+> | 		struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
+> | 		  /* ^ not declared as packed */
+> | 	} nocrc;
+> | 	struct __packed {
+> | 		struct mcp251xfd_buf_cmd_crc cmd;
+> | 		struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
+> | 		__be16 crc;
+> | 	} crc;
+> | } ____cacheline_aligned;
+> 
+> Starting from LLVM 14, having an unpacked struct nested in a packed
+> struct triggers a warning. c.f. [1].
+> 
+> This is a false positive because the field is always being accessed
+> with the relevant put_unaligned_*() function. Adding __packed to the
+> structure declaration silences the warning.
+> 
+> [1] https://github.com/llvm/llvm-project/issues/55520
+> 
+> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> ---
+> Actually, I do not have llvm 14 installed so I am not able to test
+> (this check was introduced in v14). But as explained in [1], adding
+> __packed should fix the warning.
 
-> Should I wait until your changes are in?
+Thanks for the patch! This does resolve the warning (verified with LLVM
+15).
 
-I do not think you have to wait. There are no real dependencies. You
-might just want to add a note after the --- scissors in the patch that
-there is a weak dependencies on
-https://lore.kernel.org/linux-can/20220514141650.1109542-5-mailhol.vincent@wanadoo.fr/
+> Because this is a false positive, I did not add a Fixes tag, nor a
+> Reported-by: kernel test robot.
 
+I think that the Reported-by tag should always be included but I agree
+that a Fixes tag is not necessary for this warning, as we currently have
+it under W=1, so it should not be visible under normal circumstances.
 
-Yours sincerely,
-Vincent Mailhol
+> ---
+>  drivers/net/can/spi/mcp251xfd/mcp251xfd.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
+> index 1d43bccc29bf..2b0309fedfac 100644
+> --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
+> +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
+> @@ -441,7 +441,7 @@ struct mcp251xfd_hw_tef_obj {
+>  /* The tx_obj_raw version is used in spi async, i.e. without
+>   * regmap. We have to take care of endianness ourselves.
+>   */
+> -struct mcp251xfd_hw_tx_obj_raw {
+> +struct __packed mcp251xfd_hw_tx_obj_raw {
+>  	__le32 id;
+>  	__le32 flags;
+>  	u8 data[sizeof_field(struct canfd_frame, data)];
+> -- 
+> 2.35.1
+> 
+> 
+
+Cheers,
+Nathan
