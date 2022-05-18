@@ -2,121 +2,138 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26B6E52B9A3
-	for <lists+linux-can@lfdr.de>; Wed, 18 May 2022 14:14:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B688752B961
+	for <lists+linux-can@lfdr.de>; Wed, 18 May 2022 14:14:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235939AbiERL6c (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 18 May 2022 07:58:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46132 "EHLO
+        id S236134AbiERMEA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 18 May 2022 08:04:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235878AbiERL6b (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 18 May 2022 07:58:31 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9894A3D9
-        for <linux-can@vger.kernel.org>; Wed, 18 May 2022 04:58:29 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nrIJr-0001Di-BI; Wed, 18 May 2022 13:58:23 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id E451F8134B;
-        Wed, 18 May 2022 11:58:20 +0000 (UTC)
-Date:   Wed, 18 May 2022 13:58:20 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-can@vger.kernel.org
-Subject: Re: [PATCH] can: mcp251xfd: silence clang's -Wunaligned-access
- warning
-Message-ID: <20220518115820.qzvyrnwsb4wvayq2@pengutronix.de>
-References: <20220518070517.q53bjzo6lbnq3f2i@pengutronix.de>
- <20220518114357.55452-1-mailhol.vincent@wanadoo.fr>
+        with ESMTP id S236097AbiERMD5 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 18 May 2022 08:03:57 -0400
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33B41A388;
+        Wed, 18 May 2022 05:03:49 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-2f83983782fso21677217b3.6;
+        Wed, 18 May 2022 05:03:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rVPPyUegoVxSn5lsEO7BZkKqB32kOawffPYWcQzsvL0=;
+        b=XaNRNOZ69M2vaLJExMWrSNe+ugNqvvdpc4XlReOVVb6n6oMWmN3QUWJQcOmsgvUuJq
+         f6A+XuhS/+28N3anL7n+FU4W3Ondx5iQPS4NqJ3WPPK9Z8XDelz6DxEu3/vQnZbJ4RiE
+         Dt+DMdYWp8sLrUOFWAUlpyyutMjMq3Vw0mBjbMyUs2a5IxRhEeFhVI3J0yo5ZZaYRTYk
+         u+ODZr8DkDEngPj9gZzbsNnBFa8Y+5I7yjomBTPiB+kUqOxLQVoDgWxZzRQri9lUXkq6
+         whblbEov4YMKG5ErhcS2jcBHwO1hQlMSggfRsgHF5v0KmS7wEetdLQ2CwiWLP87OL9LV
+         jb/Q==
+X-Gm-Message-State: AOAM530KsobcEPKoYEqKfnbrqA8chUglFx0zVhb+0WgTRE3aw350rm47
+        +oPXiSSnfcCwiAjez0EyrpwQXyXOyDkLbGF/qEeu20RvVcyhfg==
+X-Google-Smtp-Source: ABdhPJwcAzjvbo5MkFqDUW1g4+joKN2IALSfdlPaNkIMABQRvJUwQXlnD/3SF5HCILLiSo7DV1OA+ONdEfNlzZicS/0=
+X-Received: by 2002:a81:140e:0:b0:2fe:c3a3:5b19 with SMTP id
+ 14-20020a81140e000000b002fec3a35b19mr25432713ywu.392.1652875428925; Wed, 18
+ May 2022 05:03:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="57rj3wezavrbut5g"
-Content-Disposition: inline
-In-Reply-To: <20220518114357.55452-1-mailhol.vincent@wanadoo.fr>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
+ <20220514141650.1109542-1-mailhol.vincent@wanadoo.fr> <20220514141650.1109542-4-mailhol.vincent@wanadoo.fr>
+ <7b1644ad-c117-881e-a64f-35b8d8b40ef7@hartkopp.net> <CAMZ6RqKZMHXB7rQ70GrXcVE7x7kytAAGfE+MOpSgWgWgp0gD2g@mail.gmail.com>
+ <20220517060821.akuqbqxro34tj7x6@pengutronix.de> <CAMZ6RqJ3sXYUOpw7hEfDzj14H-vXK_i+eYojBk2Lq=h=7cm7Jg@mail.gmail.com>
+ <20220517104545.eslountqjppvcnz2@pengutronix.de> <e054f6d4-7ed1-98ac-8364-425f4ef0f760@hartkopp.net>
+ <20220517141404.578d188a.max@enpas.org> <20220517122153.4r6n6kkbdslsa2hv@pengutronix.de>
+ <20220517143921.08458f2c.max@enpas.org> <0b505b1f-1ee4-5a2c-3bbf-6e9822f78817@hartkopp.net>
+In-Reply-To: <0b505b1f-1ee4-5a2c-3bbf-6e9822f78817@hartkopp.net>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Wed, 18 May 2022 21:03:37 +0900
+Message-ID: <CAMZ6RqJ0iCsHT-D5VuYQ9fk42ZEjHStU1yW0RfX1zuJpk5rVtQ@mail.gmail.com>
+Subject: Re: [PATCH v3 3/4] can: skb:: move can_dropped_invalid_skb and
+ can_skb_headroom_valid to skb.c
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     Max Staudt <max@enpas.org>, Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+I didn't think this would trigger such a passionate discussion!
 
---57rj3wezavrbut5g
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue. 17 mai 2022 at 22:35, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
+> On 5/17/22 14:39, Max Staudt wrote:
+> > On Tue, 17 May 2022 14:21:53 +0200
+> > Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> >
+> >> On 17.05.2022 14:14:04, Max Staudt wrote:
+> >>>> After looking through drivers/net/can/Kconfig I would probably
+> >>>> phrase it like this:
+> >>>>
+> >>>> Select CAN devices (hw/sw) -> we compile a can_dev module. E.g.
+> >>>> to handle the skb stuff for vcan's.
+> >>>>
+> >>>> Select hardware CAN devices -> we compile the netlink stuff into
+> >>>> can_dev and offer CAN_CALC_BITTIMING and CAN_LEDS to be compiled
+> >>>> into can_dev too.
+> >>>>
+> >>>> In the latter case: The selection of flexcan, ti_hecc and
+> >>>> mcp251xfd automatically selects CAN_RX_OFFLOAD which is then also
+> >>>> compiled into can_dev.
+> >>>>
+> >>>> Would that fit in terms of complexity?
+> >>>
+> >>> IMHO these should always be compiled into can-dev. Out of tree
+> >>> drivers are fairly common here, and having to determine which kind
+> >>> of can-dev (stripped or not) the user has on their system is a
+> >>> nightmare waiting to happen.
+> >>
+> >> I personally don't care about out-of-tree drivers.
+> >
+> > I know that this is the official stance in the kernel.
+> >
+> > But out-of-tree drivers do happen on a regular basis, even when
+> > developing with the aim of upstreaming. And if a developer builds a
+> > minimal kernel to host a CAN driver, without building in-tree hardware
+> > CAN drivers, then can-dev will be there but behave differently from
+> > can-dev in a full distro. Leading to heisenbugs and wasting time. The
+> > source of heisenbugs really are the suggested *hidden* Kconfigs.
+> >
+> >
+> > On another note, is the module accounting overhead in the kernel for
+> > two new modules with relatively little code in each, code that almost
+> > always is loaded when CAN is used, really worth it?
+>
+> Oh, I didn't want to introduce two new kernel modules but to have
+> can_dev in different 'feature levels'.
+>
+> I would assume a distro kernel to have everything enabled with a full
+> featured can_dev - which is likely the base for out-of-tree drivers too.
+>
+> But e.g. the people that are running Linux instances in a cloud only
+> using vcan and vxcan would not need to carry the entire infrastructure
+> of CAN hardware support and rx-offload.
 
-On 18.05.2022 20:43:57, Vincent Mailhol wrote:
-> clang emits a -Wunaligned-access warning on union
-> mcp251xfd_tx_ojb_load_buf.
->=20
-> The reason is that field hw_tx_obj (not declared as packed) is being
-> packed right after a 16 bits field inside a packed struct:
->=20
-> | union mcp251xfd_tx_obj_load_buf {
-> | 	struct __packed {
-> | 		struct mcp251xfd_buf_cmd cmd;
-> | 		  /* ^ 16 bits fields */
-> | 		struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
-> | 		  /* ^ not declared as packed */
-> | 	} nocrc;
-> | 	struct __packed {
-> | 		struct mcp251xfd_buf_cmd_crc cmd;
-> | 		struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
-> | 		__be16 crc;
-> | 	} crc;
-> | } ____cacheline_aligned;
->=20
-> Starting from LLVM 14, having an unpacked struct nested in a packed
-> struct triggers a warning. c.f. [1].
->=20
-> This is a false positive because the field is always being accessed
-> with the relevant put_unaligned_*() function. Adding __packed to the
-> structure declaration silences the warning.
->=20
-> [1] https://github.com/llvm/llvm-project/issues/55520
->=20
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Are there really some people running custom builds of the Linux kernel
+in a cloud environment? The benefit of saving a few kilobytes by not
+having to carry the entire CAN hardware infrastructure is blown away
+by the cost of having to maintain a custom build.
 
-Thank! Applies to linux-can-next/testing.
+I perfectly follow the idea to split rx-offload. Integrators building
+some custom firmware for an embedded device might want to strip out
+any unneeded piece. But I am not convinced by this same argument when
+applied to v(x)can.
+A two level split (with or without rx-offload) is what makes the most
+sense to me.
 
-regards,
-Marc
+Regardless, having the three level split is not harmful. And because
+there seems to be a consensus on that, I am fine to continue in this
+direction.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---57rj3wezavrbut5g
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKE31kACgkQrX5LkNig
-011t0ggAq8G16P8sCd0leKEHsfIg71a0qsHV2KuL4mFSOedd48EPrhnA0jsvaIF8
-byxhVqb5H/VjWWQ6y4x3e0AGfj3h/3c7PZJL/P6K77Hq2frEkepTGtzLd7Lp/UWC
-uXy2m+tC3C8Emd8z2mLw0sH6bdgkZ4vtQjEPy1oHWTxPcSp1LRnAwXt8iS+ReVhA
-pp8J8k3ctN8KJdfisVRScLINFYa5dGDpbrFjLQCDkan+S1TubuqwgvIghP5V6Stb
-ilB9OFEcDh8BSqiId9YhQsocIf3z6akzTfZWBA6Vd9vxl/1VkNbm09A9u0onIfBv
-mQlJi8sA48p9WMrNmj9E6Ech2dnnVA==
-=lBes
------END PGP SIGNATURE-----
-
---57rj3wezavrbut5g--
+On a different topic, why are all the CAN devices
+under "Networking support" and not "Device Drivers" in menuconfig
+like everything else? Would it make sense to move our devices
+under the "Device Drivers" section?
