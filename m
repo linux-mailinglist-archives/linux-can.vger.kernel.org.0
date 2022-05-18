@@ -2,130 +2,135 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A99F952C0BB
-	for <lists+linux-can@lfdr.de>; Wed, 18 May 2022 19:10:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A51B52C0CC
+	for <lists+linux-can@lfdr.de>; Wed, 18 May 2022 19:10:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239872AbiERQSY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 18 May 2022 12:18:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38938 "EHLO
+        id S240058AbiERQYO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 18 May 2022 12:24:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234867AbiERQSX (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 18 May 2022 12:18:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C13DF1E012E;
-        Wed, 18 May 2022 09:18:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B3E261601;
-        Wed, 18 May 2022 16:18:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AE79C385A5;
-        Wed, 18 May 2022 16:18:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652890701;
-        bh=RgRhuYRHhC4Q30XicZretiBGKHcP4GLPcS0/38yDF4w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CgM0jXwMbLaK4x+YPbr0pbj5EojPWi1+S2LlU/vfvUuik/zWaJBLGYA1+b2oELSi1
-         jzB39mz9eo7kAjeEbUvLw/VTPbUbSmlHcx0TmNWDYP2wpGC5Ubram57aDFCTsZ9J7y
-         3oizkHq4Borhvtz258e04Wwum4eRwR5hKCjFKEhvIGYemLqYAaYwb0hfCmX1aOR6FV
-         iGNQ9ESQ24vl/UkjP7V6ML7UjQAMra5+/EZuMBSTyY8l52d5on3ZvNC7R4r2PBues4
-         8KpmoohBgpRSmhNAGH3CcAS95UqDOycF4PQVQHLN7/vWzIBUCUJ2UxHc/MEq9EB+F6
-         gJFqa1atrjUiw==
-Date:   Wed, 18 May 2022 09:18:19 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-can@vger.kernel.org
-Subject: Re: [PATCH] can: mcp251xfd: silence clang's -Wunaligned-access
- warning
-Message-ID: <YoUcS2WMkyJYMHfG@dev-arch.thelio-3990X>
-References: <20220518070517.q53bjzo6lbnq3f2i@pengutronix.de>
- <20220518114357.55452-1-mailhol.vincent@wanadoo.fr>
- <YoUZLHIbxPu15/lN@dev-arch.thelio-3990X>
- <CAMZ6RqL2eKd-uqP-2vnt99_0RRE-8x7hxwYy6x1b0Oqes-HGgA@mail.gmail.com>
+        with ESMTP id S240055AbiERQYN (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 18 May 2022 12:24:13 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A4F1F1CAC;
+        Wed, 18 May 2022 09:24:12 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id d137so4507936ybc.13;
+        Wed, 18 May 2022 09:24:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dhSiyOtTgaVAjZan+u734uFv0uo0oRV2yOrUrfVrqPI=;
+        b=ftlbUEnn8IO7BNvrI7YTiIMgh3qQlAmfrLh0Fl+h5QRnIhLZOLq7WI9ET85EyJ1Cpa
+         quiq3mVM0pSHuB73vN+hp9E0iwqTc8Q2gPAth7OPnjHd0nWoVzu2/cpWgfYb+y9Xs/CT
+         13RjgC/epaBnZqz1vw+83XxJ43JzpRxDBh7Wc820RLUFcpiauU3G/zbmbdHJBS0XYuGe
+         YdrUzvCJmONGzOoAceOEQ3o0w9C/91OfsbIcqp3tsCvmJmNJtnvrtazNsUrJ9CcA5AMc
+         StCt/z6SFfAvZCsu2oVV40hbI9dAj+dtvfqAHg1ICepWLt8DobL36pOZDgdr6ytYwt1K
+         Ahpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dhSiyOtTgaVAjZan+u734uFv0uo0oRV2yOrUrfVrqPI=;
+        b=s6u8bJXbbE9AIT+uo8RCnZ7xqwTEVArE3B4rVwKbrQsDkOP/VJSgWGAI8bpAHwIaN4
+         NzbvtI/CekvZXY3UUgMXd5k7vtyxoG7H7xL0OdIs9kV7/k4AF19JQqJmIXuhyG74x0Ep
+         1bCnVEiyyO4iE5KVtgGOTWSPoS977Si9ZwJ/vILWCFO2aR1/IFBNcJXXXyc0hohBsQmH
+         3QBI2F9tkHHXDmsu/oU9n8TiN355qP2uD3HWAYHoDHXDI2jM2VCyMjYeiDsYkJ8CYxhx
+         Q5aFySZsvfWk7B0pn4glOAX670MKapmgLmoKmJX595i19+tmW4HR+g75LjEXoqpDhR4L
+         5BRA==
+X-Gm-Message-State: AOAM531VG2viUzdvWTUUwoO1XMCICCjHWiW91NLxA+VyAgU+BJYJi+Fw
+        FO8leC6k+1BQmK0PwXRsDcaxRWkrIYPGJVQOB1U=
+X-Google-Smtp-Source: ABdhPJwpx4YSwofMVxD1GzkihxNpPcH9+j+L8tVg2vc3hhwdL2JpKktwokGCaMrXTskUVRl3/A/eAkWgAdBeGWzmuUI=
+X-Received: by 2002:a25:3145:0:b0:64e:ac9a:eb27 with SMTP id
+ x66-20020a253145000000b0064eac9aeb27mr401338ybx.630.1652891051851; Wed, 18
+ May 2022 09:24:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMZ6RqL2eKd-uqP-2vnt99_0RRE-8x7hxwYy6x1b0Oqes-HGgA@mail.gmail.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220512182921.193462-1-max@enpas.org>
+In-Reply-To: <20220512182921.193462-1-max@enpas.org>
+From:   Vincent Mailhol <vincent.mailhol@gmail.com>
+Date:   Thu, 19 May 2022 01:24:00 +0900
+Message-ID: <CAMZ6RqJqW+RuPOe6wYkAQh500BzVWnx9hcSAC3bvC7zYNYV-iw@mail.gmail.com>
+Subject: Re: [PATCH v6] can, tty: can327 CAN/ldisc driver for ELM327 based
+ OBD-II adapters
+To:     Max Staudt <max@enpas.org>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Oliver Neukum <oneukum@suse.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Thu, May 19, 2022 at 01:15:04AM +0900, Vincent MAILHOL wrote:
-> On Tue. 19 May 2022 at 01:08, Nathan Chancellor <nathan@kernel.org> wrote:
-> > Hi Vincent,
-> >
-> > On Wed, May 18, 2022 at 08:43:57PM +0900, Vincent Mailhol wrote:
-> > > clang emits a -Wunaligned-access warning on union
-> > > mcp251xfd_tx_ojb_load_buf.
-> > >
-> > > The reason is that field hw_tx_obj (not declared as packed) is being
-> > > packed right after a 16 bits field inside a packed struct:
-> > >
-> > > | union mcp251xfd_tx_obj_load_buf {
-> > > |     struct __packed {
-> > > |             struct mcp251xfd_buf_cmd cmd;
-> > > |               /* ^ 16 bits fields */
-> > > |             struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
-> > > |               /* ^ not declared as packed */
-> > > |     } nocrc;
-> > > |     struct __packed {
-> > > |             struct mcp251xfd_buf_cmd_crc cmd;
-> > > |             struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
-> > > |             __be16 crc;
-> > > |     } crc;
-> > > | } ____cacheline_aligned;
-> > >
-> > > Starting from LLVM 14, having an unpacked struct nested in a packed
-> > > struct triggers a warning. c.f. [1].
-> > >
-> > > This is a false positive because the field is always being accessed
-> > > with the relevant put_unaligned_*() function. Adding __packed to the
-> > > structure declaration silences the warning.
-> > >
-> > > [1] https://github.com/llvm/llvm-project/issues/55520
-> > >
-> > > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > > ---
-> > > Actually, I do not have llvm 14 installed so I am not able to test
-> > > (this check was introduced in v14). But as explained in [1], adding
-> > > __packed should fix the warning.
-> >
-> > Thanks for the patch! This does resolve the warning (verified with LLVM
-> > 15).
-> 
-> Great, thanks for the check! Does this mean we can add you Tested-by
-> (I assume yes, c.f. below, if not the case, please raise your voice).
+Forgot one comment.
 
-Sure, see below.
+On Fri 13 May 2022 at 03:29, Max Staudt <max@enpas.org> wrote:
+[...]
+> +/* Send a can_frame to a TTY. */
+> +static netdev_tx_t can327_netdev_start_xmit(struct sk_buff *skb,
+> +                                           struct net_device *dev)
+> +{
+> +       struct can327 *elm = netdev_priv(dev);
+> +       struct can_frame *frame = (struct can_frame *)skb->data;
+> +
+> +       if (can_dropped_invalid_skb(dev, skb))
+> +               return NETDEV_TX_OK;
+> +
+> +       /* BHs are already disabled, so no spin_lock_bh().
+> +        * See Documentation/networking/netdevices.txt
+> +        */
+> +       spin_lock(&elm->lock);
+> +
+> +       /* We shouldn't get here after a hardware fault:
+> +        * can_bus_off() calls netif_carrier_off()
+> +        */
+> +       WARN_ON_ONCE(elm->uart_side_failure);
+> +
+> +       if (!elm->tty ||
+> +           elm->uart_side_failure ||
+> +           elm->can.ctrlmode & CAN_CTRLMODE_LISTENONLY) {
+> +               spin_unlock(&elm->lock);
+> +               goto out;
+> +       }
+> +
+> +       netif_stop_queue(dev);
+> +
+> +       elm327_send_frame(elm, frame);
+> +       spin_unlock(&elm->lock);
+> +
+> +       dev->stats.tx_packets++;
+> +       dev->stats.tx_bytes += frame->len;
 
-> > > Because this is a false positive, I did not add a Fixes tag, nor a
-> > > Reported-by: kernel test robot.
-> >
-> > I think that the Reported-by tag should always be included but I agree
-> > that a Fixes tag is not necessary for this warning, as we currently have
-> > it under W=1, so it should not be visible under normal circumstances.
-> 
-> ACK.
-> Marc, can you directly add below tags to the patch:
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Tested-by: Nathan Chancellor <nathan@kernel.org>
+Do not increase tx_bytes for RTR frame. c.f.
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=cc4b08c31b5c51352f258032cc65e884b3e61e6a
 
-Please use:
+Also, when is the frame freed? Did you double check there is no race
+condition resulting in a use after free on frame->len? Similar to:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=03f16c5075b22c8902d2af739969e878b0879c94
 
-Tested-by: Nathan Chancellor <nathan@kernel.org> # build
+> +       can_led_event(dev, CAN_LED_EVENT_TX);
 
-To make it clear that I didn't perform anything more than a build test
-to see that the warning is fixed.
+Please adjust according to Oliver's patch.
 
-Cheers,
-Nathan
+> +out:
+> +       kfree_skb(skb);
+> +       return NETDEV_TX_OK;
+> +}
+> +
+> +static const struct net_device_ops can327_netdev_ops = {
+> +       .ndo_open       = can327_netdev_open,
+> +       .ndo_stop       = can327_netdev_close,
+> +       .ndo_start_xmit = can327_netdev_start_xmit,
+> +       .ndo_change_mtu = can_change_mtu,
+> +};
+[...]
+
+Yours sincerely,
+Vincent Mailhol
