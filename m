@@ -2,123 +2,92 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 695EE52C435
-	for <lists+linux-can@lfdr.de>; Wed, 18 May 2022 22:23:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A770152C70B
+	for <lists+linux-can@lfdr.de>; Thu, 19 May 2022 00:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242431AbiERUVl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 18 May 2022 16:21:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34160 "EHLO
+        id S230204AbiERW5h (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 18 May 2022 18:57:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242492AbiERUVk (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 18 May 2022 16:21:40 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F3D192D31
-        for <linux-can@vger.kernel.org>; Wed, 18 May 2022 13:21:39 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nrQAr-0007rn-Hx; Wed, 18 May 2022 22:21:37 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 886E7818A7;
-        Wed, 18 May 2022 20:21:36 +0000 (UTC)
-Date:   Wed, 18 May 2022 22:21:34 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     linux-can@vger.kernel.org,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: Re: [PATCH can-next] can: can-dev: remove obsolete CAN LED support
-Message-ID: <20220518202134.77ir3bohv2tl6vi6@pengutronix.de>
-References: <20220518154527.29046-1-socketcan@hartkopp.net>
+        with ESMTP id S230460AbiERW45 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 18 May 2022 18:56:57 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB7325C5
+        for <linux-can@vger.kernel.org>; Wed, 18 May 2022 15:56:55 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id i11so6128639ybq.9
+        for <linux-can@vger.kernel.org>; Wed, 18 May 2022 15:56:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=mZ3wqB4NmL7z6lpFr/h15h1rYqsZKafJnUpMVahbEPg=;
+        b=ovbcf3BPb/ZrA/FpQ+ZjErGDIEZ9sF3fYOxqsE4Z0xdiTlYY9UY36hS3ty6MLllddq
+         FdZzNc2PcFHW5cwKZ0FlQqx6F8uTY06Ab/cmT+eL89dkm6I4fHT5v6DDGzwY+fqIjM8b
+         RjeYQt93Ckr4p0lPVWY342OwWKznH6xDl4nV36uj7bwrBPcHFh3ePzF5GNEmu/mQBhIV
+         GwWDekgJIDWSV60014hyLdzt2NtjUStY8MI6SiwBWMH8LEBnRGkE0W6Db0zUE9IYWmDQ
+         Ifd6nbhkESdcIbQrjo3sdEfmdPtb1VAIHCw/LAZv1DOtvQwqLYnhML4dVDmuoYeMmVFn
+         q7TQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=mZ3wqB4NmL7z6lpFr/h15h1rYqsZKafJnUpMVahbEPg=;
+        b=KdrwE90ZOaKuO4A6H10ytlyLRQSrGbtBLbhZXKM7Nkx/jdT1H2np2RODq09AB7LpJy
+         WVt+stBeoJ2vnezPR/jrL4elNDBpOr4aghVUZlWQ7rTNtY+8Eq1o5jUV6DUjw8pxabwb
+         Jn7B7ZIJBpMt+P39bepA6g6CSuB1iBm+zVF/q0tZEzk1dUTlPsGyr5r4X90c5ktKzeVI
+         HVV3hrWwcd1W2dZcdVFHax/OTxhBnUdrupW1PqW2ZIqKP5+FgjqOu033fIAfBwt+tZmK
+         005e7wtIghJYvf+8BZB2Gnrfv2CH88stnonIHikPaQFsrA/xSCOJvbxQQwb+i5xLgMDE
+         Xbbg==
+X-Gm-Message-State: AOAM530tMIog0tWEBvSTzXHknV7L8gFhq2PKDFTx8xIeJUU0Z49NqTKQ
+        6FJG+2t+ah8KBtl2jS0QlF+yymA/FhIPNyGIFZQ=
+X-Google-Smtp-Source: ABdhPJyyLDAg+sVdsLTxwEXiZ5avjedwK/uWMP/Y3UWcChEjwDE+iXuY4kOycHY8vIqM/rcV0hLTcVdg0IN0RAQYgBc=
+X-Received: by 2002:a5b:f87:0:b0:64a:9aa6:e181 with SMTP id
+ q7-20020a5b0f87000000b0064a9aa6e181mr1852277ybh.157.1652914614913; Wed, 18
+ May 2022 15:56:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wncxtr4w2aex3s3l"
-Content-Disposition: inline
-In-Reply-To: <20220518154527.29046-1-socketcan@hartkopp.net>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Received: by 2002:a05:7000:7143:0:0:0:0 with HTTP; Wed, 18 May 2022 15:56:53
+ -0700 (PDT)
+Reply-To: tonywenn@asia.com
+From:   Tony Wen <weboutloock4@gmail.com>
+Date:   Thu, 19 May 2022 06:56:53 +0800
+Message-ID: <CAE2_YrD=5bo8j9+ah-xptEBBV-HEC4=Gb0SRHf996phiopc3WQ@mail.gmail.com>
+Subject: engage
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:b30 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4933]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [weboutloock4[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [weboutloock4[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.4 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-
---wncxtr4w2aex3s3l
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 18.05.2022 17:45:27, Oliver Hartkopp wrote:
-> Since commit 30f3b42147ba6f ("can: mark led trigger as broken") the
-> CAN specific LED support was disabled and marked as BROKEN. As the common
-> LED support with CONFIG_LEDS_TRIGGER_NETDEV should to this work now the
-> code can be removed as preparation for a CAN netdevice Kconfig rework.
->=20
-> Suggested-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-> ---
->  drivers/net/can/Kconfig                  |  17 ---
->  drivers/net/can/at91_can.c               |  10 --
->  drivers/net/can/c_can/c_can_main.c       |  12 +-
->  drivers/net/can/ctucanfd/ctucanfd_base.c |  10 --
->  drivers/net/can/dev/Makefile             |   2 -
->  drivers/net/can/dev/dev.c                |   5 -
->  drivers/net/can/dev/rx-offload.c         |   2 -
->  drivers/net/can/flexcan/flexcan-core.c   |   7 --
->  drivers/net/can/ifi_canfd/ifi_canfd.c    |   9 --
->  drivers/net/can/led.c                    | 140 -----------------------
->  drivers/net/can/m_can/m_can.c            |  11 --
->  drivers/net/can/m_can/m_can.h            |   1 -
->  drivers/net/can/rcar/rcar_can.c          |   8 --
->  drivers/net/can/rcar/rcar_canfd.c        |   7 --
->  drivers/net/can/sja1000/sja1000.c        |  11 --
->  drivers/net/can/spi/hi311x.c             |   8 --
->  drivers/net/can/spi/mcp251x.c            |  10 --
->  drivers/net/can/sun4i_can.c              |   7 --
->  drivers/net/can/ti_hecc.c                |   8 --
->  drivers/net/can/usb/mcba_usb.c           |   8 --
->  drivers/net/can/usb/usb_8dev.c           |  11 --
->  drivers/net/can/xilinx_can.c             |  10 +-
->  include/linux/can/dev.h                  |  10 --
->  include/linux/can/led.h                  |  51 ---------
->  24 files changed, 2 insertions(+), 373 deletions(-)
->  delete mode 100644 drivers/net/can/led.c
->  delete mode 100644 include/linux/can/led.h
-
-Applied to linux-can-next/testing.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---wncxtr4w2aex3s3l
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKFVUsACgkQrX5LkNig
-013F8Af9HBQYHZwym0Aanf/AFHqbin3C+buubyxl1u3cKF9WSDmBoKTk29OneByd
-7k7GYpULHLR6ZhlFOjDM5OpwUloKK+h/tXzUKgcL4juuEs8uImN2aNVvy0IvmA/b
-+xgPBg9+IkXke+c0WqibKM0edks/C22UUWjy8NTffSZQSqNnW8MALpnUnRWkQ6rL
-RqzubyCuvPMYC9q/NMKyOqkgVVtni38itXA733DvkZPXtZOK6cFQovdFNrI+re4i
-oc0XfmFG2yZ7o8wxNNx8j/EDo92yadwDEjk1/RL2gARJfHUhENphB2tM7AfrR/rr
-cCsE5y308xED7gkrhyOnj3D51KrReA==
-=QInh
------END PGP SIGNATURE-----
-
---wncxtr4w2aex3s3l--
+Can I engage your services?
