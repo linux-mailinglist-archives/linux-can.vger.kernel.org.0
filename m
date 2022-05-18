@@ -2,39 +2,51 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B403852BE09
-	for <lists+linux-can@lfdr.de>; Wed, 18 May 2022 17:25:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05CB052BDFC
+	for <lists+linux-can@lfdr.de>; Wed, 18 May 2022 17:25:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238683AbiEROgX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 18 May 2022 10:36:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52052 "EHLO
+        id S238694AbiEROib (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 18 May 2022 10:38:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238681AbiEROgW (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 18 May 2022 10:36:22 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED62F31DFD
-        for <linux-can@vger.kernel.org>; Wed, 18 May 2022 07:36:17 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nrKmd-0000Bl-4q; Wed, 18 May 2022 16:36:15 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 17E5B81582;
-        Wed, 18 May 2022 14:36:14 +0000 (UTC)
-Date:   Wed, 18 May 2022 16:36:13 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
+        with ESMTP id S239131AbiEROiP (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 18 May 2022 10:38:15 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F351A0AFF;
+        Wed, 18 May 2022 07:38:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1652884691;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=iAPOxwQHkDLBQcb12htFH/Vr1ZP7IJAj6M1OS0HtT3I=;
+    b=UTEVJT3cstfdTUGxp6L0UbG2e4mUTxSjmwrxZGeDcIUcbYx0A5kZFo1TtNWdwrck8A
+    0jYrUQQG+nJtNtvTVlMY8/zmeepcIUx2CpjesnCnzop5arGtqZrIaZgaUg49AQ29GmaQ
+    WpndAp0SeVb/2PkK1P/gphBBu0WeR0thbcIXseSItQJwwaA738RT4P7GlZTykoEvFRS+
+    wPVo8r9abxZGYwPaM5ASqpXG1ixCOAV3rf8jrDJrH5C/r9IvGNFjHIOB8zxpcDe1kNmZ
+    hlZvkzrmK1Zv9cJBizvEoH83CpvzEEz2/9II6DzBtVV0rgTuSKkSkyDbPNnsxLuVF8hh
+    xCwA==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdBqPeOuh2krLEWFUg=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a00:6020:1cff:5b00::b82]
+    by smtp.strato.de (RZmta 47.45.0 AUTH)
+    with ESMTPSA id R0691fy4IEcBHoO
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Wed, 18 May 2022 16:38:11 +0200 (CEST)
+Message-ID: <482fd87a-df5a-08f7-522b-898d68c3b04a@hartkopp.net>
+Date:   Wed, 18 May 2022 16:38:10 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v3 3/4] can: skb:: move can_dropped_invalid_skb and
+ can_skb_headroom_valid to skb.c
+Content-Language: en-US
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
 Cc:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
         Max Staudt <max@enpas.org>, linux-can@vger.kernel.org,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] can: skb:: move can_dropped_invalid_skb and
- can_skb_headroom_valid to skb.c
-Message-ID: <20220518143613.2a7alnw6vtkw7ct2@pengutronix.de>
 References: <e054f6d4-7ed1-98ac-8364-425f4ef0f760@hartkopp.net>
  <20220517141404.578d188a.max@enpas.org>
  <20220517122153.4r6n6kkbdslsa2hv@pengutronix.de>
@@ -45,17 +57,14 @@ References: <e054f6d4-7ed1-98ac-8364-425f4ef0f760@hartkopp.net>
  <20220518132811.xfmwms2cu3bfxgrp@pengutronix.de>
  <CAMZ6RqJqeNjAtoDWADHsWocgbSXqQixcebJBhiBFS8BVeKCb3g@mail.gmail.com>
  <3dbe135e-d13c-5c5d-e7e4-b9c13b820fb8@hartkopp.net>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wrv6rczef3xtxlyw"
-Content-Disposition: inline
-In-Reply-To: <3dbe135e-d13c-5c5d-e7e4-b9c13b820fb8@hartkopp.net>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+ <20220518143613.2a7alnw6vtkw7ct2@pengutronix.de>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20220518143613.2a7alnw6vtkw7ct2@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,79 +73,18 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---wrv6rczef3xtxlyw
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On 18.05.2022 16:33:58, Oliver Hartkopp wrote:
-> > > > And what about the LEDS support depending on BROKEN?
-> > > > That was introduced by commit 30f3b42147ba6f ("can: mark led trigge=
-r as
-> > > > broken") from Uwe as it seems there were some changes in 2018.
-> > >=20
-> > > There's a proper generic LED trigger now for network devices. So remo=
-ve
-> > > LED triggers, too.
-> >=20
-> > Yes, the broken LED topic also popped-up last year:
-> >=20
-> > https://lore.kernel.org/linux-can/20210906143057.zrpor5fkh67uqwi2@pengu=
-tronix.de/ > I am OK to add one patch to the series for LED removal.
->=20
-> Hm. We have several drivers that support LED triggers:
->=20
-> $ git grep led.h
-> at91_can.c:#include <linux/can/led.h>
-> c_can/c_can_main.c:#include <linux/can/led.h>
-> ctucanfd/ctucanfd_base.c:#include <linux/can/led.h>
-> dev/dev.c:#include <linux/can/led.h>
-> flexcan/flexcan-core.c:#include <linux/can/led.h>
-> led.c:#include <linux/can/led.h>
-> m_can/m_can.h:#include <linux/can/led.h>
-> rcar/rcar_can.c:#include <linux/can/led.h>
-> rcar/rcar_canfd.c:#include <linux/can/led.h>
-> sja1000/sja1000.c:#include <linux/can/led.h>
-> spi/hi311x.c:#include <linux/can/led.h>
-> spi/mcp251x.c:#include <linux/can/led.h>
-> sun4i_can.c:#include <linux/can/led.h>
-> ti_hecc.c:#include <linux/can/led.h>
-> usb/mcba_usb.c:#include <linux/can/led.h>
-> usb/usb_8dev.c:#include <linux/can/led.h>
-> xilinx_can.c:#include <linux/can/led.h>
->=20
-> And I personally like the ability to be able to fire some LEDS (either as
-> GPIO or probably in a window manager).
->=20
-> I would suggest to remove the Kconfig entry but not all the code inside t=
-he
-> drivers, so that a volunteer can convert the LED support based on the
-> existing trigger points in the drivers code later.
+On 18.05.22 16:36, Marc Kleine-Budde wrote:
+> On 18.05.2022 16:33:58, Oliver Hartkopp wrote:
 
-The generic netdev LED trigger code doesn't need any support in the
-netdev driver.
+>> I would suggest to remove the Kconfig entry but not all the code inside the
+>> drivers, so that a volunteer can convert the LED support based on the
+>> existing trigger points in the drivers code later.
+> 
+> The generic netdev LED trigger code doesn't need any support in the
+> netdev driver.
 
-Marc
+Oh! Yes, then it could be removed. Sorry for not looking that deep into it.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---wrv6rczef3xtxlyw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKFBFsACgkQrX5LkNig
-012tlQf+LT2ROunCO3x7zZZLFd/l4EUXwAtDbMP3DxdGpd2XNnDUYupag0EPPojc
-dAghmn07jvCZiV/jhC1UPhtq0LZ4vRVNQ+66NaROXooBo7eH31MALEvCaytYnfhh
-/cGz0VzzhhnyZTf7pcFL3NXXffrLvFtVG93TXMOLQcS19ucysg7AVWP5mU3wI9K4
-c+ZyeNpZ+17oQlYYOqb8p1uN6xKqJXuU4CU6bfcTEF9pBzimQZj0hFT+EIR7oo3F
-J2LuqbV12IBoyPJalGnHgmrGU8Hk6qC9IVjKC2NwZa8JIdmUKFEPHhq3e8CkCi9U
-FHgeZRMYaypDzsYmsyoWmgrHM8y8hQ==
-=rdYd
------END PGP SIGNATURE-----
-
---wrv6rczef3xtxlyw--
+Best,
+Oliver
