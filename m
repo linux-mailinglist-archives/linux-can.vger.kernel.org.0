@@ -2,39 +2,51 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C18C952B99C
-	for <lists+linux-can@lfdr.de>; Wed, 18 May 2022 14:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A04D52BBD6
+	for <lists+linux-can@lfdr.de>; Wed, 18 May 2022 16:15:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236211AbiERMMc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 18 May 2022 08:12:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48374 "EHLO
+        id S237307AbiERMrc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 18 May 2022 08:47:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236197AbiERMMb (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 18 May 2022 08:12:31 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A5E14AA58
-        for <linux-can@vger.kernel.org>; Wed, 18 May 2022 05:12:29 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nrIXT-0003wh-SJ; Wed, 18 May 2022 14:12:27 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id C627681373;
-        Wed, 18 May 2022 12:12:26 +0000 (UTC)
-Date:   Wed, 18 May 2022 14:12:26 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        Max Staudt <max@enpas.org>, linux-can@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Device Drivers: (was: Re: [PATCH v3 3/4] can: skb:: move
+        with ESMTP id S237401AbiERMrV (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 18 May 2022 08:47:21 -0400
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C174A1BDAC4;
+        Wed, 18 May 2022 05:45:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1652877930;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=DALuquiPTpvakZ1hsawCfe1qGQYKJ9d3gJZOL4yRbi8=;
+    b=I1+RBVUa8+5UKOMUJ7PRni8lMXTd8Grq9ftk0o0fZiHn90/WTNWd5Ra3/0hJYTkTdN
+    vs4ncegtSSOEjLjbXPod2389zZSu2PcokzwYA63a1OxmUjFzlUPS2Gj6pK5s3uJn1UY4
+    mXPVtZ1YEdXZ4IzE94fa1zlDxTmxFogra9qG65e8myFUPkj/uIBn0BCMRUn8dJfXMJJK
+    gPmcYFjbijLxJwf2CRZfn2/kQqa1/m3WRrHwou4Lj52fAhCdVg/ZURWLfrNurVRYMRtC
+    XycNcyX6w1YxOlLOrLG9sjD2bKvRwr5FzEnBZhCb1O1TTycIoUD5rk1nVBNZfEc4fHY/
+    Ozww==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdBqPeOuh2krLEWFUg=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a00:6020:1cff:5b00::b82]
+    by smtp.strato.de (RZmta 47.45.0 AUTH)
+    with ESMTPSA id R0691fy4ICjTHPh
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Wed, 18 May 2022 14:45:29 +0200 (CEST)
+Message-ID: <b76ed65a-cc3d-ae75-e764-9ce627dcb4c4@hartkopp.net>
+Date:   Wed, 18 May 2022 14:45:24 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: Device Drivers: (was: Re: [PATCH v3 3/4] can: skb:: move
  can_dropped_invalid_skb and can_skb_headroom_valid to skb.c)
-Message-ID: <20220518121226.inixzcttub6iuwll@pengutronix.de>
+Content-Language: en-US
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Max Staudt <max@enpas.org>, linux-can@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
 References: <CAMZ6RqKZMHXB7rQ70GrXcVE7x7kytAAGfE+MOpSgWgWgp0gD2g@mail.gmail.com>
  <20220517060821.akuqbqxro34tj7x6@pengutronix.de>
  <CAMZ6RqJ3sXYUOpw7hEfDzj14H-vXK_i+eYojBk2Lq=h=7cm7Jg@mail.gmail.com>
@@ -45,18 +57,15 @@ References: <CAMZ6RqKZMHXB7rQ70GrXcVE7x7kytAAGfE+MOpSgWgWgp0gD2g@mail.gmail.com>
  <20220517143921.08458f2c.max@enpas.org>
  <0b505b1f-1ee4-5a2c-3bbf-6e9822f78817@hartkopp.net>
  <CAMZ6RqJ0iCsHT-D5VuYQ9fk42ZEjHStU1yW0RfX1zuJpk5rVtQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3kuiw7eefpz5cmyt"
-Content-Disposition: inline
-In-Reply-To: <CAMZ6RqJ0iCsHT-D5VuYQ9fk42ZEjHStU1yW0RfX1zuJpk5rVtQ@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+ <20220518121226.inixzcttub6iuwll@pengutronix.de>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20220518121226.inixzcttub6iuwll@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -64,40 +73,23 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---3kuiw7eefpz5cmyt
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On 18.05.2022 21:03:37, Vincent MAILHOL wrote:
-> On a different topic, why are all the CAN devices
-> under "Networking support" and not "Device Drivers" in menuconfig
-> like everything else? Would it make sense to move our devices
-> under the "Device Drivers" section?
+On 18.05.22 14:12, Marc Kleine-Budde wrote:
+> On 18.05.2022 21:03:37, Vincent MAILHOL wrote:
+>> On a different topic, why are all the CAN devices
+>> under "Networking support" and not "Device Drivers" in menuconfig
+>> like everything else? Would it make sense to move our devices
+>> under the "Device Drivers" section?
+> 
+> ACK
+> 
+
+Bluetooth did it that way too. But I feel the same.
+When we clean up the CAN drivers moving the CAN driver selection to 
+drivers/net/Kconfig would make sense.
 
 ACK
 
-Marc
+Best regards,
+Oliver
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---3kuiw7eefpz5cmyt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKE4qcACgkQrX5LkNig
-012uAwf+LE2AN6s/mYbZjNau8v96x1hj/9QBlr0QTmKGAt9UN0QPqms3zhapK2C0
-8s0SKtEykDR/6gx9OyIDeQWQbQqf07R/iX0amf7OXnE4TPSx56p3pYk85MCXPoX4
-KWoGcTZSBLFV9Sim+yfs6JaXak1L6mejyWQDz8VqqOx2dpuTgrPETQaGe43Sfh7+
-FH4cIvzhEncq6UpzTpV95hCkv0pqykrhaD4K3Edy8Ay2uBi8ojw1oX5fP2PR5BLu
-SgqJHj+7isGkwRJWgcaYlGBk6jeDsewb5t2UCF+Gt7B4D8ODh8YTSUH7KQwAH+3Q
-bONELRwrsSPNcQqaX/63QyjA7MOiDw==
-=tKnl
------END PGP SIGNATURE-----
-
---3kuiw7eefpz5cmyt--
