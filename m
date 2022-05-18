@@ -2,139 +2,116 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D7BB52C094
-	for <lists+linux-can@lfdr.de>; Wed, 18 May 2022 19:10:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C302952C433
+	for <lists+linux-can@lfdr.de>; Wed, 18 May 2022 22:22:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240211AbiERQcQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 18 May 2022 12:32:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41570 "EHLO
+        id S242377AbiERUPl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 18 May 2022 16:15:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240247AbiERQcN (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 18 May 2022 12:32:13 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14429AFAFE;
-        Wed, 18 May 2022 09:32:10 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id d137so4547820ybc.13;
-        Wed, 18 May 2022 09:32:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uayVpCC1eBrYAegb3COrd5jXgXqO970SEpGm9TSisnQ=;
-        b=OL6XdaoriVped5yCN9aw3PcvVWLudDFf6W8HhuDr6Qp8wD1XkYnyDnceZKHcwp1uLU
-         O0TgDqRINtHpSITcW32PN8LboZx2GJSqQeQASUcf4dld37DDvDBW1CiTYX4RQYxIJvwm
-         FVFtIsyMBjdce1w/xuhDONhikNOfNgbOr3GHGktIl1NfYXgnbpKVy265kiZxEsW2qVEk
-         Wwxe8TM/LSJRAjXYJDyIux8XOBUmwUih+frd5Iq07dIcD1z0EdW1bHhloQrgXtjBTps1
-         Fprs2rOXkomu3fetYc4l4EnWwQXYwB1o1vVW0px+H2wIYS1ta66TtDSXm5kb+EOKAnvw
-         aJVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uayVpCC1eBrYAegb3COrd5jXgXqO970SEpGm9TSisnQ=;
-        b=44S20JcZq+KiTmbYTdOWhCw5dPKkObrRgZr6VZD4BrkLEiwPNlq3tu2TZO8mIqc7BA
-         SOfnhFc0t+QnTNdsWPzfTXa7+tg92a9H7REXbxq1cIcydQtPkY9WIGWPFUKyzukjBfly
-         NmrPM2RxYsqS2AuncnhWv0Qmzr+kRyCNVrk9PqPciqh7SqTAcYqLHHCuWBS1B1exoU2O
-         7ZMMpqHfkq9HUzWzSZ3A0/8uLAoNNzhDJirOckZYAN4jVDdg6cwogUMIl61uGLSDr5Oa
-         jgbxAQL0oW2XzW8cNrfosQDtNGfdsfwLfaOo0ta9050IVtDALmMYPCxiIaP3yJ5s26f8
-         hUaw==
-X-Gm-Message-State: AOAM532Rm4JnfniQlG1UPI2R9m02xx6QpQZsXWYzptD23ZnRFtBCEvCJ
-        gfRTObsdGFnAtu2sRMZ/2qZ+i4ffbXxaQqKfkvk=
-X-Google-Smtp-Source: ABdhPJzUp6xpKisfhOxd9uQJGz88DPeNGapWqgTtrNqFkZdWFQHKK66l2ec8Tt56Ai/jEVMzyFzRwz4EAekJKLlFhBM=
-X-Received: by 2002:a25:e093:0:b0:64d:6c85:6bc6 with SMTP id
- x141-20020a25e093000000b0064d6c856bc6mr433101ybg.500.1652891530181; Wed, 18
- May 2022 09:32:10 -0700 (PDT)
+        with ESMTP id S242366AbiERUPj (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 18 May 2022 16:15:39 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D4835852
+        for <linux-can@vger.kernel.org>; Wed, 18 May 2022 13:15:38 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nrQ4q-0007Bg-Ub; Wed, 18 May 2022 22:15:24 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id E473B818A0;
+        Wed, 18 May 2022 20:15:20 +0000 (UTC)
+Date:   Wed, 18 May 2022 22:15:19 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        linux-can@vger.kernel.org
+Subject: Re: [PATCH] can: mcp251xfd: silence clang's -Wunaligned-access
+ warning
+Message-ID: <20220518201519.euo3jygzuk4nul2p@pengutronix.de>
+References: <20220518070517.q53bjzo6lbnq3f2i@pengutronix.de>
+ <20220518114357.55452-1-mailhol.vincent@wanadoo.fr>
+ <YoUZLHIbxPu15/lN@dev-arch.thelio-3990X>
+ <CAMZ6RqL2eKd-uqP-2vnt99_0RRE-8x7hxwYy6x1b0Oqes-HGgA@mail.gmail.com>
+ <YoUcS2WMkyJYMHfG@dev-arch.thelio-3990X>
 MIME-Version: 1.0
-References: <20220512182921.193462-1-max@enpas.org> <CAMZ6RqJqW+RuPOe6wYkAQh500BzVWnx9hcSAC3bvC7zYNYV-iw@mail.gmail.com>
-In-Reply-To: <CAMZ6RqJqW+RuPOe6wYkAQh500BzVWnx9hcSAC3bvC7zYNYV-iw@mail.gmail.com>
-From:   Vincent Mailhol <vincent.mailhol@gmail.com>
-Date:   Thu, 19 May 2022 01:31:59 +0900
-Message-ID: <CAMZ6RqJwitvx26K_5+_mtbiBfUD8q5oaWcWo-a-GTouUG+uc0g@mail.gmail.com>
-Subject: Re: [PATCH v6] can, tty: can327 CAN/ldisc driver for ELM327 based
- OBD-II adapters
-To:     Max Staudt <max@enpas.org>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Oliver Neukum <oneukum@suse.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3hg3ueutwh7avwyx"
+Content-Disposition: inline
+In-Reply-To: <YoUcS2WMkyJYMHfG@dev-arch.thelio-3990X>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Thu. 19 May 2022 at 01:24, Vincent Mailhol <vincent.mailhol@gmail.com> wrote:
-> Forgot one comment.
->
-> On Fri 13 May 2022 at 03:29, Max Staudt <max@enpas.org> wrote:
-> [...]
-> > +/* Send a can_frame to a TTY. */
-> > +static netdev_tx_t can327_netdev_start_xmit(struct sk_buff *skb,
-> > +                                           struct net_device *dev)
-> > +{
-> > +       struct can327 *elm = netdev_priv(dev);
-> > +       struct can_frame *frame = (struct can_frame *)skb->data;
-> > +
-> > +       if (can_dropped_invalid_skb(dev, skb))
-> > +               return NETDEV_TX_OK;
-> > +
-> > +       /* BHs are already disabled, so no spin_lock_bh().
-> > +        * See Documentation/networking/netdevices.txt
-> > +        */
-> > +       spin_lock(&elm->lock);
-> > +
-> > +       /* We shouldn't get here after a hardware fault:
-> > +        * can_bus_off() calls netif_carrier_off()
-> > +        */
-> > +       WARN_ON_ONCE(elm->uart_side_failure);
-> > +
-> > +       if (!elm->tty ||
-> > +           elm->uart_side_failure ||
-> > +           elm->can.ctrlmode & CAN_CTRLMODE_LISTENONLY) {
-> > +               spin_unlock(&elm->lock);
-> > +               goto out;
-> > +       }
-> > +
-> > +       netif_stop_queue(dev);
-> > +
-> > +       elm327_send_frame(elm, frame);
-> > +       spin_unlock(&elm->lock);
-> > +
-> > +       dev->stats.tx_packets++;
-> > +       dev->stats.tx_bytes += frame->len;
->
-> Do not increase tx_bytes for RTR frame. c.f.
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=cc4b08c31b5c51352f258032cc65e884b3e61e6a
->
-> Also, when is the frame freed? Did you double check there is no race
-> condition resulting in a use after free on frame->len? Similar to:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=03f16c5075b22c8902d2af739969e878b0879c94
 
-Never mind, the free is just two lines below inside the out label.
-Sorry for the noise.
+--3hg3ueutwh7avwyx
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > +       can_led_event(dev, CAN_LED_EVENT_TX);
->
-> Please adjust according to Oliver's patch.
->
-> > +out:
-> > +       kfree_skb(skb);
-> > +       return NETDEV_TX_OK;
-> > +}
-> > +
-> > +static const struct net_device_ops can327_netdev_ops = {
-> > +       .ndo_open       = can327_netdev_open,
-> > +       .ndo_stop       = can327_netdev_close,
-> > +       .ndo_start_xmit = can327_netdev_start_xmit,
-> > +       .ndo_change_mtu = can_change_mtu,
-> > +};
-> [...]
->
-> Yours sincerely,
-> Vincent Mailhol
+On 18.05.2022 09:18:19, Nathan Chancellor wrote:
+> > > > Because this is a false positive, I did not add a Fixes tag, nor a
+> > > > Reported-by: kernel test robot.
+> > >
+> > > I think that the Reported-by tag should always be included but I agree
+> > > that a Fixes tag is not necessary for this warning, as we currently h=
+ave
+> > > it under W=3D1, so it should not be visible under normal circumstance=
+s.
+> >=20
+> > ACK.
+> > Marc, can you directly add below tags to the patch:
+> >=20
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Tested-by: Nathan Chancellor <nathan@kernel.org>
+>=20
+> Please use:
+>=20
+> Tested-by: Nathan Chancellor <nathan@kernel.org> # build
+>=20
+> To make it clear that I didn't perform anything more than a build test
+> to see that the warning is fixed.
+
+I've updated the tags!
+
+Thanks,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--3hg3ueutwh7avwyx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKFU9EACgkQrX5LkNig
+011QFQf/TUOy2+UNnYLUPR+PrsBCz35GcXtNba1vH/GmLSi0Hnf6t7BHY5XXEXCE
+FEIlAi/xX0kucczoQaKIS6g9e0XNA3dVAM8P8FLbhZpje/jiK4rc6tQPqkzjDFnn
+q0bYU6BxRlTKqiedMFpDzyNizk2yCH1B2ey1YXZS6Ac4DIgnluhZx7nMjuUdFEIX
+DMEYL40PHFFB7/rCsy5IvM/gNCqiqC8FGJB6a5dePSSX3bmCXZ7wOKLzEc2B5iDc
+WyPu0WxRT3UTExEKwvktj0ODaimU8wQSmsjBIi7PPP8lLxJBabTafG7w7bW3JSuv
+oi9jBO2/cSN7/ZbsBSRb4M3fr+L5jw==
+=zpqy
+-----END PGP SIGNATURE-----
+
+--3hg3ueutwh7avwyx--
