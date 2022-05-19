@@ -2,115 +2,86 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B40C652CCFE
-	for <lists+linux-can@lfdr.de>; Thu, 19 May 2022 09:29:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB0C952CCA7
+	for <lists+linux-can@lfdr.de>; Thu, 19 May 2022 09:16:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229847AbiESH3J (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 19 May 2022 03:29:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50648 "EHLO
+        id S229548AbiESHQL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 19 May 2022 03:16:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231694AbiESH24 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 19 May 2022 03:28:56 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACCA78AE5F
-        for <linux-can@vger.kernel.org>; Thu, 19 May 2022 00:28:53 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nraaa-0006dc-6D; Thu, 19 May 2022 09:28:52 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 3B05081CFC;
-        Thu, 19 May 2022 07:03:13 +0000 (UTC)
-Date:   Thu, 19 May 2022 09:03:11 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     linux-can@vger.kernel.org,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: Re: [PATCH can-next] can: can-dev: remove obsolete CAN LED support
-Message-ID: <20220519070311.3im3ptomr7x5iobi@pengutronix.de>
-References: <20220518154527.29046-1-socketcan@hartkopp.net>
- <20220518202134.77ir3bohv2tl6vi6@pengutronix.de>
- <4113f480-ab6a-3c1e-ff20-8778468e15c5@hartkopp.net>
+        with ESMTP id S234613AbiESHQD (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 19 May 2022 03:16:03 -0400
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7712A24D
+        for <linux-can@vger.kernel.org>; Thu, 19 May 2022 00:16:00 -0700 (PDT)
+Received: by mail-yb1-f180.google.com with SMTP id i187so5283447ybg.6
+        for <linux-can@vger.kernel.org>; Thu, 19 May 2022 00:16:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vWBKmbgKZwHjW4MpK8pxL8gh5o1oOiQQk9hgpFjm3Yk=;
+        b=ugTu+qmPOSKcb8UYp8d9pkfdN8WMSv0dsXSdQolsXIhTlmwuMQ0XUtiCKS62jVs7GV
+         4eqSPM94YPEryBgyrsMz7sca5fmi70AWMnzsu21Gp148NzZRys7BzErmMWMU4b65E7Ec
+         uxiTYqOue29Gn6Jlq05hfzmBAcPE1mo7V9zQPlYtKQiuhFqkDQ+UKtATJU55de2dTAS7
+         Q2myPK4vaa2SJziurb206D9VUqJpwOXDP9aNMwJfVMe52A/zL4jZ13hC0wR56HfovVkR
+         VdZ+saaUaAew+Jas5E88uwYragPC/9px38T1q8QX+dG9RSMhQjALT7D1dp3OP/Q32fez
+         y3bw==
+X-Gm-Message-State: AOAM5331lHN34JtIKNhV4x1NJ/W8Und1EXtbZ2Yqqv9xt0+zv94UusbB
+        1VNmb1pQu2EBNRN7UFF+JlOP3BzNEradDqI4ZvGUNlRADgLGOg==
+X-Google-Smtp-Source: ABdhPJz2XsadZXLbApnt6Fgn68JqP3SCy8kwXDN6P1rzUl4FMTjRTmEsf5HUdMx7Fqcj182R8v6IOeM/I3HqzTzqvUw=
+X-Received: by 2002:a25:5c1:0:b0:64e:a4aa:e206 with SMTP id
+ 184-20020a2505c1000000b0064ea4aae206mr2997705ybf.381.1652944559883; Thu, 19
+ May 2022 00:15:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="723dqu5yzomrln2n"
-Content-Disposition: inline
-In-Reply-To: <4113f480-ab6a-3c1e-ff20-8778468e15c5@hartkopp.net>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220518154527.29046-1-socketcan@hartkopp.net>
+In-Reply-To: <20220518154527.29046-1-socketcan@hartkopp.net>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Thu, 19 May 2022 16:15:48 +0900
+Message-ID: <CAMZ6RqLSSUkqSQBE+bYzvKfp2=bAn8jk+byXQS5cM_7VrJj2-Q@mail.gmail.com>
+Subject: Re: [PATCH can-next] can: can-dev: remove obsolete CAN LED support
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     linux-can@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Tue. 19 May 2022 at 00:52, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
+> Since commit 30f3b42147ba6f ("can: mark led trigger as broken") the
+> CAN specific LED support was disabled and marked as BROKEN. As the common
+> LED support with CONFIG_LEDS_TRIGGER_NETDEV should to this work now the
+> code can be removed as preparation for a CAN netdevice Kconfig rework.
+>
+> Suggested-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+[...]
+>  struct net_device *alloc_c_can_dev(int msg_obj_num)
+>  {
+> @@ -1376,12 +1367,11 @@ int register_c_can_dev(struct net_device *dev)
+>         dev->flags |= IFF_ECHO; /* we support local echo */
+>         dev->netdev_ops = &c_can_netdev_ops;
+>         c_can_set_ethtool_ops(dev);
+>
+>         err = register_candev(dev);
+> -       if (!err)
+> -               devm_can_led_init(dev);
+> +
+>         return err;
 
---723dqu5yzomrln2n
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I think we can remove the variable err and simply do:
 
-On 19.05.2022 08:18:30, Oliver Hartkopp wrote:
-> Hi Marc,
->=20
-> found a typo while reading your answer ...
->=20
-> On 18.05.22 22:21, Marc Kleine-Budde wrote:
-> > On 18.05.2022 17:45:27, Oliver Hartkopp wrote:
-> > > Since commit 30f3b42147ba6f ("can: mark led trigger as broken") the
-> > > CAN specific LED support was disabled and marked as BROKEN. As the co=
-mmon
-> > > LED support with CONFIG_LEDS_TRIGGER_NETDEV should to this work now t=
-he
->                                                       ^^
->=20
-> to -> do
+return register_candev(dev);
 
-fixed
+>  }
+>  EXPORT_SYMBOL_GPL(register_c_can_dev);
+[...]
 
-> m(
->=20
-> Btw. did you see this patch for can-next?
->=20
-> https://lore.kernel.org/linux-can/20220517145653.2556-1-socketcan@hartkop=
-p.net/T/#u
->=20
-> That was very short after the patch from Jakub so you probably missed
-> it.
-
-Indeed. Added to linux-can-next/testing.
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---723dqu5yzomrln2n
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKF660ACgkQrX5LkNig
-012syAgAjlpds4nX8cqbdnLMwX7WLvqixNZSwUIYdLG/cGJjhToxhwK6cOFtecft
-nnlSCzf6YEOGX0hlpgDUvKPV+a8TVUTm/S2iMZk3H6Rwt9bnp9igYcA6oiohTVbu
-A1g/qHKpEp2l9XDf0u0ngA4/h/j8aPtTXS96UkihOYZy6I7X0unZ69kDzzJ1tae8
-oAI3xjpeuCnzb6tmZi07Zew8Fwf7ikIZXh4UwCDUzvF8GUFqfL5hVrWCS3uHkXxU
-TXdhvNyb/ngNG0EpjSdgLkrrCPx1LT77ydn9mXGNu4x9zzBIXlsdRaPwzkS+wzAs
-9DvKIvqRgBYCyli8m/HL+GSfDses7g==
-=rEj0
------END PGP SIGNATURE-----
-
---723dqu5yzomrln2n--
+Yours sincerely,
+Vincent Mailhol
