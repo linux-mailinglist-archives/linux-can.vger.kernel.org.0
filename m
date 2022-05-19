@@ -2,42 +2,46 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C218D52DE1C
-	for <lists+linux-can@lfdr.de>; Thu, 19 May 2022 22:11:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8F3352DE48
+	for <lists+linux-can@lfdr.de>; Thu, 19 May 2022 22:23:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243531AbiESULG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 19 May 2022 16:11:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38398 "EHLO
+        id S244708AbiESUXc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 19 May 2022 16:23:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244636AbiESULE (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 19 May 2022 16:11:04 -0400
+        with ESMTP id S244567AbiESUXa (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 19 May 2022 16:23:30 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B8F37A10
-        for <linux-can@vger.kernel.org>; Thu, 19 May 2022 13:11:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7425A9419B
+        for <linux-can@vger.kernel.org>; Thu, 19 May 2022 13:23:29 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1nrmU8-0003zm-IH; Thu, 19 May 2022 22:11:00 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        id 1nrmgB-0005Gw-Qe
+        for linux-can@vger.kernel.org; Thu, 19 May 2022 22:23:27 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 53AE38261B
+        for <linux-can@vger.kernel.org>; Thu, 19 May 2022 20:23:27 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id C363482602;
-        Thu, 19 May 2022 20:10:59 +0000 (UTC)
-Date:   Thu, 19 May 2022 22:10:58 +0200
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id EF5FA82616;
+        Thu, 19 May 2022 20:23:26 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 84ca56c7;
+        Thu, 19 May 2022 20:23:26 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Michael Anochin <anochin@photo-meter.com>
-Cc:     linux-can@vger.kernel.org
-Subject: Re: can, m_can, tcan4x5x : big jitter between the packets by sending
-Message-ID: <20220519201058.dx7b2apkmuggdv3h@pengutronix.de>
-References: <9e431f19-897e-7bff-68bb-7ac7bb9fd757@photo-meter.com>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH net-next 0/4] pull-request: can-next 2022-05-19
+Date:   Thu, 19 May 2022 22:23:04 +0200
+Message-Id: <20220519202308.1435903-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ai4wp7vajjsyul52"
-Content-Disposition: inline
-In-Reply-To: <9e431f19-897e-7bff-68bb-7ac7bb9fd757@photo-meter.com>
+Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -51,62 +55,86 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello Jakub, hello David,
 
---ai4wp7vajjsyul52
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+this is a pull request of 4 patches for net-next/master.
 
-On 19.05.2022 17:52:36, Michael Anochin wrote:
-> my application continuously sends 64 bytes CANFD packets with 1MBit/s at =
-the
-> 10ms interval. I use tcan4450 on the RPI4 with 5.10.103 Kernel and raspbi=
-an.
-> No other significant processes load the CPU.
->=20
-> When I monitor the traffic with a PCAN adapter on a Windows PC, I notice
-> that the packets sometimes arrive with a delay of 5-9ms. But the next
-> following packet arrive faster as 10ms. My desired interval of 10ms is ke=
-pt
-> at the jitter of +/- 9ms.
->=20
-> Running the App on only one CPU core using tasksel improve the jitter
-> somewhat.
->=20
-> Am I the only one who observes such large jitter or is the m_can
-> implementation at Perepherie (spi) not so fast from the throughput and is
-> completely normal.
->=20
-> Maybe I should switch to 5.17 kernel? On 5.17 there are bulk read/write
-> function for spi regmap.
+Oliver Hartkopp contributes a patch for the ISO-TP CAN protocol to
+update the validation of address information during bind.
 
-The tcan4x5x driver is not really optimized. Don't expect great
-performance with it. At least the newer kernel have some kind of
-optimization. There are a lot of further optimization opportunities
-which are already implemented in the mcp251xfd driver.
+The next patch is by Jakub Kicinski and converts the CAN network
+drivers from netif_napi_add() to the netif_napi_add_weight() function.
+
+Another patch by Oliver Hartkopp removes obsolete CAN specific LED
+support.
+
+Vincent Mailhol's patch for the mcp251xfd driver fixes a
+-Wunaligned-access warning by clang-14.
 
 regards,
 Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+---
 
---ai4wp7vajjsyul52
-Content-Type: application/pgp-signature; name="signature.asc"
+The following changes since commit d7e6f5836038eeac561411ed7a74e2a225a6c138:
 
------BEGIN PGP SIGNATURE-----
+  Merge git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2022-05-19 11:23:59 -0700)
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKGpE8ACgkQrX5LkNig
-013IoAf5AQN020S1nlBQ7RSp+62x9LY09QpndA8NTKg/RbpaifJvfaPXFlgan4sp
-euA0WpGE1JM56/u6xNwxQ0o9GJ4MlQSHKKHDoenAbJ6eVEFH8Tkq6FcVYShj+5EY
-dlh+Z99dJqraN2x17ceIwukzVnEtadOaieagRlar0UrAYe7dMd7iXdHGCVKiEXY7
-V4/AzngmNA/RfucyqmiYciLEK3MXh9p1EvM+QccNBpBmAuBDftKue7qBKd83sood
-tolTQMAy/SfrqK18Gx63wQTQLpm8FsdPtVLaWpjJ+K2ewXJ+RRtCjcQBb0LAcpSb
-E9wTbsPcLZXSy5KQ48hQGMkvCrXG/g==
-=7bui
------END PGP SIGNATURE-----
+are available in the Git repository at:
 
---ai4wp7vajjsyul52--
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git tags/linux-can-next-for-5.19-20220519
+
+for you to fetch changes up to 1a6dd9996699889313327be03981716a8337656b:
+
+  can: mcp251xfd: silence clang's -Wunaligned-access warning (2022-05-19 22:15:51 +0200)
+
+----------------------------------------------------------------
+linux-can-next-for-5.19-20220519
+
+----------------------------------------------------------------
+Jakub Kicinski (1):
+      can: can-dev: move to netif_napi_add_weight()
+
+Oliver Hartkopp (2):
+      can: isotp: isotp_bind(): do not validate unused address information
+      can: can-dev: remove obsolete CAN LED support
+
+Vincent Mailhol (1):
+      can: mcp251xfd: silence clang's -Wunaligned-access warning
+
+ MAINTAINERS                               |   1 -
+ drivers/net/can/Kconfig                   |  17 ----
+ drivers/net/can/at91_can.c                |  12 +--
+ drivers/net/can/c_can/c_can_main.c        |  19 +---
+ drivers/net/can/ctucanfd/ctucanfd_base.c  |  10 ---
+ drivers/net/can/dev/Makefile              |   2 -
+ drivers/net/can/dev/dev.c                 |   5 --
+ drivers/net/can/dev/rx-offload.c          |   5 +-
+ drivers/net/can/flexcan/flexcan-core.c    |   7 --
+ drivers/net/can/grcan.c                   |   2 +-
+ drivers/net/can/ifi_canfd/ifi_canfd.c     |   9 --
+ drivers/net/can/janz-ican3.c              |   2 +-
+ drivers/net/can/led.c                     | 140 ------------------------------
+ drivers/net/can/m_can/m_can.c             |  11 ---
+ drivers/net/can/m_can/m_can.h             |   1 -
+ drivers/net/can/mscan/mscan.c             |   2 +-
+ drivers/net/can/pch_can.c                 |   2 +-
+ drivers/net/can/rcar/rcar_can.c           |  12 +--
+ drivers/net/can/rcar/rcar_canfd.c         |  11 +--
+ drivers/net/can/sja1000/sja1000.c         |  11 ---
+ drivers/net/can/spi/hi311x.c              |   8 --
+ drivers/net/can/spi/mcp251x.c             |  10 ---
+ drivers/net/can/spi/mcp251xfd/mcp251xfd.h |   2 +-
+ drivers/net/can/sun4i_can.c               |   7 --
+ drivers/net/can/ti_hecc.c                 |   8 --
+ drivers/net/can/usb/mcba_usb.c            |   8 --
+ drivers/net/can/usb/usb_8dev.c            |  11 ---
+ drivers/net/can/xilinx_can.c              |  12 +--
+ include/linux/can/dev.h                   |  10 ---
+ include/linux/can/led.h                   |  51 -----------
+ net/can/isotp.c                           |  29 ++++---
+ 31 files changed, 34 insertions(+), 403 deletions(-)
+ delete mode 100644 drivers/net/can/led.c
+ delete mode 100644 include/linux/can/led.h
+
+
