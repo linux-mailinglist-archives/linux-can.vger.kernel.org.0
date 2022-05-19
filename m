@@ -2,63 +2,48 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95E1652DD9C
-	for <lists+linux-can@lfdr.de>; Thu, 19 May 2022 21:17:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C218D52DE1C
+	for <lists+linux-can@lfdr.de>; Thu, 19 May 2022 22:11:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242811AbiESTRX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 19 May 2022 15:17:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59934 "EHLO
+        id S243531AbiESULG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 19 May 2022 16:11:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238850AbiESTRW (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 19 May 2022 15:17:22 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA70887A00
-        for <linux-can@vger.kernel.org>; Thu, 19 May 2022 12:17:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1652987727;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=V4pYoa0R6VOMWu04EbyMKXhgcxYqllXavCuCHqVcp+A=;
-    b=jSewXsui7r0XZcGmEOj6pIxTb6gd6LkUQAdTAGZkmuN+R3emsTokb1PpyqGceS8RiG
-    4szTnnF5okIJy2SdsVJoctTw6G0BzlIJz+fmQN4enma+QyNSf8H3A42y6V9bz7bh09is
-    H6/4e1P3mD5BqIm17k6XOWW1/2uq5aFdXGs7f9vKqD4BFONDYZdNWyYsfS7RiLeF6Wqj
-    hUDjobulbnke5S7Hty6q6kHxty7igtm9htnqgY9ztP0X2doA5skBE5bq/iRXgTwuFc7w
-    rBP/iNmc/NrWMz68R/eZNCPSqg4fXeIhWaExPEVaavF0JM8Dt3au1is23pJ3zL2TaX0k
-    xfRg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdBqPeOug2krLFRKxw=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a00:6020:1cff:5b04::b82]
-    by smtp.strato.de (RZmta 47.45.0 AUTH)
-    with ESMTPSA id R0691fy4JJFNMK0
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Thu, 19 May 2022 21:15:23 +0200 (CEST)
-Message-ID: <03e3db49-1e56-1e34-ba8d-72ca06019287@hartkopp.net>
-Date:   Thu, 19 May 2022 21:15:23 +0200
+        with ESMTP id S244636AbiESULE (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 19 May 2022 16:11:04 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B8F37A10
+        for <linux-can@vger.kernel.org>; Thu, 19 May 2022 13:11:02 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nrmU8-0003zm-IH; Thu, 19 May 2022 22:11:00 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id C363482602;
+        Thu, 19 May 2022 20:10:59 +0000 (UTC)
+Date:   Thu, 19 May 2022 22:10:58 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Michael Anochin <anochin@photo-meter.com>
+Cc:     linux-can@vger.kernel.org
+Subject: Re: can, m_can, tcan4x5x : big jitter between the packets by sending
+Message-ID: <20220519201058.dx7b2apkmuggdv3h@pengutronix.de>
+References: <9e431f19-897e-7bff-68bb-7ac7bb9fd757@photo-meter.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: PCH_CAN removal?
-Content-Language: en-US
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     linux-can@vger.kernel.org, Chee Hou Ong <chee.houx.ong@intel.com>,
-        Aman Kumar <aman.kumar@intel.com>,
-        Pallavi Kumari <kumari.pallavi@intel.com>,
-        Tomoya MORINAGA <tomoya-linux@dsn.okisemi.com>,
-        Masayuki Ohtake <masa-korg@dsn.okisemi.com>
-References: <20220513130819.386012-1-mkl@pengutronix.de>
- <20220513130819.386012-2-mkl@pengutronix.de>
- <20220513102145.748db22c@kernel.org>
- <2637cf42-b7da-a862-c599-ce418645629b@linux.intel.com>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <2637cf42-b7da-a862-c599-ce418645629b@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ai4wp7vajjsyul52"
+Content-Disposition: inline
+In-Reply-To: <9e431f19-897e-7bff-68bb-7ac7bb9fd757@photo-meter.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,22 +51,62 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Jarkko,
 
-I'm very happy to see that you are cleaning up some custom M_CAN stuff 
-which turns out to be already supported ;-)
+--ai4wp7vajjsyul52
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-In fact there is a pch_can (PCI) driver which was used in an Intel 
-embedded setup "Topcliff PCH" ~11 years ago. The driver was originally 
-contributed by OKI.
+On 19.05.2022 17:52:36, Michael Anochin wrote:
+> my application continuously sends 64 bytes CANFD packets with 1MBit/s at =
+the
+> 10ms interval. I use tcan4450 on the RPI4 with 5.10.103 Kernel and raspbi=
+an.
+> No other significant processes load the CPU.
+>=20
+> When I monitor the traffic with a PCAN adapter on a Windows PC, I notice
+> that the packets sometimes arrive with a delay of 5-9ms. But the next
+> following packet arrive faster as 10ms. My desired interval of 10ms is ke=
+pt
+> at the jitter of +/- 9ms.
+>=20
+> Running the App on only one CPU core using tasksel improve the jitter
+> somewhat.
+>=20
+> Am I the only one who observes such large jitter or is the m_can
+> implementation at Perepherie (spi) not so fast from the throughput and is
+> completely normal.
+>=20
+> Maybe I should switch to 5.17 kernel? On 5.17 there are bulk read/write
+> function for spi regmap.
 
-And I was pretty sure that this driver implements a C_CAN IP core with a 
-PCI binding which is now implemented in the C_CAN_PCI driver.
+The tcan4x5x driver is not really optimized. Don't expect great
+performance with it. At least the newer kernel have some kind of
+optimization. There are a lot of further optimization opportunities
+which are already implemented in the mcp251xfd driver.
 
-As I do not have that hardware anymore it would be interesting to see if 
-you could bring the PCH board to life with the C_CAN_PCI driver?!?
+regards,
+Marc
 
-That would allow us to remove the (then definitely) obsolete pch_can driver.
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-Thanks & best regards,
-Oliver
+--ai4wp7vajjsyul52
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKGpE8ACgkQrX5LkNig
+013IoAf5AQN020S1nlBQ7RSp+62x9LY09QpndA8NTKg/RbpaifJvfaPXFlgan4sp
+euA0WpGE1JM56/u6xNwxQ0o9GJ4MlQSHKKHDoenAbJ6eVEFH8Tkq6FcVYShj+5EY
+dlh+Z99dJqraN2x17ceIwukzVnEtadOaieagRlar0UrAYe7dMd7iXdHGCVKiEXY7
+V4/AzngmNA/RfucyqmiYciLEK3MXh9p1EvM+QccNBpBmAuBDftKue7qBKd83sood
+tolTQMAy/SfrqK18Gx63wQTQLpm8FsdPtVLaWpjJ+K2ewXJ+RRtCjcQBb0LAcpSb
+E9wTbsPcLZXSy5KQ48hQGMkvCrXG/g==
+=7bui
+-----END PGP SIGNATURE-----
+
+--ai4wp7vajjsyul52--
