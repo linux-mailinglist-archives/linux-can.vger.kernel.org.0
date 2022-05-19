@@ -2,84 +2,108 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B485A52D963
-	for <lists+linux-can@lfdr.de>; Thu, 19 May 2022 17:52:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D35DA52DA26
+	for <lists+linux-can@lfdr.de>; Thu, 19 May 2022 18:26:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232317AbiESPwo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 19 May 2022 11:52:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49894 "EHLO
+        id S241988AbiESQ0q (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 19 May 2022 12:26:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240010AbiESPwk (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 19 May 2022 11:52:40 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D427CB09
-        for <linux-can@vger.kernel.org>; Thu, 19 May 2022 08:52:39 -0700 (PDT)
-Received: from photo-meter.com ([62.157.79.106]) by mrelayeu.kundenserver.de
- (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MFslN-1o5ixe12Y3-00HRJf for <linux-can@vger.kernel.org>; Thu, 19 May 2022
- 17:52:37 +0200
-Received: from [192.168.100.109] (MICHA.fritz.box [192.168.100.109])
-        by photo-meter.com (Postfix) with ESMTP id 29EEE3B08B7
-        for <linux-can@vger.kernel.org>; Thu, 19 May 2022 17:51:16 +0200 (CEST)
-Message-ID: <9e431f19-897e-7bff-68bb-7ac7bb9fd757@photo-meter.com>
-Date:   Thu, 19 May 2022 17:52:36 +0200
+        with ESMTP id S241992AbiESQ0p (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 19 May 2022 12:26:45 -0400
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A01E61610
+        for <linux-can@vger.kernel.org>; Thu, 19 May 2022 09:26:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1652977600;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
+    Subject:Sender;
+    bh=2b9fJeor/92XTDkqacRX6ZE32I2zvCcoXpfD7tSzKwY=;
+    b=YeKmC948++wvcPqzaklBsZ8NI4cUUu370zSwC37pSMNZ1cqFnM6FnYQsEG00pllIN/
+    fJ53EdLm+BAZdL9uRWuw2GXJJkfnX94La9qLcu8L85ijymyYmioFciA55wfEsLoHipHg
+    +fFpsH4/WKd1UZfEWS4pyCOgZiPeEfewdOX8nW8a1qU53WCyZ+Kx9E1qYay387i5EPXW
+    Erv4AAP2E+wwz0v+g1qd18MMTWczpnSMDtd5uQGdYCR6YJmn31P4P726NrCZpfDUG9NL
+    gzFNGfh6LAIa5PufCjoBj+03k/uIPOIQGdU5vdGerfpTb+HRoZ4fG9YFzrm7Me3GzWXc
+    Q+aA==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdBqPeOug2krLFRKxw=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a00:6020:1cff:5b04::b82]
+    by smtp.strato.de (RZmta 47.45.0 AUTH)
+    with ESMTPSA id R0691fy4JGQeM8X
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 19 May 2022 18:26:40 +0200 (CEST)
+Message-ID: <f6d6522e-e63c-ea0f-e554-ea1cfc1b27a4@hartkopp.net>
+Date:   Thu, 19 May 2022 18:26:35 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Reply-To: anochin@photo-meter.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: can, m_can, tcan4x5x : big jitter between the packets by sending
 Content-Language: en-US
-To:     linux-can@vger.kernel.org
-From:   Michael Anochin <anochin@photo-meter.com>
-Subject: can, m_can, tcan4x5x : big jitter between the packets by sending
-Organization: Czibula und Grundmann GmbH
+To:     anochin@photo-meter.com, linux-can@vger.kernel.org
+References: <9e431f19-897e-7bff-68bb-7ac7bb9fd757@photo-meter.com>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <9e431f19-897e-7bff-68bb-7ac7bb9fd757@photo-meter.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:HGE2BWAZpX2MpwXf/zZk1mdHLMR3h74+lhNamsw2QazNPiWUR57
- 1dc9uRkMRFptoCler5saSY2MephtcmSZv6q3UkN8eaJ779zWYkzLo9guQjr04mSesSEz4zy
- RMw0Jf8n+Z7BJRn1IOf8Of5Yfd0Jll9NTBNiD+ihfDTM/KXOj4+9/Wk/cZ3en2Pn+rTPatl
- Jzhfda2BiDYTvC2cDXINw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:tWRoVzU7b2o=:WCs9XWx9oH6o2Bbkm3qpX/
- 97Jc66F6e3Nsse4hCpM1yp3hazb2LsTk6Tz1qlqWYv7Q5vDoNNOY7sxVwc5rgGghhLyfZ6Ii2
- MLo0nxS5bizvDNcMshbrqUUDlfnAbxSNpZLIHQ5j+SEIOBpp6uRUZS4EfVdpHyXgQy88twZQK
- 2AaUiokrXF+Qrbto10MXrYCfmXbWN5tbVFjpDfdexYo5Yk/AGGBqFwTQiQ+IVCCqlWPa6Sh4B
- Vio3UqjCFJfYFkqT7oMvVzb1ysgDDtECMqVzZg9+TttNmmfkO2uzNRmIq9tRNhqB4v4rHJ46t
- UbioxL157jpGHR4Zfq2iJjvly14Ktxjzv07AFwsHcb8nKdOxjZu6+5PtHZMhyUXgmOTsZGT7n
- 7oG0MT/WbF7yhJk4AnuY423Sbg1bZ9jLEOzzdlxdEu8izUIKxj2J3aCT+wdSPn1s7DzqaH0o8
- QsPK51C0ZDU453PsdsaVxbzHZjQ2fRsbXqHDPSZR56Ey0QQTFmqPF93zFqq2mJUA5U4OQam1d
- bRKdCfUacL674HZ5QPc79KSAwZEVfDMk+RsSaXG9iDSqAJC0n8ryVyHUhwbrRudYgcl4kY+Sr
- djw5I3ypMNzGCCSsqmA1r3V+DuW3EgE3LeQesJrTGNbg/M6+oNM7kx5LqIbauXpmE7NdgJzU+
- tpBeOT9R4AxT4NOLc74+4dfJyixvYYGLeVpPq978BLu7U1UC0mnTq4qFjzS/jtBv0i7YCrtev
- hUElIg5LlcPELfPlNwJTwOgYwhJUfnPzA1wUPVNM3hDl+1VLa4m8uXdvDJQ=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello,
+Hi Michael,
 
-my application continuously sends 64 bytes CANFD packets with 1MBit/s at 
-the 10ms interval. I use tcan4450 on the RPI4 with 5.10.103 Kernel and 
-raspbian. No other significant processes load the CPU.
+On 19.05.22 17:52, Michael Anochin wrote:
 
-When I monitor the traffic with a PCAN adapter on a Windows PC, I notice 
-that the packets sometimes arrive with a delay of 5-9ms. But the next 
-following packet arrive faster as 10ms. My desired interval of 10ms is 
-kept at the jitter of +/- 9ms.
+> my application continuously sends 64 bytes CANFD packets with 1MBit/s at 
+> the 10ms interval.
 
-Running the App on only one CPU core using tasksel improve the jitter 
-somewhat.
+How does this application implement this 10ms interval?
 
-Am I the only one who observes such large jitter or is the m_can 
-implementation at Perepherie (spi) not so fast from the throughput and 
-is completely normal.
+Can you check whether
 
-Maybe I should switch to 5.17 kernel? On 5.17 there are bulk read/write 
-function for spi regmap.
+     cangen -g 10 -f -I 123 -L 64 can0
 
+has the same problems?
 
-Thanks and Best Regards,
-Michael Anochin
+With
+
+     candump -td can0
+
+you should be able to see some timestamp gaps around 10ms.
+
+> I use tcan4450 on the RPI4 with 5.10.103 Kernel and 
+> raspbian. No other significant processes load the CPU.
+> 
+> When I monitor the traffic with a PCAN adapter on a Windows PC, I notice 
+> that the packets sometimes arrive with a delay of 5-9ms. But the next 
+> following packet arrive faster as 10ms. My desired interval of 10ms is 
+> kept at the jitter of +/- 9ms.
+> 
+> Running the App on only one CPU core using tasksel improve the jitter 
+> somewhat.
+
+What is the use-case for this 10ms cyclic transmission? Maybe the 
+CAN_BCM (which uses in-kernel highres timers) could bring an improvement 
+for you.
+
+> Am I the only one who observes such large jitter or is the m_can 
+> implementation at Perepherie (spi) not so fast from the throughput and 
+> is completely normal.
+> 
+> Maybe I should switch to 5.17 kernel? On 5.17 there are bulk read/write 
+> function for spi regmap.
+
+I don't answer to this as I don't have the required SPI knowledge ... 
+but if you could upgrade to a newer kernel this is always a good 
+approach ;-)
+
+Best regards,
+Oliver
