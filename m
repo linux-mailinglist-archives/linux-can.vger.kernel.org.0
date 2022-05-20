@@ -2,57 +2,54 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD8A552DE4E
-	for <lists+linux-can@lfdr.de>; Thu, 19 May 2022 22:23:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2AB852E132
+	for <lists+linux-can@lfdr.de>; Fri, 20 May 2022 02:30:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244706AbiESUXf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 19 May 2022 16:23:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59768 "EHLO
+        id S1343999AbiETAaU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 19 May 2022 20:30:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244712AbiESUXd (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 19 May 2022 16:23:33 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3014DA8892
-        for <linux-can@vger.kernel.org>; Thu, 19 May 2022 13:23:32 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nrmgE-0005IT-M6
-        for linux-can@vger.kernel.org; Thu, 19 May 2022 22:23:30 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id E703D8263B
-        for <linux-can@vger.kernel.org>; Thu, 19 May 2022 20:23:28 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 598738262F;
-        Thu, 19 May 2022 20:23:28 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id bbdc383a;
-        Thu, 19 May 2022 20:23:26 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        kernel test robot <lkp@intel.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next 4/4] can: mcp251xfd: silence clang's -Wunaligned-access warning
-Date:   Thu, 19 May 2022 22:23:08 +0200
-Message-Id: <20220519202308.1435903-5-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220519202308.1435903-1-mkl@pengutronix.de>
-References: <20220519202308.1435903-1-mkl@pengutronix.de>
+        with ESMTP id S232460AbiETAaT (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 19 May 2022 20:30:19 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3B5CEBBF;
+        Thu, 19 May 2022 17:30:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 87421CE28C5;
+        Fri, 20 May 2022 00:30:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DE0B0C385B8;
+        Fri, 20 May 2022 00:30:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653006612;
+        bh=zrBLfoi6ZefDnvO/uCOFCwqiPT1EkKDL+CQeAwqyjZw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=dwlfzx29f+vGz60f6WMdXVgL3BW1CWdo5Ai24Bv0GW6ju7N5ZLS4ffiXAgWQpp68s
+         Vsc+hjMlWoEzCD5KJoUjAgaXze+s+wDbbNHPb4isvzMQESJahbGKGbxQo2mjMei1Kk
+         QYn+qBz++iMr3R27zdHSQ1fVBxPqNjmlCMF6YkqWeOPzw7fRNzAaYJC/V7C+VrlHzw
+         ARKLNkW/hcOiTJh8dulT6FTDtGb75ProBDTt/eYA7nPx7U89pr3axKPxlq5I0Rdj6i
+         H6FdXDSXkk2Ms9dK6RWjuGbkGQ4Zznu8ZXvmVJ3S/9dh/IPpV5rQYCF0HKk8Ww/Qze
+         VsOa+u6EFBM3Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A551AF0389D;
+        Fri, 20 May 2022 00:30:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Subject: Re: [PATCH net-next 1/4] can: isotp: isotp_bind(): do not validate unused
+ address information
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165300661267.32488.11022480105388538234.git-patchwork-notify@kernel.org>
+Date:   Fri, 20 May 2022 00:30:12 +0000
+References: <20220519202308.1435903-2-mkl@pengutronix.de>
+In-Reply-To: <20220519202308.1435903-2-mkl@pengutronix.de>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        linux-can@vger.kernel.org, kernel@pengutronix.de,
+        socketcan@hartkopp.net
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,60 +58,35 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Hello:
 
-clang emits a -Wunaligned-access warning on union
-mcp251xfd_tx_ojb_load_buf.
+This series was applied to netdev/net-next.git (master)
+by Marc Kleine-Budde <mkl@pengutronix.de>:
 
-The reason is that field hw_tx_obj (not declared as packed) is being
-packed right after a 16 bits field inside a packed struct:
+On Thu, 19 May 2022 22:23:05 +0200 you wrote:
+> From: Oliver Hartkopp <socketcan@hartkopp.net>
+> 
+> With commit 2aa39889c463 ("can: isotp: isotp_bind(): return -EINVAL on
+> incorrect CAN ID formatting") the bind() syscall returns -EINVAL when
+> the given CAN ID needed to be sanitized. But in the case of an unconfirmed
+> broadcast mode the rx CAN ID is not needed and may be uninitialized from
+> the caller - which is ok.
+> 
+> [...]
 
-| union mcp251xfd_tx_obj_load_buf {
-| 	struct __packed {
-| 		struct mcp251xfd_buf_cmd cmd;
-| 		  /* ^ 16 bits fields */
-| 		struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
-| 		  /* ^ not declared as packed */
-| 	} nocrc;
-| 	struct __packed {
-| 		struct mcp251xfd_buf_cmd_crc cmd;
-| 		struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
-| 		__be16 crc;
-| 	} crc;
-| } ____cacheline_aligned;
+Here is the summary with links:
+  - [net-next,1/4] can: isotp: isotp_bind(): do not validate unused address information
+    https://git.kernel.org/netdev/net-next/c/b76b163f46b6
+  - [net-next,2/4] can: can-dev: move to netif_napi_add_weight()
+    https://git.kernel.org/netdev/net-next/c/caf6b7f81e05
+  - [net-next,3/4] can: can-dev: remove obsolete CAN LED support
+    https://git.kernel.org/netdev/net-next/c/6c1e423a3c84
+  - [net-next,4/4] can: mcp251xfd: silence clang's -Wunaligned-access warning
+    https://git.kernel.org/netdev/net-next/c/1a6dd9996699
 
-Starting from LLVM 14, having an unpacked struct nested in a packed
-struct triggers a warning. c.f. [1].
-
-This is a false positive because the field is always being accessed
-with the relevant put_unaligned_*() function. Adding __packed to the
-structure declaration silences the warning.
-
-[1] https://github.com/llvm/llvm-project/issues/55520
-
-Link: https://lore.kernel.org/all/20220518114357.55452-1-mailhol.vincent@wanadoo.fr
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Reported-by: kernel test robot <lkp@intel.com>
-Tested-by: Nathan Chancellor <nathan@kernel.org> # build
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/spi/mcp251xfd/mcp251xfd.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-index 1d43bccc29bf..2b0309fedfac 100644
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-@@ -441,7 +441,7 @@ struct mcp251xfd_hw_tef_obj {
- /* The tx_obj_raw version is used in spi async, i.e. without
-  * regmap. We have to take care of endianness ourselves.
-  */
--struct mcp251xfd_hw_tx_obj_raw {
-+struct __packed mcp251xfd_hw_tx_obj_raw {
- 	__le32 id;
- 	__le32 flags;
- 	u8 data[sizeof_field(struct canfd_frame, data)];
+You are awesome, thank you!
 -- 
-2.35.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
