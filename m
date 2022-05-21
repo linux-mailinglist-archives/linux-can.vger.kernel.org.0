@@ -2,92 +2,77 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1794352F3F4
-	for <lists+linux-can@lfdr.de>; Fri, 20 May 2022 21:47:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE33152FB38
+	for <lists+linux-can@lfdr.de>; Sat, 21 May 2022 13:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243617AbiETTrI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 20 May 2022 15:47:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37726 "EHLO
+        id S1354895AbiEULNr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 21 May 2022 07:13:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232868AbiETTrH (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 20 May 2022 15:47:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D1227E1CA;
-        Fri, 20 May 2022 12:47:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0BAB0B82B7D;
-        Fri, 20 May 2022 19:47:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 739B0C385A9;
-        Fri, 20 May 2022 19:47:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653076023;
-        bh=1h3BDBR66ZfNzUY14/QxZgGwkL8f2aEHXApH0sV2FCU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=APkCh74MUVxww7ejm7ll/yzkJYHOlUQJxPa4Mhn3vpcojyw2M09AQPj0Bmq1FH6b/
-         hIP55T6qG9RN1dalRn7fyNzWnl6JPOt9nYRb+YkyKGF9Fm/Fb6oIrqFjYWl6OkeqR0
-         6wyzqdULl/+NSnCOMyTDm6kOlQMKRgk0qb0NYf/iHvqeClId4z754feHdy+bfyc51T
-         vAxL/+Z2fWGe/+8tFX6gytEodzfsd1r8rB36D8ArJWz5Cp0r3crYSRKfqq2ldpK7+c
-         iyiPySgT1oU6RbMQmrob+H6fh5T4gK/Q/GPr3bop29EmHOLTetVlQIam+GcX6Swhjk
-         N4oUCREnvBvCg==
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     mkl@pengutronix.de
-Cc:     davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
-        pabeni@redhat.com, Jakub Kicinski <kuba@kernel.org>,
-        wg@grandegger.com, linux-can@vger.kernel.org
-Subject: [PATCH net-next] can: kvaser_usb: silence a GCC 12 -Warray-bounds warning
-Date:   Fri, 20 May 2022 12:46:59 -0700
-Message-Id: <20220520194659.2356903-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.34.3
+        with ESMTP id S242689AbiEULMG (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 21 May 2022 07:12:06 -0400
+Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3730F2980B;
+        Sat, 21 May 2022 04:12:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ysSCHxYUYI2fnvbvjl19r0L14v2vd2rA12vVrwVzVi0=;
+  b=UqK5kh2EBbAGZipXfNg9E2KfKuDxjrFxb0oz0Ho0tGLgmOEKYhG4lkwD
+   3M3Zc7SdrIYY8eKOLYmjLyUQp1i6YDnmV8YgSIZfqGlCdSIYPZAlxuq2k
+   6Kun0ZXJw0CRqeGDpOM8Qhe3U+AsddizZOk4z1RJIQQfo4i2UoVO6GwGj
+   4=;
+Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.91,242,1647298800"; 
+   d="scan'208";a="14727919"
+Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 13:11:56 +0200
+From:   Julia Lawall <Julia.Lawall@inria.fr>
+To:     Wolfgang Grandegger <wg@grandegger.com>
+Cc:     kernel-janitors@vger.kernel.org,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] can: peak_usb: fix typo in comment
+Date:   Sat, 21 May 2022 13:10:34 +0200
+Message-Id: <20220521111145.81697-24-Julia.Lawall@inria.fr>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This driver does a lot of casting of smaller buffers to
-struct kvaser_cmd_ext, GCC 12 does not like that:
+Spelling mistake (triple letters) in comment.
+Detected with the help of Coccinelle.
 
-drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c:489:65: warning: array subscript ‘struct kvaser_cmd_ext[0]’ is partly outside array bounds of ‘unsigned char[32]’ [-Warray-bounds]
-drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c:489:23: note: in expansion of macro ‘le16_to_cpu’
-  489 |                 ret = le16_to_cpu(((struct kvaser_cmd_ext *)cmd)->len);
-      |                       ^~~~~~~~~~~
+Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
-Temporarily silence this warning (move it to W=1 builds).
-
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
-Hi Marc, are you planning another -next PR? Can we take this
-directly?
+ drivers/net/can/usb/peak_usb/pcan_usb.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-CC: wg@grandegger.com
-CC: mkl@pengutronix.de
-CC: linux-can@vger.kernel.org
----
- drivers/net/can/usb/kvaser_usb/Makefile | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/net/can/usb/kvaser_usb/Makefile b/drivers/net/can/usb/kvaser_usb/Makefile
-index cf260044f0b9..b20d951a0790 100644
---- a/drivers/net/can/usb/kvaser_usb/Makefile
-+++ b/drivers/net/can/usb/kvaser_usb/Makefile
-@@ -1,3 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0-only
- obj-$(CONFIG_CAN_KVASER_USB) += kvaser_usb.o
- kvaser_usb-y = kvaser_usb_core.o kvaser_usb_leaf.o kvaser_usb_hydra.o
-+
-+# FIXME: temporarily silence -Warray-bounds on non W=1+ builds
-+ifndef KBUILD_EXTRA_WARN
-+CFLAGS_kvaser_usb_hydra.o += -Wno-array-bounds
-+endif
--- 
-2.34.3
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb.c b/drivers/net/can/usb/peak_usb/pcan_usb.c
+index 17dc178f555b..091c631ebe23 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb.c
++++ b/drivers/net/can/usb/peak_usb/pcan_usb.c
+@@ -533,7 +533,7 @@ static int pcan_usb_handle_bus_evt(struct pcan_usb_msg_context *mc, u8 ir)
+ {
+ 	struct pcan_usb *pdev = mc->pdev;
+ 
+-	/* acccording to the content of the packet */
++	/* according to the content of the packet */
+ 	switch (ir) {
+ 	case PCAN_USB_ERR_CNT_DEC:
+ 	case PCAN_USB_ERR_CNT_INC:
 
