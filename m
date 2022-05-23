@@ -2,42 +2,46 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CB6F531B0F
-	for <lists+linux-can@lfdr.de>; Mon, 23 May 2022 22:56:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFD52531799
+	for <lists+linux-can@lfdr.de>; Mon, 23 May 2022 22:53:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232513AbiEWUJP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 23 May 2022 16:09:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38326 "EHLO
+        id S231560AbiEWUKv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 23 May 2022 16:10:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232387AbiEWUJH (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 23 May 2022 16:09:07 -0400
+        with ESMTP id S232433AbiEWUKu (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 23 May 2022 16:10:50 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE89985AB
-        for <linux-can@vger.kernel.org>; Mon, 23 May 2022 13:09:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A932F985AC
+        for <linux-can@vger.kernel.org>; Mon, 23 May 2022 13:10:49 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1ntEMO-0002qI-UK; Mon, 23 May 2022 22:09:00 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        id 1ntEO8-0002yb-5j
+        for linux-can@vger.kernel.org; Mon, 23 May 2022 22:10:48 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 9B07B848C9
+        for <linux-can@vger.kernel.org>; Mon, 23 May 2022 20:10:47 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 2C27A848C0;
-        Mon, 23 May 2022 20:09:00 +0000 (UTC)
-Date:   Mon, 23 May 2022 22:08:59 +0200
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 38A44848C4;
+        Mon, 23 May 2022 20:10:47 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 28c6c25b;
+        Mon, 23 May 2022 20:10:46 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Sender: kernel <kernel-bounces@pengutronix.de>
 To:     netdev@vger.kernel.org
-Cc:     kuba@kernel.org, davem@davemloft.net, kernel@pengutronix.de,
-        linux-can@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
 Subject: [PATCH net-next 0/3] pull-request: can-next 2022-05-23
-Message-ID: <20220523200859.s3tbg54ozobyy3rn@pengutronix.de>
+Date:   Mon, 23 May 2022 22:10:42 +0200
+Message-Id: <20220523201045.1708855-1-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -52,6 +56,8 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 Hello Jakub, hello David,
+
+(this time with fixes subject to make patchwork happy)
 
 this is a pull request of 3 patches for net-next/master.
 
@@ -98,7 +104,5 @@ Marc Kleine-Budde (1):
  drivers/net/can/usb/kvaser_usb/Makefile | 5 +++++
  drivers/net/can/usb/peak_usb/pcan_usb.c | 2 +-
  3 files changed, 7 insertions(+), 2 deletions(-)
-
-
 
 
