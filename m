@@ -2,89 +2,105 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38002531F22
-	for <lists+linux-can@lfdr.de>; Tue, 24 May 2022 01:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5FD253454A
+	for <lists+linux-can@lfdr.de>; Wed, 25 May 2022 22:48:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbiEWXKQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 23 May 2022 19:10:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60850 "EHLO
+        id S241014AbiEYUsd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 25 May 2022 16:48:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiEWXKQ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 23 May 2022 19:10:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F14370901;
-        Mon, 23 May 2022 16:10:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 39A63B81696;
-        Mon, 23 May 2022 23:10:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CCC7BC34100;
-        Mon, 23 May 2022 23:10:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653347412;
-        bh=r8xL3eb2Iu7WpxuLDd0t8cmqbsoeobvUBpNroD7v/z4=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=C3+WteiVvgoUNpGLVjT6qMaxNVct9vMUD869wiAAJfK+qBLP7xvNzLO4E/N8dDwXO
-         WlLnZeVg/KUNhEXab7X7Gq5kaYJ8HceiZ3UsbLXNS5Qjg/wEMONrhSM0OSk/1lxrMV
-         57SdxTbhTaWfj1bx4jwEQbaSUngMQ3uYKdVn9RLCBohz0231AMYIcr+vi33dclHt5U
-         8fxU7PVhXDn7ilUDaIhjtxsg/5rRVoez1FsxKPu6KSi7rQJyoV00ePeuUZF3jgior8
-         81t12q6f5EbjSZslNEnX4Oq0QRm30kw/dnRlDY0cyK7eHMgMBHRiYrLzYXyLbxvFLR
-         tloN9pMMseYjg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A9B7FEAC081;
-        Mon, 23 May 2022 23:10:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S240028AbiEYUs0 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 25 May 2022 16:48:26 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37CC8B82F6
+        for <linux-can@vger.kernel.org>; Wed, 25 May 2022 13:48:23 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id i187so36043626ybg.6
+        for <linux-can@vger.kernel.org>; Wed, 25 May 2022 13:48:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=+uyh4vUIYntN7Mid2B5fbgguOxBR2RiHnKBh7A4r37I=;
+        b=MIznAoP29XHGMZwK2XaORcuFYY4KHU3SiD37YZr3IksbwEszYFwRGI6NMOaIsgw3Rc
+         MNWUak9e2Pk5zm0JPp6szTBpWptBOFEsDKaXw1mzZOTFcRGcvyjOwqdtF8UB9EvyuuJZ
+         fMICjT1+KZ7bxeE9NTTU8LESXRGeqFThSri55TjzyU4r+qSYB8KRkbeHsWYNf08X2bEy
+         pryupL2ykuBV+sygnkk+fqajrVN1/45XJT6UIDBI/J4JIiO7GZW4kaISjbo9xtOnIbu3
+         /lAT2wlHOnLDqj2MsvwscUqPgxRkbuhwflLse0VSR01xDxZYapbGb527uMRlqnyfWWDn
+         3l8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=+uyh4vUIYntN7Mid2B5fbgguOxBR2RiHnKBh7A4r37I=;
+        b=BGc25Tc2rSbnSEN/NzZnZSJuPiJUInW6QFR/MIuuzn8QxOoP83IXDy2vztfufFU0ou
+         bBNog9dJmQo94It4lC2moJ3YyVR6bOcYK5PCeea2J1Ki80SKJxai3j7uWtoJb82QJjLx
+         rf2gkQAJnt8SD5tvWtc4ZbDNvG3kbI5+NPUCUpROwm/M92adjpy3UKPSHdhFA1U4NO8s
+         X/3HbmkOZagnXqc1eA73rWhu/l8SaAdCo+m93hDgQK5/za/jJnHOKvEy5dGT6BfUhVhQ
+         ym658Q9P28e7Ckvy3TqhxsO/rXSE28hSeXKQhpjaRqQXx9V3oF0on2CLUuocvJcbV2yw
+         OtuA==
+X-Gm-Message-State: AOAM530KUnP6HTwRfXLEIwGuZhQ6ruGKyeuSwfK9gAowq6HwowAbpv8k
+        jcJUavBN4hn4pvc+ys/RsH4biaakU6qb010GZtI=
+X-Google-Smtp-Source: ABdhPJygDnPWuNyLLxTk2B3Kv8LEKih1+m2wVtTUpsrNi1Bs8nM6GPylqvWzkD99kDlHZJJaie6GrPKCBIwCtXokpK8=
+X-Received: by 2002:a05:6902:1023:b0:64f:39e7:ef05 with SMTP id
+ x3-20020a056902102300b0064f39e7ef05mr31533397ybt.126.1653511701867; Wed, 25
+ May 2022 13:48:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 1/3] can: peak_usb: fix typo in comment
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165334741269.398.15174446878045253185.git-patchwork-notify@kernel.org>
-Date:   Mon, 23 May 2022 23:10:12 +0000
-References: <20220523201045.1708855-2-mkl@pengutronix.de>
-In-Reply-To: <20220523201045.1708855-2-mkl@pengutronix.de>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, kernel@pengutronix.de,
-        Julia.Lawall@inria.fr
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:7110:3682:b0:17b:2b7b:c035 with HTTP; Wed, 25 May 2022
+ 13:48:21 -0700 (PDT)
+From:   Colina Fernando <colinafernando724@gmail.com>
+Date:   Wed, 25 May 2022 22:48:21 +0200
+Message-ID: <CAP7Hh1-EL6tqrQsO0De_QJ1avJao_roXNeVStyzCoPtO9q14fg@mail.gmail.com>
+Subject: Bitte kontaktaufnahme Erforderlich !!! Please Contact Required !!!
+To:     contact@firstdiamondbk.com
+Cc:     info@firstdiamondbk.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello:
+Guten Tag,
 
-This series was applied to netdev/net-next.git (master)
-by Marc Kleine-Budde <mkl@pengutronix.de>:
+Ich habe mich nur gefragt, ob Sie meine vorherige E-Mail bekommen
 
-On Mon, 23 May 2022 22:10:43 +0200 you wrote:
-> From: Julia Lawall <Julia.Lawall@inria.fr>
-> 
-> Spelling mistake (triple letters) in comment.
-> Detected with the help of Coccinelle.
-> 
-> Link: https://lore.kernel.org/all/20220521111145.81697-24-Julia.Lawall@inria.fr
-> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> 
-> [...]
+haben ?
 
-Here is the summary with links:
-  - [net-next,1/3] can: peak_usb: fix typo in comment
-    https://git.kernel.org/netdev/net-next/c/a682d1843300
-  - [net-next,2/3] can: kvaser_usb: silence a GCC 12 -Warray-bounds warning
-    https://git.kernel.org/netdev/net-next/c/3e88445a3a5a
-  - [net-next,3/3] can: ctucanfd: platform: add missing dependency to HAS_IOMEM
-    https://git.kernel.org/netdev/net-next/c/8f445a3ec3fd
+Ich habe versucht, Sie per E-Mail zu erreichen.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Kommen Sie bitte schnell zu mir zur=C3=BCck, es ist sehr wichtig.
+
+Danke
+
+Fernando Colina
+
+colinafernando724@gmail.com
 
 
+
+
+----------------------------------
+
+
+
+
+Good Afternoon,
+
+I was just wondering if you got my Previous E-mail
+have ?
+
+I tried to reach you by E-mail.
+
+Please come back to me quickly, it is very Important.
+
+Thanks
+
+Fernando Colina
+
+colinafernando724@gmail.com
