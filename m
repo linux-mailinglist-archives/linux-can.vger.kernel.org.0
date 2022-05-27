@@ -2,44 +2,59 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B37F5351AB
-	for <lists+linux-can@lfdr.de>; Thu, 26 May 2022 17:51:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65F07535711
+	for <lists+linux-can@lfdr.de>; Fri, 27 May 2022 02:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245223AbiEZPvl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 26 May 2022 11:51:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53070 "EHLO
+        id S231339AbiE0Aa4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 26 May 2022 20:30:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239905AbiEZPvk (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 26 May 2022 11:51:40 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2085.outbound.protection.outlook.com [40.107.243.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F692B1AE;
-        Thu, 26 May 2022 08:51:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e8TrsekBszgDgDs2u68g/rzWMS3nZlp9MbKQ2c2l0YViB2IJhlJgWhLMarIuTTRW+9nS20XVbGxQGIfV79nL3wgWTGAQ6sT02kd4ulpnNtqgC0jGt0+Lc/GvMokKWjg8YFPa7mJywb0KwmAcLbeExw2h/x6nmt9YLXpQxit4TmW7wY59RYgYiIJHQU1awrtc7TrIb0XivmacszsPpubi6Q9ptbSEDl1YDN28I8RitHbnjmydFHZNIfC4Y7Kxj3wXKI989Fw9jc+1hp4JqK5IjhkMgVbBzB5GjfYPpHNlhuZojMgRbBMhQA/t91hMY1sMFbvJ6o7GRuNrAVpOYX8nxw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=R0Q0ZTHLvafSm8MNPFgw9cFoymqtyCyKux/LpXe/Cwg=;
- b=WOXTvkv5ummxKEuGFRUwq2KP7JUWZZzp7dhahNmf/JKZ+ecN9qgpb4irrkWxGwzqCadNk2SOIyr186iG7b6rwChnPAKTVWR0QEyno8AK0hgvZizoUyjvAjb671duEcbQYq5CpVV7coOIKWboOhXRlGsr0C/OCJytYEbBF8NhEe+zD9wAgFEnI/kejs4DfgZuYcp4nT1+gnMLjZzVTBjiTrixGjiK0Fo+mYzp0zrTgYcjWbF1afwvfFJIbNjAu2EMa7dANgot1tzT43ltbfiTY2ibzs3yOvdr4Z6FrN4nMgqGfN0NUuQkRst6sCWDK5qpjxBQ42vl0nG/1F95Py9QUw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
- dkim=pass header.d=xilinx.com; arc=none
+        with ESMTP id S231130AbiE0Aa4 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 26 May 2022 20:30:56 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35BDD79823;
+        Thu, 26 May 2022 17:30:55 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-300beab2b76so31924667b3.13;
+        Thu, 26 May 2022 17:30:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=R0Q0ZTHLvafSm8MNPFgw9cFoymqtyCyKux/LpXe/Cwg=;
- b=KvF5YnNVLgMZR0v/DQ4/wXGw+ffESzaU5GFvlRs/k7QAXw1oYVGJKyFRV2Ii3RARh1eX812mf1T1DWo+LdVaU74qyEHpQ7xcHj7+P2UTxBg0vMtqOiRnNs3Lk6OMAzVVZ0kX8kFEddLTfltiKB+5GMzcyBvF97+e/rLn9Jvdo5o=
-Received: from DM6PR02MB5386.namprd02.prod.outlook.com (2603:10b6:5:75::25) by
- PH0PR02MB7173.namprd02.prod.outlook.com (2603:10b6:510:d::12) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5293.13; Thu, 26 May 2022 15:51:33 +0000
-Received: from DM6PR02MB5386.namprd02.prod.outlook.com
- ([fe80::8424:619a:69c2:f7c4]) by DM6PR02MB5386.namprd02.prod.outlook.com
- ([fe80::8424:619a:69c2:f7c4%5]) with mapi id 15.20.5273.023; Thu, 26 May 2022
- 15:51:33 +0000
-From:   Srinivas Neeli <sneeli@xilinx.com>
-To:     Vincent Mailhol <vincent.mailhol@gmail.com>
-CC:     "wg@grandegger.com" <wg@grandegger.com>,
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=elAhUcObwS39lh683eW5heCcXmPEhxRMz3DBXgxXh2M=;
+        b=CBS7mjBjpPqYDkvZ0WwHMXyp+rrb87vDcuge2vvqwOUtirUtYAP2EdfR7XuC0joMTI
+         r2yAaCV8OAIOUCcZGT4QsaplueeCxBdrniz9LXBgDz+8Lyy6T/eMNKvhsEsRwahwzgez
+         LIssmvQdVrpQ2Cls1tnkK7Df9d1Y0nKTA9l9qxZBg7rZXb8YMqM9hrEEDN7sA/Iq9lr2
+         IvyFJQ+v6/35uscqaSJ/SyYAxFsCkkS26GyRbzNA6wU1s4ZD49uALpmSGL/dU6Lwe7Nk
+         W2WCKbK5NvgB3x1Dzd3bD9uE7HvFMp1T3jswbZz8NDvryOWefk3OK7zIF3bwCm4jBNhx
+         UEYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=elAhUcObwS39lh683eW5heCcXmPEhxRMz3DBXgxXh2M=;
+        b=0xr/anBohssf1sy4ICxO8iIUzCHLAi34DTGHejlv7bFs9Ec812KkslbR+5vYiki0SE
+         fg6nzO+3XhnFmNHNlfqmarNVQBr+j4qhbseXgdtZ+iB1SRptYBvdL3aP3jIOhE2WD+ow
+         a5ZafqRHmm3xXkE9BDfl5xsXUlNVlFSi/msz0xROgZVAtJLYqxupMT4EjC/jzQwGEJnn
+         R41Or+xPYOPmlCQUgs7n6FtYUcjLKCbgT4+w22wJoYSeMKDgMJNqyGOvoCUghPaocTXo
+         3z8/+TQW7Y9uXndCZh4sqCuYnELjoNr9EA+60ERHUzMf1zmeaePeqLY/StGxr6p3UijM
+         /2HQ==
+X-Gm-Message-State: AOAM532kDgIiXPOP9ZPukSd+29jcYHBs1UlDca8rRIB2xID+U2kK2edQ
+        ofIdOmyx8HyMVqxZxjTY/hbjio70gyVVZor/9q8=
+X-Google-Smtp-Source: ABdhPJwviyj3IkTwElbYE9H3XujG8OQkn3xbfyZh0KNIESdd+4iOJCPPlcBD5I90t2/KDB5Uen6ITGRWz1hvnDRHWtk=
+X-Received: by 2002:a81:5ad6:0:b0:300:3244:341 with SMTP id
+ o205-20020a815ad6000000b0030032440341mr15471202ywb.191.1653611454269; Thu, 26
+ May 2022 17:30:54 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220512135901.1377087-1-srinivas.neeli@xilinx.com>
+ <CAMZ6Rq+z69CTY6Ec0n9d0-ri6pcyHtKH917M1eTD6hgkmyvGDQ@mail.gmail.com> <DM6PR02MB53868E201FAB1F01D01AAB25AFD99@DM6PR02MB5386.namprd02.prod.outlook.com>
+In-Reply-To: <DM6PR02MB53868E201FAB1F01D01AAB25AFD99@DM6PR02MB5386.namprd02.prod.outlook.com>
+From:   Vincent Mailhol <vincent.mailhol@gmail.com>
+Date:   Fri, 27 May 2022 09:30:41 +0900
+Message-ID: <CAMZ6RqLKQ-jmQfF7yq5dObpbzky6FcjEFw9acHmfLLhp2v4eXg@mail.gmail.com>
+Subject: Re: [PATCH] can: xilinx_can: Add Transmitter delay compensation (TDC)
+ feature support
+To:     Srinivas Neeli <sneeli@xilinx.com>
+Cc:     "wg@grandegger.com" <wg@grandegger.com>,
         "mkl@pengutronix.de" <mkl@pengutronix.de>,
         "davem@davemloft.net" <davem@davemloft.net>,
         "edumazet@google.com" <edumazet@google.com>,
@@ -54,225 +69,212 @@ CC:     "wg@grandegger.com" <wg@grandegger.com>,
         <linux-arm-kernel@lists.infradead.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         git <git@xilinx.com>
-Subject: RE: [PATCH] can: xilinx_can: Add Transmitter delay compensation (TDC)
- feature support
-Thread-Topic: [PATCH] can: xilinx_can: Add Transmitter delay compensation
- (TDC) feature support
-Thread-Index: AQHYZgiBbBEu5TjXQUWU1Nf6kD+jaa0cBDUAgBVfxOA=
-Date:   Thu, 26 May 2022 15:51:33 +0000
-Message-ID: <DM6PR02MB53868E201FAB1F01D01AAB25AFD99@DM6PR02MB5386.namprd02.prod.outlook.com>
-References: <20220512135901.1377087-1-srinivas.neeli@xilinx.com>
- <CAMZ6Rq+z69CTY6Ec0n9d0-ri6pcyHtKH917M1eTD6hgkmyvGDQ@mail.gmail.com>
-In-Reply-To: <CAMZ6Rq+z69CTY6Ec0n9d0-ri6pcyHtKH917M1eTD6hgkmyvGDQ@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=xilinx.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 140f5d2c-57d4-46bc-e15e-08da3f2f9bb7
-x-ms-traffictypediagnostic: PH0PR02MB7173:EE_
-x-ld-processed: 657af505-d5df-48d0-8300-c31994686c5c,ExtFwd,ExtAddr
-x-microsoft-antispam-prvs: <PH0PR02MB7173829F193159F9DC2A08EFAFD99@PH0PR02MB7173.namprd02.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: WCZ7GrN77wnxJvrzqLSr9+LDqniE9O568WOik6f19PSYbDRZX3nUBU3TPhydzySncix/lUK1Za56kHuBWMmL55udiJTHGPrghkVrSOlA+rLomx77d8bXVqd+nYD1LmBYsiVx13e06vubBV/XUijBUCteALOLMB/dke1jLmEtA8KTX7XgIyOu3R9BUblLh1zii++im1p3H0p6iNJ/zcQWQ5WtBRSj/E82yPQgMAIuukF5+o45nRBrq7dG1CNJ3d6OxrCPjlp35etcoXrUvD/DoaqP/Mpd4wMaCAGxwc0z0e1x/lft5qVWgwN7HIlIb2hIe2gKxxJzNCHvg4suBvkNtO0ZggFJlT23vxEoGvaRh2MGrFvfrBR07L08Y1qUv4pNudPDzIEu6U/Zo6lhU8aVT8x4RK/TdZFMFX84I38WMeH18FbPxF3Q3/zguuRNwBp7QZhQ4xfzvuxjy0heR7VAYMbpDmnq0245LufT5ggNLo8LKDt04epiNa5OZxbwmSffCrxJTbt/f/ScKU8LZEJFyi42XWgdT3CwgEd6qhjJKNkai/NxdN5ao8ifUWxkvnUnOJHNQzoc7af/kLB7Na3M/WfqRFqGFyYbN8YSYUizswdJDoXWrFnbBOiT8+m97uG+NO6/G8WfZnEmoyVF2jhuhMNFRJ4dW1uLY1GI7KTJPRYY146J5xZMJiavkclWELmAJfbJ+J5JIZJ6MqHvQSL2J/F1wxF1Wsh/C5mIKk/PQ5IUighsvvoZAzeOZ3GZ3iFcO8YZ1v+Xevi/b3u4eol+4Ty7aOfhXBX2cen4UysL86g=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR02MB5386.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(26005)(76116006)(2906002)(7696005)(9686003)(107886003)(6506007)(38100700002)(66556008)(66946007)(66446008)(316002)(66476007)(4326008)(8676002)(64756008)(966005)(54906003)(5660300002)(7416002)(6916009)(55016003)(52536014)(122000001)(38070700005)(8936002)(186003)(508600001)(53546011)(83380400001)(86362001)(71200400001)(33656002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NUtwWWpRQklId0tJVHdyK2xwQXZlOVBQS0pUdnZwenkyengxNmQ1MWo4NFVk?=
- =?utf-8?B?RnY2dEFZWnhHQWlvYzhuS2VDbmxxV09HSTNsQzBOcDVDSWNhUVQrSmltTVp2?=
- =?utf-8?B?RmlYaFdobDdhcVRsSCtEN1Joa2FNbEpyUnRLNlJhMTN5TnlCWXJQRDRzWlBZ?=
- =?utf-8?B?V255djFQQzB6VG0xdWo4Rnl1SmQreUVRTzkrNWZXeHhjR0N3WGdQU2Jublp0?=
- =?utf-8?B?elZkZXlJNlhnL0RoN3A4bWFKVlNEUlNnSllTMVhWVVpMQVYzejhUOU5MUGhs?=
- =?utf-8?B?ck5lK25PZ2tTMGtxcGp3YW1SaDJuVjdyek5scFZyaTBLdUZIeWNaTHkxdnI3?=
- =?utf-8?B?Q3FFR2h0WXE2TEJDRGNvOCtqaTlOUzdrY3R6RUZleGRka1dyeXBxaW5la0Ja?=
- =?utf-8?B?bStyOGRwMll1VWZ4RkYxZzlnbk9CTkMvUGltbjdpRHc3WlZuUTg1d2F0bUR1?=
- =?utf-8?B?MW5xYWRxSjVodmpMdUlNRGNyam4wMzVHK29KWHlvM01QQ3BQVjRwdThOM2VB?=
- =?utf-8?B?R3VGdXllcHlPVGdad0pOYjdNWGxZQ3dBSUM5eS9SM3Nka1c2ZXZRNHcvREJh?=
- =?utf-8?B?WFdacmsvUE9uQk1nRHpNektuMzA2QmtqK2FjL2dDT3V5cmxXaUl2V0JkUzJM?=
- =?utf-8?B?TUZXVE90SjZ4L0d3WUdjTjBpYkZ5YVpmZjAyTlUwRGt0TzVUbUpwUGY0a2N3?=
- =?utf-8?B?RnZHT3VFVWRlaG5CQ3R6UEtMdUVpWTZhQ1F4QjZDK1Q0a3JhVCtWbFJFYmIr?=
- =?utf-8?B?VTFrZjJaTFpJbndSUVRldTZrTk91LzFsbk5xUU9VQTRRMm00N3pBbHBpSDdu?=
- =?utf-8?B?WjBCbVdqYVc5YmUwRS9MZHFtallmSEQ1QzNIaDVrekVsMHNudlozU0N4a3NR?=
- =?utf-8?B?d1k1QVRybm93RlJKZjdZdFZVb1I0VDFIZzlzemxjUVptbTBuQmNSdlJCZXBr?=
- =?utf-8?B?WXBSQzhrdDVkSkZqc0wxYkdubVNRUlp5SlU1MGtzTU9HMjZwOFVqa1BMdjRk?=
- =?utf-8?B?ckFlME5WMUhGV0dKWG94RUl0UXZpNGU3Q3draUszVXlicDBNeUxrSXdXU1Zp?=
- =?utf-8?B?d0lwOWo0azM1cm1DUDRkelo5UUdGZUtBV2FSVTJEekI5aTZicEsydkYwdEtP?=
- =?utf-8?B?ZkRZc3pEaksrdXc4Um12WUtGa0taVXZyNlN2ME9tbkNyTW9FSjNCV3lxSmtK?=
- =?utf-8?B?d25SRWRNRWZnWUpuWUlKU2lvQ1AzYzNBUEIvQVFYaWZCanZXYTI2U2d1bFha?=
- =?utf-8?B?ZDVPMlRrNng2QmhmTUphK2sxQ1gvQnU4WjFSNVpUM2tLUEZYc2hpaU9BZmFU?=
- =?utf-8?B?eUZvWVhvZFpqeXNoZ1YycTgxRkcvQy9NcHFUQUJ4RVV0Zm9kdC9yZzhNKzdL?=
- =?utf-8?B?ZVo2Y0pCRGZwdWRRVmJzS0hJVnFTcDJUL2trVzBZR2d1bXBrL2VJa0ZzemdL?=
- =?utf-8?B?bmlkaGZZR1c1cWFCU0tIRURIVlcvT0ZYd25NckFjQXh6Ly9QYjl6YXBFejc3?=
- =?utf-8?B?UHhzV2E3SW1KYTZQMDZGL2VjMjN2NS9JaDJ3dXRSdy9FcmI4SEkzeW94bi8y?=
- =?utf-8?B?d0xKNVBSci9leG9uanRwbTR1eGxLdHNzQ3R0T3JXZTZheStHVjFhOFFFcFlq?=
- =?utf-8?B?dlRxWHFjQlYwSmtHdXp2VGdSV044bnpFSFVTa2hMSGZuNU9yQ3FVVnFEcjMw?=
- =?utf-8?B?K05UZnFKUmdrR0g0Tlo2eEo5NmdJYkdmbTN2MXhjUitwNC9USG1WZDBwaVhn?=
- =?utf-8?B?bGM3WHlhTTRSMzk4dFRhcnhrYmVKNEUzVjIvV0pqTm53TVcrR29oNEExRGR4?=
- =?utf-8?B?alE1TUlDWEg0allxMWsxcGRlRHNlR0JodXVzazFHZUhrMHQvYlZTN0NNZ1lP?=
- =?utf-8?B?L2FwRGNWWUYwMk5ZK0FSdS9DMlRPaFVId2FZYURRVW1YZEM2TkZibHlPUzlR?=
- =?utf-8?B?Z3duSWU4REpWK256cEpEUHc3RURSNHpRQzBXdXhIRVNtdlVQQ0p5MUlyRU9T?=
- =?utf-8?B?QVRDSU85WkRzZVFBZ2h0TDI0TG5mK2dSRzNkZTVrR0c3RDBLMDkyVWpOam5r?=
- =?utf-8?B?MWt3MHg3QXlnRXU4bmRXQyt1SXdQNVFId0NKNFJMZ1F5aTJSS3o4ajMzTU1i?=
- =?utf-8?B?Q0dyUFFqbmhFODlxVFkzS3R1S1QyVmMvUDJpZ1pOemUwZ3V5end2QVduNDFI?=
- =?utf-8?B?MGdQYW5nMlYzVjZPQWhobSt3L0E4Y2l0Q1JaR3VmYWVnajVKb3QvT0lPb0FN?=
- =?utf-8?B?aDl3dHFJUXR2TE9EbHIvTEt5QmR5bjRBMndtbU8xcGpmQjVWclBWVXpxOU04?=
- =?utf-8?B?aDlhcEM0eFNRRzJRV2d2bEg1UDNsNTQwMlc1SXo1S0R2YVZrZ0JQdz09?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR02MB5386.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 140f5d2c-57d4-46bc-e15e-08da3f2f9bb7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 May 2022 15:51:33.4253
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: x11O744mx+mBLdpK6VmWw5z9W1rui2ks2MelRkageRJ19OFyluzzBbqWYxvgpPv7X62sK9+5/F617UQQaicUsw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR02MB7173
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-SGkgVmluY2VudCwNCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBWaW5j
-ZW50IE1haWxob2wgPHZpbmNlbnQubWFpbGhvbEBnbWFpbC5jb20+DQo+IFNlbnQ6IEZyaWRheSwg
-TWF5IDEzLCAyMDIyIDY6NTQgQU0NCj4gVG86IFNyaW5pdmFzIE5lZWxpIDxzbmVlbGlAeGlsaW54
-LmNvbT4NCj4gQ2M6IHdnQGdyYW5kZWdnZXIuY29tOyBta2xAcGVuZ3V0cm9uaXguZGU7IGRhdmVt
-QGRhdmVtbG9mdC5uZXQ7DQo+IGVkdW1hemV0QGdvb2dsZS5jb207IEFwcGFuYSBEdXJnYSBLZWRh
-cmVzd2FyYSBSYW8NCj4gPGFwcGFuYWRAeGlsaW54LmNvbT47IFNyaW5pdmFzIEdvdWQgPHNnb3Vk
-QHhpbGlueC5jb20+OyBNaWNoYWwgU2ltZWsNCj4gPG1pY2hhbHNAeGlsaW54LmNvbT47IGt1YmFA
-a2VybmVsLm9yZzsgcGFiZW5pQHJlZGhhdC5jb207IGxpbnV4LQ0KPiBjYW5Admdlci5rZXJuZWwu
-b3JnOyBuZXRkZXZAdmdlci5rZXJuZWwub3JnOyBsaW51eC1hcm0tDQo+IGtlcm5lbEBsaXN0cy5p
-bmZyYWRlYWQub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBnaXQNCj4gPGdpdEB4
-aWxpbnguY29tPg0KPiBTdWJqZWN0OiBSZTogW1BBVENIXSBjYW46IHhpbGlueF9jYW46IEFkZCBU
-cmFuc21pdHRlciBkZWxheSBjb21wZW5zYXRpb24NCj4gKFREQykgZmVhdHVyZSBzdXBwb3J0DQo+
-IA0KPiBPbiBGcmkuIDEzIE1heSAyMDIyIGF0IDA3OjMwLCBTcmluaXZhcyBOZWVsaSA8c3Jpbml2
-YXMubmVlbGlAeGlsaW54LmNvbT4NCj4gd3JvdGU6DQo+ID4gQWRkZWQgVHJhbnNtaXR0ZXIgZGVs
-YXkgY29tcGVuc2F0aW9uIChUREMpIGZlYXR1cmUgc3VwcG9ydC4NCj4gPiBJbiB0aGUgY2FzZSBv
-ZiBoaWdoZXIgbWVhc3VyZWQgbG9vcCBkZWxheSB3aXRoIGhpZ2hlciBiYXVkIHJhdGVzLA0KPiA+
-IG9ic2VydmVkIGJpdCBzdHVmZiBlcnJvcnMuDQo+ID4gQnkgZW5hYmxpbmcgdGhlIFREQyBmZWF0
-dXJlIGluIGEgY29udHJvbGxlciwgd2lsbCBjb21wZW5zYXRlIGZvciB0aGUNCj4gPiBtZWFzdXJl
-IGxvb3AgZGVsYXkgaW4gdGhlIHJlY2VpdmUgcGF0aC4NCj4gPiBUREMgZmVhdHVyZSByZXF1aXJl
-cyBCUlAgdmFsdWVzIGNhbiBiZSAxIG9yIDIuDQo+ID4gVGhlIGN1cnJlbnQgQ0FOIGZyYW1ld29y
-ayBkb2VzIG5vdCBsaW1pdCB0aGUgYnJwIHNvIHdoaWxlIHVzaW5nIFREQywNCj4gPiBoYXZlIHRv
-IHJlc3RyaWN0IEJSUCB2YWx1ZXMuDQo+ID4gRXg6DQo+ID4gaXAgbGluayBzZXQgY2FuMCB0eXBl
-IGNhbiB0cSAxMiBwcm9wLXNlZyAzOSBwaGFzZS1zZWcxIDIwIHBoYXNlLXNlZzINCj4gPiAyMCBz
-ancgMjAgZHRxIDEyIGRwcm9wLXNlZyA1IGRwaGFzZS1zZWcxIDYgZHBoYXNlLXNlZzIgNCBkc2p3
-IDQgZmQgb24NCj4gPiBsb29wYmFjayBvbiB0ZGNvIDEyIHRkYy1tb2RlIGF1dG8NCj4gDQo+IERp
-ZCB5b3UgZXhwZXJpZW5jZSBzb21lIGNhc2VzIGluIHdoaWNoIHlvdSBoYWQgQlJQID4gMiBhbmQg
-c2F3DQo+IHRyYW5zbWlzc2lvbiBlcnJvcnMgZHVlIHRvIHRoZSBhYnNlbmNlIG9mIGRlbGF5IGNv
-bXBlbnNhdGlvbj8gQ291bGQgeW91DQo+IHNob3cgdGhlIGNhbGN1bGF0ZWQgdmFsdWVzPw0KPiBV
-c3VhbGx5LCB5b3Ugc3RhcnQgdG8gb2JzZXJ2ZSBidXQgc3R1ZmYgZXJyb3IgYXQgaGlnaCBiaXRy
-YXRlcyAoZS5nLg0KPiB+NU1CUFMpLCBhbmQgZm9yIHN1Y2ggYml0cmF0ZXMsIHRpbWUgcXVhbnRh
-IGhhcyB0byBiZSBzbWFsbCB3aGljaCB0aGVuDQo+IHJlc3VsdHMgaW4gYSBzbWFsbCBCUlAuDQoN
-Cnllcywgd2Ugb2JzZXJ2ZWQgZXJyb3JzIHdpdGggaGlnaGVyIGJhdWQgcmF0ZXMoNCBhbmQgNSBN
-QlBTKS4NCk9ic2VydmF0aW9uOg0KQlJQQSAxTWJwcyBTYW1wbGluZyA3NSUNCkJSUEQgNU1CUFMg
-U2FtcGxpbmcgNzUlDQpPbiBOWFAgUEhZIG9ic2VydmVkIGEgZGVsYXkgb2YgMTYwIG5zLiBzbyBv
-YnNlcnZpbmcgdGhlIGZhaWx1cmUuDQpBZnRlciBlbmFibGluZyB0aGUgVERDIGZlYXR1cmUgdG8g
-d29yayBmaW5lLg0KDQo+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IFNyaW5pdmFzIE5lZWxpIDxzcmlu
-aXZhcy5uZWVsaUB4aWxpbnguY29tPg0KPiA+IC0tLQ0KPiA+ICBkcml2ZXJzL25ldC9jYW4veGls
-aW54X2Nhbi5jIHwgMzAgKysrKysrKysrKysrKysrKysrKysrKysrKy0tLS0tDQo+ID4gIDEgZmls
-ZSBjaGFuZ2VkLCAyNSBpbnNlcnRpb25zKCspLCA1IGRlbGV0aW9ucygtKQ0KPiA+DQo+ID4gZGlm
-ZiAtLWdpdCBhL2RyaXZlcnMvbmV0L2Nhbi94aWxpbnhfY2FuLmMNCj4gPiBiL2RyaXZlcnMvbmV0
-L2Nhbi94aWxpbnhfY2FuLmMgaW5kZXggZTJiMTVkMjlkMTVlLi43YWY1MThmYmVkMDIgMTAwNjQ0
-DQo+ID4gLS0tIGEvZHJpdmVycy9uZXQvY2FuL3hpbGlueF9jYW4uYw0KPiA+ICsrKyBiL2RyaXZl
-cnMvbmV0L2Nhbi94aWxpbnhfY2FuLmMNCj4gPiBAQCAtMSw3ICsxLDcgQEANCj4gPiAgLy8gU1BE
-WC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjAtb3ItbGF0ZXINCj4gPiAgLyogWGlsaW54IENB
-TiBkZXZpY2UgZHJpdmVyDQo+ID4gICAqDQo+ID4gLSAqIENvcHlyaWdodCAoQykgMjAxMiAtIDIw
-MTQgWGlsaW54LCBJbmMuDQo+ID4gKyAqIENvcHlyaWdodCAoQykgMjAxMiAtIDIwMjIgWGlsaW54
-LCBJbmMuDQo+ID4gICAqIENvcHlyaWdodCAoQykgMjAwOSBQZXRhTG9naXguIEFsbCByaWdodHMg
-cmVzZXJ2ZWQuDQo+ID4gICAqIENvcHlyaWdodCAoQykgMjAxNyAtIDIwMTggU2FuZHZpayBNaW5p
-bmcgYW5kIENvbnN0cnVjdGlvbiBPeQ0KPiA+ICAgKg0KPiA+IEBAIC0xMzMsNiArMTMzLDggQEAg
-ZW51bSB4Y2FuX3JlZyB7DQo+ID4gICNkZWZpbmUgWENBTl9ETENSX0JSU19NQVNLICAgICAgICAg
-ICAgIDB4MDQwMDAwMDAgLyogQlJTIE1hc2sgaW4gRExDICovDQo+ID4NCj4gPiAgLyogQ0FOIHJl
-Z2lzdGVyIGJpdCBzaGlmdCAtIFhDQU5fPFJFRz5fPEJJVD5fU0hJRlQgKi8NCj4gPiArI2RlZmlu
-ZSBYQ0FOX0JSUFJfVERDT19TSElGVF9DQU5GRCAgICAgOCAgLyogVHJhbnNtaXR0ZXIgRGVsYXkN
-Cj4gQ29tcGVuc2F0aW9uIE9mZnNldCAqLw0KPiANCj4gSGF2aW5nIENBTkZEIGluIHRoZSBuYW1l
-IGlzIHJlZHVuZGFudCAoVERDIGltcGxpZXMgQ0FORkQpLg0KPiAjZGVmaW5lIFhDQU5fQlJQUl9U
-RENPX1NISUZUIDgNCnVwZGF0ZSBpbiBWMi4NCg0KPiANCj4gPiArI2RlZmluZSBYQ0FOX0JSUFJf
-VERDRV9TSElGVF9DQU5GRCAgICAgMTYgLyogVHJhbnNtaXR0ZXIgRGVsYXkNCj4gQ29tcGVuc2F0
-aW9uIChUREMpIEVuYWJsZSAqLw0KPiANCj4gV2h5IG5vdDoNCj4gI2RlZmluZSBYQ0FOX0JSUFJf
-VERDX0VOQUJMRSBCSVQoMTYpDQp1cGRhdGUgaW4gVjIuDQoNCj4gDQo+ID4gICNkZWZpbmUgWENB
-Tl9CVFJfU0pXX1NISUZUICAgICAgICAgICAgIDcgIC8qIFN5bmNocm9ub3VzIGp1bXAgd2lkdGgg
-Ki8NCj4gPiAgI2RlZmluZSBYQ0FOX0JUUl9UUzJfU0hJRlQgICAgICAgICAgICAgNCAgLyogVGlt
-ZSBzZWdtZW50IDIgKi8NCj4gPiAgI2RlZmluZSBYQ0FOX0JUUl9TSldfU0hJRlRfQ0FORkQgICAg
-ICAgMTYgLyogU3luY2hyb25vdXMganVtcCB3aWR0aA0KPiAqLw0KPiA+IEBAIC0yNTksNyArMjYx
-LDcgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBjYW5fYml0dGltaW5nX2NvbnN0DQo+IHhjYW5fYml0
-dGltaW5nX2NvbnN0X2NhbmZkMiA9IHsNCj4gPiAgICAgICAgIC50c2VnMl9taW4gPSAxLA0KPiA+
-ICAgICAgICAgLnRzZWcyX21heCA9IDEyOCwNCj4gPiAgICAgICAgIC5zandfbWF4ID0gMTI4LA0K
-PiA+IC0gICAgICAgLmJycF9taW4gPSAyLA0KPiA+ICsgICAgICAgLmJycF9taW4gPSAxLA0KPiAN
-Cj4gV2FzIHRoZXJlIGFueSByZWFzb24gdG8gaGF2ZSBicnBfbWluID0gMiBpbiB0aGUgZmlyc3Qg
-cGxhY2U/DQo+IEkgdGhpbmsgdGhpcyBjaGFuZ2UgIHNob3VsZCBiZSBhIGRpZmZlcmVudCBwYXRj
-aC4gSWYgdGhlIGJycF9taW4gPSAyIGlzIGp1c3QgYQ0KPiB0eXBvLCB5b3UgbWlnaHQgYWxzbyB3
-YW50IHRvIGJhY2twb3J0IGl0IHRvIHN0YWJsZSBicmFuY2hlcy4NCg0KT24gZWFybHkgc2lsaWNv
-biBlbmdpbmVlcmluZyBzYW1wbGVzIHdlIG9ic2VydmVkIGJpdCBzaHJpbmtpbmcgaXNzdWUgd2hl
-biB3ZSB1c2UgYnJwID0xICwgaGVuY2Ugd2UgdXBkYXRlZCBicnBfbWluID0yLg0KQXMgaW4gcHJv
-ZHVjdGlvbiBzaWxpY29uIHRoaXMgaXNzdWUgaXMgZml4ZWQgd2UgYXJlIHBsYW5uaW5nIHRvIHJl
-dmVydCB0aGUgcGF0Y2guDQoNCj4gDQo+ID4gICAgICAgICAuYnJwX21heCA9IDI1NiwNCj4gPiAg
-ICAgICAgIC5icnBfaW5jID0gMSwNCj4gPiAgfTsNCj4gPiBAQCAtMjcyLDExICsyNzQsMjEgQEAg
-c3RhdGljIHN0cnVjdCBjYW5fYml0dGltaW5nX2NvbnN0DQo+IHhjYW5fZGF0YV9iaXR0aW1pbmdf
-Y29uc3RfY2FuZmQyID0gew0KPiA+ICAgICAgICAgLnRzZWcyX21pbiA9IDEsDQo+ID4gICAgICAg
-ICAudHNlZzJfbWF4ID0gMTYsDQo+ID4gICAgICAgICAuc2p3X21heCA9IDE2LA0KPiA+IC0gICAg
-ICAgLmJycF9taW4gPSAyLA0KPiA+ICsgICAgICAgLmJycF9taW4gPSAxLA0KPiA+ICAgICAgICAg
-LmJycF9tYXggPSAyNTYsDQo+ID4gICAgICAgICAuYnJwX2luYyA9IDEsDQo+ID4gIH07DQo+ID4N
-Cj4gPiArLyogVHJhbnNtaXNzaW9uIERlbGF5IENvbXBlbnNhdGlvbiBjb25zdGFudHMgZm9yIENB
-TkZEMi4wIGFuZCBWZXJzYWwNCj4gPiArKi8gc3RhdGljIGNvbnN0IHN0cnVjdCBjYW5fdGRjX2Nv
-bnN0IHhjYW5fdGRjX2NvbnN0ID0gew0KPiA+ICsgICAgICAgLnRkY3ZfbWluID0gMCwNCj4gPiAr
-ICAgICAgIC50ZGN2X21heCA9IDAsIC8qIE1hbnVhbCBtb2RlIG5vdCBzdXBwb3J0ZWQuICovDQo+
-IA0KPiBSaWdodCwgaGFkIGEgbG9vayBhdCB0aGUgZGF0YXNoZWV0IGFuZCB4aWxpbnggaW5kZWVk
-IGRvZXMgbm90IHN1cHBvcnQgc2V0dGluZw0KPiBURENWLg0KPiBIb3dldmVyLCB4aWxpbnggc3Rp
-bGwgaGFzIGEgVERDViByZWdpc3RlciB0byByZXBvcnQgdGhlIG1lYXN1cmVkIHRyYW5zbWlzc2lv
-bg0KPiBkZWxheS4NCj4gDQo+IFNvY2tldCBDQU4ncyBUREMgZnJhbWV3b3JrIHByb3ZpZGVzIGNh
-bl9wcml2Ojpkb19nZXRfYXV0b190ZGN2KCkgdG8NCj4gcmVwb3J0IHRoZSBtZWFzdXJlZCB2YWx1
-ZSB0aHJvdWdoIHRoZSBuZXRsaW5rIGludGVyZmFjZToNCj4gaHR0cHM6Ly9lbGl4aXIuYm9vdGxp
-bi5jb20vbGludXgvdjUuMTcvc291cmNlL2luY2x1ZGUvbGludXgvY2FuL2Rldi5oI0w4Nw0KPiAN
-Cj4gQ2FuIHlvdSBpbXBsZW1lbnQgdGhpcyBjYWxsIGJhY2sgZnVuY3Rpb24/DQpXaWxsIGltcGxl
-bWVudCBpbiBWMi4NCg0KPiANCj4gPiArICAgICAgIC50ZGNvX21pbiA9IDAsDQo+ID4gKyAgICAg
-ICAudGRjb19tYXggPSA2NCwNCj4gPiArICAgICAgIC50ZGNmX21pbiA9IDAsIC8qIEZpbHRlciB3
-aW5kb3cgbm90IHN1cHBvcnRlZCAqLw0KPiA+ICsgICAgICAgLnRkY2ZfbWF4ID0gMCwNCj4gPiAr
-fTsNCj4gPiArDQo+ID4gIC8qKg0KPiA+ICAgKiB4Y2FuX3dyaXRlX3JlZ19sZSAtIFdyaXRlIGEg
-dmFsdWUgdG8gdGhlIGRldmljZSByZWdpc3RlciBsaXR0bGUgZW5kaWFuDQo+ID4gICAqIEBwcml2
-OiAgICAgIERyaXZlciBwcml2YXRlIGRhdGEgc3RydWN0dXJlDQo+ID4gQEAgLTQyNSw2ICs0Mzcs
-MTEgQEAgc3RhdGljIGludCB4Y2FuX3NldF9iaXR0aW1pbmcoc3RydWN0IG5ldF9kZXZpY2UNCj4g
-Km5kZXYpDQo+ID4gICAgICAgICAgICAgcHJpdi0+ZGV2dHlwZS5jYW50eXBlID09IFhBWElfQ0FO
-RkRfMl8wKSB7DQo+ID4gICAgICAgICAgICAgICAgIC8qIFNldHRpbmcgQmF1ZCBSYXRlIHByZXNj
-YWxhciB2YWx1ZSBpbiBGX0JSUFIgUmVnaXN0ZXIgKi8NCj4gPiAgICAgICAgICAgICAgICAgYnRy
-MCA9IGRidC0+YnJwIC0gMTsNCj4gPiArICAgICAgICAgICAgICAgaWYgKGNhbl90ZGNfaXNfZW5h
-YmxlZCgmcHJpdi0+Y2FuKSkgew0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgIGJ0cjAgPSBi
-dHIwIHwNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAocHJpdi0+Y2FuLnRkYy50ZGNvKSA8
-PCBYQ0FOX0JSUFJfVERDT19TSElGVF9DQU5GRCB8DQo+ID4gKyAgICAgICAgICAgICAgICAgICAg
-ICAgMSA8PCBYQ0FOX0JSUFJfVERDRV9TSElGVF9DQU5GRDsNCj4gDQo+IEkgZG9uJ3QgdGhpbmsg
-dGhlIHBhcmVudGhlc2lzIGFyb3VuZCAocHJpdi0+Y2FuLnRkYy50ZGNvKSBhcmUgbmVlZGVkLg0K
-WWVzLCB3aWxsIHVwZGF0ZS4NCj4gDQo+ICAgICAgICAgICAgICAgICAgICAgICAgYnRyMCA9IGJ0
-cjAgfA0KPiAgICAgICAgICAgICAgICAgICAgICAgIHByaXYtPmNhbi50ZGMudGRjbyA8PCBYQ0FO
-X0JSUFJfVERDT19TSElGVCB8DQo+ICAgICAgICAgICAgICAgICAgICAgICBYQ0FOX0JSUFJfVERD
-X0VOQUJMRQ0KPiANCj4gKGMuZi4gYWJvdmUgZm9yIG1hY3JvIG5hbWVzKQ0KPiANCj4gPiArICAg
-ICAgICAgICAgICAgfQ0KPiA+DQo+ID4gICAgICAgICAgICAgICAgIC8qIFNldHRpbmcgVGltZSBT
-ZWdtZW50IDEgaW4gQlRSIFJlZ2lzdGVyICovDQo+ID4gICAgICAgICAgICAgICAgIGJ0cjEgPSBk
-YnQtPnByb3Bfc2VnICsgZGJ0LT5waGFzZV9zZWcxIC0gMTsgQEANCj4gPiAtMTc0NywxMyArMTc2
-NCwxNiBAQCBzdGF0aWMgaW50IHhjYW5fcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRl
-dikNCj4gPiAgICAgICAgICAgICAgICAgcHJpdi0+Y2FuLmRhdGFfYml0dGltaW5nX2NvbnN0ID0N
-Cj4gPiAgICAgICAgICAgICAgICAgICAgICAgICAmeGNhbl9kYXRhX2JpdHRpbWluZ19jb25zdF9j
-YW5mZDsNCj4gPg0KPiA+IC0gICAgICAgaWYgKGRldnR5cGUtPmNhbnR5cGUgPT0gWEFYSV9DQU5G
-RF8yXzApDQo+ID4gKyAgICAgICBpZiAoZGV2dHlwZS0+Y2FudHlwZSA9PSBYQVhJX0NBTkZEXzJf
-MCkgew0KPiA+ICAgICAgICAgICAgICAgICBwcml2LT5jYW4uZGF0YV9iaXR0aW1pbmdfY29uc3Qg
-PQ0KPiA+ICAgICAgICAgICAgICAgICAgICAgICAgICZ4Y2FuX2RhdGFfYml0dGltaW5nX2NvbnN0
-X2NhbmZkMjsNCj4gPiArICAgICAgICAgICAgICAgcHJpdi0+Y2FuLnRkY19jb25zdCA9ICZ4Y2Fu
-X3RkY19jb25zdDsNCj4gPiArICAgICAgIH0NCj4gPg0KPiA+ICAgICAgICAgaWYgKGRldnR5cGUt
-PmNhbnR5cGUgPT0gWEFYSV9DQU5GRCB8fA0KPiA+ICAgICAgICAgICAgIGRldnR5cGUtPmNhbnR5
-cGUgPT0gWEFYSV9DQU5GRF8yXzApDQo+ID4gLSAgICAgICAgICAgICAgIHByaXYtPmNhbi5jdHJs
-bW9kZV9zdXBwb3J0ZWQgfD0gQ0FOX0NUUkxNT0RFX0ZEOw0KPiA+ICsgICAgICAgICAgICAgICBw
-cml2LT5jYW4uY3RybG1vZGVfc3VwcG9ydGVkIHw9IENBTl9DVFJMTU9ERV9GRCB8DQo+ID4gKyAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgQ0FOX0NUUkxNT0RF
-X1REQ19BVVRPOw0KPiA+DQo+ID4gICAgICAgICBwcml2LT5yZWdfYmFzZSA9IGFkZHI7DQo+ID4g
-ICAgICAgICBwcml2LT50eF9tYXggPSB0eF9tYXg7DQo+ID4gLS0NCj4gPiAyLjI1LjENCj4gPg0K
+On Fri. 27 May 2022 at 00:51, Srinivas Neeli <sneeli@xilinx.com> wrote:
+> Hi Vincent,
+>
+> > -----Original Message-----
+> > From: Vincent Mailhol <vincent.mailhol@gmail.com>
+> > Sent: Friday, May 13, 2022 6:54 AM
+> > To: Srinivas Neeli <sneeli@xilinx.com>
+> > Cc: wg@grandegger.com; mkl@pengutronix.de; davem@davemloft.net;
+> > edumazet@google.com; Appana Durga Kedareswara Rao
+> > <appanad@xilinx.com>; Srinivas Goud <sgoud@xilinx.com>; Michal Simek
+> > <michals@xilinx.com>; kuba@kernel.org; pabeni@redhat.com; linux-
+> > can@vger.kernel.org; netdev@vger.kernel.org; linux-arm-
+> > kernel@lists.infradead.org; linux-kernel@vger.kernel.org; git
+> > <git@xilinx.com>
+> > Subject: Re: [PATCH] can: xilinx_can: Add Transmitter delay compensation
+> > (TDC) feature support
+> >
+> > On Fri. 13 May 2022 at 07:30, Srinivas Neeli <srinivas.neeli@xilinx.com>
+> > wrote:
+> > > Added Transmitter delay compensation (TDC) feature support.
+> > > In the case of higher measured loop delay with higher baud rates,
+> > > observed bit stuff errors.
+> > > By enabling the TDC feature in a controller, will compensate for the
+> > > measure loop delay in the receive path.
+> > > TDC feature requires BRP values can be 1 or 2.
+> > > The current CAN framework does not limit the brp so while using TDC,
+> > > have to restrict BRP values.
+> > > Ex:
+> > > ip link set can0 type can tq 12 prop-seg 39 phase-seg1 20 phase-seg2
+> > > 20 sjw 20 dtq 12 dprop-seg 5 dphase-seg1 6 dphase-seg2 4 dsjw 4 fd on
+> > > loopback on tdco 12 tdc-mode auto
+> >
+> > Did you experience some cases in which you had BRP > 2 and saw
+> > transmission errors due to the absence of delay compensation? Could you
+> > show the calculated values?
+> > Usually, you start to observe but stuff error at high bitrates (e.g.
+> > ~5MBPS), and for such bitrates, time quanta has to be small which then
+> > results in a small BRP.
+>
+> yes, we observed errors with higher baud rates(4 and 5 MBPS).
+> Observation:
+> BRPA 1Mbps Sampling 75%
+> BRPD 5MBPS Sampling 75%
+> On NXP PHY observed a delay of 160 ns. so observing the failure.
+> After enabling the TDC feature to work fine.
+
+Can you also share the results of:
+
+| ip --details link show can0
+
+for both the automatic calculation by the CAN framework and for your
+hand calculated values?
+
+
+Thank you!
+
+> > > Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
+> > > ---
+> > >  drivers/net/can/xilinx_can.c | 30 +++++++++++++++++++++++++-----
+> > >  1 file changed, 25 insertions(+), 5 deletions(-)
+> > >
+> > > diff --git a/drivers/net/can/xilinx_can.c
+> > > b/drivers/net/can/xilinx_can.c index e2b15d29d15e..7af518fbed02 100644
+> > > --- a/drivers/net/can/xilinx_can.c
+> > > +++ b/drivers/net/can/xilinx_can.c
+> > > @@ -1,7 +1,7 @@
+> > >  // SPDX-License-Identifier: GPL-2.0-or-later
+> > >  /* Xilinx CAN device driver
+> > >   *
+> > > - * Copyright (C) 2012 - 2014 Xilinx, Inc.
+> > > + * Copyright (C) 2012 - 2022 Xilinx, Inc.
+> > >   * Copyright (C) 2009 PetaLogix. All rights reserved.
+> > >   * Copyright (C) 2017 - 2018 Sandvik Mining and Construction Oy
+> > >   *
+> > > @@ -133,6 +133,8 @@ enum xcan_reg {
+> > >  #define XCAN_DLCR_BRS_MASK             0x04000000 /* BRS Mask in DLC */
+> > >
+> > >  /* CAN register bit shift - XCAN_<REG>_<BIT>_SHIFT */
+> > > +#define XCAN_BRPR_TDCO_SHIFT_CANFD     8  /* Transmitter Delay
+> > Compensation Offset */
+> >
+> > Having CANFD in the name is redundant (TDC implies CANFD).
+> > #define XCAN_BRPR_TDCO_SHIFT 8
+> update in V2.
+>
+> >
+> > > +#define XCAN_BRPR_TDCE_SHIFT_CANFD     16 /* Transmitter Delay
+> > Compensation (TDC) Enable */
+> >
+> > Why not:
+> > #define XCAN_BRPR_TDC_ENABLE BIT(16)
+> update in V2.
+>
+> >
+> > >  #define XCAN_BTR_SJW_SHIFT             7  /* Synchronous jump width */
+> > >  #define XCAN_BTR_TS2_SHIFT             4  /* Time segment 2 */
+> > >  #define XCAN_BTR_SJW_SHIFT_CANFD       16 /* Synchronous jump width
+> > */
+> > > @@ -259,7 +261,7 @@ static const struct can_bittiming_const
+> > xcan_bittiming_const_canfd2 = {
+> > >         .tseg2_min = 1,
+> > >         .tseg2_max = 128,
+> > >         .sjw_max = 128,
+> > > -       .brp_min = 2,
+> > > +       .brp_min = 1,
+> >
+> > Was there any reason to have brp_min = 2 in the first place?
+> > I think this change  should be a different patch. If the brp_min = 2 is just a
+> > typo, you might also want to backport it to stable branches.
+>
+> On early silicon engineering samples we observed bit shrinking issue when we use brp =1 , hence we updated brp_min =2.
+> As in production silicon this issue is fixed we are planning to revert the patch.
+
+Great!
+
+> > >         .brp_max = 256,
+> > >         .brp_inc = 1,
+> > >  };
+> > > @@ -272,11 +274,21 @@ static struct can_bittiming_const
+> > xcan_data_bittiming_const_canfd2 = {
+> > >         .tseg2_min = 1,
+> > >         .tseg2_max = 16,
+> > >         .sjw_max = 16,
+> > > -       .brp_min = 2,
+> > > +       .brp_min = 1,
+> > >         .brp_max = 256,
+> > >         .brp_inc = 1,
+> > >  };
+> > >
+> > > +/* Transmission Delay Compensation constants for CANFD2.0 and Versal
+> > > +*/ static const struct can_tdc_const xcan_tdc_const = {
+> > > +       .tdcv_min = 0,
+> > > +       .tdcv_max = 0, /* Manual mode not supported. */
+> >
+> > Right, had a look at the datasheet and xilinx indeed does not support setting
+> > TDCV.
+> > However, xilinx still has a TDCV register to report the measured transmission
+> > delay.
+> >
+> > Socket CAN's TDC framework provides can_priv::do_get_auto_tdcv() to
+> > report the measured value through the netlink interface:
+> > https://elixir.bootlin.com/linux/v5.17/source/include/linux/can/dev.h#L87
+> >
+> > Can you implement this call back function?
+> Will implement in V2.
+>
+> >
+> > > +       .tdco_min = 0,
+> > > +       .tdco_max = 64,
+> > > +       .tdcf_min = 0, /* Filter window not supported */
+> > > +       .tdcf_max = 0,
+> > > +};
+> > > +
+> > >  /**
+> > >   * xcan_write_reg_le - Write a value to the device register little endian
+> > >   * @priv:      Driver private data structure
+> > > @@ -425,6 +437,11 @@ static int xcan_set_bittiming(struct net_device
+> > *ndev)
+> > >             priv->devtype.cantype == XAXI_CANFD_2_0) {
+> > >                 /* Setting Baud Rate prescalar value in F_BRPR Register */
+> > >                 btr0 = dbt->brp - 1;
+> > > +               if (can_tdc_is_enabled(&priv->can)) {
+> > > +                       btr0 = btr0 |
+> > > +                       (priv->can.tdc.tdco) << XCAN_BRPR_TDCO_SHIFT_CANFD |
+> > > +                       1 << XCAN_BRPR_TDCE_SHIFT_CANFD;
+> >
+> > I don't think the parenthesis around (priv->can.tdc.tdco) are needed.
+> Yes, will update.
+> >
+> >                        btr0 = btr0 |
+> >                        priv->can.tdc.tdco << XCAN_BRPR_TDCO_SHIFT |
+> >                       XCAN_BRPR_TDC_ENABLE
+> >
+> > (c.f. above for macro names)
+> >
+> > > +               }
+> > >
+> > >                 /* Setting Time Segment 1 in BTR Register */
+> > >                 btr1 = dbt->prop_seg + dbt->phase_seg1 - 1; @@
+> > > -1747,13 +1764,16 @@ static int xcan_probe(struct platform_device *pdev)
+> > >                 priv->can.data_bittiming_const =
+> > >                         &xcan_data_bittiming_const_canfd;
+> > >
+> > > -       if (devtype->cantype == XAXI_CANFD_2_0)
+> > > +       if (devtype->cantype == XAXI_CANFD_2_0) {
+> > >                 priv->can.data_bittiming_const =
+> > >                         &xcan_data_bittiming_const_canfd2;
+> > > +               priv->can.tdc_const = &xcan_tdc_const;
+> > > +       }
+> > >
+> > >         if (devtype->cantype == XAXI_CANFD ||
+> > >             devtype->cantype == XAXI_CANFD_2_0)
+> > > -               priv->can.ctrlmode_supported |= CAN_CTRLMODE_FD;
+> > > +               priv->can.ctrlmode_supported |= CAN_CTRLMODE_FD |
+> > > +                                               CAN_CTRLMODE_TDC_AUTO;
+> > >
+> > >         priv->reg_base = addr;
+> > >         priv->tx_max = tx_max;
