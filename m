@@ -2,71 +2,56 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4219536B72
-	for <lists+linux-can@lfdr.de>; Sat, 28 May 2022 09:41:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92668536DA2
+	for <lists+linux-can@lfdr.de>; Sat, 28 May 2022 17:55:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbiE1Hly (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 28 May 2022 03:41:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41494 "EHLO
+        id S238110AbiE1PyJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 28 May 2022 11:54:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbiE1Hlx (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 28 May 2022 03:41:53 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF66D2608
-        for <linux-can@vger.kernel.org>; Sat, 28 May 2022 00:41:51 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id c19so9873364lfv.5
-        for <linux-can@vger.kernel.org>; Sat, 28 May 2022 00:41:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kvaser.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=5AdGIq1npdZwT45hdil7GXgBo5RZT0e5WlXJHtQnvA4=;
-        b=VUkFP11V7NHqyP9pKVQuxrCrLAYh4CXAgqMwlTLdL5+So4X8aPlijKLs7J5FuKiVk9
-         xdVtYnXC+aJSNmJIDSxepqp1LzNyVoJIIlm1bj/HzswB++51Q4LqKt5y5ORophQP5GQ6
-         50UYjqMPmT8zvWZggY8zwysd+XQyL42+6wHGPgv37qnsxg+ZkKG+3ljXI6F+7Fh1Jha7
-         j2pCGoEk+tgq/LfW3VIA1mIMIr98b90BqV8vkrfpv8NcSJqqnacMx9NvEsooQuvgWRw3
-         LLpebgBDRzs9q9Sql0s02BCvsPjNW41eMXUs2/c35wWubRS7BowVdboDfauYBZb3hNQR
-         9ZIQ==
+        with ESMTP id S238076AbiE1PyJ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 28 May 2022 11:54:09 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 337CF15818
+        for <linux-can@vger.kernel.org>; Sat, 28 May 2022 08:54:07 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id g11-20020a056e021e0b00b002d1b5e8389bso4957997ila.2
+        for <linux-can@vger.kernel.org>; Sat, 28 May 2022 08:54:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=5AdGIq1npdZwT45hdil7GXgBo5RZT0e5WlXJHtQnvA4=;
-        b=qQht7kE58YYbJS86pEUp25IJgZi46+JWQ6xWlq72TERywOJNkfEayw3gCoT+cWDGqs
-         H7HNkPaCWqvr0SC05yL3Ay79CFcMDA0Gu1e0qucCM1rEsEiICIYFzwBZ1TF+eWAg5hW1
-         qs5P/jTICDAh5o1dz9ESixUqKKMk0WStcmPAcBO4tuGfsP42WrffHJjRD900l6l0gpsl
-         6F0md5bfmaw8R5DNodstXNnmnaNT5TBakaEba8ssn6AmBC62qChfzfNDEVB9xgm0ckNW
-         u+HEvaz2WCJDLNu8HRCS82r5LjM43NTVAZAHcZ9HD+OVJDEE+IKEQcRwSab24HA5DxWv
-         VLwQ==
-X-Gm-Message-State: AOAM530E6dK1dKkkQrMG92Er39qx7+jU3RM3YSJBhBqXpXDF+mkwsYzh
-        xULoRBeqCeFfmUYmd61lzTWjXQ==
-X-Google-Smtp-Source: ABdhPJx8aJAiRY08OkYNZSMia7+ZaPgZ8LWlQbSvjg4xvZctgrt+t9CYYFqgadl1iCEqdzUuAMXbOw==
-X-Received: by 2002:ac2:59dd:0:b0:477:c4e0:1c59 with SMTP id x29-20020ac259dd000000b00477c4e01c59mr32687770lfn.248.1653723710167;
-        Sat, 28 May 2022 00:41:50 -0700 (PDT)
-Received: from [192.168.16.143] (h-155-4-68-234.A785.priv.bahnhof.se. [155.4.68.234])
-        by smtp.gmail.com with ESMTPSA id y26-20020a05651c107a00b00253bb2564cbsm326745ljm.134.2022.05.28.00.41.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 28 May 2022 00:41:49 -0700 (PDT)
-Message-ID: <17631d66-7b90-e60b-e3fb-76b25e5eceaa@kvaser.com>
-Date:   Sat, 28 May 2022 09:42:06 +0200
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=YBWhcnEjzHwhtIpcyV3G+n8eZtSERP7GIZTa1mABrIQ=;
+        b=oxmjSM+jtyhXx4yYs0slTXNOZtBgo1pI0gKnvxM6XAEyAzirq9NKH9ShwqeLjL1sl9
+         ai05bKAhcG7vrWBELpZJnexBFXe4h7zmo9qTLZ74hpx2qsc4IEG1lTghfDou8sGEGVbz
+         AA32rimbukA3c6FGMjBIviy4giJIKRY03T89e7eKhu89V9x/yaDr0Qgr+gJ9IOTP/Nbr
+         u7VN5LIUf+tZA57G2V9vbZvwg4ZKv2VGZwPlNDF/SASfkjlJ/5BCEto5+l3NGdncHkNu
+         TYeKDoPeiWKewN7iqNquK7q9TuLt07NKJbOzSDVHu5l0e+ny/77Uu/l7TXsDrIXDA1qF
+         YxXw==
+X-Gm-Message-State: AOAM532y0a/eCxubLyvFNhgm5/W8OOkFF+15IL/JhlsWJ7Pp3A4p4/I+
+        PXj4jXqGCJrA3o7Y458c+uuzLDLZDE1HpRB0gXiSAgLGyIsE
+X-Google-Smtp-Source: ABdhPJwTNKsZOz0VuH2CDi/nZXLiPnNA99ONMHbUdPNx2ZnXvdt0LIAdyw5/ox49nfzscenMJtLWAbvHVF4r+11UKgpGAIDqxHkP
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH 00/12] can: kvaser_usb: Various fixes
-Content-Language: en-US
-From:   Jimmy Assarsson <extja@kvaser.com>
-To:     Anssi Hannula <anssi.hannula@bitwise.fi>
-Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-kernel@vger.kernel.org
-References: <20220516134748.3724796-1-anssi.hannula@bitwise.fi>
- <61060501-7edb-4277-acf6-117161e8593f@kvaser.com>
-In-Reply-To: <61060501-7edb-4277-acf6-117161e8593f@kvaser.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6638:1350:b0:331:9b1:e917 with SMTP id
+ u16-20020a056638135000b0033109b1e917mr1334598jad.131.1653753246569; Sat, 28
+ May 2022 08:54:06 -0700 (PDT)
+Date:   Sat, 28 May 2022 08:54:06 -0700
+In-Reply-To: <000000000000ae0adf05db4b6f66@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000cee18105e0146e2d@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in j1939_xtp_rx_dat_one (3)
+From:   syzbot <syzbot+a9dce1ff45c3bbeceb3a@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, elver@google.com, hdanton@sina.com,
+        john.ogness@linutronix.de, kernel@pengutronix.de, kuba@kernel.org,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux@rempel-privat.de, mkl@pengutronix.de, netdev@vger.kernel.org,
+        pabeni@redhat.com, pmladek@suse.com, robin@protonic.nl,
+        rostedt@goodmis.org, socketcan@hartkopp.net,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,71 +59,24 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 5/17/22 10:41, Jimmy Assarsson wrote:
-> On 2022-05-16 15:47, Anssi Hannula wrote:
->>
->> Hi all,
->>
->> Here's a set of fixes for issues I found while testing kvaser_usb as we
->> are preparing to start using it in production (with 0bfd:0124).
-> 
-> Hi Anssi,
-> 
-> Thanks for the patches!
-> I will review and test your fixes before the weekend.
-> 
-> Best regards,
-> jimmy
+syzbot suspects this issue was fixed by commit:
 
-Sorry for the delay!
+commit 701850dc0c31bfadf75a0a74af7d2c97859945ec
+Author: Marco Elver <elver@google.com>
+Date:   Tue May 3 07:38:44 2022 +0000
 
-To summarize the status.
+    printk, tracing: fix console tracepoint
 
-These patches look good:
-[PATCH 01/12] can: kvaser_usb_leaf: Fix overread with an invalid command
-[PATCH 02/12] can: kvaser_usb: Fix use of uninitialized completion
-[PATCH 03/12] can: kvaser_usb: Fix possible completions during 
-init_completion
-[PATCH 05/12] can: kvaser_usb_leaf: Set Warning state even without bus 
-errors
-[PATCH 10/12] can: kvaser_usb_leaf: Fix wrong CAN state after stopping
-[PATCH 12/12] can: kvaser_usb_leaf: Fix bogus restart events
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=153df725f00000
+start commit:   ae085d7f9365 mm: kfence: fix missing objcg housekeeping fo..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6bae4cd50262530e
+dashboard link: https://syzkaller.appspot.com/bug?extid=a9dce1ff45c3bbeceb3a
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12529653700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14b64ea5700000
 
-This looks good, but see comment regarding explicit queue flush:
-[PATCH 06/12] can: kvaser_usb_leaf: Fix TX queue out of sync after restart
+If the result looks correct, please mark the issue as fixed by replying with:
 
-I still need some more time looking into:
-PATCH 07/12] can: kvaser_usb_leaf: Fix CAN state after restart
-PATCH 08/12] can: kvaser_usb_leaf: Fix improved state not being reported
-PATCH 11/12] can: kvaser_usb_leaf: Ignore stale bus-off after start
+#syz fix: printk, tracing: fix console tracepoint
 
-I want to replace
-[PATCH 04/12] can: kvaser_usb: Mark Mini PCIe 2xHS as supporting error 
-counters
-with a new patch
-"can: kvaser_usb: kvaser_usb_leaf: Get capabilities from device"
-
-I want to split the handling of CMD_ERROR_EVENT and the readback
-functionality. I also want to add parameter readback for
-kvaser_usb_hydra. I need more time to look over the can_bittiming_const
-in kvaser_usb_leaf for the different supported firmware.
-[PATCH 09/12] can: kvaser_usb_leaf: Fix silently failing bus params setup
-
-
-I would like to create a V2 series, including my patches, if you are
-okay with it?
-
-
-Best regards,
-jimmy
-
-
-
->> The biggest caveat is that I only have two devices to test with [1] and I
->> don't have HW documentation, so there is a possibility that some of the
->> fixes might not work properly on all HW variants.
->> Hopefully Jimmy can confirm they look OK, or suggest alternatives.
->>
->> [1] Tested devices:
->> - 0bfd:0017 Kvaser Memorator Professional HS/HS FW 2.0.50
->> - 0bfd:0124 Kvaser Mini PCI Express 2xHS FW 4.18.778
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
