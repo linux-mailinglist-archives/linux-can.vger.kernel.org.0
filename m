@@ -2,35 +2,35 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27D945381DA
-	for <lists+linux-can@lfdr.de>; Mon, 30 May 2022 16:33:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B1B5381E2
+	for <lists+linux-can@lfdr.de>; Mon, 30 May 2022 16:33:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240604AbiE3OVU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        id S241185AbiE3OVU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
         Mon, 30 May 2022 10:21:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40312 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240605AbiE3OQP (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 30 May 2022 10:16:15 -0400
+        with ESMTP id S241413AbiE3ORe (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 30 May 2022 10:17:34 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2466AED79B;
-        Mon, 30 May 2022 06:43:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6CD559B;
+        Mon, 30 May 2022 06:46:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F0FC260F93;
-        Mon, 30 May 2022 13:43:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94B68C3411E;
-        Mon, 30 May 2022 13:43:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4ABC960FD4;
+        Mon, 30 May 2022 13:46:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FEB7C3411F;
+        Mon, 30 May 2022 13:46:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653918215;
-        bh=LSytcWcRLheFiFAeBtGB+s+5FczB82BvynKoYsa0pVs=;
+        s=k20201202; t=1653918398;
+        bh=4FSrYTcjJKXPVdDoyaJUWxXh5uWevkD+L6Qli9rjWgU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bjZ0SVoMjCRUtlCGRLtJG5Q7jSKKJvCSgzxpwcRx7c4dWT4L/LarRhGYG2ogdIrk4
-         W3bvh2zKvDSPdlmzBwjXD4VzXb2x8zXe6kELe7msrFuqlvUSggTG2hXIi01srcogkS
-         8TFzLaAP/+ecdAr6xj8IHseZWtCCz9nd7iM4v2lja2W282Ys96GLsLzMfKH5YY6gLT
-         jAl8q7rmXColjwrvkXugA22iKkP+onynkiDMdG4zPhgxOOGtQg3+Mt5vRxNDriStTx
-         n1DeFNCxCwLjRX7kAuJAv94JeOSy1gGNMEhaGI+c8qaRvX+0e9/hHPNTjqMnNui7Sl
-         IJjUN6/p3lFug==
+        b=UrjrfzxjFNl5zwZbxgg/sUuemVB7evbnl9GRKOUxpibKtfXeWq8xKjOZJmPKW2N+k
+         1PzALp4KErEHkw0e0Z4glyboJMsoZnP/H5AHPYwB8wOknbFH+snxHs1vQiBSPl2juB
+         uOM8ASIcRk5UKoYaqQV8+taP/PLumT/MrK9Ezzn0YpEUW9TnR0KS0hSm710Rncf3Ub
+         Bd2ZOUyKVUP4I31dRAmXxp5ylfbdUxZBbHQyfpKXSJDL9d085j0MzRPJElT+xx2zrS
+         Id/QlIb4vtc5SGP8mepuNJgLnIdFU2Ge90DKBp8tfQdsZk+YCKsYZRaLtiGfhXwpEg
+         LuzamxuTxnbWg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
@@ -42,12 +42,12 @@ Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
         pabeni@redhat.com, ndesaulniers@google.com,
         linux-can@vger.kernel.org, netdev@vger.kernel.org,
         llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.15 097/109] can: mcp251xfd: silence clang's -Wunaligned-access warning
-Date:   Mon, 30 May 2022 09:38:13 -0400
-Message-Id: <20220530133825.1933431-97-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 67/76] can: mcp251xfd: silence clang's -Wunaligned-access warning
+Date:   Mon, 30 May 2022 09:43:57 -0400
+Message-Id: <20220530134406.1934928-67-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220530133825.1933431-1-sashal@kernel.org>
-References: <20220530133825.1933431-1-sashal@kernel.org>
+In-Reply-To: <20220530134406.1934928-1-sashal@kernel.org>
+References: <20220530134406.1934928-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -106,10 +106,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-index 0f322dabaf65..281856eea2ef 100644
+index fa1246e39980..766dbd19bba6 100644
 --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
 +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-@@ -433,7 +433,7 @@ struct mcp251xfd_hw_tef_obj {
+@@ -426,7 +426,7 @@ struct mcp251xfd_hw_tef_obj {
  /* The tx_obj_raw version is used in spi async, i.e. without
   * regmap. We have to take care of endianness ourselves.
   */
