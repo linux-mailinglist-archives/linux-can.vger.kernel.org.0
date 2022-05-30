@@ -2,51 +2,59 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E62853797E
-	for <lists+linux-can@lfdr.de>; Mon, 30 May 2022 12:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E27F4537D03
+	for <lists+linux-can@lfdr.de>; Mon, 30 May 2022 15:41:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235528AbiE3K4q (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 30 May 2022 06:56:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37320 "EHLO
+        id S237593AbiE3Ni2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 30 May 2022 09:38:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234630AbiE3K4p (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 30 May 2022 06:56:45 -0400
-Received: from mail.bitwise.fi (mail.bitwise.fi [109.204.228.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9E8111C;
-        Mon, 30 May 2022 03:56:44 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.bitwise.fi (Postfix) with ESMTP id C08FC46003F;
-        Mon, 30 May 2022 13:56:42 +0300 (EEST)
-X-Virus-Scanned: Debian amavisd-new at 
-Received: from mail.bitwise.fi ([127.0.0.1])
-        by localhost (mustetatti.dmz.bitwise.fi [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ffezlduZpJEQ; Mon, 30 May 2022 13:56:40 +0300 (EEST)
-Received: from [192.168.5.238] (fw1.dmz.bitwise.fi [192.168.69.1])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        with ESMTP id S237640AbiE3Ng7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 30 May 2022 09:36:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F3384A32;
+        Mon, 30 May 2022 06:30:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: anssiha)
-        by mail.bitwise.fi (Postfix) with ESMTPSA id 95CE5460032;
-        Mon, 30 May 2022 13:56:40 +0300 (EEST)
-Message-ID: <af065054-50cb-08d7-4eb4-e42530710eb2@bitwise.fi>
-Date:   Mon, 30 May 2022 13:56:40 +0300
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9C4C5B80D89;
+        Mon, 30 May 2022 13:30:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB78BC3411E;
+        Mon, 30 May 2022 13:30:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653917456;
+        bh=8gQNAltN6BIULDhgTdmaQHw+k3XtzpJbkUP7TqeHUWw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=o6qTWDP7FT2in5SFuI7wMukx6I6DKCc2pzE3zrhf44Um2NR0N60+2qYI+hsz23U33
+         NZr+RDSqaiNPGTTnV47WEssxwPXGiX0Ac3YHd8E7sknr75iebeI5DwUW0oEN9sib3s
+         6rE8SOraXBOTdQrPkqVdr42vanN2y6xQU0I1P0KT+P1tmbqTPEMJe1QEDlES+qfWgq
+         xylJddpdxsK3BU7/mJOSs+N6mGpxEE531489NtA1ko3NXt/gnhpm3Zl/V+ZVifRjeZ
+         CVqbf3mjtpqwfgaA4+AprDmSoKfQDxg9upbcWazVv3Cf7wQmrPNoKVMofK3CuUBIwH
+         xvRf6IbJplndw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        kernel test robot <lkp@intel.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Sasha Levin <sashal@kernel.org>, wg@grandegger.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, ndesaulniers@google.com,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.18 144/159] can: mcp251xfd: silence clang's -Wunaligned-access warning
+Date:   Mon, 30 May 2022 09:24:09 -0400
+Message-Id: <20220530132425.1929512-144-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220530132425.1929512-1-sashal@kernel.org>
+References: <20220530132425.1929512-1-sashal@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 00/12] can: kvaser_usb: Various fixes
-Content-Language: en-US
-To:     Jimmy Assarsson <extja@kvaser.com>
-Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-kernel@vger.kernel.org
-References: <20220516134748.3724796-1-anssi.hannula@bitwise.fi>
- <61060501-7edb-4277-acf6-117161e8593f@kvaser.com>
- <17631d66-7b90-e60b-e3fb-76b25e5eceaa@kvaser.com>
-From:   Anssi Hannula <anssi.hannula@bitwise.fi>
-In-Reply-To: <17631d66-7b90-e60b-e3fb-76b25e5eceaa@kvaser.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,83 +62,62 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 28.5.2022 10.42, Jimmy Assarsson wrote:
-> On 5/17/22 10:41, Jimmy Assarsson wrote:
->> On 2022-05-16 15:47, Anssi Hannula wrote:
->>> Hi all,
->>>
->>> Here's a set of fixes for issues I found while testing kvaser_usb as we
->>> are preparing to start using it in production (with 0bfd:0124).
->> Hi Anssi,
->>
->> Thanks for the patches!
->> I will review and test your fixes before the weekend.
->>
->> Best regards,
->> jimmy
-> Sorry for the delay!
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
-No problem!
+[ Upstream commit 1a6dd9996699889313327be03981716a8337656b ]
 
-> To summarize the status.
->
-> These patches look good:
-> [PATCH 01/12] can: kvaser_usb_leaf: Fix overread with an invalid command
-> [PATCH 02/12] can: kvaser_usb: Fix use of uninitialized completion
-> [PATCH 03/12] can: kvaser_usb: Fix possible completions during 
-> init_completion
-> [PATCH 05/12] can: kvaser_usb_leaf: Set Warning state even without bus 
-> errors
-> [PATCH 10/12] can: kvaser_usb_leaf: Fix wrong CAN state after stopping
-> [PATCH 12/12] can: kvaser_usb_leaf: Fix bogus restart events
->
-> This looks good, but see comment regarding explicit queue flush:
-> [PATCH 06/12] can: kvaser_usb_leaf: Fix TX queue out of sync after restart
+clang emits a -Wunaligned-access warning on union
+mcp251xfd_tx_ojb_load_buf.
 
-Feel free to drop the flush, or let me know if you want me to resend it
-without it.
+The reason is that field hw_tx_obj (not declared as packed) is being
+packed right after a 16 bits field inside a packed struct:
 
-> I still need some more time looking into:
-> PATCH 07/12] can: kvaser_usb_leaf: Fix CAN state after restart
-> PATCH 08/12] can: kvaser_usb_leaf: Fix improved state not being reported
-> PATCH 11/12] can: kvaser_usb_leaf: Ignore stale bus-off after start
->
-> I want to replace
-> [PATCH 04/12] can: kvaser_usb: Mark Mini PCIe 2xHS as supporting error 
-> counters
-> with a new patch
-> "can: kvaser_usb: kvaser_usb_leaf: Get capabilities from device"
->
-> I want to split the handling of CMD_ERROR_EVENT and the readback
-> functionality. I also want to add parameter readback for
-> kvaser_usb_hydra. I need more time to look over the can_bittiming_const
-> in kvaser_usb_leaf for the different supported firmware.
-> [PATCH 09/12] can: kvaser_usb_leaf: Fix silently failing bus params setup
->
->
-> I would like to create a V2 series, including my patches, if you are
-> okay with it?
+| union mcp251xfd_tx_obj_load_buf {
+| 	struct __packed {
+| 		struct mcp251xfd_buf_cmd cmd;
+| 		  /* ^ 16 bits fields */
+| 		struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
+| 		  /* ^ not declared as packed */
+| 	} nocrc;
+| 	struct __packed {
+| 		struct mcp251xfd_buf_cmd_crc cmd;
+| 		struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
+| 		__be16 crc;
+| 	} crc;
+| } ____cacheline_aligned;
 
+Starting from LLVM 14, having an unpacked struct nested in a packed
+struct triggers a warning. c.f. [1].
 
-Yes, that's fine. I can test your series on my setup as well.
+This is a false positive because the field is always being accessed
+with the relevant put_unaligned_*() function. Adding __packed to the
+structure declaration silences the warning.
 
->
-> Best regards,
-> jimmy
->
->
->
->>> The biggest caveat is that I only have two devices to test with [1] and I
->>> don't have HW documentation, so there is a possibility that some of the
->>> fixes might not work properly on all HW variants.
->>> Hopefully Jimmy can confirm they look OK, or suggest alternatives.
->>>
->>> [1] Tested devices:
->>> - 0bfd:0017 Kvaser Memorator Professional HS/HS FW 2.0.50
->>> - 0bfd:0124 Kvaser Mini PCI Express 2xHS FW 4.18.778
+[1] https://github.com/llvm/llvm-project/issues/55520
 
+Link: https://lore.kernel.org/all/20220518114357.55452-1-mailhol.vincent@wanadoo.fr
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Reported-by: kernel test robot <lkp@intel.com>
+Tested-by: Nathan Chancellor <nathan@kernel.org> # build
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/net/can/spi/mcp251xfd/mcp251xfd.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
+index 9cb6b5ad8dda..60e56fa4601d 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
+@@ -441,7 +441,7 @@ struct mcp251xfd_hw_tef_obj {
+ /* The tx_obj_raw version is used in spi async, i.e. without
+  * regmap. We have to take care of endianness ourselves.
+  */
+-struct mcp251xfd_hw_tx_obj_raw {
++struct __packed mcp251xfd_hw_tx_obj_raw {
+ 	__le32 id;
+ 	__le32 flags;
+ 	u8 data[sizeof_field(struct canfd_frame, data)];
 -- 
-Anssi Hannula / Bitwise Oy
-+358 503803997
+2.35.1
 
