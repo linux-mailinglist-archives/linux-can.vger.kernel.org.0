@@ -2,62 +2,81 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5818853C350
-	for <lists+linux-can@lfdr.de>; Fri,  3 Jun 2022 04:46:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A42253C36A
+	for <lists+linux-can@lfdr.de>; Fri,  3 Jun 2022 05:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236997AbiFCCq3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 2 Jun 2022 22:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54612 "EHLO
+        id S232673AbiFCDjM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 2 Jun 2022 23:39:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiFCCq2 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 2 Jun 2022 22:46:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F0733375;
-        Thu,  2 Jun 2022 19:46:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 21D42B82155;
-        Fri,  3 Jun 2022 02:46:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7517EC385A5;
-        Fri,  3 Jun 2022 02:46:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654224383;
-        bh=uxZ53R3ThWE3FSFIh9D1ha7bSA75C1JjHKEUkquN/9Y=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=IAgJSZ0A3zKUuOxFbkQYGjaNt+dv6aplR2WymS08Fj9kT2PAFST/PiaXke5d5Rg7k
-         POIIB6tZwDwa9xSC1/bVxD4HYFQA0Tly29TyV2CL0PHRHRArTKN7I+NkgHf21+eNf9
-         ydC4EghpdIJZAcVrBgq2qVt+j3TSz4ghlyIqa5wL1/knGXjhb5KKLWn7ez9w2yJitR
-         g5y2ZlUE4Mcl0diZnyxKfQTGjrmWd3p12dHAmHiM7kb9e/9SqQrCSR/Llo9N5kXbt/
-         PQ1IVVVJMmo7P7XrVAnuLVE3VnprYtkypTo4B9pUS0cog3dZNMYTgcJPUNsO4HEbjg
-         QKVwTLPu+GJog==
-Date:   Thu, 2 Jun 2022 19:46:22 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
+        with ESMTP id S229481AbiFCDjL (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 2 Jun 2022 23:39:11 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC55B1CFFC
+        for <linux-can@vger.kernel.org>; Thu,  2 Jun 2022 20:39:09 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id gc3-20020a17090b310300b001e33092c737so6331780pjb.3
+        for <linux-can@vger.kernel.org>; Thu, 02 Jun 2022 20:39:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=x8SxNnSlRoxPxJO9Uoy9HTF5RbNrzxny49a/wwWHJlI=;
+        b=m+Dp64OKhHxtIwoYnPdn8ou+Ei7x0N76Ed4+7OCiDQ9nPxlgSDaVPEilak1ti2967e
+         tANiXmeB9ZSfnsWI9uzMHrKPTcwBDqFDrPqIW9fAVTMk+WleIsfRHMtwPnAh1vYzmAGz
+         6w39s2xoN5VdcT4fN9W0P/PoN4joxlBE4YdpvMqrxJCAGZFgSAUPvGK2gRdEjLLyaHji
+         gDtPyD4nY5579am5AhI9bYGp6jT+3UL0lWNQcM0kQxtQ/mt8F278e2oO4AGRsFNpuZxl
+         bWoEwhx2q41m6Hb6bFGEm5eaCz5R3Meg4gDXlwylma4f4mg5iHpc2kqSoK9s1oU0Qdeh
+         7+1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=x8SxNnSlRoxPxJO9Uoy9HTF5RbNrzxny49a/wwWHJlI=;
+        b=eP63YuZ3y+jj3Cggx9UQMm7C1+okUIMxGIk320i9B/umxbnBnuahRmQ2G6bPXNBEz+
+         zMjyPIVEDWvhVZ7+bo8xvuwzThJNKcxUHP4LQvNuDZLI1Y6PDo22fMmmpo8azanrkYFh
+         97v7Zb+IIJTiiSCNywzTYlWnYpRW2uxjIYqV+WUEzonLayos+leqlZRlm/hcTIIS+fXF
+         hYvVbaq33Atz9olps+oF72M1HTx0Iz0N6rlSNYEldSMXDQGdBxyv5N45zU0sAckKv9UK
+         wNd42qXmKamo0pRfT7/2KRssOZeKCS9C3bgALGIcxL/hrnb8ranrdiXeZQHSUpUGduAr
+         Lt7w==
+X-Gm-Message-State: AOAM530e186g92JyZfb2hXtiW8VT3P18pv0PJ6+aiSjrLbm7InOtUf+G
+        /eIuFZyNNXl5vQYmryUQ+R3Zrw==
+X-Google-Smtp-Source: ABdhPJw7SQjHZk0kByADgeyyofvzlhVc+Y0r1t6LeLRAAv19IN+3gyxnUWZY6FCi/7RLYD02yd53wg==
+X-Received: by 2002:a17:902:b214:b0:161:f6d8:45cd with SMTP id t20-20020a170902b21400b00161f6d845cdmr8296208plr.95.1654227549020;
+        Thu, 02 Jun 2022 20:39:09 -0700 (PDT)
+Received: from hermes.local (204-195-112-199.wavecable.com. [204.195.112.199])
+        by smtp.gmail.com with ESMTPSA id ft19-20020a17090b0f9300b001e2fed48f48sm4029801pjb.41.2022.06.02.20.39.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jun 2022 20:39:08 -0700 (PDT)
+Date:   Thu, 2 Jun 2022 20:39:04 -0700
+From:   Stephen Hemminger <stephen@networkplumber.org>
 To:     Kaarel =?UTF-8?B?UMOkcnRlbA==?= <kaarelp2rtel@gmail.com>
 Cc:     Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] net: add operstate for vcan and dummy
-Message-ID: <20220602194622.0c54a256@kernel.org>
+Message-ID: <20220602203904.65f7261f@hermes.local>
 In-Reply-To: <20220602081929.21929-1-kaarelp2rtel@gmail.com>
 References: <20220602081929.21929-1-kaarelp2rtel@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Thu,  2 Jun 2022 11:19:29 +0300 Kaarel P=C3=A4rtel wrote:
+On Thu,  2 Jun 2022 11:19:29 +0300
+Kaarel P=C3=A4rtel <kaarelp2rtel@gmail.com> wrote:
+
 > The idea here is simple. The vcan and the dummy network devices
 > currently do not set the operational state of the interface.
 > The result is that the interface state will be UNKNOWN.
@@ -73,32 +92,36 @@ L4125
 > operational state is set to IF_OPER_UP.
 >=20
 > Signed-off-by: Kaarel P=C3=A4rtel <kaarelp2rtel@gmail.com>
+> ---
+>  drivers/net/can/vcan.c | 1 +
+>  drivers/net/dummy.c    | 1 +
+>  2 files changed, 2 insertions(+)
+>=20
+> diff --git a/drivers/net/can/vcan.c b/drivers/net/can/vcan.c
+> index a15619d883ec..79768f9d4294 100644
+> --- a/drivers/net/can/vcan.c
+> +++ b/drivers/net/can/vcan.c
+> @@ -162,6 +162,7 @@ static void vcan_setup(struct net_device *dev)
+> =20
+>  	dev->netdev_ops		=3D &vcan_netdev_ops;
+>  	dev->needs_free_netdev	=3D true;
+> +	dev->operstate =3D IF_OPER_UP;
+>  }
+> =20
+>  static struct rtnl_link_ops vcan_link_ops __read_mostly =3D {
+> diff --git a/drivers/net/dummy.c b/drivers/net/dummy.c
+> index f82ad7419508..ab128f66de00 100644
+> --- a/drivers/net/dummy.c
+> +++ b/drivers/net/dummy.c
+> @@ -133,6 +133,7 @@ static void dummy_setup(struct net_device *dev)
+> =20
+>  	dev->min_mtu =3D 0;
+>  	dev->max_mtu =3D 0;
+> +	dev->operstate =3D IF_OPER_UP;
+>  }
+> =20
+>  static int dummy_validate(struct nlattr *tb[], struct nlattr *data[],
 
-You can change the carrier state from user space on a dummy device,
-that will inform the kernel of the operstate:
+Normally carrier state is propogated to operstate by linkwatch.
+You may need to add a call for that.
 
-# ip link add type dummy
-# ip link show dev dummy0
-8: dummy0: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN mode DEFAULT gr=
-oup default qlen 1000
-    link/ether 8e:35:15:22:e3:d7 brd ff:ff:ff:ff:ff:ff
-# ip link set dev dummy0 up
-# ip link show dev dummy0
-8: dummy0: <BROADCAST,NOARP,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNO=
-WN mode DEFAULT group default qlen 1000
-    link/ether 8e:35:15:22:e3:d7 brd ff:ff:ff:ff:ff:ff
-# ip link set dev dummy0 carrier off
-# ip link set dev dummy0 carrier on
-# ip link show dev dummy0
-8: dummy0: <BROADCAST,NOARP,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mo=
-de DEFAULT group default qlen 1000
-    link/ether 8e:35:15:22:e3:d7 brd ff:ff:ff:ff:ff:ff
-
-
-Flipping all soft devices which don't have a lower or don't expect user
-space management to UP is fine but doing it one by one feels icky.
-Yet another random thing a driver author has to know to flip.
-
-If people are confused about seeing UNKNOWN in ip link output maybe we
-should move displaying that under the -d flag (detailed output)?
-Saves space, and nobody will get confused.
