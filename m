@@ -2,48 +2,45 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 031F953D6E1
-	for <lists+linux-can@lfdr.de>; Sat,  4 Jun 2022 14:56:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3313253D6ED
+	for <lists+linux-can@lfdr.de>; Sat,  4 Jun 2022 15:05:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236212AbiFDM4g (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 4 Jun 2022 08:56:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48586 "EHLO
+        id S236199AbiFDNFW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 4 Jun 2022 09:05:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236162AbiFDM4g (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 4 Jun 2022 08:56:36 -0400
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F497644;
-        Sat,  4 Jun 2022 05:56:35 -0700 (PDT)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-30ec2aa3b6cso105555517b3.11;
-        Sat, 04 Jun 2022 05:56:35 -0700 (PDT)
+        with ESMTP id S236189AbiFDNFW (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 4 Jun 2022 09:05:22 -0400
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A6C517D0;
+        Sat,  4 Jun 2022 06:05:21 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-30fa61b1a83so100470347b3.0;
+        Sat, 04 Jun 2022 06:05:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=6wL6JUMToXUplBBVMpZMqbwmGUUZrNQVr95rlA3s2zM=;
-        b=CJ4ZvuGCYdrhnrf3+LNim/h8nBNlWzDBb3DyIS8lg3JU8uPgeraC9P1D7nRhSx/Xpb
-         VA/MF759HcCuv2E1Sm5yAXozgVgzBzh/PASvY+dAuiEM/cCP9v91VuKB1N5W+vN8UvhM
-         eYLSMkBUG+cZTuoX+bvCFZgvUU07TUmxJBavyGlLkkmJG1fxQDRJ/armTUlY1R/DGRkb
-         P6P5n750clwPksnRNUqeBhZ5tRr7m0P182aPu8A8Ha9jbEcHlQ/INjh+aQzEhoWIcgFb
-         AZc9FPG2fSSbGbFn4QFORL7kmatUJbwlaqmIAh5G9UEfamWnEFLaYS/f+tIpOibiRzYR
-         GWUw==
-X-Gm-Message-State: AOAM531GtxNum6m7v9ARCguxMLTlYS84I28We+PxHP5BfgImnGOB/Pyg
-        0dhv9dmZQhq2ECwCWbVNRh5aZ8aXCnkGiEHa9CY=
-X-Google-Smtp-Source: ABdhPJx+XtX/Mp15f2+lzGaE0H3JTGJ4vzaKH5o9GqOLQlJHeZBH8uQeNUcZGr7Yzsr3kCys9tPc7TSxvsRxrC0by6Y=
-X-Received: by 2002:a0d:ee47:0:b0:2ff:85e6:9e03 with SMTP id
- x68-20020a0dee47000000b002ff85e69e03mr16362910ywe.172.1654347394342; Sat, 04
- Jun 2022 05:56:34 -0700 (PDT)
+        bh=+bJg133VzTr840Ej01ygsEXox3ooYZgtindEMoofCgA=;
+        b=z4ER0C3ra/pWRhGze37mX5PHeW3morCjwfNNLEhHQ5OzhM1a3DeNOZ2ytb33hbkppN
+         F/dCkCK7CIf/Z7Tup5D2ARmdqngJfHVM2EWLotvT8P+JsvMEdwXuHU//+7oOxHXl0fcU
+         jL71BupOjr3jQ+6cLmFT+YoPsLQhe748d+pxM7zBXaK8TJaEHwItwV/EGSRALjuiE7JU
+         bGA34xg2T5iOwZx3YBAQn+8HL9WuQcgt4pUPk9ER/Lrjb4X+Z//Q63v9rJ/0dHp1HJQG
+         9S1lg/wAjNWHRrN2gmVcZ1f0Am4KBviDiwJJRsj4HsKuhHUET7Qbg3hN1PZNSFy7V4kW
+         EPnQ==
+X-Gm-Message-State: AOAM53084wRbV+x5u8lctPjpJyL92IeooqZRN2JLRem7ZzxkOKnTqyyj
+        WeRX3Q+iB5zYGmhRFq/jzncLiDhkxBGXBaZwRaU6TO6LcfO4Wg==
+X-Google-Smtp-Source: ABdhPJwYIjs+Me6pyYvlBoSJq2e/R0RU2S21TDiiX+WJ4LL3xGMFd39j6X/j499UDcl6oQoqG9eTqVLyCR+fW94WpHw=
+X-Received: by 2002:a81:2dc5:0:b0:2f5:c6c8:9ee5 with SMTP id
+ t188-20020a812dc5000000b002f5c6c89ee5mr16469638ywt.518.1654347920570; Sat, 04
+ Jun 2022 06:05:20 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
- <20220603102848.17907-1-mailhol.vincent@wanadoo.fr> <20220603102848.17907-4-mailhol.vincent@wanadoo.fr>
- <20220604112538.p4hlzgqnodyvftsj@pengutronix.de> <CAMZ6RqLg_Enyn1h+sn=o8rc8kkR6r=YaygLy40G9D4=Ug_KxOg@mail.gmail.com>
- <20220604124139.pg2h33zanyqs54q5@pengutronix.de>
-In-Reply-To: <20220604124139.pg2h33zanyqs54q5@pengutronix.de>
+ <20220603102848.17907-1-mailhol.vincent@wanadoo.fr> <20220604114603.hi4klmu2hwrvf75x@pengutronix.de>
+In-Reply-To: <20220604114603.hi4klmu2hwrvf75x@pengutronix.de>
 From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Sat, 4 Jun 2022 21:56:23 +0900
-Message-ID: <CAMZ6RqJqSG16fdRE5_uiOmqsDboBgQCanvVNGaG5ZUDwpVoYvA@mail.gmail.com>
-Subject: Re: [PATCH v4 3/7] can: bittiming: move bittiming calculation
- functions to calc_bittiming.c
+Date:   Sat, 4 Jun 2022 22:05:09 +0900
+Message-ID: <CAMZ6RqJpJCAudv89YqFFQH80ei7WiAshyk1RtbEv=aXSyxo3hQ@mail.gmail.com>
+Subject: Re: [PATCH v4 0/7] can: refactoring of can-dev module and of Kbuild
 To:     Marc Kleine-Budde <mkl@pengutronix.de>
 Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
         Max Staudt <max@enpas.org>,
@@ -60,135 +57,180 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Sat. 4 June 2022 at 21:41, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> On 04.06.2022 21:21:01, Vincent MAILHOL wrote:
-> > On Sat. 4 June 2022 at 20:25, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> > > On 03.06.2022 19:28:44, Vincent Mailhol wrote:
-> > > > The canonical way to select or deselect an object during compilation
-> > > > is to use this pattern in the relevant Makefile:
-> > > >
-> > > > bar-$(CONFIG_FOO) := foo.o
-> > > >
-> > > > bittiming.c instead uses some #ifdef CONFIG_CAN_CALC_BITTIMG.
-> > > >
-> > > > Create a new file named calc_bittiming.c with all the functions which
-> > > > are conditionally compiled with CONFIG_CAN_CALC_BITTIMG and modify the
-> > > > Makefile according to above pattern.
-> > > >
-> > > > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > > > ---
-> > > >  drivers/net/can/Kconfig              |   4 +
-> > > >  drivers/net/can/dev/Makefile         |   2 +
-> > > >  drivers/net/can/dev/bittiming.c      | 197 --------------------------
-> > > >  drivers/net/can/dev/calc_bittiming.c | 202 +++++++++++++++++++++++++++
-> > > >  4 files changed, 208 insertions(+), 197 deletions(-)
-> > > >  create mode 100644 drivers/net/can/dev/calc_bittiming.c
-> > > >
-> > > > diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
-> > > > index b1e47f6c5586..8f3b97aea638 100644
-> > > > --- a/drivers/net/can/Kconfig
-> > > > +++ b/drivers/net/can/Kconfig
-> > > > @@ -96,6 +96,10 @@ config CAN_CALC_BITTIMING
-> > > >         source clock frequencies. Disabling saves some space, but then the
-> > > >         bit-timing parameters must be specified directly using the Netlink
-> > > >         arguments "tq", "prop_seg", "phase_seg1", "phase_seg2" and "sjw".
-> > > > +
-> > > > +       The additional features selected by this option will be added to the
-> > > > +       can-dev module.
-> > > > +
-> > > >         If unsure, say Y.
-> > > >
-> > > >  config CAN_AT91
-> > > > diff --git a/drivers/net/can/dev/Makefile b/drivers/net/can/dev/Makefile
-> > > > index 919f87e36eed..b8a55b1d90cd 100644
-> > > > --- a/drivers/net/can/dev/Makefile
-> > > > +++ b/drivers/net/can/dev/Makefile
-> > > > @@ -9,3 +9,5 @@ can-dev-$(CONFIG_CAN_NETLINK) += dev.o
-> > > >  can-dev-$(CONFIG_CAN_NETLINK) += length.o
-> > > >  can-dev-$(CONFIG_CAN_NETLINK) += netlink.o
-> > > >  can-dev-$(CONFIG_CAN_NETLINK) += rx-offload.o
-> > > > +
-> > > > +can-dev-$(CONFIG_CAN_CALC_BITTIMING) += calc_bittiming.o
-> > >
-> > > Nitpick:
-> > > Can we keep this list sorted?
-> >
-> > My idea was first to group per CONFIG symbol according to the
-> > different levels: CAN_DEV first, then CAN_NETLINK and finally
-> > CAN_CALC_BITTIMING and CAN_RX_OFFLOAD. And then only sort by
-> > alphabetical order within each group.
+On Sat. 4 juin 2022 at 20:46, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> Hello Vincent,
 >
-> I was thinking to order by CONFIG symbol and put the objects without an
-> additional symbol first
->
-> > By sorting the list, do literally mean to sort each line like this:
-> >
-> > obj-$(CONFIG_CAN_DEV) += can-dev.o
-> > can-dev-$(CONFIG_CAN_CALC_BITTIMING) += calc_bittiming.o
-> > can-dev-$(CONFIG_CAN_DEV) += skb.o
-> > can-dev-$(CONFIG_CAN_NETLINK) += bittiming.o
-> > can-dev-$(CONFIG_CAN_NETLINK) += dev.o
-> > can-dev-$(CONFIG_CAN_NETLINK) += length.o
-> > can-dev-$(CONFIG_CAN_NETLINK) += netlink.o
-> > can-dev-$(CONFIG_CAN_RX_OFFLOAD) += rx-offload.o
->
-> ...which results in:
->
-> obj-$(CONFIG_CAN_DEV) += can-dev.o
->
-> can-dev-y += skb.o
+> wow! This is a great series which addresses a lot of long outstanding
+> issues. Great work!
 
-I see. But this contradicts the idea to do
-| obj-y += can-dev
-as suggested in:
-https://lore.kernel.org/linux-can/20220604112707.z4zjdjydqy5rkyfe@pengutronix.de/
+Thanks.
 
-So, we have to choose between:
-| obj-$(CONFIG_CAN_DEV) += can-dev.o
-|
-| can-dev-y += skb.o
-|
-| can-dev-$(CONFIG_CAN_CALC_BITTIMING) += calc_bittiming.o
-| (...)
+> As this cover letter brings so much additional information I'll ask
+> Jakub and David if they take pull request from me, which itself have
+> merges. This cover letter would be part of my merge. If I get the OK,
+> can you provide this series as a tag (ideally GPG signed) that I can
+> pull?
 
-or:
+Fine, but I need a bit of guidance here. To provide a tag, I need to
+have my own git repository hosted online, right? Is GitHub OK or
+should I create one on https://git.kernel.org/?
 
-| obj-y += can-dev.o
-|
-| can-dev-$(CONFIG_CAN_CALC_BITTIMING) += calc_bittiming.o
-| can-dev-$(CONFIG_CAN_DEV) += skb.o
-| (...)
-
-I have a slight preference for the second, but again, wouldn't mind to
-select the first one.
-
-> can-dev-$(CONFIG_CAN_CALC_BITTIMING) += calc_bittiming.o
-> can-dev-$(CONFIG_CAN_NETLINK) += bittiming.o
-> can-dev-$(CONFIG_CAN_NETLINK) += dev.o
-> can-dev-$(CONFIG_CAN_NETLINK) += length.o
-> can-dev-$(CONFIG_CAN_NETLINK) += netlink.o
-> can-dev-$(CONFIG_CAN_RX_OFFLOAD) += rx-offload.o
->
-> > or do you mean to sort by object name (ignoring the config symbol) like that:
-> >
-> > obj-$(CONFIG_CAN_DEV) += can-dev.o
-> > can-dev-$(CONFIG_CAN_NETLINK) += bittiming.o
-> > can-dev-$(CONFIG_CAN_CALC_BITTIMING) += calc_bittiming.o
-> > can-dev-$(CONFIG_CAN_NETLINK) += dev.o
-> > can-dev-$(CONFIG_CAN_NETLINK) += length.o
-> > can-dev-$(CONFIG_CAN_NETLINK) += netlink.o
-> > can-dev-$(CONFIG_CAN_RX_OFFLOAD) += rx-offload.o
-> > can-dev-$(CONFIG_CAN_DEV) += skb.o
-> >
-> > ?
-> >
-> > (I honestly do not care so much how we sort the lines. My logic of
-> > grouping first by CONFIG symbols seems more natural, but I am fine to
-> > go with any other suggestion).
->
-> I think this makes it clear where new files should be added.
->
+> regards,
 > Marc
+>
+> On 03.06.2022 19:28:41, Vincent Mailhol wrote:
+> > Aside of calc_bittiming.o which can be configured with
+> > CAN_CALC_BITTIMING, all objects from drivers/net/can/dev/ get linked
+> > unconditionally to can-dev.o even if not needed by the user.
+> >
+> > This series first goal it to split the can-dev modules so that the
+> > user can decide which features get built in during
+> > compilation. Additionally, the CAN Device Drivers menu is moved from
+> > the "Networking support" category to the "Device Drivers" category
+> > (where all drivers are supposed to be).
+> >
+> > Below diagrams illustrate the changes made.
+> > The arrow symbol "x --> y" denotes that "y depends on x".
+> >
+> > * menu before this series *
+> >
+> > CAN bus subsystem support
+> >   symbol: CONFIG_CAN
+> >   |
+> >   +-> CAN Device Drivers
+> >       (no symbol)
+> >       |
+> >       +-> software/virtual CAN device drivers
+> >       |   (at time of writing: slcan, vcan, vxcan)
+> >       |
+> >       +-> Platform CAN drivers with Netlink support
+> >           symbol: CONFIG_CAN_DEV
+> >         |
+> >           +-> CAN bit-timing calculation  (optional for hardware drivers)
+> >           |   symbol: CONFIG_CAN_BITTIMING
+> >         |
+> >         +-> All other CAN devices
+> >
+> > * menu after this series *
+> >
+> > Network device support
+> >   symbol: CONFIG_NETDEVICES
+> >   |
+> >   +-> CAN Device Drivers
+> >       symbol: CONFIG_CAN_DEV
+> >       |
+> >       +-> software/virtual CAN device drivers
+> >       |   (at time of writing: slcan, vcan, vxcan)
+> >       |
+> >       +-> CAN device drivers with Netlink support
+> >           symbol: CONFIG_CAN_NETLINK (matches previous CONFIG_CAN_DEV)
+> >           |
+> >           +-> CAN bit-timing calculation (optional for all drivers)
+> >           |   symbol: CONFIG_CAN_BITTIMING
+> >         |
+> >         +-> All other CAN devices not relying on RX offload
+> >           |
+> >           +-> CAN rx offload
+> >               symbol: CONFIG_CAN_RX_OFFLOAD
+> >               |
+> >               +-> CAN devices relying on rx offload
+> >                   (at time of writing: flexcan, ti_hecc and mcp251xfd)
+> >
+> > Patches 1 to 5 of this series do above modification.
+> >
+> > The last two patches add a check toward CAN_CTRLMODE_LISTENONLY in
+> > can_dropped_invalid_skb() to discard tx skb (such skb can potentially
+> > reach the driver if injected via the packet socket). In more details,
+> > patch 6 moves can_dropped_invalid_skb() from skb.h to skb.o and patch
+> > 7 is the actual change.
+> >
+> > Those last two patches are actually connected to the first five ones:
+> > because slcan and v(x)can requires can_dropped_invalid_skb(), it was
+> > necessary to add those three devices to the scope of can-dev before
+> > moving the function to skb.o.
+> >
+> >
+> > ** N.B. **
+> >
+> > This design results from the lengthy discussion in [1].
+> >
+> > I did one change from Oliver's suggestions in [2]. The initial idea
+> > was that the first two config symbols should be respectively
+> > CAN_DEV_SW and CAN_DEV instead of CAN_DEV and CAN_NETLINK as proposed
+> > in this series.
+> >
+> >   * First symbol is changed from CAN_DEV_SW to CAN_DEV. The rationale
+> >     is that it is this entry that will trigger the build of can-dev.o
+> >     and it makes more sense for me to name the symbol share the same
+> >     name as the module. Furthermore, this allows to create a menuentry
+> >     with an explicit name that will cover both the virtual and
+> >     physical devices (naming the menuentry "CAN Device Software" would
+> >     be inconsistent with the fact that physical devices would also be
+> >     present in a sub menu). And not using menuentry complexifies the
+> >     menu.
+> >
+> >   * Second symbol is renamed from CAN_DEV to CAN_NETLINK because
+> >     CAN_DEV is now taken by the previous menuconfig and netlink is the
+> >     predominant feature added at this level. I am opened to other
+> >     naming suggestion (CAN_DEV_NETLINK, CAN_DEV_HW...?).
+> >
+> > [1] https://lore.kernel.org/linux-can/20220514141650.1109542-1-mailhol.vincent@wanadoo.fr/
+> > [2] https://lore.kernel.org/linux-can/22590a57-c7c6-39c6-06d5-11c6e4e1534b@hartkopp.net/
+> >
+> >
+> > ** Changelog **
+> >
+> > v3 -> v4:
+> >
+> >   * Five additional patches added to split can-dev module and refactor
+> >     Kbuild. c.f. below (lengthy) thread:
+> >     https://lore.kernel.org/linux-can/20220514141650.1109542-1-mailhol.vincent@wanadoo.fr/
+> >
+> >
+> > v2 -> v3:
+> >
+> >   * Apply can_dropped_invalid_skb() to slcan.
+> >
+> >   * Make vcan, vxcan and slcan dependent of CONFIG_CAN_DEV by
+> >     modifying Kbuild.
+> >
+> >   * fix small typos.
+> >
+> > v1 -> v2:
+> >
+> >   * move can_dropped_invalid_skb() to skb.c instead of dev.h
+> >
+> >   * also move can_skb_headroom_valid() to skb.c
+> >
+> > Vincent Mailhol (7):
+> >   can: Kbuild: rename config symbol CAN_DEV into CAN_NETLINK
+> >   can: Kconfig: turn menu "CAN Device Drivers" into a menuconfig using
+> >     CAN_DEV
+> >   can: bittiming: move bittiming calculation functions to
+> >     calc_bittiming.c
+> >   can: Kconfig: add CONFIG_CAN_RX_OFFLOAD
+> >   net: Kconfig: move the CAN device menu to the "Device Drivers" section
+> >   can: skb: move can_dropped_invalid_skb() and can_skb_headroom_valid()
+> >     to skb.c
+> >   can: skb: drop tx skb if in listen only mode
+> >
+> >  drivers/net/Kconfig                   |   2 +
+> >  drivers/net/can/Kconfig               |  66 +++++++--
+> >  drivers/net/can/dev/Makefile          |  20 ++-
+> >  drivers/net/can/dev/bittiming.c       | 197 -------------------------
+> >  drivers/net/can/dev/calc_bittiming.c  | 202 ++++++++++++++++++++++++++
+> >  drivers/net/can/dev/dev.c             |   9 +-
+> >  drivers/net/can/dev/skb.c             |  72 +++++++++
+> >  drivers/net/can/spi/mcp251xfd/Kconfig |   1 +
+> >  include/linux/can/skb.h               |  59 +-------
+> >  net/can/Kconfig                       |   5 +-
+> >  10 files changed, 351 insertions(+), 282 deletions(-)
+> >  create mode 100644 drivers/net/can/dev/calc_bittiming.c
+> >
+> > --
+> > 2.35.1
+> >
+> >
 >
 > --
 > Pengutronix e.K.                 | Marc Kleine-Budde           |
