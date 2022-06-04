@@ -2,255 +2,185 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A481C53D697
-	for <lists+linux-can@lfdr.de>; Sat,  4 Jun 2022 13:46:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3980B53D6B3
+	for <lists+linux-can@lfdr.de>; Sat,  4 Jun 2022 14:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235580AbiFDLqJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 4 Jun 2022 07:46:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53698 "EHLO
+        id S235781AbiFDMOZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 4 Jun 2022 08:14:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232920AbiFDLqI (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 4 Jun 2022 07:46:08 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3968E5F72
-        for <linux-can@vger.kernel.org>; Sat,  4 Jun 2022 04:46:07 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nxSEH-0002VK-4o; Sat, 04 Jun 2022 13:46:05 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 0B6118C2FA;
-        Sat,  4 Jun 2022 11:46:03 +0000 (UTC)
-Date:   Sat, 4 Jun 2022 13:46:03 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+        with ESMTP id S231445AbiFDMOY (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 4 Jun 2022 08:14:24 -0400
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73BC1C923;
+        Sat,  4 Jun 2022 05:14:22 -0700 (PDT)
+Received: by mail-yb1-f171.google.com with SMTP id e184so18033002ybf.8;
+        Sat, 04 Jun 2022 05:14:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=boxdhvDiMWyFpyyHCYcMSN/PMwteqk8YIeu/9YG1GME=;
+        b=dYylsk2XH+ELQeCei/qciNsqfuRBDsrrTkwZo9MzP7mBWceUemia22JnILaojxV6uo
+         ifPjnEhe+tDU+ZGlCZV69iunfb5hmBRt49ZOIfO35TQXszAiASK1Sn61ufPvb7fTj8u/
+         9Z0/AEx7MqlL7jvc6m5JvIiA1M47rbo81D9NU4qDOF2ILkLmWHA+AG+hczQmyCr3jMm9
+         EppNAAacOroqZIDrA73hNihTI9MBdOvQnWgiiGmhUothLmdjaFBtQQdmeBX/qWCqBzEj
+         tN6wUhRXvcUUnTZ/g7KxMbVthD7Ne4WPn1CUyAucugWuBj/qXYGgo7ZkHoDinibZXpED
+         vcuw==
+X-Gm-Message-State: AOAM531PzveUiDNMTuizBJxIupnxoCIJE0j5BY1/dXB7eQwf21euvmhx
+        Dkatu+OVtzpNJ13oLa56+suv4JJmuGDU9VRjP8I=
+X-Google-Smtp-Source: ABdhPJzUJ1prs/N8KlS25MFDQbdL1UU5LSRr8qXyz8KbVjhYq0zp1d0vPqelAsC74XdtWkDYX2ql+G2oa1Ahw3V/roY=
+X-Received: by 2002:a25:b846:0:b0:65d:1cb0:e444 with SMTP id
+ b6-20020a25b846000000b0065d1cb0e444mr14985060ybm.20.1654344862032; Sat, 04
+ Jun 2022 05:14:22 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
+ <20220603102848.17907-1-mailhol.vincent@wanadoo.fr> <20220603102848.17907-5-mailhol.vincent@wanadoo.fr>
+ <20220604112227.nlyxulkxelgofruz@pengutronix.de>
+In-Reply-To: <20220604112227.nlyxulkxelgofruz@pengutronix.de>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Sat, 4 Jun 2022 21:14:10 +0900
+Message-ID: <CAMZ6RqLRb_n+o2eFLEzn8Er7CyaZd8Q7B3=5e4Z5d0PJHKywAg@mail.gmail.com>
+Subject: Re: [PATCH v4 4/7] can: Kconfig: add CONFIG_CAN_RX_OFFLOAD
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
 Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
         Max Staudt <max@enpas.org>,
         Oliver Hartkopp <socketcan@hartkopp.net>,
         netdev@vger.kernel.org
-Subject: Re: [PATCH v4 0/7] can: refactoring of can-dev module and of Kbuild
-Message-ID: <20220604114603.hi4klmu2hwrvf75x@pengutronix.de>
-References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
- <20220603102848.17907-1-mailhol.vincent@wanadoo.fr>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2jjncl7znrrtvgd2"
-Content-Disposition: inline
-In-Reply-To: <20220603102848.17907-1-mailhol.vincent@wanadoo.fr>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Sat. 4 June 2022 at 20:22, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> On 03.06.2022 19:28:45, Vincent Mailhol wrote:
+> > Only a few drivers rely on the CAN rx offload framework (as of the
+> > writing of this patch, only three: flexcan, ti_hecc and
+> > mcp251xfd). Give the option to the user to deselect this features
+> > during compilation.
+> >
+> > The drivers relying on CAN rx offload are in different sub
+> > folders. All of these drivers get tagged with "select CAN_RX_OFFLOAD"
+> > so that the option is automatically enabled whenever one of those
+> > driver is chosen.
+> >
+> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > ---
+> >  drivers/net/can/Kconfig               | 16 ++++++++++++++++
+> >  drivers/net/can/dev/Makefile          |  2 ++
+> >  drivers/net/can/spi/mcp251xfd/Kconfig |  1 +
+> >  3 files changed, 19 insertions(+)
+> >
+> > diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
+> > index 8f3b97aea638..1f1d81da1c8c 100644
+> > --- a/drivers/net/can/Kconfig
+> > +++ b/drivers/net/can/Kconfig
+> > @@ -102,6 +102,20 @@ config CAN_CALC_BITTIMING
+> >
+> >         If unsure, say Y.
+> >
+> > +config CAN_RX_OFFLOAD
+> > +     bool "CAN RX offload"
+> > +     default y
+> > +     help
+> > +       Framework to offload the controller's RX FIFO during one
+> > +       interrupt. The CAN frames of the FIFO are read and put into a skb
+> > +       queue during that interrupt and transmitted afterwards in a NAPI
+> > +       context.
+> > +
+> > +       The additional features selected by this option will be added to the
+> > +       can-dev module.
+> > +
+> > +       If unsure, say Y.
+> > +
+> >  config CAN_AT91
+> >       tristate "Atmel AT91 onchip CAN controller"
+> >       depends on (ARCH_AT91 || COMPILE_TEST) && HAS_IOMEM
+> > @@ -113,6 +127,7 @@ config CAN_FLEXCAN
+> >       tristate "Support for Freescale FLEXCAN based chips"
+> >       depends on OF || COLDFIRE || COMPILE_TEST
+> >       depends on HAS_IOMEM
+> > +     select CAN_RX_OFFLOAD
+> >       help
+> >         Say Y here if you want to support for Freescale FlexCAN.
+> >
+> > @@ -162,6 +177,7 @@ config CAN_SUN4I
+> >  config CAN_TI_HECC
+> >       depends on ARM
+> >       tristate "TI High End CAN Controller"
+> > +     select CAN_RX_OFFLOAD
+> >       help
+> >         Driver for TI HECC (High End CAN Controller) module found on many
+> >         TI devices. The device specifications are available from www.ti.com
+> > diff --git a/drivers/net/can/dev/Makefile b/drivers/net/can/dev/Makefile
+> > index b8a55b1d90cd..5081d8a3be57 100644
+> > --- a/drivers/net/can/dev/Makefile
+> > +++ b/drivers/net/can/dev/Makefile
+> > @@ -11,3 +11,5 @@ can-dev-$(CONFIG_CAN_NETLINK) += netlink.o
+> >  can-dev-$(CONFIG_CAN_NETLINK) += rx-offload.o
+>              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>
+> Do you want to remove this?
 
---2jjncl7znrrtvgd2
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Absolutely. As you probably guessed, this is just a leftover.
 
-Hello Vincent,
+> >
+> >  can-dev-$(CONFIG_CAN_CALC_BITTIMING) += calc_bittiming.o
+> > +
+> > +can-dev-$(CONFIG_CAN_RX_OFFLOAD) += rx-offload.o
+> > diff --git a/drivers/net/can/spi/mcp251xfd/Kconfig b/drivers/net/can/spi/mcp251xfd/Kconfig
+> > index dd0fc0a54be1..877e4356010d 100644
+> > --- a/drivers/net/can/spi/mcp251xfd/Kconfig
+> > +++ b/drivers/net/can/spi/mcp251xfd/Kconfig
+> > @@ -2,6 +2,7 @@
+> >
+> >  config CAN_MCP251XFD
+> >       tristate "Microchip MCP251xFD SPI CAN controllers"
+> > +     select CAN_RX_OFFLOAD
+> >       select REGMAP
+> >       select WANT_DEV_COREDUMP
+> >       help
+>
+> I remember I've given you a list of drivers needing RX offload, I
+> probably missed the m_can driver. Feel free to squash this patch:
 
-wow! This is a great series which addresses a lot of long outstanding
-issues. Great work!
+Added it to v5.
 
-As this cover letter brings so much additional information I'll ask
-Jakub and David if they take pull request from me, which itself have
-merges. This cover letter would be part of my merge. If I get the OK,
-can you provide this series as a tag (ideally GPG signed) that I can
-pull?
+This went through the cracks when testing. Thanks for catching this!
 
-regards,
-Marc
-
-On 03.06.2022 19:28:41, Vincent Mailhol wrote:
-> Aside of calc_bittiming.o which can be configured with
-> CAN_CALC_BITTIMING, all objects from drivers/net/can/dev/ get linked
-> unconditionally to can-dev.o even if not needed by the user.
->=20
-> This series first goal it to split the can-dev modules so that the
-> user can decide which features get built in during
-> compilation. Additionally, the CAN Device Drivers menu is moved from
-> the "Networking support" category to the "Device Drivers" category
-> (where all drivers are supposed to be).
->=20
-> Below diagrams illustrate the changes made.
-> The arrow symbol "x --> y" denotes that "y depends on x".
->=20
-> * menu before this series *
->=20
-> CAN bus subsystem support
->   symbol: CONFIG_CAN
->   |
->   +-> CAN Device Drivers
->       (no symbol)
->       |
->       +-> software/virtual CAN device drivers
->       |   (at time of writing: slcan, vcan, vxcan)
->       |
->       +-> Platform CAN drivers with Netlink support
->           symbol: CONFIG_CAN_DEV
-> 	  |
->           +-> CAN bit-timing calculation  (optional for hardware drivers)
->           |   symbol: CONFIG_CAN_BITTIMING
-> 	  |
-> 	  +-> All other CAN devices
->=20
-> * menu after this series *
->=20
-> Network device support
->   symbol: CONFIG_NETDEVICES
->   |
->   +-> CAN Device Drivers
->       symbol: CONFIG_CAN_DEV
->       |
->       +-> software/virtual CAN device drivers
->       |   (at time of writing: slcan, vcan, vxcan)
->       |
->       +-> CAN device drivers with Netlink support
->           symbol: CONFIG_CAN_NETLINK (matches previous CONFIG_CAN_DEV)
->           |
->           +-> CAN bit-timing calculation (optional for all drivers)
->           |   symbol: CONFIG_CAN_BITTIMING
-> 	  |
-> 	  +-> All other CAN devices not relying on RX offload
->           |
->           +-> CAN rx offload
->               symbol: CONFIG_CAN_RX_OFFLOAD
->               |
->               +-> CAN devices relying on rx offload
->                   (at time of writing: flexcan, ti_hecc and mcp251xfd)
->=20
-> Patches 1 to 5 of this series do above modification.
->=20
-> The last two patches add a check toward CAN_CTRLMODE_LISTENONLY in
-> can_dropped_invalid_skb() to discard tx skb (such skb can potentially
-> reach the driver if injected via the packet socket). In more details,
-> patch 6 moves can_dropped_invalid_skb() from skb.h to skb.o and patch
-> 7 is the actual change.
->=20
-> Those last two patches are actually connected to the first five ones:
-> because slcan and v(x)can requires can_dropped_invalid_skb(), it was
-> necessary to add those three devices to the scope of can-dev before
-> moving the function to skb.o.
->=20
->=20
-> ** N.B. **
->=20
-> This design results from the lengthy discussion in [1].
->=20
-> I did one change from Oliver's suggestions in [2]. The initial idea
-> was that the first two config symbols should be respectively
-> CAN_DEV_SW and CAN_DEV instead of CAN_DEV and CAN_NETLINK as proposed
-> in this series.
->=20
->   * First symbol is changed from CAN_DEV_SW to CAN_DEV. The rationale
->     is that it is this entry that will trigger the build of can-dev.o
->     and it makes more sense for me to name the symbol share the same
->     name as the module. Furthermore, this allows to create a menuentry
->     with an explicit name that will cover both the virtual and
->     physical devices (naming the menuentry "CAN Device Software" would
->     be inconsistent with the fact that physical devices would also be
->     present in a sub menu). And not using menuentry complexifies the
->     menu.
->=20
->   * Second symbol is renamed from CAN_DEV to CAN_NETLINK because
->     CAN_DEV is now taken by the previous menuconfig and netlink is the
->     predominant feature added at this level. I am opened to other
->     naming suggestion (CAN_DEV_NETLINK, CAN_DEV_HW...?).
->=20
-> [1] https://lore.kernel.org/linux-can/20220514141650.1109542-1-mailhol.vi=
-ncent@wanadoo.fr/
-> [2] https://lore.kernel.org/linux-can/22590a57-c7c6-39c6-06d5-11c6e4e1534=
-b@hartkopp.net/
->=20
->=20
-> ** Changelog **
->=20
-> v3 -> v4:
->=20
->   * Five additional patches added to split can-dev module and refactor
->     Kbuild. c.f. below (lengthy) thread:
->     https://lore.kernel.org/linux-can/20220514141650.1109542-1-mailhol.vi=
-ncent@wanadoo.fr/
->=20
->=20
-> v2 -> v3:
->=20
->   * Apply can_dropped_invalid_skb() to slcan.
->=20
->   * Make vcan, vxcan and slcan dependent of CONFIG_CAN_DEV by
->     modifying Kbuild.
->=20
->   * fix small typos.
->=20
-> v1 -> v2:
->=20
->   * move can_dropped_invalid_skb() to skb.c instead of dev.h
->=20
->   * also move can_skb_headroom_valid() to skb.c
->=20
-> Vincent Mailhol (7):
->   can: Kbuild: rename config symbol CAN_DEV into CAN_NETLINK
->   can: Kconfig: turn menu "CAN Device Drivers" into a menuconfig using
->     CAN_DEV
->   can: bittiming: move bittiming calculation functions to
->     calc_bittiming.c
->   can: Kconfig: add CONFIG_CAN_RX_OFFLOAD
->   net: Kconfig: move the CAN device menu to the "Device Drivers" section
->   can: skb: move can_dropped_invalid_skb() and can_skb_headroom_valid()
->     to skb.c
->   can: skb: drop tx skb if in listen only mode
->=20
->  drivers/net/Kconfig                   |   2 +
->  drivers/net/can/Kconfig               |  66 +++++++--
->  drivers/net/can/dev/Makefile          |  20 ++-
->  drivers/net/can/dev/bittiming.c       | 197 -------------------------
->  drivers/net/can/dev/calc_bittiming.c  | 202 ++++++++++++++++++++++++++
->  drivers/net/can/dev/dev.c             |   9 +-
->  drivers/net/can/dev/skb.c             |  72 +++++++++
->  drivers/net/can/spi/mcp251xfd/Kconfig |   1 +
->  include/linux/can/skb.h               |  59 +-------
->  net/can/Kconfig                       |   5 +-
->  10 files changed, 351 insertions(+), 282 deletions(-)
->  create mode 100644 drivers/net/can/dev/calc_bittiming.c
->=20
-> --=20
-> 2.35.1
->=20
->=20
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---2jjncl7znrrtvgd2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKbRfgACgkQrX5LkNig
-010WtwgAjisk0+9iW56D4Ex0iNn+MT1ICrkf2OQhKxQezPO6klY6a6Fl7EbF8MJe
-SIUbgJyzz8A9LXepHUf9cbgkXXg4OiJZQu0sHbU4bLqX3+rShN4AAzVVmRAgBewx
-n3ZOog1jTl1dX05OeGqADZapQ4euTNckC4C38XFNIZkH3LWu3/wlK3s89eq8p0gs
-PwqGyA2UIoGKJKr0DPJH6BQUqNgeYh1LfAfuO4it0VYswbo0h4tmc8eAcG56gXd3
-AHz7YZK2Y0naPjS/SWxEWRgsGUZjQVcwruXxIJRwEyh3yOojHhkBfNtz9R4IFMjU
-VaV7mM2cteZPzL7JFe7k3kZmR8dUdA==
-=vadE
------END PGP SIGNATURE-----
-
---2jjncl7znrrtvgd2--
+> --- a/drivers/net/can/dev/Makefile
+> +++ b/drivers/net/can/dev/Makefile
+> @@ -8,7 +8,6 @@ can-dev-$(CONFIG_CAN_NETLINK) += bittiming.o
+>  can-dev-$(CONFIG_CAN_NETLINK) += dev.o
+>  can-dev-$(CONFIG_CAN_NETLINK) += length.o
+>  can-dev-$(CONFIG_CAN_NETLINK) += netlink.o
+> -can-dev-$(CONFIG_CAN_NETLINK) += rx-offload.o
+>
+>  can-dev-$(CONFIG_CAN_CALC_BITTIMING) += calc_bittiming.o
+>
+> diff --git a/drivers/net/can/m_can/Kconfig b/drivers/net/can/m_can/Kconfig
+> index 45ad1b3f0cd0..fc2afab36279 100644
+> --- a/drivers/net/can/m_can/Kconfig
+> +++ b/drivers/net/can/m_can/Kconfig
+> @@ -1,6 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  menuconfig CAN_M_CAN
+>         tristate "Bosch M_CAN support"
+> +       select CAN_RX_OFFLOAD
+>         help
+>           Say Y here if you want support for Bosch M_CAN controller framework.
+>           This is common support for devices that embed the Bosch M_CAN IP.
+>
+> Marc
+>
+> --
+> Pengutronix e.K.                 | Marc Kleine-Budde           |
+> Embedded Linux                   | https://www.pengutronix.de  |
+> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
