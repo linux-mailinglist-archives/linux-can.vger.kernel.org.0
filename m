@@ -2,131 +2,103 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38ADE53DB47
-	for <lists+linux-can@lfdr.de>; Sun,  5 Jun 2022 12:39:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 353E453DBBB
+	for <lists+linux-can@lfdr.de>; Sun,  5 Jun 2022 15:45:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245205AbiFEKjQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 5 Jun 2022 06:39:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59622 "EHLO
+        id S243967AbiFENp0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 5 Jun 2022 09:45:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235600AbiFEKjQ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 5 Jun 2022 06:39:16 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D67420F63
-        for <linux-can@vger.kernel.org>; Sun,  5 Jun 2022 03:39:14 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nxnf5-00017S-Im; Sun, 05 Jun 2022 12:39:11 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 8C80D8C79B;
-        Sun,  5 Jun 2022 10:39:09 +0000 (UTC)
-Date:   Sun, 5 Jun 2022 12:39:09 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Max Staudt <max@enpas.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v4 0/7] can: refactoring of can-dev module and of Kbuild
-Message-ID: <20220605103909.5on3ep7lzorc35th@pengutronix.de>
-References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
- <20220603102848.17907-1-mailhol.vincent@wanadoo.fr>
- <20220604114603.hi4klmu2hwrvf75x@pengutronix.de>
- <CAMZ6RqJpJCAudv89YqFFQH80ei7WiAshyk1RtbEv=aXSyxo3hQ@mail.gmail.com>
- <20220604135541.2ki2eskyc7gsmrlu@pengutronix.de>
- <CAMZ6RqJ7qvXyxNVUK-=oJnK_oq7N94WABOb3pqeYf9Fw3G6J9A@mail.gmail.com>
- <20220604151859.hyywffrni4vo6gdl@pengutronix.de>
- <CAMZ6RqK45r-cqXvorUzRV-LA_C+mk6hNSA1b+0kLs7C-oTcDCA@mail.gmail.com>
+        with ESMTP id S231142AbiFENpY (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 5 Jun 2022 09:45:24 -0400
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08992BF5;
+        Sun,  5 Jun 2022 06:45:22 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id e184so21498711ybf.8;
+        Sun, 05 Jun 2022 06:45:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=R34pfQnmxFquIj0LVUUITUioTiz4eH/X4iuz1+vGIgY=;
+        b=tACIuu+DKslj1fOp90lB2fIyCc2qylXUs723LAhNx5AF+wtZotwxYpi18vyWX9dLpg
+         vf02DijjgX4FV4m5ytwiWXvMm6vOP/XDBcg003ZeAyrfOr6TCv3bxzKQFSbav+NNuNL4
+         h1M8MEBEyy7XZsvgzjgwX9zpdfzo4MMfA8MgCMzbldvKfY+9W9rnLNxOuhLGpeSSksDU
+         Lwy0HBJ3T4Cwr1DavKSYg/EVCwl+MrG1hlFwCJ07WeacHr+vpeemUsW11qTyCAf0rsSR
+         CHo+xRVBmAlACaK1o4ML/RX+UZcUPiRG1d/2QlBJxCEynNs4e/WtR7Vl6KIgq3v7O4KT
+         2mQw==
+X-Gm-Message-State: AOAM530BX2meX1oUKJTzTOYdPxAJWY/wyd86m2qxSuO4wR5gYtQ7sGOM
+        Rs4ZpPuxllB7bUtVdeIBWvCVxJkqOr3XE2vEO3Y=
+X-Google-Smtp-Source: ABdhPJw6tMPhxeP7rJc9ruuGtfX9lWIk7o4qAOm2k6qwJ8Nm9WZ+B25OcNZe7svpyr0r6Vmq1cdH9W8FIq4O2nsd6Ms=
+X-Received: by 2002:a25:55d7:0:b0:663:3850:e85f with SMTP id
+ j206-20020a2555d7000000b006633850e85fmr8237679ybb.500.1654436721994; Sun, 05
+ Jun 2022 06:45:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6hnz6wqmawmym7kp"
-Content-Disposition: inline
-In-Reply-To: <CAMZ6RqK45r-cqXvorUzRV-LA_C+mk6hNSA1b+0kLs7C-oTcDCA@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <alpine.DEB.2.22.394.2206041003320.1657582@thelappy>
+ <20220604144157.208849-1-mailhol.vincent@wanadoo.fr> <YpuLGkPcXrM+Eiwj@rowland.harvard.edu>
+ <a57f4af7-3fbc-0853-dd9c-b80b2425b4f5@suse.com>
+In-Reply-To: <a57f4af7-3fbc-0853-dd9c-b80b2425b4f5@suse.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Sun, 5 Jun 2022 22:45:10 +0900
+Message-ID: <CAMZ6Rq+6z-Nz=Nao2u_=LOC5QYF6KBjy-HdK1x41O4zo1c8HHg@mail.gmail.com>
+Subject: Re: [RFC PATCH] USB: core: urb: add new transfer flag URB_FREE_COHERENT
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Rhett Aultman <rhett.aultman@samsara.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-can <linux-can@vger.kernel.org>, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-
---6hnz6wqmawmym7kp
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 05.06.2022 01:32:15, Vincent MAILHOL wrote:
-> On Sun. 5 juin 2022 at 00:18, Marc Kleine-Budde <mkl@pengutronix.de> wrot=
-e:
-> > On 04.06.2022 23:59:48, Vincent MAILHOL wrote:
-> > > > > Fine, but I need a bit of guidance here. To provide a tag, I need=
- to
-> > > > > have my own git repository hosted online, right?
-> > > >
-> > > > That is one option.
-> > >
-> > > This suggests that there are other options? What would be those other
-> > > options?
+On Sun. 5 Jun. 2022 at 15:00, Oliver Neukum <oneukum@suse.com> wrote:
+> On 04.06.22 18:40, Alan Stern wrote:
 > >
-> > 2. git.kernel.org (most preferred)
-> > 3. github.com (have to ask Davem/Jakub)
-> >
-> > > > > Is GitHub OK or should I create one on https://git.kernel.org/?
-> > > >
-> > > > Some maintainers don't like github, let's wait what Davem and Jakub=
- say.
-> > > > I think for git.kernel.org you need a GPG key with signatures of 3 =
-users
-> > > > of git.kernel.org.
-> > >
-> > > Personally, I would also prefer getting my own git.kernel.org account.
-> >
-> > See https://korg.docs.kernel.org/accounts.html
->=20
-> Thanks for the link. I will have a look at it tomorrow (or the day
-> after tomorrow in the worst case).
->=20
-> Meanwhile, I will send the v5 which should address all your comments.
+> > I don't see anything wrong with this, except that it would be nice to keep
+> > the flag values in numerical order.  In other words, set URB_FREE_COHERENT
+> > to 0x0200 and change URB_DIR_IN to 0x0400.
+> Hi,
+>
+> but what sense does this patch make? You use coherent allocations
+> to avoid repeated DMA synchronizations. That is sort of incompatible
+> with the notion of discarding the buffer automatically.
 
-/me just realized that merged are independent of pull requests. I can
-create a local branch and merge it, as Davem and Jakub do it. I've added
-your v5 to can-next/master as a merge and I'll include this in my next
-PR to net-next if Davem and Jakub are OK with merges in my branch.
+This is how I see things:
+  * In the open() function, the driver will do the coherent allocation
+for its transfer_buffers, fill those into URBs and add all the URBs in
+an anchor.
+  * During runtime, the driver will keep recycling the same URBs (no
+need to kill URB nor to usb_free_coherent() the transfer_buffer).
+  * Finally, in the close() function, the driver has to kill the URBs
+and usb_free_coherent() the transfer_buffers. As far as I understand,
+no helper functions allow us to do all that, thus requiring the driver
+to iterate through the anchor to manually usb_free_coherent() the
+transfer buffer.
 
-regards,
-Marc
+So, the intent of this patch is to provide a method to both kill the
+URBs and usb_free_coherent() the transfer buffer at once. The
+rationale is that those two actions are done sequentially, at least in
+the use case exposed above, and so the driver has enough control to
+assert that usb_free_coherent() will occur at a good timing. For other
+use cases where killing the URBs and freeing the transfer_buffer
+should be done separately, the driver should not set URB_FREE_COHERENT
+and continue to manually usb_free_coherent() the transfer_buffer.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Which part of this logic is incompatible with the coherent allocation?
+Also, if the above is incorrect, what is the canonical way to kill the
+URBs and free the transfer_buffers?
 
---6hnz6wqmawmym7kp
-Content-Type: application/pgp-signature; name="signature.asc"
+Thank you!
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKch8oACgkQrX5LkNig
-012XGggAqD1LicAikRC3JMuxfXUK3p7048Ew7fkyIXL9bCcTwyPl6HSIfZocNtBt
-utW+h3IxWv1/fKBnHiMZC1RF8x+CcWp2IZxqIDDx53ERZL3MUUTBuqG/tdUGzVHo
-mBDRlEohb1K2RBrQggmuKQfAuZZ5+P3OD/F/X1tyBbnffyvJgiAkM0xa2EScP8Kh
-13bQrHT/xZR4oPHDTFEpK1SF8SCtuRCIer99cRHAapbcdRHqVl+txsSk90fkQsxR
-cQkReSm7R+c4EACo8u723jce4LAPlJL7PoAsux3YVEcZ/ZCRJLHnqxr7QbiiwcSE
-3KL0opkdhjvnlIPRk2su5ZclADj/og==
-=I4dL
------END PGP SIGNATURE-----
-
---6hnz6wqmawmym7kp--
+Yours sincerely,
+Vincent Mailhol
