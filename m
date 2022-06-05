@@ -2,146 +2,157 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE41053D934
-	for <lists+linux-can@lfdr.de>; Sun,  5 Jun 2022 04:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEC4F53DA53
+	for <lists+linux-can@lfdr.de>; Sun,  5 Jun 2022 08:00:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245003AbiFECQJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 4 Jun 2022 22:16:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49550 "EHLO
+        id S1346335AbiFEGA3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 5 Jun 2022 02:00:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbiFECQJ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 4 Jun 2022 22:16:09 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C7CA186E2;
-        Sat,  4 Jun 2022 19:16:08 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id s12so9652071plp.0;
-        Sat, 04 Jun 2022 19:16:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=x7HCq/JX0wzy3/jD50x+yfjA7pAVtCDavxjeNjonqrU=;
-        b=o5sCfVjc37aJds4agqc1B3n5KuciOVffY31uoJd5gU1Sfnl6qdrrDnYnCww66MZokX
-         ZZxgeu1m4epiJhqvz5USL6BFuxN1/8zyv8Z5ALYB7dgS30JOtfkToYm9oPIBDY59G36t
-         rDme279dqhpU8jJ8G5q753i0dkbG1XollJ4yIkLda34Yxg2uu0IwMbzqKLkw8bLWsTqa
-         WQEgVcNJCiJriUYVomcwCWIiQIL1oHTrOJAA/Qni+LN41UCPvfdRIXkM9tTpgachcPjz
-         +eVnAj0gOfU7JRZG57ujvmKm2j4mwEIJEGNRfX3ake/tVl62ZrrXbsGIRDz2tkvXBSxH
-         tPnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=x7HCq/JX0wzy3/jD50x+yfjA7pAVtCDavxjeNjonqrU=;
-        b=Bi8Gh0v0XguVr/N6Dry0In4wIJJPj4dxEbOTKPv/RCHaa913f72DF8sAkIejeJG4QC
-         /0n5VMEt2oA0gqqiG3eBwJ7ZVOrKc/nbl9dUZ+9gaCacPz3qIVDn5VTIHoYxFmr0MAe2
-         +DvROddG1NMBa6vY3ybQKabqPBO6aj2Ix7kpjA5W3miGhsh4zo6uk24mMiIR9qq7gbd3
-         3im18DuYzgU4XSOAzarYBu4YGhoFThUKenzXb39rt39oDdNG6HkQbQIo1ycHCe995rYm
-         Tu2AZ9eNOD1xQSLCDhwI9BOqbu8VyHZo3eT9JF6uuCIPaT9qvh+fmd69dsbsDTD1ISZt
-         D1IA==
-X-Gm-Message-State: AOAM533jYntdZAHxWt6H4tdCMpKjzSO2odCb3iBV4fTGVhKHWAFyrYxp
-        eKHDAyvQgDixFeKXnZobGgY=
-X-Google-Smtp-Source: ABdhPJwWoDh3ZZrWn22Cih3ALuvTEMd/QoWYb5Kq1Z+/wWVJ/oEFFoCAZQbNeblMfYwud4pMR1gGow==
-X-Received: by 2002:a17:90a:4a03:b0:1df:4583:cb26 with SMTP id e3-20020a17090a4a0300b001df4583cb26mr53675859pjh.173.1654395368012;
-        Sat, 04 Jun 2022 19:16:08 -0700 (PDT)
-Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id 6-20020a170902c20600b0016211344809sm7934506pll.72.2022.06.04.19.16.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Jun 2022 19:16:07 -0700 (PDT)
-Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Rhett Aultman <rhett.aultman@samsara.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>, wg@grandegger.com,
+        with ESMTP id S244087AbiFEGA2 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 5 Jun 2022 02:00:28 -0400
+Received: from de-smtp-delivery-102.mimecast.com (de-smtp-delivery-102.mimecast.com [194.104.111.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 835F220F71
+        for <linux-can@vger.kernel.org>; Sat,  4 Jun 2022 23:00:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
+        t=1654408825;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=N7B611lPNkMX+J/g1gIA1ubVXnH+aDEmdnDvUCS2SVk=;
+        b=edHp2uAjG3ifmX/b2GSpWpzSF57e2e8dXOb1wQtCs7ukIJvbfRZzrwDlbLTNm4EcQVCFBy
+        VQkZAZStryI1CVAgkas171c3eC+Fh6sPklMvISYIP54mP70X3si+AewrP6e6N2EN+4741e
+        6QtePxtxonppOebJ6LWcmMYZm3MAC+8=
+Received: from EUR02-VE1-obe.outbound.protection.outlook.com
+ (mail-ve1eur02lp2050.outbound.protection.outlook.com [104.47.6.50]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-32-4n7UQPgyP_6NfQcx3P2iTA-2; Sun, 05 Jun 2022 08:00:22 +0200
+X-MC-Unique: 4n7UQPgyP_6NfQcx3P2iTA-2
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Q06PHzRDL9HuOrFpwA93Ops8IcbPhiMRYzK4MD+lEyxnB45cLnRnpU+wsOLdnxAO3Io7SAg6zZBU5if1S5xyaz1TbGKHO2/Mtm7V25zraIck4eOcfsA6S7DRaDcBcBD5T6lQ+wCogrTfy2VD73vW1fQLTNA1Z3AXmOc+onQv3aVXM6nzwSOvfylRDpMC/z4thZPxUo7JPywKquRG3HceW4bNBR9Hw3ku2yAaTeZpVpQkf1oUFdNmFVKsnbPp+5gPmDszF1j2slNP0jYQM0eHQJrqOGpDBQUvv2kfn2+kh5bVAP1wZsJ+acGi7COjp/kJPGiSugdtGzG/c7G/AG5H1w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=46CO14ioM9ZyNUU42AeWERAdr6YtL3jcZq140umeNk8=;
+ b=iSJOy4fWeLmOb1Cwo9/UtN5T5O+7iVmkPK4uL0fwJlSXB90usv9x6hS0Kj6/lttOU86EaN3XB54zks1nak4/vI7XXrlQb+/x6n3BbumynIyU61KfZY945ZZfymHV0y3uefMlR/cTN5iHjl2KWjHR2wIQkIDNn2WUOh9WVmdESpjLOe4dQKYLhlWR9cRssH9UBrdk0Uryo2CqXPueRbnevrRwtFpGok4V0NhuDv6hzlLQynJv5JczLSPcggsAFIhUjRLNCuyWpxZ1yJ7NQ51KV817+L7yTRf3eqmZNWyoBJFvipdyiiPP7Dxfrj4p6p3oNWOawiAigjXNu5reEWSKyw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VI1PR0401MB2526.eurprd04.prod.outlook.com
+ (2603:10a6:800:58::16) by DU2PR04MB8935.eurprd04.prod.outlook.com
+ (2603:10a6:10:2e2::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.18; Sun, 5 Jun
+ 2022 06:00:21 +0000
+Received: from VI1PR0401MB2526.eurprd04.prod.outlook.com
+ ([fe80::19e2:fafb:553f:d8c]) by VI1PR0401MB2526.eurprd04.prod.outlook.com
+ ([fe80::19e2:fafb:553f:d8c%11]) with mapi id 15.20.5314.018; Sun, 5 Jun 2022
+ 06:00:20 +0000
+Message-ID: <a57f4af7-3fbc-0853-dd9c-b80b2425b4f5@suse.com>
+Date:   Sun, 5 Jun 2022 08:00:18 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [RFC PATCH] USB: core: urb: add new transfer flag
+ URB_FREE_COHERENT
+Content-Language: en-US
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+CC:     Rhett Aultman <rhett.aultman@samsara.com>, wg@grandegger.com,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-can@vger.kernel.org, linux-usb@vger.kernel.org,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [RFC PATCH v2] usb: urb: add new transfer flag URB_FREE_COHERENT
-Date:   Sun,  5 Jun 2022 11:15:55 +0900
-Message-Id: <20220605021555.214346-1-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220604144157.208849-1-mailhol.vincent@wanadoo.fr>
-References: <20220604144157.208849-1-mailhol.vincent@wanadoo.fr>
+        linux-can@vger.kernel.org, linux-usb@vger.kernel.org
+References: <alpine.DEB.2.22.394.2206041003320.1657582@thelappy>
+ <20220604144157.208849-1-mailhol.vincent@wanadoo.fr>
+ <YpuLGkPcXrM+Eiwj@rowland.harvard.edu>
+From:   Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <YpuLGkPcXrM+Eiwj@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: AS8PR05CA0027.eurprd05.prod.outlook.com
+ (2603:10a6:20b:311::32) To VI1PR0401MB2526.eurprd04.prod.outlook.com
+ (2603:10a6:800:58::16)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d6869e44-a572-4f4a-058a-08da46b8ac4d
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8935:EE_
+X-Microsoft-Antispam-PRVS: <DU2PR04MB89356925D973FE806B4DA878C7A39@DU2PR04MB8935.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: z6AUyeIraJD8vtZhbC4uUm+GG0YO+EJTupTlOePOzZdv8G4do4hOuVdxx6eLZLysAtiQgE+/ieTjHnpS8qbWN37C1aWmPn2tB5eFvdOlvjKQrsyX49vF51AtMxyHqeFyyCXUewx/2XMHwLApl8ksph7iezV4br8+dTYGlpfFIlRi89uSFeflHEadJUBIK5tyCNslNjDBhQ+DF+q0KHxplWlDRVLVXpSwsIt13JQInQ1Ah6/PWPeLXTk6m7aU/7VVUGOHwj48nOeVcNdPUiEfSLr2wGQRJNpXT64KpO2fT1zLB+lmftjc7aS4XCLJQl1ET6WCukS31RyHhwEFAA/wG3X5Js396C8V/ZTknt8ExoCbGSQoir2NpZrBkdgEsDAJogtCgpD5Bbpl9/HDwXiYfZTB/2P09b5apbAEQCcszrOerWMPOYHFtb/aR8T6raJJYzHt5hkE20iyHRDgLfRtloqe1vdX1ILfmhSFmsVJ3d4a38X/T9I27WUYE4SkoAHJRmREXXpKz1E59iL9+QNLq5wibIFNH6mgavenpqvKgUIr4jgE70DBQb8aioOqGATfkJOzGW2+b9N0rq4rHoFwLc9NnQwsSowntMBgPYSyAwffUwhsKtogZrcvOx3YvzFeak19augjI7omK9DG+GYq3FpRvZih3kwkLmpPOADSegHseugI2w7yK619iFh7SJloxgalonnazWqV5yWn9cHYfueKvKVWi5LWI9QgX0UjLzw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0401MB2526.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(66556008)(54906003)(83380400001)(66476007)(66946007)(38100700002)(110136005)(8676002)(186003)(31696002)(508600001)(86362001)(6486002)(31686004)(6512007)(5660300002)(36756003)(316002)(6506007)(2616005)(4326008)(2906002)(4744005)(8936002)(53546011)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?u6n3vPPyzPyot6fGJINmSp184EayGo7VR7vCHRAeIioKR1oHHjuFDXgcFLXX?=
+ =?us-ascii?Q?Kcjb66SbRifJCqjbmPUOcvG/YoMmcKeg3Vm6IiFR/az5YKkVIg1J61cxOylP?=
+ =?us-ascii?Q?OZbm86IZ/EcsUYHsE80vgUmYm7o54svWpOfTZ1/cpmMCJTjagRR2aj3+YTF4?=
+ =?us-ascii?Q?VqpyWaAjFn2NCqXhcSfIswGiTRmr40oqUegaYzBACDMZlYesV2vUheTyidHF?=
+ =?us-ascii?Q?Kopylx1hSaIRJNBAnC2DX1AGf1MwVpqMv+iFodszJqH6Xn76OmRw4NbH/FjI?=
+ =?us-ascii?Q?db/CisFo5TktQwh3GyYQjWnNoDBJv1iwZqq+ryK1TQJN9nI390aO3wzWx7P4?=
+ =?us-ascii?Q?ZUgfe5ly6PTX40qsuQj09ofYl3hBo1IRz9j8Q0Iiu6x3wIxNu8fYhGE8sLeT?=
+ =?us-ascii?Q?AlCbb8FU4DZQUfWh6vv9OmWwBad/MLokGY2eww/d1nKy6F12qsi4vQuCzHsG?=
+ =?us-ascii?Q?NwojeSgDARJ11i4S6lJxMM22zXqkZ2KXL8BhuaZ8v8cLUNbA6Hb11nVDkgAA?=
+ =?us-ascii?Q?Fe1nXfLIG8GNLH+9qR8lKwASB4ZWF7FSgR1D6ydCpAGeXqpcvnQ7ol928O6O?=
+ =?us-ascii?Q?TlrXlFTzPbvCZuzkfJ5tDcAS7Mj2LMdJDMWUILDkzkKUT34/N2FYZVI32zjO?=
+ =?us-ascii?Q?KamDOUZrtZbsfNWKUlRi8h6l0BsChUVSla4s4DkcYwOP+VuIFXeEO2PEL1VN?=
+ =?us-ascii?Q?UbVSSF1n36itkgkwTd01fiAbhG8zHXl4RhxljB8OhlWZrfUkiAuntWoU5NEq?=
+ =?us-ascii?Q?te/RMnXuZ75YsnxjVqiREAcw+mCmZ0gKvivm1QtN15U1fizLsJ5OkVeEIfT7?=
+ =?us-ascii?Q?Jnrtd0cC6ywLcxlSc9skK5l84U7GaYNRmGqxT4JO6iZWqiqEjiDItQ8ZsgJB?=
+ =?us-ascii?Q?FdA2k1j68kRur6e1BGG8xEPWrbBZ9a5CS5elIVelaSfO6e3v+k1xgUnXL6Qa?=
+ =?us-ascii?Q?MDH4h5Ct5Pyq9tmbwJ+NbdKLfyFrT+W+2b3yTRTZSECNgZdHyOPAH/fHvXLS?=
+ =?us-ascii?Q?SQ6hopue3o99hX6Wdj2hxNkz6xz7tuPC3VBSYoc9fB0/hEZoaAgquDHQd+cy?=
+ =?us-ascii?Q?AzhagQNWFQEYlZEcE0cZ0hSVPNSQcneMweYDN9Fr85qtx7TILGlmQ8Ffn/Vz?=
+ =?us-ascii?Q?nYKRiw9MhoQzLDFX1WnWI8be6Vd/QVQIFiJsqImOl66yuTUXrZt20W1yPsA+?=
+ =?us-ascii?Q?epT8zi9d3oiu8h3w+30xB3OKruZmLOBIvS6ZHRzoecyYmvw8J+H/b1+GML96?=
+ =?us-ascii?Q?K6I8m14WszQLokOT/EoVQqFkuEDyItA8oG98ZnTBqTxljHRmxQJf71C1eURY?=
+ =?us-ascii?Q?QsaOtLmaRZ5ysIIQ5RGpBYJG3fNNd9MC9H8ckIXqCZv1rXwgy2ttnOfutdcG?=
+ =?us-ascii?Q?9OEPFEeTcIh0fuyPyGOVUPWAzt9pVHQZjSltR7jQDdGi2TxTjvAsn3h06BBF?=
+ =?us-ascii?Q?jk72VKPUVfLoBg3tAZT8ZBwVfCOkn7tLlyBsjRj08m599ByAhlNcGmiVX0dJ?=
+ =?us-ascii?Q?v8ByFSaewj5j8w/IF/0CIncQ+Eisr+ZyzNSI+XdlpVhG4lwzy3Iu7MOo7wP2?=
+ =?us-ascii?Q?Y8q3SZsIe4vnNQKCynmzBjUH6PU6VyA3SotIESFbsiqVJCmqKKD4JquxRidQ?=
+ =?us-ascii?Q?TerTkx9meM7GUj+CcYRbBoPzINZVmRnelFDTfW4BjF6sKRmqbOzyCbUAQfFX?=
+ =?us-ascii?Q?+jGSB7Qm0hubMjY0nSsThTcQDL0j4ygVlIxsFyq+iLkiZBOoGunJLq5mM66c?=
+ =?us-ascii?Q?tSGpnM/FK4l20B9CC3p7jwl1BviS+6tqyxDhsc8dzkgU5q332h7tExJiPrF4?=
+X-MS-Exchange-AntiSpam-MessageData-1: siDf+ovuXKjb+Q==
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d6869e44-a572-4f4a-058a-08da46b8ac4d
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR0401MB2526.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2022 06:00:20.6408
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9ZraNuHdDvN523waPBjFzTkGHyQBW0k8HCYqOBOHO385vUVHNZXW5Lw2J0VX8wwU7rCd2c41MRdSC2asp7GbWg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8935
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-When allocating URB memory with kmalloc(), drivers can simply set the
-URB_FREE_BUFFER flag in urb::transfer_flags and that way, the memory
-will be freed in the background when killing the URB (for example with
-usb_kill_anchored_urbs()).
 
-However, there are no equivalent mechanism when allocating DMA memory
-(with usb_alloc_coherent()).
 
-This patch adds a new flag: URB_FREE_COHERENT. Setting this flag will
-cause the kernel to automatically call usb_free_coherent() on the
-transfer buffer when the URB is killed, similarly to how
-URB_FREE_BUFFER triggers a call to kfree().
+On 04.06.22 18:40, Alan Stern wrote:
+>
+> I don't see anything wrong with this, except that it would be nice to kee=
+p=20
+> the flag values in numerical order.  In other words, set URB_FREE_COHEREN=
+T=20
+> to 0x0200 and change URB_DIR_IN to 0x0400.
+Hi,
 
-In order to have all the flags in numerical order, URB_DIR_IN is
-renumbered from 0x0200 to 0x0400 so that URB_FREE_COHERENT can reuse
-value 0x0200.
+but what sense does this patch make? You use coherent allocations
+to avoid repeated DMA synchronizations. That is sort of incompatible
+with the notion of discarding the buffer automatically.
 
-CC: Alan Stern <stern@rowland.harvard.edu>
-CC: Rhett Aultman <rhett.aultman@samsara.com>
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
-Hi Rhett Aultman,
+=C2=A0=C2=A0=C2=A0 Regards
+=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 Oliver
 
-I put the code snippet I previously sent into a patch. It is not
-tested (this is why I post it as RFC). Please feel free to add this to
-your series.
-
-** Changelog **
-
-v1 -> v2:
-
-  * Renumber URB_DIR_IN for 0x0200 to 0x0400 in order to keep all the
-    flags in numerical order.
----
- drivers/usb/core/urb.c | 3 +++
- include/linux/usb.h    | 3 ++-
- 2 files changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
-index 33d62d7e3929..1460fdac0b18 100644
---- a/drivers/usb/core/urb.c
-+++ b/drivers/usb/core/urb.c
-@@ -22,6 +22,9 @@ static void urb_destroy(struct kref *kref)
- 
- 	if (urb->transfer_flags & URB_FREE_BUFFER)
- 		kfree(urb->transfer_buffer);
-+	else if (urb->transfer_flags & URB_FREE_COHERENT)
-+		usb_free_coherent(urb->dev, urb->transfer_buffer_length,
-+				  urb->transfer_buffer, urb->transfer_dma);
- 
- 	kfree(urb);
- }
-diff --git a/include/linux/usb.h b/include/linux/usb.h
-index 60bee864d897..945d68ea1d76 100644
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -1328,9 +1328,10 @@ extern int usb_disabled(void);
- #define URB_NO_INTERRUPT	0x0080	/* HINT: no non-error interrupt
- 					 * needed */
- #define URB_FREE_BUFFER		0x0100	/* Free transfer buffer with the URB */
-+#define URB_FREE_COHERENT	0x0200  /* Free DMA memory of transfer buffer */
- 
- /* The following flags are used internally by usbcore and HCDs */
--#define URB_DIR_IN		0x0200	/* Transfer from device to host */
-+#define URB_DIR_IN		0x0400	/* Transfer from device to host */
- #define URB_DIR_OUT		0
- #define URB_DIR_MASK		URB_DIR_IN
- 
--- 
-2.35.1
 
