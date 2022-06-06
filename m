@@ -2,122 +2,108 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CBAF53DF17
-	for <lists+linux-can@lfdr.de>; Mon,  6 Jun 2022 02:24:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86B7553E700
+	for <lists+linux-can@lfdr.de>; Mon,  6 Jun 2022 19:07:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351861AbiFFAY5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 5 Jun 2022 20:24:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51174 "EHLO
+        id S240752AbiFFPcK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 6 Jun 2022 11:32:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351837AbiFFAYv (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 5 Jun 2022 20:24:51 -0400
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 313A125C44;
-        Sun,  5 Jun 2022 17:24:50 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id a64so23048293ybg.11;
-        Sun, 05 Jun 2022 17:24:50 -0700 (PDT)
+        with ESMTP id S240971AbiFFPcE (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 6 Jun 2022 11:32:04 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BED138D96
+        for <linux-can@vger.kernel.org>; Mon,  6 Jun 2022 08:31:44 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id m25so12854205lji.11
+        for <linux-can@vger.kernel.org>; Mon, 06 Jun 2022 08:31:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kvaser.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=3IQLw4WbkQa+wAa1iZfTyCfXyto7YbC3Q6qJuX9XAw4=;
+        b=KVkA9gDhvveDE1vPCfgz3edIeZnoMisziwBIyCmOYpWcIFfZ37JxrOU8HXoowc+9PS
+         5pUblh6GZaG9HaZlAoHag7HGh/jzoNjEHW008/7U/wF5dFRC3emk4Irr5vXqCSeJ1Win
+         yslw2RMt43ryN02KpZINsj/U44Hj2TA9esyiW2Uk9Fo+UEjZ6cXdEbryTs3BMtnInDW3
+         ojIhWBFuonM/AlC6B0u/cfU48ax9Vm7QAcX0mUfDQUMba9zrEYfYhhzJlgby5gPl2k1y
+         a1GxqSAxDHbWJAm2Elkz02s6sT/nxkBTc5LNRQ5nv7uKucfs8PN8dFePx/ZHn3f19QAv
+         M75g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zhholLSVW1kM55iwZZI2t8gbPSyqvbmhGWq+MHhItoQ=;
-        b=Zir4EekHNruFs92vHV7I4AyBbu/TmZsV/yKahGWguWGPdd3UAGCGBd6Z0dxmbVy2Q3
-         btTnNonPIOUBh4sM0vYDCudGQyOTH6mSlCs4rm2Q+QjNhqTZJwpkRtHbhBBX8dn3S8P1
-         ss71rtb0sghTHKn3OHUN6ys0no2wKkEnIZKpHht2dg1y07b0IZ6kHjCGhA/pSCWJbXaK
-         pYlXPPFjJLvCL/yHPwo1KYbBcZ3mCbjWucTXVZk/O9EVQElaHxVaxbUiOJr7rcjoOphh
-         KD69MZ3MDD08/0nS/VBdBtb7oGdVW9UtYif9G4gcQ6WWGM+RD+LRe6a0muBA0IpQL4GW
-         SLxA==
-X-Gm-Message-State: AOAM532Fhk1H/rvNjNXFNu4X+3TrycJxZm+MwuK+RZ8Y0ijdCwfuVR1b
-        z1ZMjVaYpxxG3bLEJXMvr6oBFrjA5mPQpVCxDRurZg2zh/0=
-X-Google-Smtp-Source: ABdhPJwDuaA1GQqCL2ElzvtIZOGwBwJjsmrAil55E8Zp2R0/mGtaP6SljfBW+/6NjBbzgldJW+p2/nZBPRzerGuuZ1k=
-X-Received: by 2002:a25:55d7:0:b0:663:3850:e85f with SMTP id
- j206-20020a2555d7000000b006633850e85fmr10408274ybb.500.1654475089327; Sun, 05
- Jun 2022 17:24:49 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=3IQLw4WbkQa+wAa1iZfTyCfXyto7YbC3Q6qJuX9XAw4=;
+        b=Ar6NIhciXFSxaO6ljl+BfY7ncix2jvnTdLpcZvvyNoD6s3m441lZJzkQ21zsQbXPhB
+         ycdrbvEQXlaU9aMYbOaarcA7yoHPn7Cga0DvS1rzFOgXl+b/mko1EqjtZdxZ5+CJcMrK
+         948v6gPZTGLXtm1Au9aTtmXSUF7aqfqXnahaKOix+igroMtIryGZlgWCVFD9LDCHaCIv
+         HaM+OW0wXJWZu0JR01SAthkJiBcO3/M1kImjYEOoXk2qPVcbsvz393ixC+SLXf7S4I7s
+         w8rdmcB3uoMROalgyFGgc7dkOVHEYb647HDB3+Cl/Uey9wo3jmsh/laOTnvGpvRzrq8k
+         T2hw==
+X-Gm-Message-State: AOAM5320FfMqVGMNqLJq+LBWnb8aJvpdMuITAEKzSCTkRUeKpkQACJug
+        Fc3V4FOvwYahgabdDS6JZAEif8DecC8tDQ==
+X-Google-Smtp-Source: ABdhPJy81rfaB5ZlTyXicVEikJfpMvAMZJ+wwX6R9AiMRfktS2Ph0EYB94+vQ+qThhu86eTa4tPHxA==
+X-Received: by 2002:a2e:8044:0:b0:255:a587:3f7e with SMTP id p4-20020a2e8044000000b00255a5873f7emr989325ljg.43.1654529499708;
+        Mon, 06 Jun 2022 08:31:39 -0700 (PDT)
+Received: from [192.168.16.142] (h-155-4-68-234.A785.priv.bahnhof.se. [155.4.68.234])
+        by smtp.gmail.com with ESMTPSA id h40-20020a0565123ca800b004785b66a9a4sm2899397lfv.126.2022.06.06.08.31.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Jun 2022 08:31:39 -0700 (PDT)
+Message-ID: <a29d5945-0344-4721-553d-e710a3afc61a@kvaser.com>
+Date:   Mon, 6 Jun 2022 17:31:57 +0200
 MIME-Version: 1.0
-References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
- <20220604163000.211077-1-mailhol.vincent@wanadoo.fr> <20220605192347.518c4b3c.max@enpas.org>
- <20220605180641.tfqyxhkkauzoz2z4@pengutronix.de> <20220605224640.3a09e704.max@enpas.org>
-In-Reply-To: <20220605224640.3a09e704.max@enpas.org>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Mon, 6 Jun 2022 09:24:38 +0900
-Message-ID: <CAMZ6RqKZwC_OKcgH+WPacY6kbNbj4xR2Gdg2NQtm5Ka5Hfw79A@mail.gmail.com>
-Subject: Re: [PATCH v5 0/7] can: refactoring of can-dev module and of Kbuild
-To:     Max Staudt <max@enpas.org>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can <linux-can@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH 07/12] can: kvaser_usb_leaf: Fix CAN state after restart
+Content-Language: en-US
+To:     Anssi Hannula <anssi.hannula@bitwise.fi>
+Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-kernel@vger.kernel.org
+References: <20220516134748.3724796-1-anssi.hannula@bitwise.fi>
+ <20220516134748.3724796-8-anssi.hannula@bitwise.fi>
+From:   Jimmy Assarsson <extja@kvaser.com>
+In-Reply-To: <20220516134748.3724796-8-anssi.hannula@bitwise.fi>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon. 6 Jun. 2022, at 05:46, Max Staudt <max@enpas.org> wrote:
->
-> On Sun, 5 Jun 2022 20:06:41 +0200
-> Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->
-> > On 05.06.2022 19:23:47, Max Staudt wrote:
-> > > This seemingly splits drivers into "things that speak to hardware"
-> > > and "things that don't". Except... slcan really does speak to
-> > > hardware.
-
-slcan is just an oddity in this regard because all the netlink logic
-is done in userspace using slcand. I think that it would really
-benefit to be rewritten using the features under CAN_NETLINK.
-
-This way, it could for example benefit from can_priv::bitrate_const to
-manage the bitrates via iproute2 instead of relying on slcand c.f.:
-https://elinux.org/Bringing_CAN_interface_up#SLCAN_based_Interfaces
-
-Similarly, it doesn't seem that slcan loopbacks the TX frames which,
-in some way, violates one of the core concepts of SocketCAN:
-
-https://docs.kernel.org/networking/can.html#local-loopback-of-sent-frames
-
-You did a great job by putting all the logic in your can327 driver
-instead of requiring a userland tool and I think slcan merits to have
-your can327 improvements backported to him.
-
-> It just so happens to not use any of BITTIMING or
-> > > RX_OFFLOAD. However, my can327 (formerly elmcan) driver, which is
-> > > an ldisc just like slcan, *does* use RX_OFFLOAD, so where to I put
-> > > it? Next to flexcan, m_can, mcp251xfd and ti_hecc?
-> > >
-> > > Is it really just a split by features used in drivers, and no
-> > > longer a split by virtual/real?
-> >
-> > We can move RX_OFFLOAD out of the "if CAN_NETLINK". Who wants to
-> > create an incremental patch against can-next/master?
->
-> Yes, this may be useful in the future. But for now, I think I can
-> answer my question myself :)
-
-I was about to answer you, but you corrected the shot before I had
-time to do so :)
-
-> My driver does support Netlink to set CAN link parameters. So I'll just
-> drop it into the CAN_NETLINK -> RX_OFFLOAD category in Kconfig, unless
-> anyone objects.
-
-This is the correct approach (and the only one). Try to maintain the
-alphabetical order of the menu when you add it.
-
-> I just got confused because in my mind, I'm still comparing it to
-> slcan, whereas in reality, it's now functionally closer to all the other
-> hardware drivers. Netlink and all.
->
-> Apologies for the noise!
-
-No problem!
+On 5/16/22 15:47, Anssi Hannula wrote:
+> can_restart() expects CMD_START_CHIP to set the error state to
+> ERROR_ACTIVE as it calls netif_carrier_on() immediately afterwards.
+> 
+> Otherwise the user may immediately trigger restart again and hit a
+> BUG_ON() in can_restart().
+> 
+> Fix kvaser_usb_leaf set_mode(CMD_START_CHIP) to set the expected state.
+> 
+> Fixes: 080f40a6fa28 ("can: kvaser_usb: Add support for Kvaser CAN/USB devices")
+> Signed-off-by: Anssi Hannula <anssi.hannula@bitwise.fi>
 
 
-Yours sincerely,
-Vincent Mailhol
+Looks good to me.
+Tested-by: Jimmy Assarsson <extja@kvaser.com>
+
+> ---
+>   drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+> index 2d30a662edb5..5f27c00179c1 100644
+> --- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+> +++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+> @@ -1411,6 +1411,8 @@ static int kvaser_usb_leaf_set_mode(struct net_device *netdev,
+>   		err = kvaser_usb_leaf_simple_cmd_async(priv, CMD_START_CHIP);
+>   		if (err)
+>   			return err;
+> +
+> +		priv->can.state = CAN_STATE_ERROR_ACTIVE;
+>   		break;
+>   	default:
+>   		return -EOPNOTSUPP;
