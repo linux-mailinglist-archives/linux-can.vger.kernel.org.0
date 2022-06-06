@@ -2,148 +2,106 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D022653EC8E
-	for <lists+linux-can@lfdr.de>; Mon,  6 Jun 2022 19:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB1CE53EE89
+	for <lists+linux-can@lfdr.de>; Mon,  6 Jun 2022 21:24:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240849AbiFFPdd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 6 Jun 2022 11:33:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59838 "EHLO
+        id S232251AbiFFTYa (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 6 Jun 2022 15:24:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240874AbiFFPdb (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 6 Jun 2022 11:33:31 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B172F388
-        for <linux-can@vger.kernel.org>; Mon,  6 Jun 2022 08:33:21 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id c2so4469637lfk.0
-        for <linux-can@vger.kernel.org>; Mon, 06 Jun 2022 08:33:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kvaser.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=YcwGpjo58UXNBMEnswMeb//FPBvxd6I0WbIZe/2XdyM=;
-        b=dfwcDxiP3tZ2AU6j2Akd8JwNhhm7Av2t7LErsEwmFMrzbzdoSErffgfZcss/wD693j
-         eMY7HaQWW78zuROkKEk69OZn8hxZhVr2gWMcPrt7rHTx84FZtK5QVVL7NCUkRTToAKgc
-         IkJMYc2lhePiW80os7pTGZXGbHcaFIMHu34WLWIVz2o0Dxxp4xL9ErfwLy3eiC/ynwIb
-         OQXqhTEPaZVKFPaMLSr1vtEQ1LKTlAMLbdBy4wFureLfrbLu9/qLLOCG3+9yd2AFLfOc
-         cxmRzvKjvxUhrNlFvteKji32EHTRCMy3z4WAEU8Ehaj3aZpj0m7FKFVkWL8GNFVw996y
-         IZeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=YcwGpjo58UXNBMEnswMeb//FPBvxd6I0WbIZe/2XdyM=;
-        b=VfByVi9sbLp4R4pitrVuOd+MhkPliv628GLS5rpTaN3fASaS28hV9SkBBVid846OdA
-         Ez9sYicRK12SBbdpHGTxFNW6rUfOL1U1K8VPcPOSSYPMm+R/4kgBN5F+En1mU9WNvoCb
-         dOMdEYxuQiklEUsrYYFjias1B8qo0ck4bPdYF4PDLvw4C/+MVi5jhQHvZdYvdffBtftx
-         w4JnowTEWnumXiFBlJF5mNpI3MeM+jN++0fX0yXZx56gX6USb6wZTzTtwSr6egPGfOES
-         +UanZR4EDBzyVS60M435ole0hSHWq09DoAqLffbsjU2mn62PeMrNFZfvAvii//Pkb44g
-         aoIA==
-X-Gm-Message-State: AOAM533fbvL0GDsCfCUkeDUJ3vQhUOExL1Jb5nXjhr8uRHCOR+2i15gY
-        vo8EmF7J2LH8TA6PYyRySR3+Xw==
-X-Google-Smtp-Source: ABdhPJwUPMCGoQRCjPx3AH/QV9HgvnP0J75vM1Bxs0mNku0haACOc5sir73qVYeZwVmRfnitti5DRQ==
-X-Received: by 2002:a19:640f:0:b0:478:6d61:ae68 with SMTP id y15-20020a19640f000000b004786d61ae68mr15989243lfb.640.1654529594099;
-        Mon, 06 Jun 2022 08:33:14 -0700 (PDT)
-Received: from [192.168.16.142] (h-155-4-68-234.A785.priv.bahnhof.se. [155.4.68.234])
-        by smtp.gmail.com with ESMTPSA id w30-20020a05651204de00b0047255d21165sm2901970lfq.148.2022.06.06.08.33.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jun 2022 08:33:13 -0700 (PDT)
-Message-ID: <9816143d-198a-a238-9fa6-772724ee37c8@kvaser.com>
-Date:   Mon, 6 Jun 2022 17:33:32 +0200
+        with ESMTP id S232111AbiFFTY2 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 6 Jun 2022 15:24:28 -0400
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.219])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C86B6BF0;
+        Mon,  6 Jun 2022 12:24:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1654543461;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=RPmNSu8/QJlogBiUR3dv8QYSPVrk49UYvH70EI6bUmo=;
+    b=mgXpuIWJdyKxDvAOvdwr83RMrLy1LZZS7jXbxPlZC5AgJuxjT7uzWFZlmocwCmlU4e
+    fZaV3HKLycEjsZZLZFKwS11hGZgR2h2qtbpCVk01X2IoHU82nyLsfgPyXfD0JCRGux2G
+    kVvdyoruTrBAx3g7eq0J4yJwSRe9UE22iEeCAHSfuOsmIfZvHM7/Y/tMB6IcgDYmsn+O
+    7yS3j3J7A2H+EXe5HJkstDoR5okNXIgfc11eq0CrPG5wtC4Kjv34vG59PVJ+BcI6IXGu
+    qzYlgOBGM91rXLc6rFHCkVXNogjR4BnQUVMw+4DPvA+h+KXJXO73QbDsI/lBrvlIRUb6
+    FSSw==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1q3DbdV+Ofo7wZbW6ThU4"
+X-RZG-CLASS-ID: mo00
+Received: from [172.20.10.8]
+    by smtp.strato.de (RZmta 47.45.0 DYNA|AUTH)
+    with ESMTPSA id R0691fy56JOK4tw
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Mon, 6 Jun 2022 21:24:20 +0200 (CEST)
+Subject: Re: [PATCH v5 0/7] can: refactoring of can-dev module and of Kbuild
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Max Staudt <max@enpas.org>, netdev@vger.kernel.org
+References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
+ <20220604163000.211077-1-mailhol.vincent@wanadoo.fr>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <2e8666f3-1bd9-8610-6b72-e56e669d3484@hartkopp.net>
+Date:   Mon, 6 Jun 2022 21:24:14 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH 00/12] can: kvaser_usb: Various fixes
+In-Reply-To: <20220604163000.211077-1-mailhol.vincent@wanadoo.fr>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Anssi Hannula <anssi.hannula@bitwise.fi>
-Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-kernel@vger.kernel.org
-References: <20220516134748.3724796-1-anssi.hannula@bitwise.fi>
- <61060501-7edb-4277-acf6-117161e8593f@kvaser.com>
- <17631d66-7b90-e60b-e3fb-76b25e5eceaa@kvaser.com>
- <af065054-50cb-08d7-4eb4-e42530710eb2@bitwise.fi>
-From:   Jimmy Assarsson <extja@kvaser.com>
-In-Reply-To: <af065054-50cb-08d7-4eb4-e42530710eb2@bitwise.fi>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 5/30/22 12:56, Anssi Hannula wrote:
-> On 28.5.2022 10.42, Jimmy Assarsson wrote:
->> On 5/17/22 10:41, Jimmy Assarsson wrote:
->>> On 2022-05-16 15:47, Anssi Hannula wrote:
->>>> Hi all,
->>>>
->>>> Here's a set of fixes for issues I found while testing kvaser_usb as we
->>>> are preparing to start using it in production (with 0bfd:0124).
->>> Hi Anssi,
->>>
->>> Thanks for the patches!
->>> I will review and test your fixes before the weekend.
->>>
->>> Best regards,
->>> jimmy
->> Sorry for the delay!
-> 
-> No problem!
-> 
->> To summarize the status.
->>
->> These patches look good:
->> [PATCH 01/12] can: kvaser_usb_leaf: Fix overread with an invalid command
->> [PATCH 02/12] can: kvaser_usb: Fix use of uninitialized completion
->> [PATCH 03/12] can: kvaser_usb: Fix possible completions during
->> init_completion
->> [PATCH 05/12] can: kvaser_usb_leaf: Set Warning state even without bus
->> errors
->> [PATCH 10/12] can: kvaser_usb_leaf: Fix wrong CAN state after stopping
->> [PATCH 12/12] can: kvaser_usb_leaf: Fix bogus restart events
->>
->> This looks good, but see comment regarding explicit queue flush:
->> [PATCH 06/12] can: kvaser_usb_leaf: Fix TX queue out of sync after restart
-> 
-> Feel free to drop the flush, or let me know if you want me to resend it
-> without it.
-> 
->> I still need some more time looking into:
->> PATCH 07/12] can: kvaser_usb_leaf: Fix CAN state after restart
->> PATCH 08/12] can: kvaser_usb_leaf: Fix improved state not being reported
->> PATCH 11/12] can: kvaser_usb_leaf: Ignore stale bus-off after start
->>
->> I want to replace
->> [PATCH 04/12] can: kvaser_usb: Mark Mini PCIe 2xHS as supporting error
->> counters
->> with a new patch
->> "can: kvaser_usb: kvaser_usb_leaf: Get capabilities from device"
->>
->> I want to split the handling of CMD_ERROR_EVENT and the readback
->> functionality. I also want to add parameter readback for
->> kvaser_usb_hydra. I need more time to look over the can_bittiming_const
->> in kvaser_usb_leaf for the different supported firmware.
->> [PATCH 09/12] can: kvaser_usb_leaf: Fix silently failing bus params setup
->>
->>
->> I would like to create a V2 series, including my patches, if you are
->> okay with it?
-> 
-> 
-> Yes, that's fine. I can test your series on my setup as well.
+Hi Vincent,
 
-I'll rebase and send V2 of this series, once "can: kvaser_usb: CAN clock 
-frequency regression" [2], is sorted out.
-That would be great :)
+great work!
 
+On 04.06.22 18:29, Vincent Mailhol wrote:
 
-[2] 
-https://lore.kernel.org/linux-can/20220603083820.800246-1-extja@kvaser.com
+> * menu after this series *
+> 
+> Network device support
+>    symbol: CONFIG_NETDEVICES
+>    |
+>    +-> CAN Device Drivers
+>        symbol: CONFIG_CAN_DEV
+>        |
+>        +-> software/virtual CAN device drivers
+>        |   (at time of writing: slcan, vcan, vxcan)
+>        |
+>        +-> CAN device drivers with Netlink support
+>            symbol: CONFIG_CAN_NETLINK (matches previous CONFIG_CAN_DEV)
+>            |
+>            +-> CAN bit-timing calculation (optional for all drivers)
+>            |   symbol: CONFIG_CAN_BITTIMING
+>            |
+>            +-> All other CAN devices not relying on RX offload
+>            |
+>            +-> CAN rx offload
+>                symbol: CONFIG_CAN_RX_OFFLOAD
+
+Is this still true in patch series 5?
+
+If I understood it correctly CONFIG_CAN_BITTIMING and 
+CONFIG_CAN_RX_OFFLOAD can be enabled by the user and 
+(alternatively/additionally) the selection of "flexcan, m_can, mcp251xfd 
+and ti_hecc" enables CONFIG_CAN_RX_OFFLOAD too.
+
+Right?
+
+>                |
+>                +-> CAN devices relying on rx offload
+>                    (at time of writing: flexcan, m_can, mcp251xfd and ti_hecc)
 
 Best regards,
-jimmy
+Oliver
