@@ -2,247 +2,146 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 450AD53F973
-	for <lists+linux-can@lfdr.de>; Tue,  7 Jun 2022 11:20:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AFE353F9AF
+	for <lists+linux-can@lfdr.de>; Tue,  7 Jun 2022 11:28:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234821AbiFGJUM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 7 Jun 2022 05:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52554 "EHLO
+        id S239461AbiFGJ2M (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 7 Jun 2022 05:28:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239441AbiFGJUF (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 7 Jun 2022 05:20:05 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88970E52B9
-        for <linux-can@vger.kernel.org>; Tue,  7 Jun 2022 02:20:04 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nyVNS-0006EU-PP; Tue, 07 Jun 2022 11:19:54 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id D4C648D99B;
-        Tue,  7 Jun 2022 09:19:52 +0000 (UTC)
-Date:   Tue, 7 Jun 2022 11:19:52 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Srinivas Neeli <srinivas.neeli@xilinx.com>
-Cc:     wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
-        appana.durga.rao@xilinx.com, sgoud@xilinx.com,
-        michal.simek@xilinx.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        git@xilinx.com, Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: Re: [PATCH V2 2/2] can: xilinx_can: Add Transmitter delay
- compensation (TDC) feature support
-Message-ID: <20220607091952.gls5bgwplytbhmoq@pengutronix.de>
-References: <20220607085654.4178-1-srinivas.neeli@xilinx.com>
- <20220607085654.4178-3-srinivas.neeli@xilinx.com>
+        with ESMTP id S238703AbiFGJ2I (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 7 Jun 2022 05:28:08 -0400
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244D232ED8;
+        Tue,  7 Jun 2022 02:28:07 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id f34so30149476ybj.6;
+        Tue, 07 Jun 2022 02:28:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mWYG/OGx6qetK0o2X6cVpouqKkNTEyLC/VGAA/7a2xw=;
+        b=qSq0kChIebsX8LymnhlHYmTq+zhSO7BlOcpm3cQ9yQomxGkCwkg8QYbWyuO93hFkEr
+         Y9tBBlBQVshiRA7Xa9ik+I+I1LCB9+gbegjTRXuZQGlKHpdDZz8BG51yrzMzMWDqe3Xo
+         rRpLdFYxwB8SocfSbB3+6HAqyKexwgmJTAuK7vaX/rHNJOptEXvdCRfid9Y9JONVeP+S
+         W95mZ16bIh9OC1yBzFvpROfzPVmeK3xD7VP2E8PCDJsdVMSenbA29BdUTVef3Htk7FNK
+         DS2EQWp0z4tzG/Zvz8djHX9EnAZ8HYp00cM4zrYkcl1CVAKvz4sum95Jg5UmzOosRQk2
+         1gNg==
+X-Gm-Message-State: AOAM531OKTj/iU1hiVZLE/NrR65QlpSI88kva/xjWAfKBWmiRcYwmIKL
+        5K0AABcYuwgzJ02uZtEXW+mhsVmsm1tqKB/ZAhs=
+X-Google-Smtp-Source: ABdhPJyoR/WcIKYYbkEhsAq3MjNuXqggp+vdWXu8vVqTpHO5SSoGZVe7EbrdzXL6H7XPrcdc4ZVtfC5yPSQsA4TAWeQ=
+X-Received: by 2002:a25:ad58:0:b0:65c:e3e5:e813 with SMTP id
+ l24-20020a25ad58000000b0065ce3e5e813mr28546395ybe.151.1654594086359; Tue, 07
+ Jun 2022 02:28:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wul5pjtdvnfd2zlk"
-Content-Disposition: inline
-In-Reply-To: <20220607085654.4178-3-srinivas.neeli@xilinx.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
+ <20220604163000.211077-1-mailhol.vincent@wanadoo.fr> <20220604163000.211077-5-mailhol.vincent@wanadoo.fr>
+ <CAMuHMdXkq7+yvD=ju-LY14yOPkiiHwL6H+9G-4KgX=GJjX=h9g@mail.gmail.com>
+In-Reply-To: <CAMuHMdXkq7+yvD=ju-LY14yOPkiiHwL6H+9G-4KgX=GJjX=h9g@mail.gmail.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Tue, 7 Jun 2022 18:27:55 +0900
+Message-ID: <CAMZ6RqLEEHOZjrMH+-GLC--jjfOaWYOPLf+PpefHwy=cLpWTYg@mail.gmail.com>
+Subject: Re: [PATCH v5 4/7] can: Kconfig: add CONFIG_CAN_RX_OFFLOAD
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Max Staudt <max@enpas.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi Geert,
 
---wul5pjtdvnfd2zlk
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue. 7 Jun 2022 at 17:43, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> Hi Vincent,
+>
+> On Sun, Jun 5, 2022 at 12:25 AM Vincent Mailhol
+> <mailhol.vincent@wanadoo.fr> wrote:
+> > Only a few drivers rely on the CAN rx offload framework (as of the
+> > writing of this patch, only four: flexcan, m_can, mcp251xfd and
+> > ti_hecc). Give the option to the user to deselect this features during
+> > compilation.
+>
+> Thanks for your patch!
 
-Hello Srinivas Neeli,
+Thank you too, happy to see the warm feedback from all of you.
 
-thanks for your patch!
+> > The drivers relying on CAN rx offload are in different sub
+> > folders. All of these drivers get tagged with "select CAN_RX_OFFLOAD"
+> > so that the option is automatically enabled whenever one of those
+> > driver is chosen.
 
-On 07.06.2022 14:26:54, Srinivas Neeli wrote:
-> Added Transmitter delay compensation (TDC) feature support.
-> In the case of higher measured loop delay with higher baud rates,
-> observed bit stuff errors. By enabling the TDC feature in a controller,
-> will compensate for the measure loop delay in the receive path.
+The "select CAN_RX_OFFLOAD" is to make it dummy proof for the user who
+will deselect CAN_RX_OFFLOAD can still see the menu entries for all
+drivers. I think it is better than a "depends on" which would hide the
+rx offload devices.
 
-Wich controllers support TDC?
+> Great! But...
+>
+> >
+> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+>
+> > --- a/drivers/net/can/Kconfig
+> > +++ b/drivers/net/can/Kconfig
+> > @@ -102,6 +102,20 @@ config CAN_CALC_BITTIMING
+> >
+> >           If unsure, say Y.
+> >
+> > +config CAN_RX_OFFLOAD
+> > +       bool "CAN RX offload"
+> > +       default y
+>
+> ... then why does this default to "y"?
+>
+> > +       help
+> > +         Framework to offload the controller's RX FIFO during one
+> > +         interrupt. The CAN frames of the FIFO are read and put into a skb
+> > +         queue during that interrupt and transmitted afterwards in a NAPI
+> > +         context.
+> > +
+> > +         The additional features selected by this option will be added to the
+> > +         can-dev module.
+> > +
+> > +         If unsure, say Y.
+>
+> ... and do you suggest to enable this?
 
-XAXI_CANFD doesn't have do_get_auto_tdc assigned, but
-CAN_CTRLMODE_TDC_AUTO is set.
+Several reasons. First, *before* this series, the help menu for
+"Platform CAN drivers with Netlink support" (old CAN_DEV) had the
+"default y" and said: "if unsure, say Y." CAN_RX_OFFLOAD was part of
+it so, I am just maintaining the status quo.
 
-> Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
-> ---
->  drivers/net/can/xilinx_can.c | 46 +++++++++++++++++++++++++++++++++---
->  1 file changed, 43 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.c
-> index e179d311aa28..d0edd1bca33c 100644
-> --- a/drivers/net/can/xilinx_can.c
-> +++ b/drivers/net/can/xilinx_can.c
-> @@ -1,7 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0-or-later
->  /* Xilinx CAN device driver
->   *
-> - * Copyright (C) 2012 - 2014 Xilinx, Inc.
-> + * Copyright (C) 2012 - 2022 Xilinx, Inc.
->   * Copyright (C) 2009 PetaLogix. All rights reserved.
->   * Copyright (C) 2017 - 2018 Sandvik Mining and Construction Oy
->   *
-> @@ -99,6 +99,7 @@ enum xcan_reg {
->  #define XCAN_ESR_STER_MASK		0x00000004 /* Stuff error */
->  #define XCAN_ESR_FMER_MASK		0x00000002 /* Form error */
->  #define XCAN_ESR_CRCER_MASK		0x00000001 /* CRC error */
-> +#define XCAN_SR_TDCV_MASK		0x007F0000 /* TDCV Value */
->  #define XCAN_SR_TXFLL_MASK		0x00000400 /* TX FIFO is full */
->  #define XCAN_SR_ESTAT_MASK		0x00000180 /* Error status */
->  #define XCAN_SR_ERRWRN_MASK		0x00000040 /* Error warning */
-> @@ -132,6 +133,8 @@ enum xcan_reg {
->  #define XCAN_DLCR_BRS_MASK		0x04000000 /* BRS Mask in DLC */
-> =20
->  /* CAN register bit shift - XCAN_<REG>_<BIT>_SHIFT */
-> +#define XCAN_BRPR_TDCO_SHIFT		8  /* Transmitter Delay Compensation Offse=
-t */
-> +#define XCAN_BRPR_TDC_ENABLE		BIT(16) /* Transmitter Delay Compensation =
-(TDC) Enable */
->  #define XCAN_BTR_SJW_SHIFT		7  /* Synchronous jump width */
->  #define XCAN_BTR_TS2_SHIFT		4  /* Time segment 2 */
->  #define XCAN_BTR_SJW_SHIFT_CANFD	16 /* Synchronous jump width */
-> @@ -140,6 +143,7 @@ enum xcan_reg {
->  #define XCAN_IDR_ID2_SHIFT		1  /* Extended Message Identifier */
->  #define XCAN_DLCR_DLC_SHIFT		28 /* Data length code */
->  #define XCAN_ESR_REC_SHIFT		8  /* Rx Error Count */
-> +#define XCAN_SR_TDCV_SHIFT		16 /* TDCV Value */
-> =20
->  /* CAN frame length constants */
->  #define XCAN_FRAME_MAX_DATA_LEN		8
-> @@ -276,6 +280,16 @@ static const struct can_bittiming_const xcan_data_bi=
-ttiming_const_canfd2 =3D {
->  	.brp_inc =3D 1,
->  };
-> =20
-> +/* Transmission Delay Compensation constants for CANFD2.0 and Versal  */
-> +static const struct can_tdc_const xcan_tdc_const =3D {
-> +	.tdcv_min =3D 0,
-> +	.tdcv_max =3D 0, /* Manual mode not supported. */
-> +	.tdco_min =3D 0,
-> +	.tdco_max =3D 64,
-> +	.tdcf_min =3D 0, /* Filter window not supported */
-> +	.tdcf_max =3D 0,
-> +};
-> +
->  /**
->   * xcan_write_reg_le - Write a value to the device register little endian
->   * @priv:	Driver private data structure
-> @@ -424,6 +438,11 @@ static int xcan_set_bittiming(struct net_device *nde=
-v)
->  	    priv->devtype.cantype =3D=3D XAXI_CANFD_2_0) {
->  		/* Setting Baud Rate prescalar value in F_BRPR Register */
->  		btr0 =3D dbt->brp - 1;
-> +		if (can_tdc_is_enabled(&priv->can)) {
-> +			btr0 =3D btr0 |
+Second, and regardless of the above, I really think that it makes
+sense to have everything built in can-dev.ko by default. If someone
+does a binary release of can-dev.ko in which the rx offload is
+deactivated, end users would get really confused.
 
-Make use of "|=3D" and properly indent.
+Having a can-dev module stripped down is an expert setting. The
+average user which does not need CAN can deselect CONFIG_CAN and be
+happy. The average hobbyist who wants to do some CAN hacking will
+activate CONFIG_CAN and will automatically have the prerequisites in
+can-dev for any type of device drivers (after that just need to select
+the actual device drivers). The advanced user who actually read all
+the help menus will know that he should rather keep those to "yes"
+throughout the "if unsure, say Y" comment. Finally, the experts can
+fine tune their configuration by deselecting the pieces they did not
+wish for.
 
-> +			priv->can.tdc.tdco << XCAN_BRPR_TDCO_SHIFT |
+Honestly, I am totally happy to have the "default y" tag, the "if
+unsure, say Y" comment and the "select CAN_RX_OFFLOAD" all together.
 
-Please include <linux/bitfield.h> and make use of "FIELD_PREP".
+Unless I am violating some kind of best practices, I prefer to keep it
+as-is. Hope this makes sense.
 
-> +			XCAN_BRPR_TDC_ENABLE;
-> +		}
-> =20
->  		/* Setting Time Segment 1 in BTR Register */
->  		btr1 =3D dbt->prop_seg + dbt->phase_seg1 - 1;
-> @@ -1483,6 +1502,23 @@ static int xcan_get_berr_counter(const struct net_=
-device *ndev,
->  	return 0;
->  }
-> =20
-> +/**
-> + * xcan_get_auto_tdcv - Get Transmitter Delay Compensation Value
-> + * @ndev:	Pointer to net_device structure
-> + * @tdcv:	Pointer to TDCV value
-> + *
-> + * Return: 0 on success
-> + */
-> +static int xcan_get_auto_tdcv(const struct net_device *ndev, u32 *tdcv)
-> +{
-> +	struct xcan_priv *priv =3D netdev_priv(ndev);
-> +
-> +	*tdcv =3D (priv->read_reg(priv, XCAN_SR_OFFSET) & XCAN_SR_TDCV_MASK) >>
-> +		 XCAN_SR_TDCV_SHIFT;
 
-Please use FIELD_GET.
-
-> +
-> +	return 0;
-> +}
-> +
->  static const struct net_device_ops xcan_netdev_ops =3D {
->  	.ndo_open	=3D xcan_open,
->  	.ndo_stop	=3D xcan_close,
-> @@ -1734,18 +1770,22 @@ static int xcan_probe(struct platform_device *pde=
-v)
->  	priv->can.do_get_berr_counter =3D xcan_get_berr_counter;
->  	priv->can.ctrlmode_supported =3D CAN_CTRLMODE_LOOPBACK |
->  					CAN_CTRLMODE_BERR_REPORTING;
-> +	priv->can.do_get_auto_tdcv =3D xcan_get_auto_tdcv;
-
-I'm not sure, if it has any side effects, if you assign do_get_auto_tdc
-for all controllers, even the ones that don't support it. Vincent can
-probably clarify this.
-
-> =20
->  	if (devtype->cantype =3D=3D XAXI_CANFD)
->  		priv->can.data_bittiming_const =3D
->  			&xcan_data_bittiming_const_canfd;
-> =20
-> -	if (devtype->cantype =3D=3D XAXI_CANFD_2_0)
-> +	if (devtype->cantype =3D=3D XAXI_CANFD_2_0) {
->  		priv->can.data_bittiming_const =3D
->  			&xcan_data_bittiming_const_canfd2;
-> +		priv->can.tdc_const =3D &xcan_tdc_const;
-> +	}
-> =20
->  	if (devtype->cantype =3D=3D XAXI_CANFD ||
->  	    devtype->cantype =3D=3D XAXI_CANFD_2_0)
-> -		priv->can.ctrlmode_supported |=3D CAN_CTRLMODE_FD;
-> +		priv->can.ctrlmode_supported |=3D CAN_CTRLMODE_FD |
-> +						CAN_CTRLMODE_TDC_AUTO;
-> =20
->  	priv->reg_base =3D addr;
->  	priv->tx_max =3D tx_max;
-
-regards
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---wul5pjtdvnfd2zlk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKfGDUACgkQrX5LkNig
-011Ongf/RRwccaV+ZRKLpspCQSOABYzlA8AgPw4sbuqlOMLiEtK67YrEFniOv9Xn
-T1qzkcRz7bMEFLSuOCe+pKUXL+kAcWYPYWhlsJ2nvwnf6FvqRQfNMyLKIrW5cpja
-bUmulsofHGz5RmCg3HVuZrokdM87s7zcqpSClsSbGsvwNm/7YW+Z5zA9Ags1pAB9
-gOPwUzcO5AdQAb5aBuA6/JBckxi1VXFPRGKI79hnNhvmvSrcqRn1nabIFlIM5eTN
-daMRZnhT8iw4pUu21yXX9ZGZ5zD7XECro1cuh/js/fjaGe8BYMYOaDn5smGuqbHw
-JwRY3Hfn78N4rtAcqgPzBV+YFiVY1Q==
-=traN
------END PGP SIGNATURE-----
-
---wul5pjtdvnfd2zlk--
+Yours sincerely,
+Vincent Mailhol
