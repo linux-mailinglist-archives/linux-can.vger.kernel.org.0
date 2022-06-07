@@ -2,99 +2,109 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 588F453FAF8
-	for <lists+linux-can@lfdr.de>; Tue,  7 Jun 2022 12:15:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60BAB53FB0C
+	for <lists+linux-can@lfdr.de>; Tue,  7 Jun 2022 12:18:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233115AbiFGKPk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 7 Jun 2022 06:15:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45146 "EHLO
+        id S240784AbiFGKSW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 7 Jun 2022 06:18:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231942AbiFGKPj (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 7 Jun 2022 06:15:39 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21CFBC6E78
-        for <linux-can@vger.kernel.org>; Tue,  7 Jun 2022 03:15:39 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nyWFI-0007ir-LV; Tue, 07 Jun 2022 12:15:32 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 234908DAF7;
-        Tue,  7 Jun 2022 10:15:31 +0000 (UTC)
-Date:   Tue, 7 Jun 2022 12:15:30 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        michael@amarulasolutions.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [RFC PATCH 03/13] can: slcan: use the alloc_can_skb() helper
-Message-ID: <20220607101530.54gezhyq6goxwckz@pengutronix.de>
-References: <20220607094752.1029295-1-dario.binacchi@amarulasolutions.com>
- <20220607094752.1029295-4-dario.binacchi@amarulasolutions.com>
+        with ESMTP id S240840AbiFGKSV (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 7 Jun 2022 06:18:21 -0400
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B99A5AB8;
+        Tue,  7 Jun 2022 03:18:19 -0700 (PDT)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-31332df12a6so22245017b3.4;
+        Tue, 07 Jun 2022 03:18:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wBzzjrW5juvtMxlABnBwXXEgrG6Shz7BoM3Ydn6iWhA=;
+        b=MeMtQVL0KVK1hB9C8LvqNpZSfMLubwEXLJKZ5JRzvLnJK6+M94rPNTP419KGP3D+6H
+         5DunzGH4ba6UVXXlh+0p8DS9AIU8BhNydza8iPKTN5PcyWfvAzGFYqR0HHGDlgMMa5E2
+         w0TK1Ip55TQOoatOriaJsEodS8QXrzRytwW54HyHbhKAQ+o6zFLVL9rsmZUxVFkSAHip
+         t5DPZ5tsr18MY8jIPBSOYRkxMboMCKEfwhVi3yjssy94xLvFxkpIKsczUbrPSmavT3fT
+         QPiVND8dkck+1h2T+MNsAvm2ZPlvUmaevCRNK38nyhp8Fi0VlZrBjwE5vK/gBWvv/DGS
+         jSRQ==
+X-Gm-Message-State: AOAM532DNN7Oqe31Zb5DPmJXdBP+sAr6BvnsgOr6YLq4Lmt2V017dtNd
+        boo7TgcwEkxuJnSn94odPKTAzCxnsyJ3fpBQIvoETPVC1N2uZg==
+X-Google-Smtp-Source: ABdhPJwabTB68SgD2RHKpT9rlldr7Ana6c6z5pASJyhvX7TkJ3Houss4f+xvmVxYmfN4Pab+dnnionFkSFhb8beGLAY=
+X-Received: by 2002:a0d:ee47:0:b0:2ff:85e6:9e03 with SMTP id
+ x68-20020a0dee47000000b002ff85e69e03mr30797967ywe.172.1654597099002; Tue, 07
+ Jun 2022 03:18:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="r3lgh2urouzfbnrf"
-Content-Disposition: inline
-In-Reply-To: <20220607094752.1029295-4-dario.binacchi@amarulasolutions.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <alpine.DEB.2.22.394.2206041003320.1657582@thelappy>
+ <20220604144157.208849-1-mailhol.vincent@wanadoo.fr> <YpuLGkPcXrM+Eiwj@rowland.harvard.edu>
+ <a57f4af7-3fbc-0853-dd9c-b80b2425b4f5@suse.com> <CAMZ6Rq+6z-Nz=Nao2u_=LOC5QYF6KBjy-HdK1x41O4zo1c8HHg@mail.gmail.com>
+ <66b14321-667a-46a3-27db-cb8682bd5476@suse.com>
+In-Reply-To: <66b14321-667a-46a3-27db-cb8682bd5476@suse.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Tue, 7 Jun 2022 19:18:08 +0900
+Message-ID: <CAMZ6Rq+CtOQ7Gn62QQqDd=_0dvCNhh5g_oXB6LmHEd0MfRym1g@mail.gmail.com>
+Subject: Re: [RFC PATCH] USB: core: urb: add new transfer flag URB_FREE_COHERENT
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Rhett Aultman <rhett.aultman@samsara.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-can <linux-can@vger.kernel.org>, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Tue. 7 Jun 2022 at 18:49, Oliver Neukum <oneukum@suse.com> wrote:
+> On 05.06.22 15:45, Vincent MAILHOL wrote:
+> >
+> > This is how I see things:
+> >   * In the open() function, the driver will do the coherent allocation
+> > for its transfer_buffers, fill those into URBs and add all the URBs in
+> > an anchor.
+> >   * During runtime, the driver will keep recycling the same URBs (no
+> > need to kill URB nor to usb_free_coherent() the transfer_buffer).
+> Yes.
+> >   * Finally, in the close() function, the driver has to kill the URBs
+> > and usb_free_coherent() the transfer_buffers. As far as I understand,
+> > no helper functions allow us to do all that, thus requiring the driver
+> > to iterate through the anchor to manually usb_free_coherent() the
+> > transfer buffer.
+> Yes. But you cannot nicely solve that with a flag as you proposed. You
+> would need to use a helper function.
+> > So, the intent of this patch is to provide a method to both kill the
+> > URBs and usb_free_coherent() the transfer buffer at once. The
+> Well, you don't directly. Your patch frees the buffer together with the URB.
+> That has some uses, but you still would need to iterate over the URBs
+> Yes, there is a helper for that, but then you cover one and only one
+> use case, that is, you leave no way to free the buffers without
+> at the same time discrading the URBs.
+>
+> You can do that, but it strikes me as unelegant.
 
---r3lgh2urouzfbnrf
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Elegancy is also my concern.
 
-On 07.06.2022 11:47:42, Dario Binacchi wrote:
-> It is used successfully by most (if not all) CAN device drivers. It
-> allows to remove replicated code.
+My RFC originated from this patch:
+https://lore.kernel.org/linux-can/alpine.DEB.2.22.394.2206031547001.1630869@thelappy/
 
-While you're at it, you can change the function to put the data into the
-allocated skb directly instead of first filling the "cf" on the stack
-and then doing a memcpy();
+Here the proposed solution was to keep a pointer of all the
+transfer_buffer in a local array to be able to free them when closing.
+I really found that original patch to be unelegant which led me to
+propose this RFC.
+Comparatively, I still think my patch to be a more elegant solution,
+and the original author also seems to share my thoughts.
 
-Marc
+If my patch is unelegant, then what would be the elegant/state of the
+art way to free all this DMA allocated memory?
+(pointing to any reference driver implementation should be enough for
+me to understand).
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---r3lgh2urouzfbnrf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKfJUAACgkQrX5LkNig
-011FFQf/e7SAr4zvYs50K56wjpR7g5D+cUH7S1ta0y07du1xPlxbJM5aYvJyoSE9
-TfkFuoj77+DEbtnJz3BcmqseB2GE76YvkcyLLCdyWyY41wgCCFSzKcU4vCZ7SdlT
-Koia7yO4YlqJm1keua9OKVhtGVeP5xOgRmhuzLJkHKhO+Mg10MX0y8pXHIrinuCN
-+xIroJWNVd/I3Xwd5O+svnQgW60+8rfqb9/Lvx9zT89dD/fvXnr9Kjtd4nkljYjT
-/r//8CzmgWszLomt+7Yb+khwOpIsvEp2c2eyv/pKYuuX6vyzQ6F9fhRE5F4+i42g
-kJsP+Z+1S+mws9gb5Wm8Z1ttmvV28w==
-=lReK
------END PGP SIGNATURE-----
-
---r3lgh2urouzfbnrf--
+Yours sincerely,
+Vincent Mailhol
