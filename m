@@ -2,128 +2,125 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41AC953F827
-	for <lists+linux-can@lfdr.de>; Tue,  7 Jun 2022 10:28:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00EFB53F867
+	for <lists+linux-can@lfdr.de>; Tue,  7 Jun 2022 10:43:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbiFGI2s (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 7 Jun 2022 04:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38642 "EHLO
+        id S238380AbiFGIn3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 7 Jun 2022 04:43:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237649AbiFGI2r (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 7 Jun 2022 04:28:47 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79301674D5
-        for <linux-can@vger.kernel.org>; Tue,  7 Jun 2022 01:28:46 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nyUZj-0005qp-9D; Tue, 07 Jun 2022 10:28:31 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id C42C68D888;
-        Tue,  7 Jun 2022 08:28:27 +0000 (UTC)
-Date:   Tue, 7 Jun 2022 10:28:27 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Conor.Dooley@microchip.com
-Cc:     wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
-        Daire.McNamara@microchip.com, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH net-next 0/2] Document PolarFire SoC can controller
-Message-ID: <20220607082827.iuonhektfbuqtuqo@pengutronix.de>
-References: <20220607065459.2035746-1-conor.dooley@microchip.com>
- <20220607071519.6m6swnl55na3vgwm@pengutronix.de>
- <51e8e297-0171-0c3f-ba86-e61add04830e@microchip.com>
+        with ESMTP id S229842AbiFGInX (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 7 Jun 2022 04:43:23 -0400
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A685F8DF;
+        Tue,  7 Jun 2022 01:43:21 -0700 (PDT)
+Received: by mail-qt1-f179.google.com with SMTP id hf10so12123902qtb.7;
+        Tue, 07 Jun 2022 01:43:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=trIBU79MD2ZqYXz6AJVM4tpcbmd/BhR2QCKmFEHT7ZI=;
+        b=vVnrsf+qmaxh1j0aAZbPCPAnMyFPkwXtNkrwo2u0qV06wpdcWrK09/aruC+01Y32yw
+         Lbb9BdfUsmRVlQ8VhZVVcvoMA8GmLmvA6XiavHvgwCa019mDKxbcgR5fdyktTuNApHy4
+         KnOJS0gOZAmfXxOaf/gw9Lpb2L+jLIbevFQqIDnrN4R2R3/rlWaqF1C4Lqt0MD49AEi9
+         v27vYSgQTZrjkyr/r92Pcm9qESTXtaxhscy2G3gAKYbkJYgav/r/jiDR4x0RRrU8AKbv
+         vK2JI0dz4ksmxosvDcmws6dLYZjOyj0pCNuz+1bQFsHh+Xo4E6yEVzq98rFRaLA+L5X7
+         FEkQ==
+X-Gm-Message-State: AOAM531cEWpfTbJDFLmPhSQBeyU2oU8rNmXWWJ0SV1amcpyxIEIQMT+K
+        /J9PZtFxcib/0VhL29ufCLRt45c392spsw==
+X-Google-Smtp-Source: ABdhPJxGN2dmQfazk+egpqsUQyK9Eyi/WXgiXZRRqrWAvcUfzkHha8aa6QX4EOhk9phjm6dKasAA1Q==
+X-Received: by 2002:ac8:5d8b:0:b0:2fb:1a6:61f5 with SMTP id d11-20020ac85d8b000000b002fb01a661f5mr21692276qtx.603.1654591400852;
+        Tue, 07 Jun 2022 01:43:20 -0700 (PDT)
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
+        by smtp.gmail.com with ESMTPSA id v128-20020a37dc86000000b0069fc13ce244sm13496872qki.117.2022.06.07.01.43.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jun 2022 01:43:20 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-30c1c9b9b6cso167429027b3.13;
+        Tue, 07 Jun 2022 01:43:20 -0700 (PDT)
+X-Received: by 2002:a0d:d481:0:b0:30c:44f1:2721 with SMTP id
+ w123-20020a0dd481000000b0030c44f12721mr30757906ywd.283.1654591400102; Tue, 07
+ Jun 2022 01:43:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ajso5cyytlmmpn5k"
-Content-Disposition: inline
-In-Reply-To: <51e8e297-0171-0c3f-ba86-e61add04830e@microchip.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
+ <20220604163000.211077-1-mailhol.vincent@wanadoo.fr> <20220604163000.211077-5-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20220604163000.211077-5-mailhol.vincent@wanadoo.fr>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 7 Jun 2022 10:43:08 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXkq7+yvD=ju-LY14yOPkiiHwL6H+9G-4KgX=GJjX=h9g@mail.gmail.com>
+Message-ID: <CAMuHMdXkq7+yvD=ju-LY14yOPkiiHwL6H+9G-4KgX=GJjX=h9g@mail.gmail.com>
+Subject: Re: [PATCH v5 4/7] can: Kconfig: add CONFIG_CAN_RX_OFFLOAD
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Max Staudt <max@enpas.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi Vincent,
 
---ajso5cyytlmmpn5k
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Sun, Jun 5, 2022 at 12:25 AM Vincent Mailhol
+<mailhol.vincent@wanadoo.fr> wrote:
+> Only a few drivers rely on the CAN rx offload framework (as of the
+> writing of this patch, only four: flexcan, m_can, mcp251xfd and
+> ti_hecc). Give the option to the user to deselect this features during
+> compilation.
 
-On 07.06.2022 07:52:30, Conor.Dooley@microchip.com wrote:
-> On 07/06/2022 08:15, Marc Kleine-Budde wrote:
-> > On 07.06.2022 07:54:58, Conor Dooley wrote:
-> >> When adding the dts for PolarFire SoC, the can controllers were
-> >                                             ^^^
-> >> omitted, so here they are...
-> >=20
-> > Nitpick:
-> > Consider writing "CAN" in capital letters to avoid confusion for the not
-> > informed reader.
->=20
-> Yeah, sure. I'll try to get over my fear of capital letters ;)
+Thanks for your patch!
 
-:)
+> The drivers relying on CAN rx offload are in different sub
+> folders. All of these drivers get tagged with "select CAN_RX_OFFLOAD"
+> so that the option is automatically enabled whenever one of those
+> driver is chosen.
 
-> > Is the documentation for the CAN controller openly available? Is there a
-> > driver somewhere?
->=20
-> There is a driver /but/ for now only a UIO one so I didn't send it.
+Great! But...
 
-Brrrrr...
+>
+> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
-> There's an online doc & if the horrible link doesn't drop you there
-> directly, its section 6.12.3:
-> https://onlinedocs.microchip.com/pr/GUID-0E320577-28E6-4365-9BB8-9E1416A0=
-A6E4-en-US-3/index.html?GUID-A362DC3C-83B7-4441-BECB-B19F9AD48B66
->=20
-> And a PDF direct download here, see section 4.12.3 (page 72):
-> https://www.microsemi.com/document-portal/doc_download/1245725-polarfire-=
-soc-fpga-mss-technical-reference-manual
+> --- a/drivers/net/can/Kconfig
+> +++ b/drivers/net/can/Kconfig
+> @@ -102,6 +102,20 @@ config CAN_CALC_BITTIMING
+>
+>           If unsure, say Y.
+>
+> +config CAN_RX_OFFLOAD
+> +       bool "CAN RX offload"
+> +       default y
 
-Thanks. The documentation is quite sparse, is there a more detailed one?
-The register map cannot be downloaded directly anymore. For reference:
+... then why does this default to "y"?
 
-http://web.archive.org/web/20220403030214/https://www.microsemi.com/documen=
-t-portal/doc_download/1244581-polarfire-soc-register-map
+> +       help
+> +         Framework to offload the controller's RX FIFO during one
+> +         interrupt. The CAN frames of the FIFO are read and put into a skb
+> +         queue during that interrupt and transmitted afterwards in a NAPI
+> +         context.
+> +
+> +         The additional features selected by this option will be added to the
+> +         can-dev module.
+> +
+> +         If unsure, say Y.
 
-regards,
-Marc
+... and do you suggest to enable this?
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Gr{oetje,eeting}s,
 
---ajso5cyytlmmpn5k
-Content-Type: application/pgp-signature; name="signature.asc"
+                        Geert
 
------BEGIN PGP SIGNATURE-----
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKfDCgACgkQrX5LkNig
-010ixggAri8+zJpGE06Rm9LwkSy5IXbnAuXl+05ecMHijzwTZoXuxRjLi7FLgUt8
-RMmHB1ehanHgnud3Ux9EMH2GIbigcx6EwV5iEcShe8ltxXfHATt7HI/L1x8dtS/Z
-e6ic76cZ24PHhR/EAn5+uN9O17sTaoj+nCx13pVdLOe1iHUqZQf3RaVbABSibySZ
-wt1j6nOt7Au4o2hJCHXO3uQ72fiNDQQAdKIFRRqvsDvMVukw+nrt1vL8Fw87AKXU
-xfswszw4E2QowEV8gQeSduJwoYBlzCiya0hQJjTrlWPpxlLpYIN0VsNX+oliI0BN
-bXRB2pUhMmd1nv1wnSnZOzNcCS91/A==
-=PF1R
------END PGP SIGNATURE-----
-
---ajso5cyytlmmpn5k--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
