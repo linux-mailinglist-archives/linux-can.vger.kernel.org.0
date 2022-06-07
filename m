@@ -2,180 +2,248 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2511253FA5C
-	for <lists+linux-can@lfdr.de>; Tue,  7 Jun 2022 11:52:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25EB653FA93
+	for <lists+linux-can@lfdr.de>; Tue,  7 Jun 2022 11:57:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240194AbiFGJwM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 7 Jun 2022 05:52:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43742 "EHLO
+        id S240198AbiFGJ5z convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Tue, 7 Jun 2022 05:57:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240364AbiFGJwB (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 7 Jun 2022 05:52:01 -0400
-Received: from de-smtp-delivery-102.mimecast.com (de-smtp-delivery-102.mimecast.com [194.104.109.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFBDFE77D5
-        for <linux-can@vger.kernel.org>; Tue,  7 Jun 2022 02:50:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
-        t=1654595403;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yVd/gVU65vJ0/hx+3D41i6//ucBNBP1A4AX4UJQF8mc=;
-        b=g4vO8wK6Ij0nWyMmqZEnJasGhI70NpEGeKGiIy8Zpgd4+N3i1gyaCg+IuyyDokf1sFUBgS
-        5gVupLy2TuyDjcd/QA3HAKlIgyngDIVrLL0zBT0ThjG/j7NJtoFdapS3Kb/irfExJr2XP1
-        34S7XS6RKQVwxXHOU5MXUEhCr8jqTaw=
-Received: from EUR03-AM5-obe.outbound.protection.outlook.com
- (mail-am5eur03lp2051.outbound.protection.outlook.com [104.47.8.51]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-39--9Z7yP3BN76EtaQ1_RCQ5Q-2; Tue, 07 Jun 2022 11:49:59 +0200
-X-MC-Unique: -9Z7yP3BN76EtaQ1_RCQ5Q-2
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LazWHD+9xTkUfDjg1/qQ/2f23o5yzPYQcgfctPr1QFGaLV7x6NTCkpXzzZ/UkTVZUGmooirtnK0rGFAohafn2Vl1Xovwx1DwSAZZZUNcnIY69aPH80JVfCWqtrVOR9BCFvuin4F+9MlBf+1IpgjIQxesoqQSAuzW/WIzmAyx99wEZp9SQoi0YaNmA3IHZfK6FP24gqBuQFDe0L1IE4FdzBQdGZdVY8IUEEFep15pzoSOMvBr9hsndUjzkPmQIPgTCLFpUUm+t6V274o1OCIILYS2h0QG5qD+gb2Tf5HjbKy1+4ikk0+w9CxyW8roZgp5U0s4uAAbYxgsg1KQlY5/3Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LmJRHRWciqmCVIiGpcdqrc+GknpaBq3ELrtyqCARtiY=;
- b=N5DPeFGd0i4AjdAPOk7YOsVXJXKlnzqYz8vEPPex4uO2pFIoigbIjdNCvqgzjNXvlEssTt+YYGzfAFUfdRq/L6G/n863outhK06zhKfNiV2jZ4XaDEFszmdMJLb9AeGhoKuv+cD+jnLq4jvzlbod+5eKBTxcaK41SlvDCtXQhrOtXxRIX0afSd8bA10JBiYrUcSF/W+/AVPPXECzm0yFy2sghJTBLD0tAtEJH5ylbDtVa4LA74quY5glCZjEJgG/kVIVtqsieURWemvBCkCi1iz9tUuzRlQe5k2wtRnKCxTH1TkucVbaUKHIga9jYZBBHBwdbDBnupOZCvy542lc7g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mysuse.onmicrosoft.com; s=selector1-mysuse-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LmJRHRWciqmCVIiGpcdqrc+GknpaBq3ELrtyqCARtiY=;
- b=iLf/Z/cXg7206NdgJzdnAKEJi3TNRnT2wmQQmKJl7eycIZMlw1n8erbun4UlBTauzbfkiB3s07tg9o+AUfGafJE49USPfYM0zZzMKXHMBaUqsJfhaETsMyU4IYkc8Ucmd27PEHDZqS6NQmn4qp+JtUfUHQOaJa+CpkxXMsYb42SygQEAxJwPywIq6GcyGp66t+umCyuttevhRY2iJpo2I3GKjZXIm8jqoA+hPXsGmZbXRY3+YHE6wp7gOBVj6CqFQkKmy+3KcX2mmMHtAVudc8zTl/kU43Js9HqLaY8KhM3TGlZZDmiWUhoDM0+O2edWoPU8dsvoKKtLMpKXL27D0Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR0401MB2526.eurprd04.prod.outlook.com
- (2603:10a6:800:58::16) by DBBPR04MB6316.eurprd04.prod.outlook.com
- (2603:10a6:10:cb::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.19; Tue, 7 Jun
- 2022 09:49:55 +0000
-Received: from VI1PR0401MB2526.eurprd04.prod.outlook.com
- ([fe80::19e2:fafb:553f:d8c]) by VI1PR0401MB2526.eurprd04.prod.outlook.com
- ([fe80::19e2:fafb:553f:d8c%11]) with mapi id 15.20.5314.019; Tue, 7 Jun 2022
- 09:49:55 +0000
-Message-ID: <66b14321-667a-46a3-27db-cb8682bd5476@suse.com>
-Date:   Tue, 7 Jun 2022 11:49:52 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [RFC PATCH] USB: core: urb: add new transfer flag
- URB_FREE_COHERENT
-Content-Language: en-US
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        Oliver Neukum <oneukum@suse.com>
-CC:     Alan Stern <stern@rowland.harvard.edu>,
-        Rhett Aultman <rhett.aultman@samsara.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-can <linux-can@vger.kernel.org>, linux-usb@vger.kernel.org
-References: <alpine.DEB.2.22.394.2206041003320.1657582@thelappy>
- <20220604144157.208849-1-mailhol.vincent@wanadoo.fr>
- <YpuLGkPcXrM+Eiwj@rowland.harvard.edu>
- <a57f4af7-3fbc-0853-dd9c-b80b2425b4f5@suse.com>
- <CAMZ6Rq+6z-Nz=Nao2u_=LOC5QYF6KBjy-HdK1x41O4zo1c8HHg@mail.gmail.com>
-From:   Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <CAMZ6Rq+6z-Nz=Nao2u_=LOC5QYF6KBjy-HdK1x41O4zo1c8HHg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: AM6PR08CA0014.eurprd08.prod.outlook.com
- (2603:10a6:20b:b2::26) To VI1PR0401MB2526.eurprd04.prod.outlook.com
- (2603:10a6:800:58::16)
+        with ESMTP id S240449AbiFGJ5b (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 7 Jun 2022 05:57:31 -0400
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0998C2C10B;
+        Tue,  7 Jun 2022 02:57:20 -0700 (PDT)
+Received: by mail-yb1-f174.google.com with SMTP id v22so30264846ybd.5;
+        Tue, 07 Jun 2022 02:57:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=1o6qvv4aZHKs7XMCFadyrE8xTLQ95GJxFv1Dwo+Wjzw=;
+        b=o2E8PHTg5OllqDq6GVg33q/MJFloPbC19QCKRSOfJfF71Q0wWb2PNmXZkEd39OsqtY
+         tdyKIbZIyYYhXB629zjafKU/zvsZWBpIe+iqRLozZnjbFY7044poB7LV4XJEnxxfgJA2
+         TaTVDsu4m42Tppiz5c2B99EUaStKjGbLiFm/jAe4cU0TBCVUNUdsMugbO6O2MMslS6qZ
+         xmskxJkB4UC52Me7qqRf2V95kUrzXFduOclSkLkQUFxGpl16ITwp4PpUORl4SUJJdK0j
+         8en05qbE1rcTvcYtbSpVd5KhskefH5C+wvBvT4W6BijR/baZ/wfLpHelvEmtvuq4BCRX
+         xSsQ==
+X-Gm-Message-State: AOAM5332AF0kn+otR+8tcepcrTKPLNVTJ0llqs8xmTQpt8qcFZDdMGbT
+        UAsim0uyVpCw8GzF13TvWNIayJgFFcB6dxUlRYg=
+X-Google-Smtp-Source: ABdhPJzauMa/Ot0U1RgZij3q0h3HTyM94KvNcvA/aLGZgnTSLbgGKZh+P9FTLJm1IVkyPxWffemDBYZqA+0CcqEX7dA=
+X-Received: by 2002:a25:6588:0:b0:65d:57b9:c470 with SMTP id
+ z130-20020a256588000000b0065d57b9c470mr29863596ybb.142.1654595840050; Tue, 07
+ Jun 2022 02:57:20 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1729d085-db83-4577-960f-08da486b134c
-X-MS-TrafficTypeDiagnostic: DBBPR04MB6316:EE_
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-Microsoft-Antispam-PRVS: <DBBPR04MB6316E8130C6774C5DD09951DC7A59@DBBPR04MB6316.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: RqjYFWhsSzPSCSOrRnTP7Zyln2HxFJHtAJQeYmGlCILTe7+KYf8QBCezW8LzoMzkosAsjdEsUDOHdzac8hA7aY+zu9htgOc5OtkqViRdbdEK4CCb21wXIXtZHTyMoaUDWmD7s2t2FZQfcAlLxyCjAawoVmmgUP1Sj9kfdZGWA69vPXCY8d+ZB5URJPXiinN+jwN1sv6Gdu6ABwfnHyzGXUcfQiWA6M7j2dUtl4S88GbXS79MURzWg38C08XMdtZv7QOGlzeVmbpdR3z2OjqW4asp6ljtehqxLDUvYXJJfLC7S2iHL8Twbps53Pzqqh4n0AcBzxs8Ozy28GDQLAQ4BLD9+sc4cKRkbWYQGstuuJtFRUQa9UWVtqG7zNRhS6okoBcUyzvg/tA4Pyu85RgZuzTzDb/6oBZemXWPZEHB6k9FrFZ2j3cFhXlJsQwhbUXohWK524g6J8iz//mbZFOHrEMJnsGa7ezB1ZIPmdM+1OuufJJHxjZTAn4jzloWR9enY+Vt0X8iAHEEWev/EGXMxafZRFIkLbppPYzDB+Ds7BgE6iQG0a+DN60A8M1nvIX7EP4vjWBiA1W6DFv/adelHFfEfY9o+FrAqs85RqqcqGq69zG1R1AYdU5mRFdH4rpVSzawlj4ri/dQMpGnMqqnAiQ+eKkbYNmQtSd8fEVdosmTfcXNxPssMc+bVCAO3I0SgTBJ467pGMFZTp6PccY0ODaVn5hM0EzlAYR6V8WSHSs=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0401MB2526.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(508600001)(2616005)(186003)(2906002)(66946007)(31696002)(86362001)(110136005)(6486002)(5660300002)(31686004)(6666004)(54906003)(36756003)(8676002)(4326008)(66556008)(66476007)(83380400001)(8936002)(6506007)(53546011)(6512007)(316002)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?svxXf6AZDDqk4X0mkBa3BSicTFAMgaWoZo0d/bDmnRSA9wTlyQB4Wewd08m5?=
- =?us-ascii?Q?CvvHFmUXlY6eOyPQMHQj761g14wrEbButuJFuWSbfQuHXLam9enWN/SD2gdY?=
- =?us-ascii?Q?2DzXThYnWIyTyxLA4+9sfscE2Bg6ve30bOjyadWKijRB0eAT/TTPv079Eg5M?=
- =?us-ascii?Q?GeHyt8OSws27cDQY9EBl/DQdoEKMM74ktdI8cH6xcPfuwIzVQ+Z3hxTweATl?=
- =?us-ascii?Q?fVVyvbEkMxIZcp1p68j+YZZr7AO95t8HJO3tB6R5oYu6Xhdsk4s9HmfUDL21?=
- =?us-ascii?Q?iw7W9F0ucVLx32pVcM1ZBxZ0u14Gdw/RuVwNwNw3Omeeh+TAzayeW/JrHWDH?=
- =?us-ascii?Q?2B8fQISNnfoAMHHVwWpsiOtDeMNwzYmQLyn1akNyEtAg1AyVakKAJeVeL1Xr?=
- =?us-ascii?Q?QhUCjnD2UT/9Pta1ejh4Gv5A1c3967lGkm4E9LeyQt1gubLBXkQIDbXj4Zqr?=
- =?us-ascii?Q?h5rAtyXB+oFqsYCmTkGFncgCwR7xS5XfafA9SimRTmYJqditNWI9+B15qMX3?=
- =?us-ascii?Q?eog8geXb+nM/a7xOY2Kac/BvDYR5lXOgLxuKBsWz+ZDXoHKd4RERvl1pwbM+?=
- =?us-ascii?Q?UJjtyZxwY/CkV7aibwAj9HBB61dI8suwkR8xHckzGeGAkqslYaa/kqsk9dz9?=
- =?us-ascii?Q?Zzej4NDkUmYrxUnrv7Z8vXqq1+8u0yiM6/B77izTUm6xOyXRhg8NUL61KNrv?=
- =?us-ascii?Q?7pw8GdtwYLun7+sKVtulxBP+XDncg8R/BtMgQcawKfNwTW2nHidTW3aeQHxZ?=
- =?us-ascii?Q?GS/2tPVZY87JfdcbV64mhOPkp9X/dtxhLRH/IHaqtTbU5tADpRudRrvjI/Y3?=
- =?us-ascii?Q?Z4ixS06juSKYDUM3kjaEqOOXaZSDP+wEf/GJQkUynkRHdFXuxshXFDw3k6YH?=
- =?us-ascii?Q?omeCV0u9DylMEiFyjw/aEUneu0qhDStvaq5h4pbqsmgrpIdpeE95WM1oNCf4?=
- =?us-ascii?Q?sCC5kNxh7+rBdVoQBPXBlZ99QFHsDlQ+SNDiQp++ae/lYbXrUUZVrD96Yyi1?=
- =?us-ascii?Q?1wfqzjEmKG4AU92/HtAunkVWyzfX3rek1rLjdAoFNRpjGLY0yoeyLfXfF+Sk?=
- =?us-ascii?Q?rrF5fj0q3+lFHtCp61ULkWQ6GndiZq94Cdy8wD4y1rA0u9LhXhZCW3bXM/OX?=
- =?us-ascii?Q?1O7GhGpDK3txLhCMH5nhI+P1qIuOKOd8TLvIjrc7nZj2FstAqGi/wXWLDVcl?=
- =?us-ascii?Q?RAncKga1bZz+kmczGvpT0UrIjZz18eiunz8/wyQZQGASsNlVYNky7qp6tmwI?=
- =?us-ascii?Q?Zv3um6rXX9jTi7+waWE/UA6Y7ufKlJAJ+CYP/307hiBlWIHwYj2/eDqiUlqB?=
- =?us-ascii?Q?VmjCr1g3e2G7dLsJZA3b6fT1H/UZ/yFJUjPboBgTkX1V46n8OudRd1fMG2T8?=
- =?us-ascii?Q?O2xeiUm/WqsQVLj+0idmlaYlCp+oJAkNF1iqglpQoiENn2j1W8bxGbcYX+AZ?=
- =?us-ascii?Q?TfVIs2/RSLnCWEJHDFZWSzUDaZb7SEO5TYh8Ykoyu9QLgyor7YV52ejOj7UB?=
- =?us-ascii?Q?DYekDYw5+nvvskFzofVaQYJizk88CIDbaaY7NMLlFepakHNxviKMDwi7fxT9?=
- =?us-ascii?Q?DATq09Lb+TxKYphbT6gF52MEluIz22KhHbVhrux7BC64mbXfEONb3+N8bcGr?=
- =?us-ascii?Q?QCKXPt5+4KRC8NmWYzYVOH70RQ7Oe8rCp1jvXeh67Y0Vdmm51h7OyuGpsVnG?=
- =?us-ascii?Q?M4qb27/ZYW3HgIvIlosHUys+NzvqENz8x/8TWAEYRGLvsEKMn0/RbDZYQIbf?=
- =?us-ascii?Q?4PTCd69XYlNbfCprTS1vVG5K5YYXgs4MdlpwwOz1r89orPu0vVUI9fPPjBMt?=
-X-MS-Exchange-AntiSpam-MessageData-1: 80WY3gAKzr+Y6A==
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1729d085-db83-4577-960f-08da486b134c
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR0401MB2526.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2022 09:49:55.0239
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: sCamLWblCkqYMtjiAcBCeLf9F7pNINuKz1TvrJM2ayMH+91ceesM0QrjomP+w2eADALVEaRx+xEb8GR50Tubjw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB6316
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220607085654.4178-1-srinivas.neeli@xilinx.com>
+ <20220607085654.4178-3-srinivas.neeli@xilinx.com> <20220607091952.gls5bgwplytbhmoq@pengutronix.de>
+In-Reply-To: <20220607091952.gls5bgwplytbhmoq@pengutronix.de>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Tue, 7 Jun 2022 18:57:09 +0900
+Message-ID: <CAMZ6Rq+XjBThwqXK4DmdxChutJp_N8Jm83Bd2b3EdXVQrhO_GA@mail.gmail.com>
+Subject: Re: [PATCH V2 2/2] can: xilinx_can: Add Transmitter delay
+ compensation (TDC) feature support
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Srinivas Neeli <srinivas.neeli@xilinx.com>, wg@grandegger.com,
+        davem@davemloft.net, edumazet@google.com,
+        appana.durga.rao@xilinx.com, sgoud@xilinx.com,
+        michal.simek@xilinx.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        git@xilinx.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-
-
-On 05.06.22 15:45, Vincent MAILHOL wrote:
+ On Tue. 7 Jun. 2022 at 18:19, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> Hello Srinivas Neeli,
 >
-> This is how I see things:
->   * In the open() function, the driver will do the coherent allocation
-> for its transfer_buffers, fill those into URBs and add all the URBs in
-> an anchor.
->   * During runtime, the driver will keep recycling the same URBs (no
-> need to kill URB nor to usb_free_coherent() the transfer_buffer).
-Yes.
->   * Finally, in the close() function, the driver has to kill the URBs
-> and usb_free_coherent() the transfer_buffers. As far as I understand,
-> no helper functions allow us to do all that, thus requiring the driver
-> to iterate through the anchor to manually usb_free_coherent() the
-> transfer buffer.
-Yes. But you cannot nicely solve that with a flag as you proposed. You
-would need to use a helper function.
-> So, the intent of this patch is to provide a method to both kill the
-> URBs and usb_free_coherent() the transfer buffer at once. The
-Well, you don't directly. Your patch frees the buffer together with the URB=
-.
-That has some uses, but you still would need to iterate over the URBs
-Yes, there is a helper for that, but then you cover one and only one
-use case, that is, you leave no way to free the buffers without
-at the same time discrading the URBs.
+> thanks for your patch!
+>
+> On 07.06.2022 14:26:54, Srinivas Neeli wrote:
+> > Added Transmitter delay compensation (TDC) feature support.
+> > In the case of higher measured loop delay with higher baud rates,
+> > observed bit stuff errors. By enabling the TDC feature in a controller,
+> > will compensate for the measure loop delay in the receive path.
+>
+> Wich controllers support TDC?
+>
+> XAXI_CANFD doesn't have do_get_auto_tdc assigned, but
+> CAN_CTRLMODE_TDC_AUTO is set.
+>
+> > Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
+> > ---
+> >  drivers/net/can/xilinx_can.c | 46 +++++++++++++++++++++++++++++++++---
+> >  1 file changed, 43 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.c
+> > index e179d311aa28..d0edd1bca33c 100644
+> > --- a/drivers/net/can/xilinx_can.c
+> > +++ b/drivers/net/can/xilinx_can.c
+> > @@ -1,7 +1,7 @@
+> >  // SPDX-License-Identifier: GPL-2.0-or-later
+> >  /* Xilinx CAN device driver
+> >   *
+> > - * Copyright (C) 2012 - 2014 Xilinx, Inc.
+> > + * Copyright (C) 2012 - 2022 Xilinx, Inc.
+> >   * Copyright (C) 2009 PetaLogix. All rights reserved.
+> >   * Copyright (C) 2017 - 2018 Sandvik Mining and Construction Oy
+> >   *
+> > @@ -99,6 +99,7 @@ enum xcan_reg {
+> >  #define XCAN_ESR_STER_MASK           0x00000004 /* Stuff error */
+> >  #define XCAN_ESR_FMER_MASK           0x00000002 /* Form error */
+> >  #define XCAN_ESR_CRCER_MASK          0x00000001 /* CRC error */
+> > +#define XCAN_SR_TDCV_MASK            0x007F0000 /* TDCV Value */
+> >  #define XCAN_SR_TXFLL_MASK           0x00000400 /* TX FIFO is full */
+> >  #define XCAN_SR_ESTAT_MASK           0x00000180 /* Error status */
+> >  #define XCAN_SR_ERRWRN_MASK          0x00000040 /* Error warning */
+> > @@ -132,6 +133,8 @@ enum xcan_reg {
+> >  #define XCAN_DLCR_BRS_MASK           0x04000000 /* BRS Mask in DLC */
+> >
+> >  /* CAN register bit shift - XCAN_<REG>_<BIT>_SHIFT */
+> > +#define XCAN_BRPR_TDCO_SHIFT         8  /* Transmitter Delay Compensation Offset */
+> > +#define XCAN_BRPR_TDC_ENABLE         BIT(16) /* Transmitter Delay Compensation (TDC) Enable */
+> >  #define XCAN_BTR_SJW_SHIFT           7  /* Synchronous jump width */
+> >  #define XCAN_BTR_TS2_SHIFT           4  /* Time segment 2 */
+> >  #define XCAN_BTR_SJW_SHIFT_CANFD     16 /* Synchronous jump width */
+> > @@ -140,6 +143,7 @@ enum xcan_reg {
+> >  #define XCAN_IDR_ID2_SHIFT           1  /* Extended Message Identifier */
+> >  #define XCAN_DLCR_DLC_SHIFT          28 /* Data length code */
+> >  #define XCAN_ESR_REC_SHIFT           8  /* Rx Error Count */
+> > +#define XCAN_SR_TDCV_SHIFT           16 /* TDCV Value */
+> >
+> >  /* CAN frame length constants */
+> >  #define XCAN_FRAME_MAX_DATA_LEN              8
+> > @@ -276,6 +280,16 @@ static const struct can_bittiming_const xcan_data_bittiming_const_canfd2 = {
+> >       .brp_inc = 1,
+> >  };
+> >
+> > +/* Transmission Delay Compensation constants for CANFD2.0 and Versal  */
+> > +static const struct can_tdc_const xcan_tdc_const = {
+> > +     .tdcv_min = 0,
+> > +     .tdcv_max = 0, /* Manual mode not supported. */
+> > +     .tdco_min = 0,
+> > +     .tdco_max = 64,
+> > +     .tdcf_min = 0, /* Filter window not supported */
+> > +     .tdcf_max = 0,
+> > +};
+> > +
+> >  /**
+> >   * xcan_write_reg_le - Write a value to the device register little endian
+> >   * @priv:    Driver private data structure
+> > @@ -424,6 +438,11 @@ static int xcan_set_bittiming(struct net_device *ndev)
+> >           priv->devtype.cantype == XAXI_CANFD_2_0) {> >               /* Setting Baud Rate prescalar value in F_BRPR Register */
+                                       ^^^^^^^^^
+Not related to this patch, but this is a typo. prescalar -> prescaler.
 
-You can do that, but it strikes me as unelegant.
+> >               btr0 = dbt->brp - 1;
+> > +             if (can_tdc_is_enabled(&priv->can)) {
+> > +                     btr0 = btr0 |
+>
+> Make use of "|=" and properly indent.
+>
+> > +                     priv->can.tdc.tdco << XCAN_BRPR_TDCO_SHIFT |
+>
+> Please include <linux/bitfield.h> and make use of "FIELD_PREP".
+>
+> > +                     XCAN_BRPR_TDC_ENABLE;
+> > +             }
+> >
+> >               /* Setting Time Segment 1 in BTR Register */
+> >               btr1 = dbt->prop_seg + dbt->phase_seg1 - 1;
+> > @@ -1483,6 +1502,23 @@ static int xcan_get_berr_counter(const struct net_device *ndev,
+> >       return 0;
+> >  }
+> >
+> > +/**
+> > + * xcan_get_auto_tdcv - Get Transmitter Delay Compensation Value
+> > + * @ndev:    Pointer to net_device structure
+> > + * @tdcv:    Pointer to TDCV value
+> > + *
+> > + * Return: 0 on success
+> > + */
+> > +static int xcan_get_auto_tdcv(const struct net_device *ndev, u32 *tdcv)
+> > +{
+> > +     struct xcan_priv *priv = netdev_priv(ndev);
+> > +
+> > +     *tdcv = (priv->read_reg(priv, XCAN_SR_OFFSET) & XCAN_SR_TDCV_MASK) >>
+> > +              XCAN_SR_TDCV_SHIFT;
+>
+> Please use FIELD_GET.
+>
+> > +
+> > +     return 0;
+> > +}
+> > +
+> >  static const struct net_device_ops xcan_netdev_ops = {
+> >       .ndo_open       = xcan_open,
+> >       .ndo_stop       = xcan_close,
+> > @@ -1734,18 +1770,22 @@ static int xcan_probe(struct platform_device *pdev)
+> >       priv->can.do_get_berr_counter = xcan_get_berr_counter;
+> >       priv->can.ctrlmode_supported = CAN_CTRLMODE_LOOPBACK |
+> >                                       CAN_CTRLMODE_BERR_REPORTING;
+> > +     priv->can.do_get_auto_tdcv = xcan_get_auto_tdcv;
+>
+> I'm not sure, if it has any side effects, if you assign do_get_auto_tdc
+> for all controllers, even the ones that don't support it. Vincent can
+> probably clarify this.
 
-=C2=A0=C2=A0=C2=A0 Regards
-=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 Oliver
+It should be fine. can_priv::do_get_auto_tdcv() gets called in one
+single location in can_tdc_fill_info(). c.f.
+https://elixir.bootlin.com/linux/v5.18/source/drivers/net/can/dev/netlink.c#L464
 
+can_tdc_fill_info() returns if can_priv::tdc_const is not populated.
+https://elixir.bootlin.com/linux/v5.18/source/drivers/net/can/dev/netlink.c#L438
+
+Below, you only assign tdc_const only for XAXI_CANFD_2_0, so this
+should be safe. *BUT*, I do not think this helps for the code
+readability so I encourage you to only populate
+can_priv::do_get_auto_tdcv() for the controllers which do support TDC.
+
+> >
+> >       if (devtype->cantype == XAXI_CANFD)
+> >               priv->can.data_bittiming_const =
+> >                       &xcan_data_bittiming_const_canfd;
+> >
+> > -     if (devtype->cantype == XAXI_CANFD_2_0)
+> > +     if (devtype->cantype == XAXI_CANFD_2_0) {
+> >               priv->can.data_bittiming_const =
+> >                       &xcan_data_bittiming_const_canfd2;
+> > +             priv->can.tdc_const = &xcan_tdc_const;
+
+Here, you only populate tdc_const for XAXI_CANFD_2_0...
+
+> > +     }
+> >
+> >       if (devtype->cantype == XAXI_CANFD ||
+> >           devtype->cantype == XAXI_CANFD_2_0)
+> > -             priv->can.ctrlmode_supported |= CAN_CTRLMODE_FD;
+> > +             priv->can.ctrlmode_supported |= CAN_CTRLMODE_FD |
+> > +                                             CAN_CTRLMODE_TDC_AUTO;
+
+...but here, you set the CAN_CTRLMODE_TDC_AUTO for both XAXI_CANFD and
+XAXI_CANFD_2_0. Isn’t this a mismatch?
+
+I suggest to have a single if block in which you populate all the TDC
+fields at once:
+|         if (devtype->cantype == XAXI_CANFD_2_0) {
+|                 priv->can.data_bittiming_const =
+|                         &xcan_data_bittiming_const_canfd2;
+|                 priv->can.tdc_const = &xcan_tdc_const;
+|                 priv->can.do_get_auto_tdcv = xcan_get_auto_tdcv;
+|                 priv->can.ctrlmode_supported |= CAN_CTRLMODE_TDC_AUTO;
+|         }
+
+> >       priv->reg_base = addr;
+> >       priv->tx_max = tx_max;
+
+
+Yours sincerely,
+Vincent Mailhol
