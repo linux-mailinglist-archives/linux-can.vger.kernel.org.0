@@ -2,55 +2,66 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E3D954223C
-	for <lists+linux-can@lfdr.de>; Wed,  8 Jun 2022 08:46:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E3FC5423D6
+	for <lists+linux-can@lfdr.de>; Wed,  8 Jun 2022 08:51:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240462AbiFHArp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 7 Jun 2022 20:47:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40338 "EHLO
+        id S243087AbiFHAsP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 7 Jun 2022 20:48:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1842260AbiFHAJB (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 7 Jun 2022 20:09:01 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680C9149DBB
-        for <linux-can@vger.kernel.org>; Tue,  7 Jun 2022 13:27:12 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nyfnA-0004V9-Bf; Tue, 07 Jun 2022 22:27:08 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 07BAC8E60C;
-        Tue,  7 Jun 2022 20:27:06 +0000 (UTC)
-Date:   Tue, 7 Jun 2022 22:27:06 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        linux-can <linux-can@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Max Staudt <max@enpas.org>, netdev <netdev@vger.kernel.org>
-Subject: Re: [PATCH v5 0/7] can: refactoring of can-dev module and of Kbuild
-Message-ID: <20220607202706.7fbongzs3ixzpydm@pengutronix.de>
-References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
- <20220604163000.211077-1-mailhol.vincent@wanadoo.fr>
- <2e8666f3-1bd9-8610-6b72-e56e669d3484@hartkopp.net>
- <CAMZ6RqKWUyf6dZmxG809-yvjg5wbLwPSLtEfv-MgPpJ5ra=iGQ@mail.gmail.com>
- <f161fdd0-415a-8ea1-0aad-3a3a19f1bfa8@hartkopp.net>
+        with ESMTP id S1449430AbiFGXJs (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 7 Jun 2022 19:09:48 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD2D1F5C5B;
+        Tue,  7 Jun 2022 13:46:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1654634754;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=5EXmhbBINWAX1iJ92pS7nRFv8qfOOWqr79b/Dpdp51E=;
+    b=RqreEK8DAmvUJvJ+ZocucZMHU5ApuzIv6BBlLrDYNCq2tol28Ufq+0FCXsxOi8hROq
+    u2P9DJcs5VvkzDl484gXs708gmuPH9TOKrNAktktNEGSe4YMoBeFUetV3Uwh6cSpbkgS
+    W6qOxhaiGU59jA7TaPCbzHolCR9YwrCjWR0CAo2SLEQjkk2FCvXD4+YC/SnvfafiR9NJ
+    IBgxLOnC+giORLI2KzB9xqpyJCEhk52LUuMnfJKYI5lb9zkwv1uhpBaAv3isxjBmCBvl
+    Bu7q171l+S59nA6AhvsoKSazrV1dsPrMD0R11wGZAKNDsilF/oFl282SDgevJogt3dBC
+    sZxQ==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1q3DbdV+Ofo7wY7W6Qxgy"
+X-RZG-CLASS-ID: mo00
+Received: from [172.20.10.8]
+    by smtp.strato.de (RZmta 47.45.0 DYNA|AUTH)
+    with ESMTPSA id R0691fy57Kjq8cw
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Tue, 7 Jun 2022 22:45:52 +0200 (CEST)
+Subject: Re: [RFC PATCH 05/13] can: slcan: simplify the device de-allocation
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        michael@amarulasolutions.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+References: <20220607094752.1029295-1-dario.binacchi@amarulasolutions.com>
+ <20220607094752.1029295-6-dario.binacchi@amarulasolutions.com>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <f03bf100-c53e-75e4-55f6-47db7c5a37c2@hartkopp.net>
+Date:   Tue, 7 Jun 2022 22:45:52 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="be3gaq45kmwca64p"
-Content-Disposition: inline
-In-Reply-To: <f161fdd0-415a-8ea1-0aad-3a3a19f1bfa8@hartkopp.net>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220607094752.1029295-6-dario.binacchi@amarulasolutions.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,66 +69,62 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On 07.06.22 11:47, Dario Binacchi wrote:
+> Since slcan_devs array contains the addresses of the created devices, I
+> think it is more natural to use its address to remove it from the list.
+> It is not necessary to store the index of the array that points to the
+> device in the driver's private data.
 
---be3gaq45kmwca64p
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+IMO this patch should not be part of the slcan enhancement series.
 
-On 07.06.2022 22:12:46, Oliver Hartkopp wrote:
-> So what about:
->=20
->   symbol: CONFIG_NETDEVICES
->   |
->   +-> CAN Device Drivers
->       symbol: CONFIG_CAN_DEV
->       |
->       +-> software/virtual CAN device drivers
->       |   (at time of writing: slcan, vcan, vxcan)
->       |
->       +-> hardware CAN device drivers with Netlink support
->           symbol: CONFIG_CAN_NETLINK (matches previous CONFIG_CAN_DEV)
->           |
->           +-> CAN bit-timing calculation (optional for all drivers)
->           |   symbol: CONFIG_CAN_BITTIMING
->           |
->           +-> CAN rx offload (optional but selected by some drivers)
->           |   symbol: CONFIG_CAN_RX_OFFLOAD
->           |
->           +-> CAN devices drivers
->               (some may select CONFIG_CAN_RX_OFFLOAD)
->=20
-> (I also added 'hardware' to CAN device drivers with Netlink support) to h=
-ave
-> a distinction to 'software/virtual' CAN device drivers)
+I can see the "miss-use" of dev->base_addr but when we change this code 
+we should also take care of a similar handling in drivers/net/slip/slip.c
 
-The line between hardware and software/virtual devices ist blurry, the
-new can327 driver uses netlink and the slcan is currently being
-converted....
+Therefore a change like this should be done in slcan.c and slip.c 
+simultaneously with a single patch.
 
-> At least this would help me to understand the new configuration setup.
+Best regards,
+Oliver
 
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---be3gaq45kmwca64p
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKftJcACgkQrX5LkNig
-010rdwf5AUPYBTdJwcRgNV7YEssM6aMUpKhLxP4yEIJIYnySSUNhKOtPk4M4EUbr
-Kotj3KZDHtuwOQWG/IVr+1Amf3D3U1D0O5uJI7MzrUevZB1SJLmLJZINNETlg6OB
-Qkc0PTP2QApy8WSp/p5v50p3/JXKI87dnw3voHZaMR3GtWRdV5oLvY6PMXAFonjg
-i9jtJebTbTddPujmvBMXW6SglL1f+0Xm52JLC+aMQ4uCnBFMG9f4WxAblZ5JNGJI
-PrT74Nh6w9jwOyG46IMUe446DLEAu/v2zvt8nbbknsyM0Pt59+bZYWlrVFU025Dz
-6NvUd0zOM47E/CCmCCfb7wIEWIC/Gg==
-=XKVp
------END PGP SIGNATURE-----
-
---be3gaq45kmwca64p--
+> 
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> ---
+> 
+>   drivers/net/can/slcan.c | 15 ++++++++++-----
+>   1 file changed, 10 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/net/can/slcan.c b/drivers/net/can/slcan.c
+> index 956b47bd40a7..4df0455e11a2 100644
+> --- a/drivers/net/can/slcan.c
+> +++ b/drivers/net/can/slcan.c
+> @@ -428,11 +428,17 @@ static int slc_open(struct net_device *dev)
+>   
+>   static void slc_dealloc(struct slcan *sl)
+>   {
+> -	int i = sl->dev->base_addr;
+> +	unsigned int i;
+>   
+> -	free_candev(sl->dev);
+> -	if (slcan_devs)
+> -		slcan_devs[i] = NULL;
+> +	for (i = 0; i < maxdev; i++) {
+> +		if (sl->dev == slcan_devs[i]) {
+> +			free_candev(sl->dev);
+> +			slcan_devs[i] = NULL;
+> +			return;
+> +		}
+> +	}
+> +
+> +	pr_err("slcan: can't free %s resources\n",  sl->dev->name);
+>   }
+>   
+>   static int slcan_change_mtu(struct net_device *dev, int new_mtu)
+> @@ -529,7 +535,6 @@ static struct slcan *slc_alloc(void)
+>   
+>   	snprintf(dev->name, sizeof(dev->name), "slcan%d", i);
+>   	dev->netdev_ops = &slc_netdev_ops;
+> -	dev->base_addr  = i;
+>   	sl = netdev_priv(dev);
+>   
+>   	/* Initialize channel control data */
+> 
