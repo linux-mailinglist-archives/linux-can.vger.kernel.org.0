@@ -2,129 +2,109 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E3FC5423D6
-	for <lists+linux-can@lfdr.de>; Wed,  8 Jun 2022 08:51:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70E34542729
+	for <lists+linux-can@lfdr.de>; Wed,  8 Jun 2022 08:59:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243087AbiFHAsP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 7 Jun 2022 20:48:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45384 "EHLO
+        id S1443807AbiFHCDQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 7 Jun 2022 22:03:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1449430AbiFGXJs (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 7 Jun 2022 19:09:48 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD2D1F5C5B;
-        Tue,  7 Jun 2022 13:46:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1654634754;
+        with ESMTP id S243368AbiFHBzQ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 7 Jun 2022 21:55:16 -0400
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41531F7DAA;
+        Tue,  7 Jun 2022 13:52:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1654635116;
     s=strato-dkim-0002; d=hartkopp.net;
     h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
     From:Subject:Sender;
-    bh=5EXmhbBINWAX1iJ92pS7nRFv8qfOOWqr79b/Dpdp51E=;
-    b=RqreEK8DAmvUJvJ+ZocucZMHU5ApuzIv6BBlLrDYNCq2tol28Ufq+0FCXsxOi8hROq
-    u2P9DJcs5VvkzDl484gXs708gmuPH9TOKrNAktktNEGSe4YMoBeFUetV3Uwh6cSpbkgS
-    W6qOxhaiGU59jA7TaPCbzHolCR9YwrCjWR0CAo2SLEQjkk2FCvXD4+YC/SnvfafiR9NJ
-    IBgxLOnC+giORLI2KzB9xqpyJCEhk52LUuMnfJKYI5lb9zkwv1uhpBaAv3isxjBmCBvl
-    Bu7q171l+S59nA6AhvsoKSazrV1dsPrMD0R11wGZAKNDsilF/oFl282SDgevJogt3dBC
-    sZxQ==
+    bh=JXSiYxgFZZ2tjAxBcyTrI4C3XZX0DeCU5mEV+jv6R6k=;
+    b=tTIXRIwQyepuLXyRIEgr8laM1lqaJ/fmrXqiArmaPMoqiCXCC9HO6/UVS7VAqP3tyf
+    Vvfg+spfS8Cm5h5lUdih2JmXw5jluDL4lUFeB1qpQp3K2x5isOTq+wYHGfHQYo5gLxwA
+    OU/VijO4lXs8jPIFuQB4aGnGyrcuHQ0Zj2qZ3JGOISSO7aSY7GXlI0tQFZ/UpOoPulPm
+    mIQ4fC8b1hbuyCmvdX1MTezHbP+PUoRwMz3VZx6jFc3Y51OUltbeZkk/p1RGCaHV4zpk
+    aYB3UdEu1zQMZMoJ4SaU17Zv9/Eal9EHj+jLOJSaN0mY78t3tCexZXA3TrRj2qs2yNbc
+    JmpA==
 Authentication-Results: strato.com;
     dkim=none
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1q3DbdV+Ofo7wY7W6Qxgy"
 X-RZG-CLASS-ID: mo00
 Received: from [172.20.10.8]
     by smtp.strato.de (RZmta 47.45.0 DYNA|AUTH)
-    with ESMTPSA id R0691fy57Kjq8cw
+    with ESMTPSA id R0691fy57Kpt8dN
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-    Tue, 7 Jun 2022 22:45:52 +0200 (CEST)
-Subject: Re: [RFC PATCH 05/13] can: slcan: simplify the device de-allocation
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        michael@amarulasolutions.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-References: <20220607094752.1029295-1-dario.binacchi@amarulasolutions.com>
- <20220607094752.1029295-6-dario.binacchi@amarulasolutions.com>
+    Tue, 7 Jun 2022 22:51:55 +0200 (CEST)
+Subject: Re: [PATCH v5 0/7] can: refactoring of can-dev module and of Kbuild
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        linux-can <linux-can@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Max Staudt <max@enpas.org>, netdev <netdev@vger.kernel.org>
+References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
+ <20220604163000.211077-1-mailhol.vincent@wanadoo.fr>
+ <2e8666f3-1bd9-8610-6b72-e56e669d3484@hartkopp.net>
+ <CAMZ6RqKWUyf6dZmxG809-yvjg5wbLwPSLtEfv-MgPpJ5ra=iGQ@mail.gmail.com>
+ <f161fdd0-415a-8ea1-0aad-3a3a19f1bfa8@hartkopp.net>
+ <20220607202706.7fbongzs3ixzpydm@pengutronix.de>
 From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <f03bf100-c53e-75e4-55f6-47db7c5a37c2@hartkopp.net>
-Date:   Tue, 7 Jun 2022 22:45:52 +0200
+Message-ID: <44670e69-6d67-c6c7-160c-1ae6e740aabb@hartkopp.net>
+Date:   Tue, 7 Jun 2022 22:51:54 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <20220607094752.1029295-6-dario.binacchi@amarulasolutions.com>
+In-Reply-To: <20220607202706.7fbongzs3ixzpydm@pengutronix.de>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 07.06.22 11:47, Dario Binacchi wrote:
-> Since slcan_devs array contains the addresses of the created devices, I
-> think it is more natural to use its address to remove it from the list.
-> It is not necessary to store the index of the array that points to the
-> device in the driver's private data.
 
-IMO this patch should not be part of the slcan enhancement series.
 
-I can see the "miss-use" of dev->base_addr but when we change this code 
-we should also take care of a similar handling in drivers/net/slip/slip.c
+On 07.06.22 22:27, Marc Kleine-Budde wrote:
+> On 07.06.2022 22:12:46, Oliver Hartkopp wrote:
+>> So what about:
+>>
+>>    symbol: CONFIG_NETDEVICES
+>>    |
+>>    +-> CAN Device Drivers
+>>        symbol: CONFIG_CAN_DEV
+>>        |
+>>        +-> software/virtual CAN device drivers
+>>        |   (at time of writing: slcan, vcan, vxcan)
+>>        |
+>>        +-> hardware CAN device drivers with Netlink support
+>>            symbol: CONFIG_CAN_NETLINK (matches previous CONFIG_CAN_DEV)
+>>            |
+>>            +-> CAN bit-timing calculation (optional for all drivers)
+>>            |   symbol: CONFIG_CAN_BITTIMING
+>>            |
+>>            +-> CAN rx offload (optional but selected by some drivers)
+>>            |   symbol: CONFIG_CAN_RX_OFFLOAD
+>>            |
+>>            +-> CAN devices drivers
+>>                (some may select CONFIG_CAN_RX_OFFLOAD)
+>>
+>> (I also added 'hardware' to CAN device drivers with Netlink support) to have
+>> a distinction to 'software/virtual' CAN device drivers)
+> 
+> The line between hardware and software/virtual devices ist blurry, the
+> new can327 driver uses netlink and the slcan is currently being
+> converted....
 
-Therefore a change like this should be done in slcan.c and slip.c 
-simultaneously with a single patch.
+Right, which could mean that slcan and can327 should be located in the 
+'usual' CAN device driver section and not in the sw/virtual device section.
+
+The slcan and can327 need some kind of hardware - while vcan and vxcan 
+don't.
 
 Best regards,
 Oliver
-
-> 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> ---
-> 
->   drivers/net/can/slcan.c | 15 ++++++++++-----
->   1 file changed, 10 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/net/can/slcan.c b/drivers/net/can/slcan.c
-> index 956b47bd40a7..4df0455e11a2 100644
-> --- a/drivers/net/can/slcan.c
-> +++ b/drivers/net/can/slcan.c
-> @@ -428,11 +428,17 @@ static int slc_open(struct net_device *dev)
->   
->   static void slc_dealloc(struct slcan *sl)
->   {
-> -	int i = sl->dev->base_addr;
-> +	unsigned int i;
->   
-> -	free_candev(sl->dev);
-> -	if (slcan_devs)
-> -		slcan_devs[i] = NULL;
-> +	for (i = 0; i < maxdev; i++) {
-> +		if (sl->dev == slcan_devs[i]) {
-> +			free_candev(sl->dev);
-> +			slcan_devs[i] = NULL;
-> +			return;
-> +		}
-> +	}
-> +
-> +	pr_err("slcan: can't free %s resources\n",  sl->dev->name);
->   }
->   
->   static int slcan_change_mtu(struct net_device *dev, int new_mtu)
-> @@ -529,7 +535,6 @@ static struct slcan *slc_alloc(void)
->   
->   	snprintf(dev->name, sizeof(dev->name), "slcan%d", i);
->   	dev->netdev_ops = &slc_netdev_ops;
-> -	dev->base_addr  = i;
->   	sl = netdev_priv(dev);
->   
->   	/* Initialize channel control data */
-> 
