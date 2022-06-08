@@ -2,42 +2,43 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99819542368
-	for <lists+linux-can@lfdr.de>; Wed,  8 Jun 2022 08:51:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 966AA54222E
+	for <lists+linux-can@lfdr.de>; Wed,  8 Jun 2022 08:46:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239078AbiFHCq3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 7 Jun 2022 22:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53450 "EHLO
+        id S1354732AbiFHCqc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 7 Jun 2022 22:46:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354025AbiFHCgH (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 7 Jun 2022 22:36:07 -0400
-Received: from mail.enpas.org (zhong.enpas.org [IPv6:2a03:4000:2:537::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C99EE13F928;
-        Tue,  7 Jun 2022 17:15:46 -0700 (PDT)
+        with ESMTP id S1447685AbiFHCmF (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 7 Jun 2022 22:42:05 -0400
+Received: from mail.enpas.org (zhong.enpas.org [46.38.239.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A54E197633;
+        Tue,  7 Jun 2022 17:22:13 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
-        by mail.enpas.org (Postfix) with ESMTPSA id AD247FFB6C;
-        Wed,  8 Jun 2022 00:15:44 +0000 (UTC)
-Date:   Wed, 8 Jun 2022 02:15:37 +0200
+        by mail.enpas.org (Postfix) with ESMTPSA id CD01CFFB6C;
+        Wed,  8 Jun 2022 00:22:12 +0000 (UTC)
+Date:   Wed, 8 Jun 2022 02:22:10 +0200
 From:   Max Staudt <max@enpas.org>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        michael@amarulasolutions.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [RFC PATCH 00/13] can: slcan: extend supported features
-Message-ID: <20220608021537.04c45cf9.max@enpas.org>
-In-Reply-To: <20220607094752.1029295-1-dario.binacchi@amarulasolutions.com>
-References: <20220607094752.1029295-1-dario.binacchi@amarulasolutions.com>
+        linux-can@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        netdev <netdev@vger.kernel.org>
+Subject: Re: [PATCH v5 4/7] can: Kconfig: add CONFIG_CAN_RX_OFFLOAD
+Message-ID: <20220608022123.05f73356.max@enpas.org>
+In-Reply-To: <20220607171455.0a75020c@kernel.org>
+References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
+        <20220604163000.211077-1-mailhol.vincent@wanadoo.fr>
+        <20220604163000.211077-5-mailhol.vincent@wanadoo.fr>
+        <CAMuHMdXkq7+yvD=ju-LY14yOPkiiHwL6H+9G-4KgX=GJjX=h9g@mail.gmail.com>
+        <CAMZ6RqLEEHOZjrMH+-GLC--jjfOaWYOPLf+PpefHwy=cLpWTYg@mail.gmail.com>
+        <20220607182216.5fb1084e.max@enpas.org>
+        <20220607150614.6248c504@kernel.org>
+        <20220608014248.6e0045ae.max@enpas.org>
+        <20220607171455.0a75020c@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
@@ -50,33 +51,36 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Dario, thank you so much for working on slcan!
+On Tue, 7 Jun 2022 17:14:55 -0700
+Jakub Kicinski <kuba@kernel.org> wrote:
+
+> We have a ton of "magical" / hidden Kconfigs in networking, take a
+> look at net/Kconfig. Quick grep, likely not very accurate but FWIW:
+
+Fair enough. Thinking about it, I've grepped my distro's kernel config
+for features more than just a handful of times...
 
 
-To speed up the slcan cleanup, may I suggest looking at can327?
+> > How about making RX_OFFLOAD a separate .ko file, so we don't have
+> > various possible versions of can_dev.ko?
+> > 
+> > @Vincent, I think you suggested that some time ago, IIRC?
+> > 
+> > (I know, I was against a ton of little modules, but I'm changing my
+> > ways here now since it seems to help...)  
+> 
+> A separate module wouldn't help with my objections, I don't think.
 
-It started as a modification of slcan, and over the past few months,
-it has gone through several review rounds in upstreaming. In fact, a
-*ton* of things pointed out during reviews would apply 1:1 to slcan.
+In a system where the CAN stack is compiled as modules (i.e. a regular
+desktop distribution), the feature's presence/absence would be easily
+visible via the .ko file's presence/absence.
 
-What's more, there's legacy stuff that's no longer needed. No
-SLCAN_MAGIC, no slcan_devs, ... it's all gone in can327. May I suggest
-you have a look at it and bring slcan's boilerplate in line with it?
+Then again, I have to agree, distributing a system where RX_OFFLOAD is
+present, but no drivers using it whatsoever, seems... strange.
 
-It's certainly not perfect (7 patch series and counting, and that's
-just the public ones), but I'm sure that looking at the two drivers
-side-by-side could serve as a good starting point, to avoid
-re-reviewing the same things all over again.
+I guess I got lost in my thinking there, with my out of tree
+development and all. Sorry for the noise.
 
-
-The current out-of-tree version can be found here (the repo name is
-still the old one, elmcan), where I occasionally push changes before
-bundling them up into an upstreaming patch. If a specific line seems
-strange to you, "git blame" on this repo is likely to dig up a helpful
-commit message, explaining the choice:
-
-  https://github.com/norly/elmcan
-  https://git.enpas.org/?p=elmcan.git
 
 
 Max
