@@ -2,117 +2,119 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10A7E542221
-	for <lists+linux-can@lfdr.de>; Wed,  8 Jun 2022 08:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2972A5428A5
+	for <lists+linux-can@lfdr.de>; Wed,  8 Jun 2022 09:58:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232939AbiFHFBu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Wed, 8 Jun 2022 01:01:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60896 "EHLO
+        id S233217AbiFHHzx (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 8 Jun 2022 03:55:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233094AbiFHFBl (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 8 Jun 2022 01:01:41 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C8823104C6;
-        Tue,  7 Jun 2022 18:43:48 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-2ef5380669cso194218037b3.9;
-        Tue, 07 Jun 2022 18:43:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=yFX0ScDTbzbhgTtVTbyM2Jww+3EPJG7CHlISZZneC/A=;
-        b=59JWVnM5HhUO/XryciH+kETEnIMZKp6yYAI6JqVjVOPNHOdDIuMqg1oGzU1YaWrdAn
-         SVTlNO4DMVuQOOeW7p5maH9JOzxVefRCnqJ7/e5nlSaoKrohtFHZ5Tb2t+sBMaG9M/U6
-         va9m9npND9TKtvJaw0TSODomwle4QdZeCA6gy5ZzBm1I5S5qOAqbO4Tphj9jQscd9mtw
-         O4cWHQDysNF/Z/3fSoH2V8ug+iI2dZk9fzyxla2EXCynqW9qPnwAfLO311wMswIlh9TR
-         1Hf8tDXVyNUd62ftgWohvCOaWBTDd0Q8J7WYq72RlFruDlv/lXHZndbs4dhQuVwvNIrs
-         /l6Q==
-X-Gm-Message-State: AOAM530kaMI0kf9BlQ3Q/fUFE5UKVmK622sO7ZjOvrMblEsANv7KDmD+
-        debHyCItfLAv/p7b4T6RwVFIvB+xiMPWdKsefBU=
-X-Google-Smtp-Source: ABdhPJy/8H+x3FlXFOirCvhyOHm/sGzv12loESI0dHu34OYJFkJP3OB773LdV2b1aJSA777LrGPhTaCfKxI1y8+y1yI=
-X-Received: by 2002:a81:5ad6:0:b0:300:3244:341 with SMTP id
- o205-20020a815ad6000000b0030032440341mr35299576ywb.191.1654652305684; Tue, 07
- Jun 2022 18:38:25 -0700 (PDT)
+        with ESMTP id S233600AbiFHHzk (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 8 Jun 2022 03:55:40 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340591DB1F3
+        for <linux-can@vger.kernel.org>; Wed,  8 Jun 2022 00:24:33 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nyq2V-0006tL-8N; Wed, 08 Jun 2022 09:23:39 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 09B2E8EA6B;
+        Wed,  8 Jun 2022 07:19:47 +0000 (UTC)
+Date:   Wed, 8 Jun 2022 09:19:47 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Max Staudt <max@enpas.org>
+Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        linux-kernel@vger.kernel.org,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        michael@amarulasolutions.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [RFC PATCH 00/13] can: slcan: extend supported features
+Message-ID: <20220608071947.pwl4whyzqpyubzqn@pengutronix.de>
+References: <20220607094752.1029295-1-dario.binacchi@amarulasolutions.com>
+ <20220608021537.04c45cf9.max@enpas.org>
 MIME-Version: 1.0
-References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
- <20220604163000.211077-1-mailhol.vincent@wanadoo.fr> <20220604163000.211077-5-mailhol.vincent@wanadoo.fr>
- <CAMuHMdXkq7+yvD=ju-LY14yOPkiiHwL6H+9G-4KgX=GJjX=h9g@mail.gmail.com>
- <CAMZ6RqLEEHOZjrMH+-GLC--jjfOaWYOPLf+PpefHwy=cLpWTYg@mail.gmail.com>
- <20220607182216.5fb1084e.max@enpas.org> <20220607150614.6248c504@kernel.org>
- <20220608014248.6e0045ae.max@enpas.org> <20220607171455.0a75020c@kernel.org>
-In-Reply-To: <20220607171455.0a75020c@kernel.org>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Wed, 8 Jun 2022 10:38:15 +0900
-Message-ID: <CAMZ6RqJhshinGuG-wVAwyTiS42ZzwBRE1mdeiPg5gwamAVAR3Q@mail.gmail.com>
-Subject: Re: [PATCH v5 4/7] can: Kconfig: add CONFIG_CAN_RX_OFFLOAD
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Max Staudt <max@enpas.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zltmsl6xgx33hokg"
+Content-Disposition: inline
+In-Reply-To: <20220608021537.04c45cf9.max@enpas.org>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed. 8 juin 2022 at 09:14, Jakub Kicinski <kuba@kernel.org> wrote:
-> On Wed, 8 Jun 2022 01:43:54 +0200 Max Staudt wrote:
-> > It seems strange to me to magically build some extra features into
-> > can_dev.ko, depending on whether some other .ko files are built in that
-> > very same moment, or not. By "magically", I mean an invisible Kconfig
-> > option. This is why I think Vincent's approach is best here, by making
-> > the drivers a clearly visible subset of the RX_OFFLOAD option in
-> > Kconfig, and RX_OFFLOAD user-selectable.
->
-> Sorry for a chunked response, vger becoming unresponsive the week after
-> the merge window seems to become a tradition :/
->
-> We have a ton of "magical" / hidden Kconfigs in networking, take a look
-> at net/Kconfig. Quick grep, likely not very accurate but FWIW:
->
-> # not-hidden
-> $ git grep -c -E '(bool|tristate)..' net/Kconfig
-> net/Kconfig:23
->
-> # hidden
-> $ git grep -c -E '(bool|tristate)$' net/Kconfig
-> net/Kconfig:20
 
-OK. So we have a proposal to make CAN_RX_OFFLOAD an hidden
-configuration. I did not consider this approach before because the CAN
-subsystem *never* relies on this and I did not really explore other
-Kbuild files.
-| $ git grep -c -E '(bool|tristate)$' net/can/Kconfig
-| <no output>
+--zltmsl6xgx33hokg
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Before pushing my driver upstream, it was also an out of tree module
-for about one year and I relate a lot to what Max said. But Jakub
-explanations are consistent and reflect the best practices of the
-kernel development.
-Also, mainstream distribution would do an allyesconfig and ship the
-can-dev.ko with everything built in. So the lambda user would still
-have everything built-in.
+On 08.06.2022 02:15:37, Max Staudt wrote:
+> To speed up the slcan cleanup, may I suggest looking at can327?
+>=20
+> It started as a modification of slcan, and over the past few months,
+> it has gone through several review rounds in upstreaming. In fact, a
+> *ton* of things pointed out during reviews would apply 1:1 to slcan.
+>=20
+> What's more, there's legacy stuff that's no longer needed. No
+> SLCAN_MAGIC, no slcan_devs, ... it's all gone in can327. May I suggest
+> you have a look at it and bring slcan's boilerplate in line with it?
 
-I will let people continue to comment for a couple of days before
-making the final choice and sending the next version. But so far, I am
-leading toward Jakub’s idea to make it a hidden feature.
++1
 
-> > How about making RX_OFFLOAD a separate .ko file, so we don't have
-> > various possible versions of can_dev.ko?
-> >
-> > @Vincent, I think you suggested that some time ago, IIRC?
-> >
-> > (I know, I was against a ton of little modules, but I'm changing my
-> > ways here now since it seems to help...)
->
-> A separate module wouldn't help with my objections, I don't think.
+Most of Dario's series looks good. I suggest that we mainline this
+first. If there's interest and energy the slcan driver can be reworked
+to re-use the more modern concepts of the can327 driver.
+
+> It's certainly not perfect (7 patch series and counting, and that's
+> just the public ones), but I'm sure that looking at the two drivers
+> side-by-side could serve as a good starting point, to avoid
+> re-reviewing the same things all over again.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--zltmsl6xgx33hokg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKgTZAACgkQrX5LkNig
+013DMQf+Oowv9u1tls3YgQbK2Ek0zFsMF5BZXa9eBmGDKBf+HIIQx5g0+pzec8gq
+wBRNRaOlS1KGLewF86lK9yPxUG/CpwB9NpIDDsLtG+kL/AGfuj4Kguf/LfbjtOpV
+0vAibm8x7iyJB5AKmAgnyf9F32He0evcBCam2ZbItdLLVJT3txmhCQmvIK5gQj8S
+v342uBUKiTfyy+q1Z+7OfzX+iPsmRgjgz4IGNr4d/x8GvD3LMtMdFWCSKmyv0ZJ6
+JTdoUILLkMj6R2w9xnurIsz1RtJXJXMHNgBu1gDx9SMGxw9MlhTC7Bv0LKJ+bJZ6
+A05xF3jOzD+bLkfQF9X7a5702XOG8g==
+=1VoJ
+-----END PGP SIGNATURE-----
+
+--zltmsl6xgx33hokg--
