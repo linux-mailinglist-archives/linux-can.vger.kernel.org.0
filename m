@@ -2,26 +2,56 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42BE95430EC
-	for <lists+linux-can@lfdr.de>; Wed,  8 Jun 2022 14:57:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4644D543926
+	for <lists+linux-can@lfdr.de>; Wed,  8 Jun 2022 18:34:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238976AbiFHM4A (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 8 Jun 2022 08:56:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40126 "EHLO
+        id S245515AbiFHQeA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 8 Jun 2022 12:34:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239510AbiFHMz6 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 8 Jun 2022 08:55:58 -0400
-Received: from mail.enpas.org (zhong.enpas.org [IPv6:2a03:4000:2:537::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ADA4326AFD;
-        Wed,  8 Jun 2022 05:55:54 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        by mail.enpas.org (Postfix) with ESMTPSA id 18FEC100022;
-        Wed,  8 Jun 2022 12:55:52 +0000 (UTC)
-Date:   Wed, 8 Jun 2022 14:55:49 +0200
-From:   Max Staudt <max@enpas.org>
+        with ESMTP id S1343581AbiFHQdX (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 8 Jun 2022 12:33:23 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4B0304B6C
+        for <linux-can@vger.kernel.org>; Wed,  8 Jun 2022 09:33:21 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id a29so5552289lfk.2
+        for <linux-can@vger.kernel.org>; Wed, 08 Jun 2022 09:33:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Nczzxga2VzTI61hjMGVwlFiToqM1MiMF50/6VC0BnkQ=;
+        b=HI9q91KmJnodakEMkkvIcxiYFhZNvzMEhXQFmkw2A+WEQNB2WvWMTR52zXEbtXiGC7
+         Eb8G/wOjNPG4o+Zf4VOC/PTnskLo2rvM/HO2McFqvH3VOfDwp1F73zj3kj2H8Y2Ty1Np
+         GOEiXuyyi8OiCcRkDb3E4hU5I8sGAQia/RdhM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Nczzxga2VzTI61hjMGVwlFiToqM1MiMF50/6VC0BnkQ=;
+        b=OULPfrJoiNjdd0niROAWbGHBdtW9pedjAHLVCsZ/M6K6KOczR+jUnbIz80HPlFcTZm
+         XGxafRP09YkWmNjpz857y9kVsftofiLvqjjyw2rVMNCKOjtnLscpgW4k4HTl1wlhzZAE
+         uO7qPg1A+2QEq4914KJB7i+xqAeCzENOWvd85kHuT2TmcEVLc+HAeL7HSHRAzSeMY8D0
+         rCgxWgi52cxBDTsGULBG/ucTB1hQ4RbueAKm1OOpFl16QSAuMOGEEDLnUno6JXbewpXJ
+         qz3Ery3ckeETi+Ehcvxl3UmkjppIiwddEfTZP6BDIBQtZXM7pTuAqhtllQXCNc01DL+g
+         Q5VA==
+X-Gm-Message-State: AOAM533Evq0lnNZso5hpcVQH0Y/BV2YnPgJVl2zByJDx39xGiMxwbOeV
+        cBBrYwmXQJQNuEPOmL9n8Zgyb3bu0AK6EL2je5CaIQ==
+X-Google-Smtp-Source: ABdhPJzFy7nO2qnr5fKv1EOnBJmnn8JMOGWwCMrZHyWK3WGmMlta2rubmQComAvKJH2Vek8siCSqG/+MbMYHJs8DBgA=
+X-Received: by 2002:a05:6512:3a89:b0:479:52fc:f80a with SMTP id
+ q9-20020a0565123a8900b0047952fcf80amr8910198lfu.120.1654705999913; Wed, 08
+ Jun 2022 09:33:19 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220607094752.1029295-1-dario.binacchi@amarulasolutions.com>
+ <20220607094752.1029295-12-dario.binacchi@amarulasolutions.com> <20220607105225.xw33w32en7fd4vmh@pengutronix.de>
+In-Reply-To: <20220607105225.xw33w32en7fd4vmh@pengutronix.de>
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date:   Wed, 8 Jun 2022 18:33:08 +0200
+Message-ID: <CABGWkvozX51zeQt16bdh+edsjwqST5A11qtfxYjTvP030DnToQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 11/13] can: slcan: add ethtool support to reset
+ adapter errors
 To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        linux-kernel@vger.kernel.org,
+Cc:     linux-kernel@vger.kernel.org,
         Amarula patchwork <linux-amarula@amarulasolutions.com>,
         michael@amarulasolutions.com,
         "David S. Miller" <davem@davemloft.net>,
@@ -34,49 +64,73 @@ Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
         Wolfgang Grandegger <wg@grandegger.com>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [RFC PATCH 00/13] can: slcan: extend supported features
-Message-ID: <20220608145549.67f0f831.max@enpas.org>
-In-Reply-To: <20220608071947.pwl4whyzqpyubzqn@pengutronix.de>
-References: <20220607094752.1029295-1-dario.binacchi@amarulasolutions.com>
-        <20220608021537.04c45cf9.max@enpas.org>
-        <20220608071947.pwl4whyzqpyubzqn@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed, 8 Jun 2022 09:19:47 +0200
-Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+Hi Marc,
 
-> On 08.06.2022 02:15:37, Max Staudt wrote:
-> > To speed up the slcan cleanup, may I suggest looking at can327?
-> > 
-> > It started as a modification of slcan, and over the past few months,
-> > it has gone through several review rounds in upstreaming. In fact, a
-> > *ton* of things pointed out during reviews would apply 1:1 to slcan.
-> > 
-> > What's more, there's legacy stuff that's no longer needed. No
-> > SLCAN_MAGIC, no slcan_devs, ... it's all gone in can327. May I
-> > suggest you have a look at it and bring slcan's boilerplate in line
-> > with it?  
-> 
-> +1
-> 
-> Most of Dario's series looks good. I suggest that we mainline this
-> first. If there's interest and energy the slcan driver can be reworked
-> to re-use the more modern concepts of the can327 driver.
+On Tue, Jun 7, 2022 at 12:52 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+>
+> On 07.06.2022 11:47:50, Dario Binacchi wrote:
+> > This patch adds a private flag to the slcan driver to switch the
+> > "err-rst-on-open" setting on and off.
+> >
+> > "err-rst-on-open" on  - Reset error states on opening command
+> >
+> > "err-rst-on-open" off - Don't reset error states on opening command
+> >                         (default)
+> >
+> > The setting can only be changed if the interface is down:
+> >
+> >     ip link set dev can0 down
+> >     ethtool --set-priv-flags can0 err-rst-on-open {off|on}
+> >     ip link set dev can0 up
+> >
+> > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+>
+> I'm a big fan of bringing the device into a well known good state during
+> ifup. What would be the reasons/use cases to not reset the device?
 
-Agreed. It does look good, and I'm glad to see slcan get some
-love.
+Because by default either slcand and slcan_attach don't reset the error states,
+but you must use the `-f' option to do so. So,  I followed this use case.
 
-Thanks Dario!
+Thanks and regards,
+Dario
+>
+> Marc
+>
+> --
+> Pengutronix e.K.                 | Marc Kleine-Budde           |
+> Embedded Linux                   | https://www.pengutronix.de  |
+> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
-Max
+
+-- 
+
+Dario Binacchi
+
+Embedded Linux Developer
+
+dario.binacchi@amarulasolutions.com
+
+__________________________________
+
+
+Amarula Solutions SRL
+
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+
+T. +39 042 243 5310
+info@amarulasolutions.com
+
+www.amarulasolutions.com
