@@ -2,243 +2,148 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95E00544556
-	for <lists+linux-can@lfdr.de>; Thu,  9 Jun 2022 10:07:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 737BE54459F
+	for <lists+linux-can@lfdr.de>; Thu,  9 Jun 2022 10:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232772AbiFIIHg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 9 Jun 2022 04:07:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57356 "EHLO
+        id S240669AbiFIIZC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 9 Jun 2022 04:25:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239679AbiFIIHe (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 9 Jun 2022 04:07:34 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6883E2ED7A
-        for <linux-can@vger.kernel.org>; Thu,  9 Jun 2022 01:07:33 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nzDCQ-0005Kt-3M; Thu, 09 Jun 2022 10:07:26 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id B728C8FD63;
-        Thu,  9 Jun 2022 08:07:24 +0000 (UTC)
-Date:   Thu, 9 Jun 2022 10:07:24 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        michael@amarulasolutions.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v2 03/13] can: slcan: use the alloc_can_skb() helper
-Message-ID: <20220609080724.z2ouwivtgu36b423@pengutronix.de>
-References: <20220608165116.1575390-1-dario.binacchi@amarulasolutions.com>
- <20220608165116.1575390-4-dario.binacchi@amarulasolutions.com>
+        with ESMTP id S235876AbiFIIZB (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 9 Jun 2022 04:25:01 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2074.outbound.protection.outlook.com [40.107.92.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657BF149D8D;
+        Thu,  9 Jun 2022 01:24:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Z7BSn7IGY6HD3zbkHo+Ce3DTGKRhfnLoWx2QffpV7WpL/gTDbPP+xIoqqWclR35pw2n5SvPAEvSvhMIoE5IP7JqFcBH0K7fsyxD1jZDhooN+s+4pu7i4vPSYncFIEDFJYJvifSCD4GUCZG/Q9tdBGqOi2dN6iNzCCvJKf8G479v+h7cFrehxdQGQTalQNLYqGDLE7fegpu/34T+C8YUK+i4QDbxxPlPe/1cnbqyic3SC7cqSs2ICMXcR3QU95LXXODXu2BWASLQEKyQVwZcqGoRWDaB1svnox2PQFPCKNOLGvsxb2T743rrsigdC6ZvONmFBqL0kkX2SUznJW7x3zg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RwxFh3BM6fI1LyvUZq2hprAOoTb1DT+YPNd2IiuuPQ4=;
+ b=ZKqFGesrFCpsHKi2Y8OnMIcStsu+p2uocXk6CWLJS97H52YtA/2Ku5skPGIifr/Ik+vnxjBXb2c+DxvxpZ9qIwFJ8JxJV+Ky2mUR1v/T3uafbmPBom00PsrnqJ9msHc/beQqJ89U3s7f+QWXFotKtzq7U6F0EPPFUIUeHr+ynTuVHJGzoytIPlxjEWeOQlnScHqP90xHhIl7GFDlXMV3jCCnJ9p/u/EvvzzPqmaePI1t0o2IFXeArpdTZdet54xvFK8jE40PLJcxkgpTLG/wWP+gc3V8LbmGdyF6tIPLGSJFAcQzqkjPbWowML3MXxO2Td3bH7t2t0s2bHc3aVy0mg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=grandegger.com smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RwxFh3BM6fI1LyvUZq2hprAOoTb1DT+YPNd2IiuuPQ4=;
+ b=EtfBr9S2JrdY6xxhK8EQDzm3yO0UDqU8qLEcB8CCM+rRHaJGeIvkKu8gbT5YjuAABsRNPUFE8P2ksXkyjpFFk7HMX5apoYUpaOQjMrOrwrRGRYLYSaBDOmxwu0fJRzfNXX1Ag1TaPM+Vh/HRRD19Y4EqEZPt4Vo3D3LXiQXVp3Y=
+Received: from DM5PR18CA0082.namprd18.prod.outlook.com (2603:10b6:3:3::20) by
+ DM6PR02MB4073.namprd02.prod.outlook.com (2603:10b6:5:a5::32) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5314.13; Thu, 9 Jun 2022 08:24:56 +0000
+Received: from DM3NAM02FT032.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:3:3:cafe::f6) by DM5PR18CA0082.outlook.office365.com
+ (2603:10b6:3:3::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.13 via Frontend
+ Transport; Thu, 9 Jun 2022 08:24:56 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com; pr=C
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ DM3NAM02FT032.mail.protection.outlook.com (10.13.5.65) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5332.12 via Frontend Transport; Thu, 9 Jun 2022 08:24:55 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Thu, 9 Jun 2022 01:24:54 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Thu, 9 Jun 2022 01:24:54 -0700
+Envelope-to: git@xilinx.com,
+ wg@grandegger.com,
+ mkl@pengutronix.de,
+ davem@davemloft.net,
+ edumazet@google.com,
+ srinivas.neeli@amd.com,
+ neelisrinivas18@gmail.com,
+ kuba@kernel.org,
+ pabeni@redhat.com,
+ linux-can@vger.kernel.org,
+ netdev@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+Received: from [10.140.6.39] (port=37838 helo=xhdsgoud40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <srinivas.neeli@xilinx.com>)
+        id 1nzDTJ-0008BE-RE; Thu, 09 Jun 2022 01:24:54 -0700
+From:   Srinivas Neeli <srinivas.neeli@xilinx.com>
+To:     <wg@grandegger.com>, <mkl@pengutronix.de>, <davem@davemloft.net>,
+        <edumazet@google.com>, <srinivas.neeli@amd.com>,
+        <neelisrinivas18@gmail.com>, <appana.durga.rao@xilinx.com>,
+        <sgoud@xilinx.com>, <michal.simek@xilinx.com>
+CC:     <kuba@kernel.org>, <pabeni@redhat.com>,
+        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <git@xilinx.com>,
+        Srinivas Neeli <srinivas.neeli@xilinx.com>
+Subject: [PATCH V3 0/2] xilinx_can: Update on xilinx can
+Date:   Thu, 9 Jun 2022 13:54:31 +0530
+Message-ID: <20220609082433.1191060-1-srinivas.neeli@xilinx.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="atjba7zcmgsgdmzd"
-Content-Disposition: inline
-In-Reply-To: <20220608165116.1575390-4-dario.binacchi@amarulasolutions.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 834141eb-1637-4535-7f45-08da49f188c5
+X-MS-TrafficTypeDiagnostic: DM6PR02MB4073:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR02MB40732DE94AEAC6A6A517AD77AFA79@DM6PR02MB4073.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: EwV0hJ6FQZXI9hg8tV/zyBtpU5jtwO70m7fcUCztQ4hoWvWs/e9/MhdxzDLQKvOaDz+eqqP6hqeL2gE9rT2miYVBWogDXbMesHaYLP+iB5p5Be0FSFEaFQY8PVBNE7fBHJTGCwbl/wpau7BiuWIanhsm/lH9daEaKRYzXdRk3v6GgSxZGgwL9fOhaA3HdWcDJyW6KvOKGbLOFmSpB1fYzTVTtQKc+sFK4rBYu4J0vefwGaTRx0ZWivD/RqgeCRKbmz5JvHA4Pi6/NatMzw5kaVsGrZGAZwLjnSYxOKemDeOKzE2WcBS1dN47NurFfrpt+UTLBql5tU3ukVovyi3JUE4e2KaZNaylmtwL/bWK1MzoE4AI/2EQhlv/IwBlDpT0tQqbFxuaIfQBbA0XNNliC+LsTvtG4Kw6sjDeT6S6+oXGR6UDSjkRSCGXouN//Q3W81w/mAu5U1trXYA5NSlgWIOk1yDiQPJ+VdXXDCm7tINeOFepp55xf6U87LQgR+7LJ07U2S1EnQibGnh4V61qg1sILBr5Y2haCDo7iEedB6irb50BR2A2Yg1hnHdylX7yiFGVl758B5a/RaUUqued+Qc1lDg6cUEJ35RWs8iCVcVr6P72vwfipnndzANG1+IOOy2ZBtrhOnnFLPv7s4WOZFuY+IXTDKwHCM1PoYiXiKrS3oxcpcuQaqVsnNPltiqxg8ktc/nDHn9DlH0HMokdCA==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(82310400005)(7416002)(8936002)(186003)(2616005)(83380400001)(54906003)(316002)(6636002)(110136005)(26005)(336012)(47076005)(426003)(7636003)(2906002)(36756003)(508600001)(9786002)(356005)(7696005)(4744005)(36860700001)(4326008)(44832011)(8676002)(40460700003)(5660300002)(107886003)(70586007)(70206006)(6666004)(1076003)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2022 08:24:55.5999
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 834141eb-1637-4535-7f45-08da49f188c5
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT032.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB4073
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+This patch series addresses
+1) Reverts the limiting CANFD brp_min to 2.
+2) Adds TDC support for Xilinx can driver.
 
---atjba7zcmgsgdmzd
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Marc,
+Please apply PATCH V3 1/2 on stable branch.
+Due to some mailing issue i didn't receive your mail.
 
-On 08.06.2022 18:51:06, Dario Binacchi wrote:
-> It is used successfully by most (if not all) CAN device drivers. It
-> allows to remove replicated code.
->=20
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
->=20
-> ---
->=20
-> Changes in v2:
-> - Put the data into the allocated skb directly instead of first
->   filling the "cf" on the stack and then doing a memcpy().
->=20
->  drivers/net/can/slcan.c | 69 +++++++++++++++++++----------------------
->  1 file changed, 32 insertions(+), 37 deletions(-)
->=20
-> diff --git a/drivers/net/can/slcan.c b/drivers/net/can/slcan.c
-> index 6162a9c21672..5d87e25e2285 100644
-> --- a/drivers/net/can/slcan.c
-> +++ b/drivers/net/can/slcan.c
-> @@ -54,6 +54,7 @@
->  #include <linux/kernel.h>
->  #include <linux/workqueue.h>
->  #include <linux/can.h>
-> +#include <linux/can/dev.h>
->  #include <linux/can/skb.h>
->  #include <linux/can/can-ml.h>
-> =20
-> @@ -143,85 +144,79 @@ static struct net_device **slcan_devs;
->  static void slc_bump(struct slcan *sl)
->  {
->  	struct sk_buff *skb;
-> -	struct can_frame cf;
-> +	struct can_frame *cf;
->  	int i, tmp;
->  	u32 tmpid;
->  	char *cmd =3D sl->rbuff;
-> =20
-> -	memset(&cf, 0, sizeof(cf));
-> +	skb =3D alloc_can_skb(sl->dev, &cf);
-> +	if (unlikely(!skb)) {
-> +		sl->dev->stats.rx_dropped++;
-> +		return;
-> +	}
-> =20
->  	switch (*cmd) {
->  	case 'r':
-> -		cf.can_id =3D CAN_RTR_FLAG;
-> +		cf->can_id =3D CAN_RTR_FLAG;
->  		fallthrough;
->  	case 't':
->  		/* store dlc ASCII value and terminate SFF CAN ID string */
-> -		cf.len =3D sl->rbuff[SLC_CMD_LEN + SLC_SFF_ID_LEN];
-> +		cf->len =3D sl->rbuff[SLC_CMD_LEN + SLC_SFF_ID_LEN];
->  		sl->rbuff[SLC_CMD_LEN + SLC_SFF_ID_LEN] =3D 0;
->  		/* point to payload data behind the dlc */
->  		cmd +=3D SLC_CMD_LEN + SLC_SFF_ID_LEN + 1;
->  		break;
->  	case 'R':
-> -		cf.can_id =3D CAN_RTR_FLAG;
-> +		cf->can_id =3D CAN_RTR_FLAG;
->  		fallthrough;
->  	case 'T':
-> -		cf.can_id |=3D CAN_EFF_FLAG;
-> +		cf->can_id |=3D CAN_EFF_FLAG;
->  		/* store dlc ASCII value and terminate EFF CAN ID string */
-> -		cf.len =3D sl->rbuff[SLC_CMD_LEN + SLC_EFF_ID_LEN];
-> +		cf->len =3D sl->rbuff[SLC_CMD_LEN + SLC_EFF_ID_LEN];
->  		sl->rbuff[SLC_CMD_LEN + SLC_EFF_ID_LEN] =3D 0;
->  		/* point to payload data behind the dlc */
->  		cmd +=3D SLC_CMD_LEN + SLC_EFF_ID_LEN + 1;
->  		break;
->  	default:
-> -		return;
-> +		goto decode_failed;
->  	}
-> =20
->  	if (kstrtou32(sl->rbuff + SLC_CMD_LEN, 16, &tmpid))
-> -		return;
-> +		goto decode_failed;
-> =20
-> -	cf.can_id |=3D tmpid;
-> +	cf->can_id |=3D tmpid;
-> =20
->  	/* get len from sanitized ASCII value */
-> -	if (cf.len >=3D '0' && cf.len < '9')
-> -		cf.len -=3D '0';
-> +	if (cf->len >=3D '0' && cf->len < '9')
-> +		cf->len -=3D '0';
->  	else
-> -		return;
-> +		goto decode_failed;
-> =20
->  	/* RTR frames may have a dlc > 0 but they never have any data bytes */
-> -	if (!(cf.can_id & CAN_RTR_FLAG)) {
-> -		for (i =3D 0; i < cf.len; i++) {
-> +	if (!(cf->can_id & CAN_RTR_FLAG)) {
-> +		for (i =3D 0; i < cf->len; i++) {
->  			tmp =3D hex_to_bin(*cmd++);
->  			if (tmp < 0)
-> -				return;
-> -			cf.data[i] =3D (tmp << 4);
-> +				goto decode_failed;
-> +
-> +			cf->data[i] =3D (tmp << 4);
->  			tmp =3D hex_to_bin(*cmd++);
->  			if (tmp < 0)
-> -				return;
-> -			cf.data[i] |=3D tmp;
-> +				goto decode_failed;
-> +
-> +			cf->data[i] |=3D tmp;
->  		}
->  	}
-> =20
-> -	skb =3D dev_alloc_skb(sizeof(struct can_frame) +
-> -			    sizeof(struct can_skb_priv));
-> -	if (!skb)
-> -		return;
-> -
-> -	skb->dev =3D sl->dev;
-> -	skb->protocol =3D htons(ETH_P_CAN);
-> -	skb->pkt_type =3D PACKET_BROADCAST;
-> -	skb->ip_summed =3D CHECKSUM_UNNECESSARY;
-> -
-> -	can_skb_reserve(skb);
-> -	can_skb_prv(skb)->ifindex =3D sl->dev->ifindex;
-> -	can_skb_prv(skb)->skbcnt =3D 0;
-> -
-> -	skb_put_data(skb, &cf, sizeof(struct can_frame));
-> -
->  	sl->dev->stats.rx_packets++;
-> -	if (!(cf.can_id & CAN_RTR_FLAG))
-> -		sl->dev->stats.rx_bytes +=3D cf.len;
-> +	if (!(cf->can_id & CAN_RTR_FLAG))
-> +		sl->dev->stats.rx_bytes +=3D cf->len;
-> =20
->  	netif_rx(skb);
-> +	return;
-> +
-> +decode_failed:
-> +	dev_kfree_skb(skb);
+Changes in V3:
+-Implemented GENMASK,FIELD_PERP & FIELD_GET Calls.
+-Implemented TDC feature for all Xilinx CANFD controllers.
+-corrected prescalar to prescaler(typo).
 
-Can you increase an error counter in this situation, too?
+Changes in V2:
+- Created two patches one for revert another for TDC support.
 
-Marc
+Srinivas Neeli (2):
+  Revert "can: xilinx_can: Limit CANFD brp to 2"
+  can: xilinx_can: Add Transmitter delay compensation (TDC) feature
+    support
 
->  }
-> =20
->  /* parse tty input stream */
-> --=20
-> 2.32.0
->=20
->=20
+ drivers/net/can/xilinx_can.c | 52 +++++++++++++++++++++++++++++++-----
+ 1 file changed, 45 insertions(+), 7 deletions(-)
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+-- 
+2.25.1
 
---atjba7zcmgsgdmzd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKhqjkACgkQrX5LkNig
-013HUAgAqNyG+WGjiiRutxQFcDB8sjKXLB7vK7+Nxuo1idJ6Ez84UYz7yXxBNub4
-Tj9sLTzWmBocBoRVYOM5shThBLKYABOTJjpU90EyjtsaecGWzZ31GVmtfx95vVFK
-JDMHZP0yQZ45315d0P1/U+XV6uK03MMoUwKvb1fw0dKZ14ZhCgJrHK13n5uvX/by
-Sz8uHCJlp1X2u/ULoNFJLyFFBZt6zSQnh9dOC7Qfq612QzxZZ51mfkQjUwIvsuNx
-fwFav+zthhYOkJZdwcJpTp7ChuHxAuhFF3WTXJI6hMTpVdNDTJaFsVtzjkwz7faF
-HZsSgWXZQ2ASFS1epIjNbjb1yiQ6rg==
-=bf3D
------END PGP SIGNATURE-----
-
---atjba7zcmgsgdmzd--
