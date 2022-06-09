@@ -2,53 +2,74 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2908B5445FC
-	for <lists+linux-can@lfdr.de>; Thu,  9 Jun 2022 10:35:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54FD854469B
+	for <lists+linux-can@lfdr.de>; Thu,  9 Jun 2022 10:56:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241596AbiFIIed (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 9 Jun 2022 04:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44570 "EHLO
+        id S242556AbiFIIyd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 9 Jun 2022 04:54:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241923AbiFIIeN (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 9 Jun 2022 04:34:13 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E271D1059
-        for <linux-can@vger.kernel.org>; Thu,  9 Jun 2022 01:34:12 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nzDcA-00016O-Vd; Thu, 09 Jun 2022 10:34:03 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 6F7938FDDD;
-        Thu,  9 Jun 2022 08:34:01 +0000 (UTC)
-Date:   Thu, 9 Jun 2022 10:34:00 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Srinivas Neeli <srinivas.neeli@xilinx.com>
-Cc:     wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
-        srinivas.neeli@amd.com, neelisrinivas18@gmail.com,
-        appana.durga.rao@xilinx.com, sgoud@xilinx.com,
-        michal.simek@xilinx.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        git@xilinx.com
-Subject: Re: [PATCH V3 0/2] xilinx_can: Update on xilinx can
-Message-ID: <20220609083400.pb5q2fxhexhdqrec@pengutronix.de>
-References: <20220609082433.1191060-1-srinivas.neeli@xilinx.com>
+        with ESMTP id S242576AbiFIIyX (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 9 Jun 2022 04:54:23 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E16CB1F5AEC
+        for <linux-can@vger.kernel.org>; Thu,  9 Jun 2022 01:52:15 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id g25so25350330ljm.2
+        for <linux-can@vger.kernel.org>; Thu, 09 Jun 2022 01:52:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AX9+sxGX0p4pOxpI6WHP+Cxv1wFDNrQZS5LsuLWat6c=;
+        b=pjVfJTL0Wwdpk9HiOlKjTQg7bkwGj+pY84mbxzvjsLhVYXR6U8Rg2nPDuZ5HMH6v3J
+         3+P5k+4IJqQ+WQXgKtmb7vGsizWlSroLv6H3JP/F+mAC6VtRwB/gyffLMwfSXCWNSsX4
+         FKwLGPngTJnGsuDDl13f/LaGeEAPaQgqUrLpY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AX9+sxGX0p4pOxpI6WHP+Cxv1wFDNrQZS5LsuLWat6c=;
+        b=fi30OHds1hxEQ4+RSoCcoC1XvgpoyZ8E8lhpNZL760JqxhSiQZmr6KPsNpIjUZjPa4
+         XmEhIXL4UdNx8jGD/vuPGvPlLwszDNq7+nhkGbjwcIJEgZX/1+LmkLauNL7l7Q8Zyzxf
+         iFaj/O1F1KPXO8b4zKIvWq0sNIGGVg0vosEiMKX4eJWhPclsM89voYQBAMgVcIiQ1i/u
+         +cS7tappvCx697Mg+RX0RhuWaNNYayDaOT9vvLqyzhVGnhTpdHK5NBjd/aAYzTaGzO07
+         IRPkcDuQ0am/8U1g/VNiB4mVoN54RqwWGJKODpGM9a9wBGYs923yRNhIShUSDKDzY1nX
+         QpFg==
+X-Gm-Message-State: AOAM532OFDpD9PHlbnVJOMZFXQTbMCYmrihiKtVTxVuNCvl8K5h0y4RI
+        +2+WezNcfyF77YL8cj617kAOY637NrHOscM0Kkl6TQ==
+X-Google-Smtp-Source: ABdhPJxUFTdxUuteJmRI/lqFmzsXvopo7OOc1rcCwtQ7+Yy56rWK/epG3i42NMpsVweOVL+4zdiNtWLt5EWvGdUHw6Y=
+X-Received: by 2002:a2e:6e0c:0:b0:255:98fb:cb45 with SMTP id
+ j12-20020a2e6e0c000000b0025598fbcb45mr11214233ljc.55.1654764734145; Thu, 09
+ Jun 2022 01:52:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="h4ux6p3yn7okbj3o"
-Content-Disposition: inline
-In-Reply-To: <20220609082433.1191060-1-srinivas.neeli@xilinx.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+References: <20220607094752.1029295-1-dario.binacchi@amarulasolutions.com>
+ <20220607094752.1029295-12-dario.binacchi@amarulasolutions.com>
+ <20220607105225.xw33w32en7fd4vmh@pengutronix.de> <CABGWkvozX51zeQt16bdh+edsjwqST5A11qtfxYjTvP030DnToQ@mail.gmail.com>
+ <20220609063813.jf5u6iaghoae5dv3@pengutronix.de> <CABGWkvrViDyWfU=PUfKq2HXnDjhiZdOMWSBt3xcmxFKxhHKCyw@mail.gmail.com>
+ <20220609080112.24bw2764ov767pqc@pengutronix.de>
+In-Reply-To: <20220609080112.24bw2764ov767pqc@pengutronix.de>
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date:   Thu, 9 Jun 2022 10:52:03 +0200
+Message-ID: <CABGWkvq2nbfYRww0KWB1YxLQ92hjsWjfV9+nT-cKzc5FPF=DzA@mail.gmail.com>
+Subject: Re: [RFC PATCH 11/13] can: slcan: add ethtool support to reset
+ adapter errors
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        michael@amarulasolutions.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,55 +78,97 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi Marc,
 
---h4ux6p3yn7okbj3o
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, Jun 9, 2022 at 10:01 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+>
+> On 09.06.2022 09:24:14, Dario Binacchi wrote:
+> > > > > I'm a big fan of bringing the device into a well known good state during
+> > > > > ifup. What would be the reasons/use cases to not reset the device?
+> > > >
+> > > > Because by default either slcand and slcan_attach don't reset the
+> > > > error states, but you must use the `-f' option to do so. So, I
+> > > > followed this use case.
+> > >
+> > > Is this a CAN bus error state, like Bus Off or some controller (i.e. non
+> > > CAN related) error?
+> >
+> > The help option of slcan_attach and slcand prints " -f (read status
+> > flags with 'F\\r' to reset error states)\n" I looked at the sources of
+> > the adapter I am using (USBtin, which uses the mcp2515 controller).
+> > The 'F' command reads the EFLG register (0x2d) without resetting the
+> > RX0OVR and RX1OVR overrun bits.
+>
+> The Lawicel doc [1] says 'F' is to read the status flags not to clear
+> it. However commit 7ef581fec029 ("slcan_attach: added '-f' commandline
+> option to read status flags") [2] suggests that there are some adapters
+> that the reading of the status flag clears the errors. IMHO the 'F'
+> command should be send unconditionally during open.
 
-On 09.06.2022 13:54:31, Srinivas Neeli wrote:
-> This patch series addresses
-> 1) Reverts the limiting CANFD brp_min to 2.
-> 2) Adds TDC support for Xilinx can driver.
+When in doubt I would follow the slcand / slcan_attach approach, that don't
+send the 'F \ r' command by default. We would be more backward compatible
+as regards the sequence of commands to be sent to the controller.
 
-Thanks for your patches!
+>
+> [1] http://www.can232.com/docs/can232_v3.pdf
+> [2] https://github.com/linux-can/can-utils/commit/7ef581fec0298a228baa71372ea5667874fb4a56
+>
+> > The error states reset is done by 'f <subcmd>' command, that is not
+> > managed by slcan_attach/slcand.
+>
+> Is the 'f' command is non-standard?
 
-> Hi Marc,
-> Please apply PATCH V3 1/2 on stable branch.
-> Due to some mailing issue i didn't receive your mail.
+It's possible.
 
-Applied to can/testing, please don't mix patches for can and can-next in
-on series in the future.
+Thanks and regards,
+Dario
 
-> Changes in V3:
-> -Implemented GENMASK,FIELD_PERP & FIELD_GET Calls.
-> -Implemented TDC feature for all Xilinx CANFD controllers.
-> -corrected prescalar to prescaler(typo).
+>
+> >         switch (subcmd) {
+> >             case 0x0: // Disable status reporting
+> >                 mcp2515_write_register(MCP2515_REG_CANINTE, 0x00);
+> >                 return CR;
+> >             case 0x1: // Enable status reporting
+> >                 mcp2515_write_register(MCP2515_REG_CANINTE, 0x20); //
+> > ERRIE interrupt to INT pin
+> >                 return CR;
+> >             case 0x2: // Clear overrun errors
+> >                 mcp2515_write_register(MCP2515_REG_EFLG, 0x00);
+> >                 return CR;
+> >             case 0x3: // Reinit/reset MCP2515 to clear all errors
+> >                 if (state == STATE_CONFIG) {
+> >                     mcp2515_init();
+> >                     return CR;
+> >                 }
+> >                 break;
+> >         }
+>
+> Marc
+>
+> --
+> Pengutronix e.K.                 | Marc Kleine-Budde           |
+> Embedded Linux                   | https://www.pengutronix.de  |
+> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-Pleas make this a separate patch.
 
-regards,
-Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+-- 
 
---h4ux6p3yn7okbj3o
-Content-Type: application/pgp-signature; name="signature.asc"
+Dario Binacchi
 
------BEGIN PGP SIGNATURE-----
+Embedded Linux Developer
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKhsHYACgkQrX5LkNig
-010CkwgAr0Yn7uNWp2Rx87P8xbIi6hVYVLuyQarsLg75Xp2IjC1KG4KpIEBgY2uH
-im/FjZiJvUi1TCuFCjck+qNSdA22Jfn5rk0uyEmn7g0l1BZq7UlkK1tdAHqoQ/Cn
-Dcw9BMQqQfdm4btLikc4h1stqAH0CeZOwNXUkzjBga65ZmUaJIVowN55st01M1T3
-qO5elkWFftg1JOsbd594rh2mSDHXB/c3+a929hrAtk1KfC96F7tL+0lSdccFFL4f
-cN2+jGrt2mPCdawxZC/EGU6nr4zqCxDLsrbgMdQBkuH5l+O9ssfP3DI8MSIRuqtN
-8MaCL4sqduJssOhRn9qxccN72AwhaQ==
-=Q3e1
------END PGP SIGNATURE-----
+dario.binacchi@amarulasolutions.com
 
---h4ux6p3yn7okbj3o--
+__________________________________
+
+
+Amarula Solutions SRL
+
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+
+T. +39 042 243 5310
+info@amarulasolutions.com
+
+www.amarulasolutions.com
