@@ -2,155 +2,227 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F939546779
-	for <lists+linux-can@lfdr.de>; Fri, 10 Jun 2022 15:41:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FDC0546847
+	for <lists+linux-can@lfdr.de>; Fri, 10 Jun 2022 16:30:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229516AbiFJNlf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 10 Jun 2022 09:41:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51422 "EHLO
+        id S239052AbiFJOah (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 10 Jun 2022 10:30:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234848AbiFJNlf (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 10 Jun 2022 09:41:35 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E5C7A1BF
-        for <linux-can@vger.kernel.org>; Fri, 10 Jun 2022 06:41:32 -0700 (PDT)
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220610134130epoutp0257422df9742c2ce9e6718a9c8b97ccf7~3Rh__mqld1642616426epoutp02_
-        for <linux-can@vger.kernel.org>; Fri, 10 Jun 2022 13:41:30 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220610134130epoutp0257422df9742c2ce9e6718a9c8b97ccf7~3Rh__mqld1642616426epoutp02_
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1654868490;
-        bh=S4pQpSBiQ9JZ7ZM6nDhTseZIUEdkz4bMZ5E9UXfJQV4=;
-        h=From:To:In-Reply-To:Subject:Date:References:From;
-        b=DhTgFOGRS+V5KIcwmN47F8nY0pl4z2lFj5z0TpbFNR0KU7IQP76qM4mHBwmTD0If9
-         m+A+cMFqlDcAE8zzFL4FT2bsvpJt5CPUAWAPq5kCLly6ff074gEJlV0qDbYHQSGlD8
-         6ra35SZk/vX2GsWuhS32fBpS2IPiYmboahxJkrTo=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-        20220610134129epcas5p484fbf789bf475222da688fe7b1e52588~3Rh_V9ynY1361013610epcas5p4N;
-        Fri, 10 Jun 2022 13:41:29 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.175]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4LKMYz26Fvz4x9Pv; Fri, 10 Jun
-        2022 13:41:27 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        D8.28.10063.70A43A26; Fri, 10 Jun 2022 22:41:27 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220610115053epcas5p1b2609c019f6a7fb245346c1725459597~3QBZ4m8pD0278502785epcas5p1c;
-        Fri, 10 Jun 2022 11:50:53 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220610115053epsmtrp1128e136ffd9b33d2e82e42773ad70f03~3QBZ3_5rS1864118641epsmtrp1Q;
-        Fri, 10 Jun 2022 11:50:53 +0000 (GMT)
-X-AuditID: b6c32a49-4cbff7000000274f-f9-62a34a074229
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        86.34.11276.D1033A26; Fri, 10 Jun 2022 20:50:53 +0900 (KST)
-Received: from rcsekar06 (unknown [107.111.84.29]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220610115052epsmtip2e83ec7cdbedc2ebe9db59a4976a7f6a4~3QBZW9jcz2012820128epsmtip2g;
-        Fri, 10 Jun 2022 11:50:52 +0000 (GMT)
-From:   "Chandrasekar R" <rcsekar@samsung.com>
-To:     "'Marc Kleine-Budde'" <mkl@pengutronix.de>,
-        <linux-can@vger.kernel.org>
-In-Reply-To: <20220610112037.3857192-1-mkl@pengutronix.de>
-Subject: RE: [PATCH] can: m_can: fix typo prescalar -> prescaler
-Date:   Fri, 10 Jun 2022 17:20:51 +0530
-Message-ID: <005301d87cc0$564a8900$02df9b00$@samsung.com>
+        with ESMTP id S238857AbiFJOag (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 10 Jun 2022 10:30:36 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D2B62E0;
+        Fri, 10 Jun 2022 07:30:35 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id r1so5668056plo.10;
+        Fri, 10 Jun 2022 07:30:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=/mjtA9MLjpbHOH3mFEMMpFyEg+q0nrj1i3jXYc4/cy0=;
+        b=kf552z2RLbozvVb/HnIWAXj5mQ9L2bbOg50xc+8aPxezVhZNWNBw9+UxJdgFzAClpj
+         8p6T5frqptElPXLuTR8l+B9OLDiXxGp6vVd643oVrW7A3ssSN6mB6UXaZxkvV29a+ok4
+         R56+OGTCRaI1nkA3piurWJMAIre+LqHMWc4mHNge4/UxnV58rcLvLKlqETMLntPbDHHL
+         Kl9j8YSEn10OZAlKZONuLmvsIB222DKcg1fh6ZgdDmlZlAps5cfEgjXjQduAaQr+KhJ8
+         59bbhR0kmT8TYQEOHMIi6ebV1FAi2L5ty/lUE7VlkEOqlvjhOCyYMZgQUtdUUWaELN0g
+         +CcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :in-reply-to:references:mime-version:content-transfer-encoding;
+        bh=/mjtA9MLjpbHOH3mFEMMpFyEg+q0nrj1i3jXYc4/cy0=;
+        b=vIVRBgD6fHdGwnJ3fdLrPMHqFBWB6D1+gy9ptZ/4vvtYzSAztMynHGQuk1hmlhPN3H
+         sUO18ckX5API5ZFK6q1dXdalQ/sW+l0yhuaHlAUIyVal3zKHlqx+JrLCz9YvYM1gZw+A
+         e44CfBJzGavw8eQqL7VxTGiIpc65xyXV9j6TjNiAamy2LRMIlVMGqdnHeGAFdGwBRQ1F
+         NrFzJzQt7IaCcyq26tE5rSP0sm1Yd6fdGzvp6hOBjnHZuygRDD6xdQAxjqYjhoLJSVEN
+         B/huxpz+2ZA6n4HLJCL04Qf+AMqVsypXgqeLQKKj65j4VY7qn1pE4mwfaGmzvkloKP1Y
+         O3BQ==
+X-Gm-Message-State: AOAM533xT7uiQyvR4fV7gTgAp3F8toCQtt+XReHH/9RWYruPgpDR/+S6
+        Qbl3bCef7iAFuUQ+EnXNcs5N+R/03qhJ+A==
+X-Google-Smtp-Source: ABdhPJzjuYHAMdTge3IJvoeI8We4lcS6sC8AyHf6aJj1MLj/WyEiFyb+lJ1luGQkCn/Dz9l01ADGwg==
+X-Received: by 2002:a17:90a:a096:b0:1df:58d7:5b20 with SMTP id r22-20020a17090aa09600b001df58d75b20mr54234pjp.212.1654871434516;
+        Fri, 10 Jun 2022 07:30:34 -0700 (PDT)
+Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
+        by smtp.gmail.com with ESMTPSA id s6-20020a170902ea0600b0016232dbd01fsm18851339plg.292.2022.06.10.07.30.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jun 2022 07:30:33 -0700 (PDT)
+Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Max Staudt <max@enpas.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        netdev@vger.kernel.org, Geert Uytterhoeven <geert@linux-m68k.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v6 0/7] can: refactoring of can-dev module and of Kbuild
+Date:   Fri, 10 Jun 2022 23:30:02 +0900
+Message-Id: <20220610143009.323579-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
+References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQKWDwwugrMQPcWRuG7O5s14kk8f4gIlrWfHq7w0xWA=
-Content-Language: en-us
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrPKsWRmVeSWpSXmKPExsWy7bCmhi671+Ikgzc/eSxWfZ/KbLF+0RQW
-        ByaP/r8GHp83yQUwRWXbZKQmpqQWKaTmJeenZOal2yp5B8c7x5uaGRjqGlpamCsp5CXmptoq
-        ufgE6Lpl5gBNV1IoS8wpBQoFJBYXK+nb2RTll5akKmTkF5fYKqUWpOQUmBToFSfmFpfmpevl
-        pZZYGRoYGJkCFSZkZ9xo/MVUcJuronnfApYGxg8cXYycHBICJhLvF/5i6mLk4hAS2M0osWDu
-        GSjnE6PEpNYmVpAqIYFvjBLnbunDdKx6vJQVomgvo0TLrQ4o5zmjxLPNB8A62AR0JN73fWPr
-        YuTgEBHwlmj+ow4S5hSwklj4cwEziC0s4CBxvvM+C4jNIqAq8XjnTTYQm1fAUuLnwT+sELag
-        xMmZT8BqmAXkJba/ncMMcYSCxM+ny8BqRIBm/u79xQ5RIy7x8ugRdpB7JAROsUs8vnecEeQG
-        CQEXiSm/YyF6hSVeHd/CDmFLSbzsb4OyiyVefZ/MBmHXSOzbvBpql73EgStzWEDGMAtoSqzf
-        BQ0HWYmpp9YxQazlk+j9/YQJIs4rsWMejK0oMW3rTBaIC8QljswLgQh7SMxf/55pAqPiLCRP
-        zkLy5Cwkz8xCWLyAkWUVo2RqQXFuemqxaYFhXmo5PLaT83M3MYJTnpbnDsa7Dz7oHWJk4mA8
-        xCjBwawkwhtwe1GSEG9KYmVValF+fFFpTmrxIUZTYMhPZJYSTc4HJt28knhDE0sDEzMzMxNL
-        YzNDJXFegf+NSUIC6YklqdmpqQWpRTB9TBycUg1M0ur9Endfbrv4IO2xXs6UK3vfvz2o5rE9
-        i00n8WO/eWn1udc6Qexe+5yXrEroeRPoc/murET9e2eHqcf+sgUpr9P975TTf9A53nfNS1fv
-        OoMPLitq8pi/ZHd8C69WMtMIFu5+7e5xUf53kYjTlTc93Yf+7xKQXC7eUHjFWr37y3PnaO7+
-        j9yO+5cwHHYN+up/h3X/Lz+g4IrzbtufFdksuXDl5Ln7lxXNLDgCL6aaPC42cGr7/I9h/da6
-        95/cy22luL1qd/GvWfdJRnX+7+qzzEeEc+cmcBnWv1m3IeWLz50A6z08sXvV5TQM0tfwReVa
-        VbUG8djHmn+7nHL6Xb2t9C53Zad35vdOsQd4KrEUZyQaajEXFScCAOW+bP0CBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrLLMWRmVeSWpSXmKPExsWy7bCSvK6sweIkgw/LeS1WfZ/KbLF+0RQW
-        ByaP/r8GHp83yQUwRXHZpKTmZJalFunbJXBl3Gj8xVRwm6uied8ClgbGDxxdjJwcEgImEqse
-        L2XtYuTiEBLYzSjR03SVCSIhLrH2wxU2CFtYYuW/5+wQRU8ZJTr+rGcFSbAJ6Ei87/sGViQi
-        4CtxvqeHGaKom1Hi3PlGsASngJXEwp8LmEFsYQEHifOd91lAbBYBVYnHO2+C1fAKWEr8PPiH
-        FcIWlDg58wlQDQcHs4CeRNtGRpAws4C8xPa3c5ghDlKQ+Pl0GSvEXiuJ372/2CFqxCVeHj3C
-        PoFRaBaSSbMQJs1CMmkWko4FjCyrGCVTC4pz03OLDQsM81LL9YoTc4tL89L1kvNzNzGCQ1xL
-        cwfj9lUf9A4xMnEwHmKU4GBWEuENuL0oSYg3JbGyKrUoP76oNCe1+BCjNAeLkjjvha6T8UIC
-        6YklqdmpqQWpRTBZJg5OqQamRUbXPth66+UySTmr7lTdmK4bs1t5la3MO1d+ex1xIw87rdKp
-        Ox0utzvM+SifZ8IwN+f9jugN/tMbq041P/vcLKe8drd/U23qIcs9wXKMG4L1p+wyXdEg35/N
-        yp1yPl4iRmvy1obtyxT3XJxTHuOdKlPQVfgg+OD9pzt5alpbep7qn2ESveWrWnwrpoLJj4FP
-        3dOrwf9GxMoY2VX6i44V9gczCmy1PfBUVDdW5dgu/dWS6efLv7746pL/d63pdtUHz923F/tl
-        TZ43L0vWQCfJ1XnzVscC1rWCZ6/cD7v3sEZ9dtDhOcVrJG8lsP7n0Q43a4vJlf8gqL6a5Ydl
-        Sj7HA7nAWIFZxRKL4/ldlFiKMxINtZiLihMB+Arz0OACAAA=
-X-CMS-MailID: 20220610115053epcas5p1b2609c019f6a7fb245346c1725459597
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220610112048epcas5p1f7bf95a5f29d7c81a1c96829a96ded35
-References: <CGME20220610112048epcas5p1f7bf95a5f29d7c81a1c96829a96ded35@epcas5p1.samsung.com>
-        <20220610112037.3857192-1-mkl@pengutronix.de>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Aside of calc_bittiming.o which can be configured with
+CAN_CALC_BITTIMING, all objects from drivers/net/can/dev/ get linked
+unconditionally to can-dev.o even if not needed by the user.
+
+This series first goal it to split the can-dev modules so that the
+only the needed features get built in during compilation.
+Additionally, the CAN Device Drivers menu is moved from the
+"Networking support" category to the "Device Drivers" category (where
+all drivers are supposed to be).
 
 
-> -----Original Message-----
-> From: Marc Kleine-Budde [mailto:mkl@pengutronix.de]
-> Sent: Friday, June 10, 2022 4:51 PM
-> To: linux-can@vger.kernel.org
-> Cc: Marc Kleine-Budde <mkl@pengutronix.de>; Chandrasekar Ramakrishnan
-> <rcsekar@samsung.com>
-> Subject: [PATCH] can: m_can: fix typo prescalar -> prescaler
-> 
-> This patch fixes the typo prescalar -> prescaler.
-> 
-> Cc: Chandrasekar Ramakrishnan <rcsekar@samsung.com>
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Reviewed-by: Chandrasekar Ramakrishnan <rcsekar@samsung.com>
+* menu before this series *
 
-> ---
->  drivers/net/can/m_can/m_can.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-> index 5d0c82d8b9a9..4f90e17354f2 100644
-> --- a/drivers/net/can/m_can/m_can.c
-> +++ b/drivers/net/can/m_can/m_can.c
-> @@ -1348,8 +1348,8 @@ static void m_can_chip_config(struct net_device
-*dev)
->  	/* set bittiming params */
->  	m_can_set_bittiming(dev);
-> 
-> -	/* enable internal timestamp generation, with a prescalar of 16. The
-> -	 * prescalar is applied to the nominal bit timing
-> +	/* enable internal timestamp generation, with a prescaler of 16. The
-> +	 * prescaler is applied to the nominal bit timing
->  	 */
->  	m_can_write(cdev, M_CAN_TSCC, FIELD_PREP(TSCC_TCP_MASK, 0xf));
-> 
-> --
-> 2.35.1
-> 
+CAN bus subsystem support
+  symbol: CONFIG_CAN
+  |
+  +-> CAN Device Drivers
+      (no symbol)
+      |
+      +-> software/virtual CAN device drivers
+      |   (at time of writing: slcan, vcan, vxcan)
+      |
+      +-> Platform CAN drivers with Netlink support
+          symbol: CONFIG_CAN_DEV
+          |
+          +-> CAN bit-timing calculation  (optional for hardware drivers)
+          |   symbol: CONFIG_CAN_CALC_BITTIMING
+          |
+          +-> All other CAN devices drivers
 
+* menu after this series *
+
+Network device support
+  symbol: CONFIG_NETDEVICES
+  |
+  +-> CAN Device Drivers
+      symbol: CONFIG_CAN_DEV
+      |
+      +-> software/virtual CAN device drivers
+      |   (at time of writing: slcan, vcan, vxcan)
+      |
+      +-> CAN device drivers with Netlink support
+          symbol: CONFIG_CAN_NETLINK (matches previous CONFIG_CAN_DEV)
+          |
+          +-> CAN bit-timing calculation (optional for all drivers)
+          |   symbol: CONFIG_CAN_CALC_BITTIMING
+          |
+          +-> All other CAN devices drivers
+              (some may select CONFIG_CAN_RX_OFFLOAD)
+              |
+              +-> CAN rx offload (automatically selected by some drivers)
+                  (hidden symbol: CONFIG_CAN_RX_OFFLOAD)
+
+Patches 1 to 5 of this series do above modification.
+
+The last two patches add a check toward CAN_CTRLMODE_LISTENONLY in
+can_dropped_invalid_skb() to discard tx skb (such skb can potentially
+reach the driver if injected via the packet socket). In more details,
+patch 6 moves can_dropped_invalid_skb() from skb.h to skb.o and patch
+7 is the actual change.
+
+Those last two patches are actually connected to the first five ones:
+because slcan and v(x)can requires can_dropped_invalid_skb(), it was
+necessary to add those three devices to the scope of can-dev before
+moving the function to skb.o.
+
+This design results from the lengthy discussion in [1].
+
+[1] https://lore.kernel.org/linux-can/20220514141650.1109542-1-mailhol.vincent@wanadoo.fr/
+
+
+** Changelog **
+
+v5 -> v6:
+
+  * fix typo in patch #1's title: Kbuild -> Kconfig.
+
+  * make CONFIG_RX_CAN an hidden config symbol and modify the diagram
+    in the cover letter accordingly.
+
+    @Oliver, with CONFIG_CAN_RX_OFFLOAD now being an hidden config,
+    that option fully depends on the drivers. So contrary to your
+    suggestion, I put CONFIG_CAN_RX_OFFLOAD below the device drivers
+    in the diagram.
+
+  * fix typo in cover letter: CONFIG_CAN_BITTIMING -> CONFIG_CAN_CALC_BITTIMING.
+
+v4 -> v5:
+
+  * m_can is also requires RX offload. Add the "select CAN_RX_OFFLOAD"
+    to its Makefile.
+
+  * Reorder the lines of drivers/net/can/dev/Makefile.
+
+  * Remove duplicated rx-offload.o target in drivers/net/can/dev/Makefile
+
+  * Remove the Nota Bene in the cover letter.
+
+
+v3 -> v4:
+
+  * Five additional patches added to split can-dev module and refactor
+    Kbuild. c.f. below (lengthy) thread:
+    https://lore.kernel.org/linux-can/20220514141650.1109542-1-mailhol.vincent@wanadoo.fr/
+
+
+v2 -> v3:
+
+  * Apply can_dropped_invalid_skb() to slcan.
+
+  * Make vcan, vxcan and slcan dependent of CONFIG_CAN_DEV by
+    modifying Kbuild.
+
+  * fix small typos.
+
+v1 -> v2:
+
+  * move can_dropped_invalid_skb() to skb.c instead of dev.h
+
+  * also move can_skb_headroom_valid() to skb.c
+
+Vincent Mailhol (7):
+  can: Kconfig: rename config symbol CAN_DEV into CAN_NETLINK
+  can: Kconfig: turn menu "CAN Device Drivers" into a menuconfig using
+    CAN_DEV
+  can: bittiming: move bittiming calculation functions to
+    calc_bittiming.c
+  can: Kconfig: add CONFIG_CAN_RX_OFFLOAD
+  net: Kconfig: move the CAN device menu to the "Device Drivers" section
+  can: skb: move can_dropped_invalid_skb() and can_skb_headroom_valid()
+    to skb.c
+  can: skb: drop tx skb if in listen only mode
+
+ drivers/net/Kconfig                   |   2 +
+ drivers/net/can/Kconfig               |  55 +++++--
+ drivers/net/can/dev/Makefile          |  17 ++-
+ drivers/net/can/dev/bittiming.c       | 197 -------------------------
+ drivers/net/can/dev/calc_bittiming.c  | 202 ++++++++++++++++++++++++++
+ drivers/net/can/dev/dev.c             |   9 +-
+ drivers/net/can/dev/skb.c             |  72 +++++++++
+ drivers/net/can/m_can/Kconfig         |   1 +
+ drivers/net/can/spi/mcp251xfd/Kconfig |   1 +
+ include/linux/can/skb.h               |  59 +-------
+ net/can/Kconfig                       |   5 +-
+ 11 files changed, 338 insertions(+), 282 deletions(-)
+ create mode 100644 drivers/net/can/dev/calc_bittiming.c
+
+-- 
+2.35.1
 
