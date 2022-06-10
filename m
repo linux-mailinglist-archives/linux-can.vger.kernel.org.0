@@ -2,45 +2,57 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF4AA54591B
-	for <lists+linux-can@lfdr.de>; Fri, 10 Jun 2022 02:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AE7B54598C
+	for <lists+linux-can@lfdr.de>; Fri, 10 Jun 2022 03:30:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234341AbiFJATF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Thu, 9 Jun 2022 20:19:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53840 "EHLO
+        id S232417AbiFJB2d (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 9 Jun 2022 21:28:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230371AbiFJATF (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 9 Jun 2022 20:19:05 -0400
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3883A3A1B8;
-        Thu,  9 Jun 2022 17:19:03 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id v140so90512ybe.9;
-        Thu, 09 Jun 2022 17:19:03 -0700 (PDT)
+        with ESMTP id S1345504AbiFJB23 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 9 Jun 2022 21:28:29 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFD640E7D;
+        Thu,  9 Jun 2022 18:28:25 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id h27so415003ybj.4;
+        Thu, 09 Jun 2022 18:28:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=b/7KNh9s+MFyW7FHyqGy/cWHV9LNJaLnUFNwS0lEkfo=;
+        b=nWpwXoYycX1subytWcd82uj/10TPG7bJz+j06jndBEWouuIUQo+xVspGAcjl3HrMeQ
+         XCnEVKlyU96Ho9/mWbGYnt22aTWmsLDRMuMoXEaOYsHjxT6ky3D1FqXOpd7csihi2SdR
+         tOQgL5gyrsW79ieQE0GfTGp4yBLOT4XICBQaPzRmjg4JFf6dbg/bmTh7Z3cmgiTV+kD2
+         FKvuzaXLf1M+U4ADfms/EF0XzHMAIek4MYVHpZE9RcOsUuinyZjYji7qf0FHl6GA/gGB
+         Y4PaWqEck47qAt/kS9DtivPfKu/fXF320CVkBa+JNW2s7aBEODDtFG2DJ0aOcJDyBinV
+         d+AQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=zg7KF7YY9aGXptQ4LOLr5Rqt1X0ZoRkoJOPR7f51zj4=;
-        b=A/u0L0lMW3IuAzue2l8k118kzkC2tmFq3vWTAt37VJZ/fRYmJ8It9KiWfIKiZyFkLg
-         RAPuYNVkZ64kCR58LvmOg9zNHHP2eyxQSDP7799U0vopYllQkM+wytmW5y4H+u2ngpAV
-         5qaIGiB/HH0Tv5QXQiNEzi0gbMwC+8W5PELKnxoF1AJYj54Y4tvdUq5bswD28ApT9mEt
-         7js87F4DSBT+oxvJKThjE2HoavfRE3ZK2aM6RkxwmtY8avSdmvQWKNvqapZzg6q7f4TN
-         xMD02qvZdSWz/QTZK9mTpKAx0kEyonMcS0+1elB3MksF1UNYoqF7K2qnJDfrXTqm8Ijc
-         5j4g==
-X-Gm-Message-State: AOAM531H0QTEjxcNfC9Hq/Te2UQya+d3Vf/+BomZLnWW0ZxQYyEIgym6
-        gHOXdNkzamX6L9S0N2TVY8TG69BeAu0SkNEIABg=
-X-Google-Smtp-Source: ABdhPJwAeF77dS1PB55jgGhw11yt/sLQqem2eBt7B8BKJlSeeIBytfEbV1/+5yLuseXDgvwFRif11AOEIQ45AJXtFNE=
-X-Received: by 2002:a25:67d7:0:b0:663:b9c3:aa13 with SMTP id
- b206-20020a2567d7000000b00663b9c3aa13mr18864371ybc.20.1654820342456; Thu, 09
- Jun 2022 17:19:02 -0700 (PDT)
+        bh=b/7KNh9s+MFyW7FHyqGy/cWHV9LNJaLnUFNwS0lEkfo=;
+        b=N2z42j0tnoQTELgNhbPG+WOjsTA2evBrNtpfTxJFy+avwpc0FjFdVYvUgHaIYZV9Nz
+         a9/w+Qhkvg5X8JjgBy6/wvUNn6ZjHYEeUIDMOy8FnHFDjli5Ipna0Fqvsif1KHAYr8KV
+         2KnRxYLv0h0pMLyaaJuCiPp6m3tNK3kfk6HwkolldX1uYY0Bi/mvGbNrc1JxbqbYyu68
+         a9WkK8D5Wtlvp6NMGxlfXgDd9F7sYVdtStq6PSsUUaTs88800xYMOp7RlCm4SFwt2dul
+         ikn6YrLo2WuOpfHws2z4D1659o5WeBkYvm/htdvM3L3b51qn2sD1343qUfRg4V+Uzm/S
+         EFnw==
+X-Gm-Message-State: AOAM530Uu9IMcxpSVs/CUViHYzvuHHBy4puT4yI/gmtd5YghtY54K2G1
+        KH0cJu54R+YkwyupfPOioOJejxZVdzK7YKR3+nVegSRWJEJQWw==
+X-Google-Smtp-Source: ABdhPJyQrSHn/B5qxkQ1AkVegf5a9gE0ohxvTowVHzeS+Z7sOa/GoCJVd0HV/G43XbKEeaQ1nwfyHSjxeFBV46tbBmw=
+X-Received: by 2002:a25:6588:0:b0:65d:57b9:c470 with SMTP id
+ z130-20020a256588000000b0065d57b9c470mr43530425ybb.142.1654824504751; Thu, 09
+ Jun 2022 18:28:24 -0700 (PDT)
 MIME-Version: 1.0
 References: <alpine.DEB.2.22.394.2206031547001.1630869@thelappy>
- <20220609204714.2715188-1-rhett.aultman@samsara.com> <20220609204714.2715188-2-rhett.aultman@samsara.com>
-In-Reply-To: <20220609204714.2715188-2-rhett.aultman@samsara.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Fri, 10 Jun 2022 09:18:51 +0900
-Message-ID: <CAMZ6Rq+rEoOmy5PQ=oiaohcc=H5GFbZMfECACwe_qjEQXwuxuQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] drivers: usb/core/urb: Add URB_FREE_COHERENT
+ <20220609204714.2715188-1-rhett.aultman@samsara.com> <20220609204714.2715188-4-rhett.aultman@samsara.com>
+ <CAMZ6RqKwvSswxThiKqEB8VhD5MyHvRbSwO_9-ZNwLgmnm-0iBw@mail.gmail.com>
+In-Reply-To: <CAMZ6RqKwvSswxThiKqEB8VhD5MyHvRbSwO_9-ZNwLgmnm-0iBw@mail.gmail.com>
+From:   Vincent Mailhol <vincent.mailhol@gmail.com>
+Date:   Fri, 10 Jun 2022 10:28:14 +0900
+Message-ID: <CAMZ6RqJ6fq=Rv-BuL6bA89E_DQdJ949quSWjyphy+2tOJJ=kGw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] can: gs_usb: fix DMA memory leak on close
 To:     Rhett Aultman <rhett.aultman@samsara.com>
 Cc:     linux-usb@vger.kernel.org, linux-can <linux-can@vger.kernel.org>,
         Oliver Neukum <oneukum@suse.org>,
@@ -48,76 +60,93 @@ Cc:     linux-usb@vger.kernel.org, linux-can <linux-can@vger.kernel.org>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri. 10 juin 2022 à 06:11, Rhett Aultman <rhett.aultman@samsara.com> wrote:
+On Fri. 10 juin 2022 at 09:05, Vincent Mailhol
+<vincent.mailhol@gmail.com> wrote:
+> On Fri. 10 Jun 2022 at 05:53, Rhett Aultman <rhett.aultman@samsara.com> w=
+rote:
+> > The gs_usb driver allocates DMA memory with usb_alloc_coherent() in
+> > gs_can_open() and then keeps this memory in an URB, with the expectatio=
+n
+> > that the memory will be freed when the URB is killed in gs_can_close().
+> > Memory allocated with usb_alloc_coherent() cannot be freed in this way
+> > and much be freed using usb_free_coherent() instead.  This means that
+>       ^^^^
+> and must
+>
+> > repeated cycles of calling gs_can_open() and gs_can_close() will lead t=
+o
+> > a memory leak.
+> >
+> > Historically, drivers have handled this by keeping an array of pointers
+> > to their DMA rx buffers and explicitly freeing them.  For an example of
+> > this technique used in the esd_usb2 driver, see here:
+> > https://www.spinics.net/lists/linux-can/msg08203.html
+> >
+> > While the above method works, the conditions that cause this leak are
+> > not apparent to driver writers and the method for solving it at the
+> > driver level has been piecemeal.  This patch makes use of a new
+> > URB_FREE_COHERENT flag on the URB, reducing the solution of this memory
+> > leak down to a single line of code.
+> >
 
-The From tag goes at the beginning of the patch.
+One more thing, for bug fixes, the best practice is to add a Fixes tag. c.f=
+.:
+https://www.kernel.org/doc/html/latest/process/submitting-patches.html#desc=
+ribe-your-changes
 
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Fixes: d08e973a77d1 ("can: gs_usb: Added support for the GS_USB CAN devices=
+")
 
-> When allocating URB memory with kmalloc(), drivers can simply set the
-> URB_FREE_BUFFER flag in urb::transfer_flags and that way, the memory
-> will be freed in the background when killing the URB (for example with
-> usb_kill_anchored_urbs()).
+> > Signed-off-by: Rhett Aultman <rhett.aultman@samsara.com>
+> > ---
+> >  drivers/net/can/usb/gs_usb.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.=
+c
+> > index b29ba9138866..3ded3e14c830 100644
+> > --- a/drivers/net/can/usb/gs_usb.c
+> > +++ b/drivers/net/can/usb/gs_usb.c
+> > @@ -768,7 +768,7 @@ static int gs_can_open(struct net_device *netdev)
+> >                                           buf,
+> >                                           dev->parent->hf_size_rx,
+> >                                           gs_usb_receive_bulk_callback,=
+ parent);
+> >
+> > -                       urb->transfer_flags |=3D URB_NO_TRANSFER_DMA_MA=
+P;
+> > +                       urb->transfer_flags |=3D (URB_NO_TRANSFER_DMA_M=
+AP | URB_FREE_COHERENT);
 >
-> However, there are no equivalent mechanism when allocating DMA memory
-> (with usb_alloc_coherent()).
+> Nitpick but parenthesis are not needed here. Also, there are no
+> reasons to do a |=3D. I would prefer to see this:
+>         urb->transfer_flags =3D URB_NO_TRANSFER_DMA_MAP | URB_FREE_COHERE=
+NT;
 >
-> This patch adds a new flag: URB_FREE_COHERENT. Setting this flag will
-> cause the kernel to automatically call usb_free_coherent() on the
-> transfer buffer when the URB is killed, similarly to how
-> URB_FREE_BUFFER triggers a call to kfree().
+> >                         usb_anchor_urb(urb, &parent->rx_submitted);
 >
-> In order to have all the flags in numerical order, URB_DIR_IN is
-> renumbered from 0x0200 to 0x0400 so that URB_FREE_COHERENT can reuse
-> value 0x0200.
+> I looked at the code of gs_usb, this driver has a lot of dust. What
+> strikes me the most is that it uses usb_alloc_coherent() each time in
+> its xmit() function instead of allocating the TX URB once in the
+> open() function and resubmitting then in the callback function. That
+> last comment is not a criticism of this patch. But if someone has the
+> motivation to do some cleaning, go ahead=E2=80=A6
 >
-> From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-
-Move the From tag from here to the first line.
-
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> ---
->  drivers/usb/core/urb.c | 3 +++
->  include/linux/usb.h    | 3 ++-
->  2 files changed, 5 insertions(+), 1 deletion(-)
+> Aside from the nitpicks, the patch looks good to me. You can add this
+> to your v3:
+> Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 >
-> diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
-> index 33d62d7e3929..1460fdac0b18 100644
-> --- a/drivers/usb/core/urb.c
-> +++ b/drivers/usb/core/urb.c
-> @@ -22,6 +22,9 @@ static void urb_destroy(struct kref *kref)
 >
->         if (urb->transfer_flags & URB_FREE_BUFFER)
->                 kfree(urb->transfer_buffer);
-> +       else if (urb->transfer_flags & URB_FREE_COHERENT)
-> +               usb_free_coherent(urb->dev, urb->transfer_buffer_length,
-> +                                 urb->transfer_buffer, urb->transfer_dma);
->
->         kfree(urb);
->  }
-> diff --git a/include/linux/usb.h b/include/linux/usb.h
-> index 60bee864d897..945d68ea1d76 100644
-> --- a/include/linux/usb.h
-> +++ b/include/linux/usb.h
-> @@ -1328,9 +1328,10 @@ extern int usb_disabled(void);
->  #define URB_NO_INTERRUPT       0x0080  /* HINT: no non-error interrupt
->                                          * needed */
->  #define URB_FREE_BUFFER                0x0100  /* Free transfer buffer with the URB */
-> +#define URB_FREE_COHERENT      0x0200  /* Free DMA memory of transfer buffer */
->
->  /* The following flags are used internally by usbcore and HCDs */
-> -#define URB_DIR_IN             0x0200  /* Transfer from device to host */
-> +#define URB_DIR_IN             0x0400  /* Transfer from device to host */
->  #define URB_DIR_OUT            0
->  #define URB_DIR_MASK           URB_DIR_IN
+> Yours sincerely,
+> Vincent Mailhol
