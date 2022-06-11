@@ -2,48 +2,66 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C0DD547794
-	for <lists+linux-can@lfdr.de>; Sat, 11 Jun 2022 22:49:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65CF35477BC
+	for <lists+linux-can@lfdr.de>; Sat, 11 Jun 2022 23:52:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232140AbiFKUti (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 11 Jun 2022 16:49:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48216 "EHLO
+        id S232276AbiFKVoD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 11 Jun 2022 17:44:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229868AbiFKUth (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 11 Jun 2022 16:49:37 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA64731371
-        for <linux-can@vger.kernel.org>; Sat, 11 Jun 2022 13:49:36 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1o0835-0005kG-E0; Sat, 11 Jun 2022 22:49:35 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 725F892FE9;
-        Sat, 11 Jun 2022 20:49:34 +0000 (UTC)
-Date:   Sat, 11 Jun 2022 22:49:33 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 0/2] can: etas_es58x: cleanups on struct es58x_device
-Message-ID: <20220611204933.ztf3tuwr72mowutr@pengutronix.de>
-References: <20220611162037.1507-1-mailhol.vincent@wanadoo.fr>
+        with ESMTP id S231376AbiFKVoC (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 11 Jun 2022 17:44:02 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE21C6B0B3
+        for <linux-can@vger.kernel.org>; Sat, 11 Jun 2022 14:43:59 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id a29so3532474lfk.2
+        for <linux-can@vger.kernel.org>; Sat, 11 Jun 2022 14:43:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hfPbQWxVdTCOJ0ARtfuxn4tIfyfSZbkVjOIz2CyS9yM=;
+        b=XUz9K1yVXlY0DRBDL7zr/EEftWakgFSk5edf9xSmnaFRtK8w9R41V9cED2gfDsxEy5
+         +ghpvR7TdhpG17i3HH6k/VZMJtPeqY1wECzCPja2oejHzdpgpCOW1Eb9esT/j76u2Ix7
+         8ES6QIHr1rMCVQL33PdI6tJCgOqKOBLQtjeOE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hfPbQWxVdTCOJ0ARtfuxn4tIfyfSZbkVjOIz2CyS9yM=;
+        b=eHijK51dFPR7hLGpnYvPN8s1yQdg6u4MTBuH8p3ziv0TO2GvgRd2kU1XMQWhaslz/T
+         l6T1Jw+HxlXSR7X+sN0iQDbNv9dcN82zyms6nELsch0tq/4XAAe7rRM93/AE2aCoss9g
+         5x7X4mkh0toNrDr8aADAb/Z5zTeRwdF4N42crNOz2pvneF9/C8BzgJZIH+Rt7HJrVY4H
+         M2TgHYfsXImS8Uu8SBq+OxyAZtYR4jVpfdSaTRMf7OhFswK4x/2rRLMgG7wMRQhA8jcA
+         EQ9XqZsCmAtyiKkcyhGil2tONybG7XXSazBVfmElsg/q0nhpJdehHeO48INXjQLMD1Ws
+         /cxQ==
+X-Gm-Message-State: AOAM532kOj5jbJt4KqslBU6Ot6ZAO+L20ZrD2DLmiPnRYqqznQju98hp
+        0Y2d8DcoK6Y0iXlSX/GM0hhF7g4trWQKT6lqiAABobsqWOkWkw==
+X-Google-Smtp-Source: ABdhPJyyzlstOLJKa7Sv0E2yREoSKkKVxNfagzqdjNKZ4h9exDcco/HgBxeywj+hla4Pw8YrJxCcqUytnhupMLzQo6Q=
+X-Received: by 2002:a19:431c:0:b0:479:2053:178e with SMTP id
+ q28-20020a19431c000000b004792053178emr25009561lfa.117.1654983838112; Sat, 11
+ Jun 2022 14:43:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="35fdasoia5asrz2r"
-Content-Disposition: inline
-In-Reply-To: <20220611162037.1507-1-mailhol.vincent@wanadoo.fr>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+References: <20220607094752.1029295-1-dario.binacchi@amarulasolutions.com>
+ <20220607094752.1029295-7-dario.binacchi@amarulasolutions.com> <20220609071636.6tbspftu3yclip55@pengutronix.de>
+In-Reply-To: <20220609071636.6tbspftu3yclip55@pengutronix.de>
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date:   Sat, 11 Jun 2022 23:43:47 +0200
+Message-ID: <CABGWkvp1=DF1uok4ZoCRt1EqpdrgdcytG==Ex6zuWgT5mrvdwQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 06/13] can: slcan: allow to send commands to the adapter
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        michael@amarulasolutions.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,44 +70,67 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi Marc,
 
---35fdasoia5asrz2r
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, Jun 9, 2022 at 9:16 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+>
+> On 07.06.2022 11:47:45, Dario Binacchi wrote:
+> > This is a preparation patch for the upcoming support to change the
+> > bitrate via ip tool, reset the adapter error states via the ethtool API
+> > and, more generally, send commands to the adapter.
+> >
+> > Since some commands (e. g. setting the bitrate) will be sent before
+> > calling the open_candev(), the netif_running() will return false and so
+> > a new flag bit (i. e. SLF_XCMD) for serial transmission has to be added.
+> >
+> > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+>
+> I think this patch can be dropped, let me explain:
+>
+> You don't have to implement the do_set_bittiming callback. It's
+> perfectly OK to set the bitrate during the ndo_open callback after
+> open_candev().
 
-On 12.06.2022 01:20:35, Vincent Mailhol wrote:
-> This series contains two clean up patches toward struct es58x_device
-> of the CAN etas_es58x driver. The first one removes the field
-> rx_max_packet_size which value can actually be retrieved from the
-> helper function usb_maxpacket(). The second one fixes the signedness
-> of the TX and RX pipes.
->=20
-> No functional changes.
+I developed what you suggested (i. e. remove the SLF_XCMD bit and set the
+bitrate, as well as send the "F\r" and "O\r" commands, after calling
+the open_candev(),
+but now I can't send the close command ("C\r") during the ndo_stop() since
+netif_running() returns false. The CAN framework clears netif_running() before
+calling the ndo_stop(). IMHO the SLF_XCMD bit then becomes necessary to
+transmit the commands to the adapter from the ndo_open() and
+ndo_stop() routines.
+Any suggestions ?
 
-Applied to linux-can-next/testing.
+Thanks and regards,
+Dario
+>
+> regards,
+> Marc
+>
+> --
+> Pengutronix e.K.                 | Marc Kleine-Budde           |
+> Embedded Linux                   | https://www.pengutronix.de  |
+> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---35fdasoia5asrz2r
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
 
------BEGIN PGP SIGNATURE-----
+Dario Binacchi
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKk/9sACgkQrX5LkNig
-011BcQf9H6Y7Nba+v8y5LOeF13X7eS1vQxt1Wk6bV/t7XnfANhkhdjzBH6dCaMu3
-WuPat3HzETAQqaVDCTlY1tN736nfhoTjPfz+qEN21owTQl86GTc4oZzRJbGNNHWx
-i2L06YqbwgUTBijR7DGaooAmqooHOX+/kxqHRWHZ1mPNKyn6uTe+JPgICAb4UMD1
-/OWkCnvpMVtHSnB/Pn7OCdRyMRMiZXA3O16koyhoGWSI2+SRG4ihNDPqlP6eJvGC
-B5J4/b8LEo0ZY2bhjWKcYEFFVa7rmyirQVmaI5/xTE9HI8109EUPB7zVXlv0Ggqe
-6ySsueKKzkAUERsNt3CcyyQdzRpzKQ==
-=FGYU
------END PGP SIGNATURE-----
+Embedded Linux Developer
 
---35fdasoia5asrz2r--
+dario.binacchi@amarulasolutions.com
+
+__________________________________
+
+
+Amarula Solutions SRL
+
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+
+T. +39 042 243 5310
+info@amarulasolutions.com
+
+www.amarulasolutions.com
