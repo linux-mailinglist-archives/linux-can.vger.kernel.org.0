@@ -2,45 +2,46 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A936F5475B6
-	for <lists+linux-can@lfdr.de>; Sat, 11 Jun 2022 16:43:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73391547608
+	for <lists+linux-can@lfdr.de>; Sat, 11 Jun 2022 17:18:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235964AbiFKOm6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 11 Jun 2022 10:42:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42110 "EHLO
+        id S233496AbiFKPSG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 11 Jun 2022 11:18:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235772AbiFKOmx (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 11 Jun 2022 10:42:53 -0400
+        with ESMTP id S230056AbiFKPSF (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 11 Jun 2022 11:18:05 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ED5C11A36
-        for <linux-can@vger.kernel.org>; Sat, 11 Jun 2022 07:42:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5A122BC9
+        for <linux-can@vger.kernel.org>; Sat, 11 Jun 2022 08:18:02 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1o02KA-0004YD-Jr
-        for linux-can@vger.kernel.org; Sat, 11 Jun 2022 16:42:50 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 16B4292E77
-        for <linux-can@vger.kernel.org>; Sat, 11 Jun 2022 14:42:50 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        id 1o02s9-00086f-QT; Sat, 11 Jun 2022 17:17:57 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id CAE2092E74;
-        Sat, 11 Jun 2022 14:42:49 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 114d7d46;
-        Sat, 11 Jun 2022 14:42:49 +0000 (UTC)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 1593092EAD;
+        Sat, 11 Jun 2022 15:17:55 +0000 (UTC)
+Date:   Sat, 11 Jun 2022 17:17:54 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, Max Staudt <max@enpas.org>
-Subject: [PATCH] can: netlink: allow configuring of fixed bit rates without need for do_set_bittiming callback
-Date:   Sat, 11 Jun 2022 16:42:48 +0200
-Message-Id: <20220611144248.3924903-1-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.35.1
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Max Staudt <max@enpas.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        netdev@vger.kernel.org, Geert Uytterhoeven <geert@linux-m68k.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: Re: [PATCH v6 0/7] can: refactoring of can-dev module and of Kbuild
+Message-ID: <20220611151754.2agcczimjcgr25xl@pengutronix.de>
+References: <20220610143009.323579-1-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="kg5j2blhufuqdrtx"
+Content-Disposition: inline
+In-Reply-To: <20220610143009.323579-1-mailhol.vincent@wanadoo.fr>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -54,48 +55,163 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Usually CAN devices support freely configurable bit rates, the limits
-are defined by struct can_priv::bittiming_const. Another way is to
-implement the struct can_priv::do_set_bittiming callback.
 
-If the bit rate is configured via netlink the can_changelink()
-function checks that either can_priv::bittiming_const or struct
-can_priv::do_set_bittiming is implemented.
+--kg5j2blhufuqdrtx
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-In commit 431af779256c ("can: dev: add CAN interface API for fixed
-bitrates") an API for configuring bit rates on CAN interfaces that
-only support fixed bit rates was added. The supported bit rates are
-defined by struct can_priv::bitrate_const.
+On 10.06.2022 23:30:02, Vincent Mailhol wrote:
+> Aside of calc_bittiming.o which can be configured with
+> CAN_CALC_BITTIMING, all objects from drivers/net/can/dev/ get linked
+> unconditionally to can-dev.o even if not needed by the user.
+>=20
+> This series first goal it to split the can-dev modules so that the
+> only the needed features get built in during compilation.
+> Additionally, the CAN Device Drivers menu is moved from the
+> "Networking support" category to the "Device Drivers" category (where
+> all drivers are supposed to be).
+>=20
+>=20
+> * menu before this series *
+>=20
+> CAN bus subsystem support
+>   symbol: CONFIG_CAN
+>   |
+>   +-> CAN Device Drivers
+>       (no symbol)
+>       |
+>       +-> software/virtual CAN device drivers
+>       |   (at time of writing: slcan, vcan, vxcan)
+>       |
+>       +-> Platform CAN drivers with Netlink support
+>           symbol: CONFIG_CAN_DEV
+>           |
+>           +-> CAN bit-timing calculation  (optional for hardware drivers)
+>           |   symbol: CONFIG_CAN_CALC_BITTIMING
+>           |
+>           +-> All other CAN devices drivers
+>=20
+> * menu after this series *
+>=20
+> Network device support
+>   symbol: CONFIG_NETDEVICES
+>   |
+>   +-> CAN Device Drivers
+>       symbol: CONFIG_CAN_DEV
+>       |
+>       +-> software/virtual CAN device drivers
+>       |   (at time of writing: slcan, vcan, vxcan)
+>       |
+>       +-> CAN device drivers with Netlink support
+>           symbol: CONFIG_CAN_NETLINK (matches previous CONFIG_CAN_DEV)
+>           |
+>           +-> CAN bit-timing calculation (optional for all drivers)
+>           |   symbol: CONFIG_CAN_CALC_BITTIMING
+>           |
+>           +-> All other CAN devices drivers
+>               (some may select CONFIG_CAN_RX_OFFLOAD)
+>               |
+>               +-> CAN rx offload (automatically selected by some drivers)
+>                   (hidden symbol: CONFIG_CAN_RX_OFFLOAD)
+>=20
+> Patches 1 to 5 of this series do above modification.
+>=20
+> The last two patches add a check toward CAN_CTRLMODE_LISTENONLY in
+> can_dropped_invalid_skb() to discard tx skb (such skb can potentially
+> reach the driver if injected via the packet socket). In more details,
+> patch 6 moves can_dropped_invalid_skb() from skb.h to skb.o and patch
+> 7 is the actual change.
+>=20
+> Those last two patches are actually connected to the first five ones:
+> because slcan and v(x)can requires can_dropped_invalid_skb(), it was
+> necessary to add those three devices to the scope of can-dev before
+> moving the function to skb.o.
+>=20
+> This design results from the lengthy discussion in [1].
+>=20
+> [1] https://lore.kernel.org/linux-can/20220514141650.1109542-1-mailhol.vi=
+ncent@wanadoo.fr/
+>=20
+>=20
+> ** Changelog **
+>=20
+> v5 -> v6:
+>=20
+>   * fix typo in patch #1's title: Kbuild -> Kconfig.
+>=20
+>   * make CONFIG_RX_CAN an hidden config symbol and modify the diagram
+>     in the cover letter accordingly.
+>=20
+>     @Oliver, with CONFIG_CAN_RX_OFFLOAD now being an hidden config,
+>     that option fully depends on the drivers. So contrary to your
+>     suggestion, I put CONFIG_CAN_RX_OFFLOAD below the device drivers
+>     in the diagram.
+>=20
+>   * fix typo in cover letter: CONFIG_CAN_BITTIMING -> CONFIG_CAN_CALC_BIT=
+TIMING.
+>=20
+> v4 -> v5:
+>=20
+>   * m_can is also requires RX offload. Add the "select CAN_RX_OFFLOAD"
+>     to its Makefile.
+>=20
+>   * Reorder the lines of drivers/net/can/dev/Makefile.
+>=20
+>   * Remove duplicated rx-offload.o target in drivers/net/can/dev/Makefile
+>=20
+>   * Remove the Nota Bene in the cover letter.
+>=20
+>=20
+> v3 -> v4:
+>=20
+>   * Five additional patches added to split can-dev module and refactor
+>     Kbuild. c.f. below (lengthy) thread:
+>     https://lore.kernel.org/linux-can/20220514141650.1109542-1-mailhol.vi=
+ncent@wanadoo.fr/
+>=20
+>=20
+> v2 -> v3:
+>=20
+>   * Apply can_dropped_invalid_skb() to slcan.
+>=20
+>   * Make vcan, vxcan and slcan dependent of CONFIG_CAN_DEV by
+>     modifying Kbuild.
+>=20
+>   * fix small typos.
+>=20
+> v1 -> v2:
+>=20
+>   * move can_dropped_invalid_skb() to skb.c instead of dev.h
+>=20
+>   * also move can_skb_headroom_valid() to skb.c
 
-However the above mentioned commit forgot to add the struct
-can_priv::bitrate_const to the check in can_changelink().
+Applied to can-next/master....as a merge with the above message!
+Congrats on this series and the first ever merge to the linux-can
+branch!
 
-In order to avoid to implement a no-op can_priv::do_set_bittiming
-callback on devices with fixed bit rates, extend the check in
-can_changelink() accordingly.
+regards,
+Marc
 
-Fixes: 431af779256c ("can: dev: add CAN interface API for fixed bitrates")
-Reported-by: Max Staudt <max@enpas.org>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/dev/netlink.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlink.c
-index 7633d98e3912..667ddd28fcdc 100644
---- a/drivers/net/can/dev/netlink.c
-+++ b/drivers/net/can/dev/netlink.c
-@@ -176,7 +176,8 @@ static int can_changelink(struct net_device *dev, struct nlattr *tb[],
- 		 * directly via do_set_bitrate(). Bail out if neither
- 		 * is given.
- 		 */
--		if (!priv->bittiming_const && !priv->do_set_bittiming)
-+		if (!priv->bittiming_const && !priv->do_set_bittiming &&
-+		    !priv->bitrate_const)
- 			return -EOPNOTSUPP;
- 
- 		memcpy(&bt, nla_data(data[IFLA_CAN_BITTIMING]), sizeof(bt));
--- 
-2.35.1
+--kg5j2blhufuqdrtx
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKksh8ACgkQrX5LkNig
+011r/Qf/WO5jEO9TYcsuTPqF7I3rFy71Sm5lwROlTfTJZ4cbRYwGfZUgVD3eKHXj
+Xd89LAKzaKlcf85PugUxstqG80Tpnw7OcZYLZTDqzcxWKhkppmqX+aFUGazg2Wfa
+P5oXNltWWSpIXCSdry/hEC1COpjYOJvKmTS8TR9JDaOVE6s5BK/5UlAMePQ/hlYV
+GTgst4wTxf9UPSyH+NTOXZ+Kb9aQPMurJDP72bhFCDD6ND784zJOOHYMshJ0nexs
+nmSPhxYLqBCqEbsoxX90fGkSV6f8AxOLxSU3KPKb2/DDeMo0/aV8D2jonaXShR+X
+wB+0t4DI9BV4Ut5lpo9QuQQ4/6KslQ==
+=lzWg
+-----END PGP SIGNATURE-----
+
+--kg5j2blhufuqdrtx--
