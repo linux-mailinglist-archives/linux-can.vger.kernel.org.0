@@ -2,48 +2,48 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B26BF547C85
-	for <lists+linux-can@lfdr.de>; Sun, 12 Jun 2022 23:39:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 141AE547C89
+	for <lists+linux-can@lfdr.de>; Sun, 12 Jun 2022 23:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236536AbiFLVjt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 12 Jun 2022 17:39:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51840 "EHLO
+        id S236272AbiFLVju (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 12 Jun 2022 17:39:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236464AbiFLVjo (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 12 Jun 2022 17:39:44 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7D4B19283
-        for <linux-can@vger.kernel.org>; Sun, 12 Jun 2022 14:39:43 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id v1so7635639ejg.13
-        for <linux-can@vger.kernel.org>; Sun, 12 Jun 2022 14:39:43 -0700 (PDT)
+        with ESMTP id S236484AbiFLVjt (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 12 Jun 2022 17:39:49 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827B81A83B
+        for <linux-can@vger.kernel.org>; Sun, 12 Jun 2022 14:39:47 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id z7so4868130edm.13
+        for <linux-can@vger.kernel.org>; Sun, 12 Jun 2022 14:39:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=amarulasolutions.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=bs1pDxoqSwxHo6PhPuLte63s3qeUlbVxYb0CgUg+DU4=;
-        b=OUYQfEQrOtz7F0Nm9V9fFHrIGYhY1uY24QXJxNItXxe5w8q6wW3ICsnjqbyHOW6DXr
-         Jqmh+nt5FgmxYnt1u8l0tEFZFV8ZMiHIvBmm4bMYdii8Dq+3ltEx8X0CPs5qXkldwvXn
-         j9jVXNuJcacNFK3uxOO+hAwfSkNBevUEwcNqo=
+        bh=El3W9x0OB1VE70B0Lt3SBVyO+pC/HDeoL5aPqYtLRdg=;
+        b=FIZh5UTrlRbIHsCTBAPteoUF41feurhGY1j95FK7rMWDVMIlldVYABzLSWhURo+iRZ
+         5X9PK4jys25T9M8PvpocVL0htqhFvlb7Qq9ALIEgghXvfpHLwq5JYOr4QhvJvqBzX2ZX
+         9W1i0yEhMFUD5RYthu+fwLfuXuQLB3xqBVoBE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=bs1pDxoqSwxHo6PhPuLte63s3qeUlbVxYb0CgUg+DU4=;
-        b=pnUdb7/gX/sLtN58VDAL5BLS+kp8BUXTMiHhx0wiUJ6l9Nt3oLoRNkkm7CIBdlhGvd
-         Dj9FUne9L9OpRQz+FxsEoEyR9XEbrR8jOGdEw4r43L7CVNSjBntCRn4BXFPZRNOiCpq3
-         Td1004NEN3yoRBaYppo4votr8VtlHeVRDyDgrr9J9jxMkkrFn9TzdOMJJlDIIlxj8fyL
-         8JppEu2gmm/AYjQCTVGhDdrBPuII0zW9l+VIxxt659hrcvrk+2igVoDTdjC+LEqAuDTV
-         HPJfRSgLAkJQFKXNPUJa+3C/qTca29C2Aha4wWzTxPKfbdKSB3xLfUHnAdIr8tZMyFJv
-         sO2A==
-X-Gm-Message-State: AOAM533Hg+1Nk4CbGZdbCS1peUbissTG56fbsOlumVpTtSpQvDuPB7aj
-        hY0Ja8IjbPQgUJHJLY4H7ehofg==
-X-Google-Smtp-Source: ABdhPJxPU1NM0rh3G4bzrTJkWzWLp5YsG4UPwDoQRnwVyaL8yBwctHZy5nQSG3CaRRYu/WmNAouG0A==
-X-Received: by 2002:a17:907:1b1e:b0:6d7:31b0:e821 with SMTP id mp30-20020a1709071b1e00b006d731b0e821mr49755379ejc.334.1655069982282;
-        Sun, 12 Jun 2022 14:39:42 -0700 (PDT)
+        bh=El3W9x0OB1VE70B0Lt3SBVyO+pC/HDeoL5aPqYtLRdg=;
+        b=iS+KJ++JesIglZ1/XsJVGWq5GBzPN9HWK++XGJPeb7TpkNWU1aPyR6hQuxJUnZgwqB
+         axoHrsNTDRt4ksayX784jROq821GLqB1HSipAIRQRXCzydp+jrl9NVThSS5CPXW5YNmf
+         S8zD6EpaeUYunY7lvC/Xdx5JzNYfH8YsrrnRbeJ2dwog6K4RPcLuclXxfta5Y0H73OrP
+         faGnyY89/LnW95XGlwiNI8+2m5J20kuUdGXc4BCJ5YDoKBYlxIRA6ArZScfu9pUKwS+q
+         oUJNBEj/j11M+2s/S2Weilvz7Cg86tIZuwICJbwcwwXDIyVyqi4szMYDtUg3/xzAJh5+
+         lidw==
+X-Gm-Message-State: AOAM532GTGwFPmVYnrg3knzyWsW7rO1BY/RLN1CWx/uBmP9ef+qwKFWC
+        7EIrLlRdRt8cd2lcJhx6JExeaQ==
+X-Google-Smtp-Source: ABdhPJww3i7CVaj0ctxJLxdZv/2+Ex6h2WRxPQWXOiFgSNJiw7emFfgKJIduJPbDUDTWtLrMOo3Zpw==
+X-Received: by 2002:aa7:c306:0:b0:42d:d4cc:c606 with SMTP id l6-20020aa7c306000000b0042dd4ccc606mr62413182edq.341.1655069986039;
+        Sun, 12 Jun 2022 14:39:46 -0700 (PDT)
 Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-80-116-90-174.pool80116.interbusiness.it. [80.116.90.174])
-        by smtp.gmail.com with ESMTPSA id u10-20020a1709061daa00b00711d546f8a8sm2909398ejh.139.2022.06.12.14.39.37
+        by smtp.gmail.com with ESMTPSA id u10-20020a1709061daa00b00711d546f8a8sm2909398ejh.139.2022.06.12.14.39.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jun 2022 14:39:41 -0700 (PDT)
+        Sun, 12 Jun 2022 14:39:45 -0700 (PDT)
 From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     michael@amarulasolutions.com,
@@ -57,9 +57,9 @@ Cc:     michael@amarulasolutions.com,
         Paolo Abeni <pabeni@redhat.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH v3 01/13] can: slcan: use the BIT() helper
-Date:   Sun, 12 Jun 2022 23:39:15 +0200
-Message-Id: <20220612213927.3004444-2-dario.binacchi@amarulasolutions.com>
+Subject: [PATCH v3 02/13] can: slcan: use netdev helpers to print out messages
+Date:   Sun, 12 Jun 2022 23:39:16 +0200
+Message-Id: <20220612213927.3004444-3-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220612213927.3004444-1-dario.binacchi@amarulasolutions.com>
 References: <20220612213927.3004444-1-dario.binacchi@amarulasolutions.com>
@@ -75,29 +75,39 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Use the BIT() helper instead of an explicit shift.
+Replace printk() calls with corresponding netdev helpers.
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
 
 (no changes since v1)
 
- drivers/net/can/slcan.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/can/slcan.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/net/can/slcan.c b/drivers/net/can/slcan.c
-index 64a3aee8a7da..b37d35c2a23a 100644
+index b37d35c2a23a..6162a9c21672 100644
 --- a/drivers/net/can/slcan.c
 +++ b/drivers/net/can/slcan.c
-@@ -413,7 +413,7 @@ static int slc_open(struct net_device *dev)
- 	if (sl->tty == NULL)
- 		return -ENODEV;
+@@ -365,7 +365,7 @@ static netdev_tx_t slc_xmit(struct sk_buff *skb, struct net_device *dev)
+ 	spin_lock(&sl->lock);
+ 	if (!netif_running(dev))  {
+ 		spin_unlock(&sl->lock);
+-		printk(KERN_WARNING "%s: xmit: iface is down\n", dev->name);
++		netdev_warn(dev, "xmit: iface is down\n");
+ 		goto out;
+ 	}
+ 	if (sl->tty == NULL) {
+@@ -776,8 +776,7 @@ static void __exit slcan_exit(void)
  
--	sl->flags &= (1 << SLF_INUSE);
-+	sl->flags &= BIT(SLF_INUSE);
- 	netif_start_queue(dev);
- 	return 0;
- }
+ 		sl = netdev_priv(dev);
+ 		if (sl->tty) {
+-			printk(KERN_ERR "%s: tty discipline still running\n",
+-			       dev->name);
++			netdev_err(dev, "tty discipline still running\n");
+ 		}
+ 
+ 		unregister_netdev(dev);
 -- 
 2.32.0
 
