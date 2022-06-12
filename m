@@ -2,56 +2,73 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6B98547C7F
-	for <lists+linux-can@lfdr.de>; Sun, 12 Jun 2022 23:33:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB8C2547C83
+	for <lists+linux-can@lfdr.de>; Sun, 12 Jun 2022 23:39:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236104AbiFLVdu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 12 Jun 2022 17:33:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56734 "EHLO
+        id S236385AbiFLVjl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 12 Jun 2022 17:39:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235060AbiFLVdt (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 12 Jun 2022 17:33:49 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 157BA13F4B
-        for <linux-can@vger.kernel.org>; Sun, 12 Jun 2022 14:33:49 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1o0VDM-0007Ni-3X; Sun, 12 Jun 2022 23:33:44 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 85BE993514;
-        Sun, 12 Jun 2022 21:33:34 +0000 (UTC)
-Date:   Sun, 12 Jun 2022 23:33:33 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     'Rhett Aultman' <rhett.aultman@samsara.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        linux-can <linux-can@vger.kernel.org>,
-        --cc=Oliver Neukum <oneukum@suse.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
+        with ESMTP id S235060AbiFLVjk (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 12 Jun 2022 17:39:40 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A7818E34
+        for <linux-can@vger.kernel.org>; Sun, 12 Jun 2022 14:39:39 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id fu3so7687430ejc.7
+        for <linux-can@vger.kernel.org>; Sun, 12 Jun 2022 14:39:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZyOL/5w2xsSU/Fg6Gmxyopr+VoCvVAaounzNIX8NZuw=;
+        b=H0jOHpTEArc6aFV3dku0OMKVAUPHtxCcoGn0dSwOwoQ0At7I64G8hRrzwUSNktTRao
+         Ooyt2OIk4bfaWETXqQl077knXU82vcVplP2dRiW/mOJWfGOM1015pTqzKGyxABKqjxRD
+         uk3DbSfwtDdjPpxPMR7sPMLBZIeE4LKxTB2Qg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZyOL/5w2xsSU/Fg6Gmxyopr+VoCvVAaounzNIX8NZuw=;
+        b=Mu/6qssJ2Yv+la4AZIZffum/neZEk7oTnx1dRE8WHsA5i4rYE+mSRAEceZheUfECUQ
+         woNj40kAX+aCNXzeDWB8bapnc7NKL+t2bEcneo8D8TVjipmGKHp4OGSzU2WV+8EUrHWs
+         +gCueeaeek9+jIOY0GhA323tlmgHG0PaQQg1IxAPJAydORblSAUgck22kETn66DOxMvM
+         dz6pbGVQn4WkhZ6NELiJhX3b/cEIZm5Fr5rHXibaKIy7l6Ch6SEKho3M7mR9D6LgY2KJ
+         jOZKqbrSD6g99UED50ovnpK/tQgrpyVpTtiPrurS3jdWQcyBwfI/F+Ym3KqRl7JXOUmq
+         CqCw==
+X-Gm-Message-State: AOAM532z6y5swj0FZ9KVLJPokixOx9DKyx9tgS5YkHE/FVSBvpQBxKQh
+        5iiVQJEcDIFlnBeRpiC5J6LLYw==
+X-Google-Smtp-Source: ABdhPJwXzfhXp1V/nQIqocmiG3Ue9g+3FUfQkMXi7Tts8QAuV7jtyaxPcdKKO9JVvF3NrfOv3D0P3A==
+X-Received: by 2002:a17:907:6d24:b0:70c:81d9:d5b9 with SMTP id sa36-20020a1709076d2400b0070c81d9d5b9mr45569744ejc.597.1655069977577;
+        Sun, 12 Jun 2022 14:39:37 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-80-116-90-174.pool80116.interbusiness.it. [80.116.90.174])
+        by smtp.gmail.com with ESMTPSA id u10-20020a1709061daa00b00711d546f8a8sm2909398ejh.139.2022.06.12.14.39.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Jun 2022 14:39:37 -0700 (PDT)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     michael@amarulasolutions.com,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: Re: [PATCH v3 2/2] can: gs_usb: fix DMA memory leak on close
-Message-ID: <20220612213333.dgzzlskmmi5xew2z@pengutronix.de>
-References: <20220609204714.2715188-1-rhett.aultman@samsara.com>
- <20220610213335.3077375-1-rhett.aultman@samsara.com>
- <20220610213335.3077375-3-rhett.aultman@samsara.com>
- <0b792b543f5f4b70ab9e102825329474@AcuMS.aculab.com>
+        Jakub Kicinski <kuba@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH v3 00/13] can: slcan: extend supported features
+Date:   Sun, 12 Jun 2022 23:39:14 +0200
+Message-Id: <20220612213927.3004444-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="v6hiuh6j37n74c3l"
-Content-Disposition: inline
-In-Reply-To: <0b792b543f5f4b70ab9e102825329474@AcuMS.aculab.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,83 +77,103 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+This series originated as a result of CAN communication tests for an
+application using the USBtin adapter (https://www.fischl.de/usbtin/).
+The tests showed some errors but for the driver everything was ok.
+Also, being the first time I used the slcan driver, I was amazed that
+it was not possible to configure the bitrate via the ip tool.
+For these two reasons, I started looking at the driver code and realized
+that it didn't use the CAN network device driver interface.
 
---v6hiuh6j37n74c3l
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Starting from these assumptions, I tried to:
+- Use the CAN network device driver interface.
+- Set the bitrate via the ip tool.
+- Send the open/close command to the adapter from the driver.
+- Add ethtool support to reset the adapter errors.
+- Extend the protocol to forward the adapter CAN communication
+  errors and the CAN state changes to the netdev upper layers.
 
-On 12.06.2022 21:28:06, David Laight wrote:
-> From: Rhett Aultman
-> > Sent: 10 June 2022 22:34
-> >=20
-> > The gs_usb driver allocates DMA memory with usb_alloc_coherent() in
-> > gs_can_open() and then keeps this memory in an URB, with the expectation
-> > that the memory will be freed when the URB is killed in gs_can_close().
-> > Memory allocated with usb_alloc_coherent() cannot be freed in this way
-> > and must be freed using usb_free_coherent() instead.  This means that
-> > repeated cycles of calling gs_can_open() and gs_can_close() will lead to
-> > a memory leak.
-> >=20
-> > Historically, drivers have handled this by keeping an array of pointers
-> > to their DMA rx buffers and explicitly freeing them.  For an example of
-> > this technique used in the esd_usb2 driver, see here:
-> > https://www.spinics.net/lists/linux-can/msg08203.html
-> >=20
-> > While the above method works, the conditions that cause this leak are
-> > not apparent to driver writers and the method for solving it at the
-> > driver level has been piecemeal.  This patch makes use of a new
-> > URB_FREE_COHERENT flag on the URB, reducing the solution of this memory
-> > leak down to a single line of code.
-> >=20
-> > Signed-off-by: Rhett Aultman <rhett.aultman@samsara.com>
-> > Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > ---
-> >  drivers/net/can/usb/gs_usb.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
-> > index b29ba9138866..4e7e6a7b961a 100644
-> > --- a/drivers/net/can/usb/gs_usb.c
-> > +++ b/drivers/net/can/usb/gs_usb.c
-> > @@ -768,7 +768,7 @@ static int gs_can_open(struct net_device *netdev)
-> >  					  buf,
-> >  					  dev->parent->hf_size_rx,
-> >  					  gs_usb_receive_bulk_callback, parent);
-> > -			urb->transfer_flags |=3D URB_NO_TRANSFER_DMA_MAP;
-> > +			urb->transfer_flags =3D URB_NO_TRANSFER_DMA_MAP | URB_FREE_COHERENT;
->=20
-> Should that be clearing any other flags?
+Except for the protocol extension patches (i. e. forward the adapter CAN
+communication errors and the CAN state changes to the netdev upper
+layers), the whole series has been tested under QEMU with Linux 4.19.208
+using the USBtin adapter.
+Testing the extension protocol patches requires updating the adapter
+firmware. Before modifying the firmware I think it makes sense to know if
+these extensions can be considered useful.
 
-This chance is intentional, Vincent suggested that in
+Before applying the series I used these commands:
 
-| https://lore.kernel.org/all/CAMZ6RqKwvSswxThiKqEB8VhD5MyHvRbSwO_9-ZNwLgmn=
-m-0iBw@mail.gmail.com
+slcan_attach -f -s6 -o /dev/ttyACM0
+slcand ttyACM0 can0
+ip link set can0 up
 
-I think there are no other flags set, yet.
+After applying the series I am using these commands:
 
-regards,
-Marc
+slcan_attach /dev/ttyACM0
+slcand ttyACM0 can0
+ip link set dev can0 down
+ip link set can0 type can bitrate 500000
+ethtool --set-priv-flags can0 err-rst-on-open on
+ip link set dev can0 up
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Now there is a clearer separation between serial line and CAN,
+but above all, it is possible to use the ip and ethtool commands
+as it happens for any CAN device driver. The changes are backward
+compatible, you can continue to use the slcand and slcan_attach
+command options.
 
---v6hiuh6j37n74c3l
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+Changes in v3:
+- Increment the error counter in case of decoding failure.
+- Replace (-1) with (-1U) in the commit description.
+- Update the commit description.
+- Remove the slc_do_set_bittiming().
+- Set the bitrate in the ndo_open().
+- Replace -1UL with -1U in setting a fake value for the bitrate.
+- Drop the patch "can: slcan: simplify the device de-allocation".
+- Add the patch "can: netlink: dump bitrate 0 if can_priv::bittiming.bitrate is -1U".
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKmW6sACgkQrX5LkNig
-010/Vwf/ZJFC2GRahU667IgHUvw/NWy4L7FThd7D32GJZzuk51evb1ztToin5nxo
-0y8igjhhWfpIUeOg/hRYDdJxS7d83o83L5O3wN+E0T3NbDKGYahrTWshSJ7MiObS
-aE8KqkUzIKSxqBCxemboTGDKk3HUPwdENbUug0WSU3e4obxa67sQzugaewnuwvrD
-V0rKwHCBgb59g7nDfPR6QeauTK9vylLgo7UaWaMQhLm77m7tBt9HLtRBBK3mkc/z
-59H4v9bngAyFICVMeIltSFNoWxJSJLIh+RT075ChH005Fp2nullva2hM0higHeVX
-nxF2I1jXnOY1q25xmlS69aP/eVClZg==
-=9103
------END PGP SIGNATURE-----
+Changes in v2:
+- Put the data into the allocated skb directly instead of first
+  filling the "cf" on the stack and then doing a memcpy().
+- Move CAN_SLCAN Kconfig option inside CAN_DEV scope.
+- Improve the commit message.
+- Use the CAN framework support for setting fixed bit rates.
+- Improve the commit message.
+- Improve the commit message.
+- Protect decoding against the case the len value is longer than the
+  received data.
+- Continue error handling even if no skb can be allocated.
+- Continue error handling even if no skb can be allocated.
 
---v6hiuh6j37n74c3l--
+Dario Binacchi (13):
+  can: slcan: use the BIT() helper
+  can: slcan: use netdev helpers to print out messages
+  can: slcan: use the alloc_can_skb() helper
+  can: slcan: use CAN network device driver API
+  can: netlink: dump bitrate 0 if can_priv::bittiming.bitrate is -1U
+  can: slcan: allow to send commands to the adapter
+  can: slcan: set bitrate by CAN device driver API
+  can: slcan: send the open command to the adapter
+  can: slcan: send the close command to the adapter
+  can: slcan: move driver into separate sub directory
+  can: slcan: add ethtool support to reset adapter errors
+  can: slcan: extend the protocol with error info
+  can: slcan: extend the protocol with CAN state info
+
+ drivers/net/can/Kconfig                       |  40 +-
+ drivers/net/can/Makefile                      |   2 +-
+ drivers/net/can/dev/netlink.c                 |  12 +-
+ drivers/net/can/slcan/Makefile                |   7 +
+ .../net/can/{slcan.c => slcan/slcan-core.c}   | 518 ++++++++++++++----
+ drivers/net/can/slcan/slcan-ethtool.c         |  65 +++
+ drivers/net/can/slcan/slcan.h                 |  18 +
+ 7 files changed, 541 insertions(+), 121 deletions(-)
+ create mode 100644 drivers/net/can/slcan/Makefile
+ rename drivers/net/can/{slcan.c => slcan/slcan-core.c} (65%)
+ create mode 100644 drivers/net/can/slcan/slcan-ethtool.c
+ create mode 100644 drivers/net/can/slcan/slcan.h
+
+-- 
+2.32.0
+
