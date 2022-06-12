@@ -2,144 +2,121 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71F8D5479CB
-	for <lists+linux-can@lfdr.de>; Sun, 12 Jun 2022 12:39:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B947F5479EA
+	for <lists+linux-can@lfdr.de>; Sun, 12 Jun 2022 13:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233719AbiFLKjx (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 12 Jun 2022 06:39:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41870 "EHLO
+        id S236441AbiFLLcb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 12 Jun 2022 07:32:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234824AbiFLKjw (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 12 Jun 2022 06:39:52 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DBE465438
-        for <linux-can@vger.kernel.org>; Sun, 12 Jun 2022 03:39:46 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1o0L0J-000760-Co; Sun, 12 Jun 2022 12:39:35 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 84B4D932DE;
-        Sun, 12 Jun 2022 10:39:32 +0000 (UTC)
-Date:   Sun, 12 Jun 2022 12:39:31 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        michael@amarulasolutions.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [RFC PATCH 06/13] can: slcan: allow to send commands to the
- adapter
-Message-ID: <20220612103931.3dugmcyn23udmve7@pengutronix.de>
-References: <20220607094752.1029295-1-dario.binacchi@amarulasolutions.com>
- <20220607094752.1029295-7-dario.binacchi@amarulasolutions.com>
- <20220609071636.6tbspftu3yclip55@pengutronix.de>
- <CABGWkvp1=DF1uok4ZoCRt1EqpdrgdcytG==Ex6zuWgT5mrvdwQ@mail.gmail.com>
+        with ESMTP id S236384AbiFLLcb (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 12 Jun 2022 07:32:31 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F05D29CBB
+        for <linux-can@vger.kernel.org>; Sun, 12 Jun 2022 04:32:29 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id o10so3969329edi.1
+        for <linux-can@vger.kernel.org>; Sun, 12 Jun 2022 04:32:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=9FfohXFhB1sP403VxH1swwcmiEO4r97TnueS6gdgla0=;
+        b=HutqJca9cz10+fhpLBqF5pkCfmNuVpB/QmLPLH2RoeSpp+88FPj9DCRLsYlrV60IRI
+         yfGt8kTQJ3+U5hD05c9eQjOTUDndc3kFmmCKtoZcJTw6iEXGeaPRZUwBIb2hL10aHe3A
+         7EbObtS3e/RUerZDq6P0if6rMoEsasBL0IeuLIxwTHpNu3CceyHT/j7BTvAXuGh/jXn3
+         mZ2PnrRRlC0NrnYO4yqGRbm/BexgsBU/ybIJL5KQreT4XiaErEnB2fMcohiz3+qsoqp8
+         Xl5GKvTeAgRog3ZkHFVKaziM00o+HwG/FDCDlODVc32UellWfe2pLGmko+Rt8jRhNdyv
+         b+pA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=9FfohXFhB1sP403VxH1swwcmiEO4r97TnueS6gdgla0=;
+        b=ax/rrCNba+359c6veXr5nCXYe9w5rQXJtpbN1ySc8rN6oirKZYOfNLB9Rt0pMDNWxR
+         YVyHi4jvrgtsHk2IdeFrrF/GwiH4Rclg63WfExTbuKAE9lfOGsOyoRPCNlckx+Kth/4E
+         rZjU4ZRYLvxbcUfUWPTdTmwjzjb+dpYh+LfBG6v05WFYuqjyOCilP/zXYkzuE71RgWfa
+         n6bePgLo7PMLgbK4Pt7SpB3gu7rUd8Cq1jOET8Pd3k7OrKGjw1S4SvgFeRNgGGeXkWik
+         sxjQC7zArkZrRbAZTOS/GNvwlgmugYWn/D5MXHNuSHQjrF2VzfGXCDxC3bKS5wddATtW
+         JIpg==
+X-Gm-Message-State: AOAM533zGqR6jFLrNUz5PzRDe+SK3sKRijb7sk34/b0LIVh2qKlEOdvl
+        xGo7NukZdXbYyw45alwwbomg2R4Cz2LhTaKs6sI=
+X-Google-Smtp-Source: ABdhPJwdx/ts4yT81TfY9H4jSVwEQwJ2e/fPBdkfFmfsPIbmOM0FEcnF1voZtHMiIfkmIVV3xB+6Fmj8j1iYk6t89oo=
+X-Received: by 2002:a05:6402:d05:b0:425:b5c8:faeb with SMTP id
+ eb5-20020a0564020d0500b00425b5c8faebmr60549161edb.273.1655033547542; Sun, 12
+ Jun 2022 04:32:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rklhevn5ngclcgjp"
-Content-Disposition: inline
-In-Reply-To: <CABGWkvp1=DF1uok4ZoCRt1EqpdrgdcytG==Ex6zuWgT5mrvdwQ@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Sender: mariajohn0331@gmail.com
+Received: by 2002:a54:3a4a:0:0:0:0:0 with HTTP; Sun, 12 Jun 2022 04:32:26
+ -0700 (PDT)
+From:   MARIA ROLAND <mariaroland74@gmail.com>
+Date:   Sun, 12 Jun 2022 04:32:26 -0700
+X-Google-Sender-Auth: Co32K8Guj2mgf2O-dHQRzwqxqMY
+Message-ID: <CAEmdD2WEq8iFu03odoUHJOLqaAfOodUu9x8Et1FumwjSBv0eHw@mail.gmail.com>
+Subject: Greetings,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_60,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:536 listed in]
+        [list.dnswl.org]
+        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
+        *      [score: 0.6902]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [mariajohn0331[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mariaroland74[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Greetings,
 
---rklhevn5ngclcgjp
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I sent this mail praying it will find you in a good condition, since I
+myself am in a very critical health condition in which I sleep every
+night  without knowing if I may be alive to see the next day. I am
+Mrs. Maria Roland, a widow suffering from a long time illness. I have
+some funds I  inherited from my late husband, the sum of
+($11,000,000.00) my Doctor told me recently that I have serious
+sickness which is a cancer problem. What disturbs me most is my stroke
+sickness. Having known my condition, I decided to donate this fund to
+a good person that will utilize it the way I am going to instruct
+herein. I need a very honest God.
 
-On 11.06.2022 23:43:47, Dario Binacchi wrote:
-> Hi Marc,
->=20
-> On Thu, Jun 9, 2022 at 9:16 AM Marc Kleine-Budde <mkl@pengutronix.de> wro=
-te:
-> >
-> > On 07.06.2022 11:47:45, Dario Binacchi wrote:
-> > > This is a preparation patch for the upcoming support to change the
-> > > bitrate via ip tool, reset the adapter error states via the ethtool A=
-PI
-> > > and, more generally, send commands to the adapter.
-> > >
-> > > Since some commands (e. g. setting the bitrate) will be sent before
-> > > calling the open_candev(), the netif_running() will return false and =
-so
-> > > a new flag bit (i. e. SLF_XCMD) for serial transmission has to be add=
-ed.
-> > >
-> > > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> >
-> > I think this patch can be dropped, let me explain:
-> >
-> > You don't have to implement the do_set_bittiming callback. It's
-> > perfectly OK to set the bitrate during the ndo_open callback after
-> > open_candev().
->=20
-> I developed what you suggested (i. e. remove the SLF_XCMD bit and set the
-> bitrate, as well as send the "F\r" and "O\r" commands, after calling
-> the open_candev(),
+fearing a person who can claim this money and use it for Charity
+works, for orphanages, widows and also build schools for less
+privileges that will be named after my late husband if possible and to
+promote the word of God and the effort that the house of God is
+maintained. I do not want a situation where this money will be used in
+an ungodly manner. That's why I' making this decision. I'm not afraid
+of death so I know where I'm going. I accept this decision because I
+do not have any child who will inherit this money after I die. Please
+I want your sincere and urgent answer to know if you will be able to
+execute this project, and I will give you more information on how the
+fund will be transferred to your bank account. I am waiting for your reply,
 
-Note:
-Max Staudt noticed that you need a do_set_bittiming() callback if you
-have only fixed bitrates. I've create a patch that you can have fixed
-bit rate only an no do_set_bittiming() callback.
+May God Bless you,
 
-| https://lore.kernel.org/all/20220611144248.3924903-1-mkl@pengutronix.de/
-
-Or use the can-next/master branch as your base.
-
-> but now I can't send the close command ("C\r") during the ndo_stop() since
-> netif_running() returns false. The CAN framework clears netif_running() b=
-efore
-> calling the ndo_stop(). IMHO the SLF_XCMD bit then becomes necessary to
-> transmit the commands to the adapter from the ndo_open() and
-> ndo_stop() routines.
-> Any suggestions ?
-
-I see. Keep the setting of the bit rate in the ndo_open(), add the
-SLF_XCMD so that you can send messages in ndo_close().
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---rklhevn5ngclcgjp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKlwmEACgkQrX5LkNig
-013Eowf+KfCAs9Z0OKq+LFT5uWbL1qh9/1/auUskU/+EdODZkaDrh3bVZWFxQ0ZV
-6UuRs7QhWOdxz2kJ7Q87dKDtEiRIqhZPkeiByyd5mR3WbluTICxOoMUfjEE50p2T
-QQDTh+cfd5dSEy88SMxTt9aBKLasx90rkrSC30sPcdCvVKIXjWuyLbI2XdIKqygl
-Vga1xqQXZAKtAJNeMcNhdlfiXtYKp8/fjhhX0qdOxcuIomqrD5mv7wplk4Omq4IU
-F5p+PTHMaI26hvMQQtqhjM+5T/TCHfGCkYuw3X8jwRZV++mxNOd439YcCyLIw3Im
-+gO8YIp3CoKam9k2szJKMC/z6+bZMw==
-=xvcS
------END PGP SIGNATURE-----
-
---rklhevn5ngclcgjp--
+Mrs. Maria Roland,
