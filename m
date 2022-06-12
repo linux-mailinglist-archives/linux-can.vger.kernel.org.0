@@ -2,121 +2,164 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B947F5479EA
-	for <lists+linux-can@lfdr.de>; Sun, 12 Jun 2022 13:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF283547A02
+	for <lists+linux-can@lfdr.de>; Sun, 12 Jun 2022 14:03:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236441AbiFLLcb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 12 Jun 2022 07:32:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50342 "EHLO
+        id S236484AbiFLMD3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 12 Jun 2022 08:03:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236384AbiFLLcb (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 12 Jun 2022 07:32:31 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F05D29CBB
-        for <linux-can@vger.kernel.org>; Sun, 12 Jun 2022 04:32:29 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id o10so3969329edi.1
-        for <linux-can@vger.kernel.org>; Sun, 12 Jun 2022 04:32:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=9FfohXFhB1sP403VxH1swwcmiEO4r97TnueS6gdgla0=;
-        b=HutqJca9cz10+fhpLBqF5pkCfmNuVpB/QmLPLH2RoeSpp+88FPj9DCRLsYlrV60IRI
-         yfGt8kTQJ3+U5hD05c9eQjOTUDndc3kFmmCKtoZcJTw6iEXGeaPRZUwBIb2hL10aHe3A
-         7EbObtS3e/RUerZDq6P0if6rMoEsasBL0IeuLIxwTHpNu3CceyHT/j7BTvAXuGh/jXn3
-         mZ2PnrRRlC0NrnYO4yqGRbm/BexgsBU/ybIJL5KQreT4XiaErEnB2fMcohiz3+qsoqp8
-         Xl5GKvTeAgRog3ZkHFVKaziM00o+HwG/FDCDlODVc32UellWfe2pLGmko+Rt8jRhNdyv
-         b+pA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=9FfohXFhB1sP403VxH1swwcmiEO4r97TnueS6gdgla0=;
-        b=ax/rrCNba+359c6veXr5nCXYe9w5rQXJtpbN1ySc8rN6oirKZYOfNLB9Rt0pMDNWxR
-         YVyHi4jvrgtsHk2IdeFrrF/GwiH4Rclg63WfExTbuKAE9lfOGsOyoRPCNlckx+Kth/4E
-         rZjU4ZRYLvxbcUfUWPTdTmwjzjb+dpYh+LfBG6v05WFYuqjyOCilP/zXYkzuE71RgWfa
-         n6bePgLo7PMLgbK4Pt7SpB3gu7rUd8Cq1jOET8Pd3k7OrKGjw1S4SvgFeRNgGGeXkWik
-         sxjQC7zArkZrRbAZTOS/GNvwlgmugYWn/D5MXHNuSHQjrF2VzfGXCDxC3bKS5wddATtW
-         JIpg==
-X-Gm-Message-State: AOAM533zGqR6jFLrNUz5PzRDe+SK3sKRijb7sk34/b0LIVh2qKlEOdvl
-        xGo7NukZdXbYyw45alwwbomg2R4Cz2LhTaKs6sI=
-X-Google-Smtp-Source: ABdhPJwdx/ts4yT81TfY9H4jSVwEQwJ2e/fPBdkfFmfsPIbmOM0FEcnF1voZtHMiIfkmIVV3xB+6Fmj8j1iYk6t89oo=
-X-Received: by 2002:a05:6402:d05:b0:425:b5c8:faeb with SMTP id
- eb5-20020a0564020d0500b00425b5c8faebmr60549161edb.273.1655033547542; Sun, 12
- Jun 2022 04:32:27 -0700 (PDT)
+        with ESMTP id S231336AbiFLMD1 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 12 Jun 2022 08:03:27 -0400
+Received: from mail.enpas.org (zhong.enpas.org [IPv6:2a03:4000:2:537::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 74F3F27B0A;
+        Sun, 12 Jun 2022 05:03:24 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        by mail.enpas.org (Postfix) with ESMTPSA id D783BFF9E2;
+        Sun, 12 Jun 2022 12:03:22 +0000 (UTC)
+Date:   Sun, 12 Jun 2022 14:03:20 +0200
+From:   Max Staudt <max@enpas.org>
+To:     Vincent Mailhol <vincent.mailhol@gmail.com>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Oliver Neukum <oneukum@suse.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7] can, tty: can327 CAN/ldisc driver for ELM327 based
+ OBD-II adapters
+Message-ID: <20220612140217.6ad6d2f9.max@enpas.org>
+In-Reply-To: <CAMZ6RqKzO7ya3Z-fx+FZ5vAsOy0B9Ec8TRagjysJEK0i4Z3asw@mail.gmail.com>
+References: <20220602213544.68273-1-max@enpas.org>
+ <CAMZ6RqLLn3tE6kPd+yyHURsbBU_jVKN=u4=YvhZVyAf_NyRqCQ@mail.gmail.com>
+ <20220611151551.5024f51e.max@enpas.org>
+ <CAMZ6RqLb3irjBrpiOv23Hg6vVpzK4d31Pvat2AOS3EC0+e_=3A@mail.gmail.com>
+ <20220611184157.06271432.max@enpas.org>
+ <CAMZ6RqKzO7ya3Z-fx+FZ5vAsOy0B9Ec8TRagjysJEK0i4Z3asw@mail.gmail.com>
 MIME-Version: 1.0
-Sender: mariajohn0331@gmail.com
-Received: by 2002:a54:3a4a:0:0:0:0:0 with HTTP; Sun, 12 Jun 2022 04:32:26
- -0700 (PDT)
-From:   MARIA ROLAND <mariaroland74@gmail.com>
-Date:   Sun, 12 Jun 2022 04:32:26 -0700
-X-Google-Sender-Auth: Co32K8Guj2mgf2O-dHQRzwqxqMY
-Message-ID: <CAEmdD2WEq8iFu03odoUHJOLqaAfOodUu9x8Et1FumwjSBv0eHw@mail.gmail.com>
-Subject: Greetings,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
-        BAYES_60,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:536 listed in]
-        [list.dnswl.org]
-        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
-        *      [score: 0.6902]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [mariajohn0331[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mariaroland74[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
-        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
-        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *****
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Greetings,
+On Sun, 12 Jun 2022 10:33:51 +0900
+Vincent Mailhol <vincent.mailhol@gmail.com> wrote:
 
-I sent this mail praying it will find you in a good condition, since I
-myself am in a very critical health condition in which I sleep every
-night  without knowing if I may be alive to see the next day. I am
-Mrs. Maria Roland, a widow suffering from a long time illness. I have
-some funds I  inherited from my late husband, the sum of
-($11,000,000.00) my Doctor told me recently that I have serious
-sickness which is a cancer problem. What disturbs me most is my stroke
-sickness. Having known my condition, I decided to donate this fund to
-a good person that will utilize it the way I am going to instruct
-herein. I need a very honest God.
+> > I agree, hence the original name. I don't want to pick a fight with
+> > anyone though, and a good alternative does exist (can327), so I
+> > prefer to play it safe, at least this time.
+> >
+> > IMHO, to anyone who knows what an ELM327 is and who is looking for
+> > this driver, the "327" in the name is very likely to hint at what
+> > it is. Not many CAN devices are called 327 ;)
+> >
+> > There are also several compatible parts with extended features, so
+> > locking in on the original chip's name may be counter productive
+> > anyway.  
+> 
+> Generally speaking, I would be worried if everyone started to rename
+> the drivers. What if I named my driver can58x instead of es58x and
+> what if Marc named his driver can251xfd instead of mcp251xfd? Things
+> will start to be really confusing.
 
-fearing a person who can claim this money and use it for Charity
-works, for orphanages, widows and also build schools for less
-privileges that will be named after my late husband if possible and to
-promote the word of God and the effort that the house of God is
-maintained. I do not want a situation where this money will be used in
-an ungodly manner. That's why I' making this decision. I'm not afraid
-of death so I know where I'm going. I accept this decision because I
-do not have any child who will inherit this money after I die. Please
-I want your sincere and urgent answer to know if you will be able to
-execute this project, and I will give you more information on how the
-fund will be transferred to your bank account. I am waiting for your reply,
+Agreed. FWIW, I suggested can-* in the same vein as hid-*, which would
+group CAN drivers together. It would then be can-mcp251xfd rather than
+can251xfd. Anyway, no, I don't suggest renaming existing drivers, as
+that'd be a hassle.
 
-May God Bless you,
 
-Mrs. Maria Roland,
+> But I did a quick search. Several clones also use the name can327. So
+> in your particular case, I think this renaming is kind of acceptable.
+
+Okay, thanks!
+
+Since you deem can327 acceptable, let's leave it as it is.
+
+
+As for this particular driver, I got unlucky with my device because it
+can do more than CAN, yet I wanted the driver name to show that the
+driver implements *only* CAN. Had I called it "elm327", it would have
+been confusing to the casual user as to what the driver is really for:
+CAN? K-Line? OBD? All of them? Hence why I always squeezed "can" into
+the name somehow. It's an edge case, really.
+
+For non-edge cases, thanks for alleviating my concerns about company
+names etc. in driver names.
+
+
+> > > Do as you prefer. If you do not want the mainstream release to be
+> > > further delayed, I think it is fully acceptable to go with the
+> > > lazy direct loopback as I suggested and then later on provide a
+> > > new patch.  
+> >
+> > I agree, I'd rather leave the code as-is now, and fix it
+> > incrementally. Especially since you've reviewed it so thoroughly,
+> > and I don't want to unravel this again, and it works well enough
+> > as-is. After all, the documentation does start by saying that there
+> > are no guarantees ;)
+> >
+> > Do you see any problem with leaving it as-is, i.e. not setting
+> > IFF_ECHO, and thus having the CAN stack do the the for us? As far
+> > as I  
+>                                                  ^^^
+> do the what?
+> > can see, it is equivalent...  
+> 
+> It seems a part of your answer is missing. I do not get what
+> alternative solution you are considering instead of using IFF_ECHO.
+> 
+> What I propose should be a three line fix: add the IFF_ECHO, use the
+> can_put_echo_skb() and the can_get_echo_skb().
+
+The alternative solution is to leave it as-is: Iff IFF_ECHO is unset,
+then in net/can/af_can.c - can_send() the CAN stack generates echo
+frames for us.
+
+It seems you weren't aware of this functionality, hence the
+misunderstanding.
+
+(except that I missed the RTR detail, see below)
+
+
+> If leaving it as-is, can327 will behave differently than the other
+> drivers. For example, candump will only record the RX frames when
+> users expect to see both TX and RX. So that's my real concern.
+
+Nope, it's not at all like this - candump shows the own sent packets
+just fine!
+
+This is one of the first things I ensured when I started the driver. I
+wouldn't release a driver like that as it would drive me crazy as a
+user.
+
+Several other drivers don't provice IFF_ECHO - slcan, vxcan. And vcan
+has it configurable. An interesting one is found in usb/ucan.c which
+provides echo, but doesn't set IFF_ECHO. I suppose candump will show
+sent packets twice when using ucan?
+
+
+> The other thing is that the can_put_echo_skb() and can_get_echo_skb()
+> do some other operations. For example, can_get_echo_skb() returns a
+> length of zero for the RTR frames. If you do not use those helper
+> functions, you have to do the check by hand and only increment
+> stats->tx_bytes if the frame is not an RTR one.
+> 
+> If you leave it as is, then just fix the RTR length e.g. like that:
+> https://elixir.bootlin.com/linux/v5.18/source/drivers/net/can/vcan.c#L95
+
+Oh, I missed this detail. Very good point, thanks!
+
+I'll apply the vcan RTR fix for now (ugly, but minimal code change), and
+it can be removed once "proper" echo support is implemented in can327.
+
+
+Okay, I think all my questions are handled now.
+
+Thanks again!
+
+Max
