@@ -2,69 +2,71 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7334554A0D3
-	for <lists+linux-can@lfdr.de>; Mon, 13 Jun 2022 23:07:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8877754A147
+	for <lists+linux-can@lfdr.de>; Mon, 13 Jun 2022 23:21:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242963AbiFMVHR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 13 Jun 2022 17:07:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54404 "EHLO
+        id S245630AbiFMVVg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 13 Jun 2022 17:21:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351789AbiFMVGz (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 13 Jun 2022 17:06:55 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0907364C5
-        for <linux-can@vger.kernel.org>; Mon, 13 Jun 2022 13:44:25 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id s6so10678367lfo.13
-        for <linux-can@vger.kernel.org>; Mon, 13 Jun 2022 13:44:24 -0700 (PDT)
+        with ESMTP id S245594AbiFMVVR (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 13 Jun 2022 17:21:17 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34990B1DE
+        for <linux-can@vger.kernel.org>; Mon, 13 Jun 2022 14:04:51 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id i29so10827148lfp.3
+        for <linux-can@vger.kernel.org>; Mon, 13 Jun 2022 14:04:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=amarulasolutions.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=1fP2miIeDd3RvdPHp79IlihT8+88/+UX2uWQapkQGE0=;
-        b=B06TDkgq/fXFEQ7rv7+RfcEt5E6ZJGzFJESw4K/NohQVvPR2uJpsrBfwtMFfjD0tUZ
-         JGypfRxs5YLGCB3dVm5KEr+4kkEIM8IRFFhd/xJNlM1QB41atBcNDpJjrGaE0JD3Nnmk
-         djTp2jho4GdmaqFpLHwg59iOp1+Oo3VNqwPu4=
+        bh=0bPIEvwh+kv/i7N879RmrfihKwJqx1X8GKXfQsY9+Pw=;
+        b=AOPmRpVAYGZnd9Lg9Sfv5053p7vbdkmMl5a2q8iLRYg1DmiRxNM+r1DiuVsfUwD4kW
+         oxfGDtLsPoB074M7NzORMx0jop+iKt5RIPenFmwa/9P1c+kvmUph1AX+HLTvg205ThkQ
+         0rmiFCvyxSKJZggaH4Gm/PMz/sQfm0inObEc0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=1fP2miIeDd3RvdPHp79IlihT8+88/+UX2uWQapkQGE0=;
-        b=unTQyQNauFY+NQqxZwc29ozOMHc2vVOrspyalsOQythWcePG9ttjvT6ohF0mqREl8l
-         81SvusAw6WsuqzCInm4frHljSLXULYr+jb1wXFIuQgYyCZiKmDaTRusqf964j37j7xZb
-         PKSAHNSLT4DtdMnZQ1hGw4lUW5Uzy2Qi3GwZFyss7iTqHUYbr7jzuq9xRnpiV4yw1bEn
-         yQVFJX8Ljz9Iga9JXtLL8WFc88ZS7bmbDbzbSE3eP6q0ocY9Wtri1PQVef0rn7SADdIz
-         B6E8XjVVscZRMZOQaes0bPXFYrJZ3VgWxclsihrqA/K9Gv+m2Eu1rz4dvI5HHJauVeLV
-         ecdQ==
-X-Gm-Message-State: AJIora+igtTpXy6nzZ9ra03iJrok8AMjMyCpX/7HbvV0CHKGq0tV2PRM
-        Cm5zOfN0gETtIn638+ZTZfVQHr3lCOKEtOP6ivbAZA==
-X-Google-Smtp-Source: AGRyM1vYPgm33tg0O4fBbd0wNlqs1m0i7xGize2Bn9uDIbrcUMhquZjXmfsuCQne+QOEb6DcTwlV9eea4WD5Msh8xtw=
-X-Received: by 2002:a19:431c:0:b0:479:2053:178e with SMTP id
- q28-20020a19431c000000b004792053178emr967165lfa.117.1655153063053; Mon, 13
- Jun 2022 13:44:23 -0700 (PDT)
+        bh=0bPIEvwh+kv/i7N879RmrfihKwJqx1X8GKXfQsY9+Pw=;
+        b=bJ2GBVXaQIz7dIAPTg1nqSJ6vqnjFVHm3o1JwffCfp8rkIlVeOLNh89B7iH/7KVu3h
+         DyG6GEdYUZ6xnw/BTXbEJD1N6E5bn/y4udfrnrEbXKkJmKit2VrXyqTRnHCoKv/AN8Op
+         hRiZlb2P8zTkAbwN2z0ahlW/XfF6rdxYifxSJ1oe1+LCMlAbKJ3152YGlFlTjgLrpYop
+         /qyOOBKpIazprF4b8xMsfJHvEJE9cC32ZtbqA9+vXj0x1Jtw5mhhIBpe32rw7D/pML/H
+         RyEG3ibJlhB63T74+NYTAfVbGRVEs/7oSw7D3Q/RI2BVOeHdGfXFe9RBIX2Bb3LamTJt
+         CBrA==
+X-Gm-Message-State: AJIora//7S7bJLznb/VVbEJX1S3+Wj37abieMpwht9hZKrL+NWnhxe/X
+        a0xB7e4QLH7dOhu/BoIRsHKlbVqrxdd0iZdwRBL12w==
+X-Google-Smtp-Source: AGRyM1veUkyLuRRpprmgBfGWfYtI7bGUcL+zVZuDQgowlb2OGgWX6h9JRUYqSbVwDfuheiLCnl8CRWIVNata3yL882I=
+X-Received: by 2002:a05:6512:3fb:b0:479:6b9:27ce with SMTP id
+ n27-20020a05651203fb00b0047906b927cemr988728lfq.429.1655154289436; Mon, 13
+ Jun 2022 14:04:49 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220612213927.3004444-1-dario.binacchi@amarulasolutions.com>
- <20220612213927.3004444-6-dario.binacchi@amarulasolutions.com> <20220613071058.h6bmy6emswh76q5s@pengutronix.de>
-In-Reply-To: <20220613071058.h6bmy6emswh76q5s@pengutronix.de>
+ <20220612213927.3004444-13-dario.binacchi@amarulasolutions.com> <20220613073208.anak24kpffnngube@pengutronix.de>
+In-Reply-To: <20220613073208.anak24kpffnngube@pengutronix.de>
 From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date:   Mon, 13 Jun 2022 22:44:12 +0200
-Message-ID: <CABGWkvoNJYfK6bcjYtUi9qKvRfEfHUyrCWDBhOL4EjurW5YJ8Q@mail.gmail.com>
-Subject: Re: [PATCH v3 05/13] can: netlink: dump bitrate 0 if
- can_priv::bittiming.bitrate is -1U
+Date:   Mon, 13 Jun 2022 23:04:38 +0200
+Message-ID: <CABGWkvrq6+N0rUaAmw_dJjJQAwMFv3-xK=LtTb-CSfTYFTs7QQ@mail.gmail.com>
+Subject: Re: [PATCH v3 12/13] can: slcan: extend the protocol with error info
 To:     Marc Kleine-Budde <mkl@pengutronix.de>
 Cc:     linux-kernel@vger.kernel.org, michael@amarulasolutions.com,
         Amarula patchwork <linux-amarula@amarulasolutions.com>,
         Oliver Hartkopp <socketcan@hartkopp.net>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jakub Kicinski <kuba@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
         Wolfgang Grandegger <wg@grandegger.com>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,63 +74,206 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 9:11 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+On Mon, Jun 13, 2022 at 9:32 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
 >
-> On 12.06.2022 23:39:19, Dario Binacchi wrote:
-> > Adding Netlink support to the slcan driver made it necessary to set the
-> > bitrate to a fake value (-1U) to prevent open_candev() from failing. In
-> > this case the command `ip --details -s -s link show' would print
-> > 4294967295 as the bitrate value. The patch change this value in 0.
+> On 12.06.2022 23:39:26, Dario Binacchi wrote:
+> > It extends the protocol to receive the adapter CAN communication errors
+> > and forward them to the netdev upper levels.
 > >
-> > Suggested-by: Marc Kleine-Budde <mkl@pengutronix.de>
 > > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> >
 > > ---
 > >
-> > (no changes since v1)
+> > (no changes since v2)
 > >
-> >  drivers/net/can/dev/netlink.c | 12 +++++++++---
-> >  1 file changed, 9 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlink.c
-> > index 7633d98e3912..788a6752fcc7 100644
-> > --- a/drivers/net/can/dev/netlink.c
-> > +++ b/drivers/net/can/dev/netlink.c
-> > @@ -505,11 +505,16 @@ static int can_fill_info(struct sk_buff *skb, const struct net_device *dev)
-> >       struct can_ctrlmode cm = {.flags = priv->ctrlmode};
-> >       struct can_berr_counter bec = { };
-> >       enum can_state state = priv->state;
-> > +     __u32 bitrate = priv->bittiming.bitrate;
-> > +     int ret = 0;
-> >
-> >       if (priv->do_get_state)
-> >               priv->do_get_state(dev, &state);
-> >
-> > -     if ((priv->bittiming.bitrate &&
+> > Changes in v2:
+> > - Protect decoding against the case the len value is longer than the
+> >   received data.
 >
-> What about changing this line to:
->
->         if ((priv->bittiming.bitrate && priv->bittiming.bitrate != -1 &&
+> Where is that check?
 
-That you are right. The code becomes much cleaner.
-
->
-> This would make the code a lot cleaner. Can you think of a nice macro
-> name for the -1?
->
-> 0 could be CAN_BITRATE_UNCONFIGURED or _UNSET. For -1 I cannot find a
-> catchy name, something like CAN_BITRATE_CONFIGURED_UNKOWN or
-> SET_UNKNOWN.
->
-
-Personally I would use CAN_BITRATE_UNSET (0) and CAN_BITRATE_UNKNOWN (-1).
-Let me know what your ultimate preference is.
+I added the default case in the switch statement. Each line that is
+processed by slc_bump_err()
+is terminated by a '\r' or '\a' character. If len value is longer than
+the received characters, it will
+enter the default case for the eol character and the function will return.
+But I realize now that I am wrong, the terminator is not placed in the
+buffer passed to slc_bump_err() !!!!!! :)
+I will add the right check in v4.
 
 Thanks and regards,
 Dario
 
-> The macros can be added to bittiming.h and be part of this patch. Ofq
-> course the above code (and slcan.c) would make use of the macros instead
-> of using 0 and -1.
+>
+> > - Continue error handling even if no skb can be allocated.
+> >
+> >  drivers/net/can/slcan/slcan-core.c | 130 ++++++++++++++++++++++++++++-
+> >  1 file changed, 129 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/net/can/slcan/slcan-core.c b/drivers/net/can/slcan/slcan-core.c
+> > index 3df35ae8f040..48077edb9497 100644
+> > --- a/drivers/net/can/slcan/slcan-core.c
+> > +++ b/drivers/net/can/slcan/slcan-core.c
+> > @@ -175,8 +175,118 @@ int slcan_enable_err_rst_on_open(struct net_device *ndev, bool on)
+> >    *                  STANDARD SLCAN DECAPSULATION                     *
+> >    ************************************************************************/
+> >
+> > +static void slc_bump_err(struct slcan *sl)
+> > +{
+> > +     struct net_device *dev = sl->dev;
+> > +     struct sk_buff *skb;
+> > +     struct can_frame *cf;
+> > +     char *cmd = sl->rbuff;
+> > +     bool rx_errors = false, tx_errors = false;
+> > +     int i, len;
+> > +
+> > +     if (*cmd != 'e')
+> > +             return;
+>
+> This has already been checked in the caller, right?
+>
+> > +
+> > +     cmd += SLC_CMD_LEN;
+> > +     /* get len from sanitized ASCII value */
+> > +     len = *cmd++;
+> > +     if (len >= '0' && len < '9')
+> > +             len -= '0';
+> > +     else
+> > +             return;
+> > +
+> > +     skb = alloc_can_err_skb(dev, &cf);
+> > +
+> > +     if (skb)
+> > +             cf->can_id |= CAN_ERR_PROT | CAN_ERR_BUSERROR;
+> > +
+> > +     for (i = 0; i < len; i++, cmd++) {
+> > +             switch (*cmd) {
+> > +             case 'a':
+> > +                     netdev_dbg(dev, "ACK error\n");
+> > +                     tx_errors = true;
+>
+> Nitpick:
+> Please decide if you want to set tx/tx_errors here and increment at the
+> end of the function....or.....
+>
+> > +                     if (skb) {
+> > +                             cf->can_id |= CAN_ERR_ACK;
+> > +                             cf->data[3] = CAN_ERR_PROT_LOC_ACK;
+> > +                     }
+> > +
+> > +                     break;
+> > +             case 'b':
+> > +                     netdev_dbg(dev, "Bit0 error\n");
+> > +                     tx_errors = true;
+> > +                     if (skb)
+> > +                             cf->data[2] |= CAN_ERR_PROT_BIT0;
+> > +
+> > +                     break;
+> > +             case 'B':
+> > +                     netdev_dbg(dev, "Bit1 error\n");
+> > +                     tx_errors = true;
+> > +                     if (skb)
+> > +                             cf->data[2] |= CAN_ERR_PROT_BIT1;
+> > +
+> > +                     break;
+> > +             case 'c':
+> > +                     netdev_dbg(dev, "CRC error\n");
+> > +                     rx_errors = true;
+> > +                     if (skb) {
+> > +                             cf->data[2] |= CAN_ERR_PROT_BIT;
+> > +                             cf->data[3] = CAN_ERR_PROT_LOC_CRC_SEQ;
+> > +                     }
+> > +
+> > +                     break;
+> > +             case 'f':
+> > +                     netdev_dbg(dev, "Form Error\n");
+> > +                     rx_errors = true;
+> > +                     if (skb)
+> > +                             cf->data[2] |= CAN_ERR_PROT_FORM;
+> > +
+> > +                     break;
+> > +             case 'o':
+> > +                     netdev_dbg(dev, "Rx overrun error\n");
+> > +                     dev->stats.rx_over_errors++;
+> > +                     dev->stats.rx_errors++;
+>
+> ....if you want to increment in the case.
+>
+> > +                     if (skb) {
+> > +                             cf->can_id |= CAN_ERR_CRTL;
+> > +                             cf->data[1] = CAN_ERR_CRTL_RX_OVERFLOW;
+> > +                     }
+> > +
+> > +                     break;
+> > +             case 'O':
+> > +                     netdev_dbg(dev, "Tx overrun error\n");
+> > +                     dev->stats.tx_errors++;
+> > +                     if (skb) {
+> > +                             cf->can_id |= CAN_ERR_CRTL;
+> > +                             cf->data[1] = CAN_ERR_CRTL_TX_OVERFLOW;
+> > +                     }
+> > +
+> > +                     break;
+> > +             case 's':
+> > +                     netdev_dbg(dev, "Stuff error\n");
+> > +                     rx_errors = true;
+> > +                     if (skb)
+> > +                             cf->data[2] |= CAN_ERR_PROT_STUFF;
+> > +
+> > +                     break;
+> > +             default:
+> > +                     if (skb)
+> > +                             dev_kfree_skb(skb);
+> > +
+> > +                     return;
+> > +             }
+> > +     }
+> > +
+> > +     if (rx_errors)
+> > +             dev->stats.rx_errors++;
+> > +
+> > +     if (tx_errors)
+> > +             dev->stats.tx_errors++;
+> > +
+> > +     if (skb)
+> > +             netif_rx(skb);
+> > +}
+> > +
+> >  /* Send one completely decapsulated can_frame to the network layer */
+> > -static void slc_bump(struct slcan *sl)
+> > +static void slc_bump_frame(struct slcan *sl)
+> >  {
+> >       struct sk_buff *skb;
+> >       struct can_frame *cf;
+> > @@ -255,6 +365,24 @@ static void slc_bump(struct slcan *sl)
+> >       dev_kfree_skb(skb);
+> >  }
+> >
+> > +static void slc_bump(struct slcan *sl)
+> > +{
+> > +     switch (sl->rbuff[0]) {
+> > +     case 'r':
+> > +             fallthrough;
+> > +     case 't':
+> > +             fallthrough;
+> > +     case 'R':
+> > +             fallthrough;
+> > +     case 'T':
+> > +             return slc_bump_frame(sl);
+> > +     case 'e':
+> > +             return slc_bump_err(sl);
+> > +     default:
+> > +             return;
+> > +     }
+> > +}
+> > +
+> >  /* parse tty input stream */
+> >  static void slcan_unesc(struct slcan *sl, unsigned char s)
+> >  {
+> > --
+> > 2.32.0
+> >
+> >
 >
 > Marc
 >
