@@ -2,53 +2,53 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8877754A147
-	for <lists+linux-can@lfdr.de>; Mon, 13 Jun 2022 23:21:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D626F54A977
+	for <lists+linux-can@lfdr.de>; Tue, 14 Jun 2022 08:32:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245630AbiFMVVg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 13 Jun 2022 17:21:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50970 "EHLO
+        id S238922AbiFNGaO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 14 Jun 2022 02:30:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245594AbiFMVVR (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 13 Jun 2022 17:21:17 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34990B1DE
-        for <linux-can@vger.kernel.org>; Mon, 13 Jun 2022 14:04:51 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id i29so10827148lfp.3
-        for <linux-can@vger.kernel.org>; Mon, 13 Jun 2022 14:04:51 -0700 (PDT)
+        with ESMTP id S233653AbiFNGaM (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 14 Jun 2022 02:30:12 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0B3F1A056
+        for <linux-can@vger.kernel.org>; Mon, 13 Jun 2022 23:30:10 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id g2so8593008ljk.5
+        for <linux-can@vger.kernel.org>; Mon, 13 Jun 2022 23:30:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=amarulasolutions.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=0bPIEvwh+kv/i7N879RmrfihKwJqx1X8GKXfQsY9+Pw=;
-        b=AOPmRpVAYGZnd9Lg9Sfv5053p7vbdkmMl5a2q8iLRYg1DmiRxNM+r1DiuVsfUwD4kW
-         oxfGDtLsPoB074M7NzORMx0jop+iKt5RIPenFmwa/9P1c+kvmUph1AX+HLTvg205ThkQ
-         0rmiFCvyxSKJZggaH4Gm/PMz/sQfm0inObEc0=
+        bh=p/NRQuFI8tEQXP2R7fZneo4JlnHTbiMdQlJzFDy5/J8=;
+        b=lrFPz/wx6XrLQGNEu8CKre9K0jQFp+dy8jJWh3TUwhh2UVTs3Vp7U+HSRra96066F5
+         7sp86ZpCsDXLu3zdEVYRFErGjFwESqminOPfQAd7rgdXOEDkwQv+E+gY7/cJQzrvb2/G
+         YMiDBQUrTt6RzIyR5nGUQqa2mxdTBz85+Zgvo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=0bPIEvwh+kv/i7N879RmrfihKwJqx1X8GKXfQsY9+Pw=;
-        b=bJ2GBVXaQIz7dIAPTg1nqSJ6vqnjFVHm3o1JwffCfp8rkIlVeOLNh89B7iH/7KVu3h
-         DyG6GEdYUZ6xnw/BTXbEJD1N6E5bn/y4udfrnrEbXKkJmKit2VrXyqTRnHCoKv/AN8Op
-         hRiZlb2P8zTkAbwN2z0ahlW/XfF6rdxYifxSJ1oe1+LCMlAbKJ3152YGlFlTjgLrpYop
-         /qyOOBKpIazprF4b8xMsfJHvEJE9cC32ZtbqA9+vXj0x1Jtw5mhhIBpe32rw7D/pML/H
-         RyEG3ibJlhB63T74+NYTAfVbGRVEs/7oSw7D3Q/RI2BVOeHdGfXFe9RBIX2Bb3LamTJt
-         CBrA==
-X-Gm-Message-State: AJIora//7S7bJLznb/VVbEJX1S3+Wj37abieMpwht9hZKrL+NWnhxe/X
-        a0xB7e4QLH7dOhu/BoIRsHKlbVqrxdd0iZdwRBL12w==
-X-Google-Smtp-Source: AGRyM1veUkyLuRRpprmgBfGWfYtI7bGUcL+zVZuDQgowlb2OGgWX6h9JRUYqSbVwDfuheiLCnl8CRWIVNata3yL882I=
-X-Received: by 2002:a05:6512:3fb:b0:479:6b9:27ce with SMTP id
- n27-20020a05651203fb00b0047906b927cemr988728lfq.429.1655154289436; Mon, 13
- Jun 2022 14:04:49 -0700 (PDT)
+        bh=p/NRQuFI8tEQXP2R7fZneo4JlnHTbiMdQlJzFDy5/J8=;
+        b=72XJK5HGFMAlLbqwRPxYbuUnO2vJWqiru3b49iLtYXw8/PGp7k9kqAhrHY/XUp/PBa
+         kahCA3A7riS7SGJS74i9gVrO/YzusuD3+FUR4+R6eqCzXhqzreKht3LSCX0bQdBP1bnq
+         3fqOBwb3MsfWqfPweegEbfJ2hhBM5Spjq8RNfD7UEad7dLGdfwikWqELGh3I22QLNREH
+         d5PoNCIVH2tcZb0MIr/nc0seWXK9EDMxjceP6the2tUB1IYKZyLLsxeYMd2gIWBK3dZD
+         Y0Tewq71LIJQOLS76ZHeBLa8SyyHtBv2WF15HPMtOmMQNWkh5iitLMseJgsZ7TyfXGKE
+         06yg==
+X-Gm-Message-State: AJIora/em+gtN5UhLbNm7PgPK78QTirNT9zB6a6yEsu4s1MnnpojMuIB
+        qWZArJdYlYiZat/gZkAQBrRiRqi55rxT3Ju+xbNw+g==
+X-Google-Smtp-Source: AGRyM1vki/GDT4R9HSfcOufQmMmcVvrY9hZXpMmPyqajie+XQicj+VJMw0EtntKoXRxEIjIFi4beAZancDZ6mpEZ3BI=
+X-Received: by 2002:a2e:9609:0:b0:255:8364:9fd8 with SMTP id
+ v9-20020a2e9609000000b0025583649fd8mr1611482ljh.132.1655188208918; Mon, 13
+ Jun 2022 23:30:08 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220612213927.3004444-1-dario.binacchi@amarulasolutions.com>
- <20220612213927.3004444-13-dario.binacchi@amarulasolutions.com> <20220613073208.anak24kpffnngube@pengutronix.de>
-In-Reply-To: <20220613073208.anak24kpffnngube@pengutronix.de>
+ <20220612213927.3004444-14-dario.binacchi@amarulasolutions.com> <20220613073706.rk3bve57zi2p3nnz@pengutronix.de>
+In-Reply-To: <20220613073706.rk3bve57zi2p3nnz@pengutronix.de>
 From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date:   Mon, 13 Jun 2022 23:04:38 +0200
-Message-ID: <CABGWkvrq6+N0rUaAmw_dJjJQAwMFv3-xK=LtTb-CSfTYFTs7QQ@mail.gmail.com>
-Subject: Re: [PATCH v3 12/13] can: slcan: extend the protocol with error info
+Date:   Tue, 14 Jun 2022 08:29:57 +0200
+Message-ID: <CABGWkvqb3VHEMUaRsxcdL0+85hOSwJAtYWq+JskQ3KG+Hnca5g@mail.gmail.com>
+Subject: Re: [PATCH v3 13/13] can: slcan: extend the protocol with CAN state info
 To:     Marc Kleine-Budde <mkl@pengutronix.de>
 Cc:     linux-kernel@vger.kernel.org, michael@amarulasolutions.com,
         Amarula patchwork <linux-amarula@amarulasolutions.com>,
@@ -66,7 +66,7 @@ Cc:     linux-kernel@vger.kernel.org, michael@amarulasolutions.com,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,202 +74,138 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 9:32 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+On Mon, Jun 13, 2022 at 9:37 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
 >
-> On 12.06.2022 23:39:26, Dario Binacchi wrote:
-> > It extends the protocol to receive the adapter CAN communication errors
-> > and forward them to the netdev upper levels.
+> On 12.06.2022 23:39:27, Dario Binacchi wrote:
+> > It extends the protocol to receive the adapter CAN state changes
+> > (warning, busoff, etc.) and forward them to the netdev upper levels.
 > >
 > > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 > >
 > > ---
 > >
-> > (no changes since v2)
+> > Changes in v3:
+> > - Drop the patch "can: slcan: simplify the device de-allocation".
+> > - Add the patch "can: netlink: dump bitrate 0 if can_priv::bittiming.bitrate is -1U".
 > >
 > > Changes in v2:
-> > - Protect decoding against the case the len value is longer than the
-> >   received data.
->
-> Where is that check?
-
-I added the default case in the switch statement. Each line that is
-processed by slc_bump_err()
-is terminated by a '\r' or '\a' character. If len value is longer than
-the received characters, it will
-enter the default case for the eol character and the function will return.
-But I realize now that I am wrong, the terminator is not placed in the
-buffer passed to slc_bump_err() !!!!!! :)
-I will add the right check in v4.
-
-Thanks and regards,
-Dario
-
->
 > > - Continue error handling even if no skb can be allocated.
 > >
-> >  drivers/net/can/slcan/slcan-core.c | 130 ++++++++++++++++++++++++++++-
-> >  1 file changed, 129 insertions(+), 1 deletion(-)
+> >  drivers/net/can/slcan/slcan-core.c | 66 ++++++++++++++++++++++++++++++
+> >  1 file changed, 66 insertions(+)
 > >
 > > diff --git a/drivers/net/can/slcan/slcan-core.c b/drivers/net/can/slcan/slcan-core.c
-> > index 3df35ae8f040..48077edb9497 100644
+> > index 48077edb9497..5ba1c141f942 100644
 > > --- a/drivers/net/can/slcan/slcan-core.c
 > > +++ b/drivers/net/can/slcan/slcan-core.c
-> > @@ -175,8 +175,118 @@ int slcan_enable_err_rst_on_open(struct net_device *ndev, bool on)
+> > @@ -78,6 +78,9 @@ MODULE_PARM_DESC(maxdev, "Maximum number of slcan interfaces");
+> >  #define SLC_CMD_LEN 1
+> >  #define SLC_SFF_ID_LEN 3
+> >  #define SLC_EFF_ID_LEN 8
+> > +#define SLC_STATE_LEN 1
+> > +#define SLC_STATE_BE_RXCNT_LEN 3
+> > +#define SLC_STATE_BE_TXCNT_LEN 3
+> >
+> >  struct slcan {
+> >       struct can_priv         can;
+> > @@ -175,6 +178,67 @@ int slcan_enable_err_rst_on_open(struct net_device *ndev, bool on)
 > >    *                  STANDARD SLCAN DECAPSULATION                     *
 > >    ************************************************************************/
 > >
-> > +static void slc_bump_err(struct slcan *sl)
+> > +static void slc_bump_state(struct slcan *sl)
 > > +{
 > > +     struct net_device *dev = sl->dev;
 > > +     struct sk_buff *skb;
 > > +     struct can_frame *cf;
 > > +     char *cmd = sl->rbuff;
-> > +     bool rx_errors = false, tx_errors = false;
-> > +     int i, len;
+> > +     u32 rxerr, txerr;
+> > +     enum can_state state, rx_state, tx_state;
 > > +
-> > +     if (*cmd != 'e')
+> > +     if (*cmd != 's')
 > > +             return;
 >
-> This has already been checked in the caller, right?
+> Checked by the caller?
 >
 > > +
 > > +     cmd += SLC_CMD_LEN;
-> > +     /* get len from sanitized ASCII value */
-> > +     len = *cmd++;
-> > +     if (len >= '0' && len < '9')
-> > +             len -= '0';
-> > +     else
+> > +     switch (*cmd) {
+> > +     case 'a':
+> > +             state = CAN_STATE_ERROR_ACTIVE;
+> > +             break;
+> > +     case 'w':
+> > +             state = CAN_STATE_ERROR_WARNING;
+> > +             break;
+> > +     case 'p':
+> > +             state = CAN_STATE_ERROR_PASSIVE;
+> > +             break;
+> > +     case 'f':
+> > +             state = CAN_STATE_BUS_OFF;
+> > +             break;
+> > +     default:
 > > +             return;
+> > +     }
+> > +
+> > +     if (state == sl->can.state)
+> > +             return;
+> > +
+> > +     cmd += SLC_STATE_BE_RXCNT_LEN + 1;
+>
+> Have you checked that you have received that much data?
+>
+> > +     cmd[SLC_STATE_BE_TXCNT_LEN] = 0;
+> > +     if (kstrtou32(cmd, 10, &txerr))
+> > +             return;
+> > +
+> > +     *cmd = 0;
+> > +     cmd -= SLC_STATE_BE_RXCNT_LEN;
+> > +     if (kstrtou32(cmd, 10, &rxerr))
+> > +             return;
+>
+> Why do you parse TX first and then RX?
+
+Since adding the end-of-string character to the counter to be decoded
+invalidates the next one.
+If I had started from the rx counter, I would have found the
+transmission counter always at 0.
+
+Thanks and regards,
+Dario
+
+>
 > > +
 > > +     skb = alloc_can_err_skb(dev, &cf);
 > > +
-> > +     if (skb)
-> > +             cf->can_id |= CAN_ERR_PROT | CAN_ERR_BUSERROR;
-> > +
-> > +     for (i = 0; i < len; i++, cmd++) {
-> > +             switch (*cmd) {
-> > +             case 'a':
-> > +                     netdev_dbg(dev, "ACK error\n");
-> > +                     tx_errors = true;
->
-> Nitpick:
-> Please decide if you want to set tx/tx_errors here and increment at the
-> end of the function....or.....
->
-> > +                     if (skb) {
-> > +                             cf->can_id |= CAN_ERR_ACK;
-> > +                             cf->data[3] = CAN_ERR_PROT_LOC_ACK;
-> > +                     }
-> > +
-> > +                     break;
-> > +             case 'b':
-> > +                     netdev_dbg(dev, "Bit0 error\n");
-> > +                     tx_errors = true;
-> > +                     if (skb)
-> > +                             cf->data[2] |= CAN_ERR_PROT_BIT0;
-> > +
-> > +                     break;
-> > +             case 'B':
-> > +                     netdev_dbg(dev, "Bit1 error\n");
-> > +                     tx_errors = true;
-> > +                     if (skb)
-> > +                             cf->data[2] |= CAN_ERR_PROT_BIT1;
-> > +
-> > +                     break;
-> > +             case 'c':
-> > +                     netdev_dbg(dev, "CRC error\n");
-> > +                     rx_errors = true;
-> > +                     if (skb) {
-> > +                             cf->data[2] |= CAN_ERR_PROT_BIT;
-> > +                             cf->data[3] = CAN_ERR_PROT_LOC_CRC_SEQ;
-> > +                     }
-> > +
-> > +                     break;
-> > +             case 'f':
-> > +                     netdev_dbg(dev, "Form Error\n");
-> > +                     rx_errors = true;
-> > +                     if (skb)
-> > +                             cf->data[2] |= CAN_ERR_PROT_FORM;
-> > +
-> > +                     break;
-> > +             case 'o':
-> > +                     netdev_dbg(dev, "Rx overrun error\n");
-> > +                     dev->stats.rx_over_errors++;
-> > +                     dev->stats.rx_errors++;
->
-> ....if you want to increment in the case.
->
-> > +                     if (skb) {
-> > +                             cf->can_id |= CAN_ERR_CRTL;
-> > +                             cf->data[1] = CAN_ERR_CRTL_RX_OVERFLOW;
-> > +                     }
-> > +
-> > +                     break;
-> > +             case 'O':
-> > +                     netdev_dbg(dev, "Tx overrun error\n");
-> > +                     dev->stats.tx_errors++;
-> > +                     if (skb) {
-> > +                             cf->can_id |= CAN_ERR_CRTL;
-> > +                             cf->data[1] = CAN_ERR_CRTL_TX_OVERFLOW;
-> > +                     }
-> > +
-> > +                     break;
-> > +             case 's':
-> > +                     netdev_dbg(dev, "Stuff error\n");
-> > +                     rx_errors = true;
-> > +                     if (skb)
-> > +                             cf->data[2] |= CAN_ERR_PROT_STUFF;
-> > +
-> > +                     break;
-> > +             default:
-> > +                     if (skb)
-> > +                             dev_kfree_skb(skb);
-> > +
-> > +                     return;
-> > +             }
+> > +     if (skb) {
+> > +             cf->data[6] = txerr;
+> > +             cf->data[7] = rxerr;
 > > +     }
 > > +
-> > +     if (rx_errors)
-> > +             dev->stats.rx_errors++;
+> > +     tx_state = txerr >= rxerr ? state : 0;
+> > +     rx_state = txerr <= rxerr ? state : 0;
+> > +     can_change_state(dev, skb ? cf : NULL, tx_state, rx_state);
+>
+> alloc_can_err_skb() set cf to NULL if no skb can be allocated.
+>
 > > +
-> > +     if (tx_errors)
-> > +             dev->stats.tx_errors++;
+> > +     if (state == CAN_STATE_BUS_OFF)
+> > +             can_bus_off(dev);
 > > +
 > > +     if (skb)
 > > +             netif_rx(skb);
 > > +}
 > > +
-> >  /* Send one completely decapsulated can_frame to the network layer */
-> > -static void slc_bump(struct slcan *sl)
-> > +static void slc_bump_frame(struct slcan *sl)
+> >  static void slc_bump_err(struct slcan *sl)
 > >  {
-> >       struct sk_buff *skb;
-> >       struct can_frame *cf;
-> > @@ -255,6 +365,24 @@ static void slc_bump(struct slcan *sl)
-> >       dev_kfree_skb(skb);
-> >  }
-> >
-> > +static void slc_bump(struct slcan *sl)
-> > +{
-> > +     switch (sl->rbuff[0]) {
-> > +     case 'r':
-> > +             fallthrough;
-> > +     case 't':
-> > +             fallthrough;
-> > +     case 'R':
-> > +             fallthrough;
-> > +     case 'T':
-> > +             return slc_bump_frame(sl);
-> > +     case 'e':
-> > +             return slc_bump_err(sl);
-> > +     default:
-> > +             return;
-> > +     }
-> > +}
-> > +
-> >  /* parse tty input stream */
-> >  static void slcan_unesc(struct slcan *sl, unsigned char s)
-> >  {
+> >       struct net_device *dev = sl->dev;
+> > @@ -378,6 +442,8 @@ static void slc_bump(struct slcan *sl)
+> >               return slc_bump_frame(sl);
+> >       case 'e':
+> >               return slc_bump_err(sl);
+> > +     case 's':
+> > +             return slc_bump_state(sl);
+> >       default:
+> >               return;
+> >       }
 > > --
 > > 2.32.0
 > >
