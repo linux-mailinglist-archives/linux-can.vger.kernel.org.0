@@ -2,61 +2,74 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3406F54AA7D
-	for <lists+linux-can@lfdr.de>; Tue, 14 Jun 2022 09:26:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F5354B0D5
+	for <lists+linux-can@lfdr.de>; Tue, 14 Jun 2022 14:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353996AbiFNHY0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 14 Jun 2022 03:24:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40464 "EHLO
+        id S1357127AbiFNMbJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 14 Jun 2022 08:31:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351511AbiFNHY0 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 14 Jun 2022 03:24:26 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA49D36E34
-        for <linux-can@vger.kernel.org>; Tue, 14 Jun 2022 00:24:25 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1o10uO-00034J-F5; Tue, 14 Jun 2022 09:24:16 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 3A8EB94613;
-        Tue, 14 Jun 2022 07:24:15 +0000 (UTC)
-Date:   Tue, 14 Jun 2022 09:24:14 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org, michael@amarulasolutions.com,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        with ESMTP id S243101AbiFNM2g (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 14 Jun 2022 08:28:36 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E52A723BC9
+        for <linux-can@vger.kernel.org>; Tue, 14 Jun 2022 05:28:26 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id y19so16841586ejq.6
+        for <linux-can@vger.kernel.org>; Tue, 14 Jun 2022 05:28:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bhHRX/oRi5clzdn2dE/EY8/wgTCSEE9g8vSH+WhoX2I=;
+        b=fXAyHR6wYOrAjEoa121kXDAMBiQuKOeHTZzLKSajLlgrarAw/anKuBKZGX+sWqZhKc
+         u0w23AieZe9pPny/F0Sg5T27H2I61hCiOjE4KfV1SHvON11Iirp/kVren2/7s6BTdpDX
+         s0GckUugcWpBj6AlHsAHWQpbmQ9EPo0wjK7+o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bhHRX/oRi5clzdn2dE/EY8/wgTCSEE9g8vSH+WhoX2I=;
+        b=p4ZjRYVcRiros1pFsePp7ZMYPYGKlWxVprID6DK064Rqjja8dCeVipMqpZ9stT2/lF
+         3UHXYqD1soEpHCNmR9ClcbynT1IByxM1y+WxkbTuFq2M+kU+pgO1Rue5AEhp9xOPWV8c
+         u8PpRwwlyaYflnqtAZUrP08rOTebNyzcgkW040ikygvmcdu3K6WbPOBXrTD5VdmGIgn1
+         2NC2yeTHs8TZVFL7TinGQ7Czu+twPNucCIcf4O8XbxdKeKECpLCWJh6wgDDsT65J+gQo
+         NX+/MHXAhrX1VLv5TNHitIPDcocbJi2owhRpX+a3XLr+iyEtJKMHC9vfrNaWGpEiojik
+         o5KA==
+X-Gm-Message-State: AOAM531eZEKOPR9sun5gSf3HBiMTiv4lu3opOI8caxkE4CwO5ZGR2l3c
+        o/7Ak3RIhE+4x3Sz0Fb+JVCk+A==
+X-Google-Smtp-Source: ABdhPJy4pF7H8NgtPphY1WJTnN9t4SyQU2HyYAAQHT08cCgUQ2lc4xy7jniRTEaogLds279Um4nTuQ==
+X-Received: by 2002:a17:906:6a27:b0:708:1282:cbe9 with SMTP id qw39-20020a1709066a2700b007081282cbe9mr4290023ejc.186.1655209705333;
+        Tue, 14 Jun 2022 05:28:25 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com (host-80-116-90-174.pool80116.interbusiness.it. [80.116.90.174])
+        by smtp.gmail.com with ESMTPSA id z22-20020a17090655d600b006f3ef214e2csm5087043ejp.146.2022.06.14.05.28.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 05:28:24 -0700 (PDT)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Amarula patchwork <linux-amarula@amarulasolutions.com>,
         Oliver Hartkopp <socketcan@hartkopp.net>,
+        michael@amarulasolutions.com,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jakub Kicinski <kuba@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
         Paolo Abeni <pabeni@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
         Wolfgang Grandegger <wg@grandegger.com>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v3 05/13] can: netlink: dump bitrate 0 if
- can_priv::bittiming.bitrate is -1U
-Message-ID: <20220614072414.dxdrzrcokusunf3v@pengutronix.de>
-References: <20220612213927.3004444-1-dario.binacchi@amarulasolutions.com>
- <20220612213927.3004444-6-dario.binacchi@amarulasolutions.com>
- <20220613071058.h6bmy6emswh76q5s@pengutronix.de>
- <CABGWkvoNJYfK6bcjYtUi9qKvRfEfHUyrCWDBhOL4EjurW5YJ8Q@mail.gmail.com>
+Subject: [PATCH v4 00/12] can: slcan: extend supported features
+Date:   Tue, 14 Jun 2022 14:28:09 +0200
+Message-Id: <20220614122821.3646071-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ziwxdbyycswus75l"
-Content-Disposition: inline
-In-Reply-To: <CABGWkvoNJYfK6bcjYtUi9qKvRfEfHUyrCWDBhOL4EjurW5YJ8Q@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,49 +77,132 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+This series originated as a result of CAN communication tests for an
+application using the USBtin adapter (https://www.fischl.de/usbtin/).
+The tests showed some errors but for the driver everything was ok.
+Also, being the first time I used the slcan driver, I was amazed that
+it was not possible to configure the bitrate via the ip tool.
+For these two reasons, I started looking at the driver code and realized
+that it didn't use the CAN network device driver interface.
 
---ziwxdbyycswus75l
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Starting from these assumptions, I tried to:
+- Use the CAN network device driver interface.
+- Set the bitrate via the ip tool.
+- Send the open/close command to the adapter from the driver.
+- Add ethtool support to reset the adapter errors.
+- Extend the protocol to forward the adapter CAN communication
+  errors and the CAN state changes to the netdev upper layers.
 
-On 13.06.2022 22:44:12, Dario Binacchi wrote:
-> On Mon, Jun 13, 2022 at 9:11 AM Marc Kleine-Budde <mkl@pengutronix.de> wr=
-ote:
-> > This would make the code a lot cleaner. Can you think of a nice macro
-> > name for the -1?
-> >
-> > 0 could be CAN_BITRATE_UNCONFIGURED or _UNSET. For -1 I cannot find a
-> > catchy name, something like CAN_BITRATE_CONFIGURED_UNKOWN or
-> > SET_UNKNOWN.
-> >
->=20
-> Personally I would use CAN_BITRATE_UNSET (0) and CAN_BITRATE_UNKNOWN (-1).
-> Let me know what your ultimate preference is.
+Except for the protocol extension patches (i. e. forward the adapter CAN
+communication errors and the CAN state changes to the netdev upper
+layers), the whole series has been tested under QEMU with Linux 4.19.208
+using the USBtin adapter.
+Testing the extension protocol patches requires updating the adapter
+firmware. Before modifying the firmware I think it makes sense to know if
+these extensions can be considered useful.
 
-Looks good.
+Before applying the series I used these commands:
 
-Marc
+slcan_attach -f -s6 -o /dev/ttyACM0
+slcand ttyACM0 can0
+ip link set can0 up
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+After applying the series I am using these commands:
 
---ziwxdbyycswus75l
-Content-Type: application/pgp-signature; name="signature.asc"
+slcan_attach /dev/ttyACM0
+slcand ttyACM0 can0
+ip link set dev can0 down
+ip link set can0 type can bitrate 500000
+ethtool --set-priv-flags can0 err-rst-on-open on
+ip link set dev can0 up
 
------BEGIN PGP SIGNATURE-----
+Now there is a clearer separation between serial line and CAN,
+but above all, it is possible to use the ip and ethtool commands
+as it happens for any CAN device driver. The changes are backward
+compatible, you can continue to use the slcand and slcan_attach
+command options.
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKoN5wACgkQrX5LkNig
-012SQQf+MCc/KN4pvlFpJLP2EPpCUYG70n+5XaUEvz9ZZ+hDCfpEvX69pVFhGg/8
-58BYsbjIo4lh8XeZ9gzAIkeXjWsoHmBX2XHzcjLPM70sc8RN9VMr+uC32Wgn/VKo
-0e+S3Tvjd4EmSr0D7ulIjssYDatwdxTY+LgJUk47njL+x5PaoDFqub+MScRcNFt1
-cNk+2+B9H0klY6GCMpQiGGSHkNmOB+QVBo5tpBRaSJH9oLTIT3W5KO65U6FPz57H
-xm7kChVAUgHEx9vHRS92v2XyapmpTZwsMU2GJZRvNaoy+blRgsACrR0MbuGPnb6o
-PaGXdriKS8wM/WKuTKky0cuPYR7WLg==
-=OWqG
------END PGP SIGNATURE-----
 
---ziwxdbyycswus75l--
+Changes in v4:
+- Move the patch in front of the patch "[v3,04/13] can: slcan: use CAN network device driver API".
+- Add the CAN_BITRATE_UNSET (0) and CAN_BITRATE_UNKNOWN (-1U) macros.
+- Simplify the bitrate check to dump it.
+- Update the commit description.
+- Update the commit description.
+- Use the CAN_BITRATE_UNKNOWN macro.
+- Use kfree_skb() instead of can_put_echo_skb() in the slc_xmit().
+- Remove the `if (slcan_devs)' check in the slc_dealloc().
+- Replace `sl->tty == NULL' with `!sl->tty'.
+- Use CAN_BITRATE_UNSET (0) and CAN_BITRATE_UNKNOWN (-1U) macros.
+- Don't reset the bitrate in ndo_stop() if it has been configured.
+- Squashed to the patch [v3,09/13] can: slcan: send the close command to the adapter.
+- Use the CAN_BITRATE_UNKNOWN macro.
+- Add description of slc_bump_err() function.
+- Remove check for the 'e' character at the beggining of the function.
+  It was already checked by the caller function.
+- Protect decoding against the case the len value is longer than the
+  received data.
+- Some small changes to make the decoding more readable.
+- Increment all the error counters at the end of the function.
+- Add description of slc_bump_state() function.
+- Remove check for the 's' character at the beggining of the function.
+  It was already checked by the caller function.
+- Protect decoding against the case the frame len is longer than the
+  received data (add SLC_STATE_FRAME_LEN macro).
+- Set cf to NULL in case of alloc_can_err_skb() failure.
+- Some small changes to make the decoding more readable.
+- Use the character 'b' instead of 'f' for bus-off state.
+
+Changes in v3:
+- Increment the error counter in case of decoding failure.
+- Replace (-1) with (-1U) in the commit description.
+- Update the commit description.
+- Remove the slc_do_set_bittiming().
+- Set the bitrate in the ndo_open().
+- Replace -1UL with -1U in setting a fake value for the bitrate.
+- Drop the patch "can: slcan: simplify the device de-allocation".
+- Add the patch "can: netlink: dump bitrate 0 if can_priv::bittiming.bitrate is -1U".
+
+Changes in v2:
+- Put the data into the allocated skb directly instead of first
+  filling the "cf" on the stack and then doing a memcpy().
+- Move CAN_SLCAN Kconfig option inside CAN_DEV scope.
+- Improve the commit message.
+- Use the CAN framework support for setting fixed bit rates.
+- Improve the commit message.
+- Protect decoding against the case the len value is longer than the
+  received data.
+- Continue error handling even if no skb can be allocated.
+- Continue error handling even if no skb can be allocated.
+
+Dario Binacchi (12):
+  can: slcan: use the BIT() helper
+  can: slcan: use netdev helpers to print out messages
+  can: slcan: use the alloc_can_skb() helper
+  can: netlink: dump bitrate 0 if can_priv::bittiming.bitrate is -1U
+  can: slcan: use CAN network device driver API
+  can: slcan: allow to send commands to the adapter
+  can: slcan: set bitrate by CAN device driver API
+  can: slcan: send the open/close commands to the adapter
+  can: slcan: move driver into separate sub directory
+  can: slcan: add ethtool support to reset adapter errors
+  can: slcan: extend the protocol with error info
+  can: slcan: extend the protocol with CAN state info
+
+ drivers/net/can/Kconfig                       |  40 +-
+ drivers/net/can/Makefile                      |   2 +-
+ drivers/net/can/dev/netlink.c                 |   3 +-
+ drivers/net/can/slcan/Makefile                |   7 +
+ .../net/can/{slcan.c => slcan/slcan-core.c}   | 527 ++++++++++++++----
+ drivers/net/can/slcan/slcan-ethtool.c         |  65 +++
+ drivers/net/can/slcan/slcan.h                 |  18 +
+ include/linux/can/bittiming.h                 |   2 +
+ 8 files changed, 549 insertions(+), 115 deletions(-)
+ create mode 100644 drivers/net/can/slcan/Makefile
+ rename drivers/net/can/{slcan.c => slcan/slcan-core.c} (64%)
+ create mode 100644 drivers/net/can/slcan/slcan-ethtool.c
+ create mode 100644 drivers/net/can/slcan/slcan.h
+
+-- 
+2.32.0
+
