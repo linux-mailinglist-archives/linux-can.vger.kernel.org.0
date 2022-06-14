@@ -2,143 +2,297 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE5D754B49B
-	for <lists+linux-can@lfdr.de>; Tue, 14 Jun 2022 17:27:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D33D554BDEE
+	for <lists+linux-can@lfdr.de>; Wed, 15 Jun 2022 00:54:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240519AbiFNP1p (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 14 Jun 2022 11:27:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59108 "EHLO
+        id S236992AbiFNWxr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 14 Jun 2022 18:53:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356876AbiFNP13 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 14 Jun 2022 11:27:29 -0400
-Received: from mx0b-0054a801.pphosted.com (mx0b-0054a801.pphosted.com [205.220.172.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67DC545057
-        for <linux-can@vger.kernel.org>; Tue, 14 Jun 2022 08:27:02 -0700 (PDT)
-Received: from pps.filterd (m0208804.ppops.net [127.0.0.1])
-        by mx0b-0054a801.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25ECgtS2016676
-        for <linux-can@vger.kernel.org>; Tue, 14 Jun 2022 15:27:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsara.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=samsaracom06092020;
- bh=/aqPtmv6iSMPS7/+L+3IZl3bHaAOrQ0c5sRFaTsOanE=;
- b=h+q//88HwanbTfZXOXmp5uy2i7Qjkjdb9oPAIVsMq7cUYjx5aoya0wRdYb4DB29Bkm8k
- pCLpjgf4nKuXyolrEj19hi7dPAE7jZ/9OCIfnLOiVPxho3Dsxu/tptCWfe090uGC99Sa
- F3RgbOUm/n8RNR5roMA5RsFWoQ9aYr8Zxr77tiN4yZIaDLbihdQTWOsXQbXFkcJYPV4G
- xys82K/2TuIgg39+lWk1pzv+v+Z3+4y8RpfIfDrLy0hUCvwJIkI+6pYJSGZisAEhQAEF
- U/Ub8gNVaDyblz1ElLtU9FtqTZ7wleY6QjmnmUDChihJrORLoDK+iqrB5dx3cxwl+SWs +Q== 
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
-        by mx0b-0054a801.pphosted.com (PPS) with ESMTPS id 3gmhn5tcey-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-can@vger.kernel.org>; Tue, 14 Jun 2022 15:27:01 +0000
-Received: by mail-qk1-f200.google.com with SMTP id bm2-20020a05620a198200b006a5dac37fa2so7696948qkb.16
-        for <linux-can@vger.kernel.org>; Tue, 14 Jun 2022 08:27:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=samsara.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=/aqPtmv6iSMPS7/+L+3IZl3bHaAOrQ0c5sRFaTsOanE=;
-        b=Q4wKkqxYygF8dh6r6vWd6toIh3CZKurVs+QoTkIzDPUiaA5szD4egBc+YNs3loTEWj
-         l499TDfmFmjtT+m6u5cSbS1tL3Zaz/1/OB3fNWz721ymMqAcZKKt3dt+eUxKN87yI3Ke
-         8DnQavN17IhcVPpO5kTo2wpSlzw4vGfTWMXb/59TCcPR6XpsqgMG9wq6bo6nChAJdHnG
-         xWU7jS0f4tWVDM9b2obyIdm0Nfzf0aIOOAoSzAZWd2tfFLHHm1aXFsMEMMMGco79rtOW
-         cCjSep16HtFP4Psn4l+xmOz1T1rwxb89s1FhErrM1YiJ9tjypZP8vHxIcyxSgym01rJB
-         r+fQ==
+        with ESMTP id S1351875AbiFNWx0 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 14 Jun 2022 18:53:26 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79E617047
+        for <linux-can@vger.kernel.org>; Tue, 14 Jun 2022 15:53:24 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id 199-20020a6b01d0000000b00669bf42cd4cso5096217iob.4
+        for <linux-can@vger.kernel.org>; Tue, 14 Jun 2022 15:53:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/aqPtmv6iSMPS7/+L+3IZl3bHaAOrQ0c5sRFaTsOanE=;
-        b=T8jBpUHGjDPKkJ/Iis6bBvc+Ts9BwMjQemwiN5w0+FATJAE1976fWlmNGgMN9jrbXQ
-         YPtFEV0wk/YpfrKKQVzmbi1XneLOo8jdV/XXLawbcETDlj1sAKGOhtMnXhE0NlUGq8X+
-         lcYNY2l6QsAqIlEvE2V+RuGN7mFTZv1bMnUIZ4WdI+U3Boifwtn1hj0blKYSRU0IL/V9
-         +qmlKwBQntrANGY+GWZ2oF+GCT35ccBBlAbdW4LluKXEX0UGILe6OOjMK28NjlAXbJMq
-         WWzhoa2zLaN69hkbwd39phKq6qEFUQ2vPimac4bnIr0GtjBFQd2LqHR2ek5OyeVt4GJI
-         WVzw==
-X-Gm-Message-State: AOAM533Vfdb++Rp61UMW8iEjBtMIVynPEmQt5zsiGAE8ueMqZOxhSJS+
-        WpcpLe2RTv6rzisinZ80PQcsdF+IITldCXp+Vz5H3u8fkojTe08WXCvAvTzHj8cJ7i2/mCU+863
-        FBCd0lcbMKA2u2ub5KWs3
-X-Received: by 2002:ac8:5a10:0:b0:2f3:dd26:d138 with SMTP id n16-20020ac85a10000000b002f3dd26d138mr4688120qta.405.1655220419996;
-        Tue, 14 Jun 2022 08:26:59 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxyzmSC5oRUS1lpFt3Nk+2mdkuVVrsRrB8K6YTLxgQtPHXQw/JCfePmqyIcYR5t7+UX+Fwg2Q==
-X-Received: by 2002:ac8:5a10:0:b0:2f3:dd26:d138 with SMTP id n16-20020ac85a10000000b002f3dd26d138mr4688084qta.405.1655220419575;
-        Tue, 14 Jun 2022 08:26:59 -0700 (PDT)
-Received: from downhome.. (ec2-3-215-55-7.compute-1.amazonaws.com. [3.215.55.7])
-        by smtp.gmail.com with ESMTPSA id k4-20020a05620a414400b006a743b360bcsm10199259qko.136.2022.06.14.08.26.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 08:26:58 -0700 (PDT)
-From:   Rhett Aultman <rhett.aultman@samsara.com>
-To:     linux-can <linux-can@vger.kernel.org>
-Cc:     --cc=Marc Kleine-Budde <mkl@pengutronix.de>,
-        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        Rhett Aultman <rhett.aultman@samsara.com>
-Subject: [PATCH v4 1/1] can: gs_usb: fix DMA memory leak on close
-Date:   Tue, 14 Jun 2022 11:26:31 -0400
-Message-Id: <20220614152630.2255641-2-rhett.aultman@samsara.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220614152630.2255641-1-rhett.aultman@samsara.com>
-References: <20220610213335.3077375-1-rhett.aultman@samsara.com>
- <20220614152630.2255641-1-rhett.aultman@samsara.com>
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=bcKz89Rwh4iHGOl16T5LkMU3kB3uM/BsCIYJxAkbsBU=;
+        b=T6MAoPAHlw6qxq5vB4fanxACiEeCk6QqGVxxVJABg2zc1XuKXrmlpDfpXmhZ5jmEdm
+         K5B18jpQ8tm+14kQgTStJfEeTE6Xu24RwTXiwhyTnu8SFNVsLOxTuS9KjuU/A+SeXGP+
+         kOKDPK53JkNtAKARe7LYVeJ72NiCgkTQhdLVqiIaOBfHdfhgyzjxPp1UJliXDf/JAD2g
+         KuasFFTvXOb2Cu0Y1GKBNakV2XF+yz3ARoETEFB8U3f49zu7FZS7gApURwIZYLtFfVKY
+         omob2BYHRRgOQabVvzb+UAOH4jGEmqyqaYAP3BHXzpx5VF40PaPlEypGDD+2GDI3IzsQ
+         dMVQ==
+X-Gm-Message-State: AOAM531tOcRJHnFyHCm1fOgfupd2I+Afy2qQxj5bAEWGlR6evJ3TE2mA
+        4qWmh0FO69Jz0lpkuo9Iedki6MAsoUMPlgRCfGG8Qhd3pmlL
+X-Google-Smtp-Source: ABdhPJzHrmSSfr8eIPKH3o1Xc73RvyJCZsr9S8lmAeIYV4V3opiKOpgWR3JPCuxSaKnGV0XIk3u8cSyZA2y3xvBBa8GOvl7hqKsw
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: 6FCS2EaUYpaWzhDpeyiVGxBYvn5UeTw7
-X-Proofpoint-GUID: 6FCS2EaUYpaWzhDpeyiVGxBYvn5UeTw7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-14_05,2022-06-13_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- bulkscore=0 adultscore=0 lowpriorityscore=0 phishscore=0 mlxlogscore=579
- malwarescore=0 suspectscore=0 mlxscore=0 priorityscore=1501 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
- definitions=main-2206140060
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a05:6638:218c:b0:331:a10e:7702 with SMTP id
+ s12-20020a056638218c00b00331a10e7702mr4127898jaj.147.1655247203881; Tue, 14
+ Jun 2022 15:53:23 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 15:53:23 -0700
+In-Reply-To: <000000000000f3e56405cdcf14cd@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009a594805e17045ed@google.com>
+Subject: Re: [syzbot] possible deadlock in j1939_sk_errqueue
+From:   syzbot <syzbot+ee1cd780f69483a8616b@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, kernel@pengutronix.de,
+        kuba@kernel.org, linux-can@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux@rempel-privat.de,
+        mkl@pengutronix.de, netdev@vger.kernel.org, pabeni@redhat.com,
+        robin@protonic.nl, socketcan@hartkopp.net,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The gs_usb driver allocates DMA memory with usb_alloc_coherent() in
-gs_can_open() and then keeps this memory in an URB, with the expectation
-that the memory will be freed when the URB is killed in gs_can_close().
-Memory allocated with usb_alloc_coherent() cannot be freed in this way
-and must be freed using usb_free_coherent() instead.  This means that
-repeated cycles of calling gs_can_open() and gs_can_close() will lead to
-a memory leak.
+syzbot has found a reproducer for the following issue on:
 
-Historically, drivers have handled this by keeping an array of pointers
-to their DMA rx buffers and explicitly freeing them.  For an example of
-this technique used in the esd_usb2 driver, see here:
-928150fad41b ("can: esd_usb2: fix memory leak")
+HEAD commit:    24625f7d91fb Merge tag 'for-linus' of git://git.kernel.org..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=1391e2d7f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=70e1a4d352a3c6ae
+dashboard link: https://syzkaller.appspot.com/bug?extid=ee1cd780f69483a8616b
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=163611bff00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=157d01e7f00000
 
-While the above method works, the conditions that cause this leak are
-not apparent to driver writers and the method for solving it at the
-driver level has been piecemeal.  This patch makes use of a new
-URB_FREE_COHERENT flag on the URB, reducing the solution of this memory
-leak down to a single line of code.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+ee1cd780f69483a8616b@syzkaller.appspotmail.com
 
-Fixes: d08e973a77d1 ("can: gs_usb: Added support for the GS_USB CAN devices")
-Signed-off-by: Rhett Aultman <rhett.aultman@samsara.com>
-Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- drivers/net/can/usb/gs_usb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+vcan0: j1939_tp_rxtimer: 0xffff88814717a000: rx timeout, send abort
+vcan0: j1939_tp_rxtimer: 0xffff88807b7b3800: rx timeout, send abort
+======================================================
+WARNING: possible circular locking dependency detected
+5.19.0-rc2-syzkaller-00049-g24625f7d91fb #0 Not tainted
+------------------------------------------------------
+swapper/0/0 is trying to acquire lock:
+ffff8880777290d0 (&priv->j1939_socks_lock){+.-.}-{2:2}, at: spin_lock_bh include/linux/spinlock.h:354 [inline]
+ffff8880777290d0 (&priv->j1939_socks_lock){+.-.}-{2:2}, at: j1939_sk_errqueue+0x9f/0x1a0 net/can/j1939/socket.c:1078
 
-diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
-index b29ba9138866..4e7e6a7b961a 100644
---- a/drivers/net/can/usb/gs_usb.c
-+++ b/drivers/net/can/usb/gs_usb.c
-@@ -768,7 +768,7 @@ static int gs_can_open(struct net_device *netdev)
- 					  buf,
- 					  dev->parent->hf_size_rx,
- 					  gs_usb_receive_bulk_callback, parent);
--			urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
-+			urb->transfer_flags = URB_NO_TRANSFER_DMA_MAP | URB_FREE_COHERENT;
- 
- 			usb_anchor_urb(urb, &parent->rx_submitted);
- 
--- 
-2.30.2
+but task is already holding lock:
+ffff888077729088 (&priv->active_session_list_lock){+.-.}-{2:2}, at: spin_lock_bh include/linux/spinlock.h:354 [inline]
+ffff888077729088 (&priv->active_session_list_lock){+.-.}-{2:2}, at: j1939_session_list_lock net/can/j1939/transport.c:238 [inline]
+ffff888077729088 (&priv->active_session_list_lock){+.-.}-{2:2}, at: j1939_tp_rxtimer+0xe5/0x220 net/can/j1939/transport.c:1240
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #2 (&priv->active_session_list_lock){+.-.}-{2:2}:
+       __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
+       _raw_spin_lock_bh+0x2f/0x40 kernel/locking/spinlock.c:178
+       spin_lock_bh include/linux/spinlock.h:354 [inline]
+       j1939_session_list_lock net/can/j1939/transport.c:238 [inline]
+       j1939_session_activate+0x43/0x4b0 net/can/j1939/transport.c:1553
+       j1939_sk_queue_activate_next_locked net/can/j1939/socket.c:181 [inline]
+       j1939_sk_queue_activate_next+0x29b/0x460 net/can/j1939/socket.c:205
+       j1939_session_deactivate_activate_next net/can/j1939/transport.c:1101 [inline]
+       j1939_session_completed+0x19a/0x1f0 net/can/j1939/transport.c:1214
+       j1939_xtp_rx_eoma_one net/can/j1939/transport.c:1384 [inline]
+       j1939_xtp_rx_eoma+0x2a6/0x5f0 net/can/j1939/transport.c:1399
+       j1939_tp_cmd_recv net/can/j1939/transport.c:2088 [inline]
+       j1939_tp_recv+0x930/0xcb0 net/can/j1939/transport.c:2133
+       j1939_can_recv+0x6ff/0x9a0 net/can/j1939/main.c:108
+       deliver net/can/af_can.c:574 [inline]
+       can_rcv_filter+0x5d4/0x8d0 net/can/af_can.c:608
+       can_receive+0x31d/0x580 net/can/af_can.c:665
+       can_rcv+0x120/0x1c0 net/can/af_can.c:696
+       __netif_receive_skb_one_core+0x114/0x180 net/core/dev.c:5478
+       __netif_receive_skb+0x24/0x1b0 net/core/dev.c:5592
+       process_backlog+0x3a0/0x7c0 net/core/dev.c:5920
+       __napi_poll+0xb3/0x6e0 net/core/dev.c:6486
+       napi_poll net/core/dev.c:6553 [inline]
+       net_rx_action+0x9c1/0xd90 net/core/dev.c:6664
+       __do_softirq+0x29b/0x9c2 kernel/softirq.c:571
+       run_ksoftirqd kernel/softirq.c:934 [inline]
+       run_ksoftirqd+0x2d/0x60 kernel/softirq.c:926
+       smpboot_thread_fn+0x645/0x9c0 kernel/smpboot.c:164
+       kthread+0x2e9/0x3a0 kernel/kthread.c:376
+       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
+
+-> #1 (&jsk->sk_session_queue_lock){+.-.}-{2:2}:
+       __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
+       _raw_spin_lock_bh+0x2f/0x40 kernel/locking/spinlock.c:178
+       spin_lock_bh include/linux/spinlock.h:354 [inline]
+       j1939_sk_queue_drop_all+0x40/0x2f0 net/can/j1939/socket.c:139
+       j1939_sk_netdev_event_netdown+0x7b/0x160 net/can/j1939/socket.c:1272
+       j1939_netdev_notify+0x199/0x1d0 net/can/j1939/main.c:372
+       notifier_call_chain+0xb5/0x200 kernel/notifier.c:87
+       call_netdevice_notifiers_info+0xb5/0x130 net/core/dev.c:1943
+       call_netdevice_notifiers_extack net/core/dev.c:1981 [inline]
+       call_netdevice_notifiers net/core/dev.c:1995 [inline]
+       __dev_notify_flags+0x1da/0x2b0 net/core/dev.c:8571
+       dev_change_flags+0x112/0x170 net/core/dev.c:8607
+       do_setlink+0x961/0x3bb0 net/core/rtnetlink.c:2780
+       __rtnl_newlink+0xd6a/0x17e0 net/core/rtnetlink.c:3546
+       rtnl_newlink+0x64/0xa0 net/core/rtnetlink.c:3593
+       rtnetlink_rcv_msg+0x43a/0xc90 net/core/rtnetlink.c:6089
+       netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2501
+       netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+       netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
+       netlink_sendmsg+0x917/0xe10 net/netlink/af_netlink.c:1921
+       sock_sendmsg_nosec net/socket.c:714 [inline]
+       sock_sendmsg+0xcf/0x120 net/socket.c:734
+       ____sys_sendmsg+0x6eb/0x810 net/socket.c:2492
+       ___sys_sendmsg+0xf3/0x170 net/socket.c:2546
+       __sys_sendmsg net/socket.c:2575 [inline]
+       __do_sys_sendmsg net/socket.c:2584 [inline]
+       __se_sys_sendmsg net/socket.c:2582 [inline]
+       __x64_sys_sendmsg+0x132/0x220 net/socket.c:2582
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x46/0xb0
+
+-> #0 (&priv->j1939_socks_lock){+.-.}-{2:2}:
+       check_prev_add kernel/locking/lockdep.c:3095 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3214 [inline]
+       validate_chain kernel/locking/lockdep.c:3829 [inline]
+       __lock_acquire+0x2abe/0x5660 kernel/locking/lockdep.c:5053
+       lock_acquire kernel/locking/lockdep.c:5665 [inline]
+       lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5630
+       __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
+       _raw_spin_lock_bh+0x2f/0x40 kernel/locking/spinlock.c:178
+       spin_lock_bh include/linux/spinlock.h:354 [inline]
+       j1939_sk_errqueue+0x9f/0x1a0 net/can/j1939/socket.c:1078
+       __j1939_session_cancel+0x3b9/0x460 net/can/j1939/transport.c:1124
+       j1939_tp_rxtimer.cold+0x1f6/0x24f net/can/j1939/transport.c:1249
+       __run_hrtimer kernel/time/hrtimer.c:1685 [inline]
+       __hrtimer_run_queues+0x609/0xe50 kernel/time/hrtimer.c:1749
+       hrtimer_run_softirq+0x17b/0x360 kernel/time/hrtimer.c:1766
+       __do_softirq+0x29b/0x9c2 kernel/softirq.c:571
+       invoke_softirq kernel/softirq.c:445 [inline]
+       __irq_exit_rcu+0x123/0x180 kernel/softirq.c:650
+       irq_exit_rcu+0x5/0x20 kernel/softirq.c:662
+       sysvec_apic_timer_interrupt+0x93/0xc0 arch/x86/kernel/apic/apic.c:1106
+       asm_sysvec_apic_timer_interrupt+0x1b/0x20 arch/x86/include/asm/idtentry.h:649
+       native_safe_halt arch/x86/include/asm/irqflags.h:51 [inline]
+       arch_safe_halt arch/x86/include/asm/irqflags.h:89 [inline]
+       acpi_safe_halt drivers/acpi/processor_idle.c:111 [inline]
+       acpi_idle_do_entry+0x1c9/0x240 drivers/acpi/processor_idle.c:554
+       acpi_idle_enter+0x369/0x510 drivers/acpi/processor_idle.c:691
+       cpuidle_enter_state+0x1b1/0xc80 drivers/cpuidle/cpuidle.c:237
+       cpuidle_enter+0x4a/0xa0 drivers/cpuidle/cpuidle.c:351
+       call_cpuidle kernel/sched/idle.c:155 [inline]
+       cpuidle_idle_call kernel/sched/idle.c:236 [inline]
+       do_idle+0x3e8/0x590 kernel/sched/idle.c:303
+       cpu_startup_entry+0x14/0x20 kernel/sched/idle.c:400
+       rest_init+0x169/0x270 init/main.c:726
+       arch_call_rest_init+0xf/0x14 init/main.c:882
+       start_kernel+0x46e/0x48f init/main.c:1137
+       secondary_startup_64_no_verify+0xce/0xdb
+
+other info that might help us debug this:
+
+Chain exists of:
+  &priv->j1939_socks_lock --> &jsk->sk_session_queue_lock --> &priv->active_session_list_lock
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&priv->active_session_list_lock);
+                               lock(&jsk->sk_session_queue_lock);
+                               lock(&priv->active_session_list_lock);
+  lock(&priv->j1939_socks_lock);
+
+ *** DEADLOCK ***
+
+1 lock held by swapper/0/0:
+ #0: ffff888077729088 (&priv->active_session_list_lock){+.-.}-{2:2}, at: spin_lock_bh include/linux/spinlock.h:354 [inline]
+ #0: ffff888077729088 (&priv->active_session_list_lock){+.-.}-{2:2}, at: j1939_session_list_lock net/can/j1939/transport.c:238 [inline]
+ #0: ffff888077729088 (&priv->active_session_list_lock){+.-.}-{2:2}, at: j1939_tp_rxtimer+0xe5/0x220 net/can/j1939/transport.c:1240
+
+stack backtrace:
+CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.19.0-rc2-syzkaller-00049-g24625f7d91fb #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <IRQ>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2175
+ check_prev_add kernel/locking/lockdep.c:3095 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3214 [inline]
+ validate_chain kernel/locking/lockdep.c:3829 [inline]
+ __lock_acquire+0x2abe/0x5660 kernel/locking/lockdep.c:5053
+ lock_acquire kernel/locking/lockdep.c:5665 [inline]
+ lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5630
+ __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
+ _raw_spin_lock_bh+0x2f/0x40 kernel/locking/spinlock.c:178
+ spin_lock_bh include/linux/spinlock.h:354 [inline]
+ j1939_sk_errqueue+0x9f/0x1a0 net/can/j1939/socket.c:1078
+ __j1939_session_cancel+0x3b9/0x460 net/can/j1939/transport.c:1124
+ j1939_tp_rxtimer.cold+0x1f6/0x24f net/can/j1939/transport.c:1249
+ __run_hrtimer kernel/time/hrtimer.c:1685 [inline]
+ __hrtimer_run_queues+0x609/0xe50 kernel/time/hrtimer.c:1749
+ hrtimer_run_softirq+0x17b/0x360 kernel/time/hrtimer.c:1766
+ __do_softirq+0x29b/0x9c2 kernel/softirq.c:571
+ invoke_softirq kernel/softirq.c:445 [inline]
+ __irq_exit_rcu+0x123/0x180 kernel/softirq.c:650
+ irq_exit_rcu+0x5/0x20 kernel/softirq.c:662
+ sysvec_apic_timer_interrupt+0x93/0xc0 arch/x86/kernel/apic/apic.c:1106
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x1b/0x20 arch/x86/include/asm/idtentry.h:649
+RIP: 0010:native_save_fl arch/x86/include/asm/irqflags.h:29 [inline]
+RIP: 0010:arch_local_save_flags arch/x86/include/asm/irqflags.h:70 [inline]
+RIP: 0010:arch_irqs_disabled arch/x86/include/asm/irqflags.h:130 [inline]
+RIP: 0010:acpi_safe_halt drivers/acpi/processor_idle.c:112 [inline]
+RIP: 0010:acpi_idle_do_entry+0x1c9/0x240 drivers/acpi/processor_idle.c:554
+Code: 89 de e8 4a 53 00 f8 84 db 75 98 e8 41 57 00 f8 e8 2c a7 06 f8 66 90 e8 35 57 00 f8 0f 00 2d 2e f0 b9 00 e8 29 57 00 f8 fb f4 <9c> 5b 81 e3 00 02 00 00 fa 31 ff 48 89 de e8 74 53 00 f8 48 85 db
+RSP: 0018:ffffffff8ba07d38 EFLAGS: 00000293
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffffffff8babc940 RSI: ffffffff897a1ad7 RDI: 0000000000000000
+RBP: ffff888017071064 R08: 0000000000000001 R09: 0000000000000001
+R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000001
+R13: ffff888017071000 R14: ffff888017071064 R15: ffff88801b1cd804
+ acpi_idle_enter+0x369/0x510 drivers/acpi/processor_idle.c:691
+ cpuidle_enter_state+0x1b1/0xc80 drivers/cpuidle/cpuidle.c:237
+ cpuidle_enter+0x4a/0xa0 drivers/cpuidle/cpuidle.c:351
+ call_cpuidle kernel/sched/idle.c:155 [inline]
+ cpuidle_idle_call kernel/sched/idle.c:236 [inline]
+ do_idle+0x3e8/0x590 kernel/sched/idle.c:303
+ cpu_startup_entry+0x14/0x20 kernel/sched/idle.c:400
+ rest_init+0x169/0x270 init/main.c:726
+ arch_call_rest_init+0xf/0x14 init/main.c:882
+ start_kernel+0x46e/0x48f init/main.c:1137
+ secondary_startup_64_no_verify+0xce/0xdb
+ </TASK>
+vcan0: j1939_xtp_rx_abort_one: 0xffff88814717a000: 0x00000: (3) A timeout occurred and this is the connection abort to close the session.
+vcan0: j1939_xtp_rx_abort_one: 0xffff88807b7b3800: 0x00000: (3) A timeout occurred and this is the connection abort to close the session.
+----------------
+Code disassembly (best guess):
+   0:	89 de                	mov    %ebx,%esi
+   2:	e8 4a 53 00 f8       	callq  0xf8005351
+   7:	84 db                	test   %bl,%bl
+   9:	75 98                	jne    0xffffffa3
+   b:	e8 41 57 00 f8       	callq  0xf8005751
+  10:	e8 2c a7 06 f8       	callq  0xf806a741
+  15:	66 90                	xchg   %ax,%ax
+  17:	e8 35 57 00 f8       	callq  0xf8005751
+  1c:	0f 00 2d 2e f0 b9 00 	verw   0xb9f02e(%rip)        # 0xb9f051
+  23:	e8 29 57 00 f8       	callq  0xf8005751
+  28:	fb                   	sti
+  29:	f4                   	hlt
+* 2a:	9c                   	pushfq <-- trapping instruction
+  2b:	5b                   	pop    %rbx
+  2c:	81 e3 00 02 00 00    	and    $0x200,%ebx
+  32:	fa                   	cli
+  33:	31 ff                	xor    %edi,%edi
+  35:	48 89 de             	mov    %rbx,%rsi
+  38:	e8 74 53 00 f8       	callq  0xf80053b1
+  3d:	48 85 db             	test   %rbx,%rbx
 
