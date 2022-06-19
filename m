@@ -2,122 +2,79 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51875550736
-	for <lists+linux-can@lfdr.de>; Sun, 19 Jun 2022 00:03:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5459A550926
+	for <lists+linux-can@lfdr.de>; Sun, 19 Jun 2022 09:34:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233231AbiFRWCl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 18 Jun 2022 18:02:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57274 "EHLO
+        id S232316AbiFSHd5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 19 Jun 2022 03:33:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233828AbiFRWCj (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 18 Jun 2022 18:02:39 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC32CD;
-        Sat, 18 Jun 2022 15:02:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655589758; x=1687125758;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qtYBGi61sstW4pA7LP1jBpa+MIJmaL/05wNAVmBxe0E=;
-  b=NazcHXzOzHBssQKcUFzm2kg+00Jkup+MrJN2At7+gxh/vrab5hdWVGOp
-   DDKNgmovJSEA9i5wfO/EhrOn8Y1g6V6OM8fm6VmBhp92VXRUB8nnKvJ3q
-   PBT7oZKL4ZRUQVvHTFOZ1lMhxFmjMrWLSjvUdykErP7AqxvLq7KEI8HxE
-   g0zE+38WsyrlvDovRixd99DMFtXCt/3h82ziau3x9tuVTl9LU2JTeiMa9
-   MsYEObr5jN5A42f9L0GG8Mz7GpA0YjCQ9A2GpYb6VLqJEUvS1seYK/2+d
-   vp5N5MHgd3W+fHwfNIRPF/mEYnrJuIRhi8X2mEKQnDKtHeFXanNvmMojY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="280414299"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="280414299"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2022 15:02:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="590610945"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 18 Jun 2022 15:02:34 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o2gWX-000Qcp-Jt;
-        Sat, 18 Jun 2022 22:02:33 +0000
-Date:   Sun, 19 Jun 2022 06:02:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Max Staudt <max@enpas.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     kbuild-all@lists.01.org, linux-can@vger.kernel.org,
-        Vincent Mailhol <vincent.mailhol@gmail.com>,
-        Oliver Neukum <oneukum@suse.com>, linux-kernel@vger.kernel.org,
-        Max Staudt <max@enpas.org>
-Subject: Re: [PATCH v9] can, tty: can327 CAN/ldisc driver for ELM327 based
- OBD-II adapters
-Message-ID: <202206190533.0uzpvGYN-lkp@intel.com>
-References: <20220618195031.10975-1-max@enpas.org>
+        with ESMTP id S231939AbiFSHd5 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 19 Jun 2022 03:33:57 -0400
+X-Greylist: delayed 1819 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 19 Jun 2022 00:33:50 PDT
+Received: from mail-m965.mail.126.com (mail-m965.mail.126.com [123.126.96.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6BF316590;
+        Sun, 19 Jun 2022 00:33:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=dTAU6
+        mTEjt6l5zqq/41qP0DP8KBBlAM0uLigIY0i9p8=; b=WS25MfutzsoGDDh6btDjK
+        4xy49amCnVYNJn9dn/MXLglf3XrexwyTkWClVAuNADw8jV6E2ks9i7A83xw/pFge
+        B7GuzUs7jwndJcquv7GZUd6z3VyTLFhIjs8DLWSNSI9oaVY1QQc+NRJklY9Gd+B3
+        y7jMOzL6sDeIVGNGV2RCqI=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp10 (Coremail) with SMTP id NuRpCgB3ym4iyq5i43vMEw--.47634S2;
+        Sun, 19 Jun 2022 15:02:58 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc:     windhl@126.com, linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] can: Remove extra of_node_get in grcan
+Date:   Sun, 19 Jun 2022 15:02:57 +0800
+Message-Id: <20220619070257.4067022-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220618195031.10975-1-max@enpas.org>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: NuRpCgB3ym4iyq5i43vMEw--.47634S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrKFW7tw47CrWfGw1rGry7Awb_yoWfXFX_G3
+        s7ZF4xXr15Wr4Dt3WI93yavrW2yrW5Zrykurs0yFW3Aa13Zr1UJrs2vF93twn5W3ykZF9I
+        krnIya48C3yYqjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRiUGYtUUUUU==
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/xtbBGgolF1-HZVIHkQAAsb
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Max,
+In grcan_probe(), of_find_node_by_path() has increased the refcount.
+There is no need to call of_node_get() again.
 
-I love your patch! Yet something to improve:
+Fixes: 1e93ed26acf0 (can: grcan: grcan_probe(): fix broken system id check for errata workaround needs)
 
-[auto build test ERROR on mkl-can-next/testing]
-[also build test ERROR on linus/master v5.19-rc2 next-20220617]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Signed-off-by: Liang He <windhl@126.com>
+---
+ drivers/net/can/grcan.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Max-Staudt/can-tty-can327-CAN-ldisc-driver-for-ELM327-based-OBD-II-adapters/20220619-035333
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git testing
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220619/202206190533.0uzpvGYN-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/2338446348d90b3793e53238f210299f13bf6ec4
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Max-Staudt/can-tty-can327-CAN-ldisc-driver-for-ELM327-based-OBD-II-adapters/20220619-035333
-        git checkout 2338446348d90b3793e53238f210299f13bf6ec4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash drivers/net/can/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/net/can/can327.c:1104:27: error: 'N_CAN327' undeclared here (not in a function)
-    1104 |         .num            = N_CAN327,
-         |                           ^~~~~~~~
-
-
-vim +/N_CAN327 +1104 drivers/net/can/can327.c
-
-  1100	
-  1101	static struct tty_ldisc_ops can327_ldisc = {
-  1102		.owner		= THIS_MODULE,
-  1103		.name		= "can327",
-> 1104		.num		= N_CAN327,
-  1105		.receive_buf	= can327_ldisc_rx,
-  1106		.write_wakeup	= can327_ldisc_tx_wakeup,
-  1107		.open		= can327_ldisc_open,
-  1108		.close		= can327_ldisc_close,
-  1109		.ioctl		= can327_ldisc_ioctl,
-  1110	};
-  1111	
-
+diff --git a/drivers/net/can/grcan.c b/drivers/net/can/grcan.c
+index 76df4807d366..4c47c1055eff 100644
+--- a/drivers/net/can/grcan.c
++++ b/drivers/net/can/grcan.c
+@@ -1646,7 +1646,6 @@ static int grcan_probe(struct platform_device *ofdev)
+ 	 */
+ 	sysid_parent = of_find_node_by_path("/ambapp0");
+ 	if (sysid_parent) {
+-		of_node_get(sysid_parent);
+ 		err = of_property_read_u32(sysid_parent, "systemid", &sysid);
+ 		if (!err && ((sysid & GRLIB_VERSION_MASK) >=
+ 			     GRCAN_TXBUG_SAFE_GRLIB_VERSION))
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+
