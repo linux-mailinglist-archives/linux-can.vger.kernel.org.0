@@ -2,79 +2,92 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5459A550926
-	for <lists+linux-can@lfdr.de>; Sun, 19 Jun 2022 09:34:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58300550945
+	for <lists+linux-can@lfdr.de>; Sun, 19 Jun 2022 10:06:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232316AbiFSHd5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 19 Jun 2022 03:33:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52678 "EHLO
+        id S231939AbiFSIGI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 19 Jun 2022 04:06:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231939AbiFSHd5 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 19 Jun 2022 03:33:57 -0400
-X-Greylist: delayed 1819 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 19 Jun 2022 00:33:50 PDT
-Received: from mail-m965.mail.126.com (mail-m965.mail.126.com [123.126.96.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6BF316590;
-        Sun, 19 Jun 2022 00:33:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=dTAU6
-        mTEjt6l5zqq/41qP0DP8KBBlAM0uLigIY0i9p8=; b=WS25MfutzsoGDDh6btDjK
-        4xy49amCnVYNJn9dn/MXLglf3XrexwyTkWClVAuNADw8jV6E2ks9i7A83xw/pFge
-        B7GuzUs7jwndJcquv7GZUd6z3VyTLFhIjs8DLWSNSI9oaVY1QQc+NRJklY9Gd+B3
-        y7jMOzL6sDeIVGNGV2RCqI=
-Received: from localhost.localdomain (unknown [124.16.139.61])
-        by smtp10 (Coremail) with SMTP id NuRpCgB3ym4iyq5i43vMEw--.47634S2;
-        Sun, 19 Jun 2022 15:02:58 +0800 (CST)
-From:   Liang He <windhl@126.com>
-To:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc:     windhl@126.com, linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        with ESMTP id S230510AbiFSIGH (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 19 Jun 2022 04:06:07 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762D511153
+        for <linux-can@vger.kernel.org>; Sun, 19 Jun 2022 01:06:06 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1o2pwY-0007GD-IL; Sun, 19 Jun 2022 10:06:02 +0200
+Received: from pengutronix.de (2a03-f580-87bc-d400-83f1-6e60-bc5c-b382.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:83f1:6e60:bc5c:b382])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 818E09957B;
+        Sun, 19 Jun 2022 08:05:59 +0000 (UTC)
+Date:   Sun, 19 Jun 2022 10:05:59 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Max Staudt <max@enpas.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-can@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] can: Remove extra of_node_get in grcan
-Date:   Sun, 19 Jun 2022 15:02:57 +0800
-Message-Id: <20220619070257.4067022-1-windhl@126.com>
-X-Mailer: git-send-email 2.25.1
+Subject: Re: [PATCH] tty: Add N_CAN327 line discipline ID for ELM327 based
+ CAN driver
+Message-ID: <20220619080559.v5mhhma2zgnnkwa7@pengutronix.de>
+References: <20220618180134.9890-1-max@enpas.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: NuRpCgB3ym4iyq5i43vMEw--.47634S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrKFW7tw47CrWfGw1rGry7Awb_yoWfXFX_G3
-        s7ZF4xXr15Wr4Dt3WI93yavrW2yrW5Zrykurs0yFW3Aa13Zr1UJrs2vF93twn5W3ykZF9I
-        krnIya48C3yYqjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRiUGYtUUUUU==
-X-Originating-IP: [124.16.139.61]
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/xtbBGgolF1-HZVIHkQAAsb
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="owpoekinhglksnf6"
+Content-Disposition: inline
+In-Reply-To: <20220618180134.9890-1-max@enpas.org>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-In grcan_probe(), of_find_node_by_path() has increased the refcount.
-There is no need to call of_node_get() again.
 
-Fixes: 1e93ed26acf0 (can: grcan: grcan_probe(): fix broken system id check for errata workaround needs)
+--owpoekinhglksnf6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Liang He <windhl@126.com>
----
- drivers/net/can/grcan.c | 1 -
- 1 file changed, 1 deletion(-)
+On 18.06.2022 20:01:34, Max Staudt wrote:
+> The actual driver will be added via the CAN tree.
+>=20
+> Signed-off-by: Max Staudt <max@enpas.org>
 
-diff --git a/drivers/net/can/grcan.c b/drivers/net/can/grcan.c
-index 76df4807d366..4c47c1055eff 100644
---- a/drivers/net/can/grcan.c
-+++ b/drivers/net/can/grcan.c
-@@ -1646,7 +1646,6 @@ static int grcan_probe(struct platform_device *ofdev)
- 	 */
- 	sysid_parent = of_find_node_by_path("/ambapp0");
- 	if (sysid_parent) {
--		of_node_get(sysid_parent);
- 		err = of_property_read_u32(sysid_parent, "systemid", &sysid);
- 		if (!err && ((sysid & GRLIB_VERSION_MASK) >=
- 			     GRCAN_TXBUG_SAFE_GRLIB_VERSION))
--- 
-2.25.1
+Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
 
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--owpoekinhglksnf6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKu2OQACgkQrX5LkNig
+011aaAf/Y6ZBjHfzzzO+sookX7gHRQXDSsurd9/TaxqKOoA1Jxkb/Ki0D889anAR
+BIe1exkLt60uaEKMsIXYWNAYGajbWNE6HohisRiDDSIlA5GD0IGPqNVhbiXXOuw1
+crN+l1CoqG6J+a2uhURhPVa8LrGAjwodIUqI3OSsouDXtEcSl9or+hrOFITmTgYf
+KT4aB4OozinoiRIjQAchGsBhoUFO0N1nLMm6uXWImWB3vhGd5z0L93Thrzg2Q4yB
+MzoS/2tDBcLDgwsMU2SAVb4o+R9kTpBUN8ZqM3Up7kB6GERo1VHJIlXgyO+LmpEU
+YAX4d/SwpKodjRlhwK4R18wJWBTfCA==
+=8C5C
+-----END PGP SIGNATURE-----
+
+--owpoekinhglksnf6--
