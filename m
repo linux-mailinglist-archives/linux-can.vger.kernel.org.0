@@ -2,104 +2,67 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AED1550947
-	for <lists+linux-can@lfdr.de>; Sun, 19 Jun 2022 10:08:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 637BF550DF2
+	for <lists+linux-can@lfdr.de>; Mon, 20 Jun 2022 02:35:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234859AbiFSIIq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 19 Jun 2022 04:08:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41718 "EHLO
+        id S237500AbiFTAe4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 19 Jun 2022 20:34:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235504AbiFSIIl (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 19 Jun 2022 04:08:41 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A93AE51
-        for <linux-can@vger.kernel.org>; Sun, 19 Jun 2022 01:08:40 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1o2pyz-0007Pq-IU; Sun, 19 Jun 2022 10:08:33 +0200
-Received: from pengutronix.de (2a03-f580-87bc-d400-83f1-6e60-bc5c-b382.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:83f1:6e60:bc5c:b382])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id D59739957E;
-        Sun, 19 Jun 2022 08:08:22 +0000 (UTC)
-Date:   Sun, 19 Jun 2022 10:08:22 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Max Staudt <max@enpas.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        kbuild-all@lists.01.org, linux-can@vger.kernel.org,
-        Vincent Mailhol <vincent.mailhol@gmail.com>,
-        Oliver Neukum <oneukum@suse.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9] can, tty: can327 CAN/ldisc driver for ELM327 based
- OBD-II adapters
-Message-ID: <20220619080822.dukckeli3f2byibj@pengutronix.de>
-References: <20220618195031.10975-1-max@enpas.org>
- <202206190533.0uzpvGYN-lkp@intel.com>
+        with ESMTP id S236397AbiFTAez (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 19 Jun 2022 20:34:55 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C65B1D4
+        for <linux-can@vger.kernel.org>; Sun, 19 Jun 2022 17:34:54 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-101b4f9e825so7966800fac.5
+        for <linux-can@vger.kernel.org>; Sun, 19 Jun 2022 17:34:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=mZ3wqB4NmL7z6lpFr/h15h1rYqsZKafJnUpMVahbEPg=;
+        b=J7hkcJ3uceOP+IKzvXE/C39HgmXyn/Ufc6skBYS5jRX70ZD8DPRtujYtnf5B8JWoUp
+         H2RPhpa2yoIeCwfFLAaN9Vn3EaI4qaip04B0DduVX+Svp6O9n8sWX9mk56KEwwodLq4K
+         8Mi2SaThKlY/2D/up8J4M0OvLl7Mr2v+MCXbgb+icsXeBdax1xOYTUgRoc5Fqjl6lKxe
+         E4oOErk3jZPPpxy6oI71b63hqweixGnKsod86Tt636V34CGDlVZo1svOID/SjN0lzJYB
+         CFhK3uSCorPwiVURlOa3KDxCKvJAalswfWXXtmcPoCYXijqC5Xio+wp70Np06TqEtxzr
+         Nzow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=mZ3wqB4NmL7z6lpFr/h15h1rYqsZKafJnUpMVahbEPg=;
+        b=AkV4P/9f/QNvoiMcqacqxzRkkHOzevtC8rw1LXl+QjAd+gLxokr3CzGHaXOpq0D0Iy
+         m0FaPBIv6faoK6+3rBpEFvemmNuw8zEQpJCk9Y6RGk/uMeIWEREadlkqHGMq+IA8y7rF
+         0kCoiQpEuJWKpgdXyQCJJAhkwIoG9gMe67z/AejrB1FKu+pNqbYi119gFQrZAZnNg73S
+         lF4i6qZONfKeFHoJ9rm/GX/hSKZHm+H4fkrMtwaF+j8x4i8M4Hs6xaFD1zHaqi/8v76s
+         Vi0vv+xYrD1IVxZl+T6cmCB7dEG4EH0vwFdyaAqZNfottGmzOjVhJb96q5hFGapf/uz/
+         Yk5g==
+X-Gm-Message-State: AJIora+olFFTgM+R48Nm99t73Lk5l9418iq5q/C3zNzCorWl0eSSFUwv
+        bhMGuHYudj147ARUce8v8JxkoSYeZeomWiuHZC0=
+X-Google-Smtp-Source: AGRyM1uSH89N4TgR0IXuhjk1zDI2c++4D6cjwfc5HvRLFjSR9hle85yRv3PmtXN3HOgoUCJnMhYUm9BtuAzPQe8wN60=
+X-Received: by 2002:a05:6871:b0f:b0:f3:3687:524b with SMTP id
+ fq15-20020a0568710b0f00b000f33687524bmr11002464oab.131.1655685293346; Sun, 19
+ Jun 2022 17:34:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="u3ofpwyjtrhvxsp2"
-Content-Disposition: inline
-In-Reply-To: <202206190533.0uzpvGYN-lkp@intel.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6358:7e82:b0:a1:cca8:2804 with HTTP; Sun, 19 Jun 2022
+ 17:34:53 -0700 (PDT)
+Reply-To: wen305147@gmail.com
+From:   Tony Wen <siredmondnton@gmail.com>
+Date:   Mon, 20 Jun 2022 08:34:53 +0800
+Message-ID: <CADN_UKpcUJmmbE3CYsusf9S-PEhgROT_i0nvKY=KK105ypFQYQ@mail.gmail.com>
+Subject: services
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-
---u3ofpwyjtrhvxsp2
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 19.06.2022 06:02:32, kernel test robot wrote:
-> Hi Max,
->=20
-> I love your patch! Yet something to improve:
->=20
-> [auto build test ERROR on mkl-can-next/testing]
-> [also build test ERROR on linus/master v5.19-rc2 next-20220617]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
-
-The patch depends on:
-
-| https://lore.kernel.org/all/20220618180134.9890-1-max@enpas.org/
-
-which has not been added to a git tree so far.
-
-Marc
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---u3ofpwyjtrhvxsp2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKu2XMACgkQrX5LkNig
-012yKwgApv2PYxUTUWaf7T2KcmIrZ7vDeXXzfXUOFexW2WgtRgnShK3dCmd0lhJg
-+ZB7052ZR2/ZaN9n0MWf7d8/TrEam3LWs/6QtXq7MbXPx/BnaUFsx//qjccM6Nhz
-ylgJgev3c+JMdXuPP65zNp6HRkF4zcgwPkY/aobhMSHgnCz+GbCNiaSNtePX9wdO
-24oqYpznvCqflXB40NSEsVOCjagyhNhp0jR8wDi1LKk1u4NHSb+9XFCicXYmJhsj
-/8SGQ14tJ77FUVPciY63Lj1e8o5XxMaOKcKrqbN6iitK9tkhuDFF4zZt6kIHYymj
-OBfW2zfiK2U0PgL+S/LZoMbwwY5uKA==
-=a3mT
------END PGP SIGNATURE-----
-
---u3ofpwyjtrhvxsp2--
+Can I engage your services?
