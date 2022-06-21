@@ -2,107 +2,117 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D286552EA0
-	for <lists+linux-can@lfdr.de>; Tue, 21 Jun 2022 11:41:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27E60553403
+	for <lists+linux-can@lfdr.de>; Tue, 21 Jun 2022 15:51:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349264AbiFUJjt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 21 Jun 2022 05:39:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51622 "EHLO
+        id S1345600AbiFUNvy (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 21 Jun 2022 09:51:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349233AbiFUJjr (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 21 Jun 2022 05:39:47 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3CC275FD
-        for <linux-can@vger.kernel.org>; Tue, 21 Jun 2022 02:39:45 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-31780ad7535so98472937b3.8
-        for <linux-can@vger.kernel.org>; Tue, 21 Jun 2022 02:39:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=/0bRExIb6Mv4sy5raFRmeQINC+UUx7zEZcUUOWWOPJg=;
-        b=NKhg6kSkfnglJlsPDVUWhCY3Iibudx7OhZC5CePFgeNekYJKNrcmU8wB8gkktmjPqY
-         f0o4DET3nwW7oGb1WQAmWVCm6yLISrVrQXMY/9qoCppMNLX7K/jA/JZ+JMs1mNT38j+N
-         qSlM2vTiSOIkQo5cZ6oY4dkMVda7fWn0vzKRT295Q67AStI8u0BTanvw38uSxo4IMvFm
-         mtbeFJOQugEk6bmbrSLJZHxNWvSEoU0AT9TQz59V3jAGDZbWiI6U0Fx8UlroTYMr9wGQ
-         +xC78kHT5AZK7k/f6wmWhdDj3ThC5Cy20ctCKCcYvb/idPExEpgvQXB/UX/ziCu3vO07
-         Q2/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=/0bRExIb6Mv4sy5raFRmeQINC+UUx7zEZcUUOWWOPJg=;
-        b=PYxbhsWuDpYu87MdbwwtA9PbjuNeN+HTWYkvf9KXEVyzzMPE0peKss6LgY6H7PHbq4
-         MZ7qKH3vpfflR8R8zDvmJjhNtKcylrMVRZLVoOl3Aa9fM6VgKn+rN0vWV3PQqC7smKLI
-         hsSvUosItsWs0G8yELUfJiCjqYTYpwY8ae3jjD+sNhzTYy/CNNLDQy5NXQUL3giDfh+X
-         2/mphV2tktAfzBsnVkcDWriY0PDD9mc6XtHnjPkWuN/Vzqhgj/qsfxjEngzb0XHCd5Ji
-         /j6CVQBJs1CoRfPhzFPxHL1ZtTX4xL65YSqjKp+8h+dtobpxRddbsLahU0PCjl2QGe6I
-         3VNg==
-X-Gm-Message-State: AJIora/viQ+4RhtUo40TBqm9UvwYD03a7yj4/N1CE9gXwnJ+d+fIJTRE
-        ndi/QwAhmzG82PZKVBkkQ98yeaHWbVtiLi43OTQ=
-X-Google-Smtp-Source: AGRyM1sTF/SvvxCyraPE52znD36ZX02jNmxmam87lP8bWzXT3yTfChS1a9JgJI9LjBXh9tpS4qLO5E/t+5efudcEruY=
-X-Received: by 2002:a0d:d7c7:0:b0:317:bfe8:4f2 with SMTP id
- z190-20020a0dd7c7000000b00317bfe804f2mr12417910ywd.276.1655804384555; Tue, 21
- Jun 2022 02:39:44 -0700 (PDT)
+        with ESMTP id S229717AbiFUNvx (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 21 Jun 2022 09:51:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D12E0BF;
+        Tue, 21 Jun 2022 06:51:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 019286160D;
+        Tue, 21 Jun 2022 13:51:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3431AC3411C;
+        Tue, 21 Jun 2022 13:51:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1655819511;
+        bh=4IevcmVifiYxJwwWuX2Wh2QeaRSnAhsRk0vlmdpTTBs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DOpKHbGF0He1d+bfu/6FO2fxoH7NXzM5bK/nXg7AZt5TJin8ZqxDroupfziD8qV5N
+         ONrpCb3Sst6fu7/mmxs5IBj3ODZViZ95q+iwMWiO9wGwjcc1/CO8Elwi3RLeMvsFK1
+         63Fe43tnGZKOL7vlRP99dLm6fJLQ51rq7JQvEbQ4=
+Date:   Tue, 21 Jun 2022 15:51:46 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Rhett Aultman <rhett.aultman@samsara.com>,
+        linux-usb@vger.kernel.org, linux-can <linux-can@vger.kernel.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        Alan Stern <stern@rowland.harvard.edu>
+Subject: Re: [PATCH v3 1/2] drivers: usb/core/urb: Add URB_FREE_COHERENT
+Message-ID: <YrHM8mqG3WVVesk4@kroah.com>
+References: <20220610213335.3077375-1-rhett.aultman@samsara.com>
+ <20220610213335.3077375-2-rhett.aultman@samsara.com>
+ <20220611153104.sksoxn4dmo5rgnk3@pengutronix.de>
+ <CAMZ6RqJvU=kvkucq0JiKgTVxTBJveCe47U-UCguKTdpLvh7kHw@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a05:7010:e10a:b0:2d9:e631:94d0 with HTTP; Tue, 21 Jun 2022
- 02:39:44 -0700 (PDT)
-Reply-To: dimitryedik@gmail.com
-From:   Dimitry Edik <lsbthdwrds@gmail.com>
-Date:   Tue, 21 Jun 2022 02:39:44 -0700
-Message-ID: <CAGrL05aBO8rbFuij24J-APa+Luis69gEjhj35iv_GZfkHCVYDQ@mail.gmail.com>
-Subject: Dear Partner,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_MONEY_PERCENT,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,
-        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1133 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [lsbthdwrds[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  0.0 T_MONEY_PERCENT X% of a lot of money for you
-        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMZ6RqJvU=kvkucq0JiKgTVxTBJveCe47U-UCguKTdpLvh7kHw@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Dear,
+On Sun, Jun 12, 2022 at 01:06:37AM +0900, Vincent MAILHOL wrote:
+> On Sun. 12 juin 2022 at 00:31, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> > On 10.06.2022 17:33:35, Rhett Aultman wrote:
+> > > From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > >
+> > > When allocating URB memory with kmalloc(), drivers can simply set the
+> > > URB_FREE_BUFFER flag in urb::transfer_flags and that way, the memory
+> > > will be freed in the background when killing the URB (for example with
+> > > usb_kill_anchored_urbs()).
+> > >
+> > > However, there are no equivalent mechanism when allocating DMA memory
+> > > (with usb_alloc_coherent()).
+> > >
+> > > This patch adds a new flag: URB_FREE_COHERENT. Setting this flag will
+> > > cause the kernel to automatically call usb_free_coherent() on the
+> > > transfer buffer when the URB is killed, similarly to how
+> > > URB_FREE_BUFFER triggers a call to kfree().
+> > >
+> > > In order to have all the flags in numerical order, URB_DIR_IN is
+> > > renumbered from 0x0200 to 0x0400 so that URB_FREE_COHERENT can reuse
+> > > value 0x0200.
+> > >
+> > > Co-developed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > > Co-developed-by: Rhett Aultman <rhett.aultman@samsara.com>
+> > > Signed-off-by: Rhett Aultman <rhett.aultman@samsara.com>
+> > > Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> >
+> > FWIW:
+> > Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> >
+> > This patch probably goes upstream via USB. Once this is in net I'll take
+> > the 2nd patch.
+> 
+> Question to Greg: can this first patch also be applied to the stable
+> branches? Technically, this is a new feature but it will be used to
+> solve several memory leaks on existing drivers (the gs_usb is only one
+> example).
 
-My Name is Dimitry Edik from Russia A special assistance to my Russia
-boss who deals in oil import and export He was killed by the Ukraine
-soldiers at the border side. He supplied
-oil to the Philippines company and he was paid over 90 per cent of the
-transaction and the remaining $18.6 Million dollars have been paid into a
-Taiwan bank in the Philippines..i want a partner that will assist me
-with the claims. Is a (DEAL ) 40% for you and 60% for me
-I have all information for the claims.
-Kindly read and reply to me back is 100 per cent risk-free
+We take in dependent patches into the stable trees all the time when
+needed, that's not an issue here.
 
-Yours Sincerely
-Dimitry Edik
+What is an issue here is that this feels odd as other USB developers
+said previously.
+
+My big objection here is what validates that the size of the transfer
+buffer here is really the size of the buffer to be freed?  Is that
+always set properly to be the length that was allocated?  That might
+just be the size of the last transfer using this buffer, but there is no
+guarantee that I can see of that says this really is the length of the
+allocated buffer, which is why usb_free_coherent() requires a size
+parameter.
+
+If that guarantee is always right, then we should be able to drop the
+size option in usb_free_coherent(), and I don't think that's really
+possible.
+
+thanks,
+
+greg k-h
