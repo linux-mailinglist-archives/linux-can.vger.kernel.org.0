@@ -2,52 +2,53 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27E60553403
-	for <lists+linux-can@lfdr.de>; Tue, 21 Jun 2022 15:51:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B773F553475
+	for <lists+linux-can@lfdr.de>; Tue, 21 Jun 2022 16:25:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345600AbiFUNvy (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 21 Jun 2022 09:51:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45246 "EHLO
+        id S1351535AbiFUOZe (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 21 Jun 2022 10:25:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbiFUNvx (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 21 Jun 2022 09:51:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D12E0BF;
-        Tue, 21 Jun 2022 06:51:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 019286160D;
-        Tue, 21 Jun 2022 13:51:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3431AC3411C;
-        Tue, 21 Jun 2022 13:51:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655819511;
-        bh=4IevcmVifiYxJwwWuX2Wh2QeaRSnAhsRk0vlmdpTTBs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DOpKHbGF0He1d+bfu/6FO2fxoH7NXzM5bK/nXg7AZt5TJin8ZqxDroupfziD8qV5N
-         ONrpCb3Sst6fu7/mmxs5IBj3ODZViZ95q+iwMWiO9wGwjcc1/CO8Elwi3RLeMvsFK1
-         63Fe43tnGZKOL7vlRP99dLm6fJLQ51rq7JQvEbQ4=
-Date:   Tue, 21 Jun 2022 15:51:46 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Rhett Aultman <rhett.aultman@samsara.com>,
-        linux-usb@vger.kernel.org, linux-can <linux-can@vger.kernel.org>,
-        Oliver Neukum <oneukum@suse.com>,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: [PATCH v3 1/2] drivers: usb/core/urb: Add URB_FREE_COHERENT
-Message-ID: <YrHM8mqG3WVVesk4@kroah.com>
-References: <20220610213335.3077375-1-rhett.aultman@samsara.com>
- <20220610213335.3077375-2-rhett.aultman@samsara.com>
- <20220611153104.sksoxn4dmo5rgnk3@pengutronix.de>
- <CAMZ6RqJvU=kvkucq0JiKgTVxTBJveCe47U-UCguKTdpLvh7kHw@mail.gmail.com>
+        with ESMTP id S1351539AbiFUOZa (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 21 Jun 2022 10:25:30 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FC518E25
+        for <linux-can@vger.kernel.org>; Tue, 21 Jun 2022 07:25:28 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1o3eof-0007fC-NI; Tue, 21 Jun 2022 16:25:17 +0200
+Received: from pengutronix.de (2a03-f580-87bc-d400-bd72-15a3-eb10-2206.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:bd72:15a3:eb10:2206])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id C6EC49B8B5;
+        Tue, 21 Jun 2022 14:25:15 +0000 (UTC)
+Date:   Tue, 21 Jun 2022 16:25:15 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Thomas.Kopp@microchip.com
+Cc:     pavel.modilaynen@volvocars.com, drew@beagleboard.org,
+        linux-can@vger.kernel.org, menschel.p@posteo.de,
+        netdev@vger.kernel.org, will@macchina.cc
+Subject: Re: [net-next 6/6] can: mcp251xfd: mcp251xfd_regmap_crc_read(): work
+ around broken CRC on TBC register
+Message-ID: <20220621142515.4xgxhj6oxo5kuepn@pengutronix.de>
+References: <PR3P174MB0112D073D0E5E080FAAE8510846E9@PR3P174MB0112.EURP174.PROD.OUTLOOK.COM>
+ <DM4PR11MB5390BA1C370A5AF90E666F1EFB709@DM4PR11MB5390.namprd11.prod.outlook.com>
+ <PR3P174MB01124C085C0E0A0220F2B11584709@PR3P174MB0112.EURP174.PROD.OUTLOOK.COM>
+ <DM4PR11MB53901D49578FE265B239E55AFB7C9@DM4PR11MB5390.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="b53yhzgh5rzrogp6"
 Content-Disposition: inline
-In-Reply-To: <CAMZ6RqJvU=kvkucq0JiKgTVxTBJveCe47U-UCguKTdpLvh7kHw@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <DM4PR11MB53901D49578FE265B239E55AFB7C9@DM4PR11MB5390.namprd11.prod.outlook.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,63 +57,98 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Sun, Jun 12, 2022 at 01:06:37AM +0900, Vincent MAILHOL wrote:
-> On Sun. 12 juin 2022 at 00:31, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> > On 10.06.2022 17:33:35, Rhett Aultman wrote:
-> > > From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > >
-> > > When allocating URB memory with kmalloc(), drivers can simply set the
-> > > URB_FREE_BUFFER flag in urb::transfer_flags and that way, the memory
-> > > will be freed in the background when killing the URB (for example with
-> > > usb_kill_anchored_urbs()).
-> > >
-> > > However, there are no equivalent mechanism when allocating DMA memory
-> > > (with usb_alloc_coherent()).
-> > >
-> > > This patch adds a new flag: URB_FREE_COHERENT. Setting this flag will
-> > > cause the kernel to automatically call usb_free_coherent() on the
-> > > transfer buffer when the URB is killed, similarly to how
-> > > URB_FREE_BUFFER triggers a call to kfree().
-> > >
-> > > In order to have all the flags in numerical order, URB_DIR_IN is
-> > > renumbered from 0x0200 to 0x0400 so that URB_FREE_COHERENT can reuse
-> > > value 0x0200.
-> > >
-> > > Co-developed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > > Co-developed-by: Rhett Aultman <rhett.aultman@samsara.com>
-> > > Signed-off-by: Rhett Aultman <rhett.aultman@samsara.com>
-> > > Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> >
-> > FWIW:
-> > Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> >
-> > This patch probably goes upstream via USB. Once this is in net I'll take
-> > the 2nd patch.
-> 
-> Question to Greg: can this first patch also be applied to the stable
-> branches? Technically, this is a new feature but it will be used to
-> solve several memory leaks on existing drivers (the gs_usb is only one
-> example).
 
-We take in dependent patches into the stable trees all the time when
-needed, that's not an issue here.
+--b53yhzgh5rzrogp6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-What is an issue here is that this feels odd as other USB developers
-said previously.
+Picking up this old thread....
 
-My big objection here is what validates that the size of the transfer
-buffer here is really the size of the buffer to be freed?  Is that
-always set properly to be the length that was allocated?  That might
-just be the size of the last transfer using this buffer, but there is no
-guarantee that I can see of that says this really is the length of the
-allocated buffer, which is why usb_free_coherent() requires a size
-parameter.
+On 21.12.2021 22:24:52, Thomas.Kopp@microchip.com wrote:
+> Thanks for the data. I've looked into this and it seems that the
+> second bit being set in your case does not depend on the SPI-Rate (or
+> the quirks for that matter) but it seems to be hardware setup related.
+>=20
+> I'm fine with changing the driver so that it ignores set LSBs but
+> would limit it to 2 or 3 bits:
 
-If that guarantee is always right, then we should be able to drop the
-size option in usb_free_coherent(), and I don't think that's really
-possible.
+> (buf_rx->data[0] =3D=3D 0x0 || buf_rx->data[0] =3D=3D 0x80))
+> becomes
+> ((buf_rx->data[0] & 0xf8) =3D=3D 0x0 || (buf_rx->data[0] & 0xf8) =3D=3D 0=
+x80)) {
+>=20
+> The action also needs to be changed and the flip back of the bit needs
+> to be removed. In this case the flipped databit that produces a
+> matching CRC is actually  correct (i.e. consistent with the 7 LSBs in
+> that byte.)
+>=20
+> A patch could look like this (I'm currently not close to a setup where
+> I can compile/test this.)
 
-thanks,
+Thomas, can I have your Signed-off-by for this patch?
 
-greg k-h
+Marc
+
+> diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c b/drivers/n=
+et/can/spi/mcp251xfd/mcp251xfd-regmap.c
+> index 297491516a26..e5bc897f37e8 100644
+> --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
+> +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
+> @@ -332,12 +332,10 @@ mcp251xfd_regmap_crc_read(void *context,
+>                  *
+>                  * If the highest bit in the lowest byte is flipped
+>                  * the transferred CRC matches the calculated one. We
+> -                * assume for now the CRC calculation in the chip
+> -                * works on wrong data and the transferred data is
+> -                * correct.
+> +                * assume for now the CRC operates on the correct data.
+>                  */
+>                 if (reg =3D=3D MCP251XFD_REG_TBC &&
+> -                   (buf_rx->data[0] =3D=3D 0x0 || buf_rx->data[0] =3D=3D=
+ 0x80)) {
+> +                   ((buf_rx->data[0] & 0xF8) =3D=3D 0x0 || (buf_rx->data=
+[0] & 0xF8) =3D=3D 0x80)) {
+>                         /* Flip highest bit in lowest byte of le32 */
+>                         buf_rx->data[0] ^=3D 0x80;
+>=20
+> @@ -347,10 +345,8 @@ mcp251xfd_regmap_crc_read(void *context,
+>                                                                   val_len=
+);
+>                         if (!err) {
+>                                 /* If CRC is now correct, assume
+> -                                * transferred data was OK, flip bit
+> -                                * back to original value.
+> +                                * flipped data was OK.
+>                                  */
+> -                               buf_rx->data[0] ^=3D 0x80;
+>                                 goto out;
+>                         }
+>                 }
+>=20
+> Thanks,
+> Thomas
+>=20
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--b53yhzgh5rzrogp6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKx1McACgkQrX5LkNig
+012YUAf/YXu6T42MB7nmX1BM7wyF9wMC+oo/7AhfQa0nGVREg2JVQcO+4H6yuZko
+R/681s4acSF6qYkoVyMQgo0UkoAwvl1KegzlNdaP2+eH7CxTSYw+JCc9M+aY9B6r
+eBE8yv9b4khgMp+FB5BVx1ms+GEApGqsb6vW7bH1hXa9Zqf/yy/2rY0C/9szkMGy
+9cyHUYabnCXjW1Xn0J14Il3Ctn5QnKIrxDr/C2uhhQQVz2LwQa3TDN3CJgqI9aCq
+kv/DwbXQd3J+gCQKcAavDUZVI1tGvylyR01S89zmZK8tHffqqqrLOONt9EO5MJQA
+1SUToRmMEz7aQgzYZDzajnbWwOfbdg==
+=qFiv
+-----END PGP SIGNATURE-----
+
+--b53yhzgh5rzrogp6--
