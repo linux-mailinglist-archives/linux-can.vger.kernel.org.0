@@ -2,55 +2,69 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 637BC557D4D
-	for <lists+linux-can@lfdr.de>; Thu, 23 Jun 2022 15:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F921557E68
+	for <lists+linux-can@lfdr.de>; Thu, 23 Jun 2022 17:03:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231451AbiFWNul (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 23 Jun 2022 09:50:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60442 "EHLO
+        id S230119AbiFWPDG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 23 Jun 2022 11:03:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230349AbiFWNul (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 23 Jun 2022 09:50:41 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D98D29CA9
-        for <linux-can@vger.kernel.org>; Thu, 23 Jun 2022 06:50:39 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1o4NED-0003rY-8o; Thu, 23 Jun 2022 15:50:37 +0200
-Received: from pengutronix.de (2a03-f580-87bc-d400-80e1-c56b-9df2-c963.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:80e1:c56b:9df2:c963])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id E9D8E9D288;
-        Thu, 23 Jun 2022 13:50:35 +0000 (UTC)
-Date:   Thu, 23 Jun 2022 15:50:35 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        Thomas Kopp <thomas.kopp@microchip.com>
-Subject: Re: ram initialization on mcp2518fd
-Message-ID: <20220623135035.y2kfgwj4cbnqnaec@pengutronix.de>
-References: <e3f73c56-1b46-4ee9-357e-40400c746e09@prevas.dk>
- <87wndgyl2l.fsf@hardanger.blackshift.org>
- <441514ec-7b43-e11c-09b5-bdaf7fca0077@prevas.dk>
- <d614f497-b8f2-68cd-745b-1e3be2b991d5@prevas.dk>
- <20220616124056.cnnvlqwwkknjta7w@pengutronix.de>
- <8db56a87-a1c7-1810-ad74-c7a8e268a00d@prevas.dk>
- <20220617141751.ua3emcdaarrnx7si@pengutronix.de>
- <6e01d1e0-4e26-c42f-5d8d-f5aabe0d9d31@prevas.dk>
+        with ESMTP id S229579AbiFWPDF (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 23 Jun 2022 11:03:05 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CA63B852
+        for <linux-can@vger.kernel.org>; Thu, 23 Jun 2022 08:03:05 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id w24so10746869pjg.5
+        for <linux-can@vger.kernel.org>; Thu, 23 Jun 2022 08:03:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=jb0TECMeJEyD3LbffzKp4rPCQPjjsSrNiIBcD6Hy6O4=;
+        b=y45KeMTtVlGZjnWXnjf3G6h6Jng46GBFFcLlqHnqXshzXfbus3kOUL8lnTc+j/NqZB
+         EMZzX5L+Ei6ihVb29tBYv1loOtPFxW3q76Be3a9xLkHd2x2hFo0iG3VQQiyXxyOtUM++
+         4s4yjKbG9QfWTe2DYZK3aAAOvqeCsB5eMlwYtm8/KgklEOELx6kesOP/yS98Nudu9OB6
+         4y6bY55Epk7bNdCDuLRUCBF8AdfhRzb5iFJoKTVXnkq75AR2GpW/hpv+Nx1nh0EMVync
+         FSYaA2dykyCEvpNLctJxpkbWw7UwS5a93UVE9XHiZkw2Me1KSTL63CVKh3LicK6YZ5II
+         bjiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=jb0TECMeJEyD3LbffzKp4rPCQPjjsSrNiIBcD6Hy6O4=;
+        b=bCh5xu3Gjr/WkYbfZ/jlPdrPNE5nsLXTZsCXwn8ltXtTPci0c6bzvL3IMdN3PMiopr
+         C8dLlI3P3E3QwBEB/EopZNvW6SiPWrRMT9fyH8Ye2QaY7KC3jYZztc5Sfa3QrUZElcR6
+         jPx2tyx4fh0pOfAGbyG9iwWTgOxuI9+DninsxyF0Et/TZm2fP+aaXJ2rp+4nVhYxFGMQ
+         CPLbC5W8XOEXfzrblPwF3zbh0Ia46LTdSYgf+SqYT9EXKUGdnVYklFslpxceZtuSXKJl
+         D+cd699ip5JDwgK0zw4RE8alrAN8/jrjqXY4rR7lNVlcRWZha4BKyiE3DPQOqlL6U5PE
+         Khpw==
+X-Gm-Message-State: AJIora93eC706H6wsjCYf0hdGmOGnRnrdUEGPXNa+VjENpEjwUACib8w
+        im7VDYsFUWx3fV6Z33QEnXbIB3Gnc3h0
+X-Google-Smtp-Source: AGRyM1u2RgC1yLESGXpNNzrC4KSsQMfGR+u66gcVMReR+y07QGvdOKrATMQLcobWAaUi++OTZd4ryQ==
+X-Received: by 2002:a17:90b:38c2:b0:1e8:7ad1:bec5 with SMTP id nn2-20020a17090b38c200b001e87ad1bec5mr4370042pjb.51.1655996584511;
+        Thu, 23 Jun 2022 08:03:04 -0700 (PDT)
+Received: from thinkpad ([220.158.158.149])
+        by smtp.gmail.com with ESMTPSA id y18-20020a62b512000000b0051e7b6e8b12sm9854853pfe.11.2022.06.23.08.03.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jun 2022 08:03:03 -0700 (PDT)
+Date:   Thu, 23 Jun 2022 20:32:59 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org, kernel@pengutronix.de,
+        Thomas Kopp <thomas.kopp@microchip.com>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+Subject: Re: [PATCH] can: mcp251xfd: mcp251xfd_register_get_dev_id(): fix
+ endianness conversion
+Message-ID: <20220623150259.GB15542@thinkpad>
+References: <20220620144954.895582-1-mkl@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="avlwgw2or3wftqzl"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <6e01d1e0-4e26-c42f-5d8d-f5aabe0d9d31@prevas.dk>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220620144954.895582-1-mkl@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,56 +73,47 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Mon, Jun 20, 2022 at 04:49:54PM +0200, Marc Kleine-Budde wrote:
+> In mcp251xfd_register_get_dev_id() the device ID register is read with
+> handcrafted SPI transfers. As all registers, this register is in
+> little endian, too. However after the transfer the register content is
+> converted from big endian to CPU endianness.
+> 
+> Fix the conversion by converting from little endian to CPU endianness.
+> 
+> Side note: So far the register content is 0x0 on all mcp251xfd
+> compatible chips, and is only used for an informative printk.
+> 
+> Fixes: 55e5b97f003e ("can: mcp25xxfd: add driver for Microchip MCP25xxFD SPI CAN")
+> Cc: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 
---avlwgw2or3wftqzl
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-On 20.06.2022 09:09:09, Rasmus Villemoes wrote:
-> >> There is still something to be looked at, since I see
-> >>
-> >> NOHZ tick-stop error: Non-RCU local softirq work is pending, handler #=
-08!!!
-> >=20
-> > Update to a newer kernel. In v5.15 this problem is fixed.
->=20
-> Oh, great, thanks. I'll try to give 5.15 a quick spin, we're mostly on
-> 5.10 because this project started when that was the latest LTS.
+Thanks,
+Mani
 
-Here you can find the mcp251xfd driver and many enhancements of the CAN
-drivers and infrastructure back ported to v5.10 and v5.15. Feel free to
-test:
+> ---
+>  drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+> index 3160881e89d9..d7f406dbe2ce 100644
+> --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+> +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+> @@ -1787,7 +1787,7 @@ mcp251xfd_register_get_dev_id(const struct mcp251xfd_priv *priv, u32 *dev_id,
+>  	if (err)
+>  		goto out_kfree_buf_tx;
+>  
+> -	*dev_id = be32_to_cpup((__be32 *)buf_rx->data);
+> +	*dev_id = le32_to_cpup((__le32 *)buf_rx->data);
+>  	*effective_speed_hz_slow = xfer[0].effective_speed_hz;
+>  	*effective_speed_hz_fast = xfer[1].effective_speed_hz;
+>  
+> -- 
+> 2.35.1
+> 
+> 
 
-| https://git.pengutronix.de/cgit/mkl/linux/
-
-The "-flat" tags contains a linear series against the latest stable,
-while the tags without "-flat" are merges of different topics of the
-back port. As the name of the tags suggest this work is sponsored by
-microchip.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---avlwgw2or3wftqzl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmK0b6gACgkQrX5LkNig
-013fkwf/Q/9AnBvAb7+ldY7sWcG4EwAGL6FdQabG2k2rYCFgeiI28wpmRI2C2TWd
-p3DcL36cy4CgM0cukvt8WOaUSl9xIWHwCW860RigPnMitlN04XAnLvEER5OYWJ9E
-4tUo3OGFHIQVOgczioJqZCPL1d83rRPmbMkPmLv6HqavI7HCoeH5rz6AQKB4sH45
-JPxISdM3/RvIXgwpFVyf4ZVe2EsiZMc5IEmpVyVzTF/ZjMDDtkhoNcWGBQZVnqnq
-bdqXyoH7W1L2kqVFL97e8X8+Udbad/RD4FmWpET1ayQ1taWpy7UK9tL6kg6HWfvo
-Bc8XXbi6+VcYlyOzBXpuaH6KxTsWCw==
-=Jg+9
------END PGP SIGNATURE-----
-
---avlwgw2or3wftqzl--
+-- 
+மணிவண்ணன் சதாசிவம்
