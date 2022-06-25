@@ -2,142 +2,176 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8039655A1A2
-	for <lists+linux-can@lfdr.de>; Fri, 24 Jun 2022 21:25:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB41F55A9A7
+	for <lists+linux-can@lfdr.de>; Sat, 25 Jun 2022 14:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232007AbiFXTFz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 24 Jun 2022 15:05:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35216 "EHLO
+        id S232743AbiFYMG2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 25 Jun 2022 08:06:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231469AbiFXTFw (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 24 Jun 2022 15:05:52 -0400
-Received: from EUR03-VE1-obe.outbound.protection.outlook.com (mail-eopbgr50092.outbound.protection.outlook.com [40.107.5.92])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8167E81D85;
-        Fri, 24 Jun 2022 12:05:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N+DuJqUqOpwtsF1Pmo3axMPeBYbo2Xjv9yTwhSZmKhxlgQrLcrS6fLwX0Dvv1uGNG6kLa6Fbgexv8yH6IAqanbrLDIsWtNDZnCGo5boxInQvY+LhXMmSSqmrU3pOfCM9Jd7WC82mZlNC06s58+uUB9H6I8HWXWe5S5QFMHOEuluW9gBlqyP0XeAANGeUri/qIGvm8rYWQShtOEcS/6kYYygXWYddJ6vZtB3+2eFP0yXoU66d2m5ILvk0U2RCzjb46KDCVBOmclhhfmGp7ZMk60+AGoAdh/634oIL2aNqu5tuwbH96K3G/JDzCFEhFIFF9mzbE5+MTJIxERkb9lI4lw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LfP0tOz+7MWo/tXaqlT6yj+tKF2DtPYZb65U/lAP9n8=;
- b=IPtjDDxvuNQFd0hcQpU2ZxPIBZRJVAZdcnQMPfw7q7n1/r8FiruCZJsv6QIl/mRXbvnANAaQ1rOxk88W2Kn8p0SJWEXh4NaqZF8ovfFq+JeXjdO/H+jYIL1bisQQ//TSFKGWlRPYwqfvB0uT2/IYpvuPJFaB329NyWfAJyvGiQir40ayC6QVgTjhjvnLBShWZEEZRS1cZ9NJ8Ww6KExbImv7yFRbjW5YDzWkOdR4BUiEbMt8lyjVPYoF/6Te+fglg1TFcvzxKH3euh1AtoYCVx2rRhNYEavGuCCkYUVuB2h49kqK2ls6Lvbx2kFe0wvqee1gdcrm1qCpgvtO0ikEaA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 217.86.141.140) smtp.rcpttodomain=esd.eu smtp.mailfrom=esd.eu;
- dmarc=bestguesspass action=none header.from=esd.eu; dkim=none (message not
- signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=esdhannover.onmicrosoft.com; s=selector1-esdhannover-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LfP0tOz+7MWo/tXaqlT6yj+tKF2DtPYZb65U/lAP9n8=;
- b=VmythIqHPFjGbFDADUQ3I2fw7vT/7k+/bDi0Sux5edq6YVLSWkZsrQRqxLemiY1GAEm4LmMDQPSI/teIYwh/1DfygFXx2k10dwwdDZcuTbM+GBKMcGjU6yDWStMogHBChSrpfG7GxEo0kV8jbHkm4renGaU41j9k/IZF7ofISrc=
-Received: from DB3PR06CA0011.eurprd06.prod.outlook.com (2603:10a6:8:1::24) by
- VI1PR03MB3951.eurprd03.prod.outlook.com (2603:10a6:803:6a::18) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5373.15; Fri, 24 Jun 2022 19:05:48 +0000
-Received: from DB8EUR06FT015.eop-eur06.prod.protection.outlook.com
- (2603:10a6:8:1:cafe::f9) by DB3PR06CA0011.outlook.office365.com
- (2603:10a6:8:1::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.16 via Frontend
- Transport; Fri, 24 Jun 2022 19:05:48 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 217.86.141.140)
- smtp.mailfrom=esd.eu; dkim=none (message not signed)
- header.d=none;dmarc=bestguesspass action=none header.from=esd.eu;
-Received-SPF: Pass (protection.outlook.com: domain of esd.eu designates
- 217.86.141.140 as permitted sender) receiver=protection.outlook.com;
- client-ip=217.86.141.140; helo=esd-s7.esd; pr=C
-Received: from esd-s7.esd (217.86.141.140) by
- DB8EUR06FT015.mail.protection.outlook.com (10.233.252.156) with Microsoft
- SMTP Server id 15.20.5373.15 via Frontend Transport; Fri, 24 Jun 2022
- 19:05:47 +0000
-Received: from esd-s20.esd.local (debby [10.0.0.190])
-        by esd-s7.esd (Postfix) with ESMTPS id 80D1B7C16CB;
-        Fri, 24 Jun 2022 21:05:47 +0200 (CEST)
-Received: by esd-s20.esd.local (Postfix, from userid 2046)
-        id 69C602E4AF0; Fri, 24 Jun 2022 21:05:47 +0200 (CEST)
-From:   Frank Jungclaus <frank.jungclaus@esd.eu>
-To:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Frank Jungclaus <frank.jungclaus@esd.eu>
-Subject: [PATCH 5/5] can/esd_usb: Update to copyright, M_AUTHOR and M_DESCRIPTION
-Date:   Fri, 24 Jun 2022 21:05:19 +0200
-Message-Id: <20220624190517.2299701-6-frank.jungclaus@esd.eu>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220624190517.2299701-1-frank.jungclaus@esd.eu>
-References: <20220624190517.2299701-1-frank.jungclaus@esd.eu>
+        with ESMTP id S232768AbiFYMGZ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 25 Jun 2022 08:06:25 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7F414D07
+        for <linux-can@vger.kernel.org>; Sat, 25 Jun 2022 05:06:19 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1o54YL-0002VN-F8
+        for linux-can@vger.kernel.org; Sat, 25 Jun 2022 14:06:17 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 52E589F118
+        for <linux-can@vger.kernel.org>; Sat, 25 Jun 2022 12:03:49 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id F186B9F113;
+        Sat, 25 Jun 2022 12:03:42 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id c0178b3c;
+        Sat, 25 Jun 2022 12:03:36 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH net-next 0/22] pull-request: can-next 2022-06-25
+Date:   Sat, 25 Jun 2022 14:03:13 +0200
+Message-Id: <20220625120335.324697-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: ecfae95f-22e1-4093-531a-08da56148c3d
-X-MS-TrafficTypeDiagnostic: VI1PR03MB3951:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CntANY44iug4cVTLcRi/LtDTfQ4Xnv4sKVa0BmuPkrjDDjGm/nsXZ7CPQhs0ysqdn6KZlkfNXeL1LB1fPYOTa1QVnloo9uxDCiuK/jzgfhuBJH0sqjvhpwPD1Xkb2a6DCHf8b6/ju4szbQHDyop4RmR+7KQVnKPH+c5u9SnSyxC0BrEtZR3obH7L4Gp1Aob+QXWN9/ZTdXsleiss8WdHyeizkZZKYZcAAxAFaBChpsnlKllUaUSWjpHRUdeTNfZiB78HenrYq69RNjKsI6exx2Y/Vc+N4JlwVxETiG9rI8OGIMmKx7/sXKcC5gsD0yO51j9ryVJPPVP1RYvGk3vpgRiH9QHsR9qmksU7I7HUA0hc1wKyvskESpN0l+UWUzP4jbRCoBo1YuXfAnMIcRJvEzuZ+G07BC+5/AYnR2+ISFkVgY+xDAabsKjha7IXQ9c8H2XaQubo4SwfUWuN6yI7qlJXei57jRGJC3c/ZF1SjbQTXFqPAxHVOR4pZzJRNPX7FqsJWKuLfqgkkq93Z+kgWiSO5q8I/ebVAP+fZjN5eH9GApD9IsGLVatAuTt3j9QF5oNsrVdXisUtemXZl6fi8RcvM9lzDSe0kRAzZzbAH6p/Az9eARQFAoF8oV4SNEL206VNDtzXmOYXLCETzI1lHEc27ISqrg3R2TOZ/Dsihj5ayB1P00r5rT/J1/qJbeJCZ+BdQ9x4JSEFjRFGs15RaqeVz7ptHcSjuCU6cfEhXR/SsG7N3vcjNIrDzIzL/AgD5WgGfbXyRofG1LAnKVKMGg==
-X-Forefront-Antispam-Report: CIP:217.86.141.140;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:esd-s7.esd;PTR:pd9568d8c.dip0.t-ipconnect.de;CAT:NONE;SFS:(13230016)(4636009)(396003)(376002)(346002)(39830400003)(136003)(36840700001)(46966006)(15650500001)(41300700001)(86362001)(6266002)(8936002)(40480700001)(70586007)(316002)(42186006)(82310400005)(36756003)(2906002)(81166007)(70206006)(1076003)(110136005)(83380400001)(356005)(6666004)(5660300002)(336012)(8676002)(36860700001)(478600001)(47076005)(2616005)(44832011)(186003)(54906003)(26005)(4326008);DIR:OUT;SFP:1102;
-X-OriginatorOrg: esd.eu
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jun 2022 19:05:47.7416
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ecfae95f-22e1-4093-531a-08da56148c3d
-X-MS-Exchange-CrossTenant-Id: 5a9c3a1d-52db-4235-b74c-9fd851db2e6b
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5a9c3a1d-52db-4235-b74c-9fd851db2e6b;Ip=[217.86.141.140];Helo=[esd-s7.esd]
-X-MS-Exchange-CrossTenant-AuthSource: DB8EUR06FT015.eop-eur06.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR03MB3951
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-- Brought the copyright notice up to date
-- Also regarding the changed company name from
-esd electronic system design gmbh to esd electronics gmbh
-- Using socketcan@esd.eu as a generic mail address for matthias who
-left esd 6 years before
-- Added a second MODULE_AUTHOR() for Frank Jungclaus
+Hello Jakub, hello David,
 
-Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
+this is a pull request of 22 patches for net-next/master.
+
+The first 2 patches target the xilinx driver. Srinivas Neeli's patch
+adds Transmitter Delay Compensation (TDC) support, a patch by me fixes
+a typo.
+
+The next patch is by me and fixes a typo in the m_can driver.
+
+Another patch by me allows the configuration of fixed bit rates
+without need for do_set_bittiming callback.
+
+The following 7 patches are by Vincent Mailhol and refactor the
+can-dev module and Kbuild, de-inline the can_dropped_invalid_skb()
+function, which has grown over the time, and drop outgoing skbs if the
+controller is in listen only mode.
+
+Max Staudt's patch fixes a reference in the networking/can.rst
+documentation.
+
+Vincent Mailhol provides 2 patches with cleanups for the etas_es58x
+driver.
+
+Conor Dooley adds bindings for the mpfs-can to the PolarFire SoC dtsi.
+
+Another patch by me allows the configuration of fixed data bit rates
+without need for do_set_data_bittiming callback.
+
+The last 5 patches are by Frank Jungclaus. They prepare the esd_usb
+driver to add support for the the CAN-USB/3 device in a later series.
+
+regards,
+Marc
+
 ---
- drivers/net/can/usb/esd_usb.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_usb.c
-index e23dce3db55a..8a4bf2961f3d 100644
---- a/drivers/net/can/usb/esd_usb.c
-+++ b/drivers/net/can/usb/esd_usb.c
-@@ -1,8 +1,9 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * CAN driver for esd CAN-USB/2 and CAN-USB/Micro
-+ * CAN driver for esd electronics gmbh CAN-USB/2 and CAN-USB/Micro
-  *
-- * Copyright (C) 2010-2012 Matthias Fuchs <matthias.fuchs@esd.eu>, esd gmbh
-+ * Copyright (C) 2010-2012 esd electronic system design gmbh, Matthias Fuchs <socketcan@esd.eu>
-+ * Copyright (C) 2022 esd electronics gmbh, Frank Jungclaus <frank.jungclaus@esd.eu>
-  */
- #include <linux/signal.h>
- #include <linux/slab.h>
-@@ -14,8 +15,9 @@
- #include <linux/can/dev.h>
- #include <linux/can/error.h>
- 
--MODULE_AUTHOR("Matthias Fuchs <matthias.fuchs@esd.eu>");
--MODULE_DESCRIPTION("CAN driver for esd CAN-USB/2 and CAN-USB/Micro interfaces");
-+MODULE_AUTHOR("Matthias Fuchs <socketcan@esd.eu>");
-+MODULE_AUTHOR("Frank Jungclaus <frank.jungclaus@esd.eu>");
-+MODULE_DESCRIPTION("CAN driver for esd electronics gmbh CAN-USB/2 and CAN-USB/Micro interfaces");
- MODULE_LICENSE("GPL v2");
- 
- /* USB vendor and product ID */
--- 
-2.25.1
+The following changes since commit 27f2533bcc6e909b85d3c1b738fa1f203ed8a835:
+
+  nfp: flower: support to offload pedit of IPv6 flowinto fields (2022-06-10 22:23:17 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git tags/linux-can-next-for-5.20-20220625
+
+for you to fetch changes up to c3d396120d68c40cdf2a2da70eff3bf8806f0ff5:
+
+  Merge branch 'preparation-for-supporting-esd-CAN-USB-3' (2022-06-25 13:08:41 +0200)
+
+----------------------------------------------------------------
+linux-can-next-for-5.20-20220625
+
+----------------------------------------------------------------
+Conor Dooley (2):
+      dt-bindings: can: mpfs: document the mpfs CAN controller
+      riscv: dts: microchip: add mpfs's CAN controllers
+
+Frank Jungclaus (5):
+      can/esd_usb2: Rename esd_usb2.c to esd_usb.c
+      can/esd_usb: Add an entry to the MAINTAINERS file
+      can/esd_usb: Rename all terms USB2 to USB
+      can/esd_usb: Fixed some checkpatch.pl warnings
+      can/esd_usb: Update to copyright, M_AUTHOR and M_DESCRIPTION
+
+Marc Kleine-Budde (8):
+      can: xilinx_can: fix typo prescalar -> prescaler
+      can: m_can: fix typo prescalar -> prescaler
+      can: netlink: allow configuring of fixed bit rates without need for do_set_bittiming callback
+      Merge branch 'can-refactoring-of-can-dev-module-and-of-Kbuild'
+      Merge branch 'can-etas_es58x-cleanups-on-struct-es58x_device'
+      Merge branch 'document-polarfire-soc-can-controller'
+      can: netlink: allow configuring of fixed data bit rates without need for do_set_data_bittiming callback
+      Merge branch 'preparation-for-supporting-esd-CAN-USB-3'
+
+Max Staudt (1):
+      can: Break loopback loop on loopback documentation
+
+Srinivas Neeli (1):
+      can: xilinx_can: add Transmitter Delay Compensation (TDC) feature support
+
+Vincent Mailhol (9):
+      can: Kconfig: rename config symbol CAN_DEV into CAN_NETLINK
+      can: Kconfig: turn menu "CAN Device Drivers" into a menuconfig using CAN_DEV
+      can: bittiming: move bittiming calculation functions to calc_bittiming.c
+      can: Kconfig: add CONFIG_CAN_RX_OFFLOAD
+      net: Kconfig: move the CAN device menu to the "Device Drivers" section
+      can: skb: move can_dropped_invalid_skb() and can_skb_headroom_valid() to skb.c
+      can: skb: drop tx skb if in listen only mode
+      can: etas_es58x: replace es58x_device::rx_max_packet_size by usb_maxpacket()
+      can: etas_es58x: fix signedness of USB RX and TX pipes
+
+ .../bindings/net/can/microchip,mpfs-can.yaml       |  45 ++++
+ Documentation/networking/can.rst                   |   2 +-
+ MAINTAINERS                                        |   7 +
+ arch/riscv/boot/dts/microchip/mpfs.dtsi            |  18 ++
+ drivers/net/Kconfig                                |   2 +
+ drivers/net/can/Kconfig                            |  55 ++++-
+ drivers/net/can/dev/Makefile                       |  17 +-
+ drivers/net/can/dev/bittiming.c                    | 197 ----------------
+ drivers/net/can/dev/calc_bittiming.c               | 202 +++++++++++++++++
+ drivers/net/can/dev/dev.c                          |   9 +-
+ drivers/net/can/dev/netlink.c                      |   6 +-
+ drivers/net/can/dev/skb.c                          |  72 ++++++
+ drivers/net/can/m_can/Kconfig                      |   1 +
+ drivers/net/can/m_can/m_can.c                      |   4 +-
+ drivers/net/can/spi/mcp251xfd/Kconfig              |   1 +
+ drivers/net/can/usb/Kconfig                        |  15 +-
+ drivers/net/can/usb/Makefile                       |   2 +-
+ drivers/net/can/usb/{esd_usb2.c => esd_usb.c}      | 250 ++++++++++-----------
+ drivers/net/can/usb/etas_es58x/es58x_core.c        |   5 +-
+ drivers/net/can/usb/etas_es58x/es58x_core.h        |   6 +-
+ drivers/net/can/xilinx_can.c                       |  72 +++++-
+ include/linux/can/skb.h                            |  59 +----
+ net/can/Kconfig                                    |   5 +-
+ 23 files changed, 616 insertions(+), 436 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/can/microchip,mpfs-can.yaml
+ create mode 100644 drivers/net/can/dev/calc_bittiming.c
+ rename drivers/net/can/usb/{esd_usb2.c => esd_usb.c} (81%)
+
 
