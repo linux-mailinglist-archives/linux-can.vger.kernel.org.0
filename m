@@ -2,47 +2,44 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3FA755A9CB
-	for <lists+linux-can@lfdr.de>; Sat, 25 Jun 2022 14:14:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73FF255A9B1
+	for <lists+linux-can@lfdr.de>; Sat, 25 Jun 2022 14:14:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232739AbiFYMGR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        id S232709AbiFYMGR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
         Sat, 25 Jun 2022 08:06:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43726 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232676AbiFYMGQ (ORCPT
+        with ESMTP id S232714AbiFYMGQ (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Sat, 25 Jun 2022 08:06:16 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84F3140E9
-        for <linux-can@vger.kernel.org>; Sat, 25 Jun 2022 05:06:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F0714021
+        for <linux-can@vger.kernel.org>; Sat, 25 Jun 2022 05:06:14 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1o54YE-0002Op-QF
-        for linux-can@vger.kernel.org; Sat, 25 Jun 2022 14:06:10 +0200
+        id 1o54YH-0002Qz-1u
+        for linux-can@vger.kernel.org; Sat, 25 Jun 2022 14:06:13 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 004B89F145
-        for <linux-can@vger.kernel.org>; Sat, 25 Jun 2022 12:03:54 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id 1C7B59F155
+        for <linux-can@vger.kernel.org>; Sat, 25 Jun 2022 12:03:55 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 363F29F11F;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 4CA609F120;
         Sat, 25 Jun 2022 12:03:50 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 55da7676;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 076d717f;
         Sat, 25 Jun 2022 12:03:36 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
         kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        Srinivas Neeli <srinivas.neeli@xilinx.com>,
-        Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
-        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>
-Subject: [PATCH net-next 02/22] can: xilinx_can: fix typo prescalar -> prescaler
-Date:   Sat, 25 Jun 2022 14:03:15 +0200
-Message-Id: <20220625120335.324697-3-mkl@pengutronix.de>
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>
+Subject: [PATCH net-next 03/22] can: m_can: fix typo prescalar -> prescaler
+Date:   Sat, 25 Jun 2022 14:03:16 +0200
+Message-Id: <20220625120335.324697-4-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220625120335.324697-1-mkl@pengutronix.de>
 References: <20220625120335.324697-1-mkl@pengutronix.de>
@@ -63,47 +60,28 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 This patch fixes the typo prescalar -> prescaler.
 
-Link: https://lore.kernel.org/all/20220609111424.3819039-1-mkl@pengutronix.de
-Reported-by: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc: Srinivas Neeli <srinivas.neeli@xilinx.com>
-Cc: Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
-Cc: Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>
+Link: https://lore.kernel.org/all/20220610112037.3857192-1-mkl@pengutronix.de
+Reviewed-by: Chandrasekar Ramakrishnan <rcsekar@samsung.com>
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/xilinx_can.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/net/can/m_can/m_can.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.c
-index 70dcb45078bf..393b2d9f9d2a 100644
---- a/drivers/net/can/xilinx_can.c
-+++ b/drivers/net/can/xilinx_can.c
-@@ -51,7 +51,7 @@ enum xcan_reg {
+diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+index 5d0c82d8b9a9..4f90e17354f2 100644
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -1348,8 +1348,8 @@ static void m_can_chip_config(struct net_device *dev)
+ 	/* set bittiming params */
+ 	m_can_set_bittiming(dev);
  
- 	/* only on CAN FD cores */
- 	XCAN_F_BRPR_OFFSET	= 0x088, /* Data Phase Baud Rate
--					  * Prescalar
-+					  * Prescaler
- 					  */
- 	XCAN_F_BTR_OFFSET	= 0x08C, /* Data Phase Bit Timing */
- 	XCAN_TRR_OFFSET		= 0x0090, /* TX Buffer Ready Request */
-@@ -430,7 +430,7 @@ static int xcan_set_bittiming(struct net_device *ndev)
- 		return -EPERM;
- 	}
+-	/* enable internal timestamp generation, with a prescalar of 16. The
+-	 * prescalar is applied to the nominal bit timing
++	/* enable internal timestamp generation, with a prescaler of 16. The
++	 * prescaler is applied to the nominal bit timing
+ 	 */
+ 	m_can_write(cdev, M_CAN_TSCC, FIELD_PREP(TSCC_TCP_MASK, 0xf));
  
--	/* Setting Baud Rate prescalar value in BRPR Register */
-+	/* Setting Baud Rate prescaler value in BRPR Register */
- 	btr0 = (bt->brp - 1);
- 
- 	/* Setting Time Segment 1 in BTR Register */
-@@ -447,7 +447,7 @@ static int xcan_set_bittiming(struct net_device *ndev)
- 
- 	if (priv->devtype.cantype == XAXI_CANFD ||
- 	    priv->devtype.cantype == XAXI_CANFD_2_0) {
--		/* Setting Baud Rate prescalar value in F_BRPR Register */
-+		/* Setting Baud Rate prescaler value in F_BRPR Register */
- 		btr0 = dbt->brp - 1;
- 		if (can_tdc_is_enabled(&priv->can)) {
- 			if (priv->devtype.cantype == XAXI_CANFD)
 -- 
 2.35.1
 
