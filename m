@@ -2,61 +2,53 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB8C55B130
-	for <lists+linux-can@lfdr.de>; Sun, 26 Jun 2022 12:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10A4C55B15A
+	for <lists+linux-can@lfdr.de>; Sun, 26 Jun 2022 12:56:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234193AbiFZKcM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 26 Jun 2022 06:32:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58118 "EHLO
+        id S229557AbiFZKze (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 26 Jun 2022 06:55:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233675AbiFZKcM (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 26 Jun 2022 06:32:12 -0400
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE47511C2F
-        for <linux-can@vger.kernel.org>; Sun, 26 Jun 2022 03:32:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1656239525;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=CmID4ccbgRg69ACSmp645gUPfpshAZhyir/i3+IukZI=;
-    b=ldXTy6u6f4ujQ/NCs5c9bga1LTqG4cBB/0yhECtSOC+4ifTFkDy95V4haJV/Dwja1o
-    zPTIlYAIkClLZ7kZlxn1oXhfxPaoSoItpuzxZfonsFjY8B/TiWFx55IShaVdzC4hGy0Z
-    qmnNInHIIA57CypEd1wOWFHWlEhB33TQVj85eLRr8QOYSpFs+vCAEME6/4YyMElyxW/t
-    HlF/vKk4ZSUvTxGi6PunZcgJuKDk29RCc5lB9nKB+REDN6ksIfw6nQjENbVbg4TgQZRH
-    nDRIVSruQ2xtU3z/TBIdDyMTBXRRXrgqIB/bbKz9qvmPkKHiJnWEATFWTKcgaRvG2dmF
-    GSbA==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdBqPeOuh2krLEWFUg=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a00:6020:1cff:5b00::b82]
-    by smtp.strato.de (RZmta 47.46.0 AUTH)
-    with ESMTPSA id e45609y5QAW54cN
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Sun, 26 Jun 2022 12:32:05 +0200 (CEST)
-Message-ID: <7640a651-80c8-cfe8-c6bd-0b0d60ee3c2a@hartkopp.net>
-Date:   Sun, 26 Jun 2022 12:31:59 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [RFC PATCH] can-roundtrip-stats: a tool to benchmark transmission
- time
-Content-Language: en-US
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
+        with ESMTP id S229503AbiFZKzd (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 26 Jun 2022 06:55:33 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76EBFE00E
+        for <linux-can@vger.kernel.org>; Sun, 26 Jun 2022 03:55:32 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1o5PvO-00025O-FZ; Sun, 26 Jun 2022 12:55:30 +0200
+Received: from pengutronix.de (p200300ea0f229100c1f120485ffcf4df.dip0.t-ipconnect.de [IPv6:2003:ea:f22:9100:c1f1:2048:5ffc:f4df])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 3E1B29F85D;
+        Sun, 26 Jun 2022 10:55:26 +0000 (UTC)
+Date:   Sun, 26 Jun 2022 12:55:25 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
 Cc:     linux-can@vger.kernel.org,
-        Rhett Aultman <rhett.aultman@samsara.com>
+        Rhett Aultman <rhett.aultman@samsara.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: Re: [RFC PATCH] can-roundtrip-stats: a tool to benchmark
+ transmission time
+Message-ID: <20220626105525.va44sseksk3xej7j@pengutronix.de>
 References: <20220626075317.746535-1-mailhol.vincent@wanadoo.fr>
  <20220626090744.pycu3katdt6vir2l@pengutronix.de>
  <CAMZ6RqLVKMznm_n4j079rcYLjhj8QjmeM3=bYUeXm_rozmQNVg@mail.gmail.com>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="j4femelj4z7ywgj2"
+Content-Disposition: inline
 In-Reply-To: <CAMZ6RqLVKMznm_n4j079rcYLjhj8QjmeM3=bYUeXm_rozmQNVg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,45 +57,97 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
+--j4femelj4z7ywgj2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 26.06.22 11:54, Vincent MAILHOL wrote:
-> On Sun. 26 juin 2022 à 18:10, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+On 26.06.2022 18:54:05, Vincent MAILHOL wrote:
+> On Sun. 26 juin 2022 =C3=A0 18:10, Marc Kleine-Budde <mkl@pengutronix.de>=
+ wrote:
+> > On 26.06.2022 16:53:17, Vincent Mailhol wrote:
+> > > This is a simple tool I wrote in the past. It will report the time
+> > > need for a packet to travel from:
+> > >   * application TX path to kernel TX path
+> > >   * kernel TX path to kernel RX path (i.e. kernel round trip)
+> > >   * kernel RX path to application RX path
+> > >   * application TX path to application RX path (i.e application round
+> > >     trip)
+> >
+> > I'm currently playing around with hardware timestmaps in the mcp251xfd
+> > driver and the other day I stumbled over commit 741b91f1b0ea ("can: dev:
+> > can_put_echo_skb(): add software tx timestamps") and I was thinking
+> > which tool you're using to test this. :)
+> >
+> > Once the hardware timestamps are running stable, this is exactly the
+> > tool I need! Thanks for sharing this.
+>=20
+> Does the mcp251xfd use the host clock to do its hardware timestamp?
 
->>> My ultimate goal was to add the TX timestamp feature to candump from
->>> can-utils [3], however, I faced a blocker: the TX timestamps are sent
->>> to the error queue of the sender's socket meaning that a listener
->>> (such as candump) will not see those TX timestamp on his error queue
->>> because this is a different socket as the sender. If anyone knows a
->>> method to access the error queue of another process's socket, let me
->>> know (I guess that you need to be root, but did not find how to do
->>> it).
->>
->> I don't think there's an official way to read the TX timestamps (i.e.
->> error queue) of a socket that's outside of your process.
-> 
+It uses an external 40 MHz oscillator, usually each device has it's own.
+
+> (Not sure how SPI hardware works and if they have their own quartz or
+> if they share it with the host system). If it is indeed the same clock
+> you can have even more precise statistics.
+
+No, the device clock is not shared with the host system and thus drift
+apart. But you can synchronize the device's clock against the system
+clock with phc2sys of linuxptp. As soon as the code is stable I'll send
+the patches around.
+
+[...]
+
+> > > My ultimate goal was to add the TX timestamp feature to candump from
+> > > can-utils [3], however, I faced a blocker: the TX timestamps are sent
+> > > to the error queue of the sender's socket meaning that a listener
+> > > (such as candump) will not see those TX timestamp on his error queue
+> > > because this is a different socket as the sender. If anyone knows a
+> > > method to access the error queue of another process's socket, let me
+> > > know (I guess that you need to be root, but did not find how to do
+> > > it).
+> >
+> > I don't think there's an official way to read the TX timestamps (i.e.
+> > error queue) of a socket that's outside of your process.
+>=20
 > What I was thinking is that tools such as tcpdump are able to get TX
+
+Oh, I completely forgot the packet socket and tcpdump....
+
 > packets of ethernet interfaces even if not normally visible (because
 > contrary to CAN, there is no default loopback). I was wondering if the
 > same could be done with error queues, but as you can guess my research
-> did lead anywhere. I also guess there is no official support but then,
+> did lead anywhere.
+
+What does tcpdump show on a Ethernet if you enable TX timestamps?
+
+> I also guess there is no official support but then,
 > I am wondering how hard it would be to hack the error queues to expose
 > them to the privileged processes.
 
-I wonder whether error queues are the right mechanism or if control 
-messages needed to be extended here - like for (hardware) rx timestamps.
+Maybe there's general interest of pushing error queue data via packet
+socket, too. As this is not a CAN specific issue.
 
-E.g. the packet socket can access the vlan tag with a control message. 
-And when there would be a such a message for tx timetamps we could 
-create an identical cmesg API that could be used by CAN and PACKET sockets.
+Marc
 
->>> Because I did not manage to add the feature to candump, I am sharing
->>> instead this standalone tool, hoping someone might find it useful.
->>
->> I'm not sure which is the best tool to add this to...cangen,
->> cansequence. Maybe evolve these tools into some kind of CAN ping
->> command.
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-cansend and canplayer would be candidates for such a feature too.
+--j4femelj4z7ywgj2
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Best regards,
-Oliver
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmK4OxkACgkQrX5LkNig
+012L7Qf/UXwfRVQqPqcAVOrkBWz2XQ52P0tTUyMyBbUuAMPRPnDCNevUa9a6x1JZ
+b1vCtbUkv8tLuoBD6kiNpBeMRWQbDIr5h5SthzsxGCL9Csh6BrYL99zWy9sLwXkp
+m3pU3KAN8YhigJrvQ4Xbmp3U41k4X1JMcvz1w8UJ6Uo3I0DnwAi2eoYNf3Z0gRHW
+hy67qlJouWOyfb7RpWfpLQkPep479LI8CS5jotg8euy13EaYIdYXPoSyMxZd4dI5
+AVsArMDw45UPeFtrqqS7/ZZbNjYbkiVJR6yoZIoN7luhuQ/f0yTedwqC7C09q9u8
+CyJdALml7UaYCGKy3tGkqiOihneOvA==
+=AAi/
+-----END PGP SIGNATURE-----
+
+--j4femelj4z7ywgj2--
