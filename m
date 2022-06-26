@@ -2,45 +2,43 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78F4D55B087
-	for <lists+linux-can@lfdr.de>; Sun, 26 Jun 2022 11:09:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4579655B0D1
+	for <lists+linux-can@lfdr.de>; Sun, 26 Jun 2022 11:35:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbiFZJHz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 26 Jun 2022 05:07:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44934 "EHLO
+        id S229817AbiFZJXN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 26 Jun 2022 05:23:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbiFZJHy (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 26 Jun 2022 05:07:54 -0400
+        with ESMTP id S234136AbiFZJXL (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 26 Jun 2022 05:23:11 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044DE120AF
-        for <linux-can@vger.kernel.org>; Sun, 26 Jun 2022 02:07:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A998B7D3
+        for <linux-can@vger.kernel.org>; Sun, 26 Jun 2022 02:23:09 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1o5OFB-0007qw-Ak; Sun, 26 Jun 2022 11:07:49 +0200
+        id 1o5OU0-0000wa-2X; Sun, 26 Jun 2022 11:23:08 +0200
 Received: from pengutronix.de (p200300ea0f229100c1f120485ffcf4df.dip0.t-ipconnect.de [IPv6:2003:ea:f22:9100:c1f1:2048:5ffc:f4df])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 1AD3B9F7CD;
-        Sun, 26 Jun 2022 09:07:45 +0000 (UTC)
-Date:   Sun, 26 Jun 2022 11:07:44 +0200
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 2F41A9F7DD;
+        Sun, 26 Jun 2022 09:23:07 +0000 (UTC)
+Date:   Sun, 26 Jun 2022 11:23:06 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can@vger.kernel.org,
-        Rhett Aultman <rhett.aultman@samsara.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: Re: [RFC PATCH] can-roundtrip-stats: a tool to benchmark
- transmission time
-Message-ID: <20220626090744.pycu3katdt6vir2l@pengutronix.de>
-References: <20220626075317.746535-1-mailhol.vincent@wanadoo.fr>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Max Staudt <max@enpas.org>, linux-can <linux-can@vger.kernel.org>
+Subject: Re: Thanks for reviewing can327!
+Message-ID: <20220626092306.ewufhfpf6mdketwy@pengutronix.de>
+References: <20220614222811.1a18e19b.max@enpas.org>
+ <CAMZ6RqKAOSKcdY2PJqSHR0fBaJ8k+9Fw3jcP5nD3xg+PbF11Sg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="clifluqa4pfu5eih"
+        protocol="application/pgp-signature"; boundary="vvev533pq3lugerz"
 Content-Disposition: inline
-In-Reply-To: <20220626075317.746535-1-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <CAMZ6RqKAOSKcdY2PJqSHR0fBaJ8k+9Fw3jcP5nD3xg+PbF11Sg@mail.gmail.com>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -55,78 +53,55 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---clifluqa4pfu5eih
+--vvev533pq3lugerz
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 26.06.2022 16:53:17, Vincent Mailhol wrote:
-> This is a simple tool I wrote in the past. It will report the time
-> need for a packet to travel from:
->   * application TX path to kernel TX path
->   * kernel TX path to kernel RX path (i.e. kernel round trip)
->   * kernel RX path to application RX path
->   * application TX path to application RX path (i.e application round
->     trip)
+On 26.06.2022 17:44:36, Vincent MAILHOL wrote:
+> On Wed. 15 Jun. 2022 at 05:28, Max Staudt <max@enpas.org> wrote:
+> > Hi Vincent,
+> >
+> > Thank you so much for the thorough review of can327!
 
-I'm currently playing around with hardware timestmaps in the mcp251xfd
-driver and the other day I stumbled over commit 741b91f1b0ea ("can: dev:
-can_put_echo_skb(): add software tx timestamps") and I was thinking
-which tool you're using to test this. :)
+Thank you for staying on the ball and not being deterred. Hopefully
+you'll receive such a thankful message from some contributor in the
+future!
 
-Once the hardware timestamps are running stable, this is exactly the
-tool I need! Thanks for sharing this.
-
-> This tool is useful to benchmark latency on software and hardware. It
-> can be used to, for example:
->   * compare performances of two CAN controllers (by using the kernel
->     round trip information)
->   * compare the different CAN queue disciplines (by using the
->     application TX path to kernel TX path information)
+> > (the word "relentless" comes to mind, even if it doesn't really fit...)
+> >
+> >
+> > You went above and beyond anything I could ever have dreamed of for
+> > something that has started as a hobby curiosity, and now likely powers
+> > several projects more curious than itself. No idea why you did, but I'm
+> > grateful.
 >=20
-> I am sharing it as-is. Please see this message as an FYI. I do not
-> consider this mature enough and I am not expecting anyone to pick that
-> patch. Everything is hard coded, I did not put effort to make it
-> configurable.
+> I can answer you. Several reasons but the strongest one is that less
+> than two years ago, I was in your shoes.
+> I posted my first message on the linux-can mailing list in September
+> 2020 with the patches for the etas_es58x driver.
 >=20
-> The tool requires the TX timestamps (which I previously added to the
-> kernel in [1] and [2]).
+> I did mistakes similar to what you did, for example I also had a
+> memory leak in my code:
+> https://lore.kernel.org/linux-can/45c0b0cc-bfd6-5180-7ad9-51eebc9de3c9@gm=
+ail.com/
+> (thanks again to Jimmy for spotting that).
 >=20
-> To use it:
-> | $make
-> | ./can-roundtrip-stats
+> My patch reached v15 and took half a year before being finally
+> accepted. All the comments and mentoring I received back then from
+> Marc, Oliver and the others turned out to be my best learning
+> experience in the last few years.
+> In some way, my review is a way to give back to the community what I rece=
+ived.
+
+=2E..and Vincent has given plenty! A proper TDC framework, thousands of
+patch reviews, and most recently the can-dev/Kconfig cleanups.
+
+> > Please remind me to buy you a beer or other drink the nex^H^H^Hfirst
+> > time we meet.
 >=20
-> My ultimate goal was to add the TX timestamp feature to candump from
-> can-utils [3], however, I faced a blocker: the TX timestamps are sent
-> to the error queue of the sender's socket meaning that a listener
-> (such as candump) will not see those TX timestamp on his error queue
-> because this is a different socket as the sender. If anyone knows a
-> method to access the error queue of another process's socket, let me
-> know (I guess that you need to be root, but did not find how to do
-> it).
-
-I don't think there's an official way to read the TX timestamps (i.e.
-error queue) of a socket that's outside of your process.
-
-> Because I did not manage to add the feature to candump, I am sharing
-> instead this standalone tool, hoping someone might find it useful.
-
-I'm not sure which is the best tool to add this to...cangen,
-cansequence. Maybe evolve these tools into some kind of CAN ping
-command.
-
-> At the moment, I am not planning to invest more time in the
-> foreseeable future. If someone want to take over and make is a bit
-> more sexy so that it can reach can-utils, go ahead. I think that it
-> basically misses a command line interface in the same fashion of
-> cangen to make is configurable.
-
-I've added it to a branch of my can-utils:
-
-https://github.com/marckleinebudde/can-utils/tree/can-roundtrip-stats
-
-> Else, you can also tweak the hard coded information to easily adjust
-> it to your needs.
+> I live in Tokyo, if you have plans to visit, it would be my pleasure
+> to share a beer.
 
 regards,
 Marc
@@ -137,19 +112,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---clifluqa4pfu5eih
+--vvev533pq3lugerz
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmK4IdgACgkQrX5LkNig
-013XGQf/ed1bJFEjqjtsFpH3u3G7BPGSl/4Mn0Mt67EflLzCkcCYxhVDAW7TVDIL
-0TZwD8J+DUrI27/l5jRLSKa9PkjiUMT97zlHYZcGPxAO5CsAPggPQNGaREfvs9rG
-X0hkoHcmyYigP+LMYU3z7gcyoAgd/WsaAZiBPgbivSpZ1hG5TdSTxuVc7pdduueb
-JG00CUju9YTpqCrwGEbd5PsDH4QL/hPO1lKYJN3uhNvnnS87hfYyKNETRVpmbyLK
-5yiOuTx7nDm0w07imBPJesYRozesV+Q84Bd2hG34Hr6yh8F7gWB8FBFch1JnF3Cx
-Q58/8NOD7ic3ZslmzFM+DZPSkhTptg==
-=HWSm
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmK4JXcACgkQrX5LkNig
+013Wugf9HxWjwYk68Ki+4A3fSsEPlwJwogWbm0nO+ALuK5FKDXpp477xsb2LZgxg
+QwUB57p0yVK+veTblJhHJxhExV0R8OPr5mh+G8o4mJ93je05WrZ86G3LgYlWL4te
+CS/4hH3xREcNApw2P2HAQcGZT/fEA4He4EvGSdPcp+ad9nejMdS9PSjXJ9sNsDCv
+kUbY4KcwwVQyfxYd2lMf8R3lhtrysJue6CwduxyoHxTp9oUku9r3mMpzS0Hp4Yiz
+Z5LzQb8mbIyC/60GdZm2TMxJfVrSPAR5YukOEgYcDcozr0bjdOPTWnnhfMLJoB5j
+nuOHCe9VwzFzwgks8f7XJoV5Eu6GPQ==
+=Zpw1
 -----END PGP SIGNATURE-----
 
---clifluqa4pfu5eih--
+--vvev533pq3lugerz--
