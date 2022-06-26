@@ -2,49 +2,48 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C77E55B29A
-	for <lists+linux-can@lfdr.de>; Sun, 26 Jun 2022 17:15:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3AEC55B3B4
+	for <lists+linux-can@lfdr.de>; Sun, 26 Jun 2022 21:15:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231483AbiFZPPQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 26 Jun 2022 11:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42470 "EHLO
+        id S230490AbiFZTOQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 26 Jun 2022 15:14:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiFZPPP (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 26 Jun 2022 11:15:15 -0400
+        with ESMTP id S229877AbiFZTOP (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 26 Jun 2022 15:14:15 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F50EE36
-        for <linux-can@vger.kernel.org>; Sun, 26 Jun 2022 08:15:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFAD1B7C2
+        for <linux-can@vger.kernel.org>; Sun, 26 Jun 2022 12:14:14 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1o5Tyh-0001PU-Nm; Sun, 26 Jun 2022 17:15:11 +0200
+        id 1o5Xhz-0007BC-7G; Sun, 26 Jun 2022 21:14:11 +0200
 Received: from pengutronix.de (p200300ea0f229100c1f120485ffcf4df.dip0.t-ipconnect.de [IPv6:2003:ea:f22:9100:c1f1:2048:5ffc:f4df])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 16C4F9F94F;
-        Sun, 26 Jun 2022 15:15:07 +0000 (UTC)
-Date:   Sun, 26 Jun 2022 17:15:06 +0200
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 74F999FAC2;
+        Sun, 26 Jun 2022 19:14:08 +0000 (UTC)
+Date:   Sun, 26 Jun 2022 21:14:07 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can@vger.kernel.org,
-        Rhett Aultman <rhett.aultman@samsara.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: Re: [RFC PATCH] can-roundtrip-stats: a tool to benchmark
- transmission time
-Message-ID: <20220626151506.bzg7wqua572zswag@pengutronix.de>
-References: <20220626075317.746535-1-mailhol.vincent@wanadoo.fr>
- <20220626090744.pycu3katdt6vir2l@pengutronix.de>
- <CAMZ6RqLVKMznm_n4j079rcYLjhj8QjmeM3=bYUeXm_rozmQNVg@mail.gmail.com>
- <20220626105525.va44sseksk3xej7j@pengutronix.de>
- <CAMZ6Rq+NbmOA89DjA=e_EBJXaDm0T69vbFrjKD+arZivhVqEdA@mail.gmail.com>
+To:     Thomas.Kopp@microchip.com
+Cc:     pavel.modilaynen@volvocars.com, drew@beagleboard.org,
+        linux-can@vger.kernel.org, menschel.p@posteo.de,
+        netdev@vger.kernel.org, will@macchina.cc
+Subject: Re: [net-next 6/6] can: mcp251xfd: mcp251xfd_regmap_crc_read(): work
+ around broken CRC on TBC register
+Message-ID: <20220626191407.hcio6opdcxuf3adc@pengutronix.de>
+References: <PR3P174MB0112D073D0E5E080FAAE8510846E9@PR3P174MB0112.EURP174.PROD.OUTLOOK.COM>
+ <DM4PR11MB5390BA1C370A5AF90E666F1EFB709@DM4PR11MB5390.namprd11.prod.outlook.com>
+ <PR3P174MB01124C085C0E0A0220F2B11584709@PR3P174MB0112.EURP174.PROD.OUTLOOK.COM>
+ <DM4PR11MB53901D49578FE265B239E55AFB7C9@DM4PR11MB5390.namprd11.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4o4s2r4wmyvq5srw"
+        protocol="application/pgp-signature"; boundary="ebatoozct53ny7dd"
 Content-Disposition: inline
-In-Reply-To: <CAMZ6Rq+NbmOA89DjA=e_EBJXaDm0T69vbFrjKD+arZivhVqEdA@mail.gmail.com>
+In-Reply-To: <DM4PR11MB53901D49578FE265B239E55AFB7C9@DM4PR11MB5390.namprd11.prod.outlook.com>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -59,94 +58,35 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---4o4s2r4wmyvq5srw
+--ebatoozct53ny7dd
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 26.06.2022 22:40:13, Vincent MAILHOL wrote:
-> > > > I'm currently playing around with hardware timestmaps in the mcp251=
-xfd
-> > > > driver and the other day I stumbled over commit 741b91f1b0ea ("can:=
- dev:
-> > > > can_put_echo_skb(): add software tx timestamps") and I was thinking
-> > > > which tool you're using to test this. :)
-> > > >
-> > > > Once the hardware timestamps are running stable, this is exactly the
-> > > > tool I need! Thanks for sharing this.
-> > >
-> > > Does the mcp251xfd use the host clock to do its hardware timestamp?
-> >
-> > It uses an external 40 MHz oscillator, usually each device has it's own.
-> >
-> > > (Not sure how SPI hardware works and if they have their own quartz or
-> > > if they share it with the host system). If it is indeed the same clock
-> > > you can have even more precise statistics.
-> >
-> > No, the device clock is not shared with the host system and thus drift
-> > apart. But you can synchronize the device's clock against the system
-> > clock with phc2sys of linuxptp. As soon as the code is stable I'll send
-> > the patches around.
->=20
-> This sounds really exciting. I also wanted to play with linuxptp but
-> never had time to start.
+On 21.12.2021 22:24:52, Thomas.Kopp@microchip.com wrote:
+> diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c b/drivers/n=
+et/can/spi/mcp251xfd/mcp251xfd-regmap.c
+> index 297491516a26..e5bc897f37e8 100644
+> --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
+> +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
+> @@ -332,12 +332,10 @@ mcp251xfd_regmap_crc_read(void *context,
+>                  *
+>                  * If the highest bit in the lowest byte is flipped
+>                  * the transferred CRC matches the calculated one. We
+> -                * assume for now the CRC calculation in the chip
+> -                * works on wrong data and the transferred data is
+> -                * correct.
+> +                * assume for now the CRC operates on the correct data.
+>                  */
+>                 if (reg =3D=3D MCP251XFD_REG_TBC &&
+> -                   (buf_rx->data[0] =3D=3D 0x0 || buf_rx->data[0] =3D=3D=
+ 0x80)) {
+> +                   ((buf_rx->data[0] & 0xF8) =3D=3D 0x0 || (buf_rx->data=
+[0] & 0xF8) =3D=3D 0x80)) {
 
-I started with adding the basic callback for /dev/ptpX to show up and
-"work", i.e. not crash :). What probably most CAN devices lack is the
-possibility to fine tune the oscillator, but I figured out, there is a
-ptp clock multiplexer in the kernel that does the fine tuning in
-software. I ported that code and now I can run phc2sys on the mcp251xfd.
-
-What does phc2sys do? It's used to synch a PTP Clock to the Linux system
-clock or vice versa. The only sensible use case of this all is to sync
-=66rom the Linux system clock to the mcp251xfd device clock. This way the
-hardware timestamps are within =C2=B5s of the Linux system clock.
-
-> With the device clock synchronized, you can have decent timestamping
-> between different hardware (potentially of different brands).
-
-So far I only synchronize the Linux system clock into the mcp251xfd
-clock. I could synchronize a 2nd CAN adapter implementing a /dev/ptp on
-the same system, too.
-
-> The drawback is that you would lose a bit of precision: the hardware
-> timestamp have an accuracy around 1 microsecond. After using PTP, I
-> would expect the precision to degrade to roughly 100 microsecond
-> (which is still way better than what software timestamping can offer).
-
-Synchronizing time via CAN between different systems would be the next
-logical step. But linuxptp needs code to map the PTP messages to CAN
-frames. This will not work with raw CAN, as the messages are too long.
-Maybe CAN-FD or ISO-TP can help. But I haven't looked into this.
-
-> > What does tcpdump show on a Ethernet if you enable TX timestamps?
->=20
-> I never went so far.
->=20
-> For tcpdump, the interested flags are:
->   * -J (a.k.a. --list-time-stamp-types)
->   * -j tstamp_type (a.k.a. --time-stamp-type=3Dtstamp_type)
->=20
-> But I never went so far to make them work. If you want to try it,
-> first be sure that the driver of your network interface calls
-> skb_tx_timestamp() in its xmit() function.
-
-I think some interfaces on our compile cluster support PTP.
-
-> > > I also guess there is no official support but then,
-> > > I am wondering how hard it would be to hack the error queues to expose
-> > > them to the privileged processes.
-> >
-> > Maybe there's general interest of pushing error queue data via packet
-> > socket, too. As this is not a CAN specific issue.
->=20
-> I think so. This is just a niche topic, so we need to find the code
-> snippet which will put some light on this. I am convinced that some
-> solution should exist, just do not have enough time to investigate.
-> Studying the source code of tcpdump is probably one of the best idea I
-> can think of right now.
-
-sound like the right direction
+With this change the read of the TBC on the mcp2517fd becomes much more
+stable. No more single bit flips in the 1st data byte that can be fixed
+with xor 0x80.
 
 regards,
 Marc
@@ -157,19 +97,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---4o4s2r4wmyvq5srw
+--ebatoozct53ny7dd
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmK4d/YACgkQrX5LkNig
-013SZQf8C+QzQIwocg5VI+/dRP/N3yljvwKB5puXW5x7XBDoCaZOYzlS4xgqlgSg
-QN5HV0Js50jBs2vofH70PfeTxv6W9beL+iAW0lGdYYR5nxr40Xt0EsLhwzqww2W1
-uTbIXIPRjFnVyJLtT5+VR/2t2MWc3RPRJMHw54SWljNgV9T35kI1yn62vMAcKPhl
-fEbSIBi4/K3jYf0JXmwgVKu0MqQTWCmnD1lwI+hOd1LuXutvPgujSbyuyWTu7E3f
-md8EUBsOOZevsq6FeFewllP6IZjamkwja9jLaUHWlIFl4YZvVgvw3kPy1x+1HeGb
-6Uw7HSvENe1mu4FGx5n59rYuZ4uHNQ==
-=rJK3
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmK4r/wACgkQrX5LkNig
+010cAwf/ZvLFcs2+Qp4EECfU58rZCo9cCJDLLXuoxOHkGimcs87jtRnXatBmlxWH
+zMa7BJGCSM4HWYv7r8ykuUpHpyUO36lCPXgEAPM4HoY/UTgrBaLn2iysaQbEw5kT
+d1YL6xb+x/rXFBVW4zUNaVmEJAaZvAL4BAXQEwboz3U3x98l8yI3pO2bLVP22eFB
+RCI32vTAt7fwU8a/ebuUAx6H36G6HIWVhdFWEBnL83T8Ie5SE8aZB30TxPi+4gye
+axI7RfKdXk0+F5ReTYfCwd6mrRs6t9L4oO3TZI+k1++04XtiAdHzEP1cih3x6fhe
+WpFn58RizF5wh5bJ+0xdRAZzVd0P+A==
+=9a7c
 -----END PGP SIGNATURE-----
 
---4o4s2r4wmyvq5srw--
+--ebatoozct53ny7dd--
