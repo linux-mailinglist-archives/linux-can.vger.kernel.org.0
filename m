@@ -2,46 +2,49 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A16C55C269
-	for <lists+linux-can@lfdr.de>; Tue, 28 Jun 2022 14:46:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B310155E110
+	for <lists+linux-can@lfdr.de>; Tue, 28 Jun 2022 15:33:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232970AbiF0HaN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 27 Jun 2022 03:30:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40364 "EHLO
+        id S233461AbiF0J3G (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 27 Jun 2022 05:29:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232973AbiF0HaN (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 27 Jun 2022 03:30:13 -0400
+        with ESMTP id S233049AbiF0J3G (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 27 Jun 2022 05:29:06 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20655F99
-        for <linux-can@vger.kernel.org>; Mon, 27 Jun 2022 00:30:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F82025DB
+        for <linux-can@vger.kernel.org>; Mon, 27 Jun 2022 02:29:04 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1o5jC8-00015W-8m; Mon, 27 Jun 2022 09:30:04 +0200
-Received: from pengutronix.de (p200300ea0f229100c1f120485ffcf4df.dip0.t-ipconnect.de [IPv6:2003:ea:f22:9100:c1f1:2048:5ffc:f4df])
+        id 1o5l3H-0000wJ-1u
+        for linux-can@vger.kernel.org; Mon, 27 Jun 2022 11:29:03 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 1430AA010B
+        for <linux-can@vger.kernel.org>; Mon, 27 Jun 2022 09:29:02 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 76C6E9FFA7;
-        Mon, 27 Jun 2022 07:30:02 +0000 (UTC)
-Date:   Mon, 27 Jun 2022 09:30:01 +0200
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 874CDA0105;
+        Mon, 27 Jun 2022 09:29:01 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id baa6b7a1;
+        Mon, 27 Jun 2022 09:29:01 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Conor.Dooley@microchip.com
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH net-next 16/22] riscv: dts: microchip: add mpfs's CAN
- controllers
-Message-ID: <20220627073001.2l6twpyt7fg252ul@pengutronix.de>
-References: <20220625120335.324697-1-mkl@pengutronix.de>
- <20220625120335.324697-17-mkl@pengutronix.de>
- <ff40e50f-728d-dba3-6aa2-59db573d6f76@microchip.com>
+To:     linux-can@vger.kernel.org
+Cc:     kernel@pengutronix.de,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Thomas Kopp <thomas.kopp@microchip.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+Subject: [PATCH v2] can: mcp251xfd: mcp251xfd_register_get_dev_id(): fix endianness conversion
+Date:   Mon, 27 Jun 2022 11:28:59 +0200
+Message-Id: <20220627092859.809042-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kpnrfd4a6r3wvuen"
-Content-Disposition: inline
-In-Reply-To: <ff40e50f-728d-dba3-6aa2-59db573d6f76@microchip.com>
+Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -55,62 +58,52 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+In mcp251xfd_register_get_dev_id() the device ID register is read with
+handcrafted SPI transfers. As all registers, this register is in
+little endian. Further it is not naturally aligned in struct
+mcp251xfd_map_buf_nocrc::data. However after the transfer the register
+content is converted from big endian to CPU endianness not taking care
+of being unaligned.
 
---kpnrfd4a6r3wvuen
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fix the conversion by converting from little endian to CPU endianness
+taking the unaligned source into account.
 
-On 27.06.2022 07:12:47, Conor.Dooley@microchip.com wrote:
-> On 25/06/2022 13:03, Marc Kleine-Budde wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know =
-the content is safe
-> >=20
-> > From: Conor Dooley <conor.dooley@microchip.com>
-> >=20
-> > PolarFire SoC has a pair of CAN controllers, but as they were
-> > undocumented there were omitted from the device tree. Add them.
-> >=20
-> > Link: https://lore.kernel.org/all/20220607065459.2035746-3-conor.dooley=
-@microchip.com
-> > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> > Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
->=20
-> Hey Marc,
-> Not entirely familiar with the process here.
-> Do I apply this patch when the rest of the series gets taken,
-> or will this patch go through the net tree?
+Side note: So far the register content is 0x0 on all mcp251xfd
+compatible chips, and is only used for an informative printk.
 
-Both patches:
+Fixes: 55e5b97f003e ("can: mcp25xxfd: add driver for Microchip MCP25xxFD SPI CAN")
+Reviewed-by: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+Hello,
 
-| 38a71fc04895 riscv: dts: microchip: add mpfs's CAN controllers
-| c878d518d7b6 dt-bindings: can: mpfs: document the mpfs CAN controller
-
-are on they way to mainline via the net-next tree. No further actions
-needed on your side.
+just noticed, that buf_rx->data is not naturally aligned if
+interpreting it as a 32 bit value.
 
 regards,
 Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+changes since v1:
+- use get_unaligned_le32() instead of be32_to_cpup()
 
---kpnrfd4a6r3wvuen
-Content-Type: application/pgp-signature; name="signature.asc"
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
------BEGIN PGP SIGNATURE-----
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+index 3160881e89d9..aa17e437585a 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+@@ -1787,7 +1787,7 @@ mcp251xfd_register_get_dev_id(const struct mcp251xfd_priv *priv, u32 *dev_id,
+ 	if (err)
+ 		goto out_kfree_buf_tx;
+ 
+-	*dev_id = be32_to_cpup((__be32 *)buf_rx->data);
++	*dev_id = get_unaligned_le32(buf_rx->data);
+ 	*effective_speed_hz_slow = xfer[0].effective_speed_hz;
+ 	*effective_speed_hz_fast = xfer[1].effective_speed_hz;
+ 
+-- 
+2.35.1
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmK5XHYACgkQrX5LkNig
-0125+Af/dpJV9jmeV+bmQvtsU1t/ZNy3Zu8qWv+uG98YM+4fWhGDJL8oNAQ/9QXu
-+HtS/rk9YC2rBIbyHLK2m2Jn2x+InMKjP967RGlw6oIofAd03agTDkK6AQLDIy01
-TxXulDibc3p9jJf5qyrO1Y/MoFnn5hz9DbZNh8g27tzdC92by1KOYfP+BZplGc/o
-MUzbalGMLAQMsnQMAX6vGCKFEEE1BZxFsbH9VtNPJHO3hbymr6JFyI8x5pn6G+LO
-0Xw/FKc3v2/GU9M28kE/w0zuF5AED+wczo+WQ+E6DHrAaN1eXSroa+/+qUL/7uVA
-dNZtx9YS1nKmksqGTL/bPY9O8Pr+aw==
-=XKUC
------END PGP SIGNATURE-----
 
---kpnrfd4a6r3wvuen--
