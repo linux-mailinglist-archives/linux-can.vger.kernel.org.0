@@ -2,75 +2,84 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE11F55E9FF
-	for <lists+linux-can@lfdr.de>; Tue, 28 Jun 2022 18:42:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2ECA55EB70
+	for <lists+linux-can@lfdr.de>; Tue, 28 Jun 2022 19:55:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239469AbiF1QgS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 28 Jun 2022 12:36:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52348 "EHLO
+        id S232611AbiF1RzG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 28 Jun 2022 13:55:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237911AbiF1QfA (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 28 Jun 2022 12:35:00 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17250C2C
-        for <linux-can@vger.kernel.org>; Tue, 28 Jun 2022 09:32:08 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id cw10so26941283ejb.3
-        for <linux-can@vger.kernel.org>; Tue, 28 Jun 2022 09:32:08 -0700 (PDT)
+        with ESMTP id S232721AbiF1RzE (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 28 Jun 2022 13:55:04 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B8DB6163
+        for <linux-can@vger.kernel.org>; Tue, 28 Jun 2022 10:55:00 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id c6-20020a17090abf0600b001eee794a478so6039841pjs.1
+        for <linux-can@vger.kernel.org>; Tue, 28 Jun 2022 10:55:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=CuGBayQTKpzveprbko8jS+HWnVHJqO4mYljV1kMBj3A=;
-        b=MtMhCSr/fei8ro6GAgFIQN2QNwArvDPswgWVA92bCcINrM3QNrv44Ufz8bcR70Hin9
-         d2E1yfK//6FaPHzSk22x2w3jobVMv2wtKrVGn9OdNqZB7u+60qS6jfZ1dys6YiZ5AtBI
-         lBRrfoVADTV1DCY2tdEqS/CwfhNpHWI8tMDXg=
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Ifakbg1KSXljeCc2KlqlOz+XfzIBohlTVCEx+b5hm2Y=;
+        b=Lpc3rw2lUDFTgNuiFkNi7vJ3FOoQQ8sPNV+A/xT7kPgFFi5TelrrdXlIUbrL4j9GT+
+         3+ei8DuymmFwmq4TMtVSFXVwj/BEoFuIu2AqPN9i6R5zOS+ndUs4OIvpg1Fj2tZP3rAs
+         mZTqNdFC15vlNUFmjWu7inrraPu1BA3Mkzqts=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=CuGBayQTKpzveprbko8jS+HWnVHJqO4mYljV1kMBj3A=;
-        b=fSZgiQe6hMqlLsY6WEnj+/u1pMGE4OBCvnZeJGd1MDDxKpZjUJ8KbPPk/oXL+AeBUu
-         0XdNSzHFP/RkOG6dY1IK4D+wiQ+ZU09RJQs5l+TvHzJfHBfsucLDTf/tomSCwz0nDHdp
-         dHkuZUB9jqQCHrETyBKA4qC/YYy2vuHS/R/Pgoag9y3TUZlbOYLAbVdFWiMgBwR/z7jj
-         vaLkYBKWVo3jd8BiZ+J56jbnt4LICnAURVmch495RGrV/3yA6JI/p/h3lz/LmfpfGtyW
-         fwAiOKGLxvZLg4o3CnlZ1zprs6/o0D5l8YkVgN2YU5aWjSU16cvPyPt8INsDcV4X++sE
-         IBGA==
-X-Gm-Message-State: AJIora8ju15s+OXuf3EA/LyTtTq00YYpg+cj8LKvR0jTsubEuwBWw78X
-        PqyIO2l+OJpCClpfQXiy42nftw==
-X-Google-Smtp-Source: AGRyM1s72MC8BHF9j5Ha54DSEtE2W5iZoGmr+77mt8A8eJMZUG9x4pM48O9yrt22/OipX0MUoLoO3g==
-X-Received: by 2002:a17:906:c152:b0:726:3226:2e61 with SMTP id dp18-20020a170906c15200b0072632262e61mr18889180ejc.122.1656433926614;
-        Tue, 28 Jun 2022 09:32:06 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-80-116-90-174.pool80116.interbusiness.it. [80.116.90.174])
-        by smtp.gmail.com with ESMTPSA id b20-20020a0564021f1400b0042e15364d14sm9916952edb.8.2022.06.28.09.32.05
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Ifakbg1KSXljeCc2KlqlOz+XfzIBohlTVCEx+b5hm2Y=;
+        b=bGu0wBOgVfwt4xucVikfV/iz+t3aN/5BqqUz364bgqthG2yZ0DloPX3L7YcxuTHBl5
+         73G3qk62nHZU/Bc9Db0crAB7uJG+alIpxRI6MOzCskkzXJtJ2/9NxE+7leGsXoCiPzi2
+         Lx+IKanXE9YKCIr0Yugicvpw/TNe8QlLFm7i/N3t44bl/dvIxNhwcd5vBx1ZOxzU7PO/
+         aglD79NvxufteE3o7ee2Np/q9Qe6JlGR7MT87EtxtlusaFoJiHASRd/s1mo3m32+M4af
+         HN+D0BPtOQXaMoKqmnJqSv01zRbjpzNaAnKPzYTlOQSE3Dxo6/e4QUVhppSQO40W37xK
+         KpXQ==
+X-Gm-Message-State: AJIora/LW1ARQU8BrCWjKjykGJmKVWVL4t+uvf+BShldwDP7rGgaA6h1
+        XOjx8h8ee5tz+HRvGTQXBaCWMQ==
+X-Google-Smtp-Source: AGRyM1vNNODoy68cNcew+BOwykVJS5AyiEbndqdKVVh3DpwTH+wUBJ1HcGxnO6zSsyx2Hva19xbd8w==
+X-Received: by 2002:a17:90b:3b52:b0:1ec:db2a:b946 with SMTP id ot18-20020a17090b3b5200b001ecdb2ab946mr838564pjb.229.1656438899502;
+        Tue, 28 Jun 2022 10:54:59 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id f15-20020a170902ff0f00b0016a84d232a6sm5432810plj.46.2022.06.28.10.54.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 09:32:06 -0700 (PDT)
-From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     michael@amarulasolutions.com,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH v5 12/12] can: slcan: extend the protocol with CAN state info
-Date:   Tue, 28 Jun 2022 18:31:36 +0200
-Message-Id: <20220628163137.413025-13-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220628163137.413025-1-dario.binacchi@amarulasolutions.com>
-References: <20220628163137.413025-1-dario.binacchi@amarulasolutions.com>
+        Tue, 28 Jun 2022 10:54:59 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 10:54:58 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-kernel@vger.kernel.org, x86@kernel.org, dm-devel@redhat.com,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        linux1394-devel@lists.sourceforge.net, io-uring@vger.kernel.org,
+        lvs-devel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        kasan-dev@googlegroups.com, linux-mmc@vger.kernel.org,
+        nvdimm@lists.linux.dev, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, linux-perf-users@vger.kernel.org,
+        linux-raid@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-usb@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        v9fs-developer@lists.sourceforge.net, linux-rdma@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH][next] treewide: uapi: Replace zero-length arrays with
+ flexible-array members
+Message-ID: <202206281009.4332AA33@keescook>
+References: <20220627180432.GA136081@embeddedor>
+ <6bc1e94c-ce1d-a074-7d0c-8dbe6ce22637@iogearbox.net>
+ <20220628004052.GM23621@ziepe.ca>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220628004052.GM23621@ziepe.ca>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,134 +88,89 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-It extends the protocol to receive the adapter CAN state changes
-(warning, busoff, etc.) and forward them to the netdev upper levels.
+On Mon, Jun 27, 2022 at 09:40:52PM -0300, Jason Gunthorpe wrote:
+> On Mon, Jun 27, 2022 at 08:27:37PM +0200, Daniel Borkmann wrote:
+> > [...]
+> > Fyi, this breaks BPF CI:
+> > 
+> > https://github.com/kernel-patches/bpf/runs/7078719372?check_suite_focus=true
+> > 
+> >   [...]
+> >   progs/map_ptr_kern.c:314:26: error: field 'trie_key' with variable sized type 'struct bpf_lpm_trie_key' not at the end of a struct or class is a GNU extension [-Werror,-Wgnu-variable-sized-type-not-at-end]
+> >           struct bpf_lpm_trie_key trie_key;
+> >                                   ^
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+The issue here seems to be a collision between "unknown array size"
+and known sizes:
 
----
+struct bpf_lpm_trie_key {
+        __u32   prefixlen;      /* up to 32 for AF_INET, 128 for AF_INET6 */
+        __u8    data[0];        /* Arbitrary size */
+};
 
-(no changes since v4)
+struct lpm_key {
+	struct bpf_lpm_trie_key trie_key;
+	__u32 data;
+};
 
-Changes in v4:
-- Add description of slc_bump_state() function.
-- Remove check for the 's' character at the beggining of the function.
-  It was already checked by the caller function.
-- Protect decoding against the case the frame len is longer than the
-  received data (add SLC_STATE_FRAME_LEN macro).
-- Set cf to NULL in case of alloc_can_err_skb() failure.
-- Some small changes to make the decoding more readable.
-- Use the character 'b' instead of 'f' for bus-off state.
+This is treating trie_key as a header, which it's not: it's a complete
+structure. :)
 
-Changes in v3:
-- Drop the patch "can: slcan: simplify the device de-allocation".
-- Add the patch "can: netlink: dump bitrate 0 if can_priv::bittiming.bitrate is -1U".
+Perhaps:
 
-Changes in v2:
-- Continue error handling even if no skb can be allocated.
+struct lpm_key {
+        __u32 prefixlen;
+        __u32 data;
+};
 
- drivers/net/can/slcan/slcan-core.c | 74 +++++++++++++++++++++++++++++-
- 1 file changed, 73 insertions(+), 1 deletion(-)
+I don't see anything else trying to include bpf_lpm_trie_key.
 
-diff --git a/drivers/net/can/slcan/slcan-core.c b/drivers/net/can/slcan/slcan-core.c
-index 4269b2267be2..54d29a410ad5 100644
---- a/drivers/net/can/slcan/slcan-core.c
-+++ b/drivers/net/can/slcan/slcan-core.c
-@@ -78,7 +78,11 @@ MODULE_PARM_DESC(maxdev, "Maximum number of slcan interfaces");
- #define SLC_CMD_LEN 1
- #define SLC_SFF_ID_LEN 3
- #define SLC_EFF_ID_LEN 8
--
-+#define SLC_STATE_LEN 1
-+#define SLC_STATE_BE_RXCNT_LEN 3
-+#define SLC_STATE_BE_TXCNT_LEN 3
-+#define SLC_STATE_FRAME_LEN       (1 + SLC_CMD_LEN + SLC_STATE_BE_RXCNT_LEN + \
-+				   SLC_STATE_BE_TXCNT_LEN)
- struct slcan {
- 	struct can_priv         can;
- 	int			magic;
-@@ -254,6 +258,72 @@ static void slc_bump_frame(struct slcan *sl)
- 	dev_kfree_skb(skb);
- }
- 
-+/* A change state frame must contain state info and receive and transmit
-+ * error counters.
-+ *
-+ * Examples:
-+ *
-+ * sb256256 : state bus-off: rx counter 256, tx counter 256
-+ * sa057033 : state active, rx counter 57, tx counter 33
-+ */
-+static void slc_bump_state(struct slcan *sl)
-+{
-+	struct net_device *dev = sl->dev;
-+	struct sk_buff *skb;
-+	struct can_frame *cf;
-+	char *cmd = sl->rbuff;
-+	u32 rxerr, txerr;
-+	enum can_state state, rx_state, tx_state;
-+
-+	switch (cmd[1]) {
-+	case 'a':
-+		state = CAN_STATE_ERROR_ACTIVE;
-+		break;
-+	case 'w':
-+		state = CAN_STATE_ERROR_WARNING;
-+		break;
-+	case 'p':
-+		state = CAN_STATE_ERROR_PASSIVE;
-+		break;
-+	case 'b':
-+		state = CAN_STATE_BUS_OFF;
-+		break;
-+	default:
-+		return;
-+	}
-+
-+	if (state == sl->can.state || sl->rcount < SLC_STATE_FRAME_LEN)
-+		return;
-+
-+	cmd += SLC_STATE_BE_RXCNT_LEN + SLC_CMD_LEN + 1;
-+	cmd[SLC_STATE_BE_TXCNT_LEN] = 0;
-+	if (kstrtou32(cmd, 10, &txerr))
-+		return;
-+
-+	*cmd = 0;
-+	cmd -= SLC_STATE_BE_RXCNT_LEN;
-+	if (kstrtou32(cmd, 10, &rxerr))
-+		return;
-+
-+	skb = alloc_can_err_skb(dev, &cf);
-+	if (skb) {
-+		cf->data[6] = txerr;
-+		cf->data[7] = rxerr;
-+	} else {
-+		cf = NULL;
-+	}
-+
-+	tx_state = txerr >= rxerr ? state : 0;
-+	rx_state = txerr <= rxerr ? state : 0;
-+	can_change_state(dev, cf, tx_state, rx_state);
-+
-+	if (state == CAN_STATE_BUS_OFF)
-+		can_bus_off(dev);
-+
-+	if (skb)
-+		netif_rx(skb);
-+}
-+
- /* An error frame can contain more than one type of error.
-  *
-  * Examples:
-@@ -387,6 +457,8 @@ static void slc_bump(struct slcan *sl)
- 		return slc_bump_frame(sl);
- 	case 'e':
- 		return slc_bump_err(sl);
-+	case 's':
-+		return slc_bump_state(sl);
- 	default:
- 		return;
- 	}
+> 
+> This will break the rdma-core userspace as well, with a similar
+> error:
+> 
+> /usr/bin/clang-13 -DVERBS_DEBUG -Dibverbs_EXPORTS -Iinclude -I/usr/include/libnl3 -I/usr/include/drm -g -O2 -fdebug-prefix-map=/__w/1/s=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -Wmissing-prototypes -Wmissing-declarations -Wwrite-strings -Wformat=2 -Wcast-function-type -Wformat-nonliteral -Wdate-time -Wnested-externs -Wshadow -Wstrict-prototypes -Wold-style-definition -Werror -Wredundant-decls -g -fPIC   -std=gnu11 -MD -MT libibverbs/CMakeFiles/ibverbs.dir/cmd_flow.c.o -MF libibverbs/CMakeFiles/ibverbs.dir/cmd_flow.c.o.d -o libibverbs/CMakeFiles/ibverbs.dir/cmd_flow.c.o   -c ../libibverbs/cmd_flow.c
+> In file included from ../libibverbs/cmd_flow.c:33:
+> In file included from include/infiniband/cmd_write.h:36:
+> In file included from include/infiniband/cmd_ioctl.h:41:
+> In file included from include/infiniband/verbs.h:48:
+> In file included from include/infiniband/verbs_api.h:66:
+> In file included from include/infiniband/ib_user_ioctl_verbs.h:38:
+> include/rdma/ib_user_verbs.h:436:34: error: field 'base' with variable sized type 'struct ib_uverbs_create_cq_resp' not at the end of a struct or class is a GNU extension [-Werror,-Wgnu-variable-sized-type-not-at-end]
+>         struct ib_uverbs_create_cq_resp base;
+>                                         ^
+> include/rdma/ib_user_verbs.h:644:34: error: field 'base' with variable sized type 'struct ib_uverbs_create_qp_resp' not at the end of a struct or class is a GNU extension [-Werror,-Wgnu-variable-sized-type-not-at-end]
+>         struct ib_uverbs_create_qp_resp base;
+
+This looks very similar, a struct of unknown size is being treated as a
+header struct:
+
+struct ib_uverbs_create_cq_resp {
+        __u32 cq_handle;
+        __u32 cqe;
+        __aligned_u64 driver_data[0];
+};
+
+struct ib_uverbs_ex_create_cq_resp {
+        struct ib_uverbs_create_cq_resp base;
+        __u32 comp_mask;
+        __u32 response_length;
+};
+
+And it only gets used here:
+
+                DECLARE_UVERBS_WRITE(IB_USER_VERBS_CMD_CREATE_CQ,
+                                     ib_uverbs_create_cq,
+                                     UAPI_DEF_WRITE_UDATA_IO(
+                                             struct ib_uverbs_create_cq,
+                                             struct ib_uverbs_create_cq_resp),
+                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                     UAPI_DEF_METHOD_NEEDS_FN(create_cq)),
+
+which must also be assuming it's a header. So probably better to just
+drop the driver_data field? I don't see anything using it (that I can
+find) besides as a sanity-check that the field exists and is at the end
+of the struct.
+
 -- 
-2.32.0
-
+Kees Cook
