@@ -2,168 +2,172 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B273655E1B9
-	for <lists+linux-can@lfdr.de>; Tue, 28 Jun 2022 15:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE0A55C6F9
+	for <lists+linux-can@lfdr.de>; Tue, 28 Jun 2022 14:53:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240825AbiF0WyV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 27 Jun 2022 18:54:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59460 "EHLO
+        id S241149AbiF1Ak7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 27 Jun 2022 20:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236092AbiF0WyU (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 27 Jun 2022 18:54:20 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2433257
-        for <linux-can@vger.kernel.org>; Mon, 27 Jun 2022 15:54:19 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id y18so11193894iof.2
-        for <linux-can@vger.kernel.org>; Mon, 27 Jun 2022 15:54:19 -0700 (PDT)
+        with ESMTP id S241604AbiF1Ak6 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 27 Jun 2022 20:40:58 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899B7BC99
+        for <linux-can@vger.kernel.org>; Mon, 27 Jun 2022 17:40:55 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id v6so8609683qkh.2
+        for <linux-can@vger.kernel.org>; Mon, 27 Jun 2022 17:40:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=cyogCsoy11kmMpciXZ21N3veIA+ouiJO53HdSyXPKqo=;
-        b=IzvrakVgQ5Pe6+VmhlCD7JceS4ayPXMrbQsxfGJ67bMrXlfOgxC8PlSEZJveOg/dzw
-         mUJqxRQaCL/2y3CiLPtp9FQDWNn/3A5Ln5kUxdk0FKUgGEx5i4OxYhLLaGuQErtuasSA
-         5X+hhibkOSuiijfgSiRTnpu3Y6OHl2YJO4Bvw=
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=nrCjPCGAs4MTUiLBt7Ijf/MJPuIyH6lM8yqPhdyhJD8=;
+        b=QGfGz2XeyaJLxS6IycR7jteyzbs2f9vu4fQQcftWhoNW5sUtbyuMKwRS5XXshn3Hg2
+         yZubOZXW72TGsXoMKBc9lhqncUYMSH0Z6bymz383cNPRRHeF7rKM5RXMNm4Eaw5tsGTg
+         BQX0bHWNlf6m2F5J4oWG32dxQT2CTBmnGX6tl+1lipYgts8fc/1uUmHwN5t3zZzoA6Qn
+         DTeDwoNVOxWo0hy32OR9hFE/UO0/97qh5eo+5ewqu/iIRVMFQ1AIctopaFBuZOm9BPLs
+         HAx/pGMXLvvVO6Cb9sesF2T5smUMb44u7gsx78px69APS8fFzY4PmSgo/WM3D328ZbRr
+         X/FA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=cyogCsoy11kmMpciXZ21N3veIA+ouiJO53HdSyXPKqo=;
-        b=c/Hw4bvVmiU0Zai7FBF9bmJCinzKSJC4dOdZGcnfim5o9pZZU/CazsQbYAvWE+m+rD
-         JPzqmMBmmr0Jem+WhukdeUndi1M2YdTEV7XSMvQX036F0V3KKGPUm3a1JovhY/qLTThv
-         9LX8U4K4t7+MfBcj1tQP4zb/1XcgIe4IlQD7Txw8I2HWiUzf1QrsmCatl+RZ9YxcxPsV
-         3AA9+jdpm53HKrQ+JnXZePk0HdOJt0RTb2jrSniDECwmz3FDrc6ABT9D01xNxDUGAdtg
-         faUyVdz2cqOJIpklMWTcHTqgpZDwM9D0OnkAToTqmOzl6zViX8ueiwF0QMrsmRNh9bqi
-         kPBg==
-X-Gm-Message-State: AJIora/47xkYWrUf+N6x4Wmd+X8ISbWxoToJLbuidmVUf8BbIIgZ5stL
-        73lBLzFMNhdRQTS1XZfsTSZYvA==
-X-Google-Smtp-Source: AGRyM1sk1urSpMzR/rHfszWoj3gyWAacu9mBasm+cc2mgbT7otUdULgWvA/yaPE8ZPNWAFJ4rssVVg==
-X-Received: by 2002:a02:8609:0:b0:330:e92c:2cc4 with SMTP id e9-20020a028609000000b00330e92c2cc4mr9024050jai.95.1656370458977;
-        Mon, 27 Jun 2022 15:54:18 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id b17-20020a92c851000000b002d93dbbee35sm5035081ilq.9.2022.06.27.15.54.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 15:54:18 -0700 (PDT)
-Subject: Re: [PATCH v3 1/2] drivers: usb/core/urb: Add URB_FREE_COHERENT
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Hongren Zenithal Zheng <i@zenithal.me>
-Cc:     Rhett Aultman <rhett.aultman@samsara.com>,
-        linux-usb@vger.kernel.org, linux-can <linux-can@vger.kernel.org>,
-        Oliver Neukum <oneukum@suse.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220609204714.2715188-1-rhett.aultman@samsara.com>
- <20220610213335.3077375-1-rhett.aultman@samsara.com>
- <20220610213335.3077375-2-rhett.aultman@samsara.com> <YrSjRvb8rIIayGlg@Sun>
- <143b863d-c86b-6678-44e6-38799391fa36@linuxfoundation.org>
- <YrXNltWSYbplstPx@rowland.harvard.edu>
- <aaf64d6c-1893-67ed-013e-67d21c8be152@linuxfoundation.org>
- <YrX9SBpxp1E2cOyI@rowland.harvard.edu>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <e1c416bc-0239-6070-c516-c98332a6491d@linuxfoundation.org>
-Date:   Mon, 27 Jun 2022 16:54:17 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=nrCjPCGAs4MTUiLBt7Ijf/MJPuIyH6lM8yqPhdyhJD8=;
+        b=f3PJM0oJgt0bbEj90BJznfiiIc4Y59Wmq6E3DFCJob0UhQxrqb0+4gTxIMOeB6SFCG
+         gsVM48RWvw19oaT2P/TW1n+JPfTQZfniGR3EhzaHpzgD9d9+LwFE5QTKv5dao+BYbV+N
+         NRp2K67ISOo3izu+UkT1rm91YEjcIfyvtuCAjXSh6qkfgJ8+dT0va8zsiNmOkJ8bhAVe
+         0kzAxSjKyVg4N8WhsR+ifzzFCY8FsA07NsAkJrp9GKQ0s1Bte5MqOw5VIF0Z/9ehv572
+         Ers/4niYGX01/a3AJmKQ6wBGguLKQQ2vlwThlASlp2UNEvD5qYJvCFL+CSOBveCvZOGO
+         4YJA==
+X-Gm-Message-State: AJIora+PgUPuFMZCeBmEbbdMgoczQIYhupBB9dc+/hoNAPCHIRBRqBFf
+        VzWEnFOJdEg1GOgOwuXlycyQyQ==
+X-Google-Smtp-Source: AGRyM1vTCFcIzhygOqc0dfz0XQz9dolsiNFu6n34Zw7Kl9e9LRh00tD6U1uaxZUOgaZBY5Ks0qTgkA==
+X-Received: by 2002:a05:620a:1450:b0:6af:1999:5f4c with SMTP id i16-20020a05620a145000b006af19995f4cmr7538467qkl.301.1656376854703;
+        Mon, 27 Jun 2022 17:40:54 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id x11-20020a05620a448b00b006a768c699adsm10335849qkp.125.2022.06.27.17.40.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 17:40:53 -0700 (PDT)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1o5zHg-002iu4-9Z; Mon, 27 Jun 2022 21:40:52 -0300
+Date:   Mon, 27 Jun 2022 21:40:52 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org, x86@kernel.org, dm-devel@redhat.com,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        linux1394-devel@lists.sourceforge.net, io-uring@vger.kernel.org,
+        lvs-devel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        kasan-dev@googlegroups.com, linux-mmc@vger.kernel.org,
+        nvdimm@lists.linux.dev, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, linux-perf-users@vger.kernel.org,
+        linux-raid@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-usb@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        v9fs-developer@lists.sourceforge.net, linux-rdma@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH][next] treewide: uapi: Replace zero-length arrays with
+ flexible-array members
+Message-ID: <20220628004052.GM23621@ziepe.ca>
+References: <20220627180432.GA136081@embeddedor>
+ <6bc1e94c-ce1d-a074-7d0c-8dbe6ce22637@iogearbox.net>
 MIME-Version: 1.0
-In-Reply-To: <YrX9SBpxp1E2cOyI@rowland.harvard.edu>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6bc1e94c-ce1d-a074-7d0c-8dbe6ce22637@iogearbox.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 6/24/22 12:07 PM, Alan Stern wrote:
-> On Fri, Jun 24, 2022 at 10:31:06AM -0600, Shuah Khan wrote:
->> On 6/24/22 8:43 AM, Alan Stern wrote:
->>>> It doesn't sound like a there is a compelling reason other than
->>>> "it would be nice to keep the flag values in numerical order".
->>>>
->>>> I would not recommend this option. I am not seeing any value to adding
->>>> change URB_* to USBIP_FLAGS_* layer without some serious techinical
->>>> concerns.
->>>>
->>>>>
->>>>> Another way is to use 0x0400 for FREE_COHERENT.
->>>>> usbip will not take care of this bit as
->>>>> it would be masked.
->>>>>
->>>>
->>>> I would go with this option adding a clear comment with link to this
->>>> discussion.
->>>>
->>>>> Cc Shuah Khan here since she is the maintainer
->>>>> on usbip.
->>>>>
->>>>
->>>> Thank you adding me to the discussion.
->>>
->>> I can see this causing more problems in the future.  There's no hint in
->>> include/linux/usb.h that any of the values it defines are part of a user
->>> API.  If they are, they should be moved to include/uapi/linux/usb/.
->>>
->>
->> Please elaborate on more problems in the future.
+On Mon, Jun 27, 2022 at 08:27:37PM +0200, Daniel Borkmann wrote:
+> On 6/27/22 8:04 PM, Gustavo A. R. Silva wrote:
+> > There is a regular need in the kernel to provide a way to declare
+> > having a dynamically sized set of trailing elements in a structure.
+> > Kernel code should always use “flexible array members”[1] for these
+> > cases. The older style of one-element or zero-length arrays should
+> > no longer be used[2].
+> > 
+> > This code was transformed with the help of Coccinelle:
+> > (linux-5.19-rc2$ spatch --jobs $(getconf _NPROCESSORS_ONLN) --sp-file script.cocci --include-headers --dir . > output.patch)
+> > 
+> > @@
+> > identifier S, member, array;
+> > type T1, T2;
+> > @@
+> > 
+> > struct S {
+> >    ...
+> >    T1 member;
+> >    T2 array[
+> > - 0
+> >    ];
+> > };
+> > 
+> > -fstrict-flex-arrays=3 is coming and we need to land these changes
+> > to prevent issues like these in the short future:
+> > 
+> > ../fs/minix/dir.c:337:3: warning: 'strcpy' will always overflow; destination buffer has size 0,
+> > but the source string has length 2 (including NUL byte) [-Wfortify-source]
+> > 		strcpy(de3->name, ".");
+> > 		^
+> > 
+> > Since these are all [0] to [] changes, the risk to UAPI is nearly zero. If
+> > this breaks anything, we can use a union with a new member name.
+> > 
+> > [1] https://en.wikipedia.org/wiki/Flexible_array_member
+> > [2] https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-length-and-one-element-arrays
+> > 
+> > Link: https://github.com/KSPP/linux/issues/78
+> > Build-tested-by: https://lore.kernel.org/lkml/62b675ec.wKX6AOZ6cbE71vtF%25lkp@intel.com/
+> > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> > ---
+> > Hi all!
+> > 
+> > JFYI: I'm adding this to my -next tree. :)
 > 
-> In the future people will want to make other changes to
-> include/linux/usb.h and they will not be aware that those changes will
-> adversely affect usbip, because there is no documentation saying that
-> the values defined in usb.h are part of a user API.  That will be a
-> problem, because those changes may be serious and important ones, not
-> just decorative or stylistic as in this case.
+> Fyi, this breaks BPF CI:
 > 
-
-How often do these values change based on our past experience with these
-fields?
-
->>> In general, if a user program depends on kernel details that are not
->>> designed to be part of a user API, you should expect that the program
->>> will sometimes break from one kernel version to another.
->>>
->>> Yes, I know Linus insists that kernel changes should not cause
->>> regressions in userspace, but the line has to be drawn somewhere.
->>> Otherwise the kernel could never change at all.
->>>
->>
->> I have had to change the usbip sysfs interface api in the past to
->> address security bugs related to information leaks. I am not saying
->> no. I am asking if there is a good reason to do this. So far I haven't
->> heard one.
+> https://github.com/kernel-patches/bpf/runs/7078719372?check_suite_focus=true
 > 
-> I agree with Hongren that values defined in include/linux/ should not be
-> part of a user API.  There are two choices:
-> 
+>   [...]
+>   progs/map_ptr_kern.c:314:26: error: field 'trie_key' with variable sized type 'struct bpf_lpm_trie_key' not at the end of a struct or class is a GNU extension [-Werror,-Wgnu-variable-sized-type-not-at-end]
+>           struct bpf_lpm_trie_key trie_key;
+>                                   ^
 
-I agree with this in general. I don't think this is an explicit decision
-to make them part of API. It is a consequence of simply copying the
-transfer_flags. I am with you both on not being able to recognize the
-impact until as this is rather obscure usage hidden away in the packets.
-These defines aren't directly referenced.
+This will break the rdma-core userspace as well, with a similar
+error:
 
-> 	Move the definitions into include/uapi/linux/, or
-> 
+/usr/bin/clang-13 -DVERBS_DEBUG -Dibverbs_EXPORTS -Iinclude -I/usr/include/libnl3 -I/usr/include/drm -g -O2 -fdebug-prefix-map=/__w/1/s=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -Wmissing-prototypes -Wmissing-declarations -Wwrite-strings -Wformat=2 -Wcast-function-type -Wformat-nonliteral -Wdate-time -Wnested-externs -Wshadow -Wstrict-prototypes -Wold-style-definition -Werror -Wredundant-decls -g -fPIC   -std=gnu11 -MD -MT libibverbs/CMakeFiles/ibverbs.dir/cmd_flow.c.o -MF libibverbs/CMakeFiles/ibverbs.dir/cmd_flow.c.o.d -o libibverbs/CMakeFiles/ibverbs.dir/cmd_flow.c.o   -c ../libibverbs/cmd_flow.c
+In file included from ../libibverbs/cmd_flow.c:33:
+In file included from include/infiniband/cmd_write.h:36:
+In file included from include/infiniband/cmd_ioctl.h:41:
+In file included from include/infiniband/verbs.h:48:
+In file included from include/infiniband/verbs_api.h:66:
+In file included from include/infiniband/ib_user_ioctl_verbs.h:38:
+include/rdma/ib_user_verbs.h:436:34: error: field 'base' with variable sized type 'struct ib_uverbs_create_cq_resp' not at the end of a struct or class is a GNU extension [-Werror,-Wgnu-variable-sized-type-not-at-end]
+        struct ib_uverbs_create_cq_resp base;
+                                        ^
+include/rdma/ib_user_verbs.h:644:34: error: field 'base' with variable sized type 'struct ib_uverbs_create_qp_resp' not at the end of a struct or class is a GNU extension [-Werror,-Wgnu-variable-sized-type-not-at-end]
+        struct ib_uverbs_create_qp_resp base;
 
-Wouldn't this be easier way to handle the change? With this option
-the uapi will be well documented.
+Which is why I gave up trying to change these..
 
-> 	Add code to translate the values between the numbers used in
-> 	userspace and the numbers used in the kernel.  (This is what
-> 	was done for urb->transfer_flags in devio.c:proc_do_submiturb()
-> 	near line 1862.)
-> 
+Though maybe we could just switch off -Wgnu-variable-sized-type-not-at-end  during configuration ?
 
-I looked at the code and looks simple enough. I am okay going this route
-if we see issues with the option 1.
-
-thanks,
--- Shuah
+Jason
