@@ -2,172 +2,168 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BE0A55C6F9
-	for <lists+linux-can@lfdr.de>; Tue, 28 Jun 2022 14:53:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E248055D02C
+	for <lists+linux-can@lfdr.de>; Tue, 28 Jun 2022 15:07:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241149AbiF1Ak7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 27 Jun 2022 20:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38642 "EHLO
+        id S233937AbiF1A4R convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Mon, 27 Jun 2022 20:56:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241604AbiF1Ak6 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 27 Jun 2022 20:40:58 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899B7BC99
-        for <linux-can@vger.kernel.org>; Mon, 27 Jun 2022 17:40:55 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id v6so8609683qkh.2
-        for <linux-can@vger.kernel.org>; Mon, 27 Jun 2022 17:40:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=nrCjPCGAs4MTUiLBt7Ijf/MJPuIyH6lM8yqPhdyhJD8=;
-        b=QGfGz2XeyaJLxS6IycR7jteyzbs2f9vu4fQQcftWhoNW5sUtbyuMKwRS5XXshn3Hg2
-         yZubOZXW72TGsXoMKBc9lhqncUYMSH0Z6bymz383cNPRRHeF7rKM5RXMNm4Eaw5tsGTg
-         BQX0bHWNlf6m2F5J4oWG32dxQT2CTBmnGX6tl+1lipYgts8fc/1uUmHwN5t3zZzoA6Qn
-         DTeDwoNVOxWo0hy32OR9hFE/UO0/97qh5eo+5ewqu/iIRVMFQ1AIctopaFBuZOm9BPLs
-         HAx/pGMXLvvVO6Cb9sesF2T5smUMb44u7gsx78px69APS8fFzY4PmSgo/WM3D328ZbRr
-         X/FA==
+        with ESMTP id S242198AbiF1A4R (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 27 Jun 2022 20:56:17 -0400
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684F71D0DC
+        for <linux-can@vger.kernel.org>; Mon, 27 Jun 2022 17:56:13 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id p136so13421275ybg.4
+        for <linux-can@vger.kernel.org>; Mon, 27 Jun 2022 17:56:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=nrCjPCGAs4MTUiLBt7Ijf/MJPuIyH6lM8yqPhdyhJD8=;
-        b=f3PJM0oJgt0bbEj90BJznfiiIc4Y59Wmq6E3DFCJob0UhQxrqb0+4gTxIMOeB6SFCG
-         gsVM48RWvw19oaT2P/TW1n+JPfTQZfniGR3EhzaHpzgD9d9+LwFE5QTKv5dao+BYbV+N
-         NRp2K67ISOo3izu+UkT1rm91YEjcIfyvtuCAjXSh6qkfgJ8+dT0va8zsiNmOkJ8bhAVe
-         0kzAxSjKyVg4N8WhsR+ifzzFCY8FsA07NsAkJrp9GKQ0s1Bte5MqOw5VIF0Z/9ehv572
-         Ers/4niYGX01/a3AJmKQ6wBGguLKQQ2vlwThlASlp2UNEvD5qYJvCFL+CSOBveCvZOGO
-         4YJA==
-X-Gm-Message-State: AJIora+PgUPuFMZCeBmEbbdMgoczQIYhupBB9dc+/hoNAPCHIRBRqBFf
-        VzWEnFOJdEg1GOgOwuXlycyQyQ==
-X-Google-Smtp-Source: AGRyM1vTCFcIzhygOqc0dfz0XQz9dolsiNFu6n34Zw7Kl9e9LRh00tD6U1uaxZUOgaZBY5Ks0qTgkA==
-X-Received: by 2002:a05:620a:1450:b0:6af:1999:5f4c with SMTP id i16-20020a05620a145000b006af19995f4cmr7538467qkl.301.1656376854703;
-        Mon, 27 Jun 2022 17:40:54 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id x11-20020a05620a448b00b006a768c699adsm10335849qkp.125.2022.06.27.17.40.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 17:40:53 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1o5zHg-002iu4-9Z; Mon, 27 Jun 2022 21:40:52 -0300
-Date:   Mon, 27 Jun 2022 21:40:52 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        linux-kernel@vger.kernel.org, x86@kernel.org, dm-devel@redhat.com,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        linux1394-devel@lists.sourceforge.net, io-uring@vger.kernel.org,
-        lvs-devel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        kasan-dev@googlegroups.com, linux-mmc@vger.kernel.org,
-        nvdimm@lists.linux.dev, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, linux-perf-users@vger.kernel.org,
-        linux-raid@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-usb@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        v9fs-developer@lists.sourceforge.net, linux-rdma@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] treewide: uapi: Replace zero-length arrays with
- flexible-array members
-Message-ID: <20220628004052.GM23621@ziepe.ca>
-References: <20220627180432.GA136081@embeddedor>
- <6bc1e94c-ce1d-a074-7d0c-8dbe6ce22637@iogearbox.net>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=KxIJGsuZXlSHNGn8w8kRs2clSvA9PEMum+t1Bb1hlxw=;
+        b=rIY0+O96KJMKGFiXxny1Pan0xSUMkgrgrhrBXXNtfQkRpeJbf/Vs5mh9uH8rrZawzE
+         YV8ntjPiGSvI5qkFSWSBjEjn4HUOcHYq9TycPUz3kHJEKr5fS4eWUFhV0m1GxtkMV64N
+         4zSwWDROmaBVnj1pN5ZvQjS85ArSt47nDV9Vyiby3oOOoqUDkBs4J3C3JAy9sbVNt9gi
+         r+egTTsylU9RxVNvnlkI8h3DNsduAk2MxcXUmRmpMf17yOuUOfUayo1kzer+cP3Xi2tv
+         j5OMYxCEAEeCan5SapQqSqsb+otrJMo0uyH2ZAUZ7i5jVatuYd4uqredWIOSNnQzSesH
+         pr/g==
+X-Gm-Message-State: AJIora8ZIXQFUBGzA3941Y11/9AY74Arz4nFkvnHi3e2+A9r8oE3rtH2
+        t1ttuWXUsk5QghybnACeTBtQ/5OLNoZzlg6phOs=
+X-Google-Smtp-Source: AGRyM1tvR5GrOc3SK0oZOs+JTsiUInUqhXU2B7pHBVuXm5+4vlENpWHoC32NFvs0o2X8b01eVzXEhzszodK9s+GSbic=
+X-Received: by 2002:a5b:b52:0:b0:669:b5a0:ac98 with SMTP id
+ b18-20020a5b0b52000000b00669b5a0ac98mr17618894ybr.142.1656377772610; Mon, 27
+ Jun 2022 17:56:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6bc1e94c-ce1d-a074-7d0c-8dbe6ce22637@iogearbox.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220626075317.746535-1-mailhol.vincent@wanadoo.fr>
+ <20220626090744.pycu3katdt6vir2l@pengutronix.de> <CAMZ6RqLVKMznm_n4j079rcYLjhj8QjmeM3=bYUeXm_rozmQNVg@mail.gmail.com>
+ <20220626105525.va44sseksk3xej7j@pengutronix.de> <CAMZ6Rq+NbmOA89DjA=e_EBJXaDm0T69vbFrjKD+arZivhVqEdA@mail.gmail.com>
+ <20220626151506.bzg7wqua572zswag@pengutronix.de>
+In-Reply-To: <20220626151506.bzg7wqua572zswag@pengutronix.de>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Tue, 28 Jun 2022 09:56:03 +0900
+Message-ID: <CAMZ6RqK+BUWd=4+vga5se6obKJgYCwZp7Emc7UAQbtQ1n4z1Kw@mail.gmail.com>
+Subject: Re: [RFC PATCH] can-roundtrip-stats: a tool to benchmark transmission time
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org,
+        Rhett Aultman <rhett.aultman@samsara.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 08:27:37PM +0200, Daniel Borkmann wrote:
-> On 6/27/22 8:04 PM, Gustavo A. R. Silva wrote:
-> > There is a regular need in the kernel to provide a way to declare
-> > having a dynamically sized set of trailing elements in a structure.
-> > Kernel code should always use “flexible array members”[1] for these
-> > cases. The older style of one-element or zero-length arrays should
-> > no longer be used[2].
-> > 
-> > This code was transformed with the help of Coccinelle:
-> > (linux-5.19-rc2$ spatch --jobs $(getconf _NPROCESSORS_ONLN) --sp-file script.cocci --include-headers --dir . > output.patch)
-> > 
-> > @@
-> > identifier S, member, array;
-> > type T1, T2;
-> > @@
-> > 
-> > struct S {
-> >    ...
-> >    T1 member;
-> >    T2 array[
-> > - 0
-> >    ];
-> > };
-> > 
-> > -fstrict-flex-arrays=3 is coming and we need to land these changes
-> > to prevent issues like these in the short future:
-> > 
-> > ../fs/minix/dir.c:337:3: warning: 'strcpy' will always overflow; destination buffer has size 0,
-> > but the source string has length 2 (including NUL byte) [-Wfortify-source]
-> > 		strcpy(de3->name, ".");
-> > 		^
-> > 
-> > Since these are all [0] to [] changes, the risk to UAPI is nearly zero. If
-> > this breaks anything, we can use a union with a new member name.
-> > 
-> > [1] https://en.wikipedia.org/wiki/Flexible_array_member
-> > [2] https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-length-and-one-element-arrays
-> > 
-> > Link: https://github.com/KSPP/linux/issues/78
-> > Build-tested-by: https://lore.kernel.org/lkml/62b675ec.wKX6AOZ6cbE71vtF%25lkp@intel.com/
-> > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> > ---
-> > Hi all!
-> > 
-> > JFYI: I'm adding this to my -next tree. :)
-> 
-> Fyi, this breaks BPF CI:
-> 
-> https://github.com/kernel-patches/bpf/runs/7078719372?check_suite_focus=true
-> 
->   [...]
->   progs/map_ptr_kern.c:314:26: error: field 'trie_key' with variable sized type 'struct bpf_lpm_trie_key' not at the end of a struct or class is a GNU extension [-Werror,-Wgnu-variable-sized-type-not-at-end]
->           struct bpf_lpm_trie_key trie_key;
->                                   ^
++CC: Richard Cochran <richardcochran@gmail.com>
 
-This will break the rdma-core userspace as well, with a similar
-error:
+On Mon. 27 Jun. 2022 at 00:34, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> On 26.06.2022 22:40:13, Vincent MAILHOL wrote:
+> > > > > I'm currently playing around with hardware timestmaps in the mcp251xfd
+> > > > > driver and the other day I stumbled over commit 741b91f1b0ea ("can: dev:
+> > > > > can_put_echo_skb(): add software tx timestamps") and I was thinking
+> > > > > which tool you're using to test this. :)
+> > > > >
+> > > > > Once the hardware timestamps are running stable, this is exactly the
+> > > > > tool I need! Thanks for sharing this.
+> > > >
+> > > > Does the mcp251xfd use the host clock to do its hardware timestamp?
+> > >
+> > > It uses an external 40 MHz oscillator, usually each device has it's own.
+> > >
+> > > > (Not sure how SPI hardware works and if they have their own quartz or
+> > > > if they share it with the host system). If it is indeed the same clock
+> > > > you can have even more precise statistics.
+> > >
+> > > No, the device clock is not shared with the host system and thus drift
+> > > apart. But you can synchronize the device's clock against the system
+> > > clock with phc2sys of linuxptp. As soon as the code is stable I'll send
+> > > the patches around.
+> >
+> > This sounds really exciting. I also wanted to play with linuxptp but
+> > never had time to start.
+>
+> I started with adding the basic callback for /dev/ptpX to show up and
+> "work", i.e. not crash :). What probably most CAN devices lack is the
+> possibility to fine tune the oscillator, but I figured out, there is a
+> ptp clock multiplexer in the kernel that does the fine tuning in
+> software. I ported that code and now I can run phc2sys on the mcp251xfd.
+>
+> What does phc2sys do? It's used to synch a PTP Clock to the Linux system
+> clock or vice versa. The only sensible use case of this all is to sync
+> from the Linux system clock to the mcp251xfd device clock. This way the
+> hardware timestamps are within µs of the Linux system clock.
+>
+> > With the device clock synchronized, you can have decent timestamping
+> > between different hardware (potentially of different brands).
+>
+> So far I only synchronize the Linux system clock into the mcp251xfd
+> clock. I could synchronize a 2nd CAN adapter implementing a /dev/ptp on
+> the same system, too.
+>
+> > The drawback is that you would lose a bit of precision: the hardware
+> > timestamp have an accuracy around 1 microsecond. After using PTP, I
+> > would expect the precision to degrade to roughly 100 microsecond
+> > (which is still way better than what software timestamping can offer).
+>
+> Synchronizing time via CAN between different systems would be the next
+> logical step. But linuxptp needs code to map the PTP messages to CAN
+> frames. This will not work with raw CAN, as the messages are too long.
+> Maybe CAN-FD or ISO-TP can help. But I haven't looked into this.
 
-/usr/bin/clang-13 -DVERBS_DEBUG -Dibverbs_EXPORTS -Iinclude -I/usr/include/libnl3 -I/usr/include/drm -g -O2 -fdebug-prefix-map=/__w/1/s=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -Wmissing-prototypes -Wmissing-declarations -Wwrite-strings -Wformat=2 -Wcast-function-type -Wformat-nonliteral -Wdate-time -Wnested-externs -Wshadow -Wstrict-prototypes -Wold-style-definition -Werror -Wredundant-decls -g -fPIC   -std=gnu11 -MD -MT libibverbs/CMakeFiles/ibverbs.dir/cmd_flow.c.o -MF libibverbs/CMakeFiles/ibverbs.dir/cmd_flow.c.o.d -o libibverbs/CMakeFiles/ibverbs.dir/cmd_flow.c.o   -c ../libibverbs/cmd_flow.c
-In file included from ../libibverbs/cmd_flow.c:33:
-In file included from include/infiniband/cmd_write.h:36:
-In file included from include/infiniband/cmd_ioctl.h:41:
-In file included from include/infiniband/verbs.h:48:
-In file included from include/infiniband/verbs_api.h:66:
-In file included from include/infiniband/ib_user_ioctl_verbs.h:38:
-include/rdma/ib_user_verbs.h:436:34: error: field 'base' with variable sized type 'struct ib_uverbs_create_cq_resp' not at the end of a struct or class is a GNU extension [-Werror,-Wgnu-variable-sized-type-not-at-end]
-        struct ib_uverbs_create_cq_resp base;
-                                        ^
-include/rdma/ib_user_verbs.h:644:34: error: field 'base' with variable sized type 'struct ib_uverbs_create_qp_resp' not at the end of a struct or class is a GNU extension [-Werror,-Wgnu-variable-sized-type-not-at-end]
-        struct ib_uverbs_create_qp_resp base;
+This is already a solved problem. I suggest having a look at the
+existing standards.
 
-Which is why I gave up trying to change these..
+My top recommendation would be AUTOSAR Classic Platform’s Time
+Synchronization over CAN:
+https://www.autosar.org/fileadmin/user_upload/standards/classic/21-11/AUTOSAR_SWS_TimeSyncOverCAN.pdf
+(I haven't studied it so I am not yet able to explain).
 
-Though maybe we could just switch off -Wgnu-variable-sized-type-not-at-end  during configuration ?
+Another candidate would be PTP over DeviceNET over CAN from Annex G of
+IEEE 1588, c.f.
+https://lore.kernel.org/all/20210112021420.GA18703@hoboy.vegasvil.org/
+(I never used DeviceNET and never read IEEE 1588, I just recalled this
+message from Richard)
 
-Jason
+> > > What does tcpdump show on a Ethernet if you enable TX timestamps?
+> >
+> > I never went so far.
+> >
+> > For tcpdump, the interested flags are:
+> >   * -J (a.k.a. --list-time-stamp-types)
+> >   * -j tstamp_type (a.k.a. --time-stamp-type=tstamp_type)
+> >
+> > But I never went so far to make them work. If you want to try it,
+> > first be sure that the driver of your network interface calls
+> > skb_tx_timestamp() in its xmit() function.
+>
+> I think some interfaces on our compile cluster support PTP.
+>
+> > > > I also guess there is no official support but then,
+> > > > I am wondering how hard it would be to hack the error queues to expose
+> > > > them to the privileged processes.
+> > >
+> > > Maybe there's general interest of pushing error queue data via packet
+> > > socket, too. As this is not a CAN specific issue.
+> >
+> > I think so. This is just a niche topic, so we need to find the code
+> > snippet which will put some light on this. I am convinced that some
+> > solution should exist, just do not have enough time to investigate.
+> > Studying the source code of tcpdump is probably one of the best idea I
+> > can think of right now.
+>
+> sound like the right direction
+
+Another interesting tools for network interface timestamps is:
+        ethtool -T
+
+But I guess you already started to use it in mcp251xfd because you
+will need it to advertise the PTP hardware clock.
+
+
+Yours sincerely,
+Vincent Mailhol
