@@ -2,108 +2,76 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5FA055ECDA
-	for <lists+linux-can@lfdr.de>; Tue, 28 Jun 2022 20:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D68855FFB2
+	for <lists+linux-can@lfdr.de>; Wed, 29 Jun 2022 14:19:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbiF1SoL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 28 Jun 2022 14:44:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44794 "EHLO
+        id S233418AbiF2MQe (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 29 Jun 2022 08:16:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232448AbiF1SoJ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 28 Jun 2022 14:44:09 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E2623BD5
-        for <linux-can@vger.kernel.org>; Tue, 28 Jun 2022 11:44:06 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id q4so21351679qvq.8
-        for <linux-can@vger.kernel.org>; Tue, 28 Jun 2022 11:44:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=srd0vxfduo9pXREXizXvQ1Gwi/kEACFP1rdXcY0Aglg=;
-        b=QDfPPT0fYl+zbzIvYII9znFGb4s02ZWc7rdJXgoVlQii3pb6MPHXUbo2NQcshGpobE
-         dWlWXPBgu4AcM4BoWih7Z1Nr6ImLeGEz2FZoCblM4qyf8MsycIzs6ej4nXX7nwNpGP6Q
-         WS2wAoLm7tunOmWFHsCTXENR5aJ2dwangh3Hiy+KajaZLCQ31/GJ39i5LG+HlW0f/4Yp
-         DzCT3gMR3JvAVHruRt3NJZXTCo87e7XIf3RRiCTD40KLgGYQ8Oy9U016RK3fPhyNykEI
-         VcI+7whSObzV9gDqoR9iwpi6V1hWpQPbHnX1dl7fE5ec/owdsM9r7W03JXKpNXxaLmSi
-         lJng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=srd0vxfduo9pXREXizXvQ1Gwi/kEACFP1rdXcY0Aglg=;
-        b=rVhuXjKqL2Y0q1s74Uoj8qLPp9YUNvt2j6es/hyBlzku9BjEAllOWj2IxvJrBWZ/aX
-         PWEpo6433YktH+x9kA2iBKwFTPPV5N6enrjrG3HA9KWvdGATW2lx35ZjHdubAgg8K3oE
-         Ed8EYBLCMh9zGfHQ4jfVsampDmvaVdxeXfoEmr/ZfH1Ps+2W4N+k/033ks/FBQzdEZYN
-         8+8nZGjYkq5P3dW3GcUtYu9awdgq5ANr9KQupACXa0NoRWf/rII9qg0hlcHHUi73SEEX
-         D5O8BSYL7Qcb5zjkakRTxLRE4SINklw3YlkEnrJXnOZBA9shC47aOANlyEMPSWvlkZON
-         h0Yg==
-X-Gm-Message-State: AJIora/X/UP0o11NFySHebQ4Mz6tflk9wUIOrKfROY4Lrch7iqs3ac7n
-        PBtJgEDohurmeV8fGjGbsKjq4Q==
-X-Google-Smtp-Source: AGRyM1uBRJ6m7mmrK5Ju1JW1doBHC+UzIgAGX/xwYqaVx3XSmh4juFCDP3TjiYp7BZ5iZ3elpoeXxg==
-X-Received: by 2002:a05:622a:7:b0:31b:74bd:1597 with SMTP id x7-20020a05622a000700b0031b74bd1597mr6494688qtw.677.1656441846052;
-        Tue, 28 Jun 2022 11:44:06 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id h9-20020ac85149000000b003050bd1f7c9sm9708477qtn.76.2022.06.28.11.44.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 11:44:05 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1o6GBw-0035y2-Fs; Tue, 28 Jun 2022 15:44:04 -0300
-Date:   Tue, 28 Jun 2022 15:44:04 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-kernel@vger.kernel.org, x86@kernel.org, dm-devel@redhat.com,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        linux1394-devel@lists.sourceforge.net, io-uring@vger.kernel.org,
-        lvs-devel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        kasan-dev@googlegroups.com, linux-mmc@vger.kernel.org,
-        nvdimm@lists.linux.dev, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, linux-perf-users@vger.kernel.org,
-        linux-raid@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-usb@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        v9fs-developer@lists.sourceforge.net, linux-rdma@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] treewide: uapi: Replace zero-length arrays with
- flexible-array members
-Message-ID: <20220628184404.GS23621@ziepe.ca>
-References: <20220627180432.GA136081@embeddedor>
- <6bc1e94c-ce1d-a074-7d0c-8dbe6ce22637@iogearbox.net>
- <20220628004052.GM23621@ziepe.ca>
- <202206281009.4332AA33@keescook>
+        with ESMTP id S233263AbiF2MQ1 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 29 Jun 2022 08:16:27 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73CE31927;
+        Wed, 29 Jun 2022 05:16:22 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LY0mv4Wyzz4xD8;
+        Wed, 29 Jun 2022 22:16:15 +1000 (AEST)
+From:   Michael Ellerman <patch-notifications@ellerman.id.au>
+To:     Mark Brown <broonie@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>, linux-ide@vger.kernel.org,
+        linux-serial@vger.kernel.org,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        netdev@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-spi@vger.kernel.org, linux-can@vger.kernel.org,
+        Jiri Slaby <jirislaby@kernel.org>,
+        chris.packham@alliedtelesis.co.nz,
+        Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     Paolo Abeni <pabeni@redhat.com>, Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Eric Dumazet <edumazet@google.com>,
+        Pantelis Antoniou <pantelis.antoniou@gmail.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Anatolij Gustschin <agust@denx.de>
+In-Reply-To: <20220507100147.5802-1-andriy.shevchenko@linux.intel.com>
+References: <20220507100147.5802-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v2 1/4] powerpc/52xx: Remove dead code, i.e. mpc52xx_get_xtal_freq()
+Message-Id: <165650492719.3004956.10259665965182865650.b4-ty@ellerman.id.au>
+Date:   Wed, 29 Jun 2022 22:15:27 +1000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202206281009.4332AA33@keescook>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 10:54:58AM -0700, Kees Cook wrote:
+On Sat, 7 May 2022 13:01:44 +0300, Andy Shevchenko wrote:
+> It seems mpc52xx_get_xtal_freq() is not used anywhere. Remove dead code.
+> 
+> 
 
- 
-> which must also be assuming it's a header. So probably better to just
-> drop the driver_data field? I don't see anything using it (that I can
-> find) besides as a sanity-check that the field exists and is at the end
-> of the struct.
+Patches 1-3 applied to powerpc/next.
 
-The field is guaranteeing alignment of the following structure. IIRC
-there are a few cases that we don't have a u64 already to force this.
+[1/4] powerpc/52xx: Remove dead code, i.e. mpc52xx_get_xtal_freq()
+      https://git.kernel.org/powerpc/c/6d056b7254f9954522b7bb9947c8779a013d189f
+[2/4] powerpc/mpc5xxx: Switch mpc5xxx_get_bus_frequency() to use fwnode
+      https://git.kernel.org/powerpc/c/de06fba62af64144aca6f8a8bedbc848d2e5b440
+[3/4] powerpc/52xx: Get rid of of_node assignment
+      https://git.kernel.org/powerpc/c/00bcb550dc60f73d593d2dbb718c4f521c7d7be8
 
-Jason
+cheers
