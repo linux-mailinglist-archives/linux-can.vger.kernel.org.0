@@ -2,145 +2,111 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E1B75628C0
-	for <lists+linux-can@lfdr.de>; Fri,  1 Jul 2022 04:11:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4160562F59
+	for <lists+linux-can@lfdr.de>; Fri,  1 Jul 2022 11:02:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbiGACKk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 30 Jun 2022 22:10:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42470 "EHLO
+        id S231298AbiGAJB4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 1 Jul 2022 05:01:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231284AbiGACKj (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 30 Jun 2022 22:10:39 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 264402AE15
-        for <linux-can@vger.kernel.org>; Thu, 30 Jun 2022 19:10:38 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id y2so953854ior.12
-        for <linux-can@vger.kernel.org>; Thu, 30 Jun 2022 19:10:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=pM1LJjz3F7ELbdHDt8KtX/lLKyDCScxtrvAssHhdOK4=;
-        b=GooL1WUSXC4oA5UUX5odF9nGq1dRFh8RpvybGkeK4s02yh4xtL2dd7oi3ltqBAyFyG
-         4BTAxCcUvccxjMoqs+qKmuMVsYGcs55cZwGbT44OLqTEyMXFPDNh5Rsca9U/ncmNck9K
-         UqfycmSrfL8eD449jRoIvt9N9NBjg78Jlwjpg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=pM1LJjz3F7ELbdHDt8KtX/lLKyDCScxtrvAssHhdOK4=;
-        b=ruYWYnfBR0l9ATpg2sAQR52ZrmPnWTsJeeMyDWNnVWujNQXGATXOypiQIoxV69Dn4g
-         W/HR4tLA61VBg23ipyFt4d7cg2K73KDM7IMj9GVQcM4xpPsFZ1YGFYGR1iO0OxxYsWvq
-         Fvr9vC4gtJoBN96G6QhOYFVCXrAFgNlCt/BM8F+tkBSLViq5xGtqNrUUlBLXWvE0Tgqg
-         zOOyZkKqQG4fe9ZPV6yOm9j/SWyGjF4fjnFZHd9k9M/7XbXUZcogopI2Tc9AV/t963sb
-         ZGK2JEmO58w9I2Uhw4/huGaEG0XZDpexzlcfdYOQy029VMlHUMpYSvUdmKldAOA+5u1M
-         APiA==
-X-Gm-Message-State: AJIora8lQqQdBGkPyCW5XGyxxBcaslnSS4HWgrQpFniJ5dLtqn52RWYl
-        v4cKccyjI+Dx/7AW7kCKqmgWVA==
-X-Google-Smtp-Source: AGRyM1t6tnL5846dN4UzzYZWbX2Ozucz1apMTiG1EayJCgR+5Nm7jkHV5vLdjePKWKLCn4o3vMlYkQ==
-X-Received: by 2002:a02:2348:0:b0:331:b83a:f860 with SMTP id u69-20020a022348000000b00331b83af860mr7592526jau.297.1656641437390;
-        Thu, 30 Jun 2022 19:10:37 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id b1-20020a5d8041000000b00674f9fb1531sm9509346ior.30.2022.06.30.19.10.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jun 2022 19:10:36 -0700 (PDT)
-Subject: Re: [PATCH v3 1/2] drivers: usb/core/urb: Add URB_FREE_COHERENT
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Hongren Zenithal Zheng <i@zenithal.me>,
-        Rhett Aultman <rhett.aultman@samsara.com>,
-        linux-usb@vger.kernel.org, linux-can <linux-can@vger.kernel.org>,
-        Oliver Neukum <oneukum@suse.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220609204714.2715188-1-rhett.aultman@samsara.com>
- <20220610213335.3077375-1-rhett.aultman@samsara.com>
- <20220610213335.3077375-2-rhett.aultman@samsara.com> <YrSjRvb8rIIayGlg@Sun>
- <143b863d-c86b-6678-44e6-38799391fa36@linuxfoundation.org>
- <YrXNltWSYbplstPx@rowland.harvard.edu>
- <aaf64d6c-1893-67ed-013e-67d21c8be152@linuxfoundation.org>
- <YrX9SBpxp1E2cOyI@rowland.harvard.edu>
- <e1c416bc-0239-6070-c516-c98332a6491d@linuxfoundation.org>
- <Yrpa1zpwfauSMoTi@rowland.harvard.edu>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <b18313ab-c408-83dc-ee96-a64a432fbfcb@linuxfoundation.org>
-Date:   Thu, 30 Jun 2022 20:10:35 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        with ESMTP id S233311AbiGAJB4 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 1 Jul 2022 05:01:56 -0400
+X-Greylist: delayed 902 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 01 Jul 2022 02:01:54 PDT
+Received: from mail.prodrive-technologies.com (mail.prodrive-technologies.com [212.61.153.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3178D1C92E
+        for <linux-can@vger.kernel.org>; Fri,  1 Jul 2022 02:01:54 -0700 (PDT)
+Received: from EXC03.bk.prodrive.nl (10.1.1.212) by EXC03.bk.prodrive.nl
+ (10.1.1.212) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2242.12; Fri, 1
+ Jul 2022 10:46:50 +0200
+Received: from lnxdevrm02.prodrive.nl (10.1.1.121) by EXC03.bk.prodrive.nl
+ (10.1.1.212) with Microsoft SMTP Server id 15.1.2242.12 via Frontend
+ Transport; Fri, 1 Jul 2022 10:46:50 +0200
+From:   Wouter van Herpen <wouter.van.herpen@prodrive-technologies.com>
+To:     <mkl@pengutronix.de>
+CC:     <linux-can@vger.kernel.org>,
+        Wouter van Herpen <wouter.van.herpen@prodrive-technologies.com>
+Subject: [PATCH] can: m_can: fix netif_stop/wake_queue race condition between m_can_tx_handler() and m_can_isr().
+Date:   Fri, 1 Jul 2022 09:46:37 +0100
+Message-ID: <5083a7dfca89695f4359e519d8fd483900dea1f6.1656492416.git.wouter.van.herpen@prodrive-technologies.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <Yrpa1zpwfauSMoTi@rowland.harvard.edu>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Spam-Status: No, score=1.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 6/27/22 7:35 PM, Alan Stern wrote:
-> On Mon, Jun 27, 2022 at 04:54:17PM -0600, Shuah Khan wrote:
->> On 6/24/22 12:07 PM, Alan Stern wrote:
->>> In the future people will want to make other changes to
->>> include/linux/usb.h and they will not be aware that those changes will
->>> adversely affect usbip, because there is no documentation saying that
->>> the values defined in usb.h are part of a user API.  That will be a
->>> problem, because those changes may be serious and important ones, not
->>> just decorative or stylistic as in this case.
->>>
->>
->> How often do these values change based on our past experience with these
->> fields?
-> 
-> I don't know.  You could check the git history to find out for certain.
-> My guess would be every eight or ten years.
-> 
->>> I agree with Hongren that values defined in include/linux/ should not be
->>> part of a user API.  There are two choices:
->>>
->>
->> I agree with this in general. I don't think this is an explicit decision
->> to make them part of API. It is a consequence of simply copying the
->> transfer_flags. I am with you both on not being able to recognize the
->> impact until as this is rather obscure usage hidden away in the packets.
->> These defines aren't directly referenced.
->>
->>> 	Move the definitions into include/uapi/linux/, or
->>>
->>
->> Wouldn't this be easier way to handle the change? With this option
->> the uapi will be well documented.
->>
->>> 	Add code to translate the values between the numbers used in
->>> 	userspace and the numbers used in the kernel.  (This is what
->>> 	was done for urb->transfer_flags in devio.c:proc_do_submiturb()
->>> 	near line 1862.)
->>>
->>
->> I looked at the code and looks simple enough. I am okay going this route
->> if we see issues with the option 1.
-> 
-> It's up to you; either approach is okay with me.  However, I do think
-> that the second option is a little better; I don't see any good reason
-> why the kernel should be forced to use the same numeric values for these
-> flags forever.  Especially since the only user program that needs to
-> know them is usbip, which is fairly closely tied to the kernel; if there
-> were more programs using those values then they would constitute a good
-> reason for choosing the first option.
-> 
+m_can_tx_handler() initiates a write by calling can_put_echo_skb() and
+m_can_write() to M_CAN_TXBAR.
+After that, netif_stop_queue is called depending on the FIFO status.
 
-Thank you Alan and Hongren for your help with this problem. Since there
-are no changes to the flags for the time being, I am comfortable going
-with the second option.
+Observed with a TCAN45 controller and under high CPU load, the TCAN45
+can already generate an interrupt after the m_can_write to M_CAN_TXBAR,
+but before netif_stop_queue is executed.
+The m_can_isr() is then executed (performing a netif_wake_queue) before
+the netif_stop_queue is executed, leading to a blocking socket.
 
-I will send a patch soon.
+Fix this for TX FIFO size 1, where the queue can always be stopped
+before initiating a transfer.
 
-thanks,
--- Shuah
+Signed-off-by: Wouter van Herpen <wouter.van.herpen@prodrive-technologies.com>
+---
+Possible improvement to this patch would be to predict if the next write
+would fill the FIFO, and if so, stop the queue before initiating the
+transfer. Then the race condition would also be fixed for TX buffer sizes
+larger than 1. However, I do not recognize a proper diagnostic register
+in the TCAN45 for that purpose.
+
+Alternatively a locking mechanism could be introduced, which I did not
+investigate further as there can be sleeps involved in the SPI writes.
+
+ drivers/net/can/m_can/m_can.c | 19 +++++++++++++++----
+ 1 file changed, 15 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+index 5d0c82d8b9a9..2817f8e83206 100644
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -1684,6 +1684,15 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
+ 		if (err)
+ 			goto out_fail;
+ 
++		/* A race can occur between netif_stop_queue here and
++		 * netif_wake_queue in m_can_isr(), if the queue is stopped
++		 * after initiating a transfer. If the TX buffer has size 1,
++		 * it is allowed to always stop the queue and only then
++		 * initiate the transfer, thus avoiding any race condition.
++		 */
++		if (cdev->mcfg[MRAM_TXB].num == 1)
++			netif_stop_queue(dev);
++
+ 		/* Push loopback echo.
+ 		 * Will be looped back on TX interrupt based on message marker
+ 		 */
+@@ -1692,10 +1701,12 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
+ 		/* Enable TX FIFO element to start transfer  */
+ 		m_can_write(cdev, M_CAN_TXBAR, (1 << putidx));
+ 
+-		/* stop network queue if fifo full */
+-		if (m_can_tx_fifo_full(cdev) ||
+-		    m_can_next_echo_skb_occupied(dev, putidx))
+-			netif_stop_queue(dev);
++		if (cdev->mcfg[MRAM_TXB].num != 1) {
++			/* stop network queue if fifo full */
++			if (m_can_tx_fifo_full(cdev) ||
++			    m_can_next_echo_skb_occupied(dev, putidx))
++				netif_stop_queue(dev);
++		}
+ 	}
+ 
+ 	return NETDEV_TX_OK;
+-- 
+2.30.2
+
