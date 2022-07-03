@@ -2,116 +2,106 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15D8A56472F
-	for <lists+linux-can@lfdr.de>; Sun,  3 Jul 2022 13:40:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14A965648DF
+	for <lists+linux-can@lfdr.de>; Sun,  3 Jul 2022 20:00:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231703AbiGCLkS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 3 Jul 2022 07:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51172 "EHLO
+        id S232425AbiGCSA2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 3 Jul 2022 14:00:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbiGCLkR (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 3 Jul 2022 07:40:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E8063BB;
-        Sun,  3 Jul 2022 04:40:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8101461300;
-        Sun,  3 Jul 2022 11:40:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D4DECC341CD;
-        Sun,  3 Jul 2022 11:40:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656848415;
-        bh=U+mhikf+YwvzpoOo8QWKoxBeJJvHHtGu4iUOOfxgvi0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=vFPh5RWFg4mab5ju83IZoTGbslXm6gTQ50id9RRMYLLUVEcsh+1pjaCKjq2vhX/Pm
-         /IThDyWc+HOvxz9fTaQK3U8BPfsgLqPuBJ12AGeVKgKjf+mLr/PWXphqGfQat80RKD
-         n69+jj1PAwwb3zvBn89dUBHo7XFievlWYGP96zCl24OzoyzkQEhYK5/4S4vjN7DuYK
-         q+CPugNe6TXPmV5spnHAl9X74iN7VoXdfI039ntyCzM70juiTbZjDvSdqiwfK72ENK
-         ZGbMZaEYSyB37jHzn1b74JTi2nLkgXp+Vskzbx0GHuG7TWMhETnG5U1+hBILL/b2uN
-         2K0UPn0jVTyVw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BF429E49FA1;
-        Sun,  3 Jul 2022 11:40:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 01/15] tty: Add N_CAN327 line discipline ID for
- ELM327 based CAN driver
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165684841577.4107.12545012231996753529.git-patchwork-notify@kernel.org>
-Date:   Sun, 03 Jul 2022 11:40:15 +0000
-References: <20220703101430.1306048-2-mkl@pengutronix.de>
-In-Reply-To: <20220703101430.1306048-2-mkl@pengutronix.de>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, kernel@pengutronix.de, max@enpas.org,
-        gregkh@linuxfoundation.org
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229549AbiGCSA1 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 3 Jul 2022 14:00:27 -0400
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF9C60D1;
+        Sun,  3 Jul 2022 11:00:27 -0700 (PDT)
+Received: by mail-io1-f50.google.com with SMTP id r133so6794929iod.3;
+        Sun, 03 Jul 2022 11:00:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=0oH4Qv2b3hpacaeJbha5xxiRLG21WNmxbvy8dgQr22s=;
+        b=AOdSmEqL9Y8VBUpOZIj0YWcHxqSgD8G34oP4xKwAYbD/yD+tr4pbjAfSofsdVu5PKl
+         S6pFfxRkF3LZfCd0jy+hh2DGblxHGgpXN9wRw/jQO7ndIMxoXpg25CUoZdTLL35YQsmN
+         sMTNdQyqXDJeYSFeYiSVZ+wL0D1510itUVv+fJSU82LyaW7o5kvFnelk3biCfQx7Cjrg
+         EL3upJq+M7lgOVPTLTvBuC7ZT6lZu0JgCzLl9isHhkZbzWIYwr3DE4c31DofmGsvCilL
+         bBEawBrHeIpgDJFzbwT5dC5nuhc/mJvYWpU+i1VdqTeHzvwmpfSqTUMWdBN2Vtfb+wDm
+         brLA==
+X-Gm-Message-State: AJIora97s5xsLgxyO1ejAwKhYWCbULXC59hS2Lj3I2kWdCK1GFCsaY8o
+        NZKz85AdclsEyKgxeRxXQg==
+X-Google-Smtp-Source: AGRyM1uyZ/IzOLxMLM1fHCuuqlCDAZS8xqzT04cCI/FH8YEh27fssyASXY5sxh0osk4DmVvORf72xw==
+X-Received: by 2002:a5e:c908:0:b0:675:7f2c:b266 with SMTP id z8-20020a5ec908000000b006757f2cb266mr13808388iol.7.1656871226347;
+        Sun, 03 Jul 2022 11:00:26 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id z7-20020a923207000000b002d1d3b1abbesm11176112ile.80.2022.07.03.11.00.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Jul 2022 11:00:25 -0700 (PDT)
+Received: (nullmailer pid 1705438 invoked by uid 1000);
+        Sun, 03 Jul 2022 18:00:23 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das@bp.renesas.com>, linux-can@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Eric Dumazet <edumazet@google.com>
+In-Reply-To: <20220703104705.341070-2-biju.das.jz@bp.renesas.com>
+References: <20220703104705.341070-1-biju.das.jz@bp.renesas.com> <20220703104705.341070-2-biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH v2 1/6] dt-bindings: can: sja1000: Convert to json-schema
+Date:   Sun, 03 Jul 2022 12:00:23 -0600
+Message-Id: <1656871223.903187.1705437.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,PP_MIME_FAKE_ASCII_TEXT,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (master)
-by Marc Kleine-Budde <mkl@pengutronix.de>:
-
-On Sun,  3 Jul 2022 12:14:15 +0200 you wrote:
-> From: Max Staudt <max@enpas.org>
+On Sun, 03 Jul 2022 11:47:00 +0100, Biju Das wrote:
+> Convert the NXP SJA1000 CAN Controller Device Tree binding
+> documentation to json-schema.
 > 
-> The actual driver will be added via the CAN tree.
+> Update the example to match reality.
 > 
-> Link: https://lore.kernel.org/all/20220618180134.9890-1-max@enpas.org
-> Link: https://lore.kernel.org/all/Yrm9Ezlw1dLmIxyS@kroah.com
-> Signed-off-by: Max Staudt <max@enpas.org>
-> Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> ---
+> v1->v2:
+>  * Moved $ref: can-controller.yaml# to top along with if conditional to
+>    avoid multiple mapping issues with the if conditional in the subsequent
+>    patch.
+> ---
+>  .../bindings/net/can/nxp,sja1000.yaml         | 102 ++++++++++++++++++
+>  .../devicetree/bindings/net/can/sja1000.txt   |  58 ----------
+>  2 files changed, 102 insertions(+), 58 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/net/can/nxp,sja1000.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/net/can/sja1000.txt
 > 
-> [...]
 
-Here is the summary with links:
-  - [net-next,01/15] tty: Add N_CAN327 line discipline ID for ELM327 based CAN driver
-    https://git.kernel.org/netdev/net-next/c/713eb3c1261a
-  - [net-next,02/15] can: can327: CAN/ldisc driver for ELM327 based OBD-II adapters
-    https://git.kernel.org/netdev/net-next/c/43da2f07622f
-  - [net-next,03/15] can: ctucanfd: ctucan_interrupt(): fix typo
-    https://git.kernel.org/netdev/net-next/c/50f2944009a2
-  - [net-next,04/15] can: slcan: use the BIT() helper
-    https://git.kernel.org/netdev/net-next/c/3cd864901bc5
-  - [net-next,05/15] can: slcan: use netdev helpers to print out messages
-    https://git.kernel.org/netdev/net-next/c/da6788ea025c
-  - [net-next,06/15] can: slcan: use the alloc_can_skb() helper
-    https://git.kernel.org/netdev/net-next/c/92a31782c848
-  - [net-next,07/15] can: netlink: dump bitrate 0 if can_priv::bittiming.bitrate is -1U
-    https://git.kernel.org/netdev/net-next/c/036bff2800cb
-  - [net-next,08/15] can: slcan: use CAN network device driver API
-    https://git.kernel.org/netdev/net-next/c/c4e54b063f42
-  - [net-next,09/15] can: slcan: allow to send commands to the adapter
-    https://git.kernel.org/netdev/net-next/c/52f9ac85b876
-  - [net-next,10/15] can: slcan: set bitrate by CAN device driver API
-    https://git.kernel.org/netdev/net-next/c/dca796299462
-  - [net-next,11/15] can: slcan: send the open/close commands to the adapter
-    https://git.kernel.org/netdev/net-next/c/5bac315be7eb
-  - [net-next,12/15] can: slcan: move driver into separate sub directory
-    https://git.kernel.org/netdev/net-next/c/98b12064591d
-  - [net-next,13/15] can: slcan: add ethtool support to reset adapter errors
-    https://git.kernel.org/netdev/net-next/c/4de0e8efa052
-  - [net-next,14/15] can: slcan: extend the protocol with error info
-    https://git.kernel.org/netdev/net-next/c/b32ff4668544
-  - [net-next,15/15] can: slcan: extend the protocol with CAN state info
-    https://git.kernel.org/netdev/net-next/c/0a9cdcf098a4
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
 
+Full log is available here: https://patchwork.ozlabs.org/patch/
+
+
+can@4,0: nxp,tx-output-config:0:0: 22 is not one of [1, 2, 4, 6, 8, 16, 32, 48]
+	arch/arm/boot/dts/imx27-phytec-phycore-rdk.dtb
+
+can@4,0: 'reg-io-width' is a required property
+	arch/arm/boot/dts/imx27-phytec-phycore-rdk.dtb
 
