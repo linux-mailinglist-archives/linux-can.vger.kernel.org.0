@@ -2,165 +2,116 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 677355646E4
-	for <lists+linux-can@lfdr.de>; Sun,  3 Jul 2022 12:48:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15D8A56472F
+	for <lists+linux-can@lfdr.de>; Sun,  3 Jul 2022 13:40:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232674AbiGCKsK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 3 Jul 2022 06:48:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52478 "EHLO
+        id S231703AbiGCLkS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 3 Jul 2022 07:40:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232373AbiGCKrq (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 3 Jul 2022 06:47:46 -0400
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B2E66A447;
-        Sun,  3 Jul 2022 03:47:44 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.92,241,1650898800"; 
-   d="scan'208";a="124888170"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 03 Jul 2022 19:47:44 +0900
-Received: from localhost.localdomain (unknown [10.226.92.2])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 35B93427AD01;
-        Sun,  3 Jul 2022 19:47:39 +0900 (JST)
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v2 6/6] can: sja1000: Add support for RZ/N1 SJA1000 CAN Controller
-Date:   Sun,  3 Jul 2022 11:47:05 +0100
-Message-Id: <20220703104705.341070-7-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220703104705.341070-1-biju.das.jz@bp.renesas.com>
-References: <20220703104705.341070-1-biju.das.jz@bp.renesas.com>
+        with ESMTP id S229993AbiGCLkR (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 3 Jul 2022 07:40:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E8063BB;
+        Sun,  3 Jul 2022 04:40:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8101461300;
+        Sun,  3 Jul 2022 11:40:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D4DECC341CD;
+        Sun,  3 Jul 2022 11:40:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656848415;
+        bh=U+mhikf+YwvzpoOo8QWKoxBeJJvHHtGu4iUOOfxgvi0=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=vFPh5RWFg4mab5ju83IZoTGbslXm6gTQ50id9RRMYLLUVEcsh+1pjaCKjq2vhX/Pm
+         /IThDyWc+HOvxz9fTaQK3U8BPfsgLqPuBJ12AGeVKgKjf+mLr/PWXphqGfQat80RKD
+         n69+jj1PAwwb3zvBn89dUBHo7XFievlWYGP96zCl24OzoyzkQEhYK5/4S4vjN7DuYK
+         q+CPugNe6TXPmV5spnHAl9X74iN7VoXdfI039ntyCzM70juiTbZjDvSdqiwfK72ENK
+         ZGbMZaEYSyB37jHzn1b74JTi2nLkgXp+Vskzbx0GHuG7TWMhETnG5U1+hBILL/b2uN
+         2K0UPn0jVTyVw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BF429E49FA1;
+        Sun,  3 Jul 2022 11:40:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH net-next 01/15] tty: Add N_CAN327 line discipline ID for
+ ELM327 based CAN driver
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165684841577.4107.12545012231996753529.git-patchwork-notify@kernel.org>
+Date:   Sun, 03 Jul 2022 11:40:15 +0000
+References: <20220703101430.1306048-2-mkl@pengutronix.de>
+In-Reply-To: <20220703101430.1306048-2-mkl@pengutronix.de>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        linux-can@vger.kernel.org, kernel@pengutronix.de, max@enpas.org,
+        gregkh@linuxfoundation.org
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The SJA1000 CAN controller on RZ/N1 SoC has no clock divider register
-(CDR) support compared to others.
+Hello:
 
-This patch adds support for RZ/N1 SJA1000 CAN Controller.
+This series was applied to netdev/net-next.git (master)
+by Marc Kleine-Budde <mkl@pengutronix.de>:
 
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
----
-v1->v2:
- * Updated commit description as SJA1000_NO_HW_LOOPBACK_QUIRK is removed
- * Added error handling on clk error path
- * Started using "devm_clk_get_optional_enabled" for clk get,prepare and enable.
----
- drivers/net/can/sja1000/sja1000_platform.c | 38 +++++++++++++++++++---
- 1 file changed, 33 insertions(+), 5 deletions(-)
+On Sun,  3 Jul 2022 12:14:15 +0200 you wrote:
+> From: Max Staudt <max@enpas.org>
+> 
+> The actual driver will be added via the CAN tree.
+> 
+> Link: https://lore.kernel.org/all/20220618180134.9890-1-max@enpas.org
+> Link: https://lore.kernel.org/all/Yrm9Ezlw1dLmIxyS@kroah.com
+> Signed-off-by: Max Staudt <max@enpas.org>
+> Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> 
+> [...]
 
-diff --git a/drivers/net/can/sja1000/sja1000_platform.c b/drivers/net/can/sja1000/sja1000_platform.c
-index 81bc741905fd..757fdb5da191 100644
---- a/drivers/net/can/sja1000/sja1000_platform.c
-+++ b/drivers/net/can/sja1000/sja1000_platform.c
-@@ -14,6 +14,7 @@
- #include <linux/irq.h>
- #include <linux/can/dev.h>
- #include <linux/can/platform/sja1000.h>
-+#include <linux/clk.h>
- #include <linux/io.h>
- #include <linux/of.h>
- #include <linux/of_device.h>
-@@ -103,6 +104,11 @@ static void sp_technologic_init(struct sja1000_priv *priv, struct device_node *o
- 	spin_lock_init(&tp->io_lock);
- }
- 
-+static void sp_rzn1_init(struct sja1000_priv *priv, struct device_node *of)
-+{
-+	priv->flags = SJA1000_QUIRK_NO_CDR_REG;
-+}
-+
- static void sp_populate(struct sja1000_priv *priv,
- 			struct sja1000_platform_data *pdata,
- 			unsigned long resource_mem_flags)
-@@ -153,11 +159,13 @@ static void sp_populate_of(struct sja1000_priv *priv, struct device_node *of)
- 		priv->write_reg = sp_write_reg8;
- 	}
- 
--	err = of_property_read_u32(of, "nxp,external-clock-frequency", &prop);
--	if (!err)
--		priv->can.clock.freq = prop / 2;
--	else
--		priv->can.clock.freq = SP_CAN_CLOCK; /* default */
-+	if (!priv->can.clock.freq) {
-+		err = of_property_read_u32(of, "nxp,external-clock-frequency", &prop);
-+		if (!err)
-+			priv->can.clock.freq = prop / 2;
-+		else
-+			priv->can.clock.freq = SP_CAN_CLOCK; /* default */
-+	}
- 
- 	err = of_property_read_u32(of, "nxp,tx-output-mode", &prop);
- 	if (!err)
-@@ -192,8 +200,13 @@ static struct sja1000_of_data technologic_data = {
- 	.init = sp_technologic_init,
- };
- 
-+static struct sja1000_of_data renesas_data = {
-+	.init = sp_rzn1_init,
-+};
-+
- static const struct of_device_id sp_of_table[] = {
- 	{ .compatible = "nxp,sja1000", .data = NULL, },
-+	{ .compatible = "renesas,rzn1-sja1000", .data = &renesas_data, },
- 	{ .compatible = "technologic,sja1000", .data = &technologic_data, },
- 	{ /* sentinel */ },
- };
-@@ -210,6 +223,7 @@ static int sp_probe(struct platform_device *pdev)
- 	struct device_node *of = pdev->dev.of_node;
- 	const struct sja1000_of_data *of_data = NULL;
- 	size_t priv_sz = 0;
-+	struct clk *clk;
- 
- 	pdata = dev_get_platdata(&pdev->dev);
- 	if (!pdata && !of) {
-@@ -234,6 +248,11 @@ static int sp_probe(struct platform_device *pdev)
- 		irq = platform_get_irq(pdev, 0);
- 		if (irq < 0)
- 			return irq;
-+
-+		clk = devm_clk_get_optional_enabled(&pdev->dev, "can_clk");
-+		if (IS_ERR(clk))
-+			return dev_err_probe(&pdev->dev, PTR_ERR(clk),
-+					     "CAN clk operation failed");
- 	} else {
- 		res_irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
- 		if (!res_irq)
-@@ -262,6 +281,15 @@ static int sp_probe(struct platform_device *pdev)
- 	priv->reg_base = addr;
- 
- 	if (of) {
-+		if (clk) {
-+			priv->can.clock.freq  = clk_get_rate(clk) / 2;
-+			if (!priv->can.clock.freq) {
-+				err = -EINVAL;
-+				dev_err(&pdev->dev, "Zero CAN clk rate");
-+				goto exit_free;
-+			}
-+		}
-+
- 		sp_populate_of(priv, of);
- 
- 		if (of_data && of_data->init)
+Here is the summary with links:
+  - [net-next,01/15] tty: Add N_CAN327 line discipline ID for ELM327 based CAN driver
+    https://git.kernel.org/netdev/net-next/c/713eb3c1261a
+  - [net-next,02/15] can: can327: CAN/ldisc driver for ELM327 based OBD-II adapters
+    https://git.kernel.org/netdev/net-next/c/43da2f07622f
+  - [net-next,03/15] can: ctucanfd: ctucan_interrupt(): fix typo
+    https://git.kernel.org/netdev/net-next/c/50f2944009a2
+  - [net-next,04/15] can: slcan: use the BIT() helper
+    https://git.kernel.org/netdev/net-next/c/3cd864901bc5
+  - [net-next,05/15] can: slcan: use netdev helpers to print out messages
+    https://git.kernel.org/netdev/net-next/c/da6788ea025c
+  - [net-next,06/15] can: slcan: use the alloc_can_skb() helper
+    https://git.kernel.org/netdev/net-next/c/92a31782c848
+  - [net-next,07/15] can: netlink: dump bitrate 0 if can_priv::bittiming.bitrate is -1U
+    https://git.kernel.org/netdev/net-next/c/036bff2800cb
+  - [net-next,08/15] can: slcan: use CAN network device driver API
+    https://git.kernel.org/netdev/net-next/c/c4e54b063f42
+  - [net-next,09/15] can: slcan: allow to send commands to the adapter
+    https://git.kernel.org/netdev/net-next/c/52f9ac85b876
+  - [net-next,10/15] can: slcan: set bitrate by CAN device driver API
+    https://git.kernel.org/netdev/net-next/c/dca796299462
+  - [net-next,11/15] can: slcan: send the open/close commands to the adapter
+    https://git.kernel.org/netdev/net-next/c/5bac315be7eb
+  - [net-next,12/15] can: slcan: move driver into separate sub directory
+    https://git.kernel.org/netdev/net-next/c/98b12064591d
+  - [net-next,13/15] can: slcan: add ethtool support to reset adapter errors
+    https://git.kernel.org/netdev/net-next/c/4de0e8efa052
+  - [net-next,14/15] can: slcan: extend the protocol with error info
+    https://git.kernel.org/netdev/net-next/c/b32ff4668544
+  - [net-next,15/15] can: slcan: extend the protocol with CAN state info
+    https://git.kernel.org/netdev/net-next/c/0a9cdcf098a4
+
+You are awesome, thank you!
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
