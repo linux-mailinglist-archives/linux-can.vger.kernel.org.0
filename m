@@ -2,175 +2,98 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 840A95646A5
-	for <lists+linux-can@lfdr.de>; Sun,  3 Jul 2022 12:26:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B7C75646CA
+	for <lists+linux-can@lfdr.de>; Sun,  3 Jul 2022 12:47:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231909AbiGCK0K (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 3 Jul 2022 06:26:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42194 "EHLO
+        id S232270AbiGCKrT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 3 Jul 2022 06:47:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbiGCK0J (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 3 Jul 2022 06:26:09 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6694631A
-        for <linux-can@vger.kernel.org>; Sun,  3 Jul 2022 03:26:05 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1o7wnk-00066B-CE
-        for linux-can@vger.kernel.org; Sun, 03 Jul 2022 12:26:04 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 034BBA6A1B
-        for <linux-can@vger.kernel.org>; Sun,  3 Jul 2022 10:14:39 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 40648A69F8;
-        Sun,  3 Jul 2022 10:14:38 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 51277cfe;
-        Sun, 3 Jul 2022 10:14:32 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next 15/15] can: slcan: extend the protocol with CAN state info
-Date:   Sun,  3 Jul 2022 12:14:29 +0200
-Message-Id: <20220703101430.1306048-16-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220703101430.1306048-1-mkl@pengutronix.de>
-References: <20220703101430.1306048-1-mkl@pengutronix.de>
+        with ESMTP id S232199AbiGCKrQ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 3 Jul 2022 06:47:16 -0400
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F1EC0642C;
+        Sun,  3 Jul 2022 03:47:14 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.92,241,1650898800"; 
+   d="scan'208";a="124888145"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 03 Jul 2022 19:47:13 +0900
+Received: from localhost.localdomain (unknown [10.226.92.2])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 67DA1427AD01;
+        Sun,  3 Jul 2022 19:47:08 +0900 (JST)
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v2 0/6] Add support for RZ/N1 SJA1000 CAN controller
+Date:   Sun,  3 Jul 2022 11:46:59 +0100
+Message-Id: <20220703104705.341070-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=1.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+This patch series aims to add support for RZ/N1 SJA1000 CAN controller.
 
-It extends the protocol to receive the adapter CAN state changes
-(warning, busoff, etc.) and forward them to the netdev upper levels.
+The SJA1000 CAN controller on RZ/N1 SoC has some differences compared
+to others like it has no clock divider register (CDR) support and it has
+no HW loopback (HW doesn't see tx messages on rx), so introduced a new
+compatible 'renesas,rzn1-sja1000' to handle these differences.
 
-Link: https://lore.kernel.org/all/20220628163137.413025-13-dario.binacchi@amarulasolutions.com
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/slcan/slcan-core.c | 74 +++++++++++++++++++++++++++++-
- 1 file changed, 73 insertions(+), 1 deletion(-)
+v1->v2:
+ * Moved $ref: can-controller.yaml# to top along with if conditional to
+   avoid multiple mapping issues with the if conditional in the subsequent
+   patch.
+ * Added an example for RZ/N1D SJA1000 usage.
+ * Updated commit description for patch#2,#3 and #6
+ * Removed the quirk macro SJA1000_NO_HW_LOOPBACK_QUIRK
+ * Added prefix SJA1000_QUIRK_* for quirk macro.
+ * Replaced of_device_get_match_data->device_get_match_data.
+ * Added error handling on clk error path
+ * Started using "devm_clk_get_optional_enabled" for clk get,prepare and enable.
 
-diff --git a/drivers/net/can/slcan/slcan-core.c b/drivers/net/can/slcan/slcan-core.c
-index 4269b2267be2..54d29a410ad5 100644
---- a/drivers/net/can/slcan/slcan-core.c
-+++ b/drivers/net/can/slcan/slcan-core.c
-@@ -78,7 +78,11 @@ MODULE_PARM_DESC(maxdev, "Maximum number of slcan interfaces");
- #define SLC_CMD_LEN 1
- #define SLC_SFF_ID_LEN 3
- #define SLC_EFF_ID_LEN 8
--
-+#define SLC_STATE_LEN 1
-+#define SLC_STATE_BE_RXCNT_LEN 3
-+#define SLC_STATE_BE_TXCNT_LEN 3
-+#define SLC_STATE_FRAME_LEN       (1 + SLC_CMD_LEN + SLC_STATE_BE_RXCNT_LEN + \
-+				   SLC_STATE_BE_TXCNT_LEN)
- struct slcan {
- 	struct can_priv         can;
- 	int			magic;
-@@ -254,6 +258,72 @@ static void slc_bump_frame(struct slcan *sl)
- 	dev_kfree_skb(skb);
- }
- 
-+/* A change state frame must contain state info and receive and transmit
-+ * error counters.
-+ *
-+ * Examples:
-+ *
-+ * sb256256 : state bus-off: rx counter 256, tx counter 256
-+ * sa057033 : state active, rx counter 57, tx counter 33
-+ */
-+static void slc_bump_state(struct slcan *sl)
-+{
-+	struct net_device *dev = sl->dev;
-+	struct sk_buff *skb;
-+	struct can_frame *cf;
-+	char *cmd = sl->rbuff;
-+	u32 rxerr, txerr;
-+	enum can_state state, rx_state, tx_state;
-+
-+	switch (cmd[1]) {
-+	case 'a':
-+		state = CAN_STATE_ERROR_ACTIVE;
-+		break;
-+	case 'w':
-+		state = CAN_STATE_ERROR_WARNING;
-+		break;
-+	case 'p':
-+		state = CAN_STATE_ERROR_PASSIVE;
-+		break;
-+	case 'b':
-+		state = CAN_STATE_BUS_OFF;
-+		break;
-+	default:
-+		return;
-+	}
-+
-+	if (state == sl->can.state || sl->rcount < SLC_STATE_FRAME_LEN)
-+		return;
-+
-+	cmd += SLC_STATE_BE_RXCNT_LEN + SLC_CMD_LEN + 1;
-+	cmd[SLC_STATE_BE_TXCNT_LEN] = 0;
-+	if (kstrtou32(cmd, 10, &txerr))
-+		return;
-+
-+	*cmd = 0;
-+	cmd -= SLC_STATE_BE_RXCNT_LEN;
-+	if (kstrtou32(cmd, 10, &rxerr))
-+		return;
-+
-+	skb = alloc_can_err_skb(dev, &cf);
-+	if (skb) {
-+		cf->data[6] = txerr;
-+		cf->data[7] = rxerr;
-+	} else {
-+		cf = NULL;
-+	}
-+
-+	tx_state = txerr >= rxerr ? state : 0;
-+	rx_state = txerr <= rxerr ? state : 0;
-+	can_change_state(dev, cf, tx_state, rx_state);
-+
-+	if (state == CAN_STATE_BUS_OFF)
-+		can_bus_off(dev);
-+
-+	if (skb)
-+		netif_rx(skb);
-+}
-+
- /* An error frame can contain more than one type of error.
-  *
-  * Examples:
-@@ -387,6 +457,8 @@ static void slc_bump(struct slcan *sl)
- 		return slc_bump_frame(sl);
- 	case 'e':
- 		return slc_bump_err(sl);
-+	case 's':
-+		return slc_bump_state(sl);
- 	default:
- 		return;
- 	}
+Ref:
+ [1] https://lore.kernel.org/linux-renesas-soc/20220701162320.102165-1-biju.das.jz@bp.renesas.com/T/#t
+
+Biju Das (6):
+  dt-bindings: can: sja1000: Convert to json-schema
+  dt-bindings: can: nxp,sja1000: Document RZ/N1{D,S} support
+  can: sja1000: Add Quirk for RZ/N1 SJA1000 CAN controller
+  can: sja1000: Use device_get_match_data to get device data
+  can: sja1000: Change the return type as void for SoC specific init
+  can: sja1000: Add support for RZ/N1 SJA1000 CAN Controller
+
+ .../bindings/net/can/nxp,sja1000.yaml         | 136 ++++++++++++++++++
+ .../devicetree/bindings/net/can/sja1000.txt   |  58 --------
+ drivers/net/can/sja1000/sja1000.c             |  13 +-
+ drivers/net/can/sja1000/sja1000.h             |   3 +-
+ drivers/net/can/sja1000/sja1000_platform.c    |  56 +++++---
+ 5 files changed, 184 insertions(+), 82 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/can/nxp,sja1000.yaml
+ delete mode 100644 Documentation/devicetree/bindings/net/can/sja1000.txt
+
 -- 
-2.35.1
-
+2.25.1
 
