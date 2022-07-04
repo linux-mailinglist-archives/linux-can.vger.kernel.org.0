@@ -2,44 +2,45 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8CEC565626
-	for <lists+linux-can@lfdr.de>; Mon,  4 Jul 2022 14:53:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB0056561B
+	for <lists+linux-can@lfdr.de>; Mon,  4 Jul 2022 14:53:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234657AbiGDMxH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 4 Jul 2022 08:53:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60238 "EHLO
+        id S234586AbiGDMxA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 4 Jul 2022 08:53:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234766AbiGDMwr (ORCPT
+        with ESMTP id S234767AbiGDMwr (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Mon, 4 Jul 2022 08:52:47 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4AA912087
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D8612089
         for <linux-can@vger.kernel.org>; Mon,  4 Jul 2022 05:52:42 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1o8LZ4-0001I0-9g
+        id 1o8LZ4-0001JA-PB
         for linux-can@vger.kernel.org; Mon, 04 Jul 2022 14:52:34 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id C446BA79FC
+        by bjornoya.blackshift.org (Postfix) with SMTP id D572EA7A10
         for <linux-can@vger.kernel.org>; Mon,  4 Jul 2022 12:26:15 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 6C8C7A799F;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 869C2A79B7;
         Mon,  4 Jul 2022 12:26:15 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 1947560d;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 243dd72c;
         Mon, 4 Jul 2022 12:26:14 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Thomas Kopp <thomas.kopp@microchip.com>,
-        stable@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net 12/15] can: mcp251xfd: mcp251xfd_regmap_crc_read(): update workaround broken CRC on TBC register
-Date:   Mon,  4 Jul 2022 14:26:10 +0200
-Message-Id: <20220704122613.1551119-13-mkl@pengutronix.de>
+        kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>,
+        stable@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH net 13/15] can: mcp251xfd: mcp251xfd_stop(): add missing hrtimer_cancel()
+Date:   Mon,  4 Jul 2022 14:26:11 +0200
+Message-Id: <20220704122613.1551119-14-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220704122613.1551119-1-mkl@pengutronix.de>
 References: <20220704122613.1551119-1-mkl@pengutronix.de>
@@ -58,68 +59,36 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Thomas Kopp <thomas.kopp@microchip.com>
+In commit 169d00a25658 ("can: mcp251xfd: add TX IRQ coalescing
+support") software based TX coalescing was added to the driver. The
+key idea is to keep the TX complete IRQ disabled for some time after
+processing it and re-enable later by a hrtimer. When bringing the
+interface down, this timer has to be stopped.
 
-The mcp251xfd compatible chips have an erratum ([1], [2]), where the
-received CRC doesn't match the calculated CRC. In commit
-c7eb923c3caf ("can: mcp251xfd: mcp251xfd_regmap_crc_read(): work
-around broken CRC on TBC register") the following workaround was
-implementierend.
+Add the missing hrtimer_cancel() of the tx_irq_time hrtimer to
+mcp251xfd_stop().
 
-- If a CRC read error on the TBC register is detected and the first
-  byte is 0x00 or 0x80, the most significant bit of the first byte is
-  flipped and the CRC is calculated again.
-- If the CRC now matches, the _original_ data is passed to the reader.
-  For now we assume transferred data was OK.
-
-New investigations and simulations indicate that the CRC send by the
-device is calculated on correct data, and the data is incorrectly
-received by the SPI host controller.
-
-Use flipped instead of original data and update workaround description
-in mcp251xfd_regmap_crc_read().
-
-[1] mcp2517fd: DS80000792C: "Incorrect CRC for certain READ_CRC commands"
-[2] mcp2518fd: DS80000789C: "Incorrect CRC for certain READ_CRC commands"
-
-Link: https://lore.kernel.org/all/DM4PR11MB53901D49578FE265B239E55AFB7C9@DM4PR11MB5390.namprd11.prod.outlook.com
-Fixes: c7eb923c3caf ("can: mcp251xfd: mcp251xfd_regmap_crc_read(): work around broken CRC on TBC register")
-Cc: stable@vger.kernel.org
-Signed-off-by: Thomas Kopp <thomas.kopp@microchip.com>
-[mkl: split into 2 patches, update patch description and documentation]
+Link: https://lore.kernel.org/all/20220620143942.891811-1-mkl@pengutronix.de
+Fixes: 169d00a25658 ("can: mcp251xfd: add TX IRQ coalescing support")
+Cc: stable@vger.kernel.org # v5.18
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
-index 211edd9ef0c9..92b7bc7f14b9 100644
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
-@@ -343,9 +343,8 @@ mcp251xfd_regmap_crc_read(void *context,
- 		 *
- 		 * If the highest bit in the lowest byte is flipped
- 		 * the transferred CRC matches the calculated one. We
--		 * assume for now the CRC calculation in the chip
--		 * works on wrong data and the transferred data is
--		 * correct.
-+		 * assume for now the CRC operates on the correct
-+		 * data.
- 		 */
- 		if (reg == MCP251XFD_REG_TBC &&
- 		    ((buf_rx->data[0] & 0xf8) == 0x0 ||
-@@ -359,10 +358,8 @@ mcp251xfd_regmap_crc_read(void *context,
- 								  val_len);
- 			if (!err) {
- 				/* If CRC is now correct, assume
--				 * transferred data was OK, flip bit
--				 * back to original value.
-+				 * flipped data is OK.
- 				 */
--				buf_rx->data[0] ^= 0x80;
- 				goto out;
- 			}
- 		}
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+index b21252390216..34b160024ce3 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+@@ -1650,6 +1650,7 @@ static int mcp251xfd_stop(struct net_device *ndev)
+ 	netif_stop_queue(ndev);
+ 	set_bit(MCP251XFD_FLAGS_DOWN, priv->flags);
+ 	hrtimer_cancel(&priv->rx_irq_timer);
++	hrtimer_cancel(&priv->tx_irq_timer);
+ 	mcp251xfd_chip_interrupts_disable(priv);
+ 	free_irq(ndev->irq, priv);
+ 	can_rx_offload_disable(&priv->offload);
 -- 
 2.35.1
 
