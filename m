@@ -2,48 +2,43 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABB2F565631
-	for <lists+linux-can@lfdr.de>; Mon,  4 Jul 2022 14:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9FBE565651
+	for <lists+linux-can@lfdr.de>; Mon,  4 Jul 2022 15:00:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234073AbiGDMyU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 4 Jul 2022 08:54:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59676 "EHLO
+        id S233944AbiGDNAA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 4 Jul 2022 09:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234650AbiGDMwk (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 4 Jul 2022 08:52:40 -0400
+        with ESMTP id S232937AbiGDM77 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 4 Jul 2022 08:59:59 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8886012089
-        for <linux-can@vger.kernel.org>; Mon,  4 Jul 2022 05:52:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698D96462
+        for <linux-can@vger.kernel.org>; Mon,  4 Jul 2022 05:59:59 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1o8LYu-00011g-LB
-        for linux-can@vger.kernel.org; Mon, 04 Jul 2022 14:52:24 +0200
+        id 1o8LgD-0003BO-UZ
+        for linux-can@vger.kernel.org; Mon, 04 Jul 2022 14:59:57 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 2655FA7A32
-        for <linux-can@vger.kernel.org>; Mon,  4 Jul 2022 12:26:16 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id 75413A7C0A
+        for <linux-can@vger.kernel.org>; Mon,  4 Jul 2022 12:59:57 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id AA3BFA79DD;
-        Mon,  4 Jul 2022 12:26:15 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 60E14A7C08
+        for <linux-can@vger.kernel.org>; Mon,  4 Jul 2022 12:59:57 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 43e2380b;
-        Mon, 4 Jul 2022 12:26:14 +0000 (UTC)
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id e433cedf
+        for <linux-can@vger.kernel.org>;
+        Mon, 4 Jul 2022 12:59:57 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH net 15/15] can: mcp251xfd: mcp251xfd_register_get_dev_id(): fix endianness conversion
-Date:   Mon,  4 Jul 2022 14:26:13 +0200
-Message-Id: <20220704122613.1551119-16-mkl@pengutronix.de>
+To:     linux-can@vger.kernel.org
+Subject: [PATCH 0/5] can: slcan: checkpatch cleanups
+Date:   Mon,  4 Jul 2022 14:59:49 +0200
+Message-Id: <20220704125954.1587880-1-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220704122613.1551119-1-mkl@pengutronix.de>
-References: <20220704122613.1551119-1-mkl@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
@@ -59,50 +54,13 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-In mcp251xfd_register_get_dev_id() the device ID register is read with
-handcrafted SPI transfers. As all registers, this register is in
-little endian. Further it is not naturally aligned in struct
-mcp251xfd_map_buf_nocrc::data. However after the transfer the register
-content is converted from big endian to CPU endianness not taking care
-of being unaligned.
+Hello,
 
-Fix the conversion by converting from little endian to CPU endianness
-taking the unaligned source into account.
+this is a patch series consisting of various checkpatch cleanups for
+the slcan driver.
 
-Side note: So far the register content is 0x0 on all mcp251xfd
-compatible chips, and is only used for an informative printk.
+regards,
+Marc
 
-Link: https://lore.kernel.org/all/20220627092859.809042-1-mkl@pengutronix.de
-Fixes: 55e5b97f003e ("can: mcp25xxfd: add driver for Microchip MCP25xxFD SPI CAN")
-Reviewed-by: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-index 3160881e89d9..9b47b07162fe 100644
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-@@ -12,6 +12,7 @@
- // Copyright (c) 2019 Martin Sperl <kernel@martin.sperl.org>
- //
- 
-+#include <asm/unaligned.h>
- #include <linux/bitfield.h>
- #include <linux/clk.h>
- #include <linux/device.h>
-@@ -1787,7 +1788,7 @@ mcp251xfd_register_get_dev_id(const struct mcp251xfd_priv *priv, u32 *dev_id,
- 	if (err)
- 		goto out_kfree_buf_tx;
- 
--	*dev_id = be32_to_cpup((__be32 *)buf_rx->data);
-+	*dev_id = get_unaligned_le32(buf_rx->data);
- 	*effective_speed_hz_slow = xfer[0].effective_speed_hz;
- 	*effective_speed_hz_fast = xfer[1].effective_speed_hz;
- 
--- 
-2.35.1
 
 
