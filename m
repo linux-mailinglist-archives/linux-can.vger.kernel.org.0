@@ -2,49 +2,71 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69FAE56568F
-	for <lists+linux-can@lfdr.de>; Mon,  4 Jul 2022 15:08:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16DF8565967
+	for <lists+linux-can@lfdr.de>; Mon,  4 Jul 2022 17:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234683AbiGDNH6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 4 Jul 2022 09:07:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47914 "EHLO
+        id S234766AbiGDPIX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 4 Jul 2022 11:08:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234626AbiGDNHy (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 4 Jul 2022 09:07:54 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CF89DE8C
-        for <linux-can@vger.kernel.org>; Mon,  4 Jul 2022 06:07:45 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1o8Lnj-0004Fg-6J; Mon, 04 Jul 2022 15:07:43 +0200
-Received: from pengutronix.de (2a03-f580-87bc-d400-9ec8-2378-47c2-fbd7.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:9ec8:2378:47c2:fbd7])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 964AAA7C3C;
-        Mon,  4 Jul 2022 13:07:42 +0000 (UTC)
-Date:   Mon, 4 Jul 2022 15:07:42 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Jimmy Assarsson <extja@kvaser.com>
+        with ESMTP id S235023AbiGDPHy (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 4 Jul 2022 11:07:54 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2AB211148
+        for <linux-can@vger.kernel.org>; Mon,  4 Jul 2022 08:06:57 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id c12so1486190lff.2
+        for <linux-can@vger.kernel.org>; Mon, 04 Jul 2022 08:06:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kvaser.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=PsBtHpMy5uXbzB8lQXz0O4ljYPlSjSFx7+ITMI5I+k4=;
+        b=iDr+ves6KwXdx6kwvxF0OHsV7sQR51hDU6nL0DhVwTIm66romjSo+HVJTFsg34JQQG
+         bbjBCx7I6EN6/bET2XvqMCyjeiA0m6Ny29na9Rt6aXiJ5yQWYVAtFA2kvKCZrJpQer+X
+         il7kSCH0O0z6hSS+sON2uZ3KOV0eS3/h8WZCSsjMpN2I9J//11iNCm4HhHzT39p1pbO2
+         u2gnTQhwC3LCxrYdGfjL+9PUJx3tUBWq65etISsOQAqTwvd3enQg363eky5hQlZEuke/
+         bDiFbJ0su0iMZb3IlItWzfztHoGMT2VApEBSDzCL7x6ml+hPXllWFxIuTOKRZgo0Fpfi
+         iAVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=PsBtHpMy5uXbzB8lQXz0O4ljYPlSjSFx7+ITMI5I+k4=;
+        b=uqcnyV/fNSVfduN/GBzRq8qv0YM7GTTNhGytHveBmqUPo2Hld6lbR8USqkF3Qj5pJd
+         bcgvesFzrSSRJ9NvdGBu0zqNye5VgOgKe/HnJ53zPzjogDksOleU17nJBEoz1k3njsnZ
+         zjaR94m3vfkc7UVLZgBlVFUGa9uWhYtDN0CFLgGXttFButrxQmjmpvWZkWRgJRYJ+CsG
+         acY9VIob1mUXlxnCsDRacDfKJl0to9H1hPHbgMzy3Gl3bnxtPleTQOmgfygXau7xcn4x
+         04cY4XjFPHvWmD/bHouU2Du7TdAnb750TjmnqJVUWJbn54QdX1JZx7uRaEtaexJQ27ih
+         eOwg==
+X-Gm-Message-State: AJIora9T4xS6EUrPzAzvRfHCCG47pEsBXQPVwLch2t2xmHk2MUMrC0eG
+        oz0m+pY8MDn+9CyoKGKrkUiJVQ==
+X-Google-Smtp-Source: AGRyM1s2oQBCaEnNr3OBe9rDORvEdR2sDiB5OOWkRvQ5aU69AT/EctYaJYARM1BSFTuPGf6cTjOvow==
+X-Received: by 2002:ac2:5ec9:0:b0:481:16ae:5a55 with SMTP id d9-20020ac25ec9000000b0048116ae5a55mr20001113lfq.678.1656947215789;
+        Mon, 04 Jul 2022 08:06:55 -0700 (PDT)
+Received: from [192.168.16.142] (h-155-4-68-234.A785.priv.bahnhof.se. [155.4.68.234])
+        by smtp.gmail.com with ESMTPSA id y9-20020ac24e69000000b0047f647414efsm5173735lfs.190.2022.07.04.08.06.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Jul 2022 08:06:55 -0700 (PDT)
+Message-ID: <612195b5-aca0-2902-66f8-7d9a4f33c4dd@kvaser.com>
+Date:   Mon, 4 Jul 2022 17:07:21 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v2 0/3] can: kvaser_usb: CAN clock frequency regression
+Content-Language: en-US
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
 Cc:     linux-can@vger.kernel.org,
         Jimmy Assarsson <jimmyassarsson@gmail.com>,
         stable@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] can: kvaser_usb: CAN clock frequency regression
-Message-ID: <20220704130742.aeczqfbfnwemb7ax@pengutronix.de>
 References: <20220603083820.800246-1-extja@kvaser.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jk3ggiaspqsqf5g4"
-Content-Disposition: inline
-In-Reply-To: <20220603083820.800246-1-extja@kvaser.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+ <20220704130742.aeczqfbfnwemb7ax@pengutronix.de>
+From:   Jimmy Assarsson <extja@kvaser.com>
+In-Reply-To: <20220704130742.aeczqfbfnwemb7ax@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,55 +75,25 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On 7/4/22 15:07, Marc Kleine-Budde wrote:
+> On 03.06.2022 10:38:17, Jimmy Assarsson wrote:
+>> When fixing the CAN clock frequency,
+>> fb12797ab1fe ("can: kvaser_usb: get CAN clock frequency from device"),
+>> I introduced a regression.
+>>
+>> For Leaf devices based on M32C, the firmware expects bittiming parameters
+>> calculated for 16MHz clock. Regardless of the actual clock frequency.
+>>
+>> This regression affects M32C based Leaf devices with non-16MHz clock.
+>>
+>> Also correct the bittiming constants in kvaser_usb_leaf.c, where the limits
+>> are different depending on which firmware/device being used.
+>>
+>> Once merged to mainline, I'll backport these fixes for the stable kernels.
+> 
+> Added to linux-can/testing. I had to move the kvaser_usb_driver_info
+> into kvaser_usb_core.c and the keep struct can_bittiming_const
+> kvaser_usb_flexc_bittiming_const in kvaser_usb_hydra.c as structs in
+> header files cause defined but not used warnings on some platforms.
 
---jk3ggiaspqsqf5g4
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 03.06.2022 10:38:17, Jimmy Assarsson wrote:
-> When fixing the CAN clock frequency,
-> fb12797ab1fe ("can: kvaser_usb: get CAN clock frequency from device"),
-> I introduced a regression.
->=20
-> For Leaf devices based on M32C, the firmware expects bittiming parameters
-> calculated for 16MHz clock. Regardless of the actual clock frequency.
->=20
-> This regression affects M32C based Leaf devices with non-16MHz clock.
->=20
-> Also correct the bittiming constants in kvaser_usb_leaf.c, where the limi=
-ts
-> are different depending on which firmware/device being used.
->=20
-> Once merged to mainline, I'll backport these fixes for the stable kernels.
-
-Added to linux-can/testing. I had to move the kvaser_usb_driver_info
-into kvaser_usb_core.c and the keep struct can_bittiming_const
-kvaser_usb_flexc_bittiming_const in kvaser_usb_hydra.c as structs in
-header files cause defined but not used warnings on some platforms.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---jk3ggiaspqsqf5g4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLC5hsACgkQrX5LkNig
-013Obwf9GKOY0FnDPwrS73id/0FrnFW6T/5aXnTotaMVmFvgxxf91WbRCOhkFYfs
-6XKeqmiOTaU8Hjs0fn9ABLIDK/FNq81878oQrGKVm9DyGndwTjPBaBs9D2VrRnb5
-w0O8Fb9eiF7+BoZCh6b1F8C4dB4PMF5TajnwCYYzQWaghRt/LJC9Y8PqDVFlfYdk
-8uIkV7RNxBu1Vt/xM18JO92A51M8Iuk5dqn9Lcfz5wtaJeI0MkP4z4GZIwMGstui
-DcR11YDvZ3ny1DXHluM5F+zovNLb7LWW2q110UiV9hdxn60WYkPmhTNB53zYSWYO
-PYqVIeg1Ea+jaRthysiBUFP83tDt1A==
-=l367
------END PGP SIGNATURE-----
-
---jk3ggiaspqsqf5g4--
+Ok. Thanks Marc!
