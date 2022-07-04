@@ -2,141 +2,52 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BC205651CA
-	for <lists+linux-can@lfdr.de>; Mon,  4 Jul 2022 12:13:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCAC0565614
+	for <lists+linux-can@lfdr.de>; Mon,  4 Jul 2022 14:53:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233716AbiGDKNY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 4 Jul 2022 06:13:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34594 "EHLO
+        id S234629AbiGDMw5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 4 Jul 2022 08:52:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233425AbiGDKNX (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 4 Jul 2022 06:13:23 -0400
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2099.outbound.protection.outlook.com [40.107.114.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD04F6B;
-        Mon,  4 Jul 2022 03:13:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QPCFYACWORlDLuvi6IoGGNZSHwSc3kvQjGqHDhF3X9MszxoJ+RuACkIHSLcnJD1qKJBNt0ddcuCy+mrj0nHJ6f1xKI+GaOxqFCxrEJsYe887G2mjkvrBz5ndkRiqjiQGDbwaZxt2U5PoMrFH6NQ/G20YmqK5ThGj8xYdcbUjkN3g5CcflAVXgibJErDKbA95Ni1sfJSJTx2Fc0mgYJNSLYOl38LTKXPS+3Sg2vjwdqxHf9QqVhZJonDGxI2DwThdRxOQRz1vgXPr5Ql9x1RdoeMXYUMP0GB1A6+9eXPn+feInAKpaCJ6seDTrrB0LNG1zxHm19yIjBhN4j4woc8Q6Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OahMXwE1CE0n3gJsHdB+6WMPVxvXLwwPq/LpaLNDBVI=;
- b=iu45nWfn5O8tazJixgDL9Ieku6mbR2i8VvKOxV/79NPciX7DN7Fx/9bU0d4aB76qGdUzFxmpExgWLBYKlVlxE39Q6dMZy12xkvQrEzC42eYlwZEi+UfurTkuOlRNBr9OQdOxRCvIKnxQtS1Laz6yiRBw378E+UWvbD87LcK7f/eLvoArX2pR6BtitkM7B/rfQNfPkji2BMd1YiVeP6Zb3LDeO/TDRbOLbwp1vYoazNnQGXNSx+JDFW6XnADbjbmPsI0drogu8blIRzS3+gDOnW+rOuUQgdVXvpFEMTLOMVMSRY2V0z3wS9WW/mAHz1fwf5w1Qr0uxkolnu7N5tC4HA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OahMXwE1CE0n3gJsHdB+6WMPVxvXLwwPq/LpaLNDBVI=;
- b=awoLVXzaeCmfzKsFjt79Wdmugz7Ja9h5JAFO8q0IzdKljKMxirdANs2TeaNsi8YHomu/Dr8wPtWT9UlEAfYyAJf0qLCQz+LC3dJvvAPLcmRRr0djESf015ehYEBH2E9stD1x2x0U9uSg7bVUcIXRQB8Vck2YaAqnZ3ALWAE5Y6o=
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
- by TYAPR01MB2430.jpnprd01.prod.outlook.com (2603:1096:404:85::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.17; Mon, 4 Jul
- 2022 10:13:16 +0000
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::dc06:eb07:874:ecce]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::dc06:eb07:874:ecce%9]) with mapi id 15.20.5395.020; Mon, 4 Jul 2022
- 10:13:16 +0000
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-CC:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        =?utf-8?B?U3RlZmFuIE3DpHRqZQ==?= <stefan.maetje@esd.eu>,
-        =?utf-8?B?VXdlIEtsZWluZS1Lw7ZuaWc=?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: RE: [PATCH v3 3/6] can: sja1000: Add Quirk for RZ/N1 SJA1000 CAN
- controller
-Thread-Topic: [PATCH v3 3/6] can: sja1000: Add Quirk for RZ/N1 SJA1000 CAN
- controller
-Thread-Index: AQHYj3rNvTbRHbqmrU+w0DVEMNqwXq1t+UIAgAAD4cA=
-Date:   Mon, 4 Jul 2022 10:13:16 +0000
-Message-ID: <OS0PR01MB5922C8CF2FCBE7E6DEF806A486BE9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-References: <20220704075032.383700-1-biju.das.jz@bp.renesas.com>
- <20220704075032.383700-4-biju.das.jz@bp.renesas.com>
- <CAMZ6RqLr=eO_LFRtoDcd0eOr_JyX8eTJwsnqtg_veO_wNBN8Eg@mail.gmail.com>
-In-Reply-To: <CAMZ6RqLr=eO_LFRtoDcd0eOr_JyX8eTJwsnqtg_veO_wNBN8Eg@mail.gmail.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 99392df1-5a99-4963-0248-08da5da5cfcf
-x-ms-traffictypediagnostic: TYAPR01MB2430:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: TGofYVsoVEQAR+HBu/8gQvuVYqYX9lv3XxjRL24dSGSsD08ffbxrKzimimREafxypDR5iORvwiqcLjN4QRHOukXDKvawHd8LJMMh3ETEmrqKnnx4e/hw316Dx1yh5Qp2A6Wn53wMaClMwB2JWgHfQGyqJQAQbEMH8a/mH6KCDiWxaL3oFxtVpEcDVZ2b4eEW8l8BFM578ipscE25zTjyomxFx4ARAJNxawVyqPDne0ur+TyDRab4MsRZpgsQi8LATgE5JRGyY8ECfgFCiQtgi1ckBm3rve/BLD20Q9d7/L7V51I07CJ+qcURiGWVcvqN/KHehbErJ0BROC7VcwjJ+miUcPQHui+PYbqXcd55vaO1FMUbhLNDGK6hFI7z5mABtyPhdQigMcYy5QuWu0IuWAx7pfgH9fgvwGBk1qqrRN5xmArQt/D7ZGB/88eI8DXYFnrBCJOCZque2i0Ke9uRxWPQwiWfbPOOyV8hpvDywE+oIaen+ZYXcofTyIVInTVrOcyJIU0jxh/+7099PA599FsZ1jbnAZ67ExmmMruQ0+cFmAlK18sKPqwZVv/8LRuLgKtfnxC1EX+/nUimPPudO1SO0q7e+w89kcYWhG+nzdXJFXIlc5THFhiSDGPCm/3Fc6pItE+bi7o4Ss1V3LedSpXxD7VIzBZCu/vH9T69Plx+AsbvU6DaSISj8jNn+HYDTUg1T3BL8FRDVEDlHn2wxG2feXeAFe4hveEHfeyPQwikKa/75QtJc78/gX0y5hqycuLF56HuXvVmD7bVxK/E41Pv/TxjKX6hj7nSLPR8XUpVXHjthtYzy8u2r7LVR/sD
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(136003)(39860400002)(366004)(396003)(376002)(38100700002)(76116006)(66946007)(66556008)(4326008)(54906003)(8676002)(66476007)(66446008)(64756008)(33656002)(55016003)(86362001)(316002)(6916009)(122000001)(71200400001)(38070700005)(26005)(7416002)(2906002)(41300700001)(8936002)(52536014)(478600001)(6506007)(186003)(9686003)(83380400001)(5660300002)(7696005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VmNjbnZGWlh4WEJ1R0RNeDVLNUxlNmUzNVR3MGVjYTlWeFlGRy8xWFVVQzFN?=
- =?utf-8?B?aEV3TTZmL3NucUcrNG1mbTdkOTQ4OStRV3E5ZW5pVDZ0UW1EVlZjZURHK0FD?=
- =?utf-8?B?RytZMmYyUUdmZzFQbTlkenJhcEFVc0VMM2J1SzBxMkxKN2tBd0l3WmE2OVB3?=
- =?utf-8?B?djd2TVZXRjJMZWRFdmw4Qmp3WndpeWNtSzlPVXdNOExIaTBkRTBCR1dPS2FC?=
- =?utf-8?B?a0doanpYUitCMnYveU1WM1R3clIrU1I5OForSnhPdm00cWdOZnFwakJXdGdT?=
- =?utf-8?B?TnZqTmRyc0MyNkp2ZmlHclRPM3huZVNIUXU3US9vNjBDSEhOQ04wdHk5a0Rv?=
- =?utf-8?B?K2ZGM1Y0c05DTTF3VWVaY3VnUnR6V0lSOEZnODlBdVFXRWF5VUJOSElwYUpP?=
- =?utf-8?B?bjhUT2RoenUyMWVObFRZTENLWjFUTWdxLzFVaEVZK2RWYnhhazZwNXVQOHNM?=
- =?utf-8?B?bHhIcHVNa001N1QzRHJvOWtjOExab2dNWGdJdG5IVmFueTU4cUIxdDhmN1Zr?=
- =?utf-8?B?THc3emo0TllHRm1KMXNzelJoQnduTHZNelBKSlk1TytlckhoSmdqRGl4cThM?=
- =?utf-8?B?eXAwNmRVOFJnajUxb0tNcUlDcVUrZzdMWXRvL0U1aE85REhPT2Q2REt3N1kv?=
- =?utf-8?B?VWFHRFh4emliblVOTkowZW5xS1FUZGtYTGNIQ213VDExQ05oeDVDR3FSZlRl?=
- =?utf-8?B?M1JXRlVvdTBpb0lnOVNubnV5M2tnYkQveHRUTm1ENk9IQm5FWkROY21yV0ZU?=
- =?utf-8?B?Y3RGamZkaUdodXpqUS9nTEhGZ3JHbDh6RE1GOUxNQlNiR2ZBOC9KVUV2NVR3?=
- =?utf-8?B?QXFDK0tuWWJVamE5OTdWMzU5Rjc1U1Rnbm5NQVBFMUc1Q29aU3JUdDdXWDVS?=
- =?utf-8?B?OVJndEhYdzBwSFpVKzhZaU1ZalhWZ080OHdxUWxrN2JueWswbk00RWtHMEhP?=
- =?utf-8?B?cWVIc0tXV2hOb3h3VlpkaGFZSW0xdi83Z1U3MUxzNTJ3N0szMERaWWRwbWRB?=
- =?utf-8?B?bldhRlZkS1Z4Z1dXYVN1bmRFWEVxNDRHaXp5VWpvR3RVZFAzSjZUNGhmQ2ZN?=
- =?utf-8?B?SU1QT3NIZVpINzg2dGxlZysxN2tjbGhjS1hqRUtMQ2QyaElZcTZmN0dZSVpL?=
- =?utf-8?B?Yy9rTTA0TXEvczZlSHR6b2I0VzJYaUJSUEpuVkZkcXRad0tCTzA4QjJaUXJj?=
- =?utf-8?B?MHhZTXI4SEdNRlB6V3l5RXNUNWp4NGQ5eElpS3pjNFU4YUxPL0tFbjJ6c21s?=
- =?utf-8?B?RHZSWU9Sd1oyMUtHaHJRRXBkb01hc1V2OHZFY1ErVjRYQjFnekI4S1dXaXV2?=
- =?utf-8?B?elRaWmtRVTZEU0FGOWIzSDVZK2JmUTVkTGg5NzZSaXJVbWdlMGJMeksxM3hV?=
- =?utf-8?B?Y3FzTHZKRG8wOTIxTHN6VkN5VlBodlpCV0g2Sk9GZDd3bjJFb2dqdXlPRUc3?=
- =?utf-8?B?WEhWZHNBQjhyeWxpVTc1QWQvR2RqMXROcXhUUmNXVlhZc3BvYW0xWk9lLzB1?=
- =?utf-8?B?andCQll6U0l5WVZxNFBLSzhMWVFMZ09vc0VaVFNlUUVIK1A4Z09TUXp4ek1U?=
- =?utf-8?B?QjBIbHRkODdUM0dHS1gwMXlVcUxKanNSOVVVaTRraWM1cDZUeEk4T3BsaG9O?=
- =?utf-8?B?UU82RjVxTmVuK3FQYjBWa0IrQTBnSmI5cXMwUnpOd3J2OVVmWkVZVk1DWnpO?=
- =?utf-8?B?TUJ5SVJIRFV5N1d2ZDhlczBoeXVCNmpUeVlrdDI2dXNzMjh2aXk1akNhb1di?=
- =?utf-8?B?c04vWnlqU2h6OHpmU0xub0RUaTkyQmlpWXM2Yk9lVk5ka1NMejVCYmlhOHpE?=
- =?utf-8?B?dThKNGE3cENsM0xNM0NOWXh2bUlLSG5VRXlXL1Z2UTdsZ0phZnNNeVNRbXNK?=
- =?utf-8?B?Smo0NUVrbjVVMXJLWlR0WU5obGc4S3hudEE4dGNMS1ZhVkM2Y2ZMREppMW5G?=
- =?utf-8?B?aUkzVEFOTFBOUkNtdGtaaU1wQiswZEVOOXVoVEkzNzFTTHhpWW9QalFKU0RY?=
- =?utf-8?B?aSs1WU00byswN2VNa0hUWTRmMlBLSk04cmZROWlrbVFYUG5Sc0ViZWFLY09F?=
- =?utf-8?B?TGpwR204eVBVa1JIa24rL3NCMW5tblM4RE5IcjkxaThrbEdib3NCVXBROWVK?=
- =?utf-8?B?bm5WS2pjR3FpTVhzbldXKzhvY3AvWnhTbGdQZW5CbjJtVEt5TVk5ZEdYZVpX?=
- =?utf-8?B?SVE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S234740AbiGDMwp (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 4 Jul 2022 08:52:45 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5279511A30
+        for <linux-can@vger.kernel.org>; Mon,  4 Jul 2022 05:52:42 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1o8LZ3-0001H1-Ri
+        for linux-can@vger.kernel.org; Mon, 04 Jul 2022 14:52:33 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id CEC5AA792C
+        for <linux-can@vger.kernel.org>; Mon,  4 Jul 2022 12:26:14 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 88E45A7921;
+        Mon,  4 Jul 2022 12:26:14 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 62a2908a;
+        Mon, 4 Jul 2022 12:26:14 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH net 0/15] pull-request: can 2022-07-04
+Date:   Mon,  4 Jul 2022 14:25:58 +0200
+Message-Id: <20220704122613.1551119-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 99392df1-5a99-4963-0248-08da5da5cfcf
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Jul 2022 10:13:16.3315
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: QQqOv0A0EBUxJwrLj6Nzyj5/dQ76f2c7lsVdlBREpG6GHq5DcCnjxUVokku2mdw9UDdYRWqttocUtGKDjNXYgVgd+tF0hWKQ7lBu5RAPgwc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB2430
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -144,65 +55,101 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-SGkgVmluY2VudCwNCg0KVGhhbmtzIGZvciB0aGUgZmVlZGJhY2suDQoNCj4gU3ViamVjdDogUmU6
-IFtQQVRDSCB2MyAzLzZdIGNhbjogc2phMTAwMDogQWRkIFF1aXJrIGZvciBSWi9OMSBTSkExMDAw
-IENBTg0KPiBjb250cm9sbGVyDQo+IA0KPiBIaSBCaWp1LA0KPiANCj4gSSBnYXZlIGEgcXVpY2sg
-bG9vayB0byB5b3VyIHNlcmllcy4gTm90aGluZyBvZGQgdG8gbWUsIEkganVzdCBoYXZlIGENCj4g
-c2luZ2xlIG5pdHBpY2suDQo+IA0KPiBPbiBNb24uIDQganVpbC4gMjAyMiBhdCAxNjo1MSwgQmlq
-dSBEYXMgPGJpanUuZGFzLmp6QGJwLnJlbmVzYXMuY29tPg0KPiB3cm90ZToNCj4gPiBBcyBwZXIg
-Q2hhcHRlciA2LjUuMTYgb2YgdGhlIFJaL04xIFBlcmlwaGVyYWwgTWFudWFsLCBUaGUgU0pBMTAw
-MCBDQU4NCj4gPiBjb250cm9sbGVyIGRvZXMgbm90IHN1cHBvcnQgQ2xvY2sgRGl2aWRlciBSZWdp
-c3RlciBjb21wYXJlZCB0byB0aGUNCj4gPiByZWZlcmVuY2UgUGhpbGlwcyBTSkExMDAwIGRldmlj
-ZS4NCj4gPg0KPiA+IFRoaXMgcGF0Y2ggYWRkcyBhIGRldmljZSBxdWlyayB0byBoYW5kbGUgdGhp
-cyBkaWZmZXJlbmNlLg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogQmlqdSBEYXMgPGJpanUuZGFz
-Lmp6QGJwLnJlbmVzYXMuY29tPg0KPiA+IC0tLQ0KPiA+IHYyLT52MzoNCj4gPiAgKiBObyBDaGFu
-Z2UNCj4gPiB2MS0+djI6DQo+ID4gICogVXBkYXRlZCBjb21taXQgZGVzY3JpcHRpb24NCj4gPiAg
-KiBSZW1vdmVkIHRoZSBxdWlyayBtYWNybyBTSkExMDAwX05PX0hXX0xPT1BCQUNLX1FVSVJLDQo+
-ID4gICogQWRkZWQgcHJlZml4IFNKQTEwMDBfUVVJUktfKiBmb3IgcXVpcmsgbWFjcm8uDQo+ID4g
-LS0tDQo+ID4gIGRyaXZlcnMvbmV0L2Nhbi9zamExMDAwL3NqYTEwMDAuYyB8IDEzICsrKysrKysr
-LS0tLS0NCj4gPiBkcml2ZXJzL25ldC9jYW4vc2phMTAwMC9zamExMDAwLmggfCAgMyArKy0NCj4g
-PiAgMiBmaWxlcyBjaGFuZ2VkLCAxMCBpbnNlcnRpb25zKCspLCA2IGRlbGV0aW9ucygtKQ0KPiA+
-DQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L2Nhbi9zamExMDAwL3NqYTEwMDAuYw0KPiA+
-IGIvZHJpdmVycy9uZXQvY2FuL3NqYTEwMDAvc2phMTAwMC5jDQo+ID4gaW5kZXggMmU3NjM4Zjk4
-Y2YxLi5lOWM1NWY1YWEzYzMgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy9uZXQvY2FuL3NqYTEw
-MDAvc2phMTAwMC5jDQo+ID4gKysrIGIvZHJpdmVycy9uZXQvY2FuL3NqYTEwMDAvc2phMTAwMC5j
-DQo+ID4gQEAgLTE4Myw4ICsxODMsOSBAQCBzdGF0aWMgdm9pZCBjaGlwc2V0X2luaXQoc3RydWN0
-IG5ldF9kZXZpY2UgKmRldikNCj4gPiB7DQo+ID4gICAgICAgICBzdHJ1Y3Qgc2phMTAwMF9wcml2
-ICpwcml2ID0gbmV0ZGV2X3ByaXYoZGV2KTsNCj4gPg0KPiA+IC0gICAgICAgLyogc2V0IGNsb2Nr
-IGRpdmlkZXIgYW5kIG91dHB1dCBjb250cm9sIHJlZ2lzdGVyICovDQo+ID4gLSAgICAgICBwcml2
-LT53cml0ZV9yZWcocHJpdiwgU0pBMTAwMF9DRFIsIHByaXYtPmNkciB8IENEUl9QRUxJQ0FOKTsN
-Cj4gPiArICAgICAgIGlmICghKHByaXYtPmZsYWdzICYgU0pBMTAwMF9RVUlSS19OT19DRFJfUkVH
-KSkNCj4gPiArICAgICAgICAgICAgICAgLyogc2V0IGNsb2NrIGRpdmlkZXIgYW5kIG91dHB1dCBj
-b250cm9sIHJlZ2lzdGVyICovDQo+ID4gKyAgICAgICAgICAgICAgIHByaXYtPndyaXRlX3JlZyhw
-cml2LCBTSkExMDAwX0NEUiwgcHJpdi0+Y2RyIHwNCj4gPiArIENEUl9QRUxJQ0FOKTsNCj4gPg0K
-PiA+ICAgICAgICAgLyogc2V0IGFjY2VwdGFuY2UgZmlsdGVyIChhY2NlcHQgYWxsKSAqLw0KPiA+
-ICAgICAgICAgcHJpdi0+d3JpdGVfcmVnKHByaXYsIFNKQTEwMDBfQUNDQzAsIDB4MDApOyBAQCAt
-MjA4LDkgKzIwOSwxMQ0KPiA+IEBAIHN0YXRpYyB2b2lkIHNqYTEwMDBfc3RhcnQoc3RydWN0IG5l
-dF9kZXZpY2UgKmRldikNCj4gPiAgICAgICAgIGlmIChwcml2LT5jYW4uc3RhdGUgIT0gQ0FOX1NU
-QVRFX1NUT1BQRUQpDQo+ID4gICAgICAgICAgICAgICAgIHNldF9yZXNldF9tb2RlKGRldik7DQo+
-ID4NCj4gPiAtICAgICAgIC8qIEluaXRpYWxpemUgY2hpcCBpZiB1bmluaXRpYWxpemVkIGF0IHRo
-aXMgc3RhZ2UgKi8NCj4gPiAtICAgICAgIGlmICghKHByaXYtPnJlYWRfcmVnKHByaXYsIFNKQTEw
-MDBfQ0RSKSAmIENEUl9QRUxJQ0FOKSkNCj4gPiAtICAgICAgICAgICAgICAgY2hpcHNldF9pbml0
-KGRldik7DQo+ID4gKyAgICAgICBpZiAoIShwcml2LT5mbGFncyAmIFNKQTEwMDBfUVVJUktfTk9f
-Q0RSX1JFRykpIHsNCj4gPiArICAgICAgICAgICAgICAgLyogSW5pdGlhbGl6ZSBjaGlwIGlmIHVu
-aW5pdGlhbGl6ZWQgYXQgdGhpcyBzdGFnZSAqLw0KPiA+ICsgICAgICAgICAgICAgICBpZiAoIShw
-cml2LT5yZWFkX3JlZyhwcml2LCBTSkExMDAwX0NEUikgJg0KPiA+ICsgQ0RSX1BFTElDQU4pKQ0K
-PiANCj4gWW91IGNhbiBjb21iaW5lIHRoZSB0d28gaWYgaW4gb25lOg0KPiANCj4gfCAgICAgICAg
-LyogSW5pdGlhbGl6ZSBjaGlwIGlmIHVuaW5pdGlhbGl6ZWQgYXQgdGhpcyBzdGFnZSAqLw0KPiB8
-ICAgICAgICBpZiAoIShwcml2LT5mbGFncyAmIFNKQTEwMDBfUVVJUktfTk9fQ0RSX1JFRyB8fA0K
-PiB8ICAgICAgICAgICAgICBwcml2LT5yZWFkX3JlZyhwcml2LCBTSkExMDAwX0NEUikgJiBDRFJf
-UEVMSUNBTikpDQo+IHwgICAgICAgICAgICAgICAgY2hpcHNldF9pbml0KGRldik7DQo+IA0KPiA+
-ICsgICAgICAgICAgICAgICAgICAgICAgIGNoaXBzZXRfaW5pdChkZXYpOw0KPiA+ICsgICAgICAg
-fQ0KDQpPSywgd2lsbCBmaXggdGhpcyBpbiBuZXh0IHZlcnNpb24uDQoNCkNoZWVycywNCkJpanUN
-Cg0KPiA+DQo+ID4gICAgICAgICAvKiBDbGVhciBlcnJvciBjb3VudGVycyBhbmQgZXJyb3IgY29k
-ZSBjYXB0dXJlICovDQo+ID4gICAgICAgICBwcml2LT53cml0ZV9yZWcocHJpdiwgU0pBMTAwMF9U
-WEVSUiwgMHgwKTsgZGlmZiAtLWdpdA0KPiA+IGEvZHJpdmVycy9uZXQvY2FuL3NqYTEwMDAvc2ph
-MTAwMC5oDQo+ID4gYi9kcml2ZXJzL25ldC9jYW4vc2phMTAwMC9zamExMDAwLmgNCj4gPiBpbmRl
-eCA5ZDQ2Mzk4ZjgxNTQuLjdmNzM2ZjFkZjU0NyAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL25l
-dC9jYW4vc2phMTAwMC9zamExMDAwLmgNCj4gPiArKysgYi9kcml2ZXJzL25ldC9jYW4vc2phMTAw
-MC9zamExMDAwLmgNCj4gPiBAQCAtMTQ1LDcgKzE0NSw4IEBADQo+ID4gIC8qDQo+ID4gICAqIEZs
-YWdzIGZvciBzamExMDAwcHJpdi5mbGFncw0KPiA+ICAgKi8NCj4gPiAtI2RlZmluZSBTSkExMDAw
-X0NVU1RPTV9JUlFfSEFORExFUiAweDENCj4gPiArI2RlZmluZSBTSkExMDAwX0NVU1RPTV9JUlFf
-SEFORExFUiAgICAgQklUKDApDQo+ID4gKyNkZWZpbmUgU0pBMTAwMF9RVUlSS19OT19DRFJfUkVH
-ICAgICAgIEJJVCgxKQ0KPiA+DQo+ID4gIC8qDQo+ID4gICAqIFNKQTEwMDAgcHJpdmF0ZSBkYXRh
-IHN0cnVjdHVyZQ0K
+Hello Jakub, hello David,
+
+this is a pull request of 15 patches for net/master.
+
+The 1st patch is by Oliver Hartkopp, targets the BCM CAN protocol and
+converts a costly synchronize_rcu() to call_rcu() to fix a performance
+regression.
+
+Srinivas Neeli's patch for the xilinx_can driver drops the brp limit
+down to 1, as only the pre-production silicon have an issue with a brp
+of 1.
+
+The next patch is by Duy Nguyen and fixes the data transmission on
+R-Car V3U SoCs in the rcar_canfd driver.
+
+Rhett Aultman's patch fixes a DMA memory leak in the gs_usb driver.
+
+Liang He's patch removes an extra of_node_get() in the grcan driver.
+
+The next 2 patches are by me, target the m_can driver and fix the
+timestamp handling used for peripheral devices like the tcan4x5x.
+
+Jimmy Assarsson contributes 3 patches for the kvaser_usb driver and
+fixes CAN clock and bit timing related issues.
+
+The remaining 5 patches target the mcp251xfd driver. Thomas Kopp
+contributes 2 patches to improve the workaround for broken CRC when
+reading the TBC register. 3 patches by me add a missing
+hrtimer_cancel() during the ndo_stop() callback, and fix the reading
+of the Device ID register.
+
+regards,
+Marc
+
+---
+
+The following changes since commit 280e3a857d96f9ca8e24632788e1e7a0fec4e9f7:
+
+  Merge git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf (2022-07-03 12:29:18 +0100)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-5.19-20220704
+
+for you to fetch changes up to 1c0e78a287e3493e22bde8553d02f3b89177eaf7:
+
+  can: mcp251xfd: mcp251xfd_register_get_dev_id(): fix endianness conversion (2022-07-04 12:51:43 +0200)
+
+----------------------------------------------------------------
+linux-can-fixes-for-5.19-20220704
+
+----------------------------------------------------------------
+Duy Nguyen (1):
+      can: rcar_canfd: Fix data transmission failed on R-Car V3U
+
+Jimmy Assarsson (3):
+      can: kvaser_usb: replace run-time checks with struct kvaser_usb_driver_info
+      can: kvaser_usb: kvaser_usb_leaf: fix CAN clock frequency regression
+      can: kvaser_usb: kvaser_usb_leaf: fix bittiming limits
+
+Liang He (1):
+      can: grcan: grcan_probe(): remove extra of_node_get()
+
+Marc Kleine-Budde (5):
+      can: m_can: m_can_chip_config(): actually enable internal timestamping
+      can: m_can: m_can_{read_fifo,echo_tx_event}(): shift timestamp to full 32 bits
+      can: mcp251xfd: mcp251xfd_stop(): add missing hrtimer_cancel()
+      can: mcp251xfd: mcp251xfd_register_get_dev_id(): use correct length to read dev_id
+      can: mcp251xfd: mcp251xfd_register_get_dev_id(): fix endianness conversion
+
+Oliver Hartkopp (1):
+      can: bcm: use call_rcu() instead of costly synchronize_rcu()
+
+Rhett Aultman (1):
+      can: gs_usb: gs_usb_open/close(): fix memory leak
+
+Srinivas Neeli (1):
+      Revert "can: xilinx_can: Limit CANFD brp to 2"
+
+Thomas Kopp (2):
+      can: mcp251xfd: mcp251xfd_regmap_crc_read(): improve workaround handling for mcp2517fd
+      can: mcp251xfd: mcp251xfd_regmap_crc_read(): update workaround broken CRC on TBC register
+
+ drivers/net/can/grcan.c                           |   1 -
+ drivers/net/can/m_can/m_can.c                     |   8 +-
+ drivers/net/can/rcar/rcar_canfd.c                 |   5 +-
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c    |   6 +-
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c  |  22 +-
+ drivers/net/can/usb/gs_usb.c                      |  23 +-
+ drivers/net/can/usb/kvaser_usb/kvaser_usb.h       |  25 +-
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c  | 285 ++++++++++++----------
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c |   4 +-
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c  | 119 +++++----
+ drivers/net/can/xilinx_can.c                      |   4 +-
+ net/can/bcm.c                                     |  18 +-
+ 12 files changed, 304 insertions(+), 216 deletions(-)
+
+
