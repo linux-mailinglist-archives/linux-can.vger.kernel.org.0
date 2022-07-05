@@ -2,135 +2,113 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBC435659F7
-	for <lists+linux-can@lfdr.de>; Mon,  4 Jul 2022 17:36:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E2D5661DA
+	for <lists+linux-can@lfdr.de>; Tue,  5 Jul 2022 05:30:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234470AbiGDPgJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 4 Jul 2022 11:36:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53764 "EHLO
+        id S232017AbiGEDaT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 4 Jul 2022 23:30:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229896AbiGDPf6 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 4 Jul 2022 11:35:58 -0400
-Received: from mx0a-0054a801.pphosted.com (mx0a-0054a801.pphosted.com [205.220.160.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54EB2BE1A
-        for <linux-can@vger.kernel.org>; Mon,  4 Jul 2022 08:35:57 -0700 (PDT)
-Received: from pps.filterd (m0208802.ppops.net [127.0.0.1])
-        by mx0b-0054a801.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 264FMmnt005605
-        for <linux-can@vger.kernel.org>; Mon, 4 Jul 2022 08:35:57 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsara.com; h=from : date : to :
- cc : subject : in-reply-to : message-id : references : mime-version :
- content-type; s=samsaracom06092020;
- bh=6/cMnUUh1ad4Qp3G4u2tp66kHhAL7wJCigHkcts3ja8=;
- b=Wr9jVNyKom2IBp3FK0nFuZz21a59a6Tegc3SmAjW0npQcwxhzf1EwOfLPIwisTdTSADg
- epDBlWqiezup5l3i8QD0CazYJQFqMs2BNHMn7J4rEbUVYMQe4XLnaRaDvDFq1/MWXmSe
- b6D8idGp/WjTaZWolW2yZjDcHHwdRUxTv8wHJCl19gKbgHWo858vywSZ9RL3RUkSpwKO
- hayzHPlJumoN4nGHjJuzV+QcZpeWIXOAAsWjp5ONsjvHDlssUXBAaG5V2CIMjwbOPL6r
- 2iM+h6w8OZKdKupdd++c1YJQboE9Sed4whKQEKvB5vNM93YmefH1YkTYQ3Dj3xgwhNVI zA== 
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
-        by mx0b-0054a801.pphosted.com (PPS) with ESMTPS id 3h2kq29130-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-can@vger.kernel.org>; Mon, 04 Jul 2022 08:35:56 -0700
-Received: by mail-qt1-f199.google.com with SMTP id cf8-20020a05622a400800b0031e80dcf14cso604187qtb.3
-        for <linux-can@vger.kernel.org>; Mon, 04 Jul 2022 08:35:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=samsara.com; s=google;
-        h=from:date:to:cc:subject:in-reply-to:message-id:references
-         :user-agent:mime-version;
-        bh=6/cMnUUh1ad4Qp3G4u2tp66kHhAL7wJCigHkcts3ja8=;
-        b=P1kJtfYJEPIfcjBjtDGEvOQC5yt/VvdwJ4uD1VJRaxXQfXOuiFRJM46XQNl1iw/xBx
-         3aqg9l4HW835uO7VWdQUj1AMR0iY3plfv+VkJ++emEvqVcDo5MVnWbAtheCTvNAY7HrX
-         JMQEB3ioy2/GBrUv4l59vgEMivxciRH7to5ev/qsUBEOr19Oo7U16JhEiQyKXIeWIRaF
-         O+sNWI15lbhjxQJaAbQ/vzG5faziA+AxomGIKTx+33jSguAR+G30BJAHAJW3i6QzZ59A
-         BOdVtcCua/4xths/va+mrE4cPFULyM4ZuoNKTHvmJUKDSGS4cliPnjMzUEivvQNuwfta
-         dr/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:in-reply-to:message-id
-         :references:user-agent:mime-version;
-        bh=6/cMnUUh1ad4Qp3G4u2tp66kHhAL7wJCigHkcts3ja8=;
-        b=iBQT0p9GJfz3rb1L3II280Xni5l/q6+djYTIgpT3N1tLoCBZlPsX6uRIu+LCj6zjt+
-         FY/ttzHFtq7dNFfB/Cmm904SBc4hwv8rv5KVd0vblFVFGFT4v+jnpQOHUWCIhbS1tU99
-         Is/EmcGx6XG3/jj61sOjXu/Ba15EMuUVhpBtKh2uolKIxuj7toku7TLoZ4MTG/niezB2
-         xGPS4/sOpwZi/GI6iZLWbcBu1RT+4L5rwifmQBkzCSoIuEHGXCR1IpZSv0aSd0rHNzzu
-         BxyaOhRbEMqhaNZvThVNP9Ycc/ravn+BEnUANaaoqMUSICp/IX1O/jrDYOG/vvYkhbI2
-         FDog==
-X-Gm-Message-State: AJIora+SNNVO9N4UJGaw00jIBR9sCtMLK1LlAKLsiUYtvOx8zUNbHe3k
-        cUju9FzCnVeKYSJCQzncF2ZNwsEk5QjARYPQ5bG+WDgQWpLszcPLxWne7fZJOoqWOB6AZ5GmubZ
-        q51bhdsRNxxDJbsZbD3mk
-X-Received: by 2002:a05:620a:240a:b0:6af:27bc:66dc with SMTP id d10-20020a05620a240a00b006af27bc66dcmr20249870qkn.92.1656948955512;
-        Mon, 04 Jul 2022 08:35:55 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sS4K6RW2GAQGKqx1kGmIQSOBGnSVLgCEQ0jDsPQy4x+6+1JXQnRrinlk91N/v6nLIZOjeXYg==
-X-Received: by 2002:a05:620a:240a:b0:6af:27bc:66dc with SMTP id d10-20020a05620a240a00b006af27bc66dcmr20249847qkn.92.1656948955191;
-        Mon, 04 Jul 2022 08:35:55 -0700 (PDT)
-Received: from [192.168.1.10] ([162.250.128.47])
-        by smtp.gmail.com with ESMTPSA id m14-20020a05620a290e00b006b46ad28ba7sm1750073qkp.84.2022.07.04.08.35.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jul 2022 08:35:54 -0700 (PDT)
-From:   Rhett Aultman <rhett.aultman@samsara.com>
-X-Google-Original-From: Rhett Aultman <rhett@samsara.com>
-Date:   Mon, 4 Jul 2022 11:35:52 -0400 (EDT)
-X-X-Sender: rhett@thelappy
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-cc:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        Rhett Aultman <rhett.aultman@samsara.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Laight <David.Laight@aculab.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-can <linux-can@vger.kernel.org>,
-        Oliver Neukum <oneukum@suse.com>
-Subject: Re: [PATCH v3 1/2] drivers: usb/core/urb: Add URB_FREE_COHERENT
-In-Reply-To: <20220704130249.lqpqstjxaz2773zp@pengutronix.de>
-Message-ID: <alpine.DEB.2.22.394.2207041133330.535975@thelappy>
-References: <CAMZ6RqL42DKD3evR4skswaJnAwOAO_qrZgXoLax7O95xVKUomQ@mail.gmail.com> <48caa879b0064ced97623bf1dad5b2d9@AcuMS.aculab.com> <YrLjsAOlsizMc/1c@kroah.com> <CAMZ6Rq+e+i0xGuWeMaGyTVyLJy=q2vQZqXjYoACws=T_B-FOGQ@mail.gmail.com> <YrMJ0vXR84cISTse@kroah.com>
- <CAMZ6RqJZKYOTtLpiM3ie3fNOBm8i7d8yr8n7S=yAm6twbuhGrQ@mail.gmail.com> <99ac782c-46e7-bbef-8f54-cf2fd67acdc@samsara.com> <CAMZ6Rq+FSzy5ijQZhYyVJrbe86U9faD5aPFO4cezNkN9G-USzQ@mail.gmail.com> <337d5316-82bb-e048-2014-b0634fadf8@samsara.com>
- <CAMZ6Rq+hPC4N=_jGioUyaG0ezTE2qM8gDZic3ETESm0P=vkU9Q@mail.gmail.com> <20220704130249.lqpqstjxaz2773zp@pengutronix.de>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        with ESMTP id S229751AbiGEDaS (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 4 Jul 2022 23:30:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A9811825;
+        Mon,  4 Jul 2022 20:30:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 78596B812AC;
+        Tue,  5 Jul 2022 03:30:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 270ECC341C7;
+        Tue,  5 Jul 2022 03:30:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656991815;
+        bh=6MoM+5xxITJI3xj5bsd+AwoMc9XoWA7FRzNuF7sXlbE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=DQ70G2fEoD/TW9CqrecsOvSoj2mvwq52zO3nDZVU8JE5pyqoJOPtaMmaGdEf3NBv3
+         2iyuPugmc/9HEY9ONASyvZoMol7bv9+7zC41rnKRPNtASdTyVk0cr3BXA+Bf4UlBoh
+         1wpwY2uisNG9IDqXhCj4tGSv6nkS4MjF3hNQY9hoVR/199MmSIRwvSltC9a6IqxMJ+
+         wupNjJ3viDja2kiVgTLpO5jU6I6EL12OEe1oIYoiJwWw+Mm+QH2CNlvTF/6RBi/IxF
+         4ZPqxQGG0LktTvIAlsmnSb56PQYNFSiwBIQ9sr3gGW7tbjXtExebiWw9C/9SvfDJnC
+         r6TSPquTPo1UQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0A889E45BDB;
+        Tue,  5 Jul 2022 03:30:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Proofpoint-ORIG-GUID: oqTyQA0Z4ZiS6Jx-eAfL066MXa_Q19Wi
-X-Proofpoint-GUID: oqTyQA0Z4ZiS6Jx-eAfL066MXa_Q19Wi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-04_15,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
- malwarescore=0 priorityscore=1501 mlxlogscore=527 lowpriorityscore=0
- phishscore=0 clxscore=1015 spamscore=0 adultscore=0 bulkscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2207040068
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 01/15] can: bcm: use call_rcu() instead of costly
+ synchronize_rcu()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165699181503.30643.11616466744896977167.git-patchwork-notify@kernel.org>
+Date:   Tue, 05 Jul 2022 03:30:15 +0000
+References: <20220704122613.1551119-2-mkl@pengutronix.de>
+In-Reply-To: <20220704122613.1551119-2-mkl@pengutronix.de>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        linux-can@vger.kernel.org, kernel@pengutronix.de,
+        socketcan@hartkopp.net, stable@vger.kernel.org,
+        edumazet@google.com, nslusarek@gmx.net, cascardo@canonical.com
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello:
+
+This series was applied to netdev/net.git (master)
+by Marc Kleine-Budde <mkl@pengutronix.de>:
+
+On Mon,  4 Jul 2022 14:25:59 +0200 you wrote:
+> From: Oliver Hartkopp <socketcan@hartkopp.net>
+> 
+> In commit d5f9023fa61e ("can: bcm: delay release of struct bcm_op
+> after synchronize_rcu()") Thadeu Lima de Souza Cascardo introduced two
+> synchronize_rcu() calls in bcm_release() (only once at socket close)
+> and in bcm_delete_rx_op() (called on removal of each single bcm_op).
+> 
+> [...]
+
+Here is the summary with links:
+  - [net,01/15] can: bcm: use call_rcu() instead of costly synchronize_rcu()
+    https://git.kernel.org/netdev/net/c/f1b4e32aca08
+  - [net,02/15] Revert "can: xilinx_can: Limit CANFD brp to 2"
+    https://git.kernel.org/netdev/net/c/c6da4590fe81
+  - [net,03/15] can: rcar_canfd: Fix data transmission failed on R-Car V3U
+    https://git.kernel.org/netdev/net/c/374e11f1bde9
+  - [net,04/15] can: gs_usb: gs_usb_open/close(): fix memory leak
+    https://git.kernel.org/netdev/net/c/2bda24ef95c0
+  - [net,05/15] can: grcan: grcan_probe(): remove extra of_node_get()
+    https://git.kernel.org/netdev/net/c/562fed945ea4
+  - [net,06/15] can: m_can: m_can_chip_config(): actually enable internal timestamping
+    https://git.kernel.org/netdev/net/c/5b12933de4e7
+  - [net,07/15] can: m_can: m_can_{read_fifo,echo_tx_event}(): shift timestamp to full 32 bits
+    https://git.kernel.org/netdev/net/c/4c3333693f07
+  - [net,08/15] can: kvaser_usb: replace run-time checks with struct kvaser_usb_driver_info
+    https://git.kernel.org/netdev/net/c/49f274c72357
+  - [net,09/15] can: kvaser_usb: kvaser_usb_leaf: fix CAN clock frequency regression
+    https://git.kernel.org/netdev/net/c/e6c80e601053
+  - [net,10/15] can: kvaser_usb: kvaser_usb_leaf: fix bittiming limits
+    https://git.kernel.org/netdev/net/c/b3b6df2c56d8
+  - [net,11/15] can: mcp251xfd: mcp251xfd_regmap_crc_read(): improve workaround handling for mcp2517fd
+    https://git.kernel.org/netdev/net/c/406cc9cdb3e8
+  - [net,12/15] can: mcp251xfd: mcp251xfd_regmap_crc_read(): update workaround broken CRC on TBC register
+    https://git.kernel.org/netdev/net/c/e3d4ee7d5f7f
+  - [net,13/15] can: mcp251xfd: mcp251xfd_stop(): add missing hrtimer_cancel()
+    https://git.kernel.org/netdev/net/c/d5a972f561a0
+  - [net,14/15] can: mcp251xfd: mcp251xfd_register_get_dev_id(): use correct length to read dev_id
+    https://git.kernel.org/netdev/net/c/0ff32bfa0e79
+  - [net,15/15] can: mcp251xfd: mcp251xfd_register_get_dev_id(): fix endianness conversion
+    https://git.kernel.org/netdev/net/c/1c0e78a287e3
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-On Mon, 4 Jul 2022, Marc Kleine-Budde wrote:
-
-> On 28.06.2022 10:09:16, Vincent MAILHOL wrote:
-> > > In light of this, while I remain committed to helping work the problem, I
-> > > can't help but wonder if it's worth it to consider my original patch in a
-> > > new light?
-> >
-> > Yes, it makes sense to take your initial patch.
->
-> done
-
-Thanks.  At this point, is there anything more needed from me on that
-patch?  Addition of Reviewed-by: lines or similar?
-
-> > I will reiterate that
-> > I do not like the way it is done but you are fixing a memory leak and
-> > delaying the fix furthermore is not good.
-
-As an addendum, I think I might have found a way to scare up resources
-and time for that benchmarking work, so while I don't want to start making
-promises, there's a reasonable chance we might be able to do this in the
-next few weeks.
-
-Best,
-Rhett
