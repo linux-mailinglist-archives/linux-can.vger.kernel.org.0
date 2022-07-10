@@ -2,63 +2,51 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76FB156C8CE
-	for <lists+linux-can@lfdr.de>; Sat,  9 Jul 2022 12:09:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C0CB56CECC
+	for <lists+linux-can@lfdr.de>; Sun, 10 Jul 2022 13:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbiGIKH6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 9 Jul 2022 06:07:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32786 "EHLO
+        id S229528AbiGJLxA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 10 Jul 2022 07:53:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbiGIKHn (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 9 Jul 2022 06:07:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F494C60F;
-        Sat,  9 Jul 2022 03:07:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE0B360E75;
-        Sat,  9 Jul 2022 10:07:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85E25C341E6;
-        Sat,  9 Jul 2022 10:07:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657361258;
-        bh=dlmv/1uA+9jV5m0Yh6vFjW59sSYEsGHcbCnXJtFK6OI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EDbmzQrK/8oCiAEnfmWeOMIgHVkZMnyTxAmhKJMa4t7nVTyVybKnSkQpoR6TIUwfH
-         X4F/tO0GdftX0anPQxSEHyn3Svl7FSxebQpiwk8E4/m4/2kVPtY/QTuPDsM+ZNL436
-         bLbagUGf18U94eiyKx5g5/LnChqA9ySB0gS5n/MaEvT26LpA0sJ+ep9oXy6/eB00Gq
-         pYGjBDJqK49S2I8GCbRAgo5tAY4W+XIhi/0fbvn1B4IS9oxVXlZXNS5LRveQvmkDca
-         qdYxxu3LP2AK873DgNR9rbzC7sdmY3lJz958rIB5xdauejgp5k+n6CwBXNBJ+ml940
-         rB+n16OAjHN/w==
-Received: from mchehab by mail.kernel.org with local (Exim 4.95)
-        (envelope-from <mchehab@kernel.org>)
-        id 1oA7N9-004EGT-D2;
-        Sat, 09 Jul 2022 11:07:35 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        with ESMTP id S229469AbiGJLw7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 10 Jul 2022 07:52:59 -0400
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 670D965A1;
+        Sun, 10 Jul 2022 04:52:57 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.92,260,1650898800"; 
+   d="scan'208";a="125674833"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 10 Jul 2022 20:52:56 +0900
+Received: from localhost.localdomain (unknown [10.226.92.4])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 5CEF940071F4;
+        Sun, 10 Jul 2022 20:52:51 +0900 (JST)
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "Mauro Carvalho Chehab" <mchehab+huawei@kernel.org>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Max Staudt <max@enpas.org>, Paolo Abeni <pabeni@redhat.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH v3 01/21] docs: networking: update netdevices.rst reference
-Date:   Sat,  9 Jul 2022 11:07:14 +0100
-Message-Id: <a91cc9d0fe894e5740b4b8768b9d9f393a46e79d.1657360984.git.mchehab@kernel.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <cover.1657360984.git.mchehab@kernel.org>
-References: <cover.1657360984.git.mchehab@kernel.org>
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v4 0/6] Add support for RZ/N1 SJA1000 CAN controller
+Date:   Sun, 10 Jul 2022 12:52:42 +0100
+Message-Id: <20220710115248.190280-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=0.9 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,35 +54,59 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Changeset 482a4360c56a ("docs: networking: convert netdevices.txt to ReST")
-renamed: Documentation/networking/netdevices.txt
-to: Documentation/networking/netdevices.rst.
+This patch series aims to add support for RZ/N1 SJA1000 CAN controller.
 
-Update its cross-reference accordingly.
+The SJA1000 CAN controller on RZ/N1 SoC has some differences compared
+to others like it has no clock divider register (CDR) support and it has
+no HW loopback (HW doesn't see tx messages on rx), so introduced a new
+compatible 'renesas,rzn1-sja1000' to handle these differences.
 
-Fixes: 482a4360c56a ("docs: networking: convert netdevices.txt to ReST")
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
----
+v3->v4:
+ * Updated bindings as per coding style used in example-schema.
+ * Entire entry in properties compatible declared as enum. Also Descriptions
+   do not bring any information,so removed it from compatible description.
+ * Used decimal values in nxp,tx-output-mode enums.
+ * Fixed indentaions in binding examples.
+ * Removed clock-names from bindings, as it is single clock.
+ * Optimized the code as per Vincent's suggestion.
+ * Updated clock handling as per bindings.
+v2->v3:
+ * Added reg-io-width is a required property for technologic,sja1000 & renesas,rzn1-sja1000
+ * Removed enum type from nxp,tx-output-config and updated the description
+   for combination of TX0 and TX1.
+ * Updated the example for technologic,sja1000
+v1->v2:
+ * Moved $ref: can-controller.yaml# to top along with if conditional to
+   avoid multiple mapping issues with the if conditional in the subsequent
+   patch.
+ * Added an example for RZ/N1D SJA1000 usage.
+ * Updated commit description for patch#2,#3 and #6
+ * Removed the quirk macro SJA1000_NO_HW_LOOPBACK_QUIRK
+ * Added prefix SJA1000_QUIRK_* for quirk macro.
+ * Replaced of_device_get_match_data->device_get_match_data.
+ * Added error handling on clk error path
+ * Started using "devm_clk_get_optional_enabled" for clk get,prepare and enable.
 
-To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-See [PATCH v3 00/21] at: https://lore.kernel.org/all/cover.1657360984.git.mchehab@kernel.org/
+Ref:
+ [1] https://lore.kernel.org/linux-renesas-soc/20220701162320.102165-1-biju.das.jz@bp.renesas.com/T/#t
 
- drivers/net/can/can327.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Biju Das (6):
+  dt-bindings: can: sja1000: Convert to json-schema
+  dt-bindings: can: nxp,sja1000: Document RZ/N1{D,S} support
+  can: sja1000: Add Quirk for RZ/N1 SJA1000 CAN controller
+  can: sja1000: Use device_get_match_data to get device data
+  can: sja1000: Change the return type as void for SoC specific init
+  can: sja1000: Add support for RZ/N1 SJA1000 CAN Controller
 
-diff --git a/drivers/net/can/can327.c b/drivers/net/can/can327.c
-index 5da7778d92dc..925e880bf570 100644
---- a/drivers/net/can/can327.c
-+++ b/drivers/net/can/can327.c
-@@ -827,7 +827,7 @@ static netdev_tx_t can327_netdev_start_xmit(struct sk_buff *skb,
- 	netif_stop_queue(dev);
- 
- 	/* BHs are already disabled, so no spin_lock_bh().
--	 * See Documentation/networking/netdevices.txt
-+	 * See Documentation/networking/netdevices.rst
- 	 */
- 	spin_lock(&elm->lock);
- 	can327_send_frame(elm, frame);
+ .../bindings/net/can/nxp,sja1000.yaml         | 132 ++++++++++++++++++
+ .../devicetree/bindings/net/can/sja1000.txt   |  58 --------
+ drivers/net/can/sja1000/sja1000.c             |   8 +-
+ drivers/net/can/sja1000/sja1000.h             |   3 +-
+ drivers/net/can/sja1000/sja1000_platform.c    |  56 +++++---
+ 5 files changed, 177 insertions(+), 80 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/can/nxp,sja1000.yaml
+ delete mode 100644 Documentation/devicetree/bindings/net/can/sja1000.txt
+
 -- 
-2.36.1
+2.25.1
 
