@@ -2,397 +2,138 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2199356CFD0
-	for <lists+linux-can@lfdr.de>; Sun, 10 Jul 2022 17:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52BC956D0C6
+	for <lists+linux-can@lfdr.de>; Sun, 10 Jul 2022 20:41:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbiGJPiz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 10 Jul 2022 11:38:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47084 "EHLO
+        id S229628AbiGJSlS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 10 Jul 2022 14:41:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiGJPiy (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 10 Jul 2022 11:38:54 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30314FFC
-        for <linux-can@vger.kernel.org>; Sun, 10 Jul 2022 08:38:53 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id q7so3646951lji.12
-        for <linux-can@vger.kernel.org>; Sun, 10 Jul 2022 08:38:53 -0700 (PDT)
+        with ESMTP id S229614AbiGJSlR (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 10 Jul 2022 14:41:17 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35282140CC;
+        Sun, 10 Jul 2022 11:41:16 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id 19so3960620ljz.4;
+        Sun, 10 Jul 2022 11:41:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4InbvFypZX6TmIbBp6levT/VKpWVJCxkgia4Yfn1yWU=;
-        b=r74VLAZ//WKA5rgX28jJ8k9zfNT1Y6zrKsGOS9zGMgSkq8WYQOfUfCec7RuXCSQOPm
-         /g4mjm/7kdnglWLDp2JgO2hIhByRa8Haisq5ns3JBO+veBI38f/wKJ/dToUPcAR9k3JY
-         hPVAXuq3rRBjvcJ+Efb3SeuG9yNAfUStaN2ME=
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=kDNBr0d7sr3bD6/9LJRssalA5Q9uqgboJ4YbUUnhl90=;
+        b=nixMDEFgetF4NTqiQPaRAnY8pB2LxNhDzqQNiQZM+x+7rPjCo96SCjNo73ZtucKREs
+         4DomXt/K4X9l+gqdgy0l/tMyyzLqEgypS5zp0jG7X+7GtjlthVkYKxRwiMQrrmGPkjC+
+         z6u6Fiaax0K6v9OFYPjUp3wPGVCBWAyMRB+2LhPQD2Nv8C3OzM0rdPUYto2X0+WxJvzq
+         edjPVg7WY7pz2blcWi/ORDaMBTtuV5VcNMW0+jjgaQBIHsxlFz7n34LNVIVH3rXOIdoq
+         yEXCVcl5XeBTF34dxPLnTuGQlfDxV1wbq6PVAZmJUXbmDXPmZyFEERH309HsaNav3fLz
+         miNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4InbvFypZX6TmIbBp6levT/VKpWVJCxkgia4Yfn1yWU=;
-        b=Ak5E16kM4AQTcMRV/VqoPTUiw0EOwdWFylIlNmSNUMI4us8ZleJCh/ig9Yqd6ad1ps
-         URTOTVYiXwFhnyk5hY66NuPVygBHCnFVOGs+3Y41P7wUZSlTY4oi9GfmogseRzMfeQEI
-         RzFCsZ1wp79RMtCG4hRKTxNzyeBtrogCuWuZrZaRlPgF0iPsFj3P+XwVLuHQhBkkgtCp
-         RakGpWN6rG0dzgN0Ov+0V/vvp4sC/kwLVTEdJ7sDJPZ0zDwWBY95MosiSOJJXZ1UfNVh
-         gdyxIoRfouFq1/3I+s/Vp4bkpvIWXXJLMcyn2/yRCmBX/uBPZT5La3qS82ehzFUCQnjb
-         oI1w==
-X-Gm-Message-State: AJIora/jxbtd5+QsThTxOWi/9+ZKgvMbMc3WK7T0LJ5083bPmorskF8n
-        Bi9O7CSGizVh7xID5oU3egpvse/7H+hLn5WSGByhYWpzHoi4cA==
-X-Google-Smtp-Source: AGRyM1vzAjNt9Gs4XXh0+aJbjy7FGZiws66c9r99HhobblyVxG1cQA9cChLx+/sP50bdhhC4cB5mpKnmZ3USXNCcLVw=
-X-Received: by 2002:a2e:6e0c:0:b0:255:98fb:cb45 with SMTP id
- j12-20020a2e6e0c000000b0025598fbcb45mr7502614ljc.55.1657467531473; Sun, 10
- Jul 2022 08:38:51 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=kDNBr0d7sr3bD6/9LJRssalA5Q9uqgboJ4YbUUnhl90=;
+        b=7p4nmO5IG9kfXaud2/Uq3IQPuPxA+27gDaRXoCUhTW+YKwO4fXP3op1hnD2KR/62p0
+         bYxJZKL0wnZCy5nSORwAQ4fJ9ka2hcky7E6GUXUVNU76tOWPUjMSVbO356gb8UdmqagQ
+         pMmDvAfoes+/qsPIb9Nowaol+179E8sMWDWtXRukqbUX4JmzUu1kLEUnIH6QpgiVB3GL
+         oUqZ/unepb8gZBh6mZA9UlNRGuE2bUFhVj5yzvoXpVwG32kIu6NDc7HA8YSectg3eTEI
+         RLXoxSWVnxJiXpoMe8FnHMoK0Y74GdXsTQQMQ7adpZwFhYiNXwwtdv8dxyd3zYMSNgAR
+         wLMw==
+X-Gm-Message-State: AJIora+SUpD8UrJLk5L089dL2GZs2hnhDi2IPgCGrYJvKadePmHbwjtA
+        bX7Q/GxtVxljkCYcCe0Jk/E=
+X-Google-Smtp-Source: AGRyM1vqZQpxm5rycecwqamCyqWpncRzRJRVims5di3aDXGfRaAnVtSqvJN12pIp1Rbm6skgECufWw==
+X-Received: by 2002:a2e:8404:0:b0:250:cde7:e9e3 with SMTP id z4-20020a2e8404000000b00250cde7e9e3mr7771898ljg.289.1657478474488;
+        Sun, 10 Jul 2022 11:41:14 -0700 (PDT)
+Received: from [192.168.1.70] (90-224-163-144-no555.tbcn.telia.com. [90.224.163.144])
+        by smtp.googlemail.com with ESMTPSA id q12-20020a056512210c00b00489daae997fsm394439lfr.10.2022.07.10.11.41.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 10 Jul 2022 11:41:14 -0700 (PDT)
+Message-ID: <5059cce9-76b4-b19c-2d97-c1e54c7dd87d@gmail.com>
+Date:   Sun, 10 Jul 2022 20:40:30 +0200
 MIME-Version: 1.0
-References: <20220703101430.1306048-1-mkl@pengutronix.de> <20220703101430.1306048-9-mkl@pengutronix.de>
-In-Reply-To: <20220703101430.1306048-9-mkl@pengutronix.de>
-From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date:   Sun, 10 Jul 2022 17:38:40 +0200
-Message-ID: <CABGWkvpcHhicFGs96+czuTeVuxbXoKXx_XPvQPGt98GEvqr6aw@mail.gmail.com>
-Subject: Re: [PATCH net-next 08/15] can: slcan: use CAN network device driver API
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, kernel@pengutronix.de,
-        Jeroen Hofstee <jhofstee@victronenergy.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 4.14 1/4] can: kvaser_usb: Add struct kvaser_usb_dev_cfg
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, linux-can@vger.kernel.org,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Jimmy Assarsson <extja@kvaser.com>
+References: <20220708184653.280882-1-extja@kvaser.com>
+ <20220708184653.280882-2-extja@kvaser.com> <YsrgbqIFfcxXesWw@kroah.com>
+From:   Jimmy Assarsson <jimmyassarsson@gmail.com>
+In-Reply-To: <YsrgbqIFfcxXesWw@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Marc,
+On 7/10/22 16:21, Greg KH wrote:
+> On Fri, Jul 08, 2022 at 08:46:50PM +0200, Jimmy Assarsson wrote:
+>> Add struct kvaser_usb_dev_cfg to ease backporting of upstream commits:
+>> 49f274c72357 (can: kvaser_usb: replace run-time checks with struct kvaser_usb_driver_info)
+>> e6c80e601053 (can: kvaser_usb: kvaser_usb_leaf: fix CAN clock frequency regression)
+>> b3b6df2c56d8 (can: kvaser_usb: kvaser_usb_leaf: fix bittiming limits)
+> 
+> What upstream commit is this from?
 
-On Sun, Jul 3, 2022 at 12:26 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->
-> From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
->
-> As suggested by commit [1], now the driver uses the functions and the
-> data structures provided by the CAN network device driver interface.
->
-> Currently the driver doesn't implement a way to set bitrate for SLCAN
-> based devices via ip tool, so you'll have to do this by slcand or
-> slcan_attach invocation through the -sX parameter:
->
-> - slcan_attach -f -s6 -o /dev/ttyACM0
-> - slcand -f -s8 -o /dev/ttyUSB0
->
-> where -s6 in will set adapter's bitrate to 500 Kbit/s and -s8 to
-> 1Mbit/s.
-> See the table below for further CAN bitrates:
-> - s0 ->   10 Kbit/s
-> - s1 ->   20 Kbit/s
-> - s2 ->   50 Kbit/s
-> - s3 ->  100 Kbit/s
-> - s4 ->  125 Kbit/s
-> - s5 ->  250 Kbit/s
-> - s6 ->  500 Kbit/s
-> - s7 ->  800 Kbit/s
-> - s8 -> 1000 Kbit/s
->
-> In doing so, the struct can_priv::bittiming.bitrate of the driver is not
-> set and since the open_candev() checks that the bitrate has been set, it
-> must be a non-zero value, the bitrate is set to a fake value (-1U)
-> before it is called.
->
-> Using the rtnl_lock()/rtnl_unlock() functions has become a bit more
-> tricky as the register_candev() function indirectly calls rtnl_lock()
-> via register_netdev(). To avoid a deadlock it is therefore necessary to
-> call rtnl_unlock() before calling register_candev(). The same goes for
-> the unregister_candev() function.
->
-> [1] commit 39549eef3587f ("can: CAN Network device driver and Netlink interface")
->
-> Link: https://lore.kernel.org/all/20220628163137.413025-6-dario.binacchi@amarulasolutions.com
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> Tested-by: Jeroen Hofstee <jhofstee@victronenergy.com>
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> ---
->  drivers/net/can/Kconfig | 40 ++++++++++----------
->  drivers/net/can/slcan.c | 82 ++++++++++++++++++++---------------------
->  2 files changed, 60 insertions(+), 62 deletions(-)
->
-> diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
-> index 4078d0775572..3048ad77edb3 100644
-> --- a/drivers/net/can/Kconfig
-> +++ b/drivers/net/can/Kconfig
-> @@ -49,26 +49,6 @@ config CAN_VXCAN
->           This driver can also be built as a module.  If so, the module
->           will be called vxcan.
->
-> -config CAN_SLCAN
-> -       tristate "Serial / USB serial CAN Adaptors (slcan)"
-> -       depends on TTY
-> -       help
-> -         CAN driver for several 'low cost' CAN interfaces that are attached
-> -         via serial lines or via USB-to-serial adapters using the LAWICEL
-> -         ASCII protocol. The driver implements the tty linediscipline N_SLCAN.
-> -
-> -         As only the sending and receiving of CAN frames is implemented, this
-> -         driver should work with the (serial/USB) CAN hardware from:
-> -         www.canusb.com / www.can232.com / www.mictronics.de / www.canhack.de
-> -
-> -         Userspace tools to attach the SLCAN line discipline (slcan_attach,
-> -         slcand) can be found in the can-utils at the linux-can project, see
-> -         https://github.com/linux-can/can-utils for details.
-> -
-> -         The slcan driver supports up to 10 CAN netdevices by default which
-> -         can be changed by the 'maxdev=xx' module option. This driver can
-> -         also be built as a module. If so, the module will be called slcan.
-> -
->  config CAN_NETLINK
->         bool "CAN device drivers with Netlink support"
->         default y
-> @@ -172,6 +152,26 @@ config CAN_KVASER_PCIEFD
->             Kvaser Mini PCI Express HS v2
->             Kvaser Mini PCI Express 2xHS v2
->
-> +config CAN_SLCAN
-> +       tristate "Serial / USB serial CAN Adaptors (slcan)"
-> +       depends on TTY
-> +       help
-> +         CAN driver for several 'low cost' CAN interfaces that are attached
-> +         via serial lines or via USB-to-serial adapters using the LAWICEL
-> +         ASCII protocol. The driver implements the tty linediscipline N_SLCAN.
-> +
-> +         As only the sending and receiving of CAN frames is implemented, this
-> +         driver should work with the (serial/USB) CAN hardware from:
-> +         www.canusb.com / www.can232.com / www.mictronics.de / www.canhack.de
-> +
-> +         Userspace tools to attach the SLCAN line discipline (slcan_attach,
-> +         slcand) can be found in the can-utils at the linux-can project, see
-> +         https://github.com/linux-can/can-utils for details.
-> +
-> +         The slcan driver supports up to 10 CAN netdevices by default which
-> +         can be changed by the 'maxdev=xx' module option. This driver can
-> +         also be built as a module. If so, the module will be called slcan.
-> +
->  config CAN_SUN4I
->         tristate "Allwinner A10 CAN controller"
->         depends on MACH_SUN4I || MACH_SUN7I || COMPILE_TEST
-> diff --git a/drivers/net/can/slcan.c b/drivers/net/can/slcan.c
-> index c39580b142e0..bf84698f1a81 100644
-> --- a/drivers/net/can/slcan.c
-> +++ b/drivers/net/can/slcan.c
-> @@ -56,7 +56,6 @@
->  #include <linux/can.h>
->  #include <linux/can/dev.h>
->  #include <linux/can/skb.h>
-> -#include <linux/can/can-ml.h>
->
->  MODULE_ALIAS_LDISC(N_SLCAN);
->  MODULE_DESCRIPTION("serial line CAN interface");
-> @@ -79,6 +78,7 @@ MODULE_PARM_DESC(maxdev, "Maximum number of slcan interfaces");
->  #define SLC_EFF_ID_LEN 8
->
->  struct slcan {
-> +       struct can_priv         can;
->         int                     magic;
->
->         /* Various fields. */
-> @@ -394,6 +394,8 @@ static int slc_close(struct net_device *dev)
->                 clear_bit(TTY_DO_WRITE_WAKEUP, &sl->tty->flags);
->         }
->         netif_stop_queue(dev);
-> +       close_candev(dev);
-> +       sl->can.state = CAN_STATE_STOPPED;
->         sl->rcount   = 0;
->         sl->xleft    = 0;
->         spin_unlock_bh(&sl->lock);
+Hi Greg,
 
-Maybe better to move the spin_unlock_bh() before calling close_candev()?
+The original upstream commit introducing struct kvaser_usb_dev_cfg is
+7259124eac7d1b76b41c7a9cb2511a30556deebe
+can: kvaser_usb: Split driver into kvaser_usb_core.c and kvaser_usb_leaf.c
+And was first merged to 4.19.
 
-Thanks and regards,
-Dario
-
-> @@ -405,20 +407,34 @@ static int slc_close(struct net_device *dev)
->  static int slc_open(struct net_device *dev)
->  {
->         struct slcan *sl = netdev_priv(dev);
-> +       int err;
->
->         if (sl->tty == NULL)
->                 return -ENODEV;
->
-> +       /* The baud rate is not set with the command
-> +        * `ip link set <iface> type can bitrate <baud>' and therefore
-> +        * can.bittiming.bitrate is CAN_BITRATE_UNSET (0), causing
-> +        * open_candev() to fail. So let's set to a fake value.
-> +        */
-> +       sl->can.bittiming.bitrate = CAN_BITRATE_UNKNOWN;
-> +       err = open_candev(dev);
-> +       if (err) {
-> +               netdev_err(dev, "failed to open can device\n");
-> +               return err;
-> +       }
-> +
-> +       sl->can.state = CAN_STATE_ERROR_ACTIVE;
->         sl->flags &= BIT(SLF_INUSE);
->         netif_start_queue(dev);
->         return 0;
->  }
->
-> -/* Hook the destructor so we can free slcan devs at the right point in time */
-> -static void slc_free_netdev(struct net_device *dev)
-> +static void slc_dealloc(struct slcan *sl)
->  {
-> -       int i = dev->base_addr;
-> +       int i = sl->dev->base_addr;
->
-> +       free_candev(sl->dev);
->         slcan_devs[i] = NULL;
->  }
->
-> @@ -434,24 +450,6 @@ static const struct net_device_ops slc_netdev_ops = {
->         .ndo_change_mtu         = slcan_change_mtu,
->  };
->
-> -static void slc_setup(struct net_device *dev)
-> -{
-> -       dev->netdev_ops         = &slc_netdev_ops;
-> -       dev->needs_free_netdev  = true;
-> -       dev->priv_destructor    = slc_free_netdev;
-> -
-> -       dev->hard_header_len    = 0;
-> -       dev->addr_len           = 0;
-> -       dev->tx_queue_len       = 10;
-> -
-> -       dev->mtu                = CAN_MTU;
-> -       dev->type               = ARPHRD_CAN;
-> -
-> -       /* New-style flags. */
-> -       dev->flags              = IFF_NOARP;
-> -       dev->features           = NETIF_F_HW_CSUM;
-> -}
-> -
->  /******************************************
->    Routines looking at TTY side.
->   ******************************************/
-> @@ -514,11 +512,8 @@ static void slc_sync(void)
->  static struct slcan *slc_alloc(void)
->  {
->         int i;
-> -       char name[IFNAMSIZ];
->         struct net_device *dev = NULL;
-> -       struct can_ml_priv *can_ml;
->         struct slcan       *sl;
-> -       int size;
->
->         for (i = 0; i < maxdev; i++) {
->                 dev = slcan_devs[i];
-> @@ -531,16 +526,14 @@ static struct slcan *slc_alloc(void)
->         if (i >= maxdev)
->                 return NULL;
->
-> -       sprintf(name, "slcan%d", i);
-> -       size = ALIGN(sizeof(*sl), NETDEV_ALIGN) + sizeof(struct can_ml_priv);
-> -       dev = alloc_netdev(size, name, NET_NAME_UNKNOWN, slc_setup);
-> +       dev = alloc_candev(sizeof(*sl), 1);
->         if (!dev)
->                 return NULL;
->
-> +       snprintf(dev->name, sizeof(dev->name), "slcan%d", i);
-> +       dev->netdev_ops = &slc_netdev_ops;
->         dev->base_addr  = i;
->         sl = netdev_priv(dev);
-> -       can_ml = (void *)sl + ALIGN(sizeof(*sl), NETDEV_ALIGN);
-> -       can_set_ml_priv(dev, can_ml);
->
->         /* Initialize channel control data */
->         sl->magic = SLCAN_MAGIC;
-> @@ -605,26 +598,28 @@ static int slcan_open(struct tty_struct *tty)
->
->                 set_bit(SLF_INUSE, &sl->flags);
->
-> -               err = register_netdevice(sl->dev);
-> -               if (err)
-> +               rtnl_unlock();
-> +               err = register_candev(sl->dev);
-> +               if (err) {
-> +                       pr_err("slcan: can't register candev\n");
->                         goto err_free_chan;
-> +               }
-> +       } else {
-> +               rtnl_unlock();
->         }
->
-> -       /* Done.  We have linked the TTY line to a channel. */
-> -       rtnl_unlock();
->         tty->receive_room = 65536;      /* We don't flow control */
->
->         /* TTY layer expects 0 on success */
->         return 0;
->
->  err_free_chan:
-> +       rtnl_lock();
->         sl->tty = NULL;
->         tty->disc_data = NULL;
->         clear_bit(SLF_INUSE, &sl->flags);
-> -       slc_free_netdev(sl->dev);
-> -       /* do not call free_netdev before rtnl_unlock */
-> +       slc_dealloc(sl);
->         rtnl_unlock();
-> -       free_netdev(sl->dev);
->         return err;
->
->  err_exit:
-> @@ -658,9 +653,11 @@ static void slcan_close(struct tty_struct *tty)
->         synchronize_rcu();
->         flush_work(&sl->tx_work);
->
-> -       /* Flush network side */
-> -       unregister_netdev(sl->dev);
-> -       /* This will complete via sl_free_netdev */
-> +       slc_close(sl->dev);
-> +       unregister_candev(sl->dev);
-> +       rtnl_lock();
-> +       slc_dealloc(sl);
-> +       rtnl_unlock();
->  }
->
->  static void slcan_hangup(struct tty_struct *tty)
-> @@ -768,14 +765,15 @@ static void __exit slcan_exit(void)
->                 dev = slcan_devs[i];
->                 if (!dev)
->                         continue;
-> -               slcan_devs[i] = NULL;
->
->                 sl = netdev_priv(dev);
->                 if (sl->tty) {
->                         netdev_err(dev, "tty discipline still running\n");
->                 }
->
-> -               unregister_netdev(dev);
-> +               slc_close(dev);
-> +               unregister_candev(dev);
-> +               slc_dealloc(sl);
->         }
->
->         kfree(slcan_devs);
-> --
-> 2.35.1
->
->
+This was part of a major restructure of the driver to add support for new type of devices.
 
 
--- 
+And upstream commit
+commit fb12797ab1fef480ad8a32a30984844444eeb00d
+can: kvaser_usb: get CAN clock frequency from device
+introduced kvaser_usb_leaf_dev_cfg_{8,16,24,32}mhz
 
-Dario Binacchi
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
+>> ---
+>>   drivers/net/can/usb/kvaser_usb.c | 76 ++++++++++++++++++++++----------
+>>   1 file changed, 52 insertions(+), 24 deletions(-)
+>>
+>> diff --git a/drivers/net/can/usb/kvaser_usb.c b/drivers/net/can/usb/kvaser_usb.c
+>> index 9742e32d5cd5..6759868924b2 100644
+>> --- a/drivers/net/can/usb/kvaser_usb.c
+>> +++ b/drivers/net/can/usb/kvaser_usb.c
+>> @@ -31,10 +31,6 @@
+>>   #define USB_SEND_TIMEOUT		1000 /* msecs */
+>>   #define USB_RECV_TIMEOUT		1000 /* msecs */
+>>   #define RX_BUFFER_SIZE			3072
+>> -#define KVASER_USB_CAN_CLOCK_8MHZ	8000000
+>> -#define KVASER_USB_CAN_CLOCK_16MHZ	16000000
+>> -#define KVASER_USB_CAN_CLOCK_24MHZ	24000000
+>> -#define KVASER_USB_CAN_CLOCK_32MHZ	32000000
+> 
+> You also deleted these, you didn't really describe any of this in the
+> changelog text at all :(
 
-Embedded Linux Developer
+They where replaced by const struct kvaser_usb_dev_cfg kvaser_usb_leaf_dev_cfg_{8,16,24,32}mhz.
+Sorry for not mentioning this.
 
-dario.binacchi@amarulasolutions.com
+> Why not just backport the needed commit instead of this unknown one?
 
-__________________________________
+Sure, if you prefer it :)
+In that case I would also like to backport the rest of the patches related to the
+adding of kvaser_usb/kvaser_usb_hydra.c, if you don't mind?
+
+Best regards,
+jimmy
 
 
-Amarula Solutions SRL
-
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-
-T. +39 042 243 5310
-info@amarulasolutions.com
-
-www.amarulasolutions.com
+> thanks,
+> 
+> greg k-h
