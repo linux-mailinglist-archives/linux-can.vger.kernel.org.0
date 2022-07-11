@@ -2,45 +2,45 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EB26570A00
-	for <lists+linux-can@lfdr.de>; Mon, 11 Jul 2022 20:34:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA2F15709FE
+	for <lists+linux-can@lfdr.de>; Mon, 11 Jul 2022 20:34:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbiGKSey (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 11 Jul 2022 14:34:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55954 "EHLO
+        id S230520AbiGKSex (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 11 Jul 2022 14:34:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbiGKSew (ORCPT
+        with ESMTP id S229602AbiGKSew (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Mon, 11 Jul 2022 14:34:52 -0400
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E915FAF0
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA5352DC1
         for <linux-can@vger.kernel.org>; Mon, 11 Jul 2022 11:34:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1657564480;
     s=strato-dkim-0002; d=hartkopp.net;
     h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=cwBb4DCPShTQMZ4BoyG9p77llosdfBP4f7C4iOG6s2g=;
-    b=MGvwWPGHMTu9iZgpiCblJPMPbWr8LSMFiYehXRNjN+2SczQk4/RFnZqv+Ot3knZ+Kx
-    63PmkRdKgB8+V2ZeBVzKjx/dS8LXUJ+vsY0H2YEHcSr1fai5fIHmJG9zuuQjR8OiajvD
-    33MHashwcZqR3jQNthvyJBKc3gN5lP4mU2s6YbnElcZxz1CjgKVDME6low/W6+T5rNpE
-    ZAtMokHtt5EXMht1Uqm4IN2X3ExAd8q6r0EOkVySJsnnoATkM4ycQaT6wlU0bECsx20C
-    P7G3lBM1IngQpC9aYP5lye4m2vcx3iQt/zIvzkZHF4fNZtN+9nWrw19HOwgMbpfnzCPR
-    txCA==
+    bh=6MuEfpsuK+1GVD7m1BohqIIkex0S8cTkhxQQRRjwaHY=;
+    b=Ua1QNrdJHGIy7Gf9Q/aBz6DEnWDDCRPMbWvvXmsN8uogNX8KDDLBDHi24DEn3G2Ze0
+    FPl2P52jiE2WvAckPw/HcjfvP7L5y7k14JBN24Z2gtx5sQ3uGNlb+bkr1urtzNLlxFkF
+    kjjO1Lo0xySrLGo1RTvMShZ1mfCFaLN6dkGrmGN5ME+/xsOgRGsDneRk6DjbdvprAkXu
+    sd2ty1rfUQbGvg+p038DtuCxlbOHN7Xvy/7CIiGHpSE+aXaDMA4S5s+GY6OrAuiJFgro
+    HI1++WC2dlFkMsjyov2oDS2Op6aRsFUGZtU2sOe4BLlgnJQWPu1OGFz9+V/368E9s9Ix
+    JYRA==
 Authentication-Results: strato.com;
     dkim=none
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS/xvEBL7X5sbo3UIh9JiLceSWJaYwXUKbZ"
 X-RZG-CLASS-ID: mo00
 Received: from silver.lan
     by smtp.strato.de (RZmta 47.46.1 AUTH)
-    with ESMTPSA id 398cccy6BIYeReM
+    with ESMTPSA id 398cccy6BIYeReN
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
     Mon, 11 Jul 2022 20:34:40 +0200 (CEST)
 From:   Oliver Hartkopp <socketcan@hartkopp.net>
 To:     linux-can@vger.kernel.org
 Cc:     Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: [RFC PATCH 2/5] can: canxl: introduce ETH_P_CANXL ethernet protocol handling
-Date:   Mon, 11 Jul 2022 20:34:23 +0200
-Message-Id: <20220711183426.96446-3-socketcan@hartkopp.net>
+Subject: [RFC PATCH 3/5] can: dev: add CAN XL support
+Date:   Mon, 11 Jul 2022 20:34:24 +0200
+Message-Id: <20220711183426.96446-4-socketcan@hartkopp.net>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220711183426.96446-1-socketcan@hartkopp.net>
 References: <20220711183426.96446-1-socketcan@hartkopp.net>
@@ -56,172 +56,187 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Enable the PF_CAN infrastructure to handle CAN XL frames. A new ethernet
-protocol type ETH_P_CANXL is defined to tag skbuffs containing the CAN XL
-frame data structure.
-
-As the length information is now a uint16 value for CAN XL a new helper
-function can_get_data_len() is introduced to retrieve the data length
-from all types of CAN frames.
+Extend the CAN device driver infrastructure to handle CAN XL frames.
+This especially addresses the increased data length which is extended
+to uint16 for CAN XL.
 
 Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 ---
- include/linux/can/skb.h       | 14 ++++++++++
- include/uapi/linux/if_ether.h |  1 +
- net/can/af_can.c              | 49 +++++++++++++++++++++++++++++------
- 3 files changed, 56 insertions(+), 8 deletions(-)
+ drivers/net/can/dev/rx-offload.c |  2 +-
+ drivers/net/can/dev/skb.c        | 53 +++++++++++++++++++++++++++-----
+ include/linux/can/skb.h          |  3 +-
+ 3 files changed, 48 insertions(+), 10 deletions(-)
 
-diff --git a/include/linux/can/skb.h b/include/linux/can/skb.h
-index 182749e858b3..d043bc4afd6d 100644
---- a/include/linux/can/skb.h
-+++ b/include/linux/can/skb.h
-@@ -101,6 +101,20 @@ static inline bool can_is_canfd_skb(const struct sk_buff *skb)
+diff --git a/drivers/net/can/dev/rx-offload.c b/drivers/net/can/dev/rx-offload.c
+index a32a01c172d4..8505e547e922 100644
+--- a/drivers/net/can/dev/rx-offload.c
++++ b/drivers/net/can/dev/rx-offload.c
+@@ -245,11 +245,11 @@ unsigned int can_rx_offload_get_echo_skb(struct can_rx_offload *offload,
+ 					 unsigned int *frame_len_ptr)
  {
- 	/* the CAN specific type of skb is identified by its data length */
- 	return skb->len == CANFD_MTU;
+ 	struct net_device *dev = offload->dev;
+ 	struct net_device_stats *stats = &dev->stats;
+ 	struct sk_buff *skb;
+-	u8 len;
++	unsigned int len;
+ 	int err;
+ 
+ 	skb = __can_get_echo_skb(dev, idx, &len, frame_len_ptr);
+ 	if (!skb)
+ 		return 0;
+diff --git a/drivers/net/can/dev/skb.c b/drivers/net/can/dev/skb.c
+index 8bb62dd864c8..a849f503dcff 100644
+--- a/drivers/net/can/dev/skb.c
++++ b/drivers/net/can/dev/skb.c
+@@ -53,11 +53,12 @@ int can_put_echo_skb(struct sk_buff *skb, struct net_device *dev,
+ 	BUG_ON(idx >= priv->echo_skb_max);
+ 
+ 	/* check flag whether this packet has to be looped back */
+ 	if (!(dev->flags & IFF_ECHO) ||
+ 	    (skb->protocol != htons(ETH_P_CAN) &&
+-	     skb->protocol != htons(ETH_P_CANFD))) {
++	     skb->protocol != htons(ETH_P_CANFD) &&
++	     skb->protocol != htons(ETH_P_CANXL))) {
+ 		kfree_skb(skb);
+ 		return 0;
+ 	}
+ 
+ 	if (!priv->echo_skb[idx]) {
+@@ -86,12 +87,12 @@ int can_put_echo_skb(struct sk_buff *skb, struct net_device *dev,
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(can_put_echo_skb);
+ 
+ struct sk_buff *
+-__can_get_echo_skb(struct net_device *dev, unsigned int idx, u8 *len_ptr,
+-		   unsigned int *frame_len_ptr)
++__can_get_echo_skb(struct net_device *dev, unsigned int idx,
++		   unsigned int *len_ptr, unsigned int *frame_len_ptr)
+ {
+ 	struct can_priv *priv = netdev_priv(dev);
+ 
+ 	if (idx >= priv->echo_skb_max) {
+ 		netdev_err(dev, "%s: BUG! Trying to access can_priv::echo_skb out of bounds (%u/max %u)\n",
+@@ -104,16 +105,17 @@ __can_get_echo_skb(struct net_device *dev, unsigned int idx, u8 *len_ptr,
+ 		 * length is supported on both CAN and CANFD frames.
+ 		 */
+ 		struct sk_buff *skb = priv->echo_skb[idx];
+ 		struct can_skb_priv *can_skb_priv = can_skb_prv(skb);
+ 		struct canfd_frame *cf = (struct canfd_frame *)skb->data;
++		unsigned int len = can_get_data_len(skb);
+ 
+ 		/* get the real payload length for netdev statistics */
+ 		if (cf->can_id & CAN_RTR_FLAG)
+ 			*len_ptr = 0;
+ 		else
+-			*len_ptr = cf->len;
++			*len_ptr = len;
+ 
+ 		if (frame_len_ptr)
+ 			*frame_len_ptr = can_skb_priv->frame_len;
+ 
+ 		priv->echo_skb[idx] = NULL;
+@@ -139,11 +141,11 @@ __can_get_echo_skb(struct net_device *dev, unsigned int idx, u8 *len_ptr,
+  */
+ unsigned int can_get_echo_skb(struct net_device *dev, unsigned int idx,
+ 			      unsigned int *frame_len_ptr)
+ {
+ 	struct sk_buff *skb;
+-	u8 len;
++	unsigned int len;
+ 
+ 	skb = __can_get_echo_skb(dev, idx, &len, frame_len_ptr);
+ 	if (!skb)
+ 		return 0;
+ 
+@@ -244,10 +246,41 @@ struct sk_buff *alloc_canfd_skb(struct net_device *dev,
+ 
+ 	return skb;
+ }
+ EXPORT_SYMBOL_GPL(alloc_canfd_skb);
+ 
++struct sk_buff *alloc_canxl_skb(struct net_device *dev,
++				struct canxl_frame **cfx)
++{
++	struct sk_buff *skb;
++
++	skb = netdev_alloc_skb(dev, sizeof(struct can_skb_priv) +
++			       sizeof(struct canxl_frame));
++	if (unlikely(!skb)) {
++		*cfx = NULL;
++
++		return NULL;
++	}
++
++	skb->protocol = htons(ETH_P_CANXL);
++	skb->pkt_type = PACKET_BROADCAST;
++	skb->ip_summed = CHECKSUM_UNNECESSARY;
++
++	skb_reset_mac_header(skb);
++	skb_reset_network_header(skb);
++	skb_reset_transport_header(skb);
++
++	can_skb_reserve(skb);
++	can_skb_prv(skb)->ifindex = dev->ifindex;
++	can_skb_prv(skb)->skbcnt = 0;
++
++	*cfx = skb_put_zero(skb, sizeof(struct canxl_frame));
++
++	return skb;
++}
++EXPORT_SYMBOL_GPL(alloc_canxl_skb);
++
+ struct sk_buff *alloc_can_err_skb(struct net_device *dev, struct can_frame **cf)
+ {
+ 	struct sk_buff *skb;
+ 
+ 	skb = alloc_can_skb(dev, cf);
+@@ -291,20 +324,24 @@ static bool can_skb_headroom_valid(struct net_device *dev, struct sk_buff *skb)
  }
  
-+/* get data length inside of CAN frame for all frame types */
-+static inline unsigned int can_get_data_len(struct sk_buff *skb)
-+{
-+	if(skb->len == CANXL_MTU) {
-+		const struct canxl_frame *cfx = (struct canxl_frame *)skb->data;
-+
-+		return cfx->len;
-+	} else {
-+		const struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
-+
-+		return cfd->len;
-+	}
-+}
-+
- #endif /* !_CAN_SKB_H */
-diff --git a/include/uapi/linux/if_ether.h b/include/uapi/linux/if_ether.h
-index d370165bc621..69e0457eb200 100644
---- a/include/uapi/linux/if_ether.h
-+++ b/include/uapi/linux/if_ether.h
-@@ -136,10 +136,11 @@
- #define ETH_P_WAN_PPP   0x0007          /* Dummy type for WAN PPP frames*/
- #define ETH_P_PPP_MP    0x0008          /* Dummy type for PPP MP frames */
- #define ETH_P_LOCALTALK 0x0009		/* Localtalk pseudo type 	*/
- #define ETH_P_CAN	0x000C		/* CAN: Controller Area Network */
- #define ETH_P_CANFD	0x000D		/* CANFD: CAN flexible data rate*/
-+#define ETH_P_CANXL	0x000E		/* CANXL: eXtended frame Length */
- #define ETH_P_PPPTALK	0x0010		/* Dummy type for Atalk over PPP*/
- #define ETH_P_TR_802_2	0x0011		/* 802.2 frames 		*/
- #define ETH_P_MOBITEX	0x0015		/* Mobitex (kaz@cafe.net)	*/
- #define ETH_P_CONTROL	0x0016		/* Card specific control frames */
- #define ETH_P_IRDA	0x0017		/* Linux-IrDA			*/
-diff --git a/net/can/af_can.c b/net/can/af_can.c
-index 1fb49d51b25d..2c9f48aa5f1f 100644
---- a/net/can/af_can.c
-+++ b/net/can/af_can.c
-@@ -197,31 +197,32 @@ static int can_create(struct net *net, struct socket *sock, int protocol,
-  *  -EINVAL when the skb->data does not contain a valid CAN frame
-  */
- int can_send(struct sk_buff *skb, int loop)
+ /* Drop a given socketbuffer if it does not contain a valid CAN frame. */
+ bool can_dropped_invalid_skb(struct net_device *dev, struct sk_buff *skb)
  {
- 	struct sk_buff *newskb = NULL;
--	struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
+-	const struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
+ 	struct can_priv *priv = netdev_priv(dev);
 +	unsigned int len = can_get_data_len(skb);
- 	struct can_pkg_stats *pkg_stats = dev_net(skb->dev)->can.pkg_stats;
- 	int err = -EINVAL;
  
- 	if (skb->len == CAN_MTU) {
- 		skb->protocol = htons(ETH_P_CAN);
--		if (unlikely(cfd->len > CAN_MAX_DLEN))
-+		if (unlikely(len > CAN_MAX_DLEN))
+ 	if (skb->protocol == htons(ETH_P_CAN)) {
+ 		if (unlikely(skb->len != CAN_MTU ||
+-			     cfd->len > CAN_MAX_DLEN))
++			     len > CAN_MAX_DLEN))
  			goto inval_skb;
- 	} else if (skb->len == CANFD_MTU) {
- 		skb->protocol = htons(ETH_P_CANFD);
--		if (unlikely(cfd->len > CANFD_MAX_DLEN))
-+		if (unlikely(len > CANFD_MAX_DLEN))
+ 	} else if (skb->protocol == htons(ETH_P_CANFD)) {
+ 		if (unlikely(skb->len != CANFD_MTU ||
+-			     cfd->len > CANFD_MAX_DLEN))
++			     len > CANFD_MAX_DLEN))
 +			goto inval_skb;
-+	} else if (skb->len == CANXL_MTU) {
-+		skb->protocol = htons(ETH_P_CANXL);
-+		if (unlikely(len > CANXL_MAX_DLEN || len == 0))
++	} else if (skb->protocol == htons(ETH_P_CANXL)) {
++		if (unlikely(skb->len != CANXL_MTU ||
++			     len > CANXL_MAX_DLEN || len == 0))
  			goto inval_skb;
  	} else {
  		goto inval_skb;
  	}
  
--	/* Make sure the CAN frame can pass the selected CAN netdevice.
--	 * As structs can_frame and canfd_frame are similar, we can provide
--	 * CAN FD frames to legacy CAN drivers as long as the length is <= 8
--	 */
--	if (unlikely(skb->len > skb->dev->mtu && cfd->len > CAN_MAX_DLEN)) {
-+	/* Make sure the CAN frame can pass the selected CAN netdevice */
-+	if (unlikely(skb->len > skb->dev->mtu)) {
- 		err = -EMSGSIZE;
- 		goto inval_skb;
- 	}
+diff --git a/include/linux/can/skb.h b/include/linux/can/skb.h
+index d043bc4afd6d..72ee887a783a 100644
+--- a/include/linux/can/skb.h
++++ b/include/linux/can/skb.h
+@@ -18,11 +18,12 @@
  
- 	if (unlikely(skb->dev->type != ARPHRD_CAN)) {
-@@ -725,10 +726,36 @@ static int canfd_rcv(struct sk_buff *skb, struct net_device *dev,
- free_skb:
- 	kfree_skb(skb);
- 	return NET_RX_DROP;
- }
- 
-+static int canxl_rcv(struct sk_buff *skb, struct net_device *dev,
-+		     struct packet_type *pt, struct net_device *orig_dev)
-+{
-+	struct canxl_frame *cfx = (struct canxl_frame *)skb->data;
-+
-+	if (unlikely(dev->type != ARPHRD_CAN || skb->len != CANXL_MTU)) {
-+		pr_warn_once("PF_CAN: dropped non conform CAN XL skbuff: dev type %d, len %d\n",
-+			     dev->type, skb->len);
-+		goto free_skb;
-+	}
-+
-+	/* This check is made separately since cfx->len would be uninitialized if skb->len = 0. */
-+	if (unlikely(cfx->len > CANXL_MAX_DLEN || cfx->len == 0)) {
-+		pr_warn_once("PF_CAN: dropped non conform CAN XL skbuff: dev type %d, len %d, datalen %d\n",
-+			     dev->type, skb->len, cfx->len);
-+		goto free_skb;
-+	}
-+
-+	can_receive(skb, dev);
-+	return NET_RX_SUCCESS;
-+
-+free_skb:
-+	kfree_skb(skb);
-+	return NET_RX_DROP;
-+}
-+
- /* af_can protocol functions */
- 
- /**
-  * can_proto_register - register CAN transport protocol
-  * @cp: pointer to CAN protocol structure
-@@ -849,10 +876,15 @@ static struct packet_type can_packet __read_mostly = {
- static struct packet_type canfd_packet __read_mostly = {
- 	.type = cpu_to_be16(ETH_P_CANFD),
- 	.func = canfd_rcv,
- };
- 
-+static struct packet_type canxl_packet __read_mostly = {
-+	.type = cpu_to_be16(ETH_P_CANXL),
-+	.func = canxl_rcv,
-+};
-+
- static const struct net_proto_family can_family_ops = {
- 	.family = PF_CAN,
- 	.create = can_create,
- 	.owner  = THIS_MODULE,
- };
-@@ -888,10 +920,11 @@ static __init int can_init(void)
- 	if (err)
- 		goto out_sock;
- 
- 	dev_add_pack(&can_packet);
- 	dev_add_pack(&canfd_packet);
-+	dev_add_pack(&canxl_packet);
- 
- 	return 0;
- 
- out_sock:
- 	unregister_pernet_subsys(&can_pernet_ops);
+ void can_flush_echo_skb(struct net_device *dev);
+ int can_put_echo_skb(struct sk_buff *skb, struct net_device *dev,
+ 		     unsigned int idx, unsigned int frame_len);
+ struct sk_buff *__can_get_echo_skb(struct net_device *dev, unsigned int idx,
+-				   u8 *len_ptr, unsigned int *frame_len_ptr);
++				   unsigned int *len_ptr,
++				   unsigned int *frame_len_ptr);
+ unsigned int __must_check can_get_echo_skb(struct net_device *dev,
+ 					   unsigned int idx,
+ 					   unsigned int *frame_len_ptr);
+ void can_free_echo_skb(struct net_device *dev, unsigned int idx,
+ 		       unsigned int *frame_len_ptr);
 -- 
 2.30.2
 
