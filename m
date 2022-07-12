@@ -2,186 +2,179 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B5E8571090
-	for <lists+linux-can@lfdr.de>; Tue, 12 Jul 2022 05:05:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E8995712CA
+	for <lists+linux-can@lfdr.de>; Tue, 12 Jul 2022 09:08:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbiGLDFN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Mon, 11 Jul 2022 23:05:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57286 "EHLO
+        id S229783AbiGLHIP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 12 Jul 2022 03:08:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiGLDFN (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 11 Jul 2022 23:05:13 -0400
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91FEA20F7C;
-        Mon, 11 Jul 2022 20:05:11 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id y195so11904681yby.0;
-        Mon, 11 Jul 2022 20:05:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=xQ9YReWbslkfsJYK5nx/kGsWymMpYJHFL0KQKjFzhP4=;
-        b=r3BHag/fllwrRX2P4qyEpWyNLMfkUxDrAl+OcmnHMrKoz0cW8Gk6x4vKKxR0YO68SW
-         3/vjEHw0F9+lt+1rClD0Xy6kxovF4wPONhHzd+63umCCtqY0OLKORZjkL2nYX46tDSP0
-         1z49wCYISwfeFDzDDKpqklmy6YQS9lSeDTYiV8BNGTaSDvC6H+of6erZvrHEydhv2KlG
-         d0pn8hXPjrHngx5aO+V5h4kOwXGoR5aJ5mvWaPA08UiiRi6+1mAvJkHj2LMzK9u9yNJA
-         8TBtYiC1s1U4VnT7Nm53P7Z0/nS/hbwK/N4JrAMG+i0y3GVzam/i3P44jGgwWqATFJhM
-         TBow==
-X-Gm-Message-State: AJIora+FJHg79TicEsNoBH9kNZIQl9Fgo3GVaeZcLi6UQA7+rJ2/eCv4
-        RwJqHrlkpNTNBs9MYdz7/hWnb+HGOjKY1xt2Egx/jNQiEAbJaw==
-X-Google-Smtp-Source: AGRyM1uoroTErC1XfHvqxlzdhzryvuVCS2aSQj1Kll2jrX3T/mvB00jkAV+Z9OhFecqeA7lGhLwDh4FLXNqvRJhE6jw=
-X-Received: by 2002:a25:9743:0:b0:66e:f62d:4956 with SMTP id
- h3-20020a259743000000b0066ef62d4956mr12583850ybo.381.1657595110757; Mon, 11
- Jul 2022 20:05:10 -0700 (PDT)
+        with ESMTP id S229476AbiGLHIO (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 12 Jul 2022 03:08:14 -0400
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4048F1D0EA
+        for <linux-can@vger.kernel.org>; Tue, 12 Jul 2022 00:08:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1657609691;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=xGYVrLo9IlhEEwB7+buqcbQAWRHw3LAfiiaB8Y2irtU=;
+    b=D+VtaI+RXCeLjWeh41vB1cZOwmwq6i3lTbl1qKxLl2G8YW3L46WAPbCBrY8l87mP9o
+    3SHEJ5ckNo/E7brYfJCEiwYyt2hsMij/vET0GP/Ho8Z+uJQ0oU5AtTANV+Fp3j5MkQgU
+    DaXKGEYxR7Q/Oal6M0ohR6oTJycGFkXmACk0und6Hd8Xrys+ui6w1NrVVuWtXoXmAe+d
+    FIQhf5SmVhgMrl1r3ZUBm5ufiYfImbVNrolr25JZnsKLw/Iep0xMInWMAnHS9cKFAaQB
+    9Olo8G3S9+pjGuvhQDTNxeP7EPrav40Wgi42Myx3/01Rq9u5wGQTPGPVZfJk+A48XKds
+    JNBA==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytJSr63tDxrw=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a00:6020:1cfd:d100::b82]
+    by smtp.strato.de (RZmta 47.46.1 AUTH)
+    with ESMTPSA id 398cccy6C78BSQo
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Tue, 12 Jul 2022 09:08:11 +0200 (CEST)
+Message-ID: <34c15995-9785-9a69-fa7a-ccccc8fdc9da@hartkopp.net>
+Date:   Tue, 12 Jul 2022 09:08:06 +0200
 MIME-Version: 1.0
-References: <20220708181235.4104943-1-frank.jungclaus@esd.eu> <20220708181235.4104943-6-frank.jungclaus@esd.eu>
-In-Reply-To: <20220708181235.4104943-6-frank.jungclaus@esd.eu>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Tue, 12 Jul 2022 12:05:24 +0900
-Message-ID: <CAMZ6Rq+BOFBRPGLmP9e4tuyV0-Jb-QH_TGbUQJm6aw4M+J1X8A@mail.gmail.com>
-Subject: Re: [PATCH 5/6] can: esd_usb: Improved support for CAN_CTRLMODE_BERR_REPORTING
-To:     Frank Jungclaus <frank.jungclaus@esd.eu>
-Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC PATCH 3/5] can: dev: add CAN XL support
+Content-Language: en-US
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org
+References: <20220711183426.96446-1-socketcan@hartkopp.net>
+ <20220711183426.96446-4-socketcan@hartkopp.net>
+ <20220711194601.fvwvrcvlxkcvgbsh@pengutronix.de>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20220711194601.fvwvrcvlxkcvgbsh@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Le sam. 9 juil. 2022 à 03:14, Frank Jungclaus <frank.jungclaus@esd.eu> a écrit :
->
-> Bus error reporting has already been implemented for a long time, but
-> before it was always active! Now it's user controllable by means off the
-> "berr-reporting" parameter given to "ip link set ... ", which sets
-> CAN_CTRLMODE_BERR_REPORTING within priv->can.ctrlmode.
->
-> In case of an ESD_EV_CAN_ERROR_EXT now unconditionally supply
-> priv->bec.rxerr and priv->bec.txerr with REC and TEC.
->
-> Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
-> ---
->  drivers/net/can/usb/esd_usb.c | 47 ++++++++++++++++++++---------------
->  1 file changed, 27 insertions(+), 20 deletions(-)
->
-> diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_usb.c
-> index 588caba1453b..09649a45d6ff 100644
-> --- a/drivers/net/can/usb/esd_usb.c
-> +++ b/drivers/net/can/usb/esd_usb.c
-> @@ -230,12 +230,23 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
->         if (id == ESD_EV_CAN_ERROR_EXT) {
->                 u8 state = msg->msg.rx.data[0];
->                 u8 ecc   = msg->msg.rx.data[1];
-> -               u8 rxerr = msg->msg.rx.data[2];
-> -               u8 txerr = msg->msg.rx.data[3];
-> +
-> +               priv->bec.rxerr = msg->msg.rx.data[2];
-> +               priv->bec.txerr = msg->msg.rx.data[3];
->
->                 netdev_dbg(priv->netdev,
->                            "CAN_ERR_EV_EXT: dlc=%#02x state=%02x ecc=%02x rec=%02x tec=%02x\n",
-> -                          msg->msg.rx.dlc, state, ecc, rxerr, txerr);
-> +                          msg->msg.rx.dlc, state, ecc, priv->bec.rxerr, priv->bec.txerr);
-> +
-> +               if (ecc) {
-> +                       priv->can.can_stats.bus_error++;
-> +                       stats->rx_errors++;
-> +               }
-> +
-> +               if (state == priv->old_state &&
-> +                   !(priv->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING))
-> +                       /* Neither a state change nor active bus error reporting */
-> +                       return;
->
->                 skb = alloc_can_err_skb(priv->netdev, &cf);
->                 if (skb == NULL) {
-> @@ -270,16 +281,14 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
->                                  * berr-counters might stay on values like
->                                  * 95 forever ...
->                                  */
-> -                               txerr = 0;
-> -                               rxerr = 0;
-> +                               priv->bec.txerr = 0;
-> +                               priv->bec.rxerr = 0;
->                                 break;
->                         }
->                 }
->
-> -               if (ecc) {
-> -                       priv->can.can_stats.bus_error++;
-> -                       stats->rx_errors++;
-> -
-> +               if (ecc && (priv->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING)) {
-> +                       /* Only if bus error reporting is active ... */
->                         cf->can_id |= CAN_ERR_PROT | CAN_ERR_BUSERROR;
->
->                         /* Store error in CAN protocol (type) in data[2] */
-> @@ -301,29 +310,26 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
->                         if (!(ecc & SJA1000_ECC_DIR))
->                                 cf->data[2] |= CAN_ERR_PROT_TX;
->
-> -                       /* Store error in CAN protocol (location) in data[3] */
-> +                       /* Store error position in the bit stream of the CAN frame in data[3] */
->                         cf->data[3] = ecc & SJA1000_ECC_SEG;
->
->                         /* Store error status of CAN-controller in data[1] */
->                         if (priv->can.state == CAN_STATE_ERROR_WARNING) {
-> -                               if (txerr >= 96)
-> +                               if (priv->bec.txerr >= 96)
 
-I checked and was just surprised that we do not have any macro for the
-different thresholds.
 
-Does it make sense to add below declarations to include/uapi/linux/can/error.h?
+On 11.07.22 21:46, Marc Kleine-Budde wrote:
+> On 11.07.2022 20:34:24, Oliver Hartkopp wrote:
+>> Extend the CAN device driver infrastructure to handle CAN XL frames.
+>> This especially addresses the increased data length which is extended
+>> to uint16 for CAN XL.
+>>
+>> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+>> ---
+>>   drivers/net/can/dev/rx-offload.c |  2 +-
+>>   drivers/net/can/dev/skb.c        | 53 +++++++++++++++++++++++++++-----
+>>   include/linux/can/skb.h          |  3 +-
+>>   3 files changed, 48 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/drivers/net/can/dev/rx-offload.c b/drivers/net/can/dev/rx-offload.c
+>> index a32a01c172d4..8505e547e922 100644
+>> --- a/drivers/net/can/dev/rx-offload.c
+>> +++ b/drivers/net/can/dev/rx-offload.c
+>> @@ -245,11 +245,11 @@ unsigned int can_rx_offload_get_echo_skb(struct can_rx_offload *offload,
+>>   					 unsigned int *frame_len_ptr)
+>>   {
+>>   	struct net_device *dev = offload->dev;
+>>   	struct net_device_stats *stats = &dev->stats;
+>>   	struct sk_buff *skb;
+>> -	u8 len;
+>> +	unsigned int len;
+>>   	int err;
+>>   
+>>   	skb = __can_get_echo_skb(dev, idx, &len, frame_len_ptr);
+>>   	if (!skb)
+>>   		return 0;
+>> diff --git a/drivers/net/can/dev/skb.c b/drivers/net/can/dev/skb.c
+>> index 8bb62dd864c8..a849f503dcff 100644
+>> --- a/drivers/net/can/dev/skb.c
+>> +++ b/drivers/net/can/dev/skb.c
+>> @@ -53,11 +53,12 @@ int can_put_echo_skb(struct sk_buff *skb, struct net_device *dev,
+>>   	BUG_ON(idx >= priv->echo_skb_max);
+>>   
+>>   	/* check flag whether this packet has to be looped back */
+>>   	if (!(dev->flags & IFF_ECHO) ||
+>>   	    (skb->protocol != htons(ETH_P_CAN) &&
+>> -	     skb->protocol != htons(ETH_P_CANFD))) {
+>> +	     skb->protocol != htons(ETH_P_CANFD) &&
+>> +	     skb->protocol != htons(ETH_P_CANXL))) {
+>>   		kfree_skb(skb);
+>>   		return 0;
+>>   	}
+>>   
+>>   	if (!priv->echo_skb[idx]) {
+>> @@ -86,12 +87,12 @@ int can_put_echo_skb(struct sk_buff *skb, struct net_device *dev,
+>>   	return 0;
+>>   }
+>>   EXPORT_SYMBOL_GPL(can_put_echo_skb);
+>>   
+>>   struct sk_buff *
+>> -__can_get_echo_skb(struct net_device *dev, unsigned int idx, u8 *len_ptr,
+>> -		   unsigned int *frame_len_ptr)
+>> +__can_get_echo_skb(struct net_device *dev, unsigned int idx,
+>> +		   unsigned int *len_ptr, unsigned int *frame_len_ptr)
+>>   {
+>>   	struct can_priv *priv = netdev_priv(dev);
+>>   
+>>   	if (idx >= priv->echo_skb_max) {
+>>   		netdev_err(dev, "%s: BUG! Trying to access can_priv::echo_skb out of bounds (%u/max %u)\n",
+>> @@ -104,16 +105,17 @@ __can_get_echo_skb(struct net_device *dev, unsigned int idx, u8 *len_ptr,
+>>   		 * length is supported on both CAN and CANFD frames.
+>>   		 */
+>>   		struct sk_buff *skb = priv->echo_skb[idx];
+>>   		struct can_skb_priv *can_skb_priv = can_skb_prv(skb);
+>>   		struct canfd_frame *cf = (struct canfd_frame *)skb->data;
+>> +		unsigned int len = can_get_data_len(skb);
+>>   
+>>   		/* get the real payload length for netdev statistics */
+>>   		if (cf->can_id & CAN_RTR_FLAG)
+>>   			*len_ptr = 0;
+>>   		else
+>> -			*len_ptr = cf->len;
+>> +			*len_ptr = len;
+>>   
+>>   		if (frame_len_ptr)
+>>   			*frame_len_ptr = can_skb_priv->frame_len;
+>>   
+>>   		priv->echo_skb[idx] = NULL;
+>> @@ -139,11 +141,11 @@ __can_get_echo_skb(struct net_device *dev, unsigned int idx, u8 *len_ptr,
+>>    */
+>>   unsigned int can_get_echo_skb(struct net_device *dev, unsigned int idx,
+>>   			      unsigned int *frame_len_ptr)
+>>   {
+>>   	struct sk_buff *skb;
+>> -	u8 len;
+>> +	unsigned int len;
+>>   
+>>   	skb = __can_get_echo_skb(dev, idx, &len, frame_len_ptr);
+>>   	if (!skb)
+>>   		return 0;
+>>   
+>> @@ -244,10 +246,41 @@ struct sk_buff *alloc_canfd_skb(struct net_device *dev,
+>>   
+>>   	return skb;
+>>   }
+>>   EXPORT_SYMBOL_GPL(alloc_canfd_skb);
+>>   
+>> +struct sk_buff *alloc_canxl_skb(struct net_device *dev,
+>> +				struct canxl_frame **cfx)
+> 
+> The prototype has to be added to a header file
 
-#define CAN_ERROR_WARNING_THRESHOLD 96
-#define CAN_ERROR_PASSIVE_THRESHOLD 128
+Yes! Seen that when looking through the patches on the mailing list once 
+more m(
 
-I will try to submit a patch for that by the end of today.
+:-D
 
->                                         cf->data[1] |= CAN_ERR_CRTL_TX_WARNING;
-> -                               if (rxerr >= 96)
-> +                               if (priv->bec.rxerr >= 96)
->                                         cf->data[1] |= CAN_ERR_CRTL_RX_WARNING;
->                         } else if (priv->can.state == CAN_STATE_ERROR_PASSIVE) {
-> -                               if (txerr >= 128)
-> +                               if (priv->bec.txerr >= 128)
->                                         cf->data[1] |= CAN_ERR_CRTL_TX_PASSIVE;
-> -                               if (rxerr >= 128)
-> +                               if (priv->bec.rxerr >= 128)
->                                         cf->data[1] |= CAN_ERR_CRTL_RX_PASSIVE;
->                         }
->
-> -                       cf->data[6] = txerr;
-> -                       cf->data[7] = rxerr;
-> +                       cf->data[6] = priv->bec.txerr;
-> +                       cf->data[7] = priv->bec.rxerr;
->                 }
->
-> -               priv->bec.txerr = txerr;
-> -               priv->bec.rxerr = rxerr;
-> -
->                 netif_rx(skb);
->         }
->  }
-> @@ -1021,7 +1027,8 @@ static int esd_usb_probe_one_net(struct usb_interface *intf, int index)
->
->         priv->can.state = CAN_STATE_STOPPED;
->         priv->can.ctrlmode_supported = CAN_CTRLMODE_LISTENONLY |
-> -               CAN_CTRLMODE_CC_LEN8_DLC;
-> +                                      CAN_CTRLMODE_CC_LEN8_DLC |
-> +                                      CAN_CTRLMODE_BERR_REPORTING;
->
->         if (le16_to_cpu(dev->udev->descriptor.idProduct) ==
->             USB_CANUSBM_PRODUCT_ID)
-> --
-> 2.25.1
->
+Will add it to skb.h
+
+Best,
+Oliver
