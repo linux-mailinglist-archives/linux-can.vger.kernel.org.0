@@ -2,60 +2,60 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3194E571F41
-	for <lists+linux-can@lfdr.de>; Tue, 12 Jul 2022 17:32:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 205D5571F42
+	for <lists+linux-can@lfdr.de>; Tue, 12 Jul 2022 17:32:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233413AbiGLPc1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 12 Jul 2022 11:32:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39962 "EHLO
+        id S229810AbiGLPc2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 12 Jul 2022 11:32:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233295AbiGLPc0 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 12 Jul 2022 11:32:26 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FEDA9FE06
-        for <linux-can@vger.kernel.org>; Tue, 12 Jul 2022 08:32:25 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d10so7762996pfd.9
-        for <linux-can@vger.kernel.org>; Tue, 12 Jul 2022 08:32:25 -0700 (PDT)
+        with ESMTP id S233472AbiGLPc1 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 12 Jul 2022 11:32:27 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C429FE06
+        for <linux-can@vger.kernel.org>; Tue, 12 Jul 2022 08:32:27 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id v4-20020a17090abb8400b001ef966652a3so11772721pjr.4
+        for <linux-can@vger.kernel.org>; Tue, 12 Jul 2022 08:32:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=bfloflcr6GeunKX6dITsf1MVbmVF9Kn5MVpeW2/yFrE=;
-        b=bKDjeUQDsxx4m+Ss4cf7BEz5JtnibYHe5n4ZmPO5r5/gGXW/qEYtFX3uNc/SNEB6sW
-         7QgkmBc9Zg1hU9qOg1tXRRn/7SRYSvDTdEYxvfiXJjhJNsCY1pvjAd81+6NenW2V61Tl
-         9yPSc0mv7mK2K/1T13erQyZ7S98yxZXk0h8XaSnX5vMvEnZHykVhxW1dv7E3U90MxITJ
-         A7jBxh7wcgvSyZFROMXWmuf53qfy+rUWoqs6TjrEB1M10Z9yphWxF/i59i8bs00ooHkM
-         SGNsP64XRu2kjUC51bz/fwtmstHQo0zc+YWaajSX73uOElqXAfGVuht2SSxFniVXPJ84
-         /w/A==
+        bh=u47Yt4MvSw7OclyY24oeeZEoWwdnnVTmsdJ/OU6GR8w=;
+        b=aEkePUvnAHWFcpGIVsfnlgDx6ST4WX0LgP/vTrl/k+PPf93bbFe/l1IQxq8x3nSG16
+         t2OTFGLrLJUqEtGB7ldV7VtPln0GB3FXm/5rxb8PIfZqqtoxUELiV1nfHCbyaMi8bhqo
+         Ln/2jm2e9wCkW123o5SEbhxRBRjebRuEZDczzo/uj1pqeDNl6EU2ZgKdXtJ4XtBHfwKw
+         g9qIoGIFztOyBOhjI6MEJVCnfemaU8tVajHfKAT7g0OCFI9z1K1aznzz/hC9lJMEGBne
+         +uK6VvvjBY8MJmEDg7tiGtquz8rwZRZ/BEhfk9my272mrLdnUazfofXEfInIW2+DdNKi
+         pXyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=bfloflcr6GeunKX6dITsf1MVbmVF9Kn5MVpeW2/yFrE=;
-        b=B3fdBKh5w/9YYRYHFJaZjKiZN6IcSUOK4S4CykNaOATmEvzrRbf+mRWMaO9fVZ2fIi
-         aStoY8osagxKtTxogdpi51AMttXSgibE99N+2TtBFXpChcCnatTwi1KKll6XwYMUoIR8
-         vv/OUu+wg57FXsmnNuQMkgm0x/dL1FyXsmKqTiS9MTC48PJ1vnJ/jASUMBF9l+Zo2oJg
-         Lx7fQt6Xt0PlMGO7Iclh7RKynkBq82c9/qstosSCDkz1N1r7ezR3XAV+VrK8hhsF84qI
-         AWWjXGWHRneJc1av0LbdUW5XJYTNznpVe5d2fKUco3S1ExCgOmf8OU4PrndxQ9znuFha
-         iYHw==
-X-Gm-Message-State: AJIora/qqAJaX9SbYzLjie7i3I4KKwsb/0FNBLAeocuFwr3jlySnVifn
-        OlVc2B+AsjE7L/qvJ5Prp7Ah4zUwcFTdyw==
-X-Google-Smtp-Source: AGRyM1ugml0rbbszweG2IPObmXCSQd2BTv2z63PqylFvOCsmbUmCiRYb8sv3vwOHyJn7PMZGz1NT0A==
-X-Received: by 2002:a63:ff4c:0:b0:412:b100:786b with SMTP id s12-20020a63ff4c000000b00412b100786bmr21359041pgk.537.1657639944834;
-        Tue, 12 Jul 2022 08:32:24 -0700 (PDT)
+        bh=u47Yt4MvSw7OclyY24oeeZEoWwdnnVTmsdJ/OU6GR8w=;
+        b=wYD/9IT0Fy4NuErZnwSJs9iQpV7fwW4RaRg3C0a8KBo65l9QPA7r4Z8p7yPcY0jn1P
+         tEdGrspWsmW9kpG3CJCHROJ0Mf/Amosb0MNtjnIGJQPIyMNeHyXZn2PBQP0uqXLOC1mc
+         b9NAkrTa2H9fwmGqM84iShRsTRbm3ACzDkBBTeUggpD/oTgqBN7QGknsuYEENmJwhvNh
+         Ztn+bMbYUN02pOeRhOcamFOHqithOjgJqee4eOIKQ7VHXlGtvS8vdVo5x+Bbd2Aqyl1K
+         G44lXJb6Ge/rN4C67DuUheMe+Nbl3dqVdo2EJ+A2w/A55mR3aEh+qbX0rkyHxGdLTlAU
+         dZnA==
+X-Gm-Message-State: AJIora976tr0ezYx8duNObKD/BcK4E3+ACLqL8zzOAcVCIl/GjPDZr2f
+        QVE8/e2T0iNHXLaWo3tWbn/iPqvCQnrdig==
+X-Google-Smtp-Source: AGRyM1vGIIZjGVIXxEeLfQAK6aEF9ta7ED6bbd2OgpuktRVsksPuw+vqn5vuuVzt//X2fUBR8+1YJQ==
+X-Received: by 2002:a17:902:da8e:b0:16c:56d7:e00e with SMTP id j14-20020a170902da8e00b0016c56d7e00emr6342161plx.91.1657639946499;
+        Tue, 12 Jul 2022 08:32:26 -0700 (PDT)
 Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id c131-20020a621c89000000b005252defb016sm6891483pfc.122.2022.07.12.08.32.23
+        by smtp.gmail.com with ESMTPSA id c131-20020a621c89000000b005252defb016sm6891483pfc.122.2022.07.12.08.32.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 08:32:24 -0700 (PDT)
+        Tue, 12 Jul 2022 08:32:26 -0700 (PDT)
 Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
 From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 To:     linux-can@vger.kernel.org
 Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
         Frank Jungclaus <frank.jungclaus@esd.eu>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v1 01/12] can: pch_can: do not report txerr and rxerr during bus-off
-Date:   Wed, 13 Jul 2022 00:31:46 +0900
-Message-Id: <20220712153157.83847-2-mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v1 02/12] can: rcar_can: do not report txerr and rxerr during bus-off
+Date:   Wed, 13 Jul 2022 00:31:47 +0900
+Message-Id: <20220712153157.83847-3-mailhol.vincent@wanadoo.fr>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220712153157.83847-1-mailhol.vincent@wanadoo.fr>
 References: <20220712153157.83847-1-mailhol.vincent@wanadoo.fr>
@@ -75,36 +75,39 @@ X-Mailing-List: linux-can@vger.kernel.org
 During bus off, the error count is greater than 255 and can not fit in
 a u8.
 
-Fixes: 0c78ab76a05c ("pch_can: Add setting TEC/REC statistics processing")
+Fixes: fd1159318e55 ("can: add Renesas R-Car CAN driver")
 Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 ---
- drivers/net/can/pch_can.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/net/can/rcar/rcar_can.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/can/pch_can.c b/drivers/net/can/pch_can.c
-index fde3ac516d26..497ef77340ea 100644
---- a/drivers/net/can/pch_can.c
-+++ b/drivers/net/can/pch_can.c
-@@ -496,6 +496,9 @@ static void pch_can_error(struct net_device *ndev, u32 status)
- 		cf->can_id |= CAN_ERR_BUSOFF;
- 		priv->can.can_stats.bus_off++;
+diff --git a/drivers/net/can/rcar/rcar_can.c b/drivers/net/can/rcar/rcar_can.c
+index d45762f1cf6b..24d7a71def6a 100644
+--- a/drivers/net/can/rcar/rcar_can.c
++++ b/drivers/net/can/rcar/rcar_can.c
+@@ -232,11 +232,8 @@ static void rcar_can_error(struct net_device *ndev)
+ 	if (eifr & (RCAR_CAN_EIFR_EWIF | RCAR_CAN_EIFR_EPIF)) {
+ 		txerr = readb(&priv->regs->tecr);
+ 		rxerr = readb(&priv->regs->recr);
+-		if (skb) {
++		if (skb)
+ 			cf->can_id |= CAN_ERR_CRTL;
+-			cf->data[6] = txerr;
+-			cf->data[7] = rxerr;
+-		}
+ 	}
+ 	if (eifr & RCAR_CAN_EIFR_BEIF) {
+ 		int rx_errors = 0, tx_errors = 0;
+@@ -336,6 +333,9 @@ static void rcar_can_error(struct net_device *ndev)
  		can_bus_off(ndev);
-+	} else {
-+		cf->data[6] = errc & PCH_TEC;
-+		cf->data[7] = (errc & PCH_REC) >> 8;
+ 		if (skb)
+ 			cf->can_id |= CAN_ERR_BUSOFF;
++	} else if (skb) {
++		cf->data[6] = txerr;
++		cf->data[7] = rxerr;
  	}
- 
- 	errc = ioread32(&priv->regs->errc);
-@@ -556,9 +559,6 @@ static void pch_can_error(struct net_device *ndev, u32 status)
- 		break;
- 	}
- 
--	cf->data[6] = errc & PCH_TEC;
--	cf->data[7] = (errc & PCH_REC) >> 8;
--
- 	priv->can.state = state;
- 	netif_receive_skb(skb);
- }
+ 	if (eifr & RCAR_CAN_EIFR_ORIF) {
+ 		netdev_dbg(priv->ndev, "Receive overrun error interrupt\n");
 -- 
 2.35.1
 
