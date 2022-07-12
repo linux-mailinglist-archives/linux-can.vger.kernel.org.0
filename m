@@ -2,108 +2,122 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7861D571FB4
-	for <lists+linux-can@lfdr.de>; Tue, 12 Jul 2022 17:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3824857205A
+	for <lists+linux-can@lfdr.de>; Tue, 12 Jul 2022 18:08:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233971AbiGLPmA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 12 Jul 2022 11:42:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51540 "EHLO
+        id S233997AbiGLQIZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 12 Jul 2022 12:08:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230159AbiGLPl7 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 12 Jul 2022 11:41:59 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12olkn2093.outbound.protection.outlook.com [40.92.21.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81826C3AD9
-        for <linux-can@vger.kernel.org>; Tue, 12 Jul 2022 08:41:57 -0700 (PDT)
+        with ESMTP id S233880AbiGLQIX (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 12 Jul 2022 12:08:23 -0400
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-eopbgr150138.outbound.protection.outlook.com [40.107.15.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCCA5C84C5;
+        Tue, 12 Jul 2022 09:08:19 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N47s0z8o5EEFRTU1zgcifRQa+cjdno9eX2gGPZsxDEXjtYWd2X6FHpQC51htgpM3H7Ft4GEDzYIqk5oxSzZs5CRCsInacakULhE2r+D0n6QvNcygWkcEXiDA+J0liHcY+WyF37n6n9vcIcNYNG4YhZw3dVHY5h/cf0yUDlOgK2TL9VZPgGMliZlrKHfK3MnYtjmnKUaFhbo7htAJDLoS3WlFf6mQVzVmr9ByBNOsybfxNlY9h05wBTTlVYTGKwKDp6ipa5oQzVnrHjmegSVN9XYzrg55WSi1T5LdzwsMfcEdD70I1EsHWaULnoN+yJ6mx8t74wU9qEHZIKWv1zVK+Q==
+ b=GJQT6CiACq53SeL3IraEXcjFTZ3u9xt5Dj0dNCte6znUPdjpJkJZ6uoAPbf38goHbyeBi3Uw5NBsQSId4WHh0Rom9cwjbbTsjf0P9Ut6Z4LhIaATsroM/V1TLSXYupMv+wV6aReUsTpxE6H6kSqFqJZJIHJ0B5mFPMNscWs9HMLg72CyQ/ACjwgJhDLFTLM5+6s6Ik7bWEPaq9WKY4/swgKktoZk2JqdmPct/Kss67cLFyM6RXdN+e47ssMyyML+8ds/wFq238w7f1WT6VuxoXypMsa1Z5qAcODgp0C1iDo0UzwwobF3Gc8Sb/k325QQgVhs1Q3KQUpBiGBYK+XA+A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hHP85iow2iG7N/tgZKMtTPqEL9hKpSoMCGLwUEZg2mM=;
- b=S2T/0xYAwmJzR2zm/CzUUyjI03kXlwTx6GzNJyfuAi2uCriHhEWOV3pdpOAvW0lupOP5ittaz8/mAMa57g2784op2ONbcBp/WT8Vtxe2bt2MBQfry4p+xFDb86pRHTihif4hCQRZOfIsS0Vr/SchpOWRcmrX4+YsypAlSjPTIsDMUg+RYmekyRFw/bgMXUXUPhKnOdJ0fdMaOzVjw1DlxBqtOZhWm5M41+ZUCqLSmDNRbjro5IA34Zl8EcZ5TNwXFYlog4KIAJxEeYau3oe3+YcQmUHV0htNRF1djKWFaTQxLdjJInRzs04WHiynfxPpy0EmvJvt0wHclGQ76Jxyuw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
- s=selector1;
+ bh=6NabXQN/2kH9MlOpr6/iJDks2zW2WFmSGRoPbzFzjFk=;
+ b=GOA+rnAYJ9JeWzfxIgf8GTdAYK6aY2oF+yGbHuZWo/U2e20okIWjDHRjr2fwyOXj/jCAWIup/iLQfXyT72gYAxJzRBr97OzsiUQDbGtg7B4w7G2QvkQ4o3OW5uGol93X74LpvDjFUM5AY9U5ela/VMKk4+ktJIKai18y/t+x32dUqUx17p+C9ywlx72JFAPHIGmeXBQNodeKJiSmYARwh6H16a+++8OVkCH/YE6PDNXlFJHA+AkeGJ64BnRWOLXJv6S4ZoBG+GLefn5c7GAo7u6bnGHKGY6xcUrpp1jc0tXHw+h0l4dKcDfDc7Jh5Qn7X+O6h8Fm6xcQM1G1JTT4vQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=esd.eu; dmarc=pass action=none header.from=esd.eu; dkim=pass
+ header.d=esd.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=esdhannover.onmicrosoft.com; s=selector1-esdhannover-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hHP85iow2iG7N/tgZKMtTPqEL9hKpSoMCGLwUEZg2mM=;
- b=nfBqyBjLgsWa2x575+lG7iJ6PiHEQYeakKUQWTZf6/OfY3sGPP/iC2M0XuA7Z4LNMxKbbdLJN/uW81wAJ8HPYwba6nX1mZQ4icYJAvUBRxm5CSSVZjKsr0N3WgFKcvyHzEix443p8URhn6yEc6mRNjKMybvcCePq/+SxhgFXjeMGy7L9q8CGEiR1t9JZ3XQYWVSeCPoFq9p0DvF5n+HCHM4avZT3JhRlc6PhLBUm9PI3sWMGA1Fg9WIe/u4VdRpNgAO20GI/INuVQIg1x7eG1SgYhOQyJ+Cs4y6vNt2Wbom8vA/diS/Wl3pSTudW84lzlim0E2YaulPNe2D7LSBJ4Q==
-Received: from SN7PR14MB4270.namprd14.prod.outlook.com (2603:10b6:806:10c::9)
- by BY5PR14MB3956.namprd14.prod.outlook.com (2603:10b6:a03:205::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.15; Tue, 12 Jul
- 2022 15:41:55 +0000
-Received: from SN7PR14MB4270.namprd14.prod.outlook.com
- ([fe80::5484:2724:f7d6:b0ff]) by SN7PR14MB4270.namprd14.prod.outlook.com
- ([fe80::5484:2724:f7d6:b0ff%3]) with mapi id 15.20.5417.026; Tue, 12 Jul 2022
- 15:41:55 +0000
-From:   Sergio Alberto Valdivia <salberto2000@hotmail.com>
-To:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Subject: vcan OpenWRT
-Thread-Topic: vcan OpenWRT
-Thread-Index: AQHYlgXq2ZnGuBwybUyscbp868S3Gg==
-Date:   Tue, 12 Jul 2022 15:41:55 +0000
-Message-ID: <SN7PR14MB4270AE6DC8F68C87E6FD2876DD869@SN7PR14MB4270.namprd14.prod.outlook.com>
-Accept-Language: es-MX, en-US
-Content-Language: es-MX
+ bh=6NabXQN/2kH9MlOpr6/iJDks2zW2WFmSGRoPbzFzjFk=;
+ b=B8yN+qPwd02OulGe7vgvv7hdaeGNA+9RwBv52a7bKrk7eafadVEcEtFVyG30ijttR72H3ober3JRG8nDjtZASCOoq9dMJuarXE+wjUGgu1E3+7pKkbXBLA+K5lB8qO5tUNVvwB8tcO0PL7JkOfTAgyPijAPqnO39stmu+Tv9JAU=
+Received: from GVXPR03MB8426.eurprd03.prod.outlook.com (2603:10a6:150:4::9) by
+ DB9PR03MB7466.eurprd03.prod.outlook.com (2603:10a6:10:229::12) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5417.26; Tue, 12 Jul 2022 16:08:16 +0000
+Received: from GVXPR03MB8426.eurprd03.prod.outlook.com
+ ([fe80::d57a:7f6b:776b:481a]) by GVXPR03MB8426.eurprd03.prod.outlook.com
+ ([fe80::d57a:7f6b:776b:481a%3]) with mapi id 15.20.5417.026; Tue, 12 Jul 2022
+ 16:08:16 +0000
+From:   Frank Jungclaus <Frank.Jungclaus@esd.eu>
+To:     "mailhol.vincent@wanadoo.fr" <mailhol.vincent@wanadoo.fr>
+CC:     =?iso-8859-15?Q?Stefan_M=E4tje?= <Stefan.Maetje@esd.eu>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        "mkl@pengutronix.de" <mkl@pengutronix.de>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "wg@grandegger.com" <wg@grandegger.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 4/6] can: esd_usb: Improved behavior on esd CAN_ERROR_EXT
+ event (3)
+Thread-Topic: [PATCH 4/6] can: esd_usb: Improved behavior on esd CAN_ERROR_EXT
+ event (3)
+Thread-Index: AQHYkvZ8KbGCPl11OkK12FCtHi0K+q161HMAgAAYz4A=
+Date:   Tue, 12 Jul 2022 16:08:16 +0000
+Message-ID: <ec95c96b761df49ae19ff333aad9857c5ec498e0.camel@esd.eu>
+References: <20220708181235.4104943-1-frank.jungclaus@esd.eu>
+         <20220708181235.4104943-5-frank.jungclaus@esd.eu>
+         <CAMZ6Rq+QBO1yTX_o6GV0yhdBj-RzZSRGWDZBS0fs7zbSTy4hmA@mail.gmail.com>
+In-Reply-To: <CAMZ6Rq+QBO1yTX_o6GV0yhdBj-RzZSRGWDZBS0fs7zbSTy4hmA@mail.gmail.com>
+Accept-Language: en-001, de-DE, en-US
+Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [pBX3jr2DbdREnU6wqGg6DGyMSvBflmXe+m0P4rnOzt4=]
+user-agent: Evolution 3.36.5-0ubuntu1 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=esd.eu;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2734a333-b52a-41ae-d32b-08da641d0cc5
-x-ms-traffictypediagnostic: BY5PR14MB3956:EE_
+x-ms-office365-filtering-correlation-id: 5585e240-abcb-45dd-eed8-08da6420bb24
+x-ms-traffictypediagnostic: DB9PR03MB7466:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: PQ/isPWBmjGRv525/8MKKXzpkF/L1mldekKgV8PbZImWVSAdlo8QdarVtBe03Xs5ypDsau7H9Zp15Y1xPJ/VHhVRELiqGtrx4QWRek/V4JvreK/Z8Ht+5DVroP0qVsL/02BW8/WB0oXb71fpxKePTiFTlV1Zzx91svCRIH3LmuaJCpw8Uzfra4RDzJ2Vo7cTR5oqWpe2zImcT/Lf0bl/vhBSSt8T1XlKmjclRXYWop/DgLQIxO99XRYmlFVCR/aKXHJAJRBDF8G+tVTqmwxR1/9gJooqyQpCjvHJhLOMM0MU0XFnVYqe/betZKRL1MEDw9UbsYz9gUErgzmBy4inCyNeGTjvFHsN8Emh1oNq38KIoyvICeHbzCd8vZHdKLbbqlw9OC0igDi1x1caFh3bPUMrdv8z0z155z8aSDbEQSZoP65QuxwMXgfvrk2piUYLb4+FosYjLfA4i3Ai1VaEEEK+sz70MJwuiEvBVlvMvDjCA73yc4kXvBwGXlExhibsv0bYaGgTOl7URySPkRdNZ5t7H5CV9/BXlsIT2fjy8QH8qrVMQR7+R0Ttxr/AW5eCJu7PWqrpmXk0FbAQLpx6FZyeenWwou9u1veZeww0j49DtuX1FrvIwuUQOPzvMRshHo5t3YS2C8Fe0swbKTkAyC+HPdFnPWtGWMeutI4LKWmyQ/zp9y49K923OZD3tcA1TYHHbDIWu/08bZ9ZvNGR0w==
+x-microsoft-antispam-message-info: XK97+xeONXoiVG38N7uuBWmwmbLa3FE2MQCHYfW8cDjxiDpyMb2V8NPRxhnhuVp3Hj8YDTB0ETKORiKkP6ana7SHbjBUTdZ9uW/b6Wq8DDotrMmWI7AN9nJTwv1RJN0gQA4VxQlNWuRXcmoXKj3wDUr1QnlYkgvMif8hpbqAGPDFDVjhPyEzaCnG2NCZBl70ZD01AydPhbxNYgZWbeR0E+XUvF1Rm2uoY3BsjwJQ0+qmgG5wnbrX1w8YmWtO7NT6ZS37EloD4YIE3Ns0+sI26Nstyu+Mm4NAgwJ8rOT192NuRXutM4058LaWbxT+uT5LOfaE0bh1/iW5riG2zMtYMS5+n6nszO6ivcSO3bVZ4das7JD+okrgt4N8c12I+keo2qPoLbRqczPTNcp3jdyqSi6aba0lgTlgiL4YorrjQQx43UVgMmrsqIfpcpzwpNKd2XNxmcLXgFSZRg2fpggLtU7d1wryZrmjToo3mDD8R3Cbw2Bjm8C3WJUIpoYxNJX1sbozFzn5Iq6Zks+6A1+D3UzZflKP0hUv/72GVmbU8YqOr+89dPFUr/8Z6NbeXL1Qf9dVPALaDleTC6tQ6rDPl5GG9kcDuUv6Bb8AOhj/QSCz7yHApSG547naOz50LpRl8Xk4/BhldsdRt1gct0tSFDM9X77vIyZEsp7UrLmwukc4vghNPj3xXXAVrfCf4N/h6byVOhwLXGECuv0XpVI2KFDWsDBRUfBP+C7Addr6PxBr6kLKjjSErgAUQona1npvMaJDV8UmVTV58fqJj3N6TF73OhtcDztBKOKVK3iMc2PBohgWQzaGHIhSYWEFLe/I3JZVWGIo1bRhCCMQwccQgYl5ZIU3svgfIHRnwTCd2EA=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GVXPR03MB8426.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39840400004)(376002)(366004)(346002)(396003)(136003)(66476007)(91956017)(186003)(64756008)(8676002)(86362001)(66446008)(76116006)(38100700002)(66556008)(4326008)(2906002)(66946007)(2616005)(8936002)(83380400001)(122000001)(41300700001)(6916009)(5660300002)(54906003)(38070700005)(316002)(26005)(36756003)(6486002)(478600001)(966005)(6512007)(6506007)(71200400001);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SEQ4ZHdpTkI0ZHRRY1laNkJ2N0dYd2l1emJzaU9aQXpsMjhQMDVrdFVwMXdN?=
- =?utf-8?B?VVRIWjlRcElTL1Z5SzJ6R3AzK3FVUzNTLytHVUJ3NzNCUW1XaHpBRVZXbDA1?=
- =?utf-8?B?S1ZsOXBtUGFMeStTVWsvTXE2M24zYkxWY0hMcDVUYlk5d0F3cHFKK2YzaVZW?=
- =?utf-8?B?VVo0aXNMMnBaWlFLaVVONWIwYURLRkJnemtuVEJ2NDdRcnpPZG9CNWE3Z3cy?=
- =?utf-8?B?QlpGMUJhaGUvZEp6STl4aUdpRXlXN1ZKTFZKaDVCbHFTQzdiS2U0Yk16dzdq?=
- =?utf-8?B?MkNtenpkRWE4R3FtN0szVWlXWEJKa0p3VTdKYnc4cU15aDdMU1VqUEhTcHhY?=
- =?utf-8?B?ekMyU1I0YjZnUnR1cGJmTFNyWkRKNzNHTW9jWTNBQVg4SkRvQmJrc3VhMUxs?=
- =?utf-8?B?NUIxb2ZjL3RROGVwSWxZcVpQb0ZPTVlrMDlnMDhhcVVIRC9vSkY1R05lQU9W?=
- =?utf-8?B?dGROYms3WDFjNlpOSHNsaUVNUDlGRWRpRFNPcnhkeUUreElvNXVxU1o0SVRP?=
- =?utf-8?B?RkRjbkQvU0svS1ltVjFldGE3czBPd3hhRVdjM0VNcGY4YlZpNVc3MWJWemJH?=
- =?utf-8?B?WUR3b0wzbVdoNnYrZjNoOHdmZnNGSTRhM3JSc0ZjTGpCLzFidjlraGxHcXRF?=
- =?utf-8?B?dVZDb28rdW5FeHhaTVZmQnJ6bkxLL2cyK2VFcC9PbytWWlJ0RUNuUnl5RXlt?=
- =?utf-8?B?bWNXZTJRTWJVR1lXY3p5M0ZTV3gwVUp6UGU0MWNPZmlYUFYrMkg0ZnZVbEV1?=
- =?utf-8?B?UDhPRVZKdzdGa2dGb1lvSlh5MVJxaHozakxSK3J1bFo0ZktCVUxmdVEvRjFi?=
- =?utf-8?B?dEQwTVBXSDhWR0xrN3I0STNhc3Z1OG00VU1vWlp6d1VJaGozWFEwdHFJTkhZ?=
- =?utf-8?B?eGlQYVZYa2lVSXpJcDlKaVZlRWFrQ3FkNzBzcFREV2d3WmJHUDNEakV5ZUFy?=
- =?utf-8?B?VFlja3lCa29wL2VJQzFrV05GaUErbHg0WWFsOXBmaTdpcUZ5VWF4TEZtaFE1?=
- =?utf-8?B?SHhCcS9jV2NmaDdDUHZxNnk0dEY0TUFmKzRseCtIemlGekpOeVY3L0JNYjN0?=
- =?utf-8?B?aWJCdjVDZXFJNit2OU00S3BlbnlYZzZ2akVDSUcySjBPeUc2UnJDTUR5c0VU?=
- =?utf-8?B?b2NHNjIySGI2QTNZVnk2Q0hHZ2xBajFmY1RTTXE2N2dWNjg1cjhSYm9od0RH?=
- =?utf-8?B?d25YUm5RL1hSSXFNdU1yUng0MjF1U1ljZWJXNW9xbHBFeXNmWTIzLzNDYjBw?=
- =?utf-8?B?MWIxdzdIa0J3eThGbDM5MUF1YVpqTmM5eVJnSm9oNEZpRGxndTlXSElFZzZv?=
- =?utf-8?B?YVJsbnJuUTYrREt3WkQ2eHF3cFZ0ZEhrTEc4L01Cd0NpWkYrckI2NTFrMjdC?=
- =?utf-8?B?WnlxWndZZGM1WlBLdk1USWZzbUYzejg4Z0t1TEVJdFBKcHRWc0NEMk5aWnpx?=
- =?utf-8?B?a3N6a2xabXRHd05Jd0hBYVhYdURMVW5yYlBkQ0ZVNDhVUHBGZnErODBmYUZs?=
- =?utf-8?B?ZERXVDdoQ2JHdXJtNi9rVkp3VnJWMmZWVnZQSlh6QjZ4dXNGNFZVcnFPVEor?=
- =?utf-8?B?UUwvQW1MUWZqcmZQNVpaZW5XOU1aSjE4S3NVT3gwUWFENUVYeVBuelgzS0Fh?=
- =?utf-8?B?bXJod3I3bzJZaU5OSDdnZy9HR1VBQ1hwVkVqYXBxOXhBVTNUNlZ5Y2Z4Z29L?=
- =?utf-8?B?dUFkZXlWcTJZK0ZDVFpwRDhHcDQ3cGZMOXJGQnptMHVVakxXVnNRdTduSVFv?=
- =?utf-8?Q?PKHH2Yb0Lp5SW3Hx9A=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <1BEB3DABC5878D46B648D6E45E1049F2@sct-15-20-4755-11-msonline-outlook-cd57b.templateTenant>
-Content-Transfer-Encoding: base64
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-15?Q?UrF+KVzUT1655OsS/vPutfhjmM6+zxYnlZXJjtSHhIy+P/NtX+DHNWrTT?=
+ =?iso-8859-15?Q?GeZarq1w3NwKHxR6AcmUgCSVQOkJn+yaqjT1UFF4KdwBKMG6InoltrTcP?=
+ =?iso-8859-15?Q?kBvL5OqJOi80GJHl4CYBVfKhh1DwVJt0aB/sbwZTq140QT7sWpDussjvo?=
+ =?iso-8859-15?Q?2x6ZyKGOk9sj4k4dQ9S7f65P/ZOe8wN565lk58aWvP6apFRPT9pQboHug?=
+ =?iso-8859-15?Q?VOhjE4wzi+Hx7Pyr3omfHxbjOwQBhZJmmIyr3mEl6lpKcvpLrrUfQe3yq?=
+ =?iso-8859-15?Q?66nOcxZQWpash05ZvIHqX9LwcD0huilCqBlfa8SC57ermf5JN0KxSrgUg?=
+ =?iso-8859-15?Q?oxi+8eZpUPlEG4QQb4mKjHjeDlPaXsRmr3WzOVPBD1Evuth/GZetkbg6e?=
+ =?iso-8859-15?Q?4cqmXcZwkFvKtZIaKC/LjK6CdqvAFVqfaay1VIL6OyioUMPZaMsAB/h3F?=
+ =?iso-8859-15?Q?g3Pfox/mOW8wmpUM+63QIpCoJKeVP58JeWkpQ/DQirR5QtHmBr45aC4YM?=
+ =?iso-8859-15?Q?C/1MNNwXsBIURGmE5agGkaCvUL9joLuKvaAJAB8/85IPHxhJUz1B3mJSN?=
+ =?iso-8859-15?Q?T1D3k6vdqI4ab6LbMzV4VkJvr+WOuWg3bh0evTMZgYGcnmHLKLR49AY6S?=
+ =?iso-8859-15?Q?saeWUPn0XJ+4HBv4O30s5JbLbnF55z7SZvMU61gznTzG4DBSxCB2zWIvs?=
+ =?iso-8859-15?Q?1027CuJmF5GwDabRMjQ4XvZN5cWkbP9D7NUZlGO4ovEM1gR/RXQGtGKwt?=
+ =?iso-8859-15?Q?1aca/3ErlhZmMVvbkpM+s1hVeG6qPxvy66ltCe4VsdEKU/gMW+bXZM4Zk?=
+ =?iso-8859-15?Q?3zL43AO8vlbBLFgqT894ZcOxx90bNmuWfxHsNwbMt47jw2DHe6aOrt20u?=
+ =?iso-8859-15?Q?A771VTy18Vl1+T91ua/61T65UD/W/EuINdpmnX4AJvf2IyZJMkyzp8eAy?=
+ =?iso-8859-15?Q?PF1gmyuZrEeU1/y0YiIxZZPUJ8U8IvqlAlEop+czpzlf5jKEguLLoSGwa?=
+ =?iso-8859-15?Q?FZlr/Id1GvCn4wapVLDlrvX82XI21zNVKngOLedY+iMCFIWfJ1rEqexJI?=
+ =?iso-8859-15?Q?BaGOJbeX/NNXeZKEht9l7wkRVFyje9jylLxlVCih9evdk2nmMpKrJ1XS/?=
+ =?iso-8859-15?Q?2vJQHkiwy5sVYATqVvy8IXX+1tAb34M8/XDljSWGugRFX9jRldh+tPWbM?=
+ =?iso-8859-15?Q?EIovh8ElnuyGQ6jNEDeXM7md6ONk2ZpEyt1R2aluPhEa62ybbpuODJsU1?=
+ =?iso-8859-15?Q?z3t6ETbzuWm70tt9mIws5SIVzezfRfbu3xMr8IuUXlOrnAwwIz7tiwb2R?=
+ =?iso-8859-15?Q?BsxHQZP2IEt7O4TV+KAf5O+JKmqt7BQrj/MKazt1C7xwjE89+KGi58EDA?=
+ =?iso-8859-15?Q?fwzyh1OQmKDIRMfl99I12rVGf8610mJG8aoM54qQGjgN7G8TodMMwbcdR?=
+ =?iso-8859-15?Q?YEpRDzTKYNg1DQuJCwUhjBiVQPY0Mdjhc7saHZH62b+PA9BkERxouuHqt?=
+ =?iso-8859-15?Q?snBUAc+A+4qUphUpdDYx5XPUm0XsDO2HMzCJ/7LVZL+AuVoigTL5N3ChF?=
+ =?iso-8859-15?Q?M+5WPhPB3ofk0ZtpBviVVdiFe1mbFn9aOD5qIWmiFN68SyVKqIIQWWsHQ?=
+ =?iso-8859-15?Q?7uPkY7Sj3A38UrjlC55CvW7yHjpNCegqDazpp/TPQoWl89/uO8LeSqlnt?=
+ =?iso-8859-15?Q?ymnDLlTOI+pcHUrRvab/JiAeqQ=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-15"
+Content-ID: <3A87BDDDCB67374D97058DE907675E99@eurprd03.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-cd57b.templateTenant
+X-OriginatorOrg: esd.eu
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN7PR14MB4270.namprd14.prod.outlook.com
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2734a333-b52a-41ae-d32b-08da641d0cc5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jul 2022 15:41:55.7310
+X-MS-Exchange-CrossTenant-AuthSource: GVXPR03MB8426.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5585e240-abcb-45dd-eed8-08da6420bb24
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jul 2022 16:08:16.7524
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR14MB3956
+X-MS-Exchange-CrossTenant-id: 5a9c3a1d-52db-4235-b74c-9fd851db2e6b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6ePjwdwJv6owaOdgY6L4eSY5gesL1W8Hl4tvvB9ERnBVbqLkQ8ZvppfeGdp9+88fyjYoma1sKBCKXmQALIElAQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR03MB7466
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -111,9 +125,80 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-SGkgbXkgbmFtZSBpcyBTZXJnaW8sIEnigJltIHRyeWluZyB0byB1c2UgY2FuLXV0aWxzIGluIGFu
-IE9uaW9uIE9tZWdhIDIgcHJvLCB3aGljaCBydW5zIE9wZW5XUlQuIA0KDQpJIGhhdmUgYWxyZWFk
-eSBpbnN0YWxsZWQgdGhlIGNhbi11dGlscyBwYWNrYWdlcywgYnV0IHdoZW4gSSB0cnkgdG8gY3Jl
-YXRlIGEgdmlydHVhbCBDQU4gaW50ZXJmYWNlIEkgZ2V0IHRoZSBmb2xsb3dpbmcgZXJyb3I6IGZh
-aWxlZCB0byBmaW5kIGEgbW9kdWxlIG5hbWVkIHZjYW4uIA0KDQpIb3BlIHlvdSBjb3VsZCBoZWxw
-IG1lIHNvbHZlIHRoaXMgdXNzdWUuIFJlZ2FyZHMsDQoNClNlcmdpbyBBLiBWYWxkaXZpYQ==
+On Tue, 2022-07-12 at 23:39 +0900, Vincent MAILHOL wrote:
+> On Tue. 9 Jul. 2022 at 03:15, Frank Jungclaus <frank.jungclaus@esd.eu> wr=
+ote:
+> > Started a rework initiated by Vincents remark about "You should not
+> > report the greatest of txerr and rxerr but the one which actually
+> > increased." Now setting CAN_ERR_CRTL_[RT]X_WARNING and
+> > CAN_ERR_CRTL_[RT]X_PASSIVE depending on REC and TEC
+> >=20
+> > Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
+> > ---
+> >  drivers/net/can/usb/esd_usb.c | 16 +++++++++++-----
+> >  1 file changed, 11 insertions(+), 5 deletions(-)
+> >=20
+> > diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_us=
+b.c
+> > index 0a402a23d7ac..588caba1453b 100644
+> > --- a/drivers/net/can/usb/esd_usb.c
+> > +++ b/drivers/net/can/usb/esd_usb.c
+> > @@ -304,11 +304,17 @@ static void esd_usb_rx_event(struct esd_usb_net_p=
+riv *priv,
+> >                         /* Store error in CAN protocol (location) in da=
+ta[3] */
+> >                         cf->data[3] =3D ecc & SJA1000_ECC_SEG;
+> >=20
+> > -                       if (priv->can.state =3D=3D CAN_STATE_ERROR_WARN=
+ING ||
+> > -                           priv->can.state =3D=3D CAN_STATE_ERROR_PASS=
+IVE) {
+> > -                               cf->data[1] =3D (txerr > rxerr) ?
+> > -                                       CAN_ERR_CRTL_TX_PASSIVE :
+> > -                                       CAN_ERR_CRTL_RX_PASSIVE;
+> > +                       /* Store error status of CAN-controller in data=
+[1] */
+> > +                       if (priv->can.state =3D=3D CAN_STATE_ERROR_WARN=
+ING) {
+> > +                               if (txerr >=3D 96)
+> > +                                       cf->data[1] |=3D CAN_ERR_CRTL_T=
+X_WARNING;
+>=20
+> As far as I understand, those flags should be set only when the
+> threshold is *reached*:
+> https://elixir.bootlin.com/linux/latest/source/include/uapi/linux/can/err=
+or.h#L69
+>=20
+> I don't think you should set it if the error state does not change.
+>=20
+> Here, you probably want to compare the new value  with the previous
+> one (stored in struct can_berr_counter) to decide whether or not the
+> flags should be set.
+
+Hi Vincent, I didn't interpret the comments given to data[1] in error.h
+in that way (obviously). But after checking some other drivers, I see
+they all seem to handle it the way you proposed it ...
+So, I'll try to rework and resend patch 4/6, too.
+
+Best regards,=20
+Frank
+
+>=20
+>=20
+> > +                               if (rxerr >=3D 96)
+> > +                                       cf->data[1] |=3D CAN_ERR_CRTL_R=
+X_WARNING;
+> > +                       } else if (priv->can.state =3D=3D CAN_STATE_ERR=
+OR_PASSIVE) {
+> > +                               if (txerr >=3D 128)
+> > +                                       cf->data[1] |=3D CAN_ERR_CRTL_T=
+X_PASSIVE;
+> > +                               if (rxerr >=3D 128)
+> > +                                       cf->data[1] |=3D CAN_ERR_CRTL_R=
+X_PASSIVE;
+> >                         }
+> >=20
+> >                         cf->data[6] =3D txerr;
+> > --
+> > 2.25.1
+> >=20
