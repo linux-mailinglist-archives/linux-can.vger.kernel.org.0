@@ -2,105 +2,119 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0B0A571720
-	for <lists+linux-can@lfdr.de>; Tue, 12 Jul 2022 12:20:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F7DA571ABC
+	for <lists+linux-can@lfdr.de>; Tue, 12 Jul 2022 15:03:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbiGLKUd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 12 Jul 2022 06:20:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44114 "EHLO
+        id S229728AbiGLNDi (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 12 Jul 2022 09:03:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbiGLKUW (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 12 Jul 2022 06:20:22 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B0CACF78
-        for <linux-can@vger.kernel.org>; Tue, 12 Jul 2022 03:20:19 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id o7so13136733lfq.9
-        for <linux-can@vger.kernel.org>; Tue, 12 Jul 2022 03:20:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=t7/ucNQCCiiuq1lYv5Z+Jjy2njk0BrGXCMsPnOpnEsI=;
-        b=DGmPDi3ayHIU8BQ7IKVXKYteM5mjUPkbfi3lzehrtWp40ZH3GqyPK2XuKA1PruIoNs
-         nJhKS/HMmhjC0IbCvtF3Jemw5wNHSXMHBcp9i5MQ0AAAvtf//7XrH7IFs7vuHLl7MKJY
-         b44FO3qRt1Z6G4dQrM2Vra0pFn2A8Q7wW6N8pRbgTtUWsR5lH+aMTVRJKuUfFiprAsNJ
-         7yy8MTKKobNOlGDwKOb6zIhEpRrqiicsQUCZ6J1DyKc3F+dJpplcA3mZXK+boL0/ih8V
-         NGudIRcHBtsgOFGy4xoUQMQFzdcAdugd8jC3/0Etzh7p/U++LL1bmJWjan0g/NSVLbI2
-         NBrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=t7/ucNQCCiiuq1lYv5Z+Jjy2njk0BrGXCMsPnOpnEsI=;
-        b=0Dd3xd2ctdspjcpgGwA16PLez/NWktBxpLzN92sd8ktY5qYquqTStrMUCeHsr0N8RI
-         Qt/1Ke8LtbtE4lkz0ttNXnuTMJvaaVu3IHlgVZbPtkTQwiVB5kCukoBwAfWp1QCn9ABD
-         jptoUzIwmm+ooCfK/ua1JhtK4hvlceqC1boeI4vL9ovB+VUi6UzKnIdPms6GbjHC5Dm0
-         x7q5cDpNBBsUPaecaMuq8eIcuqPLIdhtH3eveq7NNBfclmnYQcYffmqcX8h2ZUdzQg/H
-         zMKbWKgzmI4257Q+LQkTEbR0V+Bx5XCd7kmclMQEmyy6Y5bIHfHk5Fno/yKuNNG4G0y7
-         7abg==
-X-Gm-Message-State: AJIora8Ih4utYO2a31D1oMz5welnfytY+0rBLfIS0esbxk4lDZsyC65h
-        LKoi5KKm6dKseHXIhWGVqOxRvw==
-X-Google-Smtp-Source: AGRyM1tM3Xyno5SjCdck0sIgXGeRuglfN7S9zBkB+eG2ozjVAtqbU+rY+0T3cPyD1quc3uFKvvhBMA==
-X-Received: by 2002:a05:6512:280d:b0:489:d766:5e3 with SMTP id cf13-20020a056512280d00b00489d76605e3mr7973832lfb.499.1657621217465;
-        Tue, 12 Jul 2022 03:20:17 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
-        by smtp.gmail.com with ESMTPSA id v1-20020a05651203a100b0047f7419de4asm2098315lfp.180.2022.07.12.03.20.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 03:20:17 -0700 (PDT)
-Message-ID: <9f9acf66-a9a0-c055-2113-ba40dbfbae69@linaro.org>
-Date:   Tue, 12 Jul 2022 12:20:14 +0200
+        with ESMTP id S229715AbiGLNDh (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 12 Jul 2022 09:03:37 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6EA82BD0
+        for <linux-can@vger.kernel.org>; Tue, 12 Jul 2022 06:03:35 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oBFY6-0001ba-Cr
+        for linux-can@vger.kernel.org; Tue, 12 Jul 2022 15:03:34 +0200
+Received: from pengutronix.de (2a03-f580-87bc-d400-2099-0011-e8c0-354d.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:2099:11:e8c0:354d])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id DF4A8AF0F1
+        for <linux-can@vger.kernel.org>; Tue, 12 Jul 2022 13:03:33 +0000 (UTC)
+Received: from bjornoya.blackshift.org
+        by bjornoya with LMTP
+        id yLMbLG9FzWJY2wMAs6a69A
+        (envelope-from <windhl@126.com>)
+        for <mkl-all@blackshift.org>; Tue, 12 Jul 2022 09:57:03 +0000
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id AE902AE7F3
+        for <mkl-all@blackshift.org>; Tue, 12 Jul 2022 09:57:03 +0000 (UTC)
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id A6197AE7F2
+        for <ptx@kleine-budde.de>; Tue, 12 Jul 2022 09:57:03 +0000 (UTC)
+Received: from mail-m964.mail.126.com ([123.126.96.4])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <windhl@126.com>)
+        id 1oBCdZ-0006mt-Rl; Tue, 12 Jul 2022 11:57:02 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Qz6FM
+        8MFTtvFI+oOsD9UB3a5chgKL38YyF+czNRoOew=; b=dDh9DH+4vzbC1cErfMRHx
+        ljNVigrjMjyAwl1Qdtr/q/bd60mGfgZxOY7BgACnmgc+Zl4hlGdk1DqSzC2Dumpp
+        0lWVvLtCKatnjW0p3tu0j9zHUf0FGhRwYDKu+R2RXJZlpDgXFB9VCv1SKn9vnBRw
+        PVHs0044O+Zh1q8TbCMDww=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp9 (Coremail) with SMTP id NeRpCgB3nt5HRc1ivtQ9Gg--.62421S2;
+        Tue, 12 Jul 2022 17:56:25 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        p.zabel@pengutronix.de, windhl@126.com
+Date:   Tue, 12 Jul 2022 17:56:23 +0800
+Message-Id: <20220712095623.364287-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4 2/6] dt-bindings: can: nxp,sja1000: Document RZ/N1{D,S}
- support
-Content-Language: en-US
-To:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-References: <20220710115248.190280-1-biju.das.jz@bp.renesas.com>
- <20220710115248.190280-3-biju.das.jz@bp.renesas.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220710115248.190280-3-biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: NeRpCgB3nt5HRc1ivtQ9Gg--.62421S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrKFy8tw4rKF4kWr43Ar43Jrb_yoWDurb_Gr
+        nrWF17Kw47Kr1qkwsrtr13Z3yvyr18XFy0qFZ2qr1Svw17ZFWUJr18Z3srX3ykur4xArWf
+        CayqyasrC3yYvjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRpHqrUUUUUU==
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/xtbBGgE8F1-HZfANZAAAsU
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH] can: rcar_canfd: Add missing of_node_put() in rcar_canfd_probe()
+X-PTX-Original-Recipient: mkl@pengutronix.de
+X-PTX-Original-Recipient: ptx@kleine-budde.de
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 10/07/2022 13:52, Biju Das wrote:
-> Add CAN binding documentation for Renesas RZ/N1 SoC.
-> 
-> The SJA1000 CAN controller on RZ/N1 SoC has some differences compared
-> to others like it has no clock divider register (CDR) support and it has
-> no HW loopback (HW doesn't see tx messages on rx), so introduced a new
-> compatible 'renesas,rzn1-sja1000' to handle these differences.
-> 
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+We should use of_node_put() for the reference returned by
+of_get_child_by_name() which has increased the refcount.
+
+Fixes: 45721c406dcf ("can: rcar_canfd: Add support for r8a779a0 SoC")
+Signed-off-by: Liang He <windhl@126.com>
+---
+
+45721c406dcf-commit only changed the original multi-times 'of_child'
+assignments with 'for' loop. As the original code also forgot to
+add of_node_put(), I do not know if this fix tag is right.
+
+ drivers/net/can/rcar/rcar_canfd.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
+index 40a11445d021..5a49dc243372 100644
+--- a/drivers/net/can/rcar/rcar_canfd.c
++++ b/drivers/net/can/rcar/rcar_canfd.c
+@@ -1840,6 +1840,7 @@ static int rcar_canfd_probe(struct platform_device *pdev)
+ 		of_child = of_get_child_by_name(pdev->dev.of_node, name);
+ 		if (of_child && of_device_is_available(of_child))
+ 			channels_mask |= BIT(i);
++		of_node_put(of_child);
+ 	}
+ 
+ 	if (chip_id != RENESAS_RZG2L) {
+-- 
+2.25.1
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
