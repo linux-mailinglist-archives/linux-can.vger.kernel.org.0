@@ -2,58 +2,59 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DA3657171A
-	for <lists+linux-can@lfdr.de>; Tue, 12 Jul 2022 12:19:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0B0A571720
+	for <lists+linux-can@lfdr.de>; Tue, 12 Jul 2022 12:20:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231991AbiGLKTr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 12 Jul 2022 06:19:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43406 "EHLO
+        id S230143AbiGLKUd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 12 Jul 2022 06:20:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232569AbiGLKTo (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 12 Jul 2022 06:19:44 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15144ACF5D
-        for <linux-can@vger.kernel.org>; Tue, 12 Jul 2022 03:19:43 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id q7so9302284lji.12
-        for <linux-can@vger.kernel.org>; Tue, 12 Jul 2022 03:19:42 -0700 (PDT)
+        with ESMTP id S229776AbiGLKUW (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 12 Jul 2022 06:20:22 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B0CACF78
+        for <linux-can@vger.kernel.org>; Tue, 12 Jul 2022 03:20:19 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id o7so13136733lfq.9
+        for <linux-can@vger.kernel.org>; Tue, 12 Jul 2022 03:20:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=qQrOaDf50Pv0HOVBlT2lb+A0+1iMDwI1uAjsNNgoCyo=;
-        b=KPJEVp/ed73HtOq/MVQ+p9kivU3u4M7wj69f+wN//6gnBqvYmbWeITVYEwD5KMjolQ
-         ycJstb+7y3G/2uMcmwzvmCMQw8zLnf7UYjMpn0+LAZSGLl7mhI1qc+y26rvCDdUYWd+2
-         8x25fLl0i/jbOLY4qZNmnW7PyMHJvZQDueGNnMQ9NocBNuoqAm9VWTdKXzhPowbek6dT
-         x7oQtgKGrhjH/57rYjPNh+gSndWbQ1fWTWC2eR2RFiVLbMbVtOjcoH4G2hxo0lPgN2q5
-         3Zg5ORogX/ojcwpvipHPSQK6THZucSkT0jPIrqnT0it7LPXN5kGey7hA6p9BTyVGibOS
-         EToA==
+        bh=t7/ucNQCCiiuq1lYv5Z+Jjy2njk0BrGXCMsPnOpnEsI=;
+        b=DGmPDi3ayHIU8BQ7IKVXKYteM5mjUPkbfi3lzehrtWp40ZH3GqyPK2XuKA1PruIoNs
+         nJhKS/HMmhjC0IbCvtF3Jemw5wNHSXMHBcp9i5MQ0AAAvtf//7XrH7IFs7vuHLl7MKJY
+         b44FO3qRt1Z6G4dQrM2Vra0pFn2A8Q7wW6N8pRbgTtUWsR5lH+aMTVRJKuUfFiprAsNJ
+         7yy8MTKKobNOlGDwKOb6zIhEpRrqiicsQUCZ6J1DyKc3F+dJpplcA3mZXK+boL0/ih8V
+         NGudIRcHBtsgOFGy4xoUQMQFzdcAdugd8jC3/0Etzh7p/U++LL1bmJWjan0g/NSVLbI2
+         NBrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=qQrOaDf50Pv0HOVBlT2lb+A0+1iMDwI1uAjsNNgoCyo=;
-        b=pGjjOdN9ZWADr5Nd2DoZggV7LAlJpdhR0rlSIMUICeSSWHjO+seR3XGyIS0F5Z3IlK
-         bzsfUtfKvlrLEiP0Co0J6HFcigNhPy9kHK7hL3b8tNY1/F9J74N+y0u0w8Mbozy3vxEy
-         5jAP3pdUb8Yyt9sHHhY2obLXYoA7024upM+9ZkSPFdESaxn0KXl14CpVYx4mM7Q3PaW3
-         RZpFvb4jcByDnPWIThrdZ2kPB+CMSl0m8dVNHqlzhYl1TWOzpyQt9rmz0HXRNdAqZReY
-         lXcMYw3QZhPHrlRr/V+zLCqxdsnGE5Jj+jEk1DSSAj+nj1LMP6zUlGBxLH5RJVYtOFdU
-         gNaA==
-X-Gm-Message-State: AJIora+059W4u7h0fYtQOljmgu8ESOv2FTR17hEt+Z48ALAh/bc3c9RV
-        6CQ+2OYXgewG6JaEXPCvcdgyMA==
-X-Google-Smtp-Source: AGRyM1vnr7d7f6KP0wTYXL4JCKV4WV74e9y1/USafXXWiDQ+8GgH8YDP/gg7p7Q1PxjrZeJ4fPijmQ==
-X-Received: by 2002:a2e:81c1:0:b0:24b:f44:3970 with SMTP id s1-20020a2e81c1000000b0024b0f443970mr12330002ljg.97.1657621181447;
-        Tue, 12 Jul 2022 03:19:41 -0700 (PDT)
+        bh=t7/ucNQCCiiuq1lYv5Z+Jjy2njk0BrGXCMsPnOpnEsI=;
+        b=0Dd3xd2ctdspjcpgGwA16PLez/NWktBxpLzN92sd8ktY5qYquqTStrMUCeHsr0N8RI
+         Qt/1Ke8LtbtE4lkz0ttNXnuTMJvaaVu3IHlgVZbPtkTQwiVB5kCukoBwAfWp1QCn9ABD
+         jptoUzIwmm+ooCfK/ua1JhtK4hvlceqC1boeI4vL9ovB+VUi6UzKnIdPms6GbjHC5Dm0
+         x7q5cDpNBBsUPaecaMuq8eIcuqPLIdhtH3eveq7NNBfclmnYQcYffmqcX8h2ZUdzQg/H
+         zMKbWKgzmI4257Q+LQkTEbR0V+Bx5XCd7kmclMQEmyy6Y5bIHfHk5Fno/yKuNNG4G0y7
+         7abg==
+X-Gm-Message-State: AJIora8Ih4utYO2a31D1oMz5welnfytY+0rBLfIS0esbxk4lDZsyC65h
+        LKoi5KKm6dKseHXIhWGVqOxRvw==
+X-Google-Smtp-Source: AGRyM1tM3Xyno5SjCdck0sIgXGeRuglfN7S9zBkB+eG2ozjVAtqbU+rY+0T3cPyD1quc3uFKvvhBMA==
+X-Received: by 2002:a05:6512:280d:b0:489:d766:5e3 with SMTP id cf13-20020a056512280d00b00489d76605e3mr7973832lfb.499.1657621217465;
+        Tue, 12 Jul 2022 03:20:17 -0700 (PDT)
 Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
-        by smtp.gmail.com with ESMTPSA id i16-20020a056512319000b0047f9c1b1901sm2101709lfe.7.2022.07.12.03.19.39
+        by smtp.gmail.com with ESMTPSA id v1-20020a05651203a100b0047f7419de4asm2098315lfp.180.2022.07.12.03.20.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 03:19:40 -0700 (PDT)
-Message-ID: <56774a8a-3f3b-3ba3-b57b-1fed5494b514@linaro.org>
-Date:   Tue, 12 Jul 2022 12:19:38 +0200
+        Tue, 12 Jul 2022 03:20:17 -0700 (PDT)
+Message-ID: <9f9acf66-a9a0-c055-2113-ba40dbfbae69@linaro.org>
+Date:   Tue, 12 Jul 2022 12:20:14 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v4 1/6] dt-bindings: can: sja1000: Convert to json-schema
+Subject: Re: [PATCH v4 2/6] dt-bindings: can: nxp,sja1000: Document RZ/N1{D,S}
+ support
 Content-Language: en-US
 To:     Biju Das <biju.das.jz@bp.renesas.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
@@ -72,14 +73,14 @@ Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
         Biju Das <biju.das@bp.renesas.com>,
         linux-renesas-soc@vger.kernel.org
 References: <20220710115248.190280-1-biju.das.jz@bp.renesas.com>
- <20220710115248.190280-2-biju.das.jz@bp.renesas.com>
+ <20220710115248.190280-3-biju.das.jz@bp.renesas.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220710115248.190280-2-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20220710115248.190280-3-biju.das.jz@bp.renesas.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,20 +89,14 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 On 10/07/2022 13:52, Biju Das wrote:
-> Convert the NXP SJA1000 CAN Controller Device Tree binding
-> documentation to json-schema.
+> Add CAN binding documentation for Renesas RZ/N1 SoC.
 > 
-> Update the example to match reality.
+> The SJA1000 CAN controller on RZ/N1 SoC has some differences compared
+> to others like it has no clock divider register (CDR) support and it has
+> no HW loopback (HW doesn't see tx messages on rx), so introduced a new
+> compatible 'renesas,rzn1-sja1000' to handle these differences.
 > 
 > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> ---
-> v3->v4:
->  * Updated bindings as per coding style used in example-schema.
->  * Entire entry in properties compatible declared as enum. Also Descriptions
->    do not bring any information,so removed it from compatible description.
->  * Used decimal values in nxp,tx-output-mode enums.
->  * Fixed indentaions in example.
-> v2->v3:
 
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
