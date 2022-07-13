@@ -2,130 +2,116 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20CD057313B
-	for <lists+linux-can@lfdr.de>; Wed, 13 Jul 2022 10:35:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 259045739EE
+	for <lists+linux-can@lfdr.de>; Wed, 13 Jul 2022 17:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235267AbiGMIfj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 13 Jul 2022 04:35:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45350 "EHLO
+        id S236576AbiGMPUS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 13 Jul 2022 11:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235582AbiGMIfh (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 13 Jul 2022 04:35:37 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B51DA58D0;
-        Wed, 13 Jul 2022 01:35:37 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 4B64B1FD4C;
-        Wed, 13 Jul 2022 08:35:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1657701334;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CcsBBbemJwPnREj8tUcGtqYBeLDK85WV0Rb0buPzp3s=;
-        b=BJ/2pHkXbNnHfTFeBIIZK9+C7zTuLNqlfrU5AON0AgJDEBieZg/cptr5j4lSS/Tth2GZh5
-        uTTDK6JayWctFwZVWdAzcIMoe1cRbOEyqznFtt3Io4SkUf29BmMApL/9YZ4yawoXTVuWCf
-        erYJs5aGcZo5a/6X98xFnRLAQa4ADEA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1657701334;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CcsBBbemJwPnREj8tUcGtqYBeLDK85WV0Rb0buPzp3s=;
-        b=29egoYKkhz8DyFsT88GI2fB5xWVcR3WZlWzZxkJDRz32bg0P8E5Vfsut9piqSGhsjFOuvx
-        Z82YwHDwj+9CZZBQ==
-Received: from g78 (unknown [10.163.24.226])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 4DBB22C141;
-        Wed, 13 Jul 2022 08:35:33 +0000 (UTC)
-References: <Ysrf1Yc5DaRGN1WE@xsang-OptiPlex-9020> <87wncknkfe.fsf@suse.de>
- <CABGWkvqF9f4vOYUQeYuaDGT7yuB=8=h=yPpuG04VwicNP=wgMA@mail.gmail.com>
-User-agent: mu4e 1.6.10; emacs 28.1
-From:   Richard Palethorpe <rpalethorpe@suse.de>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     kernel test robot <oliver.sang@intel.com>, lkp@intel.com,
-        lkp@lists.01.org, Jeroen Hofstee <jhofstee@victronenergy.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-can@vger.kernel.org,
+        with ESMTP id S236820AbiGMPUP (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 13 Jul 2022 11:20:15 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4004504B
+        for <linux-can@vger.kernel.org>; Wed, 13 Jul 2022 08:20:14 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-f2a4c51c45so14409182fac.9
+        for <linux-can@vger.kernel.org>; Wed, 13 Jul 2022 08:20:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LKNJ81XHX1rVWPGtQSPsv7xkRycDjY6KgGLmlaN+gNY=;
+        b=UGv5W4X0AgNs0e90Jxbuk8yoqkf1YIvPuG32cxJaOFdhOKMYtLT3UzjNMyJo3NmCSB
+         h/K0iglgBA1TRNjZsaY3WPDnmRX23YpSMViygd9NRIhPlSo9yiPb+fbPadGOwbmeYz9x
+         0j6tumQO78ZJbjdyG1XX+ZjluB6BIV4JYujzA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LKNJ81XHX1rVWPGtQSPsv7xkRycDjY6KgGLmlaN+gNY=;
+        b=kBuu7UpSBd0BHEzIIpe3TvZpcy0QAkl9/GEihuEe1/j/xoPK3AxHEJipzcJVCmVFI5
+         w7aAo9NDnjoSWMQJOBNeRPMJj1WjKL68zRQLcCjMTMGDpB2vuvcknpseU7tp2i3jVejl
+         czcFsTs9MVE+1VdVIeMTJcPSM2AqQnUZRh72qsCiFiSKLBHB4IzAgianTCBSouX+bi/N
+         j97YGv+ZabW3SBRNmjQpiV9gh1GNW0oQZ4RfBvLFg8MyVoMzZuT92WIcsNDqCtL1oTCO
+         hwh6Jg+uJ7vOCxwuAP1jOLeLNhNFti+xMp8NvTJXaNNdVuS01OemQ/vJObPeJ5NPdBT4
+         86BQ==
+X-Gm-Message-State: AJIora+sUt9szQ0WS4/0SVqJN62aN6f6fP9/n5/oTNtLmlyqyBC5LMVA
+        l44tHVSITBpRkvged/CqJPFvIA==
+X-Google-Smtp-Source: AGRyM1usHml13CDD+aHqFlxY8s5H+Eng7j9UX5kgdAqCwghIPyT60PRhwo1GRoZ8vA6nrb+/q/6Bdg==
+X-Received: by 2002:a05:6871:60c:b0:10b:ee7c:2e28 with SMTP id w12-20020a056871060c00b0010bee7c2e28mr4774059oan.21.1657725613728;
+        Wed, 13 Jul 2022 08:20:13 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.pdxnet.pdxeng.ch (host-80-182-13-224.pool80182.interbusiness.it. [80.182.13.224])
+        by smtp.gmail.com with ESMTPSA id x24-20020a4a3f58000000b00432ac97ad09sm4895477ooe.26.2022.07.13.08.20.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jul 2022 08:20:12 -0700 (PDT)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Richard Palethorpe <rpalethorpe@suse.de>,
+        Jeroen Hofstee <jhofstee@victronenergy.com>,
         Linux Memory Management List <linux-mm@kvack.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>, ltp@lists.linux.it
-Subject: Re: [LTP] [can] c4e54b063f:
- BUG:sleeping_function_called_from_invalid_context_at_kernel/workqueue.c
-Date:   Wed, 13 Jul 2022 09:23:28 +0100
-Reply-To: rpalethorpe@suse.de
-In-reply-to: <CABGWkvqF9f4vOYUQeYuaDGT7yuB=8=h=yPpuG04VwicNP=wgMA@mail.gmail.com>
-Message-ID: <87v8s1l8a3.fsf@suse.de>
+        kernel test robot <oliver.sang@intel.com>, lkp@intel.com,
+        lkp@lists.01.org, ltp@lists.linux.it,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH] can: slcan: do not sleep with a spin lock held
+Date:   Wed, 13 Jul 2022 17:19:47 +0200
+Message-Id: <20220713151947.56379-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello,
+We can't call close_candev() with a spin lock held, so release the lock
+before calling it.
 
-Dario Binacchi <dario.binacchi@amarulasolutions.com> writes:
+Fixes: c4e54b063f42f ("can: slcan: use CAN network device driver API")
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Link: https://lore.kernel.org/linux-kernel/Ysrf1Yc5DaRGN1WE@xsang-OptiPlex-9020/
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
-> Hello,
->
-> On Mon, Jul 11, 2022 at 10:05 AM Richard Palethorpe <rpalethorpe@suse.de> wrote:
->>
->> Hello,
->>
->> kernel test robot <oliver.sang@intel.com> writes:
->>
->> > Greeting,
->> >
->> > FYI, we noticed the following commit (built with gcc-11):
->> >
->> > commit: c4e54b063f42f20a6b3ad1ffa61c574e631e0216 ("can: slcan: use CAN network device driver API")
->> > https://git.kernel.org/cgit/linux/kernel/git/next/linux-next.git
->> > master
->>
->> I guess the problem is this may sleep with soft irqs disabled.
->>
->> static int slc_close(struct net_device *dev)
->> {
->>         struct slcan *sl = netdev_priv(dev);
->>         int err;
->>
->>         spin_lock_bh(&sl->lock); <-- takes lock
->>         if (sl->tty) {
->>                 if (sl->can.bittiming.bitrate &&
->>                     sl->can.bittiming.bitrate != CAN_BITRATE_UNKNOWN) {
->>                         spin_unlock_bh(&sl->lock);
->>                         err = slcan_transmit_cmd(sl, "C\r");
->>                         spin_lock_bh(&sl->lock);
->>                         if (err)
->>                                 netdev_warn(dev,
->>                                             "failed to send close command 'C\\r'\n");
->>                 }
->>
->>                 /* TTY discipline is running. */
->>                 clear_bit(TTY_DO_WRITE_WAKEUP, &sl->tty->flags);
->>         }
->>         netif_stop_queue(dev);
->>         close_candev(dev); <-- calls cancel_delayed_work_sync()
->>
->
-> I would try (since I am unable to replicate the test) to move the
-> spin_unlock_bh()
-> before calling close_candev().
+---
 
-I haven't tried, but I think it should replicate every time with
-lockdep/lock debugging enabled.
+ drivers/net/can/slcan/slcan-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Can the patch be sent now or do I have to wait until the code is in
-> mainline?
-
-IMO it *has* to be fixed before going into mainline :-p. I can't comment on
-the correctness of the proposed fix though.
-
+diff --git a/drivers/net/can/slcan/slcan-core.c b/drivers/net/can/slcan/slcan-core.c
+index 54d29a410ad5..6aaf2986effc 100644
+--- a/drivers/net/can/slcan/slcan-core.c
++++ b/drivers/net/can/slcan/slcan-core.c
+@@ -688,6 +688,7 @@ static int slc_close(struct net_device *dev)
+ 		/* TTY discipline is running. */
+ 		clear_bit(TTY_DO_WRITE_WAKEUP, &sl->tty->flags);
+ 	}
++	spin_unlock_bh(&sl->lock);
+ 	netif_stop_queue(dev);
+ 	close_candev(dev);
+ 	sl->can.state = CAN_STATE_STOPPED;
+@@ -696,7 +697,6 @@ static int slc_close(struct net_device *dev)
+ 
+ 	sl->rcount   = 0;
+ 	sl->xleft    = 0;
+-	spin_unlock_bh(&sl->lock);
+ 
+ 	return 0;
+ }
 -- 
-Thank you,
-Richard.
+2.32.0
+
