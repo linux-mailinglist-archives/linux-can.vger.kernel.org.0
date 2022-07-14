@@ -2,104 +2,143 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26818574369
-	for <lists+linux-can@lfdr.de>; Thu, 14 Jul 2022 06:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CA755744E4
+	for <lists+linux-can@lfdr.de>; Thu, 14 Jul 2022 08:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232556AbiGNEem (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 14 Jul 2022 00:34:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46048 "EHLO
+        id S231775AbiGNGLe (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 14 Jul 2022 02:11:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237573AbiGNEeM (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 14 Jul 2022 00:34:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E13503AE79;
-        Wed, 13 Jul 2022 21:26:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 44AA6B82372;
-        Thu, 14 Jul 2022 04:26:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62C53C385A2;
-        Thu, 14 Jul 2022 04:26:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657772767;
-        bh=NGZvUX2/8YYY7PFd7hqg4wLi0Lty1gk9Q+AsMykP6rs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rdDA3Z4JkVyXgLId71lOqcS7wfYvljFTRAsEoXwAenJ6uk3yUAyJYWqeR2bIW8JjD
-         Y9aAPvR5IeJr8ufVSGLIT/e1bnO+bWxrAnA9xP6A2lc3pbaSM6OFAthdTojzJ7c+ly
-         W00LpW4ZrL845nTA49H1N/etehFxTVZ8o/NNWE5mmWSCGtIq3kVZHZzoFyYXI9BYBn
-         qpjC9OHPTogxolFqZy68DdNeKi7ESJu9R6/nb/U3q/xpmBW+J+871MoyyTv5c2LJmh
-         Q5PzVWmfawBxIozjIdIXjK8SdWOLwBtbryJ1NlHlRpnlLOF6DoXqfHGDKhMITv9ApL
-         Qh4zZmESFIpPw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Srinivas Neeli <srinivas.neeli@xilinx.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Sasha Levin <sashal@kernel.org>, appana.durga.rao@xilinx.com,
-        wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, michal.simek@xilinx.com,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.10 13/15] Revert "can: xilinx_can: Limit CANFD brp to 2"
-Date:   Thu, 14 Jul 2022 00:25:38 -0400
-Message-Id: <20220714042541.282175-13-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220714042541.282175-1-sashal@kernel.org>
-References: <20220714042541.282175-1-sashal@kernel.org>
+        with ESMTP id S230061AbiGNGLc (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 14 Jul 2022 02:11:32 -0400
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.161])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5326612082
+        for <linux-can@vger.kernel.org>; Wed, 13 Jul 2022 23:11:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1657779089;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=USFvoi8suXAqEJ0VvlXF1g+3ZHMxcq38a3oFZHHy6cs=;
+    b=YwdwvHv8H31SPd0d6S1WMbHVuvb0dGLJEl7xA8TeVH9Zvc1FFCNiDvVIGTx6rT7z0S
+    JPxRlbYDOCbuwQB7r57VGg/2KUq+2+wHlHAHG3rwEnuChoGi4qONhw1p51w2YeVHQDMi
+    qJ7JQIr8SvPjxE0mv5WgyB+Z0WH3eVS21Q+C9ZYXvqDUegJcPGReBLeAtrFQW9Uqx4Rw
+    duRZO8tW3UkiGYXh5LTRJwKhKFJzi8zhmDhbrLfBWRAxB6bxQxENp2wHl6uhnMK/9AHL
+    5kFZWQrSfIV8ULwoUjIpvmxZ23eEMNnFqP1L5CGHxES4OhBn3OgNeHo75Ly4NivEKoJT
+    7Rog==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytJSr63tDxrw=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a00:6020:1cfd:d100::b82]
+    by smtp.strato.de (RZmta 47.47.0 AUTH)
+    with ESMTPSA id t870d5y6E6BT4HI
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 14 Jul 2022 08:11:29 +0200 (CEST)
+Message-ID: <ae995ec1-8dbd-7484-a250-28d8637eb6ff@hartkopp.net>
+Date:   Thu, 14 Jul 2022 08:11:23 +0200
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC PATCH 1/5] can: canxl: introduce CAN XL data structure
+Content-Language: en-US
+To:     Vincent Mailhol <vincent.mailhol@gmail.com>
+Cc:     linux-can@vger.kernel.org
+References: <20220711183426.96446-1-socketcan@hartkopp.net>
+ <20220711183426.96446-2-socketcan@hartkopp.net>
+ <CAMZ6RqLqDFqdtKsp6jGhnTtWRrf6HC5HiLuJUSCRNkDXqVfCzA@mail.gmail.com>
+ <f00a4c5d-c4e6-06a2-76c0-53105d3465f2@hartkopp.net>
+ <CAMZ6RqLVvYCoBF67VtqUSJHAxBHvEmK2-o8NCD7REZj1ywXf7w@mail.gmail.com>
+ <521fe0a3-a9ad-60ac-3ec6-30f0da228032@hartkopp.net>
+ <CAMZ6RqJhjkVgZgmfk7btYK+bLtqnbvGBYTnssy28ZWqyfyqppw@mail.gmail.com>
+ <89f90d61-35a4-59a2-231b-4372d4dca25c@hartkopp.net>
+ <CAMZ6Rq+LqfUhLcg6909=239a+Asm6aO-bPqpar2tQ_fs0EmiUQ@mail.gmail.com>
+ <b866e05b-a548-132c-4427-7a4d21d12172@hartkopp.net>
+ <CAMZ6RqLGWB-afDmZfV+qJU2g=XUycFS1o9j6EwqRVg_dyf4eOw@mail.gmail.com>
+ <16457321-6a4f-4830-17aa-d6efd7a39555@hartkopp.net>
+ <CAMZ6RqLSHAdB-ocj7=74zJqWbv-EH9x8X5ARPK6Gv+FFiTZ7Lg@mail.gmail.com>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <CAMZ6RqLSHAdB-ocj7=74zJqWbv-EH9x8X5ARPK6Gv+FFiTZ7Lg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Srinivas Neeli <srinivas.neeli@xilinx.com>
 
-[ Upstream commit c6da4590fe819dfe28a4f8037a8dc1e056542fb4 ]
 
-This reverts commit 05ca14fdb6fe65614e0652d03e44b02748d25af7.
+On 14.07.22 03:23, Vincent Mailhol wrote:
+> On Thu. 14 Jul. 2022 at 05:02, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
 
-On early silicon engineering samples observed bit shrinking issue when
-we use brp as 1. Hence updated brp_min as 2. As in production silicon
-this issue is fixed, so reverting the patch.
 
-Link: https://lore.kernel.org/all/20220609082433.1191060-2-srinivas.neeli@xilinx.com
-Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/can/xilinx_can.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> If we follow your idea, use __u8 xlsec in order to avoid undefined behaviours.
+> 
+>> Where we define
+>>
+>> #define CANXL_TAG 0x7F
+> 
+> Here, you "burn" all the flags for future usage.
+> FYI, this doesn't have to be 0x7F. It could be any of the length
+> values not allowed by CAN-FD, namely (in decimal): 9-11, 13-15, 17-19,
+> 21-23, 25-31, 33-47, 49-63
 
-diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.c
-index 1c42417810fc..1a3fba352cad 100644
---- a/drivers/net/can/xilinx_can.c
-+++ b/drivers/net/can/xilinx_can.c
-@@ -259,7 +259,7 @@ static const struct can_bittiming_const xcan_bittiming_const_canfd2 = {
- 	.tseg2_min = 1,
- 	.tseg2_max = 128,
- 	.sjw_max = 128,
--	.brp_min = 2,
-+	.brp_min = 1,
- 	.brp_max = 256,
- 	.brp_inc = 1,
- };
-@@ -272,7 +272,7 @@ static const struct can_bittiming_const xcan_data_bittiming_const_canfd2 = {
- 	.tseg2_min = 1,
- 	.tseg2_max = 16,
- 	.sjw_max = 16,
--	.brp_min = 2,
-+	.brp_min = 1,
- 	.brp_max = 256,
- 	.brp_inc = 1,
- };
--- 
-2.35.1
+Yes, I detected this issue too when waking up this morning ...
 
+>> #define CANXL_SEC 0x80
+> 
+> I did not get why CANXL_XLF isn't needed anymore.
+> 
+>> which has to be set in the xlsec element then.
+>>
+>> With this move we get rid of any flags problems (we only need the SEC
+>> bit anyway) and define a clear 'escape value' in the former length element.
+> 
+> If I try to bounce on your idea, I will propose:
+> 
+> /*********** begin **********/
+> struct canxl_frame {
+>          canid_t prio;  /* 11 bit priority for arbitration (canid_t) */
+>          __u8    flags; /* additional flags for CAN XL. MSB must be set */
+>          __u8    sdt;   /* SDU (service data unit) type */
+>          __u16   len;   /* frame payload length in bytes */
+>          __u32   af;    /* acceptance field */
+>          __u8    data[];
+> };
+
+ACK.
+
+> #define CANXL_XLF 0x01 /* mark CAN XL for dual use of struct canfd_frame */
+
+IMO the dual use stuff between CAN FD & CAN XL is not working anymore 
+and became obsolete here.
+
+CAN_XLF needs to be a hard switch for CAN XL - no optional thing.
+
+> #define CANXL_SEC 0x02 /* Simple Extended Content (security/segmentation) */
+> #define CANXL_DISCRIMINATOR 0x80; /* Mandatory to distinguish between
+> CAN(-FD) and XL frames */
+> /*********** end ************/
+> 
+> This has no undefined behaviour and we still have five flags (0x04 to
+> 0x40) for future use.
+> 
+
+I would suggest the following:
+
+#define CANXL_XLF 0x80 /* mark CAN XL frame (must be set) */
+#define CANXL_SEC 0x40 /* Simple Extended Content (security/segmentation) */
+
+And the rest of the bits are reserved (shall be set to zero).
+
+This way the CAN_XLF value would make the former 'len' element 128 - 
+which is a proper distinction for CAN XL frames as such length value 
+surely bounces on CAN/CANFD frames.
+
+Best regards,
+Oliver
