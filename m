@@ -2,63 +2,62 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F8545740EC
-	for <lists+linux-can@lfdr.de>; Thu, 14 Jul 2022 03:23:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8006B5740F7
+	for <lists+linux-can@lfdr.de>; Thu, 14 Jul 2022 03:32:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231499AbiGNBXl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 13 Jul 2022 21:23:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57780 "EHLO
+        id S229990AbiGNBcI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 13 Jul 2022 21:32:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230283AbiGNBXk (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 13 Jul 2022 21:23:40 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F4D62DED
-        for <linux-can@vger.kernel.org>; Wed, 13 Jul 2022 18:23:37 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id n74so806154yba.3
-        for <linux-can@vger.kernel.org>; Wed, 13 Jul 2022 18:23:37 -0700 (PDT)
+        with ESMTP id S232053AbiGNBcH (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 13 Jul 2022 21:32:07 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9519C21E2E
+        for <linux-can@vger.kernel.org>; Wed, 13 Jul 2022 18:32:05 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-31c8bb90d09so3051987b3.8
+        for <linux-can@vger.kernel.org>; Wed, 13 Jul 2022 18:32:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=g/57g+qRQfIDBG8vAIJjS2BU9eO7ZHFecbGaIA9xEcM=;
-        b=Pyzl2ROPLrQemzthD8pw5c0ohxEx4kfdJ62It2cxg0nsKWyXTKtRrzuOomQykLdU87
-         nntpz/Sn9GdHDpMKdgTbLu3RmUFAnosk5a28/+feHmsu8B03G33DFQ/OA3wuhOeFo72T
-         PwLWjlXXJ8XzVwsYl0hZPiXrmwGISAxvcDP6se1Ib4BocakrCd36nww01FDcg7sUeE9X
-         0T29jwZnUSFtDandDd87MfeQN+y6L9fZejoLRDBzqoxTzU5LvOcQ9c+G6ahO0gttLVj6
-         3uPDP3/RkeNuRcvllaQ9ZFU3mqM9rYxKkp8JgYfG4dWx4omzSHL3yHICvG7iBJM/pW8M
-         DyVg==
+        bh=x9jhbBvYL6jV37WiYD8mER2C+rv7FO71XEB0iLUVnao=;
+        b=bpYNzkuYOgedI6rJHbzAPQWA16eZFEfWyNTY/s9Qm3b7ubCXGNxEfV3OOqr/qc9JI7
+         LrN23vCz36Pqer0h/AuYhAUmLi7pFe++qHDCwTeOxpZIW48BEeLL5EA1TUmhyiBP+vAZ
+         lbc3vpOlwEMMi3kdFI4klyPiLYrkgWcQkWc1pX86lCEQBdblsXhV8VZx/uB4tnIaCoCB
+         cve+c/y4mILyqB8JMHp7qn5alvK4USxSkzWlnG6hpQrjXsRj+0rxXu+xUPpq8Tlsr0dP
+         WBZu7jZKr7Dz5mNcoo5eKy7q5rQT7Mu5wBVsSM0+UKppPBXgfcIqE9d8zLDJ55Ku0P+Z
+         mzZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=g/57g+qRQfIDBG8vAIJjS2BU9eO7ZHFecbGaIA9xEcM=;
-        b=Erl1sLzkWdfAD+52F3qzoVj090GeX8te+VVygDShtcCjANkSBzfImiIpYPdO0mRzto
-         7ISXuSfvM/7K1EVpugt/pV1ir7pSKQN6VWUzGYvvaduq7dZP51F0FAbpqebv/ACS+kFy
-         6VlNNMv9AfY4SJFbD6zkZzSgj3Fl+QLkXgy1kZMDBi4RCOcQ0/c8gPtMOhImhiN4ForE
-         j0K4oARUPD/YtNWOvcnWbv7iYB6x4V/xw5PyWUEfPfkeHE8C/wvAqq88mvHSq+Dym4lA
-         ewpS2ELjbhVMm3/V3d+n1zQcr+SfcUTVUNfsHfenk5KgWFfdKu7c6uhlziDWwRMacFlG
-         fgeA==
-X-Gm-Message-State: AJIora+XL9U4o71eOydnHBUQZ/+IIzSWPM94hPOoObK2ZCzNyfhHjiHN
-        m9zxdNA3QnCyG9VecCUIw6w/DsAL7aHQ2i1/KeIvQBSXD1k=
-X-Google-Smtp-Source: AGRyM1tmuO8zkBJPYJVsCZ1JtOqZU8334t3KJehU2DFwAnag7oiXv+AsZodikG1E1Gzkg14Vf0ecLDbdbrWYbx8eAN0=
-X-Received: by 2002:a05:6902:4d0:b0:66e:4fef:cc3f with SMTP id
- v16-20020a05690204d000b0066e4fefcc3fmr6085807ybs.20.1657761814956; Wed, 13
- Jul 2022 18:23:34 -0700 (PDT)
+        bh=x9jhbBvYL6jV37WiYD8mER2C+rv7FO71XEB0iLUVnao=;
+        b=k1WpUCSIcA/yazM5sno2F6ML3MxZWwd90zq8wJ1MZmcc3p87eatQ4B9ptGix/yqL7E
+         CzSv6Q07/4TJEiGiJ0RUX3PIh2THZT4Eutmz4d6DPXYTjvRfrp2TzZvOmnPq5WdclwLv
+         LX7yOzzpH4xBnrRXjAlaUeyQAMXjj52M4aBjuZFZ++146A2Im1kl/ElADYsPC6nUDLsZ
+         d34m+w0iOrO6gTo90PwDcjBfyeROVhawbEKwRygb1bsH5uwpboyoaPXI85X+USHKKCaw
+         lkcMUtf+VQKj9D5Lp6WXeoc1xasH6g6TGhXb6SLUeFkAuFUULvPudoCgoMQDMaeQob+p
+         Hj3Q==
+X-Gm-Message-State: AJIora8tISz/wpsEiXBlEJelxD8z/gr+TsIENEzdTfXyqvo12vPoIWIV
+        szPUt+JnrcXr4sjEIJa/r+dxheWst7M7q5Gz3Sul3cxHaBA=
+X-Google-Smtp-Source: AGRyM1s4MdoDux3NW+Fz5e+tJTWH6e7wQj3ZFlIX8Fp6wscvy34vpe5A4OwiLx+uxXQAaOmBxiYFsqtGoj7rlM1SA0c=
+X-Received: by 2002:a0d:f247:0:b0:31d:68b1:5a16 with SMTP id
+ b68-20020a0df247000000b0031d68b15a16mr7384538ywf.191.1657762324742; Wed, 13
+ Jul 2022 18:32:04 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220711183426.96446-1-socketcan@hartkopp.net>
- <20220711183426.96446-2-socketcan@hartkopp.net> <CAMZ6RqLqDFqdtKsp6jGhnTtWRrf6HC5HiLuJUSCRNkDXqVfCzA@mail.gmail.com>
- <f00a4c5d-c4e6-06a2-76c0-53105d3465f2@hartkopp.net> <CAMZ6RqLVvYCoBF67VtqUSJHAxBHvEmK2-o8NCD7REZj1ywXf7w@mail.gmail.com>
- <521fe0a3-a9ad-60ac-3ec6-30f0da228032@hartkopp.net> <CAMZ6RqJhjkVgZgmfk7btYK+bLtqnbvGBYTnssy28ZWqyfyqppw@mail.gmail.com>
- <89f90d61-35a4-59a2-231b-4372d4dca25c@hartkopp.net> <CAMZ6Rq+LqfUhLcg6909=239a+Asm6aO-bPqpar2tQ_fs0EmiUQ@mail.gmail.com>
- <b866e05b-a548-132c-4427-7a4d21d12172@hartkopp.net> <CAMZ6RqLGWB-afDmZfV+qJU2g=XUycFS1o9j6EwqRVg_dyf4eOw@mail.gmail.com>
- <16457321-6a4f-4830-17aa-d6efd7a39555@hartkopp.net>
-In-Reply-To: <16457321-6a4f-4830-17aa-d6efd7a39555@hartkopp.net>
+ <20220711183426.96446-3-socketcan@hartkopp.net> <CAMZ6Rq+jNEyknCWPCqPa8xEuBFdKeLBOUKmCC=pf0wZL+EG0-A@mail.gmail.com>
+ <79a8a09e-fa85-cbdc-47cd-e54d89b71728@hartkopp.net> <CAMZ6RqJMJEjYaokH798a=GqPPDGps1_x=hMtCijkWs8dMrfNPQ@mail.gmail.com>
+ <20220713070201.lzih3zqwxdjcyh2p@pengutronix.de> <CAMZ6RqJYaG_ZRXaZPQwJUecY53O1HBOWK-fHSvv7ougA_8qUZQ@mail.gmail.com>
+ <f039d26b-7142-a713-0597-dd21876959f2@hartkopp.net>
+In-Reply-To: <f039d26b-7142-a713-0597-dd21876959f2@hartkopp.net>
 From:   Vincent Mailhol <vincent.mailhol@gmail.com>
-Date:   Thu, 14 Jul 2022 10:23:48 +0900
-Message-ID: <CAMZ6RqLSHAdB-ocj7=74zJqWbv-EH9x8X5ARPK6Gv+FFiTZ7Lg@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/5] can: canxl: introduce CAN XL data structure
+Date:   Thu, 14 Jul 2022 10:32:18 +0900
+Message-ID: <CAMZ6RqJ8uaomvmAKNtiAVq_bmN1K9rDJc1tkB-2MtH1hb7i8-A@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/5] can: canxl: introduce ETH_P_CANXL ethernet
+ protocol handling
 To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     linux-can@vger.kernel.org
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -70,171 +69,119 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Thu. 14 Jul. 2022 at 05:02, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
-> On 13.07.22 03:07, Vincent Mailhol wrote:
-> > On Wed. 13 Jul. 2022 at 04:24, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
-> > Well, if we document than can_frame::__pad shall be zero for mix
-> > usages (i.e. comments in struct can_frame and updated kernel doc),
-> > then we would have done our due diligence. From that point, if people
-> > ignore the documentation *and* do not follow best practices for safety
-> > application development, I wouldn't cry.
->
-> Right. As long as we did not enable CAN_XL we do not need to take care.
-> And introducing the restriction to set __pad to zero together with the
-> new CAN_XL option seems legit.
-
-ACK. I draw the line between the already existing applications and the
-yet to be written ones. If we are safe for the existing ones, then I
-think we are good to go.
-
-> > If we absolutely want to prevent struct can_frame to be interpreted as
-> > a canxl_frame due to some stack garbage, we can add one
-> > padding/reserved field like that:
+On Thu. 14 Jul. 2022 at 05:27, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
+> On 13.07.22 09:15, Vincent Mailhol wrote:
+> > On Wed. 13 Jul. 2022 at 16:02, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> >> On 13.07.2022 08:58:26, Vincent Mailhol wrote:
+> >>> On Wed. 13 Jul. 2022 at 05:20, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
+> >>>> On 12.07.22 03:23, Vincent Mailhol wrote:
+> >>>>> On Tue. 12 Jul. 2022 at 03:44, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
+> >>>>>> Enable the PF_CAN infrastructure to handle CAN XL frames. A new ethernet
+> >>>>>> protocol type ETH_P_CANXL is defined to tag skbuffs containing the CAN XL
+> >>>>>> frame data structure.
+> >>>>>>
+> >>>>>> As the length information is now a uint16 value for CAN XL a new helper
+> >>>>>> function can_get_data_len() is introduced to retrieve the data length
+> >>>>>> from all types of CAN frames.
+> >>>>>>
+> >>>>>> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+> >>>>>> ---
+> >>>>>>    include/linux/can/skb.h       | 14 ++++++++++
+> >>>>>>    include/uapi/linux/if_ether.h |  1 +
+> >>>>>>    net/can/af_can.c              | 49 +++++++++++++++++++++++++++++------
+> >>>>>>    3 files changed, 56 insertions(+), 8 deletions(-)
+> >>>>>>
+> >>>>>> diff --git a/include/linux/can/skb.h b/include/linux/can/skb.h
+> >>>>>> index 182749e858b3..d043bc4afd6d 100644
+> >>>>>> --- a/include/linux/can/skb.h
+> >>>>>> +++ b/include/linux/can/skb.h
+> >>>>>> @@ -101,6 +101,20 @@ static inline bool can_is_canfd_skb(const struct sk_buff *skb)
+> >>>>>>    {
+> >>>>>>           /* the CAN specific type of skb is identified by its data length */
+> >>>>>>           return skb->len == CANFD_MTU;
+> >>>>>>    }
+> >>>>>>
+> >>>>>> +/* get data length inside of CAN frame for all frame types */> +static inline unsigned int can_get_data_len(struct sk_buff *skb)
+> >>>>>> +{
+> >>>>>> +       if(skb->len == CANXL_MTU) {
+> >>>>>> +               const struct canxl_frame *cfx = (struct canxl_frame *)skb->data;
+> >>>>>> +
+> >>>>>> +               return cfx->len;
+> >>>>>> +       } else {
+> >>>>>> +               const struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
+> >>>>>> +
+> >>>>>> +               return cfd->len;
+> >>>>>> +       }
+> >>>>>> +}
+> >>>>>
+> >>>>> What about the RTR frames?
+> >>>>>
+> >>>>> If there are cases in which we intentionally want the declared length
+> >>>>> and not the actual length, it might be good to have two distinct
+> >>>>> helper functions.
+> >>>>
+> >>>> Good idea.
+> >>>>
+> >>>>> /* get data length inside of CAN frame for all frame types. For
+> >>>>>    * RTR frames, return zero. */
+> >>>>> static inline unsigned int can_get_actual_len(struct sk_buff *skb)
+> >>>>
+> >>>> I would name this one can_get_data_len()
+> >>>
+> >>> ACK.
 > >
-> > struct canxl_frame {
-> >          canid_t prio;  /* 11 bit priority for arbitration (canid_t) */
-> >          __u8    sdt;   /* SDU (service data unit) type */
-> >          __u8    flags; /* additional flags for CAN XL */
-> >          __u16   len;   /* frame payload length in byte */
-> >          __u32   af;    /* acceptance field */
-> >          __u32 __res; /* reserved field. Shall be zero */
-> >          __u8    data[] __attribute__((aligned(8)));
-> > };
+> > So, according to Marc's comments (c.f. below):
+> > can_skb_get_data_len()
 > >
-> > This way, the minimum transfer unit of CANXL is 17 bytes (16 for
-> > header and 1 for data) which is exactly one byte more than can_frame
-> > (and we get back the 8 bytes alignment \o/)
-> >
-> > This would only leave the risk of having some garbage in
-> > canfd_frame::flags, e.g. if user does:
-> >
-> >          struct canfd_frame cfd; /* declared on the stack and not initialized */
-> >          cfd.flags |= <some_flags> /* use |= instead of = */
-> >
-> > But this is already risky for plain CAN-FD.
+> >>>>> {
+> >>>>>          const struct canxl_frame *cfx = (struct canxl_frame *)skb->data;
+> >>>>>          const struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
+> >>>>>
+> >>>>>          if (skb->len == CANXL_MTU)
+> >>>>>                  return cfx->len;
+> >>>>>
+> >>>>>          /* RTR frames have an actual length of zero */
+> >>>>>          if (skb->len == CAN_MTU && cfd->flags & CAN_RTR_FLAG)
+> >>>>>                  return 0;
+> >>>>>
+> >>>>>          return cfd->len;
+> >>>>> }
+> >>>>>
+> >>>>>
+> >>>>> /* get data length inside of CAN frame for all frame types. For
+> >>>>>    * RTR frames, return requested length. */
+> >>>>> static inline unsigned int can_get_declared_len(struct sk_buff *skb)
+> >>>>
+> >>>> I would name this one can_get_len()
+> >>>
+> >>> I anticipate that most of the time, developers do not want to get the
+> >>> RTR length but the actual length (e.g. to memcpy data[] or to increase
+> >>> statistics). People will get confused between can_get_data_len() and
+> >>> can_get_len() due to the similar names. So I would suggest a more
+> >>> explicit name to point out that this one is probably not the one you
+> >>> want to use.
+> >>> Candidates name I can think of:
+> >>>   * can_get_raw_len()
+> >>>   * can_get_advertised_len()
+> >>>   * can_get_rtr_len()
 >
-> Hm, this brings me to an even more weird idea:
+> But these three functions still confuse me.
 >
-> struct canxl_frame {
->          canid_t prio;  /* 11 bit priority for arbitration (canid_t) */
->          __u8    sec:1, /* SEC bit */
->                  xltag:7; /* all bits set */
->          __u8    sdt;   /* SDU (service data unit) type */
->          __u16   len;   /* frame payload length in byte */
->          __u32   af;    /* acceptance field */
->          __u8    data[CANXL_MAX_DLEN];
-> };
+> IMO we need two values:
 >
-> We could set the first byte (former len element) to a value of 0x7F and
-> define the SEC bit as 0x80.
-
-Beware! You just stepped in the realm of undefined behaviours! The
-order of the bitfields is implementation specific...
-
-Ref: ISO/IEC 9899:1999 section 6.7.2.1 "Structure and union
-specifiers" paragraph 10:
-
-| The order of allocation of bit-fields within a unit (high-order to
-| low-order or low-order to high-order) is implementation-defined.
-
-Example, on my x86_64 machine, this code:
-
-/*********** begin **********/
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-
-union foo {
-        struct {
-                uint8_t sec:1, /* SEC bit */
-                        xltag:7; /* all bits set */
-        };
-        uint8_t raw;
-};
-
-int main()
-{
-        union foo foo;
-
-        foo.sec = 1;
-        printf("foo.raw: 0x%x\n", foo.raw);
-
-        return EXIT_SUCCESS;
-}
-/*********** end ************/
-
-will return: "foo.raw: 0x1" instead of the expected 0x80.
-
-The correct declaration is:
-
-/*********** begin **********/
-#include <asm/byteorder.h>
-
-struct canxl_frame {
-        canid_t prio;  /* 11 bit priority for arbitration (canid_t) */
-#if defined(__LITTLE_ENDIAN_BITFIELD)
-        __u8    xltag:7, /* all bits set */
-                sec:1; /* SEC bit */
-#else /* __BIG_ENDIAN_BITFIELD */
-        __u8    sec:1, /* SEC bit */
-                xltag:7; /* all bits set */
-#endif
-        __u8    sdt;   /* SDU (service data unit) type */
-        __u16   len;   /* frame payload length in byte */
-        __u32   af;    /* acceptance field */
-        __u8    data[CANXL_MAX_DLEN];
-};
-/*********** end ************/
-
-And this starts to be a really convoluted solution.
-
-> This would mean that we use the former length element to indicate the
-> CAN XL frame as no CAN/CANFD frame can have a length of 127 and above.
+> - the data byte length (RTR aware)
+> - the (raw) length value
 >
-> Not sure if it makes sense to define some bits as depicted above, or if
-> we should define a __u8 xlsec ?
-
-If we follow your idea, use __u8 xlsec in order to avoid undefined behaviours.
-
-> Where we define
+> My suggestion for a naming would be:
 >
-> #define CANXL_TAG 0x7F
+> - can_skb_get_data_len()
+> - can_skb_get_len_value()
 
-Here, you "burn" all the flags for future usage.
-FYI, this doesn't have to be 0x7F. It could be any of the length
-values not allowed by CAN-FD, namely (in decimal): 9-11, 13-15, 17-19,
-21-23, 25-31, 33-47, 49-63
-
-> #define CANXL_SEC 0x80
-
-I did not get why CANXL_XLF isn't needed anymore.
-
-> which has to be set in the xlsec element then.
->
-> With this move we get rid of any flags problems (we only need the SEC
-> bit anyway) and define a clear 'escape value' in the former length element.
-
-If I try to bounce on your idea, I will propose:
-
-/*********** begin **********/
-struct canxl_frame {
-        canid_t prio;  /* 11 bit priority for arbitration (canid_t) */
-        __u8    flags; /* additional flags for CAN XL. MSB must be set */
-        __u8    sdt;   /* SDU (service data unit) type */
-        __u16   len;   /* frame payload length in bytes */
-        __u32   af;    /* acceptance field */
-        __u8    data[];
-};
-
-#define CANXL_XLF 0x01 /* mark CAN XL for dual use of struct canfd_frame */
-#define CANXL_SEC 0x02 /* Simple Extended Content (security/segmentation) */
-#define CANXL_DISCRIMINATOR 0x80; /* Mandatory to distinguish between
-CAN(-FD) and XL frames */
-/*********** end ************/
-
-This has no undefined behaviour and we still have five flags (0x04 to
-0x40) for future use.
-
+Hmm, you did not fully convince me but at the same time, your solution
+is okayish to me.
+My main point was to correctly manage the length according to the RTR
+flag and this concern is now fully addressed. I am fine to go on with
+your naming suggestions.
 
 Yours sincerely,
 Vincent Mailhol
