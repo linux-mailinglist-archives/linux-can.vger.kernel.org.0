@@ -2,60 +2,75 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E130575BE0
-	for <lists+linux-can@lfdr.de>; Fri, 15 Jul 2022 08:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4B75575C58
+	for <lists+linux-can@lfdr.de>; Fri, 15 Jul 2022 09:30:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230514AbiGOGvb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 15 Jul 2022 02:51:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58966 "EHLO
+        id S231749AbiGOHaM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 15 Jul 2022 03:30:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbiGOGv3 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 15 Jul 2022 02:51:29 -0400
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56495509D
-        for <linux-can@vger.kernel.org>; Thu, 14 Jul 2022 23:51:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1657867885;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=nXuHnOcVdeBnNlW+jXsKBUWkK0Ia4+FHehNonLtnESA=;
-    b=hx4V8SlB+xG2DgzqcuamZ6B5wh7d/TV5bNgBDg3m5MDmDiQJdbPlF0P4hIHwuBLOla
-    J32QFzdBA158e6RDDq1Hx5QpadsJAvvmYjQKmA/hnSZhYEKrYu26CLuyE+jM6tnxEceG
-    E8vM39uhzyVlfAhi73XHCDnQVWPTu1JyWUU2EzCTm0YVkAR7Q9ibcCBbMrdKQF/1MkQy
-    GigBnRjAZsq1CLZpDdjLhNhjKzlMD8+OeazLtMcj1BLZ5lJ6G1j7VnIuZOyBs8BgXGlp
-    Mh7A0aOnY0BBVIDDcJBS18lvGQ6zcgasBFJx/mSZ4zixU3zjTO6mtBSGZ4IkjSW+m3uz
-    YE6g==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytJSr63tDxrw=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a00:6020:1cfd:d100::b82]
-    by smtp.strato.de (RZmta 47.47.0 AUTH)
-    with ESMTPSA id t870d5y6F6pP7X4
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Fri, 15 Jul 2022 08:51:25 +0200 (CEST)
-Message-ID: <931b0b22-dbe6-454b-8281-4f94856288a1@hartkopp.net>
-Date:   Fri, 15 Jul 2022 08:51:20 +0200
+        with ESMTP id S231441AbiGOHaK (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 15 Jul 2022 03:30:10 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ADFA7AC2B
+        for <linux-can@vger.kernel.org>; Fri, 15 Jul 2022 00:30:08 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id v12so5187817edc.10
+        for <linux-can@vger.kernel.org>; Fri, 15 Jul 2022 00:30:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CHnTn6VhmtnfWqf0g7Gj+G785dxWqdgYwW9ZzmaeJh4=;
+        b=AVIZkYqmlFqGyQyc7TgsQ34JecaSIs4T8qLG5N3Hp0xrVzxcXrS3uzP60Pb8HTdcmT
+         NNGLnCb4Z9g7363Stm9NWRyWEhV7UQj1cA1KUh9ersScVzQznP+DuLsHeTVH54CzogV6
+         sDh41C5MSXZZjAFvypRAwrByZXHmsniHxPdoY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CHnTn6VhmtnfWqf0g7Gj+G785dxWqdgYwW9ZzmaeJh4=;
+        b=NlNpUOKoUEuyMkGZtXgC1o9BRWO1ZN93Mfp7mTt5IDFD8rGYRZiuEdT3yZNR20wNvC
+         LT/XRQj7Z0t5AXEhl4Qkaq358PyylwfjAlm1WWe09OrUElVOac/w7oDFz8m7KnjLfp2y
+         ZTbivwhk3QRWg252LnPr6SuaSm5GspPKzhp3QbT+vbXb5vkTgUwBQ6Jx5Q9nT2lsNLT1
+         duU3L9gauyWiI0BA3xtAVf/Jmyx1CnQDCGEyPv1xj06I1Rt1XvQzQB7m7MkDEfiVubLX
+         NrHw05lza9fBA0C/9asecA+y8qLVSZI0nuubLYnKVQssfEDcI3MK7Ayy0ZduwqVY8e7K
+         +SCg==
+X-Gm-Message-State: AJIora8zCPAkYoqHEojBcjRoN7SMAv39V16joqW42Jdgf3LzpxWxgLDa
+        7eR9IQjFQ3f1lbURLk3MeI4v3w==
+X-Google-Smtp-Source: AGRyM1veMbMMZYqaMJnj/C70UuvPpYLJnS6n0L96smOnFkBPJaiYLrr37MwwvBcLdyxnSZvMMZunqw==
+X-Received: by 2002:aa7:c585:0:b0:43a:725b:9851 with SMTP id g5-20020aa7c585000000b0043a725b9851mr17229990edq.399.1657870207114;
+        Fri, 15 Jul 2022 00:30:07 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.pdxnet.pdxeng.ch (host-80-182-13-224.retail.telecomitalia.it. [80.182.13.224])
+        by smtp.gmail.com with ESMTPSA id lb11-20020a170907784b00b007246492658asm1692756ejc.117.2022.07.15.00.30.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Jul 2022 00:30:06 -0700 (PDT)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     ltp@lists.linux.it, Jeroen Hofstee <jhofstee@victronenergy.com>,
+        lkp@intel.com, Richard Palethorpe <rpalethorpe@suse.de>,
+        kernel test robot <oliver.sang@intel.com>, lkp@lists.01.org,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH v3] can: slcan: do not sleep with a spin lock held
+Date:   Fri, 15 Jul 2022 09:29:51 +0200
+Message-Id: <20220715072951.859586-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC PATCH v2 3/5] can: dev: add CAN XL support
-Content-Language: en-US
-To:     Vincent Mailhol <vincent.mailhol@gmail.com>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
-References: <20220714160541.2071-1-socketcan@hartkopp.net>
- <20220714160541.2071-4-socketcan@hartkopp.net>
- <20220714200601.mklari3b6uvb7b2e@pengutronix.de>
- <c731143e-f476-b2f8-c08c-df66339d98f8@hartkopp.net>
- <CAMZ6RqJ0=PhrJUHaZR6QNWkv2vx690AiwPF2RLv1ou_JGX1qxg@mail.gmail.com>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <CAMZ6RqJ0=PhrJUHaZR6QNWkv2vx690AiwPF2RLv1ou_JGX1qxg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,168 +78,51 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+We can't call close_candev() with a spin lock held, so release the lock
+before calling it. After calling close_candev(), we can update the
+fields of the private `struct can_priv' without having to acquire the
+lock.
 
+Fixes: c4e54b063f42f ("can: slcan: use CAN network device driver API")
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Link: https://lore.kernel.org/linux-kernel/Ysrf1Yc5DaRGN1WE@xsang-OptiPlex-9020/
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
-On 15.07.22 05:53, Vincent Mailhol wrote:
-> On Fri. 15 Jul. 2022 at 06:14, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
->> On 14.07.22 22:06, Marc Kleine-Budde wrote:
->>> On 14.07.2022 18:05:39, Oliver Hartkopp wrote:
->>
->> (..)
->>
->>>> +struct sk_buff *alloc_canxl_skb(struct net_device *dev,
->>>> +                            struct canxl_frame **cfx,
->>>> +                            unsigned int datalen)
->>>> +{
->>>> +    struct sk_buff *skb;
->>>> +
->>>> +    if (datalen < CANXL_MIN_DLEN || datalen > CANXL_MAX_DLEN)
->>>> +            goto out_error;
->>>> +
->>>> +    skb = netdev_alloc_skb(dev, sizeof(struct can_skb_priv) +
->>>> +                           CANXL_HEAD_SZ + datalen);
-> 
-> If usings the flexible array member, this would become:
-> 
->          skb = netdev_alloc_skb(dev, sizeof(struct can_skb_priv) +
->                                 sizeof(struct canxl_frame) + datalen);
-> 
-> or even:
-> 
->          skb = netdev_alloc_skb(dev, sizeof(struct can_skb_priv) +
->                                 struct_size(*cxl, data, datalen));
-> 
-> This is an illustration of my point that flexible data arrays are more
-> idiomatic. I find it weird to have to mix sizeof(struct can_skb_priv)
-> and CANXL_HEAD_SZ in the same expression...
-> 
->>>> +    if (unlikely(!skb))
->>>> +            goto out_error;
->>>> +
->>>> +    skb->protocol = htons(ETH_P_CANXL);
->>>> +    skb->pkt_type = PACKET_BROADCAST;
->>>> +    skb->ip_summed = CHECKSUM_UNNECESSARY;
->>>> +
->>>> +    skb_reset_mac_header(skb);
->>>> +    skb_reset_network_header(skb);
->>>> +    skb_reset_transport_header(skb);
->>>> +
->>>> +    can_skb_reserve(skb);
->>>> +    can_skb_prv(skb)->ifindex = dev->ifindex;
->>>> +    can_skb_prv(skb)->skbcnt = 0;
->>>> +
->>>> +    *cfx = skb_put_zero(skb, CANXL_HEAD_SZ + datalen);
->>>
->>> Should the CANXL_XLF be set here?
->>
->> Yes, we can set that bit here directly - for convenience reasons ;-)
->>
->>> I have a bad feeling if we have a struct canxl_frame with a fixed size,
->>> but it might not completely be backed by data.....
-> 
-> I tried to think hard of what could go wrong with the
-> data[CANXL_MAX_DLEN] declaration.
-> 
-> The worst I could think of would be some:
->          int datalen = 64; /* or anything less than CANXL_MAX_DLEN */
->          struct canxl_frame *cxl1 = malloc(CANXL_HEAD_SZ + datalen);
->          struct canxl_frame *cxl2 = malloc(CANXL_HEAD_SZ + datalen);
-> 
->          memcpy(cxl1, cxl2, sizeof(*cxl1));
-> 
-> But that example is a bit convoluted. That's why I wrote in my
-> previous message that I saw no killer arguments against it.
-> 
->>> For example, I've updated the gs_usb driver to work with flexible arrays
->>> to accommodate the different USB frame length:
->>>
->>> https://elixir.bootlin.com/linux/latest/source/drivers/net/can/usb/gs_usb.c#L216
->>>
->>> Maybe we should talk to Kees Cook what's best to use here.
->>
->> I see this struct canxl_frame with 2048 byte of data more as a user
->> space thing.
->>
->> You can simply read() from the CAN_RAW socket into this struct (as you
->> know it from CAN/CANFD) and it works safely.
->>
->> That we optimize the length to the really needed length inside the skb
->> and for CAN XL socket read/write operations is on another page for me.
->>
->> If we *only* had the canxl data structure inside the kernel I would be
->> definitely ok with flexible arrays.
->> The current implementation indeed never allocates space with the
->> sizeof(struct canxl_frame) ...
->>
->> But I tend to maintain the pattern we introduced for CAN and CAN FD for
->> the user space visible data structures. That is clearer and safe to use
->> by default instead of reading documentation about flexible arrays and
->> how to build some data structure on your own.
-> 
-> Here, you are making the assumption that the end user will only be
-> familiar with the CAN(-FD) and not with other concepts.
-> 
-> Building data structures on your own is fairly common, the best
-> example being the struct iphdr or the struct tcphdr for TCP/IP:
->    * https://elixir.bootlin.com/linux/latest/source/include/uapi/linux/ip.h#L86
->    * https://elixir.bootlin.com/linux/latest/source/include/uapi/linux/tcp.h#L25
-> (in those examples, it is not a flexible array member but the concept
-> is basically the same).
+---
 
-But then you would have to name it struct canxlhdr or canxl_hdr to 
-follow this pattern, right?
+Changes in v3:
+- Update the commit message.
+- Reset sl->rcount and sl->xleft before releasing the spin lock.
 
-And this is my other problem. The struct canxl_frame should be able to 
-contain a CAN XL frame (as can[fd]_frame do).
+Changes in v2:
+- Release the lock just before calling the close_candev().
 
-I'm fine with introducing e.g. a
+ drivers/net/can/slcan/slcan-core.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-struct canxl_hdr {
-	canid_t prio;  /* 11 bit priority for arbitration (canid_t) */
-	__u8    flags; /* additional flags for CAN XL */
-	__u8    sdt;   /* SDU (service data unit) type */
-	__u16   len;   /* frame payload length in byte */
-	__u32   af;    /* acceptance field */
-	__u8    data[];
-};
+diff --git a/drivers/net/can/slcan/slcan-core.c b/drivers/net/can/slcan/slcan-core.c
+index 54d29a410ad5..d40ddc596596 100644
+--- a/drivers/net/can/slcan/slcan-core.c
++++ b/drivers/net/can/slcan/slcan-core.c
+@@ -689,15 +689,14 @@ static int slc_close(struct net_device *dev)
+ 		clear_bit(TTY_DO_WRITE_WAKEUP, &sl->tty->flags);
+ 	}
+ 	netif_stop_queue(dev);
++	sl->rcount   = 0;
++	sl->xleft    = 0;
++	spin_unlock_bh(&sl->lock);
+ 	close_candev(dev);
+ 	sl->can.state = CAN_STATE_STOPPED;
+ 	if (sl->can.bittiming.bitrate == CAN_BITRATE_UNKNOWN)
+ 		sl->can.bittiming.bitrate = CAN_BITRATE_UNSET;
+ 
+-	sl->rcount   = 0;
+-	sl->xleft    = 0;
+-	spin_unlock_bh(&sl->lock);
+-
+ 	return 0;
+ }
+ 
+-- 
+2.32.0
 
-and propose the suggested use-patterns.
-
-But I just don't feel good to give up the struct canxl_frame analogue to 
-can[fd]_frame.
-
-Best regards,
-Oliver
-
-ps. can we perhaps put canxl_frame and canxl_hdr in some union structure 
-that does not look ugly?
-
-> 
-> I think it is fair to expect from a developer using Berkeley sockets
-> (what SocketCAN is) to be familiar with this.
-> 
-> In the worst case, the developper who still completely ignore the
-> documentation and just do sed "s/canfd/canxl/g" on their existing code
-> base will eventually do this:
->          write(sock, &cxl, sizeof(canxl));
-> And that would fail immediately (because sizeof(canxl) <
-> CANXL_MIN_TU). So I think it is still safe. The real foot gun is when
-> you can write incorrect code that still works (e.g. buffer overflow).
-> If it directly fails, people will copy/paste the accepted answer on
-> stackoverflow and will eventually do the correct:
->          write(sock, &cxl, sizeof(cxl) + cxl.len);
-> 
-> Finally, for both solutions, user can not do this anymore:
->          assert(read(sock, &cxl, sizeof(cxl)) == sizeof(cxl));
-> But instead should do:
->          assert(read(sock, &cxl, sizeof(cxl)) >= CANXL_MINTU);
-> So regardless of the solution we use, the developer needs to be aware
-> to some extent of the variable size (and ignoring the return value of
-> read() is a bad practice so I won't accept this as a counterargument).
-> 
-> The debate is really on "reusing CAN(-FD) patterns" vs. "doing
-> idiomatic C". I will not veto the data[CANXL_MAX_DLEN], but I vote for
-> the flexible array member for the reasons listed here.
-> 
-> Yours sincerely,
-> Vincent Mailhol
