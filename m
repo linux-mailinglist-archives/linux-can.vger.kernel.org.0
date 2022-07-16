@@ -2,335 +2,334 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7575576B5F
-	for <lists+linux-can@lfdr.de>; Sat, 16 Jul 2022 05:01:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88A3A576DB6
+	for <lists+linux-can@lfdr.de>; Sat, 16 Jul 2022 14:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231284AbiGPDBL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 15 Jul 2022 23:01:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42826 "EHLO
+        id S229499AbiGPMJd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 16 Jul 2022 08:09:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231244AbiGPDBK (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 15 Jul 2022 23:01:10 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B7A8E4D1;
-        Fri, 15 Jul 2022 20:01:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657940468; x=1689476468;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=T/cGF5Nkf4YWawUFDvRxQd3G489QI1/mvWEiFyBeprw=;
-  b=I+1XULW4FZYTwJrrV++psp5JubM3M7n8Mp3fDJQ7Hd1CbYxDVafulCnO
-   yHdpTnjEyYnaSMC8RDA3Qg3UxEb/TuITN2wp2KcTIAS9LvgC2ysKJPQp9
-   evyS1hQS0S6Rs9n73JYdqk37/vbm0zxkR37YK+upP84IeIOyYxrfR8u0i
-   LgXj5gLYs21V+Ho8krVteYyDvq45RiHRifKbrrwy/mXuRk9WvKzAIFc/g
-   PX96akBIAcLeK2YnTXMbTi/HT2XaiDvCYdFS20MwGhZe6l3D+Oh7QW18h
-   bNdFhrpxAWNLqzQ1QJxNKZc+rFBPSS63CKzLaGrIDFf5DkpexvimQWqrN
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="268961733"
-X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
-   d="scan'208";a="268961733"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 20:01:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
-   d="scan'208";a="596679266"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 15 Jul 2022 20:01:00 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oCY35-00014O-2o;
-        Sat, 16 Jul 2022 03:00:55 +0000
-Date:   Sat, 16 Jul 2022 11:00:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     openbmc@lists.ozlabs.org, ntfs3@lists.linux.dev,
-        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-can@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvm@vger.kernel.org, apparmor@lists.ubuntu.com,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master] BUILD REGRESSION
- 6014cfa5bf32cf8c5c58b3cfd5ee0e1542c8a825
-Message-ID: <62d229b5.vqqoX60YvzB2JbT+%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229479AbiGPMJd (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 16 Jul 2022 08:09:33 -0400
+X-Greylist: delayed 203 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 16 Jul 2022 05:09:30 PDT
+Received: from mxd2.seznam.cz (mxd2.seznam.cz [IPv6:2a02:598:2::210])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE4913CDD;
+        Sat, 16 Jul 2022 05:09:29 -0700 (PDT)
+Received: from email.seznam.cz
+        by email-smtpc29a.ng.seznam.cz (email-smtpc29a.ng.seznam.cz [10.23.18.42])
+        id 730cc56697a0165872d16408;
+        Sat, 16 Jul 2022 14:09:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seznam.cz; s=beta;
+        t=1657973368; bh=XYu56n9XHgWjNR6No+oO+feJy36LToPiGP7tHG52ML0=;
+        h=Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
+         Content-Transfer-Encoding:X-szn-frgn:X-szn-frgc;
+        b=GP4Kp9JwMsIux7Rmzp4+lcY+wIkwWmjlYa0Qh6nmxsK6F3j40AB3Q/U40VA8NnHP6
+         vM3CpqDurvVrsbccIxmeeJVLT4uNrEgQu0NPxyUekZgSpDaZoX5BNGtbEInUoErAaI
+         oNihRlzkxLMLIPwyqIeNFtS0w/puZ+QSeWPbgZcU=
+Received: from localhost.localdomain (2a02:8308:900d:2400:1ed6:b9cb:54c9:767 [2a02:8308:900d:2400:1ed6:b9cb:54c9:767])
+        by email-relay10.ng.seznam.cz (Seznam SMTPD 1.3.137) with ESMTP;
+        Sat, 16 Jul 2022 14:05:47 +0200 (CEST)  
+From:   Matej Vasilevski <matej.vasilevski@seznam.cz>
+To:     Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
+        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        Matej Vasilevski <matej.vasilevski@seznam.cz>,
+        Martin Jerabek <martin.jerabek01@gmail.com>
+Subject: [PATCH] can: xilinx_can: add support for RX timestamps on Zynq
+Date:   Sat, 16 Jul 2022 14:04:09 +0200
+Message-Id: <20220716120408.450405-1-matej.vasilevski@seznam.cz>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,WEIRD_PORT autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-szn-frgn: <96685b1d-cc65-4703-9144-318c95f84ba9>
+X-szn-frgc: <0>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: 6014cfa5bf32cf8c5c58b3cfd5ee0e1542c8a825  Add linux-next specific files for 20220715
+This patch adds support for hardware RX timestamps from Xilinx Zynq CAN
+controllers. The timestamp is calculated against a timepoint reference
+stored when the first CAN message is received.
 
-Error/Warning reports:
+When CAN bus traffic does not contain long idle pauses (so that
+the clocks would drift by a multiple of the counter rollover time),
+then the hardware timestamps provide precise relative time between
+received messages. This can be used e.g. for latency testing.
 
-https://lore.kernel.org/linux-doc/202207021352.PpKTUY8V-lkp@intel.com
-https://lore.kernel.org/linux-doc/202207031437.qIh6LFcx-lkp@intel.com
-https://lore.kernel.org/linux-doc/202207051821.3f0eRIsL-lkp@intel.com
-https://lore.kernel.org/linux-mm/202206292052.LsFui3zO-lkp@intel.com
-https://lore.kernel.org/linux-mm/202207160452.HPLSlqzA-lkp@intel.com
-https://lore.kernel.org/llvm/202207160039.bfW3l3uk-lkp@intel.com
+Co-authored-by: Martin Jerabek <martin.jerabek01@gmail.com>
+Signed-off-by: Matej Vasilevski <matej.vasilevski@seznam.cz>
+---
+ drivers/net/can/xilinx_can.c | 171 ++++++++++++++++++++++++++++++++++-
+ 1 file changed, 168 insertions(+), 3 deletions(-)
 
-Error/Warning: (recently discovered and may have been fixed)
+diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.c
+index 393b2d9f9d2a..12e3ca856684 100644
+--- a/drivers/net/can/xilinx_can.c
++++ b/drivers/net/can/xilinx_can.c
+@@ -11,11 +11,14 @@
+ 
+ #include <linux/bitfield.h>
+ #include <linux/clk.h>
++#include <linux/clocksource.h>
+ #include <linux/errno.h>
+ #include <linux/init.h>
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
+ #include <linux/kernel.h>
++#include "linux/ktime.h"
++#include "linux/math64.h"
+ #include <linux/module.h>
+ #include <linux/netdevice.h>
+ #include <linux/of.h>
+@@ -165,6 +168,10 @@ enum xcan_reg {
+ #define XCAN_FLAG_RX_FIFO_MULTI	0x0010
+ #define XCAN_FLAG_CANFD_2	0x0020
+ 
++#define XCAN_ZYNQ_TSTAMP_BITS	16
++#define XCAN_ZYNQ_TSTAMP_BIT_MASK	GENMASK(15, 0)
++#define XCAN_ZYNQ_TSTAMP_MAX_VAL	BIT(XCAN_ZYNQ_TSTAMP_BITS)
++
+ enum xcan_ip_type {
+ 	XAXI_CAN = 0,
+ 	XZYNQ_CANPS,
+@@ -181,6 +188,11 @@ struct xcan_devtype_data {
+ 	unsigned int btr_sjw_shift;
+ };
+ 
++struct xcan_timepoint {
++	u64 ktime_ns;
++	u16 ts;
++};
++
+ /**
+  * struct xcan_priv - This definition define CAN driver instance
+  * @can:			CAN private data structure.
+@@ -197,6 +209,11 @@ struct xcan_devtype_data {
+  * @bus_clk:			Pointer to struct clk
+  * @can_clk:			Pointer to struct clk
+  * @devtype:			Device type specific constants
++ * @ref_timepoint:		Reference timepoint for synchronizing ktime with HW ticks
++ * @tstamp_rollover_ns:		Timestamping counter rollover time in nanoseconds
++ * @cantime2ns_mul:		Mult. constant for converting from counter time to nanoseconds
++ * @cantime2ns_shr:		Right shift for converting from counter time to nanoseconds
++ * @rx_timestamps_enabled:	Boolean flag indicating whether rx timestamps should be computed
+  */
+ struct xcan_priv {
+ 	struct can_priv can;
+@@ -214,6 +231,11 @@ struct xcan_priv {
+ 	struct clk *bus_clk;
+ 	struct clk *can_clk;
+ 	struct xcan_devtype_data devtype;
++	struct xcan_timepoint ref_timepoint;
++	u64 tstamp_rollover_ns;
++	u32 cantime2ns_mul;
++	u32 cantime2ns_shr;
++	bool rx_timestamps_enabled;
+ };
+ 
+ /* CAN Bittiming constants as per Xilinx CAN specs */
+@@ -759,6 +781,50 @@ static netdev_tx_t xcan_start_xmit(struct sk_buff *skb, struct net_device *ndev)
+ 	return NETDEV_TX_OK;
+ }
+ 
++/**
++ * xcan_timestamp_to_ktime - Converts the hardware timestamp to ktime timestamp
++ * @priv:	Driver private data structure
++ * @ts:		Timestamp from the hardware counter
++ *
++ * Calculating the frame ktime using rollover count and initial timepoint
++ * reference allows to have constant delay between the moment the frame is
++ * timestamped in hardware, and the timestamp reported by the driver.
++ * When CAN bus traffic does not contain long idle pauses (so that the clocks
++ * would drift by a multiple of the counter rollover time), then timestamps
++ * provide precise relative time between received messages.
++ *
++ * Return: hardware timestamp in ktime
++ */
++static ktime_t xcan_timestamp_to_ktime(struct xcan_priv *priv, u16 ts)
++{
++	struct xcan_timepoint *ref = &priv->ref_timepoint;
++	u64 ktime_now_ns;
++	u64 ktime_diff_ns;
++	u16 tstamp_diff;
++	u64 tstamp_diff_ns;
++	u64 time_diff_ns;
++	u64 rollover_count;
++
++	ktime_now_ns = ktime_get_real_ns();
++	if (ref->ktime_ns == 0) {
++		/* first received frame */
++		ref->ktime_ns = ktime_now_ns;
++		ref->ts = ts;
++		return ns_to_ktime(ktime_now_ns);
++	}
++
++	tstamp_diff = ts > ref->ts ? ts - ref->ts : ref->ts - ts;
++	tstamp_diff_ns = mul_u32_u32((u32)tstamp_diff, priv->cantime2ns_mul)
++			 >> priv->cantime2ns_shr;
++	ktime_diff_ns = ktime_now_ns - ref->ktime_ns;
++	time_diff_ns = ktime_diff_ns - tstamp_diff_ns;
++	rollover_count = div_u64(time_diff_ns + (priv->tstamp_rollover_ns / 2),
++				 priv->tstamp_rollover_ns);
++
++	return ns_to_ktime(tstamp_diff_ns + rollover_count * priv->tstamp_rollover_ns)
++	       + ref->ktime_ns;
++}
++
+ /**
+  * xcan_rx -  Is called from CAN isr to complete the received
+  *		frame  processing
+@@ -776,7 +842,8 @@ static int xcan_rx(struct net_device *ndev, int frame_base)
+ 	struct net_device_stats *stats = &ndev->stats;
+ 	struct can_frame *cf;
+ 	struct sk_buff *skb;
+-	u32 id_xcan, dlc, data[2] = {0, 0};
++	struct skb_shared_hwtstamps *hwts;
++	u32 id_xcan, dlc_reg, dlc, rawts, data[2] = {0, 0};
+ 
+ 	skb = alloc_can_skb(ndev, &cf);
+ 	if (unlikely(!skb)) {
+@@ -786,12 +853,19 @@ static int xcan_rx(struct net_device *ndev, int frame_base)
+ 
+ 	/* Read a frame from Xilinx zynq CANPS */
+ 	id_xcan = priv->read_reg(priv, XCAN_FRAME_ID_OFFSET(frame_base));
+-	dlc = priv->read_reg(priv, XCAN_FRAME_DLC_OFFSET(frame_base)) >>
+-				   XCAN_DLCR_DLC_SHIFT;
++	dlc_reg = priv->read_reg(priv, XCAN_FRAME_DLC_OFFSET(frame_base));
++	dlc = dlc_reg >> XCAN_DLCR_DLC_SHIFT;
+ 
+ 	/* Change Xilinx CAN data length format to socketCAN data format */
+ 	cf->len = can_cc_dlc2len(dlc);
+ 
++	if (priv->rx_timestamps_enabled) {
++		hwts = skb_hwtstamps(skb);
++		memset(hwts, 0, sizeof(*hwts));
++		rawts = dlc_reg & XCAN_ZYNQ_TSTAMP_BIT_MASK;
++		hwts->hwtstamp = xcan_timestamp_to_ktime(priv, rawts);
++	}
++
+ 	/* Change Xilinx CAN ID format to socketCAN ID format */
+ 	if (id_xcan & XCAN_IDR_IDE_MASK) {
+ 		/* The received frame is an Extended format frame */
+@@ -1532,11 +1606,95 @@ static int xcan_get_auto_tdcv(const struct net_device *ndev, u32 *tdcv)
+ 	return 0;
+ }
+ 
++static int xcan_hwtstamp_set(struct net_device *dev, struct ifreq *ifr)
++{
++	struct xcan_priv *priv = netdev_priv(dev);
++	struct hwtstamp_config cfg;
++
++	if (priv->devtype.cantype != XZYNQ_CANPS)
++		return -EOPNOTSUPP;
++
++	if (copy_from_user(&cfg, ifr->ifr_data, sizeof(cfg)))
++		return -EFAULT;
++
++	if (cfg.flags)
++		return -EINVAL;
++
++	if (cfg.tx_type != HWTSTAMP_TX_OFF)
++		return -ERANGE;
++
++	switch (cfg.rx_filter) {
++	case HWTSTAMP_FILTER_NONE:
++		priv->rx_timestamps_enabled = false;
++		break;
++	case HWTSTAMP_FILTER_ALL:
++		fallthrough;
++	case HWTSTAMP_FILTER_PTP_V1_L4_EVENT:
++		fallthrough;
++	case HWTSTAMP_FILTER_PTP_V1_L4_SYNC:
++		fallthrough;
++	case HWTSTAMP_FILTER_PTP_V1_L4_DELAY_REQ:
++		fallthrough;
++	case HWTSTAMP_FILTER_PTP_V2_L4_EVENT:
++		fallthrough;
++	case HWTSTAMP_FILTER_PTP_V2_L4_SYNC:
++		fallthrough;
++	case HWTSTAMP_FILTER_PTP_V2_L4_DELAY_REQ:
++		fallthrough;
++	case HWTSTAMP_FILTER_PTP_V2_L2_EVENT:
++		fallthrough;
++	case HWTSTAMP_FILTER_PTP_V2_L2_SYNC:
++		fallthrough;
++	case HWTSTAMP_FILTER_PTP_V2_L2_DELAY_REQ:
++		fallthrough;
++	case HWTSTAMP_FILTER_PTP_V2_EVENT:
++		fallthrough;
++	case HWTSTAMP_FILTER_PTP_V2_SYNC:
++		fallthrough;
++	case HWTSTAMP_FILTER_PTP_V2_DELAY_REQ:
++		priv->rx_timestamps_enabled = true;
++		cfg.rx_filter = HWTSTAMP_FILTER_ALL;
++		break;
++	default:
++		return -ERANGE;
++	}
++
++	return copy_to_user(ifr->ifr_data, &cfg, sizeof(cfg)) ? -EFAULT : 0;
++}
++
++static int xcan_hwtstamp_get(struct net_device *dev, struct ifreq *ifr)
++{
++	struct xcan_priv *priv = netdev_priv(dev);
++	struct hwtstamp_config cfg;
++
++	if (priv->devtype.cantype != XZYNQ_CANPS)
++		return -EOPNOTSUPP;
++
++	cfg.flags = 0;
++	cfg.tx_type = HWTSTAMP_TX_OFF;
++	cfg.rx_filter = priv->rx_timestamps_enabled ? HWTSTAMP_FILTER_ALL : HWTSTAMP_FILTER_NONE;
++
++	return copy_to_user(ifr->ifr_data, &cfg, sizeof(cfg)) ? -EFAULT : 0;
++}
++
++static int xcan_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd)
++{
++	switch (cmd) {
++	case SIOCSHWTSTAMP:
++		return xcan_hwtstamp_set(dev, ifr);
++	case SIOCGHWTSTAMP:
++		return xcan_hwtstamp_get(dev, ifr);
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
+ static const struct net_device_ops xcan_netdev_ops = {
+ 	.ndo_open	= xcan_open,
+ 	.ndo_stop	= xcan_close,
+ 	.ndo_start_xmit	= xcan_start_xmit,
+ 	.ndo_change_mtu	= can_change_mtu,
++	.ndo_eth_ioctl	= xcan_ioctl,
+ };
+ 
+ /**
+@@ -1854,6 +2012,13 @@ static int xcan_probe(struct platform_device *pdev)
+ 
+ 	priv->can.clock.freq = clk_get_rate(priv->can_clk);
+ 
++	clocks_calc_mult_shift(&priv->cantime2ns_mul, &priv->cantime2ns_shr,
++			       priv->can.clock.freq, NSEC_PER_SEC, 0);
++	priv->rx_timestamps_enabled = false;
++	priv->tstamp_rollover_ns = mul_u32_u32((u32)XCAN_ZYNQ_TSTAMP_MAX_VAL, priv->cantime2ns_mul)
++				   >> priv->cantime2ns_shr;
++	memset(&priv->ref_timepoint, 0, sizeof(priv->ref_timepoint));
++
+ 	netif_napi_add_weight(ndev, &priv->napi, xcan_rx_poll, rx_max);
+ 
+ 	ret = register_candev(ndev);
 
-Documentation/PCI/endpoint/pci-vntb-function.rst:82: WARNING: Unexpected indentation.
-Documentation/PCI/endpoint/pci-vntb-howto.rst:131: WARNING: Title underline too short.
-Documentation/virt/kvm/api.rst:8265: WARNING: Title underline too short.
-Documentation/virt/kvm/api.rst:8272: WARNING: Unexpected indentation.
-aarch64-linux-ld: Unexpected GOT/PLT entries detected!
-aarch64-linux-ld: Unexpected run-time procedure linkages detected!
-drivers/net/wireless/mac80211_hwsim.c:1431:37: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-drivers/pci/endpoint/functions/pci-epf-vntb.c:1247: undefined reference to `ntb_register_device'
-drivers/pci/endpoint/functions/pci-epf-vntb.c:174: undefined reference to `ntb_link_event'
-drivers/pci/endpoint/functions/pci-epf-vntb.c:262: undefined reference to `ntb_db_event'
-drivers/pci/endpoint/functions/pci-epf-vntb.c:975:5: warning: no previous prototype for 'pci_read' [-Wmissing-prototypes]
-drivers/pci/endpoint/functions/pci-epf-vntb.c:984:5: warning: no previous prototype for 'pci_write' [-Wmissing-prototypes]
-drivers/vfio/vfio_iommu_type1.c:2141:35: warning: cast to smaller integer type 'enum iommu_cap' from 'void *' [-Wvoid-pointer-to-enum-cast]
-fs/nfsd/nfsctl.c:1504:17: error: use of undeclared identifier 'NFS4_CLIENTS_PER_GB'
-security/apparmor/policy_ns.c:83:20: warning: no previous prototype for 'alloc_unconfined' [-Wmissing-prototypes]
-security/apparmor/policy_ns.c:83:20: warning: no previous prototype for function 'alloc_unconfined' [-Wmissing-prototypes]
-
-Unverified Error/Warning (likely false positive, please contact us if interested):
-
-arch/x86/kernel/cpu/rdrand.c:36 x86_init_rdrand() error: uninitialized symbol 'prev'.
-drivers/devfreq/mtk-cci-devfreq.c:135 mtk_ccifreq_target() warn: variable dereferenced before check 'drv' (see line 130)
-drivers/gpio/gpio-xilinx.c:709:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-drivers/gpio/gpiolib-cdev.c:2563:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-drivers/gpio/gpiolib.c:2215:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-drivers/gpu/drm/amd/amdgpu/../display/dc/bios/bios_parser2.c:2994:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-drivers/gpu/drm/drm_mipi_dbi.c:876:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-drivers/hid/hid-input.c:2276:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-drivers/i2c/busses/i2c-designware-master.c:165:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-drivers/i2c/busses/i2c-jz4780.c:359:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-drivers/i2c/busses/i2c-mt65xx.c:927:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-drivers/i2c/busses/i2c-npcm7xx.c:639 npcm_i2c_slave_enable() error: buffer overflow 'npcm_i2caddr' 2 <= 9
-drivers/i2c/busses/i2c-s3c2410.c:746:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-drivers/i2c/busses/i2c-xiic.c:540:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-drivers/iio/industrialio-buffer.c:927:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-drivers/md/dm-mpath.c:1681:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-drivers/media/cec/i2c/ch7322.c:332:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-drivers/mfd/da9062-core.c:323:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-drivers/misc/habanalabs/gaudi2/gaudi2.c:8728:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-drivers/mmc/host/dw_mmc.c:989:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-drivers/net/can/slcan/slcan-core.c:601:14: sparse:    void *
-drivers/net/can/slcan/slcan-core.c:601:14: sparse:    void [noderef] __rcu *
-drivers/net/can/slcan/slcan-core.c:601:14: sparse: sparse: incompatible types in comparison expression (different address spaces):
-drivers/net/phy/phylink.c:887 phylink_change_inband_advert() error: we previously assumed 'pl->pcs' could be null (see line 870)
-drivers/nfc/trf7970a.c:631:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-drivers/pinctrl/core.c:2093:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-drivers/pinctrl/stm32/pinctrl-stm32.c:1627:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-drivers/power/supply/bq24190_charger.c:1944:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-drivers/power/supply/bq24257_charger.c:1078:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-drivers/power/supply/bq25890_charger.c:847:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-drivers/power/supply/bq27xxx_battery.c:1123:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-drivers/power/supply/rt9455_charger.c:1055:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-drivers/power/supply/sbs-battery.c:355:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-drivers/regulator/core.c:5171:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-drivers/regulator/s2mps11.c:1226:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-drivers/regulator/slg51000-regulator.c:436:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-drivers/scsi/qla2xxx/qla_os.c:336:5: sparse: sparse: symbol 'ql2xdelay_before_pci_error_handling' was not declared. Should it be static?
-drivers/target/target_core_device.c:1013:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-drivers/tty/n_gsm.c:1526:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-drivers/usb/gadget/composite.c:1080:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-drivers/video/fbdev/sh_mobile_lcdcfb.c:2505:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-fs/ext4/extents.c:1293:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-fs/kernel_read_file.c:61 kernel_read_file() warn: impossible condition '(i_size > (((~0) >> 1))) => (s64min-s64max > s64max)'
-include/linux/bits.h:9:41: warning: shift by negative count ('-1') [-Wanalyzer-shift-count-negative]
-include/linux/libata.h:2052:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-kernel/params.c:214:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-lib/842/842_decompress.c:210:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-lib/kobject.c:683:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-net/bluetooth/aosp.c:114:1: internal compiler error: in arc_ccfsm_record_condition, at config/arc/arc.cc:5500
-net/bluetooth/hci_request.c:2029:1: internal compiler error: in arc_ccfsm_record_condition, at config/arc/arc.cc:5500
-net/caif/cfctrl.c:583:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
-
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- alpha-allyesconfig
-|   |-- drivers-pci-endpoint-functions-pci-epf-vntb.c:warning:no-previous-prototype-for-pci_read
-|   |-- drivers-pci-endpoint-functions-pci-epf-vntb.c:warning:no-previous-prototype-for-pci_write
-|   `-- security-apparmor-policy_ns.c:warning:no-previous-prototype-for-alloc_unconfined
-|-- alpha-randconfig-c004-20220716
-|   |-- drivers-pci-endpoint-functions-pci-epf-vntb.c:warning:no-previous-prototype-for-pci_read
-|   `-- drivers-pci-endpoint-functions-pci-epf-vntb.c:warning:no-previous-prototype-for-pci_write
-|-- arc-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-bios-bios_parser2.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
-|   |-- drivers-misc-habanalabs-gaudi2-gaudi2.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
-|   |-- drivers-net-wireless-mac80211_hwsim.c:warning:cast-to-pointer-from-integer-of-different-size
-|   |-- drivers-pci-endpoint-functions-pci-epf-vntb.c:warning:no-previous-prototype-for-pci_read
-|   |-- drivers-pci-endpoint-functions-pci-epf-vntb.c:warning:no-previous-prototype-for-pci_write
-|   |-- drivers-target-target_core_device.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
-|   `-- security-apparmor-policy_ns.c:warning:no-previous-prototype-for-alloc_unconfined
-|-- arc-randconfig-m031-20220716
-|   |-- drivers-devfreq-mtk-cci-devfreq.c-mtk_ccifreq_target()-warn:variable-dereferenced-before-check-drv-(see-line-)
-|   `-- drivers-i2c-busses-i2c-npcm7xx.c-npcm_i2c_slave_enable()-error:buffer-overflow-npcm_i2caddr
-|-- arc-randconfig-r013-20220715
-|   |-- drivers-usb-gadget-composite.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
-|   |-- net-bluetooth-aosp.c:internal-compiler-error:in-arc_ccfsm_record_condition-at-config-arc-arc.cc
-|   `-- net-bluetooth-hci_request.c:internal-compiler-error:in-arc_ccfsm_record_condition-at-config-arc-arc.cc
-|-- arc-randconfig-r032-20220715
-|   |-- drivers-gpio-gpio-xilinx.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
-|   |-- drivers-gpio-gpiolib-cdev.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
-|   |-- drivers-gpio-gpiolib.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
-|   |-- drivers-gpu-drm-drm_mipi_dbi.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
-|   |-- drivers-hid-hid-input.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
-|   |-- drivers-i2c-busses-i2c-designware-master.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
-|   |-- drivers-i2c-busses-i2c-jz4780.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
-|   |-- drivers-i2c-busses-i2c-mt65xx.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
-|   |-- drivers-i2c-busses-i2c-s3c2410.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
-|   |-- drivers-i2c-busses-i2c-xiic.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
-|   |-- drivers-iio-industrialio-buffer.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
-|   |-- drivers-md-dm-mpath.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
-|   |-- drivers-media-cec-i2c-ch7322.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
-|   |-- drivers-mfd-da9062-core.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
-|   |-- drivers-mmc-host-dw_mmc.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
-|   |-- drivers-nfc-trf7970a.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
-|   |-- drivers-pinctrl-core.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
-|   |-- drivers-pinctrl-stm32-pinctrl-stm32.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
-|   |-- drivers-power-supply-bq24190_charger.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
-|   |-- drivers-power-supply-bq24257_charger.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
-|   |-- drivers-power-supply-bq25890_charger.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
-|   |-- drivers-power-supply-bq27xxx_battery.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
-|   |-- drivers-power-supply-rt9455_charger.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
-|   |-- drivers-power-supply-sbs-battery.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
-|   |-- drivers-regulator-core.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
-|   |-- drivers-regulator-s2mps11.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
-|   |-- drivers-regulator-slg51000-regulator.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
-clang_recent_errors
-|-- arm-versatile_defconfig
-|   `-- fs-nfsd-nfsctl.c:error:use-of-undeclared-identifier-NFS4_CLIENTS_PER_GB
-|-- i386-randconfig-a015
-|   `-- fs-nfsd-nfsctl.c:error:use-of-undeclared-identifier-NFS4_CLIENTS_PER_GB
-|-- powerpc-mvme5100_defconfig
-|   `-- fs-nfsd-nfsctl.c:error:use-of-undeclared-identifier-NFS4_CLIENTS_PER_GB
-|-- x86_64-randconfig-a001
-|   `-- drivers-vfio-vfio_iommu_type1.c:warning:cast-to-smaller-integer-type-enum-iommu_cap-from-void
-|-- x86_64-randconfig-a005
-|   |-- drivers-vfio-vfio_iommu_type1.c:warning:cast-to-smaller-integer-type-enum-iommu_cap-from-void
-|   `-- security-apparmor-policy_ns.c:warning:no-previous-prototype-for-function-alloc_unconfined
-|-- x86_64-randconfig-a012
-|   `-- drivers-vfio-vfio_iommu_type1.c:warning:cast-to-smaller-integer-type-enum-iommu_cap-from-void
-|-- x86_64-randconfig-a016
-|   `-- security-apparmor-policy_ns.c:warning:no-previous-prototype-for-function-alloc_unconfined
-`-- x86_64-randconfig-k001
-    `-- drivers-vfio-vfio_iommu_type1.c:warning:cast-to-smaller-integer-type-enum-iommu_cap-from-void
-
-elapsed time: 725m
-
-configs tested: 98
-configs skipped: 4
-
-gcc tested configs:
-arm                                 defconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-i386                          randconfig-c001
-sh                        sh7785lcr_defconfig
-powerpc                    sam440ep_defconfig
-arm                           h3600_defconfig
-mips                         cobalt_defconfig
-sparc                             allnoconfig
-arm                     eseries_pxa_defconfig
-xtensa                generic_kc705_defconfig
-arm                           sama5_defconfig
-sh                         ap325rxa_defconfig
-arm                          gemini_defconfig
-m68k                        stmark2_defconfig
-mips                         rt305x_defconfig
-arm                             rpc_defconfig
-powerpc                      pasemi_defconfig
-sh                        sh7763rdp_defconfig
-mips                    maltaup_xpa_defconfig
-xtensa                              defconfig
-sh                           se7721_defconfig
-arm                           viper_defconfig
-sh                        edosk7705_defconfig
-alpha                             allnoconfig
-powerpc                 mpc8540_ads_defconfig
-nios2                         3c120_defconfig
-powerpc                     ep8248e_defconfig
-riscv                               defconfig
-riscv                             allnoconfig
-riscv                    nommu_virt_defconfig
-i386                              debian-10.3
-riscv                    nommu_k210_defconfig
-riscv                          rv32_defconfig
-i386                   debian-10.3-kselftests
-x86_64                        randconfig-c001
-ia64                             allmodconfig
-csky                              allnoconfig
-arc                               allnoconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-m68k                             allyesconfig
-powerpc                           allnoconfig
-sh                               allmodconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-i386                                defconfig
-i386                             allyesconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-arc                  randconfig-r043-20220715
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                    rhel-8.3-kselftests
-x86_64                           rhel-8.3-syz
-
-clang tested configs:
-powerpc                     kmeter1_defconfig
-powerpc                  mpc885_ads_defconfig
-powerpc                    mvme5100_defconfig
-arm                       versatile_defconfig
-arm                              alldefconfig
-powerpc                  mpc866_ads_defconfig
-mips                     cu1830-neo_defconfig
-arm                            dove_defconfig
-arm                   milbeaut_m10v_defconfig
-powerpc                      obs600_defconfig
-x86_64                        randconfig-k001
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-i386                          randconfig-a013
-i386                          randconfig-a015
-i386                          randconfig-a011
-hexagon              randconfig-r045-20220715
-hexagon              randconfig-r041-20220715
-s390                 randconfig-r044-20220715
-riscv                randconfig-r042-20220715
-
+base-commit: 874bdbfe624e577687c2053a26aab44715c68453
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+
