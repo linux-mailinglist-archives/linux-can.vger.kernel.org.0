@@ -2,98 +2,117 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3368577048
-	for <lists+linux-can@lfdr.de>; Sat, 16 Jul 2022 19:01:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8C1857704B
+	for <lists+linux-can@lfdr.de>; Sat, 16 Jul 2022 19:02:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232053AbiGPRBU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 16 Jul 2022 13:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56552 "EHLO
+        id S231327AbiGPRCP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 16 Jul 2022 13:02:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231958AbiGPRBT (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 16 Jul 2022 13:01:19 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA4AF1F62E
-        for <linux-can@vger.kernel.org>; Sat, 16 Jul 2022 10:01:18 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id t3so10034830edd.0
-        for <linux-can@vger.kernel.org>; Sat, 16 Jul 2022 10:01:18 -0700 (PDT)
+        with ESMTP id S231613AbiGPRCN (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 16 Jul 2022 13:02:13 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E580020182
+        for <linux-can@vger.kernel.org>; Sat, 16 Jul 2022 10:02:11 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id w12so9951927edd.13
+        for <linux-can@vger.kernel.org>; Sat, 16 Jul 2022 10:02:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=amarulasolutions.com; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=o5SHoKOlnIy7h2f2yOMygK1Ar0sEJbou+Jr7kQWQWPk=;
-        b=pcZqNzB7ZJ5tm4qEGbBxeyD5nosknoKSBJSrW3BjFwMUsUoJCIwBb48kpHkD0t9a7b
-         fbwmnjsJ++wB1WpDVOjtacgwPae9ogUSWYITD6H6i08N6cJVT0JQbBMfb+LoYR0fU/fC
-         t4/FM+SRVJrG+fw1u4wGKSYoxBVsADZYnzg9w=
+        bh=Kj9ELHhL1KjL7gqHkhN2yD+i8QV7t3oEetXKmHdIgWw=;
+        b=bZk/Ttg+pcR6vXUqh/H7EkGHz2DOfwnTd2GF8e+YBPlNpaoz3IiBfhngJZMEWTX0tS
+         XeJ8kpu4Epyh15uWjLQ+S2naF6KOUtdXWeWsm6rS8hRxgofi6HkSV5U3tdsy2hMOsHYT
+         zy7v/28iyl8JP1rFgybjXk3ZC0rKndIOeD+I0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=o5SHoKOlnIy7h2f2yOMygK1Ar0sEJbou+Jr7kQWQWPk=;
-        b=pWYhPeagSUIYvJUkBcH3vxC4kG5EEmwG0qDc8szgyx0qK0h0NcDU4piLHtH4oa0Ma2
-         m2HmNUCrZ2VHAwfkn47D1bDiWInWARUF0m0AVAc0dRj6qC6hpGEmQl4MzbESCTeXz2tH
-         1pYEFXbZhB566AP3PG05TNkVIsKqBt3GB0y0CX5fkL/fgxSDPHsO6/QmlzXbxK5k9sBv
-         H0h450CBt7ec+7nu4WdvF1V61eqjrl6H8uN3yhyl0otbWWlI94AAdIZ38h00wKKTBF/E
-         V6N2s/c1aeogw5v4FlKrDyiGaDnWLW/DWC8Lkig3TpWs3fHkfPYFXpW7ycB3KqjtzY/H
-         vlaQ==
-X-Gm-Message-State: AJIora/pChgU7EMqlp49pIEpWT1z8Do1qQjPWWWv0bg1XZJH/esWUMX3
-        QtXK0AGDWpne641fao5UpNrhvw==
-X-Google-Smtp-Source: AGRyM1sGWHM02srFYC9mHTuQJ/Y/gQ2JJJVPaV8AMXtdV9bGhz3PDauDqKpxN5d3cU0Gm+q+mbimfQ==
-X-Received: by 2002:aa7:cac7:0:b0:43a:c5ba:24a6 with SMTP id l7-20020aa7cac7000000b0043ac5ba24a6mr26254692edt.84.1657990877524;
-        Sat, 16 Jul 2022 10:01:17 -0700 (PDT)
+        bh=Kj9ELHhL1KjL7gqHkhN2yD+i8QV7t3oEetXKmHdIgWw=;
+        b=AVu+y9dX9DqiMlFfWflIm+hypewxW5iA5FcG1l4g2uTmw6yTAbHfAJjux/rejV2KZ7
+         lMFwKWArG58JWy/gxASKL7ze1YvhCai2MejcZpuicgBi/l14I3xd5iinK1UTvCIHswP2
+         D0xAO7UL6ogvvpQUQSWPMHFzwz5fUle0TsfgmT+idGANUa2HhqmTCEKS5pXnSheKLrfz
+         wXc3syAxcIyaLSegmiGQqWOehPRgTFCaAEq9hQ9g8ZLGAWGlCWNfaDWZEnkTY91Oetmh
+         UnhqcoVQkbIYNmH8xns/w9oj5UPFfwgUl7S+dOaYWxx58mFv22MkeDnwFD1S+45RSp6f
+         q+fA==
+X-Gm-Message-State: AJIora8DioXz1Km0IChVrk0bC02cPReJe5ETIUkFvDxuOuDuNdy3pcKC
+        R19Jv49OfX9q2qyB7/2gD6GOwA==
+X-Google-Smtp-Source: AGRyM1tJCLaZ0ClqAmFmYKdY8ydo568bbQML09uCOoggZew+Iz1u7HVIJOtoWgVsO5VfCO6VV40tNg==
+X-Received: by 2002:a05:6402:f19:b0:43a:f5db:bc7c with SMTP id i25-20020a0564020f1900b0043af5dbbc7cmr16309453eda.211.1657990930578;
+        Sat, 16 Jul 2022 10:02:10 -0700 (PDT)
 Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-80-182-13-224.pool80182.interbusiness.it. [80.182.13.224])
-        by smtp.gmail.com with ESMTPSA id i22-20020aa7c716000000b0043a64eee322sm2953898edq.28.2022.07.16.10.01.16
+        by smtp.gmail.com with ESMTPSA id b6-20020aa7cd06000000b004355998ec1asm4970471edw.14.2022.07.16.10.02.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Jul 2022 10:01:17 -0700 (PDT)
+        Sat, 16 Jul 2022 10:02:10 -0700 (PDT)
 From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        Max Staudt <max@enpas.org>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
         Paolo Abeni <pabeni@redhat.com>,
-        =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
         Wolfgang Grandegger <wg@grandegger.com>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH] can: c_can: remove wrong comment
-Date:   Sat, 16 Jul 2022 19:01:12 +0200
-Message-Id: <20220716170112.2020291-1-dario.binacchi@amarulasolutions.com>
+Subject: [RFC PATCH] can: can327: remove useless header inclusions
+Date:   Sat, 16 Jul 2022 19:02:01 +0200
+Message-Id: <20220716170201.2020510-1-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The comment referred to a status (warning) other than the one that was
-being managed (active error).
+Include only the necessary headers.
 
+CC: Max Staudt <max@enpas.org>
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+
 ---
 
- drivers/net/can/c_can/c_can_main.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/net/can/can327.c | 19 -------------------
+ 1 file changed, 19 deletions(-)
 
-diff --git a/drivers/net/can/c_can/c_can_main.c b/drivers/net/can/c_can/c_can_main.c
-index a7362af0babb..ed4db4cf8716 100644
---- a/drivers/net/can/c_can/c_can_main.c
-+++ b/drivers/net/can/c_can/c_can_main.c
-@@ -952,7 +952,6 @@ static int c_can_handle_state_change(struct net_device *dev,
+diff --git a/drivers/net/can/can327.c b/drivers/net/can/can327.c
+index 5da7778d92dc..5b0686f953ed 100644
+--- a/drivers/net/can/can327.c
++++ b/drivers/net/can/can327.c
+@@ -12,28 +12,9 @@
  
- 	switch (error_type) {
- 	case C_CAN_NO_ERROR:
--		/* error warning state */
- 		cf->can_id |= CAN_ERR_CRTL;
- 		cf->data[1] = CAN_ERR_CRTL_ACTIVE;
- 		cf->data[6] = bec.txerr;
+ #define pr_fmt(fmt) "can327: " fmt
+ 
+-#include <linux/init.h>
+ #include <linux/module.h>
+-
+-#include <linux/bitops.h>
+-#include <linux/ctype.h>
+-#include <linux/errno.h>
+-#include <linux/kernel.h>
+-#include <linux/list.h>
+-#include <linux/lockdep.h>
+-#include <linux/netdevice.h>
+-#include <linux/skbuff.h>
+-#include <linux/spinlock.h>
+-#include <linux/string.h>
+ #include <linux/tty.h>
+-#include <linux/tty_ldisc.h>
+-#include <linux/workqueue.h>
+-
+-#include <uapi/linux/tty.h>
+-
+-#include <linux/can.h>
+ #include <linux/can/dev.h>
+-#include <linux/can/error.h>
+ #include <linux/can/rx-offload.h>
+ 
+ #define CAN327_NAPI_WEIGHT 4
 -- 
 2.32.0
 
