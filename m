@@ -2,248 +2,335 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FD14575DE2
-	for <lists+linux-can@lfdr.de>; Fri, 15 Jul 2022 10:49:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7575576B5F
+	for <lists+linux-can@lfdr.de>; Sat, 16 Jul 2022 05:01:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231512AbiGOIsR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 15 Jul 2022 04:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39096 "EHLO
+        id S231284AbiGPDBL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 15 Jul 2022 23:01:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232327AbiGOIsP (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 15 Jul 2022 04:48:15 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08FDE820EE
-        for <linux-can@vger.kernel.org>; Fri, 15 Jul 2022 01:48:02 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-31c9b70c382so40901657b3.6
-        for <linux-can@vger.kernel.org>; Fri, 15 Jul 2022 01:48:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GlpiCsiJACAzGJIoXJLyZAQ/QfGwql3kZ9OFjybuRPs=;
-        b=B60QkgWi6HWnMcb+AoPxv5JjbDtf3P8dquBdqgxPN+SbJHytK1zO3aQo68yHXz68L3
-         qwRFXltFIU2DnUvPhm/nS7ixOdg/nDfIGYORb+deWEZeCsS+rLP0HZmrQ6YcUg7xvw4U
-         qw3eO3Q5+/WxFk18ywz+n5EqqxXbhf+oBPpD+YtKbGHYcrgbGW7KucNbQOOLDfl8sloD
-         MRwMF0s+fLAc3KjytAUR1YS/rR8kOYtkvBOCAkC4KygLtLNz4knekTcPX8kX/AVFqDrb
-         x0oI3AnDLIPh9EF58u6JfUWjzzdGkGWrH3aVr081P5FQh5mRQEwED85sNRkGk7ozxb18
-         cRRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GlpiCsiJACAzGJIoXJLyZAQ/QfGwql3kZ9OFjybuRPs=;
-        b=Lu3PDdN8Oiu/IrYqyJc+GiGcnLdKi7XdHH+y/o4KVapYya312593zfc0RkvdLQCGDa
-         sKZDsHHaoQwWWHVEtWvK7zdcDNprmltoHKG5Th1MHIBRdjVxNRGvFoRiOI75xrYSmlRl
-         ptI/oCpvSGNka6M+VTAi/AcCRQ+g62Zwce0RNpsOnre0POvUYHV0ivc0M7SIiY3kcblu
-         aMhX4zkmR9vS5D5+JVHIHfje3yE/e2bJzE0h+Vy+1GOrC1rjFyTjiE4SE/TpndLRMj6n
-         KIcEIS+NtH0Lq6s9tV9i7fLPh++k0oJkWvxXdgWWdRfFyRJ/DiVdLU1fFSF16RmhJfoM
-         3NCg==
-X-Gm-Message-State: AJIora+8vtWFceAPKAd/UhYZQ/DIaGclA95+LwI7rixLVh/i1TiVftjr
-        PLiJhh8L55DZz/WHbLRNE8kgKaxirY10LSyHMEWZA5eagvg=
-X-Google-Smtp-Source: AGRyM1s3fJL2mi0UUua4TP0e0u40InqRweOvIYH5f7r8e8uQxSXnOZA/CO5qDnzLmmSBnQVkQUQ7rEJ+4/qlGVaNRNs=
-X-Received: by 2002:a0d:f703:0:b0:31d:6e5b:20c with SMTP id
- h3-20020a0df703000000b0031d6e5b020cmr14632760ywf.78.1657874881003; Fri, 15
- Jul 2022 01:48:01 -0700 (PDT)
+        with ESMTP id S231244AbiGPDBK (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 15 Jul 2022 23:01:10 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B7A8E4D1;
+        Fri, 15 Jul 2022 20:01:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657940468; x=1689476468;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=T/cGF5Nkf4YWawUFDvRxQd3G489QI1/mvWEiFyBeprw=;
+  b=I+1XULW4FZYTwJrrV++psp5JubM3M7n8Mp3fDJQ7Hd1CbYxDVafulCnO
+   yHdpTnjEyYnaSMC8RDA3Qg3UxEb/TuITN2wp2KcTIAS9LvgC2ysKJPQp9
+   evyS1hQS0S6Rs9n73JYdqk37/vbm0zxkR37YK+upP84IeIOyYxrfR8u0i
+   LgXj5gLYs21V+Ho8krVteYyDvq45RiHRifKbrrwy/mXuRk9WvKzAIFc/g
+   PX96akBIAcLeK2YnTXMbTi/HT2XaiDvCYdFS20MwGhZe6l3D+Oh7QW18h
+   bNdFhrpxAWNLqzQ1QJxNKZc+rFBPSS63CKzLaGrIDFf5DkpexvimQWqrN
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10409"; a="268961733"
+X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
+   d="scan'208";a="268961733"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2022 20:01:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,275,1650956400"; 
+   d="scan'208";a="596679266"
+Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 15 Jul 2022 20:01:00 -0700
+Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1oCY35-00014O-2o;
+        Sat, 16 Jul 2022 03:00:55 +0000
+Date:   Sat, 16 Jul 2022 11:00:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     openbmc@lists.ozlabs.org, ntfs3@lists.linux.dev,
+        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+        linux-can@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvm@vger.kernel.org, apparmor@lists.ubuntu.com,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master] BUILD REGRESSION
+ 6014cfa5bf32cf8c5c58b3cfd5ee0e1542c8a825
+Message-ID: <62d229b5.vqqoX60YvzB2JbT+%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20220714160541.2071-1-socketcan@hartkopp.net> <20220714160541.2071-4-socketcan@hartkopp.net>
- <20220714200601.mklari3b6uvb7b2e@pengutronix.de> <c731143e-f476-b2f8-c08c-df66339d98f8@hartkopp.net>
- <CAMZ6RqJ0=PhrJUHaZR6QNWkv2vx690AiwPF2RLv1ou_JGX1qxg@mail.gmail.com> <20220715073728.csp4hgbrgr2q62zu@pengutronix.de>
-In-Reply-To: <20220715073728.csp4hgbrgr2q62zu@pengutronix.de>
-From:   Vincent Mailhol <vincent.mailhol@gmail.com>
-Date:   Fri, 15 Jul 2022 17:47:50 +0900
-Message-ID: <CAMZ6RqLxPHc3fW3711ExZxtmWmp7b7O8QhqY34R=9A8v-v8s9Q@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 3/5] can: dev: add CAN XL support
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,WEIRD_PORT autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri. 15 Jul. 2022 at 16:37, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> On 15.07.2022 12:53:14, Vincent Mailhol wrote:
-> > On Fri. 15 Jul. 2022 at 06:14, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
-> > > On 14.07.22 22:06, Marc Kleine-Budde wrote:
-> > > > On 14.07.2022 18:05:39, Oliver Hartkopp wrote:
-> > >
-> > > (..)
-> > >
-> > > >> +struct sk_buff *alloc_canxl_skb(struct net_device *dev,
-> > > >> +                            struct canxl_frame **cfx,
-> > > >> +                            unsigned int datalen)
-> > > >> +{
-> > > >> +    struct sk_buff *skb;
-> > > >> +
-> > > >> +    if (datalen < CANXL_MIN_DLEN || datalen > CANXL_MAX_DLEN)
-> > > >> +            goto out_error;
-> > > >> +
-> > > >> +    skb = netdev_alloc_skb(dev, sizeof(struct can_skb_priv) +
-> > > >> +                           CANXL_HEAD_SZ + datalen);
-> >
-> > If usings the flexible array member, this would become:
-> >
-> >         skb = netdev_alloc_skb(dev, sizeof(struct can_skb_priv) +
-> >                                sizeof(struct canxl_frame) + datalen);
-> >
-> > or even:
-> >
-> >         skb = netdev_alloc_skb(dev, sizeof(struct can_skb_priv) +
-> >                                struct_size(*cxl, data, datalen));
->
-> ACK. I was thinking of the 2nd option with the struct_size().
->
-> > This is an illustration of my point that flexible data arrays are more
-> > idiomatic. I find it weird to have to mix sizeof(struct can_skb_priv)
-> > and CANXL_HEAD_SZ in the same expression...
->
-> > > >> +    if (unlikely(!skb))
-> > > >> +            goto out_error;
-> > > >> +
-> > > >> +    skb->protocol = htons(ETH_P_CANXL);
-> > > >> +    skb->pkt_type = PACKET_BROADCAST;
-> > > >> +    skb->ip_summed = CHECKSUM_UNNECESSARY;
-> > > >> +
-> > > >> +    skb_reset_mac_header(skb);
-> > > >> +    skb_reset_network_header(skb);
-> > > >> +    skb_reset_transport_header(skb);
-> > > >> +
-> > > >> +    can_skb_reserve(skb);
-> > > >> +    can_skb_prv(skb)->ifindex = dev->ifindex;
-> > > >> +    can_skb_prv(skb)->skbcnt = 0;
-> > > >> +
-> > > >> +    *cfx = skb_put_zero(skb, CANXL_HEAD_SZ + datalen);
-> > > >
-> > > > Should the CANXL_XLF be set here?
-> > >
-> > > Yes, we can set that bit here directly - for convenience reasons ;-)
-> > >
-> > > > I have a bad feeling if we have a struct canxl_frame with a fixed size,
-> > > > but it might not completely be backed by data.....
-> >
-> > I tried to think hard of what could go wrong with the
-> > data[CANXL_MAX_DLEN] declaration.
-> >
-> > The worst I could think of would be some:
-> >         int datalen = 64; /* or anything less than CANXL_MAX_DLEN */
-> >         struct canxl_frame *cxl1 = malloc(CANXL_HEAD_SZ + datalen);
-> >         struct canxl_frame *cxl2 = malloc(CANXL_HEAD_SZ + datalen);
-> >
-> >         memcpy(cxl1, cxl2, sizeof(*cxl1));
-> >
-> > But that example is a bit convoluted. That's why I wrote in my
-> > previous message that I saw no killer arguments against it.
->
-> It just feels wrong to have a pointer to a struct canxl_frame that's
-> only backed half by memory.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+branch HEAD: 6014cfa5bf32cf8c5c58b3cfd5ee0e1542c8a825  Add linux-next specific files for 20220715
 
-I follow you on this feeling. But have no concrete bad examples of how
-the data[CANXL_MAX_DLEN] could be misused.
+Error/Warning reports:
 
-> I haven't followed the flex array discussion
-> in great detail, but it opens a whole class of errors if arbitrary
-> kernel memory can be accessed with struct canxl_frame::data using
-> seemingly valid array indices.
+https://lore.kernel.org/linux-doc/202207021352.PpKTUY8V-lkp@intel.com
+https://lore.kernel.org/linux-doc/202207031437.qIh6LFcx-lkp@intel.com
+https://lore.kernel.org/linux-doc/202207051821.3f0eRIsL-lkp@intel.com
+https://lore.kernel.org/linux-mm/202206292052.LsFui3zO-lkp@intel.com
+https://lore.kernel.org/linux-mm/202207160452.HPLSlqzA-lkp@intel.com
+https://lore.kernel.org/llvm/202207160039.bfW3l3uk-lkp@intel.com
 
-The point in the previous discussion is that the kernel should always
-crop the returned frames. If implemented correctly, such memory leaks
-should not occur.
+Error/Warning: (recently discovered and may have been fixed)
 
-> > > > For example, I've updated the gs_usb driver to work with flexible arrays
-> > > > to accommodate the different USB frame length:
-> > > >
-> > > > https://elixir.bootlin.com/linux/latest/source/drivers/net/can/usb/gs_usb.c#L216
-> > > >
-> > > > Maybe we should talk to Kees Cook what's best to use here.
-> > >
-> > > I see this struct canxl_frame with 2048 byte of data more as a user
-> > > space thing.
-> > >
-> > > You can simply read() from the CAN_RAW socket into this struct (as you
-> > > know it from CAN/CANFD) and it works safely.
-> > >
-> > > That we optimize the length to the really needed length inside the skb
-> > > and for CAN XL socket read/write operations is on another page for me.
-> > >
-> > > If we *only* had the canxl data structure inside the kernel I would be
-> > > definitely ok with flexible arrays.
->
-> We don't have to use the same data structure in user space and in the
-> kernel.
->
-> > > The current implementation indeed never allocates space with the
-> > > sizeof(struct canxl_frame) ...
-> > >
-> > > But I tend to maintain the pattern we introduced for CAN and CAN FD for
-> > > the user space visible data structures. That is clearer and safe to use
-> > > by default instead of reading documentation about flexible arrays and
-> > > how to build some data structure on your own.
-> >
-> > Here, you are making the assumption that the end user will only be
-> > familiar with the CAN(-FD) and not with other concepts.
-> >
-> > Building data structures on your own is fairly common, the best
-> > example being the struct iphdr or the struct tcphdr for TCP/IP:
-> >   * https://elixir.bootlin.com/linux/latest/source/include/uapi/linux/ip.h#L86
-> >   * https://elixir.bootlin.com/linux/latest/source/include/uapi/linux/tcp.h#L25
-> > (in those examples, it is not a flexible array member but the concept
-> > is basically the same).
->
-> struct_size() is not exported to user space, but I think this could be
-> changed.
+Documentation/PCI/endpoint/pci-vntb-function.rst:82: WARNING: Unexpected indentation.
+Documentation/PCI/endpoint/pci-vntb-howto.rst:131: WARNING: Title underline too short.
+Documentation/virt/kvm/api.rst:8265: WARNING: Title underline too short.
+Documentation/virt/kvm/api.rst:8272: WARNING: Unexpected indentation.
+aarch64-linux-ld: Unexpected GOT/PLT entries detected!
+aarch64-linux-ld: Unexpected run-time procedure linkages detected!
+drivers/net/wireless/mac80211_hwsim.c:1431:37: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+drivers/pci/endpoint/functions/pci-epf-vntb.c:1247: undefined reference to `ntb_register_device'
+drivers/pci/endpoint/functions/pci-epf-vntb.c:174: undefined reference to `ntb_link_event'
+drivers/pci/endpoint/functions/pci-epf-vntb.c:262: undefined reference to `ntb_db_event'
+drivers/pci/endpoint/functions/pci-epf-vntb.c:975:5: warning: no previous prototype for 'pci_read' [-Wmissing-prototypes]
+drivers/pci/endpoint/functions/pci-epf-vntb.c:984:5: warning: no previous prototype for 'pci_write' [-Wmissing-prototypes]
+drivers/vfio/vfio_iommu_type1.c:2141:35: warning: cast to smaller integer type 'enum iommu_cap' from 'void *' [-Wvoid-pointer-to-enum-cast]
+fs/nfsd/nfsctl.c:1504:17: error: use of undeclared identifier 'NFS4_CLIENTS_PER_GB'
+security/apparmor/policy_ns.c:83:20: warning: no previous prototype for 'alloc_unconfined' [-Wmissing-prototypes]
+security/apparmor/policy_ns.c:83:20: warning: no previous prototype for function 'alloc_unconfined' [-Wmissing-prototypes]
 
-Good luck with that!
+Unverified Error/Warning (likely false positive, please contact us if interested):
 
-struct_size() as-is can not be exported as-is because it will break
-existing programs which already have the same declaration. So we would
-need to declare a __struct_size(). I would absolutely love to see this
-exported but I would be surprised if such discussion did not already
-occured in the past.
+arch/x86/kernel/cpu/rdrand.c:36 x86_init_rdrand() error: uninitialized symbol 'prev'.
+drivers/devfreq/mtk-cci-devfreq.c:135 mtk_ccifreq_target() warn: variable dereferenced before check 'drv' (see line 130)
+drivers/gpio/gpio-xilinx.c:709:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+drivers/gpio/gpiolib-cdev.c:2563:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+drivers/gpio/gpiolib.c:2215:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+drivers/gpu/drm/amd/amdgpu/../display/dc/bios/bios_parser2.c:2994:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+drivers/gpu/drm/drm_mipi_dbi.c:876:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+drivers/hid/hid-input.c:2276:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+drivers/i2c/busses/i2c-designware-master.c:165:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+drivers/i2c/busses/i2c-jz4780.c:359:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+drivers/i2c/busses/i2c-mt65xx.c:927:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+drivers/i2c/busses/i2c-npcm7xx.c:639 npcm_i2c_slave_enable() error: buffer overflow 'npcm_i2caddr' 2 <= 9
+drivers/i2c/busses/i2c-s3c2410.c:746:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+drivers/i2c/busses/i2c-xiic.c:540:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+drivers/iio/industrialio-buffer.c:927:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+drivers/md/dm-mpath.c:1681:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+drivers/media/cec/i2c/ch7322.c:332:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+drivers/mfd/da9062-core.c:323:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+drivers/misc/habanalabs/gaudi2/gaudi2.c:8728:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+drivers/mmc/host/dw_mmc.c:989:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+drivers/net/can/slcan/slcan-core.c:601:14: sparse:    void *
+drivers/net/can/slcan/slcan-core.c:601:14: sparse:    void [noderef] __rcu *
+drivers/net/can/slcan/slcan-core.c:601:14: sparse: sparse: incompatible types in comparison expression (different address spaces):
+drivers/net/phy/phylink.c:887 phylink_change_inband_advert() error: we previously assumed 'pl->pcs' could be null (see line 870)
+drivers/nfc/trf7970a.c:631:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+drivers/pinctrl/core.c:2093:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+drivers/pinctrl/stm32/pinctrl-stm32.c:1627:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+drivers/power/supply/bq24190_charger.c:1944:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+drivers/power/supply/bq24257_charger.c:1078:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+drivers/power/supply/bq25890_charger.c:847:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+drivers/power/supply/bq27xxx_battery.c:1123:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+drivers/power/supply/rt9455_charger.c:1055:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+drivers/power/supply/sbs-battery.c:355:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+drivers/regulator/core.c:5171:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+drivers/regulator/s2mps11.c:1226:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+drivers/regulator/slg51000-regulator.c:436:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+drivers/scsi/qla2xxx/qla_os.c:336:5: sparse: sparse: symbol 'ql2xdelay_before_pci_error_handling' was not declared. Should it be static?
+drivers/target/target_core_device.c:1013:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+drivers/tty/n_gsm.c:1526:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+drivers/usb/gadget/composite.c:1080:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+drivers/video/fbdev/sh_mobile_lcdcfb.c:2505:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+fs/ext4/extents.c:1293:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+fs/kernel_read_file.c:61 kernel_read_file() warn: impossible condition '(i_size > (((~0) >> 1))) => (s64min-s64max > s64max)'
+include/linux/bits.h:9:41: warning: shift by negative count ('-1') [-Wanalyzer-shift-count-negative]
+include/linux/libata.h:2052:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+kernel/params.c:214:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+lib/842/842_decompress.c:210:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+lib/kobject.c:683:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
+net/bluetooth/aosp.c:114:1: internal compiler error: in arc_ccfsm_record_condition, at config/arc/arc.cc:5500
+net/bluetooth/hci_request.c:2029:1: internal compiler error: in arc_ccfsm_record_condition, at config/arc/arc.cc:5500
+net/caif/cfctrl.c:583:1: internal compiler error: in arc_ifcvt, at config/arc/arc.cc:9642
 
-> > I think it is fair to expect from a developer using Berkeley sockets
-> > (what SocketCAN is) to be familiar with this.
-> >
-> > In the worst case, the developper who still completely ignore the
-> > documentation and just do sed "s/canfd/canxl/g" on their existing code
-> > base will eventually do this:
-> >         write(sock, &cxl, sizeof(canxl));
-> > And that would fail immediately (because sizeof(canxl) <
-> > CANXL_MIN_TU). So I think it is still safe. The real foot gun is when
-> > you can write incorrect code that still works (e.g. buffer overflow).
-> > If it directly fails, people will copy/paste the accepted answer on
-> > stackoverflow and will eventually do the correct:
-> >         write(sock, &cxl, sizeof(cxl) + cxl.len);
-> >
-> > Finally, for both solutions, user can not do this anymore:
-> >         assert(read(sock, &cxl, sizeof(cxl)) == sizeof(cxl));
-> > But instead should do:
-> >         assert(read(sock, &cxl, sizeof(cxl)) >= CANXL_MINTU);
-> > So regardless of the solution we use, the developer needs to be aware
-> > to some extent of the variable size (and ignoring the return value of
-> > read() is a bad practice so I won't accept this as a counterargument).
-> >
-> > The debate is really on "reusing CAN(-FD) patterns" vs. "doing
-> > idiomatic C". I will not veto the data[CANXL_MAX_DLEN], but I vote for
-> > the flexible array member for the reasons listed here.
->
-> How are raw Ethernet frames handled in user space?
+Error/Warning ids grouped by kconfigs:
 
-The first example of a "iphdr c example" in Google gives me:
-https://github.com/joshlong/interesting-native-code-examples/blob/master/packet_sniffer.c#L133
+gcc_recent_errors
+|-- alpha-allyesconfig
+|   |-- drivers-pci-endpoint-functions-pci-epf-vntb.c:warning:no-previous-prototype-for-pci_read
+|   |-- drivers-pci-endpoint-functions-pci-epf-vntb.c:warning:no-previous-prototype-for-pci_write
+|   `-- security-apparmor-policy_ns.c:warning:no-previous-prototype-for-alloc_unconfined
+|-- alpha-randconfig-c004-20220716
+|   |-- drivers-pci-endpoint-functions-pci-epf-vntb.c:warning:no-previous-prototype-for-pci_read
+|   `-- drivers-pci-endpoint-functions-pci-epf-vntb.c:warning:no-previous-prototype-for-pci_write
+|-- arc-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-bios-bios_parser2.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
+|   |-- drivers-misc-habanalabs-gaudi2-gaudi2.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
+|   |-- drivers-net-wireless-mac80211_hwsim.c:warning:cast-to-pointer-from-integer-of-different-size
+|   |-- drivers-pci-endpoint-functions-pci-epf-vntb.c:warning:no-previous-prototype-for-pci_read
+|   |-- drivers-pci-endpoint-functions-pci-epf-vntb.c:warning:no-previous-prototype-for-pci_write
+|   |-- drivers-target-target_core_device.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
+|   `-- security-apparmor-policy_ns.c:warning:no-previous-prototype-for-alloc_unconfined
+|-- arc-randconfig-m031-20220716
+|   |-- drivers-devfreq-mtk-cci-devfreq.c-mtk_ccifreq_target()-warn:variable-dereferenced-before-check-drv-(see-line-)
+|   `-- drivers-i2c-busses-i2c-npcm7xx.c-npcm_i2c_slave_enable()-error:buffer-overflow-npcm_i2caddr
+|-- arc-randconfig-r013-20220715
+|   |-- drivers-usb-gadget-composite.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
+|   |-- net-bluetooth-aosp.c:internal-compiler-error:in-arc_ccfsm_record_condition-at-config-arc-arc.cc
+|   `-- net-bluetooth-hci_request.c:internal-compiler-error:in-arc_ccfsm_record_condition-at-config-arc-arc.cc
+|-- arc-randconfig-r032-20220715
+|   |-- drivers-gpio-gpio-xilinx.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
+|   |-- drivers-gpio-gpiolib-cdev.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
+|   |-- drivers-gpio-gpiolib.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
+|   |-- drivers-gpu-drm-drm_mipi_dbi.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
+|   |-- drivers-hid-hid-input.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
+|   |-- drivers-i2c-busses-i2c-designware-master.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
+|   |-- drivers-i2c-busses-i2c-jz4780.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
+|   |-- drivers-i2c-busses-i2c-mt65xx.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
+|   |-- drivers-i2c-busses-i2c-s3c2410.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
+|   |-- drivers-i2c-busses-i2c-xiic.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
+|   |-- drivers-iio-industrialio-buffer.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
+|   |-- drivers-md-dm-mpath.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
+|   |-- drivers-media-cec-i2c-ch7322.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
+|   |-- drivers-mfd-da9062-core.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
+|   |-- drivers-mmc-host-dw_mmc.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
+|   |-- drivers-nfc-trf7970a.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
+|   |-- drivers-pinctrl-core.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
+|   |-- drivers-pinctrl-stm32-pinctrl-stm32.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
+|   |-- drivers-power-supply-bq24190_charger.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
+|   |-- drivers-power-supply-bq24257_charger.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
+|   |-- drivers-power-supply-bq25890_charger.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
+|   |-- drivers-power-supply-bq27xxx_battery.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
+|   |-- drivers-power-supply-rt9455_charger.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
+|   |-- drivers-power-supply-sbs-battery.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
+|   |-- drivers-regulator-core.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
+|   |-- drivers-regulator-s2mps11.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
+|   |-- drivers-regulator-slg51000-regulator.c:internal-compiler-error:in-arc_ifcvt-at-config-arc-arc.cc
+clang_recent_errors
+|-- arm-versatile_defconfig
+|   `-- fs-nfsd-nfsctl.c:error:use-of-undeclared-identifier-NFS4_CLIENTS_PER_GB
+|-- i386-randconfig-a015
+|   `-- fs-nfsd-nfsctl.c:error:use-of-undeclared-identifier-NFS4_CLIENTS_PER_GB
+|-- powerpc-mvme5100_defconfig
+|   `-- fs-nfsd-nfsctl.c:error:use-of-undeclared-identifier-NFS4_CLIENTS_PER_GB
+|-- x86_64-randconfig-a001
+|   `-- drivers-vfio-vfio_iommu_type1.c:warning:cast-to-smaller-integer-type-enum-iommu_cap-from-void
+|-- x86_64-randconfig-a005
+|   |-- drivers-vfio-vfio_iommu_type1.c:warning:cast-to-smaller-integer-type-enum-iommu_cap-from-void
+|   `-- security-apparmor-policy_ns.c:warning:no-previous-prototype-for-function-alloc_unconfined
+|-- x86_64-randconfig-a012
+|   `-- drivers-vfio-vfio_iommu_type1.c:warning:cast-to-smaller-integer-type-enum-iommu_cap-from-void
+|-- x86_64-randconfig-a016
+|   `-- security-apparmor-policy_ns.c:warning:no-previous-prototype-for-function-alloc_unconfined
+`-- x86_64-randconfig-k001
+    `-- drivers-vfio-vfio_iommu_type1.c:warning:cast-to-smaller-integer-type-enum-iommu_cap-from-void
 
-(I am not saying this is the best example, but have a clear example of
-buffer size manipulation).
+elapsed time: 725m
 
-Another example of flexible array member:
-  * kernel definition:
-https://elixir.bootlin.com/linux/latest/source/include/uapi/linux/ethtool.h#L1163
-  * userland code:
-https://kernel.googlesource.com/pub/scm/network/ethtool/ethtool/+/refs/heads/ethtool-3.4.y/ethtool.c#2989
+configs tested: 98
+configs skipped: 4
 
-Yours sincerely,
-Vincent Mailhol
+gcc tested configs:
+arm                                 defconfig
+arm                              allyesconfig
+arm64                            allyesconfig
+i386                          randconfig-c001
+sh                        sh7785lcr_defconfig
+powerpc                    sam440ep_defconfig
+arm                           h3600_defconfig
+mips                         cobalt_defconfig
+sparc                             allnoconfig
+arm                     eseries_pxa_defconfig
+xtensa                generic_kc705_defconfig
+arm                           sama5_defconfig
+sh                         ap325rxa_defconfig
+arm                          gemini_defconfig
+m68k                        stmark2_defconfig
+mips                         rt305x_defconfig
+arm                             rpc_defconfig
+powerpc                      pasemi_defconfig
+sh                        sh7763rdp_defconfig
+mips                    maltaup_xpa_defconfig
+xtensa                              defconfig
+sh                           se7721_defconfig
+arm                           viper_defconfig
+sh                        edosk7705_defconfig
+alpha                             allnoconfig
+powerpc                 mpc8540_ads_defconfig
+nios2                         3c120_defconfig
+powerpc                     ep8248e_defconfig
+riscv                               defconfig
+riscv                             allnoconfig
+riscv                    nommu_virt_defconfig
+i386                              debian-10.3
+riscv                    nommu_k210_defconfig
+riscv                          rv32_defconfig
+i386                   debian-10.3-kselftests
+x86_64                        randconfig-c001
+ia64                             allmodconfig
+csky                              allnoconfig
+arc                               allnoconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+m68k                             allyesconfig
+powerpc                           allnoconfig
+sh                               allmodconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+i386                                defconfig
+i386                             allyesconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+arc                  randconfig-r043-20220715
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-syz
+
+clang tested configs:
+powerpc                     kmeter1_defconfig
+powerpc                  mpc885_ads_defconfig
+powerpc                    mvme5100_defconfig
+arm                       versatile_defconfig
+arm                              alldefconfig
+powerpc                  mpc866_ads_defconfig
+mips                     cu1830-neo_defconfig
+arm                            dove_defconfig
+arm                   milbeaut_m10v_defconfig
+powerpc                      obs600_defconfig
+x86_64                        randconfig-k001
+x86_64                        randconfig-a005
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+x86_64                        randconfig-a016
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+i386                          randconfig-a013
+i386                          randconfig-a015
+i386                          randconfig-a011
+hexagon              randconfig-r045-20220715
+hexagon              randconfig-r041-20220715
+s390                 randconfig-r044-20220715
+riscv                randconfig-r042-20220715
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
