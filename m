@@ -2,135 +2,201 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34DD157769E
-	for <lists+linux-can@lfdr.de>; Sun, 17 Jul 2022 16:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A19C7577874
+	for <lists+linux-can@lfdr.de>; Sun, 17 Jul 2022 23:39:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233186AbiGQOND (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 17 Jul 2022 10:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44726 "EHLO
+        id S231370AbiGQVjA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 17 Jul 2022 17:39:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233033AbiGQONC (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 17 Jul 2022 10:13:02 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC211402A
-        for <linux-can@vger.kernel.org>; Sun, 17 Jul 2022 07:13:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1658067179;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
-    Subject:Sender;
-    bh=vnZBbJ+iTZ6WkFe7iW5XTvELIKNVPMTKrtSIFrUsaTI=;
-    b=VaDzZ7R6Q3rgo0OXDP4oUuLq5Ifmn+4dFkZWmRY9carLxEF6tqDvvIcelj62ZHw0XF
-    5TiigN6EkngPbPXTqYXwmCqpTmh8Uv+SqEU/Kw28vPwzG6im5ljq4oZDVu5V1jXReDso
-    4u+UzjAyUqio/oKX9S08ICbBs3i+PiSzb9Seto3iYxTbqMJ4d5UowwYqCnL5XDu4M00l
-    eTus4Jn2epfYVJQVXXRr7PAPao1BLiMA/tVUfFfOhjj99c+jNWPcHdbKcjXgHio+NYlr
-    /WzrNlqro+nZByv9VOv5uvvx2VXugHk4PrSKx4YgmLsc9AmnkRBicc5vu8HinVlwBI6L
-    KaOg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytJSr63tDxrw=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a00:6020:1cfd:d100::b82]
-    by smtp.strato.de (RZmta 47.47.0 AUTH)
-    with ESMTPSA id t870d5y6HECxBA8
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Sun, 17 Jul 2022 16:12:59 +0200 (CEST)
-Message-ID: <507b5973-d673-4755-3b64-b41cb9a13b6f@hartkopp.net>
-Date:   Sun, 17 Jul 2022 16:12:59 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC PATCH 0/5] can: slcan: extend supported features (step 2)
-Content-Language: en-US
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        linux-can <linux-can@vger.kernel.org>
+        with ESMTP id S230185AbiGQVi6 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 17 Jul 2022 17:38:58 -0400
+Received: from mail.enpas.org (zhong.enpas.org [46.38.239.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 89DC7656A;
+        Sun, 17 Jul 2022 14:38:57 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        by mail.enpas.org (Postfix) with ESMTPSA id A8A25FF95E;
+        Sun, 17 Jul 2022 21:38:55 +0000 (UTC)
+Date:   Sun, 17 Jul 2022 23:38:42 +0200
+From:   Max Staudt <max@enpas.org>
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Jeroen Hofstee <jhofstee@victronenergy.com>,
+        michael@amarulasolutions.com,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [RFC PATCH 2/5] can: slcan: remove legacy infrastructure
+Message-ID: <20220717233842.1451e349.max@enpas.org>
+In-Reply-To: <20220716170007.2020037-3-dario.binacchi@amarulasolutions.com>
 References: <20220716170007.2020037-1-dario.binacchi@amarulasolutions.com>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20220716170007.2020037-1-dario.binacchi@amarulasolutions.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        <20220716170007.2020037-3-dario.binacchi@amarulasolutions.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Dario,
+Hi Dario,
 
-I have been maintaining the slcan.c driver for a long time and I'm still 
-in the MODULE_AUTHOR() macro.
+This looks good, thank you for continuing to look after slcan!
 
-As you are very committed to the slcan driver and its extensions it 
-probably makes sense to take over the maintainer-ship and add yourself 
-to the MODULE_AUTHOR() macro.
-
-Analogue to the CAN FD driver from the CTU you could also provide a 
-similar patch for the MAINTAINER file:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commit/?id=cfdb2f365cb9d
-
-Best regards,
-Oliver
+A few comments below.
 
 
-On 16.07.22 19:00, Dario Binacchi wrote:
-> With this series I try to finish the task, started with the series [1],
-> of completely removing the dependency of the slcan driver from the
-> userspace slcand/slcan_attach applications.
-> 
-> The series, however, still lacks a patch for sending the bitrate setting
-> command to the adapter:
-> 
-> slcan_attach -b <btr> <dev>
-> 
-> Without at least this patch the task cannot be considered truly completed.
-> 
-> The idea I got is that this can only happen through the ethtool API.
-> Among the various operations made available by this interface I would
-> have used the set_regs (but only the get_regs has been developed), or,
-> the set_eeprom, even if the setting would not be stored in an eeprom.
-> IMHO it would take a set_regs operation with a `struct ethtool_wregs'
-> parameter similar to `struct ethtool_eeprom' without the magic field:
-> 
-> struct ethtool_wregs {
-> 	__u32	cmd;
-> 	__u32	offset;
-> 	__u32	len;
-> 	__u8	data[0];
-> };
-> 
-> But I am not the expert and if there was an alternative solution already
-> usable, it would be welcome.
-> 
-> The series also contains patches that remove the legacy stuff (slcan_devs,
-> SLCAN_MAGIC, ...) and do some module cleanup.
-> 
-> The series has been created on top of the patches:
-> 
-> can: slcan: convert comments to network style comments
-> can: slcan: slcan_init() convert printk(LEVEL ...) to pr_level()
-> can: slcan: fix whitespace issues
-> can: slcan: convert comparison to NULL into !val
-> can: slcan: clean up if/else
-> can: slcan: use scnprintf() as a hardening measure
-> can: slcan: do not report txerr and rxerr during bus-off
-> can: slcan: do not sleep with a spin lock held
-> 
-> applied to linux-next.
-> 
-> [1] https://lore.kernel.org/all/20220628163137.413025-1-dario.binacchi@amarulasolutions.com/
-> 
-> 
-> Dario Binacchi (5):
->    can: slcan: remove useless header inclusions
->    can: slcan: remove legacy infrastructure
->    can: slcan: change every `slc' occurrence in `slcan'
->    can: slcan: use the generic can_change_mtu()
->    can: slcan: send the listen-only command to the adapter
-> 
->   drivers/net/can/slcan/slcan-core.c | 465 +++++++++--------------------
->   1 file changed, 134 insertions(+), 331 deletions(-)
-> 
+
+On Sat, 16 Jul 2022 19:00:04 +0200
+Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
+
+[...]
+
+
+> @@ -68,7 +62,6 @@ MODULE_PARM_DESC(maxdev, "Maximum number of slcan interfaces");
+>  				   SLC_STATE_BE_TXCNT_LEN)
+>  struct slcan {
+>  	struct can_priv         can;
+> -	int			magic;
+>  
+>  	/* Various fields. */
+>  	struct tty_struct	*tty;		/* ptr to TTY structure	     */
+> @@ -84,17 +77,14 @@ struct slcan {
+>  	int			xleft;          /* bytes left in XMIT queue  */
+>  
+>  	unsigned long		flags;		/* Flag values/ mode etc     */
+> -#define SLF_INUSE		0		/* Channel in use            */
+> -#define SLF_ERROR		1               /* Parity, etc. error        */
+> -#define SLF_XCMD		2               /* Command transmission      */
+> +#define SLF_ERROR		0               /* Parity, etc. error        */
+> +#define SLF_XCMD		1               /* Command transmission      */
+>  	unsigned long           cmd_flags;      /* Command flags             */
+>  #define CF_ERR_RST		0               /* Reset errors on open      */
+>  	wait_queue_head_t       xcmd_wait;      /* Wait queue for commands   */
+
+I assume xcmd_wait() came in as part of the previous patch series?
+
+
+[...]
+
+
+>  /* Send a can_frame to a TTY queue. */
+> @@ -652,25 +637,21 @@ static int slc_close(struct net_device *dev)
+>  	struct slcan *sl = netdev_priv(dev);
+>  	int err;
+>  
+> -	spin_lock_bh(&sl->lock);
+> -	if (sl->tty) {
+> -		if (sl->can.bittiming.bitrate &&
+> -		    sl->can.bittiming.bitrate != CAN_BITRATE_UNKNOWN) {
+> -			spin_unlock_bh(&sl->lock);
+> -			err = slcan_transmit_cmd(sl, "C\r");
+> -			spin_lock_bh(&sl->lock);
+> -			if (err)
+> -				netdev_warn(dev,
+> -					    "failed to send close command 'C\\r'\n");
+> -		}
+> -
+> -		/* TTY discipline is running. */
+> -		clear_bit(TTY_DO_WRITE_WAKEUP, &sl->tty->flags);
+> +	if (sl->can.bittiming.bitrate &&
+> +	    sl->can.bittiming.bitrate != CAN_BITRATE_UNKNOWN) {
+> +		err = slcan_transmit_cmd(sl, "C\r");
+> +		if (err)
+> +			netdev_warn(dev,
+> +				    "failed to send close command 'C\\r'\n");
+>  	}
+> +
+> +	/* TTY discipline is running. */
+> +	clear_bit(TTY_DO_WRITE_WAKEUP, &sl->tty->flags);
+> +	flush_work(&sl->tx_work);
+> +
+>  	netif_stop_queue(dev);
+>  	sl->rcount   = 0;
+>  	sl->xleft    = 0;
+
+I suggest moving these two assignments to slc_open() - see below.
+
+
+[...]
+
+
+> @@ -883,72 +786,50 @@ static int slcan_open(struct tty_struct *tty)
+>  	if (!tty->ops->write)
+>  		return -EOPNOTSUPP;
+>  
+> -	/* RTnetlink lock is misused here to serialize concurrent
+> -	 * opens of slcan channels. There are better ways, but it is
+> -	 * the simplest one.
+> -	 */
+> -	rtnl_lock();
+> +	dev = alloc_candev(sizeof(*sl), 1);
+> +	if (!dev)
+> +		return -ENFILE;
+>  
+> -	/* Collect hanged up channels. */
+> -	slc_sync();
+> +	sl = netdev_priv(dev);
+>  
+> -	sl = tty->disc_data;
+> +	/* Configure TTY interface */
+> +	tty->receive_room = 65536; /* We don't flow control */
+> +	sl->rcount   = 0;
+> +	sl->xleft    = 0;
+
+I suggest moving the zeroing to slc_open() - i.e. to the netdev open
+function. As a bonus, you can then remove the same two assignments from
+slc_close() (see above). They are only used when netif_running(), with
+appropiate guards already in place as far as I can see.
+
+
+> +	spin_lock_init(&sl->lock);
+> +	INIT_WORK(&sl->tx_work, slcan_transmit);
+> +	init_waitqueue_head(&sl->xcmd_wait);
+>  
+> -	err = -EEXIST;
+> -	/* First make sure we're not already connected. */
+> -	if (sl && sl->magic == SLCAN_MAGIC)
+> -		goto err_exit;
+> +	/* Configure CAN metadata */
+> +	sl->can.bitrate_const = slcan_bitrate_const;
+> +	sl->can.bitrate_const_cnt = ARRAY_SIZE(slcan_bitrate_const);
+>  
+> -	/* OK.  Find a free SLCAN channel to use. */
+> -	err = -ENFILE;
+> -	sl = slc_alloc();
+> -	if (!sl)
+> -		goto err_exit;
+> +	/* Configure netdev interface */
+> +	sl->dev	= dev;
+> +	strscpy(dev->name, "slcan%d", sizeof(dev->name));
+
+The third parameter looks... unintentional :)
+
+What do the maintainers think of dropping the old "slcan" name, and
+just allowing this to be a normal canX device? These patches do bring
+it closer to that, after all. In this case, this name string magic
+could be dropped altogether.
+
+
+[...]
+
+
+
+This looks good to me overall.
+
+Thanks Dario!
+
+
+Max
