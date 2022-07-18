@@ -2,104 +2,107 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C31D5577F19
-	for <lists+linux-can@lfdr.de>; Mon, 18 Jul 2022 11:55:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84F2F577F18
+	for <lists+linux-can@lfdr.de>; Mon, 18 Jul 2022 11:55:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233587AbiGRJzv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 18 Jul 2022 05:55:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45626 "EHLO
+        id S232792AbiGRJzk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 18 Jul 2022 05:55:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbiGRJzu (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 18 Jul 2022 05:55:50 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB6C1A05E
-        for <linux-can@vger.kernel.org>; Mon, 18 Jul 2022 02:55:49 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oDNTe-0001lV-SN; Mon, 18 Jul 2022 11:55:46 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 19A77B2E5E;
-        Mon, 18 Jul 2022 08:33:13 +0000 (UTC)
-Date:   Mon, 18 Jul 2022 10:33:12 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Matej Vasilevski <matej.vasilevski@seznam.cz>
-Cc:     Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
-        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        Martin Jerabek <martin.jerabek01@gmail.com>
-Subject: Re: [PATCH] can: xilinx_can: add support for RX timestamps on Zynq
-Message-ID: <20220718083312.4izyuf7iawfbhlnf@pengutronix.de>
-References: <20220716120408.450405-1-matej.vasilevski@seznam.cz>
+        with ESMTP id S229826AbiGRJzj (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 18 Jul 2022 05:55:39 -0400
+Received: from mailgw.felk.cvut.cz (mailgw.felk.cvut.cz [147.32.82.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F1E19C29
+        for <linux-can@vger.kernel.org>; Mon, 18 Jul 2022 02:55:36 -0700 (PDT)
+Received: from mailgw.felk.cvut.cz (localhost.localdomain [127.0.0.1])
+        by mailgw.felk.cvut.cz (Proxmox) with ESMTP id 6725630B2951;
+        Mon, 18 Jul 2022 11:55:34 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        cmp.felk.cvut.cz; h=cc:cc:content-transfer-encoding:date:from
+        :from:message-id:mime-version:reply-to:subject:subject:to:to; s=
+        felkmail; bh=0BPMuy4HATSP5/81x7ShLGQZp1u2U/wdMtfgQFgT7wY=; b=IMK
+        7PtMUhcWWF4sZ20I1Eb8AHUNAa5nZ1s4lPdnKRQ3yS80624j7x5TOwMz1FJbQzXM
+        V1GAsyWrwSwtVr/caFNIcMWZ8I05zPUeumdIrjCwu9ANCwD8ll8WwnVscmaOejDo
+        UUxz21c9pPQT9ojFKkpjS+/+pHX5LnQfDAYRdZzkWIO3Yz2SpWN/qTFyk89go0vS
+        8SYn4qmNwEbE3LR3B6ltFyJrf8RCqLNdWqvKQOdUGHuPCUl/79z0a1fkob+M8eS/
+        vLbNjK4aonYN+GAGQK8VevBqGBmKkOwDTCd+bcuDSed2d+HoXWiQLma6x3vGNTlO
+        Y4Zwb1H+izveQ3rfKGA==
+Received: from cmp.felk.cvut.cz (haar.felk.cvut.cz [147.32.84.19])
+        by mailgw.felk.cvut.cz (Proxmox) with ESMTPS id E5F1130B294D;
+        Mon, 18 Jul 2022 11:55:33 +0200 (CEST)
+Received: from haar.felk.cvut.cz (localhost [127.0.0.1])
+        by cmp.felk.cvut.cz (8.14.0/8.12.3/SuSE Linux 0.6) with ESMTP id 26I9tXaB027923;
+        Mon, 18 Jul 2022 11:55:33 +0200
+Received: (from pisa@localhost)
+        by haar.felk.cvut.cz (8.14.0/8.13.7/Submit) id 26I9tWFJ027920;
+        Mon, 18 Jul 2022 11:55:32 +0200
+From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
+To:     linux-can@vger.kernel.org,
+        "Marc Kleine-Budde" <mkl@pengutronix.de>,
+        Matej Vasilevski <matej.vasilevski@seznam.cz>
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        David Miller <davem@davemloft.net>,
+        Carsten Emde <c.emde@osadl.org>,
+        Marin Jerabek <martin.jerabek01@gmail.com>,
+        Ondrej Ille <ondrej.ille@gmail.com>,
+        Jiri Novak <jnovak@fel.cvut.cz>,
+        Pavel Pisa <pisa@cmp.felk.cvut.cz>
+Subject: [PATCH v1 0/1] can: ctucanfd: Update CTU CAN FD IP core registers to match version 3.x.
+Date:   Mon, 18 Jul 2022 11:55:17 +0200
+Message-Id: <cover.1658136506.git.pisa@cmp.felk.cvut.cz>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gia2fzp3imb2fsd2"
-Content-Disposition: inline
-In-Reply-To: <20220716120408.450405-1-matej.vasilevski@seznam.cz>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+The 3.x CTU CAN FD IP core version provides informative fields
+with number of Tx registers count and most significant active
+(toggling) timestamp base bit.
 
---gia2fzp3imb2fsd2
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The fields are read as zero for older 2.x IP core version.
+The 4 Tx buffers and bit 63 MSB can be considered in such
+case and compatibility with 2.x core version is preserved.
 
-On 16.07.2022 14:04:09, Matej Vasilevski wrote:
-> This patch adds support for hardware RX timestamps from Xilinx Zynq CAN
-> controllers. The timestamp is calculated against a timepoint reference
-> stored when the first CAN message is received.
->=20
-> When CAN bus traffic does not contain long idle pauses (so that
-> the clocks would drift by a multiple of the counter rollover time),
-> then the hardware timestamps provide precise relative time between
-> received messages. This can be used e.g. for latency testing.
+This change allows to update Matej Vasilevski's patch series
 
-Please make use of the existing cyclecounter/timecounter framework. Is
-there a way to read the current time from a register? If so, please
-setup a worker that does that regularly.
+  [RFC] can: ctucanfd: RX timestamping implementation
 
-Have a look at the mcp251xfd driver as an example:
+to work with the platform bus and PCIe core integration
+without need of additional mandatory parameters.
 
-https://elixir.bootlin.com/linux/latest/source/drivers/net/can/spi/mcp251xf=
-d/mcp251xfd-timestamp.c
+Only optional one for timestamp clock frequency can be
+used when bitrate base clock and timestamp clocks differ.
 
-Marc
+  ts-frequency:
+    description: |
+      Frequency of the timestamping counter. Set this if you want to get
+      timestamps, but you didn't set the timestamping clock in clocks property.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+The information about clocks frequencies on PCIe integration
+has to be provided by other means but we expect that it can
+be directly deduced from Vendor and Device IDs and corresponding
+device table.
 
---gia2fzp3imb2fsd2
-Content-Type: application/pgp-signature; name="signature.asc"
+Pavel Pisa (1):
+  can: ctucanfd: Update CTU CAN FD IP core registers to match version
+    3.x.
 
------BEGIN PGP SIGNATURE-----
+This patch is intended for 5.20 kernel version but possible postpone
+to 5.21 is not big problem.
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLVGsUACgkQrX5LkNig
-012x2Qf8DtbUa7HLc54ioRZu/RDkCTzAp/aNoRv1HyZ2f6C63tAWoTG4gyy2dAjT
-izMk8XFEArN35ZMYTXT2Ru2zj+HPzIB+U+USe/UKSiHP77yYzSAJCUKGUcGuVvec
-OV9hDO/jvnmuNvma4mf1w8KBilnKTICdszrwj9ktu2CwRUxkyeRQzZBHt69P3zPa
-JrYXYOLXM6isfbYboh++XbsSxAODzKH9OyiYtuBC6Klr4bzJzerxfGMARfZNZZ5O
-eormvK04zBLFDjPyrub//8Gna3aKOzI+kcw/XJVfqNot2LHEyAMJo1KijI4XhSWk
-vAB6NI91VMNlDHt4E6jmKBg7Dkargw==
-=pHe9
------END PGP SIGNATURE-----
+It would be ideal to include even ctucanfd timestamping in 5.20
+but timing for updates and reviews is probably quite tight.
 
---gia2fzp3imb2fsd2--
+ drivers/net/can/ctucanfd/ctucanfd_kregs.h | 32 ++++++++++++++++++++---
+ 1 file changed, 28 insertions(+), 4 deletions(-)
+
+-- 
+2.20.1
+
