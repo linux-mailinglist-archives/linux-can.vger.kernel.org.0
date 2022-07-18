@@ -2,54 +2,54 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09B5E577FF5
-	for <lists+linux-can@lfdr.de>; Mon, 18 Jul 2022 12:42:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0667578022
+	for <lists+linux-can@lfdr.de>; Mon, 18 Jul 2022 12:50:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233278AbiGRKmX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 18 Jul 2022 06:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50636 "EHLO
+        id S233771AbiGRKuB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 18 Jul 2022 06:50:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230179AbiGRKmW (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 18 Jul 2022 06:42:22 -0400
-X-Greylist: delayed 119 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 18 Jul 2022 03:42:20 PDT
-Received: from mxd1.seznam.cz (mxd1.seznam.cz [IPv6:2a02:598:a::78:210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C7611EAEC;
-        Mon, 18 Jul 2022 03:42:20 -0700 (PDT)
-Received: from email.seznam.cz
-        by email-smtpc11a.ko.seznam.cz (email-smtpc11a.ko.seznam.cz [10.53.11.75])
-        id 15060301f1aad03f14dba26f;
-        Mon, 18 Jul 2022 12:42:19 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seznam.cz; s=beta;
-        t=1658140939; bh=v3TCeBdThVJ4g/0p6MORvWuzDihnfViRg2oFUU1uZgY=;
-        h=Received:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:Content-Disposition:In-Reply-To:
-         X-szn-frgn:X-szn-frgc;
-        b=oIn6Nl3cHUPsMweXFdKhvf3JrXhzOpsgCFHy6DSJswr6LRpZOI9B8URTbMlYEWOlN
-         jFOK5AeoHMZRbjWT8nFEocLlAkpIphlqybxLIHVEOMK4jfxvD7aE/ZTNKMIS+x8IWI
-         0GPXVyM6f4QAUZyixkYeeENE+8Qp8scCTh0R5e2k=
-Received: from hopium (2a02:8308:900d:2400:7457:3d0c:d80:5888 [2a02:8308:900d:2400:7457:3d0c:d80:5888])
-        by email-relay1.ko.seznam.cz (Seznam SMTPD 1.3.137) with ESMTP;
-        Mon, 18 Jul 2022 12:40:04 +0200 (CEST)  
-Date:   Mon, 18 Jul 2022 12:40:03 +0200
-From:   Matej Vasilevski <matej.vasilevski@seznam.cz>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
+        with ESMTP id S233356AbiGRKuA (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 18 Jul 2022 06:50:00 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC0E51EC53
+        for <linux-can@vger.kernel.org>; Mon, 18 Jul 2022 03:49:59 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oDOK5-0001Ou-TB; Mon, 18 Jul 2022 12:49:57 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id B55DEB3013;
+        Mon, 18 Jul 2022 10:49:55 +0000 (UTC)
+Date:   Mon, 18 Jul 2022 12:49:55 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Matej Vasilevski <matej.vasilevski@seznam.cz>,
+        Michal Simek <michal.simek@xilinx.com>
 Cc:     Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
         Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org,
         Martin Jerabek <martin.jerabek01@gmail.com>
 Subject: Re: [PATCH] can: xilinx_can: add support for RX timestamps on Zynq
-Message-ID: <20220718104003.GA35020@hopium>
+Message-ID: <20220718104955.nrlbfnqyhgmnkkey@pengutronix.de>
 References: <20220716120408.450405-1-matej.vasilevski@seznam.cz>
  <20220718083312.4izyuf7iawfbhlnf@pengutronix.de>
+ <20220718104003.GA35020@hopium>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pfdsqhlcnjaht26s"
 Content-Disposition: inline
-In-Reply-To: <20220718083312.4izyuf7iawfbhlnf@pengutronix.de>
-X-szn-frgn: <165438ee-cde6-4382-8844-9ee4e2117027>
-X-szn-frgc: <0>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+In-Reply-To: <20220718104003.GA35020@hopium>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,32 +57,75 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 10:33:12AM +0200, Marc Kleine-Budde wrote:
-> On 16.07.2022 14:04:09, Matej Vasilevski wrote:
-> > This patch adds support for hardware RX timestamps from Xilinx Zynq CAN
-> > controllers. The timestamp is calculated against a timepoint reference
-> > stored when the first CAN message is received.
-> > 
-> > When CAN bus traffic does not contain long idle pauses (so that
-> > the clocks would drift by a multiple of the counter rollover time),
-> > then the hardware timestamps provide precise relative time between
-> > received messages. This can be used e.g. for latency testing.
-> 
-> Please make use of the existing cyclecounter/timecounter framework. Is
-> there a way to read the current time from a register? If so, please
-> setup a worker that does that regularly.
-> 
-> Have a look at the mcp251xfd driver as an example:
-> 
-> https://elixir.bootlin.com/linux/latest/source/drivers/net/can/spi/mcp251xfd/mcp251xfd-timestamp.c
 
-Hi Marc,
+--pfdsqhlcnjaht26s
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-as Pavel have said, the counter register isn't readable.
+I've added Michal Simek on into the loop.
 
-I'll try to fit the timecounter/cyclecounter framework and send a v2
-patch if it works well. Thanks for the suggestion, it didn't occur to me
-that I can use it in this case as well.
+Michal can you figure out if there's an undocumented register to read
+the free running time stamp counter of the xilinx_can IP core?
 
-Regards,
-Matej
+On 18.07.2022 12:40:03, Matej Vasilevski wrote:
+> On Mon, Jul 18, 2022 at 10:33:12AM +0200, Marc Kleine-Budde wrote:
+> > On 16.07.2022 14:04:09, Matej Vasilevski wrote:
+> > > This patch adds support for hardware RX timestamps from Xilinx Zynq C=
+AN
+> > > controllers. The timestamp is calculated against a timepoint reference
+> > > stored when the first CAN message is received.
+> > >=20
+> > > When CAN bus traffic does not contain long idle pauses (so that
+> > > the clocks would drift by a multiple of the counter rollover time),
+> > > then the hardware timestamps provide precise relative time between
+> > > received messages. This can be used e.g. for latency testing.
+> >=20
+> > Please make use of the existing cyclecounter/timecounter framework. Is
+> > there a way to read the current time from a register? If so, please
+> > setup a worker that does that regularly.
+> >=20
+> > Have a look at the mcp251xfd driver as an example:
+> >=20
+> > https://elixir.bootlin.com/linux/latest/source/drivers/net/can/spi/mcp2=
+51xfd/mcp251xfd-timestamp.c
+>=20
+> Hi Marc,
+>=20
+> as Pavel have said, the counter register isn't readable.
+
+Some HW designer successfully ticked the mark [x] HW time stamp support!
+But haven't thought on how to use this. No Overflow IRQ and no
+possibility to read the free running timer. :/
+
+> I'll try to fit the timecounter/cyclecounter framework and send a v2
+> patch if it works well. Thanks for the suggestion, it didn't occur to me
+> that I can use it in this case as well.
+
+Maybe it's possible to add the ktimestamp based overflow calculation
+there, too.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--pfdsqhlcnjaht26s
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLVOtAACgkQrX5LkNig
+013aLwgAidsrv0tsUNsrX44F5m+C8Lk0ZShqFBKnENmPRPww4rpW71KldW/pQS13
+ExUiKV2q/Kvo1oS0mS5qvMg3DONk5BM5bpxZBstpcRkPQuIVwfLmybo7Lou/3d5b
+xUdSB3UCLUgAXy4QCz+88jbT1OlbWAOEc44ULXMPgMxQNhLhuM3HF096+n/H8O/M
+fqiTCmEKRoKVDCzFu25wKfz/UBbUNfhmSAuuOTlQv7SYRIlf7JczXHpzCYJ1D2Ia
+MKBKqgkV00CVoykq2+84RAZHV2qKK2DYlAfZrd/tcAJNZqZDonUq8wyE2kfxsnOB
+g82ttpi39qD2ctWXY67v+amA1fLkbw==
+=nyKu
+-----END PGP SIGNATURE-----
+
+--pfdsqhlcnjaht26s--
