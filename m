@@ -2,119 +2,131 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C61A578031
-	for <lists+linux-can@lfdr.de>; Mon, 18 Jul 2022 12:51:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50F44578064
+	for <lists+linux-can@lfdr.de>; Mon, 18 Jul 2022 13:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233202AbiGRKvf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 18 Jul 2022 06:51:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57664 "EHLO
+        id S234417AbiGRLEF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 18 Jul 2022 07:04:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233271AbiGRKve (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 18 Jul 2022 06:51:34 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754631FCFC
-        for <linux-can@vger.kernel.org>; Mon, 18 Jul 2022 03:51:33 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oDOLb-0001mK-73; Mon, 18 Jul 2022 12:51:31 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id F11F8B301D;
-        Mon, 18 Jul 2022 10:51:29 +0000 (UTC)
-Date:   Mon, 18 Jul 2022 12:51:28 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Pavel Pisa <pisa@cmp.felk.cvut.cz>
-Cc:     Matej Vasilevski <matej.vasilevski@seznam.cz>,
-        Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
-        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        Martin Jerabek <martin.jerabek01@gmail.com>,
-        Vikram Garhwal <fnu.vikram@xilinx.com>
-Subject: Re: [PATCH] can: xilinx_can: add support for RX timestamps on Zynq
-Message-ID: <20220718105128.s22vp5hx4somy64f@pengutronix.de>
-References: <20220716120408.450405-1-matej.vasilevski@seznam.cz>
- <20220718083312.4izyuf7iawfbhlnf@pengutronix.de>
- <202207181220.06765.pisa@cmp.felk.cvut.cz>
+        with ESMTP id S232173AbiGRLEE (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 18 Jul 2022 07:04:04 -0400
+Received: from mailgw.felk.cvut.cz (mailgw.felk.cvut.cz [147.32.82.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2318D65DA
+        for <linux-can@vger.kernel.org>; Mon, 18 Jul 2022 04:04:02 -0700 (PDT)
+Received: from mailgw.felk.cvut.cz (localhost.localdomain [127.0.0.1])
+        by mailgw.felk.cvut.cz (Proxmox) with ESMTP id 37FB930B294D;
+        Mon, 18 Jul 2022 13:03:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        cmp.felk.cvut.cz; h=cc:cc:content-transfer-encoding:content-type
+        :content-type:date:from:from:in-reply-to:message-id:mime-version
+        :references:reply-to:subject:subject:to:to; s=felkmail; bh=XZ4fv
+        IAd4110BNZh4fNTIuiftesp3qHh+CCLDdcP2bw=; b=E6W7JlM17a9JzkQsU30MY
+        ObL6jSgxCw8vMSTMqdDOkStf4ilomLNzVPxuK7imD4WVeUht9OaxdK2XSLBKAN8L
+        I3rzIt8lhV18LgG1RQ0l0Ca8ftB9odGTxCf2/mZEZXNlQ7iv2a8pMNONZj0ZmRWt
+        lnMbXFu0yIkIwOZPzhq5hQPsZw2fbFAk2sxlInx+NU/7hGT+kJZdxrf3XKedFGS3
+        9NBwLTircqLAl7Y/M4+T8PTU6u8gyqcTCxbl6s49DHkCtOnv0laL0JXWGUUQ9WQ1
+        Nju1C7WKICGvgUUEwiZY08yLfihA8Ns7mfSzmL56DMg0RcDQ5FQVYUaJz1S95B2w
+        g==
+Received: from cmp.felk.cvut.cz (haar.felk.cvut.cz [147.32.84.19])
+        by mailgw.felk.cvut.cz (Proxmox) with ESMTPS id 531FC30B294A;
+        Mon, 18 Jul 2022 13:03:44 +0200 (CEST)
+Received: from haar.felk.cvut.cz (localhost [127.0.0.1])
+        by cmp.felk.cvut.cz (8.14.0/8.12.3/SuSE Linux 0.6) with ESMTP id 26IB3iGa031033;
+        Mon, 18 Jul 2022 13:03:44 +0200
+Received: (from pisa@localhost)
+        by haar.felk.cvut.cz (8.14.0/8.13.7/Submit) id 26IB3iDF031032;
+        Mon, 18 Jul 2022 13:03:44 +0200
+X-Authentication-Warning: haar.felk.cvut.cz: pisa set sender to pisa@cmp.felk.cvut.cz using -f
+From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: Re: [RFC PATCH v3 0/5] can: support CAN XL
+Date:   Mon, 18 Jul 2022 13:03:38 +0200
+User-Agent: KMail/1.9.10
+Cc:     linux-can@vger.kernel.org
+References: <20220717132730.30295-1-socketcan@hartkopp.net>
+In-Reply-To: <20220717132730.30295-1-socketcan@hartkopp.net>
+X-KMail-QuotePrefix: > 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="i4qfmohhwbabeeil"
+Content-Type: Text/Plain;
+  charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Content-Disposition: inline
-In-Reply-To: <202207181220.06765.pisa@cmp.felk.cvut.cz>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <202207181303.38060.pisa@cmp.felk.cvut.cz>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello Oliver,
 
---i4qfmohhwbabeeil
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Sunday 17 of July 2022 15:27:25 Oliver Hartkopp wrote:
+> V2: Major rework after discussion and feedback on Linux-CAN ML
+>
+> - rework of struct canxl_frame
+> - CANXL_XLF flag is now the switch between CAN XL and CAN/CANFD
+> - variable length in r/w operations for CAN XL frames
+> - write CAN XL frame to raw socket enforces size <-> canxl_frame.len sync
 
-On 18.07.2022 12:20:06, Pavel Pisa wrote:
-> Hello Marc,
->=20
-> On Monday 18 of July 2022 10:33:12 Marc Kleine-Budde wrote:
-> > On 16.07.2022 14:04:09, Matej Vasilevski wrote:
-> > > This patch adds support for hardware RX timestamps from Xilinx Zynq C=
-AN
-> > > controllers. The timestamp is calculated against a timepoint reference
-> > > stored when the first CAN message is received.
-> > >
-> > > When CAN bus traffic does not contain long idle pauses (so that
-> > > the clocks would drift by a multiple of the counter rollover time),
-> > > then the hardware timestamps provide precise relative time between
-> > > received messages. This can be used e.g. for latency testing.
-> >
-> > Please make use of the existing cyclecounter/timecounter framework. Is
-> > there a way to read the current time from a register? If so, please
-> > setup a worker that does that regularly.
-> >
-> > Have a look at the mcp251xfd driver as an example:
->=20
-> Matej Vasilevski has looked at the example. But there is problem
-> that we know no method how to read actual counter value at least for
-> Xilinx Zynq 7000. May be we overlooked something or there
-> is hidden test register.
+I generally like the idea but I would like even to extend it to process
+all CAN messages types through same API.
 
-I haven't found a documented register in the TRM. I've added Michal
-Simek into the loop, maybe Michal has some connection to the HW
-designers.
++struct canxl_frame {
++       canid_t prio;  /* 11 bit priority for arbitration (canid_t) */
++       __u8    flags; /* additional flags for CAN XL */
++       __u8    sdt;   /* SDU (service data unit) type */
++       __u16   len;   /* frame payload length in byte */
++       __u32   af;    /* acceptance field */
++       __u8    data[CANXL_MAX_DLEN];
++};
 
-Marc
+I would suggest to think about possibility to have single structure type
+for processing of all CAN frames types in usersace. When you define field
+prio as anonyous union of prio and can_id
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+  union {
+    canid_t prio;
+    canid_t can_id;
+  }
 
---i4qfmohhwbabeeil
-Content-Type: application/pgp-signature; name="signature.asc"
+then it is possible to define flags such way, that canxl_frame is alternative
+for all other formats
 
------BEGIN PGP SIGNATURE-----
++#define CANXL_XLF 0x80 /* mandatory CAN XL frame flag (must always be set!) */
+So CANXL_XLF will be changed to CANXLS_SELECT frame structure selected,
+then rest of bits can be used for CANXLS_XLF, CANXLS_FD, in ideal case even
+RTR, BRS etc.. or RTR can be left as part of ID if that is easier.
+This way only single structure can be used to receive and send all
+frames over single interface when XL option is selected
+by software.
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLVOy0ACgkQrX5LkNig
-011bzQf+M+TZm39JcDKTeDMjAFYuuJwFOOd8PfCqsuOWaGzohZMqKfDcWOZkrc+c
-J0WEHXYGeUe1DybHt2iHR+jf/fE3HSlzzPn4rFxWbdbIjwW8QUMBZ8XhPQSEiN0r
-UXcOw6L04U7HjEyBH+ceVMvP44ny4yHlaozpEkE9sJ04lVojTasxa1H0rGX2lEyZ
-/EOp5SXZJHhfa/IXQ2pro0BirwgHiPkJDDpC/R/aQFy+bdD23gnGPI5AKN8nmrk/
-GN3MblYE3TZVErafYsfGFC5ZGzdkDu8PAZxUoBMi2nOis4BZvINtB+/KLRSun1F5
-PIqsr37/zd5tUEGK0BlxFHSHp/A10g==
-=vJup
------END PGP SIGNATURE-----
+Yes, there would be redundancy in the kernel handling which has to accept
+two types of encoding of CAN FD and standard messages but actual complexity
+in usespace when you want to support all variants and for example
+forward frames between interfaces or process them inside QEMU etc.
+is really quite high.
 
---i4qfmohhwbabeeil--
+Best wishes,
+
+                Pavel
+-- 
+                Pavel Pisa
+    phone:      +420 603531357
+    e-mail:     pisa@cmp.felk.cvut.cz
+    Department of Control Engineering FEE CVUT
+    Karlovo namesti 13, 121 35, Prague 2
+    university: http://control.fel.cvut.cz/
+    personal:   http://cmp.felk.cvut.cz/~pisa
+    projects:   https://www.openhub.net/accounts/ppisa
+    CAN related:http://canbus.pages.fel.cvut.cz/
+    RISC-V education: https://comparch.edu.cvut.cz/
+    Open Technologies Research Education and Exchange Services
+    https://gitlab.fel.cvut.cz/otrees/org/-/wikis/home
+
+
+
+
