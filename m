@@ -2,164 +2,142 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DF79577C3E
-	for <lists+linux-can@lfdr.de>; Mon, 18 Jul 2022 09:16:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02B8E577C50
+	for <lists+linux-can@lfdr.de>; Mon, 18 Jul 2022 09:18:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233774AbiGRHQB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 18 Jul 2022 03:16:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47338 "EHLO
+        id S232195AbiGRHSv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 18 Jul 2022 03:18:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233647AbiGRHQA (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 18 Jul 2022 03:16:00 -0400
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01438175AF
-        for <linux-can@vger.kernel.org>; Mon, 18 Jul 2022 00:15:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1658128555;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:Cc:References:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=QsTr2OAP2z+aNi8S1Zcwuj2HSJISwg45NQthJfP7Y08=;
-    b=d7nRIQ1oFUFQWzjcUCEWeHoxDoW8owwghfw6Pn1dYE4hZn21pUImMrVUBVE96WDWXk
-    hQDsX4TAA5L9n0av6j4vVzb6q3ZGp92ffcolgc1KxZpC0+InJjazJxbduA+VpawC39Mm
-    h0ncSwpW0fnrdKfK6O5mZBAZ6Ld5us8eIdWC6JOrd3VjgxpEsEffmrg7YLlzqyI3iNQ4
-    v82v+0Rc1TQph/6cwhKce8YPzFFWt1CDB8b8jz/qlrn/APtJZMbRN0HZJL041b4gixqd
-    BRU0nTaAedqgHSahtgxyI6v6GrXwZ8ZLXEqKKJywWFsjQ7XG5T8305YMm0FvfYLF/hON
-    uGFg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytJSr63tDxrw=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a00:6020:1cfd:d100::b82]
-    by smtp.strato.de (RZmta 47.47.0 AUTH)
-    with ESMTPSA id t870d5y6I7FtC7s
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Mon, 18 Jul 2022 09:15:55 +0200 (CEST)
-Message-ID: <aa5a6196-7e0a-25a8-c967-415857741bb2@hartkopp.net>
-Date:   Mon, 18 Jul 2022 09:15:55 +0200
+        with ESMTP id S233771AbiGRHSu (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 18 Jul 2022 03:18:50 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3CBFF31
+        for <linux-can@vger.kernel.org>; Mon, 18 Jul 2022 00:18:49 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id d12so17807150lfq.12
+        for <linux-can@vger.kernel.org>; Mon, 18 Jul 2022 00:18:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PyRXBleb1QpB4fKxelY4Fyd23fs+FV7dQ0emB1l5pSs=;
+        b=nJNtLHqOy2pMkzxMYFZ7yPppaJCLu+2xQxX810kBBcLldCzjw5A5bgcXpyd2E/Vso+
+         r58HSISLXELZ+9EhWEWCDeNc72YPVP6ccifkY/FRlERB4HumoWMg0GmAEWMMT+hEpuVQ
+         daVWOsv7mBT1o5sbym3CZ5nOWJD3Og5WNyI5s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PyRXBleb1QpB4fKxelY4Fyd23fs+FV7dQ0emB1l5pSs=;
+        b=l64Mkaf0b88XbXiQIABdS4HXS2zyeO2N6UVTm9sy1fMFHMR62SmadbbH1S51Z4GxTx
+         Ubz55fgkuidKevnANWT81hnA27L4+Fsjz0kCZFME6nkCb2iAmYJ0UrcJIw5TsVE8h8mi
+         K9/vdwlsBTXIiY3dK4mzaUYht+mVo7hP/pusMs0V3XwMEA4OiM2ArZVjb//aQsOEmK37
+         Hp7Uk+spCr4ziLQJzMMuHIr3cqqWZn4nv438YPKfp887jbJYtIi18bQh8vJpiPLN+ANF
+         fJvgp7IrfaqdfTsG3ytpfEczu3RyYSeGoX6Dxh4TTvQyC3XJNBzZVYRTJfcu3IH0Xn5+
+         madA==
+X-Gm-Message-State: AJIora/kkbpp9bJCu9NTxPskbzKHpMMxiGKTtgImOSx4ySvey1o1hUrQ
+        obGFXDDJMUu28R3pWs1a3DH/vh6aoqZI5bOMQq5Gw6wjW1Hj7w==
+X-Google-Smtp-Source: AGRyM1uU27azdskip3dlgvLt74wyrnMbqEFBJQA/5XIeGmOG0T7mNyvF4bufdGwtDc+pgO4qXKoMvYE+/rSUQDev4eU=
+X-Received: by 2002:a05:6512:2610:b0:47f:74dc:3205 with SMTP id
+ bt16-20020a056512261000b0047f74dc3205mr13322511lfb.429.1658128728309; Mon, 18
+ Jul 2022 00:18:48 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC PATCH 0/5] can: slcan: extend supported features (step 2)
-Content-Language: en-US
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-References: <20220716170007.2020037-1-dario.binacchi@amarulasolutions.com>
- <507b5973-d673-4755-3b64-b41cb9a13b6f@hartkopp.net>
- <CABGWkvokcOW2G+CAH4Lna_pRa1ck-zKRpSifjGj-VX_cb9xP5A@mail.gmail.com>
-Cc:     linux-can <linux-can@vger.kernel.org>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <CABGWkvokcOW2G+CAH4Lna_pRa1ck-zKRpSifjGj-VX_cb9xP5A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220716170201.2020510-1-dario.binacchi@amarulasolutions.com> <20220717235000.247bfa42.max@enpas.org>
+In-Reply-To: <20220717235000.247bfa42.max@enpas.org>
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date:   Mon, 18 Jul 2022 09:18:37 +0200
+Message-ID: <CABGWkvpK25WGjp76_=Jfd9sMk5Dvj84VnVuc3iuroKR0tJEv+Q@mail.gmail.com>
+Subject: Re: [RFC PATCH] can: can327: remove useless header inclusions
+To:     Max Staudt <max@enpas.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi Max,
+
+On Sun, Jul 17, 2022 at 11:50 PM Max Staudt <max@enpas.org> wrote:
+>
+> On Sat, 16 Jul 2022 19:02:01 +0200
+> Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
+>
+> > -#include <linux/init.h>
+> >  #include <linux/module.h>
+> > -
+> > -#include <linux/bitops.h>
+> > -#include <linux/ctype.h>
+> > -#include <linux/errno.h>
+> > -#include <linux/kernel.h>
+> > -#include <linux/list.h>
+> > -#include <linux/lockdep.h>
+> > -#include <linux/netdevice.h>
+> > -#include <linux/skbuff.h>
+> > -#include <linux/spinlock.h>
+> > -#include <linux/string.h>
+> >  #include <linux/tty.h>
+> > -#include <linux/tty_ldisc.h>
+> > -#include <linux/workqueue.h>
+> > -
+> > -#include <uapi/linux/tty.h>
+> > -
+> > -#include <linux/can.h>
+> >  #include <linux/can/dev.h>
+> > -#include <linux/can/error.h>
+> >  #include <linux/can/rx-offload.h>
+>
+> AFAIK, the coding style is to not rely on headers including other
+> headers. Instead, the appropriate header for every symbol used should
+> be included.
+
+Thanks for the explanation.
+
+>
+> This is also valid for the similar patch you submitted for slcan.
+
+Probably something can be removed (if_arp.h, if_ether.h, ...).
+I will take can327.c as a reference.
+
+Thanks and regards,
+Dario
+
+>
+>
+> Unless something has changed, this is a NAK from me, sorry.
+>
+>
+> Max
 
 
-On 18.07.22 08:59, Dario Binacchi wrote:
-> Hello Oliver,
-> 
-> On Sun, Jul 17, 2022 at 4:13 PM Oliver Hartkopp <socketcan@hartkopp.net> wrote:
->>
->> Hello Dario,
->>
->> I have been maintaining the slcan.c driver for a long time and I'm still
->> in the MODULE_AUTHOR() macro.
->>
->> As you are very committed to the slcan driver and its extensions it
->> probably makes sense to take over the maintainer-ship and add yourself
->> to the MODULE_AUTHOR() macro.
->>
->> Analogue to the CAN FD driver from the CTU you could also provide a
->> similar patch for the MAINTAINER file:
->>
->> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commit/?id=cfdb2f365cb9d
->>
-> 
-> I am happy and honored. I hope I am adequate for the task.
 
-I think so ;-)
+-- 
 
-And with all your new enhancements and clean-ups that get away from the 
-slow-moving slip.c I would be happy to get out of the line of fire when 
-something breaks :-D
+Dario Binacchi
 
-Many thanks!
+Embedded Linux Developer
 
-Oliver
+dario.binacchi@amarulasolutions.com
 
-> Thanks and regards,
-> 
-> Dario
-> 
->> Best regards,
->> Oliver
->>
->>
->> On 16.07.22 19:00, Dario Binacchi wrote:
->>> With this series I try to finish the task, started with the series [1],
->>> of completely removing the dependency of the slcan driver from the
->>> userspace slcand/slcan_attach applications.
->>>
->>> The series, however, still lacks a patch for sending the bitrate setting
->>> command to the adapter:
->>>
->>> slcan_attach -b <btr> <dev>
->>>
->>> Without at least this patch the task cannot be considered truly completed.
->>>
->>> The idea I got is that this can only happen through the ethtool API.
->>> Among the various operations made available by this interface I would
->>> have used the set_regs (but only the get_regs has been developed), or,
->>> the set_eeprom, even if the setting would not be stored in an eeprom.
->>> IMHO it would take a set_regs operation with a `struct ethtool_wregs'
->>> parameter similar to `struct ethtool_eeprom' without the magic field:
->>>
->>> struct ethtool_wregs {
->>>        __u32   cmd;
->>>        __u32   offset;
->>>        __u32   len;
->>>        __u8    data[0];
->>> };
->>>
->>> But I am not the expert and if there was an alternative solution already
->>> usable, it would be welcome.
->>>
->>> The series also contains patches that remove the legacy stuff (slcan_devs,
->>> SLCAN_MAGIC, ...) and do some module cleanup.
->>>
->>> The series has been created on top of the patches:
->>>
->>> can: slcan: convert comments to network style comments
->>> can: slcan: slcan_init() convert printk(LEVEL ...) to pr_level()
->>> can: slcan: fix whitespace issues
->>> can: slcan: convert comparison to NULL into !val
->>> can: slcan: clean up if/else
->>> can: slcan: use scnprintf() as a hardening measure
->>> can: slcan: do not report txerr and rxerr during bus-off
->>> can: slcan: do not sleep with a spin lock held
->>>
->>> applied to linux-next.
->>>
->>> [1] https://lore.kernel.org/all/20220628163137.413025-1-dario.binacchi@amarulasolutions.com/
->>>
->>>
->>> Dario Binacchi (5):
->>>     can: slcan: remove useless header inclusions
->>>     can: slcan: remove legacy infrastructure
->>>     can: slcan: change every `slc' occurrence in `slcan'
->>>     can: slcan: use the generic can_change_mtu()
->>>     can: slcan: send the listen-only command to the adapter
->>>
->>>    drivers/net/can/slcan/slcan-core.c | 465 +++++++++--------------------
->>>    1 file changed, 134 insertions(+), 331 deletions(-)
->>>
-> 
-> 
-> 
+__________________________________
+
+
+Amarula Solutions SRL
+
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+
+T. +39 042 243 5310
+info@amarulasolutions.com
+
+www.amarulasolutions.com
