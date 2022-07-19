@@ -2,61 +2,62 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C6C57A1E7
-	for <lists+linux-can@lfdr.de>; Tue, 19 Jul 2022 16:40:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C256757A1F2
+	for <lists+linux-can@lfdr.de>; Tue, 19 Jul 2022 16:40:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238124AbiGSOkb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 19 Jul 2022 10:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59164 "EHLO
+        id S239590AbiGSOkg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 19 Jul 2022 10:40:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239431AbiGSOkG (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 19 Jul 2022 10:40:06 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596DD3AD
-        for <linux-can@vger.kernel.org>; Tue, 19 Jul 2022 07:36:09 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id bh13so13660579pgb.4
-        for <linux-can@vger.kernel.org>; Tue, 19 Jul 2022 07:36:09 -0700 (PDT)
+        with ESMTP id S239434AbiGSOkH (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 19 Jul 2022 10:40:07 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DCB0E99
+        for <linux-can@vger.kernel.org>; Tue, 19 Jul 2022 07:36:11 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id 17so3371176pfy.0
+        for <linux-can@vger.kernel.org>; Tue, 19 Jul 2022 07:36:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=QQPY0V/qlPRYSc71/C3QyqsaJHrCXDE5XW8cNsLL7VA=;
-        b=kE4uJ2fy1ja6/Q9EbH7IKALQskpp9BDKK7U0IYpyS7mur72VdR1w3YG93wOU4Ut97H
-         ugpfYSbM8r2zvbJCDxMg7whPlhR6Sn3qf6TzoSKCetFrSF4Q7ZhewnEYhMF90loANE5i
-         PKbLLIbguNpLAFYZY+FU/nglq7CI2n9dbfIjk0OnXlC5zLQtin5t9GBRswTzMXnny6UM
-         j7JdJ+uH10pVzwifvP8m4N06A0jrMt23Wqelg4tp0JTRCTp6CkJexjUxi2mwAUmsWYwH
-         A2z3uvzxk/Fi1m8XXmz6qVZdrYPazZMz1fv1EBxbSuTC+XXfLEQbrgGDf/O/2jji7Nok
-         qI6g==
+        bh=pdimTSsBcdX/uHs4tiV7k0VxwvUhCLhYDAuFITW0R40=;
+        b=CwW+cQgPWdixPqk3xBjFWKqip6ELuf19oIRpy+jfc+RbsMH/n3lxFD+th1yPsAKmqX
+         3Wlpy9QCJkpQdXIt4GCeS51BmuNu2WVAl+RooeaBcKTURdQarNg9+b3EMLkmQ7ohywdT
+         u6nLAX+1cIQ9lHJGSyhCFHyhSB7HaoaPWIGYBZrZ9e2n04kG34lkAFp0niOS1y3RR56M
+         RfYiwpG7ARXaBXx9wWpXXkhl9ONtQZLAvjVm9qvWcBqtgRtJEkiP/s8PPDXGawt3pJ6I
+         etUgl5EiUSPz1t4UJekw1cR6t1GhPdmA04PszVc1FSePBFhY6+uYI4krnfHkDRDyo3Ai
+         hc6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=QQPY0V/qlPRYSc71/C3QyqsaJHrCXDE5XW8cNsLL7VA=;
-        b=Ag0HKCBaK8hM8TxWm98cLbKjdQRnpwvbSPCZ4/4ojroPngJxGHm09HtsFtBVoXBmXt
-         I0lK+NZZ3+QE/tDwG9E0PCoDKz0PDPMcyU2rX2vhLCNQdnz09NjFSE0T3B6ASwEbJehV
-         Qb8o7/QuJvpXt5u6QQlo9dEtdyfuPnIkrZyXO+g1mzXmsnUFkhY4PkaU+4BRpOn8zdKY
-         TptJFHqn7lgtO+wVSlQO8k9YCsg6p6DR21XVFAiPmcz7mfBlwdbJsYDQS6iSNy+bh3xf
-         +7ov0YE9F7J7XK43NJq/Qa0fFgZ1nlhXtO2ItzDMbwG1OEbZOhc81qUo8HmLN/hct3IA
-         Is0w==
-X-Gm-Message-State: AJIora/Vuw3rNUMVtUWxL4eNZmTK3xVxe5gWBGfw9vrrYr2ia+pDdogz
-        CjW483qqmiIp0ALDnmQygQE2EQQCgho=
-X-Google-Smtp-Source: AGRyM1tZyLPwOXbslLyfXyvGd9eyjIUKt4vKT7DFiUmRye7vm/yL+6XjctGgXckvPV+4TkTfBsMgOA==
-X-Received: by 2002:a63:6a45:0:b0:419:cb1b:891b with SMTP id f66-20020a636a45000000b00419cb1b891bmr22869281pgc.135.1658241368411;
-        Tue, 19 Jul 2022 07:36:08 -0700 (PDT)
+        bh=pdimTSsBcdX/uHs4tiV7k0VxwvUhCLhYDAuFITW0R40=;
+        b=iaz+aeD5rFiX4ZjIwK5+yzgfAiEkMWKAUR1jozM2uoUjbqmBnhgTf2CjvevcAYyy33
+         BrwkGpbYJ5Xwvo1drIglS2fd+Bqhju+ERKtSy5riAtUhA/vzecRnO4y1tJ3qPGWHAooi
+         AyHmSaL9n+AVNqzSQo03rflJkWn9Uy5LJsaYe8wZh0GrQS18Ect/DtGbo4L7d+dDxxa0
+         ekvGK+w7s2hiblAnrCjhAsKYjrk+DnaIKpQuM6xulhU5KyKa7YX+NhkL4zC184EX37Nn
+         ZeODTn1BAlisb/Up3DoMDtjLjVc/FjjmbktTNHwJaJ5DruVge/Z+OXbTp/0pjPjbgozl
+         OQfg==
+X-Gm-Message-State: AJIora/soqBCCTgl0QyT086tprZEDFuABkcsDemow7xCHONvGKcpkVVg
+        FS7mVLDsbPeUr1uirUl3AFNDUWWAEVorgg==
+X-Google-Smtp-Source: AGRyM1treTfLJaQ9EW/YNp/8zIqUFo6N5nPWQqneH2YuyPeQwbIwaa3erzqX9QbfX9oHcRdw61ohEQ==
+X-Received: by 2002:a63:5cd:0:b0:412:b163:b7e1 with SMTP id 196-20020a6305cd000000b00412b163b7e1mr30078010pgf.451.1658241370318;
+        Tue, 19 Jul 2022 07:36:10 -0700 (PDT)
 Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id d75-20020a621d4e000000b0052896629f66sm11562516pfd.208.2022.07.19.07.36.07
+        by smtp.gmail.com with ESMTPSA id d75-20020a621d4e000000b0052896629f66sm11562516pfd.208.2022.07.19.07.36.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jul 2022 07:36:08 -0700 (PDT)
+        Tue, 19 Jul 2022 07:36:10 -0700 (PDT)
 Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
 From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 To:     linux-can@vger.kernel.org
 Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
         Frank Jungclaus <frank.jungclaus@esd.eu>,
         =?UTF-8?q?Stefan=20M=C3=A4tje?= <Stefan.Maetje@esd.eu>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v2 03/12] can: sja1000: do not report txerr and rxerr during bus-off
-Date:   Tue, 19 Jul 2022 23:35:41 +0900
-Message-Id: <20220719143550.3681-4-mailhol.vincent@wanadoo.fr>
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Subject: [PATCH v2 04/12] can: slcan: do not report txerr and rxerr during bus-off
+Date:   Tue, 19 Jul 2022 23:35:42 +0900
+Message-Id: <20220719143550.3681-5-mailhol.vincent@wanadoo.fr>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220719143550.3681-1-mailhol.vincent@wanadoo.fr>
 References: <20220712153157.83847-1-mailhol.vincent@wanadoo.fr>
@@ -76,37 +77,47 @@ X-Mailing-List: linux-can@vger.kernel.org
 During bus off, the error count is greater than 255 and can not fit in
 a u8.
 
-Fixes: 215db1856e83 ("can: sja1000: Consolidate and unify state change handling")
+alloc_can_err_skb() already sets cf to NULL if the allocation fails [1],
+so the redundant cf = NULL assignment gets removed.
+
+[1] https://elixir.bootlin.com/linux/latest/source/drivers/net/can/dev/skb.c#L187
+
+Fixes: 0a9cdcf098a4 ("can: slcan: extend the protocol with CAN state info")
+CC: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 ---
- drivers/net/can/sja1000/sja1000.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/net/can/slcan/slcan-core.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/net/can/sja1000/sja1000.c b/drivers/net/can/sja1000/sja1000.c
-index 2e7638f98cf1..84adf8b5945e 100644
---- a/drivers/net/can/sja1000/sja1000.c
-+++ b/drivers/net/can/sja1000/sja1000.c
-@@ -402,9 +402,6 @@ static int sja1000_err(struct net_device *dev, uint8_t isrc, uint8_t status)
- 	txerr = priv->read_reg(priv, SJA1000_TXERR);
- 	rxerr = priv->read_reg(priv, SJA1000_RXERR);
+diff --git a/drivers/net/can/slcan/slcan-core.c b/drivers/net/can/slcan/slcan-core.c
+index 54d29a410ad5..d4137cd9cd97 100644
+--- a/drivers/net/can/slcan/slcan-core.c
++++ b/drivers/net/can/slcan/slcan-core.c
+@@ -306,19 +306,17 @@ static void slc_bump_state(struct slcan *sl)
+ 		return;
  
--	cf->data[6] = txerr;
--	cf->data[7] = rxerr;
--
- 	if (isrc & IRQ_DOI) {
- 		/* data overrun interrupt */
- 		netdev_dbg(dev, "data overrun interrupt\n");
-@@ -426,6 +423,10 @@ static int sja1000_err(struct net_device *dev, uint8_t isrc, uint8_t status)
- 		else
- 			state = CAN_STATE_ERROR_ACTIVE;
- 	}
-+	if (state != CAN_STATE_BUS_OFF) {
+ 	skb = alloc_can_err_skb(dev, &cf);
+-	if (skb) {
+-		cf->data[6] = txerr;
+-		cf->data[7] = rxerr;
+-	} else {
+-		cf = NULL;
+-	}
+ 
+ 	tx_state = txerr >= rxerr ? state : 0;
+ 	rx_state = txerr <= rxerr ? state : 0;
+ 	can_change_state(dev, cf, tx_state, rx_state);
+ 
+-	if (state == CAN_STATE_BUS_OFF)
++	if (state == CAN_STATE_BUS_OFF) {
+ 		can_bus_off(dev);
++	} else if (skb) {
 +		cf->data[6] = txerr;
 +		cf->data[7] = rxerr;
 +	}
- 	if (isrc & IRQ_BEI) {
- 		/* bus error interrupt */
- 		priv->can.can_stats.bus_error++;
+ 
+ 	if (skb)
+ 		netif_rx(skb);
 -- 
 2.35.1
 
