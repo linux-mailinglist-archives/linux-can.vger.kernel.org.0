@@ -2,256 +2,93 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F0A057A2CC
-	for <lists+linux-can@lfdr.de>; Tue, 19 Jul 2022 17:16:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4271357A6A2
+	for <lists+linux-can@lfdr.de>; Tue, 19 Jul 2022 20:41:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238440AbiGSPQx (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 19 Jul 2022 11:16:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48126 "EHLO
+        id S233963AbiGSSlI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 19 Jul 2022 14:41:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233305AbiGSPQw (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 19 Jul 2022 11:16:52 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D3AD189
-        for <linux-can@vger.kernel.org>; Tue, 19 Jul 2022 08:16:51 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id k85so24315682ybk.7
-        for <linux-can@vger.kernel.org>; Tue, 19 Jul 2022 08:16:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YUZtGs1D2S3PFvmOCWz7WtyIilprWp5gC2CXjVJ+xYE=;
-        b=lymoboKbraL0SYNHtvOHaQRVnjaJtxG+d4KUMcCUl51mGyMjujHn2UnQfajEMT2OFD
-         +S+UU1eNzrksULmegOhKlczwDw4RNJF6dJ1b90GSRUZGdC9rgqreXKEp6NYlrD1Okjcp
-         WLaV4WvGAyIESOCsrgkA0rlQ74SGObQM+V2KPOOEFj1LKDPwRt5HRlPWpg/So8j4T4ag
-         lfX19mAwxa4wTAgkk+/AoLhJC98ye9meiOPIRGCRrGfroSA3TtsaSV5dHZLHXwym2Wm9
-         WRiRDUb/rtSaJ0WpgwBvUOOjXVIyXXmTyTT2rnGfofXJP4Xsy03eRnr6rJzcXnqCw568
-         mGkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YUZtGs1D2S3PFvmOCWz7WtyIilprWp5gC2CXjVJ+xYE=;
-        b=hags5wBcnb9JbC3VpTJJjpS4lDKMs0vJQdYxYoCxcXE4XgDrocj6NVAA71inzNXVPg
-         /uUm2adTL7kKp6iFSW/GleSXdNjRWmktx36av4alTTKsvi4FqNuYepBFk+JUOfQI2DtB
-         62l9cfqE5Fu1gbXfcMH4XsYYLbqrZ5ILjHsdJ43KP51oj2oU+9JLR3VqraJcp/oimd9r
-         xOTLzM62hN/R6/PfYVTh0hA/wPf0D2WUvdhDwE8JnKz0KIvhxM6nkflIoaOuc1H1RdtK
-         temK4ymj+c4spMKoQPW6ZTl1TufsK/hW2n0zn5cxk1vTuNPX6C+hqorr1bTcguISkxYv
-         KxTg==
-X-Gm-Message-State: AJIora+RNN0cpjj/adhYAdd2xayXTI3jTGfOY+7hG85iYFFF6iDEs4VB
-        mwgMdbEFY+HSXcIOpg8fgMgASKVlGL/4fywHbTwT92hspdQ=
-X-Google-Smtp-Source: AGRyM1s2oZBceEa7F8APabrexqZ+5tgIB8RoQvez9/64alxpuEmA2iTG8ajwFNfrbRpOhO5umh2RreXIkmVKYnEqSxM=
-X-Received: by 2002:a25:72d4:0:b0:670:7c08:a9e8 with SMTP id
- n203-20020a2572d4000000b006707c08a9e8mr5497242ybc.423.1658243810415; Tue, 19
- Jul 2022 08:16:50 -0700 (PDT)
+        with ESMTP id S232193AbiGSSlH (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 19 Jul 2022 14:41:07 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 045505F81
+        for <linux-can@vger.kernel.org>; Tue, 19 Jul 2022 11:41:05 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oDs9X-0000Fx-BB; Tue, 19 Jul 2022 20:41:03 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 7B8CEB446E;
+        Tue, 19 Jul 2022 18:41:00 +0000 (UTC)
+Date:   Tue, 19 Jul 2022 20:40:59 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Jimmy Assarsson <extja@kvaser.com>
+Cc:     linux-can@vger.kernel.org,
+        Anssi Hannula <anssi.hannula@bitwise.fi>,
+        Jimmy Assarsson <jimmyassarsson@gmail.com>
+Subject: Re: [PATCH v2 00/15] can: kvaser_usb: Various fixes
+Message-ID: <20220719184059.pzqgxsgl7hw3cdne@pengutronix.de>
+References: <20220708115709.232815-1-extja@kvaser.com>
 MIME-Version: 1.0
-References: <20220719112748.3281-1-socketcan@hartkopp.net> <20220719112748.3281-4-socketcan@hartkopp.net>
- <CAMZ6RqLb=Q3VQxwG3gXtTyo7YkLsB5f3YonjgcpmeoRzReOXCw@mail.gmail.com> <f8ec078d-44c9-9f8c-800f-058e4c735003@hartkopp.net>
-In-Reply-To: <f8ec078d-44c9-9f8c-800f-058e4c735003@hartkopp.net>
-From:   Vincent Mailhol <vincent.mailhol@gmail.com>
-Date:   Wed, 20 Jul 2022 00:16:39 +0900
-Message-ID: <CAMZ6RqKhW1vGwY1n=k82VmjKk_7MSUAQo4vvR-SGEpA0kD5sXA@mail.gmail.com>
-Subject: Re: [RFC PATCH v5 3/5] can: dev: add CAN XL support
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     linux-can <linux-can@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ucdctedkuvfskyco"
+Content-Disposition: inline
+In-Reply-To: <20220708115709.232815-1-extja@kvaser.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue 19 Jul. 2022 at 23:38, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
-> On 19.07.22 16:11, Vincent Mailhol wrote:
-> > On Tue. 19 Jul. 2022, 20:44, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
-> >> Extend the CAN device driver infrastructure to handle CAN XL frames.
-> >> This especially addresses the increased data length which is extended
-> >> to uint16 for CAN XL.
-> >>
-> >> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-> >> ---
-> >>   drivers/net/can/dev/rx-offload.c |  2 +-
-> >>   drivers/net/can/dev/skb.c        | 49 ++++++++++++++++++++++++++------
-> >>   include/linux/can/skb.h          |  5 +++-
-> >>   3 files changed, 45 insertions(+), 11 deletions(-)
-> >>
-> >> diff --git a/drivers/net/can/dev/rx-offload.c b/drivers/net/can/dev/rx-offload.c
-> >> index a32a01c172d4..8505e547e922 100644
-> >> --- a/drivers/net/can/dev/rx-offload.c
-> >> +++ b/drivers/net/can/dev/rx-offload.c
-> >> @@ -245,11 +245,11 @@ unsigned int can_rx_offload_get_echo_skb(struct can_rx_offload *offload,
-> >>                                           unsigned int *frame_len_ptr)
-> >>   {
-> >>          struct net_device *dev = offload->dev;
-> >>          struct net_device_stats *stats = &dev->stats;
-> >>          struct sk_buff *skb;
-> >> -       u8 len;
-> >> +       unsigned int len;
-> >>          int err;
-> >>
-> >>          skb = __can_get_echo_skb(dev, idx, &len, frame_len_ptr);
-> >>          if (!skb)
-> >>                  return 0;
-> >> diff --git a/drivers/net/can/dev/skb.c b/drivers/net/can/dev/skb.c
-> >> index 8bb62dd864c8..8531e0c39d1c 100644
-> >> --- a/drivers/net/can/dev/skb.c
-> >> +++ b/drivers/net/can/dev/skb.c
-> >> @@ -53,11 +53,12 @@ int can_put_echo_skb(struct sk_buff *skb, struct net_device *dev,
-> >>          BUG_ON(idx >= priv->echo_skb_max);
-> >>
-> >>          /* check flag whether this packet has to be looped back */
-> >>          if (!(dev->flags & IFF_ECHO) ||
-> >>              (skb->protocol != htons(ETH_P_CAN) &&
-> >> -            skb->protocol != htons(ETH_P_CANFD))) {
-> >> +            skb->protocol != htons(ETH_P_CANFD) &&
-> >> +            skb->protocol != htons(ETH_P_CANXL))) {
-> >>                  kfree_skb(skb);
-> >>                  return 0;
-> >>          }
-> >>
-> >>          if (!priv->echo_skb[idx]) {
-> >> @@ -86,12 +87,12 @@ int can_put_echo_skb(struct sk_buff *skb, struct net_device *dev,
-> >>          return 0;
-> >>   }
-> >>   EXPORT_SYMBOL_GPL(can_put_echo_skb);
-> >>
-> >>   struct sk_buff *
-> >> -__can_get_echo_skb(struct net_device *dev, unsigned int idx, u8 *len_ptr,
-> >> -                  unsigned int *frame_len_ptr)
-> >> +__can_get_echo_skb(struct net_device *dev, unsigned int idx,
-> >> +                  unsigned int *len_ptr, unsigned int *frame_len_ptr)
-> >>   {
-> >>          struct can_priv *priv = netdev_priv(dev);
-> >>
-> >>          if (idx >= priv->echo_skb_max) {
-> >>                  netdev_err(dev, "%s: BUG! Trying to access can_priv::echo_skb out of bounds (%u/max %u)\n",
-> >> @@ -103,17 +104,13 @@ __can_get_echo_skb(struct net_device *dev, unsigned int idx, u8 *len_ptr,
-> >>                  /* Using "struct canfd_frame::len" for the frame
-> >>                   * length is supported on both CAN and CANFD frames.
-> >>                   */
-> >>                  struct sk_buff *skb = priv->echo_skb[idx];
-> >>                  struct can_skb_priv *can_skb_priv = can_skb_prv(skb);
-> >> -               struct canfd_frame *cf = (struct canfd_frame *)skb->data;
-> >>
-> >>                  /* get the real payload length for netdev statistics */
-> >> -               if (cf->can_id & CAN_RTR_FLAG)
-> >> -                       *len_ptr = 0;
-> >> -               else
-> >> -                       *len_ptr = cf->len;
-> >> +               *len_ptr = can_skb_get_data_len(skb);
-> >>
-> >>                  if (frame_len_ptr)
-> >>                          *frame_len_ptr = can_skb_priv->frame_len;
-> >>
-> >>                  priv->echo_skb[idx] = NULL;
-> >> @@ -139,11 +136,11 @@ __can_get_echo_skb(struct net_device *dev, unsigned int idx, u8 *len_ptr,
-> >>    */
-> >>   unsigned int can_get_echo_skb(struct net_device *dev, unsigned int idx,
-> >>                                unsigned int *frame_len_ptr)
-> >>   {
-> >>          struct sk_buff *skb;
-> >> -       u8 len;
-> >> +       unsigned int len;
-> >>
-> >>          skb = __can_get_echo_skb(dev, idx, &len, frame_len_ptr);
-> >>          if (!skb)
-> >>                  return 0;
-> >>
-> >> @@ -244,10 +241,41 @@ struct sk_buff *alloc_canfd_skb(struct net_device *dev,
-> >>
-> >>          return skb;
-> >>   }
-> >>   EXPORT_SYMBOL_GPL(alloc_canfd_skb);
-> >>
-> >> +struct sk_buff *alloc_canxl_skb(struct net_device *dev,
-> >> +                               struct canxl_frame **cfx)
-> >> +{
-> >> +       struct sk_buff *skb;
-> >> +
-> >> +       skb = netdev_alloc_skb(dev, sizeof(struct can_skb_priv) +
-> >> +                              sizeof(struct canxl_frame));
-> >
-> > I am confused. In this message:
-> > https://lore.kernel.org/linux-can/3dcc85f8-2c02-dfe5-de23-d022f3fc56be@hartkopp.net/
-> > you said that you "vote for selecting the 'truncated' option only"
-> > (which is OK with me). But here, you are allocating the full size. If
-> > we always want truncated frames, shouldn't we allocate the exact size
-> > frame length here?
->
-> No confusion.
->
-> The API to the user space is 'truncated' option only.
->
-> The data structure inside the kernel sizeof(struct can[|fd|xl]_frame).
->
-> See:
-> https://lore.kernel.org/linux-can/4c79233f-1301-d5c7-7698-38d39d8702aa@hartkopp.net/
->
-> ---8<---
->
-> As the sk_buffs are only allocated once and are not copied inside the
-> kernel there should be no remarkable drawbacks whether we allocate
-> CAN_MTU skbs or CANXL_MTU skbs.
->
-> AFAICS both skbs will fit into a single page.
 
-This is true. A page is at least 4k. So the 2k + alpha will easily fit.
-But the page is not the smallest chunk that can return malloc, c.f.
-KMALLOC_MIN_SIZE:
-https://elixir.bootlin.com/linux/latest/source/include/linux/slab.h#L279
+--ucdctedkuvfskyco
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Also, more than the page size, my concern are the cache misses,
-especially when memsetting to zero the full canxl frame. As far as I
-understand, cloning an skb does not copy the payload (only increment a
-reference to it) so the echo_skb thing should not be impacted.
-That said, I am not able to tell whether or not this will have a
-noticeable impact (I have some feeling it might but can not assert
-it). If this looks good for the people who have the expertise in
-kernel performances, then I am fine.
+On 08.07.2022 13:56:54, Jimmy Assarsson wrote:
+> This patch series was originally posted by Anssi Hannula [1].
+> Since v1 I've rebased the patches on top of commit
+> b3b6df2c56d8 ("can: kvaser_usb: kvaser_usb_leaf: fix bittiming limits")
+> and replaced a couple of patches with new ones.
 
-> ---8<---
->
-> It is just easier and safe.
->
-> (..)
->
-> >> @@ -302,10 +330,13 @@ bool can_dropped_invalid_skb(struct net_device *dev, struct sk_buff *skb)
-> >>                          goto inval_skb;
-> >>          } else if (skb->protocol == htons(ETH_P_CANFD)) {
-> >>                  if (unlikely(skb->len != CANFD_MTU ||
-> >>                               cfd->len > CANFD_MAX_DLEN))
-> >>                          goto inval_skb;
-> >> +       } else if (skb->protocol == htons(ETH_P_CANXL)) {
-> >
-> > Nitpick but with the growing list, I would see a switch
-> > (skb->protocol) rather than the cascade of if.
-> >
-> >> +               if (unlikely(!can_is_canxl_skb(skb)))
-> >> +                       goto inval_skb;
-> >>          } else {
-> >
-> > default:
-> >
-> >>                  goto inval_skb;
-> >>          }
->
-> Yes. Good idea!
->
-> Will change that.
+Jimmy, as all of these patches went through your hands, they need your
+S-o-b. Can I add it while applying?
 
-Maybe even better:
+regards,
+Marc
 
-        switch(ntohs(skb->protocol)) {
-        case ETH_P_CAN:
-               /* ... */
-        case ETH_P_CANFD:
-               /* ... */
-        case ETH_P_CANXL:
-                /* ... */
-        default:
-                /* ... */
-        }
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--ucdctedkuvfskyco
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLW+rkACgkQrX5LkNig
+013DYQf8CTvGO3+lh5cFMb33l9JlAMxumjC6bvpMYhpsMekuqOLow0BWeIrGrp32
+aOwhg1soDOdSrCSjUNXP5cwajVySiJyAZpoAczbgA0g0Bc401IDLG+SrPh6Lh+Pg
+Ul+MsHaCGmBx5FTCcGnzoOELvtUlbD2LKDwAcqORb/1T/JZ6oaoe1inLGZVWjWD7
+UPfLTpwj4KfTdQu0lhU7nSh0K3z/ZLCR0lQ1540i1HFGKTs7PA8wWvy3bAwEcK88
+Cf9W8tMZpuOpT4uU4L8K7ijRVUg5fOxIPbRUo8DXlwLeakrXzREZO2ZPrkgn1EVG
+uP6aaOtyac4mZxEptVVVKwjiNMVstQ==
+=CUnp
+-----END PGP SIGNATURE-----
+
+--ucdctedkuvfskyco--
