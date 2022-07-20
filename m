@@ -2,44 +2,44 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBA1357B296
-	for <lists+linux-can@lfdr.de>; Wed, 20 Jul 2022 10:13:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 732D357B264
+	for <lists+linux-can@lfdr.de>; Wed, 20 Jul 2022 10:11:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238439AbiGTIMj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 20 Jul 2022 04:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52786 "EHLO
+        id S238843AbiGTILd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 20 Jul 2022 04:11:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240289AbiGTILy (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 20 Jul 2022 04:11:54 -0400
+        with ESMTP id S236335AbiGTILY (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 20 Jul 2022 04:11:24 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289506B278
-        for <linux-can@vger.kernel.org>; Wed, 20 Jul 2022 01:11:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2FF4AD71
+        for <linux-can@vger.kernel.org>; Wed, 20 Jul 2022 01:11:23 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1oE4nw-0000eO-Ay
-        for linux-can@vger.kernel.org; Wed, 20 Jul 2022 10:11:36 +0200
+        id 1oE4nh-0008Qk-Gi
+        for linux-can@vger.kernel.org; Wed, 20 Jul 2022 10:11:21 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id CC6ACB5907
-        for <linux-can@vger.kernel.org>; Wed, 20 Jul 2022 08:10:40 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id 516C0B5917
+        for <linux-can@vger.kernel.org>; Wed, 20 Jul 2022 08:10:41 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 3D0BDB58F0;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id A8C06B58FF;
         Wed, 20 Jul 2022 08:10:40 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 2464fd71;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id ec850fba;
         Wed, 20 Jul 2022 08:10:35 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
         kernel@pengutronix.de, Biju Das <biju.das.jz@bp.renesas.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next 10/29] can: sja1000: Use device_get_match_data to get device data
-Date:   Wed, 20 Jul 2022 10:10:15 +0200
-Message-Id: <20220720081034.3277385-11-mkl@pengutronix.de>
+Subject: [PATCH net-next 11/29] can: sja1000: Change the return type as void for SoC specific init
+Date:   Wed, 20 Jul 2022 10:10:16 +0200
+Message-Id: <20220720081034.3277385-12-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220720081034.3277385-1-mkl@pengutronix.de>
 References: <20220720081034.3277385-1-mkl@pengutronix.de>
@@ -50,7 +50,8 @@ X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,42 +60,60 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 From: Biju Das <biju.das.jz@bp.renesas.com>
 
-This patch replaces of_match_device->device_get_match_data
-to get pointer to device data.
+Change the return type as void for SoC specific init function as it
+always return 0.
 
-Link: https://lore.kernel.org/all/20220710115248.190280-5-biju.das.jz@bp.renesas.com
+Link: https://lore.kernel.org/all/20220710115248.190280-6-biju.das.jz@bp.renesas.com
 Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/sja1000/sja1000_platform.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ drivers/net/can/sja1000/sja1000_platform.c | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/net/can/sja1000/sja1000_platform.c b/drivers/net/can/sja1000/sja1000_platform.c
-index f9ec7bd8dfac..0b78568f5286 100644
+index 0b78568f5286..81bc741905fd 100644
 --- a/drivers/net/can/sja1000/sja1000_platform.c
 +++ b/drivers/net/can/sja1000/sja1000_platform.c
-@@ -210,7 +210,6 @@ static int sp_probe(struct platform_device *pdev)
- 	struct resource *res_mem, *res_irq = NULL;
- 	struct sja1000_platform_data *pdata;
- 	struct device_node *of = pdev->dev.of_node;
--	const struct of_device_id *of_id;
- 	const struct sja1000_of_data *of_data = NULL;
- 	size_t priv_sz = 0;
+@@ -31,7 +31,7 @@ MODULE_LICENSE("GPL v2");
  
-@@ -243,11 +242,9 @@ static int sp_probe(struct platform_device *pdev)
- 			return -ENODEV;
+ struct sja1000_of_data {
+ 	size_t  priv_sz;
+-	int     (*init)(struct sja1000_priv *priv, struct device_node *of);
++	void    (*init)(struct sja1000_priv *priv, struct device_node *of);
+ };
+ 
+ struct technologic_priv {
+@@ -94,15 +94,13 @@ static void sp_technologic_write_reg16(const struct sja1000_priv *priv,
+ 	spin_unlock_irqrestore(&tp->io_lock, flags);
+ }
+ 
+-static int sp_technologic_init(struct sja1000_priv *priv, struct device_node *of)
++static void sp_technologic_init(struct sja1000_priv *priv, struct device_node *of)
+ {
+ 	struct technologic_priv *tp = priv->priv;
+ 
+ 	priv->read_reg = sp_technologic_read_reg16;
+ 	priv->write_reg = sp_technologic_write_reg16;
+ 	spin_lock_init(&tp->io_lock);
+-
+-	return 0;
+ }
+ 
+ static void sp_populate(struct sja1000_priv *priv,
+@@ -266,11 +264,8 @@ static int sp_probe(struct platform_device *pdev)
+ 	if (of) {
+ 		sp_populate_of(priv, of);
+ 
+-		if (of_data && of_data->init) {
+-			err = of_data->init(priv, of);
+-			if (err)
+-				goto exit_free;
+-		}
++		if (of_data && of_data->init)
++			of_data->init(priv, of);
+ 	} else {
+ 		sp_populate(priv, pdata, res_mem->flags);
  	}
- 
--	of_id = of_match_device(sp_of_table, &pdev->dev);
--	if (of_id && of_id->data) {
--		of_data = of_id->data;
-+	of_data = device_get_match_data(&pdev->dev);
-+	if (of_data)
- 		priv_sz = of_data->priv_sz;
--	}
- 
- 	dev = alloc_sja1000dev(priv_sz);
- 	if (!dev)
 -- 
 2.35.1
 
