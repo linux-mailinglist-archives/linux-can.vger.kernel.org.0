@@ -2,117 +2,91 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A157457B18B
-	for <lists+linux-can@lfdr.de>; Wed, 20 Jul 2022 09:17:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C797957B1AC
+	for <lists+linux-can@lfdr.de>; Wed, 20 Jul 2022 09:24:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbiGTHR1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 20 Jul 2022 03:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37548 "EHLO
+        id S229952AbiGTHYv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 20 Jul 2022 03:24:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230316AbiGTHRX (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 20 Jul 2022 03:17:23 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C45266BB5
-        for <linux-can@vger.kernel.org>; Wed, 20 Jul 2022 00:17:22 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oE3xP-0001Rq-R9; Wed, 20 Jul 2022 09:17:19 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 91C73B5458;
-        Wed, 20 Jul 2022 07:17:18 +0000 (UTC)
-Date:   Wed, 20 Jul 2022 09:17:17 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can@vger.kernel.org,
-        Frank Jungclaus <frank.jungclaus@esd.eu>,
-        Stefan =?utf-8?B?TcOkdGpl?= <Stefan.Maetje@esd.eu>
+        with ESMTP id S239087AbiGTHYr (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 20 Jul 2022 03:24:47 -0400
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4A867C89
+        for <linux-can@vger.kernel.org>; Wed, 20 Jul 2022 00:24:47 -0700 (PDT)
+Received: by mail-yb1-f182.google.com with SMTP id r3so30704794ybr.6
+        for <linux-can@vger.kernel.org>; Wed, 20 Jul 2022 00:24:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=e11+fe8Z8ESHsJuUn0fkECgkggAo1cSJFgG5j15LV7o=;
+        b=MURAn5IFG1unHBbu6LcNSnF7xIZA7Jq+UJPx2oZb2k1Ks7l+pEr48xQdE/UEFl2SYD
+         +lOQ5uIZMty/dOftDrQoBlnG8GTQSRVj0Grb+r8fcIzImiyikYow6KC+Z2skBhqF+qK2
+         yzvX+/0aG5PZuMLv5CwunoHdILLpq9pj7aM89W7d66IaP9giLSnvuYFu/W83HeyZ9fLv
+         H6RgL7Fsp2RSMRtjZhEkOE9fSh3r1wUoT08aEN24mASIav35O67TZVacEXePXU2QlN6m
+         aDJjB6yiM8r19FeGNyTi+HEBl2vHPc8mggPhElDgNsfbt+bbvM9I9efN2tK2MhEUljVJ
+         pJ8A==
+X-Gm-Message-State: AJIora9yZHS34KHhCtfZGa7WL768lV1GIyVmm9ER6AtSwCMrepXUL0qj
+        vW/apiYcWRbH6vGSLDLlS+brw/24OOvforxA68l2MWVX
+X-Google-Smtp-Source: AGRyM1tSzrbZvVkF4DJP1e0rGDMfeEFmX6tRbgVPNtt+mFOSgLXHHy/8Pheu5ZKtmz4sinfxCy1U7jKQb3nhRXoTAeA=
+X-Received: by 2002:a25:a0cf:0:b0:66f:f075:51cb with SMTP id
+ i15-20020a25a0cf000000b0066ff07551cbmr23222728ybm.142.1658301886333; Wed, 20
+ Jul 2022 00:24:46 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220719143550.3681-1-mailhol.vincent@wanadoo.fr> <20220720071717.q7egrzu2fjc2c64i@pengutronix.de>
+In-Reply-To: <20220720071717.q7egrzu2fjc2c64i@pengutronix.de>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Wed, 20 Jul 2022 16:24:32 +0900
+Message-ID: <CAMZ6RqJ+HnkzLxLkgZMqKmFGtXJR9udD6ak+JnFs4AYD1HCyKw@mail.gmail.com>
 Subject: Re: [PATCH v2 00/12] can: error: set of fixes and improvement on
  txerr and rxerr reporting
-Message-ID: <20220720071717.q7egrzu2fjc2c64i@pengutronix.de>
-References: <20220719143550.3681-1-mailhol.vincent@wanadoo.fr>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ltdqtqampmjbhso5"
-Content-Disposition: inline
-In-Reply-To: <20220719143550.3681-1-mailhol.vincent@wanadoo.fr>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org,
+        Frank Jungclaus <frank.jungclaus@esd.eu>,
+        =?UTF-8?Q?Stefan_M=C3=A4tje?= <Stefan.Maetje@esd.eu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Wed. 20 Jul. 2022 at 16:20, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> On 19.07.2022 23:35:38, Vincent Mailhol wrote:
+> > This series is a collection of patches targeting the CAN error
+> > counter. The series is split in three blocks (with small relation to
+> > each other).
+> >
+> > Several drivers uses the data[6] and data[7] fields (both of type u8)
+> > of the CAN error frame to report those values. However, the maximum
+> > size an u8 can hold is 255 and the error counter can exceed this value
+> > if bus-off status occurs. As such, the first nine patches of this
+> > series make sure that no drivers try to report txerr or rxerr through
+> > the CAN error frame when bus-off status is reached.
+> >
+> > can_frame::data[5..7] are defined as being "controller
+> > specific". Controller specific behaviors are not something desirable
+> > (portability issue...) The tenth patch of this series specifies how
+> > can_frame::data[5..7] should be use and remove any "controller
+> > specific" freedom. The eleventh patch adds a flag to notify though
+> > can_frame::can_id that data[6..7] were populated (in order to be
+> > consistent with other fields).
+> >
+> > Finally, the twelfth and last patch add three macro values to specify
+> > the different error counter threshold with so far was hard-coded as
+> > magic numbers in the drivers.
+> >
+> > N.B.:
+> >   * patches 1 to 10 are for net (stable).
+> >   * patches 11 and 12 are for net-next (but depends on patches 1 to 10).
+>
+> IMHO the patches 1..10 are not so critical that they need to go upstream
+> via net. Especially that we're already at -rc7. I'll take all via
+> can-next, OK?
 
---ltdqtqampmjbhso5
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 19.07.2022 23:35:38, Vincent Mailhol wrote:
-> This series is a collection of patches targeting the CAN error
-> counter. The series is split in three blocks (with small relation to
-> each other).
->=20
-> Several drivers uses the data[6] and data[7] fields (both of type u8)
-> of the CAN error frame to report those values. However, the maximum
-> size an u8 can hold is 255 and the error counter can exceed this value
-> if bus-off status occurs. As such, the first nine patches of this
-> series make sure that no drivers try to report txerr or rxerr through
-> the CAN error frame when bus-off status is reached.
->=20
-> can_frame::data[5..7] are defined as being "controller
-> specific". Controller specific behaviors are not something desirable
-> (portability issue...) The tenth patch of this series specifies how
-> can_frame::data[5..7] should be use and remove any "controller
-> specific" freedom. The eleventh patch adds a flag to notify though
-> can_frame::can_id that data[6..7] were populated (in order to be
-> consistent with other fields).
->=20
-> Finally, the twelfth and last patch add three macro values to specify
-> the different error counter threshold with so far was hard-coded as
-> magic numbers in the drivers.
->=20
-> N.B.:
->   * patches 1 to 10 are for net (stable).
->   * patches 11 and 12 are for net-next (but depends on patches 1 to 10).
-
-IMHO the patches 1..10 are not so critical that they need to go upstream
-via net. Especially that we're already at -rc7. I'll take all via
-can-next, OK?
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---ltdqtqampmjbhso5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLXq/oACgkQrX5LkNig
-011EVwf+M8+JFtCgTyh3dy8Tg5rNG7pg8u38Lvf7o3MSkgkUuS2LCeA7JSID69kE
-epAapSnOjb1jYJ5HBeBU8i5yCQsubz0Zml/YAYNb6J5uo4ixDwhK2xBfExeTKZ43
-BkY5jiKCP9c/ZG/eia0EiXxXXtsPC+DLIJxHBj7Ym5soQ7oFGgm2FSDMphfHwzU9
-gzU9e4APRUqABvnaesr//CaT9JXpqp66KHrxEp0+ZIzFM0Eok5O9YV8FBfJyzLnn
-L16g7fPlwt5igjdaE8D9q+aGjwJVPWQYBYiura5PyuxVKj+trqgR+GFHgXIVnJzG
-DDvgo/SZnREr7xd6vLc4l4r0oxnGHQ==
-=+VKX
------END PGP SIGNATURE-----
-
---ltdqtqampmjbhso5--
+Absolutely OK. Nothing critical here.
