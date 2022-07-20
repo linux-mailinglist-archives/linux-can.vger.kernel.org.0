@@ -2,85 +2,85 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECD2657B461
-	for <lists+linux-can@lfdr.de>; Wed, 20 Jul 2022 12:20:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1FDC57B514
+	for <lists+linux-can@lfdr.de>; Wed, 20 Jul 2022 13:07:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbiGTKUQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 20 Jul 2022 06:20:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38312 "EHLO
+        id S229830AbiGTLHN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 20 Jul 2022 07:07:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230087AbiGTKUP (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 20 Jul 2022 06:20:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBFB5A442;
-        Wed, 20 Jul 2022 03:20:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E0FA561BA0;
-        Wed, 20 Jul 2022 10:20:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 377E3C341C7;
-        Wed, 20 Jul 2022 10:20:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658312413;
-        bh=HOQhHtGXtjzLVdj1ro/LNI+1Ny99QaZ7D4TbaiXg7kM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=NJnBuh2O0vvm4+r7jN3xINsWwaruI1vle/1OZ5rv2sXDZpriwH11+l8ryfbqVNM8E
-         XtNB7WIhfAVbcIVrZDnA0L8tNedSY20MMKG/VKY3jKNXxM4UIWEkDnaj0DQKx2JEKN
-         PR3jt2Krwi4RONFOKdMENmLOMKRPovMtXu14h9jfk79pDeKHlfGenCYiCSsqncgjna
-         GQIYKJI9WKcUhWqKcw3x4GpN3GQrDYtAUpVFXICl3iLfUQtqC7+v1KiZnG/n29h6Z1
-         yxD9r/Wr7LFO/W0FbyDLnd4oAphDAAGIp9/Dw/a1E/gEnEM0vaNhqB+NMpdiGGHrKu
-         VLJc2eqNkvKdw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1D59BE451BC;
-        Wed, 20 Jul 2022 10:20:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229614AbiGTLHL (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 20 Jul 2022 07:07:11 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D1D4B0D7;
+        Wed, 20 Jul 2022 04:07:09 -0700 (PDT)
+Received: from localhost.localdomain (unknown [46.242.14.200])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 08A0D40737AC;
+        Wed, 20 Jul 2022 11:07:06 +0000 (UTC)
+From:   Fedor Pchelkin <pchelkin@ispras.ru>
+To:     Robin van der Gracht <robin@protonic.nl>,
+        Oleksij Rempel <linux@rempel-privat.de>
+Cc:     Fedor Pchelkin <pchelkin@ispras.ru>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Elenita Hinds <ecathinds@gmail.com>,
+        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>
+Subject: [PATCH] can: j1939: Remove unnecessary WARN_ON_ONCE in j1939_sk_queue_activate_next_locked()
+Date:   Wed, 20 Jul 2022 14:06:45 +0300
+Message-Id: <20220720110645.519601-1-pchelkin@ispras.ru>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 1/2] can: mcp251xfd: fix detection of mcp251863
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165831241311.14288.2555817485894575710.git-patchwork-notify@kernel.org>
-Date:   Wed, 20 Jul 2022 10:20:13 +0000
-References: <20220720083621.3294548-2-mkl@pengutronix.de>
-In-Reply-To: <20220720083621.3294548-2-mkl@pengutronix.de>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, kernel@pengutronix.de
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello:
+The purpose of WARN_ON_ONCE if the session with the same parameters
+has already been activated and is currently in active_session_list is
+not very clear. Is this warning implemented to indicate that userspace
+is doing something wrong?
 
-This series was applied to netdev/net.git (master)
-by Marc Kleine-Budde <mkl@pengutronix.de>:
+As far as I can see, there are two lists: active_session_list (which
+is for the whole device) and sk_session_queue (which is unique for
+each j1939_sock), and the situation when we have two sessions with
+the same type, addresses and destinations in two different
+sk_session_queues (owned by two different sockets) is actually highly
+probable - one is active and the other is willing to become active
+but the j1939_session_activate() does not let that happen. It is
+correct behaviour as I assume.
 
-On Wed, 20 Jul 2022 10:36:20 +0200 you wrote:
-> In commit c6f2a617a0a8 ("can: mcp251xfd: add support for mcp251863")
-> support for the mcp251863 was added. However it was not taken into
-> account that the auto detection of the chip model cannot distinguish
-> between mcp2518fd and mcp251863 and would lead to a warning message if
-> the firmware specifies a mcp251863.
-> 
-> Fix auto detection: If a mcp2518fd compatible chip is found, keep the
-> mcp251863 if specified by firmware, use mcp2518fd instead.
-> 
-> [...]
+Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
 
-Here is the summary with links:
-  - [net,1/2] can: mcp251xfd: fix detection of mcp251863
-    https://git.kernel.org/netdev/net/c/db87c005b9cc
-  - [net,2/2] can: rcar_canfd: Add missing of_node_put() in rcar_canfd_probe()
-    https://git.kernel.org/netdev/net/c/7b66dfcc6e1e
+Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
+Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
+Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+---
+ net/can/j1939/socket.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-You are awesome, thank you!
+diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
+index f5ecfdcf57b2..be4b73afa16c 100644
+--- a/net/can/j1939/socket.c
++++ b/net/can/j1939/socket.c
+@@ -178,7 +178,7 @@ static void j1939_sk_queue_activate_next_locked(struct j1939_session *session)
+ 	if (!first)
+ 		return;
+ 
+-	if (WARN_ON_ONCE(j1939_session_activate(first))) {
++	if (j1939_session_activate(first)) {
+ 		first->err = -EBUSY;
+ 		goto activate_next;
+ 	} else {
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.25.1
 
