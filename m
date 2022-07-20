@@ -2,44 +2,46 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7BD357B308
-	for <lists+linux-can@lfdr.de>; Wed, 20 Jul 2022 10:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B736E57B30A
+	for <lists+linux-can@lfdr.de>; Wed, 20 Jul 2022 10:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231771AbiGTIg1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 20 Jul 2022 04:36:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47456 "EHLO
+        id S230029AbiGTIg2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 20 Jul 2022 04:36:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiGTIg1 (ORCPT
+        with ESMTP id S231245AbiGTIg1 (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Wed, 20 Jul 2022 04:36:27 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60CF24E621
-        for <linux-can@vger.kernel.org>; Wed, 20 Jul 2022 01:36:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36FD95246E
+        for <linux-can@vger.kernel.org>; Wed, 20 Jul 2022 01:36:27 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1oE5Bw-0005lw-Sq
-        for linux-can@vger.kernel.org; Wed, 20 Jul 2022 10:36:24 +0200
+        id 1oE5Bx-0005mL-KY
+        for linux-can@vger.kernel.org; Wed, 20 Jul 2022 10:36:25 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 4E4C8B5B7F
+        by bjornoya.blackshift.org (Postfix) with SMTP id C3789B5B87
         for <linux-can@vger.kernel.org>; Wed, 20 Jul 2022 08:36:24 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id EE03EB5B7B;
-        Wed, 20 Jul 2022 08:36:23 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 53847B5B80;
+        Wed, 20 Jul 2022 08:36:24 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id beddd37d;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id ce92ab8b;
         Wed, 20 Jul 2022 08:36:23 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: [PATCH net 0/2] pull-request: can 2022-07-20
-Date:   Wed, 20 Jul 2022 10:36:19 +0200
-Message-Id: <20220720083621.3294548-1-mkl@pengutronix.de>
+        kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH net 1/2] can: mcp251xfd: fix detection of mcp251863
+Date:   Wed, 20 Jul 2022 10:36:20 +0200
+Message-Id: <20220720083621.3294548-2-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220720083621.3294548-1-mkl@pengutronix.de>
+References: <20220720083621.3294548-1-mkl@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
@@ -54,45 +56,62 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Jakub, hello David,
+In commit c6f2a617a0a8 ("can: mcp251xfd: add support for mcp251863")
+support for the mcp251863 was added. However it was not taken into
+account that the auto detection of the chip model cannot distinguish
+between mcp2518fd and mcp251863 and would lead to a warning message if
+the firmware specifies a mcp251863.
 
-this is a pull request of 2 patches for net/master.
+Fix auto detection: If a mcp2518fd compatible chip is found, keep the
+mcp251863 if specified by firmware, use mcp2518fd instead.
 
-The first patch is by me and fixes the detection of the mcp251863 in
-the mcp251xfd driver.
-
-The last patch is by Liang He and adds a missing of_node_put() in the
-rcar_canfd driver.
-
-regards,
-Marc
-
+Link: https://lore.kernel.org/all/20220706064835.1848864-1-mkl@pengutronix.de
+Fixes: c6f2a617a0a8 ("can: mcp251xfd: add support for mcp251863")
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
-
-The following changes since commit 48ea8ea32dbf3231882e9bc0b297fe1400785219:
-
-  Merge branch '40GbE' of git://git.kernel.org/pub/scm/linux/kernel/git/tnguy/net-queue (2022-07-19 17:43:02 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-5.19-20220720
-
-for you to fetch changes up to 7b66dfcc6e1e1f018492619c3d0fc432b6b54272:
-
-  can: rcar_canfd: Add missing of_node_put() in rcar_canfd_probe() (2022-07-20 10:20:19 +0200)
-
-----------------------------------------------------------------
-linux-can-fixes-for-5.19-20220720
-
-----------------------------------------------------------------
-Liang He (1):
-      can: rcar_canfd: Add missing of_node_put() in rcar_canfd_probe()
-
-Marc Kleine-Budde (1):
-      can: mcp251xfd: fix detection of mcp251863
-
- drivers/net/can/rcar/rcar_canfd.c              |  1 +
  drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 18 +++++++++++++-----
- 2 files changed, 14 insertions(+), 5 deletions(-)
+ 1 file changed, 13 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+index 9b47b07162fe..bc6518504fd4 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+@@ -1690,8 +1690,8 @@ static int mcp251xfd_register_chip_detect(struct mcp251xfd_priv *priv)
+ 	u32 osc;
+ 	int err;
+ 
+-	/* The OSC_LPMEN is only supported on MCP2518FD, so use it to
+-	 * autodetect the model.
++	/* The OSC_LPMEN is only supported on MCP2518FD and MCP251863,
++	 * so use it to autodetect the model.
+ 	 */
+ 	err = regmap_update_bits(priv->map_reg, MCP251XFD_REG_OSC,
+ 				 MCP251XFD_REG_OSC_LPMEN,
+@@ -1703,10 +1703,18 @@ static int mcp251xfd_register_chip_detect(struct mcp251xfd_priv *priv)
+ 	if (err)
+ 		return err;
+ 
+-	if (osc & MCP251XFD_REG_OSC_LPMEN)
+-		devtype_data = &mcp251xfd_devtype_data_mcp2518fd;
+-	else
++	if (osc & MCP251XFD_REG_OSC_LPMEN) {
++		/* We cannot distinguish between MCP2518FD and
++		 * MCP251863. If firmware specifies MCP251863, keep
++		 * it, otherwise set to MCP2518FD.
++		 */
++		if (mcp251xfd_is_251863(priv))
++			devtype_data = &mcp251xfd_devtype_data_mcp251863;
++		else
++			devtype_data = &mcp251xfd_devtype_data_mcp2518fd;
++	} else {
+ 		devtype_data = &mcp251xfd_devtype_data_mcp2517fd;
++	}
+ 
+ 	if (!mcp251xfd_is_251XFD(priv) &&
+ 	    priv->devtype_data.model != devtype_data->model) {
+
+base-commit: 48ea8ea32dbf3231882e9bc0b297fe1400785219
+-- 
+2.35.1
 
 
