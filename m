@@ -2,91 +2,187 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C797957B1AC
-	for <lists+linux-can@lfdr.de>; Wed, 20 Jul 2022 09:24:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 739E757B26D
+	for <lists+linux-can@lfdr.de>; Wed, 20 Jul 2022 10:11:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229952AbiGTHYv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 20 Jul 2022 03:24:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43730 "EHLO
+        id S238045AbiGTILg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 20 Jul 2022 04:11:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239087AbiGTHYr (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 20 Jul 2022 03:24:47 -0400
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4A867C89
-        for <linux-can@vger.kernel.org>; Wed, 20 Jul 2022 00:24:47 -0700 (PDT)
-Received: by mail-yb1-f182.google.com with SMTP id r3so30704794ybr.6
-        for <linux-can@vger.kernel.org>; Wed, 20 Jul 2022 00:24:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=e11+fe8Z8ESHsJuUn0fkECgkggAo1cSJFgG5j15LV7o=;
-        b=MURAn5IFG1unHBbu6LcNSnF7xIZA7Jq+UJPx2oZb2k1Ks7l+pEr48xQdE/UEFl2SYD
-         +lOQ5uIZMty/dOftDrQoBlnG8GTQSRVj0Grb+r8fcIzImiyikYow6KC+Z2skBhqF+qK2
-         yzvX+/0aG5PZuMLv5CwunoHdILLpq9pj7aM89W7d66IaP9giLSnvuYFu/W83HeyZ9fLv
-         H6RgL7Fsp2RSMRtjZhEkOE9fSh3r1wUoT08aEN24mASIav35O67TZVacEXePXU2QlN6m
-         aDJjB6yiM8r19FeGNyTi+HEBl2vHPc8mggPhElDgNsfbt+bbvM9I9efN2tK2MhEUljVJ
-         pJ8A==
-X-Gm-Message-State: AJIora9yZHS34KHhCtfZGa7WL768lV1GIyVmm9ER6AtSwCMrepXUL0qj
-        vW/apiYcWRbH6vGSLDLlS+brw/24OOvforxA68l2MWVX
-X-Google-Smtp-Source: AGRyM1tSzrbZvVkF4DJP1e0rGDMfeEFmX6tRbgVPNtt+mFOSgLXHHy/8Pheu5ZKtmz4sinfxCy1U7jKQb3nhRXoTAeA=
-X-Received: by 2002:a25:a0cf:0:b0:66f:f075:51cb with SMTP id
- i15-20020a25a0cf000000b0066ff07551cbmr23222728ybm.142.1658301886333; Wed, 20
- Jul 2022 00:24:46 -0700 (PDT)
+        with ESMTP id S239565AbiGTILZ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 20 Jul 2022 04:11:25 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9B366AE1
+        for <linux-can@vger.kernel.org>; Wed, 20 Jul 2022 01:11:23 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oE4nh-0008S9-LX
+        for linux-can@vger.kernel.org; Wed, 20 Jul 2022 10:11:21 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 6F63FB5877
+        for <linux-can@vger.kernel.org>; Wed, 20 Jul 2022 08:10:36 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id F00E2B586F;
+        Wed, 20 Jul 2022 08:10:35 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 74ce5f34;
+        Wed, 20 Jul 2022 08:10:35 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH net-next 0/29] pull-request: can-next 2022-07-20
+Date:   Wed, 20 Jul 2022 10:10:05 +0200
+Message-Id: <20220720081034.3277385-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220719143550.3681-1-mailhol.vincent@wanadoo.fr> <20220720071717.q7egrzu2fjc2c64i@pengutronix.de>
-In-Reply-To: <20220720071717.q7egrzu2fjc2c64i@pengutronix.de>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Wed, 20 Jul 2022 16:24:32 +0900
-Message-ID: <CAMZ6RqJ+HnkzLxLkgZMqKmFGtXJR9udD6ak+JnFs4AYD1HCyKw@mail.gmail.com>
-Subject: Re: [PATCH v2 00/12] can: error: set of fixes and improvement on
- txerr and rxerr reporting
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org,
-        Frank Jungclaus <frank.jungclaus@esd.eu>,
-        =?UTF-8?Q?Stefan_M=C3=A4tje?= <Stefan.Maetje@esd.eu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed. 20 Jul. 2022 at 16:20, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> On 19.07.2022 23:35:38, Vincent Mailhol wrote:
-> > This series is a collection of patches targeting the CAN error
-> > counter. The series is split in three blocks (with small relation to
-> > each other).
-> >
-> > Several drivers uses the data[6] and data[7] fields (both of type u8)
-> > of the CAN error frame to report those values. However, the maximum
-> > size an u8 can hold is 255 and the error counter can exceed this value
-> > if bus-off status occurs. As such, the first nine patches of this
-> > series make sure that no drivers try to report txerr or rxerr through
-> > the CAN error frame when bus-off status is reached.
-> >
-> > can_frame::data[5..7] are defined as being "controller
-> > specific". Controller specific behaviors are not something desirable
-> > (portability issue...) The tenth patch of this series specifies how
-> > can_frame::data[5..7] should be use and remove any "controller
-> > specific" freedom. The eleventh patch adds a flag to notify though
-> > can_frame::can_id that data[6..7] were populated (in order to be
-> > consistent with other fields).
-> >
-> > Finally, the twelfth and last patch add three macro values to specify
-> > the different error counter threshold with so far was hard-coded as
-> > magic numbers in the drivers.
-> >
-> > N.B.:
-> >   * patches 1 to 10 are for net (stable).
-> >   * patches 11 and 12 are for net-next (but depends on patches 1 to 10).
->
-> IMHO the patches 1..10 are not so critical that they need to go upstream
-> via net. Especially that we're already at -rc7. I'll take all via
-> can-next, OK?
+Hello Jakub, hello David,
 
-Absolutely OK. Nothing critical here.
+this is a pull request of 29 patches for net-next/master.
+
+The first 6 patches target the slcan driver. Dan Carpenter contributes
+a hardening patch, followed by 5 cleanup patches.
+
+Biju Das contributes 5 patches to prepare the sja1000 driver to
+support the Renesas RZ/N1 SJA1000 CAN controller.
+
+Dario Binacchi's patch for the slcan driver fixes a sleep with held
+spin lock.
+
+Another patch by Dario Binacchi fixes a wrong comment in the c_can
+driver.
+
+Pavel Pisa updates the CTU CAN FD IP core registers.
+
+Stephane Grosjean contributes 3 patches to the peak_usb driver for
+cleanups and support of a new MCU.
+
+The last 12 patches are by Vincent Mailhol, they fix and improve the
+txerr and rxerr reporting in all CAN drivers.
+
+regards,
+Marc
+
+---
+
+The following changes since commit e22c88799f2629088504e1357384f2ec3798da46:
+
+  Merge branch '100GbE' of git://git.kernel.org/pub/scm/linux/kernel/git/tnguy/next-queue (2022-07-18 20:39:54 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git tags/linux-can-next-for-5.20-20220720
+
+for you to fetch changes up to 1dbd8748a147c971747c8460e0cd1828cf2745d7:
+
+  Merge branch 'can-error-set-of-fixes-and-improvement-on-txerr-and-rxerr-reporting' (2022-07-20 09:28:43 +0200)
+
+----------------------------------------------------------------
+linux-can-next-for-5.20-20220720
+
+----------------------------------------------------------------
+Biju Das (5):
+      dt-bindings: can: sja1000: Convert to json-schema
+      dt-bindings: can: nxp,sja1000: Document RZ/N1{D,S} support
+      can: sja1000: Add Quirk for RZ/N1 SJA1000 CAN controller
+      can: sja1000: Use device_get_match_data to get device data
+      can: sja1000: Change the return type as void for SoC specific init
+
+Dan Carpenter (1):
+      can: slcan: use scnprintf() as a hardening measure
+
+Dario Binacchi (2):
+      can: slcan: do not sleep with a spin lock held
+      can: c_can: remove wrong comment
+
+Marc Kleine-Budde (9):
+      can: slcan: convert comments to network style comments
+      can: slcan: slcan_init() convert printk(LEVEL ...) to pr_level()
+      can: slcan: fix whitespace issues
+      can: slcan: convert comparison to NULL into !val
+      can: slcan: clean up if/else
+      Merge branch 'can-slcan-checkpatch-cleanups'
+      Merge branch 'can-add-support-for-rz-n1-sja1000-can-controller'
+      Merge branch 'can-peak_usb-cleanups-and-updates'
+      Merge branch 'can-error-set-of-fixes-and-improvement-on-txerr-and-rxerr-reporting'
+
+Pavel Pisa (1):
+      can: ctucanfd: Update CTU CAN FD IP core registers to match version 3.x.
+
+Stephane Grosjean (3):
+      can: peak_usb: pcan_dump_mem(): mark input prompt and data pointer as const
+      can: peak_usb: correction of an initially misnamed field name
+      can: peak_usb: include support for a new MCU
+
+Vincent Mailhol (12):
+      can: pch_can: do not report txerr and rxerr during bus-off
+      can: rcar_can: do not report txerr and rxerr during bus-off
+      can: sja1000: do not report txerr and rxerr during bus-off
+      can: slcan: do not report txerr and rxerr during bus-off
+      can: hi311x: do not report txerr and rxerr during bus-off
+      can: sun4i_can: do not report txerr and rxerr during bus-off
+      can: kvaser_usb_hydra: do not report txerr and rxerr during bus-off
+      can: kvaser_usb_leaf: do not report txerr and rxerr during bus-off
+      can: usb_8dev: do not report txerr and rxerr during bus-off
+      can: error: specify the values of data[5..7] of CAN error frames
+      can: add CAN_ERR_CNT flag to notify availability of error counter
+      can: error: add definitions for the different CAN error thresholds
+
+ .../devicetree/bindings/net/can/nxp,sja1000.yaml   | 132 +++++++++++++++++++++
+ .../devicetree/bindings/net/can/sja1000.txt        |  58 ---------
+ drivers/net/can/c_can/c_can_main.c                 |   7 +-
+ drivers/net/can/cc770/cc770.c                      |   1 +
+ drivers/net/can/ctucanfd/ctucanfd_base.c           |   5 +-
+ drivers/net/can/ctucanfd/ctucanfd_kregs.h          |  32 ++++-
+ drivers/net/can/grcan.c                            |   1 +
+ drivers/net/can/ifi_canfd/ifi_canfd.c              |   4 +-
+ drivers/net/can/janz-ican3.c                       |   4 +-
+ drivers/net/can/kvaser_pciefd.c                    |   2 +-
+ drivers/net/can/m_can/m_can.c                      |   4 +-
+ drivers/net/can/pch_can.c                          |   7 +-
+ drivers/net/can/peak_canfd/peak_canfd.c            |   6 +-
+ drivers/net/can/rcar/rcar_can.c                    |   9 +-
+ drivers/net/can/rcar/rcar_canfd.c                  |   4 +-
+ drivers/net/can/sja1000/sja1000.c                  |  16 ++-
+ drivers/net/can/sja1000/sja1000.h                  |   3 +-
+ drivers/net/can/sja1000/sja1000_platform.c         |  20 +---
+ drivers/net/can/slcan/slcan-core.c                 | 117 +++++++++---------
+ drivers/net/can/spi/hi311x.c                       |   6 +-
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c     |   1 +
+ drivers/net/can/sun4i_can.c                        |  10 +-
+ drivers/net/can/ti_hecc.c                          |   1 +
+ drivers/net/can/usb/esd_usb.c                      |   3 +-
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c  |  14 ++-
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c   |   7 +-
+ drivers/net/can/usb/peak_usb/pcan_usb.c            |   1 +
+ drivers/net/can/usb/peak_usb/pcan_usb_core.c       |   2 +-
+ drivers/net/can/usb/peak_usb/pcan_usb_core.h       |   2 +-
+ drivers/net/can/usb/peak_usb/pcan_usb_fd.c         |  68 +++++++++--
+ drivers/net/can/usb/peak_usb/pcan_usb_pro.c        |   2 +-
+ drivers/net/can/usb/peak_usb/pcan_usb_pro.h        |   2 +-
+ drivers/net/can/usb/usb_8dev.c                     |   8 +-
+ drivers/net/can/xilinx_can.c                       |   1 +
+ include/uapi/linux/can/error.h                     |  20 +++-
+ 35 files changed, 376 insertions(+), 204 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/can/nxp,sja1000.yaml
+ delete mode 100644 Documentation/devicetree/bindings/net/can/sja1000.txt
+
+
