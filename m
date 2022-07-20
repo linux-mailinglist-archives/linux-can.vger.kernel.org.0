@@ -2,184 +2,118 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B14857BBA1
-	for <lists+linux-can@lfdr.de>; Wed, 20 Jul 2022 18:44:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00DC757BE4C
+	for <lists+linux-can@lfdr.de>; Wed, 20 Jul 2022 21:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231882AbiGTQoR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 20 Jul 2022 12:44:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42286 "EHLO
+        id S229504AbiGTTOV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 20 Jul 2022 15:14:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiGTQn7 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 20 Jul 2022 12:43:59 -0400
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE60965565
-        for <linux-can@vger.kernel.org>; Wed, 20 Jul 2022 09:43:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1658335436;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=w0n4ORTWdHmFHA0vJg1QqwTPL/9ucecq7uPypEp/ZW8=;
-    b=EzEDkPoh5U1N2drulYvIVXA7VBmgjYvfx9Tf5YVd78mvp9MnFGyXgPzWdCRauHN8Uk
-    qPEQU9j3eicqM5nwnJ1BJXTVIjMxgJP83X0Vh0OMM5at2vjkkoyV2E+njwoDsFooE7jI
-    fWC/L/dJ78aXryAT87NA1Kj8pzaHXj7jL/Ua97qGlNogvtq8GcMCXPgzpeoEKsIbGNAk
-    p9vbTSUrqM8JmTWURiShQw9BPNkgTcsdTalvP4E1GHnN7yPqsTPyQo4S1wfMcZL0S+vI
-    Eh/6n9HgTYC9wY5UtuULFnwUjsVl7jfyGyp/JhELjcuM3n8J7BG9yAm+yx46UoKNCod8
-    Lqyw==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytJSr63tDxrw=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a00:6020:1cfd:d100::b82]
-    by smtp.strato.de (RZmta 47.47.0 AUTH)
-    with ESMTPSA id jdcffay6KGht1Rh
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Wed, 20 Jul 2022 18:43:55 +0200 (CEST)
-Message-ID: <e31e06bc-e4ba-92a9-c48a-8d125303d822@hartkopp.net>
-Date:   Wed, 20 Jul 2022 18:43:55 +0200
+        with ESMTP id S231365AbiGTTOU (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 20 Jul 2022 15:14:20 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C4985720B
+        for <linux-can@vger.kernel.org>; Wed, 20 Jul 2022 12:14:17 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oEF90-0004W8-0J; Wed, 20 Jul 2022 21:14:02 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oEF8v-0005MV-H8; Wed, 20 Jul 2022 21:13:57 +0200
+Date:   Wed, 20 Jul 2022 21:13:57 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Fedor Pchelkin <pchelkin@ispras.ru>
+Cc:     Robin van der Gracht <robin@protonic.nl>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Elenita Hinds <ecathinds@gmail.com>,
+        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>
+Subject: Re: [PATCH] can: j1939: Remove unnecessary WARN_ON_ONCE in
+ j1939_sk_queue_activate_next_locked()
+Message-ID: <20220720191357.GB5600@pengutronix.de>
+References: <20220720110645.519601-1-pchelkin@ispras.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC PATCH v5 3/5] can: dev: add CAN XL support
-Content-Language: en-US
-To:     Vincent Mailhol <vincent.mailhol@gmail.com>
-Cc:     linux-can <linux-can@vger.kernel.org>
-References: <20220719112748.3281-1-socketcan@hartkopp.net>
- <20220719112748.3281-4-socketcan@hartkopp.net>
- <CAMZ6RqLb=Q3VQxwG3gXtTyo7YkLsB5f3YonjgcpmeoRzReOXCw@mail.gmail.com>
- <f8ec078d-44c9-9f8c-800f-058e4c735003@hartkopp.net>
- <CAMZ6RqKhW1vGwY1n=k82VmjKk_7MSUAQo4vvR-SGEpA0kD5sXA@mail.gmail.com>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <CAMZ6RqKhW1vGwY1n=k82VmjKk_7MSUAQo4vvR-SGEpA0kD5sXA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220720110645.519601-1-pchelkin@ispras.ru>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi Fedor,
 
+On Wed, Jul 20, 2022 at 02:06:45PM +0300, Fedor Pchelkin wrote:
+> The purpose of WARN_ON_ONCE if the session with the same parameters
+> has already been activated and is currently in active_session_list is
+> not very clear. Is this warning implemented to indicate that userspace
+> is doing something wrong?
 
-On 19.07.22 17:16, Vincent Mailhol wrote:
-> On Tue 19 Jul. 2022 at 23:38, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
+yes.
 
+> As far as I can see, there are two lists: active_session_list (which
+> is for the whole device) and sk_session_queue (which is unique for
+> each j1939_sock), and the situation when we have two sessions with
+> the same type, addresses and destinations in two different
+> sk_session_queues (owned by two different sockets) is actually highly
+> probable - one is active and the other is willing to become active
+> but the j1939_session_activate() does not let that happen. It is
+> correct behaviour as I assume.
 
->> No confusion.
->>
->> The API to the user space is 'truncated' option only.
->>
->> The data structure inside the kernel sizeof(struct can[|fd|xl]_frame).
->>
->> See:
->> https://lore.kernel.org/linux-can/4c79233f-1301-d5c7-7698-38d39d8702aa@hartkopp.net/
->>
->> ---8<---
->>
->> As the sk_buffs are only allocated once and are not copied inside the
->> kernel there should be no remarkable drawbacks whether we allocate
->> CAN_MTU skbs or CANXL_MTU skbs.
->>
->> AFAICS both skbs will fit into a single page.
+No. It is not typical use case and most probably it will create
+problems. Are you working on some system where this use case is valid?
+
+> Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
 > 
-> This is true. A page is at least 4k. So the 2k + alpha will easily fit.
-> But the page is not the smallest chunk that can return malloc, c.f.
-> KMALLOC_MIN_SIZE:
-> https://elixir.bootlin.com/linux/latest/source/include/linux/slab.h#L279
+> Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
+> Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
+> Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+>
+> ---
+>  net/can/j1939/socket.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Also, more than the page size, my concern are the cache misses,
-> especially when memsetting to zero the full canxl frame. As far as I
-> understand, cloning an skb does not copy the payload (only increment a
-> reference to it) so the echo_skb thing should not be impacted.
-> That said, I am not able to tell whether or not this will have a
-> noticeable impact (I have some feeling it might but can not assert
-> it). If this looks good for the people who have the expertise in
-> kernel performances, then I am fine.
-
-The more I think about our discussion and your remark that we were 
-somehow going back to the V2 patch set the more I wonder if this would 
-be a good idea.
-
-IMO using the struct canxl_frame (including 2048 byte) and allowing 
-truncated sizes can be handled inside the kernel safely.
-
-And with V2 we only allocate the needed size for the sk_buff - without 
-any memsetting.
-
-When user space gets a truncated frame -> fine
-
-When the user forges some CAN XL frame where the length value does not 
-match the spec and the size does not fit the length -> -EINVAL
-
-So there is no uninitialized data also.
-
-And even the user space side to handle a mix of CAN frame types is 
-pretty simple IMO:
-
-union {
-         struct can_frame cc;
-         struct canfd_frame fd;
-         struct canxl_frame xl;
-} can;
-
-nbytes = read(s, &can.xl, sizeof(struct canxl_frame));
-if (nbytes < 0) {
-         perror("read");
-         return 1;
-}
-printf("nbytes = %d\n", nbytes);
-
-if (nbytes < CANXL_HDR_SZ + CANXL_MIN_DLEN) {
-         fprintf(stderr, "read: no CAN frame\n");
-         return 1;
-}
-
-if (can.xl.flags & CANXL_XLF) {
-          if (nbytes != CANXL_HDR_SZ + can.xl.len) {
-                 printf("nbytes = %d\n", nbytes);
-                 perror("read canxl_frame");
-                 continue;
-          }
-          /* process CAN XL frames */
-          printf("canxl frame prio %03X len %d flags %d\n",
-                  can.xl.prio, can.xl.len, can.xl.flags);
-          continue;
-}
-
-if (nbytes != sizeof(struct can_frame) &&
-     nbytes != sizeof(struct canfd_frame)) {
-         fprintf(stderr, "read: incomplete CAN(FD) frame\n");
-         return 1;
-}
-
-/* process CAN/FD frames */
-
-Working with partially filled data structures is a known pattern for CAN 
-and CAN FD.
-
-We only optimize the transfer from/to kernel space with truncated 
-read/write operations.
-
-¯\_(ツ)_/¯
-
+> diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
+> index f5ecfdcf57b2..be4b73afa16c 100644
+> --- a/net/can/j1939/socket.c
+> +++ b/net/can/j1939/socket.c
+> @@ -178,7 +178,7 @@ static void j1939_sk_queue_activate_next_locked(struct j1939_session *session)
+>  	if (!first)
+>  		return;
+>  
+> -	if (WARN_ON_ONCE(j1939_session_activate(first))) {
+> +	if (j1939_session_activate(first)) {
+>  		first->err = -EBUSY;
+>  		goto activate_next;
+>  	} else {
+> -- 
+> 2.25.1
 > 
-> Maybe even better:
 > 
->          switch(ntohs(skb->protocol)) {
->          case ETH_P_CAN:
->                 /* ... */
->          case ETH_P_CANFD:
->                 /* ... */
->          case ETH_P_CANXL:
->                  /* ... */
->          default:
->                  /* ... */
->          }
 
-Yes ... updated my next patch.
-
-Best regards,
-Oliver
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
