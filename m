@@ -2,56 +2,57 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AA0657D18A
-	for <lists+linux-can@lfdr.de>; Thu, 21 Jul 2022 18:30:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 508CD57D1FE
+	for <lists+linux-can@lfdr.de>; Thu, 21 Jul 2022 18:51:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233404AbiGUQat (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 21 Jul 2022 12:30:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35766 "EHLO
+        id S232543AbiGUQvk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 21 Jul 2022 12:51:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233565AbiGUQar (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 21 Jul 2022 12:30:47 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D999A47BBE
-        for <linux-can@vger.kernel.org>; Thu, 21 Jul 2022 09:30:46 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oEZ4X-00049E-CB
-        for linux-can@vger.kernel.org; Thu, 21 Jul 2022 18:30:45 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 8A1C7B6F40
-        for <linux-can@vger.kernel.org>; Thu, 21 Jul 2022 16:30:44 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id EA3C1B6F39;
-        Thu, 21 Jul 2022 16:30:43 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id b053b1dd;
-        Thu, 21 Jul 2022 16:30:43 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next] can: pch_can: pch_can_error(): initialize errc before using it
-Date:   Thu, 21 Jul 2022 18:30:42 +0200
-Message-Id: <20220721163042.3448384-2-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220721163042.3448384-1-mkl@pengutronix.de>
-References: <20220721163042.3448384-1-mkl@pengutronix.de>
+        with ESMTP id S231603AbiGUQvj (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 21 Jul 2022 12:51:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C8048BA93;
+        Thu, 21 Jul 2022 09:51:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 23936B825DC;
+        Thu, 21 Jul 2022 16:51:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 645ABC3411E;
+        Thu, 21 Jul 2022 16:51:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658422295;
+        bh=9hfSjSU6ZEOEWK+4sagbygAVSU3WAbHmJYkaTJ7NNWc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=UMSv/3zccNh7CJYI+Vr63UmnZOWfZTvtgdrCMyw5flAvpN/345DvFqWoAHNDgp+x6
+         UR/wflk5IpJy3+1Qj8DDFcNswghe6MHZu56pin7eOQblqKtSyiCU4YxgV0stK4Unlv
+         U5G8Qktiq/2NnwrZuyHVPz6wJwHEx2AGK+bHyk0W/ZO10WZFEkuol1cZgpZ9rR7Wc4
+         vMF6oUpRzcGj9cEhSC8LGLF9jn6+z2nOJZF+Hu3mCBJ/C53oVEYVUJ1CIpKgzCwrA8
+         FyCPpZoSYsHMCxp5Z/0maq4raUACS6xzgb7Vg7s+5d1GrWVHJ+R+x5W6XaJCceS8Zn
+         HB5AIW0hHsc6g==
+Date:   Thu, 21 Jul 2022 09:51:34 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, netdev@vger.kernel.org,
+        davem@davemloft.net, linux-can@vger.kernel.org,
+        kernel@pengutronix.de, llvm@lists.linux.dev
+Subject: Re: [PATCH net-next 18/29] can: pch_can: do not report txerr and
+ rxerr during bus-off
+Message-ID: <20220721095134.47ac717e@kernel.org>
+In-Reply-To: <Ytl8x20qmsKyYJpS@dev-arch.thelio-3990X>
+References: <20220720081034.3277385-1-mkl@pengutronix.de>
+        <20220720081034.3277385-19-mkl@pengutronix.de>
+        <YtlwSpoeT+nhmhVn@dev-arch.thelio-3990X>
+        <20220721154725.ovcsfiio7e6hts2n@pengutronix.de>
+        <CAMZ6RqLdYCqag_MDp7dj=u1SEjx1r=bs_xHG26w11_A_D_SumQ@mail.gmail.com>
+        <Ytl8x20qmsKyYJpS@dev-arch.thelio-3990X>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,56 +60,26 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+On Thu, 21 Jul 2022 09:20:23 -0700 Nathan Chancellor wrote:
+> > That said, I have one complaint: this type of warning is reported at
+> > W=2 *but* W=2 output is heavily polluted, mostly due to a false
+> > positive on linux/bits.h's GENMASK_INPUT_CHECK(). Under the current
+> > situation, the relevant warings become invisible with all the
+> > flooding.
+> > I tried to send a patch to silence a huge chunk of the W=2 spam in [1]
+> > but it got rejected. I am sorry but even with the best intent, I might
+> > repeat a similar mistake in the future. The W=2 is just not usable.
+> > 
+> > [1] https://lore.kernel.org/all/20220426161658.437466-1-mailhol.vincent@wanadoo.fr/  
+> 
+> Yes, having -Wmaybe-uninitialized in W=2 is unfortunate because these
+> types of mistakes will continue to happen. I have been fighting this for
+> a while and so has Dan Carpenter, who started a thread about it a couple
+> of months ago but it doesn't seem like it really went anywhere:
+> 
+> https://lore.kernel.org/20220506091338.GE4031@kadam/
 
-After commit 3a5c7e4611dd, the variable errc is accessed before being
-initialized, c.f. below W=2 warning:
-
-| In function 'pch_can_error',
-|     inlined from 'pch_can_poll' at drivers/net/can/pch_can.c:739:4:
-| drivers/net/can/pch_can.c:501:29: warning: 'errc' may be used uninitialized [-Wmaybe-uninitialized]
-|   501 |                 cf->data[6] = errc & PCH_TEC;
-|       |                             ^
-| drivers/net/can/pch_can.c: In function 'pch_can_poll':
-| drivers/net/can/pch_can.c:484:13: note: 'errc' was declared here
-|   484 |         u32 errc, lec;
-|       |             ^~~~
-
-Moving errc initialization up solves this issue.
-
-Fixes: 3a5c7e4611dd ("can: pch_can: do not report txerr and rxerr during bus-off")
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Link: https://lore.kernel.org/all/20220721160032.9348-1-mailhol.vincent@wanadoo.fr
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/pch_can.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/can/pch_can.c b/drivers/net/can/pch_can.c
-index 50f6719b3aa4..32804fed116c 100644
---- a/drivers/net/can/pch_can.c
-+++ b/drivers/net/can/pch_can.c
-@@ -489,6 +489,7 @@ static void pch_can_error(struct net_device *ndev, u32 status)
- 	if (!skb)
- 		return;
- 
-+	errc = ioread32(&priv->regs->errc);
- 	if (status & PCH_BUS_OFF) {
- 		pch_can_set_tx_all(priv, 0);
- 		pch_can_set_rx_all(priv, 0);
-@@ -502,7 +503,6 @@ static void pch_can_error(struct net_device *ndev, u32 status)
- 		cf->data[7] = (errc & PCH_REC) >> 8;
- 	}
- 
--	errc = ioread32(&priv->regs->errc);
- 	/* Warning interrupt. */
- 	if (status & PCH_EWARN) {
- 		state = CAN_STATE_ERROR_WARNING;
-
-base-commit: 5588d628027092e66195097bdf6835ddf64418b3
--- 
-2.35.1
-
-
+FWIW it's reported by clang and was in fact reported in the netdev
+patchwork:
+https://patchwork.kernel.org/project/netdevbpf/patch/20220720081034.3277385-19-mkl@pengutronix.de/
+DaveM must have not looked before pulling :S
