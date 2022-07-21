@@ -2,111 +2,67 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D668457D098
-	for <lists+linux-can@lfdr.de>; Thu, 21 Jul 2022 18:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 891F257D09D
+	for <lists+linux-can@lfdr.de>; Thu, 21 Jul 2022 18:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbiGUQDG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 21 Jul 2022 12:03:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58364 "EHLO
+        id S229576AbiGUQDS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 21 Jul 2022 12:03:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbiGUQDF (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 21 Jul 2022 12:03:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E0687C0B;
-        Thu, 21 Jul 2022 09:03:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8A42EB82566;
-        Thu, 21 Jul 2022 16:03:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F1A3C3411E;
-        Thu, 21 Jul 2022 16:03:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658419381;
-        bh=NGcKvDlZiQVEt7g5gg+TPc/xoOAhXGRajJKNtTaB18M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CcS59g+NCS4R5fkiq1Q4Qc5/cNUo7SbFA0dIfhcxVk0b+UF7v5W3NpMSJCnwWmlvH
-         q+lRoptgEz4rEeNVemAez9No6WGLr2oqW7fXmkxwn5J3nd/5r4apotrcviFqK6ry9G
-         mGywL+iI7149SDN7TqwZ0wRQ2KWwMehmHRRgVakfWNZ96LJlejCHoNovOgJmc2q4Bk
-         XGheIy6zPRqHKwmBN+lJM49fuN/fQInRkmDiqhUt0xdKPx3a41jduuEw6qIzxIMcIQ
-         xBnSmHpUiokest5Bp5Q1hAmgRSQ90bAlqkkzZ1X+bI+4MJYZlli6AIOAnVu6bqPa3g
-         lx7rQATIhmMUA==
-Date:   Thu, 21 Jul 2022 09:02:58 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        netdev@vger.kernel.org, kernel@pengutronix.de,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Frank Jungclaus <frank.jungclaus@esd.eu>,
-        Stefan =?iso-8859-1?Q?M=E4tje?= <Stefan.Maetje@esd.eu>
-Subject: Re: [PATCH] can: pch_can: initialize errc before using it
-Message-ID: <Ytl4suKQfH5sc+er@dev-arch.thelio-3990X>
-References: <YtlwSpoeT+nhmhVn@dev-arch.thelio-3990X>
- <20220721160032.9348-1-mailhol.vincent@wanadoo.fr>
+        with ESMTP id S229540AbiGUQDR (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 21 Jul 2022 12:03:17 -0400
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB7887C1C
+        for <linux-can@vger.kernel.org>; Thu, 21 Jul 2022 09:03:17 -0700 (PDT)
+Received: by mail-yb1-f181.google.com with SMTP id f73so3478630yba.10
+        for <linux-can@vger.kernel.org>; Thu, 21 Jul 2022 09:03:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9V9VZN6lAEQF6HCAvRIPj9uneFryFIMlLjgG4+lKXOc=;
+        b=t3HJsP1VsmEcU1RGE6bmnX+NHF2NAOEW3VfRxdMghFoGUuicixHflc9A/l9BNr2bH4
+         Ifh49D9BU44R1dshoPFL8aqmXJJ1k1y82WDF9j2nO3vBTxaJvOFVo7sxLvGqglRg/TtB
+         qI9wV2O4vAxBoJboxT44HoUU3nEbkwHsnafzhT5eXDE/MJHgAQtXiI3Jq3lDwOrlv8nI
+         5zJK+LtQkPvhec8Yhi2eSHV/HcAXU3ib65DmD7U/J8EtuLWQ5JqF/9DYoHdms5zZ0m1f
+         Q6VI5pVMP7TmxjddDv2Xu+h4w1ge56vXt0z+9Pa0X01Zc7jOjiTz3AZlAKA5ata43PeB
+         1PBQ==
+X-Gm-Message-State: AJIora+zxc6o0pp+WtuWB00/5ZA+f7y51FRyDKGnCCQQAUgKxXGREI3+
+        pSrB/EjY2ZAiH9kGhzxMO2mocyuZyKh0g/zu5NI=
+X-Google-Smtp-Source: AGRyM1vOioP1X+h/p06HHqtCiHtUJLOj5iGmmjnY7YCr21ePknuBcHV/R0MgjrR0TFAIvwDjnAPB9yBdoNw1d6/ToO8=
+X-Received: by 2002:a5b:ad0:0:b0:670:81c5:1b52 with SMTP id
+ a16-20020a5b0ad0000000b0067081c51b52mr11447083ybr.20.1658419396206; Thu, 21
+ Jul 2022 09:03:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220721160032.9348-1-mailhol.vincent@wanadoo.fr>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220721155228.3399103-1-mkl@pengutronix.de>
+In-Reply-To: <20220721155228.3399103-1-mkl@pengutronix.de>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Fri, 22 Jul 2022 01:03:05 +0900
+Message-ID: <CAMZ6RqJw8ViJ5bRdJdURbDgFGE5Yggm6NLHR+KaxfUDmXeoORQ@mail.gmail.com>
+Subject: Re: [PATCH] can: pch_can: fix uninitialized use of errc
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 01:00:32AM +0900, Vincent Mailhol wrote:
-> After commit 3a5c7e4611dd, the variable errc is accessed before being
-> initialized, c.f. below W=2 warning:
-> 
-> | In function 'pch_can_error',
-> |     inlined from 'pch_can_poll' at drivers/net/can/pch_can.c:739:4:
-> | drivers/net/can/pch_can.c:501:29: warning: 'errc' may be used uninitialized [-Wmaybe-uninitialized]
-> |   501 |                 cf->data[6] = errc & PCH_TEC;
-> |       |                             ^
-> | drivers/net/can/pch_can.c: In function 'pch_can_poll':
-> | drivers/net/can/pch_can.c:484:13: note: 'errc' was declared here
-> |   484 |         u32 errc, lec;
-> |       |             ^~~~
-> 
-> Moving errc initialization up solves this issue.
-> 
+On Fri. 22 Jul. 2022 at 00:54, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> Fix the uninitialized use of errc by moving the ioread32() up, before
+> accessing it.
+>
 > Fixes: 3a5c7e4611dd ("can: pch_can: do not report txerr and rxerr during bus-off")
 > Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 
-Heh, Marc just sent the same patch. Just in case this one gets picked up
-instead:
+I did not see that you were working on it. I also sent a patch but you
+beat me by six minutes. Thanks for the quick action!
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-
-Thanks for the quick response!
-
-> ---
->  drivers/net/can/pch_can.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/can/pch_can.c b/drivers/net/can/pch_can.c
-> index 50f6719b3aa4..32804fed116c 100644
-> --- a/drivers/net/can/pch_can.c
-> +++ b/drivers/net/can/pch_can.c
-> @@ -489,6 +489,7 @@ static void pch_can_error(struct net_device *ndev, u32 status)
->  	if (!skb)
->  		return;
->  
-> +	errc = ioread32(&priv->regs->errc);
->  	if (status & PCH_BUS_OFF) {
->  		pch_can_set_tx_all(priv, 0);
->  		pch_can_set_rx_all(priv, 0);
-> @@ -502,7 +503,6 @@ static void pch_can_error(struct net_device *ndev, u32 status)
->  		cf->data[7] = (errc & PCH_REC) >> 8;
->  	}
->  
-> -	errc = ioread32(&priv->regs->errc);
->  	/* Warning interrupt. */
->  	if (status & PCH_EWARN) {
->  		state = CAN_STATE_ERROR_WARNING;
-> -- 
-> 2.35.1
-> 
+Acked-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
