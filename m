@@ -2,48 +2,47 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B587A57D3DD
-	for <lists+linux-can@lfdr.de>; Thu, 21 Jul 2022 21:10:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9FB257D4C4
+	for <lists+linux-can@lfdr.de>; Thu, 21 Jul 2022 22:26:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233399AbiGUTKD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 21 Jul 2022 15:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53932 "EHLO
+        id S230428AbiGUU04 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 21 Jul 2022 16:26:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233404AbiGUTKB (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 21 Jul 2022 15:10:01 -0400
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00B108CEBD
-        for <linux-can@vger.kernel.org>; Thu, 21 Jul 2022 12:09:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1658430596;
+        with ESMTP id S229565AbiGUU04 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 21 Jul 2022 16:26:56 -0400
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.216])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E24C193FA
+        for <linux-can@vger.kernel.org>; Thu, 21 Jul 2022 13:26:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1658435213;
     s=strato-dkim-0002; d=hartkopp.net;
     h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
     From:Subject:Sender;
-    bh=BtqRHcqs6vyelBQAxMBQ2/3RYJYRuzDo6rJoG0fioLU=;
-    b=krUu/Qt454GX5SvsnHsYH5SNCbEbpvG2XsPBHZC4gVozsNqvo84oJMbyE/tcaw1XmV
-    YJg9fz8mQUxK4wUg6JW2tW93AfSVuuDoT4jXrbuMk/ZfrRdUliO+W+48YU4eYwg6stfv
-    ZGwLtJluaiUisxPq0bAEO4M+bzmCXUln+JNsUZCLR4jQhREGaLKDIRJ1H/IFNyOI8iaw
-    7H1RxN3v+iuKTZi9deYTWjCBryhaTreXg4b9lyH/sJqBB13jTSkNsVJQ9MuwD56JB4N3
-    +LVusI0iOJjFMABXDdhFjQosRrKERhfNTjLNnn19lXx51IMb4f0NXBY+piTcPO5M+TtI
-    /oCA==
+    bh=IECtOmXVTAydwKbDTSJ6pROmWKhm02lCfFhpj7Icr74=;
+    b=tocx+4U8iii28tMNT3IqPGNMhayVADfO+gf6ZjPEAhtRyyuAXNuf5Fzcc2qTtDbQnG
+    bPgbKWaA8Hdbld+J/osdSkxMg+APd7yYcOjXQ0/nMjXJQ7QGTytBRD9oRggYy3v2nN74
+    Y07P7xAlb1Pq6MK3+nyG1nbOVmpR6RfKQb2sLA96bRZhc4sZ71RLPKsQ7voysreMzQga
+    Bkm9/vDYEE41N2YOVdKnXdpCMrfw3K9//9R7vsDUSxNgwvfRpz5gLiQvH6Tjf2qsqN+e
+    00ReIb9c9J5c9oPCLniFbLrTrkFPnK8du/X22CwPCb0Lysd1BP7mOjafVbOtEYZrbR9c
+    lNOA==
 Authentication-Results: strato.com;
     dkim=none
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytJSr63tDxrw=="
 X-RZG-CLASS-ID: mo00
 Received: from [IPV6:2a00:6020:1cfd:d100::b82]
     by smtp.strato.de (RZmta 47.47.0 AUTH)
-    with ESMTPSA id jdcffay6LJ9u4Wz
+    with ESMTPSA id jdcffay6LKQq4bK
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-    Thu, 21 Jul 2022 21:09:56 +0200 (CEST)
-Message-ID: <ea8ffea6-1065-8526-4774-16d088ec7bf1@hartkopp.net>
-Date:   Thu, 21 Jul 2022 21:09:47 +0200
+    Thu, 21 Jul 2022 22:26:52 +0200 (CEST)
+Message-ID: <cdb2d8cb-a0ab-a4f6-267a-0a574823a8a9@hartkopp.net>
+Date:   Thu, 21 Jul 2022 22:26:52 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
 Subject: Re: [RFC PATCH v5 3/5] can: dev: add CAN XL support
 Content-Language: en-US
-To:     Vincent Mailhol <vincent.mailhol@gmail.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent Mailhol <vincent.mailhol@gmail.com>
 Cc:     linux-can <linux-can@vger.kernel.org>
 References: <20220719112748.3281-1-socketcan@hartkopp.net>
  <20220719112748.3281-4-socketcan@hartkopp.net>
@@ -52,15 +51,13 @@ References: <20220719112748.3281-1-socketcan@hartkopp.net>
  <CAMZ6RqKhW1vGwY1n=k82VmjKk_7MSUAQo4vvR-SGEpA0kD5sXA@mail.gmail.com>
  <e31e06bc-e4ba-92a9-c48a-8d125303d822@hartkopp.net>
  <CAMZ6RqLhah079XwkA6_Sk8LZ9zF8+xtxVW39kW=ZPPc18GNJZQ@mail.gmail.com>
- <cee555a2-2883-9dab-5740-62849e9ee3ab@hartkopp.net>
- <20220721075309.l6uusnyk7xjkqd4g@pengutronix.de>
- <CAMZ6RqJTZ4o3dsaYG2s9boJ4By7QC55-N+0RszT9LNxRp3bYuA@mail.gmail.com>
+ <CAMZ6RqKex6DwpFrs6pYe5UnSSHhu6TCcGi4xW1WcpKM8F=oS=A@mail.gmail.com>
 From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <CAMZ6RqJTZ4o3dsaYG2s9boJ4By7QC55-N+0RszT9LNxRp3bYuA@mail.gmail.com>
+In-Reply-To: <CAMZ6RqKex6DwpFrs6pYe5UnSSHhu6TCcGi4xW1WcpKM8F=oS=A@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,74 +67,122 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 
 
-On 21.07.22 10:14, Vincent Mailhol wrote:
-> On Thu. 21 Jul. 2022 at 16:53, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->> On 21.07.2022 09:36:21, Oliver Hartkopp wrote:
->>> Btw. How should we finally name the 'non data' header of CAN XL?
+On 21.07.22 05:13, Vincent Mailhol wrote:
+> On Thu. 21 juil. 2022 at 11:37, Vincent Mailhol
+> <vincent.mailhol@gmail.com> wrote:
+>> On Wed. 21 Jul. 2022 at 01:43, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
+
+
+>>> And even the user space side to handle a mix of CAN frame types is
+>>> pretty simple IMO:
 >>>
->>> 1. CANXL_HEADER_SIZE
->>> 2. CANXL_HEAD_SIZE
->>> 3. CANXL_HDR_SIZE
->>> 4. CANXL_HDR_SZ <- currently in the patches
->>> 5. CANXL_HD_SZ
->>>
->>> I think it has to be 'head' and not 'header'.
+>>> union {
+>>>           struct can_frame cc;
+>>>           struct canfd_frame fd;
+>>>           struct canxl_frame xl;
+>>> } can;
 >>
->> Header! Header is in front of data.
+>> Do you want to add this union in the kernel uapi or is it just a
+>> userland example?
 > 
-> I am also part of the header team! By analogy with:
-> https://en.wikipedia.org/wiki/IPv4#Header
+> More brainstorming. If we want to introduce a generic can structure in
+> linux/can.h, we could  do:
 > 
->>> In skbs we also have head and tail.
->>
->> Yes, but they point at the head or tail of the buffer allocated with the
->> skb.
->>
->>> So I would vote for 2 or 5 with a tendency to 5.
->>
->> 3, 1, 4
+> struct canxl_frame {
+>          canid_t prio;  /* 11 bit priority for arbitration (canid_t) */
+>          __u8    xl_flags; /* additional flags for CAN XL */
+>          __u8    fd_flags; /* CAN(-FD) flags */
+>          __u16   len;   /* frame payload length in byte */
+>          __u32   af;    /* acceptance field */
+>          __u8    sdt;   /* SDU (service data unit) type */
+>          __u8    __res0;  /* reserved / padding */
+>          __u8    __res1;  /* reserved / padding */
+>          __u8    __res2;  /* reserved / padding */
+>          __u8    data[CANXL_MAX_DLEN] __attribute__((aligned(8)));
+> };
 > 
-> My top vote goes to:
-> 6. No macro, instead use flexible array member and do sizeof(struct canxl_frame)
-
-This is no sizeof(struct canxl_frame) anymore with the use of a flexible 
-array because a valid "CAN XL frame" has data (at least one byte and up 
-to 2048 byte).
-
-You might name it
-
-struct canxl_header {
-         canid_t prio;  /* 11 bit priority for arbitration (canid_t) */
-         __u8    flags; /* additional flags for CAN XL */
-         __u8    sdt;   /* SDU (service data unit) type */
-         __u16   len;   /* frame payload length in byte */
-         __u32   af;    /* acceptance field */
-         __u8    data[];
-};
-
-But then you can't build a struct canxl_frame anymore in the way that 
-you can access the elements as you can do it today:
-
-struct canxl_frame {
-          struct canxl_header xldhr;
-          data[CANXL_MAX_DLEN];
-};
-
-struct canxl_frame cfx;
-
-=> cfx.xlhdr.len
-
-Which is not cfx.len anymore what is a known pattern from struct 
-can[fd]_frame from CAN application programmers and simple to use.
-
-The only new thing is the possibility to handle a truncated data[] 
-section. That should be feasible to learn.
-
-> I do not like the SZ abbreviation either, so my next choices will be 3 then 1.
+> union can_generic_frame {
+>           struct {
+>                  union {
+>                         canid_t can_id;
+>                         canid_t prio;
+>                  };
+>                  union {
+>                          __u16 type;
+>                           struct {
+>                                  __u8 xl_flags;
+>                                  __u8 fd_flags;
+>                          } __attribute__((packed));
+>                  } __attribute__((packed));
+>           };
+>           struct can_frame cc;
+>           struct canfd_frame fd;
+>           struct canxl_frame xl;
+> };
 > 
-> To recap: 6, 3, 1.
+> #define CANXL_XLF 0x80 /* apply to canxl_frame::xl_flags */
+> 
+> #define CAN_TYPE_CC 0
+> #ifdef __LITTLE_ENDIAN
+> #define CAN_TYPE_FD (CANFD_FDF << 8)
+> #define CAN_TYPE_XL (CANXL_XLF)
+> #else /* __BIG_ENDIAN */
+> #define CAN_TYPE_FD (CANFD_FDF)
+> #define CAN_TYPE_XL (CANXL_XLF << 8)
+> #endif
+> 
+> #define CAN_TYPE_MASK (CAN_TYPE_FD | CAN_TYPE_XL)
+> 
+> Because can_generic_frame::type overlaps with the can(fd)_frame::len,
+> it will contain garbage and thus it is necessary to mask it with
+> CAN_TYPE_MASK.
+> The CANFD_FDF is only set in the rx path. In the tx path it is simply
+> ignored. This done, we can use it as below when *receiving* can
+> frames:
 
-Then CANXL_HDR_SIZE wins :-)
+No problem to set CANFD_FDF in raw_sendmsg() when we process a CAN FD 
+frame in the tx path ...
+
+> 
+> int foo()
+> {
+>    union can_generic_frame can;
+> 
+>    /* receive a frame */
+> 
+>    switch (can.type & CAN_TYPE_MASK) {
+>    case CAN_TYPE_CC:
+>      printf("Received classical CAN Frame\n");
+>      break;
+> 
+>    case CAN_TYPE_FD:
+>      printf("Received CAN FD Frame\n");
+>      break;
+> 
+>    case CAN_TYPE_XL:
+>      printf("Received CAN XL Frame\n");
+>      break;
+> 
+>    default:
+>      fprintf(stderr, "Unknown type: %x\n", can.type & CAN_TYPE_MASK);
+>    }
+> 
+>    return EXIT_SUCCESS;
+> }
+> 
+
+If you just want to get rid of the nbytes checking and we make sure 
+CANFD_FDF is properly set in the future we are not far from such an easy 
+check - even without moving the sdt element or endian magic:
+
+
+if (can.xl_flags & CANXL_XLF) {
+     printf("Received CAN XL Frame\n");
+} else if (can.fd_flags & CANFD_FDF) {
+     printf("Received CAN FD Frame\n");
+} else {
+     printf("Received classical CAN Frame\n");
+}
 
 Regards,
 Oliver
