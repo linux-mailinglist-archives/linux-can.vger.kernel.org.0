@@ -2,102 +2,181 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ACE157C5F2
-	for <lists+linux-can@lfdr.de>; Thu, 21 Jul 2022 10:15:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B78BF57C609
+	for <lists+linux-can@lfdr.de>; Thu, 21 Jul 2022 10:17:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231713AbiGUIPL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 21 Jul 2022 04:15:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45782 "EHLO
+        id S230328AbiGUIRi (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 21 Jul 2022 04:17:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231972AbiGUIPJ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 21 Jul 2022 04:15:09 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8102B57
-        for <linux-can@vger.kernel.org>; Thu, 21 Jul 2022 01:15:06 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-31d85f82f0bso9204097b3.7
-        for <linux-can@vger.kernel.org>; Thu, 21 Jul 2022 01:15:06 -0700 (PDT)
+        with ESMTP id S231407AbiGUIR3 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 21 Jul 2022 04:17:29 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFBB57E009
+        for <linux-can@vger.kernel.org>; Thu, 21 Jul 2022 01:17:27 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id z22so1586306lfu.7
+        for <linux-can@vger.kernel.org>; Thu, 21 Jul 2022 01:17:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=amarulasolutions.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=MqHE4BK3e3Pm9KgW/SJnUA527Cf4tqD4K+qQVkJukeg=;
-        b=a7OWJov4SMDiz/4dl8Iyd2s3MXPCE+4q+YWRXaqUEVHM9vji3plWvfXPknEXBTP0O9
-         2DN+vBsxRVgRUoB6ziEU2y5e9RjOpJ47NxPFPJ5jkPX3jLW6KFuJUyegEcWh0lllK7vH
-         jQ6sadTtH38N9EFVFxvIlqg2yHDYGd7ln/TyazXA4/O9WXwRxb0e+UozTOwg9x1iFta7
-         uxA+Lv0Y5JsE+wxAhx6eVHIf/WhykHx0ug2nYmidmOEUVkkgeRdCSz+vVB5+dRh0Tosy
-         toTdFAiuI8S8wlRwFcYFcan9PUJWq4ohnq5smlww1nLPBmU8fyCx+tssgc1W9XUWDU2h
-         +Z+g==
+        bh=CXTgtlqLJ4/ccGg/ZVcRqRwbk2jzjIpBAEnjuKYHOG8=;
+        b=ECKSOnUYc5HaMnhSUPrnMRaZKeYAD7ValXquz6QlXsQRvt6pM3dc1Zh6iuvqMQqs1p
+         vkficU6A26aKu3AISdyt/5LgUlepuAeYYShiP7XLRoKI4zCLuJHsAlBPu3unpyQeF/nL
+         tHMzK4wJUtu4FbnPes5doM3OThzn7D/fceMjo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=MqHE4BK3e3Pm9KgW/SJnUA527Cf4tqD4K+qQVkJukeg=;
-        b=brvsWKd/0hj0dNb5qP/h7lD0e52APjPLay30ItriB2PNLR9AGcd2O8vrT8JWie65aZ
-         fxUR0aCCNG3k1RuSku5yVQAjn3sDKvJvGk1SSW4tcPGTGhGJjFl2qVbKiirU7rPK88mm
-         BbdxSxaKKmERC4fz6XOb5wqcYj+ds/kOAZqQPHLhHxmDwA3E8dSHdQsdURQrbDtYDLcc
-         zK5yn+v0jexRN5rQ6GWwCuwEIEUQdTFHOx6pVdKEpobM1lw0KmmLk4ganUge8ZQluXIy
-         aHSE649i7F/kfCr/ghd0lh1P8OCscst7rotXhfPIYmnLlZuW7Z5dbizJpJESgT5bl1Il
-         7RXg==
-X-Gm-Message-State: AJIora9Wkc5pEpESY95Fz+S5mFyCzmRk4O+IU6nMOOwPAkoIwVONj0Kf
-        FgxsmsleAxOt2jxpDbC1ylhIg0ddOMFv2BkCPiONCE+Rl5U=
-X-Google-Smtp-Source: AGRyM1v/EeJ3vMFKAMdYojUG5AqgcT3ERq5egwt+ZcNrgULI8vX+VLDLK43sOaG13lWRIkLYz7gR6uSneaFTlI51dhw=
-X-Received: by 2002:a81:9201:0:b0:31e:4ce6:8c90 with SMTP id
- j1-20020a819201000000b0031e4ce68c90mr15976475ywg.45.1658391306025; Thu, 21
- Jul 2022 01:15:06 -0700 (PDT)
+        bh=CXTgtlqLJ4/ccGg/ZVcRqRwbk2jzjIpBAEnjuKYHOG8=;
+        b=MXFLXqqq3SNMZZRnVC3CeYSzMBy6Ql9STie/SmBMWesYYnWNOwTjkCxKLLH8rLGtdw
+         DPxFv4wZJQAXtzZDaNjwAIsxF+yDkNwhxvFQ9Tfyqj4H8zRKjk6Ab9WtvqzuYL6cDTQo
+         Hx3MT2W/iFNNBzzj7JmugQ6UT4keG/4QHwmFWRRGwlkeMw+z/RgGzUzYv4vJdFmSN5/5
+         NUi8C0ioDHVrLp5K5TmfLQvNOdBorBPHSsXz8bG2Uy/aU/up4qQfBmmA/jwHqEyHKCgY
+         uzIgBkO5VeXnT9bfZiTqlGmSc8n7Kq4PGpSz8Ox4aQ/kI7spWuN7SR9NXh/iQ484MP6Q
+         QrZg==
+X-Gm-Message-State: AJIora/bhlEvEUyvP9sBT1s3iVS1JOVNJ1I4axAnd3NdFBYJYZiglPeU
+        ZFfQg9UhCWfIy/TSt0P6OnAbmCdfMQdEFlhWN2NBMamAPgJYsg==
+X-Google-Smtp-Source: AGRyM1syTT0nDSlzBPl3yxxmAFp/qrDcpgxuTHgeAQieT1mLOMdlSf1rR2uu6j+2gJMs2n8OiBAmZwYrMBl4iqln7Ks=
+X-Received: by 2002:a05:6512:32c1:b0:489:e9de:2f0 with SMTP id
+ f1-20020a05651232c100b00489e9de02f0mr23244981lfg.117.1658391446244; Thu, 21
+ Jul 2022 01:17:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220719112748.3281-1-socketcan@hartkopp.net> <20220719112748.3281-4-socketcan@hartkopp.net>
- <CAMZ6RqLb=Q3VQxwG3gXtTyo7YkLsB5f3YonjgcpmeoRzReOXCw@mail.gmail.com>
- <f8ec078d-44c9-9f8c-800f-058e4c735003@hartkopp.net> <CAMZ6RqKhW1vGwY1n=k82VmjKk_7MSUAQo4vvR-SGEpA0kD5sXA@mail.gmail.com>
- <e31e06bc-e4ba-92a9-c48a-8d125303d822@hartkopp.net> <CAMZ6RqLhah079XwkA6_Sk8LZ9zF8+xtxVW39kW=ZPPc18GNJZQ@mail.gmail.com>
- <cee555a2-2883-9dab-5740-62849e9ee3ab@hartkopp.net> <20220721075309.l6uusnyk7xjkqd4g@pengutronix.de>
-In-Reply-To: <20220721075309.l6uusnyk7xjkqd4g@pengutronix.de>
-From:   Vincent Mailhol <vincent.mailhol@gmail.com>
-Date:   Thu, 21 Jul 2022 17:14:54 +0900
-Message-ID: <CAMZ6RqJTZ4o3dsaYG2s9boJ4By7QC55-N+0RszT9LNxRp3bYuA@mail.gmail.com>
-Subject: Re: [RFC PATCH v5 3/5] can: dev: add CAN XL support
+References: <20220716170007.2020037-1-dario.binacchi@amarulasolutions.com>
+ <20220716170007.2020037-6-dario.binacchi@amarulasolutions.com> <20220718102203.66y6glwwphptl2tu@pengutronix.de>
+In-Reply-To: <20220718102203.66y6glwwphptl2tu@pengutronix.de>
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date:   Thu, 21 Jul 2022 10:17:15 +0200
+Message-ID: <CABGWkvqxKBVa_pGhg-aThn76wz-rpiVAqgFNDT-HNd1_Bz7WXw@mail.gmail.com>
+Subject: Re: [RFC PATCH 5/5] can: slcan: send the listen-only command to the adapter
 To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        linux-can <linux-can@vger.kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Jeroen Hofstee <jhofstee@victronenergy.com>,
+        michael@amarulasolutions.com,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Thu. 21 Jul. 2022 at 16:53, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> On 21.07.2022 09:36:21, Oliver Hartkopp wrote:
-> > Btw. How should we finally name the 'non data' header of CAN XL?
+Hello Marc,
+
+On Mon, Jul 18, 2022 at 12:22 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+>
+> The subject can be enhanced, as the listen-only command ist not send
+> unconditionally. What about: "add support for listen-only mode"?
+
+I like it.
+
+>
+> On 16.07.2022 19:00:07, Dario Binacchi wrote:
+> > In case the bitrate has been set via ip tool, this patch changes the
+> > driver to send the listen-only ("L\r") command to the adapter.
+>
+> ...but only of CAN_CTRLMODE_LISTENONLY is requested.
+>
+> What about:
+>
+> For non-legacy, i.e. ip based configuration, add support for listen-only
+> mode. If listen-only is requested send a listen-only ("L\r") command
+> instead of an open ("O\r") command to the adapter..
+
+I agree with you. It's definitely clearer.
+
+Thanks and regards,
+Dario
+>
 > >
-> > 1. CANXL_HEADER_SIZE
-> > 2. CANXL_HEAD_SIZE
-> > 3. CANXL_HDR_SIZE
-> > 4. CANXL_HDR_SZ <- currently in the patches
-> > 5. CANXL_HD_SZ
+> > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 > >
-> > I think it has to be 'head' and not 'header'.
+> > ---
+> >
+> >  drivers/net/can/slcan/slcan-core.c | 20 ++++++++++++++++----
+> >  1 file changed, 16 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/net/can/slcan/slcan-core.c b/drivers/net/can/slcan/slcan-core.c
+> > index 7a1540507ecd..d97dfeccbf9c 100644
+> > --- a/drivers/net/can/slcan/slcan-core.c
+> > +++ b/drivers/net/can/slcan/slcan-core.c
+> > @@ -711,10 +711,21 @@ static int slcan_netdev_open(struct net_device *dev)
+> >                       }
+> >               }
+> >
+> > -             err = slcan_transmit_cmd(sl, "O\r");
+> > -             if (err) {
+> > -                     netdev_err(dev, "failed to send open command 'O\\r'\n");
+> > -                     goto cmd_transmit_failed;
+> > +             /* listen-only command overrides open command */
 >
-> Header! Header is in front of data.
-
-I am also part of the header team! By analogy with:
-https://en.wikipedia.org/wiki/IPv4#Header
-
-> > In skbs we also have head and tail.
+> I think this comment can be removed.
 >
-> Yes, but they point at the head or tail of the buffer allocated with the
-> skb.
+> > +             if (sl->can.ctrlmode & CAN_CTRLMODE_LISTENONLY) {
+> > +                     err = slcan_transmit_cmd(sl, "L\r");
+> > +                     if (err) {
+> > +                             netdev_err(dev,
+> > +                                        "failed to send listen-only command 'L\\r'\n");
+> > +                             goto cmd_transmit_failed;
+> > +                     }
+> > +             } else {
+> > +                     err = slcan_transmit_cmd(sl, "O\r");
+> > +                     if (err) {
+> > +                             netdev_err(dev,
+> > +                                        "failed to send open command 'O\\r'\n");
+> > +                             goto cmd_transmit_failed;
+> > +                     }
+> >               }
+> >       }
+> >
+> > @@ -801,6 +812,7 @@ static int slcan_open(struct tty_struct *tty)
+> >       /* Configure CAN metadata */
+> >       sl->can.bitrate_const = slcan_bitrate_const;
+> >       sl->can.bitrate_const_cnt = ARRAY_SIZE(slcan_bitrate_const);
+> > +     sl->can.ctrlmode_supported = CAN_CTRLMODE_LISTENONLY;
+> >
+> >       /* Configure netdev interface */
+> >       sl->dev = dev;
 >
-> > So I would vote for 2 or 5 with a tendency to 5.
+> Marc
 >
-> 3, 1, 4
+> --
+> Pengutronix e.K.                 | Marc Kleine-Budde           |
+> Embedded Linux                   | https://www.pengutronix.de  |
+> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-My top vote goes to:
-6. No macro, instead use flexible array member and do sizeof(struct canxl_frame)
 
-I do not like the SZ abbreviation either, so my next choices will be 3 then 1.
 
-To recap: 6, 3, 1.
+-- 
+
+Dario Binacchi
+
+Embedded Linux Developer
+
+dario.binacchi@amarulasolutions.com
+
+__________________________________
+
+
+Amarula Solutions SRL
+
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+
+T. +39 042 243 5310
+info@amarulasolutions.com
+
+www.amarulasolutions.com
