@@ -2,114 +2,149 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4384257D141
-	for <lists+linux-can@lfdr.de>; Thu, 21 Jul 2022 18:17:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4CF657D15E
+	for <lists+linux-can@lfdr.de>; Thu, 21 Jul 2022 18:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233968AbiGUQRs (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 21 Jul 2022 12:17:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43004 "EHLO
+        id S231514AbiGUQU2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 21 Jul 2022 12:20:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233703AbiGUQRK (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 21 Jul 2022 12:17:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E92EA8C3E5
-        for <linux-can@vger.kernel.org>; Thu, 21 Jul 2022 09:16:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658420138;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=PPUfN2aC/PVXDzfJ07LBJeBzGqwt66XBq8iYF1IJ01w=;
-        b=II7ss+O2pkFarlRHTTihC9WY/29SDirOnwXXJiR5oFOAKQ9+etUK8wN0aZK1xMFzziaL6Z
-        L5P11d6lZKthrPBWA8f7rjWQoS6NRH5xM8VeaeU7JEgQIJQBxwCc9CdL2zqPo8YSMH2/Nf
-        RJZ6CV4blLFMVMycdJOCa+dxScAjtvM=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-354-2HsrMrfCP4Cd3ZWbQ388Yw-1; Thu, 21 Jul 2022 12:15:36 -0400
-X-MC-Unique: 2HsrMrfCP4Cd3ZWbQ388Yw-1
-Received: by mail-qt1-f200.google.com with SMTP id f1-20020ac84641000000b0031ecb35e4d1so1322989qto.2
-        for <linux-can@vger.kernel.org>; Thu, 21 Jul 2022 09:15:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PPUfN2aC/PVXDzfJ07LBJeBzGqwt66XBq8iYF1IJ01w=;
-        b=j1H5tUmyj94DQMk+Fxm8KMdfRJupHmkBbNSKdVF0JoRzu3GQqvNCzWwqncfp2qTzOM
-         XMfmPImyyxjr2fUZ4f8ZatrAKsasrgjkLTpYeZyBSlxBjakyYFSM6t02iE74NbThT/9W
-         o1Wwys7CEa+HBZhLZzKuQ6La8+0t8XwTb3XWz6u2Gs55aHAyr7iHTuZfPalVpZ7bXjF5
-         DK1IYjTplf72gG09Ul6CDQAfdpYl8H8U6fql/NJPvqBn8OSA3/XuI+l/GCIuJmWQMCp3
-         gpKCl+6TDpHBb07iC3foFE/Wt41Cz/pfWZAnjvg5o7bYvMe0EJdzICpzUQQPOOm8XcK+
-         R2Qg==
-X-Gm-Message-State: AJIora8slLr8m92dGSoz1uHV+CSzhP5k+jMGlLAw6BkvHQUklfpIBzq3
-        Pas2CgOqwdrMI32ouvVvSOxfLjmXEtzRKmgsUhvddfGLwgbEdh6m3l1N+smY5mZhwPZuM85yPzj
-        m9GhQ56pPWNsVQGVLQWnd
-X-Received: by 2002:ac8:5a52:0:b0:31e:f585:3d66 with SMTP id o18-20020ac85a52000000b0031ef5853d66mr15116747qta.90.1658420136214;
-        Thu, 21 Jul 2022 09:15:36 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vBeHanWUmyHthB96zttRkCX6UHShHu5dTY7wk2xVfGz3V9RUE/OA/ewP2v5Pq5J8ymODrXBA==
-X-Received: by 2002:ac8:5a52:0:b0:31e:f585:3d66 with SMTP id o18-20020ac85a52000000b0031ef5853d66mr15116722qta.90.1658420135971;
-        Thu, 21 Jul 2022 09:15:35 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id j2-20020a05620a410200b006b5cb5d2fa0sm1868385qko.1.2022.07.21.09.15.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 09:15:35 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        nathan@kernel.org, ndesaulniers@google.com,
-        mailhol.vincent@wanadoo.fr
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] can: pch_can: move setting of errc to before use
-Date:   Thu, 21 Jul 2022 12:15:26 -0400
-Message-Id: <20220721161526.930416-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        with ESMTP id S229606AbiGUQU1 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 21 Jul 2022 12:20:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E96DD116;
+        Thu, 21 Jul 2022 09:20:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF03061E05;
+        Thu, 21 Jul 2022 16:20:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 980B6C3411E;
+        Thu, 21 Jul 2022 16:20:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658420426;
+        bh=HOKEGqbNtknAQt0cuic72RlBJrJJCnIdEoHjz7JAhlk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=l+5A6RFlEIQFZPdSUHe0prdiulAO6baXLituorna5fBrBm99sBmBgHZmhLfTJqaSC
+         tTyMNT80CdJZEwU2hbwYlFB5D8q4DJZil8eLn5dERURcRRmnm1X95uEp9JH2GRNRDc
+         vGHnEBZI/dFLJVS9RHQvIlQdCKDuHr1DZRXgCpSfRllNOjBBuwg9tYoBGOEhRHekro
+         JLmiUXJfjciD/9qUv1dEx5eUF3GNEG03Nf578D4VJ9HXkgqliVCOu+biyAptEIqwd7
+         w143xM46gWWv/a1Y9jabkmIHdCuttZyT3EIxlL2tbCNejStAA89Uq4hH1/YC+ukZCT
+         ojNTgBjfQjw+A==
+Date:   Thu, 21 Jul 2022 09:20:23 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, netdev@vger.kernel.org,
+        davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de, llvm@lists.linux.dev
+Subject: Re: [PATCH net-next 18/29] can: pch_can: do not report txerr and
+ rxerr during bus-off
+Message-ID: <Ytl8x20qmsKyYJpS@dev-arch.thelio-3990X>
+References: <20220720081034.3277385-1-mkl@pengutronix.de>
+ <20220720081034.3277385-19-mkl@pengutronix.de>
+ <YtlwSpoeT+nhmhVn@dev-arch.thelio-3990X>
+ <20220721154725.ovcsfiio7e6hts2n@pengutronix.de>
+ <CAMZ6RqLdYCqag_MDp7dj=u1SEjx1r=bs_xHG26w11_A_D_SumQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMZ6RqLdYCqag_MDp7dj=u1SEjx1r=bs_xHG26w11_A_D_SumQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-clang build fails with
-drivers/net/can/pch_can.c:501:17: error: variable 'errc' is uninitialized when used here [-Werror,-Wuninitialized]
-                cf->data[6] = errc & PCH_TEC;
+On Fri, Jul 22, 2022 at 01:11:49AM +0900, Vincent MAILHOL wrote:
+> On Fri. 22 Jul. 2022 at 00:49, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> > On 21.07.2022 08:27:06, Nathan Chancellor wrote:
+> > > On Wed, Jul 20, 2022 at 10:10:23AM +0200, Marc Kleine-Budde wrote:
+> > > > From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > > >
+> > > > During bus off, the error count is greater than 255 and can not fit in
+> > > > a u8.
+> > > >
+> > > > Fixes: 0c78ab76a05c ("pch_can: Add setting TEC/REC statistics processing")
+> > > > Link: https://lore.kernel.org/all/20220719143550.3681-2-mailhol.vincent@wanadoo.fr
+> > > > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > > > Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> > > > ---
+> > > >  drivers/net/can/pch_can.c | 6 +++---
+> > > >  1 file changed, 3 insertions(+), 3 deletions(-)
+> > > >
+> > > > diff --git a/drivers/net/can/pch_can.c b/drivers/net/can/pch_can.c
+> > > > index fde3ac516d26..497ef77340ea 100644
+> > > > --- a/drivers/net/can/pch_can.c
+> > > > +++ b/drivers/net/can/pch_can.c
+> > > > @@ -496,6 +496,9 @@ static void pch_can_error(struct net_device *ndev, u32 status)
+> > > >             cf->can_id |= CAN_ERR_BUSOFF;
+> > > >             priv->can.can_stats.bus_off++;
+> > > >             can_bus_off(ndev);
+> > > > +   } else {
+> > > > +           cf->data[6] = errc & PCH_TEC;
+> > > > +           cf->data[7] = (errc & PCH_REC) >> 8;
+> > > >     }
+> > > >
+> > > >     errc = ioread32(&priv->regs->errc);
+> > > > @@ -556,9 +559,6 @@ static void pch_can_error(struct net_device *ndev, u32 status)
+> > > >             break;
+> > > >     }
+> > > >
+> > > > -   cf->data[6] = errc & PCH_TEC;
+> > > > -   cf->data[7] = (errc & PCH_REC) >> 8;
+> > > > -
+> > > >     priv->can.state = state;
+> > > >     netif_receive_skb(skb);
+> > > >  }
+> > > > --
+> > > > 2.35.1
+> > > >
+> > > >
+> > > >
+> > >
+> > > Apologies if this has been reported already, I didn't see anything on
+> > > the mailing lists.
+> > >
+> > > This commit is now in -next as commit 3a5c7e4611dd ("can: pch_can: do
+> > > not report txerr and rxerr during bus-off"), where it causes the
+> > > following clang warning:
+> > >
+> > >   ../drivers/net/can/pch_can.c:501:17: error: variable 'errc' is uninitialized when used here [-Werror,-Wuninitialized]
+> > >                   cf->data[6] = errc & PCH_TEC;
+> > >                                 ^~~~
+> > >   ../drivers/net/can/pch_can.c:484:10: note: initialize the variable 'errc' to silence this warning
+> > >           u32 errc, lec;
+> > >                   ^
+> > >                    = 0
+> > >   1 error generated.
+> > >
+> > > errc is initialized underneath this now, should it be hoisted or is
+> > > there another fix?
+> 
+> Thanks for reporting and sorry for the bug.
 
-The commit in the fixes moved the use without moving the setting. So move
-the setting of errc to before the use.
+No worries, it happens :)
 
-Fixes: 3a5c7e4611dd ("can: pch_can: do not report txerr and rxerr during bus-off")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/net/can/pch_can.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> That said, I have one complaint: this type of warning is reported at
+> W=2 *but* W=2 output is heavily polluted, mostly due to a false
+> positive on linux/bits.h's GENMASK_INPUT_CHECK(). Under the current
+> situation, the relevant warings become invisible with all the
+> flooding.
+> I tried to send a patch to silence a huge chunk of the W=2 spam in [1]
+> but it got rejected. I am sorry but even with the best intent, I might
+> repeat a similar mistake in the future. The W=2 is just not usable.
+> 
+> [1] https://lore.kernel.org/all/20220426161658.437466-1-mailhol.vincent@wanadoo.fr/
 
-diff --git a/drivers/net/can/pch_can.c b/drivers/net/can/pch_can.c
-index 50f6719b3aa4..32804fed116c 100644
---- a/drivers/net/can/pch_can.c
-+++ b/drivers/net/can/pch_can.c
-@@ -489,6 +489,7 @@ static void pch_can_error(struct net_device *ndev, u32 status)
- 	if (!skb)
- 		return;
- 
-+	errc = ioread32(&priv->regs->errc);
- 	if (status & PCH_BUS_OFF) {
- 		pch_can_set_tx_all(priv, 0);
- 		pch_can_set_rx_all(priv, 0);
-@@ -502,7 +503,6 @@ static void pch_can_error(struct net_device *ndev, u32 status)
- 		cf->data[7] = (errc & PCH_REC) >> 8;
- 	}
- 
--	errc = ioread32(&priv->regs->errc);
- 	/* Warning interrupt. */
- 	if (status & PCH_EWARN) {
- 		state = CAN_STATE_ERROR_WARNING;
--- 
-2.27.0
+Yes, having -Wmaybe-uninitialized in W=2 is unfortunate because these
+types of mistakes will continue to happen. I have been fighting this for
+a while and so has Dan Carpenter, who started a thread about it a couple
+of months ago but it doesn't seem like it really went anywhere:
 
+https://lore.kernel.org/20220506091338.GE4031@kadam/
+
+Cheers,
+Nathan
