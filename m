@@ -2,80 +2,91 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0252857D165
-	for <lists+linux-can@lfdr.de>; Thu, 21 Jul 2022 18:22:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B5BB57D189
+	for <lists+linux-can@lfdr.de>; Thu, 21 Jul 2022 18:30:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbiGUQWB convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Thu, 21 Jul 2022 12:22:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56056 "EHLO
+        id S233254AbiGUQat (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 21 Jul 2022 12:30:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiGUQWA (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 21 Jul 2022 12:22:00 -0400
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA235006E;
-        Thu, 21 Jul 2022 09:21:59 -0700 (PDT)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-31e7c4b593fso22401917b3.13;
-        Thu, 21 Jul 2022 09:21:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=4tuVfX9bKKufRa9+rIEczxOme0B9PbnJssWHNEU67L8=;
-        b=B/LYU8ep/rMbDJFc4u67PkThRiMT2SW8PMlTWpwFtfEfzrMs+6Y1vUdBxvrFi9BD6d
-         XZeuY0dusnEbQmU1vhPwD5J44378a+5V9Y3zxNWSZ80gmJm7SpewpSzl5Sxpyp3vs/X4
-         RXIcWpYnPYTHuEyzXPVuayXZxOihF+tH9Hiy10T4TW6FUD8N5DnZOzyiAvOtGtcZ96LF
-         72FTUACnoie6qRiSWJcm/kQEjbs4+J1jMlzSCVrf9vhRpKY6/seL514d8iy0cdgyu2zv
-         shroU3jNUDd9Bg0PbKJt4TVZZTPvWn7Q2TFnjC9TTQoOvR9Gle/guok2S49FU/GTNprW
-         sk/w==
-X-Gm-Message-State: AJIora8EnWzUCVwVuurT58OXImpV75qdYg9MkQqsRAyzXA14hPYMzKua
-        ZB6C3eCmu2sL49RbRNlEuiS1ft0P1ZK27cztPfI=
-X-Google-Smtp-Source: AGRyM1s0j5C7KrwKVl0xitO8o0mGA4aHRoHTICik/N5JCVKPzDCOlvNHTuvVd9Dlk8MJG/2azgZTjqSgngDu5QqLX3o=
-X-Received: by 2002:a81:8349:0:b0:31e:732a:258a with SMTP id
- t70-20020a818349000000b0031e732a258amr7468400ywf.518.1658420519100; Thu, 21
- Jul 2022 09:21:59 -0700 (PDT)
+        with ESMTP id S233516AbiGUQar (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 21 Jul 2022 12:30:47 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ECAF4E869
+        for <linux-can@vger.kernel.org>; Thu, 21 Jul 2022 09:30:46 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oEZ4W-00048k-HL
+        for linux-can@vger.kernel.org; Thu, 21 Jul 2022 18:30:44 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id E3A35B6F38
+        for <linux-can@vger.kernel.org>; Thu, 21 Jul 2022 16:30:43 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 8C525B6F34;
+        Thu, 21 Jul 2022 16:30:43 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id a9762a30;
+        Thu, 21 Jul 2022 16:30:43 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH net-next 0/1] pull-request: can-next 2022-07-21
+Date:   Thu, 21 Jul 2022 18:30:41 +0200
+Message-Id: <20220721163042.3448384-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220721161526.930416-1-trix@redhat.com>
-In-Reply-To: <20220721161526.930416-1-trix@redhat.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Fri, 22 Jul 2022 01:21:48 +0900
-Message-ID: <CAMZ6Rq+di4CYnZ6eDgBS68qGuPLvGHfxP0JYWJFkgH4c-riSmw@mail.gmail.com>
-Subject: Re: [PATCH] can: pch_can: move setting of errc to before use
-To:     Tom Rix <trix@redhat.com>
-Cc:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        nathan@kernel.org, ndesaulniers@google.com,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri. 22 juil. 2022 à 01:18, Tom Rix <trix@redhat.com> wrote:
-> clang build fails with
-> drivers/net/can/pch_can.c:501:17: error: variable 'errc' is uninitialized when used here [-Werror,-Wuninitialized]
->                 cf->data[6] = errc & PCH_TEC;
->
-> The commit in the fixes moved the use without moving the setting. So move
-> the setting of errc to before the use.
->
-> Fixes: 3a5c7e4611dd ("can: pch_can: do not report txerr and rxerr during bus-off")
-> Signed-off-by: Tom Rix <trix@redhat.com>
+Hello Jakub, hello David,
 
-Sorry, you are a couple minutes late. You are actually the third to
-submit the same patch:
-https://lore.kernel.org/linux-can/20220721155228.3399103-1-mkl@pengutronix.de/
-https://lore.kernel.org/linux-can/20220721160032.9348-1-mailhol.vincent@wanadoo.fr/
+this is a pull request of 1 patch for net-next/master.
 
-But thanks for this!
+The patch is by Vincent Mailhol and fixes a use on an uninitialized
+variable in the pch_can driver (introduced in last pull request to
+net-next).
+
+regards,
+Marc
+
+---
+
+The following changes since commit 5588d628027092e66195097bdf6835ddf64418b3:
+
+  net/cdc_ncm: Increase NTB max RX/TX values to 64kb (2022-07-21 13:20:28 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git tags/linux-can-next-for-5.20-20220721
+
+for you to fetch changes up to 9950f11211331180269867aef848c7cf56861742:
+
+  can: pch_can: pch_can_error(): initialize errc before using it (2022-07-21 18:19:01 +0200)
+
+----------------------------------------------------------------
+linux-can-next-for-5.20-20220721
+
+----------------------------------------------------------------
+Vincent Mailhol (1):
+      can: pch_can: pch_can_error(): initialize errc before using it
+
+ drivers/net/can/pch_can.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 
-Yours sincerely,
-Vincent Mailhol
