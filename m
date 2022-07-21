@@ -2,181 +2,125 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B78BF57C609
-	for <lists+linux-can@lfdr.de>; Thu, 21 Jul 2022 10:17:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6B4057C63E
+	for <lists+linux-can@lfdr.de>; Thu, 21 Jul 2022 10:28:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230328AbiGUIRi (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 21 Jul 2022 04:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48372 "EHLO
+        id S232261AbiGUI2j (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 21 Jul 2022 04:28:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231407AbiGUIR3 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 21 Jul 2022 04:17:29 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFBB57E009
-        for <linux-can@vger.kernel.org>; Thu, 21 Jul 2022 01:17:27 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id z22so1586306lfu.7
-        for <linux-can@vger.kernel.org>; Thu, 21 Jul 2022 01:17:27 -0700 (PDT)
+        with ESMTP id S232241AbiGUI2i (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 21 Jul 2022 04:28:38 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DFBF7E302
+        for <linux-can@vger.kernel.org>; Thu, 21 Jul 2022 01:28:37 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id 7so1669240ybw.0
+        for <linux-can@vger.kernel.org>; Thu, 21 Jul 2022 01:28:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=CXTgtlqLJ4/ccGg/ZVcRqRwbk2jzjIpBAEnjuKYHOG8=;
-        b=ECKSOnUYc5HaMnhSUPrnMRaZKeYAD7ValXquz6QlXsQRvt6pM3dc1Zh6iuvqMQqs1p
-         vkficU6A26aKu3AISdyt/5LgUlepuAeYYShiP7XLRoKI4zCLuJHsAlBPu3unpyQeF/nL
-         tHMzK4wJUtu4FbnPes5doM3OThzn7D/fceMjo=
+        bh=r7CRBLP6zp44Boo+ab6QJvkP0YMfHnujeDMG6PP1H8g=;
+        b=WuE3N0RGMtocBkDGBYH39+92ZbX6aPf6CvTQsIaqE6NAqBHzSYu0PvrlD0YJfCy/vk
+         tYyF71pyeYckFJrsmXb4sqW6MT8GDltFuKuy6SjCkE1IXKkDICJmEJJdeX7R5yVYFW+/
+         XUZq3tZONat+WH7Y9wcuxixB5lFgAtyQ9zQOhFQ5NvdDt4lJPe/ByxDxJ14xZFS0Psw+
+         EINx0FMf+Dk4NaBaaeLKAVdzdusgaN4SVUSR3T5o+XZGa8AnD6/do89Um7uhYaLkEHwD
+         ZnTew+0gC+T7oMVVRYQAm+1tmur3uXYtDbLLfuFr3dPs0ulpb7BADM/DEt5taVlwL+72
+         TiDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=CXTgtlqLJ4/ccGg/ZVcRqRwbk2jzjIpBAEnjuKYHOG8=;
-        b=MXFLXqqq3SNMZZRnVC3CeYSzMBy6Ql9STie/SmBMWesYYnWNOwTjkCxKLLH8rLGtdw
-         DPxFv4wZJQAXtzZDaNjwAIsxF+yDkNwhxvFQ9Tfyqj4H8zRKjk6Ab9WtvqzuYL6cDTQo
-         Hx3MT2W/iFNNBzzj7JmugQ6UT4keG/4QHwmFWRRGwlkeMw+z/RgGzUzYv4vJdFmSN5/5
-         NUi8C0ioDHVrLp5K5TmfLQvNOdBorBPHSsXz8bG2Uy/aU/up4qQfBmmA/jwHqEyHKCgY
-         uzIgBkO5VeXnT9bfZiTqlGmSc8n7Kq4PGpSz8Ox4aQ/kI7spWuN7SR9NXh/iQ484MP6Q
-         QrZg==
-X-Gm-Message-State: AJIora/bhlEvEUyvP9sBT1s3iVS1JOVNJ1I4axAnd3NdFBYJYZiglPeU
-        ZFfQg9UhCWfIy/TSt0P6OnAbmCdfMQdEFlhWN2NBMamAPgJYsg==
-X-Google-Smtp-Source: AGRyM1syTT0nDSlzBPl3yxxmAFp/qrDcpgxuTHgeAQieT1mLOMdlSf1rR2uu6j+2gJMs2n8OiBAmZwYrMBl4iqln7Ks=
-X-Received: by 2002:a05:6512:32c1:b0:489:e9de:2f0 with SMTP id
- f1-20020a05651232c100b00489e9de02f0mr23244981lfg.117.1658391446244; Thu, 21
- Jul 2022 01:17:26 -0700 (PDT)
+        bh=r7CRBLP6zp44Boo+ab6QJvkP0YMfHnujeDMG6PP1H8g=;
+        b=nrR3FeB8tKk4On1NYB9UJfkNBn5EmQumUIeiiIUEi4wd0oipv+NMDocMZTcLPWAwJI
+         aK8zqm57ElPMYalAXapfAUiwVwAqoBMZkSbbQM14N5ph1bQDOQYqi6cxI7TKCUW8kIbR
+         wDVXkg0lsMzbUccPpqN7Mt6pS1FfwSnM2haZQX4UAEyfAmFizCMkZv7t60yr/LXUJer6
+         /g/TnYOpaAOXgKwHUz04S1FtrXQ3zI8DTV785YpiT9GVCHqkZb13NP5WTZ0upkFQ8TW5
+         CShBi0ysbpIXwfre3YcTXyABNTMhVWD5sQFACe3sAT//CoLTNi037DfHUWtlAXQlRz3T
+         jrrw==
+X-Gm-Message-State: AJIora/TXgcEMrmbSSf36/XpJHLyUVNjGC/n92w1xp29Z4vTbLbPULKH
+        AKLGUlvxHRK6SPSE/26oANFwo7kepPm6xS2Z7PsLwyh8j80=
+X-Google-Smtp-Source: AGRyM1sYAjfelvDf89oxSQeb9g5cT21Byj9WxPjUYev4QQooCnllfga4G8pG9TqXpH59zljK+VbXHRpFowPiqPyhG8E=
+X-Received: by 2002:a25:72d4:0:b0:670:7c08:a9e8 with SMTP id
+ n203-20020a2572d4000000b006707c08a9e8mr12976220ybc.423.1658392116688; Thu, 21
+ Jul 2022 01:28:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220716170007.2020037-1-dario.binacchi@amarulasolutions.com>
- <20220716170007.2020037-6-dario.binacchi@amarulasolutions.com> <20220718102203.66y6glwwphptl2tu@pengutronix.de>
-In-Reply-To: <20220718102203.66y6glwwphptl2tu@pengutronix.de>
-From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date:   Thu, 21 Jul 2022 10:17:15 +0200
-Message-ID: <CABGWkvqxKBVa_pGhg-aThn76wz-rpiVAqgFNDT-HNd1_Bz7WXw@mail.gmail.com>
-Subject: Re: [RFC PATCH 5/5] can: slcan: send the listen-only command to the adapter
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Jeroen Hofstee <jhofstee@victronenergy.com>,
-        michael@amarulasolutions.com,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
+References: <20220719112748.3281-1-socketcan@hartkopp.net> <20220719112748.3281-4-socketcan@hartkopp.net>
+ <CAMZ6RqLb=Q3VQxwG3gXtTyo7YkLsB5f3YonjgcpmeoRzReOXCw@mail.gmail.com>
+ <f8ec078d-44c9-9f8c-800f-058e4c735003@hartkopp.net> <CAMZ6RqKhW1vGwY1n=k82VmjKk_7MSUAQo4vvR-SGEpA0kD5sXA@mail.gmail.com>
+ <e31e06bc-e4ba-92a9-c48a-8d125303d822@hartkopp.net> <CAMZ6RqLhah079XwkA6_Sk8LZ9zF8+xtxVW39kW=ZPPc18GNJZQ@mail.gmail.com>
+ <cee555a2-2883-9dab-5740-62849e9ee3ab@hartkopp.net>
+In-Reply-To: <cee555a2-2883-9dab-5740-62849e9ee3ab@hartkopp.net>
+From:   Vincent Mailhol <vincent.mailhol@gmail.com>
+Date:   Thu, 21 Jul 2022 17:28:26 +0900
+Message-ID: <CAMZ6RqKbBLhEq99vesRLs-WSp5jOfwtMHDOQCjrZng4BAgK-vg@mail.gmail.com>
+Subject: Re: [RFC PATCH v5 3/5] can: dev: add CAN XL support
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     linux-can <linux-can@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Marc,
-
-On Mon, Jul 18, 2022 at 12:22 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+On Thu. 21 Jul. 2022 at 16:36, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
+> On 21.07.22 04:37, Vincent Mailhol wrote:
+> > On Wed. 21 Jul. 2022 at 01:43, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
+> >> On 19.07.22 17:16, Vincent Mailhol wrote:
+> >>> On Tue 19 Jul. 2022 at 23:38, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
+(...)
+> I just wanted to get an impression whether it is handy to program this
+> extended API or not.
 >
-> The subject can be enhanced, as the listen-only command ist not send
-> unconditionally. What about: "add support for listen-only mode"?
-
-I like it.
-
->
-> On 16.07.2022 19:00:07, Dario Binacchi wrote:
-> > In case the bitrate has been set via ip tool, this patch changes the
-> > driver to send the listen-only ("L\r") command to the adapter.
->
-> ...but only of CAN_CTRLMODE_LISTENONLY is requested.
->
-> What about:
->
-> For non-legacy, i.e. ip based configuration, add support for listen-only
-> mode. If listen-only is requested send a listen-only ("L\r") command
-> instead of an open ("O\r") command to the adapter..
-
-I agree with you. It's definitely clearer.
-
-Thanks and regards,
-Dario
->
+> >> nbytes = read(s, &can.xl, sizeof(struct canxl_frame));
+> >> if (nbytes < 0) {
+> >>           perror("read");
+> >>           return 1;
+> >> }
+> >> printf("nbytes = %d\n", nbytes);
 > >
-> > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> > Does read() guarantee atomicity? From "man 2 read":
+> > | It is not an error if [the return value] is smaller than the number
+> > | of bytes requested; this may happen for example because fewer bytes
+> > | are actually available right now (maybe because we were close to
+> > | end-of-file, or because we are reading from a pipe, or from a
+> > | terminal), *or because read() was interrupted by a signal*.
 > >
-> > ---
-> >
-> >  drivers/net/can/slcan/slcan-core.c | 20 ++++++++++++++++----
-> >  1 file changed, 16 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/net/can/slcan/slcan-core.c b/drivers/net/can/slcan/slcan-core.c
-> > index 7a1540507ecd..d97dfeccbf9c 100644
-> > --- a/drivers/net/can/slcan/slcan-core.c
-> > +++ b/drivers/net/can/slcan/slcan-core.c
-> > @@ -711,10 +711,21 @@ static int slcan_netdev_open(struct net_device *dev)
-> >                       }
-> >               }
-> >
-> > -             err = slcan_transmit_cmd(sl, "O\r");
-> > -             if (err) {
-> > -                     netdev_err(dev, "failed to send open command 'O\\r'\n");
-> > -                     goto cmd_transmit_failed;
-> > +             /* listen-only command overrides open command */
+> > I think the answer is yes, but I prefer to double check (I am
+> > especially concerned by the signal interrupts).
 >
-> I think this comment can be removed.
+> Hm, we are not reading from a file but from a socket here that provide
+> chunks in the form of struct can_frame in raw_recvmsg(). You only get a
+> MSG_TRUNC there when you provide a (buffer)size in userspace that's to
+> small.
 >
-> > +             if (sl->can.ctrlmode & CAN_CTRLMODE_LISTENONLY) {
-> > +                     err = slcan_transmit_cmd(sl, "L\r");
-> > +                     if (err) {
-> > +                             netdev_err(dev,
-> > +                                        "failed to send listen-only command 'L\\r'\n");
-> > +                             goto cmd_transmit_failed;
-> > +                     }
-> > +             } else {
-> > +                     err = slcan_transmit_cmd(sl, "O\r");
-> > +                     if (err) {
-> > +                             netdev_err(dev,
-> > +                                        "failed to send open command 'O\\r'\n");
-> > +                             goto cmd_transmit_failed;
-> > +                     }
-> >               }
-> >       }
-> >
-> > @@ -801,6 +812,7 @@ static int slcan_open(struct tty_struct *tty)
-> >       /* Configure CAN metadata */
-> >       sl->can.bitrate_const = slcan_bitrate_const;
-> >       sl->can.bitrate_const_cnt = ARRAY_SIZE(slcan_bitrate_const);
-> > +     sl->can.ctrlmode_supported = CAN_CTRLMODE_LISTENONLY;
-> >
-> >       /* Configure netdev interface */
-> >       sl->dev = dev;
+> I've never got any error reports on CAN_RAW reading (over 16 years) and
+> all the examples contain a test for sizeof(struct can_frame) like this:
 >
-> Marc
+>  >> if (nbytes != sizeof(struct can_frame) &&
+>  >>       nbytes != sizeof(struct canfd_frame)) {
 >
-> --
-> Pengutronix e.K.                 | Marc Kleine-Budde           |
-> Embedded Linux                   | https://www.pengutronix.de  |
-> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+> So we either have an error or an incomplete CAN frame which becomes an
+> error too.
+>
+> Do you think this is still worth an investigation?
+
+My concern is whether or not read() can really be interrupted by a signal?
+But actually, even if read() were not atomic, it would still be
+usable: you just have to continue reading until you get the first 64
+bits, then you have all the information needed to determine the type
+and the total length.
+
+So I do not think this is a valid concern, but even if it is, it does
+not invalidate current design. So OK to move on. Maybe it is just
+something to add to the TODO list of the "things I yet have to
+understand".
 
 
-
--- 
-
-Dario Binacchi
-
-Embedded Linux Developer
-
-dario.binacchi@amarulasolutions.com
-
-__________________________________
-
-
-Amarula Solutions SRL
-
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-
-T. +39 042 243 5310
-info@amarulasolutions.com
-
-www.amarulasolutions.com
+Yours sincerely,
+Vincent Mailhol
