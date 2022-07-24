@@ -2,71 +2,49 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE76457EECE
-	for <lists+linux-can@lfdr.de>; Sat, 23 Jul 2022 12:33:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1128C57F3CB
+	for <lists+linux-can@lfdr.de>; Sun, 24 Jul 2022 09:44:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239263AbiGWKdd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 23 Jul 2022 06:33:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46990 "EHLO
+        id S234930AbiGXHoQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 24 Jul 2022 03:44:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237288AbiGWKdc (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 23 Jul 2022 06:33:32 -0400
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.220])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46EC1A3BA
-        for <linux-can@vger.kernel.org>; Sat, 23 Jul 2022 03:33:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1658572408;
+        with ESMTP id S232718AbiGXHoP (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 24 Jul 2022 03:44:15 -0400
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57D213F70
+        for <linux-can@vger.kernel.org>; Sun, 24 Jul 2022 00:44:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1658648649;
     s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=U8pZM70YWE6rtRGZxDj+uaCVmctQvsV2p9l/O+Q3wV4=;
-    b=rpVX84jQLdXt0DasGng0stTGgQVLqUpQTM0Loj92mhfU+f/SBba/FIj90NXfwX6A4q
-    9agrGilqbu+I80N+9yOp0R3C0yAzOSr3j7fsDQ0Kr+6QR8DGKJoPafPXNd1w/JsKLem/
-    yaWLu3ufTftFQQs5zMf0OC+28Jj+LGjAmO01eTynTROVE77SP1Mg3Qo4lumJptDufgen
-    /0UMbtltznvxb9ILO4pD+UaxuXBW8m5JHHQaylUW1HApFumE16awKZjPEOU+IeqqrkL2
-    lQ5TaFr2DW8TeLAmEYJqpW4x8sXc2Z2y3cCXkifRripEo6PkXIIYQFGVYnAmUUpexP8Q
-    oFeQ==
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=l9UB7w+sWb9ImuZLpb/FeQICZx7QETuzgwOi5nDLUuw=;
+    b=pVvm52FcY64uYT/T3UFgep/NBxtKZtqionorOPA6p7zSiJVmWDdDieKpHJP4nP/LxN
+    eOwgVZx58wgfF//XqTn9mCwUAVx8uhADVMrwUYPKNzxg8ixbZaCFSnu+DgLEHt+q+/uw
+    vtdCgmGIPVSfp6Iq64PgOMExbCyoA+fg440humA5q/rHPbiTYZvc5iNzHq/lmtS4U3CB
+    N7s5pKFwww+8ldnVMrLWmnKIbzOoYmJUIbl/lqXwMe6h74mzKKfAmMbhyF0di13amIuR
+    alYs/4pViY3UqH5rCQ5taeumBCWVLbC/ofk8YdK8ZvqtVn+kPcdgbCcXdCX3FCjDbz9w
+    HCFQ==
 Authentication-Results: strato.com;
     dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytJSr63tDxrw=="
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS/xvEBL7X5sbo3UIh9JiLceSWJaYwXUKbZ"
 X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a00:6020:1cfd:d100::b82]
+Received: from silver.lan
     by smtp.strato.de (RZmta 47.47.0 AUTH)
-    with ESMTPSA id jdcffay6NAXS7Yp
+    with ESMTPSA id jdcffay6O7i886S
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-    Sat, 23 Jul 2022 12:33:28 +0200 (CEST)
-Message-ID: <d5a58f83-3aca-9d05-66d5-153909a6e389@hartkopp.net>
-Date:   Sat, 23 Jul 2022 12:33:21 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC PATCH v5 3/5] can: dev: add CAN XL support
-Content-Language: en-US
-To:     Vincent Mailhol <vincent.mailhol@gmail.com>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can <linux-can@vger.kernel.org>
-References: <CAMZ6RqKhW1vGwY1n=k82VmjKk_7MSUAQo4vvR-SGEpA0kD5sXA@mail.gmail.com>
- <e31e06bc-e4ba-92a9-c48a-8d125303d822@hartkopp.net>
- <CAMZ6RqLhah079XwkA6_Sk8LZ9zF8+xtxVW39kW=ZPPc18GNJZQ@mail.gmail.com>
- <cee555a2-2883-9dab-5740-62849e9ee3ab@hartkopp.net>
- <20220721075309.l6uusnyk7xjkqd4g@pengutronix.de>
- <CAMZ6RqJTZ4o3dsaYG2s9boJ4By7QC55-N+0RszT9LNxRp3bYuA@mail.gmail.com>
- <ea8ffea6-1065-8526-4774-16d088ec7bf1@hartkopp.net>
- <CAMZ6Rq+NWFc4KmhCCpJ2LzTt8ap1U_FLrQ1L1RQgYNT0BD3w_Q@mail.gmail.com>
- <20220722072731.s3s7bkfn33zzzeni@pengutronix.de>
- <CAMZ6RqJcUtSyYbYnqAE87hrwL1G+cxGLKAZ_E4kvSW3Mq43tYg@mail.gmail.com>
- <20220722095853.jb3ko4qsktud5uob@pengutronix.de>
- <CAMZ6Rq+GZTifSLqO6V_wErtx5U932cnTO2ktMSjnq_ybPCx91Q@mail.gmail.com>
- <0046f0e1-0bd4-0add-7759-ed459fd050fb@hartkopp.net>
- <CAMZ6RqKn7W26LwaJmdJ-1cpF7bZScHEcUiscLjtGNbAd=1_OeA@mail.gmail.com>
- <e4e74603-5db6-04bd-295e-2b20c96c39e7@hartkopp.net>
- <CAMZ6RqLD-B87LN_1a2zhuPuPX1nENiDQQi+b34V9c-KP1gwtsg@mail.gmail.com>
+    Sun, 24 Jul 2022 09:44:08 +0200 (CEST)
 From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <CAMZ6RqLD-B87LN_1a2zhuPuPX1nENiDQQi+b34V9c-KP1gwtsg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+To:     linux-can@vger.kernel.org
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: [RFC PATCH v6 0/7] can: support CAN XL
+Date:   Sun, 24 Jul 2022 09:43:55 +0200
+Message-Id: <20220724074402.117394-1-socketcan@hartkopp.net>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,36 +52,71 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 23.07.22 04:39, Vincent Mailhol wrote:
+The CAN with eXtended data Length (CAN XL) is a new CAN protocol with a
+10Mbit/s data transfer with a new physical layer transceiver (for this
+data section). CAN XL allows up to 2048 byte of payload and shares the
+arbitration principle (11 bit priority) known from Classical CAN and
+CAN FD. RTR and 29 bit identifiers are not implemented in CAN XL.
 
-> This debate is going to a dead end. I do not see one of us fully
-> convincing the other. As I stated before, the data[CANXL_MIN_DLEN] is
-> not bad and has the big merit of allowing static declaration. While my
-> preference definitely goes to the flexible array member, I will not
-> veto your idea. I think it was important to have this debate.
-> With that said, I leave the final decision to the mailing list. If
-> other people prefer the data[CANXL_MIN_DLEN] over the flexible array
-> member, or if no one other than the two of us care, then let's use
-> your approach!
+A short introdution to CAN XL can be found here:
+https://www.bosch-semiconductors.com/media/ip_modules/pdf_2/can_xl_1/canxl_intro_20210225.pdf
 
-Thanks Vincent!
+V2: Major rework after discussion and feedback on Linux-CAN ML
 
-I really think it is the right approach to maintain the current CAN_RAW 
-API patterns for all CAN flavours. It provides consistency for 
-programmers and tools and really only affects the CAN_RAW socket.
+- rework of struct canxl_frame
+- CANXL_XLF flag is now the switch between CAN XL and CAN/CANFD
+- variable length in r/w operations for CAN XL frames
+- write CAN XL frame to raw socket enforces size <-> canxl_frame.len sync
 
-When it comes to Ethernet traffic encapsulation inside CAN XL this can 
-be seen as a break to the CAN stuff and I wonder if we should create 
-another 'Ethernet like' network device then.
+V3: Fix length for CAN XL frames inside the sk_buff
 
-E.g. an Ethernet device, that is able to handle/convert ETH_P_CANXL 
-frames and offers additional attributes (setting the prio and defining 
-the CAN XL encapsulation schema etc). This will kick us into the 
-Ethernet world with all the common APIs - and will definitely fuel a new 
-and interesting discussion ;-)
+- extend the CAN_RAW sockopt to handle fixed/truncated read/write operations
 
-Best regards,
-Oliver
+V4: Fix patch 5 (can: raw: add CAN XL support)
 
+- fix return value (move 'err = -EINVAL' in raw_sendmsg())
+- add CAN XL frame handling in can_rcv()
+- change comment for CAN_RAW_XL_[RT]X_DYN definition (allow -> enable)
 
+V5: Remove CAN_RAW_XL_[RT]X_DYN definition again
+
+- CAN_RAW_XL_[RT]X_DYN (truncated data) feature is now enabled by default
+- use CANXL_MIN_DLEN instead of '1' in canxl_frame definition
+- add missing 'err = -EINVAL' initialization in raw_sendmsg())
+
+V6:
+
+- rework an separate skb identification and length helpers
+- add CANFD_FDF flag in all CAN FD frame structures
+- simplify patches for infrastructure and raw sockets
+- add vxcan support in virtual CAN interface patch
+
+Oliver Hartkopp (7):
+  can: skb: unify skb CAN frame identification helpers
+  can: skb: add skb CAN frame data length helpers
+  can: set CANFD_FDF flag in all CAN FD frame structures
+  can: canxl: introduce CAN XL data structure
+  can: canxl: update CAN infrastructure for CAN XL frames
+  can: dev: add CAN XL support to virtual CAN
+  can: raw: add CAN XL support
+
+ drivers/net/can/ctucanfd/ctucanfd_base.c |   1 -
+ drivers/net/can/dev/rx-offload.c         |   2 +-
+ drivers/net/can/dev/skb.c                | 105 +++++++++++++++--------
+ drivers/net/can/vcan.c                   |  11 ++-
+ drivers/net/can/vxcan.c                  |   7 +-
+ include/linux/can/skb.h                  |  57 +++++++++++-
+ include/uapi/linux/can.h                 |  53 +++++++++++-
+ include/uapi/linux/can/raw.h             |   1 +
+ include/uapi/linux/if_ether.h            |   1 +
+ net/can/af_can.c                         |  76 ++++++++--------
+ net/can/bcm.c                            |   9 +-
+ net/can/gw.c                             |   4 +-
+ net/can/isotp.c                          |   2 +-
+ net/can/j1939/main.c                     |   4 +
+ net/can/raw.c                            |  54 +++++++++---
+ 15 files changed, 281 insertions(+), 106 deletions(-)
+
+-- 
+2.30.2
 
