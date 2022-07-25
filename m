@@ -2,51 +2,51 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4468757FFFF
+	by mail.lfdr.de (Postfix) with ESMTP id DA312580001
 	for <lists+linux-can@lfdr.de>; Mon, 25 Jul 2022 15:33:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235390AbiGYNd3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 25 Jul 2022 09:33:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53992 "EHLO
+        id S235248AbiGYNd1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 25 Jul 2022 09:33:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235559AbiGYNdY (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 25 Jul 2022 09:33:24 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5680E0BB
-        for <linux-can@vger.kernel.org>; Mon, 25 Jul 2022 06:33:15 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id n10-20020a17090a670a00b001f22ebae50aso10295326pjj.3
-        for <linux-can@vger.kernel.org>; Mon, 25 Jul 2022 06:33:15 -0700 (PDT)
+        with ESMTP id S235510AbiGYNdX (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 25 Jul 2022 09:33:23 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0097513D7E
+        for <linux-can@vger.kernel.org>; Mon, 25 Jul 2022 06:33:17 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id b7-20020a17090a12c700b001f20eb82a08so14385962pjg.3
+        for <linux-can@vger.kernel.org>; Mon, 25 Jul 2022 06:33:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=/Rj1+qLgX9PKJlGGql5VxIx3n29BZXPRUS2TXJB5cxU=;
-        b=O1Mxob14yRwQ2vGDZJECSHuCb+z6kuBp/2v3uQh42inMlwVpY/Vj+5Vtm0nIyavWRj
-         4dOrapJ28hj268MBAUqOHoiL8hExl6Io/tDr/4yHoErk6v+1eH1KPc2/mSpqkVUB/acn
-         n2LiDUaKLq9WnG5NFmxPQvGd5bSUeQftrIve75ZV0WSGYdiElB+FbgHIk+aVi0J5p/3r
-         DJbmzTL/ua2iHIAQkGH0Lu+s3rFPYSj/vcLjfG0hcKNy9AkCCqwWQV4UZm1GmFm+Jbof
-         sFGkzi+uGAZhcDqHAtJ4XzFgtaRdXYvs1hR4Mfq8sGcIRfabHQQkoqY33Vlzdd0L3SIX
-         vlDA==
+        bh=DHZllP+LkQASzlYCEgbC2URVtDXJ0m/2moXp2NDhlEk=;
+        b=Iw8WDe688zw28kTyJ5mi3UZeV3w3LNRXYjKX81Loody9wmpIkEgocdhO32SUmm8ykM
+         nRmOfUxCiiXsQ5DFm0yoTE2te6u5KdjztrL5/l7AY3LLrydyoO42rrshYhoa47u2jaXr
+         yFHAKVYObu+x2BXRF6hFYsPUacCId8G5p8+Nnanugf+26v6OdW8UmfNz5xtGPfS0+9F8
+         8sVix8lBqXqPndn9l3dwOGe+DmbtDiJsqhCCNSaSg88dJKX575fM6gaYbqFjTVeBKPPx
+         tGAPyAScZPxne2B3zgQ0nuGscX+snkLOfd0JVIthKVqr1pUz3bYzdcrlBbVHKEXatoBU
+         oUkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=/Rj1+qLgX9PKJlGGql5VxIx3n29BZXPRUS2TXJB5cxU=;
-        b=u/77m6uQ+i8byNpOEgVTfXemTUdqKB3Rl37FMZOMCWBmahacb3Vvz1ohCkbXpieCzI
-         v5VsQNlyzu4d/N1EtCkztR1+oxvNln1BreI9OPvMRIRzNVL0vKy7tqIGrLmoiJweJ4JQ
-         YmMdDBERU+Fb/PRpGqnAHmQjkqIQr9qqnSyRBaLEGAis0zxRhgEF2A8qRNg4eqAB3yhM
-         v9MecCZ3UthN+6tneUMlsFFKzayKZhermRDa66HXAShHq3ppSQMrAzC4vxmPrrwLFJi3
-         5UaRxHeXY7vnU5Tgy0Ob89c5oOg0oSw+eiTBAY+FvxYymfGSdt7DZvd5ix98BPTW6Vvg
-         k1JQ==
-X-Gm-Message-State: AJIora+YS/imzTTW8Uvy/+dQj5J23GEqDjrcMMb2pccHXoH2TVNje60q
-        36TJO/lfWYzGeuPwNSJsw2IwMXrvYVSyfg==
-X-Google-Smtp-Source: AGRyM1vK0OXq0YzgsE/TVfx1rV+A+7NVPKjh5parrUebNY9TJR9X5iFEFdr7GnDhpxx1ZGF4oQ2uDA==
-X-Received: by 2002:a17:90b:380c:b0:1f2:460a:2b30 with SMTP id mq12-20020a17090b380c00b001f2460a2b30mr19772233pjb.103.1658755994978;
-        Mon, 25 Jul 2022 06:33:14 -0700 (PDT)
+        bh=DHZllP+LkQASzlYCEgbC2URVtDXJ0m/2moXp2NDhlEk=;
+        b=zdWFo3mWv3BmUdxrABJcJJ0iLQJLuwo4S0PgL3UgOU5TBah3NQsmkPYxDTn6XVa26L
+         xoMHl95Iv014IZYTRXAW0Fqf0QGlFIWnvv26Ciu0JwWj1I4CH0fzIqNUNsrRlUFqx16a
+         1XAe+RtjVf1JDd0OZ5Ns/001omuu3oU9afY5EZKynerx7DFyRAC9vgv6ZzRmVDB8LAM0
+         G2banJuGDI2Y5E4bjZNUWdkb720MSBDXBz+mlw3V626kJ9JkJSBsE+geW+yNxk4KVzlh
+         egyGe0rRXw4+2GdefQPPDXghj722em3whpL5vFiIy1WaOB+z3gdiK9jgVk4cMtSEPMhv
+         yYyA==
+X-Gm-Message-State: AJIora8q2tmZladUOr05xsHh/yOAOP31GQXzox66zInX9TmfTw1IKcB5
+        A0gyo11PHg76T/+/Dfta/FQ5IutArezJyw==
+X-Google-Smtp-Source: AGRyM1swEPnn2xaf7yISqpfVVeu9+RLLEPVAEhesSgJM6wsjb7jUDPkH7EN8xhzGvucOvrwszIuvHg==
+X-Received: by 2002:a17:902:d504:b0:16d:69f9:e607 with SMTP id b4-20020a170902d50400b0016d69f9e607mr6992478plg.131.1658755997168;
+        Mon, 25 Jul 2022 06:33:17 -0700 (PDT)
 Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id i12-20020a170902c94c00b0016c16648213sm9406133pla.20.2022.07.25.06.33.13
+        by smtp.gmail.com with ESMTPSA id i12-20020a170902c94c00b0016c16648213sm9406133pla.20.2022.07.25.06.33.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 06:33:14 -0700 (PDT)
+        Mon, 25 Jul 2022 06:33:16 -0700 (PDT)
 Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
 From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 To:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
@@ -56,9 +56,9 @@ Cc:     Stephane Grosjean <s.grosjean@peak-system.com>,
         Dario Binacchi <dario.binacchi@amarulasolutions.com>,
         Max Staudt <max@enpas.org>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v1 21/24] can: kvaser_pciefd: advertise timestamping capabilities and add ioctl support
-Date:   Mon, 25 Jul 2022 22:32:05 +0900
-Message-Id: <20220725133208.432176-22-mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v1 22/24] can: kvaser_usb: advertise timestamping capabilities and add ioctl support
+Date:   Mon, 25 Jul 2022 22:32:06 +0900
+Message-Id: <20220725133208.432176-23-mailhol.vincent@wanadoo.fr>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220725133208.432176-1-mailhol.vincent@wanadoo.fr>
 References: <20220725133208.432176-1-mailhol.vincent@wanadoo.fr>
@@ -75,7 +75,7 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 Currently, userland has no method to query which timestamping features
-are supported by the kvaser_pciefd driver (aside maybe of getting RX
+are supported by the kvaser_usb driver (aside maybe of getting RX
 messages and obseverse whever or not hardware timestamps stay at
 zero).
 
@@ -97,29 +97,86 @@ Link: https://docs.kernel.org/networking/timestamping.html#hardware-timestamping
 CC: Jimmy Assarsson <extja@kvaser.com>
 Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 ---
- drivers/net/can/kvaser_pciefd.c | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/can/kvaser_pciefd.c b/drivers/net/can/kvaser_pciefd.c
-index f7f7a0287a8d..2109f904b052 100644
---- a/drivers/net/can/kvaser_pciefd.c
-+++ b/drivers/net/can/kvaser_pciefd.c
-@@ -920,6 +920,7 @@ static void kvaser_pciefd_bec_poll_timer(struct timer_list *data)
- static const struct net_device_ops kvaser_pciefd_netdev_ops = {
- 	.ndo_open = kvaser_pciefd_open,
- 	.ndo_stop = kvaser_pciefd_stop,
-+	.ndo_eth_ioctl = can_eth_ioctl_hwts,
- 	.ndo_start_xmit = kvaser_pciefd_start_xmit,
+Hi Jimmy, as far as I understand, only the hydra has the hardware
+timestamping. If not the case, let me know.
+
+This is not tested. If you find any issue or if you want to modify,
+feel free to pick up that patch and resend it.
+---
+ drivers/net/can/usb/kvaser_usb/kvaser_usb.h   |  1 +
+ .../net/can/usb/kvaser_usb/kvaser_usb_core.c  | 25 ++++++++++++++++---
+ 2 files changed, 23 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb.h b/drivers/net/can/usb/kvaser_usb/kvaser_usb.h
+index eefcbe3aadce..841da29cef93 100644
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb.h
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb.h
+@@ -39,6 +39,7 @@
+ #define KVASER_USB_QUIRK_HAS_SILENT_MODE	BIT(0)
+ #define KVASER_USB_QUIRK_HAS_TXRX_ERRORS	BIT(1)
+ #define KVASER_USB_QUIRK_IGNORE_CLK_FREQ	BIT(2)
++#define KVASER_USB_QUIRK_HAS_HARDWARE_TIMESTAMP	BIT(3)
+ 
+ /* Device capabilities */
+ #define KVASER_USB_CAP_BERR_CAP			0x01
+diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
+index 964c0026383e..36e896dbd94b 100644
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
+@@ -92,7 +92,7 @@
+ #define USB_HYBRID_PRO_CANLIN_PRODUCT_ID	278
+ 
+ static const struct kvaser_usb_driver_info kvaser_usb_driver_info_hydra = {
+-	.quirks = 0,
++	.quirks = KVASER_USB_QUIRK_HAS_HARDWARE_TIMESTAMP,
+ 	.ops = &kvaser_usb_hydra_dev_ops,
+ };
+ 
+@@ -668,6 +668,14 @@ static const struct net_device_ops kvaser_usb_netdev_ops = {
  	.ndo_change_mtu = can_change_mtu,
  };
-@@ -932,6 +933,7 @@ static void kvaser_pciefd_get_drvinfo(struct net_device *netdev,
  
- static const struct ethtool_ops kvaser_pciefd_ethtool_ops = {
- 	.get_drvinfo = kvaser_pciefd_get_drvinfo,
++static const struct net_device_ops kvaser_usb_netdev_ops_hwts = {
++	.ndo_open = kvaser_usb_open,
++	.ndo_stop = kvaser_usb_close,
++	.ndo_eth_ioctl = can_eth_ioctl_hwts,
++	.ndo_start_xmit = kvaser_usb_start_xmit,
++	.ndo_change_mtu = can_change_mtu,
++};
++
+ static void kvaser_usb_get_drvinfo(struct net_device *netdev,
+ 				   struct ethtool_drvinfo *drvinfo)
+ {
+@@ -676,6 +684,12 @@ static void kvaser_usb_get_drvinfo(struct net_device *netdev,
+ 
+ static const struct ethtool_ops kvaser_usb_ethtool_ops = {
+ 	.get_drvinfo = kvaser_usb_get_drvinfo,
++	.get_ts_info = ethtool_op_get_ts_info,
++};
++
++static const struct ethtool_ops kvaser_usb_ethtool_ops_hwts = {
++	.get_drvinfo = kvaser_usb_get_drvinfo,
 +	.get_ts_info = can_ethtool_op_get_ts_info_hwts,
  };
  
- static int kvaser_pciefd_setup_can_ctrls(struct kvaser_pciefd *pcie)
+ static void kvaser_usb_remove_interfaces(struct kvaser_usb *dev)
+@@ -755,8 +769,13 @@ static int kvaser_usb_init_one(struct kvaser_usb *dev, int channel)
+ 	netdev->flags |= IFF_ECHO;
+ 
+ 	netdev->netdev_ops = &kvaser_usb_netdev_ops;
+-	netdev->ethtool_ops = &kvaser_usb_ethtool_ops;
+-
++	if (driver_info->quirks & KVASER_USB_QUIRK_HAS_HARDWARE_TIMESTAMP) {
++		netdev->netdev_ops = &kvaser_usb_netdev_ops_hwts;
++		netdev->ethtool_ops = &kvaser_usb_ethtool_ops_hwts;
++	} else {
++		netdev->netdev_ops = &kvaser_usb_netdev_ops;
++		netdev->ethtool_ops = &kvaser_usb_ethtool_ops;
++	}
+ 	SET_NETDEV_DEV(netdev, &dev->intf->dev);
+ 	netdev->dev_id = channel;
+ 
 -- 
 2.35.1
 
