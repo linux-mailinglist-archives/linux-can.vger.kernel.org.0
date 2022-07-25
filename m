@@ -2,109 +2,136 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B61957FF97
-	for <lists+linux-can@lfdr.de>; Mon, 25 Jul 2022 15:09:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F1FB57FFBE
+	for <lists+linux-can@lfdr.de>; Mon, 25 Jul 2022 15:25:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235476AbiGYNJf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 25 Jul 2022 09:09:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40432 "EHLO
+        id S233197AbiGYNZb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 25 Jul 2022 09:25:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235481AbiGYNJc (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 25 Jul 2022 09:09:32 -0400
-Received: from mail.enpas.org (zhong.enpas.org [46.38.239.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 22AF013D76;
-        Mon, 25 Jul 2022 06:09:28 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        by mail.enpas.org (Postfix) with ESMTPSA id 430C0FF9C3;
-        Mon, 25 Jul 2022 13:09:26 +0000 (UTC)
-Date:   Mon, 25 Jul 2022 15:09:20 +0200
-From:   Max Staudt <max@enpas.org>
+        with ESMTP id S232494AbiGYNZa (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 25 Jul 2022 09:25:30 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42AD626ED
+        for <linux-can@vger.kernel.org>; Mon, 25 Jul 2022 06:25:30 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oFy5G-0002CC-6O; Mon, 25 Jul 2022 15:25:18 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 1793DB9964;
+        Mon, 25 Jul 2022 13:25:15 +0000 (UTC)
+Date:   Mon, 25 Jul 2022 15:25:14 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Jeroen Hofstee <jhofstee@victronenergy.com>,
-        michael@amarulasolutions.com,
+Cc:     linux-kernel@vger.kernel.org, michael@amarulasolutions.com,
         Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Jeroen Hofstee <jhofstee@victronenergy.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jakub Kicinski <kuba@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
         Paolo Abeni <pabeni@redhat.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
         Wolfgang Grandegger <wg@grandegger.com>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [RFC PATCH 2/5] can: slcan: remove legacy infrastructure
-Message-ID: <20220725150920.63ac3a77.max@enpas.org>
-In-Reply-To: <CABGWkvrgX+9J-rOb-EO1wXVAZQ5phwKKpbc-iD491rD9zn5UpQ@mail.gmail.com>
-References: <20220716170007.2020037-1-dario.binacchi@amarulasolutions.com>
-        <20220716170007.2020037-3-dario.binacchi@amarulasolutions.com>
-        <20220717233842.1451e349.max@enpas.org>
-        <CABGWkvrgX+9J-rOb-EO1wXVAZQ5phwKKpbc-iD491rD9zn5UpQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/6] can: slcan: extend supported features (step 2)
+Message-ID: <20220725132514.h3iva4xi4sdncus6@pengutronix.de>
+References: <20220725065419.3005015-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="yohv5x576q7yvjhc"
+Content-Disposition: inline
+In-Reply-To: <20220725065419.3005015-1-dario.binacchi@amarulasolutions.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, 25 Jul 2022 08:40:24 +0200
-Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
 
-> > > @@ -883,72 +786,50 @@ static int slcan_open(struct tty_struct *tty)
-> > >       if (!tty->ops->write)
-> > >               return -EOPNOTSUPP;
-> > >
-> > > -     /* RTnetlink lock is misused here to serialize concurrent
-> > > -      * opens of slcan channels. There are better ways, but it is
-> > > -      * the simplest one.
-> > > -      */
-> > > -     rtnl_lock();
-> > > +     dev = alloc_candev(sizeof(*sl), 1);
-> > > +     if (!dev)
-> > > +             return -ENFILE;
-> > >
-> > > -     /* Collect hanged up channels. */
-> > > -     slc_sync();
-> > > +     sl = netdev_priv(dev);
-> > >
-> > > -     sl = tty->disc_data;
-> > > +     /* Configure TTY interface */
-> > > +     tty->receive_room = 65536; /* We don't flow control */
-> > > +     sl->rcount   = 0;
-> > > +     sl->xleft    = 0;  
-> >
-> > I suggest moving the zeroing to slc_open() - i.e. to the netdev open
-> > function. As a bonus, you can then remove the same two assignments from
-> > slc_close() (see above). They are only used when netif_running(), with
-> > appropiate guards already in place as far as I can see.  
-> 
-> I think it is better to keep the code as it is, since at the entry of
-> the netdev
-> open function, netif_running already returns true (it is set to true by the
-> calling function) and therefore it would be less safe to reset the
-> rcount and xleft
-> fields.
+--yohv5x576q7yvjhc
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Wow, great catch!
+On 25.07.2022 08:54:13, Dario Binacchi wrote:
+> With this series I try to finish the task, started with the series [1],
+> of completely removing the dependency of the slcan driver from the
+> userspace slcand/slcan_attach applications.
+>=20
+> The series, however, still lacks a patch for sending the bitrate setting
+> command to the adapter:
+>=20
+> slcan_attach -b <btr> <dev>
+>=20
+> Without at least this patch the task cannot be considered truly completed.
+>=20
+> The idea I got is that this can only happen through the ethtool API.
+> Among the various operations made available by this interface I would
+> have used the set_regs (but only the get_regs has been developed), or,
+> the set_eeprom, even if the setting would not be stored in an eeprom.
+> IMHO it would take a set_regs operation with a `struct ethtool_wregs'
+> parameter similar to `struct ethtool_eeprom' without the magic field:
 
-I wonder why __LINK_STATE_START is set before ->ndo_open() is called...?
+This doesn't feel right.
 
+> struct ethtool_wregs {
+> 	__u32	cmd;
+> 	__u32	offset;
+> 	__u32	len;
+> 	__u8	data[0];
+> };
+>=20
+> But I am not the expert and if there was an alternative solution already
+> usable, it would be welcome.
 
-Since the drivers are similar, I've checked can327. It is unaffected,
-because the counters are additionally guarded by a spinlock. Same in
-slcan, where netdev_close() takes the spinlock to reset the counters.
+Have a look at the get/set_tunable() callback:
 
-So you *could* move them to netdev_open() *if* they are always guarded
-by the slcan lock.
+| https://elixir.bootlin.com/linux/latest/source/include/linux/ethtool.h#L5=
+75
 
-Or, leave it as it is, as it seems to be correct. Your choice :)
+You probably have to add a new tunable. Here you'll find the people and
+commits that changed the tunable:
 
+| https://github.com/torvalds/linux/blame/master/include/uapi/linux/ethtool=
+=2Eh#L229
 
-Thank you!
+It's usually worth including them in an RFC patch series where you add a
+new tunable and make use of it in the slcan driver.
 
-Max
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--yohv5x576q7yvjhc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLembgACgkQrX5LkNig
+011YBwf8D6sYc5Z10hNfGDyKQ3RcYyhgRysl2n8u/I+7BTE6Y3+sOXF5X0Gt5auQ
+O3L54lyy3/LKsyXwoCRPUgMOgbLCPwPI0EqLNEKhpTrQAJ5h0uCbRZkUREhkngtO
+Tr9MoBK+7JmHVOpZUBVVIXB631k/RNvCZQXm1wlUsumXqX13EFPImJvuk+dDo1lm
+TrM1mSGX8FAq4OG2mlvdLwztIJExjprR2hP2zyUs3gEJk6r4z5z5N5TBCcU8+bH0
+98kyOZzlpUcSB1tIK7V1KHOsW2kifnyGGueznkI/V22bNzq0E4e1jeUjANuEtMXm
+nWmiiH/XE7rvUL/kf4ER0yut8pUv8g==
+=K8BG
+-----END PGP SIGNATURE-----
+
+--yohv5x576q7yvjhc--
