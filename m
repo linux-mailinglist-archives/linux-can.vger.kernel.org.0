@@ -2,104 +2,109 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DFEE57FF21
-	for <lists+linux-can@lfdr.de>; Mon, 25 Jul 2022 14:41:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B61957FF97
+	for <lists+linux-can@lfdr.de>; Mon, 25 Jul 2022 15:09:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232202AbiGYMls (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 25 Jul 2022 08:41:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47090 "EHLO
+        id S235476AbiGYNJf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 25 Jul 2022 09:09:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232467AbiGYMlq (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 25 Jul 2022 08:41:46 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F24193
-        for <linux-can@vger.kernel.org>; Mon, 25 Jul 2022 05:41:45 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oFxP0-000534-0D; Mon, 25 Jul 2022 14:41:38 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 5A7BFB98CE;
-        Mon, 25 Jul 2022 12:41:35 +0000 (UTC)
-Date:   Mon, 25 Jul 2022 14:41:34 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
+        with ESMTP id S235481AbiGYNJc (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 25 Jul 2022 09:09:32 -0400
+Received: from mail.enpas.org (zhong.enpas.org [46.38.239.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 22AF013D76;
+        Mon, 25 Jul 2022 06:09:28 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        by mail.enpas.org (Postfix) with ESMTPSA id 430C0FF9C3;
+        Mon, 25 Jul 2022 13:09:26 +0000 (UTC)
+Date:   Mon, 25 Jul 2022 15:09:20 +0200
+From:   Max Staudt <max@enpas.org>
 To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org, michael@amarulasolutions.com,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+Cc:     linux-kernel@vger.kernel.org,
         Jeroen Hofstee <jhofstee@victronenergy.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
+        michael@amarulasolutions.com,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jakub Kicinski <kuba@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
         Paolo Abeni <pabeni@redhat.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
         Wolfgang Grandegger <wg@grandegger.com>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v2 6/6] MAINTAINERS: Add maintainer for the slcan driver
-Message-ID: <20220725124134.2dhqfjqhv6wmzqb6@pengutronix.de>
-References: <20220725065419.3005015-1-dario.binacchi@amarulasolutions.com>
- <20220725065419.3005015-7-dario.binacchi@amarulasolutions.com>
+Subject: Re: [RFC PATCH 2/5] can: slcan: remove legacy infrastructure
+Message-ID: <20220725150920.63ac3a77.max@enpas.org>
+In-Reply-To: <CABGWkvrgX+9J-rOb-EO1wXVAZQ5phwKKpbc-iD491rD9zn5UpQ@mail.gmail.com>
+References: <20220716170007.2020037-1-dario.binacchi@amarulasolutions.com>
+        <20220716170007.2020037-3-dario.binacchi@amarulasolutions.com>
+        <20220717233842.1451e349.max@enpas.org>
+        <CABGWkvrgX+9J-rOb-EO1wXVAZQ5phwKKpbc-iD491rD9zn5UpQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zyj3ee4vghl7eput"
-Content-Disposition: inline
-In-Reply-To: <20220725065419.3005015-7-dario.binacchi@amarulasolutions.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Mon, 25 Jul 2022 08:40:24 +0200
+Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
 
---zyj3ee4vghl7eput
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> > > @@ -883,72 +786,50 @@ static int slcan_open(struct tty_struct *tty)
+> > >       if (!tty->ops->write)
+> > >               return -EOPNOTSUPP;
+> > >
+> > > -     /* RTnetlink lock is misused here to serialize concurrent
+> > > -      * opens of slcan channels. There are better ways, but it is
+> > > -      * the simplest one.
+> > > -      */
+> > > -     rtnl_lock();
+> > > +     dev = alloc_candev(sizeof(*sl), 1);
+> > > +     if (!dev)
+> > > +             return -ENFILE;
+> > >
+> > > -     /* Collect hanged up channels. */
+> > > -     slc_sync();
+> > > +     sl = netdev_priv(dev);
+> > >
+> > > -     sl = tty->disc_data;
+> > > +     /* Configure TTY interface */
+> > > +     tty->receive_room = 65536; /* We don't flow control */
+> > > +     sl->rcount   = 0;
+> > > +     sl->xleft    = 0;  
+> >
+> > I suggest moving the zeroing to slc_open() - i.e. to the netdev open
+> > function. As a bonus, you can then remove the same two assignments from
+> > slc_close() (see above). They are only used when netif_running(), with
+> > appropiate guards already in place as far as I can see.  
+> 
+> I think it is better to keep the code as it is, since at the entry of
+> the netdev
+> open function, netif_running already returns true (it is set to true by the
+> calling function) and therefore it would be less safe to reset the
+> rcount and xleft
+> fields.
 
-On 25.07.2022 08:54:19, Dario Binacchi wrote:
-> At the suggestion of its author Oliver Hartkopp ([1]), I take over the
-> maintainer-ship and add myself to the authors of the driver.
->=20
-> [1] https://marc.info/?l=3Dlinux-can&m=3D165806705927851&w=3D2
+Wow, great catch!
 
-Please use the lore.k.o link:
-https://lore.kernel.org/all/507b5973-d673-4755-3b64-b41cb9a13b6f@hartkopp.n=
-et
+I wonder why __LINK_STATE_START is set before ->ndo_open() is called...?
 
-Suggested-by: Oliver Hartkopp <socketcan@hartkopp.net>
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
-Marc
+Since the drivers are similar, I've checked can327. It is unaffected,
+because the counters are additionally guarded by a spinlock. Same in
+slcan, where netdev_close() takes the spinlock to reset the counters.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+So you *could* move them to netdev_open() *if* they are always guarded
+by the slcan lock.
 
---zyj3ee4vghl7eput
-Content-Type: application/pgp-signature; name="signature.asc"
+Or, leave it as it is, as it seems to be correct. Your choice :)
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLej3wACgkQrX5LkNig
-012koggAnd8VfgVZ76OHV68XceKS7x9Jp/zuXfZK3cxaNywBBRhncO8Q8abTz7JN
-Tl4rDmsgwNkRn1hhCVfw9NHggLpzBb1YCkpAUfhyP3zB9p02w4ym+16mVXLFYN8P
-NhquMssGyfm/3SrE8kQoOTZ3FHC7F28UYimmttbfIv0k6h/MBHsbLfxCxonvZ14E
-5DFoEuKhK+/P+pUhaYesUYIq/Aay0lMZAnudU3JkPIOt4+Ts+XvE74wn9TEi4YQ5
-Ev+6SgZhGfq2xz7C0y8w20j02f1Kh9jp8IVPDrQKHPeqszKFxnz+yT06YQhvHS6C
-Tf4hTBmyg4degdlE3iywmTlGJYljFw==
-=/pKJ
------END PGP SIGNATURE-----
+Thank you!
 
---zyj3ee4vghl7eput--
+Max
