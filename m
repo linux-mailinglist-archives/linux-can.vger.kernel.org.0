@@ -2,51 +2,46 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E13CD580286
-	for <lists+linux-can@lfdr.de>; Mon, 25 Jul 2022 18:19:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F004580385
+	for <lists+linux-can@lfdr.de>; Mon, 25 Jul 2022 19:35:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234946AbiGYQTw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 25 Jul 2022 12:19:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50920 "EHLO
+        id S233055AbiGYRfD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 25 Jul 2022 13:35:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232954AbiGYQTv (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 25 Jul 2022 12:19:51 -0400
+        with ESMTP id S229824AbiGYRfC (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 25 Jul 2022 13:35:02 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE151571C
-        for <linux-can@vger.kernel.org>; Mon, 25 Jul 2022 09:19:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B2A89FD6
+        for <linux-can@vger.kernel.org>; Mon, 25 Jul 2022 10:35:01 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1oG0o6-0000O3-QM; Mon, 25 Jul 2022 18:19:46 +0200
+        id 1oG1yt-0000XV-3c; Mon, 25 Jul 2022 19:34:59 +0200
 Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 467CCB9C55;
-        Mon, 25 Jul 2022 16:19:44 +0000 (UTC)
-Date:   Mon, 25 Jul 2022 18:19:42 +0200
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 79C1AB9CE9;
+        Mon, 25 Jul 2022 17:34:57 +0000 (UTC)
+Date:   Mon, 25 Jul 2022 19:34:55 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 Cc:     linux-can@vger.kernel.org,
-        Stephane Grosjean <s.grosjean@peak-system.com>,
-        Jimmy Assarsson <extja@kvaser.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
         Dario Binacchi <dario.binacchi@amarulasolutions.com>,
         Max Staudt <max@enpas.org>
-Subject: Re: [PATCH v1 18/24] can: dev: add generic function
- can_eth_ioctl_hwts()
-Message-ID: <20220725161942.drjxm235njk35e24@pengutronix.de>
-References: <20220725133208.432176-1-mailhol.vincent@wanadoo.fr>
- <20220725133208.432176-19-mailhol.vincent@wanadoo.fr>
- <20220725142215.ww7hktoizjgskkpl@pengutronix.de>
- <CAMZ6Rq+YVgX72Aj2WDRx4nkOg9BRE7XyCSOo0pPBdhb3jDMtZA@mail.gmail.com>
+Subject: Re: [PATCH 2/9] can: ems_ubs: use KBUILD_MODNAME instead of hard
+ coded name
+Message-ID: <20220725173455.dqg6jffzsaavii2l@pengutronix.de>
+References: <20220725153124.467061-1-mailhol.vincent@wanadoo.fr>
+ <20220725153124.467061-3-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wuaq537r47mxfzl5"
+        protocol="application/pgp-signature"; boundary="k5jvolyo3zddvgxu"
 Content-Disposition: inline
-In-Reply-To: <CAMZ6Rq+YVgX72Aj2WDRx4nkOg9BRE7XyCSOo0pPBdhb3jDMtZA@mail.gmail.com>
+In-Reply-To: <20220725153124.467061-3-mailhol.vincent@wanadoo.fr>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -60,107 +55,51 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---wuaq537r47mxfzl5
+--k5jvolyo3zddvgxu
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 25.07.2022 23:41:17, Vincent MAILHOL wrote:
-> On Mon. 25 juil. 2022 at 23:31, Marc Kleine-Budde <mkl@pengutronix.de> wr=
-ote:
-> > On 25.07.2022 22:32:02, Vincent Mailhol wrote:
-> > > Tools based on libpcap (such as tcpdump) expect the SIOCSHWTSTAMP
-> > > ioctl call to be supported. This is also specified in the kernel doc
-> > > [1]. The purpose of this ioctl is to toggle the hardware timestamps.
-> > >
-> > > Currently, CAN devices which support hardware timestamping have those
-> > > always activated. can_eth_ioctl_hwts() is a dumb function that will
-> > > always succeed when requested to set tx_type to HWTSTAMP_TX_ON or
-> > > rx_filter to HWTSTAMP_FILTER_ALL.
-> > >
-> > > [1] Kernel doc: Timestamping, section 3.1 "Hardware Timestamping
-> > > Implementation: Device Drivers"
-> > > Link: https://docs.kernel.org/networking/timestamping.html#hardware-t=
-imestamping-implementation-device-drivers
-> > >
-> > > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > > ---
-> > >  drivers/net/can/dev/dev.c | 29 +++++++++++++++++++++++++++++
-> > >  include/linux/can/dev.h   |  1 +
-> > >  2 files changed, 30 insertions(+)
-> > >
-> > > diff --git a/drivers/net/can/dev/dev.c b/drivers/net/can/dev/dev.c
-> > > index 7ad56d31cec9..750dc7cae9d4 100644
-> > > --- a/drivers/net/can/dev/dev.c
-> > > +++ b/drivers/net/can/dev/dev.c
-> > > @@ -322,6 +322,35 @@ int can_change_mtu(struct net_device *dev, int n=
-ew_mtu)
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(can_change_mtu);
-> > >
-> > > +/* generic implementation of netdev_ops::ndo_eth_ioctl for CAN devic=
-es
-> > > + * supporting hardware RX timestamps
-> > > + */
-> > > +int can_eth_ioctl_hwts(struct net_device *netdev, struct ifreq *ifr,=
- int cmd)
-> > > +{
-> > > +     struct hwtstamp_config hwts_cfg =3D { 0 };
-> > > +
-> > > +     switch (cmd) {
-> > > +     case SIOCSHWTSTAMP: /* set */
-> > > +             if (copy_from_user(&hwts_cfg, ifr->ifr_data, sizeof(hwt=
-s_cfg)))
-> > > +                     return -EFAULT;
-> > > +             if (hwts_cfg.tx_type =3D=3D HWTSTAMP_TX_ON &&
-> > > +                 hwts_cfg.rx_filter =3D=3D HWTSTAMP_FILTER_ALL)
-> > > +                     return 0;
-> >
-> > I have a WIP hwts patch series for the mcp251xfd. IIRC the driver is
-> > allowed to add RX timestamps to more packages than requested without
-> > failing, so the relevant code my WIP patches looks like this:
-> >
-> > +       switch (config.tx_type) {
-> > +       case HWTSTAMP_TX_OFF:
-> > +               break;
-> > +       default:
-> > +               return -ERANGE;
-> > +       }
-> > +
-> > +       switch (config.rx_filter) {
-> > +       case HWTSTAMP_FILTER_NONE:
-> > +               clear_bit(MCP251XFD_FLAGS_TIMESTAMP_RX, priv->flags);
-> > +               break;
-> > +       default:
-> > +               set_bit(MCP251XFD_FLAGS_TIMESTAMP_RX, priv->flags);
-> > +               config.rx_filter =3D HWTSTAMP_FILTER_ALL;
-> > +       }
+On 26.07.2022 00:31:17, Vincent Mailhol wrote:
+> The driver uses the string "ems_usb" to populate usb_driver::name and
+> can_bittiming_const::name. KBUILD_MODNAME also evaluates to
+> "ems_ubs". Use KBUILD_MODNAME and get rid on the hardcoded string
+> names.
 >=20
-> What is the default value for rx_filter?
+> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> ---
+>  drivers/net/can/usb/ems_usb.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/net/can/usb/ems_usb.c b/drivers/net/can/usb/ems_usb.c
+> index bbec3311d893..89a64e05cbd7 100644
+> --- a/drivers/net/can/usb/ems_usb.c
+> +++ b/drivers/net/can/usb/ems_usb.c
+> @@ -880,7 +880,7 @@ static const struct net_device_ops ems_usb_netdev_ops=
+ =3D {
+>  };
+> =20
+>  static const struct can_bittiming_const ems_usb_bittiming_const =3D {
+> -	.name =3D "ems_usb",
+> +	.name =3D KBUILD_NAME,
+                      MOD
+>  	.tseg1_min =3D 1,
+>  	.tseg1_max =3D 16,
+>  	.tseg2_min =3D 1,
+> @@ -1074,7 +1074,7 @@ static void ems_usb_disconnect(struct usb_interface=
+ *intf)
+> =20
+>  /* usb specific object needed to register this driver with the usb subsy=
+stem */
+>  static struct usb_driver ems_usb_driver =3D {
+> -	.name =3D "ems_usb",
+> +	.name =3D KBUILD_NAME,
+                      MOD
+>  	.probe =3D ems_usb_probe,
+>  	.disconnect =3D ems_usb_disconnect,
+>  	.id_table =3D ems_usb_table,
 
-Currently switched off.
-
-> Currently, candump -H
-> implicitly expects rx_filter to be HWTSTAMP_FILTER_ALL. Defaulting to
-> HWTSTAMP_FILTER_NONE would break the current versions of candump.
-
-My series is still WIP, haven't thought that far. I was falling down the
-rabbit hole due 2 mcp251xfd "specialties" with regards to reading the
-time stamp counter register.
-
-> so I
-> was wondering if it would be better for CAN to start with hardware
-> timestamps as active (in my series, I assume that HWTSTAMP_FILTER_NONE
-> is not supported and thus avoid this problem).
-
-There's hwstamp_ctl to configure time stamping, but that's part of
-linuxptp.
-
-> Moving forward, should I keep mcp251xfd in this series or should I
-> remove it and let you take care of it?
-
-Keep the patch, I'll adopt mine.
-
+regards,
 Marc
 
 --=20
@@ -169,19 +108,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---wuaq537r47mxfzl5
+--k5jvolyo3zddvgxu
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLewpwACgkQrX5LkNig
-013jFQf/ZG+4rIxR6xtvt8tjrEfTEvCaO15gKSDCKF4HCLjRY6a5nkekzf23Yu6m
-9Na43+1xQSa0MZYcKFHYmET3EqnGTa58Lr4V5mH/VPxBa6tgKBiDo+cLI57gb1IX
-5XeorUiT8SsJvXX05UPO+BCBy0EuridjLAZL7WZU1yxRa81I7KvDbfpoctUGbDnG
-QOB9Gefw0A3+1n6nYb9oEhaAC7lmIkyhGNY03k7fo4ThOwocYFiwpbCvVdiStEPG
-TMY7HECG8TGbsTfNKRekMu7yAtlgardsS7ft49DLcYVlj7ZNPelqMN4FA0XueP94
-/gfeLzm6ipuoPhZCbPULPTXUwOj4KA==
-=e5+C
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLe1DwACgkQrX5LkNig
+011EnAf/cxxnMHS8qoUHKrhyQKwQ+ysuBGE+IJZ+Gr9OkosnLfcez+BDMs62oevj
+vLFbTOm4szDDpPzf5MSH3PcrjDGfvDribcLj1u8S/gFZ4JTsqXURhjt5+VqgnuuC
+JV9fW6ioxNhiWDcxiI/P+BHuN+bRx5E15huxIhQGiLmZcG4O0JbrdAYyDWKp8qGG
+osOe1dL6ihKsj9FVuIjrsTwtdlvszL+L/0tXVJ3K4oPUeQ6rhwkwKFBItQiQA3aI
+i0jooGy0gxyroYm9YQIH1Jue57kbzRdpjyKfigD6eKllYEyKNXFgLLfHsvSKHB4X
+oZGi34QmxH3N7RVmcFgoUiiBFnZDrA==
+=U34C
 -----END PGP SIGNATURE-----
 
---wuaq537r47mxfzl5--
+--k5jvolyo3zddvgxu--
