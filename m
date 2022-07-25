@@ -2,247 +2,271 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E2B257F3CC
-	for <lists+linux-can@lfdr.de>; Sun, 24 Jul 2022 09:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22B2257F987
+	for <lists+linux-can@lfdr.de>; Mon, 25 Jul 2022 08:40:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232718AbiGXHoQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 24 Jul 2022 03:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53506 "EHLO
+        id S230190AbiGYGkk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 25 Jul 2022 02:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239286AbiGXHoP (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 24 Jul 2022 03:44:15 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC77419C12
-        for <linux-can@vger.kernel.org>; Sun, 24 Jul 2022 00:44:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1658648650;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=GGRWk9wXQlnVXXZrFJnY+syyT7WKtnEm1KbDeVoTIxs=;
-    b=G8ucJn9/i7bik1clbeU/wR8r86/70AIjK5fxgZJR94EEe1JCQvVp/0hu5fa2zc8dyQ
-    DSzrVf+qtbDE9PnDAKqoEKVLI4s7grQPTshwah2hNFQDSzOrrQ/rh3pFYZ7K0Jdj/WGT
-    gLa2RsFaeE3bI+DlraxX0AVDW8nKAVNaj8i3am2O19zynAlZmbxHvRirpiCCVG8x8cRx
-    l3QKc1+20dEeG6aVZ1lOrqIdWlwXi/iiNUYoIcw+wvBnZsKXkaa1+QKeOQ3+08H9oXWp
-    H6k51b/IYpKlJma8CfV9rOa9gmGbkng4NcxnJGCIZUzL2tJV92CNdGvKVeaJ/6IAb2M0
-    9rKg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS/xvEBL7X5sbo3UIh9JiLceSWJaYwXUKbZ"
-X-RZG-CLASS-ID: mo00
-Received: from silver.lan
-    by smtp.strato.de (RZmta 47.47.0 AUTH)
-    with ESMTPSA id jdcffay6O7iA86Z
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Sun, 24 Jul 2022 09:44:10 +0200 (CEST)
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-To:     linux-can@vger.kernel.org
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: [RFC PATCH v6 7/7] can: raw: add CAN XL support
-Date:   Sun, 24 Jul 2022 09:44:02 +0200
-Message-Id: <20220724074402.117394-8-socketcan@hartkopp.net>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220724074402.117394-1-socketcan@hartkopp.net>
-References: <20220724074402.117394-1-socketcan@hartkopp.net>
+        with ESMTP id S229864AbiGYGkk (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 25 Jul 2022 02:40:40 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B89872AC3
+        for <linux-can@vger.kernel.org>; Sun, 24 Jul 2022 23:40:37 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id p22so2171759lji.10
+        for <linux-can@vger.kernel.org>; Sun, 24 Jul 2022 23:40:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3n2kEuwuuK7IkJ0ff/d4b/av1Jc3vPr0Y+VbQ9saI84=;
+        b=LMFj5ZuaBlD5A8dOVY5use5OPng2TabtOQeQh3sj1+jQuFlqkgAZUEmCK8tSwYgexa
+         o2MsvhXhVrSMXTC9diMSKAfs4wAZuvHIqEhL/GdOURDxkZOeJ7e/fIS5RBAjIuiKWfcA
+         gqtQq0NLk4mZWY2TGmOQJx/c1R0bJUVAsjrac=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3n2kEuwuuK7IkJ0ff/d4b/av1Jc3vPr0Y+VbQ9saI84=;
+        b=KIv2pJjNaLARdHpiMQvPfcAZ5e+sUZZGL1EHqIHFP+D0MFzcrwuFaeS3gF52cd0k4a
+         b+pWSXq6hOBA8YvsVQRYQs0kQ5EUiemzwCQn3MFpX3BIIub0w3qv9vU2pcfz/F/oy/NP
+         2ZwCtRgo1EXb1HviOq80WYwLI1356MALI1PdAXIuz4pPtFP9SxHstvoiaO5YMOZ1CB3Y
+         a4tM9p6hriOyqwHPnx+MNhcj1wkRnXzUUQKncco7Kas3dQ0ZovrXX5MufvnDpf0nXsv5
+         7UmdTPbPA7oadPj4le0lMyCiljkrHFW9T1gvekOOGec+f8F7b+LEPE2Dt9Gad3AESAOT
+         gnQg==
+X-Gm-Message-State: AJIora/+hjrQabqXT3NZzI7P7LAta7wkfVJgx73wctOCf/e2U1XV3JGK
+        oAoWSF4dzOAZGZVoefGHIWTpowIIMVZZUxFV7ktW/w==
+X-Google-Smtp-Source: AGRyM1sn3iWkEiLU6hMHnvyasmekyibSLlJDbi1WCJvYwpGTp4FtZLeav7l27mv0g0B0s3BIzRQHP86NWkxqKLRXK1k=
+X-Received: by 2002:a2e:bf0e:0:b0:258:e99e:998c with SMTP id
+ c14-20020a2ebf0e000000b00258e99e998cmr3841212ljr.365.1658731236073; Sun, 24
+ Jul 2022 23:40:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220716170007.2020037-1-dario.binacchi@amarulasolutions.com>
+ <20220716170007.2020037-3-dario.binacchi@amarulasolutions.com> <20220717233842.1451e349.max@enpas.org>
+In-Reply-To: <20220717233842.1451e349.max@enpas.org>
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date:   Mon, 25 Jul 2022 08:40:24 +0200
+Message-ID: <CABGWkvrgX+9J-rOb-EO1wXVAZQ5phwKKpbc-iD491rD9zn5UpQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/5] can: slcan: remove legacy infrastructure
+To:     Max Staudt <max@enpas.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Jeroen Hofstee <jhofstee@victronenergy.com>,
+        michael@amarulasolutions.com,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Enable CAN_RAW sockets to read and write CAN XL frames analogue to the
-CAN FD extension (new CAN_RAW_XL_FRAMES sockopt).
+Hi Max,
 
-A CAN XL network interface is capable to handle Classical CAN, CAN FD and
-CAN XL frames. When CAN_RAW_XL_FRAMES is enabled, the CAN_RAW socket checks
-whether the addressed CAN network interface is capable to handle the
-provided CAN frame.
+First of all thank you for your review, it took me a while to get back
+to you because I wanted to
+do some analysis and tests regarding the code you suggested I change
+and also last week
+was very busy.
 
-In opposite to the fixed number of bytes for
-- CAN frames (CAN_MTU = sizeof(struct can_frame))
-- CAN FD frames (CANFD_MTU = sizeof(struct can_frame))
-the number of bytes when reading/writing CAN XL frames depends on the
-number of data bytes. For efficiency reasons the length of the struct
-canxl_frame is truncated to the needed size for read/write operations.
-This leads to a calculated size of CANXL_HDR_SIZE + canxl_frame::len which
-is enforced on write() operations and guaranteed on read() operations.
+On Sun, Jul 17, 2022 at 11:38 PM Max Staudt <max@enpas.org> wrote:
+>
+> Hi Dario,
+>
+> This looks good, thank you for continuing to look after slcan!
+>
+> A few comments below.
+>
+>
+>
+> On Sat, 16 Jul 2022 19:00:04 +0200
+> Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
+>
+> [...]
+>
+>
+> > @@ -68,7 +62,6 @@ MODULE_PARM_DESC(maxdev, "Maximum number of slcan interfaces");
+> >                                  SLC_STATE_BE_TXCNT_LEN)
+> >  struct slcan {
+> >       struct can_priv         can;
+> > -     int                     magic;
+> >
+> >       /* Various fields. */
+> >       struct tty_struct       *tty;           /* ptr to TTY structure      */
+> > @@ -84,17 +77,14 @@ struct slcan {
+> >       int                     xleft;          /* bytes left in XMIT queue  */
+> >
+> >       unsigned long           flags;          /* Flag values/ mode etc     */
+> > -#define SLF_INUSE            0               /* Channel in use            */
+> > -#define SLF_ERROR            1               /* Parity, etc. error        */
+> > -#define SLF_XCMD             2               /* Command transmission      */
+> > +#define SLF_ERROR            0               /* Parity, etc. error        */
+> > +#define SLF_XCMD             1               /* Command transmission      */
+> >       unsigned long           cmd_flags;      /* Command flags             */
+> >  #define CF_ERR_RST           0               /* Reset errors on open      */
+> >       wait_queue_head_t       xcmd_wait;      /* Wait queue for commands   */
+>
+> I assume xcmd_wait() came in as part of the previous patch series?
+>
 
-NB: Valid length values are 1 .. 2048 (CANXL_MIN_DLEN .. CANXL_MAX_DLEN).
+Yes, correct.
 
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
----
- include/uapi/linux/can/raw.h |  1 +
- net/can/raw.c                | 54 ++++++++++++++++++++++++++++--------
- 2 files changed, 43 insertions(+), 12 deletions(-)
+>
+> [...]
+>
+>
+> >  /* Send a can_frame to a TTY queue. */
+> > @@ -652,25 +637,21 @@ static int slc_close(struct net_device *dev)
+> >       struct slcan *sl = netdev_priv(dev);
+> >       int err;
+> >
+> > -     spin_lock_bh(&sl->lock);
+> > -     if (sl->tty) {
+> > -             if (sl->can.bittiming.bitrate &&
+> > -                 sl->can.bittiming.bitrate != CAN_BITRATE_UNKNOWN) {
+> > -                     spin_unlock_bh(&sl->lock);
+> > -                     err = slcan_transmit_cmd(sl, "C\r");
+> > -                     spin_lock_bh(&sl->lock);
+> > -                     if (err)
+> > -                             netdev_warn(dev,
+> > -                                         "failed to send close command 'C\\r'\n");
+> > -             }
+> > -
+> > -             /* TTY discipline is running. */
+> > -             clear_bit(TTY_DO_WRITE_WAKEUP, &sl->tty->flags);
+> > +     if (sl->can.bittiming.bitrate &&
+> > +         sl->can.bittiming.bitrate != CAN_BITRATE_UNKNOWN) {
+> > +             err = slcan_transmit_cmd(sl, "C\r");
+> > +             if (err)
+> > +                     netdev_warn(dev,
+> > +                                 "failed to send close command 'C\\r'\n");
+> >       }
+> > +
+> > +     /* TTY discipline is running. */
+> > +     clear_bit(TTY_DO_WRITE_WAKEUP, &sl->tty->flags);
+> > +     flush_work(&sl->tx_work);
+> > +
+> >       netif_stop_queue(dev);
+> >       sl->rcount   = 0;
+> >       sl->xleft    = 0;
+>
+> I suggest moving these two assignments to slc_open() - see below.
+>
+>
+> [...]
+>
+>
+> > @@ -883,72 +786,50 @@ static int slcan_open(struct tty_struct *tty)
+> >       if (!tty->ops->write)
+> >               return -EOPNOTSUPP;
+> >
+> > -     /* RTnetlink lock is misused here to serialize concurrent
+> > -      * opens of slcan channels. There are better ways, but it is
+> > -      * the simplest one.
+> > -      */
+> > -     rtnl_lock();
+> > +     dev = alloc_candev(sizeof(*sl), 1);
+> > +     if (!dev)
+> > +             return -ENFILE;
+> >
+> > -     /* Collect hanged up channels. */
+> > -     slc_sync();
+> > +     sl = netdev_priv(dev);
+> >
+> > -     sl = tty->disc_data;
+> > +     /* Configure TTY interface */
+> > +     tty->receive_room = 65536; /* We don't flow control */
+> > +     sl->rcount   = 0;
+> > +     sl->xleft    = 0;
+>
+> I suggest moving the zeroing to slc_open() - i.e. to the netdev open
+> function. As a bonus, you can then remove the same two assignments from
+> slc_close() (see above). They are only used when netif_running(), with
+> appropiate guards already in place as far as I can see.
 
-diff --git a/include/uapi/linux/can/raw.h b/include/uapi/linux/can/raw.h
-index 3386aa81fdf2..ff12f525c37c 100644
---- a/include/uapi/linux/can/raw.h
-+++ b/include/uapi/linux/can/raw.h
-@@ -60,8 +60,9 @@ enum {
- 	CAN_RAW_ERR_FILTER,	/* set filter for error frames       */
- 	CAN_RAW_LOOPBACK,	/* local loopback (default:on)       */
- 	CAN_RAW_RECV_OWN_MSGS,	/* receive my own msgs (default:off) */
- 	CAN_RAW_FD_FRAMES,	/* allow CAN FD frames (default:off) */
- 	CAN_RAW_JOIN_FILTERS,	/* all filters must match to trigger */
-+	CAN_RAW_XL_FRAMES,	/* allow CAN XL frames (default:off) */
- };
- 
- #endif /* !_UAPI_CAN_RAW_H */
-diff --git a/net/can/raw.c b/net/can/raw.c
-index d1bd9cc51ebe..0721e8fb7042 100644
---- a/net/can/raw.c
-+++ b/net/can/raw.c
-@@ -85,10 +85,11 @@ struct raw_sock {
- 	int ifindex;
- 	struct list_head notifier;
- 	int loopback;
- 	int recv_own_msgs;
- 	int fd_frames;
-+	int xl_frames;
- 	int join_filters;
- 	int count;                 /* number of active filters */
- 	struct can_filter dfilter; /* default/single filter */
- 	struct can_filter *filter; /* pointer to filter(s) */
- 	can_err_mask_t err_mask;
-@@ -127,12 +128,13 @@ static void raw_rcv(struct sk_buff *oskb, void *data)
- 
- 	/* check the received tx sock reference */
- 	if (!ro->recv_own_msgs && oskb->sk == sk)
- 		return;
- 
--	/* do not pass non-CAN2.0 frames to a legacy socket */
--	if (!ro->fd_frames && oskb->len != CAN_MTU)
-+	/* make sure to not pass oversized frames to the socket */
-+	if ((can_is_canfd_skb(oskb) && !ro->fd_frames && !ro->xl_frames) ||
-+	    (can_is_canxl_skb(oskb) && !ro->xl_frames))
- 		return;
- 
- 	/* eliminate multiple filter matches for the same skb */
- 	if (this_cpu_ptr(ro->uniq)->skb == oskb &&
- 	    this_cpu_ptr(ro->uniq)->skbcnt == can_skb_prv(oskb)->skbcnt) {
-@@ -344,10 +346,11 @@ static int raw_init(struct sock *sk)
- 
- 	/* set default loopback behaviour */
- 	ro->loopback         = 1;
- 	ro->recv_own_msgs    = 0;
- 	ro->fd_frames        = 0;
-+	ro->xl_frames        = 0;
- 	ro->join_filters     = 0;
- 
- 	/* alloc_percpu provides zero'ed memory */
- 	ro->uniq = alloc_percpu(struct uniqframe);
- 	if (unlikely(!ro->uniq))
-@@ -667,10 +670,19 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
- 		if (copy_from_sockptr(&ro->fd_frames, optval, optlen))
- 			return -EFAULT;
- 
- 		break;
- 
-+	case CAN_RAW_XL_FRAMES:
-+		if (optlen != sizeof(ro->xl_frames))
-+			return -EINVAL;
-+
-+		if (copy_from_sockptr(&ro->xl_frames, optval, optlen))
-+			return -EFAULT;
-+
-+		break;
-+
- 	case CAN_RAW_JOIN_FILTERS:
- 		if (optlen != sizeof(ro->join_filters))
- 			return -EINVAL;
- 
- 		if (copy_from_sockptr(&ro->join_filters, optval, optlen))
-@@ -749,10 +761,16 @@ static int raw_getsockopt(struct socket *sock, int level, int optname,
- 		if (len > sizeof(int))
- 			len = sizeof(int);
- 		val = &ro->fd_frames;
- 		break;
- 
-+	case CAN_RAW_XL_FRAMES:
-+		if (len > sizeof(int))
-+			len = sizeof(int);
-+		val = &ro->xl_frames;
-+		break;
-+
- 	case CAN_RAW_JOIN_FILTERS:
- 		if (len > sizeof(int))
- 			len = sizeof(int);
- 		val = &ro->join_filters;
- 		break;
-@@ -774,11 +792,15 @@ static int raw_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
- 	struct raw_sock *ro = raw_sk(sk);
- 	struct sockcm_cookie sockc;
- 	struct sk_buff *skb;
- 	struct net_device *dev;
- 	int ifindex;
--	int err;
-+	int err = -EINVAL;
-+
-+	/* check for valid CAN frame sizes */
-+	if (size < CANXL_HDR_SIZE + CANXL_MIN_DLEN || size > CANXL_MTU)
-+		return -EINVAL;
- 
- 	if (msg->msg_name) {
- 		DECLARE_SOCKADDR(struct sockaddr_can *, addr, msg->msg_name);
- 
- 		if (msg->msg_namelen < RAW_MIN_NAMELEN)
-@@ -794,32 +816,40 @@ static int raw_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
- 
- 	dev = dev_get_by_index(sock_net(sk), ifindex);
- 	if (!dev)
- 		return -ENXIO;
- 
--	err = -EINVAL;
--	if (ro->fd_frames && dev->mtu == CANFD_MTU) {
--		if (unlikely(size != CANFD_MTU && size != CAN_MTU))
--			goto put_dev;
--	} else {
--		if (unlikely(size != CAN_MTU))
--			goto put_dev;
--	}
--
- 	skb = sock_alloc_send_skb(sk, size + sizeof(struct can_skb_priv),
- 				  msg->msg_flags & MSG_DONTWAIT, &err);
- 	if (!skb)
- 		goto put_dev;
- 
- 	can_skb_reserve(skb);
- 	can_skb_prv(skb)->ifindex = dev->ifindex;
- 	can_skb_prv(skb)->skbcnt = 0;
- 
-+	/* fill the skb before testing for valid CAN frames */
- 	err = memcpy_from_msg(skb_put(skb, size), msg, size);
- 	if (err < 0)
- 		goto free_skb;
- 
-+	err = -EINVAL;
-+	if (ro->xl_frames && dev->mtu == CANXL_MTU) {
-+		/* CAN XL, CAN FD and Classical CAN */
-+		if (!can_is_canxl_skb(skb) && !can_is_canfd_skb(skb) &&
-+		    !can_is_can_skb(skb))
-+			goto free_skb;
-+	} else if (ro->fd_frames && dev->mtu == CANFD_MTU) {
-+		/* CAN FD and Classical CAN */
-+		if (!can_is_canfd_skb(skb) && !can_is_can_skb(skb))
-+			goto free_skb;
-+	} else {
-+		/* Classical CAN */
-+		if (!can_is_can_skb(skb))
-+			goto free_skb;
-+	}
-+
- 	sockcm_init(&sockc, sk);
- 	if (msg->msg_controllen) {
- 		err = sock_cmsg_send(sk, msg, &sockc);
- 		if (unlikely(err))
- 			goto free_skb;
+I think it is better to keep the code as it is, since at the entry of
+the netdev
+open function, netif_running already returns true (it is set to true by the
+calling function) and therefore it would be less safe to reset the
+rcount and xleft
+fields.
+
+Thanks and regards,
+Dario
+
+>
+>
+> > +     spin_lock_init(&sl->lock);
+> > +     INIT_WORK(&sl->tx_work, slcan_transmit);
+> > +     init_waitqueue_head(&sl->xcmd_wait);
+> >
+> > -     err = -EEXIST;
+> > -     /* First make sure we're not already connected. */
+> > -     if (sl && sl->magic == SLCAN_MAGIC)
+> > -             goto err_exit;
+> > +     /* Configure CAN metadata */
+> > +     sl->can.bitrate_const = slcan_bitrate_const;
+> > +     sl->can.bitrate_const_cnt = ARRAY_SIZE(slcan_bitrate_const);
+> >
+> > -     /* OK.  Find a free SLCAN channel to use. */
+> > -     err = -ENFILE;
+> > -     sl = slc_alloc();
+> > -     if (!sl)
+> > -             goto err_exit;
+> > +     /* Configure netdev interface */
+> > +     sl->dev = dev;
+> > +     strscpy(dev->name, "slcan%d", sizeof(dev->name));
+>
+> The third parameter looks... unintentional :)
+>
+> What do the maintainers think of dropping the old "slcan" name, and
+> just allowing this to be a normal canX device? These patches do bring
+> it closer to that, after all. In this case, this name string magic
+> could be dropped altogether.
+>
+>
+> [...]
+>
+>
+>
+> This looks good to me overall.
+>
+> Thanks Dario!
+>
+>
+> Max
+
+
+
 -- 
-2.30.2
 
+Dario Binacchi
+
+Embedded Linux Developer
+
+dario.binacchi@amarulasolutions.com
+
+__________________________________
+
+
+Amarula Solutions SRL
+
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+
+T. +39 042 243 5310
+info@amarulasolutions.com
+
+www.amarulasolutions.com
