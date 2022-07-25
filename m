@@ -2,60 +2,60 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F42A5801E9
+	by mail.lfdr.de (Postfix) with ESMTP id F05F25801EA
 	for <lists+linux-can@lfdr.de>; Mon, 25 Jul 2022 17:32:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232954AbiGYPcL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 25 Jul 2022 11:32:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48414 "EHLO
+        id S234317AbiGYPcO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 25 Jul 2022 11:32:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232032AbiGYPcK (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 25 Jul 2022 11:32:10 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01D960D2
-        for <linux-can@vger.kernel.org>; Mon, 25 Jul 2022 08:32:09 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id f3-20020a17090ac28300b001f22d62bfbcso8533886pjt.0
-        for <linux-can@vger.kernel.org>; Mon, 25 Jul 2022 08:32:09 -0700 (PDT)
+        with ESMTP id S232032AbiGYPcM (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 25 Jul 2022 11:32:12 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B97B60D2
+        for <linux-can@vger.kernel.org>; Mon, 25 Jul 2022 08:32:11 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id b133so10762966pfb.6
+        for <linux-can@vger.kernel.org>; Mon, 25 Jul 2022 08:32:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=lPxeUU0StP5c6ZgwSeiGwxhM6MlWFuGPWc1Fd7dUDPY=;
-        b=Zl/tzBg8txAIRPRlFMPvLss3mnNF5nbReIjnKe6yKF6vAUpdvqEuh3dHsigqHuF+Wp
-         BDQtshJ/Z1P5w63Otwt+RAokbYfZZHYRebmll9aHf10BDY2r4NTN0j8bh9WZsVO8XCav
-         uPOqRO0UHSaXCPu0JsXVUQEcqGdP83x9V2fFhzbSh3HMCGGqrPX8jyCB8jDKae1MuWsY
-         v+wm9ccPuKrQqtCvWXdLwmdUWWBdPIK5cbWJpmFy6wPVAuTw8KlHZVJQwc5OwNzEmFVK
-         nkbpJKc5gDdUNRtKKmUAZD9shSKMWCbOd1n9TZyz7lHvOtU1sLusmYH1bh2/OMZBZR8/
-         gNdw==
+        bh=lMdXzctjvecUvKvq+1rYZTs1jbZCEiaVtYgz0V7ZnDM=;
+        b=jh79zvIVuNb9ElpiK0auRTF0l7bdDA5Tjr1Nfq0YwikJ35nqzG0aVC3Gl9FZnljcrM
+         aVP+GepRC0jjkc+JFySqaUTwd5LV4gG4TldB/f+LL9mGyxFNZQ3Ctp2GE7QtOWmLs0Ii
+         unL/3ZlkdqTpcQ7LvzNlRt3uST3M0DHZvFCFtmZQt0/OAHx/u06CczHUYiI7GsGSJWoQ
+         oFIgMSSKhNZdHS7ZVvle+LTydo8YYvU74lBfazdcjAYZJ4QVXkm1yb6R8/1U6vL7+l0K
+         7O2s9Z/X6/AQ59XP1MgM5iGRWHBaLiTdK6Wh91uT1eIeYvfL65uYHta9tYslzsWsvrnl
+         fNsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=lPxeUU0StP5c6ZgwSeiGwxhM6MlWFuGPWc1Fd7dUDPY=;
-        b=0it7bnKZQcimXymGHlAl9WvPFRmiE5j9xgNou4YGhAm0lhqmdm3eDYYM/pWHrh3fHo
-         yNkYi4gRUVEp5wKT5bJMYekXD39gIiofg4saJ00VfZYrHYxbpeo5siFqgP/1fDzjTJyK
-         DnzFfAB0UJ/fwwOSgcZ9N+TsBhCuc3D2miIbxkdAir/Ci87m7MhzqVvjQYDmJ4OKTxTd
-         ggnzHGDSCByaxkPE5+ZFLDacFjzg2x0toj7aRUl9nGq5mqA+rOmdfc1jR2XlEDBjdfhN
-         G7nG4vWkt3xSfbUKQp1scH4LwRxT6u0vbDkzVNgkfdPnprOb5cx/dczHyN03rYTB6mLK
-         zN2w==
-X-Gm-Message-State: AJIora+tGGhjRaOYG8Fq4L9Gvjc5HgbnlYkbPGv1bEI1p6T3vuC2F/V1
-        m/dSwHOj1c0TJZ8yv5BJO7xJA80IuliO6g==
-X-Google-Smtp-Source: AGRyM1tMeHAlfRPflNbvpzI1zcC70Tp7ivhAQ6A15JIG+G3UfmA/iAwiOJ0KUu5INITMihuD3BDCNQ==
-X-Received: by 2002:a17:90a:9bc4:b0:1f2:389a:7faa with SMTP id b4-20020a17090a9bc400b001f2389a7faamr15353418pjw.72.1658763129230;
-        Mon, 25 Jul 2022 08:32:09 -0700 (PDT)
+        bh=lMdXzctjvecUvKvq+1rYZTs1jbZCEiaVtYgz0V7ZnDM=;
+        b=YrYMugdgYWa3P8b/YmU0YZC/tjUUXxo/RVsdopVs8vNsQBQCxHUZirDHL+SXbrKOez
+         +p0jelRV71UK/SiwHJqF9Sy5iOzuXiP99CV0dWg2aswd7XV4d9oVH3iR2h2ps5WdAi3p
+         JdU+llxvSWqL+MmJ2rVv8/7SCCBZgxyF1igu4IBbLPJ5zfDZbGV0JOvIt0K7N8m0OXs8
+         f4xUPkROl0ZgBEe4kFKKp4tiPrBpa8k1xAGA6C1B8IeWRZNIED+nM16JjYl0tyup6O1K
+         mzEBvMw+vemQEIy0PbEig04qjho8YOtOpwsABR3BQLvJAhkcqKITSzzOUTk45UCMl6pd
+         TfPw==
+X-Gm-Message-State: AJIora+BX/EKax2dlm0Fs+tCR9MZryoBUy+/6bCWi0Z2pfvT0X3AmWnW
+        36LMOvVcsiajELKAisGFvca+oJu6BWFuvQ==
+X-Google-Smtp-Source: AGRyM1syQbzo+xPDDXmB2B2OQMBGNg/6eZvJPUcxaR8vr5U5+AqbZxLoAoxnCcvBluTAJ9RF+k23bQ==
+X-Received: by 2002:a63:4608:0:b0:41a:617f:e194 with SMTP id t8-20020a634608000000b0041a617fe194mr11767633pga.152.1658763130883;
+        Mon, 25 Jul 2022 08:32:10 -0700 (PDT)
 Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id m1-20020a62a201000000b005289ef6db79sm9745477pff.32.2022.07.25.08.32.07
+        by smtp.gmail.com with ESMTPSA id m1-20020a62a201000000b005289ef6db79sm9745477pff.32.2022.07.25.08.32.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 08:32:08 -0700 (PDT)
+        Mon, 25 Jul 2022 08:32:10 -0700 (PDT)
 Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
 From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 To:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
 Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
         Max Staudt <max@enpas.org>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH 3/9] can: slcan: add DRV_NAME and define pr_fmt to replace hardcoded names
-Date:   Tue, 26 Jul 2022 00:31:18 +0900
-Message-Id: <20220725153124.467061-4-mailhol.vincent@wanadoo.fr>
+Subject: [PATCH 4/9] can: softing: add DRV_NAME to replace hardcoded names
+Date:   Tue, 26 Jul 2022 00:31:19 +0900
+Message-Id: <20220725153124.467061-5-mailhol.vincent@wanadoo.fr>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220725153124.467061-1-mailhol.vincent@wanadoo.fr>
 References: <20220725153124.467061-1-mailhol.vincent@wanadoo.fr>
@@ -71,87 +71,46 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The driver uses the string "slcan" to populate
-tty_ldisc_ops::name. Add a new macro DRV_NAME which evaluates to
-"slcan" and then use DRV_NAME and to get rid on the hardcoded string
-names.
+The driver uses the string "softing" to populate platform_driver::name
+and can_bittiming_const::name. Add a new macro DRV_NAME which
+evaluates to "ems_ubs" and then use DRV_NAME and to get rid on the
+hardcoded string names.
 
-Similarly, the pr_info() and pr_err() hardcoded the "slcan"
-prefix. Define pr_fmt so that the "slcan" prefix gets automatically
-added.
-
-CC: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 ---
+ drivers/net/can/softing/softing_main.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-@Dario, because you are also doing a lot of changes on slcan, our
-patches might conflict. Do not hesitate to take this one and add it to
-your series to simplify the merge.
----
- drivers/net/can/slcan/slcan-core.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/net/can/slcan/slcan-core.c b/drivers/net/can/slcan/slcan-core.c
-index dc28e715bbe1..d1562f9474c9 100644
---- a/drivers/net/can/slcan/slcan-core.c
-+++ b/drivers/net/can/slcan/slcan-core.c
-@@ -35,6 +35,9 @@
-  *
-  */
+diff --git a/drivers/net/can/softing/softing_main.c b/drivers/net/can/softing/softing_main.c
+index 8d27ac66ca7f..d810fe6915a4 100644
+--- a/drivers/net/can/softing/softing_main.c
++++ b/drivers/net/can/softing/softing_main.c
+@@ -11,6 +11,7 @@
  
-+#define DRV_NAME "slcan"
-+#define pr_fmt(fmt) DRV_NAME ": " fmt
-+
- #include <linux/module.h>
- #include <linux/moduleparam.h>
+ #include "softing.h"
  
-@@ -864,7 +867,7 @@ static struct slcan *slc_alloc(void)
- 	if (!dev)
- 		return NULL;
++#define DRV_NAME "softing"
+ #define TX_ECHO_SKB_MAX (((TXMAX+1)/2)-1)
  
--	snprintf(dev->name, sizeof(dev->name), "slcan%d", i);
-+	snprintf(dev->name, sizeof(dev->name), DRV_NAME "%d", i);
- 	dev->netdev_ops = &slc_netdev_ops;
- 	dev->base_addr  = i;
- 	slcan_set_ethtool_ops(dev);
-@@ -937,7 +940,7 @@ static int slcan_open(struct tty_struct *tty)
- 		rtnl_unlock();
- 		err = register_candev(sl->dev);
- 		if (err) {
--			pr_err("slcan: can't register candev\n");
-+			pr_err("can't register candev\n");
- 			goto err_free_chan;
- 		}
- 	} else {
-@@ -1028,7 +1031,7 @@ static int slcan_ioctl(struct tty_struct *tty, unsigned int cmd,
- static struct tty_ldisc_ops slc_ldisc = {
- 	.owner		= THIS_MODULE,
- 	.num		= N_SLCAN,
--	.name		= "slcan",
-+	.name		= DRV_NAME,
- 	.open		= slcan_open,
- 	.close		= slcan_close,
- 	.hangup		= slcan_hangup,
-@@ -1044,8 +1047,8 @@ static int __init slcan_init(void)
- 	if (maxdev < 4)
- 		maxdev = 4; /* Sanity */
+ /*
+@@ -612,7 +613,7 @@ static const struct net_device_ops softing_netdev_ops = {
+ };
  
--	pr_info("slcan: serial line CAN interface driver\n");
--	pr_info("slcan: %d dynamic interface channels.\n", maxdev);
-+	pr_info("serial line CAN interface driver\n");
-+	pr_info("%d dynamic interface channels.\n", maxdev);
+ static const struct can_bittiming_const softing_btr_const = {
+-	.name = "softing",
++	.name = DRV_NAME,
+ 	.tseg1_min = 1,
+ 	.tseg1_max = 16,
+ 	.tseg2_min = 1,
+@@ -846,7 +847,7 @@ static int softing_pdev_probe(struct platform_device *pdev)
  
- 	slcan_devs = kcalloc(maxdev, sizeof(struct net_device *), GFP_KERNEL);
- 	if (!slcan_devs)
-@@ -1054,7 +1057,7 @@ static int __init slcan_init(void)
- 	/* Fill in our line protocol discipline, and register it */
- 	status = tty_register_ldisc(&slc_ldisc);
- 	if (status)  {
--		pr_err("slcan: can't register line discipline\n");
-+		pr_err("can't register line discipline\n");
- 		kfree(slcan_devs);
- 	}
- 	return status;
+ static struct platform_driver softing_driver = {
+ 	.driver = {
+-		.name = "softing",
++		.name = DRV_NAME,
+ 	},
+ 	.probe = softing_pdev_probe,
+ 	.remove = softing_pdev_remove,
 -- 
 2.35.1
 
