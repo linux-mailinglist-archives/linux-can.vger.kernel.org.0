@@ -2,61 +2,57 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F4A85812DF
-	for <lists+linux-can@lfdr.de>; Tue, 26 Jul 2022 14:12:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 643A45812EA
+	for <lists+linux-can@lfdr.de>; Tue, 26 Jul 2022 14:14:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238601AbiGZMMD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 26 Jul 2022 08:12:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52486 "EHLO
+        id S238657AbiGZMO0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 26 Jul 2022 08:14:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232677AbiGZMMC (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 26 Jul 2022 08:12:02 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E1B32B184
-        for <linux-can@vger.kernel.org>; Tue, 26 Jul 2022 05:12:01 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id b16so9830506lfb.7
-        for <linux-can@vger.kernel.org>; Tue, 26 Jul 2022 05:12:01 -0700 (PDT)
+        with ESMTP id S232819AbiGZMO0 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 26 Jul 2022 08:14:26 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0152B258
+        for <linux-can@vger.kernel.org>; Tue, 26 Jul 2022 05:14:24 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id z25so22424480lfr.2
+        for <linux-can@vger.kernel.org>; Tue, 26 Jul 2022 05:14:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=amarulasolutions.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=DRdMkVO45kt5SUq2iTSwOTuiugVw1ePTDCKNo3/Lr2Q=;
-        b=PWpNy38u+kmxcyNOBTsonapbCAkL3cJaMR4mqtXCM6PBsg1pnSlLojXIouR2HEm4gc
-         nQGRcdQhBEPSk7FemlfLMu2vuyGtyK9kGUQqImx3Jjqtd7THFBIPliuzj9VeIUclriS4
-         pKb7YBTkwl30kCjGoqQ6zki5lcHDMdlsHMpwQ=
+        bh=JSI3fstLoaSfTHtz4CWJBKNvtmx7kMrfr48Gh9Ol0TQ=;
+        b=TsFmCxgmvQsod+IwsLbWbfb1opLHnzXLtlD3ojDopwudHQF35HTFuSQ8tXiUK+utAk
+         H4Sxf89oATVd7Yufd3uHAqXJUqWK8jp5f9eLo0lTKylDHw8yJo0Kjb0E1EAql0AVZ8S0
+         ZYPE9dkdjxYsuLgiVmyJNdIdCDXY986c+5uW0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=DRdMkVO45kt5SUq2iTSwOTuiugVw1ePTDCKNo3/Lr2Q=;
-        b=Zszf8C8X7lT0bDgZo/ixw7JfdPQr+9brWBIiHr403zBB2qvYcmC2i9o21AdLCdsxpz
-         cL7KufsWfcXWzCaUm4H3MA2DnacDZp9kyXVHHtXPt54/84q2qALH9z5S8k99RaiFeQEv
-         MUcqfptzwX5XDwthpZElJJTKXBgdgJQoJF5UJi+RwCYpfXjzErGBMP4hKU2rqx+wGAH9
-         ZDgBRxHcFwF4dPQQeQ6veypfPvwqXMtO6Lfup4BIs42stXAq6o63qHyYdAwoldF1xVIJ
-         2f0GQT/D7qp5M7tQ6dloat3kLpdqAntJM/gvjbm+hhcC9mz7y//9Ph3qjfMNl2thpbEk
-         UZMw==
-X-Gm-Message-State: AJIora914dknD6HxSoejY99aWaY4dkVTqGyNXcKHkPj7nqU5+yrj+C1J
-        seMtmPQnp6BaVd9u+2pezlkQiM4tD3XRT1/K0mH9Mg==
-X-Google-Smtp-Source: AGRyM1tMgbLOF7GIEOIivn9Jp8KvbfU4Z7Vy7FS2Xgg2x+pv0vH3AwCgePCUcgeP86HEVM/iUvSYHNnU6CaDrCpYSvA=
-X-Received: by 2002:a05:6512:32c2:b0:48a:9822:ca2c with SMTP id
- f2-20020a05651232c200b0048a9822ca2cmr2540199lfg.117.1658837519793; Tue, 26
- Jul 2022 05:11:59 -0700 (PDT)
+        bh=JSI3fstLoaSfTHtz4CWJBKNvtmx7kMrfr48Gh9Ol0TQ=;
+        b=6CBvaNUibbk5PkVHiyhRn4FXll7VMdGjmOb/350FIS+SlcLFbP0QErFcaWHuAFC4FI
+         nD18tGGVfZu1rgIDpJfKcKXOpmBGdQwAzMiBfPrev072WwIilAB0rV5XeE0vwRoyKmAz
+         BXHAZBBR62ijz9eyNpPukQ1gfhTa84/wmxpo2ZeNAhYSbTNcFpiG+n9s7vt3GsTLvalw
+         LkGwJcHksh72/XgJ5NgEtxi1+345nvHewkhh0X/4S7eyBOzbyX53KH1//cJaA93dv4LP
+         Pr8cwKbpz2nURGmZ+R31R/mzrAMrw11Bz70fzhSy/0PyY4+VnTuXmv6qar7xG3IFuXzR
+         DNLA==
+X-Gm-Message-State: AJIora//P+cCidK0qnAqWFLjcgaFrC1wfEHyOHS7Eiq+X8ls7JZGZNxb
+        JFaSB6jrmPqUE/L14EIPDhWJT4hPdx2zSYOvZEubOZ1cWFhISQ==
+X-Google-Smtp-Source: AGRyM1stIwcyq2/Jzo91Z3IR3QJF3vlSX1yPftVAV2G0gU1V/jlIKyA9ek2dBHemm+ULO1qfTwr4uQxZgsk90oIBHHU=
+X-Received: by 2002:a05:6512:3503:b0:48a:6060:5ebb with SMTP id
+ h3-20020a056512350300b0048a60605ebbmr5902220lfs.429.1658837663080; Tue, 26
+ Jul 2022 05:14:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220725065419.3005015-1-dario.binacchi@amarulasolutions.com>
- <20220725065419.3005015-3-dario.binacchi@amarulasolutions.com>
- <20220725123804.ofqpq4j467qkbtzn@pengutronix.de> <CABGWkvrBrTqWQPBWKuKzuwQzgvc-iuWJPXt2utb60MOfych09A@mail.gmail.com>
- <20220726115845.4ywgubfpqfbl7qa3@pengutronix.de>
-In-Reply-To: <20220726115845.4ywgubfpqfbl7qa3@pengutronix.de>
+References: <20220725065419.3005015-1-dario.binacchi@amarulasolutions.com> <20220725132514.h3iva4xi4sdncus6@pengutronix.de>
+In-Reply-To: <20220725132514.h3iva4xi4sdncus6@pengutronix.de>
 From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date:   Tue, 26 Jul 2022 14:11:48 +0200
-Message-ID: <CABGWkvrknM0VS2V1TAjyjeoE0n2yXGLvv6ucvO-z23nL=EXvXQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] can: slcan: remove legacy infrastructure
+Date:   Tue, 26 Jul 2022 14:14:12 +0200
+Message-ID: <CABGWkvpQ_5Yz=B0Q=qJGd1vkysntV=449wbv43opvO6=UDrAJw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/6] can: slcan: extend supported features (step 2)
 To:     Marc Kleine-Budde <mkl@pengutronix.de>
 Cc:     linux-kernel@vger.kernel.org, michael@amarulasolutions.com,
         Amarula patchwork <linux-amarula@amarulasolutions.com>,
         Jeroen Hofstee <jhofstee@victronenergy.com>,
         Oliver Hartkopp <socketcan@hartkopp.net>,
-        Max Staudt <max@enpas.org>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
@@ -66,58 +62,66 @@ Cc:     linux-kernel@vger.kernel.org, michael@amarulasolutions.com,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 1:58 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->
-> On 26.07.2022 12:11:33, Dario Binacchi wrote:
-> > Hello Marc,
-> >
-> > On Mon, Jul 25, 2022 at 2:38 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> > >
-> > > On 25.07.2022 08:54:15, Dario Binacchi wrote:
-> > > > Taking inspiration from the drivers/net/can/can327.c driver and at the
-> > > > suggestion of its author Max Staudt, I removed legacy stuff like
-> > > > `SLCAN_MAGIC' and `slcan_devs' resulting in simplification of the code
-> > > > and its maintainability.
-> > > >
-> > > > The use of slcan_devs is derived from a very old kernel, since slip.c
-> > > > is about 30 years old, so today's kernel allows us to remove it.
-> > > >
-> > > > The .hangup() ldisc function, which only called the ldisc .close(), has
-> > > > been removed since the ldisc layer calls .close() in a good place
-> > > > anyway.
-> > > >
-> > > > The old slcanX name has been dropped in order to use the standard canX
-> > > > interface naming. It has been assumed that this change does not break
-> > > > the user space as the slcan driver provides an ioctl to resolve from tty
-> > > > fd to netdev name.
-> > >
-> > > Is there a man page that documents this iotcl? Please add it and/or the
-> > > IOCTL name.
-> >
-> > I have not found documentation of the SIOCGIFNAME ioctl for the line discipline,
-> > but only for netdev (i. e.
-> > https://man7.org/linux/man-pages/man7/netdevice.7.html),
->
-> Ok - What about:
->
-> The old slcanX name has been dropped in order to use the standard canX
-> interface naming. The ioctl SIOCGIFNAME can be used to query the name of
-> the created interface. Further There are several ways to get stable
-> interfaces names in user space, e.g. udev or systemd-networkd.
+Hello Marc,
 
-Good! I will update the commit message in the next version I will submit.
-Thanks and regards,
+On Mon, Jul 25, 2022 at 3:25 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+>
+> On 25.07.2022 08:54:13, Dario Binacchi wrote:
+> > With this series I try to finish the task, started with the series [1],
+> > of completely removing the dependency of the slcan driver from the
+> > userspace slcand/slcan_attach applications.
+> >
+> > The series, however, still lacks a patch for sending the bitrate setting
+> > command to the adapter:
+> >
+> > slcan_attach -b <btr> <dev>
+> >
+> > Without at least this patch the task cannot be considered truly completed.
+> >
+> > The idea I got is that this can only happen through the ethtool API.
+> > Among the various operations made available by this interface I would
+> > have used the set_regs (but only the get_regs has been developed), or,
+> > the set_eeprom, even if the setting would not be stored in an eeprom.
+> > IMHO it would take a set_regs operation with a `struct ethtool_wregs'
+> > parameter similar to `struct ethtool_eeprom' without the magic field:
+>
+> This doesn't feel right.
+>
+> > struct ethtool_wregs {
+> >       __u32   cmd;
+> >       __u32   offset;
+> >       __u32   len;
+> >       __u8    data[0];
+> > };
+> >
+> > But I am not the expert and if there was an alternative solution already
+> > usable, it would be welcome.
+>
+> Have a look at the get/set_tunable() callback:
+>
+> | https://elixir.bootlin.com/linux/latest/source/include/linux/ethtool.h#L575
+>
+> You probably have to add a new tunable. Here you'll find the people and
+> commits that changed the tunable:
+>
+> | https://github.com/torvalds/linux/blame/master/include/uapi/linux/ethtool.h#L229
+>
+> It's usually worth including them in an RFC patch series where you add a
+> new tunable and make use of it in the slcan driver.
+
+Thank you very much for the suggestions.
+Regards,
 
 Dario
 >
+> regards,
 > Marc
 >
 > --
