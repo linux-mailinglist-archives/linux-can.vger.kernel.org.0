@@ -2,71 +2,79 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA4515815CB
-	for <lists+linux-can@lfdr.de>; Tue, 26 Jul 2022 16:59:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 620C1581B75
+	for <lists+linux-can@lfdr.de>; Tue, 26 Jul 2022 23:03:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239448AbiGZO72 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 26 Jul 2022 10:59:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33292 "EHLO
+        id S239232AbiGZVD2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 26 Jul 2022 17:03:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiGZO7Z (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 26 Jul 2022 10:59:25 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8547A2CC93
-        for <linux-can@vger.kernel.org>; Tue, 26 Jul 2022 07:59:24 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id y11so22890026lfs.6
-        for <linux-can@vger.kernel.org>; Tue, 26 Jul 2022 07:59:24 -0700 (PDT)
+        with ESMTP id S231648AbiGZVD1 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 26 Jul 2022 17:03:27 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B2E2CE34
+        for <linux-can@vger.kernel.org>; Tue, 26 Jul 2022 14:03:25 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id va17so28339829ejb.0
+        for <linux-can@vger.kernel.org>; Tue, 26 Jul 2022 14:03:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=amarulasolutions.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=n0HjOM/d2+hqNFb0LUzBClLdan9uRjh/1pepW+TXnpw=;
-        b=mRMJjULNmr1ZBAkPkI4xlsy1SUjQapLFdJNzkiWMYFeJMg7+A4HHMRuyX54Uq459Hn
-         I2Aq5aTaF8MwK3dcOipuPuX3IWDr9R+MLjgH6hIdiCM69uDbuZ00q+TQ3PldgBYy8G7c
-         OjkZ6OPf7zUadap6/teHx/KXbuiRJldpmFknY=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/Fix0ZZRTMX4dxRXPKnOmcw0/YjyjkpPTfrxJEvmQ4k=;
+        b=FTfM21nXEhHg2f8iPQNXpgPVJtjKJh6CWrgnOeZPrXrjEhfiEiUijbyPWBpJ+8n4+W
+         Ocmun4adiTy37fjtMjLHLL4ks+ORQWEXed8BCfxgMjPC7F9JUYC6HsdZ7ULO20uVhLHV
+         eQtjq4wyNZbT2ISo+NysRfBFvLv5epV751x4Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=n0HjOM/d2+hqNFb0LUzBClLdan9uRjh/1pepW+TXnpw=;
-        b=yDx40E+cXxYPbZ/ZPH15RmCyQVQnS2erRINLOQgj8FHU2aCJdG8U8CgSkiROelNcxL
-         aWMRWYCJUTxz6K+NymdoOl8I3MpNcbFsgxltKqJDsmOWZV0aOuLFvts7rIcQE5+LmTTm
-         DADuZX/bSu9RH/DQXYmILOZczkOsaTgduov1gQG35OKlhn5r4N5aYURQG49wx3lWZoll
-         h7aRMeDm95A8E+DbbvvKwg8e+e71BXZmUth2wqxV7YcNvYjBKBBsvbV1mbdNjNQFC/a3
-         hVvZj/4AY/VTqIv+TSw0ys0VQcqcpwQha6ROfBmqRYFkhxKEwQVCM3zCet0+A4hKf3AL
-         +0MA==
-X-Gm-Message-State: AJIora+261rwqbQDNv8ElEeJdMbyQCX9aBCu7LHe6Vf9GB2OlyYpf4vN
-        S+vRurTLwhAaZcLDJDbiCZBIwp+P/1hkV8sPs72HBw==
-X-Google-Smtp-Source: AGRyM1urKoX+dO3rgXCo+AGf4sf4Fw8Y+JA37WQkI1fKzO+Be3+QzS0kr3W37l+QsB0zB6/X62ZFRALtDjds5CKQ3wM=
-X-Received: by 2002:a05:6512:3c88:b0:48a:86d8:dbad with SMTP id
- h8-20020a0565123c8800b0048a86d8dbadmr4525794lfv.172.1658847562848; Tue, 26
- Jul 2022 07:59:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220716170007.2020037-1-dario.binacchi@amarulasolutions.com>
- <20220716170007.2020037-3-dario.binacchi@amarulasolutions.com>
- <20220717233842.1451e349.max@enpas.org> <CABGWkvrgX+9J-rOb-EO1wXVAZQ5phwKKpbc-iD491rD9zn5UpQ@mail.gmail.com>
- <20220725150920.63ac3a77.max@enpas.org>
-In-Reply-To: <20220725150920.63ac3a77.max@enpas.org>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/Fix0ZZRTMX4dxRXPKnOmcw0/YjyjkpPTfrxJEvmQ4k=;
+        b=JA+0jVcxzRuLztzNKsH7mK0X7hOLqwdQlmIeT1LhngQjGNc7QHdlsRqsruzAZumh7t
+         eNsnmEQvVHFKY/GmV5pDppspQ0oCqucjt5DYt0Z+0Wk2VW08ll5E2UgHkaq6NU8RErS1
+         GHDM8xfYs+akPNL5Pia28Si7z7TS1RbjKJnOpVbnQZf2xyNRFYLe6x/RR97Sfh4o9tQ6
+         blWI0uGRMo1F7c2XAnMflAPYj68rejuAQOt76PaDmB9hhnVKKt7b/+EveZHfVgMvD19E
+         6Y9UKtCu+u3sp2v0KF68AXhDl8z4O3YOOoNV9+4JX+0iOssNw9qczCw7hvaqgKu324kG
+         4kUw==
+X-Gm-Message-State: AJIora+HepZFQwIVyoOOh1ZPwsQeNldRBYWR9Uqydc0fJmfSTEnfv+ZC
+        3CZbRw0LUmEtj2jYaWhTk49XFw==
+X-Google-Smtp-Source: AGRyM1v4xl1rfOBKqE3/bYUDthCvWJ6l+y4YoDodnW7VXZEl6q+teDw/Z3IadP8uylt+rwPRVyTsjg==
+X-Received: by 2002:a17:907:6890:b0:72e:dc8f:ad42 with SMTP id qy16-20020a170907689000b0072edc8fad42mr14787713ejc.683.1658869403619;
+        Tue, 26 Jul 2022 14:03:23 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-87-14-98-67.retail.telecomitalia.it. [87.14.98.67])
+        by smtp.gmail.com with ESMTPSA id y19-20020aa7d513000000b0043a7293a03dsm9092849edq.7.2022.07.26.14.03.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Jul 2022 14:03:22 -0700 (PDT)
 From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date:   Tue, 26 Jul 2022 16:59:11 +0200
-Message-ID: <CABGWkvqghRsP2w+yw6LXVCnJy4ju10jmQnofS858Vh+VVZzMMQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 2/5] can: slcan: remove legacy infrastructure
-To:     Max Staudt <max@enpas.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Jeroen Hofstee <jhofstee@victronenergy.com>,
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
         michael@amarulasolutions.com,
         Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Jeroen Hofstee <jhofstee@victronenergy.com>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        Alexandru Tachici <alexandru.tachici@analog.com>,
+        Andrew Lunn <andrew@lunn.ch>, Arnd Bergmann <arnd@arndb.de>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guangbin Huang <huangguangbin2@huawei.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Hao Chen <chenhao288@hisilicon.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Ido Schimmel <idosch@nvidia.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Leon Romanovsky <leon@kernel.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
         Paolo Abeni <pabeni@redhat.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Tom Rix <trix@redhat.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Yufeng Mo <moyufeng@huawei.com>, netdev@vger.kernel.org
+Subject: [RFC PATCH v3 0/9] can: slcan: extend supported features (step 2)
+Date:   Tue, 26 Jul 2022 23:02:08 +0200
+Message-Id: <20220726210217.3368497-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -76,90 +84,73 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Max,
+With this series I try to finish the task, started with the series [1],
+of completely removing the dependency of the slcan driver from the
+userspace slcand/slcan_attach applications.
 
-On Mon, Jul 25, 2022 at 3:09 PM Max Staudt <max@enpas.org> wrote:
->
-> On Mon, 25 Jul 2022 08:40:24 +0200
-> Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
->
-> > > > @@ -883,72 +786,50 @@ static int slcan_open(struct tty_struct *tty)
-> > > >       if (!tty->ops->write)
-> > > >               return -EOPNOTSUPP;
-> > > >
-> > > > -     /* RTnetlink lock is misused here to serialize concurrent
-> > > > -      * opens of slcan channels. There are better ways, but it is
-> > > > -      * the simplest one.
-> > > > -      */
-> > > > -     rtnl_lock();
-> > > > +     dev = alloc_candev(sizeof(*sl), 1);
-> > > > +     if (!dev)
-> > > > +             return -ENFILE;
-> > > >
-> > > > -     /* Collect hanged up channels. */
-> > > > -     slc_sync();
-> > > > +     sl = netdev_priv(dev);
-> > > >
-> > > > -     sl = tty->disc_data;
-> > > > +     /* Configure TTY interface */
-> > > > +     tty->receive_room = 65536; /* We don't flow control */
-> > > > +     sl->rcount   = 0;
-> > > > +     sl->xleft    = 0;
-> > >
-> > > I suggest moving the zeroing to slc_open() - i.e. to the netdev open
-> > > function. As a bonus, you can then remove the same two assignments from
-> > > slc_close() (see above). They are only used when netif_running(), with
-> > > appropiate guards already in place as far as I can see.
-> >
-> > I think it is better to keep the code as it is, since at the entry of
-> > the netdev
-> > open function, netif_running already returns true (it is set to true by the
-> > calling function) and therefore it would be less safe to reset the
-> > rcount and xleft
-> > fields.
->
-> Wow, great catch!
->
-> I wonder why __LINK_STATE_START is set before ->ndo_open() is called...?
->
->
-> Since the drivers are similar, I've checked can327. It is unaffected,
-> because the counters are additionally guarded by a spinlock. Same in
-> slcan, where netdev_close() takes the spinlock to reset the counters.
->
-> So you *could* move them to netdev_open() *if* they are always guarded
-> by the slcan lock.
->
-> Or, leave it as it is, as it seems to be correct. Your choice :)
+The series also contains patches that remove the legacy stuff (slcan_devs,
+SLCAN_MAGIC, ...) and do some module cleanup.
 
-If possible I prefer not to use spin_lock. So I prefer to keep the code as is.
-Thanks and regards,
-Dario
+The series has been created on top of the patches:
 
->
->
-> Thank you!
->
-> Max
+can: slcan: convert comments to network style comments
+can: slcan: slcan_init() convert printk(LEVEL ...) to pr_level()
+can: slcan: fix whitespace issues
+can: slcan: convert comparison to NULL into !val
+can: slcan: clean up if/else
+can: slcan: use scnprintf() as a hardening measure
+can: slcan: do not report txerr and rxerr during bus-off
+can: slcan: do not sleep with a spin lock held
 
+applied to linux-next.
 
+[1] https://lore.kernel.org/all/20220628163137.413025-1-dario.binacchi@amarulasolutions.com/
+
+Changes in v3:
+- Update the commit message.
+- Use 1 space in front of the =.
+- Put the series as RFC again.
+- Pick up the patch "can: slcan: use KBUILD_MODNAME and define pr_fmt to replace hardcoded names".
+- Add the patch "ethtool: add support to get/set CAN bit time register"
+  to the series.
+- Add the patch "can: slcan: add support to set bit time register (btr)"
+  to the series.
+- Replace the link https://marc.info/?l=linux-can&m=165806705927851&w=2 with
+  https://lore.kernel.org/all/507b5973-d673-4755-3b64-b41cb9a13b6f@hartkopp.net.
+- Add the `Suggested-by' tag.
+
+Changes in v2:
+- Re-add headers that export at least one symbol used by the module.
+- Update the commit description.
+- Drop the old "slcan" name to use the standard canX interface naming.
+- Remove comment on listen-only command.
+- Update the commit subject and description.
+- Add the patch "MAINTAINERS: Add myself as maintainer of the SLCAN driver"
+  to the series.
+
+Dario Binacchi (8):
+  can: slcan: remove useless header inclusions
+  can: slcan: remove legacy infrastructure
+  can: slcan: change every `slc' occurrence in `slcan'
+  can: slcan: use the generic can_change_mtu()
+  can: slcan: add support for listen-only mode
+  ethtool: add support to get/set CAN bit time register
+  can: slcan: add support to set bit time register (btr)
+  MAINTAINERS: Add maintainer for the slcan driver
+
+Vincent Mailhol (1):
+  can: slcan: use KBUILD_MODNAME and define pr_fmt to replace hardcoded
+    names
+
+ MAINTAINERS                           |   6 +
+ drivers/net/can/slcan/slcan-core.c    | 515 +++++++++-----------------
+ drivers/net/can/slcan/slcan-ethtool.c |  13 +
+ drivers/net/can/slcan/slcan.h         |   1 +
+ include/uapi/linux/ethtool.h          |   1 +
+ net/ethtool/common.c                  |   1 +
+ net/ethtool/ioctl.c                   |   1 +
+ 7 files changed, 204 insertions(+), 334 deletions(-)
 
 -- 
+2.32.0
 
-Dario Binacchi
-
-Embedded Linux Developer
-
-dario.binacchi@amarulasolutions.com
-
-__________________________________
-
-
-Amarula Solutions SRL
-
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-
-T. +39 042 243 5310
-info@amarulasolutions.com
-
-www.amarulasolutions.com
