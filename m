@@ -2,51 +2,51 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A66A8581113
-	for <lists+linux-can@lfdr.de>; Tue, 26 Jul 2022 12:25:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AF1D581115
+	for <lists+linux-can@lfdr.de>; Tue, 26 Jul 2022 12:25:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233180AbiGZKZl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 26 Jul 2022 06:25:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55478 "EHLO
+        id S233109AbiGZKZo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 26 Jul 2022 06:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238311AbiGZKZk (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 26 Jul 2022 06:25:40 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D20221
-        for <linux-can@vger.kernel.org>; Tue, 26 Jul 2022 03:25:38 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id b7-20020a17090a12c700b001f20eb82a08so16865494pjg.3
-        for <linux-can@vger.kernel.org>; Tue, 26 Jul 2022 03:25:38 -0700 (PDT)
+        with ESMTP id S238483AbiGZKZm (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 26 Jul 2022 06:25:42 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CBADB7D6
+        for <linux-can@vger.kernel.org>; Tue, 26 Jul 2022 03:25:41 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id f11-20020a17090a4a8b00b001f2f7e32d03so708465pjh.0
+        for <linux-can@vger.kernel.org>; Tue, 26 Jul 2022 03:25:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=bGGyEEdPfjlH1QaPzOP46sjt0adhPkjHvUuvLk8R2os=;
-        b=SbPNM7AkFEf/tW/wZ3ddGpKmQ4cqmNzVupsm1oAP+A6IYJfAYoZqMC6t4fRXMpHFet
-         /Mzcq5mvIuR5NJJ+Ks2139uYazfOjFMKyzAODrcUZGhZQx3D7LH8ogNKtS3uHx5XeA3D
-         xWChng+LeElMahxZlsve5N+jmGUATFyN1NM/HSMSDuYHlq6PBVBPzVYFJFy6aLClt1LK
-         4O7HjHOvhY39RLwgTHBd0axoYRpsVZJRpSdNBZ4A7v2dgseqkKzS2kq4RHzwKmlTyncr
-         t/CymFznvmxIOYbaZZufK6I/QT71SeeR4ukIEfzW2s2U/hRvlMrwD+PXllG5S0Fsk+oc
-         DPOw==
+        bh=r5Txqu8QqXk1j94Vu9ZhuEySdqC2ZrZ0pryhl2/h6u4=;
+        b=OratSyFjs8lguRMoLLR/6XbSIus3l89GNJQCnkMhiNE+yEq26tSWrhPDxGDuy1RrjV
+         CY49k6KBT3flryi3LiyMQLt8rPS39DkKFNr9aqLftTTAArPXtwJrHqbbVI+DnpGzPAgx
+         +yF3Bak1XL0x/itHSBsGme/5kx5Y7ARJYCHLUvSBhBIaC4GMquMNuy1alLHDkjQwk4ax
+         DFTZbjqhlt3u1tqMMmruNIXx3SDIW5Be4w4yDZk9QwkvyTokBShm2bC+SyG4jfxLi/BE
+         uuwFRS3IIqKDWonYEq1+ovUADDomBPDFJWUPkjXL6KbBur2hf0RlnvEC2ok/hyrJrbOw
+         QSww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=bGGyEEdPfjlH1QaPzOP46sjt0adhPkjHvUuvLk8R2os=;
-        b=NO7736ZTkZSZjGX5mO8VaI8ZvdbIFsdXZpe8gpq6ar9nRHX29K6mO9/EK6TxoMxJ5F
-         7jH7nEajZk8HgMCN9ctWtbGkx875O6WlEiKRtcgURl5/WwukDGqd4IEWebt4Cywuy551
-         5zWmBT3FFaQIAbGXQ8d0l0YJYycQQbr18lfm2CddhEmCm/xtrS9X04yy/y1CrUfNnuBE
-         /e6uEFvhZgj7BXrdJ4pvVREHQbpJu7WXSA5sL5siQKIW1aNa6aG09zSi9ZRWSPLdwYi4
-         duGJg6XZG1KgswBIx18R8NXKgxGdw42SA09SQU5/Lw1TTUK2iqctZ8OR10R1rT5oLyv+
-         6SSA==
-X-Gm-Message-State: AJIora+xJuRo1gdEsaqhICyMu5Z3C1iZP+4xFQgN+DcyrOAHxAMD3tz9
-        v4w+F/lBKqy/m22zsESzfb78lCB1el3qtw==
-X-Google-Smtp-Source: AGRyM1ulYMy0MFd/N2Hf81XycX6vsQmY9NL/1bFQ0OIjs4cQa7EOwOPWyWpFJ69U5qw+APoTz2Fmuw==
-X-Received: by 2002:a17:90b:4c52:b0:1f2:c763:5303 with SMTP id np18-20020a17090b4c5200b001f2c7635303mr7282691pjb.21.1658831138181;
-        Tue, 26 Jul 2022 03:25:38 -0700 (PDT)
+        bh=r5Txqu8QqXk1j94Vu9ZhuEySdqC2ZrZ0pryhl2/h6u4=;
+        b=2m21QRbm2PeK4mR2U4VqDLlRyL3gme58XQP1xwj5OYkkIe3WuNMU5hjdJu5LKC70oJ
+         qp0UT/zh3dnr0IerIOI+zMct3cxtIpKpcSN5URx4lsScmkAwm+dmZR1DgIzNdN2ju3VF
+         CFLGwqDDuS1dJMzE/PhSXdukAvsTL82fygeGsLxFB0Sc7qxrki2wqG2sc6H+mxPFySBh
+         P6p3ohLkoS+IkNjgNxFlEWYCFS8Wjqhyt3moOB46a7vzjvuIjRY85q+tjCsg0LRgGiRr
+         oZjV8Sd7gVbq/mBFfG9LTl7EEAbEXagJJzp039xWi9EVHYJIAURpD+f3kHlo9qNXZR4/
+         bTBA==
+X-Gm-Message-State: AJIora9sXewf+H/InX6H8K2FclYYrsf1ROg7zRD1tWGPOKUAA+wY96l+
+        4fgOnfupkYrFM/3PrJ2uUGusfnyn9hfoyw==
+X-Google-Smtp-Source: AGRyM1skROypJl4H5W6U7pAZrXQFzlFg9UbNSMIr/UHar5I5xshaS0HV8DVRlnKsBSDVVwlOsWb9hA==
+X-Received: by 2002:a17:903:2311:b0:16d:9b91:9547 with SMTP id d17-20020a170903231100b0016d9b919547mr3002596plh.18.1658831140444;
+        Tue, 26 Jul 2022 03:25:40 -0700 (PDT)
 Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id y6-20020a655b46000000b00411bbcdfbf7sm9869894pgr.87.2022.07.26.03.25.35
+        by smtp.gmail.com with ESMTPSA id y6-20020a655b46000000b00411bbcdfbf7sm9869894pgr.87.2022.07.26.03.25.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 03:25:37 -0700 (PDT)
+        Tue, 26 Jul 2022 03:25:40 -0700 (PDT)
 Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
 From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 To:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
@@ -56,9 +56,9 @@ Cc:     Stephane Grosjean <s.grosjean@peak-system.com>,
         Dario Binacchi <dario.binacchi@amarulasolutions.com>,
         Max Staudt <max@enpas.org>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v3 07/14] can: dev: add generic function can_ethtool_op_get_ts_info_hwts()
-Date:   Tue, 26 Jul 2022 19:24:47 +0900
-Message-Id: <20220726102454.95096-8-mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v3 08/14] can: dev: add generic function can_eth_ioctl_hwts()
+Date:   Tue, 26 Jul 2022 19:24:48 +0900
+Message-Id: <20220726102454.95096-9-mailhol.vincent@wanadoo.fr>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220726102454.95096-1-mailhol.vincent@wanadoo.fr>
 References: <20220725133208.432176-1-mailhol.vincent@wanadoo.fr>
@@ -75,82 +75,77 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Add function can_ethtool_op_get_ts_info_hwts(). This function will be
-used by CAN devices with hardware TX/RX timestamping support to
-implement ethtool_ops::get_ts_info. This function does not offer
-support to activate/deactivate hardware timestamps at device level nor
-support the filter options (which is currently the case for all CAN
-devices with hardware timestamping support).
+Tools based on libpcap (such as tcpdump) expect the SIOCSHWTSTAMP
+ioctl call to be supported. This is also specified in the kernel doc
+[1]. The purpose of this ioctl is to toggle the hardware timestamps.
 
-The fact that hardware timestamp can not be deactivated at hardware
-level does not impact the userland. As long as the user do not set
-SO_TIMESTAMPING using a setsockopt() or ioctl(), the kernel will not
-emit TX timestamps (RX timestamps will still be reproted as it is the
-case currently).
+Currently, CAN devices which support hardware timestamping have those
+always activated. can_eth_ioctl_hwts() is a dumb function that will
+always succeed when requested to set tx_type to HWTSTAMP_TX_ON or
+rx_filter to HWTSTAMP_FILTER_ALL.
 
-Drivers which need more fine grained control remains free to implement
-their own function, but we foresee that the generic function
-introduced here will be sufficient for the majority.
+[1] Kernel doc: Timestamping, section 3.1 "Hardware Timestamping
+Implementation: Device Drivers"
+Link: https://docs.kernel.org/networking/timestamping.html#hardware-timestamping-implementation-device-drivers
 
 Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 ---
- drivers/net/can/dev/dev.c | 21 +++++++++++++++++++++
- include/linux/can/dev.h   |  3 +++
- 2 files changed, 24 insertions(+)
+ drivers/net/can/dev/dev.c | 29 +++++++++++++++++++++++++++++
+ include/linux/can/dev.h   |  1 +
+ 2 files changed, 30 insertions(+)
 
 diff --git a/drivers/net/can/dev/dev.c b/drivers/net/can/dev/dev.c
-index 523eaacfe29e..f307034ff4fd 100644
+index f307034ff4fd..c1956b1e9faf 100644
 --- a/drivers/net/can/dev/dev.c
 +++ b/drivers/net/can/dev/dev.c
-@@ -322,6 +322,27 @@ int can_change_mtu(struct net_device *dev, int new_mtu)
+@@ -322,6 +322,35 @@ int can_change_mtu(struct net_device *dev, int new_mtu)
  }
  EXPORT_SYMBOL_GPL(can_change_mtu);
  
-+/* generic implementation of ethtool_ops::get_ts_info for CAN devices
++/* generic implementation of netdev_ops::ndo_eth_ioctl for CAN devices
 + * supporting hardware timestamps
 + */
-+int can_ethtool_op_get_ts_info_hwts(struct net_device *dev,
-+				    struct ethtool_ts_info *info)
++int can_eth_ioctl_hwts(struct net_device *netdev, struct ifreq *ifr, int cmd)
 +{
-+	info->so_timestamping =
-+		SOF_TIMESTAMPING_TX_SOFTWARE |
-+		SOF_TIMESTAMPING_RX_SOFTWARE |
-+		SOF_TIMESTAMPING_SOFTWARE |
-+		SOF_TIMESTAMPING_TX_HARDWARE |
-+		SOF_TIMESTAMPING_RX_HARDWARE |
-+		SOF_TIMESTAMPING_RAW_HARDWARE;
-+	info->phc_index = -1;
-+	info->tx_types = BIT(HWTSTAMP_TX_ON);
-+	info->rx_filters = BIT(HWTSTAMP_FILTER_ALL);
++	struct hwtstamp_config hwts_cfg = { 0 };
 +
-+	return 0;
++	switch (cmd) {
++	case SIOCSHWTSTAMP: /* set */
++		if (copy_from_user(&hwts_cfg, ifr->ifr_data, sizeof(hwts_cfg)))
++			return -EFAULT;
++		if (hwts_cfg.tx_type == HWTSTAMP_TX_ON &&
++		    hwts_cfg.rx_filter == HWTSTAMP_FILTER_ALL)
++			return 0;
++		return -ERANGE;
++
++	case SIOCGHWTSTAMP: /* get */
++		hwts_cfg.tx_type = HWTSTAMP_TX_ON;
++		hwts_cfg.rx_filter = HWTSTAMP_FILTER_ALL;
++		if (copy_to_user(ifr->ifr_data, &hwts_cfg, sizeof(hwts_cfg)))
++			return -EFAULT;
++		return 0;
++
++	default:
++		return -EOPNOTSUPP;
++	}
 +}
-+EXPORT_SYMBOL(can_ethtool_op_get_ts_info_hwts);
++EXPORT_SYMBOL(can_eth_ioctl_hwts);
 +
- /* Common open function when the device gets opened.
-  *
-  * This function should be called in the open function of the device
+ /* generic implementation of ethtool_ops::get_ts_info for CAN devices
+  * supporting hardware timestamps
+  */
 diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
-index e22dc03c850e..752bd45d8ebf 100644
+index 752bd45d8ebf..c3e50e537e39 100644
 --- a/include/linux/can/dev.h
 +++ b/include/linux/can/dev.h
-@@ -20,6 +20,7 @@
- #include <linux/can/length.h>
- #include <linux/can/netlink.h>
- #include <linux/can/skb.h>
-+#include <linux/ethtool.h>
- #include <linux/netdevice.h>
- 
- /*
-@@ -162,6 +163,8 @@ struct can_priv *safe_candev_priv(struct net_device *dev);
+@@ -163,6 +163,7 @@ struct can_priv *safe_candev_priv(struct net_device *dev);
  int open_candev(struct net_device *dev);
  void close_candev(struct net_device *dev);
  int can_change_mtu(struct net_device *dev, int new_mtu);
-+int can_ethtool_op_get_ts_info_hwts(struct net_device *dev,
-+				    struct ethtool_ts_info *info);
++int can_eth_ioctl_hwts(struct net_device *netdev, struct ifreq *ifr, int cmd);
+ int can_ethtool_op_get_ts_info_hwts(struct net_device *dev,
+ 				    struct ethtool_ts_info *info);
  
- int register_candev(struct net_device *dev);
- void unregister_candev(struct net_device *dev);
 -- 
 2.35.1
 
