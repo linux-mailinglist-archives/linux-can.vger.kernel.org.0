@@ -2,51 +2,51 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C50B15823FD
-	for <lists+linux-can@lfdr.de>; Wed, 27 Jul 2022 12:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6D3D582400
+	for <lists+linux-can@lfdr.de>; Wed, 27 Jul 2022 12:17:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbiG0KRX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 27 Jul 2022 06:17:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52870 "EHLO
+        id S231415AbiG0KRZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 27 Jul 2022 06:17:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231580AbiG0KRW (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 27 Jul 2022 06:17:22 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72CBF220DA
-        for <linux-can@vger.kernel.org>; Wed, 27 Jul 2022 03:17:21 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id f11so15540025pgj.7
-        for <linux-can@vger.kernel.org>; Wed, 27 Jul 2022 03:17:21 -0700 (PDT)
+        with ESMTP id S231499AbiG0KRY (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 27 Jul 2022 06:17:24 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8879F42ADA
+        for <linux-can@vger.kernel.org>; Wed, 27 Jul 2022 03:17:23 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id e1so5369831pjl.1
+        for <linux-can@vger.kernel.org>; Wed, 27 Jul 2022 03:17:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=r5Txqu8QqXk1j94Vu9ZhuEySdqC2ZrZ0pryhl2/h6u4=;
-        b=YTKN/NzE8WHdYkUBqILSCxfG0khjzXHh1pnOMCSO/vs2NDR1iRj89UJjP4nSR9dmE8
-         Ds+AXp/hu4zY9Baj2GxCQp5wJXXKc4RcdsywfnrlOT07Fi2I4nAwfOfYXsjkqDbprTlJ
-         Mjv00u56lDG1qnulsSUa7BESXaRh7wQwzTEWmTplt7rA3Ley43OJ4ZlrvuwxbJ0IDY36
-         hc69V9+tltkHNR1fQuBTbDzHV/0c56f99en87H6AJ2HeQvGwKpH4973qGCstHdb4UPkw
-         7U0/rP2W6IDx0IYGIJZ8wKaYwHkTxTqcGXg9Gg17OgEVd2PPLQpaUXcMGAWoYKCdL1t7
-         tRjQ==
+        bh=980oFUpwJI5Mz79NnWWqDdwdmI9aJZAPmUQwx1kpVq4=;
+        b=UWnT+OhqkhtuYuTyZxYDrRxyIpoBZo8DR3IAxqtFRWM/LcE9ITAFVrX4OGmHpViaVO
+         y7+WjzWR66FJIg2Zkx1377njoY+z0tTxNRy2A1SJmxNhRnvWvujQN2eADU/tdDMUQ2fr
+         D9jXOCcg2+4l8/SgsxKlP0XGca78UKxSE6A+TrbDPELusiZ0RRLQf2LeXh0dICrdMlH7
+         2H0+wIJcwqDoh5TAvS3c4wgBDYCoIE7lYjWaSlkWLaDB3YocQ7UhJomP3evwZXUW6U3R
+         MA2BTB0jOIHzMZjLpc/TkCPSm1foSyfjeJSKiXVwhpdJRwIjrK947A7rh19s6jAmQ6BC
+         Y+yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=r5Txqu8QqXk1j94Vu9ZhuEySdqC2ZrZ0pryhl2/h6u4=;
-        b=ezRoA9c3oqheRGlkOR6nYFfAuPzkL6UmvvRqfMwGuLItXAJ0jZaQJKzCc8CZC1HR4i
-         a2Utm76et4Myd+of7FJJpIX8Z0OdUyUGT4nXzVshokCW9bMw9LEDdAnyfiESN20GnRsz
-         J/EacdD7CIfboqrKmSnu03cjvdKnErTod9ZKu9zNFFZLZsmN5GS6NqFM/F2K3FGprLc8
-         XkEet6Dpqw46E80fnKl8LrsquXK2UPIU8NaS8O+Ri+f/MilSXATmZ+uwfhxXQY+vjKTa
-         jNT9tPeoiswDBbo94PArroDJJ519LGLYX6dNmr8xp1pxYXKw+canugdmzu1KVVVsS/yl
-         o/gA==
-X-Gm-Message-State: AJIora9CVRNk4mxQwb6+djvSUr53KnQ6tqeCy5K6FcvrOl99Kb82gwr1
-        LzF42JPOF4+D6f/YEyGW3q+s4IkX9b9NOA==
-X-Google-Smtp-Source: AGRyM1u8r6lSizV14EcxK3oU0Dw/bOF6tR7Gfk5coEDfKKSSzvrJDmdVH9o36ah3pDYdVgbWtrPBfw==
-X-Received: by 2002:a05:6a00:4211:b0:52a:c86e:aba3 with SMTP id cd17-20020a056a00421100b0052ac86eaba3mr21840527pfb.41.1658917040590;
-        Wed, 27 Jul 2022 03:17:20 -0700 (PDT)
+        bh=980oFUpwJI5Mz79NnWWqDdwdmI9aJZAPmUQwx1kpVq4=;
+        b=n6+konhTaLnsnveqZiD/Ml5FdeM44x9hQI3posLJi2aL942L5uTTwQNLeWhGQ3AMUQ
+         TS8K/5EKOF+XH21N5xmV8ZWlv8bXMeaOhDV6r9pY+FGvk8KN2il/5uf/WbXjmFLQXjXY
+         X1u8ajzXGW2jgbsZeVASwtQchOa/NlhjtkN5zlMb7Agq787NcKt2kd5aSLGlIMOZE7g1
+         61etyODWE0YhR7XtGSfwk/MbR8WCEWKajA0odX2yZ/hnhym2iIy+FTyIsB4pawMEK4lg
+         TJw23E0i7JQZCzrF/eb3U7qULL66WAi0LE/gpSu4Lq9WEosiRgHGHuXP5pvy1Z5/VvjP
+         ibBA==
+X-Gm-Message-State: AJIora9P6gH6veDpogZZPnsxKSx8/rchuhfKnWnPYgURB8BEBRRbMGlx
+        h7aFxT6aTmrgy9TjQlYI8jdZ2g6Bc+Ta8Q==
+X-Google-Smtp-Source: AGRyM1uWHppPuCaZPrRPF/Q8aqlnnGDDMt9aPK5TfpS/ioYFC30P1sNOEx96+JM0+PRVTsmNhdyECA==
+X-Received: by 2002:a17:90b:3ec4:b0:1f0:5aab:48d6 with SMTP id rm4-20020a17090b3ec400b001f05aab48d6mr3778967pjb.123.1658917042843;
+        Wed, 27 Jul 2022 03:17:22 -0700 (PDT)
 Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id w22-20020aa79556000000b005284e98304csm13260666pfq.205.2022.07.27.03.17.18
+        by smtp.gmail.com with ESMTPSA id w22-20020aa79556000000b005284e98304csm13260666pfq.205.2022.07.27.03.17.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 03:17:20 -0700 (PDT)
+        Wed, 27 Jul 2022 03:17:22 -0700 (PDT)
 Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
 From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 To:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
@@ -56,9 +56,9 @@ Cc:     Stephane Grosjean <s.grosjean@peak-system.com>,
         Dario Binacchi <dario.binacchi@amarulasolutions.com>,
         Max Staudt <max@enpas.org>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v4 08/14] can: dev: add generic function can_eth_ioctl_hwts()
-Date:   Wed, 27 Jul 2022 19:16:35 +0900
-Message-Id: <20220727101641.198847-9-mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v4 09/14] can: mcp251xfd: advertise timestamping capabilities and add ioctl support
+Date:   Wed, 27 Jul 2022 19:16:36 +0900
+Message-Id: <20220727101641.198847-10-mailhol.vincent@wanadoo.fr>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220727101641.198847-1-mailhol.vincent@wanadoo.fr>
 References: <20220725133208.432176-1-mailhol.vincent@wanadoo.fr>
@@ -75,77 +75,56 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Tools based on libpcap (such as tcpdump) expect the SIOCSHWTSTAMP
-ioctl call to be supported. This is also specified in the kernel doc
-[1]. The purpose of this ioctl is to toggle the hardware timestamps.
+Currently, userland has no methods to query which timestamping
+features are supported by the mcp251xfd driver (aside maybe of getting
+RX messages and observe whether or not hardware timestamps stay at
+zero).
 
-Currently, CAN devices which support hardware timestamping have those
-always activated. can_eth_ioctl_hwts() is a dumb function that will
-always succeed when requested to set tx_type to HWTSTAMP_TX_ON or
-rx_filter to HWTSTAMP_FILTER_ALL.
+The canonical way for a network driver to advertise what kind of
+timestamping it supports is to implement
+ethtool_ops::get_ts_info(). Here, we use the CAN specific
+can_ethtool_op_get_ts_info_hwts() function to achieve this.
 
-[1] Kernel doc: Timestamping, section 3.1 "Hardware Timestamping
+In addition, the driver currently does not support the hardware
+timestamps ioctls. According to [1], SIOCSHWTSTAMP is "must" and
+SIOCGHWTSTAMP is "should". This patch fills up that gap by
+implementing net_device_ops::ndo_eth_ioctl() using the CAN specific
+function can_eth_ioctl_hwts().
+
+[1] kernel doc Timestamping, section 3.1: "Hardware Timestamping
 Implementation: Device Drivers"
 Link: https://docs.kernel.org/networking/timestamping.html#hardware-timestamping-implementation-device-drivers
 
 Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 ---
- drivers/net/can/dev/dev.c | 29 +++++++++++++++++++++++++++++
- include/linux/can/dev.h   |  1 +
- 2 files changed, 30 insertions(+)
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c    | 1 +
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-ethtool.c | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/drivers/net/can/dev/dev.c b/drivers/net/can/dev/dev.c
-index f307034ff4fd..c1956b1e9faf 100644
---- a/drivers/net/can/dev/dev.c
-+++ b/drivers/net/can/dev/dev.c
-@@ -322,6 +322,35 @@ int can_change_mtu(struct net_device *dev, int new_mtu)
- }
- EXPORT_SYMBOL_GPL(can_change_mtu);
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+index 7fc86ed405c6..68df6d4641b5 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+@@ -1671,6 +1671,7 @@ static const struct net_device_ops mcp251xfd_netdev_ops = {
+ 	.ndo_open = mcp251xfd_open,
+ 	.ndo_stop = mcp251xfd_stop,
+ 	.ndo_start_xmit	= mcp251xfd_start_xmit,
++	.ndo_eth_ioctl = can_eth_ioctl_hwts,
+ 	.ndo_change_mtu = can_change_mtu,
+ };
  
-+/* generic implementation of netdev_ops::ndo_eth_ioctl for CAN devices
-+ * supporting hardware timestamps
-+ */
-+int can_eth_ioctl_hwts(struct net_device *netdev, struct ifreq *ifr, int cmd)
-+{
-+	struct hwtstamp_config hwts_cfg = { 0 };
-+
-+	switch (cmd) {
-+	case SIOCSHWTSTAMP: /* set */
-+		if (copy_from_user(&hwts_cfg, ifr->ifr_data, sizeof(hwts_cfg)))
-+			return -EFAULT;
-+		if (hwts_cfg.tx_type == HWTSTAMP_TX_ON &&
-+		    hwts_cfg.rx_filter == HWTSTAMP_FILTER_ALL)
-+			return 0;
-+		return -ERANGE;
-+
-+	case SIOCGHWTSTAMP: /* get */
-+		hwts_cfg.tx_type = HWTSTAMP_TX_ON;
-+		hwts_cfg.rx_filter = HWTSTAMP_FILTER_ALL;
-+		if (copy_to_user(ifr->ifr_data, &hwts_cfg, sizeof(hwts_cfg)))
-+			return -EFAULT;
-+		return 0;
-+
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+EXPORT_SYMBOL(can_eth_ioctl_hwts);
-+
- /* generic implementation of ethtool_ops::get_ts_info for CAN devices
-  * supporting hardware timestamps
-  */
-diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
-index 752bd45d8ebf..c3e50e537e39 100644
---- a/include/linux/can/dev.h
-+++ b/include/linux/can/dev.h
-@@ -163,6 +163,7 @@ struct can_priv *safe_candev_priv(struct net_device *dev);
- int open_candev(struct net_device *dev);
- void close_candev(struct net_device *dev);
- int can_change_mtu(struct net_device *dev, int new_mtu);
-+int can_eth_ioctl_hwts(struct net_device *netdev, struct ifreq *ifr, int cmd);
- int can_ethtool_op_get_ts_info_hwts(struct net_device *dev,
- 				    struct ethtool_ts_info *info);
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-ethtool.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-ethtool.c
+index 6c7a57f16cc6..3585f02575df 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-ethtool.c
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-ethtool.c
+@@ -124,6 +124,7 @@ static const struct ethtool_ops mcp251xfd_ethtool_ops = {
+ 	.set_ringparam = mcp251xfd_ring_set_ringparam,
+ 	.get_coalesce = mcp251xfd_ring_get_coalesce,
+ 	.set_coalesce = mcp251xfd_ring_set_coalesce,
++	.get_ts_info = can_ethtool_op_get_ts_info_hwts,
+ };
  
+ void mcp251xfd_ethtool_init(struct mcp251xfd_priv *priv)
 -- 
 2.35.1
 
