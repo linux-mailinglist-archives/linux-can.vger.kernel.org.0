@@ -2,51 +2,51 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 073F6582405
-	for <lists+linux-can@lfdr.de>; Wed, 27 Jul 2022 12:17:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FED9582406
+	for <lists+linux-can@lfdr.de>; Wed, 27 Jul 2022 12:17:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231499AbiG0KRe (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 27 Jul 2022 06:17:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53112 "EHLO
+        id S231786AbiG0KRi (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 27 Jul 2022 06:17:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231529AbiG0KRd (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 27 Jul 2022 06:17:33 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3EA342ADA
-        for <linux-can@vger.kernel.org>; Wed, 27 Jul 2022 03:17:32 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id t2-20020a17090a4e4200b001f21572f3a4so1713825pjl.0
-        for <linux-can@vger.kernel.org>; Wed, 27 Jul 2022 03:17:32 -0700 (PDT)
+        with ESMTP id S231580AbiG0KRf (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 27 Jul 2022 06:17:35 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7D142AE5
+        for <linux-can@vger.kernel.org>; Wed, 27 Jul 2022 03:17:34 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id bf13so15516158pgb.11
+        for <linux-can@vger.kernel.org>; Wed, 27 Jul 2022 03:17:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=+Rc2jzSToE2WVmBBseF0efCy3p2ZF+4b2IH/8Qzzf5s=;
-        b=XykStxtamg3FuXPFNdXihMLAKwUJJagTYjJ/vIJSSVnAHtbCczlxAi3Gmvv3NzsowU
-         R1xxM6l+h3awHQDODvGQfT3jzpMz3O3Q2NsfCwBr08xEsFilWqtpjEZpTKmxTVkRzXFF
-         eG1jlVH2kF+epOQ0ahSSIWby7xZYcAl6mi8gxbXjUsjlghMVvDryM4UFHZC/X54rbENO
-         aN2Mqr8oDCPGhyd46uMu7tbiWGNlIXZxDYSVjFGfZbiRFaXR9OUPQHC2JJDQXPe2xieu
-         3u/+xT2t68NKJEDG85ejP8wOoHWRSaQWtay6EtImgdD0cDMD/yV9DqAz85zqAbGXJYTf
-         LVrg==
+        bh=o3UfLAGFs/UUTMnnKLBN4WLp0pUigF8hnWvH8xPWBfU=;
+        b=llRo/W/WCkdwGnukaFYxCNsT2e+UhcjFMf5HnkGtkbpuCMguZeo7UeYuw2/FsL8r/c
+         wlZI/2hwjIxJP30zdtVG8U5x57fgjT+8hX3O27C1sC+lePh29ygUEzMkzaCWyQQj6vCq
+         UI8cBAmeg+RHCmlNdI7qTvZxHi4vG6QZ9ypJEhN/2dVPRALPRrSmruiLp/KeTGrm//Z6
+         JHSEznK3xC8ToJkWfG3yF0H+7lCzl4F+0qzaQV2X5yrY+ZvLw92onGiDwbTcQOb0LiCv
+         Ml6uVB8+L/GDkfP7LKuY2kE1aVbuBonDJkOvx78o6/6AklOhELSgELHBiwJdq47M/31D
+         hueA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=+Rc2jzSToE2WVmBBseF0efCy3p2ZF+4b2IH/8Qzzf5s=;
-        b=O85Sa0PxwUjENNbspzkkijqpDom8F7zc+lHRkfi+Py5m+R5GUsTBW+tXBrSjz3KfNB
-         lThU7AYCFdneLytlvzQ7Mm5gE0xi9cPJh06jYDWwECjJIgDZR3XjCkmkvrcgBI6E2PFS
-         V0WpXS/JcBPXgEYOcaYPmcJs2DKks583MDL1dNZuwwTekGQgcNq/g0HkOdLC4UYy87Pd
-         7ZpxTwuwrayF6Qif328iQ4FVR/EYlG3VhnqPMALzaLyJRu2WN/cFK7MAa9p5JiuJnv3l
-         R4MhTi2P/oRgqV4nNtSGq/X1WAKnZROpFwVKYf1r6wcsSXoGv343FqcnCIyCDd3T4Cm3
-         5+Uw==
-X-Gm-Message-State: AJIora9FjV+1NLXNIaXzDPZ/M24GJ9aeicKwhWciZT7gz4Rx1mKY1JYM
-        3cJdLw8d3BvmkXrosjLnvxxCBIS5xhTsQw==
-X-Google-Smtp-Source: AGRyM1u7yB4U/n+zIDi/k30LVD0OmorRWRY+jXmMEF88QgNwcslbSFpfvxkqsI/gvotwTjoG3u+yvw==
-X-Received: by 2002:a17:902:6901:b0:168:9bb4:7adb with SMTP id j1-20020a170902690100b001689bb47adbmr20861762plk.147.1658917051900;
-        Wed, 27 Jul 2022 03:17:31 -0700 (PDT)
+        bh=o3UfLAGFs/UUTMnnKLBN4WLp0pUigF8hnWvH8xPWBfU=;
+        b=n2eAlVxqXyBnPzFJ7ANV8UvgOcBmsw0w9IbR3S1X3XbKNB2pVnM8Rg1SleKu4HmW+K
+         krSL5mpAXxJXk58GhaQJdZiD49dYdk/pTRH2pNwU/yj4YXiMzWGKkFENOeAO6jQe7kni
+         7Xf0CSvpBIckdJ450P9WPSa1zr2L68zlDJNttBQYZR4vPXbMK4Z5UBLWKFXIK9chWcBT
+         0e83c1FBVRYedt11WPt6vIld6Q7t4eY4nKbxTpwmN44lbotLR5VxS66nec6Bhwnr2/xJ
+         mGOzSGf+Atf/J16I9ACYhQl1EDc7lbBYUaFKYvHPKIdVn7gRcJDXtOhu5CI8lMzUn6Fe
+         YRZg==
+X-Gm-Message-State: AJIora8C8bR9WmtSW6IdQJAk6L013LE5T5eX/6b2GnH3hyPh3fciHrZs
+        7Z4L7CH8jlQ0dZcrQbG4srxJ1OF7wgUIng==
+X-Google-Smtp-Source: AGRyM1tBlyYJPy16iGvH/rpN0LdXsA3m1EfgUROm1M3QvqEyAyKkVPs3ZNz3cOJrpeK6LCpRXbNu4A==
+X-Received: by 2002:a05:6a00:21c2:b0:52b:ff44:6680 with SMTP id t2-20020a056a0021c200b0052bff446680mr11559333pfj.57.1658917054147;
+        Wed, 27 Jul 2022 03:17:34 -0700 (PDT)
 Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id w22-20020aa79556000000b005284e98304csm13260666pfq.205.2022.07.27.03.17.29
+        by smtp.gmail.com with ESMTPSA id w22-20020aa79556000000b005284e98304csm13260666pfq.205.2022.07.27.03.17.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 03:17:31 -0700 (PDT)
+        Wed, 27 Jul 2022 03:17:33 -0700 (PDT)
 Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
 From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 To:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
@@ -56,9 +56,9 @@ Cc:     Stephane Grosjean <s.grosjean@peak-system.com>,
         Dario Binacchi <dario.binacchi@amarulasolutions.com>,
         Max Staudt <max@enpas.org>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v4 13/14] can: peak_canfd: advertise timestamping capabilities and add ioctl support
-Date:   Wed, 27 Jul 2022 19:16:40 +0900
-Message-Id: <20220727101641.198847-14-mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v4 14/14] can: peak_usb: advertise timestamping capabilities and add ioctl support
+Date:   Wed, 27 Jul 2022 19:16:41 +0900
+Message-Id: <20220727101641.198847-15-mailhol.vincent@wanadoo.fr>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220727101641.198847-1-mailhol.vincent@wanadoo.fr>
 References: <20220725133208.432176-1-mailhol.vincent@wanadoo.fr>
@@ -76,7 +76,7 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 Currently, userland has no method to query which timestamping features
-are supported by the peak_canfd driver (aside maybe of getting RX
+are supported by the peak_usb driver (aside maybe of getting RX
 messages and observe whether or not hardware timestamps stay at zero).
 
 The canonical way to add hardware timestamp support is to implement
@@ -85,35 +85,43 @@ capabilities and to implement net_device_ops::ndo_eth_ioctl() as
 requested in [1]. Currently, the driver only supports hardware RX
 timestamps [2] but not hardware TX. For this reason, the generic
 function can_ethtool_op_get_ts_info_hwts() and can_eth_ioctl_hwts()
-can not be reused and instead this patch adds peak_get_ts_info() and
+can not be reused and instead this patch adds pcan_get_ts_info() and
 peak_eth_ioctl().
 
 [1] kernel doc Timestamping, section 3.1: "Hardware Timestamping
 Implementation: Device Drivers"
 Link: https://docs.kernel.org/networking/timestamping.html#hardware-timestamping-implementation-device-drivers
 
-[2] https://lore.kernel.org/linux-can/20220727084257.brcbbf7lksoeekbr@pengutronix.de/
+[2] https://lore.kernel.org/linux-can/20220727080634.l6uttnbrmwbabh3o@pengutronix.de/
 
 CC: Stephane Grosjean <s.grosjean@peak-system.com>
 Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 ---
- drivers/net/can/peak_canfd/peak_canfd.c | 48 +++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+ drivers/net/can/usb/peak_usb/pcan_usb.c      |  1 +
+ drivers/net/can/usb/peak_usb/pcan_usb_core.c | 41 ++++++++++++++++++++
+ drivers/net/can/usb/peak_usb/pcan_usb_core.h |  1 +
+ drivers/net/can/usb/peak_usb/pcan_usb_fd.c   |  1 +
+ drivers/net/can/usb/peak_usb/pcan_usb_pro.c  |  1 +
+ 5 files changed, 45 insertions(+)
 
-diff --git a/drivers/net/can/peak_canfd/peak_canfd.c b/drivers/net/can/peak_canfd/peak_canfd.c
-index afb9adb3d5c2..f8420cc1d907 100644
---- a/drivers/net/can/peak_canfd/peak_canfd.c
-+++ b/drivers/net/can/peak_canfd/peak_canfd.c
-@@ -7,6 +7,7 @@
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb.c b/drivers/net/can/usb/peak_usb/pcan_usb.c
+index d07b7ee79e3e..687dd542f7f6 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb.c
++++ b/drivers/net/can/usb/peak_usb/pcan_usb.c
+@@ -965,6 +965,7 @@ static int pcan_usb_set_phys_id(struct net_device *netdev,
  
- #include <linux/can.h>
- #include <linux/can/dev.h>
-+#include <linux/ethtool.h>
+ static const struct ethtool_ops pcan_usb_ethtool_ops = {
+ 	.set_phys_id = pcan_usb_set_phys_id,
++	.get_ts_info = pcan_get_ts_info,
+ };
  
- #include "peak_canfd_user.h"
- 
-@@ -742,13 +743,59 @@ static netdev_tx_t peak_canfd_start_xmit(struct sk_buff *skb,
- 	return NETDEV_TX_OK;
+ /*
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.c b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+index 27b0a72fd885..8c9d53f6e24c 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb_core.c
++++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+@@ -775,13 +775,54 @@ static int peak_usb_set_data_bittiming(struct net_device *netdev)
+ 	return 0;
  }
  
 +static int peak_eth_ioctl(struct net_device *netdev, struct ifreq *ifr, int cmd)
@@ -141,16 +149,15 @@ index afb9adb3d5c2..f8420cc1d907 100644
 +	}
 +}
 +
- static const struct net_device_ops peak_canfd_netdev_ops = {
- 	.ndo_open = peak_canfd_open,
- 	.ndo_stop = peak_canfd_close,
+ static const struct net_device_ops peak_usb_netdev_ops = {
+ 	.ndo_open = peak_usb_ndo_open,
+ 	.ndo_stop = peak_usb_ndo_stop,
 +	.ndo_eth_ioctl = peak_eth_ioctl,
- 	.ndo_start_xmit = peak_canfd_start_xmit,
+ 	.ndo_start_xmit = peak_usb_ndo_start_xmit,
  	.ndo_change_mtu = can_change_mtu,
  };
  
-+static int peak_get_ts_info(struct net_device *dev,
-+			    struct ethtool_ts_info *info)
++int pcan_get_ts_info(struct net_device *dev, struct ethtool_ts_info *info)
 +{
 +	info->so_timestamping =
 +		SOF_TIMESTAMPING_TX_SOFTWARE |
@@ -165,21 +172,44 @@ index afb9adb3d5c2..f8420cc1d907 100644
 +	return 0;
 +}
 +
-+static const struct ethtool_ops peak_canfd_ethtool_ops = {
-+	.get_ts_info = peak_get_ts_info,
-+};
-+
- struct net_device *alloc_peak_canfd_dev(int sizeof_priv, int index,
- 					int echo_skb_max)
- {
-@@ -789,6 +836,7 @@ struct net_device *alloc_peak_canfd_dev(int sizeof_priv, int index,
+ /*
+  * create one device which is attached to CAN controller #ctrl_idx of the
+  * usb adapter.
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.h b/drivers/net/can/usb/peak_usb/pcan_usb_core.h
+index 9c90487b9c92..f6bdd8b3f290 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb_core.h
++++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.h
+@@ -145,5 +145,6 @@ int peak_usb_netif_rx(struct sk_buff *skb,
+ int peak_usb_netif_rx_64(struct sk_buff *skb, u32 ts_low, u32 ts_high);
+ void peak_usb_async_complete(struct urb *urb);
+ void peak_usb_restart_complete(struct peak_usb_device *dev);
++int pcan_get_ts_info(struct net_device *dev, struct ethtool_ts_info *info);
  
- 	ndev->flags |= IFF_ECHO;
- 	ndev->netdev_ops = &peak_canfd_netdev_ops;
-+	ndev->ethtool_ops = &peak_canfd_ethtool_ops;
- 	ndev->dev_id = index;
+ #endif
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
+index 3d7e0e370505..2ea1500df393 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
++++ b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
+@@ -1080,6 +1080,7 @@ static int pcan_usb_fd_set_phys_id(struct net_device *netdev,
  
- 	return ndev;
+ static const struct ethtool_ops pcan_usb_fd_ethtool_ops = {
+ 	.set_phys_id = pcan_usb_fd_set_phys_id,
++	.get_ts_info = pcan_get_ts_info,
+ };
+ 
+ /* describes the PCAN-USB FD adapter */
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_pro.c b/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
+index 457887113e75..5d8f6a40bb2c 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
++++ b/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
+@@ -1022,6 +1022,7 @@ static int pcan_usb_pro_set_phys_id(struct net_device *netdev,
+ 
+ static const struct ethtool_ops pcan_usb_pro_ethtool_ops = {
+ 	.set_phys_id = pcan_usb_pro_set_phys_id,
++	.get_ts_info = pcan_get_ts_info,
+ };
+ 
+ /*
 -- 
 2.35.1
 
