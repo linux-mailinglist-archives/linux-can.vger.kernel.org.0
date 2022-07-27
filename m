@@ -2,165 +2,136 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B886582252
-	for <lists+linux-can@lfdr.de>; Wed, 27 Jul 2022 10:43:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7DDB5822AF
+	for <lists+linux-can@lfdr.de>; Wed, 27 Jul 2022 11:05:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbiG0InG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 27 Jul 2022 04:43:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58478 "EHLO
+        id S229600AbiG0JFa (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 27 Jul 2022 05:05:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbiG0InF (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 27 Jul 2022 04:43:05 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B4345995
-        for <linux-can@vger.kernel.org>; Wed, 27 Jul 2022 01:43:04 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oGcdB-0006ds-4E; Wed, 27 Jul 2022 10:43:01 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id D42C1BBF23;
-        Wed, 27 Jul 2022 08:42:59 +0000 (UTC)
-Date:   Wed, 27 Jul 2022 10:42:57 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can@vger.kernel.org,
+        with ESMTP id S229485AbiG0JF2 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 27 Jul 2022 05:05:28 -0400
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9C143306
+        for <linux-can@vger.kernel.org>; Wed, 27 Jul 2022 02:05:27 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id z132so10369483yba.3
+        for <linux-can@vger.kernel.org>; Wed, 27 Jul 2022 02:05:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sFBMfGT4OltIzhibguDimQkyPHoLX7DJYDR7NOt+V68=;
+        b=cagpsW9Pjoa024QUv2tipgqRc6xD6BXjdgmoaWGrb10NUY8cJbc7fWIngnszwCmH4T
+         KT1jIGvL3kqeW8LZyKqfJodeeOi9O4uBdykrhdvNMs2J2YVA07V+D1q6t+nmpnrjnkjn
+         78beI3RmkCQZ66dY0fPJLNdNBwnNsSQNh0KmTGm9gUiEs9GOwUyjVI4MmI6f6HkQCtvn
+         t4fcZ7T/vdp5rROG0DIZJN70/3p1Zca3aIiU3rKkhwtxyqmAl+6xFfgxj6M3SlwOonWm
+         3QgTtdpHsdtCSuaQ56oXN8z17ec/cyrQuogKaX+uWdYaHnTSZq3EoUx6l5eC5afMtACo
+         uzwg==
+X-Gm-Message-State: AJIora/Pyjo6IiCd+gX/VWjNpjwWL9raBpX6Kp4Zu2pgKRLnRb3PujpX
+        WHGnynvWl9JWv3O5/fsu4jDP43BdWPQE8HXRVf9ZLDzAqSpM6Q==
+X-Google-Smtp-Source: AGRyM1tTinQ9W57ugwf7E469xeCl7eoRxDujqD1sTJ13Jjv4MzrH6ulU3oO1k0Sd5fLJ8yjOVYFZU1xYxYvZpiHR86Y=
+X-Received: by 2002:a25:3789:0:b0:671:6d58:f242 with SMTP id
+ e131-20020a253789000000b006716d58f242mr6611063yba.142.1658912726362; Wed, 27
+ Jul 2022 02:05:26 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220725133208.432176-1-mailhol.vincent@wanadoo.fr>
+ <20220725133208.432176-11-mailhol.vincent@wanadoo.fr> <CABGWkvoqkETb0H-UWhwPCk1eMwQC2ExfKUXm25Mv4R5g0kjb+Q@mail.gmail.com>
+ <CAMZ6Rq+Wd412aFSiuLsjPE=aT0UQVNqp9FEZCEkjdU71hVWR0Q@mail.gmail.com>
+ <CABGWkvqA5p=h7fHabH4iKoppvrypedonEnLnohgm0j+Nm-70NA@mail.gmail.com>
+ <CAMZ6RqLhPHzv_zdPsE2QHOD7RgxYEu+ttWJXgjNFkE5h-8z4DQ@mail.gmail.com> <20220727081933.yufxemvws3haj22y@pengutronix.de>
+In-Reply-To: <20220727081933.yufxemvws3haj22y@pengutronix.de>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Wed, 27 Jul 2022 18:05:15 +0900
+Message-ID: <CAMZ6RqKpV0_xhj=n5tE0Cm3+s00dR6LbvTWXsT3Y=r5wiFp9wA@mail.gmail.com>
+Subject: Re: [PATCH v1 10/24] can: tree-wide: implement ethtool_ops::get_drvinfo()
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        linux-can@vger.kernel.org,
         Stephane Grosjean <s.grosjean@peak-system.com>,
         Jimmy Assarsson <extja@kvaser.com>,
         Oliver Hartkopp <socketcan@hartkopp.net>,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
         Max Staudt <max@enpas.org>
-Subject: Re: [PATCH v3 14/14] can: peak_usb: advertise timestamping
- capabilities and add ioctl support
-Message-ID: <20220727084257.brcbbf7lksoeekbr@pengutronix.de>
-References: <20220726102454.95096-1-mailhol.vincent@wanadoo.fr>
- <20220726102454.95096-15-mailhol.vincent@wanadoo.fr>
- <20220727080634.l6uttnbrmwbabh3o@pengutronix.de>
- <CAMZ6RqL0sNAFtLiiopeaA2Oyqq15=dhdOnLivTWngPxGyAFHQw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ami4arnxzv53pxnd"
-Content-Disposition: inline
-In-Reply-To: <CAMZ6RqL0sNAFtLiiopeaA2Oyqq15=dhdOnLivTWngPxGyAFHQw@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-
---ami4arnxzv53pxnd
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 27.07.2022 17:29:25, Vincent MAILHOL wrote:
-> On Wed. 27 Jul. 2022 at 17:10, Marc Kleine-Budde <mkl@pengutronix.de> wro=
-te:
-> > On 26.07.2022 19:24:54, Vincent Mailhol wrote:
-> > > Currently, userland has no method to query which timestamping features
-> > > are supported by the peak_usb driver (aside maybe of getting RX
-> > > messages and obseverse whever or not hardware timestamps stay at
-> > > zero).
+On Wed. 27 Jul. 2022 at 17:20, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> On 26.07.2022 18:59:18, Vincent MAILHOL wrote:
+> > > > Does it make sense?
 > > >
-> > > The canonical way for a network driver to advertise what kind of
-> > > timestamping it supports is to implement
-> > > ethtool_ops::get_ts_info(). Here, we use the CAN specific
-> > > can_ethtool_op_get_ts_info_hwts() function to achieve this.
-> > >
-> > > In addition, the driver currently does not support the hardware
-> > > timestamps ioctls. According to [1], SIOCSHWTSTAMP is "must" and
-> > > SIOCGHWTSTAMP is "should". This patch fills up that gap by
-> > > implementing net_device_ops::ndo_eth_ioctl() using the CAN specific
-> > > function can_eth_ioctl_hwts().
-> > >
-> > > [1] kernel doc Timestamping, section 3.1: "Hardware Timestamping
-> > > Implementation: Device Drivers"
-> > > Link: https://docs.kernel.org/networking/timestamping.html#hardware-t=
-imestamping-implementation-device-drivers
-> > >
-> > > CC: Stephane Grosjean <s.grosjean@peak-system.com>
-> > > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > > ---
-> > >
-> > > Hi St=C3=A9phane, as far as I understand, the pcan_usb and the pacn_u=
-sb_pro
-> >                                                             ^^^^
-> >                                                             pcan
+> > > I have already used this scheme in the c_can driver. I used this
+> > > scheme because I saw that it was used a lot
+> > > (git grep set_ethtool_ops) in the kernel.
 > >
-> > > support hardware timestamps but the pcan_usb_fd doesn't. If not the
-> > > case, let me know.
-> > >
-> > > This is not tested. If you find any issue or if you want to modify,
-> > > feel free to pick up that patch and resend it.
+> > | $ git grep "void .*_set_ethtool_ops.*;" | wc -l
+> > | 46
+> > | $ git grep "extern const struct ethtool_ops" | wc -l
+> > | 43
 > >
-> > I have a:
+> > I did not know it was a good practice, but you are right, both schemes
+> > are roughly as popular (with yours slightly more popular by a small
+> > margin).
 > >
-> > | Bus 002 Device 009: ID 0c72:0012 PEAK System PCAN-USB FD
+> > > By doing so you can define
+> > > slcan_ethtool_ops as a static variable
+> > > and if possible I prefer to export functions rather than data. But it
+> > > can be a matter of taste.
 > >
-> > It supports hardware RX timestamps (Debian kernel 5.18.0-2-amd64) only:
+> > My taste is to export the data (to remove a function call), but as the
+> > maintainer, your opinion should prevail here.
+>
+> I think with exporting the data instead of the function, the resulting
+> module will be a bit smaller. As we don't use LTO by default there's no
+> optimization between object files. The size of the resulting modules can
+> be checked with:
+
+Yes, the additional function call goes with additional assembly
+instruction. I did not mention it but this goes in pairs.
+
+> | ./scripts/bloat-o-meter old.o new.o
+
+$ ./scripts/bloat-o-meter drivers/net/can/slcan/slcan.old.o
+drivers/net/can/slcan/slcan.o
+add/remove: 0/1 grow/shrink: 1/0 up/down: 15/-29 (-14)
+Function                                     old     new   delta
+slcan_open                                  1010    1025     +15
+slcan_set_ethtool_ops                         29       -     -29
+Total: Before=11115, After=11101, chg -0.13%
+
+slcan.old.o is the current one which uses the set_ethtool_ops()
+function, the slcan.o exports the structure instead.
+
+It saves 14 bytes (and a function call).
+
+> > And thanks for the explanation.
 > >
-> > |  (1970-01-01 01:00:00.000000)  peakfd0  TX - -  002   [1]  01
-> > |  (1970-01-01 02:17:09.473817)  peakfd0  RX - -  002   [1]  3C
-> > |  (1970-01-01 01:00:00.000000)  peakfd0  TX - -  002   [1]  02
-> > |  (1970-01-01 02:17:09.673980)  peakfd0  RX - -  002   [1]  3D
->=20
-> Thanks for the confirmation. So this means that all Peak hardware
-> supports the hardware timestamping.
+> > I will also fix those two drivers:
+> >
+> > | $ git grep "void .*_set_ethtool_ops.*;" drivers/net/can/
+> > | drivers/net/can/c_can/c_can.h:void c_can_set_ethtool_ops(struct
+> > net_device *dev);
+> > | drivers/net/can/flexcan/flexcan.h:void
+> > flexcan_set_ethtool_ops(struct net_device *dev);
+>
+> In the mcp251xfd driver there is mcp251xfd_ethtool_init(). This function
+> sets the ethtool_ops, but also initializes the parameters that can be
+> configured by ethtool (ring layout and coalescing) to default values.
 
-The PCAN-USB FD only support RX hardware timestamping, not TX.
+Yes, also the mcp251xfd is already fixed in v3.
 
-> This will greatly simplify the
-> logic. No need to have two different struct ethtool_ops. I will
-> prepare a v4.
+> Other drivers that have a dedicated function that assigns ethtool_ops
+> only can be optimized IMHO.
 
-We have a peak_pciefd card:
+Yes, but this is not related to the timestamp series. So if I do it, I
+will do it separately (and I do not commit that I will do it).
 
-| 01:00.0 Network controller: PEAK-System Technik GmbH Device 0018 (rev 01)
 
-Only RX HW timestamps (Debian kernel 5.16.0-0.bpo.4-amd64):
-
-|  (1970-01-01 01:00:00.000000)  can0_iobus  TX - -  601   [8]  40 0C 21 01=
- 00 00 00 00
-|  (1970-02-16 18:25:06.810100)  can0_iobus  RX - -  581   [8]  53 0C 21 01=
- 00 00 00 00
-|  (1970-01-01 01:00:00.000000)  can0_iobus  TX - -  602   [8]  40 0C 21 01=
- 00 00 00 00
-|  (1970-02-16 18:25:06.819380)  can0_iobus  RX - -  582   [8]  53 0C 21 01=
- 00 00 00 00
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---ami4arnxzv53pxnd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLg+o4ACgkQrX5LkNig
-010BJwf/Uy/NRQFiynYaUIboDmpvpZagFXfAYiTc7ixFktL/XUm+BJQRDHLLj/xc
-/ELvLBuuRW2sMCrzw9zreVGbVqT51Gfk3FQJBUBeKIrpQrjaLA5FhZnK4Dfp2dnD
-ydPCZm0Knxk0k+z1+1v9OqRIWopzsR6gQ9MgUVa78KNr81KEFbSF4R+a90qMKMEg
-Nm5CZGsUfTICa39DLUT9hvds0EofVkiAdvNWJlKI3LHgOb+x3C3FaKUss05OAI7D
-/YW4FXL9o19c+h7vDAEBa6RfC2pON7eUKiE4ZfCERTmgCRJ7FOmyoV61BItV0LvU
-ZWsOIiLheFF7iXTlFeY55DCwRHO4ng==
-=yvJ1
------END PGP SIGNATURE-----
-
---ami4arnxzv53pxnd--
+Yours sincerely,
+Vincent Mailhol
