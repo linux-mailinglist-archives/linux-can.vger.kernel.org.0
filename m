@@ -2,51 +2,51 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE926582404
-	for <lists+linux-can@lfdr.de>; Wed, 27 Jul 2022 12:17:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 073F6582405
+	for <lists+linux-can@lfdr.de>; Wed, 27 Jul 2022 12:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231152AbiG0KRc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 27 Jul 2022 06:17:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53056 "EHLO
+        id S231499AbiG0KRe (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 27 Jul 2022 06:17:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231642AbiG0KRb (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 27 Jul 2022 06:17:31 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D0D942AE4
-        for <linux-can@vger.kernel.org>; Wed, 27 Jul 2022 03:17:30 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id 17so15758918pfy.0
-        for <linux-can@vger.kernel.org>; Wed, 27 Jul 2022 03:17:30 -0700 (PDT)
+        with ESMTP id S231529AbiG0KRd (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 27 Jul 2022 06:17:33 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3EA342ADA
+        for <linux-can@vger.kernel.org>; Wed, 27 Jul 2022 03:17:32 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id t2-20020a17090a4e4200b001f21572f3a4so1713825pjl.0
+        for <linux-can@vger.kernel.org>; Wed, 27 Jul 2022 03:17:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=0wxgf2YsUxJPAwwmNt/fzolIvtjHd0XXG8RQoRlz+oI=;
-        b=QHjEmglOYptZfAyMJPwxyp28ScxL6nnRQyrO5mNORrR5FAgvexLHMqQz3JEsfvqEO/
-         6WnYj3rEDwYyGvsqYY/WkRmf0I05mzFFN5PSEj2MeWil8cpZ5bKclpcDO6dGeurcjhKX
-         LYML9lF3YXD1Kp1MKFcDFjMSCyxHRZ6pUBv18i3I6GRXCjX5bfciDP4yYMQMjAGCAq8T
-         U6uZgriXppKqq5PBd4Lkq0s8CUam9TXCofXJ/UFfSinl/6xVMLW7zQgWzmCxSkgvBUr2
-         /NafkDcivXVjRA06I5Ozp2a19mHoRLdlu8m1xET8ZVzroFgkNF68mAxTEM4w1xfSxPPm
-         eRqA==
+        bh=+Rc2jzSToE2WVmBBseF0efCy3p2ZF+4b2IH/8Qzzf5s=;
+        b=XykStxtamg3FuXPFNdXihMLAKwUJJagTYjJ/vIJSSVnAHtbCczlxAi3Gmvv3NzsowU
+         R1xxM6l+h3awHQDODvGQfT3jzpMz3O3Q2NsfCwBr08xEsFilWqtpjEZpTKmxTVkRzXFF
+         eG1jlVH2kF+epOQ0ahSSIWby7xZYcAl6mi8gxbXjUsjlghMVvDryM4UFHZC/X54rbENO
+         aN2Mqr8oDCPGhyd46uMu7tbiWGNlIXZxDYSVjFGfZbiRFaXR9OUPQHC2JJDQXPe2xieu
+         3u/+xT2t68NKJEDG85ejP8wOoHWRSaQWtay6EtImgdD0cDMD/yV9DqAz85zqAbGXJYTf
+         LVrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=0wxgf2YsUxJPAwwmNt/fzolIvtjHd0XXG8RQoRlz+oI=;
-        b=ujzmTt1CUvCxR7/fHWJ8X++5lF1i5rfTY2+yq1lPgyl/qudK6JQQf0FUaA4Y/vPd8q
-         3/M6mqWX7uJ2cAWxOUhnjVVQHWUe+G7PXDeOEvBmmTy7XJM3Nt0PB1AZ4Zhvfnc4jATB
-         xUeibgoIuMeB2xRe8TV3C3yvOnSiqe0aAZyjUnbns1ySA5VtnVsdbe+9qaPparYETSa3
-         OUjGnPjGsBcPObHDLOm8DkLXkBDWhPu0qSbDc/eqPIHXgPFPSkj1OjpnzdmRrtGlcMbp
-         kdxO94wTHYsSv5FikB4wYKhR/F7Tmzrj4snD9/6OT8tFytft5Ta0Rs1P6Y2W/fwNLGQS
-         afbA==
-X-Gm-Message-State: AJIora90ktPW4T6PCbQZqL7cVWeykb4h1qveexS3Xlzk9VimOOrjMH2q
-        dm+xmfxhizXQIpc82WS3YNRznRGwi7LHlg==
-X-Google-Smtp-Source: AGRyM1sVXgYYBl1kXibF+eND8K4TCas8WHnb8tL+j8iq6A3MJ8f8XrXErNWFyvZDr1pb4Uz8FJ0C/g==
-X-Received: by 2002:a62:4e04:0:b0:52b:30f5:59b8 with SMTP id c4-20020a624e04000000b0052b30f559b8mr21218180pfb.37.1658917049588;
-        Wed, 27 Jul 2022 03:17:29 -0700 (PDT)
+        bh=+Rc2jzSToE2WVmBBseF0efCy3p2ZF+4b2IH/8Qzzf5s=;
+        b=O85Sa0PxwUjENNbspzkkijqpDom8F7zc+lHRkfi+Py5m+R5GUsTBW+tXBrSjz3KfNB
+         lThU7AYCFdneLytlvzQ7Mm5gE0xi9cPJh06jYDWwECjJIgDZR3XjCkmkvrcgBI6E2PFS
+         V0WpXS/JcBPXgEYOcaYPmcJs2DKks583MDL1dNZuwwTekGQgcNq/g0HkOdLC4UYy87Pd
+         7ZpxTwuwrayF6Qif328iQ4FVR/EYlG3VhnqPMALzaLyJRu2WN/cFK7MAa9p5JiuJnv3l
+         R4MhTi2P/oRgqV4nNtSGq/X1WAKnZROpFwVKYf1r6wcsSXoGv343FqcnCIyCDd3T4Cm3
+         5+Uw==
+X-Gm-Message-State: AJIora9FjV+1NLXNIaXzDPZ/M24GJ9aeicKwhWciZT7gz4Rx1mKY1JYM
+        3cJdLw8d3BvmkXrosjLnvxxCBIS5xhTsQw==
+X-Google-Smtp-Source: AGRyM1u7yB4U/n+zIDi/k30LVD0OmorRWRY+jXmMEF88QgNwcslbSFpfvxkqsI/gvotwTjoG3u+yvw==
+X-Received: by 2002:a17:902:6901:b0:168:9bb4:7adb with SMTP id j1-20020a170902690100b001689bb47adbmr20861762plk.147.1658917051900;
+        Wed, 27 Jul 2022 03:17:31 -0700 (PDT)
 Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id w22-20020aa79556000000b005284e98304csm13260666pfq.205.2022.07.27.03.17.27
+        by smtp.gmail.com with ESMTPSA id w22-20020aa79556000000b005284e98304csm13260666pfq.205.2022.07.27.03.17.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 03:17:29 -0700 (PDT)
+        Wed, 27 Jul 2022 03:17:31 -0700 (PDT)
 Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
 From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 To:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
@@ -56,9 +56,9 @@ Cc:     Stephane Grosjean <s.grosjean@peak-system.com>,
         Dario Binacchi <dario.binacchi@amarulasolutions.com>,
         Max Staudt <max@enpas.org>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v4 12/14] can: kvaser_usb: advertise timestamping capabilities and add ioctl support
-Date:   Wed, 27 Jul 2022 19:16:39 +0900
-Message-Id: <20220727101641.198847-13-mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v4 13/14] can: peak_canfd: advertise timestamping capabilities and add ioctl support
+Date:   Wed, 27 Jul 2022 19:16:40 +0900
+Message-Id: <20220727101641.198847-14-mailhol.vincent@wanadoo.fr>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220727101641.198847-1-mailhol.vincent@wanadoo.fr>
 References: <20220725133208.432176-1-mailhol.vincent@wanadoo.fr>
@@ -76,109 +76,110 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 Currently, userland has no method to query which timestamping features
-are supported by the kvaser_usb driver (aside maybe of getting RX
+are supported by the peak_canfd driver (aside maybe of getting RX
 messages and observe whether or not hardware timestamps stay at zero).
 
-The canonical way for a network driver to advertise what kind of
-timestamping it supports is to implement
-ethtool_ops::get_ts_info(). Here, we use the CAN specific
-can_ethtool_op_get_ts_info_hwts() function to achieve this.
-
-In addition, the driver currently does not support the hardware
-timestamps ioctls. According to [1], SIOCSHWTSTAMP is "must" and
-SIOCGHWTSTAMP is "should". This patch fills up that gap by
-implementing net_device_ops::ndo_eth_ioctl() using the CAN specific
-function can_eth_ioctl_hwts().
+The canonical way to add hardware timestamp support is to implement
+ethtool_ops::get_ts_info() in order to advertise the timestamping
+capabilities and to implement net_device_ops::ndo_eth_ioctl() as
+requested in [1]. Currently, the driver only supports hardware RX
+timestamps [2] but not hardware TX. For this reason, the generic
+function can_ethtool_op_get_ts_info_hwts() and can_eth_ioctl_hwts()
+can not be reused and instead this patch adds peak_get_ts_info() and
+peak_eth_ioctl().
 
 [1] kernel doc Timestamping, section 3.1: "Hardware Timestamping
 Implementation: Device Drivers"
 Link: https://docs.kernel.org/networking/timestamping.html#hardware-timestamping-implementation-device-drivers
 
-CC: Jimmy Assarsson <extja@kvaser.com>
+[2] https://lore.kernel.org/linux-can/20220727084257.brcbbf7lksoeekbr@pengutronix.de/
+
+CC: Stephane Grosjean <s.grosjean@peak-system.com>
 Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 ---
+ drivers/net/can/peak_canfd/peak_canfd.c | 48 +++++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
-Hi Jimmy, as far as I understand, only the hydra has the hardware
-timestamping. If not the case, let me know.
-
-This is not tested. If you find any issue or if you want to modify,
-feel free to pick up that patch and resend it.
----
- drivers/net/can/usb/kvaser_usb/kvaser_usb.h   |  1 +
- .../net/can/usb/kvaser_usb/kvaser_usb_core.c  | 27 +++++++++++++++++--
- 2 files changed, 26 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb.h b/drivers/net/can/usb/kvaser_usb/kvaser_usb.h
-index eefcbe3aadce..841da29cef93 100644
---- a/drivers/net/can/usb/kvaser_usb/kvaser_usb.h
-+++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb.h
-@@ -39,6 +39,7 @@
- #define KVASER_USB_QUIRK_HAS_SILENT_MODE	BIT(0)
- #define KVASER_USB_QUIRK_HAS_TXRX_ERRORS	BIT(1)
- #define KVASER_USB_QUIRK_IGNORE_CLK_FREQ	BIT(2)
-+#define KVASER_USB_QUIRK_HAS_HARDWARE_TIMESTAMP	BIT(3)
+diff --git a/drivers/net/can/peak_canfd/peak_canfd.c b/drivers/net/can/peak_canfd/peak_canfd.c
+index afb9adb3d5c2..f8420cc1d907 100644
+--- a/drivers/net/can/peak_canfd/peak_canfd.c
++++ b/drivers/net/can/peak_canfd/peak_canfd.c
+@@ -7,6 +7,7 @@
  
- /* Device capabilities */
- #define KVASER_USB_CAP_BERR_CAP			0x01
-diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-index f211bfcb1d97..5e357f5d3116 100644
---- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-+++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-@@ -13,6 +13,7 @@
- 
- #include <linux/completion.h>
- #include <linux/device.h>
+ #include <linux/can.h>
+ #include <linux/can/dev.h>
 +#include <linux/ethtool.h>
- #include <linux/gfp.h>
- #include <linux/if.h>
- #include <linux/kernel.h>
-@@ -89,7 +90,7 @@
- #define USB_HYBRID_PRO_CANLIN_PRODUCT_ID	278
  
- static const struct kvaser_usb_driver_info kvaser_usb_driver_info_hydra = {
--	.quirks = 0,
-+	.quirks = KVASER_USB_QUIRK_HAS_HARDWARE_TIMESTAMP,
- 	.ops = &kvaser_usb_hydra_dev_ops,
- };
+ #include "peak_canfd_user.h"
  
-@@ -665,6 +666,22 @@ static const struct net_device_ops kvaser_usb_netdev_ops = {
+@@ -742,13 +743,59 @@ static netdev_tx_t peak_canfd_start_xmit(struct sk_buff *skb,
+ 	return NETDEV_TX_OK;
+ }
+ 
++static int peak_eth_ioctl(struct net_device *netdev, struct ifreq *ifr, int cmd)
++{
++	struct hwtstamp_config hwts_cfg = { 0 };
++
++	switch (cmd) {
++	case SIOCSHWTSTAMP: /* set */
++		if (copy_from_user(&hwts_cfg, ifr->ifr_data, sizeof(hwts_cfg)))
++			return -EFAULT;
++		if (hwts_cfg.tx_type == HWTSTAMP_TX_OFF &&
++		    hwts_cfg.rx_filter == HWTSTAMP_FILTER_ALL)
++			return 0;
++		return -ERANGE;
++
++	case SIOCGHWTSTAMP: /* get */
++		hwts_cfg.tx_type = HWTSTAMP_TX_OFF;
++		hwts_cfg.rx_filter = HWTSTAMP_FILTER_ALL;
++		if (copy_to_user(ifr->ifr_data, &hwts_cfg, sizeof(hwts_cfg)))
++			return -EFAULT;
++		return 0;
++
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
+ static const struct net_device_ops peak_canfd_netdev_ops = {
+ 	.ndo_open = peak_canfd_open,
+ 	.ndo_stop = peak_canfd_close,
++	.ndo_eth_ioctl = peak_eth_ioctl,
+ 	.ndo_start_xmit = peak_canfd_start_xmit,
  	.ndo_change_mtu = can_change_mtu,
  };
  
-+static const struct net_device_ops kvaser_usb_netdev_ops_hwts = {
-+	.ndo_open = kvaser_usb_open,
-+	.ndo_stop = kvaser_usb_close,
-+	.ndo_eth_ioctl = can_eth_ioctl_hwts,
-+	.ndo_start_xmit = kvaser_usb_start_xmit,
-+	.ndo_change_mtu = can_change_mtu,
++static int peak_get_ts_info(struct net_device *dev,
++			    struct ethtool_ts_info *info)
++{
++	info->so_timestamping =
++		SOF_TIMESTAMPING_TX_SOFTWARE |
++		SOF_TIMESTAMPING_RX_SOFTWARE |
++		SOF_TIMESTAMPING_SOFTWARE |
++		SOF_TIMESTAMPING_RX_HARDWARE |
++		SOF_TIMESTAMPING_RAW_HARDWARE;
++	info->phc_index = -1;
++	info->tx_types = BIT(HWTSTAMP_TX_OFF);
++	info->rx_filters = BIT(HWTSTAMP_FILTER_ALL);
++
++	return 0;
++}
++
++static const struct ethtool_ops peak_canfd_ethtool_ops = {
++	.get_ts_info = peak_get_ts_info,
 +};
 +
-+static const struct ethtool_ops kvaser_usb_ethtool_ops = {
-+	.get_ts_info = ethtool_op_get_ts_info,
-+};
-+
-+static const struct ethtool_ops kvaser_usb_ethtool_ops_hwts = {
-+	.get_ts_info = can_ethtool_op_get_ts_info_hwts,
-+};
-+
- static void kvaser_usb_remove_interfaces(struct kvaser_usb *dev)
+ struct net_device *alloc_peak_canfd_dev(int sizeof_priv, int index,
+ 					int echo_skb_max)
  {
- 	int i;
-@@ -742,7 +759,13 @@ static int kvaser_usb_init_one(struct kvaser_usb *dev, int channel)
- 	netdev->flags |= IFF_ECHO;
+@@ -789,6 +836,7 @@ struct net_device *alloc_peak_canfd_dev(int sizeof_priv, int index,
  
- 	netdev->netdev_ops = &kvaser_usb_netdev_ops;
--
-+	if (driver_info->quirks & KVASER_USB_QUIRK_HAS_HARDWARE_TIMESTAMP) {
-+		netdev->netdev_ops = &kvaser_usb_netdev_ops_hwts;
-+		netdev->ethtool_ops = &kvaser_usb_ethtool_ops_hwts;
-+	} else {
-+		netdev->netdev_ops = &kvaser_usb_netdev_ops;
-+		netdev->ethtool_ops = &kvaser_usb_ethtool_ops;
-+	}
- 	SET_NETDEV_DEV(netdev, &dev->intf->dev);
- 	netdev->dev_id = channel;
+ 	ndev->flags |= IFF_ECHO;
+ 	ndev->netdev_ops = &peak_canfd_netdev_ops;
++	ndev->ethtool_ops = &peak_canfd_ethtool_ops;
+ 	ndev->dev_id = index;
  
+ 	return ndev;
 -- 
 2.35.1
 
