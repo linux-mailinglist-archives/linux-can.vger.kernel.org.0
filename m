@@ -2,137 +2,137 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04D1F581B84
-	for <lists+linux-can@lfdr.de>; Tue, 26 Jul 2022 23:05:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01BA35821C1
+	for <lists+linux-can@lfdr.de>; Wed, 27 Jul 2022 10:06:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233833AbiGZVDv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 26 Jul 2022 17:03:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53058 "EHLO
+        id S229813AbiG0IGp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 27 Jul 2022 04:06:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240005AbiGZVDm (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 26 Jul 2022 17:03:42 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F563A4A4
-        for <linux-can@vger.kernel.org>; Tue, 26 Jul 2022 14:03:37 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id oy13so28292077ejb.1
-        for <linux-can@vger.kernel.org>; Tue, 26 Jul 2022 14:03:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=AiQ0HcOvDIah4fMpuXqHSwjgHcHZ/tpuZ/vuW2o2BXw=;
-        b=evXGwLvcDjU0qDyrkdC6mkUy83vtHbjOvR811LRjxjmNIBxTovzwE71jwghsXDlrVt
-         ZZkOUWCYyeCI1cvvw5/0ArR5ytXQlAGQfs488gE2zq3GJ4YjXplfiNFqoBk2x0FURxF9
-         ndE63J6sd8f7FN9Tm7oy41WSi51bFyGCDXA3w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=AiQ0HcOvDIah4fMpuXqHSwjgHcHZ/tpuZ/vuW2o2BXw=;
-        b=ODtORQ3fLrZFtESIX4IZ/zv4odUo87m9OCcTqqOU9zXHNnyeC56ff7QP3V+3H6mHpC
-         rnWhN8p8j0fsV5pZwNs4fk4m2+A8WndxR/JWFtsoftR/dvW8BLrVZTQviagOgbcGLcWh
-         kD6F0hG1Qd0tCrFxvSRsDNaGjdvHAxrCOsyLWCQ8d/la0P8nOAW3y8H7VkgP70R7mPFi
-         3SO6/vdR1r543D5PZ7rQbfjpRgCx60pFVp4OsEBGGIxPnxjkd1+vlyLZKem4TrDsh9bU
-         qvki3y+T7wiPjrvatG+dacUTGXFx53CA2diPVl/5myP0kT5CQJ8XTVga+EmIn1eZ+LPB
-         ITGw==
-X-Gm-Message-State: AJIora98NaUFLTb5mOHQvXhUSa/Ty/jJMy8Vwix6M4hkbrB1sotwX02T
-        YDPEnq7iVls3b6Ft/wx2Yx7jig==
-X-Google-Smtp-Source: AGRyM1t4M5JDiuIqo8f049Mkcape1IJDhp/IBDYwWppv3LoaojPZmxWycbkF7PwAdBbxdf61ozHpZQ==
-X-Received: by 2002:a17:906:8a79:b0:72b:871a:57b7 with SMTP id hy25-20020a1709068a7900b0072b871a57b7mr15018909ejc.602.1658869416578;
-        Tue, 26 Jul 2022 14:03:36 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-87-14-98-67.retail.telecomitalia.it. [87.14.98.67])
-        by smtp.gmail.com with ESMTPSA id y19-20020aa7d513000000b0043a7293a03dsm9092849edq.7.2022.07.26.14.03.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jul 2022 14:03:36 -0700 (PDT)
-From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        with ESMTP id S229680AbiG0IGp (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 27 Jul 2022 04:06:45 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6A243E58
+        for <linux-can@vger.kernel.org>; Wed, 27 Jul 2022 01:06:44 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oGc3z-000250-48; Wed, 27 Jul 2022 10:06:39 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id CCA05BBECA;
+        Wed, 27 Jul 2022 08:06:35 +0000 (UTC)
+Date:   Wed, 27 Jul 2022 10:06:34 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     linux-can@vger.kernel.org,
+        Stephane Grosjean <s.grosjean@peak-system.com>,
+        Jimmy Assarsson <extja@kvaser.com>,
         Oliver Hartkopp <socketcan@hartkopp.net>,
-        michael@amarulasolutions.com,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        Jeroen Hofstee <jhofstee@victronenergy.com>,
         Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Wolfgang Grandegger <wg@grandegger.com>, netdev@vger.kernel.org
-Subject: [RFC PATCH v3 9/9] MAINTAINERS: Add maintainer for the slcan driver
-Date:   Tue, 26 Jul 2022 23:02:17 +0200
-Message-Id: <20220726210217.3368497-10-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220726210217.3368497-1-dario.binacchi@amarulasolutions.com>
-References: <20220726210217.3368497-1-dario.binacchi@amarulasolutions.com>
+        Max Staudt <max@enpas.org>
+Subject: Re: [PATCH v3 14/14] can: peak_usb: advertise timestamping
+ capabilities and add ioctl support
+Message-ID: <20220727080634.l6uttnbrmwbabh3o@pengutronix.de>
+References: <20220726102454.95096-1-mailhol.vincent@wanadoo.fr>
+ <20220726102454.95096-15-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="kzbnrtqiturjn2zh"
+Content-Disposition: inline
+In-Reply-To: <20220726102454.95096-15-mailhol.vincent@wanadoo.fr>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-At the suggestion of its author Oliver Hartkopp ([1]), I take over the
-maintainer-ship and add myself to the authors of the driver.
 
-[1] https://lore.kernel.org/all/507b5973-d673-4755-3b64-b41cb9a13b6f@hartkopp.net
+--kzbnrtqiturjn2zh
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Suggested-by: Oliver Hartkopp <socketcan@hartkopp.net>
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+On 26.07.2022 19:24:54, Vincent Mailhol wrote:
+> Currently, userland has no method to query which timestamping features
+> are supported by the peak_usb driver (aside maybe of getting RX
+> messages and obseverse whever or not hardware timestamps stay at
+> zero).
+>=20
+> The canonical way for a network driver to advertise what kind of
+> timestamping it supports is to implement
+> ethtool_ops::get_ts_info(). Here, we use the CAN specific
+> can_ethtool_op_get_ts_info_hwts() function to achieve this.
+>=20
+> In addition, the driver currently does not support the hardware
+> timestamps ioctls. According to [1], SIOCSHWTSTAMP is "must" and
+> SIOCGHWTSTAMP is "should". This patch fills up that gap by
+> implementing net_device_ops::ndo_eth_ioctl() using the CAN specific
+> function can_eth_ioctl_hwts().
+>=20
+> [1] kernel doc Timestamping, section 3.1: "Hardware Timestamping
+> Implementation: Device Drivers"
+> Link: https://docs.kernel.org/networking/timestamping.html#hardware-times=
+tamping-implementation-device-drivers
+>=20
+> CC: Stephane Grosjean <s.grosjean@peak-system.com>
+> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> ---
+>=20
+> Hi St=C3=A9phane, as far as I understand, the pcan_usb and the pacn_usb_p=
+ro
+                                                            ^^^^
+                                                            pcan
 
----
+> support hardware timestamps but the pcan_usb_fd doesn't. If not the
+> case, let me know.
+>=20
+> This is not tested. If you find any issue or if you want to modify,
+> feel free to pick up that patch and resend it.
 
-Changes in v3:
-- Put the series as RFC again.
-- Pick up the patch "can: slcan: use KBUILD_MODNAME and define pr_fmt to replace hardcoded names".
-- Add the patch "ethtool: add support to get/set CAN bit time register"
-  to the series.
-- Add the patch "can: slcan: add support to set bit time register (btr)"
-  to the series.
-- Replace the link https://marc.info/?l=linux-can&m=165806705927851&w=2 with
-  https://lore.kernel.org/all/507b5973-d673-4755-3b64-b41cb9a13b6f@hartkopp.net.
-- Add the `Suggested-by' tag.
+I have a:
 
-Changes in v2:
-- Add the patch "MAINTAINERS: Add myself as maintainer of the SLCAN driver"
-  to the series.
+| Bus 002 Device 009: ID 0c72:0012 PEAK System PCAN-USB FD
 
- MAINTAINERS                        | 6 ++++++
- drivers/net/can/slcan/slcan-core.c | 1 +
- 2 files changed, 7 insertions(+)
+It supports hardware RX timestamps (Debian kernel 5.18.0-2-amd64) only:
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index fc7d75c5cdb9..74e42f78e7cb 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18448,6 +18448,12 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git
- F:	include/linux/sl?b*.h
- F:	mm/sl?b*
- 
-+SLCAN CAN NETWORK DRIVER
-+M:	Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+L:	linux-can@vger.kernel.org
-+S:	Maintained
-+F:	drivers/net/can/slcan/
-+
- SLEEPABLE READ-COPY UPDATE (SRCU)
- M:	Lai Jiangshan <jiangshanlai@gmail.com>
- M:	"Paul E. McKenney" <paulmck@kernel.org>
-diff --git a/drivers/net/can/slcan/slcan-core.c b/drivers/net/can/slcan/slcan-core.c
-index 3905f21e7788..6a0f12cfbb4e 100644
---- a/drivers/net/can/slcan/slcan-core.c
-+++ b/drivers/net/can/slcan/slcan-core.c
-@@ -63,6 +63,7 @@ MODULE_ALIAS_LDISC(N_SLCAN);
- MODULE_DESCRIPTION("serial line CAN interface");
- MODULE_LICENSE("GPL");
- MODULE_AUTHOR("Oliver Hartkopp <socketcan@hartkopp.net>");
-+MODULE_AUTHOR("Dario Binacchi <dario.binacchi@amarulasolutions.com>");
- 
- /* maximum rx buffer len: extended CAN frame with timestamp */
- #define SLCAN_MTU (sizeof("T1111222281122334455667788EA5F\r") + 1)
--- 
-2.32.0
+|  (1970-01-01 01:00:00.000000)  peakfd0  TX - -  002   [1]  01
+|  (1970-01-01 02:17:09.473817)  peakfd0  RX - -  002   [1]  3C
+|  (1970-01-01 01:00:00.000000)  peakfd0  TX - -  002   [1]  02
+|  (1970-01-01 02:17:09.673980)  peakfd0  RX - -  002   [1]  3D
 
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--kzbnrtqiturjn2zh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLg8gcACgkQrX5LkNig
+0114eAgAgakEW/3GF2kxidPqS1gRGvV4XyFavXReBSbn8jse+Ud+opXahxn+/h+9
+BgEWZGQNTmsiovzu+vLq6i5Dyglj8jnmK76cqdBsHFEuorFkXaRLiyyLF/NTwsl9
+t/RE5Jx5jEROiGeNfANQ78MWjY4T9RUsZIldzDVuH9JoyiJqzY7rllSkuZ9UyE4w
+k7JPiTwhfF8Wf/p+iIHtsnIAL4Hyj3xzuZ/yijR+VqH7u/d3Gi4Q3vCSFHF2DHvn
+unNP9nmIk0QPuZ+UVNJgtG5ZUXJnnK1AP3vgxkqKPZYosx67F83ofpqiM+S8Kkp/
+qNd9zpAaXJhiH5MiS/CFv3GC/Rjq9Q==
+=o+nF
+-----END PGP SIGNATURE-----
+
+--kzbnrtqiturjn2zh--
