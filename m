@@ -2,54 +2,65 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 940D35833E9
-	for <lists+linux-can@lfdr.de>; Wed, 27 Jul 2022 22:04:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D94E25833F6
+	for <lists+linux-can@lfdr.de>; Wed, 27 Jul 2022 22:12:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229508AbiG0UEn (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 27 Jul 2022 16:04:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44630 "EHLO
+        id S234134AbiG0UMb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 27 Jul 2022 16:12:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233779AbiG0UEm (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 27 Jul 2022 16:04:42 -0400
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A793E5A3D2
-        for <linux-can@vger.kernel.org>; Wed, 27 Jul 2022 13:04:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1658952278;
+        with ESMTP id S233755AbiG0UMa (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 27 Jul 2022 16:12:30 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1135D564C9
+        for <linux-can@vger.kernel.org>; Wed, 27 Jul 2022 13:12:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1658952734;
     s=strato-dkim-0002; d=hartkopp.net;
     h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
     From:Subject:Sender;
-    bh=ogQRDFXjJE41hq7/LfNNsOyhSpCYIB4GPmAu7Hnhy+s=;
-    b=avXeTDfz+8qou4qngnjQ86r7Kxp+B4Pne+DIXMTchM8+wJmm4E4t+9n5TK7MH95zjG
-    iZxPGLE23eQIY1b69VMW4WG4hQ6x6oR3c722U0fogU8iHCZ6zFngXCR623shdeyhjb0t
-    ifuP/EfJ5R1482nGb0NDhEr92wS6ONc5ZtQUlGC4ANNvuOzPRTgOZkiXv1gRHVb3mH1w
-    YtVIxuKVXUs7PMoOVwLfCJYTCgX84sZ10Br9E2dOaD0dnHjnZ2B4Kdno1HmTF0oqQEZY
-    En8WIPMpqxA76ifAJTMnkFV/zI9Ulvr0YTbQCRu8CMMEmCo05JpJwFWFE47zzXMqFu7F
-    Ko3A==
+    bh=zf3hu7M3LvvEmzfKZIjNzdc/JfMNFzqSTpMxpu54JFk=;
+    b=NWM1ZklkAQkxY8sVcrnmQ6XqisOoSiNw3AKr/n8DDwn3BbXMnSTJ6IBpYBZKjtOI8e
+    CRTt13uKFhHTSE0iSIO7yEOUnGKPn0slpRIlnanx9Dz8ITIvRnbJB0BLegWv2d97cWP5
+    ImUbDxO3TlK/KLBxMhqe5OqF/ceUxqh/V+5rMNvkYGEScLj71qwsS+ZczsdC2PFPynkd
+    2IJ9dTHCtUP9WFRH/E+eWhYmV7p0QPQE6iS3QpUzpGNYr3f7xuXy/rxbrMTo+aGoYeaq
+    7ZxiJWh9If1eQ2Iy/6QGSPL9vKbkgYn3VISp3K6QkKLaXtFURBkGXoS1lwwOdXXkaCdX
+    Fc4w==
 Authentication-Results: strato.com;
     dkim=none
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytJSr63tDxrw=="
 X-RZG-CLASS-ID: mo00
 Received: from [IPV6:2a00:6020:1cfd:d100::b82]
     by smtp.strato.de (RZmta 47.47.0 AUTH)
-    with ESMTPSA id Icb1b0y6RK4c5oh
+    with ESMTPSA id Icb1b0y6RKCD5ow
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-    Wed, 27 Jul 2022 22:04:38 +0200 (CEST)
-Message-ID: <cdcd6e61-4c7a-4bf8-036a-ed326ec481a6@hartkopp.net>
-Date:   Wed, 27 Jul 2022 22:04:29 +0200
+    Wed, 27 Jul 2022 22:12:13 +0200 (CEST)
+Message-ID: <fb31bfeb-e7bc-c7f8-db2c-f8d0c531af99@hartkopp.net>
+Date:   Wed, 27 Jul 2022 22:12:13 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [RFC PATCH v6 5/7] can: canxl: update CAN infrastructure for CAN
- XL frames
+Subject: Re: [RFC PATCH v3 8/9] can: slcan: add support to set bit time
+ register (btr)
 Content-Language: en-US
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org
-References: <20220724074402.117394-1-socketcan@hartkopp.net>
- <20220724074402.117394-6-socketcan@hartkopp.net>
- <20220727140431.55g5aa35rko3vt5q@pengutronix.de>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, Max Staudt <max@enpas.org>
+Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
+        michael@amarulasolutions.com,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Jeroen Hofstee <jhofstee@victronenergy.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>, netdev@vger.kernel.org
+References: <20220726210217.3368497-1-dario.binacchi@amarulasolutions.com>
+ <20220726210217.3368497-9-dario.binacchi@amarulasolutions.com>
+ <20220727113054.ffcckzlcipcxer2c@pengutronix.de>
+ <20220727192839.707a3453.max@enpas.org>
+ <20220727182414.3mysdeam7mtnqyfx@pengutronix.de>
 From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20220727140431.55g5aa35rko3vt5q@pengutronix.de>
+In-Reply-To: <20220727182414.3mysdeam7mtnqyfx@pengutronix.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -63,67 +74,86 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 
 
-On 27.07.22 16:04, Marc Kleine-Budde wrote:
-> On 24.07.2022 09:44:00, Oliver Hartkopp wrote:
->> - add new ETH_P_CANXL ethernet protocol type
->> - update skb checks for CAN XL
->> - add alloc_canxl_skb() which now needs a data length parameter
->> - introduce init_can_skb_reserve() to reduce code duplication
+On 27.07.22 20:24, Marc Kleine-Budde wrote:
+> On 27.07.2022 19:28:39, Max Staudt wrote:
+>> On Wed, 27 Jul 2022 13:30:54 +0200
+>> Marc Kleine-Budde <mkl@pengutronix.de> wrote:
 >>
->> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
->> ---
->>   drivers/net/can/dev/skb.c     | 72 ++++++++++++++++++++++++++---------
->>   include/linux/can/skb.h       | 23 ++++++++++-
->>   include/uapi/linux/if_ether.h |  1 +
->>   net/can/af_can.c              | 25 +++++++++++-
->>   4 files changed, 101 insertions(+), 20 deletions(-)
+>>> As far as I understand, setting the btr is an alternative way to set the
+>>> bitrate, right? I don't like the idea of poking arbitrary values into a
+>>> hardware from user space.
 >>
->> diff --git a/drivers/net/can/dev/skb.c b/drivers/net/can/dev/skb.c
->> index ea9ea0128c48..e9e8fcbaa7be 100644
->> --- a/drivers/net/can/dev/skb.c
->> +++ b/drivers/net/can/dev/skb.c
-> [...]
->> +struct sk_buff *alloc_canxl_skb(struct net_device *dev,
->> +				struct canxl_frame **cfx,
->> +				unsigned int data_len)
->> +{
->> +	struct sk_buff *skb;
->> +
->> +	if (data_len < CANXL_MIN_DLEN || data_len > CANXL_MAX_DLEN)
->> +		goto out_error;
->> +
->> +	skb = netdev_alloc_skb(dev, sizeof(struct can_skb_priv) +
->> +			       CANXL_HDR_SIZE + data_len);
->> +	if (unlikely(!skb))
->> +		goto out_error;
->> +
->> +	skb->protocol = htons(ETH_P_CANXL);
->> +	init_can_skb_reserve(skb);
->> +	can_skb_prv(skb)->ifindex = dev->ifindex;
->> +
->> +	*cfx = skb_put_zero(skb, CANXL_HDR_SIZE + data_len);
->> +
->> +	/* set CAN XL flag and length information by default */
->> +	(*cfx)->flags = CANXL_XLF;
->> +	(*cfx)->len = data_len;
->> +
->> +	return skb;
->> +
->> +out_error:
->> +		*cfx = NULL;
->> +
->> +		return NULL;
+>> I agree with Marc here.
+>>
+>> This is a modification across the whole stack, specific to a single
+>> device, when there are ways around.
+>>
+>> If I understand correctly, the CAN232 "S" command sets one of the fixed
+>> bitrates, whereas "s" sets the two BTR registers. Now the question is,
+>> what do BTR0/BTR1 mean, and what are they? If they are merely a divider
+>> in a CAN controller's master clock, like in ELM327, then you could
+>>
+>>    a) Calculate the BTR values from the bitrate userspace requests, or
 > 
-> Nitpick:
-> Indent with one tab only here.
+> Most of the other CAN drivers write the BTR values into the register of
+> the hardware. How are these BTR values transported into the driver?
+> 
+> There are 2 ways:
+> 
+> 1) - user space configures a bitrate
+>     - the kernel calculates with the "struct can_bittiming_const" [1] given
+>       by driver and the CAN clock rate the low level timing parameters.
+> 
+>       [1] https://elixir.bootlin.com/linux/v5.18/source/include/uapi/linux/can/netlink.h#L47
+> 
+> 2) - user space configures low level bit timing parameter
+>       (Sample point in one-tenth of a percent, Time quanta (TQ) in
+>        nanoseconds, Propagation segment in TQs, Phase buffer segment 1 in
+>        TQs, Phase buffer segment 2 in TQs, Synchronisation jump width in
+>        TQs)
+>      - the kernel calculates the Bit-rate prescaler from the given TQ and
+>        CAN clock rate
+> 
+> Both ways result in a fully calculated "struct can_bittiming" [2]. The
+> driver translates this into the hardware specific BTR values and writes
+> the into the registers.
+> 
+> If you know the CAN clock and the bit timing const parameters of the
+> slcan's BTR register you can make use of the automatic BTR calculation,
+> too. Maybe the framework needs some tweaking if the driver supports both
+> fixed CAN bit rate _and_ "struct can_bittiming_const".
+> 
+> [2] https://elixir.bootlin.com/linux/v5.18/source/include/uapi/linux/can/netlink.h#L31
+> 
+>>    b) pre-calculate a huge table of possible bitrates and present them
+>>       all to userspace. Sounds horrible, but that's what I did in can327,
+>>       haha. Maybe I should have reigned them in a little, to the most
+>>       useful values.
+> 
+> If your adapter only supports fixed values, then that's the only way to
+> go.
+> 
+>>    c) just limit the bitrates to whatever seems most useful (like the
+>>       "S" command's table), and let users complain if they really need
+>>       something else. In the meantime, they are still free to slcand or
+>>       minicom to their heart's content before attaching slcan, thanks to
+>>       your backwards compatibility efforts.
+> 
+> In the early stages of the non-mainline CAN framework we had tables for
+> BTR values for some fixed bit rates, but that turned out to be not
+> scaleable.
 
-Of course! Copy/paste from the if-statement where it originally was m(
+The Microchip CAN BUS Analyzer Tool is another example for fixed bitrates:
 
-Thanks for the review!
+https://elixir.bootlin.com/linux/v5.18.14/source/drivers/net/can/usb/mcba_usb.c#L156
 
-After these rounds I really feel better with the skb helpers which also 
-brought some clarity to other code that needed to separate between CAN 
-and CAN FD processing.
+So this might be the way to go here too ...
 
 Best regards,
 Oliver
+
+> 
+>> In short, to me, this isn't a deal breaker for your patch series.
+> 
+> Marc
+> 
