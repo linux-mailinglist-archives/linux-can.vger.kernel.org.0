@@ -2,56 +2,50 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE523584017
-	for <lists+linux-can@lfdr.de>; Thu, 28 Jul 2022 15:36:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D92505843F8
+	for <lists+linux-can@lfdr.de>; Thu, 28 Jul 2022 18:15:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbiG1Ngi (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 28 Jul 2022 09:36:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43470 "EHLO
+        id S233268AbiG1QPN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 28 Jul 2022 12:15:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231598AbiG1Nfp (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 28 Jul 2022 09:35:45 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5DE04C626
-        for <linux-can@vger.kernel.org>; Thu, 28 Jul 2022 06:35:44 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oH3fx-0006zM-4R; Thu, 28 Jul 2022 15:35:41 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id E1B3CBCE32;
-        Thu, 28 Jul 2022 13:35:37 +0000 (UTC)
-Date:   Thu, 28 Jul 2022 15:35:36 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can@vger.kernel.org,
-        Stephane Grosjean <s.grosjean@peak-system.com>,
-        Jimmy Assarsson <extja@kvaser.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Max Staudt <max@enpas.org>
-Subject: Re: [PATCH v4 05/14] can: tree-wide: advertise software timestamping
- capabilities
-Message-ID: <20220728133536.m2qdlkjxk5qtsddl@pengutronix.de>
-References: <20220727101641.198847-1-mailhol.vincent@wanadoo.fr>
- <20220727101641.198847-6-mailhol.vincent@wanadoo.fr>
- <20220728093819.q37lzttsknqzi6a5@pengutronix.de>
- <CAMZ6RqKFDpzB5L-HkJ0=gTw0vL6G7SV5bz=8dUgGpMS+OzvsOg@mail.gmail.com>
+        with ESMTP id S232868AbiG1QOu (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 28 Jul 2022 12:14:50 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C01176E2F8;
+        Thu, 28 Jul 2022 09:14:47 -0700 (PDT)
+Received: from [10.10.132.125] (unknown [83.149.199.65])
+        by mail.ispras.ru (Postfix) with ESMTPSA id A658240737CF;
+        Thu, 28 Jul 2022 16:14:43 +0000 (UTC)
+Message-ID: <7ea40c0e-e696-3537-c2a4-a8eccf4695d0@ispras.ru>
+Date:   Thu, 28 Jul 2022 19:14:43 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="elw3tgvny4o5ass6"
-Content-Disposition: inline
-In-Reply-To: <CAMZ6RqKFDpzB5L-HkJ0=gTw0vL6G7SV5bz=8dUgGpMS+OzvsOg@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] can: j1939: Remove unnecessary WARN_ON_ONCE in
+ j1939_sk_queue_activate_next_locked()
+Content-Language: en-US
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Robin van der Gracht <robin@protonic.nl>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Elenita Hinds <ecathinds@gmail.com>,
+        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        ldv-project@linuxtesting.org
+References: <20220720110645.519601-1-pchelkin@ispras.ru>
+ <20220720191357.GB5600@pengutronix.de>
+From:   Fedor Pchelkin <pchelkin@ispras.ru>
+In-Reply-To: <20220720191357.GB5600@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,69 +53,44 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello Oleksij,
 
---elw3tgvny4o5ass6
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I'm sorry for late answering.
 
-On 28.07.2022 22:28:51, Vincent MAILHOL wrote:
-> > > diff --git a/drivers/net/can/mscan/mscan.c b/drivers/net/can/mscan/ms=
-can.c
-> > > index 78a21ab63601..b1677588a4c8 100644
-> > > --- a/drivers/net/can/mscan/mscan.c
-> > > +++ b/drivers/net/can/mscan/mscan.c
-> > > @@ -676,6 +676,7 @@ struct net_device *alloc_mscandev(void)
-> > >       priv =3D netdev_priv(dev);
-> > >
-> > >       dev->netdev_ops =3D &mscan_netdev_ops;
-> > > +     dev->ethtool_ops =3D &mscan_ethtool_ops;
-> > >
-> > >       dev->flags |=3D IFF_ECHO; /* we support local echo */
-> >
-> > | drivers/net/can/mscan/mscan.c: In function =E2=80=98alloc_mscandev=E2=
-=80=99:
-> > | drivers/net/can/mscan/mscan.c:679:29: error: =E2=80=98mscan_ethtool_o=
-ps=E2=80=99 undeclared (first use in this function)
-> > |   679 |         dev->ethtool_ops =3D &mscan_ethtool_ops;
-> > |       |                             ^~~~~~~~~~~~~~~~~
-> > | drivers/net/can/mscan/mscan.c:679:29: note: each undeclared identifie=
-r is reported only once for each function it appears in
-> >
-> > I'm fixing this.
->=20
-> Thanks for catching this.
+On 20.07.2022 22:13, Oleksij Rempel wrote:
+>> Are you working on some system where this use case is valid?
 
-n.p.
+No, we are fuzzing the kernel and analyzing different warnings and
+crashes.
 
-> mscan does not show up in the menuconfig by default because it
-> requires CONFIG_PPC. And it is not possible to add CONFIG_COMPILE_TEST
-> to mscan's KBUILD file because some PPC specific symbols would be
-> missing. So this is yet another pitfall.
+On 20.07.2022 22:13, Oleksij Rempel wrote:
+ > yes
 
-:(
+Well, there is a long story about where and for which purposes the
+kernel warning macros should be correctly used and, overall,
+WARN_ON_ONCE is not intended for user-space notification.
 
-Marc
+Linus Torvalds wrote:
+ > WARN_ON() should only be used for "This cannot happen, but if it does,
+ > I want to know how we got here".
+ >
+ > So if that j1939 thing is something that can be triggered by a user,
+ > then the backtrace should be reported to the driver maintainer, and
+ > then either
+ >
+ > (a) the WARN_ON_ONCE() should just be removed ("ok, this can happen,
+ > we understand why it can happen, and it's fine")
+ >
+ > (b) the problem the WARN_ON_ONCE() reports about should be made
+ > impossible some way
+ >
+ > (c) it might be downgraded to a pr_warn() if people really want to
+ > tell user space that "guys, you're doing something wrong" and it's
+ > considered a useful warning.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+So WARN_ON_ONCE should be replaced with a more gentle variant - I think
+pr_warn_once would suit this case. I've prepared a new patch for that,
+it will follow this email.
 
---elw3tgvny4o5ass6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLikKUACgkQrX5LkNig
-012KfAf+IotEhzC+3cD6wFQvX5+WHGcs3oOHcfr3/djr4H/Xutm25tbfVahmHRVz
-ktKvWUyqWglnuDlDwPR6dog2iubAG2IbjGCw8BB5JfHuXSeVJKR0vrK8drS7lrQy
-AcJdknwQ3+Yv4gdqo1s5mdrDfj7uLwZA7jVWnPgvbROFQqoZ1hEmn45zTCEFRt80
-+b1z6HAwjT1+ZgRqNe0BagUYd3UC7Ha2tG96fLWdj8cRjWKK2xABMViYC+keShCL
-X2rb+ba/bzQmO73gR5jo87PBBcVQ8vS6974OqYuf87aZzTGFO8smCqXHDXiUFDdf
-pczGZQgFM0/+mRIbx97G8VUoC0cpvA==
-=UaRI
------END PGP SIGNATURE-----
-
---elw3tgvny4o5ass6--
+Could you also look at the patch - [PATCH] can: j1939: fix memory leak 
+of skbs - which I sent you on 08.07.2022, please?
