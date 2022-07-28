@@ -2,166 +2,237 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC60D583BC9
-	for <lists+linux-can@lfdr.de>; Thu, 28 Jul 2022 12:09:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82DFA583BF4
+	for <lists+linux-can@lfdr.de>; Thu, 28 Jul 2022 12:23:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235617AbiG1KJv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 28 Jul 2022 06:09:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40502 "EHLO
+        id S235744AbiG1KXT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 28 Jul 2022 06:23:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235813AbiG1KJe (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 28 Jul 2022 06:09:34 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA181A192
-        for <linux-can@vger.kernel.org>; Thu, 28 Jul 2022 03:09:33 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oH0SQ-0005Rw-6L; Thu, 28 Jul 2022 12:09:30 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id E1FF9BCC02;
-        Thu, 28 Jul 2022 10:09:27 +0000 (UTC)
-Date:   Thu, 28 Jul 2022 12:09:26 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can@vger.kernel.org,
-        Stephane Grosjean <s.grosjean@peak-system.com>,
-        Jimmy Assarsson <extja@kvaser.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Max Staudt <max@enpas.org>
-Subject: Re: [PATCH v4 00/14] can: add ethtool support and reporting of
- timestamping capabilities
-Message-ID: <20220728100926.ypvazixdmnlrh3gq@pengutronix.de>
-References: <20220727101641.198847-1-mailhol.vincent@wanadoo.fr>
+        with ESMTP id S235395AbiG1KXS (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 28 Jul 2022 06:23:18 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4013D51A01
+        for <linux-can@vger.kernel.org>; Thu, 28 Jul 2022 03:23:17 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id m12so2173033lfj.4
+        for <linux-can@vger.kernel.org>; Thu, 28 Jul 2022 03:23:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yMZGifoUNXOtUdS4KlzIsHVx4WHyBaSbYfIRmilRvlA=;
+        b=mjgVxSDm+fYEWn4vCVM3rACA/ySjzsyesKlU1sEiDPEb9FYZBRorT+TMhNwxwuhKIW
+         CSNkjDmJbYMmb/lLMqtIDa2jThXlXg7KDzoXuaRObv4+WFye8Azufk5jXHm48pcpSvaV
+         s03fHw+ZpdF7H+pryOufOwPzrTI0qXNXv/LVg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yMZGifoUNXOtUdS4KlzIsHVx4WHyBaSbYfIRmilRvlA=;
+        b=mDudf3TtWzVlIm0eFlIFfylWp6IYghYtMCikHPiD6skXs8dr7SpYP9EXFqy2LQMLWK
+         UMwXgI0WNGoh95j7T3r3ayxusof6E6di8x+3VNh6lsgl/alOP1jCIJk9jBsyJVerJmgE
+         b93O4Cd5wFnBtyBADs/cjyRbZ9KAqSwBMUHutteJtsz2eNvnW+zyRb8D4dyXu/HO3Vwj
+         xgSxhrHPn9IWtFw37seqV8O6qZ+UuyGS2jZXa7V7aUYenbxiThUhiadyfWZs/aALprB8
+         C/dI9M+ytFcnLLEgGkIsmnx0DOyE8qtHI0nIHrDOFa+9ABKToN31+NcNOm8sesI0907t
+         FRdg==
+X-Gm-Message-State: AJIora954E5RvIEfvzmZra1xoNJ+Kr9e+wG3nTQads/fRlx0bSyYovLq
+        g5sQi9WqxBIb3XKLUEqowMFzXpqHvyaN9RYOTZv+qA==
+X-Google-Smtp-Source: AGRyM1sQ94bkl3cSe4sS2qJv4YReX+VPVipCTj//NNAY/XHi3A7GR63/Gi8RtDRY2/sI20zjM0OWhcOQDqWq/QV+9qM=
+X-Received: by 2002:a05:6512:3503:b0:48a:6060:5ebb with SMTP id
+ h3-20020a056512350300b0048a60605ebbmr8980945lfs.429.1659003795334; Thu, 28
+ Jul 2022 03:23:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4b6hkae6tssp72j5"
-Content-Disposition: inline
-In-Reply-To: <20220727101641.198847-1-mailhol.vincent@wanadoo.fr>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220726210217.3368497-1-dario.binacchi@amarulasolutions.com>
+ <20220726210217.3368497-9-dario.binacchi@amarulasolutions.com>
+ <20220727113054.ffcckzlcipcxer2c@pengutronix.de> <20220727192839.707a3453.max@enpas.org>
+ <20220727182414.3mysdeam7mtnqyfx@pengutronix.de> <CABGWkvoE8i--g_2cNU6ToAfZk9WE6uK-nLcWy7J89hU6RidLWw@mail.gmail.com>
+ <20220728090228.nckgpmfe7rpnfcyr@pengutronix.de>
+In-Reply-To: <20220728090228.nckgpmfe7rpnfcyr@pengutronix.de>
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date:   Thu, 28 Jul 2022 12:23:04 +0200
+Message-ID: <CABGWkvoYR67MMmqZ6bRLuL3szhVb-gMwuAy6Z4YMkaG0yw6Sdg@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 8/9] can: slcan: add support to set bit time
+ register (btr)
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Max Staudt <max@enpas.org>, linux-kernel@vger.kernel.org,
+        linux-can@vger.kernel.org,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        michael@amarulasolutions.com,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Jeroen Hofstee <jhofstee@victronenergy.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Thu, Jul 28, 2022 at 11:02 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+>
+> On 28.07.2022 09:36:21, Dario Binacchi wrote:
+> > > Most of the other CAN drivers write the BTR values into the register of
+> > > the hardware. How are these BTR values transported into the driver?
+> > >
+> > > There are 2 ways:
+> > >
+> > > 1) - user space configures a bitrate
+> > >    - the kernel calculates with the "struct can_bittiming_const" [1] given
+> > >      by driver and the CAN clock rate the low level timing parameters.
+> > >
+> > >      [1] https://elixir.bootlin.com/linux/v5.18/source/include/uapi/linux/can/netlink.h#L47
+> > >
+> > > 2) - user space configures low level bit timing parameter
+> > >      (Sample point in one-tenth of a percent, Time quanta (TQ) in
+> > >       nanoseconds, Propagation segment in TQs, Phase buffer segment 1 in
+> > >       TQs, Phase buffer segment 2 in TQs, Synchronisation jump width in
+> > >       TQs)
+> > >     - the kernel calculates the Bit-rate prescaler from the given TQ and
+> > >       CAN clock rate
+> > >
+> > > Both ways result in a fully calculated "struct can_bittiming" [2]. The
+> > > driver translates this into the hardware specific BTR values and writes
+> > > the into the registers.
+> > >
+> > > If you know the CAN clock and the bit timing const parameters of the
+> > > slcan's BTR register you can make use of the automatic BTR calculation,
+> > > too. Maybe the framework needs some tweaking if the driver supports both
+> > > fixed CAN bit rate _and_ "struct can_bittiming_const".
+> >
+> > Does it make sense to use the device tree
+>
+> The driver doesn't support DT and DT only works for static serial
+> interfaces.
+>
+> > to provide the driver with those
+> > parameters required for the automatic calculation of the BTR (clock rate,
+> > struct can_bittiming_const, ...) that depend on the connected
+> > controller?
+>
+> The device tree usually says it's a CAN controller compatible to X and
+> the following clock(s) are connected. The driver for CAN controller X
+> knows the bit timing const. Some USB CAN drivers query the bit timing
+> const from the USB device.
+>
+> > In this way the solution should be generic and therefore scalable. I
+> > think we should also add some properties to map the calculated BTR
+> > value on the physical register of the controller.
+>
+> The driver knows how to map the "struct can_bittiming" to the BTR
+> register values of the hardware.
+>
+> What does the serial protocol say to the BTR values? Are these standard
+> SJA1000 layout with 8 MHz CAN clock or are those adapter specific?
 
---4b6hkae6tssp72j5
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I think they are adapter specific.
+This is  what the can232_ver3_Manual.pdf reports:
 
-On 27.07.2022 19:16:27, Vincent Mailhol wrote:
-> This series revolves around ethtool and timestamping. Its ultimate
-> goal is that the timestamping implementation within socketCAN meets
-> the specification of other network drivers in the kernel. This way,
-> tcpdump or other tools derived from libpcap can be used to do
-> timestamping on CAN devices.
->=20
-> * Example on a device with hardware timestamp support *
->=20
-> Before this series:
-> | # tcpdump -j adapter_unsynced -i can0
-> | tcpdump: WARNING: When trying to set timestamp type
-> | 'adapter_unsynced' on can0: That type of time stamp is not supported
-> | by that device
->=20
-> After applying this series, the warning disappears and tcpdump can be
-> used to get RX hardware timestamps.
->=20
->=20
-> This series is articulated in three major parts.
->=20
-> * Part 1: Add TX software timestamps and report the software
->   timestamping capabilities through ethtool.
->=20
-> All the drivers using can_put_echo_skb() already support TX software
-> timestamps. However, the five drivers not using this function (namely
-> can327, janz-ican3, slcan, vcan and vxcan) lack such support. Patch 1
-> to 4 adds this support.  Finally, patch 5 advertises the timesamping
-> capabilities of all drivers which do not support hardware timestamps.
->=20
->=20
-> * Part 2: add TX hardware timestapms
->=20
-> This part is a single patch. In SocketCAN TX hardware is equal to the
-> RX hardware timestamps of the corresponding loopback frame. Reuse the
-> TX hardware timestamp to populate the RX hardware timestamp. While the
-> need of this feature can be debatable, we implement it here so that
-> generic timestamping tools which are agnostic of the specificity of
-> SocketCAN can still obtain the value. For example, tcpdump expects for
-> both TX and RX hardware timestamps to be supported in order to do:
-> | # tcpdump -j adapter_unsynced -i canX
->=20
->=20
-> * Part 3: report the hardware timestamping capabilities and implement
->   the hardware timestamps ioctls.
->=20
-> The kernel documentation specifies in [1] that, for the drivers which
-> support hardware timestamping, SIOCSHWTSTAMP ioctl must be supported
-> and that SIOCGHWTSTAMP ioctl should be supported. Currently, none of
-> the CAN drivers do so. This is a gap.
->=20
-> Furthermore, even if not specified, the tools based on libpcap
-> (e.g. tcpdump) also expect ethtool_ops::get_ts_info to be implemented.
->=20
-> This last part first adds some generic implementation of
-> net_device_ops::ndo_eth_ioctl and ethtool_ops::get_ts_info which can
-> be used by the drivers with hardware timestamping capabilities.
->=20
-> It then uses those generic functions to add ioctl and reporting
-> functionalities to the drivers with hardware timestamping support
-> (namely: mcp251xfd, etas_es58x, kvaser_{pciefd,usb}, peak_{canfd,usb})
->=20
->=20
-> [1] Kernel doc: Timestamping, section 3.1 "Hardware Timestamping
-> Implementation: Device Drivers"
-> Link: https://docs.kernel.org/networking/timestamping.html#hardware-times=
-tamping-implementation-device-drivers
->=20
->=20
-> * Testing *
->=20
-> I also developed a tool to test all the different timestamps. For
-> those who would also like to test it, please have a look at:
-> https://lore.kernel.org/linux-can/20220725134345.432367-1-mailhol.vincent=
-@wanadoo.fr/T/
+sxxyy[CR]         Setup with BTR0/BTR1 CAN bit-rates where xx and yy is a hex
+                         value. This command is only active if the CAN
+channel is closed.
 
-Applied to linux-can-next/master with fixed mscan driver.
+xx     BTR0 value in hex
+yy     BTR1 value in hex
 
-regards,
-Marc
+Example:            s031C[CR]
+                           Setup CAN with BTR0=0x03 & BTR1=0x1C
+                           which equals to 125Kbit.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+But I think the example is misleading because IMHO it depends on the
+adapter's controller (0x31C -> 125Kbit).
 
---4b6hkae6tssp72j5
-Content-Type: application/pgp-signature; name="signature.asc"
+>
+> > Or, use the device tree to extend the bittates supported by the controller
+> > to the fixed ones (struct can_priv::bitrate_const)?
+>
+> The serial protocol defines fixed bit rates, no need to describe them in
+> the DT:
+>
+> |           0            10 Kbit/s
+> |           1            20 Kbit/s
+> |           2            50 Kbit/s
+> |           3           100 Kbit/s
+> |           4           125 Kbit/s
+> |           5           250 Kbit/s
+> |           6           500 Kbit/s
+> |           7           800 Kbit/s
+> |           8          1000 Kbit/s
+>
+> Are there more bit rates?
 
------BEGIN PGP SIGNATURE-----
+No, the manual can232_ver3_Manual.pdf does not contain any others.
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLiYFMACgkQrX5LkNig
-012ZCgf/YPkyUBn5PpWJ//y0KDHCuvMd2qe5Z6my6PGuoa6Ztj1hjgzq26dmSgGT
-5o0tOAO+KAXTAQ2iyDJytisCellKC35SgKFBA1eMRX4dTNsxq8UotzBDXemYGcnk
-UqYRtA4OszBDFt29aL6XVgMj9Z5OSglxDjY31C4762/tHsIPtkCV1Idzh20p0xa7
-P7zGZ67IecfhjxSe+PlAFatw5WG37WAIgyBKbZAKCuLVVBUkRuMetuzTFkOi6Jfq
-vkBpx7AsyYTZjWWukOUDsBOV85w16mlnUDqWfFG8aocT0cn5wu1yvxsXme6+kdJ0
-f1Wvh7UJNrDFNW9L/fAet1VQ37Iplg==
-=ri+6
------END PGP SIGNATURE-----
+What about defining a device tree node for the slcan (foo adapter):
 
---4b6hkae6tssp72j5--
+slcan {
+    compatible = "can,slcan";
+                                     /* bit rate btr0btr1 */
+    additional-bitrates = < 33333  0x0123
+                                        80000  0x4567
+                                        83333  0x89ab
+                                      150000 0xcd10
+                                      175000 0x2345
+                                      200000 0x6789>
+};
+
+So that the can_priv::bitrate_cons array (dynamically created) will
+contain the bitrates
+           10000,
+           20000,
+           50000,
+         100000,
+         125000,
+         250000,
+         500000,
+         800000,
+        1000000 /* end of standards bitrates,  use S command */
+           33333,  /* use s command, btr 0x0123 */
+           80000,  /* use s command, btr 0x4567 */
+           83333,  /* use s command, btr 0x89ab */
+         150000,  /* use s command, btr 0xcd10 */
+         175000, /* use s command, btr 0x2345 */
+         200000  /* use s command, btr 0x6789 */
+};
+
+So if a standard bitrate is requested, the S command is used,
+otherwise the s command with the associated btr.
+
+Thanks and regards,
+Dario
+
+>
+> regards,
+> Marc
+>
+> --
+> Pengutronix e.K.                 | Marc Kleine-Budde           |
+> Embedded Linux                   | https://www.pengutronix.de  |
+> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+--
+
+Dario Binacchi
+
+Embedded Linux Developer
+
+dario.binacchi@amarulasolutions.com
+
+__________________________________
+
+
+Amarula Solutions SRL
+
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+
+T. +39 042 243 5310
+info@amarulasolutions.com
+
+www.amarulasolutions.com
