@@ -2,45 +2,45 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E065852F8
-	for <lists+linux-can@lfdr.de>; Fri, 29 Jul 2022 17:41:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98F2C5852F9
+	for <lists+linux-can@lfdr.de>; Fri, 29 Jul 2022 17:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236558AbiG2Plc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 29 Jul 2022 11:41:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44020 "EHLO
+        id S237540AbiG2Pld (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 29 Jul 2022 11:41:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237961AbiG2PlT (ORCPT
+        with ESMTP id S237958AbiG2PlT (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Fri, 29 Jul 2022 11:41:19 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF3C86C24
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DDC967143
         for <linux-can@vger.kernel.org>; Fri, 29 Jul 2022 08:41:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1659109274;
     s=strato-dkim-0002; d=hartkopp.net;
     h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=DyC1Bci4NP0efT/OV+Vm8+N4maK529RK6bSh6buXtZ0=;
-    b=OZ40HkFfx88p5B/WFV/TPiQ7ZoctikoE6wPueaXUYY0EHRW1Zr2jMCPK9sVeFk7t5Y
-    BRYBUi68LcTtPPnu4SLgwVMqdD8Nz8s6FiU9pHkpCLAsTfE2W99JDP6iNmReU7haL8UA
-    V7l0hahP2r+GnfYpBTOn+fYWU8GF0/CYQNNhd5hpSXWvmvQdw5XRsoAXw7PMJ3QXCmcl
-    ry2AF0d4IbNeLXaCGuNoMogd8PEyNpYbiThY68GkMwO/KwY6jNKbugc2Kc3IAZMGmiBi
-    6J2DZxUjEWk9KVGDdCkqRFGmf2pPuJovYouWEYbLREsu3cOL/YVpI/OBJF9v0zjlIRjl
-    00ZQ==
+    bh=FCRuF+q2DALIlkVrQH3aWH+6rk/pC3Le7Lv488Pea+w=;
+    b=cjiOLN2e33aknxXMicTZoox3mrUvrloh/CyCxnfCEUqb0J48FljoeXrjjFNHngYJWk
+    U+zL7Cadi0hXKVeaZH0tnb1kFv9QFMm0ozrvp8X3WByKNbAcSfPoWHcCMYK6oeYcdiyX
+    gai43VoW4BQoMi9nc0ai5TIplBFktBiuW6WdSI2xTquKjIBvVTYdQVIodGK2lfaZsDza
+    NuflkSgLOhXrSFueX8pJvAHOIC1pgmnVPWby5rZkiq2nDGoZ9jD0GomDr1mH8G59kVZs
+    119+xi2GMFRLZsQL2mbZuIPT47jK1C9BNHXcjcjmVr3ypvAeBZLn63mbJtiID7e61LSb
+    XpkA==
 Authentication-Results: strato.com;
     dkim=none
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS/xvEBL7X5sbo3UIh9JiLceSWJaYwXUKbZ"
-X-RZG-CLASS-ID: mo00
+X-RZG-CLASS-ID: mo01
 Received: from silver.lan
     by smtp.strato.de (RZmta 47.47.0 AUTH)
-    with ESMTPSA id Icb1b0y6TFfECnt
+    with ESMTPSA id Icb1b0y6TFfECnu
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
     Fri, 29 Jul 2022 17:41:14 +0200 (CEST)
 From:   Oliver Hartkopp <socketcan@hartkopp.net>
 To:     linux-can@vger.kernel.org
 Cc:     Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: [PATCH v7 6/7] can: dev: add CAN XL support to virtual CAN
-Date:   Fri, 29 Jul 2022 17:41:06 +0200
-Message-Id: <20220729154107.1875-7-socketcan@hartkopp.net>
+Subject: [PATCH v7 7/7] can: raw: add CAN XL support
+Date:   Fri, 29 Jul 2022 17:41:07 +0200
+Message-Id: <20220729154107.1875-8-socketcan@hartkopp.net>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220729154107.1875-1-socketcan@hartkopp.net>
 References: <20220729154107.1875-1-socketcan@hartkopp.net>
@@ -55,139 +55,205 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Make use of new can_skb_get_data_len() helper.
-Add support for variable CANXL MTU using the new can_is_canxl_dev_mtu().
+Enable CAN_RAW sockets to read and write CAN XL frames analogue to the
+CAN FD extension (new CAN_RAW_XL_FRAMES sockopt).
+
+A CAN XL network interface is capable to handle Classical CAN, CAN FD and
+CAN XL frames. When CAN_RAW_XL_FRAMES is enabled, the CAN_RAW socket checks
+whether the addressed CAN network interface is capable to handle the
+provided CAN frame.
+
+In opposite to the fixed number of bytes for
+- CAN frames (CAN_MTU = sizeof(struct can_frame))
+- CAN FD frames (CANFD_MTU = sizeof(struct can_frame))
+the number of bytes when reading/writing CAN XL frames depends on the
+number of data bytes. For efficiency reasons the length of the struct
+canxl_frame is truncated to the needed size for read/write operations.
+This leads to a calculated size of CANXL_HDR_SIZE + canxl_frame::len which
+is enforced on write() operations and guaranteed on read() operations.
+
+NB: Valid length values are 1 .. 2048 (CANXL_MIN_DLEN .. CANXL_MAX_DLEN).
 
 Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 ---
- drivers/net/can/vcan.c  | 12 ++++++------
- drivers/net/can/vxcan.c |  8 ++++----
- include/linux/can/dev.h |  5 +++++
- 3 files changed, 15 insertions(+), 10 deletions(-)
+ include/uapi/linux/can/raw.h |  1 +
+ net/can/raw.c                | 55 ++++++++++++++++++++++++++++--------
+ 2 files changed, 44 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/net/can/vcan.c b/drivers/net/can/vcan.c
-index a15619d883ec..6c4d4ef93e80 100644
---- a/drivers/net/can/vcan.c
-+++ b/drivers/net/can/vcan.c
-@@ -68,33 +68,32 @@ static bool echo; /* echo testing. Default: 0 (Off) */
- module_param(echo, bool, 0444);
- MODULE_PARM_DESC(echo, "Echo sent frames (for testing). Default: 0 (Off)");
+diff --git a/include/uapi/linux/can/raw.h b/include/uapi/linux/can/raw.h
+index 3386aa81fdf2..ff12f525c37c 100644
+--- a/include/uapi/linux/can/raw.h
++++ b/include/uapi/linux/can/raw.h
+@@ -60,8 +60,9 @@ enum {
+ 	CAN_RAW_ERR_FILTER,	/* set filter for error frames       */
+ 	CAN_RAW_LOOPBACK,	/* local loopback (default:on)       */
+ 	CAN_RAW_RECV_OWN_MSGS,	/* receive my own msgs (default:off) */
+ 	CAN_RAW_FD_FRAMES,	/* allow CAN FD frames (default:off) */
+ 	CAN_RAW_JOIN_FILTERS,	/* all filters must match to trigger */
++	CAN_RAW_XL_FRAMES,	/* allow CAN XL frames (default:off) */
+ };
  
- static void vcan_rx(struct sk_buff *skb, struct net_device *dev)
- {
--	struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
- 	struct net_device_stats *stats = &dev->stats;
+ #endif /* !_UAPI_CAN_RAW_H */
+diff --git a/net/can/raw.c b/net/can/raw.c
+index d1bd9cc51ebe..c6859a061a7c 100644
+--- a/net/can/raw.c
++++ b/net/can/raw.c
+@@ -48,10 +48,11 @@
+ #include <linux/socket.h>
+ #include <linux/if_arp.h>
+ #include <linux/skbuff.h>
+ #include <linux/can.h>
+ #include <linux/can/core.h>
++#include <linux/can/dev.h> /* for can_is_canxl_dev_mtu() */
+ #include <linux/can/skb.h>
+ #include <linux/can/raw.h>
+ #include <net/sock.h>
+ #include <net/net_namespace.h>
  
- 	stats->rx_packets++;
--	stats->rx_bytes += cfd->len;
-+	stats->rx_bytes += can_skb_get_data_len(skb);
+@@ -85,10 +86,11 @@ struct raw_sock {
+ 	int ifindex;
+ 	struct list_head notifier;
+ 	int loopback;
+ 	int recv_own_msgs;
+ 	int fd_frames;
++	int xl_frames;
+ 	int join_filters;
+ 	int count;                 /* number of active filters */
+ 	struct can_filter dfilter; /* default/single filter */
+ 	struct can_filter *filter; /* pointer to filter(s) */
+ 	can_err_mask_t err_mask;
+@@ -127,12 +129,13 @@ static void raw_rcv(struct sk_buff *oskb, void *data)
  
- 	skb->pkt_type  = PACKET_BROADCAST;
- 	skb->dev       = dev;
- 	skb->ip_summed = CHECKSUM_UNNECESSARY;
+ 	/* check the received tx sock reference */
+ 	if (!ro->recv_own_msgs && oskb->sk == sk)
+ 		return;
  
- 	netif_rx(skb);
- }
+-	/* do not pass non-CAN2.0 frames to a legacy socket */
+-	if (!ro->fd_frames && oskb->len != CAN_MTU)
++	/* make sure to not pass oversized frames to the socket */
++	if ((can_is_canfd_skb(oskb) && !ro->fd_frames && !ro->xl_frames) ||
++	    (can_is_canxl_skb(oskb) && !ro->xl_frames))
+ 		return;
  
- static netdev_tx_t vcan_tx(struct sk_buff *skb, struct net_device *dev)
- {
--	struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
- 	struct net_device_stats *stats = &dev->stats;
--	int loop, len;
-+	unsigned int len;
-+	int loop;
+ 	/* eliminate multiple filter matches for the same skb */
+ 	if (this_cpu_ptr(ro->uniq)->skb == oskb &&
+ 	    this_cpu_ptr(ro->uniq)->skbcnt == can_skb_prv(oskb)->skbcnt) {
+@@ -344,10 +347,11 @@ static int raw_init(struct sock *sk)
  
- 	if (can_dropped_invalid_skb(dev, skb))
- 		return NETDEV_TX_OK;
+ 	/* set default loopback behaviour */
+ 	ro->loopback         = 1;
+ 	ro->recv_own_msgs    = 0;
+ 	ro->fd_frames        = 0;
++	ro->xl_frames        = 0;
+ 	ro->join_filters     = 0;
  
--	len = cfd->can_id & CAN_RTR_FLAG ? 0 : cfd->len;
-+	len = can_skb_get_data_len(skb);
- 	stats->tx_packets++;
- 	stats->tx_bytes += len;
+ 	/* alloc_percpu provides zero'ed memory */
+ 	ro->uniq = alloc_percpu(struct uniqframe);
+ 	if (unlikely(!ro->uniq))
+@@ -667,10 +671,19 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
+ 		if (copy_from_sockptr(&ro->fd_frames, optval, optlen))
+ 			return -EFAULT;
  
- 	/* set flag whether this packet has to be looped back */
- 	loop = skb->pkt_type == PACKET_LOOPBACK;
-@@ -132,11 +131,12 @@ static int vcan_change_mtu(struct net_device *dev, int new_mtu)
- {
- 	/* Do not allow changing the MTU while running */
- 	if (dev->flags & IFF_UP)
- 		return -EBUSY;
+ 		break;
  
--	if (new_mtu != CAN_MTU && new_mtu != CANFD_MTU)
-+	if (new_mtu != CAN_MTU && new_mtu != CANFD_MTU &&
-+	    !can_is_canxl_dev_mtu(new_mtu))
- 		return -EINVAL;
- 
- 	dev->mtu = new_mtu;
- 	return 0;
- }
-diff --git a/drivers/net/can/vxcan.c b/drivers/net/can/vxcan.c
-index 577a80300514..189f51428c24 100644
---- a/drivers/net/can/vxcan.c
-+++ b/drivers/net/can/vxcan.c
-@@ -35,14 +35,13 @@ struct vxcan_priv {
- 
- static netdev_tx_t vxcan_xmit(struct sk_buff *oskb, struct net_device *dev)
- {
- 	struct vxcan_priv *priv = netdev_priv(dev);
- 	struct net_device *peer;
--	struct canfd_frame *cfd = (struct canfd_frame *)oskb->data;
- 	struct net_device_stats *peerstats, *srcstats = &dev->stats;
- 	struct sk_buff *skb;
--	u8 len;
-+	unsigned int len;
- 
- 	if (can_dropped_invalid_skb(dev, oskb))
- 		return NETDEV_TX_OK;
- 
- 	rcu_read_lock();
-@@ -65,11 +64,11 @@ static netdev_tx_t vxcan_xmit(struct sk_buff *oskb, struct net_device *dev)
- 	skb->csum_start = 0;
- 	skb->pkt_type   = PACKET_BROADCAST;
- 	skb->dev        = peer;
- 	skb->ip_summed  = CHECKSUM_UNNECESSARY;
- 
--	len = cfd->can_id & CAN_RTR_FLAG ? 0 : cfd->len;
-+	len = can_skb_get_data_len(skb);
- 	if (netif_rx(skb) == NET_RX_SUCCESS) {
- 		srcstats->tx_packets++;
- 		srcstats->tx_bytes += len;
- 		peerstats = &peer->stats;
- 		peerstats->rx_packets++;
-@@ -127,11 +126,12 @@ static int vxcan_change_mtu(struct net_device *dev, int new_mtu)
- {
- 	/* Do not allow changing the MTU while running */
- 	if (dev->flags & IFF_UP)
- 		return -EBUSY;
- 
--	if (new_mtu != CAN_MTU && new_mtu != CANFD_MTU)
-+	if (new_mtu != CAN_MTU && new_mtu != CANFD_MTU &&
-+	    !can_is_canxl_dev_mtu(new_mtu))
- 		return -EINVAL;
- 
- 	dev->mtu = new_mtu;
- 	return 0;
- }
-diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
-index e22dc03c850e..8245ec7d2667 100644
---- a/include/linux/can/dev.h
-+++ b/include/linux/can/dev.h
-@@ -144,10 +144,15 @@ static inline int __must_check can_set_static_ctrlmode(struct net_device *dev,
- static inline u32 can_get_static_ctrlmode(struct can_priv *priv)
- {
- 	return priv->ctrlmode & ~priv->ctrlmode_supported;
- }
- 
-+static inline bool can_is_canxl_dev_mtu(unsigned int mtu)
-+{
-+	return (mtu >= CANXL_MIN_MTU && mtu <= CANXL_MAX_MTU);
-+}
++	case CAN_RAW_XL_FRAMES:
++		if (optlen != sizeof(ro->xl_frames))
++			return -EINVAL;
 +
- void can_setup(struct net_device *dev);
++		if (copy_from_sockptr(&ro->xl_frames, optval, optlen))
++			return -EFAULT;
++
++		break;
++
+ 	case CAN_RAW_JOIN_FILTERS:
+ 		if (optlen != sizeof(ro->join_filters))
+ 			return -EINVAL;
  
- struct net_device *alloc_candev_mqs(int sizeof_priv, unsigned int echo_skb_max,
- 				    unsigned int txqs, unsigned int rxqs);
- #define alloc_candev(sizeof_priv, echo_skb_max) \
+ 		if (copy_from_sockptr(&ro->join_filters, optval, optlen))
+@@ -749,10 +762,16 @@ static int raw_getsockopt(struct socket *sock, int level, int optname,
+ 		if (len > sizeof(int))
+ 			len = sizeof(int);
+ 		val = &ro->fd_frames;
+ 		break;
+ 
++	case CAN_RAW_XL_FRAMES:
++		if (len > sizeof(int))
++			len = sizeof(int);
++		val = &ro->xl_frames;
++		break;
++
+ 	case CAN_RAW_JOIN_FILTERS:
+ 		if (len > sizeof(int))
+ 			len = sizeof(int);
+ 		val = &ro->join_filters;
+ 		break;
+@@ -774,11 +793,15 @@ static int raw_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
+ 	struct raw_sock *ro = raw_sk(sk);
+ 	struct sockcm_cookie sockc;
+ 	struct sk_buff *skb;
+ 	struct net_device *dev;
+ 	int ifindex;
+-	int err;
++	int err = -EINVAL;
++
++	/* check for valid CAN frame sizes */
++	if (size < CANXL_HDR_SIZE + CANXL_MIN_DLEN || size > CANXL_MTU)
++		return -EINVAL;
+ 
+ 	if (msg->msg_name) {
+ 		DECLARE_SOCKADDR(struct sockaddr_can *, addr, msg->msg_name);
+ 
+ 		if (msg->msg_namelen < RAW_MIN_NAMELEN)
+@@ -794,32 +817,40 @@ static int raw_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
+ 
+ 	dev = dev_get_by_index(sock_net(sk), ifindex);
+ 	if (!dev)
+ 		return -ENXIO;
+ 
+-	err = -EINVAL;
+-	if (ro->fd_frames && dev->mtu == CANFD_MTU) {
+-		if (unlikely(size != CANFD_MTU && size != CAN_MTU))
+-			goto put_dev;
+-	} else {
+-		if (unlikely(size != CAN_MTU))
+-			goto put_dev;
+-	}
+-
+ 	skb = sock_alloc_send_skb(sk, size + sizeof(struct can_skb_priv),
+ 				  msg->msg_flags & MSG_DONTWAIT, &err);
+ 	if (!skb)
+ 		goto put_dev;
+ 
+ 	can_skb_reserve(skb);
+ 	can_skb_prv(skb)->ifindex = dev->ifindex;
+ 	can_skb_prv(skb)->skbcnt = 0;
+ 
++	/* fill the skb before testing for valid CAN frames */
+ 	err = memcpy_from_msg(skb_put(skb, size), msg, size);
+ 	if (err < 0)
+ 		goto free_skb;
+ 
++	err = -EINVAL;
++	if (ro->xl_frames && can_is_canxl_dev_mtu(dev->mtu)) {
++		/* CAN XL, CAN FD and Classical CAN */
++		if (!can_is_canxl_skb(skb) && !can_is_canfd_skb(skb) &&
++		    !can_is_can_skb(skb))
++			goto free_skb;
++	} else if (ro->fd_frames && dev->mtu == CANFD_MTU) {
++		/* CAN FD and Classical CAN */
++		if (!can_is_canfd_skb(skb) && !can_is_can_skb(skb))
++			goto free_skb;
++	} else {
++		/* Classical CAN */
++		if (!can_is_can_skb(skb))
++			goto free_skb;
++	}
++
+ 	sockcm_init(&sockc, sk);
+ 	if (msg->msg_controllen) {
+ 		err = sock_cmsg_send(sk, msg, &sockc);
+ 		if (unlikely(err))
+ 			goto free_skb;
 -- 
 2.30.2
 
