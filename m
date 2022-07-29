@@ -2,60 +2,35 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AB48584C23
-	for <lists+linux-can@lfdr.de>; Fri, 29 Jul 2022 08:52:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DD5A584CB2
+	for <lists+linux-can@lfdr.de>; Fri, 29 Jul 2022 09:34:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234813AbiG2GwX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 29 Jul 2022 02:52:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39778 "EHLO
+        id S234881AbiG2HeM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 29 Jul 2022 03:34:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234595AbiG2GwW (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 29 Jul 2022 02:52:22 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D88480508
-        for <linux-can@vger.kernel.org>; Thu, 28 Jul 2022 23:52:21 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id t22so6051799lfg.1
-        for <linux-can@vger.kernel.org>; Thu, 28 Jul 2022 23:52:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3YdU07mGqFiuXuE6icp9hQwa4CmEM4aos/lBcDu+paA=;
-        b=QyDv8RosvYisZ/L4YmozirAZZzmYZDY7TdGbixAgsSXGAEMlhYwhGViZucM5617Bwq
-         fV3a4JWt23Iqm6dsVPBvn57Fjg+sTE8QK2DbulGxGwtopIFcrEzaPOs4gSAXH+BvB19R
-         pQ/GZ878jdpwEKUB73n8wDCE4ozGeyUH3DzuM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3YdU07mGqFiuXuE6icp9hQwa4CmEM4aos/lBcDu+paA=;
-        b=mFmO2WbNmaJ6hYzHT90HHMQicqKdCnEoEfwtsYGlZlHMc+vX8yWX8v3BpvyCbm/Qi+
-         Htd7YXTyhypdH2iCtrx9/Y2NTvj2w68j/TxWwWAzTye03NdWHO3pD3LCT79ojxOsfnol
-         /tfG2TK7S837iQn2hJjYC4u3mdIM18tpva8XZO0OjSzrxabS5XWQ/YI+UBIJyTaR6Cjb
-         TP+SNL7RYgEqyIDicUDRUgm3KjZx+IkBf6qFa0Fty4t60xu31R4SXkwkWW60X5fkQLbw
-         ttgXSa2j7U0rdd/4JAOrXjpqxJLX22YEcTfdP/amJZSIU4UpZmRuV3ptRLjECuhWQP3r
-         SZCA==
-X-Gm-Message-State: AJIora8zU1Vs5wbMbCVhw4EKU82hydd9Vwidu9/8JYBymFXLNtDs38j2
-        X+V8U6UyrdX1jC4npptqeu0P9IE4gtYIOT3Tqz5wMg==
-X-Google-Smtp-Source: AGRyM1v+s6pbBabOtiq58q1rla6DcPiUzx1gexOuNWFWqJUbkqKm3CrTbCCRfCQTPYH+YpUhrxOvPPpTILQIGJdJmpU=
-X-Received: by 2002:a05:6512:2811:b0:48a:d1e1:12d2 with SMTP id
- cf17-20020a056512281100b0048ad1e112d2mr781330lfb.153.1659077538787; Thu, 28
- Jul 2022 23:52:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220726210217.3368497-1-dario.binacchi@amarulasolutions.com>
- <20220726210217.3368497-9-dario.binacchi@amarulasolutions.com>
- <20220727113054.ffcckzlcipcxer2c@pengutronix.de> <20220727192839.707a3453.max@enpas.org>
- <20220727182414.3mysdeam7mtnqyfx@pengutronix.de> <CABGWkvoE8i--g_2cNU6ToAfZk9WE6uK-nLcWy7J89hU6RidLWw@mail.gmail.com>
- <20220728090228.nckgpmfe7rpnfcyr@pengutronix.de> <CABGWkvoYR67MMmqZ6bRLuL3szhVb-gMwuAy6Z4YMkaG0yw6Sdg@mail.gmail.com>
- <20220728105049.43gbjuctezxzmm4j@pengutronix.de> <20220728125734.1c380d25.max@enpas.org>
-In-Reply-To: <20220728125734.1c380d25.max@enpas.org>
-From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date:   Fri, 29 Jul 2022 08:52:07 +0200
-Message-ID: <CABGWkvo0B8XM+5qLhz3zY2DzyUrEQtQyJnd91VweUWDUcjyr5A@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 8/9] can: slcan: add support to set bit time
- register (btr)
-To:     Max Staudt <max@enpas.org>, Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
+        with ESMTP id S233949AbiG2HeL (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 29 Jul 2022 03:34:11 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D20658049C
+        for <linux-can@vger.kernel.org>; Fri, 29 Jul 2022 00:34:09 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oHKVT-0007Pt-Hy; Fri, 29 Jul 2022 09:33:59 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 2F80CBD688;
+        Fri, 29 Jul 2022 07:33:55 +0000 (UTC)
+Date:   Fri, 29 Jul 2022 09:33:52 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     Max Staudt <max@enpas.org>, linux-kernel@vger.kernel.org,
+        linux-can@vger.kernel.org,
         Oliver Hartkopp <socketcan@hartkopp.net>,
         michael@amarulasolutions.com,
         Amarula patchwork <linux-amarula@amarulasolutions.com>,
@@ -65,9 +40,29 @@ Cc:     linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
         Wolfgang Grandegger <wg@grandegger.com>, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Subject: Re: [RFC PATCH v3 8/9] can: slcan: add support to set bit time
+ register (btr)
+Message-ID: <20220729073352.rfxdyjvttjp7rnfk@pengutronix.de>
+References: <20220726210217.3368497-9-dario.binacchi@amarulasolutions.com>
+ <20220727113054.ffcckzlcipcxer2c@pengutronix.de>
+ <20220727192839.707a3453.max@enpas.org>
+ <20220727182414.3mysdeam7mtnqyfx@pengutronix.de>
+ <CABGWkvoE8i--g_2cNU6ToAfZk9WE6uK-nLcWy7J89hU6RidLWw@mail.gmail.com>
+ <20220728090228.nckgpmfe7rpnfcyr@pengutronix.de>
+ <CABGWkvoYR67MMmqZ6bRLuL3szhVb-gMwuAy6Z4YMkaG0yw6Sdg@mail.gmail.com>
+ <20220728105049.43gbjuctezxzmm4j@pengutronix.de>
+ <20220728125734.1c380d25.max@enpas.org>
+ <CABGWkvo0B8XM+5qLhz3zY2DzyUrEQtQyJnd91VweUWDUcjyr5A@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="uvqgmkh7exxi4qsq"
+Content-Disposition: inline
+In-Reply-To: <CABGWkvo0B8XM+5qLhz3zY2DzyUrEQtQyJnd91VweUWDUcjyr5A@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,86 +70,118 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Marc and Max,
 
-On Thu, Jul 28, 2022 at 12:57 PM Max Staudt <max@enpas.org> wrote:
->
-> On Thu, 28 Jul 2022 12:50:49 +0200
-> Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->
-> > On 28.07.2022 12:23:04, Dario Binacchi wrote:
-> > > > > Does it make sense to use the device tree
-> > > >
-> > > > The driver doesn't support DT and DT only works for static serial
-> > > > interfaces.
+--uvqgmkh7exxi4qsq
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 29.07.2022 08:52:07, Dario Binacchi wrote:
+> Hello Marc and Max,
+>=20
+> On Thu, Jul 28, 2022 at 12:57 PM Max Staudt <max@enpas.org> wrote:
 > >
-> > Have you seen my remarks about Device Tree?
->
-> Dario, there seems to be a misunderstanding about the Device Tree.
->
-> It is used *only* for hardware that is permanently attached, present at
-> boot, and forever after. Not for dyamically added stuff, and definitely
-> not for ldiscs that have to be attached manually by the user.
->
->
-> The only exception to this is if you have an embedded device with an
-> slcan adapter permanently attached to one of its UARTs. Then you can
-> use the serdev ldisc adapter to attach the ldisc automatically at boot.
+> > On Thu, 28 Jul 2022 12:50:49 +0200
+> > Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> >
+> > > On 28.07.2022 12:23:04, Dario Binacchi wrote:
+> > > > > > Does it make sense to use the device tree
+> > > > >
+> > > > > The driver doesn't support DT and DT only works for static serial
+> > > > > interfaces.
+> > >
+> > > Have you seen my remarks about Device Tree?
+> >
+> > Dario, there seems to be a misunderstanding about the Device Tree.
+> >
+> > It is used *only* for hardware that is permanently attached, present at
+> > boot, and forever after. Not for dyamically added stuff, and definitely
+> > not for ldiscs that have to be attached manually by the user.
+> >
+> >
+> > The only exception to this is if you have an embedded device with an
+> > slcan adapter permanently attached to one of its UARTs. Then you can
+> > use the serdev ldisc adapter to attach the ldisc automatically at boot.
+>=20
+> It is evident that I am lacking some skills (I will try to fix it :)).
 
-It is evident that I am lacking some skills (I will try to fix it :)).
-I think it is
-equally clear that it is not worth going down this path.
+We're all here to learn something!
 
->
-> If you are actively developing for such a use case, please let us know,
-> so we know what you're after and can help you better :)
->
+> I think it is equally clear that it is not worth going down this path.
 
-I don't have a use case, other than to try, if possible, to make the driver
-autonomous from slcand / slcan_attach for the CAN bus setup.
+If you have a static attached serial devices serdev is the way to go.
+But slcan has so many drawbacks compared to "real" CAN adapters that I
+hope the no one uses them in such a scenario.
 
-Returning to Marc's previous analysis:
-"... Some USB CAN drivers query the bit timing const from the USB device."
+> > If you are actively developing for such a use case, please let us know,
+> > so we know what you're after and can help you better :)
+>=20
+> I don't have a use case, other than to try, if possible, to make the driv=
+er
+> autonomous from slcand / slcan_attach for the CAN bus setup.
 
-Can we think of taking the gs_usb driver as inspiration for getting/setting the
-bit timings?
+=46rom my point of view your job is done!
 
-https://elixir.bootlin.com/linux/latest/source/drivers/net/can/usb/gs_usb.c#L951
-https://elixir.bootlin.com/linux/latest/source/drivers/net/can/usb/gs_usb.c#L510
+> Returning to Marc's previous analysis:
+> "... Some USB CAN drivers query the bit timing const from the USB device."
+>=20
+> Can we think of taking the gs_usb driver as inspiration for getting/setti=
+ng the
+> bit timings?
+>=20
+> https://elixir.bootlin.com/linux/latest/source/drivers/net/can/usb/gs_usb=
+=2Ec#L951
+> https://elixir.bootlin.com/linux/latest/source/drivers/net/can/usb/gs_usb=
+=2Ec#L510
+>=20
+> and, as done with patches:
+>=20
+> can: slcan: extend the protocol with CAN state info
+> can: slcan: extend the protocol with error info
 
-and, as done with patches:
+You can define a way to query bit timing constants and CAN clock rate,
+but you have to get this into the "official" firmware. You have to roll
+out a firmware update to all devices. What about non official firmware?
 
-can: slcan: extend the protocol with CAN state info
-can: slcan: extend the protocol with error info
+> further extend the protocol to get/set the bit timing from / to the adapt=
+er ?
+> In the case of non-standard bit rates, the driver would try, depending on=
+ the
+> firmware of the adapter, to calculate and set the bit timings autonomousl=
+y.
 
-further extend the protocol to get/set the bit timing from / to the adapter ?
-In the case of non-standard bit rates, the driver would try, depending on the
-firmware of the adapter, to calculate and set the bit timings autonomously.
+If an adapter follows 100% the official firmware doc the BTR registers
+are interpreted as SJA1000 with 8 MHz CAN clock.
 
-Thanks and regards,
-Dario
+See
 
->
-> Max
+| https://lore.kernel.org/all/20220728105049.43gbjuctezxzmm4j@pengutronix.de
 
+where I compare the 125 Kbit/s BTR config of the documentation with the
+bit timing calculated by the kernel algorithm.
 
+regards,
+Marc
 
--- 
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-Dario Binacchi
+--uvqgmkh7exxi4qsq
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Embedded Linux Developer
+-----BEGIN PGP SIGNATURE-----
 
-dario.binacchi@amarulasolutions.com
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLjjV0ACgkQrX5LkNig
+011JXggAirzTuOAHUICqHeBohgikqNvfpTC2TSgukAcL9Gw2AkuU4P9kXEW/lHTc
+gjVFYxly67MCoBLXjpcbS4tvY4KveQBrD1UdFjka6NmWuSK1cf6TBiv9aw6OCWb+
+tWVgZuVk9SuPCDaHaY0ohfP4XflqH2M+ruFdKuoN2bElkM9gOv9exPCE+etGiVKq
+PnhCVwcGpUn04XqIOcnaIGjjhH68/rOLFnZH8vcV2uzHJ4iCfzok+1i5wZq0pvr6
+PtpHnfomhjtyc+kpzdEVoIz2e6ew1vQkQWchzhrRzrk+bnwMlnOBdvhbbkVecAKd
+oqeuYMqzgnafTco7n6a93CnUEQt/FA==
+=aZAq
+-----END PGP SIGNATURE-----
 
-__________________________________
-
-
-Amarula Solutions SRL
-
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-
-T. +39 042 243 5310
-info@amarulasolutions.com
-
-www.amarulasolutions.com
+--uvqgmkh7exxi4qsq--
