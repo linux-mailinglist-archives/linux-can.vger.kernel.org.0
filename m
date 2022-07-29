@@ -2,85 +2,129 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 924855851A9
-	for <lists+linux-can@lfdr.de>; Fri, 29 Jul 2022 16:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 559D75852F4
+	for <lists+linux-can@lfdr.de>; Fri, 29 Jul 2022 17:41:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236252AbiG2OhU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 29 Jul 2022 10:37:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43360 "EHLO
+        id S237722AbiG2Pl3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 29 Jul 2022 11:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237203AbiG2OhR (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 29 Jul 2022 10:37:17 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A2D7D7A0;
-        Fri, 29 Jul 2022 07:37:14 -0700 (PDT)
-Received: from localhost.localdomain (unknown [95.31.173.239])
-        by mail.ispras.ru (Postfix) with ESMTPSA id E259C4076263;
-        Fri, 29 Jul 2022 14:37:10 +0000 (UTC)
-From:   Fedor Pchelkin <pchelkin@ispras.ru>
-To:     Robin van der Gracht <robin@protonic.nl>,
-        Oleksij Rempel <linux@rempel-privat.de>
-Cc:     Fedor Pchelkin <pchelkin@ispras.ru>, kernel@pengutronix.de,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        ldv-project@linuxtesting.org,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: [PATCH v2] can: j1939: Replace WARN_ON_ONCE with netdev_warn_once() in j1939_sk_queue_activate_next_locked()
-Date:   Fri, 29 Jul 2022 17:36:55 +0300
-Message-Id: <20220729143655.1108297-1-pchelkin@ispras.ru>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220729142634.GD10850@pengutronix.de>
-References: 
+        with ESMTP id S237943AbiG2PlT (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 29 Jul 2022 11:41:19 -0400
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B50526FF
+        for <linux-can@vger.kernel.org>; Fri, 29 Jul 2022 08:41:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1659109273;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=WEWMdqgQlZoQ8j4Wd912H/Zfze5iq6c/w/oyMKkoYRA=;
+    b=OWI37ZVQuInapGBUep8QgMi2ypBAfAhke0HQjlIRPKXinNGC7dz5p8GIFL45bm39kC
+    MFpU3yAImBo+9lDFUcLXi64cPYIUT2tZunRqosyjMj6MoEm+2fJu0hjD/1a8jo9BUv5u
+    ENjxE2Xg2B58GlQo/r1ZrknXesBBb95R2wyWjIt49BO8fKpsLp1BjOLAPO9Em7hwksfZ
+    ohrcSy206ettyKhQsy88Ab0WBkLpKiYR++aAtVaw4k5DSbyKoEySMyuiJjFk8KZZQ/xK
+    RbJ/b7xNaL8TUmElJPpblCwZuNqWUy22zM6RznJWAf1AasI4xCHzPB/6Sh4KMMavoTxP
+    o2Og==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS/xvEBL7X5sbo3UIh9JiLceSWJaYwXUKbZ"
+X-RZG-CLASS-ID: mo00
+Received: from silver.lan
+    by smtp.strato.de (RZmta 47.47.0 AUTH)
+    with ESMTPSA id Icb1b0y6TFfDCnn
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Fri, 29 Jul 2022 17:41:13 +0200 (CEST)
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+To:     linux-can@vger.kernel.org
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: [PATCH v7 0/7] can: support CAN XL
+Date:   Fri, 29 Jul 2022 17:41:00 +0200
+Message-Id: <20220729154107.1875-1-socketcan@hartkopp.net>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-We should warn user-space that it is doing something wrong when trying to
-activate sessions with identical parameters but WARN_ON_ONCE macro can not
-be used here as it serves a different purpose.
+The CAN with eXtended data Length (CAN XL) is a new CAN protocol with a
+10Mbit/s data transfer with a new physical layer transceiver (for this
+data section). CAN XL allows up to 2048 byte of payload and shares the
+arbitration principle (11 bit priority) known from Classical CAN and
+CAN FD. RTR and 29 bit identifiers are not implemented in CAN XL.
 
-So it would be good to replace it with netdev_warn_once() message.
+A short introdution to CAN XL can be found here:
+https://www.bosch-semiconductors.com/media/ip_modules/pdf_2/can_xl_1/canxl_intro_20210225.pdf
 
-Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
+V2: Major rework after discussion and feedback on Linux-CAN ML
 
-Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
-Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
-Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
-Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
-v1 -> v2: Used netdev_warn_once() instead of pr_warn_once()
+- rework of struct canxl_frame
+- CANXL_XLF flag is now the switch between CAN XL and CAN/CANFD
+- variable length in r/w operations for CAN XL frames
+- write CAN XL frame to raw socket enforces size <-> canxl_frame.len sync
 
- net/can/j1939/socket.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+V3: Fix length for CAN XL frames inside the sk_buff
 
-diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
-index f5ecfdcf57b2..09e1d78bd22c 100644
---- a/net/can/j1939/socket.c
-+++ b/net/can/j1939/socket.c
-@@ -178,7 +178,10 @@ static void j1939_sk_queue_activate_next_locked(struct j1939_session *session)
- 	if (!first)
- 		return;
- 
--	if (WARN_ON_ONCE(j1939_session_activate(first))) {
-+	if (j1939_session_activate(first)) {
-+		netdev_warn_once(first->priv->ndev,
-+						 "%s: 0x%p: Identical session is already activated.\n",
-+						 __func__, first);
- 		first->err = -EBUSY;
- 		goto activate_next;
- 	} else {
+- extend the CAN_RAW sockopt to handle fixed/truncated read/write operations
+
+V4: Fix patch 5 (can: raw: add CAN XL support)
+
+- fix return value (move 'err = -EINVAL' in raw_sendmsg())
+- add CAN XL frame handling in can_rcv()
+- change comment for CAN_RAW_XL_[RT]X_DYN definition (allow -> enable)
+
+V5: Remove CAN_RAW_XL_[RT]X_DYN definition again
+
+- CAN_RAW_XL_[RT]X_DYN (truncated data) feature is now enabled by default
+- use CANXL_MIN_DLEN instead of '1' in canxl_frame definition
+- add missing 'err = -EINVAL' initialization in raw_sendmsg())
+
+V6:
+
+- rework an separate skb identification and length helpers
+- add CANFD_FDF flag in all CAN FD frame structures
+- simplify patches for infrastructure and raw sockets
+- add vxcan support in virtual CAN interface patch
+
+V7:
+
+- fixed indention as remarked by Marc
+- set CANFD_FDF flag when detecting CAN FD frames generated by PF_PACKET
+- Allow to use variable CAN XL MTU sizes to enforce real time requirements
+  on CAN XL segments (e.g. to support of CAN CiA segmentation concept)
+
+Oliver Hartkopp (7):
+  can: skb: unify skb CAN frame identification helpers
+  can: skb: add skb CAN frame data length helpers
+  can: set CANFD_FDF flag in all CAN FD frame structures
+  can: canxl: introduce CAN XL data structure
+  can: canxl: update CAN infrastructure for CAN XL frames
+  can: dev: add CAN XL support to virtual CAN
+  can: raw: add CAN XL support
+
+ drivers/net/can/ctucanfd/ctucanfd_base.c |   1 -
+ drivers/net/can/dev/rx-offload.c         |   2 +-
+ drivers/net/can/dev/skb.c                | 113 ++++++++++++++++-------
+ drivers/net/can/vcan.c                   |  12 +--
+ drivers/net/can/vxcan.c                  |   8 +-
+ include/linux/can/dev.h                  |   5 +
+ include/linux/can/skb.h                  |  57 +++++++++++-
+ include/uapi/linux/can.h                 |  55 ++++++++++-
+ include/uapi/linux/can/raw.h             |   1 +
+ include/uapi/linux/if_ether.h            |   1 +
+ net/can/af_can.c                         |  76 ++++++++-------
+ net/can/bcm.c                            |   9 +-
+ net/can/gw.c                             |   4 +-
+ net/can/isotp.c                          |   2 +-
+ net/can/j1939/main.c                     |   4 +
+ net/can/raw.c                            |  55 ++++++++---
+ 16 files changed, 299 insertions(+), 106 deletions(-)
+
 -- 
-2.25.1
+2.30.2
 
