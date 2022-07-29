@@ -2,27 +2,27 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C70C8584482
-	for <lists+linux-can@lfdr.de>; Thu, 28 Jul 2022 18:58:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D778584A8E
+	for <lists+linux-can@lfdr.de>; Fri, 29 Jul 2022 06:23:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232153AbiG1Q6p (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 28 Jul 2022 12:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43048 "EHLO
+        id S233600AbiG2EXC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 29 Jul 2022 00:23:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232075AbiG1Q6o (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 28 Jul 2022 12:58:44 -0400
+        with ESMTP id S233301AbiG2EXB (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 29 Jul 2022 00:23:01 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CBE161B0C
-        for <linux-can@vger.kernel.org>; Thu, 28 Jul 2022 09:58:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328AB77A51
+        for <linux-can@vger.kernel.org>; Thu, 28 Jul 2022 21:23:00 -0700 (PDT)
 Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1oH6qG-00082K-1X; Thu, 28 Jul 2022 18:58:32 +0200
+        id 1oHHWS-0001Up-I9; Fri, 29 Jul 2022 06:22:48 +0200
 Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1oH6qC-0001DX-8P; Thu, 28 Jul 2022 18:58:28 +0200
-Date:   Thu, 28 Jul 2022 18:58:28 +0200
+        id 1oHHWP-0002bH-0o; Fri, 29 Jul 2022 06:22:45 +0200
+Date:   Fri, 29 Jul 2022 06:22:44 +0200
 From:   Oleksij Rempel <o.rempel@pengutronix.de>
 To:     Fedor Pchelkin <pchelkin@ispras.ru>
 Cc:     Robin van der Gracht <robin@protonic.nl>,
@@ -32,22 +32,17 @@ Cc:     Robin van der Gracht <robin@protonic.nl>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
-        Bastian Stender <bst@pengutronix.de>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        ldv-project@linuxtesting.org
-Subject: Re: [PATCH] can: j1939: Replace WARN_ON_ONCE with pr_warn_once() in
- j1939_sk_queue_activate_next_locked()
-Message-ID: <20220728165828.GB30201@pengutronix.de>
-References: <7ea40c0e-e696-3537-c2a4-a8eccf4695d0@ispras.ru>
- <20220728163429.214758-1-pchelkin@ispras.ru>
+        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ldv-project@linuxtesting.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>
+Subject: Re: [PATCH] can: j1939: fix memory leak of skbs
+Message-ID: <20220729042244.GC30201@pengutronix.de>
+References: <20220708175949.539064-1-pchelkin@ispras.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220728163429.214758-1-pchelkin@ispras.ru>
+In-Reply-To: <20220708175949.539064-1-pchelkin@ispras.ru>
 X-Sent-From: Pengutronix Hildesheim
 X-URL:  http://www.pengutronix.de/
 X-Accept-Language: de,en
@@ -58,7 +53,8 @@ X-SA-Exim-Mail-From: ore@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -67,45 +63,60 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 Hi Fedor,
 
-thank you for your patch.
+thank you for work.
 
-On Thu, Jul 28, 2022 at 07:34:29PM +0300, Fedor Pchelkin wrote:
-> We should warn user-space that it is doing something wrong when trying to
-> activate sessions with identical parameters but WARN_ON_ONCE macro can not
-> be used here as it serves a different purpose.
+On Fri, Jul 08, 2022 at 08:59:49PM +0300, Fedor Pchelkin wrote:
+> Syzkaller reported memory leak of skbs introduced with the commit
+> 2030043e616c ("can: j1939: fix Use-after-Free, hold skb ref while in use").
+> 
+> Link to Syzkaller info and repro: https://forge.ispras.ru/issues/11743
+> 
+> The suggested solution was tested on the new memory-leak Syzkaller repro
+> and on the old use-after-free repro (that use-after-free bug was solved
+> with aforementioned commit). Although there can probably be another
+> situations when the numbers of skb_get() and skb_unref() calls don't match
+> and I don't see it in right way.
+> 
+> Moreover, skb_unref() call can be harmlessly removed from line 338 in
+> j1939_session_skb_drop_old() (/net/can/j1939/transport.c). But then I
+> assume this removal ruins the whole reference counts logic...
+> 
+> Overall, there is definitely something not clear in skb reference counts
+> management with skb_get() and skb_unref(). The solution we suggested fixes
+> the leaks and use-after-free's induced by Syzkaller but perhaps the origin
+> of the problem can be somewhere else.
 > 
 > Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
-> 
-> Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
 > Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
 > Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
 > ---
->  net/can/j1939/socket.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  net/can/j1939/transport.c | 1 -
+>  1 file changed, 1 deletion(-)
 > 
-> diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
-> index f5ecfdcf57b2..67e8b50b8bc1 100644
-> --- a/net/can/j1939/socket.c
-> +++ b/net/can/j1939/socket.c
-> @@ -178,7 +178,8 @@ static void j1939_sk_queue_activate_next_locked(struct j1939_session *session)
->  	if (!first)
->  		return;
+> diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
+> index 307ee1174a6e..9600b339cbf8 100644
+> --- a/net/can/j1939/transport.c
+> +++ b/net/can/j1939/transport.c
+> @@ -356,7 +356,6 @@ void j1939_session_skb_queue(struct j1939_session *session,
 >  
-> -	if (WARN_ON_ONCE(j1939_session_activate(first))) {
-> +	if (j1939_session_activate(first)) {
-> +		pr_warn_once("can: j1939: Identical session is already activated.\n");
+>  	skcb->flags |= J1939_ECU_LOCAL_SRC;
+>  
+> -	skb_get(skb);
+>  	skb_queue_tail(&session->skb_queue, skb);
+>  }
 
-please use netdev_warn_once().
-Otherwise looks good.
+This skb_get() is counter part of skb_unref()
+j1939_session_skb_drop_old().
 
->  		first->err = -EBUSY;
->  		goto activate_next;
->  	} else {
-> -- 
-> 2.25.1
-> 
-> 
+Initial issue can be reproduced by using real (slow) CAN with j1939cat[1]
+tool. Both parts should be started to make sure the j1939_session_tx_dat() will
+actually start using the queue. After pushing about 100K of data, application
+will try to close the socket and exit. After socket is closed, all skb related
+to this socket will be freed and j1939_session_tx_dat() will use freed skbs.
 
+NACK for this patch.
+
+1. https://github.com/linux-can/can-utils/blob/master/j1939cat.c
 -- 
 Pengutronix e.K.                           |                             |
 Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
