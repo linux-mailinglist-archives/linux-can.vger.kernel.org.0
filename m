@@ -2,147 +2,153 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36670586CEF
-	for <lists+linux-can@lfdr.de>; Mon,  1 Aug 2022 16:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA727586FAD
+	for <lists+linux-can@lfdr.de>; Mon,  1 Aug 2022 19:42:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbiHAOg0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Mon, 1 Aug 2022 10:36:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49092 "EHLO
+        id S232212AbiHARmN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 1 Aug 2022 13:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231459AbiHAOgZ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 1 Aug 2022 10:36:25 -0400
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D2033368
-        for <linux-can@vger.kernel.org>; Mon,  1 Aug 2022 07:36:23 -0700 (PDT)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-2ef5380669cso110839907b3.9
-        for <linux-can@vger.kernel.org>; Mon, 01 Aug 2022 07:36:23 -0700 (PDT)
+        with ESMTP id S232105AbiHARmM (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 1 Aug 2022 13:42:12 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8893618B33
+        for <linux-can@vger.kernel.org>; Mon,  1 Aug 2022 10:42:11 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-10e6bdbe218so14497809fac.10
+        for <linux-can@vger.kernel.org>; Mon, 01 Aug 2022 10:42:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=EyD03pfVpeH7iUsN9cfO7bixQfRvh2HMA3MIy+9mnb0=;
+        b=EaLDBYXF7PwQExk638enSBzIYCz8w4YKgHmhUFAfi9ydUT1miL2FJI6k/ArR6MYWTB
+         jngIFoOEMAqtfGdwHuTP/Qf8bILm+LtLE/HVrwm80VShbHiCMx9M6YeuqPSEao3uw17R
+         6lonxzRiNV6/uzlVDe5Jk5YUSZm7zCH8lxBq4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=2j1SEBDr1oDem/7kypqVwzGkjOJpVMx8WGZBSXmmUkk=;
-        b=VI8HcCUq5062PC+VzoD3yW6nLq3XCmbSxohTUZrZkXBZuIaAX8++jxGsyNbTV5zsdY
-         /kycBJkMKwSTrML0g4siToZhN9VhQ68wI1aEOsxfikuJF5c+/L3fwA/3B/T9Tfr5bjI0
-         xEcV2LaoBDvrp2RFP+Pi4yYQl5wb4xrH+9B6Y61BxhSzXtDCk1q41y4hU6vE2TD/8Ov/
-         OEtqoPPAOY7XOxV7I5Fj1g7hpTpCv/Dr9YWMsD+KAxFBAov/6RIwNMPBHcn7mPOQyuYY
-         G8OWjBaME9pG+2aCqMAj8xr6Bqg19k8n5EliTOF6NTM3bKLP3dcKjc3tu5FhohiZ2H+p
-         ON/Q==
-X-Gm-Message-State: ACgBeo2GFoyHpj0j4Vh1+oIqdaEvWo6uJ+U3qEkKeCPFJZNWKheorpmL
-        SaSE7hEe2f0vGh8EAib+nB312IkWE1N+yeBW62fLMersTbY=
-X-Google-Smtp-Source: AA6agR6NzG1pLgNm87/MsnT9z9gZ66uWbOzcWjpwv0JTW79YvJrqCBhM4K1GFdhwdIBVZxlX2H5/ONuZYUHXM7IFYFM=
-X-Received: by 2002:a81:11c2:0:b0:31f:5a44:c0b7 with SMTP id
- 185-20020a8111c2000000b0031f5a44c0b7mr13674233ywr.518.1659364582452; Mon, 01
- Aug 2022 07:36:22 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=EyD03pfVpeH7iUsN9cfO7bixQfRvh2HMA3MIy+9mnb0=;
+        b=pQ0vT/v1wSuk63uTux4mQIoDg2/QkB/B69S2XL3hShrFsHIXApYPELdHrYRbrMKWar
+         a2TXC+0kMf78fLAg5GaMawqjt1J6B3X1iVwXWhVNXksuWTT6NGnt4OPCHNd4cyipFcA0
+         MGb9Z5orXE8PQnJctYBmK/mKFyJQi5egrPIDZES5ZjoS7UL/vvJTpBrRwAwpJs9hEp1s
+         +Ye/2XIBrtyCc9vGEqvzzY+VLJ+e30UyTtd84kvU+6LxmfqHHKURMV5ANeiWfbF9/VEO
+         Nvii6krS0qwlyXJJymWoePRD+pPJv4R61fgZwVUaVEiPWXZe6cLMMrCQQ38oZG+Dr4cI
+         9kJA==
+X-Gm-Message-State: AJIora/lrc95y6p+rGInvwy99tFCk+SaKCMrbX7pgrBmlYot1OnUesjd
+        8OABffq3tFqz/2LYdhc11/uz8A==
+X-Google-Smtp-Source: AGRyM1sISZF/mWnQtd1spLElr1rjiH1whX16vTUR5jYHPvLPwUzLz1srSaeEOE3J8LSR+OxOZyw1FA==
+X-Received: by 2002:a05:6870:61ca:b0:10c:1358:4eaf with SMTP id b10-20020a05687061ca00b0010c13584eafmr8025002oah.111.1659375730489;
+        Mon, 01 Aug 2022 10:42:10 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id j8-20020a9d7d88000000b0061c3753c30dsm2876274otn.17.2022.08.01.10.42.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 Aug 2022 10:42:09 -0700 (PDT)
+Subject: Re: [PATCH v3 1/2] drivers: usb/core/urb: Add URB_FREE_COHERENT
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Hongren Zenithal Zheng <i@zenithal.me>
+Cc:     Rhett Aultman <rhett.aultman@samsara.com>,
+        linux-usb@vger.kernel.org, linux-can <linux-can@vger.kernel.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220609204714.2715188-1-rhett.aultman@samsara.com>
+ <20220610213335.3077375-1-rhett.aultman@samsara.com>
+ <20220610213335.3077375-2-rhett.aultman@samsara.com> <YrSjRvb8rIIayGlg@Sun>
+ <143b863d-c86b-6678-44e6-38799391fa36@linuxfoundation.org>
+ <YrXNltWSYbplstPx@rowland.harvard.edu>
+ <aaf64d6c-1893-67ed-013e-67d21c8be152@linuxfoundation.org>
+ <YrX9SBpxp1E2cOyI@rowland.harvard.edu>
+ <e1c416bc-0239-6070-c516-c98332a6491d@linuxfoundation.org>
+ <Yrpa1zpwfauSMoTi@rowland.harvard.edu>
+ <b18313ab-c408-83dc-ee96-a64a432fbfcb@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <07e82270-cc75-d346-72cf-0a60ffba06dc@linuxfoundation.org>
+Date:   Mon, 1 Aug 2022 11:42:07 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-References: <20220801080446.36374-1-lukas.magel@posteo.net>
-In-Reply-To: <20220801080446.36374-1-lukas.magel@posteo.net>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Mon, 1 Aug 2022 23:36:10 +0900
-Message-ID: <CAMZ6RqJD4w_vpaSABdW26aySviVC9ECN4fsP2F+k3vP8GXg9pw@mail.gmail.com>
-Subject: Re: [PATCH v1] can: peak_usb: export PCAN device ID as sysfs device attribute
-To:     Lukas Magel <lukas.magel@posteo.net>
-Cc:     linux-can@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <b18313ab-c408-83dc-ee96-a64a432fbfcb@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Lukas,
+On 6/30/22 8:10 PM, Shuah Khan wrote:
+> On 6/27/22 7:35 PM, Alan Stern wrote:
+>> On Mon, Jun 27, 2022 at 04:54:17PM -0600, Shuah Khan wrote:
+>>> On 6/24/22 12:07 PM, Alan Stern wrote:
+>>>> In the future people will want to make other changes to
+>>>> include/linux/usb.h and they will not be aware that those changes will
+>>>> adversely affect usbip, because there is no documentation saying that
+>>>> the values defined in usb.h are part of a user API.  That will be a
+>>>> problem, because those changes may be serious and important ones, not
+>>>> just decorative or stylistic as in this case.
+>>>>
+>>>
+>>> How often do these values change based on our past experience with these
+>>> fields?
+>>
+>> I don't know.  You could check the git history to find out for certain.
+>> My guess would be every eight or ten years.
+>>
+>>>> I agree with Hongren that values defined in include/linux/ should not be
+>>>> part of a user API.  There are two choices:
+>>>>
+>>>
+>>> I agree with this in general. I don't think this is an explicit decision
+>>> to make them part of API. It is a consequence of simply copying the
+>>> transfer_flags. I am with you both on not being able to recognize the
+>>> impact until as this is rather obscure usage hidden away in the packets.
+>>> These defines aren't directly referenced.
+>>>
+>>>>     Move the definitions into include/uapi/linux/, or
+>>>>
+>>>
+>>> Wouldn't this be easier way to handle the change? With this option
+>>> the uapi will be well documented.
+>>>
+>>>>     Add code to translate the values between the numbers used in
+>>>>     userspace and the numbers used in the kernel.  (This is what
+>>>>     was done for urb->transfer_flags in devio.c:proc_do_submiturb()
+>>>>     near line 1862.)
+>>>>
+>>>
+>>> I looked at the code and looks simple enough. I am okay going this route
+>>> if we see issues with the option 1.
+>>
+>> It's up to you; either approach is okay with me.  However, I do think
+>> that the second option is a little better; I don't see any good reason
+>> why the kernel should be forced to use the same numeric values for these
+>> flags forever.  Especially since the only user program that needs to
+>> know them is usbip, which is fairly closely tied to the kernel; if there
+>> were more programs using those values then they would constitute a good
+>> reason for choosing the first option.
+>>
+> 
+> Thank you Alan and Hongren for your help with this problem. Since there
+> are no changes to the flags for the time being, I am comfortable going
+> with the second option.
+> 
+> I will send a patch soon.
+> 
 
-Welcome on the linux-can mailing list!
+Patch is almost ready to be sent out. Changes aren't bad at all. Hoping to
+get this done sooner - summer vacations didn't cooperate.
 
-On Mon. 1 août 2022 at 17:13, Lukas Magel <lukas.magel@posteo.net> wrote:
-> Peak USB devices support a configurable u8 / u32 device ID. In
-> multi-device setups, this device ID can be configured and used to
-> identify individual CAN interfaces independent of the order in which
-> they are plugged into the system. At the current time, the device ID
-> is already queried from the device and stored in the peak_usb_device
-> struct.
->
-> This patch exports the device ID (called device_number in the struct)
-> as a sysfs attribute. The attribute name was chosen to be device_id
-> instead of device_number because the latter has been deprecated by Peak
-> in their API.
->
-> Signed-off-by: Lukas Magel <lukas.magel@posteo.net>
-> Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Just an update that I haven't forgotten and it will taken care of.
+thanks,
+-- Shuah
 
-For the public record, I did the review in private message.
-
-> ---
-> For the moment, the patch only implements read support for the device
-> ID. My next goal is to also implement write access. However, this
-> will require a more significant modification of the driver since the
-> corresponding commands for ID retrieval and configuration are not
-> implemented for all device types.
->
->  drivers/net/can/usb/peak_usb/pcan_usb_core.c | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
->
-> diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.c b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
-> index 27b0a72fd885..43df178e9473 100644
-> --- a/drivers/net/can/usb/peak_usb/pcan_usb_core.c
-> +++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
-> @@ -15,6 +15,8 @@
->  #include <linux/netdevice.h>
->  #include <linux/usb.h>
->  #include <linux/ethtool.h>
-> +#include <linux/device.h>
-> +#include <linux/sysfs.h>
->
->  #include <linux/can.h>
->  #include <linux/can/dev.h>
-> @@ -53,6 +55,15 @@ static const struct usb_device_id peak_usb_table[] = {
->
->  MODULE_DEVICE_TABLE(usb, peak_usb_table);
->
-> +static ssize_t device_id_show(struct device *dev, struct device_attribute *attr, char *buf)
-> +{
-> +       struct net_device *netdev = to_net_dev(dev);
-> +       struct peak_usb_device *peak_dev = netdev_priv(netdev);
-> +
-> +       return sysfs_emit(buf, "%08X\n", peak_dev->device_number);
-> +}
-> +static DEVICE_ATTR_RO(device_id);
-> +
->  /*
->   * dump memory
->   */
-> @@ -887,6 +898,11 @@ static int peak_usb_create_dev(const struct peak_usb_adapter *peak_usb_adapter,
->         netdev_info(netdev, "attached to %s channel %u (device %u)\n",
->                         peak_usb_adapter->name, ctrl_idx, dev->device_number);
->
-> +       err = device_create_file(&netdev->dev, &dev_attr_device_id);
-> +       /* Do not error out since device was configured successfully */
-> +       if (err)
-> +               netdev_warn(netdev, "unable to expose device_id via sysfs %d\n", err);
-
-netdev_warn(netdev, "unable to expose device_id via sysfs %pe\n", ERR_PTR(err));
-
-I forgot this point in my first review. The %pe will print the
-mnemotechnic instead of the error number. c.f.:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=57f5677e535ba24b8926a7125be2ef8d7f09323c
-
-> +
->         return 0;
->
->  adap_dev_free:
-> @@ -923,6 +939,8 @@ static void peak_usb_disconnect(struct usb_interface *intf)
->                 dev->state &= ~PCAN_USB_STATE_CONNECTED;
->                 strlcpy(name, netdev->name, IFNAMSIZ);
->
-> +               device_remove_file(&netdev->dev, &dev_attr_device_id);
-> +
->                 unregister_netdev(netdev);
->
->                 kfree(dev->cmd_buf);
-> --
-> 2.37.1
->
