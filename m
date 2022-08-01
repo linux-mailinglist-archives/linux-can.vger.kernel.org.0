@@ -2,92 +2,126 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D5135860F4
-	for <lists+linux-can@lfdr.de>; Sun, 31 Jul 2022 21:22:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC33D5865FA
+	for <lists+linux-can@lfdr.de>; Mon,  1 Aug 2022 10:05:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234198AbiGaTWj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 31 Jul 2022 15:22:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33224 "EHLO
+        id S229760AbiHAIFf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 1 Aug 2022 04:05:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238283AbiGaTV5 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 31 Jul 2022 15:21:57 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD95C1182F
-        for <linux-can@vger.kernel.org>; Sun, 31 Jul 2022 12:21:04 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oIEUl-0008G1-Uj
-        for linux-can@vger.kernel.org; Sun, 31 Jul 2022 21:20:59 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 77D7BBED2E
-        for <linux-can@vger.kernel.org>; Sun, 31 Jul 2022 19:20:41 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id F0509BED12;
-        Sun, 31 Jul 2022 19:20:40 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id c8824923;
-        Sun, 31 Jul 2022 19:20:31 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next 36/36] can: can327: fix a broken link to Documentation
-Date:   Sun, 31 Jul 2022 21:20:29 +0200
-Message-Id: <20220731192029.746751-37-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220731192029.746751-1-mkl@pengutronix.de>
-References: <20220731192029.746751-1-mkl@pengutronix.de>
+        with ESMTP id S229555AbiHAIFd (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 1 Aug 2022 04:05:33 -0400
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B08DE1
+        for <linux-can@vger.kernel.org>; Mon,  1 Aug 2022 01:05:32 -0700 (PDT)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout02.posteo.de (Postfix) with ESMTPS id 7730E240104
+        for <linux-can@vger.kernel.org>; Mon,  1 Aug 2022 10:05:29 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+        t=1659341129; bh=VcN7O1YaJMbD7d9hK3A+3wrI3Lxi8b3nHGG7rFoEss0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=m7w9JiUNet76AHNqTB0HskifLR3o3EmivwNkGMHeB5ynAF8zhGvW59YYSqkjWKqi0
+         ar1ne7WfXftHcR/q8+cV81CoAMvlrCGYZaSfxpMEt9pfEi4f9XqMZa3ROXx/rK9Vln
+         y8rbrg7Bmzsk7pfjswrryxwkZiEAnStsmWqDlJvXlQyfjbP3q4VK+eb3nl7bewzOmf
+         UMGtIWkMzY1urfYxBU+rGpSigo7TIfBJv9DKBUoC/Kzi2PJV3v6yDmpt6oizT+mZze
+         RJbhQ5W8K+5mJapf9SPLvQJePwXIgWqSI7ouiJ2xeO3E/kX4qy+6lH5IFRwyVyA3j7
+         JZSiDuhJzYNsw==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4Lx9fJ3sXRz9rxP;
+        Mon,  1 Aug 2022 10:05:28 +0200 (CEST)
+From:   Lukas Magel <lukas.magel@posteo.net>
+To:     linux-can@vger.kernel.org
+Cc:     Lukas Magel <lukas.magel@posteo.net>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v1] can: peak_usb: export PCAN device ID as sysfs device attribute
+Date:   Mon,  1 Aug 2022 08:04:46 +0000
+Message-Id: <20220801080446.36374-1-lukas.magel@posteo.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Peak USB devices support a configurable u8 / u32 device ID. In
+multi-device setups, this device ID can be configured and used to
+identify individual CAN interfaces independent of the order in which
+they are plugged into the system. At the current time, the device ID
+is already queried from the device and stored in the peak_usb_device
+struct.
 
-Since commit 482a4360c56a ("docs: networking: convert netdevices.txt to
-ReST"), Documentation/networking/netdevices.txt has been replaced by
-Documentation/networking/netdevices.rst.
+This patch exports the device ID (called device_number in the struct)
+as a sysfs attribute. The attribute name was chosen to be device_id
+instead of device_number because the latter has been deprecated by Peak
+in their API.
 
-Update the comment accordingly to avoid a 'make htmldocs' warning.
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Link: https://lore.kernel.org/all/6a54aff884ea4f84b661527d75aabd6632140715.1659249135.git.christophe.jaillet@wanadoo.fr
-Fixes: 43da2f07622f ("can: can327: CAN/ldisc driver for ELM327 based OBD-II adapters")
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Lukas Magel <lukas.magel@posteo.net>
+Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 ---
- drivers/net/can/can327.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+For the moment, the patch only implements read support for the device
+ID. My next goal is to also implement write access. However, this
+will require a more significant modification of the driver since the
+corresponding commands for ID retrieval and configuration are not
+implemented for all device types.
 
-diff --git a/drivers/net/can/can327.c b/drivers/net/can/can327.c
-index 50a374972ad9..0aa1af31d0fe 100644
---- a/drivers/net/can/can327.c
-+++ b/drivers/net/can/can327.c
-@@ -827,7 +827,7 @@ static netdev_tx_t can327_netdev_start_xmit(struct sk_buff *skb,
- 	netif_stop_queue(dev);
+ drivers/net/can/usb/peak_usb/pcan_usb_core.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.c b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+index 27b0a72fd885..43df178e9473 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb_core.c
++++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+@@ -15,6 +15,8 @@
+ #include <linux/netdevice.h>
+ #include <linux/usb.h>
+ #include <linux/ethtool.h>
++#include <linux/device.h>
++#include <linux/sysfs.h>
  
- 	/* BHs are already disabled, so no spin_lock_bh().
--	 * See Documentation/networking/netdevices.txt
-+	 * See Documentation/networking/netdevices.rst
- 	 */
- 	spin_lock(&elm->lock);
- 	can327_send_frame(elm, frame);
+ #include <linux/can.h>
+ #include <linux/can/dev.h>
+@@ -53,6 +55,15 @@ static const struct usb_device_id peak_usb_table[] = {
+ 
+ MODULE_DEVICE_TABLE(usb, peak_usb_table);
+ 
++static ssize_t device_id_show(struct device *dev, struct device_attribute *attr, char *buf)
++{
++	struct net_device *netdev = to_net_dev(dev);
++	struct peak_usb_device *peak_dev = netdev_priv(netdev);
++
++	return sysfs_emit(buf, "%08X\n", peak_dev->device_number);
++}
++static DEVICE_ATTR_RO(device_id);
++
+ /*
+  * dump memory
+  */
+@@ -887,6 +898,11 @@ static int peak_usb_create_dev(const struct peak_usb_adapter *peak_usb_adapter,
+ 	netdev_info(netdev, "attached to %s channel %u (device %u)\n",
+ 			peak_usb_adapter->name, ctrl_idx, dev->device_number);
+ 
++	err = device_create_file(&netdev->dev, &dev_attr_device_id);
++	/* Do not error out since device was configured successfully */
++	if (err)
++		netdev_warn(netdev, "unable to expose device_id via sysfs %d\n", err);
++
+ 	return 0;
+ 
+ adap_dev_free:
+@@ -923,6 +939,8 @@ static void peak_usb_disconnect(struct usb_interface *intf)
+ 		dev->state &= ~PCAN_USB_STATE_CONNECTED;
+ 		strlcpy(name, netdev->name, IFNAMSIZ);
+ 
++		device_remove_file(&netdev->dev, &dev_attr_device_id);
++
+ 		unregister_netdev(netdev);
+ 
+ 		kfree(dev->cmd_buf);
 -- 
-2.35.1
-
+2.37.1
 
