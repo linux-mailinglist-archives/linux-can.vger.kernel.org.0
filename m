@@ -2,98 +2,134 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28A7958707F
-	for <lists+linux-can@lfdr.de>; Mon,  1 Aug 2022 20:48:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C58DE5870A4
+	for <lists+linux-can@lfdr.de>; Mon,  1 Aug 2022 21:00:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233754AbiHASss (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 1 Aug 2022 14:48:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42224 "EHLO
+        id S229966AbiHATA2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 1 Aug 2022 15:00:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233464AbiHASsr (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 1 Aug 2022 14:48:47 -0400
-Received: from mxd2.seznam.cz (mxd2.seznam.cz [IPv6:2a02:598:2::210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D0D237C0;
-        Mon,  1 Aug 2022 11:48:45 -0700 (PDT)
-Received: from email.seznam.cz
-        by email-smtpc12a.ng.seznam.cz (email-smtpc12a.ng.seznam.cz [10.23.11.105])
-        id 2925978acd8944b428f836e4;
-        Mon, 01 Aug 2022 20:47:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seznam.cz; s=beta;
-        t=1659379679; bh=DZl/zpDC4daeyZK5+yAdaWiaFpHk14LLzJ5mzlIQIT0=;
-        h=Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:
-         References:MIME-Version:Content-Transfer-Encoding:X-szn-frgn:
-         X-szn-frgc;
-        b=KBd1HmI8foVQT0ufUitgmsfk/ku+CiIOL/HD+dIBMsInW7nv1pgc4K6hV+/ZIGJ68
-         RtvUv/iBPaIV92KYd+/KGpvI0WyscsLXCPzfA1Nj23MvqptxztsuV8YIN3PnA6vNYA
-         zd0hfgT7zmueEuY+hkbo1qa8ifvYFeqX7/R5zoV4=
-Received: from localhost.localdomain (2a02:8308:900d:2400:95cc:114a:1ae8:6a72 [2a02:8308:900d:2400:95cc:114a:1ae8:6a72])
-        by email-relay1.ng.seznam.cz (Seznam SMTPD 1.3.137) with ESMTP;
-        Mon, 01 Aug 2022 20:47:54 +0200 (CEST)  
-From:   Matej Vasilevski <matej.vasilevski@seznam.cz>
-To:     Pavel Pisa <pisa@cmp.felk.cvut.cz>,
-        Ondrej Ille <ondrej.ille@gmail.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Matej Vasilevski <matej.vasilevski@seznam.cz>
-Subject: [PATCH v2 3/3] doc: ctucanfd: RX frames timestamping for platform devices
-Date:   Mon,  1 Aug 2022 20:46:56 +0200
-Message-Id: <20220801184656.702930-4-matej.vasilevski@seznam.cz>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220801184656.702930-1-matej.vasilevski@seznam.cz>
-References: <20220801184656.702930-1-matej.vasilevski@seznam.cz>
+        with ESMTP id S231549AbiHATA1 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 1 Aug 2022 15:00:27 -0400
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768F1D13D
+        for <linux-can@vger.kernel.org>; Mon,  1 Aug 2022 12:00:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1659380420;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=dDlSYdX8mucs3fhR/WRO82WheED/tW/u8xiYoGgafMo=;
+    b=YCFjD2sK2pLdkXpaSQnSUMfROBfvwAfgBEmB91PZ7JpYFwcsw9O/O4tT4egSwKXuH6
+    Ma4jWmuykoaM3I8lJ/Oi+ntXsGDtAPN8RSq7JEo4p3+Be4IQYrds8GGUNkecbuHHzUeu
+    WyUUCZz4vmP64DMowWIH3hNnhjatdzx723Of/izZblvyKiXIylr9IEdzhe+AN/RXHCXv
+    NqldFEQqqbhwSBSGwXUd73DfN0DKOJNbYeHVx8wcgM8X5nSi8K/hOnktecUsp6pE2pOr
+    TvmuJrpQzk+oqyl6EdBtEq/htuwm63QoYbg0Ox0cXIcYWANuwMyo8Hhu7FlYs6IDOKho
+    NeSg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS/xvEBL7X5sbo3UIh9JiLceSWJaYwXUKbZ"
+X-RZG-CLASS-ID: mo00
+Received: from silver.lan
+    by smtp.strato.de (RZmta 47.47.0 AUTH)
+    with ESMTPSA id Icb1b0y71J0KHvt
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Mon, 1 Aug 2022 21:00:20 +0200 (CEST)
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+To:     linux-can@vger.kernel.org
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: [PATCH v8 0/7] can: support CAN XL
+Date:   Mon,  1 Aug 2022 21:00:03 +0200
+Message-Id: <20220801190010.3344-1-socketcan@hartkopp.net>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-szn-frgn: <76f84256-b676-4728-b145-325ee172cef1>
-X-szn-frgc: <0>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Update the section about timestamping RX frames with instructions
-how to enable it.
+The CAN with eXtended data Length (CAN XL) is a new CAN protocol with a
+10Mbit/s data transfer with a new physical layer transceiver (for this
+data section). CAN XL allows up to 2048 byte of payload and shares the
+arbitration principle (11 bit priority) known from Classical CAN and
+CAN FD. RTR and 29 bit identifiers are not implemented in CAN XL.
 
-Signed-off-by: Matej Vasilevski <matej.vasilevski@seznam.cz>
----
- .../device_drivers/can/ctu/ctucanfd-driver.rst      | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+A short introdution to CAN XL can be found here:
+https://www.bosch-semiconductors.com/media/ip_modules/pdf_2/can_xl_1/canxl_intro_20210225.pdf
 
-diff --git a/Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst b/Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst
-index 40c92ea272af..05a7ce0c3d9e 100644
---- a/Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst
-+++ b/Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst
-@@ -386,8 +386,17 @@ The CTU CAN FD core reports the exact timestamp when the frame has been
- received. The timestamp is by default captured at the sample point of
- the last bit of EOF but is configurable to be captured at the SOF bit.
- The timestamp source is external to the core and may be up to 64 bits
--wide. At the time of writing, passing the timestamp from kernel to
--userspace is not yet implemented, but is planned in the future.
-+wide.
-+
-+Both platform and PCI devices can report the timestamp.
-+For platform devices, add another clock phandle for timestamping clock
-+in device tree bindings. If you don't add another clock, the driver
-+will assume the primary clock's frequency for timestamping.
-+For PCI devices, the timestamping frequency is assumed to be equal to
-+the bus frequency.
-+
-+Timestamp reporting is disabled by default, you have to enable it with
-+SIOCSHWTSTAMP ioctl call first.
- 
- Handling TX
- ~~~~~~~~~~~
+V2: Major rework after discussion and feedback on Linux-CAN ML
+
+- rework of struct canxl_frame
+- CANXL_XLF flag is now the switch between CAN XL and CAN/CANFD
+- variable length in r/w operations for CAN XL frames
+- write CAN XL frame to raw socket enforces size <-> canxl_frame.len sync
+
+V3: Fix length for CAN XL frames inside the sk_buff
+
+- extend the CAN_RAW sockopt to handle fixed/truncated read/write operations
+
+V4: Fix patch 5 (can: raw: add CAN XL support)
+
+- fix return value (move 'err = -EINVAL' in raw_sendmsg())
+- add CAN XL frame handling in can_rcv()
+- change comment for CAN_RAW_XL_[RT]X_DYN definition (allow -> enable)
+
+V5: Remove CAN_RAW_XL_[RT]X_DYN definition again
+
+- CAN_RAW_XL_[RT]X_DYN (truncated data) feature is now enabled by default
+- use CANXL_MIN_DLEN instead of '1' in canxl_frame definition
+- add missing 'err = -EINVAL' initialization in raw_sendmsg())
+
+V6:
+
+- rework an separate skb identification and length helpers
+- add CANFD_FDF flag in all CAN FD frame structures
+- simplify patches for infrastructure and raw sockets
+- add vxcan support in virtual CAN interface patch
+
+V7:
+
+- fixed indention as remarked by Marc
+- set CANFD_FDF flag when detecting CAN FD frames generated by PF_PACKET
+- Allow to use variable CAN XL MTU sizes to enforce real time requirements
+  on CAN XL segments (e.g. to support of CAN CiA segmentation concept)
+
+V8:
+
+- fixed typo as remarked by Vincent
+- rebased to latest can-next/net-next tree
+
+Oliver Hartkopp (7):
+  can: skb: unify skb CAN frame identification helpers
+  can: skb: add skb CAN frame data length helpers
+  can: set CANFD_FDF flag in all CAN FD frame structures
+  can: canxl: introduce CAN XL data structure
+  can: canxl: update CAN infrastructure for CAN XL frames
+  can: dev: add CAN XL support to virtual CAN
+  can: raw: add CAN XL support
+
+ drivers/net/can/ctucanfd/ctucanfd_base.c |   1 -
+ drivers/net/can/dev/rx-offload.c         |   2 +-
+ drivers/net/can/dev/skb.c                | 113 ++++++++++++++++-------
+ drivers/net/can/vcan.c                   |  12 +--
+ drivers/net/can/vxcan.c                  |   8 +-
+ include/linux/can/dev.h                  |   5 +
+ include/linux/can/skb.h                  |  57 +++++++++++-
+ include/uapi/linux/can.h                 |  55 ++++++++++-
+ include/uapi/linux/can/raw.h             |   1 +
+ include/uapi/linux/if_ether.h            |   1 +
+ net/can/af_can.c                         |  76 ++++++++-------
+ net/can/bcm.c                            |   9 +-
+ net/can/gw.c                             |   4 +-
+ net/can/isotp.c                          |   2 +-
+ net/can/j1939/main.c                     |   4 +
+ net/can/raw.c                            |  55 ++++++++---
+ 16 files changed, 299 insertions(+), 106 deletions(-)
+
 -- 
-2.25.1
+2.30.2
 
