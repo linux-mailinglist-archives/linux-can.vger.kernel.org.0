@@ -2,81 +2,57 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF340587847
-	for <lists+linux-can@lfdr.de>; Tue,  2 Aug 2022 09:49:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 539F15879E8
+	for <lists+linux-can@lfdr.de>; Tue,  2 Aug 2022 11:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236164AbiHBHtX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 2 Aug 2022 03:49:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54690 "EHLO
+        id S233350AbiHBJen (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 2 Aug 2022 05:34:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236257AbiHBHtK (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 2 Aug 2022 03:49:10 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CC454D148
-        for <linux-can@vger.kernel.org>; Tue,  2 Aug 2022 00:49:07 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id u1so10533594lfq.4
-        for <linux-can@vger.kernel.org>; Tue, 02 Aug 2022 00:49:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=IrNRhOKsz1OWQDYQfQKh2l69GmIOmDxrnod2nDb+hTE=;
-        b=LGrbtkKa5FlEWBiJIK2ScPpVy3bynVh7tvYjYjB87raIQxlW0OdvG3ouGoEEc2T15T
-         0yRdWAh3Qge6H1wlDuwYut2DtOB58f/zjTN94K83sRjJpZAjOmRbpBzw1/uuLgM/oFna
-         OGTxjMnDNeMIN02NZUzx57HznPlpw+O6raYRKK1r51Rdcq5xhtvn2s5NYkwnaID0fyDd
-         2XmP8lpx6Tnj0nvl82/qVX+ASr/jaF1WW/Up0sS8lRquuey13KP+aK9HliQypitY60av
-         zlkKyZaRsda9kS5NuDwaVD0vyypA3l2PqQs6VzHEG72OdCa/c5XvlmcIeMBIsdnWDbhL
-         9IiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=IrNRhOKsz1OWQDYQfQKh2l69GmIOmDxrnod2nDb+hTE=;
-        b=FA+iostZ//CaAHnTn5q72htmW2r2kShjgRcvNBkeH5n2Zi/LzxLKK6/AOtGTnIhf3+
-         0EKsOOsUoAHhNJ8uBlVCNdmd8MABaSCYPm+5v+jlFJGw0GB5w2NqIn6T4LUMf/vx+52c
-         nUP0A46YOJBwKVLrduIh2UuxHYFpDQB2cAQn5GMyK8MoThtUCZOEl+G3VsUEk9GaS+TG
-         3pxVEdwiHfMJxWSfCqbJXzAp6zvaGyA9XnyfYkDAtqzsM+PFQz4aTUQKuAwM0cS/KUBx
-         3b3xUDCsBeuG9spqO8an5raNI2Ggfpgbver8+bB3QG0L/XpOJleiHA5hlb5UF6eVlLjy
-         KrQQ==
-X-Gm-Message-State: ACgBeo2IH4LThgKT68LRv1zsB9vPfNi2tw+qdiHyuJta4JOFKezVM2DG
-        T+IEuxEWCorK5AkqCvn+x53CMg==
-X-Google-Smtp-Source: AA6agR7B2rnsQhxphn9IMN0Q3PUKu0HYhD//NSx5eVl6YpWvO9a/EbTKATTlcdT4E8cO3L0+F9iC4w==
-X-Received: by 2002:a19:6414:0:b0:48a:eb80:816b with SMTP id y20-20020a196414000000b0048aeb80816bmr4571106lfb.360.1659426545550;
-        Tue, 02 Aug 2022 00:49:05 -0700 (PDT)
-Received: from [192.168.1.6] ([213.161.169.44])
-        by smtp.gmail.com with ESMTPSA id o20-20020a056512053400b0048a73d83b7csm1173385lfc.133.2022.08.02.00.49.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Aug 2022 00:49:05 -0700 (PDT)
-Message-ID: <cb88bd4a-5f42-477d-c419-c4d90bf06b1f@linaro.org>
-Date:   Tue, 2 Aug 2022 09:49:03 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 2/3] dt-bindings: can: ctucanfd: add another clock for
- HW timestamping
-Content-Language: en-US
-To:     Matej Vasilevski <matej.vasilevski@seznam.cz>,
-        Pavel Pisa <pisa@cmp.felk.cvut.cz>,
+        with ESMTP id S234722AbiHBJen (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 2 Aug 2022 05:34:43 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6495540BFC
+        for <linux-can@vger.kernel.org>; Tue,  2 Aug 2022 02:34:42 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oIoIA-0005wN-Ok; Tue, 02 Aug 2022 11:34:22 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 705CFC130C;
+        Tue,  2 Aug 2022 07:06:31 +0000 (UTC)
+Date:   Tue, 2 Aug 2022 09:06:30 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Matej Vasilevski <matej.vasilevski@seznam.cz>
+Cc:     Pavel Pisa <pisa@cmp.felk.cvut.cz>,
         Ondrej Ille <ondrej.ille@gmail.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
         devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] can: ctucanfd: hardware rx timestamps reporting
+Message-ID: <20220802070630.7g5dyn732bh724az@pengutronix.de>
 References: <20220801184656.702930-1-matej.vasilevski@seznam.cz>
- <20220801184656.702930-3-matej.vasilevski@seznam.cz>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220801184656.702930-3-matej.vasilevski@seznam.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="w4uynht36msvyibp"
+Content-Disposition: inline
+In-Reply-To: <20220801184656.702930-1-matej.vasilevski@seznam.cz>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,63 +61,67 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 01/08/2022 20:46, Matej Vasilevski wrote:
-> Add second clock phandle to specify the timestamping clock.
-> You can even use the same clock as the core, or define a fixed-clock
-> if you need something custom.
-> 
-> Signed-off-by: Matej Vasilevski <matej.vasilevski@seznam.cz>
-> ---
->  .../bindings/net/can/ctu,ctucanfd.yaml        | 23 +++++++++++++++----
->  1 file changed, 19 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/can/ctu,ctucanfd.yaml b/Documentation/devicetree/bindings/net/can/ctu,ctucanfd.yaml
-> index 4635cb96fc64..90390530f909 100644
-> --- a/Documentation/devicetree/bindings/net/can/ctu,ctucanfd.yaml
-> +++ b/Documentation/devicetree/bindings/net/can/ctu,ctucanfd.yaml
-> @@ -44,9 +44,23 @@ properties:
->  
->    clocks:
->      description: |
-> -      phandle of reference clock (100 MHz is appropriate
-> -      for FPGA implementation on Zynq-7000 system).
-> -    maxItems: 1
-> +      Phandle of reference clock (100 MHz is appropriate for FPGA
-> +      implementation on Zynq-7000 system). If you wish to use timestamps
-> +      from the controller, add a second phandle with the clock used for
-> +      timestamping. The timestamping clock is optional, if you don't
-> +      add it here, the driver will use the primary clock frequency for
-> +      timestamp calculations. If you need something custom, define
-> +      a fixed-clock oscillator and reference it.
 
-This should not be a guide how to write DTS, but description of
-hardware. The references to driver are also not really appropriate in
-the bindings (are you 100% sure that all other operating systems and SW
-have driver which behaves like this...)
+--w4uynht36msvyibp
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> +    minItems: 1
-> +    items:
-> +      - description: core clock
-> +      - description: timestamping clock
-> +
-> +  clock-names:
-> +    minItems: 1
-> +    items:
-> +      - const: core-clk
-> +      - const: ts-clk
->  
->  required:
->    - compatible
-> @@ -61,6 +75,7 @@ examples:
->      ctu_can_fd_0: can@43c30000 {
->        compatible = "ctu,ctucanfd";
->        interrupts = <0 30 4>;
-> -      clocks = <&clkc 15>;
-> +      clocks = <&clkc 15>, <&clkc 16>;
-> +      clock-names = "core-clk", "ts-clk";
->        reg = <0x43c30000 0x10000>;
->      };
+On 01.08.2022 20:46:53, Matej Vasilevski wrote:
+> Hello,
+>=20
+> this is the v2 patch for CTU CAN FD hardware timestamps reporting.
+>=20
+> This patch series is based on the latest net-next, as I need the patch
+> - 9e7c9b8eb719 can: ctucanfd: Update CTU CAN FD IP core registers to matc=
+h version 3.x.
+> and the patch below to avoid git conflict (both this and my patch
+> introduce ethtool_ops)
+> - 409c188c57cd can: tree-wide: advertise software timestamping capabiliti=
+es
+>=20
+> Changes in v2: (compared to the RFC I've sent in May)
 
+Please add a link to the RFC here:
+https://lore.kernel.org/all/20220512232706.24575-1-matej.vasilevski@seznam.=
+cz
 
-Best regards,
-Krzysztof
+> - Removed kconfig option to enable/disable timestamps.
+> - Removed dt parameters ts-frequency and ts-used-bits. Now the user
+>   only needs to add the timestamping clock phandle to clocks, and even
+>   that is optional.
+> - Added SIOCSHWTSTAMP ioctl to enable/disable timestamps.
+> - Adressed comments from the RFC review.
+>=20
+> Matej Vasilevski (3):
+>   can: ctucanfd: add HW timestamps to RX and error CAN frames
+>   dt-bindings: can: ctucanfd: add another clock for HW timestamping
+>   doc: ctucanfd: RX frames timestamping for platform devices
+
+Please reorder your patches so that the dt-bindings update comes first.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--w4uynht36msvyibp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLozPMACgkQrX5LkNig
+01091Af+OFXdTcBJ8SC+XtUpGidcGMP3j/04HaOYtByP8I5TVp+WdTPZAJaPbVmj
+N556yRn6xx+cbMZVYQQ0cRr0uDBMWiv0jKfP95EI6X9zQtv/eiACjoTI+81QRoPz
++bfPfCiDnPNZKGUhGRNdJiFRbbFBG998Ihim6RVsqZcTo3aQVzzKIK7yVOpx+vKH
+e+d6wgTX0X6+iyqx5kKlONJk9vhxW9waSQEQDlu5f+M4K7djBEHg+cZkpgPI0W5P
+5yFAmPQZJCi0RoySSKXxYcQQAFXkPeTTv3eS/6sAI5EkHe+eDwcaNm8jgt3syFh+
+KAEvVRaI8HEqEXM/eVE9m9UXMac8OA==
+=/wYk
+-----END PGP SIGNATURE-----
+
+--w4uynht36msvyibp--
