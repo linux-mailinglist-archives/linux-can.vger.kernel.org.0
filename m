@@ -2,210 +2,146 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C042B5877FC
-	for <lists+linux-can@lfdr.de>; Tue,  2 Aug 2022 09:38:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF340587847
+	for <lists+linux-can@lfdr.de>; Tue,  2 Aug 2022 09:49:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236000AbiHBHik (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 2 Aug 2022 03:38:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43810 "EHLO
+        id S236164AbiHBHtX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 2 Aug 2022 03:49:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232158AbiHBHij (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 2 Aug 2022 03:38:39 -0400
-Received: from mailgw.felk.cvut.cz (mailgw.felk.cvut.cz [147.32.82.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1656CB86E;
-        Tue,  2 Aug 2022 00:38:34 -0700 (PDT)
-Received: from mailgw.felk.cvut.cz (localhost.localdomain [127.0.0.1])
-        by mailgw.felk.cvut.cz (Proxmox) with ESMTP id E4E7A30B294F;
-        Tue,  2 Aug 2022 09:38:02 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        cmp.felk.cvut.cz; h=cc:cc:content-transfer-encoding:content-type
-        :content-type:date:from:from:in-reply-to:message-id:mime-version
-        :references:reply-to:subject:subject:to:to; s=felkmail; bh=qMHRI
-        qP5hY9O9b/xkCgt4bDck43g/6SvtkDTMLkcfYA=; b=XMnqdhxlHMHU2ffmRKnm0
-        UH8m2Udz/jXZ0tdKq0SO6Yalq8AdzRX4kKKclhN8L6frxLltJpSGVeb/hT1ac1O3
-        uEQ+5j32Vr1JNY1cqYWoNCTE9e5yXiWtYtvptepPEUlsTZ9ZIsom2ymTpaNmZ4CN
-        EdKzsrTCw9TvM1Id5+ew/1sQIdOiU0Ja56m1KCqdM29zu9X/zdydS9hCX/rz/u7m
-        LuwFNTtTkinFYYjVEoXB+fR6JXlaMWjnDxPjDybF2L+GKCtT1sKrPJOMaFZ5vqmb
-        kQ8Wkba6qYFvJu/AJ8oKPegegQ4rYLalQWvVg6QXq2LUYiyCphWuYaW8lfFEELMh
-        Q==
-Received: from cmp.felk.cvut.cz (haar.felk.cvut.cz [147.32.84.19])
-        by mailgw.felk.cvut.cz (Proxmox) with ESMTPS id D5FE330ADE4B;
-        Tue,  2 Aug 2022 09:38:01 +0200 (CEST)
-Received: from haar.felk.cvut.cz (localhost [127.0.0.1])
-        by cmp.felk.cvut.cz (8.14.0/8.12.3/SuSE Linux 0.6) with ESMTP id 2727c1n4011125;
-        Tue, 2 Aug 2022 09:38:01 +0200
-Received: (from pisa@localhost)
-        by haar.felk.cvut.cz (8.14.0/8.13.7/Submit) id 2727c10Z011124;
-        Tue, 2 Aug 2022 09:38:01 +0200
-X-Authentication-Warning: haar.felk.cvut.cz: pisa set sender to pisa@cmp.felk.cvut.cz using -f
-From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
-To:     Vincent Mailhol <vincent.mailhol@gmail.com>
-Subject: Re: [PATCH v2 1/3] can: ctucanfd: add HW timestamps to RX and error CAN frames
-Date:   Tue, 2 Aug 2022 09:37:54 +0200
-User-Agent: KMail/1.9.10
-Cc:     Matej Vasilevski <matej.vasilevski@seznam.cz>,
+        with ESMTP id S236257AbiHBHtK (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 2 Aug 2022 03:49:10 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CC454D148
+        for <linux-can@vger.kernel.org>; Tue,  2 Aug 2022 00:49:07 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id u1so10533594lfq.4
+        for <linux-can@vger.kernel.org>; Tue, 02 Aug 2022 00:49:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=IrNRhOKsz1OWQDYQfQKh2l69GmIOmDxrnod2nDb+hTE=;
+        b=LGrbtkKa5FlEWBiJIK2ScPpVy3bynVh7tvYjYjB87raIQxlW0OdvG3ouGoEEc2T15T
+         0yRdWAh3Qge6H1wlDuwYut2DtOB58f/zjTN94K83sRjJpZAjOmRbpBzw1/uuLgM/oFna
+         OGTxjMnDNeMIN02NZUzx57HznPlpw+O6raYRKK1r51Rdcq5xhtvn2s5NYkwnaID0fyDd
+         2XmP8lpx6Tnj0nvl82/qVX+ASr/jaF1WW/Up0sS8lRquuey13KP+aK9HliQypitY60av
+         zlkKyZaRsda9kS5NuDwaVD0vyypA3l2PqQs6VzHEG72OdCa/c5XvlmcIeMBIsdnWDbhL
+         9IiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=IrNRhOKsz1OWQDYQfQKh2l69GmIOmDxrnod2nDb+hTE=;
+        b=FA+iostZ//CaAHnTn5q72htmW2r2kShjgRcvNBkeH5n2Zi/LzxLKK6/AOtGTnIhf3+
+         0EKsOOsUoAHhNJ8uBlVCNdmd8MABaSCYPm+5v+jlFJGw0GB5w2NqIn6T4LUMf/vx+52c
+         nUP0A46YOJBwKVLrduIh2UuxHYFpDQB2cAQn5GMyK8MoThtUCZOEl+G3VsUEk9GaS+TG
+         3pxVEdwiHfMJxWSfCqbJXzAp6zvaGyA9XnyfYkDAtqzsM+PFQz4aTUQKuAwM0cS/KUBx
+         3b3xUDCsBeuG9spqO8an5raNI2Ggfpgbver8+bB3QG0L/XpOJleiHA5hlb5UF6eVlLjy
+         KrQQ==
+X-Gm-Message-State: ACgBeo2IH4LThgKT68LRv1zsB9vPfNi2tw+qdiHyuJta4JOFKezVM2DG
+        T+IEuxEWCorK5AkqCvn+x53CMg==
+X-Google-Smtp-Source: AA6agR7B2rnsQhxphn9IMN0Q3PUKu0HYhD//NSx5eVl6YpWvO9a/EbTKATTlcdT4E8cO3L0+F9iC4w==
+X-Received: by 2002:a19:6414:0:b0:48a:eb80:816b with SMTP id y20-20020a196414000000b0048aeb80816bmr4571106lfb.360.1659426545550;
+        Tue, 02 Aug 2022 00:49:05 -0700 (PDT)
+Received: from [192.168.1.6] ([213.161.169.44])
+        by smtp.gmail.com with ESMTPSA id o20-20020a056512053400b0048a73d83b7csm1173385lfc.133.2022.08.02.00.49.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Aug 2022 00:49:05 -0700 (PDT)
+Message-ID: <cb88bd4a-5f42-477d-c419-c4d90bf06b1f@linaro.org>
+Date:   Tue, 2 Aug 2022 09:49:03 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 2/3] dt-bindings: can: ctucanfd: add another clock for
+ HW timestamping
+Content-Language: en-US
+To:     Matej Vasilevski <matej.vasilevski@seznam.cz>,
+        Pavel Pisa <pisa@cmp.felk.cvut.cz>,
         Ondrej Ille <ondrej.ille@gmail.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
-        "Marc Kleine-Budde" <mkl@pengutronix.de>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, Jiri Novak <jnovak@fel.cvut.cz>,
-        Oliver Hartkopp <socketcan@hartkopp.net>
-References: <20220801184656.702930-1-matej.vasilevski@seznam.cz> <20220801184656.702930-2-matej.vasilevski@seznam.cz> <CAMZ6RqJEBV=1iUN3dH-ZZVujOFEoJ-U1FaJ5OOJzw+aM_mkUvA@mail.gmail.com>
-In-Reply-To: <CAMZ6RqJEBV=1iUN3dH-ZZVujOFEoJ-U1FaJ5OOJzw+aM_mkUvA@mail.gmail.com>
-X-KMail-QuotePrefix: > 
-MIME-Version: 1.0
-Content-Type: Text/Plain;
-  charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: inline
-Message-Id: <202208020937.54675.pisa@cmp.felk.cvut.cz>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20220801184656.702930-1-matej.vasilevski@seznam.cz>
+ <20220801184656.702930-3-matej.vasilevski@seznam.cz>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220801184656.702930-3-matej.vasilevski@seznam.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Vincent,
+On 01/08/2022 20:46, Matej Vasilevski wrote:
+> Add second clock phandle to specify the timestamping clock.
+> You can even use the same clock as the core, or define a fixed-clock
+> if you need something custom.
+> 
+> Signed-off-by: Matej Vasilevski <matej.vasilevski@seznam.cz>
+> ---
+>  .../bindings/net/can/ctu,ctucanfd.yaml        | 23 +++++++++++++++----
+>  1 file changed, 19 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/can/ctu,ctucanfd.yaml b/Documentation/devicetree/bindings/net/can/ctu,ctucanfd.yaml
+> index 4635cb96fc64..90390530f909 100644
+> --- a/Documentation/devicetree/bindings/net/can/ctu,ctucanfd.yaml
+> +++ b/Documentation/devicetree/bindings/net/can/ctu,ctucanfd.yaml
+> @@ -44,9 +44,23 @@ properties:
+>  
+>    clocks:
+>      description: |
+> -      phandle of reference clock (100 MHz is appropriate
+> -      for FPGA implementation on Zynq-7000 system).
+> -    maxItems: 1
+> +      Phandle of reference clock (100 MHz is appropriate for FPGA
+> +      implementation on Zynq-7000 system). If you wish to use timestamps
+> +      from the controller, add a second phandle with the clock used for
+> +      timestamping. The timestamping clock is optional, if you don't
+> +      add it here, the driver will use the primary clock frequency for
+> +      timestamp calculations. If you need something custom, define
+> +      a fixed-clock oscillator and reference it.
 
-thanks much for review. I am adding some notices to Tx timestamps
-after your comments
+This should not be a guide how to write DTS, but description of
+hardware. The references to driver are also not really appropriate in
+the bindings (are you 100% sure that all other operating systems and SW
+have driver which behaves like this...)
 
-On Tuesday 02 of August 2022 05:43:38 Vincent Mailhol wrote:
-> I just send a series last week which a significant amount of changes
-> for CAN timestamping tree-wide:
-> https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/co=
-mm
->it/?id=3D12a18d79dc14c80b358dbd26461614b97f2ea4a6
->
-> I suggest you have a look at this series and harmonize it with the new
-> features (e.g. Hardware TX=E2=80=AFtimestamp).
->
-> On Tue. 2 Aug. 2022 at 03:52, Matej Vasilevski
-=2E..
-> > +static int ctucan_hwtstamp_set(struct net_device *dev, struct ifreq
-> > *ifr) +{
-> > +       struct ctucan_priv *priv =3D netdev_priv(dev);
-> > +       struct hwtstamp_config cfg;
-> > +
-> > +       if (!priv->timestamp_possible)
-> > +               return -EOPNOTSUPP;
-> > +
-> > +       if (copy_from_user(&cfg, ifr->ifr_data, sizeof(cfg)))
-> > +               return -EFAULT;
-> > +
-> > +       if (cfg.flags)
-> > +               return -EINVAL;
-> > +
-> > +       if (cfg.tx_type !=3D HWTSTAMP_TX_OFF)
-> > +               return -ERANGE;
->
-> I have a great news: your driver now also support hardware TX timestamps:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/co=
-mm
->it/?id=3D8bdd1112edcd3edce2843e03826204a84a61042d
->
-> > +
-> > +       switch (cfg.rx_filter) {
-> > +       case HWTSTAMP_FILTER_NONE:
-> > +               priv->timestamp_enabled =3D false;
-=2E..
-> > +
-> > +       cfg.flags =3D 0;
-> > +       cfg.tx_type =3D HWTSTAMP_TX_OFF;
->
-> Hardware TX timestamps are now supported (c.f. supra).
->
-> > +       cfg.rx_filter =3D priv->timestamp_enabled ? HWTSTAMP_FILTER_ALL=
- :
-> > HWTSTAMP_FILTER_NONE; +       return copy_to_user(ifr->ifr_data, &cfg,
-> > sizeof(cfg)) ? -EFAULT : 0; +}
-> > +
-> > +static int ctucan_ioctl(struct net_device *dev, struct ifreq *ifr, int
-> > cmd)
->
-> Please consider using the generic function can_eth_ioctl_hwts()
-> https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/co=
-mm
->it/?id=3D90f942c5a6d775bad1be33ba214755314105da4a
->
-> > +{
-=2E..
-> > +       info->so_timestamping |=3D SOF_TIMESTAMPING_RX_HARDWARE |
-> > +                                SOF_TIMESTAMPING_RAW_HARDWARE;
-> > +       info->tx_types =3D BIT(HWTSTAMP_TX_OFF);
->
-> Hardware TX timestamps are now supported (c.f. supra).
->
-> > +       info->rx_filters =3D BIT(HWTSTAMP_FILTER_NONE) |
-> > +                          BIT(HWTSTAMP_FILTER_ALL);
+> +    minItems: 1
+> +    items:
+> +      - description: core clock
+> +      - description: timestamping clock
+> +
+> +  clock-names:
+> +    minItems: 1
+> +    items:
+> +      - const: core-clk
+> +      - const: ts-clk
+>  
+>  required:
+>    - compatible
+> @@ -61,6 +75,7 @@ examples:
+>      ctu_can_fd_0: can@43c30000 {
+>        compatible = "ctu,ctucanfd";
+>        interrupts = <0 30 4>;
+> -      clocks = <&clkc 15>;
+> +      clocks = <&clkc 15>, <&clkc 16>;
+> +      clock-names = "core-clk", "ts-clk";
+>        reg = <0x43c30000 0x10000>;
+>      };
 
 
-I am not sure if it is good idea to report support for hardware
-TX timestamps by all drivers. Precise hardware Tx timestamps
-are important for some CAN applications but they require to be
-exactly/properly aligned with Rx timestamps.
-
-Only some CAN (FD) controllers really support that feature.
-=46or M-CAN and some others it is realized as another event
-=46IFO in addition to Tx and Rx FIFOs.
-
-=46or CTU CAN FD, we have decided that we do not complicate design
-and driver by separate events channel. We have configurable
-and possibly large Rx FIFO depth which is logical to use for
-analyzer mode and we can use loopback to receive own messages
-timestamped same way as external received ones.
-
-See 2.14.1 Loopback mode
-SETTINGS[ILBP]=3D1.
-
-in the datasheet
-
-  http://canbus.pages.fel.cvut.cz/ctucanfd_ip_core/doc/Datasheet.pdf
-
-There is still missing information which frames are received
-locally and from which buffer they are in the Rx message format,
-but we plan to add that into VHDL design.
-
-In such case, we can switch driver mode and release Tx buffers
-only after corresponding message is read from Rx FIFO and
-fill exact finegrain (10 ns in our current design) timestamps
-to the echo skb. The order of received messages will be seen
-exactly mathing the wire order for both transmitted and received
-messages then. Which I consider as proper solution for the
-most applications including CAN bus analyzers.
-
-So I consider to report HW Tx timestamps for cases where exact,
-precise timestamping is not available for loopback messages
-as problematic because you cannot distinguish if you talk
-with driver and HW with real/precise timestamps support
-or only dummy implementation to make some tools happy.
-
-=20
-Best wishes and thanks for consideration about altrenatives,
-
-                Pavel
-
-=2D-=20
-                Pavel Pisa
-    phone:      +420 603531357
-    e-mail:     pisa@cmp.felk.cvut.cz
-    Department of Control Engineering FEE CVUT
-    Karlovo namesti 13, 121 35, Prague 2
-    university: http://control.fel.cvut.cz/
-    personal:   http://cmp.felk.cvut.cz/~pisa
-    projects:   https://www.openhub.net/accounts/ppisa
-    CAN related:http://canbus.pages.fel.cvut.cz/
-    RISC-V education: https://comparch.edu.cvut.cz/
-    Open Technologies Research Education and Exchange Services
-    https://gitlab.fel.cvut.cz/otrees/org/-/wikis/home
-
+Best regards,
+Krzysztof
