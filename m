@@ -2,157 +2,161 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01323588906
-	for <lists+linux-can@lfdr.de>; Wed,  3 Aug 2022 11:04:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E4F3588F73
+	for <lists+linux-can@lfdr.de>; Wed,  3 Aug 2022 17:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235157AbiHCJEy (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 3 Aug 2022 05:04:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56420 "EHLO
+        id S233926AbiHCPdt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 3 Aug 2022 11:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235136AbiHCJEx (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 3 Aug 2022 05:04:53 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15DA29816
-        for <linux-can@vger.kernel.org>; Wed,  3 Aug 2022 02:04:51 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oJAIx-0006Tj-DE; Wed, 03 Aug 2022 11:04:39 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 4F37EC1EEC;
-        Wed,  3 Aug 2022 09:04:37 +0000 (UTC)
-Date:   Wed, 3 Aug 2022 11:04:36 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Pavel Pisa <pisa@cmp.felk.cvut.cz>
-Cc:     Vincent Mailhol <vincent.mailhol@gmail.com>,
-        Matej Vasilevski <matej.vasilevski@seznam.cz>,
-        Ondrej Ille <ondrej.ille@gmail.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
+        with ESMTP id S231537AbiHCPds (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 3 Aug 2022 11:33:48 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A07B63A4
+        for <linux-can@vger.kernel.org>; Wed,  3 Aug 2022 08:33:46 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id h13so2765549wrf.6
+        for <linux-can@vger.kernel.org>; Wed, 03 Aug 2022 08:33:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ororatech.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=0umAYbB18JPdG3ZmPCkx39gW6/HCrNImGco95eRjbLE=;
+        b=vvAjKhTnMfE1WOtRIHrwn4aQceY66tnhhJIlJlrHfBzwCq0bZYCrg0b/5zBmJA0dXF
+         PPUKY4m9dc1sHGHSGEvHBIgoo+sCesx/L41p0YCubxRCLeQ3h10RM5gzqY9uqJ6zemEi
+         frnk20o0H3C9lb40mODLFBWypNX5I3zE01TUqxhZVHR+jNuBwmADZSO19GFf12l7vz5M
+         exH7JAIzyupcbiS3NppT1u9VVP+8QwZ9IZimwvUbRHg3GGWWJM6VBsKIVynKVsoRapxV
+         17pm9zUEXAhEcc++IrS1L1hwteHbT2RDw+e9IXcayc0kwummKPxpZYjXE72UR82tPyXz
+         wOrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=0umAYbB18JPdG3ZmPCkx39gW6/HCrNImGco95eRjbLE=;
+        b=mjgq146bhHwvm6gc4pM/qvgV/pk0PjcbxVVaq7H0ajIzdVuJp0b/L6H2IdWlKv2XOD
+         wObzXM08BYBQpGsLHOjymmGjOQMvHf7tB+Un5/tnF+0j/dlaCs/AhFxzYi2OnFCQF7E5
+         Hex7D9BM3wg9RNgELYIlEJYTqPbCj8gYCWHeWh708SGlFBdIheqHi0ftRZuFSiQfwDNU
+         fWP9B2rTn325kjmLsDTwLaOGlB4ivDrowdxCEXUwHILRw/c24oiPu+WMLM11alCp2/dz
+         1toC8ZgeJyQDUpnz1uuzF28pNMFUkRea9u0qeBKV0o/rLsPd+LoF/QjyULZBA3kO3k3M
+         /aSw==
+X-Gm-Message-State: ACgBeo2gGBbMhHKJ0qSCj3PGOfbWFctjIm43EQBH44cof2mW+iBRFNX8
+        zVDG9F/O2qfn7/CV0G3+QhNkyA==
+X-Google-Smtp-Source: AA6agR54iLIwbRC1Xy7tswVJx/HIgfcNEe28F3bPGIew4YgTJg3SKqCQfhPDdp/mo4fOcZJPCH7SNg==
+X-Received: by 2002:adf:da45:0:b0:21d:8f3e:a3e0 with SMTP id r5-20020adfda45000000b0021d8f3ea3e0mr16366749wrl.310.1659540824764;
+        Wed, 03 Aug 2022 08:33:44 -0700 (PDT)
+Received: from toolbox.dsn.orora.tech (host-88-217-137-115.customer.m-online.net. [88.217.137.115])
+        by smtp.googlemail.com with ESMTPSA id n18-20020a5d67d2000000b0020fff0ea0a3sm18273804wrw.116.2022.08.03.08.33.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Aug 2022 08:33:44 -0700 (PDT)
+From:   =?UTF-8?q?Sebastian=20W=C3=BCrl?= <sebastian.wuerl@ororatech.com>
+To:     sebastian.wuerl@ororatech.com
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, Jiri Novak <jnovak@fel.cvut.cz>,
-        Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: Re: [PATCH v2 1/3] can: ctucanfd: add HW timestamps to RX and error
- CAN frames
-Message-ID: <20220803090436.o3c7khieckxwmj5y@pengutronix.de>
-References: <20220801184656.702930-1-matej.vasilevski@seznam.cz>
- <20220801184656.702930-2-matej.vasilevski@seznam.cz>
- <CAMZ6RqJEBV=1iUN3dH-ZZVujOFEoJ-U1FaJ5OOJzw+aM_mkUvA@mail.gmail.com>
- <202208020937.54675.pisa@cmp.felk.cvut.cz>
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drivers/net/can/spi/mcp251x.c: Fix race condition on receive interrupt
+Date:   Wed,  3 Aug 2022 17:32:59 +0200
+Message-Id: <20220803153300.58732-1-sebastian.wuerl@ororatech.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lnyqk3jichuhl7n6"
-Content-Disposition: inline
-In-Reply-To: <202208020937.54675.pisa@cmp.felk.cvut.cz>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+The mcp251x driver uses both receiving mailboxes of the can controller
+chips. For retrieving the CAN frames from the controller via SPI, it checks
+once per interrupt which mailboxes have been filled, an will retrieve the
+messages accordingly.
 
---lnyqk3jichuhl7n6
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This introduces a race condition, as another CAN frame can enter mailbox 1
+while mailbox 0 is emptied. If now another CAN frame enters mailbox 0 until
+the interrupt handler is called next, mailbox 0 is emptied before
+mailbox 1, leading to out-of-order CAN frames in the network device.
 
-On 02.08.2022 09:37:54, Pavel Pisa wrote:
-> > Hardware TX timestamps are now supported (c.f. supra).
-> >
-> > > +       info->rx_filters =3D BIT(HWTSTAMP_FILTER_NONE) |
-> > > +                          BIT(HWTSTAMP_FILTER_ALL);
->=20
-> I am not sure if it is good idea to report support for hardware
-> TX timestamps by all drivers. Precise hardware Tx timestamps
-> are important for some CAN applications but they require to be
-> exactly/properly aligned with Rx timestamps.
->=20
-> Only some CAN (FD) controllers really support that feature.
-> For M-CAN and some others it is realized as another event
-> FIFO in addition to Tx and Rx FIFOs.
+This is fixed by checking the interrupt flags once again after freeing
+mailbox 0, to correctly also empty mailbox 1 before leaving the handler.
 
-The mcp251xfd uses the event FIFO to signal TX completion. Timestamps
-are optional, but always enabled in the mcp251xfd driver.
+For reproducing the bug I created the following setup:
+ - Two CAN devices, one Raspberry Pi with MCP2515, the other can be any.
+ - Setup CAN to 1 MHz
+ - Spam bursts of 5 CAN-messages with increasing CAN-ids
+ - Continue sending the bursts while sleeping a second between the bursts
+ - Check on the RPi whether the received messages have increasing CAN-ids
+ - Without this patch, every burst of messages will contain a flipped pair
 
-> For CTU CAN FD, we have decided that we do not complicate design
-> and driver by separate events channel. We have configurable
-> and possibly large Rx FIFO depth which is logical to use for
-> analyzer mode and we can use loopback to receive own messages
-> timestamped same way as external received ones.
->=20
-> See 2.14.1 Loopback mode
-> SETTINGS[ILBP]=3D1.
->=20
-> in the datasheet
->=20
->   http://canbus.pages.fel.cvut.cz/ctucanfd_ip_core/doc/Datasheet.pdf
+Signed-off-by: Sebastian Würl <sebastian.wuerl@ororatech.com>
+---
+ drivers/net/can/spi/mcp251x.c | 21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
 
-BTW: the datasheet says:
+diff --git a/drivers/net/can/spi/mcp251x.c b/drivers/net/can/spi/mcp251x.c
+index 666a4505a55a..687aafef4717 100644
+--- a/drivers/net/can/spi/mcp251x.c
++++ b/drivers/net/can/spi/mcp251x.c
+@@ -1063,17 +1063,14 @@ static irqreturn_t mcp251x_can_ist(int irq, void *dev_id)
+ 	mutex_lock(&priv->mcp_lock);
+ 	while (!priv->force_quit) {
+ 		enum can_state new_state;
+-		u8 intf, eflag;
++		u8 intf, intf0, intf1, eflag, eflag0, eflag1;
+ 		u8 clear_intf = 0;
+ 		int can_id = 0, data1 = 0;
+ 
+-		mcp251x_read_2regs(spi, CANINTF, &intf, &eflag);
+-
+-		/* mask out flags we don't care about */
+-		intf &= CANINTF_RX | CANINTF_TX | CANINTF_ERR;
++		mcp251x_read_2regs(spi, CANINTF, &intf0, &eflag0);
+ 
+ 		/* receive buffer 0 */
+-		if (intf & CANINTF_RX0IF) {
++		if (intf0 & CANINTF_RX0IF) {
+ 			mcp251x_hw_rx(spi, 0);
+ 			/* Free one buffer ASAP
+ 			 * (The MCP2515/25625 does this automatically.)
+@@ -1083,14 +1080,24 @@ static irqreturn_t mcp251x_can_ist(int irq, void *dev_id)
+ 						   CANINTF_RX0IF, 0x00);
+ 		}
+ 
++		/* intf needs to be read again to avoid a race condition */
++		mcp251x_read_2regs(spi, CANINTF, &intf1, &eflag1);
++
+ 		/* receive buffer 1 */
+-		if (intf & CANINTF_RX1IF) {
++		if (intf1 & CANINTF_RX1IF) {
+ 			mcp251x_hw_rx(spi, 1);
+ 			/* The MCP2515/25625 does this automatically. */
+ 			if (mcp251x_is_2510(spi))
+ 				clear_intf |= CANINTF_RX1IF;
+ 		}
+ 
++		/* combine flags from both operations for error handling */
++		intf = intf0 | intf1;
++		eflag = eflag0 | eflag1;
++
++		/* mask out flags we don't care about */
++		intf &= CANINTF_RX | CANINTF_TX | CANINTF_ERR;
++
+ 		/* any error or tx interrupt we need to clear? */
+ 		if (intf & (CANINTF_ERR | CANINTF_TX))
+ 			clear_intf |= intf & (CANINTF_ERR | CANINTF_TX);
+-- 
+2.36.1
 
-| 3.1.36 RX_DATA
-|=20
-| ... this register must be read by 32 bit access.
-
-While there is a section that uses 8-bit accessed on that register:
-
-| 2.10.10 Sample code 2 - Frame reception in manual mode (8-bit access)
-
-> There is still missing information which frames are received
-> locally and from which buffer they are in the Rx message format,
-> but we plan to add that into VHDL design.
->=20
-> In such case, we can switch driver mode and release Tx buffers
-> only after corresponding message is read from Rx FIFO and
-> fill exact finegrain (10 ns in our current design) timestamps
-> to the echo skb. The order of received messages will be seen
-> exactly mathing the wire order for both transmitted and received
-> messages then. Which I consider as proper solution for the
-> most applications including CAN bus analyzers.
->=20
-> So I consider to report HW Tx timestamps for cases where exact,
-> precise timestamping is not available for loopback messages
-> as problematic because you cannot distinguish if you talk
-> with driver and HW with real/precise timestamps support
-> or only dummy implementation to make some tools happy.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---lnyqk3jichuhl7n6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLqOiIACgkQrX5LkNig
-011p9Af/Y1I6EmIJ8ta7aYBYf5wBk6gtXgZHszI7ySl1DuoM24QUgtK2U0VDZWtJ
-77uNsHBypWE8WaycCIFd6+k/x0ivFbaOFp/gzP7FDadpQy25uc6tR8vVZxTmBnWv
-edPN7Rjs2sBF3CInbjS1bUNZtBMfIHiiXAsXjtK8JojeGnt/h6TC/6uA1BKSwiMw
-PQaO+f6X2pqRy9P/ZGygdn+9IasCSYdMCu4I1WkPlTFba2zTudPTYxxv79A4wUia
-1AEVu5lmpxbzitOSPWASteYtwYWr/qVZ7qDTuPss6ywOZNXD/jvUmhf5VAZfZ8u1
-k1BHIq0iUCGl91bfvjiFo+yGR6+u3w==
-=WcbP
------END PGP SIGNATURE-----
-
---lnyqk3jichuhl7n6--
