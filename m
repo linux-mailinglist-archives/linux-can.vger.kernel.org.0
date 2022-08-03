@@ -2,49 +2,35 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02A5F58872C
-	for <lists+linux-can@lfdr.de>; Wed,  3 Aug 2022 08:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA465888BD
+	for <lists+linux-can@lfdr.de>; Wed,  3 Aug 2022 10:37:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236006AbiHCGMF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 3 Aug 2022 02:12:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58534 "EHLO
+        id S229445AbiHCIhh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 3 Aug 2022 04:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235771AbiHCGME (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 3 Aug 2022 02:12:04 -0400
-Received: from mailgw.felk.cvut.cz (mailgw.felk.cvut.cz [147.32.82.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCEE2201B7;
-        Tue,  2 Aug 2022 23:12:01 -0700 (PDT)
-Received: from mailgw.felk.cvut.cz (localhost.localdomain [127.0.0.1])
-        by mailgw.felk.cvut.cz (Proxmox) with ESMTP id 07E5830B2954;
-        Wed,  3 Aug 2022 08:11:29 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        cmp.felk.cvut.cz; h=cc:cc:content-transfer-encoding:content-type
-        :content-type:date:from:from:in-reply-to:message-id:mime-version
-        :references:reply-to:subject:subject:to:to; s=felkmail; bh=8nXfu
-        T49GJp9b6oemN/CUgGdt/BO7Gb+5pt5rdx1l0M=; b=BkthUDJAUEzhNfEmO1Hx/
-        Skqzm/tyv2pj4XkzuXxDjMnn5GixqVdlEnny0rOHs1SorhmfvgfeIYe7UDziUmJz
-        7ExclbF2N2d8xvLVd2QAMhDySC24l//lpfKQHfD3IxZFwbS9/rXY7tOoVLFwLF5s
-        Vg95MKVNgW8LJZ7hRgS9kPRkOkdN+gfc21onTnrMH/bihNnoJW8q46nNYQ1f2AD0
-        /vSCJwTuHsRPhTFjyUdQg+gSYmqoRd1VSRJ1LHQobg+vFSRadYhjbwVz1uDb9HBV
-        MfvKIL34Z8ghNX0UlqqozowT79ePp/DkrJ25Vu8h28n7GLp40NcyR/BZDJogDnnk
-        Q==
-Received: from cmp.felk.cvut.cz (haar.felk.cvut.cz [147.32.84.19])
-        by mailgw.felk.cvut.cz (Proxmox) with ESMTPS id 3575930B294F;
-        Wed,  3 Aug 2022 08:11:28 +0200 (CEST)
-Received: from haar.felk.cvut.cz (localhost [127.0.0.1])
-        by cmp.felk.cvut.cz (8.14.0/8.12.3/SuSE Linux 0.6) with ESMTP id 2736BS6C006601;
-        Wed, 3 Aug 2022 08:11:28 +0200
-Received: (from pisa@localhost)
-        by haar.felk.cvut.cz (8.14.0/8.13.7/Submit) id 2736BR0u006598;
-        Wed, 3 Aug 2022 08:11:27 +0200
-X-Authentication-Warning: haar.felk.cvut.cz: pisa set sender to pisa@cmp.felk.cvut.cz using -f
-From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
-To:     Matej Vasilevski <matej.vasilevski@seznam.cz>,
-        "Marc Kleine-Budde" <mkl@pengutronix.de>
-Subject: Re: [PATCH v2 1/3] can: ctucanfd: add HW timestamps to RX and error CAN frames
-Date:   Wed, 3 Aug 2022 08:11:22 +0200
-User-Agent: KMail/1.9.10
-Cc:     Ondrej Ille <ondrej.ille@gmail.com>,
+        with ESMTP id S234256AbiHCIhg (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 3 Aug 2022 04:37:36 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A831C131
+        for <linux-can@vger.kernel.org>; Wed,  3 Aug 2022 01:37:34 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oJ9sY-0003DA-J2; Wed, 03 Aug 2022 10:37:22 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 66F8AC1E98;
+        Wed,  3 Aug 2022 08:37:19 +0000 (UTC)
+Date:   Wed, 3 Aug 2022 10:37:18 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Pavel Pisa <pisa@cmp.felk.cvut.cz>
+Cc:     Matej Vasilevski <matej.vasilevski@seznam.cz>,
+        Ondrej Ille <ondrej.ille@gmail.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
@@ -54,78 +40,197 @@ Cc:     Ondrej Ille <ondrej.ille@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org,
         devicetree@vger.kernel.org
-References: <20220801184656.702930-1-matej.vasilevski@seznam.cz> <20220802092907.d2xtbqulkvzcwfgj@pengutronix.de> <20220803000903.GB4457@hopium>
-In-Reply-To: <20220803000903.GB4457@hopium>
-X-KMail-QuotePrefix: > 
+Subject: Re: [PATCH v2 1/3] can: ctucanfd: add HW timestamps to RX and error
+ CAN frames
+Message-ID: <20220803083718.7bh2edmsorwuv4vu@pengutronix.de>
+References: <20220801184656.702930-1-matej.vasilevski@seznam.cz>
+ <20220801184656.702930-2-matej.vasilevski@seznam.cz>
+ <20220802092907.d2xtbqulkvzcwfgj@pengutronix.de>
+ <202208021820.17878.pisa@cmp.felk.cvut.cz>
 MIME-Version: 1.0
-Content-Type: Text/Plain;
-  charset="iso-8859-1"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="izugbepx2z5mwcpb"
 Content-Disposition: inline
-Message-Id: <202208030811.22322.pisa@cmp.felk.cvut.cz>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <202208021820.17878.pisa@cmp.felk.cvut.cz>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Minor remark to clocks
 
-On Wednesday 03 of August 2022 02:09:03 Matej Vasilevski wrote:
-> On Tue, Aug 02, 2022 at 11:29:07AM +0200, Marc Kleine-Budde wrote:
-> > > diff --git a/drivers/net/can/ctucanfd/ctucanfd.h
-> > > b/drivers/net/can/ctucanfd/ctucanfd.h index 0e9904f6a05d..43d9c73ce244
-....
-> > > @@ -1386,7 +1536,9 @@ int ctucan_probe_common(struct device *dev, void
-> > > __iomem *addr, int irq, unsigne
+--izugbepx2z5mwcpb
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 02.08.2022 18:20:17, Pavel Pisa wrote:
+> Hello Marc,
+>=20
+> thanks for feedback.
+>=20
+> On Tuesday 02 of August 2022 11:29:07 Marc Kleine-Budde wrote:
+> > On 01.08.2022 20:46:54, Matej Vasilevski wrote:
+> > > This patch adds support for retrieving hardware timestamps to RX and
+> > > error CAN frames. It uses timecounter and cyclecounter structures,
+> > > because the timestamping counter width depends on the IP core integra=
+tion
+> > > (it might not always be 64-bit).
+> > > For platform devices, you should specify "ts_clk" clock in device tre=
+e.
+> > > For PCI devices, the timestamping frequency is assumed to be the same
+> > > as bus frequency.
 > > >
-> > >  	/* Getting the can_clk info */
-> > >  	if (!can_clk_rate) {
-> > > -		priv->can_clk = devm_clk_get(dev, NULL);
-> > > +		priv->can_clk = devm_clk_get_optional(dev, "core-clk");
-> > > +		if (!priv->can_clk)
-> > > +			priv->can_clk = devm_clk_get(dev, NULL);
+> > > Signed-off-by: Matej Vasilevski <matej.vasilevski@seznam.cz>
+> > > ---
+> > >  drivers/net/can/ctucanfd/Makefile             |   2 +-
+> > >  drivers/net/can/ctucanfd/ctucanfd.h           |  20 ++
+> > >  drivers/net/can/ctucanfd/ctucanfd_base.c      | 214 ++++++++++++++++=
++-
+> > >  drivers/net/can/ctucanfd/ctucanfd_timestamp.c |  87 +++++++
+> > >  4 files changed, 315 insertions(+), 8 deletions(-)
+> > >  create mode 100644 drivers/net/can/ctucanfd/ctucanfd_timestamp.c
+> ...
+> > > +	if (ts_high2 !=3D ts_high)
+> > > +		ts_low =3D priv->read_reg(priv, CTUCANFD_TIMESTAMP_LOW);
+> > > +
+> > > +	return concatenate_two_u32(ts_high2, ts_low) & priv->cc.mask;
+> > > +}
+> > > +
+> > >  #define CTU_CAN_FD_TXTNF(priv) (!!FIELD_GET(REG_STATUS_TXNF,
+> > > ctucan_read32(priv, CTUCANFD_STATUS))) #define CTU_CAN_FD_ENABLED(pri=
+v)
+> > > (!!FIELD_GET(REG_MODE_ENA, ctucan_read32(priv, CTUCANFD_MODE)))
 > >
-> > Please add a comment here, that the NULL clock is for compatibility with
-> > older DTs.
->
-> Even in this patch the clock-names isn't a required property in the DT.
-> But I can add a comment explaining the situation.
+> > please make these static inline bool functions.
+>=20
+> We put that to TODO list. But I prefer to prepare separate followup
+> patch later.
 
-In the fact, actual FPGA design is intended for single clock domain
-and if timestamp counter is running from other non synchronized
-clocks then cross domain synchronization is necessary
-which in a 64-bit parallel case is relatively complex.
-Sampling of some slower clocks signal on input to CTU CAN FD
-core domain would be easier...
+ACK. I noticed later that these were not modified by this patch. Sorry
+for the noise
 
-There can appear optimization for some constrained designs
-in future where clock counter is narrowed to less bits
-and clock is divided from main clocks by some ratio...
+>=20
+> > > @@ -736,7 +764,9 @@ static int ctucan_rx(struct net_device *ndev)
+> > >  		return 0;
+> > >  	}
+> > >
+> > > -	ctucan_read_rx_frame(priv, cf, ffw);
+> > > +	ctucan_read_rx_frame(priv, cf, ffw, &timestamp);
+> > > +	if (priv->timestamp_enabled)
+> > > +		ctucan_skb_set_timestamp(priv, skb, timestamp);
+> >
+> > Can the ctucan_skb_set_timestamp() and ctucan_read_timestamp_counter()
+> > happen concurrently? AFAICS they are all called from ctucan_rx_poll(),
+> > right?
+>=20
+> I am not sure about which possible problem do you think.
+> But ctucan_read_timestamp_counter() is fully reentrant
+> and has no side effect on the core. So there is no
+> problem.
 
-So option to use separate ts-clock is reserve for future.
-I personally, do not even insist on including the second
-clock to the driver now because all our actual and currently
-planed designs are single clock domain. But may it be Ondrej
-Ille can comment even further foresee...
+ctucan_read_timestamp_counter() is reentrant, but on 32 bit systems the
+update of tc->cycle_last isn't.
 
-Thanks for the work and review,
+[...]
 
-                Pavel
--- 
-                Pavel Pisa
-    phone:      +420 603531357
-    e-mail:     pisa@cmp.felk.cvut.cz
-    Department of Control Engineering FEE CVUT
-    Karlovo namesti 13, 121 35, Prague 2
-    university: http://control.fel.cvut.cz/
-    personal:   http://cmp.felk.cvut.cz/~pisa
-    projects:   https://www.openhub.net/accounts/ppisa
-    CAN related:http://canbus.pages.fel.cvut.cz/
-    RISC-V education: https://comparch.edu.cvut.cz/
-    Open Technologies Research Education and Exchange Services
-    https://gitlab.fel.cvut.cz/otrees/org/-/wikis/home
+> > > +
+> > > +	/* Obtain timestamping frequency */
+> > > +	if (pm_enable_call) {
+> > > +		/* Plaftorm device: get tstamp clock from device tree */
+> > > +		priv->timestamp_clk =3D devm_clk_get(dev, "ts-clk");
+> > > +		if (IS_ERR(priv->timestamp_clk)) {
+> > > +			/* Take the core clock frequency instead */
+> > > +			timestamp_freq =3D can_clk_rate;
+> > > +		} else {
+> > > +			timestamp_freq =3D clk_get_rate(priv->timestamp_clk);
+> > > +		}
+> >
+> > Who prepares/enabled the timestamp clock? clk_get_rate() is only valid =
+if
+> > the clock is enabled. I know, we violate this for the CAN clock. :/
+>=20
+> Yes, I have noticed that we miss clk_prepare_enable() in the
+> ctucan_probe_common() and clk_disable_unprepare() in ctucan_platform_remo=
+ve().
 
+Oh, I missed the fact that the CAN clock is not enabled at all. That
+should be fixed, too, in a separate patch.
+
+So let's focus on the ts_clk here. On DT systems if there's no ts-clk,
+you can assign the normal clk pointer to the priv->timestamp_clk, too.
+Move the calculation of mult, shift and the delays into
+ctucan_timestamp_init(). If ctucan_timestamp_init is not NULL, add a
+clk_prepare_enable() and clk_get_rate(), otherwise use the can_clk_rate.
+Add the corresponding clk_disable_unprepare() to ctucan_timestamp_stop().
+
+> The need for clock running should be released in ctucan_suspend()
+> and regained in ctucan_resume(). I see that the most CAN drivers
+> use there clk_disable_unprepare/clk_prepare_enable but I am not
+> sure, if this is right. Ma be plain clk_disable/clk_enable should
+> be used for suspend and resume because as I understand, the clock
+> frequency can be recomputed and reset during clk_prepare which
+> would require to recompute bitrate. Do you have some advice
+> what is a right option there?
+
+For the CAN clock, add a prepare_enable to ndo_open, corresponding
+function to ndo_stop. Or better, add these time runtime_pm.
+
+Has system suspend/resume been tested? I think the IP core might be
+powered off during system suspend, so the driver has to restore the
+state of the chip. The easiest would be to run through
+chip_start()/chip_stop().
+
+For the possible change of clock rate between probe and ifup, we should
+add a CAN driver framework wide function to re-calculate the bitrates
+with the current clock rate after the prepare_enable.
+
+BTW: In an early version of the stm32mp1 device tree some graphics clock
+and the CAN clock shared the same parent clock. The configuration of the
+display (which happened after the probe of the CAN driver ) caused a
+different rate in the CAN clock, resulting in broken bit timings.
+
+> Actual omission is no problem on our systems, be the clock are used
+> in whole FPGA system with AXI connection and has to running already
+> and we use same for timestamping.
+>=20
+> I would prefer to allow timestamping patch as it is without clock enable
+> and then correct clock enable, disable by another patch for both ts and c=
+ore
+> clocks.
+
+NACK - if the time stamping clock is added, please with proper handling.
+The core clock can be fixed in a later patch.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--izugbepx2z5mwcpb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLqM7sACgkQrX5LkNig
+012UEggApgw++SiOOTSwAHObtiyCNc2Gg/EuWuJi+J+uoqiwj2GNNkK7W0DNUVRz
+x+GpBuroQNqFrIJ3WntuVwWlbHRXAbFMNEzkxDR8HCH2nhiLkovpqAKnJqmCqPhU
+PEgPElv4QZsheOOC+emcedUxYsRudLDDFe92OyPgGwlb19wbKkBZBQvLNbs1yXV/
+VpTLLigtYBvLHFliNvT+xFEkY+iYJoDlPutNcuKlb+q6AWZ65fGvAMvGvq6ybaAX
+M1MgK0bdOBUTMK8flwKXRBOnUJmLVKKfMcdhBNAwjAB4Bvm83XjX8FdEI7pKeWOw
+2A4fCtfzYbAKyBhLsS5yL2e9jitQkw==
+=KN02
+-----END PGP SIGNATURE-----
+
+--izugbepx2z5mwcpb--
