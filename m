@@ -2,95 +2,115 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3635658989E
-	for <lists+linux-can@lfdr.de>; Thu,  4 Aug 2022 09:45:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C17A45898AE
+	for <lists+linux-can@lfdr.de>; Thu,  4 Aug 2022 09:52:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239222AbiHDHpW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 4 Aug 2022 03:45:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34084 "EHLO
+        id S236007AbiHDHwO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 4 Aug 2022 03:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238727AbiHDHpV (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 4 Aug 2022 03:45:21 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EEB46157
-        for <linux-can@vger.kernel.org>; Thu,  4 Aug 2022 00:45:20 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id y23so10925084ljh.12
-        for <linux-can@vger.kernel.org>; Thu, 04 Aug 2022 00:45:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ororatech.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=dhLsCRYGUtuAwALD1KlxKTdhkhp8QSNYwM9InIv21hY=;
-        b=vhFbtTOGOksHyzcro9kH4cZHaorB7nfGcWpikpO7dNKwncnTRw1+ByiMFJe/2elMHX
-         b7OFjEv9TqgTOdb2zsflnf724l7IR7GO9J3muH/4h9jAjKaDV06uAda+3eRlck9Jm8fU
-         N1FdUO8DhuA0L5atc+KdjD8fiwIjd10nsD5xvo8yOopR+hvLU+gT8/ZsGbBGbSPQGPkR
-         kFaHhPAqmEtHB61cFq/nc59DDMptgPmfVJayemcGQqG1wEx9CUFQBwl1NCvkklilW4zn
-         pPID1KoWR/K7YAtLuEiitRb61GcgIiFrb7XQ5x7X9gM+xOVBccR96aiQBOxUOmkOmO+D
-         DqLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=dhLsCRYGUtuAwALD1KlxKTdhkhp8QSNYwM9InIv21hY=;
-        b=NAOaHO2Ji87P5ZvscXk+08tjJbL7DGa6hVLhnm2jK0LtUnNsN60Lnmo3rQHCMUTsnm
-         ylpciUalOGNS/HRneLnBYo5netbeQX4s4IQsmlv5odB/Xxquqvle53jiQwlTV0Vdqagr
-         Oqj5ezbhqpxKzS0lH7S/hX0VuSzD1+HwnV18FTkMwmQ83So7qRfxz4ss9B8W+NnAhlvu
-         xMegcFyvSsBvFvMTfcfBAWFBJK2GYJgooFlNBx4aG4BE2wsJBi6ArhuV9QwnioBBIYoS
-         gSqVJKMUNDbwDOuF9yaIeZtzmG4ec8K1sisewI3W3Vj1+uJcuyuYn1n8fXqn8IMR2tL/
-         nK7w==
-X-Gm-Message-State: ACgBeo3EpmfWiakIGGDsmhw2kPESbYxJLSmdutC3hfnqi7Jjj/GYJ+Ir
-        HxjrSns8fCYs5FCTkRxoUj2IKBeJjSwmgKndYwvYLg==
-X-Google-Smtp-Source: AA6agR5Sj3szcvbsmwN7u+7x18QMzCdlRlPvPZm74RpikcBlNUt3W+A0c8kDn0SglEOtyhPijnOp/MbeyjstLRROdpA=
-X-Received: by 2002:a2e:9e55:0:b0:25d:e795:d852 with SMTP id
- g21-20020a2e9e55000000b0025de795d852mr191846ljk.367.1659599118481; Thu, 04
- Aug 2022 00:45:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220803185910.5jpufgziqsslnqtf@pengutronix.de>
- <20220804064803.63157-1-sebastian.wuerl@ororatech.com> <20220804070603.s3llvccpldtkejln@pengutronix.de>
-In-Reply-To: <20220804070603.s3llvccpldtkejln@pengutronix.de>
-From:   =?UTF-8?Q?Sebastian_W=C3=BCrl?= <sebastian.wuerl@ororatech.com>
-Date:   Thu, 4 Aug 2022 09:45:07 +0200
-Message-ID: <CA+KjhYWukGxZUMMch_vFe=TNYCD0-jmuwO2520oUVDPE2kE1Rw@mail.gmail.com>
-Subject: Re: [PATCH] can: mcp251x: Fix race condition on receive interrupt
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
+        with ESMTP id S229884AbiHDHwN (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 4 Aug 2022 03:52:13 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397262AE38
+        for <linux-can@vger.kernel.org>; Thu,  4 Aug 2022 00:52:13 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oJVeA-0001tT-V6; Thu, 04 Aug 2022 09:51:59 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id D1A6AC288A;
+        Thu,  4 Aug 2022 07:51:54 +0000 (UTC)
+Date:   Thu, 4 Aug 2022 09:51:52 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Sebastian =?utf-8?B?V8O8cmw=?= <sebastian.wuerl@ororatech.com>
 Cc:     Wolfgang Grandegger <wg@grandegger.com>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Oliver Hartkopp <socketcan@hartkopp.net>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>,
         Christian Pellegrin <chripell@fsfe.org>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH] can: mcp251x: Fix race condition on receive interrupt
+Message-ID: <20220804075152.kqlp5weoz4grzbpp@pengutronix.de>
+References: <20220803185910.5jpufgziqsslnqtf@pengutronix.de>
+ <20220804064803.63157-1-sebastian.wuerl@ororatech.com>
+ <20220804070603.s3llvccpldtkejln@pengutronix.de>
+ <CA+KjhYWukGxZUMMch_vFe=TNYCD0-jmuwO2520oUVDPE2kE1Rw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="wmflnmbvqbtvlyoh"
+Content-Disposition: inline
+In-Reply-To: <CA+KjhYWukGxZUMMch_vFe=TNYCD0-jmuwO2520oUVDPE2kE1Rw@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Thu, Aug 4, 2022 at 9:06 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->
-> Another optimization idea: Do we need to re-read the eflag1? "eflag" is
-> for error handling only and you're optimizing the good path.
 
-I'd argue if a new message entered mailbox 1, this also potentially
-changed the error state, so we need to read it.
+--wmflnmbvqbtvlyoh
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks a lot for your feedback! Will post v3 soon.
+On 04.08.2022 09:45:07, Sebastian W=C3=BCrl wrote:
+> On Thu, Aug 4, 2022 at 9:06 AM Marc Kleine-Budde <mkl@pengutronix.de> wro=
+te:
+> >
+> > Another optimization idea: Do we need to re-read the eflag1? "eflag" is
+> > for error handling only and you're optimizing the good path.
+>=20
+> I'd argue if a new message entered mailbox 1, this also potentially
+> changed the error state, so we need to read it.
 
-Also I'm sorry for spam in anyones inbox, I didn't get my mailing
-program to produce plain-text for the last mail.
+Makes sense!
 
-best,
-Sebastian
+> Thanks a lot for your feedback! Will post v3 soon.
+>=20
+> Also I'm sorry for spam in anyones inbox, I didn't get my mailing
+> program to produce plain-text for the last mail.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--wmflnmbvqbtvlyoh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLrepUACgkQrX5LkNig
+011YJAf+L3PZEy9x/pSHGSUOvoAQF7K7jjRwi1zAeyss+ujiN0gls73XWN8NnoKo
+AahPfXB8jdIeclp1wyRxeuuZwbwK2Vk1ZGYhnApeA3C2QLJX5GqsZLh06eovnafA
+BF9cnmgKwiH9vZeYBMrJie9RD4wSN7yrGUQoU8G5x+/dBtRrD5TbHmpD8MK6Mx61
+PkJ+Yvqs8rLc5WgcUBzrd3Lh3CQ1YcGZhYIuGOPDFD8ZTkSRPEuVREJx9c6VMRgV
+B6bNTMD+saWayZdFyGEvtENrOXes16pwDZkL/VsMuY4tP+JqmHISWHvcg6mzhZHP
+hkEqiB/Dy3cPaTpTlT0NzcA5RJmj4A==
+=yFeG
+-----END PGP SIGNATURE-----
+
+--wmflnmbvqbtvlyoh--
