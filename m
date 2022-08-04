@@ -2,169 +2,173 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E5605894FA
-	for <lists+linux-can@lfdr.de>; Thu,  4 Aug 2022 01:44:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AE3C5897ED
+	for <lists+linux-can@lfdr.de>; Thu,  4 Aug 2022 08:52:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237197AbiHCXoS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 3 Aug 2022 19:44:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39816 "EHLO
+        id S230001AbiHDGwM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 4 Aug 2022 02:52:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237057AbiHCXoR (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 3 Aug 2022 19:44:17 -0400
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE4635D0E7
-        for <linux-can@vger.kernel.org>; Wed,  3 Aug 2022 16:44:16 -0700 (PDT)
-Received: by mail-il1-x12b.google.com with SMTP id l9so2642260ilq.1
-        for <linux-can@vger.kernel.org>; Wed, 03 Aug 2022 16:44:16 -0700 (PDT)
+        with ESMTP id S230177AbiHDGwL (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 4 Aug 2022 02:52:11 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF342497C
+        for <linux-can@vger.kernel.org>; Wed,  3 Aug 2022 23:52:08 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id p10so19876295wru.8
+        for <linux-can@vger.kernel.org>; Wed, 03 Aug 2022 23:52:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=uWHGfg7aX7ICMwSXUYVKFKVf5d3ah58UuK5hBA1Tu+E=;
-        b=ainz+naQb/cSkkTSbrlJkPnd61yZqk6iGas4K5mEyWSY5EZ/NpO7F2OXFEjwqeRqgE
-         KaJXpR+8TV4dJEYWZvu7LR2Wtanl0geTl4Il1cBQX8m8a4G6HM6Jch4PmQI4P3orDNBr
-         zZKPBR2QIpIsuyeyXVGBkPDzGQ9plXt8hgT8s=
+        d=ororatech.com; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=0AEunzLr7vTPk11eedsuPVfmI7JOhTR6S+12Kvpg100=;
+        b=Qc7CSsWIDOJDekmEWSMYtJx81uVWuvMi32PR2QVNwlS9aNZY7jI7G2yEd7oEvFN6ql
+         OmNmQYNMfcRVHCaag+a4fBv0x7R7Ko5T/9bzKGTn9y67yh5KfVnfdLPl/lM/yecNvfCJ
+         20i8qSZDHf+dMyrTgQhIyDgt0gkZJ7D2isXLfFk8oHIOFZ6mvHMyASieuPEj1tqXI9mF
+         DcooNCvZ4jR6xefHb4zgKR7gFQ5w0DYgTAWgJF2E65S/VottD/4oypHST30+/SN2Ll8V
+         9zHOfcMnQ3rUfwebaN+2c2fa++LIbWpK2Wgpo9H2xo1YSNQIcRi/EgVJ5ljc+X4mhrwH
+         G7XQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=uWHGfg7aX7ICMwSXUYVKFKVf5d3ah58UuK5hBA1Tu+E=;
-        b=jzBrkA+7OpsscN0DNesPzqpYPiI1c3I9m6IMZB+XcD0x9VVDpq7ZLlN1WpEznnGYV/
-         ofIs796odz4ICitGBYkV+BPggHgs/vlNjjG/rXuLCJKRuZsW+UZ4UJRNZwkR6FKXr6LN
-         gKUaPwNJpOYG/vpCyhV5nL5i5KO17EffvFJmwPtLoVkTCXYKf21SwmTP5RzoIX/DhDN3
-         JqgvwGDTMxxtaiNXSv6exKt0mD4TTCKK4QJwdmpge3xk1XddL3fvmEHPa5dPWFhsXhNi
-         A2gxzKLa+78LCLnip/aUfsiMbrMhhtgzRJL8CzQFef39i8w4PxmTDOBbP6UVtEoU9RJu
-         R//A==
-X-Gm-Message-State: AJIora85zlCvVWJLfmsiJ/w4yg+RA5QgUcy2R1fetN/qm81qtamIlHNw
-        iqxJiXWXe3WlrGNvrBLkOTu0FA==
-X-Google-Smtp-Source: AGRyM1t+7EEqzHBWaMIBsPUh09XoYMcFkX3khxV375085mRxvhaoFmGi/pmZv/uwZ95u6aJszT2p5A==
-X-Received: by 2002:a05:6e02:1d8e:b0:2dd:47eb:cd1e with SMTP id h14-20020a056e021d8e00b002dd47ebcd1emr11334660ila.221.1659570256210;
-        Wed, 03 Aug 2022 16:44:16 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id c14-20020a92cf4e000000b002ddd861f578sm7474021ilr.72.2022.08.03.16.44.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Aug 2022 16:44:15 -0700 (PDT)
-Subject: Re: [PATCH v3 1/2] drivers: usb/core/urb: Add URB_FREE_COHERENT
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Hongren Zenithal Zheng <i@zenithal.me>,
-        Rhett Aultman <rhett.aultman@samsara.com>,
-        linux-usb@vger.kernel.org, linux-can <linux-can@vger.kernel.org>,
-        Oliver Neukum <oneukum@suse.com>,
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=0AEunzLr7vTPk11eedsuPVfmI7JOhTR6S+12Kvpg100=;
+        b=LzXGj8e3Pq5BTKpT8mKYTkXDyzdamndJ8adAaPqeXLUHICDnDoaqR1W8buopom2MCK
+         Zc+6I+UY6RZvAOqpP7cpCR4vfhnMDI48LlosqNDsyiRbeRs1HU+ACHZTIgq+eOQ9tqZx
+         A+XiAGJQ0HeUU8bJdpSsQh67MoNcGn12/1q0wINZEPowJDeMbSQpI1bE1LoQa9UCsOg5
+         ppMT3fvlI6/6QEGyFJ5p2mmIBphOAAadCjDoEJWAb0DdRB995sfNgT8xNhWGYsoeaeDa
+         8WZStiAvYICzZFHib8vApWTK+GmQKK8JXS9WIj0KwV9hSHcpVB8uD08xP6IhR4OJSWB0
+         9dig==
+X-Gm-Message-State: ACgBeo0yVRVrftwAzw96cOUV4aFMvolLSgmPinjn49XUiWTKsj0oE4pg
+        tkmjrUWSFDnWPNGjst5ppTWO0Q==
+X-Google-Smtp-Source: AA6agR7Ajq6pXORGxS9sUC7eVWqphD3mHssT1VVxN/WpnIDF5MBPF4Tz5LjqNf23noRW1SbJIEXCcQ==
+X-Received: by 2002:adf:e6ce:0:b0:220:5e20:ce80 with SMTP id y14-20020adfe6ce000000b002205e20ce80mr339553wrm.13.1659595926832;
+        Wed, 03 Aug 2022 23:52:06 -0700 (PDT)
+Received: from toolbox.dsn.orora.tech (host-88-217-137-115.customer.m-online.net. [88.217.137.115])
+        by smtp.googlemail.com with ESMTPSA id u19-20020a05600c00d300b003a2fde6ef62sm350020wmm.7.2022.08.03.23.52.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Aug 2022 23:52:06 -0700 (PDT)
+From:   =?UTF-8?q?Sebastian=20W=C3=BCrl?= <sebastian.wuerl@ororatech.com>
+To:     sebastian.wuerl@ororatech.com
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220609204714.2715188-1-rhett.aultman@samsara.com>
- <20220610213335.3077375-1-rhett.aultman@samsara.com>
- <20220610213335.3077375-2-rhett.aultman@samsara.com> <YrSjRvb8rIIayGlg@Sun>
- <143b863d-c86b-6678-44e6-38799391fa36@linuxfoundation.org>
- <YrXNltWSYbplstPx@rowland.harvard.edu>
- <aaf64d6c-1893-67ed-013e-67d21c8be152@linuxfoundation.org>
- <YrX9SBpxp1E2cOyI@rowland.harvard.edu>
- <e1c416bc-0239-6070-c516-c98332a6491d@linuxfoundation.org>
- <Yrpa1zpwfauSMoTi@rowland.harvard.edu>
- <b18313ab-c408-83dc-ee96-a64a432fbfcb@linuxfoundation.org>
- <07e82270-cc75-d346-72cf-0a60ffba06dc@linuxfoundation.org>
- <CAMZ6RqKmxzcCEGFyt3wB6rfHECHhLxb3phcs=FOQZGs_S_cvMA@mail.gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <2a9c8067-2ba8-644f-9362-9f2079e97e11@linuxfoundation.org>
-Date:   Wed, 3 Aug 2022 17:44:15 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Christian Pellegrin <chripell@fsfe.org>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] can: mcp251x: Fix race condition on receive interrupt
+Date:   Thu,  4 Aug 2022 08:48:03 +0200
+Message-Id: <20220804064803.63157-1-sebastian.wuerl@ororatech.com>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220803185910.5jpufgziqsslnqtf@pengutronix.de>
+References: <20220803185910.5jpufgziqsslnqtf@pengutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <CAMZ6RqKmxzcCEGFyt3wB6rfHECHhLxb3phcs=FOQZGs_S_cvMA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 8/1/22 12:28 PM, Vincent MAILHOL wrote:
-> On Tue. 2 Aug. 2022 at 02:48, Shuah Khan <skhan@linuxfoundation.org> wrote:
->> On 6/30/22 8:10 PM, Shuah Khan wrote:
->>> On 6/27/22 7:35 PM, Alan Stern wrote:
->>>> On Mon, Jun 27, 2022 at 04:54:17PM -0600, Shuah Khan wrote:
->>>>> On 6/24/22 12:07 PM, Alan Stern wrote:
->>>>>> In the future people will want to make other changes to
->>>>>> include/linux/usb.h and they will not be aware that those changes will
->>>>>> adversely affect usbip, because there is no documentation saying that
->>>>>> the values defined in usb.h are part of a user API.  That will be a
->>>>>> problem, because those changes may be serious and important ones, not
->>>>>> just decorative or stylistic as in this case.
->>>>>>
->>>>>
->>>>> How often do these values change based on our past experience with these
->>>>> fields?
->>>>
->>>> I don't know.  You could check the git history to find out for certain.
->>>> My guess would be every eight or ten years.
->>>>
->>>>>> I agree with Hongren that values defined in include/linux/ should not be
->>>>>> part of a user API.  There are two choices:
->>>>>>
->>>>>
->>>>> I agree with this in general. I don't think this is an explicit decision
->>>>> to make them part of API. It is a consequence of simply copying the
->>>>> transfer_flags. I am with you both on not being able to recognize the
->>>>> impact until as this is rather obscure usage hidden away in the packets.
->>>>> These defines aren't directly referenced.
->>>>>
->>>>>>      Move the definitions into include/uapi/linux/, or
->>>>>>
->>>>>
->>>>> Wouldn't this be easier way to handle the change? With this option
->>>>> the uapi will be well documented.
->>>>>
->>>>>>      Add code to translate the values between the numbers used in
->>>>>>      userspace and the numbers used in the kernel.  (This is what
->>>>>>      was done for urb->transfer_flags in devio.c:proc_do_submiturb()
->>>>>>      near line 1862.)
->>>>>>
->>>>>
->>>>> I looked at the code and looks simple enough. I am okay going this route
->>>>> if we see issues with the option 1.
->>>>
->>>> It's up to you; either approach is okay with me.  However, I do think
->>>> that the second option is a little better; I don't see any good reason
->>>> why the kernel should be forced to use the same numeric values for these
->>>> flags forever.  Especially since the only user program that needs to
->>>> know them is usbip, which is fairly closely tied to the kernel; if there
->>>> were more programs using those values then they would constitute a good
->>>> reason for choosing the first option.
->>>>
->>>
->>> Thank you Alan and Hongren for your help with this problem. Since there
->>> are no changes to the flags for the time being, I am comfortable going
->>> with the second option.
->>>
->>> I will send a patch soon.
->>>
->>
->> Patch is almost ready to be sent out. Changes aren't bad at all. Hoping to
->> get this done sooner - summer vacations didn't cooperate.
->>
->> Just an update that I haven't forgotten and it will taken care of.
->> thanks,
-> 
-> Thanks for keeping this under your radar. I also have on my TODO list
-> to send a new version of my patch to add the `URB_FREE_COHERENT' flag
-> but this time adding an `allocated_length' field to struct urb. I will
-> wait for your patch to go first. By the way, I will be out for summer
-> holiday for the next couple of weeks so I wasn't planning to submit
-> anything soon regardless.
-> 
+The mcp251x driver uses both receiving mailboxes of the CAN controller
+chips. For retrieving the CAN frames from the controller via SPI, it checks
+once per interrupt which mailboxes have been filled and will retrieve the
+messages accordingly.
 
-Sounds good. I now have the patch ready to be sent out. I will wait for
-the merge window to close before I send it out.
+This introduces a race condition, as another CAN frame can enter mailbox 1
+while mailbox 0 is emptied. If now another CAN frame enters mailbox 0 until
+the interrupt handler is called next, mailbox 0 is emptied before
+mailbox 1, leading to out-of-order CAN frames in the network device.
 
-thanks,
--- Shuah
+This is fixed by checking the interrupt flags once again after freeing
+mailbox 0, to correctly also empty mailbox 1 before leaving the handler.
+
+For reproducing the bug I created the following setup:
+ - Two CAN devices, one Raspberry Pi with MCP2515, the other can be any.
+ - Setup CAN to 1 MHz
+ - Spam bursts of 5 CAN-messages with increasing CAN-ids
+ - Continue sending the bursts while sleeping a second between the bursts
+ - Check on the RPi whether the received messages have increasing CAN-ids
+ - Without this patch, every burst of messages will contain a flipped pair
+
+Fixes: bf66f3736a94 ("can: mcp251x: Move to threaded interrupts instead of workqueues.")
+Signed-off-by: Sebastian Würl <sebastian.wuerl@ororatech.com>
+---
+ drivers/net/can/spi/mcp251x.c | 26 +++++++++++++++++++-------
+ 1 file changed, 19 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/net/can/spi/mcp251x.c b/drivers/net/can/spi/mcp251x.c
+index 89897a2d41fa..ca462868141c 100644
+--- a/drivers/net/can/spi/mcp251x.c
++++ b/drivers/net/can/spi/mcp251x.c
+@@ -1068,17 +1068,14 @@ static irqreturn_t mcp251x_can_ist(int irq, void *dev_id)
+ 	mutex_lock(&priv->mcp_lock);
+ 	while (!priv->force_quit) {
+ 		enum can_state new_state;
+-		u8 intf, eflag;
++		u8 intf, intf0, intf1, eflag, eflag0, eflag1;
+ 		u8 clear_intf = 0;
+ 		int can_id = 0, data1 = 0;
+ 
+-		mcp251x_read_2regs(spi, CANINTF, &intf, &eflag);
+-
+-		/* mask out flags we don't care about */
+-		intf &= CANINTF_RX | CANINTF_TX | CANINTF_ERR;
++		mcp251x_read_2regs(spi, CANINTF, &intf0, &eflag0);
+ 
+ 		/* receive buffer 0 */
+-		if (intf & CANINTF_RX0IF) {
++		if (intf0 & CANINTF_RX0IF) {
+ 			mcp251x_hw_rx(spi, 0);
+ 			/* Free one buffer ASAP
+ 			 * (The MCP2515/25625 does this automatically.)
+@@ -1086,16 +1083,31 @@ static irqreturn_t mcp251x_can_ist(int irq, void *dev_id)
+ 			if (mcp251x_is_2510(spi))
+ 				mcp251x_write_bits(spi, CANINTF,
+ 						   CANINTF_RX0IF, 0x00);
++
++			if (intf0 & CANINTF_RX1IF) {
++				/* buffer 1 is already known to be full, no need to re-read */
++				intf1 = intf0;
++			} else {
++				/* intf needs to be read again to avoid a race condition */
++				mcp251x_read_2regs(spi, CANINTF, &intf1, &eflag1);
++			}
+ 		}
+ 
+ 		/* receive buffer 1 */
+-		if (intf & CANINTF_RX1IF) {
++		if (intf1 & CANINTF_RX1IF) {
+ 			mcp251x_hw_rx(spi, 1);
+ 			/* The MCP2515/25625 does this automatically. */
+ 			if (mcp251x_is_2510(spi))
+ 				clear_intf |= CANINTF_RX1IF;
+ 		}
+ 
++		/* combine flags from both operations for error handling */
++		intf = intf0 | intf1;
++		eflag = eflag0 | eflag1;
++
++		/* mask out flags we don't care about */
++		intf &= CANINTF_RX | CANINTF_TX | CANINTF_ERR;
++
+ 		/* any error or tx interrupt we need to clear? */
+ 		if (intf & (CANINTF_ERR | CANINTF_TX))
+ 			clear_intf |= intf & (CANINTF_ERR | CANINTF_TX);
+-- 
+2.30.2
+
