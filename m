@@ -2,157 +2,116 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A63DB58B9B8
-	for <lists+linux-can@lfdr.de>; Sun,  7 Aug 2022 07:43:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A95758BA23
+	for <lists+linux-can@lfdr.de>; Sun,  7 Aug 2022 09:59:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230257AbiHGFnY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 7 Aug 2022 01:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52846 "EHLO
+        id S233544AbiHGH7u (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 7 Aug 2022 03:59:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbiHGFnW (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 7 Aug 2022 01:43:22 -0400
-X-Greylist: delayed 1501 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 06 Aug 2022 22:43:21 PDT
-Received: from mx5.cs.washington.edu (mx5.cs.washington.edu [IPv6:2607:4000:200:11::6a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BEEB1FF;
-        Sat,  6 Aug 2022 22:43:21 -0700 (PDT)
-Received: from mx5.cs.washington.edu (localhost [IPv6:0:0:0:0:0:0:0:1])
-        by mx5.cs.washington.edu (8.17.1/8.17.1/1.26) with ESMTP id 2775I1ed909678;
-        Sat, 6 Aug 2022 22:18:01 -0700
-Received: from attu1.cs.washington.edu (attu1.cs.washington.edu [IPv6:2607:4000:200:10:0:0:0:89])
-        (authenticated bits=128)
-        by mx5.cs.washington.edu (8.17.1/8.17.1/1.26) with ESMTPSA id 2775Hxg6909674
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Sat, 6 Aug 2022 22:18:01 -0700
-Received: from attu1.cs.washington.edu (localhost [127.0.0.1])
-        by attu1.cs.washington.edu (8.15.2/8.15.2/1.23) with ESMTP id 2775HwLD1991828;
-        Sat, 6 Aug 2022 22:17:59 -0700
-Received: (from klee33@localhost)
-        by attu1.cs.washington.edu (8.15.2/8.15.2/Submit/1.2) id 2775HudJ1991801;
-        Sat, 6 Aug 2022 22:17:56 -0700
-From:   Kenneth Lee <klee33@uw.edu>
-To:     mkl@pengutronix.de, wg@grandegger.com
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        Kenneth Lee <klee33@uw.edu>
-Subject: [PATCH] can: kvaser_usb: kvaser_usb_hydra: Use kzalloc for allocating only one element
-Date:   Sat,  6 Aug 2022 22:16:56 -0700
-Message-Id: <20220807051656.1991446-1-klee33@uw.edu>
-X-Mailer: git-send-email 2.31.1
+        with ESMTP id S231962AbiHGH7u (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 7 Aug 2022 03:59:50 -0400
+X-Greylist: delayed 450 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 07 Aug 2022 00:59:47 PDT
+Received: from smtp.smtpout.orange.fr (smtp-22.smtpout.orange.fr [80.12.242.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D8D85657A
+        for <linux-can@vger.kernel.org>; Sun,  7 Aug 2022 00:59:47 -0700 (PDT)
+Received: from pop-os.home ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id Kb52oyREZ5V1hKb53o3EZs; Sun, 07 Aug 2022 09:52:15 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 07 Aug 2022 09:52:15 +0200
+X-ME-IP: 90.11.190.129
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH] can: rcar_canfd: Use dev_err_probe() to simplify code and better handle -EPROBE_DEFER
+Date:   Sun,  7 Aug 2022 09:52:11 +0200
+Message-Id: <f5bf0b8f757bd3bc9b391094ece3548cc2f96456.1659858686.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Use kzalloc(...) rather than kcalloc(1, ...) since because the number of
-elements we are specifying in this case is 1, kzalloc would accomplish the
-same thing and we can simplify. Also refactor how we calculate the sizeof()
-as checkstyle for kzalloc() prefers using the variable we are assigning
-to versus the type of that variable for calculating the size to allocate.
+devm_clk_get() can return -EPROBE_DEFER, so use dev_err_probe() instead of
+dev_err() in order to be less verbose in the log.
 
-Signed-off-by: Kenneth Lee <klee33@uw.edu>
+This also saves a few LoC.
+
+While at it, turn a "goto fail_dev;" at the beginning of the function into
+a direct return in order to avoid mixing goto and return, which looks
+spurious.
+
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- .../net/can/usb/kvaser_usb/kvaser_usb_hydra.c | 20 +++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ drivers/net/can/rcar/rcar_canfd.c | 26 ++++++++++----------------
+ 1 file changed, 10 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-index dd65c101bfb8..6871d474dabf 100644
---- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-+++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-@@ -534,7 +534,7 @@ static int kvaser_usb_hydra_send_simple_cmd(struct kvaser_usb *dev,
- 	struct kvaser_cmd *cmd;
- 	int err;
+diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
+index 27085b796e75..567620d215f8 100644
+--- a/drivers/net/can/rcar/rcar_canfd.c
++++ b/drivers/net/can/rcar/rcar_canfd.c
+@@ -1880,10 +1880,9 @@ static int rcar_canfd_probe(struct platform_device *pdev)
  
--	cmd = kcalloc(1, sizeof(struct kvaser_cmd), GFP_KERNEL);
-+	cmd = kzalloc(sizeof(*cmd), GFP_KERNEL);
- 	if (!cmd)
- 		return -ENOMEM;
+ 	/* Global controller context */
+ 	gpriv = devm_kzalloc(&pdev->dev, sizeof(*gpriv), GFP_KERNEL);
+-	if (!gpriv) {
+-		err = -ENOMEM;
+-		goto fail_dev;
+-	}
++	if (!gpriv)
++		return -ENOMEM;
++
+ 	gpriv->pdev = pdev;
+ 	gpriv->channels_mask = channels_mask;
+ 	gpriv->fdmode = fdmode;
+@@ -1904,12 +1903,9 @@ static int rcar_canfd_probe(struct platform_device *pdev)
  
-@@ -573,7 +573,7 @@ kvaser_usb_hydra_send_simple_cmd_async(struct kvaser_usb_net_priv *priv,
- 	struct kvaser_usb *dev = priv->dev;
- 	int err;
+ 	/* Peripheral clock */
+ 	gpriv->clkp = devm_clk_get(&pdev->dev, "fck");
+-	if (IS_ERR(gpriv->clkp)) {
+-		err = PTR_ERR(gpriv->clkp);
+-		dev_err(&pdev->dev, "cannot get peripheral clock, error %d\n",
+-			err);
+-		goto fail_dev;
+-	}
++	if (IS_ERR(gpriv->clkp))
++		return dev_err_probe(&pdev->dev, PTR_ERR(gpriv->clkp),
++				     "cannot get peripheral clock\n");
  
--	cmd = kcalloc(1, sizeof(struct kvaser_cmd), GFP_ATOMIC);
-+	cmd = kzalloc(sizeof(*cmd), GFP_ATOMIC);
- 	if (!cmd)
- 		return -ENOMEM;
+ 	/* fCAN clock: Pick External clock. If not available fallback to
+ 	 * CANFD clock
+@@ -1917,12 +1913,10 @@ static int rcar_canfd_probe(struct platform_device *pdev)
+ 	gpriv->can_clk = devm_clk_get(&pdev->dev, "can_clk");
+ 	if (IS_ERR(gpriv->can_clk) || (clk_get_rate(gpriv->can_clk) == 0)) {
+ 		gpriv->can_clk = devm_clk_get(&pdev->dev, "canfd");
+-		if (IS_ERR(gpriv->can_clk)) {
+-			err = PTR_ERR(gpriv->can_clk);
+-			dev_err(&pdev->dev,
+-				"cannot get canfd clock, error %d\n", err);
+-			goto fail_dev;
+-		}
++		if (IS_ERR(gpriv->can_clk))
++			return dev_err_probe(&pdev->dev, PTR_ERR(gpriv->can_clk),
++					     "cannot get canfd clock\n");
++
+ 		gpriv->fcan = RCANFD_CANFDCLK;
  
-@@ -694,7 +694,7 @@ static int kvaser_usb_hydra_map_channel(struct kvaser_usb *dev, u16 transid,
- 	struct kvaser_cmd *cmd;
- 	int err;
- 
--	cmd = kcalloc(1, sizeof(struct kvaser_cmd), GFP_KERNEL);
-+	cmd = kzalloc(sizeof(*cmd), GFP_KERNEL);
- 	if (!cmd)
- 		return -ENOMEM;
- 
-@@ -735,7 +735,7 @@ static int kvaser_usb_hydra_get_single_capability(struct kvaser_usb *dev,
- 	int err;
- 	int i;
- 
--	cmd = kcalloc(1, sizeof(struct kvaser_cmd), GFP_KERNEL);
-+	cmd = kzalloc(sizeof(*cmd), GFP_KERNEL);
- 	if (!cmd)
- 		return -ENOMEM;
- 
-@@ -1394,7 +1394,7 @@ kvaser_usb_hydra_frame_to_cmd_ext(const struct kvaser_usb_net_priv *priv,
- 	u32 kcan_id;
- 	u32 kcan_header;
- 
--	cmd = kcalloc(1, sizeof(struct kvaser_cmd_ext), GFP_ATOMIC);
-+	cmd = kzalloc(sizeof(*cmd), GFP_ATOMIC);
- 	if (!cmd)
- 		return NULL;
- 
-@@ -1468,7 +1468,7 @@ kvaser_usb_hydra_frame_to_cmd_std(const struct kvaser_usb_net_priv *priv,
- 	u32 flags;
- 	u32 id;
- 
--	cmd = kcalloc(1, sizeof(struct kvaser_cmd), GFP_ATOMIC);
-+	cmd = kzalloc(sizeof(*cmd), GFP_ATOMIC);
- 	if (!cmd)
- 		return NULL;
- 
-@@ -1533,7 +1533,7 @@ static int kvaser_usb_hydra_set_bittiming(struct net_device *netdev)
- 	int sjw = bt->sjw;
- 	int err;
- 
--	cmd = kcalloc(1, sizeof(struct kvaser_cmd), GFP_KERNEL);
-+	cmd = kzalloc(sizeof(*cmd), GFP_KERNEL);
- 	if (!cmd)
- 		return -ENOMEM;
- 
-@@ -1567,7 +1567,7 @@ static int kvaser_usb_hydra_set_data_bittiming(struct net_device *netdev)
- 	int sjw = dbt->sjw;
- 	int err;
- 
--	cmd = kcalloc(1, sizeof(struct kvaser_cmd), GFP_KERNEL);
-+	cmd = kzalloc(sizeof(*cmd), GFP_KERNEL);
- 	if (!cmd)
- 		return -ENOMEM;
- 
-@@ -1711,7 +1711,7 @@ static int kvaser_usb_hydra_get_software_details(struct kvaser_usb *dev)
- 	u32 flags;
- 	struct kvaser_usb_dev_card_data *card_data = &dev->card_data;
- 
--	cmd = kcalloc(1, sizeof(struct kvaser_cmd), GFP_KERNEL);
-+	cmd = kzalloc(sizeof(*cmd), GFP_KERNEL);
- 	if (!cmd)
- 		return -ENOMEM;
- 
-@@ -1851,7 +1851,7 @@ static int kvaser_usb_hydra_set_opt_mode(const struct kvaser_usb_net_priv *priv)
- 		return -EINVAL;
- 	}
- 
--	cmd = kcalloc(1, sizeof(struct kvaser_cmd), GFP_KERNEL);
-+	cmd = kzalloc(sizeof(*cmd), GFP_KERNEL);
- 	if (!cmd)
- 		return -ENOMEM;
- 
+ 	} else {
 -- 
-2.31.1
+2.34.1
 
