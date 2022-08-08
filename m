@@ -2,44 +2,57 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A95758BA23
-	for <lists+linux-can@lfdr.de>; Sun,  7 Aug 2022 09:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2395D58C47E
+	for <lists+linux-can@lfdr.de>; Mon,  8 Aug 2022 09:57:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233544AbiHGH7u (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 7 Aug 2022 03:59:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
+        id S235861AbiHHH50 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 8 Aug 2022 03:57:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231962AbiHGH7u (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 7 Aug 2022 03:59:50 -0400
-X-Greylist: delayed 450 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 07 Aug 2022 00:59:47 PDT
-Received: from smtp.smtpout.orange.fr (smtp-22.smtpout.orange.fr [80.12.242.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D8D85657A
-        for <linux-can@vger.kernel.org>; Sun,  7 Aug 2022 00:59:47 -0700 (PDT)
-Received: from pop-os.home ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id Kb52oyREZ5V1hKb53o3EZs; Sun, 07 Aug 2022 09:52:15 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 07 Aug 2022 09:52:15 +0200
-X-ME-IP: 90.11.190.129
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
+        with ESMTP id S237632AbiHHH50 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 8 Aug 2022 03:57:26 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9098BF5A6
+        for <linux-can@vger.kernel.org>; Mon,  8 Aug 2022 00:57:23 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oKxd6-0008Ov-7v; Mon, 08 Aug 2022 09:56:52 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 87AA1C45A6;
+        Mon,  8 Aug 2022 07:56:46 +0000 (UTC)
+Date:   Mon, 8 Aug 2022 09:56:45 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Fedor Pchelkin <pchelkin@ispras.ru>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Robin van der Gracht <robin@protonic.nl>,
+        kernel@pengutronix.de, Oliver Hartkopp <socketcan@hartkopp.net>,
+        "David S . Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH] can: rcar_canfd: Use dev_err_probe() to simplify code and better handle -EPROBE_DEFER
-Date:   Sun,  7 Aug 2022 09:52:11 +0200
-Message-Id: <f5bf0b8f757bd3bc9b391094ece3548cc2f96456.1659858686.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ldv-project@linuxtesting.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>
+Subject: Re: [PATCH] can: j1939: fix memory leak of skbs
+Message-ID: <20220808075645.qtgwu64mjc2rxnuc@pengutronix.de>
+References: <20220805150216.66313-1-pchelkin@ispras.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hiqec7dmmpfnqmy6"
+Content-Disposition: inline
+In-Reply-To: <20220805150216.66313-1-pchelkin@ispras.ru>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,71 +60,50 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-devm_clk_get() can return -EPROBE_DEFER, so use dev_err_probe() instead of
-dev_err() in order to be less verbose in the log.
 
-This also saves a few LoC.
+--hiqec7dmmpfnqmy6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-While at it, turn a "goto fail_dev;" at the beginning of the function into
-a direct return in order to avoid mixing goto and return, which looks
-spurious.
+On 05.08.2022 18:02:16, Fedor Pchelkin wrote:
+> We need to drop skb references taken in j1939_session_skb_queue() when
+> destroying a session in j1939_session_destroy(). Otherwise those skbs
+> would be lost.
+>=20
+> Link to Syzkaller info and repro: https://forge.ispras.ru/issues/11743.
+>=20
+> Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
+>=20
+> Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
+> Suggested-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
+> Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/net/can/rcar/rcar_canfd.c | 26 ++++++++++----------------
- 1 file changed, 10 insertions(+), 16 deletions(-)
+Added to can/master
 
-diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index 27085b796e75..567620d215f8 100644
---- a/drivers/net/can/rcar/rcar_canfd.c
-+++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -1880,10 +1880,9 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 
- 	/* Global controller context */
- 	gpriv = devm_kzalloc(&pdev->dev, sizeof(*gpriv), GFP_KERNEL);
--	if (!gpriv) {
--		err = -ENOMEM;
--		goto fail_dev;
--	}
-+	if (!gpriv)
-+		return -ENOMEM;
-+
- 	gpriv->pdev = pdev;
- 	gpriv->channels_mask = channels_mask;
- 	gpriv->fdmode = fdmode;
-@@ -1904,12 +1903,9 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 
- 	/* Peripheral clock */
- 	gpriv->clkp = devm_clk_get(&pdev->dev, "fck");
--	if (IS_ERR(gpriv->clkp)) {
--		err = PTR_ERR(gpriv->clkp);
--		dev_err(&pdev->dev, "cannot get peripheral clock, error %d\n",
--			err);
--		goto fail_dev;
--	}
-+	if (IS_ERR(gpriv->clkp))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(gpriv->clkp),
-+				     "cannot get peripheral clock\n");
- 
- 	/* fCAN clock: Pick External clock. If not available fallback to
- 	 * CANFD clock
-@@ -1917,12 +1913,10 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 	gpriv->can_clk = devm_clk_get(&pdev->dev, "can_clk");
- 	if (IS_ERR(gpriv->can_clk) || (clk_get_rate(gpriv->can_clk) == 0)) {
- 		gpriv->can_clk = devm_clk_get(&pdev->dev, "canfd");
--		if (IS_ERR(gpriv->can_clk)) {
--			err = PTR_ERR(gpriv->can_clk);
--			dev_err(&pdev->dev,
--				"cannot get canfd clock, error %d\n", err);
--			goto fail_dev;
--		}
-+		if (IS_ERR(gpriv->can_clk))
-+			return dev_err_probe(&pdev->dev, PTR_ERR(gpriv->can_clk),
-+					     "cannot get canfd clock\n");
-+
- 		gpriv->fcan = RCANFD_CANFDCLK;
- 
- 	} else {
--- 
-2.34.1
+Thanks,
+Marc
 
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--hiqec7dmmpfnqmy6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLwwboACgkQrX5LkNig
+010SAgf8DcRHAVx/USEkzkATwto/JOfRALIMKu8UHkPr+0JyLricXyQYn4NPMUjg
+3dP3ZYZY3l5Pg5hCrto9W0T1tgn/9SxRR7ngIgqX46YNphbBgIr07DjWMOrB5Lv+
+YnrdkYgWfBH2rx1f6BJfF+9Dmur3vLomVG7IpwemLDeWa4azE2f9gRnJwHLBbfGX
+RuvaBIgA+F6qAMXdU9RZv8d4/NGlI3gHQdvzrmNIZA79NEIVZMQA3DrZroN/W8t1
+Hf/mJncv4eRYt38RcDoihu/CKEbS3C4gq2olzLN4xA1h+jUDJsDNdBHDHfd0w1fo
+/3KKaSQleo2KY+k8pFkGm3LivhmhQQ==
+=TBCJ
+-----END PGP SIGNATURE-----
+
+--hiqec7dmmpfnqmy6--
