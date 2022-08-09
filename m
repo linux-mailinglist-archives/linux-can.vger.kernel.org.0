@@ -2,56 +2,48 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5576358D8C5
-	for <lists+linux-can@lfdr.de>; Tue,  9 Aug 2022 14:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42CB058D8DD
+	for <lists+linux-can@lfdr.de>; Tue,  9 Aug 2022 14:45:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242262AbiHIMbv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 9 Aug 2022 08:31:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34120 "EHLO
+        id S242943AbiHIMpp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 9 Aug 2022 08:45:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242036AbiHIMbu (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 9 Aug 2022 08:31:50 -0400
-X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 09 Aug 2022 05:31:48 PDT
-Received: from mailrelay1-2.pub.mailoutpod1-cph3.one.com (mailrelay1-2.pub.mailoutpod1-cph3.one.com [46.30.212.0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD45F18B08
-        for <linux-can@vger.kernel.org>; Tue,  9 Aug 2022 05:31:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=csselectronics.com; s=rsa1;
-        h=content-transfer-encoding:content-type:to:subject:from:mime-version:date:
-         message-id:from;
-        bh=IHxKrbx0I4qpTf/8bCVdowqsph57xG4wHJ5zAlaYt6A=;
-        b=YlzAjNtHRyPCVHqAsnJFfFefVZXT1x9CRHgpkA+gQp2i+rh1LCBTr3TAlhywKgncZxHiwiRMuQCI5
-         4uHgffDB2xBE6uuyezc35sTXiM0bv963Q/7vAsm/cSAQ6KVh31fOVIJll4dH0ukH7pyVExqbYhuHwg
-         BBW64l0S7ArKHKtlEPWF2TOzjTTcN7PgRowWOo5+MjXJKZrS7b5YZg0SW+a3ok0qj0eqzaDYzYjVtS
-         43loUJOd8ZDCZe9wLmWDv8Dsz5sJed3TBiW9Ec6j1+Kg3kaxG+iIEo+kjPGb2x8tAxGRI0uVUIwUaN
-         YZhZke8CsCGNOTMGfFjIABBxq3cDNTw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=csselectronics.com; s=ed1;
-        h=content-transfer-encoding:content-type:to:subject:from:mime-version:date:
-         message-id:from;
-        bh=IHxKrbx0I4qpTf/8bCVdowqsph57xG4wHJ5zAlaYt6A=;
-        b=89itezlSCOb0BM7UlMjKbXWDs5UTagwcGN8m/kXhw9mOhIg7SMVmW8j8cd+RhBGtIm1VlGo9yU3uz
-         f8hxC/ODw==
-X-HalOne-Cookie: 3296973920fbe09509c93b8b6d9ae47ed3b20861
-X-HalOne-ID: 16223d92-17df-11ed-a6cc-d0431ea8a283
-Received: from [192.168.1.155] (unknown [5.103.118.41])
-        by mailrelay1.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id 16223d92-17df-11ed-a6cc-d0431ea8a283;
-        Tue, 09 Aug 2022 12:30:43 +0000 (UTC)
-Message-ID: <e396bfcd-aca2-fef8-a25d-e6e4b61e7d70@csselectronics.com>
-Date:   Tue, 9 Aug 2022 14:30:43 +0200
+        with ESMTP id S243263AbiHIMpo (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 9 Aug 2022 08:45:44 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE96BB1F4
+        for <linux-can@vger.kernel.org>; Tue,  9 Aug 2022 05:45:43 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oLOcA-0005Hn-FD; Tue, 09 Aug 2022 14:45:42 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id B515DC5D9B;
+        Tue,  9 Aug 2022 12:45:41 +0000 (UTC)
+Date:   Tue, 9 Aug 2022 14:45:40 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Magnus Aagaard =?utf-8?B?U8O4cmVuc2Vu?= <mas@csselectronics.com>
+Cc:     linux-can@vger.kernel.org
+Subject: Re: Debugging dropped/missing frames in the network layer
+Message-ID: <20220809124540.777p5lykbndyja6v@pengutronix.de>
+References: <e396bfcd-aca2-fef8-a25d-e6e4b61e7d70@csselectronics.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Content-Language: en-US
-From:   =?UTF-8?Q?Magnus_Aagaard_S=c3=b8rensen?= <mas@csselectronics.com>
-Subject: Debugging dropped/missing frames in the network layer
-To:     linux-can@vger.kernel.org
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dfcovdmrfsaxz3px"
+Content-Disposition: inline
+In-Reply-To: <e396bfcd-aca2-fef8-a25d-e6e4b61e7d70@csselectronics.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,26 +51,64 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-I am working with an out-of-tree kernel driver which maps LIN messages 
-via a UART onto the CAN networking stack, to allow for using the regular 
-CAN tools to also work with LIN messages (The driver in question is 
-sllin, https://github.com/lin-bus/linux-lin/, based on slcan from what I 
-understand).
 
-During use, I see a lot of frames missing from the output. From 
-debugging the module, I can see that the kernel module receive the 
-messages as expected, but they never show up in user space using 
-candump. I can trace the messages in the module to the hand-off to the 
-networking stack via a netif_rx call.
+--dfcovdmrfsaxz3px
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Are there any additional handles in the networking/CAN stack to show me 
-where the missing frames are being discarded before reaching user space, 
-or which could otherwise help me narrow down the origin of this issue? 
-The frames are transmitted from a custom/third party device at 19200 
-kbps and with 100 ms spacing.
+On 09.08.2022 14:30:43, Magnus Aagaard S=C3=B8rensen wrote:
+> I am working with an out-of-tree kernel driver which maps LIN messages vi=
+a a
+> UART onto the CAN networking stack, to allow for using the regular CAN to=
+ols
+> to also work with LIN messages (The driver in question is sllin,
+> https://github.com/lin-bus/linux-lin/, based on slcan from what I
+> understand).
 
-Hardware on the Linux side is a Raspberry Pi 4 running kernel 5.15.56 in 
-64 bit mode.
+FYI: in net-next/main the slcan driver has undergone a major cleanup.
 
-Regards, Magnus.
+> During use, I see a lot of frames missing from the output. From debugging
+> the module, I can see that the kernel module receive the messages as
+> expected, but they never show up in user space using candump. I can trace
+> the messages in the module to the hand-off to the networking stack via a
+> netif_rx call.
+>=20
+> Are there any additional handles in the networking/CAN stack to show me
+> where the missing frames are being discarded before reaching user space, =
+or
+> which could otherwise help me narrow down the origin of this issue? The
+> frames are transmitted from a custom/third party device at 19200 kbps and
+> with 100 ms spacing.
 
+Try running candump with -d.
+
+| -d     (monitor dropped CAN frames)
+
+> Hardware on the Linux side is a Raspberry Pi 4 running kernel 5.15.56 in =
+64
+> bit mode.
+
+Marc
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--dfcovdmrfsaxz3px
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLyVvEACgkQrX5LkNig
+013lXQf+PhhUC5K3vZnKaJobSFQ3qXa5b1l81pbc86evlJWGnA/Da+4O+Xjew6O5
+aG850AdbBw7v9RbVzhMepkoa3G96UmULe9ASPLqYdWPXbpl0p4Qwzq6b8As3fGp9
+QK3gjh6EBxA4pprw1H+RhPKyHl5mUB9+u5M0eJRn0dr7d2gKlY7MbF5TElUZWEkg
+iQRY/0rtrXcAu+ywMzOzVuD6lRXtIsaHmifggV18pYuUvTgtTNrtcXpDWF1knk3s
+zYJ6RCz6IQqU5NtesK4eGK2J6zO5rzgKJ9j3QYUohq3wyGFqM7Zsr44uFr26EJXB
+NCgYC052E7bNcAOOg4+2QxFIQyU1lg==
+=52A2
+-----END PGP SIGNATURE-----
+
+--dfcovdmrfsaxz3px--
