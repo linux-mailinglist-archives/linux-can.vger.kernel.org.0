@@ -2,75 +2,107 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3656058D486
-	for <lists+linux-can@lfdr.de>; Tue,  9 Aug 2022 09:28:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4818B58D4F3
+	for <lists+linux-can@lfdr.de>; Tue,  9 Aug 2022 09:55:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238495AbiHIH21 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 9 Aug 2022 03:28:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52916 "EHLO
+        id S235002AbiHIHyv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 9 Aug 2022 03:54:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237496AbiHIH2Z (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 9 Aug 2022 03:28:25 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706CA20F62
-        for <linux-can@vger.kernel.org>; Tue,  9 Aug 2022 00:28:23 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id v7so12155132ljj.4
-        for <linux-can@vger.kernel.org>; Tue, 09 Aug 2022 00:28:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
-        bh=ze1eT5Lg5bNGve/aGYosnnSf8uaPmjR59Sgjcewn6dA=;
-        b=Q63u1LZ7SsI6nSiYjm5CY8jn2o/GibNe1Isu6aHJmFZRkYk9jUhYjbchztvMp0LgGF
-         ts+EGTUKEZQti8Hg6DskmvERKSDRZ2DbgJr5miTdDQ04UlHzUppT5QMMrObgKlK8nomv
-         /J9PoLKA4lOTjfOpyEAKIbofWrjAXc8AN6X5ILm0S44HDCQh2sk8RhqVdROBvOITvPj4
-         8xsMJjq2+U14rA8yaJAQgmn8ngSZWltTXZ0lOI5/NR1izoNn8s4Vn8qb9xHwnN8U/lQp
-         FS+8pL/gsHwa4eQ9yvb3nM5w05YtHWLs+W1B0Ka8P1d9vB5d0n3id2lBNhfaLspb6nSb
-         MQpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=ze1eT5Lg5bNGve/aGYosnnSf8uaPmjR59Sgjcewn6dA=;
-        b=ioe40r+usgaoTI5NAdAGurwe/IzVuwZM9LSEpDbgiaEhhgrPXzJX1jsdikovK1r/Ic
-         s2GeDL4eo1httVJlKQRAWkToPXhCH8SDj4n8hSHYPEWM39gNa/IFRgY3W3KhP4mQlNpH
-         lILqQmwPj1wgVFeqnsHeOFGDCR2vXh+C+I7QU1cGmRUtf485QS3JoRTh3ZDPC9dnOLaD
-         KQXfjrf1s93NI+qDb/1lVvER7UYy5w0T+4k9Aw2YwY+EgPc7NjiboXhdZqfzlDYIRcT9
-         ZqndgMG1Hkw+b5XgXjW1heGvTs1e2IG6pP/XdjnUXtj1JAZYEvQKM0PsV4gYCqNpg2rt
-         GIGQ==
-X-Gm-Message-State: ACgBeo3410fnlfEHWbOkiEA/7nc/cn1t6pnlVqxK0pNob/1QEgOYqsbj
-        Md6wb8rvAD6MRxKK/wI3Iy8k9jGO6XbB8wnL30k=
-X-Google-Smtp-Source: AA6agR5SWMuV81z2hU/zyIf6xa+0ur4hIB97jdyKO+lQJxpYaZhIEYD4xKYP6Ctjjsfu7fgEB6j4uqig6YShtnYG7po=
-X-Received: by 2002:a05:651c:1502:b0:25f:d9d2:f906 with SMTP id
- e2-20020a05651c150200b0025fd9d2f906mr3400477ljf.311.1660030101782; Tue, 09
- Aug 2022 00:28:21 -0700 (PDT)
+        with ESMTP id S240140AbiHIHys (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 9 Aug 2022 03:54:48 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143982127D
+        for <linux-can@vger.kernel.org>; Tue,  9 Aug 2022 00:54:47 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oLK4c-0000UA-7r
+        for linux-can@vger.kernel.org; Tue, 09 Aug 2022 09:54:46 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 82ABBC5561
+        for <linux-can@vger.kernel.org>; Tue,  9 Aug 2022 07:53:20 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 3513AC555C;
+        Tue,  9 Aug 2022 07:53:20 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 0515bd6d;
+        Tue, 9 Aug 2022 07:53:19 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH net 0/4] pull-request: can 2022-08-09
+Date:   Tue,  9 Aug 2022 09:53:13 +0200
+Message-Id: <20220809075317.1549323-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Received: by 2002:a05:6512:b1b:0:0:0:0 with HTTP; Tue, 9 Aug 2022 00:28:21
- -0700 (PDT)
-Reply-To: s.clarke@rahimglobalinc.com
-From:   Sara Clarke <ivankatrumpamericanfirstdaught@gmail.com>
-Date:   Tue, 9 Aug 2022 10:28:21 +0300
-Message-ID: <CACbjJV8a8Vwf5-u_DrsmT0ynRPWwWv2p5=EcBkCzaU+YeeZnWA@mail.gmail.com>
-Subject: Enquiries
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello,
-We are interested in purchasing your product, kindly furnish with us
-your price list.
+Hello Jakub, hello David,
 
-Best regard,
-Sara Clarke,
-Purchasing Manager
-Rahim Consultants Office Address
-17 Bridge Road East Molesey
-Surrey KT8 9EU
-United Kingdom
+this is a pull request of 4 patches for net/master.
+
+Fedor Pchelkin contributes 2 fixes for the j1939 CAN protcol.
+
+A patch by me for the ems_usb driver fixes an unaligned-access
+warning.
+
+Sebastian Würl's patch for the mcp251x driver fixes a race condition
+in the receive interrupt.
+
+regards,
+Marc
+
+---
+
+The following changes since commit b8c3bf0ed2edf2deaedba5f0bf0bb54c76dee71d:
+
+  Merge tag 'for-net-2022-08-08' of git://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth (2022-08-08 20:59:07 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-6.0-20220809
+
+for you to fetch changes up to 72599394ad46226ca17a405fa0472078c3160c62:
+
+  can: mcp251x: Fix race condition on receive interrupt (2022-08-09 09:05:06 +0200)
+
+----------------------------------------------------------------
+linux-can-fixes-for-6.0-20220809
+
+----------------------------------------------------------------
+Fedor Pchelkin (2):
+      can: j1939: j1939_sk_queue_activate_next_locked(): replace WARN_ON_ONCE with netdev_warn_once()
+      can: j1939: j1939_session_destroy(): fix memory leak of skbs
+
+Marc Kleine-Budde (1):
+      can: ems_usb: fix clang's -Wunaligned-access warning
+
+Sebastian Würl (1):
+      can: mcp251x: Fix race condition on receive interrupt
+
+ drivers/net/can/spi/mcp251x.c | 18 +++++++++++++++---
+ drivers/net/can/usb/ems_usb.c |  2 +-
+ net/can/j1939/socket.c        |  5 ++++-
+ net/can/j1939/transport.c     |  8 +++++++-
+ 4 files changed, 27 insertions(+), 6 deletions(-)
+
+
