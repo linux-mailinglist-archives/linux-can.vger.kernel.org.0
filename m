@@ -2,42 +2,47 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA77458E7BF
+	by mail.lfdr.de (Postfix) with ESMTP id 7ED4D58E7BE
 	for <lists+linux-can@lfdr.de>; Wed, 10 Aug 2022 09:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbiHJHTm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 10 Aug 2022 03:19:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38330 "EHLO
+        id S231149AbiHJHTh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 10 Aug 2022 03:19:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231337AbiHJHPm (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 10 Aug 2022 03:15:42 -0400
+        with ESMTP id S230282AbiHJHTd (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 10 Aug 2022 03:19:33 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187E8193
-        for <linux-can@vger.kernel.org>; Wed, 10 Aug 2022 00:15:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9902184EC0
+        for <linux-can@vger.kernel.org>; Wed, 10 Aug 2022 00:19:31 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1oLfwI-00042N-Nc; Wed, 10 Aug 2022 09:15:38 +0200
+        id 1oLfzz-0004PJ-Jn; Wed, 10 Aug 2022 09:19:27 +0200
 Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id EF7DAC659E;
-        Wed, 10 Aug 2022 07:15:37 +0000 (UTC)
-Date:   Wed, 10 Aug 2022 09:15:31 +0200
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 6EEB8C65A9;
+        Wed, 10 Aug 2022 07:19:26 +0000 (UTC)
+Date:   Wed, 10 Aug 2022 09:19:24 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: [PATCH net 0/4] pull-request: can 2022-08-10
-Message-ID: <20220810071531.276vcbfcqxgdun4e@pengutronix.de>
-X-Mailer: git-send-email 2.35.1
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net,
+        linux-can@vger.kernel.org, kernel@pengutronix.de,
+        Sebastian =?utf-8?B?V8O8cmw=?= <sebastian.wuerl@ororatech.com>
+Subject: Re: [PATCH net 4/4] can: mcp251x: Fix race condition on receive
+ interrupt
+Message-ID: <20220810071924.z3fbou2wbg6s7jjl@pengutronix.de>
+References: <20220809075317.1549323-1-mkl@pengutronix.de>
+ <20220809075317.1549323-5-mkl@pengutronix.de>
+ <20220809115016.1db564b3@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5m3gw4gol5kj2loq"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220809115016.1db564b3@kernel.org>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -51,55 +56,55 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Jakub, hello David,
 
-this is a pull request of 4 patches for net/master, with the
-whitespace issue fixed.
+--5m3gw4gol5kj2loq
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Fedor Pchelkin contributes 2 fixes for the j1939 CAN protocol.
+On 09.08.2022 11:50:16, Jakub Kicinski wrote:
+> On Tue,  9 Aug 2022 09:53:17 +0200 Marc Kleine-Budde wrote:
+> > @@ -1082,6 +1079,18 @@ static irqreturn_t mcp251x_can_ist(int irq, void=
+ *dev_id)
+> >  			if (mcp251x_is_2510(spi))
+> >  				mcp251x_write_bits(spi, CANINTF,
+> >  						   CANINTF_RX0IF, 0x00);
+> > +
+> > +			/* check if buffer 1 is already known to be full, no need to re-rea=
+d */
+> > +			if (!(intf & CANINTF_RX1IF)) {
+> > +				u8 intf1, eflag1;
+> > +			=09
+>=20
+> This line is full of trailing whitespace, could you add a fix on top to
+> remove it and resend?
 
-A patch by me for the ems_usb driver fixes an unaligned access
-warning.
+Doh! It was me moving both variables there to reduce their scope and
+somehow the whitespace slipped in. Here's an updated PR:
 
-Sebastian Würl's patch for the mcp251x driver fixes a race condition
-in the receive interrupt.
+https://lore.kernel.org/all/20220810071448.1627857-1-mkl@pengutronix.de/
 
-regards,
 Marc
 
----
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-The following changes since commit b8c3bf0ed2edf2deaedba5f0bf0bb54c76dee71d:
+--5m3gw4gol5kj2loq
+Content-Type: application/pgp-signature; name="signature.asc"
 
-  Merge tag 'for-net-2022-08-08' of git://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth (2022-08-08 20:59:07 -0700)
+-----BEGIN PGP SIGNATURE-----
 
-are available in the Git repository at:
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLzW/kACgkQrX5LkNig
+012WzQf7BfVypr61XIbVCgZtPBv2yuXfOP/35jLumTUFabf5R8wg8f/ixjfwyh0Y
+M3DPSe3gEsdEcb34yewWngMUnSiIMhJk3sCreb0auXXnuQ7rbNMWpn0VsSrX0jFf
+4qlM9jYfxZG2tsCh/XnVpJ1ssj9i+Slob5UEodYcxn8IhaKv6L+cXR15huGkR47b
+NxoMJIJFVqdoDkxy3quLqcdT5f9eoPonSUFAyh1M8aV570sHVJh8MnnpM6eMbnmf
+mRgLSJ9Z1v2me5dIENyaCgFL04vW5LABlAx0Q8lpsw2uOWX3BGhrUcZKLIg2Fsjk
+G48kWPz+sBqR5IBQawfvUOsf/0cqWw==
+=NS4m
+-----END PGP SIGNATURE-----
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-6.0-20220810
-
-for you to fetch changes up to d80d60b0db6ff3dd2e29247cc2a5166d7e9ae37e:
-
-  can: mcp251x: Fix race condition on receive interrupt (2022-08-09 21:40:22 +0200)
-
-----------------------------------------------------------------
-linux-can-fixes-for-6.0-20220810
-
-----------------------------------------------------------------
-Fedor Pchelkin (2):
-      can: j1939: j1939_sk_queue_activate_next_locked(): replace WARN_ON_ONCE with netdev_warn_once()
-      can: j1939: j1939_session_destroy(): fix memory leak of skbs
-
-Marc Kleine-Budde (1):
-      can: ems_usb: fix clang's -Wunaligned-access warning
-
-Sebastian Würl (1):
-      can: mcp251x: Fix race condition on receive interrupt
-
- drivers/net/can/spi/mcp251x.c | 18 +++++++++++++++---
- drivers/net/can/usb/ems_usb.c |  2 +-
- net/can/j1939/socket.c        |  5 ++++-
- net/can/j1939/transport.c     |  8 +++++++-
- 4 files changed, 27 insertions(+), 6 deletions(-)
-
-
-
+--5m3gw4gol5kj2loq--
