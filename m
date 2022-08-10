@@ -2,55 +2,54 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F129C58E8C4
-	for <lists+linux-can@lfdr.de>; Wed, 10 Aug 2022 10:30:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 139F458EA79
+	for <lists+linux-can@lfdr.de>; Wed, 10 Aug 2022 12:34:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231387AbiHJIaq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 10 Aug 2022 04:30:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51752 "EHLO
+        id S229481AbiHJKeH convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Wed, 10 Aug 2022 06:34:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231417AbiHJIaX (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 10 Aug 2022 04:30:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 458A11A8;
-        Wed, 10 Aug 2022 01:30:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DA66FB81B11;
-        Wed, 10 Aug 2022 08:30:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7C185C433C1;
-        Wed, 10 Aug 2022 08:30:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660120215;
-        bh=5MyKZGu54z+B2Bggh4Iqs/zOi00lCYIgWA3QaHn9uTA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=hb9R6jljzlgmxRMgdPa9BULAA9Nmo+CbhCWVAs1qkCYxtoi3zS1mdSM3AR7w9NndW
-         MfQqohicq+QJTm71pGleUXQDxZP+enaJnBFXu/M5R4/hExCrSCqHm27azmMLZjXgV+
-         9933hxAPXDJ/7oAuxIPrHY00qjx0BBmNaLwXbQkaLvymOEsldNaOhc3Fc+pYjw0dGz
-         fU0rrixc/3izXAUF/iwrNuv8vYNS+D9CtMB6C7QN650ENktgzFzgQK/KC7B1aeHfN0
-         tTsunnBRj/qTaqCI1qF+ASgIAmyx/XRMOxMGI86UdrA6qvp/4E4aEPVtgAonzK+xlG
-         qKrg0MlGNcaYQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 613EDC43143;
-        Wed, 10 Aug 2022 08:30:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 1/4] can: j1939: j1939_sk_queue_activate_next_locked():
- replace WARN_ON_ONCE with netdev_warn_once()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166012021539.17355.18233144959835378708.git-patchwork-notify@kernel.org>
-Date:   Wed, 10 Aug 2022 08:30:15 +0000
-References: <20220810071448.1627857-2-mkl@pengutronix.de>
-In-Reply-To: <20220810071448.1627857-2-mkl@pengutronix.de>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, kernel@pengutronix.de,
-        pchelkin@ispras.ru, khoroshilov@ispras.ru, o.rempel@pengutronix.de
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        with ESMTP id S229476AbiHJKeG (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 10 Aug 2022 06:34:06 -0400
+X-Greylist: delayed 181 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 10 Aug 2022 03:34:03 PDT
+Received: from avasout-peh-003.plus.net (avasout-peh-003.plus.net [212.159.14.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E32753B1
+        for <linux-can@vger.kernel.org>; Wed, 10 Aug 2022 03:34:03 -0700 (PDT)
+Received: from genesis.baggywrinkle.co.uk ([31.125.18.98])
+        by smtp with ESMTP
+        id LizLofPPwHHF7LizMos7TN; Wed, 10 Aug 2022 11:31:00
+ +0100
+X-Clacks-Overhead: "GNU Terry Pratchett"
+X-CM-Score: 0.00
+X-CNFS-Analysis: v=2.4 cv=GpdRR25C c=1 sm=1 tr=0 ts=62f388e4
+ a=86bM3K2DLQsQH5/1ktvscg==:117 a=86bM3K2DLQsQH5/1ktvscg==:17
+ a=kj9zAlcOel0A:10 a=biHskzXt2R4A:10 a=ccRei-trmjVMO_n8gXYA:9 a=CjuIK1q_8ugA:10
+Received: from localhost (localhost [127.0.0.1])
+        by genesis.baggywrinkle.co.uk (Postfix) with ESMTP id 4CA769CF606B;
+        Wed, 10 Aug 2022 11:30:58 +0100 (BST)
+X-Virus-Scanned: amavisd-new at mydomain = baggywrinkle.co.uk
+Received: from genesis.baggywrinkle.co.uk ([127.0.0.1])
+        by localhost (genesis.baggywrinkle.co.uk [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id cBXcJCwEpvqH; Wed, 10 Aug 2022 11:30:55 +0100 (BST)
+Received: from smtpclient.apple (bavaria.baggywrinkle.co.uk [10.0.10.194])
+        by genesis.baggywrinkle.co.uk (Postfix) with ESMTPSA id 5C8349CF6055;
+        Wed, 10 Aug 2022 11:30:55 +0100 (BST)
+From:   Mark Bath <mark@baggywrinkle.co.uk>
+Content-Type: text/plain;
+        charset=us-ascii
+Content-Transfer-Encoding: 8BIT
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
+Date:   Wed, 10 Aug 2022 11:30:53 +0100
+Subject: Raspberry PI running 5.10.x Kernel and issues with Daul channel
+ Waveshare based 2.1 MCP251xFD CAN HAT 
+Cc:     mkl@pengutronix.de
+To:     linux-can@vger.kernel.org
+Message-Id: <9024B39B-CCDA-4E10-9A4E-70A4335F6304@baggywrinkle.co.uk>
+X-Mailer: Apple Mail (2.3696.80.82.1.1)
+X-CMAE-Envelope: MS4xfIFqL7thgAZZzSamUbh+hqSftJs6Fk5Yd2HSYbpc7s857ft1sSsQRAsLx5XmkGeFoTsNHnhwf01pz1rh8sIN67SkZ5kS/RT1sI91GaMpge0GNF3Ndv5/
+ C8ViTG6ReRDPVTohe2TqpQ5SYTrZEncQG3OGdy9cMUejxp34Rg7Lm7IvtaeVjQDXKToPzIZkKvjrWBr3+tpdJylg449VQ1N3/SI=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,35 +57,83 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello:
+Good morning,
 
-This series was applied to netdev/net.git (master)
-by Marc Kleine-Budde <mkl@pengutronix.de>:
+I hope someone can give me some pointers on what might be causing my system an issue or how to debug the issue.
 
-On Wed, 10 Aug 2022 09:14:45 +0200 you wrote:
-> From: Fedor Pchelkin <pchelkin@ispras.ru>
-> 
-> We should warn user-space that it is doing something wrong when trying
-> to activate sessions with identical parameters but WARN_ON_ONCE macro
-> can not be used here as it serves a different purpose.
-> 
-> So it would be good to replace it with netdev_warn_once() message.
-> 
-> [...]
+The revision 2 Waveshare Dual channel MCP251xFD CAN HAT was working fine in my LAB with 2 or 3 other can devices. Both can channels are using standard 29 bit CAN2.0 extended identifiers. The can0 interface was running at 250kb, and can1at 500Kb.
 
-Here is the summary with links:
-  - [net,1/4] can: j1939: j1939_sk_queue_activate_next_locked(): replace WARN_ON_ONCE with netdev_warn_once()
-    https://git.kernel.org/netdev/net/c/8ef49f7f8244
-  - [net,2/4] can: j1939: j1939_session_destroy(): fix memory leak of skbs
-    https://git.kernel.org/netdev/net/c/8c21c54a53ab
-  - [net,3/4] can: ems_usb: fix clang's -Wunaligned-access warning
-    https://git.kernel.org/netdev/net/c/a4cb6e62ea4d
-  - [net,4/4] can: mcp251x: Fix race condition on receive interrupt
-    https://git.kernel.org/netdev/net/c/d80d60b0db6f
+As soon as I moved the device into my live environment I have started to have issues.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+The 250Kb segment has around 10-15 devices and a bus length of something in the order of 40m, properly terminated at each end with a 120ohm resistor. The 500kb segment has 2 devices and is maybe 10m in length and also properly terminated. Without the PI connected both segments are running fine with no reported BER counters. The following output is from an embedded linux based device on the network when my PI is not connected.
+
+root@Venus:~# ip -details link show can0
+3: can0: <NOARP,UP,LOWER_UP,ECHO> mtu 16 qdisc pfifo_fast state UP mode DEFAULT group default qlen 100
+    link/can  promiscuity 0 minmtu 0 maxmtu 0 
+    can state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 100 
+	  bitrate 250000 sample-point 0.875 
+	  tq 250 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+	  sun4i_can: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+	  clock 24000000 numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 
+
+The bus loading is very low.
+
+root@Venus:~# canbusload can0@250000 
+ can0@250000    84   13440   5376   5%
+ can0@250000   133   21280   8512   8%
+ can0@250000    95   15200   6080   6%
+ can0@250000   114   18240   7296   7%
+ can0@250000   105   16800   6720   6%
+ can0@250000   132   21020   8368   8%
+ can0@250000   104   16640   6656   6%
+
+
+As soon as I attach the PI4 with the revision 2.1 waveshare 251xFD dual can hat I start getting BER errors on devices, and the PI is reporting RX BER errors. 
+
+The embedded Linux device
+root@Venus:~# ip -details link show can0
+3: can0: <NOARP,UP,LOWER_UP,ECHO> mtu 16 qdisc pfifo_fast state UP mode DEFAULT group default qlen 100
+    link/can  promiscuity 0 minmtu 0 maxmtu 0 
+    can state ERROR-ACTIVE (berr-counter tx 0 rx 83) restart-ms 100 
+	  bitrate 250000 sample-point 0.875 
+	  tq 250 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+	  sun4i_can: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+	  clock 24000000 numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 
+
+
+RaspberryPI4 with the wave share dual can hat
+root@Olaso-PI:~# ip -details link show can0
+5: can0: <NOARP,UP,LOWER_UP,ECHO> mtu 16 qdisc pfifo_fast state UP mode DEFAULT group default qlen 100
+    link/can  promiscuity 0 minmtu 0 maxmtu 0 
+    can state ERROR-WARNING (berr-counter tx 0 rx 124) restart-ms 100 
+	  bitrate 250000 sample-point 0.875 
+	  tq 25 prop-seg 69 phase-seg1 70 phase-seg2 20 sjw 1
+	  mcp251xfd: tseg1 2..256 tseg2 1..128 sjw 1..128 brp 1..256 brp-inc 1
+	  mcp251xfd: dtseg1 1..32 dtseg2 1..16 dsjw 1..16 dbrp 1..256 dbrp-inc 1
+	  clock 40000000 numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 
+
+ip -details link show can1
+6: can1: <NOARP,UP,LOWER_UP,ECHO> mtu 16 qdisc pfifo_fast state UP mode DEFAULT group default qlen 100
+    link/can  promiscuity 0 minmtu 0 maxmtu 0 
+    can state ERROR-WARNING (berr-counter tx 0 rx 125) restart-ms 100 
+	  bitrate 500000 sample-point 0.875 
+	  tq 25 prop-seg 34 phase-seg1 35 phase-seg2 10 sjw 1
+	  mcp251xfd: tseg1 2..256 tseg2 1..128 sjw 1..128 brp 1..256 brp-inc 1
+	  mcp251xfd: dtseg1 1..32 dtseg2 1..16 dsjw 1..16 dbrp 1..256 dbrp-inc 1
+	  clock 40000000 numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 
+
+Do you have any idea what might be doing this. I have checked cables, termination, voltages, etc and all are OK. I have asked Waveshare and basically been given the not our issue, its the network.
+
+I have even checked the cable drops between the backbone and PI, by plugging alternative devices in and they have behaved correctly. Moving the PI to an alternative drop has also not hanged anything.
+
+It seems to me that there might be a timing issue, but have no idea how to check.
+
+
+Thank you.
+
+Regards
+
+Mark
+
 
 
