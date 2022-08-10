@@ -2,47 +2,47 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C6258EB36
-	for <lists+linux-can@lfdr.de>; Wed, 10 Aug 2022 13:25:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 412B958EEAC
+	for <lists+linux-can@lfdr.de>; Wed, 10 Aug 2022 16:45:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbiHJLZR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 10 Aug 2022 07:25:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54332 "EHLO
+        id S232645AbiHJOpv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 10 Aug 2022 10:45:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbiHJLZQ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 10 Aug 2022 07:25:16 -0400
+        with ESMTP id S232894AbiHJOpq (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 10 Aug 2022 10:45:46 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F20745F79
-        for <linux-can@vger.kernel.org>; Wed, 10 Aug 2022 04:25:15 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA70B49B70
+        for <linux-can@vger.kernel.org>; Wed, 10 Aug 2022 07:45:44 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oLjpp-0001iP-LD; Wed, 10 Aug 2022 13:25:13 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 00875C68D4;
-        Wed, 10 Aug 2022 11:25:12 +0000 (UTC)
-Date:   Wed, 10 Aug 2022 13:25:10 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Mark Bath <mark@baggywrinkle.co.uk>
-Cc:     linux-can@vger.kernel.org
-Subject: Re: Raspberry PI running 5.10.x Kernel and issues with Daul channel
- Waveshare based 2.1 MCP251xFD CAN HAT
-Message-ID: <20220810112510.zmpo6eqo7bipvtth@pengutronix.de>
-References: <9024B39B-CCDA-4E10-9A4E-70A4335F6304@baggywrinkle.co.uk>
- <20220810103605.nsh7r4pe6g7lzbvv@pengutronix.de>
- <CD5C45C2-85DE-4105-B096-13FDA3FE1932@baggywrinkle.co.uk>
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oLmxq-00028X-Ew; Wed, 10 Aug 2022 16:45:42 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oLmxn-002vUa-6G; Wed, 10 Aug 2022 16:45:41 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oLmxo-00AnsB-Mj; Wed, 10 Aug 2022 16:45:40 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH] can: rx-offload: Break loop on queue full
+Date:   Wed, 10 Aug 2022 16:45:36 +0200
+Message-Id: <20220810144536.389237-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jygnw25nn6sw3h4i"
-Content-Disposition: inline
-In-Reply-To: <CD5C45C2-85DE-4105-B096-13FDA3FE1932@baggywrinkle.co.uk>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1982; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=Cn04GZTinb3PN++vuBq/xD3wJWb9dO28EXwq06xJYPM=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBi88SMnBsnvOfBX9QR1MhCX82hZIFPz2XNtmDorvRp dxQd+yCJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYvPEjAAKCRDB/BR4rcrsCQlhB/ 4haeId7TOd3cTFuUcjcNgW48p6P7AGuZP85k/cxmvNKpeuNZ9TxSJkrVaUIj7iqFB1nzZZotRLOyGx FxOSN2mnhmsc4YV/pDIDI1ErPNYBHFznFRG8+IbTXwbWZF9QyBe8NlgzKo/9iEkytdrhFt+V7I8eVh +9sKrLCa6tj8hqltweWn8XP19JtBt/0sy0ue+qi6Gc7DjsySBH4yZUXVMOv9JVk2Ypcf36qtLT7zlY jayTSi0EoaMcm82KChpxhDkcraFqoP6n59c+5Jp6yiYNlJ3od2BD+vZZUSW0BTQehLpfALoDO69Jm6 wwwSfJV1WzjuU50lSYD0I8yhprqhGP
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
@@ -54,122 +54,65 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+The following happend on an i.MX25 using flexcan with many packets on
+the bus:
 
---jygnw25nn6sw3h4i
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The rx-offload queue reached a length more than skb_queue_len_max. So in
+can_rx_offload_offload_one() the drop variable was set to true which
+made the call to .mailbox_read() (here: flexcan_mailbox_read()) just
+return ERR_PTR(-ENOBUFS) (plus some irrelevant hardware interaction) and
+so can_rx_offload_offload_one() returned ERR_PTR(-ENOBUFS), too.
 
-On 10.08.2022 12:14:46, Mark Bath wrote:
->=20
->=20
-> > On 10 Aug 2022, at 11:36, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> >=20
-> >> The embedded Linux device
-> >> root@Venus:~# ip -details link show can0
-> >> 3: can0: <NOARP,UP,LOWER_UP,ECHO> mtu 16 qdisc pfifo_fast state UP mod=
-e DEFAULT group default qlen 100
-> >>    link/can  promiscuity 0 minmtu 0 maxmtu 0=20
-> >>    can state ERROR-ACTIVE (berr-counter tx 0 rx 83) restart-ms 100=20
-> >> 	  bitrate 250000 sample-point 0.875=20
-> >> 	  tq 250 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
-> >                                         ^^^^^^^^^^^^^^^^^^
-> >=20
-> > Here the sjw is 50% of phase-seg2.
-> >=20
-> >> 	  sun4i_can: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
-> >> 	  clock 24000000 numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_m=
-ax_segs 65535=20
-> >>=20
-> >>=20
-> >> RaspberryPI4 with the wave share dual can hat
-> >> root@Olaso-PI:~# ip -details link show can0
-> >> 5: can0: <NOARP,UP,LOWER_UP,ECHO> mtu 16 qdisc pfifo_fast state UP mod=
-e DEFAULT group default qlen 100
-> >>    link/can  promiscuity 0 minmtu 0 maxmtu 0=20
-> >>    can state ERROR-WARNING (berr-counter tx 0 rx 124) restart-ms 100=
-=20
-> >> 	  bitrate 250000 sample-point 0.875=20
-> >> 	  tq 25 prop-seg 69 phase-seg1 70 phase-seg2 20 sjw 1
-> >                                          ^^^^^^^^^^^^^^^^^^^
-> > Can you try to configure sjw to 10 on the mcp251xfd for 250 kbit/s.
->=20
-> That did it. All stable and working great.
+Now can_rx_offload_irq_offload_fifo() looks as follows:
 
-\o/
+	while (1) {
+		skb = can_rx_offload_offload_one(offload, 0);
+		if (IS_ERR(skb))
+			continue;
+		...
+	}
 
-> > Which tool are you using to configure the bitrate?
->=20
-> Ip command from iproute2
->=20
-> ip link set $dev up txqueuelen 100 type can bitrate $rate restart-ms 100
+As the i.MX25 is a single core CPU while the rx-offload processing is
+active there is no thread to process packets from the offload queue and
+so it doesn't get shorter.
 
-Ok, I just wanted to know in case you needed help to set the sjw.
+The result is a tight loop: can_rx_offload_offload_one() does nothing
+relevant and returns an error code and so
+can_rx_offload_irq_offload_fifo() calls can_rx_offload_offload_one()
+again.
 
-> >> 	  mcp251xfd: tseg1 2..256 tseg2 1..128 sjw 1..128 brp 1..256 brp-inc 1
-> >> 	  mcp251xfd: dtseg1 1..32 dtseg2 1..16 dsjw 1..16 dbrp 1..256 dbrp-in=
-c 1
-> >> 	  clock 40000000 numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_m=
-ax_segs 65535=20
-> >>=20
-> >> ip -details link show can1
-> >> 6: can1: <NOARP,UP,LOWER_UP,ECHO> mtu 16 qdisc pfifo_fast state UP mod=
-e DEFAULT group default qlen 100
-> >>    link/can  promiscuity 0 minmtu 0 maxmtu 0=20
-> >>    can state ERROR-WARNING (berr-counter tx 0 rx 125) restart-ms 100=
-=20
-> >> 	  bitrate 500000 sample-point 0.875=20
-> >> 	  tq 25 prop-seg 34 phase-seg1 35 phase-seg2 10 sjw 1
-> >                                          ^^^^^^^^^^^^^^^^^^^
-> >=20
-> > Try a sjw of 5 for 500 kbit/s.
->=20
-> That also worked.
+To break that loop don't continue calling can_rx_offload_offload_one()
+after it reported an error.
 
-\o/
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+Hello,
 
-> Should I be manually setting the sow value or should it have been set
-                                   ^^^
-                                   sjw :)
-> automatically?
+this patch just implements the obvious change to break the loop. I'm not
+100% certain that there is no corner case where the break is wrong. The
+problem exists at least since v5.6, didn't go back further to check.
 
-For now you have to do it automatically. I have on my todo list to
-improve the bit timing calculation algorithm to calculate a proper sjw
-value. The kernel default is currently an absolute value of "1". sjw is
-better described as a percentage of min(phase-seg1, phase-seg2).
+This fixes a hard hang on said i.MX25.
 
-> Thank you for the quick response, while it looks like an easy fix, the
-> system has many different possible can hats that could be used so
-> modifying the ip command could be challenging for just this HAT.
+Best regards
+Uwe
 
-If you target sjw to be 50% of phase-seg2, the absolute sjw value
-depends on phase-seg2. phase-seg2 depends on the input CAN clock, the
-bitrate of the CAN bus and the used CAN controller.
+ drivers/net/can/dev/rx-offload.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-So if you always use mcp2518fd with 40 MHz external oscillator you have
-a sjw per CAN bus bitrate. (i.e. 10 for 250 kbit/s, 5 for 500 kbit/s).
+diff --git a/drivers/net/can/dev/rx-offload.c b/drivers/net/can/dev/rx-offload.c
+index a32a01c172d4..d5d33692bb6a 100644
+--- a/drivers/net/can/dev/rx-offload.c
++++ b/drivers/net/can/dev/rx-offload.c
+@@ -207,7 +207,7 @@ int can_rx_offload_irq_offload_fifo(struct can_rx_offload *offload)
+ 	while (1) {
+ 		skb = can_rx_offload_offload_one(offload, 0);
+ 		if (IS_ERR(skb))
+-			continue;
++			break;
+ 		if (!skb)
+ 			break;
+ 
+-- 
+2.36.1
 
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---jygnw25nn6sw3h4i
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmLzlZQACgkQrX5LkNig
-013Luwf/QXaGtSIkmAbfTTkk3zJYNfIyHG2I9TRyi2TQADAc00H7ZI+Lb9e41v05
-T8UQWphRrLRnS1kXMZFSGtAL2XA7rmtQDGjBxpsFIRNa/iFiZGRAXsK+JND3nSV5
-4vcN7Wr45q2vXvyqbCbgAJDHNRyVTX+G5fVIO8XprWE8i99L9vEvRSpVW713RMhA
-+X1LoMDCL2FY9W2WMrtBeonsyFw2ibWSSLJ959DEb6qDjUtCabq3gYmf/1UTJPGQ
-55Wz8Ycx4VVuDCSaDuSPKBxFiMa/R4RvfF+8b8HM3aGBSb6dqmIamYqOomIxXv3v
-ZBkaGoVVLwg/nl6B7Ogd0wjlr4jfow==
-=FE91
------END PGP SIGNATURE-----
-
---jygnw25nn6sw3h4i--
