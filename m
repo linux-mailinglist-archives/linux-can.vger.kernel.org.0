@@ -2,35 +2,35 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D556359025D
-	for <lists+linux-can@lfdr.de>; Thu, 11 Aug 2022 18:09:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 109A459033E
+	for <lists+linux-can@lfdr.de>; Thu, 11 Aug 2022 18:21:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237392AbiHKQJB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 11 Aug 2022 12:09:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39100 "EHLO
+        id S237695AbiHKQVZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 11 Aug 2022 12:21:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237008AbiHKQIf (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 11 Aug 2022 12:08:35 -0400
+        with ESMTP id S237899AbiHKQU4 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 11 Aug 2022 12:20:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA434A0269;
-        Thu, 11 Aug 2022 08:54:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35719C22B;
+        Thu, 11 Aug 2022 09:03:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F698612B5;
-        Thu, 11 Aug 2022 15:54:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2A0CC433C1;
-        Thu, 11 Aug 2022 15:54:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3EEB5613E2;
+        Thu, 11 Aug 2022 16:03:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04FA1C433B5;
+        Thu, 11 Aug 2022 16:03:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660233269;
-        bh=yttqcTs7u4UII3gt8REgYQ16qpkU712yQ3SjusyjIuk=;
+        s=k20201202; t=1660233791;
+        bh=Sp5JihRVAfi7GOifL1NK2AOKdWRE7r9oXZwdCzXYjwo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rb1XDA9ESsdr7Gh125sjVW/PYYYrCOheYAgdKeQl3O0lY2MxlFlVeeXk4kTfKYox/
-         5THPEAp5I7x0RjpRSmhXmrRF6Pl5aqVYpmp90YRvihyoDBmLeC2NEQUOz185mtIxVh
-         BtY6z/wQpR/1yzesHwSjTvn/JOMfiEAA+q+ITcoOm9Fup91UNA2p8HvT2N63px27Zr
-         vrVb2zc92zz4FQqRWZWW+QLMbEvq8mtrcy6P5g7ir7AK0H4GYbtJBHWTI/esqNcmwL
-         gmnPeTWICAoHb/04aTCTKdh2PHnXPDnuixC9IQ7+f+U99sd5SQDjNE9IPXWDY+Hwed
-         l/ZBoaEVWUJCw==
+        b=SaRy/W/v3FSPsADUbjzBUltkhhM2a/DuVuK2QBAL4PBX+H82sZqTFuNbkGHAgsM4N
+         lhKSIlMe7fTfiLiPVNPXfzZOWEc7FDNy7XFFJoZpOLUjo2p7mXNcp6hZmyBHM2LFF5
+         JwAuvhAfDJX9K3RPOqJ3H4uksTPYFyELSq/o6QfBvGHTmMlaWWcguySIu2HU9eEaOY
+         4Ru6EhG5ntMu4xlkLUDxHp4GWnUG12axqwljav7yjN5NFU/dTUqcE5JMN4mOEocxWr
+         96JufYfjX5JDgg9O1A+hhWsKosLQmubud1NFUWK9+1GOH1teVb40QrbbzETb7H+uWP
+         Qrb+RMGwxflhQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
@@ -40,12 +40,12 @@ Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
         pabeni@redhat.com, mailhol.vincent@wanadoo.fr,
         stefan.maetje@esd.eu, socketcan@hartkopp.net,
         linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.18 71/93] can: sja1000: Add Quirk for RZ/N1 SJA1000 CAN controller
-Date:   Thu, 11 Aug 2022 11:42:05 -0400
-Message-Id: <20220811154237.1531313-71-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 55/69] can: sja1000: Add Quirk for RZ/N1 SJA1000 CAN controller
+Date:   Thu, 11 Aug 2022 11:56:04 -0400
+Message-Id: <20220811155632.1536867-55-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220811154237.1531313-1-sashal@kernel.org>
-References: <20220811154237.1531313-1-sashal@kernel.org>
+In-Reply-To: <20220811155632.1536867-1-sashal@kernel.org>
+References: <20220811155632.1536867-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -80,7 +80,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 7 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/net/can/sja1000/sja1000.c b/drivers/net/can/sja1000/sja1000.c
-index 966316479485..12c4cd8dc05d 100644
+index 3fad54646746..225db8c124d3 100644
 --- a/drivers/net/can/sja1000/sja1000.c
 +++ b/drivers/net/can/sja1000/sja1000.c
 @@ -184,8 +184,9 @@ static void chipset_init(struct net_device *dev)
