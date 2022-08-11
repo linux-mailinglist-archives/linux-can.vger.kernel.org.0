@@ -2,35 +2,35 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC14C590462
-	for <lists+linux-can@lfdr.de>; Thu, 11 Aug 2022 18:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39C6E59045A
+	for <lists+linux-can@lfdr.de>; Thu, 11 Aug 2022 18:48:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238644AbiHKQc4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 11 Aug 2022 12:32:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57378 "EHLO
+        id S238625AbiHKQhV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 11 Aug 2022 12:37:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239120AbiHKQcA (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 11 Aug 2022 12:32:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866DE1F603;
-        Thu, 11 Aug 2022 09:10:35 -0700 (PDT)
+        with ESMTP id S239020AbiHKQgL (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 11 Aug 2022 12:36:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44442760FF;
+        Thu, 11 Aug 2022 09:11:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A8D76145E;
-        Thu, 11 Aug 2022 16:10:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 644BFC433D7;
-        Thu, 11 Aug 2022 16:10:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F1735B82123;
+        Thu, 11 Aug 2022 16:11:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FDD1C433C1;
+        Thu, 11 Aug 2022 16:11:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660234234;
+        s=k20201202; t=1660234291;
         bh=O9KBh+JEHKvSn8aaofSPCI6UL1Cfbf9hwmI6B2XVZeQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i2uI2xBmkMkFL/17mJ3cPxazZH238oyDZU6IHcvF3KwgqlWGzL3mSAOxa8GbWSJnh
-         fB5Z2gae4qSCvw2QYaqJnbwAZXfcRdpONuDSwSWwhV6gY1oDmwusbXKD3LPwOUH4Sn
-         Zxkoz72kCJ8GvI4FFQ25rLnvlhYqcjOQqiUUJYhBT4D9oMvaje85vHQ5C7hga+cwpR
-         DHTuYnIsGZ3a7pf0joNYt/Jqh0MUgWxDs/eWFA+azWZv3tYAeT4xf2WH10UxLeRf7S
-         NkhzbWmaiwoWwlpTK/85cILfFbNErMnFw0LO0c1A3Zl50366P41Z0w4FQEUiYnTABQ
-         yJmNY7C8b0j3w==
+        b=h7/O9stSUAF9XNaPnv8PGc5ltbCBsnLa5QkEhz7yMWU3PQrK12VClpy/40W72Et0x
+         eEH743JBApwd+Amb/zBVoJjRaf8ZQ6er+iEuC+hiG0N/xT0pIBvMexVjIsBpa0abv5
+         EQyTXFS5TiIbo6MrNwxuBkIdeL8TGXqJT99HPqTSQIvA0MKUpn3tKAr9Z9pkg0660k
+         w7YXGPZcIdY4yCk5u1eIB9d/B2aqoH8um5cMpeU/W/A07NcWzvMdPXV+mqkzibQyLl
+         zfavYa7u32Nby7VvfwY4mMGnhqNm/vWTtckVMIEtVcUTMNvY41nOk5soaMZ/ERx8In
+         1ZwWMLvjmxt/g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
@@ -40,12 +40,12 @@ Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
         pabeni@redhat.com, mailhol.vincent@wanadoo.fr,
         stefan.maetje@esd.eu, socketcan@hartkopp.net,
         linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 10/14] can: sja1000: Add Quirk for RZ/N1 SJA1000 CAN controller
-Date:   Thu, 11 Aug 2022 12:09:38 -0400
-Message-Id: <20220811160948.1542842-10-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 10/14] can: sja1000: Add Quirk for RZ/N1 SJA1000 CAN controller
+Date:   Thu, 11 Aug 2022 12:10:39 -0400
+Message-Id: <20220811161050.1543183-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220811160948.1542842-1-sashal@kernel.org>
-References: <20220811160948.1542842-1-sashal@kernel.org>
+In-Reply-To: <20220811161050.1543183-1-sashal@kernel.org>
+References: <20220811161050.1543183-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
