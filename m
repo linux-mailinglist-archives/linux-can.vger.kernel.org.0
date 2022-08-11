@@ -2,50 +2,50 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1A3B5900D8
-	for <lists+linux-can@lfdr.de>; Thu, 11 Aug 2022 17:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D556359025D
+	for <lists+linux-can@lfdr.de>; Thu, 11 Aug 2022 18:09:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236513AbiHKPrL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 11 Aug 2022 11:47:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49144 "EHLO
+        id S237392AbiHKQJB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 11 Aug 2022 12:09:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236799AbiHKPqU (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 11 Aug 2022 11:46:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02DD06B663;
-        Thu, 11 Aug 2022 08:40:44 -0700 (PDT)
+        with ESMTP id S237008AbiHKQIf (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 11 Aug 2022 12:08:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA434A0269;
+        Thu, 11 Aug 2022 08:54:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B853CB82150;
-        Thu, 11 Aug 2022 15:40:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9280C433D6;
-        Thu, 11 Aug 2022 15:40:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F698612B5;
+        Thu, 11 Aug 2022 15:54:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2A0CC433C1;
+        Thu, 11 Aug 2022 15:54:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660232441;
-        bh=vWxMhTLOlvBvRUfH9j2U4MQTpIn2kqpnxtWPQNZxddg=;
+        s=k20201202; t=1660233269;
+        bh=yttqcTs7u4UII3gt8REgYQ16qpkU712yQ3SjusyjIuk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jlLjPx9JbTIzFGQP3fYdqaxA+VPOsFGjVKlMQpsEAn5IljarC2QxdI3fW7M9MAGUS
-         GbK6MArQnCXxmZAZrjf4NdmiXclgjByqUvSGaBkZrapMehHxgIEXmmdRDRzvhUTbA4
-         jbnNnmhz3z0rOwOxmUjVzFyaX2tc8fwVQh0LOuytSzbjlxKBYlxENu1KRdEfjufpK0
-         yPeCpOuQyGBLhwbYsKoPGvQhCkE2eICyTldPA/iQGmvQaCChgfhX0Bdqdu3EKgUboH
-         FL6LqqIamskGw2x1wKAvnSSOYUEVgzhXXoLUq9ZIM6Vs90d12ggTp0iQRszzuQ4dEh
-         SoZ5x+RTQANCA==
+        b=rb1XDA9ESsdr7Gh125sjVW/PYYYrCOheYAgdKeQl3O0lY2MxlFlVeeXk4kTfKYox/
+         5THPEAp5I7x0RjpRSmhXmrRF6Pl5aqVYpmp90YRvihyoDBmLeC2NEQUOz185mtIxVh
+         BtY6z/wQpR/1yzesHwSjTvn/JOMfiEAA+q+ITcoOm9Fup91UNA2p8HvT2N63px27Zr
+         vrVb2zc92zz4FQqRWZWW+QLMbEvq8mtrcy6P5g7ir7AK0H4GYbtJBHWTI/esqNcmwL
+         gmnPeTWICAoHb/04aTCTKdh2PHnXPDnuixC9IQ7+f+U99sd5SQDjNE9IPXWDY+Hwed
+         l/ZBoaEVWUJCw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         Sasha Levin <sashal@kernel.org>, wg@grandegger.com,
         davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, stefan.maetje@esd.eu,
-        mailhol.vincent@wanadoo.fr, socketcan@hartkopp.net,
+        pabeni@redhat.com, mailhol.vincent@wanadoo.fr,
+        stefan.maetje@esd.eu, socketcan@hartkopp.net,
         linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.19 079/105] can: sja1000: Add Quirk for RZ/N1 SJA1000 CAN controller
-Date:   Thu, 11 Aug 2022 11:28:03 -0400
-Message-Id: <20220811152851.1520029-79-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.18 71/93] can: sja1000: Add Quirk for RZ/N1 SJA1000 CAN controller
+Date:   Thu, 11 Aug 2022 11:42:05 -0400
+Message-Id: <20220811154237.1531313-71-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220811152851.1520029-1-sashal@kernel.org>
-References: <20220811152851.1520029-1-sashal@kernel.org>
+In-Reply-To: <20220811154237.1531313-1-sashal@kernel.org>
+References: <20220811154237.1531313-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -80,10 +80,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 7 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/net/can/sja1000/sja1000.c b/drivers/net/can/sja1000/sja1000.c
-index 2e7638f98cf1..d9da471f1bb9 100644
+index 966316479485..12c4cd8dc05d 100644
 --- a/drivers/net/can/sja1000/sja1000.c
 +++ b/drivers/net/can/sja1000/sja1000.c
-@@ -183,8 +183,9 @@ static void chipset_init(struct net_device *dev)
+@@ -184,8 +184,9 @@ static void chipset_init(struct net_device *dev)
  {
  	struct sja1000_priv *priv = netdev_priv(dev);
  
@@ -95,7 +95,7 @@ index 2e7638f98cf1..d9da471f1bb9 100644
  
  	/* set acceptance filter (accept all) */
  	priv->write_reg(priv, SJA1000_ACCC0, 0x00);
-@@ -209,7 +210,8 @@ static void sja1000_start(struct net_device *dev)
+@@ -210,7 +211,8 @@ static void sja1000_start(struct net_device *dev)
  		set_reset_mode(dev);
  
  	/* Initialize chip if uninitialized at this stage */
