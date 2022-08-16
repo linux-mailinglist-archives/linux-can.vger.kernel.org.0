@@ -2,101 +2,102 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CECB05930FA
-	for <lists+linux-can@lfdr.de>; Mon, 15 Aug 2022 16:46:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ABCA595E92
+	for <lists+linux-can@lfdr.de>; Tue, 16 Aug 2022 16:50:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242630AbiHOOqO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 15 Aug 2022 10:46:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55332 "EHLO
+        id S229919AbiHPOu5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 16 Aug 2022 10:50:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233167AbiHOOqF (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 15 Aug 2022 10:46:05 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E985BE0E
-        for <linux-can@vger.kernel.org>; Mon, 15 Aug 2022 07:45:55 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id bu15so815526wrb.7
-        for <linux-can@vger.kernel.org>; Mon, 15 Aug 2022 07:45:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
-        bh=BP7N97YjVM4PMUACuppi4PcUKAj1aoOhRa9DbafFqaA=;
-        b=Od8tS2k2L5+07MMiPD3I6aujrHGBD8FMTwqhWKf1OUw9RqOlgZd7OJvsdmF8l7etPB
-         G4iXS8Sybl4fQDQ7iHyO+t7C2UyWhrgajxkJeuIY4FmDC8AXtklT/Fu1F1W0jrhtAZ7d
-         myeOhc9LjhHvGfXtNz3HFWUmVpvakA4v3vaJZgTfwuOh+L2CmlVgsf21xhxRaWcgnGFC
-         fxOOzzeuKQc5wmnG1iGKjQsQoYt/VepCjIbtHEl9n/+08KsXwaYdh4vdm+JKaQ767A80
-         P2C2peST+xxFqarth45nDxpp9QqSPWo4AwdnbjHkiINurarLfzzIqW7kGrVw6kncJXsS
-         ziSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=BP7N97YjVM4PMUACuppi4PcUKAj1aoOhRa9DbafFqaA=;
-        b=rao+Mq31FDqq3BmEysxMr+krvCfgR3E6hjW4qwdLBxZFjatp+c/1fMIn9XPrg1j0d/
-         /0E4cq+xnFJl7Gx2mOPIu0VpBSRJWpVtMhSqRB1qkI525jTzvomdMxaq1SkbkKCgadEb
-         u+RQ/CbJfJjRDRaabX08SFtdrB2ESxotnEiecHlAHjuwUYIL+l2A24neWRnXlBaM6cO7
-         sk5Hrxg2kwns5b6zb4J+HDNfdWQdAZUkEOp0L0FQgSJyD75tE3CsutQTJemhMYu70Q3F
-         RGvLOQsAnjxArtDhtSyu82/o+f+WGOPC5s3ZtMaQQ5etTAIY6N/WwO826vDPjl2BH9Rv
-         +FHA==
-X-Gm-Message-State: ACgBeo1SRIvViEBpONEIjWMD3Oj+KZqKR2SVwjRliAQwnpUVc1xtekA8
-        YOkzRkhO7PLPhCM2ktPel9Q2YfxpDFKIM44x/QQ=
-X-Google-Smtp-Source: AA6agR4y414MfUXp7y6SuTr1UdgniBKka2/mH44Xdzh95SFZT0e5mT8VL5CCRxgRYVEshQukiFwXfuGop5ZQoxbEIqM=
-X-Received: by 2002:a05:6000:2a4:b0:220:687a:cda9 with SMTP id
- l4-20020a05600002a400b00220687acda9mr8961633wry.187.1660574753410; Mon, 15
- Aug 2022 07:45:53 -0700 (PDT)
+        with ESMTP id S229607AbiHPOuz (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 16 Aug 2022 10:50:55 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE93A459A2
+        for <linux-can@vger.kernel.org>; Tue, 16 Aug 2022 07:50:54 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oNxu7-0007RG-Oh; Tue, 16 Aug 2022 16:50:51 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 3999ECC0B9;
+        Tue, 16 Aug 2022 14:50:50 +0000 (UTC)
+Date:   Tue, 16 Aug 2022 16:50:48 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Jimmy Assarsson <extja@kvaser.com>
+Cc:     linux-can@vger.kernel.org,
+        Anssi Hannula <anssi.hannula@bitwise.fi>,
+        Jimmy Assarsson <jimmyassarsson@gmail.com>
+Subject: Re: [PATCH v2 00/15] can: kvaser_usb: Various fixes
+Message-ID: <20220816145048.leptfnx2wlk6vbdd@pengutronix.de>
+References: <20220708115709.232815-1-extja@kvaser.com>
+ <20220719184059.pzqgxsgl7hw3cdne@pengutronix.de>
+ <48197e64-6dda-12d0-26ce-34054b23f7b4@kvaser.com>
 MIME-Version: 1.0
-Received: by 2002:adf:e4c9:0:0:0:0:0 with HTTP; Mon, 15 Aug 2022 07:45:52
- -0700 (PDT)
-Reply-To: rkeenj7@gmail.com
-From:   "Keen J. Richardson" <pamelamcpeak181@gmail.com>
-Date:   Mon, 15 Aug 2022 14:45:52 +0000
-Message-ID: <CADnBHHkCSJhtndZ5sqYsO_Koj-QR1VSzjZJazR5oRFZv1EUMcg@mail.gmail.com>
-Subject: Greetings
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:431 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4906]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [rkeenj7[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [pamelamcpeak181[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [pamelamcpeak181[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="brfbl2sv64tkqiby"
+Content-Disposition: inline
+In-Reply-To: <48197e64-6dda-12d0-26ce-34054b23f7b4@kvaser.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
--- 
-A mail was sent to you sometime last week with the expectation of
-having a return mail from you but to my surprise you never bothered to replied.
-Kindly reply for further explanations.
 
-Respectfully yours,
-Keen J. Richardson.
+--brfbl2sv64tkqiby
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 19.07.2022 20:59:01, Jimmy Assarsson wrote:
+> On 7/19/22 20:40, Marc Kleine-Budde wrote:
+> > On 08.07.2022 13:56:54, Jimmy Assarsson wrote:
+> > > This patch series was originally posted by Anssi Hannula [1].
+> > > Since v1 I've rebased the patches on top of commit
+> > > b3b6df2c56d8 ("can: kvaser_usb: kvaser_usb_leaf: fix bittiming limits=
+")
+> > > and replaced a couple of patches with new ones.
+> >=20
+> > Jimmy, as all of these patches went through your hands, they need your
+> > S-o-b. Can I add it while applying?
+
+Jimmy, can you resend this series rebased again current net/main. Please
+add your S-o-b and take care of Anssi Hannula's issue in patch 04/15.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--brfbl2sv64tkqiby
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmL7rsUACgkQrX5LkNig
+013EnwgAnxD0lhftERiL2IDbgLEvZ30umXFyk2R8jdh0cPax2u/jP0fIbF1wNSXr
+cQHg2uP7p7/7AiFFlB4OJJNwHQUV15ziiUebCGYBQaASOuSWfnqTI0SehcuLQHVY
+kHrSSjZtwUWbpFb9nbBtlv9peaz8KGl5ro4l1DWo5hoYwf6UOwrHvS7qV7WrpUaQ
+VytGa1y8iWpZkCwxMBXP3vttHpAsmBjU1FeTvjGIe+hDPVjpaMYIzfX8nUgFb5t3
+JyBtBP8h+2ui+n2xPLd9LzpwSecNTMW46FzEp27PqW6ZLwtdyDOUxkXExAWRuqhM
+G4QaYjSi7xsoCrAokkV77hSMRTir9A==
+=Zmi+
+-----END PGP SIGNATURE-----
+
+--brfbl2sv64tkqiby--
