@@ -2,53 +2,60 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D58555978C9
-	for <lists+linux-can@lfdr.de>; Wed, 17 Aug 2022 23:16:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C445597A13
+	for <lists+linux-can@lfdr.de>; Thu, 18 Aug 2022 01:19:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241421AbiHQVQS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 17 Aug 2022 17:16:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51894 "EHLO
+        id S242071AbiHQXPe (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 17 Aug 2022 19:15:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242330AbiHQVQR (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 17 Aug 2022 17:16:17 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5410E57552
-        for <linux-can@vger.kernel.org>; Wed, 17 Aug 2022 14:16:16 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oOQOX-0004kI-IR; Wed, 17 Aug 2022 23:16:09 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 5D4F1CD031;
-        Wed, 17 Aug 2022 21:16:05 +0000 (UTC)
-Date:   Wed, 17 Aug 2022 23:16:04 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        michael@amarulasolutions.com,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [RFC PATCH 0/4] can: bxcan: add support for ST bxCAN controller
-Message-ID: <20220817211604.o44ojny342ynk7zg@pengutronix.de>
-References: <20220817143529.257908-1-dario.binacchi@amarulasolutions.com>
+        with ESMTP id S234438AbiHQXPe (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 17 Aug 2022 19:15:34 -0400
+Received: from mxd1.seznam.cz (mxd1.seznam.cz [IPv6:2a02:598:a::78:210])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABFB7A7218;
+        Wed, 17 Aug 2022 16:15:30 -0700 (PDT)
+Received: from email.seznam.cz
+        by email-smtpc23b.ko.seznam.cz (email-smtpc23b.ko.seznam.cz [10.53.18.31])
+        id 306424bfd4c8f78131b985d1;
+        Thu, 18 Aug 2022 01:14:38 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seznam.cz; s=beta;
+        t=1660778078; bh=W4K12dXu6Dj+lHw287pM6t3/vwebMnGfZdWhnEcBocg=;
+        h=Received:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+        b=daTXKi/tiB/8ZwuXLED4H75rgIRoJuMVXaSmYn1r77lbkWDtrXXxS6niKRqtCMBeF
+         p9DYqI2Z8Q7GrYOar6H+G72WPISmPb/pTT9aVn0++6/9zV5Fswav+06rynMpmiP6ZI
+         KCmSJzVAlcurqw3K3P1Ws50VzflmGFZHpxqDWfXs=
+Received: from hopium (2a02:8308:900d:2400:42a0:4fb5:48e:75cc [2a02:8308:900d:2400:42a0:4fb5:48e:75cc])
+        by email-relay10.ko.seznam.cz (Seznam SMTPD 1.3.137) with ESMTP;
+        Thu, 18 Aug 2022 01:14:36 +0200 (CEST)  
+Date:   Thu, 18 Aug 2022 01:14:34 +0200
+From:   Matej Vasilevski <matej.vasilevski@seznam.cz>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Pavel Pisa <pisa@cmp.felk.cvut.cz>,
+        Ondrej Ille <ondrej.ille@gmail.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] can: ctucanfd: add HW timestamps to RX and error
+ CAN frames
+Message-ID: <20220817231434.GA157998@hopium>
+References: <20220801184656.702930-1-matej.vasilevski@seznam.cz>
+ <20220801184656.702930-2-matej.vasilevski@seznam.cz>
+ <20220802092907.d2xtbqulkvzcwfgj@pengutronix.de>
+ <20220803000903.GB4457@hopium>
+ <20220803085303.2u4l5l6wmualq33v@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kmsf55lalqtcovvr"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220817143529.257908-1-dario.binacchi@amarulasolutions.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20220803085303.2u4l5l6wmualq33v@pengutronix.de>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,125 +64,64 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello Marc,
 
---kmsf55lalqtcovvr
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+I have two questions before I send the next patch version, please
+bear with me.
 
-I've stripped down the Cc list a bit...
+On Wed, Aug 03, 2022 at 10:53:03AM +0200, Marc Kleine-Budde wrote:
 
-On 17.08.2022 16:35:25, Dario Binacchi wrote:
-> The series adds support for the basic extended CAN controller (bxCAN)
-> found in many low- to middle-end STM32 SoCs.
->
-> The driver has been tested on the stm32f469i-discovery board with a
-> kernel version 5.19.0-rc2 in loopback + silent mode:
+[...]
 
-I've had no time for a in depth review, but here are some warnings by
-the standard checker tools:
+> > > > +	if (priv->timestamp_possible) {
+> > > > +		clocks_calc_mult_shift(&priv->cc.mult, &priv->cc.shift, timestamp_freq,
+> > > > +				       NSEC_PER_SEC, CTUCANFD_MAX_WORK_DELAY_SEC);
+> > > > +		priv->work_delay_jiffies =
+> > > > +			ctucan_calculate_work_delay(timestamp_bit_size, timestamp_freq);
+> > > > +		if (priv->work_delay_jiffies == 0)
+> > > > +			priv->timestamp_possible = false;
+> > > 
+> > > You'll get a higher precision if you take the mask into account, at
+> > > least if the counter overflows before CTUCANFD_MAX_WORK_DELAY_SEC:
+> > > 
+> > >         maxsec = min(CTUCANFD_MAX_WORK_DELAY_SEC, priv->cc.mask / timestamp_freq);
+> > > 	
+> > >         clocks_calc_mult_shift(&priv->cc.mult, &priv->cc.shift, timestamp_freq, NSEC_PER_SEC,  maxsec);
+> > >         work_delay_in_ns = clocks_calc_max_nsecs(&priv->cc.mult, &priv->cc.shift, 0, &priv->cc.mask, NULL);
+> > > 
+> > > You can use clocks_calc_max_nsecs() to calculate the work delay.
+> > 
+> > This is a good point, thanks. I'll incorporate it into the patch.
+> 
+> And do this calculation after a clk_prepare_enable(), see other mail to
+> Pavel
+> | https://lore.kernel.org/all/20220803083718.7bh2edmsorwuv4vu@pengutronix.de/
 
-Please fix these sparse errors:
 
-| drivers/net/can/bxcan/bxcan-drv.c:641:39: warning: incorrect type in initializer (different address spaces)
-| drivers/net/can/bxcan/bxcan-drv.c:641:39:    expected struct bxcan_regs *regs
-| drivers/net/can/bxcan/bxcan-drv.c:641:39:    got struct bxcan_regs [noderef] __iomem *regs
-| drivers/net/can/bxcan/bxcan-drv.c:650:15: warning: incorrect type in argument 1 (different address spaces)
-| drivers/net/can/bxcan/bxcan-drv.c:650:15:    expected void const volatile [noderef] __iomem *addr
-| drivers/net/can/bxcan/bxcan-drv.c:650:15:    got unsigned int *
-| drivers/net/can/bxcan/bxcan-drv.c:667:20: warning: incorrect type in argument 1 (different address spaces)
-| drivers/net/can/bxcan/bxcan-drv.c:667:20:    expected void volatile [noderef] __iomem *addr
-| drivers/net/can/bxcan/bxcan-drv.c:667:20:    got unsigned int *
-| drivers/net/can/bxcan/bxcan-drv.c:672:17: warning: incorrect type in argument 2 (different address spaces)
-| drivers/net/can/bxcan/bxcan-drv.c:672:17:    expected void volatile [noderef] __iomem *addr
-| drivers/net/can/bxcan/bxcan-drv.c:672:17:    got unsigned int *
-| drivers/net/can/bxcan/bxcan-drv.c:675:9: warning: incorrect type in argument 2 (different address spaces)
-| drivers/net/can/bxcan/bxcan-drv.c:675:9:    expected void volatile [noderef] __iomem *addr
-| drivers/net/can/bxcan/bxcan-drv.c:675:9:    got unsigned int *
-| drivers/net/can/bxcan/bxcan-drv.c:677:15: warning: incorrect type in argument 1 (different address spaces)
-| drivers/net/can/bxcan/bxcan-drv.c:677:15:    expected void const volatile [noderef] __iomem *addr
-| drivers/net/can/bxcan/bxcan-drv.c:677:15:    got unsigned int *
-| drivers/net/can/bxcan/bxcan-drv.c:703:14: warning: incorrect type in argument 1 (different address spaces)
-| drivers/net/can/bxcan/bxcan-drv.c:703:14:    expected void const volatile [noderef] __iomem *addr
-| drivers/net/can/bxcan/bxcan-drv.c:703:14:    got unsigned int *
-| drivers/net/can/bxcan/bxcan-drv.c:709:15: warning: incorrect type in argument 1 (different address spaces)
-| drivers/net/can/bxcan/bxcan-drv.c:709:15:    expected void const volatile [noderef] __iomem *addr
-| drivers/net/can/bxcan/bxcan-drv.c:709:15:    got unsigned int *
-| drivers/net/can/bxcan/bxcan-drv.c:718:50: warning: incorrect type in argument 1 (different address spaces)
-| drivers/net/can/bxcan/bxcan-drv.c:718:50:    expected void const volatile [noderef] __iomem *addr
-| drivers/net/can/bxcan/bxcan-drv.c:718:50:    got unsigned int *
-| drivers/net/can/bxcan/bxcan-drv.c:730:39: warning: incorrect type in initializer (different address spaces)
-| drivers/net/can/bxcan/bxcan-drv.c:730:39:    expected struct bxcan_regs *regs
-| drivers/net/can/bxcan/bxcan-drv.c:730:39:    got struct bxcan_regs [noderef] __iomem *regs
-| drivers/net/can/bxcan/bxcan-drv.c:735:24: warning: incorrect type in argument 1 (different address spaces)
-| drivers/net/can/bxcan/bxcan-drv.c:735:24:    expected void const volatile [noderef] __iomem *addr
-| drivers/net/can/bxcan/bxcan-drv.c:735:24:    got unsigned int *
-| drivers/net/can/bxcan/bxcan-drv.c:742:17: warning: incorrect type in argument 2 (different address spaces)
-| drivers/net/can/bxcan/bxcan-drv.c:742:17:    expected void volatile [noderef] __iomem *addr
-| drivers/net/can/bxcan/bxcan-drv.c:742:17:    got unsigned int *
-| drivers/net/can/bxcan/bxcan-drv.c:747:28: warning: incorrect type in argument 1 (different address spaces)
-| drivers/net/can/bxcan/bxcan-drv.c:747:28:    expected void volatile [noderef] __iomem *addr
-| drivers/net/can/bxcan/bxcan-drv.c:747:28:    got unsigned int *
-| drivers/net/can/bxcan/bxcan-drv.c:802:39: warning: incorrect type in initializer (different address spaces)
-| drivers/net/can/bxcan/bxcan-drv.c:802:39:    expected struct bxcan_regs *regs
-| drivers/net/can/bxcan/bxcan-drv.c:802:39:    got struct bxcan_regs [noderef] __iomem *regs
-| drivers/net/can/bxcan/bxcan-drv.c:810:15: warning: incorrect type in argument 1 (different address spaces)
-| drivers/net/can/bxcan/bxcan-drv.c:810:15:    expected void const volatile [noderef] __iomem *addr
-| drivers/net/can/bxcan/bxcan-drv.c:810:15:    got unsigned int *
+1) I can't use clocks_calc_max_nsecs(), because it isn't exported
+symbol (and I get modpost error during linking). Is that simply an
+oversight on your end or I'm doing something incorrectly?
 
-(To enable sparse checking, do a "make C=1" to compile.)
+I've also listed all the exported symbols from /kernel/time, and nothing
+really stood out to me as super useful for this patch. So I would
+continue using ctucan_calculate_work_delay().
 
-Please fix these checkpatch warnings:
+2) Instead of using clk_prepare_enable() manually in probe, I've added
+the prepare_enable and disable_unprepare(ts_clk) calls into pm_runtime
+suspend and resume callbacks. And I call clk_get_rate(ts_clk) only after
+the pm_runtime_enable() and pm_runtime_get_sync() are called. This
+seemed nicer to me, because the core clock prepare/unprepare will go
+into the pm_runtime callbacks too.
 
-| WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
-| #74:
-| new file mode 100644
+Is that a correct approach, or should I really use the clk_prepare_enable()
+and clk_disable_unprepare() "manually" in ctucan_common_probe()/ctucan_timestamp_stop()?
 
-Please create a MAINTAINERS entry.
+On my Zynq board I don't see the ctucan_resume() callback executed during probe
+(after pm_runtime_enable() and pm_runtime_get_sync() are called in _probe()),
+but in theory it seems like the correct approach. Xilinx_can driver does this too.
+Other drivers (e.g. flexcan, mpc251xfd, rcar) call clk_get_rate() right after
+devm_clk_get() in probe, but maybe the situation there is different, I don't
+know too much about clocks and pm_runtime yet.
 
-| WARNING: Using vsprintf specifier '%px' potentially exposes the kernel memory layout, if you don't really need the address please consider using '%p'.
-| #307: FILE: drivers/net/can/bxcan/bxcan-core.c:179:
-| +       dev_info(&pdev->dev, "regs: %px\n", priv->base);
-
-Please remove the print of the base address.
-
-| WARNING: Use of volatile is usually wrong: see Documentation/process/volatile-considered-harmful.rst
-| #356: FILE: drivers/net/can/bxcan/bxcan-core.h:21:
-| +static inline void bxcan_rmw(volatile void __iomem *addr, u32 clear, u32 set)
-
-remove the volatile.
-
-| WARNING: Using vsprintf specifier '%px' potentially exposes the kernel memory layout, if you don't really need the address please consider using '%p'.
-| #1273: FILE: drivers/net/can/bxcan/bxcan-drv.c:899:
-| +       }
-| +
-| +       dev_info(dev, "regs: %px, clk: %d Hz, IRQs: %d, %d, %d\n",
-| +                priv->regs, priv->can.clock.freq, tx_irq, rx_irq,
-| +                sce_irq);
-
-Remote the print of the regs.
-
-regards,
-Marc
-
---
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---kmsf55lalqtcovvr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmL9WpAACgkQrX5LkNig
-0104Swf/WXC5q/uKxglR55v1iXB0ag/QppN8vUAVT8mrTm2JteBp0W1p+t9MWqjP
-WzqJspo6R4uhrdOp6IG0w8IwS6aIESsE6IvYgCrEVjJUBMnHAEgDiaL5YxrTNwqL
-bVCskkv93KZmpTEhpHlqUlgTufpxlJOnpo+g5vTy169+0eh1eEP5F2CySrYDcEnO
-+r1yf0dKBUpRnMe+EAZ+UN7FK5yHheanbnm44i35zfZ3+Tm72Z4SzS9jd48iINTv
-qLmGsTKoYfmW3bYkUreCVEwTC7mrn6suAvVE8bNECtfHkEENwtEHVaQfnI42ySsW
-Aiw+/cyVC3TM66PhZtmzT3Slo+Wmkg==
-=NSCv
------END PGP SIGNATURE-----
-
---kmsf55lalqtcovvr--
+Thanks and best regards,
+Matej
