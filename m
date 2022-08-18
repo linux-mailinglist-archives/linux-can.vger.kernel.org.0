@@ -2,85 +2,63 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 575FB598002
-	for <lists+linux-can@lfdr.de>; Thu, 18 Aug 2022 10:25:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C40C55980C3
+	for <lists+linux-can@lfdr.de>; Thu, 18 Aug 2022 11:25:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240197AbiHRIWg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 18 Aug 2022 04:22:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56468 "EHLO
+        id S233637AbiHRJZB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 18 Aug 2022 05:25:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239965AbiHRIWe (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 18 Aug 2022 04:22:34 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E365A80E92
-        for <linux-can@vger.kernel.org>; Thu, 18 Aug 2022 01:22:31 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id v2so1188254lfi.6
-        for <linux-can@vger.kernel.org>; Thu, 18 Aug 2022 01:22:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=ZISBdhU5jjsQ/J0wTDtKXgSITQfAqU8864taLHzaYjM=;
-        b=h6ZJ2B4Dt3c05SoEFIulAnGd7MNkX38buE09h03m1YVDrOI4kULqre4pETeIfBeheU
-         W4CL4F7IHfrDgJl36TqihuPkalIjzkhykUZXE9O3CD5dMKioWnXAzfzb8hbICqkMjwQM
-         7zTrM7xzfGBlIevNqpx+TCfp41NA9mFD5xdWbKedMY/ZorkWeQnTgsKHNbC96Ba0kYRH
-         H54B3XA19tnygktHG7Vr/0atmyLax/Vp7obBCjy0P2kruxeOWNdCvKSyzL30r097UX3T
-         BEz9W7ajXVd1YAA0Uwm2T4IByu/eOH3ZL2LVtDDxiP2oyJhDdoXNDckSsc0JkafpmMcf
-         ei5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=ZISBdhU5jjsQ/J0wTDtKXgSITQfAqU8864taLHzaYjM=;
-        b=ns/3lXGAxp9UeQ4fa41qgt/jVxKzMa8nhTpVXwa4B9413Oj/rmH4Cl92XNW12cNde/
-         4Cp2aLnna3BAU4VB/y/aGMLr315DzWSwgvfa0sO7o3o0Ah7ZyrtYkTnzJyjbhicRgi69
-         Tkg5DtIiLBBh5357jL9sN2MJu/8rremw/lbhpnQLG+sozgYMWpBiZ4EatKo3MOjhwMzg
-         1GoJV/AWFQhWDJlt95GIBP+IDsZmd0sc78OzdatCkEqFVdLdUvJ0iOA7FJdCgVEX6aVU
-         kwxJDKpsM77XwRG3FVBMIu3qPJ7JS5hJ0PApABzxAjrClOmgT/ekaxsWoKpp/pqDNpjn
-         gQeQ==
-X-Gm-Message-State: ACgBeo3da617AmBQGqIqN/60gRlIOp1Ij91WhtmTE6UT7jPGtv0C2q00
-        nIIqlwI4OKXbXKDZ08dzltYGwg==
-X-Google-Smtp-Source: AA6agR7XMgueVY9H5NCQMxHMX/tByaMro7wUOEat1L/UTWiXyjOMiAkwE86qNw66Vl2z4V0qwL19Dw==
-X-Received: by 2002:a05:6512:31ca:b0:48b:c4c2:d6d4 with SMTP id j10-20020a05651231ca00b0048bc4c2d6d4mr557266lfe.423.1660810950225;
-        Thu, 18 Aug 2022 01:22:30 -0700 (PDT)
-Received: from ?IPV6:2001:14bb:ae:539c:53ab:2635:d4f2:d6d5? (d15l54z9nf469l8226z-4.rev.dnainternet.fi. [2001:14bb:ae:539c:53ab:2635:d4f2:d6d5])
-        by smtp.gmail.com with ESMTPSA id a8-20020a2eb548000000b00261b05d9d54sm127426ljn.127.2022.08.18.01.22.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Aug 2022 01:22:29 -0700 (PDT)
-Message-ID: <b851147b-6453-c19e-7c31-a9cf8f87c1a4@linaro.org>
-Date:   Thu, 18 Aug 2022 11:22:28 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [RFC PATCH 1/4] dt-bindings: net: can: add STM32 bxcan DT
- bindings
-Content-Language: en-US
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        michael@amarulasolutions.com,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Dario Binacchi <dariobin@libero.it>,
+        with ESMTP id S230506AbiHRJZA (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 18 Aug 2022 05:25:00 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A89DB0B33
+        for <linux-can@vger.kernel.org>; Thu, 18 Aug 2022 02:24:59 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oOblZ-0005dc-2X; Thu, 18 Aug 2022 11:24:41 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 4D648CD62E;
+        Thu, 18 Aug 2022 09:24:38 +0000 (UTC)
+Date:   Thu, 18 Aug 2022 11:24:35 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Matej Vasilevski <matej.vasilevski@seznam.cz>
+Cc:     Pavel Pisa <pisa@cmp.felk.cvut.cz>,
+        Ondrej Ille <ondrej.ille@gmail.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Paolo Abeni <pabeni@redhat.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        devicetree@vger.kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20220817143529.257908-1-dario.binacchi@amarulasolutions.com>
- <20220817143529.257908-2-dario.binacchi@amarulasolutions.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220817143529.257908-2-dario.binacchi@amarulasolutions.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] can: ctucanfd: add HW timestamps to RX and error
+ CAN frames
+Message-ID: <20220818092435.hchmowfaolxe2tlq@pengutronix.de>
+References: <20220801184656.702930-1-matej.vasilevski@seznam.cz>
+ <20220801184656.702930-2-matej.vasilevski@seznam.cz>
+ <20220802092907.d2xtbqulkvzcwfgj@pengutronix.de>
+ <20220803000903.GB4457@hopium>
+ <20220803085303.2u4l5l6wmualq33v@pengutronix.de>
+ <20220817231434.GA157998@hopium>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4qtlqk4ha34rel2p"
+Content-Disposition: inline
+In-Reply-To: <20220817231434.GA157998@hopium>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -89,203 +67,152 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 17/08/2022 17:35, Dario Binacchi wrote:
-> Add documentation of device tree bindings for the STM32 basic extended
-> CAN (bxcan) controller.
-> 
-> Signed-off-by: Dario Binacchi <dariobin@libero.it>
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
-You do not need two SoBs. Keep only one, matching the From field.
+--4qtlqk4ha34rel2p
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> ---
-> 
->  .../devicetree/bindings/net/can/st,bxcan.yaml | 139 ++++++++++++++++++
->  1 file changed, 139 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/can/st,bxcan.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/net/can/st,bxcan.yaml b/Documentation/devicetree/bindings/net/can/st,bxcan.yaml
-> new file mode 100644
-> index 000000000000..f4cfd26e4785
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/can/st,bxcan.yaml
+On 18.08.2022 01:14:34, Matej Vasilevski wrote:
+> Hello Marc,
+>=20
+> I have two questions before I send the next patch version, please
+> bear with me.
+>=20
+> On Wed, Aug 03, 2022 at 10:53:03AM +0200, Marc Kleine-Budde wrote:
+>=20
+> [...]
+>=20
+> > > > > +	if (priv->timestamp_possible) {
+> > > > > +		clocks_calc_mult_shift(&priv->cc.mult, &priv->cc.shift, timest=
+amp_freq,
+> > > > > +				       NSEC_PER_SEC, CTUCANFD_MAX_WORK_DELAY_SEC);
+> > > > > +		priv->work_delay_jiffies =3D
+> > > > > +			ctucan_calculate_work_delay(timestamp_bit_size, timestamp_fre=
+q);
+> > > > > +		if (priv->work_delay_jiffies =3D=3D 0)
+> > > > > +			priv->timestamp_possible =3D false;
+> > > >=20
+> > > > You'll get a higher precision if you take the mask into account, at
+> > > > least if the counter overflows before CTUCANFD_MAX_WORK_DELAY_SEC:
+> > > >=20
+> > > >         maxsec =3D min(CTUCANFD_MAX_WORK_DELAY_SEC, priv->cc.mask /=
+ timestamp_freq);
+> > > > =09
+> > > >         clocks_calc_mult_shift(&priv->cc.mult, &priv->cc.shift, tim=
+estamp_freq, NSEC_PER_SEC,  maxsec);
+> > > >         work_delay_in_ns =3D clocks_calc_max_nsecs(&priv->cc.mult, =
+&priv->cc.shift, 0, &priv->cc.mask, NULL);
+> > > >=20
+> > > > You can use clocks_calc_max_nsecs() to calculate the work delay.
+> > >=20
+> > > This is a good point, thanks. I'll incorporate it into the patch.
+> >=20
+> > And do this calculation after a clk_prepare_enable(), see other mail to
+> > Pavel
+> > | https://lore.kernel.org/all/20220803083718.7bh2edmsorwuv4vu@pengutron=
+ix.de/
+>=20
+>=20
+> 1) I can't use clocks_calc_max_nsecs(), because it isn't exported
+> symbol (and I get modpost error during linking). Is that simply an
+> oversight on your end or I'm doing something incorrectly?
 
-File name like compatible, so st,stm32-bxcan-core.yaml (or some other
-name, see comment later)
+Oh, I haven't checked if clocks_calc_max_nsecs() is exported. You can
+either create a patch to export it, or "open code" its functionality. I
+think this should be more or less equivalent:
 
-> @@ -0,0 +1,139 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/can/st,bxcan.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: STMicroelectronics bxCAN controller Device Tree Bindings
+| work_delay_in_ns =3D clocksource_cyc2ns(mask, mult, shift) >> 1;
 
-s/Device Tree Bindings//
+> I've also listed all the exported symbols from /kernel/time, and nothing
+> really stood out to me as super useful for this patch. So I would
+> continue using ctucan_calculate_work_delay().
+>=20
+> 2) Instead of using clk_prepare_enable() manually in probe, I've added
+> the prepare_enable and disable_unprepare(ts_clk) calls into pm_runtime
+> suspend and resume callbacks. And I call clk_get_rate(ts_clk) only after
+> the pm_runtime_enable() and pm_runtime_get_sync() are called.
 
-> +
-> +description: STMicroelectronics BxCAN controller for CAN bus
-> +
-> +maintainers:
-> +  - Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> +
-> +allOf:
-> +  - $ref: can-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - st,stm32-bxcan-core
+Use pm_runtime_resume_and_get(), see:
 
-compatibles are supposed to be specific. If this is some type of
-micro-SoC, then it should have its name/number. If it is dedicated
-device, is the final name bxcan core? Google says  the first is true, so
-you miss specific device part.
-	
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    description:
-> +      Input clock for registers access
-> +    maxItems: 1
-> +
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 0
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - resets
-> +  - clocks
-> +  - '#address-cells'
-> +  - '#size-cells'
-> +
-> +additionalProperties: false
-> +
-> +patternProperties:
+| https://elixir.bootlin.com/linux/v5.19/source/include/linux/pm_runtime.h#=
+L419
 
-This goes after "properties: in top level (before "required").
+> This
+> seemed nicer to me, because the core clock prepare/unprepare will go
+> into the pm_runtime callbacks too.
 
-> +  "^can@[0-9]+$":
-> +    type: object
-> +    description:
-> +      A CAN block node contains two subnodes, representing each one a CAN
-> +      instance available on the machine.
-> +
-> +    properties:
-> +      compatible:
-> +        enum:
-> +          - st,stm32-bxcan
+Sound good. If you rely on the runtime PM, please add a "depends on PM"
+to the Kconfig. If you want/need to support configurations without
+runtime PM, you have to do some extra work:
 
-Why exactly do you need compatible for the child? Is it an entierly
-separate device?
+| https://elixir.bootlin.com/linux/v5.19/source/drivers/net/can/spi/mcp251x=
+fd/mcp251xfd-core.c#L1860
 
-Comments about specific part are applied here as well.
+In the mcp251xfd driver without runtime PM I enable the clocks and VDD
+during probe() and keep them running until remove(). The idea is:
 
-> +
-> +      master:
+1) call clock_prepare_enable() manually
+2) call pm_runtime_get_noresume(), which equal to
+   pm_runtime_resume_and_get() but doesn't call the resume function
+3) pm_runtime_enable()
+4) pm_runtime_put()
+   will call suspend with runtime PM enabled,
+   will do nothing otherwise
 
-Is this a standard property? I don't see it anywhere else. Non-standard
-properties require vendor prefix.
+Then use pm_runtime_resume_and_get() during open() and pm_runtime_put()
+during stop(). Use both between accessing regs in do_get_berr_counter().
 
-> +        description:
-> +          Master and slave mode of the bxCAN peripheral is only relevant
-> +          if the chip has two CAN peripherals. In that case they share
-> +          some of the required logic, and that means you cannot use the
-> +          slave CAN without the master CAN.
-> +        type: boolean
-> +
-> +      reg:
-> +        description: |
-> +          Offset of CAN instance in CAN block. Valid values are:
-> +            - 0x0:   CAN1
-> +            - 0x400: CAN2
-> +        maxItems: 1
-> +
-> +      interrupts:
-> +        items:
-> +          - description: transmit interrupt
-> +          - description: FIFO 0 receive interrupt
-> +          - description: FIFO 1 receive interrupt
-> +          - description: status change error interrupt
-> +
-> +      interrupt-names:
-> +        items:
-> +          - const: tx
-> +          - const: rx0
-> +          - const: rx1
-> +          - const: sce
-> +
-> +      resets:
-> +        maxItems: 1
-> +
-> +      clocks:
-> +        description:
-> +          Input clock for registers access
-> +        maxItems: 1
-> +
-> +    additionalProperties: false
-> +
-> +    required:
-> +      - compatible
-> +      - reg
-> +      - interrupts
-> +      - resets
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/stm32fx-clock.h>
-> +    #include <dt-bindings/mfd/stm32f4-rcc.h>
-> +
-> +    can: can@40006400 {
-> +        compatible = "st,stm32-bxcan-core";
-> +        reg = <0x40006400 0x800>;
-> +        resets = <&rcc STM32F4_APB1_RESET(CAN1)>;
-> +        clocks = <&rcc 0 STM32F4_APB1_CLOCK(CAN1)>;
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +        status = "disabled";
+During remove it's a bit simpler:
 
-No status in examples.
+| https://elixir.bootlin.com/linux/v5.19/source/drivers/net/can/spi/mcp251x=
+fd/mcp251xfd-core.c#L1932
 
-> +
-> +        can1: can@0 {
-> +            compatible = "st,stm32-bxcan";
-> +            reg = <0x0>;
-> +            interrupts = <19>, <20>, <21>, <22>;
-> +            interrupt-names = "tx", "rx0", "rx1", "sce";
-> +            resets = <&rcc STM32F4_APB1_RESET(CAN1)>;
-> +            master;
-> +            status = "disabled";
+> Is that a correct approach, or should I really use the clk_prepare_enable=
+()
+> and clk_disable_unprepare() "manually" in ctucan_common_probe()/ctucan_ti=
+mestamp_stop()?
+>=20
+> On my Zynq board I don't see the ctucan_resume() callback executed during=
+ probe
+> (after pm_runtime_enable() and pm_runtime_get_sync() are called in _probe=
+()),
 
-No status in examples.
+Is this a kernel without CONFIG_PM?
 
+> but in theory it seems like the correct approach. Xilinx_can driver does =
+this too.
+> Other drivers (e.g. flexcan, mpc251xfd, rcar) call clk_get_rate() right a=
+fter
+> devm_clk_get() in probe, but maybe the situation there is different, I do=
+n't
+> know too much about clocks and pm_runtime yet.
 
-> +        };
-> +
-> +        can2: can@400 {
-> +            compatible = "st,stm32-bxcan";
-> +            reg = <0x400>;
-> +            interrupts = <63>, <64>, <65>, <66>;
-> +            interrupt-names = "tx", "rx0", "rx1", "sce";
-> +            resets = <&rcc STM32F4_APB1_RESET(CAN2)>;
-> +            clocks = <&rcc 0 STM32F4_APB1_CLOCK(CAN2)>;
-> +            status = "disabled";
+The API says the clock must be enabled during clk_get_rate() (but that's
+not enforced). And another problem is that the clock rate might change,
+but let's ignore the clock rate change problem for now.
 
-No status in examples.
+Marc
 
-> +        };
-> +    };
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
+--4qtlqk4ha34rel2p
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Best regards,
-Krzysztof
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmL+BVAACgkQrX5LkNig
+013oTAf/X0uRNyeHKJ+6Clm0PtLxXHaXGF6vQemQJGO9HUiAubFTgwJ70JPSYER0
+KrJnfW+UJZz9MPxJsNljKSqGQLU3+yXRP10hBLTHVGFhHFdSnRNITzbnBtbYdi0U
+KbtmN0Mrl+z73CsubfizJpFaRfkEgUVUHQcV1YtXauSF2KFo5YCF4C70qtcxiMz6
+O2QogTaVQ8sKlIEtW7y1Vn+4wlIZpiSZp4HHAnZxrJuo1iisYHk+MKONiXl5LEOp
+vFZ4zjLvSOP8w3JfkEubMl++1ngjjCxGOupmzeK3UpJheDsIV4deTrBlaxnU5iSr
+lWzwhkasxiwZWLAXIqHGN/YAL/L4HA==
+=bS85
+-----END PGP SIGNATURE-----
+
+--4qtlqk4ha34rel2p--
