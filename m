@@ -2,126 +2,290 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C445597A13
-	for <lists+linux-can@lfdr.de>; Thu, 18 Aug 2022 01:19:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 575FB598002
+	for <lists+linux-can@lfdr.de>; Thu, 18 Aug 2022 10:25:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242071AbiHQXPe (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 17 Aug 2022 19:15:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43956 "EHLO
+        id S240197AbiHRIWg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 18 Aug 2022 04:22:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234438AbiHQXPe (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 17 Aug 2022 19:15:34 -0400
-Received: from mxd1.seznam.cz (mxd1.seznam.cz [IPv6:2a02:598:a::78:210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABFB7A7218;
-        Wed, 17 Aug 2022 16:15:30 -0700 (PDT)
-Received: from email.seznam.cz
-        by email-smtpc23b.ko.seznam.cz (email-smtpc23b.ko.seznam.cz [10.53.18.31])
-        id 306424bfd4c8f78131b985d1;
-        Thu, 18 Aug 2022 01:14:38 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seznam.cz; s=beta;
-        t=1660778078; bh=W4K12dXu6Dj+lHw287pM6t3/vwebMnGfZdWhnEcBocg=;
-        h=Received:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-        b=daTXKi/tiB/8ZwuXLED4H75rgIRoJuMVXaSmYn1r77lbkWDtrXXxS6niKRqtCMBeF
-         p9DYqI2Z8Q7GrYOar6H+G72WPISmPb/pTT9aVn0++6/9zV5Fswav+06rynMpmiP6ZI
-         KCmSJzVAlcurqw3K3P1Ws50VzflmGFZHpxqDWfXs=
-Received: from hopium (2a02:8308:900d:2400:42a0:4fb5:48e:75cc [2a02:8308:900d:2400:42a0:4fb5:48e:75cc])
-        by email-relay10.ko.seznam.cz (Seznam SMTPD 1.3.137) with ESMTP;
-        Thu, 18 Aug 2022 01:14:36 +0200 (CEST)  
-Date:   Thu, 18 Aug 2022 01:14:34 +0200
-From:   Matej Vasilevski <matej.vasilevski@seznam.cz>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Pavel Pisa <pisa@cmp.felk.cvut.cz>,
-        Ondrej Ille <ondrej.ille@gmail.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
+        with ESMTP id S239965AbiHRIWe (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 18 Aug 2022 04:22:34 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E365A80E92
+        for <linux-can@vger.kernel.org>; Thu, 18 Aug 2022 01:22:31 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id v2so1188254lfi.6
+        for <linux-can@vger.kernel.org>; Thu, 18 Aug 2022 01:22:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=ZISBdhU5jjsQ/J0wTDtKXgSITQfAqU8864taLHzaYjM=;
+        b=h6ZJ2B4Dt3c05SoEFIulAnGd7MNkX38buE09h03m1YVDrOI4kULqre4pETeIfBeheU
+         W4CL4F7IHfrDgJl36TqihuPkalIjzkhykUZXE9O3CD5dMKioWnXAzfzb8hbICqkMjwQM
+         7zTrM7xzfGBlIevNqpx+TCfp41NA9mFD5xdWbKedMY/ZorkWeQnTgsKHNbC96Ba0kYRH
+         H54B3XA19tnygktHG7Vr/0atmyLax/Vp7obBCjy0P2kruxeOWNdCvKSyzL30r097UX3T
+         BEz9W7ajXVd1YAA0Uwm2T4IByu/eOH3ZL2LVtDDxiP2oyJhDdoXNDckSsc0JkafpmMcf
+         ei5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=ZISBdhU5jjsQ/J0wTDtKXgSITQfAqU8864taLHzaYjM=;
+        b=ns/3lXGAxp9UeQ4fa41qgt/jVxKzMa8nhTpVXwa4B9413Oj/rmH4Cl92XNW12cNde/
+         4Cp2aLnna3BAU4VB/y/aGMLr315DzWSwgvfa0sO7o3o0Ah7ZyrtYkTnzJyjbhicRgi69
+         Tkg5DtIiLBBh5357jL9sN2MJu/8rremw/lbhpnQLG+sozgYMWpBiZ4EatKo3MOjhwMzg
+         1GoJV/AWFQhWDJlt95GIBP+IDsZmd0sc78OzdatCkEqFVdLdUvJ0iOA7FJdCgVEX6aVU
+         kwxJDKpsM77XwRG3FVBMIu3qPJ7JS5hJ0PApABzxAjrClOmgT/ekaxsWoKpp/pqDNpjn
+         gQeQ==
+X-Gm-Message-State: ACgBeo3da617AmBQGqIqN/60gRlIOp1Ij91WhtmTE6UT7jPGtv0C2q00
+        nIIqlwI4OKXbXKDZ08dzltYGwg==
+X-Google-Smtp-Source: AA6agR7XMgueVY9H5NCQMxHMX/tByaMro7wUOEat1L/UTWiXyjOMiAkwE86qNw66Vl2z4V0qwL19Dw==
+X-Received: by 2002:a05:6512:31ca:b0:48b:c4c2:d6d4 with SMTP id j10-20020a05651231ca00b0048bc4c2d6d4mr557266lfe.423.1660810950225;
+        Thu, 18 Aug 2022 01:22:30 -0700 (PDT)
+Received: from ?IPV6:2001:14bb:ae:539c:53ab:2635:d4f2:d6d5? (d15l54z9nf469l8226z-4.rev.dnainternet.fi. [2001:14bb:ae:539c:53ab:2635:d4f2:d6d5])
+        by smtp.gmail.com with ESMTPSA id a8-20020a2eb548000000b00261b05d9d54sm127426ljn.127.2022.08.18.01.22.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Aug 2022 01:22:29 -0700 (PDT)
+Message-ID: <b851147b-6453-c19e-7c31-a9cf8f87c1a4@linaro.org>
+Date:   Thu, 18 Aug 2022 11:22:28 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [RFC PATCH 1/4] dt-bindings: net: can: add STM32 bxcan DT
+ bindings
+Content-Language: en-US
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        michael@amarulasolutions.com,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Dario Binacchi <dariobin@libero.it>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Paolo Abeni <pabeni@redhat.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] can: ctucanfd: add HW timestamps to RX and error
- CAN frames
-Message-ID: <20220817231434.GA157998@hopium>
-References: <20220801184656.702930-1-matej.vasilevski@seznam.cz>
- <20220801184656.702930-2-matej.vasilevski@seznam.cz>
- <20220802092907.d2xtbqulkvzcwfgj@pengutronix.de>
- <20220803000903.GB4457@hopium>
- <20220803085303.2u4l5l6wmualq33v@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220803085303.2u4l5l6wmualq33v@pengutronix.de>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        devicetree@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20220817143529.257908-1-dario.binacchi@amarulasolutions.com>
+ <20220817143529.257908-2-dario.binacchi@amarulasolutions.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220817143529.257908-2-dario.binacchi@amarulasolutions.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Marc,
-
-I have two questions before I send the next patch version, please
-bear with me.
-
-On Wed, Aug 03, 2022 at 10:53:03AM +0200, Marc Kleine-Budde wrote:
-
-[...]
-
-> > > > +	if (priv->timestamp_possible) {
-> > > > +		clocks_calc_mult_shift(&priv->cc.mult, &priv->cc.shift, timestamp_freq,
-> > > > +				       NSEC_PER_SEC, CTUCANFD_MAX_WORK_DELAY_SEC);
-> > > > +		priv->work_delay_jiffies =
-> > > > +			ctucan_calculate_work_delay(timestamp_bit_size, timestamp_freq);
-> > > > +		if (priv->work_delay_jiffies == 0)
-> > > > +			priv->timestamp_possible = false;
-> > > 
-> > > You'll get a higher precision if you take the mask into account, at
-> > > least if the counter overflows before CTUCANFD_MAX_WORK_DELAY_SEC:
-> > > 
-> > >         maxsec = min(CTUCANFD_MAX_WORK_DELAY_SEC, priv->cc.mask / timestamp_freq);
-> > > 	
-> > >         clocks_calc_mult_shift(&priv->cc.mult, &priv->cc.shift, timestamp_freq, NSEC_PER_SEC,  maxsec);
-> > >         work_delay_in_ns = clocks_calc_max_nsecs(&priv->cc.mult, &priv->cc.shift, 0, &priv->cc.mask, NULL);
-> > > 
-> > > You can use clocks_calc_max_nsecs() to calculate the work delay.
-> > 
-> > This is a good point, thanks. I'll incorporate it into the patch.
+On 17/08/2022 17:35, Dario Binacchi wrote:
+> Add documentation of device tree bindings for the STM32 basic extended
+> CAN (bxcan) controller.
 > 
-> And do this calculation after a clk_prepare_enable(), see other mail to
-> Pavel
-> | https://lore.kernel.org/all/20220803083718.7bh2edmsorwuv4vu@pengutronix.de/
+> Signed-off-by: Dario Binacchi <dariobin@libero.it>
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+
+You do not need two SoBs. Keep only one, matching the From field.
+
+> ---
+> 
+>  .../devicetree/bindings/net/can/st,bxcan.yaml | 139 ++++++++++++++++++
+>  1 file changed, 139 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/can/st,bxcan.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/net/can/st,bxcan.yaml b/Documentation/devicetree/bindings/net/can/st,bxcan.yaml
+> new file mode 100644
+> index 000000000000..f4cfd26e4785
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/can/st,bxcan.yaml
+
+File name like compatible, so st,stm32-bxcan-core.yaml (or some other
+name, see comment later)
+
+> @@ -0,0 +1,139 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/can/st,bxcan.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: STMicroelectronics bxCAN controller Device Tree Bindings
+
+s/Device Tree Bindings//
+
+> +
+> +description: STMicroelectronics BxCAN controller for CAN bus
+> +
+> +maintainers:
+> +  - Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> +
+> +allOf:
+> +  - $ref: can-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - st,stm32-bxcan-core
+
+compatibles are supposed to be specific. If this is some type of
+micro-SoC, then it should have its name/number. If it is dedicated
+device, is the final name bxcan core? Google says  the first is true, so
+you miss specific device part.
+	
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    description:
+> +      Input clock for registers access
+> +    maxItems: 1
+> +
+> +  '#address-cells':
+> +    const: 1
+> +
+> +  '#size-cells':
+> +    const: 0
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - resets
+> +  - clocks
+> +  - '#address-cells'
+> +  - '#size-cells'
+> +
+> +additionalProperties: false
+> +
+> +patternProperties:
+
+This goes after "properties: in top level (before "required").
+
+> +  "^can@[0-9]+$":
+> +    type: object
+> +    description:
+> +      A CAN block node contains two subnodes, representing each one a CAN
+> +      instance available on the machine.
+> +
+> +    properties:
+> +      compatible:
+> +        enum:
+> +          - st,stm32-bxcan
+
+Why exactly do you need compatible for the child? Is it an entierly
+separate device?
+
+Comments about specific part are applied here as well.
+
+> +
+> +      master:
+
+Is this a standard property? I don't see it anywhere else. Non-standard
+properties require vendor prefix.
+
+> +        description:
+> +          Master and slave mode of the bxCAN peripheral is only relevant
+> +          if the chip has two CAN peripherals. In that case they share
+> +          some of the required logic, and that means you cannot use the
+> +          slave CAN without the master CAN.
+> +        type: boolean
+> +
+> +      reg:
+> +        description: |
+> +          Offset of CAN instance in CAN block. Valid values are:
+> +            - 0x0:   CAN1
+> +            - 0x400: CAN2
+> +        maxItems: 1
+> +
+> +      interrupts:
+> +        items:
+> +          - description: transmit interrupt
+> +          - description: FIFO 0 receive interrupt
+> +          - description: FIFO 1 receive interrupt
+> +          - description: status change error interrupt
+> +
+> +      interrupt-names:
+> +        items:
+> +          - const: tx
+> +          - const: rx0
+> +          - const: rx1
+> +          - const: sce
+> +
+> +      resets:
+> +        maxItems: 1
+> +
+> +      clocks:
+> +        description:
+> +          Input clock for registers access
+> +        maxItems: 1
+> +
+> +    additionalProperties: false
+> +
+> +    required:
+> +      - compatible
+> +      - reg
+> +      - interrupts
+> +      - resets
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/stm32fx-clock.h>
+> +    #include <dt-bindings/mfd/stm32f4-rcc.h>
+> +
+> +    can: can@40006400 {
+> +        compatible = "st,stm32-bxcan-core";
+> +        reg = <0x40006400 0x800>;
+> +        resets = <&rcc STM32F4_APB1_RESET(CAN1)>;
+> +        clocks = <&rcc 0 STM32F4_APB1_CLOCK(CAN1)>;
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +        status = "disabled";
+
+No status in examples.
+
+> +
+> +        can1: can@0 {
+> +            compatible = "st,stm32-bxcan";
+> +            reg = <0x0>;
+> +            interrupts = <19>, <20>, <21>, <22>;
+> +            interrupt-names = "tx", "rx0", "rx1", "sce";
+> +            resets = <&rcc STM32F4_APB1_RESET(CAN1)>;
+> +            master;
+> +            status = "disabled";
+
+No status in examples.
 
 
-1) I can't use clocks_calc_max_nsecs(), because it isn't exported
-symbol (and I get modpost error during linking). Is that simply an
-oversight on your end or I'm doing something incorrectly?
+> +        };
+> +
+> +        can2: can@400 {
+> +            compatible = "st,stm32-bxcan";
+> +            reg = <0x400>;
+> +            interrupts = <63>, <64>, <65>, <66>;
+> +            interrupt-names = "tx", "rx0", "rx1", "sce";
+> +            resets = <&rcc STM32F4_APB1_RESET(CAN2)>;
+> +            clocks = <&rcc 0 STM32F4_APB1_CLOCK(CAN2)>;
+> +            status = "disabled";
 
-I've also listed all the exported symbols from /kernel/time, and nothing
-really stood out to me as super useful for this patch. So I would
-continue using ctucan_calculate_work_delay().
+No status in examples.
 
-2) Instead of using clk_prepare_enable() manually in probe, I've added
-the prepare_enable and disable_unprepare(ts_clk) calls into pm_runtime
-suspend and resume callbacks. And I call clk_get_rate(ts_clk) only after
-the pm_runtime_enable() and pm_runtime_get_sync() are called. This
-seemed nicer to me, because the core clock prepare/unprepare will go
-into the pm_runtime callbacks too.
+> +        };
+> +    };
 
-Is that a correct approach, or should I really use the clk_prepare_enable()
-and clk_disable_unprepare() "manually" in ctucan_common_probe()/ctucan_timestamp_stop()?
 
-On my Zynq board I don't see the ctucan_resume() callback executed during probe
-(after pm_runtime_enable() and pm_runtime_get_sync() are called in _probe()),
-but in theory it seems like the correct approach. Xilinx_can driver does this too.
-Other drivers (e.g. flexcan, mpc251xfd, rcar) call clk_get_rate() right after
-devm_clk_get() in probe, but maybe the situation there is different, I don't
-know too much about clocks and pm_runtime yet.
-
-Thanks and best regards,
-Matej
+Best regards,
+Krzysztof
