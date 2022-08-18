@@ -2,131 +2,198 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0997A598622
-	for <lists+linux-can@lfdr.de>; Thu, 18 Aug 2022 16:41:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3637B598856
+	for <lists+linux-can@lfdr.de>; Thu, 18 Aug 2022 18:06:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245646AbiHROi7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 18 Aug 2022 10:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36878 "EHLO
+        id S1343744AbiHRQEt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 18 Aug 2022 12:04:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343545AbiHROi6 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 18 Aug 2022 10:38:58 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE4B65246
-        for <linux-can@vger.kernel.org>; Thu, 18 Aug 2022 07:38:56 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oOgff-0006r0-Et
-        for linux-can@vger.kernel.org; Thu, 18 Aug 2022 16:38:55 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id E87C8CD9F0
-        for <linux-can@vger.kernel.org>; Thu, 18 Aug 2022 14:38:54 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id AFC9FCD9EE;
-        Thu, 18 Aug 2022 14:38:54 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id f3f98291;
-        Thu, 18 Aug 2022 14:38:54 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH] can: gs_usb: gs_usb_set_phys_id(): return with error if identify is not supported
-Date:   Thu, 18 Aug 2022 16:38:53 +0200
-Message-Id: <20220818143853.2671854-1-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S245462AbiHRQEs (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 18 Aug 2022 12:04:48 -0400
+Received: from mxd1.seznam.cz (mxd1.seznam.cz [IPv6:2a02:598:a::78:210])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F157D43321;
+        Thu, 18 Aug 2022 09:04:44 -0700 (PDT)
+Received: from email.seznam.cz
+        by email-smtpc17b.ko.seznam.cz (email-smtpc17b.ko.seznam.cz [10.53.18.19])
+        id 081a9684ecb645ba09c737ea;
+        Thu, 18 Aug 2022 18:03:48 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seznam.cz; s=beta;
+        t=1660838628; bh=l4izIYveon3swGZsVW6a4txzcsFgvxecVRqPxonk/8s=;
+        h=Received:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+        b=Ndx+GZef0W0zshtUnW4vZm4O/eVsLFCwKDtWYr7v/MQHB3fpHZTIvKQXE4Ecu5rzl
+         ByxCYHHL25lDMKfwhR4ggPA9zjNWGGXMXoXuFsDB/hTc63sQfL6j+L+Wol/nCYwdel
+         GAlj9Hmvm1AjU5IL2DGP9QyZoUJnd8OupR0asoMA=
+Received: from hopium (2a02:8308:900d:2400:42a0:4fb5:48e:75cc [2a02:8308:900d:2400:42a0:4fb5:48e:75cc])
+        by email-relay22.ng.seznam.cz (Seznam SMTPD 1.3.137) with ESMTP;
+        Thu, 18 Aug 2022 18:03:46 +0200 (CEST)  
+Date:   Thu, 18 Aug 2022 18:03:44 +0200
+From:   Matej Vasilevski <matej.vasilevski@seznam.cz>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Pavel Pisa <pisa@cmp.felk.cvut.cz>,
+        Ondrej Ille <ondrej.ille@gmail.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] can: ctucanfd: add HW timestamps to RX and error
+ CAN frames
+Message-ID: <20220818160344.GA297252@hopium>
+References: <20220801184656.702930-1-matej.vasilevski@seznam.cz>
+ <20220801184656.702930-2-matej.vasilevski@seznam.cz>
+ <20220802092907.d2xtbqulkvzcwfgj@pengutronix.de>
+ <20220803000903.GB4457@hopium>
+ <20220803085303.2u4l5l6wmualq33v@pengutronix.de>
+ <20220817231434.GA157998@hopium>
+ <20220818092435.hchmowfaolxe2tlq@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220818092435.hchmowfaolxe2tlq@pengutronix.de>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Until commit 409c188c57cd ("can: tree-wide: advertise software
-timestamping capabilities") the ethtool_ops was only assigned for
-devices which support the GS_CAN_FEATURE_IDENTIFY feature. That commit
-assigns ethtool_ops unconditionally.
+On Thu, Aug 18, 2022 at 11:24:35AM +0200, Marc Kleine-Budde wrote:
+> On 18.08.2022 01:14:34, Matej Vasilevski wrote:
+> > Hello Marc,
+> > 
+> > I have two questions before I send the next patch version, please
+> > bear with me.
+> > 
+> > On Wed, Aug 03, 2022 at 10:53:03AM +0200, Marc Kleine-Budde wrote:
+> > 
+> > [...]
+> > 
+> > > > > > +	if (priv->timestamp_possible) {
+> > > > > > +		clocks_calc_mult_shift(&priv->cc.mult, &priv->cc.shift, timestamp_freq,
+> > > > > > +				       NSEC_PER_SEC, CTUCANFD_MAX_WORK_DELAY_SEC);
+> > > > > > +		priv->work_delay_jiffies =
+> > > > > > +			ctucan_calculate_work_delay(timestamp_bit_size, timestamp_freq);
+> > > > > > +		if (priv->work_delay_jiffies == 0)
+> > > > > > +			priv->timestamp_possible = false;
+> > > > > 
+> > > > > You'll get a higher precision if you take the mask into account, at
+> > > > > least if the counter overflows before CTUCANFD_MAX_WORK_DELAY_SEC:
+> > > > > 
+> > > > >         maxsec = min(CTUCANFD_MAX_WORK_DELAY_SEC, priv->cc.mask / timestamp_freq);
+> > > > > 	
+> > > > >         clocks_calc_mult_shift(&priv->cc.mult, &priv->cc.shift, timestamp_freq, NSEC_PER_SEC,  maxsec);
+> > > > >         work_delay_in_ns = clocks_calc_max_nsecs(&priv->cc.mult, &priv->cc.shift, 0, &priv->cc.mask, NULL);
+> > > > > 
+> > > > > You can use clocks_calc_max_nsecs() to calculate the work delay.
+> > > > 
+> > > > This is a good point, thanks. I'll incorporate it into the patch.
+> > > 
+> > > And do this calculation after a clk_prepare_enable(), see other mail to
+> > > Pavel
+> > > | https://lore.kernel.org/all/20220803083718.7bh2edmsorwuv4vu@pengutronix.de/
+> > 
+> > 
+> > 1) I can't use clocks_calc_max_nsecs(), because it isn't exported
+> > symbol (and I get modpost error during linking). Is that simply an
+> > oversight on your end or I'm doing something incorrectly?
+> 
+> Oh, I haven't checked if clocks_calc_max_nsecs() is exported. You can
+> either create a patch to export it, or "open code" its functionality. I
+> think this should be more or less equivalent:
+> 
+> | work_delay_in_ns = clocksource_cyc2ns(mask, mult, shift) >> 1;
 
-This results on controllers without GS_CAN_FEATURE_IDENTIFY support
-for the following ethtool error:
+I'm afraid creating a patch for the export would open another can of worms. I'll
+take a barebones version of the function: only the _cyc2ns(), and the max_cycles
+computation to avoid overflows for 64-bit mask. It should fit in 3 rows of code.
 
-| $ ethtool -p can0 1
-| Cannot identify NIC: Broken pipe
+> > I've also listed all the exported symbols from /kernel/time, and nothing
+> > really stood out to me as super useful for this patch. So I would
+> > continue using ctucan_calculate_work_delay().
+> > 
+> > 2) Instead of using clk_prepare_enable() manually in probe, I've added
+> > the prepare_enable and disable_unprepare(ts_clk) calls into pm_runtime
+> > suspend and resume callbacks. And I call clk_get_rate(ts_clk) only after
+> > the pm_runtime_enable() and pm_runtime_get_sync() are called.
+> 
+> Use pm_runtime_resume_and_get(), see:
+> 
+> | https://elixir.bootlin.com/linux/v5.19/source/include/linux/pm_runtime.h#L419
+> 
+> > This
+> > seemed nicer to me, because the core clock prepare/unprepare will go
+> > into the pm_runtime callbacks too.
+> 
+> Sound good. If you rely on the runtime PM, please add a "depends on PM"
+> to the Kconfig. If you want/need to support configurations without
+> runtime PM, you have to do some extra work:
 
-Restore the correct error value by checking for
-GS_CAN_FEATURE_IDENTIFY in the gs_usb_set_phys_id() function.
+Yes, I'll have to add PM to Kconfig. Currently the driver defines suspend
+and resume sleep callbacks, but PM isn't in KConfig.
 
-| $ ethtool -p can0 1
-| Cannot identify NIC: Operation not supported
+I would support only runtime PM, but Pavel Pisa knows more and might disagree.
+In such case this write up will be very helpful, thank you.
 
-While there use the variable "netdev" for the "struct net_device"
-pointer and "dev" for the "struct gs_can" pointer as in the rest of
-the driver.
+> | https://elixir.bootlin.com/linux/v5.19/source/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c#L1860
+> 
+> In the mcp251xfd driver without runtime PM I enable the clocks and VDD
+> during probe() and keep them running until remove(). The idea is:
+> 
+> 1) call clock_prepare_enable() manually
+> 2) call pm_runtime_get_noresume(), which equal to
+>    pm_runtime_resume_and_get() but doesn't call the resume function
+> 3) pm_runtime_enable()
+> 4) pm_runtime_put()
+>    will call suspend with runtime PM enabled,
+>    will do nothing otherwise
+> 
+> Then use pm_runtime_resume_and_get() during open() and pm_runtime_put()
+> during stop(). Use both between accessing regs in do_get_berr_counter().
+> 
+> During remove it's a bit simpler:
+> 
+> | https://elixir.bootlin.com/linux/v5.19/source/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c#L1932
+> 
+> > Is that a correct approach, or should I really use the clk_prepare_enable()
+> > and clk_disable_unprepare() "manually" in ctucan_common_probe()/ctucan_timestamp_stop()?
+> > 
+> > On my Zynq board I don't see the ctucan_resume() callback executed during probe
+> > (after pm_runtime_enable() and pm_runtime_get_sync() are called in _probe()),
+> 
+> Is this a kernel without CONFIG_PM?
 
-Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Fixes: 409c188c57cd ("can: tree-wide: advertise software timestamping capabilities")
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/usb/gs_usb.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+Fortunately the kernel was configured with CONFIG_PM. But I didn't have
+runtime_suspend and runtime_resume callbacks defined, only the "system
+sleep" suspend and resume (I wasn't aware of the difference).
+After I defined some runtime suspend/resume callbacks, they were executed
+as expected. 
 
-diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
-index baf749c8cda3..e69226470b13 100644
---- a/drivers/net/can/usb/gs_usb.c
-+++ b/drivers/net/can/usb/gs_usb.c
-@@ -925,17 +925,21 @@ static int gs_usb_set_identify(struct net_device *netdev, bool do_identify)
- }
- 
- /* blink LED's for finding the this interface */
--static int gs_usb_set_phys_id(struct net_device *dev,
-+static int gs_usb_set_phys_id(struct net_device *netdev,
- 			      enum ethtool_phys_id_state state)
- {
-+	const struct gs_can *dev = netdev_priv(netdev);
- 	int rc = 0;
- 
-+	if (!(dev->feature & GS_CAN_FEATURE_IDENTIFY))
-+		return -EOPNOTSUPP;
-+
- 	switch (state) {
- 	case ETHTOOL_ID_ACTIVE:
--		rc = gs_usb_set_identify(dev, GS_CAN_IDENTIFY_ON);
-+		rc = gs_usb_set_identify(netdev, GS_CAN_IDENTIFY_ON);
- 		break;
- 	case ETHTOOL_ID_INACTIVE:
--		rc = gs_usb_set_identify(dev, GS_CAN_IDENTIFY_OFF);
-+		rc = gs_usb_set_identify(netdev, GS_CAN_IDENTIFY_OFF);
- 		break;
- 	default:
- 		break;
-@@ -1072,9 +1076,10 @@ static struct gs_can *gs_make_candev(unsigned int channel,
- 		dev->feature |= GS_CAN_FEATURE_REQ_USB_QUIRK_LPC546XX |
- 			GS_CAN_FEATURE_QUIRK_BREQ_CANTACT_PRO;
- 
--	if (le32_to_cpu(dconf->sw_version) > 1)
--		if (feature & GS_CAN_FEATURE_IDENTIFY)
--			netdev->ethtool_ops = &gs_usb_ethtool_ops;
-+	/* GS_CAN_FEATURE_IDENTIFY is only supported for sw_version > 1 */
-+	if (!(le32_to_cpu(dconf->sw_version) > 1 &&
-+	      feature & GS_CAN_FEATURE_IDENTIFY))
-+		dev->feature &= ~GS_CAN_FEATURE_IDENTIFY;
- 
- 	kfree(bt_const);
- 
--- 
-2.35.1
+> 
+> > but in theory it seems like the correct approach. Xilinx_can driver does this too.
+> > Other drivers (e.g. flexcan, mpc251xfd, rcar) call clk_get_rate() right after
+> > devm_clk_get() in probe, but maybe the situation there is different, I don't
+> > know too much about clocks and pm_runtime yet.
+> 
+> The API says the clock must be enabled during clk_get_rate() (but that's
+> not enforced). And another problem is that the clock rate might change,
+> but let's ignore the clock rate change problem for now.
+> 
+> Marc
+> 
+> -- 
+> Pengutronix e.K.                 | Marc Kleine-Budde           |
+> Embedded Linux                   | https://www.pengutronix.de  |
+> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-
+Thanks, regards
+Matej
