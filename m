@@ -2,36 +2,56 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C40C55980C3
-	for <lists+linux-can@lfdr.de>; Thu, 18 Aug 2022 11:25:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A0935980F2
+	for <lists+linux-can@lfdr.de>; Thu, 18 Aug 2022 11:39:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233637AbiHRJZB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 18 Aug 2022 05:25:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60038 "EHLO
+        id S242781AbiHRJjI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 18 Aug 2022 05:39:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230506AbiHRJZA (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 18 Aug 2022 05:25:00 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A89DB0B33
-        for <linux-can@vger.kernel.org>; Thu, 18 Aug 2022 02:24:59 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oOblZ-0005dc-2X; Thu, 18 Aug 2022 11:24:41 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 4D648CD62E;
-        Thu, 18 Aug 2022 09:24:38 +0000 (UTC)
-Date:   Thu, 18 Aug 2022 11:24:35 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Matej Vasilevski <matej.vasilevski@seznam.cz>
-Cc:     Pavel Pisa <pisa@cmp.felk.cvut.cz>,
-        Ondrej Ille <ondrej.ille@gmail.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
+        with ESMTP id S230168AbiHRJjH (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 18 Aug 2022 05:39:07 -0400
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596415B04A;
+        Thu, 18 Aug 2022 02:39:06 -0700 (PDT)
+Received: by mail-qv1-f46.google.com with SMTP id p4so806079qvr.5;
+        Thu, 18 Aug 2022 02:39:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=yJaFIy2nGiUJbEANfPip7v6rB5kJDt4D1/AQTHyeqUY=;
+        b=mNHK6FqR3WzelQfXQusSX5aprGLY8tPzMYb9LgNkbMQG0scVz/Jrm1MMQxSrcpxkqn
+         Bg86Am7GHZK1yhN2wyxjbRr8cY3elgmBvmvPtCTzUf+fdfySSk6FFiNTp6NxL5aXTvlU
+         VN2qBrjEJH0ACUq5uCQ8r0xhKnKht+J6sM8LPGf5gH1UQOUmqr9A9YY9NzziOlH9nv33
+         QOkluF3u14+NGWAUudQfl9IvsYHhej3TVRMyZP5e+MjYHJSsgPqpBcxKgBLL3DstMzBq
+         qouJPvOv9RQRyhOcGtqDT2KIEr+TOIxQcyo4EJQl8Ca3zh/i3wC4i2C069c5YeNfUIuh
+         L8og==
+X-Gm-Message-State: ACgBeo1zS2xiQFuPcjKCOPSS058DJWLC3cauKkJOh0NajWWRAZRkrMH7
+        Adru5eCtnmSJhhqT086mAJZR23lt22hgxw==
+X-Google-Smtp-Source: AA6agR6guGxFe2BvdM+E3ILwBccP8ha0FlncllTQBwXxwWpQgdgBjlno9RT5AAOQ9GbyQwmruPftcg==
+X-Received: by 2002:ad4:5cae:0:b0:496:a988:ddc0 with SMTP id q14-20020ad45cae000000b00496a988ddc0mr1549683qvh.3.1660815545392;
+        Thu, 18 Aug 2022 02:39:05 -0700 (PDT)
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
+        by smtp.gmail.com with ESMTPSA id x8-20020a05620a258800b006b9a89d408csm1099751qko.100.2022.08.18.02.39.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Aug 2022 02:39:04 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-32a09b909f6so27160447b3.0;
+        Thu, 18 Aug 2022 02:39:03 -0700 (PDT)
+X-Received: by 2002:a25:250b:0:b0:68f:425b:3ee0 with SMTP id
+ l11-20020a25250b000000b0068f425b3ee0mr2056784ybl.89.1660815543145; Thu, 18
+ Aug 2022 02:39:03 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220710115248.190280-1-biju.das.jz@bp.renesas.com> <20220710115248.190280-3-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20220710115248.190280-3-biju.das.jz@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 18 Aug 2022 11:38:52 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVvh5n159TLVzosnHyjX3Hxadjky4DjpedSvezPZ=fRLQ@mail.gmail.com>
+Message-ID: <CAMuHMdVvh5n159TLVzosnHyjX3Hxadjky4DjpedSvezPZ=fRLQ@mail.gmail.com>
+Subject: Re: [PATCH v4 2/6] dt-bindings: can: nxp,sja1000: Document RZ/N1{D,S} support
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
@@ -39,180 +59,85 @@ Cc:     Pavel Pisa <pisa@cmp.felk.cvut.cz>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] can: ctucanfd: add HW timestamps to RX and error
- CAN frames
-Message-ID: <20220818092435.hchmowfaolxe2tlq@pengutronix.de>
-References: <20220801184656.702930-1-matej.vasilevski@seznam.cz>
- <20220801184656.702930-2-matej.vasilevski@seznam.cz>
- <20220802092907.d2xtbqulkvzcwfgj@pengutronix.de>
- <20220803000903.GB4457@hopium>
- <20220803085303.2u4l5l6wmualq33v@pengutronix.de>
- <20220817231434.GA157998@hopium>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4qtlqk4ha34rel2p"
-Content-Disposition: inline
-In-Reply-To: <20220817231434.GA157998@hopium>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        devicetree@vger.kernel.org,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi Biju,
 
---4qtlqk4ha34rel2p
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Sun, Jul 10, 2022 at 1:53 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> Add CAN binding documentation for Renesas RZ/N1 SoC.
+>
+> The SJA1000 CAN controller on RZ/N1 SoC has some differences compared
+> to others like it has no clock divider register (CDR) support and it has
+> no HW loopback (HW doesn't see tx messages on rx), so introduced a new
+> compatible 'renesas,rzn1-sja1000' to handle these differences.
+>
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 
-On 18.08.2022 01:14:34, Matej Vasilevski wrote:
-> Hello Marc,
->=20
-> I have two questions before I send the next patch version, please
-> bear with me.
->=20
-> On Wed, Aug 03, 2022 at 10:53:03AM +0200, Marc Kleine-Budde wrote:
->=20
-> [...]
->=20
-> > > > > +	if (priv->timestamp_possible) {
-> > > > > +		clocks_calc_mult_shift(&priv->cc.mult, &priv->cc.shift, timest=
-amp_freq,
-> > > > > +				       NSEC_PER_SEC, CTUCANFD_MAX_WORK_DELAY_SEC);
-> > > > > +		priv->work_delay_jiffies =3D
-> > > > > +			ctucan_calculate_work_delay(timestamp_bit_size, timestamp_fre=
-q);
-> > > > > +		if (priv->work_delay_jiffies =3D=3D 0)
-> > > > > +			priv->timestamp_possible =3D false;
-> > > >=20
-> > > > You'll get a higher precision if you take the mask into account, at
-> > > > least if the counter overflows before CTUCANFD_MAX_WORK_DELAY_SEC:
-> > > >=20
-> > > >         maxsec =3D min(CTUCANFD_MAX_WORK_DELAY_SEC, priv->cc.mask /=
- timestamp_freq);
-> > > > =09
-> > > >         clocks_calc_mult_shift(&priv->cc.mult, &priv->cc.shift, tim=
-estamp_freq, NSEC_PER_SEC,  maxsec);
-> > > >         work_delay_in_ns =3D clocks_calc_max_nsecs(&priv->cc.mult, =
-&priv->cc.shift, 0, &priv->cc.mask, NULL);
-> > > >=20
-> > > > You can use clocks_calc_max_nsecs() to calculate the work delay.
-> > >=20
-> > > This is a good point, thanks. I'll incorporate it into the patch.
-> >=20
-> > And do this calculation after a clk_prepare_enable(), see other mail to
-> > Pavel
-> > | https://lore.kernel.org/all/20220803083718.7bh2edmsorwuv4vu@pengutron=
-ix.de/
->=20
->=20
-> 1) I can't use clocks_calc_max_nsecs(), because it isn't exported
-> symbol (and I get modpost error during linking). Is that simply an
-> oversight on your end or I'm doing something incorrectly?
+Thanks for your patch, which is now commit 4591c760b7975984
+("dt-bindings: can: nxp,sja1000: Document RZ/N1{D,S} in v6.0-rc1.
 
-Oh, I haven't checked if clocks_calc_max_nsecs() is exported. You can
-either create a patch to export it, or "open code" its functionality. I
-think this should be more or less equivalent:
+> --- a/Documentation/devicetree/bindings/net/can/nxp,sja1000.yaml
+> +++ b/Documentation/devicetree/bindings/net/can/nxp,sja1000.yaml
+> @@ -11,9 +11,15 @@ maintainers:
+>
+>  properties:
+>    compatible:
+> -    enum:
+> -      - nxp,sja1000
+> -      - technologic,sja1000
+> +    oneOf:
+> +      - enum:
+> +          - nxp,sja1000
+> +          - technologic,sja1000
+> +      - items:
+> +          - enum:
+> +              - renesas,r9a06g032-sja1000 # RZ/N1D
+> +              - renesas,r9a06g033-sja1000 # RZ/N1S
+> +          - const: renesas,rzn1-sja1000 # RZ/N1
+>
+>    reg:
+>      maxItems: 1
+> @@ -21,6 +27,9 @@ properties:
+>    interrupts:
+>      maxItems: 1
+>
+> +  clocks:
+> +    maxItems: 1
+> +
 
-| work_delay_in_ns =3D clocksource_cyc2ns(mask, mult, shift) >> 1;
+Probably you want to add the power-domains property, and make it
+required on RZ/N1.
+This is not super-critical, as your driver patch uses explicit clock
+handling anyway.
 
-> I've also listed all the exported symbols from /kernel/time, and nothing
-> really stood out to me as super useful for this patch. So I would
-> continue using ctucan_calculate_work_delay().
->=20
-> 2) Instead of using clk_prepare_enable() manually in probe, I've added
-> the prepare_enable and disable_unprepare(ts_clk) calls into pm_runtime
-> suspend and resume callbacks. And I call clk_get_rate(ts_clk) only after
-> the pm_runtime_enable() and pm_runtime_get_sync() are called.
+>    reg-io-width:
+>      $ref: /schemas/types.yaml#/definitions/uint32
+>      description: I/O register width (in bytes) implemented by this device
 
-Use pm_runtime_resume_and_get(), see:
 
-| https://elixir.bootlin.com/linux/v5.19/source/include/linux/pm_runtime.h#=
-L419
+Gr{oetje,eeting}s,
 
-> This
-> seemed nicer to me, because the core clock prepare/unprepare will go
-> into the pm_runtime callbacks too.
+                        Geert
 
-Sound good. If you rely on the runtime PM, please add a "depends on PM"
-to the Kconfig. If you want/need to support configurations without
-runtime PM, you have to do some extra work:
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-| https://elixir.bootlin.com/linux/v5.19/source/drivers/net/can/spi/mcp251x=
-fd/mcp251xfd-core.c#L1860
-
-In the mcp251xfd driver without runtime PM I enable the clocks and VDD
-during probe() and keep them running until remove(). The idea is:
-
-1) call clock_prepare_enable() manually
-2) call pm_runtime_get_noresume(), which equal to
-   pm_runtime_resume_and_get() but doesn't call the resume function
-3) pm_runtime_enable()
-4) pm_runtime_put()
-   will call suspend with runtime PM enabled,
-   will do nothing otherwise
-
-Then use pm_runtime_resume_and_get() during open() and pm_runtime_put()
-during stop(). Use both between accessing regs in do_get_berr_counter().
-
-During remove it's a bit simpler:
-
-| https://elixir.bootlin.com/linux/v5.19/source/drivers/net/can/spi/mcp251x=
-fd/mcp251xfd-core.c#L1932
-
-> Is that a correct approach, or should I really use the clk_prepare_enable=
-()
-> and clk_disable_unprepare() "manually" in ctucan_common_probe()/ctucan_ti=
-mestamp_stop()?
->=20
-> On my Zynq board I don't see the ctucan_resume() callback executed during=
- probe
-> (after pm_runtime_enable() and pm_runtime_get_sync() are called in _probe=
-()),
-
-Is this a kernel without CONFIG_PM?
-
-> but in theory it seems like the correct approach. Xilinx_can driver does =
-this too.
-> Other drivers (e.g. flexcan, mpc251xfd, rcar) call clk_get_rate() right a=
-fter
-> devm_clk_get() in probe, but maybe the situation there is different, I do=
-n't
-> know too much about clocks and pm_runtime yet.
-
-The API says the clock must be enabled during clk_get_rate() (but that's
-not enforced). And another problem is that the clock rate might change,
-but let's ignore the clock rate change problem for now.
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---4qtlqk4ha34rel2p
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmL+BVAACgkQrX5LkNig
-013oTAf/X0uRNyeHKJ+6Clm0PtLxXHaXGF6vQemQJGO9HUiAubFTgwJ70JPSYER0
-KrJnfW+UJZz9MPxJsNljKSqGQLU3+yXRP10hBLTHVGFhHFdSnRNITzbnBtbYdi0U
-KbtmN0Mrl+z73CsubfizJpFaRfkEgUVUHQcV1YtXauSF2KFo5YCF4C70qtcxiMz6
-O2QogTaVQ8sKlIEtW7y1Vn+4wlIZpiSZp4HHAnZxrJuo1iisYHk+MKONiXl5LEOp
-vFZ4zjLvSOP8w3JfkEubMl++1ngjjCxGOupmzeK3UpJheDsIV4deTrBlaxnU5iSr
-lWzwhkasxiwZWLAXIqHGN/YAL/L4HA==
-=bS85
------END PGP SIGNATURE-----
-
---4qtlqk4ha34rel2p--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
