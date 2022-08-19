@@ -2,61 +2,59 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F303A599796
-	for <lists+linux-can@lfdr.de>; Fri, 19 Aug 2022 10:49:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07B8E599AF7
+	for <lists+linux-can@lfdr.de>; Fri, 19 Aug 2022 13:31:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347762AbiHSIpz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 19 Aug 2022 04:45:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57306 "EHLO
+        id S1348492AbiHSLXg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 19 Aug 2022 07:23:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347688AbiHSIpu (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 19 Aug 2022 04:45:50 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4BAFC57A5
-        for <linux-can@vger.kernel.org>; Fri, 19 Aug 2022 01:45:49 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oOxdJ-0008I8-6U; Fri, 19 Aug 2022 10:45:37 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 1011CCE430;
-        Fri, 19 Aug 2022 08:45:34 +0000 (UTC)
-Date:   Fri, 19 Aug 2022 10:45:32 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org
+        with ESMTP id S1348684AbiHSLXf (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 19 Aug 2022 07:23:35 -0400
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA422C654
+        for <linux-can@vger.kernel.org>; Fri, 19 Aug 2022 04:23:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1660908209;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=JIAO0JBtaDIRSqDY6VNP7bDNvJXbC6Tx/2Ki0WWcYU4=;
+    b=RyJS1Xamy9JSbKiwXXiAFIkYOFUb6AaMGBg7BUqzt1qgcZeMcw+zyAwq67rPULJ/Sg
+    oWKlMi42ZXY99YkXrMYrCFMRdmw9zJjFd1lMHn6ixN3tOXrqTIj1/DDak+qoh4mQGt5b
+    EvahwXC0hztQHwq8OkDrI8czFzGYbx6HoZv/aAcRQ0B/eIECTphsJ7XdnvcPKMlP63kw
+    I06pLcvR37Y8xV2oom3tj7CF2y53HG4WqGAz1qS9rp5koG6Z/bi45PvZJ5jPbc0i1UP5
+    wV/1pAxVy7YZN9XGjiiwc9g9PumAq1c9qRXG2jfjOkgZjKJ038gSvGph1l3ySi/iBlmF
+    8qvQ==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytJSr6jW1T+A=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a00:6020:1cfd:d100::1e4]
+    by smtp.strato.de (RZmta 47.47.0 AUTH)
+    with ESMTPSA id Icb1b0y7JBNTz5O
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Fri, 19 Aug 2022 13:23:29 +0200 (CEST)
+Message-ID: <04b05aa5-e926-1050-b1ed-e5ad99a23722@hartkopp.net>
+Date:   Fri, 19 Aug 2022 13:23:22 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
 Subject: Re: [PATCH v4 6/6] can: sja1000: Add support for RZ/N1 SJA1000 CAN
  Controller
-Message-ID: <20220819084532.ywtziogd7ycuozxx@pengutronix.de>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org
 References: <20220710115248.190280-1-biju.das.jz@bp.renesas.com>
  <20220710115248.190280-7-biju.das.jz@bp.renesas.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7mbwvgyie7jnnaxh"
-Content-Disposition: inline
-In-Reply-To: <20220710115248.190280-7-biju.das.jz@bp.renesas.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+ <20220819084532.ywtziogd7ycuozxx@pengutronix.de>
+Content-Language: en-US
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20220819084532.ywtziogd7ycuozxx@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,46 +62,20 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi Marc,
 
---7mbwvgyie7jnnaxh
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 8/19/22 10:45, Marc Kleine-Budde wrote:
 
-On 10.07.2022 12:52:48, Biju Das wrote:
-> The SJA1000 CAN controller on RZ/N1 SoC has no clock divider register
-> (CDR) support compared to others.
->=20
-> This patch adds support for RZ/N1 SJA1000 CAN Controller, by adding
-> SoC specific compatible to handle this difference as well as using
-> clk framework to retrieve the CAN clock frequency.
->=20
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> 
+> Applied to linux-can-next.
 
-Applied to linux-can-next.
+net-next has been rebased to 6.0-rc1 some house ago.
 
-regards,
-Marc
+Do you have any plans for the CAN XL support for linux-can-next?
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+So far there has been no new feedback for a while.
 
---7mbwvgyie7jnnaxh
-Content-Type: application/pgp-signature; name="signature.asc"
+https://lore.kernel.org/linux-can/20220801190010.3344-1-socketcan@hartkopp.net/T/#t
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmL/TaoACgkQrX5LkNig
-011BIwgApYLVtfJ7eiu/fg+tUiaoLoOjp/ZoG16KUJaoEsC5EDCnzR/rmlBFXK2k
-sy9g8X7jvgqA5KgHz+vWJFVYPHkxehpOpqw+h9bp5K81lXn4iZIL3XAjEfxoOqFa
-YUdYHhkZBsZ8iYuk/P7EL4WBGm2W/y4RNKmPg6QNVdhN2cU7dw++HuLVOpmjDmes
-AjJBlpz8hj6VrDBoaGT/GHO7nAKRRAvRagucMRJd03ZP7JnxTDf+T+Bp1JkUbK/z
-7M8R1IVGCQfrw713DwBSl7V8UZIPISQiff+FSlZiq4bouXEEWv5ZcGokf0rnVdC/
-nBK/IpBFB0K3vTPzC8Q1AnKBmDi1bQ==
-=Plk0
------END PGP SIGNATURE-----
-
---7mbwvgyie7jnnaxh--
+Best,
+Oliver
