@@ -2,101 +2,97 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7D1F598B4E
-	for <lists+linux-can@lfdr.de>; Thu, 18 Aug 2022 20:37:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1B959958D
+	for <lists+linux-can@lfdr.de>; Fri, 19 Aug 2022 08:57:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235520AbiHRSgl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 18 Aug 2022 14:36:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56206 "EHLO
+        id S240299AbiHSGxf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 19 Aug 2022 02:53:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230492AbiHRSgl (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 18 Aug 2022 14:36:41 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DADC5CE47B
-        for <linux-can@vger.kernel.org>; Thu, 18 Aug 2022 11:36:39 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id s1so428200lfp.6
-        for <linux-can@vger.kernel.org>; Thu, 18 Aug 2022 11:36:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kvaser.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=BvdJyTAm+t23sKrv/8vCD7Ya5VBhvBCAkS35stRcPCM=;
-        b=IvzwtkAwinn48IPPF7aXne2i72R5vrq4E0UjHAdFLLySF2gL2LEbIAxm2G09/3Cq2u
-         pBpVMXt/LN9mWPGyD9aQuIvPMES2EFVKOoLuM2Y9v7eM4hd3QEbccd78hVF5VY2FkPOs
-         lrVvf46le9ouMv05ZUrDMKXqvJu9YRhsuf3hjajysMoOb0dZGFVV0KyquhUIFIwzS873
-         oEGoeD1fiYHP6XyV/xYfZf1sDNL4g0P9SCENlSNpHmKyEKcFpXodhfyD6VxfKldMvEVo
-         BMNH65z2blkvkmysJfdcTYYJ0QIWWxXlFcOAxB6SG1vTdoNrpR5KaxwGPI5HewdPgj8E
-         luKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=BvdJyTAm+t23sKrv/8vCD7Ya5VBhvBCAkS35stRcPCM=;
-        b=FcyTp1SC68kFTOb3Gj8cgJDteGEW4VmjyHFABJm10qe/gvflUnhCh8aV5NBjgbrDp8
-         PT7VJ+wBQ6h5XkgvV4dAd7iNie1Fnu3zWEGT7aF/IscbTYpQqfqVc3EPeos4tSIFKcQx
-         vD7XSuSHhfCt50Xix6ZQgd8ClgnfZ1BBcdHj0VLBPT2n4PcKDLlpyQ05nitHKK7fM9FF
-         VQxejDMLDz41i92kA+Py9YHuaHF406G7Y5TqFvKRxTWJ92uYQrNnSdyGY+TqDupOubiJ
-         06BRay99MK919CbNOVQZwGN5Yc4SDCQH82GhQdIhc3yLvGB+jHaO/k6t17pNaTLOIiHW
-         tW9w==
-X-Gm-Message-State: ACgBeo2yacKtcRXlm2iR0OqMYB0K86jc83zmcZoVdrm9pDzL1DjoMozZ
-        CuAmPHkuN3h9mWa1X+I+oEsHTl0t0SqHhA==
-X-Google-Smtp-Source: AA6agR6QsAPbgB/506sjCFT2hjAdDkVZBy1s9lXvlnU7erxjU0DNeQLg20hH5bnAc4y99Q7+7XIITQ==
-X-Received: by 2002:a05:6512:2210:b0:48c:eba9:5493 with SMTP id h16-20020a056512221000b0048ceba95493mr1279073lfu.540.1660847797671;
-        Thu, 18 Aug 2022 11:36:37 -0700 (PDT)
-Received: from [192.168.16.196] (h-155-4-68-234.A785.priv.bahnhof.se. [155.4.68.234])
-        by smtp.gmail.com with ESMTPSA id n24-20020a05651203f800b0048b0bc13615sm313478lfq.88.2022.08.18.11.36.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Aug 2022 11:36:37 -0700 (PDT)
-Message-ID: <fb1ed28d-69a0-7b01-1081-6cfb398b3653@kvaser.com>
-Date:   Thu, 18 Aug 2022 20:35:33 +0200
+        with ESMTP id S1346240AbiHSGxd (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 19 Aug 2022 02:53:33 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84ABA2A426
+        for <linux-can@vger.kernel.org>; Thu, 18 Aug 2022 23:53:30 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oOvsm-0008U9-Ds; Fri, 19 Aug 2022 08:53:28 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 999A7CE2C6;
+        Fri, 19 Aug 2022 06:53:27 +0000 (UTC)
+Date:   Fri, 19 Aug 2022 08:53:24 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-kernel@vger.kernel.org, linux-can@vger.kernel.org
+Subject: Re: [PATCH] net: move from strlcpy with unused retval to strscpy
+Message-ID: <20220819065324.qfrbrs6hmr5szfuc@pengutronix.de>
+References: <20220818210050.7108-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 00/15] can: kvaser_usb: Various fixes
-Content-Language: en-US
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org,
-        Anssi Hannula <anssi.hannula@bitwise.fi>,
-        Jimmy Assarsson <jimmyassarsson@gmail.com>
-References: <20220708115709.232815-1-extja@kvaser.com>
- <20220719184059.pzqgxsgl7hw3cdne@pengutronix.de>
- <48197e64-6dda-12d0-26ce-34054b23f7b4@kvaser.com>
- <20220816145048.leptfnx2wlk6vbdd@pengutronix.de>
-From:   Jimmy Assarsson <extja@kvaser.com>
-In-Reply-To: <20220816145048.leptfnx2wlk6vbdd@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lcgs47n7y5fqaeta"
+Content-Disposition: inline
+In-Reply-To: <20220818210050.7108-1-wsa+renesas@sang-engineering.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 8/16/22 16:50, Marc Kleine-Budde wrote:
-> On 19.07.2022 20:59:01, Jimmy Assarsson wrote:
->> On 7/19/22 20:40, Marc Kleine-Budde wrote:
->>> On 08.07.2022 13:56:54, Jimmy Assarsson wrote:
->>>> This patch series was originally posted by Anssi Hannula [1].
->>>> Since v1 I've rebased the patches on top of commit
->>>> b3b6df2c56d8 ("can: kvaser_usb: kvaser_usb_leaf: fix bittiming limits")
->>>> and replaced a couple of patches with new ones.
->>>
->>> Jimmy, as all of these patches went through your hands, they need your
->>> S-o-b. Can I add it while applying?
-> 
-> Jimmy, can you resend this series rebased again current net/main. Please
-> add your S-o-b and take care of Anssi Hannula's issue in patch 04/15.
-> 
-> regards,
-> Marc
 
-Sure! Will try to fix this next week.
+--lcgs47n7y5fqaeta
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-jimmy
+On 18.08.2022 23:00:34, Wolfram Sang wrote:
+> Follow the advice of the below link and prefer 'strscpy' in this
+> subsystem. Conversion is 1:1 because the return value is not used.
+> Generated by a coccinelle script.
+>=20
+> Link: https://lore.kernel.org/r/CAHk-=3DwgfRnXz0W3D37d01q3JFkr_i_uTL=3DV6=
+A6G1oUZcprmknw@mail.gmail.com/
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>  drivers/net/can/sja1000/peak_pcmcia.c            |  2 +-
+>  drivers/net/can/usb/peak_usb/pcan_usb_core.c     |  2 +-
+
+Acked-by: Marc Kleine-Budde <mkl@pengutronix.de> # for CAN
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--lcgs47n7y5fqaeta
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmL/M2EACgkQrX5LkNig
+011LSQf/RMiol3VoFyzYvGXuMbEJrMnE8B4jhFphzfQ4g1FNThH0wE8TEoubHvgX
+uIWrIXW7H7AA/hYXUFwkQBbaboyM1cn4at59LZsTmK3hTsJvJ6YUVwUXMYNAelW6
+wehs2rHK/edwk9Dn4sr+SpIDeszdB5rC0MITEPzGqgQ82Oms1dK3eKWcaArPbX8W
+Z1UACWPBStiEGyBRFRxFY3iNHlIS5LIrhJMHIGYwTrtGq74xoRrauG0DZydbtIaP
+Mr0FPsBosKt6ojDbUdo+/n0lAbuA1u7JTpSDRExycTqL803iJr/CDngCNmv/mPdI
+Qb9yBIMerd4ji/CdUTdA7EgaoGYtnQ==
+=Wdh3
+-----END PGP SIGNATURE-----
+
+--lcgs47n7y5fqaeta--
