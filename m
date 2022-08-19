@@ -2,42 +2,55 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1B959958D
-	for <lists+linux-can@lfdr.de>; Fri, 19 Aug 2022 08:57:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F303A599796
+	for <lists+linux-can@lfdr.de>; Fri, 19 Aug 2022 10:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240299AbiHSGxf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 19 Aug 2022 02:53:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44314 "EHLO
+        id S1347762AbiHSIpz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 19 Aug 2022 04:45:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346240AbiHSGxd (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 19 Aug 2022 02:53:33 -0400
+        with ESMTP id S1347688AbiHSIpu (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 19 Aug 2022 04:45:50 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84ABA2A426
-        for <linux-can@vger.kernel.org>; Thu, 18 Aug 2022 23:53:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4BAFC57A5
+        for <linux-can@vger.kernel.org>; Fri, 19 Aug 2022 01:45:49 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1oOvsm-0008U9-Ds; Fri, 19 Aug 2022 08:53:28 +0200
+        id 1oOxdJ-0008I8-6U; Fri, 19 Aug 2022 10:45:37 +0200
 Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 999A7CE2C6;
-        Fri, 19 Aug 2022 06:53:27 +0000 (UTC)
-Date:   Fri, 19 Aug 2022 08:53:24 +0200
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 1011CCE430;
+        Fri, 19 Aug 2022 08:45:34 +0000 (UTC)
+Date:   Fri, 19 Aug 2022 10:45:32 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-kernel@vger.kernel.org, linux-can@vger.kernel.org
-Subject: Re: [PATCH] net: move from strlcpy with unused retval to strscpy
-Message-ID: <20220819065324.qfrbrs6hmr5szfuc@pengutronix.de>
-References: <20220818210050.7108-1-wsa+renesas@sang-engineering.com>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH v4 6/6] can: sja1000: Add support for RZ/N1 SJA1000 CAN
+ Controller
+Message-ID: <20220819084532.ywtziogd7ycuozxx@pengutronix.de>
+References: <20220710115248.190280-1-biju.das.jz@bp.renesas.com>
+ <20220710115248.190280-7-biju.das.jz@bp.renesas.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lcgs47n7y5fqaeta"
+        protocol="application/pgp-signature"; boundary="7mbwvgyie7jnnaxh"
 Content-Disposition: inline
-In-Reply-To: <20220818210050.7108-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20220710115248.190280-7-biju.das.jz@bp.renesas.com>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -52,24 +65,22 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---lcgs47n7y5fqaeta
+--7mbwvgyie7jnnaxh
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 18.08.2022 23:00:34, Wolfram Sang wrote:
-> Follow the advice of the below link and prefer 'strscpy' in this
-> subsystem. Conversion is 1:1 because the return value is not used.
-> Generated by a coccinelle script.
+On 10.07.2022 12:52:48, Biju Das wrote:
+> The SJA1000 CAN controller on RZ/N1 SoC has no clock divider register
+> (CDR) support compared to others.
 >=20
-> Link: https://lore.kernel.org/r/CAHk-=3DwgfRnXz0W3D37d01q3JFkr_i_uTL=3DV6=
-A6G1oUZcprmknw@mail.gmail.com/
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->  drivers/net/can/sja1000/peak_pcmcia.c            |  2 +-
->  drivers/net/can/usb/peak_usb/pcan_usb_core.c     |  2 +-
+> This patch adds support for RZ/N1 SJA1000 CAN Controller, by adding
+> SoC specific compatible to handle this difference as well as using
+> clk framework to retrieve the CAN clock frequency.
+>=20
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 
-Acked-by: Marc Kleine-Budde <mkl@pengutronix.de> # for CAN
+Applied to linux-can-next.
 
 regards,
 Marc
@@ -80,19 +91,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---lcgs47n7y5fqaeta
+--7mbwvgyie7jnnaxh
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmL/M2EACgkQrX5LkNig
-011LSQf/RMiol3VoFyzYvGXuMbEJrMnE8B4jhFphzfQ4g1FNThH0wE8TEoubHvgX
-uIWrIXW7H7AA/hYXUFwkQBbaboyM1cn4at59LZsTmK3hTsJvJ6YUVwUXMYNAelW6
-wehs2rHK/edwk9Dn4sr+SpIDeszdB5rC0MITEPzGqgQ82Oms1dK3eKWcaArPbX8W
-Z1UACWPBStiEGyBRFRxFY3iNHlIS5LIrhJMHIGYwTrtGq74xoRrauG0DZydbtIaP
-Mr0FPsBosKt6ojDbUdo+/n0lAbuA1u7JTpSDRExycTqL803iJr/CDngCNmv/mPdI
-Qb9yBIMerd4ji/CdUTdA7EgaoGYtnQ==
-=Wdh3
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmL/TaoACgkQrX5LkNig
+011BIwgApYLVtfJ7eiu/fg+tUiaoLoOjp/ZoG16KUJaoEsC5EDCnzR/rmlBFXK2k
+sy9g8X7jvgqA5KgHz+vWJFVYPHkxehpOpqw+h9bp5K81lXn4iZIL3XAjEfxoOqFa
+YUdYHhkZBsZ8iYuk/P7EL4WBGm2W/y4RNKmPg6QNVdhN2cU7dw++HuLVOpmjDmes
+AjJBlpz8hj6VrDBoaGT/GHO7nAKRRAvRagucMRJd03ZP7JnxTDf+T+Bp1JkUbK/z
+7M8R1IVGCQfrw713DwBSl7V8UZIPISQiff+FSlZiq4bouXEEWv5ZcGokf0rnVdC/
+nBK/IpBFB0K3vTPzC8Q1AnKBmDi1bQ==
+=Plk0
 -----END PGP SIGNATURE-----
 
---lcgs47n7y5fqaeta--
+--7mbwvgyie7jnnaxh--
