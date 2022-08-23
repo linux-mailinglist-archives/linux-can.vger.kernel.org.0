@@ -2,71 +2,86 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0E2B59E42D
-	for <lists+linux-can@lfdr.de>; Tue, 23 Aug 2022 15:32:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E090459E935
+	for <lists+linux-can@lfdr.de>; Tue, 23 Aug 2022 19:23:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238978AbiHWNJ5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 23 Aug 2022 09:09:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51088 "EHLO
+        id S235171AbiHWRRi (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 23 Aug 2022 13:17:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241574AbiHWNJY (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 23 Aug 2022 09:09:24 -0400
+        with ESMTP id S238076AbiHWRQu (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 23 Aug 2022 13:16:50 -0400
 Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05FD3133B8D
-        for <linux-can@vger.kernel.org>; Tue, 23 Aug 2022 03:11:20 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id l8so1470510lfc.12
-        for <linux-can@vger.kernel.org>; Tue, 23 Aug 2022 03:11:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BBA90C58
+        for <linux-can@vger.kernel.org>; Tue, 23 Aug 2022 06:41:52 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id q7so16046268lfu.5
+        for <linux-can@vger.kernel.org>; Tue, 23 Aug 2022 06:41:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=AZasA7ru4RBuOT7il+83aHYYeB5TFBrGiGUj7Hz0hho=;
-        b=rEDtys7/7ehxHoe6Wrw9K9tDKHsQaWvQWc/iO7EXhJIqEvqH8g0cRZm+ntDEI/BBho
-         RUPePCWjNMAQQa7z1vSihgZ+HQaj1h021VoaQeLMiOw0+w1uPPRtPLpnA17oilmxOKig
-         Ck5pabaJqWlll2wAeFXbP4S8W2o47Kvf0V+RivEivn5Gbv5eKO5RlYB5vz4FJFGQqnUJ
-         q/7uO0DlfHX5rRd8SmiH/Nujcdetzhqfzt1CXFAsO1p4RZqtgUs9h82SYNJULDZpgdxi
-         /dTg9cpbEYzGJVHnGv8PaBuVyF0m7BD7n4f9UzIzBqh5GtAVqvBF8tJdfVPd6yHpXRVK
-         6Clw==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=94ObA0sxNMfnUjuPe8k5nNJuRKk7+0BvBgJlyDjNB6U=;
+        b=MDkEhUd3g66BHtv8ayb5PFnYCSFsUOgMs1J3OFRtFIDpx5xhG7xgYbSmjimRv6ufky
+         0wfiKTXYXbklnpVEt8tDV6m2bVs5LPglAFfaoUDTPIGO+GoX/RuIhFzfuv6ktR2mq6Bm
+         XslsG1lxC6yywPsVcLVlAjbeWcpCz2+qrLnSTa7/rLHuRufNM/MTRldUkatcSxYQuae7
+         4G8OafImliELiwM/yF4BMHPZa6QWfkELACZZ74akC/cKMfVHwJ1t5R4ZXZDHXtC3EhHW
+         DMI7bWkl64txNuxh2FKPvy0o+5mFvYDc7zCn7cjkMOtZFrBAJALhoUCrkv9loDPHUF1f
+         8SkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=AZasA7ru4RBuOT7il+83aHYYeB5TFBrGiGUj7Hz0hho=;
-        b=pnYMWxidsYExcvd6yjdNZuILcx4w3Sc92kjnwPCrzzKJsyVf/72Z4SxqcYkI/Q169n
-         XNpX6NLlMuK6MGoeln1lWlmNFkZ7O+TDZRK0l1iINJXALsOleZ5JQGEfvfr/g1tlCLXS
-         Sf8f/+Iw2nKMns+245di7+AxjR5RC3ZkuPsUX9Vd8styZHd4UsldfeJTCV5zqgopNht3
-         63pV5TLHZznogWUkcE4lRSl+99tsPxiMebw3F5z5UL2z91WzYSNxZxYyL/0l11j/10dq
-         lHaaXStawd1G+472P5+H4Rc8i8QNet0hOoKLbHHfpJg4Bg+s/Zj/IqwYuOhZjAc9s2I4
-         Tl6Q==
-X-Gm-Message-State: ACgBeo3eziwVeT5JcznLp1AAmez45g5go2Ama/fp5azS4cc7HuLCtAWx
-        DkMV+aP59kRbG3cp/vickg4LIQ==
-X-Google-Smtp-Source: AA6agR6pd09B988zCU50PRE+Ehh4CmDVrkjcaGeGv4/suuwgIa/1BEky+q4J4ZmdTHCH0FOq/Grfmg==
-X-Received: by 2002:ac2:4e6a:0:b0:492:f027:218e with SMTP id y10-20020ac24e6a000000b00492f027218emr1721637lfs.676.1661249414775;
-        Tue, 23 Aug 2022 03:10:14 -0700 (PDT)
-Received: from krzk-bin.. (89-27-92-210.bb.dnainternet.fi. [89.27.92.210])
-        by smtp.gmail.com with ESMTPSA id 28-20020ac25f5c000000b00492db7f47f2sm1383025lfz.275.2022.08.23.03.10.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 03:10:14 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=94ObA0sxNMfnUjuPe8k5nNJuRKk7+0BvBgJlyDjNB6U=;
+        b=P/ln3mQ8ahdlSf7Byj8BIrTpCgG9hzBqjipfnJfdvDmJoI/uVN/eqNRDyqktbWTi6h
+         kzDrGje83HLgVYVsUVW5EwFERGh2NHPFs1jt1A5QN8ZBF3CWLoUkaJ+/tmnJ3QLKTzvf
+         tbjMDpxkf1LxebYYcT0fbOD5QpIR2xh2JD8SPBIUvmO+sEhJve42E2j3NX0ks4nMRRFs
+         CCxa4/F3Qn0lAB3+e72cYyZlCfb30H//PMwxE+T5xtMrDmDfsZk6Ii3b97IK15IbMSGv
+         woftYMSsyG0LE+j/uEH/RcWPCiVM5Rk07r9kz78OprylWUIC27kpqNspn6P72SuwAvpU
+         0QyA==
+X-Gm-Message-State: ACgBeo2LWloS5bfr+1GK3tHddUjW+jTnMiKB99TlwTZdqdrfa5WM2uGP
+        AVlks5B+5CG6QtoGBSjpXdxZ4FGoyiYuwcfN
+X-Google-Smtp-Source: AA6agR54aEjYHox84XnSc1aRIIM9Si6SlFqPQS60naXJqyyEDfTdI9sa1/BQZa7FkPZn6RojlDJEQQ==
+X-Received: by 2002:a05:6512:39d3:b0:492:e172:e313 with SMTP id k19-20020a05651239d300b00492e172e313mr3623919lfu.628.1661262111019;
+        Tue, 23 Aug 2022 06:41:51 -0700 (PDT)
+Received: from [192.168.0.11] (89-27-92-210.bb.dnainternet.fi. [89.27.92.210])
+        by smtp.gmail.com with ESMTPSA id p16-20020ac24ed0000000b0048b1b2233ddsm1493031lfr.120.2022.08.23.06.41.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 06:41:49 -0700 (PDT)
+Message-ID: <fe2041cc-dd8b-6695-1fc8-6c1c49dd7220@linaro.org>
+Date:   Tue, 23 Aug 2022 16:41:44 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [RFC PATCH v2 1/4] dt-bindings: net: can: add STM32 bxcan DT
+ bindings
+Content-Language: en-US
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
+        michael@amarulasolutions.com, Dario Binacchi <dariobin@libero.it>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
         Paolo Abeni <pabeni@redhat.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] dt-bindings: net: can: nxp,sja1000: drop ref from reg-io-width
-Date:   Tue, 23 Aug 2022 13:10:11 +0300
-Message-Id: <20220823101011.386970-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Wolfgang Grandegger <wg@grandegger.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-can@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org
+References: <20220820082936.686924-1-dario.binacchi@amarulasolutions.com>
+ <20220820082936.686924-2-dario.binacchi@amarulasolutions.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220820082936.686924-2-dario.binacchi@amarulasolutions.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,25 +90,98 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-reg-io-width is a standard property, so no need for defining its type
+On 20/08/2022 11:29, Dario Binacchi wrote:
+> Add documentation of device tree bindings for the STM32 basic extended
+> CAN (bxcan) controller.
+> 
+> Signed-off-by: Dario Binacchi <dariobin@libero.it>
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> 
+> ---
+> 
+> Changes in v2:
+> - Change the file name into 'st,stm32-bxcan-core.yaml'.
+> - Rename compatibles:
+>   - st,stm32-bxcan-core -> st,stm32f4-bxcan-core
+>   - st,stm32-bxcan -> st,stm32f4-bxcan
+> - Rename master property to st,can-master.
+> - Remove the status property from the example.
+> - Put the node child properties as required.
+> 
+>  .../bindings/net/can/st,stm32-bxcan.yaml      | 136 ++++++++++++++++++
+>  1 file changed, 136 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/can/st,stm32-bxcan.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/net/can/st,stm32-bxcan.yaml b/Documentation/devicetree/bindings/net/can/st,stm32-bxcan.yaml
+> new file mode 100644
+> index 000000000000..288631b5556d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/can/st,stm32-bxcan.yaml
+> @@ -0,0 +1,136 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/can/st,stm32-bxcan.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: STMicroelectronics bxCAN controller
+> +
+> +description: STMicroelectronics BxCAN controller for CAN bus
+> +
+> +maintainers:
+> +  - Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> +
+> +allOf:
+> +  - $ref: can-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - st,stm32f4-bxcan-core
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    description:
+> +      Input clock for registers access
+> +    maxItems: 1
+> +
+> +  '#address-cells':
+> +    const: 1
+> +
+> +  '#size-cells':
+> +    const: 0
+> +
+> +additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - resets
+> +  - clocks
+> +  - '#address-cells'
+> +  - '#size-cells'
+> +
+> +patternProperties:
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- Documentation/devicetree/bindings/net/can/nxp,sja1000.yaml | 1 -
- 1 file changed, 1 deletion(-)
+No improvements here, so my comment stay. Please fix it.
 
-diff --git a/Documentation/devicetree/bindings/net/can/nxp,sja1000.yaml b/Documentation/devicetree/bindings/net/can/nxp,sja1000.yaml
-index b1327c5b86cf..d919910c690c 100644
---- a/Documentation/devicetree/bindings/net/can/nxp,sja1000.yaml
-+++ b/Documentation/devicetree/bindings/net/can/nxp,sja1000.yaml
-@@ -31,7 +31,6 @@ properties:
-     maxItems: 1
- 
-   reg-io-width:
--    $ref: /schemas/types.yaml#/definitions/uint32
-     description: I/O register width (in bytes) implemented by this device
-     default: 1
-     enum: [ 1, 2, 4 ]
--- 
-2.34.1
 
+> +  "^can@[0-9]+$":
+> +    type: object
+> +    description:
+> +      A CAN block node contains two subnodes, representing each one a CAN
+> +      instance available on the machine.
+
+I still do not understand why you need children. You did not CC me on
+driver change, so difficult to say. You did not describe the parent
+device - there is no description. Why do you need parent device at all?
+This looks like some driver-driven-bindings instead of just real
+hardware description.
+
+Best regards,
+Krzysztof
