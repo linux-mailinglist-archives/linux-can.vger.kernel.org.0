@@ -2,276 +2,251 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B44105A18B2
-	for <lists+linux-can@lfdr.de>; Thu, 25 Aug 2022 20:21:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9F3E5A1AD8
+	for <lists+linux-can@lfdr.de>; Thu, 25 Aug 2022 23:12:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241950AbiHYSV3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 25 Aug 2022 14:21:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60050 "EHLO
+        id S242106AbiHYVMp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 25 Aug 2022 17:12:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239089AbiHYSV2 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 25 Aug 2022 14:21:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 993C889839;
-        Thu, 25 Aug 2022 11:21:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4E374B82853;
-        Thu, 25 Aug 2022 18:21:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D530DC43144;
-        Thu, 25 Aug 2022 18:21:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661451684;
-        bh=wVc03IqlubuXAOqXJ2gmSZKR3a5bbQkXHMLhzFsQke0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=C5OByZVEwUfSkcCh+io9ipi8kZbbneck2aly4OWVja6cACq3yNvDpGiNsL7Q6g3/8
-         sev7RHZsIrRo6eLt146i4jwiLiavM5FkKfpXdV8dBIxpQwevameOPiVtj2WJjFnvOB
-         ToNf1V2vebnNTZTFWQGIAjF2fCVlQ+E11ETgE/GUb7C8VQ5QThJz9uCJIA6sYhytXS
-         adFGnBKMMp8ZhnQU7toyjvcaGkOjPdLKWYy8vbQx/6UTOmIQsSLlLlbHjyVIR2ZzBh
-         Vqm6wr74QZnCwLRCx2J5VDJzpYDXcqOtFVUDS/+5Ro3Hwu1Js4JtVUafw7/EPWhVOX
-         6dAclr3/5lT0g==
-Received: by mail-ed1-f54.google.com with SMTP id s11so27151064edd.13;
-        Thu, 25 Aug 2022 11:21:24 -0700 (PDT)
-X-Gm-Message-State: ACgBeo0hzc71aA4oSALQAJ/BWGEYWbLojpbYKeC4MDudz2Q4kPUfb+FI
-        jzQddelqCFidXatB07L899rpsnIahWrTKZEGMyU=
-X-Google-Smtp-Source: AA6agR43BzUtBg/G5aW5QBnzNsvI37mZfgSJ8U+jcWdAWxdZj/Ja5kpYaVwMi1533wDHBuNDlqaXiZHcUtKFhsrxPtM=
-X-Received: by 2002:a05:6402:5201:b0:446:cfe7:9f0c with SMTP id
- s1-20020a056402520100b00446cfe79f0cmr4211219edd.16.1661451682918; Thu, 25 Aug
- 2022 11:21:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220825134449.18803-1-harald.mommer@opensynergy.com>
-In-Reply-To: <20220825134449.18803-1-harald.mommer@opensynergy.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Thu, 25 Aug 2022 20:21:06 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1biW1qygRS8Mf0F5n8e6044+W-5v+Gnv+gh+Cyzj-Vjg@mail.gmail.com>
-Message-ID: <CAK8P3a1biW1qygRS8Mf0F5n8e6044+W-5v+Gnv+gh+Cyzj-Vjg@mail.gmail.com>
-Subject: Re: [virtio-dev] [RFC PATCH 1/1] can: virtio: Initial virtio CAN driver.
-To:     Harald Mommer <harald.mommer@opensynergy.com>
-Cc:     virtio-dev@lists.oasis-open.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wolfgang Grandegger <wg@grandegger.com>,
+        with ESMTP id S232136AbiHYVMo (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 25 Aug 2022 17:12:44 -0400
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB1F6B1BBD;
+        Thu, 25 Aug 2022 14:12:43 -0700 (PDT)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-11c5505dba2so26530515fac.13;
+        Thu, 25 Aug 2022 14:12:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=7cYyxg+Rjs2OKuzQlOjAlSHEpxBggE7h7LYSTjnsFQY=;
+        b=O0aNaAc2BQP/ZfLv6yEbmA7bMaS/MztotiuxUg7TSVRYePqhPtj7sLJooCKs3GbMEn
+         +EJG02mkjQAjlnPoYp1BbKgDpJjqcwlcjaX+PeYpJxWq8pioUOuPndHkKjemKfknxj71
+         SD2qcI5FHgXw3bHxiFf25nWo9ZNF/+Y9IXJXaQEkjHJnluxXJNjUsbNkuRqamgN3eEFK
+         OX6bAW7tQfR6rJg1s16eu7xPTjL15gQrbx43X0+yTcamssJG5pPkRGgAi9Tq9zYabhSD
+         5rQ0Qv8OS0b+V73BIvWNSji+P19wAGui9MAnpFlzcPCYRS4tzONLepYemKtKWevyJ0Ip
+         3cEw==
+X-Gm-Message-State: ACgBeo3ZrUeuSdkeGRRseI2Aw2cOTERypth7jFey+Yezus7dtjJqlvJE
+        LLSwBf/D3rXS8Ykh0kBkaw==
+X-Google-Smtp-Source: AA6agR7L4kQd6z1UzBVG2YOwp2flBq48abWOo4dTD4AKZRma54US5SS++O70oOI3XePD8j7/qDEheA==
+X-Received: by 2002:a05:6870:438b:b0:11c:ecf2:e4ca with SMTP id r11-20020a056870438b00b0011cecf2e4camr449518oah.122.1661461963080;
+        Thu, 25 Aug 2022 14:12:43 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id o12-20020a9d5c0c000000b0061d31170573sm92760otk.20.2022.08.25.14.12.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 14:12:42 -0700 (PDT)
+Received: (nullmailer pid 1696440 invoked by uid 1000);
+        Thu, 25 Aug 2022 21:12:41 -0000
+Date:   Thu, 25 Aug 2022 16:12:41 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S . Miller" <davem@davemloft.net>,
+        michael@amarulasolutions.com, Dario Binacchi <dariobin@libero.it>,
+        "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
         Paolo Abeni <pabeni@redhat.com>,
-        Dariusz Stojaczyk <Dariusz.Stojaczyk@opensynergy.com>,
-        Harald Mommer <hmo@opensynergy.com>,
-        Stratos Mailing List <stratos-dev@op-lists.linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wolfgang Grandegger <wg@grandegger.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-can@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org
+Subject: Re: [RFC PATCH v2 1/4] dt-bindings: net: can: add STM32 bxcan DT
+ bindings
+Message-ID: <20220825211241.GA1688421-robh@kernel.org>
+References: <20220820082936.686924-1-dario.binacchi@amarulasolutions.com>
+ <20220820082936.686924-2-dario.binacchi@amarulasolutions.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220820082936.686924-2-dario.binacchi@amarulasolutions.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-() b
-On Thu, Aug 25, 2022 at 3:44 PM Harald Mommer
-<harald.mommer@opensynergy.com> wrote:
->
-> - CAN Control
->
->   - "ip link set up can0" starts the virtual CAN controller,
->   - "ip link set up can0" stops the virtual CAN controller
->
-> - CAN RX
->
->   Receive CAN frames. CAN frames can be standard or extended, classic or
->   CAN FD. Classic CAN RTR frames are supported.
->
-> - CAN TX
->
->   Send CAN frames. CAN frames can be standard or extended, classic or
->   CAN FD. Classic CAN RTR frames are supported.
->
-> - CAN Event indication (BusOff)
->
->   The bus off handling is considered code complete but until now bus off
->   handling is largely untested.
->
-> Signed-off-by: Harald Mommer <hmo@opensynergy.com>
-
-This looks nice overall, but as you say there is still some work needed in all
-the details. I've done a rough first pass at reviewing it, but I have
-no specific
-understanding of CAN, so these are mostly generic comments about
-coding style or network drivers.
-
->  drivers/net/can/Kconfig                 |    1 +
->  drivers/net/can/Makefile                |    1 +
->  drivers/net/can/virtio_can/Kconfig      |   12 +
->  drivers/net/can/virtio_can/Makefile     |    5 +
->  drivers/net/can/virtio_can/virtio_can.c | 1176 +++++++++++++++++++++++
->  include/uapi/linux/virtio_can.h         |   69 ++
-
-Since the driver is just one file, you probably don't need the subdirectory.
-
-> +struct virtio_can_tx {
-> +       struct list_head list;
-> +       int prio; /* Currently always 0 "normal priority" */
-> +       int putidx;
-> +       struct virtio_can_tx_out tx_out;
-> +       struct virtio_can_tx_in tx_in;
-> +};
-
-Having a linked list of these appears to add a little extra complexity.
-If they are always processed in sequence, using an array would be
-much simpler, as you just need to remember the index.
-
-> +#ifdef DEBUG
-> +static void __attribute__((unused))
-> +virtio_can_hexdump(const void *data, size_t length, size_t base)
-> +{
-> +#define VIRTIO_CAN_MAX_BYTES_PER_LINE 16u
-
-This seems to duplicate print_hex_dump(), maybe just use that?
-
-> +
-> +       while (!virtqueue_get_buf(vq, &len) && !virtqueue_is_broken(vq))
-> +               cpu_relax();
-> +
-> +       mutex_unlock(&priv->ctrl_lock);
-
-A busy loop is probably not what you want here. Maybe just
-wait_for_completion() until the callback happens?
-
-> +       /* Push loopback echo. Will be looped back on TX interrupt/TX NAPI */
-> +       can_put_echo_skb(skb, dev, can_tx_msg->putidx, 0);
-> +
-> +       err = virtqueue_add_sgs(vq, sgs, 1u, 1u, can_tx_msg, GFP_ATOMIC);
-> +       if (err != 0) {
-> +               list_del(&can_tx_msg->list);
-> +               virtio_can_free_tx_idx(priv, can_tx_msg->prio,
-> +                                      can_tx_msg->putidx);
-> +               netif_stop_queue(dev);
-> +               spin_unlock_irqrestore(&priv->tx_lock, flags);
-> +               kfree(can_tx_msg);
-> +               if (err == -ENOSPC)
-> +                       netdev_info(dev, "TX: Stop queue, no space left\n");
-> +               else
-> +                       netdev_warn(dev, "TX: Stop queue, reason = %d\n", err);
-> +               return NETDEV_TX_BUSY;
-> +       }
-> +
-> +       if (!virtqueue_kick(vq))
-> +               netdev_err(dev, "%s(): Kick failed\n", __func__);
-> +
-> +       spin_unlock_irqrestore(&priv->tx_lock, flags);
-
-There should not be a need for a spinlock or disabling interrupts
-in the xmit function. What exactly are you protecting against here?
-
-As a further optimization, you may want to use the xmit_more()
-function, as the virtqueue kick is fairly expensive and can be
-batched here.
-
-> +       kfree(can_tx_msg);
-> +
-> +       /* Flow control */
-> +       if (netif_queue_stopped(dev)) {
-> +               netdev_info(dev, "TX ACK: Wake up stopped queue\n");
-> +               netif_wake_queue(dev);
-> +       }
-
-You may want to add netdev_sent_queue()/netdev_completed_queue()
-based BQL flow control here as well, so you don't have to rely on the
-queue filling up completely.
-
-> +static int virtio_can_probe(struct virtio_device *vdev)
-> +{
-> +       struct net_device *dev;
-> +       struct virtio_can_priv *priv;
-> +       int err;
-> +       unsigned int echo_skb_max;
-> +       unsigned int idx;
-> +       u16 lo_tx = VIRTIO_CAN_ECHO_SKB_MAX;
-> +
-> +       BUG_ON(!vdev);
-
-Not a useful debug check, just remove the BUG_ON(!vdev), here and elsewhere
-
-> +
-> +       echo_skb_max = lo_tx;
-> +       dev = alloc_candev(sizeof(struct virtio_can_priv), echo_skb_max);
-> +       if (!dev)
-> +               return -ENOMEM;
-> +
-> +       priv = netdev_priv(dev);
-> +
-> +       dev_info(&vdev->dev, "echo_skb_max = %u\n", priv->can.echo_skb_max);
-
-Also remove the prints, I assume this is left over from
-initial debugging.
-
-> +       priv->can.do_set_mode = virtio_can_set_mode;
-> +       priv->can.state = CAN_STATE_STOPPED;
-> +       /* Set Virtio CAN supported operations */
-> +       priv->can.ctrlmode_supported = CAN_CTRLMODE_BERR_REPORTING;
-> +       if (virtio_has_feature(vdev, VIRTIO_CAN_F_CAN_FD)) {
-> +               dev_info(&vdev->dev, "CAN FD is supported\n");
-
-> +       } else {
-> +               dev_info(&vdev->dev, "CAN FD not supported\n");
-> +       }
-
-Same here. There should be a way to see CAN FD support as an interactive
-user, but there is no point printing it to the console.
-
-> +
-> +       register_virtio_can_dev(dev);
-> +
-> +       /* Initialize virtqueues */
-> +       err = virtio_can_find_vqs(priv);
-> +       if (err != 0)
-> +               goto on_failure;
-
-Should the register_virtio_can_dev() be done here? I would expect this to be
-the last thing after setting up the queues.
-
-> +static struct virtio_driver virtio_can_driver = {
-> +       .feature_table = features,
-> +       .feature_table_size = ARRAY_SIZE(features),
-> +       .feature_table_legacy = NULL,
-> +       .feature_table_size_legacy = 0u,
-> +       .driver.name =  KBUILD_MODNAME,
-> +       .driver.owner = THIS_MODULE,
-> +       .id_table =     virtio_can_id_table,
-> +       .validate =     virtio_can_validate,
-> +       .probe =        virtio_can_probe,
-> +       .remove =       virtio_can_remove,
-> +       .config_changed = NULL,
-> +#ifdef CONFIG_PM_SLEEP
-> +       .freeze =       virtio_can_freeze,
-> +       .restore =      virtio_can_restore,
-> +#endif
-
-You can remove the #ifdef here and above, and replace that with the
-pm_sleep_ptr() macro in the assignment.
-
-> diff --git a/include/uapi/linux/virtio_can.h b/include/uapi/linux/virtio_can.h
+On Sat, Aug 20, 2022 at 10:29:33AM +0200, Dario Binacchi wrote:
+> Add documentation of device tree bindings for the STM32 basic extended
+> CAN (bxcan) controller.
+> 
+> Signed-off-by: Dario Binacchi <dariobin@libero.it>
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> 
+> ---
+> 
+> Changes in v2:
+> - Change the file name into 'st,stm32-bxcan-core.yaml'.
+> - Rename compatibles:
+>   - st,stm32-bxcan-core -> st,stm32f4-bxcan-core
+>   - st,stm32-bxcan -> st,stm32f4-bxcan
+> - Rename master property to st,can-master.
+> - Remove the status property from the example.
+> - Put the node child properties as required.
+> 
+>  .../bindings/net/can/st,stm32-bxcan.yaml      | 136 ++++++++++++++++++
+>  1 file changed, 136 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/can/st,stm32-bxcan.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/net/can/st,stm32-bxcan.yaml b/Documentation/devicetree/bindings/net/can/st,stm32-bxcan.yaml
 > new file mode 100644
-> index 000000000000..0ca75c7a98ee
+> index 000000000000..288631b5556d
 > --- /dev/null
-> +++ b/include/uapi/linux/virtio_can.h
-> @@ -0,0 +1,69 @@
-> +/* SPDX-License-Identifier: BSD-3-Clause */
-> +/*
-> + * Copyright (C) 2021 OpenSynergy GmbH
-> + */
-> +#ifndef _LINUX_VIRTIO_VIRTIO_CAN_H
-> +#define _LINUX_VIRTIO_VIRTIO_CAN_H
+> +++ b/Documentation/devicetree/bindings/net/can/st,stm32-bxcan.yaml
+> @@ -0,0 +1,136 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/can/st,stm32-bxcan.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +#include <linux/types.h>
-> +#include <linux/virtio_types.h>
-> +#include <linux/virtio_ids.h>
-> +#include <linux/virtio_config.h>
+> +title: STMicroelectronics bxCAN controller
+> +
+> +description: STMicroelectronics BxCAN controller for CAN bus
+> +
+> +maintainers:
+> +  - Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> +
+> +allOf:
+> +  - $ref: can-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - st,stm32f4-bxcan-core
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    description:
+> +      Input clock for registers access
+> +    maxItems: 1
+> +
+> +  '#address-cells':
+> +    const: 1
+> +
+> +  '#size-cells':
+> +    const: 0
+> +
+> +additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - resets
+> +  - clocks
+> +  - '#address-cells'
+> +  - '#size-cells'
+> +
+> +patternProperties:
+> +  "^can@[0-9]+$":
+> +    type: object
+> +    description:
+> +      A CAN block node contains two subnodes, representing each one a CAN
+> +      instance available on the machine.
+> +
+> +    properties:
+> +      compatible:
+> +        enum:
+> +          - st,stm32f4-bxcan
+> +
+> +      st,can-master:
+> +        description:
+> +          Master and slave mode of the bxCAN peripheral is only relevant
+> +          if the chip has two CAN peripherals. In that case they share
+> +          some of the required logic, and that means you cannot use the
+> +          slave CAN without the master CAN.
+> +        type: boolean
+> +
+> +      reg:
+> +        description: |
+> +          Offset of CAN instance in CAN block. Valid values are:
+> +            - 0x0:   CAN1
+> +            - 0x400: CAN2
+> +        maxItems: 1
+> +
+> +      interrupts:
+> +        items:
+> +          - description: transmit interrupt
+> +          - description: FIFO 0 receive interrupt
+> +          - description: FIFO 1 receive interrupt
+> +          - description: status change error interrupt
+> +
+> +      interrupt-names:
+> +        items:
+> +          - const: tx
+> +          - const: rx0
+> +          - const: rx1
+> +          - const: sce
+> +
+> +      resets:
+> +        maxItems: 1
+> +
+> +      clocks:
+> +        description:
+> +          Input clock for registers access
+> +        maxItems: 1
+> +
+> +    additionalProperties: false
+> +
+> +    required:
+> +      - compatible
+> +      - reg
+> +      - interrupts
+> +      - resets
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/stm32fx-clock.h>
+> +    #include <dt-bindings/mfd/stm32f4-rcc.h>
+> +
+> +    can: can@40006400 {
+> +        compatible = "st,stm32f4-bxcan-core";
+> +        reg = <0x40006400 0x800>;
+> +        resets = <&rcc STM32F4_APB1_RESET(CAN1)>;
+> +        clocks = <&rcc 0 STM32F4_APB1_CLOCK(CAN1)>;
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
 
-Maybe a link to the specification here? I assume the definitions in this file
-are all lifted from that document, rather than specific to the driver, right?
+Missing 'ranges'.
 
-         Arnd
+> +        can1: can@0 {
+> +            compatible = "st,stm32f4-bxcan";
+> +            reg = <0x0>;
+> +            interrupts = <19>, <20>, <21>, <22>;
+> +            interrupt-names = "tx", "rx0", "rx1", "sce";
+> +            resets = <&rcc STM32F4_APB1_RESET(CAN1)>;
+> +            st,can-master;
+
+No clocks?
+
+> +        };
+> +
+> +        can2: can@400 {
+> +            compatible = "st,stm32f4-bxcan";
+> +            reg = <0x400>;
+> +            interrupts = <63>, <64>, <65>, <66>;
+> +            interrupt-names = "tx", "rx0", "rx1", "sce";
+> +            resets = <&rcc STM32F4_APB1_RESET(CAN2)>;
+> +            clocks = <&rcc 0 STM32F4_APB1_CLOCK(CAN2)>;
+> +        };
+> +    };
+> -- 
+> 2.32.0
+> 
+> 
