@@ -2,72 +2,72 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B2335A217D
-	for <lists+linux-can@lfdr.de>; Fri, 26 Aug 2022 09:12:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09ACC5A21A2
+	for <lists+linux-can@lfdr.de>; Fri, 26 Aug 2022 09:20:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245176AbiHZHMj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 26 Aug 2022 03:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36816 "EHLO
+        id S244973AbiHZHUu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 26 Aug 2022 03:20:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245168AbiHZHMg (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 26 Aug 2022 03:12:36 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485DCD2B2B
-        for <linux-can@vger.kernel.org>; Fri, 26 Aug 2022 00:12:34 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id d8so916864lfq.0
-        for <linux-can@vger.kernel.org>; Fri, 26 Aug 2022 00:12:34 -0700 (PDT)
+        with ESMTP id S234047AbiHZHUt (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 26 Aug 2022 03:20:49 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3102533418
+        for <linux-can@vger.kernel.org>; Fri, 26 Aug 2022 00:20:48 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id d8so939357lfq.0
+        for <linux-can@vger.kernel.org>; Fri, 26 Aug 2022 00:20:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=amarulasolutions.com; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=TsGga+p3/E9an7wI98rRb/MFwrywOK8BvinFvruEnr4=;
-        b=P42W/vx34Oi+AYvrGS4jqaKlFDewTQhYL4ODI5SFqrhkKEDPUmG5xuyuoz6/7/3WvV
-         bpYw1dlQLRoPG+DiwwlfJxCdGmlPdnf/UCBNIowzO+wyD8JVTESRd84prKTjzIryZqJi
-         0maAw46JHNlMVTaDLJ5espB4KYWCgnXqPBKJU=
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=CEGNVel+DD71gCbMY4+NplXPx6ttJvqdwAiSfqWyuyc=;
+        b=jQ86Y7gtk1EpU4RztWNT1iTdh2AUuRrwXfiVeyrNKILZFHEST2uROvFtOFKzico+PW
+         JdiP0jlcR/My88TNoWLOM2Dt+q69rIK++vjnpB/CrldlJdpweNn/cdutT1KaTsGdYAD0
+         Qy6yv5wVKl49zb+u45pbzd7pK90bqNa5NjHr0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=TsGga+p3/E9an7wI98rRb/MFwrywOK8BvinFvruEnr4=;
-        b=FIKRZl778aA8wDOqyFxOCSNlptOFxzK3hj8B75JXbMsX6O9eV0cNvp78XYPgDpz3BP
-         /rnqnYx4MR+OZ8TGYGxN/jK8EpjLlIzfDMMR4FAAXWkTMmO4yC4a4kBzxHf5ArPc2UeK
-         BfdFVAPTsUG91n2lku3zgeEhzTzHivKAAzQp3yid+bGy7oRSSO1ao1kEVoTdr4xgFue3
-         6Gq23lGkrOmA+UKxlBDdSdm3hdq6lu7CyFHVHLDJOmj13tGl1+HcFLJyKEH55dT9FlLx
-         9bcUUc+CBdPB9q06qQT7OXLwrOtrDkDfhjMkrQcXlS0NHhSbH+j+iPrYIRx+YUfN29V9
-         k6Hw==
-X-Gm-Message-State: ACgBeo2UeNM8UWhBEK7TlEQr0ONjExqoBGJYPIREK/CE6i5aHvSGS/fY
-        nunV/lc3YMVxLOxRGyw2TMaSHLHJ5jN348+tG5HiCA==
-X-Google-Smtp-Source: AA6agR7CkxZMhLsDqNufa2XQws9YeFkWd1TvveuOauUFwiJpdK+2brKqI5N9qCf01ayFkWEcv+/FL2+Q6RobfuyrFxU=
-X-Received: by 2002:a05:6512:1585:b0:48d:158:7013 with SMTP id
- bp5-20020a056512158500b0048d01587013mr2305322lfb.536.1661497952481; Fri, 26
- Aug 2022 00:12:32 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=CEGNVel+DD71gCbMY4+NplXPx6ttJvqdwAiSfqWyuyc=;
+        b=YxUj9EhLcDmYes/5mClWxwTUtQSOG0ASRFw1wuBffLgWdamRLT7VQ70/9DPJRr4A5v
+         kZ6QoPihL90hUrUleWXLWENNoXe74wVuVhehJRF0syWNRRvTg9xRRgChB3VrhaYUI0k3
+         1gSyNz0sSzYz+BW4EL0pkU9Z970lbNvbRkiUCnlAWRP0SSdIHa+JL5t+eJ0nf2I2ySWY
+         /fnc7/ajNzwP6SzjHId8JDKu6Al5Tg83f4Zb7pOlIgZe+JrxBRzcO7IpZP28GvkwqXAX
+         dxcthvWwljfi2gpqMyZ/9WxpWr0dc3dulimp+mRr0tBmP1KmOIQzYGETtaYgcru+lKGJ
+         c87w==
+X-Gm-Message-State: ACgBeo2R/qT+SZnsXZZXDLVRrznmBQVR7l7WWzFqtey9nALlzzAeEnvc
+        /bPlqpaiYWTT7FAT6syDsdoSOcYoHRTS1XGCvp1XgA==
+X-Google-Smtp-Source: AA6agR5E9rzLsk8Bxfltxj6vo0as9RfWJbfBdrR4zX1Gwkiwxtu0fySwDNeWtkDdUojuZHozS10XTuWSiLTeFSkQNck=
+X-Received: by 2002:a05:6512:3503:b0:48a:6060:5ebb with SMTP id
+ h3-20020a056512350300b0048a60605ebbmr1974187lfs.429.1661498446570; Fri, 26
+ Aug 2022 00:20:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220820082936.686924-1-dario.binacchi@amarulasolutions.com>
- <20220820082936.686924-2-dario.binacchi@amarulasolutions.com> <fe2041cc-dd8b-6695-1fc8-6c1c49dd7220@linaro.org>
-In-Reply-To: <fe2041cc-dd8b-6695-1fc8-6c1c49dd7220@linaro.org>
+References: <20220817143529.257908-1-dario.binacchi@amarulasolutions.com>
+ <20220817143529.257908-2-dario.binacchi@amarulasolutions.com>
+ <b851147b-6453-c19e-7c31-a9cf8f87c1a4@linaro.org> <CABGWkvomGpo9zWi59YNYfRfzAZZ90D9_HaiVV3Gs_x_eQ59e5A@mail.gmail.com>
+ <d8db1648-edcd-3580-60d3-96ef91d6bbed@linaro.org>
+In-Reply-To: <d8db1648-edcd-3580-60d3-96ef91d6bbed@linaro.org>
 From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date:   Fri, 26 Aug 2022 09:12:21 +0200
-Message-ID: <CABGWkvrdqE=1JpOvzs9u9j_gYFsDuKQ92ruzwc=CJQBB5jaj4g@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 1/4] dt-bindings: net: can: add STM32 bxcan DT bindings
+Date:   Fri, 26 Aug 2022 09:20:35 +0200
+Message-ID: <CABGWkvpBHFUx_KHKxeL2sEK8bO7=+3HCUAgJM7zphM3q7soczg@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/4] dt-bindings: net: can: add STM32 bxcan DT bindings
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     linux-kernel@vger.kernel.org,
         Alexandre Torgue <alexandre.torgue@foss.st.com>,
         Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        michael@amarulasolutions.com,
         Marc Kleine-Budde <mkl@pengutronix.de>,
-        michael@amarulasolutions.com, Dario Binacchi <dariobin@libero.it>,
+        Dario Binacchi <dariobin@libero.it>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
         Paolo Abeni <pabeni@redhat.com>,
         Rob Herring <robh+dt@kernel.org>,
         Wolfgang Grandegger <wg@grandegger.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-can@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org
+        devicetree@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -80,142 +80,164 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 Hi Krzysztof,
 
-On Tue, Aug 23, 2022 at 3:41 PM Krzysztof Kozlowski
+On Mon, Aug 22, 2022 at 7:39 PM Krzysztof Kozlowski
 <krzysztof.kozlowski@linaro.org> wrote:
 >
-> On 20/08/2022 11:29, Dario Binacchi wrote:
-> > Add documentation of device tree bindings for the STM32 basic extended
-> > CAN (bxcan) controller.
+> On 20/08/2022 11:08, Dario Binacchi wrote:
+> > Hi Krzysztof,
 > >
-> > Signed-off-by: Dario Binacchi <dariobin@libero.it>
-> > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> > On Thu, Aug 18, 2022 at 10:22 AM Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> On 17/08/2022 17:35, Dario Binacchi wrote:
+> >>> Add documentation of device tree bindings for the STM32 basic extended
+> >>> CAN (bxcan) controller.
+> >>>
+> >>> Signed-off-by: Dario Binacchi <dariobin@libero.it>
+> >>> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> >>
+> >> You do not need two SoBs. Keep only one, matching the From field.
 > >
-> > ---
-> >
-> > Changes in v2:
-> > - Change the file name into 'st,stm32-bxcan-core.yaml'.
-> > - Rename compatibles:
-> >   - st,stm32-bxcan-core -> st,stm32f4-bxcan-core
-> >   - st,stm32-bxcan -> st,stm32f4-bxcan
-> > - Rename master property to st,can-master.
-> > - Remove the status property from the example.
-> > - Put the node child properties as required.
-> >
-> >  .../bindings/net/can/st,stm32-bxcan.yaml      | 136 ++++++++++++++++++
-> >  1 file changed, 136 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/net/can/st,stm32-=
-bxcan.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/net/can/st,stm32-bxcan.y=
-aml b/Documentation/devicetree/bindings/net/can/st,stm32-bxcan.yaml
-> > new file mode 100644
-> > index 000000000000..288631b5556d
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/net/can/st,stm32-bxcan.yaml
-> > @@ -0,0 +1,136 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/net/can/st,stm32-bxcan.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: STMicroelectronics bxCAN controller
-> > +
-> > +description: STMicroelectronics BxCAN controller for CAN bus
-> > +
-> > +maintainers:
-> > +  - Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> > +
-> > +allOf:
-> > +  - $ref: can-controller.yaml#
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - st,stm32f4-bxcan-core
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  resets:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    description:
-> > +      Input clock for registers access
-> > +    maxItems: 1
-> > +
-> > +  '#address-cells':
-> > +    const: 1
-> > +
-> > +  '#size-cells':
-> > +    const: 0
-> > +
-> > +additionalProperties: false
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - resets
-> > +  - clocks
-> > +  - '#address-cells'
-> > +  - '#size-cells'
-> > +
-> > +patternProperties:
+> > I started implementing this driver in my spare time, so my intention
+> > was to keep track of it.
 >
-> No improvements here, so my comment stay. Please fix it.
+> SoB is not related to copyrights. Keep personal copyrights (with/next to
+> work ones), but SoB is coming from a person and that's only one. Choose
+> one "person".
 
-Sorry, I'ff fix it in version 3.
+Ok, I got it.
 
 >
+> >
+> >>
+> >>> ---
+> >>>
+> >>>  .../devicetree/bindings/net/can/st,bxcan.yaml | 139 ++++++++++++++++++
+> >>>  1 file changed, 139 insertions(+)
+> >>>  create mode 100644 Documentation/devicetree/bindings/net/can/st,bxcan.yaml
+> >>>
+> >>> diff --git a/Documentation/devicetree/bindings/net/can/st,bxcan.yaml b/Documentation/devicetree/bindings/net/can/st,bxcan.yaml
+> >>> new file mode 100644
+> >>> index 000000000000..f4cfd26e4785
+> >>> --- /dev/null
+> >>> +++ b/Documentation/devicetree/bindings/net/can/st,bxcan.yaml
+> >>
+> >> File name like compatible, so st,stm32-bxcan-core.yaml (or some other
+> >> name, see comment later)
+> >
+> >>
+> >>> @@ -0,0 +1,139 @@
+> >>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> >>> +%YAML 1.2
+> >>> +---
+> >>> +$id: http://devicetree.org/schemas/net/can/st,bxcan.yaml#
+> >>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >>> +
+> >>> +title: STMicroelectronics bxCAN controller Device Tree Bindings
+> >>
+> >> s/Device Tree Bindings//
+> >
+> >>
+> >>> +
+> >>> +description: STMicroelectronics BxCAN controller for CAN bus
+> >>> +
+> >>> +maintainers:
+> >>> +  - Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> >>> +
+> >>> +allOf:
+> >>> +  - $ref: can-controller.yaml#
+> >>> +
+> >>> +properties:
+> >>> +  compatible:
+> >>> +    enum:
+> >>> +      - st,stm32-bxcan-core
+> >>
+> >> compatibles are supposed to be specific. If this is some type of
+> >> micro-SoC, then it should have its name/number. If it is dedicated
+> >> device, is the final name bxcan core? Google says  the first is true, so
+> >> you miss specific device part.
+> >
+> > I don't know if I understand correctly, I hope the change in version 2
+> > is what you requested.
 >
-> > +  "^can@[0-9]+$":
-> > +    type: object
-> > +    description:
-> > +      A CAN block node contains two subnodes, representing each one a =
-CAN
-> > +      instance available on the machine.
+> What is the name of the SoC, where this is in?
+
+STM32F4
+
 >
-> I still do not understand why you need children. You did not CC me on
-> driver change, so difficult to say. You did not describe the parent
+> >
+> >>
+> >>> +
+> >>> +  reg:
+> >>> +    maxItems: 1
+> >>> +
+> >>> +  resets:
+> >>> +    maxItems: 1
+> >>> +
+> >>> +  clocks:
+> >>> +    description:
+> >>> +      Input clock for registers access
+> >>> +    maxItems: 1
+> >>> +
+> >>> +  '#address-cells':
+> >>> +    const: 1
+> >>> +
+> >>> +  '#size-cells':
+> >>> +    const: 0
+> >>> +
+> >>> +required:
+> >>> +  - compatible
+> >>> +  - reg
+> >>> +  - resets
+> >>> +  - clocks
+> >>> +  - '#address-cells'
+> >>> +  - '#size-cells'
+> >>> +
+> >>> +additionalProperties: false
+> >>> +
+> >>> +patternProperties:
+> >>
+> >> This goes after "properties: in top level (before "required").
+> >>
+> >>> +  "^can@[0-9]+$":
+> >>> +    type: object
+> >>> +    description:
+> >>> +      A CAN block node contains two subnodes, representing each one a CAN
+> >>> +      instance available on the machine.
+> >>> +
+> >>> +    properties:
+> >>> +      compatible:
+> >>> +        enum:
+> >>> +          - st,stm32-bxcan
+> >>
+> >> Why exactly do you need compatible for the child? Is it an entierly
+> >> separate device?
+> >
+> > I took inspiration from other drivers for ST microcontroller
+> > peripherals (e. g. drivers/iio/adc/stm32-adc-core.c,
+> > drivers/iio/adc/stm32-adc.c) where
+> > some resources are shared between the peripheral instances. In the
+> > case of CAN, master (CAN1) and slave (CAN2) share the registers for
+> > configuring the filters and the clock.
+> > In the core module you can find the functions about the shared
+> > resources, while the childrens implement the driver.
+>
+> In both cases you refer to the driver, but we talk here about bindings
+> which are rather not related. So I repeat the question - is the child
+> entirely separate device which can be used in other devices?
 
-On the next submissions I'll send you all the series patches.
-
-> device - there is no description.
-
-Ok, I'll do it.
-
-> Why do you need parent device at all?
-> This looks like some driver-driven-bindings instead of just real
-> hardware description.
-
-The two devices are not independent.
-As described in the reference manual RM0386 (STM32F469xx and STM32F479xx
-advanced Arm=C2=AE-based 32-bit MCUs) in paragraph 34.2, the bxCAN controll=
-er is a
-dual CAN peripheral configuration:
-
-=E2=80=A2 CAN1: Master bxCAN for managing the communication between a Slave=
- bxCAN and
-the 512-byte SRAM memory
-=E2=80=A2 CAN2: Slave bxCAN, with no direct access to the SRAM memory.
-
-So, if I want to use CAN2 only (and not CAN1), I need to be able to use sha=
-red
-resources with CAN1 without having to probe the CAN1 driver. IMHO here is t=
-he
-justification of the parent node.
+IMHO, I think so.
 
 Thanks and regards,
 Dario
-
+>
 >
 > Best regards,
 > Krzysztof
 
 
 
---=20
+-- 
 
 Dario Binacchi
 
