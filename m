@@ -2,96 +2,159 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D789E5A2C46
-	for <lists+linux-can@lfdr.de>; Fri, 26 Aug 2022 18:26:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E7F55A3191
+	for <lists+linux-can@lfdr.de>; Fri, 26 Aug 2022 23:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230433AbiHZQ0a (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 26 Aug 2022 12:26:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36062 "EHLO
+        id S231557AbiHZV45 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 26 Aug 2022 17:56:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiHZQ0a (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 26 Aug 2022 12:26:30 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58CABDF4EB
-        for <linux-can@vger.kernel.org>; Fri, 26 Aug 2022 09:26:27 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oRcA6-0002jB-6c; Fri, 26 Aug 2022 18:26:26 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 4C687D4863;
-        Fri, 26 Aug 2022 16:26:25 +0000 (UTC)
-Date:   Fri, 26 Aug 2022 18:26:23 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org
-Cc:     John Whittington <git@jbrengineering.co.uk>
-Subject: Re: [PATCH 2/2] can: gs_usb: advertise timestamping capabilities and
- add ioctl support
-Message-ID: <20220826162623.j6zvxtx6nzwtlkjr@pengutronix.de>
-References: <20220826104629.2837024-1-mkl@pengutronix.de>
- <20220826104629.2837024-3-mkl@pengutronix.de>
+        with ESMTP id S231298AbiHZV44 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 26 Aug 2022 17:56:56 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE92CACA2;
+        Fri, 26 Aug 2022 14:56:54 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-32a09b909f6so69161807b3.0;
+        Fri, 26 Aug 2022 14:56:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=YIsmXK/1IMUzBKPFPBCOzWlrG3vuxnAl26/EQEinaGU=;
+        b=Woi3HMQVUTh9wjBeAKXEpTFy4sf0GT5G162/idyorzEjanNHHAAO45K6yb3Gq251vx
+         vdGkWXeLHyJD1Eg5RShfMvgsW17hKDHZr/WeeDtgdpyt32v1ggnnjCHlRuAQ94Dpc11n
+         zS2IwMRHR9s2PGlSxiCxhhs3r1G6RPkeqBKCOCYCE4mPWzWmQqlnHguY0hSWkrhmHkVP
+         c80tnpQQ8aynngWmq9c20Rz5FIJYqJ1lG8EM+uu+/Bn+bD/1qLICngiaAtk0lCNG7gJn
+         U7gXacECwV1iR4jaz+0w7cw+lJzQltivxlZf7vX/cHXdyHNxlEyqXdk9GMeHqzK764xE
+         fj2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=YIsmXK/1IMUzBKPFPBCOzWlrG3vuxnAl26/EQEinaGU=;
+        b=xtJ3U2yLwssHKz6czZ3Qs+tai4dTBlgdlPzgdlZ5kCmBHzUs4Q4+BqpIaYTYJg4xwe
+         8+vxr/EqO+65qpYAatXv95S53IEZZsG2hUZ085JMjr6AbuvME6i/pZREpB+TwwKMdVHE
+         zhSgFb++RH4cSFbCvG7DXaKiDQArf5momXl+O7c2qNE6BUgi8pfDLfxF8QZUUziI3QYR
+         Uh+Gk8zGQwFCCaU4UI2Be3KXwtXeLFSudMPcrXeJo0P1dDs3t9n9xM8UBfk8A5mpAnhj
+         tnR1KXjFx4EWJJVq5bNdBEiyhK1gyMCMIQXSmci6mxjMhgAO0fXPdePWtphaKpNjQ+lq
+         rd9w==
+X-Gm-Message-State: ACgBeo3R57Ucj1iiEZDefLlEEItyUdZ6LUMTw7XMYwhM9jqqaOQLDS4d
+        Z99ETb3AKLCcvbQuHmrV/AEaeUx6m0PGS7sLv6Y=
+X-Google-Smtp-Source: AA6agR4UTuA3qINNphj7afBVZTaQiWFU8zQh4oSl0I8d9SplK6OhHc5jyFq4/aR+zST0rOWp264LYbZR9vv+Gc1Ll04=
+X-Received: by 2002:a5b:68e:0:b0:671:76c9:ff with SMTP id j14-20020a5b068e000000b0067176c900ffmr1606448ybq.630.1661551013566;
+ Fri, 26 Aug 2022 14:56:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tssfphukfsjdpyij"
-Content-Disposition: inline
-In-Reply-To: <20220826104629.2837024-3-mkl@pengutronix.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220820082936.686924-1-dario.binacchi@amarulasolutions.com> <20220820082936.686924-5-dario.binacchi@amarulasolutions.com>
+In-Reply-To: <20220820082936.686924-5-dario.binacchi@amarulasolutions.com>
+From:   Vincent Mailhol <vincent.mailhol@gmail.com>
+Date:   Sat, 27 Aug 2022 06:56:42 +0900
+Message-ID: <CAMZ6RqKQJZBVOSU7oA3AGSRG11vxdysAyRotHavUzsVRuM28Kw@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 4/4] can: bxcan: add support for ST bxCAN controller
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        michael@amarulasolutions.com, Dario Binacchi <dariobin@libero.it>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Sat. 20 Aug. 2022 =C3=A0 17:32, Dario Binacchi
+<dario.binacchi@amarulasolutions.com> a =C3=A9crit :
+> Add support for the basic extended CAN controller (bxCAN) found in many
+> low- to middle-end STM32 SoCs. It supports the Basic Extended CAN
+> protocol versions 2.0A and B with a maximum bit rate of 1 Mbit/s.
+>
+> The controller supports two channels (CAN1 as master and CAN2 as slave)
+> and the driver can enable either or both of the channels. They share
+> some of the required logic (e. g. clocks and filters), and that means
+> you cannot use the slave CAN without enabling some hardware resources
+> managed by the master CAN.
+>
+> Each channel has 3 transmit mailboxes, 2 receive FIFOs with 3 stages and
+> 28 scalable filter banks.
+> It also manages 4 dedicated interrupt vectors:
+> - transmit interrupt
+> - FIFO 0 receive interrupt
+> - FIFO 1 receive interrupt
+> - status change error interrupt
+>
+> Driver uses all 3 available mailboxes for transmission and FIFO 0 for
+> reception. Rx filter rules are configured to the minimum. They accept
+> all messages and assign filter 0 to CAN1 and filter 14 to CAN2 in
+> identifier mask mode with 32 bits width. It enables and uses transmit,
+> receive buffers for FIFO 0 and error and status change interrupts.
+>
+> Signed-off-by: Dario Binacchi <dariobin@libero.it>
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+>
+> ---
 
---tssfphukfsjdpyij
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+(...)
 
-On 26.08.2022 12:46:29, Marc Kleine-Budde wrote:
-> From: John Whittington <git@jbrengineering.co.uk>
->=20
-> Following dc0d8e068f837 ("can: gs_usb: hardware timestamp support")
-> this correctly advertises the support for RX HW timestamps if the device
-> does support it. Similar to bedd94835a352 ("can: peak_usb: advertise
-> timestamping capabilities...") since PCAN devices also only support RX
-> and not TX HW timestamping.
+> +static void bxcan_handle_state_change(struct net_device *ndev, u32 esr)
+> +{
+> +       struct bxcan_priv *priv =3D netdev_priv(ndev);
+> +       struct net_device_stats *stats =3D &ndev->stats;
+> +       enum can_state new_state =3D priv->can.state;
+> +       struct can_berr_counter bec;
+> +       enum can_state rx_state, tx_state;
+> +       struct sk_buff *skb;
+> +       struct can_frame *cf;
+> +
+> +       /* Early exit if no error flag is set */
+> +       if (!(esr & (BXCAN_ESR_EWGF | BXCAN_ESR_EPVF | BXCAN_ESR_BOFF)))
+> +               return;
+> +
+> +       bec.txerr =3D BXCAN_TEC(esr);
+> +       bec.rxerr =3D BXCAN_REC(esr);
+> +
+> +       if (esr & BXCAN_ESR_BOFF)
+> +               new_state =3D CAN_STATE_BUS_OFF;
+> +       else if (esr & BXCAN_ESR_EPVF)
+> +               new_state =3D CAN_STATE_ERROR_PASSIVE;
+> +       else if (esr & BXCAN_ESR_EWGF)
+> +               new_state =3D CAN_STATE_ERROR_WARNING;
+> +
+> +       /* state hasn't changed */
+> +       if (unlikely(new_state =3D=3D priv->can.state))
+> +               return;
+> +
+> +       skb =3D alloc_can_err_skb(ndev, &cf);
+> +       if (unlikely(!skb))
+> +               return;
+> +
+> +       tx_state =3D bec.txerr >=3D bec.rxerr ? new_state : 0;
+> +       rx_state =3D bec.txerr <=3D bec.rxerr ? new_state : 0;
+> +       can_change_state(ndev, cf, tx_state, rx_state);
+> +
+> +       if (new_state =3D=3D CAN_STATE_BUS_OFF)
+> +               can_bus_off(ndev);
+> +
+> +       stats->rx_bytes +=3D cf->len;
 
-While all peak_usb devices support RX HW timestamps, not all gs_usb
-devices do. Please adjust the gs_can_eth_ioctl() accordingly.
+Please do not increment the stats if the frame is remote (c.f. CAN_RTR_FLAG=
+).
 
-Marc
+> +       stats->rx_packets++;
+> +       netif_rx(skb);
+> +}
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---tssfphukfsjdpyij
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmMI9C0ACgkQrX5LkNig
-013y8Af/fpIY4paqR4mT+CyO6OPBWNFu6dDKKogcRb8r4BoY9BMlzzF4QDK/IvUI
-Yccg1rB8a0y8fYDe0H8qdRFRZbRPST9oeksTvh459CjNtMuO84nw9ChlmdQBe6zd
-AwnXcE4XLXVw2kiJG876Wrh92dyz8JAvNqch/3TQxyHRM5CsctclZPbNSSRSEBCI
-wzwMWrOToacKIHBMqeNNFtZCzHeWJK3nvsgSmNxiApV9mJ8uhRFw5C/RCBw0FWkK
-KqdjcT8ltwkcoRH9UFHuehZIAHHd919+37E4lPkDpj9qjdW/wRsUEFNzHkRz/2tm
-cFyGhiqWSd0GLtrl6r1DNh+g/PMspg==
-=F+ZN
------END PGP SIGNATURE-----
-
---tssfphukfsjdpyij--
+Yours sincerely,
+Vincent Mailhol
