@@ -2,297 +2,102 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C52605A3731
-	for <lists+linux-can@lfdr.de>; Sat, 27 Aug 2022 13:12:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B3B15A3A30
+	for <lists+linux-can@lfdr.de>; Sun, 28 Aug 2022 00:15:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230283AbiH0LMo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 27 Aug 2022 07:12:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41824 "EHLO
+        id S229458AbiH0WP5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 27 Aug 2022 18:15:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230176AbiH0LMn (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 27 Aug 2022 07:12:43 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.166])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F11954C99;
-        Sat, 27 Aug 2022 04:12:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1661598744;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=VaJk7sINEIae+TNpvJ5IvFGcM4VJpS4JY8vRgYaAwNo=;
-    b=B2xS/I0gWOpeNipmsYABfVSUN4RhWuEBF0eWc1yd0Qds8tdmY8YN0ZUKtdY4EN7Eno
-    72jNfgxe8AOs84207oWUp6zr8pQetJfVceqPiV9t8CZ4Gf2DnxXUzwuFCFonX7L2Zf/1
-    2whgR4oUgVALbgv1PAn2FvCv7RSddA70MF01/GT98RRfO5DMEkOHNF4noKBZHaLCgkg0
-    ds2DkcE7F5iErMj/hTUY8V8vPZZh4BMIaeW6GLeo8+F8dID2A+3rDh/H3O67Qz5AyoOr
-    Kx/VSTHLHuwW/sl0dnGb7+J5GRsxDdKP82wqkVY38k3g4b3hmQHzAR3iCF3Sx9wYPhfa
-    2Img==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytISr6jamATg=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a00:6020:1cfd:d104::1e4]
-    by smtp.strato.de (RZmta 47.47.0 AUTH)
-    with ESMTPSA id Icb1b0y7RBCNIdT
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Sat, 27 Aug 2022 13:12:23 +0200 (CEST)
-Message-ID: <33cab5f4-8391-a59f-0873-b359c9c13917@hartkopp.net>
-Date:   Sat, 27 Aug 2022 13:12:17 +0200
+        with ESMTP id S229745AbiH0WPz (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 27 Aug 2022 18:15:55 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5389832D8D
+        for <linux-can@vger.kernel.org>; Sat, 27 Aug 2022 15:15:53 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oS45n-00076N-9X
+        for linux-can@vger.kernel.org; Sun, 28 Aug 2022 00:15:51 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id CA5D4D5152
+        for <linux-can@vger.kernel.org>; Sat, 27 Aug 2022 22:15:50 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 9C989D514F;
+        Sat, 27 Aug 2022 22:15:50 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id d581e6bb;
+        Sat, 27 Aug 2022 22:15:50 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     linux-can@vger.kernel.org
+Cc:     John Whittington <git@jbrengineering.co.uk>
+Subject: Re: [PATCH v3 0/2] can: gs_usb: hardware timestamp support
+Date:   Sun, 28 Aug 2022 00:15:46 +0200
+Message-Id: <20220827221548.3291393-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [RFC PATCH 1/1] can: virtio: Initial virtio CAN driver.
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Harald Mommer <harald.mommer@opensynergy.com>
-Cc:     virtio-dev@lists.oasis-open.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Dariusz Stojaczyk <Dariusz.Stojaczyk@opensynergy.com>,
-        Harald Mommer <hmo@opensynergy.com>
-References: <20220825134449.18803-1-harald.mommer@opensynergy.com>
- <20220827093909.ag3zi7k525k4zuqq@pengutronix.de>
-Content-Language: en-US
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20220827093909.ag3zi7k525k4zuqq@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello,
+
+after noticing that the gs_usb firmware sends timestamps on the TX,
+too, I updated the driver and squashed the 2nd patch. Also added
+proper endianness handling to gs_usb_get_timestamp(). I allowed to add
+myself as Co-developed-by.
+
+regards,
+Marc
+
+Changes since v2: https://lore.kernel.org/all/20220827092545.2971240-1-mkl@pengutronix.de
+- new patch 1/2: use common spelling of GS_USB in macros
+- squashed both old patches into now 2/2
+- use GS_USB instead of GSUSB in macros
+- gs_usb_get_timestamp(): renamed from gs_usb_get_sof_timestamp()
+- gs_usb_get_timestamp(): take care of endianness
+- gs_usb_skb_set_timestamp(): renamed from gs_usb_set_timestamp()
+- gs_usb_set_timestamp(): add new function to add timestamp to skb
+  from struct gs_host_frame
+- add support for TX timestamps
+- gs_can_eth_ioctl(): return -EOPNOTSUPP if device doesn't support
+  GS_CAN_FEATURE_HW_TIMESTAMP
+- gs_usb_get_ts_info(): renamed from gs_usb_get_ts_info_hwts()
+- gs_usb_get_ts_info(): call can_ethtool_op_get_ts_info_hwts() if
+  device supports GS_CAN_FEATURE_HW_TIMESTAMP, call
+  ethtool_op_get_ts_info() otherwise
+
+Changes since v1: https://lore.kernel.org/all/20220826104629.2837024-1-mkl@pengutronix.de
+- add new includes sorted
+- adjust multi line comment style
+- don't use 1e6, but 1 * HZ_PER_MHZ, to fix sparse warning
+- use __le32 instead of u32 in struct classic_can_ts and canfd_ts
+- place _ts in front of _quirk in union in struct gs_host_frame
+- gs_usb_get_sof_timestamp(): pass "const struct gs_can *dev" as 1st
+  argument, not struct net_device *netdev, simplify return handling
+- gs_usb_timestamp_init(), gs_usb_timestamp_stop(),
+  gs_usb_get_ts_info_hwts(): make static
+- gs_usb_timestamp_init(): increase cc->shift to maximize precision
+- fix long lines, remove braces {} for single statement blocks
+- gs_can_open(): move check for GS_CAN_FEATURE_HW_TIMESTAMP after all
+  ctrlmode checks
+- gs_can_open(): move start polling sof timestamp after kfree(dm)
+- gs_can_close(): move stop polling sof timestamp to be symmetric with
+  respect to gs_can_open()
+- gs_usb_probe(): make calculation of dev->hf_size_rx more robost
 
 
-On 8/27/22 11:39, Marc Kleine-Budde wrote:
-> On 25.08.2022 15:44:49, Harald Mommer wrote:
->> - CAN Control
->>
->>    - "ip link set up can0" starts the virtual CAN controller,
->>    - "ip link set up can0" stops the virtual CAN controller
->>
->> - CAN RX
->>
->>    Receive CAN frames. CAN frames can be standard or extended, classic or
->>    CAN FD. Classic CAN RTR frames are supported.
->>
->> - CAN TX
->>
->>    Send CAN frames. CAN frames can be standard or extended, classic or
->>    CAN FD. Classic CAN RTR frames are supported.
->>
->> - CAN Event indication (BusOff)
->>
->>    The bus off handling is considered code complete but until now bus off
->>    handling is largely untested.
-> 
-> Is there an Open Source implementation of the host side of this
-> interface?
-> 
-> Please fix these checkpatch warnings:
-> 
-> | WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
-> | #65:
-> | new file mode 100644
-> |
-> | WARNING: Use #include <linux/atomic.h> instead of <asm/atomic.h>
-> | #105: FILE: drivers/net/can/virtio_can/virtio_can.c:7:
-> | +#include <asm/atomic.h>
-> |
-> | WARNING: __always_unused or __maybe_unused is preferred over __attribute__((__unused__))
-> | #186: FILE: drivers/net/can/virtio_can/virtio_can.c:88:
-> | +static void __attribute__((unused))
-> |
-> | WARNING: Avoid crashing the kernel - try using WARN_ON & recovery code rather than BUG() or BUG_ON()
-> | #263: FILE: drivers/net/can/virtio_can/virtio_can.c:165:
-> | +	BUG_ON(prio != 0); /* Currently only 1 priority */
-> |
-> | WARNING: Avoid crashing the kernel - try using WARN_ON & recovery code rather than BUG() or BUG_ON()
-> | #264: FILE: drivers/net/can/virtio_can/virtio_can.c:166:
-> | +	BUG_ON(atomic_read(&priv->tx_inflight[0]) >= priv->can.echo_skb_max);
-> |
-> | WARNING: Avoid crashing the kernel - try using WARN_ON & recovery code rather than BUG() or BUG_ON()
-> | #279: FILE: drivers/net/can/virtio_can/virtio_can.c:181:
-> | +	BUG_ON(prio >= VIRTIO_CAN_PRIO_COUNT);
-> |
-> | WARNING: Avoid crashing the kernel - try using WARN_ON & recovery code rather than BUG() or BUG_ON()
-> | #280: FILE: drivers/net/can/virtio_can/virtio_can.c:182:
-> | +	BUG_ON(idx >= priv->can.echo_skb_max);
-> |
-> | WARNING: Avoid crashing the kernel - try using WARN_ON & recovery code rather than BUG() or BUG_ON()
-> | #281: FILE: drivers/net/can/virtio_can/virtio_can.c:183:
-> | +	BUG_ON(atomic_read(&priv->tx_inflight[prio]) == 0);
-> |
-> | WARNING: networking block comments don't use an empty /* line, use /* Comment...
-> | #288: FILE: drivers/net/can/virtio_can/virtio_can.c:190:
-> | +/*
-> | + * Create a scatter-gather list representing our input buffer and put
-> |
-> | WARNING: networking block comments don't use an empty /* line, use /* Comment...
-> | #309: FILE: drivers/net/can/virtio_can/virtio_can.c:211:
-> | +/*
-> | + * Send a control message with message type either
-> |
-> | WARNING: networking block comments don't use an empty /* line, use /* Comment...
-> | #332: FILE: drivers/net/can/virtio_can/virtio_can.c:234:
-> | +	/*
-> | +	 * The function may be serialized by rtnl lock. Not sure.
-> |
-> | WARNING: networking block comments don't use an empty /* line, use /* Comment...
-> | #382: FILE: drivers/net/can/virtio_can/virtio_can.c:284:
-> | +/*
-> | + * See also m_can.c/m_can_set_mode()
-> |
-> | WARNING: networking block comments don't use an empty /* line, use /* Comment...
-> | #408: FILE: drivers/net/can/virtio_can/virtio_can.c:310:
-> | +/*
-> | + * Called by issuing "ip link set up can0"
-> |
-> | WARNING: networking block comments don't use an empty /* line, use /* Comment...
-> | #443: FILE: drivers/net/can/virtio_can/virtio_can.c:345:
-> | +	/*
-> | +	 * Keep RX napi active to allow dropping of pending RX CAN messages,
-> |
-> | WARNING: networking block comments don't use an empty /* line, use /* Comment...
-> | #481: FILE: drivers/net/can/virtio_can/virtio_can.c:383:
-> | +	/*
-> | +	 * No local check for CAN_RTR_FLAG or FD frame against negotiated
-> |
-> | WARNING: networking block comments don't use an empty /* line, use /* Comment...
-> | #521: FILE: drivers/net/can/virtio_can/virtio_can.c:423:
-> | +		/*
-> | +		 * May happen if
-> |
-> | WARNING: Avoid crashing the kernel - try using WARN_ON & recovery code rather than BUG() or BUG_ON()
-> | #533: FILE: drivers/net/can/virtio_can/virtio_can.c:435:
-> | +	BUG_ON(can_tx_msg->putidx < 0);
-> |
-> | WARNING: networking block comments don't use an empty /* line, use /* Comment...
-> | #613: FILE: drivers/net/can/virtio_can/virtio_can.c:515:
-> | +		/*
-> | +		 * Here also frames with result != VIRTIO_CAN_RESULT_OK are
-> |
-> | WARNING: networking block comments don't use an empty /* line, use /* Comment...
-> | #646: FILE: drivers/net/can/virtio_can/virtio_can.c:548:
-> | +/*
-> | + * Poll TX used queue for sent CAN messages
-> |
-> | WARNING: networking block comments don't use an empty /* line, use /* Comment...
-> | #675: FILE: drivers/net/can/virtio_can/virtio_can.c:577:
-> | +/*
-> | + * This function is the NAPI RX poll function and NAPI guarantees that this
-> |
-> | WARNING: Avoid crashing the kernel - try using WARN_ON & recovery code rather than BUG() or BUG_ON()
-> | #698: FILE: drivers/net/can/virtio_can/virtio_can.c:600:
-> | +	BUG_ON(len < header_size);
-> |
-> | WARNING: networking block comments don't use an empty /* line, use /* Comment...
-> | #813: FILE: drivers/net/can/virtio_can/virtio_can.c:715:
-> | +/*
-> | + * See m_can_poll() / m_can_handle_state_errors() m_can_handle_state_change().
-> |
-> | WARNING: networking block comments don't use an empty /* line, use /* Comment...
-> | #855: FILE: drivers/net/can/virtio_can/virtio_can.c:757:
-> | +/*
-> | + * Poll RX used queue for received CAN messages
-> |
-> | WARNING: networking block comments don't use an empty /* line, use /* Comment...
-> | #897: FILE: drivers/net/can/virtio_can/virtio_can.c:799:
-> | +		/*
-> | +		 * The interrupt function is not assumed to be interrupted by
-> |
-> | WARNING: Avoid crashing the kernel - try using WARN_ON & recovery code rather than BUG() or BUG_ON()
-> | #904: FILE: drivers/net/can/virtio_can/virtio_can.c:806:
-> | +		BUG_ON(len < sizeof(struct virtio_can_event_ind));
-> |
-> | WARNING: networking block comments don't use an empty /* line, use /* Comment...
-> | #966: FILE: drivers/net/can/virtio_can/virtio_can.c:868:
-> | +	/*
-> | +	 * The order of RX and TX is exactly the opposite as in console and
-> |
-> | WARNING: Avoid crashing the kernel - try using WARN_ON & recovery code rather than BUG() or BUG_ON()
-> | #976: FILE: drivers/net/can/virtio_can/virtio_can.c:878:
-> | +	BUG_ON(!priv);
-> |
-> | WARNING: Avoid crashing the kernel - try using WARN_ON & recovery code rather than BUG() or BUG_ON()
-> | #977: FILE: drivers/net/can/virtio_can/virtio_can.c:879:
-> | +	BUG_ON(!priv->vdev);
-> |
-> | WARNING: networking block comments don't use an empty /* line, use /* Comment...
-> | #1004: FILE: drivers/net/can/virtio_can/virtio_can.c:906:
-> | +	/*
-> | +	 * From here we have dead silence from the device side so no locks
-> |
-> | WARNING: networking block comments don't use an empty /* line, use /* Comment...
-> | #1025: FILE: drivers/net/can/virtio_can/virtio_can.c:927:
-> | +	/*
-> | +	 * Is keeping track of allocated elements by an own linked list
-> |
-> | WARNING: Avoid crashing the kernel - try using WARN_ON & recovery code rather than BUG() or BUG_ON()
-> | #1060: FILE: drivers/net/can/virtio_can/virtio_can.c:962:
-> | +	BUG_ON(!vdev);
-> |
-> | WARNING: networking block comments don't use an empty /* line, use /* Comment...
-> | #1063: FILE: drivers/net/can/virtio_can/virtio_can.c:965:
-> | +	/*
-> | +	 * CAN needs always access to the config space.
-> |
-> | WARNING: Avoid crashing the kernel - try using WARN_ON & recovery code rather than BUG() or BUG_ON()
-> | #1090: FILE: drivers/net/can/virtio_can/virtio_can.c:992:
-> | +	BUG_ON(!vdev);
-> |
-> | WARNING: networking block comments don't use an empty /* line, use /* Comment...
-> | #1144: FILE: drivers/net/can/virtio_can/virtio_can.c:1046:
-> | +	/*
-> | +	 * It is possible to consider the number of TX queue places to
-> |
-> | WARNING: networking block comments don't use an empty /* line, use /* Comment...
-> | #1185: FILE: drivers/net/can/virtio_can/virtio_can.c:1087:
-> | +/*
-> | + * Compare with m_can.c/m_can_suspend(), virtio_net.c/virtnet_freeze() and
-> |
-> | WARNING: networking block comments don't use an empty /* line, use /* Comment...
-> | #1210: FILE: drivers/net/can/virtio_can/virtio_can.c:1112:
-> | +/*
-> | + * Compare with m_can.c/m_can_resume(), virtio_net.c/virtnet_restore() and
-> |
-> | WARNING: Prefer "GPL" over "GPL v2" - see commit bf7fbeeae6db ("module: Cure the MODULE_LICENSE "GPL" vs. "GPL v2" bogosity")
-> | #1273: FILE: drivers/net/can/virtio_can/virtio_can.c:1175:
-> | +MODULE_LICENSE("GPL v2");
-
-Btw. @Harald:
-
-When you want to express your code to be GPLv2 why is your code GPL-2.0+ 
-then?
-
-diff --git a/drivers/net/can/virtio_can/virtio_can.c 
-b/drivers/net/can/virtio_can/virtio_can.c
-new file mode 100644
-index 000000000000..dafbe5a36511
---- /dev/null
-+++ b/drivers/net/can/virtio_can/virtio_can.c
-@@ -0,0 +1,1176 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * CAN bus driver for the Virtio CAN controller
-+ * Copyright (C) 2021 OpenSynergy GmbH
-+ */
-
-Best regards,
-Oliver
-
-> |
-> | WARNING: From:/Signed-off-by: email address mismatch: 'From: Harald Mommer <harald.mommer@opensynergy.com>' != 'Signed-off-by: Harald Mommer <hmo@opensynergy.com>'
-> |
-> | total: 0 errors, 38 warnings, 1275 lines checked
-> 
-> regards,
-> Marc
-> 
