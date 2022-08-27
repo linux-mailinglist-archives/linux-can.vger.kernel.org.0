@@ -2,65 +2,51 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D1395A3621
-	for <lists+linux-can@lfdr.de>; Sat, 27 Aug 2022 11:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C21EA5A364C
+	for <lists+linux-can@lfdr.de>; Sat, 27 Aug 2022 11:25:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233171AbiH0JDC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 27 Aug 2022 05:03:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37262 "EHLO
+        id S233317AbiH0JZw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 27 Aug 2022 05:25:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233152AbiH0JC4 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 27 Aug 2022 05:02:56 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9845A286E5;
-        Sat, 27 Aug 2022 02:02:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1661590954;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=xsJJDT05zwrS62WUvKCZ4ErvGOIqvTn3kjzwl1anUsA=;
-    b=C2GcM/yBwMX/Yw6MzOYk8Ba9Yo5pBBEKV4aXpBzAw7CvsZxAv4JiOznr0RbmdwXPCZ
-    SxjgjTrHzG+PiwM8exoFP2I/O/W8rr2JtJTUrs7LRWAewq1x1Be8GdsdS8ZkZb1050ZU
-    1EqeyIY5DCW9NbxVKFPq/k5OEZRvcwWvlY11Y8wwpT5zr9wPUwHk2PDvq06Bq6dRgmQf
-    F+rEIozvT8h+WYFY7/abMM22AzChHyeb+CjeCEQ1Bbn84D8ZyQArrfCovs8g2bR48e5R
-    YUkMtp5UrqiVVqIKGq+yU+12n/kN7n/EIAyO1l801WamigertEcIqOrmyDrnYPrkab8x
-    5rIQ==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytISr6jamATg=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a00:6020:1cfd:d104::1e4]
-    by smtp.strato.de (RZmta 47.47.0 AUTH)
-    with ESMTPSA id Icb1b0y7R92XIVi
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Sat, 27 Aug 2022 11:02:33 +0200 (CEST)
-Message-ID: <b19f3d7e-9439-5c2b-c731-e5eaef37442d@hartkopp.net>
-Date:   Sat, 27 Aug 2022 11:02:28 +0200
+        with ESMTP id S229737AbiH0JZv (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 27 Aug 2022 05:25:51 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F09F75486
+        for <linux-can@vger.kernel.org>; Sat, 27 Aug 2022 02:25:50 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oRs4a-0001UU-Jw
+        for linux-can@vger.kernel.org; Sat, 27 Aug 2022 11:25:48 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 104CFD4E6A
+        for <linux-can@vger.kernel.org>; Sat, 27 Aug 2022 09:25:48 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id CE7EAD4E67;
+        Sat, 27 Aug 2022 09:25:47 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 84ce0224;
+        Sat, 27 Aug 2022 09:25:47 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     linux-can@vger.kernel.org
+Cc:     John Whittington <git@jbrengineering.co.uk>
+Subject: [PATCH v2 0/2] can: gs_usb: hardware timestamp support
+Date:   Sat, 27 Aug 2022 11:25:43 +0200
+Message-Id: <20220827092545.2971240-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [RFC PATCH 1/1] can: virtio: Initial virtio CAN driver.
-To:     Harald Mommer <harald.mommer@opensynergy.com>,
-        virtio-dev@lists.oasis-open.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Dariusz Stojaczyk <Dariusz.Stojaczyk@opensynergy.com>,
-        Harald Mommer <hmo@opensynergy.com>
-References: <20220825134449.18803-1-harald.mommer@opensynergy.com>
-Content-Language: en-US
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20220825134449.18803-1-harald.mommer@opensynergy.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,214 +54,35 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Harald,
+Hello,
 
-On 8/25/22 15:44, Harald Mommer wrote:
+here's promised v2 of John's series.
 
-> +/*
-> + * This function is the NAPI RX poll function and NAPI guarantees that this
-> + * function is not invoked simulataneously on multiply processors.
-> + * Read a RX message from the used queue and sends it to the upper layer.
-> + * (See also m_can.c / m_can_read_fifo()).
-> + */
-> +static int virtio_can_read_rx_queue(struct virtqueue *vq)
-> +{
-> +	struct virtio_can_priv *priv = vq->vdev->priv;
-> +	struct net_device *dev = priv->dev;
-> +	struct net_device_stats *stats = &dev->stats;
-> +	struct virtio_can_rx *can_rx;
-> +	struct canfd_frame *cf;
-> +	struct sk_buff *skb;
-> +	unsigned int len;
-> +	const unsigned int header_size = offsetof(struct virtio_can_rx, sdu);
-> +	u16 msg_type;
-> +	u32 can_flags;
-> +	u32 can_id;
-> +
-> +	can_rx = virtqueue_get_buf(vq, &len);
-> +	if (!can_rx)
-> +		return 0; /* No more data */
-> +
-> +	BUG_ON(len < header_size);
-> +
-> +	/* virtio_can_hexdump(can_rx, len, 0u); */
-> +
-> +	if (priv->can.state >= CAN_STATE_ERROR_PASSIVE) {
-> +		netdev_dbg(dev, "%s(): Controller not active\n", __func__);
-> +		goto putback;
-> +	}
-> +
-> +	msg_type = le16_to_cpu(can_rx->msg_type);
-> +	if (msg_type != VIRTIO_CAN_RX) {
-> +		netdev_warn(dev, "RX: Got unknown msg_type %04x\n", msg_type);
-> +		goto putback;
-> +	}
-> +
-> +	len -= header_size; /* Payload only now */
-> +	can_flags = le32_to_cpu(can_rx->flags);
-> +	can_id = le32_to_cpu(can_rx->can_id);
-> +
-> +	if ((can_flags & ~CAN_KNOWN_FLAGS) != 0u) {
+John, feel free to take it from here on and fix the problem in patch 2
+(add missing S-o-b and make gs_can_eth_ioctl() respect
+GS_CAN_FEATURE_HW_TIMESTAMP).
 
-For your entire patch:
+regards,
+Marc
 
-Please remove this pointless " != 0u)" stuff.
-
-	if (can_flags & ~CAN_KNOWN_FLAGS) {
-
-is just ok.
-
-> +		stats->rx_dropped++;
-> +		netdev_warn(dev, "RX: CAN Id 0x%08x: Invalid flags 0x%x\n",
-> +			    can_id, can_flags);
-> +		goto putback;
-> +	}
-> +
-> +	if ((can_flags & VIRTIO_CAN_FLAGS_EXTENDED) != 0u) {
-
-e.g. here too ...
-
-> +		if (can_id > CAN_EFF_MASK) {
-
-The MASK is not a number value.
-
-The check should be
-
-if (can_id & ~CAN_EFF_MASK) {
-
-or you simply mask the can_id value to be really sure without the 
-netdev_warn() stuff.
-
-Are you sure that you could get undefined CAN ID values here?
-
-> +			stats->rx_dropped++;
-> +			netdev_warn(dev, "RX: CAN Ext Id 0x%08x too big\n",
-
-As it is no value 'too big' is not the right comment here.
-
-> +				    can_id);
-> +			goto putback;
-> +		}
-> +		can_id |= CAN_EFF_FLAG;
-> +	} else {
-> +		if (can_id > CAN_SFF_MASK) {
-
-same here
-
-> +			stats->rx_dropped++;
-> +			netdev_warn(dev, "RX: CAN Std Id 0x%08x too big\n",
-
-and here
-
-> +				    can_id);
-> +			goto putback;
-> +		}
-> +	}
-> +
-> +	if ((can_flags & VIRTIO_CAN_FLAGS_RTR) != 0u) {
-> +		if (!virtio_has_feature(vq->vdev, VIRTIO_CAN_F_RTR_FRAMES)) {
-> +			stats->rx_dropped++;
-> +			netdev_warn(dev, "RX: CAN Id 0x%08x: RTR not negotiated\n",
-> +				    can_id);
-> +			goto putback;
-> +		}
-> +		if ((can_flags & VIRTIO_CAN_FLAGS_FD) != 0u) {
-> +			stats->rx_dropped++;
-> +			netdev_warn(dev, "RX: CAN Id 0x%08x: RTR with FD not possible\n",
-> +				    can_id);
-> +			goto putback;
-> +		}
-> +		if (len != 0u) {
-> +			stats->rx_dropped++;
-> +			netdev_warn(dev, "RX: CAN Id 0x%08x: RTR with len != 0\n",
-> +				    can_id);
-
-This is not the right handling.
-
-Classical CAN frames with RTR bit set can have a DLC value from 0 .. F 
-which is represented in
-
-can_frame.len (for values 0 .. 8)
-can_frame.len8_dlc (values 9 .. F; len must be 8)
-
-With the RTR bit set, the CAN controller does not send CAN data, but the 
-DLC value is set from 0 .. F.
-
-> +			goto putback;
-> +		}
-> +		can_id |= CAN_RTR_FLAG;
-> +	}
-> +
-> +	if ((can_flags & VIRTIO_CAN_FLAGS_FD) != 0u) {
-> +		if (!virtio_has_feature(vq->vdev, VIRTIO_CAN_F_CAN_FD)) {
-> +			stats->rx_dropped++;
-> +			netdev_warn(dev, "RX: CAN Id 0x%08x: FD not negotiated\n",
-> +				    can_id);
-> +			goto putback;
-> +		}
-> +
-> +		skb = alloc_canfd_skb(priv->dev, &cf);
-> +		if (len > CANFD_MAX_DLEN)
-> +			len = CANFD_MAX_DLEN;
-
-No netdev_warn() here? ;-)
-
-When you silently sanitize the length value here, you should do the same 
-with the can_id checks above and simply do a masking like
-
-can_id &= CAN_SFF_MASK or can_id &= CAN_EFF_MASK
+Changes since v1: https://lore.kernel.org/all/20220826104629.2837024-1-mkl@pengutronix.de
+- add new includes sorted
+- adjust multi line comment style
+- don't use 1e6, but 1 * HZ_PER_MHZ, to fix sparse warning
+- use __le32 instead of u32 in struct classic_can_ts and canfd_ts
+- place _ts in front of _quirk in union in struct gs_host_frame
+- gs_usb_get_sof_timestamp(): pass "const struct gs_can *dev" as 1st
+  argument, not struct net_device *netdev, simplify return handling
+- gs_usb_timestamp_init(), gs_usb_timestamp_stop(),
+  gs_usb_get_ts_info_hwts(): make static
+- gs_usb_timestamp_init(): increase cc->shift to maximize precision
+- fix long lines, remove braces {} for single statement blocks
+- gs_can_open(): move check for GS_CAN_FEATURE_HW_TIMESTAMP after all
+  ctrlmode checks
+- gs_can_open(): move start polling sof timestamp after kfree(dm)
+- gs_can_close(): move stop polling sof timestamp to be symmetric with
+  respect to gs_can_open()
+- gs_usb_probe(): make calculation of dev->hf_size_rx more robost
 
 
-> +	} else {
-> +		if (!virtio_has_feature(vq->vdev, VIRTIO_CAN_F_CAN_CLASSIC)) {
-> +			stats->rx_dropped++;
-> +			netdev_warn(dev, "RX: CAN Id 0x%08x: classic not negotiated\n",
-> +				    can_id);
-> +			goto putback;
-> +		}
-> +
-> +		skb = alloc_can_skb(priv->dev, (struct can_frame **)&cf);
-> +		if (len > CAN_MAX_DLEN)
-> +			len = CAN_MAX_DLEN;
-> +	}
-> +	if (!skb) {
-> +		stats->rx_dropped++;
-> +		netdev_warn(dev, "RX: No skb available\n");
-> +		goto putback;
-> +	}
-> +
-> +	cf->can_id = can_id;
-> +	cf->len = len;
-> +	if ((can_flags & VIRTIO_CAN_FLAGS_RTR) == 0u) {
-> +		/* Copy if no RTR frame. RTR frames have a DLC but no payload */
-> +		memcpy(cf->data, can_rx->sdu, len);
-
-This would need some rework together with the RTR handling too.
-
-> +	}
-> +
-> +	stats->rx_packets++;
-> +	stats->rx_bytes += cf->len;
-> +
-> +	/* Use netif_rx() for interrupt context */
-
-?? What is this comment about?
-
-> +	(void)netif_receive_skb(skb);
-
-Why this "(void)" here and at other places in the patch? Please remove.
-
-Is there no error handling needed when netif_receive_skb() fails? Or ar 
-least some statistics rollback?
-
-> +
-> +putback:
-> +	/* Put processed RX buffer back into avail queue */
-> +	(void)virtio_can_add_inbuf(vq, can_rx, sizeof(struct virtio_can_rx));
-> +
-> +	return 1; /* Queue was not emtpy so there may be more data */
-> +}
-
-Best regards,
-Oliver
 
