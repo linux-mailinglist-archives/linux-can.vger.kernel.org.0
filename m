@@ -2,50 +2,78 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 725DE5A3A3A
-	for <lists+linux-can@lfdr.de>; Sun, 28 Aug 2022 00:23:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09C3F5A3DC2
+	for <lists+linux-can@lfdr.de>; Sun, 28 Aug 2022 15:33:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229532AbiH0WXA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 27 Aug 2022 18:23:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52520 "EHLO
+        id S229721AbiH1Ndl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 28 Aug 2022 09:33:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiH0WXA (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 27 Aug 2022 18:23:00 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B93356FF
-        for <linux-can@vger.kernel.org>; Sat, 27 Aug 2022 15:22:59 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oS4Cf-0007ej-5y; Sun, 28 Aug 2022 00:22:57 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 8BA12D5166;
-        Sat, 27 Aug 2022 22:22:55 +0000 (UTC)
-Date:   Sun, 28 Aug 2022 00:22:53 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org
-Cc:     John Whittington <git@jbrengineering.co.uk>,
-        Peter Fink <pfink@christ-es.de>,
-        Christoph =?utf-8?Q?M=C3=B6hring?= <cmoehring@christ-es.de>
-Subject: Re: [PATCH v3 0/2] can: gs_usb: hardware timestamp support
-Message-ID: <20220827222253.2r7nydujnquubsgy@pengutronix.de>
-References: <20220827221548.3291393-1-mkl@pengutronix.de>
+        with ESMTP id S229498AbiH1Ndk (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 28 Aug 2022 09:33:40 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B770924F11
+        for <linux-can@vger.kernel.org>; Sun, 28 Aug 2022 06:33:38 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id cu2so11053133ejb.0
+        for <linux-can@vger.kernel.org>; Sun, 28 Aug 2022 06:33:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=DNUvT1ZZ3fFrLVQIyi9us/iFYLs4Qz0Ypyc3D33P4jw=;
+        b=RwRoWd9AYF8OGCjv58SePtwQnPalN5pnfcu2PcXDc0X7SEZ27f2l6auvNoy6bXv/f3
+         s1Jz5d6OXF0ydCOHiLCPggZ95FgKN7QL6W+ILfKCFECPetB1kiMS2E8RRcVVgX0n6TZj
+         CPBbEDkleISRtbCLdgimRmsY6T0ErgmyzHeAA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=DNUvT1ZZ3fFrLVQIyi9us/iFYLs4Qz0Ypyc3D33P4jw=;
+        b=QrFCcU4/y6ZoKT9Kk5NZwD0OeODqntpq/26JWuF2Q3w28axXNi3JNMXoqGw3Vj0frg
+         b16j4+h4ODUsUh+/oTPweBH9ABp7atrVw1plt0jatsOPmmsOYPSvNjSBFeCUHy3HHVI0
+         +OmC0bQnr3bQK28hayPK+IPr+k0K2p++anLd22uRugdJQ5XVQdiNec9TCTPxZoQ/cHrp
+         221xlVJ2vY8JQdI5FT/s05SG8Z+fj/gG5+r+D7JMh2XdRFpX9mD3acDt6qY3CmgpcGOd
+         mvyCga4zLhwHGRUUrbghNL2gqWpN/RJYi+besTe1bEFlcOvOHYVnZbhOgdETU42ZXjd2
+         j6Ow==
+X-Gm-Message-State: ACgBeo1ku0MwekhXeNYqUNpuuhmrhCkSDp76Apvp39GrDjAYQFoKb9i5
+        Q4gVKbeKynfU2aQ+6S1mw8yMNa7ehyN5rQ==
+X-Google-Smtp-Source: AA6agR589FF7S2UjahMF8q4laiggfgapRLShsh241BpWLPPW6mBtYh3v02vIrAfWhFEGX8XoEZ4PZQ==
+X-Received: by 2002:a17:907:6d24:b0:731:7720:bb9b with SMTP id sa36-20020a1709076d2400b007317720bb9bmr10836381ejc.717.1661693617054;
+        Sun, 28 Aug 2022 06:33:37 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-79-31-31-9.retail.telecomitalia.it. [79.31.31.9])
+        by smtp.gmail.com with ESMTPSA id u26-20020a1709064ada00b007313a25e56esm3247669ejt.29.2022.08.28.06.33.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 Aug 2022 06:33:36 -0700 (PDT)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        michael@amarulasolutions.com,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-can@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org
+Subject: [RFC PATCH v3 0/4] can: bxcan: add support for ST bxCAN controller
+Date:   Sun, 28 Aug 2022 15:33:25 +0200
+Message-Id: <20220828133329.793324-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="a453ieb2tzysj4ff"
-Content-Disposition: inline
-In-Reply-To: <20220827221548.3291393-1-mkl@pengutronix.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,45 +81,94 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+The series adds support for the basic extended CAN controller (bxCAN)
+found in many low- to middle-end STM32 SoCs.
 
---a453ieb2tzysj4ff
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The driver design (one core module and one driver module) was inspired
+by other ST drivers (e. g. drivers/iio/adc/stm32-adc.c,
+drivers/iio/adc/stm32-adc-core.c) where device instances share resources.
+The shared resources functions are implemented in the core module, the
+device driver in a separate module.
 
-Adding Peter and Christoph on Cc.
+The driver has been tested on the stm32f469i-discovery board with a
+kernel version 5.19.0-rc2 in loopback + silent mode:
 
-On 28.08.2022 00:15:46, Marc Kleine-Budde wrote:
-> after noticing that the gs_usb firmware sends timestamps on the TX,
-> too, I updated the driver and squashed the 2nd patch. Also added
-> proper endianness handling to gs_usb_get_timestamp(). I allowed to add
-> myself as Co-developed-by.
+ip link set can0 type can bitrate 125000 loopback on listen-only on
+ip link set up can0
+candump can0 -L &
+cansend can0 300#AC.AB.AD.AE.75.49.AD.D1
 
-Peter, Christoph, does the CES CANext FD support timestamps? Are you
-planing to add TS support?
+For uboot and kernel compilation, as well as for rootfs creation I used
+buildroot:
 
-regards,
-Marc
+make stm32f469_disco_sd_defconfig
+make
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+but I had to patch can-utils and busybox as can-utils and iproute are
+not compiled for MMU-less microcotrollers. In the case of can-utils,
+replacing the calls to fork() with vfork(), I was able to compile the
+package with working candump and cansend applications, while in the
+case of iproute, I ran into more than one problem and finally I decided
+to extend busybox's ip link command for CAN-type devices. I'm still
+wondering if it was really necessary, but this way I was able to test
+the driver.
 
---a453ieb2tzysj4ff
-Content-Type: application/pgp-signature; name="signature.asc"
+Changes in v3:
+- Remove 'Dario Binacchi <dariobin@libero.it>' SOB.
+- Add description to the parent of the two child nodes.
+- Move "patterProperties:" after "properties: in top level before "required".
+- Add "clocks" to the "required:" list of the child nodes.
+- Remove 'Dario Binacchi <dariobin@libero.it>' SOB.
+- Add "clocks" to can@0 node.
+- Remove 'Dario Binacchi <dariobin@libero.it>' SOB.
+- Remove a blank line.
+- Remove 'Dario Binacchi <dariobin@libero.it>' SOB.
+- Fix the documentation file path in the MAINTAINERS entry.
+- Do not increment the "stats->rx_bytes" if the frame is remote.
+- Remove pr_debug() call from bxcan_rmw().
 
------BEGIN PGP SIGNATURE-----
+Changes in v2:
+- Change the file name into 'st,stm32-bxcan-core.yaml'.
+- Rename compatibles:
+  - st,stm32-bxcan-core -> st,stm32f4-bxcan-core
+  - st,stm32-bxcan -> st,stm32f4-bxcan
+- Rename master property to st,can-master.
+- Remove the status property from the example.
+- Put the node child properties as required.
+- Remove a blank line.
+- Fix sparse errors.
+- Create a MAINTAINERS entry.
+- Remove the print of the registers address.
+- Remove the volatile keyword from bxcan_rmw().
+- Use tx ring algorithm to manage tx mailboxes.
+- Use can_{get|put}_echo_skb().
+- Update DT properties.
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmMKmToACgkQrX5LkNig
-011JawgAjA40EhJ95gV0bd9F1cHNAYes58lYvkE1wLKgtW3MB53mnZy4EYFgOAgh
-dciD0m6aPCp677SVp5zw7wWhY8PaF6oZWYp+xpDl349k5bQ8bl20xvZ0RXsB86/C
-6e6yDkXtdUSRg41uvYQpD2py0IQCqO8HhBYzWGt+qknTOe6UOBXn++oJB8t/dA7M
-5W6FGcguiPAiPx31cm2OkZ0Iws8bsKosTy03fLy73gUD6ajfxNhHpRgGXjSp5OcG
-Md+amey1MTW6PDHEOWq5SsTKsWmvhnNjnhFROchzwd7SHYm4PhqKliSYg5N2BF2U
-rJgk/4Ha98KYXn+mt4BWueU6wNk72A==
-=hU3v
------END PGP SIGNATURE-----
+Dario Binacchi (4):
+  dt-bindings: net: can: add STM32 bxcan DT bindings
+  ARM: dts: stm32: add CAN support on stm32f429
+  ARM: dts: stm32: add pin map for CAN controller on stm32f4
+  can: bxcan: add support for ST bxCAN controller
 
---a453ieb2tzysj4ff--
+ .../bindings/net/can/st,stm32-bxcan.yaml      |  142 +++
+ MAINTAINERS                                   |    7 +
+ arch/arm/boot/dts/stm32f4-pinctrl.dtsi        |   30 +
+ arch/arm/boot/dts/stm32f429.dtsi              |   31 +
+ drivers/net/can/Kconfig                       |    1 +
+ drivers/net/can/Makefile                      |    1 +
+ drivers/net/can/bxcan/Kconfig                 |   34 +
+ drivers/net/can/bxcan/Makefile                |    4 +
+ drivers/net/can/bxcan/bxcan-core.c            |  200 ++++
+ drivers/net/can/bxcan/bxcan-core.h            |   31 +
+ drivers/net/can/bxcan/bxcan-drv.c             | 1045 +++++++++++++++++
+ 11 files changed, 1526 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/can/st,stm32-bxcan.yaml
+ create mode 100644 drivers/net/can/bxcan/Kconfig
+ create mode 100644 drivers/net/can/bxcan/Makefile
+ create mode 100644 drivers/net/can/bxcan/bxcan-core.c
+ create mode 100644 drivers/net/can/bxcan/bxcan-core.h
+ create mode 100644 drivers/net/can/bxcan/bxcan-drv.c
+
+-- 
+2.32.0
+
