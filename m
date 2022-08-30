@@ -2,125 +2,115 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C98D95A6CB2
-	for <lists+linux-can@lfdr.de>; Tue, 30 Aug 2022 21:03:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 661D05A6CE5
+	for <lists+linux-can@lfdr.de>; Tue, 30 Aug 2022 21:15:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbiH3TDY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 30 Aug 2022 15:03:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54514 "EHLO
+        id S230245AbiH3TPa (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 30 Aug 2022 15:15:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbiH3TDX (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 30 Aug 2022 15:03:23 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317425925B
-        for <linux-can@vger.kernel.org>; Tue, 30 Aug 2022 12:03:22 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id bn9so12365399ljb.6
-        for <linux-can@vger.kernel.org>; Tue, 30 Aug 2022 12:03:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=gXK/wYTrdjw1OFwGZvQGSVF4ZM2/PXgjnzR2P4z9JVU=;
-        b=RfyVD3awpAa0llxye9rwb8D/ncwSK7kal8kbOTuM8IbDZFVDp3nkj1DLplToMDLPH9
-         29f5OmifJuPUSCaaEHSautt/YWR1ko394Ac4+Ke0yY9H8LAKIKnGvXOra5p9wX83TobH
-         NC+3MQoXk+6m+I67DPYLhh4r3IBHjXl796aNlSoHAxzoi9U7xscBQorR3pulfB4bkwLV
-         zaVyrK2txt0sbDMiOJ57bjrByubi+NWvB97jNTBLHnzP57aUdknZ7o2zUn9M2GeojJqg
-         VsxHRqHM4b3XJrCDpFHi8Qkqhh+fuabfsP4hykouZxs3r5PGUipSMx8rhjE+Q44E0Cww
-         WJOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=gXK/wYTrdjw1OFwGZvQGSVF4ZM2/PXgjnzR2P4z9JVU=;
-        b=LgGf9vR3aTL+sXAGFhucQ97X/fPjnaVpt6kDXBAZHGHIkDnjZvr9a7OrPq9aCangXu
-         A4Y1g6RcFnfojZviSESPy35/3TX8dhx/sS2xyVSnuSoVUePMXgIGeNEcRPNeg8L2XDA9
-         8VaFlQPewirIWarjFq65/dJnHk30FlgDwRDm2QyzYGBZHEvBE2jrEGKaRKcLizPOcdXq
-         /PAsvg7DvVrKPuB9AiMqCATlNms6oUsI2OXcfjKhkzpjOyikg+Ym5f5CBASBhoDzrlmI
-         kRnJLekXX6qLtnQmqgCIvfKH83ZlyuiI0rUjdThpMU028pGKoWm7x9mSCjuep+6npN8s
-         ohfw==
-X-Gm-Message-State: ACgBeo0rvWnVrCmpsgIF0Ki3wXeCk07NQXfXp0uQ00uz4qlWxWylsXhx
-        DLG6+rGtl9qQnWV9ATbyBsccpQ==
-X-Google-Smtp-Source: AA6agR7XX821cAlmC8c6TzfFWW/lCcMRA71i63MiH9w6y67HfOTP74/INxmWqpqcMogEbXBBQEmDJQ==
-X-Received: by 2002:a2e:b0f9:0:b0:266:d31e:3061 with SMTP id h25-20020a2eb0f9000000b00266d31e3061mr2075012ljl.391.1661886200513;
-        Tue, 30 Aug 2022 12:03:20 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id z9-20020a056512308900b00492f21c161esm1691923lfd.123.2022.08.30.12.03.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 12:03:19 -0700 (PDT)
-Message-ID: <1ef5dbd4-806f-ac1d-0ad5-0f8359a560de@linaro.org>
-Date:   Tue, 30 Aug 2022 22:03:18 +0300
+        with ESMTP id S230020AbiH3TP3 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 30 Aug 2022 15:15:29 -0400
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.219])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 872E34505D
+        for <linux-can@vger.kernel.org>; Tue, 30 Aug 2022 12:15:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1661886922;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
+    Subject:Sender;
+    bh=WUEQ+eMBiHkpQAl3LHj1qjSUD1iAPAj8pJbwiSH3Nb4=;
+    b=cn55VwwfSdCw/G6JGt/Q78bnHGpXVM5irr+nyVh3eJ9+bwA3gO6Atyu6A9dHJmHmQk
+    QfvwQoeI4UOy7oGbG7oXLaWrz5o7U2YjXTqcZtPMR20D5d/dH+KZCDTgqNhq3IKRQTid
+    BiEUFrk16DaPKg++zMty0o/x4ngukxGY9m+41q2BI4SEvNkjN/cw3WqkhkOVdimFRPSh
+    eMQ0BeVUYYaOjA3leStK7MZcKD8/ojM//nH3DXKsCsBc44AR7ef/ZrSAjs31C6u4COnx
+    PmjJqOoL52FllfCoPXZ3hLR8uPxzusPv0Q2hKFSrObAYCzp7zmjtAhrEWzIPVajOcYn6
+    ccSw==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytISr63rQm6g=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a00:6020:1cfd:d104::b82]
+    by smtp.strato.de (RZmta 47.47.0 AUTH)
+    with ESMTPSA id Icb1b0y7UJFMQP8
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Tue, 30 Aug 2022 21:15:22 +0200 (CEST)
+Message-ID: <df1d220e-bf99-1051-ca90-5bd52e6c64e7@hartkopp.net>
+Date:   Tue, 30 Aug 2022 21:15:15 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v3 1/3] dt-bindings: can: nxp,sja1000: Document RZ/N1
- power-domains support
+ Thunderbird/91.12.0
+Subject: Re: CM-ITC, pch_can/c_can_pci, sendto() returning ENOBUFS
 Content-Language: en-US
-To:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-References: <20220830164518.1381632-1-biju.das.jz@bp.renesas.com>
- <20220830164518.1381632-2-biju.das.jz@bp.renesas.com>
- <23539312-caaa-78f0-cd6c-899a826f9947@linaro.org>
- <OS0PR01MB592292E8BE619470F4C621A186799@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <OS0PR01MB592292E8BE619470F4C621A186799@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Jacob Kroon <jacob.kroon@gmail.com>, linux-can@vger.kernel.org,
+        wg@grandegger.com, mkl@pengutronix.de
+References: <15a8084b-9617-2da1-6704-d7e39d60643b@gmail.com>
+ <403e18fe-8695-cd56-38f3-0ffe3ec9e472@gmail.com>
+ <36d0419b-297f-8e39-8843-051b55b8a2bb@gmail.com>
+ <986401a8-5f5a-0705-82c4-4df339509e07@gmail.com>
+ <556866e2-a3aa-9077-8db7-edc4ced69491@hartkopp.net>
+ <f8a95bfb-b1c2-cd41-1106-ca739c438fb9@gmail.com>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <f8a95bfb-b1c2-cd41-1106-ca739c438fb9@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 30/08/2022 20:47, Biju Das wrote:
-> Hi Krzysztof Kozlowski,
-> 
-> Thanks for the feedback.
-> 
->> Subject: Re: [PATCH v3 1/3] dt-bindings: can: nxp,sja1000: Document
->> RZ/N1 power-domains support
+Hi Jacob,
+
+On 30.08.22 14:59, Jacob Kroon wrote:
+
+> On 8/29/22 15:53, Oliver Hartkopp wrote:
+
+>> Regarding your problem:
+>> "BUG! echo_skb 0 is occupied" should never show up but I wonder if you 
+>> probably have another CAN specific problem with your setup.
 >>
->> On 30/08/2022 19:45, Biju Das wrote:
->>> Document RZ/N1 power-domains support. Also update the example with
->>> power-domains property.
->>>
->>> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
->>> ---
->>> v3:
->>>  * Documented power-domains support.
+>> Did you set up a CAN network with at least two CAN nodes, identical 
+>> bitrate settings and 2x120 Ohms (== 60 Ohms) termination between CAN_L 
+>> and CAN_H?
 >>
->> You made them required, so it would be nice to see reason in such
->> change. The commit msg says only what you did, but not why you did it.
 > 
-> It is simple. As you see from [1] and [2] power-domains are enabled by default in RZ/N1 SoC.
-> So there is nothing prevent us to document this property for all IP's present in
-> RZ/N1 SoC.
+> I have double checked that both endpoints of the network are terminated 
+> with 120Ohm resistors, and when I check CAN_H/CAN_L in an oscilloscope 
+> they look ok, and within the spec. voltage levels.
 
-Any explanation I expect to see in commit msg.
+https://www.compulab.com/wp-content/uploads/2011/08/CM-iTC-Reference-Guide.pdf
 
-Anyway you referred to Linux drivers, which is not actually a reason.
-What if some device is not in a power domain?
+"it is necessary to add transceiver
+hardware (see the SB-iTC reference schematic)"
 
-Best regards,
-Krzysztof
+I assume you have a transceiver, right? ;-)
+
+What is the other endpoint? The EG20T and another (automotive) ECU?
+
+>> Do you have another CAN node which can be attached to the EG20T setup 
+>> (e.g. some ECU or an USB CAN adapter)?
+> 
+> Yes I do have a CAN analyser from Microchip. I guess I can record all 
+> traffic with the analyzer, and compare it to what I see with "candump 
+> can0" on the host. Or do you have some other suggestion ?
+
+Yes, please add the CAN analyzer from Microchip too!
+
+The problem with only two nodes is that you have to be very precise with 
+bitrate settings and sampling points so that the receiving node needs to 
+properly set the ACK to acknowlege the CAN frame.
+
+I had been working with a MSCAN system some time ago and that wasn't 
+able to talk to a commercial CAN tool until I added another node (from 
+another CAN tool provider).
+
+Maybe you can make the other node talk to the Microchip CAN analyzer and 
+let the EG20T receive that traffic first.
+
+Best,
+Oliver
