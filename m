@@ -2,158 +2,105 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8FC85A7C9D
-	for <lists+linux-can@lfdr.de>; Wed, 31 Aug 2022 13:56:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2A665A80EA
+	for <lists+linux-can@lfdr.de>; Wed, 31 Aug 2022 17:08:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbiHaL4c (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 31 Aug 2022 07:56:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54012 "EHLO
+        id S229892AbiHaPIN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 31 Aug 2022 11:08:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiHaL43 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 31 Aug 2022 07:56:29 -0400
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F37D25D4
-        for <linux-can@vger.kernel.org>; Wed, 31 Aug 2022 04:56:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1661946985;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:Cc:References:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=VRWwMG0S+8PTjgXrNoxN9LPEyZuwRB3YhPekFwdpzJg=;
-    b=a6/EhYX70edq8Z0dKfEU1nC3KwPK2IQs0OFP9bEz3j++f9d8pGWrtQMR2hVIjfFV9b
-    Tq+kUWlaScZwZWSE/ivqlnsXcMoovsuYeyjIMg+s+fSi28PwWIIc9s9z//PrQA1EC6An
-    N9lGcEKJCSj4WiaOVpG0kKql01V/DiRIomFd4i68DU4leZ2PdypptCqQVa1EWjLtwbYV
-    lZCJc85FjO1TvdhmIFTq5W8uy+eFI8UDtqbC0KWHWxnigma/hXuDqIwKY4eS7CtxAX+A
-    PQwGVcyCRzT+SVnF1o1UGiWaQT8+0V+cy8ynvD+ZSnlvORD50I/LsF3WEqgJ00DSG0it
-    Bd8w==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytJSr63tDxrw=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a00:6020:1cfd:d100::b82]
-    by smtp.strato.de (RZmta 47.47.0 AUTH)
-    with ESMTPSA id Icb1b0y7VBuPSXq
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Wed, 31 Aug 2022 13:56:25 +0200 (CEST)
-Message-ID: <27076536-8f8b-8e6a-60ac-a5bbb1bb48cd@hartkopp.net>
-Date:   Wed, 31 Aug 2022 13:56:20 +0200
+        with ESMTP id S230215AbiHaPIN (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 31 Aug 2022 11:08:13 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 574A05300E;
+        Wed, 31 Aug 2022 08:08:12 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id t11-20020a17090a510b00b001fac77e9d1fso21316199pjh.5;
+        Wed, 31 Aug 2022 08:08:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=iWFIf9ElN8TxtCnTHIToMg3ZbWgSB5UvML/M3/3xtpY=;
+        b=AA+qAmQ2Ihx4N9w/DmqJddeCttTFT+CLsKZLA4nehDNwHbgJs4w7dJ+UGuikeI2lPo
+         W2bYWhIxmfwwKIy66KMDNSFVJv3JqUdsG0mhoyR60wNfWaU12l2mbMi3rRfjaqUVIBzB
+         KwGnYujaZ+zTWF0Ray6rQuyEJl1BNVA8QXFUwxaaAp6EZXv8d1LhLK5BWQKKSVksrKlx
+         MBSowfIBKcHg3sJE8XfTmEIyGSkaZfNzJDNuSeaGE6y5x/VO/A146jOLlPb3DMBSDPzk
+         G1mCd4ZVAGz33rctvKBd7IMlTJg4bs2Rqv4cOF9XJORiECUKZi5Lw9DcCBPscxBO4gZP
+         p5bQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=iWFIf9ElN8TxtCnTHIToMg3ZbWgSB5UvML/M3/3xtpY=;
+        b=OlKO51/yu+Hy6uk1cnxIHipDZSGQt8zBoSJeeJ+dIQWTnT4ofiQvjy/pi0PEdDrsUz
+         gNlA6v5iKWhhrpUEIWpJTvusU1Cu0fRQHLnPdtlFYfAz0Tauki0DMpOXeaFr2PuRgZ4f
+         9a8/Sd01fwCfVsYuWbzFfeJ3dq4NJPEwxkRqMQkY+GX3xon3D511LddsgySh4JdYEWle
+         zXzRwP41DKbzApFrH0Px0snr0uJKhl3AEcIUvDppUJBFsKK9P4r/JXi4cnusH0NWKVVX
+         3maYexdE4NtSeCpBnkmPf5ERr0nh4aVmZHm362gfMP0yVaDUR38EwlCQuFyDk5SpsnAQ
+         oZQg==
+X-Gm-Message-State: ACgBeo1zkmCPq1W+6DbnlCrpbL7CPsYSJqXrcUnI5+xTUVdnExhTlQGx
+        PVRLf5DZZUl03ET8eQjzzJk=
+X-Google-Smtp-Source: AA6agR60nDiAOlc9wA/x+4MWn3ZYLxOP+67enaD2S66jhA3wcrX8mg6SfolvUHEsbF6MdbnvYWbJXA==
+X-Received: by 2002:a17:90b:4a05:b0:1fe:289a:3ce1 with SMTP id kk5-20020a17090b4a0500b001fe289a3ce1mr3713139pjb.96.1661958491711;
+        Wed, 31 Aug 2022 08:08:11 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id s5-20020a17090a6e4500b001fa9e7b0c3esm1392289pjm.41.2022.08.31.08.08.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 08:08:11 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: cui.jinpeng2@zte.com.cn
+To:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net
+Cc:     edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] can: kvaser_pciefd: remove redundant variable ret
+Date:   Wed, 31 Aug 2022 15:08:05 +0000
+Message-Id: <20220831150805.305106-1-cui.jinpeng2@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v8 0/7] can: support CAN XL
-Content-Language: en-US
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-References: <20220801190010.3344-1-socketcan@hartkopp.net>
-Cc:     linux-can <linux-can@vger.kernel.org>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20220801190010.3344-1-socketcan@hartkopp.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Vincent,
+From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
 
-I have discussed with Marc about this patch set and after our discussion 
-about len/flags he was missing an ACK from your side:
+Return value directly from readl_poll_timeout() instead of
+getting value from redundant variable ret.
 
-https://lore.kernel.org/linux-can/247226f6-b9b5-ec47-2234-d1cc70ee6954@hartkopp.net/T/#u
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+---
+ drivers/net/can/kvaser_pciefd.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-Are you fine with this V8 patch set now?
+diff --git a/drivers/net/can/kvaser_pciefd.c b/drivers/net/can/kvaser_pciefd.c
+index ed54c0b3c7d4..4e9680c8eb34 100644
+--- a/drivers/net/can/kvaser_pciefd.c
++++ b/drivers/net/can/kvaser_pciefd.c
+@@ -329,12 +329,9 @@ MODULE_DEVICE_TABLE(pci, kvaser_pciefd_id_table);
+ static int kvaser_pciefd_spi_wait_loop(struct kvaser_pciefd *pcie, int msk)
+ {
+ 	u32 res;
+-	int ret;
+-
+-	ret = readl_poll_timeout(pcie->reg_base + KVASER_PCIEFD_SPI_STATUS_REG,
+-				 res, res & msk, 0, 10);
+ 
+-	return ret;
++	return readl_poll_timeout(pcie->reg_base + KVASER_PCIEFD_SPI_STATUS_REG,
++			res, res & msk, 0, 10);
+ }
+ 
+ static int kvaser_pciefd_spi_cmd(struct kvaser_pciefd *pcie, const u8 *tx,
+-- 
+2.25.1
 
-I already created some CAN CiA p-o-c code for CAN XL segmentation:
-
-https://github.com/hartkopp/can-cia-613-3-poc
-
-When the patch set is committed and the definitions are fixed I would 
-also start with some documentation.
-
-Best regards,
-Oliver
-
-On 01.08.22 21:00, Oliver Hartkopp wrote:
-> The CAN with eXtended data Length (CAN XL) is a new CAN protocol with a
-> 10Mbit/s data transfer with a new physical layer transceiver (for this
-> data section). CAN XL allows up to 2048 byte of payload and shares the
-> arbitration principle (11 bit priority) known from Classical CAN and
-> CAN FD. RTR and 29 bit identifiers are not implemented in CAN XL.
-> 
-> A short introdution to CAN XL can be found here:
-> https://www.bosch-semiconductors.com/media/ip_modules/pdf_2/can_xl_1/canxl_intro_20210225.pdf
-> 
-> V2: Major rework after discussion and feedback on Linux-CAN ML
-> 
-> - rework of struct canxl_frame
-> - CANXL_XLF flag is now the switch between CAN XL and CAN/CANFD
-> - variable length in r/w operations for CAN XL frames
-> - write CAN XL frame to raw socket enforces size <-> canxl_frame.len sync
-> 
-> V3: Fix length for CAN XL frames inside the sk_buff
-> 
-> - extend the CAN_RAW sockopt to handle fixed/truncated read/write operations
-> 
-> V4: Fix patch 5 (can: raw: add CAN XL support)
-> 
-> - fix return value (move 'err = -EINVAL' in raw_sendmsg())
-> - add CAN XL frame handling in can_rcv()
-> - change comment for CAN_RAW_XL_[RT]X_DYN definition (allow -> enable)
-> 
-> V5: Remove CAN_RAW_XL_[RT]X_DYN definition again
-> 
-> - CAN_RAW_XL_[RT]X_DYN (truncated data) feature is now enabled by default
-> - use CANXL_MIN_DLEN instead of '1' in canxl_frame definition
-> - add missing 'err = -EINVAL' initialization in raw_sendmsg())
-> 
-> V6:
-> 
-> - rework an separate skb identification and length helpers
-> - add CANFD_FDF flag in all CAN FD frame structures
-> - simplify patches for infrastructure and raw sockets
-> - add vxcan support in virtual CAN interface patch
-> 
-> V7:
-> 
-> - fixed indention as remarked by Marc
-> - set CANFD_FDF flag when detecting CAN FD frames generated by PF_PACKET
-> - Allow to use variable CAN XL MTU sizes to enforce real time requirements
->    on CAN XL segments (e.g. to support of CAN CiA segmentation concept)
-> 
-> V8:
-> 
-> - fixed typo as remarked by Vincent
-> - rebased to latest can-next/net-next tree
-> 
-> Oliver Hartkopp (7):
->    can: skb: unify skb CAN frame identification helpers
->    can: skb: add skb CAN frame data length helpers
->    can: set CANFD_FDF flag in all CAN FD frame structures
->    can: canxl: introduce CAN XL data structure
->    can: canxl: update CAN infrastructure for CAN XL frames
->    can: dev: add CAN XL support to virtual CAN
->    can: raw: add CAN XL support
-> 
->   drivers/net/can/ctucanfd/ctucanfd_base.c |   1 -
->   drivers/net/can/dev/rx-offload.c         |   2 +-
->   drivers/net/can/dev/skb.c                | 113 ++++++++++++++++-------
->   drivers/net/can/vcan.c                   |  12 +--
->   drivers/net/can/vxcan.c                  |   8 +-
->   include/linux/can/dev.h                  |   5 +
->   include/linux/can/skb.h                  |  57 +++++++++++-
->   include/uapi/linux/can.h                 |  55 ++++++++++-
->   include/uapi/linux/can/raw.h             |   1 +
->   include/uapi/linux/if_ether.h            |   1 +
->   net/can/af_can.c                         |  76 ++++++++-------
->   net/can/bcm.c                            |   9 +-
->   net/can/gw.c                             |   4 +-
->   net/can/isotp.c                          |   2 +-
->   net/can/j1939/main.c                     |   4 +
->   net/can/raw.c                            |  55 ++++++++---
->   16 files changed, 299 insertions(+), 106 deletions(-)
-> 
