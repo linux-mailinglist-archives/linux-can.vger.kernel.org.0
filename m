@@ -2,133 +2,119 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E55AC5A9487
-	for <lists+linux-can@lfdr.de>; Thu,  1 Sep 2022 12:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71FCB5A96C7
+	for <lists+linux-can@lfdr.de>; Thu,  1 Sep 2022 14:29:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234234AbiIAK0G (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 1 Sep 2022 06:26:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53044 "EHLO
+        id S233603AbiIAM31 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 1 Sep 2022 08:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233865AbiIAKZs (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 1 Sep 2022 06:25:48 -0400
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791459F75A;
-        Thu,  1 Sep 2022 03:25:42 -0700 (PDT)
-Received: by mail-qt1-f178.google.com with SMTP id w28so12998529qtc.7;
-        Thu, 01 Sep 2022 03:25:42 -0700 (PDT)
+        with ESMTP id S233919AbiIAM25 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 1 Sep 2022 08:28:57 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC91312692A
+        for <linux-can@vger.kernel.org>; Thu,  1 Sep 2022 05:28:18 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id w19so14736703ljj.7
+        for <linux-can@vger.kernel.org>; Thu, 01 Sep 2022 05:28:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kvaser.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=5T5wLLEDu6OXsS2oU34K7c5tkwyKBh84Iru8P2pYD9I=;
+        b=GXfLi0rinPBFI+Y1+c79/x/z41Kvmglxd+/cvSQPM7Sj9twWHGcY81goNlpMQRCmnL
+         vvVnk0aNGqKhekQUI8KHxmkdNGvNcrP7q9C7fYTMYIfc+taJmg3ISYXNmj7eWWJtaO63
+         Qf5mrQiRo824BX+LCws4yweo12unNURAfGsQXhBKO1ZM/AtMB2RbXPfWXrtCQUFATiYf
+         dftEpqivOx9vgJOeFB9lmXBIZMfT8JlJNVr3lX25rGrBSfq2c5YOEHOmDOjzzB4CHMmF
+         4yTY2KNurXzelIaB5rC/D6OoZ5K07AIOxAtYqi+lkqFHX3o1sghvnhG/2kUnRmolyXPH
+         dnFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=jQiwC2wtAwOaQD0hPRp2nlHKTvtSxYoVlYqx7E4G0+s=;
-        b=sVJbv02cHu/phK05kLcIKg4I8etuzfFSG4AM+LaNh6NwpZs5ggmdCKvyEn3F2ftlEe
-         S486K92bt8PGjO4YMiSZKv5w33xioDt9fB8B6U+NYRJI3h50tcm7ezUT9cJtT7R02Tjf
-         qk/ALhacDEm04OtaEyl7ItZ2zT3fZSE7lXiuSV5wZ6p60OSvwWbOdgjxxH5dQLfzUr2h
-         AegwkGDlFNMA3j9mBZ57l4Payoz2cDQ0DcgCvTDaia1r4rbBTtue+eixJUy3NWTnCGCp
-         dA2hSGPIol2Ff3ujyByVuZEPl7mBl66PeMIKROEqQ1evw1A2C1n/S+psa0RVVi+yfePN
-         2T6Q==
-X-Gm-Message-State: ACgBeo0EYBOswqeTTPmrrEd/Tm6S8PhQHxgYdQ0qllgfd6H57hXklJ/b
-        abq8vgNMb0WL22fop6pr7KlWJMcwtv/AyA==
-X-Google-Smtp-Source: AA6agR61boqv9R5GwxiSEbbbDiM7VdzQSGWRU8MnGks8DhasC46hZJmDN75uK7FdsIMuw+IzSjdDRA==
-X-Received: by 2002:a05:622a:2c4:b0:343:7f18:c2ab with SMTP id a4-20020a05622a02c400b003437f18c2abmr22347052qtx.641.1662027941508;
-        Thu, 01 Sep 2022 03:25:41 -0700 (PDT)
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
-        by smtp.gmail.com with ESMTPSA id az20-20020a05620a171400b006bb41ac3b6bsm11672157qkb.113.2022.09.01.03.25.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 03:25:41 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id 21so7949618ybl.6;
-        Thu, 01 Sep 2022 03:25:40 -0700 (PDT)
-X-Received: by 2002:a25:778d:0:b0:696:4bb6:9aaa with SMTP id
- s135-20020a25778d000000b006964bb69aaamr18315096ybc.380.1662027940511; Thu, 01
- Sep 2022 03:25:40 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=5T5wLLEDu6OXsS2oU34K7c5tkwyKBh84Iru8P2pYD9I=;
+        b=yn0BcKpOyhOcuMahwAK0FrDrcNlQ+4b9d8ZjnUdRkVtYONvcYyfg640688+S8kzvUg
+         HPHFDDyJGhRzhnoGwz5eDiZII585Z3j6uunPh8fGUR4TZr6HBNND/MEgUOic8ywVs7zW
+         ZxVke2mtnVXHmgkULHGXbi3iQNPicSATsApEuT4yx5aSei5GqObjr80myxi6BRlRB7/s
+         oMLWHlAd2KIqucS58Gj+gnnXzkCV1dT+LWVbFiWYSixMhvBKNP5CxumdTNok5U68/ZUj
+         LWmXl6WcoWhNqB/m/dsMHHziK1YAv5PGXA8fXsm3AZ4WotXI4lGm3GZdlYrUfsTTUcgN
+         nFJA==
+X-Gm-Message-State: ACgBeo0eOL9DB6csReRg4mQmQL6OdRTx4H2tFLFmvlOPA54j1tIu8Id1
+        H6DpIAZpn69yIRG6Gyj9AG/dc/qFlJwjMKH3
+X-Google-Smtp-Source: AA6agR7w9/ZU+B6UvHi19zf2ywpNMcrudteufAcQ9LFAeRCBnzDX8YORiW0t75xx5ew7ETU0Y1I2pQ==
+X-Received: by 2002:a2e:b8d6:0:b0:268:9b1d:5084 with SMTP id s22-20020a2eb8d6000000b002689b1d5084mr1822843ljp.37.1662035296408;
+        Thu, 01 Sep 2022 05:28:16 -0700 (PDT)
+Received: from fb10a0c5d590.. (h-155-4-68-234.A785.priv.bahnhof.se. [155.4.68.234])
+        by smtp.gmail.com with ESMTPSA id s12-20020a056512202c00b00492c2394ea5sm125935lfs.165.2022.09.01.05.28.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 05:28:16 -0700 (PDT)
+From:   Jimmy Assarsson <extja@kvaser.com>
+To:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Anssi Hannula <anssi.hannula@bitwise.fi>
+Cc:     Jimmy Assarsson <jimmyassarsson@gmail.com>, stable@vger.kernel.org,
+        Jimmy Assarsson <extja@kvaser.com>
+Subject: [PATCH v3 00/15] can: kvaser_usb: Various fixes
+Date:   Thu,  1 Sep 2022 14:27:14 +0200
+Message-Id: <20220901122729.271-1-extja@kvaser.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-References: <20220830164518.1381632-1-biju.das.jz@bp.renesas.com>
- <20220830164518.1381632-2-biju.das.jz@bp.renesas.com> <23539312-caaa-78f0-cd6c-899a826f9947@linaro.org>
- <OS0PR01MB592292E8BE619470F4C621A186799@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <1ef5dbd4-806f-ac1d-0ad5-0f8359a560de@linaro.org>
-In-Reply-To: <1ef5dbd4-806f-ac1d-0ad5-0f8359a560de@linaro.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 1 Sep 2022 12:25:29 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWWUQvsHV4TCLd+4reMpc4nTc8Hjor5gQa2DopOrRaEjw@mail.gmail.com>
-Message-ID: <CAMuHMdWWUQvsHV4TCLd+4reMpc4nTc8Hjor5gQa2DopOrRaEjw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] dt-bindings: can: nxp,sja1000: Document RZ/N1
- power-domains support
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Krzysztof,
+This patch series was originally posted by Anssi Hannula [1].
+In v2 I rebased and updated some of the patches [2].
 
-On Tue, Aug 30, 2022 at 9:03 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> On 30/08/2022 20:47, Biju Das wrote:
-> >> Subject: Re: [PATCH v3 1/3] dt-bindings: can: nxp,sja1000: Document
-> >> RZ/N1 power-domains support
-> >>
-> >> On 30/08/2022 19:45, Biju Das wrote:
-> >>> Document RZ/N1 power-domains support. Also update the example with
-> >>> power-domains property.
-> >>>
-> >>> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> >>> ---
-> >>> v3:
-> >>>  * Documented power-domains support.
-> >>
-> >> You made them required, so it would be nice to see reason in such
-> >> change. The commit msg says only what you did, but not why you did it.
-> >
-> > It is simple. As you see from [1] and [2] power-domains are enabled by default in RZ/N1 SoC.
-> > So there is nothing prevent us to document this property for all IP's present in
-> > RZ/N1 SoC.
->
-> Any explanation I expect to see in commit msg.
->
-> Anyway you referred to Linux drivers, which is not actually a reason.
-> What if some device is not in a power domain?
+Changes in v3:
+ - Rebase on top of commit
+   1d5eeda23f36 ("can: kvaser_usb: advertise timestamping capabilities and add ioctl support")
+ - Add Tested-by: Anssi Hannula
+ - Add stable@vger.kernel.org to CC.
+ - Add my S-o-b to all patches
+ - Fix regression introduced in
+   [PATCH v2 04/15] can: kvaser_usb: kvaser_usb_leaf: Get capabilities from device,
+   found by Anssi Hannula [3]
 
-DT describes hardware, not software policy.
+[1]
+https://lore.kernel.org/linux-can/20220516134748.3724796-1-anssi.hannula@bitwise.fi
+[2]
+https://lore.kernel.org/linux-can/20220708115709.232815-1-extja@kvaser.com
+[3]
+https://lore.kernel.org/linux-can/b25bc059-d776-146d-0b3c-41aecf4bd9f8@bitwise.fi
 
-"power domains" are a property of the hardware.
-I.e. this device (like most other devices on the SoC) is power-managed
-through the system-controller.
+Anssi Hannula (10):
+  can: kvaser_usb_leaf: Fix overread with an invalid command
+  can: kvaser_usb: Fix use of uninitialized completion
+  can: kvaser_usb: Fix possible completions during init_completion
+  can: kvaser_usb_leaf: Set Warning state even without bus errors
+  can: kvaser_usb_leaf: Fix TX queue out of sync after restart
+  can: kvaser_usb_leaf: Fix CAN state after restart
+  can: kvaser_usb_leaf: Fix improved state not being reported
+  can: kvaser_usb_leaf: Fix wrong CAN state after stopping
+  can: kvaser_usb_leaf: Ignore stale bus-off after start
+  can: kvaser_usb_leaf: Fix bogus restart events
 
-Whether software does that by explicitly managing the clocks, or by
-having a PM Domains driver is a software detail.
+Jimmy Assarsson (5):
+  can: kvaser_usb: kvaser_usb_leaf: Get capabilities from device
+  can: kvaser_usb: kvaser_usb_leaf: Rename {leaf,usbcan}_cmd_error_event
+    to {leaf,usbcan}_cmd_can_error_event
+  can: kvaser_usb: kvaser_usb_leaf: Handle CMD_ERROR_EVENT
+  can: kvaser_usb: Add struct kvaser_usb_busparams
+  can: kvaser_usb: Compare requested bittiming parameters with actual
+    parameters in do_set_{,data}_bittiming
 
-Gr{oetje,eeting}s,
+ drivers/net/can/usb/kvaser_usb/kvaser_usb.h   |  32 +-
+ .../net/can/usb/kvaser_usb/kvaser_usb_core.c  | 118 +++-
+ .../net/can/usb/kvaser_usb/kvaser_usb_hydra.c | 166 ++++--
+ .../net/can/usb/kvaser_usb/kvaser_usb_leaf.c  | 543 ++++++++++++++++--
+ 4 files changed, 764 insertions(+), 95 deletions(-)
 
-                        Geert
+-- 
+2.37.3
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
