@@ -2,60 +2,60 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 167815A96E1
+	by mail.lfdr.de (Postfix) with ESMTP id D3DD55A96E3
 	for <lists+linux-can@lfdr.de>; Thu,  1 Sep 2022 14:30:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233632AbiIAM3r (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 1 Sep 2022 08:29:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46802 "EHLO
+        id S231351AbiIAM3v (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 1 Sep 2022 08:29:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233654AbiIAM3a (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 1 Sep 2022 08:29:30 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F191F12DA26
-        for <linux-can@vger.kernel.org>; Thu,  1 Sep 2022 05:28:33 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id bt10so24174051lfb.1
-        for <linux-can@vger.kernel.org>; Thu, 01 Sep 2022 05:28:33 -0700 (PDT)
+        with ESMTP id S233715AbiIAM3d (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 1 Sep 2022 08:29:33 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A035712E4C3
+        for <linux-can@vger.kernel.org>; Thu,  1 Sep 2022 05:28:35 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id v26so13928732lfd.10
+        for <linux-can@vger.kernel.org>; Thu, 01 Sep 2022 05:28:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kvaser.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=3DIbIh68o/anmm+/aJkEjWEUUfosSo9p7dyutkWjemo=;
-        b=J5W+KcYb/nFZpqT+9mqKMzgrJw1CLoowBipMs3gRbfRlVdW5TtHKuTA6CcJDJeBn0V
-         cFvmpE+Yk4mpdk6BdEnN5Ou69PEn23Uj5UpLMXN2nSqQVAG+nh0oB09pcwh4kBtG3+Ab
-         vS3//oKq7X2gNIZkAPvt4zBennGy/O+3vUIOBVnm3fQwOyRHh+IotdtToIRUZSHWu44r
-         6hs398LcDOJw8VkYwXtOqW7qikKT1Ap5wnAfXM2b0aFY6KVzjTTbAF3MjJkD2/2G8Wf5
-         qV742DGrPlu01gbj9eHm/4gdRtrBTMzYrCzPrHQQI6CPwyRd/Ljfyaq3/H8R+b+AvFkZ
-         5ksg==
+        bh=2NaARrLzFS5l4oyJ21qLSczaPy5VErkMYvgWIEx6AP0=;
+        b=d798vUzsZDoavqVuMovyJefqYAwgVOPb2/tdDKgBVjQNMtzoLrGoEk8iK092o04ZEm
+         0Tr/Jwu5dv0Y/Aa1Jjhzv0QMm2yK9S4jb+rnPtpPIR/1QyDeIT5QBuXr5yvA+zyUAnr7
+         l6xEojxlB4S41mSdXex8PQWLxfe7c8VLDdV5oo/dWWMAb8mpJaEnlDoMXzr5fIz0OlKq
+         IY8bE+84fVLpUjpVjVLT7jrTJcVXVIxw+Qt8tYqksfdv/XvSxUPYInWNt9gG/Ivk72YK
+         MtKTzeg7YUwS3cQ0IFXybo4uYI4bImtQd7hjueElytbpRQA8PgfTJG2o9RMsd00u0wRF
+         XH0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=3DIbIh68o/anmm+/aJkEjWEUUfosSo9p7dyutkWjemo=;
-        b=ZCpTKRBERDaQYACdO25ODxog17Uvaq4ySOHgJTjFktc3H4obsJjonwZHWE3gd/hfdX
-         jgbmwvYUEo1/j56hvN22vz5zcPrCV5BLUdAbZfRMaabsrYZSReeUm8t2cPAGB27Hwmlk
-         6Eu+CAwn14BrV3pL55iIylPaRm0sSEC4V01hf0X/Nk464XI+fQrMNdI6GpCWnTTwk5BU
-         kflwFsz4sV7kn1FDUsDkwalU8Ob5Kv/CkoEOLohsNf4eJ1Ji5/syJrx8dUa+IX1YBq1O
-         FRHBGXiF3nZsu9k2XjLOwbXxB+E3uzOhp/7RepwR8Ak7n+6Sp1isXI4XXlECNsCsLJOF
-         sx+Q==
-X-Gm-Message-State: ACgBeo1kyw8aZGqRdqGz6m8BuI/FXr19Jfxf23cYFRKpUysKTK158aBl
-        jUdYJG/dheix4kqdkOS1g5WwkICkg71u8g==
-X-Google-Smtp-Source: AA6agR6Rn1CEmv1EzOz+FT2eP+uAXCTG9xGBe9luQSsqOg16Tlkp+akKg5b+sSofruStgdxxeWH2Cg==
-X-Received: by 2002:a05:6512:1329:b0:492:e050:b0dc with SMTP id x41-20020a056512132900b00492e050b0dcmr11487756lfu.136.1662035309755;
-        Thu, 01 Sep 2022 05:28:29 -0700 (PDT)
+        bh=2NaARrLzFS5l4oyJ21qLSczaPy5VErkMYvgWIEx6AP0=;
+        b=QVzTE+8tocpAAeF5iZY7bjp4IKBg+QBTBK8A1thPqiSLxCwGjFCM8EWefKjITdQ+J7
+         1S8qUIwxvP7nn+ZDFYnYXujYr1Ubl4f1ywkBV/YjbZIQeWKdINywESTl6fmjW+VIOo1v
+         83LIHi9fQQ4FOZFjzSApekKMPieYzszaZVvz9NGQd4msoLOorNLj6bcqzzv3A7Rt9ame
+         owWkzKFU1aR5Hd0XpxVXb++y+0n+R9y9bPJPpTc3ieVgja+Ne133o5DAhr6TbsXnpGJD
+         T0mdNMiSNLXG9F0f8qZoWm+PkjAWLR7+AMJWUKyfhfGlrXATSsVbQt1RTbFvrsqhCEor
+         iZLA==
+X-Gm-Message-State: ACgBeo2/LGTuurZdP10pRaaDag/IidRwMDbKrNrSWzsDajz5oGp2AG+H
+        HfduWmO33lB93Jx5wad6SrgDf/BD8t/QQg==
+X-Google-Smtp-Source: AA6agR74BCUBbCt2nYDW3F8YUV6RBx93P5OZxBYqZ9ysI3OY0xkM4X9O1ZZX9/27AK5qZvnuiJ6QLg==
+X-Received: by 2002:a05:6512:1192:b0:492:ce3e:4dd0 with SMTP id g18-20020a056512119200b00492ce3e4dd0mr11017730lfr.452.1662035310490;
+        Thu, 01 Sep 2022 05:28:30 -0700 (PDT)
 Received: from fb10a0c5d590.. (h-155-4-68-234.A785.priv.bahnhof.se. [155.4.68.234])
         by smtp.gmail.com with ESMTPSA id s12-20020a056512202c00b00492c2394ea5sm125935lfs.165.2022.09.01.05.28.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 05:28:29 -0700 (PDT)
+        Thu, 01 Sep 2022 05:28:30 -0700 (PDT)
 From:   Jimmy Assarsson <extja@kvaser.com>
 To:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
         Anssi Hannula <anssi.hannula@bitwise.fi>
 Cc:     Jimmy Assarsson <jimmyassarsson@gmail.com>, stable@vger.kernel.org,
         Jimmy Assarsson <extja@kvaser.com>
-Subject: [PATCH v3 11/15] can: kvaser_usb_leaf: Fix wrong CAN state after stopping
-Date:   Thu,  1 Sep 2022 14:27:25 +0200
-Message-Id: <20220901122729.271-12-extja@kvaser.com>
+Subject: [PATCH v3 12/15] can: kvaser_usb_leaf: Ignore stale bus-off after start
+Date:   Thu,  1 Sep 2022 14:27:26 +0200
+Message-Id: <20220901122729.271-13-extja@kvaser.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220901122729.271-1-extja@kvaser.com>
 References: <20220901122729.271-1-extja@kvaser.com>
@@ -73,15 +73,29 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 From: Anssi Hannula <anssi.hannula@bitwise.fi>
 
-0bfd:0124 Kvaser Mini PCI Express 2xHS FW 4.18.778 sends a
-CMD_CHIP_STATE_EVENT indicating bus-off after stopping the device,
-causing a stopped device to appear as CAN_STATE_BUS_OFF instead of
-CAN_STATE_STOPPED.
+With 0bfd:0124 Kvaser Mini PCI Express 2xHS FW 4.18.778 it was observed
+that if the device was bus-off when stopped, at next start (either via
+interface down/up or manual bus-off restart) the initial
+CMD_CHIP_STATE_EVENT received just after CMD_START_CHIP_REPLY will have
+the M16C_STATE_BUS_OFF bit still set, causing the interface to
+immediately go bus-off again.
 
-Fix that by not handling error events on stopped devices.
+The bit seems to internally clear quickly afterwards but we do not get
+another CMD_CHIP_STATE_EVENT.
+
+Fix the issue by ignoring any initial bus-off state until we see at
+least one bus-on state. Also, poll the state periodically until that
+occurs.
+
+It is possible we lose one actual immediately occurring bus-off event
+here in which case the HW will auto-recover and we see the recovery
+event. We will then catch the next bus-off event, if any.
+
+This issue did not reproduce with 0bfd:0017 Kvaser Memorator
+Professional HS/HS FW 2.0.50.
 
 Cc: stable@vger.kernel.org
-Fixes: 080f40a6fa28 ("can: kvaser_usb: Add support for Kvaser CAN/USB devices")
+Fixes: 71873a9b38d1 ("can: kvaser_usb: Add support for more Kvaser Leaf v2 devices")
 Tested-by: Jimmy Assarsson <extja@kvaser.com>
 Signed-off-by: Anssi Hannula <anssi.hannula@bitwise.fi>
 Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
@@ -94,24 +108,96 @@ Changes in v3:
 Changes in v2:
   - Rebased on b3b6df2c56d8 ("can: kvaser_usb: kvaser_usb_leaf: fix bittiming limits")
 
- drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../net/can/usb/kvaser_usb/kvaser_usb_leaf.c  | 31 ++++++++++++++++++-
+ 1 file changed, 30 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
-index 993fcc19637d..4f9c76f4d0da 100644
+index 4f9c76f4d0da..f8a12a285050 100644
 --- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
 +++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
-@@ -1045,6 +1045,10 @@ static void kvaser_usb_leaf_rx_error(const struct kvaser_usb *dev,
- 	leaf = priv->sub_priv;
- 	stats = &priv->netdev->stats;
+@@ -427,6 +427,9 @@ struct kvaser_usb_net_leaf_priv {
+ 	struct kvaser_usb_net_priv *net;
  
-+	/* Ignore e.g. state change to bus-off reported just after stopping */
-+	if (!netif_running(priv->netdev))
-+		return;
+ 	struct delayed_work chip_state_req_work;
 +
- 	/* Update all of the CAN interface's state and error counters before
- 	 * trying any memory allocation that can actually fail with -ENOMEM.
- 	 *
++	/* started but not reported as bus-on yet */
++	bool joining_bus;
+ };
+ 
+ static const struct can_bittiming_const kvaser_usb_leaf_m16c_bittiming_const = {
+@@ -966,6 +969,7 @@ kvaser_usb_leaf_rx_error_update_can_state(struct kvaser_usb_net_priv *priv,
+ 					const struct kvaser_usb_err_summary *es,
+ 					struct can_frame *cf)
+ {
++	struct kvaser_usb_net_leaf_priv *leaf = priv->sub_priv;
+ 	struct kvaser_usb *dev = priv->dev;
+ 	struct net_device_stats *stats = &priv->netdev->stats;
+ 	enum can_state cur_state, new_state, tx_state, rx_state;
+@@ -990,6 +994,22 @@ kvaser_usb_leaf_rx_error_update_can_state(struct kvaser_usb_net_priv *priv,
+ 		new_state = CAN_STATE_ERROR_ACTIVE;
+ 	}
+ 
++	/* 0bfd:0124 FW 4.18.778 was observed to send the initial
++	 * CMD_CHIP_STATE_EVENT after CMD_START_CHIP with M16C_STATE_BUS_OFF
++	 * bit set if the channel was bus-off when it was last stopped (even
++	 * across chip resets). This bit will clear shortly afterwards, without
++	 * triggering a second unsolicited chip state event.
++	 * Ignore this initial bus-off.
++	 */
++	if (leaf->joining_bus) {
++		if (new_state == CAN_STATE_BUS_OFF) {
++			netdev_dbg(priv->netdev, "ignoring bus-off during startup");
++			new_state = cur_state;
++		} else {
++			leaf->joining_bus = false;
++		}
++	}
++
+ 	if (new_state != cur_state) {
+ 		tx_state = (es->txerr >= es->rxerr) ? new_state : 0;
+ 		rx_state = (es->txerr <= es->rxerr) ? new_state : 0;
+@@ -1065,9 +1085,12 @@ static void kvaser_usb_leaf_rx_error(const struct kvaser_usb *dev,
+ 
+ 	/* If there are errors, request status updates periodically as we do
+ 	 * not get automatic notifications of improved state.
++	 * Also request updates if we saw a stale BUS_OFF during startup
++	 * (joining_bus).
+ 	 */
+ 	if (new_state < CAN_STATE_BUS_OFF &&
+-	    (es->rxerr || es->txerr || new_state == CAN_STATE_ERROR_PASSIVE))
++	    (es->rxerr || es->txerr || new_state == CAN_STATE_ERROR_PASSIVE ||
++	     leaf->joining_bus))
+ 		schedule_delayed_work(&leaf->chip_state_req_work,
+ 				      msecs_to_jiffies(500));
+ 
+@@ -1587,8 +1610,11 @@ static int kvaser_usb_leaf_set_opt_mode(const struct kvaser_usb_net_priv *priv)
+ 
+ static int kvaser_usb_leaf_start_chip(struct kvaser_usb_net_priv *priv)
+ {
++	struct kvaser_usb_net_leaf_priv *leaf = priv->sub_priv;
+ 	int err;
+ 
++	leaf->joining_bus = true;
++
+ 	reinit_completion(&priv->start_comp);
+ 
+ 	err = kvaser_usb_leaf_send_simple_cmd(priv->dev, CMD_START_CHIP,
+@@ -1719,12 +1745,15 @@ static int kvaser_usb_leaf_set_mode(struct net_device *netdev,
+ 				    enum can_mode mode)
+ {
+ 	struct kvaser_usb_net_priv *priv = netdev_priv(netdev);
++	struct kvaser_usb_net_leaf_priv *leaf = priv->sub_priv;
+ 	int err;
+ 
+ 	switch (mode) {
+ 	case CAN_MODE_START:
+ 		kvaser_usb_unlink_tx_urbs(priv);
+ 
++		leaf->joining_bus = true;
++
+ 		err = kvaser_usb_leaf_simple_cmd_async(priv, CMD_START_CHIP);
+ 		if (err)
+ 			return err;
 -- 
 2.37.3
 
