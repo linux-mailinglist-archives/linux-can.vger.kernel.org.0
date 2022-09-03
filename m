@@ -2,74 +2,65 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28FB65AC099
-	for <lists+linux-can@lfdr.de>; Sat,  3 Sep 2022 20:22:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A07BA5AC09B
+	for <lists+linux-can@lfdr.de>; Sat,  3 Sep 2022 20:23:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232659AbiICSWJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 3 Sep 2022 14:22:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58720 "EHLO
+        id S232762AbiICSXO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 3 Sep 2022 14:23:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231305AbiICSWI (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 3 Sep 2022 14:22:08 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877494E85A
-        for <linux-can@vger.kernel.org>; Sat,  3 Sep 2022 11:22:07 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id g7so7620229lfe.11
-        for <linux-can@vger.kernel.org>; Sat, 03 Sep 2022 11:22:07 -0700 (PDT)
+        with ESMTP id S231889AbiICSXN (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 3 Sep 2022 14:23:13 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3726F4E85A
+        for <linux-can@vger.kernel.org>; Sat,  3 Sep 2022 11:23:12 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id z23so5349674ljk.1
+        for <linux-can@vger.kernel.org>; Sat, 03 Sep 2022 11:23:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kvaser.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=Q2prn5n6newbXXuJ8BZvUmVYF/i8jBG0q25CnLkH4Nc=;
-        b=PLiLs7HkOLwViGixLW5/dqW5QWftgjsNsNA9XhBfpIpHH8xZO6V7QEyfB+ajTRqIqH
-         l0EejjN+d/g01qsJH1jyrQLkk+EmyQuykbHW0FrwOAAqU0r1vYltpUbWiEMGxYfwg+HU
-         Aytwg4hu3KE310I7jyhB60w2d/X3jDNWcfgg5oDwSJJdPgijms90g5c22k9jtIIwhyQ6
-         T4NZEDill6IqGNFDP0twX9B1tHKjYwWJlJs6x2l5wwgOpsH8QFbmu7O74Kb/b2hvm2rL
-         vahBcVMwzEgtWxSc4E167FZHWPrkcXRvv8scrto0RPbnYDLofU73qP+TioDdSx26D8PU
-         z7CA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=6gtWwN5KvU9IWuR5ZpKgCDwZwZnqNeyrwcvUIdz+jaY=;
+        b=LEPUPNAMi2iqI2RVL5MmD+Vhyo2bFOoh2I1PDwY5I+g22uYk9sh8gcT2gy7YC8Wxg7
+         +yW9s+mwe6ggou6nuxQM58b4qDNTvD5UUag6CY8wt9H4I0LrTUY6qt+eDs7bm0lM/kQ1
+         EQbo04NjBOEHnpvplWFsnUdzKSn0on+XBUHBhQ9bmuNGw0uMnc05TjXkPvfKaFn3mI6S
+         v9U+Xny1lTA6rHfwTmN3Smm7FqSO0JK7A6/I9O9c8PKeSg8rBTM+xgFWBUbuVh+slqzn
+         5ubrqBfoCKNmERyaSmFAzs7Mu8gB9r2/s3U0oexOOsmoTLNXpY6MLipE5NPquD4qGa6e
+         amPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Q2prn5n6newbXXuJ8BZvUmVYF/i8jBG0q25CnLkH4Nc=;
-        b=GkgphfHTmGYecOmBBsHqODiSZt0vbrqg9I4FJUoXA80OsIaRDYwGecpZf2spqlw3e/
-         bLBk33ddoYLPGv1ycC81FrzgkpjQbCe4irIztxbiVeF2Ujw590jneX0xABt/k0w9Ne+N
-         HFDYKdJHgo16IaCWncxAMGTzNmATKhOGcSW2umVI/hpdic1YCoZ627OY6kCiVso3n/zq
-         mUM4i14e+mjo4knrShIIsEuc7H8cSSv/iLQgTXAb+ku8sW6sN3HW5pOEX9cGwjfMFkcX
-         So/ELbNTlRPMzQWanmpiCFEVwjSi5Z2Shm8MQmB3n2MZD6vMX7wUM9hnB0O3DKS2oWq3
-         Fp+Q==
-X-Gm-Message-State: ACgBeo2ELny8/C/SkeLvXFMGokeJo87qh6c3kiiLmWi+sDMxQVEUCUdy
-        MvkHoD56hrT2YANLcZBD9UTo/g==
-X-Google-Smtp-Source: AA6agR55O0d5r9d7AxS3IPcHoBFGJUeAVagfXYsLXWpZUBoedkNkDVsMflBDdYuJ7JWQ0lMtQY/YPA==
-X-Received: by 2002:a05:6512:33d5:b0:48b:17a:6b86 with SMTP id d21-20020a05651233d500b0048b017a6b86mr15315782lfg.671.1662229325880;
-        Sat, 03 Sep 2022 11:22:05 -0700 (PDT)
-Received: from [192.168.16.196] (h-155-4-68-234.A785.priv.bahnhof.se. [155.4.68.234])
-        by smtp.gmail.com with ESMTPSA id u4-20020ac258c4000000b0048b03ec561fsm655685lfo.150.2022.09.03.11.22.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 03 Sep 2022 11:22:05 -0700 (PDT)
-Message-ID: <43824cd0-a25f-5d3b-ca85-7b8488201ef2@kvaser.com>
-Date:   Sat, 3 Sep 2022 20:21:09 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 04/15] can: kvaser_usb: kvaser_usb_leaf: Get
- capabilities from device
-Content-Language: en-US
-To:     Anssi Hannula <anssi.hannula@bitwise.fi>,
-        linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Jimmy Assarsson <jimmyassarsson@gmail.com>, stable@vger.kernel.org
-References: <20220901122729.271-1-extja@kvaser.com>
- <20220901122729.271-5-extja@kvaser.com>
- <e1c06d77-9758-49e3-f772-084d2df365b9@bitwise.fi>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=6gtWwN5KvU9IWuR5ZpKgCDwZwZnqNeyrwcvUIdz+jaY=;
+        b=E4yXm+qZAoktGbVL8AmTG1+No4kYbmGg6f0X6JJ00BtBt1ankx4EMVlsoozBcYozCC
+         4ecAfXXHNdFbx77mVudnSgIOsBZiAJKF9bNBLLLstBAwyWZWGktHm/s07YNZzNCrJWkY
+         ijGHqePCM6qQvqb7xD69c7bx3sS7mznfcBCB/gK7uPI0QW1QvVxTkbjv/ZRlz74IEngV
+         HGVuEtSV2QPHov5bCvpImIH5tDeTy/5tDSr7td1m0JCPnsAsf5EbXCuLVnFU9hRdDDuO
+         DPtQLZTEWchUZI+2OeZaOw7fh3xfBd+TPs5BYza9Ts+jZpD5zbQWXWz5RsXDOX6qV/M6
+         xjOA==
+X-Gm-Message-State: ACgBeo2vw/f0mrB2kuitaCxm8/wEsrUJ41P8HLwQiSfPIIIIji+zFurF
+        XhQKWTBWr0JD4bJL+efZodRCMhSa+C7eFzo8
+X-Google-Smtp-Source: AA6agR6ktR7QiY+Ib9VNeWxonin7MvXCYfKw8lnVb5swYnKNybAD+WPDB6bHi8SF3stvLux3EOwsEA==
+X-Received: by 2002:a2e:9295:0:b0:267:f8f7:2a0f with SMTP id d21-20020a2e9295000000b00267f8f72a0fmr6228268ljh.41.1662229390512;
+        Sat, 03 Sep 2022 11:23:10 -0700 (PDT)
+Received: from f6a14fef6d45.. (h-155-4-68-234.A785.priv.bahnhof.se. [155.4.68.234])
+        by smtp.gmail.com with ESMTPSA id a6-20020a05651c010600b002688cceee44sm609851ljb.132.2022.09.03.11.23.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 Sep 2022 11:23:10 -0700 (PDT)
 From:   Jimmy Assarsson <extja@kvaser.com>
-In-Reply-To: <e1c06d77-9758-49e3-f772-084d2df365b9@bitwise.fi>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Anssi Hannula <anssi.hannula@bitwise.fi>
+Cc:     Jimmy Assarsson <jimmyassarsson@gmail.com>, stable@vger.kernel.org,
+        Jimmy Assarsson <extja@kvaser.com>
+Subject: [PATCH v4 00/15] can: kvaser_usb: Various fixes
+Date:   Sat,  3 Sep 2022 20:23:29 +0200
+Message-Id: <20220903182344.139-1-extja@kvaser.com>
+X-Mailer: git-send-email 2.37.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,46 +68,59 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 9/2/22 13:40, Anssi Hannula wrote:
-> Hi,
-> 
-> On 1.9.2022 15.27, Jimmy Assarsson wrote:
->> Use the CMD_GET_CAPABILITIES_REQ command to query the device for certain
->> capabilities. We are only interested in LISTENONLY mode and wither the
->> device reports CAN error counters.
->>
->> And remove hard coded capabilities for all Leaf devices.
-> 
-> I think the second paragraph is no longer accurate.
+This patch series was originally posted by Anssi Hannula [1].
+In v2 I rebased and updated some of the patches [2].
 
-Oops, will fix this in v4.
+Changes in v4:
+ - Add Tested-by: Anssi Hannula to
+   [PATCH v4 04/15] can: kvaser_usb: kvaser_usb_leaf: Get capabilities from device
+ - Update commit message in
+   [PATCH v4 04/15] can: kvaser_usb: kvaser_usb_leaf: Get capabilities from device
 
-> But the patch itself works for me now with no regressions that I can see.
-> 
-> Tested-by: Anssi Hannula <anssi.hannula@bitwise.fi>
-> 
-> Thanks for taking care of the patchset!
-Thanks again for testing!
+Changes in v3:
+ - Rebase on top of commit
+   1d5eeda23f36 ("can: kvaser_usb: advertise timestamping capabilities and add ioctl support")
+ - Add Tested-by: Anssi Hannula
+ - Add stable@vger.kernel.org to CC.
+ - Add my S-o-b to all patches
+ - Fix regression introduced in
+   [PATCH v2 04/15] can: kvaser_usb: kvaser_usb_leaf: Get capabilities from device,
+   found by Anssi Hannula [3]
 
->> Cc: stable@vger.kernel.org
->> Fixes: 080f40a6fa28 ("can: kvaser_usb: Add support for Kvaser CAN/USB devices")
->> Reported-by: Anssi Hannula <anssi.hannula@bitwise.fi>
->> Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
->> ---
->> Changes in v3
->>   - Rebased on 1d5eeda23f36 ("can: kvaser_usb: advertise timestamping capabilities and add ioctl support")
->>   - Add stable to CC
->>   - Re-add hard coded capabilities for Leaf M32C devices, to fix regression
->>     found by Anssi Hannula in v2 [1].
->>
->> Changes in v2:
->>    - New in v2. Replaces [PATCH 04/12] can: kvaser_usb: Mark Mini PCIe 2xHS as supporting
->>   error counters
->>    - Fixed Anssi's comments; https://lore.kernel.org/linux-can/9742e7ab-3650-74d8-5a44-136555788c08@bitwise.fi/
->>
->> [1] https://lore.kernel.org/linux-can/b25bc059-d776-146d-0b3c-41aecf4bd9f8@bitwise.fi/
->>
->>   .../net/can/usb/kvaser_usb/kvaser_usb_leaf.c  | 144 +++++++++++++++++-
->>   1 file changed, 143 insertions(+), 1 deletion(-)
->>
-> [...]
+[1]
+https://lore.kernel.org/linux-can/20220516134748.3724796-1-anssi.hannula@bitwise.fi
+[2]
+https://lore.kernel.org/linux-can/20220708115709.232815-1-extja@kvaser.com
+[3]
+https://lore.kernel.org/linux-can/b25bc059-d776-146d-0b3c-41aecf4bd9f8@bitwise.fi
+
+Anssi Hannula (10):
+  can: kvaser_usb_leaf: Fix overread with an invalid command
+  can: kvaser_usb: Fix use of uninitialized completion
+  can: kvaser_usb: Fix possible completions during init_completion
+  can: kvaser_usb_leaf: Set Warning state even without bus errors
+  can: kvaser_usb_leaf: Fix TX queue out of sync after restart
+  can: kvaser_usb_leaf: Fix CAN state after restart
+  can: kvaser_usb_leaf: Fix improved state not being reported
+  can: kvaser_usb_leaf: Fix wrong CAN state after stopping
+  can: kvaser_usb_leaf: Ignore stale bus-off after start
+  can: kvaser_usb_leaf: Fix bogus restart events
+
+Jimmy Assarsson (5):
+  can: kvaser_usb: kvaser_usb_leaf: Get capabilities from device
+  can: kvaser_usb: kvaser_usb_leaf: Rename {leaf,usbcan}_cmd_error_event
+    to {leaf,usbcan}_cmd_can_error_event
+  can: kvaser_usb: kvaser_usb_leaf: Handle CMD_ERROR_EVENT
+  can: kvaser_usb: Add struct kvaser_usb_busparams
+  can: kvaser_usb: Compare requested bittiming parameters with actual
+    parameters in do_set_{,data}_bittiming
+
+ drivers/net/can/usb/kvaser_usb/kvaser_usb.h   |  32 +-
+ .../net/can/usb/kvaser_usb/kvaser_usb_core.c  | 118 +++-
+ .../net/can/usb/kvaser_usb/kvaser_usb_hydra.c | 166 ++++--
+ .../net/can/usb/kvaser_usb/kvaser_usb_leaf.c  | 543 ++++++++++++++++--
+ 4 files changed, 764 insertions(+), 95 deletions(-)
+
+-- 
+2.37.3
+
