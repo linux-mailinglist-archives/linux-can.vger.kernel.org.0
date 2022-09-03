@@ -2,60 +2,60 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC3B65AC0AA
-	for <lists+linux-can@lfdr.de>; Sat,  3 Sep 2022 20:25:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A0E45AC0AF
+	for <lists+linux-can@lfdr.de>; Sat,  3 Sep 2022 20:25:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233213AbiICSZt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 3 Sep 2022 14:25:49 -0400
+        id S230333AbiICSZw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 3 Sep 2022 14:25:52 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233224AbiICSZr (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 3 Sep 2022 14:25:47 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F45341D3A
-        for <linux-can@vger.kernel.org>; Sat,  3 Sep 2022 11:25:45 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id z25so7714086lfr.2
-        for <linux-can@vger.kernel.org>; Sat, 03 Sep 2022 11:25:45 -0700 (PDT)
+        with ESMTP id S233287AbiICSZs (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 3 Sep 2022 14:25:48 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B71D1089
+        for <linux-can@vger.kernel.org>; Sat,  3 Sep 2022 11:25:47 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id v26so7649571lfd.10
+        for <linux-can@vger.kernel.org>; Sat, 03 Sep 2022 11:25:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kvaser.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=FtYEyGAJaRB0x8ImnvWnEBF8IOBBq297Mde/T1RSt3w=;
-        b=aB9FmxIK6o2ysewr84GWl+pyPyYCLkDYNpXn5eziKPtCHd5N8bBLNqVuOZ4VcPevnP
-         PKGphpfSXF45SYTuPz6AJ/c6AjR4IwQEv2JIueKfnu+lTK4FBqP1AMFR1GT6E7lUU1ad
-         7lhPIEUHut2umww4d3sqBGELjV/tu+8R8zmDlS8WUcF15jiElgBRcGC3gG44aj7dBIMi
-         byd5rk2JZUswMBFfbt3A0j3WbWgJDXR10MV+PVw9RIflntGD/s5e2vuKuJyqql5P4IZ2
-         pElCkFE99+sYV8NzlDGc+n8zriCQWrwybUfqP8/wfwNNU28lRknqxYA4OPtub6Lq/UCl
-         l5TQ==
+        bh=Opm1Gh+i0ZnGHSUzxPyi7bNCWNJS2k2uV+gp190oxyI=;
+        b=N5+wwiF8m8/w7vzG/XjizdDP2VdolkeE05HEKTBRancL4+Zl4XK72HZmb73dZg1ye/
+         gJEOu6uXqWw4h2J+L1p483tYGoUeY2QhRaaj/ofrwZJdwCVoPM2YgXYy2sKoPkvA41mv
+         /cR3jV0Mp9VUe0TEKl6/RLtNRAQAGNdIhA++g30Om4MrTAQ3HlBxu2jtikoJ1lo1j8jb
+         tzUM3hi/VRDgdIkECbwgGjfqedHgnK7K70F1MT+0Li7XxLufzbk32TD6NkeGhCTDYXP7
+         N48BZ7G6jgsLNr0Q+UzTebUVXQ+Ykuszp3fDMFxh3YVKyx9yR0NOHOwLBHcAO87zfcZd
+         2lpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=FtYEyGAJaRB0x8ImnvWnEBF8IOBBq297Mde/T1RSt3w=;
-        b=dhKSjIRcEicqw0iX/4N1zSZItaUYYzO2EnbRcB2V3BmKjDapa3b9XuHX/BjmQ0GpbW
-         4iBUaJ1hJhtjl1znpEUj1luFJmm/08UAc50D9XCsTiKDNRXGNFiXb7Ab3IRmeJAuDBmt
-         i9XxQ14cIxlTAPk0xsbmFPLMltmLc2Ka93K9KEx82UeIdVtGn2YBkB4mNDE194B0QNTg
-         LD3zRhN4fMetGkTcie90Fz28SB/kIOyNP2/Bz+GnAqzRPunK+kqqZ58X8bkQ+lKhemb1
-         xxIGLbH5kq3WUJZEaUb+zttVR4r6hgw6qbKNE8e7PCV7PcLhazqVt/X7CoZFKOL6mWvu
-         ys0Q==
-X-Gm-Message-State: ACgBeo3UwXYWd/L5qOmvnXc9gegQstvOvPKnbcWqbD8RKuJmi1xos54P
-        QcRnmT2n9tENx8yjvTfeoc7frTz/vt4DFj5f
-X-Google-Smtp-Source: AA6agR4gK/BdhHrVmt67eijB8NQ51Jvr/jmZtRXHXl7oWNnaua/CjOD8BvjP/6WFuGWn63EMSk0uWQ==
-X-Received: by 2002:a05:6512:3f02:b0:494:5c72:6a8b with SMTP id y2-20020a0565123f0200b004945c726a8bmr12091837lfa.313.1662229544892;
-        Sat, 03 Sep 2022 11:25:44 -0700 (PDT)
+        bh=Opm1Gh+i0ZnGHSUzxPyi7bNCWNJS2k2uV+gp190oxyI=;
+        b=TKqABW/USK3vm+HxLPAY60f2Ar6PBFE2x2n5M5xxSQLcw3Rt1zHCE7eut8iEQ/Sxs9
+         flQzFivMABhalot7XRvH1LCHTYHDOhJzFAu8S2jFdDQesqyMPghtW54ecQDlu1D8wE/T
+         g4D0SKgiQI/O53lCe7EuFkdz3SzO1Xoo9rMFFwd5xvIHIakrT2nfntrsP1JXLHq5lajC
+         16qKsBGOW7tm3c5HD/jLceqHmsmrUQf0h2yvbxlJ25ZLsDmzv3mXTpyc8K8EuIys/DMg
+         lpkFrPOjdB9/lNjK8NfekqOBBY8qvd1LliOg9wm2YheUDZ/8zCtYzyBUBbCSJmsXgYuZ
+         D+hQ==
+X-Gm-Message-State: ACgBeo39n1EEATOZ9/4OEY1pDODzmwyceEKee3NwZom7gNxbzdmFYjVJ
+        SiWUj/WbAYAbWeOWsG3yLiochPR/R9QJeEnI
+X-Google-Smtp-Source: AA6agR7H6uviaRHICwHvLrx5a6R/CGg0GEh5AZ7V+nik2ahvwLu3pjqm6mlO86u/6PAg+JQuxJQ+zQ==
+X-Received: by 2002:a05:6512:39c6:b0:48b:9d1d:fd9c with SMTP id k6-20020a05651239c600b0048b9d1dfd9cmr15401170lfu.633.1662229545691;
+        Sat, 03 Sep 2022 11:25:45 -0700 (PDT)
 Received: from f6a14fef6d45.. (h-155-4-68-234.A785.priv.bahnhof.se. [155.4.68.234])
         by smtp.gmail.com with ESMTPSA id u18-20020ac24c32000000b00492f6ddba59sm658330lfq.75.2022.09.03.11.25.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Sep 2022 11:25:44 -0700 (PDT)
+        Sat, 03 Sep 2022 11:25:45 -0700 (PDT)
 From:   Jimmy Assarsson <extja@kvaser.com>
 To:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
         Anssi Hannula <anssi.hannula@bitwise.fi>
 Cc:     Jimmy Assarsson <jimmyassarsson@gmail.com>, stable@vger.kernel.org,
         Jimmy Assarsson <extja@kvaser.com>
-Subject: [PATCH v4 08/15] can: kvaser_usb_leaf: Fix TX queue out of sync after restart
-Date:   Sat,  3 Sep 2022 20:25:52 +0200
-Message-Id: <20220903182559.189-8-extja@kvaser.com>
+Subject: [PATCH v4 09/15] can: kvaser_usb_leaf: Fix CAN state after restart
+Date:   Sat,  3 Sep 2022 20:25:53 +0200
+Message-Id: <20220903182559.189-9-extja@kvaser.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20220903182559.189-1-extja@kvaser.com>
 References: <20220903182559.189-1-extja@kvaser.com>
@@ -73,17 +73,13 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 From: Anssi Hannula <anssi.hannula@bitwise.fi>
 
-The TX queue seems to be implicitly flushed by the hardware during
-bus-off or bus-off recovery, but the driver does not reset the TX
-bookkeeping.
+can_restart() expects CMD_START_CHIP to set the error state to
+ERROR_ACTIVE as it calls netif_carrier_on() immediately afterwards.
 
-Despite not resetting TX bookkeeping the driver still re-enables TX
-queue unconditionally, leading to "cannot find free context" /
-NETDEV_TX_BUSY errors if the TX queue was full at bus-off time.
+Otherwise the user may immediately trigger restart again and hit a
+BUG_ON() in can_restart().
 
-Fix that by resetting TX bookkeeping on CAN restart.
-
-Tested with 0bfd:0124 Kvaser Mini PCI Express 2xHS FW 4.18.778.
+Fix kvaser_usb_leaf set_mode(CMD_START_CHIP) to set the expected state.
 
 Cc: stable@vger.kernel.org
 Fixes: 080f40a6fa28 ("can: kvaser_usb: Add support for Kvaser CAN/USB devices")
@@ -101,52 +97,23 @@ Changes in v3:
 
 Changes in v2:
   - Rebased on b3b6df2c56d8 ("can: kvaser_usb: kvaser_usb_leaf: fix bittiming limits")
-  - Removed explicit queue flush.
 
- drivers/net/can/usb/kvaser_usb/kvaser_usb.h      | 2 ++
- drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c | 2 +-
  drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c | 2 ++
- 3 files changed, 5 insertions(+), 1 deletion(-)
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb.h b/drivers/net/can/usb/kvaser_usb/kvaser_usb.h
-index 841da29cef93..f6c0938027ec 100644
---- a/drivers/net/can/usb/kvaser_usb/kvaser_usb.h
-+++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb.h
-@@ -178,6 +178,8 @@ struct kvaser_usb_dev_cfg {
- extern const struct kvaser_usb_dev_ops kvaser_usb_hydra_dev_ops;
- extern const struct kvaser_usb_dev_ops kvaser_usb_leaf_dev_ops;
- 
-+void kvaser_usb_unlink_tx_urbs(struct kvaser_usb_net_priv *priv);
-+
- int kvaser_usb_recv_cmd(const struct kvaser_usb *dev, void *cmd, int len,
- 			int *actual_len);
- 
-diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-index c2bce6773adc..e91648ed7386 100644
---- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-+++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-@@ -477,7 +477,7 @@ static void kvaser_usb_reset_tx_urb_contexts(struct kvaser_usb_net_priv *priv)
- /* This method might sleep. Do not call it in the atomic context
-  * of URB completions.
-  */
--static void kvaser_usb_unlink_tx_urbs(struct kvaser_usb_net_priv *priv)
-+void kvaser_usb_unlink_tx_urbs(struct kvaser_usb_net_priv *priv)
- {
- 	usb_kill_anchored_urbs(&priv->tx_submitted);
- 	kvaser_usb_reset_tx_urb_contexts(priv);
 diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
-index b4acd9427967..48b8a0f0b362 100644
+index 48b8a0f0b362..a6a26085bc15 100644
 --- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
 +++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
-@@ -1663,6 +1663,8 @@ static int kvaser_usb_leaf_set_mode(struct net_device *netdev,
- 
- 	switch (mode) {
- 	case CAN_MODE_START:
-+		kvaser_usb_unlink_tx_urbs(priv);
-+
+@@ -1668,6 +1668,8 @@ static int kvaser_usb_leaf_set_mode(struct net_device *netdev,
  		err = kvaser_usb_leaf_simple_cmd_async(priv, CMD_START_CHIP);
  		if (err)
  			return err;
++
++		priv->can.state = CAN_STATE_ERROR_ACTIVE;
+ 		break;
+ 	default:
+ 		return -EOPNOTSUPP;
 -- 
 2.37.3
 
