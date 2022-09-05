@@ -2,36 +2,37 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 312965AD49B
-	for <lists+linux-can@lfdr.de>; Mon,  5 Sep 2022 16:18:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 365315AD6F2
+	for <lists+linux-can@lfdr.de>; Mon,  5 Sep 2022 17:55:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238017AbiIEORt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 5 Sep 2022 10:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37194 "EHLO
+        id S238809AbiIEPy3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 5 Sep 2022 11:54:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237671AbiIEORs (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 5 Sep 2022 10:17:48 -0400
+        with ESMTP id S238227AbiIEPyZ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 5 Sep 2022 11:54:25 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63CD5580A3
-        for <linux-can@vger.kernel.org>; Mon,  5 Sep 2022 07:17:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED74D20B
+        for <linux-can@vger.kernel.org>; Mon,  5 Sep 2022 08:54:20 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1oVCv3-0000at-92; Mon, 05 Sep 2022 16:17:45 +0200
-Received: from pengutronix.de (unknown [IPv6:2a0a:edc0:0:701:86c0:9b80:5c95:555])
+        id 1oVEQU-0004g2-68; Mon, 05 Sep 2022 17:54:18 +0200
+Received: from pengutronix.de (unknown [IPv6:2a0a:edc0:0:701:b4c0:a600:5e68:1e31])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 50649DAD62;
-        Mon,  5 Sep 2022 14:17:44 +0000 (UTC)
-Date:   Mon, 5 Sep 2022 16:17:43 +0200
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 2A59FDAE34;
+        Mon,  5 Sep 2022 15:54:17 +0000 (UTC)
+Date:   Mon, 5 Sep 2022 17:54:16 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     Jacob Kroon <jacob.kroon@gmail.com>
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        linux-can@vger.kernel.org, wg@grandegger.com
 Subject: Re: CM-ITC, pch_can/c_can_pci, sendto() returning ENOBUFS
-Message-ID: <20220905141743.2hqexc3gmzzgdgly@pengutronix.de>
+Message-ID: <20220905155416.pgvseb6uggc67ua4@pengutronix.de>
 References: <15a8084b-9617-2da1-6704-d7e39d60643b@gmail.com>
  <403e18fe-8695-cd56-38f3-0ffe3ec9e472@gmail.com>
  <36d0419b-297f-8e39-8843-051b55b8a2bb@gmail.com>
@@ -40,13 +41,11 @@ References: <15a8084b-9617-2da1-6704-d7e39d60643b@gmail.com>
  <f8a95bfb-b1c2-cd41-1106-ca739c438fb9@gmail.com>
  <df1d220e-bf99-1051-ca90-5bd52e6c64e7@hartkopp.net>
  <0eb1dd1b-427a-92c5-22ef-97c557cfec6e@gmail.com>
- <68dd96fb-69e7-d82f-75b3-610afe9ae0b8@hartkopp.net>
- <c1c8bbbe-4282-1dc4-db20-a21b55eecc14@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cve2wybuct6tltoy"
+        protocol="application/pgp-signature"; boundary="h2ad3nydi3ujbhs6"
 Content-Disposition: inline
-In-Reply-To: <c1c8bbbe-4282-1dc4-db20-a21b55eecc14@gmail.com>
+In-Reply-To: <0eb1dd1b-427a-92c5-22ef-97c557cfec6e@gmail.com>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -61,40 +60,74 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---cve2wybuct6tltoy
+--h2ad3nydi3ujbhs6
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 02.09.2022 17:13:46, Jacob Kroon wrote:
-> Thank you Oliver for all the good hints.
+On 01.09.2022 11:38:31, Jacob Kroon wrote:
+> I used "candump can0 -l" on the EG20T host to capture the traffic, and
+> then connected an CAN USB analyzer to the network and used that to
+> capture the traffic. One thing sticks out. This is the log from the
+> CAN USB analyzer:
+
+Who generates these CAN messages?
+
+> > ...
+> > 505.7052;RX;0x464;3;0x01;0x01;0x00;;;;;;
+> > 505.7052;RX;0x464;3;0x00;0x00;0x00;;;;;;
+> > 505.7063;RX;0x65;64;;;;;;;;;
+
+As Oliver pointed out, this doesn't look like a valid CAN frame. Is the
+analyzer and/or sender configured for CAN-FD?
+
+> > 505.7662;RX;0x440;3;0x32;0x20;0xFA;;;;;;
+> > 505.7912;RX;0x44C;3;0x35;0x20;0xFA;;;;;;
+> > 505.9632;RX;0x464;3;0x00;0x00;0x00;;;;;;
+> > 505.9632;RX;0x464;3;0x01;0x01;0x00;;;;;;
+> > 505.9752;RX;0x468;3;0x51;0x20;0xFA;;;;;;
+> > 506.0362;RX;0x440;3;0x32;0x20;0xFA;;;;;;
+> > 506.0622;RX;0x44C;3;0x35;0x20;0xFA;;;;;;
+> > 506.2112;RX;0x464;3;0x00;0x00;0x00;;;;;;
+> > 506.2112;RX;0x464;3;0x00;0x00;0x00;;;;;;
+> > 506.2462;RX;0x468;3;0x51;0x20;0xFA;;;;;;
+> > 506.3072;RX;0x440;3;0x32;0x20;0xFA;;;;;;
+> > 506.3322;RX;0x44C;3;0x35;0x20;0xFA;;;;;;
+> > 506.4572;RX;0x464;3;0x00;0x00;0x00;;;;;;
+> > 506.4580;RX;0x464;3;0x00;0x00;0x00;;;;;;
+> > 506.5162;RX;0x468;3;0x51;0x20;0xFA;;;;;;
+> > 522.7203;RX;0x1E;1;0xFF;;;;;;;;
+> > ...
 >=20
-> I've done some more logging, but there are no error frames being logged.
+> Note the third message from the top. This is what "candump" on the host
+> logs:
 >=20
-> I can see that both pch_can and c_can_pci drivers call can_put_echo_skb()=
- in
-> their ndo_start_xmit functions, but neither checks the return value wheth=
-er
-> it succeeded or not. Shouldn't both these return NETDEV_TX_BUSY if there =
-are
-> no echo slots available ?
+> > ...
+> > (1662022485.638794) can0 464#010100
+> > (1662022485.638940) can0 464#000000
+> > (1662022485.699405) can0 440#3220FA
+> > (1662022485.725166) can0 44C#3520FA
+> > (1662022485.896858) can0 464#000000
+> > (1662022485.897382) can0 464#010100
+> > (1662022485.909042) can0 468#5120FA
+> > (1662022485.970036) can0 440#3220FA
+> > (1662022485.995596) can0 44C#3520FA
+> > (1662022486.144685) can0 464#000000
+> > (1662022486.144768) can0 464#000000
+> > (1662022486.179595) can0 468#5120FA
+> > (1662022486.240561) can0 440#3220FA
+> > (1662022486.266274) can0 44C#3520FA
+> > (1662022486.391248) can0 464#000000
+> > (1662022486.391469) can0 464#000000
+> > (1662022486.450115) can0 468#5120FA
+> > (1662022502.662035) can0 01E#FF
+> > ...
+>=20
+> It fails to see the 3rd message from the previous log. What would that
+> indicate ? The CAN analyzer sees the message, but the EG20T doesn't.
 
-No - The TX queue between the kernel and the driver should only be
-active in the first place if there is room in the hardware TX queue. If
-there is room in the hardware TX queue, there's room in the echo skb
-array, too.
-
-> One reason I ask is because whenever I strace the application, it would s=
-eem
-> the problem goes away, and I'm guessing strace:ing will slow down my
-> application.
-
-ACK - strace slows down the app, probably resulting in the TX queue not
-run full.
-
-If I find some time I can try to reproduce the problem on a beagle bone,
-which uses d_can core. Just got back from holidays, so I'm quite busy
-right now. Drop me a note, if you need commercial support.
+Is this error somehow related to the "can0: can_put_echo_skb: BUG!
+echo_skb 0 is occupied"?
 
 regards,
 Marc
@@ -105,19 +138,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---cve2wybuct6tltoy
+--h2ad3nydi3ujbhs6
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmMWBQIACgkQrX5LkNig
-010lMggAs5zAgnCdt2JVP0Iu4M5a3COz0+F1dwlftrnmtVuqsl0YL4P1azxzGbwm
-OF0Jw+wE/IEI49+4KnNEP7FPffriZw8l4yO8tkSDUj0QxuMGQQ9oZThZKUcEmQ8P
-z19KAVOfOXAMGGZctnU8jB3sSZjSkM9Yq12EC3IIx8tS568kXsVQ8S7ETGcWhScf
-i+JEcUyva/DFY/UnlQEpV8tw5iGaVmgvhUQ2RKE0numY1nLfHKL1Ai3qoZpX/zor
-T1/mnNGklT0S/L4ppcmnKMrslZdmMnlPwgkBzisBcMnrQGKJ8dxyirIY6KWtC6Ps
-4RSvnjVAW3Sl4Bg1b8KTzJPpLH9Rvw==
-=1U1N
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmMWG6UACgkQrX5LkNig
+010Z2Af/YLI0NsMnXL8q1xJtl9PdDzDqggmIad8Bo48Wp4uAFpmMqPzluzmR15qu
+hXvhIAEOFMfc95MtRucjBdFXXxzkOaGY6X72yRVHrthbX7yhM377gbNeY6oBcylY
++qVCx3imXKeZ4TshjrVtNkxhnVfA8y3aRxElHBHjYCiPdUdero6rV23aBZOTqH76
+M9qzwIcqV+t/mf8irSzHN8Bj1yomuBAKlmea1LchC/rwzNYTYP/INVIN6H/pc90D
+JzT2w7Utha1QR9/C0ON29wcDEUdGCgNMmdts0cdc3b7pGl0tn5r8CYbjUUxpiwwZ
+ZwwUiysapCIQR2+0kXKpaOc6bvmYrg==
+=u64f
 -----END PGP SIGNATURE-----
 
---cve2wybuct6tltoy--
+--h2ad3nydi3ujbhs6--
