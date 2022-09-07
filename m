@@ -2,174 +2,113 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C28FC5B0200
-	for <lists+linux-can@lfdr.de>; Wed,  7 Sep 2022 12:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 505835B06F4
+	for <lists+linux-can@lfdr.de>; Wed,  7 Sep 2022 16:33:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbiIGKi5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 7 Sep 2022 06:38:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52712 "EHLO
+        id S230339AbiIGOdo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 7 Sep 2022 10:33:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229963AbiIGKiw (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 7 Sep 2022 06:38:52 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54DE577EB4
-        for <linux-can@vger.kernel.org>; Wed,  7 Sep 2022 03:38:51 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oVsSH-0001JY-Qi
-        for linux-can@vger.kernel.org; Wed, 07 Sep 2022 12:38:49 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 17533DC674
-        for <linux-can@vger.kernel.org>; Wed,  7 Sep 2022 10:38:49 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 44EFADC66B;
-        Wed,  7 Sep 2022 10:38:48 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 745196ee;
-        Wed, 7 Sep 2022 10:38:46 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org
-Cc:     Mark Bath <mark@baggywrinkle.co.uk>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 5/5] can: bittiming: can_calc_bittiming(): use Phase Seg2 / 2 as default for SJW
-Date:   Wed,  7 Sep 2022 12:38:45 +0200
-Message-Id: <20220907103845.3929288-6-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220907103845.3929288-1-mkl@pengutronix.de>
-References: <20220907103845.3929288-1-mkl@pengutronix.de>
+        with ESMTP id S229688AbiIGOdN (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 7 Sep 2022 10:33:13 -0400
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9A57E332
+        for <linux-can@vger.kernel.org>; Wed,  7 Sep 2022 07:32:46 -0700 (PDT)
+Received: by mail-ed1-x543.google.com with SMTP id t5so19958624edc.11
+        for <linux-can@vger.kernel.org>; Wed, 07 Sep 2022 07:32:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date;
+        bh=UTPjlhWN0j/3cl0uibj9IdU3K9tIHCNTd74bAPWV+BQ=;
+        b=mqK4Urm6SI0LL0fIUpNglz2SbMFsznWTf0PUQzqjeQH/Bx12DkdTnBbzDZaQ4NR5iF
+         EQ7O7aO6doj8u/y3juxRvQfrpZ+4GxqWxP8xLHHcNMflWyA+nbVtyNaPRhtr9ofPoPwP
+         8B+OpsMdCo4QTDhmgZx918/MwMfvch/o8zTMSvXvdQRmqiXAGAGG0BMKFEwgydJ+Wh2g
+         mACuo7ixacFf2kfjc0mw39zk8rxwdiQKq9VKx4zvYpa6O1ByXXOPP+qBaWEXo7gAHnwA
+         FAVlPjIOEE2/ttEfWJe2qBCmRSUgsg0XQyoATWJy8k712P//auvk1V/Dh46aKaKpfIy+
+         X5Hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=UTPjlhWN0j/3cl0uibj9IdU3K9tIHCNTd74bAPWV+BQ=;
+        b=NeYDP5r7w9v3Gx8e2inI+4pjvCXmOEI0I62rLPxUUgFabQw15epJrgTb4uzCYNPkZN
+         qzwFfQvHAdkGeQGWSPAznnLHMGwMolH39K9PrI5ewjL70POBg5ZKCLi/kXFtpSkq5yNL
+         6L3q1ikbQ1MXQKLDsJ+aM8NsrmWa+B0Ccm4rPdSqhy4pngL9DZ9GGa9Ttx6hLLyRcyML
+         /TRPCAW1vPRRMH5XKgmMtIWV95uQ4RrlCpf0Y1GAb7qEM+2hoI0iNrtLzKOMJqGUNd6c
+         AcThj78q00Gla2kDR2zO4QX66s7+VYunTLNGEm4ATVh12NsLnmliRU13Sk7OiCZ8Yd01
+         ytuQ==
+X-Gm-Message-State: ACgBeo03B8i8Cdr/fl/HD4GnCwYha1r14RSSAEchJBA1V5L/K6UO+bo3
+        oqSm+xuvKwB8a97TUOi4dx6PtCViky+79FBcxII=
+X-Google-Smtp-Source: AA6agR4rVWBPLpn6GXYzkUIV6dVS5ftgYaJRvLA5IUNE2znvSte/lik1W2yhM2ubbwRHIY2/TUDyhZrg0vh1fMG2v9I=
+X-Received: by 2002:a05:6402:510c:b0:43e:305c:a4d1 with SMTP id
+ m12-20020a056402510c00b0043e305ca4d1mr3247713edd.35.1662561165041; Wed, 07
+ Sep 2022 07:32:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Received: by 2002:a54:3fc4:0:0:0:0:0 with HTTP; Wed, 7 Sep 2022 07:32:44 -0700 (PDT)
+Reply-To: lumar.casey@outlook.com
+From:   LUMAR CASEY <miriankushrat@gmail.com>
+Date:   Wed, 7 Sep 2022 16:32:44 +0200
+Message-ID: <CAO4StN0TpPxKN5zH_svRaRqGX4qmv4BYo2qpgmikVSdFaMxdLg@mail.gmail.com>
+Subject: ATTENTION/PROPOSAL
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.8 required=5.0 tests=ADVANCE_FEE_4_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM,UNDISC_MONEY,UPPERCASE_75_100 autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:543 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [miriankushrat[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 UPPERCASE_75_100 message body is 75-100% uppercase
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  0.2 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  0.0 ADVANCE_FEE_4_NEW_MONEY Advance Fee fraud and lots of money
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-"The (Re-)Synchronization Jump Width (SJW) defines how far a
- resynchronization may move the Sample Point inside the limits defined
- by the Phase Buffer Segments to compensate for edge phase errors." [1]
+ATTENTION
 
-In other words this means the SJW parameter controls the tolerance of
-the CAN controller against the frequency error compared to other CAN
-controllers.
+BUSINESS PARTNER,
 
-If the user space doesn't provide a SJW parameter, the kernel chooses
-a default value of 1. This proved to be a good default value for CAN
-controllers, but not anymore with modern controllers.
+I AM LUMAR CASEY WORKING WITH AN INSURANCE FINANCIAL INSTITUTE, WITH
+MY POSITION AND PRIVILEGES I WAS ABLE TO SOURCE OUT AN OVER DUE
+PAYMENT OF 12.8 MILLION POUNDS THAT IS NOW SECURED WITH A SHIPPING
+DIPLOMATIC OUTLET.
 
-In the past, there were CAN controllers like the sja1000 with a rather
-limited range of bit timing parameters. For the standard bit rates
-this results in the following bit timing parameters:
+I AM SEEKING YOUR PARTNERSHIP TO RECEIVE THIS CONSIGNMENT AS AS MY
+PARTNER TO INVEST THIS FUND INTO A PROSPEROUS INVESTMENT VENTURE IN
+YOUR COUNTRY.
 
-| Bit timing parameters for sja1000 with 8.000000 MHz ref clock
-|                     _----+--------------=> tseg1: 1 …   16
-|                    /    /     _---------=> tseg2: 1 …    8
-|                   |    |     /    _-----=> sjw:   1 …    4
-|                   |    |    |    /    _-=> brp:   1 …   64 (inc: 1)
-|                   |    |    |   |    /
-|  nominal          |    |    |   |   |     real  Bitrt    nom   real   SampP
-|  Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP  Bitrate  Error  SampP  SampP   Error  BTR0 BTR1
-|  1000000    125   2    3    2   1   1  1000000   0.0%  75.0%  75.0%   0.0%   0x00 0x14
-|   800000    125   3    4    2   1   1   800000   0.0%  80.0%  80.0%   0.0%   0x00 0x16
-|   666666    125   4    4    3   1   1   666666   0.0%  80.0%  75.0%   6.2%   0x00 0x27
-|   500000    125   6    7    2   1   1   500000   0.0%  87.5%  87.5%   0.0%   0x00 0x1c
-|   250000    250   6    7    2   1   2   250000   0.0%  87.5%  87.5%   0.0%   0x01 0x1c
-|   125000    500   6    7    2   1   4   125000   0.0%  87.5%  87.5%   0.0%   0x03 0x1c
-|   100000    625   6    7    2   1   5   100000   0.0%  87.5%  87.5%   0.0%   0x04 0x1c
-|    83333    750   6    7    2   1   6    83333   0.0%  87.5%  87.5%   0.0%   0x05 0x1c
-|    50000   1250   6    7    2   1  10    50000   0.0%  87.5%  87.5%   0.0%   0x09 0x1c
-|    33333   1875   6    7    2   1  15    33333   0.0%  87.5%  87.5%   0.0%   0x0e 0x1c
-|    20000   3125   6    7    2   1  25    20000   0.0%  87.5%  87.5%   0.0%   0x18 0x1c
-|    10000   6250   6    7    2   1  50    10000   0.0%  87.5%  87.5%   0.0%   0x31 0x1c
+I AWAIT YOUR REPLY TO ENABLE US PROCEED WITH THIS BUSINESS PARTNERSHIP TOGETHER.
 
-The attentive reader notices that in most cases the SJW is 1, while
-the Phase Seg2 is 2. Both values are in TQ units, which itself is a
-duration in nanoseconds.
+REGARDS,
 
-For example the 500 kbit/s configuration:
-
-|  nominal                                  real  Bitrt    nom   real   SampP
-|  Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP  Bitrate  Error  SampP  SampP   Error  BTR0 BTR1
-|   500000    125   6    7    2   1   1   500000   0.0%  87.5%  87.5%   0.0%   0x00 0x1c
-
-the TQ is 125ns, the Phase Seg2 is "2" (== 250ns), the SJW is "1" (==
-125 ns).
-
-Looking at a more modern CAN controller like a mcp2518fd, it has wider
-bit timing registers.
-
-| Bit timing parameters for mcp251xfd with 40.000000 MHz ref clock
-|                     _----+--------------=> tseg1: 2 …  256
-|                    /    /     _---------=> tseg2: 1 …  128
-|                   |    |     /    _-----=> sjw:   1 …  128
-|                   |    |    |    /    _-=> brp:   1 …  256 (inc: 1)
-|                   |    |    |   |    /
-|  nominal          |    |    |   |   |     real  Bitrt    nom   real   SampP
-|  Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP  Bitrate  Error  SampP  SampP   Error      NBTCFG
-|   500000     25  34   35   10   1   1   500000   0.0%  87.5%  87.5%   0.0%   0x00440900
-
-The TQ is 25ns, the Phase Seg 2 is "10" (== 250ns), the SJW is "1" (==
-25ns).
-
-As the kernel chooses a default SJW of 1 independent of the TQ, this
-results in a much smaller SJW and thus much smaller tolerances against
-frequency errors.
-
-To get the same oscillator tolerances on controllers with wide bit
-timing registers, choose a default SJW value of Phase Seg2 / 2. This
-results in the following bit timing parameters:
-
-| Bit timing parameters for mcp251xfd with 40.000000 MHz ref clock
-|                     _----+--------------=> tseg1: 2 …  256
-|                    /    /     _---------=> tseg2: 1 …  128
-|                   |    |     /    _-----=> sjw:   1 …  128
-|                   |    |    |    /    _-=> brp:   1 …  256 (inc: 1)
-|                   |    |    |   |    /
-|  nominal          |    |    |   |   |     real  Bitrt    nom   real   SampP
-|  Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP  Bitrate  Error  SampP  SampP   Error      NBTCFG
-|   500000     25  34   35   10   5   1   500000   0.0%  87.5%  87.5%   0.0%   0x00440904
-
-The TQ is 25ns, the Phase Seg 2 is "10" (== 250ns), the SJW is "5" (==
-125ns). Which is the same as on the sja1000 controller.
-
-[1] http://web.archive.org/http://www.oertel-halle.de/files/cia99paper.pdf
-
-Cc: Mark Bath <mark@baggywrinkle.co.uk>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/dev/calc_bittiming.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/can/dev/calc_bittiming.c b/drivers/net/can/dev/calc_bittiming.c
-index b9aa1f7d0b37..6b4ca7af05fa 100644
---- a/drivers/net/can/dev/calc_bittiming.c
-+++ b/drivers/net/can/dev/calc_bittiming.c
-@@ -154,9 +154,9 @@ int can_calc_bittiming(const struct net_device *dev, struct can_bittiming *bt,
- 	bt->phase_seg1 = tseg1 - bt->prop_seg;
- 	bt->phase_seg2 = tseg2;
- 
--	/* If user space provides no sjw, use 1 as default */
-+	/* If user space provides no sjw, use sane default of phase_seg2 / 2 */
- 	if (!bt->sjw)
--		bt->sjw = 1;
-+		bt->sjw = max(1U, bt->phase_seg2 / 2);
- 
- 	/* sjw must not be higher than sjw_max, phase_seg1, and phase_seg2 */
- 	bt->sjw = min3(bt->sjw, btc->sjw_max,
--- 
-2.35.1
-
-
+LUMAR CASEY
