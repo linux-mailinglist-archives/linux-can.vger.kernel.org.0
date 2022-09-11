@@ -2,63 +2,61 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A6675B4C9C
-	for <lists+linux-can@lfdr.de>; Sun, 11 Sep 2022 10:24:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 511AF5B4EB4
+	for <lists+linux-can@lfdr.de>; Sun, 11 Sep 2022 14:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229464AbiIKIYO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 11 Sep 2022 04:24:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55714 "EHLO
+        id S230204AbiIKML3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 11 Sep 2022 08:11:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiIKIYN (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 11 Sep 2022 04:24:13 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F22AD27148
-        for <linux-can@vger.kernel.org>; Sun, 11 Sep 2022 01:24:12 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-3454b0b1b6dso66876277b3.4
-        for <linux-can@vger.kernel.org>; Sun, 11 Sep 2022 01:24:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=vux7pfAjv8sP1swXZza1/dBq9SIr51zc78+4cJhkKmw=;
-        b=Zpo1Zf+tJ/Q3OZnmdXweWmsCBNpfH+lTz0jkdE1YmUFGCBHdKT1zaztBhlK/EDFH46
-         3KY+MP+m4XgH6jZ5E8y6earv7ODe9iObMoYR4Y8XofFJ5Y05bPwVodyqLUXY3AM5V0vH
-         G/68JN4rqIkLX4b8XeOxaFfz6fNMG0dYZiq+wymwzjJLrVPeFq4gSBCRcTDI3x8ISQXP
-         QwPbf2cRqa7nPxNNjqNfVZntpq5KG5eQXJ23jVVRKuOIhPDhg7XIYS9Es0UWmC+iaWth
-         x9TMq065ahW25MHZ9M7QOrF9gg2Fly3U+ZvqSfeMMnNEYH6BWHf2sFhDfigUxqozPRYP
-         rckA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=vux7pfAjv8sP1swXZza1/dBq9SIr51zc78+4cJhkKmw=;
-        b=PtcvULOUlJYcwyS5Nw+Ziw1dYzxwOCu2PMDzo2Af/EFlmcmaK5z/a8TpgluouEwhl2
-         gG/mjFblkeH9g1aXbL2Xi1tv4u/d36p8+bh5B89N3IWOG05mBy8nT1CBfD8JMCy5osav
-         xYP76WDm2KX9BGYW0eF/36zWZuuBpd7vyE314xN1RqEtd/f5x83LW8Cg4naCCbx3YyYM
-         xtMaFqpd6SH6nVCoIKrhyMaeAg5yv/KhGpDLGOeAgcVjcRspN7zwhZ+6WinsN+7KCj0v
-         ybdxGb39iCZvpiKqA8JE+ovOG4hodoBZgoOM80ZwX+4poGW24V/bs0Mh675qAdUmYGsA
-         uU5g==
-X-Gm-Message-State: ACgBeo1Xzmu16W69JJ/uXsB/tU8UALkNeylhuo6QtLdwe93Km9tgzX8z
-        lCWw6UzWh5xxqwUoR1fyWFWMYlcEJDNJgk3zQ+jSzqDA
-X-Google-Smtp-Source: AA6agR69RGnkjpVgRK7Q2jrBUwPjkmCJ2I4IXn9pAeDSZLim2B4s3mIHhTv++703HQ5MJNdLcfkubZjWfeJsKjUMsmY=
-X-Received: by 2002:a0d:c283:0:b0:335:7a81:f61e with SMTP id
- e125-20020a0dc283000000b003357a81f61emr17814006ywd.220.1662884652152; Sun, 11
- Sep 2022 01:24:12 -0700 (PDT)
+        with ESMTP id S230302AbiIKML2 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 11 Sep 2022 08:11:28 -0400
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.219])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CBBD2EF2E
+        for <linux-can@vger.kernel.org>; Sun, 11 Sep 2022 05:11:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1662898284;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=rtYXCG42N4WXTBkX6/ivH/nEbkYumBcsykg87Dd/gP4=;
+    b=hwe9wDx6v/ieNzD1TwpDdCB6SVICJrHTNTjFz39q51akwOpkVEjNhV3rqq6Q5/hbi8
+    zggUEZslVBPXSr5WvHJR7XwOsXO1wTcDeNL7bhZCrJtcUNZ9k5yvUG7HwpRN0Escny6o
+    8M06i/KDPI1sk/jC2KuOA/OwP8e5imzTolUbpq/1pQI413DggbiM3iO2sYeL8AVUmzNb
+    e9UsZ3RovJA6zrmYEwUKI0Ztd0BftQF9HleTqj4uLXyHf3/JEhcJchMKIG7Qyg0QsyZX
+    X2wgnuyrasz5SVSoR6+gXgpigPZk3Et49gt6FYm3Qt0gMCMgPVGT4KEgiaEMlMa5VyM5
+    0tSA==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytISr6hZqJAw=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a00:6020:1cfd:d104::923]
+    by smtp.strato.de (RZmta 48.0.2 AUTH)
+    with ESMTPSA id wfa541y8BCBOCoS
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Sun, 11 Sep 2022 14:11:24 +0200 (CEST)
+Message-ID: <1d8be592-5f4c-8036-8050-22aec73a3eb4@hartkopp.net>
+Date:   Sun, 11 Sep 2022 14:11:18 +0200
 MIME-Version: 1.0
-References: <20220907103845.3929288-1-mkl@pengutronix.de> <20220907103845.3929288-3-mkl@pengutronix.de>
-In-Reply-To: <20220907103845.3929288-3-mkl@pengutronix.de>
-From:   Vincent Mailhol <vincent.mailhol@gmail.com>
-Date:   Sun, 11 Sep 2022 17:24:01 +0900
-Message-ID: <CAMZ6RqKqhmTgUZiwe5uqUjBDnhhC2iOjZ791+Y845btJYwVDKg@mail.gmail.com>
-Subject: Re: [PATCH 2/5] can: bittiming: can_calc_bittiming(): make use of min3()
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org, Mark Bath <mark@baggywrinkle.co.uk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v8 4/7] can: canxl: introduce CAN XL data structure
+Content-Language: en-US
+To:     Vincent Mailhol <vincent.mailhol@gmail.com>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+References: <20220801190010.3344-1-socketcan@hartkopp.net>
+ <20220801190010.3344-5-socketcan@hartkopp.net>
+ <CAMZ6RqKFNY1y9XpsLU6cjs_TmnYBjjDin6LHn5TRpm5m4w2ewg@mail.gmail.com>
+ <414e2a33-0091-11fc-70db-a87331addff8@hartkopp.net>
+ <f79f729c-01eb-2121-e315-a240357d2eb0@hartkopp.net>
+ <CAMZ6RqL=ZqBUSA8xGQW1jMU8fwduz11_HJcFjerPtO8ZUAVdiw@mail.gmail.com>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <CAMZ6RqL=ZqBUSA8xGQW1jMU8fwduz11_HJcFjerPtO8ZUAVdiw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,42 +64,65 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed. 7 sept. 2022 =C3=A0 19:59, Marc Kleine-Budde <mkl@pengutronix.de> w=
-rote:
-> In can_calc_bittiming() there are several open coded checks to ensure
-> that SJW is within certain limits. Replace this by a single call to
-> min3().
->
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> ---
->  drivers/net/can/dev/calc_bittiming.c | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/net/can/dev/calc_bittiming.c b/drivers/net/can/dev/c=
-alc_bittiming.c
-> index d3caa040614d..ce6bef2444a2 100644
-> --- a/drivers/net/can/dev/calc_bittiming.c
-> +++ b/drivers/net/can/dev/calc_bittiming.c
-> @@ -158,12 +158,8 @@ int can_calc_bittiming(const struct net_device *dev,=
- struct can_bittiming *bt,
->         if (!bt->sjw || !btc->sjw_max) {
->                 bt->sjw =3D 1;
->         } else {
-> -               /* bt->sjw is at least 1 -> sanitize upper bound to sjw_m=
-ax */
-> -               if (bt->sjw > btc->sjw_max)
-> -                       bt->sjw =3D btc->sjw_max;
-> -               /* bt->sjw must not be higher than tseg2 */
-> -               if (tseg2 < bt->sjw)
-> -                       bt->sjw =3D tseg2;
-> +               /* sjw must not be higher than sjw_max and tseg2 */
-> +               bt->sjw =3D min3(bt->sjw, btc->sjw_max, tseg2);
+Hi Vincent,
 
-Not directly a criticism of this patch (as things were already like
-that), but if the user provides an incorrect value for SJW (or any
-other bittiming argument), wouldn't it be better to inform? Returning
--EINVAL might be too violent. Maybe a dmesg would be good?
+On 11.09.22 09:50, Vincent Mailhol wrote:
+> On Thu. 8 Sep. 2022 at 16:24, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
+(..)
 
+>>> The CAN-ID was (due to its arbitration nature) always also a priority
+>>> field.
+> 
+> The CAN-(FD) ID holds two roles: priority and ID. For CAN XL, it is
+> only ID.
 
-Yours sincerely,
-Vincent Mailhol
+Typo? It is only the priority ;-)
+
+> While I agree that both have the priority attributes, my
+> concerns are on the semantics. The type is canid_t, not canprio_t. I
+> just want to point that it is weird to had ID in the type when that
+> field doesn't have an ID property anymore.
+
+CAN XL moves away from the two roles combined in the CAN(FD) Identifier. 
+The main focus is on arbitration now (CAN XL is like CAN arbitration 
+with Ethernet data).
+
+But in the end the CAN bitstream at the beginning of the frame including 
+the arbitration is completely identical for all CAN variants.
+
+Even when this arbitration field is now named priority for CAN XL it is 
+still the exact mechanism of the CAN identifier (what we introduces 
+canid_t for).
+
+Therefore having canid_t for can_id and prio seems appropriate.
+
+>>> So nothing changed here. There is no RTR and no 29-bit priority anymore
+>>> now. The RTR flag has already been disabled for CAN FD (see presentation
+>>> at the end of this mail).
+>>>
+>>> Therefore it makes sense to handle the SFF 11-bit prio analogue to the
+>>> former CAN-ID - and also use canid_t to simply keep the entire CAN
+>>> filter handling in af_can.c !
+> 
+> This is a good argument to keep using the canid_t. If we make it a
+> u16, we lose the alignment (unless we add dirty endianness
+> preprocessing macros).
+
+Yep.
+
+(..)
+
+>>> Btw. I uploaded a presentation which shows the way from classical CAN to
+>>> CAN XL which might depict some relations of the bits in a clearer way:
+>>>
+>>> https://github.com/linux-can/can-doc/blob/master/presentations/CAN-XL-Intro.pdf
+> 
+> Thanks. With the Bosch PDF now returning error 404, I suggest
+> replacing the link in the cover letter with your link (or the CIA
+> knowledge page).
+
+Ok, will do.
+
+Best regards,
+Oliver
+
