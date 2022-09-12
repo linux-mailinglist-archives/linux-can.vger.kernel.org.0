@@ -2,66 +2,49 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D66A5B5CC1
-	for <lists+linux-can@lfdr.de>; Mon, 12 Sep 2022 16:55:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70B075B5ED4
+	for <lists+linux-can@lfdr.de>; Mon, 12 Sep 2022 19:07:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbiILOzF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 12 Sep 2022 10:55:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43320 "EHLO
+        id S229881AbiILRHv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 12 Sep 2022 13:07:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230301AbiILOzB (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 12 Sep 2022 10:55:01 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 310946277;
-        Mon, 12 Sep 2022 07:54:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1662994494;
+        with ESMTP id S229498AbiILRHu (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 12 Sep 2022 13:07:50 -0400
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456742127C
+        for <linux-can@vger.kernel.org>; Mon, 12 Sep 2022 10:07:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1663002465;
     s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=zI8dQLr+hgubSc2Md+BLeXBqKRPJrR0RfZFn/VtvoiY=;
-    b=pug4P711jbukSxRjD5Fs3Nqpp2V3i+itICXRJvCm73SfX5ct9w2UnzwLz5QdmE77WW
-    b3k3oriaOxVhdNX5Wr44HBZLm8CdocOwAOJ+9Djle2Qqq45UgZlzUHC/9UamwNZhpR6A
-    hSg7z5vFU5IqjtvKl770MFli+caHVE26JPHCYfsm7WvTop+RLQN/a/bIUsnQathlBDP7
-    5gUv2toCpAg5sj+7dEaKy+HVFYn8FICwKkYND/hxrcRSUoIGKynPNuWF+Tx1gCz47Jn0
-    V+RvoDGZjKrdNRZEKm/I1+SaqWo1pIvKYFF+EfG4loVaFa5KopyiOeYEjbe6yPM3ah+B
-    4Fug==
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=RLSQeXLc8dpqjTzVgRIJJmPvR43BkgBwt1oOq3HsICo=;
+    b=jLQRiioD+Av77CEVKSh5c4e1MF7kJIwWKdyKJLL4zjPnEQem9Qsh11VK5eY7byUwVt
+    hzF5vII15DPiB9VQpWHZMtmtY8fkALiMp3xJFEarrEzvuC8WM8EgkSsO2yAdWx3qk0Wu
+    y4i55O8BPyYE+1rNhfl0vuNk6Kmf/jLyrw64KKnCn3BzGsvOmvJwEjuDjD1QDdfjpNxJ
+    NlWfometDYNJi7zR8+VwXjtog6rcmNB0HCzWlMYSQ5RQFu5SA4g251JG3V6MHI5c32Cp
+    tSXRiIeMTI9MsX9EBY1jSVWriOPLq6Ft/PsZoRvWeE8jjPxKDVaUO0c9kpmFToeWXwvB
+    paGA==
 Authentication-Results: strato.com;
     dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytJSr6hfz3Vg=="
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS/xvEBL7X5sbo3UIh9JiLceSWJaYxMWqfZ"
 X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a00:6020:1cfd:d100::923]
+Received: from silver.lan
     by smtp.strato.de (RZmta 48.1.0 AUTH)
-    with ESMTPSA id d25a93y8CEsr18D
+    with ESMTPSA id d25a93y8CH7j1O5
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-    Mon, 12 Sep 2022 16:54:53 +0200 (CEST)
-Message-ID: <4791cc31-db17-7720-4a86-f83e7bf0918d@hartkopp.net>
-Date:   Mon, 12 Sep 2022 16:54:48 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 1/2] can: bcm: registration process optimization in
- bcm_module_init()
-Content-Language: en-US
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>,
-        edumazet@google.com, kuba@kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1662606045.git.william.xuanziyang@huawei.com>
- <823cff0ebec33fa9389eeaf8b8ded3217c32cb38.1662606045.git.william.xuanziyang@huawei.com>
- <381dd961-f786-2400-0977-9639c3f7006e@hartkopp.net>
- <c480bdd7-e35e-fbf9-6767-801e04703780@hartkopp.net>
- <7b063d38-311c-76d6-4e31-02f9cccc9bcb@huawei.com>
- <053c7de3-c76c-82fd-2d44-2e7c1673ae98@hartkopp.net>
- <9228b20a-3baa-32ad-6059-5cf0ffdb97a3@huawei.com>
- <d392c1f4-7ad3-59a4-1358-2c216c498402@hartkopp.net>
- <20220912120020.dlxuryltw4sii635@pengutronix.de>
+    Mon, 12 Sep 2022 19:07:45 +0200 (CEST)
 From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20220912120020.dlxuryltw4sii635@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     linux-can@vger.kernel.org
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: [PATCH v9 0/7] can: support CAN XL
+Date:   Mon, 12 Sep 2022 19:07:18 +0200
+Message-Id: <20220912170725.120748-1-socketcan@hartkopp.net>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,76 +53,92 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+The CAN with eXtended data Length (CAN XL) is a new CAN protocol with a
+10Mbit/s data transfer with a new physical layer transceiver (for this
+data section). CAN XL allows up to 2048 byte of payload and shares the
+arbitration principle (11 bit priority) known from Classical CAN and
+CAN FD. RTR and 29 bit identifiers are not implemented in CAN XL.
 
+A short introdution to CAN XL can be found here:
+https://www.can-cia.org/can-knowledge/can/can-xl/
+https://github.com/linux-can/can-doc/blob/master/presentations/CAN-XL-Intro.pdf
 
-On 12.09.22 14:00, Marc Kleine-Budde wrote:
-> On 09.09.2022 17:04:06, Oliver Hartkopp wrote:
->>
->>
->> On 09.09.22 05:58, Ziyang Xuan (William) wrote:
->>>>
->>>>
->>>> On 9/8/22 13:14, Ziyang Xuan (William) wrote:
->>>>>> Just another reference which make it clear that the reordering of function calls in your patch is likely not correct:
->>>>>>
->>>>>> https://elixir.bootlin.com/linux/v5.19.7/source/net/packet/af_packet.c#L4734
->>>>>>
->>>>>> static int __init packet_init(void)
->>>>>> {
->>>>>>            int rc;
->>>>>>
->>>>>>            rc = proto_register(&packet_proto, 0);
->>>>>>            if (rc)
->>>>>>                    goto out;
->>>>>>            rc = sock_register(&packet_family_ops);
->>>>>>            if (rc)
->>>>>>                    goto out_proto;
->>>>>>            rc = register_pernet_subsys(&packet_net_ops);
->>>>>>            if (rc)
->>>>>>                    goto out_sock;
->>>>>>            rc = register_netdevice_notifier(&packet_netdev_notifier);
->>>>>>            if (rc)
->>>>>>                    goto out_pernet;
->>>>>>
->>>>>>            return 0;
->>>>>>
->>>>>> out_pernet:
->>>>>>            unregister_pernet_subsys(&packet_net_ops);
->>>>>> out_sock:
->>>>>>            sock_unregister(PF_PACKET);
->>>>>> out_proto:
->>>>>>            proto_unregister(&packet_proto);
->>>>>> out:
->>>>>>            return rc;
->>>>>> }
->>>>>>
->>
->>> Yes，all these socket operations need time, most likely, register_netdevice_notifier() and register_pernet_subsys() had been done.
->>> But it maybe not for some reasons, for example, cpu# that runs {raw,bcm}_module_init() is stuck temporary,
->>> or pernet_ops_rwsem lock competition in register_netdevice_notifier() and register_pernet_subsys().
->>>
->>> If the condition which I pointed happens, I think my solution can solve.
->>>
->>
->> No, I don't think so.
->>
->> We need to maintain the exact order which is depicted in the af_packet.c
->> code from above as the notifier call references the sock pointer.
-> 
-> The notifier calls bcm_notifier() first, which will loop over the
-> bcm_notifier_list. The list is empty if there are no sockets open, yet.
-> So from my point of view this change looks fine.
-> 
-> IMHO it's better to make a series where all these notifiers are moved in
-> front of the respective socket proto_register().
+V2: Major rework after discussion and feedback on Linux-CAN ML
 
-Notifiers and/or pernet_subsys ?
+- rework of struct canxl_frame
+- CANXL_XLF flag is now the switch between CAN XL and CAN/CANFD
+- variable length in r/w operations for CAN XL frames
+- write CAN XL frame to raw socket enforces size <-> canxl_frame.len sync
 
-But yes, that would be better to have a clean consistent sequence in all 
-these cases.
+V3: Fix length for CAN XL frames inside the sk_buff
 
-Would this affect af_packet.c then too?
+- extend the CAN_RAW sockopt to handle fixed/truncated read/write operations
 
-Regards,
-Oliver
+V4: Fix patch 5 (can: raw: add CAN XL support)
+
+- fix return value (move 'err = -EINVAL' in raw_sendmsg())
+- add CAN XL frame handling in can_rcv()
+- change comment for CAN_RAW_XL_[RT]X_DYN definition (allow -> enable)
+
+V5: Remove CAN_RAW_XL_[RT]X_DYN definition again
+
+- CAN_RAW_XL_[RT]X_DYN (truncated data) feature is now enabled by default
+- use CANXL_MIN_DLEN instead of '1' in canxl_frame definition
+- add missing 'err = -EINVAL' initialization in raw_sendmsg())
+
+V6:
+
+- rework an separate skb identification and length helpers
+- add CANFD_FDF flag in all CAN FD frame structures
+- simplify patches for infrastructure and raw sockets
+- add vxcan support in virtual CAN interface patch
+
+V7:
+
+- fixed indention as remarked by Marc
+- set CANFD_FDF flag when detecting CAN FD frames generated by PF_PACKET
+- Allow to use variable CAN XL MTU sizes to enforce real time requirements
+  on CAN XL segments (e.g. to support of CAN CiA segmentation concept)
+
+V8:
+
+- fixed typo as remarked by Vincent
+- rebased to latest can-next/net-next tree
+
+V9:
+
+- rebased to latest can-next/net-next tree
+- updated and extended public available CAN XL documenatation in cover letter
+- renamed struct canxl_frame variable cfx to cxl as suggested by Vincent
+- Added Acked-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr> tag
+
+Oliver Hartkopp (7):
+  can: skb: unify skb CAN frame identification helpers
+  can: skb: add skb CAN frame data length helpers
+  can: set CANFD_FDF flag in all CAN FD frame structures
+  can: canxl: introduce CAN XL data structure
+  can: canxl: update CAN infrastructure for CAN XL frames
+  can: dev: add CAN XL support to virtual CAN
+  can: raw: add CAN XL support
+
+ drivers/net/can/ctucanfd/ctucanfd_base.c |   1 -
+ drivers/net/can/dev/rx-offload.c         |   2 +-
+ drivers/net/can/dev/skb.c                | 113 ++++++++++++++++-------
+ drivers/net/can/vcan.c                   |  12 +--
+ drivers/net/can/vxcan.c                  |   8 +-
+ include/linux/can/dev.h                  |   5 +
+ include/linux/can/skb.h                  |  57 +++++++++++-
+ include/uapi/linux/can.h                 |  55 ++++++++++-
+ include/uapi/linux/can/raw.h             |   1 +
+ include/uapi/linux/if_ether.h            |   1 +
+ net/can/af_can.c                         |  76 ++++++++-------
+ net/can/bcm.c                            |   9 +-
+ net/can/gw.c                             |   4 +-
+ net/can/isotp.c                          |   2 +-
+ net/can/j1939/main.c                     |   4 +
+ net/can/raw.c                            |  55 ++++++++---
+ 16 files changed, 299 insertions(+), 106 deletions(-)
+
+-- 
+2.30.2
 
