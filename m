@@ -2,53 +2,67 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12AE15B59DF
-	for <lists+linux-can@lfdr.de>; Mon, 12 Sep 2022 14:03:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D66A5B5CC1
+	for <lists+linux-can@lfdr.de>; Mon, 12 Sep 2022 16:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbiILMDC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 12 Sep 2022 08:03:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55098 "EHLO
+        id S230095AbiILOzF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 12 Sep 2022 10:55:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbiILMCj (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 12 Sep 2022 08:02:39 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B9A03ECCC
-        for <linux-can@vger.kernel.org>; Mon, 12 Sep 2022 05:02:28 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oXi8p-0000HU-5f; Mon, 12 Sep 2022 14:02:19 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:75e7:62d4:691e:2f47])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 9A554E12F5;
-        Mon, 12 Sep 2022 12:02:18 +0000 (UTC)
-Date:   Mon, 12 Sep 2022 14:02:10 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Ziyang Xuan <william.xuanziyang@huawei.com>, edumazet@google.com,
-        kuba@kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] can: bcm: check the result of can_send() in
- bcm_can_tx()
-Message-ID: <20220912120210.6oc4tbb7xjxhjihc@pengutronix.de>
-References: <cover.1662606045.git.william.xuanziyang@huawei.com>
- <5c0f2f1bd1dc7bbb9500afd4273e36378e00a35d.1662606045.git.william.xuanziyang@huawei.com>
- <1caf3e52-c862-e702-c833-153f130b790a@hartkopp.net>
+        with ESMTP id S230301AbiILOzB (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 12 Sep 2022 10:55:01 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 310946277;
+        Mon, 12 Sep 2022 07:54:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1662994494;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=zI8dQLr+hgubSc2Md+BLeXBqKRPJrR0RfZFn/VtvoiY=;
+    b=pug4P711jbukSxRjD5Fs3Nqpp2V3i+itICXRJvCm73SfX5ct9w2UnzwLz5QdmE77WW
+    b3k3oriaOxVhdNX5Wr44HBZLm8CdocOwAOJ+9Djle2Qqq45UgZlzUHC/9UamwNZhpR6A
+    hSg7z5vFU5IqjtvKl770MFli+caHVE26JPHCYfsm7WvTop+RLQN/a/bIUsnQathlBDP7
+    5gUv2toCpAg5sj+7dEaKy+HVFYn8FICwKkYND/hxrcRSUoIGKynPNuWF+Tx1gCz47Jn0
+    V+RvoDGZjKrdNRZEKm/I1+SaqWo1pIvKYFF+EfG4loVaFa5KopyiOeYEjbe6yPM3ah+B
+    4Fug==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytJSr6hfz3Vg=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a00:6020:1cfd:d100::923]
+    by smtp.strato.de (RZmta 48.1.0 AUTH)
+    with ESMTPSA id d25a93y8CEsr18D
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Mon, 12 Sep 2022 16:54:53 +0200 (CEST)
+Message-ID: <4791cc31-db17-7720-4a86-f83e7bf0918d@hartkopp.net>
+Date:   Mon, 12 Sep 2022 16:54:48 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rnwntybvven35lb2"
-Content-Disposition: inline
-In-Reply-To: <1caf3e52-c862-e702-c833-153f130b790a@hartkopp.net>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 1/2] can: bcm: registration process optimization in
+ bcm_module_init()
+Content-Language: en-US
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>,
+        edumazet@google.com, kuba@kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1662606045.git.william.xuanziyang@huawei.com>
+ <823cff0ebec33fa9389eeaf8b8ded3217c32cb38.1662606045.git.william.xuanziyang@huawei.com>
+ <381dd961-f786-2400-0977-9639c3f7006e@hartkopp.net>
+ <c480bdd7-e35e-fbf9-6767-801e04703780@hartkopp.net>
+ <7b063d38-311c-76d6-4e31-02f9cccc9bcb@huawei.com>
+ <053c7de3-c76c-82fd-2d44-2e7c1673ae98@hartkopp.net>
+ <9228b20a-3baa-32ad-6059-5cf0ffdb97a3@huawei.com>
+ <d392c1f4-7ad3-59a4-1358-2c216c498402@hartkopp.net>
+ <20220912120020.dlxuryltw4sii635@pengutronix.de>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20220912120020.dlxuryltw4sii635@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,56 +71,75 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---rnwntybvven35lb2
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On 08.09.2022 08:47:57, Oliver Hartkopp wrote:
-> Sorry, but NACK.
->=20
-> The curr_frame counter handles the sequence counter of multiplex messages.
->=20
-> Even when this single send attempt failed the curr_frame counter has to
-> continue.
->=20
-> For that reason the comment about statistics *before* the curr_frame++ mi=
-ght
-> be misleading.
->=20
-> A potential improvement could be:
->=20
-> 	if (!(can_send(skb, 1)))
+On 12.09.22 14:00, Marc Kleine-Budde wrote:
+> On 09.09.2022 17:04:06, Oliver Hartkopp wrote:
+>>
+>>
+>> On 09.09.22 05:58, Ziyang Xuan (William) wrote:
+>>>>
+>>>>
+>>>> On 9/8/22 13:14, Ziyang Xuan (William) wrote:
+>>>>>> Just another reference which make it clear that the reordering of function calls in your patch is likely not correct:
+>>>>>>
+>>>>>> https://elixir.bootlin.com/linux/v5.19.7/source/net/packet/af_packet.c#L4734
+>>>>>>
+>>>>>> static int __init packet_init(void)
+>>>>>> {
+>>>>>>            int rc;
+>>>>>>
+>>>>>>            rc = proto_register(&packet_proto, 0);
+>>>>>>            if (rc)
+>>>>>>                    goto out;
+>>>>>>            rc = sock_register(&packet_family_ops);
+>>>>>>            if (rc)
+>>>>>>                    goto out_proto;
+>>>>>>            rc = register_pernet_subsys(&packet_net_ops);
+>>>>>>            if (rc)
+>>>>>>                    goto out_sock;
+>>>>>>            rc = register_netdevice_notifier(&packet_netdev_notifier);
+>>>>>>            if (rc)
+>>>>>>                    goto out_pernet;
+>>>>>>
+>>>>>>            return 0;
+>>>>>>
+>>>>>> out_pernet:
+>>>>>>            unregister_pernet_subsys(&packet_net_ops);
+>>>>>> out_sock:
+>>>>>>            sock_unregister(PF_PACKET);
+>>>>>> out_proto:
+>>>>>>            proto_unregister(&packet_proto);
+>>>>>> out:
+>>>>>>            return rc;
+>>>>>> }
+>>>>>>
+>>
+>>> Yes，all these socket operations need time, most likely, register_netdevice_notifier() and register_pernet_subsys() had been done.
+>>> But it maybe not for some reasons, for example, cpu# that runs {raw,bcm}_module_init() is stuck temporary,
+>>> or pernet_ops_rwsem lock competition in register_netdevice_notifier() and register_pernet_subsys().
+>>>
+>>> If the condition which I pointed happens, I think my solution can solve.
+>>>
+>>
+>> No, I don't think so.
+>>
+>> We need to maintain the exact order which is depicted in the af_packet.c
+>> code from above as the notifier call references the sock pointer.
+> 
+> The notifier calls bcm_notifier() first, which will loop over the
+> bcm_notifier_list. The list is empty if there are no sockets open, yet.
+> So from my point of view this change looks fine.
+> 
+> IMHO it's better to make a series where all these notifiers are moved in
+> front of the respective socket proto_register().
 
-Nitpick:
-In the kernel we usually assign the return value to a variable first,
-and evaluate this variable in the if ().
+Notifiers and/or pernet_subsys ?
 
-> 		op->frames_abs++;
->=20
-> 	op->currframe++;
+But yes, that would be better to have a clean consistent sequence in all 
+these cases.
 
-Marc
+Would this affect af_packet.c then too?
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Regards,
+Oliver
 
---rnwntybvven35lb2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmMfH78ACgkQrX5LkNig
-011kxwgAqOqSIZx3uPc8Kfl3nqztqUiLqG9DrtssBRQfFziA8lBSlDwcOip3QywP
-1VApIpOCREvpcVeIOqW8Iz8O+3Uo90Do2GXPSh+aciJo/PgSjnKFb69iwMHV5SI6
-2lSXs56tAGjIHKESrIQUpCIaYmDHJZIPjHY/NEh1nk9gR3X/lH1+w9ts2XJJ+v9w
-suTw/v1DneHJSmdIaCj+UgiZiLl64rTWjv4BwIDibavSkunvo5sc0o9QHiH8HnB9
-KFd8kBkcSMR5JhWay/J4RPo2KtMnlFy7vPEh2whyx7Kz5FRi8HY0pr1H0AQ2SUOk
-jqq4J6cSwerwHBplJDZIdCyfjcGkYw==
-=oJz8
------END PGP SIGNATURE-----
-
---rnwntybvven35lb2--
