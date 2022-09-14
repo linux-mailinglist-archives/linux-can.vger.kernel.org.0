@@ -2,163 +2,92 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B92D65B818C
-	for <lists+linux-can@lfdr.de>; Wed, 14 Sep 2022 08:42:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A4445B8942
+	for <lists+linux-can@lfdr.de>; Wed, 14 Sep 2022 15:38:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229463AbiINGmo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 14 Sep 2022 02:42:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58938 "EHLO
+        id S229456AbiINNi2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 14 Sep 2022 09:38:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiINGmn (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 14 Sep 2022 02:42:43 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9C425EB8;
-        Tue, 13 Sep 2022 23:42:41 -0700 (PDT)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MS9f70n03zmV94;
-        Wed, 14 Sep 2022 14:38:55 +0800 (CST)
-Received: from [10.174.179.200] (10.174.179.200) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 14 Sep 2022 14:42:39 +0800
-Subject: Re: [PATCH 1/2] can: bcm: registration process optimization in
- bcm_module_init()
-To:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-CC:     <edumazet@google.com>, <kuba@kernel.org>,
-        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <cover.1662606045.git.william.xuanziyang@huawei.com>
- <823cff0ebec33fa9389eeaf8b8ded3217c32cb38.1662606045.git.william.xuanziyang@huawei.com>
- <381dd961-f786-2400-0977-9639c3f7006e@hartkopp.net>
- <c480bdd7-e35e-fbf9-6767-801e04703780@hartkopp.net>
- <7b063d38-311c-76d6-4e31-02f9cccc9bcb@huawei.com>
- <053c7de3-c76c-82fd-2d44-2e7c1673ae98@hartkopp.net>
- <9228b20a-3baa-32ad-6059-5cf0ffdb97a3@huawei.com>
- <d392c1f4-7ad3-59a4-1358-2c216c498402@hartkopp.net>
- <20220912120020.dlxuryltw4sii635@pengutronix.de>
- <4791cc31-db17-7720-4a86-f83e7bf0918d@hartkopp.net>
-From:   "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>
-Message-ID: <dbf68897-c719-db79-b856-792bf8fbf533@huawei.com>
-Date:   Wed, 14 Sep 2022 14:42:39 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        with ESMTP id S229597AbiINNi1 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 14 Sep 2022 09:38:27 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65395282F
+        for <linux-can@vger.kernel.org>; Wed, 14 Sep 2022 06:38:24 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oYSas-0007RQ-Qk; Wed, 14 Sep 2022 15:38:22 +0200
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:956:4247:55d:c7ae])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id DF4AFE2F18;
+        Wed, 14 Sep 2022 13:38:21 +0000 (UTC)
+Date:   Wed, 14 Sep 2022 15:38:13 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        wg@grandegger.com
+Subject: Re: [PATCH -next] can: flexcan: Switch to use dev_err_probe() helper
+Message-ID: <20220914133813.h7hmrithtavzuxum@pengutronix.de>
+References: <20220914134030.3782754-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <4791cc31-db17-7720-4a86-f83e7bf0918d@hartkopp.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.200]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fe3p4i3bvieo4hmd"
+Content-Disposition: inline
+In-Reply-To: <20220914134030.3782754-1-yangyingliang@huawei.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-> 
-> 
-> On 12.09.22 14:00, Marc Kleine-Budde wrote:
->> On 09.09.2022 17:04:06, Oliver Hartkopp wrote:
->>>
->>>
->>> On 09.09.22 05:58, Ziyang Xuan (William) wrote:
->>>>>
->>>>>
->>>>> On 9/8/22 13:14, Ziyang Xuan (William) wrote:
->>>>>>> Just another reference which make it clear that the reordering of function calls in your patch is likely not correct:
->>>>>>>
->>>>>>> https://elixir.bootlin.com/linux/v5.19.7/source/net/packet/af_packet.c#L4734
->>>>>>>
->>>>>>> static int __init packet_init(void)
->>>>>>> {
->>>>>>>            int rc;
->>>>>>>
->>>>>>>            rc = proto_register(&packet_proto, 0);
->>>>>>>            if (rc)
->>>>>>>                    goto out;
->>>>>>>            rc = sock_register(&packet_family_ops);
->>>>>>>            if (rc)
->>>>>>>                    goto out_proto;
->>>>>>>            rc = register_pernet_subsys(&packet_net_ops);
->>>>>>>            if (rc)
->>>>>>>                    goto out_sock;
->>>>>>>            rc = register_netdevice_notifier(&packet_netdev_notifier);
->>>>>>>            if (rc)
->>>>>>>                    goto out_pernet;
->>>>>>>
->>>>>>>            return 0;
->>>>>>>
->>>>>>> out_pernet:
->>>>>>>            unregister_pernet_subsys(&packet_net_ops);
->>>>>>> out_sock:
->>>>>>>            sock_unregister(PF_PACKET);
->>>>>>> out_proto:
->>>>>>>            proto_unregister(&packet_proto);
->>>>>>> out:
->>>>>>>            return rc;
->>>>>>> }
->>>>>>>
->>>
->>>> Yes，all these socket operations need time, most likely, register_netdevice_notifier() and register_pernet_subsys() had been done.
->>>> But it maybe not for some reasons, for example, cpu# that runs {raw,bcm}_module_init() is stuck temporary,
->>>> or pernet_ops_rwsem lock competition in register_netdevice_notifier() and register_pernet_subsys().
->>>>
->>>> If the condition which I pointed happens, I think my solution can solve.
->>>>
->>>
->>> No, I don't think so.
->>>
->>> We need to maintain the exact order which is depicted in the af_packet.c
->>> code from above as the notifier call references the sock pointer.
->>
->> The notifier calls bcm_notifier() first, which will loop over the
->> bcm_notifier_list. The list is empty if there are no sockets open, yet.
->> So from my point of view this change looks fine.
->>
->> IMHO it's better to make a series where all these notifiers are moved in
->> front of the respective socket proto_register().
-> 
-> Notifiers and/or pernet_subsys ?
-> 
-> But yes, that would be better to have a clean consistent sequence in all these cases.
-> 
-> Would this affect af_packet.c then too?
-Yes.
 
-When we create a sock by packet_create() after proto_register() and sock_register().
-It will use net->packet.sklist_lock and net->packet.sklist directly in packet_create().
-net->packet.sklist_lock and net->packet.sklist are initialized in packet_net_init().
+--fe3p4i3bvieo4hmd
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The code snippet is as follows:
+On 14.09.2022 21:40:30, Yang Yingliang wrote:
+> dev_err() can be replace with dev_err_probe() which will check if error
+> code is -EPROBE_DEFER.
+>=20
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 
-static int packet_create(struct net *net, struct socket *sock, int protocol,
-			 int kern)
-{
-	...
-	mutex_lock(&net->packet.sklist_lock);
-	sk_add_node_tail_rcu(sk, &net->packet.sklist);
-	mutex_unlock(&net->packet.sklist_lock);
-	...
-}
+added to linux-can-next
 
+Thanks,
+Marc
 
-static int __net_init packet_net_init(struct net *net)
-{
-	mutex_init(&net->packet.sklist_lock);
-	INIT_HLIST_HEAD(&net->packet.sklist);
-	...
-}
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-So, if the sock is created firstly, we will get illegal access bug.
+--fe3p4i3bvieo4hmd
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> 
-> Regards,
-> Oliver
-> 
-> .
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmMh2UIACgkQrX5LkNig
+012wBggAoTxd886BIviOOOJhOve8Jv+O7vZADm5twM5s+NmsWM6OmZ0+iZJFvTks
+ZUL8WKYW2773xHCdCVIe0euTchgqF0GwlCAnysBBYSKm3gtXCIPRJRBQ6aodgyRA
+Ld4hK0veZgnjBQqSUJHfKCBh8LStwgBB7cAIoMqHUm25J66mWf+XWN/TzL70DAoX
+GDzWKIJ5fhpquhnu8CS8/QMIWCT2tNI5ZVZ22q+/I6Z2oblolTMt9C6Z9OtSC5Qn
+wWo5l3TOij98dc4EziT1bqN+AB9feI0kBKi/gH5rlgjMjDJpnHVSRBzhy6tl4ltk
+bZVi0arNOvQeO7hpcgiEJ7z9LOw1Nw==
+=xCxj
+-----END PGP SIGNATURE-----
+
+--fe3p4i3bvieo4hmd--
