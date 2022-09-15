@@ -2,56 +2,42 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 646D65B9103
-	for <lists+linux-can@lfdr.de>; Thu, 15 Sep 2022 01:40:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A7B55B9261
+	for <lists+linux-can@lfdr.de>; Thu, 15 Sep 2022 03:56:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbiINXks (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 14 Sep 2022 19:40:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55924 "EHLO
+        id S230019AbiIOB4G (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 14 Sep 2022 21:56:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbiINXkq (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 14 Sep 2022 19:40:46 -0400
-Received: from mxd1.seznam.cz (mxd1.seznam.cz [IPv6:2a02:598:a::78:210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9C9402E9;
-        Wed, 14 Sep 2022 16:40:43 -0700 (PDT)
-Received: from email.seznam.cz
-        by email-smtpc13b.ko.seznam.cz (email-smtpc13b.ko.seznam.cz [10.53.14.135])
-        id 2750b258c3fc6166268d1336;
-        Thu, 15 Sep 2022 01:40:20 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seznam.cz; s=beta;
-        t=1663198820; bh=DZl/zpDC4daeyZK5+yAdaWiaFpHk14LLzJ5mzlIQIT0=;
-        h=Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:
-         References:MIME-Version:Content-Transfer-Encoding;
-        b=daHUCnY4MgnAd6VR8RJI8zrBmnq5XAclyjk5BDbJ+SzLAMx3OPUngJenQNozJvU9e
-         62o3pqUTN8viTJp4i2C8pZZX+LoII7b27uCh04aSGSJ7rr9soS09ZmRFp+AVUHPnKw
-         QwRl0jyiXODD6Q30HMK0L/47tfXlpqW9io7wyQos=
-Received: from localhost.localdomain (2a02:8308:900d:2400:4bcc:f22e:1266:5194 [2a02:8308:900d:2400:4bcc:f22e:1266:5194])
-        by email-relay10.ng.seznam.cz (Seznam SMTPD 1.3.137) with ESMTP;
-        Thu, 15 Sep 2022 01:40:19 +0200 (CEST)  
-From:   Matej Vasilevski <matej.vasilevski@seznam.cz>
-To:     Pavel Pisa <pisa@cmp.felk.cvut.cz>,
-        Ondrej Ille <ondrej.ille@gmail.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Matej Vasilevski <matej.vasilevski@seznam.cz>
-Subject: [PATCH v4 3/3] doc: ctucanfd: RX frames timestamping for platform devices
-Date:   Thu, 15 Sep 2022 01:39:44 +0200
-Message-Id: <20220914233944.598298-4-matej.vasilevski@seznam.cz>
+        with ESMTP id S229709AbiIOB4E (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 14 Sep 2022 21:56:04 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD9C8E472;
+        Wed, 14 Sep 2022 18:56:03 -0700 (PDT)
+Received: from canpemm500006.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MSgDf6Qdvz14QZV;
+        Thu, 15 Sep 2022 09:52:02 +0800 (CST)
+Received: from localhost.localdomain (10.175.104.82) by
+ canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 15 Sep 2022 09:56:00 +0800
+From:   Ziyang Xuan <william.xuanziyang@huawei.com>
+To:     <socketcan@hartkopp.net>, <mkl@pengutronix.de>,
+        <davem@davemloft.net>, <kuba@kernel.org>,
+        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 0/2] can: bcm: can: bcm: random optimizations
+Date:   Thu, 15 Sep 2022 09:55:54 +0800
+Message-ID: <cover.1663206163.git.william.xuanziyang@huawei.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220914233944.598298-1-matej.vasilevski@seznam.cz>
-References: <20220914233944.598298-1-matej.vasilevski@seznam.cz>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+X-Originating-IP: [10.175.104.82]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500006.china.huawei.com (7.192.105.130)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,38 +46,20 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Update the section about timestamping RX frames with instructions
-how to enable it.
+Do some small optimization for can_bcm.
 
-Signed-off-by: Matej Vasilevski <matej.vasilevski@seznam.cz>
 ---
- .../device_drivers/can/ctu/ctucanfd-driver.rst      | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+v2:
+  - Continue to update currframe when can_send() failed in patch 2.
+  - Remove ‘Fixes’ tag in patch 2.
 
-diff --git a/Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst b/Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst
-index 40c92ea272af..05a7ce0c3d9e 100644
---- a/Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst
-+++ b/Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst
-@@ -386,8 +386,17 @@ The CTU CAN FD core reports the exact timestamp when the frame has been
- received. The timestamp is by default captured at the sample point of
- the last bit of EOF but is configurable to be captured at the SOF bit.
- The timestamp source is external to the core and may be up to 64 bits
--wide. At the time of writing, passing the timestamp from kernel to
--userspace is not yet implemented, but is planned in the future.
-+wide.
-+
-+Both platform and PCI devices can report the timestamp.
-+For platform devices, add another clock phandle for timestamping clock
-+in device tree bindings. If you don't add another clock, the driver
-+will assume the primary clock's frequency for timestamping.
-+For PCI devices, the timestamping frequency is assumed to be equal to
-+the bus frequency.
-+
-+Timestamp reporting is disabled by default, you have to enable it with
-+SIOCSHWTSTAMP ioctl call first.
- 
- Handling TX
- ~~~~~~~~~~~
+Ziyang Xuan (2):
+  can: bcm: registration process optimization in bcm_module_init()
+  can: bcm: check the result of can_send() in bcm_can_tx()
+
+ net/can/bcm.c | 25 +++++++++++++++++++------
+ 1 file changed, 19 insertions(+), 6 deletions(-)
+
 -- 
 2.25.1
 
