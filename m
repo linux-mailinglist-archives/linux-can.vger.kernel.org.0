@@ -2,150 +2,173 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BA3E5BA3D1
-	for <lists+linux-can@lfdr.de>; Fri, 16 Sep 2022 03:17:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF2B95BA5A4
+	for <lists+linux-can@lfdr.de>; Fri, 16 Sep 2022 06:15:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiIPBRh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 15 Sep 2022 21:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34692 "EHLO
+        id S229462AbiIPEPF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 16 Sep 2022 00:15:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiIPBRe (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 15 Sep 2022 21:17:34 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01hn2218.outbound.protection.outlook.com [52.100.223.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15DC77568;
-        Thu, 15 Sep 2022 18:17:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RHySZeo98zLAwkITHSwPOge6SSbyoF/vFDx/cKEARd4nmrRUOmaSPM8pIHbqzmlDLRbjibhyaLAYmI7AkkwSG9iSkOigyn359W/cTnhm0/9h/B0gs2j8NrCLx2MVjuczky6wLrhlG8TkCM/8yOtLUYHq7+z6y/DtXlTyvnlEs/+vaVAHgby880SqEFaDOIIzZ0wqTQBrThySnaxf2F6HFuVoX5phritkOGDLpoc/8aOBL1LI1KR/KB8uKpmNteHoxJducIlkwyVRrLywJS7od5WTS5aFVtVB7X3pc8oIuPIhFDvrKbpVfK8HJJ7MuzXB0STb0ls/LxW3/LFCRMw6kw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Bs10Md+15nMnyayKLyd22Uv+/ZH79IcFcpzuzGLq1Fg=;
- b=bpmMSIp5G22sxE9TFGf3Y9jM7FoQkhc9QTz2BGdoOa0zPFDGnkdNtAJGBmASV8pc0AagJ6eZsaQyRoP4b7EadpllopNOaT53oonw+ijWMVcHAuSI19VWaJhd1rckafas8cyVlYAe2urgvi6uhoQsrFtAk4oseH0qrzZLvTbiMGFVVGRPkZ0a5z5RUvFavxzXZSA2JZLWvJbVP9LeXZtrxdqtuwl9yY1XiGLkOvQWgYaBCU5mZgoUvN7KX1XdwzfomUmPDz9/9vyjSzG4WavshywAyTog8hGvexdzcNDz5lO1Rvazivo4rXQVCjfLzIEf3QnmQ6S49RK9YA63JXx86A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 45.14.71.5) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=t4.cims.jp;
- dmarc=bestguesspass action=none header.from=t4.cims.jp; dkim=none (message
- not signed); arc=none (0)
-Received: from TYCPR01CA0122.jpnprd01.prod.outlook.com (2603:1096:400:26d::11)
- by SI2PR04MB4137.apcprd04.prod.outlook.com (2603:1096:4:f8::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5612.16; Fri, 16 Sep 2022 01:17:32 +0000
-Received: from TYZAPC01FT053.eop-APC01.prod.protection.outlook.com
- (2603:1096:400:26d:cafe::65) by TYCPR01CA0122.outlook.office365.com
- (2603:1096:400:26d::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.19 via Frontend
- Transport; Fri, 16 Sep 2022 01:17:31 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 45.14.71.5)
- smtp.mailfrom=t4.cims.jp; dkim=none (message not signed)
- header.d=none;dmarc=bestguesspass action=none header.from=t4.cims.jp;
-Received-SPF: Pass (protection.outlook.com: domain of t4.cims.jp designates
- 45.14.71.5 as permitted sender) receiver=protection.outlook.com;
- client-ip=45.14.71.5; helo=User; pr=M
-Received: from mail.prasarana.com.my (58.26.8.158) by
- TYZAPC01FT053.mail.protection.outlook.com (10.118.152.149) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5632.12 via Frontend Transport; Fri, 16 Sep 2022 01:17:31 +0000
-Received: from MRL-EXH-02.prasarana.com.my (10.128.66.101) by
- MRL-EXH-01.prasarana.com.my (10.128.66.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Fri, 16 Sep 2022 09:16:51 +0800
-Received: from User (45.14.71.5) by MRL-EXH-02.prasarana.com.my
- (10.128.66.101) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
- Transport; Fri, 16 Sep 2022 09:16:21 +0800
-Reply-To: <rhashimi202222@kakao.com>
-From:   Consultant Swift Capital Loans Ltd <info@t4.cims.jp>
-Subject: I hope you are doing well, and business is great!
-Date:   Fri, 16 Sep 2022 09:17:03 +0800
+        with ESMTP id S229487AbiIPEPD (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 16 Sep 2022 00:15:03 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54B152715E
+        for <linux-can@vger.kernel.org>; Thu, 15 Sep 2022 21:15:02 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id f14so32653047lfg.5
+        for <linux-can@vger.kernel.org>; Thu, 15 Sep 2022 21:15:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=s+D2g1IMuJqRsGmASTGqUuEFCZBdAB1XobJl55Kbuuk=;
+        b=LMy3C++NDxFCSu7R2/en1gIp+3aKimmjsLsyP6EaDz0dc7x6Y+bo6VAlrV8MJo70dI
+         L4kNs6Xam9VoXtSkDC6LAc++ROSAjxXlcNxQeZRV7jiu+dnCO/l9vX13bfJQ2iIzzp1M
+         W6B3VFUa20dW/kTaYSn+QH0PD98Gm8IBcViJ+q0Ny4qu65d8GNe2eZW9EmKMqxj5L1FE
+         gfCFt8JIMX6kNtnJQreNSG6WUuiCLqcWJS1ITnyCqxOl7rGElfDcB6IhENNriwX49ans
+         cm7YBE7RxYacdI5x0HzafrqxHOJhslFq2WzgU+E2PsPgSh+LxouguobzKza7Tjz/Vf+C
+         dgkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=s+D2g1IMuJqRsGmASTGqUuEFCZBdAB1XobJl55Kbuuk=;
+        b=Be8wN9NqCVQ4QvYREEYyMcUwjv3jhs8hNiQytGgwfF4yX2mKKeELBIstZiooIhvkPm
+         4afIEtE1ksQ9xah+YGnmota0Es3SE4GvveZ+Rk1sHcKpaNS70lwWwfiSUJ7rgjCP0C0S
+         c2wq8Aij5ytlFr5ZFS+2B8sT0UnEqL2p6sgujqHnTsfP9wHsLlEhhlJm90DCPII4O7Sv
+         HfXinFpai9DOCtLn27j5Vv0eYjIhhOjbzuQghWQqrzRDmkXX3rB3Cuov50nC1+iQyERR
+         m+AyydP3iq0zbYUf/2lab94P+BtN0lnlXdhBOl8cjLQffL80csj7cun8YURdRaPQVogM
+         ErzQ==
+X-Gm-Message-State: ACrzQf1SP6dmHN48E9NII3QRYb8CFbljslW9Skga7tzNcXFFw/ZT114J
+        NvJLhPq+ue7i2iauhJ7NMqM=
+X-Google-Smtp-Source: AMsMyM7MxnS3F8a9aK1/F/tdelZ2TY9CMXvELmo71EHFsIovPSW5EjArj/Q6hRM7d0VlGD9BxYhaLA==
+X-Received: by 2002:a05:6512:3989:b0:49f:480f:c9ae with SMTP id j9-20020a056512398900b0049f480fc9aemr957466lfu.343.1663301700469;
+        Thu, 15 Sep 2022 21:15:00 -0700 (PDT)
+Received: from [192.168.10.102] (89-253-118-72.customers.ownit.se. [89.253.118.72])
+        by smtp.gmail.com with ESMTPSA id z17-20020a056512377100b0048b3a92a2dbsm3267022lft.215.2022.09.15.21.14.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Sep 2022 21:14:59 -0700 (PDT)
+Message-ID: <8c481a4e-9493-25ae-f4d7-c12dc98bc83e@gmail.com>
+Date:   Fri, 16 Sep 2022 06:14:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="Windows-1251"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: CM-ITC, pch_can/c_can_pci, sendto() returning ENOBUFS
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        linux-can@vger.kernel.org, wg@grandegger.com, dariobin@libero.it
+References: <15a8084b-9617-2da1-6704-d7e39d60643b@gmail.com>
+ <403e18fe-8695-cd56-38f3-0ffe3ec9e472@gmail.com>
+ <36d0419b-297f-8e39-8843-051b55b8a2bb@gmail.com>
+ <986401a8-5f5a-0705-82c4-4df339509e07@gmail.com>
+ <556866e2-a3aa-9077-8db7-edc4ced69491@hartkopp.net>
+ <f8a95bfb-b1c2-cd41-1106-ca739c438fb9@gmail.com>
+ <df1d220e-bf99-1051-ca90-5bd52e6c64e7@hartkopp.net>
+ <0eb1dd1b-427a-92c5-22ef-97c557cfec6e@gmail.com>
+ <20220905155416.pgvseb6uggc67ua4@pengutronix.de>
+Content-Language: en-US
+From:   Jacob Kroon <jacob.kroon@gmail.com>
+In-Reply-To: <20220905155416.pgvseb6uggc67ua4@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-ID: <0135ac95-8929-4d45-8a5f-93547c102f2e@MRL-EXH-02.prasarana.com.my>
-To:     Undisclosed recipients:;
-X-EOPAttributedMessage: 0
-X-MS-Exchange-SkipListedInternetSender: ip=[45.14.71.5];domain=User
-X-MS-Exchange-ExternalOriginalInternetSender: ip=[45.14.71.5];domain=User
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYZAPC01FT053:EE_|SI2PR04MB4137:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9ea11b2e-dba3-4db4-6365-08da97813ab5
-X-MS-Exchange-AtpMessageProperties: SA|SL
-X-MS-Exchange-SenderADCheck: 0
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: =?windows-1251?Q?27C4NJfFKZgDG5cHZywkbuN9AlsZ/R+LT2SDpH3esd6rzewy/uF5Ikd2?=
- =?windows-1251?Q?QHN4fwZjm9vXHH6VXw67j1K6Ejx5yiIsp1K12ZkN4FjFIckxyZX3rLAM?=
- =?windows-1251?Q?EJ8d9siWYXQQQNC2JVEfxo163pwfnju6ybc0PAAgFLuzDAF7272+mcVB?=
- =?windows-1251?Q?paA/8YnGaZ0RHR3NdmRVKuAAncQJ4ibGuuTwzFP82pz4u0qcox3t6eg3?=
- =?windows-1251?Q?uU3qw0L9gcm+mVrcCyLkDhVyTdCw4EE/E4p015Vd0PmyE1tm5gcYq1XY?=
- =?windows-1251?Q?FI81i37wggWd8CryMy5w68/YZ3L/FBlS3vQHxyA6i9yJxiQVlY1mngjb?=
- =?windows-1251?Q?g2xRwI9MEnRG2ei5gOylrviz5ajsUs8X6iYTKEWDGf2c5avE242BIwwZ?=
- =?windows-1251?Q?cTDsd8uXdtyj19Kmc3YinX9bjY7aYGyBydlF1yxbZibj0mtUkxoMFrVl?=
- =?windows-1251?Q?NAdkzB7z/PLD7+u70tjgLQNVWU8+aZwpTSGgO1Pd+dsuNzKELTFZJaG8?=
- =?windows-1251?Q?kDHlCqfd1aRz+Ch/fgi2sVGIJPx0YNZE7wHH7emXnkXtAfyp0VFMiQlV?=
- =?windows-1251?Q?jn9RMokVhMHqWPt1v3EGxDm2szo9gI2S/NZn3ImT0Tw6ogSfRti7TTKR?=
- =?windows-1251?Q?RfbtOoOrjZ/Klo7ylF+OcqPNByQbjzusVZb5x3gYtWJ1JPbBZl35qYgw?=
- =?windows-1251?Q?YnSLzDag3iDgguj2uVS//uU+7R+jKoya2S4Ixlsu717lNB+P6qmEBfee?=
- =?windows-1251?Q?qugQYBsvC9JjdcJhw8lXIPUHuO3AhfSfSnEZcTz2w3G7hC6RQsi21kcY?=
- =?windows-1251?Q?aF7+vOQ5yWEiIlNULc2cGf1ozwrB+IwFA0qRYMWQ4g2Up95rWMm9ZWM8?=
- =?windows-1251?Q?1uXF1QS2EaFBD5/xLWYTjDjW7HZkwaytLDUqs8OmTStcQi6USnsdYy1E?=
- =?windows-1251?Q?RpSRZo6fZ1Cfd3nbYZWHgWWWGlhTNw0Gv9e2IceeZpTxx8ZFqvlPpCO8?=
- =?windows-1251?Q?9+XPTQ3GticBsqpY+ewFLNqRpdPfvdpc3ejOt++uQTR0AUAYHM/LXC+F?=
- =?windows-1251?Q?Cn7iYoZhAA2fskt23RA9Zpc3NjYwFfGe0cgfaha9Vm5m/yEeLUpFM1w3?=
- =?windows-1251?Q?nUrlMn5+tFhwxOH7URRD3oFSgZMumPzXSUc606LkMzWa93WIYXLVLIVp?=
- =?windows-1251?Q?2tIzt0ApJNxGoIV+QZiSP4YPCUzPAJ72WwQaEvuNn9DPqSJf7mLzPpI3?=
- =?windows-1251?Q?PFm8G6B78oAOPemwEoj0/vVH6F9HxM3hTNTYSS0/9Rl2Ayr7W4TBTVwk?=
- =?windows-1251?Q?xa4JChRApsohZw0FNkQa4v7eSHUVYXYCrIlj7G3/69Bh9f02?=
-X-Forefront-Antispam-Report: CIP:58.26.8.158;CTRY:JP;LANG:en;SCL:5;SRV:;IPV:NLI;SFV:SPM;H:User;PTR:45.14.71.5.static.xtom.com;CAT:OSPM;SFS:(13230022)(4636009)(376002)(396003)(136003)(39860400002)(346002)(451199015)(40470700004)(82310400005)(40480700001)(32650700002)(31686004)(86362001)(70586007)(70206006)(8936002)(5660300002)(336012)(956004)(498600001)(8676002)(7416002)(7366002)(31696002)(7406005)(81166007)(4744005)(156005)(316002)(35950700001)(32850700003)(41300700001)(36906005)(2906002)(40460700003)(6666004)(82740400003)(26005)(109986005)(9686003)(66899012)(2700400008);DIR:OUT;SFP:1501;
-X-OriginatorOrg: myprasarana.onmicrosoft.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2022 01:17:31.6325
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9ea11b2e-dba3-4db4-6365-08da97813ab5
-X-MS-Exchange-CrossTenant-Id: 3cbb2ff2-27fb-4993-aecf-bf16995e64c0
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3cbb2ff2-27fb-4993-aecf-bf16995e64c0;Ip=[58.26.8.158];Helo=[mail.prasarana.com.my]
-X-MS-Exchange-CrossTenant-AuthSource: TYZAPC01FT053.eop-APC01.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR04MB4137
-X-Spam-Status: Yes, score=6.2 required=5.0 tests=AXB_XMAILER_MIMEOLE_OL_024C2,
-        AXB_X_FF_SEZ_S,BAYES_50,FORGED_MUA_OUTLOOK,FSL_CTYPE_WIN1251,
-        FSL_NEW_HELO_USER,HEADER_FROM_DIFFERENT_DOMAINS,NSL_RCVD_FROM_USER,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=no
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [52.100.223.218 listed in list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5181]
-        *  0.0 NSL_RCVD_FROM_USER Received from User
-        *  0.0 FSL_CTYPE_WIN1251 Content-Type only seen in 419 spam
-        *  3.2 AXB_X_FF_SEZ_S Forefront sez this is spam
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
-        *  0.2 HEADER_FROM_DIFFERENT_DOMAINS From and EnvelopeFrom 2nd level
-        *      mail domains are different
-        *  0.0 AXB_XMAILER_MIMEOLE_OL_024C2 Yet another X header trait
-        *  0.0 FSL_NEW_HELO_USER Spam's using Helo and User
-        *  1.9 FORGED_MUA_OUTLOOK Forged mail pretending to be from MS Outlook
-X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello,
+Hi Marc and Dario,
 
-I hope you are doing well, and business is great!
-However, if you need working capital to further grow and expand your business, we may be a perfect fit for you. I am Ms. Kaori Ichikawa Swift Capital Loans Ltd Consultant, Our loans are NOT based on your personal credit, and NO collateral is required.
+(CC:ing patch author Dario)
 
-We are a Direct Lender who can approve your loan today, and fund as Early as Tomorrow.
+On 9/5/22 17:54, Marc Kleine-Budde wrote:
+> On 01.09.2022 11:38:31, Jacob Kroon wrote:
+>> I used "candump can0 -l" on the EG20T host to capture the traffic, and
+>> then connected an CAN USB analyzer to the network and used that to
+>> capture the traffic. One thing sticks out. This is the log from the
+>> CAN USB analyzer:
+> 
+> Who generates these CAN messages?
+> 
 
-Once your reply I will send you the official website to complete your application
+The invalid frames in the logs are being sent from the the EG20T host, 
+but some of them have also originated from the other nodes in the network.
 
-Waiting for your reply.
+>>> ...
+>>> 505.7052;RX;0x464;3;0x01;0x01;0x00;;;;;;
+>>> 505.7052;RX;0x464;3;0x00;0x00;0x00;;;;;;
+>>> 505.7063;RX;0x65;64;;;;;;;;;
+> 
+> As Oliver pointed out, this doesn't look like a valid CAN frame. Is the
+> analyzer and/or sender configured for CAN-FD?
+> 
 
-Regards
-Ms. Kaori Ichikawa
-Consultant Swift Capital Loans Ltd
+No, none of the nodes in the network are sending CAN-FD frames, they are 
+all normal CAN frames, max 8 bytes.
+
+>>> 505.7662;RX;0x440;3;0x32;0x20;0xFA;;;;;;
+>>> 505.7912;RX;0x44C;3;0x35;0x20;0xFA;;;;;;
+>>> 505.9632;RX;0x464;3;0x00;0x00;0x00;;;;;;
+>>> 505.9632;RX;0x464;3;0x01;0x01;0x00;;;;;;
+>>> 505.9752;RX;0x468;3;0x51;0x20;0xFA;;;;;;
+>>> 506.0362;RX;0x440;3;0x32;0x20;0xFA;;;;;;
+>>> 506.0622;RX;0x44C;3;0x35;0x20;0xFA;;;;;;
+>>> 506.2112;RX;0x464;3;0x00;0x00;0x00;;;;;;
+>>> 506.2112;RX;0x464;3;0x00;0x00;0x00;;;;;;
+>>> 506.2462;RX;0x468;3;0x51;0x20;0xFA;;;;;;
+>>> 506.3072;RX;0x440;3;0x32;0x20;0xFA;;;;;;
+>>> 506.3322;RX;0x44C;3;0x35;0x20;0xFA;;;;;;
+>>> 506.4572;RX;0x464;3;0x00;0x00;0x00;;;;;;
+>>> 506.4580;RX;0x464;3;0x00;0x00;0x00;;;;;;
+>>> 506.5162;RX;0x468;3;0x51;0x20;0xFA;;;;;;
+>>> 522.7203;RX;0x1E;1;0xFF;;;;;;;;
+>>> ...
+>>
+>> Note the third message from the top. This is what "candump" on the host
+>> logs:
+>>
+>>> ...
+>>> (1662022485.638794) can0 464#010100
+>>> (1662022485.638940) can0 464#000000
+>>> (1662022485.699405) can0 440#3220FA
+>>> (1662022485.725166) can0 44C#3520FA
+>>> (1662022485.896858) can0 464#000000
+>>> (1662022485.897382) can0 464#010100
+>>> (1662022485.909042) can0 468#5120FA
+>>> (1662022485.970036) can0 440#3220FA
+>>> (1662022485.995596) can0 44C#3520FA
+>>> (1662022486.144685) can0 464#000000
+>>> (1662022486.144768) can0 464#000000
+>>> (1662022486.179595) can0 468#5120FA
+>>> (1662022486.240561) can0 440#3220FA
+>>> (1662022486.266274) can0 44C#3520FA
+>>> (1662022486.391248) can0 464#000000
+>>> (1662022486.391469) can0 464#000000
+>>> (1662022486.450115) can0 468#5120FA
+>>> (1662022502.662035) can0 01E#FF
+>>> ...
+>>
+>> It fails to see the 3rd message from the previous log. What would that
+>> indicate ? The CAN analyzer sees the message, but the EG20T doesn't.
+> 
+> Is this error somehow related to the "can0: can_put_echo_skb: BUG!
+> echo_skb 0 is occupied"?
+> 
+
+Possibly.
+
+What I do know is that if I revert commit:
+
+"can: c_can: cache frames to operate as a true FIFO"
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=387da6bc7a826cc6d532b1c0002b7c7513238d5f
+
+then everything looks good. I don't get any BUG messages, and the host 
+has been running overnight without problems, so it seems to have fixed 
+the network interface lockup as well.
+
+Jacob
