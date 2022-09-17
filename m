@@ -2,82 +2,127 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C32B5BB2CE
-	for <lists+linux-can@lfdr.de>; Fri, 16 Sep 2022 21:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F1255BBA1A
+	for <lists+linux-can@lfdr.de>; Sat, 17 Sep 2022 21:20:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbiIPTan (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 16 Sep 2022 15:30:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45552 "EHLO
+        id S229674AbiIQTU0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 17 Sep 2022 15:20:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbiIPTam (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 16 Sep 2022 15:30:42 -0400
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C12C959270;
-        Fri, 16 Sep 2022 12:30:40 -0700 (PDT)
-Received: by mail-oi1-f180.google.com with SMTP id m81so5654803oia.1;
-        Fri, 16 Sep 2022 12:30:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=8cuk1eJxoG1FNNo/YKYY7GR8A8kNHB5RJDTvskk+Tfk=;
-        b=FsQQdSjPnOsxqhpFociBBOP04f5Pxl0UP8m8apo3ga/7PLAigPMbyswEofT6+P5M7P
-         wJhlYYwPPTiWLyOyzqQZ9S2YOcPJq10CFL07NqvIcC2HVk2VgoPdgwFvwGzFeQTH0bCx
-         3Vm9iBwTA4tNKfVg+J6zEGaklkgkzEJsh7S59rhfaxPVQe4jnogqMRStwtI9Guga3QM4
-         VFUnOgtr5A8o2dEb3NfTiGR0JTqxOrDHnduUkp38cKwR0JnjUcHWKTWMbKLn7WClzEf0
-         NNHcnQTRXwFI4Sjl/oj/6y0ICnQqsAbeyOtMesB7LzS8+OPZIJq9etLpUx7sPKmFtbFJ
-         nJaQ==
-X-Gm-Message-State: ACrzQf2ZQGCHiid1CJH3ZQN3lGNFAv0wDebpjZ/j4OXT7a2WXRuiiMNj
-        pW3KTbNn+eBI6+BKYWDiig==
-X-Google-Smtp-Source: AMsMyM55WVnfjf35q6Y7UEBkhQeojCI+xmbengY+1s6c3Xj01c34ilWcTHfUCnIzh2JAafjlrQxqgg==
-X-Received: by 2002:aca:908:0:b0:34f:87eb:6a62 with SMTP id 8-20020aca0908000000b0034f87eb6a62mr3081579oij.33.1663356640081;
-        Fri, 16 Sep 2022 12:30:40 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id k19-20020a4abd93000000b004357ccfc8bfsm9429934oop.7.2022.09.16.12.30.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 12:30:39 -0700 (PDT)
-Received: (nullmailer pid 1131728 invoked by uid 1000);
-        Fri, 16 Sep 2022 19:30:38 -0000
-Date:   Fri, 16 Sep 2022 14:30:38 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Matej Vasilevski <matej.vasilevski@seznam.cz>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Pavel Pisa <pisa@cmp.felk.cvut.cz>,
-        "David S. Miller" <davem@davemloft.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Ondrej Ille <ondrej.ille@gmail.com>
-Subject: Re: [PATCH v4 1/3] dt-bindings: can: ctucanfd: add another clock for
- HW timestamping
-Message-ID: <20220916193038.GA1131695-robh@kernel.org>
-References: <20220914233944.598298-1-matej.vasilevski@seznam.cz>
- <20220914233944.598298-2-matej.vasilevski@seznam.cz>
+        with ESMTP id S229660AbiIQTUY (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 17 Sep 2022 15:20:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A4EC275DD;
+        Sat, 17 Sep 2022 12:20:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D69F61170;
+        Sat, 17 Sep 2022 19:20:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CDD91C433D6;
+        Sat, 17 Sep 2022 19:20:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663442421;
+        bh=pB2NqJ7QmQ/SLGKnl5hY2V8z0YYnFa2HOjbqxxEJKVo=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=YrsLYdOIT2FEvNwL3Uz5NfCZUS8II0TmKlWFMDVBQPXXRjBq2O9mLP60FdEHhkW/v
+         gd0hbO9lokNH45XVspkPLpOIXW7QUkKvw+UThSCbKsTFxMg1WnVg+cP9pJX7wdOTsS
+         6crSCLG/QhsurkN+EsGNjU4IFJA93fJNPFFMTcj/Jx12xilJ9And5yoIHnVz4O2U8C
+         Qh1HyxR2hniW8seEzV4vLserNY/ECoISekM7o75YZz0PwIv8pJYVJgiW0nBU0KsGJR
+         dIyh4er6/UWGkpB1klzdLymQa2qN4/oqSU93Yu1PWD7oFZpxySGlFDOXBczyN0OqyC
+         5aCVwAtFu+reg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B2CF3C74000;
+        Sat, 17 Sep 2022 19:20:21 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220914233944.598298-2-matej.vasilevski@seznam.cz>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 01/23] can: rx-offload: can_rx_offload_init_queue():
+ fix typo
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166344242172.31603.16282918738271793500.git-patchwork-notify@kernel.org>
+Date:   Sat, 17 Sep 2022 19:20:21 +0000
+References: <20220915082013.369072-2-mkl@pengutronix.de>
+In-Reply-To: <20220915082013.369072-2-mkl@pengutronix.de>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        linux-can@vger.kernel.org, kernel@pengutronix.de,
+        u.kleine-koenig@pengutronix.de
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Thu, 15 Sep 2022 01:39:42 +0200, Matej Vasilevski wrote:
-> Add second clock phandle to specify the timestamping clock.
-> 
-> Signed-off-by: Matej Vasilevski <matej.vasilevski@seznam.cz>
-> ---
->  .../bindings/net/can/ctu,ctucanfd.yaml        | 19 +++++++++++++++----
->  1 file changed, 15 insertions(+), 4 deletions(-)
-> 
+Hello:
 
-Acked-by: Rob Herring <robh@kernel.org>
+This series was applied to netdev/net-next.git (master)
+by Marc Kleine-Budde <mkl@pengutronix.de>:
+
+On Thu, 15 Sep 2022 10:19:51 +0200 you wrote:
+> Fix typo "rounted" -> "rounded".
+> 
+> Link: https://lore.kernel.org/all/20220811093617.1861938-2-mkl@pengutronix.de
+> Fixes: d254586c3453 ("can: rx-offload: Add support for HW fifo based irq offloading")
+> Reported-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,01/23] can: rx-offload: can_rx_offload_init_queue(): fix typo
+    https://git.kernel.org/netdev/net-next/c/766108d91246
+  - [net-next,02/23] can: flexcan: fix typo: FLEXCAN_QUIRK_SUPPPORT_* -> FLEXCAN_QUIRK_SUPPORT_*
+    https://git.kernel.org/netdev/net-next/c/d945346db1ef
+  - [net-next,03/23] can: rcar_canfd: Use dev_err_probe() to simplify code and better handle -EPROBE_DEFER
+    https://git.kernel.org/netdev/net-next/c/ddbbed25309f
+  - [net-next,04/23] can: kvaser_usb: kvaser_usb_hydra: Use kzalloc for allocating only one element
+    https://git.kernel.org/netdev/net-next/c/00784da3e6b8
+  - [net-next,05/23] dt-bindings: can: nxp,sja1000: Document RZ/N1 power-domains support
+    https://git.kernel.org/netdev/net-next/c/f4dda24432d7
+  - [net-next,06/23] can: sja1000: Add support for RZ/N1 SJA1000 CAN Controller
+    https://git.kernel.org/netdev/net-next/c/0838921bb409
+  - [net-next,07/23] can: sja1000: remove redundant variable ret
+    https://git.kernel.org/netdev/net-next/c/3a71eba64c9c
+  - [net-next,08/23] can: kvaser_pciefd: remove redundant variable ret
+    https://git.kernel.org/netdev/net-next/c/7912fc9905ff
+  - [net-next,09/23] can: gs_usb: use common spelling of GS_USB in macros
+    https://git.kernel.org/netdev/net-next/c/49c007b9ecea
+  - [net-next,10/23] can: gs_usb: add RX and TX hardware timestamp support
+    https://git.kernel.org/netdev/net-next/c/45dfa45f52e6
+  - [net-next,11/23] can: etas_es58x: Replace zero-length array with DECLARE_FLEX_ARRAY() helper
+    https://git.kernel.org/netdev/net-next/c/6fc5d84e6d85
+  - [net-next,12/23] dt-bindings: net: can: nxp,sja1000: drop ref from reg-io-width
+    https://git.kernel.org/netdev/net-next/c/2a50db2656e0
+  - [net-next,13/23] docs: networking: device drivers: flexcan: fix invalid email
+    https://git.kernel.org/netdev/net-next/c/318d8235bcb8
+  - [net-next,14/23] can: raw: process optimization in raw_init()
+    https://git.kernel.org/netdev/net-next/c/c28b3bffe49e
+  - [net-next,15/23] can: raw: use guard clause to optimize nesting in raw_rcv()
+    https://git.kernel.org/netdev/net-next/c/170277c53278
+  - [net-next,16/23] can: flexcan: Switch to use dev_err_probe() helper
+    https://git.kernel.org/netdev/net-next/c/1c679f917397
+  - [net-next,17/23] can: skb: unify skb CAN frame identification helpers
+    https://git.kernel.org/netdev/net-next/c/96a7457a14d9
+  - [net-next,18/23] can: skb: add skb CAN frame data length helpers
+    https://git.kernel.org/netdev/net-next/c/467ef4c7b9d1
+  - [net-next,19/23] can: set CANFD_FDF flag in all CAN FD frame structures
+    https://git.kernel.org/netdev/net-next/c/061834624c87
+  - [net-next,20/23] can: canxl: introduce CAN XL data structure
+    https://git.kernel.org/netdev/net-next/c/1a3e3034c049
+  - [net-next,21/23] can: canxl: update CAN infrastructure for CAN XL frames
+    https://git.kernel.org/netdev/net-next/c/fb08cba12b52
+  - [net-next,22/23] can: dev: add CAN XL support to virtual CAN
+    https://git.kernel.org/netdev/net-next/c/ebf87fc72850
+  - [net-next,23/23] can: raw: add CAN XL support
+    https://git.kernel.org/netdev/net-next/c/626332696d75
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
