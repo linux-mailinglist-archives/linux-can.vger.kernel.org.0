@@ -2,48 +2,49 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1FC35BC000
-	for <lists+linux-can@lfdr.de>; Sun, 18 Sep 2022 23:18:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76BD95BC002
+	for <lists+linux-can@lfdr.de>; Sun, 18 Sep 2022 23:18:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbiIRVSK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 18 Sep 2022 17:18:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56214 "EHLO
+        id S229610AbiIRVSN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 18 Sep 2022 17:18:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiIRVSJ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 18 Sep 2022 17:18:09 -0400
+        with ESMTP id S229563AbiIRVSK (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 18 Sep 2022 17:18:10 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4007C11828
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 878AA1277A
         for <linux-can@vger.kernel.org>; Sun, 18 Sep 2022 14:18:08 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1oa1fy-0002Mp-OF
+        id 1oa1fy-0002Mw-RM
         for linux-can@vger.kernel.org; Sun, 18 Sep 2022 23:18:06 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id E6C25E570C
+        by bjornoya.blackshift.org (Postfix) with SMTP id F123FE570D
         for <linux-can@vger.kernel.org>; Sun, 18 Sep 2022 21:18:05 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 385A7E5700;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 4D77CE5702;
         Sun, 18 Sep 2022 21:18:05 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 691a34c9;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 677b4c18;
         Sun, 18 Sep 2022 21:18:04 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     linux-can@vger.kernel.org
 Cc:     Daniel Trevitz <daniel.trevitz@wika.com>,
         Ryan Edwards <ryan.edwards@gmail.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH v2 2/3] can: gs_usb: gs_make_candev(): clean up error handling
-Date:   Sun, 18 Sep 2022 23:18:01 +0200
-Message-Id: <20220918211802.692405-3-mkl@pengutronix.de>
+Subject: [PATCH v2 3/3] can: gs_usb: add switchable termination support
+Date:   Sun, 18 Sep 2022 23:18:02 +0200
+Message-Id: <20220918211802.692405-4-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220918211802.692405-1-mkl@pengutronix.de>
 References: <20220918211802.692405-1-mkl@pengutronix.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
@@ -57,65 +58,158 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Introduce a label to free the allocated candev in case of a error and
-make use of if. Fix a memory leak if the extended bit timing cannot be
-read. Extend the error messages to print the number of the failing
-channel and the symbolic error name.
+The candleLight community is working on switchable termination support
+for the candleLight firmware. As the the Linux CAN framework supports
+switchable termination add this feature to the gs_usb driver.
 
+Devices supporting the feature should set the
+GS_CAN_FEATURE_TERMINATION and implement the
+GS_USB_BREQ_SET_TERMINATION and GS_USB_BREQ_GET_TERMINATION control
+messages.
+
+For now the driver assumes for activated termination the standard
+termination value of 120Ω.
+
+Link: https://github.com/candle-usb/candleLight_fw/issues/92
+Link: https://github.com/candle-usb/candleLight_fw/pull/108
+Cc: Daniel Trevitz <daniel.trevitz@wika.com>
+Cc: Ryan Edwards <ryan.edwards@gmail.com>
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/usb/gs_usb.c | 21 +++++++++++++--------
- 1 file changed, 13 insertions(+), 8 deletions(-)
+ drivers/net/can/usb/gs_usb.c | 78 +++++++++++++++++++++++++++++++++++-
+ 1 file changed, 77 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
-index 16e56394ef9b..bfa061687d13 100644
+index bfa061687d13..d0c491d7319a 100644
 --- a/drivers/net/can/usb/gs_usb.c
 +++ b/drivers/net/can/usb/gs_usb.c
-@@ -1137,8 +1137,8 @@ static struct gs_can *gs_make_candev(unsigned int channel,
+@@ -64,6 +64,8 @@ enum gs_usb_breq {
+ 	GS_USB_BREQ_SET_USER_ID,
+ 	GS_USB_BREQ_DATA_BITTIMING,
+ 	GS_USB_BREQ_BT_CONST_EXT,
++	GS_USB_BREQ_SET_TERMINATION,
++	GS_USB_BREQ_GET_TERMINATION,
+ };
  
- 	if (rc) {
- 		dev_err(&intf->dev,
--			"Couldn't get bit timing const for channel (err=%d)\n",
--			rc);
-+			"Couldn't get bit timing const for channel %d (%pe)\n",
-+			channel, ERR_PTR(rc));
- 		return ERR_PTR(rc);
+ enum gs_can_mode {
+@@ -87,6 +89,14 @@ enum gs_can_identify_mode {
+ 	GS_CAN_IDENTIFY_ON
+ };
+ 
++enum gs_can_termination_state {
++	GS_CAN_TERMINATION_STATE_OFF = 0,
++	GS_CAN_TERMINATION_STATE_ON
++};
++
++#define GS_USB_TERMINATION_DISABLED CAN_TERMINATION_DISABLED
++#define GS_USB_TERMINATION_ENABLED 120
++
+ /* data types passed between host and device */
+ 
+ /* The firmware on the original USB2CAN by Geschwister Schneider
+@@ -123,6 +133,7 @@ struct gs_device_config {
+ #define GS_CAN_MODE_FD BIT(8)
+ /* GS_CAN_FEATURE_REQ_USB_QUIRK_LPC546XX BIT(9) */
+ /* GS_CAN_FEATURE_BT_CONST_EXT BIT(10) */
++/* GS_CAN_FEATURE_TERMINATION BIT(11) */
+ 
+ struct gs_device_mode {
+ 	__le32 mode;
+@@ -147,6 +158,10 @@ struct gs_identify_mode {
+ 	__le32 mode;
+ } __packed;
+ 
++struct gs_termination_state {
++	__le32 state;
++} __packed;
++
+ #define GS_CAN_FEATURE_LISTEN_ONLY BIT(0)
+ #define GS_CAN_FEATURE_LOOP_BACK BIT(1)
+ #define GS_CAN_FEATURE_TRIPLE_SAMPLE BIT(2)
+@@ -158,7 +173,8 @@ struct gs_identify_mode {
+ #define GS_CAN_FEATURE_FD BIT(8)
+ #define GS_CAN_FEATURE_REQ_USB_QUIRK_LPC546XX BIT(9)
+ #define GS_CAN_FEATURE_BT_CONST_EXT BIT(10)
+-#define GS_CAN_FEATURE_MASK GENMASK(10, 0)
++#define GS_CAN_FEATURE_TERMINATION BIT(11)
++#define GS_CAN_FEATURE_MASK GENMASK(11, 0)
+ 
+ /* internal quirks - keep in GS_CAN_FEATURE space for now */
+ 
+@@ -1117,6 +1133,52 @@ static const struct ethtool_ops gs_usb_ethtool_ops = {
+ 	.get_ts_info = gs_usb_get_ts_info,
+ };
+ 
++static int gs_usb_get_termination(struct net_device *netdev, u16 *term)
++{
++	struct gs_can *dev = netdev_priv(netdev);
++	struct gs_termination_state term_state;
++	int rc;
++
++	rc = usb_control_msg_recv(interface_to_usbdev(dev->iface), 0,
++				  GS_USB_BREQ_GET_TERMINATION,
++				  USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_INTERFACE,
++				  dev->channel, 0,
++				  &term_state, sizeof(term_state), 1000,
++				  GFP_KERNEL);
++	if (rc)
++		return rc;
++
++	if (term_state.state == cpu_to_le32(GS_CAN_TERMINATION_STATE_ON))
++		*term = GS_USB_TERMINATION_ENABLED;
++	else
++		*term = GS_USB_TERMINATION_DISABLED;
++
++	return 0;
++}
++
++static int gs_usb_set_termination(struct net_device *netdev, u16 term)
++{
++	struct gs_can *dev = netdev_priv(netdev);
++	struct gs_termination_state term_state;
++
++	if (term == GS_USB_TERMINATION_ENABLED)
++		term_state.state = cpu_to_le32(GS_CAN_TERMINATION_STATE_ON);
++	else
++		term_state.state = cpu_to_le32(GS_CAN_TERMINATION_STATE_OFF);
++
++	return usb_control_msg_send(interface_to_usbdev(dev->iface), 0,
++				    GS_USB_BREQ_SET_TERMINATION,
++				    USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_INTERFACE,
++				    dev->channel, 0,
++				    &term_state, sizeof(term_state), 1000,
++				    GFP_KERNEL);
++}
++
++static const u16 gs_usb_termination_const[] = {
++	GS_USB_TERMINATION_DISABLED,
++	GS_USB_TERMINATION_ENABLED
++};
++
+ static struct gs_can *gs_make_candev(unsigned int channel,
+ 				     struct usb_interface *intf,
+ 				     struct gs_device_config *dconf)
+@@ -1211,6 +1273,20 @@ static struct gs_can *gs_make_candev(unsigned int channel,
+ 		dev->can.do_set_data_bittiming = gs_usb_set_data_bittiming;
  	}
  
-@@ -1251,9 +1251,9 @@ static struct gs_can *gs_make_candev(unsigned int channel,
- 					  1000, GFP_KERNEL);
- 		if (rc) {
- 			dev_err(&intf->dev,
--				"Couldn't get extended bit timing const for channel (err=%d)\n",
--				rc);
--			return ERR_PTR(rc);
-+				"Couldn't get extended bit timing const for channel %d (%pe)\n",
++	if (feature & GS_CAN_FEATURE_TERMINATION) {
++		dev->can.termination_const = gs_usb_termination_const;
++		dev->can.termination_const_cnt = ARRAY_SIZE(gs_usb_termination_const);
++		dev->can.do_set_termination = gs_usb_set_termination;
++
++		rc = gs_usb_get_termination(netdev, &dev->can.termination);
++		if (rc) {
++			dev_err(&intf->dev,
++				"Couldn't get current termination state for channel %d (%pe)\n",
 +				channel, ERR_PTR(rc));
 +			goto out_free_candev;
- 		}
- 
- 		strcpy(dev->data_bt_const.name, KBUILD_MODNAME);
-@@ -1273,12 +1273,17 @@ static struct gs_can *gs_make_candev(unsigned int channel,
- 
- 	rc = register_candev(dev->netdev);
- 	if (rc) {
--		free_candev(dev->netdev);
--		dev_err(&intf->dev, "Couldn't register candev (err=%d)\n", rc);
--		return ERR_PTR(rc);
-+		dev_err(&intf->dev,
-+			"Couldn't register candev for channel %d (%pe)\n",
-+			channel, ERR_PTR(rc));
-+		goto out_free_candev;
- 	}
- 
- 	return dev;
++		}
++	}
 +
-+ out_free_candev:
-+	free_candev(dev->netdev);
-+	return ERR_PTR(rc);
- }
- 
- static void gs_destroy_candev(struct gs_can *dev)
+ 	/* The CANtact Pro from LinkLayer Labs is based on the
+ 	 * LPC54616 µC, which is affected by the NXP LPC USB transfer
+ 	 * erratum. However, the current firmware (version 2) doesn't
 -- 
 2.35.1
 
