@@ -2,128 +2,212 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B45D65BBD3F
-	for <lists+linux-can@lfdr.de>; Sun, 18 Sep 2022 11:59:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04FFA5BBFC4
+	for <lists+linux-can@lfdr.de>; Sun, 18 Sep 2022 22:24:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbiIRJ7m (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 18 Sep 2022 05:59:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36502 "EHLO
+        id S229541AbiIRUX5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 18 Sep 2022 16:23:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbiIRJ6S (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 18 Sep 2022 05:58:18 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B51E2A73F
-        for <linux-can@vger.kernel.org>; Sun, 18 Sep 2022 02:56:47 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id s10so29986745ljp.5
-        for <linux-can@vger.kernel.org>; Sun, 18 Sep 2022 02:56:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=cz0sWC5cENZ7vP4TUISPsB3yoAy7s2V0KQsu6rxUMR0=;
-        b=enEITnuIhSmNIoO0CSlQdEh0nMmnTE6WFwnBrsEQJoFKvcBjx6kQDApb38fGbFaL+4
-         j7tQOBNFYDVlQaNrb93hDSdmTrDURv4SCMxsu7mEeisdUHzLvZhFoLT3K9in+IaE3iz5
-         t43vCTSrtx7gErHYGIeIf3FuSHz7djo6bUXqaxGuRJbw2DR884/8PsuWfsVEVEBmdBRu
-         jC0jQlePlXN40ndWhNPYJ8tCZ0kA1EZmZ5/36UJIJb+WdkCs7o7ez4gRWpfnUdegEQ2h
-         imCVcVGWXvu2hmcdBGBYVQw+R6V8qmQJA2D8RAYJgkThAueiqR9Zw89j/+KnyN0ltfXZ
-         FK4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=cz0sWC5cENZ7vP4TUISPsB3yoAy7s2V0KQsu6rxUMR0=;
-        b=npr8YG/cFSf0DtrrXN9/79g7cozpPRe9zpjILckgX8dR3AXjXaUunSX2WdcgOjec5b
-         EEbvg6B6HbyND1SVz8yND7lfA2x/T5jqbcmk/DQ6h/B3VxF0A3XjTXVZLGW/EKGZ4Ock
-         Vqj04ifvJWO5EMN3eImZjHqLemqFqA0Yu0d489UYu/YxxCZ/In7DVakzq8idhREOdG8b
-         kss1epYELPYzpVLQ/rQJ83kg8rUGXxhZvMTWj01JWQOIKWbDuoa8lmu2ngEkFq5fJJ++
-         qhalq7PMJ6Tjrf2BaR677JtsBgfghzYRVEEH056fuvTIzNNRrS7TA9grty3uE99gci2Y
-         fmTA==
-X-Gm-Message-State: ACrzQf2QyRLObN0bCm1jOTbTg7jTYghvwWcqIBqhUvIRdXG4RKR1kVo1
-        nk+GQZpkaDdaQInaUHl6ob46Vw==
-X-Google-Smtp-Source: AMsMyM6Ufdd1m8EK48b5T0NphdQ4gBfuybpVEH2MUvYOBg6UFSt32aSiPPhMSIgY6bwnTgAcJeDIxw==
-X-Received: by 2002:a2e:9f17:0:b0:26c:43f6:fd9d with SMTP id u23-20020a2e9f17000000b0026c43f6fd9dmr1435543ljk.176.1663495005393;
-        Sun, 18 Sep 2022 02:56:45 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id m5-20020a056512358500b0049482adb3basm4597506lfr.63.2022.09.18.02.56.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 18 Sep 2022 02:56:44 -0700 (PDT)
-Message-ID: <d279523c-5c66-dfe4-d4a3-116889498815@linaro.org>
-Date:   Sun, 18 Sep 2022 10:56:39 +0100
+        with ESMTP id S229505AbiIRUX4 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 18 Sep 2022 16:23:56 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8709713E97
+        for <linux-can@vger.kernel.org>; Sun, 18 Sep 2022 13:23:53 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oa0pT-0005qR-78
+        for linux-can@vger.kernel.org; Sun, 18 Sep 2022 22:23:51 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 908B6E56CC
+        for <linux-can@vger.kernel.org>; Sun, 18 Sep 2022 20:23:50 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id E1D5BE56C9;
+        Sun, 18 Sep 2022 20:23:49 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 8c03e7df;
+        Sun, 18 Sep 2022 20:23:49 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     linux-can@vger.kernel.org
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Daniel Trevitz <daniel.trevitz@wika.com>,
+        Ryan Edwards <ryan.edwards@gmail.com>
+Subject: [PATCH] can: gs_usb: add switchable termination support
+Date:   Sun, 18 Sep 2022 22:23:48 +0200
+Message-Id: <20220918202348.675850-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v3 1/3] dt-bindings: can: ctucanfd: add another clock for
- HW timestamping
-Content-Language: en-US
-To:     Matej Vasilevski <matej.vasilevski@seznam.cz>,
-        Pavel Pisa <pisa@cmp.felk.cvut.cz>,
-        Ondrej Ille <ondrej.ille@gmail.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20220914231249.593643-1-matej.vasilevski@seznam.cz>
- <20220914231249.593643-2-matej.vasilevski@seznam.cz>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220914231249.593643-2-matej.vasilevski@seznam.cz>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 15/09/2022 00:12, Matej Vasilevski wrote:
-> Add second clock phandle to specify the timestamping clock.
-> 
-> Signed-off-by: Matej Vasilevski <matej.vasilevski@seznam.cz>
-> ---
->  .../bindings/net/can/ctu,ctucanfd.yaml        | 19 +++++++++++++++----
->  1 file changed, 15 insertions(+), 4 deletions(-)
-> 
+The candleLight community is working on switchable termination support
+for the candleLight firmware. As the the Linux CAN framework supports
+switchable termination add this feature to the gs_usb driver.
 
-Thank you for your patch. There is something to discuss/improve.
+Devices supporting the feature should set the
+GS_CAN_FEATURE_TERMINATION and implement the
+GS_USB_BREQ_SET_TERMINATION and GS_USB_BREQ_GET_TERMINATION control
+messages.
 
-> diff --git a/Documentation/devicetree/bindings/net/can/ctu,ctucanfd.yaml b/Documentation/devicetree/bindings/net/can/ctu,ctucanfd.yaml
-> index 4635cb96fc64..432f0e3ed828 100644
-> --- a/Documentation/devicetree/bindings/net/can/ctu,ctucanfd.yaml
-> +++ b/Documentation/devicetree/bindings/net/can/ctu,ctucanfd.yaml
-> @@ -44,9 +44,19 @@ properties:
->  
->    clocks:
->      description: |
-> -      phandle of reference clock (100 MHz is appropriate
-> -      for FPGA implementation on Zynq-7000 system).
-> -    maxItems: 1
-> +      Phandle of reference clock (100 MHz is appropriate for FPGA
-> +      implementation on Zynq-7000 system). Optionally add a phandle to
-> +      the timestamping clock connected to timestamping counter, if used.
-> +    minItems: 1
-> +    items:
-> +      - description: core clock
-> +      - description: timestamping clock
-> +
-> +  clock-names:
-> +    minItems: 1
-> +    items:
-> +      - const: core-clk
-> +      - const: ts-clk
+For now the driver assumes for activated termination the standard
+termination of 120Ω.
 
-Skip the -clk suffixes, so just "core" and "ts".
+Link: https://github.com/candle-usb/candleLight_fw/issues/92
+Link: https://github.com/candle-usb/candleLight_fw/pull/108
+Cc: Daniel Trevitz <daniel.trevitz@wika.com>
+Cc: Ryan Edwards <ryan.edwards@gmail.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+ drivers/net/can/usb/gs_usb.c | 77 +++++++++++++++++++++++++++++++++++-
+ 1 file changed, 76 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
+index cc363f1935ce..2d6c1fe0c8d3 100644
+--- a/drivers/net/can/usb/gs_usb.c
++++ b/drivers/net/can/usb/gs_usb.c
+@@ -64,6 +64,8 @@ enum gs_usb_breq {
+ 	GS_USB_BREQ_SET_USER_ID,
+ 	GS_USB_BREQ_DATA_BITTIMING,
+ 	GS_USB_BREQ_BT_CONST_EXT,
++	GS_USB_BREQ_SET_TERMINATION,
++	GS_USB_BREQ_GET_TERMINATION,
+ };
+ 
+ enum gs_can_mode {
+@@ -87,6 +89,14 @@ enum gs_can_identify_mode {
+ 	GS_CAN_IDENTIFY_ON
+ };
+ 
++enum gs_can_termination_state {
++	GS_CAN_TERMINATION_STATE_OFF = 0,
++	GS_CAN_TERMINATION_STATE_ON
++};
++
++#define GS_USB_TERMINATION_DISABLED CAN_TERMINATION_DISABLED
++#define GS_USB_TERMINATION_ENABLED 120
++
+ /* data types passed between host and device */
+ 
+ /* The firmware on the original USB2CAN by Geschwister Schneider
+@@ -123,6 +133,7 @@ struct gs_device_config {
+ #define GS_CAN_MODE_FD BIT(8)
+ /* GS_CAN_FEATURE_REQ_USB_QUIRK_LPC546XX BIT(9) */
+ /* GS_CAN_FEATURE_BT_CONST_EXT BIT(10) */
++/* GS_CAN_FEATURE_TERMINATION BIT(11) */
+ 
+ struct gs_device_mode {
+ 	__le32 mode;
+@@ -147,6 +158,10 @@ struct gs_identify_mode {
+ 	__le32 mode;
+ } __packed;
+ 
++struct gs_termination_state {
++	__le32 state;
++} __packed;
++
+ #define GS_CAN_FEATURE_LISTEN_ONLY BIT(0)
+ #define GS_CAN_FEATURE_LOOP_BACK BIT(1)
+ #define GS_CAN_FEATURE_TRIPLE_SAMPLE BIT(2)
+@@ -158,7 +173,8 @@ struct gs_identify_mode {
+ #define GS_CAN_FEATURE_FD BIT(8)
+ #define GS_CAN_FEATURE_REQ_USB_QUIRK_LPC546XX BIT(9)
+ #define GS_CAN_FEATURE_BT_CONST_EXT BIT(10)
+-#define GS_CAN_FEATURE_MASK GENMASK(10, 0)
++#define GS_CAN_FEATURE_TERMINATION BIT(11)
++#define GS_CAN_FEATURE_MASK GENMASK(11, 0)
+ 
+ /* internal quirks - keep in GS_CAN_FEATURE space for now */
+ 
+@@ -1117,6 +1133,59 @@ static const struct ethtool_ops gs_usb_ethtool_ops = {
+ 	.get_ts_info = gs_usb_get_ts_info,
+ };
+ 
++static int gs_usb_get_termination(struct net_device *netdev, u16 *term)
++{
++	struct gs_can *dev = netdev_priv(netdev);
++	struct gs_termination_state state;
++	int rc;
++
++	rc = usb_control_msg_recv(interface_to_usbdev(dev->iface), 0,
++				  GS_USB_BREQ_GET_TERMINATION,
++				  USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_INTERFACE,
++				  dev->channel, 0,
++				  &state, sizeof(state), 1000,
++				  GFP_KERNEL);
++
++	return rc;
++}
++
++static int gs_usb_set_termination(struct net_device *netdev, u16 term)
++{
++	struct gs_can *dev = netdev_priv(netdev);
++	struct gs_termination_state state;
++	u16 actual_term;
++	int rc;
++
++	if (term == GS_USB_TERMINATION_ENABLED)
++		state.state = cpu_to_le32(GS_CAN_TERMINATION_STATE_ON);
++	else
++		state.state = cpu_to_le32(GS_CAN_TERMINATION_STATE_OFF);
++
++	rc = usb_control_msg_send(interface_to_usbdev(dev->iface), 0,
++				  GS_USB_BREQ_SET_TERMINATION,
++				  USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_INTERFACE,
++				  dev->channel, 0,
++				  &state, sizeof(state), 1000,
++				  GFP_KERNEL);
++
++	if (rc)
++		return rc;
++
++	rc = gs_usb_get_termination(netdev, &actual_term);
++	if (rc)
++		return rc;
++
++	if (term != actual_term)
++		return -EIO;
++
++	return rc;
++}
++
++static const u16 gs_usb_termination_const[] = {
++	GS_USB_TERMINATION_DISABLED,
++	GS_USB_TERMINATION_ENABLED
++};
++
+ static struct gs_can *gs_make_candev(unsigned int channel,
+ 				     struct usb_interface *intf,
+ 				     struct gs_device_config *dconf)
+@@ -1217,6 +1286,12 @@ static struct gs_can *gs_make_candev(unsigned int channel,
+ 		dev->can.do_set_data_bittiming = gs_usb_set_data_bittiming;
+ 	}
+ 
++	if (feature & GS_CAN_FEATURE_TERMINATION) {
++		dev->can.termination_const = gs_usb_termination_const;
++		dev->can.termination_const_cnt = ARRAY_SIZE(gs_usb_termination_const);
++		dev->can.do_set_termination = gs_usb_set_termination;
++	}
++
+ 	/* The CANtact Pro from LinkLayer Labs is based on the
+ 	 * LPC54616 µC, which is affected by the NXP LPC USB transfer
+ 	 * erratum. However, the current firmware (version 2) doesn't
+-- 
+2.35.1
 
 
-Best regards,
-Krzysztof
