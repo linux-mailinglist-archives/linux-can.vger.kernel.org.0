@@ -2,102 +2,161 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB9785BE29D
-	for <lists+linux-can@lfdr.de>; Tue, 20 Sep 2022 12:04:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 794325BE4F2
+	for <lists+linux-can@lfdr.de>; Tue, 20 Sep 2022 13:50:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbiITKE4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 20 Sep 2022 06:04:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58020 "EHLO
+        id S229839AbiITLtH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 20 Sep 2022 07:49:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230423AbiITKEx (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Sep 2022 06:04:53 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83BA02B1BA
-        for <linux-can@vger.kernel.org>; Tue, 20 Sep 2022 03:04:51 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oaa7V-0003qx-M9
-        for linux-can@vger.kernel.org; Tue, 20 Sep 2022 12:04:49 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 4464BE7476
-        for <linux-can@vger.kernel.org>; Tue, 20 Sep 2022 10:04:48 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 914EEE746B;
-        Tue, 20 Sep 2022 10:04:47 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 2e5c3a6b;
-        Tue, 20 Sep 2022 10:04:47 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org
-Cc:     John Whittington <git@jbrengineering.co.uk>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 3/3] can: gs_usb: gs_can_open(): initialize time counter before starting device
-Date:   Tue, 20 Sep 2022 12:04:17 +0200
-Message-Id: <20220920100416.959226-4-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220920100416.959226-1-mkl@pengutronix.de>
-References: <20220920100416.959226-1-mkl@pengutronix.de>
+        with ESMTP id S229767AbiITLtB (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Sep 2022 07:49:01 -0400
+Received: from mail2-emea.wika.com (mail2-emea.wika.com [195.145.204.7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7BF673327
+        for <linux-can@vger.kernel.org>; Tue, 20 Sep 2022 04:48:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=wika.com; i=@wika.com; q=dns/txt; s=wika1;
+  t=1663674541;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=gqi55DrXUdjPp+KQUeRDcnWxkzPoL5mcmXHsFZVez2s=;
+  b=Octxt8+SNwP54jGAwEa1KgsvXZ6HbH6XP3T524GA6k1SCdboRtpgS+wl
+   Do3d6ZpDHU339IFc8blaPM/SNqy+VXwVUheEgrr/t21ZSfTJXlY/sy8/2
+   SWJY7dTLnLOplbuODzypd0obvUnISy8dSnVV9sV6sYvLwFgyBYaX7WSX5
+   EMepk0f15jvjRYVvAlzcP+Z1Wj7znCG3Z1SAa0XUYq+ppR2jD0i8m1Ewo
+   pXIgy/lG595pnSCp87RWha5FEd736pBLMx0dUE3iE5wNrZoTDwoNlaswq
+   IsOnbo0xKU1U8W9iOjmEgzR9n8hxlTDkqokFNDxhkGoveYjcyTJE91J45
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,330,1654552800"; 
+   d="scan'208";a="23313454"
+Received: from unknown (HELO USATL1S6501.corp.root.int) ([172.17.4.221])
+  by mail2-emea.wika.com with ESMTP/TLS/ECDHE-RSA-AES128-SHA; 20 Sep 2022 13:48:57 +0200
+Received: from USATL1S6502.corp.root.int (172.17.4.222) by
+ USATL1S6501.corp.root.int (172.17.4.221) with Microsoft SMTP Server
+ (version=TLS1_1, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA_P256) id
+ 15.1.2507.9; Tue, 20 Sep 2022 07:48:54 -0400
+Received: from USATL1S6502.corp.root.int ([fe80::25de:b226:769c:6e35]) by
+ USATL1S6502.corp.root.int ([fe80::25de:b226:769c:6e35%12]) with mapi id
+ 15.01.2507.009; Tue, 20 Sep 2022 07:48:54 -0400
+From:   "Trevitz, Daniel" <Daniel.Trevitz@wika.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+CC:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        Ryan Edwards <ryan.edwards@gmail.com>
+Subject: RE: [PATCH v2 3/3] can: gs_usb: add switchable termination support
+Thread-Topic: [PATCH v2 3/3] can: gs_usb: add switchable termination support
+Thread-Index: AQHYy6Qn3CN19ElUP0SIyc5f1WgmVa3m/LTggABshoCAARB1sA==
+Date:   Tue, 20 Sep 2022 11:48:54 +0000
+Message-ID: <d5116175927a48fdad6c5fbedc34e418@wika.com>
+References: <20220918211802.692405-1-mkl@pengutronix.de>
+ <20220918211802.692405-4-mkl@pengutronix.de>
+ <46b828feda4c4ef3bf978dd186b094af@wika.com>
+ <20220919193343.jcepx2lccia6lmdn@pengutronix.de>
+In-Reply-To: <20220919193343.jcepx2lccia6lmdn@pengutronix.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.17.6.19]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-GBS-PROC: nzy5iiIda39ucI2qNLF3y+HFN49+3ZTZ97RoE4srZu6gu/zz7jtzEnXJofhE31RQ
+X-GBS-PROCJOB: NaWCnzoo9Rl/tOlcKY99Zzvi4mAPN7eg/v/1UAkdtA/19hIZvp9n9l3+yLUFYWVD
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On busy networks the CAN controller might receive CAN frames directly
-after starting it but before the timecounter is setup. This will lead
-to NULL pointer deref while converting the converting the CAN frame's
-timestamp with the timecounter.
-
-Close the race window by setting up the timecounter before starting
-the CAN controller.
-
-Fixes: 45dfa45f52e6 ("can: gs_usb: add RX and TX hardware timestamp support")
-Cc: John Whittington <git@jbrengineering.co.uk
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/usb/gs_usb.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
-index fe4116bf925b..d3e229c62389 100644
---- a/drivers/net/can/usb/gs_usb.c
-+++ b/drivers/net/can/usb/gs_usb.c
-@@ -972,6 +972,10 @@ static int gs_can_open(struct net_device *netdev)
- 	if (dev->feature & GS_CAN_FEATURE_HW_TIMESTAMP)
- 		flags |= GS_CAN_MODE_HW_TIMESTAMP;
- 
-+	/* start polling timestamp */
-+	if (dev->feature & GS_CAN_FEATURE_HW_TIMESTAMP)
-+		gs_usb_timestamp_init(dev);
-+
- 	/* finally start device */
- 	dev->can.state = CAN_STATE_ERROR_ACTIVE;
- 	dm->mode = cpu_to_le32(GS_CAN_MODE_START);
-@@ -991,10 +995,6 @@ static int gs_can_open(struct net_device *netdev)
- 
- 	kfree(dm);
- 
--	/* start polling timestamp */
--	if (dev->feature & GS_CAN_FEATURE_HW_TIMESTAMP)
--		gs_usb_timestamp_init(dev);
--
- 	parent->active_channels++;
- 	if (!(dev->can.ctrlmode & CAN_CTRLMODE_LISTENONLY))
- 		netif_start_queue(netdev);
--- 
-2.35.1
-
-
+TG9va3MgZ29vZCENCg0KT25jZSBteSBoYXJkd2FyZSBjb21lcyBpbiB3aXRoIHRoZSB0ZXJt
+aW5hdGlvbiByZXNpc3RvciBidWlsdCBpbiBJJ2xsIHJ1biB0aGlzIGxhdGVzdCB2ZXJzaW9u
+Lg0KSSd2ZSBiZWVuIGRvaW5nIGFsbCBteSB0ZXN0cyBvbiBhbiBlYXJsaWVyIHZlcnNpb24g
+d2l0aG91dCBpdCwganVzdCBtb25pdG9yaW5nIHRoZSBncGlvIHN0YXRlLg0KSXQgcHJvYmFi
+bHkgd29uJ3QgYmUgZm9yIGEgZmV3IHdlZWtzIHRpbGwgdGhleSBnZXQgaW4uDQoNCkJSLA0K
+ICBEYW5pZWwNCg0KDQoNCg0KDQoqKkNPTkZJREVOVElBTElUWSBOT1RJQ0UqKg0KDQoNClRo
+aXMgY29tbXVuaWNhdGlvbiwgaW5jbHVkaW5nIGFueSBhdHRhY2htZW50cywgaXMgZnJvbSBX
+SUtBIE1vYmlsZSBDb250cm9sLCBMUCBhbmQgY29udGFpbnMgY29uZmlkZW50aWFsIGluZm9y
+bWF0aW9uIGludGVuZGVkIG9ubHkgZm9yIHRoZSBhZGRyZXNzZWUocykuIElmIHlvdSBhcmUg
+bm90IHRoZSBpbnRlbmRlZCByZWNpcGllbnQsIGFueSB1c2UsIGRpc3NlbWluYXRpb24sIGRp
+c3RyaWJ1dGlvbiBvciBjb3B5aW5nIG9mIHRoaXMgZG9jdW1lbnQgb3IgaXRzIGNvbnRlbnRz
+IGlzIHN0cmljdGx5IHByb2hpYml0ZWQuIElmIHlvdSBoYXZlIHJlY2VpdmVkIHRoaXMgY29t
+bXVuaWNhdGlvbiBpbiBlcnJvciwgcGxlYXNlIGNvbnRhY3QgdGhlIHNlbmRlciBieSByZXBs
+eSBlLW1haWwgaW1tZWRpYXRlbHkgYW5kIGRlc3Ryb3kgYWxsIGNvcGllcyBvZiB0aGUgb3Jp
+Z2luYWwgbWVzc2FnZS4gDQoNCg0KLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCkZyb206
+IE1hcmMgS2xlaW5lLUJ1ZGRlIDxta2xAcGVuZ3V0cm9uaXguZGU+IA0KU2VudDogTW9uZGF5
+LCBTZXB0ZW1iZXIgMTksIDIwMjIgMzozNCBQTQ0KVG86IFRyZXZpdHosIERhbmllbCA8RGFu
+aWVsLlRyZXZpdHpAd2lrYS5jb20+DQpDYzogbGludXgtY2FuQHZnZXIua2VybmVsLm9yZzsg
+UnlhbiBFZHdhcmRzIDxyeWFuLmVkd2FyZHNAZ21haWwuY29tPg0KU3ViamVjdDogUmU6IFtQ
+QVRDSCB2MiAzLzNdIGNhbjogZ3NfdXNiOiBhZGQgc3dpdGNoYWJsZSB0ZXJtaW5hdGlvbiBz
+dXBwb3J0DQoNCk9uIDE5LjA5LjIwMjIgMTc6MTQ6MzksIFRyZXZpdHosIERhbmllbCB3cm90
+ZToNCj4gKyAgICAgICBpZiAoZmVhdHVyZSAmIEdTX0NBTl9GRUFUVVJFX1RFUk1JTkFUSU9O
+KSB7DQo+ICsgICAgICAgICAgICAgICBkZXYtPmNhbi50ZXJtaW5hdGlvbl9jb25zdCA9IGdz
+X3VzYl90ZXJtaW5hdGlvbl9jb25zdDsNCj4gKyAgICAgICAgICAgICAgIGRldi0+Y2FuLnRl
+cm1pbmF0aW9uX2NvbnN0X2NudCA9IEFSUkFZX1NJWkUoZ3NfdXNiX3Rlcm1pbmF0aW9uX2Nv
+bnN0KTsNCj4gKyAgICAgICAgICAgICAgIGRldi0+Y2FuLmRvX3NldF90ZXJtaW5hdGlvbiA9
+IGdzX3VzYl9zZXRfdGVybWluYXRpb247DQo+ICsNCj4gKyAgICAgICAgICAgICAgIHJjID0g
+Z3NfdXNiX2dldF90ZXJtaW5hdGlvbihuZXRkZXYsICZkZXYtPmNhbi50ZXJtaW5hdGlvbik7
+DQo+ICsgICAgICAgICAgICAgICBpZiAocmMpIHsNCj4gKyAgICAgICAgICAgICAgICAgICAg
+ICAgZGV2X2VycigmaW50Zi0+ZGV2LA0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICJDb3VsZG4ndCBnZXQgY3VycmVudCB0ZXJtaW5hdGlvbiBzdGF0ZSBmb3IgY2hhbm5l
+bCAlZCAoJXBlKVxuIiwNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjaGFu
+bmVsLCBFUlJfUFRSKHJjKSk7DQo+ICsgICAgICAgICAgICAgICAgICAgICAgIGdvdG8gb3V0
+X2ZyZWVfY2FuZGV2Ow0KPiArICAgICAgICAgICAgICAgfQ0KPiArICAgICAgIH0NCj4gDQo+
+IERvZXMgaXQgbWFrZSBzZW5zZSB0byBjaGVjayBpZiB3ZSBoYXZlIHRoZSB0ZXJtaW5hdGlv
+biBzdXBwb3J0LCB0aGVuIA0KPiBzZXQgdGhlIHZhbHVlcz8gTXkgbG9naWMgaXMgdGhhdCBq
+dXN0IGJlY2F1c2UgdGhlIHRlcm1pbmF0aW9uIGlzIG5vdCANCj4gd29ya2luZyBjb3JyZWN0
+bHksIGl0IGRvZXMgbm90IG1lYW4gZXZlcnl0aGluZyBpcyBicm9rZW4uDQoNCk1ha2VzIHNl
+bnNlIQ0KDQo+IFRoaXMgd2F5IHlvdSBjb3VsZCBoYXZlIGEgbXVsdGktY2FuLWNoYW5uZWwg
+VVNCIGRldmljZSBidXQgd2l0aCBvbmx5IA0KPiBzcGVjaWZpYyBjaGFubmVscyBzdXBwb3J0
+aW5nIGNvbmZpZ3VyYWJsZSB0ZXJtaW5hdGlvbiByZXNpc3RvcnMuDQoNCkF0IGxlYXN0IGZy
+b20gdGhlIExpbnV4IGRyaXZlcidzIHBlcnNwZWN0aXZlIHRoZSBmZWF0dXJlIGJpdHMgYXJl
+IHBlciBjaGFubmVsIG5vdCBwZXIgZGV2aWNlLg0KDQo+IFNvbWV0aGluZyBsaWtlOg0KPiAN
+Cj4gcmMgPSBnc191c2JfZ2V0X3Rlcm1pbmF0aW9uKG5ldGRldiwgJmRldi0+Y2FuLnRlcm1p
+bmF0aW9uKTsgIGlmIChyYykgew0KPiAJZGV2X2VycigmaW50Zi0+ZGV2LA0KPiAJCSJDb3Vs
+ZG4ndCBnZXQgY3VycmVudCB0ZXJtaW5hdGlvbiBzdGF0ZSBmb3IgY2hhbm5lbCAlZCAoJXBl
+KS4gTm90IGVuYWJsaW5nIHRlcm1pbmF0aW9uIHN1cHBvcnQgZm9yIHRoaXMgY2hhbm5lbFxu
+IiwNCj4gCQljaGFubmVsLCBFUlJfUFRSKHJjKSk7DQo+ICB9IGVsc2Ugew0KPiAJZGV2LT5j
+YW4udGVybWluYXRpb25fY29uc3QgPSBnc191c2JfdGVybWluYXRpb25fY29uc3Q7DQo+IAlk
+ZXYtPmNhbi50ZXJtaW5hdGlvbl9jb25zdF9jbnQgPSBBUlJBWV9TSVpFKGdzX3VzYl90ZXJt
+aW5hdGlvbl9jb25zdCk7DQo+IAlkZXYtPmNhbi5kb19zZXRfdGVybWluYXRpb24gPSBnc191
+c2Jfc2V0X3Rlcm1pbmF0aW9uOyB9DQoNCkkndmUgcmVkdWNlZCB0aGUgZGV2X2VycigpIHRv
+IGRldl9pbmZvKCkgYW5kIHRyaWVkIHRvIGtlZXAgdGhlIGVycm9yIG1lc3NhZ2Ugc2hvcnQu
+IEFsc28gSSByZW1vdmUgdGhlIHRlcm1pbmF0aW9uIGZlYXR1cmUgZmxhZy4gVGhlIGluY3Jl
+bWVudGFsIHBhdGNoIGxvb2tzIGxpa2UgdGhpczoNCg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMv
+bmV0L2Nhbi91c2IvZ3NfdXNiLmMgYi9kcml2ZXJzL25ldC9jYW4vdXNiL2dzX3VzYi5jIGlu
+ZGV4IDVjOTg4ZTUyODczNC4uYjAyNzNmYWIxODQzIDEwMDY0NA0KLS0tIGEvZHJpdmVycy9u
+ZXQvY2FuL3VzYi9nc191c2IuYw0KKysrIGIvZHJpdmVycy9uZXQvY2FuL3VzYi9nc191c2Iu
+Yw0KQEAgLTEyODcsMTYgKzEyODcsMTcgQEAgc3RhdGljIHN0cnVjdCBnc19jYW4gKmdzX21h
+a2VfY2FuZGV2KHVuc2lnbmVkIGludCBjaGFubmVsLA0KICAgICAgICB9DQogDQogICAgICAg
+IGlmIChmZWF0dXJlICYgR1NfQ0FOX0ZFQVRVUkVfVEVSTUlOQVRJT04pIHsNCi0gICAgICAg
+ICAgICAgICBkZXYtPmNhbi50ZXJtaW5hdGlvbl9jb25zdCA9IGdzX3VzYl90ZXJtaW5hdGlv
+bl9jb25zdDsNCi0gICAgICAgICAgICAgICBkZXYtPmNhbi50ZXJtaW5hdGlvbl9jb25zdF9j
+bnQgPSBBUlJBWV9TSVpFKGdzX3VzYl90ZXJtaW5hdGlvbl9jb25zdCk7DQotICAgICAgICAg
+ICAgICAgZGV2LT5jYW4uZG9fc2V0X3Rlcm1pbmF0aW9uID0gZ3NfdXNiX3NldF90ZXJtaW5h
+dGlvbjsNCi0NCiAgICAgICAgICAgICAgICByYyA9IGdzX3VzYl9nZXRfdGVybWluYXRpb24o
+bmV0ZGV2LCAmZGV2LT5jYW4udGVybWluYXRpb24pOw0KICAgICAgICAgICAgICAgIGlmIChy
+Yykgew0KLSAgICAgICAgICAgICAgICAgICAgICAgZGV2X2VycigmaW50Zi0+ZGV2LA0KLSAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAiQ291bGRuJ3QgZ2V0IGN1cnJlbnQgdGVy
+bWluYXRpb24gc3RhdGUgZm9yIGNoYW5uZWwgJWQgKCVwZSlcbiIsDQotICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIGNoYW5uZWwsIEVSUl9QVFIocmMpKTsNCi0gICAgICAgICAg
+ICAgICAgICAgICAgIGdvdG8gb3V0X2ZyZWVfY2FuZGV2Ow0KKyAgICAgICAgICAgICAgICAg
+ICAgICAgZGV2LT5mZWF0dXJlICY9IH5HU19DQU5fRkVBVFVSRV9URVJNSU5BVElPTjsNCisN
+CisgICAgICAgICAgICAgICAgICAgICAgIGRldl9pbmZvKCZpbnRmLT5kZXYsDQorICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAiRGlzYWJsaW5nIHRlcm1pbmF0aW9uIHN1cHBv
+cnQgZm9yIGNoYW5uZWwgJWQgKCVwZSlcbiIsDQorICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICBjaGFubmVsLCBFUlJfUFRSKHJjKSk7DQorICAgICAgICAgICAgICAgfSBlbHNl
+IHsNCisgICAgICAgICAgICAgICAgICAgICAgIGRldi0+Y2FuLnRlcm1pbmF0aW9uX2NvbnN0
+ID0gZ3NfdXNiX3Rlcm1pbmF0aW9uX2NvbnN0Ow0KKyAgICAgICAgICAgICAgICAgICAgICAg
+ZGV2LT5jYW4udGVybWluYXRpb25fY29uc3RfY250ID0gQVJSQVlfU0laRShnc191c2JfdGVy
+bWluYXRpb25fY29uc3QpOw0KKyAgICAgICAgICAgICAgICAgICAgICAgZGV2LT5jYW4uZG9f
+c2V0X3Rlcm1pbmF0aW9uID0gDQorIGdzX3VzYl9zZXRfdGVybWluYXRpb247DQogICAgICAg
+ICAgICAgICAgfQ0KICAgICAgICB9DQoNCnJlZ2FyZHMsDQpNYXJjDQoNCi0tIA0KUGVuZ3V0
+cm9uaXggZS5LLiAgICAgICAgICAgICAgICAgfCBNYXJjIEtsZWluZS1CdWRkZSAgICAgICAg
+ICAgfA0KRW1iZWRkZWQgTGludXggICAgICAgICAgICAgICAgICAgfCBCTE9DS0VEcGVuZ3V0
+cm9uaXhbLl1kZUJMT0NLRUQgIHwNClZlcnRyZXR1bmcgV2VzdC9Eb3J0bXVuZCAgICAgICAg
+IHwgUGhvbmU6ICs0OS0yMzEtMjgyNi05MjQgICAgIHwNCkFtdHNnZXJpY2h0IEhpbGRlc2hl
+aW0sIEhSQSAyNjg2IHwgRmF4OiAgICs0OS01MTIxLTIwNjkxNy01NTU1IHwNCg==
