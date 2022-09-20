@@ -2,45 +2,46 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1BA05BDE9F
-	for <lists+linux-can@lfdr.de>; Tue, 20 Sep 2022 09:44:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0AC05BE1F8
+	for <lists+linux-can@lfdr.de>; Tue, 20 Sep 2022 11:30:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231247AbiITHoO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 20 Sep 2022 03:44:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47518 "EHLO
+        id S229695AbiITJ30 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 20 Sep 2022 05:29:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231403AbiITHnv (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Sep 2022 03:43:51 -0400
+        with ESMTP id S229881AbiITJ3W (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Sep 2022 05:29:22 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69CF261DA9
-        for <linux-can@vger.kernel.org>; Tue, 20 Sep 2022 00:42:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC8E6C139
+        for <linux-can@vger.kernel.org>; Tue, 20 Sep 2022 02:29:21 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1oaXtg-0004aj-EO; Tue, 20 Sep 2022 09:42:24 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:5f01:4019:fc9a:d27f])
+        id 1oaZZ9-0005W1-SD
+        for linux-can@vger.kernel.org; Tue, 20 Sep 2022 11:29:19 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 4A240E72B1
+        for <linux-can@vger.kernel.org>; Tue, 20 Sep 2022 09:29:18 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id B2A87E6A8C;
-        Mon, 19 Sep 2022 19:33:51 +0000 (UTC)
-Date:   Mon, 19 Sep 2022 21:33:43 +0200
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 66090E7297;
+        Tue, 20 Sep 2022 09:29:17 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 5eb76275;
+        Tue, 20 Sep 2022 09:29:16 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     "Trevitz, Daniel" <Daniel.Trevitz@wika.com>
-Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        Ryan Edwards <ryan.edwards@gmail.com>
-Subject: Re: [PATCH v2 3/3] can: gs_usb: add switchable termination support
-Message-ID: <20220919193343.jcepx2lccia6lmdn@pengutronix.de>
-References: <20220918211802.692405-1-mkl@pengutronix.de>
- <20220918211802.692405-4-mkl@pengutronix.de>
- <46b828feda4c4ef3bf978dd186b094af@wika.com>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH net 0/17] pull-request: can 2022-09-20
+Date:   Tue, 20 Sep 2022 11:28:58 +0200
+Message-Id: <20220920092915.921613-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xsw2dn3ofe24lvx2"
-Content-Disposition: inline
-In-Reply-To: <46b828feda4c4ef3bf978dd186b094af@wika.com>
+Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -53,120 +54,71 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello Jakub, hello David,
 
---xsw2dn3ofe24lvx2
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+this is a pull request of 17 patches for net/master.
 
-On 19.09.2022 17:14:39, Trevitz, Daniel wrote:
-> +       if (feature & GS_CAN_FEATURE_TERMINATION) {
-> +               dev->can.termination_const =3D gs_usb_termination_const;
-> +               dev->can.termination_const_cnt =3D ARRAY_SIZE(gs_usb_term=
-ination_const);
-> +               dev->can.do_set_termination =3D gs_usb_set_termination;
-> +
-> +               rc =3D gs_usb_get_termination(netdev, &dev->can.terminati=
-on);
-> +               if (rc) {
-> +                       dev_err(&intf->dev,
-> +                               "Couldn't get current termination state f=
-or channel %d (%pe)\n",
-> +                               channel, ERR_PTR(rc));
-> +                       goto out_free_candev;
-> +               }
-> +       }
->=20
-> Does it make sense to check if we have the termination support, then
-> set the values? My logic is that just because the termination is not
-> working correctly, it does not mean everything is broken.
+The 1st patch is by me, targets the flexcan driver and fixes a
+potential system hang on single core systems under high CAN packet
+rate.
 
-Makes sense!
+The next patch is also by me and fixes the return value in the gs_usb
+driver if the ethtool identify feature is not supported.
 
-> This way you could have a multi-can-channel USB device but with only
-> specific channels supporting configurable termination resistors.
-
-At least from the Linux driver's perspective the feature bits are per
-channel not per device.
-
-> Something like:
->=20
-> rc =3D gs_usb_get_termination(netdev, &dev->can.termination);
->  if (rc) {
-> 	dev_err(&intf->dev,
-> 		"Couldn't get current termination state for channel %d (%pe). Not enabl=
-ing termination support for this channel\n",
-> 		channel, ERR_PTR(rc));
->  } else {
-> 	dev->can.termination_const =3D gs_usb_termination_const;
-> 	dev->can.termination_const_cnt =3D ARRAY_SIZE(gs_usb_termination_const);
-> 	dev->can.do_set_termination =3D gs_usb_set_termination;
-> }
-
-I've reduced the dev_err() to dev_info() and tried to keep the error
-message short. Also I remove the termination feature flag. The
-incremental patch looks like this:
-
-diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
-index 5c988e528734..b0273fab1843 100644
---- a/drivers/net/can/usb/gs_usb.c
-+++ b/drivers/net/can/usb/gs_usb.c
-@@ -1287,16 +1287,17 @@ static struct gs_can *gs_make_candev(unsigned int c=
-hannel,
-        }
-=20
-        if (feature & GS_CAN_FEATURE_TERMINATION) {
--               dev->can.termination_const =3D gs_usb_termination_const;
--               dev->can.termination_const_cnt =3D ARRAY_SIZE(gs_usb_termin=
-ation_const);
--               dev->can.do_set_termination =3D gs_usb_set_termination;
--
-                rc =3D gs_usb_get_termination(netdev, &dev->can.termination=
-);
-                if (rc) {
--                       dev_err(&intf->dev,
--                               "Couldn't get current termination state for=
- channel %d (%pe)\n",
--                               channel, ERR_PTR(rc));
--                       goto out_free_candev;
-+                       dev->feature &=3D ~GS_CAN_FEATURE_TERMINATION;
-+
-+                       dev_info(&intf->dev,
-+                                "Disabling termination support for channel=
- %d (%pe)\n",
-+                                channel, ERR_PTR(rc));
-+               } else {
-+                       dev->can.termination_const =3D gs_usb_termination_c=
-onst;
-+                       dev->can.termination_const_cnt =3D ARRAY_SIZE(gs_us=
-b_termination_const);
-+                       dev->can.do_set_termination =3D gs_usb_set_terminat=
-ion;
-                }
-        }
+The next 15 patches are by Anssi Hannula and Jimmy Assarsson and fix
+various problem in the kvaser_usb CAN driver.
 
 regards,
 Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+---
 
---xsw2dn3ofe24lvx2
-Content-Type: application/pgp-signature; name="signature.asc"
+The following changes since commit 8ccac4edc8da764389d4fc18b1df740892006557:
 
------BEGIN PGP SIGNATURE-----
+  gve: Fix GFP flags when allocing pages (2022-09-19 18:31:06 -0700)
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmMoxBMACgkQrX5LkNig
-011yGwf/Qt+m+5nqS4i+8fEeRyNUg1H4/Q9CYBbZQSTXrNdrZrNIiiR46XYX47VD
-ftDMwVkVYXRR2WF8VArPwuVskTzmmfCrZ2ldecYBYct8fqrP+i4d/XvUhhLKhOAt
-b1dVmBhZlwRPVuDMaIEFw2KdhhMEeR3Gtv3aJQdxKJsHrWTcoIjKGoibLz/7NVlG
-TltQ+2GJSwRbtwiGRgA4h6YwxqXKn18mjGnwYJuEFPirie6SyLISOWlieEh4N2rG
-oC8TInhPlIfgY92m3rvJjjjKCB7/zpndWBjJUQLn9WW0eRWpbqgWGB5/68xTNBIs
-/V9BO4NrwyUAKiqZzi8QmmdcIa4ECw==
-=z5yq
------END PGP SIGNATURE-----
+are available in the Git repository at:
 
---xsw2dn3ofe24lvx2--
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-6.0-20220920
+
+for you to fetch changes up to 5f93b3d804a2840053d44cb4bac6d376575acb69:
+
+  Merge patch series "can: kvaser_usb: Various fixes" (2022-09-20 11:17:40 +0200)
+
+----------------------------------------------------------------
+linux-can-fixes-for-6.0-20220920
+
+----------------------------------------------------------------
+Anssi Hannula (10):
+      can: kvaser_usb_leaf: Fix overread with an invalid command
+      can: kvaser_usb: Fix use of uninitialized completion
+      can: kvaser_usb: Fix possible completions during init_completion
+      can: kvaser_usb_leaf: Set Warning state even without bus errors
+      can: kvaser_usb_leaf: Fix TX queue out of sync after restart
+      can: kvaser_usb_leaf: Fix CAN state after restart
+      can: kvaser_usb_leaf: Fix improved state not being reported
+      can: kvaser_usb_leaf: Fix wrong CAN state after stopping
+      can: kvaser_usb_leaf: Ignore stale bus-off after start
+      can: kvaser_usb_leaf: Fix bogus restart events
+
+Jimmy Assarsson (5):
+      can: kvaser_usb: kvaser_usb_leaf: Get capabilities from device
+      can: kvaser_usb: kvaser_usb_leaf: Rename {leaf,usbcan}_cmd_error_event to {leaf,usbcan}_cmd_can_error_event
+      can: kvaser_usb: kvaser_usb_leaf: Handle CMD_ERROR_EVENT
+      can: kvaser_usb: Add struct kvaser_usb_busparams
+      can: kvaser_usb: Compare requested bittiming parameters with actual parameters in do_set_{,data}_bittiming
+
+Marc Kleine-Budde (3):
+      can: flexcan: flexcan_mailbox_read() fix return value for drop = true
+      can: gs_usb: gs_usb_set_phys_id(): return with error if identify is not supported
+      Merge patch series "can: kvaser_usb: Various fixes"
+
+ drivers/net/can/flexcan/flexcan-core.c            |  10 +-
+ drivers/net/can/usb/gs_usb.c                      |  17 +-
+ drivers/net/can/usb/kvaser_usb/kvaser_usb.h       |  32 +-
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c  | 118 ++++-
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c | 166 +++++--
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c  | 543 ++++++++++++++++++++--
+ 6 files changed, 780 insertions(+), 106 deletions(-)
+
+
