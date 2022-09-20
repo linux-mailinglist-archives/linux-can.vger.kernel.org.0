@@ -2,118 +2,63 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D588B5BEA8B
-	for <lists+linux-can@lfdr.de>; Tue, 20 Sep 2022 17:51:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5F525BED91
+	for <lists+linux-can@lfdr.de>; Tue, 20 Sep 2022 21:23:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230046AbiITPvG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 20 Sep 2022 11:51:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54012 "EHLO
+        id S231363AbiITTXS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 20 Sep 2022 15:23:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231650AbiITPu6 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Sep 2022 11:50:58 -0400
-Received: from mx0b-0054a801.pphosted.com (mx0b-0054a801.pphosted.com [205.220.172.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6760B51A33
-        for <linux-can@vger.kernel.org>; Tue, 20 Sep 2022 08:50:48 -0700 (PDT)
-Received: from pps.filterd (m0208804.ppops.net [127.0.0.1])
-        by mx0b-0054a801.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28KDutEt030726
-        for <linux-can@vger.kernel.org>; Tue, 20 Sep 2022 15:50:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsara.com; h=from : date : to :
- subject : in-reply-to : message-id : references : mime-version :
- content-type; s=samsaracom06092020;
- bh=GkPqOyMQcmCqMLz0LgdRFCceWM3Th0ukYvk819AoLeE=;
- b=Bg8uj6BdNR6GtdnXC5Xy7o8+rVcCznAKOVCyn825995Jy+A43REaBsGsMYjE2JRP4ERS
- m9nBOQjR3VUuoG6adslPWJlDn6RhsNPamQ8TzITGxxnLf1/xonwxKGJ9Cx50fwlM6lKw
- 8+xlBlm0Eq18n/FBmn2BP/lDhEhTKOeXbx5ztXEI5PAVnf+e7ioe/OKPP9wulb54ZFNp
- DNx+zusNlgxYzwOath0pO/MwM1dV7iYvdHaR+uwJrbg+EfK9HcZEwkSGjHUhFvU2Q7yf
- dqqj0Mgk1V9Qvq6BcM8NdvCFFJlgf21S6/SKtgXeUJ78tZ88VUI82xnCxQildMODWi/C Tw== 
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com [209.85.219.71])
-        by mx0b-0054a801.pphosted.com (PPS) with ESMTPS id 3jn4u62nc5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-can@vger.kernel.org>; Tue, 20 Sep 2022 15:50:48 +0000
-Received: by mail-qv1-f71.google.com with SMTP id y7-20020ad45307000000b004ac7fd46495so2295051qvr.23
-        for <linux-can@vger.kernel.org>; Tue, 20 Sep 2022 08:50:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=samsara.com; s=google;
-        h=mime-version:references:message-id:in-reply-to:subject:to:date:from
-         :from:to:cc:subject:date;
-        bh=GkPqOyMQcmCqMLz0LgdRFCceWM3Th0ukYvk819AoLeE=;
-        b=fRpT86k8/Z4RYsZCVWuGmA78/d38S/3cbH1lVgI7n8L0rLF66Y5Rf0Cytlt78iCp+X
-         92eX1sM5MnUcjqLp0kqmappF9x3lROG3lnbPFVEuDgt8Sqj02qUHpYzSbw7svF1kp0nm
-         DkqZSppS0b7y3WyiHsDk2mEVZz6VACZaqIYtpQ9EC8871HXHbY+dr9TQlkcKIO0rFDrI
-         B2TUlkK8hyyEQn5jbgFrhc1Pz2idpLsHLiUnjjP1sLgaBriDiyPEDl++81WnkJvyG/J/
-         hPPfPSWrcvskES1hSLrwTCaRe8ig2ziRswW+dhnVExji9KwVAh+kEBz+hEMMZ/p/pMIn
-         VA6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=GkPqOyMQcmCqMLz0LgdRFCceWM3Th0ukYvk819AoLeE=;
-        b=KrF+atPUUpcUBTkepT0k0Q/+6I/GNrMuceznXUzEPpHy47pOSITXRY0Ru85NV0a2G1
-         ZjKAX0hGO/ZsRrY+tTPvn4BdZCjuRl3mRgANmofyBl8INs4nFJb3vCrQVE7RGQpgr0ve
-         rsW9Mmjy7Nl887Lgf15LFzSqQKT0q3LiJfGEBYY4X9C+OM1mldn4PpclSx7E+5JE6Zfd
-         vX4Zb2W8xCKlDPKZHIuyfBQogftoANCj1K857Riy5BDWYdbu78TXE4amc/BmqHln7yIM
-         Fn+KzyKhZzE4OeZekHEGFa+4UICEVAhD5S4j3QhixzA2XxdAXm9RFQSwkeo0iLu7L4Lz
-         n9sw==
-X-Gm-Message-State: ACrzQf03w+pY9lfBmF1LIhdnvSYd374I/s/UPLyh3uSdsMsYf3u+Prz/
-        QHsbDhhzve7Ae21ydMQ/DhbAuF4or9QPT6B6AeYppKMWZ8ZsMhzyPUcQ8gUKme9Xqm2v21GQ5aZ
-        k/pwJIliIqvrowXibGxgD
-X-Received: by 2002:a37:c49:0:b0:6cc:43ac:a29a with SMTP id 70-20020a370c49000000b006cc43aca29amr16570321qkm.763.1663689047206;
-        Tue, 20 Sep 2022 08:50:47 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM79gUcu+vz5o8HHy92Lgg0/hIhow0OuQZi11MlsBrCw1R8qo1bcpdygXhsKNtFcP1a34uvllg==
-X-Received: by 2002:a37:c49:0:b0:6cc:43ac:a29a with SMTP id 70-20020a370c49000000b006cc43aca29amr16570266qkm.763.1663689046386;
-        Tue, 20 Sep 2022 08:50:46 -0700 (PDT)
-Received: from downhome (ec2-184-72-5-93.us-west-1.compute.amazonaws.com. [184.72.5.93])
-        by smtp.gmail.com with ESMTPSA id x7-20020a05620a098700b006bc56c063fcsm73282qkx.62.2022.09.20.08.50.45
-        for <linux-can@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 08:50:46 -0700 (PDT)
-From:   Rhett Aultman <rhett.aultman@samsara.com>
-X-Google-Original-From: Rhett Aultman <rhett@samsara.com>
-Date:   Tue, 20 Sep 2022 11:50:44 -0400 (EDT)
-To:     linux-can@vger.kernel.org
-Subject: Re: [PATCH 0/1] can: gs_usb: remove dma allocations
-In-Reply-To: <20220920154724.861093-1-rhett.aultman@samsara.com>
-Message-ID: <4582a8b5-f238-25a6-86d0-211d1b18f1@samsara.com>
-References: <20220913204110.89730-1-rhett.aultman@samsara.com> <20220920154724.861093-1-rhett.aultman@samsara.com>
+        with ESMTP id S231438AbiITTXD (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Sep 2022 15:23:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4535A419B8;
+        Tue, 20 Sep 2022 12:22:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ECED7B82CA6;
+        Tue, 20 Sep 2022 19:22:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6162AC433C1;
+        Tue, 20 Sep 2022 19:22:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663701767;
+        bh=kfIpyROBoZ8yrJKq+vs/PmB1xO92sG3Xj30E9xJMJ7Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KwXKDptMpumbNkk1+kXEy/9YEDq309IWc4VIcejBE2f+aPnBABLhdrIHdOJbUOJDC
+         GMFQiatKjbLRkywoHez+Qx9FyI96J2J7jeaH5knjn4W5qGZ1xUR/12PWDX6uOe340V
+         8dXQL8bMAPTplJTafL2ALiHUpLaYxSAvfPe9d1Us0i8/eQMqxGhSHSBqR0IqIKcKV1
+         C17KCdp6ekmz0cgyC14B8ANEXSedu7iBc27Wx6n8J31/60TcY7SbcDHVp4kHh5SxQt
+         lP8gJ/wIn5V0wV2d9w5tNGkyiHPzAaB6qbHyaOHxPdtBZU+xjfB3LaKH8r1kNt9aj0
+         lXs7NBLJA2jOg==
+Date:   Tue, 20 Sep 2022 12:22:46 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net,
+        linux-can@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH net 0/17] pull-request: can 2022-09-20
+Message-ID: <20220920122246.00dbe946@kernel.org>
+In-Reply-To: <20220920092915.921613-1-mkl@pengutronix.de>
+References: <20220920092915.921613-1-mkl@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Proofpoint-ORIG-GUID: 1hapudbCPDlFnJLCvS_N3qUraPQLUD6v
-X-Proofpoint-GUID: 1hapudbCPDlFnJLCvS_N3qUraPQLUD6v
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-20_06,2022-09-20_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- lowpriorityscore=0 priorityscore=1501 impostorscore=0 adultscore=0
- mlxlogscore=737 clxscore=1015 malwarescore=0 spamscore=0 suspectscore=0
- mlxscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209200094
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Tue, 20 Sep 2022 11:28:58 +0200 Marc Kleine-Budde wrote:
+> The next 15 patches are by Anssi Hannula and Jimmy Assarsson and fix
+> various problem in the kvaser_usb CAN driver.
 
-Apologies for the mixed-up subject lines.  That's my mistake.
+These are large patches which don't clearly justify the classification
+as a fix. Patches 6 and 8 for example leave me asking "what does this
+fix?" It's good to report errors, but the absence of error reporting
+is not necessarily a bug worthy of stable.
 
---Rhett
-
-On Tue, 20 Sep 2022, Rhett Aultman wrote:
-
-> Hi all,
->
-> Please find here an updated patch from Vasanth incorporating Marc's feedback.
->
-> Vasanth performed his benchmarking tests again and found no change in the
-> results, so the remarks in our PDF are still current and valid.
->
-> If there aren't any concerns with how we're checking performance without DMA,
-> then perhaps we should double-check this on an ARM platform and then proceed?
->
->
-> Best,
-> Rhett Aultman
->
+Can we get the commit messages beefed up?
