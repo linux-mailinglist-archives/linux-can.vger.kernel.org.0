@@ -2,161 +2,111 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 794325BE4F2
-	for <lists+linux-can@lfdr.de>; Tue, 20 Sep 2022 13:50:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92CA65BEA7D
+	for <lists+linux-can@lfdr.de>; Tue, 20 Sep 2022 17:47:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbiITLtH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 20 Sep 2022 07:49:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44624 "EHLO
+        id S230428AbiITPrb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 20 Sep 2022 11:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbiITLtB (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Sep 2022 07:49:01 -0400
-Received: from mail2-emea.wika.com (mail2-emea.wika.com [195.145.204.7])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7BF673327
-        for <linux-can@vger.kernel.org>; Tue, 20 Sep 2022 04:48:59 -0700 (PDT)
+        with ESMTP id S230253AbiITPra (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Sep 2022 11:47:30 -0400
+Received: from mx0a-0054a801.pphosted.com (mx0a-0054a801.pphosted.com [205.220.160.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23A666120
+        for <linux-can@vger.kernel.org>; Tue, 20 Sep 2022 08:47:29 -0700 (PDT)
+Received: from pps.filterd (m0208802.ppops.net [127.0.0.1])
+        by mx0b-0054a801.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28KDuo9Z031394
+        for <linux-can@vger.kernel.org>; Tue, 20 Sep 2022 08:47:29 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsara.com; h=from : to : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=samsaracom06092020;
+ bh=zswPk3CHtwiHzo177YaIcxRuK9nrL6M5/aoJQ+qgiPw=;
+ b=ZRjqQJcMjU/Zgmr5zVy93cgIa4wGB5YxhQ4+MJKADLoELbT9YyzcOJeaBCOxUTHMPED0
+ TQGYCJNUaVEhajfFAU3cJKQ9qy6v+at+ONCmllNQJYvO7AWqkQ4TYjztIStw0MZFCcpW
+ DWpZZWapalsvXlKMoDo3af2RKaiz/uF0Fulp1o4xw9do3U0eHB+fwq7DOyFQev9Wif1M
+ bnrJirUFCipAUupVIOJOqbrWHjrswuHs6T5JgKS+pKQXaG/rpQca6kBImFilpYWKlOgf
+ HdYEvAPS00oHu/Ro2/HYoojrjV/hb/r3ldRUcXEi+a+hVL8qU6wL24SsrIqHFh9wDX9Q cw== 
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
+        by mx0b-0054a801.pphosted.com (PPS) with ESMTPS id 3jnbx2tf6s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-can@vger.kernel.org>; Tue, 20 Sep 2022 08:47:29 -0700
+Received: by mail-qk1-f200.google.com with SMTP id r14-20020a05620a298e00b006be796b6164so2223700qkp.19
+        for <linux-can@vger.kernel.org>; Tue, 20 Sep 2022 08:47:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=wika.com; i=@wika.com; q=dns/txt; s=wika1;
-  t=1663674541;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=gqi55DrXUdjPp+KQUeRDcnWxkzPoL5mcmXHsFZVez2s=;
-  b=Octxt8+SNwP54jGAwEa1KgsvXZ6HbH6XP3T524GA6k1SCdboRtpgS+wl
-   Do3d6ZpDHU339IFc8blaPM/SNqy+VXwVUheEgrr/t21ZSfTJXlY/sy8/2
-   SWJY7dTLnLOplbuODzypd0obvUnISy8dSnVV9sV6sYvLwFgyBYaX7WSX5
-   EMepk0f15jvjRYVvAlzcP+Z1Wj7znCG3Z1SAa0XUYq+ppR2jD0i8m1Ewo
-   pXIgy/lG595pnSCp87RWha5FEd736pBLMx0dUE3iE5wNrZoTDwoNlaswq
-   IsOnbo0xKU1U8W9iOjmEgzR9n8hxlTDkqokFNDxhkGoveYjcyTJE91J45
-   w==;
-X-IronPort-AV: E=Sophos;i="5.93,330,1654552800"; 
-   d="scan'208";a="23313454"
-Received: from unknown (HELO USATL1S6501.corp.root.int) ([172.17.4.221])
-  by mail2-emea.wika.com with ESMTP/TLS/ECDHE-RSA-AES128-SHA; 20 Sep 2022 13:48:57 +0200
-Received: from USATL1S6502.corp.root.int (172.17.4.222) by
- USATL1S6501.corp.root.int (172.17.4.221) with Microsoft SMTP Server
- (version=TLS1_1, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA_P256) id
- 15.1.2507.9; Tue, 20 Sep 2022 07:48:54 -0400
-Received: from USATL1S6502.corp.root.int ([fe80::25de:b226:769c:6e35]) by
- USATL1S6502.corp.root.int ([fe80::25de:b226:769c:6e35%12]) with mapi id
- 15.01.2507.009; Tue, 20 Sep 2022 07:48:54 -0400
-From:   "Trevitz, Daniel" <Daniel.Trevitz@wika.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-CC:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        Ryan Edwards <ryan.edwards@gmail.com>
-Subject: RE: [PATCH v2 3/3] can: gs_usb: add switchable termination support
-Thread-Topic: [PATCH v2 3/3] can: gs_usb: add switchable termination support
-Thread-Index: AQHYy6Qn3CN19ElUP0SIyc5f1WgmVa3m/LTggABshoCAARB1sA==
-Date:   Tue, 20 Sep 2022 11:48:54 +0000
-Message-ID: <d5116175927a48fdad6c5fbedc34e418@wika.com>
-References: <20220918211802.692405-1-mkl@pengutronix.de>
- <20220918211802.692405-4-mkl@pengutronix.de>
- <46b828feda4c4ef3bf978dd186b094af@wika.com>
- <20220919193343.jcepx2lccia6lmdn@pengutronix.de>
-In-Reply-To: <20220919193343.jcepx2lccia6lmdn@pengutronix.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.17.6.19]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        d=samsara.com; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:from:to:cc:subject:date;
+        bh=zswPk3CHtwiHzo177YaIcxRuK9nrL6M5/aoJQ+qgiPw=;
+        b=GVXFWmsil6kfEsNUTX1g7mSuCrYy+Z6AUH+Ic7yV9JG68CgKbOOKOW37CyrNEh02E4
+         9awrK7PF2UCRUugvSzb4Q2UEbk1tIRsg4rnXZ/L15mufFtTIDDtb2L3b5vEEB6bdV+/z
+         Z56A6eEggT3B4pQe7oTkQKTV0aBW2JcCTRYn7VireDLVzHRHzzufKj1UF2gH+wbI4n/z
+         ayHvpzEps1nvZvU0M2y2UxMabkh625z+5r84XOwCppU5I6bUC5ooa3NAjzgKlyMiHfO6
+         xF1c8hA0mIPj5ov02gTo/Wss2ABLl8MajtMrVwvNfsMKq+ULeowgZZEAIA1e0pv3wcx5
+         S9uA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=zswPk3CHtwiHzo177YaIcxRuK9nrL6M5/aoJQ+qgiPw=;
+        b=WZOj5suzR4cw7N6hP4Xn3k58YdCs3wEvyS3lX9v5Jsd30so89Wzp9Niag+5GtNyFPZ
+         +zh4KlO9/nEK9bEsdH4OsmMF2iH+7IMN3c168Fdt+iAYKGY4TSYg5Ae8RTkwB/MSOLUc
+         xX2ooTlp3t5NamUF8Dav80p5llIPzChM6YtKfkLJZ4vZrWtZzpxbXbAHxT8ZSVOUDUC/
+         ROFSuIHfI4X9FzyhrL8ZadgxGBJyR3a0ep5BveEXG/mYJs0ReZt7SIAaxnzDwWG27Y+D
+         6R+fFq5Ha1KaSmRIGPS8l4MjOigT6V9lOzNM0LGo3JhBNyOgtvDMRr/3TthiyVcCOC5G
+         /s7Q==
+X-Gm-Message-State: ACrzQf1m2UNRX1PTAm6Vaf8iMVhlSIaRQmFhTZ6cSItjeycBlMYo6ZZA
+        Ba5fb/FVv3DhpdGTjJOVFnw26u/gu0/r5GFCVhz1dCwcnnHjEtyAprgaWGpnl46lqPzxJr75yA/
+        3ne41WbWAWvsP6OC9eA4p
+X-Received: by 2002:a05:620a:4083:b0:6ce:7e02:5cb8 with SMTP id f3-20020a05620a408300b006ce7e025cb8mr16964183qko.170.1663688847993;
+        Tue, 20 Sep 2022 08:47:27 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5NY0O3oO43ud6C+t/piRdiS0seOGKcgaEJY4i70xj7kc0714QEZRg/WYJzyPzAuZOpzsMtgQ==
+X-Received: by 2002:a05:620a:4083:b0:6ce:7e02:5cb8 with SMTP id f3-20020a05620a408300b006ce7e025cb8mr16964162qko.170.1663688847680;
+        Tue, 20 Sep 2022 08:47:27 -0700 (PDT)
+Received: from downhome.. (ec2-184-72-5-93.us-west-1.compute.amazonaws.com. [184.72.5.93])
+        by smtp.gmail.com with ESMTPSA id w17-20020ac86b11000000b0035cd6a4ba3csm60615qts.39.2022.09.20.08.47.26
+        for <linux-can@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Sep 2022 08:47:26 -0700 (PDT)
+From:   Rhett Aultman <rhett.aultman@samsara.com>
+To:     linux-can@vger.kernel.org
+Subject: [PATCH 0/1] can: gs_usb: remove dma allocations
+Date:   Tue, 20 Sep 2022 11:47:23 -0400
+Message-Id: <20220920154724.861093-1-rhett.aultman@samsara.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220913204110.89730-1-rhett.aultman@samsara.com>
+References: <20220913204110.89730-1-rhett.aultman@samsara.com>
 MIME-Version: 1.0
-X-GBS-PROC: nzy5iiIda39ucI2qNLF3y+HFN49+3ZTZ97RoE4srZu6gu/zz7jtzEnXJofhE31RQ
-X-GBS-PROCJOB: NaWCnzoo9Rl/tOlcKY99Zzvi4mAPN7eg/v/1UAkdtA/19hIZvp9n9l3+yLUFYWVD
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: u0WEITTgR00KHr2hoftHmhs6gXMZoH3L
+X-Proofpoint-GUID: u0WEITTgR00KHr2hoftHmhs6gXMZoH3L
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-20_06,2022-09-20_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ mlxscore=0 phishscore=0 mlxlogscore=756 lowpriorityscore=0 malwarescore=0
+ priorityscore=1501 suspectscore=0 spamscore=0 bulkscore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2209200093
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-TG9va3MgZ29vZCENCg0KT25jZSBteSBoYXJkd2FyZSBjb21lcyBpbiB3aXRoIHRoZSB0ZXJt
-aW5hdGlvbiByZXNpc3RvciBidWlsdCBpbiBJJ2xsIHJ1biB0aGlzIGxhdGVzdCB2ZXJzaW9u
-Lg0KSSd2ZSBiZWVuIGRvaW5nIGFsbCBteSB0ZXN0cyBvbiBhbiBlYXJsaWVyIHZlcnNpb24g
-d2l0aG91dCBpdCwganVzdCBtb25pdG9yaW5nIHRoZSBncGlvIHN0YXRlLg0KSXQgcHJvYmFi
-bHkgd29uJ3QgYmUgZm9yIGEgZmV3IHdlZWtzIHRpbGwgdGhleSBnZXQgaW4uDQoNCkJSLA0K
-ICBEYW5pZWwNCg0KDQoNCg0KDQoqKkNPTkZJREVOVElBTElUWSBOT1RJQ0UqKg0KDQoNClRo
-aXMgY29tbXVuaWNhdGlvbiwgaW5jbHVkaW5nIGFueSBhdHRhY2htZW50cywgaXMgZnJvbSBX
-SUtBIE1vYmlsZSBDb250cm9sLCBMUCBhbmQgY29udGFpbnMgY29uZmlkZW50aWFsIGluZm9y
-bWF0aW9uIGludGVuZGVkIG9ubHkgZm9yIHRoZSBhZGRyZXNzZWUocykuIElmIHlvdSBhcmUg
-bm90IHRoZSBpbnRlbmRlZCByZWNpcGllbnQsIGFueSB1c2UsIGRpc3NlbWluYXRpb24sIGRp
-c3RyaWJ1dGlvbiBvciBjb3B5aW5nIG9mIHRoaXMgZG9jdW1lbnQgb3IgaXRzIGNvbnRlbnRz
-IGlzIHN0cmljdGx5IHByb2hpYml0ZWQuIElmIHlvdSBoYXZlIHJlY2VpdmVkIHRoaXMgY29t
-bXVuaWNhdGlvbiBpbiBlcnJvciwgcGxlYXNlIGNvbnRhY3QgdGhlIHNlbmRlciBieSByZXBs
-eSBlLW1haWwgaW1tZWRpYXRlbHkgYW5kIGRlc3Ryb3kgYWxsIGNvcGllcyBvZiB0aGUgb3Jp
-Z2luYWwgbWVzc2FnZS4gDQoNCg0KLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCkZyb206
-IE1hcmMgS2xlaW5lLUJ1ZGRlIDxta2xAcGVuZ3V0cm9uaXguZGU+IA0KU2VudDogTW9uZGF5
-LCBTZXB0ZW1iZXIgMTksIDIwMjIgMzozNCBQTQ0KVG86IFRyZXZpdHosIERhbmllbCA8RGFu
-aWVsLlRyZXZpdHpAd2lrYS5jb20+DQpDYzogbGludXgtY2FuQHZnZXIua2VybmVsLm9yZzsg
-UnlhbiBFZHdhcmRzIDxyeWFuLmVkd2FyZHNAZ21haWwuY29tPg0KU3ViamVjdDogUmU6IFtQ
-QVRDSCB2MiAzLzNdIGNhbjogZ3NfdXNiOiBhZGQgc3dpdGNoYWJsZSB0ZXJtaW5hdGlvbiBz
-dXBwb3J0DQoNCk9uIDE5LjA5LjIwMjIgMTc6MTQ6MzksIFRyZXZpdHosIERhbmllbCB3cm90
-ZToNCj4gKyAgICAgICBpZiAoZmVhdHVyZSAmIEdTX0NBTl9GRUFUVVJFX1RFUk1JTkFUSU9O
-KSB7DQo+ICsgICAgICAgICAgICAgICBkZXYtPmNhbi50ZXJtaW5hdGlvbl9jb25zdCA9IGdz
-X3VzYl90ZXJtaW5hdGlvbl9jb25zdDsNCj4gKyAgICAgICAgICAgICAgIGRldi0+Y2FuLnRl
-cm1pbmF0aW9uX2NvbnN0X2NudCA9IEFSUkFZX1NJWkUoZ3NfdXNiX3Rlcm1pbmF0aW9uX2Nv
-bnN0KTsNCj4gKyAgICAgICAgICAgICAgIGRldi0+Y2FuLmRvX3NldF90ZXJtaW5hdGlvbiA9
-IGdzX3VzYl9zZXRfdGVybWluYXRpb247DQo+ICsNCj4gKyAgICAgICAgICAgICAgIHJjID0g
-Z3NfdXNiX2dldF90ZXJtaW5hdGlvbihuZXRkZXYsICZkZXYtPmNhbi50ZXJtaW5hdGlvbik7
-DQo+ICsgICAgICAgICAgICAgICBpZiAocmMpIHsNCj4gKyAgICAgICAgICAgICAgICAgICAg
-ICAgZGV2X2VycigmaW50Zi0+ZGV2LA0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICJDb3VsZG4ndCBnZXQgY3VycmVudCB0ZXJtaW5hdGlvbiBzdGF0ZSBmb3IgY2hhbm5l
-bCAlZCAoJXBlKVxuIiwNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjaGFu
-bmVsLCBFUlJfUFRSKHJjKSk7DQo+ICsgICAgICAgICAgICAgICAgICAgICAgIGdvdG8gb3V0
-X2ZyZWVfY2FuZGV2Ow0KPiArICAgICAgICAgICAgICAgfQ0KPiArICAgICAgIH0NCj4gDQo+
-IERvZXMgaXQgbWFrZSBzZW5zZSB0byBjaGVjayBpZiB3ZSBoYXZlIHRoZSB0ZXJtaW5hdGlv
-biBzdXBwb3J0LCB0aGVuIA0KPiBzZXQgdGhlIHZhbHVlcz8gTXkgbG9naWMgaXMgdGhhdCBq
-dXN0IGJlY2F1c2UgdGhlIHRlcm1pbmF0aW9uIGlzIG5vdCANCj4gd29ya2luZyBjb3JyZWN0
-bHksIGl0IGRvZXMgbm90IG1lYW4gZXZlcnl0aGluZyBpcyBicm9rZW4uDQoNCk1ha2VzIHNl
-bnNlIQ0KDQo+IFRoaXMgd2F5IHlvdSBjb3VsZCBoYXZlIGEgbXVsdGktY2FuLWNoYW5uZWwg
-VVNCIGRldmljZSBidXQgd2l0aCBvbmx5IA0KPiBzcGVjaWZpYyBjaGFubmVscyBzdXBwb3J0
-aW5nIGNvbmZpZ3VyYWJsZSB0ZXJtaW5hdGlvbiByZXNpc3RvcnMuDQoNCkF0IGxlYXN0IGZy
-b20gdGhlIExpbnV4IGRyaXZlcidzIHBlcnNwZWN0aXZlIHRoZSBmZWF0dXJlIGJpdHMgYXJl
-IHBlciBjaGFubmVsIG5vdCBwZXIgZGV2aWNlLg0KDQo+IFNvbWV0aGluZyBsaWtlOg0KPiAN
-Cj4gcmMgPSBnc191c2JfZ2V0X3Rlcm1pbmF0aW9uKG5ldGRldiwgJmRldi0+Y2FuLnRlcm1p
-bmF0aW9uKTsgIGlmIChyYykgew0KPiAJZGV2X2VycigmaW50Zi0+ZGV2LA0KPiAJCSJDb3Vs
-ZG4ndCBnZXQgY3VycmVudCB0ZXJtaW5hdGlvbiBzdGF0ZSBmb3IgY2hhbm5lbCAlZCAoJXBl
-KS4gTm90IGVuYWJsaW5nIHRlcm1pbmF0aW9uIHN1cHBvcnQgZm9yIHRoaXMgY2hhbm5lbFxu
-IiwNCj4gCQljaGFubmVsLCBFUlJfUFRSKHJjKSk7DQo+ICB9IGVsc2Ugew0KPiAJZGV2LT5j
-YW4udGVybWluYXRpb25fY29uc3QgPSBnc191c2JfdGVybWluYXRpb25fY29uc3Q7DQo+IAlk
-ZXYtPmNhbi50ZXJtaW5hdGlvbl9jb25zdF9jbnQgPSBBUlJBWV9TSVpFKGdzX3VzYl90ZXJt
-aW5hdGlvbl9jb25zdCk7DQo+IAlkZXYtPmNhbi5kb19zZXRfdGVybWluYXRpb24gPSBnc191
-c2Jfc2V0X3Rlcm1pbmF0aW9uOyB9DQoNCkkndmUgcmVkdWNlZCB0aGUgZGV2X2VycigpIHRv
-IGRldl9pbmZvKCkgYW5kIHRyaWVkIHRvIGtlZXAgdGhlIGVycm9yIG1lc3NhZ2Ugc2hvcnQu
-IEFsc28gSSByZW1vdmUgdGhlIHRlcm1pbmF0aW9uIGZlYXR1cmUgZmxhZy4gVGhlIGluY3Jl
-bWVudGFsIHBhdGNoIGxvb2tzIGxpa2UgdGhpczoNCg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMv
-bmV0L2Nhbi91c2IvZ3NfdXNiLmMgYi9kcml2ZXJzL25ldC9jYW4vdXNiL2dzX3VzYi5jIGlu
-ZGV4IDVjOTg4ZTUyODczNC4uYjAyNzNmYWIxODQzIDEwMDY0NA0KLS0tIGEvZHJpdmVycy9u
-ZXQvY2FuL3VzYi9nc191c2IuYw0KKysrIGIvZHJpdmVycy9uZXQvY2FuL3VzYi9nc191c2Iu
-Yw0KQEAgLTEyODcsMTYgKzEyODcsMTcgQEAgc3RhdGljIHN0cnVjdCBnc19jYW4gKmdzX21h
-a2VfY2FuZGV2KHVuc2lnbmVkIGludCBjaGFubmVsLA0KICAgICAgICB9DQogDQogICAgICAg
-IGlmIChmZWF0dXJlICYgR1NfQ0FOX0ZFQVRVUkVfVEVSTUlOQVRJT04pIHsNCi0gICAgICAg
-ICAgICAgICBkZXYtPmNhbi50ZXJtaW5hdGlvbl9jb25zdCA9IGdzX3VzYl90ZXJtaW5hdGlv
-bl9jb25zdDsNCi0gICAgICAgICAgICAgICBkZXYtPmNhbi50ZXJtaW5hdGlvbl9jb25zdF9j
-bnQgPSBBUlJBWV9TSVpFKGdzX3VzYl90ZXJtaW5hdGlvbl9jb25zdCk7DQotICAgICAgICAg
-ICAgICAgZGV2LT5jYW4uZG9fc2V0X3Rlcm1pbmF0aW9uID0gZ3NfdXNiX3NldF90ZXJtaW5h
-dGlvbjsNCi0NCiAgICAgICAgICAgICAgICByYyA9IGdzX3VzYl9nZXRfdGVybWluYXRpb24o
-bmV0ZGV2LCAmZGV2LT5jYW4udGVybWluYXRpb24pOw0KICAgICAgICAgICAgICAgIGlmIChy
-Yykgew0KLSAgICAgICAgICAgICAgICAgICAgICAgZGV2X2VycigmaW50Zi0+ZGV2LA0KLSAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAiQ291bGRuJ3QgZ2V0IGN1cnJlbnQgdGVy
-bWluYXRpb24gc3RhdGUgZm9yIGNoYW5uZWwgJWQgKCVwZSlcbiIsDQotICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgIGNoYW5uZWwsIEVSUl9QVFIocmMpKTsNCi0gICAgICAgICAg
-ICAgICAgICAgICAgIGdvdG8gb3V0X2ZyZWVfY2FuZGV2Ow0KKyAgICAgICAgICAgICAgICAg
-ICAgICAgZGV2LT5mZWF0dXJlICY9IH5HU19DQU5fRkVBVFVSRV9URVJNSU5BVElPTjsNCisN
-CisgICAgICAgICAgICAgICAgICAgICAgIGRldl9pbmZvKCZpbnRmLT5kZXYsDQorICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAiRGlzYWJsaW5nIHRlcm1pbmF0aW9uIHN1cHBv
-cnQgZm9yIGNoYW5uZWwgJWQgKCVwZSlcbiIsDQorICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICBjaGFubmVsLCBFUlJfUFRSKHJjKSk7DQorICAgICAgICAgICAgICAgfSBlbHNl
-IHsNCisgICAgICAgICAgICAgICAgICAgICAgIGRldi0+Y2FuLnRlcm1pbmF0aW9uX2NvbnN0
-ID0gZ3NfdXNiX3Rlcm1pbmF0aW9uX2NvbnN0Ow0KKyAgICAgICAgICAgICAgICAgICAgICAg
-ZGV2LT5jYW4udGVybWluYXRpb25fY29uc3RfY250ID0gQVJSQVlfU0laRShnc191c2JfdGVy
-bWluYXRpb25fY29uc3QpOw0KKyAgICAgICAgICAgICAgICAgICAgICAgZGV2LT5jYW4uZG9f
-c2V0X3Rlcm1pbmF0aW9uID0gDQorIGdzX3VzYl9zZXRfdGVybWluYXRpb247DQogICAgICAg
-ICAgICAgICAgfQ0KICAgICAgICB9DQoNCnJlZ2FyZHMsDQpNYXJjDQoNCi0tIA0KUGVuZ3V0
-cm9uaXggZS5LLiAgICAgICAgICAgICAgICAgfCBNYXJjIEtsZWluZS1CdWRkZSAgICAgICAg
-ICAgfA0KRW1iZWRkZWQgTGludXggICAgICAgICAgICAgICAgICAgfCBCTE9DS0VEcGVuZ3V0
-cm9uaXhbLl1kZUJMT0NLRUQgIHwNClZlcnRyZXR1bmcgV2VzdC9Eb3J0bXVuZCAgICAgICAg
-IHwgUGhvbmU6ICs0OS0yMzEtMjgyNi05MjQgICAgIHwNCkFtdHNnZXJpY2h0IEhpbGRlc2hl
-aW0sIEhSQSAyNjg2IHwgRmF4OiAgICs0OS01MTIxLTIwNjkxNy01NTU1IHwNCg==
+Hi all,
+
+Please find here an updated patch from Vasanth incorporating Marc's feedback.
+
+Vasanth performed his benchmarking tests again and found no change in the
+results, so the remarks in our PDF are still current and valid.
+
+If there aren't any concerns with how we're checking performance without DMA,
+then perhaps we should double-check this on an ARM platform and then proceed?
+
+
+Best,
+Rhett Aultman
