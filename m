@@ -2,99 +2,155 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40EBF5BEE0A
-	for <lists+linux-can@lfdr.de>; Tue, 20 Sep 2022 21:52:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80F785BF6FB
+	for <lists+linux-can@lfdr.de>; Wed, 21 Sep 2022 09:07:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbiITTwc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 20 Sep 2022 15:52:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47062 "EHLO
+        id S230098AbiIUHHO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 21 Sep 2022 03:07:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiITTwb (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Sep 2022 15:52:31 -0400
+        with ESMTP id S230012AbiIUHHM (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 21 Sep 2022 03:07:12 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B606FA3D
-        for <linux-can@vger.kernel.org>; Tue, 20 Sep 2022 12:52:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA97491E3
+        for <linux-can@vger.kernel.org>; Wed, 21 Sep 2022 00:07:11 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1oajID-0001Uk-AB
-        for linux-can@vger.kernel.org; Tue, 20 Sep 2022 21:52:29 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id B1A5FE7C15
-        for <linux-can@vger.kernel.org>; Tue, 20 Sep 2022 19:52:28 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        id 1oatop-0003As-K9; Wed, 21 Sep 2022 09:06:51 +0200
+Received: from pengutronix.de (hardanger-2.fritz.box [IPv6:2a03:f580:87bc:d400:f566:9915:77e6:ceb3])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 5E073E7C13;
-        Tue, 20 Sep 2022 19:52:28 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 1057f250;
-        Tue, 20 Sep 2022 19:52:27 +0000 (UTC)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 3EEF7E8203;
+        Wed, 21 Sep 2022 07:06:50 +0000 (UTC)
+Date:   Wed, 21 Sep 2022 09:06:49 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH] can: gs_usb: gs_can_open(): fix race dev->can.state condition
-Date:   Tue, 20 Sep 2022 21:52:16 +0200
-Message-Id: <20220920195216.232481-1-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.35.1
+To:     Matej Vasilevski <matej.vasilevski@seznam.cz>
+Cc:     Pavel Pisa <pisa@cmp.felk.cvut.cz>,
+        Ondrej Ille <ondrej.ille@gmail.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 2/3] can: ctucanfd: add HW timestamps to RX and error
+ CAN frames
+Message-ID: <20220920221450.poy5phzx564k36qn@pengutronix.de>
+References: <20220914233944.598298-1-matej.vasilevski@seznam.cz>
+ <20220914233944.598298-3-matej.vasilevski@seznam.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dvrixjtqc5qvlwxk"
+Content-Disposition: inline
+In-Reply-To: <20220914233944.598298-3-matej.vasilevski@seznam.cz>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The dev->can.state is set to CAN_STATE_ERROR_ACTIVE, after the device
-has been started. On busy networks the CAN controller might receive
-CAN frame between and go into an error state before the dev->can.state
-is assigned.
 
-Assign dev->can.state before starting the controller to close the race
-window.
-
-Fixes: d08e973a77d1 ("can: gs_usb: Added support for the GS_USB CAN devices")
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/usb/gs_usb.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
-index baf749c8cda3..553e2c7b0b12 100644
---- a/drivers/net/can/usb/gs_usb.c
-+++ b/drivers/net/can/usb/gs_usb.c
-@@ -824,6 +824,7 @@ static int gs_can_open(struct net_device *netdev)
- 		flags |= GS_CAN_MODE_TRIPLE_SAMPLE;
- 
- 	/* finally start device */
-+	dev->can.state = CAN_STATE_ERROR_ACTIVE;
- 	dm->mode = cpu_to_le32(GS_CAN_MODE_START);
- 	dm->flags = cpu_to_le32(flags);
- 	rc = usb_control_msg(interface_to_usbdev(dev->iface),
-@@ -835,13 +836,12 @@ static int gs_can_open(struct net_device *netdev)
- 	if (rc < 0) {
- 		netdev_err(netdev, "Couldn't start device (err=%d)\n", rc);
- 		kfree(dm);
-+		dev->can.state = CAN_STATE_STOPPED;
- 		return rc;
- 	}
- 
- 	kfree(dm);
- 
--	dev->can.state = CAN_STATE_ERROR_ACTIVE;
--
- 	parent->active_channels++;
- 	if (!(dev->can.ctrlmode & CAN_CTRLMODE_LISTENONLY))
- 		netif_start_queue(netdev);
--- 
-2.35.1
+--dvrixjtqc5qvlwxk
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="s5pcgxzoguqlmlik"
+Content-Disposition: inline
 
 
+--s5pcgxzoguqlmlik
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 15.09.2022 01:39:43, Matej Vasilevski wrote:
+[...]
+
+>  	/* Check for big-endianity and set according IO-accessors */
+>  	if ((ctucan_read32(priv, CTUCANFD_DEVICE_ID) & 0xFFFF) !=3D CTUCANFD_ID=
+) {
+> @@ -1425,6 +1582,49 @@ int ctucan_probe_common(struct device *dev, void _=
+_iomem *addr, int irq, unsigne
+> =20
+>  	priv->can.clock.freq =3D can_clk_rate;
+> =20
+> +	/* Obtain timestamping counter bit size */
+> +	timestamp_bit_size =3D FIELD_GET(REG_ERR_CAPT_TS_BITS,
+> +				       ctucan_read32(priv, CTUCANFD_ERR_CAPT));
+> +
+> +	/* The register value is actually bit_size - 1 */
+> +	if (timestamp_bit_size) {
+> +		timestamp_bit_size +=3D 1;
+> +	} else {
+> +		/* For 2.x versions of the IP core, we will assume 64-bit counter
+> +		 * if there was a 0 in the register.
+> +		 */
+> +		u32 version_reg =3D ctucan_read32(priv, CTUCANFD_DEVICE_ID);
+> +		u32 major =3D FIELD_GET(REG_DEVICE_ID_VER_MAJOR, version_reg);
+> +
+> +		if (major =3D=3D 2)
+> +			timestamp_bit_size =3D 64;
+> +		else
+> +			priv->timestamp_possible =3D false;
+> +	}
+> +
+> +	/* Setup conversion constants and work delay */
+> +	priv->cc.mask =3D CYCLECOUNTER_MASK(timestamp_bit_size);
+> +	if (priv->timestamp_possible) {
+> +		u64 max_cycles;
+> +		u64 work_delay_ns;
+> +		u32 maxsec =3D min_t(u32, CTUCANFD_MAX_WORK_DELAY_SEC,
+> +				   div_u64(priv->cc.mask, timestamp_freq));
+> +
+> +		priv->cc.read =3D ctucan_read_timestamp_cc_wrapper;
+> +		clocks_calc_mult_shift(&priv->cc.mult, &priv->cc.shift,
+> +				       timestamp_freq, NSEC_PER_SEC, maxsec);
+> +
+> +		/* shortened copy of clocks_calc_max_nsecs() */
+> +		max_cycles =3D div_u64(ULLONG_MAX, priv->cc.mult);
+> +		max_cycles =3D min(max_cycles, priv->cc.mask);
+> +		work_delay_ns =3D clocksource_cyc2ns(max_cycles, priv->cc.mult,
+> +						   priv->cc.shift) >> 1;
+
+I just ported the code to another driver with dynamic frequency and
+width. I noticed that the shift of 1 is not enough. With 2 it works.
+
+regards,
+MArc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--s5pcgxzoguqlmlik--
+
+--dvrixjtqc5qvlwxk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmMquAcACgkQrX5LkNig
+012aPQf+P/mj/TEcAdI3Be4pkcF4qImtZF6LaZM5OrHc4iFbySunnpJHsg0FKrir
+0gai4uY2wGpxWkNc5yZri5B83wWMtQsBJP/+ct0Nju8VnQADAlgGBBBMwK77qWR9
+qfHRIQLL/MiWtZAQkxE/wLBGBQQhRHz1aZOv/wqn292wOMF81MS1e83AVHHHr/8E
+YQ/x5lrgtVd1+JtgoAPNvmpKNvIqwa8dUmrKHT18RBwkOE+lz6qsr8wYKMz6P5Ix
+ggULkhfKCqrGF9rx9Xbx8xBQGbxc12/qW6//E08UmcyXAJMEr6ljP5qz1pskDMCa
+TcwPwhXXkmKEh77CClksVGgjIUue+w==
+=mHOw
+-----END PGP SIGNATURE-----
+
+--dvrixjtqc5qvlwxk--
