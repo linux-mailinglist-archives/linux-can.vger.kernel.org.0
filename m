@@ -2,37 +2,49 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2D605BFC60
-	for <lists+linux-can@lfdr.de>; Wed, 21 Sep 2022 12:33:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A83085BFC78
+	for <lists+linux-can@lfdr.de>; Wed, 21 Sep 2022 12:39:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbiIUKdG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 21 Sep 2022 06:33:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37838 "EHLO
+        id S229709AbiIUKjL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 21 Sep 2022 06:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbiIUKdF (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 21 Sep 2022 06:33:05 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D4E90C68
-        for <linux-can@vger.kernel.org>; Wed, 21 Sep 2022 03:33:04 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oax2K-0002T0-QL; Wed, 21 Sep 2022 12:33:00 +0200
-Received: from pengutronix.de (hardanger-2.fritz.box [IPv6:2a03:f580:87bc:d400:f566:9915:77e6:ceb3])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 91AFFE87B7;
-        Wed, 21 Sep 2022 10:32:59 +0000 (UTC)
-Date:   Wed, 21 Sep 2022 12:32:59 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
+        with ESMTP id S229841AbiIUKjK (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 21 Sep 2022 06:39:10 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC208E4D8
+        for <linux-can@vger.kernel.org>; Wed, 21 Sep 2022 03:39:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1663756747;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=Qsp3pFeysYxb2q3EHq0wD+9q6ORhrLc+nN3ywjJ1G1w=;
+    b=JSMOCfv2B4vkzhmYWONXhKduxyMkHv0G51P72bp6TU8wIR4KU/0GGEKR+dz/Ky+Q26
+    hJNfM/jMpI4/0AaqYzj2RVQbpLpcC76+iy+QEVZI3naos1zdA7DMKYlElNLBrP0HnOBy
+    ZF+DPEpsUOAXQta6Jbvr5JCcJThVMNJEFZBaeEWCf1m4BHZmZon1yveuEJ6papJNqfwu
+    8ZT+LBwYy3JNDbc3IVLhV9TylriaJ/wFdTsIy+OJxEN/rQvEs8rK965kHZaR3ZiTrB1J
+    c2w2YS5i3CI175osyHbFTR2urJCtbtAREEvzwRcpV8CCoH8UeMmkGaP6CFFt1ZEEwHu1
+    eZSw==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytJSr6hfz3Vg=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a00:6020:1cfd:d100::923]
+    by smtp.strato.de (RZmta 48.1.1 AUTH)
+    with ESMTPSA id 0e791ay8LAd73av
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Wed, 21 Sep 2022 12:39:07 +0200 (CEST)
+Message-ID: <f44c183a-f5f4-abe8-2dd9-47f6abb223e2@hartkopp.net>
+Date:   Wed, 21 Sep 2022 12:39:06 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: CM-ITC, pch_can/c_can_pci, sendto() returning ENOBUFS
+Content-Language: en-US
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
 Cc:     dariobin@libero.it, Jacob Kroon <jacob.kroon@gmail.com>,
         linux-can@vger.kernel.org, wg@grandegger.com
-Subject: Re: CM-ITC, pch_can/c_can_pci, sendto() returning ENOBUFS
-Message-ID: <20220921103259.5x5zf5fwxqnm56nd@pengutronix.de>
 References: <556866e2-a3aa-9077-8db7-edc4ced69491@hartkopp.net>
  <f8a95bfb-b1c2-cd41-1106-ca739c438fb9@gmail.com>
  <df1d220e-bf99-1051-ca90-5bd52e6c64e7@hartkopp.net>
@@ -43,17 +55,15 @@ References: <556866e2-a3aa-9077-8db7-edc4ced69491@hartkopp.net>
  <541998938.482927.1663745141832@mail1.libero.it>
  <20220921074741.admuodnlv4yexfwr@pengutronix.de>
  <fb1f38e6-c95c-5847-2ebf-16fd8bc2db94@hartkopp.net>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="i3tukmlwel7qixl2"
-Content-Disposition: inline
-In-Reply-To: <fb1f38e6-c95c-5847-2ebf-16fd8bc2db94@hartkopp.net>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+ <20220921103259.5x5zf5fwxqnm56nd@pengutronix.de>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20220921103259.5x5zf5fwxqnm56nd@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -61,54 +71,31 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---i3tukmlwel7qixl2
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On 21.09.2022 11:55:59, Oliver Hartkopp wrote:
-> Btw. I uploaded the 'latest' C_CAN manuals on
->=20
-> https://github.com/linux-can/can-doc
->=20
-> ... as it could only be found on archive.org :-/
->=20
-> Unfortunately I was not able to find any (latest?) D_CAN manual anymore,
-> which was originally hosted at http://www.semiconductors.bosch.de/media/e=
-n/pdf/ipmodules_1/can/d_can_users_manual_111.pdf
->=20
-> Archive.org did not crawl this PDF ;-(
->=20
-> If someone still has this D_CAN PDF please send a URL or the PDF itself to
-> me, so that I can put it there too.
+On 21.09.22 12:32, Marc Kleine-Budde wrote:
+> On 21.09.2022 11:55:59, Oliver Hartkopp wrote:
+>> Btw. I uploaded the 'latest' C_CAN manuals on
+>>
+>> https://github.com/linux-can/can-doc
+>>
+>> ... as it could only be found on archive.org :-/
+>>
+>> Unfortunately I was not able to find any (latest?) D_CAN manual anymore,
+>> which was originally hosted at http://www.semiconductors.bosch.de/media/en/pdf/ipmodules_1/can/d_can_users_manual_111.pdf
+>>
+>> Archive.org did not crawl this PDF ;-(
+>>
+>> If someone still has this D_CAN PDF please send a URL or the PDF itself to
+>> me, so that I can put it there too.
+> 
+> I've found some old stuff on https://www.yumpu.com/user/bosch.semiconductors.de
+> 
+> You've got PR:
+> https://github.com/linux-can/can-doc/pull/1
 
-I've found some old stuff on https://www.yumpu.com/user/bosch.semiconductor=
-s.de
+Pulled.
 
-You've got PR:
-https://github.com/linux-can/can-doc/pull/1
+Excellent contribution! Thanks Marc!
 
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---i3tukmlwel7qixl2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmMq6FgACgkQrX5LkNig
-012qzggAmq1jjQ+OuiPUkHZ9zrSP7oSQnBnQNB10dblhAF/jafsg178cFBuOez1N
-FcKS6awkhmd5xdY4Ijk7fPBmlUgA18BGyeg7j2QbrU/uZtas0WhtOgW4PJrOWiwY
-PQcvqCIu4T/w1JnjCjq0hHl4Le4L+wwWspHWew/bLBKZEHBnHdtL7ulEjQVrpGMO
-6aRKaIbVQR3KHqfu3ROYbGW4OnzF3ZFCKHoQ20k8pFUEcEAj7DgMbVxDtuV3Wy8d
-Y40tfkpkwEi4E82N0ANYDUiwp+6O/6KV2TcabLV139hWwWnuuoTQG7+MPdmmVT83
-ZB69+9bsFHxCBMKkrmWayUcBfy9h7Q==
-=2cJl
------END PGP SIGNATURE-----
-
---i3tukmlwel7qixl2--
+Best regards,
+Oliver
