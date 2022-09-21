@@ -2,47 +2,44 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B376A5E53E8
-	for <lists+linux-can@lfdr.de>; Wed, 21 Sep 2022 21:39:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C3365E5412
+	for <lists+linux-can@lfdr.de>; Wed, 21 Sep 2022 21:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbiIUTjg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 21 Sep 2022 15:39:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48490 "EHLO
+        id S230100AbiIUT6O (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 21 Sep 2022 15:58:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbiIUTjZ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 21 Sep 2022 15:39:25 -0400
+        with ESMTP id S229551AbiIUT6N (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 21 Sep 2022 15:58:13 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C71A2626
-        for <linux-can@vger.kernel.org>; Wed, 21 Sep 2022 12:39:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CFABA2635
+        for <linux-can@vger.kernel.org>; Wed, 21 Sep 2022 12:58:13 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1ob5Z4-00020N-Jh
-        for linux-can@vger.kernel.org; Wed, 21 Sep 2022 21:39:22 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 04AECE8DC8
-        for <linux-can@vger.kernel.org>; Wed, 21 Sep 2022 19:39:21 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        id 1ob5rF-0003mj-LL; Wed, 21 Sep 2022 21:58:09 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 01EFBE8DC3;
-        Wed, 21 Sep 2022 19:39:19 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 8e2b8f0b;
-        Wed, 21 Sep 2022 19:39:03 +0000 (UTC)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 6E428E8DFD;
+        Wed, 21 Sep 2022 19:58:07 +0000 (UTC)
+Date:   Wed, 21 Sep 2022 21:58:04 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 3/3] can: gs_usb: gs_make_candev(): clean up error handling
-Date:   Wed, 21 Sep 2022 21:39:02 +0200
-Message-Id: <20220921193902.575416-4-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220921193902.575416-1-mkl@pengutronix.de>
-References: <20220921193902.575416-1-mkl@pengutronix.de>
+To:     john@jbrengineering.co.uk
+Cc:     linux-can@vger.kernel.org,
+        John Whittington <git@jbrengineering.co.uk>
+Subject: Re: (No Subject)
+Message-ID: <20220921195804.iqiorhtcbehmpolb@pengutronix.de>
+References: <20220920100416.959226-1-mkl@pengutronix.de>
+ <wRg__4HuO0FuJrZu5M_JEbOd6MvCtxHq_aV86X_Bj-Dgb0YTRaoVO_sr6DpPcvwrhWtnNYwSCCWf0hJ8bCsFEYfon_iTkyctFDZOxOyO3x8=@jbrengineering.co.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="wpsya37h3yh3excq"
+Content-Disposition: inline
+In-Reply-To: <wRg__4HuO0FuJrZu5M_JEbOd6MvCtxHq_aV86X_Bj-Dgb0YTRaoVO_sr6DpPcvwrhWtnNYwSCCWf0hJ8bCsFEYfon_iTkyctFDZOxOyO3x8=@jbrengineering.co.uk>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -55,66 +52,52 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Introduce a label to free the allocated candev in case of an error and
-make use of if. Fix a memory leak if the extended bit timing cannot be
-read. Extend the error messages to print the number of the failing
-channel and the symbolic error name.
 
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/usb/gs_usb.c | 21 +++++++++++++--------
- 1 file changed, 13 insertions(+), 8 deletions(-)
+--wpsya37h3yh3excq
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
-index be4530e288d1..17e1ac2ffc19 100644
---- a/drivers/net/can/usb/gs_usb.c
-+++ b/drivers/net/can/usb/gs_usb.c
-@@ -1096,8 +1096,8 @@ static struct gs_can *gs_make_candev(unsigned int channel,
- 
- 	if (rc) {
- 		dev_err(&intf->dev,
--			"Couldn't get bit timing const for channel (err=%d)\n",
--			rc);
-+			"Couldn't get bit timing const for channel %d (%pe)\n",
-+			channel, ERR_PTR(rc));
- 		return ERR_PTR(rc);
- 	}
- 
-@@ -1210,9 +1210,9 @@ static struct gs_can *gs_make_candev(unsigned int channel,
- 					  1000, GFP_KERNEL);
- 		if (rc) {
- 			dev_err(&intf->dev,
--				"Couldn't get extended bit timing const for channel (err=%d)\n",
--				rc);
--			return ERR_PTR(rc);
-+				"Couldn't get extended bit timing const for channel %d (%pe)\n",
-+				channel, ERR_PTR(rc));
-+			goto out_free_candev;
- 		}
- 
- 		strcpy(dev->data_bt_const.name, KBUILD_MODNAME);
-@@ -1232,12 +1232,17 @@ static struct gs_can *gs_make_candev(unsigned int channel,
- 
- 	rc = register_candev(dev->netdev);
- 	if (rc) {
--		free_candev(dev->netdev);
--		dev_err(&intf->dev, "Couldn't register candev (err=%d)\n", rc);
--		return ERR_PTR(rc);
-+		dev_err(&intf->dev,
-+			"Couldn't register candev for channel %d (%pe)\n",
-+			channel, ERR_PTR(rc));
-+		goto out_free_candev;
- 	}
- 
- 	return dev;
-+
-+ out_free_candev:
-+	free_candev(dev->netdev);
-+	return ERR_PTR(rc);
- }
- 
- static void gs_destroy_candev(struct gs_can *dev)
--- 
-2.35.1
+On 21.09.2022 07:07:26, john@jbrengineering.co.uk wrote:
+> > while playing around with the hardware timestamping code, I found some
+> > issues, which are fixed in this series.
+> >=20
+> > John, can you test if timestamping still works on your hardware.
+>=20
+> I've just tested the 3 patches and yes it still works. Thanks for
+> picking up on those.
 
+Thanks, can I add your Tested-by?
 
+> I see a potential issue with 3/3: the timer not being stopped if the
+> USB start errors but I've replied in that thread.
+
+Fixed, see:
+
+| https://lore.kernel.org/all/20220921081329.385509-1-mkl@pengutronix.de
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--wpsya37h3yh3excq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmMrbMoACgkQrX5LkNig
+011o1Qf/UldGKPfzPE0sVJT2UJBDbFqFWC9mgi/ghVnDL4PkP0v5q1g26a53Jdaj
+zT+6ZCr+NnyYwt4nnRPsUPSSvxE53AvUZ4xsA7tkpC6m8QBRlnifsi+0AJpgAR5e
+sVnUxft1Ia+6GSh+BQkk/QkoTG16vh98ji3ueaB5gMeiUZ4zjiN9hli92tKcLebx
+3bYum4EIjm47bqb8QPxdEGQTV4a5OmtkUy/sFFZgva67xZiFgdV46Dnp01ui9qS4
+bLnNxNP7Apu0qh78IdNuN5vt3TM2udtwEdbSy+wrwGM8Cg/0MNP75P5i1gDynfZi
+VN9JFVh5tcMIq5YSrehW7eG1efh6Mw==
+=Zohm
+-----END PGP SIGNATURE-----
+
+--wpsya37h3yh3excq--
