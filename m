@@ -2,52 +2,54 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B43F95E5DB6
-	for <lists+linux-can@lfdr.de>; Thu, 22 Sep 2022 10:43:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22FA65E6CA8
+	for <lists+linux-can@lfdr.de>; Thu, 22 Sep 2022 22:05:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229488AbiIVImv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 22 Sep 2022 04:42:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40550 "EHLO
+        id S229828AbiIVUFa (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 22 Sep 2022 16:05:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbiIVImu (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 22 Sep 2022 04:42:50 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61313CDCCF
-        for <linux-can@vger.kernel.org>; Thu, 22 Sep 2022 01:42:49 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1obHn8-00069v-Lf; Thu, 22 Sep 2022 10:42:42 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id DE95DE9FCD;
-        Thu, 22 Sep 2022 08:23:38 +0000 (UTC)
-Date:   Thu, 22 Sep 2022 10:23:38 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
+        with ESMTP id S229777AbiIVUF3 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 22 Sep 2022 16:05:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A47AA8CC4;
+        Thu, 22 Sep 2022 13:05:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A3888B80DE4;
+        Thu, 22 Sep 2022 20:05:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F50BC433D6;
+        Thu, 22 Sep 2022 20:05:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663877126;
+        bh=MGbVyhewQ7VxXznFUjRgEqvL1s+44pP4F3IRDbTf/5c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KrfxTNyQFtRJ78gmGC4KkzSEDtm7tsC9er9OGUCgIUGNRPtNzAhpJ6xwUNf11kdR3
+         dNFHXLxgc4uXKHFJncMp8EPpm6tlMHQ34aDPGWGx1XZ1kipq5xnEvWE+Hsx81OQ2jk
+         I+PdplmgO8sm1vs0L9hBwKNRPnjXBYCyReuRh7a4meT9/tifiQ6nAOJy+v+8SHnx4r
+         wx6i6stj4ZjAPRr3XuK6J7EBMZwt/J2f8mxXncXsNb3HDuMFFcKSt2i0hGmqWxMXMv
+         jyHDeBApQx+mwDUD+KHiptmZJSYPAD6XnZtzXYNBTY0nDsOPLlHOZTjqpaNqkaBbeY
+         aiWwttVG45EzA==
+Date:   Thu, 22 Sep 2022 13:05:25 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
 To:     Matthieu Baerts <matthieu.baerts@tessares.net>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, kernel@pengutronix.de,
-        MPTCP Upstream <mptcp@lists.linux.dev>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, netdev@vger.kernel.org,
+        davem@davemloft.net, linux-can@vger.kernel.org,
+        kernel@pengutronix.de, MPTCP Upstream <mptcp@lists.linux.dev>
 Subject: Re: [PATCH net 2/3] can: gs_usb: gs_can_open(): fix race
  dev->can.state condition
-Message-ID: <20220922082338.a6mbf2bbtznr3lvz@pengutronix.de>
+Message-ID: <20220922130525.6b1a1104@kernel.org>
+In-Reply-To: <20220922082338.a6mbf2bbtznr3lvz@pengutronix.de>
 References: <20220921083609.419768-1-mkl@pengutronix.de>
- <20220921083609.419768-3-mkl@pengutronix.de>
- <84f45a7d-92b6-4dc5-d7a1-072152fab6ff@tessares.net>
+        <20220921083609.419768-3-mkl@pengutronix.de>
+        <84f45a7d-92b6-4dc5-d7a1-072152fab6ff@tessares.net>
+        <20220922082338.a6mbf2bbtznr3lvz@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vaq73b4wttzzl5et"
-Content-Disposition: inline
-In-Reply-To: <84f45a7d-92b6-4dc5-d7a1-072152fab6ff@tessares.net>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,65 +57,21 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Thu, 22 Sep 2022 10:23:38 +0200 Marc Kleine-Budde wrote:
+> On 22.09.2022 10:04:55, Matthieu Baerts wrote:
+> > FYI, we got a small conflict when merging -net in net-next in the MPTCP
+> > tree due to this patch applied in -net:
+> > 
+> >   5440428b3da6 ("can: gs_usb: gs_can_open(): fix race dev->can.state
+> > condition")
+> > 
+> > and this one from net-next:
+> > 
+> >   45dfa45f52e6 ("can: gs_usb: add RX and TX hardware timestamp support")
+> > 
+> > The conflict has been resolved on our side[1] and the resolution we
+> > suggest is attached to this email.  
 
---vaq73b4wttzzl5et
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 22.09.2022 10:04:55, Matthieu Baerts wrote:
-> On 21/09/2022 10:36, Marc Kleine-Budde wrote:
-> > The dev->can.state is set to CAN_STATE_ERROR_ACTIVE, after the device
-> > has been started. On busy networks the CAN controller might receive
-> > CAN frame between and go into an error state before the dev->can.state
-> > is assigned.
-> >=20
-> > Assign dev->can.state before starting the controller to close the race
-> > window.
-> >=20
-> > Fixes: d08e973a77d1 ("can: gs_usb: Added support for the GS_USB CAN dev=
-ices")
-> > Link: https://lore.kernel.org/all/20220920195216.232481-1-mkl@pengutron=
-ix.de
-> > Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
->=20
-> FYI, we got a small conflict when merging -net in net-next in the MPTCP
-> tree due to this patch applied in -net:
->=20
->   5440428b3da6 ("can: gs_usb: gs_can_open(): fix race dev->can.state
-> condition")
->=20
-> and this one from net-next:
->=20
->   45dfa45f52e6 ("can: gs_usb: add RX and TX hardware timestamp support")
->=20
-> The conflict has been resolved on our side[1] and the resolution we
-> suggest is attached to this email.
-
-That patch looks good to me.
-
-Thanks,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---vaq73b4wttzzl5et
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmMsG4YACgkQrX5LkNig
-013BAAf/e8dSMLbcldH9hd0PZggpl/ZVOZp4/l82rYQCWa4VWXHfLg+XUMmvvyxp
-rwvvw4ku3d2RBX5V6OKP+Xtqhe7gaXdRm2miKGS8404n3Cr3AmxYSXs41e/pDkj5
-xM0oUB+oAR2lP9ZDkICvA3ZbM4roVhEFimrPDoVrTP41t1L7YCyBqNrNZsqv4p9e
-leKI3+TZQuJdVTnlZGhkLto7sXY2v1GgrlK97EqiekICB0MBwWIHBr/LIAnVLkfD
-Yy4rDCD2Byhbmao9mhnCa/vg+yG5MFTDo58dvM5C6x5ABwvhpWTKtyyRQ0N+CI5F
-sHpP4/DHzamLg0sUdNDklbMwDXoEDA==
-=vFx/
------END PGP SIGNATURE-----
-
---vaq73b4wttzzl5et--
+Thanks for the resolution! If you happen to remember perhaps throw
+"manual merge" into the subject. That's what I search my inbox for
+when merging, it will allow us to be even more lazy :)
