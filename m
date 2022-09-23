@@ -2,43 +2,43 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D449A5E79D4
-	for <lists+linux-can@lfdr.de>; Fri, 23 Sep 2022 13:42:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E12565E7A50
+	for <lists+linux-can@lfdr.de>; Fri, 23 Sep 2022 14:18:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230015AbiIWLma (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 23 Sep 2022 07:42:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54024 "EHLO
+        id S231129AbiIWMSV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 23 Sep 2022 08:18:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbiIWLm3 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 23 Sep 2022 07:42:29 -0400
+        with ESMTP id S230363AbiIWMQS (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 23 Sep 2022 08:16:18 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 113E411DFDD
-        for <linux-can@vger.kernel.org>; Fri, 23 Sep 2022 04:42:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7268713C86B
+        for <linux-can@vger.kernel.org>; Fri, 23 Sep 2022 05:09:05 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1obh4c-0003iN-Hx
-        for linux-can@vger.kernel.org; Fri, 23 Sep 2022 13:42:26 +0200
+        id 1obhUN-0007El-Uh
+        for linux-can@vger.kernel.org; Fri, 23 Sep 2022 14:09:03 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id E64E8EB0CB
-        for <linux-can@vger.kernel.org>; Fri, 23 Sep 2022 11:42:25 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id 1E385EB10D
+        for <linux-can@vger.kernel.org>; Fri, 23 Sep 2022 12:09:03 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 1F950EB0C8;
-        Fri, 23 Sep 2022 11:42:25 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id D703DEB104;
+        Fri, 23 Sep 2022 12:09:01 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 536690dc;
-        Fri, 23 Sep 2022 11:42:24 +0000 (UTC)
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id c8f4d511;
+        Fri, 23 Sep 2022 12:09:00 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Jacob Kroon <jacob.kroon@gmail.com>
-Subject: [PATCH RFC] can: c_can: don't cache TX messages for C_CAN cores
-Date:   Fri, 23 Sep 2022 13:42:23 +0200
-Message-Id: <20220923114223.726808-1-mkl@pengutronix.de>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH net-next 0/11] pull-request: can-next 2022-09-23
+Date:   Fri, 23 Sep 2022 14:08:48 +0200
+Message-Id: <20220923120859.740577-1-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -54,94 +54,68 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Link: https://lore.kernel.org/all/15a8084b-9617-2da1-6704-d7e39d60643b@gmail.com
-Reported-by: Jacob Kroon <jacob.kroon@gmail.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/c_can/c_can.h      | 17 +++++++++++++++--
- drivers/net/can/c_can/c_can_main.c | 11 +++++------
- 2 files changed, 20 insertions(+), 8 deletions(-)
+Hello Jakub, hello David,
 
-diff --git a/drivers/net/can/c_can/c_can.h b/drivers/net/can/c_can/c_can.h
-index f23a03300a81..029cd8194ed5 100644
---- a/drivers/net/can/c_can/c_can.h
-+++ b/drivers/net/can/c_can/c_can.h
-@@ -235,9 +235,22 @@ static inline u8 c_can_get_tx_tail(const struct c_can_tx_ring *ring)
- 	return ring->tail & (ring->obj_num - 1);
- }
- 
--static inline u8 c_can_get_tx_free(const struct c_can_tx_ring *ring)
-+static inline u8 c_can_get_tx_free(const struct c_can_priv *priv,
-+				   const struct c_can_tx_ring *ring)
- {
--	return ring->obj_num - (ring->head - ring->tail);
-+	u8 head = c_can_get_tx_head(ring);
-+	u8 tail = c_can_get_tx_tail(ring);
-+
-+	if (priv->type == BOSCH_D_CAN)
-+		return ring->obj_num - (ring->head - ring->tail);
-+
-+	/* This is not a FIFO. C/D_CAN sends out the buffers
-+	 * prioritized. The lowest buffer number wins.
-+	 */
-+	if (head < tail)
-+		return 0;
-+
-+	return ring->obj_num - head;
- }
- 
- #endif /* C_CAN_H */
-diff --git a/drivers/net/can/c_can/c_can_main.c b/drivers/net/can/c_can/c_can_main.c
-index dc8132862f33..d6605dbb7737 100644
---- a/drivers/net/can/c_can/c_can_main.c
-+++ b/drivers/net/can/c_can/c_can_main.c
-@@ -429,7 +429,7 @@ static void c_can_setup_receive_object(struct net_device *dev, int iface,
- static bool c_can_tx_busy(const struct c_can_priv *priv,
- 			  const struct c_can_tx_ring *tx_ring)
- {
--	if (c_can_get_tx_free(tx_ring) > 0)
-+	if (c_can_get_tx_free(priv, tx_ring) > 0)
- 		return false;
- 
- 	netif_stop_queue(priv->dev);
-@@ -437,7 +437,7 @@ static bool c_can_tx_busy(const struct c_can_priv *priv,
- 	/* Memory barrier before checking tx_free (head and tail) */
- 	smp_mb();
- 
--	if (c_can_get_tx_free(tx_ring) == 0) {
-+	if (c_can_get_tx_free(priv, tx_ring) == 0) {
- 		netdev_dbg(priv->dev,
- 			   "Stopping tx-queue (tx_head=0x%08x, tx_tail=0x%08x, len=%d).\n",
- 			   tx_ring->head, tx_ring->tail,
-@@ -465,7 +465,7 @@ static netdev_tx_t c_can_start_xmit(struct sk_buff *skb,
- 
- 	idx = c_can_get_tx_head(tx_ring);
- 	tx_ring->head++;
--	if (c_can_get_tx_free(tx_ring) == 0)
-+	if (c_can_get_tx_free(priv, tx_ring) == 0)
- 		netif_stop_queue(dev);
- 
- 	if (idx < c_can_get_tx_tail(tx_ring))
-@@ -748,7 +748,7 @@ static void c_can_do_tx(struct net_device *dev)
- 		return;
- 
- 	tx_ring->tail += pkts;
--	if (c_can_get_tx_free(tx_ring)) {
-+	if (c_can_get_tx_free(priv, tx_ring)) {
- 		/* Make sure that anybody stopping the queue after
- 		 * this sees the new tx_ring->tail.
- 		 */
-@@ -760,8 +760,7 @@ static void c_can_do_tx(struct net_device *dev)
- 	stats->tx_packets += pkts;
- 
- 	tail = c_can_get_tx_tail(tx_ring);
--
--	if (tail == 0) {
-+	if (priv->type == BOSCH_D_CAN && tail == 0) {
- 		u8 head = c_can_get_tx_head(tx_ring);
- 
- 		/* Start transmission for all cached messages */
--- 
-2.35.1
+this is a pull request of 11 patches for net-next/main.
+
+The first 2 patches are by Ziyang Xuan and optimize registration and
+the sending in the CAN BCM protocol a bit.
+
+The next 8 patches target the gs_usb driver. 7 are by me and first fix
+the time hardware stamping support (added during this net-next cycle),
+rename a variable, convert the usb_control_msg + manual
+kmalloc()/kfree() to usb_control_msg_{send,rev}(), clean up the error
+handling and add switchable termination support. The patch by Rhett
+Aultman and Vasanth Sadhasivan convert the driver from
+usb_alloc_coherent()/usb_free_coherent() to kmalloc()/URB_FREE_BUFFER.
+
+The last patch is by Shang XiaoJing and removes an unneeded call to
+dev_err() from the ctucanfd driver.
+
+regards,
+Marc
+
+---
+
+The following changes since commit d05d9eb79d0cd0f7a978621b4a56a1f2db444f86:
+
+  Merge branch 'net-dsa-remove-unnecessary-set_drvdata' (2022-09-22 19:31:39 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git tags/linux-can-next-for-6.1-20220923
+
+for you to fetch changes up to 6eed756408c69687613a83fd221431c8790cf0bb:
+
+  can: ctucanfd: Remove redundant dev_err call (2022-09-23 13:55:01 +0200)
+
+----------------------------------------------------------------
+linux-can-next-for-6.1-20220923
+
+----------------------------------------------------------------
+Marc Kleine-Budde (8):
+      Merge patch series "can: bcm: can: bcm: random optimizations"
+      can: gs_usb: gs_usb_get_timestamp(): fix endpoint parameter for usb_control_msg_recv()
+      can: gs_usb: add missing lock to protect struct timecounter::cycle_last
+      can: gs_usb: gs_can_open(): initialize time counter before starting device
+      can: gs_usb: gs_cmd_reset(): rename variable holding struct gs_can pointer to dev
+      can: gs_usb: convert from usb_control_msg() to usb_control_msg_{send,recv}()
+      can: gs_usb: gs_make_candev(): clean up error handling
+      can: gs_usb: add switchable termination support
+
+Shang XiaoJing (1):
+      can: ctucanfd: Remove redundant dev_err call
+
+Vasanth Sadhasivan (1):
+      can: gs_usb: remove dma allocations
+
+Ziyang Xuan (2):
+      can: bcm: registration process optimization in bcm_module_init()
+      can: bcm: check the result of can_send() in bcm_can_tx()
+
+ drivers/net/can/ctucanfd/ctucanfd_platform.c |   1 -
+ drivers/net/can/usb/gs_usb.c                 | 478 +++++++++++++--------------
+ net/can/bcm.c                                |  25 +-
+ 3 files changed, 249 insertions(+), 255 deletions(-)
 
 
