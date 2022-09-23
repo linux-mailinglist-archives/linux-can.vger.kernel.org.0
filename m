@@ -2,105 +2,122 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCC3B5E7CC0
-	for <lists+linux-can@lfdr.de>; Fri, 23 Sep 2022 16:20:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E52F45E812E
+	for <lists+linux-can@lfdr.de>; Fri, 23 Sep 2022 19:55:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232552AbiIWOUV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 23 Sep 2022 10:20:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55628 "EHLO
+        id S232098AbiIWRzT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 23 Sep 2022 13:55:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232544AbiIWOUU (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 23 Sep 2022 10:20:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27C9CE171F;
-        Fri, 23 Sep 2022 07:20:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BA1F662373;
-        Fri, 23 Sep 2022 14:20:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 242A2C433D7;
-        Fri, 23 Sep 2022 14:20:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663942818;
-        bh=Rhvv+Iydenk8ACiYitJE/oTrMmj9xntYcGCGLQuTFUc=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=krV+S6MfQFKQRI2XALFhC2dlaOOIbe74ALI+MiAIuzAFuHRvMUus15qmSsnMf6U/q
-         6EKcCYqjwwECIBVPxHhzIYuwloxtJcrtq4Q6a2MhcWdIjM3ZLOOHU5pBJqG7ZnrVvw
-         1vSkyl6tkwtDdlwK9MSUaSX3mOsjy03uZR7SeumCIddF/+GWqGQJmuOx+aqo/LUypr
-         nUi33/UT5J3W5t4GVCGwCMpiugc0+mv85BgJPl0q293eV11SmVCgZnift0KOIon5+S
-         Q1AnCS9U4p41npDHit984nN3jE8fdXGaO9u+0X3weo3mSTjdHRScL1NosZMvh19TQ8
-         KioT668NReJoQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 11515E4D03D;
-        Fri, 23 Sep 2022 14:20:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S232516AbiIWRzM (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 23 Sep 2022 13:55:12 -0400
+Received: from libero.it (smtp-35-i2.italiaonline.it [213.209.12.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D0DD69DE
+        for <linux-can@vger.kernel.org>; Fri, 23 Sep 2022 10:55:08 -0700 (PDT)
+Received: from oxapps-36-168.iol.local ([10.101.8.214])
+        by smtp-35.iol.local with ESMTPA
+        id bmtGoXIV750p3bmtGo8NfI; Fri, 23 Sep 2022 19:55:06 +0200
+x-libjamoibt: 1601
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=libero.it; s=s2021;
+        t=1663955706; bh=wQCtgWl4x8GWeuI9I517VKhsmejYmt6e6g4WdE/9ZqQ=;
+        h=From;
+        b=A3rE44O2p787NQMralp19JCArd0aOyJl16p8rvPPu7etGYLQ0WPuYH5pPfZ0cafRv
+         4tNdkll4qwEVlyM6LhIJv9EMkZ2OQU7XrRo1lI/zJGolZFQmWi0iOQr/beFnw5ceAK
+         bYhw3pWiEQhRfus7wQFklfvKRoKsGwwfL1KWfTs0fDenzNYlBtsnB/KLWcQUw3ySzo
+         YysTr12VpObMLeQVBN2CW+XYNPzop2DdlXKYfYsEXh0vD1KbPpAqQ/lWEpo857behS
+         0rXXAb0hHSHlIrz8sDCOFMfb23VCVULyxhrbmLE5pgCiKnXoOipwzzmrBqZ8mO/Tj+
+         1SqVXQ2NZXpSw==
+X-CNFS-Analysis: v=2.4 cv=D5aCltdj c=1 sm=1 tr=0 ts=632df2fa cx=a_exe
+ a=3iLpBvWwvOdkg4efS1Ji/Q==:117 a=KtRsck1nP08A:10 a=IkcTkHD0fZMA:10
+ a=NT8mcSYMf2YA:10 a=VwQbUJbxAAAA:8 a=bGNZPXyTAAAA:8 a=bAF_0_vCazFOC95qmekA:9
+ a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22 a=yL4RfsBhuEsimFDS2qtJ:22
+Date:   Fri, 23 Sep 2022 19:55:06 +0200 (CEST)
+From:   dariobin@libero.it
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Jacob Kroon <jacob.kroon@gmail.com>
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        linux-can@vger.kernel.org, wg@grandegger.com
+Message-ID: <36690382.801104.1663955706569@mail1.libero.it>
+In-Reply-To: <20220923113638.tjnbuvkzdq24c4as@pengutronix.de>
+References: <15a8084b-9617-2da1-6704-d7e39d60643b@gmail.com>
+ <403e18fe-8695-cd56-38f3-0ffe3ec9e472@gmail.com>
+ <36d0419b-297f-8e39-8843-051b55b8a2bb@gmail.com>
+ <986401a8-5f5a-0705-82c4-4df339509e07@gmail.com>
+ <556866e2-a3aa-9077-8db7-edc4ced69491@hartkopp.net>
+ <f8a95bfb-b1c2-cd41-1106-ca739c438fb9@gmail.com>
+ <df1d220e-bf99-1051-ca90-5bd52e6c64e7@hartkopp.net>
+ <0eb1dd1b-427a-92c5-22ef-97c557cfec6e@gmail.com>
+ <20220905155416.pgvseb6uggc67ua4@pengutronix.de>
+ <8c481a4e-9493-25ae-f4d7-c12dc98bc83e@gmail.com>
+ <20220923113638.tjnbuvkzdq24c4as@pengutronix.de>
+Subject: Re: CM-ITC, pch_can/c_can_pci, sendto() returning ENOBUFS
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 01/11] can: bcm: registration process optimization in
- bcm_module_init()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166394281805.25768.3506928119698170613.git-patchwork-notify@kernel.org>
-Date:   Fri, 23 Sep 2022 14:20:18 +0000
-References: <20220923120859.740577-2-mkl@pengutronix.de>
-In-Reply-To: <20220923120859.740577-2-mkl@pengutronix.de>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, kernel@pengutronix.de,
-        william.xuanziyang@huawei.com, socketcan@hartkopp.net
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+Importance: Normal
+X-Mailer: Open-Xchange Mailer v7.10.5-Rev48
+X-Originating-IP: 95.232.92.192
+X-Originating-Client: open-xchange-appsuite
+x-libjamsun: BRc3EBzIi25H+mkQjwGhLU3QlA+qTujH
+x-libjamv: 2NL/srFTPNs=
+X-CMAE-Envelope: MS4xfAx5gpfrXU6QqdkvF9GedexVZ881ld2mCGP6ZW89LXxBJW5cmoJLff1+nRlnrSB4TutCwLZnfnUGcUTlozJ/9pgcOt++V4HtwF/1qB+eHefOwDIGk2Mp
+ dCo5RmY1ZM3Z6M96oHcj47kIZidYPVpjnYaye1VcwDCKkfkaETeKvt/EcB90xEZ2yDdh+JWft58Zlz940KF9U99xeQuq70TsNgRYpGIba0xhqhFLXT2qgdNY
+ SP+VccN/c6r7I9lxrhS8cuZm6P73vtOOFBU6gU5U75e88jCGs6+3XlxFcaXwlgzjbD91qUcnjfuAbRY3YXi1OfZQC4/uTJ5ZSh08sclpOOw=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello:
+Hi Michael,
 
-This series was applied to netdev/net-next.git (master)
-by Marc Kleine-Budde <mkl@pengutronix.de>:
-
-On Fri, 23 Sep 2022 14:08:49 +0200 you wrote:
-> From: Ziyang Xuan <william.xuanziyang@huawei.com>
+> Il 23/09/2022 13:36 Marc Kleine-Budde <mkl@pengutronix.de> ha scritto:
 > 
-> Now, register_netdevice_notifier() and register_pernet_subsys() are both
-> after can_proto_register(). It can create CAN_BCM socket and process socket
-> once can_proto_register() successfully, so it is possible missing notifier
-> event or proc node creation because notifier or bcm proc directory is not
-> registered or created yet. Although this is a low probability scenario, it
-> is not impossible.
+>  
+> On 16.09.2022 06:14:58, Jacob Kroon wrote:
+> > What I do know is that if I revert commit:
+> > 
+> > "can: c_can: cache frames to operate as a true FIFO"
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=387da6bc7a826cc6d532b1c0002b7c7513238d5f
+> > 
+> > then everything looks good. I don't get any BUG messages, and the host
+> > has been running overnight without problems, so it seems to have fixed
+> > the network interface lockup as well.
 > 
-> [...]
+> Jacob, after this mail, I'll send 2 patches. One tries to disable the
+> cache feature for C_CAN cores, the other shuts a potential race window.
 
-Here is the summary with links:
-  - [net-next,01/11] can: bcm: registration process optimization in bcm_module_init()
-    https://git.kernel.org/netdev/net-next/c/edd1a7e42f1d
-  - [net-next,02/11] can: bcm: check the result of can_send() in bcm_can_tx()
-    https://git.kernel.org/netdev/net-next/c/3fd7bfd28cfd
-  - [net-next,03/11] can: gs_usb: gs_usb_get_timestamp(): fix endpoint parameter for usb_control_msg_recv()
-    https://git.kernel.org/netdev/net-next/c/593b5e2f5a4a
-  - [net-next,04/11] can: gs_usb: add missing lock to protect struct timecounter::cycle_last
-    https://git.kernel.org/netdev/net-next/c/29a8c9ec9090
-  - [net-next,05/11] can: gs_usb: gs_can_open(): initialize time counter before starting device
-    https://git.kernel.org/netdev/net-next/c/103108cb9673
-  - [net-next,06/11] can: gs_usb: gs_cmd_reset(): rename variable holding struct gs_can pointer to dev
-    https://git.kernel.org/netdev/net-next/c/002467518688
-  - [net-next,07/11] can: gs_usb: convert from usb_control_msg() to usb_control_msg_{send,recv}()
-    https://git.kernel.org/netdev/net-next/c/3814ed27548a
-  - [net-next,08/11] can: gs_usb: gs_make_candev(): clean up error handling
-    https://git.kernel.org/netdev/net-next/c/68822f4e74f3
-  - [net-next,09/11] can: gs_usb: add switchable termination support
-    https://git.kernel.org/netdev/net-next/c/906e0e6886af
-  - [net-next,10/11] can: gs_usb: remove dma allocations
-    https://git.kernel.org/netdev/net-next/c/62f102c0d156
-  - [net-next,11/11] can: ctucanfd: Remove redundant dev_err call
-    https://git.kernel.org/netdev/net-next/c/6eed756408c6
+About the "can: c_can: don't cache TX messages for C_CAN cores" patch:
+Could it make sense to change the c_can_start_xmit in this way
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+-       if (idx < c_can_get_tx_tail(tx_ring))
+-               cmd &= ~IF_COMM_TXRQST; /* Cache the message */
++       if (idx < c_can_get_tx_tail(tx_ring)) {
++               if (priv->type == BOSCH_D_CAN) {
++                       cmd &= ~IF_COMM_TXRQST; /* Cache the message */
++               } else {
++                       netif_stop_queue(priv->dev);
++                       return NETDEV_TX_BUSY;
++               }
++       }
 
+without changing the c_can_get_tx_{free,busy} routines ?
 
+Thanks and regards,
+Dario
+
+> Please test both patches, but only apply one of them at a time. :)
+> 
+> regards,
+> Marc
+> 
+> -- 
+> Pengutronix e.K.                 | Marc Kleine-Budde           |
+> Embedded Linux                   | https://www.pengutronix.de  |
+> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
