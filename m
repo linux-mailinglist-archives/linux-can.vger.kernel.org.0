@@ -2,56 +2,67 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43AB45EC8B7
-	for <lists+linux-can@lfdr.de>; Tue, 27 Sep 2022 17:55:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FEB15ECBBC
+	for <lists+linux-can@lfdr.de>; Tue, 27 Sep 2022 19:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232570AbiI0Pzc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 27 Sep 2022 11:55:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43836 "EHLO
+        id S233313AbiI0RzM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 27 Sep 2022 13:55:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232616AbiI0PzA (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 27 Sep 2022 11:55:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA65422E9;
-        Tue, 27 Sep 2022 08:54:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 561AEB81C4A;
-        Tue, 27 Sep 2022 15:54:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2F19C433D7;
-        Tue, 27 Sep 2022 15:54:49 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Kr3veXtE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1664294087;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wXMcknmy52+bmB46p09vHJPvomoJDbcpYQo26BsrWTs=;
-        b=Kr3veXtEIYJhucAcuSAvEshBizlDQXyGGIXGapoKnEC2LiwD88o/LL20ffruaZuN3aDT2Z
-        MQ69gEkiOp64PvBXWN95uRnQMKTsez6G+ECQ15PirKNEyTc+74hFm1mqWJDIs+7m3K2B6K
-        RJ70WqkD4YocCQv9eXTM3l8R4GKmQO8=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 60cf2a05 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Tue, 27 Sep 2022 15:54:47 +0000 (UTC)
-Date:   Tue, 27 Sep 2022 17:54:43 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
-        pabeni@redhat.com, kvalo@kernel.org, johannes@sipsolutions.net,
-        linux-wireless@vger.kernel.org, mkl@pengutronix.de,
-        linux-can@vger.kernel.org
-Subject: Re: [PATCH net-next] net: drop the weight argument from
- netif_napi_add
-Message-ID: <YzMcw8S7fuSS9UPw@zx2c4.com>
-References: <20220927132753.750069-1-kuba@kernel.org>
+        with ESMTP id S233037AbiI0RzE (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 27 Sep 2022 13:55:04 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F99B7E3
+        for <linux-can@vger.kernel.org>; Tue, 27 Sep 2022 10:55:02 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-3450990b0aeso107457977b3.12
+        for <linux-can@vger.kernel.org>; Tue, 27 Sep 2022 10:55:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=tWpS4cEqVjCvAbrEpDrZ5jq3lmCtX8OGRlYF/P9XNV8=;
+        b=aI81aKFW+4dgqcToZisPeA4jtrgtLI5hDy+Cm0Mwnw3Ejr8SR4V2xB/zjlqPLSLI2Q
+         czwtAffY37UauybiIJFHhsz/Toihy02bT6l/NDNpcOrPHizj7QfEjRvtYM5GIhXfuqX7
+         GCOZ+7yIYsMcp4/5JBvMq3XLkL6ChR0Q/HorJVS6N5ATSLg3tdHQyLFx0mEa7QvC5VoQ
+         mQqawFfbMWUfJhyCjDqvj3AfkYWn72DQdJIGk0Pq3N8z5bGS3XbAEPubNAt4VLiwWiFC
+         Fa4ckKxIoZLKNol9BC9Lo4/0gIu93WgzTQio99Bb6BY8IDW2G97+eEkk/w8o97vUwz1C
+         gQbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=tWpS4cEqVjCvAbrEpDrZ5jq3lmCtX8OGRlYF/P9XNV8=;
+        b=7dHqAwgO5D3DmyO972SFqFj9xTt9q4Wb4sW4yoi70CaKGmNn/BoDGtGhi2B6d/9iv9
+         yMRjuxGP9LvIRohpwTfFSnapMD49nHGNCMcsVUuChzoMq5GCL3+Ssk9rXqZJ5XpvFJfE
+         lZ8io4KYOl8iWb0WNwl1J1lZcBr5yI736zVCOGflcnRjzUxac2WmHcMWNgBkJx6aCkVV
+         1wGoI9le5lfGQ4e7QJ7DyAP1PbEDUKg2DM7C7TNO6R4AXIP3K6KOBuDjTJjPFn1kjcaL
+         5yjHbophEicY97VNOC16mfWmYJ4ZihHCSloesYxV6sptyKDXVDPEllCdfePCFlogM4jc
+         7nLQ==
+X-Gm-Message-State: ACrzQf0bIPms0DhxPvIeFZS1uu255naDFV5WyrdIcY7XRV07Nz18sJIr
+        Nt4XV0pyZeYQPrO7Zpx66vzj47itAdgCj3fSbGlYJg==
+X-Google-Smtp-Source: AMsMyM52wMIxhgYM5ELWXtaWymd9neNz5hZdppDIvfylJWmhZCtnT2YZ8QouamPa8ksX5z3a0GGPERJkDnkuiW0UTkU=
+X-Received: by 2002:a81:98d:0:b0:352:b79c:4cc6 with SMTP id
+ 135-20020a81098d000000b00352b79c4cc6mr1557441ywj.467.1664301301055; Tue, 27
+ Sep 2022 10:55:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+References: <20220927132753.750069-1-kuba@kernel.org>
 In-Reply-To: <20220927132753.750069-1-kuba@kernel.org>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Tue, 27 Sep 2022 10:54:49 -0700
+Message-ID: <CANn89iL4m=aMjZ1XWFNWDyyyDBF1uhNocN0OFqhm2VMm_JQOog@mail.gmail.com>
+Subject: Re: [PATCH net-next] net: drop the weight argument from netif_napi_add
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     David Miller <davem@davemloft.net>,
+        netdev <netdev@vger.kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        kvalo@kernel.org, Johannes Berg <johannes@sipsolutions.net>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,31 +70,14 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 06:27:53AM -0700, Jakub Kicinski wrote:
+On Tue, Sep 27, 2022 at 6:28 AM Jakub Kicinski <kuba@kernel.org> wrote:
+>
 > We tell driver developers to always pass NAPI_POLL_WEIGHT
 > as the weight to netif_napi_add(). This may be confusing
 > to newcomers, drop the weight argument, those who really
 > need to tweak the weight can use netif_napi_add_weight().
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
->  drivers/net/wireguard/peer.c                  |  3 +--
 >
-> diff --git a/drivers/net/wireguard/peer.c b/drivers/net/wireguard/peer.c
-> index 1acd00ab2fbc..1cb502a932e0 100644
-> --- a/drivers/net/wireguard/peer.c
-> +++ b/drivers/net/wireguard/peer.c
-> @@ -54,8 +54,7 @@ struct wg_peer *wg_peer_create(struct wg_device *wg,
->  	skb_queue_head_init(&peer->staged_packet_queue);
->  	wg_noise_reset_last_sent_handshake(&peer->last_sent_handshake);
->  	set_bit(NAPI_STATE_NO_BUSY_POLL, &peer->napi.state);
-> -	netif_napi_add(wg->dev, &peer->napi, wg_packet_rx_poll,
-> -		       NAPI_POLL_WEIGHT);
-> +	netif_napi_add(wg->dev, &peer->napi, wg_packet_rx_poll);
->  	napi_enable(&peer->napi);
->  	list_add_tail(&peer->peer_list, &wg->peer_list);
->  	INIT_LIST_HEAD(&peer->allowedips_list);
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
-For the wireguard part,
-
-   Acked-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Sure, but this kind of patch makes backports harder.
+Not sure how confused are newcomers about this NAPI_POLL_WEIGHT....
