@@ -2,99 +2,88 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F0635EC488
-	for <lists+linux-can@lfdr.de>; Tue, 27 Sep 2022 15:33:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43AB45EC8B7
+	for <lists+linux-can@lfdr.de>; Tue, 27 Sep 2022 17:55:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232609AbiI0Ndj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 27 Sep 2022 09:33:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50042 "EHLO
+        id S232570AbiI0Pzc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 27 Sep 2022 11:55:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232535AbiI0NdT (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 27 Sep 2022 09:33:19 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11FE8832DE
-        for <linux-can@vger.kernel.org>; Tue, 27 Sep 2022 06:31:52 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1odAgT-0004Qu-4S; Tue, 27 Sep 2022 15:31:37 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 98235EE174;
-        Tue, 27 Sep 2022 13:31:34 +0000 (UTC)
-Date:   Tue, 27 Sep 2022 15:31:32 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
+        with ESMTP id S232616AbiI0PzA (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 27 Sep 2022 11:55:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA65422E9;
+        Tue, 27 Sep 2022 08:54:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 561AEB81C4A;
+        Tue, 27 Sep 2022 15:54:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2F19C433D7;
+        Tue, 27 Sep 2022 15:54:49 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Kr3veXtE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1664294087;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wXMcknmy52+bmB46p09vHJPvomoJDbcpYQo26BsrWTs=;
+        b=Kr3veXtEIYJhucAcuSAvEshBizlDQXyGGIXGapoKnEC2LiwD88o/LL20ffruaZuN3aDT2Z
+        MQ69gEkiOp64PvBXWN95uRnQMKTsez6G+ECQ15PirKNEyTc+74hFm1mqWJDIs+7m3K2B6K
+        RJ70WqkD4YocCQv9eXTM3l8R4GKmQO8=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 60cf2a05 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Tue, 27 Sep 2022 15:54:47 +0000 (UTC)
+Date:   Tue, 27 Sep 2022 17:54:43 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
 To:     Jakub Kicinski <kuba@kernel.org>
 Cc:     davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
         pabeni@redhat.com, kvalo@kernel.org, johannes@sipsolutions.net,
-        linux-wireless@vger.kernel.org, linux-can@vger.kernel.org
+        linux-wireless@vger.kernel.org, mkl@pengutronix.de,
+        linux-can@vger.kernel.org
 Subject: Re: [PATCH net-next] net: drop the weight argument from
  netif_napi_add
-Message-ID: <20220927133132.ze3wx54shojraa5a@pengutronix.de>
+Message-ID: <YzMcw8S7fuSS9UPw@zx2c4.com>
 References: <20220927132753.750069-1-kuba@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="sn3iwhk4ctenflmz"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 In-Reply-To: <20220927132753.750069-1-kuba@kernel.org>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-
---sn3iwhk4ctenflmz
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 27.09.2022 06:27:53, Jakub Kicinski wrote:
+On Tue, Sep 27, 2022 at 06:27:53AM -0700, Jakub Kicinski wrote:
 > We tell driver developers to always pass NAPI_POLL_WEIGHT
 > as the weight to netif_napi_add(). This may be confusing
 > to newcomers, drop the weight argument, those who really
 > need to tweak the weight can use netif_napi_add_weight().
->=20
+> 
 > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 > ---
->  drivers/net/can/ctucanfd/ctucanfd_base.c      |  2 +-
->  drivers/net/can/ifi_canfd/ifi_canfd.c         |  2 +-
->  drivers/net/can/m_can/m_can.c                 |  3 +--
+>  drivers/net/wireguard/peer.c                  |  3 +--
+>
+> diff --git a/drivers/net/wireguard/peer.c b/drivers/net/wireguard/peer.c
+> index 1acd00ab2fbc..1cb502a932e0 100644
+> --- a/drivers/net/wireguard/peer.c
+> +++ b/drivers/net/wireguard/peer.c
+> @@ -54,8 +54,7 @@ struct wg_peer *wg_peer_create(struct wg_device *wg,
+>  	skb_queue_head_init(&peer->staged_packet_queue);
+>  	wg_noise_reset_last_sent_handshake(&peer->last_sent_handshake);
+>  	set_bit(NAPI_STATE_NO_BUSY_POLL, &peer->napi.state);
+> -	netif_napi_add(wg->dev, &peer->napi, wg_packet_rx_poll,
+> -		       NAPI_POLL_WEIGHT);
+> +	netif_napi_add(wg->dev, &peer->napi, wg_packet_rx_poll);
+>  	napi_enable(&peer->napi);
+>  	list_add_tail(&peer->peer_list, &wg->peer_list);
+>  	INIT_LIST_HEAD(&peer->allowedips_list);
 
-Acked-by: Marc Kleine-Budde <mkl@pengutronix.de> # for CAN
+For the wireguard part,
 
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---sn3iwhk4ctenflmz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmMy+zEACgkQrX5LkNig
-013DrQgAnSKMI/Gmp2TfD4MpcjCCFFzRyLlfs/viJiu7YHBCsRclZMTAAjTAnyD1
-/t5maqlOkdRi0wZCqcu/kF7vgnbmNYuFfEw4RlAWGZl9AXXgo6jPXxz8qEpnlr5B
-5lQuaVneytM0+ky5WLWl3uqB6JG++Ra+L3jDESRAcwXiJNJPg92n2IglPENuBNxT
-s6CrSuetrV0OAvEaU8IJAtIYIIFjMy7P3itZY535ngx65mhiEomQ9Er3ohkRvCzi
-teo7zO/iutWshQQK1WKjNQ1P/L+aDvtAvGlnx5Sf5Ap4cYauwiywsqRjzlzdPVou
-EQLAVrG9cy8yPUyKXWpmvifg3osHlQ==
-=pEGT
------END PGP SIGNATURE-----
-
---sn3iwhk4ctenflmz--
+   Acked-by: Jason A. Donenfeld <Jason@zx2c4.com>
