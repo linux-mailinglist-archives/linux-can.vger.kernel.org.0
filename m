@@ -2,37 +2,62 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38FF95ED7A5
-	for <lists+linux-can@lfdr.de>; Wed, 28 Sep 2022 10:25:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B2B05ED7BB
+	for <lists+linux-can@lfdr.de>; Wed, 28 Sep 2022 10:29:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233333AbiI1IZh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 28 Sep 2022 04:25:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48196 "EHLO
+        id S233345AbiI1I3I (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 28 Sep 2022 04:29:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233181AbiI1IZb (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 28 Sep 2022 04:25:31 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02835183B9
-        for <linux-can@vger.kernel.org>; Wed, 28 Sep 2022 01:25:23 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1odSNc-0001ZV-Uc; Wed, 28 Sep 2022 10:25:20 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id AEF0DEF5F9;
-        Wed, 28 Sep 2022 08:25:19 +0000 (UTC)
-Date:   Wed, 28 Sep 2022 10:25:16 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Jacob Kroon <jacob.kroon@gmail.com>
+        with ESMTP id S233778AbiI1I27 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 28 Sep 2022 04:28:59 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1D42786CB
+        for <linux-can@vger.kernel.org>; Wed, 28 Sep 2022 01:28:56 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id a3so19228242lfk.9
+        for <linux-can@vger.kernel.org>; Wed, 28 Sep 2022 01:28:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=vYW28YD0Q2KT2L6+sGkwfdRyu9b683awRycWIxHGZa8=;
+        b=ejPnSR269opRrBe3pR4I0aqEO2lWl8hvsMWPneW7Udf0ENTkk40UiY48p15VpKezU5
+         Jb/2KS8ZpmO1KdKz2+Isq0j8xBsWmMzh8gR9PAGYYLFHRQUKcLwtFiIUtHI0GRv6/4eX
+         UNMuGX89HBnT0GakDc9gersr5n3p1oUAvMQptr0/215iLZSaAtHSokGVL+dDFlFr/guI
+         wnhYvmAJKvlMtrDp11UF4saIZvI4cm8vvb8BJRNZgNWNMm8zmAI77EpyI+nowh4BaDh6
+         6GoSwZOcwYMWZSKVujN+LdnbYDdWZ4Cd+pHM2EjjQpStV01OFRwvpK24c4ZmymfV4ZgZ
+         UNbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=vYW28YD0Q2KT2L6+sGkwfdRyu9b683awRycWIxHGZa8=;
+        b=Yutverb5xkxE9hbSAoXaOvn+jRrsON7DAQHVh4tCFC0Mk36oO6hmO2BshXC6NYw6mW
+         5sQt/G2trBAXpd0HFRx3mv/pk1f8wo0y/3I/gRQdcB4KdfuIu2Ejj1ZHbx4dI1io5krW
+         q8aVoxIAXGo1OH84SSL+geKlYa7CfWkjTshi76kNWOcbvEY4R14R8v+mgvSoRuKWYIob
+         4bNtt1Ufl8CTyls8fOzqZEGeOZSHYb07aOeWWkM85sh2MG4EVfCWosILMW9sIUWtV/gk
+         TLjr1MHq+Fa6NHlrdWDAFPKB5qfA3rkssrngVqsaCIERgStTDeyO1SPIZmrIJraBOTVf
+         g0ug==
+X-Gm-Message-State: ACrzQf0jHuyf16URoY7jXjMEwvooO+HfomEHfaResU1LeFkAdICS9dMp
+        O3apMnTM0gNjrn1uFcMI44b1TKq5+psrkUxx
+X-Google-Smtp-Source: AMsMyM5fVcHZdA9pTQaeg9GUskZMZYKdzjGJ/bPLZ1roLKMYeALEmYZwvXemXNkeRYKqfL4IPWWhyg==
+X-Received: by 2002:a19:dc54:0:b0:49f:53f3:9bcd with SMTP id f20-20020a19dc54000000b0049f53f39bcdmr13332703lfj.158.1664353735059;
+        Wed, 28 Sep 2022 01:28:55 -0700 (PDT)
+Received: from [192.168.10.102] (89-253-118-72.customers.ownit.se. [89.253.118.72])
+        by smtp.gmail.com with ESMTPSA id y9-20020ac255a9000000b00499cf3e3edcsm404908lfg.296.2022.09.28.01.28.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Sep 2022 01:28:54 -0700 (PDT)
+Message-ID: <1eff87d0-2e63-dee0-6df6-9ce1dead0e8b@gmail.com>
+Date:   Wed, 28 Sep 2022 10:28:53 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: CM-ITC, pch_can/c_can_pci, sendto() returning ENOBUFS
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
 Cc:     dariobin@libero.it, Oliver Hartkopp <socketcan@hartkopp.net>,
         linux-can@vger.kernel.org, wg@grandegger.com
-Subject: Re: CM-ITC, pch_can/c_can_pci, sendto() returning ENOBUFS
-Message-ID: <20220928082516.5hxt22y7u6cwjbmz@pengutronix.de>
 References: <0eb1dd1b-427a-92c5-22ef-97c557cfec6e@gmail.com>
  <20220905155416.pgvseb6uggc67ua4@pengutronix.de>
  <8c481a4e-9493-25ae-f4d7-c12dc98bc83e@gmail.com>
@@ -43,63 +68,38 @@ References: <0eb1dd1b-427a-92c5-22ef-97c557cfec6e@gmail.com>
  <1885528784.804387.1663962304792@mail1.libero.it>
  <a843df30-f1f9-f2dc-2d3f-4302c928c34c@gmail.com>
  <d9cf121c-de6c-b3e7-cb71-db505fc8c88f@gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6btkj2go4p5xkbqp"
-Content-Disposition: inline
-In-Reply-To: <d9cf121c-de6c-b3e7-cb71-db505fc8c88f@gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+ <20220928082516.5hxt22y7u6cwjbmz@pengutronix.de>
+Content-Language: en-US
+From:   Jacob Kroon <jacob.kroon@gmail.com>
+In-Reply-To: <20220928082516.5hxt22y7u6cwjbmz@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On 9/28/22 10:25, Marc Kleine-Budde wrote:
+> On 24.09.2022 07:17:25, Jacob Kroon wrote:
+>> Machine is still running with CAN network traffic working, so both patches
+>> at
+>>
+>> https://marc.info/?l=linux-can&m=166393304023574&w=2
+>> https://marc.info/?l=linux-can&m=166396200108947&w=2
+>>
+>> are working for me.
+> 
+> Can I add your Tested-by for my variant of the patch? That is:
+> 
+> | https://lore.kernel.org/all/20220923114223.726808-1-mkl@pengutronix.de
+> 
 
---6btkj2go4p5xkbqp
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Absolutely,
 
-On 24.09.2022 07:17:25, Jacob Kroon wrote:
-> Machine is still running with CAN network traffic working, so both patches
-> at
->=20
-> https://marc.info/?l=3Dlinux-can&m=3D166393304023574&w=3D2
-> https://marc.info/?l=3Dlinux-can&m=3D166396200108947&w=3D2
->=20
-> are working for me.
-
-Can I add your Tested-by for my variant of the patch? That is:
-
-| https://lore.kernel.org/all/20220923114223.726808-1-mkl@pengutronix.de
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---6btkj2go4p5xkbqp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmM0BOoACgkQrX5LkNig
-012R1wf/eikJ2y/A0s1KZ4wCOLKysuqpf3bM5ExOLBVKHk6X7xWsE2buHbkJNpN/
-ZwM+CPPPjYqVF0CZ+QgFfyGPuYhhJWvJO7r7zG6sya5Lyl9KecgG/PqivJLDd5Jn
-fgGnaqj5aUinTjKrxcC9SvnHmQ3E+duhvfi2riVcgvFpBRc2ztUfmRnqJURcuPWO
-oBX+3xPfk/SkMb6eiqtE/iH/Wc83pWwdthqBfrUtV0sscdSeil5nQOYfctA9oRTX
-J8dkTxfFvtikSpuMYp5bRLXklUaxJbJ1QIZPVb8MiPTWEypiP2WZKPG6b96w9ikx
-FfkR6S5esSMuDXFOrfmuWILPnrt02Q==
-=H6+q
------END PGP SIGNATURE-----
-
---6btkj2go4p5xkbqp--
+Regards
+Jacob
