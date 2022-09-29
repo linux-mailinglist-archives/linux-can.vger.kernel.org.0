@@ -2,83 +2,68 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0315E5EEBA5
-	for <lists+linux-can@lfdr.de>; Thu, 29 Sep 2022 04:20:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23E095EF388
+	for <lists+linux-can@lfdr.de>; Thu, 29 Sep 2022 12:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234530AbiI2CU3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 28 Sep 2022 22:20:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40684 "EHLO
+        id S235524AbiI2KbS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 29 Sep 2022 06:31:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234745AbiI2CU0 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 28 Sep 2022 22:20:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C0ECA1D26;
-        Wed, 28 Sep 2022 19:20:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F3D60B822C8;
-        Thu, 29 Sep 2022 02:20:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 98557C43142;
-        Thu, 29 Sep 2022 02:20:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664418021;
-        bh=6cn8FHaQcyYogSt4drg4rG8e23DcP74VAjMxE+GFZRY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Xm8V1v0fegjtNkLKuaIBk+WlLuu+wCu5irp40airw35khoSBsOZY+XrYmcq+Lsf/5
-         ZDdSWZW1IrzUfpC9syaTdr5VUViCJvsn0DTV7MBjepf6G5RQe9mLCCeP8HDp6l0SLZ
-         JBm1uGNAreAAnbtob8QxGY+ceLNBq0S/uFuTdJol6zV1DA6PndS2D00znxUBo5qmCw
-         h3Z0vafczOG5hM9QbzVBQr+egJOLN0+E8cceRMO6NmNQx3/q8B3JXmKDZ9T5NaWSeu
-         TZxjiN3edPrbaYdG8wLno7FVC5pZ1V+dq+5eB1qC/tj55akUdkDecVjSY4gOI4VUeu
-         yJMuDBsLObT0g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7F2DBE4D023;
-        Thu, 29 Sep 2022 02:20:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S235538AbiI2KbQ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 29 Sep 2022 06:31:16 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B580812FF10
+        for <linux-can@vger.kernel.org>; Thu, 29 Sep 2022 03:31:15 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id j188so1178591oih.0
+        for <linux-can@vger.kernel.org>; Thu, 29 Sep 2022 03:31:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date;
+        bh=2R9rezOeSZv7hb9r01mgXFWZD64uGjqRDhGdXAtulVg=;
+        b=eyzo70bbcYPNNclLKrohdRZDmNh5YQzQU1nS5669wUjMKRsd2WBD1kTnGZ+VeZ1m/e
+         vQRshfa7Y6FcHSxEiEiITL/U3ETvQ87KL/8/f+3rqYrRfIQ4SMtcxl2Tj6M47fmqdtPi
+         Cmg+rbuUrDfEbhz+gtO7aMlRDanbrawUEiqGh3dynJChRqpROGQQLvNEZSCUbBbk5NSR
+         P69uhrCau9hGovVqFGL1PZGTe+eTwUGIQeaPpjO7wEHumh3jkxLOBQIauaA6uNmMDZyJ
+         QuYeoiRTrwzakIn1ySCkv/UrY41HJwKKl22tDZEdWwJ5b3auSIDzdNgAQ+837dSeLzFN
+         wgfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=2R9rezOeSZv7hb9r01mgXFWZD64uGjqRDhGdXAtulVg=;
+        b=G9QcP43jw4iN/yMX+De70THwGQPY+8vhy0DT8ZlZFizTUHn9lk4fsNrCR0HqxWxGrO
+         HSCjypPBtnzC220gRMkrbzhJjZjfCP8DQrtdWFk8FPbRCkDganFk6NRvO35kCLL+TzF5
+         pq7Qw2j7Ce06SidsgS//lH0aDkSmqY4ddIwG/KF9y9ksEQUcOovtOCjtDWcI1FZzw6Aj
+         6dmsNfAjsiLiH93F2syFkoXB+bEbMhiVN/NRrUt4zg/gXhotiG03+ruEaDeGKluo1E88
+         whsVDos2popHTXjgC7kY2+ugwazEVr1SlE44l7oIxf42+hFwrcsjNpPiduvoiZei2QFf
+         xmCQ==
+X-Gm-Message-State: ACrzQf3vVaEUAwuC1eJ/You52usZHKwNlj5gWjjgYwzUGirre+vGDZnR
+        pSe6bwE5cZR9sWkbcSgRk6b9n4xDFlYzODvr4k8=
+X-Google-Smtp-Source: AMsMyM7BC4Fqvinl+T23s9BDIwDIn8+8gZD9heG3qE5vACSAsKzSKWfNBTRbw+XRHOoXfzLGlHPz0eTgzItq+8XgmnY=
+X-Received: by 2002:a05:6808:23ca:b0:350:92c4:3422 with SMTP id
+ bq10-20020a05680823ca00b0035092c43422mr1169764oib.144.1664447475041; Thu, 29
+ Sep 2022 03:31:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] net: drop the weight argument from netif_napi_add
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166441802151.18961.15973207341585394668.git-patchwork-notify@kernel.org>
-Date:   Thu, 29 Sep 2022 02:20:21 +0000
-References: <20220927132753.750069-1-kuba@kernel.org>
-In-Reply-To: <20220927132753.750069-1-kuba@kernel.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
-        pabeni@redhat.com, kvalo@kernel.org, johannes@sipsolutions.net,
-        linux-wireless@vger.kernel.org, mkl@pengutronix.de,
-        linux-can@vger.kernel.org
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6358:8407:b0:c8:de10:ec0f with HTTP; Thu, 29 Sep 2022
+ 03:31:14 -0700 (PDT)
+From:   ulrica mica <umica1778@gmail.com>
+Date:   Thu, 29 Sep 2022 03:31:14 -0700
+Message-ID: <CAPuk59epyiK=MHwvmYV=zwj7njKc7f-4zzrkCDUPjBTofKMgJg@mail.gmail.com>
+Subject: good morning
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Tue, 27 Sep 2022 06:27:53 -0700 you wrote:
-> We tell driver developers to always pass NAPI_POLL_WEIGHT
-> as the weight to netif_napi_add(). This may be confusing
-> to newcomers, drop the weight argument, those who really
-> need to tweak the weight can use netif_napi_add_weight().
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> 
-> [...]
-
-Here is the summary with links:
-  - [net-next] net: drop the weight argument from netif_napi_add
-    https://git.kernel.org/netdev/net-next/c/b48b89f9c189
-
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Hello dear
+Can i talk to you please?
+Ulrica.
