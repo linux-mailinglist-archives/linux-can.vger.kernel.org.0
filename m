@@ -2,54 +2,63 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED1F95F5026
-	for <lists+linux-can@lfdr.de>; Wed,  5 Oct 2022 09:06:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C521D5F5197
+	for <lists+linux-can@lfdr.de>; Wed,  5 Oct 2022 11:11:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbiJEHG0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 5 Oct 2022 03:06:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42064 "EHLO
+        id S230298AbiJEJLz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 5 Oct 2022 05:11:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiJEHGZ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 5 Oct 2022 03:06:25 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA666501A5
-        for <linux-can@vger.kernel.org>; Wed,  5 Oct 2022 00:06:24 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1ofyU1-0000Do-QQ; Wed, 05 Oct 2022 09:06:21 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 74914F4C26;
-        Wed,  5 Oct 2022 07:06:20 +0000 (UTC)
-Date:   Wed, 5 Oct 2022 09:06:18 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
+        with ESMTP id S230142AbiJEJLj (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 5 Oct 2022 05:11:39 -0400
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 857AF19C3F
+        for <linux-can@vger.kernel.org>; Wed,  5 Oct 2022 02:09:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1664960971;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=xlfH3BZa4HJZ8Msh7t/Nw589utgJHnAdR3gyITpIfNE=;
+    b=ib8OpYyEBoC0ORWSY59A7nw1yRHrnR2lTUryTT9iO+at+/XoTiD4G0aJqZ3UO9xNZC
+    gAt4jQBvP3/3ReV5kgHCNN0l/R+R3H4KtiCyAcYxry8QtD3CZv13ZPdn/UIN6yLmyuui
+    UB0O5ewMkP8+q6Uqe8zhmkw4jXdqpoicI0qz/aQ3+jytO4cRXVQ416MD3VTqQDfRoiWw
+    qe+zAVJ8HSV9aymX8A8C1lWo7d8a7N69fr+diuEUY9pJDQwKPxRWECJowifxCWIDj2W4
+    yqu5lyaEXIyo97XqeK+jdvFXPXL1q+OfJeBYFKbw8MRqoIKQGlUCmONMjED6MSZmpcVL
+    iQEQ==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytJSr6hfz3Vg=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a00:6020:1cfd:d100::923]
+    by smtp.strato.de (RZmta 48.1.3 AUTH)
+    with ESMTPSA id Y52aa0y9599VF7S
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Wed, 5 Oct 2022 11:09:31 +0200 (CEST)
+Message-ID: <3a880265-291c-f768-cbb5-85466d488f94@hartkopp.net>
+Date:   Wed, 5 Oct 2022 11:09:24 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [RFC can-next] can: remove obsolete PCH CAN driver
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
 Cc:     Jacob Kroon <jacob.kroon@gmail.com>, linux-can@vger.kernel.org,
         Dario Binacchi <dariobin@libero.it>,
         Wolfgang Grandegger <wg@grandegger.com>
-Subject: Re: [RFC can-next] can: remove obsolete PCH CAN driver
-Message-ID: <20221005070618.o3jdakrgzdvhkswh@pengutronix.de>
 References: <20220924174424.86541-1-socketcan@hartkopp.net>
  <f9b37775-edd5-2a5b-18bc-b34bb69b8324@gmail.com>
  <20220926082526.ofoderi7wrpyolff@pengutronix.de>
  <1653bdae-2ed0-7cc4-993e-cae922f1c524@gmail.com>
  <23216e28-49be-6461-9525-1faad3d439a7@hartkopp.net>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3gfmoykm3tklkhis"
-Content-Disposition: inline
-In-Reply-To: <23216e28-49be-6461-9525-1faad3d439a7@hartkopp.net>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+ <20221005070618.o3jdakrgzdvhkswh@pengutronix.de>
+Content-Language: en-US
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20221005070618.o3jdakrgzdvhkswh@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -57,42 +66,23 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---3gfmoykm3tklkhis
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On 04.10.2022 20:44:07, Oliver Hartkopp wrote:
-> Hi Marc,
->=20
-> now that net-next is closed for the merge window would you consider this
-> removal for the next can-next phase or is this something that can be still
-> applied after the merge window to 6.1-rc1?
+On 05.10.22 09:06, Marc Kleine-Budde wrote:
+> On 04.10.2022 20:44:07, Oliver Hartkopp wrote:
+>> Hi Marc,
+>>
+>> now that net-next is closed for the merge window would you consider this
+>> removal for the next can-next phase or is this something that can be still
+>> applied after the merge window to 6.1-rc1?
+> 
+> This will go into net-next once it's open again. Why do you ask?
 
-This will go into net-next once it's open again. Why do you ask?
+I just wasn't sure if such simple removals could also be applied in 
+early -rc stages. IIRC I've seen such things on the netdev list one or 
+two times before.
 
-regards,
-Marc
+But there is no pressure on this topic so the coming net-next phase 
+would be definitely fine.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---3gfmoykm3tklkhis
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmM9LOgACgkQrX5LkNig
-010peAgAqtWLnnK9B+5hLwHt+B9gMiqNTYi5zQTkkAYwQykRaBV3XKBiF6hGhZaJ
-vgrhfuX9CS6I5tx4Bh3PxMBqUpqRuPmFyBcWVNRSi1BR8KDXLfVrrmW/v+/zxHsw
-c1UOFVxlQuo1ZfB/j70VwkAiaRr1SZHx/OTUy6ghL11Imdbqa5A2k5MenIMTII0Y
-T4mHRXRCKrjK1+kQRz724oa+4f7VVlscxFE28lOX995eto6IK1RGV1oHk1l5ANiO
-MWvhC7iXnh0iUZdDtAHEI1eXFBFdONxwSSXxda98OwZxHfkEK8KNgfrhY6gHCw0O
-chvB4ctG+qKwElvINXkhdOJYYBOKUw==
-=moZ1
------END PGP SIGNATURE-----
-
---3gfmoykm3tklkhis--
+Thanks,
+Oliver
