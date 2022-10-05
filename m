@@ -2,63 +2,55 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C521D5F5197
-	for <lists+linux-can@lfdr.de>; Wed,  5 Oct 2022 11:11:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4C515F57F2
+	for <lists+linux-can@lfdr.de>; Wed,  5 Oct 2022 18:04:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230298AbiJEJLz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 5 Oct 2022 05:11:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33620 "EHLO
+        id S229946AbiJEQEN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 5 Oct 2022 12:04:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230142AbiJEJLj (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 5 Oct 2022 05:11:39 -0400
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 857AF19C3F
-        for <linux-can@vger.kernel.org>; Wed,  5 Oct 2022 02:09:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1664960971;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=xlfH3BZa4HJZ8Msh7t/Nw589utgJHnAdR3gyITpIfNE=;
-    b=ib8OpYyEBoC0ORWSY59A7nw1yRHrnR2lTUryTT9iO+at+/XoTiD4G0aJqZ3UO9xNZC
-    gAt4jQBvP3/3ReV5kgHCNN0l/R+R3H4KtiCyAcYxry8QtD3CZv13ZPdn/UIN6yLmyuui
-    UB0O5ewMkP8+q6Uqe8zhmkw4jXdqpoicI0qz/aQ3+jytO4cRXVQ416MD3VTqQDfRoiWw
-    qe+zAVJ8HSV9aymX8A8C1lWo7d8a7N69fr+diuEUY9pJDQwKPxRWECJowifxCWIDj2W4
-    yqu5lyaEXIyo97XqeK+jdvFXPXL1q+OfJeBYFKbw8MRqoIKQGlUCmONMjED6MSZmpcVL
-    iQEQ==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytJSr6hfz3Vg=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a00:6020:1cfd:d100::923]
-    by smtp.strato.de (RZmta 48.1.3 AUTH)
-    with ESMTPSA id Y52aa0y9599VF7S
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Wed, 5 Oct 2022 11:09:31 +0200 (CEST)
-Message-ID: <3a880265-291c-f768-cbb5-85466d488f94@hartkopp.net>
-Date:   Wed, 5 Oct 2022 11:09:24 +0200
+        with ESMTP id S229942AbiJEQEM (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 5 Oct 2022 12:04:12 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B7F57B2A2
+        for <linux-can@vger.kernel.org>; Wed,  5 Oct 2022 09:04:11 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1og6sT-00087I-83; Wed, 05 Oct 2022 18:04:09 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 01B34F5874;
+        Wed,  5 Oct 2022 16:04:06 +0000 (UTC)
+Date:   Wed, 5 Oct 2022 18:04:05 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Stefan =?utf-8?B?TcOkdGpl?= <Stefan.Maetje@esd.eu>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        "wg@grandegger.com" <wg@grandegger.com>
+Subject: Re: [PATCH v6 2/4] can: esd: add support for esd GmbH PCIe/402 CAN
+ interface family
+Message-ID: <20221005160405.xcxecyic3nqhuhht@pengutronix.de>
+References: <20211201220328.3079270-1-stefan.maetje@esd.eu>
+ <20211201220328.3079270-3-stefan.maetje@esd.eu>
+ <20220201172508.vvftyw2vy4uq2jpu@pengutronix.de>
+ <fa770d67ed8bb7feea08954ebf25d5c9bebbe700.camel@esd.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [RFC can-next] can: remove obsolete PCH CAN driver
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Jacob Kroon <jacob.kroon@gmail.com>, linux-can@vger.kernel.org,
-        Dario Binacchi <dariobin@libero.it>,
-        Wolfgang Grandegger <wg@grandegger.com>
-References: <20220924174424.86541-1-socketcan@hartkopp.net>
- <f9b37775-edd5-2a5b-18bc-b34bb69b8324@gmail.com>
- <20220926082526.ofoderi7wrpyolff@pengutronix.de>
- <1653bdae-2ed0-7cc4-993e-cae922f1c524@gmail.com>
- <23216e28-49be-6461-9525-1faad3d439a7@hartkopp.net>
- <20221005070618.o3jdakrgzdvhkswh@pengutronix.de>
-Content-Language: en-US
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20221005070618.o3jdakrgzdvhkswh@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ltk2dysu6dygmh2y"
+Content-Disposition: inline
+In-Reply-To: <fa770d67ed8bb7feea08954ebf25d5c9bebbe700.camel@esd.eu>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -66,23 +58,67 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
+--ltk2dysu6dygmh2y
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 05.10.22 09:06, Marc Kleine-Budde wrote:
-> On 04.10.2022 20:44:07, Oliver Hartkopp wrote:
->> Hi Marc,
->>
->> now that net-next is closed for the merge window would you consider this
->> removal for the next can-next phase or is this something that can be still
->> applied after the merge window to 6.1-rc1?
-> 
-> This will go into net-next once it's open again. Why do you ask?
+On 30.09.2022 22:15:59, Stefan M=C3=A4tje wrote:
+> I would like to resume the efforts to bring this driver in the Linux
+> kernel after being kicked off track in February by another project.
 
-I just wasn't sure if such simple removals could also be applied in 
-early -rc stages. IIRC I've seen such things on the netdev list one or 
-two times before.
+\o/
 
-But there is no pressure on this topic so the coming net-next phase 
-would be definitely fine.
+> I did a lot of the changes on the driver you recommended, but some
+> stuff is not yet clear to me. Please see my comments in-line of the
+> email below.
+>=20
+> My local developement is at the moment rebased to
+> linux-can-next:master on 7b584fbb36362340a2d9cfe459e447619eecebea.
+> Should I send a V7 of the patch (rebased to another commit)? How
+> should I proceed?
 
-Thanks,
-Oliver
+You can use latest net-next/main as base version.
+
+> You have commented on many type casts that they would not be needed.
+> But all of them had been introduced by me due to warnings of the
+> compiler in the style of "warning: conversion from =E2=80=98u32=E2=80=99 =
+{aka
+> =E2=80=98unsigned int=E2=80=99} to =E2=80=98u8=E2=80=99 {aka =E2=80=98uns=
+igned char=E2=80=99} may change value
+> [-Wconversion]". These are triggered by building the driver with "W=3D3"
+> as recommended in kernel documentation.
+
+Oh? Is there a recommendation for W=3D3? I can only find a W=3D1:
+
+| https://elixir.bootlin.com/linux/v6.0/source/Documentation/process/mainta=
+iner-netdev.rst#L235
+
+> Should these warnings generally be ignored and the casts be removed
+> then?
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--ltk2dysu6dygmh2y
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmM9qvIACgkQrX5LkNig
+012H7AgAiUQMOx+sXOYO27Kq5AYVPjxXpHYC3pL1XTDpXUwF+Q/1CKvfLSYz4XGN
+ayFxYF1AJ7+D7vH5TDorJRrxSpgnTy3QZXKg+IERvrYiqPptGYXi7hE3lrJlTC0T
+5vrpwfV4fvolcaf5D/fjADZyIbP9zfbZkMlu9/CjN0uweV1E0SEulHdthdr58RP2
+x8qao9pHWKuMbPUu8QL57XHV8waAmGiRtuLrMYxv/ZT1SJ/HwZrl7sx8xfLLaSlt
+1V4UT8VEsAnK3fI+NdmT1F8P/uuOT9OI/T6RCcfLMChHMA6lbJZQ1JXH2qS0yNOj
+c3F7Y1RILiQPXhL/r5maSCxMAQkQBg==
+=+S8j
+-----END PGP SIGNATURE-----
+
+--ltk2dysu6dygmh2y--
