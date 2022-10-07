@@ -2,102 +2,134 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 542945F74FA
-	for <lists+linux-can@lfdr.de>; Fri,  7 Oct 2022 09:57:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 937725F76F9
+	for <lists+linux-can@lfdr.de>; Fri,  7 Oct 2022 12:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbiJGH5A (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 7 Oct 2022 03:57:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55868 "EHLO
+        id S229514AbiJGKhk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 7 Oct 2022 06:37:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiJGH47 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 7 Oct 2022 03:56:59 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E13A87BE
-        for <linux-can@vger.kernel.org>; Fri,  7 Oct 2022 00:56:57 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1ogiDy-0008DF-0P; Fri, 07 Oct 2022 09:56:50 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        with ESMTP id S229472AbiJGKhb (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 7 Oct 2022 06:37:31 -0400
+X-Greylist: delayed 54571 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 07 Oct 2022 03:37:29 PDT
+Received: from relay2.mymailcheap.com (relay2.mymailcheap.com [151.80.165.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71651D57D2
+        for <linux-can@vger.kernel.org>; Fri,  7 Oct 2022 03:37:29 -0700 (PDT)
+Received: from filter2.mymailcheap.com (filter2.mymailcheap.com [91.134.140.82])
+        by relay2.mymailcheap.com (Postfix) with ESMTPS id 00F183ECD9;
+        Fri,  7 Oct 2022 12:37:28 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by filter2.mymailcheap.com (Postfix) with ESMTP id EB8662A7D6;
+        Fri,  7 Oct 2022 10:37:27 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at filter2.mymailcheap.com
+Received: from filter2.mymailcheap.com ([127.0.0.1])
+        by localhost (filter2.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 30-xcSmCWviF; Fri,  7 Oct 2022 10:37:26 +0000 (UTC)
+Received: from mail15.mymailcheap.com (mail15.mymailcheap.com [141.94.164.103])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by filter2.mymailcheap.com (Postfix) with ESMTPS;
+        Fri,  7 Oct 2022 10:37:26 +0000 (UTC)
+Received: from daniel6430.localnet (c-73-64-181-209.hsd1.pa.comcast.net [73.64.181.209])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 201DAF6BFB;
-        Fri,  7 Oct 2022 07:56:48 +0000 (UTC)
-Date:   Fri, 7 Oct 2022 09:56:47 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>, linux-can@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Subject: Re: [PATCH] can: kvaser_usb: Remove -Warray-bounds exception
-Message-ID: <20221007075647.3e2jm4g5qlytvqgo@pengutronix.de>
-References: <20221006192035.1742912-1-keescook@chromium.org>
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail15.mymailcheap.com (Postfix) with ESMTPSA id B26EE202C4;
+        Fri,  7 Oct 2022 10:37:25 +0000 (UTC)
+From:   "Daniel S. Trevitz" <dan@sstrev.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org,
+        Daniel Trevitz <daniel.trevitz@wika.com>,
+        Ryan Edwards <ryan.edwards@gmail.com>
+Subject: Re: [PATCH 1/1] Termination resistor documentation
+Date:   Fri, 07 Oct 2022 06:37:24 -0400
+Message-ID: <5016474.31r3eYUQgx@daniel6430>
+In-Reply-To: <20221007074117.5enbqlt4fno7vtlz@pengutronix.de>
+References: <4514353.LvFx2qVVIh@daniel6430> <20221007074117.5enbqlt4fno7vtlz@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mdrwwnddiarwtxpo"
-Content-Disposition: inline
-In-Reply-To: <20221006192035.1742912-1-keescook@chromium.org>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Friday, October 7, 2022 3:41:17 AM EDT Marc Kleine-Budde wrote:
+> On 06.10.2022 15:27:50, Daniel S. Trevitz wrote:
+> > Add documentation for how to use and setup the switchable termination
+> > resistor support for the can-controllers.
+> > 
+> > Signed-off-by: Daniel Trevitz <dan@sstrev.com>
+> > ---
+> > 
+> >  Documentation/networking/can.rst | 30 ++++++++++++++++++++++++++++++
+> >  1 file changed, 30 insertions(+)
+> > 
+> > diff --git a/Documentation/networking/can.rst
+> > b/Documentation/networking/can.rst index ebc822e605f5..bb39cfa4c502
+> > 100644
+> > --- a/Documentation/networking/can.rst
+> > +++ b/Documentation/networking/can.rst
+> > @@ -1148,6 +1148,36 @@ tuning on deep embedded systems'. The author is
+> > running a MPC603e> 
+> >  load without any problems ...
+> > 
+> > +Switchable Termination Resistors
+> > +--------------------------------
+> > +
+> > +CAN bus requires a specific impedance across the differential pair,
+> > +typically provided by two 120Ohm resistors on the farthest nodes of
+> > +the bus. Some CAN controllers support activating / deactivating a
+> > +termination resistor(s) to provide the correct impedance.::
+> > +
+> 
+> > +  - Query the available resistances:
+> You need double :: followed by a newline to mark as code.
+This whole section is a code block; :: is up three lines.
+> 
+> > +      $ ip -details link show can0
+> > +      ...
+> > +      termination 120 [ 0, 120
+> 
+> The closing ] is missing, please add it, even if the current ip command
+> doesn't print it. I just noticed it got lost in a cleanup patch in
+> iproute2.
+Okay
+> 
+> > +
+> 
+> > +  - Activate the terminating resistor:
+> same here
+> 
+> > +      $ ip link set dev can0 type can termination 120
+> > +
+> 
+> > +  - Deactivate the terminating resistor:
+> same here
+> 
+> > +      $ ip link set dev can0 type can termination 0
+> > +
+> > +To enable termination resistor support to a can-controller, either
+> > +implement in the controller's struct can-priv::
+> > +
+> > +    termination_const
+> > +    termination_const_cnt
+> > +    do_set_termination
+> > +
+> > +or add gpio control with the device tree entries from
+> > +Documentation/devicetree/bindings/net/can/can-controller.yaml
+> > +
+> > +
+> > 
+> >  The Virtual CAN Driver (vcan)
+> >  -----------------------------
+> 
+> Marc
 
---mdrwwnddiarwtxpo
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+-Dan
 
-On 06.10.2022 12:20:35, Kees Cook wrote:
-> GCC-12 emits false positive -Warray-bounds warnings with
-> CONFIG_UBSAN_SHIFT (-fsanitize=3Dshift). This is fixed in GCC 13[1],
-> and there is top-level Makefile logic to remove -Warray-bounds for
-> known-bad GCC versions staring with commit f0be87c42cbd ("gcc-12: disable
-> '-Warray-bounds' universally for now").
->=20
-> Remove the local work-around.
->=20
-> [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D105679
->=20
-> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Applied to linux-can-next/main.
 
-Thanks,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---mdrwwnddiarwtxpo
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmM/27wACgkQrX5LkNig
-010vAQgAkL2nVGUp5uFl5m5LUQQDiBi5hflSPSP1u7B8UrI7yuPAwLF+mlzv80PO
-eS+yMvKoAC6tiFPHS0p7tmBdxiJBZ4u8/64qOh73cx1qizqk6g9MTT3i8eOk0oY6
-bSgrhhwyYZAK67O7xueEJogtxKI41caGhX9KUvqEU/1qb7bNvZqUCGb9k4GtGSFA
-6ctpE/WJ158TWcgKOM8T6gM8e42Nnjt8C8JCODNmotLNMYtqZRaqa/56ECQ+oSVh
-GbG+h7E0A2+hZc926FXqEfDPy3gJJxYvpKSPVvJxGchm5PCmbg0rytte6P0Mp7w3
-9Un5ncNR6QnIXLGsNCG02X5lRz4B5A==
-=3Lk2
------END PGP SIGNATURE-----
-
---mdrwwnddiarwtxpo--
