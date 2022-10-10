@@ -2,142 +2,121 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F18DA5F9A51
-	for <lists+linux-can@lfdr.de>; Mon, 10 Oct 2022 09:46:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BF145F9D10
+	for <lists+linux-can@lfdr.de>; Mon, 10 Oct 2022 12:51:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232562AbiJJHqD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 10 Oct 2022 03:46:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57726 "EHLO
+        id S231699AbiJJKvO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 10 Oct 2022 06:51:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231774AbiJJHpm (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 10 Oct 2022 03:45:42 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F0867444
-        for <linux-can@vger.kernel.org>; Mon, 10 Oct 2022 00:42:18 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1ohn3L-00023y-Di; Mon, 10 Oct 2022 09:18:19 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 37F55F8F21;
-        Mon, 10 Oct 2022 07:03:21 +0000 (UTC)
-Date:   Mon, 10 Oct 2022 09:03:19 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Jeroen Hofstee <jhofstee@victronenergy.com>
-Cc:     linux-can@vger.kernel.org
-Subject: Re: [PATCH 4/6] can: gs_usb: add ability to enable / disable berr
- rerporting
-Message-ID: <20221010070319.kcmv2zo5gzd6uohx@pengutronix.de>
-References: <20221006162452.200322-1-mkl@pengutronix.de>
- <20221006162452.200322-5-mkl@pengutronix.de>
- <20221006163650.b6n2g44kl5d3ptq4@pengutronix.de>
- <6c4445d4-e494-4cbf-3b74-e6db4f37d522@victronenergy.com>
+        with ESMTP id S230514AbiJJKvO (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 10 Oct 2022 06:51:14 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F9C286CE;
+        Mon, 10 Oct 2022 03:51:12 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id p3-20020a17090a284300b0020a85fa3ffcso12753168pjf.2;
+        Mon, 10 Oct 2022 03:51:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=xDAJhO6nMeWEoNHiOlooadZpm12/jqYN+cZC7C+A+cU=;
+        b=X8rxYGns2BxQ0rORK5lw0t1/xZ5f20NItWAJX7RAfaCTGH2bhAA7wfzlafa7RYJnUk
+         r7EHv4NtDfS8+0M/09O0RoJokEHP4madb4Pxh3O7z6Am0Sap2FFnPFgVCwFLw8hUt9l2
+         CA3vL2ENcH8hIqcKS8I1NCdxoenWiIrTAxFWp6W5S0qf2XZiKmVEYL7rCpuCsHOcjTYj
+         lV6HMidga2tytXs5nZ2xVrgnROZV/m8TYX5Azit45G0tCoeQglfGY5oSghLWgMf3JRW7
+         Z6W4s5pGIbBaXlr1RILrFwstir8tXPQhaWfqBIU/Lw4GOxZmhC3m4YM290NvR9kD1KaI
+         TMbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xDAJhO6nMeWEoNHiOlooadZpm12/jqYN+cZC7C+A+cU=;
+        b=aNlyXfLg87s3DWkz+TmZGvZW84eRzZFdqDGf5HVylnyqqG0aERZCW/4a8EoGR0Tff0
+         njO4Alxg2Dvd5dTPuWIUdATDEacSWEKlXKuo9NozTlkaNBFj200WqJfRz6faZsmv7xbl
+         W0Wde6jomIPQbjQG3GrVTK7ufsnJUeoTRwVqcnsKg04G6NYBZGWtN9vG1IvqrF/XpX0J
+         KbGkYFOvB2iSpFCAhB7/8Ssykb9YjEITTLK7RkNXzZ6ooJmLxQG/XG4xRdiNXpDvN55U
+         uHQkxfGPYjTVV9OE3gfXnUh1CerUh/r1MH/CpvLfT3edv7gKf358i113cHN9RYwQq31B
+         0HXw==
+X-Gm-Message-State: ACrzQf1uNke5rv+VBESDz+9xcHtF+p/XldAJbGpyXPc2ZHbEqqoVnPJv
+        9RMd6X2MVyHgoHNrC7/VdOcWSyy0sDU=
+X-Google-Smtp-Source: AMsMyM4DTqQ8cOATpFoLxmw11Pf0bdewgdfPXjp2BItmroHRq4xdb0vNhpMNph+Qs8AP0Vt7UtLV5Q==
+X-Received: by 2002:a17:902:d54d:b0:180:202c:ad78 with SMTP id z13-20020a170902d54d00b00180202cad78mr16025103plf.84.1665399072017;
+        Mon, 10 Oct 2022 03:51:12 -0700 (PDT)
+Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
+        by smtp.gmail.com with ESMTPSA id a1-20020a170902710100b00178af82a000sm6279134pll.122.2022.10.10.03.51.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Oct 2022 03:51:11 -0700 (PDT)
+Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     linux-can@vger.kernel.org, David Ahern <dsahern@gmail.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        netdev@vger.kernel.org
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH] iplink_can: add missing `]' of the bitrate, dbitrate and termination arrays
+Date:   Mon, 10 Oct 2022 19:50:41 +0900
+Message-Id: <20221010105041.65736-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="alpxxskujg2e5ohl"
-Content-Disposition: inline
-In-Reply-To: <6c4445d4-e494-4cbf-3b74-e6db4f37d522@victronenergy.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+The command "ip --details link show canX" misses the closing bracket
+`]' of the bitrate, the dbitrate and the termination arrays. The JSON
+output is not impacted.
 
---alpxxskujg2e5ohl
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Change the first argument of close_json_array() from PRINT_JSON to
+PRINT_ANY to fix the problem. The second argument is already set
+correctly.
 
-On 09.10.2022 00:11:49, Jeroen Hofstee wrote:
-> Hi,
->=20
-> On 10/6/22 18:36, Marc Kleine-Budde wrote:
-> > On 06.10.2022 18:24:50, Marc Kleine-Budde wrote:
-> > > From: Jeroen Hofstee <jhofstee@victronenergy.com>
-> > >=20
-> > > The open source firmware candleLight report bus errors
-> > > unconditionally. This adds support to enable / disable bus error
-> > > reporting with the standard netlink property.
-> > I haven't checked the candleLight firmware, yet.
-> >=20
-> > If the unmodified firmware sends bus errors per default and we introduce
-> > BERR_REPORTING as suggested in this patch, we have to modify the default
-> > behavior for bus errors: By default the firmware will not send bus
-> > errors, but only if GS_CAN_MODE_BERR_REPORTING is requested during
-> > open().
-> >=20
-> > I'm not sure if we want to change the default behavior of the
-> > firmware....To work around this backwards compatibility issue we can
-> > explicitly turn BERR reporting on or off during open via
-> > GS_CAN_MODE_BERR_REPORTING_ON or GS_CAN_MODE_BERR_REPORTING_OFF.
->=20
-> It would look like this, untested:
->=20
-> subject: can: gs_usb: add ability to enable / disable berr rerporting
->=20
-> The open source firmware candleLight report bus errors
-> unconditionally. This adds support to enable / disable bus error
-> reporting with the standard netlink property.
->=20
-> Signed-off-by: Jeroen Hofstee <jeroen@myspectrum.nl>
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> ---
-> =C2=A0drivers/net/can/usb/gs_usb.c | 18 +++++++++++++++++-
-> =C2=A01 file changed, 17 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
-> index 7c1f13a90419..039e8d91ad88 100644
-> --- a/drivers/net/can/usb/gs_usb.c
-> +++ b/drivers/net/can/usb/gs_usb.c
-> @@ -135,6 +135,13 @@ struct gs_device_config {
-> =C2=A0/* GS_CAN_FEATURE_BT_CONST_EXT BIT(10) */
-> =C2=A0/* GS_CAN_FEATURE_TERMINATION BIT(11) */
->=20
-> +/* Previous versions of this driver didn't support the berr-reporting fl=
-ag,
-> + * this flag tells if berr-reporting is supported. When not set, the dev=
-ice
-> + * can default to its own preference to be backwards compatible.
-> + */
-> +#define GS_CAN_MODE_BERR_REPORTING_SET BIT(12)
-> +#define GS_CAN_MODE_BERR_REPORTING BIT(13)
+Fixes: 67f3c7a5cc0d ("iplink_can: use PRINT_ANY to factorize code and fix signedness")
+Reported-by: Marc Kleine-Budde <mkl@pengutronix.de> via vger.kernel.org>
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+---
+ ip/iplink_can.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-You've convinced me :) This is overengineered, and it "breaks" the nice
-1-to-1 mapping of feature and mode bits :)
+diff --git a/ip/iplink_can.c b/ip/iplink_can.c
+index 0e670a6c..9bbe3d95 100644
+--- a/ip/iplink_can.c
++++ b/ip/iplink_can.c
+@@ -519,7 +519,7 @@ static void can_print_opt(struct link_util *lu, FILE *f, struct rtattr *tb[])
+ 				   i < bitrate_cnt - 1 ? "%8u, " : "%8u",
+ 				   bitrate_const[i]);
+ 		}
+-		close_json_array(PRINT_JSON, " ]");
++		close_json_array(PRINT_ANY, " ]");
+ 	}
+ 
+ 	/* data bittiming is irrelevant if fixed bitrate is defined */
+@@ -606,7 +606,7 @@ static void can_print_opt(struct link_util *lu, FILE *f, struct rtattr *tb[])
+ 				   i < dbitrate_cnt - 1 ? "%8u, " : "%8u",
+ 				   dbitrate_const[i]);
+ 		}
+-		close_json_array(PRINT_JSON, " ]");
++		close_json_array(PRINT_ANY, " ]");
+ 	}
+ 
+ 	if (tb[IFLA_CAN_TERMINATION_CONST] && tb[IFLA_CAN_TERMINATION]) {
+@@ -623,7 +623,7 @@ static void can_print_opt(struct link_util *lu, FILE *f, struct rtattr *tb[])
+ 			print_hu(PRINT_ANY, NULL,
+ 				 i < trm_cnt - 1 ? "%hu, " : "%hu",
+ 				 trm_const[i]);
+-		close_json_array(PRINT_JSON, " ]");
++		close_json_array(PRINT_ANY, " ]");
+ 	}
+ 
+ 	if (tb[IFLA_CAN_CLOCK]) {
+-- 
+2.35.1
 
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---alpxxskujg2e5ohl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNDw7UACgkQrX5LkNig
-010cUQf/V63o30hOfVyvo+FFpzlgc1DeqdW/z2nC1nrK/bBYWcrCVcOZxrnWZEa5
-3DNgIbbwTDksgmEToU67vAF//QeBO/1bIHRHOTk0dl4Lm78j9B2w6DqjUoPl47TS
-n2mT5gLOdWu6FFQmdkZyP+ywWvXx3OzmmsboczaFFwyGWFHCSF5CbW6tSQx8tJPJ
-ZRqOduGzqmV0H1pJsn9MgIndErJZYe1cbrid4lSOPgObG/k/yyBmM86QqpT3+ler
-lhmn52lGW8brrSVNFou4CE2UTKW6an378S4E6C8WiMLiRZ3KZAuzVnxrEmew1E3K
-gS+ozPLx7ulkva5uf9b4nq8ZB3mCBA==
-=fZwN
------END PGP SIGNATURE-----
-
---alpxxskujg2e5ohl--
