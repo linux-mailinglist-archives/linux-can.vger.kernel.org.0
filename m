@@ -2,64 +2,61 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC8B25FA0EC
-	for <lists+linux-can@lfdr.de>; Mon, 10 Oct 2022 17:09:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A6F5FA3AC
+	for <lists+linux-can@lfdr.de>; Mon, 10 Oct 2022 20:53:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbiJJPJT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 10 Oct 2022 11:09:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59184 "EHLO
+        id S229607AbiJJSw7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 10 Oct 2022 14:52:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbiJJPJR (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 10 Oct 2022 11:09:17 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 513076B64B
-        for <linux-can@vger.kernel.org>; Mon, 10 Oct 2022 08:09:16 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id s20so17000190lfi.11
-        for <linux-can@vger.kernel.org>; Mon, 10 Oct 2022 08:09:16 -0700 (PDT)
+        with ESMTP id S229462AbiJJSw7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 10 Oct 2022 14:52:59 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2B7F753BB
+        for <linux-can@vger.kernel.org>; Mon, 10 Oct 2022 11:52:57 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id f37so17839275lfv.8
+        for <linux-can@vger.kernel.org>; Mon, 10 Oct 2022 11:52:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kvaser.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YOUPzlpuR8ElHymCzhvlZOpr1K/a0a5K9CA1bW8RjXM=;
-        b=ffnUko8BzlXPkp/Df73uyj3Zt8+b1AofrZJzaVibUmlwwPzJPW8yC4LoLH6cSdW4Yg
-         T3+Nbj0+6P8onYow2EWJbi4ZySrog2Sd5tWp4CXkyQRtIRnubXx4jmZSacF9bfUA2wGc
-         xLt3EypvU2jFn1b30q9V/e4Eph65CqXe2Gl/yEBcj3Y59xcsU3PC2xvLwIyvsmeA3EES
-         +E0b+JfVoXhj/LsmfkEUwvp4noMiROHKSmXXRAvX8hVxPKrciC3Cqh89/WpD6XWZGMlF
-         MfayBTqSGxTXGNZotsbgnIJonzNbqrZjeFeGaeIGbTh4M7QJsRsDfqkqmxwKDhNm0Uk+
-         GzQg==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q3cRxRSlS2mQMLaWclHW8xSm2vqvy6G9bHt9gKWVv2M=;
+        b=nOSm2T69lfVdqNc/JUcKf0iG7kcsgWzBn+ULZM5Sk0Ue9SffBogdGSd87Dvr2zWUT1
+         mYlAVAVQeMByjGfml6cZWBLbGLHexUDUcmPzfVUV+H8XNaXik3Lf6LS9FkEww33kiW+v
+         aTCOFs31mQybibT5Ta64IPhTqtJfuPEIliUI9qvDkkrLAjtvvqpnW/N5x/lrHe63apXS
+         DUAdrgWPyPKIGtUNdON2m8g/InZiMurFWv+6DdpOkhJHPz7YlqJUpU6nNauojh6a0oSu
+         b2pqYXzxKkRGPZeydyIrnC84tcheycLkgxr12G5H1IfNUYHTfHQqEEMHqlQYZHIorn6R
+         /w2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YOUPzlpuR8ElHymCzhvlZOpr1K/a0a5K9CA1bW8RjXM=;
-        b=TgE4lMkecjaUgwYGVMnf1ezrGSVk5VzmurzSJRpF7ujzDWKsmYa34akvzedd/enMHq
-         6eVl1vBtaUKM2vvcoyNmq2cUMhawMmPbetrVG+L+E7FRVBA5KvrYbkq63HaHZyLv/J4i
-         NJI4YlIdNT00Gz6+YcjXD+lA+r/6dDLPzu8e8lvvyEenFwMR0b0TReB4PLtt+5iZRaBg
-         psQSOXeskpwNOu9sBa17i278ex0ZN9udH63TaF6DTQDrmIdhwAXQ/ACafRmP4J2/YACi
-         x2xWx47rDxSjuJ9+81H/AZBDmplqcJvcc3wxze8lXmjXYWvc7PK8pz7gs23VeXclhPYe
-         O9bQ==
-X-Gm-Message-State: ACrzQf2FDO1XUGWvz9CLWiCJq65zAfQmqoLUXm1fJs0WuY+ZpCwghtnp
-        kNx1k4D1OmpKA86Cfu5Tn2JJwL+ILqI3+A==
-X-Google-Smtp-Source: AMsMyM5/tdfR1Q9AHKJ+/N8mU8kbePRzA4iYvR4LLXFAVOv8ZARV1M57owkfUDogsGQa4Xf8eOEvJQ==
-X-Received: by 2002:a05:6512:4011:b0:4a2:5148:9e48 with SMTP id br17-20020a056512401100b004a251489e48mr6505233lfb.337.1665414554700;
-        Mon, 10 Oct 2022 08:09:14 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Q3cRxRSlS2mQMLaWclHW8xSm2vqvy6G9bHt9gKWVv2M=;
+        b=J9KXidlHkuW+Y+iN9g7jsR14NO0gJ58EHJuCFDCyxixU7U5ngkXhcZZ0S5KyOs6lJq
+         TaaScOtrUJ/ujcopnsokhPZr/F4gkCXW+QenwRoWMTbxegYV+qeSpILzu/+zEj0O7Gd1
+         b30OXRHxcdeqlTISvwm1SGo5mTXGpqOX2Ar03gJNNE1f24Ep2VsALIRn/KnkQ36Wud1G
+         ZjaYsJKkZt+tA5K8ZDyG9eoYJGeDhG47yPE0s+Y/+JMJJC3cdaTYA124W2/GRnqHLdnz
+         sO1E2yYm4nelkgjIJ5yn7L6c6P0c4XPv3Te0edhjuZhKW4i0hDiDchAvWx5RHA9x4zf+
+         N+qg==
+X-Gm-Message-State: ACrzQf3nwFZsZEWu3Hfvh1s9akfZYtXbYsRwNtz6sVcgySsUe492EC3d
+        NTPnRTDx+nhvUbg2OfELvAuvainJz+UfRw==
+X-Google-Smtp-Source: AMsMyM6rFfNyfIhW4tv/p6iYTMXnN1xGoMWaj4MxQlFawweNyDIDZM6KEmWWrwCHRpm45z5l0MdLYA==
+X-Received: by 2002:a05:6512:6ce:b0:4a2:530a:33d0 with SMTP id u14-20020a05651206ce00b004a2530a33d0mr7636293lff.270.1665427975989;
+        Mon, 10 Oct 2022 11:52:55 -0700 (PDT)
 Received: from archyz.. (h-155-4-68-234.A785.priv.bahnhof.se. [155.4.68.234])
-        by smtp.gmail.com with ESMTPSA id q7-20020ac24a67000000b0049ebc44994fsm1450280lfp.128.2022.10.10.08.09.08
+        by smtp.gmail.com with ESMTPSA id b4-20020a056512070400b004a2386b8ce6sm1517769lfs.207.2022.10.10.11.52.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Oct 2022 08:09:09 -0700 (PDT)
+        Mon, 10 Oct 2022 11:52:55 -0700 (PDT)
 From:   Jimmy Assarsson <extja@kvaser.com>
 To:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
         Anssi Hannula <anssi.hannula@bitwise.fi>
-Cc:     Jimmy Assarsson <jimmyassarsson@gmail.com>, stable@vger.kernel.org,
+Cc:     Jimmy Assarsson <jimmyassarsson@gmail.com>,
         Jimmy Assarsson <extja@kvaser.com>
-Subject: [PATCH v5 4/4] can: kvaser_usb_leaf: Fix CAN state after restart
-Date:   Mon, 10 Oct 2022 17:08:29 +0200
-Message-Id: <20221010150829.199676-5-extja@kvaser.com>
+Subject: [PATCH can-next v5 00/11] can: kvaser_usb: Fixes and improvements
+Date:   Mon, 10 Oct 2022 20:52:26 +0200
+Message-Id: <20221010185237.319219-1-extja@kvaser.com>
 X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221010150829.199676-1-extja@kvaser.com>
-References: <20221010150829.199676-1-extja@kvaser.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,52 +68,42 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Anssi Hannula <anssi.hannula@bitwise.fi>
-
-can_restart() expects CMD_START_CHIP to set the error state to
-ERROR_ACTIVE as it calls netif_carrier_on() immediately afterwards.
-
-Otherwise the user may immediately trigger restart again and hit a
-BUG_ON() in can_restart().
-
-Fix kvaser_usb_leaf set_mode(CMD_START_CHIP) to set the expected state.
-
-Cc: stable@vger.kernel.org
-Fixes: 080f40a6fa28 ("can: kvaser_usb: Add support for Kvaser CAN/USB devices")
-Tested-by: Jimmy Assarsson <extja@kvaser.com>
-Signed-off-by: Anssi Hannula <anssi.hannula@bitwise.fi>
-Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
----
 Changes in v5:
- - Split series and rebased
+ - Split series [1], since v4 got rejected [2].
+   This part only contains non-critical fixes and improvements.
 
-Changes in v4:
- - No changes
+Note: This series depend on changes in [3]
 
-Changes in v3:
- - Rebased on 1d5eeda23f36 ("can: kvaser_usb: advertise timestamping capabilities and add ioctl support")
- - Add stable to CC
- - Add S-o-b
+[1]
+https://lore.kernel.org/linux-can/20220903182344.139-1-extja@kvaser.com
+[2]
+https://lore.kernel.org/linux-can/20220920192708.jcvyph3ec7lscuqj@pengutronix.de
+[3]
+https://lore.kernel.org/linux-can/20221010150829.199676-1-extja@kvaser.com/T/#m77a503db16c46024601e0d41fed60a806b02c15f
 
-Changes in v2:
-  - Rebased on b3b6df2c56d8 ("can: kvaser_usb: kvaser_usb_leaf: fix bittiming limits")
+Anssi Hannula (6):
+  can: kvaser_usb: Fix possible completions during init_completion
+  can: kvaser_usb_leaf: Set Warning state even without bus errors
+  can: kvaser_usb_leaf: Fix improved state not being reported
+  can: kvaser_usb_leaf: Fix wrong CAN state after stopping
+  can: kvaser_usb_leaf: Ignore stale bus-off after start
+  can: kvaser_usb_leaf: Fix bogus restart events
 
- drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c | 2 ++
- 1 file changed, 2 insertions(+)
+Jimmy Assarsson (5):
+  can: kvaser_usb: kvaser_usb_leaf: Get capabilities from device
+  can: kvaser_usb: kvaser_usb_leaf: Rename {leaf,usbcan}_cmd_error_event
+    to {leaf,usbcan}_cmd_can_error_event
+  can: kvaser_usb: kvaser_usb_leaf: Handle CMD_ERROR_EVENT
+  can: kvaser_usb: Add struct kvaser_usb_busparams
+  can: kvaser_usb: Compare requested bittiming parameters with actual
+    parameters in do_set_{,data}_bittiming
 
-diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
-index 59c220ef3049..50f2ac8319ff 100644
---- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
-+++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
-@@ -1431,6 +1431,8 @@ static int kvaser_usb_leaf_set_mode(struct net_device *netdev,
- 		err = kvaser_usb_leaf_simple_cmd_async(priv, CMD_START_CHIP);
- 		if (err)
- 			return err;
-+
-+		priv->can.state = CAN_STATE_ERROR_ACTIVE;
- 		break;
- 	default:
- 		return -EOPNOTSUPP;
+ drivers/net/can/usb/kvaser_usb/kvaser_usb.h   |  30 +-
+ .../net/can/usb/kvaser_usb/kvaser_usb_core.c  | 115 ++++-
+ .../net/can/usb/kvaser_usb/kvaser_usb_hydra.c | 164 ++++--
+ .../net/can/usb/kvaser_usb/kvaser_usb_leaf.c  | 468 ++++++++++++++++--
+ 4 files changed, 682 insertions(+), 95 deletions(-)
+
 -- 
 2.38.0
 
