@@ -2,93 +2,103 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C0735FAD1D
-	for <lists+linux-can@lfdr.de>; Tue, 11 Oct 2022 08:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F03CA5FADB2
+	for <lists+linux-can@lfdr.de>; Tue, 11 Oct 2022 09:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229446AbiJKG5l (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 11 Oct 2022 02:57:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38618 "EHLO
+        id S229755AbiJKHsY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 11 Oct 2022 03:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbiJKG5l (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 11 Oct 2022 02:57:41 -0400
+        with ESMTP id S229501AbiJKHsX (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 11 Oct 2022 03:48:23 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B3E80F6E
-        for <linux-can@vger.kernel.org>; Mon, 10 Oct 2022 23:57:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0858D5A83D
+        for <linux-can@vger.kernel.org>; Tue, 11 Oct 2022 00:48:21 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1oi9Cs-0001ZS-7h; Tue, 11 Oct 2022 08:57:38 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        id 1oi9zw-0007cq-9O
+        for linux-can@vger.kernel.org; Tue, 11 Oct 2022 09:48:20 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id BA6E9F9C93
+        for <linux-can@vger.kernel.org>; Tue, 11 Oct 2022 07:48:19 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id BA5E6F9C0B;
-        Tue, 11 Oct 2022 06:57:36 +0000 (UTC)
-Date:   Tue, 11 Oct 2022 08:57:34 +0200
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 9DB50F9C8C;
+        Tue, 11 Oct 2022 07:48:18 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 69173efa;
+        Tue, 11 Oct 2022 07:48:17 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Jimmy Assarsson <extja@kvaser.com>
-Cc:     linux-can@vger.kernel.org,
-        Anssi Hannula <anssi.hannula@bitwise.fi>,
-        Jimmy Assarsson <jimmyassarsson@gmail.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v5 0/4] can: kvaser_usb: Various fixes
-Message-ID: <20221011065734.a3mjk7hnx4xtuvfk@pengutronix.de>
-References: <20221010150829.199676-1-extja@kvaser.com>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH net 0/4] pull-request: can 2022-10-11
+Date:   Tue, 11 Oct 2022 09:48:11 +0200
+Message-Id: <20221011074815.397301-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zcbitiktxcidjbv2"
-Content-Disposition: inline
-In-Reply-To: <20221010150829.199676-1-extja@kvaser.com>
+Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello Jakub, hello David,
 
---zcbitiktxcidjbv2
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+this is a pull request of 4 patches for net/main.
 
-On 10.10.2022 17:08:25, Jimmy Assarsson wrote:
-> Changes in v5:
->  - Split series [1], keept only critical bug fixes that should go into
->    stable, since v4 got rejected [2].
->    Non-critical fixes are posted in a separate series.
+Anssi Hannula and Jimmy Assarsson contribute 4 patches for the
+kvaser_usb driver. A check for actual received length of USB transfers
+is added, the use of an uninitialized completion is fixed, the TX
+queue is re-synced after restart, and the CAN state is fixed after
+restart.
 
-Looks much better now. Added to linux-can/main.
-
-Thanks,
+regards,
 Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+---
 
---zcbitiktxcidjbv2
-Content-Type: application/pgp-signature; name="signature.asc"
+The following changes since commit b15e2e49bfc4965d86b9bc4a8426d53ec90a7192:
 
------BEGIN PGP SIGNATURE-----
+  nfp: flower: fix incorrect struct type in GRE key_size (2022-10-10 18:00:43 -0700)
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNFE9sACgkQrX5LkNig
-011M7Af+OR297o5tgXYrzju+6oGAPkfxisg0d7gDb3OqlHHaYUpHbwCtf/0xmnzr
-dwJ2oXyMdn6UW8R142YXQSfZzlYbPWMyld/JS7VC80IzVyUqxMpjR1Bkn9L3EtCx
-EbgpnzXF/SixttsfRp5Yw+zFUgB7fes3bZaqQUEWWiNWr4zabKagFG+b7VJIgaGb
-l6pjNE514S+xPYuZYHlr3NNPiF6AWjURF98ZcCYBSCJRioZ0rMCOwBk3xWCdMyed
-zGER/IG7rkyzVST8OsYiYeqBMuuS4k45wZC1TS+5lTLxHZIkD+SoIxGuqNZZpZ5C
-0JofmRq/QYSnIvB6CiEBb+OQBtXqAg==
-=L4z0
------END PGP SIGNATURE-----
+are available in the Git repository at:
 
---zcbitiktxcidjbv2--
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-6.1-20221011
+
+for you to fetch changes up to 8183602b8cbc4d865068c6c5705228760d30b003:
+
+  Merge patch series "can: kvaser_usb: Various fixes" (2022-10-11 08:51:22 +0200)
+
+----------------------------------------------------------------
+linux-can-fixes-for-6.1-20221011
+
+----------------------------------------------------------------
+Anssi Hannula (4):
+      can: kvaser_usb_leaf: Fix overread with an invalid command
+      can: kvaser_usb: Fix use of uninitialized completion
+      can: kvaser_usb_leaf: Fix TX queue out of sync after restart
+      can: kvaser_usb_leaf: Fix CAN state after restart
+
+Marc Kleine-Budde (1):
+      Merge patch series "can: kvaser_usb: Various fixes"
+
+ drivers/net/can/usb/kvaser_usb/kvaser_usb.h       |  2 +
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c  |  3 +-
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c |  2 +-
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c  | 79 +++++++++++++++++++++++
+ 4 files changed, 84 insertions(+), 2 deletions(-)
+
+
