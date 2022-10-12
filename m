@@ -2,56 +2,52 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7FA05FC09D
-	for <lists+linux-can@lfdr.de>; Wed, 12 Oct 2022 08:27:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFA865FC15F
+	for <lists+linux-can@lfdr.de>; Wed, 12 Oct 2022 09:45:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbiJLG1H (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 12 Oct 2022 02:27:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36280 "EHLO
+        id S229537AbiJLHpn (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 12 Oct 2022 03:45:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiJLG1G (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 12 Oct 2022 02:27:06 -0400
-Received: from mxd2.seznam.cz (mxd2.seznam.cz [IPv6:2a02:598:2::210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB73A99FB;
-        Tue, 11 Oct 2022 23:27:05 -0700 (PDT)
-Received: from email.seznam.cz
-        by email-smtpc1b.ng.seznam.cz (email-smtpc1b.ng.seznam.cz [10.23.13.15])
-        id 555b47cbb1f794f55486e6a5;
-        Wed, 12 Oct 2022 08:26:31 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seznam.cz; s=beta;
-        t=1665555991; bh=zaMVf81+peIjjQCoUMAqrj52UKkM4T1hKf0Aa0rWato=;
-        h=Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:
-         References:MIME-Version:Content-Transfer-Encoding;
-        b=JEIt4zgucI7V/jJTXwTKBz2QkFGliVO/DvRIp51nLOQqNpYcgodIX+69mFnuI/3dI
-         XIB8jFTUTrJ3X0mA0ARVZhIMrY0f19t+fk8hgaKv2aYdVwNOS6xS0PLBEwDNtMdec5
-         JMtyR3sUpxQxS8B+NqL5tSDPgoJBFJjTlZuetr0I=
-Received: from localhost.localdomain (2a02:8308:900d:2400:bba2:4592:a1de:fd80 [2a02:8308:900d:2400:bba2:4592:a1de:fd80])
-        by email-relay16.ko.seznam.cz (Seznam SMTPD 1.3.137) with ESMTP;
-        Wed, 12 Oct 2022 08:26:29 +0200 (CEST)  
-From:   Matej Vasilevski <matej.vasilevski@seznam.cz>
-To:     Pavel Pisa <pisa@cmp.felk.cvut.cz>,
-        Ondrej Ille <ondrej.ille@gmail.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Matej Vasilevski <matej.vasilevski@seznam.cz>
-Subject: [PATCH v5 4/4] can: ctucanfd: remove __maybe_unused from suspend/resume callbacks
-Date:   Wed, 12 Oct 2022 08:25:58 +0200
-Message-Id: <20221012062558.732930-5-matej.vasilevski@seznam.cz>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221012062558.732930-1-matej.vasilevski@seznam.cz>
-References: <20221012062558.732930-1-matej.vasilevski@seznam.cz>
+        with ESMTP id S229506AbiJLHp2 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 12 Oct 2022 03:45:28 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C2CE27FEC
+        for <linux-can@vger.kernel.org>; Wed, 12 Oct 2022 00:45:26 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oiWQe-00060m-TA
+        for linux-can@vger.kernel.org; Wed, 12 Oct 2022 09:45:24 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 45647FB359
+        for <linux-can@vger.kernel.org>; Wed, 12 Oct 2022 07:42:09 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 2A562FB352;
+        Wed, 12 Oct 2022 07:42:08 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 9d159858;
+        Wed, 12 Oct 2022 07:42:07 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     linux-can@vger.kernel.org
+Cc:     Vivek Yadav <vivek.2311@samsung.com>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [RFC] can: m_can: clean up LEC error handling
+Date:   Wed, 12 Oct 2022 09:42:05 +0200
+Message-Id: <20221012074205.691384-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,29 +55,60 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Those two functions are always used, because they are exported symbols.
-
-Spotted-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Signed-off-by: Matej Vasilevski <matej.vasilevski@seznam.cz>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/ctucanfd/ctucanfd.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/can/m_can/m_can.c | 15 ++++++++-------
+ drivers/net/can/m_can/m_can.h |  2 +-
+ 2 files changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/net/can/ctucanfd/ctucanfd.h b/drivers/net/can/ctucanfd/ctucanfd.h
-index cf4d8cc5349e..756b46076f98 100644
---- a/drivers/net/can/ctucanfd/ctucanfd.h
-+++ b/drivers/net/can/ctucanfd/ctucanfd.h
-@@ -90,8 +90,8 @@ int ctucan_probe_common(struct device *dev, void __iomem *addr,
- 						struct net_device *ndev));
- void ctucan_remove_common(struct ctucan_priv *priv);
+diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+index dcb582563d5e..ebdd3c164d7b 100644
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -816,11 +816,9 @@ static void m_can_handle_other_err(struct net_device *dev, u32 irqstatus)
+ 		netdev_err(dev, "Message RAM access failure occurred\n");
+ }
  
--int ctucan_suspend(struct device *dev) __maybe_unused;
--int ctucan_resume(struct device *dev) __maybe_unused;
-+int ctucan_suspend(struct device *dev);
-+int ctucan_resume(struct device *dev);
- int ctucan_runtime_resume(struct device *dev);
- int ctucan_runtime_suspend(struct device *dev);
+-static inline bool is_lec_err(u32 psr)
++static inline bool is_lec_err(u8 lec)
+ {
+-	psr &= LEC_UNUSED;
+-
+-	return psr && (psr != LEC_UNUSED);
++	return lec != LEC_NO_ERROR && lec != LEC_NO_CHANGE;
+ }
  
+ static inline bool m_can_is_protocol_err(u32 irqstatus)
+@@ -875,9 +873,12 @@ static int m_can_handle_bus_errors(struct net_device *dev, u32 irqstatus,
+ 		work_done += m_can_handle_lost_msg(dev);
+ 
+ 	/* handle lec errors on the bus */
+-	if ((cdev->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING) &&
+-	    is_lec_err(psr))
+-		work_done += m_can_handle_lec_err(dev, psr & LEC_UNUSED);
++	if (cdev->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING) {
++		u8 lec = FIELD_GET(PSR_LEC_MASK, psr);
++
++		if (is_lec_err(lec))
++			work_done += m_can_handle_lec_err(dev, lec);
++	}
+ 
+ 	/* handle protocol errors in arbitration phase */
+ 	if ((cdev->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING) &&
+diff --git a/drivers/net/can/m_can/m_can.h b/drivers/net/can/m_can/m_can.h
+index 4c0267f9f297..52563c048732 100644
+--- a/drivers/net/can/m_can/m_can.h
++++ b/drivers/net/can/m_can/m_can.h
+@@ -38,7 +38,7 @@ enum m_can_lec_type {
+ 	LEC_BIT1_ERROR,
+ 	LEC_BIT0_ERROR,
+ 	LEC_CRC_ERROR,
+-	LEC_UNUSED,
++	LEC_NO_CHANGE,
+ };
+ 
+ enum m_can_mram_cfg {
 -- 
-2.25.1
+2.35.1
+
 
