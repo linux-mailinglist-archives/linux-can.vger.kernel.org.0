@@ -2,164 +2,127 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D6D85FBF8B
-	for <lists+linux-can@lfdr.de>; Wed, 12 Oct 2022 05:46:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58AE35FC099
+	for <lists+linux-can@lfdr.de>; Wed, 12 Oct 2022 08:27:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229477AbiJLDq2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 11 Oct 2022 23:46:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45816 "EHLO
+        id S229698AbiJLG1H (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 12 Oct 2022 02:27:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiJLDq0 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 11 Oct 2022 23:46:26 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA469796BA
-        for <linux-can@vger.kernel.org>; Tue, 11 Oct 2022 20:46:23 -0700 (PDT)
-Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20221012034619epoutp022ad8209aaed3a143030deaf1553bbba8~dNZuEavcn1735617356epoutp02x
-        for <linux-can@vger.kernel.org>; Wed, 12 Oct 2022 03:46:19 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20221012034619epoutp022ad8209aaed3a143030deaf1553bbba8~dNZuEavcn1735617356epoutp02x
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1665546379;
-        bh=9Z/+w+F454z0H7x0XmWxlYencJ1CYBTi6E82IACKXlc=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=mD7LdkPo8qKXm5P7YzrOSpYY0xHfZejYeUoKbv1z7Fn/FNMTgyDqew83J/KzOakWO
-         OxYMO2YbQtAX0BBecfrTjB06San1xxpN8pPHOjX0nt8CvbBJfiYE/P9J/fal2xKoHR
-         MjJtn6zzoEvdpUKau+2hHymgFM0RBtIa2r+/Jsxs=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20221012034618epcas5p1a27ca887871381c60ecbad50866ea445~dNZtZCbiH0912109121epcas5p1Z;
-        Wed, 12 Oct 2022 03:46:18 +0000 (GMT)
-Received: from epsmges5p2new.samsung.com (unknown [182.195.38.182]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4MnJTz0sMpz4x9Q1; Wed, 12 Oct
-        2022 03:46:15 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        50.8B.39477.68836436; Wed, 12 Oct 2022 12:46:15 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-        20221011120147epcas5p45049f7c0428a799c005b6ab77b428128~dAhCDyTuS1761517615epcas5p4P;
-        Tue, 11 Oct 2022 12:01:47 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20221011120147epsmtrp222a75feb8614315677f467942b54324c~dAhCC9G1R2226422264epsmtrp2c;
-        Tue, 11 Oct 2022 12:01:47 +0000 (GMT)
-X-AuditID: b6c32a4a-259fb70000019a35-4d-634638862f05
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        56.32.18644.A2B55436; Tue, 11 Oct 2022 21:01:47 +0900 (KST)
-Received: from cheetah.sa.corp.samsungelectronics.net (unknown
-        [107.109.115.53]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20221011120144epsmtip2ff82626fc431fb636abb0859cf6df5f6~dAg-kpFeb1451514515epsmtip2X;
-        Tue, 11 Oct 2022 12:01:44 +0000 (GMT)
-From:   Vivek Yadav <vivek.2311@samsung.com>
-To:     rcsekar@samsung.com, wg@grandegger.com, mkl@pengutronix.de,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, pankaj.dubey@samsung.com
+        with ESMTP id S229633AbiJLG1G (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 12 Oct 2022 02:27:06 -0400
+Received: from mxd1.seznam.cz (mxd1.seznam.cz [IPv6:2a02:598:a::78:210])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A5CB8996C;
+        Tue, 11 Oct 2022 23:27:03 -0700 (PDT)
+Received: from email.seznam.cz
+        by email-smtpc2a.ko.seznam.cz (email-smtpc2a.ko.seznam.cz [10.53.10.45])
+        id 54e165dfb04db6e1553cc4b1;
+        Wed, 12 Oct 2022 08:26:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seznam.cz; s=beta;
+        t=1665555973; bh=wpmlIN258XfWIeGbhbj967WfqtzvizDK2ia92GmgakM=;
+        h=Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
+         Content-Transfer-Encoding;
+        b=Al5Gaw89P/TEsSvIbDGeGeFw1GMFgdVVVexo3v53qe949QzwO/XFn3GwabY7spAe5
+         mKDUBUzV3t1/srnkNpXZPx/1AO8LehSZ1uuB2homALrh+ZOuEvWmdta6yahvwxhACu
+         IgfUHRNE6hiuAxOO2l7d6s4ERQ0imprB3VLj7iRU=
+Received: from localhost.localdomain (2a02:8308:900d:2400:bba2:4592:a1de:fd80 [2a02:8308:900d:2400:bba2:4592:a1de:fd80])
+        by email-relay16.ko.seznam.cz (Seznam SMTPD 1.3.137) with ESMTP;
+        Wed, 12 Oct 2022 08:26:11 +0200 (CEST)  
+From:   Matej Vasilevski <matej.vasilevski@seznam.cz>
+To:     Pavel Pisa <pisa@cmp.felk.cvut.cz>,
+        Ondrej Ille <ondrej.ille@gmail.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Vivek Yadav <vivek.2311@samsung.com>
-Subject: [PATCH] can: mcan: Add support for handling dlec error on CAN FD
- format frame
-Date:   Tue, 11 Oct 2022 17:05:12 +0530
-Message-Id: <20221011113512.13756-1-vivek.2311@samsung.com>
-X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrGKsWRmVeSWpSXmKPExsWy7bCmum67hVuyQXMXs8Wc8y0sFk+PPWK3
-        uLCtj9Vi1fepzBaXd81hs1i/aAqLxbEFYhbfTr9htFi09Qu7xawLO1gtfi08zGKx9N5OVgce
-        jy0rbzJ5LNhU6vHx0m1Gj02rOtk8+v8aeLzfd5XNo2/LKkaPz5vkAjiism0yUhNTUosUUvOS
-        81My89JtlbyD453jTc0MDHUNLS3MlRTyEnNTbZVcfAJ03TJzgG5VUihLzCkFCgUkFhcr6dvZ
-        FOWXlqQqZOQXl9gqpRak5BSYFOgVJ+YWl+al6+WlllgZGhgYmQIVJmRn3HikXHCBt+LZrJes
-        DYwTuLsYOTkkBEwkZryczNzFyMUhJLCbUeLD3efsEM4nRolDkzdBOZ8ZJd78fcUG07Lh0g6o
-        ll2MEkc7lkM5rUwSC5tmsoJUsQloSTzuXMACkhARWMUocWn1LaB2Dg5mgWqJA0f4QGqEBSIk
-        1h4+yAISZhFQldjzKwEkzCtgLbFw0jFWiGXyEqs3HACbLyHwkl3i1/YVTBAJF4kd6y5DFQlL
-        vDq+hR3ClpL4/G4v1KXJEjv+dULVZEgsmLiHEcK2lzhwZQ4LxDmaEut36UOEZSWmnloHNp5Z
-        gE+i9/cTqFW8EjvmwdgqEi8+T2AFaQVZ1XtOGCLsIXFs1SlmEFtIIFaiq2sH4wRG2VkICxYw
-        Mq5ilEwtKM5NTy02LTDKSy2HR1Nyfu4mRnAC1PLawfjwwQe9Q4xMHIyHGCU4mJVEeBnnOyUL
-        8aYkVlalFuXHF5XmpBYfYjQFhthEZinR5HxgCs4riTc0sTQwMTMzM7E0NjNUEuddPEMrWUgg
-        PbEkNTs1tSC1CKaPiYNTqoFpS8fSmdJOzC9vTz10f85OL41NDelvPC/aXv9gWBXW5jj95+Tt
-        Qb+Osk+f186/687W4xc3cZ9leSSQsOAZw9WtMf/TorcXb+xMbeSQd2t9ybPUNu7Srk0H2nTP
-        hC+qTLFoi934sPy30dY3az+83Zukw7ZovZTb9wtOjTvul91mdXxiyLn4yMpDWTvOJjabph2R
-        fuR/LXpb1FLOQ6oX/Hy4vDc9s0id3DDlTsSfZTXHJpfmGXMtY6/bXPt/3coTIh0C/+0Mf1h+
-        +nXrT+/Z1eInnq9kS1vxZ5rRkQyDcof5/y+fmd//puCI8XX53R+C3GavC7FnKn3+RNj4q8fK
-        6R2FiXLz8p9xO8tLJh/OnainuUaJpTgj0VCLuag4EQAeAIvPCQQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrMLMWRmVeSWpSXmKPExsWy7bCSvK52tGuywesXTBZzzrewWDw99ojd
-        4sK2PlaLVd+nMltc3jWHzWL9oiksFscWiFl8O/2G0WLR1i/sFrMu7GC1+LXwMIvF0ns7WR14
-        PLasvMnksWBTqcfHS7cZPTat6mTz6P9r4PF+31U2j74tqxg9Pm+SC+CI4rJJSc3JLEst0rdL
-        4Mq48Ui54AJvxbNZL1kbGCdwdzFyckgImEhsuLSDuYuRi0NIYAejxOIZO1khElISU868ZIGw
-        hSVW/nvODlHUzCTRefAAWIJNQEvicecCFpCEiMAWRomDixYzgiSYBeol3p25yQ5iCwuESUxd
-        3A+0goODRUBVYs+vBJAwr4C1xMJJx6CWyUus3nCAeQIjzwJGhlWMkqkFxbnpucWGBUZ5qeV6
-        xYm5xaV56XrJ+bmbGMHhqKW1g3HPqg96hxiZOBgPMUpwMCuJ8DLOd0oW4k1JrKxKLcqPLyrN
-        SS0+xCjNwaIkznuh62S8kEB6YklqdmpqQWoRTJaJg1Oqganw7EOTU+XJ12+ovezy4VvUzs5s
-        c2Eb14makl0cKc+fKB36zTu3PPL2579x09d8Fz4xq9Rin8955Y25+bUXyi/aT02afbNMtHrP
-        Vu+3MnUxGTq23+4u9bNrezvP8NSr+xaxtRu0rvIGMjy6V1t8/OW+gq6jbVbZzxbMXzJP8rrJ
-        woVdjWVm+Rd/X3ueoPVdblrtjpLs9eL51j0zxJc0X/3JV2UneEkmXMDx/7kLElfae87G97of
-        W+18x3bGMq+SG5VvpY/+2L6z9epEI0aezEeXXROPe3lEb3a7Uj7X7fS9dPYFV1w1BIIPTtjL
-        Z6N5I3pOUvPupz65QstkZx9Y+uC7yeaH6me2XJQ8lNb5yCtFiaU4I9FQi7moOBEAmP1kRrYC
-        AAA=
-X-CMS-MailID: 20221011120147epcas5p45049f7c0428a799c005b6ab77b428128
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20221011120147epcas5p45049f7c0428a799c005b6ab77b428128
-References: <CGME20221011120147epcas5p45049f7c0428a799c005b6ab77b428128@epcas5p4.samsung.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        devicetree@vger.kernel.org,
+        Matej Vasilevski <matej.vasilevski@seznam.cz>
+Subject: [PATCH v5 0/4] can: ctucanfd: hardware rx timestamps reporting
+Date:   Wed, 12 Oct 2022 08:25:54 +0200
+Message-Id: <20221012062558.732930-1-matej.vasilevski@seznam.cz>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-When a frame in CAN FD format has reached the data phase, the next
-CAN event (error or valid frame) will be shown in DLEC.
+Hello,
 
-Utilizes the dedicated flag (Data Phase Last Error Code: DLEC flag) to
-determine the type of last error that occurred in the data phase
-of a CAN FD frame and handle the bus errors.
+this is the v5 patch for CTU CAN FD hardware timestamps reporting.
 
-Signed-off-by: Vivek Yadav <vivek.2311@samsung.com>
----
- drivers/net/can/m_can/m_can.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+Changes since v4: https://lore.kernel.org/all/20220914233944.598298-1-matej.vasilevski@seznam.cz/T/#u
+dt-bindings:
+- removed the -clk suffix, as per Krzysztof's request on patch v3 review
+code:
+- reverted changes to PM framework usage
+	- also added dependency on PM to Kconfig
+- added ctucan_remove_common() function to disable_unprepare timestamping clock
+	on driver removal
+- removed __maybe_unused - the fourth extra commit
+- removed unnecessary bit masking of the read timestamp
+- removed else branches after return
+- removed ternary operators
+- renamed timestamp_freq to timestamp_clk_rate
+- removed unnecessary IS_ERR_OR_NULL() checks
+- removed cfg.flags check to keep consistency with can_eth_ioctl_hwts()
+- added lockdep_assert_held
+- removed coupling to pm_enable_call variable
+- increased the bit shift for work_delay_ns calculation from 1 to 2
 
-diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index 4709c012b1dc..c070580d35fb 100644
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -156,6 +156,7 @@ enum m_can_reg {
- #define PSR_EW		BIT(6)
- #define PSR_EP		BIT(5)
- #define PSR_LEC_MASK	GENMASK(2, 0)
-+#define PSR_DLEC_SHIFT  8
- 
- /* Interrupt Register (IR) */
- #define IR_ALL_INT	0xffffffff
-@@ -870,6 +871,7 @@ static int m_can_handle_bus_errors(struct net_device *dev, u32 irqstatus,
- {
- 	struct m_can_classdev *cdev = netdev_priv(dev);
- 	int work_done = 0;
-+	int dpsr = 0;
- 
- 	if (irqstatus & IR_RF0L)
- 		work_done += m_can_handle_lost_msg(dev);
-@@ -884,6 +886,15 @@ static int m_can_handle_bus_errors(struct net_device *dev, u32 irqstatus,
- 	    m_can_is_protocol_err(irqstatus))
- 		work_done += m_can_handle_protocol_error(dev, irqstatus);
- 
-+	if (cdev->can.ctrlmode & CAN_CTRLMODE_FD) {
-+		dpsr  = psr >> PSR_DLEC_SHIFT;
-+		if ((cdev->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING) &&
-+		    is_lec_err(dpsr)) {
-+			netdev_dbg(dev, "Data phase error detected\n");
-+			work_done += m_can_handle_lec_err(dev, dpsr & LEC_UNUSED);
-+		}
-+	}
-+
- 	/* other unproccessed error interrupts */
- 	m_can_handle_other_err(dev, irqstatus);
- 
--- 
-2.17.1
 
+Changes since v3: https://lore.kernel.org/all/20220914231249.593643-1-matej.vasilevski@seznam.cz/t/#u
+- use pm_runtime_resume_and_get in error counter routine ctucan_get_berr_counter
+
+Changes since v2: https://lore.kernel.org/all/20220801184656.702930-1-matej.vasilevski@seznam.cz/t/#u
+- proper timestamping clock handling
+	- clocks manually enabled using clk_prepare_enable, then managed
+	  by runtime PM (if runtime PM is enabled)
+	- driver should work even without CONFIG_PM
+- access to the timecounter is now protected by a spinlock
+- harmonized with Vincent's patch - TX timestamping capability is now
+  correctly reported
+- work_delay_jiffies stored as unsigned long instead of u32
+- max work delay limited to 3600 seconds (instead of 86k seconds)
+- adressed the rest of the comments from the patch V2 review
+
+Changes since v1: https://lore.kernel.org/all/20220512232706.24575-1-matej.vasilevski@seznam.cz/
+- Removed kconfig option to enable/disable timestamps.
+- Removed dt parameters ts-frequency and ts-used-bits. Now the user
+  only needs to add the timestamping clock phandle to clocks, and even
+  that is optional.
+- Added SIOCSHWTSTAMP ioctl to enable/disable timestamps.
+- Adressed comments from the RFC review.
+
+Matej Vasilevski (4):
+  dt-bindings: can: ctucanfd: add another clock for HW timestamping
+  can: ctucanfd: add HW timestamps to RX and error CAN frames
+  doc: ctucanfd: RX frames timestamping for platform devices
+  can: ctucanfd: remove __maybe_unused from suspend/resume callbacks
+
+ .../bindings/net/can/ctu,ctucanfd.yaml        |  19 +-
+ .../can/ctu/ctucanfd-driver.rst               |  13 +-
+ drivers/net/can/ctucanfd/Kconfig              |   2 +-
+ drivers/net/can/ctucanfd/Makefile             |   2 +-
+ drivers/net/can/ctucanfd/ctucanfd.h           |  25 +-
+ drivers/net/can/ctucanfd/ctucanfd_base.c      | 229 +++++++++++++++++-
+ drivers/net/can/ctucanfd/ctucanfd_pci.c       |   7 +-
+ drivers/net/can/ctucanfd/ctucanfd_platform.c  |   7 +-
+ drivers/net/can/ctucanfd/ctucanfd_timestamp.c |  77 ++++++
+ 9 files changed, 361 insertions(+), 20 deletions(-)
+ create mode 100644 drivers/net/can/ctucanfd/ctucanfd_timestamp.c
+
+
+base-commit: 0326074ff4652329f2a1a9c8685104576bd8d131
+--
+2.25.1
