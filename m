@@ -2,129 +2,156 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DADDA5FED3D
-	for <lists+linux-can@lfdr.de>; Fri, 14 Oct 2022 13:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D605B5FEDFA
+	for <lists+linux-can@lfdr.de>; Fri, 14 Oct 2022 14:25:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbiJNLg2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 14 Oct 2022 07:36:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54162 "EHLO
+        id S229800AbiJNMZw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 14 Oct 2022 08:25:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbiJNLg1 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 14 Oct 2022 07:36:27 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381CD1C2091
-        for <linux-can@vger.kernel.org>; Fri, 14 Oct 2022 04:36:26 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1ojIz3-0008Bs-Ap; Fri, 14 Oct 2022 13:36:09 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 3B87BFE1ED;
-        Fri, 14 Oct 2022 11:36:06 +0000 (UTC)
-Date:   Fri, 14 Oct 2022 13:36:03 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vivek Yadav <vivek.2311@samsung.com>
-Cc:     rcsekar@samsung.com, wg@grandegger.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        pankaj.dubey@samsung.com, ravi.patel@samsung.com,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] can: mcan: Add support for handling DLEC error on CAN
- FD
-Message-ID: <20221014113603.hrg3ttsgofgq44ba@pengutronix.de>
-References: <CGME20221014053017epcas5p359d337008999640fa140c691f47bc79c@epcas5p3.samsung.com>
- <20221014050332.45045-1-vivek.2311@samsung.com>
- <20221014071114.a6ls5ay56xk4cin3@pengutronix.de>
- <00db01d8dfbf$5e38fbd0$1aaaf370$@samsung.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mj7nepgaiz77tn2a"
-Content-Disposition: inline
-In-Reply-To: <00db01d8dfbf$5e38fbd0$1aaaf370$@samsung.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229673AbiJNMZv (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 14 Oct 2022 08:25:51 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B2F286E8
+        for <linux-can@vger.kernel.org>; Fri, 14 Oct 2022 05:25:47 -0700 (PDT)
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20221014122544epoutp0289b948aff5019fc505a6862e695a528f~d7xzwnYC-1677116771epoutp02P
+        for <linux-can@vger.kernel.org>; Fri, 14 Oct 2022 12:25:44 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20221014122544epoutp0289b948aff5019fc505a6862e695a528f~d7xzwnYC-1677116771epoutp02P
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1665750344;
+        bh=qYBYf5hhZ7Zi27Hl/Ma70yBBWva895amMf9SeflFxoU=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=n3X0FKXnPMbU4BNqPCiNog8zrLsgHLTcZRcWXQXlz2/uhfdB8/IpBRYvFIHzkOL3T
+         j3n60CgnKQW/DOf4dGqUGw/XywVMk62AiAMGxPa3AZtzru+oHBjay/CjJgFf2T+jxc
+         qos0Y5MaLP5hUxWySY7vMdnG4Fa8pWW8N+3R1xlg=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+        20221014122544epcas5p16108a91f55cc1ec451af2da4800ce662~d7xzKqQk70129201292epcas5p1s;
+        Fri, 14 Oct 2022 12:25:44 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.178]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4MplwL5CFkz4x9Pp; Fri, 14 Oct
+        2022 12:25:38 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        2C.C4.39477.24559436; Fri, 14 Oct 2022 21:25:38 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+        20221014121257epcas5p3805649d1a77149ac4d3dd110fb808633~d7mo-ZBn22694626946epcas5p3e;
+        Fri, 14 Oct 2022 12:12:57 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20221014121257epsmtrp10794d9d074fa85fa6f3d1b9eeba237f5~d7mo_ZkNo1590015900epsmtrp1F;
+        Fri, 14 Oct 2022 12:12:57 +0000 (GMT)
+X-AuditID: b6c32a4a-259fb70000019a35-ef-63495542a44c
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        16.3A.14392.94259436; Fri, 14 Oct 2022 21:12:57 +0900 (KST)
+Received: from cheetah.sa.corp.samsungelectronics.net (unknown
+        [107.109.115.53]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20221014121254epsmtip2607fb0cdbd839638c87b54055e3fe191~d7mmBjzCq2358023580epsmtip2h;
+        Fri, 14 Oct 2022 12:12:53 +0000 (GMT)
+From:   Vivek Yadav <vivek.2311@samsung.com>
+To:     rcsekar@samsung.com, wg@grandegger.com, mkl@pengutronix.de,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, pankaj.dubey@samsung.com, ravi.patel@samsung.com
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Vivek Yadav <vivek.2311@samsung.com>
+Subject: [PATCH v3] can: mcan: Add support for handling DLEC error on CAN FD
+Date:   Fri, 14 Oct 2022 17:16:13 +0530
+Message-Id: <20221014114613.33369-1-vivek.2311@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrNKsWRmVeSWpSXmKPExsWy7bCmhq5TqGeyQdtLJYs551tYLJ4ee8Ru
+        cWFbH6vFqu9TmS0u75rDZrF+0RQWi2MLxCy+nX7DaLFo6xd2i4cf9rBbzLqwg9Xi18LDLBZL
+        7+1kdeD12LLyJpPHgk2lHh8v3Wb02LSqk82j/6+Bx/t9V9k8+rasYvT4vEkugCMq2yYjNTEl
+        tUghNS85PyUzL91WyTs43jne1MzAUNfQ0sJcSSEvMTfVVsnFJ0DXLTMH6GAlhbLEnFKgUEBi
+        cbGSvp1NUX5pSapCRn5xia1SakFKToFJgV5xYm5xaV66Xl5qiZWhgYGRKVBhQnbGrmsXWApW
+        cVe8XfScsYFxCWcXIyeHhICJxKOVK9i6GLk4hAR2M0pcaNzBAuF8YpToW9cLlfnGKDH16gxm
+        mJYNix+zQyT2Mkqs2/WBGcJpZZK487mdEaSKTUBL4nHnArBZIgKHGCVWtj0Dcjg4mAWqJQ4c
+        4QMxhQV8JDpOqIKUswioSmydcgSslVfAWmL7/b2sEMvkJVZvOAA2X0LgI7vE5kOtUFe4SHRv
+        usMOYQtLvDq+BcqWknjZ3wZlJ0vs+NcJNShDYsHEPYwQtr3EgStzoM7RlFi/Sx8iLCsx9dQ6
+        JhCbWYBPovf3EyaIOK/EjnkwtorEi88TWEFaQVb1nhOGMD0knvzWAakQEoiVuPDiMssERtlZ
+        CPMXMDKuYpRMLSjOTU8tNi0wyksth0dTcn7uJkZwKtTy2sH48MEHvUOMTByMwDDjYFYS4X2t
+        5JksxJuSWFmVWpQfX1Sak1p8iNEUGGITmaVEk/OByTivJN7QxNLAxMzMzMTS2MxQSZx38Qyt
+        ZCGB9MSS1OzU1ILUIpg+Jg5OqQamRs6rHxIezfN+znM/OH1Km6vgik49EY1/Nje4ZoR9P/WU
+        LzH007G/ycujfsxg1JKYZmr09yNbT5/tl6aqJ4z7Chi1lthsNJ59uPhJ2zw+u8CP/22PeB9l
+        7uPzjJyU8sGg6b7Ky/XB0cVfn0aZryudHTY7u2qVcaj7fLXFW46/TFp98dDRhrKtXi6TK2Y5
+        7bBafu2UANOGX2/k34jaHeY3YFw9P+Twswv75C7fePrsj9+PdU2vi29mi6m08ovM5Pj1KaH7
+        If/cW6p33XXYzoZ+NfNT+jDzzLFai97+1mSWNbNMuKLqmB/5sDMn33vtlNn4L411Vaus3ITr
+        dS2TanfsYitde6lCXvmipom0xIUNSizFGYmGWsxFxYkAaK18uQ4EAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrBLMWRmVeSWpSXmKPExsWy7bCSvK5nkGeywZsJXBZzzrewWDw99ojd
+        4sK2PlaLVd+nMltc3jWHzWL9oiksFscWiFl8O/2G0WLR1i/sFg8/7GG3mHVhB6vFr4WHWSyW
+        3tvJ6sDrsWXlTSaPBZtKPT5eus3osWlVJ5tH/18Dj/f7rrJ59G1ZxejxeZNcAEcUl01Kak5m
+        WWqRvl0CV8auaxdYClZxV7xd9JyxgXEJZxcjJ4eEgInEhsWP2bsYuTiEBHYzShxpuM0GkZCS
+        mHLmJQuELSyx8t9zdhBbSKCZSeLTTFkQm01AS+Jx5wIWkGYRgXOMEs/X/wBrZhaol3h35iZQ
+        AweHsICPRMcJVZAwi4CqxNYpRxhBbF4Ba4nt9/eyQsyXl1i94QDzBEaeBYwMqxglUwuKc9Nz
+        iw0LDPNSy/WKE3OLS/PS9ZLzczcxggNTS3MH4/ZVH/QOMTJxMB5ilOBgVhLhfa3kmSzEm5JY
+        WZValB9fVJqTWnyIUZqDRUmc90LXyXghgfTEktTs1NSC1CKYLBMHp1QDU/6btOCHCxssDO89
+        Mpzukp9xfdqZr3rSYndXde3m3OvAWnxNVz5aiUPIq2aZ+te5eqGyFxQZWcXyRQ+aZmUlR8w+
+        L/RRTae86UOvykptBgleHs9Lk6J8Y3Y7XpcSEfeUOPShNff4Q71DTJxNUvtkTuRU8Xn1bP1p
+        mmeo0TT/RqlZ5tS5AmcWTbb/u/SBSbxq7/b2C1b6ai89UxcZFjqtl5LnYfr5X2LJ9IaD/M2X
+        7fVqv224+0/w75aT8UtCpOZmJLaHdG0wb40S+ybnVxvSvOPGF/dkv9idZ2Kf5aurJuW/Unly
+        iMNRUeorX1ono6viZMOve3/fe6FbLTXrQ8nKJUdfmtuHPyk7Ida9P1aJpTgj0VCLuag4EQDB
+        wpJEuwIAAA==
+X-CMS-MailID: 20221014121257epcas5p3805649d1a77149ac4d3dd110fb808633
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20221014121257epcas5p3805649d1a77149ac4d3dd110fb808633
+References: <CGME20221014121257epcas5p3805649d1a77149ac4d3dd110fb808633@epcas5p3.samsung.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+When a frame in CAN FD format has reached the data phase, the next
+CAN event (error or valid frame) will be shown in DLEC.
 
---mj7nepgaiz77tn2a
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Utilizes the dedicated flag (Data Phase Last Error Code: DLEC flag) to
+determine the type of last error that occurred in the data phase
+of a CAN FD frame and handle the bus errors.
 
-On 14.10.2022 16:53:19, Vivek Yadav wrote:
-> >=20
-> >                 if (is_lec_err(lec))
-> >                         work_done +=3D m_can_handle_lec_err(dev, lec);
-> >=20
-> >                 if (is_lec_err(dlec))
-> >                         work_done +=3D m_can_handle_lec_err(dev, dlec);
-> >=20
-> > > +			u8 dlec =3D FIELD_GET(PSR_DLEC_MASK, psr);
-> > > +
-> > > +			if (is_lec_err(dlec)) {
-> > > +				netdev_dbg(dev, "Data phase error
-> > detected\n");
-> >=20
-> > If you add a debug, please add one for the Arbitration phase, too.
->
-> I have added the debug print specially for dlec (data phase). So we
-> can differentiate lec errors (for all type of frames except FD with
-> BRS) and Data phase errors, as we are calling same handler function
-> for both the errors.
->=20
-> If I understood your comment correctly, you are asking something like bel=
-ow:
->         /* handle protocol errors in arbitration phase */
->         if ((cdev->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING) &&
-> -           m_can_is_protocol_err(irqstatus))
-> +           m_can_is_protocol_err(irqstatus)) {
-> +               netdev_dbg(dev, "Arbitration phase error detected\n");
->                 work_done +=3D m_can_handle_protocol_error(dev, irqstatus=
-);
-> +       }
->=20
-> If the above implementation is correct as per your review comment, I
-> think we don't need the above changes because Debug print for
-> arbitration failure are already there in "
-> m_can_handle_protocol_error" function.
+Signed-off-by: Vivek Yadav <vivek.2311@samsung.com>
+---
+This patch is dependent on following patch from Marc:
+[1]: https://lore.kernel.org/all/20221012074205.691384-1-mkl@pengutronix.de/
 
-Ok
+ drivers/net/can/m_can/m_can.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-regards,
-Marc
+diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+index 18a138fdfa66..73ce946b5aab 100644
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -156,6 +156,7 @@ enum m_can_reg {
+ #define PSR_EW		BIT(6)
+ #define PSR_EP		BIT(5)
+ #define PSR_LEC_MASK	GENMASK(2, 0)
++#define PSR_DLEC_MASK   GENMASK(8, 10)
+ 
+ /* Interrupt Register (IR) */
+ #define IR_ALL_INT	0xffffffff
+@@ -878,6 +879,13 @@ static int m_can_handle_bus_errors(struct net_device *dev, u32 irqstatus,
+ 
+ 		if (is_lec_err(lec))
+ 			work_done += m_can_handle_lec_err(dev, lec);
++
++		u8 dlec = FIELD_GET(PSR_DLEC_MASK, psr);
++
++		if (is_lec_err(dlec)) {
++			netdev_dbg(dev, "Data phase error detected\n");
++			work_done += m_can_handle_lec_err(dev, dlec);
++		}
+ 	}
+ 
+ 	/* handle protocol errors in arbitration phase */
+-- 
+2.17.1
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---mj7nepgaiz77tn2a
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNJSaEACgkQrX5LkNig
-011yxgf/c6acNcBfDRfZ9nhxnau0jXG2K7yOwJb8Hi4SIxPO/63RPFT+lqGvm+Pn
-eA75SQiGy8ojstW3XJyGDTm5hJ0YNHN1jEd00ZlY4LuBwTmoNrsdMigxjbpLOAdp
-orkIkDcbsL6TNx37Ky38actcIhNVJ9MognLme0WG/2Z3AA9iEQHpV1RmBe1a3rxQ
-TDpUo9iK8juT9CtH7A54MPEmeFJnIiHTC4sOBD5fX9e8iaTiqQS73UP8O6R3M8LG
-AHDywbXMHeCVI8M/mPP2iY11q58D2omCh6J7lD0VpiycpWEycGaGp+n52S33FaEX
-BFx4blHBGw7XsfT2KbGaZm52yweSWw==
-=UAXg
------END PGP SIGNATURE-----
-
---mj7nepgaiz77tn2a--
