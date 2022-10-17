@@ -2,137 +2,219 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01DE1601259
-	for <lists+linux-can@lfdr.de>; Mon, 17 Oct 2022 17:03:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E96C6013BC
+	for <lists+linux-can@lfdr.de>; Mon, 17 Oct 2022 18:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231177AbiJQPDJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 17 Oct 2022 11:03:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36006 "EHLO
+        id S229998AbiJQQnD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 17 Oct 2022 12:43:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231533AbiJQPDD (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 17 Oct 2022 11:03:03 -0400
-Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-mr2fra01on0616.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e19::616])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893AC237D2
-        for <linux-can@vger.kernel.org>; Mon, 17 Oct 2022 08:02:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gFLDameGw7pl1oP6uuz+IijqMIRuH3CFUSAsqcx8unRDHBwgw0qRmFRpYcw++kw4DNl6qkK+zk0jymNU0mJdn/mtoO8T9nMmfFbl6Vk0L0spFtujEQBqQMoDFkTM8p81na+PftV/TzPWYR9edu0tEyNxKptWHPYv8rWSJzIZa3XlwUvFMCuNJL27hGdHdFR3wcpvFJ3Z3jZMNk9jxVY/m5ECEhS9yAltC4YDaNv+lLJK01N9n/ChJzVzkw1ubpmikxjA//Cji16rfUW540OeW58EX4fPwwHx0tGspuE9gvpTcD28XvyBHGBqOY4tp2pJFEPwM0m0aMrBsjPq0x8m0g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QXnJ++e5KPGvZRl34S7wPpHRBmN8SJ516kPdkeflKf0=;
- b=Haefdq+6S3HSE4pzAi5vlgiZxMOQLKQdiMfyLlvi84/Bu3ZIgz9NZDDu/+z6bmvA977NFPbi2ITX9VJhdtIhSsK+/aCmBcx/hnuoPT0biJMSHy4+Vq/ZUpRNaXSarVA48WORakZ8b1RdvUDfy52u0wr3eVQ78ev2WhIPomJ8O7jTbGr3yQhJKCPsFz6UTXiZevafzigEQYD6D6KX+0DrrMuG/tvVieKKC0qqpmGtVRFsFKgG4yuUqtCjPmw2Uz6T9ERnu8+P1krUO1v2uoy+4bfI2SeyVgPuJ2G8AhA7gguj6wdfHO/R2EdjwFmkNThHfQyPx3FGL8O1pfDPQPL23Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=actia.fr; dmarc=pass action=none header.from=actia.fr;
- dkim=pass header.d=actia.fr; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=actia.fr; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QXnJ++e5KPGvZRl34S7wPpHRBmN8SJ516kPdkeflKf0=;
- b=kg6hETt/PMm75yOeTw80MbJNpNWUlw0Rivm277jALBg0qLJ2sj4X5FgLXCCRuQOPlKUFiHQQnAoxqdLQg5LrF9WwoGMjlLTjWoFbwRDYTyjHTtq9bOzmmJ4IHFsY/jX+NHsJIGjl9eR24belI40s/NReJk7ZATKIwMleJHWrHIc=
-Received: from PR0P264MB2309.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1e0::12)
- by PR0P264MB1579.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:166::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.32; Mon, 17 Oct
- 2022 14:55:58 +0000
-Received: from PR0P264MB2309.FRAP264.PROD.OUTLOOK.COM
- ([fe80::4cbd:493e:7d7f:22ce]) by PR0P264MB2309.FRAP264.PROD.OUTLOOK.COM
- ([fe80::4cbd:493e:7d7f:22ce%2]) with mapi id 15.20.5723.033; Mon, 17 Oct 2022
- 14:55:58 +0000
-From:   Sebastien FABRE <sebastien.fabre@actia.fr>
-To:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Subject: J1939: Send messages without acknowledging
-Thread-Topic: J1939: Send messages without acknowledging
-Thread-Index: AdjiOArCihCCUJS2S0aV5OLbcs6cdQ==
-Date:   Mon, 17 Oct 2022 14:55:58 +0000
-Message-ID: <PR0P264MB23096FC238E648331A32B5A492299@PR0P264MB2309.FRAP264.PROD.OUTLOOK.COM>
-Accept-Language: fr-FR, en-US
-Content-Language: fr-FR
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=actia.fr;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PR0P264MB2309:EE_|PR0P264MB1579:EE_
-x-ms-office365-filtering-correlation-id: d97f241a-f849-4253-8689-08dab04fb333
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 3CeZWvNwr5Ie1iyqcUIujl1LmDz7DFK940nutDlPT/gKlXpKHrXkqH1YNWs2GngZjkXt4IQthGYRQucTmiej8JLpBR+QTrp8DnwQFQcC0mR/A+SsQeYrz44xfev4Y62JrjF1C4FtnBVfOQZ13dCuJ0AvXkPMZ/3lH82E6Ao0IKUfzXgK/MUQG035pZPkkAm9o1c0Q8WkldQgs/Hz3vIa4seyWXFK+hODstkIOsEa5ODE4E8k61XkDJJodhdXQsZkKLB1oAKtRtLeB+kJ9AO9B0mNktnvo7OfQDfk8ZNNRZYOZviZ09hSaQgqnzhH3hWbU28h823YiJ+vcL9R4/YwDAypoX02/sGjWQXHpYlDG4lwv4kZGUiIrf5prChr8jXDHCWT2zX6bFGDIVNmiKWIQT0QZ7RiCpGiO9TRycsgLVqQTS+3lwPAiSprZAnNNx/chStj22YhdkyT8LW+Rd0quIya1Tofb8qR0ifQupMqxi6bLn11p5v3sbrK4PrgrV4pA9NFD1VSFu4lJ8Fz9pBwJB5GWohz5vPmVVAiubzU2rjD6vZOrn9Lm1SbTz4lqSpyL1BRruiOK1Yzt4jmzRYXCn/ucap5AEahtHvVLg35QtjN2/eOI28uJH5S3BUHhdZTTl2GCCfpRkfNiodVUwgGgv593Q70WSCaw+PfcVniq5sRMaAV/sX9ANWa+NmOEUQ43GoRW61XZeyzVxe762V48yWl8i7cVVHj2RPskPL4JBc4PAmYirQ9Qzq+Cc0wc1JkAh9wIUm48JxApfCXFpC+hw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PR0P264MB2309.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(396003)(346002)(376002)(39860400002)(366004)(136003)(451199015)(478600001)(33656002)(71200400001)(6506007)(41300700001)(8936002)(52536014)(316002)(8676002)(6916009)(76116006)(66556008)(64756008)(66946007)(66446008)(7696005)(122000001)(55016003)(66476007)(38100700002)(86362001)(186003)(38070700005)(9686003)(83380400001)(66574015)(26005)(2906002)(15650500001)(5660300002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?E2NndSOYfiZ/4zJFS5SqJWaLBxVuG5W80Km1LW+qR56qQkbdu5pDXVSAqk?=
- =?iso-8859-1?Q?wvplVERz9KcQxImKe/ls2GtD2PtYxQ93LriQCCuxQtv2QagCFSKdpwiQSE?=
- =?iso-8859-1?Q?s2zpY4KVkJqJplFMRYh0ffqBoDfx2rt7gipo52L7rH/z/XbSanocj9TEwF?=
- =?iso-8859-1?Q?yFF/6eybE8eBRqEIZDv9QUGmpIWv1p4TY9otLe0Uh9niXy2VdPNHpEco3k?=
- =?iso-8859-1?Q?JNuMcTYoJlKhtZYjED2peHCuw8iHS50/KYY8ybaz+1pWR+PD/vDHb460rH?=
- =?iso-8859-1?Q?DcYyTwWKImWekz4kqPGQnfnaFk2cktShfRz4tTJqepYXhwHeFxGhlK2wwM?=
- =?iso-8859-1?Q?X+zRsXKSwuuGDoxFmVzhoDh2LM8JdQAPkvZyOTmmaRTxlKhygX9lgcy+Yu?=
- =?iso-8859-1?Q?h2rHOukWC+B8SnHt8T3cHaO7ajDJ3xPByOlIM7H2nzUtIshQzPFPrp8LtG?=
- =?iso-8859-1?Q?3BUauMfhKtQTawJWF2083Opeczeze0hTx0oJCR4fb77prGyNaXjVw1SJ6i?=
- =?iso-8859-1?Q?X/1TEA+0JJtKoFuwVlspTo5o1hopd5p69RccwIQfY26CaA9XMRtFMNuwVU?=
- =?iso-8859-1?Q?H7mn+kXcy9pZS0893VSf+oDYPELoBwChPfzfxQTNZe0Pl7XlY7lq6d3Gzj?=
- =?iso-8859-1?Q?VjpdwgCGBGwz+kp3eNhWGdaHyHP86v1YKFHXBHIl+6ow4aUb6xC5Q1c74j?=
- =?iso-8859-1?Q?NkusGD5bnQDv3TVa7GIug6jDvUYZJdZ/BuFD+bs7xsvO8bs+6JkvXDMOos?=
- =?iso-8859-1?Q?KbR8GEZdx2AlP3fhnpyNqAyU7iH7irX2k8sLr44I6x8UHoMNjJxRHVPhjk?=
- =?iso-8859-1?Q?qKU/lPZoRXAbyUrXirEKT0X9zWDeTOSPFyhUmaOfWaAwgJ5TXb9EHk/xGF?=
- =?iso-8859-1?Q?qMuQxRw4OcAHhYhg8qUfFkKvEe9wjvDojr7+4gYQnforUH3lw01CEkk4DY?=
- =?iso-8859-1?Q?O4B6sVjOg91kXlWJMBqTPpFnUmHj5XaHeO83gXIRfxVHo5VSK3mqn+lC0F?=
- =?iso-8859-1?Q?XQdg00j1NSnvysli3kPD609HOWVr8ArG6WwtgTDO4SX7Lr/sN/OJKJ39Fh?=
- =?iso-8859-1?Q?7y/WiuRMmHB6r9iqzCCLSS0Y+xP7X/5oBXnRrs9zzIql1d04E4g/OCidEh?=
- =?iso-8859-1?Q?ti1s4vGcNr2MpUkO8+DiiKqgssaTY2SZ0HhDcoZZaHP9Qdi79DJY3MiZSk?=
- =?iso-8859-1?Q?tq+EVcxOpB/nBi/toHU6d03g/fEGgyMFwJuT1rDJdpXkapYOfHZbsbeeRu?=
- =?iso-8859-1?Q?CQHRrNcsCguR8luhdUPEgfa+gGKFXo9+QVrDxy/3Ieu2kjYmaZL9+56f4f?=
- =?iso-8859-1?Q?oHt4GSFThlL6hOBz2JgEB+i+ZJ28jzuDbonUmeFE+YExKpYA9h+Beyd+eW?=
- =?iso-8859-1?Q?q2XYKUqKk4LEjlJcniUibZPKvU9458LxbGfXq3oY+v9eLGZ++wuJsK2HTw?=
- =?iso-8859-1?Q?ylA8vAwBFcqEmnpOOtAYZgEoqUtepoHS8j4avoYRxgcspt0XvRMa1BiKBN?=
- =?iso-8859-1?Q?7bozZwJJkTecz0S/hVCjJsaSfkpvaaUDYF2nVlI8TYEUDkF8MIKhaRolys?=
- =?iso-8859-1?Q?LlUJOpo7yvs93r+2dqfOL0r5remLE+9e5PhatZReag4StZTd4M72mqFYry?=
- =?iso-8859-1?Q?A62KMpt6LZswe4vX1q7JsGpKVokaew1y1J?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S229742AbiJQQnB (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 17 Oct 2022 12:43:01 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1A2D6F551
+        for <linux-can@vger.kernel.org>; Mon, 17 Oct 2022 09:42:58 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id d26so26237514ejc.8
+        for <linux-can@vger.kernel.org>; Mon, 17 Oct 2022 09:42:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xDO3sMF/hJIpyc2siGnZVm8MMtmhdSexdGimiQU1euY=;
+        b=ekoyXht2pXc84+ATtkT19eSJ4jFGdCp4gYUOr0z53NhSlzVuXapGWvanix9LF15F1W
+         sCfMPQzAnTZdueMwd4Ys2I80LHwdQaPTRA2LOieTBZMppYklMZOolhEoGJPxdp/6j8IA
+         alYNZgbZoBz0wIDoH+bMXKZ4dveNzRCfMzeMs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xDO3sMF/hJIpyc2siGnZVm8MMtmhdSexdGimiQU1euY=;
+        b=kRaMIo3+YqQ2nnLWTea89oe9sNPADIVt9esXWV1oBuJjpY6GuvzjAdwgaktk83w+iT
+         pHvK57kEu0Wt33umfz7owrih6xHGIQxklLMPNn7qG/XLSMu95zuCnFXn1KdcIpgGSTc0
+         I0LOOGmY18uOAkhPiHbkCv8Qd+RV9n78rYbKDuPjGtGay2rIw6g72cpGJm/mRmsF5b5J
+         XdazlG+qlBaxpJb0ACBD+8xAThVGIrVlG2V0CKvSJcPUTroPj5pybmnHidRUIZqxo2Zz
+         E9Wph6PiJXiQ/A8rZBilMb3WPbDu7JSYfwyG4MyAfYXi5ywIHarSeYsf82pQsmbFAqxm
+         0OCA==
+X-Gm-Message-State: ACrzQf3l2o6KUZvwQ+wghiqf8YmFRgKtjKYKTRr/XcE7WOvMocXdYU/4
+        O1H7MGP9wcdv488ooL44fSYbIQ==
+X-Google-Smtp-Source: AMsMyM73WjIuQdLx3Gq1P0i+P9Hs9HP6iWg4YxnTiOMi8rI1qby6/eVw4+RBzKX11sbZGci4xlx/fQ==
+X-Received: by 2002:a17:906:5dcc:b0:78d:fb98:6f85 with SMTP id p12-20020a1709065dcc00b0078dfb986f85mr9542851ejv.123.1666024976923;
+        Mon, 17 Oct 2022 09:42:56 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-95-244-101-110.retail.telecomitalia.it. [95.244.101.110])
+        by smtp.gmail.com with ESMTPSA id a24-20020a1709063a5800b0078128c89439sm6437388ejf.6.2022.10.17.09.42.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 09:42:56 -0700 (PDT)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     michael@amarulasolutions.com,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        Christophe Roullier <christophe.roullier@foss.st.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-can@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org
+Subject: [RFC PATCH v5 0/5] can: bxcan: add support for ST bxCAN controller
+Date:   Mon, 17 Oct 2022 18:42:26 +0200
+Message-Id: <20221017164231.4192699-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-OriginatorOrg: actia.fr
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PR0P264MB2309.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: d97f241a-f849-4253-8689-08dab04fb333
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Oct 2022 14:55:58.1437
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 86314f06-03e8-4460-82f3-a44f992a19c7
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: xupfAGGJ7j6PMKpzMeuCfyqFXgbR2QrxLvcDVXYNRkjrjhSMg88w+I6OoytMMLn7af8sesdl03hINZJATOS9Z7aL1e3nfR6h8sYx0bE4sFI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB1579
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello,
+The series adds support for the basic extended CAN controller (bxCAN)
+found in many low- to middle-end STM32 SoCs.
 
-I am working on 5.4 kernel, and I have the same behavior with 5.10 kernel v=
-ersion.
-I reproduce the behavior with a custom application. A j1939 socket is creat=
-ed with SO_BROADCAST and SO_J1939_PROMISC options and is binded. The applic=
-ation sends a claim message then 50 broadcast messages in loop (without wai=
-ting) with size greater than 8 bytes (50).
+The driver design (one core module and one driver module) was inspired
+by other ST drivers (e. g. drivers/iio/adc/stm32-adc.c,
+drivers/iio/adc/stm32-adc-core.c) where device instances share resources.
+The shared resources functions are implemented in the core module, the
+device driver in a separate module.
 
-Every sendto methods return success directly and sessions are stored in sk_=
-session_queue.
-If the can is 'on' but nobody acknowledges, after some times, trames are no=
- longer sent (ENOBUFS) but the application does not have this information (=
-sendto returned success).
-Moreover, txqueuelen does not have impact to this behavior (queue size seem=
-s to be infinite).
-To finish, closing socket will take a long time depending on sk_session_que=
-ue size because of J1939_XTP_TX_RETRY_LIMIT: kernel seems to try to send ev=
-ery message 100 times if ENOBUFS is received.
+The driver has been tested on the stm32f469i-discovery board with a
+kernel version 5.19.0-rc2 in loopback + silent mode:
 
-Is it the expected behavior? How can the application know that messages are=
- no longer sent?=20
+ip link set can0 type can bitrate 125000 loopback on listen-only on
+ip link set up can0
+candump can0 -L &
+cansend can0 300#AC.AB.AD.AE.75.49.AD.D1
 
-Best regards,
-S=E9bastien Fabre=20
+For uboot and kernel compilation, as well as for rootfs creation I used
+buildroot:
+
+make stm32f469_disco_sd_defconfig
+make
+
+but I had to patch can-utils and busybox as can-utils and iproute are
+not compiled for MMU-less microcotrollers. In the case of can-utils,
+replacing the calls to fork() with vfork(), I was able to compile the
+package with working candump and cansend applications, while in the
+case of iproute, I ran into more than one problem and finally I decided
+to extend busybox's ip link command for CAN-type devices. I'm still
+wondering if it was really necessary, but this way I was able to test
+the driver.
+
+Changes in v5:
+- Add Rob Herring's Acked-by tag.
+- Add Rob Herring's Reviewed-by tag.
+- Put static in front of bxcan_enable_filters() definition.
+
+Changes in v4:
+- Remove "st,stm32f4-bxcan-core" compatible. In this way the can nodes
+ (compatible "st,stm32f4-bxcan") are no longer children of a parent
+  node with compatible "st,stm32f4-bxcan-core".
+- Add the "st,gcan" property (global can memory) to can nodes which
+  references a "syscon" node containing the shared clock and memory
+  addresses.
+- Replace the node can@40006400 (compatible "st,stm32f4-bxcan-core")
+  with the gcan@40006600 node ("sysnode" compatible). The gcan node
+  contains clocks and memory addresses shared by the two can nodes
+  of which it's no longer the parent.
+- Add to can nodes the "st,gcan" property (global can memory) which
+  references the gcan@40006600 node ("sysnode compatibble).
+- Add "dt-bindings: arm: stm32: add compatible for syscon gcan node" patch.
+- Drop the core driver. Thus bxcan-drv.c has been renamed to bxcan.c and
+  moved to the drivers/net/can folder. The drivers/net/can/bxcan directory
+  has therefore been removed.
+- Use the regmap_*() functions to access the shared memory registers.
+- Use spinlock to protect bxcan_rmw().
+- Use 1 space, instead of tabs, in the macros definition.
+- Drop clock ref-counting.
+- Drop unused code.
+- Drop the _SHIFT macros and use FIELD_GET()/FIELD_PREP() directly.
+- Add BXCAN_ prefix to lec error codes.
+- Add the macro BXCAN_RX_MB_NUM.
+- Enable time triggered mode and use can_rx_offload().
+- Use readx_poll_timeout() in function with timeouts.
+- Loop from tail to head in bxcan_tx_isr().
+- Check bits of tsr register instead of pkts variable in bxcan_tx_isr().
+- Don't return from bxcan_handle_state_change() if skb/cf are NULL.
+- Enable/disable the generation of the bus error interrupt depending
+  on can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING.
+- Don't return from bxcan_handle_bus_err() if skb is NULL.
+- Drop statistics updating from bxcan_handle_bus_err().
+- Add an empty line in front of 'return IRQ_HANDLED;'
+- Rename bxcan_start() to bxcan_chip_start().
+- Rename bxcan_stop() to bxcan_chip_stop().
+- Disable all IRQs in bxcan_chip_stop().
+- Rename bxcan_close() to bxcan_ndo_stop().
+- Use writel instead of bxcan_rmw() to update the dlc register.
+
+Changes in v3:
+- Remove 'Dario Binacchi <dariobin@libero.it>' SOB.
+- Add description to the parent of the two child nodes.
+- Move "patterProperties:" after "properties: in top level before "required".
+- Add "clocks" to the "required:" list of the child nodes.
+- Remove 'Dario Binacchi <dariobin@libero.it>' SOB.
+- Add "clocks" to can@0 node.
+- Remove 'Dario Binacchi <dariobin@libero.it>' SOB.
+- Remove a blank line.
+- Remove 'Dario Binacchi <dariobin@libero.it>' SOB.
+- Fix the documentation file path in the MAINTAINERS entry.
+- Do not increment the "stats->rx_bytes" if the frame is remote.
+- Remove pr_debug() call from bxcan_rmw().
+
+Changes in v2:
+- Change the file name into 'st,stm32-bxcan-core.yaml'.
+- Rename compatibles:
+  - st,stm32-bxcan-core -> st,stm32f4-bxcan-core
+  - st,stm32-bxcan -> st,stm32f4-bxcan
+- Rename master property to st,can-master.
+- Remove the status property from the example.
+- Put the node child properties as required.
+- Remove a blank line.
+- Fix sparse errors.
+- Create a MAINTAINERS entry.
+- Remove the print of the registers address.
+- Remove the volatile keyword from bxcan_rmw().
+- Use tx ring algorithm to manage tx mailboxes.
+- Use can_{get|put}_echo_skb().
+- Update DT properties.
+
+Dario Binacchi (5):
+  dt-bindings: arm: stm32: add compatible for syscon gcan node
+  dt-bindings: net: can: add STM32 bxcan DT bindings
+  ARM: dts: stm32: add CAN support on stm32f429
+  ARM: dts: stm32: add pin map for CAN controller on stm32f4
+  can: bxcan: add support for ST bxCAN controller
+
+ .../bindings/arm/stm32/st,stm32-syscon.yaml   |    2 +
+ .../bindings/net/can/st,stm32-bxcan.yaml      |   83 ++
+ MAINTAINERS                                   |    7 +
+ arch/arm/boot/dts/stm32f4-pinctrl.dtsi        |   30 +
+ arch/arm/boot/dts/stm32f429.dtsi              |   29 +
+ drivers/net/can/Kconfig                       |   12 +
+ drivers/net/can/Makefile                      |    1 +
+ drivers/net/can/bxcan.c                       | 1110 +++++++++++++++++
+ 8 files changed, 1274 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/can/st,stm32-bxcan.yaml
+ create mode 100644 drivers/net/can/bxcan.c
+
+-- 
+2.32.0
 
