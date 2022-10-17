@@ -2,50 +2,36 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6163360038A
-	for <lists+linux-can@lfdr.de>; Sun, 16 Oct 2022 23:55:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 306EC600E97
+	for <lists+linux-can@lfdr.de>; Mon, 17 Oct 2022 14:11:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbiJPVzH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 16 Oct 2022 17:55:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58640 "EHLO
+        id S230028AbiJQMLt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 17 Oct 2022 08:11:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiJPVzF (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 16 Oct 2022 17:55:05 -0400
-Received: from mailgw.felk.cvut.cz (mailgw.felk.cvut.cz [147.32.82.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6340A13FA2;
-        Sun, 16 Oct 2022 14:54:59 -0700 (PDT)
-Received: from mailgw.felk.cvut.cz (localhost.localdomain [127.0.0.1])
-        by mailgw.felk.cvut.cz (Proxmox) with ESMTP id BF2D730B2949;
-        Sun, 16 Oct 2022 23:54:56 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        cmp.felk.cvut.cz; h=cc:cc:content-transfer-encoding:content-type
-        :content-type:date:from:from:in-reply-to:message-id:mime-version
-        :references:reply-to:subject:subject:to:to; s=felkmail; bh=LQd5Q
-        rd/j/9u/DWNjR5yotOcmDbQdjNNhniIHl7ZOf0=; b=MVJLVMYqSYViWakjPEkyh
-        jC5bHZpTvnlG/EkD9gUrNl+HiWBCacw7dmC80V+TfPPknuhBJ6yH0k0VD+86K0Yy
-        0PkMckp1RqcMwCFaQ+ooWYtXftz+0pfRmDRWOK1yXx+8jnFFa86wg+ryT70+kQtE
-        taPfDlDIgjBk7FIL/fpMCxMBP9YRUOQx5dsQIrJ76cnAKdOgXJFY1IPM39F8TY7x
-        oWR/miAyybtBlLDWhm2YpFZwxi6z+ZgMiHglVrqDcgQoDahOW0xjylaQhPwx9zsk
-        tQj7dqnmk4picPDdEXLCT2lPDvnC0Bu3SiRQVMrlc1KV+xUNtfAMLRPt+dcd+drh
-        Q==
-Received: from cmp.felk.cvut.cz (haar.felk.cvut.cz [147.32.84.19])
-        by mailgw.felk.cvut.cz (Proxmox) with ESMTPS id D759630ADE4B;
-        Sun, 16 Oct 2022 23:54:55 +0200 (CEST)
-Received: from haar.felk.cvut.cz (localhost [127.0.0.1])
-        by cmp.felk.cvut.cz (8.14.0/8.12.3/SuSE Linux 0.6) with ESMTP id 29GLstLx017446;
-        Sun, 16 Oct 2022 23:54:55 +0200
-Received: (from pisa@localhost)
-        by haar.felk.cvut.cz (8.14.0/8.13.7/Submit) id 29GLstXE017445;
-        Sun, 16 Oct 2022 23:54:55 +0200
-X-Authentication-Warning: haar.felk.cvut.cz: pisa set sender to pisa@cmp.felk.cvut.cz using -f
-From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
-To:     Matej Vasilevski <matej.vasilevski@seznam.cz>
-Subject: Re: [PATCH v5 2/4] can: ctucanfd: add HW timestamps to RX and error CAN frames
-Date:   Sun, 16 Oct 2022 23:54:48 +0200
-User-Agent: KMail/1.9.10
-Cc:     Ondrej Ille <ondrej.ille@gmail.com>,
+        with ESMTP id S230089AbiJQMLs (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 17 Oct 2022 08:11:48 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A5D5E67C
+        for <linux-can@vger.kernel.org>; Mon, 17 Oct 2022 05:11:46 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1okOxt-00034B-Ey; Mon, 17 Oct 2022 14:11:29 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id B0CB0100A4C;
+        Mon, 17 Oct 2022 12:11:26 +0000 (UTC)
+Date:   Mon, 17 Oct 2022 14:11:22 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Pavel Pisa <pisa@cmp.felk.cvut.cz>
+Cc:     Matej Vasilevski <matej.vasilevski@seznam.cz>,
+        Ondrej Ille <ondrej.ille@gmail.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
-        "Marc Kleine-Budde" <mkl@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
@@ -54,77 +40,70 @@ Cc:     Ondrej Ille <ondrej.ille@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org,
         devicetree@vger.kernel.org
-References: <20221012062558.732930-1-matej.vasilevski@seznam.cz> <20221012062558.732930-3-matej.vasilevski@seznam.cz>
-In-Reply-To: <20221012062558.732930-3-matej.vasilevski@seznam.cz>
-X-KMail-QuotePrefix: > 
+Subject: Re: [PATCH v5 2/4] can: ctucanfd: add HW timestamps to RX and error
+ CAN frames
+Message-ID: <20221017121122.kt6adqz4dtqc2sy5@pengutronix.de>
+References: <20221012062558.732930-1-matej.vasilevski@seznam.cz>
+ <20221012062558.732930-3-matej.vasilevski@seznam.cz>
+ <202210162354.48915.pisa@cmp.felk.cvut.cz>
 MIME-Version: 1.0
-Content-Type: Text/Plain;
-  charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rvnrtrzjwhjvuun7"
 Content-Disposition: inline
-Message-Id: <202210162354.48915.pisa@cmp.felk.cvut.cz>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <202210162354.48915.pisa@cmp.felk.cvut.cz>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Thanks for the work
 
-On Wednesday 12 of October 2022 08:25:56 Matej Vasilevski wrote:
-> This patch adds support for retrieving hardware timestamps to RX and
-> error CAN frames. It uses timecounter and cyclecounter structures,
-> because the timestamping counter width depends on the IP core integration
-> (it might not always be 64-bit).
-> For platform devices, you should specify "ts" clock in device tree.
-> For PCI devices, the timestamping frequency is assumed to be the same
-> as bus frequency.
->
-> Signed-off-by: Matej Vasilevski <matej.vasilevski@seznam.cz>
+--rvnrtrzjwhjvuun7
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Acked-by: Pave Pisa <pisa@cmp.felk.cvut.cz>
+On 16.10.2022 23:54:48, Pavel Pisa wrote:
+[...]
+> I hope/expect that it is not problem to call clk_prepare_enable twice
+> on same reference when the clocks are the same. As I read the code the
+> state is counted. If it is a problem then some if has to be put there
+> when the core and timestamp clock are the same.
 
-It would be great if the code gets in as a basic level for CTU CAN FD
-timestamping which we need for CAN latency test project.
+The clock prepare and enable are counting. If you call then twice, you
+have to call disable and unprepare twice, too, to shut it down. This is
+widely used in the kernel, e.g. if the same clock is passed to several
+IP cores.
 
-In the longer term, it could be usesfull to discuss if rx_filter == HWTSTAMP_FILTER_ALL
-and cfg.tx_type == HWTSTAMP_TX_ON should be divided to allow separate timestamping
-enable and disable for transmit and receive. Our actual focus is to receive
-and Tx is implemented by reading the timestamping counter in the message transmit
-done interrupt. There is option (for newer core version) to loop Tx frames
-into Rx loop which could allow to enhance precision of Tx timestamps
-to 10 ns. But that requires newer IP core and I wait even for some minor changes
-to allow identification of looped Tx frames into Rx queue.
-Switch to such processing mode will have some overhead etc... So it should
-stay configurable and used only when precise Tx timestamp are really required...
+regards,
+Marc
 
-When the current timestamping patch is accepted I plan to discuss
-use of clk_prepare_enable for the main IP core clocks.
-These clocks are AXI bus ones on our FPGA integration so they
-has to be up anyway and clk_prepare_enable etc.. does not change
-behavior, but I want to make that correct in long term.
-I hope/expect that it is not problem to call clk_prepare_enable twice
-on same reference when the clocks are the same. As I read the code the
-state is counted. If it is a problem then some if has to be put there
-when the core and timestamp clock are the same.
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-Thanks for work and reviews,
+--rvnrtrzjwhjvuun7
+Content-Type: application/pgp-signature; name="signature.asc"
 
-                Pavel
--- 
-                Pavel Pisa
-    phone:      +420 603531357
-    e-mail:     pisa@cmp.felk.cvut.cz
-    Department of Control Engineering FEE CVUT
-    Karlovo namesti 13, 121 35, Prague 2
-    university: http://control.fel.cvut.cz/
-    personal:   http://cmp.felk.cvut.cz/~pisa
-    projects:   https://www.openhub.net/accounts/ppisa
-    CAN related:http://canbus.pages.fel.cvut.cz/
-    RISC-V education: https://comparch.edu.cvut.cz/
-    Open Technologies Research Education and Exchange Services
-    https://gitlab.fel.cvut.cz/otrees/org/-/wikis/home
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNNRmcACgkQrX5LkNig
+013jTQf+O3lLkZSM4YhGiVas49XH0Hf3wyVccsA5bdMIO4RQMnWPnxWbY/wIzY1o
+POdo3ycEo6hQCYZ1XMpNznzmnBaD17yXiLJHzWVrx16ZSAWfQOblluOgHujs3vkg
+jnqPRD74I1F5LlqOI0RRWtX1jlGZkO9Bd0cyyYgwtSoNFWXp6I+xIxrclgArda24
+HPWR2VSeqmiQAna8r9rdslI8j/HD6llI4Rspq8I3PpSL2ipyvtN9v2FbSfhLPOer
+Kr0Pc7/LITS95Klj/cpCFLJDLX/F4o0MdamQar5kh92vDSx15Sc2gUxBD9jqgpyc
+SPVzpWjMEbIaPv7++vzBN8Z/px/Yjg==
+=GIBY
+-----END PGP SIGNATURE-----
+
+--rvnrtrzjwhjvuun7--
