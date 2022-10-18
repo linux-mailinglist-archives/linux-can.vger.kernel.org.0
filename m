@@ -2,47 +2,43 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81B076026A2
-	for <lists+linux-can@lfdr.de>; Tue, 18 Oct 2022 10:19:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 106FE6029BE
+	for <lists+linux-can@lfdr.de>; Tue, 18 Oct 2022 13:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbiJRITo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 18 Oct 2022 04:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33240 "EHLO
+        id S229932AbiJRLAd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 18 Oct 2022 07:00:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230271AbiJRITl (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 18 Oct 2022 04:19:41 -0400
+        with ESMTP id S230009AbiJRLAV (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 18 Oct 2022 07:00:21 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F268B18E29
-        for <linux-can@vger.kernel.org>; Tue, 18 Oct 2022 01:19:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3EB95ADB
+        for <linux-can@vger.kernel.org>; Tue, 18 Oct 2022 04:00:20 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1okhp4-0006yh-69
-        for linux-can@vger.kernel.org; Tue, 18 Oct 2022 10:19:38 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 9D2771016E6
-        for <linux-can@vger.kernel.org>; Tue, 18 Oct 2022 08:19:37 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        id 1okkKY-0005AR-Qe; Tue, 18 Oct 2022 13:00:18 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 9ED7B1016E2;
-        Tue, 18 Oct 2022 08:19:36 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 26421a47;
-        Tue, 18 Oct 2022 08:19:35 +0000 (UTC)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id E98DD101981;
+        Tue, 18 Oct 2022 11:00:17 +0000 (UTC)
+Date:   Tue, 18 Oct 2022 13:00:16 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org
-Cc:     Vivek Yadav <vivek.2311@samsung.com>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH v5] can: mcan: m_can_handle_bus_errors(): add support for handling DLEC error on CAN-FD frames
-Date:   Tue, 18 Oct 2022 10:19:34 +0200
-Message-Id: <20221018081934.1336690-1-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.35.1
+To:     Sebastien FABRE <sebastien.fabre@actia.fr>
+Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        ore@pengutronix.de
+Subject: Re: J1939: Send messages without acknowledging
+Message-ID: <20221018110016.sgvh2prqm5ehstxv@pengutronix.de>
+References: <PR0P264MB23096FC238E648331A32B5A492299@PR0P264MB2309.FRAP264.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dqyzzeqhhydoemiy"
+Content-Disposition: inline
+In-Reply-To: <PR0P264MB23096FC238E648331A32B5A492299@PR0P264MB2309.FRAP264.PROD.OUTLOOK.COM>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -55,59 +51,66 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Vivek Yadav <vivek.2311@samsung.com>
 
-When a frame in CAN FD format has reached the data phase, the next CAN
-event (error or valid frame) will be shown in DLEC.
+--dqyzzeqhhydoemiy
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Utilize the dedicated flag (Data Phase Last Error Code: DLEC flag) to
-determine the type of last error that occurred in the data phase of a
-CAN-FD frame and handle the bus errors.
+On 17.10.2022 14:55:58, Sebastien FABRE wrote:
+> Hello,
+>=20
+> I am working on 5.4 kernel, and I have the same behavior with 5.10
+> kernel version.
+>=20
+> I reproduce the behavior with a custom application. A j1939 socket is
+> created with SO_BROADCAST and SO_J1939_PROMISC options and is binded.
+> The application sends a claim message then 50 broadcast messages in
+> loop (without waiting) with size greater than 8 bytes (50).
+>=20
+> Every sendto methods return success directly and sessions are stored
+> in sk_session_queue.
+>=20
+> If the can is 'on' but nobody acknowledges, after some times, trames
+> are no longer sent (ENOBUFS) but the application does not have this
+> information (sendto returned success).
+>=20
+> Moreover, txqueuelen does not have impact to this behavior (queue size
+> seems to be infinite).
+>=20
+> To finish, closing socket will take a long time depending on
+> sk_session_queue size because of J1939_XTP_TX_RETRY_LIMIT: kernel
+> seems to try to send every message 100 times if ENOBUFS is received.
+>=20
+> Is it the expected behavior? How can the application know that
+> messages are no longer sent?
 
-Signed-off-by: Vivek Yadav <vivek.2311@samsung.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
-Changes since v4:
-- fix indention for GENMASK
-- fix GENMASK
-- reduce scope of dlec
-- add netdev_dbg() for arbitration phase
+It's sort of expected....I think we haven't thought of that corner case.
+There is the socket TX timeout option, seems we have to implement this
+for j1939.
 
- drivers/net/can/m_can/m_can.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+regards,
+Marc
 
-diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index ebdd3c164d7b..34c76ee87c6e 100644
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -156,6 +156,7 @@ enum m_can_reg {
- #define PSR_EW		BIT(6)
- #define PSR_EP		BIT(5)
- #define PSR_LEC_MASK	GENMASK(2, 0)
-+#define PSR_DLEC_MASK	GENMASK(10, 8)
- 
- /* Interrupt Register (IR) */
- #define IR_ALL_INT	0xffffffff
-@@ -875,9 +876,17 @@ static int m_can_handle_bus_errors(struct net_device *dev, u32 irqstatus,
- 	/* handle lec errors on the bus */
- 	if (cdev->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING) {
- 		u8 lec = FIELD_GET(PSR_LEC_MASK, psr);
-+		u8 dlec = FIELD_GET(PSR_DLEC_MASK, psr);
- 
--		if (is_lec_err(lec))
-+		if (is_lec_err(lec)) {
-+			netdev_dbg(dev, "Arbitration phase error detected\n");
- 			work_done += m_can_handle_lec_err(dev, lec);
-+		}
-+		
-+		if (is_lec_err(dlec)) {
-+			netdev_dbg(dev, "Data phase error detected\n");
-+			work_done += m_can_handle_lec_err(dev, dlec);
-+		}
- 	}
- 
- 	/* handle protocol errors in arbitration phase */
--- 
-2.35.1
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
+--dqyzzeqhhydoemiy
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNOhz0ACgkQrX5LkNig
+013vewf/SuadPPcLDk14U9NZ+JiGWdf+evLfcQNRUfAizhs/NB8e7YLvIjCEDeBl
+7fdFmpSjZdbw/0hB+AeVyrEYODZ6SscbfE5ONqZc7CIv7s1Fjghz8xu8dMhOhmbo
+6R5M0QOBGopzj/Yz4kpOyu6p/F+t0ODNCVbjket1lSYvRVZYcjhF2TON5RvIS8Fv
+MUIuwXtBWgQMvg5H+OKrHwQeT/zeb6/OJM6JYyt2Z2KhWiC1wn2lNn6uK5Vr5ge7
+qaafbIuyp07X3A8t4PAeq/9gkcGvIQ7CvveVYbH5mPjWZoJVdzad8Ik8XAaIVpEl
++1/VVnlfiQYdBaRJOiRNieniPL9hTA==
+=hnOk
+-----END PGP SIGNATURE-----
+
+--dqyzzeqhhydoemiy--
