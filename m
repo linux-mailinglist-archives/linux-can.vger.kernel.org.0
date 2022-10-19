@@ -2,49 +2,46 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77B336051FE
-	for <lists+linux-can@lfdr.de>; Wed, 19 Oct 2022 23:30:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBB22605262
+	for <lists+linux-can@lfdr.de>; Wed, 19 Oct 2022 23:58:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230376AbiJSVas (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 19 Oct 2022 17:30:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50804 "EHLO
+        id S229979AbiJSV6B (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 19 Oct 2022 17:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiJSVap (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 19 Oct 2022 17:30:45 -0400
+        with ESMTP id S229491AbiJSV56 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 19 Oct 2022 17:57:58 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3466018C432
-        for <linux-can@vger.kernel.org>; Wed, 19 Oct 2022 14:30:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8EA14139D
+        for <linux-can@vger.kernel.org>; Wed, 19 Oct 2022 14:57:54 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1olGeB-0004fC-Co
-        for linux-can@vger.kernel.org; Wed, 19 Oct 2022 23:30:43 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id D5F3F104173
-        for <linux-can@vger.kernel.org>; Wed, 19 Oct 2022 21:30:42 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        id 1olH4R-00084K-E0; Wed, 19 Oct 2022 23:57:51 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 2906510416D;
-        Wed, 19 Oct 2022 21:30:42 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 77dad1fd;
-        Wed, 19 Oct 2022 21:30:36 +0000 (UTC)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 3CD3D1041C8;
+        Wed, 19 Oct 2022 21:57:49 +0000 (UTC)
+Date:   Wed, 19 Oct 2022 23:57:46 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org
-Cc:     Jeroen Hofstee <jhofstee@victronenergy.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH v2 7/7] can: gs_usb: add support for reading error counters
-Date:   Wed, 19 Oct 2022 23:30:35 +0200
-Message-Id: <20221019213035.1607752-8-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221019213035.1607752-1-mkl@pengutronix.de>
-References: <20221019213035.1607752-1-mkl@pengutronix.de>
+To:     Jimmy Assarsson <extja@kvaser.com>
+Cc:     linux-can@vger.kernel.org,
+        Anssi Hannula <anssi.hannula@bitwise.fi>,
+        Jimmy Assarsson <jimmyassarsson@gmail.com>
+Subject: Re: [PATCH can-next v5 10/11] can: kvaser_usb: Add struct
+ kvaser_usb_busparams
+Message-ID: <20221019215746.v7xwjt3zlxzdvqw7@pengutronix.de>
+References: <20221010185237.319219-1-extja@kvaser.com>
+ <20221010185237.319219-11-extja@kvaser.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="flhw25aphi2nkh7i"
+Content-Disposition: inline
+In-Reply-To: <20221010185237.319219-11-extja@kvaser.com>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -57,76 +54,77 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Jeroen Hofstee <jhofstee@victronenergy.com>
 
-Add support for reading the device state and CAN error counters, using
-the GS_USB_BREQ_GET_STATE control message, if supported by the device,
-indicated by the GS_CAN_FEATURE_GET_STATE feature flag.
+--flhw25aphi2nkh7i
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Jeroen Hofstee <jhofstee@victronenergy.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/usb/gs_usb.c | 39 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+On 10.10.2022 20:52:36, Jimmy Assarsson wrote:
+> Add struct kvaser_usb_busparams containing the busparameters used in
+> CMD_{SET,GET}_BUSPARAMS* commands.
+>=20
+> Tested-by: Anssi Hannula <anssi.hannula@bitwise.fi>
+> Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
+> ---
 
-diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
-index 3f00e8d79b75..b279cf54cca1 100644
---- a/drivers/net/can/usb/gs_usb.c
-+++ b/drivers/net/can/usb/gs_usb.c
-@@ -961,6 +961,42 @@ static int gs_can_open(struct net_device *netdev)
- 	return 0;
- }
- 
-+static int gs_usb_get_state(const struct net_device *netdev,
-+			    struct can_berr_counter *bec,
-+			    enum can_state *state)
-+{
-+	struct gs_can *dev = netdev_priv(netdev);
-+	struct gs_device_state ds;
-+	int rc;
-+
-+	rc = usb_control_msg_recv(interface_to_usbdev(dev->iface), 0,
-+				  GS_USB_BREQ_GET_STATE,
-+				  USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_INTERFACE,
-+				  dev->channel, 0,
-+				  &ds, sizeof(ds),
-+				  USB_CTRL_GET_TIMEOUT,
-+				  GFP_KERNEL);
-+	if (rc)
-+		return rc;
-+
-+	if (ds.state >= CAN_STATE_MAX)
-+		return -EOPNOTSUPP;
-+
-+	*state = ds.state;
-+	bec->txerr = ds.txerr;
-+	bec->rxerr = ds.rxerr;
-+
-+	return 0;
-+}
-+
-+static int gs_usb_can_get_berr_counter(const struct net_device *netdev,
-+				       struct can_berr_counter *bec)
-+{
-+	enum can_state state;
-+
-+	return gs_usb_get_state(netdev, bec, &state);
-+}
-+
- static int gs_can_close(struct net_device *netdev)
- {
- 	int rc;
-@@ -1235,6 +1271,9 @@ static struct gs_can *gs_make_candev(unsigned int channel,
- 	if (feature & GS_CAN_FEATURE_BERR_REPORTING)
- 		dev->can.ctrlmode_supported |= CAN_CTRLMODE_BERR_REPORTING;
- 
-+	if (feature & GS_CAN_FEATURE_GET_STATE)
-+		dev->can.do_get_berr_counter = gs_usb_can_get_berr_counter;
-+
- 	/* The CANtact Pro from LinkLayer Labs is based on the
- 	 * LPC54616 µC, which is affected by the NXP LPC USB transfer
- 	 * erratum. However, the current firmware (version 2) doesn't
--- 
-2.35.1
+[...]
 
+> +struct kvaser_usb_busparams {
+> +	__le32 bitrate;
+> +	u8 tseg1;
+> +	u8 tseg2;
+> +	u8 sjw;
+> +	u8 nsamples;
+> +};
 
+| drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c:169:30: error: field
+| busparams within 'struct kvaser_cmd_busparams' is less aligned than
+| 'struct kvaser_usb_busparams' and is usually due to 'struct
+| kvaser_cmd_busparams' being packed, which can lead to unaligned
+| accesses [-Werror,-Wunaligned-access]
+|         struct kvaser_usb_busparams busparams;
+|                                     ^
+
+Fixed (again) while applying.
+
+diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb.h b/drivers/net/can/=
+usb/kvaser_usb/kvaser_usb.h
+index 8c4c2f00fb9f..ff10b3790d84 100644
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb.h
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb.h
+@@ -82,7 +82,7 @@ struct kvaser_usb_busparams {
+        u8 tseg2;
+        u8 sjw;
+        u8 nsamples;
+-};
++} __packed;
+=20
+ struct kvaser_usb {
+        struct usb_device *udev;
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--flhw25aphi2nkh7i
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNQctgACgkQrX5LkNig
+012F2Af+OkSYujEc2AU9Ag0qCdJKEtk9jrOwkNa6tDi5lqolHK/aVWVyqGRneWAe
+EKJPNz5AzCekPjmsvqDl4vPPFerNB2buWCcYO5SrIjU02a6PflgHeew180RbAFR8
+3lUg8wwqPqR1Xy/Et1+Gp46qGp2z/TNPPEd9N7eIsyDy+YOyKN74k/piEXTdownt
+i0Q2P2wXsmM3V5Gjw7T7K+02MqkmIEwGNDdnDL80SLBQ7TCWX03AejEDtE9U6CNz
+CtCn42VZZgZwZT1ZGlPBSDVQBTxCSoo/wrpfXC52k39jj1pRpbvzWyEG3kRFwdkE
+GHMkzaQpmwBrtE/dIXZZLpGet7BqUw==
+=A8V9
+-----END PGP SIGNATURE-----
+
+--flhw25aphi2nkh7i--
