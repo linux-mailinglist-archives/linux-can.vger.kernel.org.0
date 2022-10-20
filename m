@@ -2,111 +2,110 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A76B605B79
-	for <lists+linux-can@lfdr.de>; Thu, 20 Oct 2022 11:49:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27D21605B7E
+	for <lists+linux-can@lfdr.de>; Thu, 20 Oct 2022 11:49:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbiJTJtI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 20 Oct 2022 05:49:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41956 "EHLO
+        id S229608AbiJTJtj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 20 Oct 2022 05:49:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbiJTJtE (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 20 Oct 2022 05:49:04 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27091C906D
-        for <linux-can@vger.kernel.org>; Thu, 20 Oct 2022 02:48:59 -0700 (PDT)
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20221020094854epoutp04090e8270cb1c42a6aba8b867c4d11424~fvglcO7Yx3182131821epoutp04M
-        for <linux-can@vger.kernel.org>; Thu, 20 Oct 2022 09:48:54 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20221020094854epoutp04090e8270cb1c42a6aba8b867c4d11424~fvglcO7Yx3182131821epoutp04M
+        with ESMTP id S229948AbiJTJte (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 20 Oct 2022 05:49:34 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E94B25D9
+        for <linux-can@vger.kernel.org>; Thu, 20 Oct 2022 02:49:22 -0700 (PDT)
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20221020094917epoutp038606e3e054f5aa64bd101a287d6c160d~fvg6n-eb81262112621epoutp03E
+        for <linux-can@vger.kernel.org>; Thu, 20 Oct 2022 09:49:17 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20221020094917epoutp038606e3e054f5aa64bd101a287d6c160d~fvg6n-eb81262112621epoutp03E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1666259334;
-        bh=uzqEkS3AsLeq/bVuAwqx41AXSTCfDbNjTFMpIIH4hY4=;
+        s=mail20170921; t=1666259357;
+        bh=mXpXXW7FDJVzh5xT3qEufr5C3NDZDUXmvQJfo/Dd6+Y=;
         h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=cUOFBlZRMfJcB4uP5jYDunzRcUSGyEIzdAlCM+YTy+462Y09JHnUs9M3ivV14fovb
-         UK69TSlsjv62ubhbHBgaq9pLWzavopi2vk3ZjZcQPfTiPLZTFXiC3uhpWsGRZh3tMB
-         +NgI3ayM7V1xAzvbBVTRcw0UnExxZQbZt7iSly80=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-        20221020094854epcas5p4c67bd3cddef9a227716a0ec22cd493e0~fvglAWV9g1312613126epcas5p4F;
-        Thu, 20 Oct 2022 09:48:54 +0000 (GMT)
-Received: from epsmges5p2new.samsung.com (unknown [182.195.38.174]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4MtN8g3kVDz4x9Pw; Thu, 20 Oct
-        2022 09:48:51 +0000 (GMT)
-Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        A5.AD.39477.F7911536; Thu, 20 Oct 2022 18:48:47 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-        20221020094130epcas5p4e96f28710db539f50eae8869acef100a~fvaIAp60O2723027230epcas5p4U;
-        Thu, 20 Oct 2022 09:41:30 +0000 (GMT)
+        b=oIniUXTYql7vghh05IN+TyDwnqrA9QyU+C/8riwdqKxmUyRvx1LqJKCZkVUCIey/g
+         rf4LGvJg1FYvD0iuNZLe569fiksPTb8EM9jMvir8LlgGvqJLB81/EyBESdNzbbPQt9
+         ENZqBaNU3v9cReA4/t6xRYiBBKiwJDH6j7Vkq+XI=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+        20221020094916epcas5p2d3e5fbd6ea853d3ac047e18752263d2a~fvg5spzy62159021590epcas5p2u;
+        Thu, 20 Oct 2022 09:49:16 +0000 (GMT)
+Received: from epsmges5p3new.samsung.com (unknown [182.195.38.174]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4MtN955G6mz4x9Q4; Thu, 20 Oct
+        2022 09:49:13 +0000 (GMT)
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        6A.11.56352.99911536; Thu, 20 Oct 2022 18:49:13 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+        20221020094824epcas5p1c069f11b37d07d0c88d3c95eed314878~fvgJg7S0V2517325173epcas5p1U;
+        Thu, 20 Oct 2022 09:48:24 +0000 (GMT)
 Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20221020094130epsmtrp1ed90fefc5868f7262de6d251479feae6~fvaH--KeD0951709517epsmtrp1w;
-        Thu, 20 Oct 2022 09:41:30 +0000 (GMT)
-X-AuditID: b6c32a4a-259fb70000019a35-b4-6351197fefc6
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20221020094824epsmtrp2a7091bef8d3e887dac69fd4be3b1d314~fvgJd2fPH1004110041epsmtrp2K;
+        Thu, 20 Oct 2022 09:48:24 +0000 (GMT)
+X-AuditID: b6c32a4b-5f7fe7000001dc20-27-63511999063a
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
         epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        1C.ED.14392.AC711536; Thu, 20 Oct 2022 18:41:30 +0900 (KST)
-Received: from FDSFTE343 (unknown [107.122.81.111]) by epsmtip1.samsung.com
+        4C.5E.14392.86911536; Thu, 20 Oct 2022 18:48:24 +0900 (KST)
+Received: from FDSFTE343 (unknown [107.122.81.111]) by epsmtip2.samsung.com
         (KnoxPortal) with ESMTPA id
-        20221020094129epsmtip126214b2ff1b9d6e4e96672882af20894~fvaHBng7c0299602996epsmtip14;
-        Thu, 20 Oct 2022 09:41:29 +0000 (GMT)
+        20221020094823epsmtip2b41f5fe83350d1c6c07895db18f7b608~fvgIzfnXb2338023380epsmtip25;
+        Thu, 20 Oct 2022 09:48:23 +0000 (GMT)
 From:   "Chandrasekar R" <rcsekar@samsung.com>
 To:     "'Marc Kleine-Budde'" <mkl@pengutronix.de>,
         <linux-can@vger.kernel.org>
 Cc:     "'Vivek Yadav'" <vivek.2311@samsung.com>
-In-Reply-To: <20221019211611.1605764-1-mkl@pengutronix.de>
-Subject: RE: [PATCH v2] can: m_can: is_lec_err(): clean up LEC error
- handling
-Date:   Thu, 20 Oct 2022 15:11:26 +0530
-Message-ID: <004b01d8e468$21e16160$65a42420$@samsung.com>
+In-Reply-To: <20221018081934.1336690-1-mkl@pengutronix.de>
+Subject: RE: [PATCH v5] can: mcan: m_can_handle_bus_errors(): add support
+ for handling DLEC error on CAN-FD frames
+Date:   Thu, 20 Oct 2022 15:18:22 +0530
+Message-ID: <005301d8e469$189b2770$49d17650$@samsung.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQLEguLVrP6XG6+h37puLd5Zq27r3QElmQi4rDac7XA=
+Thread-Index: AQHOGH3zLVrDc3MKTS6n20XEz2tJjwGe84MVrh+pZWA=
 Content-Language: en-in
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrOKsWRmVeSWpSXmKPExsWy7bCmlm69ZGCywawuTotV36cyW6xfNIXF
-        4tfCwywOzB79fw08+rasYvT4vEkugDkq2yYjNTEltUghNS85PyUzL91WyTs43jne1MzAUNfQ
-        0sJcSSEvMTfVVsnFJ0DXLTMHaI+SQlliTilQKCCxuFhJ386mKL+0JFUhI7+4xFYptSAlp8Ck
-        QK84Mbe4NC9dLy+1xMrQwMDIFKgwITvjzdEjTAVbxSpW9zewNjDuEOpi5OSQEDCRWHdpN3MX
-        IxeHkMBuRokFhxrZIJxPjBInnyyCynxjlJh2+QJrFyMHWMvvY/UQ8b2MEu9nzWcCGSUk8IJR
-        Yu5BARCbTUBH4n3fNzaQehEBb4nmP+ogYWag8PpZb8DKOQWsJD4dfsgGYgsL+EssW72OHcRm
-        EVCV6O64ANbKK2ApMWOHG0iYV0BQ4uTMJywQY+Qltr+dwwzxgILEz6fLWEFsEaCR5zbPYIeo
-        EZc4+rMHquYtu8SxFnEI20Vi5u+nTBC2sMSr41vYIWwpiZf9bVB2scSr75PZIOwaiX2bV0PN
-        sZc4cGUOC8hpzAKaEut36UOEZSWmnlrHBLGWT6L39xOo8bwSO+bB2IoS07bOZIEEoLjEkXkh
-        ExiVZiF5bBaSx2YheWAWwrIFjCyrGCVTC4pz01OLTQuM8lLL4XGdnJ+7iRGcArW8djA+fPBB
-        7xAjEwfjIUYJDmYlEd6CdwHJQrwpiZVVqUX58UWlOanFhxhNgYE9kVlKNDkfmITzSuINTSwN
-        TMzMzEwsjc0MlcR5F8/QShYSSE8sSc1OTS1ILYLpY+LglGpgmvfmXLLdP/71y7KYZ0av5vRX
-        ue11Y6Wm3KrJf7JKgl7N6nLi+5P15ZLrWbsXu00i7RTennr1/D/X9n13euqmu1oZc0d8trid
-        Wdn55VZ8Tp5ubqR/1Dsr/pV3PzXuZDqT2OsX/2Z9yO+FeVtd9N4u/8p2O3jP/XsfTB7d3XSz
-        YM7L3p86jy6IVVYWThW5urlqUUL8B63JUjsFD77t1FcLe6RQHeL7LkpTQfXxki0JPk6BDyQY
-        12dFnFL6ylTqcSdh267IbQXnPiXHvTwRLv3ttpany4J7rClXxZTcr2n0ZTR3Rs/zdT+wdirv
-        OfFal3OTvVq2XZHl+hh44mLurOY59yd43NskKeLu0lF0rizTSYmlOCPRUIu5qDgRAAxJ9RYK
-        BAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrILMWRmVeSWpSXmKPExsWy7bCSnO4p8cBkg/ZvCharvk9ltli/aAqL
-        xa+Fh1kcmD36/xp49G1ZxejxeZNcAHMUl01Kak5mWWqRvl0CV8abo0eYCraKVazub2BtYNwh
-        1MXIwSEhYCLx+1h9FyMXh5DAbkaJxc397F2MnEBxcYm1H66wQdjCEiv/PWeHKHrGKHH+5GxW
-        kASbgI7E+75vYEUiAr4S53t6mEFsZqD4+llvmCAauhklpt2fCtbAKWAl8enwQ7AGYaCGLYf2
-        gcVZBFQlujsusIFcxCtgKTFjhxtImFdAUOLkzCcsIGFmAT2Jto2MEOPlJba/ncMMcZuCxM+n
-        y1ghTrCSOLd5BjtEjbjE0Z89zBMYhWchmTQLYdIsJJNmIelYwMiyilEytaA4Nz232LDAMC+1
-        XK84Mbe4NC9dLzk/dxMjOBa0NHcwbl/1Qe8QIxMH4yFGCQ5mJRHegncByUK8KYmVValF+fFF
-        pTmpxYcYpTlYlMR5L3SdjBcSSE8sSc1OTS1ILYLJMnFwSjUwbX/Imrz3cljtYbv5h3evb7y6
-        8I9gzQ+ZHweXpG9KbKzq1FbJnvLE6iBjTMas9vDvNRLaPWse9+/b6Tt3Q8+v0Iyu272nApgm
-        cX9k2Nnss75W7Kfjilblfevt5BIF528VXcF6pkyvUvG0sP6O61NDZK2bzvud6tireO03z/Sl
-        6gtKV9Rtm6VxmbPcTIHv3Vc9H739WRudDsf0MUz4+/V7fvz2tTcP5DuYx9u9vLqjpWmSxg4T
-        t5Pyq4JbXEVCfq4xZl2QGLG098Ee17MTHa9cMzTe5/GrXaPiipKUqtD5ix5zXsib/5f+dmrf
-        P7V5SqJ8UxZtux0Wde7Y9/a5c/K/7Vxx1+nZ5f3x32P7vOpeHlFiKc5INNRiLipOBACmWAw/
-        9AIAAA==
-X-CMS-MailID: 20221020094130epcas5p4e96f28710db539f50eae8869acef100a
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrNKsWRmVeSWpSXmKPExsWy7bCmuu5MycBkg+snxS1WfZ/KbLF+0RQW
+        i18LD7M4MHv0/zXw6NuyitHj8ya5AOaobJuM1MSU1CKF1Lzk/JTMvHRbJe/geOd4UzMDQ11D
+        SwtzJYW8xNxUWyUXnwBdt8wcoD1KCmWJOaVAoYDE4mIlfTubovzSklSFjPziElul1IKUnAKT
+        Ar3ixNzi0rx0vbzUEitDAwMjU6DChOyMe+f/MRc8FqrYe2Q2UwPjVP4uRk4OCQETiQtPbjB1
+        MXJxCAnsZpR4dqiJFcL5xCjRP+EqlPONUWL3z3vMMC0HlrWyQST2AlXdfgrlvGCU6Pn1mw2k
+        ik1AR+J93zcgm4NDRMBbovmPOkiYGSi8ftYbJhCbU8BKYtPZVrByYYESiWvT1zGC2CwCqhI3
+        P70FW8YrYCmxvWsNlC0ocXLmExaIOfIS29/OgTpIQeLn02WsILYI0Mw7B5ewQdSISxz92cMM
+        cpuEwCN2iROHdzNBNLhI3L7RyQphC0u8Or6FHcKWkvj8bi8bhF0s8er7ZCi7RmLf5tVQy+wl
+        DlyZwwLyF7OApsT6XfoQYVmJqafWMUHs5ZPo/f0EahWvxI55MLaixLStM8FaJYBuOzIvZAKj
+        0iwkn81C8tksJB/MQli2gJFlFaNkakFxbnpqsWmBcV5qOTy+k/NzNzGCU6GW9w7GRw8+6B1i
+        ZOJgPMQowcGsJMJb8C4gWYg3JbGyKrUoP76oNCe1+BCjKTC4JzJLiSbnA5NxXkm8oYmlgYmZ
+        mZmJpbGZoZI47+IZWslCAumJJanZqakFqUUwfUwcnFINTExNn61PxLv3nDpT9KD5w5Gvx06d
+        y3C5uejB0X0mhTy1N7cw6l5gUN47dbbXs5877zIdnPlwRcPNtJ47efuveX98z745UnXW++SL
+        UtNbmrKX+fL9PnKuWW5OyvQWl57zNpF8mcnFM9mWeoq8NwjcNH2CSMAeBost/llnuKvUzZP4
+        /2VE8HyTPLspTM9V+krRYW5rjq2u4T0i7677n9ctW9G2LfHcepP54UVvXWZ4GJ4vK721Ljek
+        eucNBcdbL1fkXlx4lvPb/Ijv3+1nJMbduTT5s9h27U2b9SO+yMzwzv/CsumUjNDj1VtezVcX
+        Wd/KKzvrafZEdv16lQXPl/p6hfbWKGu6rXd638p1MX/a6kNKLMUZiYZazEXFiQCn7J0wDgQA
+        AA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrMLMWRmVeSWpSXmKPExsWy7bCSvG6GZGCywdb9sharvk9ltli/aAqL
+        xa+Fh1kcmD36/xp49G1ZxejxeZNcAHMUl01Kak5mWWqRvl0CV8a98/+YCx4LVew9MpupgXEq
+        fxcjJ4eEgInEgWWtbF2MXBxCArsZJS5de84OkRCXWPvhChuELSyx8h9IHKToGaPE1++rmUAS
+        bAI6Eu/7voEViQj4Spzv6WEGsZmB4utnvWGCaOhmlOhY/YcVJMEpYCWx6WwrWIOwQJHE8TOH
+        wLaxCKhK3Pz0FqyZV8BSYnvXGihbUOLkzCcsXYwcQEP1JNo2MkLMl5fY/nYOM8RxChI/ny5j
+        hbjBSuLOwSVsEDXiEkd/9jBPYBSehWTSLIRJs5BMmoWkYwEjyypGydSC4tz03GLDAsO81HK9
+        4sTc4tK8dL3k/NxNjOB40NLcwbh91Qe9Q4xMHIyHGCU4mJVEeAveBSQL8aYkVlalFuXHF5Xm
+        pBYfYpTmYFES573QdTJeSCA9sSQ1OzW1ILUIJsvEwSnVwLRj1ZX/MSHvnhuZhknlnY9osFn/
+        X2Qpx4ql/gwHs0xyrTynJkVv9g5lrfxS9+fx36LkOa5Nc6SuRP458btpu9ftzEvtZT0/ZllP
+        NS9I/stvYvDCOFTU6Gv/tnt/g38tqd6u9c6TS4k1+n4fw/errX/Wqr8p+uT1w9lFUHTfcubm
+        Kr2wucs7Vq/TX5nIauVwq0K4PPWPqG9XRvj0qv/ZC7WPPJx3nrP07YfKf7KBqyX38zVHZvD0
+        +Ugxrv0SvmK5cWisU73+Tek45v9Mf+S++Wqqfj0cYH+lXdOcffvFsN/a7Qa1Ih7O1axna/Yf
+        kmXx1ZOeyr3XTEGuZtrp0yImXCy3DxU9jsup1xIMTmZTYinOSDTUYi4qTgQA5Tsf6fYCAAA=
+X-CMS-MailID: 20221020094824epcas5p1c069f11b37d07d0c88d3c95eed314878
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: REQ_APPROVE
 CMS-TYPE: 105P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20221019211623epcas5p4202f80061238508c48fae82a40d079e0
-References: <CGME20221019211623epcas5p4202f80061238508c48fae82a40d079e0@epcas5p4.samsung.com>
-        <20221019211611.1605764-1-mkl@pengutronix.de>
+X-CMS-RootMailID: 20221018081944epcas5p4c87af0a214b02e7c062eca86a3d1f029
+References: <CGME20221018081944epcas5p4c87af0a214b02e7c062eca86a3d1f029@epcas5p4.samsung.com>
+        <20221018081934.1336690-1-mkl@pengutronix.de>
 X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
@@ -121,85 +120,72 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 > -----Original Message-----
 > From: Marc Kleine-Budde [mailto:mkl@pengutronix.de]
-> Sent: 20 October 2022 02:46
+> Sent: 18 October 2022 13:50
 > To: linux-can@vger.kernel.org
 > Cc: Vivek Yadav <vivek.2311@samsung.com>; Chandrasekar Ramakrishnan
 > <rcsekar@samsung.com>; Marc Kleine-Budde <mkl@pengutronix.de>
-> Subject: [PATCH v2] can: m_can: is_lec_err(): clean up LEC error handling
+> Subject: [PATCH v5] can: mcan: m_can_handle_bus_errors(): add support for
+> handling DLEC error on CAN-FD frames
 > 
-> The PSR register contains among other the error for the CAN arbitration
-> phase (LEC bits) and CAN data phase (DLEC bits).
+> From: Vivek Yadav <vivek.2311@samsung.com>
 > 
-> Prepare is_lec_err() to be called with the (D)LEC value only instead of
-the
-> whole PSR register. While there rename LEC_UNUSED to LEC_NO_CHANGE
-> to match the latest M_CAN reference manual.
+> When a frame in CAN FD format has reached the data phase, the next CAN
+> event (error or valid frame) will be shown in DLEC.
 > 
-Looks good to me, 
+> Utilize the dedicated flag (Data Phase Last Error Code: DLEC flag) to
+> determine the type of last error that occurred in the data phase of a
+CAN-FD
+> frame and handle the bus errors.
+> 
+Looks good to me,
 Reviewed-by: Chandrasekar Ramakrishnan <rcsekar@samsung.com>
 
+> Signed-off-by: Vivek Yadav <vivek.2311@samsung.com>
 > Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 > ---
-> changes since RFC: https://lore.kernel.org/all/20221012074205.691384-1-
-> mkl@pengutronix.de
-> - add proper patch description
+> Changes since v4:
+> - fix indention for GENMASK
+> - fix GENMASK
+> - reduce scope of dlec
+> - add netdev_dbg() for arbitration phase
 > 
->  drivers/net/can/m_can/m_can.c | 15 ++++++++-------
-> drivers/net/can/m_can/m_can.h |  2 +-
->  2 files changed, 9 insertions(+), 8 deletions(-)
+>  drivers/net/can/m_can/m_can.c | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
 > 
 > diff --git a/drivers/net/can/m_can/m_can.c
-> b/drivers/net/can/m_can/m_can.c index dcb582563d5e..ebdd3c164d7b
+> b/drivers/net/can/m_can/m_can.c index ebdd3c164d7b..34c76ee87c6e
 > 100644
 > --- a/drivers/net/can/m_can/m_can.c
 > +++ b/drivers/net/can/m_can/m_can.c
-> @@ -816,11 +816,9 @@ static void m_can_handle_other_err(struct
-> net_device *dev, u32 irqstatus)
->  		netdev_err(dev, "Message RAM access failure occurred\n");
-> }
+> @@ -156,6 +156,7 @@ enum m_can_reg {
+>  #define PSR_EW		BIT(6)
+>  #define PSR_EP		BIT(5)
+>  #define PSR_LEC_MASK	GENMASK(2, 0)
+> +#define PSR_DLEC_MASK	GENMASK(10, 8)
 > 
-> -static inline bool is_lec_err(u32 psr)
-> +static inline bool is_lec_err(u8 lec)
->  {
-> -	psr &= LEC_UNUSED;
-> -
-> -	return psr && (psr != LEC_UNUSED);
-> +	return lec != LEC_NO_ERROR && lec != LEC_NO_CHANGE;
->  }
-> 
->  static inline bool m_can_is_protocol_err(u32 irqstatus) @@ -875,9 +873,12
-> @@ static int m_can_handle_bus_errors(struct net_device *dev, u32
-> irqstatus,
->  		work_done += m_can_handle_lost_msg(dev);
-> 
+>  /* Interrupt Register (IR) */
+>  #define IR_ALL_INT	0xffffffff
+> @@ -875,9 +876,17 @@ static int m_can_handle_bus_errors(struct
+> net_device *dev, u32 irqstatus,
 >  	/* handle lec errors on the bus */
-> -	if ((cdev->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING) &&
-> -	    is_lec_err(psr))
-> -		work_done += m_can_handle_lec_err(dev, psr &
-> LEC_UNUSED);
-> +	if (cdev->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING) {
-> +		u8 lec = FIELD_GET(PSR_LEC_MASK, psr);
+>  	if (cdev->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING) {
+>  		u8 lec = FIELD_GET(PSR_LEC_MASK, psr);
+> +		u8 dlec = FIELD_GET(PSR_DLEC_MASK, psr);
+> 
+> -		if (is_lec_err(lec))
+> +		if (is_lec_err(lec)) {
+> +			netdev_dbg(dev, "Arbitration phase error
+> detected\n");
+>  			work_done += m_can_handle_lec_err(dev, lec);
+> +		}
 > +
-> +		if (is_lec_err(lec))
-> +			work_done += m_can_handle_lec_err(dev, lec);
-> +	}
+> +		if (is_lec_err(dlec)) {
+> +			netdev_dbg(dev, "Data phase error detected\n");
+> +			work_done += m_can_handle_lec_err(dev, dlec);
+> +		}
+>  	}
 > 
 >  	/* handle protocol errors in arbitration phase */
->  	if ((cdev->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING) &&
-> diff --git a/drivers/net/can/m_can/m_can.h
-> b/drivers/net/can/m_can/m_can.h index 4c0267f9f297..52563c048732
-> 100644
-> --- a/drivers/net/can/m_can/m_can.h
-> +++ b/drivers/net/can/m_can/m_can.h
-> @@ -38,7 +38,7 @@ enum m_can_lec_type {
->  	LEC_BIT1_ERROR,
->  	LEC_BIT0_ERROR,
->  	LEC_CRC_ERROR,
-> -	LEC_UNUSED,
-> +	LEC_NO_CHANGE,
->  };
-> 
->  enum m_can_mram_cfg {
 > --
 > 2.35.1
 > 
