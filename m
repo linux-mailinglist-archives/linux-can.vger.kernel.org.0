@@ -2,167 +2,108 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26394607711
-	for <lists+linux-can@lfdr.de>; Fri, 21 Oct 2022 14:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8443C6078CF
+	for <lists+linux-can@lfdr.de>; Fri, 21 Oct 2022 15:44:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230208AbiJUMjX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 21 Oct 2022 08:39:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40090 "EHLO
+        id S229441AbiJUNot (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 21 Oct 2022 09:44:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbiJUMi5 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 21 Oct 2022 08:38:57 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCCBE266430
-        for <linux-can@vger.kernel.org>; Fri, 21 Oct 2022 05:38:39 -0700 (PDT)
-Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20221021123837epoutp01aeeb221091961736272e2ab5a182e8f6~gFeC6_seA1195311953epoutp01d
-        for <linux-can@vger.kernel.org>; Fri, 21 Oct 2022 12:38:37 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20221021123837epoutp01aeeb221091961736272e2ab5a182e8f6~gFeC6_seA1195311953epoutp01d
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1666355917;
-        bh=biFlnjuZ8k7mTMxR0OX0eBniKYxMuKThwFDjh9fvDPg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fM/6QpP77QqhvdyX4IMUTsW3Snw5E3jfZMJqCOnubcf3zz4RNNnjUgM1XrqG77+BB
-         gDPtEitKhaZOqkx6qiKvoZlHlakFTj2jKeU2vSVV7NcjD+2/k++gdIzHqS1DhEQbYH
-         Nk1vS30dxzgPLCswBzRzzbVhOotPRDCGRbgvoeYU=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-        20221021123836epcas5p26af5b3a891b3f64ace2e9353297721d1~gFeCVtaPu1049710497epcas5p2R;
-        Fri, 21 Oct 2022 12:38:36 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.179]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4Mv3t15TyZz4x9Pw; Fri, 21 Oct
-        2022 12:38:33 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        BA.EB.20812.9C292536; Fri, 21 Oct 2022 21:38:33 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-        20221021102642epcas5p24fec1e1e90632f6d9e768f7d25dc5480~gDq4NHe3l0419604196epcas5p2Z;
-        Fri, 21 Oct 2022 10:26:42 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20221021102642epsmtrp28fea699862896241631581e17642ead7~gDq4MJMPm0776407764epsmtrp2P;
-        Fri, 21 Oct 2022 10:26:42 +0000 (GMT)
-X-AuditID: b6c32a49-b09f97000001514c-61-635292c956f6
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        56.26.14392.2E372536; Fri, 21 Oct 2022 19:26:42 +0900 (KST)
-Received: from cheetah.sa.corp.samsungelectronics.net (unknown
-        [107.109.115.53]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20221021102640epsmtip1194c12f5c871cadc8caa52e6fb12ce21~gDq2Ud8bo2758127581epsmtip1B;
-        Fri, 21 Oct 2022 10:26:40 +0000 (GMT)
-From:   Vivek Yadav <vivek.2311@samsung.com>
-To:     rcsekar@samsung.com, wg@grandegger.com, mkl@pengutronix.de,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, pankaj.dubey@samsung.com,
-        ravi.patel@samsung.com, alim.akhtar@samsung.com
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Vivek Yadav <vivek.2311@samsung.com>
-Subject: [PATCH 7/7] arm64: dts: fsd: Add support for error correction code
- for message RAM
-Date:   Fri, 21 Oct 2022 15:28:33 +0530
-Message-Id: <20221021095833.62406-8-vivek.2311@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221021095833.62406-1-vivek.2311@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuplk+LIzCtJLcpLzFFi42LZdlhTQ/fkpKBkgw87NC0ezNvGZjHnfAuL
-        xdNjj9gtLmzrY7VY9X0qs8XlXXPYLNYvmsJicWyBmMW3028YLRZt/cJu8fDDHnaLWRd2sFr8
-        WniYxWLpvZ2sDnweW1beZPJYsKnU4+Ol24wem1Z1snn0/zXweL/vKptH35ZVjB6fN8kFcERl
-        22SkJqakFimk5iXnp2TmpdsqeQfHO8ebmhkY6hpaWpgrKeQl5qbaKrn4BOi6ZeYAXa2kUJaY
-        UwoUCkgsLlbSt7Mpyi8tSVXIyC8usVVKLUjJKTAp0CtOzC0uzUvXy0stsTI0MDAyBSpMyM74
-        2PmRqWAHb8XfK/NZGhjvcHUxcnJICJhItM57wNTFyMUhJLCbUeLqpQ/MEM4nRomzG9+zgVQJ
-        CXxjlLjSHAHT0fXpBCtE0V5GiW0NE9ggnFYmiVtvm1lBqtgEtCQedy5gAbFFBO4ySlxbnNnF
-        yMHBLFAtceAIH0hYWCBW4sKlXWALWARUJb48OcAIYvMKWEs8aZnMBLFMXmL1hgPMIDangI3E
-        q/lbGEF2SQhM5JDYuPMzM0SRi8Tyn5OgGoQlXh3fwg5hS0l8freXDcJOltjxr5MVws6QWDBx
-        DyOEbS9x4MocFojbNCXW79KHCMtKTD21DmwkswCfRO/vJ1DjeSV2zIOxVSRefJ7ACtIKsqr3
-        nDBE2EPi8qP/0PDpZ5SYNPk02wRGuVkIGxYwMq5ilEwtKM5NTy02LTDMSy2Hx1lyfu4mRnC6
-        1PLcwXj3wQe9Q4xMHIyHGCU4mJVEeC3qgpKFeFMSK6tSi/Lji0pzUosPMZoCw28is5Rocj4w
-        YeeVxBuaWBqYmJmZmVgamxkqifMunqGVLCSQnliSmp2aWpBaBNPHxMEp1cCksYnryO7uRxfD
-        onYcUurYJP6w6dHHZga5r1ovY65r/xcu0Xq49dqknyXTbtYl3n2axl9X7VM+VXNN/a/Htmsc
-        05O6y76e8Ct88a2FY9rxJI9HN+bFOUg9aMvq8Aq6H3+o47mLvURl5ZI1M/3/fwv3srW4eX9R
-        nahmZ/mdCXO/P5cQvNJrLiT7yqf2WOHtjB9qGerB0oFtvYHWZ/9MFv6Yasbs0nuorHe+7B1u
-        vunOrF+E10r3XFqynmWP6N0rWqumqLvf3n7JWGoxT43NrgOJXu9mfA7ZIHOWU/NwR7PzjBW5
-        u+/89mQ7k519aHlsoxxvhubch3qOCnvD+6VLfglPn/rZjC2nSvPFL5UAO3MlluKMREMt5qLi
-        RADlduDdIAQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrGLMWRmVeSWpSXmKPExsWy7bCSnO6j4qBkg3NL9CwezNvGZjHnfAuL
-        xdNjj9gtLmzrY7VY9X0qs8XlXXPYLNYvmsJicWyBmMW3028YLRZt/cJu8fDDHnaLWRd2sFr8
-        WniYxWLpvZ2sDnweW1beZPJYsKnU4+Ol24wem1Z1snn0/zXweL/vKptH35ZVjB6fN8kFcERx
-        2aSk5mSWpRbp2yVwZXzs/MhUsIO34u+V+SwNjHe4uhg5OSQETCS6Pp1g7WLk4hAS2M0oMfvN
-        XkaIhJTElDMvWSBsYYmV/56zQxQ1M0nsXHqICSTBJqAl8bhzAViRiMBLRomWs2wgNrNAvcS7
-        MzfZQWxhgWiJfx+Pgg1lEVCV+PLkAJjNK2At8aRlMhPEAnmJ1RsOMIPYnAI2Eq/mbwGrEQKq
-        WfboJvsERr4FjAyrGCVTC4pz03OLDQsM81LL9YoTc4tL89L1kvNzNzGCg1pLcwfj9lUf9A4x
-        MnEwHmKU4GBWEuEteBeQLMSbklhZlVqUH19UmpNafIhRmoNFSZz3QtfJeCGB9MSS1OzU1ILU
-        IpgsEwenVAPTfK03/yMiLobMV/hzY9Mpo9LbTB8dJFlsrwktuSm+S797dnZ2fdSW2RLHZrTN
-        O9hz+MNaNa8tfFMf7HC4KvkjrPyuYseBY17f7kfEJHjHWNx1OnHxV4n2w+qA7fMv7ktlXFK6
-        6EZq9RfDiT8mr+k5Oq218ccaM5fLYcs8zh2UfGKWJuO2eWbpU1U1+xk2qj+WXn9zSi3B/Hht
-        vcNiP6aK52F7N23cHaMwLyrhxpfQrxe2797mkVP+5HaPyOXP0dEz0i0NGaM0JS0XRP/euvpo
-        b9j/ikNJkwu+di1NiltuX/9cfZK95Wbf6x9OzlVa7dBlNHv3wwUlLLr7TqprNh9PflLRdP5i
-        TG5s6N6MDc8z9imxFGckGmoxFxUnAgBdRuRs2QIAAA==
-X-CMS-MailID: 20221021102642epcas5p24fec1e1e90632f6d9e768f7d25dc5480
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20221021102642epcas5p24fec1e1e90632f6d9e768f7d25dc5480
-References: <20221021095833.62406-1-vivek.2311@samsung.com>
-        <CGME20221021102642epcas5p24fec1e1e90632f6d9e768f7d25dc5480@epcas5p2.samsung.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S230409AbiJUNor (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 21 Oct 2022 09:44:47 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4078439131
+        for <linux-can@vger.kernel.org>; Fri, 21 Oct 2022 06:44:37 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1olsKB-0007Wv-41; Fri, 21 Oct 2022 15:44:35 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1olsK9-00010Z-Ku; Fri, 21 Oct 2022 15:44:33 +0200
+Date:   Fri, 21 Oct 2022 15:44:33 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Sebastien FABRE <sebastien.fabre@actia.fr>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Subject: Re: J1939: Send messages without acknowledging
+Message-ID: <20221021134433.GG28729@pengutronix.de>
+References: <PR0P264MB23096FC238E648331A32B5A492299@PR0P264MB2309.FRAP264.PROD.OUTLOOK.COM>
+ <20221018110016.sgvh2prqm5ehstxv@pengutronix.de>
+ <PR0P264MB23094D0D6CA05334809ACEE1922A9@PR0P264MB2309.FRAP264.PROD.OUTLOOK.COM>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <PR0P264MB23094D0D6CA05334809ACEE1922A9@PR0P264MB2309.FRAP264.PROD.OUTLOOK.COM>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Add mram-ecc-cfg property which indicates the error correction code config
-and enable the same for FSD platform.
+Hi Sebastien,
 
-In FSD, error correction code (ECC) is configured via PERIC SYSREG registers.
+On Thu, Oct 20, 2022 at 01:17:36PM +0000, Sebastien FABRE wrote:
+> > On 17.10.2022 14:55:58, Sebastien FABRE wrote:
+> > > Hello,
+> > >
+> > > I am working on 5.4 kernel, and I have the same behavior with 5.10
+> > > kernel version.
+> > >
+> > > I reproduce the behavior with a custom application. A j1939 socket is
+> > > created with SO_BROADCAST and SO_J1939_PROMISC options and is binded.
+> > > The application sends a claim message then 50 broadcast messages in
+> > > loop (without waiting) with size greater than 8 bytes (50).
+> > >
+> > > Every sendto methods return success directly and sessions are stored
+> > > in sk_session_queue.
+> > >
+> > > If the can is 'on' but nobody acknowledges, after some times, trames
+> > > are no longer sent (ENOBUFS) but the application does not have this
+> > > information (sendto returned success).
+> > >
+> > > Moreover, txqueuelen does not have impact to this behavior (queue size
+> > > seems to be infinite).
+> > >
+> > > To finish, closing socket will take a long time depending on
+> > > sk_session_queue size because of J1939_XTP_TX_RETRY_LIMIT: kernel
+> > > seems to try to send every message 100 times if ENOBUFS is received.
+> > >
+> > > Is it the expected behavior? How can the application know that
+> > > messages are no longer sent?
+> > 
+> > It's sort of expected....I think we haven't thought of that corner case.
+> > There is the socket TX timeout option, seems we have to implement this for
+> > j1939.
+> > 
+> 
+> I reproduced the same behaviour with updated testj1939 (so no claim message) to be able to send multiple messages.
+> The tests have been done with peak can or flexcan.
+> Should we limit the sk_session_queue size to not be able to have too many messages in this queue ? In this case, sendto will return an error (and not success) when it is full.
 
-Signed-off-by: Vivek Yadav <vivek.2311@samsung.com>
----
- arch/arm64/boot/dts/tesla/fsd.dtsi | 4 ++++
- 1 file changed, 4 insertions(+)
+Can you reproduce same issue with j1939cat in broadcast mode?
 
-diff --git a/arch/arm64/boot/dts/tesla/fsd.dtsi b/arch/arm64/boot/dts/tesla/fsd.dtsi
-index 154fd3fc5895..03d46a113612 100644
---- a/arch/arm64/boot/dts/tesla/fsd.dtsi
-+++ b/arch/arm64/boot/dts/tesla/fsd.dtsi
-@@ -778,6 +778,7 @@
- 			clocks = <&clock_peric PERIC_MCAN0_IPCLKPORT_PCLK>,
- 				<&clock_peric PERIC_MCAN0_IPCLKPORT_CCLK>;
- 			clock-names = "hclk", "cclk";
-+			mram-ecc-cfg = <&sysreg_peric 0x700>;
- 			bosch,mram-cfg = <0x0 128 64 64 64 64 32 32>;
- 			status = "disabled";
- 		};
-@@ -795,6 +796,7 @@
- 			clocks = <&clock_peric PERIC_MCAN1_IPCLKPORT_PCLK>,
- 				<&clock_peric PERIC_MCAN1_IPCLKPORT_CCLK>;
- 			clock-names = "hclk", "cclk";
-+			mram-ecc-cfg = <&sysreg_peric 0x704>;
- 			bosch,mram-cfg = <0x0 128 64 64 64 64 32 32>;
- 			status = "disabled";
- 		};
-@@ -812,6 +814,7 @@
- 			clocks = <&clock_peric PERIC_MCAN2_IPCLKPORT_PCLK>,
- 				<&clock_peric PERIC_MCAN2_IPCLKPORT_CCLK>;
- 			clock-names = "hclk", "cclk";
-+			mram-ecc-cfg = <&sysreg_peric 0x708>;
- 			bosch,mram-cfg = <0x0 128 64 64 64 64 32 32>;
- 			status = "disabled";
- 		};
-@@ -829,6 +832,7 @@
- 			clocks = <&clock_peric PERIC_MCAN3_IPCLKPORT_PCLK>,
- 				<&clock_peric PERIC_MCAN3_IPCLKPORT_CCLK>;
- 			clock-names = "hclk", "cclk";
-+			mram-ecc-cfg = <&sysreg_peric 0x70c>;
- 			bosch,mram-cfg = <0x0 128 64 64 64 64 32 32>;
- 			status = "disabled";
- 		};
+The difference between testj1939 and j1939cat is the last one is
+designed to get error/completion reports from the kernel J1939 stack.
+
+Regards,
+Oleksij
+
 -- 
-2.17.1
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
