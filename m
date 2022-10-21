@@ -2,155 +2,163 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2E860615D
-	for <lists+linux-can@lfdr.de>; Thu, 20 Oct 2022 15:19:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88DDD60704B
+	for <lists+linux-can@lfdr.de>; Fri, 21 Oct 2022 08:45:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230323AbiJTNT3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 20 Oct 2022 09:19:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60630 "EHLO
+        id S229741AbiJUGpu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 21 Oct 2022 02:45:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231398AbiJTNTL (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 20 Oct 2022 09:19:11 -0400
-Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-mr2fra01on0609.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e19::609])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1598319D8B4
-        for <linux-can@vger.kernel.org>; Thu, 20 Oct 2022 06:18:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VZjwt5seaINR7LveO2iRk7EWYSSbQ23DSfeKXP79TgNsJI8OqxI5Y9kOGjoNtuJsr06rMTemZe+PB/75BsZ/i0b5OnMAEamzAgOoGI16ujItSr29A6KZ/PW5De/5/ke89YTfgeZvSO6iWH8KRn7r2XTrPzIAbtqd6P3lsKMsBYQRQYNr1LwPZJ7DkdIM2r/5R/hQeke3jmTuqzOEcay6BulxLG8Exa07WircY61+5M1VKWYfC1hYMuYknJc13jsHwc3dRfiOvJH5YlR5ofpc719aYtIfbtjOU2X5QPsvswHQhHr7Jda7lZK95is+S1+vyMCPx/JEYxIzSC+uyoNswQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SzeKHV6vgdKD+rHMGKFZSrhltjC+Sunj6/3HFSVwY80=;
- b=QZQ+S+59tEvUM52d4KhrUOCGmcol7wG3PCK9aau4aM770wReLoQGLO2zbdhlML7RciUV/4CYvKliAf1Vx+7EGlDZNm2GLNJPyySWwH7ePNIr61NYNeEzmyxxJXR8ZCpIo+XJNWuMvGcDW8iIN2l0TZs2T7gKwhcmXSBBLP+lnZ8gD3MuXoCQn0ENTkUHvJbab8Drsmwlk+jSZTE+hT3V9e6V7ASq9UsVS9asinsB+oxgnAd9MC9EufZZhAhOrwWxfUiVhNJesaYIZCSB7NhvbZ14sHly/lVoj/IAeZQmuD57WrUwYCpDvJnKy/PmEi6T2JnsTU9pWfBf32jV2GcF4Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=actia.fr; dmarc=pass action=none header.from=actia.fr;
- dkim=pass header.d=actia.fr; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=actia.fr; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SzeKHV6vgdKD+rHMGKFZSrhltjC+Sunj6/3HFSVwY80=;
- b=GH5HzgqdnpSXSTpNmLandZL7idVIHEVBsh9Lyp/aNnAwDNpwJ07dYpWQyWnBP9FBsaGcHYcSITfFp8IMzJQZ9trEmzA5dwl5bsvSNvETFVdC4fTRjBbis1OkCRoHK5QcU6Un2PqHsDZvOdVSrmjS3bfQ5IcZ9uGryTtj3Utvqns=
-Received: from PR0P264MB2309.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1e0::12)
- by PR0P264MB1866.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:169::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.35; Thu, 20 Oct
- 2022 13:17:37 +0000
-Received: from PR0P264MB2309.FRAP264.PROD.OUTLOOK.COM
- ([fe80::4cbd:493e:7d7f:22ce]) by PR0P264MB2309.FRAP264.PROD.OUTLOOK.COM
- ([fe80::4cbd:493e:7d7f:22ce%2]) with mapi id 15.20.5723.034; Thu, 20 Oct 2022
- 13:17:36 +0000
-From:   Sebastien FABRE <sebastien.fabre@actia.fr>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-CC:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "ore@pengutronix.de" <ore@pengutronix.de>
-Subject: RE: J1939: Send messages without acknowledging
-Thread-Topic: J1939: Send messages without acknowledging
-Thread-Index: AdjiOArCihCCUJS2S0aV5OLbcs6cdQAqML8AAGhoI9A=
-Date:   Thu, 20 Oct 2022 13:17:36 +0000
-Message-ID: <PR0P264MB23094D0D6CA05334809ACEE1922A9@PR0P264MB2309.FRAP264.PROD.OUTLOOK.COM>
-References: <PR0P264MB23096FC238E648331A32B5A492299@PR0P264MB2309.FRAP264.PROD.OUTLOOK.COM>
- <20221018110016.sgvh2prqm5ehstxv@pengutronix.de>
-In-Reply-To: <20221018110016.sgvh2prqm5ehstxv@pengutronix.de>
-Accept-Language: fr-FR, en-US
-Content-Language: fr-FR
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=actia.fr;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PR0P264MB2309:EE_|PR0P264MB1866:EE_
-x-ms-office365-filtering-correlation-id: 0650b69c-cb12-473c-e7c5-08dab29d750a
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: G9qILPDcmHobYpePvc/Yc8Sgaq8oCUTRpsr6PyyPYGBU2Hj0fTMtEk9GvE6lyJHA2SjQ4sNk746Hyb4mNo7k20dMp1i2R3RqXwmvo+4+zUaRYllAZFqf87QfE50IP8LVMwSvr3uxleo1vU8zcrvKFkV9FPQTVn/O6DMmFG7tnU7jH1zB0XB9m7fZO1y1M+kHOAIqVX4Ce8SGg66BlnYC5CMAKl70Sc84kEVs+JWbEjYy+3kU5WDK5sNJVVLhmn6j4T5vvW7ygEXxivON7uBgTiXUUPTyVj+0W6bjSrgcy7E9UoMR7IrTZv6TaWijOdwTLBnJYN6eVnvVbsH+ai+Lljv3X27wX14seqt2klY3LiWKYlyak/HWOTyCEH7oMyhfE3b8lr03+l4pmy7gsRsgQr2tNj1qOKI25qP6LufaPfAntA4fXXp9xO6V55Z74lkapiUQhIqQZxdQHglPril3OQzmerSRHXhYI3K9xPeT/DThLkMCCNP5kMIkAQtk+hlxBqUR9Y1aGXbHH0B8oWg+O1bIxHlCTftZ/PtkvY5bBLNZGolVuH05uPMA1qWeBVZuQeU5I58gTpsxB7D9wA/BDsRK+fhG+2lgfwL7faP7WcB2JuziegZ87e8sXVUOXYDr519E/nCtTb4GTLCiW3VasFmGQXKamA9ggjHo5rl+rau62Ys5pId884rZ+GkhXzctvkQ15IRjvpc0Km8rYRdIDSnCm0EmyCamibSmnM3SfWm4MNW69r4gEKeg80WPs6dW5GiDquMmn6H5NpcejX1Fxg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PR0P264MB2309.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(136003)(346002)(396003)(376002)(39860400002)(366004)(451199015)(316002)(33656002)(8936002)(2906002)(6916009)(52536014)(15650500001)(54906003)(71200400001)(38100700002)(9686003)(122000001)(478600001)(38070700005)(5660300002)(86362001)(53546011)(6506007)(7696005)(26005)(76116006)(64756008)(66446008)(66476007)(66946007)(66556008)(8676002)(66574015)(186003)(55016003)(41300700001)(83380400001)(4326008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZGo1OVJKMXByc2FaZWFHT05VR2dYUWZXN1Vqc1YrbnBicE5xc2VTSGh1SWkz?=
- =?utf-8?B?Zjk0WWJPbmFwUUhLeFRLQmdSMWZoanFyT3FLRmJoU1JaeUVkcHZTaEhtZ2RT?=
- =?utf-8?B?NytlNFIzMWpnbTd6QW5yUmhxWllTQTNzTmIxTmhlQXNGNnB3azJNUnhseFdW?=
- =?utf-8?B?bFI2c0JFckhxdjhNVHZHd1lzZzQxVVhDblJSSzIzSDYrY1BaM0d2YUpGNEYz?=
- =?utf-8?B?RjNaVXltY1dIZGlhWStMNjRhNG9SSlJrcnV0OWNOc2J0UGo3UXBhM3VScEQy?=
- =?utf-8?B?RnRrRVIrL1dzOEsrQTRSOStJVHU5UFpHMCs2N0Rja3duTEFMeGxRb0gyTit1?=
- =?utf-8?B?VzhxQkV2MGtMNDArQ2hBS1ZELzFaaVZNOTNBL3lWNkxScUozd29jSGtaelND?=
- =?utf-8?B?L01pMStveUxBaEpMR1lxRThKY3Z6Z0Z1SGlpUG5ETEZhU3BxdG5WYzlVMzB5?=
- =?utf-8?B?YzI5emRaamVWOERycG45eFVaTUppTVUrdURKelhlSk9PQjFpTmc3OEFzRHRM?=
- =?utf-8?B?RWEraFZMOW1oYW5FRmxIcUpsdk9Sb0lTWC9lQUZnZ0wzVU5HdVZDOFBEczNS?=
- =?utf-8?B?REJ5aXhFMUZEeFc1TmtlZTVWK3psN3dWWVZKVVRqdWNORC94aWRxTXBtcWln?=
- =?utf-8?B?VlQ2ZElXb2R5anZ5eUpzU0lYaHpOSmovRzZaUG5mU2NQZWg2MVpEYjF3Y29J?=
- =?utf-8?B?M3hGbmdaWk94eHVZYU15WkM5NTFJOXpraEVpVmNmRldsQUl2Y1VEb2c4aUJK?=
- =?utf-8?B?OUpiRXl1MzJ6VFZ4SzF1a1ZxWEF0Qi96RnJmb0tDY3NRTXoyRUF6Zmh1Qk03?=
- =?utf-8?B?L2NqYjFsTGdaaHhxWXltaHZ1dnl3L0dLNW41RDUvZVBRVk5UOWYxQVZVN0VM?=
- =?utf-8?B?VjlHRVpIaDg2WXQ3WlRXdWpINGZ2TnJUdGJLQ0RhOU9lZ1hJZlNKdFVUNWpZ?=
- =?utf-8?B?WUoweVVQU0F2bjI5UENqZ3FjYS9sZk9tUHRwVjFuUXF0a01uS2FQQU5Gd2VZ?=
- =?utf-8?B?MFJzdW10T1BTbnNPSHJUMXRJcTlYVjRGaFJTQmFtY3c3OXJRWmtlMncrUTB3?=
- =?utf-8?B?eGRWcVlmbUZTVTRRd1F3R2hPb0NleG0vQVJZSW9DTnlpT2Q1dGlTL3ZJOW1D?=
- =?utf-8?B?L0VrQmIwSlVHdnZRa2ljRk91V000a1d4c0l4VkMwUU1UZkM2UytPbjU0LzFu?=
- =?utf-8?B?a3RoTzVDeWtkdGk4V3huUnpqTU44M1JaaUdwZzdaUGV4UGM3amZ6REcrdUgw?=
- =?utf-8?B?NllXcndaSnNoNGE2c0p2UExPbUNzdjByakYxUUxaVnEzNlBBa2ZrOWovTnJt?=
- =?utf-8?B?em5hSE84WDR6N2NmNkJRbndsTzl6SFZ0WHZ0SllxbmgwQ2xNcGQyQzAwamdn?=
- =?utf-8?B?UktuK0hGbGtjY1lWYVJsaFl4L3BJREpCSTBzOHduR0tLL2didjZ5cUZNbCt5?=
- =?utf-8?B?OVJ5WlN6Z3grY3FPckRScEFvczhRSy8weFZGdkpldW9TMTU1RDdOWm44MU5C?=
- =?utf-8?B?NHlnL1FIakljMk1jYTBUMUszVVV5MDJmWmZJeStEaHNwV2NQS1VDYUFSOWJD?=
- =?utf-8?B?RUppcVlCeHhzTHgyT0dEUjFWNzhPb0lLakxXU2h6MnVMSGYvcUFQYkhSbm41?=
- =?utf-8?B?YSt5clk3SUxQcVhqbGlWaEFiNVMwZHROalZBbU9VbGdhT2FhOTliUUNDSjdh?=
- =?utf-8?B?Wm9MclRyNE1pN2dveHJJaklPQitmYWlSNVB4Z01zaHl0MU1NTzZ4WmNWR2FX?=
- =?utf-8?B?U1Y4UmlWRkpjcnJEdHhLQlo4dTFQNDhYVDJNbjYxT2R1VW9qYW41ZEZFRkN2?=
- =?utf-8?B?bTZkS21TSXNiRDArcjdJTGRONmo4RW1Ja2V2azBoaFcrMHNSL0dxWER3Ti8v?=
- =?utf-8?B?alVMeDVNU3djQjBLVE00TENmRVBXM3o4OVZBSHZpSWdUd1hGVGkrOWcrRFJ0?=
- =?utf-8?B?YUZaMU5sZkdGQnI2UVZib3ZaTWY5UUNZclVjaXVHTk02Um1tTGp4aGNMVmxT?=
- =?utf-8?B?S0JOZmowZTJCWGtERXV1d0JhZzZjb1crZnRJTnpXS0lhd25aY0FUMERHSldV?=
- =?utf-8?B?bE9jWUhUQjVacXdSaXBHV3ROM2Z1c1UrZlRqcDJJMml5L1pSZEJOU05UNVY2?=
- =?utf-8?Q?lUEhUNS4zcPXGhjXyfxHPtJTb?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S229664AbiJUGpt (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 21 Oct 2022 02:45:49 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65C24181C83;
+        Thu, 20 Oct 2022 23:45:47 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id ot12so4898299ejb.1;
+        Thu, 20 Oct 2022 23:45:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=UsP6BA8242iuA6asJSMHNVclQ4lpHkn1NjFDmAKWmkM=;
+        b=hkRUOS6LIIMe3DJHptGpld7ztBTrrDRtgDBhqLNnHyeKwSx4SWUtE/LDRqhv50NeXW
+         C7tygAprsv0R0pLn8QIc46UjwXd7bcSEBBW0ViCNgx4xNlMTUwm45MYGXQATK9fpOh7h
+         6r0QepuzZk3fyZ6XJRSiBbQ8gWSnOUGpsIBZd8wZCPeZFPGoYwI5ELuzebAl/zL88yWV
+         zW+IobqbxgOWOm79i0t/GweVIZVCECw+c4HN1zAgZKA4Zgtt3Yby90AhZxs+sUpGf2lc
+         UPTsOqw62lyXk+jHrvNVFv2AtwD70trlV+ylz3bwQ6Ba/46/kFj8/ulOt/xlf0DxJ79s
+         pH6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UsP6BA8242iuA6asJSMHNVclQ4lpHkn1NjFDmAKWmkM=;
+        b=RtoPSu8BrMFonq32XuFQwfmMhZT3rfRuOFmNpAOyjkgE5+7jf9Ocqdwe9yu9ruzws9
+         zTYcE4EhJ7Dkr9mHUFbUbz66KrfaSJSW4IkkcG2pgHeGFr6M+MCKHVv/+2Mxl2n5i4B9
+         FKjd9qCmL0PFzoq6fzb5jpoKC7YapkrI2WDuAYad4RZKOwiiJqtTunriCyZvuUxl/s3F
+         SUY2ZI7Fk48OyFtkZLzKHQ4vvo6/8JmtbAd+0zb603Ai6OzUhvkLDP2wIrCMw38bVH0k
+         bGKO55j5W0EBuoILylQf/9mMx+xio1bte2pbLw/JtpLOZEfmnU9A93m68HdhZlKyiGYS
+         yxqg==
+X-Gm-Message-State: ACrzQf0Zj0Bw3T5kznLoZx8oQkQmvejC6V0lirzRVbndO8QFs3yaakRn
+        +S14rouWFyUPPYjlRLsmCS1rPfcDH108yOknk5g=
+X-Google-Smtp-Source: AMsMyM5tmmxQ3IxC5PHRlD6ynHeOQX6lKutwP0ff+pOfxpD1GM2NIzXNMiFisOSNfr9bBmTO4/5MU1qycDdKpA4VCLg=
+X-Received: by 2002:a17:907:2d06:b0:78d:50db:130e with SMTP id
+ gs6-20020a1709072d0600b0078d50db130emr14178681ejc.371.1666334745803; Thu, 20
+ Oct 2022 23:45:45 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: actia.fr
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PR0P264MB2309.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0650b69c-cb12-473c-e7c5-08dab29d750a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Oct 2022 13:17:36.8981
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 86314f06-03e8-4460-82f3-a44f992a19c7
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Q2B2uuGm9pzmh2bHaWrljWYsk0K+LdX7URHCvgFS07cGJdgnUX1k+KGw936IEQ0NcGWhHuVCi4mduqymd5LesHLbXclp8GNBqWJyoo8HU5Q=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB1866
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+From:   Wei Chen <harperchen1110@gmail.com>
+Date:   Fri, 21 Oct 2022 14:45:13 +0800
+Message-ID: <CAO4mrfe3dG7cMP1V5FLUkw7s+50c9vichigUMQwsxX4M=45QEw@mail.gmail.com>
+Subject: WARNING in isotp_tx_timer_handler
+To:     socketcan@hartkopp.net, mkl@pengutronix.de, davem@davemloft.net,
+        Eric Dumazet <edumazet@google.com>, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-PiBPbiAxNy4xMC4yMDIyIDE0OjU1OjU4LCBTZWJhc3RpZW4gRkFCUkUgd3JvdGU6DQo+ID4gSGVs
-bG8sDQo+ID4NCj4gPiBJIGFtIHdvcmtpbmcgb24gNS40IGtlcm5lbCwgYW5kIEkgaGF2ZSB0aGUg
-c2FtZSBiZWhhdmlvciB3aXRoIDUuMTANCj4gPiBrZXJuZWwgdmVyc2lvbi4NCj4gPg0KPiA+IEkg
-cmVwcm9kdWNlIHRoZSBiZWhhdmlvciB3aXRoIGEgY3VzdG9tIGFwcGxpY2F0aW9uLiBBIGoxOTM5
-IHNvY2tldCBpcw0KPiA+IGNyZWF0ZWQgd2l0aCBTT19CUk9BRENBU1QgYW5kIFNPX0oxOTM5X1BS
-T01JU0Mgb3B0aW9ucyBhbmQgaXMgYmluZGVkLg0KPiA+IFRoZSBhcHBsaWNhdGlvbiBzZW5kcyBh
-IGNsYWltIG1lc3NhZ2UgdGhlbiA1MCBicm9hZGNhc3QgbWVzc2FnZXMgaW4NCj4gPiBsb29wICh3
-aXRob3V0IHdhaXRpbmcpIHdpdGggc2l6ZSBncmVhdGVyIHRoYW4gOCBieXRlcyAoNTApLg0KPiA+
-DQo+ID4gRXZlcnkgc2VuZHRvIG1ldGhvZHMgcmV0dXJuIHN1Y2Nlc3MgZGlyZWN0bHkgYW5kIHNl
-c3Npb25zIGFyZSBzdG9yZWQNCj4gPiBpbiBza19zZXNzaW9uX3F1ZXVlLg0KPiA+DQo+ID4gSWYg
-dGhlIGNhbiBpcyAnb24nIGJ1dCBub2JvZHkgYWNrbm93bGVkZ2VzLCBhZnRlciBzb21lIHRpbWVz
-LCB0cmFtZXMNCj4gPiBhcmUgbm8gbG9uZ2VyIHNlbnQgKEVOT0JVRlMpIGJ1dCB0aGUgYXBwbGlj
-YXRpb24gZG9lcyBub3QgaGF2ZSB0aGlzDQo+ID4gaW5mb3JtYXRpb24gKHNlbmR0byByZXR1cm5l
-ZCBzdWNjZXNzKS4NCj4gPg0KPiA+IE1vcmVvdmVyLCB0eHF1ZXVlbGVuIGRvZXMgbm90IGhhdmUg
-aW1wYWN0IHRvIHRoaXMgYmVoYXZpb3IgKHF1ZXVlIHNpemUNCj4gPiBzZWVtcyB0byBiZSBpbmZp
-bml0ZSkuDQo+ID4NCj4gPiBUbyBmaW5pc2gsIGNsb3Npbmcgc29ja2V0IHdpbGwgdGFrZSBhIGxv
-bmcgdGltZSBkZXBlbmRpbmcgb24NCj4gPiBza19zZXNzaW9uX3F1ZXVlIHNpemUgYmVjYXVzZSBv
-ZiBKMTkzOV9YVFBfVFhfUkVUUllfTElNSVQ6IGtlcm5lbA0KPiA+IHNlZW1zIHRvIHRyeSB0byBz
-ZW5kIGV2ZXJ5IG1lc3NhZ2UgMTAwIHRpbWVzIGlmIEVOT0JVRlMgaXMgcmVjZWl2ZWQuDQo+ID4N
-Cj4gPiBJcyBpdCB0aGUgZXhwZWN0ZWQgYmVoYXZpb3I/IEhvdyBjYW4gdGhlIGFwcGxpY2F0aW9u
-IGtub3cgdGhhdA0KPiA+IG1lc3NhZ2VzIGFyZSBubyBsb25nZXIgc2VudD8NCj4gDQo+IEl0J3Mg
-c29ydCBvZiBleHBlY3RlZC4uLi5JIHRoaW5rIHdlIGhhdmVuJ3QgdGhvdWdodCBvZiB0aGF0IGNv
-cm5lciBjYXNlLg0KPiBUaGVyZSBpcyB0aGUgc29ja2V0IFRYIHRpbWVvdXQgb3B0aW9uLCBzZWVt
-cyB3ZSBoYXZlIHRvIGltcGxlbWVudCB0aGlzIGZvcg0KPiBqMTkzOS4NCj4gDQoNCkkgcmVwcm9k
-dWNlZCB0aGUgc2FtZSBiZWhhdmlvdXIgd2l0aCB1cGRhdGVkIHRlc3RqMTkzOSAoc28gbm8gY2xh
-aW0gbWVzc2FnZSkgdG8gYmUgYWJsZSB0byBzZW5kIG11bHRpcGxlIG1lc3NhZ2VzLg0KVGhlIHRl
-c3RzIGhhdmUgYmVlbiBkb25lIHdpdGggcGVhayBjYW4gb3IgZmxleGNhbi4NClNob3VsZCB3ZSBs
-aW1pdCB0aGUgc2tfc2Vzc2lvbl9xdWV1ZSBzaXplIHRvIG5vdCBiZSBhYmxlIHRvIGhhdmUgdG9v
-IG1hbnkgbWVzc2FnZXMgaW4gdGhpcyBxdWV1ZSA/IEluIHRoaXMgY2FzZSwgc2VuZHRvIHdpbGwg
-cmV0dXJuIGFuIGVycm9yIChhbmQgbm90IHN1Y2Nlc3MpIHdoZW4gaXQgaXMgZnVsbC4NCg0KUmVn
-YXJkcywNClPDqWJhc3RpZW4gRmFicmUNCg==
+Dear Linux Developer,
+
+Recently when using our tool to fuzz kernel, the following crash was triggered:
+
+HEAD commit: 4fe89d07 Linux v6.0
+git tree: upstream
+compiler: clang 12.0.0
+console output:
+https://drive.google.com/file/d/1uwGcdgsj0b2RQy0dQqiCN5ntcbYpVoKL/view?usp=sharing
+Syzlang reproducer:
+https://drive.google.com/file/d/1sWib_bzKTQCeQOqApX9y1wVJ0C-UdyJP/view?usp=sharing
+kernel config: https://drive.google.com/file/d/1ZHRxVTXHL9mENdAPmQYS1DtgbflZ9XsD/view?usp=sharing
+
+Unfortunately, I don't have any C reproducer for this crash yet.
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: Wei Chen <harperchen1110@gmail.com>
+
+WARNING: CPU: 0 PID: 0 at net/can/isotp.c:910 isotp_tx_timer_handler+0x160/0x270
+Modules linked in:
+CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.0.0 #35
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+1.13.0-1ubuntu1.1 04/01/2014
+RIP: 0010:isotp_tx_timer_handler+0x160/0x270 net/can/isotp.c:910
+Code: 01 00 00 00 00 00 48 81 c3 90 09 02 00 31 ed 48 89 df be 01 00
+00 00 ba 01 00 00 00 31 c9 e8 07 62 2b f8 eb 6e e8 d0 15 4e f8 <0f> 0b
+31 ed eb 63 e8 c5 15 4e f8 e8 70 75 3e f8 49 89 c6 49 81 c6
+RSP: 0018:ffffc90000007c30 EFLAGS: 00010246
+RAX: ffffffff89390350 RBX: ffff88804c440000 RCX: ffffffff8ccbb940
+RDX: 0000000080000101 RSI: ffffffff8e13dba0 RDI: 0000000000000000
+RBP: 0000000000000000 R08: 0000000000000005 R09: ffffffff8939023d
+R10: 0000000000000003 R11: ffffffff8ccbb940 R12: 1ffff1100988a0f5
+R13: ffffffff8ccbc360 R14: ffff88804c4507a8 R15: dffffc0000000000
+FS:  0000000000000000(0000) GS:ffff88802cc00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000564e766615a8 CR3: 000000000cc8e000 CR4: 0000000000750ef0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+PKRU: 55555554
+Call Trace:
+ <IRQ>
+ __run_hrtimer kernel/time/hrtimer.c:1685 [inline]
+ __hrtimer_run_queues+0x50b/0xa60 kernel/time/hrtimer.c:1749
+ hrtimer_run_softirq+0x1b7/0x5d0 kernel/time/hrtimer.c:1766
+ __do_softirq+0x372/0x783 kernel/softirq.c:571
+ __irq_exit_rcu+0xcf/0x150 kernel/softirq.c:650
+ irq_exit_rcu+0x5/0x20 kernel/softirq.c:662
+ sysvec_apic_timer_interrupt+0x91/0xb0 arch/x86/kernel/apic/apic.c:1106
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x16/0x20 arch/x86/include/asm/idtentry.h:649
+RIP: 0010:default_idle+0xb/0x10 arch/x86/kernel/process.c:731
+Code: fe ff ff 44 89 e1 80 e1 07 80 c1 03 38 c1 7c 93 4c 89 e7 e8 07
+f5 a9 f7 eb 89 e8 00 41 fd ff 66 90 0f 00 2d 87 bc 5a 00 fb f4 <c3> 0f
+1f 40 00 41 57 41 56 53 49 be 00 00 00 00 00 fc ff df 65 48
+RSP: 0018:ffffffff8cc07da8 EFLAGS: 000002c2
+RAX: 2a4c2150f0015f00 RBX: ffffffff8ccbb940 RCX: ffffffff8a2b46ee
+RDX: 0000000000000001 RSI: 0000000000000001 RDI: 0000000000000000
+RBP: ffffffff8cc07ed0 R08: dffffc0000000000 R09: ffffed100598693d
+R10: ffffed100598693d R11: 0000000000000000 R12: 1ffffffff1997728
+R13: 1ffffffff1980fca R14: 0000000000000000 R15: dffffc0000000000
+ default_idle_call+0x82/0xc0 kernel/sched/idle.c:109
+ cpuidle_idle_call kernel/sched/idle.c:191 [inline]
+ do_idle+0x215/0x5e0 kernel/sched/idle.c:303
+ cpu_startup_entry+0x15/0x20 kernel/sched/idle.c:400
+ rest_init+0x24f/0x270 init/main.c:727
+ arch_call_rest_init+0xa/0xa
+ start_kernel+0x490/0x536 init/main.c:1138
+ secondary_startup_64_no_verify+0xcf/0xdb
+ </TASK>
+----------------
+Code disassembly (best guess), 2 bytes skipped:
+   0: ff 44 89 e1           incl   -0x1f(%rcx,%rcx,4)
+   4: 80 e1 07             and    $0x7,%cl
+   7: 80 c1 03             add    $0x3,%cl
+   a: 38 c1                 cmp    %al,%cl
+   c: 7c 93                 jl     0xffffffa1
+   e: 4c 89 e7             mov    %r12,%rdi
+  11: e8 07 f5 a9 f7       callq  0xf7a9f51d
+  16: eb 89                 jmp    0xffffffa1
+  18: e8 00 41 fd ff       callq  0xfffd411d
+  1d: 66 90                 xchg   %ax,%ax
+  1f: 0f 00 2d 87 bc 5a 00 verw   0x5abc87(%rip)        # 0x5abcad
+  26: fb                   sti
+  27: f4                   hlt
+* 28: c3                   retq <-- trapping instruction
+  29: 0f 1f 40 00           nopl   0x0(%rax)
+  2d: 41 57                 push   %r15
+  2f: 41 56                 push   %r14
+  31: 53                   push   %rbx
+  32: 49 be 00 00 00 00 00 movabs $0xdffffc0000000000,%r14
+  39: fc ff df
+  3c: 65                   gs
+  3d: 48                   rex.W
+
+Best,
+Wei
