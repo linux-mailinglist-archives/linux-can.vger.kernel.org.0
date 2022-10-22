@@ -2,101 +2,85 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D490608B7C
-	for <lists+linux-can@lfdr.de>; Sat, 22 Oct 2022 12:22:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D252608C94
+	for <lists+linux-can@lfdr.de>; Sat, 22 Oct 2022 13:28:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbiJVKWC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 22 Oct 2022 06:22:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41266 "EHLO
+        id S229514AbiJVL2K (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 22 Oct 2022 07:28:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbiJVKVj (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 22 Oct 2022 06:21:39 -0400
+        with ESMTP id S229782AbiJVL1z (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 22 Oct 2022 07:27:55 -0400
 Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3AB9E4C2DA;
-        Sat, 22 Oct 2022 02:38:01 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.95,204,1661785200"; 
-   d="scan'208";a="137536315"
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6F0FD2751A9;
+        Sat, 22 Oct 2022 04:02:45 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.95,205,1661785200"; 
+   d="scan'208";a="137542090"
 Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 22 Oct 2022 17:34:13 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 22 Oct 2022 20:02:44 +0900
 Received: from localhost.localdomain (unknown [10.226.92.14])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id C94014006185;
-        Sat, 22 Oct 2022 17:34:07 +0900 (JST)
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id BAD9740078D3;
+        Sat, 22 Oct 2022 20:02:38 +0900 (JST)
 From:   Biju Das <biju.das.jz@bp.renesas.com>
 To:     Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
+        Paolo Abeni <pabeni@redhat.com>
 Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
         =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Ulrich Hecht <uli+renesas@fpond.eu>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
         linux-renesas-soc@vger.kernel.org
-Subject: [PATCH 3/3] can: rcar_canfd: Use devm_reset_control_get_optional_exclusive
-Date:   Sat, 22 Oct 2022 09:15:03 +0100
-Message-Id: <20221022081503.1051257-4-biju.das.jz@bp.renesas.com>
+Subject: [PATCH 0/6] R-Can CAN FD driver enhancements
+Date:   Sat, 22 Oct 2022 11:43:51 +0100
+Message-Id: <20221022104357.1276740-1-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221022081503.1051257-1-biju.das.jz@bp.renesas.com>
-References: <20221022081503.1051257-1-biju.das.jz@bp.renesas.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.9 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Replace devm_reset_control_get_exclusive->devm_reset_control_
-get_optional_exclusive so that we can avoid unnecessary
-SoC specific check in probe().
+The CAN FD IP found on RZ/G2L SoC has some HW features different to that
+of R-Car. For example, it has multiple resets and multiple IRQs for global
+and channel interrupts. Also, it does not have ECC error flag registers
+and clk post divider present on R-Car. Similarly, R-Car V3U has 8 channels
+whereas other SoCs has only 2 channels.
 
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
----
- drivers/net/can/rcar/rcar_canfd.c | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+Currently all the differences are taken by comparing chip_id enum.
+This patch series aims to replace chip_id with struct rcar_canfd_hw_info
+to take care of the HW feature differences and driver data present
+on both IPs.
 
-diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index 38d6a8f5691c..4b12ed85deca 100644
---- a/drivers/net/can/rcar/rcar_canfd.c
-+++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -1893,17 +1893,17 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 	gpriv->chip_id = chip_id;
- 	gpriv->max_channels = max_channels;
- 
--	if (gpriv->chip_id == RENESAS_RZG2L) {
--		gpriv->rstc1 = devm_reset_control_get_exclusive(&pdev->dev, "rstp_n");
--		if (IS_ERR(gpriv->rstc1))
--			return dev_err_probe(&pdev->dev, PTR_ERR(gpriv->rstc1),
--					     "failed to get rstp_n\n");
--
--		gpriv->rstc2 = devm_reset_control_get_exclusive(&pdev->dev, "rstc_n");
--		if (IS_ERR(gpriv->rstc2))
--			return dev_err_probe(&pdev->dev, PTR_ERR(gpriv->rstc2),
--					     "failed to get rstc_n\n");
--	}
-+	gpriv->rstc1 = devm_reset_control_get_optional_exclusive(&pdev->dev,
-+								 "rstp_n");
-+	if (IS_ERR(gpriv->rstc1))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(gpriv->rstc1),
-+				     "failed to get rstp_n\n");
-+
-+	gpriv->rstc2 = devm_reset_control_get_optional_exclusive(&pdev->dev,
-+								 "rstc_n");
-+	if (IS_ERR(gpriv->rstc2))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(gpriv->rstc2),
-+				     "failed to get rstc_n\n");
- 
- 	/* Peripheral clock */
- 	gpriv->clkp = devm_clk_get(&pdev->dev, "fck");
+The changes are trivial and tested on RZ/G2L SMARC EVK.
+
+This patch series depend upon[1]
+[1] https://lore.kernel.org/linux-renesas-soc/20221022081503.1051257-1-biju.das.jz@bp.renesas.com/T/#t
+
+Biju Das (6):
+  can: rcar_canfd: rcar_canfd_probe: Add struct rcar_canfd_hw_info to
+    driver data
+  can: rcar_canfd: Add max_channels to struct rcar_canfd_hw_info
+  can: rcar_canfd: Add multi_global_irqs to struct rcar_canfd_hw_info
+  can: rcar_canfd: Add clk_postdiv to struct rcar_canfd_hw_info
+  can: rcar_canfd: Add multi_channel_irqs to struct rcar_canfd_hw_info
+  can: rcar_canfd: Add has_gerfl_eef to struct rcar_canfd_hw_info
+
+ drivers/net/can/rcar/rcar_canfd.c | 89 +++++++++++++++++++------------
+ 1 file changed, 54 insertions(+), 35 deletions(-)
+
 -- 
 2.25.1
 
