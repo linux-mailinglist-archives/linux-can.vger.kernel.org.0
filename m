@@ -2,123 +2,82 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 620FC608CA6
-	for <lists+linux-can@lfdr.de>; Sat, 22 Oct 2022 13:29:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3878608FBD
+	for <lists+linux-can@lfdr.de>; Sat, 22 Oct 2022 23:36:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbiJVL3N (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 22 Oct 2022 07:29:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38854 "EHLO
+        id S229910AbiJVVgA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 22 Oct 2022 17:36:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230084AbiJVL20 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 22 Oct 2022 07:28:26 -0400
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC0402F5010;
-        Sat, 22 Oct 2022 04:03:19 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.95,205,1661785200"; 
-   d="scan'208";a="137542133"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 22 Oct 2022 20:03:18 +0900
-Received: from localhost.localdomain (unknown [10.226.92.14])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id A1FF3400619B;
-        Sat, 22 Oct 2022 20:03:13 +0900 (JST)
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        Ulrich Hecht <uli+renesas@fpond.eu>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH 6/6] can: rcar_canfd: Add has_gerfl_eef to struct rcar_canfd_hw_info
-Date:   Sat, 22 Oct 2022 11:43:57 +0100
-Message-Id: <20221022104357.1276740-7-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221022104357.1276740-1-biju.das.jz@bp.renesas.com>
-References: <20221022104357.1276740-1-biju.das.jz@bp.renesas.com>
+        with ESMTP id S229744AbiJVVf7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 22 Oct 2022 17:35:59 -0400
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F437858E
+        for <linux-can@vger.kernel.org>; Sat, 22 Oct 2022 14:35:57 -0700 (PDT)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout01.posteo.de (Postfix) with ESMTPS id 70FA6240026
+        for <linux-can@vger.kernel.org>; Sat, 22 Oct 2022 23:35:56 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+        t=1666474556; bh=9LuUqEqN5s5Z23z1D88rvBLFEfMsKEPcw1UP8rwWsBY=;
+        h=From:To:Subject:Date:From;
+        b=V5/y2ubXYGiZRtJAFEmIAotF6DATYkQi4IG2x2HNNDEqP0VLpK0b3TyX6coZxyIQV
+         TRLOSf4v82meJmhvQZ4HLxnHofku2tFLGAfjWa9Dzu8/SIA1ENOq0v1DlmXi4+0uGO
+         TCCXbzT2boquLEm+1fTf8bK89vp8tZJSG83n/50OT2v072tgpSQKrZm7GaECHq2Vbj
+         LYmjj61KRp0OYOkCjQpLnUGZP/9wlL3zRz/vLo7grlpQWRaW8HkwVsMKiC5TOr+A5q
+         K0zymBXFQkMH/Ae8Q5W+BsqkbrAaOlEkM/bLRsBRO0Y26gvWoeFabMqFUhwsN/5a63
+         KwSVXN90oL07A==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4Mvvlb5yCWz9rxL
+        for <linux-can@vger.kernel.org>; Sat, 22 Oct 2022 23:35:55 +0200 (CEST)
+From:   Lukas Magel <lukas.magel@posteo.net>
+To:     linux-can@vger.kernel.org
+Subject: [PATCH 0/7] can: peak_usb: Introduce configurable user dev id
+Date:   Sat, 22 Oct 2022 21:35:28 +0000
+Message-Id: <20221022213535.8495-1-lukas.magel@posteo.net>
+In-Reply-To: <20220801080446.36374-1-lukas.magel@posteo.net>
+References: <20220801080446.36374-1-lukas.magel@posteo.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-R-Car has ECC error flags in global error interrupts whereas it is
-not available on RZ/G2L.
+This series of patches introduces the user device id for the PEAK USB
+CAN interfaces. The id can be read/written via ethtool and is exposed as
+a read-only attribute via sysfs. This allows users to set the id via
+ethtool and write udev rules to match against the sysfs attribute.
 
-Add has_gerfl_eef to struct rcar_canfd_hw_info so that rcar_canfd_
-global_error() will process ECC errors only for R-Car.
+Most of the patches were originally introduced by Stéphane Grosjean and
+have only been modified slightly. See the following threads for the
+original patches:
 
-whilst, this patch fixes the below checkpatch warnings
-  CHECK: Unnecessary parentheses around 'ch == 0'
-  CHECK: Unnecessary parentheses around 'ch == 1'
+* https://lore.kernel.org/linux-can/20220128150157.1222850-1-s.grosjean@peak-system.com/T/#mad8014c9f1c89a50d5944a50ae0a585edec79eab
+* https://lore.kernel.org/linux-can/20211117150132.37056-1-s.grosjean@peak-system.com/T/#mbf1d7db8433734a1fe08868d79f9927a04fe7ffe
 
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
----
- drivers/net/can/rcar/rcar_canfd.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+Stéphane Grosjean (5):
+  can: peak_usb: rename device_id to a more explicit name
+  can: peak_usb: add callback to read user value of CANFD
+  can: peak_usb: allow flashing of the user device id
+  can: peak_usb: replace unregister_netdev() with
+  can: peak_usb: add ethtool interface to user defined
 
-diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index 0b6f14df2a43..bb825cce8acb 100644
---- a/drivers/net/can/rcar/rcar_canfd.c
-+++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -523,6 +523,7 @@ struct rcar_canfd_hw_info {
- 	unsigned multi_global_irqs:1;	/* Has multiple global irqs  */
- 	unsigned clk_postdiv:1;		/* Has CAN clk post divider  */
- 	unsigned multi_channel_irqs:1;	/* Has multiple channel irqs  */
-+	unsigned has_gerfl_eef:1;	/* Has ECC Error Flag  */
- };
- 
- /* Channel priv data */
-@@ -595,6 +596,7 @@ static const struct can_bittiming_const rcar_canfd_bittiming_const = {
- static const struct rcar_canfd_hw_info rcar_gen3_hw_info = {
- 	.max_channels = 2,
- 	.clk_postdiv = 1,
-+	.has_gerfl_eef = 1,
- };
- 
- static const struct rcar_canfd_hw_info rzg2l_hw_info = {
-@@ -606,6 +608,7 @@ static const struct rcar_canfd_hw_info rzg2l_hw_info = {
- static const struct rcar_canfd_hw_info r8a779a0_hw_info = {
- 	.max_channels = 8,
- 	.clk_postdiv = 1,
-+	.has_gerfl_eef = 1,
- };
- 
- /* Helper functions */
-@@ -947,17 +950,18 @@ static void rcar_canfd_global_error(struct net_device *ndev)
- {
- 	struct rcar_canfd_channel *priv = netdev_priv(ndev);
- 	struct rcar_canfd_global *gpriv = priv->gpriv;
-+	const struct rcar_canfd_hw_info *info = gpriv->info;
- 	struct net_device_stats *stats = &ndev->stats;
- 	u32 ch = priv->channel;
- 	u32 gerfl, sts;
- 	u32 ridx = ch + RCANFD_RFFIFO_IDX;
- 
- 	gerfl = rcar_canfd_read(priv->base, RCANFD_GERFL);
--	if ((gerfl & RCANFD_GERFL_EEF0) && (ch == 0)) {
-+	if (info->has_gerfl_eef && (gerfl & RCANFD_GERFL_EEF0) && ch == 0) {
- 		netdev_dbg(ndev, "Ch0: ECC Error flag\n");
- 		stats->tx_dropped++;
- 	}
--	if ((gerfl & RCANFD_GERFL_EEF1) && (ch == 1)) {
-+	if (info->has_gerfl_eef && (gerfl & RCANFD_GERFL_EEF1) && ch == 1) {
- 		netdev_dbg(ndev, "Ch1: ECC Error flag\n");
- 		stats->tx_dropped++;
- 	}
--- 
-2.25.1
+Lukas Magel (2):
+  can: peak_usb: export PCAN user device ID as sysfs device
+  can: peak_usb: align user device id format in log with
+
+ .../ABI/testing/sysfs-class-net-peak_usb        |  15 +++
+ drivers/net/can/usb/peak_usb/pcan_usb.c         |  43 ++++++-
+ drivers/net/can/usb/peak_usb/pcan_usb_core.c    | 119 +++++++++++++++++--
+ drivers/net/can/usb/peak_usb/pcan_usb_core.h    |  11 +-
+ drivers/net/can/usb/peak_usb/pcan_usb_fd.c      |  64 +++++++++-
+ drivers/net/can/usb/peak_usb/pcan_usb_pro.c     |  26 +++-
+ drivers/net/can/usb/peak_usb/pcan_usb_pro.h     |   1 +
+ 7 files changed, 254 insertions(+), 25 deletions(-)
+
 
