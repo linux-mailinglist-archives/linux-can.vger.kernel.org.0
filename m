@@ -2,23 +2,23 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C3D609D79
-	for <lists+linux-can@lfdr.de>; Mon, 24 Oct 2022 11:07:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC23E609FB7
+	for <lists+linux-can@lfdr.de>; Mon, 24 Oct 2022 13:05:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbiJXJHu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 24 Oct 2022 05:07:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48700 "EHLO
+        id S230210AbiJXLFP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 24 Oct 2022 07:05:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231128AbiJXJHi (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 24 Oct 2022 05:07:38 -0400
-Received: from hust.edu.cn (unknown [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 331E012D33;
-        Mon, 24 Oct 2022 02:07:19 -0700 (PDT)
+        with ESMTP id S230232AbiJXLEr (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 24 Oct 2022 07:04:47 -0400
+Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5A791B798;
+        Mon, 24 Oct 2022 04:04:00 -0700 (PDT)
 Received: from localhost.localdomain ([172.16.0.254])
         (user=dzm91@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 29O94ftr027533-29O94ftu027533
+        by mx1.hust.edu.cn  with ESMTP id 29OB2GTB015664-29OB2GTE015664
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 24 Oct 2022 17:04:45 +0800
+        Mon, 24 Oct 2022 19:02:20 +0800
 From:   Dongliang Mu <dzm91@hust.edu.cn>
 To:     Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
@@ -28,19 +28,13 @@ To:     Wolfgang Grandegger <wg@grandegger.com>,
         Paolo Abeni <pabeni@redhat.com>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
         =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        =?UTF-8?q?Sebastian=20W=C3=BCrl?= <sebastian.wuerl@ororatech.com>,
         Dongliang Mu <dzm91@hust.edu.cn>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        =?UTF-8?q?Timo=20Schl=C3=BC=C3=9Fler?= <schluessler@krause.de>
+        Julia Lawall <Julia.Lawall@inria.fr>
 Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2] can: mcp251x: fix error handling code in mcp251x_can_probe
-Date:   Mon, 24 Oct 2022 17:02:52 +0800
-Message-Id: <20221024090256.717236-1-dzm91@hust.edu.cn>
+Subject: [PATCH] can: usb: ucan: modify unregister_netdev to unregister_candev
+Date:   Mon, 24 Oct 2022 19:00:30 +0800
+Message-Id: <20221024110033.727542-1-dzm91@hust.edu.cn>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -53,38 +47,28 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-In mcp251x_can_probe, if mcp251x_gpio_setup fails, it forgets to
-unregister the can device.
+From API pairing, modify unregister_netdev to unregister_candev since
+the registeration function is register_candev. Actually, they are the
+same.
 
-Fix this by unregistering can device in mcp251x_can_probe.
-
-Fixes: 2d52dabbef60 ("can: mcp251x: add GPIO support")
 Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
 ---
-v1->v2: add fixes tag
- drivers/net/can/spi/mcp251x.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/net/can/usb/ucan.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/can/spi/mcp251x.c b/drivers/net/can/spi/mcp251x.c
-index c320de474f40..00ed46683656 100644
---- a/drivers/net/can/spi/mcp251x.c
-+++ b/drivers/net/can/spi/mcp251x.c
-@@ -1415,11 +1415,14 @@ static int mcp251x_can_probe(struct spi_device *spi)
+diff --git a/drivers/net/can/usb/ucan.c b/drivers/net/can/usb/ucan.c
+index 7c35f50fda4e..60f730094e5d 100644
+--- a/drivers/net/can/usb/ucan.c
++++ b/drivers/net/can/usb/ucan.c
+@@ -1581,7 +1581,7 @@ static void ucan_disconnect(struct usb_interface *intf)
+ 	usb_set_intfdata(intf, NULL);
  
- 	ret = mcp251x_gpio_setup(priv);
- 	if (ret)
--		goto error_probe;
-+		goto err_reg_candev;
- 
- 	netdev_info(net, "MCP%x successfully initialized.\n", priv->model);
- 	return 0;
- 
-+err_reg_candev:
-+	unregister_candev(net);
-+
- error_probe:
- 	destroy_workqueue(priv->wq);
- 	priv->wq = NULL;
+ 	if (up) {
+-		unregister_netdev(up->netdev);
++		unregister_candev(up->netdev);
+ 		free_candev(up->netdev);
+ 	}
+ }
 -- 
 2.35.1
 
