@@ -2,193 +2,217 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 808FF60B6B7
-	for <lists+linux-can@lfdr.de>; Mon, 24 Oct 2022 21:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 058A560B8F5
+	for <lists+linux-can@lfdr.de>; Mon, 24 Oct 2022 22:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232854AbiJXTIt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 24 Oct 2022 15:08:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38786 "EHLO
+        id S233867AbiJXT7y (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 24 Oct 2022 15:59:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232853AbiJXTIa (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 24 Oct 2022 15:08:30 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on20716.outbound.protection.outlook.com [IPv6:2a01:111:f403:700c::716])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF70329CAB;
-        Mon, 24 Oct 2022 10:47:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AdKd16mWorGiDTpU4jE6HSDSGloipJsIuo27ZhB/MrLgGc+4Af+C7j0jb+zU7dTtw/GLLb2s3TsdPnNo/GwWb9CqED9+GanfQbJdZHQ9gB8F3STUI9iNVi3FzHcC5MqUWVBMZRLfgiuz6UvYtTj0a2ct/9nw1bOb2Bib4hal72Jtnz27r5MnfG/qmX7tUCImsmHUYmRpGxJ7ewv9geS7uD10GjvVGq+kurad0ENatc4sGPbizPqNbSoI8Cja0dBlQORatJKJnvGh+gXemjS8w7zlnl4qVZt8yr7AYIOevY/Dtph2JF55TuZQpc4dfAratl+ruaALbfDnpmj/7vbaJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=v4gX4Xzkr7mbteIhahmD9/C9SGR5wIUs5Ab4WDSmVPE=;
- b=PxIvW7rD0Sy5YCyKRzr3kxtaTT91S576iUmQqYyQ5SHSCifpDqSi3mdf/I7ptWPezFKuDqNzAfiyjuSIe/a2CiAKyZPem7I10J3Pug2T5rNT8JDdFeZAETdDPVNMXApVu2p5MVS2IaGzVa83MD10QSERD/4tJvLgBcmSbhGLAPtBqOXMUgFx47dd6iq60ADgBUGx6XS5rAuxvkBDKznm0Bkjxbp1GKMvS5yTSnsCobBVlXQ898fr2VpJ1ORITpq4F+syX9y5TH39u9Fiq8hXX5rNjuzmFeAO6tMsN5x3FLqKI8l6WmxPIvyqiPt6jpeUUOB/BEDfQYIScW0CSuRpyQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=v4gX4Xzkr7mbteIhahmD9/C9SGR5wIUs5Ab4WDSmVPE=;
- b=cPkxC97J4BheuQiD/sfFS3VYdiKooRpvVh3Jxp/IzhB48cYvjkcvitecIrkV3RpUanchRma7/QEbeJZDx/kR+uX7+VR13kB13HT8BCk1mMrIcBENoEGnEsWdsCt91/ReQ5lQFIbd9QlqgOTGh6rNaCGe7xhmJOtuk23y6wYruvI=
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
- by TYWPR01MB8495.jpnprd01.prod.outlook.com (2603:1096:400:173::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Mon, 24 Oct
- 2022 17:46:11 +0000
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::fea0:9039:b0b3:968f]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::fea0:9039:b0b3:968f%7]) with mapi id 15.20.5746.028; Mon, 24 Oct 2022
- 17:46:05 +0000
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-CC:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
+        with ESMTP id S234159AbiJXT7L (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 24 Oct 2022 15:59:11 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05170EBF
+        for <linux-can@vger.kernel.org>; Mon, 24 Oct 2022 11:22:06 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1on1r1-0004Wv-Bo; Mon, 24 Oct 2022 20:07:15 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 2AD24108BF7;
+        Mon, 24 Oct 2022 18:07:10 +0000 (UTC)
+Date:   Mon, 24 Oct 2022 20:07:08 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        =?utf-8?B?U3RlZmFuIE3DpHRqZQ==?= <stefan.maetje@esd.eu>,
-        Ulrich Hecht <uli+renesas@fpond.eu>,
+        Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
         Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Ulrich Hecht <uli+renesas@fpond.eu>,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Rob Herring <robh@kernel.org>,
         "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
         "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
         "linux-renesas-soc@vger.kernel.org" 
         <linux-renesas-soc@vger.kernel.org>
-Subject: RE: [PATCH 6/6] can: rcar_canfd: Add has_gerfl_eef to struct
- rcar_canfd_hw_info
-Thread-Topic: [PATCH 6/6] can: rcar_canfd: Add has_gerfl_eef to struct
- rcar_canfd_hw_info
-Thread-Index: AQHY5gXl7pCMlngFIEKI2bQeSzUzv64dplSAgAAo/iA=
-Date:   Mon, 24 Oct 2022 17:46:05 +0000
-Message-ID: <OS0PR01MB592206905C515C449EAC5EA9862E9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-References: <20221022104357.1276740-1-biju.das.jz@bp.renesas.com>
- <20221022104357.1276740-7-biju.das.jz@bp.renesas.com>
- <CAMuHMdV8MmTMMPnCGgXbZZ-gb4CVduAUBBG3BdAecBrc3J7RLQ@mail.gmail.com>
-In-Reply-To: <CAMuHMdV8MmTMMPnCGgXbZZ-gb4CVduAUBBG3BdAecBrc3J7RLQ@mail.gmail.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TYWPR01MB8495:EE_
-x-ms-office365-filtering-correlation-id: 2245b41e-92de-4e33-30d0-08dab5e7a028
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: vdKNwxqj6IBawX1CeNqzvFOtF8IaTO8hVflI/ULecEj282Ze+UnxPWHVmIMMRAIG2UA+cCr2fw3NIPrL5usB/rzkuxL8fd03K2c9QV7ofNAZK9jb0gb4pBfu/es5QGKf1fEw759cnVa/P/qcU93b0eqKaA2k2SjaRO0gVZn07zAfyx3b5YJBAn7u06kpqmfoD/sgs3t3VbV1PfN+U11gfnKdTqZjXVPGgqROQvCnKxvXD7jHBwvOp152yyAiGYMGQPF6swWu/Ke7sSE+sG9ZWlHadpdODKHF6eifIEP4mmM+biBLNMDULaH+vrbhMrHaUPftdj3ZFGsEkQKcY4u/q+TfBwF4JDy+JrlL9Z4Ev1gh5h/jynPDT8VacJpPNXABePqCz3xzsJTwSk73KrUzDGzlDaGDDGEA4KQuFBHK+GWW/yyVgiZkQX1ViBjVXYy3dLk3hP+yy7NBM7UvwPCS/X6yaperDO/R0e7L5AZRjmmU0IVqH7VRAfkeqdha474KYHYsJMh6AExdq3j5bgK9dXVAANqtSlqkwE5VXCt74CButxyoEbD2AeK38YXgiy+HzGEjktDgzqr3naO3YfnMsqZKntUGiiQC/tOU7GAH3A6+tD3gxnXWgj+AHiMoDl+CTjm37K19vuvWCYzGFivGArrLOPEe7UxF6mCNxYY1novltkaspETlCInIOJVc8fRq2YSmAiHySVjbxTN2OJ2YOv1Ht9JC5Aa1J+Al/SS01i1Jo44BPA7RxYti0ZRoukIh3fS50LjORfUOHtZv4U77xg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(366004)(396003)(376002)(136003)(346002)(451199015)(38100700002)(122000001)(478600001)(38070700005)(6916009)(316002)(55016003)(54906003)(9686003)(26005)(4326008)(76116006)(66446008)(8676002)(86362001)(186003)(41300700001)(71200400001)(83380400001)(53546011)(2906002)(5660300002)(52536014)(8936002)(33656002)(66556008)(66946007)(7416002)(64756008)(66476007)(7696005)(6506007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?blc0bVl0eTRQOUZHcWoydTIySUUvRVh5K0g2ZWZLbDFPNzl0NDFwUkptSVlZ?=
- =?utf-8?B?azBDTHp4VDNKd2dFbjE4N0tobmk1c1kvcTNXK1ZXUThqc3o3ZHA4Nkw2SlQx?=
- =?utf-8?B?WWNNTlNIS2tQRVZuYlNRb3A4QzZJYlJjRjVMeENsSXFZa2hvM0w5eEdlTnl3?=
- =?utf-8?B?M1RMSHNjVldzN0pWYkRycU1SdU9HV3Z0Nkh1ajh5TmRZNldMdy9oT09SdjBU?=
- =?utf-8?B?RGc5SDBhd1FtVUZ0ek0yV2VvZCtpQTFLQlVCcW05bEFnWnFETEFYYU53MU1n?=
- =?utf-8?B?VDN2eG1BNWxScnFTMDVkWkk4SjFSRmlHaHJXenR4b3Y2ajFhY1V2ek1LazRK?=
- =?utf-8?B?RVJGVWRhTU4wZVdkck8rUGh2ckNEVW8zd3pqUmZ0alhVM01oN0lEaXk1T01y?=
- =?utf-8?B?dUF4NWxBUzkyQ0wzcE5RUXJxK0R3dEk1dFE3NFdFaTIxMWw2VHU3R1B3bGtx?=
- =?utf-8?B?YUk3L1czTHFocE1XUy92c0hwNXR4dTNTSXFmUHVtbWU2L250ZlZmYWdtOHZE?=
- =?utf-8?B?bmRlZWk1dUVJWk5ybjdaQ0dJNFNNVnZZbm02em03bTdlNVhoMkxVbVlxYkw3?=
- =?utf-8?B?d2tnSDZCbjB0dGVNRzI3dkRUZzkxMC9xVitITmRNbitBaHJtWmxXbTlydTFR?=
- =?utf-8?B?Z0VKcGh5aDVTTTJ0UDZWZmZhRHdVTERkRWZEN0ZrbjRCRVcvKzJscmQ0TmNU?=
- =?utf-8?B?WmJCT00yK2JRNytCS1NyWnBYeGhLYnVRSXFMMTFvOHZUaURKWHBpb3U4SDhF?=
- =?utf-8?B?NEZ6UTJPbjZqVlc4ZzFYZSs0MFcwQWx0TXYrTDErMHB4QTNHTmRUWm8yN2I2?=
- =?utf-8?B?Yjd4TEFicGRvMzI4MmpNR2NqRGd4dnR5TVJPUFNIZmM0dCtrZ2VZeGJYYkFS?=
- =?utf-8?B?SndZQmY5VktOYzV6aTRXMG9aeDBCbFQwc1RCTURJcnA2K3hNMldTWVc5YVk5?=
- =?utf-8?B?eGVqbnMyc3ZIMW9jb3ZUcXZFU2Y1ZVIyZDZxYmtSUkRYNlRrR2x0RjRYRzVP?=
- =?utf-8?B?dExmaTYzSGlhdXBDRzhaT21OMXhFVlVNYm51L3hJSzVIdUlNVWR6a1NCM3NM?=
- =?utf-8?B?ckMvV2RmYU4yUVY3cGwwR1hobkRIWnpzMEY3eGJjbVF3SUdXdHdVRXEvN2tr?=
- =?utf-8?B?ci9LYzYzVTdNUm5yN1l3UUFiT210c2dQYVBaT0c0VTRPbkUwSHFERlo3a0x0?=
- =?utf-8?B?NGk3NXJlQ3NhbzFTSDROa2NyTkJXS0VyVUJkMXduNFA4cnBaNlRJWkZuTmZS?=
- =?utf-8?B?OHdsaDJDNmVJTE4yYWp3K2djSVBJcEVuSStMZ2trMmh1UEZNdEt0ckdubmlS?=
- =?utf-8?B?NVdKUDhKSmtXcldySE9TVks0L2plQ2FPSEJTeThybXdxMW5XNjhINzhPUTVj?=
- =?utf-8?B?ci9SYjRXTmVKYUdRKzNFUG5hQVRuM2ZnU0FYMGUrano5Mmlxbm0zdkQwNzdW?=
- =?utf-8?B?NVpJZ0xUM3hKc3B1dDRpY0JmYjVOU1ZxK3U5YU4wcUZzcXZoS1hpYWpzaUV4?=
- =?utf-8?B?UUNjenJFSkVmOTRERFFMaVlLdHhwUzBISkhWcCtjUmE1ZFV3dFJPZEFUTDMv?=
- =?utf-8?B?UlFUZURScDVpL2NGNzREbWNrbnZUNnpZTEUxY0pLV3JGbjdLUmFaKzJ3NDlD?=
- =?utf-8?B?a215Q211NmU2UmJNSnlFVW1FMDlmSkhUVW5aVFBpME16T1VKUFliNURydHh1?=
- =?utf-8?B?ZFBUWThHZi9XdG9DcDIwRGVydXRveFl0ekcwUFoxbE5hNG1QWjdBYllTWUtH?=
- =?utf-8?B?d3VZY1ZDU28wMU42eUl6K2RSTFN0eHJvSnlacjRwVjdWWlJDMDFiMUJSUEJa?=
- =?utf-8?B?VVlrUlJUcDhIUlljMlprVTBsL2t5VURCbkRpdUxXSjNBZ3BzOHFSeDQxQjN3?=
- =?utf-8?B?ZE5iaDl1Ym0xcHh6NXcyaTdzS3hZV2g3Yy9JWGVrcGlTczRIbnoraHlvRkU0?=
- =?utf-8?B?WFlqZStVNVhnOTQ5QmN2aGVGZEhVWW41ZGF3UnlUZjcxNjRXU3VKbzF6aG5G?=
- =?utf-8?B?bm9RNngxdnlnUTJFOW4wNEdOVGc1dWNyZnJRU2d0elplQkpMN2lHMThrNmR3?=
- =?utf-8?B?N3JOMExyMDFUSm9YS3NMSFRHMlJBS3NPZEdxS2RrTzdhWE5YeUk5Qk45REdG?=
- =?utf-8?B?MExZcU54bWR6MWJZcDQxZmFRSmpmVFU4UnVSaFJtbjVtckV3bk1qazZQMTlL?=
- =?utf-8?B?M0E9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Subject: Re: [PATCH 1/3] can: rcar_canfd: Fix IRQ storm on global fifo receive
+Message-ID: <20221024180708.5zfti5whtpfowk5c@pengutronix.de>
+References: <20221022081503.1051257-1-biju.das.jz@bp.renesas.com>
+ <20221022081503.1051257-2-biju.das.jz@bp.renesas.com>
+ <20221024153726.72avg6xbgzwyboms@pengutronix.de>
+ <20221024155342.bz2opygr62253646@pengutronix.de>
+ <OS0PR01MB5922B66F44AEF91CDCED8374862E9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2245b41e-92de-4e33-30d0-08dab5e7a028
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Oct 2022 17:46:05.4938
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: LaxCTveuD9Ul+9bDmurw50MNuce+QXcs0QTtUdFHc1bHyJpD93+XfoNp2j5GZlJNamGgUtgMMt/k/XYidJghzTcovh0/BnnIypfhGbglTXI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWPR01MB8495
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="whv77qosu2tvjdil"
+Content-Disposition: inline
+In-Reply-To: <OS0PR01MB5922B66F44AEF91CDCED8374862E9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-SGkgR2VlcnQsDQoNClRoYW5rcyBmb3IgdGhlIGZlZWRiYWNrLg0KDQo+IFN1YmplY3Q6IFJlOiBb
-UEFUQ0ggNi82XSBjYW46IHJjYXJfY2FuZmQ6IEFkZCBoYXNfZ2VyZmxfZWVmIHRvIHN0cnVjdA0K
-PiByY2FyX2NhbmZkX2h3X2luZm8NCj4gDQo+IEhpIEJpanUsDQo+IA0KPiBPbiBTYXQsIE9jdCAy
-MiwgMjAyMiBhdCAxOjAzIFBNIEJpanUgRGFzIDxiaWp1LmRhcy5qekBicC5yZW5lc2FzLmNvbT4N
-Cj4gd3JvdGU6DQo+ID4gUi1DYXIgaGFzIEVDQyBlcnJvciBmbGFncyBpbiBnbG9iYWwgZXJyb3Ig
-aW50ZXJydXB0cyB3aGVyZWFzIGl0IGlzDQo+IG5vdA0KPiA+IGF2YWlsYWJsZSBvbiBSWi9HMkwu
-DQo+ID4NCj4gPiBBZGQgaGFzX2dlcmZsX2VlZiB0byBzdHJ1Y3QgcmNhcl9jYW5mZF9od19pbmZv
-IHNvIHRoYXQgcmNhcl9jYW5mZF8NCj4gPiBnbG9iYWxfZXJyb3IoKSB3aWxsIHByb2Nlc3MgRUND
-IGVycm9ycyBvbmx5IGZvciBSLUNhci4NCj4gPg0KPiA+IHdoaWxzdCwgdGhpcyBwYXRjaCBmaXhl
-cyB0aGUgYmVsb3cgY2hlY2twYXRjaCB3YXJuaW5ncw0KPiA+ICAgQ0hFQ0s6IFVubmVjZXNzYXJ5
-IHBhcmVudGhlc2VzIGFyb3VuZCAnY2ggPT0gMCcNCj4gPiAgIENIRUNLOiBVbm5lY2Vzc2FyeSBw
-YXJlbnRoZXNlcyBhcm91bmQgJ2NoID09IDEnDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBCaWp1
-IERhcyA8YmlqdS5kYXMuanpAYnAucmVuZXNhcy5jb20+DQo+IA0KPiBUaGFua3MgZm9yIHlvdXIg
-cGF0Y2ghDQo+IA0KPiA+IC0tLSBhL2RyaXZlcnMvbmV0L2Nhbi9yY2FyL3JjYXJfY2FuZmQuYw0K
-PiA+ICsrKyBiL2RyaXZlcnMvbmV0L2Nhbi9yY2FyL3JjYXJfY2FuZmQuYw0KPiA+IEBAIC01MjMs
-NiArNTIzLDcgQEAgc3RydWN0IHJjYXJfY2FuZmRfaHdfaW5mbyB7DQo+ID4gICAgICAgICB1bnNp
-Z25lZCBtdWx0aV9nbG9iYWxfaXJxczoxOyAgIC8qIEhhcyBtdWx0aXBsZSBnbG9iYWwgaXJxcw0K
-PiAqLw0KPiA+ICAgICAgICAgdW5zaWduZWQgY2xrX3Bvc3RkaXY6MTsgICAgICAgICAvKiBIYXMg
-Q0FOIGNsayBwb3N0IGRpdmlkZXINCj4gKi8NCj4gPiAgICAgICAgIHVuc2lnbmVkIG11bHRpX2No
-YW5uZWxfaXJxczoxOyAgLyogSGFzIG11bHRpcGxlIGNoYW5uZWwgaXJxcw0KPiA+ICovDQo+ID4g
-KyAgICAgICB1bnNpZ25lZCBoYXNfZ2VyZmxfZWVmOjE7ICAgICAgIC8qIEhhcyBFQ0MgRXJyb3Ig
-RmxhZyAgKi8NCj4gDQo+IERvIHlvdSByZWFsbHkgbmVlZCB0aGlzIGZsYWc/IEFjY29yZGluZyB0
-byB0aGUgUlovRzJMIGRvY3MsIHRoZQ0KPiBjb3JyZXNwb25kaW5nIHJlZ2lzdGVyIGJpdHMgYXJl
-IGFsd2F5cyByZWFkIGFzIHplcm8uDQoNClRoZXNlIGFyZSByZXNlcnZlZCBiaXRzIHdpdGggMCB2
-YWx1ZSwgQnV0IGl0IGlzIG5vdCBkb2N1bWVudGVkIGFzIEVDQyBFcnJvciBmbGFnIGZvciBSWi9H
-MkwuDQpTbyBqdXN0IHdhbnQgdG8gYmUgY2xlYXIgaXQgaXMgYSBodyBmZWF0dXJlIHRoYXQgbm90
-IHN1cHBvcnRlZCBmb3IgUlovRzJMLiAgDQoNCj4gDQo+ID4gIH07DQo+ID4NCj4gPiAgLyogQ2hh
-bm5lbCBwcml2IGRhdGEgKi8NCj4gDQo+ID4gQEAgLTk0NywxNyArOTUwLDE4IEBAIHN0YXRpYyB2
-b2lkIHJjYXJfY2FuZmRfZ2xvYmFsX2Vycm9yKHN0cnVjdA0KPiA+IG5ldF9kZXZpY2UgKm5kZXYp
-ICB7DQo+ID4gICAgICAgICBzdHJ1Y3QgcmNhcl9jYW5mZF9jaGFubmVsICpwcml2ID0gbmV0ZGV2
-X3ByaXYobmRldik7DQo+ID4gICAgICAgICBzdHJ1Y3QgcmNhcl9jYW5mZF9nbG9iYWwgKmdwcml2
-ID0gcHJpdi0+Z3ByaXY7DQo+ID4gKyAgICAgICBjb25zdCBzdHJ1Y3QgcmNhcl9jYW5mZF9od19p
-bmZvICppbmZvID0gZ3ByaXYtPmluZm87DQo+ID4gICAgICAgICBzdHJ1Y3QgbmV0X2RldmljZV9z
-dGF0cyAqc3RhdHMgPSAmbmRldi0+c3RhdHM7DQo+ID4gICAgICAgICB1MzIgY2ggPSBwcml2LT5j
-aGFubmVsOw0KPiA+ICAgICAgICAgdTMyIGdlcmZsLCBzdHM7DQo+ID4gICAgICAgICB1MzIgcmlk
-eCA9IGNoICsgUkNBTkZEX1JGRklGT19JRFg7DQo+ID4NCj4gPiAgICAgICAgIGdlcmZsID0gcmNh
-cl9jYW5mZF9yZWFkKHByaXYtPmJhc2UsIFJDQU5GRF9HRVJGTCk7DQo+ID4gLSAgICAgICBpZiAo
-KGdlcmZsICYgUkNBTkZEX0dFUkZMX0VFRjApICYmIChjaCA9PSAwKSkgew0KPiA+ICsgICAgICAg
-aWYgKGluZm8tPmhhc19nZXJmbF9lZWYgJiYgKGdlcmZsICYgUkNBTkZEX0dFUkZMX0VFRjApICYm
-IGNoDQo+ID4gKyA9PSAwKSB7DQo+ID4gICAgICAgICAgICAgICAgIG5ldGRldl9kYmcobmRldiwg
-IkNoMDogRUNDIEVycm9yIGZsYWdcbiIpOw0KPiA+ICAgICAgICAgICAgICAgICBzdGF0cy0+dHhf
-ZHJvcHBlZCsrOw0KPiA+ICAgICAgICAgfQ0KPiA+IC0gICAgICAgaWYgKChnZXJmbCAmIFJDQU5G
-RF9HRVJGTF9FRUYxKSAmJiAoY2ggPT0gMSkpIHsNCj4gPiArICAgICAgIGlmIChpbmZvLT5oYXNf
-Z2VyZmxfZWVmICYmIChnZXJmbCAmIFJDQU5GRF9HRVJGTF9FRUYxKSAmJiBjaA0KPiA+ICsgPT0g
-MSkgew0KPiA+ICAgICAgICAgICAgICAgICBuZXRkZXZfZGJnKG5kZXYsICJDaDE6IEVDQyBFcnJv
-ciBmbGFnXG4iKTsNCj4gPiAgICAgICAgICAgICAgICAgc3RhdHMtPnR4X2Ryb3BwZWQrKzsNCj4g
-PiAgICAgICAgIH0NCj4gDQo+IEp1c3Qgd3JhcCBib3RoIGNoZWNrcyBpbnNpZGUgYSBzaW5nbGUg
-ImlmIChncHJpdi0+aW5mby0+aGFzX2dlcmZsKSB7DQo+IC4uLiB9Ij8NCj4gDQoNCk9LLCBjaGVl
-cnMsDQpCaWp1DQo=
+
+--whv77qosu2tvjdil
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 24.10.2022 16:55:56, Biju Das wrote:
+> Hi Marc,
+> > Subject: Re: [PATCH 1/3] can: rcar_canfd: Fix IRQ storm on global fifo
+> > receive
+> >=20
+> > On 24.10.2022 17:37:35, Marc Kleine-Budde wrote:
+> > > On 22.10.2022 09:15:01, Biju Das wrote:
+> > > > We are seeing IRQ storm on global receive IRQ line under heavy CAN
+> > > > bus load conditions with both CAN channels are enabled.
+> > > >
+> > > > Conditions:
+> > > >   The global receive IRQ line is shared between can0 and can1,
+> > either
+> > > >   of the channels can trigger interrupt while the other channel
+> > irq
+> > > >   line is disabled(rfie).
+> > > >   When global receive IRQ interrupt occurs, we mask the interrupt
+> > in
+> > > >   irqhandler. Clearing and unmasking of the interrupt is happening
+> > in
+> > > >   rx_poll(). There is a race condition where rx_poll unmask the
+> > > >   interrupt, but the next irq handler does not mask the irq due to
+> > > >   NAPIF_STATE_MISSED flag.
+> > >
+> > > Why does this happen? Is it a problem that you call
+> > > rcar_canfd_handle_global_receive() for a channel that has the IRQs
+> > > actually disabled in hardware?
+> >=20
+> > Can you check if the IRQ is active _and_ enabled before handling the
+> > IRQ on a particular channel?
+>=20
+> You mean IRQ handler or rx_poll()??
+
+I mean the IRQ handler.
+
+Consider the IRQ for channel0 is disabled but active and the IRQ for
+channel1 is enabled and active. The
+rcar_canfd_global_receive_fifo_interrupt() will iterate over both
+channels, and rcar_canfd_handle_global_receive() will serve the channel0
+IRQ, even if the IRQ is _not_ enabled. So I suggested to only handle a
+channel's RX IRQ if that IRQ is actually enabled.
+
+Assuming "cc & RCANFD_RFCC_RFI" checks if IRQ is enabled:
+
+index 567620d215f8..ea828c1bd3a1 100644
+--- a/drivers/net/can/rcar/rcar_canfd.c
++++ b/drivers/net/can/rcar/rcar_canfd.c
+@@ -1157,11 +1157,13 @@ static void rcar_canfd_handle_global_receive(struct=
+ rcar_canfd_global *gpriv, u3
+ {
+        struct rcar_canfd_channel *priv =3D gpriv->ch[ch];
+        u32 ridx =3D ch + RCANFD_RFFIFO_IDX;
+-       u32 sts;
++       u32 sts, cc;
+=20
+        /* Handle Rx interrupts */
+        sts =3D rcar_canfd_read(priv->base, RCANFD_RFSTS(gpriv, ridx));
+-       if (likely(sts & RCANFD_RFSTS_RFIF)) {
++       cc =3D rcar_canfd_read(priv->base, RCANFD_RFCC(gpriv, ridx));
++       if (likely(sts & RCANFD_RFSTS_RFIF &&
++                  cc & RCANFD_RFCC_RFIE)) {
+                if (napi_schedule_prep(&priv->napi)) {
+                        /* Disable Rx FIFO interrupts */
+                        rcar_canfd_clear_bit(priv->base,
+
+Please check if that fixes your issue.
+
+> IRQ handler check the status and disable(mask) the IRQ line.
+> rx_poll() clears the status and enable(unmask) the IRQ line.
+>=20
+> Status flag is set by HW while line is in disabled/enabled state.
+>=20
+> Channel0 and channel1 has 2 IRQ lines within the IP which is ored together
+> to provide global receive interrupt(shared line).
+
+> > A more clearer approach would be to get rid of the global interrupt
+> > handlers at all. If the hardware only given 1 IRQ line for more than 1
+> > channel, the driver would register an IRQ handler for each channel
+> > (with the shared attribute). The IRQ handler must check, if the IRQ is
+                     ^^^^^^^^^
+That should be "flag".
+
+> > pending and enabled. If not return IRQ_NONE, otherwise handle and
+> > return IRQ_HANDLED.
+>=20
+> That involves restructuring the IRQ handler altogether.
+
+ACK
+
+> RZ/G2L has shared line for rx fifos {ch0 and ch1} -> 2 IRQ routine
+> with shared attributes.
+
+It's the same IRQ handler (or IRQ routine), but called 1x for each
+channel, so 2x in total. The SHARED is actually a IRQ flag in the 4th
+argument in the devm_request_irq() function.
+
+| devm_request_irq(..., ..., ..., IRQF_SHARED, ..., ...);
+
+> R-Car SoCs has shared line for rx fifos {ch0 and ch1} and error
+> interrupts->3 IRQ routines with shared attributes.
+
+> R-CarV3U SoCs has shared line for rx fifos {ch0 to ch8} and error
+> interrupts->9 IRQ routines with shared attributes.
+
+I think you got the point, I just wanted to point out the usual way they
+are called.
+
+> Yes, I can send follow up patches for migrating to shared interrupt
+> handlers as enhancement. Please let me know.
+
+Please check if my patch snippet from above works. To fix the IRQ storm
+problem I'd like to have a simple and short solution that can go into
+stable before restructuring the IRQ handlers.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--whv77qosu2tvjdil
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNW1EoACgkQrX5LkNig
+0121FAf/UGwWyYVDjSFI0sfvgyXV53K9yXA0bZcVyt1DjoNuNycmQ6c+gcmQXLO/
+VYpQrHOkX0voEgtoFT+/jnAS5yqAB+MvT77jk9U3lsz75TSzl+JCTQS9weTRB4/t
+8lKQoRLwmo3i10n7c50qQbcaRbHnpTvw93s4JS3izMhRPtQw56XNZmy9ffka9ub2
+32kJu8Uq7HOQJ54AC9GkK23B9IujKRNIxk7K0fTAJ9fnDFHSeuIRVvoJEnYVrmsg
+OuI5pZcOg92jzvpd9l2OhwM41gveTiPq7rjfzcTLGIVAVVnBjV7ev3W6CSNB1Jmn
+N22KiYMJL+lqFWid+Ox/hfHzW5Y5Mg==
+=Yip9
+-----END PGP SIGNATURE-----
+
+--whv77qosu2tvjdil--
