@@ -2,95 +2,113 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F099560A5EE
-	for <lists+linux-can@lfdr.de>; Mon, 24 Oct 2022 14:31:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 535DE60AE7E
+	for <lists+linux-can@lfdr.de>; Mon, 24 Oct 2022 17:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232839AbiJXMam (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 24 Oct 2022 08:30:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60548 "EHLO
+        id S229914AbiJXPE4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 24 Oct 2022 11:04:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234140AbiJXM3Y (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 24 Oct 2022 08:29:24 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0ED13F8F;
-        Mon, 24 Oct 2022 05:03:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666613003; x=1698149003;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CfmKsPPFEZz3JYfcGzvUpUe5DGAdjt5IdWHUUS6XAEs=;
-  b=dmWZYRFA91f6Ed2pGUxy8ykbOWmOEk7oyxmtZEGToGJX7N6oCdh01SwU
-   RU++LYZ3H7nn/rfUBvUp3n4MIBcTS9XBxeknyfQYwiD9FRT8dkfMOPf9C
-   NJY7taDADtXIc1Y1fpdOsWpYAkpcvo/ocThsvoZVZrpZk5nBvo3a1xu1Z
-   LRRL++tix6RmgTGQBwh2gXW+KRyDtIurTfQ0IYurR70v9dhlNrB9axGNi
-   enTJnD/Ug9zhCMKGYTtchYBs34JHisP07s8zHxzfY+PTzqZjPAbUJpPgT
-   dZ1qkMQilZlMDg5hlseGWpkejtooGpK4yKJONeMtkIbEm/t94GxlF1n3k
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="305008264"
-X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
-   d="scan'208";a="305008264"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 05:00:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="633684800"
-X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
-   d="scan'208";a="633684800"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga007.fm.intel.com with ESMTP; 24 Oct 2022 05:00:31 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1omw84-001QQC-1P;
-        Mon, 24 Oct 2022 15:00:28 +0300
-Date:   Mon, 24 Oct 2022 15:00:28 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Dongliang Mu <dzm91@hust.edu.cn>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Gerhard Sittig <gsi@denx.de>,
-        Anatolij Gustschin <agust@denx.de>,
-        Mark Brown <broonie@kernel.org>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] can: mscan: mpc5xxx: fix error handling code in
- mpc5xxx_can_probe
-Message-ID: <Y1Z+XHdOozjBFBzF@smile.fi.intel.com>
-References: <20221024114810.732168-1-dzm91@hust.edu.cn>
+        with ESMTP id S232268AbiJXPEj (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 24 Oct 2022 11:04:39 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 030E7100BDF
+        for <linux-can@vger.kernel.org>; Mon, 24 Oct 2022 06:41:20 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1omxex-0006Zt-Ia
+        for linux-can@vger.kernel.org; Mon, 24 Oct 2022 15:38:31 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 01DC910895A
+        for <linux-can@vger.kernel.org>; Mon, 24 Oct 2022 13:38:30 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 27A6A108956;
+        Mon, 24 Oct 2022 13:38:30 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 3382f141;
+        Mon, 24 Oct 2022 13:38:29 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     linux-can@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Dongliang Mu <dzm91@hust.edu.cn>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH v2] can: mscan: mpc5xxx: mpc5xxx_can_probe(): add missing put_clock() in error path
+Date:   Mon, 24 Oct 2022 15:38:28 +0200
+Message-Id: <20221024133828.35881-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221024114810.732168-1-dzm91@hust.edu.cn>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 07:48:07PM +0800, Dongliang Mu wrote:
-> The commit 1149108e2fbf ("can: mscan: improve clock API use
-> ") only adds put_clock in mpc5xxx_can_remove function, forgetting to add
+From: Dongliang Mu <dzm91@hust.edu.cn>
 
-Strange indentation. Why the '")' part can't be on the previous line?
+The commit 1149108e2fbf ("can: mscan: improve clock API use") only
+adds put_clock() in mpc5xxx_can_remove() function, forgetting to add
+put_clock() in the error handling code.
 
-> put_clock in the error handling code.
-> 
-> Fix this bug by adding put_clock in the error handling code.
+Fix this bug by adding put_clock() in the error handling code.
 
+Fixes: 1149108e2fbf ("can: mscan: improve clock API use")
+Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+
+Changes since v1:
+- adjust subject
+- adjust patch patch description (Thanks, Andy)
+- adjust labels in mpc5xxx_can_probe()
+
+ drivers/net/can/mscan/mpc5xxx_can.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/net/can/mscan/mpc5xxx_can.c b/drivers/net/can/mscan/mpc5xxx_can.c
+index c469b2f3e57d..b0ed798ae70f 100644
+--- a/drivers/net/can/mscan/mpc5xxx_can.c
++++ b/drivers/net/can/mscan/mpc5xxx_can.c
+@@ -322,14 +322,14 @@ static int mpc5xxx_can_probe(struct platform_device *ofdev)
+ 					       &mscan_clksrc);
+ 	if (!priv->can.clock.freq) {
+ 		dev_err(&ofdev->dev, "couldn't get MSCAN clock properties\n");
+-		goto exit_free_mscan;
++		goto exit_put_clock;
+ 	}
+ 
+ 	err = register_mscandev(dev, mscan_clksrc);
+ 	if (err) {
+ 		dev_err(&ofdev->dev, "registering %s failed (err=%d)\n",
+ 			DRV_NAME, err);
+-		goto exit_free_mscan;
++		goto exit_put_clock;
+ 	}
+ 
+ 	dev_info(&ofdev->dev, "MSCAN at 0x%p, irq %d, clock %d Hz\n",
+@@ -337,7 +337,9 @@ static int mpc5xxx_can_probe(struct platform_device *ofdev)
+ 
+ 	return 0;
+ 
+-exit_free_mscan:
++exit_put_clock:
++	if (data->put_clock)
++		data->put_clock(ofdev);
+ 	free_candev(dev);
+ exit_dispose_irq:
+ 	irq_dispose_mapping(irq);
 -- 
-With Best Regards,
-Andy Shevchenko
+2.35.1
 
 
