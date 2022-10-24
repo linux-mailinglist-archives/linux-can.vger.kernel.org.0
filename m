@@ -2,73 +2,95 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC23E609FB7
-	for <lists+linux-can@lfdr.de>; Mon, 24 Oct 2022 13:05:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F099560A5EE
+	for <lists+linux-can@lfdr.de>; Mon, 24 Oct 2022 14:31:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230210AbiJXLFP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 24 Oct 2022 07:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51752 "EHLO
+        id S232839AbiJXMam (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 24 Oct 2022 08:30:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbiJXLEr (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 24 Oct 2022 07:04:47 -0400
-Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5A791B798;
-        Mon, 24 Oct 2022 04:04:00 -0700 (PDT)
-Received: from localhost.localdomain ([172.16.0.254])
-        (user=dzm91@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 29OB2GTB015664-29OB2GTE015664
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 24 Oct 2022 19:02:20 +0800
-From:   Dongliang Mu <dzm91@hust.edu.cn>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
+        with ESMTP id S234140AbiJXM3Y (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 24 Oct 2022 08:29:24 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0ED13F8F;
+        Mon, 24 Oct 2022 05:03:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666613003; x=1698149003;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CfmKsPPFEZz3JYfcGzvUpUe5DGAdjt5IdWHUUS6XAEs=;
+  b=dmWZYRFA91f6Ed2pGUxy8ykbOWmOEk7oyxmtZEGToGJX7N6oCdh01SwU
+   RU++LYZ3H7nn/rfUBvUp3n4MIBcTS9XBxeknyfQYwiD9FRT8dkfMOPf9C
+   NJY7taDADtXIc1Y1fpdOsWpYAkpcvo/ocThsvoZVZrpZk5nBvo3a1xu1Z
+   LRRL++tix6RmgTGQBwh2gXW+KRyDtIurTfQ0IYurR70v9dhlNrB9axGNi
+   enTJnD/Ug9zhCMKGYTtchYBs34JHisP07s8zHxzfY+PTzqZjPAbUJpPgT
+   dZ1qkMQilZlMDg5hlseGWpkejtooGpK4yKJONeMtkIbEm/t94GxlF1n3k
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="305008264"
+X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
+   d="scan'208";a="305008264"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 05:00:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="633684800"
+X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
+   d="scan'208";a="633684800"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP; 24 Oct 2022 05:00:31 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1omw84-001QQC-1P;
+        Mon, 24 Oct 2022 15:00:28 +0300
+Date:   Mon, 24 Oct 2022 15:00:28 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dongliang Mu <dzm91@hust.edu.cn>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        Dongliang Mu <dzm91@hust.edu.cn>,
-        Julia Lawall <Julia.Lawall@inria.fr>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] can: usb: ucan: modify unregister_netdev to unregister_candev
-Date:   Mon, 24 Oct 2022 19:00:30 +0800
-Message-Id: <20221024110033.727542-1-dzm91@hust.edu.cn>
-X-Mailer: git-send-email 2.35.1
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Gerhard Sittig <gsi@denx.de>,
+        Anatolij Gustschin <agust@denx.de>,
+        Mark Brown <broonie@kernel.org>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] can: mscan: mpc5xxx: fix error handling code in
+ mpc5xxx_can_probe
+Message-ID: <Y1Z+XHdOozjBFBzF@smile.fi.intel.com>
+References: <20221024114810.732168-1-dzm91@hust.edu.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: dzm91@hust.edu.cn
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221024114810.732168-1-dzm91@hust.edu.cn>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From API pairing, modify unregister_netdev to unregister_candev since
-the registeration function is register_candev. Actually, they are the
-same.
+On Mon, Oct 24, 2022 at 07:48:07PM +0800, Dongliang Mu wrote:
+> The commit 1149108e2fbf ("can: mscan: improve clock API use
+> ") only adds put_clock in mpc5xxx_can_remove function, forgetting to add
 
-Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
----
- drivers/net/can/usb/ucan.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Strange indentation. Why the '")' part can't be on the previous line?
 
-diff --git a/drivers/net/can/usb/ucan.c b/drivers/net/can/usb/ucan.c
-index 7c35f50fda4e..60f730094e5d 100644
---- a/drivers/net/can/usb/ucan.c
-+++ b/drivers/net/can/usb/ucan.c
-@@ -1581,7 +1581,7 @@ static void ucan_disconnect(struct usb_interface *intf)
- 	usb_set_intfdata(intf, NULL);
- 
- 	if (up) {
--		unregister_netdev(up->netdev);
-+		unregister_candev(up->netdev);
- 		free_candev(up->netdev);
- 	}
- }
+> put_clock in the error handling code.
+> 
+> Fix this bug by adding put_clock in the error handling code.
+
 -- 
-2.35.1
+With Best Regards,
+Andy Shevchenko
+
 
