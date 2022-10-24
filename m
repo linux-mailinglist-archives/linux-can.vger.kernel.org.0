@@ -2,33 +2,33 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B804C60B767
-	for <lists+linux-can@lfdr.de>; Mon, 24 Oct 2022 21:23:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62ED960B79D
+	for <lists+linux-can@lfdr.de>; Mon, 24 Oct 2022 21:27:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232601AbiJXTX3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 24 Oct 2022 15:23:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47802 "EHLO
+        id S232770AbiJXT1q (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 24 Oct 2022 15:27:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231722AbiJXTWf (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 24 Oct 2022 15:22:35 -0400
+        with ESMTP id S232889AbiJXT1Z (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 24 Oct 2022 15:27:25 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4213917ABD
-        for <linux-can@vger.kernel.org>; Mon, 24 Oct 2022 10:57:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3058D38FF
+        for <linux-can@vger.kernel.org>; Mon, 24 Oct 2022 10:59:19 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1omxuW-0000Tz-Bu; Mon, 24 Oct 2022 15:54:36 +0200
+        id 1omyGL-00058R-To; Mon, 24 Oct 2022 16:17:09 +0200
 Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:1bbf:91f6:fcf3:6f78])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id D94CB108980;
-        Mon, 24 Oct 2022 13:54:30 +0000 (UTC)
-Date:   Mon, 24 Oct 2022 15:54:22 +0200
+        by smtp.blackshift.org (Postfix) with ESMTPSA id D732E1089C1;
+        Mon, 24 Oct 2022 14:17:07 +0000 (UTC)
+Date:   Mon, 24 Oct 2022 16:16:59 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Dongliang Mu <dzm91@hust.edu.cn>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
 Cc:     Wolfgang Grandegger <wg@grandegger.com>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
@@ -36,18 +36,22 @@ Cc:     Wolfgang Grandegger <wg@grandegger.com>,
         Paolo Abeni <pabeni@redhat.com>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
         Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] can: usb: ucan: modify unregister_netdev to
- unregister_candev
-Message-ID: <20221024135422.egkcbxvudtj7z3ie@pengutronix.de>
-References: <20221024110033.727542-1-dzm91@hust.edu.cn>
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Ulrich Hecht <uli+renesas@fpond.eu>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Rob Herring <robh@kernel.org>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH 0/3] R-Car CANFD fixes
+Message-ID: <20221024141659.62rtawuce7mczbt2@pengutronix.de>
+References: <20221022081503.1051257-1-biju.das.jz@bp.renesas.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xnap6ow5gg7x5npq"
+        protocol="application/pgp-signature"; boundary="qb5jtsrmrf5tic7f"
 Content-Disposition: inline
-In-Reply-To: <20221024110033.727542-1-dzm91@hust.edu.cn>
+In-Reply-To: <20221022081503.1051257-1-biju.das.jz@bp.renesas.com>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -62,20 +66,23 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---xnap6ow5gg7x5npq
+--qb5jtsrmrf5tic7f
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 24.10.2022 19:00:30, Dongliang Mu wrote:
-> From API pairing, modify unregister_netdev to unregister_candev since
-> the registeration function is register_candev. Actually, they are the
-            ^ typo
-> same.
+On 22.10.2022 09:15:00, Biju Das wrote:
+> This patch series fixes the below issues in R-Car CAN FD driver.
 >=20
-> Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
+>  1) Race condition in CAN driver under heavy CAN load condition
+>     with both channels enabled results in IRQ stom on global fifo
+                                                ^^^^ typo
+>     receive irq line.
+>  2) Add channel specific tx interrupts handling for RZ/G2L SoC as it has
+>     separate IRQ lines for each tx.
+>  3) Remove unnecessary SoC specific checks in probe.
 
-Fixed while applying.
+Fixed typo while applying.
 
 Thanks,
 Marc
@@ -86,19 +93,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---xnap6ow5gg7x5npq
+--qb5jtsrmrf5tic7f
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNWmQsACgkQrX5LkNig
-0121mAf7BiRgfNOG9M3efutpUwqUshfIiVD/k+sS1Ppxu6bs8vQVw3hOny4M6sf0
-8oWz6I45twfV9eBZMuueFzt51OQnczM2Ygmauk2F6je16tFWBLa4xbRlYam+uwSO
-8w70ZMpOFVpGz2EjN06JMvsS2CxNv+KQnOP5AaoFFaAvX+e6aKFIUUT0dA4fC82j
-98ygrX05X/FXIrhPgY/vKIhLCpi0z1qYcqzFzG61ViIMjROFvFDy8D0JHQF4MLLq
-4I0HxwjDTpFfzIaQQsbt8sy8lu4aD6ehw6eOnyiwNdb46I9NrsgZ8/cBHvGjOb8m
-vOd94T9UO9jvlVbRyDW6N4+2opsTCA==
-=MNLr
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNWnlgACgkQrX5LkNig
+013+yQf/Z095gwUkiZoaqt0KdEx/ukxJmGdZh13W3abgRyYtlESSzC4PAozPyK9/
+CZDCmXi1N3QtMAiuma1sYDDDSNynCbTNV2lSO807ghQ4J2mGOwX1sBVezlNR4H3b
+834fC5y2pATiLJDGs0uj0Z/Ae919+cSqId8BYJVSqAPtWabpDsdAT9+aCuRQBe4X
+EixLG11stSKN5AM7F2bBS/R3ir5INdnZ7itVa7SQQT3H3bbYAah5G9CnBukXNUSS
+aQXA/Mkgxlyn8xGq+x9DwsjATyYqyvuVhztvnEPphBPB12ScxfFO1GRoLX7DwTDx
+hRcvV1Gahs6N+q3/EW8DdLR2uodCLQ==
+=XC8V
 -----END PGP SIGNATURE-----
 
---xnap6ow5gg7x5npq--
+--qb5jtsrmrf5tic7f--
