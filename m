@@ -2,144 +2,123 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1A1360B194
-	for <lists+linux-can@lfdr.de>; Mon, 24 Oct 2022 18:28:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78D2C60B358
+	for <lists+linux-can@lfdr.de>; Mon, 24 Oct 2022 19:05:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231747AbiJXQ1v (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 24 Oct 2022 12:27:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53492 "EHLO
+        id S230107AbiJXRFW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 24 Oct 2022 13:05:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233627AbiJXQ1Z (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 24 Oct 2022 12:27:25 -0400
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC74328E32;
-        Mon, 24 Oct 2022 08:14:04 -0700 (PDT)
-Received: by mail-qk1-f169.google.com with SMTP id a5so6237092qkl.6;
-        Mon, 24 Oct 2022 08:14:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=m4viJHxfacreRm9wTZHfw/EqLzaLhJI57ZF7n+4sesI=;
-        b=lddOhnkSKqyV2/fbsZbKMLZdAwM9Y/gUuPCGVvtUPfVT/jTGajqv3g6uH7kAKNtS2T
-         tFa6RmIdpi/lUs9ONaT9r20sWi2CmpUJ91rusL8/c/hSzUK2hh2fDoKNltiyypMfpsYz
-         11EM+YAxQWKHidSXxqigA9UXaTlzmlT5vqXF9lKavWpXZPzQmy1iQxsKKCC/CN6+lDaI
-         in79LpkqyLJWruosf+GiwUhTNhjGHG5aD50uSY6j8tKdrXHpTh8m4V90KIXKC+0telWQ
-         LRUoS7FvixiekIDUQSQPGhhYFCreQHEA+6nfeGvmPhsvtWb7xzEB1vxsffzh9+AM9eCT
-         MNGQ==
-X-Gm-Message-State: ACrzQf16LyWeCKMPetNzTI2vEW3Zg3oPezbgo6UONIjDrOY5OgSUDkvA
-        We9rF5lYQHvtutoxAlObWTiiwUlX2JcA7w==
-X-Google-Smtp-Source: AMsMyM66KLH3yXhQf1WGFA8wXaMs+RlBpXmfGyKsiH1ejjEA5fUSplb+c2cRmWGIYbu9/1gNyDHzaA==
-X-Received: by 2002:ac8:4e4f:0:b0:39c:e080:3643 with SMTP id e15-20020ac84e4f000000b0039ce0803643mr27954535qtw.426.1666623570029;
-        Mon, 24 Oct 2022 07:59:30 -0700 (PDT)
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
-        by smtp.gmail.com with ESMTPSA id cq13-20020a05622a424d00b003972790deb9sm32320qtb.84.2022.10.24.07.59.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 07:59:29 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id y72so11261489yby.13;
-        Mon, 24 Oct 2022 07:59:29 -0700 (PDT)
-X-Received: by 2002:a25:26c1:0:b0:6c3:bdae:c6d6 with SMTP id
- m184-20020a2526c1000000b006c3bdaec6d6mr30854658ybm.36.1666623568821; Mon, 24
- Oct 2022 07:59:28 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221022104357.1276740-1-biju.das.jz@bp.renesas.com> <20221022104357.1276740-7-biju.das.jz@bp.renesas.com>
-In-Reply-To: <20221022104357.1276740-7-biju.das.jz@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 24 Oct 2022 16:59:17 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdV8MmTMMPnCGgXbZZ-gb4CVduAUBBG3BdAecBrc3J7RLQ@mail.gmail.com>
-Message-ID: <CAMuHMdV8MmTMMPnCGgXbZZ-gb4CVduAUBBG3BdAecBrc3J7RLQ@mail.gmail.com>
-Subject: Re: [PATCH 6/6] can: rcar_canfd: Add has_gerfl_eef to struct rcar_canfd_hw_info
-To:     biju.das.jz@bp.renesas.com
+        with ESMTP id S234503AbiJXRD6 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 24 Oct 2022 13:03:58 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF75873C3E
+        for <linux-can@vger.kernel.org>; Mon, 24 Oct 2022 08:40:00 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1omzWE-0007KN-4k; Mon, 24 Oct 2022 17:37:38 +0200
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:1bbf:91f6:fcf3:6f78])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id DEF08108A71;
+        Mon, 24 Oct 2022 15:37:34 +0000 (UTC)
+Date:   Mon, 24 Oct 2022 17:37:26 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
 Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        Ulrich Hecht <uli+renesas@fpond.eu>,
+        Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Ulrich Hecht <uli+renesas@fpond.eu>,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        Rob Herring <robh@kernel.org>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
         linux-renesas-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 1/3] can: rcar_canfd: Fix IRQ storm on global fifo receive
+Message-ID: <20221024153726.72avg6xbgzwyboms@pengutronix.de>
+References: <20221022081503.1051257-1-biju.das.jz@bp.renesas.com>
+ <20221022081503.1051257-2-biju.das.jz@bp.renesas.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pp2dauigdnxmzpha"
+Content-Disposition: inline
+In-Reply-To: <20221022081503.1051257-2-biju.das.jz@bp.renesas.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Biju,
 
-On Sat, Oct 22, 2022 at 1:03 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> R-Car has ECC error flags in global error interrupts whereas it is
-> not available on RZ/G2L.
->
-> Add has_gerfl_eef to struct rcar_canfd_hw_info so that rcar_canfd_
-> global_error() will process ECC errors only for R-Car.
->
-> whilst, this patch fixes the below checkpatch warnings
->   CHECK: Unnecessary parentheses around 'ch == 0'
->   CHECK: Unnecessary parentheses around 'ch == 1'
->
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+--pp2dauigdnxmzpha
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for your patch!
+On 22.10.2022 09:15:01, Biju Das wrote:
+> We are seeing IRQ storm on global receive IRQ line under heavy CAN
+> bus load conditions with both CAN channels are enabled.
+>=20
+> Conditions:
+>   The global receive IRQ line is shared between can0 and can1, either
+>   of the channels can trigger interrupt while the other channel irq
+>   line is disabled(rfie).
+>   When global receive IRQ interrupt occurs, we mask the interrupt in
+>   irqhandler. Clearing and unmasking of the interrupt is happening in
+>   rx_poll(). There is a race condition where rx_poll unmask the
+>   interrupt, but the next irq handler does not mask the irq due to
+>   NAPIF_STATE_MISSED flag.
 
-> --- a/drivers/net/can/rcar/rcar_canfd.c
-> +++ b/drivers/net/can/rcar/rcar_canfd.c
-> @@ -523,6 +523,7 @@ struct rcar_canfd_hw_info {
->         unsigned multi_global_irqs:1;   /* Has multiple global irqs  */
->         unsigned clk_postdiv:1;         /* Has CAN clk post divider  */
->         unsigned multi_channel_irqs:1;  /* Has multiple channel irqs  */
-> +       unsigned has_gerfl_eef:1;       /* Has ECC Error Flag  */
+Why does this happen? Is it a problem that you call
+rcar_canfd_handle_global_receive() for a channel that has the IRQs
+actually disabled in hardware?
 
-Do you really need this flag? According to the RZ/G2L docs, the
-corresponding register bits are always read as zero.
+>   (for eg: can0 rx fifo interrupt enable is
+>   disabled and can1 is triggering rx interrupt, the delay in rx_poll()
+>   processing results in setting NAPIF_STATE_MISSED flag) leading to IRQ
+>   storm.
+>=20
+> This patch fixes the issue by checking irq is masked or not in
+> irq handler and it masks the interrupt if it is unmasked.
 
->  };
->
->  /* Channel priv data */
+Marc
 
-> @@ -947,17 +950,18 @@ static void rcar_canfd_global_error(struct net_device *ndev)
->  {
->         struct rcar_canfd_channel *priv = netdev_priv(ndev);
->         struct rcar_canfd_global *gpriv = priv->gpriv;
-> +       const struct rcar_canfd_hw_info *info = gpriv->info;
->         struct net_device_stats *stats = &ndev->stats;
->         u32 ch = priv->channel;
->         u32 gerfl, sts;
->         u32 ridx = ch + RCANFD_RFFIFO_IDX;
->
->         gerfl = rcar_canfd_read(priv->base, RCANFD_GERFL);
-> -       if ((gerfl & RCANFD_GERFL_EEF0) && (ch == 0)) {
-> +       if (info->has_gerfl_eef && (gerfl & RCANFD_GERFL_EEF0) && ch == 0) {
->                 netdev_dbg(ndev, "Ch0: ECC Error flag\n");
->                 stats->tx_dropped++;
->         }
-> -       if ((gerfl & RCANFD_GERFL_EEF1) && (ch == 1)) {
-> +       if (info->has_gerfl_eef && (gerfl & RCANFD_GERFL_EEF1) && ch == 1) {
->                 netdev_dbg(ndev, "Ch1: ECC Error flag\n");
->                 stats->tx_dropped++;
->         }
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-Just wrap both checks inside a single "if (gpriv->info->has_gerfl) { ... }"?
+--pp2dauigdnxmzpha
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Gr{oetje,eeting}s,
+-----BEGIN PGP SIGNATURE-----
 
-                        Geert
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNWsTMACgkQrX5LkNig
+012EJgf/TJuBlGVYoPZqvkLueDAZ6s8nJzeI8sB5zxTsvDBoWpHaFk+gHd2PO9ai
+X4yfVczOEQfJBcT1yho2dWMoADFmAVWFTizWsblTTxYQd7cwhN/Y/itcXf6+rAqv
+1ej8FTyWI0gyguG1/IaN6LHpCzkHpxhzZaV1kkMpWPuutYsLPCYGSt1NH7j0d0ih
+GDcUVfprkzyNmUJb/SjYLsi23e5kLe+y7B+T6RZLc83+1tTZujjkn/tOkGjBGEQ2
+aZd6QviFmC7I/BmOVcVDWs7IIi/nDDSqsJx+57DgrjCVaPRHuJDoQZ23102H6izP
+HcXRZw9IKKbUqhIpqFNboYy8f32C7g==
+=3yl4
+-----END PGP SIGNATURE-----
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--pp2dauigdnxmzpha--
