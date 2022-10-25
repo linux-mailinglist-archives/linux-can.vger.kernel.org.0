@@ -2,31 +2,31 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1483C60C639
-	for <lists+linux-can@lfdr.de>; Tue, 25 Oct 2022 10:19:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 582AE60C80E
+	for <lists+linux-can@lfdr.de>; Tue, 25 Oct 2022 11:29:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232167AbiJYITM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 25 Oct 2022 04:19:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36466 "EHLO
+        id S229740AbiJYJ3Y (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 25 Oct 2022 05:29:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232164AbiJYITC (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 25 Oct 2022 04:19:02 -0400
+        with ESMTP id S231640AbiJYJ2y (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 25 Oct 2022 05:28:54 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2892DC354C
-        for <linux-can@vger.kernel.org>; Tue, 25 Oct 2022 01:19:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D999B10FFC
+        for <linux-can@vger.kernel.org>; Tue, 25 Oct 2022 02:25:37 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1onF98-000755-1U; Tue, 25 Oct 2022 10:18:50 +0200
+        id 1onGBY-0000jR-F6; Tue, 25 Oct 2022 11:25:24 +0200
 Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 358BF109365;
-        Tue, 25 Oct 2022 08:18:48 +0000 (UTC)
-Date:   Tue, 25 Oct 2022 10:18:46 +0200
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 72D3B10944C;
+        Tue, 25 Oct 2022 09:25:22 +0000 (UTC)
+Date:   Tue, 25 Oct 2022 11:25:20 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     Matej Vasilevski <matej.vasilevski@seznam.cz>
 Cc:     Pavel Pisa <pisa@cmp.felk.cvut.cz>,
@@ -42,12 +42,12 @@ Cc:     Pavel Pisa <pisa@cmp.felk.cvut.cz>,
         devicetree@vger.kernel.org
 Subject: Re: [PATCH v5 2/4] can: ctucanfd: add HW timestamps to RX and error
  CAN frames
-Message-ID: <20221025081846.kbabbavzlz72dwhc@pengutronix.de>
+Message-ID: <20221025092520.lz7qkafrwolwnbau@pengutronix.de>
 References: <20221012062558.732930-1-matej.vasilevski@seznam.cz>
  <20221012062558.732930-3-matej.vasilevski@seznam.cz>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="g4nb3ysqtgjqax7z"
+        protocol="application/pgp-signature"; boundary="2pqevftidrz3jehg"
 Content-Disposition: inline
 In-Reply-To: <20221012062558.732930-3-matej.vasilevski@seznam.cz>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
@@ -64,7 +64,7 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---g4nb3ysqtgjqax7z
+--2pqevftidrz3jehg
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
@@ -82,26 +82,52 @@ On 12.10.2022 08:25:56, Matej Vasilevski wrote:
 
 [...]
 
-> @@ -640,12 +663,16 @@ static netdev_tx_t ctucan_start_xmit(struct sk_buff=
- *skb, struct net_device *nde
->   * @priv:	Pointer to CTU CAN FD's private data
->   * @cf:		Pointer to CAN frame struct
->   * @ffw:	Previously read frame format word
-> + * @skb:	Pointer to buffer to store timestamp
->   *
->   * Note: Frame format word must be read separately and provided in 'ffw'.
->   */
-> -static void ctucan_read_rx_frame(struct ctucan_priv *priv, struct canfd_=
-frame *cf, u32 ffw)
-> +static void ctucan_read_rx_frame(struct ctucan_priv *priv, struct canfd_=
-frame *cf,
-> +				 u32 ffw, u64 *timestamp)
+>  int ctucan_suspend(struct device *dev)
+> @@ -1337,12 +1456,41 @@ int ctucan_resume(struct device *dev)
+>  }
+>  EXPORT_SYMBOL(ctucan_resume);
+> =20
+> +int ctucan_runtime_suspend(struct device *dev)
+> +{
+> +	struct net_device *ndev =3D dev_get_drvdata(dev);
+> +	struct ctucan_priv *priv =3D netdev_priv(ndev);
+> +
+> +	clk_disable_unprepare(priv->timestamp_clk);
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL(ctucan_runtime_suspend);
+> +
+> +int ctucan_runtime_resume(struct device *dev)
+> +{
+> +	struct net_device *ndev =3D dev_get_drvdata(dev);
+> +	struct ctucan_priv *priv =3D netdev_priv(ndev);
+> +	int ret;
+> +
+> +	ret =3D clk_prepare_enable(priv->timestamp_clk);
+> +	if (ret) {
+> +		dev_err(dev, "Cannot enable timestamping clock: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL(ctucan_runtime_resume);
 
-| drivers/net/can/ctucanfd/ctucanfd_base.c:672: warning: Function parameter=
- or member 'timestamp' not described in 'ctucan_read_rx_frame'             =
-         =20
-| drivers/net/can/ctucanfd/ctucanfd_base.c:672: warning: Excess function pa=
-rameter 'skb' description in 'ctucan_read_rx_frame'    =20
+Regarding the timestamp_clk handling:
+
+If you prepare_enable the timestamp_clk during probe_common() and don't
+disable_unprepare it, it stays on the whole lifetime of the driver. So
+there's no need/reason for the runtime suspend/resume functions.
+
+So either keep the clock powered and remove the suspend/resume functions
+or shut down the clock after probe.
+
+If you want to make things 1000% clean, you can get the timestamp's
+clock rate during open() and re-calculate the mult and shift. The
+background is that the clock rate might change if the clock is not
+enabled (at least that's not guaranteed by the common clock framework).
+Actual HW implementations might differ.
 
 Marc
 
@@ -111,19 +137,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---g4nb3ysqtgjqax7z
+--2pqevftidrz3jehg
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNXm+QACgkQrX5LkNig
-012zwwf9FauuUSSLqD54GBklBhQmf1EZjdawC3a0ZjhcJ4U6HBStuNAblr0Gb5QN
-h6OvayKrGkGieXtiDWGK8JdOEucPIVX0/PAevGQWqk9R1XpJm+vVhGP4fZiGHUXh
-mIEEktRPm29ZzDgGNeFc9CqHsFy6Cf5TlRBR90dqUUgYSaevXIhuz0Fbajyn4eSk
-so1to5qiujGbLBVKdgIMamkuDqh22KQqkhh2phUoPd6RPBBncydn6dcUDlXa1wTj
-7jCklcOqbRnGm0S1AX471uxUDFandscNWLlFbq73+6NHC2V0urNqTMVWQJwH1BZJ
-8YPduKRWXD/dZhE5GmyBSPWKHfsL6A==
-=XGgm
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNXq34ACgkQrX5LkNig
+0137awgAl+o5l9VnGtWijsorYQSdAlZHIMgEBzaCdGHe45E7q/nvYSgyliBc7J6a
+58GYkPDD0D7WH82InFuLecm//MqLImiXZZqoo9RaqsLMTjV12xV//vNPZIQoA0+I
+FSLP9Gg/TZUN1ORPert99XZ+9u8ZcFHHQCGor9zSEf9GGc+iurMmG7eBNzX9KS9r
+6TPJkifeuG0f+Sh7G8WVDxUjQ/I1j5xZ2Z0fat1yn9aTZVIVUpkeyNkKBKpf++hS
+dc4xJGc85UeOLystjoaZTqENchO2zfVzK4YxEwVms93OcBtj4+OiQ5lNkYYnxVqn
+gblQRt1atIAWuwlgNo7woeu6C38HSA==
+=A8pO
 -----END PGP SIGNATURE-----
 
---g4nb3ysqtgjqax7z--
+--2pqevftidrz3jehg--
