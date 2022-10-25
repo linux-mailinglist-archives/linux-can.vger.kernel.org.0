@@ -2,48 +2,49 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7450660C5B3
-	for <lists+linux-can@lfdr.de>; Tue, 25 Oct 2022 09:45:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7E9660C5B7
+	for <lists+linux-can@lfdr.de>; Tue, 25 Oct 2022 09:45:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232016AbiJYHpG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 25 Oct 2022 03:45:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44398 "EHLO
+        id S232025AbiJYHpX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 25 Oct 2022 03:45:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231997AbiJYHoz (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 25 Oct 2022 03:44:55 -0400
+        with ESMTP id S232045AbiJYHpU (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 25 Oct 2022 03:45:20 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DCC08A6E1
-        for <linux-can@vger.kernel.org>; Tue, 25 Oct 2022 00:44:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A09BFBCF7
+        for <linux-can@vger.kernel.org>; Tue, 25 Oct 2022 00:45:17 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1onEbu-0001jd-0z; Tue, 25 Oct 2022 09:44:30 +0200
+        id 1onEcP-0001oW-P8; Tue, 25 Oct 2022 09:45:01 +0200
 Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id C32D91092E3;
-        Tue, 25 Oct 2022 07:44:27 +0000 (UTC)
-Date:   Tue, 25 Oct 2022 09:44:24 +0200
+        by smtp.blackshift.org (Postfix) with ESMTPSA id A35CF1092E5;
+        Tue, 25 Oct 2022 07:45:00 +0000 (UTC)
+Date:   Tue, 25 Oct 2022 09:44:59 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     Vivek Yadav <vivek.2311@samsung.com>
 Cc:     rcsekar@samsung.com, wg@grandegger.com, davem@davemloft.net,
         edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
         pankaj.dubey@samsung.com, ravi.patel@samsung.com,
         alim.akhtar@samsung.com, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/7] can: mcan: enable peripheral clk to access mram
-Message-ID: <20221025074424.udfltascaqjc6dhs@pengutronix.de>
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sriranjani P <sriranjani.p@samsung.com>
+Subject: Re: [PATCH 5/7] arm64: dts: fsd: Add MCAN device node
+Message-ID: <20221025074459.z7utljgnexqnohir@pengutronix.de>
 References: <20221021095833.62406-1-vivek.2311@samsung.com>
- <CGME20221021102632epcas5p29333840201aacbae42bc90f651ac85cd@epcas5p2.samsung.com>
- <20221021095833.62406-5-vivek.2311@samsung.com>
+ <CGME20221021102635epcas5p33623e6b6ed02d3fb663da9ec253585ad@epcas5p3.samsung.com>
+ <20221021095833.62406-6-vivek.2311@samsung.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2636diqrfd4pgcj5"
+        protocol="application/pgp-signature"; boundary="ykpmhpitlojghido"
 Content-Disposition: inline
-In-Reply-To: <20221021095833.62406-5-vivek.2311@samsung.com>
+In-Reply-To: <20221021095833.62406-6-vivek.2311@samsung.com>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -58,21 +59,19 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---2636diqrfd4pgcj5
+--ykpmhpitlojghido
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 21.10.2022 15:28:30, Vivek Yadav wrote:
-> When we try to access the mcan message ram addresses, make sure hclk is
-> not gated by any other drivers or disabled. Enable the clock (hclk) before
-> accessing the mram and disable it after that.
+On 21.10.2022 15:28:31, Vivek Yadav wrote:
+> Add MCAN device node and enable the same for FSD platform.
+> This also adds the required pin configuration for the same.
 >=20
-> This is required in case if by-default hclk is gated.
+> Signed-off-by: Sriranjani P <sriranjani.p@samsung.com>
+> Signed-off-by: Vivek Yadav <vivek.2311@samsung.com>
 
-=46rom my point of view it makes no sense to init the RAM during probe.
-Can you move the init_ram into the m_can_chip_config() function? The
-clocks should be enabled then.
+Please add the DT people on Cc.
 
 Marc
 
@@ -82,19 +81,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---2636diqrfd4pgcj5
+--ykpmhpitlojghido
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNXk9YACgkQrX5LkNig
-012s4wgAgEvXknoIf4nkxglrh4BH7qZ19M3p2awqWomcLpkgCN0XfHo7NGFtd4pD
-UABYD6nDQYc+aOPqQmDFfYVghWHXv5BvjLWuojiq5d9m6YLXw9zcPzBH3NcTlTV8
-Unt4dCYLjDW3HAurEG5C4OA0/zyzaIezFtIil+UszYX19g/JEknxydnkxMsakrqH
-Bwr0CUBmi3tytW1oWMpgpSh6VCbcH9XKzEP9OeXQtDyZZdOcNeJM6G/nJSecPV8j
-rUogXNZcuHGqIp0rWsJV8bfjDK4fgfcntfznWgV+MN8V3X1vfmpKNmD6cqrAsj0O
-eisHx4gR0CXKc+LzFJ2NCGWPjCl8dg==
-=3bl7
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNXk/kACgkQrX5LkNig
+010figf9HAIKN8UzsLOvNgGVazFnTNDI5tr95FdMvQeuO1BeZwnLjuds+XoH9PuQ
+nAvGgrbwb6QvGV0CDdNOJS/M+MvS5KcJw81TohuToDxiNZKZYoNJ3IF98jue78Ew
+0EoEp0abO9L6vnferQu3JGNIhDpoBub/99SxGryO6ID6MpdHvvkrl8QEnx7ipwZN
+ATpzUMoaX9y/18Cdjs6ijCu1uE2u8ZPWGGVSqVbW+ZhEhQFUiH0cCnnA3eXdn4ZK
+HEcGG+oARd/BBCZUCN8zj+GxCJ8JP6K5hVaPxKknUl0/wlB084tg8mf/wZBkVwW8
+niXj5O+v4+rzwGvxM7SWUFRkeHh0Sw==
+=kt9G
 -----END PGP SIGNATURE-----
 
---2636diqrfd4pgcj5--
+--ykpmhpitlojghido--
