@@ -2,174 +2,139 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82C5C60E146
-	for <lists+linux-can@lfdr.de>; Wed, 26 Oct 2022 14:56:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5095160E15F
+	for <lists+linux-can@lfdr.de>; Wed, 26 Oct 2022 15:00:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233705AbiJZM4m (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 26 Oct 2022 08:56:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39254 "EHLO
+        id S234002AbiJZNAl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 26 Oct 2022 09:00:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233912AbiJZM4k (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 26 Oct 2022 08:56:40 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2102.outbound.protection.outlook.com [40.107.113.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFBCB36431;
-        Wed, 26 Oct 2022 05:56:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bJ92zRzR9sIFiOZC5fYWS2/bFYRXNeGgjc+9My8JQs80mbVxLs4k2feT6kSiRn7dfXN4yIEQ4sze/pL54Di5Smy2zcf9RRU2K4cW1Myilpa10E8SxR7+UQ5ZC32q9SLEj/07xFuyfMWsdQKDfvJ4LKTUGUEtjv6OZ/v2csjaLHLHOmoSYry48b60yknXmrNMCjpyDqzGAq5zoexQscKdg/XNvdILBoUZjq/8fWxrKHsTUSIVms+8CmOK+p5TacSEHIrlyavn7L3DFlIlgxZpSWDvM3xR/EYcwPPR5b/zzi3331sey0sAmpVVF9qa6FWNpgqgy+DFPLjBi99k/bAcPg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+SdoGDkxqKoy5MxaTGMuclJKOapqN7EjMJur1X7F0dM=;
- b=YxqKByIvv/1f3nHldxDZkrUdl/onvC6xF7oUX9D3GvHlLLsN/lcMaqb8AMgW9yBz6IAH0Hx0P7S6Pbx2NvwEYewFf7ycZeuFyt/kl0bpeX51M7ZOjLS0tep+ichfPP3XTSTNdEl6mVsnIFuUnI7AJmDhMmzhicKbRk3Gc5RKqN2nTM5vOoMXT5CAHA8FgKPJzmX3QKKxv4bNrJueoYJ5UjInYJhTMTn4lTvj7GH/YJQL4/oBEAVsaHLHcV81dIH7UX76H0x6rKVkMQzF0bQtYgMKEDmThAZEnJ72WvfjMoPuZCUKAQXHwZy3M8BGiHMdzhUlRFRSVB48+RIGA8tD6g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+SdoGDkxqKoy5MxaTGMuclJKOapqN7EjMJur1X7F0dM=;
- b=DDo8u2wdMA29z/GoZsq/fbtiEj/Iaeomw3AFw7sPsh0ljwH4HU7QDUdeRJSduI2go+FzjaG5Jehe5eF/J+QhRjXQWsj6pagfKEhSEKySKyFYafPtdIt949S9gKChGyjElWtG6jsjuvVn7Yb1Bw5681ll8a08f/aut/p2JldM5Gg=
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
- by TYWPR01MB9646.jpnprd01.prod.outlook.com (2603:1096:400:1a3::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.23; Wed, 26 Oct
- 2022 12:56:35 +0000
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::fea0:9039:b0b3:968f]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::fea0:9039:b0b3:968f%7]) with mapi id 15.20.5746.028; Wed, 26 Oct 2022
- 12:56:35 +0000
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-CC:     Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        =?utf-8?B?U3RlZmFuIE3DpHRqZQ==?= <stefan.maetje@esd.eu>,
-        Ulrich Hecht <uli+renesas@fpond.eu>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: RE: [PATCH v2 2/3] can: rcar_canfd: Fix channel specific IRQ handling
- for RZ/G2L
-Thread-Topic: [PATCH v2 2/3] can: rcar_canfd: Fix channel specific IRQ
- handling for RZ/G2L
-Thread-Index: AQHY6Ip2RBA8f39PzUqILbm0/1Sk/64gSiQAgAAUPdCAAD8zAIAABM6Q
-Date:   Wed, 26 Oct 2022 12:56:35 +0000
-Message-ID: <OS0PR01MB5922B83EE681BFAE56B420D386309@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-References: <20221025155657.1426948-1-biju.das.jz@bp.renesas.com>
- <20221025155657.1426948-3-biju.das.jz@bp.renesas.com>
- <20221026073608.7h47b2axcayakfnn@pengutronix.de>
- <OS0PR01MB5922FCC50E590DFDD041F99386309@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <20221026123446.c6ob45mbke5aj7f5@pengutronix.de>
-In-Reply-To: <20221026123446.c6ob45mbke5aj7f5@pengutronix.de>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TYWPR01MB9646:EE_
-x-ms-office365-filtering-correlation-id: 81449d3d-9351-4f3d-0538-08dab75183af
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: QHth/u9K+q9InnyDcjBD/8ukdyMbAqGBPH0yWUe3uBWLemTcmCwVmmgYltXNf14KoVHCHIhjvFlwZoQNQO+9ZyQSlWTlEOZbCUrHHXxNSuFD7A/5NHRX4RHUZS87sWgiwVgViaV9T7Y1hxMoUp8ZdVSlZ5Jv0JBpIX9uTZO7eBcTDl0iVXIJ+AhEBEnEEvTXjqq7kRj3t2N3WX/+rcfN0LIUb/izX+iZhzTIJVvpdsXatpCCuDe+zgOIVGamiCRCREIU6xPJTQ2ywiWm5tN5J86I4kOuM4MOOm7vZPVUZse1+A2SwNfG6jSXKVxJUANCAfsvA7QOzHqeO+ZGQTgmZPQCbE4x+b/OZ7GKoYR703qifovIKQkOPyapeb61ji75L/+uLwTyTQHo+ZW+33Pj+YY1yPyGEaKlG0DmtC0sj2oqnsLaOuOUAlZ2+pmldh5QMPt1IeHLaCmautEhTIqdNIrnCg8XbJNNf3Ln+gViit71OchcJDDj9bXHi/4xUJrmWroaQSs6U2cvnSJPopcHtgxiQyORyJs4QQoq5EqHDJEIyuE0e/E1HFLtGykqPTdzWXXSTQRmewANgxgUkRpHo2SJHdOcVfNQcZ9Sn7njCBzGTCcfQPIcdo83Qz/VKgdjCfuVfBlg7BaoSrLvQnq21xVfCwZf8N4DNe/fbZwwrDSF2TEPb1hFhX/cGhTH/HG/19zWdKN8u6LK7kKnkfC/d6dW/cR716YyYbPoB/K9Nderu+E8CBNhNOtGQmkEMruNY0/GW1VKtOJ3xO5G6DE8AQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(366004)(396003)(136003)(39860400002)(346002)(451199015)(478600001)(86362001)(71200400001)(66446008)(66946007)(53546011)(66476007)(64756008)(7696005)(66556008)(8676002)(4326008)(41300700001)(5660300002)(9686003)(76116006)(7416002)(52536014)(8936002)(6916009)(33656002)(122000001)(54906003)(55016003)(6506007)(186003)(2906002)(38100700002)(316002)(26005)(38070700005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?U01uY0tSSUxBOUViN21PQ2pocDBkLzdQYWI5dWJ3UlFIQmNneWsxbklwK2p1?=
- =?utf-8?B?Nno4T0orOHVvZnE4RDNoYWZiODBUWU5wZkYvbkQxMGdrbnVsazNpWE1BMGJN?=
- =?utf-8?B?ZURzcERKV3ZxV0pCYVJxUXVxR3o4NXZjOHJ3enQxTEdzOCsvWGQ4Y2Y3dlpC?=
- =?utf-8?B?aTI4b0VSUHhtN08rK1lJN3JyUjFnL1hFT1FrYXNtcDBVV0kvOXd5TnhSaDM1?=
- =?utf-8?B?Y2Jpdm91YzgwUFU3QUw4VzRrSFNOSzdDYlRxNU9VVytoYjF3a1FPbDZwdGhX?=
- =?utf-8?B?YWdYY1N0SU5wdFE1dEdNUXZ5VXpyb3VsN1FMQ3YzdjhZZWZHT3FKUysxSG1D?=
- =?utf-8?B?T2dJTVV2TWV3VEZMUkprUGlhdlBPVmNNQXkrRHZScWhlYnNMdG0wRjh6ZERH?=
- =?utf-8?B?Rm5ZRFhNQll1L0V0akU2d3hDSXZxZXQ4L3ZNSEVERkR5L2l5bUhVZWRsN2dV?=
- =?utf-8?B?ZVFia2hSL2c4ZHdNcExDUGhidmZLV1dQY3ZTQlZRcUQzNEF3Uytjd1FUNVdY?=
- =?utf-8?B?NWRXeFNCOXNTUTFtZHN5S2U5WDlZRkFOdmZrd25WTEpHRXRwd2YxT1BwV1NU?=
- =?utf-8?B?amVUdnBPcmhhdGNlbjduQUlMUlBjTVZFbmVGeUp0dFNoOEo0S2pzWjVtdWxZ?=
- =?utf-8?B?b3RaRzQxUXZzaHA3dVhNdWQzcTJQWjJNd2h1ZTRjcFZFLzVNOUNGR2poUTZq?=
- =?utf-8?B?TFVmZ20yOGVnSmEvOEs4VDBoUFlQUFA5cDJNY1d1KzZ4VEdtR2tsekRaR0xv?=
- =?utf-8?B?dml3VWlFWUVsS3QzdWd0a05HT1hhcXZjUTR4L0cvdHdhNStka0FJTmhPb3Ra?=
- =?utf-8?B?MnZWbWE0dzlFMjVjY3RmMkQzMnRpMFpzaGNPMEIyQkpSOFZBU3Zwam4xY01H?=
- =?utf-8?B?Y3hwWm1JWWgzbzJqem5BMjBwQmFhb1hIejIwV0s4My9zVjl5bWxGcTZJbjkz?=
- =?utf-8?B?cUkvUHlKZ1pobExBbHVKdGRlR29tV2ZwYkdsTmwxY0ttaWpzWTdPU25ZUFk0?=
- =?utf-8?B?Y0pGY002OVY2OUw4MUt2VUpXNlVORThpNzhVOHRDTUZsSVJQSGxJSzJFeU1j?=
- =?utf-8?B?M0d0Q2dEYnRsRllVRkdYV0pjZVhJVUFEZGpVZm9qcGttMmRkVlpGZjRFQkk1?=
- =?utf-8?B?Z2pleDJTeHdwRnJOczM2bW93cSs0Q2lsM29oZlFLUmdwUmEwaGMvdTZnQ3N0?=
- =?utf-8?B?UWNVTEFyakUxazdNYWgwSm5UYXBwVlliUUJwcXhOTnlVQlp1c3JkMkQxVkVY?=
- =?utf-8?B?ZktqazFQZEtmcUcxS2ZEdWJRVmhVaTRDSnhsZm1rTjJzYWxDTzhaZ2JsTm1u?=
- =?utf-8?B?MWhmVkg5OWwyMjRmWnFnZWVHRFV1M1BXdEtMeW9MKzJST3JsbnU0QXFKQWhP?=
- =?utf-8?B?b0xLTGs0Q1JzK1AwTG5DNjhIa29QMXkreW1KdlBMSEt6MFNQR1c5YS9TWVlu?=
- =?utf-8?B?c29VUUtyL3RQa2ZHVm9Ua2NJM0FHNjhUK1N1bFEzVy9JdGl2dE9wWUIzdmVQ?=
- =?utf-8?B?NzhOdjMzaVVxU1ZNK0U3Z0ozcEY5UlFoYlJscDhJbnBqcE9jUDd1YkdTWDdI?=
- =?utf-8?B?TlFIdHNsQkxOVFcvdFRRbDVOckZDSU9aZjVwS2dMVHNFb3RjenpUU3lScmRN?=
- =?utf-8?B?ZHRYUUdyd29NYnNZTmFIcVgzdGRmRnZNdHY5b09CODhkbjl0R1JZYTJEeW16?=
- =?utf-8?B?dWY0MEptdlI0blg5MTFnOWpmWUp4SHVYbmV0ejVuY29najAyTThGTWw2ZTFv?=
- =?utf-8?B?dXRKTGU4K2ZrM0F2UTlvalJqcEdIbC9hQjQrSWJMUzRUSWtUQVpKWEE0N2R3?=
- =?utf-8?B?aE5BZ2VySFJqRE0rNUlpRkZreHZXMC9qV0FRVHBaaFlhdy9TRDYvY01wWGN4?=
- =?utf-8?B?aGhDSTQ5dmdmQ3ZkeGhVenI1eTNjVzVGY3psOUYzKyt2K0QxdEVWeEtPdThG?=
- =?utf-8?B?emNmT1M3SURxdDc0Q1ZQMFgwQjJ3U1BacDVTNEExQ3V0SjhPZDBhTUpWWFh5?=
- =?utf-8?B?dCsyVVcyYVE5aFo3NlV4WVBOc2VNQ2JkNmpxUlBOOWpGZDNQNTBYZndsMnkv?=
- =?utf-8?B?OXBFZmJ6TlZweWR5L21EcDN2SHgvSHcrNkV6OFk1K1NCT0FiSG1MWTRhYktE?=
- =?utf-8?B?M01od0x5Znp5VklCdnA1VFZJbVZpclUwK2dDak5uYXU2Qkppc1pVWHRUNnha?=
- =?utf-8?B?d0E9PQ==?=
+        with ESMTP id S233533AbiJZNAZ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 26 Oct 2022 09:00:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F041E688A6;
+        Wed, 26 Oct 2022 06:00:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E07D61EBB;
+        Wed, 26 Oct 2022 13:00:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DB0C7C433C1;
+        Wed, 26 Oct 2022 13:00:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666789222;
+        bh=1er536WIQpRb9kmkTNARefOgWVYoxav06rvZa3g9Xuw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=gz4K50qqJ5xnRSAqOYXO+shxioJyZk34UakBG5y8DC2D19YmKyVbfwU7dsWGKY4iy
+         mRbOh0P+vlRLzzbc68oHcKQvV/3fCX5+dFXn4w6+/0Ugw4iLX3T08tdTEANBsm6QOt
+         CXua/MlZxUzlsBZheaZeWpOKvQShS0DwrcNZHWYwm4FgZLKQBN/vXKA4FHIZ++ninP
+         G/CEoS6JSbyeCpwuFKh2SEDQ7cQdr6edrzREUtt7CrN8lp8FrF8v2zA909xku9ItIR
+         shkkMKunlXDUD5CUPy2INH3ys76wFltxrMWdWuXaFd9VO5gwhD9HYt1DweBowPfyEw
+         eCdBusn/K5SAw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C446DE270DB;
+        Wed, 26 Oct 2022 13:00:22 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 81449d3d-9351-4f3d-0538-08dab75183af
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Oct 2022 12:56:35.5241
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: K+rjIN4eaJ4SfCWEOY3mCwkvnZNvifmn26OXXq1AobBUn2R+8NLCbZQ4JRxIuc46kymtTRb4DzdgAhyb4j+3UkAf5y0KK3AqnNKVgpm8rRA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWPR01MB9646
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 01/29] can: add termination resistor documentation
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166678922279.29060.2518413007329149073.git-patchwork-notify@kernel.org>
+Date:   Wed, 26 Oct 2022 13:00:22 +0000
+References: <20221026084007.1583333-2-mkl@pengutronix.de>
+In-Reply-To: <20221026084007.1583333-2-mkl@pengutronix.de>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        linux-can@vger.kernel.org, kernel@pengutronix.de, dan@sstrev.com
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-SGkgTWFyYywNCg0KVGhhbmtzIGZvciB0aGUgZmVlZGJhY2suDQoNCj4gU3ViamVjdDogUmU6IFtQ
-QVRDSCB2MiAyLzNdIGNhbjogcmNhcl9jYW5mZDogRml4IGNoYW5uZWwgc3BlY2lmaWMgSVJRDQo+
-IGhhbmRsaW5nIGZvciBSWi9HMkwNCj4gDQo+IE9uIDI2LjEwLjIwMjIgMDk6MzQ6NDEsIEJpanUg
-RGFzIHdyb3RlOg0KPiA+ID4gSW4gYSBzZXBhcmF0ZSBwYXRjaCwgcGxlYXNlIGNsZWFuIHVwIHRo
-ZXNlLCB0b286DQo+ID4gPg0KPiA+ID4gfCBzdGF0aWMgdm9pZCByY2FyX2NhbmZkX2hhbmRsZV9n
-bG9iYWxfZXJyKHN0cnVjdA0KPiByY2FyX2NhbmZkX2dsb2JhbA0KPiA+ID4gfCAqZ3ByaXYsIHUz
-MiBjaCkgc3RhdGljIHZvaWQNCj4gPiA+IHwgcmNhcl9jYW5mZF9oYW5kbGVfZ2xvYmFsX3JlY2Vp
-dmUoc3RydWN0DQo+ID4gPiB8IHJjYXJfY2FuZmRfZ2xvYmFsICpncHJpdiwgdTMyIGNoKSBzdGF0
-aWMgdm9pZA0KPiA+ID4gfCByY2FyX2NhbmZkX2NoYW5uZWxfcmVtb3ZlKHN0cnVjdCByY2FyX2Nh
-bmZkX2dsb2JhbCAqZ3ByaXYsIHUzMg0KPiBjaCkNCj4gPiA+DQo+ID4gPiBXaHkgYXJlIDIgb2Yg
-dGhlIGFib3ZlIGZ1bmN0aW9ucyBjYWxsZWQgImdsb2JhbCIgYXMgdGhleSB3b3JrIG9uIGENCj4g
-PiA+IHNwZWNpZmljIGNoYW5uZWw/IFRoYXQgY2FuIGJlIHN0cmVhbWxpbmVkLCB0b28uDQo+ID4g
-Pg0KPiA+DQo+ID4gVGhlIGZ1bmN0aW9uIG5hbWUgaXMgYXMgcGVyIHRoZSBoYXJkd2FyZSBtYW51
-YWwsIEludGVycnVwdCBzb3VyY2VzDQo+IGFyZQ0KPiA+IGNsYXNzaWZpZWQgaW50byBnbG9iYWwg
-YW5kIGNoYW5uZWwgaW50ZXJydXB0cy4NCj4gPg0KPiA+IOKAoiBHbG9iYWwgaW50ZXJydXB0cyAo
-MiBzb3VyY2VzKToNCj4gPiDigJQgUmVjZWl2ZSBGSUZPIGludGVycnVwdA0KPiA+IOKAlCBHbG9i
-YWwgZXJyb3IgaW50ZXJydXB0DQo+ID4g4oCiIENoYW5uZWwgaW50ZXJydXB0cyAoMyBzb3VyY2Vz
-L2NoYW5uZWwpOg0KPiANCj4gSSBzZWUuIEtlZXAgdGhlIGZ1bmN0aW9ucyBhcyBpcy4NCj4gDQo+
-ID4gTWF5YmUgd2UgY291bGQgY2hhbmdlDQo+ID4gInJjYXJfY2FuZmRfaGFuZGxlX2dsb2JhbF9y
-ZWNlaXZlIi0NCj4gPiJyY2FyX2NhbmZkX2hhbmRsZV9jaGFubmVsX3JlY2VpdmUNCj4gPiAiLCBh
-cyBmcm9tIGRyaXZlciBwb2ludCBJdCBpcyBub3QgZ2xvYmFsIGFueW1vcmU/PyBQbGVhc2UgbGV0
-IG1lDQo+IGtub3cuDQo+IA0KPiBOZXZlciBtaW5kIC0gdGhlIGdwcml2IGFuZCBjaGFubmVsIG51
-bWJlcnMgYXJlIG5lZWRlZCBzb21ldGltZXMgZXZlbg0KPiBpbiB0aGUgZnVuY3Rpb25zIHdvcmtp
-bmcgb24gYSBzaW5nbGUgY2hhbm5lbC4gTmV2ZXIgbWluZC4gSSdsbCB0YWtlDQo+IHBhdGNoZXMN
-Cj4gMSBhbmQgMiBhcyB0aGV5IGFyZS4NCg0KT0ssIFRoYW5rcy4NCg0KQ2hlZXJzLA0KQmlqdQ0K
-DQoNCg0KDQoNCg==
+Hello:
+
+This series was applied to netdev/net-next.git (master)
+by Marc Kleine-Budde <mkl@pengutronix.de>:
+
+On Wed, 26 Oct 2022 10:39:39 +0200 you wrote:
+> From: "Daniel S. Trevitz" <dan@sstrev.com>
+> 
+> Add documentation for how to use and setup the switchable termination
+> resistor support for CAN controllers.
+> 
+> Signed-off-by: Daniel Trevitz <dan@sstrev.com>
+> Link: https://lore.kernel.org/all/3441354.44csPzL39Z@daniel6430
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,01/29] can: add termination resistor documentation
+    https://git.kernel.org/netdev/net-next/c/85700ac19aa1
+  - [net-next,02/29] can: j1939: j1939_session_tx_eoma(): fix debug info
+    https://git.kernel.org/netdev/net-next/c/de1deb156970
+  - [net-next,03/29] can: remove obsolete PCH CAN driver
+    https://git.kernel.org/netdev/net-next/c/1dd1b521be85
+  - [net-next,04/29] can: ucan: Replace zero-length array with DECLARE_FLEX_ARRAY() helper
+    https://git.kernel.org/netdev/net-next/c/b2df8a1bc303
+  - [net-next,05/29] can: kvaser_usb: Remove -Warray-bounds exception
+    https://git.kernel.org/netdev/net-next/c/26117d92d001
+  - [net-next,06/29] can: m_can: is_lec_err(): clean up LEC error handling
+    https://git.kernel.org/netdev/net-next/c/6a8836e3c24a
+  - [net-next,07/29] can: m_can: m_can_handle_bus_errors(): add support for handling DLEC error on CAN-FD frames
+    https://git.kernel.org/netdev/net-next/c/f5071d9e729d
+  - [net-next,08/29] can: gs_usb: mention candleLight as supported device
+    https://git.kernel.org/netdev/net-next/c/b1419cbebf5d
+  - [net-next,09/29] can: gs_usb: gs_make_candev(): set netdev->dev_id
+    https://git.kernel.org/netdev/net-next/c/acff76fa45b4
+  - [net-next,10/29] can: gs_usb: gs_can_open(): allow loopback and listen only at the same time
+    https://git.kernel.org/netdev/net-next/c/deb8534e8ef3
+  - [net-next,11/29] can: gs_usb: gs_can_open(): sort checks for ctrlmode
+    https://git.kernel.org/netdev/net-next/c/f6adf410f70b
+  - [net-next,12/29] can: gs_usb: gs_can_open(): merge setting of timestamp flags and init
+    https://git.kernel.org/netdev/net-next/c/ac3f25824e4f
+  - [net-next,13/29] can: gs_usb: document GS_CAN_FEATURE_BERR_REPORTING
+    https://git.kernel.org/netdev/net-next/c/1f1835264d81
+  - [net-next,14/29] can: gs_usb: add ability to enable / disable berr reporting
+    https://git.kernel.org/netdev/net-next/c/2f3cdad1c616
+  - [net-next,15/29] can: gs_usb: document GS_CAN_FEATURE_GET_STATE
+    https://git.kernel.org/netdev/net-next/c/40e1997d4551
+  - [net-next,16/29] can: gs_usb: add support for reading error counters
+    https://git.kernel.org/netdev/net-next/c/0c9f92a4b795
+  - [net-next,17/29] can: kvaser_usb: kvaser_usb_leaf: Get capabilities from device
+    https://git.kernel.org/netdev/net-next/c/35364f5b41a4
+  - [net-next,18/29] can: kvaser_usb: kvaser_usb_leaf: Rename {leaf,usbcan}_cmd_error_event to {leaf,usbcan}_cmd_can_error_event
+    https://git.kernel.org/netdev/net-next/c/7ea56128dbf9
+  - [net-next,19/29] can: kvaser_usb: kvaser_usb_leaf: Handle CMD_ERROR_EVENT
+    https://git.kernel.org/netdev/net-next/c/b24cb2d169e0
+  - [net-next,20/29] can: kvaser_usb_leaf: Set Warning state even without bus errors
+    https://git.kernel.org/netdev/net-next/c/df1b7af2761b
+  - [net-next,21/29] can: kvaser_usb_leaf: Fix improved state not being reported
+    https://git.kernel.org/netdev/net-next/c/8d21f5927ae6
+  - [net-next,22/29] can: kvaser_usb_leaf: Fix wrong CAN state after stopping
+    https://git.kernel.org/netdev/net-next/c/a11249acf802
+  - [net-next,23/29] can: kvaser_usb_leaf: Ignore stale bus-off after start
+    https://git.kernel.org/netdev/net-next/c/abb8670938b2
+  - [net-next,24/29] can: kvaser_usb_leaf: Fix bogus restart events
+    https://git.kernel.org/netdev/net-next/c/90904d326269
+  - [net-next,25/29] can: kvaser_usb: Add struct kvaser_usb_busparams
+    https://git.kernel.org/netdev/net-next/c/00e578617764
+  - [net-next,26/29] can: kvaser_usb: Compare requested bittiming parameters with actual parameters in do_set_{,data}_bittiming
+    https://git.kernel.org/netdev/net-next/c/39d3df6b0ea8
+  - [net-next,27/29] can: m_can: use consistent indention
+    https://git.kernel.org/netdev/net-next/c/4aeb91880999
+  - [net-next,28/29] can: ucan: ucan_disconnect(): change unregister_netdev() to unregister_candev()
+    https://git.kernel.org/netdev/net-next/c/aa9832e45012
+  - [net-next,29/29] can: rcar_canfd: Use devm_reset_control_get_optional_exclusive
+    https://git.kernel.org/netdev/net-next/c/68399ff574e4
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
