@@ -2,129 +2,110 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D484B60E1EF
-	for <lists+linux-can@lfdr.de>; Wed, 26 Oct 2022 15:19:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 485CD60E6F2
+	for <lists+linux-can@lfdr.de>; Wed, 26 Oct 2022 20:04:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233822AbiJZNTb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 26 Oct 2022 09:19:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55444 "EHLO
+        id S230090AbiJZSEp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 26 Oct 2022 14:04:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234073AbiJZNTB (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 26 Oct 2022 09:19:01 -0400
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D2BE2100BD5;
-        Wed, 26 Oct 2022 06:18:15 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.95,214,1661785200"; 
-   d="scan'208";a="140456063"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 26 Oct 2022 22:18:15 +0900
-Received: from localhost.localdomain (unknown [10.226.92.188])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id E81AE4255D31;
-        Wed, 26 Oct 2022 22:18:09 +0900 (JST)
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        Ulrich Hecht <uli+renesas@fpond.eu>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v2 6/6] can: rcar_canfd: Add has_gerfl_eef to struct rcar_canfd_hw_info
-Date:   Wed, 26 Oct 2022 14:17:32 +0100
-Message-Id: <20221026131732.1843105-7-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221026131732.1843105-1-biju.das.jz@bp.renesas.com>
-References: <20221026131732.1843105-1-biju.das.jz@bp.renesas.com>
+        with ESMTP id S231164AbiJZSEo (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 26 Oct 2022 14:04:44 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB52205E4
+        for <linux-can@vger.kernel.org>; Wed, 26 Oct 2022 11:04:42 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id bp15so30276726lfb.13
+        for <linux-can@vger.kernel.org>; Wed, 26 Oct 2022 11:04:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3Q8kGhOrDwBQ2oN4a2TtKVwW3Xfh65pTBvHD/KcWiLg=;
+        b=DMxk1c1WBU4T8kx15P5M4Ztmhoxm2KPG4mc6QqTkXS+zIQmI975sXHujCmj4GjF2Ip
+         L+M1Y5im3itb5OlcOpXFhyttbm2v6WFsJssW64QeE/YM2qDorR3kyrDr/S9nFP6jM5qU
+         urhdwY9PmDKAMlllqjq40z/505YPFNgNmPnCQP/a0tF5/jpUpjTRdR2Gi84bPzCLzju3
+         jeIg6tBR3GeUzWDPwwWROmzdr2qTjjVRDU1h3UD1VN9OQXKOPKAQvGo0bdFEktKE7V78
+         EDOh+FqHmDfC0+Am+cLj+qLY4W6zqwi43jehb4cQaUt5irFu52VmUM2dqi16EXoQ1XWC
+         UjhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3Q8kGhOrDwBQ2oN4a2TtKVwW3Xfh65pTBvHD/KcWiLg=;
+        b=fWGqKfvfQBQ3x7ycYYFqYC6L7yn946PLqx6TTfZ0tJqTB59a1h+c/FKWBb57Gu2L6c
+         4/EDmIqE3AK9TOtjNA7g5g4mnL8E5vOQoW/GaKXBknh8g1boXAOahxJ+P307E/nj3l7M
+         TsHyoiSRVQdo/2R455Z4cMkiYIPDB0zoexlLm8/F0udK5iK9v7OO6W76QNDUSrifb+di
+         0M4aVSAICuRPevMPkjS1KJly461jFQn1rn86SkZYXJBOdKsCllkiFWvqzOhJhLGl27zO
+         fogFCDX5QZNKZ55cL2rrQnd5JX0NWtWKjW9OTEHGrjI/lERV/Q07vs+BSVoKSp4y1czY
+         4+3g==
+X-Gm-Message-State: ACrzQf0q3Zs6DXrB57/OMcjYSAIhHw5BUT5T00aeTLm9RPGrHxd58fX9
+        XwkmUrTo3UBEHfx7teGgFlc=
+X-Google-Smtp-Source: AMsMyM5pm9AQjeMIPJsnh4Q0oDJVpUb9yrgu7WClah3Y1alEA8TxguaukxcwT8j4sab1h/jBPl3/eQ==
+X-Received: by 2002:ac2:5616:0:b0:4a2:61f6:85e9 with SMTP id v22-20020ac25616000000b004a261f685e9mr15930031lfd.419.1666807481187;
+        Wed, 26 Oct 2022 11:04:41 -0700 (PDT)
+Received: from [192.168.16.196] (h-155-4-68-234.A785.priv.bahnhof.se. [155.4.68.234])
+        by smtp.googlemail.com with ESMTPSA id j5-20020a056512344500b00494a603953dsm925484lfr.89.2022.10.26.11.04.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Oct 2022 11:04:40 -0700 (PDT)
+Message-ID: <f53a9afa-42fa-73b0-4dfa-f1684bacf63e@gmail.com>
+Date:   Wed, 26 Oct 2022 20:04:39 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH can-next v5 01/11] can: kvaser_usb: Fix possible
+ completions during init_completion
+Content-Language: en-US
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org,
+        Anssi Hannula <anssi.hannula@bitwise.fi>,
+        Jimmy Assarsson <extja@kvaser.com>
+References: <20221010185237.319219-1-extja@kvaser.com>
+ <20221010185237.319219-2-extja@kvaser.com>
+ <20221026081432.5lrzl5tkcfp7gzxj@pengutronix.de>
+From:   Jimmy Assarsson <jimmyassarsson@gmail.com>
+In-Reply-To: <20221026081432.5lrzl5tkcfp7gzxj@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-R-Car has ECC error flags in global error interrupts whereas it is
-not available on RZ/G2L.
+On 10/26/22 10:14, Marc Kleine-Budde wrote:
+> On 10.10.2022 20:52:27, Jimmy Assarsson wrote:
+>> From: Anssi Hannula <anssi.hannula@bitwise.fi>
+>>
+>> kvaser_usb uses completions to signal when a response event is received
+>> for outgoing commands.
+>>
+>> However, it uses init_completion() to reinitialize the start_comp and
+>> stop_comp completions before sending the start/stop commands.
+>>
+>> In case the device sends the corresponding response just before the
+>> actual command is sent, complete() may be called concurrently with
+>> init_completion() which is not safe.
+>>
+>> This might be triggerable even with a properly functioning device by
+>> stopping the interface (CMD_STOP_CHIP) just after it goes bus-off (which
+>> also causes the driver to send CMD_STOP_CHIP when restart-ms is off),
+>> but that was not tested.
+>>
+>> Fix the issue by using reinit_completion() instead.
+> 
+> Looks like this should go to net instead of net-next.
 
-Add has_gerfl_eef to struct rcar_canfd_hw_info so that rcar_canfd_
-global_error() will process ECC errors only for R-Car.
+Yes, I agree.
 
-whilst, this patch fixes the below checkpatch warnings
-  CHECK: Unnecessary parentheses around 'ch == 0'
-  CHECK: Unnecessary parentheses around 'ch == 1'
+Thanks!
 
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
----
-v1->v2:
- * Replaced info->has_gerfl to gpriv->info->has_gerfl and wrapped
-   the ECC error flag check within single if statement.
----
- drivers/net/can/rcar/rcar_canfd.c | 19 ++++++++++++-------
- 1 file changed, 12 insertions(+), 7 deletions(-)
+/jimmy
 
-diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index 20d434eef639..0bb0ed65ea8c 100644
---- a/drivers/net/can/rcar/rcar_canfd.c
-+++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -523,6 +523,7 @@ struct rcar_canfd_hw_info {
- 	/* hardware features */
- 	unsigned shared_global_irqs:1;	/* Has shared global irqs */
- 	unsigned multi_channel_irqs:1;	/* Has multiple channel irqs */
-+	unsigned has_gerfl_eef:1;	/* Has ECC Error Flag */
- };
- 
- /* Channel priv data */
-@@ -596,6 +597,7 @@ static const struct rcar_canfd_hw_info rcar_gen3_hw_info = {
- 	.max_channels = 2,
- 	.postdiv = 2,
- 	.shared_global_irqs = 1,
-+	.has_gerfl_eef = 1,
- };
- 
- static const struct rcar_canfd_hw_info rzg2l_hw_info = {
-@@ -608,6 +610,7 @@ static const struct rcar_canfd_hw_info r8a779a0_hw_info = {
- 	.max_channels = 8,
- 	.postdiv = 2,
- 	.shared_global_irqs = 1,
-+	.has_gerfl_eef = 1,
- };
- 
- /* Helper functions */
-@@ -955,13 +958,15 @@ static void rcar_canfd_global_error(struct net_device *ndev)
- 	u32 ridx = ch + RCANFD_RFFIFO_IDX;
- 
- 	gerfl = rcar_canfd_read(priv->base, RCANFD_GERFL);
--	if ((gerfl & RCANFD_GERFL_EEF0) && (ch == 0)) {
--		netdev_dbg(ndev, "Ch0: ECC Error flag\n");
--		stats->tx_dropped++;
--	}
--	if ((gerfl & RCANFD_GERFL_EEF1) && (ch == 1)) {
--		netdev_dbg(ndev, "Ch1: ECC Error flag\n");
--		stats->tx_dropped++;
-+	if (gpriv->info->has_gerfl_eef) {
-+		if ((gerfl & RCANFD_GERFL_EEF0) && ch == 0) {
-+			netdev_dbg(ndev, "Ch0: ECC Error flag\n");
-+			stats->tx_dropped++;
-+		}
-+		if ((gerfl & RCANFD_GERFL_EEF1) && ch == 1) {
-+			netdev_dbg(ndev, "Ch1: ECC Error flag\n");
-+			stats->tx_dropped++;
-+		}
- 	}
- 	if (gerfl & RCANFD_GERFL_MES) {
- 		sts = rcar_canfd_read(priv->base,
--- 
-2.25.1
 
+> Marc
