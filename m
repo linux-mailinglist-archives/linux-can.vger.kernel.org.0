@@ -2,43 +2,43 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F398E60DD43
-	for <lists+linux-can@lfdr.de>; Wed, 26 Oct 2022 10:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB75E60DD4D
+	for <lists+linux-can@lfdr.de>; Wed, 26 Oct 2022 10:41:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233343AbiJZIk5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 26 Oct 2022 04:40:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57052 "EHLO
+        id S233109AbiJZIlO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 26 Oct 2022 04:41:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233376AbiJZIki (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 26 Oct 2022 04:40:38 -0400
+        with ESMTP id S233390AbiJZIkj (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 26 Oct 2022 04:40:39 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81206386B0
-        for <linux-can@vger.kernel.org>; Wed, 26 Oct 2022 01:40:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1363C167
+        for <linux-can@vger.kernel.org>; Wed, 26 Oct 2022 01:40:21 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1onbxR-0006jL-Ri
-        for linux-can@vger.kernel.org; Wed, 26 Oct 2022 10:40:17 +0200
+        id 1onbxS-0006kA-Fn
+        for linux-can@vger.kernel.org; Wed, 26 Oct 2022 10:40:18 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 9B6B710A0CB
+        by bjornoya.blackshift.org (Postfix) with SMTP id 040C510A0D7
         for <linux-can@vger.kernel.org>; Wed, 26 Oct 2022 08:40:14 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 4667E10A0AC;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 9D67510A0B3;
         Wed, 26 Oct 2022 08:40:13 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 00373d8f;
-        Wed, 26 Oct 2022 08:40:08 +0000 (UTC)
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 29742447;
+        Wed, 26 Oct 2022 08:40:09 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
         kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next 11/29] can: gs_usb: gs_can_open(): sort checks for ctrlmode
-Date:   Wed, 26 Oct 2022 10:39:49 +0200
-Message-Id: <20221026084007.1583333-12-mkl@pengutronix.de>
+Subject: [PATCH net-next 12/29] can: gs_usb: gs_can_open(): merge setting of timestamp flags and init
+Date:   Wed, 26 Oct 2022 10:39:50 +0200
+Message-Id: <20221026084007.1583333-13-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221026084007.1583333-1-mkl@pengutronix.de>
 References: <20221026084007.1583333-1-mkl@pengutronix.de>
@@ -56,53 +56,35 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Sort the checks for dev->can.ctrlmode by values of CAN_CTRLMODE_*, so
-that it's clear where to add new checks.
+Merge the bodies of 2 consecutive "if (dev->feature &
+GS_CAN_FEATURE_HW_TIMESTAMP)" statements.
 
-While there, remove the comment that the Atmel UC3C hardware doesn't
-support One Shot Mode. The One Shot mode is only available and to be
-activated by the user, if the device specifies the feature bit
-GS_CAN_FEATURE_ONE_SHOT.
-
-Link: https://lore.kernel.org/all/20221019221016.1659260-3-mkl@pengutronix.de
+Link: https://lore.kernel.org/all/20221019221016.1659260-4-mkl@pengutronix.de
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/usb/gs_usb.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+ drivers/net/can/usb/gs_usb.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
-index aa6c84b7db06..5dad0ebb3d3e 100644
+index 5dad0ebb3d3e..f9e2b394c71e 100644
 --- a/drivers/net/can/usb/gs_usb.c
 +++ b/drivers/net/can/usb/gs_usb.c
-@@ -843,8 +843,6 @@ static int gs_can_open(struct net_device *netdev)
- 
- 	ctrlmode = dev->can.ctrlmode;
- 	if (ctrlmode & CAN_CTRLMODE_FD) {
--		flags |= GS_CAN_MODE_FD;
--
- 		if (dev->feature & GS_CAN_FEATURE_REQ_USB_QUIRK_LPC546XX)
- 			dev->hf_size_tx = struct_size(hf, canfd_quirk, 1);
- 		else
-@@ -915,14 +913,14 @@ static int gs_can_open(struct net_device *netdev)
- 	if (ctrlmode & CAN_CTRLMODE_LISTENONLY)
- 		flags |= GS_CAN_MODE_LISTEN_ONLY;
- 
--	/* Controller is not allowed to retry TX
--	 * this mode is unavailable on atmels uc3c hardware
--	 */
-+	if (ctrlmode & CAN_CTRLMODE_3_SAMPLES)
-+		flags |= GS_CAN_MODE_TRIPLE_SAMPLE;
-+
- 	if (ctrlmode & CAN_CTRLMODE_ONE_SHOT)
- 		flags |= GS_CAN_MODE_ONE_SHOT;
- 
--	if (ctrlmode & CAN_CTRLMODE_3_SAMPLES)
--		flags |= GS_CAN_MODE_TRIPLE_SAMPLE;
-+	if (ctrlmode & CAN_CTRLMODE_FD)
-+		flags |= GS_CAN_MODE_FD;
+@@ -923,12 +923,12 @@ static int gs_can_open(struct net_device *netdev)
+ 		flags |= GS_CAN_MODE_FD;
  
  	/* if hardware supports timestamps, enable it */
- 	if (dev->feature & GS_CAN_FEATURE_HW_TIMESTAMP)
+-	if (dev->feature & GS_CAN_FEATURE_HW_TIMESTAMP)
++	if (dev->feature & GS_CAN_FEATURE_HW_TIMESTAMP) {
+ 		flags |= GS_CAN_MODE_HW_TIMESTAMP;
+ 
+-	/* start polling timestamp */
+-	if (dev->feature & GS_CAN_FEATURE_HW_TIMESTAMP)
++		/* start polling timestamp */
+ 		gs_usb_timestamp_init(dev);
++	}
+ 
+ 	/* finally start device */
+ 	dev->can.state = CAN_STATE_ERROR_ACTIVE;
 -- 
 2.35.1
 
