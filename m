@@ -2,110 +2,97 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3909A60DC53
-	for <lists+linux-can@lfdr.de>; Wed, 26 Oct 2022 09:41:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 442A760DC94
+	for <lists+linux-can@lfdr.de>; Wed, 26 Oct 2022 09:55:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232944AbiJZHl1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 26 Oct 2022 03:41:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39522 "EHLO
+        id S232371AbiJZHzb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 26 Oct 2022 03:55:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233207AbiJZHlS (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 26 Oct 2022 03:41:18 -0400
+        with ESMTP id S229452AbiJZHz1 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 26 Oct 2022 03:55:27 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 287949621D
-        for <linux-can@vger.kernel.org>; Wed, 26 Oct 2022 00:41:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A2D712AA7
+        for <linux-can@vger.kernel.org>; Wed, 26 Oct 2022 00:55:26 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1onb28-00078a-0O; Wed, 26 Oct 2022 09:41:04 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        id 1onbG0-0000ZH-RE
+        for linux-can@vger.kernel.org; Wed, 26 Oct 2022 09:55:24 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 3C7F4109FE0
+        for <linux-can@vger.kernel.org>; Wed, 26 Oct 2022 07:55:24 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 70B9B109F9D;
-        Wed, 26 Oct 2022 07:41:02 +0000 (UTC)
-Date:   Wed, 26 Oct 2022 09:41:00 +0200
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 225EE109FD7;
+        Wed, 26 Oct 2022 07:55:23 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 5551b5ff;
+        Wed, 26 Oct 2022 07:55:21 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Ulrich Hecht <uli+renesas@fpond.eu>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] can: rcar_canfd: Use
- devm_reset_control_get_optional_exclusive
-Message-ID: <20221026074100.2nwc7u7soekbfb3l@pengutronix.de>
-References: <20221025155657.1426948-1-biju.das.jz@bp.renesas.com>
- <20221025155657.1426948-4-biju.das.jz@bp.renesas.com>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH net 0/n] pull-request: can 2022-10-25
+Date:   Wed, 26 Oct 2022 09:55:18 +0200
+Message-Id: <20221026075520.1502520-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="e6qkpbpfo3v5e2nv"
-Content-Disposition: inline
-In-Reply-To: <20221025155657.1426948-4-biju.das.jz@bp.renesas.com>
+Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello Jakub, hello David,
 
---e6qkpbpfo3v5e2nv
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+this is a pull request of 2 patches for net/master.
 
-On 25.10.2022 16:56:57, Biju Das wrote:
-> Replace devm_reset_control_get_exclusive->devm_reset_control_
-> get_optional_exclusive so that we can avoid unnecessary
-> SoC specific check in probe().
->=20
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+Both patches are by Dongliang Mu.
 
-Applied this patch to linux-can-next/main only. The other will go into
-can/main after final review.
+The 1st patch adds a missing cleanup call in the error path of the
+probe function in mpc5xxx glue code for the mscan driver.
 
-Thanks,
+The 2nd patch adds a missing cleanup call in the error path of the
+probe function of the mcp251x driver.
+
+regards,
 Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+---
 
---e6qkpbpfo3v5e2nv
-Content-Type: application/pgp-signature; name="signature.asc"
+The following changes since commit baee5a14ab2c9a8f8df09d021885c8f5de458a38:
 
------BEGIN PGP SIGNATURE-----
+  Merge tag 'ieee802154-for-net-2022-10-24' of git://git.kernel.org/pub/scm/linux/kernel/git/sschmidt/wpan (2022-10-24 21:17:03 -0700)
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNY5IkACgkQrX5LkNig
-011zOQf+MSXg1I4BS0paFUNv/096tRBixT1Ish7T9sGh2vspiaXgfRVhHTtzAmXh
-2YEf9OpAqSdN9K2mbM3q1GEjSZ6j8HbGtZ2ItV5+Kok8c0vzYt4YtHWykmvAEp/0
-F7zmupQE4A5fgPE1dxRmh6l5o2OEanLAuVy9TN18XM8hfuic3H6fAt/F0H4iu+HH
-7I8vDjNPm6YLk2hBBGXosPGIa6iD574WNx52/ZK66xngrbrUqpf3q/l5YXgbNc3x
-Sun8eO6hOiofx/5yvyAjsxJnNfMAsoXL1M156NDsDKYJJkdPGhxOBSIosUHhmbjL
-5oFSDy1L1MXo221IhXuU0eqMJ9Avxw==
-=LwaK
------END PGP SIGNATURE-----
+are available in the Git repository at:
 
---e6qkpbpfo3v5e2nv--
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-6.1-20221025
+
+for you to fetch changes up to b1a09b63684cea56774786ca14c13b7041ffee63:
+
+  can: mcp251x: mcp251x_can_probe(): add missing unregister_candev() in error path (2022-10-25 09:13:14 +0200)
+
+----------------------------------------------------------------
+linux-can-fixes-for-6.1-20221025
+
+----------------------------------------------------------------
+Dongliang Mu (2):
+      can: mscan: mpc5xxx: mpc5xxx_can_probe(): add missing put_clock() in error path
+      can: mcp251x: mcp251x_can_probe(): add missing unregister_candev() in error path
+
+ drivers/net/can/mscan/mpc5xxx_can.c | 8 +++++---
+ drivers/net/can/spi/mcp251x.c       | 5 ++++-
+ 2 files changed, 9 insertions(+), 4 deletions(-)
+
+
