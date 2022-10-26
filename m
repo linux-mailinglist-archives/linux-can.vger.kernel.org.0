@@ -2,45 +2,43 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F3960DD3B
+	by mail.lfdr.de (Postfix) with ESMTP id 2FCA960DD3A
 	for <lists+linux-can@lfdr.de>; Wed, 26 Oct 2022 10:40:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233319AbiJZIkl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 26 Oct 2022 04:40:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56962 "EHLO
+        id S230134AbiJZIkq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 26 Oct 2022 04:40:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233363AbiJZIkb (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 26 Oct 2022 04:40:31 -0400
+        with ESMTP id S233096AbiJZIkh (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 26 Oct 2022 04:40:37 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DED6357CA
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DFAA357CD
         for <linux-can@vger.kernel.org>; Wed, 26 Oct 2022 01:40:17 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1onbxP-0006hX-Q7
+        id 1onbxP-0006h6-Pb
         for linux-can@vger.kernel.org; Wed, 26 Oct 2022 10:40:15 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id A8DA810A0B5
+        by bjornoya.blackshift.org (Postfix) with SMTP id 9C94A10A0B2
         for <linux-can@vger.kernel.org>; Wed, 26 Oct 2022 08:40:13 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id C70B110A088;
-        Wed, 26 Oct 2022 08:40:11 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 3588310A092;
+        Wed, 26 Oct 2022 08:40:12 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 13e6c347;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id c7e4a8ba;
         Wed, 26 Oct 2022 08:40:08 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Vivek Yadav <vivek.2311@samsung.com>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next 07/29] can: m_can: m_can_handle_bus_errors(): add support for handling DLEC error on CAN-FD frames
-Date:   Wed, 26 Oct 2022 10:39:45 +0200
-Message-Id: <20221026084007.1583333-8-mkl@pengutronix.de>
+        kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH net-next 08/29] can: gs_usb: mention candleLight as supported device
+Date:   Wed, 26 Oct 2022 10:39:46 +0200
+Message-Id: <20221026084007.1583333-9-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221026084007.1583333-1-mkl@pengutronix.de>
 References: <20221026084007.1583333-1-mkl@pengutronix.de>
@@ -51,7 +49,7 @@ X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,54 +57,37 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Vivek Yadav <vivek.2311@samsung.com>
+To make it easier for new users to find the correct driver for
+candleLight compatible CAN-USB devices mention candleLight in the
+driver's Kconfig input prompt.
 
-When a frame in CAN FD format has reached the data phase, the next CAN
-event (error or valid frame) will be shown in DLEC.
-
-Utilize the dedicated flag (Data Phase Last Error Code: DLEC flag) to
-determine the type of last error that occurred in the data phase of a
-CAN-FD frame and handle the bus errors.
-
-Signed-off-by: Vivek Yadav <vivek.2311@samsung.com>
-Link: https://lore.kernel.org/all/20221018081934.1336690-1-mkl@pengutronix.de
-Reviewed-by: Chandrasekar Ramakrishnan <rcsekar@samsung.com>
+Link: https://lore.kernel.org/all/20221019205037.1600936-1-mkl@pengutronix.de
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/m_can/m_can.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ drivers/net/can/usb/Kconfig | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index ebdd3c164d7b..34c76ee87c6e 100644
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -156,6 +156,7 @@ enum m_can_reg {
- #define PSR_EW		BIT(6)
- #define PSR_EP		BIT(5)
- #define PSR_LEC_MASK	GENMASK(2, 0)
-+#define PSR_DLEC_MASK	GENMASK(10, 8)
+diff --git a/drivers/net/can/usb/Kconfig b/drivers/net/can/usb/Kconfig
+index 1218f9642f33..8c6fea661530 100644
+--- a/drivers/net/can/usb/Kconfig
++++ b/drivers/net/can/usb/Kconfig
+@@ -38,10 +38,13 @@ config CAN_ETAS_ES58X
+ 	  will be called etas_es58x.
  
- /* Interrupt Register (IR) */
- #define IR_ALL_INT	0xffffffff
-@@ -875,9 +876,17 @@ static int m_can_handle_bus_errors(struct net_device *dev, u32 irqstatus,
- 	/* handle lec errors on the bus */
- 	if (cdev->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING) {
- 		u8 lec = FIELD_GET(PSR_LEC_MASK, psr);
-+		u8 dlec = FIELD_GET(PSR_DLEC_MASK, psr);
- 
--		if (is_lec_err(lec))
-+		if (is_lec_err(lec)) {
-+			netdev_dbg(dev, "Arbitration phase error detected\n");
- 			work_done += m_can_handle_lec_err(dev, lec);
-+		}
-+		
-+		if (is_lec_err(dlec)) {
-+			netdev_dbg(dev, "Data phase error detected\n");
-+			work_done += m_can_handle_lec_err(dev, dlec);
-+		}
- 	}
- 
- 	/* handle protocol errors in arbitration phase */
+ config CAN_GS_USB
+-	tristate "Geschwister Schneider UG interfaces"
++	tristate "Geschwister Schneider UG and candleLight compatible interfaces"
+ 	help
+-	  This driver supports the Geschwister Schneider and bytewerk.org
+-	  candleLight USB CAN interfaces USB/CAN devices
++	  This driver supports the Geschwister Schneider and
++	  bytewerk.org candleLight compatible
++	  (https://github.com/candle-usb/candleLight_fw) USB/CAN
++	  interfaces.
++
+ 	  If unsure choose N,
+ 	  choose Y for built in support,
+ 	  M to compile as module (module will be named: gs_usb).
 -- 
 2.35.1
 
