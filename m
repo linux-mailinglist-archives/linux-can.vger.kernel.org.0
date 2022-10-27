@@ -2,131 +2,84 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12FCA60F240
-	for <lists+linux-can@lfdr.de>; Thu, 27 Oct 2022 10:22:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0847060F371
+	for <lists+linux-can@lfdr.de>; Thu, 27 Oct 2022 11:15:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234949AbiJ0IWs (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 27 Oct 2022 04:22:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43596 "EHLO
+        id S235361AbiJ0JPa (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 27 Oct 2022 05:15:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234927AbiJ0IWp (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 27 Oct 2022 04:22:45 -0400
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 611D61CB0C;
-        Thu, 27 Oct 2022 01:22:43 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.95,217,1661785200"; 
-   d="scan'208";a="140573960"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 27 Oct 2022 17:22:43 +0900
-Received: from localhost.localdomain (unknown [10.226.93.45])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id DCFE24048F22;
-        Thu, 27 Oct 2022 17:22:37 +0900 (JST)
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        Ulrich Hecht <uli+renesas@fpond.eu>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v3 6/6] can: rcar_canfd: Add has_gerfl_eef to struct rcar_canfd_hw_info
-Date:   Thu, 27 Oct 2022 09:21:58 +0100
-Message-Id: <20221027082158.95895-7-biju.das.jz@bp.renesas.com>
+        with ESMTP id S235376AbiJ0JPC (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 27 Oct 2022 05:15:02 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E987A140FF;
+        Thu, 27 Oct 2022 02:13:54 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MyfxQ0RYfz15M3R;
+        Thu, 27 Oct 2022 17:08:58 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 27 Oct 2022 17:13:52 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 27 Oct
+ 2022 17:13:51 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     <robin@protonic.nl>, <linux@rempel-privat.de>,
+        <kernel@pengutronix.de>, <socketcan@hartkopp.net>,
+        <mkl@pengutronix.de>
+Subject: [PATCH v2] can: j1939: transport: replace kfree_skb() with dev_kfree_skb_irq()
+Date:   Thu, 27 Oct 2022 17:12:37 +0800
+Message-ID: <20221027091237.2290111-1-yangyingliang@huawei.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221027082158.95895-1-biju.das.jz@bp.renesas.com>
-References: <20221027082158.95895-1-biju.das.jz@bp.renesas.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-R-Car has ECC error flags in global error interrupts whereas it is
-not available on RZ/G2L.
+It is not allowed to call kfree_skb() from hardware interrupt
+context or with interrupts being disabled. The skb is unlinked
+from the queue, so it can be freed after spin_unlock_irqrestore().
 
-Add has_gerfl_eef to struct rcar_canfd_hw_info so that rcar_canfd_
-global_error() will process ECC errors only for R-Car.
-
-whilst, this patch fixes the below checkpatch warnings
-  CHECK: Unnecessary parentheses around 'ch == 0'
-  CHECK: Unnecessary parentheses around 'ch == 1'
-
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
-v2->v3:
- * No change.
-v1->v2:
- * Replaced info->has_gerfl to gpriv->info->has_gerfl and wrapped
-   the ECC error flag check within single if statement.
+v1 -> v2:
+  Move kfree_skb() after spin_unlock_irqrestore().
 ---
- drivers/net/can/rcar/rcar_canfd.c | 19 ++++++++++++-------
- 1 file changed, 12 insertions(+), 7 deletions(-)
+ net/can/j1939/transport.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index f8eafb132b39..00242eac377d 100644
---- a/drivers/net/can/rcar/rcar_canfd.c
-+++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -523,6 +523,7 @@ struct rcar_canfd_hw_info {
- 	/* hardware features */
- 	unsigned shared_global_irqs:1;	/* Has shared global irqs */
- 	unsigned multi_channel_irqs:1;	/* Has multiple channel irqs */
-+	unsigned has_gerfl_eef:1;	/* Has ECC Error Flag */
- };
+diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
+index d7d86c944d76..55f29c9f9e08 100644
+--- a/net/can/j1939/transport.c
++++ b/net/can/j1939/transport.c
+@@ -342,10 +342,12 @@ static void j1939_session_skb_drop_old(struct j1939_session *session)
+ 		__skb_unlink(do_skb, &session->skb_queue);
+ 		/* drop ref taken in j1939_session_skb_queue() */
+ 		skb_unref(do_skb);
++		spin_unlock_irqrestore(&session->skb_queue.lock, flags);
  
- /* Channel priv data */
-@@ -596,6 +597,7 @@ static const struct rcar_canfd_hw_info rcar_gen3_hw_info = {
- 	.max_channels = 2,
- 	.postdiv = 2,
- 	.shared_global_irqs = 1,
-+	.has_gerfl_eef = 1,
- };
- 
- static const struct rcar_canfd_hw_info rzg2l_hw_info = {
-@@ -608,6 +610,7 @@ static const struct rcar_canfd_hw_info r8a779a0_hw_info = {
- 	.max_channels = 8,
- 	.postdiv = 2,
- 	.shared_global_irqs = 1,
-+	.has_gerfl_eef = 1,
- };
- 
- /* Helper functions */
-@@ -955,13 +958,15 @@ static void rcar_canfd_global_error(struct net_device *ndev)
- 	u32 ridx = ch + RCANFD_RFFIFO_IDX;
- 
- 	gerfl = rcar_canfd_read(priv->base, RCANFD_GERFL);
--	if ((gerfl & RCANFD_GERFL_EEF0) && (ch == 0)) {
--		netdev_dbg(ndev, "Ch0: ECC Error flag\n");
--		stats->tx_dropped++;
--	}
--	if ((gerfl & RCANFD_GERFL_EEF1) && (ch == 1)) {
--		netdev_dbg(ndev, "Ch1: ECC Error flag\n");
--		stats->tx_dropped++;
-+	if (gpriv->info->has_gerfl_eef) {
-+		if ((gerfl & RCANFD_GERFL_EEF0) && ch == 0) {
-+			netdev_dbg(ndev, "Ch0: ECC Error flag\n");
-+			stats->tx_dropped++;
-+		}
-+		if ((gerfl & RCANFD_GERFL_EEF1) && ch == 1) {
-+			netdev_dbg(ndev, "Ch1: ECC Error flag\n");
-+			stats->tx_dropped++;
-+		}
+ 		kfree_skb(do_skb);
++	} else {
++		spin_unlock_irqrestore(&session->skb_queue.lock, flags);
  	}
- 	if (gerfl & RCANFD_GERFL_MES) {
- 		sts = rcar_canfd_read(priv->base,
+-	spin_unlock_irqrestore(&session->skb_queue.lock, flags);
+ }
+ 
+ void j1939_session_skb_queue(struct j1939_session *session,
 -- 
 2.25.1
 
