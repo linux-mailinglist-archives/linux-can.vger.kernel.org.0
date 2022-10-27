@@ -2,114 +2,102 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EA7460F1D5
-	for <lists+linux-can@lfdr.de>; Thu, 27 Oct 2022 10:06:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D646960F228
+	for <lists+linux-can@lfdr.de>; Thu, 27 Oct 2022 10:22:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234865AbiJ0IGw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 27 Oct 2022 04:06:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34100 "EHLO
+        id S234754AbiJ0IWS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 27 Oct 2022 04:22:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234921AbiJ0IGl (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 27 Oct 2022 04:06:41 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4056C166560
-        for <linux-can@vger.kernel.org>; Thu, 27 Oct 2022 01:06:39 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1onxuM-0005F1-7m; Thu, 27 Oct 2022 10:06:34 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 7973B10AF68;
-        Thu, 27 Oct 2022 08:06:30 +0000 (UTC)
-Date:   Thu, 27 Oct 2022 10:06:29 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        robin@protonic.nl, linux@rempel-privat.de, kernel@pengutronix.de,
-        socketcan@hartkopp.net
-Subject: Re: [PATCH] can: j1939: transport: replace kfree_skb() with
- dev_kfree_skb_irq()
-Message-ID: <20221027080629.mn6hhdg56d4achwl@pengutronix.de>
-References: <20221026125354.911575-1-yangyingliang@huawei.com>
+        with ESMTP id S234804AbiJ0IWJ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 27 Oct 2022 04:22:09 -0400
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 37E2B5AC44;
+        Thu, 27 Oct 2022 01:22:08 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.95,217,1661785200"; 
+   d="scan'208";a="140573872"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie6.idc.renesas.com with ESMTP; 27 Oct 2022 17:22:07 +0900
+Received: from localhost.localdomain (unknown [10.226.93.45])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 62CAF40078D8;
+        Thu, 27 Oct 2022 17:22:02 +0900 (JST)
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        Ulrich Hecht <uli+renesas@fpond.eu>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v3 0/6] R-Car CAN FD driver enhancements
+Date:   Thu, 27 Oct 2022 09:21:52 +0100
+Message-Id: <20221027082158.95895-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="devnwdik7riyhej2"
-Content-Disposition: inline
-In-Reply-To: <20221026125354.911575-1-yangyingliang@huawei.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.4 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+The CAN FD IP found on RZ/G2L SoC has some HW features different to that
+of R-Car. For example, it has multiple resets, dedicated channel tx
+and error interrupts, separate global rx and error interrupts compared
+to shared irq for R-Car. it does not s ECC error flag registers
+and clk post divider present on R-Car.
+Similarly, R-Car V3U has 8 channels whereas other SoCs has only 2
+channels. Currently all the HW differences are handled by comparing
+with chip_id enum.
 
---devnwdik7riyhej2
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This patch series aims to replace chip_id with struct rcar_canfd_hw_info
+to handle the HW feature differences and driver data present
+on both IPs.
 
-On 26.10.2022 20:53:54, Yang Yingliang wrote:
-> It is not allowed to call kfree_skb() from hardware interrupt
-> context or with interrupts being disabled. So replace kfree_skb()
-> with dev_kfree_skb_irq() under spin_lock_irqsave().
->=20
-> Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
->  net/can/j1939/transport.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
-> index d7d86c944d76..b95fb759c49d 100644
-> --- a/net/can/j1939/transport.c
-> +++ b/net/can/j1939/transport.c
-> @@ -343,7 +343,7 @@ static void j1939_session_skb_drop_old(struct j1939_s=
-ession *session)
->  		/* drop ref taken in j1939_session_skb_queue() */
->  		skb_unref(do_skb);
-> =20
-> -		kfree_skb(do_skb);
-> +		dev_kfree_skb_irq(do_skb);
+The changes are trivial and tested on RZ/G2L SMARC EVK.
 
-Can you call spin_unlock_irqrestore() before the kfree_skb()? Does that
-fix the problem?
+This patch series depend upon[1]
+[1] https://lore.kernel.org/linux-renesas-soc/20221025155657.1426948-1-biju.das.jz@bp.renesas.com/T/#t
 
->  	}
->  	spin_unlock_irqrestore(&session->skb_queue.lock, flags);
->  }
+v2->v3:
+ * Replaced data type of max_channels from unsigned int->u8 to save memory.
+ * Replaced data type of postdiv from unsigned int->u8 to save memory.
+v1->v2:
+ * Updated commit description for R-Car V3U SoC detection using
+   driver data.
+ * Replaced data type of max_channels from u32->unsigned int.
+ * Replaced multi_global_irqs->shared_global_irqs to make it
+   positive checks.
+ * Replaced clk_postdiv->postdiv driver data variable.
+ * Simplified the calcualtion for fcan_freq.
+ * Replaced info->has_gerfl to gpriv->info->has_gerfl and wrapped
+   the ECC error flag checks inside a single if statement.
+ * Added Rb tag from Geert patch#1,#2,#3 and #5
 
-Marc
+Biju Das (6):
+  can: rcar_canfd: rcar_canfd_probe: Add struct rcar_canfd_hw_info to
+    driver data
+  can: rcar_canfd: Add max_channels to struct rcar_canfd_hw_info
+  can: rcar_canfd: Add shared_global_irqs to struct rcar_canfd_hw_info
+  can: rcar_canfd: Add postdiv to struct rcar_canfd_hw_info
+  can: rcar_canfd: Add multi_channel_irqs to struct rcar_canfd_hw_info
+  can: rcar_canfd: Add has_gerfl_eef to struct rcar_canfd_hw_info
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+ drivers/net/can/rcar/rcar_canfd.c | 104 ++++++++++++++++++------------
+ 1 file changed, 63 insertions(+), 41 deletions(-)
 
---devnwdik7riyhej2
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+2.25.1
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNaPAIACgkQrX5LkNig
-0138/Af/eVgLesJa2+ifRizhBglTbRcfkmKIYspFxN1K4GpG6klk4ZTCnVZ+M36N
-cODS9Z0nRQrVE+mjiO0FEPYOG2K9FED9+zopswmYvwyyuqmhL9Y0m9zWptKDCeJ+
-tlfOLvGiGci1SJ0rTQJqJG/9ByHCjYx8AaqymkQrOunCu4uZe87QDcwc7Oxjp2hn
-nKdmWDH3j4MAlxo7hWyYQIzet4NfvxUDq/792PlV3h+EOFcEEDdwFzmhE0uZ8yPN
-Ikv4OzoT4fdPwKHOE14H3z2Ae68RvaVj2lXuabU7/bxsTMxwbjszBKVCc1747F4I
-TgxRO0jn1Nfu+nF3TsrhOutfwjOZ+w==
-=XtAk
------END PGP SIGNATURE-----
-
---devnwdik7riyhej2--
