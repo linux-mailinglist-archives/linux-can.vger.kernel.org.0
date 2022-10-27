@@ -2,45 +2,49 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0847060F371
-	for <lists+linux-can@lfdr.de>; Thu, 27 Oct 2022 11:15:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0E4960F634
+	for <lists+linux-can@lfdr.de>; Thu, 27 Oct 2022 13:30:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235361AbiJ0JPa (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 27 Oct 2022 05:15:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40748 "EHLO
+        id S235154AbiJ0LaE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 27 Oct 2022 07:30:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235376AbiJ0JPC (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 27 Oct 2022 05:15:02 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E987A140FF;
-        Thu, 27 Oct 2022 02:13:54 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MyfxQ0RYfz15M3R;
-        Thu, 27 Oct 2022 17:08:58 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 27 Oct 2022 17:13:52 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 27 Oct
- 2022 17:13:51 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     <robin@protonic.nl>, <linux@rempel-privat.de>,
-        <kernel@pengutronix.de>, <socketcan@hartkopp.net>,
-        <mkl@pengutronix.de>
-Subject: [PATCH v2] can: j1939: transport: replace kfree_skb() with dev_kfree_skb_irq()
-Date:   Thu, 27 Oct 2022 17:12:37 +0800
-Message-ID: <20221027091237.2290111-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S235277AbiJ0LaC (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 27 Oct 2022 07:30:02 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F31A9FCD
+        for <linux-can@vger.kernel.org>; Thu, 27 Oct 2022 04:29:58 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oo159-0007Rd-On; Thu, 27 Oct 2022 13:29:55 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oo159-0001ku-1K; Thu, 27 Oct 2022 13:29:55 +0200
+Date:   Thu, 27 Oct 2022 13:29:55 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        robin@protonic.nl, linux@rempel-privat.de, kernel@pengutronix.de,
+        socketcan@hartkopp.net, mkl@pengutronix.de
+Subject: Re: [PATCH v2] can: j1939: transport: replace kfree_skb() with
+ dev_kfree_skb_irq()
+Message-ID: <20221027112955.GA17401@pengutronix.de>
+References: <20221027091237.2290111-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221027091237.2290111-1-yangyingliang@huawei.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -49,37 +53,48 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-It is not allowed to call kfree_skb() from hardware interrupt
-context or with interrupts being disabled. The skb is unlinked
-from the queue, so it can be freed after spin_unlock_irqrestore().
+On Thu, Oct 27, 2022 at 05:12:37PM +0800, Yang Yingliang wrote:
+> It is not allowed to call kfree_skb() from hardware interrupt
+> context or with interrupts being disabled. The skb is unlinked
+> from the queue, so it can be freed after spin_unlock_irqrestore().
+> 
+> Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 
-Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
-v1 -> v2:
-  Move kfree_skb() after spin_unlock_irqrestore().
----
- net/can/j1939/transport.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
-index d7d86c944d76..55f29c9f9e08 100644
---- a/net/can/j1939/transport.c
-+++ b/net/can/j1939/transport.c
-@@ -342,10 +342,12 @@ static void j1939_session_skb_drop_old(struct j1939_session *session)
- 		__skb_unlink(do_skb, &session->skb_queue);
- 		/* drop ref taken in j1939_session_skb_queue() */
- 		skb_unref(do_skb);
-+		spin_unlock_irqrestore(&session->skb_queue.lock, flags);
- 
- 		kfree_skb(do_skb);
-+	} else {
-+		spin_unlock_irqrestore(&session->skb_queue.lock, flags);
- 	}
--	spin_unlock_irqrestore(&session->skb_queue.lock, flags);
- }
- 
- void j1939_session_skb_queue(struct j1939_session *session,
+> ---
+> v1 -> v2:
+>   Move kfree_skb() after spin_unlock_irqrestore().
+> ---
+>  net/can/j1939/transport.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
+> index d7d86c944d76..55f29c9f9e08 100644
+> --- a/net/can/j1939/transport.c
+> +++ b/net/can/j1939/transport.c
+> @@ -342,10 +342,12 @@ static void j1939_session_skb_drop_old(struct j1939_session *session)
+>  		__skb_unlink(do_skb, &session->skb_queue);
+>  		/* drop ref taken in j1939_session_skb_queue() */
+>  		skb_unref(do_skb);
+> +		spin_unlock_irqrestore(&session->skb_queue.lock, flags);
+>  
+>  		kfree_skb(do_skb);
+> +	} else {
+> +		spin_unlock_irqrestore(&session->skb_queue.lock, flags);
+>  	}
+> -	spin_unlock_irqrestore(&session->skb_queue.lock, flags);
+>  }
+>  
+>  void j1939_session_skb_queue(struct j1939_session *session,
+> -- 
+> 2.25.1
+> 
+> 
+
 -- 
-2.25.1
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
