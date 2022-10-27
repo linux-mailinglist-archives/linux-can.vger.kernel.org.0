@@ -2,55 +2,54 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB96760F66E
-	for <lists+linux-can@lfdr.de>; Thu, 27 Oct 2022 13:44:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4809A60FF74
+	for <lists+linux-can@lfdr.de>; Thu, 27 Oct 2022 19:40:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233701AbiJ0LoM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 27 Oct 2022 07:44:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58350 "EHLO
+        id S234849AbiJ0Rk3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 27 Oct 2022 13:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235239AbiJ0LoF (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 27 Oct 2022 07:44:05 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B12120EE3
-        for <linux-can@vger.kernel.org>; Thu, 27 Oct 2022 04:44:04 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oo1Io-0000fV-Ts
-        for linux-can@vger.kernel.org; Thu, 27 Oct 2022 13:44:02 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 414CD10B243
-        for <linux-can@vger.kernel.org>; Thu, 27 Oct 2022 11:44:02 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 4028F10B229;
-        Thu, 27 Oct 2022 11:44:00 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id af969fe1;
-        Thu, 27 Oct 2022 11:43:57 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Yang Yingliang <yangyingliang@huawei.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        stable@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net 4/4] can: j1939: transport: j1939_session_skb_drop_old(): spin_unlock_irqrestore() before kfree_skb()
-Date:   Thu, 27 Oct 2022 13:43:56 +0200
-Message-Id: <20221027114356.1939821-5-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221027114356.1939821-1-mkl@pengutronix.de>
-References: <20221027114356.1939821-1-mkl@pengutronix.de>
+        with ESMTP id S235922AbiJ0RkZ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 27 Oct 2022 13:40:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BAC3578B2;
+        Thu, 27 Oct 2022 10:40:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DB725B82731;
+        Thu, 27 Oct 2022 17:40:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 83380C43141;
+        Thu, 27 Oct 2022 17:40:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666892419;
+        bh=JRe0eDq+okg933vXfQhwZYi9AoAytZNfWjSHEgU3cWY=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=cGTtt0Tlqh9UBvEw/M8pBosfR9S8IB8emClWTlJBLy3/lQBIF/5phSfniMwKtk4eS
+         w/gxWnJqo93JjN487ro1ugrF+Jw4CNZW3OxeRD0IuTf6cd8VgaPACHg8eI0uO1SxUY
+         a/4w493PH9wlVuVmVUNlO5gbVxpnoKf3wThSmvGdD2ugy9phXb23M1muJXwNHYBCsq
+         us6jLxzSEGialaUQS5C2zm25o7MX8k4VRvySRuGRZAQXokn8HNbJaExGALzDLqBVU1
+         X5MUp09gMH5pxWM1qSzWTRTtgpxIiFEjxmpnEHOFGsXoMXdgC9P5PTJAC8K+sJdyjo
+         v+x9qphEiEMig==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 65975E270D8;
+        Thu, 27 Oct 2022 17:40:19 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Subject: Re: [PATCH net 1/4] can: kvaser_usb: Fix possible completions during
+ init_completion
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166689241941.10875.15815557488092799175.git-patchwork-notify@kernel.org>
+Date:   Thu, 27 Oct 2022 17:40:19 +0000
+References: <20221027114356.1939821-2-mkl@pengutronix.de>
+In-Reply-To: <20221027114356.1939821-2-mkl@pengutronix.de>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        linux-can@vger.kernel.org, kernel@pengutronix.de,
+        anssi.hannula@bitwise.fi, extja@kvaser.com, stable@vger.kernel.org
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,42 +57,35 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+Hello:
 
-It is not allowed to call kfree_skb() from hardware interrupt context
-or with interrupts being disabled. The skb is unlinked from the queue,
-so it can be freed after spin_unlock_irqrestore().
+This series was applied to netdev/net.git (master)
+by Marc Kleine-Budde <mkl@pengutronix.de>:
 
-Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Link: https://lore.kernel.org/all/20221027091237.2290111-1-yangyingliang@huawei.com
-Cc: stable@vger.kernel.org
-[mkl: adjust subject]
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- net/can/j1939/transport.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+On Thu, 27 Oct 2022 13:43:53 +0200 you wrote:
+> From: Anssi Hannula <anssi.hannula@bitwise.fi>
+> 
+> kvaser_usb uses completions to signal when a response event is received
+> for outgoing commands.
+> 
+> However, it uses init_completion() to reinitialize the start_comp and
+> stop_comp completions before sending the start/stop commands.
+> 
+> [...]
 
-diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
-index d7d86c944d76..55f29c9f9e08 100644
---- a/net/can/j1939/transport.c
-+++ b/net/can/j1939/transport.c
-@@ -342,10 +342,12 @@ static void j1939_session_skb_drop_old(struct j1939_session *session)
- 		__skb_unlink(do_skb, &session->skb_queue);
- 		/* drop ref taken in j1939_session_skb_queue() */
- 		skb_unref(do_skb);
-+		spin_unlock_irqrestore(&session->skb_queue.lock, flags);
- 
- 		kfree_skb(do_skb);
-+	} else {
-+		spin_unlock_irqrestore(&session->skb_queue.lock, flags);
- 	}
--	spin_unlock_irqrestore(&session->skb_queue.lock, flags);
- }
- 
- void j1939_session_skb_queue(struct j1939_session *session,
+Here is the summary with links:
+  - [net,1/4] can: kvaser_usb: Fix possible completions during init_completion
+    https://git.kernel.org/netdev/net/c/2871edb32f46
+  - [net,2/4] can: rcar_canfd: rcar_canfd_handle_global_receive(): fix IRQ storm on global FIFO receive
+    https://git.kernel.org/netdev/net/c/702de2c21eed
+  - [net,3/4] can: rcar_canfd: fix channel specific IRQ handling for RZ/G2L
+    https://git.kernel.org/netdev/net/c/d887087c8968
+  - [net,4/4] can: j1939: transport: j1939_session_skb_drop_old(): spin_unlock_irqrestore() before kfree_skb()
+    https://git.kernel.org/netdev/net/c/c3c06c61890d
+
+You are awesome, thank you!
 -- 
-2.35.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
