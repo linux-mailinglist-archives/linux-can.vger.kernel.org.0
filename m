@@ -2,54 +2,51 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FF62610BE9
-	for <lists+linux-can@lfdr.de>; Fri, 28 Oct 2022 10:09:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 849BE610C6F
+	for <lists+linux-can@lfdr.de>; Fri, 28 Oct 2022 10:44:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbiJ1IJu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 28 Oct 2022 04:09:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46260 "EHLO
+        id S229711AbiJ1IoG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 28 Oct 2022 04:44:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbiJ1IJr (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 28 Oct 2022 04:09:47 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329A5240A1
-        for <linux-can@vger.kernel.org>; Fri, 28 Oct 2022 01:09:44 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1ooKQZ-0007ci-OX; Fri, 28 Oct 2022 10:09:19 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 386F510C7E3;
-        Fri, 28 Oct 2022 07:46:39 +0000 (UTC)
-Date:   Fri, 28 Oct 2022 09:46:37 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Zhengchao Shao <shaozhengchao@huawei.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux@rempel-privat.de, weiyongjun1@huawei.com,
-        yuehaibing@huawei.com
+        with ESMTP id S230022AbiJ1IoF (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 28 Oct 2022 04:44:05 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D78B1C4EDE;
+        Fri, 28 Oct 2022 01:44:03 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MzGDb0znJzVjDN;
+        Fri, 28 Oct 2022 16:39:11 +0800 (CST)
+Received: from [10.174.178.66] (10.174.178.66) by
+ dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 28 Oct 2022 16:44:00 +0800
+Message-ID: <b14fbd79-31e6-3409-e4f3-dae675219e1b@huawei.com>
+Date:   Fri, 28 Oct 2022 16:44:00 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.2
 Subject: Re: [PATCH net] can: af_can: fix NULL pointer dereference in
  can_rx_register()
-Message-ID: <20221028074637.3havdrt37qsmbvll@pengutronix.de>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+CC:     <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <socketcan@hartkopp.net>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <linux@rempel-privat.de>, <weiyongjun1@huawei.com>,
+        <yuehaibing@huawei.com>
 References: <20221028033342.173528-1-shaozhengchao@huawei.com>
- <d1e728d2-b62f-3646-dd27-8cc36ba7c819@hartkopp.net>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2zfesnt5wdoyraqi"
-Content-Disposition: inline
-In-Reply-To: <d1e728d2-b62f-3646-dd27-8cc36ba7c819@hartkopp.net>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+ <20221028073339.hx5pyysuyzhdj64q@pengutronix.de>
+From:   shaozhengchao <shaozhengchao@huawei.com>
+In-Reply-To: <20221028073339.hx5pyysuyzhdj64q@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.66]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -57,92 +54,64 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---2zfesnt5wdoyraqi
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On 28.10.2022 09:13:09, Oliver Hartkopp wrote:
-> Hello,
->=20
-> On 28.10.22 05:33, Zhengchao Shao wrote:
-> > It causes NULL pointer dereference when testing as following:
-> > (a) use syscall(__NR_socket, 0x10ul, 3ul, 0) to create netlink socket.
-> > (b) use syscall(__NR_sendmsg, ...) to create bond link device and vxcan
-> >      link device, and bind vxcan device to bond device (can also use
-> >      ifenslave command to bind vxcan device to bond device).
-> > (c) use syscall(__NR_socket, 0x1dul, 3ul, 1) to create CAN socket.
-> > (d) use syscall(__NR_bind, ...) to bind the bond device to CAN socket.
-> >=20
-> > The bond device invokes the can-raw protocol registration interface to
-> > receive CAN packets. However, ml_priv is not allocated to the dev,
-> > dev_rcv_lists is assigned to NULL in can_rx_register(). In this case,
-> > it will occur the NULL pointer dereference issue.
->=20
-> I can see the problem and see that the patch makes sense for
-> can_rx_register().
->=20
-> But for me the problem seems to be located in the bonding device.
->=20
-> A CAN interface with dev->type =3D=3D ARPHRD_CAN *always* has the dev->ml=
-_priv
-> and dev->ml_priv_type set correctly.
->=20
-> I'm not sure if a bonding device does the right thing by just 'claiming' =
-to
-> be a CAN device (by setting dev->type to ARPHRD_CAN) but not taking care =
-of
-> being a CAN device and taking care of ml_priv specifics.
->=20
-> This might also be the case in other ml_priv use cases.
->=20
-> Would it probably make sense to blacklist CAN devices in bonding devices?
+On 2022/10/28 15:33, Marc Kleine-Budde wrote:
+> On 28.10.2022 11:33:42, Zhengchao Shao wrote:
+>> It causes NULL pointer dereference when testing as following:
+>> (a) use syscall(__NR_socket, 0x10ul, 3ul, 0) to create netlink socket.
+>> (b) use syscall(__NR_sendmsg, ...) to create bond link device and vxcan
+>>      link device, and bind vxcan device to bond device (can also use
+>>      ifenslave command to bind vxcan device to bond device).
+>> (c) use syscall(__NR_socket, 0x1dul, 3ul, 1) to create CAN socket.
+>> (d) use syscall(__NR_bind, ...) to bind the bond device to CAN socket.
+>>
+>> The bond device invokes the can-raw protocol registration interface to
+>> receive CAN packets. However, ml_priv is not allocated to the dev,
+>> dev_rcv_lists is assigned to NULL in can_rx_register(). In this case,
+>> it will occur the NULL pointer dereference issue.
+>>
+>> The following is the stack information:
+>> BUG: kernel NULL pointer dereference, address: 0000000000000008
+>> PGD 122a4067 P4D 122a4067 PUD 1223c067 PMD 0
+>> Oops: 0000 [#1] PREEMPT SMP
+>> RIP: 0010:can_rx_register+0x12d/0x1e0
+>> Call Trace:
+>> <TASK>
+>> raw_enable_filters+0x8d/0x120
+>> raw_enable_allfilters+0x3b/0x130
+>> raw_bind+0x118/0x4f0
+>> __sys_bind+0x163/0x1a0
+>> __x64_sys_bind+0x1e/0x30
+>> do_syscall_64+0x35/0x80
+>> entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>> </TASK>
+>>
+>> Fixes: 4e096a18867a ("net: introduce CAN specific pointer in the struct net_device")
+>> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+>> ---
+>>   net/can/af_can.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/net/can/af_can.c b/net/can/af_can.c
+>> index 9503ab10f9b8..ef2697f3ebcb 100644
+>> --- a/net/can/af_can.c
+>> +++ b/net/can/af_can.c
+>> @@ -450,7 +450,7 @@ int can_rx_register(struct net *net, struct net_device *dev, canid_t can_id,
+>>   
+>>   	/* insert new receiver  (dev,canid,mask) -> (func,data) */
+>>   
+>> -	if (dev && dev->type != ARPHRD_CAN)
+>> +	if (dev && (dev->type != ARPHRD_CAN || dev->ml_priv_type != ML_PRIV_CAN))
+> 
+> You can use the helper function: can_get_ml_priv() instead of open
+> coding the check.
+> 
+> Reviewed-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> 
+> regards,
+> Marc
+> 
+Hi Marc:
+	Thank you for your review. And I will fix it in V2.
 
-NACK - We had this discussion 2.5 years ago:
-
-| https://lore.kernel.org/all/00000000000030dddb059c562a3f@google.com
-| https://lore.kernel.org/all/20200130133046.2047-1-socketcan@hartkopp.net
-
-=2E..and davem pointed out:
-
-| https://lore.kernel.org/all/20200226.202326.295871777946911500.davem@dave=
-mloft.net
-
-On 26.02.2020 20:23:26, David Miller wrote:
-[...]
-> What I don't get is why the PF_CAN is blindly dereferencing a device
-> assuming what is behind bond_dev->ml_priv.
->=20
-> If it assumes a device it access is CAN then it should check the
-> device by comparing the netdev_ops or via some other means.
->=20
-> This restriction seems arbitrary.
-
-With the addition of struct net_device::ml_priv_type in 4e096a18867a
-("net: introduce CAN specific pointer in the struct net_device"), what
-davem requested is now possible.
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---2zfesnt5wdoyraqi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNbiNsACgkQrX5LkNig
-012+HQf/TW0iWNZeKwgY1obNhXWQaQCqXiIsFQbVqtbzTOQksER4kRyYjUL0ARPp
-TFPjHENfdopdHRit3bGCn3n8Ync6586skXTOWjk5T8giX5W5/gbouA2J8Q2Qv6m+
-U66PiORh1l02PbBTDD6AsGyvSCDjMv6rEGQzzqEBP15dRtumvIM3xZSFc0JEEkME
-cd+7Dcs8t2RueCLAj8rYpJiswI+NuuSqyiof1vF6NP1rXHiBnts+6UgB+MKl1phI
-r+W6WKm+jifileOL65j5JylwQPuQ1beFW+0YlHxHqH0J560Mjzz6eHLDTBrkYHFA
-NZ8xUVf0/M3ESgj9E2lUOr/vZmuexQ==
-=s7ha
------END PGP SIGNATURE-----
-
---2zfesnt5wdoyraqi--
+Zhengchao Shao
