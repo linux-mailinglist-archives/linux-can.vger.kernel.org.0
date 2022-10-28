@@ -2,60 +2,46 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA941610E6A
-	for <lists+linux-can@lfdr.de>; Fri, 28 Oct 2022 12:25:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92E4E610E78
+	for <lists+linux-can@lfdr.de>; Fri, 28 Oct 2022 12:29:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbiJ1KZp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 28 Oct 2022 06:25:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53100 "EHLO
+        id S229839AbiJ1K3l (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 28 Oct 2022 06:29:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230398AbiJ1KZ0 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 28 Oct 2022 06:25:26 -0400
+        with ESMTP id S229864AbiJ1K3k (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 28 Oct 2022 06:29:40 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 313B543162
-        for <linux-can@vger.kernel.org>; Fri, 28 Oct 2022 03:25:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03D413D6E
+        for <linux-can@vger.kernel.org>; Fri, 28 Oct 2022 03:29:38 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1ooMXu-0002pA-VD; Fri, 28 Oct 2022 12:25:03 +0200
+        id 1ooMcJ-0003WY-AE; Fri, 28 Oct 2022 12:29:35 +0200
 Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 71CD310CA55;
-        Fri, 28 Oct 2022 10:24:59 +0000 (UTC)
-Date:   Fri, 28 Oct 2022 12:24:58 +0200
+        by smtp.blackshift.org (Postfix) with ESMTPSA id AF62B10CA66;
+        Fri, 28 Oct 2022 10:29:33 +0000 (UTC)
+Date:   Fri, 28 Oct 2022 12:29:32 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     biju.das.jz@bp.renesas.com,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
-        Ulrich Hecht <uli+renesas@fpond.eu>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v3 6/6] can: rcar_canfd: Add has_gerfl_eef to struct
- rcar_canfd_hw_info
-Message-ID: <20221028102458.6qcuojc5xk46jbuo@pengutronix.de>
-References: <20221027082158.95895-1-biju.das.jz@bp.renesas.com>
- <20221027082158.95895-7-biju.das.jz@bp.renesas.com>
- <CAMuHMdXayck0o9=Oc2+X7pDSx=Y+SHHdi3QtmYz+U-rumpc92Q@mail.gmail.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Ulrich Hecht <uli+renesas@fpond.eu>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH] can: rcar_canfd: Add missing ECC error checks for
+ channels 2-7
+Message-ID: <20221028102932.lfwrm3ahhhgtndsu@pengutronix.de>
+References: <4edb2ea46cc64d0532a08a924179827481e14b4f.1666951503.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lzkvswxk2o4rmw7l"
+        protocol="application/pgp-signature"; boundary="rhx3mhoq5czo7h3o"
 Content-Disposition: inline
-In-Reply-To: <CAMuHMdXayck0o9=Oc2+X7pDSx=Y+SHHdi3QtmYz+U-rumpc92Q@mail.gmail.com>
+In-Reply-To: <4edb2ea46cc64d0532a08a924179827481e14b4f.1666951503.git.geert+renesas@glider.be>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -69,62 +55,24 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---lzkvswxk2o4rmw7l
+--rhx3mhoq5czo7h3o
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 28.10.2022 12:12:22, Geert Uytterhoeven wrote:
-> Hi Biju,
+On 28.10.2022 12:06:45, Geert Uytterhoeven wrote:
+> When introducing support for R-Car V3U, which has 8 instead of 2
+> channels, the ECC error bitmask was extended to take into account the
+> extra channels, but rcar_canfd_global_error() was not updated to act
+> upon the extra bits.
 >=20
-> On Thu, Oct 27, 2022 at 10:22 AM Biju Das <biju.das.jz@bp.renesas.com> wr=
-ote:
-> > R-Car has ECC error flags in global error interrupts whereas it is
-> > not available on RZ/G2L.
-> >
-> > Add has_gerfl_eef to struct rcar_canfd_hw_info so that rcar_canfd_
-> > global_error() will process ECC errors only for R-Car.
-> >
-> > whilst, this patch fixes the below checkpatch warnings
-> >   CHECK: Unnecessary parentheses around 'ch =3D=3D 0'
-> >   CHECK: Unnecessary parentheses around 'ch =3D=3D 1'
-> >
-> > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Replace the RCANFD_GERFL_EEF[01] macros by a new macro that takes the
+> channel number, fixing R-Car V3U while simplifying the code.
 >=20
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
->=20
-> > --- a/drivers/net/can/rcar/rcar_canfd.c
-> > +++ b/drivers/net/can/rcar/rcar_canfd.c
-> > @@ -955,13 +958,15 @@ static void rcar_canfd_global_error(struct net_de=
-vice *ndev)
-> >         u32 ridx =3D ch + RCANFD_RFFIFO_IDX;
-> >
-> >         gerfl =3D rcar_canfd_read(priv->base, RCANFD_GERFL);
-> > -       if ((gerfl & RCANFD_GERFL_EEF0) && (ch =3D=3D 0)) {
-> > -               netdev_dbg(ndev, "Ch0: ECC Error flag\n");
-> > -               stats->tx_dropped++;
-> > -       }
-> > -       if ((gerfl & RCANFD_GERFL_EEF1) && (ch =3D=3D 1)) {
-> > -               netdev_dbg(ndev, "Ch1: ECC Error flag\n");
-> > -               stats->tx_dropped++;
-> > +       if (gpriv->info->has_gerfl_eef) {
-> > +               if ((gerfl & RCANFD_GERFL_EEF0) && ch =3D=3D 0) {
-> > +                       netdev_dbg(ndev, "Ch0: ECC Error flag\n");
-> > +                       stats->tx_dropped++;
-> > +               }
-> > +               if ((gerfl & RCANFD_GERFL_EEF1) && ch =3D=3D 1) {
-> > +                       netdev_dbg(ndev, "Ch1: ECC Error flag\n");
-> > +                       stats->tx_dropped++;
-> > +               }
->=20
-> BTW, this fails to check the ECC error flags for channels 2-7 on R-Car
-> V3U, which is a pre-existing problem.  As that is a bug, I have sent
-> a fix[1], which unfortunately conflicts with your patch. Sorry for that.
+> Fixes: 45721c406dcf50d4 ("can: rcar_canfd: Add support for r8a779a0 SoC")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-I'll add Geert's fix to can/main and upstream via net/main. Please
-re-spin this series after net/main has been merged to net-next/main.
-
-This way we'll avoid a merge conflict.
+Is this stable material?
 
 Marc
 
@@ -134,19 +82,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---lzkvswxk2o4rmw7l
+--rhx3mhoq5czo7h3o
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNbrfgACgkQrX5LkNig
-013U5wf/XjunyQiWXDyQwoiVIgePKcZ0DBJxteyGaNgkoTe2/oQbVTiWCJgYYLNu
-elyoZQf/+vNW4OXi6HCy+pQgoXIaReeKuWdVrdlKvRRBHqCQD/pG8AnSrGjU1aLY
-QPoTyEYk+vCD0xMJIB+XZ2NcTqFCu95cFmXyNyjS5dKy5pvilLYSnSkPaQ60Pema
-EDsehFz+wLVG45MbwwRtImIQDd5HhYf7mjeGxAQQtvgG41hY9UTmAiZDRkBCbzLN
-RigrLqZOyDTk+mji+Z1Q+xuDhl73ZI5m++otwXTgTxlcv+4E6u8gC1+y1T5jFkvZ
-RK89/oE9XT3bGXXaRrfN63kXoJxJVA==
-=LNpu
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNbrwoACgkQrX5LkNig
+013UJQgAtodjOXaEwxLSAmbujcBVAfGsyVs2o5W9Qmicfx+JBA5iEm4f/nrdkTsJ
+PaeskRn7pNZShLAjIdfrnW4NfhL+tAVXb2+w1E6QxeWJFMyn2rBqmevartpPtOmn
+JdgEHBXDuxwGRNf8pUXD/kxZi6Me1WKdbnXFQuF4uCl1CUjR74eBy2yKWRrIELo6
+nJlqwMzIYpb3CYYZa78m9EwOVkfy+n755hWadMJnPmg/Kbls1TnfViwW4dt86ywI
+5gCDI2ogXP/7raW9C2prFvKbjzoJWDMRCYatJv67hteHE58ue2n508dPrtuHfud7
+JpA2SSWSvltIMtDJM+NGDlfJesQ+LA==
+=FnBu
 -----END PGP SIGNATURE-----
 
---lzkvswxk2o4rmw7l--
+--rhx3mhoq5czo7h3o--
