@@ -2,100 +2,140 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A33E610F59
-	for <lists+linux-can@lfdr.de>; Fri, 28 Oct 2022 13:06:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF9EB610F9E
+	for <lists+linux-can@lfdr.de>; Fri, 28 Oct 2022 13:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229379AbiJ1LG5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 28 Oct 2022 07:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55716 "EHLO
+        id S230174AbiJ1LZG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 28 Oct 2022 07:25:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbiJ1LG4 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 28 Oct 2022 07:06:56 -0400
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970721D0D7C;
-        Fri, 28 Oct 2022 04:06:55 -0700 (PDT)
-Received: by mail-qt1-f181.google.com with SMTP id cr19so3249604qtb.0;
-        Fri, 28 Oct 2022 04:06:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BjzbETfFX+gqI4cCnhy09ae2F5HDKhvax3GK6w9Wn+Y=;
-        b=QfH77EWyshcjJm6XiNDsaw0/CX7elopk9ce/PqEPGtIa37huR8NhqtLinBB54IwE/d
-         JB/v8cDO30dvuIiB90nlmeKnN+/5knGytomm5C46JB9MsPCmYKVLLxdEf02zfAcr3boN
-         GNdcOSMY9DsSCfrObkAmgNaLKY+tm9Q7fc9hS2C2u5bL7FqFE4H8XFIlRi36adq2765D
-         jv2nOc6zS4KEQk7S920QPgFSjLM19huP+s0E7f0dY0+/xwnoAtzUZv/X61xypHKkhm81
-         EEmz45TKjeQKOZre0PxnLXIA8Ck3ApO6s9Jc/k+q1izAQYHqNedOwo/xKE3SQyzothEc
-         Yo5w==
-X-Gm-Message-State: ACrzQf3mkIRd/AiWGTZrtQLVBU95BA7+pSLDsU79mOi6RXKiMQwvF5b8
-        9mQfncimKLDfdUJJZP4gHTMHKN0swArBsA==
-X-Google-Smtp-Source: AMsMyM4/w6nHdqaVjEjLeUxaDQQTJEtnXQcZ/NS0NVYFRmShLH+90T6CAkwSDTTvf/qvppxfTPCzBw==
-X-Received: by 2002:ac8:5a50:0:b0:3a5:ce3:a657 with SMTP id o16-20020ac85a50000000b003a50ce3a657mr613317qta.277.1666955214558;
-        Fri, 28 Oct 2022 04:06:54 -0700 (PDT)
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
-        by smtp.gmail.com with ESMTPSA id d9-20020a05620a240900b006b8e8c657ccsm2768807qkn.117.2022.10.28.04.06.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 04:06:54 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id o70so5728824yba.7;
-        Fri, 28 Oct 2022 04:06:54 -0700 (PDT)
-X-Received: by 2002:a25:687:0:b0:6c2:2b0c:26e with SMTP id 129-20020a250687000000b006c22b0c026emr49498878ybg.202.1666955213909;
- Fri, 28 Oct 2022 04:06:53 -0700 (PDT)
+        with ESMTP id S230220AbiJ1LZE (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 28 Oct 2022 07:25:04 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BDB5FF74;
+        Fri, 28 Oct 2022 04:24:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1666956281;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=7v1Lc0mrTAZ3fxIwBDnwQONRBkHRnlphfULEbABarX8=;
+    b=LB6ekYdKq7/Ofq1rabkpWmfX8lhuf6Dva/xPFq3U24g+LNZwqATrd0z+6bU75kfogu
+    BkQQ9mfheepwZmC8zPz/1oqVh5ZNSnobmQmBYa/SIEjj7/gvzRhmL/3f0AYI7mVE8WlV
+    bd+0Xp4RUw6jpFQ8FOKhhS72F6zvwAOUgv+f08SG2YsQ1iWSxPDzMMgQxHVAp7DVWWDL
+    6A4Yr9Wc3Uw/YiXkTUjReUyvR/wYXYz+mkkV1+JQ4Ovu2GTuzaU3o+JeFfXK07svyd/s
+    dSlTxlByAcg4jshnhPsBZZJOkPVvKfDQsCy4T1bS+8Vohec52LXeq0pbBBu50Xpp/y9S
+    KFaQ==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytJSr6hfz3Vg=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a00:6020:1cfd:d100::923]
+    by smtp.strato.de (RZmta 48.2.1 AUTH)
+    with ESMTPSA id Dde783y9SBOfA4X
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Fri, 28 Oct 2022 13:24:41 +0200 (CEST)
+Message-ID: <773e6b03-c816-5ecb-bd4f-5f214fa347fb@hartkopp.net>
+Date:   Fri, 28 Oct 2022 13:24:36 +0200
 MIME-Version: 1.0
-References: <4edb2ea46cc64d0532a08a924179827481e14b4f.1666951503.git.geert+renesas@glider.be>
- <20221028102932.lfwrm3ahhhgtndsu@pengutronix.de>
-In-Reply-To: <20221028102932.lfwrm3ahhhgtndsu@pengutronix.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 28 Oct 2022 13:06:42 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVnBiXuSgDtZwkj_uf9U+M5-8oaG_Shr_zAyVb2hJCngg@mail.gmail.com>
-Message-ID: <CAMuHMdVnBiXuSgDtZwkj_uf9U+M5-8oaG_Shr_zAyVb2hJCngg@mail.gmail.com>
-Subject: Re: [PATCH] can: rcar_canfd: Add missing ECC error checks for
- channels 2-7
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH net] can: af_can: fix NULL pointer dereference in
+ can_rx_register()
 To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Ulrich Hecht <uli+renesas@fpond.eu>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Cc:     Zhengchao Shao <shaozhengchao@huawei.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux@rempel-privat.de, weiyongjun1@huawei.com,
+        yuehaibing@huawei.com
+References: <20221028033342.173528-1-shaozhengchao@huawei.com>
+ <d1e728d2-b62f-3646-dd27-8cc36ba7c819@hartkopp.net>
+ <20221028074637.3havdrt37qsmbvll@pengutronix.de>
+Content-Language: en-US
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20221028074637.3havdrt37qsmbvll@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Marc,
 
-On Fri, Oct 28, 2022 at 12:29 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> On 28.10.2022 12:06:45, Geert Uytterhoeven wrote:
-> > When introducing support for R-Car V3U, which has 8 instead of 2
-> > channels, the ECC error bitmask was extended to take into account the
-> > extra channels, but rcar_canfd_global_error() was not updated to act
-> > upon the extra bits.
-> >
-> > Replace the RCANFD_GERFL_EEF[01] macros by a new macro that takes the
-> > channel number, fixing R-Car V3U while simplifying the code.
-> >
-> > Fixes: 45721c406dcf50d4 ("can: rcar_canfd: Add support for r8a779a0 SoC")
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
->
-> Is this stable material?
 
-Upstream DTS[1] has only the first two channels enabled, so it's not
-critical. But it never hurts to end up in stable, helping e.g. CiP.
+On 28.10.22 09:46, Marc Kleine-Budde wrote:
+> On 28.10.2022 09:13:09, Oliver Hartkopp wrote:
+>> Hello,
+>>
+>> On 28.10.22 05:33, Zhengchao Shao wrote:
+>>> It causes NULL pointer dereference when testing as following:
+>>> (a) use syscall(__NR_socket, 0x10ul, 3ul, 0) to create netlink socket.
+>>> (b) use syscall(__NR_sendmsg, ...) to create bond link device and vxcan
+>>>       link device, and bind vxcan device to bond device (can also use
+>>>       ifenslave command to bind vxcan device to bond device).
+>>> (c) use syscall(__NR_socket, 0x1dul, 3ul, 1) to create CAN socket.
+>>> (d) use syscall(__NR_bind, ...) to bind the bond device to CAN socket.
+>>>
+>>> The bond device invokes the can-raw protocol registration interface to
+>>> receive CAN packets. However, ml_priv is not allocated to the dev,
+>>> dev_rcv_lists is assigned to NULL in can_rx_register(). In this case,
+>>> it will occur the NULL pointer dereference issue.
+>>
+>> I can see the problem and see that the patch makes sense for
+>> can_rx_register().
+>>
+>> But for me the problem seems to be located in the bonding device.
+>>
+>> A CAN interface with dev->type == ARPHRD_CAN *always* has the dev->ml_priv
+>> and dev->ml_priv_type set correctly.
+>>
+>> I'm not sure if a bonding device does the right thing by just 'claiming' to
+>> be a CAN device (by setting dev->type to ARPHRD_CAN) but not taking care of
+>> being a CAN device and taking care of ml_priv specifics.
+>>
+>> This might also be the case in other ml_priv use cases.
+>>
+>> Would it probably make sense to blacklist CAN devices in bonding devices?
+> 
+> NACK - We had this discussion 2.5 years ago:
+> 
+> | https://lore.kernel.org/all/00000000000030dddb059c562a3f@google.com
+> | https://lore.kernel.org/all/20200130133046.2047-1-socketcan@hartkopp.net
+> 
+> ...and davem pointed out:
+> 
+> | https://lore.kernel.org/all/20200226.202326.295871777946911500.davem@davemloft.net
+> 
+> On 26.02.2020 20:23:26, David Miller wrote:
+> [...]
+>> What I don't get is why the PF_CAN is blindly dereferencing a device
+>> assuming what is behind bond_dev->ml_priv.
+>>
+>> If it assumes a device it access is CAN then it should check the
+>> device by comparing the netdev_ops or via some other means.
+>>
+>> This restriction seems arbitrary.
+> 
+> With the addition of struct net_device::ml_priv_type in 4e096a18867a
+> ("net: introduce CAN specific pointer in the struct net_device"), what
+> davem requested is now possible.
+> 
+> Marc
 
-[1] arch/arm64/boot/dts/renesas/r8a779a0-falcon.dts
+Oh, thanks for the heads up!
 
-Gr{oetje,eeting}s,
+Didn't have remembered that specific discussion.
 
-                        Geert
+Wouldn't we need this check in can_rx_unregister() and maybe 
+can[|fd|xl]_rcv() then too?
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+As all these functions check for ARPHRD_CAN and later access ml_priv.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Best regards,
+Oliver
+
