@@ -2,101 +2,125 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F247610C77
-	for <lists+linux-can@lfdr.de>; Fri, 28 Oct 2022 10:49:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14607610D47
+	for <lists+linux-can@lfdr.de>; Fri, 28 Oct 2022 11:31:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbiJ1ItX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 28 Oct 2022 04:49:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59718 "EHLO
+        id S230103AbiJ1Jbk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 28 Oct 2022 05:31:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiJ1ItW (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 28 Oct 2022 04:49:22 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0401BB545;
-        Fri, 28 Oct 2022 01:49:21 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MzGLk003XzVj6m;
-        Fri, 28 Oct 2022 16:44:29 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
- (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 28 Oct
- 2022 16:49:19 +0800
-From:   Zhengchao Shao <shaozhengchao@huawei.com>
-To:     <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <socketcan@hartkopp.net>, <mkl@pengutronix.de>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>
-CC:     <linux@rempel-privat.de>, <weiyongjun1@huawei.com>,
-        <yuehaibing@huawei.com>, <shaozhengchao@huawei.com>
-Subject: [PATCH net,v2] can: af_can: fix NULL pointer dereference in can_rx_register()
-Date:   Fri, 28 Oct 2022 16:56:50 +0800
-Message-ID: <20221028085650.170470-1-shaozhengchao@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S230115AbiJ1Jbf (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 28 Oct 2022 05:31:35 -0400
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639D51C2EA6;
+        Fri, 28 Oct 2022 02:31:35 -0700 (PDT)
+Received: by mail-qt1-f182.google.com with SMTP id g16so3132556qtu.2;
+        Fri, 28 Oct 2022 02:31:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TUPxAxBOedpCe3uto+qLKu/zGMsAA1ebYp0ttjtv2+4=;
+        b=lzLgncB/duPcdvCa9Ifng/36a+Lw+yPTmXb3IyHQa9F322IEE4jSAfQhmCnXVTapi3
+         LuGvzZfgjRn8i5Bjyo7IGfsxlVIxKU1AVMhHPqT+E2M9CxzyT+gLGpAlprNNPK1ln5gL
+         YNf2XOmp7UoWtuxOev/9VV5LTs8PfynaL1yekKuqq4lTLDR7YlmDnARIaP0maeU0hUTL
+         5Xw7Nt2PyzFe4QzGGNCmvLtMS4JT3KvfFs5jJompB0aSBrcwYqgTsjkbNqK9bmDS3La7
+         d2qBpwfmGdEfleOAx33X42zpczN2qoKOtF+76e9jWtQ8ruhvtVrKda9U3YARlp1OTJ50
+         KGCw==
+X-Gm-Message-State: ACrzQf0yVAgQXJ5yvEjAiPggXOElEZlJCWGamHFYHcamXJyMRbh7/EdN
+        tgjeXCRP930zWy2zDF0pYssyPGipim2tXw==
+X-Google-Smtp-Source: AMsMyM4Tvi9LFBQU6xjP2m95knridKLBQPfwDQfdY2W0+znveVF2+MaRkL74UvKbfsk1jsv5bzt15Q==
+X-Received: by 2002:a05:622a:1a19:b0:39c:d550:6ac3 with SMTP id f25-20020a05622a1a1900b0039cd5506ac3mr43709545qtb.204.1666949494217;
+        Fri, 28 Oct 2022 02:31:34 -0700 (PDT)
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
+        by smtp.gmail.com with ESMTPSA id w29-20020a05620a095d00b006eecc4a0de9sm2553527qkw.62.2022.10.28.02.31.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Oct 2022 02:31:33 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-368edbc2c18so41973907b3.13;
+        Fri, 28 Oct 2022 02:31:33 -0700 (PDT)
+X-Received: by 2002:a81:5a57:0:b0:353:6de6:3263 with SMTP id
+ o84-20020a815a57000000b003536de63263mr48432888ywb.358.1666949493320; Fri, 28
+ Oct 2022 02:31:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500026.china.huawei.com (7.185.36.106)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221027082158.95895-1-biju.das.jz@bp.renesas.com> <20221027082158.95895-5-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20221027082158.95895-5-biju.das.jz@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 28 Oct 2022 11:31:21 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVf8R8JHM8jay2LiGGb8gLn1W0N8Q901ADcaNWv4hmAvQ@mail.gmail.com>
+Message-ID: <CAMuHMdVf8R8JHM8jay2LiGGb8gLn1W0N8Q901ADcaNWv4hmAvQ@mail.gmail.com>
+Subject: Re: [PATCH v3 4/6] can: rcar_canfd: Add postdiv to struct rcar_canfd_hw_info
+To:     biju.das.jz@bp.renesas.com
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        Ulrich Hecht <uli+renesas@fpond.eu>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-It causes NULL pointer dereference when testing as following:
-(a) use syscall(__NR_socket, 0x10ul, 3ul, 0) to create netlink socket.
-(b) use syscall(__NR_sendmsg, ...) to create bond link device and vxcan
-    link device, and bind vxcan device to bond device (can also use
-    ifenslave command to bind vxcan device to bond device).
-(c) use syscall(__NR_socket, 0x1dul, 3ul, 1) to create CAN socket.
-(d) use syscall(__NR_bind, ...) to bind the bond device to CAN socket.
+Hi Biju,
 
-The bond device invokes the can-raw protocol registration interface to
-receive CAN packets. However, ml_priv is not allocated to the dev,
-dev_rcv_lists is assigned to NULL in can_rx_register(). In this case,
-it will occur the NULL pointer dereference issue.
+On Thu, Oct 27, 2022 at 10:22 AM Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> R-Car has a clock divider for CAN FD clock within the IP, whereas
+> it is not available on RZ/G2L.
+>
+> Add postdiv variable to struct rcar_canfd_hw_info to take care of this
+> difference.
+>
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> ---
+> v2->v3:
+>  * Replaced data type of postdiv from unsigned int->u8 to save memory.
 
-The following is the stack information:
-BUG: kernel NULL pointer dereference, address: 0000000000000008
-PGD 122a4067 P4D 122a4067 PUD 1223c067 PMD 0
-Oops: 0000 [#1] PREEMPT SMP
-RIP: 0010:can_rx_register+0x12d/0x1e0
-Call Trace:
-<TASK>
-raw_enable_filters+0x8d/0x120
-raw_enable_allfilters+0x3b/0x130
-raw_bind+0x118/0x4f0
-__sys_bind+0x163/0x1a0
-__x64_sys_bind+0x1e/0x30
-do_syscall_64+0x35/0x80
-entry_SYSCALL_64_after_hwframe+0x63/0xcd
-</TASK>
+Thanks for the update!
 
-Fixes: 4e096a18867a ("net: introduce CAN specific pointer in the struct net_device")
-Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
-Reviewed-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
-v2: use can_get_ml_priv() instead of open code
----
- net/can/af_can.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> --- a/drivers/net/can/rcar/rcar_canfd.c
+> +++ b/drivers/net/can/rcar/rcar_canfd.c
+> @@ -1943,9 +1947,9 @@ static int rcar_canfd_probe(struct platform_device *pdev)
+>         }
+>         fcan_freq = clk_get_rate(gpriv->can_clk);
+>
+> -       if (gpriv->fcan == RCANFD_CANFDCLK && info->chip_id != RENESAS_RZG2L)
+> +       if (gpriv->fcan == RCANFD_CANFDCLK)
+>                 /* CANFD clock is further divided by (1/2) within the IP */
 
-diff --git a/net/can/af_can.c b/net/can/af_can.c
-index 9503ab10f9b8..98973846f89e 100644
---- a/net/can/af_can.c
-+++ b/net/can/af_can.c
-@@ -450,7 +450,7 @@ int can_rx_register(struct net *net, struct net_device *dev, canid_t can_id,
- 
- 	/* insert new receiver  (dev,canid,mask) -> (func,data) */
- 
--	if (dev && dev->type != ARPHRD_CAN)
-+	if (dev && (dev->type != ARPHRD_CAN || !can_get_ml_priv(dev)))
- 		return -ENODEV;
- 
- 	if (dev && !net_eq(net, dev_net(dev)))
--- 
-2.17.1
+may be further divided?
 
+> -               fcan_freq /= 2;
+> +               fcan_freq /= info->postdiv;
+>
+>         addr = devm_platform_ioremap_resource(pdev, 0);
+>         if (IS_ERR(addr)) {
+
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
