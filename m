@@ -2,49 +2,44 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEBB26134D0
-	for <lists+linux-can@lfdr.de>; Mon, 31 Oct 2022 12:45:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 695C36134D8
+	for <lists+linux-can@lfdr.de>; Mon, 31 Oct 2022 12:47:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbiJaLpv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 31 Oct 2022 07:45:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41728 "EHLO
+        id S230085AbiJaLrA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 31 Oct 2022 07:47:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230512AbiJaLpU (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 31 Oct 2022 07:45:20 -0400
+        with ESMTP id S231230AbiJaLqq (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 31 Oct 2022 07:46:46 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3503EF004
-        for <linux-can@vger.kernel.org>; Mon, 31 Oct 2022 04:45:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02B8EE18
+        for <linux-can@vger.kernel.org>; Mon, 31 Oct 2022 04:46:36 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1opTED-0003tA-Ak
-        for linux-can@vger.kernel.org; Mon, 31 Oct 2022 12:45:17 +0100
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 8CAA410F0C5
-        for <linux-can@vger.kernel.org>; Mon, 31 Oct 2022 11:45:16 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        id 1opTFS-0004LE-Fi; Mon, 31 Oct 2022 12:46:34 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:3c2a:13d:f861:4564])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id A8F1510F0BD;
-        Mon, 31 Oct 2022 11:45:15 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 0902c7df;
-        Mon, 31 Oct 2022 11:45:15 +0000 (UTC)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id D4CED10F0D4;
+        Mon, 31 Oct 2022 11:46:33 +0000 (UTC)
+Date:   Mon, 31 Oct 2022 12:46:28 +0100
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Jimmy Assarsson <extja@kvaser.com>,
-        Anssi Hannula <anssi.hannula@bitwise.fi>
-Subject: [PATCH 2/2] can: kvaser_usb: kvaser_usb_set_{,data}bittiming(): remove empty lines in variable declaration
-Date:   Mon, 31 Oct 2022 12:45:13 +0100
-Message-Id: <20221031114513.81214-2-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221031114513.81214-1-mkl@pengutronix.de>
-References: <20221031114513.81214-1-mkl@pengutronix.de>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-can@vger.kernel.org
+Subject: Re: [linux-next:master] BUILD REGRESSION
+ fd8dab197cca2746e1fcd399a218eec5164726d4
+Message-ID: <20221031114628.zxddr74xeevvudei@pengutronix.de>
+References: <635c09d2.Uo03FEcDk/bchhMt%lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="x6dpljnwhrczhbdv"
+Content-Disposition: inline
+In-Reply-To: <635c09d2.Uo03FEcDk/bchhMt%lkp@intel.com>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -57,37 +52,45 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Fix coding style by removing empty lines in variable declaration.
 
-Fixes: 39d3df6b0ea8 ("can: kvaser_usb: Compare requested bittiming parameters with actual parameters in do_set_{,data}_bittiming")
-Cc: Jimmy Assarsson <extja@kvaser.com>
-Cc: Anssi Hannula <anssi.hannula@bitwise.fi>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c | 2 --
- 1 file changed, 2 deletions(-)
+--x6dpljnwhrczhbdv
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-index 810dfe4053ca..fe3a591dcc05 100644
---- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-+++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-@@ -536,7 +536,6 @@ static int kvaser_usb_set_bittiming(struct net_device *netdev)
- 	struct kvaser_usb *dev = priv->dev;
- 	const struct kvaser_usb_dev_ops *ops = dev->driver_info->ops;
- 	struct can_bittiming *bt = &priv->can.bittiming;
--
- 	struct kvaser_usb_busparams busparams;
- 	int tseg1 = bt->prop_seg + bt->phase_seg1;
- 	int tseg2 = bt->phase_seg2;
-@@ -581,7 +580,6 @@ static int kvaser_usb_set_data_bittiming(struct net_device *netdev)
- 	struct kvaser_usb *dev = priv->dev;
- 	const struct kvaser_usb_dev_ops *ops = dev->driver_info->ops;
- 	struct can_bittiming *dbt = &priv->can.data_bittiming;
--
- 	struct kvaser_usb_busparams busparams;
- 	int tseg1 = dbt->prop_seg + dbt->phase_seg1;
- 	int tseg2 = dbt->phase_seg2;
--- 
-2.35.1
+On 29.10.2022 00:56:50, kernel test robot wrote:
+> Unverified Error/Warning (likely false positive, please contact us if int=
+erested):
+>=20
+> drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c:555:6: warning: Redundan=
+t initialization for 'err'. The initialized value is overwritten before it =
+is read. [redundantInitialization]
 
+Addressed with: https://lore.kernel.org/20221031114513.81214-1-mkl@pengutro=
+nix.de
 
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--x6dpljnwhrczhbdv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNftZEACgkQrX5LkNig
+0108fgf/UQnWUf3Egte8dhInKt9c4MstddoLvgAXcv6Pl5DpVsYgsLcyJHSk9vJj
+Yg5DqrHtu8K3uzo3550p2Nqgacku5ncXeoOyOjJWgK0mMRbE8kZjYu+2E1RbOS3p
+t/RUhCcIrwL8IiK5woSIFjqpXcvNmnvl6csZ40ZUEUz2V8J5RJJl/5UlxjuPf2ZR
+5zqcnizNdp61nagJ4+SXa4DfviIMmdKqoZC6wNQ6ehQteEohjK6cLMxjgoOSNAMj
+Kuo/Fz9aWpIhcuSLTWtTd9AOhVPAdPxVUhvdjVLCyeCpBwi85xfTUQ1Hy1LkZQLX
+YqZqi4l90ELCBKGP+o3u7PdhlpqnRg==
+=7IiC
+-----END PGP SIGNATURE-----
+
+--x6dpljnwhrczhbdv--
