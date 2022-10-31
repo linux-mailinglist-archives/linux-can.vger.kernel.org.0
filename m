@@ -2,25 +2,25 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A45F6134E9
-	for <lists+linux-can@lfdr.de>; Mon, 31 Oct 2022 12:50:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44E146136DF
+	for <lists+linux-can@lfdr.de>; Mon, 31 Oct 2022 13:50:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231134AbiJaLub (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 31 Oct 2022 07:50:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48028 "EHLO
+        id S231226AbiJaMuT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 31 Oct 2022 08:50:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231137AbiJaLu3 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 31 Oct 2022 07:50:29 -0400
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2E32EEE01;
-        Mon, 31 Oct 2022 04:50:26 -0700 (PDT)
+        with ESMTP id S229726AbiJaMuS (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 31 Oct 2022 08:50:18 -0400
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 27AF6DFCF;
+        Mon, 31 Oct 2022 05:50:17 -0700 (PDT)
 X-IronPort-AV: E=Sophos;i="5.95,227,1661785200"; 
-   d="scan'208";a="138516686"
+   d="scan'208";a="141003490"
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 31 Oct 2022 20:50:25 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 31 Oct 2022 21:50:16 +0900
 Received: from localhost.localdomain (unknown [10.226.92.171])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 5406C42B0AA9;
-        Mon, 31 Oct 2022 20:50:21 +0900 (JST)
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id A0F3C42DC111;
+        Mon, 31 Oct 2022 21:50:12 +0900 (JST)
 From:   Biju Das <biju.das.jz@bp.renesas.com>
 To:     Wolfgang Grandegger <wg@grandegger.com>,
         gregkh@linuxfoundation.org, Marc Kleine-Budde <mkl@pengutronix.de>
@@ -32,8 +32,8 @@ Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
         Chris Paterson <chris.paterson2@renesas.com>,
         linux-renesas-soc@vger.kernel.org, stable@vger.kernel.org
 Subject: [PATCH] can: rcar_canfd: rcar_canfd_handle_global_receive(): fix IRQ storm on global FIFO receive
-Date:   Mon, 31 Oct 2022 11:50:18 +0000
-Message-Id: <20221031115018.707442-1-biju.das.jz@bp.renesas.com>
+Date:   Mon, 31 Oct 2022 12:50:10 +0000
+Message-Id: <20221031125010.720151-1-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -71,23 +71,22 @@ Fixes: dd3bd23eb438 ("can: rcar_canfd: Add Renesas R-Car CAN FD driver")
 Suggested-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 Link: https://lore.kernel.org/all/20221025155657.1426948-2-biju.das.jz@bp.renesas.com
-Cc: stable@vger.kernel.org # 4.19.y
+Cc: stable@vger.kernel.org # 5.4.y
 [mkl: adjust commit message]
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 [biju: removed gpriv from RCANFD_RFCC_RFIE macro]
 Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 ---
-Resending to 4.19 with confilcts[1] fixed
-[1] https://lore.kernel.org/stable/16671942077080@kroah.com/T/#u
----
+Resending to 5.4 with confilcts[1] fixed
+[1] https://lore.kernel.org/stable/1667194206150167@kroah.com/T/#u
  drivers/net/can/rcar/rcar_canfd.c | 6 ++++--
  1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index a1634834b640..cb1388267fe0 100644
+index d4e9815ca26f..eed69e7e95ad 100644
 --- a/drivers/net/can/rcar/rcar_canfd.c
 +++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -1079,7 +1079,7 @@ static irqreturn_t rcar_canfd_global_interrupt(int irq, void *dev_id)
+@@ -1075,7 +1075,7 @@ static irqreturn_t rcar_canfd_global_interrupt(int irq, void *dev_id)
  	struct rcar_canfd_global *gpriv = dev_id;
  	struct net_device *ndev;
  	struct rcar_canfd_channel *priv;
@@ -96,7 +95,7 @@ index a1634834b640..cb1388267fe0 100644
  	u32 ch, ridx;
  
  	/* Global error interrupts still indicate a condition specific
-@@ -1097,7 +1097,9 @@ static irqreturn_t rcar_canfd_global_interrupt(int irq, void *dev_id)
+@@ -1093,7 +1093,9 @@ static irqreturn_t rcar_canfd_global_interrupt(int irq, void *dev_id)
  
  		/* Handle Rx interrupts */
  		sts = rcar_canfd_read(priv->base, RCANFD_RFSTS(ridx));
