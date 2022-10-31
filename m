@@ -2,106 +2,85 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2C40613310
-	for <lists+linux-can@lfdr.de>; Mon, 31 Oct 2022 10:52:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CAD86134CE
+	for <lists+linux-can@lfdr.de>; Mon, 31 Oct 2022 12:45:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbiJaJwS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 31 Oct 2022 05:52:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55112 "EHLO
+        id S231137AbiJaLpu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 31 Oct 2022 07:45:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbiJaJwQ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 31 Oct 2022 05:52:16 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F587D2C2;
-        Mon, 31 Oct 2022 02:52:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1667209912;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=1q9fEUOKuWy2MmpzvJRJt2YAOqO+9Lu7ei8YZTtRDnw=;
-    b=OKf136eLS80IjVjyiiVmEC2iCWzIYr8JCbN97wCerT39e6vXtlnwqkgTBUQ1C7f6g6
-    CnqcLJumhQWlXgo3g1UqtluwG797VBqdHcY5Zz56hPQtyiQvuCBgZU/0jcfxAkLn1r3b
-    udMh+XiEBJ+kheYR/NUBUnTqetnBvG9nNy9P9gV2MqzC7uEcWfNXotqdlNMHVb1owGG3
-    Q6XkPf5vau90VF+kIF/oF833mcRsIusEfaJbDmfhy4EJd4hEu2NCNU6QRVs6k2M1nbGZ
-    cNjS3vWhkAWaZ2PVQ+VUnGj3QB/mZwhNjFWyGyqQCVDJgoOJ35iQv2UCVA+IS4KoErVX
-    ykTw==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytISr6hZqJAw=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a00:6020:1cfd:d104::923]
-    by smtp.strato.de (RZmta 48.2.1 AUTH)
-    with ESMTPSA id Dde783y9V9pqDjr
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Mon, 31 Oct 2022 10:51:52 +0100 (CET)
-Message-ID: <ef85bc4b-fbd0-f21c-1fe6-345659934bd9@hartkopp.net>
-Date:   Mon, 31 Oct 2022 10:51:26 +0100
+        with ESMTP id S231127AbiJaLpU (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 31 Oct 2022 07:45:20 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35197EE10
+        for <linux-can@vger.kernel.org>; Mon, 31 Oct 2022 04:45:18 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1opTED-0003tB-9s
+        for linux-can@vger.kernel.org; Mon, 31 Oct 2022 12:45:17 +0100
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 7A31F10F0C4
+        for <linux-can@vger.kernel.org>; Mon, 31 Oct 2022 11:45:16 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id A3BD210F0BC;
+        Mon, 31 Oct 2022 11:45:15 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 845fafbe;
+        Mon, 31 Oct 2022 11:45:15 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     linux-can@vger.kernel.org
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Jimmy Assarsson <extja@kvaser.com>,
+        Anssi Hannula <anssi.hannula@bitwise.fi>
+Subject: [PATCH 1/2] can: kvaser_usb: kvaser_usb_set_bittiming(): fix redundant initialization warning for err
+Date:   Mon, 31 Oct 2022 12:45:12 +0100
+Message-Id: <20221031114513.81214-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH] can: canxl: Fix unremoved canxl_packet in can_exit()
-To:     Chen Zhongjin <chenzhongjin@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     mkl@pengutronix.de, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, mailhol.vincent@wanadoo.fr
-References: <20221031033053.37849-1-chenzhongjin@huawei.com>
-Content-Language: en-US
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20221031033053.37849-1-chenzhongjin@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+The variable err is initialized, but the initialized value is
+Overwritten before it is read. Fix the warning by not initializing the
+variable err at all.
+
+Fixes: 39d3df6b0ea8 ("can: kvaser_usb: Compare requested bittiming parameters with actual parameters in do_set_{,data}_bittiming")
+Cc: Jimmy Assarsson <extja@kvaser.com>
+Cc: Anssi Hannula <anssi.hannula@bitwise.fi>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
+index 989e75351062..810dfe4053ca 100644
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
+@@ -541,7 +541,7 @@ static int kvaser_usb_set_bittiming(struct net_device *netdev)
+ 	int tseg1 = bt->prop_seg + bt->phase_seg1;
+ 	int tseg2 = bt->phase_seg2;
+ 	int sjw = bt->sjw;
+-	int err = -EOPNOTSUPP;
++	int err;
+ 
+ 	busparams.bitrate = cpu_to_le32(bt->bitrate);
+ 	busparams.sjw = (u8)sjw;
+-- 
+2.35.1
 
 
-On 31.10.22 04:30, Chen Zhongjin wrote:
-> In can_init(), dev_add_pack(&canxl_packet) is added but not removed in
-> can_exit(). It break the packet handler list and can make kernel panic
-> when can_init() for the second time.
-> 
->> modprobe can && rmmod can
->> rmmod xxx && modprobe can
-> 
-> BUG: unable to handle page fault for address: fffffbfff807d7f4
-> RIP: 0010:dev_add_pack+0x133/0x1f0
-> Call Trace:
->   <TASK>
->   can_init+0xaa/0x1000 [can]
->   do_one_initcall+0xd3/0x4e0
->   ...
-> 
-> Fixes: fb08cba12b52 ("can: canxl: update CAN infrastructure for CAN XL frames")
-> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
-
-Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
-
-Thanks for the finding!
-
-Best regards,
-Oliver
-
-> ---
->   net/can/af_can.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/net/can/af_can.c b/net/can/af_can.c
-> index 9503ab10f9b8..5e9e3e1e9825 100644
-> --- a/net/can/af_can.c
-> +++ b/net/can/af_can.c
-> @@ -902,6 +902,7 @@ static __init int can_init(void)
->   static __exit void can_exit(void)
->   {
->   	/* protocol unregister */
-> +	dev_remove_pack(&canxl_packet);
->   	dev_remove_pack(&canfd_packet);
->   	dev_remove_pack(&can_packet);
->   	sock_unregister(PF_CAN);
