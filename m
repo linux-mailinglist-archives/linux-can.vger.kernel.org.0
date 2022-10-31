@@ -2,65 +2,46 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 562CD6139D8
-	for <lists+linux-can@lfdr.de>; Mon, 31 Oct 2022 16:17:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8982613A72
+	for <lists+linux-can@lfdr.de>; Mon, 31 Oct 2022 16:44:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230512AbiJaPRs (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 31 Oct 2022 11:17:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46350 "EHLO
+        id S231974AbiJaPoT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 31 Oct 2022 11:44:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbiJaPRs (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 31 Oct 2022 11:17:48 -0400
+        with ESMTP id S232056AbiJaPoN (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 31 Oct 2022 11:44:13 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC8251114D
-        for <linux-can@vger.kernel.org>; Mon, 31 Oct 2022 08:17:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2346F11A14
+        for <linux-can@vger.kernel.org>; Mon, 31 Oct 2022 08:44:12 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1opWXY-00078z-KN; Mon, 31 Oct 2022 16:17:28 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:3c2a:13d:f861:4564])
+        id 1opWxO-0002mR-H1
+        for linux-can@vger.kernel.org; Mon, 31 Oct 2022 16:44:10 +0100
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 09DDD10F42B
+        for <linux-can@vger.kernel.org>; Mon, 31 Oct 2022 15:44:08 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id D6B1010F39A;
-        Mon, 31 Oct 2022 15:17:24 +0000 (UTC)
-Date:   Mon, 31 Oct 2022 16:17:19 +0100
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 2641C10F40B;
+        Mon, 31 Oct 2022 15:44:08 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 7c444614;
+        Mon, 31 Oct 2022 15:44:07 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
-        Ulrich Hecht <uli+renesas@fpond.eu>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: Re: RE: [PATCH v3 6/6] can: rcar_canfd: Add has_gerfl_eef to struct
- rcar_canfd_hw_info
-Message-ID: <20221031151719.6p3jyou4rxoblz3q@pengutronix.de>
-References: <20221027082158.95895-1-biju.das.jz@bp.renesas.com>
- <20221027082158.95895-7-biju.das.jz@bp.renesas.com>
- <CAMuHMdXayck0o9=Oc2+X7pDSx=Y+SHHdi3QtmYz+U-rumpc92Q@mail.gmail.com>
- <20221028102458.6qcuojc5xk46jbuo@pengutronix.de>
- <OS0PR01MB5922A029B93F82F47AE1DD7C86329@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <OS0PR01MB5922BBCF1BDFD3176C5DAAF386379@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH net-next 0/14] pull-request: can-next 2022-10-31
+Date:   Mon, 31 Oct 2022 16:43:52 +0100
+Message-Id: <20221031154406.259857-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="i5zf2r45iochguhu"
-Content-Disposition: inline
-In-Reply-To: <OS0PR01MB5922BBCF1BDFD3176C5DAAF386379@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -73,47 +54,77 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello Jakub, hello David,
 
---i5zf2r45iochguhu
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+this is a pull request of 14 patches for net-next/master.
 
-On 31.10.2022 14:57:43, Biju Das wrote:
-[...]
+The first 7 patches are by Stephane Grosjean and Lukas Magel and
+target the peak_usb driver. Support for flashing a user defined device
+ID via the ethtool flash interface is added. A read only sysfs
+attribute for that value is added to distinguish between devices via
+udev.
 
-> > > This way we'll avoid a merge conflict.
->=20
-> Is it OK, if I send all other patches ie, patch#1 to patch#5 in [1] and l=
-ater
-> once net/main merged to net-next/main, will send patch#6?
->=20
-> Please let me know.
+The next 2 patches are by me an fix minor coding style issues in the
+kvaser_usb driver.
 
-I picked patches 1...5 for can-next/main.
+The last 5 patches are by Biju Das, target the rcar_canfd driver and
+clean up the support for different IP cores.
 
 regards,
 Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+---
 
---i5zf2r45iochguhu
-Content-Type: application/pgp-signature; name="signature.asc"
+The following changes since commit 02a97e02c64fb3245b84835cbbed1c3a3222e2f1:
 
------BEGIN PGP SIGNATURE-----
+  Merge tag 'mlx5-updates-2022-10-24' of git://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux (2022-10-28 22:07:48 -0700)
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNf5vwACgkQrX5LkNig
-010NgAf+PVoRDYEoikD26GnGOeEZn240nW7P24ols+p3jfOaqpb4AlFAPafKRHho
-ZzKWxR9paqtd+YKONsh5bhgI12d005S2vFs0Rq6I/TyxivBUG5VDPwC1Wm/WMg0N
-kkLwV+ac3CsW/rf8fpaAy4vg7fS9Kz0oAXkaOr5iiihW0iEF4W9KxmwoQZUfU5S0
-446aMy4EGg5OtQ9S2IzZP3gQ138NivbIYBK4UoCKhHDT6NSzlH3oNNzNWln3862H
-oHh0fNqO1PW2Ismwy3LyONlQnH/xVARY392uvD2rPtEOhtuD0ecVjguFajJXK59K
-snjKBap38hsh4ofDHfN0dZlScLvKDg==
-=EXJg
------END PGP SIGNATURE-----
+are available in the Git repository at:
 
---i5zf2r45iochguhu--
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git tags/linux-can-next-for-6.2-20221031
+
+for you to fetch changes up to 3755b56a9b8ff8f1a6a21a979cc215c220401278:
+
+  Merge patch series "R-Car CAN FD driver enhancements" (2022-10-31 16:15:25 +0100)
+
+----------------------------------------------------------------
+linux-can-next-for-6.2-20221031
+
+----------------------------------------------------------------
+Biju Das (5):
+      can: rcar_canfd: rcar_canfd_probe: Add struct rcar_canfd_hw_info to driver data
+      can: rcar_canfd: Add max_channels to struct rcar_canfd_hw_info
+      can: rcar_canfd: Add shared_global_irqs to struct rcar_canfd_hw_info
+      can: rcar_canfd: Add postdiv to struct rcar_canfd_hw_info
+      can: rcar_canfd: Add multi_channel_irqs to struct rcar_canfd_hw_info
+
+Lukas Magel (2):
+      can: peak_usb: export PCAN user device ID as sysfs device attribute
+      can: peak_usb: align user device id format in log with sysfs attribute
+
+Marc Kleine-Budde (4):
+      Merge patch series "can: peak_usb: Introduce configurable user dev id"
+      can: kvaser_usb: kvaser_usb_set_bittiming(): fix redundant initialization warning for err
+      can: kvaser_usb: kvaser_usb_set_{,data}bittiming(): remove empty lines in variable declaration
+      Merge patch series "R-Car CAN FD driver enhancements"
+
+Stephane Grosjean (5):
+      can: peak_usb: rename device_id to a more explicit name
+      can: peak_usb: add callback to read user value of CANFD devices
+      can: peak_usb: allow flashing of the user device id
+      can: peak_usb: replace unregister_netdev() with unregister_candev()
+      can: peak_usb: add ethtool interface to user defined flashed device number
+
+ Documentation/ABI/testing/sysfs-class-net-peak_usb |  15 +++
+ drivers/net/can/rcar/rcar_canfd.c                  |  85 +++++++++------
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c   |   4 +-
+ drivers/net/can/usb/peak_usb/pcan_usb.c            |  43 ++++++--
+ drivers/net/can/usb/peak_usb/pcan_usb_core.c       | 119 +++++++++++++++++++--
+ drivers/net/can/usb/peak_usb/pcan_usb_core.h       |  11 +-
+ drivers/net/can/usb/peak_usb/pcan_usb_fd.c         |  64 ++++++++++-
+ drivers/net/can/usb/peak_usb/pcan_usb_pro.c        |  26 ++++-
+ drivers/net/can/usb/peak_usb/pcan_usb_pro.h        |   1 +
+ 9 files changed, 306 insertions(+), 62 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-class-net-peak_usb
+
+
