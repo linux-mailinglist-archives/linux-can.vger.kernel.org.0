@@ -2,95 +2,92 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 070F1614405
-	for <lists+linux-can@lfdr.de>; Tue,  1 Nov 2022 06:05:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57AA6614531
+	for <lists+linux-can@lfdr.de>; Tue,  1 Nov 2022 08:44:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbiKAFF0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 1 Nov 2022 01:05:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38012 "EHLO
+        id S229496AbiKAHn6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 1 Nov 2022 03:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiKAFFZ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Nov 2022 01:05:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB4B13D3F;
-        Mon, 31 Oct 2022 22:05:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC3296152C;
-        Tue,  1 Nov 2022 05:05:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB457C433C1;
-        Tue,  1 Nov 2022 05:05:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1667279124;
-        bh=HhWTqUJ0/Hjh59ReDgoeYvu4XA6vfKrVKTQdy+QckFg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mLujFD2MGhSauTFXfgW8Fdps0GoG8APokfXodZVbB0qTsTcWWNZDBeYeg+z1yCOdM
-         NgiYDmOj1wbfxLJCnnTxQ0zXQRdkCiVxmI8CSdEeV7KHcaNdxLyMfnFcwaLCgXGmYI
-         xQmd47UrpshFrpCo8d22Q8eRt5PykFnObvoLqalg=
-Date:   Tue, 1 Nov 2022 06:06:13 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, netdev@vger.kernel.org,
-        davem@davemloft.net, linux-can@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH net-next 0/14] pull-request: can-next 2022-10-31
-Message-ID: <Y2CpRfuto8wFrXX+@kroah.com>
-References: <20221031154406.259857-1-mkl@pengutronix.de>
- <20221031202714.1eada551@kernel.org>
+        with ESMTP id S229475AbiKAHn4 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Nov 2022 03:43:56 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA564FD8;
+        Tue,  1 Nov 2022 00:43:54 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 953E71C0049; Tue,  1 Nov 2022 08:43:52 +0100 (CET)
+Date:   Tue, 1 Nov 2022 08:43:51 +0100
+From:   Pavel Machek <pavel@denx.de>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        gregkh@linuxfoundation.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Pavel Machek <pavel@denx.de>, Sasha Levin <sashal@kernel.org>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Paterson <chris.paterson2@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] can: rcar_canfd: rcar_canfd_handle_global_receive(): fix
+ IRQ storm on global FIFO receive
+Message-ID: <20221101074351.GA8310@amd>
+References: <20221031143317.938785-1-biju.das.jz@bp.renesas.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="n8g4imXOkfNTN/H1"
 Content-Disposition: inline
-In-Reply-To: <20221031202714.1eada551@kernel.org>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221031143317.938785-1-biju.das.jz@bp.renesas.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 08:27:14PM -0700, Jakub Kicinski wrote:
-> On Mon, 31 Oct 2022 16:43:52 +0100 Marc Kleine-Budde wrote:
-> > The first 7 patches are by Stephane Grosjean and Lukas Magel and
-> > target the peak_usb driver. Support for flashing a user defined device
-> > ID via the ethtool flash interface is added. A read only sysfs
-> 
-> nit: ethtool eeprom set != ethtool flash
-> 
-> > attribute for that value is added to distinguish between devices via
-> > udev.
-> 
-> So the user can write an arbitrary u32 value into flash which then
-> persistently pops up in sysfs across reboots (as a custom attribute
-> called "user_devid")?
-> 
-> I don't know.. the whole thing strikes me as odd. Greg do you have any
-> feelings about such.. solutions?
-> 
-> patches 5 and 6 here:
-> https://lore.kernel.org/all/20221031154406.259857-1-mkl@pengutronix.de/
 
-Device-specific attributes should be in the device-specific directory,
-not burried in a class directory somewhere that is generic like this one
-is.
+--n8g4imXOkfNTN/H1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Why isn't this an attribute of the usb device instead?
+Hi!
 
-And there's no need to reorder the .h file includes in patch 06 while
-you are adding a sysfs entry, that should be a separate commit, right?
+> Fixes: dd3bd23eb438 ("can: rcar_canfd: Add Renesas R-Car CAN FD driver")
+> Suggested-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Link: https://lore.kernel.org/all/20221025155657.1426948-2-biju.das.jz@bp=
+=2Erenesas.com
+> Cc: stable@vger.kernel.org#5.15.y
+> [mkl: adjust commit message]
 
-Also, the line:
+I got 7 or so copies of this, with slightly different Cc: lines.
 
-+	.attrs	= (struct attribute **)peak_usb_sysfs_attrs,
+AFAICT this is supposed to be stable kernel submission. In such case,
+I'd expect [PATCH 4.14, 4.19, 5.10] in the subject line, and original
+sign-off block from the mainline patch.
 
-Is odd, there should never be a need to cast anything like this if you
-are doing things properly.
+OTOH if it has Fixes tag (and it does) or Cc: stable (it has both),
+normally there's no need to do separate submission to stable, as Greg
+handles these automatically?
 
-So this still needs work, sorry.
+Thanks and best regards,
+								Pavel
+								=09
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
 
-thanks,
+--n8g4imXOkfNTN/H1
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
 
-greg k-h
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
 
+iEYEARECAAYFAmNgzjcACgkQMOfwapXb+vIpCACeK57yqOvVkjX8PRmNZDqjjBmO
+lfIAoMGRwF/DVFfw4s22pfZV3Swtz0YG
+=DOYJ
+-----END PGP SIGNATURE-----
+
+--n8g4imXOkfNTN/H1--
