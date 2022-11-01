@@ -2,55 +2,50 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4AE9613A8F
-	for <lists+linux-can@lfdr.de>; Mon, 31 Oct 2022 16:44:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B3E96143A3
+	for <lists+linux-can@lfdr.de>; Tue,  1 Nov 2022 04:27:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232086AbiJaPoy (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 31 Oct 2022 11:44:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51190 "EHLO
+        id S229576AbiKAD1S (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 31 Oct 2022 23:27:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232033AbiJaPoX (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 31 Oct 2022 11:44:23 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128F211C32
-        for <linux-can@vger.kernel.org>; Mon, 31 Oct 2022 08:44:18 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1opWxU-0002wE-Ee
-        for linux-can@vger.kernel.org; Mon, 31 Oct 2022 16:44:16 +0100
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 4538910F48E
-        for <linux-can@vger.kernel.org>; Mon, 31 Oct 2022 15:44:12 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id C069210F425;
-        Mon, 31 Oct 2022 15:44:08 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 71714060;
-        Mon, 31 Oct 2022 15:44:08 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Biju Das <biju.das.jz@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next 14/14] can: rcar_canfd: Add multi_channel_irqs to struct rcar_canfd_hw_info
-Date:   Mon, 31 Oct 2022 16:44:06 +0100
-Message-Id: <20221031154406.259857-15-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S229565AbiKAD1R (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 31 Oct 2022 23:27:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D3ADBC;
+        Mon, 31 Oct 2022 20:27:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4610461492;
+        Tue,  1 Nov 2022 03:27:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6460DC433C1;
+        Tue,  1 Nov 2022 03:27:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667273235;
+        bh=L1IBfjfOFq+K/Esb8RP5PXa3qyj94RhKpco9HpxQFME=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=quk4O123zcz3700lWnblwDjK1+wgfK1BaKs8DKQ3jkhpFqIDRmaWNwvy4BO56YC4K
+         dLrSowxkX+Q96zXZ0jjRUYw+a9XbcJJQth2AvcJlrXgR2PscHADPPtnO6F9pQenmej
+         0AHIdPHyamPfmoiVTUr/az8EmWY83wsfg/MZv6uLRe/2mH5l/U5hyhyF1fea39D7wP
+         NEBy2Dntzrd04orSA5sYNq7BqMGcB5COmRPMAdo2hzF7j50TOM6lKtJ97M4BbWHfC8
+         u9SWOhKIX3JOPl49L0yNuNHi0qrAysxFBhFZ8AUkx+0a/YlfaaYisQpO8bYKqZznlk
+         Rln8bEm40sfBg==
+Date:   Mon, 31 Oct 2022 20:27:14 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net,
+        linux-can@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH net-next 0/14] pull-request: can-next 2022-10-31
+Message-ID: <20221031202714.1eada551@kernel.org>
 In-Reply-To: <20221031154406.259857-1-mkl@pengutronix.de>
 References: <20221031154406.259857-1-mkl@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,88 +53,22 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Biju Das <biju.das.jz@bp.renesas.com>
+On Mon, 31 Oct 2022 16:43:52 +0100 Marc Kleine-Budde wrote:
+> The first 7 patches are by Stephane Grosjean and Lukas Magel and
+> target the peak_usb driver. Support for flashing a user defined device
+> ID via the ethtool flash interface is added. A read only sysfs
 
-RZ/G2L has separate IRQ lines for tx and error interrupt for each
-channel whereas R-Car has a combined IRQ line for all the channel
-specific tx and error interrupts.
+nit: ethtool eeprom set != ethtool flash
 
-Add multi_channel_irqs to struct rcar_canfd_hw_info to select the
-driver to choose between combined and separate irq registration for
-channel interrupts. This patch also removes enum rcanfd_chip_id and
-chip_id from both struct rcar_canfd_hw_info, as it is unused.
+> attribute for that value is added to distinguish between devices via
+> udev.
 
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Link: https://lore.kernel.org/all/20221027082158.95895-6-biju.das.jz@bp.renesas.com
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/rcar/rcar_canfd.c | 16 ++++------------
- 1 file changed, 4 insertions(+), 12 deletions(-)
+So the user can write an arbitrary u32 value into flash which then
+persistently pops up in sysfs across reboots (as a custom attribute
+called "user_devid")?
 
-diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index bc5df7a39f91..f8eafb132b39 100644
---- a/drivers/net/can/rcar/rcar_canfd.c
-+++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -41,12 +41,6 @@
- 
- #define RCANFD_DRV_NAME			"rcar_canfd"
- 
--enum rcanfd_chip_id {
--	RENESAS_RCAR_GEN3 = 0,
--	RENESAS_RZG2L,
--	RENESAS_R8A779A0,
--};
--
- /* Global register bits */
- 
- /* RSCFDnCFDGRMCFG */
-@@ -524,11 +518,11 @@ enum rcar_canfd_fcanclk {
- struct rcar_canfd_global;
- 
- struct rcar_canfd_hw_info {
--	enum rcanfd_chip_id chip_id;
- 	u8 max_channels;
- 	u8 postdiv;
- 	/* hardware features */
- 	unsigned shared_global_irqs:1;	/* Has shared global irqs */
-+	unsigned multi_channel_irqs:1;	/* Has multiple channel irqs */
- };
- 
- /* Channel priv data */
-@@ -599,20 +593,18 @@ static const struct can_bittiming_const rcar_canfd_bittiming_const = {
- };
- 
- static const struct rcar_canfd_hw_info rcar_gen3_hw_info = {
--	.chip_id = RENESAS_RCAR_GEN3,
- 	.max_channels = 2,
- 	.postdiv = 2,
- 	.shared_global_irqs = 1,
- };
- 
- static const struct rcar_canfd_hw_info rzg2l_hw_info = {
--	.chip_id = RENESAS_RZG2L,
--	.postdiv = 1,
- 	.max_channels = 2,
-+	.postdiv = 1,
-+	.multi_channel_irqs = 1,
- };
- 
- static const struct rcar_canfd_hw_info r8a779a0_hw_info = {
--	.chip_id = RENESAS_R8A779A0,
- 	.max_channels = 8,
- 	.postdiv = 2,
- 	.shared_global_irqs = 1,
-@@ -1751,7 +1743,7 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
- 	priv->can.clock.freq = fcan_freq;
- 	dev_info(&pdev->dev, "can_clk rate is %u\n", priv->can.clock.freq);
- 
--	if (info->chip_id == RENESAS_RZG2L) {
-+	if (info->multi_channel_irqs) {
- 		char *irq_name;
- 		int err_irq;
- 		int tx_irq;
--- 
-2.35.1
+I don't know.. the whole thing strikes me as odd. Greg do you have any
+feelings about such.. solutions?
 
-
+patches 5 and 6 here:
+https://lore.kernel.org/all/20221031154406.259857-1-mkl@pengutronix.de/
