@@ -2,48 +2,46 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B3E96143A3
-	for <lists+linux-can@lfdr.de>; Tue,  1 Nov 2022 04:27:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 070F1614405
+	for <lists+linux-can@lfdr.de>; Tue,  1 Nov 2022 06:05:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbiKAD1S (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 31 Oct 2022 23:27:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35378 "EHLO
+        id S229566AbiKAFF0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 1 Nov 2022 01:05:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiKAD1R (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 31 Oct 2022 23:27:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D3ADBC;
-        Mon, 31 Oct 2022 20:27:16 -0700 (PDT)
+        with ESMTP id S229531AbiKAFFZ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Nov 2022 01:05:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB4B13D3F;
+        Mon, 31 Oct 2022 22:05:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4610461492;
-        Tue,  1 Nov 2022 03:27:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6460DC433C1;
-        Tue,  1 Nov 2022 03:27:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667273235;
-        bh=L1IBfjfOFq+K/Esb8RP5PXa3qyj94RhKpco9HpxQFME=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=quk4O123zcz3700lWnblwDjK1+wgfK1BaKs8DKQ3jkhpFqIDRmaWNwvy4BO56YC4K
-         dLrSowxkX+Q96zXZ0jjRUYw+a9XbcJJQth2AvcJlrXgR2PscHADPPtnO6F9pQenmej
-         0AHIdPHyamPfmoiVTUr/az8EmWY83wsfg/MZv6uLRe/2mH5l/U5hyhyF1fea39D7wP
-         NEBy2Dntzrd04orSA5sYNq7BqMGcB5COmRPMAdo2hzF7j50TOM6lKtJ97M4BbWHfC8
-         u9SWOhKIX3JOPl49L0yNuNHi0qrAysxFBhFZ8AUkx+0a/YlfaaYisQpO8bYKqZznlk
-         Rln8bEm40sfBg==
-Date:   Mon, 31 Oct 2022 20:27:14 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net,
-        linux-can@vger.kernel.org, kernel@pengutronix.de
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC3296152C;
+        Tue,  1 Nov 2022 05:05:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB457C433C1;
+        Tue,  1 Nov 2022 05:05:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1667279124;
+        bh=HhWTqUJ0/Hjh59ReDgoeYvu4XA6vfKrVKTQdy+QckFg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mLujFD2MGhSauTFXfgW8Fdps0GoG8APokfXodZVbB0qTsTcWWNZDBeYeg+z1yCOdM
+         NgiYDmOj1wbfxLJCnnTxQ0zXQRdkCiVxmI8CSdEeV7KHcaNdxLyMfnFcwaLCgXGmYI
+         xQmd47UrpshFrpCo8d22Q8eRt5PykFnObvoLqalg=
+Date:   Tue, 1 Nov 2022 06:06:13 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, netdev@vger.kernel.org,
+        davem@davemloft.net, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
 Subject: Re: [PATCH net-next 0/14] pull-request: can-next 2022-10-31
-Message-ID: <20221031202714.1eada551@kernel.org>
-In-Reply-To: <20221031154406.259857-1-mkl@pengutronix.de>
+Message-ID: <Y2CpRfuto8wFrXX+@kroah.com>
 References: <20221031154406.259857-1-mkl@pengutronix.de>
+ <20221031202714.1eada551@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221031202714.1eada551@kernel.org>
 X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -53,22 +51,46 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, 31 Oct 2022 16:43:52 +0100 Marc Kleine-Budde wrote:
-> The first 7 patches are by Stephane Grosjean and Lukas Magel and
-> target the peak_usb driver. Support for flashing a user defined device
-> ID via the ethtool flash interface is added. A read only sysfs
+On Mon, Oct 31, 2022 at 08:27:14PM -0700, Jakub Kicinski wrote:
+> On Mon, 31 Oct 2022 16:43:52 +0100 Marc Kleine-Budde wrote:
+> > The first 7 patches are by Stephane Grosjean and Lukas Magel and
+> > target the peak_usb driver. Support for flashing a user defined device
+> > ID via the ethtool flash interface is added. A read only sysfs
+> 
+> nit: ethtool eeprom set != ethtool flash
+> 
+> > attribute for that value is added to distinguish between devices via
+> > udev.
+> 
+> So the user can write an arbitrary u32 value into flash which then
+> persistently pops up in sysfs across reboots (as a custom attribute
+> called "user_devid")?
+> 
+> I don't know.. the whole thing strikes me as odd. Greg do you have any
+> feelings about such.. solutions?
+> 
+> patches 5 and 6 here:
+> https://lore.kernel.org/all/20221031154406.259857-1-mkl@pengutronix.de/
 
-nit: ethtool eeprom set != ethtool flash
+Device-specific attributes should be in the device-specific directory,
+not burried in a class directory somewhere that is generic like this one
+is.
 
-> attribute for that value is added to distinguish between devices via
-> udev.
+Why isn't this an attribute of the usb device instead?
 
-So the user can write an arbitrary u32 value into flash which then
-persistently pops up in sysfs across reboots (as a custom attribute
-called "user_devid")?
+And there's no need to reorder the .h file includes in patch 06 while
+you are adding a sysfs entry, that should be a separate commit, right?
 
-I don't know.. the whole thing strikes me as odd. Greg do you have any
-feelings about such.. solutions?
+Also, the line:
 
-patches 5 and 6 here:
-https://lore.kernel.org/all/20221031154406.259857-1-mkl@pengutronix.de/
++	.attrs	= (struct attribute **)peak_usb_sysfs_attrs,
+
+Is odd, there should never be a need to cast anything like this if you
+are doing things properly.
+
+So this still needs work, sorry.
+
+thanks,
+
+greg k-h
+
