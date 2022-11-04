@@ -2,88 +2,80 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23D2861A22E
-	for <lists+linux-can@lfdr.de>; Fri,  4 Nov 2022 21:33:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9941C61A41D
+	for <lists+linux-can@lfdr.de>; Fri,  4 Nov 2022 23:36:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbiKDUdd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 4 Nov 2022 16:33:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38014 "EHLO
+        id S229494AbiKDWgR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 4 Nov 2022 18:36:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiKDUdc (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 4 Nov 2022 16:33:32 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517DC45A0D;
-        Fri,  4 Nov 2022 13:33:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1667594003;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=9m5xgCCWtTY75QRL2nyoUUMBnApx/bdSDONEfsYu3Qg=;
-    b=HyJmoM71kld6Bk2h5uOB5eRaoIPjiY2bX9a5uqUuGV0IYErMS6Ls3K6nKF9F9H2Yr2
-    3SDmzhBOkUlmQLvMiOoLar3LMeMvxFJuuKt2gmAtOeTfsQ/u+abahl9MnreRCNjba1K9
-    aoTtDNNOcH9FyNytxqAVO8v2UuUyWcbBVFXmLP4vonpolysL9/htUkq6EnPbX4Dp5616
-    C5P19glDmhmNdXF5Ua6e03yk0lyVqbAqbd3gIvAdmW11OgFNFnKMcPjR6p2hHydPbvUF
-    xhR1HSxIItd2aR3J6mUFS2nkYCjYfTO/6M8w3Nv0cA2GT+6l8e95/XYPxnEKteYcLrVj
-    Lxug==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytISr6hZqJAw=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a00:6020:1cfd:d104::923]
-    by smtp.strato.de (RZmta 48.2.1 AUTH)
-    with ESMTPSA id Dde783yA4KXMRT7
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Fri, 4 Nov 2022 21:33:22 +0100 (CET)
-Message-ID: <68896ba9-68c6-1f7a-3c6c-c3ee3c98e32f@hartkopp.net>
-Date:   Fri, 4 Nov 2022 21:33:16 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH net 4/5] can: dev: fix skb drop check
-To:     Jakub Kicinski <kuba@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net,
-        linux-can@vger.kernel.org, kernel@pengutronix.de,
+        with ESMTP id S229457AbiKDWgR (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 4 Nov 2022 18:36:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E74B2DAA8;
+        Fri,  4 Nov 2022 15:36:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 05153B82F60;
+        Fri,  4 Nov 2022 22:36:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FF34C433D6;
+        Fri,  4 Nov 2022 22:36:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667601372;
+        bh=ftFQ7NaOZiK4nmSEvsrsVbVm2SjTDawWqfO++yMnZus=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=r6PR1PMlj15qZTKBNkwVARnPU/RffHRVdGfGGlNzAQV2tki4KatxfrpljMh5wqfuh
+         9Gl6ARWMz8uFaEkrGTzSzD05g4E87Q+bmbHLMK/tHoKJMFhRW21ymPwwVKHJe1eFhN
+         UoQqJ4LTEgpGoFgqgauF15cU0lubYhpTu05E3mXvQ0XfX6E2THMdGcPDbhrIpsg63Z
+         qb7OgvG6125lRqC3BUCbmbsQ8m0VXPY3f86C8/DowJXFhdJUD8SccLYC/ptlbekAR6
+         c+5HlqH8V5QcjtvwXdndoat/p6RlHeBaR12wrX2P7hTSmQFcCTP8GAFe5MlzyZjBu8
+         rZOz4le0uz+Jw==
+Date:   Fri, 4 Nov 2022 15:36:11 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, netdev@vger.kernel.org,
+        davem@davemloft.net, linux-can@vger.kernel.org,
+        kernel@pengutronix.de,
         Dariusz Stojaczyk <Dariusz.Stojaczyk@opensynergy.com>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
         Max Staudt <max@enpas.org>, stable@vger.kernel.org
+Subject: Re: [PATCH net 4/5] can: dev: fix skb drop check
+Message-ID: <20221104153611.53758e3a@kernel.org>
+In-Reply-To: <68896ba9-68c6-1f7a-3c6c-c3ee3c98e32f@hartkopp.net>
 References: <20221104130535.732382-1-mkl@pengutronix.de>
- <20221104130535.732382-5-mkl@pengutronix.de>
- <20221104115059.429412fb@kernel.org>
-Content-Language: en-US
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20221104115059.429412fb@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        <20221104130535.732382-5-mkl@pengutronix.de>
+        <20221104115059.429412fb@kernel.org>
+        <68896ba9-68c6-1f7a-3c6c-c3ee3c98e32f@hartkopp.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Jakub,
-
-On 04.11.22 19:50, Jakub Kicinski wrote:
-> On Fri,  4 Nov 2022 14:05:34 +0100 Marc Kleine-Budde wrote:
->> -	if (can_dropped_invalid_skb(ndev, skb))
->> +	if (can_dev_dropped_skb(dev, skb))
+On Fri, 4 Nov 2022 21:33:16 +0100 Oliver Hartkopp wrote:
+> On 04.11.22 19:50, Jakub Kicinski wrote:
+> > On Fri,  4 Nov 2022 14:05:34 +0100 Marc Kleine-Budde wrote:  
+> >> -	if (can_dropped_invalid_skb(ndev, skb))
+> >> +	if (can_dev_dropped_skb(dev, skb))  
+> > 
+> > Compiler says "Did you mean ndev"?  
 > 
-> Compiler says "Did you mean ndev"?
+> Your compiler is a smart buddy! Sorry!
+> 
+> Marc added that single change to my patch for the pch_can.c driver 
+> (which is removed in net-next but not in 6.1-rc).
+> 
+> And in pch_can.c the netdev is named ndev.
+> 
+> Would you like to fix this up on your own or should we send an updated 
+> PR for the series?
 
-Your compiler is a smart buddy! Sorry!
-
-Marc added that single change to my patch for the pch_can.c driver 
-(which is removed in net-next but not in 6.1-rc).
-
-And in pch_can.c the netdev is named ndev.
-
-Would you like to fix this up on your own or should we send an updated 
-PR for the series?
-
-Many thanks,
-Oliver
-
+Updated PR would be better, if possible. 
+We don't edit patches locally much (at all?) when applying to netdev.
