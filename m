@@ -2,160 +2,262 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91A0E619BB3
-	for <lists+linux-can@lfdr.de>; Fri,  4 Nov 2022 16:33:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C0F1619BD2
+	for <lists+linux-can@lfdr.de>; Fri,  4 Nov 2022 16:36:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232560AbiKDPc6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 4 Nov 2022 11:32:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43742 "EHLO
+        id S231905AbiKDPgM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 4 Nov 2022 11:36:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232605AbiKDPcz (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 4 Nov 2022 11:32:55 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80074.outbound.protection.outlook.com [40.107.8.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C54B2FC24;
-        Fri,  4 Nov 2022 08:32:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QkP/2o/9K6OJulzEAqWrxdAbDbWwgJxmjzMXWqwMvLcmRe/WkGMT74AbgjkUzCHDfg32+6CE4tzylzMLfIsqlZilmnWj9KAX8oPM33bHngbUHvB2dp3Unbz0Ik2VyHEazrdlFa5o2cBeBLDRCKoNFpMqutKAn1aSQ+m0dzgjUuP3VOR5ROLWE+ZOyOsgEE/tHOeAzxOqlAlTArdadJ3TFMAlRzhbVdfB4CUtRI0qFkh1dzav/XvtWyzxwZ+HC4wTrX8t6gH0uToQhOiw7hHexQIVrSdTXmdqwKFeW2SQc/qBffkipZOfB3WAM9DtFZtCxEa6wYO9lN+ehrMu0t9ZcQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Dt+w5VayGAmzc9zZQoEhd/zSYX+5c6M2yKpXk3nXABQ=;
- b=Ab/iJx4JvyB5LAnJV0LxpeE08OR1zqoq4Iq3vnLrcgtxa4B/EIocZsPo7ej/OGUJzBQ3hC8HYvcUTQvDPpCild48KNx9lO7lryAYwLP0ZNRhNYbJ7/4OOdNni+29Y3I3AGLliTAYXDOwbkZ/3w5M8Yjb4BL9olYxI2wRj0VwuV1h5DZnd3xpYX5Sqor+xZtvK3/bE/4KQ/E55Lj5phKep+SmTLQn5BEu9nPvlTEhjmmrNCYueCnCB+7BhWuHwncdCnw6MB49PiBDXK31j79E4nKykjI0cZeMov+7zdRKsKVyw4fnRh/WVHdvVqsKEgltzABa4kbYeYMaxyGb9L/PdA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
- dkim=pass header.d=siemens.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Dt+w5VayGAmzc9zZQoEhd/zSYX+5c6M2yKpXk3nXABQ=;
- b=y/MFikHdHECwzmaXjdCLcpz3Q6isxLAkR0mHpjMJh91CcpP/5u9PEKcltEJ5Ey/yR90iiqJjiEmU4swFxn0pVIo3eGvpTF5duL/mrwLSv4rhTnLzE5KO6NjkWCAQg6fkiBqghll56K+Ho3jJx0XcgidhnSMylTS7cSEJvUAeYxq5CbW/kbGyXt9Gy3jiOOx6zhgIpOannki1jrN6fAbkin+uFGIFXHTC8TWNR+0pQi/vb/23IJ+rZDpdBzB/0z6pQWme2/27Rbp6nyPSaTxa/QjXfb89xq7G5uDxh4hxvm0DYSDGlB4g1OIksnCTsk+y8RR8wDnsucQblC3JBaJ05w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siemens.com;
-Received: from AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:588::19)
- by PRAPR10MB5324.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:299::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.20; Fri, 4 Nov
- 2022 15:32:52 +0000
-Received: from AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::5d9b:b9d1:bd69:107b]) by AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::5d9b:b9d1:bd69:107b%3]) with mapi id 15.20.5791.022; Fri, 4 Nov 2022
- 15:32:52 +0000
-Message-ID: <c2c0ba34-2985-21ea-0809-b96a3aa5e401@siemens.com>
-Date:   Fri, 4 Nov 2022 16:32:49 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [virtio-dev] Re: [RFC PATCH 1/1] can: virtio: Initial virtio CAN
- driver.
-Content-Language: en-US
-To:     Harald Mommer <hmo@opensynergy.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Harald Mommer <harald.mommer@opensynergy.com>
-Cc:     virtio-dev@lists.oasis-open.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Dariusz Stojaczyk <Dariusz.Stojaczyk@opensynergy.com>
-References: <20220825134449.18803-1-harald.mommer@opensynergy.com>
- <20220827093909.ag3zi7k525k4zuqq@pengutronix.de>
- <40e3d678-b840-e780-c1da-367000724f69@opensynergy.com>
-From:   Jan Kiszka <jan.kiszka@siemens.com>
-In-Reply-To: <40e3d678-b840-e780-c1da-367000724f69@opensynergy.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0157.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a2::13) To AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:20b:588::19)
+        with ESMTP id S232603AbiKDPgL (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 4 Nov 2022 11:36:11 -0400
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 490992BB3B;
+        Fri,  4 Nov 2022 08:36:10 -0700 (PDT)
+Received: by mail-pl1-f175.google.com with SMTP id j12so5221233plj.5;
+        Fri, 04 Nov 2022 08:36:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PfPMTNxKfH1Iwjv44Zoz/84tOu0bbhe77Q2FXcd9ysg=;
+        b=Tqfe3l9Drf9DDLG+iCs8NyBYy8ZsN0YouR1+u8vLjqvu6vVr5guZ4A63R8OExGMWPa
+         fLXooKJLJv01EIg7KlZMrevERVHxFjhVvbjAeze9p64ATgZeoUpFUkd/M/2bjzBcz/rW
+         nFOtsHptEgxsRrnyRnepp8cwCY/QHiiw3n8SxFmVWo022P/lHVh6hrFaUqwfn+XT3wev
+         FZXrcL0yfPxpH54ealgMjhr6dCkaTvyopLeZhGP+OlLAbns+y6iP29GfsDfef96B+L+q
+         sz/gaNSx6VMbykRFTU/X10khiPPn2fY9nSy/wPwSO5HKQ0GQang0O1nD33qrAnl5E5Sf
+         FmWQ==
+X-Gm-Message-State: ACrzQf3zX65tZKk/rG1WxvGTw9NUrnoBhH8rX/czSbM00rAj5kXNiN1O
+        4JyuPvIIQ8goMtJn/rj4KesbDxVpbGNR+2EQirCaF7PTshg=
+X-Google-Smtp-Source: AMsMyM6pkkAMAWeBioVp9IyUuLSTBM+J57o9fHZJ68LAVPMLmQ0K8N5/b2o6RkA32SeJJa79ErsrkV6/gI4iqaneRfw=
+X-Received: by 2002:a17:90b:4ac3:b0:213:3918:f276 with SMTP id
+ mh3-20020a17090b4ac300b002133918f276mr52894280pjb.19.1667576169351; Fri, 04
+ Nov 2022 08:36:09 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS4PR10MB6181:EE_|PRAPR10MB5324:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5d476306-fa4b-4fe5-d2f7-08dabe79d63f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6k6jaIVNAuaD9bdoIPgaqiUPyQQxfGEG/nwCEkfgRvwjsmUv9GEWdfvRXE/HlLgVQM2sxcLDsLvU/9ekBwCDYAxFOjdMv5IOLaT4KgKNjpXrVen7kiiAh9O8rMrkzNL/iTc995c6w+szuQwH4hTicFrS6bX5pWxOV7jVkzB0ix4F05C4YefwCazAdr2tExSPF7kVNpKLeiFQo93VyIUSdaYd/N7t6Ghf06kUGcdRo0DfoLDImcO2PaVgu8X8WEk2STHO77wrp4sQxhkk+mXvnnaxLXbSJWo70tV0DiNijWv5Vhy6mebEQzbn0arnYYaAmhfHdvOxC8A5pTYXrtXLzuyvC8iBsADm7xxLYRmh7cK/+DJo9oBR0HPVwBIuiRyxPf2noPr8VlLvJDF3ToAIPJScQp98BXko+34567RMNZOJ8ljJk9nrRfskMKrXtJscCXA0JTc3irwbwc3rFiGogQDTumag3anO0aQ+e1p8GGIMeY0VkEkyBE97kyY3RDjWipqurctUKNZILUNAwbtY8b9ACY816phF3MPD4aIvSDBGXHH3KOCyMSop/Yitj34KiJetDjnxCxRp9rxIP8CPKMUVFUziqksuSSqTmpS5U6gEKv3SKjaefmlJ2N+F3/1E2l9TaCMmek4DbSGAk39AePCwq1irTx/7vg4M4Mj3yDHQJwbW+heUXXrEREZik28K1/OniqN9nUN3mNQZ6+wjo4FqM0p96ho8hQwK2k7EKwLB7skcI8CQwp99ay6k8VwH03XyqdN9lgYkAv2r9VEWuUe61/z07vxKO5PBhM9uF4k=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(366004)(376002)(136003)(39860400002)(346002)(451199015)(83380400001)(2616005)(26005)(53546011)(110136005)(6506007)(6666004)(316002)(6486002)(82960400001)(186003)(6512007)(54906003)(38100700002)(8936002)(7416002)(4744005)(8676002)(31686004)(66556008)(66476007)(44832011)(4326008)(41300700001)(2906002)(478600001)(5660300002)(36756003)(66946007)(31696002)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?M1BBK0tFNWJySlV4YnE5cjVEbEtLMlB3b09sRzkyT2lUNkIzRjZYM01MMnpO?=
- =?utf-8?B?czBFWVo1YUN4c0ZvZGhYVFpBeVd0Vm9ldkRObXhyU2cvUVBqRUt6U3l5bGZ4?=
- =?utf-8?B?M09jRjgrZy9icm9nenpoRk5KeWdpaVNCZ3BDQ1VhNUM1RW4wN2QwSUwwdG9V?=
- =?utf-8?B?YTdUOTlxVHlwbmVJRzkwSnBuVnl6cm93THlXZU5nU01pTmVTZlRKTGhIN1dy?=
- =?utf-8?B?T3pLaHY5WlV3M2pqYWo3bG5KdCthaW5vbkE0VC9yWUl5ZmNpQ3FTbVNPdEdz?=
- =?utf-8?B?NGtVOVpnT1QwZlVYTzNLdEtNS3BVMzd4VHZqOVVNcURuMjdOMEpCMWJJWGUv?=
- =?utf-8?B?dG9lekZtQkRlTlVJQk04azB0MHhEZGh1cnh3eWloWHhNbS9Rbmc4YlpLakxP?=
- =?utf-8?B?VTFCWTBFdUlTT2F6UE9sT2FOOTBwMWxhQXF5N2hsS0FZMklVelV4UEVUdjZP?=
- =?utf-8?B?THNEbjZrZmlGVzYyNTJXSG0yQjR6ZDNpVWdwK3ltWUFWdStCbVVRSnovKzRV?=
- =?utf-8?B?SGhkUkVwY2VnZ0RRb2pmZ2hsemczSnZyVXl6TDlFVDU3WTdqL1BRdzB5K0U2?=
- =?utf-8?B?U2lmZW5KcGM1elZJWHMzR3FTOFVhN3czTERhNXdmV2N3MWdIc2Q2bEhXRko2?=
- =?utf-8?B?Z2R4NHV1ZzFxMS9TL1hZSVplYlFaV2pNTHVGV0RpdER4QnBJbldJdi8yT2t4?=
- =?utf-8?B?ZU9KOGtKVFY5bXkrSWlvOU84ajcyTmdKZzN0eE5WaHdOQ1dWTUpDOWc1TWZR?=
- =?utf-8?B?K2d4bjZoT20zRGdpSGRpclVxVlUxL2grclpJTW5ncmNaSVRJME9pZXh5ckoy?=
- =?utf-8?B?VTMvb2llWTBabDBVZjc5MDcyRWpLRWVhSFZKdFJOd2o1QnhTMC9qSGlKZXZl?=
- =?utf-8?B?WnVZMm81dFZhRVpzQ05pNDhHazd1T0RQRzdmNlA4NkNGUWYxaUxabHZTNDRS?=
- =?utf-8?B?bjNzVWp0OFQ4Q3FZTDVRSVFPdUVjUEdQdks3ZkxBY05WZGkzRWNLQ3JiKy8x?=
- =?utf-8?B?WlRCUDAyT1hVUHJJZHRzcktudGtaYmRWUHRnbU41c0NwaDJHVWxaQ3luTW0v?=
- =?utf-8?B?c0gvck1qd21USXNnVElOMmNoOXBYbVNteUtTRVZDMzUrVEE4dzFROGJUQnJR?=
- =?utf-8?B?WEFwYUxONWt1SitJaXhmYzZBWXYraGhqN2VKZU5SUExIenFiaEY1QmRxdFYw?=
- =?utf-8?B?bnhhWGc5WDBUWEpTT0o5Q1pKK3RkMGRRVTRCTXBJdzVQZFByc2tPOVV2VERi?=
- =?utf-8?B?Z2RMTHNENm92c00xNk5mNUhWa251anRKblA3aTdFRnBJeFNocjM1QmIxK1FO?=
- =?utf-8?B?ZGlLSVRHTUxIUjNEZUh3RVp4eTU0UW15ZWwyNVovMEZlWXlYbTl2ZzE4YWtX?=
- =?utf-8?B?YnN4d0krZ3V6TVhiSlprZDF4c05zSy94d3hGa0VJNGJkeEc1QWdGbUxpb0tt?=
- =?utf-8?B?bFVpRzk2M3h1TmlldHI5UmlkTGtnemwrSXBuM2ExYjB2UzhaODJvVGxIKzI3?=
- =?utf-8?B?d2pOYjQ0cTZndzdCZlBNOW42ZEllbkxOQzE1QnJhYzRSUzB2N3A0TjZMWVI4?=
- =?utf-8?B?MkVTMk5EU0NYbXIrY2tTL3o2YlhpQVVpTmxaRW1WVi9HdnkxcWhXR1g1WG9K?=
- =?utf-8?B?aHU4dnlhREUyT3lvbUwvb3NvblNrbkptVHlLRzlZdHREK2VxcTVGVm85bkVL?=
- =?utf-8?B?V25hV0I0dFAzNG45R3FLR2l1aDRKT2l6RU4wVWVmNytNa3JuUUNjN2FYOHU1?=
- =?utf-8?B?YzNjaGdrVVduOTJGaEcwbmh3aGd5VDFWUEl2VENvRXVRZkNYNjVFdS9Qdmt3?=
- =?utf-8?B?Uy9GdHkyUmFCaTRNU0hOWGdRMW9lNG90cWhONFhJVHQvcFZMZkVIcmx3WERT?=
- =?utf-8?B?MEkvK1BTRjBTSHRXMlpkcVcvSWhnSjIwUU9Cd0Y5Q2JCVFNrOHl5VmVIYWlp?=
- =?utf-8?B?L1hzdkZsS0srZUFiYnFaMjVob253alQ2cW9jVWhUSklqZkowZys2ZUY5dUNt?=
- =?utf-8?B?eUpRQU9lVnl5SDE5U1c1UjQzQ211aWwzQ1RBYm9DeGNqREl2ZXFxZ0RzZE42?=
- =?utf-8?B?RXdTY2hldFBxK010YzA2SUpSVkJhd1lTaU00N3hlcHg0bzhUWThDWDZJNUgv?=
- =?utf-8?B?UlBCRWFoU1ZpcHRaTjRyaUN2TjN6RWN3R0N5K2FlYzBqSWVmSUFobjNjQUdi?=
- =?utf-8?B?Smc9PQ==?=
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5d476306-fa4b-4fe5-d2f7-08dabe79d63f
-X-MS-Exchange-CrossTenant-AuthSource: AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Nov 2022 15:32:52.2111
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: XxxGJEslQOze+Y7fhF1fRhbK9ZadxfWW6gAoQTo7MC5uDkXSSpg3gUQ4ux3xYbe8TMlQqgHMk5bNhj9AdLIecA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PRAPR10MB5324
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr> <20221104115211.533zif7ip4f5tvky@pengutronix.de>
+In-Reply-To: <20221104115211.533zif7ip4f5tvky@pengutronix.de>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Sat, 5 Nov 2022 00:35:57 +0900
+Message-ID: <CAMZ6RqL864PFLOq1Wo3XV=kpAP0tVtd7Zj46oWw-pTr9rR=XiA@mail.gmail.com>
+Subject: Re: [PATCH] can: etas_es58x: report the firmware version through ethtool
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 03.11.22 14:55, Harald Mommer wrote:
-> Hello,
-> 
-> On 27.08.22 11:39, Marc Kleine-Budde wrote:
->> Is there an Open Source implementation of the host side of this
->> interface?
-> there is neither an open source device nor is it currently planned. The
-> device I'm developing is closed source.
+On Fri 4 nov. 2022 at 21:06, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> On 04.11.2022 16:36:59, Vincent Mailhol wrote:
+> > ES58x devices report below information in their usb product info
+> > string:
+> >
+> >   * the firmware version
+> >   * the bootloader version
+> >   * the hardware revision
+> >
+> > Report the firmware version through ethtool_drvinfo::fw_version.
+> > Because struct ethtool_drvinfo has no fields to report the boatloader
+> > version nor the hardware revision, continue to print these in the
+> > kernel log (c.f. es58x_print_product_info()).
+> >
+> > While doing so, bump up copyright year of each modified files.
+> >
+> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > ---
+> >  drivers/net/can/usb/etas_es58x/es581_4.c    |   5 +-
+> >  drivers/net/can/usb/etas_es58x/es58x_core.c | 140 +++++++++++++-------
+> >  drivers/net/can/usb/etas_es58x/es58x_core.h |  11 +-
+> >  drivers/net/can/usb/etas_es58x/es58x_fd.c   |   5 +-
+> >  4 files changed, 108 insertions(+), 53 deletions(-)
+> >
+> > diff --git a/drivers/net/can/usb/etas_es58x/es581_4.c b/drivers/net/can/usb/etas_es58x/es581_4.c
+> > index 1bcdcece5ec7..1d6ae7b279cf 100644
+> > --- a/drivers/net/can/usb/etas_es58x/es581_4.c
+> > +++ b/drivers/net/can/usb/etas_es58x/es581_4.c
+> > @@ -6,7 +6,7 @@
+> >   *
+> >   * Copyright (c) 2019 Robert Bosch Engineering and Business Solutions. All rights reserved.
+> >   * Copyright (c) 2020 ETAS K.K.. All rights reserved.
+> > - * Copyright (c) 2020, 2021 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > + * Copyright (c) 2020-2022 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> >   */
+> >
+> >  #include <linux/kernel.h>
+> > @@ -492,7 +492,8 @@ const struct es58x_parameters es581_4_param = {
+> >       .tx_bulk_max = ES581_4_TX_BULK_MAX,
+> >       .urb_cmd_header_len = ES581_4_URB_CMD_HEADER_LEN,
+> >       .rx_urb_max = ES58X_RX_URBS_MAX,
+> > -     .tx_urb_max = ES58X_TX_URBS_MAX
+> > +     .tx_urb_max = ES58X_TX_URBS_MAX,
+> > +     .prod_info_delim = ','
+>
+> Nitpick: you can add a trailing "," here, makes the diff smaller on the
+> next change :)
 
-Likely not helpful long-term /wrt kernel QA - how should kernelci or
-others even have a chance to test the driver? Keep in mind that you are
-not proposing a specific driver for an Opensynergy hypervisor, rather
-for the open and vendor-agnostic virtio spec.
+ACK.
 
-But QEMU already supports both CAN and virtio, thus should be relatively
-easy to augment with this new device.
+> >  };
+> >
+> >  const struct es58x_operators es581_4_ops = {
+> > diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/usb/etas_es58x/es58x_core.c
+> > index 51294b717040..7c20a73169f3 100644
+> > --- a/drivers/net/can/usb/etas_es58x/es58x_core.c
+> > +++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
+> > @@ -7,7 +7,7 @@
+> >   *
+> >   * Copyright (c) 2019 Robert Bosch Engineering and Business Solutions. All rights reserved.
+> >   * Copyright (c) 2020 ETAS K.K.. All rights reserved.
+> > - * Copyright (c) 2020, 2021 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > + * Copyright (c) 2020-2022 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> >   */
+> >
+> >  #include <linux/ethtool.h>
+> > @@ -1978,10 +1978,6 @@ static const struct net_device_ops es58x_netdev_ops = {
+> >       .ndo_eth_ioctl = can_eth_ioctl_hwts,
+> >  };
+> >
+> > -static const struct ethtool_ops es58x_ethtool_ops = {
+> > -     .get_ts_info = can_ethtool_op_get_ts_info_hwts,
+> > -};
+> > -
+> >  /**
+> >   * es58x_set_mode() - Change network device mode.
+> >   * @netdev: CAN network device.
+> > @@ -2062,6 +2058,96 @@ static void es58x_init_priv(struct es58x_device *es58x_dev,
+> >       can->do_set_mode = es58x_set_mode;
+> >  }
+> >
+> > +/**
+> > + * es58x_get_product_info() - Get the product information.
+> > + * @es58x_dev: ES58X device.
+> > + * @prod_info: Buffer where to store the product information.
+> > + * @prod_info_len: Length of @prod_info.
+> > + *
+> > + * Do a synchronous call to get the product information.
+> > + *
+> > + * Return: zero on success, errno when any error occurs.
+> > + */
+> > +static int es58x_get_product_info(struct es58x_device *es58x_dev,
+> > +                               char *prod_info, size_t prod_info_len)
+> > +{
+> > +     struct usb_device *udev = es58x_dev->udev;
+> > +     const int es58x_prod_info_idx = 6;
+> > +     int ret;
+> > +
+> > +     ret = usb_string(udev, es58x_prod_info_idx, prod_info, prod_info_len);
+> > +     if (ret < 0) {
+> > +             dev_err(es58x_dev->dev,
+> > +                     "%s: Could not read the product info: %pe\n",
+> > +                     __func__, ERR_PTR(ret));
+> > +             return ret;
+> > +     }
+> > +     if (ret >= prod_info_len - 1) {
+> > +             dev_warn(es58x_dev->dev,
+> > +                      "%s: Buffer is too small, result might be truncated\n",
+> > +                      __func__);
+> > +     }
+>
+> You can use usb_cache_string() that puts the requested string into a
+> kmalloc()ed buffer:
+>
+> | https://elixir.bootlin.com/linux/v6.0/source/drivers/usb/core/message.c#L1018
+>
+> ...and avoids having the large stack frame.
 
-Jan
+I saw that one a long time ago, before I started sending patches on
+the mailing list, but couldn't use it because it is not
+EXPORT_SYMBOL_GPLed. I was also too shy to send a patch to change
+it...
 
--- 
-Siemens AG, Technology
-Competence Center Embedded Linux
+I guess I will add the export and use it.
 
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +/**
+> > + * es58x_print_product_info() - Print the product information.
+> > + * @es58x_dev: ES58X device.
+> > + *
+> > + * Return: zero on success, errno when any error occurs.
+> > + */
+> > +static int es58x_print_product_info(struct es58x_device *es58x_dev)
+> > +{
+> > +     char prod_info[ES58X_USB_STRING_SIZE];
+>
+> Stack size in the kernel is limited.
+
+'make checkstack' tels me:
+  0x00000000000008300 es58x_get_drvinfo []:        448
+  0x00000000000003ae0 es58x_print_product_info []:    448
+
+My understanding is that anything under 512 is still acceptable. c.f.
+  https://www.kernel.org/doc/html/v4.12/process/submit-checklist.html
+
+Regardless, I agree that using usb_cache_string() is better.
+
+> > +     int ret;
+> > +
+> > +     ret = es58x_get_product_info(es58x_dev, prod_info, sizeof(prod_info));
+> > +     if (ret == 0)
+> > +             dev_info(es58x_dev->dev, "Product info: %s\n", prod_info);
+> > +
+> > +     return ret;
+> > +}
+> > +
+> > +/**
+> > + * es58x_get_drvinfo() - Get the driver name and firmware version.
+> > + * @netdev: CAN network device.
+> > + * @drvinfo: Driver information.
+> > + *
+> > + * Populate @drvinfo with the driver name and the firwmware version.
+> > + */
+> > +static void es58x_get_drvinfo(struct net_device *netdev,
+> > +                           struct ethtool_drvinfo *drvinfo)
+> > +{
+> > +     struct es58x_device *es58x_dev = es58x_priv(netdev)->es58x_dev;
+> > +     char prod_info[ES58X_USB_STRING_SIZE];
+> > +     char *start, *end;
+> > +
+> > +     strscpy(drvinfo->driver, KBUILD_MODNAME, sizeof(drvinfo->driver));
+> > +
+> > +     if (es58x_get_product_info(es58x_dev, prod_info, sizeof(prod_info)) < 0)
+> > +             return;
+> > +
+> > +     /* The firmware prefix is either "FW_V" or "FW:" */
+> > +     start = strstr(prod_info, "FW");
+> > +     if (!start)
+> > +             return;
+> > +     /* Go to first digit */
+> > +     while (!isdigit(*start))
+> > +             start++;
+>
+> Don't trust the input. Check for end of string before accessing it.
+
+You are right. Now I feel ashamed of making this mistake.
+
+> > +
+> > +     end = strchr(start, es58x_dev->param->prod_info_delim);
+> > +     if (!end || end - start >= sizeof(drvinfo->fw_version))
+> > +             return;
+> > +
+> > +     strscpy(drvinfo->fw_version, start, end - start + 1);
+>
+> Are you misusing strscpy() here? The last parameter should be the size
+> of the dest buffer, not the src buffer.
+
+Indeed, the documentation clearly specifies that it should be the size
+of the destination. I will use strncpy() instead. I already checked
+that (end - start) is strictly smaller than the destination size above
+so it will be fine.
+
+Yours sincerely,
+Vincent Mailhol
