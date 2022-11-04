@@ -2,47 +2,46 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD57E619630
-	for <lists+linux-can@lfdr.de>; Fri,  4 Nov 2022 13:27:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA4796196FE
+	for <lists+linux-can@lfdr.de>; Fri,  4 Nov 2022 14:05:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230240AbiKDM1g (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 4 Nov 2022 08:27:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49982 "EHLO
+        id S231620AbiKDNFt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 4 Nov 2022 09:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230079AbiKDM1f (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 4 Nov 2022 08:27:35 -0400
+        with ESMTP id S231446AbiKDNFl (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 4 Nov 2022 09:05:41 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D46D1FFB3
-        for <linux-can@vger.kernel.org>; Fri,  4 Nov 2022 05:27:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF18E2DA8C
+        for <linux-can@vger.kernel.org>; Fri,  4 Nov 2022 06:05:40 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1oqvnI-0002GD-0y; Fri, 04 Nov 2022 13:27:32 +0100
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        id 1oqwOB-0007sx-24
+        for linux-can@vger.kernel.org; Fri, 04 Nov 2022 14:05:39 +0100
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 91665112EF4
+        for <linux-can@vger.kernel.org>; Fri,  4 Nov 2022 13:05:38 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 09D90112E6E;
-        Fri,  4 Nov 2022 12:27:29 +0000 (UTC)
-Date:   Fri, 4 Nov 2022 13:27:29 +0100
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 60B4C112EEC;
+        Fri,  4 Nov 2022 13:05:37 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 0fac8381;
+        Fri, 4 Nov 2022 13:05:36 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        linux-can@vger.kernel.org,
-        Dariusz Stojaczyk <Dariusz.Stojaczyk@opensynergy.com>,
-        Max Staudt <max@enpas.org>
-Subject: Re: [PATCH] can: dev: fix skb drop check
-Message-ID: <20221104122729.gwrlooxkegp3ofyc@pengutronix.de>
-References: <20221102095431.36831-1-socketcan@hartkopp.net>
- <CAMZ6RqJ+q5UmFrQFKKzxHzC4pOVT0HS6vD9509Rbth_cUFkjkg@mail.gmail.com>
- <ad18725f-e751-4e3f-3f99-ee6749a800c3@hartkopp.net>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH net 0/5] pull-request: can 2022-11-04
+Date:   Fri,  4 Nov 2022 14:05:30 +0100
+Message-Id: <20221104130535.732382-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7ialo6yogde3h4so"
-Content-Disposition: inline
-In-Reply-To: <ad18725f-e751-4e3f-3f99-ee6749a800c3@hartkopp.net>
+Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -55,83 +54,102 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello Jakub, hello David,
 
---7ialo6yogde3h4so
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+this is a pull request of 5 patches for net/master.
 
-On 02.11.2022 11:28:29, Oliver Hartkopp wrote:
->=20
->=20
-> On 02.11.22 11:17, Vincent MAILHOL wrote:
-> > On Wed. 2 Nov. 2022 at19:06, Oliver Hartkopp <socketcan@hartkopp.net> w=
-rote:
-> > > In commit a6d190f8c767 ("can: skb: drop tx skb if in listen only mode=
-") the
-> > > priv->ctrlmode element is read even on virtual CAN interfaces that do=
- not
-> > > create the struct can_priv at startup. This out-of-bounds read may le=
-ad to
-> > > CAN frame drops for virtual CAN interfaces like vcan and vxcan.
-> > >=20
-> > > This patch mainly reverts the original commit and adds a new helper f=
-or CAN
-> > > interface drivers that provide the required information in struct can=
-_priv.
-> > >=20
-> > > Fixes: a6d190f8c767 ("can: skb: drop tx skb if in listen only mode")
-> > > Reported-by: Dariusz Stojaczyk <Dariusz.Stojaczyk@opensynergy.com>
-> > > Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > > Cc: Max Staudt <max@enpas.org>
-> > > Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-> >=20
-> > Cross fire... I missed your patch and sent another one. That said:
-> >=20
-> > Acked-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> >=20
-> > Thank you!
->=20
-> :-D
->=20
-> Yes! I would be fine with both of them. The main difference is the naming
-> and the inline implementation.
->=20
-> So let us Marc decide ;-)
+The first patch is by Chen Zhongjin and adds a missing
+dev_remove_pack() to the AF_CAN protocol.
 
-I've added Oliver's patch to linux/can + Cc: stable@vger.kernel.org # 6.0.x
+Zhengchao Shao's patch fixes a potential NULL pointer deref in
+AF_CAN's can_rx_register().
 
-> Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
->=20
-> Btw. my patch is missing the pch_can driver change which was already remo=
-ved
-> in net-next.
+The next patch is by Oliver Hartkopp, targets the j1939 protocol and
+adds a missing initialization of the CAN headers inside outgoing skbs.
 
-As this goes into v6.0, which still has the pch_can, I'll fix that
-driver too.
+Another patch by Oliver Hartkopp fixes an out of bounds read in the
+check for invalid CAN frames in the xmit callback of virtual CAN
+devices. This touches all non virtual device drivers as we decided to
+rename the function requiring that netdev_priv points to a struct
+can_priv.
+(Note: This patch will create a merge conflict with net-next where the
+ pch_can driver has removed.)
+
+The last patch is by Geert Uytterhoeven and adds the missing ECC error
+checks for the channels 2-7 in the rcar_canfd driver.
 
 regards,
 Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+---
 
---7ialo6yogde3h4so
-Content-Type: application/pgp-signature; name="signature.asc"
+The following changes since commit 91018bbcc664b6c9410ddccacd2239a4acadcfc9:
 
------BEGIN PGP SIGNATURE-----
+  Merge tag 'wireless-2022-11-03' of git://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless (2022-11-03 21:07:40 -0700)
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNlBS4ACgkQrX5LkNig
-013aPQf/S0jcyu6gtY7SIDv4ggtSy9P6q/QLGjzJx1T9wOMS3JW1XSbvKlP6tRMX
-URW4FZibapK/ocoMMXmXeczCakF9F38f8zkofpRf13C/hG5UAYUU3uTMDWuBv7C3
-WK4fRKzhPeqj+5ySsN/kHxb8nKUo37NzU3hSOYRhuag/d7UTPexNz73U9pl3ztN3
-j+DE8aNHwAbNyJzQyWwl83HiGFqh2oJXpz7l9rP9ZkRxR77vU//Nxcf7LjnQ0bmy
-KLw92kdAXUyaKB42s0NRF0CJ5QceDJohwY6rrJ6bahAp/c5cRJu1mSoGIhoPT0uV
-x9SpYDL8KM5IZ+s3Nx0yVlehrhRPZg==
-=cPmU
------END PGP SIGNATURE-----
+are available in the Git repository at:
 
---7ialo6yogde3h4so--
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-6.1-20221104
+
+for you to fetch changes up to 07d79cb24535b0d801bf5fabe127c054276e2d38:
+
+  can: rcar_canfd: Add missing ECC error checks for channels 2-7 (2022-11-04 13:29:29 +0100)
+
+----------------------------------------------------------------
+linux-can-fixes-for-6.1-20221104
+
+----------------------------------------------------------------
+Chen Zhongjin (1):
+      can: af_can: can_exit(): add missing dev_remove_pack() of canxl_packet
+
+Geert Uytterhoeven (1):
+      can: rcar_canfd: Add missing ECC error checks for channels 2-7
+
+Oliver Hartkopp (2):
+      can: j1939: j1939_send_one(): fix missing CAN header initialization
+      can: dev: fix skb drop check
+
+Zhengchao Shao (1):
+      can: af_can: fix NULL pointer dereference in can_rx_register()
+
+ drivers/net/can/at91_can.c                       |  2 +-
+ drivers/net/can/c_can/c_can_main.c               |  2 +-
+ drivers/net/can/can327.c                         |  2 +-
+ drivers/net/can/cc770/cc770.c                    |  2 +-
+ drivers/net/can/ctucanfd/ctucanfd_base.c         |  2 +-
+ drivers/net/can/dev/skb.c                        | 10 +---------
+ drivers/net/can/flexcan/flexcan-core.c           |  2 +-
+ drivers/net/can/grcan.c                          |  2 +-
+ drivers/net/can/ifi_canfd/ifi_canfd.c            |  2 +-
+ drivers/net/can/janz-ican3.c                     |  2 +-
+ drivers/net/can/kvaser_pciefd.c                  |  2 +-
+ drivers/net/can/m_can/m_can.c                    |  2 +-
+ drivers/net/can/mscan/mscan.c                    |  2 +-
+ drivers/net/can/pch_can.c                        |  2 +-
+ drivers/net/can/peak_canfd/peak_canfd.c          |  2 +-
+ drivers/net/can/rcar/rcar_can.c                  |  2 +-
+ drivers/net/can/rcar/rcar_canfd.c                | 15 +++++----------
+ drivers/net/can/sja1000/sja1000.c                |  2 +-
+ drivers/net/can/slcan/slcan-core.c               |  2 +-
+ drivers/net/can/softing/softing_main.c           |  2 +-
+ drivers/net/can/spi/hi311x.c                     |  2 +-
+ drivers/net/can/spi/mcp251x.c                    |  2 +-
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-tx.c     |  2 +-
+ drivers/net/can/sun4i_can.c                      |  2 +-
+ drivers/net/can/ti_hecc.c                        |  2 +-
+ drivers/net/can/usb/ems_usb.c                    |  2 +-
+ drivers/net/can/usb/esd_usb.c                    |  2 +-
+ drivers/net/can/usb/etas_es58x/es58x_core.c      |  2 +-
+ drivers/net/can/usb/gs_usb.c                     |  2 +-
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c |  2 +-
+ drivers/net/can/usb/mcba_usb.c                   |  2 +-
+ drivers/net/can/usb/peak_usb/pcan_usb_core.c     |  2 +-
+ drivers/net/can/usb/ucan.c                       |  2 +-
+ drivers/net/can/usb/usb_8dev.c                   |  2 +-
+ drivers/net/can/xilinx_can.c                     |  2 +-
+ include/linux/can/dev.h                          | 16 ++++++++++++++++
+ net/can/af_can.c                                 |  3 ++-
+ net/can/j1939/main.c                             |  3 +++
+ 38 files changed, 60 insertions(+), 53 deletions(-)
+
+
