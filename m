@@ -2,238 +2,144 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2124C619E49
-	for <lists+linux-can@lfdr.de>; Fri,  4 Nov 2022 18:16:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFB8B619EA0
+	for <lists+linux-can@lfdr.de>; Fri,  4 Nov 2022 18:25:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231623AbiKDRQt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 4 Nov 2022 13:16:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57616 "EHLO
+        id S230008AbiKDRZX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 4 Nov 2022 13:25:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231621AbiKDRQq (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 4 Nov 2022 13:16:46 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CC883E09D;
-        Fri,  4 Nov 2022 10:16:45 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id v17so5500464plo.1;
-        Fri, 04 Nov 2022 10:16:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e0ErP+orkk4G4ShNSRoAumyTCOdV2yHLSVRR3eTBZqY=;
-        b=pnM3I45GlSkO+51EPfO/sMnc4irB4Km6/IANDutMalaLXhM0IbxCwbXK1vNBWmD4Cx
-         IaEbe+6qSuyiP+ff+zgSY7A2g6unUQt2J3/kHEciXxbQvFNkLY7qKNeBSfS42DU/Gzm8
-         4/hOoI/3YQwf2XbCC5lPNk65PRLQESclwUb5kQeFA2K0dIUhLRQeeAl4oExZrO5jwfSo
-         fJd73x2t2uAjgAT0X88cufrQbA+2qnKVn1SqECkojZfFmMtqn3tEc843RIY8b8WgK00r
-         BuY+JKPIaY09w6d4/iMfLl99dklAQ4QKx7a6htaodAdv8DjWmfSxoCErE4l28o1XN0sU
-         ZtEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=e0ErP+orkk4G4ShNSRoAumyTCOdV2yHLSVRR3eTBZqY=;
-        b=pjbhcPRfoak/KUVrwcC6pJp9HzxEFQeZqxbKDGGtzrUryzsHRNFvIANjU3xsBxH4ez
-         X5s+4sDCJF/eCrnrTxYf+mE2Ncrbp+IP40EvhMnU803ePfeE+rcsloAiocsGUi4Pnxpd
-         8gJyCcL4s6rOr1eBopcDuJVVB45AK4Zs1sffvAWTISer0L80iQP5A86QOiwnCxxt6FFy
-         odbmL7Ft1V7R+LlAZBLYEir+IuqK08MFNxQV4RB/GvC4GL1SM9TrkPNLa1MKRsqOPliB
-         NNFrl0wcgdDfIXt93YaaOvxSq/incJStLPV9AfSQ+zmjwA15xYF/GzhJd806eBpuX26S
-         kKJQ==
-X-Gm-Message-State: ACrzQf04cyEkWTMVqy5BXZ7VAZ3CpKomwLfSvBuxiF/Z/zMnhjaVEuKG
-        IGlVUsapz73mM/BvMTVwodpDvZR8No4=
-X-Google-Smtp-Source: AMsMyM7hdEM7xNTxTC+b/SLA3tmCuWd+pXY/ru1M14fvtoxF7YucqgvNa7u/+yapLO6Ua1M7ev1b+w==
-X-Received: by 2002:a17:903:2308:b0:186:f608:c509 with SMTP id d8-20020a170903230800b00186f608c509mr36996999plh.154.1667582204511;
-        Fri, 04 Nov 2022 10:16:44 -0700 (PDT)
-Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id u15-20020a17090a450f00b00212c27abcaesm1917655pjg.17.2022.11.04.10.16.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 10:16:44 -0700 (PDT)
-Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     linux-can@vger.kernel.org
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v2 3/3] can: etas_es58x: report the firmware version through ethtool
-Date:   Sat,  5 Nov 2022 02:16:04 +0900
-Message-Id: <20221104171604.24052-4-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.37.4
-In-Reply-To: <20221104171604.24052-1-mailhol.vincent@wanadoo.fr>
-References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
- <20221104171604.24052-1-mailhol.vincent@wanadoo.fr>
+        with ESMTP id S231889AbiKDRZF (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 4 Nov 2022 13:25:05 -0400
+Received: from repost01.tmes.trendmicro.eu (repost01.tmes.trendmicro.eu [18.185.115.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15F8419A0
+        for <linux-can@vger.kernel.org>; Fri,  4 Nov 2022 10:24:32 -0700 (PDT)
+Received: from 104.47.11.171_.trendmicro.com (unknown [172.21.188.236])
+        by repost01.tmes.trendmicro.eu (Postfix) with SMTP id 299A6100004E7;
+        Fri,  4 Nov 2022 17:24:31 +0000 (UTC)
+X-TM-MAIL-RECEIVED-TIME: 1667582670.353000
+X-TM-MAIL-UUID: 216e3a40-45d7-4a73-aceb-002fc6564422
+Received: from DEU01-FR2-obe.outbound.protection.outlook.com (unknown [104.47.11.171])
+        by repre01.tmes.trendmicro.eu (Trend Micro Email Security) with ESMTPS id 5682A10000851;
+        Fri,  4 Nov 2022 17:24:30 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Psi5o4C3QTw4+N2Xb/qY1wNTsxqEGfhRvSLrahqOdEF+SSGwX9RhwQZ79WDCoKBPkFOngVRwatPzPPPxzykBJYbwuZBSRgdEx+MldmoK5BInPv1SnEyMoZgCRTJI7n2DJ9zMgduyyN8ZYarliHE5SQtHDNEoEJqb5YWdUEuT5PAbgyGIj1ysObj7uhexBmXIHR1Mv4ei0UUwf+zQle5Eo0tBYWnEIEqZGKwEPGKI88sO/N1QRoF09P5qxqdDi9OXbWBKKWJmetQ7r2zu7DtBweB1JEDsDcpdnVyWMTJ5sIjLWzP/g4QMsDiJr8KD4wM1AjSkOCb99QQyvwGpY3wwdA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mLfiFPMSrZ6AdGksfQmuk/KFFC6GHPjs8XFpTXkIGZI=;
+ b=Ba6vGV0dKTG2FGIDi1Ng6Ckqz2WvsZCroawICei8nNYlPNj/ANPvhv25xgqmQU8dlztVuy6qt3gTQm5BZykWAMa6DcQu84gi4nCajfsxdmbo7Yc5ro8GIv3Sq6YLqWfDZs4zfcVyAqB1s6nLDg+NXV81Hbye0CfrdOqn6IzcR53Pa4tRgyqCh0/7JRayxx3FMN7HyRXeth1EvbED+iku5I0qSqj/Kq5HqlZ+i4DB2K2W+XAaLsEtYUT0jv/M+4kSLLhLgBHM/G8WU0nDVVamFEbXsH7rGGkV4nMZgzGdfxAZQfHQbP43FrdrP36zR2aMdPABVY+maxuK6eEdwZcscA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 217.66.60.4) smtp.rcpttodomain=davemloft.net smtp.mailfrom=opensynergy.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=opensynergy.com;
+ dkim=none (message not signed); arc=none
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 217.66.60.4)
+ smtp.mailfrom=opensynergy.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=opensynergy.com;
+Received-SPF: Pass (protection.outlook.com: domain of opensynergy.com
+ designates 217.66.60.4 as permitted sender) receiver=protection.outlook.com;
+ client-ip=217.66.60.4; helo=SR-MAIL-03.open-synergy.com; pr=C
+From:   Harald Mommer <Harald.Mommer@opensynergy.com>
+To:     virtio-dev@lists.oasis-open.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Dariusz Stojaczyk <Dariusz.Stojaczyk@opensynergy.com>
+Subject: [RFC PATCH v2 0/2] can: virtio: virtio-can driver
+Date:   Fri,  4 Nov 2022 18:24:19 +0100
+Message-Id: <20221104172421.8271-1-Harald.Mommer@opensynergy.com>
+X-Mailer: git-send-email 2.17.1
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM6EUR05FT046:EE_|BEZP281MB3121:EE_
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: fe90f9cd-945e-4f7c-d30c-08dabe896d20
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /kQ+1JmURlfqDYDL3ZsexZ3cqOCyDolwMTqiLN+8TdHV1g455esyVqJEcyrhvPqtG8dcmyZbU5FyPxT5LU8iechBV171ZUMmrqgK9SAczsa+bLK0hYTyPraYS7A0BjzYdWEfZMLpH4Xs/NWkE6aDlhCOJFBk62PVGMQOLcclIGLEKOECpt+MrcvfcUkNtc2U+90srSvghk0sNwqbxxG6EPeX9WyvlVrESVbHNIzPtiAmJSzS7eksfDb2d0YclDD0kiRgYxS5s8YEtaxwJpNP+g+kT6WqybCdBLJLsp5I7P2MoQuT2HjXt5VsEmO8yMrj99Ba200VpwCwicRnH4DmTc34sMDcOfbnr6EeCe3F6YW5I9L8/0zWSiTrwwALdBt3ogrwAIqkgvVK4wqnzdGcDlZIrVUuZa9zz60AC8qPhPd3aWmV0vOPFP93P3A5JOBXyycjD/XPXhXE2HmitDkgTcF+QIl93zaiAgIu5E1cWAM5vBeqZ+hc0D6HeYnnJO8pqcUHCzd3rc24BXNw8l8sxNuBb/KSKEYv/unAkMskPUBVhZSXOEZGm1wQVDMNwD+vlgVRAPHmMqvnqS1ZDXBEzHiOTS8iLH34I4TzuWLC8cQFYHprh2nOg0YC6CyZtz+brtL+ObYvOCJklq8QIfKhY8uHktnVHR0X2nq0c3U9Y00GoRVbzoLZuMum8ba2m4ZvXEG2rxMkr9IuTQffaE1cD/pB2Zyg1tWMCrXzImbFrpOx2eDMSo/XWzpwn9XpY8f3OXUOcyLLqqWrRVl/d9mivlr9uCGkr60API+mrFqiT4LST3igspeYH4kmdT7Mld9tlY64vaadoopfh82yfxO38A==
+X-Forefront-Antispam-Report: CIP:217.66.60.4;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SR-MAIL-03.open-synergy.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(396003)(376002)(39840400004)(136003)(346002)(451199015)(36840700001)(46966006)(82310400005)(42186006)(54906003)(316002)(40480700001)(81166007)(83380400001)(966005)(36756003)(70586007)(2906002)(70206006)(478600001)(5660300002)(8936002)(41300700001)(7416002)(4326008)(8676002)(2616005)(26005)(336012)(186003)(47076005)(1076003)(36860700001)(86362001)(107886003)(36900700001);DIR:OUT;SFP:1102;
+X-OriginatorOrg: opensynergy.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Nov 2022 17:24:27.6230
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: fe90f9cd-945e-4f7c-d30c-08dabe896d20
+X-MS-Exchange-CrossTenant-Id: 800fae25-9b1b-4edc-993d-c939c4e84a64
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=800fae25-9b1b-4edc-993d-c939c4e84a64;Ip=[217.66.60.4];Helo=[SR-MAIL-03.open-synergy.com]
+X-MS-Exchange-CrossTenant-AuthSource: AM6EUR05FT046.eop-eur05.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BEZP281MB3121
+X-TM-AS-ERS: 104.47.11.171-0.0.0.0
+X-TMASE-Version: StarCloud-1.3-9.0.1006-27244.001
+X-TMASE-Result: 10--9.251200-4.000000
+X-TMASE-MatchedRID: 0a+qS+HYqZUXsn05+3ENErPx3rO+jk2QSl7Mg8DR4I9ScXQMxepe+24+
+        gA+i9D2DF40HISqSK6o1JRT1LSWO9ipe4ofkluPsqhcdnP91eXGWrxIsNZE6h9GenxDH6mnrXyU
+        tRCqrdXJIC/625M48HzkjhB+PG6yx6goM8gKRlUf3dt27LH8hnErh/hn4JkBneGHkpR2WBaIXn0
+        fuBWX+3fqHst1NzlK+bG2wDyGdkFGLNCjacuFsFZ4CIKY/Hg3AV8JCXvLn9fGvXSmSdlcYmogEL
+        0sGCK9rXWPmaFoiyJsgBwKKRHe+rz9NEyPqSyoS5AiJOm0jze9oQ2PntXcZBFs///8m7oNWazzr
+        6w4LafQ=
+X-TMASE-XGENCLOUD: 03c815d7-b8e0-450d-a081-81479b0fcaa3-0-0-200-0
+X-TM-Deliver-Signature: 0AC12DC3DAFC739BF20D0563155B8413
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=opensynergy.com;
+        s=TM-DKIM-20210503141657; t=1667582671;
+        bh=W6bZJC89dIKsoI9nr3SSvvi2cf6xqkdJmxJGN5WxRos=; l=1294;
+        h=From:To:Date;
+        b=zBRB+dM3yj28lpubYGEkHIny5HLBC4ToYo1o5Fy1No2q6m7HqxOK+f/8z3Vdx+UOR
+         MS6QWDTj+s6JR5fepyYwUN1c2KFQqsXQZhLS2KwKd5gaTdwxRe8XNz5WriVC2nWNc9
+         5pM65JPmN9dCiGuxmP+FIa3oKUP+V88ae6KpjS+mcl/kDp+ZZDDpH2w1a8KeZlh8k/
+         1jnNpM5cueGiB9O465jQqlP/GRKUZmxVqdQUOeWqkxxy5UokJqIRk80tM1puQQGqbj
+         gdX5G7LZXIo+X4i9Ip72jFO7YrigrgGIfO6CYNkdmIpZ9ih68soZBSMgxDQ1r49BT9
+         XpAkFITBqorfQ==
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-ES58x devices report below information in their usb product info
-string:
+Hello,
 
-  * the firmware version
-  * the bootloader version
-  * the hardware revision
+this is a new virtio-can driver. 
 
-Report the firmware version through ethtool_drvinfo::fw_version.
-Because struct ethtool_drvinfo has no fields to report the boatloader
-version nor the hardware revision, continue to print these in the
-kernel log (c.f. es58x_get_product_info()).
+The proposed addition to the virtio specification which should match
+this driver has been sent 25-Aug-2022 and can be found here:
 
-While doing so, bump up copyright year of each modified files.
+https://lore.kernel.org/all/20220825133410.18367-1-harald.mommer@opensynergy.com/
 
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- drivers/net/can/usb/etas_es58x/es581_4.c    |  5 ++-
- drivers/net/can/usb/etas_es58x/es58x_core.c | 42 ++++++++++++++++++++-
- drivers/net/can/usb/etas_es58x/es58x_core.h |  5 ++-
- drivers/net/can/usb/etas_es58x/es58x_fd.c   |  5 ++-
- 4 files changed, 51 insertions(+), 6 deletions(-)
+(Got no comments on the updated specification proposal now.)
 
-diff --git a/drivers/net/can/usb/etas_es58x/es581_4.c b/drivers/net/can/usb/etas_es58x/es581_4.c
-index 1bcdcece5ec7..29c03c8b3f07 100644
---- a/drivers/net/can/usb/etas_es58x/es581_4.c
-+++ b/drivers/net/can/usb/etas_es58x/es581_4.c
-@@ -6,7 +6,7 @@
-  *
-  * Copyright (c) 2019 Robert Bosch Engineering and Business Solutions. All rights reserved.
-  * Copyright (c) 2020 ETAS K.K.. All rights reserved.
-- * Copyright (c) 2020, 2021 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-+ * Copyright (c) 2020-2022 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-  */
- 
- #include <linux/kernel.h>
-@@ -492,7 +492,8 @@ const struct es58x_parameters es581_4_param = {
- 	.tx_bulk_max = ES581_4_TX_BULK_MAX,
- 	.urb_cmd_header_len = ES581_4_URB_CMD_HEADER_LEN,
- 	.rx_urb_max = ES58X_RX_URBS_MAX,
--	.tx_urb_max = ES58X_TX_URBS_MAX
-+	.tx_urb_max = ES58X_TX_URBS_MAX,
-+	.prod_info_delim = ',',
- };
- 
- const struct es58x_operators es581_4_ops = {
-diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/usb/etas_es58x/es58x_core.c
-index 1a17aadfc1dc..72a60f5f92c8 100644
---- a/drivers/net/can/usb/etas_es58x/es58x_core.c
-+++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
-@@ -7,7 +7,7 @@
-  *
-  * Copyright (c) 2019 Robert Bosch Engineering and Business Solutions. All rights reserved.
-  * Copyright (c) 2020 ETAS K.K.. All rights reserved.
-- * Copyright (c) 2020, 2021 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-+ * Copyright (c) 2020-2022 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-  */
- 
- #include <linux/ethtool.h>
-@@ -1978,7 +1978,47 @@ static const struct net_device_ops es58x_netdev_ops = {
- 	.ndo_eth_ioctl = can_eth_ioctl_hwts,
- };
- 
-+/**
-+ * es58x_get_drvinfo() - Get the driver name and firmware version.
-+ * @netdev: CAN network device.
-+ * @drvinfo: Driver information.
-+ *
-+ * Populate @drvinfo with the driver name and the firmware version.
-+ */
-+static void es58x_get_drvinfo(struct net_device *netdev,
-+			      struct ethtool_drvinfo *drvinfo)
-+{
-+	struct es58x_device *es58x_dev = es58x_priv(netdev)->es58x_dev;
-+	char *prod_info, *start, *end;
-+
-+	strscpy(drvinfo->driver, KBUILD_MODNAME, sizeof(drvinfo->driver));
-+
-+	prod_info = usb_cache_string(es58x_dev->udev, ES58X_PROD_INFO_IDX);
-+	if (!prod_info)
-+		return;
-+
-+	/* The firmware prefix is either "FW_V" or "FW:" */
-+	start = strstr(prod_info, "FW");
-+	if (!start)
-+		goto free_prod_info;
-+	/* Go to first digit */
-+	while (!isdigit(*start)) {
-+		start++;
-+		if (!*start)
-+			goto free_prod_info;
-+	}
-+	end = strchr(start, es58x_dev->param->prod_info_delim);
-+	if (!end || end - start >= sizeof(drvinfo->fw_version))
-+		goto free_prod_info;
-+
-+	strncpy(drvinfo->fw_version, start, end - start);
-+
-+ free_prod_info:
-+	kfree(prod_info);
-+}
-+
- static const struct ethtool_ops es58x_ethtool_ops = {
-+	.get_drvinfo = es58x_get_drvinfo,
- 	.get_ts_info = can_ethtool_op_get_ts_info_hwts,
- };
- 
-diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.h b/drivers/net/can/usb/etas_es58x/es58x_core.h
-index 9a5a616df783..9c2cdb57f34a 100644
---- a/drivers/net/can/usb/etas_es58x/es58x_core.h
-+++ b/drivers/net/can/usb/etas_es58x/es58x_core.h
-@@ -6,7 +6,7 @@
-  *
-  * Copyright (c) 2019 Robert Bosch Engineering and Business Solutions. All rights reserved.
-  * Copyright (c) 2020 ETAS K.K.. All rights reserved.
-- * Copyright (c) 2020, 2021 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-+ * Copyright (c) 2020-2022 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-  */
- 
- #ifndef __ES58X_COMMON_H__
-@@ -309,6 +309,8 @@ struct es58x_priv {
-  * @urb_cmd_header_len: Length of the URB command header.
-  * @rx_urb_max: Number of RX URB to be allocated during device probe.
-  * @tx_urb_max: Number of TX URB to be allocated during device probe.
-+ * @prod_info_delim: delimiter of the different fields in the USB
-+ *	product information string.
-  */
- struct es58x_parameters {
- 	const struct can_bittiming_const *bittiming_const;
-@@ -327,6 +329,7 @@ struct es58x_parameters {
- 	u8 urb_cmd_header_len;
- 	u8 rx_urb_max;
- 	u8 tx_urb_max;
-+	char prod_info_delim;
- };
- 
- /**
-diff --git a/drivers/net/can/usb/etas_es58x/es58x_fd.c b/drivers/net/can/usb/etas_es58x/es58x_fd.c
-index c97ffa71fd75..aa7a4866f870 100644
---- a/drivers/net/can/usb/etas_es58x/es58x_fd.c
-+++ b/drivers/net/can/usb/etas_es58x/es58x_fd.c
-@@ -8,7 +8,7 @@
-  *
-  * Copyright (c) 2019 Robert Bosch Engineering and Business Solutions. All rights reserved.
-  * Copyright (c) 2020 ETAS K.K.. All rights reserved.
-- * Copyright (c) 2020, 2021 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-+ * Copyright (c) 2020-2022 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-  */
- 
- #include <linux/kernel.h>
-@@ -550,7 +550,8 @@ const struct es58x_parameters es58x_fd_param = {
- 	.tx_bulk_max = ES58X_FD_TX_BULK_MAX,
- 	.urb_cmd_header_len = ES58X_FD_URB_CMD_HEADER_LEN,
- 	.rx_urb_max = ES58X_RX_URBS_MAX,
--	.tx_urb_max = ES58X_TX_URBS_MAX
-+	.tx_urb_max = ES58X_TX_URBS_MAX,
-+	.prod_info_delim = '-',
- };
- 
- const struct es58x_operators es58x_fd_ops = {
--- 
-2.37.4
+The RFC driver version has been sent 25-Aug-2022 and can be found here:
 
+https://lore.kernel.org/all/20220825134449.18803-1-harald.mommer@opensynergy.com/
+
+- Small update to be compilable against newest kernel
+
+  - netif_napi_add() prototype change
+
+- Address the review comments got from Arnd Bergmann, Oliver Hartkopp,
+  Marc Kleine-Budde:
+
+  - Remove virtio_can_hexdump()
+  - Use completion instead of polling
+  - Restructure usage of spinlock in virtio_can_start_xmit()
+  - Save kicks in virtio_can_start_xmit()
+  - Minimize usage of BUG_ON()
+  - Make driver less noisy
+  - Move register_virtio_candev() down in code
+  - Remove unwanted MISRA habits used to in a former life
+  - Treat bitmasks as bitmasks
+  - Remove excessive usage of netdev_warn() silently sanitizing
+  - Fix RTR frame handling with payload != 0
+  - Work through checkpatch problems
+  - Clarify license
+  - Remove some pointless leftover comments
+
+Regards
+Harald
