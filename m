@@ -2,106 +2,85 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CEAE619A0A
-	for <lists+linux-can@lfdr.de>; Fri,  4 Nov 2022 15:34:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A08619A98
+	for <lists+linux-can@lfdr.de>; Fri,  4 Nov 2022 15:54:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231761AbiKDOd7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 4 Nov 2022 10:33:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46314 "EHLO
+        id S230324AbiKDOyD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 4 Nov 2022 10:54:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231826AbiKDOdV (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 4 Nov 2022 10:33:21 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 194FB4AF2E;
-        Fri,  4 Nov 2022 07:31:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1667572097;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=1iIpXFsuyPQINneA2wCr5wWDQHSoRuYe4hV6XN+OD6A=;
-    b=pllalSucjoTv1gml5YxbETpWUUKScNTvvb8Jwt1hcUcwguIQDW5HcTDKVJfMO4bujL
-    URyPHBWQb+aWL3FG+D+Wx3Krhwp88tSFqLXgJTD1WVMBbxPFKZVsFe3Vdfl+v/JrNNYU
-    srLA+mIQg/sVZPVwgXE7eAm8Nu96JLNoSx8kehnhQMqaXjevNCZGL0yRJsQyh5rriXGB
-    eS132vH7l12Cvvl+g/oP7XPBVwfdYZGv7YjjuVm4SrfskheM31ToJ7t9BLtqGw9lFc4Z
-    +VFY9Iv4jSRrCrQ/fxme3yadboO579VIKEHLC7wKyD35eXB5l4v3xniig/mocFNyXnH5
-    wm9A==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytISr6hZqJAw=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a00:6020:1cfd:d104::923]
-    by smtp.strato.de (RZmta 48.2.1 AUTH)
-    with ESMTPSA id Dde783yA4ESHQrC
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Fri, 4 Nov 2022 15:28:17 +0100 (CET)
-Message-ID: <f8a22e38-a7e9-0643-d6a6-6c5901dee7b4@hartkopp.net>
-Date:   Fri, 4 Nov 2022 15:28:11 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH] can: isotp: fix tx state handling for echo tx processing
+        with ESMTP id S229548AbiKDOyC (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 4 Nov 2022 10:54:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20DEE2B1AC;
+        Fri,  4 Nov 2022 07:54:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC66C6222C;
+        Fri,  4 Nov 2022 14:54:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A907C433D6;
+        Fri,  4 Nov 2022 14:54:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1667573641;
+        bh=tzDa8YTj03bBk4FG2ZfMhfLiDD3T3czNHsssXCWXQho=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hU/+8B+4FbxX6sG0iga4XA1p9d/+KLolv85RWkuRtoobJEM3Mv6lV/PoHz/ZjEH2e
+         Spz80r3K+5RS0Zq7aHTB7Eje4zMy1vQusEYvOsPgin2ZzUH+GzuVRJTeaGn66XbZxe
+         AmAiPkicLjlEJCPB9xBkDF1pe9GAutsx9GO91L1c=
+Date:   Fri, 4 Nov 2022 15:53:57 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        Wei Chen <harperchen1110@gmail.com>, stable@vger.kernel.org
-References: <20221101212902.10702-1-socketcan@hartkopp.net>
- <20221104121059.kbhrpwbumuc6q3iv@pengutronix.de>
-Content-Language: en-US
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20221104121059.kbhrpwbumuc6q3iv@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Cc:     Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        davem@davemloft.net, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH net-next 0/14] pull-request: can-next 2022-10-31
+Message-ID: <Y2UnhZf5/HkY6vwm@kroah.com>
+References: <20221031154406.259857-1-mkl@pengutronix.de>
+ <20221031202714.1eada551@kernel.org>
+ <Y2CpRfuto8wFrXX+@kroah.com>
+ <20221104130857.amzwa2mzmwhbljmk@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221104130857.amzwa2mzmwhbljmk@pengutronix.de>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Marc,
-
-On 04.11.22 13:10, Marc Kleine-Budde wrote:
-> On 01.11.2022 22:29:02, Oliver Hartkopp wrote:
->> In commit 4b7fe92c0690 ("can: isotp: add local echo tx processing for
->> consecutive frames") the data flow for consecutive frames (CF) has been
->> reworked to improve the reliability of long data transfers.
->>
->> This rework did not touch the transmission and the tx state changes of
->> single frame (SF) transfers which likely led to the WARN in the
->> isotp_tx_timer_handler() catching a wrong tx state. This patch makes use
->> of the improved frame processing for SF frames and sets the ISOTP_SENDING
->> state in isotp_sendmsg() within the cmpxchg() condition handling.
->>
->> A review of the state machine and the timer handling additionally revealed
->> a missing echo timeout handling in the case of the burst mode in
->> isotp_rcv_echo() and removes a potential timer configuration uncertainty
->> in isotp_rcv_fc() when the receiver requests consecutive frames.
->>
->> Fixes: 4b7fe92c0690 ("can: isotp: add local echo tx processing for consecutive frames")
->> Link: https://lore.kernel.org/linux-can/CAO4mrfe3dG7cMP1V5FLUkw7s+50c9vichigUMQwsxX4M=45QEw@mail.gmail.com/T/#u
->> Reported-by: Wei Chen <harperchen1110@gmail.com>
->> Cc: stable@vger.kernel.org # v6.0
->> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+On Fri, Nov 04, 2022 at 02:08:57PM +0100, Marc Kleine-Budde wrote:
+> On 01.11.2022 06:06:13, Greg Kroah-Hartman wrote:
+> > Also, the line:
+> > 
+> > +	.attrs	= (struct attribute **)peak_usb_sysfs_attrs,
+> > 
+> > Is odd, there should never be a need to cast anything like this if you
+> > are doing things properly.
 > 
-> [...]
+> After marking the struct attribute not as const, we can remove the cast:
 > 
->> @@ -905,10 +915,11 @@ static enum hrtimer_restart isotp_tx_timer_handler(struct hrtimer *hrtimer)
->>   		so->tx.state = ISOTP_IDLE;
->>   		wake_up_interruptible(&so->wait);
->>   		break;
->>   
->>   	default:
->> +		pr_notice_once("can-isotp: tx timer state %X\n", so->tx.state);
->>   		WARN_ON_ONCE(1);
-> 
-> Can you use WARN_ONCE() instead of pr_notice_once() + WARN_ON_ONCE() here?
-> 
+> | --- a/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+> | +++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+> | @@ -64,14 +64,14 @@ static ssize_t user_devid_show(struct device *dev, struct device_attribute *attr
+> |  }
+> |  static DEVICE_ATTR_RO(user_devid);
+> |  
+> | -static const struct attribute *peak_usb_sysfs_attrs[] = {
+> | +static struct attribute *peak_usb_sysfs_attrs[] = {
 
-Yes. That was a good idea! V2 is sent.
+Ah.  Yeah, I would love to make this a const pointer, but people do some
+pretty crazy dynamic stuff with attribute groups at times, so that it
+will not always work.
 
-It also allowed me to print another relevant variable.
+I have a long series of patches I'm working on that add more const
+markings to the kobject and then the driver core apis, I'll add this
+type of thing to the idea list as what to work on next.
 
-Thanks,
-Oliver
+thanks,
+
+greg k-h
