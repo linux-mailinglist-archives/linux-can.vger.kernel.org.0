@@ -2,54 +2,47 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9941C61A41D
-	for <lists+linux-can@lfdr.de>; Fri,  4 Nov 2022 23:36:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC32D61D8B0
+	for <lists+linux-can@lfdr.de>; Sat,  5 Nov 2022 09:22:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229494AbiKDWgR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 4 Nov 2022 18:36:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44864 "EHLO
+        id S229505AbiKEIV7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 5 Nov 2022 04:21:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiKDWgR (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 4 Nov 2022 18:36:17 -0400
+        with ESMTP id S229472AbiKEIV6 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 5 Nov 2022 04:21:58 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E74B2DAA8;
-        Fri,  4 Nov 2022 15:36:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822592C644;
+        Sat,  5 Nov 2022 01:21:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 05153B82F60;
-        Fri,  4 Nov 2022 22:36:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FF34C433D6;
-        Fri,  4 Nov 2022 22:36:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667601372;
-        bh=ftFQ7NaOZiK4nmSEvsrsVbVm2SjTDawWqfO++yMnZus=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=r6PR1PMlj15qZTKBNkwVARnPU/RffHRVdGfGGlNzAQV2tki4KatxfrpljMh5wqfuh
-         9Gl6ARWMz8uFaEkrGTzSzD05g4E87Q+bmbHLMK/tHoKJMFhRW21ymPwwVKHJe1eFhN
-         UoQqJ4LTEgpGoFgqgauF15cU0lubYhpTu05E3mXvQ0XfX6E2THMdGcPDbhrIpsg63Z
-         qb7OgvG6125lRqC3BUCbmbsQ8m0VXPY3f86C8/DowJXFhdJUD8SccLYC/ptlbekAR6
-         c+5HlqH8V5QcjtvwXdndoat/p6RlHeBaR12wrX2P7hTSmQFcCTP8GAFe5MlzyZjBu8
-         rZOz4le0uz+Jw==
-Date:   Fri, 4 Nov 2022 15:36:11 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, netdev@vger.kernel.org,
-        davem@davemloft.net, linux-can@vger.kernel.org,
-        kernel@pengutronix.de,
-        Dariusz Stojaczyk <Dariusz.Stojaczyk@opensynergy.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Max Staudt <max@enpas.org>, stable@vger.kernel.org
-Subject: Re: [PATCH net 4/5] can: dev: fix skb drop check
-Message-ID: <20221104153611.53758e3a@kernel.org>
-In-Reply-To: <68896ba9-68c6-1f7a-3c6c-c3ee3c98e32f@hartkopp.net>
-References: <20221104130535.732382-1-mkl@pengutronix.de>
-        <20221104130535.732382-5-mkl@pengutronix.de>
-        <20221104115059.429412fb@kernel.org>
-        <68896ba9-68c6-1f7a-3c6c-c3ee3c98e32f@hartkopp.net>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 00741B815BE;
+        Sat,  5 Nov 2022 08:21:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 458B8C433D6;
+        Sat,  5 Nov 2022 08:21:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1667636514;
+        bh=B/n86Fu5nZ0M00dp4LuImX4DmzO0wAHJcu1Fk9hDp0k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=z0slTixcG9ka+pwYPB9PBhs92nXnj3XD+tFZkfvXQLQuTdmzwBL+lJye096IGx4OJ
+         qbis+cFKr9DrZqCdQZEYmNClhdrTLFzwVk1mmX67gQ0fjPy4ZPELmWZ/1881G1f4RD
+         Je+5ZhVQ7lcI1pty+wB29LT0qsGIUjH0CfzQ655o=
+Date:   Sat, 5 Nov 2022 09:21:51 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] can: etas_es58x: use usb_cache_string() to
+ retrieve the product info string
+Message-ID: <Y2YdH4dd8u/eUEXg@kroah.com>
+References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
+ <20221104171604.24052-1-mailhol.vincent@wanadoo.fr>
+ <20221104171604.24052-3-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221104171604.24052-3-mailhol.vincent@wanadoo.fr>
 X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,23 +52,86 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri, 4 Nov 2022 21:33:16 +0100 Oliver Hartkopp wrote:
-> On 04.11.22 19:50, Jakub Kicinski wrote:
-> > On Fri,  4 Nov 2022 14:05:34 +0100 Marc Kleine-Budde wrote:  
-> >> -	if (can_dropped_invalid_skb(ndev, skb))
-> >> +	if (can_dev_dropped_skb(dev, skb))  
-> > 
-> > Compiler says "Did you mean ndev"?  
+On Sat, Nov 05, 2022 at 02:16:03AM +0900, Vincent Mailhol wrote:
+> Instead of allocating memory ourselves and doing all the error
+> handling, rely on usb_cache_string(). This results in simpler code.
 > 
-> Your compiler is a smart buddy! Sorry!
+> Make es58x_get_product_info() return void. The reason is double:
 > 
-> Marc added that single change to my patch for the pch_can.c driver 
-> (which is removed in net-next but not in 6.1-rc).
+>   1/ by using usb_cache_string() we do not know anymore the root cause
+>      (is it an allocation issue or input/output issue?)
 > 
-> And in pch_can.c the netdev is named ndev.
+>   2/ Failling to get the product info is not critical. So it is OK to
+>      continue.
 > 
-> Would you like to fix this up on your own or should we send an updated 
-> PR for the series?
+> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> ---
+>  drivers/net/can/usb/etas_es58x/es58x_core.c | 33 +++------------------
+>  drivers/net/can/usb/etas_es58x/es58x_core.h |  3 ++
+>  2 files changed, 7 insertions(+), 29 deletions(-)
+> 
+> diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/usb/etas_es58x/es58x_core.c
+> index 51294b717040..1a17aadfc1dc 100644
+> --- a/drivers/net/can/usb/etas_es58x/es58x_core.c
+> +++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
+> @@ -2124,41 +2124,18 @@ static void es58x_free_netdevs(struct es58x_device *es58x_dev)
+>   * @es58x_dev: ES58X device.
+>   *
+>   * Do a synchronous call to get the product information.
+> - *
+> - * Return: zero on success, errno when any error occurs.
+>   */
+> -static int es58x_get_product_info(struct es58x_device *es58x_dev)
+> +static void es58x_get_product_info(struct es58x_device *es58x_dev)
+>  {
+> -	struct usb_device *udev = es58x_dev->udev;
+> -	const int es58x_prod_info_idx = 6;
+> -	/* Empirical tests show a prod_info length of maximum 83,
+> -	 * below should be more than enough.
+> -	 */
+> -	const size_t prod_info_len = 127;
+>  	char *prod_info;
+> -	int ret;
+>  
+> -	prod_info = kmalloc(prod_info_len, GFP_KERNEL);
+> +	prod_info = usb_cache_string(es58x_dev->udev, ES58X_PROD_INFO_IDX);
+>  	if (!prod_info)
+> -		return -ENOMEM;
+> +		return;
+>  
+> -	ret = usb_string(udev, es58x_prod_info_idx, prod_info, prod_info_len);
+> -	if (ret < 0) {
+> -		dev_err(es58x_dev->dev,
+> -			"%s: Could not read the product info: %pe\n",
+> -			__func__, ERR_PTR(ret));
+> -		goto out_free;
+> -	}
+> -	if (ret >= prod_info_len - 1) {
+> -		dev_warn(es58x_dev->dev,
+> -			 "%s: Buffer is too small, result might be truncated\n",
+> -			 __func__);
+> -	}
+>  	dev_info(es58x_dev->dev, "Product info: %s\n", prod_info);
 
-Updated PR would be better, if possible. 
-We don't edit patches locally much (at all?) when applying to netdev.
+Wait, why is this driver spamming the kernel log with this information
+in the first place?  That should not be happening as when drivers work
+properly, they are quiet.
+
+Can you just delete this entirely?  Bonus is that device discovery is
+now even faster as you drop the useless "get me the product string" USB
+transactions.
+
+And all of that info is in userspace today if userspace really wants it
+(through libusb, usbutils, or just reading from a sysfs file.)  There is
+no need to add this to individual drivers as well.
+
+So no, please don't do this, just remove this code entirely.
+
+Also note that the USB core can, and will, provide this info if the
+kernel is configured to do so, just enable
+CONFIG_USB_ANNOUNCE_NEW_DEVICES.  This should not be a per-driver thing
+to do.
+
+thanks,
+
+greg k-h
