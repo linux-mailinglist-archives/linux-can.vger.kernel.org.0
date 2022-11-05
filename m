@@ -2,93 +2,92 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0977D61D91A
-	for <lists+linux-can@lfdr.de>; Sat,  5 Nov 2022 10:28:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6452961D950
+	for <lists+linux-can@lfdr.de>; Sat,  5 Nov 2022 11:11:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbiKEJ15 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 5 Nov 2022 05:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54974 "EHLO
+        id S229511AbiKEKLk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 5 Nov 2022 06:11:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiKEJ1v (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 5 Nov 2022 05:27:51 -0400
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1005B303CC;
-        Sat,  5 Nov 2022 02:27:49 -0700 (PDT)
-Received: by mail-pl1-f171.google.com with SMTP id k7so6960609pll.6;
-        Sat, 05 Nov 2022 02:27:49 -0700 (PDT)
+        with ESMTP id S229501AbiKEKLk (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 5 Nov 2022 06:11:40 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 543561CB16;
+        Sat,  5 Nov 2022 03:11:39 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so10333519pjc.3;
+        Sat, 05 Nov 2022 03:11:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=AnnGCrt5RbgHj8ZQA5nS741HGDNZdNXSMfYQ5sBboqs=;
+        b=jQcm7u3oj5HYs/1R8mHFbz4i6zWvv3cQB9QwRpNBuh2FqrgZffT7WafCmWJj2OBUoq
+         WnQKTchdC00n0zVD9OyMVHGbqreKRdjpnI5LuxolLZY7rTuGRlBVH9u4DHfw13tUnjsi
+         GpYR0FMco3J10hSE/bTkT4SMCuEJvy4/PgmJwSMXPNbTyQqw8iRfTQRhfWn4xUYjHEmx
+         kCGPKlVimXK9WQv94Q8YkJwF5W6tYlay+/Vp5qSpwCpsgxuSMfUVH4xA8N9MLkU6ZNwS
+         wOtb9O/NQ39dTgI6J9GEemJDbhAF8yVdD7Dh6RHnuOXuQgB18tjQkFW0wiz8cQLKnS7D
+         BuNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=AcabuyOCyRp/GUeKePhs2D/mGuyiXtjOrLeSsbF2QLQ=;
-        b=Sl49yHGoTXfvPinHKyVHAKsq3/lKyjeeQkQMSmLIweqVFx7gjUW8MWC5WG7cA2hNQO
-         3eEkmzlbYnkl1g6rjefUoyKTPYDwDoHgvog5eS41UvX6U6Xxlg37OnORzAXvrgg1MVG8
-         WXhaAe0UM8HjV6WLyPIpvPdQzjEkKPiYRSglrfvw+RxZS+ajk8as9ZRttRyFSRldlW4x
-         Maj4mKXAjBiEmu14LEJbRT+p31Tq+5URuOwEzR8ws/AfyYiHQChXehsOgvrvMxHgpb2W
-         1NF018Yv/bqyVxpcyN+y2hDj5GXQysGx0JnW/yfiz78nJxbk8EVMgp8DgGSSh58CKy3Q
-         Tnyg==
-X-Gm-Message-State: ACrzQf3Jtn3rhdXKCPNS7bBIp5cT7/lbIMg8cSfX3zX/ne3upC3BVKme
-        thTMG0P2USFXUIfjaIr0Hy5ydPtX3JxkrbPMzaM=
-X-Google-Smtp-Source: AMsMyM5sUIvNQ7y8Gj2BUY6yQ3ZyurJT+teF2q5k3gOct1lJlhHGepOi3xKwwP50AXSal95Y28lyiX5U69v4Tmi69Ag=
+        bh=AnnGCrt5RbgHj8ZQA5nS741HGDNZdNXSMfYQ5sBboqs=;
+        b=OCJP7fYi5xdReJPjjxuBAknfUxKRjAqOQjG1RK7GHaEPnnAPI/GxUvhU9Uv/pOX9rk
+         l2wt3Mm1bj1cxwRbTdEXu5vwNt2V327c/7zGUd2LX74Ngz1+E5/vMCiUyEWzLdpD+fw/
+         rOfAGuhK99heFfL/qu+D+AV7lTi1sS23/dkY4XN8FDI5v0USxOCBb1NQTlbtv4/jrcOb
+         /o0hDypQeeLyYvSPF3VJJDIbmgklw6lxqiqZJPCGbvpE+xvkpmqvcdb/Oo8hqQR0qkuz
+         baLrjrKqpvJBlzc80Zk00EDS0RlMY6pzKR5wwwTF0tyBDJjG31K1Vt0yaaAHq1vlVcKe
+         PDsw==
+X-Gm-Message-State: ACrzQf0g0TMxVAAUc2W2TJPP2GvdkuzMBz3hGTQcJ22MmJ+fXjjKl9oW
+        x5h3dZrBQPKe+UuG+osUm49ya2wyXxVBwJGs3j8=
+X-Google-Smtp-Source: AMsMyM4QQYZiZWQhJsEOrJc5NW4GFb7wBCjHwuCqJNgGQUh9xaBeJIEhKXVCOPrlvOBW/WI1HK7NDJLLqNoMRdLfXds=
 X-Received: by 2002:a17:903:185:b0:187:2430:d39e with SMTP id
- z5-20020a170903018500b001872430d39emr30280252plg.65.1667640467936; Sat, 05
- Nov 2022 02:27:47 -0700 (PDT)
+ z5-20020a170903018500b001872430d39emr30430740plg.65.1667643097969; Sat, 05
+ Nov 2022 03:11:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
- <20221104171604.24052-1-mailhol.vincent@wanadoo.fr> <20221104171604.24052-4-mailhol.vincent@wanadoo.fr>
- <Y2Ydf6UxVvTe8Zmz@kroah.com>
-In-Reply-To: <Y2Ydf6UxVvTe8Zmz@kroah.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Sat, 5 Nov 2022 18:27:36 +0900
-Message-ID: <CAMZ6RqJkzag-PGuzHcDQkSXjqH6d8=uAe-UN8VXUoNWX2x+qbw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] can: etas_es58x: report the firmware version
- through ethtool
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20221104172421.8271-1-Harald.Mommer@opensynergy.com>
+ <20221104172421.8271-2-Harald.Mommer@opensynergy.com> <CAMZ6Rq+Gj0xzrsT6VJANv5k3-BgsONSqA7snNMAbpxpbybA9-A@mail.gmail.com>
+In-Reply-To: <CAMZ6Rq+Gj0xzrsT6VJANv5k3-BgsONSqA7snNMAbpxpbybA9-A@mail.gmail.com>
+From:   Vincent Mailhol <vincent.mailhol@gmail.com>
+Date:   Sat, 5 Nov 2022 19:11:26 +0900
+Message-ID: <CAMZ6RqK1g5GKTZWQA_BpLNq5uR29sBUwAr0VQCCqkGwW9SV75g@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 1/2] can: virtio: Initial virtio CAN driver.
+To:     Harald Mommer <Harald.Mommer@opensynergy.com>
+Cc:     virtio-dev@lists.oasis-open.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Dariusz Stojaczyk <Dariusz.Stojaczyk@opensynergy.com>,
+        Damir Shaikhutdinov <Damir.Shaikhutdinov@opensynergy.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Sat. 5 Nov. 2022 at 17:36, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
-> On Sat, Nov 05, 2022 at 02:16:04AM +0900, Vincent Mailhol wrote:
-> > ES58x devices report below information in their usb product info
-> > string:
-> >
-> >   * the firmware version
-> >   * the bootloader version
-> >   * the hardware revision
-> >
-> > Report the firmware version through ethtool_drvinfo::fw_version.
-> > Because struct ethtool_drvinfo has no fields to report the boatloader
-> > version nor the hardware revision, continue to print these in the
-> > kernel log (c.f. es58x_get_product_info()).
-> >
-> > While doing so, bump up copyright year of each modified files.
+On Sat. 5 Nov. 2022 at 18:11, Vincent Mailhol <vincent.mailhol@gmail.com> wrote:
+> On Sat. 5 Nov. 2022 at 02:29, Harald Mommer <Harald.Mommer@opensynergy.com> wrote:
+> > +/* CAN flags to determine type of CAN Id */
+> > +#define VIRTIO_CAN_FLAGS_EXTENDED       0x8000u
+> > +#define VIRTIO_CAN_FLAGS_FD             0x4000u
+> > +#define VIRTIO_CAN_FLAGS_RTR            0x2000u
 >
-> Why not just stick to the normal USB interface here and not try to tie
-> it into ethtool?  These values are all availble today in sysfs or in
-> libusb, right?
+> I recommend the use of the BIT() macro to declare flags.
 
-The simple answer is ignorance. I am more familiar with ethtool than
-libusb and I just did not think to explore that second option.
-Thanks for the review, comments taken. I will study sysfs and libusb
-and will rework that.
+I just remembered that the BIT() macro is not meant to be used for
+UAPI. Please ignore this particular comment.
 
-> What workflow wants this added to ethtool?
+> Please order those in ascending order.
+> Also, what is the reason to start from BIT(9) (0x200)?
 
-No workflow. My work is not bound to any company and this driver
-maintenance and anything else I am doing on the mailing list at this
-time is pure hobby.
-
-Yours sincerely,
-Vincent Mailhol
+[...]
