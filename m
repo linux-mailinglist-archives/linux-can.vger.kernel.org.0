@@ -2,167 +2,132 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B85DE61E05D
-	for <lists+linux-can@lfdr.de>; Sun,  6 Nov 2022 06:35:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB5C161E174
+	for <lists+linux-can@lfdr.de>; Sun,  6 Nov 2022 11:01:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbiKFFfR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 6 Nov 2022 01:35:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57478 "EHLO
+        id S229707AbiKFKBm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 6 Nov 2022 05:01:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiKFFfP (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 6 Nov 2022 01:35:15 -0400
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9F6F62E1;
-        Sat,  5 Nov 2022 22:35:10 -0700 (PDT)
-Received: by mail-pf1-f172.google.com with SMTP id g62so7892680pfb.10;
-        Sat, 05 Nov 2022 22:35:10 -0700 (PDT)
+        with ESMTP id S229700AbiKFKBl (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 6 Nov 2022 05:01:41 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D182FDF52;
+        Sun,  6 Nov 2022 02:01:40 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id y4so8642756plb.2;
+        Sun, 06 Nov 2022 02:01:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=4JSxMfPPRi4uvWXezJ7MJrT+ZDAtZISikWvFV4s0SgQ=;
+        b=gTRWgnHcqhlcoBtdif83fdV4mva/ZapwzVcR8KshqADQ2Pwmj+m1TnLSEijgzk7Xh+
+         BTBJnK3gwUevL9PG3sMDTTVLsUwo0KFUhmlXLNpyxrA46eaT5bDfUuIBrKG7UY0pansw
+         lBQ5sEWuINn/hej//F8zR2qZkZelxYqNYj1gUqy1FYWv29PFqXfANR2ZNTQAsg5bfdBu
+         STd+xlPM3LqI1paK4w6zihZ75awvhVJNK/r7vUfXN6WdDY/469XsRgLP4OVEWW7OwGiT
+         i8mi0buV1dCE7k7fReVqoX7pWjx6EmueGhze0MlMjEPTkS9lKuyyR5HlgEYMnhZ4snMw
+         Zgbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KdcHygyluxlSKZYhnOmBthfqKtj/GWkjEK+v9KvjztY=;
-        b=fW6UwGe8o/Ye2VvIC4G/mRQYZUqUzC3TICxqAIhCgigDzUlNKtzQZ3DWpWaSIS7Dx0
-         Lj0mYdsFtfLSb/VXvUGMe4G1U3O09R1Ialntx4TNGj/8wU+QOBn6ivqyvZOZDScyOwG/
-         +1vyZUR+7Zq/qBzjZ/d4bWsCRCPY2MgR+/H16B30r3F1N9jqhH0FP4LeeYisW9MQe6Cw
-         k8oS33/VpzLXjqnQzuYp1JXwCciUAyDfC1npGZheSNYzNBI2yjI8yLse6raoOV7DJnPe
-         qq1dpVRxoLoQD+6fWi+XU6L41P0fWEfijhddktjTZEr8l8jBLzBK3KjzLRsBKIam7FOw
-         00TA==
-X-Gm-Message-State: ACrzQf1XqOlAZRrRq/8j5rrQFF5XpJZbN31Jccf9VS2pWG1iom/dp3/y
-        jmfxdJ8Lqus9pt9JPPqzdZ6rd8CUQIRBWrgYlFyPD4Ic28UlSQ==
-X-Google-Smtp-Source: AMsMyM7Q8GwZh9SKm3Tco3931Q8FVqiPXIX2xv52FjuT3th+35TD7IfyBqv8xJC1D1lvq8zZgm1YJMpabzvuqegeaYI=
-X-Received: by 2002:a65:6894:0:b0:470:76d:6f4a with SMTP id
- e20-20020a656894000000b00470076d6f4amr19455046pgt.457.1667712910263; Sat, 05
- Nov 2022 22:35:10 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4JSxMfPPRi4uvWXezJ7MJrT+ZDAtZISikWvFV4s0SgQ=;
+        b=gKef9HqUN3G5kS0M5ajO8KKFViKkyeu3FWRKTrRSNqsW3Czm3hipoFPHfHpqbaSUwW
+         TeXew10b5r8MG9WjBEfOdgXLOMTVYY98eWZMVJhfTiX9myB20tU7wmDGZGMT9mMpfNVv
+         HWNHeGB3PI3mTeOOk1YIroLGeQKbZR+XoXzNwFhVrjj4ZaewVlpRtyGqo3A4JXZ7YFF9
+         ZQ7oDwztpslY0BgVa3p0ahuSJEQdlhqukx/djavlUJlA7pioZUYj3ssI1tDADF2/nYs9
+         jPMr08P7s80Cmx6M4P5lGYvjbU1Jqk6UyPDLjqn5kkXKP631j5ev+kgoBWIM7DdTRzpQ
+         7nAQ==
+X-Gm-Message-State: ACrzQf0WIR5g0bsQNDCj6NehDimVhXXF1k+vkjtBJ0caG5cgpaJJFaQ8
+        PgmGI3hDtXBBLUd+kjcNVvClOU9iBI+80w==
+X-Google-Smtp-Source: AMsMyM5C+jHIBqMqQXTkgKW6u0PNrZTygm4RyoN6U36CvPFnLu+pimivqAl48KcVIBAvmJ732zZ7NA==
+X-Received: by 2002:a17:903:54a:b0:186:c41b:dd7f with SMTP id jo10-20020a170903054a00b00186c41bdd7fmr45242141plb.33.1667728899787;
+        Sun, 06 Nov 2022 02:01:39 -0800 (PST)
+Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
+        by smtp.gmail.com with ESMTPSA id d67-20020a621d46000000b00562a237179esm2382997pfd.131.2022.11.06.02.01.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Nov 2022 02:01:39 -0800 (PST)
+Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     linux-can@vger.kernel.org
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH] can: etas_es58x: sort the includes by alphabetic order
+Date:   Sun,  6 Nov 2022 19:01:20 +0900
+Message-Id: <20221106100120.849735-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.37.4
 MIME-Version: 1.0
-References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
- <20221104171604.24052-1-mailhol.vincent@wanadoo.fr> <20221104171604.24052-4-mailhol.vincent@wanadoo.fr>
- <Y2Ydf6UxVvTe8Zmz@kroah.com> <CAMZ6RqJkzag-PGuzHcDQkSXjqH6d8=uAe-UN8VXUoNWX2x+qbw@mail.gmail.com>
- <CAMZ6RqLMGfW0QcNdBKhfwayV=+FNHhvM_-ob0UvL=o6=zN0J7A@mail.gmail.com>
- <Y2afm9xFIvJnwXh/@kroah.com> <Y2cDlrNjL5YSAPm2@rowland.harvard.edu>
-In-Reply-To: <Y2cDlrNjL5YSAPm2@rowland.harvard.edu>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Sun, 6 Nov 2022 14:34:58 +0900
-Message-ID: <CAMZ6Rq+hc+YObxCAFL8Go3gvc8budzdaxLZY2b4GexcG1xHzdQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] can: etas_es58x: report the firmware version
- through ethtool
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Sun. 6 Nov. 2022 at 09:48, Alan Stern <stern@rowland.harvard.edu> wrote:
-> On Sat, Nov 05, 2022 at 06:38:35PM +0100, Greg Kroah-Hartman wrote:
-> > On Sun, Nov 06, 2022 at 02:21:11AM +0900, Vincent MAILHOL wrote:
-> > > On Sat. 5 Nov. 2022 at 18:27, Vincent MAILHOL
-> > > <mailhol.vincent@wanadoo.fr> wrote:
-> > > > On Sat. 5 Nov. 2022 at 17:36, Greg Kroah-Hartman
-> > > > <gregkh@linuxfoundation.org> wrote:
-> > It's late right now, and I can't remember the whole USB spec, but I
-> > think the device provides a list of the string ids that are valid for
-> > it.  If so, we can add that to sysfs for any USB device out there, no
-> > matter the string descriptor number.
->
-> No, there is no such list.
->
-> > If not, maybe we can just iterate the 255 values and populate sysfs
-> > files if they are present?  I'll dig up the USB spec tomorrow...
->
-> Yes, we could do that.  But the filename would have to be the string
-> id, which is not meaningful.  We wouldn't be able to have labels like
-> "product-info" unless somehow a driver could provide the label.
+Follow the best practices, reorder the includes.
 
-My shot on this would be like this:
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+---
+ drivers/net/can/usb/etas_es58x/es581_4.c    | 2 +-
+ drivers/net/can/usb/etas_es58x/es58x_core.c | 4 ++--
+ drivers/net/can/usb/etas_es58x/es58x_fd.c   | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/mod_devicetable.h b/include/linux/mod_devicetable.h
-index 549590e9c644..d0a4fc3ffe07 100644
---- a/include/linux/mod_devicetable.h
-+++ b/include/linux/mod_devicetable.h
-@@ -77,6 +77,19 @@ struct ieee1394_device_id {
-  * Use the flag values to control which fields are compared.
+diff --git a/drivers/net/can/usb/etas_es58x/es581_4.c b/drivers/net/can/usb/etas_es58x/es581_4.c
+index 29c03c8b3f07..eaab5c13f09e 100644
+--- a/drivers/net/can/usb/etas_es58x/es581_4.c
++++ b/drivers/net/can/usb/etas_es58x/es581_4.c
+@@ -9,9 +9,9 @@
+  * Copyright (c) 2020-2022 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
   */
+ 
++#include <asm/unaligned.h>
+ #include <linux/kernel.h>
+ #include <linux/units.h>
+-#include <asm/unaligned.h>
+ 
+ #include "es58x_core.h"
+ #include "es581_4.h"
+diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/usb/etas_es58x/es58x_core.c
+index db86ca995c5d..81ac1fedcdf5 100644
+--- a/drivers/net/can/usb/etas_es58x/es58x_core.c
++++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
+@@ -10,12 +10,12 @@
+  * Copyright (c) 2020-2022 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+  */
+ 
++#include <asm/unaligned.h>
++#include <linux/crc16.h>
+ #include <linux/ethtool.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/usb.h>
+-#include <linux/crc16.h>
+-#include <asm/unaligned.h>
+ 
+ #include "es58x_core.h"
+ 
+diff --git a/drivers/net/can/usb/etas_es58x/es58x_fd.c b/drivers/net/can/usb/etas_es58x/es58x_fd.c
+index aa7a4866f870..c1e176dfc090 100644
+--- a/drivers/net/can/usb/etas_es58x/es58x_fd.c
++++ b/drivers/net/can/usb/etas_es58x/es58x_fd.c
+@@ -11,9 +11,9 @@
+  * Copyright (c) 2020-2022 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+  */
+ 
++#include <asm/unaligned.h>
+ #include <linux/kernel.h>
+ #include <linux/units.h>
+-#include <asm/unaligned.h>
+ 
+ #include "es58x_core.h"
+ #include "es58x_fd.h"
+-- 
+2.37.4
 
-+/**
-+ * struct custom_string - information of custom string and their indexes
-+ * @idx: Index of the custom string descriptor.
-+ * @label: Mnemotechnic, will be used as a filename for the sysfs entry.
-+ *
-+ * USB devices might expose some information in some customs strings. Drivers
-+ * can use this structure to inform the USB core of where to find these.
-+ */
-+struct custom_string {
-+       __u8 idx;
-+       const char *label;
-+};
-+
- /**
-  * struct usb_device_id - identifies USB devices for probing and hotplugging
-  * @match_flags: Bit mask controlling which of the other fields are used to
-@@ -110,6 +123,9 @@ struct ieee1394_device_id {
-  * @driver_info: Holds information used by the driver.  Usually it holds
-  *         a pointer to a descriptor understood by the driver, or perhaps
-  *         device flags.
-+ * @customs_strings_table: devices using customs strings can use this table to
-+ *         inform the USB core of how to retrieve them. If used, must
-contained an
-+ *         empty terminating entry.
-  *
-  * In most cases, drivers will create a table of device IDs by using
-  * USB_DEVICE(), or similar macros designed for that purpose.
-@@ -150,6 +166,7 @@ struct usb_device_id {
-            /* not matched against */
-            kernel_ulong_t  driver_info
-                        __attribute__((aligned(sizeof(kernel_ulong_t))));
-+           const struct custom_string *custom_strings_table;
- };
-
- /* Some useful macros to use to create struct usb_device_id */
-
-
-Then the driver would declare its custom stings like this:
-
-  static const struct custom_string es58x_custom_strings_table[] = {
-          { .idx = 6, .label = "product_info" },
-          { /* Terminating entry */ }
-  };
-
-
-Finally, the USB core can iterate through it and populate the sysfs
-entries using the provided label.
-
-
-> Also, there's the matter of language.  Devices can have string
-> descriptors in multiple languages; which one should we show in sysfs?
-> All of them?  Right now we use just the default language for the strings
-> that we put in sysfs.
-
-I do not have the knowledge to comment on the multiple languages
-issue. FYI, the device which I maintain does not have multiple
-languages.
-
-> > I say do this at the USB core level, that way it works for any USB
-> > device, and you don't have a device-specific sysfs file and custom
-> > userspace code just for this.
->
-> This is unavoidable to some extent.  Without device-specific information
-> or userspace code, there is no way to know which string descriptor
-> contains the data you want.
-
-ACK. I also do not want any userspace code for that. Users should not
-need to know a magic number to retrieve the thing.
-
-> Alan Stern
->
-> > Sound reasonable?
-> >
-> > greg k-h
