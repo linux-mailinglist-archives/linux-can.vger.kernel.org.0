@@ -2,97 +2,98 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 713E4620A2E
-	for <lists+linux-can@lfdr.de>; Tue,  8 Nov 2022 08:31:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD3D620D1A
+	for <lists+linux-can@lfdr.de>; Tue,  8 Nov 2022 11:20:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233436AbiKHHbT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 8 Nov 2022 02:31:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36594 "EHLO
+        id S233950AbiKHKTz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 8 Nov 2022 05:19:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiKHHbS (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 8 Nov 2022 02:31:18 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBB6167D0
-        for <linux-can@vger.kernel.org>; Mon,  7 Nov 2022 23:31:18 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id g12so20024116lfh.3
-        for <linux-can@vger.kernel.org>; Mon, 07 Nov 2022 23:31:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1G4HH/Un4Ldw4Kg9mAfztEcm3aw8Ky8DnIHt266GhrM=;
-        b=bn31pW0bLuEvW8tfclQguCs2OTjmTcwwNfsBA8RNTMk9240IWp6b2lVEb7T1XZ744e
-         gxH/krUEZSwExZ1lj+lujqw0lfytAF+WtJ1EvBq1ifunB4q5LRmdET3xaMZiq9TEYQOb
-         crxUxz/7c+u4P+3OGlwyCAHV8uZJv4YeUNCf1ABJdHicB2I9PhX5XkQwe6ELvp8hpF8S
-         TNKBU3uZa5s50STdM2R/rNv4uozrXhUSSZf8ogxNNuHdeN70ca3Ze9Wpwx8Ik+RsWoVQ
-         Vw+Tvtm8i76iy57IAoHznFg6lK109b1WiKoNF45GGCyqiTlKFfpPqi2Ue9bSMbGxWty0
-         w1ZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1G4HH/Un4Ldw4Kg9mAfztEcm3aw8Ky8DnIHt266GhrM=;
-        b=Z8WenIhP3fAOVN9LM1y1oc+pc9OTgBOf3y18kZ6hdg9Re6orkb2daoRMk9cruSKemk
-         gckgoUTSFibwMexuH2jtGhqa+uCgArCMxLhk0p1+M/s7wKrcIx9HeB5FLjjc1/A8iVOv
-         c+GAx7DpZYi7TKFXbRgkrJhSOd2s0StfxoKduDHRmNJzy9L2SFbDTrWXZoa2M5JT+2Rg
-         LJprlJLvnT+LryqxITahIVkVI1buOxSwSKgND5bSoctQOQmQ+btNgVu/fzRdo5qxUVnE
-         ksG+NVxVQln3DKzGyuRFYL2Lu/L2IOUsY5TjjdfTuh2TPIdoSfGZ+IehYX5ewkWMuEVY
-         Smrg==
-X-Gm-Message-State: ACrzQf123pG9H/2I4NpT3WD/cO7g4Tg+BDIC00iuP6dodQOX9Zt/3uz2
-        DpCwD1mEUc0o3SAFUBKbNWw6r41hFrBrhiimjtQ=
-X-Google-Smtp-Source: AMsMyM4y694psFdvsh7e1mY2W2Rs2e+BX3HXYKnB/rK00BXQkxFDkOfw+EEOdljgWyxBxrqvLcPp90xDmsZ9T+GhwFQ=
-X-Received: by 2002:a05:6512:252b:b0:4a0:5642:dbc5 with SMTP id
- be43-20020a056512252b00b004a05642dbc5mr20453941lfb.436.1667892676354; Mon, 07
- Nov 2022 23:31:16 -0800 (PST)
+        with ESMTP id S233918AbiKHKTW (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 8 Nov 2022 05:19:22 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03948140E4
+        for <linux-can@vger.kernel.org>; Tue,  8 Nov 2022 02:19:18 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1osLhJ-0006MP-Vs; Tue, 08 Nov 2022 11:19:14 +0100
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 3A9C2115BB4;
+        Mon,  7 Nov 2022 13:01:36 +0000 (UTC)
+Date:   Mon, 7 Nov 2022 14:01:33 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net,
+        linux-can@vger.kernel.org, kernel@pengutronix.de,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Dariusz Stojaczyk <Dariusz.Stojaczyk@opensynergy.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Max Staudt <max@enpas.org>, stable@vger.kernel.org
+Subject: Re: [PATCH net 4/5] can: dev: fix skb drop check
+Message-ID: <20221107130133.pfgfp4ymna2ogr5s@pengutronix.de>
+References: <20221104130535.732382-1-mkl@pengutronix.de>
+ <20221104130535.732382-5-mkl@pengutronix.de>
+ <20221104115059.429412fb@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:a05:6022:1d9:b0:32:78fe:502 with HTTP; Mon, 7 Nov 2022
- 23:31:15 -0800 (PST)
-Reply-To: Vanessagomes0000@outlook.com
-From:   Vanessa Gomes <jp2364930@gmail.com>
-Date:   Tue, 8 Nov 2022 07:31:15 +0000
-Message-ID: <CAFpYN5-UGi-cgEv0aQVB5oaZUdKsgyOnGz23H2Yu-1thzD2Qxg@mail.gmail.com>
-Subject: ///////'//////////Ugrent
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:12f listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [jp2364930[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [jp2364930[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [vanessagomes0000[at]outlook.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bcuckfzhnjyvck7g"
+Content-Disposition: inline
+In-Reply-To: <20221104115059.429412fb@kernel.org>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Can i trust you on this transaction?
-I have important business to discuss with you as soon as possible.
-This proposition will be in the best interest of you and me both.
+
+--bcuckfzhnjyvck7g
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 04.11.2022 11:50:59, Jakub Kicinski wrote:
+> On Fri,  4 Nov 2022 14:05:34 +0100 Marc Kleine-Budde wrote:
+> > -	if (can_dropped_invalid_skb(ndev, skb))
+> > +	if (can_dev_dropped_skb(dev, skb))
+>=20
+> Compiler says "Did you mean ndev"?
+
+Sorry for the mess, in my config files the driver in question was
+already disabled. :(
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--bcuckfzhnjyvck7g
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNpAaoACgkQrX5LkNig
+012Ytwf9EsPA+j9+kcubAdNYsXT2nvxukuE/5CjMprQNt+M4XkULFzjbZCKxfUXS
+RZL7p1vbESTEdce1/40yUnOozaGKm/3NCp21kG2Y2cRUGWcMVl8jvQzMz3YdN3Gx
+EwSehNmbaD0fZ9R8CrowHcfL96uOfbO1cCOlF/+tD7OetysTgly0loPmnrPKQJ44
+8WtEVmRDKfZkVCDQnbRGZcvFcycJ91e+NUocWyjr8pibmpNAGqGYNPJWfJeyglb0
+ZRPntwn6X55zQjthnaKmidbOj7fq0uHeA48IpgX+b6zs7EEasoJKs4SHm2RKM5i4
+pfTJt859ckH3qxRU6g7A1vnGSr6VMw==
+=9Rva
+-----END PGP SIGNATURE-----
+
+--bcuckfzhnjyvck7g--
