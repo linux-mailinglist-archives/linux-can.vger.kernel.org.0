@@ -2,97 +2,123 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCF416216CF
-	for <lists+linux-can@lfdr.de>; Tue,  8 Nov 2022 15:32:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2F0D621CB0
+	for <lists+linux-can@lfdr.de>; Tue,  8 Nov 2022 20:08:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233826AbiKHOcV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 8 Nov 2022 09:32:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37468 "EHLO
+        id S229524AbiKHTIL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 8 Nov 2022 14:08:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233908AbiKHObl (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 8 Nov 2022 09:31:41 -0500
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0927258BFB
-        for <linux-can@vger.kernel.org>; Tue,  8 Nov 2022 06:31:16 -0800 (PST)
-Received: by mail-qv1-xf35.google.com with SMTP id c8so10307003qvn.10
-        for <linux-can@vger.kernel.org>; Tue, 08 Nov 2022 06:31:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=plCZMl07mNxOy4FwEnJyPWecERqsJQyrHYHIsHPByWrtU1k24II845ABLvzsZ/utuV
-         xrfZ6D/e/ZRoyRjpbZ5oMDY9h9ndbu6gtWFiQs/CjHcVVSqci/vjYPMMyy1pnVJ69u5N
-         OM2Kwkcs/9db1KNzWi4t4Kki8xmdjDy37F969+9phg4q7Iutyq/zyteGqROU9T6wdO4n
-         lS/c2RFkn8H1h3UlswE5jNY6oMt5wQG8oq965L41J8fDh6fe1zek7KZifUk151Do70De
-         k9oKwcRkEhDvguAg4zcTYagV5rrGsvTLwyNtdWlzI5EY/CPrjAga8S7nNTzf3DHImH9S
-         a/jQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=ojRyRhPPnItioU4+awPSxvIUKd4ISie9AQbaQLhxQGhypLSVLKdgyT3SAuhg2Gvb3q
-         a3037lpOEcbmCdgQ2zMpt8f7EZ7Al37xXSAChlv8H6HI6EllTSV3IWxMl2UxXbWaI8By
-         hx2V1KIItMJlOg0DuaMne4blJ7YHxv99NwY5pzI5EH5nMK5pxD+6dizlbECCAAGvivqy
-         32B6K/b3hBuvLv0OSsZDFkD/yYUIfXusSh+C0oHwz2uO1fVW1i5QcM84QXFA0ZqPb+V1
-         KA+IXFj2VwPl6irm5vDRVYvodM7Wc1wic2E6N6IKJ65d7tnySGCYV5kCxRU9y/gyRcZ+
-         hr8g==
-X-Gm-Message-State: ACrzQf23zv8u3TPPOYcZrKzJLWk9mGUyX2BWk5s/Ty+J6BvFsvBw1bKH
-        go5klvlniLRYI+/CLWVmOrESTVqcP+hbn1ZLp5iIK6brKUkfNg==
-X-Google-Smtp-Source: AMsMyM5cpw1VKvG8gEasOMmG4UhkblJY7gBReqfbYX80x9OXEWSZokzXOm90JDY4L5h3JbfU+3ckCU+QNWhG8SGrNVo=
-X-Received: by 2002:a05:6a00:1da6:b0:56c:318a:f8ab with SMTP id
- z38-20020a056a001da600b0056c318af8abmr56843835pfw.82.1667917864342; Tue, 08
- Nov 2022 06:31:04 -0800 (PST)
+        with ESMTP id S229470AbiKHTIK (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 8 Nov 2022 14:08:10 -0500
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E98AD8CE5F
+        for <linux-can@vger.kernel.org>; Tue,  8 Nov 2022 11:08:08 -0800 (PST)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout02.posteo.de (Postfix) with ESMTPS id 2239B240107
+        for <linux-can@vger.kernel.org>; Tue,  8 Nov 2022 20:08:07 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+        t=1667934487; bh=AesJj0aCIMx2MWDCrj3cOaIGPv8nxtJuQkyvGc0O42Y=;
+        h=Date:From:Subject:To:Cc:From;
+        b=OiGMjQ2V9GFTUEnE06Zd+6HxP8M9+yLOARoPLwBN7j0pYwdggUHalYlIzDAbTwQbr
+         TGHV2ClF5tbIrprmfSGgQwyZK4dJzcNYutQZ+YhLcZ/JeeGs44f/PVBQaS2XGLOSsF
+         +87l/MtOn7RBAwkKoRcvG+yA7276DFouqMzcCoxnes/lzd903zqaGLIt/SeiBbq8D8
+         QU9i9c33wVnbEbb1OKI4bZaaYfbqAVpOr7EeRTe2yKARjmK7QjNCY0fP1occEfAhc0
+         bfez5i7UWZ8K4JIRpBVYJhepi5bQSME0941jzsPX1Ll7Dp6pQoaHaSUTBASX0QgbTn
+         6bPGIT9bnp+aw==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4N6Hg905gbz6tnC;
+        Tue,  8 Nov 2022 20:08:04 +0100 (CET)
+Message-ID: <ea8f2b55-3871-8ba6-b545-d3c73a7508cc@posteo.net>
+Date:   Tue,  8 Nov 2022 19:07:25 +0000
 MIME-Version: 1.0
-Received: by 2002:ac4:c8c2:0:b0:56a:d900:eb11 with HTTP; Tue, 8 Nov 2022
- 06:31:03 -0800 (PST)
-Reply-To: mr.abraham022@gmail.com
-From:   "Mr.Abraham" <davidbraddy01@gmail.com>
-Date:   Tue, 8 Nov 2022 14:31:03 +0000
-Message-ID: <CAHGOU4PvdrNhE2KifzdPkFxZTCG5gy+23qf130PwnSmJcLRSew@mail.gmail.com>
-Subject: Greeting
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:f35 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4954]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mr.abraham022[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [davidbraddy01[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [davidbraddy01[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+From:   Lukas Magel <lukas.magel@posteo.net>
+Subject: Re: [PATCH net-next 0/14] pull-request: can-next 2022-10-31
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, netdev@vger.kernel.org,
+        davem@davemloft.net, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+References: <20221031154406.259857-1-mkl@pengutronix.de>
+ <20221031202714.1eada551@kernel.org> <Y2CpRfuto8wFrXX+@kroah.com>
+Content-Language: en-US
+In-Reply-To: <Y2CpRfuto8wFrXX+@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-My Greeting, Did you receive the letter i sent to you. Please answer me.
-Regard, Mr.Abraham
+On 01.11.22 06:06, Greg Kroah-Hartman wrote:
+> On Mon, Oct 31, 2022 at 08:27:14PM -0700, Jakub Kicinski wrote:
+>> On Mon, 31 Oct 2022 16:43:52 +0100 Marc Kleine-Budde wrote:
+>>> The first 7 patches are by Stephane Grosjean and Lukas Magel and
+>>> target the peak_usb driver. Support for flashing a user defined device
+>>> ID via the ethtool flash interface is added. A read only sysfs
+>> nit: ethtool eeprom set != ethtool flash
+>>
+>>> attribute for that value is added to distinguish between devices via
+>>> udev.
+>> So the user can write an arbitrary u32 value into flash which then
+>> persistently pops up in sysfs across reboots (as a custom attribute
+>> called "user_devid")?
+>>
+>> I don't know.. the whole thing strikes me as odd. Greg do you have any
+>> feelings about such.. solutions?
+>>
+>> patches 5 and 6 here:
+>> https://lore.kernel.org/all/20221031154406.259857-1-mkl@pengutronix.de/
+I now realize that I didn't do a sufficient job at describing the purpose of the
+device ID in the patches (which I am working on improving at the moment). In
+contrast to other devices (such as the ones from ETAS), at least the PCAN USB-FD
+devices do not export an iSerial attribute at USB level, which makes it hard to
+distinguish them if you are using multiple with the same product ID. The user
+device ID is a freely configurable identifier (basically an arbitrary u8 / u32
+value like you said) that can be set individually for each CAN channel of any
+PEAK device and can serve as a replacement for the missing serial number. This
+use case is also explicitly stated in the Windows API manual for the PEAK
+devices (see page 11 in [1]). The patch series implements write support for the
+value via ethtool and exports it readonly as a sysfs attribute for udev matching.
+> Device-specific attributes should be in the device-specific directory,
+> not burried in a class directory somewhere that is generic like this one
+> is.
+>
+> Why isn't this an attribute of the usb device instead?
+
+Each CAN channel of a PEAK device can have its own device ID, meaning that there
+is a potential one-to-n mapping between USB device and device IDs. I can see how
+the name might appear confusing in that regard, we chose it to be consistent
+with the API description put out by PEAK (also see [1]).
+
+> And there's no need to reorder the .h file includes in patch 06 while
+> you are adding a sysfs entry, that should be a separate commit, right?
+I have split this into a separate commit.
+> Also, the line:
+>
+> +	.attrs	= (struct attribute **)peak_usb_sysfs_attrs,
+>
+> Is odd, there should never be a need to cast anything like this if you
+> are doing things properly.
+I have removed the const modifier from the struct as well as the cast.
+> So this still needs work, sorry.
+>
+> thanks,
+>
+> greg k-h
+>
+Please let me know if you require further changes to the patch series or want
+the attribute to be renamed.
+
+Regards,
+
+
+Lukas
+
+[1] See PCAN-Parameter_Documentation.pdf in
+https://www.peak-system.com/fileadmin/media/files/pcan-basic.zip
