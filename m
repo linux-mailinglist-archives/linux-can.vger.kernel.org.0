@@ -2,42 +2,44 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03F60621CC2
-	for <lists+linux-can@lfdr.de>; Tue,  8 Nov 2022 20:14:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CCE2621CF4
+	for <lists+linux-can@lfdr.de>; Tue,  8 Nov 2022 20:22:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbiKHTOA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 8 Nov 2022 14:14:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41678 "EHLO
+        id S229695AbiKHTWd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 8 Nov 2022 14:22:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiKHTN7 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 8 Nov 2022 14:13:59 -0500
-Received: from repost01.tmes.trendmicro.eu (repost01.tmes.trendmicro.eu [18.185.115.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260C91BEAF;
-        Tue,  8 Nov 2022 11:13:56 -0800 (PST)
-Received: from 104.47.11.174_.trendmicro.com (unknown [172.21.173.179])
-        by repost01.tmes.trendmicro.eu (Postfix) with SMTP id A558010000077;
-        Tue,  8 Nov 2022 19:13:54 +0000 (UTC)
-X-TM-MAIL-RECEIVED-TIME: 1667934834.030000
-X-TM-MAIL-UUID: 5442a119-ea81-4474-82a3-d9e6f08fcc2a
-Received: from DEU01-FR2-obe.outbound.protection.outlook.com (unknown [104.47.11.174])
-        by repre01.tmes.trendmicro.eu (Trend Micro Email Security) with ESMTPS id 078D8100003D2;
-        Tue,  8 Nov 2022 19:13:54 +0000 (UTC)
+        with ESMTP id S229553AbiKHTWd (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 8 Nov 2022 14:22:33 -0500
+Received: from repost01.tmes.trendmicro.eu (repost01.tmes.trendmicro.eu [18.185.115.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E2CB77220
+        for <linux-can@vger.kernel.org>; Tue,  8 Nov 2022 11:22:31 -0800 (PST)
+Received: from 104.47.7.176_.trendmicro.com (unknown [172.21.188.236])
+        by repost01.tmes.trendmicro.eu (Postfix) with SMTP id CD31A10000D17;
+        Tue,  8 Nov 2022 19:22:29 +0000 (UTC)
+X-TM-MAIL-RECEIVED-TIME: 1667935349.091000
+X-TM-MAIL-UUID: e7fea5b5-83ee-4ee3-81f0-ddbadf8c1c9f
+Received: from DEU01-BE0-obe.outbound.protection.outlook.com (unknown [104.47.7.176])
+        by repre01.tmes.trendmicro.eu (Trend Micro Email Security) with ESMTPS id 165FB1000030C;
+        Tue,  8 Nov 2022 19:22:29 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N50oXncHXMPi1UlMSritKV6Y+oZK8uoJvcKxnAnW56WkjrkVL8k1Du7m9SNN2aarlZ1wQ2D2MWnqVlC7uhBwv/501Lofub0ezbVktOQt+QTg3D7LRlVtxm7EXM1pk46tbeE7yY5t54DaWifMsJAy4q7vaS1WOCInAQpbFfBjbX4TaK8JnjsOahrhmdPnoytm3J2VDCh+Kvwxscl6SwN8iQCCKoyUkqjFH50yEyRUHPzHwO9G/CiT1bPcVUfpnekYWRUN/s0lYo6kT0lnR9RJ4r+507IBrEI89sPAlHOh2/M8kctvqS+9ceWqAwu8+f+MSbsknWHb7WJ0Q+jbdFa0pQ==
+ b=mqEuOkSeqfjGxPKIcJ3VzVs6EkHNJtHSRtnpZ3+J8wKXxlDAvBlsYFJ9BPFGTwGRaGBMBNSIKoDym7HbOe8EaShlw9Pw6QTHS9DyXSL6jWLnFF2fngvtViVcxvyNqzBqLculJQwGxLmXg3us8FYc77pLCm8mygLG9PNbWQYQiLCVLwkLQtxgiXOrlVJcptpLt5ucU5JMEKDQdiL95YisO/LyM8H6MkobmLfGofpq/wyfRB/SFSJY0WVTh9a9ouOGlWIC7Cndj/pDu37DfJg7n/L1DsFDEzAUXCmRhpUtd4iwhq9XbnmdP2ZP56kMi0Zc81NutCHaXZmkQBaelVlu3w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NgR95SpLxVCAR934tASv4hjK4m2pnFOL5fIFEZyY53I=;
- b=UA0wzyFTHVyIXRakwyUxpPQPGNYYJXb3eQ90Uu1XE8srBWbth52xzGPwMex6mPY3nZuRv8O3dWGCHqA+FWYOzR5avFeBGQKw0JcJnjM41GJK9ddxxOJQLooaH3fOAwELM3yE/htWDvTHYfcIXj0LYtawnv/fxkpQqmE/SZC3kns6/38qE/EOjGIl6OWRRB2Aa0W27eMPmGoucGNUWi9Y/YahzmHYDDb1ndrsrYSnD4l9CsiPqPjniXmsLEudYMjV94nMm0vHERkVjtElQQKtlgCY0hHGZBPJfqqhttWp0jyT+tsR/HiuA46Gi8F4of+P/tfV2+QKbCnK2/h7PVQwMg==
+ bh=Wkk6t8a7JS2hhrG7WASG57pY41QR+vaBjtTXgiFkzrs=;
+ b=ATm2rtXH0jGl9mAruHKiLf0FDfgolg5CWcWDrra0Pasc/it6ezX6co1G8oRihCTUzaTre0Z+MbJtyk1rZ6rulAGyYUmmxY1qo6NUVFdrykRADGVEpC76jR6VYAJ+ijHRwfzLUi+uBxS9bjar4DIdwsxCY1gm1v+8KYtRfNTEYW34j1saLt4cKxR17SerI2NcwRA2wUwHgJsiM+PbQMd/gpXnJLJr/Nuyog++gN203qNfEFhfmjEY33FHObBAXCF5XYHRzkjRN1jHdads20drPZJ72/KwSnppf4646V01B38rTXVBMV2SlXa0FZoF1ZcdoT77Hcj5z4edi1k/qUGvcg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=opensynergy.com; dmarc=pass action=none
  header.from=opensynergy.com; dkim=pass header.d=opensynergy.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=opensynergy.com;
-Message-ID: <9008244e-10ea-7983-50da-4716e213d119@opensynergy.com>
-Date:   Tue, 8 Nov 2022 20:13:51 +0100
+Message-ID: <bcf9fd32-1078-2c7f-0c2a-5848ac6571e8@opensynergy.com>
+Date:   Tue, 8 Nov 2022 20:22:25 +0100
 Subject: Re: [RFC PATCH v2 2/2] can: virtio: Add virtio_can to MAINTAINERS
  file.
+Content-Language: en-US
+From:   Harald Mommer <hmo@opensynergy.com>
 To:     Vincent Mailhol <vincent.mailhol@gmail.com>,
         Harald Mommer <Harald.Mommer@opensynergy.com>
 Cc:     virtio-dev@lists.oasis-open.org, linux-can@vger.kernel.org,
@@ -52,94 +54,96 @@ Cc:     virtio-dev@lists.oasis-open.org, linux-can@vger.kernel.org,
 References: <20221104172421.8271-1-Harald.Mommer@opensynergy.com>
  <20221104172421.8271-3-Harald.Mommer@opensynergy.com>
  <CAMZ6RqLUCs0W8ZP2jAUsFMUXgHTjce649Gu+jnz_S1x_0ER6YQ@mail.gmail.com>
-Content-Language: en-US
-From:   Harald Mommer <hmo@opensynergy.com>
-In-Reply-To: <CAMZ6RqLUCs0W8ZP2jAUsFMUXgHTjce649Gu+jnz_S1x_0ER6YQ@mail.gmail.com>
+ <9008244e-10ea-7983-50da-4716e213d119@opensynergy.com>
+In-Reply-To: <9008244e-10ea-7983-50da-4716e213d119@opensynergy.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BEXP281CA0010.DEUP281.PROD.OUTLOOK.COM (2603:10a6:b10::20)
- To FR3P281MB2479.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:5f::10)
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BE0P281CA0012.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:b10:a::22) To FR3P281MB2479.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:5f::10)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: FR3P281MB2479:EE_|FR2P281MB1573:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1477b99c-3826-44ec-0608-08dac1bd5fcc
+X-MS-TrafficTypeDiagnostic: FR3P281MB2479:EE_|FR2P281MB1606:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9380f27b-4ea5-42f5-811d-08dac1be9269
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uPK2e5OUchHd6WnwapJD/mjv3ML3ssWW+yrc79IBxH5sSdhIDmWQEDmvjB0jkCEjeh5i0IBCf2erpLnm1s/lnh+S7FuT01YPIvkukdH7dFLkj7TyWN7oW6VqWBYOysuKwuiuCg/crIvJ8R8zx0l2qPjdjQrGMXTYt3DYVnPsDMS1ip+GKLyP1Z9NBImWnG3q9/ZmrZMO60vWVDWgSR9XFeklQ7T13K4ub1rXHh5sMUGAvi4zXLbiObaRbh7q/iNqcPEX11sOQNx1eoJTNaigZyVkf5NCTP/LE28TIKaoifi1eBEDS9bA27wcbnLyF5SBF4h5oPOlGrqPCLsHTbwVHpBpg79EzFfXBVzQ1SmTk1G7UwCbVMcMWgK4Q0S3qNJ7vPW4PnGIXPlSSzw7tcJSgMyrvSOanWitL5+X8lPaY7ULGLuKpCeUSJ/Rf68x4yMHam/vS/mSnROQ/pEmj4Mms1+VA9l1Us7KFf2roVU6GfmcPE+TDNxVcuvL2NGMoHcvN3M2cHDBvCF5Azwc9Kjvo2744vAp56K6ZRfjdLs+ubPeedsMMq8OM2329NQvb7rVf7YCjZMVwifoAKDKBS46e6s0XGIG5K8zCozj1vYHHcAxuJbE6kLK/lbFpjZ9mVgVAFseBm/+363Vqlhyq0C3kUDCUFpJ02PdyuUOkBdh9MrpYx/sQ0HoOah1nG1zsnikWUPaP3+vkRmHaaE9Ro8+Qg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:FR3P281MB2479.DEUP281.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(136003)(39830400003)(366004)(396003)(346002)(376002)(451199015)(66476007)(8676002)(4326008)(31686004)(31696002)(7416002)(41300700001)(6636002)(5660300002)(110136005)(66946007)(66556008)(8936002)(54906003)(83380400001)(186003)(478600001)(2906002)(42186006)(2616005)(36756003)(107886003)(316002)(38100700002)(26005)(53546011);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: u7GQVMODv4DttNJHXRc99KyOTa5KQgt56sStVeavM/RoqQmycD5+U8pXp5800iM6A/dBupmEvg9Q/z1AJr5NsSbqgPVnipwc7Uw7czTgebZbtbaw32jcbFnerH7MIhiBJytzqpdgvKrw+k9672rKjXtonuuYQPJ5aUAJ3VVUtcrnQlqr90W6DP7t+tPDe1cHnoS44iaFlQYYTGXnj2eZQQNwRvCmW5cYR/J9Vpm2f9y0NBynHCDYSp1kwzDNt0ZdEv8quj74lMTNNLYmacVW9ySKbh83R9cDfOsCHowVpE9n8XOWhzPJYyfXz9ytEubxqftJfeBOWJYNj0PSQyUc/Ypt1UkNwsSak8s1NrZK0M3+pya6aaSejE+0WaUDYBiKeUvOGp68wlZoiUyuzFUb1/yLie4qQgGSYk0919bgQ7gI+1//57uw4Mo9vooSwFcvCaiAcL/aoAavmOrjDc2SWshhattTDephCSrzwyDhvPvAU9N5kT8KoPqZAoisPeWId6TJMCQzt3VquehpMW9zZcrjK2ZxF1RlN/lJ7ZUcplw948ZojRj1FVvAx0y8kdbXwjyPF+2v4M5LHG3kf72qqoM7f5j2xJaoZT9hoBHhvW7+8e2He4ldHcnAqle/AwpPpt7mhFNS17ja+7NwgAmaawiGDRs5vDlMGMG8IWqoDG+j7/5yUPJxqRuFdjAuOyac8xwbUUmgcgYjXVs60kCl0xPDyrfFvptvz7jjwA1avj0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:FR3P281MB2479.DEUP281.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(376002)(396003)(136003)(366004)(39830400003)(346002)(451199015)(107886003)(8676002)(4326008)(42186006)(83380400001)(316002)(66574015)(2906002)(31696002)(38100700002)(53546011)(15974865002)(36756003)(66556008)(66476007)(66946007)(31686004)(54906003)(2616005)(8936002)(41300700001)(478600001)(7416002)(186003)(110136005)(6636002)(26005)(5660300002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YTFveFMrZWxhWm5iZWlseEt2ZVNyQlJ0bS9DaVp0V0hIY2kvVmNZTEtSUzhQ?=
- =?utf-8?B?RDc5NnZtSGNrNncwZllVVDZmYUhHdW5yYUU0ajd0SE1JNFNXWkN5Uis0MURw?=
- =?utf-8?B?a0ZNYkY0VFIxajgvdytzL0pESVVPU2VCL2Jua0E1WkRzMVdsVU9KaWhEdTJu?=
- =?utf-8?B?eW1SUXg1bjZxTVk4d3dlcVg4SVNlQlNWejFRZWttQ2lrY3BaeUFaZXVUWUp3?=
- =?utf-8?B?MDJjemxnWlFOSWNZU2FMei9VZkhtVDV6L1kvOHgwR3JoeTM0K0NQaE40SUE1?=
- =?utf-8?B?bUttc0wwb3hmZEt4MlhqSGpmd3l1Nmt3RWtSTWQ5YlllM2hURVlGNFE5VklL?=
- =?utf-8?B?bUNLOGUzNWNadThCQ01JclB3U3RhT1R2RWtMUlpocjZoaml3dmFWNTlXTytV?=
- =?utf-8?B?N09uNzcyUUREWkg3ZjJLTXoxTXRCT3ZjVE85S2JDbGdYOUFRN0F3SlJBYmhh?=
- =?utf-8?B?a0FZeU90VzlpMHhIQUpldWh6SXd2SVJiSmt3T3B3QXUzOGhhdWpVREhEVytx?=
- =?utf-8?B?ZjNkQnRIWElMb0YvZEg0RHRnWHQyVHIrdWE5aFk0d3ZIVDFUL2VkcDBKQWxi?=
- =?utf-8?B?U3hpVy9lK01qZlFkZGg2YXQ1cXIvV1N1eFFkcFh2RXl2QllsVm5wY2l3VGhS?=
- =?utf-8?B?aHY5SXRJbmtGSzc0UU5KSi9GOHN0Wkk3enphL1N4Z1JmM2dHR1hPRVlYR1VP?=
- =?utf-8?B?emp3TFBsMzErTzFRWFR4OEwrNk9EQXhYUEpFV2R0UHZQVGJNdUhaY3lUeUh0?=
- =?utf-8?B?RmxFb1ErcG45UUhGbUd3UlRTWm9STlFJc29hSko2Q3ZISmVpTk9GU1RENXhW?=
- =?utf-8?B?YUxrTXB6SFU4cXNzMFdmYzE1cTl2OWdlYkNIUW9zdlBpQkNqQzBpT29zeUQ2?=
- =?utf-8?B?ekNSeCtGRE9mWFgrYnFiN3RCc1BKaGpaaEtENUZKN3U4NUdSeEM5Y2RtU3Fn?=
- =?utf-8?B?cUVPeWYrblErVmFUaFFKckNORGJodUUvTEFudVE4RlpBR0VYMjdHZFZnR21J?=
- =?utf-8?B?L3pYbStpaStBOFg4Uy9tTms3TEhXeHBBbFlEU1dmRDlSamp5M0wwbWhPaCs4?=
- =?utf-8?B?dndmaHJqdHcxekIzSm9OanRGaDQzc3htL2pvYkVvUmRIb1MvSHdOREFiNVBr?=
- =?utf-8?B?NVIvckc4UUd3UkIrM004aTNRWTZUZjhOTngzamd6YWlEOUtEQmkxRGU0c3F6?=
- =?utf-8?B?aGtDU09yWjFzbTlpeWdFUEt1U2FXMmFmNTZ6UTNlaEEzMGtka0p6YXlZMEQy?=
- =?utf-8?B?OUEzbW9ROW8xb3A5S2orWXM1L01mTk4ybnNKWE9yNXdyTGo2SzFSRlAyUklq?=
- =?utf-8?B?NDFRQUhCUlMvQnlHSkV4eDk2a2xmUXlFQTJtbWdlWlF1c2g3RkxlaUFQaG9J?=
- =?utf-8?B?UEFkYWd4cC9FS1V0VjlqU1ZWZHdTcm56L1ZrZHNZQkFoa1lVd1hjMHByTmVM?=
- =?utf-8?B?ZjVJYXBHdnEvbWNpRDZ2L0c0eVRyd29VWFNqMkRQeENHenh0cXV2eDBUUUlr?=
- =?utf-8?B?RzNEa1p4eHBRbkhDeXkwbStsNGc4dGEzZTJ3bzE2MWxiR3NsUWZBcHJzRHk5?=
- =?utf-8?B?WGI5TEFIeU5iQlFDQlFUUkpPOGRrckxUR1BpcEFyOEJmNVlYMEMwQVJkT29s?=
- =?utf-8?B?RTJncEVLUFc1SEQyd2tsNklZb2FRL3pLeWhqRk1DZkhOR2l6dWx3anhJZjIx?=
- =?utf-8?B?Y29kVWVVR1B3NW5JajJjOGdTZnVyRzhqV0U5ZXlHRUZsWlB2dnFpWmhVT2lq?=
- =?utf-8?B?Nyt1RkxoYTJvVk5ubUZQV3hNZGNZRk9LMXBzZnFwcHdTRUNGcG1hV1R5QVJB?=
- =?utf-8?B?U2Q4MTdYMnR6MG1LK0RMYURvTXJiOWowWkswRHlBRXpWbEdxaFZMbFpyS3l6?=
- =?utf-8?B?d2l4QUZKWjU2WTVlT2gvR2o2aTJmdHBGcnQrVTMzZnh5cVBsbFB4a1lVMlVm?=
- =?utf-8?B?dWNYY0dOdk5wZ280b2J4dkpPOXR2WlFBaTV0RkN5RDA1SGZOT2dvSjFYSzNP?=
- =?utf-8?B?dk1QY3p5Zk9laVhnd0kwOFl5ejNjeTh2dzg0OU9YY3V1alROb3hLeWxCQzBF?=
- =?utf-8?B?U2VYbFJ1T0RTbStQQlBRSUpJZXNDajRKOVZoUVVwSzBXV1ZWbkwrMUF1MHIx?=
- =?utf-8?Q?SKDx3DjiSPxullYXzxPUqaRqD?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QlJOV2xsUVpGUzhMMGpadVZ6M041VlFYVzhLN2F1am5KNjVCYnJQdnhXSmdE?=
+ =?utf-8?B?azdhbWlPS3J3WjN0ejdnOXFuMnVwNHp2QnA4cUQ4OVFnQmYxVkEyVkc3MTVZ?=
+ =?utf-8?B?ZVF1QWhtcXc4VnlqSkZ3elFKTDB3cEtFMjB4MElQQ2t3R2FmQStwZWNxYnkx?=
+ =?utf-8?B?U0IyRGxHbWtyOXhrK25hdGsvU0JyaFhIZ1F5TjZEd3ErTUlkRXhlV1M5QzJh?=
+ =?utf-8?B?c2hLNHBvcWdhTUx6N2lzK0ZCTXpQMExJcmo3LzJ3WWtMK0FEck41aVdUc29I?=
+ =?utf-8?B?ZFVlZmJlMHAxbDFqL1ZIRmpOVWZEK1BIdUVneDZzL0ZDTkJiTEZzQnFJam1Q?=
+ =?utf-8?B?aFloeXlOOUR0a3hPaVdCL0NCUVBOSE0rOEdwZEp5L2JYM3I5c1VqbDRnUHBM?=
+ =?utf-8?B?cy92S0xaQ0VyY1FTcE5vZVhjU1RxemMzL25QaGt0QjNBL3Myb0NPb2V6cVJo?=
+ =?utf-8?B?SUdKeUdLZE9oWWlXMDA2T004a3hwZGRuSjFYWnhvdHJPYlRkOVZEUXRFQTIz?=
+ =?utf-8?B?NWtyc2Nkb3FEZmRNTDI4M2lrRlI5ZmNqekdna1czTHR4a2w4K2tJekp4MGFm?=
+ =?utf-8?B?OGt5N3FZNlJaSHgwTDgyYmo1VDZiNUNZek5NL3F0MnMxTUZqcFpYUFIxZFZ4?=
+ =?utf-8?B?SjJBNVNTSkdPT3NxSjRhT1FlcGV0Vld6aUZKaitkYng3Y2FLVWVNRzhocjV3?=
+ =?utf-8?B?V3JEcEZDd2d4ZnJRTlEybkRvazR0ek5XS2VHa2JyYkhXNzhnNUZXSkVaWk5l?=
+ =?utf-8?B?VXB4QUtRZExtc3FiMFZNeTdEeWZvK1ZsN0hhbmZyMURZcnVjbE5rZ2NWR1Uw?=
+ =?utf-8?B?TmdHOFZUTDEyVWVOdFMveVFhdkxOaEZZR3dkbklyMzJ6azF0amduWHlLTTlI?=
+ =?utf-8?B?TmdMcnVmUnBkZEFRaExONVFKcG1FM0FPaG1oZC9OUjBkUXAxMFA2bVhpZHlI?=
+ =?utf-8?B?d3EyK3lSVGZqTDNFdmlTTUFLdHBBdnVhTjc1THluM1MxVVUzNmswN2FWRWJL?=
+ =?utf-8?B?NXFIZjJ4MW9kamo5YjBZRTVrTXNLSE1oczlCaUdQMDA4RlI5VllHWXk2V253?=
+ =?utf-8?B?WGlQMEtvQ0pYdndFK1JQS25yODduWkRpWGlrQU9BenRIM1NXVGxvN3c4VHpy?=
+ =?utf-8?B?aW5Ka1NWUVA3NVRTSVV3U2IzSzJyTnF4ajJCa0VFa0kxMUQ1cGdYd2JQbVV1?=
+ =?utf-8?B?MHk1dFJHRzZhTzFkNVZCS2kxRkZtSW9QYVdWZUVJSEZva28wTEF5cUVZTHEz?=
+ =?utf-8?B?dVV5dnV6bVFyYmFXT051SFJ6aUZMU2w2b1dWRVRTM1RWYUlGaE8wdWMzR1J0?=
+ =?utf-8?B?N0xwdE1WeWJTdWdJNWE0ZDA2RHRYeGhuUTZsbkdaQ29FR1R3WmFQYklTRlVu?=
+ =?utf-8?B?RlMyU0lLRmgyNU9xN1RwTEoyZHFjc1EwQ3lLNnpZOU9BbVIycHlueGkrc1pX?=
+ =?utf-8?B?TGhiakJEWDZtRUlXVERza01GQmUvOGRxU254d0pJalh5V3JhOEY1amZPWEY0?=
+ =?utf-8?B?K0MvaVlzcDlGWDJEV0kwWjF1UVFqb3VJYnduK3RSaEFmRzRxVzJkSk56MjZh?=
+ =?utf-8?B?NG5PditTaXBEVGZxS3pKVnd4YkEyK0xnakRMdjlYQW5YTXRFdGpLa1FnR2tE?=
+ =?utf-8?B?cDdIUjZNbTBzRXNINVlWRy9NaWFtV1pJS0RKYmUyc0RhdmxvazNlOVl5UmlO?=
+ =?utf-8?B?Y2pZTDNyVjNPWkpmK0NqN0puU29sanZvbkZzbmF0UjJsM2lKaklxbEdpVlZr?=
+ =?utf-8?B?MEZ1QjQybHFmdG9YNksvanROSnREdm1FbEVnUVp4SGt4ZU1KZ3pCWDRlak1K?=
+ =?utf-8?B?OHM1Qnh1Q2RQYjJzUlBLeCtabCtncmpSdUV2OENBSEZPVHJEc1FiZXpMbnRT?=
+ =?utf-8?B?WWlJSEpYMXpRQld1OUxUQ21CK0s0TTJNOXQ3NnlQdnIyVXZNaEM0dFRFWG5D?=
+ =?utf-8?B?ZmFNaDZnUk5pL0dNRWE5UVhwR2JsV2JoL0hhaWh0Uk5KSUtnQ2c2U1pVaU8z?=
+ =?utf-8?B?cVRIcVVLWTJ3dWd1RXdLNmg2S3NaUnY1dmVrZk1ieGd6UXhOcnVYckdVQ0xz?=
+ =?utf-8?B?eW0vTGRxT2h3V0FPRVhwblFPaFFONTgrYzlsMXVvMWx2enB1bU5RQTBaRTVJ?=
+ =?utf-8?Q?eyCcbRRRSnpe4XPbguUwqtJKe?=
 X-OriginatorOrg: opensynergy.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1477b99c-3826-44ec-0608-08dac1bd5fcc
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9380f27b-4ea5-42f5-811d-08dac1be9269
 X-MS-Exchange-CrossTenant-AuthSource: FR3P281MB2479.DEUP281.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Nov 2022 19:13:52.7939
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Nov 2022 19:22:27.1618
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 800fae25-9b1b-4edc-993d-c939c4e84a64
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ewT0RlYr2EUfvchhH3gFoxAEEAU049Wgqtk5xrFglVL7TMmd+3TBFZD2HqtE5UZQ6Ap1mCJjrEyJSsvEokmwqg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: FR2P281MB1573
-X-TM-AS-ERS: 104.47.11.174-0.0.0.0
+X-MS-Exchange-CrossTenant-UserPrincipalName: tgR/QHEHBVbuyBVJBZJ30EViNZhfOtbhY5CG/nYGGXiL5vnni0WDWgh1/g2Qhhm1JKzGQgnXWo4G5KS48Ksb2Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: FR2P281MB1606
+X-TM-AS-ERS: 104.47.7.176-0.0.0.0
 X-TMASE-Version: StarCloud-1.3-9.0.1006-27252.002
-X-TMASE-Result: 10--10.064600-4.000000
-X-TMASE-MatchedRID: y/2oPz6gbvj/9O/B1c/QyxfqkKQlk1I5yeUl7aCTy8gtferJ/d7Abyxz
-        RYsJiUavXObdKWhVpNQh7dnpNZ2lgBMNYLce+hsxxi///JpaHQPk7kL8Bkx9+pF2kRRKjUQ9/L4
-        h+S8DcywHKWdS7YRsIrXYdqC9vAOOL/tBTZzO5Q0D2WXLXdz+AfSzAdIVxUno4Cfg9OGQwiw/Wi
-        q2fPW6wdInOZzevFRl30EC1BEEsimyUEn8khnAN9+pUF0HsjxRN6i7v/DQHPyD1hLxlLxt3Tgzd
-        3q0An8gondEiTFJ7F+98F7d8+3Dt5cFdomgH0lnOX/V8P8ail1ZDL1gLmoa/PoA9r2LThYYKrau
-        Xd3MZDWagNc9ySCU/mAAfdwlecA9JIPZ1fdrP7PWF7lBiD4jjQxAFWmbE2gI
-X-TMASE-XGENCLOUD: 979b573b-f55d-98a3-b868-4062ca5d8372-0-0-200-0
-X-TM-Deliver-Signature: 85D69DCC3A21336F8B8F98620840EE96
+X-TMASE-Result: 10--11.495800-4.000000
+X-TMASE-MatchedRID: 6lay9u8oTUP/9O/B1c/Qy8p9Bgr5ONKhyiKgKtIyB4p4cbnZlATT0S4X
+        epmu1hPLPsj5qjS+dCFcHyoC9xsa8muqF0uWEJST8eSmTJSmEv3bLuvAgD3xvFc/CedjlcvkLHN
+        FiwmJRq9c5t0paFWk1CHt2ek1naWAEw1gtx76GzEiLmf+ghTG/wmWvXEqQTm5wLkNMQzGl5B+Kr
+        WCPbERPxfDSmuAMQpg/2yKc9qkSI3OtS99eBvZ8LxygpRxo469bo9qnUw920cvQQTWKJzDNxDSN
+        tOTt0GFA/KpErKDNEqOpvWBCtxpVOtsQZv7lD9530kDaWZBE1Sd2Wz0X3OaLRdidqgv9+A7IGlR
+        +tiic9sMfsF34CdiVz30VFQY70sLTJzMBIRDQjRwJy1CuqvGVA1bi9r2Kq3eG1h5LatqS4mFWK3
+        CKcvE/P11Tj/BVX6iX7bicKxRIU23sNbcHjySQd0H8LFZNFG7bkV4e2xSge6w68jL7IpprMcbC3
+        /f+BaEs/Lk4UC9Yzqp3GmNWyQ4s0uFvzEYSdV+
+X-TMASE-XGENCLOUD: 295a80ae-7075-4dc6-a82c-dff42a82e159-5-0-200-0
+X-TM-Deliver-Signature: AE9A71CF9904D6313439E6DA6198B0CD
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=opensynergy.com;
-        s=TM-DKIM-20210503141657; t=1667934834;
-        bh=gAqfg8MoL5PoJ7UB2yZpgSfroT6regLOG1tAPTvgc3o=; l=2615;
-        h=Date:To:From;
-        b=JwGwNxNPnsH2fdLMQ3hNcvlpIWytDFPPmfoiEazJwcS17ePGIc/6GrgJNHBnxEM8P
-         TX1ir8kXlo97ZTYzaHsR/guRskRb3EuBYN2cRL40YMsOg1X+Cx3+3F1urz+y6UoOFK
-         xNUO4a5RuZXJO5KyB2cOtTq2FJphs/TFYFAEDFHtJMk7Zpxw1Zw/P/I3qTMV632j30
-         4KnmawOS8JevRxMTilsdkyMF699/s2Br8BIMKPbC/LLUYjIcUbLFvULaDsBSJu4+Qi
-         rYXIdgwEcBnPoxIDaWCtiey4sSvyEm1nUINmCWURYOGc3WzpUBd764QNlDT+OdjogJ
-         JT/tVkhnXHIyw==
+        s=TM-DKIM-20210503141657; t=1667935349;
+        bh=jQjomTYRLzXb8oX1EycHFjTs8YPqHK8cF+fOCy372qQ=; l=3522;
+        h=Date:From:To;
+        b=s1xLbSuYHPMfI8b6QCDluUzpTzIWCQ7u5zg4ug5ZLCoxVZllypTZ95Ue+3qnXKzH5
+         acjzHmSZxqhre19m/4W5OgTRDrWNKfvcC8wIlwGy+f4h9HtQ7sPaRzmup2scyYi89t
+         v7Eb9VztAAXT0oIRIt3iYjFSHzUiGRhTIt5Lk4z+tJwOJYoA5QCULeRLAzE2TdoWfp
+         LRvmaant5QZnSVflEc6DH8E1i/SN1zULSjOFN6TMotZtoTeqNa0b60UYmNzjpR16Nf
+         3ZtIgIYXmWvEVczDAv+oI2pCfb+6DfvszUpX5TZLqnAIAN18us9opqjLEYANkY2us7
+         UdUd95Ryqne9w==
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -148,77 +152,107 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 Hello Vincent,
 
-what I see here are places from v1 which should be now obsolete and of 
-no further interest. There was a patch v1, this has been reworked and 
-now comes v2 which supersedes v1. Squashing is something I could do if I 
-had 2 commits which should be joined together but here is probably not 
-meant to squash the virtio_can.[ch] code file commit with the 
-MAINTAINERS file commit.
-
-Could be that I misunderstood the way how is worked with patches on the 
-mailing lists, don't know. I do absolutely not understand what you mean 
-here.
+sorry, my mistake, got it. I was absolutely convinced that commit 1 only 
+contained the code changes and commit 2 only contained the maintainers 
+file. But this is not the case, there was a last minute change and then 
+I did it wrong in git.
 
 Regards
 Harald
 
-On 05.11.22 11:14, Vincent Mailhol wrote:
-> On Sat. 5 Nov. 2022 at 02:29, Harald Mommer
-> <Harald.Mommer@opensynergy.com> wrote:
->> From: Harald Mommer <harald.mommer@opensynergy.com>
->>
->> Signed-off-by: Harald Mommer <Harald.Mommer@opensynergy.com>
->> ---
->>   MAINTAINERS                  | 7 +++++++
->>   drivers/net/can/virtio_can.c | 6 ++----
->>   2 files changed, 9 insertions(+), 4 deletions(-)
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 379945f82a64..01b2738b7c16 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -21692,6 +21692,13 @@ F:     drivers/vhost/scsi.c
->>   F:     include/uapi/linux/virtio_blk.h
->>   F:     include/uapi/linux/virtio_scsi.h
->>
->> +VIRTIO CAN DRIVER
->> +M:     "Harald Mommer" <harald.mommer@opensynergy.com>
->> +L:     linux-can@vger.kernel.org
->> +S:     Maintained
->> +F:     drivers/net/can/virtio_can.c
->> +F:     include/uapi/linux/virtio_can.h
->> +
->>   VIRTIO CONSOLE DRIVER
->>   M:     Amit Shah <amit@kernel.org>
->>   L:     virtualization@lists.linux-foundation.org
->> diff --git a/drivers/net/can/virtio_can.c b/drivers/net/can/virtio_can.c
->> index 43cf1c9e4afd..0e87172bbddf 100644
->> --- a/drivers/net/can/virtio_can.c
->> +++ b/drivers/net/can/virtio_can.c
->> @@ -1,7 +1,7 @@
->> -// SPDX-License-Identifier: GPL-2.0+
->> +// SPDX-License-Identifier: GPL-2.0-only
-> Please squash this in the previous patch.
+On 08.11.22 20:13, Harald Mommer wrote:
+> Hello Vincent,
 >
->>   /*
->>    * CAN bus driver for the Virtio CAN controller
->> - * Copyright (C) 2021 OpenSynergy GmbH
->> + * Copyright (C) 2021-2022 OpenSynergy GmbH
-> Same.
+> what I see here are places from v1 which should be now obsolete and of 
+> no further interest. There was a patch v1, this has been reworked and 
+> now comes v2 which supersedes v1. Squashing is something I could do if 
+> I had 2 commits which should be joined together but here is probably 
+> not meant to squash the virtio_can.[ch] code file commit with the 
+> MAINTAINERS file commit.
 >
->>    */
->>
->>   #include <linux/atomic.h>
->> @@ -793,8 +793,6 @@ static void virtio_can_populate_vqs(struct virtio_device *vdev)
->>          unsigned int idx;
->>          int ret;
->>
->> -       // TODO: Think again a moment if here locks already may be needed!
-> Same.
+> Could be that I misunderstood the way how is worked with patches on 
+> the mailing lists, don't know. I do absolutely not understand what you 
+> mean here.
 >
->>          /* Fill RX queue */
->>          vq = priv->vqs[VIRTIO_CAN_QUEUE_RX];
->>          for (idx = 0u; idx < ARRAY_SIZE(priv->rpkt); idx++) {
->> --
->> 2.17.1
+> Regards
+> Harald
+>
+> On 05.11.22 11:14, Vincent Mailhol wrote:
+>> On Sat. 5 Nov. 2022 at 02:29, Harald Mommer
+>> <Harald.Mommer@opensynergy.com> wrote:
+>>> From: Harald Mommer <harald.mommer@opensynergy.com>
+>>>
+>>> Signed-off-by: Harald Mommer <Harald.Mommer@opensynergy.com>
+>>> ---
+>>>   MAINTAINERS                  | 7 +++++++
+>>>   drivers/net/can/virtio_can.c | 6 ++----
+>>>   2 files changed, 9 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>> index 379945f82a64..01b2738b7c16 100644
+>>> --- a/MAINTAINERS
+>>> +++ b/MAINTAINERS
+>>> @@ -21692,6 +21692,13 @@ F:     drivers/vhost/scsi.c
+>>>   F:     include/uapi/linux/virtio_blk.h
+>>>   F:     include/uapi/linux/virtio_scsi.h
+>>>
+>>> +VIRTIO CAN DRIVER
+>>> +M:     "Harald Mommer" <harald.mommer@opensynergy.com>
+>>> +L:     linux-can@vger.kernel.org
+>>> +S:     Maintained
+>>> +F:     drivers/net/can/virtio_can.c
+>>> +F:     include/uapi/linux/virtio_can.h
+>>> +
+>>>   VIRTIO CONSOLE DRIVER
+>>>   M:     Amit Shah <amit@kernel.org>
+>>>   L:     virtualization@lists.linux-foundation.org
+>>> diff --git a/drivers/net/can/virtio_can.c 
+>>> b/drivers/net/can/virtio_can.c
+>>> index 43cf1c9e4afd..0e87172bbddf 100644
+>>> --- a/drivers/net/can/virtio_can.c
+>>> +++ b/drivers/net/can/virtio_can.c
+>>> @@ -1,7 +1,7 @@
+>>> -// SPDX-License-Identifier: GPL-2.0+
+>>> +// SPDX-License-Identifier: GPL-2.0-only
+>> Please squash this in the previous patch.
 >>
+>>>   /*
+>>>    * CAN bus driver for the Virtio CAN controller
+>>> - * Copyright (C) 2021 OpenSynergy GmbH
+>>> + * Copyright (C) 2021-2022 OpenSynergy GmbH
+>> Same.
+>>
+>>>    */
+>>>
+>>>   #include <linux/atomic.h>
+>>> @@ -793,8 +793,6 @@ static void virtio_can_populate_vqs(struct 
+>>> virtio_device *vdev)
+>>>          unsigned int idx;
+>>>          int ret;
+>>>
+>>> -       // TODO: Think again a moment if here locks already may be 
+>>> needed!
+>> Same.
+>>
+>>>          /* Fill RX queue */
+>>>          vq = priv->vqs[VIRTIO_CAN_QUEUE_RX];
+>>>          for (idx = 0u; idx < ARRAY_SIZE(priv->rpkt); idx++) {
+>>> -- 
+>>> 2.17.1
+>>>
+-- 
+Dipl.-Ing. Harald Mommer
+Senior Software Engineer
+
+OpenSynergy GmbH
+Rotherstr. 20, 10245 Berlin
+
+Phone:  +49 (30) 60 98 540-0 <== Zentrale
+Fax:    +49 (30) 60 98 540-99
+E-Mail: harald.mommer@opensynergy.com
+
+www.opensynergy.com
+
+Handelsregister: Amtsgericht Charlottenburg, HRB 108616B
+Geschäftsführer/Managing Director: Regis Adjamah
+
