@@ -2,106 +2,79 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27492622A4F
-	for <lists+linux-can@lfdr.de>; Wed,  9 Nov 2022 12:22:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E96E623BA5
+	for <lists+linux-can@lfdr.de>; Thu, 10 Nov 2022 07:14:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231178AbiKILWI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 9 Nov 2022 06:22:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40402 "EHLO
+        id S231828AbiKJGOu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 10 Nov 2022 01:14:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231259AbiKILV6 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 9 Nov 2022 06:21:58 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9000C624B
-        for <linux-can@vger.kernel.org>; Wed,  9 Nov 2022 03:21:56 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id t10so25350340ljj.0
-        for <linux-can@vger.kernel.org>; Wed, 09 Nov 2022 03:21:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vCxYg4WgOjP/bm5a9BsDTG0c45MKZEsJG67lP9MsgSg=;
-        b=HO+gw2fSW5E05U6Iq8JqzMRKLuM08uJDLhQRuJlxdr8dPesLMigBWgAyzAeExa/QeM
-         nw0R5KrFXl+7T/GNrFhphNcbZaMhwSA3VB9Th1nj3R5wpJ6CcHE8rDHzETkHzHM0Oiwt
-         in7VXNBFy/07Kz3EgHs7G0g0nZqONOpmfoGbGYOjZ3kVH55CNNAMH/bbX5ieNbd0Pqi9
-         iuupt++I5YcAQlyePI7uickafZLUSSNtSPzpPb09dR/Xi5x3lBPgbm3CYeuBfvBGx6vL
-         tkYQboJ0epeJoFCdNGZa3ThE7N8YaUG3rR4meKJAM5CPnNbbNrzqmAhmW0erUsceeqeb
-         MRmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vCxYg4WgOjP/bm5a9BsDTG0c45MKZEsJG67lP9MsgSg=;
-        b=c3rOysoMZz8Sm4r2OuUca4H6SGl4utNucasik+KGicJCi0OBvYNCofeqwl4AmKpR/P
-         h1zcVj2FH474tqQxjxAgYCoa4B1REq3e8BBuvcMlJqpG8EODE1Jeu8R2+wtsmDV8A9v4
-         cdk4Y0uu4J98Y/ykamnMgFd6yQndj1i5lRnFY5plpfIUEjyPRWDqMbbm3dKhb5+nmTj8
-         mKljarAh1aINFO7UmCTNtdGpIJWV2IyCf7HzwoEea/zZJjTNmpCXx2HbFXX0WxmfH2+E
-         ZUZvS+8wP153Fwcdu4b2o9fOSqMk3IsqFdttOVKsoY8PPy0bpoiJSIPfWqX/H6HDoA8i
-         a+FA==
-X-Gm-Message-State: ACrzQf0p/yXOLSxHBjWvfg/xg2vR0l1sF0ORNwWeffXgDKtU9Qhdn9cj
-        Nt17xiyYOH/SdQ/l7b8CKKdiCA==
-X-Google-Smtp-Source: AMsMyM5qV7jVeG2pPQIG8qp/abMPvu2TVr8VijShCi76V0U224nQCkI55e+QRkjLdIj+vRoGV2Cf7g==
-X-Received: by 2002:a05:651c:2226:b0:277:4818:a1ca with SMTP id y38-20020a05651c222600b002774818a1camr7905330ljq.361.1667992914945;
-        Wed, 09 Nov 2022 03:21:54 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id c6-20020ac25f66000000b0047f7722b73csm2187030lfc.142.2022.11.09.03.21.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Nov 2022 03:21:54 -0800 (PST)
-Message-ID: <32240212-7460-9d37-8986-e7d3e34cb1b7@linaro.org>
-Date:   Wed, 9 Nov 2022 12:21:53 +0100
+        with ESMTP id S229449AbiKJGOs (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 10 Nov 2022 01:14:48 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5224D275FC;
+        Wed,  9 Nov 2022 22:14:44 -0800 (PST)
+Received: from canpemm500006.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N7BPN3MsFzHvdV;
+        Thu, 10 Nov 2022 14:14:16 +0800 (CST)
+Received: from localhost.localdomain (10.175.104.82) by
+ canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 10 Nov 2022 14:14:41 +0800
+From:   Ziyang Xuan <william.xuanziyang@huawei.com>
+To:     <max@enpas.org>, <wg@grandegger.com>, <mkl@pengutronix.de>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <linux-can@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>
+Subject: [PATCH] can: can327: fix potential skb leak when netdev is down
+Date:   Thu, 10 Nov 2022 14:14:37 +0800
+Message-ID: <20221110061437.411525-1-william.xuanziyang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 6/6] arm64: dts: fsd: Add support for error correction
- code for message RAM
-Content-Language: en-US
-To:     Vivek Yadav <vivek.2311@samsung.com>, rcsekar@samsung.com,
-        krzysztof.kozlowski+dt@linaro.org, wg@grandegger.com,
-        mkl@pengutronix.de, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, pankaj.dubey@samsung.com,
-        ravi.patel@samsung.com, alim.akhtar@samsung.com,
-        linux-fsd@tesla.com, robh+dt@kernel.org
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        aswani.reddy@samsung.com, sriranjani.p@samsung.com
-References: <20221109100928.109478-1-vivek.2311@samsung.com>
- <CGME20221109100309epcas5p4bc1ddd62048098d681ba8af8d35e2e73@epcas5p4.samsung.com>
- <20221109100928.109478-7-vivek.2311@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221109100928.109478-7-vivek.2311@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.104.82]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500006.china.huawei.com (7.192.105.130)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 09/11/2022 11:09, Vivek Yadav wrote:
-> Add mram-ecc-cfg property which indicates the error correction code config
-> and enable the same for FSD platform.
-> 
-> In FSD, error correction code (ECC) is configured via PERIC SYSREG
-> registers.
-> 
-> Signed-off-by: Chandrasekar R <rcsekar@samsung.com>
-> Cc: devicetree@vger.kernel.org
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Signed-off-by: Vivek Yadav <vivek.2311@samsung.com>
-> ---
+In can327_feed_frame_to_netdev(), it did not free the skb when netdev
+is down, and all callers of can327_feed_frame_to_netdev() did not free
+allocated skb too. That would trigger skb leak.
 
-For net-folks: although the DTS patches are here as well, but they must
-go via ARM SOC tree, so pick only network/can drivers and bindings when
-they are ready.
+Fix it by adding kfree_skb() in can327_feed_frame_to_netdev() when netdev
+is down. Not tested, just compiled.
 
-Best regards,
-Krzysztof
+Fixes: 43da2f07622f ("can: can327: CAN/ldisc driver for ELM327 based OBD-II adapters")
+Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+---
+ drivers/net/can/can327.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/can/can327.c b/drivers/net/can/can327.c
+index 0aa1af31d0fe..17bca63f3dd3 100644
+--- a/drivers/net/can/can327.c
++++ b/drivers/net/can/can327.c
+@@ -263,8 +263,10 @@ static void can327_feed_frame_to_netdev(struct can327 *elm, struct sk_buff *skb)
+ {
+ 	lockdep_assert_held(&elm->lock);
+ 
+-	if (!netif_running(elm->dev))
++	if (!netif_running(elm->dev)) {
++		kfree_skb(skb);
+ 		return;
++	}
+ 
+ 	/* Queue for NAPI pickup.
+ 	 * rx-offload will update stats and LEDs for us.
+-- 
+2.25.1
 
