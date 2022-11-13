@@ -2,70 +2,65 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8B71626DA5
-	for <lists+linux-can@lfdr.de>; Sun, 13 Nov 2022 05:03:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1B96626E97
+	for <lists+linux-can@lfdr.de>; Sun, 13 Nov 2022 09:53:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235211AbiKMEDF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 12 Nov 2022 23:03:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60912 "EHLO
+        id S235153AbiKMIxi (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 13 Nov 2022 03:53:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235174AbiKMEDC (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 12 Nov 2022 23:03:02 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F8213F71;
-        Sat, 12 Nov 2022 20:02:51 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so11002768pji.1;
-        Sat, 12 Nov 2022 20:02:51 -0800 (PST)
+        with ESMTP id S235267AbiKMIxg (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 13 Nov 2022 03:53:36 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74D82BC3
+        for <linux-can@vger.kernel.org>; Sun, 13 Nov 2022 00:53:32 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id b62so7871929pgc.0
+        for <linux-can@vger.kernel.org>; Sun, 13 Nov 2022 00:53:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hDuvicETB47o1CIVZJhl8/Y9cPAH0K8QGejUp0fFrIg=;
-        b=PfhhcE1ybwFdUQ/LcvjTBXSkXd4uA29ayC9av6hO0Izwf1LYMSx0c6JarAgAdaVbRY
-         r1OvZzyqnH7pprM173+rOSWqpWqpAI00Xj/EwbBOc117ctFCrgFmoUW1xM8YaJTJ9iAs
-         A1flunV8MOILrgB0bI9WNUlHKWrKI4QpjSX0s3lBUdId2OL8DjIwrZxIYgW6e80JSoF2
-         zWIlAxaryArW4dU7fVBb07u2DICW7640/Tb8hoAXJ7iHELqNMxQz1h7Zb9allRp7jS8e
-         an85URhYygnHVxCzuW3fWQ8ufC8/rIjoaL3ob7DbUJWdscd3vRcH/a/ogvfKvXHZRkiU
-         ewxQ==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=ixdVuBr5zEDmq+mrDo6cWwg4EBSM6LXV3GjPeN74VNk=;
+        b=gCP2JoubeZGbmUIl9cVQ4Wwc/wb9F6suFUrrPLMKhRww3cOF0vS3WwE6sJfJTroJHF
+         W4hnqtWongwFBYUHXuqi5aRVzy2hy3UL0zSowBb4RLvWgU48+CcdB0YDNviunU0ie/KK
+         YMHTWHeVmypM1Jj2UJ9i72AdfSgaROfrpOUVzHIEUX+aP26+4yU547sf/1RNBzMhnPjl
+         CdKa0BL2Dn5taCBqjcqMGUK3Y5TalPVO+BfxRx2/k/t6+rE+AwbmAdHFu6DMEBKYTTFF
+         njvaQLD5lvTHzlDUFBvbaEqScpFdRc0WPk+UWK7Nm1JGfNItnKhBDSxed0EJTJp4KCOA
+         eS0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=hDuvicETB47o1CIVZJhl8/Y9cPAH0K8QGejUp0fFrIg=;
-        b=hsmp2XosM7cMGuH9/DelIVv23bYs2r0Jp1RvmDpgYvxtjSh6Fbt5HHKMVrgDNMpBek
-         M0gU7CRfYd/xe8JGfDVGVf3MktMlgg1ilWG6ysnON0ZngrxdhwTz5eIOPVl87hbpbGxH
-         tkXehden/u5k+ZHau1mRKhQfpP0Tl8UvuBldaVac9vg5mGMqYN79nw+zrAh18ju3fVhT
-         FbzfavDuOHWy8zLWCLF5KJzYw2mRKXQJoxFAvfiOgH0oHd86JNJRadg8R7Jx60xnsE5S
-         qDVDlicCCyw0gWRSK1lKeIpuJ8TruIC/M3QbjlM1GzQ8Yn+MpmJjblKgEEYWHlX3bJca
-         JJMA==
-X-Gm-Message-State: ANoB5pkviWhPYsR243fjzrv0kWnm+rz38yZ6ZrfdC/u+G5bZTrbVE1pk
-        YMl17ozJOZfcpir0PE+7k/k=
-X-Google-Smtp-Source: AA0mqf4eRIpKEXGVlu+vzC91odIvs50k4JA6h0gtI90ohrVjuqCvCCGAnQe+iGqWWCeZvX9HS/aoew==
-X-Received: by 2002:a17:90a:c702:b0:213:16b5:f45e with SMTP id o2-20020a17090ac70200b0021316b5f45emr8505607pjt.170.1668312170547;
-        Sat, 12 Nov 2022 20:02:50 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ixdVuBr5zEDmq+mrDo6cWwg4EBSM6LXV3GjPeN74VNk=;
+        b=i/FDekQRAd0EJnbUeNZskGdQoZiKuxcm+90VK0JqDe2Pj3LUzK8VoJ5wkfhfdcSKNF
+         /h1cc7ME46YMpMX6M2OkyHmr6UtWbMmUQQBC0yCqGV1JwJqUcOvOpPTModNmJCSVL9Uu
+         Yue5D7FEy+/Kh1ZI1jo55mvcH3AWQpe1gUoL2/si4zlCopgHy3f5SrrIN6lxwfWX3S4a
+         bY+Q7SD9fHrLlKWXDvEsj/JfnOR0TWk+5KPPURKriRuVWFi2r611lKn7lm5SCB5eScJp
+         R6BuRCEHnT4aKU4hor0s91Ehw6Rd1gUVyJkX7g+punCK9oSQnzDpsJs/lPZb/cvOmJCf
+         j9Yg==
+X-Gm-Message-State: ANoB5pkbMgn2p63JV6BUegopzqHkusWjR5BNVB7Q/3xzJJ4VyAIwGFx2
+        2Ps8JrR3EIuZIUwQ7+5EduO1DOugOVVJ2Q==
+X-Google-Smtp-Source: AA0mqf5y/2EMnCHI3wC1TKhuaB8IBDU3tAdNUp8u0gwaesB2adOkgH74KwzixYYcOr2pSloe9HqacA==
+X-Received: by 2002:a63:d143:0:b0:45c:5a74:9a92 with SMTP id c3-20020a63d143000000b0045c5a749a92mr8022405pgj.473.1668329611940;
+        Sun, 13 Nov 2022 00:53:31 -0800 (PST)
 Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id n63-20020a17090a5ac500b00200461cfa99sm7122686pji.11.2022.11.12.20.02.48
+        by smtp.gmail.com with ESMTPSA id y1-20020a626401000000b00528a097aeffsm4372391pfb.118.2022.11.13.00.53.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Nov 2022 20:02:50 -0800 (PST)
+        Sun, 13 Nov 2022 00:53:31 -0800 (PST)
 Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
 From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org,
+To:     linux-can@vger.kernel.org
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v3 3/3] can: etas_es58x: report firmware-version through ethtool
-Date:   Sun, 13 Nov 2022 13:01:08 +0900
-Message-Id: <20221113040108.68249-4-mailhol.vincent@wanadoo.fr>
+Subject: [PATCH can-utils-dev 0/5] can-utils-dev: a set of cleanup patches
+Date:   Sun, 13 Nov 2022 17:53:16 +0900
+Message-Id: <20221113085321.87910-1-mailhol.vincent@wanadoo.fr>
 X-Mailer: git-send-email 2.37.4
-In-Reply-To: <20221113040108.68249-1-mailhol.vincent@wanadoo.fr>
-References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
- <20221113040108.68249-1-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
         SPF_PASS autolearn=no autolearn_force=no version=3.4.6
@@ -75,59 +70,28 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Implement ethtool_ops::get_drvinfo() in order to report the firmware
-version.
+This series contain five cleanup patches. There is no real relation
+between each patch so I will end the cover letter here and let you
+refer to the short description.
 
-Firmware version 0.0.0 has a special meaning and just means that we
-could not parse the product information string. In such case, do
-nothing (i.e. leave the .fw_version string empty).
+Vincent Mailhol (5):
+  slcanpty: remove redundant asc2nibble()
+  lib: add pr_debug() macro
+  candump: add global variable progname
+  candump: use linux/net_tstamp.h instead of redefining values ourselves
+  lib: snprintf_can_error_frame: print counter errors if CAN_ERR_CNT is
+    set
 
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
+ Makefile                           |  2 ++
+ canbusload.c                       |  9 ++---
+ candump.c                          | 58 +++++++++++++-----------------
+ canlogserver.c                     | 12 +++----
+ lib.c                              |  4 +++
+ lib.h                              |  6 ++++
+ mcp251xfd/mcp251xfd-dev-coredump.c | 10 +-----
+ slcanpty.c                         | 27 +++-----------
+ 8 files changed, 50 insertions(+), 78 deletions(-)
 
-*N.B.* Drivers had to also fill ethtool_drvinfo::driver and
-ethtool_drvinfo::bus_info. Starting this week, this is not needed
-anymore because of commit edaf5df22cb8 ("ethtool: ethtool_get_drvinfo:
-populate drvinfo fields even if callback exits").
-
-  https://git.kernel.org/netdev/net-next/c/edaf5df22cb8
----
- drivers/net/can/usb/etas_es58x/es58x_core.c | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
-
-diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/usb/etas_es58x/es58x_core.c
-index c5109117f8e6..a048e0d40c97 100644
---- a/drivers/net/can/usb/etas_es58x/es58x_core.c
-+++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
-@@ -1978,7 +1978,28 @@ static const struct net_device_ops es58x_netdev_ops = {
- 	.ndo_eth_ioctl = can_eth_ioctl_hwts,
- };
- 
-+/**
-+ * es58x_get_drvinfo() - Get the firmware version.
-+ * @netdev: CAN network device.
-+ * @drvinfo: Driver information.
-+ *
-+ * Populate @drvinfo with the firmware version. The core will populate
-+ * the rest.
-+ */
-+static void es58x_get_drvinfo(struct net_device *netdev,
-+			      struct ethtool_drvinfo *drvinfo)
-+{
-+	struct es58x_device *es58x_dev = es58x_priv(netdev)->es58x_dev;
-+	struct es58x_sw_version *fw_ver = &es58x_dev->firmware_version;
-+
-+	if (fw_ver->major || fw_ver->minor || fw_ver->revision)
-+		snprintf(drvinfo->fw_version, sizeof(drvinfo->fw_version),
-+			 "%02u.%02u.%02u",
-+			 fw_ver->major, fw_ver->minor, fw_ver->revision);
-+}
-+
- static const struct ethtool_ops es58x_ethtool_ops = {
-+	.get_drvinfo = es58x_get_drvinfo,
- 	.get_ts_info = can_ethtool_op_get_ts_info_hwts,
- };
- 
 -- 
 2.37.4
 
