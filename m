@@ -2,137 +2,130 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 761E0626A46
-	for <lists+linux-can@lfdr.de>; Sat, 12 Nov 2022 16:40:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0F0E626D9F
+	for <lists+linux-can@lfdr.de>; Sun, 13 Nov 2022 05:02:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234864AbiKLPkp convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Sat, 12 Nov 2022 10:40:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36124 "EHLO
+        id S231694AbiKMECk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 12 Nov 2022 23:02:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231404AbiKLPkp (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 12 Nov 2022 10:40:45 -0500
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E65B1ADAC;
-        Sat, 12 Nov 2022 07:40:44 -0800 (PST)
-Received: by mail-pg1-f172.google.com with SMTP id 136so6687276pga.1;
-        Sat, 12 Nov 2022 07:40:44 -0800 (PST)
+        with ESMTP id S229584AbiKMECi (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 12 Nov 2022 23:02:38 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41DA6DFA0;
+        Sat, 12 Nov 2022 20:02:34 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id gw22so7648377pjb.3;
+        Sat, 12 Nov 2022 20:02:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aNSRPUO1v1OYkd49ueorKmsNQJVAAcCUYPFtGJiFcIg=;
+        b=JTpfsZ0jn/PD0C35/LkjaBbGMoaWE3MXg98oU61ZKtOaUvnmhYkOcm5uuUuPVAbe8E
+         qZ3zTlbJ13UwN8KEWcCPRoZcXKk6sdX8bO/RfYmuIxYhjHRtN2iqPJBQm3hTQqHX+FLP
+         yImkWB9lVND4OXHkMIBVT/LJYThmLf+N8ArHGhQVCWT9zyiC4OkHt1GXck1VC1HPZG8u
+         0qswhUyM22N0gBV3iOK0gWHJsrGVfYiUxN9UG0mXH7jIbzf88pN8RTrt+lDh8mo8pHc4
+         aPYjbK5m3z/VzznjLB3Iu7qhnWhAjHbu/27kROjxik5HdXRbDjb7iX6uA8IULDQZKbYg
+         ThAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JFmEovQuih3sC0ACkx1NqUHQ6cWP4h8cIyeW3MWuhGY=;
-        b=GziSfrdP4WDbfkR4yrd9a3/FbqVd11+6faQmdncSQvQsGWMoa+Gehd2LJTPNbpF6/d
-         KqC/qR1ELHj06ue5Vgd2i3z1siVAwAX0gWwWOFP2CkccpvpzwnnW76vyW9A0o/TDKJi5
-         Dvun6PfBq9lN66ePWLM64NsZnXVKevEmGNb8DynGs4BqfnWrIoA/Jhjam6k35GbqdN79
-         gSwp2nncIzbQggLsPgzj2CixrWUiRyi8pPblkU8GhEtVK9rae8H25MtgmlMyznrcvuaf
-         Do6dD/T7BNUXtsaMwKHQVDxXc10lHLwljWQQBlDkOU6bAsUzexCV+fAFFW8QRqR9Pd7T
-         5Z7g==
-X-Gm-Message-State: ANoB5pmTRQHPaZYueJxtKJJ/AyoDpe7C9yDyqkcW1rmQyrZr5ATcVZDA
-        THSWn0yzo1v2c60llBxU+5orbLwkZYtxZ3b79W0fKt9VqLA=
-X-Google-Smtp-Source: AA0mqf45ci/2udy38PrCir2ebdsKsLN4JFAx8FeKjFhrpyNi9bASzqETpUJxdcijsb0IYwuBi/qSs4D6d2xNIgk8O38=
-X-Received: by 2002:a63:4e53:0:b0:473:f7fb:d2c7 with SMTP id
- o19-20020a634e53000000b00473f7fbd2c7mr5730598pgl.535.1668267643484; Sat, 12
- Nov 2022 07:40:43 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=aNSRPUO1v1OYkd49ueorKmsNQJVAAcCUYPFtGJiFcIg=;
+        b=o7IHAy7jSdwnxGquoP3xH2RRvAwyU8M6t0v5PVBKLruQ9D0ynkGu6rpUYJbCCxrf9n
+         J3QC91w552QszqSfuVggg7ufoL7MicZXa6pcTnb0yrpXR/blQkgClDP/VcpJw0+2gx65
+         OF5vohuzqsgo6kJ/d/FLJKgKk2GvWUIsEUxc90lAYOuiKNt6nbY7+kgfolZ22pM1SXPD
+         sY7dSiLEH81aNOPcJbll7N+mJNikZLY30ksplJ7XZ1PzJhkPu8V8xNnL2ABgf2KrnRRt
+         wW5H5woqUSEW9v7Afn1wUqODf7Z7JkRRi8tw8d+gnTuDO0LSoHcm3dBHaaDhmrmfYo+2
+         dA4g==
+X-Gm-Message-State: ANoB5pnJn3YgCSZk/7jlvlYG8c81jowBZqWRlzY03BDFhXuk5qvvUVtb
+        E2BUoMufSMz+OtXNefnTv/w=
+X-Google-Smtp-Source: AA0mqf4/qaAdXICwWYKtgHRrE3yobAei9bI2c3f/qDckf95tp7Ej5g8/0czkS1vnOzLL/PZ7qSYC3A==
+X-Received: by 2002:a17:902:e3d4:b0:188:53b9:f003 with SMTP id r20-20020a170902e3d400b0018853b9f003mr8500917ple.170.1668312153584;
+        Sat, 12 Nov 2022 20:02:33 -0800 (PST)
+Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
+        by smtp.gmail.com with ESMTPSA id n63-20020a17090a5ac500b00200461cfa99sm7122686pji.11.2022.11.12.20.02.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 12 Nov 2022 20:02:33 -0800 (PST)
+Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v3 0/3] can: etas_es58x: report firmware, bootloader and hardware version
+Date:   Sun, 13 Nov 2022 13:01:05 +0900
+Message-Id: <20221113040108.68249-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.37.4
+In-Reply-To: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
+References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
-References: <20221104171604.24052-4-mailhol.vincent@wanadoo.fr>
- <Y2Ydf6UxVvTe8Zmz@kroah.com> <CAMZ6RqJkzag-PGuzHcDQkSXjqH6d8=uAe-UN8VXUoNWX2x+qbw@mail.gmail.com>
- <CAMZ6RqLMGfW0QcNdBKhfwayV=+FNHhvM_-ob0UvL=o6=zN0J7A@mail.gmail.com>
- <Y2afm9xFIvJnwXh/@kroah.com> <Y2cDlrNjL5YSAPm2@rowland.harvard.edu>
- <Y2eYw9Kna712mzR8@kroah.com> <CAMZ6RqJVFwhCjxghmDBt2kYeT_KhqE-4h=UGtKaSA1bwke1CaA@mail.gmail.com>
- <Y2fDG9AsuFZh0Dkr@kroah.com> <CAMZ6RqLwebh6VuwXdyyxpcdyJjYg3fUt9Opx+dPQRzqZ-2976w@mail.gmail.com>
- <Y2faf++qaSq92qmZ@kroah.com>
-In-Reply-To: <Y2faf++qaSq92qmZ@kroah.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Sun, 13 Nov 2022 00:40:31 +0900
-Message-ID: <CAMZ6Rq+N7Dbs7AENU12PJu-M2coBeoEF-YLpvQp79cSChAR6hg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] can: etas_es58x: report the firmware version
- through ethtool
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-can@vger.kernel.org,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon. 7 nov. 2022 at 01:18, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
-> On Sun, Nov 06, 2022 at 11:44:52PM +0900, Vincent MAILHOL wrote:
-> > On Sun. 6 Nov. 2022 à 23:22, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> > > On Sun, Nov 06, 2022 at 09:47:05PM +0900, Vincent MAILHOL wrote:
-> > > > On Sun. 6 Nov. 2022 at 20:25, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> > > > 1/ Can I still export and use usb_cache_string()? In other terms, does
-> > > > the first patch of this series still apply? This looks like the most
-> > > > convenient function to retrieve that custom string to me.
-> > >
-> > > Everyone seems to just use the usb_string() function, will that not work
-> > > for you?
-> >
-> > It is just that I would have to write two or three lines of code less.
->
-> Odd, should it be used instead where others are calling usb_string()?
->
-> > But if you prefer I can use usb_string(), no problem on that.
->
-> Try it both ways.  If it's easier with usb_cache_string(), then we can
-> export it.  It's just odd that it hasn't been exported yet.
+The goal of this series is to report the firmware version, the
+bootloader version and the hardware revision of ETAS ES58x
+devices.
 
-I tried both. Not counting the line breaks, the empty lines and the
-comments, the usb_string() version needs 6 more lines. Not a huge
-difference but the usb_cache_string() remains easier (at least in my
-eyes).
+These are already reported in the kernel log but this isn't best
+practise. Remove the kernel log and instead export all these in
+sysfs. In addition, the firmware version is also reported through
+ethtool.
 
-For reference, here is the diff before and after using usb_cache_string():
 
-diff --git a/drivers/net/can/usb/etas_es58x/es58x_sysfs.c
-b/drivers/net/can/usb/etas_es58x/es58x_sysfs.c
-index 4ff0332f6f50..c1d220d0d35f 100644
---- a/drivers/net/can/usb/etas_es58x/es58x_sysfs.c
-+++ b/drivers/net/can/usb/etas_es58x/es58x_sysfs.c
-@@ -178,17 +178,10 @@ void es58x_create_file(struct device *dev)
- {
-        struct es58x_device *es58x_dev = dev_get_drvdata(dev);
-        char *prod_info;
--       int ret;
+* Changelog *
 
--       prod_info = kmalloc(ES58X_PROD_INFO_SIZE, GFP_KERNEL);
--       if (!prod_info)
--               return;
--
--        ret = usb_string(es58x_dev->udev, ES58X_PROD_INFO_IDX,
--                        prod_info, ES58X_PROD_INFO_SIZE);
--        if (ret < 0) {
-+       prod_info = usb_cache_string(es58x_dev->udev, ES58X_PROD_INFO_IDX);
-+       if (!prod_info) {
-                dev_warn(dev, "could not retrieve the product info string\n");
--               kfree(prod_info);
-                return;
-        }
+v2 -> v3:
 
-diff --git a/drivers/net/can/usb/etas_es58x/es58x_sysfs.h
-b/drivers/net/can/usb/etas_es58x/es58x_sysfs.h
-index 62347ffa0214..a204aa5344a8 100644
---- a/drivers/net/can/usb/etas_es58x/es58x_sysfs.h
-+++ b/drivers/net/can/usb/etas_es58x/es58x_sysfs.h
-@@ -14,13 +14,6 @@
- /* USB descriptor index containing the product information string. */
- #define ES58X_PROD_INFO_IDX 6
+  * patch 2/3: do not spam the kernel log anymore with the product
+    number. Instead parse the product information string, extract the
+    firmware version, the bootloadar version and the hardware revision
+    and export them through sysfs.
 
--/* Maximum size for the USB information custom string. USB strings are
-- * at most 127 characters and es58x devices only use ASCII (i.e. one
-- * byte). Also, empirical observations show a maximum length of 83
-- * bytes for the product information.
-- */
--#define ES58X_PROD_INFO_SIZE (127 + 1)
--
- void es58x_create_file(struct device *dev);
- void es58x_remove_file(struct device *dev);
+  * patch 2/3: rework the parsing in order not to need additional
+    fields in struct es58x_parameters.
+
+  * patch 3/3: only populate ethtool_drvinfo::fw_version because since
+    commit edaf5df22cb8 ("ethtool: ethtool_get_drvinfo: populate
+    drvinfo fields even if callback exits"), there is no need to
+    populate ethtool_drvinfo::driver and ethtool_drvinfo::bus_info in
+    the driver.
+
+v1 -> v2:
+
+  * was a single patch. It is now a series of three patches.
+  * add a first new patch to export  usb_cache_string().
+  * add a second new patch to apply usb_cache_string() to existing code.
+  * add missing check on product info string to prevent a buffer overflow.
+  * add comma on the last entry of struct es58x_parameters.
+
+Vincent Mailhol (3):
+  USB: core: export usb_cache_string()
+  can: etas_es58x: export firmware, bootloader and hardware versions in
+    sysfs
+  can: etas_es58x: report firmware-version through ethtool
+
+ drivers/net/can/usb/etas_es58x/Makefile      |   2 +-
+ drivers/net/can/usb/etas_es58x/es58x_core.c  |  70 ++----
+ drivers/net/can/usb/etas_es58x/es58x_core.h  |  51 ++++
+ drivers/net/can/usb/etas_es58x/es58x_sysfs.c | 231 +++++++++++++++++++
+ drivers/usb/core/message.c                   |   1 +
+ drivers/usb/core/usb.h                       |   1 -
+ include/linux/usb.h                          |   1 +
+ 7 files changed, 309 insertions(+), 48 deletions(-)
+ create mode 100644 drivers/net/can/usb/etas_es58x/es58x_sysfs.c
+
+-- 
+2.37.4
+
