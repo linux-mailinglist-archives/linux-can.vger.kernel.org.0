@@ -2,109 +2,176 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43610626E9B
-	for <lists+linux-can@lfdr.de>; Sun, 13 Nov 2022 09:53:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 915D9626F5E
+	for <lists+linux-can@lfdr.de>; Sun, 13 Nov 2022 13:04:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235255AbiKMIxo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 13 Nov 2022 03:53:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49378 "EHLO
+        id S235215AbiKMMEJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 13 Nov 2022 07:04:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235249AbiKMIxn (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 13 Nov 2022 03:53:43 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03EF19596
-        for <linux-can@vger.kernel.org>; Sun, 13 Nov 2022 00:53:41 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id 140so7029687pfz.6
-        for <linux-can@vger.kernel.org>; Sun, 13 Nov 2022 00:53:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t4XWVzl97xGrN05ee3zdFxyEOfTCn+97qjGfXOEozv0=;
-        b=XhpoxwBT3TCSgMua2WkLjTnhcr3mZ5ZIc7xtv//Y0+UUi8mgf9rUeQ+VzcgeeWm6td
-         eTdk+PEIM2RJHzuUZaziKdevv9YtoqwrJsqhJ7dZYFSB0rhBcrahdTPHFIH5fx1g9AXj
-         MK07WPHzgA1IPjKipOA6oH5F/sRsyymFNKthPo8KkbCD7Z2luShKmKzKukGyQnDM9zzl
-         TX/GvyITGDbhw31Ec6EyAuE4kW4VyIJvCtJp2rTTg4SOcFnExrnlRI/K/8fsjtLB7Yal
-         TLXw8foF16OD9mrVqor9uSF7y2bgNGDvnO2ja5B2bXtT2ujLLnGHN27wqg51B/Jtz6sd
-         xPdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=t4XWVzl97xGrN05ee3zdFxyEOfTCn+97qjGfXOEozv0=;
-        b=v9zO2XXeAaHWYidQIqLe3NyxFdSAY9hXjMGxZGXTD+HRQW64220uvyvZSCsplOj79t
-         eQvuPai3pbmj5/5qxEYWgQIlZlnQXjVZ4cAsOlhGGlJXsqWL9pOYwtBJgPv5qP5izLk4
-         bxelHyYH9Jk9A5b5NPgNkb/H7DNd6EzR+IyvkWGGXyTt6RXiQVChHyrsB5liWhM/wGC6
-         PfaEyn584Q3pqmvlb1+Fuxldu9FhVqk8LiVzvVA1KRCTGI2oSC8TRwTbAJMXRSS8DrEr
-         nEzBxgju8tOLqF9B4GY4PQg+FZvoXM1nokjUDENthMyH0kOlRCNbb2SxdYxn+6ysa6UA
-         QonQ==
-X-Gm-Message-State: ANoB5plr1Zs4B34xrtGh9TZ+khjnhthW9nP+L3LSzq5WGo1+DU4kMlbX
-        CWqCiViaecGafW6LFdN8sNpTkPDZM/Mg4w==
-X-Google-Smtp-Source: AA0mqf4QzNCQ10mQCEP5QhLu4LksTF0xut1YApp07Vnoo3Z9mqSI8rM1plhKP0bUrAmNJDOt+HHbIw==
-X-Received: by 2002:a63:1e05:0:b0:434:911a:301 with SMTP id e5-20020a631e05000000b00434911a0301mr8158786pge.50.1668329620284;
-        Sun, 13 Nov 2022 00:53:40 -0800 (PST)
-Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id y1-20020a626401000000b00528a097aeffsm4372391pfb.118.2022.11.13.00.53.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Nov 2022 00:53:39 -0800 (PST)
-Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     linux-can@vger.kernel.org
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH can-utils-dev 5/5] lib: snprintf_can_error_frame: print counter errors if CAN_ERR_CNT is set
-Date:   Sun, 13 Nov 2022 17:53:21 +0900
-Message-Id: <20221113085321.87910-6-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.37.4
-In-Reply-To: <20221113085321.87910-1-mailhol.vincent@wanadoo.fr>
+        with ESMTP id S235208AbiKMMEI (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 13 Nov 2022 07:04:08 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251B664EC
+        for <linux-can@vger.kernel.org>; Sun, 13 Nov 2022 04:04:07 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1ouBiV-0003mG-U5; Sun, 13 Nov 2022 13:04:03 +0100
+Received: from pengutronix.de (hardanger-2.fritz.box [IPv6:2a03:f580:87bc:d400:6d7d:dd1c:b670:c511])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 0159911BD7A;
+        Sun, 13 Nov 2022 12:04:02 +0000 (UTC)
+Date:   Sun, 13 Nov 2022 13:04:02 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     linux-can@vger.kernel.org, Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: Re: [PATCH can-utils-dev 2/5] lib: add pr_debug() macro
+Message-ID: <20221113120402.ymdyylxm3avhxsaw@pengutronix.de>
 References: <20221113085321.87910-1-mailhol.vincent@wanadoo.fr>
+ <20221113085321.87910-3-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rf7qh6ze4qfjv5p5"
+Content-Disposition: inline
+In-Reply-To: <20221113085321.87910-3-mailhol.vincent@wanadoo.fr>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Since [1], the kernel has a new flag: CAN_ERR_CNT to notify whether or
-not the errour counter is set. Use this to decide whether on not the
-error-counter-tx-rx should be printed.
 
-For interoperability reasons, use an #ifdef so that the code still
-work on older kernels.
+--rf7qh6ze4qfjv5p5
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[1] commit 3e5c291c7942 ("can: add CAN_ERR_CNT flag to notify
-    availability of error counter")
-Link: https://git.kernel.org/torvalds/linux/c/3e5c291c7942
+On 13.11.2022 17:53:18, Vincent Mailhol wrote:
+> Add the pr_debug() macro so that replace:
+>=20
+>   #ifdef DEBUG
+>   	printf("foo");
+>   #endif
+>=20
+> by:
+>=20
+>   	pr_debug("foo");
+>=20
+> Apply the pr_debug() macro wherever relevant.
+>=20
+> Currently, there is no consensus whether debug messages should be
+> printed on stdout or stderr. Most of the modules: canbusload.c,
+> candump.c and canlogserver.c use stdout but
+> mcp251xfd/mcp251xfd-dev-coredump.c uses stderr. Harmonize the behavior
+> by following the major trend and make
+> mcp251xfd/mcp251xfd-dev-coredump.c also output to stdout.
+>=20
+> CC: Marc Kleine-Budde <mkl@pengutronix.de>
+> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> ---
+> @Marc, was there any reasons to print debug information to stderr and
+> not stdout in mcp251xfd-dev-coredump.c?
 
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- lib.c | 4 ++++
- 1 file changed, 4 insertions(+)
+No real reason, just gut feeling. There are at least 2 differences: IIRC
+stdout is line buffered, it will not write to console until a newline.
+stderr will print even if there is no newline. The other one is: If
+use/parse the stdout if the program you're debugging (i.e. in a pipe)
+the debug output on stdout will interfere with the regular output.
 
-diff --git a/lib.c b/lib.c
-index 3c1a0d9..fb08c0b 100644
---- a/lib.c
-+++ b/lib.c
-@@ -679,7 +679,11 @@ void snprintf_can_error_frame(char *buf, size_t len, const struct canfd_frame *c
- 		}
- 	}
- 
-+#ifdef CAN_ERR_CNT
-+	if (cf->can_id & CAN_ERR_CNT) {
-+#else
- 	if (cf->data[6] || cf->data[7]) {
-+#endif
- 		n += snprintf(buf + n, len - n, "%s", sep);
- 		n += snprintf(buf + n, len - n, "error-counter-tx-rx{{%d}{%d}}",
- 			      cf->data[6], cf->data[7]);
--- 
-2.37.4
+[...]
 
+> diff --git a/lib.h b/lib.h
+> index a4d3ce5..1cb1dd4 100644
+> --- a/lib.h
+> +++ b/lib.h
+> @@ -47,6 +47,12 @@
+> =20
+>  #include <stdio.h>
+> =20
+> +#ifdef DEBUG
+> +#define pr_debug(fmt, args...) printf(fmt, ##args)
+> +#else
+> +#define pr_debug(...)
+> +#endif
+
+With this change if DEBUG is not defined, the print format strings are
+not checked. This is why I have the pr_no macro. Side node: For functions
+you can use __attribute__ ((format (printf, 2, 3))).
+
+> +
+>  /* buffer sizes for CAN frame string representations */
+> =20
+>  #define CL_ID (sizeof("12345678##1"))
+> diff --git a/mcp251xfd/mcp251xfd-dev-coredump.c b/mcp251xfd/mcp251xfd-dev=
+-coredump.c
+> index 5874d24..422900f 100644
+> --- a/mcp251xfd/mcp251xfd-dev-coredump.c
+> +++ b/mcp251xfd/mcp251xfd-dev-coredump.c
+> @@ -17,18 +17,10 @@
+> =20
+>  #include <linux/kernel.h>
+> =20
+> +#include "../lib.h"
+>  #include "mcp251xfd.h"
+>  #include "mcp251xfd-dump-userspace.h"
+> =20
+> -#define pr_err(fmt, args...)    fprintf(stderr, fmt, ##args)
+> -#define pr_no(fmt, args...)     while (0) { fprintf(stdout, fmt, ##args)=
+; }
+> -
+> -#ifdef DEBUG
+> -#define pr_debug(fmt, args...) pr_err(fmt, ##args)
+> -#else
+> -#define pr_debug(fmt, args...) pr_no(fmt, ##args)
+> -#endif
+> -
+> =20
+>  struct mcp251xfd_dump_iter {
+>  	const void *start;
+> diff --git a/slcanpty.c b/slcanpty.c
+> index 4ac9e8a..3eba07e 100644
+> --- a/slcanpty.c
+> +++ b/slcanpty.c
+> @@ -49,8 +49,6 @@
+>  #define SLC_MTU (sizeof("T1111222281122334455667788EA5F\r")+1)
+>  #define DEVICE_NAME_PTMX "/dev/ptmx"
+> =20
+> -#define DEBUG
+
+For completeness mention that you switch off debugging in slcanpty.c.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--rf7qh6ze4qfjv5p5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNw3TAACgkQrX5LkNig
+011m9gf/Wc771hU6fanhOlHbX7dMCD0XiSsRzHu7DciVemQbr6WfeR3KkEPNB4Eo
+0MIZ9/ZnUr5LvsfzifL+2RiBwKEzWjOsICCk9PS4+xYnPDpm4gwyu9DsIVZ8xx0+
+eqP+yCssx6jzg/u0gSLI03mx91HiJbH1IEoc1nas7MxvCzv3IE5N1r7xvRTuzFZA
+KOwKLVW4c6JksT7GBVqaABcn1zZUO8lTjt+55QelMmbMNy+vyXjSib7A6tZwyZ/i
+Ocg7rdnhuR7GGFBxj6sGYlFvYDfIsbuxvnDXK6G3PPB7Lcg/tIXgM+AcH1ieAA3H
+3KK7+8ok5tCKq/74orr22kgH8bSgCA==
+=Ocrz
+-----END PGP SIGNATURE-----
+
+--rf7qh6ze4qfjv5p5--
