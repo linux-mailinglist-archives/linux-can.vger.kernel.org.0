@@ -2,62 +2,62 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6D8062706A
-	for <lists+linux-can@lfdr.de>; Sun, 13 Nov 2022 17:19:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB3A862706B
+	for <lists+linux-can@lfdr.de>; Sun, 13 Nov 2022 17:19:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231252AbiKMQTD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 13 Nov 2022 11:19:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53848 "EHLO
+        id S233916AbiKMQTE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 13 Nov 2022 11:19:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233867AbiKMQTD (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 13 Nov 2022 11:19:03 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0AD8FD31
-        for <linux-can@vger.kernel.org>; Sun, 13 Nov 2022 08:19:01 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id q1so8285883pgl.11
-        for <linux-can@vger.kernel.org>; Sun, 13 Nov 2022 08:19:01 -0800 (PST)
+        with ESMTP id S233867AbiKMQTE (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 13 Nov 2022 11:19:04 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91FFEE005
+        for <linux-can@vger.kernel.org>; Sun, 13 Nov 2022 08:19:03 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id d20so8044245plr.10
+        for <linux-can@vger.kernel.org>; Sun, 13 Nov 2022 08:19:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/MgiQmPlf3s15cSQPNeyAp64Pun4oKgxRr1xwh7ytgQ=;
-        b=Jg3q+YdLf/8t/H8cSA8aVDAsGNJVII3kqa5JuvBUzKfceNh5IY/UwPO1L+KvEwWkxn
-         4yvyalM15QtijeSOVy54MyaK/7G3qLY7YoBPXH246GeYBtwcIO0ScPEHupe3RC+gAhU1
-         aX6tBVBtEkyXrHoMGcnBk4NgjzrE67zcK2ewZJovdtL2mO48aGlMorGgLkFphieT9ztw
-         WQuSCjjYXMpt86rM3u64njrTcpRTKfsH8+d0ZGfLihg30z+Dux9C3EUF58ThIqvCm0ac
-         eWb90pjFSxwwT29PTBYF+JQWEb2dz1xRjaRld1f5v3wjFV/OZ7jY9vynhnAJ6T+XM87e
-         FZSg==
+        bh=ItXyjG77WAyaCmpRvDWlbmh/7CicYqejXh9n/rv0NoI=;
+        b=QSH9cbswwLU6uOd/cfN4exVRrXCU1ALDvu0BjjI9WDYYJ+yMBJXXDIsF9XvHpTXHb5
+         bIYgoojU5pFfrtJcLnnWwKazIrQJB0jObIcAj43mdu6RXMCGaR9s6I6DpKuw5imkInkz
+         XA99PWF14YuCCxEwCq80jj7jS8BafONf5MX9y8nuD4OsGHLrri2psvuJi7laLXk0Uhm0
+         A/vwvBFd5R0TfovkqgiyZGeCzUL2x5MD7eb2j2oeLxgURqzw1yglZ0rQbeUBzpTaVteG
+         Rf1XOY9gKwynobHK8ER0beAHc+EwvZcARl5X1UagbU/2x1eTBUS+1HVWtqRuNlv3T8PO
+         oBNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=/MgiQmPlf3s15cSQPNeyAp64Pun4oKgxRr1xwh7ytgQ=;
-        b=SoO4AJx5WkgZtcvzrhglRkCIelz2bK5qCPCaUi0aGfk/AharavR1oFfnoVYXtHfdz1
-         iYBewrONmxRmO2v6FNVy+KgP5pE4c6H6GaiCvi3PIxay3AeeCcvQIkI0bdLQ+w+Dxfw2
-         JzXDJIZDBM5PghXvkPZSlL8ELTSDKpprKUTutl5MA/B7y+WbZgb2Wot/EbFB/O7csFGz
-         6XVuRQrLCSKjqflO2JNgmi9WUE0QpBFswdXu8lZTCiqqWVs8Q89eDVXPyYdnHZkGOg93
-         VYaigPh87JGnBGuFEY6UU+P12JiHMn5OOJXHG+gxz0gruRtGXycrFp0QUUDpFD+uMTU7
-         /yaQ==
-X-Gm-Message-State: ANoB5pkLu0cQsCpk2mCU+KbwyRyhXaWHbtLQVOFc9m5P/PKk2qEGNAZ/
-        p98DdFfCKDOYSmR1cndJqTwBfK5jLpJgfQ==
-X-Google-Smtp-Source: AA0mqf7yruA5jJk4ucS2fA8rVQMwp35997UKZCDN2/C/6NBdAHbICv7Yf1SezhMWlfwDrC5Q102FOw==
-X-Received: by 2002:a63:e24e:0:b0:46f:eb81:8c01 with SMTP id y14-20020a63e24e000000b0046feb818c01mr8846966pgj.68.1668356341084;
-        Sun, 13 Nov 2022 08:19:01 -0800 (PST)
+        bh=ItXyjG77WAyaCmpRvDWlbmh/7CicYqejXh9n/rv0NoI=;
+        b=Ipy/WW3qPJHRNo1HJac6aLp9VYoKgu4/COJmb3VHdOtKeEpLQM3VcpC5BPC5TEaRv6
+         CH4vzLaMryIWMQBLHZTdXLZ9i/q9kWvxO62kJR7dS+N8iHnu49NauY6UdyeX22LSJvob
+         0UDHeoCitTiqoCyxktvlQGjcRV84fihpeZqQpPH4AgdYg/7hIAhBFYrnrz2n3mR2ckiV
+         rvCoE4/nnXi6vwUqcRoWqpR+VDY9EGmm2UqzFO/xJvLm/FdTqFOU5wrZmSfrXE+C4Sv2
+         ZF0UONHkIItW+jYaNgaQsbmqHhTRuSYxVS5iHFfRR0utXSR69cjtVJYE9481zoWDycs8
+         jp4w==
+X-Gm-Message-State: ANoB5plm/3Hv9lpwgvZrdYSXCy9Z2F/2JfNRj2vwuAIMOqNJJYVFz4DZ
+        5Iiz37P+nFBIODCm5hFGWtL0fGDDIKnvGg==
+X-Google-Smtp-Source: AA0mqf7/8hVrtgbXky6DnGcsu5CuLWjAUrzWxSf9KqX+3gzW1qpTrl6pGgITdQtgWvmzD3xtXK8EsA==
+X-Received: by 2002:a17:90a:fc7:b0:214:160a:7993 with SMTP id 65-20020a17090a0fc700b00214160a7993mr10816495pjz.32.1668356342741;
+        Sun, 13 Nov 2022 08:19:02 -0800 (PST)
 Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id 192-20020a6217c9000000b0056c04dee930sm4863558pfx.120.2022.11.13.08.18.59
+        by smtp.gmail.com with ESMTPSA id 192-20020a6217c9000000b0056c04dee930sm4863558pfx.120.2022.11.13.08.19.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Nov 2022 08:19:00 -0800 (PST)
+        Sun, 13 Nov 2022 08:19:02 -0800 (PST)
 Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
 From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 To:     linux-can@vger.kernel.org
 Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH can-utils-dev v2 2/5] lib: add pr_debug() macro
-Date:   Mon, 14 Nov 2022 01:18:28 +0900
-Message-Id: <20221113161831.16388-3-mailhol.vincent@wanadoo.fr>
+Subject: [PATCH can-utils-dev v2 3/5] lib: snprintf_can_error_frame: print counter errors if CAN_ERR_CNT is set
+Date:   Mon, 14 Nov 2022 01:18:29 +0900
+Message-Id: <20221113161831.16388-4-mailhol.vincent@wanadoo.fr>
 X-Mailer: git-send-email 2.37.4
 In-Reply-To: <20221113161831.16388-1-mailhol.vincent@wanadoo.fr>
 References: <20221113085321.87910-1-mailhol.vincent@wanadoo.fr>
@@ -74,225 +74,38 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Add the pr_debug() macro so that:
+Since [1], the kernel has a new flag: CAN_ERR_CNT to notify whether or
+not the error counter is set. Use this to decide whether on not the
+error-counter-tx-rx should be printed.
 
-  #ifdef DEBUG
-  	printf("foo");
-  #endif
+For interoperability reasons, use an #ifdef so that the code still
+work if built on older kernels.
 
-can be replaced by:
-
-  	pr_debug("foo");
-
-Apply the pr_debug() macro wherever relevant.
-
-Currently, there is no consensus whether debug messages should be
-printed on stdout or stderr. Most of the modules: canbusload.c,
-candump.c and canlogserver.c use stdout but
-mcp251xfd/mcp251xfd-dev-coredump.c uses stderr. Harmonize the behavior
-by following the major trend and make
-mcp251xfd/mcp251xfd-dev-coredump.c also output to stdout.
-
-slcanpty.c does a #define DEBUG, meaning that debug is always turned
-on for this file. Remove this and make debug an option like every
-other files.
+[1] commit 3e5c291c7942 ("can: add CAN_ERR_CNT flag to notify
+    availability of error counter")
+Link: https://git.kernel.org/torvalds/linux/c/3e5c291c7942
 
 Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 ---
- canbusload.c                       |  9 +++------
- candump.c                          | 16 ++++------------
- canlogserver.c                     | 12 ++++--------
- lib.h                              |  7 +++++++
- mcp251xfd/mcp251xfd-dev-coredump.c | 10 +---------
- slcanpty.c                         | 10 +++-------
- 6 files changed, 22 insertions(+), 42 deletions(-)
+ lib.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/canbusload.c b/canbusload.c
-index e4dfc02..47b62fd 100644
---- a/canbusload.c
-+++ b/canbusload.c
-@@ -61,6 +61,7 @@
- #include <linux/can.h>
- #include <linux/can/raw.h>
- 
-+#include "lib.h"
- #include "terminal.h"
- #include "canframelen.h"
- 
-@@ -310,9 +311,7 @@ int main(int argc, char **argv)
- 			return 1;
+diff --git a/lib.c b/lib.c
+index 3c1a0d9..fb08c0b 100644
+--- a/lib.c
++++ b/lib.c
+@@ -679,7 +679,11 @@ void snprintf_can_error_frame(char *buf, size_t len, const struct canfd_frame *c
  		}
+ 	}
  
--#ifdef DEBUG
--		printf("open %d '%s'.\n", i, ptr);
--#endif
-+		pr_debug("open %d '%s'.\n", i, ptr);
- 
- 		s[i] = socket(PF_CAN, SOCK_RAW, CAN_RAW);
- 		if (s[i] < 0) {
-@@ -358,10 +357,8 @@ int main(int argc, char **argv)
- 		if (nbytes > max_bitrate_len)
- 			max_bitrate_len = nbytes; /* for nice printing */
- 
-+		pr_debug("using interface name '%s'.\n", ifr.ifr_name);
- 
--#ifdef DEBUG
--		printf("using interface name '%s'.\n", ifr.ifr_name);
--#endif
- 		/* try to switch the socket into CAN FD mode */
- 		const int canfd_on = 1;
- 		setsockopt(s[i], SOL_CAN_RAW, CAN_RAW_FD_FRAMES, &canfd_on, sizeof(canfd_on));
-diff --git a/candump.c b/candump.c
-index 6fe30bb..4a239e7 100644
---- a/candump.c
-+++ b/candump.c
-@@ -216,9 +216,7 @@ static int idx2dindex(int ifidx, int socket)
- 
- 	strcpy(devname[i], ifr.ifr_name);
- 
--#ifdef DEBUG
--	printf("new index %d (%s)\n", i, devname[i]);
--#endif
-+	pr_debug("new index %d (%s)\n", i, devname[i]);
- 
- 	return i;
- }
-@@ -474,9 +472,7 @@ int main(int argc, char **argv)
- 		ptr = argv[optind+i];
- 		nptr = strchr(ptr, ',');
- 
--#ifdef DEBUG
--		printf("open %d '%s'.\n", i, ptr);
--#endif
-+		pr_debug("open %d '%s'.\n", i, ptr);
- 
- 		obj->s = socket(PF_CAN, SOCK_RAW, CAN_RAW);
- 		if (obj->s < 0) {
-@@ -510,9 +506,7 @@ int main(int argc, char **argv)
- 		memset(&ifr.ifr_name, 0, sizeof(ifr.ifr_name));
- 		strncpy(ifr.ifr_name, ptr, nbytes);
- 
--#ifdef DEBUG
--		printf("using interface name '%s'.\n", ifr.ifr_name);
--#endif
-+		pr_debug("using interface name '%s'.\n", ifr.ifr_name);
- 
- 		if (strcmp(ANYDEV, ifr.ifr_name) != 0) {
- 			if (ioctl(obj->s, SIOCGIFINDEX, &ifr) < 0) {
-@@ -602,9 +596,7 @@ int main(int argc, char **argv)
- 			/* try SO_RCVBUFFORCE first, if we run with CAP_NET_ADMIN */
- 			if (setsockopt(obj->s, SOL_SOCKET, SO_RCVBUFFORCE,
- 				       &rcvbuf_size, sizeof(rcvbuf_size)) < 0) {
--#ifdef DEBUG
--				printf("SO_RCVBUFFORCE failed so try SO_RCVBUF ...\n");
--#endif
-+				pr_debug("SO_RCVBUFFORCE failed so try SO_RCVBUF ...\n");
- 				if (setsockopt(obj->s, SOL_SOCKET, SO_RCVBUF,
- 					       &rcvbuf_size, sizeof(rcvbuf_size)) < 0) {
- 					perror("setsockopt SO_RCVBUF");
-diff --git a/canlogserver.c b/canlogserver.c
-index 6425ca4..51d548f 100644
---- a/canlogserver.c
-+++ b/canlogserver.c
-@@ -145,9 +145,7 @@ int idx2dindex(int ifidx, int socket)
- 
- 	strcpy(devname[i], ifr.ifr_name);
- 
--#ifdef DEBUG
--	printf("new index %d (%s)\n", i, devname[i]);
--#endif
-+	pr_debug("new index %d (%s)\n", i, devname[i]);
- 
- 	return i;
- }
-@@ -310,11 +308,9 @@ int main(int argc, char **argv)
- 
- 	for (i=0; i<currmax; i++) {
- 
--#ifdef DEBUG
--		printf("open %d '%s' m%08X v%08X i%d e%d.\n",
--		       i, argv[optind+i], mask[i], value[i],
--		       inv_filter[i], err_mask[i]);
--#endif
-+		pr_debug("open %d '%s' m%08X v%08X i%d e%d.\n",
-+		      i, argv[optind+i], mask[i], value[i],
-+		      inv_filter[i], err_mask[i]);
- 
- 		if ((s[i] = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
- 			perror("socket");
-diff --git a/lib.h b/lib.h
-index a4d3ce5..6cc58a2 100644
---- a/lib.h
-+++ b/lib.h
-@@ -47,6 +47,13 @@
- 
- #include <stdio.h>
- 
-+#ifdef DEBUG
-+#define pr_debug(fmt, args...) printf(fmt, ##args)
++#ifdef CAN_ERR_CNT
++	if (cf->can_id & CAN_ERR_CNT) {
 +#else
-+__attribute__((format (printf, 1, 2)))
-+static inline int pr_debug(const char* fmt, ...) {return 0;}
+ 	if (cf->data[6] || cf->data[7]) {
 +#endif
-+
- /* buffer sizes for CAN frame string representations */
- 
- #define CL_ID (sizeof("12345678##1"))
-diff --git a/mcp251xfd/mcp251xfd-dev-coredump.c b/mcp251xfd/mcp251xfd-dev-coredump.c
-index 5874d24..422900f 100644
---- a/mcp251xfd/mcp251xfd-dev-coredump.c
-+++ b/mcp251xfd/mcp251xfd-dev-coredump.c
-@@ -17,18 +17,10 @@
- 
- #include <linux/kernel.h>
- 
-+#include "../lib.h"
- #include "mcp251xfd.h"
- #include "mcp251xfd-dump-userspace.h"
- 
--#define pr_err(fmt, args...)    fprintf(stderr, fmt, ##args)
--#define pr_no(fmt, args...)     while (0) { fprintf(stdout, fmt, ##args); }
--
--#ifdef DEBUG
--#define pr_debug(fmt, args...) pr_err(fmt, ##args)
--#else
--#define pr_debug(fmt, args...) pr_no(fmt, ##args)
--#endif
--
- 
- struct mcp251xfd_dump_iter {
- 	const void *start;
-diff --git a/slcanpty.c b/slcanpty.c
-index 4ac9e8a..fa97cd6 100644
---- a/slcanpty.c
-+++ b/slcanpty.c
-@@ -49,8 +49,6 @@
- #define SLC_MTU (sizeof("T1111222281122334455667788EA5F\r")+1)
- #define DEVICE_NAME_PTMX "/dev/ptmx"
- 
--#define DEBUG
--
- /* read data from pty, send CAN frames to CAN socket and answer commands */
- int pty2can(int pty, int socket, struct can_filter *fi,
- 	    int *is_open, int *tstamp)
-@@ -106,14 +104,12 @@ rx_restart:
- 	cmd = buf[0];
- 	buf[nbytes] = 0;
- 
--#ifdef DEBUG
- 	for (tmp = 0; tmp < nbytes; tmp++)
- 		if (buf[tmp] == '\r')
--			putchar('@');
-+			pr_debug("@");
- 		else
--			putchar(buf[tmp]);
--	printf("\n");
--#endif
-+			pr_debug("%c", buf[tmp]);
-+	pr_debug("\n");
- 
- 	/* check for filter configuration commands */
- 	if (cmd == 'm' || cmd == 'M') {
+ 		n += snprintf(buf + n, len - n, "%s", sep);
+ 		n += snprintf(buf + n, len - n, "error-counter-tx-rx{{%d}{%d}}",
+ 			      cf->data[6], cf->data[7]);
 -- 
 2.37.4
 
