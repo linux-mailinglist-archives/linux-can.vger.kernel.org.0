@@ -2,83 +2,120 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 226D4626FDB
-	for <lists+linux-can@lfdr.de>; Sun, 13 Nov 2022 14:47:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01683626FF2
+	for <lists+linux-can@lfdr.de>; Sun, 13 Nov 2022 14:57:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235427AbiKMNrf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 13 Nov 2022 08:47:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53704 "EHLO
+        id S235147AbiKMN5F (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 13 Nov 2022 08:57:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235400AbiKMNrc (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 13 Nov 2022 08:47:32 -0500
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E16012D34
-        for <linux-can@vger.kernel.org>; Sun, 13 Nov 2022 05:47:26 -0800 (PST)
-Received: by mail-pj1-f50.google.com with SMTP id m14-20020a17090a3f8e00b00212dab39bcdso11580607pjc.0
-        for <linux-can@vger.kernel.org>; Sun, 13 Nov 2022 05:47:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=S/zF3ASBFGTvshiNReXAMvrHFSAfOqftamWYMD1oBFQ=;
-        b=QcYjiy2Anj0mI+XwV9ZZ5wCvNPNzKggwZgsRl04igzu7UToDpqBGFUXBswxC37Fm/A
-         t+1bnLFqBTC7P0803/sL/3SMPCMw98Br86b9JMEOjqkGEvAyoyEnKSdtL0aALnzGFEHl
-         PBOKQRb+st4rY3Wwgo6ZQ4iuamh4U/5InuD1UXhNl9gsoCR/s4+CH3se4m0a2N0nkmJe
-         b5tElZG1KonTGmaxJzfCNz+nRK+ka/IA8BRzvnjeA7Mbp1iwrQgfMQ+la8pcs8hBOQ69
-         b9VvbIk1OCsT0SIeZB+YSOQhonZQZbCguRWKYTm+7wiCwwH1iHtTD+Oc756ZgwHBKHeW
-         ZcDA==
-X-Gm-Message-State: ANoB5pnXje4Ffa5gYIzoOZTmuE8Lxt8o4oGS+sodvkXTo7WCzp64cKgv
-        ZyxOzMWfm7R1ScXLbAzSpOHWXaHwvW+dqDto747wBxp4Jv8=
-X-Google-Smtp-Source: AA0mqf4v2UPZP43nXv5yBSjO5uvBr6bSe4xAA1F4qov1BTqLvmYZZpkQu3oSxKOiOXYvxZ8bg1XSZDimJvZukHLReto=
-X-Received: by 2002:a17:902:b609:b0:186:ac81:2aa9 with SMTP id
- b9-20020a170902b60900b00186ac812aa9mr10141968pls.95.1668347245970; Sun, 13
- Nov 2022 05:47:25 -0800 (PST)
-MIME-Version: 1.0
-References: <20221113085321.87910-1-mailhol.vincent@wanadoo.fr>
- <20221113085321.87910-3-mailhol.vincent@wanadoo.fr> <20221113130325.5tagqsi4t4523uob@pengutronix.de>
- <CAMZ6RqKjAyYL6rNXaFK4dTQn=XtYnMw29RNmQJMo1pu29GrE-Q@mail.gmail.com> <20221113133406.bmwavedn66wng3cu@pengutronix.de>
-In-Reply-To: <20221113133406.bmwavedn66wng3cu@pengutronix.de>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Sun, 13 Nov 2022 22:47:14 +0900
-Message-ID: <CAMZ6RqJSbUCehY5cFST24GLnJKbpb=m=v55b=V46RjK-knH2pw@mail.gmail.com>
-Subject: Re: [PATCH can-utils-dev 2/5] lib: add pr_debug() macro
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
+        with ESMTP id S234073AbiKMN5F (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 13 Nov 2022 08:57:05 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6517DDE8B
+        for <linux-can@vger.kernel.org>; Sun, 13 Nov 2022 05:57:04 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1ouDTq-0005tR-RN; Sun, 13 Nov 2022 14:57:02 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:6d7d:dd1c:b670:c511])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 2EA3C11BDD9;
+        Sun, 13 Nov 2022 13:57:02 +0000 (UTC)
+Date:   Sun, 13 Nov 2022 14:56:53 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
 Cc:     linux-can@vger.kernel.org, Oliver Hartkopp <socketcan@hartkopp.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Subject: Re: [PATCH can-utils-dev 2/5] lib: add pr_debug() macro
+Message-ID: <20221113135653.klh4g7ng4pd4olon@pengutronix.de>
+References: <20221113085321.87910-1-mailhol.vincent@wanadoo.fr>
+ <20221113085321.87910-3-mailhol.vincent@wanadoo.fr>
+ <20221113130325.5tagqsi4t4523uob@pengutronix.de>
+ <CAMZ6RqKjAyYL6rNXaFK4dTQn=XtYnMw29RNmQJMo1pu29GrE-Q@mail.gmail.com>
+ <20221113133406.bmwavedn66wng3cu@pengutronix.de>
+ <CAMZ6RqJSbUCehY5cFST24GLnJKbpb=m=v55b=V46RjK-knH2pw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ix2xprxvvyldrv5d"
+Content-Disposition: inline
+In-Reply-To: <CAMZ6RqJSbUCehY5cFST24GLnJKbpb=m=v55b=V46RjK-knH2pw@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Sun. 13 nov. 2022 at 22:39, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> On 13.11.2022 22:19:23, Vincent MAILHOL wrote:
-> > On Sun. 13 Nov. 2022 at 22:12, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> > > On 13.11.2022 17:53:18, Vincent Mailhol wrote:
-> > >
-> > > > diff --git a/mcp251xfd/mcp251xfd-dev-coredump.c b/mcp251xfd/mcp251xfd-dev-coredump.c
-> > > > index 5874d24..422900f 100644
-> > > > --- a/mcp251xfd/mcp251xfd-dev-coredump.c
-> > > > +++ b/mcp251xfd/mcp251xfd-dev-coredump.c
-> > > > @@ -17,18 +17,10 @@
-> > > >
-> > > >  #include <linux/kernel.h>
-> > > >
-> > > > +#include "../lib.h"
-> > >
-> > > Does #include <lib.h> work?
-> >
-> > Unfortunately, no:
->
-> Using the plain makefile without autotools and cmake?
 
-It works with autotools. Actually, I am now confused, I thought that
-Makefile would be generated by ./autogen.sh and ./configure. To be
-honest, after seeing the Makefile, I did not pay attention to the rest
-and did not realize that this was also a autotools project.
-Shouldn't the Makefile be removed? It is odd to have both.
+--ix2xprxvvyldrv5d
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 13.11.2022 22:47:14, Vincent MAILHOL wrote:
+> On Sun. 13 nov. 2022 at 22:39, Marc Kleine-Budde <mkl@pengutronix.de> wro=
+te:
+> > On 13.11.2022 22:19:23, Vincent MAILHOL wrote:
+> > > On Sun. 13 Nov. 2022 at 22:12, Marc Kleine-Budde <mkl@pengutronix.de>=
+ wrote:
+> > > > On 13.11.2022 17:53:18, Vincent Mailhol wrote:
+> > > >
+> > > > > diff --git a/mcp251xfd/mcp251xfd-dev-coredump.c b/mcp251xfd/mcp25=
+1xfd-dev-coredump.c
+> > > > > index 5874d24..422900f 100644
+> > > > > --- a/mcp251xfd/mcp251xfd-dev-coredump.c
+> > > > > +++ b/mcp251xfd/mcp251xfd-dev-coredump.c
+> > > > > @@ -17,18 +17,10 @@
+> > > > >
+> > > > >  #include <linux/kernel.h>
+> > > > >
+> > > > > +#include "../lib.h"
+> > > >
+> > > > Does #include <lib.h> work?
+> > >
+> > > Unfortunately, no:
+> >
+> > Using the plain makefile without autotools and cmake?
+>=20
+> It works with autotools. Actually, I am now confused, I thought that
+> Makefile would be generated by ./autogen.sh and ./configure. To be
+> honest, after seeing the Makefile, I did not pay attention to the rest
+> and did not realize that this was also a autotools project.
+> Shouldn't the Makefile be removed? It is odd to have both.
+
+I don't see any benefits in the handcrafted Makefile, Oliver seems to
+like it :)
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--ix2xprxvvyldrv5d
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNw96MACgkQrX5LkNig
+013DBQf+NfJ2HEhtm3AJfPrrHRHGnOkSFGNfLQljo+TmPLUss8jux8IeNQFuA5dY
+DBQfdhI0ryG1k6ylitVrkx4dTHNcMOYjjLSPOJznhZAma2hjwTJxiwKL5ylEvgof
+EGUYZLa3zAjawsCHBs2JxxVMGeXaqR8ptxUR3mLXMRiiUU33aVbUEDAjXtvmp97E
+v8PVewV4FZJ8ZRvoJU1tlm+CDbmjeWshjeGGJceTxQYLjExtAx1OV/LuWdnI6zo6
+X9KfYVjHoiUlKjowcidmCBCDytucPhTcHoC7yWmSiReiGlKU5ILK7zxayyWKo1H2
+8dYYBbD4wQ5mOeykGBgPQDqpwRkiVg==
+=3BmC
+-----END PGP SIGNATURE-----
+
+--ix2xprxvvyldrv5d--
