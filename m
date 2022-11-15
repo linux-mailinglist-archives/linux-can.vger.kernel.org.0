@@ -2,56 +2,56 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 629D4629905
-	for <lists+linux-can@lfdr.de>; Tue, 15 Nov 2022 13:39:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B742629957
+	for <lists+linux-can@lfdr.de>; Tue, 15 Nov 2022 13:54:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbiKOMjH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 15 Nov 2022 07:39:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52966 "EHLO
+        id S238085AbiKOMyY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 15 Nov 2022 07:54:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbiKOMjH (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 15 Nov 2022 07:39:07 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA201FF97;
-        Tue, 15 Nov 2022 04:39:05 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id j15so24062818wrq.3;
-        Tue, 15 Nov 2022 04:39:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=QKEXLyPGXjJRKPyvW3PaMhdvkr3/5SmF5s8yvu+zTKo=;
-        b=NmWecbfPc3BUXQz2DWCZAXcNm8nXoinDTs8mMqCsMqBQOS83ucUtmaru3L/0xEFY78
-         v5xjfaF1k5d639TGBRJfDsGlo4iqw1cTeIZWY9b2tDG669D9Bnm0USvWmCaW0HzSqyyR
-         JX4ZFafXCEVWEc4Np7IQRGttEgNeKUZx9mQZy+dB/ftO2lFfFlZB59QmUD9u3mx1ycZo
-         pnuToKBnOu/Bbe9XIBQdJZo0lhreWYN6SEdJVcUK1JGUP6Wz0O5doccRIicJu+1CSR2d
-         kgVR21EiXBHrCbsBwoc6bLbn0oTkgYxgyfKss94IhB89FJxOOuMAirjayTIgocruMt68
-         kBaQ==
+        with ESMTP id S238256AbiKOMyD (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 15 Nov 2022 07:54:03 -0500
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F6BF08;
+        Tue, 15 Nov 2022 04:54:01 -0800 (PST)
+Received: by mail-qv1-f54.google.com with SMTP id c8so9675584qvn.10;
+        Tue, 15 Nov 2022 04:54:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=QKEXLyPGXjJRKPyvW3PaMhdvkr3/5SmF5s8yvu+zTKo=;
-        b=BWod6FeIRGIhaseV2vmGvSi96Y4I1YzJPZa5HRSKO/nRX+VOjumHwBb5WxTwKnjQ4E
-         APUpK0+aslRe/vMvF1B5jZPwG8TmF3IqG55QST8dav0fmzPCSZUmG7MwgB2ydEtia4AG
-         ZUnSGfA3wiXq9dNXbX0Q7Ub1BirYw/k5P8thnZehD6BcRzSrGnJzFE5lnBFZXRJlDrYN
-         AQ9kKedT2p4WRb1+KUMV9cQinMUn+b1+kflLp0MTfwquYxAJRlWrRY4yAOBqj0oEV5Nr
-         YDVwL1M5TD1mbke4BGhb3/DkCAhnwrT1kSS4917J1ZLJm5cd1VzEmjzQvfFnh78itwGm
-         yEdw==
-X-Gm-Message-State: ANoB5pkOI5j2/xZaOL/ILqMrzpi/9MB/uoo2jwPinh+spbTh9pGlOqv8
-        aYEYskGEfMLnQr3mbvsaQUU=
-X-Google-Smtp-Source: AA0mqf6tmoz1BJJ0n5zUU8CY0LabZNgtpI2+CtgwsY8wssR/lutYM+mj34Bhl0yB6iOJaiI9THy/Sg==
-X-Received: by 2002:a05:6000:1806:b0:241:7277:6aa4 with SMTP id m6-20020a056000180600b0024172776aa4mr10038121wrh.660.1668515944078;
-        Tue, 15 Nov 2022 04:39:04 -0800 (PST)
-Received: from prasmi.home ([2a00:23c8:2501:c701:d94a:6345:c378:e255])
-        by smtp.gmail.com with ESMTPSA id r8-20020a05600c2f0800b003c701c12a17sm20735803wmn.12.2022.11.15.04.39.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 04:39:02 -0800 (PST)
-From:   Prabhakar <prabhakar.csengg@gmail.com>
-X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wolfgang Grandegger <wg@grandegger.com>,
+        bh=kNu7gqY5FuH+enfhy3h6rYwlDBJbYmHEghI0eWJOGto=;
+        b=SljO9RvVBg2lSIB3MjXszVfqTGsBSgdblt1SPJRFIsmX4BJ3NFtxPc4tniJmU4Gwc6
+         Pzwg9ObTnHnCTq6Q7+ZcCY2RhiVTA7ZR0smXq9UCarQgE83hoS2Xy33nuIR20jdFY7r3
+         dUJf54jgyWZOzR7Oer/9QwrqESg8gt6bkrXw7IK8ckIikTKRyWfINFMU4i6GimHAE0nS
+         P4p0SpIBtpt0IfX5y4WUPwKBN2+Qif9aFNTyebgg4hT515UdLlsRxsDWuH/u1H/88ZCV
+         YzLal6T4v61hU9Y5HwHiklb+EgC4yMf0Kg8LX9MWSp4WyjeafHxslNLWACoXKm/7bCPV
+         V8mg==
+X-Gm-Message-State: ANoB5pnMHkRFzmNO1lQdP8K6d2+wDaalzlAZD3EbHxzobJlznJL5L80O
+        Z01eTn8QrLCC0h5Ge/SvgwWt3Pf8AzR7TQ==
+X-Google-Smtp-Source: AA0mqf4L4XoJkaz0N84B4fZlnMo61pNwhvn1OY1j1Ec4XjZkzokjSHMXByi/99Z50ECi0e+yxT20MA==
+X-Received: by 2002:a0c:d807:0:b0:4be:a152:aca9 with SMTP id h7-20020a0cd807000000b004bea152aca9mr16460076qvj.102.1668516840765;
+        Tue, 15 Nov 2022 04:54:00 -0800 (PST)
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
+        by smtp.gmail.com with ESMTPSA id y20-20020a05620a25d400b006faa88ba2b5sm8247906qko.7.2022.11.15.04.54.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Nov 2022 04:54:00 -0800 (PST)
+Received: by mail-yb1-f182.google.com with SMTP id b131so16355920yba.11;
+        Tue, 15 Nov 2022 04:54:00 -0800 (PST)
+X-Received: by 2002:a25:ba4c:0:b0:6dc:dc81:aaf4 with SMTP id
+ z12-20020a25ba4c000000b006dcdc81aaf4mr15188013ybj.365.1668516840123; Tue, 15
+ Nov 2022 04:54:00 -0800 (PST)
+MIME-Version: 1.0
+References: <20221115123811.1182922-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20221115123811.1182922-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 15 Nov 2022 13:53:48 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdV8r-QXi6KBsZs2SE8t34e8is05xwCrWqfTL3XP-mAGVA@mail.gmail.com>
+Message-ID: <CAMuHMdV8r-QXi6KBsZs2SE8t34e8is05xwCrWqfTL3XP-mAGVA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: can: renesas,rcar-canfd: Document RZ/Five SoC
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
@@ -59,57 +59,45 @@ To:     Geert Uytterhoeven <geert+renesas@glider.be>,
         Paolo Abeni <pabeni@redhat.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
         Biju Das <biju.das.jz@bp.renesas.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH] dt-bindings: can: renesas,rcar-canfd: Document RZ/Five SoC
-Date:   Tue, 15 Nov 2022 12:38:11 +0000
-Message-Id: <20221115123811.1182922-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On Tue, Nov 15, 2022 at 1:51 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> The CANFD block on the RZ/Five SoC is identical to one found on the
+> RZ/G2UL SoC. "renesas,r9a07g043-canfd" compatible string will be used
+> on the RZ/Five SoC so to make this clear, update the comment to include
+> RZ/Five SoC.
+>
+> No driver changes are required as generic compatible string
+> "renesas,rzg2l-canfd" will be used as a fallback on RZ/Five SoC.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-The CANFD block on the RZ/Five SoC is identical to one found on the
-RZ/G2UL SoC. "renesas,r9a07g043-canfd" compatible string will be used
-on the RZ/Five SoC so to make this clear, update the comment to include
-RZ/Five SoC.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-No driver changes are required as generic compatible string
-"renesas,rzg2l-canfd" will be used as a fallback on RZ/Five SoC.
+Gr{oetje,eeting}s,
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
- .../devicetree/bindings/net/can/renesas,rcar-canfd.yaml         | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+                        Geert
 
-diff --git a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-index 6f71fc96bc4e..8347053a96dc 100644
---- a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-+++ b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-@@ -33,7 +33,7 @@ properties:
- 
-       - items:
-           - enum:
--              - renesas,r9a07g043-canfd    # RZ/G2UL
-+              - renesas,r9a07g043-canfd    # RZ/G2UL and RZ/Five
-               - renesas,r9a07g044-canfd    # RZ/G2{L,LC}
-               - renesas,r9a07g054-canfd    # RZ/V2L
-           - const: renesas,rzg2l-canfd     # RZ/G2L family
--- 
-2.25.1
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
