@@ -2,147 +2,114 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAE0062961A
-	for <lists+linux-can@lfdr.de>; Tue, 15 Nov 2022 11:39:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 629D4629905
+	for <lists+linux-can@lfdr.de>; Tue, 15 Nov 2022 13:39:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238038AbiKOKjs (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 15 Nov 2022 05:39:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54880 "EHLO
+        id S230153AbiKOMjH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 15 Nov 2022 07:39:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237577AbiKOKjr (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 15 Nov 2022 05:39:47 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2386E00E
-        for <linux-can@vger.kernel.org>; Tue, 15 Nov 2022 02:39:45 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1outM0-00088X-7H; Tue, 15 Nov 2022 11:39:44 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:6ac2:39cd:4970:9b29])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 1DA2811EF0B;
-        Tue, 15 Nov 2022 08:57:44 +0000 (UTC)
-Date:   Tue, 15 Nov 2022 09:57:38 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can@vger.kernel.org, Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: Re: [PATCH can-utils-dev v3 0/6] can-utils-dev: a set of update and
- cleanup patches
-Message-ID: <20221115085738.wd6ozab7k4d4qam2@pengutronix.de>
-References: <20221114163848.3398-1-mailhol.vincent@wanadoo.fr>
- <20221115081545.lovcyysosrix4dk6@pengutronix.de>
+        with ESMTP id S229781AbiKOMjH (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 15 Nov 2022 07:39:07 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA201FF97;
+        Tue, 15 Nov 2022 04:39:05 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id j15so24062818wrq.3;
+        Tue, 15 Nov 2022 04:39:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QKEXLyPGXjJRKPyvW3PaMhdvkr3/5SmF5s8yvu+zTKo=;
+        b=NmWecbfPc3BUXQz2DWCZAXcNm8nXoinDTs8mMqCsMqBQOS83ucUtmaru3L/0xEFY78
+         v5xjfaF1k5d639TGBRJfDsGlo4iqw1cTeIZWY9b2tDG669D9Bnm0USvWmCaW0HzSqyyR
+         JX4ZFafXCEVWEc4Np7IQRGttEgNeKUZx9mQZy+dB/ftO2lFfFlZB59QmUD9u3mx1ycZo
+         pnuToKBnOu/Bbe9XIBQdJZo0lhreWYN6SEdJVcUK1JGUP6Wz0O5doccRIicJu+1CSR2d
+         kgVR21EiXBHrCbsBwoc6bLbn0oTkgYxgyfKss94IhB89FJxOOuMAirjayTIgocruMt68
+         kBaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QKEXLyPGXjJRKPyvW3PaMhdvkr3/5SmF5s8yvu+zTKo=;
+        b=BWod6FeIRGIhaseV2vmGvSi96Y4I1YzJPZa5HRSKO/nRX+VOjumHwBb5WxTwKnjQ4E
+         APUpK0+aslRe/vMvF1B5jZPwG8TmF3IqG55QST8dav0fmzPCSZUmG7MwgB2ydEtia4AG
+         ZUnSGfA3wiXq9dNXbX0Q7Ub1BirYw/k5P8thnZehD6BcRzSrGnJzFE5lnBFZXRJlDrYN
+         AQ9kKedT2p4WRb1+KUMV9cQinMUn+b1+kflLp0MTfwquYxAJRlWrRY4yAOBqj0oEV5Nr
+         YDVwL1M5TD1mbke4BGhb3/DkCAhnwrT1kSS4917J1ZLJm5cd1VzEmjzQvfFnh78itwGm
+         yEdw==
+X-Gm-Message-State: ANoB5pkOI5j2/xZaOL/ILqMrzpi/9MB/uoo2jwPinh+spbTh9pGlOqv8
+        aYEYskGEfMLnQr3mbvsaQUU=
+X-Google-Smtp-Source: AA0mqf6tmoz1BJJ0n5zUU8CY0LabZNgtpI2+CtgwsY8wssR/lutYM+mj34Bhl0yB6iOJaiI9THy/Sg==
+X-Received: by 2002:a05:6000:1806:b0:241:7277:6aa4 with SMTP id m6-20020a056000180600b0024172776aa4mr10038121wrh.660.1668515944078;
+        Tue, 15 Nov 2022 04:39:04 -0800 (PST)
+Received: from prasmi.home ([2a00:23c8:2501:c701:d94a:6345:c378:e255])
+        by smtp.gmail.com with ESMTPSA id r8-20020a05600c2f0800b003c701c12a17sm20735803wmn.12.2022.11.15.04.39.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 04:39:02 -0800 (PST)
+From:   Prabhakar <prabhakar.csengg@gmail.com>
+X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH] dt-bindings: can: renesas,rcar-canfd: Document RZ/Five SoC
+Date:   Tue, 15 Nov 2022 12:38:11 +0000
+Message-Id: <20221115123811.1182922-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tiov2z26hb4l3uq7"
-Content-Disposition: inline
-In-Reply-To: <20221115081545.lovcyysosrix4dk6@pengutronix.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
---tiov2z26hb4l3uq7
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The CANFD block on the RZ/Five SoC is identical to one found on the
+RZ/G2UL SoC. "renesas,r9a07g043-canfd" compatible string will be used
+on the RZ/Five SoC so to make this clear, update the comment to include
+RZ/Five SoC.
 
-On 15.11.2022 09:15:45, Marc Kleine-Budde wrote:
-> On 15.11.2022 01:38:42, Vincent Mailhol wrote:
-> > This series contain cleanup patches and update of header files. There
-> > is no real relation between each patch (aside of 2/6 and 3/6 which
-> > form a pair) so I will end the cover letter here and let you refer to
-> > the short description.
->=20
-> Applied to master.
+No driver changes are required as generic compatible string
+"renesas,rzg2l-canfd" will be used as a fallback on RZ/Five SoC.
 
-Squashed the following changes:
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+ .../devicetree/bindings/net/can/renesas,rcar-canfd.yaml         | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> diff --git a/CMakeLists.txt b/CMakeLists.txt
-> index 7088c5120154..a4e8484db931 100644
-> --- a/CMakeLists.txt
-> +++ b/CMakeLists.txt
-> @@ -33,6 +33,7 @@ set(PROGRAMS_CANLIB
->      cansequence
->      log2asc
->      log2long
-> +    slcanpty
->  )
-> =20
->  set(PROGRAMS_J1939
-> @@ -58,7 +59,6 @@ set(PROGRAMS
->      isotptun
->      slcan_attach
->      slcand
-> -    slcanpty
->  )
-> =20
->  add_executable(can-calc-bit-timing
+diff --git a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
+index 6f71fc96bc4e..8347053a96dc 100644
+--- a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
++++ b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
+@@ -33,7 +33,7 @@ properties:
+ 
+       - items:
+           - enum:
+-              - renesas,r9a07g043-canfd    # RZ/G2UL
++              - renesas,r9a07g043-canfd    # RZ/G2UL and RZ/Five
+               - renesas,r9a07g044-canfd    # RZ/G2{L,LC}
+               - renesas,r9a07g054-canfd    # RZ/V2L
+           - const: renesas,rzg2l-canfd     # RZ/G2L family
+-- 
+2.25.1
 
-Fixed linking with cmake
-
-> diff --git a/Makefile b/Makefile
-> index c3baa6b287fc..529343d576df 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -46,6 +46,7 @@ MAKEFLAGS :=3D -k
->  CFLAGS :=3D -O2 -Wall -Wno-parentheses
-> =20
->  CPPFLAGS +=3D \
-> +       -I. \
->         -Iinclude \
->         -DAF_CAN=3DPF_CAN \
->         -DPF_CAN=3D29 \
-
-Add the missing include search path to for mcp251xfd-dev-coredump...:
-
-> diff --git a/mcp251xfd/mcp251xfd-dev-coredump.c b/mcp251xfd/mcp251xfd-dev=
--coredump.c
-> index 422900f9cb9e..680c73479d1f 100644
-> --- a/mcp251xfd/mcp251xfd-dev-coredump.c
-> +++ b/mcp251xfd/mcp251xfd-dev-coredump.c
-> @@ -17,7 +17,7 @@
-> =20
->  #include <linux/kernel.h>
-> =20
-> -#include "../lib.h"
-> +#include "lib.h"
->  #include "mcp251xfd.h"
->  #include "mcp251xfd-dump-userspace.h"
->
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---tiov2z26hb4l3uq7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNzVIAACgkQrX5LkNig
-011FPQf7BKXd8TAzRQe/y5DzoKjrQnirrOSQ6wGcNPEQyd3JZ1IFFnOyZbcNlr0Y
-sarsQo3X+HKs0GVNGVjMbTcXgc0F8AfbFvoVuvJEoJm450xKcJnbXbFQmdkdPtpu
-fDUr3JnCF0/6cEagv+fg/giXn0t8dwZo3CjEs8S7DJ4UP6dnI6n8e6Tv79ov/MHc
-+WiVIKVDOw+4FYJW8JqftqUKGqTAncIJFjch5n/aUtUQyQFTY6f83B8YpzxY9nPc
-QwZOpsb8Bql/20gws/TcP10gs6v+JfJxirFFqsLBT/5fFqN718yQp5RatguJ19bc
-dvG1v6i4V83dn0ee5JJwKcodLnvHRQ==
-=Wr3Z
------END PGP SIGNATURE-----
-
---tiov2z26hb4l3uq7--
