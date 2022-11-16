@@ -2,53 +2,53 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADE4A62CBA2
-	for <lists+linux-can@lfdr.de>; Wed, 16 Nov 2022 21:54:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D3C962CB9E
+	for <lists+linux-can@lfdr.de>; Wed, 16 Nov 2022 21:54:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238910AbiKPUyS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 16 Nov 2022 15:54:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36440 "EHLO
+        id S237725AbiKPUyV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 16 Nov 2022 15:54:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234634AbiKPUxu (ORCPT
+        with ESMTP id S234789AbiKPUxu (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Wed, 16 Nov 2022 15:53:50 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCEF6115F
-        for <linux-can@vger.kernel.org>; Wed, 16 Nov 2022 12:53:30 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id ft34so47068705ejc.12
-        for <linux-can@vger.kernel.org>; Wed, 16 Nov 2022 12:53:30 -0800 (PST)
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E3EA2BD3
+        for <linux-can@vger.kernel.org>; Wed, 16 Nov 2022 12:53:31 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id f27so13484eje.1
+        for <linux-can@vger.kernel.org>; Wed, 16 Nov 2022 12:53:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bbjKmVvFBDrESxHm1md/sljGuNuz1laUujygzg6feGk=;
-        b=B/KjXbxQuT9Gao+aqZROklxkKnU1p+JXxNuxzuhCtYHY1qTn69DbzDH9lQBT/eNtGu
-         4cvQiebMBzu2VeLwimrApbHF9QayhwvoyCWlOCRBn8/pI5cMT9/jVYr9FdPjS78n3BFG
-         L1pif1BFc5E4V2kPh8B84h3XUMsGCRsYm5dOaNMhyLQo4J0WKRh/DlSE7T/JBJrD1n0z
-         vvHzwckjHAiqraXNKoeG3vhOgwbAclMQU49UtaQb6AJAR6UYGVjv7SWDu6CwlttxVwQi
-         VRcCrCalM2c6S0NuQeiqn9hJGg01DtEbjpSdHH1RqkJRZOnR6GXu/3esQC8fI16aIqDe
-         Z6pg==
+        bh=qMp0tWmayQFDCuQozvTUDpU6JW1zD9b9gmw4AkF62cg=;
+        b=DfeLSauoK/xGMIYKQS8dUtNF5Y18jC4Dz7wPaMBhY5Wz7+f37x4ilwFFQVnDpFTXSy
+         RKqXurBocAzbyzMqPdiS6IFjDxXzj+E3RZZQepcFM0ml8inFXsUQmDvg0Hy2EsCOITDH
+         JHZYC75OVUxxK1+3P2am1KYY0AVX41vaxmwed/okFMyJDFu0zoFRlpFGwsO6hKrIPbwS
+         inW4U/bJrq78cR6BOJhNepOxNwuQ/Qzlt8apxkk1uMwSP5visMZepMGF+j0smMOFVL/n
+         NTjVi45THe7cCOGS1X7kkLDZg9X3Ivh5BUibveo9ryklA21H8QR8Gt0Or4XILbIIvTJT
+         23jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bbjKmVvFBDrESxHm1md/sljGuNuz1laUujygzg6feGk=;
-        b=R9+MOh1kl8CLrglco9wTe5t20jut6oPeKyJKt2FiLx1Pp02Q74TEBSyIP2iQj/Jjr9
-         JoG4EmuIv3cn9AbOcdrH59TtnbtVRC4k6/4Fcnbf0in3YscbiTm6Hf6kS7VKTcKNCyW6
-         DmKCBxy3w1pIgz67yHffaDLppvonUwGaQMicBwYQ0x1dv6WsOKn75XCJx/sRckc50lXE
-         l/RDfAGFBSgwe0k3eyc2o94SGfglmonzIsBd+1r3dImFo8wFginuhK2jcQdwL0GKF+9Y
-         WEZGvXDkKUUz0CYFd0lbVPjXhTnlQ+GnAnwpeBn+d15yRQADvTb97PBUoFU8MuM9HXDD
-         nRrg==
-X-Gm-Message-State: ANoB5pmfdGxEXrrPgKrTQwnTJ6Ih/hLIpBnDbUV5EzRXgMagi72r9fV3
-        aGxKl3O+yFD/lobRCiFcygVCWQ==
-X-Google-Smtp-Source: AA0mqf5Nm+7E+pI2+mVyMKOZ+hhoiLffdy2qs4ZnZpOiqCStipKLy7DN1WH8OXWV5oL0hqD/qSZTuA==
-X-Received: by 2002:a17:906:141b:b0:78d:5176:c4d2 with SMTP id p27-20020a170906141b00b0078d5176c4d2mr18738240ejc.532.1668632008850;
-        Wed, 16 Nov 2022 12:53:28 -0800 (PST)
+        bh=qMp0tWmayQFDCuQozvTUDpU6JW1zD9b9gmw4AkF62cg=;
+        b=2SxdaBe8qSwXfE9JbD8knRmMTyg9XQPiakJuQnqZtlwCc7eiDFEoO0jWUKyaUVbssh
+         BzSrR7gkfQzlj7Rii6ySb1XSHNBFoLZPpuVcNLEJIo84uA8rPEZ1yZmVXJICPPgHzSAR
+         SCwRTsgx0Dmn/GvYxnDQ6ssFN7JTtPaIRGjdF/j8UI9LrLe+g3I/cS8JhenI7cRuDpHh
+         vGgQEtfEJ0s/c3hFPSOdfcTYTjmt2vvxlTMW6Mmc//jvvanP48738UfeKZ1WhwB8/ylv
+         +h/BiO4x7tEzu1Nh5+LFGa6eBkjz7bmErxQn1GPmChbKFXAr2FtInzLU9QItRzYEnY2V
+         mr0g==
+X-Gm-Message-State: ANoB5pl6G5MunSlpJ8Z00qvFK3LvJZWS4mUse0miIO5QdlOzOYXlPRti
+        4YjkULjiOH+2brgc4pOUhtU3vA==
+X-Google-Smtp-Source: AA0mqf5UtYQOtXnOHStEcoyycrgqiCBoL8jfnYcxOSZJ0kartEU1g5NyzH2ae4zG0NlZQX+qHgcbWQ==
+X-Received: by 2002:a17:907:cc9d:b0:7ac:ef6b:1ef4 with SMTP id up29-20020a170907cc9d00b007acef6b1ef4mr20163923ejc.104.1668632009629;
+        Wed, 16 Nov 2022 12:53:29 -0800 (PST)
 Received: from blmsp.fritz.box ([2001:4090:a244:804b:353b:565:addf:3aa7])
         by smtp.gmail.com with ESMTPSA id kv17-20020a17090778d100b007aece68483csm6782828ejc.193.2022.11.16.12.53.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 12:53:28 -0800 (PST)
+        Wed, 16 Nov 2022 12:53:29 -0800 (PST)
 From:   Markus Schneider-Pargmann <msp@baylibre.com>
 To:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
@@ -56,9 +56,9 @@ To:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
 Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Markus Schneider-Pargmann <msp@baylibre.com>
-Subject: [PATCH 06/15] can: m_can: Avoid reading irqstatus twice
-Date:   Wed, 16 Nov 2022 21:52:59 +0100
-Message-Id: <20221116205308.2996556-7-msp@baylibre.com>
+Subject: [PATCH 07/15] can: m_can: Read register PSR only on error
+Date:   Wed, 16 Nov 2022 21:53:00 +0100
+Message-Id: <20221116205308.2996556-8-msp@baylibre.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221116205308.2996556-1-msp@baylibre.com>
 References: <20221116205308.2996556-1-msp@baylibre.com>
@@ -73,74 +73,43 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-For peripheral devices the m_can_rx_handler is called directly after
-setting cdev->irqstatus. This means we don't have to read the irqstatus
-again in m_can_rx_handler. Avoid this by adding a parameter that is
-false for direct calls.
+Only read register PSR if there is an error indicated in irqstatus.
 
 Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
 ---
- drivers/net/can/m_can/m_can.c | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+ drivers/net/can/m_can/m_can.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index 5c00c6162058..0efa6dee0617 100644
+index 0efa6dee0617..1d15beaea920 100644
 --- a/drivers/net/can/m_can/m_can.c
 +++ b/drivers/net/can/m_can/m_can.c
-@@ -896,14 +896,13 @@ static int m_can_handle_bus_errors(struct net_device *dev, u32 irqstatus,
- 	return work_done;
- }
- 
--static int m_can_rx_handler(struct net_device *dev, int quota)
-+static int m_can_rx_handler(struct net_device *dev, int quota, u32 irqstatus)
- {
+@@ -901,7 +901,6 @@ static int m_can_rx_handler(struct net_device *dev, int quota, u32 irqstatus)
  	struct m_can_classdev *cdev = netdev_priv(dev);
  	int rx_work_or_err;
  	int work_done = 0;
--	u32 irqstatus, psr;
-+	u32 psr;
+-	u32 psr;
  
--	irqstatus = cdev->irqstatus | m_can_read(cdev, M_CAN_IR);
  	if (!irqstatus)
  		goto end;
- 
-@@ -947,12 +946,12 @@ static int m_can_rx_handler(struct net_device *dev, int quota)
- 	return work_done;
- }
- 
--static int m_can_rx_peripheral(struct net_device *dev)
-+static int m_can_rx_peripheral(struct net_device *dev, u32 irqstatus)
- {
- 	struct m_can_classdev *cdev = netdev_priv(dev);
- 	int work_done;
- 
--	work_done = m_can_rx_handler(dev, NAPI_POLL_WEIGHT);
-+	work_done = m_can_rx_handler(dev, NAPI_POLL_WEIGHT, irqstatus);
- 
- 	/* Don't re-enable interrupts if the driver had a fatal error
- 	 * (e.g., FIFO read failure).
-@@ -968,8 +967,11 @@ static int m_can_poll(struct napi_struct *napi, int quota)
- 	struct net_device *dev = napi->dev;
- 	struct m_can_classdev *cdev = netdev_priv(dev);
- 	int work_done;
-+	u32 irqstatus;
-+
-+	irqstatus = cdev->irqstatus | m_can_read(cdev, M_CAN_IR);
- 
--	work_done = m_can_rx_handler(dev, quota);
-+	work_done = m_can_rx_handler(dev, quota, irqstatus);
- 
- 	/* Don't re-enable interrupts if the driver had a fatal error
- 	 * (e.g., FIFO read failure).
-@@ -1080,7 +1082,7 @@ static irqreturn_t m_can_isr(int irq, void *dev_id)
- 		m_can_disable_all_interrupts(cdev);
- 		if (!cdev->is_peripheral)
- 			napi_schedule(&cdev->napi);
--		else if (m_can_rx_peripheral(dev) < 0)
-+		else if (m_can_rx_peripheral(dev, ir) < 0)
- 			goto out_fail;
+@@ -927,13 +926,13 @@ static int m_can_rx_handler(struct net_device *dev, int quota, u32 irqstatus)
+ 		}
  	}
  
+-	psr = m_can_read(cdev, M_CAN_PSR);
+-
+ 	if (irqstatus & IR_ERR_STATE)
+-		work_done += m_can_handle_state_errors(dev, psr);
++		work_done += m_can_handle_state_errors(dev,
++						       m_can_read(cdev, M_CAN_PSR));
+ 
+ 	if (irqstatus & IR_ERR_BUS_30X)
+-		work_done += m_can_handle_bus_errors(dev, irqstatus, psr);
++		work_done += m_can_handle_bus_errors(dev, irqstatus,
++						     m_can_read(cdev, M_CAN_PSR));
+ 
+ 	if (irqstatus & IR_RF0N) {
+ 		rx_work_or_err = m_can_do_rx_poll(dev, (quota - work_done));
 -- 
 2.38.1
 
