@@ -2,53 +2,53 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A55B62CBB8
-	for <lists+linux-can@lfdr.de>; Wed, 16 Nov 2022 21:57:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 049EE62CBBD
+	for <lists+linux-can@lfdr.de>; Wed, 16 Nov 2022 21:57:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239326AbiKPU5P (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 16 Nov 2022 15:57:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35212 "EHLO
+        id S229931AbiKPU5V (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 16 Nov 2022 15:57:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234935AbiKPUyB (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 16 Nov 2022 15:54:01 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F8D9FFE
-        for <linux-can@vger.kernel.org>; Wed, 16 Nov 2022 12:53:35 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id f27so14282eje.1
-        for <linux-can@vger.kernel.org>; Wed, 16 Nov 2022 12:53:35 -0800 (PST)
+        with ESMTP id S234560AbiKPUyC (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 16 Nov 2022 15:54:02 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792CBCE2E
+        for <linux-can@vger.kernel.org>; Wed, 16 Nov 2022 12:53:37 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id v27so28494402eda.1
+        for <linux-can@vger.kernel.org>; Wed, 16 Nov 2022 12:53:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=YM61plGO68WaURjQUGMFYN3EyOhHGwttCZUHVzMzSmk=;
-        b=Ai+PNsCF8RUwtUbnUOAUElOEHQCIBtfvFr4FFEPhc4TBV1LylFALavmdFCQF1QzYq/
-         qDLB9z/9yjs+tm0zJDPFsIHbvWfXxkuKo96Mw4ScW7PN57/EQlnKCQF3ks2yEEWGQS4M
-         fOkPJMw5pzIgSHSJxAAN/m0vsKCwGMVMEeXP40tQCc2n8qnsGB+hhZa1DA4jL5zut82i
-         7bC2rKxw1gYmVP6CvdtAOEt2IjHSFaOJPPC4uXz5zk7Yf+apbdDgU6asT4dd1JJgsrsU
-         hgu+opVs9duZiov5egbrN5iBHXVuLoqZhPNnLyLFx6oOgUWVE2t7GU+wFAKEtKmsFXq3
-         kPfA==
+        bh=CeVee7WTu+MIVK7s97PRG5d4Tw3kKV6cU2vVtZ3DItQ=;
+        b=ofPkZh1sJHCSjcXBt5MSofHDe4685qhi1/Uc6LWnRd5EToxTmQIbpUn6ccrEQAQAns
+         SXavK0S2kbOubR/NRJ7cDZLF6RKWaQ4G757sspLKT7U2Nq1FQa21mr8+z+tgJN1JAHar
+         bAGuACN8zSgXgSFsxzahOcOiGZtZqtaI3ADgt8nVKKhB/xQ5NRUK8cjr9uuVpDjrECJG
+         ZIM8hXLVCMHjmTEFYN/pf8GLR66Zi1gz5BAhY62LqokcHeYn5zUnYo+GMZQSk9oRLSrz
+         5o59LVtNJfrNkQhOE//fxGY7XlXdPB/LDl9sjti2Spkq8u58gt9NoQCSLUs3GqyCorT1
+         nZKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=YM61plGO68WaURjQUGMFYN3EyOhHGwttCZUHVzMzSmk=;
-        b=l3A7yYnuBDxBOdLwiuO+m63mzbd76fL+HI3ply2nEVe8gAaA8yBK3zTry3kBRji6HI
-         AI3haC8aB+GLM36CKHVn9m2NxCmh8Renwh+JcvQLX3S+SRbZgKacidP/qoRKILfwxD1K
-         jgoa5t1D+/E9S8wvdPPCvULWwXRT5WzXWGyTXZGl6BkpA2uxmUsJJyZsPnSKKNzeT3YC
-         2rPAxbODD2DhxnG5g7nG23JA1qVQ4frJ52dDPS/dWexGLTJ3FbtPZ2z85ff2CLrENHzT
-         8YTyinHYrNJbmNaBx2NGGtj7znMgDdufX8kOyJwqEAn41hcQXI3BNLmmmn3tN0JKbL/a
-         Hc1Q==
-X-Gm-Message-State: ANoB5pnomMhZGWVK1R3IIn/2XoEDsSqur05+EC5R0wRjLEqf2d9dZfBu
-        3uINRe8lpczOLuhWz67kz46HwA==
-X-Google-Smtp-Source: AA0mqf7VeG4VcKKp/7grTNCCfy6yeZuKVFMgRgRP2joVmv0aloO7Kuyi4aEcATQ/8m/x/shIVVm6OQ==
-X-Received: by 2002:a17:907:c78d:b0:7af:113a:7416 with SMTP id tz13-20020a170907c78d00b007af113a7416mr10052021ejc.16.1668632015148;
-        Wed, 16 Nov 2022 12:53:35 -0800 (PST)
+        bh=CeVee7WTu+MIVK7s97PRG5d4Tw3kKV6cU2vVtZ3DItQ=;
+        b=s2btzXWPgQGSAGbXTGtUP/4KypkvE1rZgT3bVhB5bY7BQbDXTiK1SFSFGlXiO+hkC5
+         kBod8aKULWTosu5HA/936hrhj2ku9zwAsiid+csRQVhw3AMILUQ2YYiollyM9mmiakC5
+         B9J1NfKVyZxZv2kmJztJlQ5STi8JiDcYYSaU2JMLPwm364VZLCRBOHIc32XVk3O0suBb
+         9Cu6ZpneNHvZVr6HdrJ7iWCLN64uEsL9NdxdsT0J8ioqFiC2gMxYbSw4wobwBD38eITq
+         SruSqiIO9OiU96j0MN0TE3oXeeo1wkLbQUlXNecP/OuiNzHYxmUd2Qwnm+WWpc3LaVRK
+         173w==
+X-Gm-Message-State: ANoB5pkioIYc7ttA2QxfAjr0hQpQjEtpysE1KWNRm5Ha1061jIhJR7g1
+        ebN4+T0aMuTL8URneKgOlIRxlg==
+X-Google-Smtp-Source: AA0mqf5j6sPxY2lkGgEc/UQ8QjGsma8Lta5ZRqNfdGt0PvRbt3fxbOhFaJmq6bYcUruYMVFEqjFqeA==
+X-Received: by 2002:a05:6402:17c2:b0:459:443a:faf4 with SMTP id s2-20020a05640217c200b00459443afaf4mr20696086edy.297.1668632016031;
+        Wed, 16 Nov 2022 12:53:36 -0800 (PST)
 Received: from blmsp.fritz.box ([2001:4090:a244:804b:353b:565:addf:3aa7])
-        by smtp.gmail.com with ESMTPSA id kv17-20020a17090778d100b007aece68483csm6782828ejc.193.2022.11.16.12.53.34
+        by smtp.gmail.com with ESMTPSA id kv17-20020a17090778d100b007aece68483csm6782828ejc.193.2022.11.16.12.53.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 12:53:34 -0800 (PST)
+        Wed, 16 Nov 2022 12:53:35 -0800 (PST)
 From:   Markus Schneider-Pargmann <msp@baylibre.com>
 To:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
@@ -56,9 +56,9 @@ To:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
 Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Markus Schneider-Pargmann <msp@baylibre.com>
-Subject: [PATCH 14/15] can: tcan4x5x: Fix register range of first block
-Date:   Wed, 16 Nov 2022 21:53:07 +0100
-Message-Id: <20221116205308.2996556-15-msp@baylibre.com>
+Subject: [PATCH 15/15] can: tcan4x5x: Specify separate read/write ranges
+Date:   Wed, 16 Nov 2022 21:53:08 +0100
+Message-Id: <20221116205308.2996556-16-msp@baylibre.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221116205308.2996556-1-msp@baylibre.com>
 References: <20221116205308.2996556-1-msp@baylibre.com>
@@ -73,27 +73,81 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-According to the datasheet 0x1c is the last register in the first block,
-not register 0x2c.
+Specify exactly which registers are read/writeable in the chip. This
+is supposed to help detect any violations in the future.
 
 Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
 ---
- drivers/net/can/m_can/tcan4x5x-regmap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/can/m_can/tcan4x5x-regmap.c | 43 +++++++++++++++++++++----
+ 1 file changed, 37 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/net/can/m_can/tcan4x5x-regmap.c b/drivers/net/can/m_can/tcan4x5x-regmap.c
-index 26e212b8ca7a..d4b79d2d4598 100644
+index d4b79d2d4598..19215c39cd5b 100644
 --- a/drivers/net/can/m_can/tcan4x5x-regmap.c
 +++ b/drivers/net/can/m_can/tcan4x5x-regmap.c
-@@ -91,7 +91,7 @@ static int tcan4x5x_regmap_read(void *context,
+@@ -90,16 +90,47 @@ static int tcan4x5x_regmap_read(void *context,
+ 	return 0;
  }
  
- static const struct regmap_range tcan4x5x_reg_table_yes_range[] = {
--	regmap_reg_range(0x0000, 0x002c),	/* Device ID and SPI Registers */
-+	regmap_reg_range(0x0000, 0x001c),	/* Device ID and SPI Registers */
+-static const struct regmap_range tcan4x5x_reg_table_yes_range[] = {
++static const struct regmap_range tcan4x5x_reg_table_wr_range[] = {
++	/* Device ID and SPI Registers */
++	regmap_reg_range(0x000c, 0x001c),
++	/* Device configuration registers and Interrupt Flags*/
++	regmap_reg_range(0x0800, 0x080c),
++	regmap_reg_range(0x0814, 0x0814),
++	regmap_reg_range(0x0820, 0x0820),
++	regmap_reg_range(0x0830, 0x0830),
++	/* M_CAN */
++	regmap_reg_range(0x100c, 0x102c),
++	regmap_reg_range(0x1048, 0x1048),
++	regmap_reg_range(0x1050, 0x105c),
++	regmap_reg_range(0x1080, 0x1088),
++	regmap_reg_range(0x1090, 0x1090),
++	regmap_reg_range(0x1098, 0x10a0),
++	regmap_reg_range(0x10a8, 0x10b0),
++	regmap_reg_range(0x10b8, 0x10c0),
++	regmap_reg_range(0x10c8, 0x10c8),
++	regmap_reg_range(0x10d0, 0x10d4),
++	regmap_reg_range(0x10e0, 0x10e4),
++	regmap_reg_range(0x10f0, 0x10f0),
++	regmap_reg_range(0x10f8, 0x10f8),
++	/* MRAM */
++	regmap_reg_range(0x8000, 0x87fc),
++};
++
++static const struct regmap_range tcan4x5x_reg_table_rd_range[] = {
+ 	regmap_reg_range(0x0000, 0x001c),	/* Device ID and SPI Registers */
  	regmap_reg_range(0x0800, 0x083c),	/* Device configuration registers and Interrupt Flags*/
  	regmap_reg_range(0x1000, 0x10fc),	/* M_CAN */
  	regmap_reg_range(0x8000, 0x87fc),	/* MRAM */
+ };
+ 
+-static const struct regmap_access_table tcan4x5x_reg_table = {
+-	.yes_ranges = tcan4x5x_reg_table_yes_range,
+-	.n_yes_ranges = ARRAY_SIZE(tcan4x5x_reg_table_yes_range),
++static const struct regmap_access_table tcan4x5x_reg_table_wr = {
++	.yes_ranges = tcan4x5x_reg_table_wr_range,
++	.n_yes_ranges = ARRAY_SIZE(tcan4x5x_reg_table_wr_range),
++};
++
++static const struct regmap_access_table tcan4x5x_reg_table_rd = {
++	.yes_ranges = tcan4x5x_reg_table_rd_range,
++	.n_yes_ranges = ARRAY_SIZE(tcan4x5x_reg_table_rd_range),
+ };
+ 
+ static const struct regmap_config tcan4x5x_regmap = {
+@@ -107,8 +138,8 @@ static const struct regmap_config tcan4x5x_regmap = {
+ 	.reg_stride = 4,
+ 	.pad_bits = 8,
+ 	.val_bits = 32,
+-	.wr_table = &tcan4x5x_reg_table,
+-	.rd_table = &tcan4x5x_reg_table,
++	.wr_table = &tcan4x5x_reg_table_wr,
++	.rd_table = &tcan4x5x_reg_table_rd,
+ 	.max_register = TCAN4X5X_MAX_REGISTER,
+ 	.cache_type = REGCACHE_NONE,
+ 	.read_flag_mask = (__force unsigned long)
 -- 
 2.38.1
 
