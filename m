@@ -2,152 +2,95 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 049EE62CBBD
-	for <lists+linux-can@lfdr.de>; Wed, 16 Nov 2022 21:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BB9862CCD0
+	for <lists+linux-can@lfdr.de>; Wed, 16 Nov 2022 22:38:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229931AbiKPU5V (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 16 Nov 2022 15:57:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35180 "EHLO
+        id S234372AbiKPViY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 16 Nov 2022 16:38:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234560AbiKPUyC (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 16 Nov 2022 15:54:02 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792CBCE2E
-        for <linux-can@vger.kernel.org>; Wed, 16 Nov 2022 12:53:37 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id v27so28494402eda.1
-        for <linux-can@vger.kernel.org>; Wed, 16 Nov 2022 12:53:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CeVee7WTu+MIVK7s97PRG5d4Tw3kKV6cU2vVtZ3DItQ=;
-        b=ofPkZh1sJHCSjcXBt5MSofHDe4685qhi1/Uc6LWnRd5EToxTmQIbpUn6ccrEQAQAns
-         SXavK0S2kbOubR/NRJ7cDZLF6RKWaQ4G757sspLKT7U2Nq1FQa21mr8+z+tgJN1JAHar
-         bAGuACN8zSgXgSFsxzahOcOiGZtZqtaI3ADgt8nVKKhB/xQ5NRUK8cjr9uuVpDjrECJG
-         ZIM8hXLVCMHjmTEFYN/pf8GLR66Zi1gz5BAhY62LqokcHeYn5zUnYo+GMZQSk9oRLSrz
-         5o59LVtNJfrNkQhOE//fxGY7XlXdPB/LDl9sjti2Spkq8u58gt9NoQCSLUs3GqyCorT1
-         nZKA==
+        with ESMTP id S238401AbiKPViG (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 16 Nov 2022 16:38:06 -0500
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 870B91F60A;
+        Wed, 16 Nov 2022 13:37:55 -0800 (PST)
+Received: by mail-oo1-f48.google.com with SMTP id t15-20020a4a96cf000000b0049f7e18db0dso12688ooi.10;
+        Wed, 16 Nov 2022 13:37:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CeVee7WTu+MIVK7s97PRG5d4Tw3kKV6cU2vVtZ3DItQ=;
-        b=s2btzXWPgQGSAGbXTGtUP/4KypkvE1rZgT3bVhB5bY7BQbDXTiK1SFSFGlXiO+hkC5
-         kBod8aKULWTosu5HA/936hrhj2ku9zwAsiid+csRQVhw3AMILUQ2YYiollyM9mmiakC5
-         B9J1NfKVyZxZv2kmJztJlQ5STi8JiDcYYSaU2JMLPwm364VZLCRBOHIc32XVk3O0suBb
-         9Cu6ZpneNHvZVr6HdrJ7iWCLN64uEsL9NdxdsT0J8ioqFiC2gMxYbSw4wobwBD38eITq
-         SruSqiIO9OiU96j0MN0TE3oXeeo1wkLbQUlXNecP/OuiNzHYxmUd2Qwnm+WWpc3LaVRK
-         173w==
-X-Gm-Message-State: ANoB5pkioIYc7ttA2QxfAjr0hQpQjEtpysE1KWNRm5Ha1061jIhJR7g1
-        ebN4+T0aMuTL8URneKgOlIRxlg==
-X-Google-Smtp-Source: AA0mqf5j6sPxY2lkGgEc/UQ8QjGsma8Lta5ZRqNfdGt0PvRbt3fxbOhFaJmq6bYcUruYMVFEqjFqeA==
-X-Received: by 2002:a05:6402:17c2:b0:459:443a:faf4 with SMTP id s2-20020a05640217c200b00459443afaf4mr20696086edy.297.1668632016031;
-        Wed, 16 Nov 2022 12:53:36 -0800 (PST)
-Received: from blmsp.fritz.box ([2001:4090:a244:804b:353b:565:addf:3aa7])
-        by smtp.gmail.com with ESMTPSA id kv17-20020a17090778d100b007aece68483csm6782828ejc.193.2022.11.16.12.53.35
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pcSskvio5vyYIl+GbeA90w9BhN/hk5+54+lGyz4M6zo=;
+        b=qmIgq7eJhLfpn/8FttttHgLXBLmxB+DU0wh9/yDWQYW4O0+LBMPRVj0qP75gIMZVcE
+         vj1+5nugRSeS7RHOMw/+19yYfPmttJszUYltgwZwe0Aj/apvsnU7NphaJDue3fjP/ACr
+         VebQtGjAyyO/913wx+St5IrVZLErYS+MOP1jCMbghGNSbG/0nc9DYyjkim3rz9cAy2E5
+         Q0I3P1kFmZZbXJelimGFD8CYWJbFy7PjP97UxInahP80FWbiET2TtYWkRK0pj/wgW8lt
+         fYVbGw0q/ZSyvG14TeLYd0ekyR1MZp1cCZL7BhnFzRXlG7MXiylgPCGk/4TBEd+yRMtm
+         HhaQ==
+X-Gm-Message-State: ANoB5pkuA2HarBt/H8OTrAojaM2S4/B3h4r63AxrJDFwra/GMrGrPmoI
+        SOErDP2WkCOOS+Yh75ic3w==
+X-Google-Smtp-Source: AA0mqf4o4wE40C9VeOV1wdtN2y07KalDoSG7F0C8WnXwbmNqBYH/mIxFmgbgsZBfDcMvobOpZNGCEw==
+X-Received: by 2002:a4a:ee06:0:b0:49f:87d0:ef5c with SMTP id bd6-20020a4aee06000000b0049f87d0ef5cmr57989oob.96.1668634674696;
+        Wed, 16 Nov 2022 13:37:54 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id c64-20020a9d27c6000000b00655ca9a109bsm6983866otb.36.2022.11.16.13.37.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 12:53:35 -0800 (PST)
-From:   Markus Schneider-Pargmann <msp@baylibre.com>
-To:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wed, 16 Nov 2022 13:37:54 -0800 (PST)
+Received: (nullmailer pid 1016467 invoked by uid 1000);
+        Wed, 16 Nov 2022 21:37:56 -0000
+Date:   Wed, 16 Nov 2022 15:37:56 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Markus Schneider-Pargmann <msp@baylibre.com>
-Subject: [PATCH 15/15] can: tcan4x5x: Specify separate read/write ranges
-Date:   Wed, 16 Nov 2022 21:53:08 +0100
-Message-Id: <20221116205308.2996556-16-msp@baylibre.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221116205308.2996556-1-msp@baylibre.com>
-References: <20221116205308.2996556-1-msp@baylibre.com>
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        linux-can@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: Re: [PATCH] dt-bindings: can: renesas,rcar-canfd: Document RZ/Five
+ SoC
+Message-ID: <166863467572.1016411.8935801189903331443.robh@kernel.org>
+References: <20221115123811.1182922-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221115123811.1182922-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Specify exactly which registers are read/writeable in the chip. This
-is supposed to help detect any violations in the future.
 
-Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
----
- drivers/net/can/m_can/tcan4x5x-regmap.c | 43 +++++++++++++++++++++----
- 1 file changed, 37 insertions(+), 6 deletions(-)
+On Tue, 15 Nov 2022 12:38:11 +0000, Prabhakar wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> 
+> The CANFD block on the RZ/Five SoC is identical to one found on the
+> RZ/G2UL SoC. "renesas,r9a07g043-canfd" compatible string will be used
+> on the RZ/Five SoC so to make this clear, update the comment to include
+> RZ/Five SoC.
+> 
+> No driver changes are required as generic compatible string
+> "renesas,rzg2l-canfd" will be used as a fallback on RZ/Five SoC.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+>  .../devicetree/bindings/net/can/renesas,rcar-canfd.yaml         | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-diff --git a/drivers/net/can/m_can/tcan4x5x-regmap.c b/drivers/net/can/m_can/tcan4x5x-regmap.c
-index d4b79d2d4598..19215c39cd5b 100644
---- a/drivers/net/can/m_can/tcan4x5x-regmap.c
-+++ b/drivers/net/can/m_can/tcan4x5x-regmap.c
-@@ -90,16 +90,47 @@ static int tcan4x5x_regmap_read(void *context,
- 	return 0;
- }
- 
--static const struct regmap_range tcan4x5x_reg_table_yes_range[] = {
-+static const struct regmap_range tcan4x5x_reg_table_wr_range[] = {
-+	/* Device ID and SPI Registers */
-+	regmap_reg_range(0x000c, 0x001c),
-+	/* Device configuration registers and Interrupt Flags*/
-+	regmap_reg_range(0x0800, 0x080c),
-+	regmap_reg_range(0x0814, 0x0814),
-+	regmap_reg_range(0x0820, 0x0820),
-+	regmap_reg_range(0x0830, 0x0830),
-+	/* M_CAN */
-+	regmap_reg_range(0x100c, 0x102c),
-+	regmap_reg_range(0x1048, 0x1048),
-+	regmap_reg_range(0x1050, 0x105c),
-+	regmap_reg_range(0x1080, 0x1088),
-+	regmap_reg_range(0x1090, 0x1090),
-+	regmap_reg_range(0x1098, 0x10a0),
-+	regmap_reg_range(0x10a8, 0x10b0),
-+	regmap_reg_range(0x10b8, 0x10c0),
-+	regmap_reg_range(0x10c8, 0x10c8),
-+	regmap_reg_range(0x10d0, 0x10d4),
-+	regmap_reg_range(0x10e0, 0x10e4),
-+	regmap_reg_range(0x10f0, 0x10f0),
-+	regmap_reg_range(0x10f8, 0x10f8),
-+	/* MRAM */
-+	regmap_reg_range(0x8000, 0x87fc),
-+};
-+
-+static const struct regmap_range tcan4x5x_reg_table_rd_range[] = {
- 	regmap_reg_range(0x0000, 0x001c),	/* Device ID and SPI Registers */
- 	regmap_reg_range(0x0800, 0x083c),	/* Device configuration registers and Interrupt Flags*/
- 	regmap_reg_range(0x1000, 0x10fc),	/* M_CAN */
- 	regmap_reg_range(0x8000, 0x87fc),	/* MRAM */
- };
- 
--static const struct regmap_access_table tcan4x5x_reg_table = {
--	.yes_ranges = tcan4x5x_reg_table_yes_range,
--	.n_yes_ranges = ARRAY_SIZE(tcan4x5x_reg_table_yes_range),
-+static const struct regmap_access_table tcan4x5x_reg_table_wr = {
-+	.yes_ranges = tcan4x5x_reg_table_wr_range,
-+	.n_yes_ranges = ARRAY_SIZE(tcan4x5x_reg_table_wr_range),
-+};
-+
-+static const struct regmap_access_table tcan4x5x_reg_table_rd = {
-+	.yes_ranges = tcan4x5x_reg_table_rd_range,
-+	.n_yes_ranges = ARRAY_SIZE(tcan4x5x_reg_table_rd_range),
- };
- 
- static const struct regmap_config tcan4x5x_regmap = {
-@@ -107,8 +138,8 @@ static const struct regmap_config tcan4x5x_regmap = {
- 	.reg_stride = 4,
- 	.pad_bits = 8,
- 	.val_bits = 32,
--	.wr_table = &tcan4x5x_reg_table,
--	.rd_table = &tcan4x5x_reg_table,
-+	.wr_table = &tcan4x5x_reg_table_wr,
-+	.rd_table = &tcan4x5x_reg_table_rd,
- 	.max_register = TCAN4X5X_MAX_REGISTER,
- 	.cache_type = REGCACHE_NONE,
- 	.read_flag_mask = (__force unsigned long)
--- 
-2.38.1
-
+Acked-by: Rob Herring <robh@kernel.org>
