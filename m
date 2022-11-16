@@ -2,95 +2,112 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BB9862CCD0
-	for <lists+linux-can@lfdr.de>; Wed, 16 Nov 2022 22:38:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEAC362CEA3
+	for <lists+linux-can@lfdr.de>; Thu, 17 Nov 2022 00:20:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234372AbiKPViY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 16 Nov 2022 16:38:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43480 "EHLO
+        id S233785AbiKPXUg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 16 Nov 2022 18:20:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238401AbiKPViG (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 16 Nov 2022 16:38:06 -0500
-Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 870B91F60A;
-        Wed, 16 Nov 2022 13:37:55 -0800 (PST)
-Received: by mail-oo1-f48.google.com with SMTP id t15-20020a4a96cf000000b0049f7e18db0dso12688ooi.10;
-        Wed, 16 Nov 2022 13:37:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pcSskvio5vyYIl+GbeA90w9BhN/hk5+54+lGyz4M6zo=;
-        b=qmIgq7eJhLfpn/8FttttHgLXBLmxB+DU0wh9/yDWQYW4O0+LBMPRVj0qP75gIMZVcE
-         vj1+5nugRSeS7RHOMw/+19yYfPmttJszUYltgwZwe0Aj/apvsnU7NphaJDue3fjP/ACr
-         VebQtGjAyyO/913wx+St5IrVZLErYS+MOP1jCMbghGNSbG/0nc9DYyjkim3rz9cAy2E5
-         Q0I3P1kFmZZbXJelimGFD8CYWJbFy7PjP97UxInahP80FWbiET2TtYWkRK0pj/wgW8lt
-         fYVbGw0q/ZSyvG14TeLYd0ekyR1MZp1cCZL7BhnFzRXlG7MXiylgPCGk/4TBEd+yRMtm
-         HhaQ==
-X-Gm-Message-State: ANoB5pkuA2HarBt/H8OTrAojaM2S4/B3h4r63AxrJDFwra/GMrGrPmoI
-        SOErDP2WkCOOS+Yh75ic3w==
-X-Google-Smtp-Source: AA0mqf4o4wE40C9VeOV1wdtN2y07KalDoSG7F0C8WnXwbmNqBYH/mIxFmgbgsZBfDcMvobOpZNGCEw==
-X-Received: by 2002:a4a:ee06:0:b0:49f:87d0:ef5c with SMTP id bd6-20020a4aee06000000b0049f87d0ef5cmr57989oob.96.1668634674696;
-        Wed, 16 Nov 2022 13:37:54 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id c64-20020a9d27c6000000b00655ca9a109bsm6983866otb.36.2022.11.16.13.37.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 13:37:54 -0800 (PST)
-Received: (nullmailer pid 1016467 invoked by uid 1000);
-        Wed, 16 Nov 2022 21:37:56 -0000
-Date:   Wed, 16 Nov 2022 15:37:56 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        linux-can@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: Re: [PATCH] dt-bindings: can: renesas,rcar-canfd: Document RZ/Five
- SoC
-Message-ID: <166863467572.1016411.8935801189903331443.robh@kernel.org>
-References: <20221115123811.1182922-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        with ESMTP id S229910AbiKPXUg (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 16 Nov 2022 18:20:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E7F623A4;
+        Wed, 16 Nov 2022 15:20:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 13ED86201F;
+        Wed, 16 Nov 2022 23:20:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62AFEC433C1;
+        Wed, 16 Nov 2022 23:20:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668640834;
+        bh=o+VByynSeoTOtbxxqGW88pHtPLAYkDbDYL2ejaugK5s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Vo2WlpWiBNqo6NvDjaOMy0R26oBiKme/8b7U3aRpZZpWjfevhHiqcJaRWhs8YAvVX
+         gPos+QeomRrfbc37iBHqNvzviu7HnGy15a87mJJzQ/hEdyDTSnL9UKfLBSsBhzNhdh
+         EB9yFOoN0IGAuRAdU5U6AHbkGS2YpY0YNronMcPmFHWRbBU8F885Eu97PvXG4YDvty
+         jZLT5dWxqUz8Ubuahc9Naujw605R00a6TLHOjS0LSZPQWcRSuX8lbk0WQGyuYl+kjb
+         KJg8p/+hDhwea0YbPkpnvjg2NPigbVvm3gMfg8Ap1aWMlKu1hM5ZorZnVemkdSgSyW
+         rTBSxHy3rBwlA==
+Date:   Wed, 16 Nov 2022 15:20:33 -0800
+From:   Saeed Mahameed <saeed@kernel.org>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH v3 2/3] can: etas_es58x: export firmware, bootloader and
+ hardware versions in sysfs
+Message-ID: <Y3VwQdZoStfryz3q@x130.lan>
+References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
+ <20221113040108.68249-1-mailhol.vincent@wanadoo.fr>
+ <20221113040108.68249-3-mailhol.vincent@wanadoo.fr>
+ <Y3QW/ufhuYnHWcli@x130.lan>
+ <CAMZ6RqKUKLUf1Y6yL=J6n+N2Uz+JuFnHXdfVDXTZaDQ89=9DzQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20221115123811.1182922-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAMZ6RqKUKLUf1Y6yL=J6n+N2Uz+JuFnHXdfVDXTZaDQ89=9DzQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On 16 Nov 09:36, Vincent MAILHOL wrote:
+>On Wed. 16 Nov. 2022 at 07:50, Saeed Mahameed <saeed@kernel.org> wrote:
+>> On 13 Nov 13:01, Vincent Mailhol wrote:
+>> >ES58x devices report below information in their usb product info
+>> >string:
+>> >
+>> >  * the firmware version
+>> >  * the bootloader version
+>> >  * the hardware revision
+>> >
+>> >Parse this string, store the results in struct es58x_dev and create
+>> >three new sysfs entries.
+>> >
+>>
+>> will this be the /sys/class/net/XXX sysfs  ?
+>
+>I am dropping the idea of using sysfs and I am now considering using
+>devlink following Andrew's message:
+>https://lore.kernel.org/linux-can/Y3Ef4K5lbilY3EQT@lunn.ch/
+>
 
-On Tue, 15 Nov 2022 12:38:11 +0000, Prabhakar wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> 
-> The CANFD block on the RZ/Five SoC is identical to one found on the
-> RZ/G2UL SoC. "renesas,r9a07g043-canfd" compatible string will be used
-> on the RZ/Five SoC so to make this clear, update the comment to include
-> RZ/Five SoC.
-> 
-> No driver changes are required as generic compatible string
-> "renesas,rzg2l-canfd" will be used as a fallback on RZ/Five SoC.
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
->  .../devicetree/bindings/net/can/renesas,rcar-canfd.yaml         | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
++1
 
-Acked-by: Rob Herring <robh@kernel.org>
+>> We try to avoid adding device specific entries in there,
+>>
+>> Couldn't you just squeeze the firmware and hw version into the
+>> ethtool->drvinfo->fw_version
+>>
+>> something like:
+>> fw_version: %3u.%3u.%3u (%c.%3u.%3u)
+>
+>This looks like a hack. There is no way for the end user to know, just
+>from the ethtool output, what these in brackets values would mean.
+
+it's not, there is no well defined format for what to put in the version,
+as long as it clearly describes what FW is currently running.
+at the end of the day, it's just a text you copy&paste when you contact
+customer support.
+
+>
+>> and bootloader into ethtool->drvinfo->erom_version:
+>>   * @erom_version: Expansion ROM version string; may be an empty string
+>
+>Same. I considered doing this in the early draft of this series and
+>dropped the idea because an expansion ROM and a boot loader are two
+>things different.
+>
+>I will continue to study devlink and only use the drvinfo only for the
+>firmware version.
+>
+
+100% devlink is a great options.
