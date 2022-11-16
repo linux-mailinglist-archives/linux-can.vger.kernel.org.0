@@ -2,193 +2,119 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0F862C543
-	for <lists+linux-can@lfdr.de>; Wed, 16 Nov 2022 17:47:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C721B62CB8C
+	for <lists+linux-can@lfdr.de>; Wed, 16 Nov 2022 21:54:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234037AbiKPQrU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 16 Nov 2022 11:47:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59834 "EHLO
+        id S236124AbiKPUyE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 16 Nov 2022 15:54:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239161AbiKPQq5 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 16 Nov 2022 11:46:57 -0500
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBADCB3E;
-        Wed, 16 Nov 2022 08:43:36 -0800 (PST)
-Received: by mail-oi1-f178.google.com with SMTP id t62so19078779oib.12;
-        Wed, 16 Nov 2022 08:43:36 -0800 (PST)
+        with ESMTP id S238592AbiKPUxn (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 16 Nov 2022 15:53:43 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A63423BB
+        for <linux-can@vger.kernel.org>; Wed, 16 Nov 2022 12:53:24 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id i21so28463138edj.10
+        for <linux-can@vger.kernel.org>; Wed, 16 Nov 2022 12:53:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CYWMMUbBw93RRaB82Tv6rmjWQ7OjIXTvTPik8qxDxCo=;
+        b=rTDy/jgYPCRzE6NdKcp1p40vLzuwCFilt4GMZ2KgsYOwc3AeCM+94KSaGrZKLYKxFG
+         opmzxtk5xRCS5WSeC565gaVF4DdshwC1HSRqklfwYr7WJ+S0owa0wHj3IbmeF8U1T4i7
+         6RiyePLsWNqDFSqXEFhJCNuyBMF6k4Yb7ur9DPggsh6q8H5JA4FmNPH5NuR0vw5ngGgX
+         EpYPw123nxWG7VbD4qJmqj19F3NVD0pF4BS+TSEKNlxF5l8N1f3xyN6mpRnn/CsSlGp6
+         3rLhBMS8WxVlXUhSQSd6FVwmIqlHmbypQP6abng742u05WM1o/YX6VCFz2FMNznvbHgS
+         ybZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8B5/87gKzEK1DHTjBN460dWTsUxNgyOjDKt1AO8fAIM=;
-        b=oAxI32fGulcdp1ItejT1LU8zWaS3pJYwwycnLq3rDJ+weEGqCDYTn0Vss1nuDiopo8
-         BbW1nFIjow9d+Fl21PKQukL5OzT8aiou15BzORKZ+MMeDt/S61Z5nmDnsnEUX3r0vV1O
-         0fefZABKhKwHzNAIoWWTpw8RaKxHo+KWd3y6HkpBwRhVTBNjwBIKDMqkXStY9z2HOOZS
-         OQtD7FivovlEgmkfZzw+ooplt4VeK0gqgiV/RbNVmUjUHEFMXEd/JStFrlS1EAA4Ra0C
-         6L+Em5KO7B32X8cHHT3Op6RCYEGzykM0HHEMyo88ubptRu45BYLO0AFRXKozVpgw1sb/
-         Zrqg==
-X-Gm-Message-State: ANoB5plFX29inmjNu5g3TA7jno8gxcpAQq0kEJ7csXOWNCYE5YGo6YkA
-        5NX8zhK7Ji0djPVFPwd1PQ==
-X-Google-Smtp-Source: AA0mqf6l6fNt+UU2Tz8uYxAZJZVv7nnrGresiuFjASgy/dwkv0ln2dV9GKYUUtcrm7tX4B48WXq3lw==
-X-Received: by 2002:a05:6808:a83:b0:354:b300:16d5 with SMTP id q3-20020a0568080a8300b00354b30016d5mr1972701oij.253.1668617015856;
-        Wed, 16 Nov 2022 08:43:35 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id f21-20020a9d6c15000000b00661ad8741b4sm6805514otq.24.2022.11.16.08.43.34
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CYWMMUbBw93RRaB82Tv6rmjWQ7OjIXTvTPik8qxDxCo=;
+        b=TXdS8irKvZAl1c6vB1/iR5bcerG7BMZi5BWFRDS6rYpRHL58zhfEff1B/HmyA41+xh
+         pP6JYGJ7sjGu/1QT25EfcdFwEVuSpjupf7JcDrxwPruu3eVjE+OPz8z16Ohdy3WUvfU6
+         XPXK37mi/a8OV1Kxeti3NwYzv5djBVziRxlqX7G252VmH2jFYu6IETo2OtKG2UIvcqpA
+         a9TY9H5/1QzyyzY9Bl13nmwjWOtZ8+vCDp/8eULyyTM5wuDHI/g2b1DSNdzUZ3Vt6/lh
+         h7EipqNQGR6+HwgYNtTg003aiHz87AsQXp3TeTZuActeWnBlfrk47jE7Xra89nn3QW5i
+         uA6A==
+X-Gm-Message-State: ANoB5pn6Tl4jybdLZT6kBEHz7U6IWOxw322M3OKjsE0atf0tH+760pSQ
+        5ilaVTO8wylaztsg4Xumfp2+Kg==
+X-Google-Smtp-Source: AA0mqf5GghMPuf8/49SrUqtwUrDtiDsBaRv1sxhvM2kqZAgVR5XZuviSvJwLzzJB0XDNHiDQmj6t4A==
+X-Received: by 2002:a05:6402:f8d:b0:461:8f21:5f12 with SMTP id eh13-20020a0564020f8d00b004618f215f12mr20896599edb.54.1668632003246;
+        Wed, 16 Nov 2022 12:53:23 -0800 (PST)
+Received: from blmsp.fritz.box ([2001:4090:a244:804b:353b:565:addf:3aa7])
+        by smtp.gmail.com with ESMTPSA id kv17-20020a17090778d100b007aece68483csm6782828ejc.193.2022.11.16.12.53.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 08:43:35 -0800 (PST)
-Received: (nullmailer pid 217080 invoked by uid 1000);
-        Wed, 16 Nov 2022 16:43:37 -0000
-Date:   Wed, 16 Nov 2022 10:43:37 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Vivek Yadav <vivek.2311@samsung.com>
-Cc:     'Krzysztof Kozlowski' <krzysztof.kozlowski@linaro.org>,
-        rcsekar@samsung.com, krzysztof.kozlowski+dt@linaro.org,
-        wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        pankaj.dubey@samsung.com, ravi.patel@samsung.com,
-        alim.akhtar@samsung.com, linux-fsd@tesla.com,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        aswani.reddy@samsung.com, sriranjani.p@samsung.com
-Subject: Re: [PATCH v2 1/6] dt-bindings: Document the SYSREG specific
- compatibles found on FSD SoC
-Message-ID: <20221116164337.GA203961-robh@kernel.org>
-References: <20221109100928.109478-1-vivek.2311@samsung.com>
- <CGME20221109100245epcas5p38a01aed025f491d39a09508ebcdcef84@epcas5p3.samsung.com>
- <20221109100928.109478-2-vivek.2311@samsung.com>
- <709daf8b-a58e-9247-c5d8-f3be3e60fe70@linaro.org>
- <000001d8f4f6$1c7e96e0$557bc4a0$@samsung.com>
+        Wed, 16 Nov 2022 12:53:22 -0800 (PST)
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Markus Schneider-Pargmann <msp@baylibre.com>
+Subject: [PATCH 00/15] can: m_can: Optimizations for tcan and peripheral chips
+Date:   Wed, 16 Nov 2022 21:52:53 +0100
+Message-Id: <20221116205308.2996556-1-msp@baylibre.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000001d8f4f6$1c7e96e0$557bc4a0$@samsung.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 04:48:03PM +0530, Vivek Yadav wrote:
-> 
-> 
-> > -----Original Message-----
-> > From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > Sent: 09 November 2022 16:39
-> > To: Vivek Yadav <vivek.2311@samsung.com>; rcsekar@samsung.com;
-> > krzysztof.kozlowski+dt@linaro.org; wg@grandegger.com;
-> > mkl@pengutronix.de; davem@davemloft.net; edumazet@google.com;
-> > kuba@kernel.org; pabeni@redhat.com; pankaj.dubey@samsung.com;
-> > ravi.patel@samsung.com; alim.akhtar@samsung.com; linux-fsd@tesla.com;
-> > robh+dt@kernel.org
-> > Cc: linux-can@vger.kernel.org; netdev@vger.kernel.org; linux-
-> > kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
-> > samsung-soc@vger.kernel.org; devicetree@vger.kernel.org;
-> > aswani.reddy@samsung.com; sriranjani.p@samsung.com
-> > Subject: Re: [PATCH v2 1/6] dt-bindings: Document the SYSREG specific
-> > compatibles found on FSD SoC
-> > 
-> > On 09/11/2022 11:09, Vivek Yadav wrote:
-> > > From: Sriranjani P <sriranjani.p@samsung.com>
-> > >
-> > 
-> > Use subject prefixes matching the subsystem (git log --oneline -- ...).
-> > 
-> Okay, I will add the correct prefixes.
-> > > Describe the compatible properties for SYSREG controllers found on FSD
-> > > SoC.
-> > 
-> > This is ARM SoC patch, split it from the patchset.
-> >
-> I understand this patch is not to be subset of CAN patches, I will send these patches separately.
-> These patches will be used by EQos patches. As per reference, I am adding the Address link.
-> https://lore.kernel.org/all/20221104120517.77980-1-sriranjani.p@samsung.com/
->  
-> > >
-> > > Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
-> > > Signed-off-by: Pankaj Kumar Dubey <pankaj.dubey@samsung.com>
-> > > Signed-off-by: Ravi Patel <ravi.patel@samsung.com>
-> > > Signed-off-by: Vivek Yadav <vivek.2311@samsung.com>
-> > > Cc: devicetree@vger.kernel.org
-> > > Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> > > Cc: Rob Herring <robh+dt@kernel.org>
-> > 
-> > Drop the Cc list from commit log. It's not helpful.
-> > 
-> Okay, I will remove.
-> > > Signed-off-by: Sriranjani P <sriranjani.p@samsung.com>
-> > > ---
-> > >  .../devicetree/bindings/arm/tesla-sysreg.yaml | 50
-> > +++++++++++++++++++
-> > >  MAINTAINERS                                   |  1 +
-> > >  2 files changed, 51 insertions(+)
-> > >  create mode 100644
-> > > Documentation/devicetree/bindings/arm/tesla-sysreg.yaml
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/arm/tesla-sysreg.yaml
-> > > b/Documentation/devicetree/bindings/arm/tesla-sysreg.yaml
-> > > new file mode 100644
-> > > index 000000000000..bbcc6dd75918
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/arm/tesla-sysreg.yaml
-> > 
-> > arm is only for top level stuff. This goes to soc under tesla or samsung
-> > directory.
-> > 
-> Okay, this is specific to Samsung fsd SoC, I will be moving this file to arm/samsung in next patch series. Hope that is fine.
-> > > @@ -0,0 +1,50 @@
-> > > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause %YAML 1.2
-> > > +---
-> > > +$id:
-> > > +https://protect2.fireeye.com/v1/url?k=1ad2834a-7b59967c-1ad30805-
-> > 000b
-> > > +abff9b5d-1f65584e412e916c&q=1&e=a870a282-632a-4896-ae53-
-> > 3ecb50f02be5&
-> > > +u=http%3A%2F%2Fdevicetree.org%2Fschemas%2Farm%2Ftesla-
-> > sysreg.yaml%23
-> > > +$schema:
-> > > +https://protect2.fireeye.com/v1/url?k=13876e33-720c7b05-1386e57c-
-> > 000b
-> > > +abff9b5d-edae3ff711999305&q=1&e=a870a282-632a-4896-ae53-
-> > 3ecb50f02be5&
-> > > +u=http%3A%2F%2Fdevicetree.org%2Fmeta-schemas%2Fcore.yaml%23
-> > > +
-> > > +title: Tesla Full Self-Driving platform's system registers
-> > > +
-> > > +maintainers:
-> > > +  - Alim Akhtar <alim.akhtar@samsung.com>
-> > > +
-> > > +description: |
-> > > +  This is a system control registers block, providing multiple low
-> > > +level
-> > > +  platform functions like board detection and identification,
-> > > +software
-> > > +  interrupt generation.
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    oneOf:
-> > 
-> > No need for oneOf.
-> > 
-> Removing this results into dt_binding_check error, so this is required.
-> > > +      - items:
-> > > +          - enum:
-> > > +              - tesla,sysreg_fsys0
-> > > +              - tesla,sysreg_peric
-> > 
-> > From where did you get underscores in compatibles?
-> > 
-> I have seen in MCAN Driver <drivers/net/can/m_can/m_can_platform.c> and also too many other yaml files.
-> Do you have any ref standard guideline of compatible which says underscore is not allowed.
+Hi,
 
-Section 2.3.1 defining 'compatible' in the DT spec:
+this series is aimed at optimizing the driver code for tcan chips and
+more generally for peripheral m_can chips.
 
-The compatible string should consist only of lowercase letters, digits  
-and dashes, and should start with a letter. A single comma is typically 
-only used following a vendor prefix. Underscores should not be used.
+I did different things to improve the performance:
+- Reduce the number of SPI transfers.
+- Reduce the number of interrupts.
+- Enable use of FIFOs.
+
+I am working with a tcan4550 in loopback mode attached to a beaglebone
+black. I am currently working on optimizing the receive path as well
+which will be submitted in another series once it is done.
+
+Best,
+Markus
+
+Markus Schneider-Pargmann (15):
+  can: m_can: Eliminate double read of TXFQS in tx_handler
+  can: m_can: Wakeup net queue once tx was issued
+  can: m_can: Cache tx putidx and transmits in flight
+  can: m_can: Use transmit event FIFO watermark level interrupt
+  can: m_can: Disable unused interrupts
+  can: m_can: Avoid reading irqstatus twice
+  can: m_can: Read register PSR only on error
+  can: m_can: Count TXE FIFO getidx in the driver
+  can: m_can: Count read getindex in the driver
+  can: m_can: Batch acknowledge rx fifo
+  can: m_can: Batch acknowledge transmit events
+  can: tcan4x5x: Remove invalid write in clear_interrupts
+  can: tcan4x5x: Fix use of register error status mask
+  can: tcan4x5x: Fix register range of first block
+  can: tcan4x5x: Specify separate read/write ranges
+
+ drivers/net/can/m_can/m_can.c           | 140 +++++++++++++++---------
+ drivers/net/can/m_can/m_can.h           |   5 +
+ drivers/net/can/m_can/tcan4x5x-core.c   |  19 ++--
+ drivers/net/can/m_can/tcan4x5x-regmap.c |  45 ++++++--
+ 4 files changed, 141 insertions(+), 68 deletions(-)
+
+
+base-commit: 094226ad94f471a9f19e8f8e7140a09c2625abaa
+prerequisite-patch-id: e9df6751d43bb0d1e3b8938d7e93bc1cfa22cef2
+prerequisite-patch-id: dad9ec37af766bcafe54cb156f896267a0f47fe1
+prerequisite-patch-id: f4e6f1a213a31df2741a5fa3baa87aa45ef6707a
+-- 
+2.38.1
+
