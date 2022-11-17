@@ -2,442 +2,416 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1A5162DD94
-	for <lists+linux-can@lfdr.de>; Thu, 17 Nov 2022 15:09:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3948262DE2C
+	for <lists+linux-can@lfdr.de>; Thu, 17 Nov 2022 15:33:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240031AbiKQOJd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 17 Nov 2022 09:09:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43738 "EHLO
+        id S239133AbiKQOdY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 17 Nov 2022 09:33:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239819AbiKQOJb (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 17 Nov 2022 09:09:31 -0500
-X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Nov 2022 06:09:27 PST
-Received: from smtpcmd01-sp1.aruba.it (smtpcmd01-sp1.aruba.it [62.149.158.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 26D2664557
-        for <linux-can@vger.kernel.org>; Thu, 17 Nov 2022 06:09:24 -0800 (PST)
-Received: from [192.168.1.212] ([213.215.163.55])
-        by Aruba Outgoing Smtp  with ESMTPSA
-        id vfYyo46iFTm9tvfYyovAfr; Thu, 17 Nov 2022 15:08:21 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1668694101; bh=RuRoZHrRLUaiAuyu6g0vsBokY1EOInuPu2RuoW/uHYg=;
-        h=Subject:From:To:Date:Content-Type:MIME-Version;
-        b=NO4Dlu6OJ6L0ebe3CF7UXBzibfXfnEwlwxWYo1e8S1vCTEKU55X4kuXODqNCOkul1
-         kv5w5VgBr3Za+D+33n2fZ/sS5552pnvmM+PnvG2cU5GYs22OsTwvVEjNQd1n/TT1xK
-         UzNiGb6GWwsqYPFmxFtauXOtv2ZjLhbDAVkSS5ff4XXWgRFkP2tjMb0Dh02WiWZAJZ
-         xGaZNuDMtNT/nIug13sTv+9mY6hoqJsHkMnAaBhXUWiIjgSMtGwrMSnlduHzZNHjir
-         /455LDs4Wi6GTXi9hcLynuXi2zhKNanGFcqQZGrgy0fdbsrVCrTYE4bGBDmr/a3cwN
-         M27hOokrxIawg==
-Message-ID: <e0f6b26e2c724439752f3c13b53af1a56a42a5bf.camel@egluetechnologies.com>
-Subject: Re: [PATCH RESEND] can: j1939: do not wait 250ms if the same addr
- was already claimed
-From:   Devid Antonio Filoni <devid.filoni@egluetechnologies.com>
-To:     David Jander <david@protonic.nl>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
-        Robin van der Gracht <robin@protonic.nl>,
-        kernel@pengutronix.de, linux-can@vger.kernel.org,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Jayat <maxime.jayat@mobile-devices.fr>,
-        kbuild test robot <lkp@intel.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 17 Nov 2022 15:08:20 +0100
-In-Reply-To: <3566cba652c64641603fd0ad477e2c90cd77655b.camel@egluetechnologies.com>
-References: <20220509170303.29370-1-devid.filoni@egluetechnologies.com>
-         <YnllpntZ8V5CD07v@x1.vandijck-laurijssen.be>
-         <20220510042609.GA10669@pengutronix.de>
-         <ce7da10389fe448efee86d788dd5282b8022f92e.camel@egluetechnologies.com>
-         <20220511084728.GD10669@pengutronix.de> <20220511110649.21cc1f65@erd992>
-         <baaf0b8b237a2e6a8f99faca60112919d79cf549.camel@egluetechnologies.com>
-         <20220511162247.2cf3fb2e@erd992>
-         <3566cba652c64641603fd0ad477e2c90cd77655b.camel@egluetechnologies.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        with ESMTP id S240186AbiKQOdN (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 17 Nov 2022 09:33:13 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7FB7C035;
+        Thu, 17 Nov 2022 06:33:07 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id z26so1953770pff.1;
+        Thu, 17 Nov 2022 06:33:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PbFDs+3SDAki55RJjrrFRD3jZK40Qi40k+nyqVzyofw=;
+        b=mMbOTdEjO/WsYpudFX4YM2CluSHhPm2wREMWr0zsJPGtIdOgI0+AtmqA7QePmXiSzf
+         05n4QXjvyv2y8ZSHzsx2SFH83nbl6zXi0ZrNXHOv+20rvMHBXr8maJYD38QTgh9eYVxV
+         sBusroZDjB1Adn7CFxrmighHn5CYv51/OL278swURZqeiy04D/4t48cUiyFErh3pd3He
+         eiX+Mi6pVmg22uI3JKTgtBWdkmRIyhe/gsGVpGwP9K4xjrJgBO6hzryY3b2TNpMzWRo+
+         xlSgMCgNT3v/iN5wt1JpmS/CruOzr/qkGgoPvAMxoW/YFh8yomslvg+qZl3HXtSlTCUp
+         is+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PbFDs+3SDAki55RJjrrFRD3jZK40Qi40k+nyqVzyofw=;
+        b=5/hOz0lpdkuPauXlyzR6BDsB4mtdtKOB6Jqcje2eiXTExBnhDNjauMtVbIHPdjPLsQ
+         GrIKdeO1IaK4x5V4Wu6strIfyauPcLX/NKIQNzlMqloQqKLQK/RXrtRrsjcG1zrup/fV
+         ORBBHvsu4mU+4sYD0+q7IYxOE1dep4n+cvp7DjTJVVwltW4kU238B2B7cGRRkouazN7Y
+         wed/0Pgkyxf7jXqDwUDhG2qt9dgg65h9opx1YOhMKi0jMplIu1wiUqTxFH69R9RfyBgh
+         lcN0cwoVC+ZG+zIPYH9nA6oMeAWiWv34F08PjMHoVKIzCgXRI2YgxakI/DvEBJ2tDsvN
+         y6JQ==
+X-Gm-Message-State: ANoB5plKuwwIiYQcbvvwb60z+aDptI0pHvaHh/WIM+lRnaGfXpZjeR7j
+        5B1MXwuEfF0kSU638GuMkng=
+X-Google-Smtp-Source: AA0mqf5dJ7wlexrp0AKne+xBVwPRPn2VKPcEdcgpAZKn7ulkPPW5dlCGCHXy/YxM9FejM3LwQqvA/Q==
+X-Received: by 2002:a62:1cd4:0:b0:56b:deea:72e9 with SMTP id c203-20020a621cd4000000b0056bdeea72e9mr3188734pfc.47.1668695587265;
+        Thu, 17 Nov 2022 06:33:07 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o65-20020a625a44000000b00562664d5027sm1217491pfb.61.2022.11.17.06.33.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 06:33:06 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 17 Nov 2022 06:33:05 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [RFC PATCH 1/9] dt-bindings: drop redundant part of title of
+ shared bindings
+Message-ID: <20221117143305.GC664755@roeck-us.net>
+References: <20221117123850.368213-1-krzysztof.kozlowski@linaro.org>
+ <20221117123850.368213-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfLTQAylqxCnBqAUaCDfd2zNEXcIKOaz60e/QdYbYG/ryQK/fYZ/ua19oRt3eGJH5AEo4RmpJDgYDJsZE6lF1TI4vFcF0RcvWg94208FIQmsYT5XyPwzH
- T25DWpOUAJ28tUm3tSmsahQBIoqH6s+/Qrl5InLAarAqS0wOxIP6rtvO5ikAxQr6SlCOCPv3ktPDvFqucHBQTWl2vyWuWwNDnKIbWC39CwL5GykU2HCc6+m1
- sGoDU5fbLl0cNFmYdX9DVnas1V/uxg3xObuQqyh6knZNB5qKGb1FtCwuVDCO8q2d8nNzsW2OJAV4awcxree72QAHyC65BtPLGmCCwQnpEvisDSxMLAsztcdh
- 0GOQY3npRD2jZEIOrqSDKn0+lEnd6uOOTMiyFLRedY4IKIIL/ON/QkPcRUtLsS/kxMWczcZdVNN8mc7DqoyxTZ0ydmCq1jXcBUPhcQVEKUlxOCxFrMmWZcHc
- dsWbA2hpkPL9h/JvExuUVpRJnXLfuPeE9M1geeNEp3+hNQud+NpNKR7ROQM3M73bwLHx+J/IWo/DMkFf2o/nLRAzPlDZYe8Zrgb1YLp3TgkzjAmSE9YyHnat
- aili0Fx0jDuQ/2R6u7WrKXPkfFBe/sTmPhmgTdUmT4V9PtmBAF81MDZH0LkH30JNGbkyT4hqU/GqOzfwK7H98J+FtxADLtz2YxtMl7r9JflTFT07knAAqGaD
- zJvlSF9x+Y8=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221117123850.368213-2-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri, 2022-05-13 at 11:46 +0200, Devid Antonio Filoni wrote:
-> Hi David,
->=20
-> On Wed, 2022-05-11 at 16:22 +0200, David Jander wrote:
-> > Hi Devid,
-> >=20
-> > On Wed, 11 May 2022 14:55:04 +0200
-> > Devid Antonio Filoni <
-> > devid.filoni@egluetechnologies.com
-> > > wrote:
-> >=20
-> > > On Wed, 2022-05-11 at 11:06 +0200, David Jander wrote:
-> > > > Hi,
-> > > >=20
-> > > > On Wed, 11 May 2022 10:47:28 +0200
-> > > > Oleksij Rempel <
-> > > > o.rempel@pengutronix.de
-> > > >  =20
-> > > > > wrote: =20
-> > > >=20
-> > > >  =20
-> > > > > Hi,
-> > > > >=20
-> > > > > i'll CC more J1939 users to the discussion. =20
-> > > >=20
-> > > > Thanks for the CC.
-> > > >  =20
-> > > > > On Tue, May 10, 2022 at 01:00:41PM +0200, Devid Antonio Filoni wr=
-ote: =20
-> > > > > > Hi,
-> > > > > >=20
-> > > > > > On Tue, 2022-05-10 at 06:26 +0200, Oleksij Rempel wrote:   =20
-> > > > > > > Hi,
-> > > > > > >=20
-> > > > > > > On Mon, May 09, 2022 at 09:04:06PM +0200, Kurt Van Dijck wrot=
-e:   =20
-> > > > > > > > On ma, 09 mei 2022 19:03:03 +0200, Devid Antonio Filoni wro=
-te:   =20
-> > > > > > > > > This is not explicitly stated in SAE J1939-21 and some to=
-ols used for
-> > > > > > > > > ISO-11783 certification do not expect this wait.   =20
-> > > > > > >=20
-> > > > > > > It will be interesting to know which certification tool do no=
-t expect it and
-> > > > > > > what explanation is used if it fails?
-> > > > > > >    =20
-> > > > > > > > IMHO, the current behaviour is not explicitely stated, but =
-nor is the opposite.
-> > > > > > > > And if I'm not mistaken, this introduces a 250msec delay.
-> > > > > > > >=20
-> > > > > > > > 1. If you want to avoid the 250msec gap, you should avoid t=
-o contest the same address.
-> > > > > > > >=20
-> > > > > > > > 2. It's a balance between predictability and flexibility, b=
-ut if you try to accomplish both,
-> > > > > > > > as your patch suggests, there is slight time-window until t=
-he current owner responds,
-> > > > > > > > in which it may be confusing which node has the address. It=
- depends on how much history
-> > > > > > > > you have collected on the bus.
-> > > > > > > >=20
-> > > > > > > > I'm sure that this problem decreases with increasing proces=
-sing power on the nodes,
-> > > > > > > > but bigger internal queues also increase this window.
-> > > > > > > >=20
-> > > > > > > > It would certainly help if you describe how the current imp=
-lementation fails.
-> > > > > > > >=20
-> > > > > > > > Would decreasing the dead time to 50msec help in such case.
-> > > > > > > >=20
-> > > > > > > > Kind regards,
-> > > > > > > > Kurt
-> > > > > > > >    =20
-> > > > > > >=20
-> > > > > > >    =20
-> > > > > >=20
-> > > > > > The test that is being executed during the ISOBUS compliance is=
- the
-> > > > > > following: after an address has been claimed by a CF (#1), anot=
-her CF
-> > > > > > (#2) sends a  message (other than address-claim) using the same=
- address
-> > > > > > claimed by CF #1.
-> > > > > >=20
-> > > > > > As per ISO11783-5 standard, if a CF receives a message, other t=
-han the
-> > > > > > address-claimed message, which uses the CF's own SA, then the C=
-F (#1):
-> > > > > > - shall send the address-claim message to the Global address;
-> > > > > > - shall activate a diagnostic trouble code with SPN =3D 2000+SA=
- and FMI =3D
-> > > > > > 31
-> > > > > >=20
-> > > > > > After the address-claim message is sent by CF #1, as per ISO117=
-83-5
-> > > > > > standard:
-> > > > > > - If the name of the CF #1 has a lower priority then the one of=
- the CF
-> > > > > > #2, the the CF #2 shall send its address-claim message and thus=
- the CF
-> > > > > > #1 shall send the cannot-claim-address message or shall execute=
- again
-> > > > > > the claim procedure with a new address
-> > > > > > - If the name of the CF #1 has higher priority then the of the =
-CF #2,
-> > > > > > then the CF #2 shall send the cannot-claim-address message or s=
-hall
-> > > > > > execute the claim procedure with a new address
-> > > > > >=20
-> > > > > > Above conflict management is OK with current J1939 driver
-> > > > > > implementation, however, since the driver always waits 250ms af=
-ter
-> > > > > > sending an address-claim message, the CF #1 cannot set the DTC.=
- The DM1
-> > > > > > message which is expected to be sent each second (as per J1939-=
-73
-> > > > > > standard) may not be sent.
-> > > > > >=20
-> > > > > > Honestly, I don't know which company is doing the ISOBUS compli=
-ance
-> > > > > > tests on our products and which tool they use as it was choosen=
- by our
-> > > > > > customer, however they did send us some CAN traces of previousl=
-y
-> > > > > > performed tests and we noticed that the DM1 message is sent 160=
-ms after
-> > > > > > the address-claim message (but it may also be lower then that),=
- and this
-> > > > > > is something that we cannot do because the driver blocks the ap=
-plication
-> > > > > > from sending it.
-> > > > > >=20
-> > > > > > 28401.127146 1  18E6FFF0x    Tx   d 8 FE 26 FF FF FF FF FF FF  =
-//Message
-> > > > > > with other CF's address
-> > > > > > 28401.167414 1  18EEFFF0x    Rx   d 8 15 76 D1 0B 00 86 00 A0  =
-//Address
-> > > > > > Claim - SA =3D F0
-> > > > > > 28401.349214 1  18FECAF0x    Rx   d 8 FF FF C0 08 1F 01 FF FF  =
-//DM1
-> > > > > > 28402.155774 1  18E6FFF0x    Tx   d 8 FE 26 FF FF FF FF FF FF  =
-//Message
-> > > > > > with other CF's address
-> > > > > > 28402.169455 1  18EEFFF0x    Rx   d 8 15 76 D1 0B 00 86 00 A0  =
-//Address
-> > > > > > Claim - SA =3D F0
-> > > > > > 28402.348226 1  18FECAF0x    Rx   d 8 FF FF C0 08 1F 02 FF FF  =
-//DM1
-> > > > > > 28403.182753 1  18E6FFF0x    Tx   d 8 FE 26 FF FF FF FF FF FF  =
-//Message
-> > > > > > with other CF's address
-> > > > > > 28403.188648 1  18EEFFF0x    Rx   d 8 15 76 D1 0B 00 86 00 A0  =
-//Address
-> > > > > > Claim - SA =3D F0
-> > > > > > 28403.349328 1  18FECAF0x    Rx   d 8 FF FF C0 08 1F 03 FF FF  =
-//DM1
-> > > > > > 28404.349406 1  18FECAF0x    Rx   d 8 FF FF C0 08 1F 03 FF FF  =
-//DM1
-> > > > > > 28405.349740 1  18FECAF0x    Rx   d 8 FF FF C0 08 1F 03 FF FF  =
-//DM1
-> > > > > >=20
-> > > > > > Since the 250ms wait is not explicitly stated, IMHO it should b=
-e up to
-> > > > > > the user-space implementation to decide how to manage it. =20
-> > > >=20
-> > > > I think this is not entirely correct. AFAICS the 250ms wait is inde=
-ed
-> > > > explicitly stated.
-> > > > The following is taken from ISO 11783-5:
-> > > >=20
-> > > > In "4.4.4.3 Address violation" it states that "If a CF receives a m=
-essage,
-> > > > other than the address-claimed message, which uses the CF=E2=80=99s=
- own SA, then the
-> > > > CF [...] shall send the address-claim message to the Global address=
-."
-> > > >=20
-> > > > So the CF shall claim its address again. But further down, in "4.5.=
-2 Address
-> > > > claim requirements" it is stated that "...No CF shall begin, or res=
-ume,
-> > > > transmission on the network until 250 ms after it has successfully =
-claimed an
-> > > > address".
-> > > >=20
-> > > > At this moment, the address is in dispute. The affected CFs are not=
- allowed to
-> > > > send any other messages until this dispute is resolved, and the sta=
-ndard
-> > > > requires a waiting time of 250ms which is minimally deemed necessar=
-y to give
-> > > > all participants time to respond and eventually dispute the address=
- claim.
-> > > >=20
-> > > > If the offending CF ignores this dispute and keeps sending incorrec=
-t messages
-> > > > faster than every 250ms, then effectively the other CF has no chanc=
-e to ever
-> > > > resume normal operation because its address is still disputed.
-> > > >=20
-> > > > According to 4.4.4.3 it is also required to set a DTC, but it will =
-not be
-> > > > allowed to send the DM1 message unless the address dispute is resol=
-ved.
-> > > >=20
-> > > > This effectively leads to the offending CF to DoS the affected CF i=
-f it keeps
-> > > > sending offending messages. Unfortunately neither J1939 nor ISObus =
-takes into
-> > > > account adversarial behavior on the CAN network, so we cannot do an=
-ything
-> > > > about this.
-> > > >=20
-> > > > As for the ISObus compliance tool that is mentioned by Devid, IMHO =
-this
-> > > > compliance tool should be challenged and fixed, since it is broken.
-> > > >=20
-> > > > The networking layer is prohibiting the DM1 message to be sent, and=
- the
-> > > > networking layer has precedence above all superior protocol layers,=
- so the
-> > > > diagnostics layer is not able to operate at this moment.
-> > > >=20
-> > > > Best regards,
-> > > >=20
-> > > >  =20
-> > >=20
-> > > Hi David,
-> > >=20
-> > > I get your point but I'm not sure that it is the correct interpretati=
-on
-> > > that should be applied in this particular case for the following
-> > > reasons:
-> > >=20
-> > > - In "4.5.2 Address claim requirements" it is explicitly stated that
-> > > "The CF shall claim its own address when initializing and when
-> > > responding to a command to change its NAME or address" and this seems=
- to
-> >=20
-> > The standard unfortunately has a track record of ignoring a lot of scen=
-arios
-> > and corner cases, like in this instance the fact that there can appear =
-new
-> > participants on the bus _after_ initialization has long finished, and i=
-t would
-> > need to claim its address again in that case.
-> >=20
-> > But look at point d) of that same section: "No CF shall begin, or resum=
-e,
-> > transmission on the network until 250 ms after it has successfully clai=
-med an
-> > address (Figure 4). This does not apply when responding to a request fo=
-r
-> > address claimed."
-> >=20
-> > So we basically have two situations when this will apply after the netw=
-ork is
-> > up and running and a new node suddenly appears:
-> >=20
-> >  1. The new node starts with a "Request for address claimed" message, t=
-o
-> >  which your CF should respond with an "Address Claimed" message and NOT=
- wait
-> >  250ms.
-> >=20
-> > or
-> >=20
-> >  2. The new node creates an addressing conflict either by claiming its =
-address
-> >  without first sending a "request for address claimed" message or (and =
-this is
-> >  your case) simply using its address without claiming it first.
-> >=20
-> > It is this second possibility where there is a conflict that must be re=
-solved,
-> > and then you must wait 250ms after claiming the conflicting address for
-> > yourself.
-> >=20
-> > > completely ignore the "4.4.4.3 Address violation" that states that th=
-e
-> > > address-claimed message shall be sent also when "the CF receives a
-> > > message, other than the address-claimed message, which uses the CF's =
-own
-> > > SA".
-> > > Please note that the address was already claimed by the CF, so I thin=
-k
-> > > that the initialization requirements should not apply in this case si=
-nce
-> > > all disputes were already resolved.
-> >=20
-> > Well, yes and no. The address was claimed before, yes, but then a new n=
-ode came
-> > onto the bus and disputed that address. In that case the dispute needs =
-to be
-> > resolved first. Imagine you would NOT wait 250ms, but the other CF did
-> > correctly claim its address, but it was you who did not receive that me=
-ssage
-> > for some reason. Now also assume that your own NAME has a lower priorit=
-y than
-> > the other CF. In this case you can send a "claimed address" message to =
-claim
-> > your address again, but it will be contested. If you don't wait for the
-> > contestant, it is you who will be in violation of the protocol, because=
- you
-> > should have changed your own address but failed to do so.
-> >=20
-> > > - If the offending CF ignores the dispute, as you said, then the othe=
-r
-> > > CF has no chance to ever resume normal operation and so the network
-> > > cannot be aware that the other CF is not working correctly because th=
-e
-> > > offending CF is spoofing its own address.
-> >=20
-> > Correct. And like I said in my previous reply, this is unfortunately ho=
-w CAN,
-> > J1939 and ISObus work. The whole network must cooperate and there is no
-> > consideration for malign or adversarial actors.
-> > There are also a lot of possible corner cases that these standards
-> > unfortunately do not take into account. Conformance test tools seem to =
-be even
-> > more problematic and tend to have bugs quite often. I am still inclined=
- to
-> > think this is the case with your test tool.
-> >=20
-> > > This seems to make useless the
-> > > requirement that states to activate the DTC in "4.4.4.3 Address
-> > > violation".
-> >=20
-> > The requirement is not useless. You can still set and store the DTC, ju=
-st not
-> > broadcast it to the network at that moment.
-> >=20
-> > Best regards,
-> >=20
-> >=20
->=20
-> Thank you for your feedback and explanation.
-> I asked the customer to contact the compliance company so that we can
-> verify with them this particular use-case. I want to understand if there
-> is an application note or exception that states how to manage it or if
-> they implemented the test basing it on their own interpretation and how
-> it really works: supposing that the test does not check the DM1
-> presence, then the test could be passed even without sending the DM1
-> message during the 250ms after the adress-claimed message.
->=20
-> Best regards,
-> Devid
+On Thu, Nov 17, 2022 at 01:38:42PM +0100, Krzysztof Kozlowski wrote:
+> The Devicetree bindings document does not have to say in the title that
+> it is a "binding", but instead just describe the hardware.  For shared
+> (re-usable) schemas, name them all as "common properties".
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/clock/qcom,gcc.yaml         | 2 +-
+>  Documentation/devicetree/bindings/dma/dma-common.yaml         | 2 +-
+>  Documentation/devicetree/bindings/dma/dma-controller.yaml     | 4 ++--
+>  Documentation/devicetree/bindings/dma/dma-router.yaml         | 4 ++--
+>  Documentation/devicetree/bindings/iio/adc/adc.yaml            | 2 +-
+>  .../devicetree/bindings/media/video-interface-devices.yaml    | 2 +-
+>  Documentation/devicetree/bindings/media/video-interfaces.yaml | 2 +-
+>  Documentation/devicetree/bindings/mmc/mmc-controller.yaml     | 2 +-
+>  Documentation/devicetree/bindings/mtd/nand-chip.yaml          | 2 +-
+>  Documentation/devicetree/bindings/mtd/nand-controller.yaml    | 2 +-
+>  .../bindings/net/bluetooth/bluetooth-controller.yaml          | 2 +-
+>  Documentation/devicetree/bindings/net/can/can-controller.yaml | 2 +-
+>  .../devicetree/bindings/net/ethernet-controller.yaml          | 2 +-
+>  Documentation/devicetree/bindings/net/ethernet-phy.yaml       | 2 +-
+>  Documentation/devicetree/bindings/net/mdio.yaml               | 2 +-
+>  Documentation/devicetree/bindings/opp/opp-v2-base.yaml        | 2 +-
+>  .../devicetree/bindings/power/reset/restart-handler.yaml      | 2 +-
+>  Documentation/devicetree/bindings/rtc/rtc.yaml                | 2 +-
+>  .../devicetree/bindings/soundwire/soundwire-controller.yaml   | 2 +-
+>  Documentation/devicetree/bindings/spi/spi-controller.yaml     | 2 +-
+>  Documentation/devicetree/bindings/watchdog/watchdog.yaml      | 2 +-
 
-Hi David, all,
+For watchdog:
 
-I'm sorry for resuming this discussion after a long time but I noticed
-that the driver forces the 250 ms wait even when responding to a request
-for address-claimed which is against point d) of ISO 11783-5 "4.5.2
-Address claim requirements":
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-No CF shall begin, or resume, transmission on the network until 250 ms
-after it has successfully claimed  an  address  (see Figure 4), except
-when responding to a request for address-claimed.
-
-IMHO the driver shall be able to detect above condition or shall not
-force the 250 ms wait which should then be implemented, depending on the
-case, on user-space application side.
-
-Thank you, best regards,
-Devid
-
+>  21 files changed, 23 insertions(+), 23 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
+> index 1ab416c83c8d..d2de3d128b73 100644
+> --- a/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
+> +++ b/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/clock/qcom,gcc.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Qualcomm Global Clock & Reset Controller Common Bindings
+> +title: Qualcomm Global Clock & Reset Controller common parts
+>  
+>  maintainers:
+>    - Stephen Boyd <sboyd@kernel.org>
+> diff --git a/Documentation/devicetree/bindings/dma/dma-common.yaml b/Documentation/devicetree/bindings/dma/dma-common.yaml
+> index ad06d36af208..9b7b94fdbb0b 100644
+> --- a/Documentation/devicetree/bindings/dma/dma-common.yaml
+> +++ b/Documentation/devicetree/bindings/dma/dma-common.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/dma/dma-common.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: DMA Engine Generic Binding
+> +title: DMA Engine common properties
+>  
+>  maintainers:
+>    - Vinod Koul <vkoul@kernel.org>
+> diff --git a/Documentation/devicetree/bindings/dma/dma-controller.yaml b/Documentation/devicetree/bindings/dma/dma-controller.yaml
+> index 6d3727267fa8..225a141c7b5c 100644
+> --- a/Documentation/devicetree/bindings/dma/dma-controller.yaml
+> +++ b/Documentation/devicetree/bindings/dma/dma-controller.yaml
+> @@ -4,13 +4,13 @@
+>  $id: http://devicetree.org/schemas/dma/dma-controller.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: DMA Controller Generic Binding
+> +title: DMA Controller common properties
+>  
+>  maintainers:
+>    - Vinod Koul <vkoul@kernel.org>
+>  
+>  allOf:
+> -  - $ref: "dma-common.yaml#"
+> +  - $ref: dma-common.yaml#
+>  
+>  # Everything else is described in the common file
+>  properties:
+> diff --git a/Documentation/devicetree/bindings/dma/dma-router.yaml b/Documentation/devicetree/bindings/dma/dma-router.yaml
+> index 4b817f5dc30e..0ebd7bc6232b 100644
+> --- a/Documentation/devicetree/bindings/dma/dma-router.yaml
+> +++ b/Documentation/devicetree/bindings/dma/dma-router.yaml
+> @@ -4,13 +4,13 @@
+>  $id: http://devicetree.org/schemas/dma/dma-router.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: DMA Router Generic Binding
+> +title: DMA Router common properties
+>  
+>  maintainers:
+>    - Vinod Koul <vkoul@kernel.org>
+>  
+>  allOf:
+> -  - $ref: "dma-common.yaml#"
+> +  - $ref: dma-common.yaml#
+>  
+>  description:
+>    DMA routers are transparent IP blocks used to route DMA request
+> diff --git a/Documentation/devicetree/bindings/iio/adc/adc.yaml b/Documentation/devicetree/bindings/iio/adc/adc.yaml
+> index db348fcbb52c..bd0f5fae256e 100644
+> --- a/Documentation/devicetree/bindings/iio/adc/adc.yaml
+> +++ b/Documentation/devicetree/bindings/iio/adc/adc.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/iio/adc/adc.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Generic IIO bindings for ADC channels
+> +title: IIO common properties for ADC channels
+>  
+>  maintainers:
+>    - Jonathan Cameron <jic23@kernel.org>
+> diff --git a/Documentation/devicetree/bindings/media/video-interface-devices.yaml b/Documentation/devicetree/bindings/media/video-interface-devices.yaml
+> index 4527f56a5a6e..bd719cb1813e 100644
+> --- a/Documentation/devicetree/bindings/media/video-interface-devices.yaml
+> +++ b/Documentation/devicetree/bindings/media/video-interface-devices.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/media/video-interface-devices.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Common bindings for video receiver and transmitter devices
+> +title: Common properties for video receiver and transmitter devices
+>  
+>  maintainers:
+>    - Jacopo Mondi <jacopo@jmondi.org>
+> diff --git a/Documentation/devicetree/bindings/media/video-interfaces.yaml b/Documentation/devicetree/bindings/media/video-interfaces.yaml
+> index 68c3b9871cf3..e8cf73794772 100644
+> --- a/Documentation/devicetree/bindings/media/video-interfaces.yaml
+> +++ b/Documentation/devicetree/bindings/media/video-interfaces.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/media/video-interfaces.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Common bindings for video receiver and transmitter interface endpoints
+> +title: Common properties for video receiver and transmitter interface endpoints
+>  
+>  maintainers:
+>    - Sakari Ailus <sakari.ailus@linux.intel.com>
+> diff --git a/Documentation/devicetree/bindings/mmc/mmc-controller.yaml b/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
+> index 802e3ca8be4d..a17f49738abd 100644
+> --- a/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/mmc/mmc-controller.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: MMC Controller Generic Binding
+> +title: MMC Controller common properties
+>  
+>  maintainers:
+>    - Ulf Hansson <ulf.hansson@linaro.org>
+> diff --git a/Documentation/devicetree/bindings/mtd/nand-chip.yaml b/Documentation/devicetree/bindings/mtd/nand-chip.yaml
+> index 97ac3a3fbb52..20b195ef9b70 100644
+> --- a/Documentation/devicetree/bindings/mtd/nand-chip.yaml
+> +++ b/Documentation/devicetree/bindings/mtd/nand-chip.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/mtd/nand-chip.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: NAND Chip and NAND Controller Generic Binding
+> +title: NAND Chip and NAND Controller common properties
+>  
+>  maintainers:
+>    - Miquel Raynal <miquel.raynal@bootlin.com>
+> diff --git a/Documentation/devicetree/bindings/mtd/nand-controller.yaml b/Documentation/devicetree/bindings/mtd/nand-controller.yaml
+> index 359a015d4e5a..a004efc42842 100644
+> --- a/Documentation/devicetree/bindings/mtd/nand-controller.yaml
+> +++ b/Documentation/devicetree/bindings/mtd/nand-controller.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/mtd/nand-controller.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: NAND Chip and NAND Controller Generic Binding
+> +title: NAND Chip and NAND Controller common properties
+>  
+>  maintainers:
+>    - Miquel Raynal <miquel.raynal@bootlin.com>
+> diff --git a/Documentation/devicetree/bindings/net/bluetooth/bluetooth-controller.yaml b/Documentation/devicetree/bindings/net/bluetooth/bluetooth-controller.yaml
+> index 9309dc40f54f..8715adff5eaf 100644
+> --- a/Documentation/devicetree/bindings/net/bluetooth/bluetooth-controller.yaml
+> +++ b/Documentation/devicetree/bindings/net/bluetooth/bluetooth-controller.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/net/bluetooth/bluetooth-controller.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Bluetooth Controller Generic Binding
+> +title: Bluetooth Controller common properties
+>  
+>  maintainers:
+>    - Marcel Holtmann <marcel@holtmann.org>
+> diff --git a/Documentation/devicetree/bindings/net/can/can-controller.yaml b/Documentation/devicetree/bindings/net/can/can-controller.yaml
+> index 1f0e98051074..3747b46cf9b6 100644
+> --- a/Documentation/devicetree/bindings/net/can/can-controller.yaml
+> +++ b/Documentation/devicetree/bindings/net/can/can-controller.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/net/can/can-controller.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: CAN Controller Generic Binding
+> +title: CAN Controller common properties
+>  
+>  maintainers:
+>    - Marc Kleine-Budde <mkl@pengutronix.de>
+> diff --git a/Documentation/devicetree/bindings/net/ethernet-controller.yaml b/Documentation/devicetree/bindings/net/ethernet-controller.yaml
+> index 3aef506fa158..26502c0f2aff 100644
+> --- a/Documentation/devicetree/bindings/net/ethernet-controller.yaml
+> +++ b/Documentation/devicetree/bindings/net/ethernet-controller.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/net/ethernet-controller.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Ethernet Controller Generic Binding
+> +title: Ethernet Controller common properties
+>  
+>  maintainers:
+>    - David S. Miller <davem@davemloft.net>
+> diff --git a/Documentation/devicetree/bindings/net/ethernet-phy.yaml b/Documentation/devicetree/bindings/net/ethernet-phy.yaml
+> index ad808e9ce5b9..0aa1b60e78cc 100644
+> --- a/Documentation/devicetree/bindings/net/ethernet-phy.yaml
+> +++ b/Documentation/devicetree/bindings/net/ethernet-phy.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/net/ethernet-phy.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Ethernet PHY Generic Binding
+> +title: Ethernet PHY common properties
+>  
+>  maintainers:
+>    - Andrew Lunn <andrew@lunn.ch>
+> diff --git a/Documentation/devicetree/bindings/net/mdio.yaml b/Documentation/devicetree/bindings/net/mdio.yaml
+> index b5706d4e7e38..b184689dd6b2 100644
+> --- a/Documentation/devicetree/bindings/net/mdio.yaml
+> +++ b/Documentation/devicetree/bindings/net/mdio.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/net/mdio.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: MDIO Bus Generic Binding
+> +title: MDIO Bus common properties
+>  
+>  maintainers:
+>    - Andrew Lunn <andrew@lunn.ch>
+> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+> index cf9c2f7bddc2..20ac432dc683 100644
+> --- a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+> +++ b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/opp/opp-v2-base.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Generic OPP (Operating Performance Points) Common Binding
+> +title: Generic OPP (Operating Performance Points) common parts
+>  
+>  maintainers:
+>    - Viresh Kumar <viresh.kumar@linaro.org>
+> diff --git a/Documentation/devicetree/bindings/power/reset/restart-handler.yaml b/Documentation/devicetree/bindings/power/reset/restart-handler.yaml
+> index 1f9a2aac53c0..8b52fd156d4c 100644
+> --- a/Documentation/devicetree/bindings/power/reset/restart-handler.yaml
+> +++ b/Documentation/devicetree/bindings/power/reset/restart-handler.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/power/reset/restart-handler.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Restart and shutdown handler generic binding
+> +title: Restart and shutdown handler common properties
+>  
+>  maintainers:
+>    - Sebastian Reichel <sre@kernel.org>
+> diff --git a/Documentation/devicetree/bindings/rtc/rtc.yaml b/Documentation/devicetree/bindings/rtc/rtc.yaml
+> index 0ec3551f12dd..00848a5a409e 100644
+> --- a/Documentation/devicetree/bindings/rtc/rtc.yaml
+> +++ b/Documentation/devicetree/bindings/rtc/rtc.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/rtc/rtc.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: RTC Generic Binding
+> +title: Real Time Clock common properties
+>  
+>  maintainers:
+>    - Alexandre Belloni <alexandre.belloni@bootlin.com>
+> diff --git a/Documentation/devicetree/bindings/soundwire/soundwire-controller.yaml b/Documentation/devicetree/bindings/soundwire/soundwire-controller.yaml
+> index 4aad121eff3f..2176033850dc 100644
+> --- a/Documentation/devicetree/bindings/soundwire/soundwire-controller.yaml
+> +++ b/Documentation/devicetree/bindings/soundwire/soundwire-controller.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/soundwire/soundwire-controller.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: SoundWire Controller Generic Binding
+> +title: SoundWire Controller common properties
+>  
+>  maintainers:
+>    - Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> diff --git a/Documentation/devicetree/bindings/spi/spi-controller.yaml b/Documentation/devicetree/bindings/spi/spi-controller.yaml
+> index 01042a7f382e..6bbe073f894b 100644
+> --- a/Documentation/devicetree/bindings/spi/spi-controller.yaml
+> +++ b/Documentation/devicetree/bindings/spi/spi-controller.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/spi/spi-controller.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: SPI Controller Generic Binding
+> +title: SPI Controller common properties
+>  
+>  maintainers:
+>    - Mark Brown <broonie@kernel.org>
+> diff --git a/Documentation/devicetree/bindings/watchdog/watchdog.yaml b/Documentation/devicetree/bindings/watchdog/watchdog.yaml
+> index e3dfb02f0ca5..6875cf1c3159 100644
+> --- a/Documentation/devicetree/bindings/watchdog/watchdog.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/watchdog.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/watchdog/watchdog.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Watchdog Generic Bindings
+> +title: Watchdog common properties
+>  
+>  maintainers:
+>    - Guenter Roeck <linux@roeck-us.net>
+> -- 
+> 2.34.1
+> 
