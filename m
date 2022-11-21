@@ -2,434 +2,130 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C50E5631F9C
-	for <lists+linux-can@lfdr.de>; Mon, 21 Nov 2022 12:09:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AC4863219C
+	for <lists+linux-can@lfdr.de>; Mon, 21 Nov 2022 13:08:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230264AbiKULJU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 21 Nov 2022 06:09:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33694 "EHLO
+        id S229436AbiKUMIy convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Mon, 21 Nov 2022 07:08:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230265AbiKULHj (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 21 Nov 2022 06:07:39 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F77B4F06
-        for <linux-can@vger.kernel.org>; Mon, 21 Nov 2022 03:06:41 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id r12so18315387lfp.1
-        for <linux-can@vger.kernel.org>; Mon, 21 Nov 2022 03:06:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Vt/Wa0oZhOf8fgPaUT9nYutANNXrYJ1M3EC69Oc6bKY=;
-        b=dkjpcM/pO1IKb6CkVrne1aMXK5pKU0cbTJhHKlkx02vkdPOtEnSa8DcY0ZNFQ/Aai2
-         qH8lEQpCvc0P3JcOHif7m8xCUExRkW/i8XEAk8Xd4nF6WUgIbY7pTaOw296tyj9d0s5S
-         49bYPkzl2sPqUHIasE8UjxvT6H2A4jv1BVUikormOKd/yX2YAHV4NTeUqY3JsiBuSZsv
-         +9IxEfLYGIRpoF01ldIPFQS4uTCNTZT7q0WF2ueSIYt48kH9zXpMEhn2lViD/abJfvRE
-         ZQuEKSQZMi0x8fDazXqUX1ZYHspCB+iO3RQZ9pNytp+96JUXrCzq0pmB0EWAToKjCK2P
-         pNqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Vt/Wa0oZhOf8fgPaUT9nYutANNXrYJ1M3EC69Oc6bKY=;
-        b=ONQdTdkRSzKTBZnhAfKqZFK9IMr/uWxia68lhNYyXj6xNf15RHEtduXAAZKsExK9yL
-         r3oZl59H8HksKvnvnmfT8+5VtvFWsgsVKhPoSEwlSjaYYx95YKKI8yKQs6ZxsyVX0aui
-         r3SllIN9fB3Bxr63zb/wjQRCG6w5zIpuNg/oLjHIDeABA1sJcFwq5W9JmK5He6e/p5SG
-         D4bMwL5QS+w0TldQLCN/mcP13NBmg+yKgQJZGaxtIEUMcs4Rjtlf9fU7A7eLw/4wFWkR
-         EKmuHddlTzic4q8rgE9mU/KUfSEj9RX6l6IiggdD9yninJHqDnwsz10THCq2sJ4vHTF7
-         xPJw==
-X-Gm-Message-State: ANoB5pkO1WB5ToTy7nauerfH9CCWM5eS/U8B2bzhcstACsbvM5ygkNQZ
-        ikz2hDz2jnx6sDSLJaQroM/hgg==
-X-Google-Smtp-Source: AA0mqf5nUBeMC8Y3mQrtIk7tF8Nu1KTg6JLn6oA018LE9kb9lE6jW7NgPef3dUXhGdN0anp1mO8BbA==
-X-Received: by 2002:a05:6512:15a6:b0:4a2:3d2c:34ac with SMTP id bp38-20020a05651215a600b004a23d2c34acmr5515193lfb.41.1669028801206;
-        Mon, 21 Nov 2022 03:06:41 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id n1-20020a05651203e100b0049313f77755sm1991521lfq.213.2022.11.21.03.06.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 03:06:40 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-watchdog@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v2 9/9] dt-bindings: drop redundant part of title (manual)
-Date:   Mon, 21 Nov 2022 12:06:15 +0100
-Message-Id: <20221121110615.97962-10-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221121110615.97962-1-krzysztof.kozlowski@linaro.org>
-References: <20221121110615.97962-1-krzysztof.kozlowski@linaro.org>
+        with ESMTP id S229505AbiKUMIw (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 21 Nov 2022 07:08:52 -0500
+Received: from DEU01-BE0-obe.outbound.protection.outlook.com (mail-be0deu01on2119.outbound.protection.outlook.com [40.107.127.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE936A681
+        for <linux-can@vger.kernel.org>; Mon, 21 Nov 2022 04:08:51 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gjNYbRJcsNDLGvTLMpC0ZhAs4RXu/60vogHiwkxuPna+lQFtKOuHX1t/MKCq0CzAJWrDVFmu8sdLhCwa3U12+DC0nYy0tJPBtHvdNwXTO5dSQbcg6PjeXwfHWdgyTV48jjnTzaRX2aMy/CHeu8bbI/amsJj0WstZXDfORYMNBKxx6gtP3dGC+d3zSjNpEe8o4+YtATNrud7S0A9tTW5DQ/+ca+r9UPR9bXi+uzApHW9xsdKUoSa3xsp4DlvS4f2Gn4wbYI22VkUpgSvmNG+cg4Ix6819yC5knt5HDNLvVOo71ByhhltUUR1VrbC9CoxViuGejvxYMkdUDqUo2hO6/g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RwlPk6T1eBW0Tdv9YcKuUY0erXVMbeugyHv+itMRG9Y=;
+ b=PiNj9WfTx19NOPBSHPrdnWyQkqjpHnQOGjJfnC+7YQmG69GYRlyBZgrCzdLwaneqTMzv6ZQLbLDIe6O4ehAimK2ruw3+UXrzkzsRP8/R0u8wiEbdGfjR6fhsOxDVxRumDebdeMjZeT8cF9354AY6NSOxudGzrc9EXQaZHQLBoOVdQEjR9eml11dJx0JWyZPQjjIpsGC8pDvt0I1Qhcf6pazaSeFAH0Al14MLmoe8sreQ36NbaKyjvTNpOtWrlJ8C2KDErmpDKdjfGSK9RANnR8lj1Ikj6RbnKABzD39nA/LlHOLVVfyNd8EF/AGdwQv9dJKkyt9ARGiLXG6GfERDsw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=dintec.solutions; dmarc=pass action=none
+ header.from=dintec.solutions; dkim=pass header.d=dintec.solutions; arc=none
+Received: from FR2P281MB1655.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:8e::7) by
+ FR3P281MB2509.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:5b::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5834.15; Mon, 21 Nov 2022 12:08:49 +0000
+Received: from FR2P281MB1655.DEUP281.PROD.OUTLOOK.COM
+ ([fe80::18e:f41d:d97c:6f43]) by FR2P281MB1655.DEUP281.PROD.OUTLOOK.COM
+ ([fe80::18e:f41d:d97c:6f43%4]) with mapi id 15.20.5834.015; Mon, 21 Nov 2022
+ 12:08:49 +0000
+From:   Marvin Ludersdorfer <marvin.ludersdorfer@dintec.solutions>
+To:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Subject: AW: Problem receiving > 8 byte UDS response when using istpsend
+Thread-Topic: Problem receiving > 8 byte UDS response when using istpsend
+Thread-Index: Adj9oXS9XKrdsZ8wSP6hlXFXAyCoOgAADfAw
+Date:   Mon, 21 Nov 2022 12:08:49 +0000
+Message-ID: <FR2P281MB165503FACCD9894C353ED4CE9F0A9@FR2P281MB1655.DEUP281.PROD.OUTLOOK.COM>
+References: <FR2P281MB165556E4F729AC3CDB50F6F69F0A9@FR2P281MB1655.DEUP281.PROD.OUTLOOK.COM>
+In-Reply-To: <FR2P281MB165556E4F729AC3CDB50F6F69F0A9@FR2P281MB1655.DEUP281.PROD.OUTLOOK.COM>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-bromium-msgid: b48650ef-b2df-409f-a4b6-a1368ee9584d
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=dintec.solutions;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: FR2P281MB1655:EE_|FR3P281MB2509:EE_
+x-ms-office365-filtering-correlation-id: 81d7be5f-b473-4df3-e854-08dacbb925e0
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 0IrsI1IUGzRVzaXck9eWh/wnw2DMOqewmUkBj97PTUaecLmGzM/rniVGWeXfq640cMdqx6cpxN+BTWfg31fuKsfV11TI19DjTSgJa7+WMVFRKUJVgqHuxnjfKCjL2lze7dVZg5ICcsXS1f72FyKjj4+QJ/ymRbTTM6nKb8eAfNcbRcjwm3jhoiFYGYojWLQ8FyBUAxwKFe2YHIkWRqU6tuo9MHhyD1+osQVFk9/V1+Pbcc+V7wZXunslTqLotdujrs4QtGKtOUSJ+ljRRmEQn2v8qK4hstJr3Y/OZEbHXRSRFPZCi0UjN/GyMXcQXv8Twt6SQpJltEfWTf8Zj52+DbhHYBYAaGwJmIBWiqQbgHPkwsI6U2iN1xSXHoqMjpwFebc9TUUK9Q8Q+pLPclxX/jew9afVLEEw2DV/kTq8LTlbPB2fwl12LN2b0IpgcdvhfE0NDeX/TCuvYXvXKoTszWpy0QiPPS36iTvdmDt/IPXBl1osbondBRkuz0kZFZiVEY4YCTU2fkSVbmdYJ5KgsX+SEGoRyM1vefhC1cLKIGkJD0nnlbvMkxkjyyaElB0eSupFS4LY0nLDZACuSuApTZTJFqz701D8A9UNyk26okXEiXrZgHSyPvwol22Ha92TZaywKwkHhEcHrW/v3xs6n+x17NJKOu8HV4yLpKp1i9TDXKv8B5dkcUie//jVzLeuPDFzsczskOeFI4vuaxn9WlhisFZFsRp/o6S/hv5d7oo=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:FR2P281MB1655.DEUP281.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(346002)(366004)(136003)(39830400003)(451199015)(2906002)(83380400001)(33656002)(66946007)(76116006)(41300700001)(66476007)(55016003)(86362001)(122000001)(6916009)(6506007)(7696005)(38100700002)(38070700005)(4744005)(66556008)(2940100002)(186003)(5660300002)(8936002)(44832011)(8676002)(64756008)(66446008)(52536014)(26005)(316002)(9686003)(71200400001)(478600001)(46492015);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?7e9VSpho3t72JfiaPm3j36Gy9kLWux2Y53GhK6iffkcHHR7vZQmGDGjzhE8B?=
+ =?us-ascii?Q?d/+QKyGpyp3cKyEJmINnUu7RG/+GGcC1TEIk1dZfqYCSQlmjq3acq4cIWH80?=
+ =?us-ascii?Q?tCFIYpbZHVS+N9WSucjeB7Z89rY+hvwODRQuamb8o+FXbTBHxqGj0LeLLu4D?=
+ =?us-ascii?Q?Ytk2ai+CCYVhChMcHyracDM6Cw4xpKDmG3zBdD+iEhdddua/FJhTs+AChnyi?=
+ =?us-ascii?Q?BTocT+zOb2rfxjCTMFh1kejkDSUX8UieAfqnqu2vVfnOzEztiLdn+1X2JNVo?=
+ =?us-ascii?Q?qgQDqyl9aDwd/v7+mMnDVVYnPSfWebRdXtH6eKE1vYHrPnKkmyvZ28s0K1CM?=
+ =?us-ascii?Q?rAKsNCtfMnPAnXW0zLk6aF1xuUt8dbnzq6jOXVV5R3QtZxWXkvUetTzXIUIC?=
+ =?us-ascii?Q?vSJf7bNnQi1rGqSxsnFUt1X6Y0ySRhv4fRL6/szGGXCo5aDFLnyXe+/5xkO4?=
+ =?us-ascii?Q?AIBDuziCvxdTQrVsSB3Gaep63SUVntX+vh6HFKzJ5ewUh4hfq58PnQfblV5c?=
+ =?us-ascii?Q?ObZnwe1HnxfAxrsiTXIIDaK6rA2cbVftZnX4mCh72jKwZSLX3YKprRz6IZU1?=
+ =?us-ascii?Q?+iZhqRAvL03zSzeiADTbeTyuastM1QMEwO4lTY5ZpKmaM+BWl/tYbRAm9l5P?=
+ =?us-ascii?Q?oDUyO/xRrg73Xe7sGuzyEanh1bB3JG/4SGBviyyqhittFomrZ0DIJqa0/tNu?=
+ =?us-ascii?Q?+eBY42574AdYQCK+d0jdUzTbE8k62fXA0Av9VfZgNDLb7ye9uCBYbUPWn5V2?=
+ =?us-ascii?Q?BTMsi6+yUhPJ4NAGywAr6NuxC2PimWHfVS7HSkuz803eTgKXvL8FoT/ZhsMB?=
+ =?us-ascii?Q?6UVpnkCuEKzE431q/kNUiZ1jyhZgb3ny/1l/8i6rOl0alyuAjMNehH3o/QM9?=
+ =?us-ascii?Q?oVQ/hhW+UW2EjK3VYZjxk8nJ1hGpbJWknR4Y0WOrZy1I18l0uKsPpLVXZSXw?=
+ =?us-ascii?Q?bKhOkYp6Ks/jZM1FwfhPHXQBkTR0xdvXNchH6eRvoFg6BUuBaNGgUxoHbaNA?=
+ =?us-ascii?Q?mmvw2pHWpGuPPKLfqejenucZK5Ql2HVZYjF/eq5/9AFYKUzodTHVNkUp/fbM?=
+ =?us-ascii?Q?aNHRKrV/9kbc3H3Ks24ZlF9iGyqn/6U82+D+dvDXtB3NmB6UmfVUlGN3bQrF?=
+ =?us-ascii?Q?5Eq0wrAwMLGs5eErkT6oi8at4WKOyXwLJa6nHU2b1we0RS5SxQPPZx2IP2nJ?=
+ =?us-ascii?Q?kmwP5H2pRoRp5/5ehuEUAj/GdXsEnOo87EItvRUXksPYyqgxqrC9VIHcW5r9?=
+ =?us-ascii?Q?WbezJxuqaal7iV8Z/c5KXisAYntvOw7Ao3DB3K6+4xONnqvnxqIzOdgzPHYq?=
+ =?us-ascii?Q?7rB3xJh/FNXLEb4EDaeGUm6GayGsaHDX4r7yuACVfdbnfhYmqdCtRQWgP8IH?=
+ =?us-ascii?Q?Jsg+dyPuwGU7CTvbvoZ5FOiOjw4W9Ks+eD/EHePv80sPKlI3sHNyU1+LBvgZ?=
+ =?us-ascii?Q?cgR3TR5I34DMxUTwXvQ++x5hP+N/4tCkz5xCLn57wS+s1EuoR1PIcnEeY95b?=
+ =?us-ascii?Q?CMdjJ5AySSOU12O84jLbamSfqYNU+ciFExO86E3zspOiLOpoNW7L5dFFivH0?=
+ =?us-ascii?Q?uj9Ee9hWRWAgsRnMvv2ICe3CMzmGYbdVAaOAFsyWDM9zRhQ8MmumI0Id8Zuo?=
+ =?us-ascii?Q?bm9R6GWNiL7JObrWw+9qa8E=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: dintec.solutions
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: FR2P281MB1655.DEUP281.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 81d7be5f-b473-4df3-e854-08dacbb925e0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Nov 2022 12:08:49.1075
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: aced8699-8899-4f52-b3b1-e68bc99e845d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: o6oe5vo8zR8mJCHRcDGTAsGcgUlKXjYFpDdDSLf9DXJ1dUFBIyRXoCeV8MpBlEZewbF/anycJwiQOlCfW+uxxvCEdUtRb9CCW5AAGOTlJNXe45L1pONeuz74WPgHij36
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: FR3P281MB2509
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The Devicetree bindings document does not have to say in the title that
-it is a "Devicetree binding" or a "schema", but instead just describe
-the hardware.
+Hi,
 
-Manual updates to various binding titles, including capitalizing them.
+I'm experiencing problems when trying to read out ECU parameters using istpsend when the response exceeds 8 bytes:
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
----
- Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml   | 2 +-
- Documentation/devicetree/bindings/clock/fsl,scu-clk.yaml        | 2 +-
- .../devicetree/bindings/clock/qcom,dispcc-sc8280xp.yaml         | 2 +-
- Documentation/devicetree/bindings/example-schema.yaml           | 2 +-
- Documentation/devicetree/bindings/input/fsl,scu-key.yaml        | 2 +-
- Documentation/devicetree/bindings/input/matrix-keymap.yaml      | 2 +-
- Documentation/devicetree/bindings/leds/issi,is31fl319x.yaml     | 2 +-
- Documentation/devicetree/bindings/net/asix,ax88178.yaml         | 2 +-
- Documentation/devicetree/bindings/net/microchip,lan95xx.yaml    | 2 +-
- Documentation/devicetree/bindings/nvmem/fsl,scu-ocotp.yaml      | 2 +-
- Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml    | 2 +-
- Documentation/devicetree/bindings/pci/pci-ep.yaml               | 2 +-
- Documentation/devicetree/bindings/phy/calxeda-combophy.yaml     | 2 +-
- Documentation/devicetree/bindings/pinctrl/fsl,scu-pinctrl.yaml  | 2 +-
- Documentation/devicetree/bindings/pinctrl/pincfg-node.yaml      | 2 +-
- Documentation/devicetree/bindings/pinctrl/pinmux-node.yaml      | 2 +-
- Documentation/devicetree/bindings/power/fsl,scu-pd.yaml         | 2 +-
- Documentation/devicetree/bindings/riscv/cpus.yaml               | 2 +-
- Documentation/devicetree/bindings/rtc/fsl,scu-rtc.yaml          | 2 +-
- Documentation/devicetree/bindings/spi/omap-spi.yaml             | 2 +-
- Documentation/devicetree/bindings/thermal/fsl,scu-thermal.yaml  | 2 +-
- Documentation/devicetree/bindings/usb/usb-device.yaml           | 2 +-
- Documentation/devicetree/bindings/watchdog/fsl,scu-wdt.yaml     | 2 +-
- 23 files changed, 23 insertions(+), 23 deletions(-)
+In one terminal, I run isotpdump -s 00000680 -d 00000780 -c -ta can0
 
-diff --git a/Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml b/Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml
-index 82836086cac1..d416c374e853 100644
---- a/Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml
-+++ b/Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml
-@@ -4,7 +4,7 @@
- $id: http://devicetree.org/schemas/clock/cirrus,cs2000-cp.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: Binding CIRRUS LOGIC Fractional-N Clock Synthesizer & Clock Multiplier
-+title: CIRRUS LOGIC Fractional-N Clock Synthesizer & Clock Multiplier
- 
- maintainers:
-   - Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-diff --git a/Documentation/devicetree/bindings/clock/fsl,scu-clk.yaml b/Documentation/devicetree/bindings/clock/fsl,scu-clk.yaml
-index f2c48460a399..36d4cfc3c2f8 100644
---- a/Documentation/devicetree/bindings/clock/fsl,scu-clk.yaml
-+++ b/Documentation/devicetree/bindings/clock/fsl,scu-clk.yaml
-@@ -4,7 +4,7 @@
- $id: http://devicetree.org/schemas/clock/fsl,scu-clk.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: i.MX SCU Client Device Node - Clock bindings based on SCU Message Protocol
-+title: i.MX SCU Client Device Node - Clock Controller Based on SCU Message Protocol
- 
- maintainers:
-   - Abel Vesa <abel.vesa@nxp.com>
-diff --git a/Documentation/devicetree/bindings/clock/qcom,dispcc-sc8280xp.yaml b/Documentation/devicetree/bindings/clock/qcom,dispcc-sc8280xp.yaml
-index 28c13237059f..3cb996b2c9d5 100644
---- a/Documentation/devicetree/bindings/clock/qcom,dispcc-sc8280xp.yaml
-+++ b/Documentation/devicetree/bindings/clock/qcom,dispcc-sc8280xp.yaml
-@@ -4,7 +4,7 @@
- $id: http://devicetree.org/schemas/clock/qcom,dispcc-sc8280xp.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: Qualcomm Display Clock & Reset Controller Binding for SC8280XP
-+title: Qualcomm Display Clock & Reset Controller on SC8280XP
- 
- maintainers:
-   - Bjorn Andersson <bjorn.andersson@linaro.org>
-diff --git a/Documentation/devicetree/bindings/example-schema.yaml b/Documentation/devicetree/bindings/example-schema.yaml
-index 8e1a8b19d429..dfcf4c27d44a 100644
---- a/Documentation/devicetree/bindings/example-schema.yaml
-+++ b/Documentation/devicetree/bindings/example-schema.yaml
-@@ -11,7 +11,7 @@ $id: http://devicetree.org/schemas/example-schema.yaml#
- # $schema is the meta-schema this schema should be validated with.
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: An example schema annotated with jsonschema details
-+title: An Example Device
- 
- maintainers:
-   - Rob Herring <robh@kernel.org>
-diff --git a/Documentation/devicetree/bindings/input/fsl,scu-key.yaml b/Documentation/devicetree/bindings/input/fsl,scu-key.yaml
-index e6266d188266..e5a3c355ee1f 100644
---- a/Documentation/devicetree/bindings/input/fsl,scu-key.yaml
-+++ b/Documentation/devicetree/bindings/input/fsl,scu-key.yaml
-@@ -4,7 +4,7 @@
- $id: http://devicetree.org/schemas/input/fsl,scu-key.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: i.MX SCU Client Device Node - SCU key bindings based on SCU Message Protocol
-+title: i.MX SCU Client Device Node - SCU Key Based on SCU Message Protocol
- 
- maintainers:
-   - Dong Aisheng <aisheng.dong@nxp.com>
-diff --git a/Documentation/devicetree/bindings/input/matrix-keymap.yaml b/Documentation/devicetree/bindings/input/matrix-keymap.yaml
-index 6699d5e32dca..4d6dbe91646d 100644
---- a/Documentation/devicetree/bindings/input/matrix-keymap.yaml
-+++ b/Documentation/devicetree/bindings/input/matrix-keymap.yaml
-@@ -4,7 +4,7 @@
- $id: http://devicetree.org/schemas/input/matrix-keymap.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: Common key matrices binding for matrix-connected key boards
-+title: Common Key Matrices on Matrix-connected Key Boards
- 
- maintainers:
-   - Olof Johansson <olof@lixom.net>
-diff --git a/Documentation/devicetree/bindings/leds/issi,is31fl319x.yaml b/Documentation/devicetree/bindings/leds/issi,is31fl319x.yaml
-index 940333f2d69c..eebe372ea463 100644
---- a/Documentation/devicetree/bindings/leds/issi,is31fl319x.yaml
-+++ b/Documentation/devicetree/bindings/leds/issi,is31fl319x.yaml
-@@ -4,7 +4,7 @@
- $id: http://devicetree.org/schemas/leds/issi,is31fl319x.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: ISSI LED controllers bindings for IS31FL319{0,1,3,6,9}
-+title: ISSI LED Controllers for IS31FL319{0,1,3,6,9}
- 
- maintainers:
-   - Vincent Knecht <vincent.knecht@mailoo.org>
-diff --git a/Documentation/devicetree/bindings/net/asix,ax88178.yaml b/Documentation/devicetree/bindings/net/asix,ax88178.yaml
-index a81dbc4792f6..768504ccbf74 100644
---- a/Documentation/devicetree/bindings/net/asix,ax88178.yaml
-+++ b/Documentation/devicetree/bindings/net/asix,ax88178.yaml
-@@ -4,7 +4,7 @@
- $id: http://devicetree.org/schemas/net/asix,ax88178.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: The device tree bindings for the USB Ethernet controllers
-+title: ASIX AX88172/AX88772 USB Ethernet Controllers
- 
- maintainers:
-   - Oleksij Rempel <o.rempel@pengutronix.de>
-diff --git a/Documentation/devicetree/bindings/net/microchip,lan95xx.yaml b/Documentation/devicetree/bindings/net/microchip,lan95xx.yaml
-index 3715c5f8f0e0..0b97e14d947f 100644
---- a/Documentation/devicetree/bindings/net/microchip,lan95xx.yaml
-+++ b/Documentation/devicetree/bindings/net/microchip,lan95xx.yaml
-@@ -4,7 +4,7 @@
- $id: http://devicetree.org/schemas/net/microchip,lan95xx.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: The device tree bindings for the USB Ethernet controllers
-+title: Microchip SMSC9500/LAN9530/LAN9730 USB Ethernet Controllers
- 
- maintainers:
-   - Oleksij Rempel <o.rempel@pengutronix.de>
-diff --git a/Documentation/devicetree/bindings/nvmem/fsl,scu-ocotp.yaml b/Documentation/devicetree/bindings/nvmem/fsl,scu-ocotp.yaml
-index 682688299b26..f0a49283649d 100644
---- a/Documentation/devicetree/bindings/nvmem/fsl,scu-ocotp.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/fsl,scu-ocotp.yaml
-@@ -4,7 +4,7 @@
- $id: http://devicetree.org/schemas/nvmem/fsl,scu-ocotp.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: i.MX SCU Client Device Node - OCOTP bindings based on SCU Message Protocol
-+title: i.MX SCU Client Device Node - OCOTP Based on SCU Message Protocol
- 
- maintainers:
-   - Dong Aisheng <aisheng.dong@nxp.com>
-diff --git a/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml b/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
-index df8442fb11f0..b9ce2e099ce9 100644
---- a/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
-+++ b/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
-@@ -4,7 +4,7 @@
- $id: http://devicetree.org/schemas/opp/opp-v2-qcom-level.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: Qualcomm OPP bindings to describe OPP nodes.
-+title: Qualcomm OPP
- 
- maintainers:
-   - Niklas Cassel <nks@flawful.org>
-diff --git a/Documentation/devicetree/bindings/pci/pci-ep.yaml b/Documentation/devicetree/bindings/pci/pci-ep.yaml
-index ccec51ab5247..d1eef4825207 100644
---- a/Documentation/devicetree/bindings/pci/pci-ep.yaml
-+++ b/Documentation/devicetree/bindings/pci/pci-ep.yaml
-@@ -4,7 +4,7 @@
- $id: http://devicetree.org/schemas/pci/pci-ep.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: PCI Endpoint Controller Schema
-+title: PCI Endpoint Controller
- 
- description: |
-   Common properties for PCI Endpoint Controller Nodes.
-diff --git a/Documentation/devicetree/bindings/phy/calxeda-combophy.yaml b/Documentation/devicetree/bindings/phy/calxeda-combophy.yaml
-index 41ee16e21f8d..d05a7c793035 100644
---- a/Documentation/devicetree/bindings/phy/calxeda-combophy.yaml
-+++ b/Documentation/devicetree/bindings/phy/calxeda-combophy.yaml
-@@ -4,7 +4,7 @@
- $id: http://devicetree.org/schemas/phy/calxeda-combophy.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: Calxeda Highbank Combination PHYs binding for SATA
-+title: Calxeda Highbank Combination PHYs for SATA
- 
- description: |
-   The Calxeda Combination PHYs connect the SoC to the internal fabric
-diff --git a/Documentation/devicetree/bindings/pinctrl/fsl,scu-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/fsl,scu-pinctrl.yaml
-index 45ea565ce238..fcd729afeee1 100644
---- a/Documentation/devicetree/bindings/pinctrl/fsl,scu-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/fsl,scu-pinctrl.yaml
-@@ -4,7 +4,7 @@
- $id: http://devicetree.org/schemas/pinctrl/fsl,scu-pinctrl.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: i.MX SCU Client Device Node - Pinctrl bindings based on SCU Message Protocol
-+title: i.MX SCU Client Device Node - Pinctrl Based on SCU Message Protocol
- 
- maintainers:
-   - Dong Aisheng <aisheng.dong@nxp.com>
-diff --git a/Documentation/devicetree/bindings/pinctrl/pincfg-node.yaml b/Documentation/devicetree/bindings/pinctrl/pincfg-node.yaml
-index f5a121311f61..be81ed22a036 100644
---- a/Documentation/devicetree/bindings/pinctrl/pincfg-node.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/pincfg-node.yaml
-@@ -4,7 +4,7 @@
- $id: http://devicetree.org/schemas/pinctrl/pincfg-node.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: Generic pin configuration node schema
-+title: Generic Pin Configuration Node
- 
- maintainers:
-   - Linus Walleij <linus.walleij@linaro.org>
-diff --git a/Documentation/devicetree/bindings/pinctrl/pinmux-node.yaml b/Documentation/devicetree/bindings/pinctrl/pinmux-node.yaml
-index 551df3d9b809..008c3ab7f1bb 100644
---- a/Documentation/devicetree/bindings/pinctrl/pinmux-node.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/pinmux-node.yaml
-@@ -4,7 +4,7 @@
- $id: http://devicetree.org/schemas/pinctrl/pinmux-node.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: Generic pin multiplexing node schema
-+title: Generic Pin Multiplexing Node
- 
- maintainers:
-   - Linus Walleij <linus.walleij@linaro.org>
-diff --git a/Documentation/devicetree/bindings/power/fsl,scu-pd.yaml b/Documentation/devicetree/bindings/power/fsl,scu-pd.yaml
-index 1f72b18ca0fc..407b7cfec783 100644
---- a/Documentation/devicetree/bindings/power/fsl,scu-pd.yaml
-+++ b/Documentation/devicetree/bindings/power/fsl,scu-pd.yaml
-@@ -4,7 +4,7 @@
- $id: http://devicetree.org/schemas/power/fsl,scu-pd.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: i.MX SCU Client Device Node - Power domain bindings based on SCU Message Protocol
-+title: i.MX SCU Client Device Node - Power Domain Based on SCU Message Protocol
- 
- maintainers:
-   - Dong Aisheng <aisheng.dong@nxp.com>
-diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentation/devicetree/bindings/riscv/cpus.yaml
-index 83ad177a9043..c6720764e765 100644
---- a/Documentation/devicetree/bindings/riscv/cpus.yaml
-+++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
-@@ -4,7 +4,7 @@
- $id: http://devicetree.org/schemas/riscv/cpus.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: RISC-V bindings for 'cpus' DT nodes
-+title: RISC-V CPUs
- 
- maintainers:
-   - Paul Walmsley <paul.walmsley@sifive.com>
-diff --git a/Documentation/devicetree/bindings/rtc/fsl,scu-rtc.yaml b/Documentation/devicetree/bindings/rtc/fsl,scu-rtc.yaml
-index 8c102b70d735..dd1b1abf1e1b 100644
---- a/Documentation/devicetree/bindings/rtc/fsl,scu-rtc.yaml
-+++ b/Documentation/devicetree/bindings/rtc/fsl,scu-rtc.yaml
-@@ -4,7 +4,7 @@
- $id: http://devicetree.org/schemas/rtc/fsl,scu-rtc.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: i.MX SCU Client Device Node - RTC bindings based on SCU Message Protocol
-+title: i.MX SCU Client Device Node - RTC Based on SCU Message Protocol
- 
- maintainers:
-   - Dong Aisheng <aisheng.dong@nxp.com>
-diff --git a/Documentation/devicetree/bindings/spi/omap-spi.yaml b/Documentation/devicetree/bindings/spi/omap-spi.yaml
-index 9952199cae11..352affa4b7f8 100644
---- a/Documentation/devicetree/bindings/spi/omap-spi.yaml
-+++ b/Documentation/devicetree/bindings/spi/omap-spi.yaml
-@@ -4,7 +4,7 @@
- $id: http://devicetree.org/schemas/spi/omap-spi.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: SPI controller bindings for OMAP and K3 SoCs
-+title: SPI Controller on OMAP and K3 SoCs
- 
- maintainers:
-   - Aswath Govindraju <a-govindraju@ti.com>
-diff --git a/Documentation/devicetree/bindings/thermal/fsl,scu-thermal.yaml b/Documentation/devicetree/bindings/thermal/fsl,scu-thermal.yaml
-index f9e4b3c8d0ee..3721c8c8ec64 100644
---- a/Documentation/devicetree/bindings/thermal/fsl,scu-thermal.yaml
-+++ b/Documentation/devicetree/bindings/thermal/fsl,scu-thermal.yaml
-@@ -4,7 +4,7 @@
- $id: http://devicetree.org/schemas/thermal/fsl,scu-thermal.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: i.MX SCU Client Device Node - Thermal bindings based on SCU Message Protocol
-+title: i.MX SCU Client Device Node - Thermal Based on SCU Message Protocol
- 
- maintainers:
-   - Dong Aisheng <aisheng.dong@nxp.com>
-diff --git a/Documentation/devicetree/bindings/usb/usb-device.yaml b/Documentation/devicetree/bindings/usb/usb-device.yaml
-index b77960a7a37b..7a771125ec76 100644
---- a/Documentation/devicetree/bindings/usb/usb-device.yaml
-+++ b/Documentation/devicetree/bindings/usb/usb-device.yaml
-@@ -4,7 +4,7 @@
- $id: http://devicetree.org/schemas/usb/usb-device.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: The device tree bindings for the Generic USB Device
-+title: Generic USB Device
- 
- maintainers:
-   - Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-diff --git a/Documentation/devicetree/bindings/watchdog/fsl,scu-wdt.yaml b/Documentation/devicetree/bindings/watchdog/fsl,scu-wdt.yaml
-index f84c45d687d7..47701248cd8d 100644
---- a/Documentation/devicetree/bindings/watchdog/fsl,scu-wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/fsl,scu-wdt.yaml
-@@ -4,7 +4,7 @@
- $id: http://devicetree.org/schemas/watchdog/fsl,scu-wdt.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: i.MX SCU Client Device Node - Watchdog bindings based on SCU Message Protocol
-+title: i.MX SCU Client Device Node - Watchdog Based on SCU Message Protocol
- 
- maintainers:
-   - Dong Aisheng <aisheng.dong@nxp.com>
--- 
-2.34.1
+In another terminal, I run echo 22 F1 95 | isotpsend -s 00000680 -d 00000780 can0 -p 0x00
+
+In the first terminal, I receive only the FF, but no FC frame is sent (expected is a 11-byte response).
+
+If I turn around the communication direction and run isotpsend -s 00000680 -d 0000780 can0 -D 255, the target ECU answers correctly by sending the expected FC frame.
+
+
+I would expect that isotpsend takes care of sending the FC frame in the first example as well to receive the full response - am I doing something wrong?
+
+Any help would be highly appreciated!
+
+Best regards,
+
+Marvin Ludersdorfer
 
