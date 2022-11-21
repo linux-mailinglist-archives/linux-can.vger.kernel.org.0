@@ -2,114 +2,105 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3167D63290F
-	for <lists+linux-can@lfdr.de>; Mon, 21 Nov 2022 17:11:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FBBD6329EA
+	for <lists+linux-can@lfdr.de>; Mon, 21 Nov 2022 17:45:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbiKUQLk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 21 Nov 2022 11:11:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41254 "EHLO
+        id S229868AbiKUQpj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 21 Nov 2022 11:45:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiKUQLj (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 21 Nov 2022 11:11:39 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4EACCB942
-        for <linux-can@vger.kernel.org>; Mon, 21 Nov 2022 08:11:38 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id f18so29710848ejz.5
-        for <linux-can@vger.kernel.org>; Mon, 21 Nov 2022 08:11:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=01ifG+pc+vCTSdwSID6c6icJNdj2A1gFCwhKSniOp8E=;
-        b=AeEapRqvfrvCWqxVLNYG0DjWedQFnbO4DEOZk+uM+jvAsO4WWqyU5u4rf0eKz5FS1k
-         zI4ZHJStMn0uEF5I1ai2P1r2Lw9hQrBNjukyIrNkGSb+Y0pMBwyy/uafPYRuDf0lLA1c
-         amYSgcDQgdjf4yG+Xj/6Gk4tcrUQyCQyqrPqfaSCyswRrTHIE0vNDvNOY+ba80Fsa1P6
-         ycIgM27iQsij61HfRBYwp1cY+9nw7IVX9pNktn0hv3pO8FfOv0A1Idcb7WmDG3xW1KBX
-         QozEz9z7sKOBP30Y4uDW7jDfPLwNiFiif0W+Hhvp/vD4iHaXmSL2fZjb3/S+MVQVs7Mf
-         Z18g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=01ifG+pc+vCTSdwSID6c6icJNdj2A1gFCwhKSniOp8E=;
-        b=Y+AcK7tk3ctt2ZBL+Qbq2+4OVw1mORibxIaJ2ji84gJJeE/FDHSjY28JOUIsiHqycH
-         VDl0bc1S9mhLhkSrmH7Cj5aT1BW9/Y+UoR1GBlW8jBJ2+zgCB5HU2HSj2wqnHs01dw20
-         SoiG94dqcb/rvrIof7vQg5kvrdrABLk+poDyPaIOlXr+DpmPQswy4xUaI5ps6L/Bvagl
-         +fZ6VHz7ds5PD4Cb/P0/cM9+IceZk5inoT6f8dNoobFMSzj6YW5X53Q4hxCZG+6qO8tV
-         WT3MHPR3FDL28UDwJ2IxXcGC0GteOxmDeS4v0y6bCy3EdegC6jrCnIC9XdcKC7pFfDMV
-         5vOw==
-X-Gm-Message-State: ANoB5pnNTwj8+2ny80jeZnqT5Q0y7KTzwRpUtE4K3P6kOLDEC6wQmKiN
-        j221zgvosAiuhmyCALn6qaUBhbcVovo=
-X-Google-Smtp-Source: AA0mqf44MywsljcxHpxWnVFnCu9QLa7COaAJ/ke8RPjCF23edA09Lv8JcorhukRtEeBdb8w0FicVXQ==
-X-Received: by 2002:a17:906:6d8e:b0:7ad:a2e9:a48c with SMTP id h14-20020a1709066d8e00b007ada2e9a48cmr4503736ejt.77.1669047097147;
-        Mon, 21 Nov 2022 08:11:37 -0800 (PST)
-Received: from ?IPV6:2a02:810d:d40:2317:2ef0:5dff:fe0a:a2d5? ([2a02:810d:d40:2317:2ef0:5dff:fe0a:a2d5])
-        by smtp.gmail.com with ESMTPSA id up30-20020a170907cc9e00b007ae0fde7a9asm5125723ejc.201.2022.11.21.08.11.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 08:11:36 -0800 (PST)
-Message-ID: <49ce15b4-feaf-a519-9172-d0f59a9285ed@gmail.com>
-Date:   Mon, 21 Nov 2022 17:11:35 +0100
+        with ESMTP id S229849AbiKUQpi (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 21 Nov 2022 11:45:38 -0500
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E529515734
+        for <linux-can@vger.kernel.org>; Mon, 21 Nov 2022 08:45:36 -0800 (PST)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout01.posteo.de (Postfix) with ESMTPS id 53A1A24002A
+        for <linux-can@vger.kernel.org>; Mon, 21 Nov 2022 17:45:35 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
+        t=1669049135; bh=YrRzO40NwP5jZdql+ojM/Z6w96Y3wHkF36YteAu5TiM=;
+        h=Date:To:Cc:From:Subject:From;
+        b=LraqiBJUb8dmgEAoE/aEqk7+HAZGQRyu/mm8bxORPcmnNRZpJj7FXwcMSvjn6PuTF
+         nMbGDSlst/6pv3UkVaMevymZ4hPH67fpobFxt+9j1cT7oGeMbPq6vDRDRdvqnpl6MR
+         0dtppDyNeh3AObc62yY50jkmBfhMZJNrQOTZLZ4M/zP4I4wX6f2zwKkEzspjFBa06y
+         +btnJ/egz4NmEPlb/vr6/qahe1HKZMAhuyLexNj5/w/8yysAA9IzQsxdpce5Lv82dO
+         2W/31c7sFMx/5KBv8612r1auiGQFy3sriF7RFDzcgh+z9hOPxgCpaPk2oUjzeilehF
+         0lxxcaPU/nsvg==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4NGCtk3NPYz6tqw;
+        Mon, 21 Nov 2022 17:45:34 +0100 (CET)
+Message-ID: <40200c08-552e-e6b3-c5c7-f5ee8a4b839c@posteo.de>
+Date:   Mon, 21 Nov 2022 16:45:33 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: Problem receiving > 8 byte UDS response when using istpsend
-To:     Marvin Ludersdorfer <marvin.ludersdorfer@dintec.solutions>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+To:     Marvin Ludersdorfer <marvin.ludersdorfer@dintec.solutions>
 References: <FR2P281MB165556E4F729AC3CDB50F6F69F0A9@FR2P281MB1655.DEUP281.PROD.OUTLOOK.COM>
  <FR2P281MB165503FACCD9894C353ED4CE9F0A9@FR2P281MB1655.DEUP281.PROD.OUTLOOK.COM>
-Content-Language: en-US
-From:   Andre Naujoks <nautsch2@gmail.com>
-In-Reply-To: <FR2P281MB165503FACCD9894C353ED4CE9F0A9@FR2P281MB1655.DEUP281.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+ <49ce15b4-feaf-a519-9172-d0f59a9285ed@gmail.com>
+Content-Language: de-DE
+Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        Andre Naujoks <nautsch2@gmail.com>
+From:   Patrick Menschel <menschel.p@posteo.de>
+Subject: Re: Problem receiving > 8 byte UDS response when using istpsend
+In-Reply-To: <49ce15b4-feaf-a519-9172-d0f59a9285ed@gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------H2O0yheSQQsKTlvrtf8yD02Q"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Am 21.11.22 um 13:08 schrieb Marvin Ludersdorfer:
-> Hi,
-> 
-> I'm experiencing problems when trying to read out ECU parameters using istpsend when the response exceeds 8 bytes:
-> 
-> In one terminal, I run isotpdump -s 00000680 -d 00000780 -c -ta can0
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------H2O0yheSQQsKTlvrtf8yD02Q
+Content-Type: multipart/mixed; boundary="------------ws2xzyzOjJsoGCrYcxSMsJ1H";
+ protected-headers="v1"
+From: Patrick Menschel <menschel.p@posteo.de>
+To: Marvin Ludersdorfer <marvin.ludersdorfer@dintec.solutions>
+Cc: "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+ Andre Naujoks <nautsch2@gmail.com>
+Message-ID: <40200c08-552e-e6b3-c5c7-f5ee8a4b839c@posteo.de>
+Subject: Re: Problem receiving > 8 byte UDS response when using istpsend
+References: <FR2P281MB165556E4F729AC3CDB50F6F69F0A9@FR2P281MB1655.DEUP281.PROD.OUTLOOK.COM>
+ <FR2P281MB165503FACCD9894C353ED4CE9F0A9@FR2P281MB1655.DEUP281.PROD.OUTLOOK.COM>
+ <49ce15b4-feaf-a519-9172-d0f59a9285ed@gmail.com>
+In-Reply-To: <49ce15b4-feaf-a519-9172-d0f59a9285ed@gmail.com>
 
-Use isotprecv instead of isotpdump. isotpsend just sends the 3 bytes, 
-you pass to it and then is done.
+--------------ws2xzyzOjJsoGCrYcxSMsJ1H
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-The FC should then be sent by the socket, which is opened by isotprecv.
+QW0gMjEuMTEuMjIgdW0gMTc6MTEgc2NocmllYiBBbmRyZSBOYXVqb2tzOg0KPiBBbSAyMS4x
+MS4yMiB1bSAxMzowOCBzY2hyaWViIE1hcnZpbiBMdWRlcnNkb3JmZXI6DQo+Pg0KPj4gSW4g
+YW5vdGhlciB0ZXJtaW5hbCwgSSBydW4gZWNobyAyMiBGMSA5NSB8IGlzb3Rwc2VuZCAtcyAw
+MDAwMDY4MCAtZCANCj4+IDAwMDAwNzgwIGNhbjAgLXAgMHgwMA0KDQpUeXBpY2FsIGVycm9y
+LA0KDQpleGNoYW5nZSAtcyBhbmQgLWQNCg0KaXNvdHByZWN2IHdvcmtzIHRoZSBvdGhlciB3
+YXkgYXJvdW5kLg0KDQotLQ0KUGF0cmljaw0K
 
-E.g.
-terminal 1: isotprecv -s 00000680 -d 00000780 vcan0  <anything else>
-terminal 2: echo 22 f1 95 | isotpsend -s 00000680 -d 00000780 vcan0 
-<anything else>
+--------------ws2xzyzOjJsoGCrYcxSMsJ1H--
 
-... your milage may vary though.
+--------------H2O0yheSQQsKTlvrtf8yD02Q
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-Regards
-   Andre
+-----BEGIN PGP SIGNATURE-----
 
-> 
-> In another terminal, I run echo 22 F1 95 | isotpsend -s 00000680 -d 00000780 can0 -p 0x00
-> 
-> In the first terminal, I receive only the FF, but no FC frame is sent (expected is a 11-byte response).
-> 
-> If I turn around the communication direction and run isotpsend -s 00000680 -d 0000780 can0 -D 255, the target ECU answers correctly by sending the expected FC frame.
-> 
-> 
-> I would expect that isotpsend takes care of sending the FC frame in the first example as well to receive the full response - am I doing something wrong?
-> 
-> Any help would be highly appreciated!
-> 
-> Best regards,
-> 
-> Marvin Ludersdorfer
-> 
+wsF5BAABCAAjFiEE6VSgQlqXIUKDwAxHMeZuMM+vuE4FAmN7qy0FAwAAAAAACgkQMeZuMM+vuE4i
+OA/+KT04NxdXg98hTwmNrEk5DQ947pOkyR154vO4bPskBALnhwTaGk0+3mx0B1swRyXyD2tM5Buy
+Al8wH8S3XVmudCidZVgY3yELdzaU7pKDkV648AsGRmCDYfhRTZ3cG8ThJT+2XZK2320VybdxHJ1Q
+tAo9TNIBNdWR3ZU0C5pyqmzRd0qevhxY1vxvQgZFp7cqrGXBORGkSiJvM4DeMmsq1JXJbfzhve9n
+C/l+KA13R0J4+CXw0cetuWEGMh0wa3awdUAtN5gEjkoJb7FaZczrkTMCr/wK4DsHna17EkkCRzMN
+EW3CubNtEWF3RRsUMG2HgUlRxUgGVH9tkvHYuLq+GiVj1zOydfpdWlYZdCKE16eNZsySbh/kf0yd
+Xsxt6hGkyx0aqretCmQekq0c6nsPGIJuu8e/aOZWjmyf8NIiXNmnn26mqnXUW1YFM5UwHYd163/d
+TTIBziJAaGIKAtpedHd2HJw67yncPZ+T5x6icKpgxh+v8tlrHq95ZnBGgGxRZIBJ+lAVT2UHFTP0
+UgTuozdwd/zMHpdgEJexAy5S6eLWSHnpqKEBHrar7KcU/XaJZdAGalbbaaNkoOE9YzRFNR6L92/f
+qiD8h3q6ikbBFxsPH+41c5mZoA9GR/eGSZ9OBAVpN5+r8+/Tsq0XIk2dkORjI1DDHI5O5N8vKe+k
+jUo=
+=Qe+j
+-----END PGP SIGNATURE-----
 
+--------------H2O0yheSQQsKTlvrtf8yD02Q--
