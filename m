@@ -2,84 +2,104 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D26B635101
-	for <lists+linux-can@lfdr.de>; Wed, 23 Nov 2022 08:16:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E23BE635132
+	for <lists+linux-can@lfdr.de>; Wed, 23 Nov 2022 08:44:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235866AbiKWHQu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 23 Nov 2022 02:16:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36654 "EHLO
+        id S235915AbiKWHoC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 23 Nov 2022 02:44:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235612AbiKWHQt (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 23 Nov 2022 02:16:49 -0500
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A956DCF5;
-        Tue, 22 Nov 2022 23:16:48 -0800 (PST)
-Received: from mail-internal.denx.de (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: noc@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 576808517E;
-        Wed, 23 Nov 2022 08:16:45 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1669187805;
-        bh=OIYyALv6fQ3JaJSDccGn0Zm5VKzxXieKgqBDhfmERf8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=RZcr20f3rmxjLNXy72K3I1ssAqLpDp6cuc8zAiMNGampKqrIt2jqQTE168nJylOvu
-         Q2rSgDvnbv7tp3Txcs7ZCgfhnwg9W+TstMJNFYlME1LzdTDuwPFCXc94hLasPbnIz6
-         0vWoCW0bbGfNJXQr1DorIsRIoG9n8bgvKL8+ul3JTxNKfqjPUup9Ql41EtDZSsRh3p
-         gr2r8e2zhi0Khsmci6gQ8s+QNuJSw01zvlOIb3Y7zMXK0vJwOKeithboB50eEPotN3
-         vccv7+M1C5nM5N1S3oq8V0I2tUVEo8U+P/N5sMgs5rWh0ruoqzKES08WU0Mrf1bqBy
-         vWDcPFED6STog==
-Received: from pollux.denx.de (pollux [192.168.1.1])
-        by mail-internal.denx.de (Postfix) with ESMTPS id E3031180523;
-        Wed, 23 Nov 2022 08:16:38 +0100 (CET)
-Received: by pollux.denx.de (Postfix, from userid 515)
-        id A8CD41A86FB; Wed, 23 Nov 2022 08:16:38 +0100 (CET)
-From:   Heiko Schocher <hs@denx.de>
-To:     linux-can@vger.kernel.org
-Cc:     Heiko Schocher <hs@denx.de>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
+        with ESMTP id S235633AbiKWHoA (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 23 Nov 2022 02:44:00 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA2BF72C5;
+        Tue, 22 Nov 2022 23:43:59 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id z63so4704733ede.1;
+        Tue, 22 Nov 2022 23:43:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4tVlprrrNke5mFJD3/iYHZS4yaa+3ERCi6F/wJGiXeM=;
+        b=D8LMubMYRPyqtEe2Gjzyr9EplHp0q3MLWskKwHjRMUwgenyPDDpRZEkg8Io47uLz1X
+         vcDl6SbtlYIBMpNRSnRXNaG6xdLiHpuZBb5MKQUnhy7unO6dCUU15hjW4lMJ3hHSknhn
+         m7pALpuyQWFpm2NGNum+Be3YrFprtZqo+ZF+r83Jav+Ke+wO1ArwqZ9M22vAymcDhCY1
+         FSiZqhzOXyltmOD+/oVmZe1MihCKzQXP9XXC6AGCNDr4yBvuP6LXERTEGZ2XxNEVuHKw
+         VVasILyvML6eAY7oPF8Lw0LPUa9EC+aqfIwJNVY2nmBzCRHTFjbaYE81cNDezVY7xOon
+         6U9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4tVlprrrNke5mFJD3/iYHZS4yaa+3ERCi6F/wJGiXeM=;
+        b=U+BMeXhMX9ETXdS9W5PlRtf4flq+iLXxbX8O8k0jdW1FVD4rC3IK+mGlhRNLLNcP3M
+         m6R7q0szv5UmYuVT1ab0yxPRJicQ0lL7xwxR11KdtNLg+2T1XkAPNB3DNQ9CDCJNv1w5
+         3FdBmxGgGOw/UC8JxClxL/4dloR9zM57DfKuMTEp5ngG8dX8AnHCBZYkIQl3ym8DOU5l
+         CiaYhTDfmzO1//gMzECUQF1FHWZWS7Z+uL/VJEhnUd3+TDzHU1tPUPB0RLN1IkJCBkWp
+         E+6ENP21CHzvkdUEiQVkLkAfAzn/xBuomUau5SXRlUuohMpn1KVidkK4CWBZephJ/MoX
+         RYmw==
+X-Gm-Message-State: ANoB5plcx5N2f1kdk78BDYJFK28Jo5fnHiKvhhsS9yA4IKZp/1M1VHyY
+        T1rylr7cY550EmEp7cNyI5k=
+X-Google-Smtp-Source: AA0mqf4cajyyEnqd7ZFPlV8ZMXO0wtZID40H63DrcO87cf5SlOZ8JsQQKIBnpLBDkPeYd4KYwGnFGg==
+X-Received: by 2002:a50:f602:0:b0:469:4e4f:4827 with SMTP id c2-20020a50f602000000b004694e4f4827mr16435104edn.214.1669189438290;
+        Tue, 22 Nov 2022 23:43:58 -0800 (PST)
+Received: from felia.fritz.box (200116b826997500d517ac74edd630a9.dip.versatel-1u1.de. [2001:16b8:2699:7500:d517:ac74:edd6:30a9])
+        by smtp.gmail.com with ESMTPSA id fi17-20020a056402551100b00459012e5145sm7284446edb.70.2022.11.22.23.43.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Nov 2022 23:43:57 -0800 (PST)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
         Wolfgang Grandegger <wg@grandegger.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1] can: sja1000: fix size of OCR_MODE_MASK define
-Date:   Wed, 23 Nov 2022 08:16:36 +0100
-Message-Id: <20221123071636.2407823-1-hs@denx.de>
-X-Mailer: git-send-email 2.37.3
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] can: etas_es58x: repair conditional for a verbose debug message
+Date:   Wed, 23 Nov 2022 08:42:14 +0100
+Message-Id: <20221123074214.21538-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-bitfield mode in ocr register has only 2 bits not 3, so correct
-the OCR_MODE_MASK define.
+The definition of VERBOSE_DEBUG for detailled debugging is set simply by
+adding "#define VERBOSE_DEBUG" in the source code. It is not a kernel
+configuration that is prefixed by CONFIG.
 
-Signed-off-by: Heiko Schocher <hs@denx.de>
+As the netdev_vdbg() macro is already defined conditional on
+defined(VERBOSE_DEBUG), there is really no need to duplicate the check
+before calling netdev_vdbg().
+
+Repair the conditional for a verbose debug message.
+
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 ---
-
- include/linux/can/platform/sja1000.h | 2 +-
+ drivers/net/can/usb/etas_es58x/es58x_core.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/can/platform/sja1000.h b/include/linux/can/platform/sja1000.h
-index 5755ae5a4712..6a869682c120 100644
---- a/include/linux/can/platform/sja1000.h
-+++ b/include/linux/can/platform/sja1000.h
-@@ -14,7 +14,7 @@
- #define OCR_MODE_TEST     0x01
- #define OCR_MODE_NORMAL   0x02
- #define OCR_MODE_CLOCK    0x03
--#define OCR_MODE_MASK     0x07
-+#define OCR_MODE_MASK     0x03
- #define OCR_TX0_INVERT    0x04
- #define OCR_TX0_PULLDOWN  0x08
- #define OCR_TX0_PULLUP    0x10
+diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/usb/etas_es58x/es58x_core.c
+index 25f863b4f5f0..2708909fb851 100644
+--- a/drivers/net/can/usb/etas_es58x/es58x_core.c
++++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
+@@ -989,7 +989,7 @@ int es58x_rx_cmd_ret_u32(struct net_device *netdev,
+ 			break;
+ 
+ 		case ES58X_RET_TYPE_TX_MSG:
+-			if (IS_ENABLED(CONFIG_VERBOSE_DEBUG) && net_ratelimit())
++			if (net_ratelimit())
+ 				netdev_vdbg(netdev, "%s: OK\n", ret_desc);
+ 			break;
+ 
 -- 
-2.37.3
+2.17.1
 
