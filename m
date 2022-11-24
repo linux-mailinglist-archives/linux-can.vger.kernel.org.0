@@ -2,97 +2,119 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0588463801A
-	for <lists+linux-can@lfdr.de>; Thu, 24 Nov 2022 21:15:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24389638038
+	for <lists+linux-can@lfdr.de>; Thu, 24 Nov 2022 21:38:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbiKXUPb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 24 Nov 2022 15:15:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42454 "EHLO
+        id S229463AbiKXUig (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 24 Nov 2022 15:38:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiKXUPa (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 24 Nov 2022 15:15:30 -0500
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94A6B0400
-        for <linux-can@vger.kernel.org>; Thu, 24 Nov 2022 12:15:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1669320927;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=3ygsWgrhXXE8axZOoLemAejOIr47WU1+gNB4+7gimYY=;
-    b=UH9opzLkV4rsQzwLivM0xJneJOPoeNOVqgHJcdlDEEdLrH44u+aykw1Wh1EDTF335j
-    iZEaIMKoW7KDvP0+UCwDDhsxqwzj/I8+mT2hI+Hm3sDXmH9jSVTHJ2zBWj3sj94T50Dj
-    GQ/YEMsGU7JGu3CX1Iju+ihu5dlLzLwEoxtzotp71IGxpxXydgz1xJ/7C6utnFjIiXW6
-    4jRGiTcyOqJvMzR8zqb/o+CxIX8aK/l8I+4vDE+0k9012XECeZ+Uebx+Avv3JLVgDGOM
-    k0wsk1j8G5fg0IufBSGanfbFuk6JbyGhzP6V3xq93zr0TnwE5lKPEjxPVjYqzJiiWl3D
-    lwnA==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytISr6hZqJAw=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a00:6020:1cfd:d104::923]
-    by smtp.strato.de (RZmta 48.2.1 AUTH)
-    with ESMTPSA id Dde783yAOKFRJCW
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Thu, 24 Nov 2022 21:15:27 +0100 (CET)
-Message-ID: <70b9e4a0-69ed-ba6a-ac3a-4e20aa9fc251@hartkopp.net>
-Date:   Thu, 24 Nov 2022 21:15:21 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] can: mcba_usb: Fix termination command argument
-To:     Yasushi SHOJI <yasushi.shoji@gmail.com>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        =?UTF-8?B?UmVtaWdpdXN6IEtvxYLFgsSFdGFq?= 
-        <remigiusz.kollataj@mobica.com>,
-        Yasushi SHOJI <yashi@spacecubics.com>,
+        with ESMTP id S229472AbiKXUig (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 24 Nov 2022 15:38:36 -0500
+Received: from EUR03-VI1-obe.outbound.protection.outlook.com (mail-vi1eur03on2134.outbound.protection.outlook.com [40.107.103.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB006F0F5;
+        Thu, 24 Nov 2022 12:38:33 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nyzxwSMLy6b/EZ7w0FnY1GpOHrLpkZEtjTqxsMmppu2pGJAAy5+6GYgqrH/Fe/xTBHb/kM9djvR08dRlaKY/7Aqgsgpguyep6BUPqJsSdQhTUrjIcIKIR92fHq/lk0qOXFiKi5CeNxnZjD3VMWhNY888t3wtVE6ssI7wTS54eIc+IWa2kg/tqwR5fgZFxiolhLaTedgKBOGJGnmvYfygwbO+nx/Hbdcf1sl94hEa85SZB5mhmWP9s7CQ9aGcNdeSqZGGYE0GPX+jpPknrcCygdTFgtPYWzEmRpHiCe6slirkdJfEx6Voiw6wNpCw0jH+S3qCTdOUGJYitc9nHufIpA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iEpFpQvG2hQcrhr+X+kHFhsOWxJYu/hfLkAJ8Hj89Lo=;
+ b=OZIqF9UQyr0XPlBH3Bv7k8L5CsEj96GMFiSjsDa8QxoU4nXr/YWaJ1elhsb/IgHg7cyIPCEAWgiKyOw89Ou0WlFBFQwCG2oeroRkHO512taS7IEeCBquQ8XTFIU0eP/m1SwlxTJge7hZAyn78qIpSi1EWGqWMQ436AXMOmaEl1SPW1eHSfHL7lLba9wusmE2pJ9MtfCbfSSa3IgmD+uV7MBnVjp1dlxjTP0WIXL/Z84iEkSpneiizeOt0T2X0UDgcpBGYqWLVRJoRZ4vIBmeB/nh5vQ0FXYZi/61I0Eulm51V9xc9F/93Nu4/oljmXveGy0nJL27bx+uym+EUJBRlQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 81.14.233.218) smtp.rcpttodomain=esd.eu smtp.mailfrom=esd.eu;
+ dmarc=bestguesspass action=none header.from=esd.eu; dkim=none (message not
+ signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=esdhannover.onmicrosoft.com; s=selector1-esdhannover-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iEpFpQvG2hQcrhr+X+kHFhsOWxJYu/hfLkAJ8Hj89Lo=;
+ b=r+tz7h3NMakGDVLfc6Unjfamo7xRZ2i4xzspT48OWIj2BYafuLUezvJaRjzOlEs8OgAPZu4xxb2srhsL/JOHpwOpJ2sHeI6ZY8nA0FQ/Iqaa05bX4xSFlKGztIf9z3/GJ5uTtkMZSaN93XuJu1VBToiPN0PsfKF6Qm7Y7AVM7Ds=
+Received: from DB6PR1001CA0027.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:4:55::13)
+ by AM7PR03MB6563.eurprd03.prod.outlook.com (2603:10a6:20b:1c3::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.19; Thu, 24 Nov
+ 2022 20:38:29 +0000
+Received: from DB8EUR06FT027.eop-eur06.prod.protection.outlook.com
+ (2603:10a6:4:55:cafe::e7) by DB6PR1001CA0027.outlook.office365.com
+ (2603:10a6:4:55::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.19 via Frontend
+ Transport; Thu, 24 Nov 2022 20:38:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 81.14.233.218)
+ smtp.mailfrom=esd.eu; dkim=none (message not signed)
+ header.d=none;dmarc=bestguesspass action=none header.from=esd.eu;
+Received-SPF: Pass (protection.outlook.com: domain of esd.eu designates
+ 81.14.233.218 as permitted sender) receiver=protection.outlook.com;
+ client-ip=81.14.233.218; helo=esd-s7.esd; pr=C
+Received: from esd-s7.esd (81.14.233.218) by
+ DB8EUR06FT027.mail.protection.outlook.com (10.233.253.49) with Microsoft SMTP
+ Server id 15.20.5857.19 via Frontend Transport; Thu, 24 Nov 2022 20:38:29
+ +0000
+Received: from esd-s20.esd.local (debby [10.0.0.190])
+        by esd-s7.esd (Postfix) with ESMTPS id 2E4867C16C5;
+        Thu, 24 Nov 2022 21:38:29 +0100 (CET)
+Received: by esd-s20.esd.local (Postfix, from userid 2046)
+        id 202C52F0710; Thu, 24 Nov 2022 21:38:29 +0100 (CET)
+From:   Frank Jungclaus <frank.jungclaus@esd.eu>
+To:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
         Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org
-References: <20221123194406.80575-1-yashi@spacecubics.com>
- <20221123223410.sg2ixkaqg4dpe7ew@pengutronix.de>
- <CAELBRWJoQjLD9UaFUmqnFWT9HkPMNb4kKF+1EZwcfrn_WBwBYw@mail.gmail.com>
- <5a309931-ca81-5433-b437-5c8ec23c4d85@hartkopp.net>
- <CAELBRWKz57boSG1B=ONQ1Ax2TXw9FTHj36aG6p0VKp_tyHx2mg@mail.gmail.com>
-Content-Language: en-US
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <CAELBRWKz57boSG1B=ONQ1Ax2TXw9FTHj36aG6p0VKp_tyHx2mg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Frank Jungclaus <frank.jungclaus@esd.eu>
+Subject: [PATCH RESEND 0/1] can: esd_usb: Some preparation for supporting esd CAN-USB/3
+Date:   Thu, 24 Nov 2022 21:38:05 +0100
+Message-Id: <20221124203806.3034897-1-frank.jungclaus@esd.eu>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB8EUR06FT027:EE_|AM7PR03MB6563:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 0d73e47c-471b-4ea8-3a11-08dace5bd87a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: RdEUG3OF+X+Zfq3hbhS26TE6a+62ymUzBKu6dNYoX2AZokrei1DkQX9tChybSWrOR3r2hJLwvNRgCJnG/5QCtSBqdD1EO55IEC3HRci6CjRH0gdEPcBtIOnfRlK/YRyCJVlhE4qu5Jrye8e5DD67G6jwIv5deOdWca8kGgGDXgH/l7uO0MSP41bm+PlYrb6F3m3hz5rx0GouN6VGKz/TMaqkDRO5RJhbgklXz/w2yRDV0OCSccWWzeDWmmfgWmtUZhxu4O5/nMEDHB0TLcmrUn6w+xXWJ/mvfcApptP9CUvO8DbhUGY6guyJaH5+beLQx4qJaGnpzDOCA0AGiCzmC0g3JqT3xa1x/6S3BalppzPbcTdCJE/M7sDOjWYPviP6AbrevVYchahz06u3N2cUyM+zmfQLGck/UNf7sRmTYCSz/Zg0yIdTaJpLr+DdFe6/a0K5EiA/4sqJKWfPlwwl2D4WoJj0SmAIlMTjkVZrm48S/YOIqxM8Tf5NAjC11LokKrrePhbc+5NlmeTgQzyMO+PwcxcRfCCZe7sBBLLjQJm3+coC/sCfGws0RXSLZZysp47nc3dXz4Gd3IkIU+aG/a1XddW8vK0phJ5bwu5RUnOul2rVARGIO3GmLZ/Wh5dYpMyKHK27JbWCYtgcViwUMi12B0lTAGgOpY6SlmuvcONXWNGd+qF9IadWtEPwfindya91vnkRDHg10N/3ZpTnZQ==
+X-Forefront-Antispam-Report: CIP:81.14.233.218;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:esd-s7.esd;PTR:a81-14-233-218.net-htp.de;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(39830400003)(376002)(136003)(451199015)(36840700001)(46966006)(54906003)(110136005)(42186006)(316002)(83380400001)(36756003)(36860700001)(70206006)(41300700001)(4326008)(8676002)(70586007)(966005)(478600001)(26005)(6666004)(336012)(47076005)(86362001)(6266002)(1076003)(186003)(82310400005)(2616005)(356005)(81166007)(40480700001)(2906002)(8936002)(44832011)(4744005)(5660300002);DIR:OUT;SFP:1102;
+X-OriginatorOrg: esd.eu
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2022 20:38:29.4487
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0d73e47c-471b-4ea8-3a11-08dace5bd87a
+X-MS-Exchange-CrossTenant-Id: 5a9c3a1d-52db-4235-b74c-9fd851db2e6b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5a9c3a1d-52db-4235-b74c-9fd851db2e6b;Ip=[81.14.233.218];Helo=[esd-s7.esd]
+X-MS-Exchange-CrossTenant-AuthSource: DB8EUR06FT027.eop-eur06.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR03MB6563
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Yashi,
+Being sucked into another higher prioritized project in the mid of
+July, my work on preparations for adding support of the newly available
+esd CAN-USB/3 to esd_usb.c came to a halt. Let's start again ...
 
-On 24.11.22 14:13, Yasushi SHOJI wrote:
+Here is a attempt to resend a slightly overhauled and split
+into two pieces version of my patch series from Fri, 8 Jul 2022.
+Link to the patch series in July 2022:
+https://lore.kernel.org/all/20220708181235.4104943-1-frank.jungclaus@esd.eu/
 
-> I've checked with one of my colleagues and he told me I measured it wrong.
 
-Ok.
+Frank Jungclaus (1):
+  can: esd_usb: Allow REC and TEC to return to zero
 
-> Here is a correction.
-> 
-> You can find the schematic of the analyzer in its user's guide
-> https://www.microchip.com/en-us/development-tool/APGDT002
-> or directly at https://ww1.microchip.com/downloads/aemDocuments/documents/APG/ProductDocuments/UserGuides/CAN-Bus-Analyzer-Users-Guide-DS50001848C.pdf
-> 
-> The schematics is at page 11.
-> 
-> Basically the "termination" controls the CAN_RES signal.  When it's
-> low, R24 and R25 are connected to the bus.
-> They are 56 Ohms.
+ drivers/net/can/usb/esd_usb.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-Ah, that means 2 x 56 Ohms => 112 Ohms (nearly 120)
 
-> With my patch, "termination 120" drives CAN_RES low and the resistors
-> are active, and "termination 0" drives it high.
+base-commit: 3755b56a9b8ff8f1a6a21a979cc215c220401278
+-- 
+2.25.1
 
-Thanks for the clarification!
-
-Best regards,
-Oliver
