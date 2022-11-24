@@ -2,110 +2,164 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE7986375A0
-	for <lists+linux-can@lfdr.de>; Thu, 24 Nov 2022 10:54:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A207C6375F3
+	for <lists+linux-can@lfdr.de>; Thu, 24 Nov 2022 11:09:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbiKXJyv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 24 Nov 2022 04:54:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40022 "EHLO
+        id S229628AbiKXKJ3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 24 Nov 2022 05:09:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiKXJyi (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 24 Nov 2022 04:54:38 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3CE12F414;
-        Thu, 24 Nov 2022 01:54:37 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id p12so1051632plq.4;
-        Thu, 24 Nov 2022 01:54:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XIgPTakbw0hwKBNbkmD4l8Qc3Gi4AwORlTsSds71r68=;
-        b=BsVxydxBs9aa9qznlYR6MOpRqa+u8uFxiB2ZSUV2ZqJJjea+BTD88tv/TydzWSYKZw
-         y61O5a77M6UpIz2D9skWnej+1q1TaK6Zzhfs4Nqp9dqXsIvn6jTPCfPMz5F4BfWwkJK2
-         FizNA4s251QUQ7nrTbCLROW9StO58D5bf7zWydMwLqoHWVXDz38gZEdFBq7DRzd9Nqxe
-         ZwjTvLpTuFUMhWP77QE3zbk6KlUUH2Aqaw9cirjp+FcXcZj8zSSIBrsGUzjcdf+iXr6n
-         JggchEHjCJhbJuIErHC2MZrm2njvRWCWE6naWrbPWnKGiioXtO76e5o8s3V4Z9wEnLkE
-         XWPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XIgPTakbw0hwKBNbkmD4l8Qc3Gi4AwORlTsSds71r68=;
-        b=b27iAqbR+CUYM6Empx1RdCjmaMz948mmMBpdFd5INf3/NgOsjhK9vENxPemmwY++4G
-         jZc0s1ejPOXBXlO1zPZhR1A4tUzDY8hHZFngsx/dyI84+qJEf24LsiQ4huD149BcYWNK
-         cr/WT1QStEhnFfUeQweWzOPEaIdNscb2eTi4DJRDkls4Oyge+ZPIRwSwop2JLnK1BaC0
-         h7vNXDy2rTit9Tn9D0rK7/u+x4K54TKG3d8MlaIvh1zv2ZL2w1tmg6oHpxeMF2b7h3Fq
-         21CjYBGSZPbSBz+qpMYyohmLlqF7DCPHgHjSNsVldoFbkoTDAJ+2XvD+UV4eVOvRa+Kw
-         zimw==
-X-Gm-Message-State: ANoB5plB7Exk42BTR+S+C7wKHPOOtfdHAUh6VX0apADZyoGQDzHaSRqC
-        k5sjpbKN/VT7mniDHYpzEmOWH5ZYx9PnzAAF8cqNN0kBIjk=
-X-Google-Smtp-Source: AA0mqf4fbm1xuFTG/tN/aKXkrNjqCIFMW6GMVvWfx1PI3bE9KWxnr1m3qJg+KAhUu7XhrDR1mYl5f3bwltqE49y0F8A=
-X-Received: by 2002:a17:902:aa04:b0:17f:6fee:3334 with SMTP id
- be4-20020a170902aa0400b0017f6fee3334mr12975525plb.10.1669283676615; Thu, 24
- Nov 2022 01:54:36 -0800 (PST)
+        with ESMTP id S229589AbiKXKJ3 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 24 Nov 2022 05:09:29 -0500
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ABB9B9498
+        for <linux-can@vger.kernel.org>; Thu, 24 Nov 2022 02:09:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1669284565;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=pJeoHDTbJwXOg0E0zLY0l0wk7A/EKJGFN4PDuczh4MM=;
+    b=l51sbnjAfFcz3/R868D1f1kd/oshGkPqVqRC85cpUuNk/CNf5Dx9dQm8bEU5v3bh/J
+    KxappgzC0YeGewhza8hXgYxv8Z2d+Wx1Y5lBQvtnv8wQTug9uGtB1oFSb9zltidwToc0
+    EmOxxd7k8z5hs5i8SauFEOgddiMFvyhw2skeLAiuEaTVUUquljwL9L0FJ8G8sVsBDxT6
+    7e1GwrnLKe/9ipOZtsG+y50aORQwyKX0Ib5DFQToCk4bSwhnXsFo/okrZdy2X01BVeJt
+    fXJ+gJvqBXunfT8/Ktwz8M+gIP6plMNCy9n2dOFb2F1PeNGdJW1Qoy4O5AF5OMz4olaF
+    3wNw==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytJSr6hfz3Vg=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a00:6020:1cfd:d100::923]
+    by smtp.strato.de (RZmta 48.2.1 AUTH)
+    with ESMTPSA id Dde783yAOA9PHHh
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 24 Nov 2022 11:09:25 +0100 (CET)
+Message-ID: <5a309931-ca81-5433-b437-5c8ec23c4d85@hartkopp.net>
+Date:   Thu, 24 Nov 2022 11:09:21 +0100
 MIME-Version: 1.0
-References: <20221123194406.80575-1-yashi@spacecubics.com> <CAMZ6RqJ2L6YntT23rsYEEUK=YDF2LrhB8hXwvYjciu3vzjx2hQ@mail.gmail.com>
- <CAELBRWLOKW8NCLpV=MG0_=XY4N3BaozsZCacfgaXEs-tyfzoAA@mail.gmail.com>
-In-Reply-To: <CAELBRWLOKW8NCLpV=MG0_=XY4N3BaozsZCacfgaXEs-tyfzoAA@mail.gmail.com>
-From:   Vincent Mailhol <vincent.mailhol@gmail.com>
-Date:   Thu, 24 Nov 2022 18:54:25 +0900
-Message-ID: <CAMZ6Rq+-ya9VxSGUD4aP=N58gZ1CmDbFFGQ9Oys0aTKm1rWN0A@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
 Subject: Re: [PATCH] can: mcba_usb: Fix termination command argument
-To:     Yasushi SHOJI <yasushi.shoji@gmail.com>
-Cc:     Yasushi SHOJI <yashi@spacecubics.com>,
+To:     Yasushi SHOJI <yasushi.shoji@gmail.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     =?UTF-8?B?UmVtaWdpdXN6IEtvxYLFgsSFdGFq?= 
+        <remigiusz.kollataj@mobica.com>,
+        Yasushi SHOJI <yashi@spacecubics.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        linux-can@vger.kernel.org
+References: <20221123194406.80575-1-yashi@spacecubics.com>
+ <20221123223410.sg2ixkaqg4dpe7ew@pengutronix.de>
+ <CAELBRWJoQjLD9UaFUmqnFWT9HkPMNb4kKF+1EZwcfrn_WBwBYw@mail.gmail.com>
+Content-Language: en-US
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <CAELBRWJoQjLD9UaFUmqnFWT9HkPMNb4kKF+1EZwcfrn_WBwBYw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Thu. 24 Nov. 2022 at 18:52, Yasushi SHOJI <yasushi.shoji@gmail.com> wrote:
-> On Thu, Nov 24, 2022 at 9:53 AM Vincent Mailhol
-> <vincent.mailhol@gmail.com> wrote:
-> > > diff --git a/drivers/net/can/usb/mcba_usb.c b/drivers/net/can/usb/mcba_usb.c
-> > > index 218b098b261d..67beff1a3876 100644
-> > > --- a/drivers/net/can/usb/mcba_usb.c
-> > > +++ b/drivers/net/can/usb/mcba_usb.c
-> > > @@ -785,9 +785,9 @@ static int mcba_set_termination(struct net_device *netdev, u16 term)
-> > >         };
-> > >
-> > >         if (term == MCBA_TERMINATION_ENABLED)
-> > > -               usb_msg.termination = 1;
-> > > -       else
-> > >                 usb_msg.termination = 0;
-> > > +       else
-> > > +               usb_msg.termination = 1;
-> > >
-> > >         mcba_usb_xmit_cmd(priv, (struct mcba_usb_msg *)&usb_msg);
-> >
-> > Nitpick: does it make sense to rename the field to something like
-> > usb_msg.termination_disable or usb_msg.termination_off? This would
-> > make it more explicit that this is a "reverse" boolean.
->
-> I'd rather define the values like
->
-> #define TERMINATION_ON (0)
-> #define TERMINATION_OFF (1)
->
-> So the block becomes
->
-> if (term == MCBA_TERMINATION_ENABLED)
->     usb_msg.termination = TERMINATION_ON;
-> else
->     usb_msg.termination = TERMINATION_OFF;
 
-That also works! Thank you.
+
+On 24.11.22 10:50, Yasushi SHOJI wrote:
+> Hi,
+> 
+> On Thu, Nov 24, 2022 at 7:34 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+>>
+>> Let's take the original driver author into the loop.
+>>
+>> On 24.11.2022 04:44:06, Yasushi SHOJI wrote:
+>>> Microchip USB Analyzer can be set with termination setting ON or OFF.
+>>> As I've observed, both with my oscilloscope and USB packet capture
+>>> below, you must send "0" to turn it ON, and "1" to turn it OFF.
+>>>
+>>> Reverse the argument value to fix this.
+>>>
+>>> These are the two commands sequence, ON then OFF.
+>>>
+>>>> No.     Time           Source                Destination           Protocol Length Info
+>>>>        1 0.000000       host                  1.3.1                 USB      46     URB_BULK out
+>>>>
+>>>> Frame 1: 46 bytes on wire (368 bits), 46 bytes captured (368 bits)
+>>>> USB URB
+>>>> Leftover Capture Data: a80000000000000000000000000000000000a8
+>>>>
+>>>> No.     Time           Source                Destination           Protocol Length Info
+>>>>        2 4.372547       host                  1.3.1                 USB      46     URB_BULK out
+>>>>
+>>>> Frame 2: 46 bytes on wire (368 bits), 46 bytes captured (368 bits)
+>>>> USB URB
+>>>> Leftover Capture Data: a80100000000000000000000000000000000a9
+>>
+>> Is this the USB data after applying the patch?
+> 
+> That's not from Linux.
+> 
+>> Can you measure the resistance between CAN-H and CAN-L to verify that
+>> your patch fixes the problem?
+> 
+> Sure.  The command I'm using on my Linux is:
+> 
+>      sudo ip link set can0 up type can bitrate 100000 termination X
+> 
+> where X is either 0 or 120.
+> 
+> With Debian Sid stock kernel: linux-image-6.0.0-4-amd64
+>    - termination 0: 135.4 Ohms
+>    - termination 120: 17.82 Ohms
+> 
+> With my patch on v6.1-rc6
+>    - termination 0: 22.20 Ohms
+>    - termination 120: 134.2 Ohms
+> 
+
+Hugh!
+
+What does "termination 0" mean here?
+
+I assumed "termination 0" results in "termination off" (=> no 
+termination => very high resistor value) but in fact it gets around 20 
+Ohms, which is a pretty heavy termination for a CAN bus.
+
+Best regards,
+Oliver
+
+
+>>> Signed-off-by: Yasushi SHOJI <yashi@spacecubics.com>
+>>> ---
+>>>   drivers/net/can/usb/mcba_usb.c | 4 ++--
+>>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/net/can/usb/mcba_usb.c b/drivers/net/can/usb/mcba_usb.c
+>>> index 218b098b261d..67beff1a3876 100644
+>>> --- a/drivers/net/can/usb/mcba_usb.c
+>>> +++ b/drivers/net/can/usb/mcba_usb.c
+>>> @@ -785,9 +785,9 @@ static int mcba_set_termination(struct net_device *netdev, u16 term)
+>>>        };
+>>>
+>>>        if (term == MCBA_TERMINATION_ENABLED)
+>>> -             usb_msg.termination = 1;
+>>> -     else
+>>>                usb_msg.termination = 0;
+>>> +     else
+>>> +             usb_msg.termination = 1;
+>>>
+>>>        mcba_usb_xmit_cmd(priv, (struct mcba_usb_msg *)&usb_msg);
+>>
+>> What about the static void mcba_usb_process_ka_usb() function? Do you
+>> need to convert this, too?
+> 
+> Ah, yes. Thanks.
+> Attaching a compressed patch.
+> 
+> Let me know if I need to resend it as an email.
+> 
+> Best,
+> --
+>            yashi
