@@ -2,57 +2,55 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBD24637B88
-	for <lists+linux-can@lfdr.de>; Thu, 24 Nov 2022 15:38:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 298FD637B8C
+	for <lists+linux-can@lfdr.de>; Thu, 24 Nov 2022 15:40:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbiKXOim (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 24 Nov 2022 09:38:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43788 "EHLO
+        id S229563AbiKXOkS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 24 Nov 2022 09:40:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiKXOil (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 24 Nov 2022 09:38:41 -0500
+        with ESMTP id S229480AbiKXOkR (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 24 Nov 2022 09:40:17 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C8C6AEFF
-        for <linux-can@vger.kernel.org>; Thu, 24 Nov 2022 06:38:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047F5C5B5F
+        for <linux-can@vger.kernel.org>; Thu, 24 Nov 2022 06:40:17 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1oyDMy-0001tx-6I; Thu, 24 Nov 2022 15:38:28 +0100
+        id 1oyDOR-0001xM-ET; Thu, 24 Nov 2022 15:39:59 +0100
 Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:5507:4aba:5e0a:4c27])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id DE8E7128645;
-        Thu, 24 Nov 2022 14:38:25 +0000 (UTC)
-Date:   Thu, 24 Nov 2022 15:38:24 +0100
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 9705A12864A;
+        Thu, 24 Nov 2022 14:39:58 +0000 (UTC)
+Date:   Thu, 24 Nov 2022 15:39:57 +0100
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Yasushi SHOJI <yasushi.shoji@gmail.com>
-Cc:     Vincent Mailhol <vincent.mailhol@gmail.com>,
-        Yasushi SHOJI <yashi@spacecubics.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] can: mcba_usb: Fix termination command argument
-Message-ID: <20221124143824.u5lyi3rektjxft7o@pengutronix.de>
-References: <20221123194406.80575-1-yashi@spacecubics.com>
- <CAMZ6RqJ2L6YntT23rsYEEUK=YDF2LrhB8hXwvYjciu3vzjx2hQ@mail.gmail.com>
- <CAELBRWLOKW8NCLpV=MG0_=XY4N3BaozsZCacfgaXEs-tyfzoAA@mail.gmail.com>
+To:     haibo.chen@nxp.com
+Cc:     wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/3] can: flexcan: add auto stop mode for IMX93 to
+ support wakeup
+Message-ID: <20221124143957.fr5fojvu3fa5vhnj@pengutronix.de>
+References: <1669116752-4260-1-git-send-email-haibo.chen@nxp.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2b5oymuqicmyslax"
+        protocol="application/pgp-signature"; boundary="yhn2qnplluft6atz"
 Content-Disposition: inline
-In-Reply-To: <CAELBRWLOKW8NCLpV=MG0_=XY4N3BaozsZCacfgaXEs-tyfzoAA@mail.gmail.com>
+In-Reply-To: <1669116752-4260-1-git-send-email-haibo.chen@nxp.com>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -60,50 +58,93 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---2b5oymuqicmyslax
+--yhn2qnplluft6atz
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 24.11.2022 18:52:14, Yasushi SHOJI wrote:
-> On Thu, Nov 24, 2022 at 9:53 AM Vincent Mailhol
-> <vincent.mailhol@gmail.com> wrote:
-> > > diff --git a/drivers/net/can/usb/mcba_usb.c b/drivers/net/can/usb/mcb=
-a_usb.c
-> > > index 218b098b261d..67beff1a3876 100644
-> > > --- a/drivers/net/can/usb/mcba_usb.c
-> > > +++ b/drivers/net/can/usb/mcba_usb.c
-> > > @@ -785,9 +785,9 @@ static int mcba_set_termination(struct net_device=
- *netdev, u16 term)
-> > >         };
-> > >
-> > >         if (term =3D=3D MCBA_TERMINATION_ENABLED)
-> > > -               usb_msg.termination =3D 1;
-> > > -       else
-> > >                 usb_msg.termination =3D 0;
-> > > +       else
-> > > +               usb_msg.termination =3D 1;
-> > >
-> > >         mcba_usb_xmit_cmd(priv, (struct mcba_usb_msg *)&usb_msg);
-> >
-> > Nitpick: does it make sense to rename the field to something like
-> > usb_msg.termination_disable or usb_msg.termination_off? This would
-> > make it more explicit that this is a "reverse" boolean.
+On 22.11.2022 19:32:30, haibo.chen@nxp.com wrote:
+> From: Haibo Chen <haibo.chen@nxp.com>
 >=20
-> I'd rather define the values like
+> IMX93 do not contain a GPR to config the stop mode, it will set
+> the flexcan into stop mode automatically once the ARM core go
+> into low power mode (WFI instruct) and gate off the flexcan
+> related clock automatically. But to let these logic work as
+> expect, before ARM core go into low power mode, need to make
+> sure the flexcan related clock keep on.
 >=20
-> #define TERMINATION_ON (0)
-> #define TERMINATION_OFF (1)
+> To support stop mode and wakeup feature on imx93, this patch
+> add a new fsl_imx93_devtype_data to separate from imx8mp.
 >=20
-> So the block becomes
+> Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
+> ---
+>  drivers/net/can/flexcan/flexcan-core.c | 37 +++++++++++++++++++++++---
+>  drivers/net/can/flexcan/flexcan.h      |  2 ++
+>  2 files changed, 36 insertions(+), 3 deletions(-)
 >=20
-> if (term =3D=3D MCBA_TERMINATION_ENABLED)
->     usb_msg.termination =3D TERMINATION_ON;
-> else
->     usb_msg.termination =3D TERMINATION_OFF;
+> diff --git a/drivers/net/can/flexcan/flexcan-core.c b/drivers/net/can/fle=
+xcan/flexcan-core.c
+> index 9bdadd716f4e..0aeff34e5ae1 100644
+> --- a/drivers/net/can/flexcan/flexcan-core.c
+> +++ b/drivers/net/can/flexcan/flexcan-core.c
+> @@ -345,6 +345,15 @@ static struct flexcan_devtype_data fsl_imx8mp_devtyp=
+e_data =3D {
+>  		FLEXCAN_QUIRK_SUPPORT_RX_MAILBOX_RTR,
+>  };
+> =20
+> +static struct flexcan_devtype_data fsl_imx93_devtype_data =3D {
+> +	.quirks =3D FLEXCAN_QUIRK_DISABLE_RXFG | FLEXCAN_QUIRK_ENABLE_EACEN_RRS=
+ |
+> +		FLEXCAN_QUIRK_DISABLE_MECR | FLEXCAN_QUIRK_USE_RX_MAILBOX |
+> +		FLEXCAN_QUIRK_BROKEN_PERR_STATE | FLEXCAN_QUIRK_AUTO_STOP_MODE |
+> +		FLEXCAN_QUIRK_SUPPORT_FD | FLEXCAN_QUIRK_SUPPORT_ECC |
+> +		FLEXCAN_QUIRK_SUPPORT_RX_MAILBOX |
+> +		FLEXCAN_QUIRK_SUPPORT_RX_MAILBOX_RTR,
+> +};
+> +
+>  static const struct flexcan_devtype_data fsl_vf610_devtype_data =3D {
+>  	.quirks =3D FLEXCAN_QUIRK_DISABLE_RXFG | FLEXCAN_QUIRK_ENABLE_EACEN_RRS=
+ |
+>  		FLEXCAN_QUIRK_DISABLE_MECR | FLEXCAN_QUIRK_USE_RX_MAILBOX |
+> @@ -532,9 +541,14 @@ static inline int flexcan_enter_stop_mode(struct fle=
+xcan_priv *priv)
+>  		ret =3D flexcan_stop_mode_enable_scfw(priv, true);
+>  		if (ret < 0)
+>  			return ret;
+> -	} else {
+> +	} else if (priv->devtype_data.quirks & FLEXCAN_QUIRK_SETUP_STOP_MODE_GP=
+R) {
+>  		regmap_update_bits(priv->stm.gpr, priv->stm.req_gpr,
+>  				   1 << priv->stm.req_bit, 1 << priv->stm.req_bit);
+> +	} else if (priv->devtype_data.quirks & FLEXCAN_QUIRK_AUTO_STOP_MODE) {
+> +		/* For the auto stop mode, software do nothing, hardware will cover
+> +		 * all the operation automatically after system go into low power mode.
+> +		 */
+> +		return 0;
+>  	}
+> =20
+>  	return flexcan_low_power_enter_ack(priv);
+> @@ -551,7 +565,7 @@ static inline int flexcan_exit_stop_mode(struct flexc=
+an_priv *priv)
+>  		ret =3D flexcan_stop_mode_enable_scfw(priv, false);
+>  		if (ret < 0)
+>  			return ret;
+> -	} else {
+> +	} else if (priv->devtype_data.quirks & FLEXCAN_QUIRK_SETUP_STOP_MODE_GP=
+R) {
+>  		regmap_update_bits(priv->stm.gpr, priv->stm.req_gpr,
+>  				   1 << priv->stm.req_bit, 0);
+>  	}
+> @@ -560,6 +574,12 @@ static inline int flexcan_exit_stop_mode(struct flex=
+can_priv *priv)
+>  	reg_mcr &=3D ~FLEXCAN_MCR_SLF_WAK;
+>  	priv->write(reg_mcr, &regs->mcr);
+> =20
+> +	/* For the auto stop mode, hardware will exist stop mode
+                                                 ^^^^^
+                                                 exit?
 
-Please send a v2 patch, using git send-email, as you did with the first
-version. (No compressed attached patches please.)
+No need to resend.
 
 Marc
 
@@ -113,19 +154,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---2b5oymuqicmyslax
+--yhn2qnplluft6atz
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmN/gd0ACgkQrX5LkNig
-0133OwgAlfuDYqc4mfHIa8P9QiLu3aGHzuezoaoZjCyBFGYcA7asa4LMdpf1pjz7
-ldCGajT5dJImf+BS5XnUPFpCU5NOvE9lEw8O8am7jF2386YFJz0f5Mb9aQ7ithOy
-S6h6t0ltrfbHLEErAk6mWKYtMZAy53yyeVS0goe+SK0KVvPiuMnkoOm6v8pEON/F
-y5ob4OD/kiBWfqgt3PT6Cwjc0pRuj/iLvIpgNYOV0zcybjyFubNY0tBinvnXWqPN
-ChuBpKD5d/Rpl3faA0enZ+MdfrEEff+NdUvdVSUzmcCZb8740yr76UMBInYys2gu
-CIBZm0t5ldgG4XZ440/i/iLs9czdUw==
-=Vfvz
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmN/gjoACgkQrX5LkNig
+011sXQf+MCoRIn0fsXC1+erxc4xdoDvO1PaSDE7V5RT0iSFDX8tNKFew3uSnzPTi
+SPTuiIiEGy0SsJB108lLBxw+sS7x4+3ybV10clPL9Q4jEOgTJPthr2Iz8g8YQem6
+17gmmNv0kVyVSwGw1frreiuaxQ2fOaccMrr0Cgns2K8CzFpnyxQkIHDPM75L9IGw
+W6uOh1lFWYwW7W3RqZWruGb2QtBMVJFjKc0MTJO8Mqfiuo+EXAogIjbEAdKpJM9r
+9zHXgJrrN8m9xPwXF3zBYd1SnY/c0Fzy5xvVllbjVGKFIPfG2F5CCCLc6B/fYgml
+Cucg2bGPSmkvT9RDnHppJ7qyGfBScQ==
+=31C3
 -----END PGP SIGNATURE-----
 
---2b5oymuqicmyslax--
+--yhn2qnplluft6atz--
