@@ -2,31 +2,31 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22F93637C7E
-	for <lists+linux-can@lfdr.de>; Thu, 24 Nov 2022 16:09:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3E69637C85
+	for <lists+linux-can@lfdr.de>; Thu, 24 Nov 2022 16:11:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbiKXPJF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 24 Nov 2022 10:09:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51852 "EHLO
+        id S229925AbiKXPLD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 24 Nov 2022 10:11:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbiKXPJD (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 24 Nov 2022 10:09:03 -0500
+        with ESMTP id S229611AbiKXPLD (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 24 Nov 2022 10:11:03 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3480715B4D7
-        for <linux-can@vger.kernel.org>; Thu, 24 Nov 2022 07:09:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FDC61541AB
+        for <linux-can@vger.kernel.org>; Thu, 24 Nov 2022 07:11:02 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1oyDqL-0007Hq-Lx; Thu, 24 Nov 2022 16:08:49 +0100
+        id 1oyDsJ-0007pU-Uy; Thu, 24 Nov 2022 16:10:52 +0100
 Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:5507:4aba:5e0a:4c27])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id D6762128715;
-        Thu, 24 Nov 2022 15:08:48 +0000 (UTC)
-Date:   Thu, 24 Nov 2022 16:08:47 +0100
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 1DA4412873B;
+        Thu, 24 Nov 2022 15:10:51 +0000 (UTC)
+Date:   Thu, 24 Nov 2022 16:10:49 +0100
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     Zhang Changzhong <zhangchangzhong@huawei.com>
 Cc:     Wolfgang Grandegger <wg@grandegger.com>,
@@ -35,15 +35,15 @@ Cc:     Wolfgang Grandegger <wg@grandegger.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] can: cc770: add missing free_cc770dev() in
- cc770_isa_probe()
-Message-ID: <20221124150847.5mzafztlb6qr6wzo@pengutronix.de>
-References: <1668168557-6024-1-git-send-email-zhangchangzhong@huawei.com>
+Subject: Re: [PATCH 1/3] can: sja1000_isa: add missing free_sja1000dev() in
+ sja1000_isa_probe()
+Message-ID: <20221124151049.tz6mcx2fe65skmpl@pengutronix.de>
+References: <1668168521-5540-1-git-send-email-zhangchangzhong@huawei.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xyr6puzvnva3rugy"
+        protocol="application/pgp-signature"; boundary="pesesiyv5l3isq7p"
 Content-Disposition: inline
-In-Reply-To: <1668168557-6024-1-git-send-email-zhangchangzhong@huawei.com>
+In-Reply-To: <1668168521-5540-1-git-send-email-zhangchangzhong@huawei.com>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -57,23 +57,22 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---xyr6puzvnva3rugy
+--pesesiyv5l3isq7p
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 11.11.2022 20:09:16, Zhang Changzhong wrote:
-> Add the missing free_cc770dev() before return from cc770_isa_probe() in
-> the register_cc770dev() error handling case.
+On 11.11.2022 20:08:41, Zhang Changzhong wrote:
+> Add the missing free_sja1000dev() before return from sja1000_isa_probe()
+> in the register_sja1000dev() error handling case.
 >=20
 > In addition, remove blanks before goto labels.
 >=20
-> Fixes: 7e02e5433e00 ("can: cc770: legacy CC770 ISA bus driver")
+> Fixes: 2a6ba39ad6a2 ("can: sja1000: legacy SJA1000 ISA bus driver")
 > Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
 
 Applied to linux-can.
 
-Thanks,
 Marc
 
 --=20
@@ -82,19 +81,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---xyr6puzvnva3rugy
+--pesesiyv5l3isq7p
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmN/iPwACgkQrX5LkNig
-010AHAgAgcTbWF4nsjKqCHvZgWivk46qroxzomBCVo34/xmM6um5TUs+Xeqf9KIA
-3ONf8IX+HkhZxypT67VyCICWjVzdhItWzvuOu+hSqYSo78E/R1IqroDUAupI4UEY
-6UyP+p1SJwY/uK7A5NK8W/GeHJhqpb8HJLwVKNoKYKhCJ6ILkcs3IewVkI1ukUJq
-hva2VnBjBtUkKGia9sNKRHQanGCD+ZkXtRyor0kTRmsKd8c268BXO3DVSZrQLKCJ
-FT1nj0fu15QfSJVY7QJ2SLuUtK3jSDfCtGD+G7KgDeq73d/E+1OmU5ZpLXiB7ZCq
-aAyAammdlhEXxqdY+h8b4EklrjcNKQ==
-=qmtl
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmN/iXYACgkQrX5LkNig
+010tfwf8CQGe92mNn5xHafQD0c50fpzbrDD0jLWVMHHQwNwrWl4dGOAUlIY6PeZe
+QUldL/UyLsleh78rYvgaU09V+WrcHXUGUZ7N0WMZ+lp1+aEJl36GKwOhC/dgx8S9
+T87T17sm1RRMn8L4nc2+R7sClPCsyYF35UIocLXqAj8xGZMN0fLvHHuNV90MTJBD
+b04O1rFzvmW8GSwVogQEDyfbHY3iaXp5jyNySwTa1ETeMtBMw8AL5W4yqtmjLVNj
+UmVRJ/NZXcUMGGQsFlPkmkeDi0aDeIMYWrfTdJqH4fPIgBJ2muXeBlA2PHktBfmS
+xmuciCZmDV84a/UlIXFV2aHcj6uO0Q==
+=IkBX
 -----END PGP SIGNATURE-----
 
---xyr6puzvnva3rugy--
+--pesesiyv5l3isq7p--
