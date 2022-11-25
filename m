@@ -2,50 +2,54 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D325638B26
-	for <lists+linux-can@lfdr.de>; Fri, 25 Nov 2022 14:28:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72158638BE9
+	for <lists+linux-can@lfdr.de>; Fri, 25 Nov 2022 15:14:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbiKYN2n (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 25 Nov 2022 08:28:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56448 "EHLO
+        id S229642AbiKYOOA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 25 Nov 2022 09:14:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbiKYN2n (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 25 Nov 2022 08:28:43 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5005222B3;
-        Fri, 25 Nov 2022 05:28:40 -0800 (PST)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NJbK00KBfzmWCs;
-        Fri, 25 Nov 2022 21:28:04 +0800 (CST)
-Received: from dggpeml500006.china.huawei.com (7.185.36.76) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 25 Nov 2022 21:28:38 +0800
-Received: from localhost.localdomain (10.175.112.70) by
- dggpeml500006.china.huawei.com (7.185.36.76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 25 Nov 2022 21:28:37 +0800
-From:   Zhang Changzhong <zhangchangzhong@huawei.com>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
+        with ESMTP id S229553AbiKYON7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 25 Nov 2022 09:13:59 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDBCF209AB
+        for <linux-can@vger.kernel.org>; Fri, 25 Nov 2022 06:13:58 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oyZSY-0001ux-7X; Fri, 25 Nov 2022 15:13:42 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:339c:bb17:19c8:3a96])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 1EFA5129BF0;
+        Fri, 25 Nov 2022 14:13:36 +0000 (UTC)
+Date:   Fri, 25 Nov 2022 15:13:34 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Zhang Changzhong <zhangchangzhong@huawei.com>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>, Julia Lawall <julia@diku.dk>,
-        Pavel Cheblakov <P.B.Cheblakov@inp.nsk.su>
-CC:     Zhang Changzhong <zhangchangzhong@huawei.com>,
-        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] can: sja1000: plx_pci: fix error handling path in plx_pci_add_card()
-Date:   Fri, 25 Nov 2022 21:46:14 +0800
-Message-ID: <1669383975-17332-1-git-send-email-zhangchangzhong@huawei.com>
-X-Mailer: git-send-email 1.8.3.1
+        Pavel Cheblakov <P.B.Cheblakov@inp.nsk.su>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] can: sja1000: plx_pci: fix error handling path in
+ plx_pci_add_card()
+Message-ID: <20221125141334.yhnye7psko3pih5u@pengutronix.de>
+References: <1669383975-17332-1-git-send-email-zhangchangzhong@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.70]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500006.china.huawei.com (7.185.36.76)
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="mcxjcl67uddrktzz"
+Content-Disposition: inline
+In-Reply-To: <1669383975-17332-1-git-send-email-zhangchangzhong@huawei.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,66 +58,102 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-If pci_iomap() or register_sja1000dev() fails, netdev will not be
-registered, but plx_pci_del_card() still deregisters the netdev.
 
-To avoid this, let's free the netdev and clear card->net_dev[i] before
-calling plx_pci_del_card(). In addition, add the missing pci_iounmap()
-when the channel does not exist.
+--mcxjcl67uddrktzz
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Compile tested only.
+On 25.11.2022 21:46:14, Zhang Changzhong wrote:
+> If pci_iomap() or register_sja1000dev() fails, netdev will not be
+> registered, but plx_pci_del_card() still deregisters the netdev.
+>=20
+> To avoid this, let's free the netdev and clear card->net_dev[i] before
+> calling plx_pci_del_card(). In addition, add the missing pci_iounmap()
+> when the channel does not exist.
+>=20
+> Compile tested only.
+>=20
+> Fixes: 951f2f960e5b ("drivers/net/can/sja1000/plx_pci.c: eliminate double=
+ free")
+> Fixes: 24c4a3b29255 ("can: add support for CAN interface cards based on t=
+he PLX90xx PCI bridge")
+> Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
+> ---
+> v1->v2: switch to goto style fix.
+>=20
+>  drivers/net/can/sja1000/plx_pci.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/net/can/sja1000/plx_pci.c b/drivers/net/can/sja1000/=
+plx_pci.c
+> index 5de1ebb..134a8cb 100644
+> --- a/drivers/net/can/sja1000/plx_pci.c
+> +++ b/drivers/net/can/sja1000/plx_pci.c
+> @@ -678,7 +678,7 @@ static int plx_pci_add_card(struct pci_dev *pdev,
+>  		if (!addr) {
+>  			err =3D -ENOMEM;
+>  			dev_err(&pdev->dev, "Failed to remap BAR%d\n", cm->bar);
+> -			goto failure_cleanup;
+> +			goto failure_free_dev;
+>  		}
+> =20
+>  		priv->reg_base =3D addr + cm->offset;
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> @@ -699,7 +699,7 @@ static int plx_pci_add_card(struct pci_dev *pdev,
+>  			if (err) {
+>  				dev_err(&pdev->dev, "Registering device failed "
+>  					"(err=3D%d)\n", err);
+> -				goto failure_cleanup;
+> +				goto failure_iounmap;
+>  			}
+> =20
+>  			card->channels++;
+> @@ -710,6 +710,7 @@ static int plx_pci_add_card(struct pci_dev *pdev,
+>  		} else {
+>  			dev_err(&pdev->dev, "Channel #%d not detected\n",
+>  				i + 1);
+> +			pci_iounmap(pdev, priv->reg_base);
+>  			free_sja1000dev(dev);
+>  			card->net_dev[i] =3D NULL;
+>  		}
+> @@ -738,6 +739,11 @@ static int plx_pci_add_card(struct pci_dev *pdev,
+>  	}
+>  	return 0;
+> =20
+> +failure_iounmap:
+> +	pci_iounmap(pdev, priv->reg_base);
+                          ^^^^^^^^^^^^^^
 
-Fixes: 951f2f960e5b ("drivers/net/can/sja1000/plx_pci.c: eliminate double free")
-Fixes: 24c4a3b29255 ("can: add support for CAN interface cards based on the PLX90xx PCI bridge")
-Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
----
-v1->v2: switch to goto style fix.
+reg_base it not that what has been mapped, but with an offset.
 
- drivers/net/can/sja1000/plx_pci.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+> +failure_free_dev:
+> +	free_sja1000dev(dev);
+> +	card->net_dev[i] =3D NULL;
+>  failure_cleanup:
+>  	dev_err(&pdev->dev, "Error: %d. Cleaning Up.\n", err);
 
-diff --git a/drivers/net/can/sja1000/plx_pci.c b/drivers/net/can/sja1000/plx_pci.c
-index 5de1ebb..134a8cb 100644
---- a/drivers/net/can/sja1000/plx_pci.c
-+++ b/drivers/net/can/sja1000/plx_pci.c
-@@ -678,7 +678,7 @@ static int plx_pci_add_card(struct pci_dev *pdev,
- 		if (!addr) {
- 			err = -ENOMEM;
- 			dev_err(&pdev->dev, "Failed to remap BAR%d\n", cm->bar);
--			goto failure_cleanup;
-+			goto failure_free_dev;
- 		}
- 
- 		priv->reg_base = addr + cm->offset;
-@@ -699,7 +699,7 @@ static int plx_pci_add_card(struct pci_dev *pdev,
- 			if (err) {
- 				dev_err(&pdev->dev, "Registering device failed "
- 					"(err=%d)\n", err);
--				goto failure_cleanup;
-+				goto failure_iounmap;
- 			}
- 
- 			card->channels++;
-@@ -710,6 +710,7 @@ static int plx_pci_add_card(struct pci_dev *pdev,
- 		} else {
- 			dev_err(&pdev->dev, "Channel #%d not detected\n",
- 				i + 1);
-+			pci_iounmap(pdev, priv->reg_base);
- 			free_sja1000dev(dev);
- 			card->net_dev[i] = NULL;
- 		}
-@@ -738,6 +739,11 @@ static int plx_pci_add_card(struct pci_dev *pdev,
- 	}
- 	return 0;
- 
-+failure_iounmap:
-+	pci_iounmap(pdev, priv->reg_base);
-+failure_free_dev:
-+	free_sja1000dev(dev);
-+	card->net_dev[i] = NULL;
- failure_cleanup:
- 	dev_err(&pdev->dev, "Error: %d. Cleaning Up.\n", err);
- 
--- 
-2.9.5
+Marc
 
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--mcxjcl67uddrktzz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOAzYsACgkQrX5LkNig
+013gVAf/eoxKhqdlLtB4JTg3JaizhFwwl41YUevHC7Dlat2okHGtUnykIt2vCHeF
+EUAWo/MrsatxXMz7R/jtJvx5Qv+EzgI+uiqrjglnY1t/Ed0A2jG2iIR79prAicrq
+/XBXa7pVa0fXABPh3JfFpRIpesAabSVodfqSzmCUCY4m6sERDo7IyrbCzr1ofobX
+mNfquHUsph6/YtaGBThFngmW+7ocaCjqRJ8iqdZW5oH3ATzMX+7+8qbGJAdioFS4
+PmxLkscOhMUZo3zGy8b8OiFEzGdDLqca1jCoXZjoui2/J6jQdfZK6fLkGIfFGff5
+r1BWMocts1AFlB1KbK4p9kteDvnriw==
+=K+FC
+-----END PGP SIGNATURE-----
+
+--mcxjcl67uddrktzz--
