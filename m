@@ -2,65 +2,70 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A6B639703
-	for <lists+linux-can@lfdr.de>; Sat, 26 Nov 2022 17:05:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF2D1639711
+	for <lists+linux-can@lfdr.de>; Sat, 26 Nov 2022 17:22:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229513AbiKZQFk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 26 Nov 2022 11:05:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58730 "EHLO
+        id S229536AbiKZQWf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 26 Nov 2022 11:22:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiKZQFj (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 26 Nov 2022 11:05:39 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6211AF39;
-        Sat, 26 Nov 2022 08:05:35 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso10201333pjt.0;
-        Sat, 26 Nov 2022 08:05:35 -0800 (PST)
+        with ESMTP id S229459AbiKZQWf (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 26 Nov 2022 11:22:35 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD2B6258;
+        Sat, 26 Nov 2022 08:22:32 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id mv18so5970017pjb.0;
+        Sat, 26 Nov 2022 08:22:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=68GAubzH81JmBn8GaHYOWuHCK/z6l7YaDbt7HaREjmk=;
-        b=GJSWUUIEnIbR0HsFDAx6v+Ie16yQl2Ut5hLPW9hVFvTe5JW7c4nhEkUxaLiYYghcMl
-         MNIJ8toxN7t0FWN9FmWdOemlukQUyHSP0V2ruwCCTi66ywJZcu03AlTJ+F3kAexAljbN
-         /UkSAvrIg+2FCuMbGrwXInZxAkSzC0ZcHMXdsVn2Ynkun1aqmqqwvDBjdfBNZK3LlNg0
-         QSsPlqbAdoIiraCINAEIsqiJAU7ZsbMxxFwbV1OrM8t63kHTE5daD+Dp2VgxS62DYMY3
-         viV52FPZHgsIKN0Fq6o67pGhiHinLgKd6xJYsL1SODjL1j1dC/TVNZVSXHVe+Szs7pYK
-         pasQ==
+        bh=u0hxFFmy8oYwIx+3AY8R3T8lDZ42Z6Hf4DtqyJhNml8=;
+        b=H5WP8UEekhWEksR7km+aNgxBCjgC8nZgcDTtUpuZRC7um3IvsdvfBKNNdYwDxO52BP
+         oSzB5kWb0+4DPRMkqqc7jIX2RXGpcERhAlMBfe6w34ccY6AgkQY0oxZhiMkKwhef3hQN
+         DlXcHVGexEd15lJOwpfjcWdWlEFH4xCnEA0Gkz/XwVM6IDJyFFwWQeuVHvn5cps40q9D
+         w1t44y6qa5VTb0Nf7mLdA6BNTHgOnfELVG7gBBL+Em6NXFpTdDLLcAgtfLceOPdL4s3c
+         9+G11YyJOzD8xMPFubse2+COdvUtp4KxDOdfHwrDpWqUqCzPLnJO4KWEjGk0UhVrTZCm
+         dwEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=68GAubzH81JmBn8GaHYOWuHCK/z6l7YaDbt7HaREjmk=;
-        b=M96aZiumstNXtK20UFxQB4Qz1vbwDlPyrqxRGB8LW042QFGI5HPhaH3TZl1oyM1sdx
-         ltMRpjQ6RkzmNJBhzDKALAALDEGAVU9bNj89DlZP4JmhEc3jEe/mF5JZFvez5Q1BhRHL
-         8+fK7+juPJLYiBJgbc8eFSZfea0yPjej78tcTMa0O311i9O6OkoIy1tmqVUvszhqCLO1
-         djdeGHR+zgKLCKP2VbVvVrVB6F55R+0wNHGzgEmM9fayUETNCdeiyOu0PQsuNoJBMLC/
-         TgaA9gywqj4zA6rdqrUheqRhUqvZEHXLYLdx8wPjOk/1K8mG25ZdqMZexDcZtfCYumfI
-         Q29w==
-X-Gm-Message-State: ANoB5pnZ2byzVcxiUwXneISJULEe+1YFle9xbUZTxbnczse6AkIGF9wN
-        KQQX+mLW5AllrXSrOFmH2gHx5SiOQLI=
-X-Google-Smtp-Source: AA0mqf7LiCtXzJUEsFOl0prmm0Dz+g+4XjpcrsWgsKgZGQRZnmBsgS8i1dNznydI63k7ZQCNgPwTKg==
-X-Received: by 2002:a17:903:452:b0:189:65c5:4508 with SMTP id iw18-20020a170903045200b0018965c54508mr9312734plb.66.1669478734972;
-        Sat, 26 Nov 2022 08:05:34 -0800 (PST)
+        bh=u0hxFFmy8oYwIx+3AY8R3T8lDZ42Z6Hf4DtqyJhNml8=;
+        b=QAvn2ynTLTuclfsmYgq4bGY5R3C0cyli6O53uxvW6hda3vPfGIbjudk1WXWzMckMAM
+         S7ubSDIDIV/DIwlK25q4XZ419zlqwvUHge3rw0NlGNnKhtNEFpbmnBRBufyqYIrvtgPr
+         vD2l3mmy3TLINydkUs539ur2Veq+e2PFrysl8ZyD08Hpd2v/Dti0ohfwUHRXyNNxtcTS
+         GE9Ap7KnNLVEp3GpT7i3s6xmSR20AVzBC0/aDeEFikbh81A4T0/7Aj9eahovCXPu4NY/
+         ob0v1O1VQm+TuMMUSM6g5Korszf/Y9wcJWCkVzazszaRiajeImwZP2ZWcbRcfSAUvEHI
+         dtRw==
+X-Gm-Message-State: ANoB5plON5JtDxFCKDmLklZTYf5lJHOpLrTSqbkjz5OKmVYCl1knKamp
+        88Pz08Wa/JQICwBqSmaCCnNbtQ5wzvX0jw==
+X-Google-Smtp-Source: AA0mqf5bNsd6E6mvEeuWX94ikTWtkdsiayv+1UsA3MuozsoA9NENM0ycaW1MywRyURrKBl95LOZrBA==
+X-Received: by 2002:a17:90a:3e4e:b0:218:7ee7:899a with SMTP id t14-20020a17090a3e4e00b002187ee7899amr41738267pjm.204.1669479751962;
+        Sat, 26 Nov 2022 08:22:31 -0800 (PST)
 Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id w64-20020a626243000000b0056c0d129edfsm4868044pfb.121.2022.11.26.08.05.33
+        by smtp.gmail.com with ESMTPSA id y14-20020a63e24e000000b00460ea630c1bsm4169601pgj.46.2022.11.26.08.22.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Nov 2022 08:05:34 -0800 (PST)
+        Sat, 26 Nov 2022 08:22:31 -0800 (PST)
 Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
 From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 To:     linux-can@vger.kernel.org
 Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
         linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        Saeed Mahameed <saeed@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>, Jiri Pirko <jiri@nvidia.com>,
+        Lukas Magel <lukas.magel@posteo.net>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v3] can: etas_es58x: sort the includes by alphabetic order
-Date:   Sun, 27 Nov 2022 01:05:25 +0900
-Message-Id: <20221126160525.87036-1-mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v4 0/6] can: etas_es58x: report firmware, bootloader and hardware version
+Date:   Sun, 27 Nov 2022 01:22:05 +0900
+Message-Id: <20221126162211.93322-1-mailhol.vincent@wanadoo.fr>
 X-Mailer: git-send-email 2.37.4
-In-Reply-To: <20221106100120.849735-1-mailhol.vincent@wanadoo.fr>
-References: <20221106100120.849735-1-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
+References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,122 +78,75 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Follow the best practices, reorder the includes.
+The goal of this series is to report the firmware version, the
+bootloader version and the hardware revision of ETAS ES58x
+devices.
 
-While doing so, bump up copyright year of each modified files.
+These are already reported in the kernel log but this isn't best
+practice. Remove the kernel log and instead export all these through
+devlink. In addition, the firmware version is also reported through
+ethtool.
 
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 ---
+* Changelog *
 
-Changelog:
+v3 -> v4:
+
+  * major rework to use devlink instead of sysfs following Andrew's
+    comment.
+
+  * split the series in 6 patches.
+
+  * [PATCH 1/6] add Acked-by: Greg Kroah-Hartman
 
 v2 -> v3:
 
-  * also reoder the includes of es58x_core.h
+  * patch 2/3: do not spam the kernel log anymore with the product
+    number. Instead parse the product information string, extract the
+    firmware version, the bootloadar version and the hardware revision
+    and export them through sysfs.
+
+  * patch 2/3: rework the parsing in order not to need additional
+    fields in struct es58x_parameters.
+
+  * patch 3/3: only populate ethtool_drvinfo::fw_version because since
+    commit edaf5df22cb8 ("ethtool: ethtool_get_drvinfo: populate
+    drvinfo fields even if callback exits"), there is no need to
+    populate ethtool_drvinfo::driver and ethtool_drvinfo::bus_info in
+    the driver.
 
 v1 -> v2:
 
-  * rebase on linux-can-next/testing. v1 was based on a local branch
-    and did not apply (sorry for the noise).
+  * was a single patch. It is now a series of three patches.
+  * add a first new patch to export  usb_cache_string().
+  * add a second new patch to apply usb_cache_string() to existing code.
+  * add missing check on product info string to prevent a buffer overflow.
+  * add comma on the last entry of struct es58x_parameters.
 
-  * add the copyright bump. That was initially from this patch:
-    https://lore.kernel.org/linux-can/20221104073659.414147-1-mailhol.vincent@wanadoo.fr/raw
-    but figured out that it is better to put this next to the
-    modifications of the includes.
----
- drivers/net/can/usb/etas_es58x/es581_4.c    | 4 ++--
- drivers/net/can/usb/etas_es58x/es58x_core.c | 6 +++---
- drivers/net/can/usb/etas_es58x/es58x_core.h | 8 ++++----
- drivers/net/can/usb/etas_es58x/es58x_fd.c   | 4 ++--
- 4 files changed, 11 insertions(+), 11 deletions(-)
+Vincent Mailhol (6):
+  USB: core: export usb_cache_string()
+  can: etas_es58x: add devlink support
+  can: etas_es58x: export product information through
+    devlink_ops::info_get()
+  can: etas_es58x: remove es58x_get_product_info()
+  can: etas_es58x: report the firmware version through ethtool
+  Documentation: devlink: add devlink documentation for the etas_es58x
+    driver
 
-diff --git a/drivers/net/can/usb/etas_es58x/es581_4.c b/drivers/net/can/usb/etas_es58x/es581_4.c
-index 1bcdcece5ec7..4151b18fd045 100644
---- a/drivers/net/can/usb/etas_es58x/es581_4.c
-+++ b/drivers/net/can/usb/etas_es58x/es581_4.c
-@@ -6,12 +6,12 @@
-  *
-  * Copyright (c) 2019 Robert Bosch Engineering and Business Solutions. All rights reserved.
-  * Copyright (c) 2020 ETAS K.K.. All rights reserved.
-- * Copyright (c) 2020, 2021 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-+ * Copyright (c) 2020-2022 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-  */
- 
-+#include <asm/unaligned.h>
- #include <linux/kernel.h>
- #include <linux/units.h>
--#include <asm/unaligned.h>
- 
- #include "es58x_core.h"
- #include "es581_4.h"
-diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/usb/etas_es58x/es58x_core.c
-index 25f863b4f5f0..4c97102202bf 100644
---- a/drivers/net/can/usb/etas_es58x/es58x_core.c
-+++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
-@@ -7,15 +7,15 @@
-  *
-  * Copyright (c) 2019 Robert Bosch Engineering and Business Solutions. All rights reserved.
-  * Copyright (c) 2020 ETAS K.K.. All rights reserved.
-- * Copyright (c) 2020, 2021 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-+ * Copyright (c) 2020-2022 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-  */
- 
-+#include <asm/unaligned.h>
-+#include <linux/crc16.h>
- #include <linux/ethtool.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/usb.h>
--#include <linux/crc16.h>
--#include <asm/unaligned.h>
- 
- #include "es58x_core.h"
- 
-diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.h b/drivers/net/can/usb/etas_es58x/es58x_core.h
-index 640fe0a1df63..4a082fd69e6f 100644
---- a/drivers/net/can/usb/etas_es58x/es58x_core.h
-+++ b/drivers/net/can/usb/etas_es58x/es58x_core.h
-@@ -6,17 +6,17 @@
-  *
-  * Copyright (c) 2019 Robert Bosch Engineering and Business Solutions. All rights reserved.
-  * Copyright (c) 2020 ETAS K.K.. All rights reserved.
-- * Copyright (c) 2020, 2021 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-+ * Copyright (c) 2020-2022 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-  */
- 
- #ifndef __ES58X_COMMON_H__
- #define __ES58X_COMMON_H__
- 
--#include <linux/types.h>
--#include <linux/usb.h>
--#include <linux/netdevice.h>
- #include <linux/can.h>
- #include <linux/can/dev.h>
-+#include <linux/netdevice.h>
-+#include <linux/types.h>
-+#include <linux/usb.h>
- 
- #include "es581_4.h"
- #include "es58x_fd.h"
-diff --git a/drivers/net/can/usb/etas_es58x/es58x_fd.c b/drivers/net/can/usb/etas_es58x/es58x_fd.c
-index c97ffa71fd75..fa87b0b78e3e 100644
---- a/drivers/net/can/usb/etas_es58x/es58x_fd.c
-+++ b/drivers/net/can/usb/etas_es58x/es58x_fd.c
-@@ -8,12 +8,12 @@
-  *
-  * Copyright (c) 2019 Robert Bosch Engineering and Business Solutions. All rights reserved.
-  * Copyright (c) 2020 ETAS K.K.. All rights reserved.
-- * Copyright (c) 2020, 2021 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-+ * Copyright (c) 2020-2022 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-  */
- 
-+#include <asm/unaligned.h>
- #include <linux/kernel.h>
- #include <linux/units.h>
--#include <asm/unaligned.h>
- 
- #include "es58x_core.h"
- #include "es58x_fd.h"
+ .../networking/devlink/etas_es58x.rst         |  33 +++
+ MAINTAINERS                                   |   1 +
+ drivers/net/can/usb/Kconfig                   |   1 +
+ drivers/net/can/usb/etas_es58x/Makefile       |   2 +-
+ drivers/net/can/usb/etas_es58x/es58x_core.c   |  85 +++----
+ drivers/net/can/usb/etas_es58x/es58x_core.h   |  73 ++++++
+ .../net/can/usb/etas_es58x/es58x_devlink.c    | 207 ++++++++++++++++++
+ drivers/usb/core/message.c                    |   1 +
+ drivers/usb/core/usb.h                        |   1 -
+ include/linux/usb.h                           |   1 +
+ 10 files changed, 352 insertions(+), 53 deletions(-)
+ create mode 100644 Documentation/networking/devlink/etas_es58x.rst
+ create mode 100644 drivers/net/can/usb/etas_es58x/es58x_devlink.c
+
 -- 
 2.37.4
 
