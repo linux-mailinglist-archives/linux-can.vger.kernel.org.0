@@ -2,30 +2,30 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B68463974E
-	for <lists+linux-can@lfdr.de>; Sat, 26 Nov 2022 17:52:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FAF663976A
+	for <lists+linux-can@lfdr.de>; Sat, 26 Nov 2022 18:16:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229487AbiKZQwG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 26 Nov 2022 11:52:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54080 "EHLO
+        id S229487AbiKZRQi (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 26 Nov 2022 12:16:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiKZQwD (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 26 Nov 2022 11:52:03 -0500
+        with ESMTP id S229450AbiKZRQh (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 26 Nov 2022 12:16:37 -0500
 Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240C417E0A;
-        Sat, 26 Nov 2022 08:51:59 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E301B795;
+        Sat, 26 Nov 2022 09:16:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
         s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
         Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
         Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=afYyqnESstPYF0qp8DiQpmjfKKmBgKX2qGLEWL9vw/8=; b=zdEytqfZTLJ4ycL/DZABrwe23e
-        8z8uxB8pggswChhbz47AJg1vixjvQx0Ct54WwSzEu0ZOScALhrW8NxvIqNj5YX5a6qjMK6OUjDJek
-        yjPByU76BjsfMgUxKBfnhry6aOrICOswz8qO/bdNxTk+XMESHimui67GhSA4dOuauW0g=;
+        bh=5Hw31AgKId+3OPnZUDNl0zoIziLgXdVSUBBYyPkaxJA=; b=OCNEu2IqIwoJjsrj84rge722+P
+        RCBQrmpgb9mdXI9VD8F20jmskv9EXiEWZ3OLgbZYVlvfihZ72zXFj7kP7fbl7nxFMxoE32dnB/PAz
+        UZBIVukz0RCsu8ib0W6SZacXCPcG89vQXQnM/l9dZ/rJC19xnv7kYY4Uh20Emz0SSUPk=;
 Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
         (envelope-from <andrew@lunn.ch>)
-        id 1oyyOv-003WSK-I0; Sat, 26 Nov 2022 17:51:37 +0100
-Date:   Sat, 26 Nov 2022 17:51:37 +0100
+        id 1oyyn2-003WW5-Gn; Sat, 26 Nov 2022 18:16:32 +0100
+Date:   Sat, 26 Nov 2022 18:16:32 +0100
 From:   Andrew Lunn <andrew@lunn.ch>
 To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
@@ -35,15 +35,16 @@ Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
         Saeed Mahameed <saeed@kernel.org>,
         Jiri Pirko <jiri@nvidia.com>,
         Lukas Magel <lukas.magel@posteo.net>
-Subject: Re: [PATCH v4 2/6] can: etas_es58x: add devlink support
-Message-ID: <Y4JEGYMtIWX9clxo@lunn.ch>
+Subject: Re: [PATCH v4 3/6] can: etas_es58x: export product information
+ through devlink_ops::info_get()
+Message-ID: <Y4JJ8Dyz7urLz/IM@lunn.ch>
 References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
  <20221126162211.93322-1-mailhol.vincent@wanadoo.fr>
- <20221126162211.93322-3-mailhol.vincent@wanadoo.fr>
+ <20221126162211.93322-4-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221126162211.93322-3-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20221126162211.93322-4-mailhol.vincent@wanadoo.fr>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -53,52 +54,39 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-> @@ -2196,11 +2198,12 @@ static struct es58x_device *es58x_init_es58x_dev(struct usb_interface *intf,
->  		ops = &es581_4_ops;
->  	}
->  
-> -	es58x_dev = devm_kzalloc(dev, es58x_sizeof_es58x_device(param),
-> -				 GFP_KERNEL);
-> -	if (!es58x_dev)
-> +	devlink = devlink_alloc(&es58x_dl_ops, es58x_sizeof_es58x_device(param),
-> +				dev);
-> +	if (!devlink)
->  		return ERR_PTR(-ENOMEM);
->  
-> +	es58x_dev = devlink_priv(devlink);
+> +struct es58x_sw_version {
+> +	u8 major;
+> +	u8 minor;
+> +	u8 revision;
+> +};
 
-That is 'interesting'. Makes me wonder about lifetimes of different
-objects. Previously your es58x_dev structure would disappear when the
-driver is released, or an explicit call to devm_kfree(). Now it
-disappears when devlink_free() is called. Any danger of use after free
-here?
-
-USB devices always make me wonder about life times rules since they
-are probably the mode dynamic sort of device the kernel has the
-handle, them just abruptly disappearing.
-
->  	es58x_dev->param = param;
->  	es58x_dev->ops = ops;
->  	es58x_dev->dev = dev;
-> @@ -2247,6 +2250,8 @@ static int es58x_probe(struct usb_interface *intf,
->  	if (ret)
->  		return ret;
->  
-> +	devlink_register(priv_to_devlink(es58x_dev));
+> +static int es58x_devlink_info_get(struct devlink *devlink,
+> +				  struct devlink_info_req *req,
+> +				  struct netlink_ext_ack *extack)
+> +{
+> +	struct es58x_device *es58x_dev = devlink_priv(devlink);
+> +	struct es58x_sw_version *fw_ver = &es58x_dev->firmware_version;
+> +	struct es58x_sw_version *bl_ver = &es58x_dev->bootloader_version;
+> +	struct es58x_hw_revision *hw_rev = &es58x_dev->hardware_revision;
+> +	char buf[max(sizeof("xx.xx.xx"), sizeof("axxx/xxx"))];
+> +	int ret = 0;
 > +
->  	for (ch_idx = 0; ch_idx < es58x_dev->num_can_ch; ch_idx++) {
->  		ret = es58x_init_netdev(es58x_dev, ch_idx);
->  		if (ret) {
-> @@ -2272,8 +2277,10 @@ static void es58x_disconnect(struct usb_interface *intf)
->  	dev_info(&intf->dev, "Disconnecting %s %s\n",
->  		 es58x_dev->udev->manufacturer, es58x_dev->udev->product);
->  
-> +	devlink_unregister(priv_to_devlink(es58x_dev));
->  	es58x_free_netdevs(es58x_dev);
->  	es58x_free_urbs(es58x_dev);
-> +	devlink_free(priv_to_devlink(es58x_dev));
->  	usb_set_intfdata(intf, NULL);
+> +	if (es58x_sw_version_is_set(fw_ver)) {
+> +		snprintf(buf, sizeof(buf), "%02u.%02u.%02u",
+> +			 fw_ver->major, fw_ver->minor, fw_ver->revision);
 
-Should devlink_free() be after usb_set_inftdata()?
+I see you have been very careful here, but i wonder if you might still
+get some compiler/static code analyser warnings here. As far as i
+remember %02u does not limit it to two characters. If the number is
+bigger than 99, it will take three characters. And your types are u8,
+so the compiler could consider these to be 3 characters each. So you
+end up truncating. Which you look to of done correctly, but i wonder
+if some over zealous checker will report it? Maybe consider
+"xxx.xxx.xxx"?
 
-       Andrew
+Nice paranoid code by the way. I'm not the best at spotting potential
+buffer overflows, but this code looks good. The only question i had
+left was how well sscanf() deals with UTF-8.
+
+     Andrew
+
