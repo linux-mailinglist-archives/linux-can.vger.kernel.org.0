@@ -2,78 +2,46 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8A9263999F
-	for <lists+linux-can@lfdr.de>; Sun, 27 Nov 2022 09:10:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0819A6399EF
+	for <lists+linux-can@lfdr.de>; Sun, 27 Nov 2022 11:38:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229496AbiK0IKl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 27 Nov 2022 03:10:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46322 "EHLO
+        id S229602AbiK0KiL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Sun, 27 Nov 2022 05:38:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiK0IKk (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 27 Nov 2022 03:10:40 -0500
-Received: from mailgw.felk.cvut.cz (mailgw.felk.cvut.cz [147.32.82.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB45E0D6;
-        Sun, 27 Nov 2022 00:10:38 -0800 (PST)
-Received: from mailgw.felk.cvut.cz (localhost.localdomain [127.0.0.1])
-        by mailgw.felk.cvut.cz (Proxmox) with ESMTP id 0021330B294A;
-        Sun, 27 Nov 2022 09:10:06 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        cmp.felk.cvut.cz; h=cc:cc:content-transfer-encoding:content-type
-        :content-type:date:from:from:in-reply-to:message-id:mime-version
-        :references:reply-to:subject:subject:to:to; s=felkmail; bh=GGyL/
-        C4H6vtTsrrNEWsfehnYpF8amxqPutxzbZGcttQ=; b=aNK6bSUHyYC0fKV//4P50
-        8iC488EVv3oOeIeB/P0hp6Q5BUVjiJsG2KoBRdqMesQHs0CH/3MTt2pT2HjEOAmq
-        FrW3KqCVYpMOY38rNMMXcnllpqD1OdyhlRxcvYW4eSa50vmVrXZHz33TVBwQeCd5
-        ff5Q/n3aAsArvNHEVVZFGm++feNVcvm5Ih3tdwSoBP09q6pgecUccr670dHPl+vk
-        9ArL1E1kQD0cS3MMciFila9785HvItTcyhfVP3YWXmZ8RHiTlqOMO7rx9Jm3mzS6
-        s4ztCn1+7MsS5KrwuTmR4ZNjl8ppRNRnEtswbd8XV/eDq4Z2rb0ueOBytj5UpuPD
-        Q==
-Received: from cmp.felk.cvut.cz (haar.felk.cvut.cz [147.32.84.19])
-        by mailgw.felk.cvut.cz (Proxmox) with ESMTPS id 72DED30AE001;
-        Sun, 27 Nov 2022 09:10:05 +0100 (CET)
-Received: from haar.felk.cvut.cz (localhost [127.0.0.1])
-        by cmp.felk.cvut.cz (8.14.0/8.12.3/SuSE Linux 0.6) with ESMTP id 2AR8A5lQ000718;
-        Sun, 27 Nov 2022 09:10:05 +0100
-Received: (from pisa@localhost)
-        by haar.felk.cvut.cz (8.14.0/8.13.7/Submit) id 2AR8A5nY000717;
-        Sun, 27 Nov 2022 09:10:05 +0100
-X-Authentication-Warning: haar.felk.cvut.cz: pisa set sender to pisa@cmp.felk.cvut.cz using -f
-From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
-To:     "Marc Kleine-Budde" <mkl@pengutronix.de>
-Subject: Re: [PATCH] can: ctucanfd: Drop obsolete dependency on COMPILE_TEST
-Date:   Sun, 27 Nov 2022 09:09:57 +0100
-User-Agent: KMail/1.9.10
-Cc:     Jean Delvare <jdelvare@suse.de>, linux-can@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ondrej Ille <ondrej.ille@gmail.com>,
-        =?utf-8?q?Mat=C4=9Bj_Vasilevski?= <matej.vasilevski@gmail.com>
-References: <20221124141604.4265225f@endymion.delvare> <202211241556.38957.pisa@cmp.felk.cvut.cz> <20221125155758.ji5djevvycduuykt@pengutronix.de>
-In-Reply-To: <20221125155758.ji5djevvycduuykt@pengutronix.de>
-X-KMail-QuotePrefix: > 
+        with ESMTP id S229575AbiK0KiK (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 27 Nov 2022 05:38:10 -0500
+X-Greylist: delayed 3302 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 27 Nov 2022 02:38:06 PST
+Received: from mail2.hlhk.net (20218120117.hlhk.net [202.181.201.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F2DC0D2C9
+        for <linux-can@vger.kernel.org>; Sun, 27 Nov 2022 02:38:06 -0800 (PST)
+Received: from mail2.hlhk.net (localhost.localdomain [127.0.0.1])
+        by mail2.hlhk.net (Postfix) with ESMTP id 2E80BFB945
+        for <linux-can@vger.kernel.org>; Sun, 27 Nov 2022 17:36:29 +0800 (HKT)
+Received: (qmail 12558 invoked by uid 89); 27 Nov 2022 09:36:28 -0000
+Received: from unknown (HELO ?192.168.1.100?) (joyce@enjoy.com.hk@138.199.18.150)
+  by mail2.hlhk.net with ESMTPA; 27 Nov 2022 09:36:28 -0000
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: Text/Plain;
-  charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-Message-Id: <202211270909.57804.pisa@cmp.felk.cvut.cz>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Hello,
+To:     Recipients <joyce@enjoy.com.hk>
+From:   joyce@enjoy.com.hk
+Date:   Sun, 27 Nov 2022 11:36:04 +0200
+Reply-To: yeung.kung@bocbk.io
+Message-Id: <20221127093629.2E80BFB945@mail2.hlhk.net>
+X-Spam-Status: No, score=3.3 required=5.0 tests=BAYES_80,KHOP_HELO_FCRDNS,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Friday 25 of November 2022 16:57:58 Marc Kleine-Budde wrote:
-> On 24.11.2022 15:56:38, Pavel Pisa wrote:
-> > Thanks for the care. I cannot judge change on my personal opinion.
-> > But if that is general direction even for other drivers
-> > then I confirm the change.
->
-> Should I convert this into a formal Acked-by: :)
+Can I still reach you at this email address?
 
-I you prefer formal one and agree with the change then yes.
-
-Acked-by: Pavel Pisa <pisa@cmp.felk.cvut.cz>
+Regards,
 
