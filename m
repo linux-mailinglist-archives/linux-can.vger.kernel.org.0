@@ -2,46 +2,71 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0819A6399EF
-	for <lists+linux-can@lfdr.de>; Sun, 27 Nov 2022 11:38:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F50C639B7B
+	for <lists+linux-can@lfdr.de>; Sun, 27 Nov 2022 16:07:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbiK0KiL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Sun, 27 Nov 2022 05:38:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53248 "EHLO
+        id S229535AbiK0PHy (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 27 Nov 2022 10:07:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiK0KiK (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 27 Nov 2022 05:38:10 -0500
-X-Greylist: delayed 3302 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 27 Nov 2022 02:38:06 PST
-Received: from mail2.hlhk.net (20218120117.hlhk.net [202.181.201.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F2DC0D2C9
-        for <linux-can@vger.kernel.org>; Sun, 27 Nov 2022 02:38:06 -0800 (PST)
-Received: from mail2.hlhk.net (localhost.localdomain [127.0.0.1])
-        by mail2.hlhk.net (Postfix) with ESMTP id 2E80BFB945
-        for <linux-can@vger.kernel.org>; Sun, 27 Nov 2022 17:36:29 +0800 (HKT)
-Received: (qmail 12558 invoked by uid 89); 27 Nov 2022 09:36:28 -0000
-Received: from unknown (HELO ?192.168.1.100?) (joyce@enjoy.com.hk@138.199.18.150)
-  by mail2.hlhk.net with ESMTPA; 27 Nov 2022 09:36:28 -0000
-Content-Type: text/plain; charset="iso-8859-1"
+        with ESMTP id S229495AbiK0PHx (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 27 Nov 2022 10:07:53 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899AFA193;
+        Sun, 27 Nov 2022 07:07:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=9NdXCH+5Yf+i6OJS1Ny95eYqibE3km5noeNhlOnIk7Q=; b=nKSi8xbJob0n0p+HFPFPoMHK0m
+        aZRJcUDQwwszF7J1P1Z1FnoblDx/lzqYiWcFRODSxWYHc47gdwKQo8bVjjh9YkPWpRPMJn1FlxLHN
+        WvzM6w8Qgjt9LNKmpbo2+NSJQu0F18DrjI7jsyPtlmepi26hMeIoQP1VAqSgiixx/qSw=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1ozJFQ-003ZU2-4c; Sun, 27 Nov 2022 16:07:12 +0100
+Date:   Sun, 27 Nov 2022 16:07:12 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        Saeed Mahameed <saeed@kernel.org>,
+        Jiri Pirko <jiri@nvidia.com>,
+        Lukas Magel <lukas.magel@posteo.net>
+Subject: Re: [PATCH v4 3/6] can: etas_es58x: export product information
+ through devlink_ops::info_get()
+Message-ID: <Y4N9IAlQVsdyIJ9Q@lunn.ch>
+References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
+ <20221126162211.93322-1-mailhol.vincent@wanadoo.fr>
+ <20221126162211.93322-4-mailhol.vincent@wanadoo.fr>
+ <Y4JJ8Dyz7urLz/IM@lunn.ch>
+ <CAMZ6Rq+K+6gbaZ35SOJcR9qQaTJ7KR0jW=XoDKFkobjhj8CHhw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Hello,
-To:     Recipients <joyce@enjoy.com.hk>
-From:   joyce@enjoy.com.hk
-Date:   Sun, 27 Nov 2022 11:36:04 +0200
-Reply-To: yeung.kung@bocbk.io
-Message-Id: <20221127093629.2E80BFB945@mail2.hlhk.net>
-X-Spam-Status: No, score=3.3 required=5.0 tests=BAYES_80,KHOP_HELO_FCRDNS,
-        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMZ6Rq+K+6gbaZ35SOJcR9qQaTJ7KR0jW=XoDKFkobjhj8CHhw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Can I still reach you at this email address?
+> I checked, none of gcc and clang would trigger a warning even for a
+> 'make W=12'. More generally speaking, I made sure that my driver is
+> free of any W=12.
 
-Regards,
+That is good enough for me.
 
+> I do not care any more as long as it does not result in
+> undefined behaviour.
+
+Agreed. Hopefully sscanf cannot go completely wrong and go off the end
+of the buffer. That i would care about. Bit i guess the USB fuzzers
+would of hit such problems already.
+
+	Andrew
