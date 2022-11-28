@@ -2,135 +2,146 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98AAD63A0C4
-	for <lists+linux-can@lfdr.de>; Mon, 28 Nov 2022 06:32:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D252163A2C5
+	for <lists+linux-can@lfdr.de>; Mon, 28 Nov 2022 09:22:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbiK1Fcj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 28 Nov 2022 00:32:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45202 "EHLO
+        id S229937AbiK1IWO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 28 Nov 2022 03:22:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiK1Fci (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 28 Nov 2022 00:32:38 -0500
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B899BEA;
-        Sun, 27 Nov 2022 21:32:35 -0800 (PST)
-Received: by mail-pf1-f179.google.com with SMTP id w79so9429023pfc.2;
-        Sun, 27 Nov 2022 21:32:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2Aa6IZglYvctadBEzqWZe9EXgU7WiR6HNZzFHtL5DNo=;
-        b=n3LbE2po45L7UEA/e4z8Dn0mvYkvs0+qS7CNVLew7hNwlobQvNu60t2fH8EEsjnxnK
-         Mxu4DhwaYd9+T6tHBoC7O2B5Fd25zBO3HsaXd6ssdjpW8j6QFkPf8NYeEwof6vk713W9
-         V9SrwoixJzFpiOAxl9DRFErzIycIatZR5H9aQNfAVKJz2IwVjzZf+rjKDw7fVCZyGe3n
-         /TUe23dZ42envD/Gvb7kQpySEMyQLOf4/SMBR5MjC4pBLChOeWb7XekNeljNUe4EUS9n
-         eCEjQyq+VXTLiHS11mL7a6pz3lzRVWY0VQKD49Qk/QYIE6U9sjYIxvCB1pjwsAGt8PrW
-         vjIA==
-X-Gm-Message-State: ANoB5pl6fr2M/gUTETuhxrZqQigxE+WgGHCJouz9ilnk2Tm8NTIEL//N
-        hNvs1yT+Rmg4NJAqiwRNqchLR7wC0ekj2ZHVyEs=
-X-Google-Smtp-Source: AA0mqf4DsMKAlgvZVcNPpcG6bvgBwfljvVj8E/qqpGfmBCUsqDrL33BR5G5S4PYVxNZ8B7TexHAsaA0JeMi81NOV8sY=
-X-Received: by 2002:a63:1803:0:b0:477:6e5d:4e25 with SMTP id
- y3-20020a631803000000b004776e5d4e25mr31802247pgl.70.1669613554816; Sun, 27
- Nov 2022 21:32:34 -0800 (PST)
+        with ESMTP id S229568AbiK1IV5 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 28 Nov 2022 03:21:57 -0500
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA007167F4;
+        Mon, 28 Nov 2022 00:21:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1669623711;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=r8DNEtzdUr23A31WbyF9m0tTQ4gvOo1TVcul6uPNYC4=;
+    b=APDHWcTRLcAPh/L9ddyE3tqfyZ+vvfPXmy2/10noa5JyGTY5IJmucicG5K9FUDqIHq
+    9VwN1XjHttm9f7BTXe6NwFsGLcsuYQLb5o1QjwiILaGhmtL2AN/RAUh5SR/gD5k1tIw0
+    eIynHhMVQfH0qTkdm4BJiTJyY+yujZ2W4cZHFgril/qeZMpW00kLDD22trZWB6tXL04c
+    gzQJtCPZtGkq/hyd6dZHxKfSWxoSlSBLQsn0TnjLwOLQoPQ9KOHv+nEARmrNIYsOSCwB
+    UBYDaxKxvVz5Y79RHcPCUs9o24TjPPyG/xnXGjl6U4uVdLHg2g9XMtAnbWXpiEjBvvI8
+    Sk6A==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytISr6hZqJAw=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a00:6020:1cfd:d104::923]
+    by smtp.strato.de (RZmta 48.2.1 AUTH)
+    with ESMTPSA id Dde783yAS8LoOkk
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Mon, 28 Nov 2022 09:21:50 +0100 (CET)
+Message-ID: <58a773bd-0db4-bade-f8a2-46e850df9b0b@hartkopp.net>
+Date:   Mon, 28 Nov 2022 09:21:44 +0100
 MIME-Version: 1.0
-References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
- <20221126162211.93322-1-mailhol.vincent@wanadoo.fr> <20221126162211.93322-3-mailhol.vincent@wanadoo.fr>
- <Y4JEGYMtIWX9clxo@lunn.ch> <CAMZ6RqK6AQVsRufw5Jr5aKpPQcy+05jq3TjrKqbaqk7NVgK+_Q@mail.gmail.com>
- <Y4OD70GD4KnoRk0k@rowland.harvard.edu> <CAMZ6Rq+Gi+rcLqSj2-kug7c1G_nNuj6peh5nH1DNoo8B3aSxzw@mail.gmail.com>
-In-Reply-To: <CAMZ6Rq+Gi+rcLqSj2-kug7c1G_nNuj6peh5nH1DNoo8B3aSxzw@mail.gmail.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Mon, 28 Nov 2022 14:32:23 +0900
-Message-ID: <CAMZ6RqKS0sUFZWQfmRU6q2ivWEUFD06uiQekDr=u94L3uij3yQ@mail.gmail.com>
-Subject: Re: [PATCH v4 2/6] can: etas_es58x: add devlink support
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Andrew Lunn <andrew@lunn.ch>, linux-can@vger.kernel.org,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [RFC][PATCH 0/2] LIN support for Linux
+To:     Christoph Fritz <christoph.fritz@hexdev.de>,
+        Pavel Pisa <pisa@cmp.felk.cvut.cz>,
+        Richard Weinberger <richard@nod.at>,
+        Andreas Lauser <andreas.lauser@mbition.io>,
+        Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        Saeed Mahameed <saeed@kernel.org>,
-        Jiri Pirko <jiri@nvidia.com>,
-        Lukas Magel <lukas.magel@posteo.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221127190244.888414-1-christoph.fritz@hexdev.de>
+Content-Language: en-US
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20221127190244.888414-1-christoph.fritz@hexdev.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon. 28 Nov. 2022 at 10:34, Vincent MAILHOL
-<mailhol.vincent@wanadoo.fr> wrote:
-> On Mon. 28 Nov. 2022 at 00:41, Alan Stern <stern@rowland.harvard.edu> wrote:
-> > On Sun, Nov 27, 2022 at 02:10:32PM +0900, Vincent MAILHOL wrote:
-> > > > Should devlink_free() be after usb_set_inftdata()?
-> > >
-> > > A look at
-> > >   $ git grep -W "usb_set_intfdata(.*NULL)"
-> > >
-> > > shows that the two patterns (freeing before or after
-> > > usb_set_intfdata()) coexist.
-> > >
-> > > You are raising an important question here. usb_set_intfdata() does
-> > > not have documentation that freeing before it is risky. And the
-> > > documentation of usb_driver::disconnect says that:
-> > >   "@disconnect: Called when the interface is no longer accessible,
-> > >    usually because its device has been (or is being) disconnected
-> > >    or the driver module is being unloaded."
-> > >   Ref: https://elixir.bootlin.com/linux/v6.1-rc6/source/include/linux/usb.h#L1130
-> > >
-> > > So the interface no longer being accessible makes me assume that the
-> > > order does not matter. If it indeed matters, then this is a foot gun
-> > > and there is some clean-up work waiting for us on many drivers.
-> > >
-> > > @Greg, any thoughts on whether or not the order of usb_set_intfdata()
-> > > and resource freeing matters or not?
-> >
-> > In fact, drivers don't have to call usb_set_intfdata(NULL) at all; the
-> > USB core does it for them after the ->disconnect() callback returns.
->
-> Interesting. This fact is widely unknown, cf:
->   $ git grep "usb_set_intfdata(.*NULL)" | wc -l
->   215
->
-> I will do some clean-up later on, at least for the CAN USB drivers.
->
-> > But if a driver does make the call, it should be careful to ensure that
-> > the call happens _after_ the driver is finished using the interface-data
-> > pointer.  For example, after all outstanding URBs have completed, if the
-> > completion handlers will need to call usb_get_intfdata().
->
-> ACK. I understand that it should be called *after* the completion of
-> any ongoing task.
->
-> My question was more on:
->
->         devlink_free(priv_to_devlink(es58x_dev));
->         usb_set_intfdata(intf, NULL);
->
-> VS.
->
->         usb_set_intfdata(intf, NULL);
->         devlink_free(priv_to_devlink(es58x_dev));
->
-> From your comments, I understand that both are fine.
+Hello Christoph,
 
-Do we agree that the usb-skeleton is doing it wrong?
-  https://elixir.bootlin.com/linux/latest/source/drivers/usb/usb-skeleton.c#L567
-usb_set_intfdata(interface, NULL) is called before deregistering the
-interface and terminating the outstanding URBs!
+are you already aware of this LIN project that uses the Linux SocketCAN 
+infrastructure and implements the LIN protocol based on a serial tty 
+adaption (which the serial LIN protocol mainly is)?
 
-> > Remember, the interface-data pointer is owned by the driver.  Nothing
-> > else in the kernel uses it.  So the driver merely has to be careful not
-> > to clear the pointer while it is still using it.
->
-> Thanks for your comments!
->
->
-> Yours sincerely,
-> Vincent Mailhol
+https://github.com/lin-bus
+
+IIRC the implementation of the master/slave timings was the biggest 
+challenge and your approach seems to offload this problem to your 
+USB-attached hardware right?
+
+Can I assume there will be a similar CAN-controlled programming 
+interface to create real time master/slave protocol frames like in a 
+usual CAN/LIN adapter (e.g. 
+https://www.peak-system.com/PCAN-LIN.213.0.html) ??
+
+Best regards,
+Oliver
+
+
+On 27.11.22 20:02, Christoph Fritz wrote:
+> The intention of this series is to kick off a discussion about how to
+> support LIN (ISO 17987) [0] in Linux.
+> 
+> This series consist of two patches which are two individual proposals
+> for adding LIN abstraction into the kernel.
+> 
+> One approach is to add LIN ontop of CANFD:
+>    [RFC] can: introduce LIN abstraction
+> 
+> The other approach is adding a new type of CAN-socket:
+>    [RFC] can: Add LIN proto skeleton
+> 
+> These patches are abstracting LIN so that actual device drivers can
+> make use of it.
+> 
+> For reference, the LIN-ontop-of-CANFD variant already has a device
+> driver using it (not part of this series). It is a specially built USB
+> LIN-BUS adapter hardware called hexLIN [1].  Its purpose is mainly to
+> test, adapt and discuss different LIN APIs for mainline Linux kernel.
+> But it can already be used productively as a Linux LIN node in
+> controller (master) and responder (slave) mode. By sysfs, hexLIN
+> supports different checksum calculations and setting up a
+> responder-table.
+> 
+> For more info about hexLIN, see link below [1].
+> 
+> We are looking for partners with Linux based LIN projects for funding.
+> 
+> [0]: https://en.wikipedia.org/wiki/Local_Interconnect_Network
+> [1]: https://hexdev.de/hexlin/
+> 
+> Christoph Fritz (1):
+>    [RFC] can: Introduce LIN bus as CANFD abstraction
+> 
+> Richard Weinberger (1):
+>    [RFC] can: Add LIN proto skeleton
+> 
+>   drivers/net/can/Kconfig          |  10 ++
+>   drivers/net/can/Makefile         |   1 +
+>   drivers/net/can/lin.c            | 181 +++++++++++++++++++++++++++
+>   include/net/lin.h                |  30 +++++
+>   include/uapi/linux/can.h         |   8 +-
+>   include/uapi/linux/can/lin.h     |  15 +++
+>   include/uapi/linux/can/netlink.h |   1 +
+>   net/can/Kconfig                  |   5 +
+>   net/can/Makefile                 |   3 +
+>   net/can/lin.c                    | 207 +++++++++++++++++++++++++++++++
+>   10 files changed, 460 insertions(+), 1 deletion(-)
+>   create mode 100644 drivers/net/can/lin.c
+>   create mode 100644 include/net/lin.h
+>   create mode 100644 include/uapi/linux/can/lin.h
+>   create mode 100644 net/can/lin.c
+> 
