@@ -2,82 +2,92 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E44A63B4F9
-	for <lists+linux-can@lfdr.de>; Mon, 28 Nov 2022 23:50:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13D8E63B5BD
+	for <lists+linux-can@lfdr.de>; Tue, 29 Nov 2022 00:18:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234567AbiK1Wu0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 28 Nov 2022 17:50:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45706 "EHLO
+        id S234277AbiK1XSH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 28 Nov 2022 18:18:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234535AbiK1WuZ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 28 Nov 2022 17:50:25 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A105A2A713;
-        Mon, 28 Nov 2022 14:50:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=T9rYwEbRiQBED+qpRhzaD06PSzyyE+bp9qase0iwt68=; b=0talWK4KaQCdH5rTWh68JNXh5E
-        FvGJmHuEORZ7f0M1LHuoHTeISlWVoRfrrwhKmJ1WJDZR8ifUE4CoqwY7ueglSZmvD7NgZ2MRtdgCn
-        vekVek73CuvjTGvK2JQKLnE7SY6KWvSPqmIi7Ipzrl6DE3ZDvT5CsOv6cFWRxpRNYD4c=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1ozmuq-003nlP-MO; Mon, 28 Nov 2022 23:47:56 +0100
-Date:   Mon, 28 Nov 2022 23:47:56 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Christoph Fritz <christoph.fritz@hexdev.de>
-Cc:     Ryan Edwards <ryan.edwards@gmail.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Pavel Pisa <pisa@cmp.felk.cvut.cz>,
-        Andreas Lauser <andreas.lauser@mbition.io>,
-        Richard Weinberger <richard@nod.at>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC][PATCH 0/2] LIN support for Linux
-Message-ID: <Y4U6nC4/ZUqkSbVq@lunn.ch>
-References: <20221127190244.888414-1-christoph.fritz@hexdev.de>
- <202211281549.47092.pisa@cmp.felk.cvut.cz>
- <CAEVdEgBWVgVFF2utm4w5W0_trYYJQVeKrcGN+T0yJ1Qa615bcQ@mail.gmail.com>
- <202211281852.30067.pisa@cmp.felk.cvut.cz>
- <CAEVdEgBtikDjQ-cVOq-MkoS_0q_hGJRVSS=9L=htHhh7YvSUgA@mail.gmail.com>
- <Y4UslxhfRPVGXzS/@mars>
+        with ESMTP id S229483AbiK1XSH (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 28 Nov 2022 18:18:07 -0500
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8EC25296;
+        Mon, 28 Nov 2022 15:18:06 -0800 (PST)
+Received: by mail-pg1-f182.google.com with SMTP id v3so11362514pgh.4;
+        Mon, 28 Nov 2022 15:18:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BmoOTGFi6JltCrWxfK3yHl/CkpSEbsjve+TtReyPSMk=;
+        b=4ThU32Uw7dv6J4aiw90nwLGKd9OZ4BxiKD3/RYpEIWq4yAmdHCl9AxsRbDz6lgi0xy
+         VpvZWAEevKeq2x/6+WqmGVCrZkiZ2Ii8cQQG70Id+zjVWwPlTWyjQC6KjAljx7BXuxH2
+         r8Qf3J6iP6iDKXu0/TkaKHPpLMrlTPs0EHxnyLlcEuDnP+06mPY8jJZYGh4c6Bd99e9E
+         NCyap3qYE+8NUcCyq9UC7T03C+4dWgaXI0wKv05EXyLxTYLorNWxRcsPLH2dstJLv8Bl
+         INZkfAKHBvnB5WVuibyFwSXt3tQwOLeMG4hg4Pv/VZ+GQWZ9ZejSoIqKMFX0WPY5yBI/
+         Ov3g==
+X-Gm-Message-State: ANoB5pkf486jbww4EWvFQM+yxsNjsllCsiBc2eDUapsE7R8m/UcNhz5I
+        QLos+OEJqt/Oje4Py+y8VNSUylc40IrpxGOz18s=
+X-Google-Smtp-Source: AA0mqf5R7R1rrnT4jxiSzHues/lBn+HzCTojJ7W7ZrVNk/A64ek9pAF1lRKO+w4lzdBlnTI+Cg3h8mBhl8ug38ukLJE=
+X-Received: by 2002:a05:6a00:194a:b0:56b:a795:e99c with SMTP id
+ s10-20020a056a00194a00b0056ba795e99cmr43585538pfk.14.1669677486025; Mon, 28
+ Nov 2022 15:18:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4UslxhfRPVGXzS/@mars>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
+ <20221126162211.93322-1-mailhol.vincent@wanadoo.fr> <20221126162211.93322-4-mailhol.vincent@wanadoo.fr>
+ <Y4S73jX07uFAwVQv@lunn.ch> <CAMZ6RqKYyLCCxQKSnOxku2u9604Uxmxw3xG9d031-2=9iC_8tw@mail.gmail.com>
+ <20221128142723.2f826d20@kernel.org>
+In-Reply-To: <20221128142723.2f826d20@kernel.org>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Tue, 29 Nov 2022 08:17:55 +0900
+Message-ID: <CAMZ6RqJS5X54WyKyPxt+nqMSbiKVWiwZ85o9q860_z_uGfaawQ@mail.gmail.com>
+Subject: Re: [PATCH v4 3/6] can: etas_es58x: export product information
+ through devlink_ops::info_get()
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>, linux-can@vger.kernel.org,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        Saeed Mahameed <saeed@kernel.org>,
+        Jiri Pirko <jiri@nvidia.com>,
+        Lukas Magel <lukas.magel@posteo.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
->   - LIN devices with off loading capabilities are a bit special.
+On Tue. 29 Nov. 2022 at 07:27, Jakub Kicinski <kuba@kernel.org> wrote:
+> On Mon, 28 Nov 2022 23:43:19 +0900 Vincent MAILHOL wrote:
+> > On Mon. 28 Nov. 2022 at 22:49, Andrew Lunn <andrew@lunn.ch> wrote:
+> > > > devlink does not yet have a name suited for the bootloader and so this
+> > > > last piece of information is exposed to the userland for through a
+> > > > custom name: "bl".
+> > >
+> > > Jiri, what do you think about 'bl'? Is it too short, not well known
+> > > enough? It could easily be 'bootloader'.
+> >
+> > For the record, I name it "bl" by analogy with the firmware which is
+> > named "fw". My personal preference would have been to name the fields
+> > without any abbreviations: "firmware", "bootloader" and
+> > "hardware.revision" (for reference ethtool -i uses
+> > "firmware-version"). But I tried to put my personal taste aside and
+> > try to fit with the devlink trends to abbreviate things. Thus the name
+> > "bl".
+>
+> Agreed, I thought "fw" is sufficiently universally understood to be used
+> but "bl" is most definitely not :S  I'd suggest "fw.bootloader". Also
+> don't hesitate to add that to the "well known" list in devlink.h,
+> I reckon it will be used by others sooner or later.
 
-For networking in general, we try very hard to make offload to
-hardware not special at all. It should just transparently work.
-
-One example of this is Ethernet switches which Linux controls. The
-ports of the switch are just normal Linux interfaces. You can put an
-IP address onto the ports in the normal way, you can add a port to a
-linux bridge in the normal way. If the switch can perform bridging in
-hardware, the linux bridge will offload it to the hardware. But for
-the user, its just a port added to a bridge, nothing special. And
-there are a lot more examples like this.
-
-I don't know CAN at all, but please try to avoid doing anything
-special for hardware offload. We don't want one way for software, and
-then 42 different ways for 42 different offload engines. Just one uAPI
-which works for everything.
-
-    Andrew
+I like the "fw.bootloader" suggestion. A bootloader is technically
+still a firmware. I will send a separate patch to add the entry to
+devlink.h and only then send the v5.
