@@ -2,117 +2,68 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F3863A5E0
-	for <lists+linux-can@lfdr.de>; Mon, 28 Nov 2022 11:16:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F176863A628
+	for <lists+linux-can@lfdr.de>; Mon, 28 Nov 2022 11:34:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbiK1KQb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 28 Nov 2022 05:16:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52670 "EHLO
+        id S230322AbiK1KeA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 28 Nov 2022 05:34:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbiK1KQ2 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 28 Nov 2022 05:16:28 -0500
-Received: from fritzc.com (mail.fritzc.com [IPv6:2a00:17d8:100::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E4A13E35;
-        Mon, 28 Nov 2022 02:16:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fritzc.com;
-        s=dkim; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject
-        :Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=JGFyuaNpearh4I2bkKpI3Yx2+bxxpkCL2JVRRmilW+M=; b=IEmONJxAPPyIdo+IxEmTA2iS8t
-        FNntZqbM6YxPJtgwAFsuhkxNjZsfCEoDiwYyXLkng/f+jLhWFk2wEUhc90F2uXeGLOOnkoFQUSrzi
-        qunS5i5HnqySi9KjBws1E3bIY8ahh/z7UlT51WccrgBb3jYlidt8rxs+SyrFDSjZFsyY=;
-Received: from 127.0.0.1
-        by fritzc.com with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim latest)
-        (envelope-from <christoph.fritz@hexdev.de>)
-        id 1ozbBH-000ZNN-IW; Mon, 28 Nov 2022 11:16:11 +0100
-Date:   Mon, 28 Nov 2022 11:16:05 +0100
-From:   Christoph Fritz <christoph.fritz@hexdev.de>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Pavel Pisa <pisa@cmp.felk.cvut.cz>,
-        Richard Weinberger <richard@nod.at>,
-        Andreas Lauser <andreas.lauser@mbition.io>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC][PATCH 0/2] LIN support for Linux
-Message-ID: <Y4SKZb9woV5XE1bU@mars>
-References: <20221127190244.888414-1-christoph.fritz@hexdev.de>
- <58a773bd-0db4-bade-f8a2-46e850df9b0b@hartkopp.net>
+        with ESMTP id S230378AbiK1Kdi (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 28 Nov 2022 05:33:38 -0500
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135761ADBF
+        for <linux-can@vger.kernel.org>; Mon, 28 Nov 2022 02:33:32 -0800 (PST)
+Received: by mail-ua1-x92e.google.com with SMTP id n9so381945uao.13
+        for <linux-can@vger.kernel.org>; Mon, 28 Nov 2022 02:33:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JFV+j+1TLtUL/wbZKnobmQuBkAthMS/vMODiYSi4VWQ=;
+        b=dN0S/TpVo17Z4AnM/TuuJaCe98CuqanwOg5YHhJKFqDRe/XXHVEJsjoISyq1Cmqx1j
+         0uBLi5k2KYgKLb0wJN/8nJMKKC+QfAoQMBUXlp2twX/+qKIPRcED3KeU8t5ehnzJFS8T
+         65TGWtyTWNeKESVAV5k2Jq8+UbUBXufpB3EU0Q/KtwpV+2ospxwEbNgud4LgaQwoYPey
+         U9Ic8CybTRvL7HXiy/aZ4Uq3ljQIVGFP29Etd4oyUghXDNW7Hu4mQnhcWAgztWv/eah+
+         mY/j/CvhNH+RCzVLZwBf/PLZqJpBKhX9wvmc8it2YhsMYfHMSiuTDN3QWe5hGOQLRL7Q
+         lJNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JFV+j+1TLtUL/wbZKnobmQuBkAthMS/vMODiYSi4VWQ=;
+        b=YPFdr0aKqg1J3mAmsFvHdN9kASBBgQ9K0paFdxS38qojiiUuVI3fjPIQ6HMthu2Gzw
+         OePRLd0hpjDoQou7YtAfhGgZnKEg2g22qaRddZDmSK8QyinG2UUucvnQ0X43TgT1tDJG
+         ZzfHGAajnauiA39oYNBi5ASmcsJrzzPDig7mfupQ6q4rdlkaucHzZJQmqdwr1vVFHY2y
+         NX+XvFc1Tx1TknBAUdCARdFNoDK923K2/YJDMkgSbFWmZliwp4FDpLsU5OPBHEg3Uchb
+         97oJZyB967SjmjIklKWompa3kWMIXmFRmV8idxz8eHwNAJdKXte3QYHPzRjGzBJ5+C+G
+         CDFw==
+X-Gm-Message-State: ANoB5plPX7Jy9OJQMK61ZT3sd0s+HMT2FkhxaYyoL3BuTJ57UjXCGzmX
+        7MaMKyl3rhQX2vcWWol9YAuVqPDi+DSBrgjH4Sw=
+X-Google-Smtp-Source: AA0mqf4b8T+FeAOE8Bo4igruw+OZCvIu8xtSfd4uYD/tTavKK1ginA1t4eiN7UHcz3azfmiwSNHAhXhkqn+zJSTyc5A=
+X-Received: by 2002:ab0:298e:0:b0:419:27e4:c2b9 with SMTP id
+ u14-20020ab0298e000000b0041927e4c2b9mr416176uap.118.1669631611164; Mon, 28
+ Nov 2022 02:33:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <58a773bd-0db4-bade-f8a2-46e850df9b0b@hartkopp.net>
-X-Spam_score: -1.0
-X-Spam_bar: -
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:a59:dc91:0:b0:32b:a013:5722 with HTTP; Mon, 28 Nov 2022
+ 02:33:30 -0800 (PST)
+Reply-To: erickkofa@yahoo.com
+From:   "Erick Koffa." <koffamorris8@gmail.com>
+Date:   Mon, 28 Nov 2022 11:33:30 +0100
+Message-ID: <CABirKWt9t3zBC7GeQJezLVXUvYi+MEYPfxWBi0GfXQ2kR1fX=Q@mail.gmail.com>
+Subject: Re:
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Oliver
-
-> are you already aware of this LIN project that uses the Linux SocketCAN
-> infrastructure and implements the LIN protocol based on a serial tty
-> adaption (which the serial LIN protocol mainly is)?
-> 
-> https://github.com/lin-bus
-
-Sure, that's why I initially added Pavel Pisa to the recipients of this
-RFC patch series. When there is an internal kernel API for LIN, his
-sllin (tty-line-discipline driver for LIN) could be adjusted and finally
-go mainline.
-
-Adding LIN only as a tty-line-discipline does not fit all the currently
-available hardware. Another argument against a tty-line-discipline only
-approach as a LIN-API is, that there is no off the shelf standard
-computer UART with LIN-break-detection (necessary to meet timing
-constraints), so it always needs specially crafted hardware like USB
-adapters or PCIe-cards.
-
-For the handful of specialized embedded UARTs with LIN-break-detection I
-guess it could make more sense to go the RS485-kind-of-path and
-integrate LIN support into the tty-driver while not using a
-tty-line-discipline there at all.
-
-> IIRC the implementation of the master/slave timings was the biggest
-
-Currently sllin only supports master mode, I guess because of the tight
-timing constraints.
-
-> challenge and your approach seems to offload this problem to your
-> USB-attached hardware right?
-
-The hexLIN USB adapter processes slave mode answer table on its own,
-just to meet timing constraints.  For master mode, it is currently not
-offloaded (but could be if really necessary).
-
-The amount of offloading (if any at all) is totally up to the device and
-its device-driver (the entity actually processing data). So sllin does
-not do offloading but can only work in relaxed timing constrained
-environments.
-An UART with built in LIN-break-detection (there are a few) might be
-able to fully meet timing constraints without offloading (as well as
-e.g. a PCIe card).
-
-> Can I assume there will be a similar CAN-controlled programming interface to
-> create real time master/slave protocol frames like in a usual CAN/LIN
-> adapter (e.g. https://www.peak-system.com/PCAN-LIN.213.0.html) ??
-
-I already did some tests letting hexLIN and PCAN talk to each other in a
-real time manner. Please see my preliminary PDF docu at
-https://hexdev.de/hexlin/
-
-Thanks
- -- Christoph
+Greetings from Mr.Erick Koffa, can i talk to you, very important please?
+(erickkofa@yahoo.com)
