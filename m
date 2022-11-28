@@ -2,47 +2,48 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 171A463AB21
-	for <lists+linux-can@lfdr.de>; Mon, 28 Nov 2022 15:37:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEA9263AB75
+	for <lists+linux-can@lfdr.de>; Mon, 28 Nov 2022 15:44:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231268AbiK1OhD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 28 Nov 2022 09:37:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57404 "EHLO
+        id S230127AbiK1OoG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 28 Nov 2022 09:44:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232045AbiK1Og5 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 28 Nov 2022 09:36:57 -0500
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5978A1E3C9;
-        Mon, 28 Nov 2022 06:36:57 -0800 (PST)
-Received: by mail-pl1-f174.google.com with SMTP id y17so2430988plp.3;
-        Mon, 28 Nov 2022 06:36:57 -0800 (PST)
+        with ESMTP id S232742AbiK1Onb (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 28 Nov 2022 09:43:31 -0500
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B1C52316D;
+        Mon, 28 Nov 2022 06:43:30 -0800 (PST)
+Received: by mail-pg1-f169.google.com with SMTP id h33so5134114pgm.9;
+        Mon, 28 Nov 2022 06:43:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2tfGJ688yw66/5+c/tC+iEpvYaVIiyqra5EJQGq6yW0=;
-        b=THpMDmRnWZdTY5f6irzQmpEPD4/tR78MeeDpj6DaraTF9WmnyroYnsN4AcWMnxfp/5
-         USigBlCRaoG9FmiL6IOXP8u88gUMl+lg8EmE5MAD4WN+VED72B7XOo1nDo2hPtsKZr0V
-         4Qdj9kSXKbXHeOrQKEINVSbX6mcnUIqrW1QLA2RWqh4d0gMDDOVx0AS3UZNG7r9GEVXB
-         RQ3qkFGq3vi9G1PZ2d5U3pBfqVvfjbTWyArW4RfzFPJtg1x8T6jMAqj9lZspyu4hWhou
-         kl656nLBoCeB+vyNOetbyI2Lm51sSPj65Xn0F6GkDEcBAzACH8LF+WUllN2vKK0TG5ou
-         h4Pw==
-X-Gm-Message-State: ANoB5pnUEaO30OYoLT7+vkHFJsMOdSWIx1QTLJ7iNmAz0KFDyNYvpjqD
-        Rp3cHX5crWUkBBT9lrltMlvfC96B12xuKETaR7TZ4ah01oLO7Q==
-X-Google-Smtp-Source: AA0mqf71NiCmueKGbVL7eIHIYR822P/A0exOdsRXjEcjJAEpb2yA2syOqwKfhDRGpYN4qf3CBZi4D5hSrudyEHiFHAg=
-X-Received: by 2002:a17:90a:77cc:b0:219:1747:f19c with SMTP id
- e12-20020a17090a77cc00b002191747f19cmr13715759pjs.222.1669646216859; Mon, 28
- Nov 2022 06:36:56 -0800 (PST)
+        bh=VTmGeSSogjZ2KUpKVsQh7cCY7PmDcXBzkpDBcjxzQvc=;
+        b=fMLkULRoc41E7XJ94u1P3G95qwojJ/rdtE1us8ynT1hglmv+nhsJnqVpFxSdfCt2/Q
+         nHUKZS0y5uk05L3DCYEvEuy1M6UrwSF5MW+TzyoqQ8ur4DjM0lEVjvWIf+CYTkuv3Rhr
+         r9CruhZrKl+SchqZIp9Eq4etKAn77O53LDXJwwO0+WkO7j1ZgG7DAmFjCQiTf00TbcKn
+         naTHUm6tF9CWW9+LYH84hgPG5eKsMcKfgDj/26LFQP860f/E6q5fPNdmRoheE/TpCun6
+         mAWG2mhhJVvsrVAGhV87Br1epY4h/bKNZjbn2g3tPuU96iIAxN1NrVSfMeK6iP0Mes6G
+         lQ/Q==
+X-Gm-Message-State: ANoB5pm4GZCK2GsY9RuFYTAGHg6J7xMc9vQv2Q/O31AFd0a8gcfzjHXP
+        8csL7KfsMXCHJf+NHSgkMBFVdUnt5066kXlvfMNWeOtd5vQ=
+X-Google-Smtp-Source: AA0mqf5mliUR5UT14w6tcyRTWocKFd6BY4WzfZwqP88NWJJArwrYWJW2ikfdCn+mrQqhkAqYbYU16HRuLw9ucZmUdAI=
+X-Received: by 2002:a63:1803:0:b0:477:6e5d:4e25 with SMTP id
+ y3-20020a631803000000b004776e5d4e25mr33564167pgl.70.1669646610095; Mon, 28
+ Nov 2022 06:43:30 -0800 (PST)
 MIME-Version: 1.0
 References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
- <20221126162211.93322-1-mailhol.vincent@wanadoo.fr> <20221126162211.93322-5-mailhol.vincent@wanadoo.fr>
- <Y4S7LB0ThF4jZ0Bj@lunn.ch>
-In-Reply-To: <Y4S7LB0ThF4jZ0Bj@lunn.ch>
+ <20221126162211.93322-1-mailhol.vincent@wanadoo.fr> <20221126162211.93322-4-mailhol.vincent@wanadoo.fr>
+ <Y4S73jX07uFAwVQv@lunn.ch>
+In-Reply-To: <Y4S73jX07uFAwVQv@lunn.ch>
 From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Mon, 28 Nov 2022 23:36:45 +0900
-Message-ID: <CAMZ6RqJjq795FyvSSuro1y+x2z+K6o6aasPTgajxKC1b4ECOLg@mail.gmail.com>
-Subject: Re: [PATCH v4 4/6] can: etas_es58x: remove es58x_get_product_info()
+Date:   Mon, 28 Nov 2022 23:43:19 +0900
+Message-ID: <CAMZ6RqKYyLCCxQKSnOxku2u9604Uxmxw3xG9d031-2=9iC_8tw@mail.gmail.com>
+Subject: Re: [PATCH v4 3/6] can: etas_es58x: export product information
+ through devlink_ops::info_get()
 To:     Andrew Lunn <andrew@lunn.ch>
 Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
         linux-kernel@vger.kernel.org,
@@ -62,23 +63,22 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon. 28 Nov. 2022 at 22:47, Andrew Lunn <andrew@lunn.ch> wrote:
-> On Sun, Nov 27, 2022 at 01:22:09AM +0900, Vincent Mailhol wrote:
-> > Now that the product information is available under devlink, no more
-> > need to print them in the kernel log. Remove es58x_get_product_info().
-> >
-> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+On Mon. 28 Nov. 2022 at 22:49, Andrew Lunn <andrew@lunn.ch> wrote:
+> > devlink does not yet have a name suited for the bootloader and so this
+> > last piece of information is exposed to the userland for through a
+> > custom name: "bl".
 >
-> There is a slim chance this will break something paring the kernel
-> log, but you are not really supposed to do that.
+> Jiri, what do you think about 'bl'? Is it too short, not well known
+> enough? It could easily be 'bootloader'.
 
-Greg made it clear that this should disappear:
-  https://lore.kernel.org/linux-can/Y2YdH4dd8u%2FeUEXg@kroah.com/
-and I agree.
+For the record, I name it "bl" by analogy with the firmware which is
+named "fw". My personal preference would have been to name the fields
+without any abbreviations: "firmware", "bootloader" and
+"hardware.revision" (for reference ethtool -i uses
+"firmware-version"). But I tried to put my personal taste aside and
+try to fit with the devlink trends to abbreviate things. Thus the name
+"bl".
 
-I do not recognize the kernel log as being a stable interface to the
-userland that we should not break.
 
-> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-
-Thank you!
+Yours sincerely,
+Vincent Mailhol
