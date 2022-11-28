@@ -2,52 +2,49 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFCE263AAE9
-	for <lists+linux-can@lfdr.de>; Mon, 28 Nov 2022 15:29:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 171A463AB21
+	for <lists+linux-can@lfdr.de>; Mon, 28 Nov 2022 15:37:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232529AbiK1O3g (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 28 Nov 2022 09:29:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51482 "EHLO
+        id S231268AbiK1OhD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 28 Nov 2022 09:37:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232502AbiK1O30 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 28 Nov 2022 09:29:26 -0500
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C393A1F63A;
-        Mon, 28 Nov 2022 06:29:24 -0800 (PST)
-Received: by mail-pj1-f42.google.com with SMTP id t17so9635280pjo.3;
-        Mon, 28 Nov 2022 06:29:24 -0800 (PST)
+        with ESMTP id S232045AbiK1Og5 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 28 Nov 2022 09:36:57 -0500
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5978A1E3C9;
+        Mon, 28 Nov 2022 06:36:57 -0800 (PST)
+Received: by mail-pl1-f174.google.com with SMTP id y17so2430988plp.3;
+        Mon, 28 Nov 2022 06:36:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=shIIJU9mUgqVvo7u+uZBJemwke0hUUcMwXAy+fLCBZg=;
-        b=clea3xd9sSvB/Y917+W1DUpsu9JjgVpy74IadlgPmJ0L7feaeCpnaAumZyWPQUCDRi
-         vZ+o962LTHEkI1v65HsiVehDuYRpJDwsMOMASMxKAnRtHpWTnOESc76JbMYSlnMuk6O1
-         zr3evS7eVU3s8pBkWorauXy2/qIiIupIaVbAXkKpS7kCH2E/s0c1nkZr/TkWMrnJpoQK
-         nKNhAkkvT94Jqgalagt63BMEeBjed4M0IammBsCOREMAEMkSe5uPv5MPUo1FJhGnperN
-         GKY6KBw/+/uDjAQYQ3cSl1CAPa+6o/L/gzHEstZOW4qjY5pPE6LZLnL/99XU1aSeK/NA
-         ZlGg==
-X-Gm-Message-State: ANoB5plN00SkYar7LGIWYgyybhhzTzAAxq2Nxc+yczHwRKPKsvvAV5H/
-        49JLZH1BHuC50Tl6xXrfzfrmIyThMfURVsndoYY=
-X-Google-Smtp-Source: AA0mqf62r3HiorKL8UciX0wkuqNuN1kQtduso5//lD7W9O9LDyvNYuzbBuZDf4H4qWMJ/+nYMt1mvnM06PCZFcZjotU=
-X-Received: by 2002:a17:902:b608:b0:189:7a8b:537d with SMTP id
- b8-20020a170902b60800b001897a8b537dmr10252626pls.95.1669645763894; Mon, 28
- Nov 2022 06:29:23 -0800 (PST)
+        bh=2tfGJ688yw66/5+c/tC+iEpvYaVIiyqra5EJQGq6yW0=;
+        b=THpMDmRnWZdTY5f6irzQmpEPD4/tR78MeeDpj6DaraTF9WmnyroYnsN4AcWMnxfp/5
+         USigBlCRaoG9FmiL6IOXP8u88gUMl+lg8EmE5MAD4WN+VED72B7XOo1nDo2hPtsKZr0V
+         4Qdj9kSXKbXHeOrQKEINVSbX6mcnUIqrW1QLA2RWqh4d0gMDDOVx0AS3UZNG7r9GEVXB
+         RQ3qkFGq3vi9G1PZ2d5U3pBfqVvfjbTWyArW4RfzFPJtg1x8T6jMAqj9lZspyu4hWhou
+         kl656nLBoCeB+vyNOetbyI2Lm51sSPj65Xn0F6GkDEcBAzACH8LF+WUllN2vKK0TG5ou
+         h4Pw==
+X-Gm-Message-State: ANoB5pnUEaO30OYoLT7+vkHFJsMOdSWIx1QTLJ7iNmAz0KFDyNYvpjqD
+        Rp3cHX5crWUkBBT9lrltMlvfC96B12xuKETaR7TZ4ah01oLO7Q==
+X-Google-Smtp-Source: AA0mqf71NiCmueKGbVL7eIHIYR822P/A0exOdsRXjEcjJAEpb2yA2syOqwKfhDRGpYN4qf3CBZi4D5hSrudyEHiFHAg=
+X-Received: by 2002:a17:90a:77cc:b0:219:1747:f19c with SMTP id
+ e12-20020a17090a77cc00b002191747f19cmr13715759pjs.222.1669646216859; Mon, 28
+ Nov 2022 06:36:56 -0800 (PST)
 MIME-Version: 1.0
 References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
- <20221126162211.93322-1-mailhol.vincent@wanadoo.fr> <20221126162211.93322-3-mailhol.vincent@wanadoo.fr>
- <Y4JEGYMtIWX9clxo@lunn.ch> <CAMZ6RqK6AQVsRufw5Jr5aKpPQcy+05jq3TjrKqbaqk7NVgK+_Q@mail.gmail.com>
- <Y4OD70GD4KnoRk0k@rowland.harvard.edu> <CAMZ6Rq+Gi+rcLqSj2-kug7c1G_nNuj6peh5nH1DNoo8B3aSxzw@mail.gmail.com>
- <Y4S6wnM33Vs56vr5@lunn.ch>
-In-Reply-To: <Y4S6wnM33Vs56vr5@lunn.ch>
+ <20221126162211.93322-1-mailhol.vincent@wanadoo.fr> <20221126162211.93322-5-mailhol.vincent@wanadoo.fr>
+ <Y4S7LB0ThF4jZ0Bj@lunn.ch>
+In-Reply-To: <Y4S7LB0ThF4jZ0Bj@lunn.ch>
 From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Mon, 28 Nov 2022 23:29:12 +0900
-Message-ID: <CAMZ6RqLnfg=UG_Pisa9M0zYkWEvScZmGbytWmAQPVXLeacRffw@mail.gmail.com>
-Subject: Re: [PATCH v4 2/6] can: etas_es58x: add devlink support
+Date:   Mon, 28 Nov 2022 23:36:45 +0900
+Message-ID: <CAMZ6RqJjq795FyvSSuro1y+x2z+K6o6aasPTgajxKC1b4ECOLg@mail.gmail.com>
+Subject: Re: [PATCH v4 4/6] can: etas_es58x: remove es58x_get_product_info()
 To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-can@vger.kernel.org,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
+Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
         linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         netdev@vger.kernel.org, linux-usb@vger.kernel.org,
@@ -65,33 +62,23 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon. 28 Nov. 2022 at 22:45, Andrew Lunn <andrew@lunn.ch> wrote:
-> > > But if a driver does make the call, it should be careful to ensure that
-> > > the call happens _after_ the driver is finished using the interface-data
-> > > pointer.  For example, after all outstanding URBs have completed, if the
-> > > completion handlers will need to call usb_get_intfdata().
+On Mon. 28 Nov. 2022 at 22:47, Andrew Lunn <andrew@lunn.ch> wrote:
+> On Sun, Nov 27, 2022 at 01:22:09AM +0900, Vincent Mailhol wrote:
+> > Now that the product information is available under devlink, no more
+> > need to print them in the kernel log. Remove es58x_get_product_info().
 > >
-> > ACK. I understand that it should be called *after* the completion of
-> > any ongoing task.
+> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 >
-> What sometimes gets people is /sys, /proc. etc. A process can have
-> such a file open when the device is unplugged. If the read needs to
-> make use of your private data structure, you need to guarantee it
-> still exists.  Ideally the core needs to wait and not call the
-> disconnect until all such files are closed. Probably the USB core
-> does, it is such an obvious issue, but i have no knowledge of USB.
+> There is a slim chance this will break something paring the kernel
+> log, but you are not really supposed to do that.
 
-For USB drivers, the parallel of what you are describing are the URBs
-(USB request Buffers). The URB are sent asynchronously to the device.
-Each URB has a completion handler:
-  https://elixir.bootlin.com/linux/v6.0/source/include/linux/usb.h#L1443
-It is important to wait for all outstanding URB to complete before
-releasing your resources. But once you are able to guarantee that any
-ongoing actions were completed, the order in which you kfree() or
-usb_set_intfdata() to NULL matters less.
+Greg made it clear that this should disappear:
+  https://lore.kernel.org/linux-can/Y2YdH4dd8u%2FeUEXg@kroah.com/
+and I agree.
 
-Of course, the USB drivers could also have some /sys/ or /proc/ files
-opened, but this is not the case of the etas_es58x. By the way, the
-handling of outstanding URBs is done by es58x_free_urbs():
-  https://elixir.bootlin.com/linux/v6.0/source/drivers/net/can/usb/etas_es58x/es58x_core.c#L1745
-which is called just before the devlink_free() and the usb_set_intfdata().
+I do not recognize the kernel log as being a stable interface to the
+userland that we should not break.
+
+> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+
+Thank you!
