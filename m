@@ -2,68 +2,76 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F176863A628
-	for <lists+linux-can@lfdr.de>; Mon, 28 Nov 2022 11:34:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D46EB63A9CD
+	for <lists+linux-can@lfdr.de>; Mon, 28 Nov 2022 14:43:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbiK1KeA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 28 Nov 2022 05:34:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34626 "EHLO
+        id S231841AbiK1NnK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 28 Nov 2022 08:43:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230378AbiK1Kdi (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 28 Nov 2022 05:33:38 -0500
-Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135761ADBF
-        for <linux-can@vger.kernel.org>; Mon, 28 Nov 2022 02:33:32 -0800 (PST)
-Received: by mail-ua1-x92e.google.com with SMTP id n9so381945uao.13
-        for <linux-can@vger.kernel.org>; Mon, 28 Nov 2022 02:33:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JFV+j+1TLtUL/wbZKnobmQuBkAthMS/vMODiYSi4VWQ=;
-        b=dN0S/TpVo17Z4AnM/TuuJaCe98CuqanwOg5YHhJKFqDRe/XXHVEJsjoISyq1Cmqx1j
-         0uBLi5k2KYgKLb0wJN/8nJMKKC+QfAoQMBUXlp2twX/+qKIPRcED3KeU8t5ehnzJFS8T
-         65TGWtyTWNeKESVAV5k2Jq8+UbUBXufpB3EU0Q/KtwpV+2ospxwEbNgud4LgaQwoYPey
-         U9Ic8CybTRvL7HXiy/aZ4Uq3ljQIVGFP29Etd4oyUghXDNW7Hu4mQnhcWAgztWv/eah+
-         mY/j/CvhNH+RCzVLZwBf/PLZqJpBKhX9wvmc8it2YhsMYfHMSiuTDN3QWe5hGOQLRL7Q
-         lJNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JFV+j+1TLtUL/wbZKnobmQuBkAthMS/vMODiYSi4VWQ=;
-        b=YPFdr0aKqg1J3mAmsFvHdN9kASBBgQ9K0paFdxS38qojiiUuVI3fjPIQ6HMthu2Gzw
-         OePRLd0hpjDoQou7YtAfhGgZnKEg2g22qaRddZDmSK8QyinG2UUucvnQ0X43TgT1tDJG
-         ZzfHGAajnauiA39oYNBi5ASmcsJrzzPDig7mfupQ6q4rdlkaucHzZJQmqdwr1vVFHY2y
-         NX+XvFc1Tx1TknBAUdCARdFNoDK923K2/YJDMkgSbFWmZliwp4FDpLsU5OPBHEg3Uchb
-         97oJZyB967SjmjIklKWompa3kWMIXmFRmV8idxz8eHwNAJdKXte3QYHPzRjGzBJ5+C+G
-         CDFw==
-X-Gm-Message-State: ANoB5plPX7Jy9OJQMK61ZT3sd0s+HMT2FkhxaYyoL3BuTJ57UjXCGzmX
-        7MaMKyl3rhQX2vcWWol9YAuVqPDi+DSBrgjH4Sw=
-X-Google-Smtp-Source: AA0mqf4b8T+FeAOE8Bo4igruw+OZCvIu8xtSfd4uYD/tTavKK1ginA1t4eiN7UHcz3azfmiwSNHAhXhkqn+zJSTyc5A=
-X-Received: by 2002:ab0:298e:0:b0:419:27e4:c2b9 with SMTP id
- u14-20020ab0298e000000b0041927e4c2b9mr416176uap.118.1669631611164; Mon, 28
- Nov 2022 02:33:31 -0800 (PST)
+        with ESMTP id S232013AbiK1Nm6 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 28 Nov 2022 08:42:58 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6B61131;
+        Mon, 28 Nov 2022 05:42:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=sMuw+r8XztM/y1RLcfVFDrwbd0bUxp2HwDoeUHaaJ4I=; b=lHZ+um/dRDTPKX/QYmMSYhCILO
+        +GZexIJXLRc2Pr3g4cE8ujWFp4NxKn/r9Y7SgCSO83epSVKZ+ZZWHROK+QcolC1ktkUAtH/d/oqOQ
+        SUsNwiP3KhKEUd/4s0YH6i1eA3hYmXW3anOJ6anakRqdk6WhZuIymun513EEeBd30e6g=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1ozeOw-003emo-2x; Mon, 28 Nov 2022 14:42:26 +0100
+Date:   Mon, 28 Nov 2022 14:42:26 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-can@vger.kernel.org,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        Saeed Mahameed <saeed@kernel.org>,
+        Jiri Pirko <jiri@nvidia.com>,
+        Lukas Magel <lukas.magel@posteo.net>
+Subject: Re: [PATCH v4 2/6] can: etas_es58x: add devlink support
+Message-ID: <Y4S6wnM33Vs56vr5@lunn.ch>
+References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
+ <20221126162211.93322-1-mailhol.vincent@wanadoo.fr>
+ <20221126162211.93322-3-mailhol.vincent@wanadoo.fr>
+ <Y4JEGYMtIWX9clxo@lunn.ch>
+ <CAMZ6RqK6AQVsRufw5Jr5aKpPQcy+05jq3TjrKqbaqk7NVgK+_Q@mail.gmail.com>
+ <Y4OD70GD4KnoRk0k@rowland.harvard.edu>
+ <CAMZ6Rq+Gi+rcLqSj2-kug7c1G_nNuj6peh5nH1DNoo8B3aSxzw@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a59:dc91:0:b0:32b:a013:5722 with HTTP; Mon, 28 Nov 2022
- 02:33:30 -0800 (PST)
-Reply-To: erickkofa@yahoo.com
-From:   "Erick Koffa." <koffamorris8@gmail.com>
-Date:   Mon, 28 Nov 2022 11:33:30 +0100
-Message-ID: <CABirKWt9t3zBC7GeQJezLVXUvYi+MEYPfxWBi0GfXQ2kR1fX=Q@mail.gmail.com>
-Subject: Re:
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMZ6Rq+Gi+rcLqSj2-kug7c1G_nNuj6peh5nH1DNoo8B3aSxzw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Greetings from Mr.Erick Koffa, can i talk to you, very important please?
-(erickkofa@yahoo.com)
+> > But if a driver does make the call, it should be careful to ensure that
+> > the call happens _after_ the driver is finished using the interface-data
+> > pointer.  For example, after all outstanding URBs have completed, if the
+> > completion handlers will need to call usb_get_intfdata().
+> 
+> ACK. I understand that it should be called *after* the completion of
+> any ongoing task.
+
+What sometimes gets people is /sys, /proc. etc. A process can have
+such a file open when the device is unplugged. If the read needs to
+make use of your private data structure, you need to guarantee it
+still exists.  Ideally the core needs to wait and not call the
+disconnect until all such files are closed. Probably the USB core
+does, it is such an obvious issue, but i have no knowledge of USB.
+
+	Andrew
+
