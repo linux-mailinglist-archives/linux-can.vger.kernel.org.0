@@ -2,125 +2,95 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD98163BCEA
-	for <lists+linux-can@lfdr.de>; Tue, 29 Nov 2022 10:29:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D99563C5E0
+	for <lists+linux-can@lfdr.de>; Tue, 29 Nov 2022 17:59:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbiK2J3A (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 29 Nov 2022 04:29:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60838 "EHLO
+        id S236540AbiK2Q7l (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 29 Nov 2022 11:59:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbiK2J25 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 29 Nov 2022 04:28:57 -0500
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485B043AE0;
-        Tue, 29 Nov 2022 01:28:56 -0800 (PST)
-Received: by mail-pl1-f171.google.com with SMTP id g10so12821778plo.11;
-        Tue, 29 Nov 2022 01:28:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mWAyxGnGfDBWOO/6cOO40LHqAdd4xJd4z4/3HDguLVQ=;
-        b=YHQJvVxPLxmXddoiEuOPQWqn2Ormx76iPImrHMmEg9fQW+ogdRR4srDwZaDG7MXZzf
-         dX60ZM/Eu35ZW6QG6vehtwtYHqRae9X+XjPoqsq3UKVC3akeANw+ij2PZN/JLNUN5uXU
-         pQevwQDVnbB2dawcZvaGv5omTYlf0wbuz0ujCWLASPv+Okgeu0m+F91YlU9o6LYsbHmx
-         yYXZ/cPKC7wVoXWIeWgvqqcJuBtHFme4banpd1ntsYsG5x0ktrIJ9BwGz7oe/IkuX2kg
-         vrOlFE5efJabLcoM99A5gnCMzOuQtvyGGGcg2NiB38BITMUXgyjRBQZnEW99tnWZr9OT
-         J5dA==
-X-Gm-Message-State: ANoB5pmxM+F3fas6wyB49ZdPNd4WXNZeuY1Cf5wyHaG8WpHudXeG3tVD
-        zyspc8Y53jCXAtLYhfmbIJ2xPPSq+CpyH8M/fRw=
-X-Google-Smtp-Source: AA0mqf620ASVhJcH9VzlQ/gUV/fbrctcX+o6Wio404xHTF++V3JgVh8khWNcKxYRhxiCYTFGN2t+UN8XXV9d2DTbDjQ=
-X-Received: by 2002:a17:90a:77cc:b0:219:1747:f19c with SMTP id
- e12-20020a17090a77cc00b002191747f19cmr17832727pjs.222.1669714135683; Tue, 29
- Nov 2022 01:28:55 -0800 (PST)
+        with ESMTP id S236419AbiK2Q7T (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 29 Nov 2022 11:59:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B022D6CA09;
+        Tue, 29 Nov 2022 08:54:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39594B816AA;
+        Tue, 29 Nov 2022 16:54:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 913EDC433D6;
+        Tue, 29 Nov 2022 16:54:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1669740873;
+        bh=ygBCEMDajaDr54eqmGvoWqIfS5rHpbo1MjEW8YvhyNw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mxzxTOItaUE4RU1mpWAPrF8eLmvZkg4wsnUbEFDaP6Z9jNpM5rmlJB5yy0+45CkZ9
+         XgAG7Khle7kIbIMDfqIngffvZJjcj5oZglahRlQFojKtbnBMz+xH0aefbeIuel35XR
+         lQIzd+Xsdqoe0gX95RpxGWnqHKkiya7SP75kNE/g=
+Date:   Tue, 29 Nov 2022 17:54:30 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org, Peter Fink <pfink@christ-es.de>,
+        stable@vger.kernel.org, Ryan Edwards <ryan.edwards@gmail.com>
+Subject: Re: [PATCH] can: gs_usb: fix size parameter to usb_free_coherent()
+ calls
+Message-ID: <Y4Y5Rp1E6ApR+s2n@kroah.com>
+References: <20221125201727.1558965-1-mkl@pengutronix.de>
+ <20221125203217.cuv63t4ijxwmqun7@pengutronix.de>
+ <Y4G6a4hlJFgH+iAy@kroah.com>
+ <20221126192656.yb2v2sw6af57sa4f@pengutronix.de>
 MIME-Version: 1.0
-References: <20221129031406.3849872-1-mailhol.vincent@wanadoo.fr> <Y4XCnAA2hGvqgXh0@nanopsycho>
-In-Reply-To: <Y4XCnAA2hGvqgXh0@nanopsycho>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Tue, 29 Nov 2022 18:28:44 +0900
-Message-ID: <CAMZ6RqJ54rfLfODB1JNaFr_pxWxzHJBoC2UmCKAZ7mSkEbcdzQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v2] net: devlink: add DEVLINK_INFO_VERSION_GENERIC_FW_BOOTLOADER
-To:     Jiri Pirko <jiri@resnulli.us>
-Cc:     Jiri Pirko <jiri@nvidia.com>, Jakub Kicinski <kuba@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can <linux-can@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221126192656.yb2v2sw6af57sa4f@pengutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue. 29 Nov. 2022 at 17:33, Jiri Pirko <jiri@resnulli.us> wrote:
-> Tue, Nov 29, 2022 at 04:14:06AM CET, mailhol.vincent@wanadoo.fr wrote:
-> >As discussed in [1], abbreviating the bootloader to "bl" might not be
-> >well understood. Instead, a bootloader technically being a firmware,
-> >name it "fw.bootloader".
-> >
-> >Add a new macro to devlink.h to formalize this new info attribute name
-> >and update the documentation.
-> >
-> >[1] https://lore.kernel.org/netdev/20221128142723.2f826d20@kernel.org/
-> >
-> >Suggested-by: Jakub Kicinski <kuba@kernel.org>
-> >Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> >---
-> >* Changelog *
-> >
-> >v1 -> v2:
-> >
-> >  * update the documentation as well.
-> >  Link: https://lore.kernel.org/netdev/20221129020151.3842613-1-mailhol.vincent@wanadoo.fr/
-> >---
-> > Documentation/networking/devlink/devlink-info.rst | 5 +++++
-> > include/net/devlink.h                             | 2 ++
-> > 2 files changed, 7 insertions(+)
-> >
-> >diff --git a/Documentation/networking/devlink/devlink-info.rst b/Documentation/networking/devlink/devlink-info.rst
-> >index 7572bf6de5c1..1242b0e6826b 100644
-> >--- a/Documentation/networking/devlink/devlink-info.rst
-> >+++ b/Documentation/networking/devlink/devlink-info.rst
-> >@@ -198,6 +198,11 @@ fw.bundle_id
-> >
-> > Unique identifier of the entire firmware bundle.
-> >
-> >+fw.bootloader
-> >+-------------
-> >+
-> >+Version of the bootloader.
-> >+
-> > Future work
-> > ===========
-> >
-> >diff --git a/include/net/devlink.h b/include/net/devlink.h
-> >index 074a79b8933f..2f552b90b5c6 100644
-> >--- a/include/net/devlink.h
-> >+++ b/include/net/devlink.h
-> >@@ -621,6 +621,8 @@ enum devlink_param_generic_id {
-> > #define DEVLINK_INFO_VERSION_GENERIC_FW_ROCE  "fw.roce"
-> > /* Firmware bundle identifier */
-> > #define DEVLINK_INFO_VERSION_GENERIC_FW_BUNDLE_ID     "fw.bundle_id"
-> >+/* Bootloader */
-> >+#define DEVLINK_INFO_VERSION_GENERIC_FW_BOOTLOADER    "fw.bootloader"
->
-> You add it and don't use it. You should add only what you use.
+On Sat, Nov 26, 2022 at 08:26:56PM +0100, Marc Kleine-Budde wrote:
+> On 26.11.2022 08:04:11, Greg Kroah-Hartman wrote:
+> > On Fri, Nov 25, 2022 at 09:32:17PM +0100, Marc Kleine-Budde wrote:
+> > > Hello Greg,
+> > > 
+> > > with v5.18-rc1 in commit
+> > > 
+> > > | c359931d2545 ("can: gs_usb: use union and FLEX_ARRAY for data in struct gs_host_frame")
+> > > 
+> > > a bug in the gs_usb driver in the usage of usb_free_coherent() was
+> > > introduced. With v6.1-rc1
+> > > 
+> > > | 62f102c0d156 ("can: gs_usb: remove dma allocations")
+> > > 
+> > > the DMA allocation was removed altogether from the driver, fixing the
+> > > bug unintentionally.
+> > > 
+> > > We can either cherry-pick 62f102c0d156 ("can: gs_usb: remove dma
+> > > allocations") on v6.0, v5.19, and v5.18 or apply this patch, which fixes
+> > > the usage of usb_free_coherent() only.
+> > 
+> > We should always take what is in Linus's tree, that's the best
+> > solution.
+> 
+> Ok.
+> 
+> > Does the change backport cleanly?
+> 
+> ACK.
+> 
+> > And 5.19 and 5.18 are long end-of-life, no need to worry about them.
+> > Only 6.0 matters right now.
+> 
+> Please queue 62f102c0d156 ("can: gs_usb: remove dma allocations") for
+> v6.0.x and add the fixes tag:
+> 
+> Fixes: c359931d2545 ("can: gs_usb: use union and FLEX_ARRAY for data in struct gs_host_frame")
 
-I will use it in this series for the linux-can tree:
-https://lore.kernel.org/netdev/20221126162211.93322-4-mailhol.vincent@wanadoo.fr/
+Now queued up, thanks.
 
-If it is a problem to send this as a standalone patch, I will then
-just add it to my series and have the patch go through the linux-can
-tree.
-
-
-Yours sincerely,
-Vincent Mailhol
+greg k-h
