@@ -2,95 +2,88 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D99563C5E0
-	for <lists+linux-can@lfdr.de>; Tue, 29 Nov 2022 17:59:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45F7263C634
+	for <lists+linux-can@lfdr.de>; Tue, 29 Nov 2022 18:12:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236540AbiK2Q7l (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 29 Nov 2022 11:59:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59536 "EHLO
+        id S236458AbiK2RMw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 29 Nov 2022 12:12:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236419AbiK2Q7T (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 29 Nov 2022 11:59:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B022D6CA09;
-        Tue, 29 Nov 2022 08:54:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 39594B816AA;
-        Tue, 29 Nov 2022 16:54:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 913EDC433D6;
-        Tue, 29 Nov 2022 16:54:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1669740873;
-        bh=ygBCEMDajaDr54eqmGvoWqIfS5rHpbo1MjEW8YvhyNw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mxzxTOItaUE4RU1mpWAPrF8eLmvZkg4wsnUbEFDaP6Z9jNpM5rmlJB5yy0+45CkZ9
-         XgAG7Khle7kIbIMDfqIngffvZJjcj5oZglahRlQFojKtbnBMz+xH0aefbeIuel35XR
-         lQIzd+Xsdqoe0gX95RpxGWnqHKkiya7SP75kNE/g=
-Date:   Tue, 29 Nov 2022 17:54:30 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org, Peter Fink <pfink@christ-es.de>,
-        stable@vger.kernel.org, Ryan Edwards <ryan.edwards@gmail.com>
-Subject: Re: [PATCH] can: gs_usb: fix size parameter to usb_free_coherent()
- calls
-Message-ID: <Y4Y5Rp1E6ApR+s2n@kroah.com>
-References: <20221125201727.1558965-1-mkl@pengutronix.de>
- <20221125203217.cuv63t4ijxwmqun7@pengutronix.de>
- <Y4G6a4hlJFgH+iAy@kroah.com>
- <20221126192656.yb2v2sw6af57sa4f@pengutronix.de>
+        with ESMTP id S236436AbiK2RMl (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 29 Nov 2022 12:12:41 -0500
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1425E63;
+        Tue, 29 Nov 2022 09:12:39 -0800 (PST)
+Received: by mail-pf1-f173.google.com with SMTP id 130so14286907pfu.8;
+        Tue, 29 Nov 2022 09:12:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gbYAVcz0mxyKN98GkPCLeSplQYrU3jgnryNfmo+3ZmU=;
+        b=lmnpM6zjwdGHRXrMK5UGRKe/D4cxVsMT4HHK4LpYMDWF3cycxhSUjxOkbNeEWjG0Hz
+         H8PhAPuh9q7vosa4YMk2aDKLPHZFtsAp1kRSsKus88lUk7/amQ/5hImGm2zY5FJFNddz
+         FOSmmfYy5lqTbOT7lWG2i+lYHXsQ7z9mQkJg/jgpd4E1OMt2eZhlLYeoj5juGXKFZL7B
+         jqDJnMK4tks+1H1DsEGr+Zm4Vr3qqDtfGTsHMh+BQtqLlU493I6uf5DOsQQrEoAmOYdA
+         ijiTR+TPrbF8kL+E2SbbBUrurOC7F1D0J4a251MCdDofxuhHPvBl8vnADvThYUvldEq7
+         YpqQ==
+X-Gm-Message-State: ANoB5pm0eWQ1n0hWE024JZd0Ei2f7KB/sM9L14zNh8N8qy22HazA5jIi
+        DVGdehaAq0dKolTr5e++GRC79F8p4odEX8R4vJU=
+X-Google-Smtp-Source: AA0mqf6sW7S2q6k6Z8gOVKR3pcqvyOJk+4ckrNujXKrxJEyqNqlvRF1cQCMKGIY1aqBauXhDHWejhFnCFo30vjjc/UQ=
+X-Received: by 2002:a62:1a8b:0:b0:572:7c58:540 with SMTP id
+ a133-20020a621a8b000000b005727c580540mr39438867pfa.69.1669741959106; Tue, 29
+ Nov 2022 09:12:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221126192656.yb2v2sw6af57sa4f@pengutronix.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
+ <20221126162211.93322-1-mailhol.vincent@wanadoo.fr> <20221126162211.93322-6-mailhol.vincent@wanadoo.fr>
+ <20221128142857.07cb5d88@kicinski-fedora-PC1C0HJN>
+In-Reply-To: <20221128142857.07cb5d88@kicinski-fedora-PC1C0HJN>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Wed, 30 Nov 2022 02:12:27 +0900
+Message-ID: <CAMZ6RqJU5hm=HniJ59aGvHyaWboa7ZHv+9nSbzGxoY-cCfxMag@mail.gmail.com>
+Subject: Re: [PATCH v4 5/6] can: etas_es58x: report the firmware version
+ through ethtool
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        Saeed Mahameed <saeed@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>, Jiri Pirko <jiri@nvidia.com>,
+        Lukas Magel <lukas.magel@posteo.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Sat, Nov 26, 2022 at 08:26:56PM +0100, Marc Kleine-Budde wrote:
-> On 26.11.2022 08:04:11, Greg Kroah-Hartman wrote:
-> > On Fri, Nov 25, 2022 at 09:32:17PM +0100, Marc Kleine-Budde wrote:
-> > > Hello Greg,
-> > > 
-> > > with v5.18-rc1 in commit
-> > > 
-> > > | c359931d2545 ("can: gs_usb: use union and FLEX_ARRAY for data in struct gs_host_frame")
-> > > 
-> > > a bug in the gs_usb driver in the usage of usb_free_coherent() was
-> > > introduced. With v6.1-rc1
-> > > 
-> > > | 62f102c0d156 ("can: gs_usb: remove dma allocations")
-> > > 
-> > > the DMA allocation was removed altogether from the driver, fixing the
-> > > bug unintentionally.
-> > > 
-> > > We can either cherry-pick 62f102c0d156 ("can: gs_usb: remove dma
-> > > allocations") on v6.0, v5.19, and v5.18 or apply this patch, which fixes
-> > > the usage of usb_free_coherent() only.
-> > 
-> > We should always take what is in Linus's tree, that's the best
-> > solution.
-> 
-> Ok.
-> 
-> > Does the change backport cleanly?
-> 
-> ACK.
-> 
-> > And 5.19 and 5.18 are long end-of-life, no need to worry about them.
-> > Only 6.0 matters right now.
-> 
-> Please queue 62f102c0d156 ("can: gs_usb: remove dma allocations") for
-> v6.0.x and add the fixes tag:
-> 
-> Fixes: c359931d2545 ("can: gs_usb: use union and FLEX_ARRAY for data in struct gs_host_frame")
+On Tue. 29 Nov. 2022 at 07:29, Jakub Kicinski <kuba@kernel.org> wrote:
+> On Sun, 27 Nov 2022 01:22:10 +0900 Vincent Mailhol wrote:
+> > Implement ethtool_ops::get_drvinfo() in order to report the firmware
+> > version.
+> >
+> > Firmware version 0.0.0 has a special meaning and just means that we
+> > could not parse the product information string. In such case, do
+> > nothing (i.e. leave the .fw_version string empty).
+>
+> devlink_compat_running_version() does not work?
 
-Now queued up, thanks.
+I was not aware of this one. Thank you for pointing this out.
+If I correctly understand, devlink_compat_running_version() is
+supposed to allow ethtool to retrieve the firmware version from
+devlink, right?
 
-greg k-h
+Currently it does not work. I guess it is because I am not using
+SET_NETDEV_DEVLINK_PORT()? I initially thought that this was optional.
+I will continue to investigate and see if it is possible to completely
+remove the .get_drvinfo() callback.
+
+
+Yours sincerely,
+Vincent Mailhol
