@@ -2,51 +2,47 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9660B63DB95
-	for <lists+linux-can@lfdr.de>; Wed, 30 Nov 2022 18:09:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B75F463DBCB
+	for <lists+linux-can@lfdr.de>; Wed, 30 Nov 2022 18:18:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231126AbiK3RJg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 30 Nov 2022 12:09:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34026 "EHLO
+        id S229749AbiK3RSF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 30 Nov 2022 12:18:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231134AbiK3RJW (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 30 Nov 2022 12:09:22 -0500
+        with ESMTP id S230381AbiK3RRn (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 30 Nov 2022 12:17:43 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 686DF8B1A3
-        for <linux-can@vger.kernel.org>; Wed, 30 Nov 2022 09:04:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30652DEC9
+        for <linux-can@vger.kernel.org>; Wed, 30 Nov 2022 09:17:20 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1p0QV0-0005r7-Bq; Wed, 30 Nov 2022 18:03:54 +0100
+        id 1p0Qhx-0008EY-PB; Wed, 30 Nov 2022 18:17:17 +0100
 Received: from pengutronix.de (unknown [IPv6:2a0a:edc0:0:701:cf48:5678:3bb0:eeda])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 1960812E2AE;
-        Wed, 30 Nov 2022 17:03:52 +0000 (UTC)
-Date:   Wed, 30 Nov 2022 18:03:51 +0100
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 14B1F12E2E6;
+        Wed, 30 Nov 2022 17:17:16 +0000 (UTC)
+Date:   Wed, 30 Nov 2022 18:17:15 +0100
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Jiri Pirko <jiri@resnulli.us>, Jiri Pirko <jiri@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        linux-can <linux-can@vger.kernel.org>
-Subject: Re: [PATCH net-next v2] net: devlink: add
- DEVLINK_INFO_VERSION_GENERIC_FW_BOOTLOADER
-Message-ID: <20221130170351.cjyaqr22vhqzq4hv@pengutronix.de>
-References: <20221129031406.3849872-1-mailhol.vincent@wanadoo.fr>
- <Y4XCnAA2hGvqgXh0@nanopsycho>
- <CAMZ6RqJ54rfLfODB1JNaFr_pxWxzHJBoC2UmCKAZ7mSkEbcdzQ@mail.gmail.com>
+To:     Markus Schneider-Pargmann <msp@baylibre.com>
+Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 04/15] can: m_can: Use transmit event FIFO watermark
+ level interrupt
+Message-ID: <20221130171715.nujptzwnut7silbm@pengutronix.de>
+References: <20221116205308.2996556-1-msp@baylibre.com>
+ <20221116205308.2996556-5-msp@baylibre.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="obziojiov5xhwwjh"
+        protocol="application/pgp-signature"; boundary="r7p5tzu2udczjqwl"
 Content-Disposition: inline
-In-Reply-To: <CAMZ6RqJ54rfLfODB1JNaFr_pxWxzHJBoC2UmCKAZ7mSkEbcdzQ@mail.gmail.com>
+In-Reply-To: <20221116205308.2996556-5-msp@baylibre.com>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -60,77 +56,37 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---obziojiov5xhwwjh
+--r7p5tzu2udczjqwl
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 29.11.2022 18:28:44, Vincent MAILHOL wrote:
-> On Tue. 29 Nov. 2022 at 17:33, Jiri Pirko <jiri@resnulli.us> wrote:
-> > Tue, Nov 29, 2022 at 04:14:06AM CET, mailhol.vincent@wanadoo.fr wrote:
-> > >As discussed in [1], abbreviating the bootloader to "bl" might not be
-> > >well understood. Instead, a bootloader technically being a firmware,
-> > >name it "fw.bootloader".
-> > >
-> > >Add a new macro to devlink.h to formalize this new info attribute name
-> > >and update the documentation.
-> > >
-> > >[1] https://lore.kernel.org/netdev/20221128142723.2f826d20@kernel.org/
-> > >
-> > >Suggested-by: Jakub Kicinski <kuba@kernel.org>
-> > >Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > >---
-> > >* Changelog *
-> > >
-> > >v1 -> v2:
-> > >
-> > >  * update the documentation as well.
-> > >  Link: https://lore.kernel.org/netdev/20221129020151.3842613-1-mailho=
-l.vincent@wanadoo.fr/
-> > >---
-> > > Documentation/networking/devlink/devlink-info.rst | 5 +++++
-> > > include/net/devlink.h                             | 2 ++
-> > > 2 files changed, 7 insertions(+)
-> > >
-> > >diff --git a/Documentation/networking/devlink/devlink-info.rst b/Docum=
-entation/networking/devlink/devlink-info.rst
-> > >index 7572bf6de5c1..1242b0e6826b 100644
-> > >--- a/Documentation/networking/devlink/devlink-info.rst
-> > >+++ b/Documentation/networking/devlink/devlink-info.rst
-> > >@@ -198,6 +198,11 @@ fw.bundle_id
-> > >
-> > > Unique identifier of the entire firmware bundle.
-> > >
-> > >+fw.bootloader
-> > >+-------------
-> > >+
-> > >+Version of the bootloader.
-> > >+
-> > > Future work
-> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > >
-> > >diff --git a/include/net/devlink.h b/include/net/devlink.h
-> > >index 074a79b8933f..2f552b90b5c6 100644
-> > >--- a/include/net/devlink.h
-> > >+++ b/include/net/devlink.h
-> > >@@ -621,6 +621,8 @@ enum devlink_param_generic_id {
-> > > #define DEVLINK_INFO_VERSION_GENERIC_FW_ROCE  "fw.roce"
-> > > /* Firmware bundle identifier */
-> > > #define DEVLINK_INFO_VERSION_GENERIC_FW_BUNDLE_ID     "fw.bundle_id"
-> > >+/* Bootloader */
-> > >+#define DEVLINK_INFO_VERSION_GENERIC_FW_BOOTLOADER    "fw.bootloader"
-> >
-> > You add it and don't use it. You should add only what you use.
+On 16.11.2022 21:52:57, Markus Schneider-Pargmann wrote:
+> Currently the only mode of operation is an interrupt for every transmit
+> event. This is inefficient for peripheral chips. Use the transmit FIFO
+> event watermark interrupt instead if the FIFO size is more than 2. Use
+> FIFOsize - 1 for the watermark so the interrupt is triggered early
+> enough to not stop transmitting.
 >=20
-> I will use it in this series for the linux-can tree:
-> https://lore.kernel.org/netdev/20221126162211.93322-4-mailhol.vincent@wan=
-adoo.fr/
+> Note that if the number of transmits is less than the watermark level,
+> the transmit events will not be processed until there is any other
+> interrupt. This will only affect statistic counters. Also there is an
+> interrupt every time the timestamp wraps around.
 >=20
-> If it is a problem to send this as a standalone patch, I will then
-> just add it to my series and have the patch go through the linux-can
-> tree.
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
 
-As you have the Ok from Greg, include this in you v5 series.
+Please make this configurable with the ethtool TX IRQ coalescing
+parameter. Please setup an hwtimer to enable the regular interrupt after
+some configurable time to avoid starving of the TX complete events.
+
+I've implemented this for the mcp251xfd driver, see:
+
+656fc12ddaf8 ("can: mcp251xfd: add TX IRQ coalescing ethtool support")
+169d00a25658 ("can: mcp251xfd: add TX IRQ coalescing support")
+846990e0ed82 ("can: mcp251xfd: add RX IRQ coalescing ethtool support")
+60a848c50d2d ("can: mcp251xfd: add RX IRQ coalescing support")
+9263c2e92be9 ("can: mcp251xfd: ring: add support for runtime configurable R=
+X/TX ring parameters")
 
 Marc
 
@@ -140,19 +96,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---obziojiov5xhwwjh
+--r7p5tzu2udczjqwl
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOHjPQACgkQrX5LkNig
-011yRQf/Z//khRUupApjepNa7hj73LOXKehQrdvABWt+K/GUaMpnRFtDMASWz4ZJ
-D9DH4Gk9+dsV6y8/tHnE9VNMYXZCkDqLxqq3INn7b4Th+eyS6Ajfk79k51Iervdv
-Q7IgNfeuEV52vnjIUrfGXIpqpV/1Tc83nmyiHM1yuhKPFv88hWAppuzZ53lTZRnE
-YHfAL9iy/FaA85w0334LSuIst36Mj2CFtFWc4+ymA0aBwL2t8dbiIQ0dDgYOowep
-Rk7NkT0LSsPXNUfm0KYq12z4VYG7lvWAtzWcSHwX0G+axxzWQKGY4lMAd8mBsAoY
-+1jDIuaKCXorISuFceKoD2ock+4+jw==
-=7wqE
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOHkBgACgkQrX5LkNig
+012n+ggAkjxGu6fzc+XN6IqoY9Yn3LMia/azxxAbbRgcPD1gS4jBaulIPdVAon0D
+Veno5UPsOxB4yfraBvUylwROO0bkg9+vJG20XaDrExwMAU5CRfQ9qBjZBpHgj8VU
+PE9id632nhB1bJ9wWhqlV2W9vMkehQtRB+4sIqnfgQ1P2t9XgoM51NBDMF+fEkCR
+Y7k5p4kH5iCbIarx7R5nLQnnS77BxpSq3BiMd8ddlJGbumtECd0RqkL6JAq0P7D3
+Xtkw9hylSQQEIHDxAEOlvDb4IQqXITE7CzjveDcrN+X43JPtLD09va6A3D95DrAR
+LzmklmW9y9pIgyz5htSCY0wFTCc96g==
+=DbHj
 -----END PGP SIGNATURE-----
 
---obziojiov5xhwwjh--
+--r7p5tzu2udczjqwl--
