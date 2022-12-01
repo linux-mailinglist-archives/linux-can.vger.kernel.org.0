@@ -2,109 +2,211 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07BED63ECE9
-	for <lists+linux-can@lfdr.de>; Thu,  1 Dec 2022 10:51:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0152563ED52
+	for <lists+linux-can@lfdr.de>; Thu,  1 Dec 2022 11:12:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbiLAJv2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 1 Dec 2022 04:51:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56488 "EHLO
+        id S229747AbiLAKM2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 1 Dec 2022 05:12:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbiLAJv1 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 1 Dec 2022 04:51:27 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1550CDFC6
-        for <linux-can@vger.kernel.org>; Thu,  1 Dec 2022 01:51:25 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1p0gDp-0001Zy-PO; Thu, 01 Dec 2022 10:51:13 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:dc5e:59bf:44a8:4077])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 1E96512F41D;
-        Thu,  1 Dec 2022 09:51:10 +0000 (UTC)
-Date:   Thu, 1 Dec 2022 10:51:08 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Jiri Pirko <jiri@resnulli.us>, Jiri Pirko <jiri@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        linux-can <linux-can@vger.kernel.org>
-Subject: Re: [PATCH net-next v2] net: devlink: add
- DEVLINK_INFO_VERSION_GENERIC_FW_BOOTLOADER
-Message-ID: <20221201095108.4q3frhsktsbvw7at@pengutronix.de>
-References: <20221129031406.3849872-1-mailhol.vincent@wanadoo.fr>
- <Y4XCnAA2hGvqgXh0@nanopsycho>
- <CAMZ6RqJ54rfLfODB1JNaFr_pxWxzHJBoC2UmCKAZ7mSkEbcdzQ@mail.gmail.com>
- <20221130170351.cjyaqr22vhqzq4hv@pengutronix.de>
- <CAMZ6RqLy_H-A-=_jgPh6dUdHa_wMLB20X0rCFY7vkgBwvS1Uyg@mail.gmail.com>
+        with ESMTP id S229602AbiLAKM0 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 1 Dec 2022 05:12:26 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3179BC54
+        for <linux-can@vger.kernel.org>; Thu,  1 Dec 2022 02:12:23 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id z4so1896451wrr.3
+        for <linux-can@vger.kernel.org>; Thu, 01 Dec 2022 02:12:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3n/k+1TqbNbk3XruAjVDKWfZ9x2e5CAo+VCQq43cL5Q=;
+        b=Yy+5OGwxesewEX3E7NwiCzowvW3JAXr/Si1kYURjyXQ+pX2gDkAbHON4dXQ0wEniyL
+         bEGAUrFRVZKutqLTLQyP4iPS3yG07Y3X5+Qcl67+wCFgxweehXruJ/fYVXBLxlhHwRQ7
+         GzU0lXJTDp6NtZIrDc2tIzFjm7JuqkqjU/BP9Be/J/mZ5ZZgy8P9cpWJf0LlgUN2s5Jw
+         bMP7FCVp7HKi/+mK+G12RfRYb0C5Q3cdRM5/Auub8gmzRE3T1x4F42lPBF7YwuYULmkF
+         9t3dU5yn7gkF4zjVhEpdD7rVTqGyv0GVjxoxgSNUpAIyycFavzS7GVJ45rgQVhAwC9/L
+         b1Mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3n/k+1TqbNbk3XruAjVDKWfZ9x2e5CAo+VCQq43cL5Q=;
+        b=AKKJLPbhLbPVwXmH7DghOtdrrc4higbfQjL3N0bMAbUNrRbur2wdkjoeIdzx29nwwK
+         TMLUN+RBpao7DlpOeETYq53R0erxFERqvgEuOcTSPps1PvLvMcW4Dg+O1icVEGbQ8ccy
+         XjrDeX7RPGpPsrmCJby1Q9chL85UiyGE7VIbdBwqGNiO8+isBZl58ihxLkYBTJ/yJVm2
+         B6wKQ81qUyJw2kDd/Huj9ekbIabOOPUQu1XPR7upL6J62xhYx8ywLJ1F24PS20y/SX8y
+         6l3utCm1w+b53M49Oh7CMUskaUdgt2yyBSkKi4efzjVAUS8OeXySvdDE3FijdxL4ekkL
+         wqdg==
+X-Gm-Message-State: ANoB5pkDQtdk3a+0bxGdchTapygcqcw+tkOx2IdemlxvyIe36DXEXPRD
+        Ht1A2pZ+Yb8ehJR1w/bCzCkY1g==
+X-Google-Smtp-Source: AA0mqf5GWpig130H/UDLQvQ9fUwHqk3Hfh++Pdf4PEOVwnDO+5Ae+Vnk5iUJC5pSyQBFPvnvsAP2vw==
+X-Received: by 2002:adf:de88:0:b0:242:15d5:7dd1 with SMTP id w8-20020adfde88000000b0024215d57dd1mr12631670wrl.207.1669889541664;
+        Thu, 01 Dec 2022 02:12:21 -0800 (PST)
+Received: from blmsp ([185.238.219.84])
+        by smtp.gmail.com with ESMTPSA id d8-20020a05600c34c800b003cf4eac8e80sm5938699wmq.23.2022.12.01.02.12.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 02:12:21 -0800 (PST)
+Date:   Thu, 1 Dec 2022 11:12:20 +0100
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 04/15] can: m_can: Use transmit event FIFO watermark
+ level interrupt
+Message-ID: <20221201101220.r63fvussavailwh5@blmsp>
+References: <20221116205308.2996556-1-msp@baylibre.com>
+ <20221116205308.2996556-5-msp@baylibre.com>
+ <20221130171715.nujptzwnut7silbm@pengutronix.de>
+ <20221201082521.3tqevaygz4nhw52u@blmsp>
+ <20221201090508.jh5iymwmhs3orb2v@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ymtbgkasf62ps6zq"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAMZ6RqLy_H-A-=_jgPh6dUdHa_wMLB20X0rCFY7vkgBwvS1Uyg@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221201090508.jh5iymwmhs3orb2v@pengutronix.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+HI Marc,
 
---ymtbgkasf62ps6zq
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, Dec 01, 2022 at 10:05:08AM +0100, Marc Kleine-Budde wrote:
+> On 01.12.2022 09:25:21, Markus Schneider-Pargmann wrote:
+> > Hi Marc,
+> > 
+> > Thanks for reviewing.
+> > 
+> > On Wed, Nov 30, 2022 at 06:17:15PM +0100, Marc Kleine-Budde wrote:
+> > > On 16.11.2022 21:52:57, Markus Schneider-Pargmann wrote:
+> > > > Currently the only mode of operation is an interrupt for every transmit
+> > > > event. This is inefficient for peripheral chips. Use the transmit FIFO
+> > > > event watermark interrupt instead if the FIFO size is more than 2. Use
+> > > > FIFOsize - 1 for the watermark so the interrupt is triggered early
+> > > > enough to not stop transmitting.
+> > > > 
+> > > > Note that if the number of transmits is less than the watermark level,
+> > > > the transmit events will not be processed until there is any other
+> > > > interrupt. This will only affect statistic counters. Also there is an
+> > > > interrupt every time the timestamp wraps around.
+> > > > 
+> > > > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > > 
+> > > Please make this configurable with the ethtool TX IRQ coalescing
+> > > parameter. Please setup an hwtimer to enable the regular interrupt after
+> > > some configurable time to avoid starving of the TX complete events.
+> > 
+> > I guess hwtimer==hrtimer?
+> 
+> Sorry, yes!
+> 
+> > I thought about setting up a timer but decided against it as the TX
+> > completion events are only used to update statistics of the interface,
+> > as far as I can tell. I can implement a timer as well.
+> 
+> It's not only statistics, the sending socket can opt in to receive the
+> sent CAN frame on successful transmission. Other sockets will (by
+> default) receive successful sent CAN frames. The idea is that the other
+> sockets see the same CAN bus, doesn't matter if they are on a different
+> system receiving the CAN frame via the bus or on the same system
+> receiving the CAN frame as soon it has been sent to the bus.
 
-On 01.12.2022 02:52:17, Vincent MAILHOL wrote:
-> > > I will use it in this series for the linux-can tree:
-> > > https://lore.kernel.org/netdev/20221126162211.93322-4-mailhol.vincent=
-@wanadoo.fr/
-> > >
-> > > If it is a problem to send this as a standalone patch, I will then
-> > > just add it to my series and have the patch go through the linux-can
-> > > tree.
-> >
-> > As you have the Ok from Greg, include this in you v5 series.
->=20
-> This is a different patch. Greg gave me his ACK to export usb_cache_strin=
-g():
->   https://lore.kernel.org/linux-usb/Y3zyCz5HbGdsxmRT@kroah.com/
+Thanks for explaining. I wasn't aware of that. I agree on the timer
+then.
 
-Right, thanks for the clarification. - Too many patches :)
+> 
+> > For the upcoming receive side patch I already added a hrtimer. I may try
+> > to use the same timer for both directions as it is going to do the exact
+> > same thing in both cases (call the interrupt routine). Of course that
+> > depends on the details of the coalescing support. Any objections on
+> > that?
+> 
+> For the mcp251xfd I implemented the RX and TX coalescing independent of
+> each other and made it configurable via ethtool's IRQ coalescing
+> options.
+> 
+> The hardware doesn't support any timeouts and only FIFO not empty, FIFO
+> half full and FIFO full IRQs and the on chip RAM for mailboxes is rather
+> limited. I think the mcan core has the same limitations.
 
-Marc
+Yes and no, the mcan core provides watermark levels so it has more
+options, but there is no hardware timer as well (at least I didn't see
+anything usable).
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+> 
+> The configuration for the mcp251xfd looks like this:
+> 
+> - First decide for classical CAN or CAN-FD mode
+> - configure RX and TX ring size
+>   9263c2e92be9 ("can: mcp251xfd: ring: add support for runtime configurable RX/TX ring parameters")
+>   For TX only a single FIFO is used.
+>   For RX up to 3 FIFOs (up to a depth of 32 each).
+>   FIFO depth is limited to power of 2.
+>   On the mcan cores this is currently done with a DT property.
+>   Runtime configurable ring size is optional but gives more flexibility
+>   for our use-cases due to limited RAM size.
+> - configure RX and TX coalescing via ethtools
+>   Set a timeout and the max CAN frames to coalesce.
+>   The max frames are limited to half or full FIFO.
 
---ymtbgkasf62ps6zq
-Content-Type: application/pgp-signature; name="signature.asc"
+mcan can offer more options for the max frames limit fortunately.
 
------BEGIN PGP SIGNATURE-----
+> 
+> How does coalescing work?
+> 
+> If coalescing is activated during reading of the RX'ed frames the FIFO
+> not empty IRQ is disabled (the half or full IRQ stays enabled). After
+> handling the RX'ed frames a hrtimer is started. In the hrtimer's
+> functions the FIFO not empty IRQ is enabled again.
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOIeQkACgkQrX5LkNig
-011mWwf9ECdOBcKUiwp2BsQhmB7fN/5C7S4dIfJPQ5DzDvUT3dg3CGPo2RjP64Jr
-kV4GGX612N48tlHfmY683OthL3t5GrbJl2HU2jHLPEjC2UUv7ci+VlP8DrGYB6th
-DnEzHEB+0KSsGuZyw64DnONZbTpTlwW0DlqFaKlbGTuFJXwwXfJ4sVSCBUD60vtZ
-eIPv7kRBMqoe2DpOP+Cm8TKFR3MbIjIr43bFcfJv+wFHp73GxjoqgVq/WKMfiaZo
-NupBpVcd+bGSEel+6aojv0kvQ2Oi5dNmuSyNI3HHpWeZHffF5eRd+xJBDjy2rkmO
-P77W0AamMH5PMlny+N/89kaBmmTUYA==
-=E7Aa
------END PGP SIGNATURE-----
+My rx path patches are working similarly though not 100% the same. I
+will adopt everything and add it to the next version of this series.
 
---ymtbgkasf62ps6zq--
+> 
+> I decided not to call the IRQ handler from the hrtimer to avoid
+> concurrency, but enable the FIFO not empty IRQ.
+
+mcan uses a threaded irq and I found this nice helper function I am
+currently using for the receive path.
+	irq_wake_thread()
+
+It is not widely used so I hope this is fine. But this hopefully avoids
+the concurrency issue. Also I don't need to artificially create an IRQ
+as you do.
+
+> 
+> > > I've implemented this for the mcp251xfd driver, see:
+> > > 
+> > > 656fc12ddaf8 ("can: mcp251xfd: add TX IRQ coalescing ethtool support")
+> > > 169d00a25658 ("can: mcp251xfd: add TX IRQ coalescing support")
+> > > 846990e0ed82 ("can: mcp251xfd: add RX IRQ coalescing ethtool support")
+> > > 60a848c50d2d ("can: mcp251xfd: add RX IRQ coalescing support")
+> > > 9263c2e92be9 ("can: mcp251xfd: ring: add support for runtime configurable RX/TX ring parameters")
+> > 
+> > Thanks for the pointers. I will have a look and try to implement it
+> > similarly.
+> 
+> If you want to implement runtime configurable ring size, I created a
+> function to help in the calculation of the ring sizes:
+> 
+> a1439a5add62 ("can: mcp251xfd: ram: add helper function for runtime ring size calculation")
+> 
+> The code is part of the mcp251xfd driver, but is prepared to become a
+> generic helper function. The HW parameters are described with struct
+> can_ram_config and use you can_ram_get_layout() to get a valid RAM
+> layout based on CAN/CAN-FD ring size and coalescing parameters.
+
+Thank you. I think configurable ring sizes are currently out of scope
+for me as I only have limited time for this.
+
+Thank you Marc!
+
+Best,
+Markus
