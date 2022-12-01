@@ -2,206 +2,148 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BF5363E8E4
-	for <lists+linux-can@lfdr.de>; Thu,  1 Dec 2022 05:37:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DC5763EA5D
+	for <lists+linux-can@lfdr.de>; Thu,  1 Dec 2022 08:34:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229445AbiLAEhO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 30 Nov 2022 23:37:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39332 "EHLO
+        id S229610AbiLAHef (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 1 Dec 2022 02:34:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiLAEhN (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 30 Nov 2022 23:37:13 -0500
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4167742C
-        for <linux-can@vger.kernel.org>; Wed, 30 Nov 2022 20:37:10 -0800 (PST)
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20221201043708epoutp01a87ce0951f3e6becd9c58899a005a7fd~skWXrpB303020130201epoutp01h
-        for <linux-can@vger.kernel.org>; Thu,  1 Dec 2022 04:37:08 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20221201043708epoutp01a87ce0951f3e6becd9c58899a005a7fd~skWXrpB303020130201epoutp01h
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1669869428;
-        bh=z/uj3aw1pAluhqEep2srfIlcP+du9f+FkKAdDbyUsiY=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=KAtXC1NuHE5vcNPAEUlfx9BJPpR2qpVPvcoP8D3/NV/ayGPRchZVP3giTgyaHSyuI
-         A+XK/ZtUpRsAgsAFMgLhWdHFyUqfUYpBdicLTYFcT2uEUC7npcR1DtR4s2poMLbrz6
-         1+HoGeV/8w2JJn40kUNlxkSoHqY4olWpvpkCDLE0=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-        20221201043708epcas5p4ec9c2d060a41756dee37e1d4251756aa~skWXAlGLD1260512605epcas5p4W;
-        Thu,  1 Dec 2022 04:37:08 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.181]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4NN3FZ2q17z4x9Pt; Thu,  1 Dec
-        2022 04:37:06 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        EE.64.56352.27F28836; Thu,  1 Dec 2022 13:37:06 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-        20221201041110epcas5p1b0f4efd9b6c225ab5203d840099f649f~sj-sFqa6D0484304843epcas5p1M;
-        Thu,  1 Dec 2022 04:11:10 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20221201041110epsmtrp203f02a4b4228ebe1be25ea2b6f0baa04~sj-sD_scY1904419044epsmtrp2i;
-        Thu,  1 Dec 2022 04:11:10 +0000 (GMT)
-X-AuditID: b6c32a4b-383ff7000001dc20-55-63882f725909
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        07.F7.18644.D5928836; Thu,  1 Dec 2022 13:11:09 +0900 (KST)
-Received: from FDSFTE314 (unknown [107.122.81.85]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20221201041104epsmtip1fbe8af72afac5e3640d702a0af30fb0f~sj-m4_qG_2592925929epsmtip1W;
-        Thu,  1 Dec 2022 04:11:04 +0000 (GMT)
-From:   "Vivek Yadav" <vivek.2311@samsung.com>
-To:     "'Marc Kleine-Budde'" <mkl@pengutronix.de>
-Cc:     <rcsekar@samsung.com>, <krzysztof.kozlowski+dt@linaro.org>,
-        <wg@grandegger.com>, <davem@davemloft.net>, <edumazet@google.com>,
-        <kuba@kernel.org>, <pabeni@redhat.com>, <pankaj.dubey@samsung.com>,
-        <ravi.patel@samsung.com>, <alim.akhtar@samsung.com>,
-        <linux-fsd@tesla.com>, <robh+dt@kernel.org>,
-        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <aswani.reddy@samsung.com>, <sriranjani.p@samsung.com>
-In-Reply-To: <20221124145405.d67cb6xmoiqfdsq3@pengutronix.de>
-Subject: RE: RE: [PATCH v3 1/2] can: m_can: Move mram init to mcan device
- setup
-Date:   Thu, 1 Dec 2022 09:40:50 +0530
-Message-ID: <01f901d9053a$f138bdd0$d3aa3970$@samsung.com>
+        with ESMTP id S229541AbiLAHef (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 1 Dec 2022 02:34:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B780630F41;
+        Wed, 30 Nov 2022 23:34:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 47EE861EB8;
+        Thu,  1 Dec 2022 07:34:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 332CDC433D6;
+        Thu,  1 Dec 2022 07:34:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669880072;
+        bh=70O6dWJgZaOOZXUcY049Qm0l1Sl9m0rDak1NqB+X3FA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=VjyMr2PhNhftA89A5fAHg5mMHPzyCjrsdNh8fCfzIIsMjBMfbM94vQvO18k/17c++
+         M/LpJBVqxXxONrI142i/HA0HAVHIt0OVBetWr723YRVxQoSiLt8+KJYO8AUbYsaWf3
+         cz0E30ozBL8TOVS4eI46GvwapLXkfCfwdKnXDlUR1e8qj9MARmbvMKIv+yhVp0FjBf
+         Y4/syiiEiX1lmc5ycm0Esk3Cd34+vyX6OjT6eCGOVbzvySIg753Pk8A2QKGuy6iTwT
+         SJtDvXKZtIAYVcoX2hghbR+lX2hidRBSrmm23NybkZdpyCa8p6nYMvwO2thjmtVJeo
+         M5Hjl1BS4Ktig==
+From:   "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+To:     dario.binacchi@amarulasolutions.com
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
+        Richard Palethorpe <richard.palethorpe@suse.com>,
+        Petr Vorel <petr.vorel@suse.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, stable@vger.kernel.org,
+        Max Staudt <max@enpas.org>
+Subject: [PATCH] can: slcan: fix freed work crash
+Date:   Thu,  1 Dec 2022 08:34:26 +0100
+Message-Id: <20221201073426.17328-1-jirislaby@kernel.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQKzKt4C0V6WIa1X2lvfORr5q2BWDgH5Y+bNAeiPnOMDLJn5dwD4TowRAqfPl+usTqoaEA==
-Content-Language: en-in
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrOJsWRmVeSWpSXmKPExsWy7bCmum6RfkeywZ1ZfBYP5m1jszi0eSu7
-        xZzzLSwW84+cY7V4euwRu0Xfi4fMFhe29bFabHp8jdVi1fepzBYPX4VbXN41h81ixvl9TBbr
-        F01hsTi2QMzi2+k3jBaLtn5ht3j4YQ+7xawLO1gtWvceYbe4/WYdq8XSeztZHUQ9tqy8yeSx
-        YFOpx8dLtxk9Nq3qZPO4c20Pm8fmJfUe/X8NPN7vu8rm0bdlFaPHv6a57B6fN8kFcEdl22Sk
-        JqakFimk5iXnp2TmpdsqeQfHO8ebmhkY6hpaWpgrKeQl5qbaKrn4BOi6ZeYAfamkUJaYUwoU
-        CkgsLlbSt7Mpyi8tSVXIyC8usVVKLUjJKTAp0CtOzC0uzUvXy0stsTI0MDAyBSpMyM6YemQ/
-        Y0GveMWTQxdYGhg/C3UxcnJICJhIXPu3mBHEFhLYzShxt9Oni5ELyP7EKPFg3kFGCOczo8SJ
-        3W1sMB2X3z5mgujYxSjxb00NRNFzRolb15ewgCTYBHQkmif/BRsrIqAn8XvCIrAGZoH1LBLf
-        DomA2JwCthK3vk5mBbGFBQIl3t1pAKtnEVCR2PC4F6yeV8BSovnuF0YIW1Di5MwnLBBztCWW
-        LXzNDHGQgsTPp8tYIXaFSXz8dIwZokZc4ujPHqia+ZwSH5+lQNguElP//2SHsIUlXh3fAmVL
-        SXx+txfqyWSJHf86WSHsDIkFE/cwQtj2EgeuzAG6gQNovqbE+l36EGFZiamn1kG9yCfR+/sJ
-        E0ScV2LHPBhbReLF5wmsIK0gq3rPCU9gVJqF5LFZSB6bheSBWQjLFjCyrGKUTC0ozk1PLTYt
-        MM5LLYfHdnJ+7iZGcA7Q8t7B+OjBB71DjEwcjIcYJTiYlUR4Oz63JQvxpiRWVqUW5ccXleak
-        Fh9iNAWG9kRmKdHkfGAWyiuJNzSxNDAxMzMzsTQ2M1QS5108QytZSCA9sSQ1OzW1ILUIpo+J
-        g1OqgclL6OHyxcktq85Fm/D27RWVtlyv+a6zNvJA7VnntSERGwTOrPjySWhFN9cPvavfliZ3
-        HXF+NkW8cmHgMqnPUVUvG4V4KgLebONWr71/ueNvTLL0tZC2pHMhvhoPlS2NI2bPXFa7+sHC
-        2mXyDjHtxlfV/n049fmZBUu6W/5aoeUK2rsLihRD1RVfiSozzrpRffTgJcsa5uiz+2PnTGR1
-        YzkT/zhuzc3mjJ4sr4UzfwhFW12ezlPoe7im74DzjeTp11L+SPBfCjTODzyisCb/GWPssZ9v
-        4ieLCGVMOjo5vOtXFutqLRGT7gzfv77zedR//72xQKp51bN/EgzanqJtVeuapS+bJ9yaxCHZ
-        0xjwQ4mlOCPRUIu5qDgRAA7kQnWKBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sf0yMcRzHfe95nnue4rrHXe6+splOm/XrUYZ9WcwWesyP8Edis5w8q1td
-        bs8VyaZIpigscp2jH7h1Z8nukkpCTpZfhYmkOHf9ICUqSTLrbrb+e23vX58/PhQmceI+lCop
-        meOTlIkKoSde9UAxN3in//HYkCLdcvTxUpUQNVhvksjQfBRHRbbnBOpq/ESivF47hlqq8ghk
-        cbQSyDx6DkP2L9vQq1qDEOma6wWoovQsjhqLZejnk68Ald4cJpF9sI5E+pZqAmXdsZGo/et1
-        Al3trCFWzWIrTW0CttiSwn5/2Q5YizlbyL5vrROy1ivp7KmJEPZb/Wshm1dpBuzfIxdJdsgy
-        d/P0HZ5he7hE1T6OX7hyl2f84wtnSE2TLLW8zSnMABWSHOBBQXoxfNXvEOQAT0pCVwM4VF9I
-        uAUfePbpZ9zNUmj620O6TV0AtltLwaQgpINgZv6Ei71pBo6fLnU1YfQjHH5o6yTciWcCOGwb
-        xSZdHvQK+G4k3zUhpSOhqaPMNYHTfvCGI1cwySJ6GczsGAZungmbCp0uD0YHwlx7FvjPxpI+
-        zH3ePDjWZSTcV0TB7z8aMbdHDh+OncROA6l+SpV+SpV+SpV+SqQY4GYwm9No1XFqbahmURK3
-        n9Eq1dqUpDgmdq/aAlyPEBBQDerMg0wDEFCgAUAKU3iLjg8di5WI9igPpHH83hg+JZHTNoA5
-        FK6Qi1pymmIkdJwymUvgOA3H/1cFlIdPhiDig2ydDhP1Pw0ekP6xHVYFOUZu9Wzt9fti1Uem
-        GZc405t9l6+yj+czY6rIASJxY3stL8q13V/v0Zjlb5g/HpYqXjtWtxV/E9C6o7ZAI55pDP5t
-        CIvO/MUclG7yggOFGb3mfN5eZa6XOgp9vU/NkK3JZPpOpDq7NwTG7I5K2RS0whBYEyJfQIhr
-        jKE6VeX2KLm4u79kOlOeXgTDz+Nvl1nv7ja2eplkVInxthfbNxr24mr2aEHZIF3ZoVtarjoE
-        izb2FNh8dt6LuPZMnKwpH2HDSW305QcvfD9NY9riqARTckT06y1+6t9yZedB9a2JoXNUcVoQ
-        r1vtPy9NrMC18crQAIzXKv8BMvCK1XcDAAA=
-X-CMS-MailID: 20221201041110epcas5p1b0f4efd9b6c225ab5203d840099f649f
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20221122105022epcas5p3f5db1c5790b605bac8d319fe06ad915b
-References: <20221122105455.39294-1-vivek.2311@samsung.com>
-        <CGME20221122105022epcas5p3f5db1c5790b605bac8d319fe06ad915b@epcas5p3.samsung.com>
-        <20221122105455.39294-2-vivek.2311@samsung.com>
-        <20221123224146.iic52cuhhnwqk2te@pengutronix.de>
-        <01a101d8ffe4$1797f290$46c7d7b0$@samsung.com>
-        <20221124145405.d67cb6xmoiqfdsq3@pengutronix.de>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        PDS_BAD_THREAD_QP_64,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+The LTP test pty03 is causing a crash in slcan:
+  BUG: kernel NULL pointer dereference, address: 0000000000000008
+  #PF: supervisor read access in kernel mode
+  #PF: error_code(0x0000) - not-present page
+  PGD 0 P4D 0
+  Oops: 0000 [#1] PREEMPT SMP NOPTI
+  CPU: 0 PID: 348 Comm: kworker/0:3 Not tainted 6.0.8-1-default #1 openSUSE Tumbleweed 9d20364b934f5aab0a9bdf84e8f45cfdfae39dab
+  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.15.0-0-g2dd4b9b-rebuilt.opensuse.org 04/01/2014
+  Workqueue:  0x0 (events)
+  RIP: 0010:process_one_work (/home/rich/kernel/linux/kernel/workqueue.c:706 /home/rich/kernel/linux/kernel/workqueue.c:2185)
+  Code: 49 89 ff 41 56 41 55 41 54 55 53 48 89 f3 48 83 ec 10 48 8b 06 48 8b 6f 48 49 89 c4 45 30 e4 a8 04 b8 00 00 00 00 4c 0f 44 e0 <49> 8b 44 24 08 44 8b a8 00 01 00 00 41 83 e5 20 f6 45 10 04 75 0e
+  RSP: 0018:ffffaf7b40f47e98 EFLAGS: 00010046
+  RAX: 0000000000000000 RBX: ffff9d644e1b8b48 RCX: ffff9d649e439968
+  RDX: 00000000ffff8455 RSI: ffff9d644e1b8b48 RDI: ffff9d64764aa6c0
+  RBP: ffff9d649e4335c0 R08: 0000000000000c00 R09: ffff9d64764aa734
+  R10: 0000000000000007 R11: 0000000000000001 R12: 0000000000000000
+  R13: ffff9d649e4335e8 R14: ffff9d64490da780 R15: ffff9d64764aa6c0
+  FS:  0000000000000000(0000) GS:ffff9d649e400000(0000) knlGS:0000000000000000
+  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+  CR2: 0000000000000008 CR3: 0000000036424000 CR4: 00000000000006f0
+  Call Trace:
+   <TASK>
+  worker_thread (/home/rich/kernel/linux/kernel/workqueue.c:2436)
+  kthread (/home/rich/kernel/linux/kernel/kthread.c:376)
+  ret_from_fork (/home/rich/kernel/linux/arch/x86/entry/entry_64.S:312)
 
+Apparently, the slcan's tx_work is freed while being scheduled. While
+slcan_netdev_close() (netdev side) calls flush_work(&sl->tx_work),
+slcan_close() (tty side) does not. So when the netdev is never set UP,
+but the tty is stuffed with bytes and forced to wakeup write, the work
+is scheduled, but never flushed.
 
-> -----Original Message-----
-> From: Marc Kleine-Budde <mkl=40pengutronix.de>
-> Sent: 24 November 2022 20:24
-> To: Vivek Yadav <vivek.2311=40samsung.com>
-> Cc: rcsekar=40samsung.com; krzysztof.kozlowski+dt=40linaro.org;
-> wg=40grandegger.com; davem=40davemloft.net; edumazet=40google.com;
-> kuba=40kernel.org; pabeni=40redhat.com; pankaj.dubey=40samsung.com;
-> ravi.patel=40samsung.com; alim.akhtar=40samsung.com; linux-fsd=40tesla.co=
-m;
-> robh+dt=40kernel.org; linux-can=40vger.kernel.org; netdev=40vger.kernel.o=
-rg;
-> linux-kernel=40vger.kernel.org; linux-arm-kernel=40lists.infradead.org; l=
-inux-
-> samsung-soc=40vger.kernel.org; devicetree=40vger.kernel.org;
-> aswani.reddy=40samsung.com; sriranjani.p=40samsung.com
-> Subject: Re: RE: =5BPATCH v3 1/2=5D can: m_can: Move mram init to mcan de=
-vice
-> setup
->=20
-> On 24.11.2022 14:36:48, Vivek Yadav wrote:
-> > > Why not call the RAM init directly from m_can_chip_config()?
-> > >
-> > m_can_chip_config function is called from m_can open.
-> >
-> > Configuring RAM init every time we open the CAN instance is not
-> > needed, I think only once during the probe is enough.
->=20
-> That probably depends on you power management. If I add a regulator to
-> power the external tcan4x5x chip and power it up during open(), I need to
-> initialize the RAM.
->=20
-Thanks for the clarification,
-There is one doubt for which I need clarity if I add ram init in m_can_chip=
-_config.
+So add an additional flush_work() to slcan_close() to be sure the work
+is flushed under all circumstances.
 
-In the current implementation, m_can_ram_init is added in the probe and m_c=
-an_class_resume function.
-If I add the ram init function in chip_config which is getting called from =
-m_can_start, then m_can_init_ram will be called two times, once in resume a=
-nd next from m_can_start also.
+The Fixes commit below moved flush_work() from slcan_close() to
+slcan_netdev_close(). What was the rationale behind it? Maybe we can
+drop the one in slcan_netdev_close()?
 
-Can we add ram init inside the m_can_open function itself?
-Because it is independent of m_can resume functionality.
+I see the same pattern in can327. So it perhaps needs the very same fix.
 
-> > If message RAM init failed then fifo Transmit and receive will fail
-> > and there will be no communication. So there is no point to =22open and
-> > Configure CAN chip=22.
->=20
-> For mmio devices the RAM init will probably not fail. There are return va=
-lues
-> and error checking for the SPI attached devices. Where the SPI
-> communication will fail. However if this is problem, I assume the chip wi=
-ll not
-> be detected in the first place.
->=20
-> > From my understanding it's better to keep RAM init inside the probe
-> > and if there is a failure happened goes to CAN probe failure.
->=20
-> Marc
->=20
-> --
-> Pengutronix e.K.                 =7C Marc Kleine-Budde           =7C
-> Embedded Linux                   =7C
-> https://protect2.fireeye.com/v1/url?k=3D2053d9ab-7fc8e0b4-205252e4-
-> 000babdfecba-a8c309c53e3358f5&q=3D1&e=3Dc0cfd0e2-a422-4821-a49d-
-> 113cfa4da9cb&u=3Dhttps%3A%2F%2Fwww.pengutronix.de%2F  =7C
-> Vertretung West/Dortmund         =7C Phone: +49-231-2826-924     =7C
-> Amtsgericht Hildesheim, HRA 2686 =7C Fax:   +49-5121-206917-5555 =7C
+Fixes: cfcb4465e992 ("can: slcan: remove legacy infrastructure")
+Link: https://bugzilla.suse.com/show_bug.cgi?id=1205597
+Reported-by: Richard Palethorpe <richard.palethorpe@suse.com>
+Tested-by: Petr Vorel <petr.vorel@suse.com>
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: Wolfgang Grandegger <wg@grandegger.com>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: linux-can@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: stable@vger.kernel.org
+Cc: Max Staudt <max@enpas.org>
+Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
+---
+ drivers/net/can/slcan/slcan-core.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/net/can/slcan/slcan-core.c b/drivers/net/can/slcan/slcan-core.c
+index fbb34139daa1..f4db77007c13 100644
+--- a/drivers/net/can/slcan/slcan-core.c
++++ b/drivers/net/can/slcan/slcan-core.c
+@@ -864,12 +864,14 @@ static void slcan_close(struct tty_struct *tty)
+ {
+ 	struct slcan *sl = (struct slcan *)tty->disc_data;
+ 
+-	/* unregister_netdev() calls .ndo_stop() so we don't have to.
+-	 * Our .ndo_stop() also flushes the TTY write wakeup handler,
+-	 * so we can safely set sl->tty = NULL after this.
+-	 */
+ 	unregister_candev(sl->dev);
+ 
++	/*
++	 * The netdev needn't be UP (so .ndo_stop() is not called). Hence make
++	 * sure this is not running before freeing it up.
++	 */
++	flush_work(&sl->tx_work);
++
+ 	/* Mark channel as dead */
+ 	spin_lock_bh(&sl->lock);
+ 	tty->disc_data = NULL;
+-- 
+2.38.1
 
