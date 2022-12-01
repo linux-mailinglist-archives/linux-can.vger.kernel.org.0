@@ -2,48 +2,53 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8DCB63EC23
-	for <lists+linux-can@lfdr.de>; Thu,  1 Dec 2022 10:16:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07BED63ECE9
+	for <lists+linux-can@lfdr.de>; Thu,  1 Dec 2022 10:51:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbiLAJQM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 1 Dec 2022 04:16:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49272 "EHLO
+        id S229520AbiLAJv2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 1 Dec 2022 04:51:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbiLAJQM (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 1 Dec 2022 04:16:12 -0500
+        with ESMTP id S229649AbiLAJv1 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 1 Dec 2022 04:51:27 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C31470615
-        for <linux-can@vger.kernel.org>; Thu,  1 Dec 2022 01:16:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1550CDFC6
+        for <linux-can@vger.kernel.org>; Thu,  1 Dec 2022 01:51:25 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1p0ffs-00053K-AF; Thu, 01 Dec 2022 10:16:08 +0100
+        id 1p0gDp-0001Zy-PO; Thu, 01 Dec 2022 10:51:13 +0100
 Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:dc5e:59bf:44a8:4077])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id D433A12ECAC;
-        Thu,  1 Dec 2022 09:16:06 +0000 (UTC)
-Date:   Thu, 1 Dec 2022 10:16:05 +0100
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 1E96512F41D;
+        Thu,  1 Dec 2022 09:51:10 +0000 (UTC)
+Date:   Thu, 1 Dec 2022 10:51:08 +0100
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Markus Schneider-Pargmann <msp@baylibre.com>
-Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 02/15] can: m_can: Wakeup net queue once tx was issued
-Message-ID: <20221201091605.jgd7dlswcbxapdy3@pengutronix.de>
-References: <20221116205308.2996556-1-msp@baylibre.com>
- <20221116205308.2996556-3-msp@baylibre.com>
- <20221130172100.ef4xn6j6kzrymdyn@pengutronix.de>
- <20221201084302.oodh22xgvwsjmoc3@blmsp>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Jiri Pirko <jiri@resnulli.us>, Jiri Pirko <jiri@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        linux-can <linux-can@vger.kernel.org>
+Subject: Re: [PATCH net-next v2] net: devlink: add
+ DEVLINK_INFO_VERSION_GENERIC_FW_BOOTLOADER
+Message-ID: <20221201095108.4q3frhsktsbvw7at@pengutronix.de>
+References: <20221129031406.3849872-1-mailhol.vincent@wanadoo.fr>
+ <Y4XCnAA2hGvqgXh0@nanopsycho>
+ <CAMZ6RqJ54rfLfODB1JNaFr_pxWxzHJBoC2UmCKAZ7mSkEbcdzQ@mail.gmail.com>
+ <20221130170351.cjyaqr22vhqzq4hv@pengutronix.de>
+ <CAMZ6RqLy_H-A-=_jgPh6dUdHa_wMLB20X0rCFY7vkgBwvS1Uyg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bgbavs7rssx26dyz"
+        protocol="application/pgp-signature"; boundary="ymtbgkasf62ps6zq"
 Content-Disposition: inline
-In-Reply-To: <20221201084302.oodh22xgvwsjmoc3@blmsp>
+In-Reply-To: <CAMZ6RqLy_H-A-=_jgPh6dUdHa_wMLB20X0rCFY7vkgBwvS1Uyg@mail.gmail.com>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -57,50 +62,28 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---bgbavs7rssx26dyz
+--ymtbgkasf62ps6zq
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 01.12.2022 09:43:02, Markus Schneider-Pargmann wrote:
-> Hi Marc,
+On 01.12.2022 02:52:17, Vincent MAILHOL wrote:
+> > > I will use it in this series for the linux-can tree:
+> > > https://lore.kernel.org/netdev/20221126162211.93322-4-mailhol.vincent=
+@wanadoo.fr/
+> > >
+> > > If it is a problem to send this as a standalone patch, I will then
+> > > just add it to my series and have the patch go through the linux-can
+> > > tree.
+> >
+> > As you have the Ok from Greg, include this in you v5 series.
 >=20
-> On Wed, Nov 30, 2022 at 06:21:00PM +0100, Marc Kleine-Budde wrote:
-> > On 16.11.2022 21:52:55, Markus Schneider-Pargmann wrote:
-> > > Currently the driver waits to wakeup the queue until the interrupt for
-> > > the transmit event is received and acknowledged. If we want to use the
-> > > hardware FIFO, this is too late.
-> > >=20
-> > > Instead release the queue as soon as the transmit was transferred into
-> > > the hardware FIFO. We are then ready for the next transmit to be
-> > > transferred.
-> >=20
-> > If you want to really speed up the TX path, remove the worker and use
-> > the spi_async() API from the xmit callback, see mcp251xfd_start_xmit().
->=20
-> Good idea. I will check how regmap's async_write works and if it is
-> suitable to do the job. I don't want to drop the regmap usage for this
-> right now.
+> This is a different patch. Greg gave me his ACK to export usb_cache_strin=
+g():
+>   https://lore.kernel.org/linux-usb/Y3zyCz5HbGdsxmRT@kroah.com/
 
-IIRC regmap async write still uses mutexes, but sleeping is not allowed
-in the xmit handler. The mcp251xfd driver does the endianness conversion
-(and the optional CRC) manually for the TX path.
+Right, thanks for the clarification. - Too many patches :)
 
-Sending directly from the xmit handler basically eliminates the queuing
-between the network stack and the worker. Getting rid of the worker
-makes life easier and it's faster anyways.
-
-> > Extra bonus if you implement xmit_more() and transfer more than 1 skb
-> > per SPI transfer.
->=20
-> That's on my todo list, but I am not sure I will get to it soonish.
-
-I haven't implemented this for the mcp251xfd, yet, but I have some
-proof-of-concept code somewhere. However, the mcp251xfd driver already
-implemented byte queue limits: 0084e298acfe ("can: mcp251xfd: add BQL
-support").
-
-regards,
 Marc
 
 --=20
@@ -109,19 +92,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---bgbavs7rssx26dyz
+--ymtbgkasf62ps6zq
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOIcNIACgkQrX5LkNig
-012hAggAlCb40W8MfJXLFvupUYSaOXCTBav4Ad74PpGE+RCHo5V+RVAHB6xNqBUC
-Ur3tjLynBaHmla68klZIdl4ZUqRU5cBdJtRiGQpHwZJLqU9xP2FuiUf0I0VHAn/9
-Wa/0yS2DY3kd9Ss9cdeAsewED4/0+zjgaFWWVycUX8srrcTi7ub26px0QGCkH+ld
-6H2MJOtYzkLD3tAlcAghuRpfp3bsq2ZigzRfkungG8vJOlvkm7AsvLH49Q+ZAAW9
-ALcyi61T2MGL6tL4glNVH5nozZif11Oo8SLY+y6cSeiRv1XGH+LLA6W2ff9hJo04
-24rseGKCL6TUFzXOWhE1w+CBmE+LKQ==
-=p4PT
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOIeQkACgkQrX5LkNig
+011mWwf9ECdOBcKUiwp2BsQhmB7fN/5C7S4dIfJPQ5DzDvUT3dg3CGPo2RjP64Jr
+kV4GGX612N48tlHfmY683OthL3t5GrbJl2HU2jHLPEjC2UUv7ci+VlP8DrGYB6th
+DnEzHEB+0KSsGuZyw64DnONZbTpTlwW0DlqFaKlbGTuFJXwwXfJ4sVSCBUD60vtZ
+eIPv7kRBMqoe2DpOP+Cm8TKFR3MbIjIr43bFcfJv+wFHp73GxjoqgVq/WKMfiaZo
+NupBpVcd+bGSEel+6aojv0kvQ2Oi5dNmuSyNI3HHpWeZHffF5eRd+xJBDjy2rkmO
+P77W0AamMH5PMlny+N/89kaBmmTUYA==
+=E7Aa
 -----END PGP SIGNATURE-----
 
---bgbavs7rssx26dyz--
+--ymtbgkasf62ps6zq--
