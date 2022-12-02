@@ -2,116 +2,57 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2325640A1D
-	for <lists+linux-can@lfdr.de>; Fri,  2 Dec 2022 17:04:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEBC3640CA4
+	for <lists+linux-can@lfdr.de>; Fri,  2 Dec 2022 18:56:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233808AbiLBQEv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 2 Dec 2022 11:04:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42310 "EHLO
+        id S234324AbiLBR4L convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Fri, 2 Dec 2022 12:56:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233824AbiLBQE3 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 2 Dec 2022 11:04:29 -0500
-Received: from mail.enpas.org (zhong.enpas.org [IPv6:2a03:4000:2:537::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CBBCDA9590;
-        Fri,  2 Dec 2022 08:03:29 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        by mail.enpas.org (Postfix) with ESMTPSA id 284FCFF9B7;
-        Fri,  2 Dec 2022 16:03:23 +0000 (UTC)
-From:   Max Staudt <max@enpas.org>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Vincent Mailhol <vincent.mailhol@gmail.com>,
-        Oliver Neukum <oneukum@suse.com>, linux-kernel@vger.kernel.org,
-        Max Staudt <max@enpas.org>,
-        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH] can: can327: Flush tx_work on ldisc .close()
-Date:   Sat,  3 Dec 2022 01:01:48 +0900
-Message-Id: <20221202160148.282564-1-max@enpas.org>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S233790AbiLBR4G (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 2 Dec 2022 12:56:06 -0500
+Received: from slot0.krrombacher.com (slot0.krrombacher.com [185.246.220.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D31A3E11A8
+        for <linux-can@vger.kernel.org>; Fri,  2 Dec 2022 09:56:04 -0800 (PST)
+Reply-To: sales.reitangroup2@outlook.com
+From:   sales.reitangroup2@outlook.com
+To:     linux-can@vger.kernel.org
+Subject: General Inquiries
+Date:   2 Dec 2022 00:58:05 -0800
+Message-ID: <20221202005805.59BFE9D92D0F2DEA@outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DATE_IN_PAST_06_12,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_SOFTFAIL,SPOOFED_FREEMAIL
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Additionally, remove it from .ndo_stop().
+We are a procuring Branch of Reitan Groups. A Retail and Trading 
+company located in Norway and newly now in USA. This is one of 
+our procuring services, hence will like to order your Product.
 
-This ensures that the worker is not called after being freed, and that
-the UART TX queue remains active to send final commands when the netdev
-is stopped.
+Please provide us with your offers, catalog so we can choose 
+precisely the needed products required by our client. 
 
-Thanks to Jiri Slaby for finding this in slcan:
+Advise if you can as well Ship to USA and Europe.
 
-  https://lore.kernel.org/linux-can/20221201073426.17328-1-jirislaby@kernel.org/
+Your prompt response will be well appreciated.
 
-A variant of this patch for slcan, with the flush in .ndo_stop() still
-present, has been tested successfully on physical hardware:
+Thank You,
 
-  https://bugzilla.suse.com/show_bug.cgi?id=1205597
+Kriston Jentes
 
-Fixes: 43da2f07622f ("can: can327: CAN/ldisc driver for ELM327 based OBD-II adapters")
-Cc: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-Cc: Max Staudt <max@enpas.org>
-Cc: Wolfgang Grandegger <wg@grandegger.com>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: linux-can@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Cc: stable@vger.kernel.org
-Signed-off-by: Max Staudt <max@enpas.org>
----
- drivers/net/can/can327.c | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/net/can/can327.c b/drivers/net/can/can327.c
-index ed3d0b8989a0..dc7192ecb001 100644
---- a/drivers/net/can/can327.c
-+++ b/drivers/net/can/can327.c
-@@ -796,9 +796,9 @@ static int can327_netdev_close(struct net_device *dev)
- 
- 	netif_stop_queue(dev);
- 
--	/* Give UART one final chance to flush. */
--	clear_bit(TTY_DO_WRITE_WAKEUP, &elm->tty->flags);
--	flush_work(&elm->tx_work);
-+	/* We don't flush the UART TX queue here, as we want final stop
-+	 * commands (like the above dummy char) to be flushed out.
-+	 */
- 
- 	can_rx_offload_disable(&elm->offload);
- 	elm->can.state = CAN_STATE_STOPPED;
-@@ -1069,12 +1069,15 @@ static void can327_ldisc_close(struct tty_struct *tty)
- {
- 	struct can327 *elm = (struct can327 *)tty->disc_data;
- 
--	/* unregister_netdev() calls .ndo_stop() so we don't have to.
--	 * Our .ndo_stop() also flushes the TTY write wakeup handler,
--	 * so we can safely set elm->tty = NULL after this.
--	 */
-+	/* unregister_netdev() calls .ndo_stop() so we don't have to. */
- 	unregister_candev(elm->dev);
- 
-+	/* Give UART one final chance to flush.
-+	 * No need to clear TTY_DO_WRITE_WAKEUP since .write_wakeup() is
-+	 * serialised against .close() and will not be called once we return.
-+	 */
-+	flush_work(&elm->tx_work);
-+
- 	/* Mark channel as dead */
- 	spin_lock_bh(&elm->lock);
- 	tty->disc_data = NULL;
--- 
-2.30.2
-
+Oversea Marketing Manager
+REMA 1000 REMA 1000 Norge
++47 24 09 85 00Gladengveien 2, 0661, Oslo
+Postboks 6428 Etterstad, 0605 Oslo
+https://www.reitangruppen.no
