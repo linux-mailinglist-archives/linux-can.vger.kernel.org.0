@@ -2,54 +2,64 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB50C6408AF
-	for <lists+linux-can@lfdr.de>; Fri,  2 Dec 2022 15:46:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A60D96408EE
+	for <lists+linux-can@lfdr.de>; Fri,  2 Dec 2022 16:05:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232923AbiLBOqp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 2 Dec 2022 09:46:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47748 "EHLO
+        id S233678AbiLBPFa (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 2 Dec 2022 10:05:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232265AbiLBOqo (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 2 Dec 2022 09:46:44 -0500
+        with ESMTP id S233710AbiLBPFX (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 2 Dec 2022 10:05:23 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE961C2D3E
-        for <linux-can@vger.kernel.org>; Fri,  2 Dec 2022 06:46:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D2337FA7
+        for <linux-can@vger.kernel.org>; Fri,  2 Dec 2022 07:05:16 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1p17JJ-0002Ij-Ga; Fri, 02 Dec 2022 15:46:41 +0100
+        id 1p17as-0004iX-Qd; Fri, 02 Dec 2022 16:04:50 +0100
 Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:63a6:d4c5:22e2:f72a])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 6A01413172B;
-        Fri,  2 Dec 2022 14:46:39 +0000 (UTC)
-Date:   Fri, 2 Dec 2022 15:46:30 +0100
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 135E2131753;
+        Fri,  2 Dec 2022 15:04:48 +0000 (UTC)
+Date:   Fri, 2 Dec 2022 16:04:39 +0100
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Markus Schneider-Pargmann <msp@baylibre.com>
-Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 03/15] can: m_can: Cache tx putidx and transmits in flight
-Message-ID: <20221202144630.l4jil6spb4er5vzk@pengutronix.de>
-References: <20221116205308.2996556-1-msp@baylibre.com>
- <20221116205308.2996556-4-msp@baylibre.com>
- <20221201111450.fpadmwscjyhefs2u@pengutronix.de>
- <20221202083740.moa7whqd52oasbar@blmsp>
+To:     Vivek Yadav <vivek.2311@samsung.com>
+Cc:     rcsekar@samsung.com, krzysztof.kozlowski+dt@linaro.org,
+        wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, pankaj.dubey@samsung.com,
+        ravi.patel@samsung.com, alim.akhtar@samsung.com,
+        linux-fsd@tesla.com, robh+dt@kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        aswani.reddy@samsung.com, sriranjani.p@samsung.com
+Subject: Re: RE: RE: [PATCH v3 1/2] can: m_can: Move mram init to mcan device
+ setup
+Message-ID: <20221202150439.dmt7omdck7wdjpbv@pengutronix.de>
+References: <20221122105455.39294-1-vivek.2311@samsung.com>
+ <CGME20221122105022epcas5p3f5db1c5790b605bac8d319fe06ad915b@epcas5p3.samsung.com>
+ <20221122105455.39294-2-vivek.2311@samsung.com>
+ <20221123224146.iic52cuhhnwqk2te@pengutronix.de>
+ <01a101d8ffe4$1797f290$46c7d7b0$@samsung.com>
+ <20221124145405.d67cb6xmoiqfdsq3@pengutronix.de>
+ <01f901d9053a$f138bdd0$d3aa3970$@samsung.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ixaicbn435jko43j"
+        protocol="application/pgp-signature"; boundary="nnzicvks5gam4beu"
 Content-Disposition: inline
-In-Reply-To: <20221202083740.moa7whqd52oasbar@blmsp>
+In-Reply-To: <01f901d9053a$f138bdd0$d3aa3970$@samsung.com>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -57,63 +67,66 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---ixaicbn435jko43j
+--nnzicvks5gam4beu
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 02.12.2022 09:37:40, Markus Schneider-Pargmann wrote:
-> Hi Marc,
->=20
-> On Thu, Dec 01, 2022 at 12:14:50PM +0100, Marc Kleine-Budde wrote:
-> > On 16.11.2022 21:52:56, Markus Schneider-Pargmann wrote:
-> > > On peripheral chips every read/write can be costly. Avoid reading eas=
-ily
-> > > trackable information and cache them internally. This saves multiple
-> > > reads.
-> > >=20
-> > > Transmit FIFO put index is cached, this is increased for every time we
-> > > enqueue a transmit request.
-> > >=20
-> > > The transmits in flight is cached as well. With each transmit request=
- it
-> > > is increased when reading the finished transmit event it is decreased.
-> > >=20
-> > > A submit limit is cached to avoid submitting too many transmits at on=
-ce,
-> > > either because the TX FIFO or the TXE FIFO is limited. This is curren=
-tly
-> > > done very conservatively as the minimum of the fifo sizes. This means=
- we
-> > > can reach FIFO full events but won't drop anything.
+On 01.12.2022 09:40:50, Vivek Yadav wrote:
+> > That probably depends on you power management. If I add a regulator
+> > to power the external tcan4x5x chip and power it up during open(), I
+> > need to initialize the RAM.
 > >=20
-> > You have a dedicated in_flight variable, which is read-modify-write in 2
-> > different code path, i.e. this looks racy.
+> Thanks for the clarification,
+>
+> There is one doubt for which I need clarity if I add ram init in
+> m_can_chip_config.
 >=20
-> True, of course, thank you. Yes I have to redesign this a bit for
-> concurrency.
->=20
-> > If you allow only power-of-two FIFO size, you can use 2 unsigned
-> > variables, i.e. a head and a tail pointer. You can apply a mask to get
-> > the index to the FIFO. The difference between head and tail is the fill
-> > level of the FIFO. See mcp251xfd driver for this.
->=20
-> Maybe that is a trivial question but what's wrong with using atomics
-> instead?
+> In the current implementation, m_can_ram_init is added in the probe
+> and m_can_class_resume function.
+>
+> If I add the ram init function in chip_config which is getting called
+> from m_can_start, then m_can_init_ram will be called two times, once
+> in resume and next from m_can_start also.
 
-I think it's Ok to use an atomic for the fill level. The put index
-doesn't need to be. No need to cache the get index, as it's in the same
-register as the fill level.
+As m_can_start() is called from resume, remove the direct call to
+m_can_init_ram() from m_can_class_resume().
 
-As the mcp251xfd benefits from caching both indexes, a head and tail
-pointer felt like the right choice. As both are only written in 1
-location, no need for atomics or locking.
+> Can we add ram init inside the m_can_open function itself? Because it
+> is independent of m_can resume functionality.
 
-> The tcan mram size is limited to 2048 so I would like to avoid limiting
-> the possible sizes of the tx fifos.
+See above.
 
-What FIFO sizes are you using currently?
+mainline implementation:
 
+m_can_class_resume()
+        -> m_can_init_ram()
+
+m_can_open()
+        -> m_can_start()
+        -> m_can_chip_config()
+        -> ops->init
+                m_can_init_ram() (for tcan only)
+
+
+proposed:
+
+m_can_class_resume()
+        -> m_can_start()
+        -> m_can_chip_config()
+        -> m_can_init_ram()
+
+m_can_open()
+        -> m_can_start()
+        -> m_can_chip_config()
+        -> m_can_init_ram()
+
+In mainline m_can_init_ram() is called for the tcan during open(). So if
+you call m_can_init_ram() from m_can_chip_config(), remove it from the
+tcan's tcan4x5x_init() functions, and from m_can_class_resume() it
+should only be called once for open and once for resume.
+
+regards,
 Marc
 
 --=20
@@ -122,19 +135,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---ixaicbn435jko43j
+--nnzicvks5gam4beu
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOKD8QACgkQrX5LkNig
-011nRggApqQ6QLzpNnhi7K+OdMn/p9UPZnTesrpUao+VEKOrPhAeHqJKnNqbxQAx
-SZBcx39+DMalId+KYY93FB5Y7TxqBAGafQjIhK+DIezdKPybIXsBapR5HmHzmchk
-0oDptBDm/fxWa4akqiGOkucBXXPufVFZqWp3JDhvZkm+cN5PtwAxOJXjt5a77Op8
-FBkIjiH3xt35Qbj7wjGl7XiH59QJJNakBkwiBRTXAcbzUEVgeqE9grhHJK8lmXuT
-8FMXWHzOmVgpxU+LzuzrJrwjEGom6itXWzGrwTMq/y2Qw/xNXxDS1/na4ovFtNJD
-i2JW1ba6cSM0WYYBtDJOaFoa6AqgiQ==
-=mbq6
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOKFAUACgkQrX5LkNig
+011Q9Af8D5n0O+psn9BhVDedhpW//hB/XQMMH7zksV1ocaFaqRhrKndNq/6VxvaQ
+76p0XvaMDoItxBNZOQPFCNibWg8okFne0hyy1QiFmAxzxstuitQJmdsdRAAFZ3Sd
+wheA/xiL2BYQtbRgDkK2ANmQawU9+tOyRmIRRWCki9vcZ4J346uhAzRs6G7BShOr
+w1KH/8oTD5dDIwoyAXvaFeGKNgaf/YDV4JUhwrjFr9dpX4g7HrVsacPxD0V9gyVX
+nI8hamSZM4JAB5tN16hCIsUlnejUHR7QRPy+/q88HyvULstvXWZJ64OERksd++7G
+TCm0ycMZAmZ8WzJmxhCKz01go341Zg==
+=1sZ5
 -----END PGP SIGNATURE-----
 
---ixaicbn435jko43j--
+--nnzicvks5gam4beu--
