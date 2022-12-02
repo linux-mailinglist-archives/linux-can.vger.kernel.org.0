@@ -2,236 +2,123 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC3DB640213
-	for <lists+linux-can@lfdr.de>; Fri,  2 Dec 2022 09:29:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 703F6640255
+	for <lists+linux-can@lfdr.de>; Fri,  2 Dec 2022 09:39:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232770AbiLBI27 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 2 Dec 2022 03:28:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46610 "EHLO
+        id S233010AbiLBIjD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 2 Dec 2022 03:39:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232670AbiLBI2J (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 2 Dec 2022 03:28:09 -0500
-Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0303BD8A2
-        for <linux-can@vger.kernel.org>; Fri,  2 Dec 2022 00:22:22 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:2d07:19c5:4d8b:89d9])
-        by andre.telenet-ops.be with bizsmtp
-        id rLNH2800U0ys3B701LNHQP; Fri, 02 Dec 2022 09:22:19 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1p11JJ-002Hbf-68; Fri, 02 Dec 2022 09:22:17 +0100
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1p11JI-005TUo-3d; Fri, 02 Dec 2022 09:22:16 +0100
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc:     Ulrich Hecht <uli+renesas@fpond.eu>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-can@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] dt-bindings: can: renesas,rcar-canfd: Fix number of channels for R-Car V3U
-Date:   Fri,  2 Dec 2022 09:22:11 +0100
-Message-Id: <021037bf7e422fcc23700dd62d1174c8e46ac85d.1669969283.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S232560AbiLBIih (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 2 Dec 2022 03:38:37 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD871114D
+        for <linux-can@vger.kernel.org>; Fri,  2 Dec 2022 00:37:43 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id bg10so3031686wmb.1
+        for <linux-can@vger.kernel.org>; Fri, 02 Dec 2022 00:37:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/xIgmLq/C17zsRVPkarsENL7GSZIci+87q7Y9/uooIw=;
+        b=1uOrZ8sJ+PUYOTzvGs7uUF7vsYQs+WGpstKt6MC1HMItS/GAt+aHFnMkKpmjT9sgZZ
+         847FWIlH3ePBuRhq4Eq0ZSHytatsrdHwQ0oCPKxOhikB6wBRdkjlKKwoCBqLG7WFseiO
+         X0ta0WXs0VDBJMKNGldtPEmE8p8Eo6W7h9w677Y5lJfdesMJwZTi+q3Cw1kaFldOSamb
+         hwm3Kt8mqJO8Tobt6cF1JR3dweBM4GZquziZayrw02hJjNKdxxreNigjQvurqttedJe3
+         2YPJO1NJZKNMtit6TAWRZLV6nALKySXjSGOjZzpuRhHKO1iU4tAp6//PLPKMfF9Is71Q
+         aiCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/xIgmLq/C17zsRVPkarsENL7GSZIci+87q7Y9/uooIw=;
+        b=YPsNg4WSixFjbTuv2jgkle2SRZlzbLjQUJlbxtIoHjzMzUJIts2bK2Njwr5nO79t+q
+         KxAsnWIAvnBR3bILttJ0yYgZwkzmjLMAZvn85eLpxSyfYh9d9rwki+og5pwwwcr5iCvs
+         w16P6TmOlr+PgmwJqEQ11ySgI3Hrmz3pV0ewa6fe5Js3iRKLpVVMJhUF+/EwGw+A5qEg
+         rgsJ7b0m+JqFmVWQtr2D4G3GEllUtEC9tQbuhxggPNqurcUzUwP1w/moRdloUkPxz0tv
+         gjdGDhZW8BhknoTIFbNxunfl1CkqHTdRyOSl4ekWVlMYrq9F/TftQozdngMyeL2+H0h5
+         CFnA==
+X-Gm-Message-State: ANoB5pl2ms94j19ATEJr0jlN4FO006eFoQf9PxQRUwPbDjy6wif33Iyh
+        QnCTCijJeo/PrCC5029AXT+Lz70aVbF64EML
+X-Google-Smtp-Source: AA0mqf7nzU7iZ6L5WcgsuHh7L6H7KyqvASHV+E3NzK4ANsBmu7fRw/+rARI/Q5oyv3SzYTVTF/nQtQ==
+X-Received: by 2002:a7b:cb83:0:b0:3cf:96da:3846 with SMTP id m3-20020a7bcb83000000b003cf96da3846mr53105100wmi.10.1669970261507;
+        Fri, 02 Dec 2022 00:37:41 -0800 (PST)
+Received: from blmsp ([185.238.219.82])
+        by smtp.gmail.com with ESMTPSA id l22-20020a05600c4f1600b003cf54b77bfesm12948650wmq.28.2022.12.02.00.37.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 00:37:41 -0800 (PST)
+Date:   Fri, 2 Dec 2022 09:37:40 +0100
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 03/15] can: m_can: Cache tx putidx and transmits in flight
+Message-ID: <20221202083740.moa7whqd52oasbar@blmsp>
+References: <20221116205308.2996556-1-msp@baylibre.com>
+ <20221116205308.2996556-4-msp@baylibre.com>
+ <20221201111450.fpadmwscjyhefs2u@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221201111450.fpadmwscjyhefs2u@pengutronix.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-According to the bindings, only two channels are supported.
-However, R-Car V3U supports eight, leading to "make dtbs" failures:
+Hi Marc,
 
-        arch/arm64/boot/dts/renesas/r8a779a0-falcon.dtb: can@e6660000: Unevaluated properties are not allowed ('channel2', 'channel3', 'channel4', 'channel5', 'channel6', 'channel7' were unexpected)
+On Thu, Dec 01, 2022 at 12:14:50PM +0100, Marc Kleine-Budde wrote:
+> On 16.11.2022 21:52:56, Markus Schneider-Pargmann wrote:
+> > On peripheral chips every read/write can be costly. Avoid reading easily
+> > trackable information and cache them internally. This saves multiple
+> > reads.
+> > 
+> > Transmit FIFO put index is cached, this is increased for every time we
+> > enqueue a transmit request.
+> > 
+> > The transmits in flight is cached as well. With each transmit request it
+> > is increased when reading the finished transmit event it is decreased.
+> > 
+> > A submit limit is cached to avoid submitting too many transmits at once,
+> > either because the TX FIFO or the TXE FIFO is limited. This is currently
+> > done very conservatively as the minimum of the fifo sizes. This means we
+> > can reach FIFO full events but won't drop anything.
+> 
+> You have a dedicated in_flight variable, which is read-modify-write in 2
+> different code path, i.e. this looks racy.
 
-Update the number of channels to 8 on R-Car V3U.
-While at it, prevent adding more properties to the channel nodes, as
-they must contain no other properties than a status property.
+True, of course, thank you. Yes I have to redesign this a bit for
+concurrency.
 
-Fixes: d6254d52d70de530 ("dt-bindings: can: renesas,rcar-canfd: Document r8a779a0 support")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-Is there a way to express this using positive logic (i.e. default to 2
-channels, extend to more where needed)? R-Car V3H_2 (which is not yet
-supported) has 3 channels.
-Or perhaps the check should be dropped completely?
----
- .../bindings/net/can/renesas,rcar-canfd.yaml  | 132 ++++++++++--------
- 1 file changed, 72 insertions(+), 60 deletions(-)
+> If you allow only power-of-two FIFO size, you can use 2 unsigned
+> variables, i.e. a head and a tail pointer. You can apply a mask to get
+> the index to the FIFO. The difference between head and tail is the fill
+> level of the FIFO. See mcp251xfd driver for this.
 
-diff --git a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-index 6f71fc96bc4e3156..6a4fb26cfd7b8979 100644
---- a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-+++ b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-@@ -9,9 +9,6 @@ title: Renesas R-Car CAN FD Controller
- maintainers:
-   - Fabrizio Castro <fabrizio.castro.jz@renesas.com>
- 
--allOf:
--  - $ref: can-controller.yaml#
--
- properties:
-   compatible:
-     oneOf:
-@@ -77,13 +74,15 @@ properties:
-     description: Maximum frequency of the CANFD clock.
- 
- patternProperties:
--  "^channel[01]$":
-+  "^channel[0-7]$":
-     type: object
-     description:
--      The controller supports two channels and each is represented as a child
--      node.  Each child node supports the "status" property only, which
-+      The controller supports multiple channels and each is represented as a
-+      child node.  Each child node supports the "status" property only, which
-       is used to enable/disable the respective channel.
- 
-+    unevaluatedProperties: false
-+
- required:
-   - compatible
-   - reg
-@@ -98,60 +97,73 @@ required:
-   - channel0
-   - channel1
- 
--if:
--  properties:
--    compatible:
--      contains:
--        enum:
--          - renesas,rzg2l-canfd
--then:
--  properties:
--    interrupts:
--      items:
--        - description: CAN global error interrupt
--        - description: CAN receive FIFO interrupt
--        - description: CAN0 error interrupt
--        - description: CAN0 transmit interrupt
--        - description: CAN0 transmit/receive FIFO receive completion interrupt
--        - description: CAN1 error interrupt
--        - description: CAN1 transmit interrupt
--        - description: CAN1 transmit/receive FIFO receive completion interrupt
--
--    interrupt-names:
--      items:
--        - const: g_err
--        - const: g_recc
--        - const: ch0_err
--        - const: ch0_rec
--        - const: ch0_trx
--        - const: ch1_err
--        - const: ch1_rec
--        - const: ch1_trx
--
--    resets:
--      maxItems: 2
--
--    reset-names:
--      items:
--        - const: rstp_n
--        - const: rstc_n
--
--  required:
--    - reset-names
--else:
--  properties:
--    interrupts:
--      items:
--        - description: Channel interrupt
--        - description: Global interrupt
--
--    interrupt-names:
--      items:
--        - const: ch_int
--        - const: g_int
--
--    resets:
--      maxItems: 1
-+allOf:
-+  - $ref: can-controller.yaml#
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - renesas,rzg2l-canfd
-+    then:
-+      properties:
-+        interrupts:
-+          items:
-+            - description: CAN global error interrupt
-+            - description: CAN receive FIFO interrupt
-+            - description: CAN0 error interrupt
-+            - description: CAN0 transmit interrupt
-+            - description: CAN0 transmit/receive FIFO receive completion interrupt
-+            - description: CAN1 error interrupt
-+            - description: CAN1 transmit interrupt
-+            - description: CAN1 transmit/receive FIFO receive completion interrupt
-+
-+        interrupt-names:
-+          items:
-+            - const: g_err
-+            - const: g_recc
-+            - const: ch0_err
-+            - const: ch0_rec
-+            - const: ch0_trx
-+            - const: ch1_err
-+            - const: ch1_rec
-+            - const: ch1_trx
-+
-+        resets:
-+          maxItems: 2
-+
-+        reset-names:
-+          items:
-+            - const: rstp_n
-+            - const: rstc_n
-+
-+      required:
-+        - reset-names
-+    else:
-+      properties:
-+        interrupts:
-+          items:
-+            - description: Channel interrupt
-+            - description: Global interrupt
-+
-+        interrupt-names:
-+          items:
-+            - const: ch_int
-+            - const: g_int
-+
-+        resets:
-+          maxItems: 1
-+
-+  - if:
-+      not:
-+        properties:
-+          compatible:
-+            contains:
-+              const: renesas,r8a779a0-canfd
-+    then:
-+      patternProperties:
-+        "^channel[2-7]$": false
- 
- unevaluatedProperties: false
- 
--- 
-2.25.1
+Maybe that is a trivial question but what's wrong with using atomics
+instead?
+
+The tcan mram size is limited to 2048 so I would like to avoid limiting
+the possible sizes of the tx fifos.
+
+Best,
+Markus
+
+> 
+> Marc
+> 
+> -- 
+> Pengutronix e.K.                 | Marc Kleine-Budde           |
+> Embedded Linux                   | https://www.pengutronix.de  |
+> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
 
