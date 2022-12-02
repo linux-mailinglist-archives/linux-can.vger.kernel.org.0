@@ -2,129 +2,157 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C3EC640343
-	for <lists+linux-can@lfdr.de>; Fri,  2 Dec 2022 10:25:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0316F640394
+	for <lists+linux-can@lfdr.de>; Fri,  2 Dec 2022 10:43:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232458AbiLBJZu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 2 Dec 2022 04:25:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48090 "EHLO
+        id S232898AbiLBJn4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 2 Dec 2022 04:43:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232574AbiLBJZc (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 2 Dec 2022 04:25:32 -0500
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B87E13FB9;
-        Fri,  2 Dec 2022 01:25:30 -0800 (PST)
-Received: by mail-qv1-f42.google.com with SMTP id s14so3037202qvo.11;
-        Fri, 02 Dec 2022 01:25:30 -0800 (PST)
+        with ESMTP id S232781AbiLBJnx (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 2 Dec 2022 04:43:53 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C2DC23F7
+        for <linux-can@vger.kernel.org>; Fri,  2 Dec 2022 01:43:50 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id h11so6913982wrw.13
+        for <linux-can@vger.kernel.org>; Fri, 02 Dec 2022 01:43:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=c7jlww+YwvtAfoXwz8qUgfga6wLFv4byhYCz3Q0szb8=;
+        b=UUc5j3AY/8JQw+2iT1LRk0y67Zdou18oQp+qMNiQ5HQ2ZM7wjqAqK+J0bA0SVzPl1m
+         uhLopuQ7wySKWej1bxdYuxwkfM/zbXDRzaYKHXEfUbjQo4aPkNsWSJJL1EIY+RRNF2yb
+         qRF64ISg2W7145G7j8/5wfzG2Ktx8O9JBzgSGYZfF0+Z5whK4hQMe/07xss/gbfFjGXj
+         6CoT9Y0iev91zqQYyOveRkI95p7oP2h50Jn2/F70Pj/TJ7LbnUWyaDUD3WhDVYz9E06G
+         itm/c6NrQoXxBfm37yjjjZPXUdv/sQQoZ9fX1ip9k84iN1UzkLc+3FyYCFqi2UbVAdIg
+         e55w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DMI5tS8skVho4WVNvy+4Y+948fh/Zr6JgQS25XTwcPs=;
-        b=E6Td5z4+sBBv8XEmqsAa3NCICkkW/jrz2KPKiXznzbYXbJQrq1lb5yQNI1e8CCxYvS
-         +coijIVG45tCciGAlBLVWMoGIyKTGlS79TAmiw0/ff40uIqYHElZBlcOY/e1bnYy1FUG
-         Wu8RaLQmBXr6lc5K8Zl+NYOI5TSmcg7CvY5AX7TsfdVvjwEiwiIASj1mDv8QbzADwC88
-         qes6jGvpiy1xEDUmzaYzyKFr93vETGRVL1JmyjYtHsPMogRNte418riDeepgP3jHOyUY
-         Y6MpNugsEhpONP1iNx6OciDOKUxVLwVqGcW+gL3Tho73G3TwpUnllTC0LQCqZPZhugRw
-         uc0w==
-X-Gm-Message-State: ANoB5pk5K5iMBibIdM1u6f6HK3/pQ+ufw58zrE1zf52os645h4uSEKLo
-        MwqgsiinO7tqgdHaWZw/86tSJVAgrEOe5g==
-X-Google-Smtp-Source: AA0mqf4W1aYsjPPJuo59f/91LwDQISaFzO7nj6BWZmJTZO5GevuI6cZE7UmfEpVBMjBh2C1pR6zSJg==
-X-Received: by 2002:ad4:52ca:0:b0:4bb:cb21:df19 with SMTP id p10-20020ad452ca000000b004bbcb21df19mr51987650qvs.85.1669973129457;
-        Fri, 02 Dec 2022 01:25:29 -0800 (PST)
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
-        by smtp.gmail.com with ESMTPSA id bj9-20020a05620a190900b006b95b0a714esm5076536qkb.17.2022.12.02.01.25.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 01:25:28 -0800 (PST)
-Received: by mail-yb1-f179.google.com with SMTP id 7so5311118ybp.13;
-        Fri, 02 Dec 2022 01:25:28 -0800 (PST)
-X-Received: by 2002:a25:7408:0:b0:6f2:49a7:38ef with SMTP id
- p8-20020a257408000000b006f249a738efmr34049752ybc.365.1669973127972; Fri, 02
- Dec 2022 01:25:27 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c7jlww+YwvtAfoXwz8qUgfga6wLFv4byhYCz3Q0szb8=;
+        b=tD6/I/iyCRJp9A4CGYhIJmhwywPEIihW5IIGJkGA0Xsctb+8RNLrxcHsFSIGsE7s00
+         gN0c3gPNxyRr4t77zkRoEqXGfI6T93427ngn08OnlSJ0LHaAWpjdvAZuRok/WxW1jink
+         /oNYyUBZLLIjg/NwwlMDnvgH4HKlAidQWiTqaQ/BR0aeM/UPgArxJIdLpEaTMIgGFjJW
+         1LB6Pw5RvCjlpbFkihIWOiMdXqXzCQNKxVdLJClSnqatn9F2rnXYpE2KneMk5oCpAB3D
+         znHYWj+AO8QOsWTIbawo53QNZoEEcOwdoHdCbjPqYIiSX8fJaQh+izxns9dnoRUXZ0Z6
+         Vghg==
+X-Gm-Message-State: ANoB5plIet+lal6TfjmYH6wozFw0sYEbrAaNwlrJly56pcnJ3hexyhX9
+        9rA4/jCpS82XAOhadtQgrKd9CPOH1Sw/t6do
+X-Google-Smtp-Source: AA0mqf5PU3+l+PWDbIeocGDkvLX8GPrawrhlnnw5BkWigrAwIkUb2MEgKnEa5yha97IhUbU+4a9aAQ==
+X-Received: by 2002:a5d:5952:0:b0:241:a79b:3c41 with SMTP id e18-20020a5d5952000000b00241a79b3c41mr42208065wri.22.1669974229202;
+        Fri, 02 Dec 2022 01:43:49 -0800 (PST)
+Received: from blmsp ([185.238.219.119])
+        by smtp.gmail.com with ESMTPSA id j3-20020adfd203000000b002366c3eefccsm6661799wrh.109.2022.12.02.01.43.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 01:43:48 -0800 (PST)
+Date:   Fri, 2 Dec 2022 10:43:46 +0100
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 04/15] can: m_can: Use transmit event FIFO watermark
+ level interrupt
+Message-ID: <20221202094346.u2nasxlcwh7llwe5@blmsp>
+References: <20221116205308.2996556-1-msp@baylibre.com>
+ <20221116205308.2996556-5-msp@baylibre.com>
+ <20221130171715.nujptzwnut7silbm@pengutronix.de>
+ <20221201082521.3tqevaygz4nhw52u@blmsp>
+ <20221201090508.jh5iymwmhs3orb2v@pengutronix.de>
+ <20221201101220.r63fvussavailwh5@blmsp>
+ <20221201110033.r7hnvpw6fp2fquni@pengutronix.de>
+ <20221201165951.5a4srb7zjrsdr3vd@blmsp>
+ <20221202092306.7p3r4yuauwjj5xaj@pengutronix.de>
 MIME-Version: 1.0
-References: <021037bf7e422fcc23700dd62d1174c8e46ac85d.1669969283.git.geert+renesas@glider.be>
- <8af1d8b0-8b59-6d2f-ef1c-a24ef49e5d77@linaro.org>
-In-Reply-To: <8af1d8b0-8b59-6d2f-ef1c-a24ef49e5d77@linaro.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 2 Dec 2022 10:25:16 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWd3KikD=HKFTorQvD_yGRvP3zCBF=FMJQvrLnF6VX5eA@mail.gmail.com>
-Message-ID: <CAMuHMdWd3KikD=HKFTorQvD_yGRvP3zCBF=FMJQvrLnF6VX5eA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: can: renesas,rcar-canfd: Fix number of
- channels for R-Car V3U
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Ulrich Hecht <uli+renesas@fpond.eu>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-can@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221202092306.7p3r4yuauwjj5xaj@pengutronix.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Krzysztof,
+On Fri, Dec 02, 2022 at 10:23:06AM +0100, Marc Kleine-Budde wrote:
+...
+> > > > > The configuration for the mcp251xfd looks like this:
+> > > > > 
+> > > > > - First decide for classical CAN or CAN-FD mode
+> > > > > - configure RX and TX ring size
+> > > > >   9263c2e92be9 ("can: mcp251xfd: ring: add support for runtime configurable RX/TX ring parameters")
+> > > > >   For TX only a single FIFO is used.
+> > > > >   For RX up to 3 FIFOs (up to a depth of 32 each).
+> > > > >   FIFO depth is limited to power of 2.
+> > > > >   On the mcan cores this is currently done with a DT property.
+> > > > >   Runtime configurable ring size is optional but gives more flexibility
+> > > > >   for our use-cases due to limited RAM size.
+> > > > > - configure RX and TX coalescing via ethtools
+> > > > >   Set a timeout and the max CAN frames to coalesce.
+> > > > >   The max frames are limited to half or full FIFO.
+> > > > 
+> > > > mcan can offer more options for the max frames limit fortunately.
+> > > > 
+> > > > > 
+> > > > > How does coalescing work?
+> > > > > 
+> > > > > If coalescing is activated during reading of the RX'ed frames the FIFO
+> > > > > not empty IRQ is disabled (the half or full IRQ stays enabled). After
+> > > > > handling the RX'ed frames a hrtimer is started. In the hrtimer's
+> > > > > functions the FIFO not empty IRQ is enabled again.
+> > > > 
+> > > > My rx path patches are working similarly though not 100% the same. I
+> > > > will adopt everything and add it to the next version of this series.
+> > > > 
+> > > > > 
+> > > > > I decided not to call the IRQ handler from the hrtimer to avoid
+> > > > > concurrency, but enable the FIFO not empty IRQ.
+> > > > 
+> > > > mcan uses a threaded irq and I found this nice helper function I am
+> > > > currently using for the receive path.
+> > > > 	irq_wake_thread()
+> > > > 
+> > > > It is not widely used so I hope this is fine. But this hopefully avoids
+> > > > the concurrency issue. Also I don't need to artificially create an IRQ
+> > > > as you do.
+> > > 
+> > > I think it's Ok to use the function. Which IRQs are enabled after you
+> > > leave the RX handler? The mcp251xfd driver enables only a high watermark
+> > > IRQ and sets up the hrtimer. Then we have 3 scenarios:
+> > > - high watermark IRQ triggers -> IRQ is handled,
+> > > - FIFO level between 0 and high water mark -> no IRQ triggered, but
+> > >   hrtimer will run, irq_wake_thread() is called, IRQ is handled
+> > > - FIFO level 0 -> no IRQ triggered, hrtimer will run. What do you do in
+> > >   the IRQ handler? Check if FIFO is empty and enable the FIFO not empty
+> > >   IRQ?
+> > 
+> > I am currently doing the normal IRQ handler run. It checks the
+> > "Interrupt Register" at the beginning. This register does not show the
+> > interrupts that fired, it shows the status. So even though the watermark
+> > interrupt didn't trigger when called by a timer, RF0N 'new message'
+> > status bit is still set if there is something new in the FIFO.
+> 
+> That covers scenario 2 from above.
+> 
+> > Of course it is the same for the transmit status bits.
+> 
+> ACK - The TX complete event handling is a 95% copy/paste of the RX
+> handling.
+> 
+> > So there is no need to read the FIFO fill levels directly, just the
+> > general status register.
+> 
+> What do you do if the hrtimer fires and there's no CAN frame waiting in
+> the FIFO?
 
-On Fri, Dec 2, 2022 at 10:01 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> On 02/12/2022 09:22, Geert Uytterhoeven wrote:
-> > According to the bindings, only two channels are supported.
-> > However, R-Car V3U supports eight, leading to "make dtbs" failures:
-> >
-> >         arch/arm64/boot/dts/renesas/r8a779a0-falcon.dtb: can@e6660000: Unevaluated properties are not allowed ('channel2', 'channel3', 'channel4', 'channel5', 'channel6', 'channel7' were unexpected)
-> >
-> > Update the number of channels to 8 on R-Car V3U.
-> > While at it, prevent adding more properties to the channel nodes, as
-> > they must contain no other properties than a status property.
-> >
-> > Fixes: d6254d52d70de530 ("dt-bindings: can: renesas,rcar-canfd: Document r8a779a0 support")
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Just enabling the 'new item' interrupt again and keep the hrtimer
+disabled.
 
-> > --- a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-> > +++ b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-
-> >      description: Maximum frequency of the CANFD clock.
-> >
-> >  patternProperties:
-> > -  "^channel[01]$":
-> > +  "^channel[0-7]$":
-> >      type: object
-> >      description:
-> > -      The controller supports two channels and each is represented as a child
-> > -      node.  Each child node supports the "status" property only, which
-> > +      The controller supports multiple channels and each is represented as a
-> > +      child node.  Each child node supports the "status" property only, which
-> >        is used to enable/disable the respective channel.
-> >
-> > +    unevaluatedProperties: false
->
-> There are no other properties within a channel, so this should be rather
-> additionalProperties: false.
-
-Are you sure? Then I also have to add:
-
-        properties:
-          status: true
-
-Thanks!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Best,
+Markus
