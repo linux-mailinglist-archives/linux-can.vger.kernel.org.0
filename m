@@ -2,50 +2,53 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 968BB640364
+	by mail.lfdr.de (Postfix) with ESMTP id E2A5B640365
 	for <lists+linux-can@lfdr.de>; Fri,  2 Dec 2022 10:33:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232705AbiLBJdm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 2 Dec 2022 04:33:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33912 "EHLO
+        id S232789AbiLBJdn (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 2 Dec 2022 04:33:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232946AbiLBJdU (ORCPT
+        with ESMTP id S232950AbiLBJdU (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Fri, 2 Dec 2022 04:33:20 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284A12CE
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284F4267F
         for <linux-can@vger.kernel.org>; Fri,  2 Dec 2022 01:33:01 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1p12Pi-0001p9-OC; Fri, 02 Dec 2022 10:32:58 +0100
+        id 1p12Pi-0001pA-OC; Fri, 02 Dec 2022 10:32:58 +0100
 Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:63a6:d4c5:22e2:f72a])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 1CC8B1312BF;
-        Fri,  2 Dec 2022 09:16:36 +0000 (UTC)
-Date:   Fri, 2 Dec 2022 10:16:30 +0100
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 59E901312FE;
+        Fri,  2 Dec 2022 09:23:11 +0000 (UTC)
+Date:   Fri, 2 Dec 2022 10:23:06 +0100
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     Markus Schneider-Pargmann <msp@baylibre.com>
 Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 02/15] can: m_can: Wakeup net queue once tx was issued
-Message-ID: <20221202091630.253elxu66i3nur4n@pengutronix.de>
+Subject: Re: [PATCH 04/15] can: m_can: Use transmit event FIFO watermark
+ level interrupt
+Message-ID: <20221202092306.7p3r4yuauwjj5xaj@pengutronix.de>
 References: <20221116205308.2996556-1-msp@baylibre.com>
- <20221116205308.2996556-3-msp@baylibre.com>
- <20221130172100.ef4xn6j6kzrymdyn@pengutronix.de>
- <20221201084302.oodh22xgvwsjmoc3@blmsp>
- <20221201091605.jgd7dlswcbxapdy3@pengutronix.de>
- <20221201164902.ipd3ctrtne47jtmv@blmsp>
+ <20221116205308.2996556-5-msp@baylibre.com>
+ <20221130171715.nujptzwnut7silbm@pengutronix.de>
+ <20221201082521.3tqevaygz4nhw52u@blmsp>
+ <20221201090508.jh5iymwmhs3orb2v@pengutronix.de>
+ <20221201101220.r63fvussavailwh5@blmsp>
+ <20221201110033.r7hnvpw6fp2fquni@pengutronix.de>
+ <20221201165951.5a4srb7zjrsdr3vd@blmsp>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gkatmsqg2kawq7yc"
+        protocol="application/pgp-signature"; boundary="lplwxv2ffj4xly6s"
 Content-Disposition: inline
-In-Reply-To: <20221201164902.ipd3ctrtne47jtmv@blmsp>
+In-Reply-To: <20221201165951.5a4srb7zjrsdr3vd@blmsp>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -59,67 +62,121 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---gkatmsqg2kawq7yc
+--lplwxv2ffj4xly6s
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 01.12.2022 17:49:02, Markus Schneider-Pargmann wrote:
-> Hi Marc,
->=20
-> On Thu, Dec 01, 2022 at 10:16:05AM +0100, Marc Kleine-Budde wrote:
-> > On 01.12.2022 09:43:02, Markus Schneider-Pargmann wrote:
-> > > Hi Marc,
-> > >=20
-> > > On Wed, Nov 30, 2022 at 06:21:00PM +0100, Marc Kleine-Budde wrote:
-> > > > On 16.11.2022 21:52:55, Markus Schneider-Pargmann wrote:
-> > > > > Currently the driver waits to wakeup the queue until the interrup=
-t for
-> > > > > the transmit event is received and acknowledged. If we want to us=
-e the
-> > > > > hardware FIFO, this is too late.
-> > > > >=20
-> > > > > Instead release the queue as soon as the transmit was transferred=
- into
-> > > > > the hardware FIFO. We are then ready for the next transmit to be
-> > > > > transferred.
+On 01.12.2022 17:59:51, Markus Schneider-Pargmann wrote:
+> On Thu, Dec 01, 2022 at 12:00:33PM +0100, Marc Kleine-Budde wrote:
+> > On 01.12.2022 11:12:20, Markus Schneider-Pargmann wrote:
+> > > > > For the upcoming receive side patch I already added a hrtimer. I =
+may try
+> > > > > to use the same timer for both directions as it is going to do th=
+e exact
+> > > > > same thing in both cases (call the interrupt routine). Of course =
+that
+> > > > > depends on the details of the coalescing support. Any objections =
+on
+> > > > > that?
 > > > >=20
-> > > > If you want to really speed up the TX path, remove the worker and u=
-se
-> > > > the spi_async() API from the xmit callback, see mcp251xfd_start_xmi=
-t().
+> > > > For the mcp251xfd I implemented the RX and TX coalescing independen=
+t of
+> > > > each other and made it configurable via ethtool's IRQ coalescing
+> > > > options.
+> > > >=20
+> > > > The hardware doesn't support any timeouts and only FIFO not empty, =
+FIFO
+> > > > half full and FIFO full IRQs and the on chip RAM for mailboxes is r=
+ather
+> > > > limited. I think the mcan core has the same limitations.
 > > >=20
-> > > Good idea. I will check how regmap's async_write works and if it is
-> > > suitable to do the job. I don't want to drop the regmap usage for this
-> > > right now.
+> > > Yes and no, the mcan core provides watermark levels so it has more
+> > > options, but there is no hardware timer as well (at least I didn't see
+> > > anything usable).
 > >=20
-> > IIRC regmap async write still uses mutexes, but sleeping is not allowed
-> > in the xmit handler. The mcp251xfd driver does the endianness conversion
-> > (and the optional CRC) manually for the TX path.
+> > Are there any limitations to the water mark level?
 >=20
-> I just saw, you can force regmap to use spinlocks as well. But it uses
-> the same operation for sync operations as well.
+> Anything specific? I can't really see any limitation. You can set the
+> watermark between 1 and 32. I guess we could also always use it instead
+> of the new-element interrupt, but I haven't tried that yet. That may
+> simplify the code.
 
-But you cannot use sync SPI api under a spinlock.
+Makes sense.
 
-> > Sending directly from the xmit handler basically eliminates the queuing
-> > between the network stack and the worker. Getting rid of the worker
-> > makes life easier and it's faster anyways.
+> > > > The configuration for the mcp251xfd looks like this:
+> > > >=20
+> > > > - First decide for classical CAN or CAN-FD mode
+> > > > - configure RX and TX ring size
+> > > >   9263c2e92be9 ("can: mcp251xfd: ring: add support for runtime conf=
+igurable RX/TX ring parameters")
+> > > >   For TX only a single FIFO is used.
+> > > >   For RX up to 3 FIFOs (up to a depth of 32 each).
+> > > >   FIFO depth is limited to power of 2.
+> > > >   On the mcan cores this is currently done with a DT property.
+> > > >   Runtime configurable ring size is optional but gives more flexibi=
+lity
+> > > >   for our use-cases due to limited RAM size.
+> > > > - configure RX and TX coalescing via ethtools
+> > > >   Set a timeout and the max CAN frames to coalesce.
+> > > >   The max frames are limited to half or full FIFO.
+> > >=20
+> > > mcan can offer more options for the max frames limit fortunately.
+> > >=20
+> > > >=20
+> > > > How does coalescing work?
+> > > >=20
+> > > > If coalescing is activated during reading of the RX'ed frames the F=
+IFO
+> > > > not empty IRQ is disabled (the half or full IRQ stays enabled). Aft=
+er
+> > > > handling the RX'ed frames a hrtimer is started. In the hrtimer's
+> > > > functions the FIFO not empty IRQ is enabled again.
+> > >=20
+> > > My rx path patches are working similarly though not 100% the same. I
+> > > will adopt everything and add it to the next version of this series.
+> > >=20
+> > > >=20
+> > > > I decided not to call the IRQ handler from the hrtimer to avoid
+> > > > concurrency, but enable the FIFO not empty IRQ.
+> > >=20
+> > > mcan uses a threaded irq and I found this nice helper function I am
+> > > currently using for the receive path.
+> > > 	irq_wake_thread()
+> > >=20
+> > > It is not widely used so I hope this is fine. But this hopefully avoi=
+ds
+> > > the concurrency issue. Also I don't need to artificially create an IRQ
+> > > as you do.
+> >=20
+> > I think it's Ok to use the function. Which IRQs are enabled after you
+> > leave the RX handler? The mcp251xfd driver enables only a high watermark
+> > IRQ and sets up the hrtimer. Then we have 3 scenarios:
+> > - high watermark IRQ triggers -> IRQ is handled,
+> > - FIFO level between 0 and high water mark -> no IRQ triggered, but
+> >   hrtimer will run, irq_wake_thread() is called, IRQ is handled
+> > - FIFO level 0 -> no IRQ triggered, hrtimer will run. What do you do in
+> >   the IRQ handler? Check if FIFO is empty and enable the FIFO not empty
+> >   IRQ?
 >=20
-> The current implementation of the driver doesn't really queue anything
-> between the network stack and the worker. It is a queue of size 1 ;).
+> I am currently doing the normal IRQ handler run. It checks the
+> "Interrupt Register" at the beginning. This register does not show the
+> interrupts that fired, it shows the status. So even though the watermark
+> interrupt didn't trigger when called by a timer, RF0N 'new message'
+> status bit is still set if there is something new in the FIFO.
 
-Ok
+That covers scenario 2 from above.
 
-> To be honest I would rather focus on the other things than on getting
-> rid of the worker completely as this can be done in a separate patch
-> later as well. Yes I agree it would be nice to get rid of the worker but
-> it is also probably not a major bottleneck for the performance and in
-> its current state it works. If I have time left at the end I will be
-> more than happy to do that. But for the moment I would just keep the
-> worker as it is. Is that OK for you?
+> Of course it is the same for the transmit status bits.
 
-Sure.
+ACK - The TX complete event handling is a 95% copy/paste of the RX
+handling.
+
+> So there is no need to read the FIFO fill levels directly, just the
+> general status register.
+
+What do you do if the hrtimer fires and there's no CAN frame waiting in
+the FIFO?
 
 Marc
 
@@ -129,19 +186,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---gkatmsqg2kawq7yc
+--lplwxv2ffj4xly6s
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOJwmsACgkQrX5LkNig
-0126Egf6AoFzKXBy4GROos9DBeL7yECpyQlkoQoOfHsO/WumBEad76Zty8iRt3nI
-3G4YxYoBInpvkA2z6hDSkAxGNg7U98GNwME8EwXMClGrCToXyyV0Z4xaFCs00nsy
-nJUpS3C/dL29eH1NNhuDhZu0UANYCRkCQwVwCr2I4+AQCQ1FVf+WNfuJfC7IkijE
-ISeV6c+hYU/L5pNNsRWRaHmz08p8gAQot2DoFp2miBK3e0hJ9CdgBg82cpvsGh6+
-StKjpr1MPnbD6AE34uVKkwFPreCoGRnPSsOlXFcWIXqQHRLm5n4LNg9x6lO5Yqql
-kpHTw7s4SCDU0IAAYwa0aoVc7X4NOw==
-=RMCq
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOJw/cACgkQrX5LkNig
+012Odwf9H2t1BGoHh4+kbgb4wtOXdxQfjeF8IrH6rVaLWxCmxIRwD+U2aDY81uMP
+ETPahpX4MxK0x5mczQYb241iwammrFQJ9TzNPmA7D4ouLBVcoh+fKJQvkXaX6k4W
+2xMKaXAzuRU4vO+LT+Ou8IHXgwsyxqi5USunD5YOWpH6QmrWWk+CpDao1vcFF/rj
+aoAqR2y1/UWsDOBQo1cp8bCln7emTL52gJt8f9r0ImxfXyEevmvaqz0z8kXtnqA1
+k9dpwxJyDkwyD6LyL4b5msnExomIxhXp+cvjBdBASKCKD6d8LJnMCzCR1q6oKKXh
+sE23sD3qxcmK+qqBqPx8q1Kwo8ewaQ==
+=kBcF
 -----END PGP SIGNATURE-----
 
---gkatmsqg2kawq7yc--
+--lplwxv2ffj4xly6s--
