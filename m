@@ -2,68 +2,70 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50927642574
-	for <lists+linux-can@lfdr.de>; Mon,  5 Dec 2022 10:10:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A729D6425CB
+	for <lists+linux-can@lfdr.de>; Mon,  5 Dec 2022 10:30:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbiLEJKv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 5 Dec 2022 04:10:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58742 "EHLO
+        id S230511AbiLEJaS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 5 Dec 2022 04:30:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbiLEJKU (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 5 Dec 2022 04:10:20 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C631928C
-        for <linux-can@vger.kernel.org>; Mon,  5 Dec 2022 01:09:35 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id d14so9876334edj.11
-        for <linux-can@vger.kernel.org>; Mon, 05 Dec 2022 01:09:35 -0800 (PST)
+        with ESMTP id S230503AbiLEJaR (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 5 Dec 2022 04:30:17 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905FB1573C
+        for <linux-can@vger.kernel.org>; Mon,  5 Dec 2022 01:30:16 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id ml11so26283380ejb.6
+        for <linux-can@vger.kernel.org>; Mon, 05 Dec 2022 01:30:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+mqkHAvBv1y5qS2y58nAD/iFpsVKp/726AYMa4PGL3o=;
-        b=wjJlMPQFvu5r3taMHZ7MUIsm8Y8OlsIkDMO05PgJsPs10HD6/mSS6m0uS1B3uXHyuJ
-         Zx8f3AQsRj27lhL7oAgx0ggwJvcJx5JItoPWXovLhk9mlAhoXzJNy3iokvxTjChNDLNa
-         wk2TyEe/S2g+Ww12WtM9km3V/aJo1QEghKMBZkghK7EY/VOpVhfVqq3Netjy9wlLKKs8
-         5a+QXKJmClAT1PPbHbqkX+T9B2zAsZZwbkpEhfd7MlAWEyy6i5DXMhpzPncwYBc6uZwO
-         wiFjYkpDOqD/VLUuEWdJ6aQ4Q9GJMA94PecIzJRhQ61BFNT2r5B7YPzz+IEdax2XbDkh
-         vJCw==
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=FDSrwTaiYkeBidVUL1wtnaARBnuugrDybG4J4B7KjRQ=;
+        b=Ek0fC49oSagD3Ul+L5jopBmUBuROZhyg8VcZqkQLTLLSW289nCIWsDjmqkq4Lfw3jn
+         6JTFUVwUuz/ucY7tHQ7rjwKWqiLvK4QBoG2qCjn/7uTS+IxdOeI19s/gXRup1X8kZZTq
+         NHkqvHENyjPX4T6Ko8Z0crqu/RPwk48aBb4ZhEv8pAjM1BZTGxx9FlYJfTEp57nCwAhy
+         sB9Ntjtk70cgt8Zpy4oHiVoRCcCWyNwGuyvebX9d7ovvFMpTNf4VlyXVEl2QIm3wkPch
+         s84BmvXPo33pDnXrac/2nfzR/irs9Ufr+UFiGKtljIbiwaTllL77iZJsEL4SSshmW1xY
+         z4hA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+mqkHAvBv1y5qS2y58nAD/iFpsVKp/726AYMa4PGL3o=;
-        b=pN3PYWvNv2j/dLvR/QfSlUtRvRkOFmLM4PZVUOTxzhfpqPsqtZ+BVj+NO/8xy2I1re
-         TlQJ9L9nDlXL7UQwy50uYe/TlkjhLApQjmiPLD3334cvOQ8s77twjbkI9plueQY+9EZ/
-         2a2nA9IUF2uNy7Z62CL9AQeTy28qLj/Vr/AthuHpPYRBr7yJLIEMtbo0CgjPwyLo+3AE
-         o+SYSWpEBjT4DNKOiNthTuJ0kxMpVtc3Unlk8XZ84FUxCTWcKQzXDmkaqtkZZ4heovTI
-         7qrpPAwhmF+CHUbDISRtw+p2Uo5U4zY7oHOYPWpwO/sHJdouJ9np3aKa1HO+klnDkBoH
-         Ljvg==
-X-Gm-Message-State: ANoB5pmZjiEePPvfjn4JZKBm3i7i5bmiqPRL7umZ7iEibONBiPIAhG9W
-        kr7rDu5I2hmzpFVCx/PXLpNMBw==
-X-Google-Smtp-Source: AA0mqf7zDgFbgzzL9zXGb6oaRV02L0v0dT9PAg4S7vuf7JqCuhV2WiTd4pIf7FjDQkpvwEGAHc2Ydg==
-X-Received: by 2002:a05:6402:290:b0:46b:81d2:e3d0 with SMTP id l16-20020a056402029000b0046b81d2e3d0mr23709060edv.314.1670231373853;
-        Mon, 05 Dec 2022 01:09:33 -0800 (PST)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FDSrwTaiYkeBidVUL1wtnaARBnuugrDybG4J4B7KjRQ=;
+        b=NFmawdBe473S/HdmVNfbUTpXgFH+spDqAtRmlPvSynSpnC6g1LSyv6pYJ/FPqXh1bO
+         N5M9tQRxOzo9LdiGBe80vDOMCX3W1Xg5aMRTSIFxPBkT4JXkF1y+U8k7SC8Jq7xYNhbW
+         s4lhxrVPozF0K3Vek8xDUXdEC80El57j0AlH17+l62n7n1E9iVJYBRWdymaa3tMswFq/
+         KuuwqH+rLlIUqeykuMby5mYDWODKq1wDmmpTZr/JiVAeknVc82vnMwFaE9O6Nx/Pzqfb
+         QAVbqf5PoIVZjDwXc7v5fwrojFJr6JHzNcoj1CGJl9DIAT2+fd2hY8A3V+VGC4a9RR/Q
+         p7Ig==
+X-Gm-Message-State: ANoB5pnTHmBFCEE+lHTiURKWi32O1JFL9C8YGwbpNYmygi/ceN/qfCAz
+        k48vhGVPtKPBNpQZ/W+B3rSywa+yeEu2a4Tj
+X-Google-Smtp-Source: AA0mqf4TucuADXPXXqE+4vnUK9TP8V9mLlh1wYufLkkd/GzpBoGLKx7nJ3ZNqqhERafJoj9+vyiZjg==
+X-Received: by 2002:a17:906:a1a:b0:79e:9aea:7b60 with SMTP id w26-20020a1709060a1a00b0079e9aea7b60mr70679116ejf.444.1670232615061;
+        Mon, 05 Dec 2022 01:30:15 -0800 (PST)
 Received: from blmsp ([185.238.219.11])
-        by smtp.gmail.com with ESMTPSA id b17-20020a1709063cb100b007b4bc423b41sm5917994ejh.190.2022.12.05.01.09.33
+        by smtp.gmail.com with ESMTPSA id o26-20020a170906289a00b007415f8ffcbbsm6136319ejd.98.2022.12.05.01.30.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 01:09:33 -0800 (PST)
-Date:   Mon, 5 Dec 2022 10:09:32 +0100
+        Mon, 05 Dec 2022 01:30:14 -0800 (PST)
+Date:   Mon, 5 Dec 2022 10:30:13 +0100
 From:   Markus Schneider-Pargmann <msp@baylibre.com>
 To:     Marc Kleine-Budde <mkl@pengutronix.de>
 Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/15] can: m_can: Optimizations for tcan and peripheral
- chips
-Message-ID: <20221205090932.zdoqxifsf6aty4k6@blmsp>
+Subject: Re: [PATCH 14/15] can: tcan4x5x: Fix register range of first block
+Message-ID: <20221205093013.kpsqyb3fhd5njubm@blmsp>
 References: <20221116205308.2996556-1-msp@baylibre.com>
- <20221202140306.n3iy74ru5f6bxmco@pengutronix.de>
+ <20221116205308.2996556-15-msp@baylibre.com>
+ <20221202142810.kmd5m26fnm6lw2jh@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221202140306.n3iy74ru5f6bxmco@pengutronix.de>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221202142810.kmd5m26fnm6lw2jh@pengutronix.de>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
@@ -73,72 +75,33 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Good Morning Marc,
+Hi Marc,
 
-On Fri, Dec 02, 2022 at 03:03:06PM +0100, Marc Kleine-Budde wrote:
-> On 16.11.2022 21:52:53, Markus Schneider-Pargmann wrote:
-> > Hi,
-> > 
-> > this series is aimed at optimizing the driver code for tcan chips and
-> > more generally for peripheral m_can chips.
-> > 
-> > I did different things to improve the performance:
-> > - Reduce the number of SPI transfers.
-> > - Reduce the number of interrupts.
-> > - Enable use of FIFOs.
-> > 
-> > I am working with a tcan4550 in loopback mode attached to a beaglebone
-> > black. I am currently working on optimizing the receive path as well
-> > which will be submitted in another series once it is done.
+On Fri, Dec 02, 2022 at 03:28:10PM +0100, Marc Kleine-Budde wrote:
+> On 16.11.2022 21:53:07, Markus Schneider-Pargmann wrote:
+> > According to the datasheet 0x1c is the last register in the first block,
+> > not register 0x2c.
 > 
-> The patches I've not commented on look fine. If you re-spin the series
-> only containing those, I'll include them in my next pull request, which
-> I'll send out soonish.
-
-Ok, thank you, I will send a subset of the patches today.
-
+> The datasheet "SLLSF91A – DECEMBER 2018 – REVISED JANUARY 2020" says:
 > 
-> regards,
-> Marc
+> | 8.6.1 Device ID and Interrupt/Diagnostic Flag Registers: 16'h0000 to
+> | 16'h002F
 > 
-> > Best,
-> > Markus
-> > 
-> > Markus Schneider-Pargmann (15):
-> >   can: m_can: Eliminate double read of TXFQS in tx_handler
-> >   can: m_can: Wakeup net queue once tx was issued
-> >   can: m_can: Cache tx putidx and transmits in flight
-> >   can: m_can: Use transmit event FIFO watermark level interrupt
-> >   can: m_can: Disable unused interrupts
-> >   can: m_can: Avoid reading irqstatus twice
-> >   can: m_can: Read register PSR only on error
-> >   can: m_can: Count TXE FIFO getidx in the driver
-> >   can: m_can: Count read getindex in the driver
-> >   can: m_can: Batch acknowledge rx fifo
-> >   can: m_can: Batch acknowledge transmit events
-> >   can: tcan4x5x: Remove invalid write in clear_interrupts
-> >   can: tcan4x5x: Fix use of register error status mask
-> >   can: tcan4x5x: Fix register range of first block
-> >   can: tcan4x5x: Specify separate read/write ranges
-> > 
-> >  drivers/net/can/m_can/m_can.c           | 140 +++++++++++++++---------
-> >  drivers/net/can/m_can/m_can.h           |   5 +
-> >  drivers/net/can/m_can/tcan4x5x-core.c   |  19 ++--
-> >  drivers/net/can/m_can/tcan4x5x-regmap.c |  45 ++++++--
-> >  4 files changed, 141 insertions(+), 68 deletions(-)
-> > 
-> > 
-> > base-commit: 094226ad94f471a9f19e8f8e7140a09c2625abaa
-> > prerequisite-patch-id: e9df6751d43bb0d1e3b8938d7e93bc1cfa22cef2
-> > prerequisite-patch-id: dad9ec37af766bcafe54cb156f896267a0f47fe1
-> > prerequisite-patch-id: f4e6f1a213a31df2741a5fa3baa87aa45ef6707a
-> 
-> BTW: I don't have access to these prerequisite-patch-id.
+> While the last described register is at 0xc.
 
-I think I messed up here. I have three patches, SPI fixes and devicetree
-snippet that this series is based on. I guess I shouldn't have used
---base then or rebase on something without these patches first.
+Sorry, not sure what I looked up here. The last described register is
+0x10 SPI Error status mask in my datasheet:
+'SLLSEZ5D – JANUARY 2018 – REVISED JUNE 2022'
 
-Thanks,
+I would prefer using the actual registers if that is ok with you, so
+0x10 here because I assume the remaining registers have internal use or
+maybe don't exist at all?! If there is an undocumented register that
+needs to be used at some point we can still modify the ranges.
+
+Also it seems the existing ranges are following the same logic and don't
+list the whole range, just the documented registers.
+
+The second range is wrong as well. The last register is 0x830, will fix.
+
+Best,
 Markus
-
