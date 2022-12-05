@@ -2,132 +2,78 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C609B64262C
-	for <lists+linux-can@lfdr.de>; Mon,  5 Dec 2022 10:55:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D16FF642D89
+	for <lists+linux-can@lfdr.de>; Mon,  5 Dec 2022 17:49:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbiLEJz3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 5 Dec 2022 04:55:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38228 "EHLO
+        id S232619AbiLEQt4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 5 Dec 2022 11:49:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230405AbiLEJz2 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 5 Dec 2022 04:55:28 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326D517426
-        for <linux-can@vger.kernel.org>; Mon,  5 Dec 2022 01:55:26 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id a16so14946996edb.9
-        for <linux-can@vger.kernel.org>; Mon, 05 Dec 2022 01:55:26 -0800 (PST)
+        with ESMTP id S232181AbiLEQti (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 5 Dec 2022 11:49:38 -0500
+Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E20B21241
+        for <linux-can@vger.kernel.org>; Mon,  5 Dec 2022 08:48:54 -0800 (PST)
+Received: by mail-ot1-x342.google.com with SMTP id p10-20020a9d76ca000000b0066d6c6bce58so7607361otl.7
+        for <linux-can@vger.kernel.org>; Mon, 05 Dec 2022 08:48:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=5t8Zxcrb+H4S05AQ/AraVBApneGFb/IHc/5E++wpWSU=;
-        b=WiqRSkcWL+Sj7ba2AZFBTP5DcCJeqY9WedM96JIxUrFKuF5kiFaV7lxTwhppkhGO6k
-         6KPbo3SwEoDafrCAIwTuN9DNuznXsDnp3NmJMVWiXKDZOYYABg5xY7sP5AHBAy1LpSvO
-         vYXMnlrKcqDFBcKJ+TiaTEib0whUIy0Odr5FBXuOFEQCtZyzOzPEid34L1SF6P3NDxHJ
-         xK/LaJqP6BaYski375Xfb/D1gV3wIy/Fje+sVfa/XawH+j9dGuaKSWXHHzUzNgLTopm/
-         sJHn52sRE5ULE7Yn3ED8M6IVkv4iNeGGZPE8zaQyMnDzTJuqfk1Axaq18Ww8u6NVcdp1
-         pkeQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=O4WPtqOs6pYDke8VCfpzwsIX+8zN33o8tLS2XMy/lFU=;
+        b=EvWmzEra/azIE+dhpMGnktmqmSoesb8PSCiM/05QKkVO5anMKEbRHSG7nojCSOyYWk
+         9IDI1UgS5rC+uB5j5uOW4no2X6seMos8u1Uby8q6RKzl1vCALcAn7vpiT6rpclAi8Jt0
+         gPKoEl0xikkT9S+7dg4LTBa5X4VHIsnKU2e6OrEO/j4h9xN1NPllzu29Dg0k3gFH+bOt
+         HMDW+rYw/YqhqvZ6y4oXgIeqTNVodnF9zHtiwgFo2Y0tEc6ReoK23o3+Epe6dWg/8ai1
+         Z4r7fWQ42rAk0Fys+lVH3VBvE+2FTvVvceopyfVxKS8DxJV3KaRTE9M5zTY24mYt1gIO
+         /rEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5t8Zxcrb+H4S05AQ/AraVBApneGFb/IHc/5E++wpWSU=;
-        b=gyFTrSKdKk4d56cWoksUNfsEdU4xW5elWMtC2K6avN3qru8yyQdZ4jpKZQvtibqxVM
-         M+XF+Q0DGdyBLr91xDUTq4UTLOD9HMNvdQsTL3MKBCGLyaN3LW7vFzyaegrJdrFF6CiJ
-         4KmK+IQBY67ADXM0EvGBn132XNJ9KPOTqRo8pADH7BwzLPd1bYTgQXZYDvhT1k5zd0s5
-         g/YZF8P1ScTzJUXpTw2Y/dKJHjjW541Ajjp21Cl0m2MJQHtcvOWQUNJzWee3rIxrjPyV
-         qmrmmO8C0fZNyLM+BRJQMqTfMfEjglF7gEUfO+2V+2liNkJF3Vks/m1lGtsj6bcgTo4P
-         u7+Q==
-X-Gm-Message-State: ANoB5pmIfgCulIbG7WZxvqsJlWQD/6wX59qL3eN4qPrE0iHDHo4KkN/o
-        DV45LBkM6SD5LBtjOHb4wFD64g==
-X-Google-Smtp-Source: AA0mqf4+Vr8oNX+baEGQRy7Gf9y/wATbL4bIBvFJ4WJaG+PANkrG5kyQRbVd/BXSJpsV5lR6P9oyyQ==
-X-Received: by 2002:aa7:c042:0:b0:462:2f5a:8618 with SMTP id k2-20020aa7c042000000b004622f5a8618mr73787160edo.42.1670234124657;
-        Mon, 05 Dec 2022 01:55:24 -0800 (PST)
-Received: from blmsp ([185.238.219.8])
-        by smtp.gmail.com with ESMTPSA id c7-20020a056402120700b0046b94e67b4bsm6050822edw.86.2022.12.05.01.55.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 01:55:24 -0800 (PST)
-Date:   Mon, 5 Dec 2022 10:55:23 +0100
-From:   Markus Schneider-Pargmann <msp@baylibre.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 14/15] can: tcan4x5x: Fix register range of first block
-Message-ID: <20221205095523.sy3piugsrvik2zz3@blmsp>
-References: <20221116205308.2996556-1-msp@baylibre.com>
- <20221116205308.2996556-15-msp@baylibre.com>
- <20221202142810.kmd5m26fnm6lw2jh@pengutronix.de>
- <20221205093013.kpsqyb3fhd5njubm@blmsp>
- <20221205094458.xkvlvp7fnygf23fq@pengutronix.de>
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=O4WPtqOs6pYDke8VCfpzwsIX+8zN33o8tLS2XMy/lFU=;
+        b=yeaTJy9USaFPp5jz/pVqC+jQhn3SD5sMs5NhMSAZemEIpUZiBLWdR4E0wvc95Z5O/w
+         thNRk3f53sF5UAlNzsHzW7mdHtqI6CofjDX4cvIs7zjJ9Z0ftWY01nVcRcx2bz92b9Ql
+         WMgam8uriyTu9kWS6/jxO0KFFqLfzSsiUx/4bmBdBJmcFmNsoX8YS5KfpVcKsMXgm12A
+         kJLg4gZL73IU5zy8THZregi70mS8pPElsY8CRg2tkR+0/k4bp8tvjb25vCtw54574h8H
+         H8eIG97PVm8/usSk8iYN8AwKoJkgBHEJ7e25FRXCp3B20EhNbTVtrhjyK6BJBJDRbyUF
+         H+fw==
+X-Gm-Message-State: ANoB5plUt9MaS3VTdj+uIMF4gk6dAQTiiQ3msMn7os7gFne8zrvQOl21
+        IrKefHIssKiZtwXD9WdD4+qtCgbvwubnDu3oquY=
+X-Google-Smtp-Source: AA0mqf6rJpockmAlPLGWb5IdXxyZXi5oeB/VlA7nQtTh5mH5GBjbP93nFRUHbmrw3A3v2AKvxeLYo6EVgAyGoUC2980=
+X-Received: by 2002:a05:6830:61ce:b0:66b:e4e2:8d25 with SMTP id
+ cc14-20020a05683061ce00b0066be4e28d25mr41635604otb.152.1670258933537; Mon, 05
+ Dec 2022 08:48:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221205094458.xkvlvp7fnygf23fq@pengutronix.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Received: by 2002:a05:6358:7211:b0:dd:1fa2:ef73 with HTTP; Mon, 5 Dec 2022
+ 08:48:53 -0800 (PST)
+Reply-To: plml47@hotmail.com
+From:   Philip Manul <lometogo1999@gmail.com>
+Date:   Mon, 5 Dec 2022 08:48:53 -0800
+Message-ID: <CAFtqZGFXDNDSmyfAW1goTwuOjaKBWi=RMxR7avPMnWxdOUFKOg@mail.gmail.com>
+Subject: REP:
+To:     in <in@proposal.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 10:44:58AM +0100, Marc Kleine-Budde wrote:
-> On 05.12.2022 10:30:13, Markus Schneider-Pargmann wrote:
-> > Hi Marc,
-> > 
-> > On Fri, Dec 02, 2022 at 03:28:10PM +0100, Marc Kleine-Budde wrote:
-> > > On 16.11.2022 21:53:07, Markus Schneider-Pargmann wrote:
-> > > > According to the datasheet 0x1c is the last register in the first block,
-> > > > not register 0x2c.
-> > > 
-> > > The datasheet "SLLSF91A – DECEMBER 2018 – REVISED JANUARY 2020" says:
-> > > 
-> > > | 8.6.1 Device ID and Interrupt/Diagnostic Flag Registers: 16'h0000 to
-> > > | 16'h002F
-> > > 
-> > > While the last described register is at 0xc.
-> > 
-> > Sorry, not sure what I looked up here. The last described register is
-> > 0x10 SPI Error status mask in my datasheet:
-> > 'SLLSEZ5D – JANUARY 2018 – REVISED JUNE 2022'
-> 
-> The TCAN4550-Q1 variant has the 0x10 register documented, while the
-> TCAN4550 (w/o -Q1) doesn't have.
-
-Ah haven't noticed, thank you.
-
-> 
-> > I would prefer using the actual registers if that is ok with you, so
-> > 0x10 here because I assume the remaining registers have internal use or
-> > maybe don't exist at all?! If there is an undocumented register that
-> > needs to be used at some point we can still modify the ranges.
-> 
-> I'm fine with using 0x10 as the last register.
-> 
-> > Also it seems the existing ranges are following the same logic and don't
-> > list the whole range, just the documented registers.
-> > 
-> > The second range is wrong as well. The last register is 0x830, will
-> > fix.
-> 
-> IIRC I used the register ranges from the section titles ("8.6.1 Device
-> ID and Interrupt/Diagnostic Flag Registers: 16'h0000 to 16'h002F") when
-> I added the {wr,rd}_table.
-
-The second range in the driver was specified as 0x800-0x83c in the
-driver. The last documented register is 0x830 in both normal and Q1
-versions while the range in the title is 0x800-0x8ff. That's why I
-thought it was using the last register, just because it is closer.
-
-Anyways not really important.
-
-I can put in whatever you feel comfortable with or keep as it is.
-
-Thanks,
-Markus
+--=20
+Guten tag,
+Mein Name ist Philip Manul. Ich bin von Beruf Rechtsanwalt. Ich habe
+einen verstorbenen Kunden, der zuf=C3=A4llig denselben Namen mit Ihnen
+teilt. Ich habe alle Papierdokumente in meinem Besitz. Ihr Verwandter,
+mein verstorbener Kunde, hat hier in meinem Land einen nicht
+beanspruchten Fonds zur=C3=BCckgelassen. Ich warte auf Ihre Antwort zum
+Verfahren.
+Philip Manul.
