@@ -2,128 +2,132 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13BBB6425FD
-	for <lists+linux-can@lfdr.de>; Mon,  5 Dec 2022 10:45:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C609B64262C
+	for <lists+linux-can@lfdr.de>; Mon,  5 Dec 2022 10:55:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbiLEJpL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 5 Dec 2022 04:45:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57520 "EHLO
+        id S230243AbiLEJz3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 5 Dec 2022 04:55:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbiLEJpL (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 5 Dec 2022 04:45:11 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4792419039
-        for <linux-can@vger.kernel.org>; Mon,  5 Dec 2022 01:45:10 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1p2827-0004t1-VD; Mon, 05 Dec 2022 10:45:08 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:c1b8:7ff9:10eb:2660])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 7D4821362AB;
-        Mon,  5 Dec 2022 09:45:06 +0000 (UTC)
-Date:   Mon, 5 Dec 2022 10:44:58 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Markus Schneider-Pargmann <msp@baylibre.com>
+        with ESMTP id S230405AbiLEJz2 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 5 Dec 2022 04:55:28 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326D517426
+        for <linux-can@vger.kernel.org>; Mon,  5 Dec 2022 01:55:26 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id a16so14946996edb.9
+        for <linux-can@vger.kernel.org>; Mon, 05 Dec 2022 01:55:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=5t8Zxcrb+H4S05AQ/AraVBApneGFb/IHc/5E++wpWSU=;
+        b=WiqRSkcWL+Sj7ba2AZFBTP5DcCJeqY9WedM96JIxUrFKuF5kiFaV7lxTwhppkhGO6k
+         6KPbo3SwEoDafrCAIwTuN9DNuznXsDnp3NmJMVWiXKDZOYYABg5xY7sP5AHBAy1LpSvO
+         vYXMnlrKcqDFBcKJ+TiaTEib0whUIy0Odr5FBXuOFEQCtZyzOzPEid34L1SF6P3NDxHJ
+         xK/LaJqP6BaYski375Xfb/D1gV3wIy/Fje+sVfa/XawH+j9dGuaKSWXHHzUzNgLTopm/
+         sJHn52sRE5ULE7Yn3ED8M6IVkv4iNeGGZPE8zaQyMnDzTJuqfk1Axaq18Ww8u6NVcdp1
+         pkeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5t8Zxcrb+H4S05AQ/AraVBApneGFb/IHc/5E++wpWSU=;
+        b=gyFTrSKdKk4d56cWoksUNfsEdU4xW5elWMtC2K6avN3qru8yyQdZ4jpKZQvtibqxVM
+         M+XF+Q0DGdyBLr91xDUTq4UTLOD9HMNvdQsTL3MKBCGLyaN3LW7vFzyaegrJdrFF6CiJ
+         4KmK+IQBY67ADXM0EvGBn132XNJ9KPOTqRo8pADH7BwzLPd1bYTgQXZYDvhT1k5zd0s5
+         g/YZF8P1ScTzJUXpTw2Y/dKJHjjW541Ajjp21Cl0m2MJQHtcvOWQUNJzWee3rIxrjPyV
+         qmrmmO8C0fZNyLM+BRJQMqTfMfEjglF7gEUfO+2V+2liNkJF3Vks/m1lGtsj6bcgTo4P
+         u7+Q==
+X-Gm-Message-State: ANoB5pmIfgCulIbG7WZxvqsJlWQD/6wX59qL3eN4qPrE0iHDHo4KkN/o
+        DV45LBkM6SD5LBtjOHb4wFD64g==
+X-Google-Smtp-Source: AA0mqf4+Vr8oNX+baEGQRy7Gf9y/wATbL4bIBvFJ4WJaG+PANkrG5kyQRbVd/BXSJpsV5lR6P9oyyQ==
+X-Received: by 2002:aa7:c042:0:b0:462:2f5a:8618 with SMTP id k2-20020aa7c042000000b004622f5a8618mr73787160edo.42.1670234124657;
+        Mon, 05 Dec 2022 01:55:24 -0800 (PST)
+Received: from blmsp ([185.238.219.8])
+        by smtp.gmail.com with ESMTPSA id c7-20020a056402120700b0046b94e67b4bsm6050822edw.86.2022.12.05.01.55.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 01:55:24 -0800 (PST)
+Date:   Mon, 5 Dec 2022 10:55:23 +0100
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
 Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 14/15] can: tcan4x5x: Fix register range of first block
-Message-ID: <20221205094458.xkvlvp7fnygf23fq@pengutronix.de>
+Message-ID: <20221205095523.sy3piugsrvik2zz3@blmsp>
 References: <20221116205308.2996556-1-msp@baylibre.com>
  <20221116205308.2996556-15-msp@baylibre.com>
  <20221202142810.kmd5m26fnm6lw2jh@pengutronix.de>
  <20221205093013.kpsqyb3fhd5njubm@blmsp>
+ <20221205094458.xkvlvp7fnygf23fq@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="d45yhfs3ex7kqilv"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221205093013.kpsqyb3fhd5njubm@blmsp>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221205094458.xkvlvp7fnygf23fq@pengutronix.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Mon, Dec 05, 2022 at 10:44:58AM +0100, Marc Kleine-Budde wrote:
+> On 05.12.2022 10:30:13, Markus Schneider-Pargmann wrote:
+> > Hi Marc,
+> > 
+> > On Fri, Dec 02, 2022 at 03:28:10PM +0100, Marc Kleine-Budde wrote:
+> > > On 16.11.2022 21:53:07, Markus Schneider-Pargmann wrote:
+> > > > According to the datasheet 0x1c is the last register in the first block,
+> > > > not register 0x2c.
+> > > 
+> > > The datasheet "SLLSF91A – DECEMBER 2018 – REVISED JANUARY 2020" says:
+> > > 
+> > > | 8.6.1 Device ID and Interrupt/Diagnostic Flag Registers: 16'h0000 to
+> > > | 16'h002F
+> > > 
+> > > While the last described register is at 0xc.
+> > 
+> > Sorry, not sure what I looked up here. The last described register is
+> > 0x10 SPI Error status mask in my datasheet:
+> > 'SLLSEZ5D – JANUARY 2018 – REVISED JUNE 2022'
+> 
+> The TCAN4550-Q1 variant has the 0x10 register documented, while the
+> TCAN4550 (w/o -Q1) doesn't have.
 
---d45yhfs3ex7kqilv
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Ah haven't noticed, thank you.
 
-On 05.12.2022 10:30:13, Markus Schneider-Pargmann wrote:
-> Hi Marc,
->=20
-> On Fri, Dec 02, 2022 at 03:28:10PM +0100, Marc Kleine-Budde wrote:
-> > On 16.11.2022 21:53:07, Markus Schneider-Pargmann wrote:
-> > > According to the datasheet 0x1c is the last register in the first blo=
-ck,
-> > > not register 0x2c.
-> >=20
-> > The datasheet "SLLSF91A =E2=80=93 DECEMBER 2018 =E2=80=93 REVISED JANUA=
-RY 2020" says:
-> >=20
-> > | 8.6.1 Device ID and Interrupt/Diagnostic Flag Registers: 16'h0000 to
-> > | 16'h002F
-> >=20
-> > While the last described register is at 0xc.
->=20
-> Sorry, not sure what I looked up here. The last described register is
-> 0x10 SPI Error status mask in my datasheet:
-> 'SLLSEZ5D =E2=80=93 JANUARY 2018 =E2=80=93 REVISED JUNE 2022'
+> 
+> > I would prefer using the actual registers if that is ok with you, so
+> > 0x10 here because I assume the remaining registers have internal use or
+> > maybe don't exist at all?! If there is an undocumented register that
+> > needs to be used at some point we can still modify the ranges.
+> 
+> I'm fine with using 0x10 as the last register.
+> 
+> > Also it seems the existing ranges are following the same logic and don't
+> > list the whole range, just the documented registers.
+> > 
+> > The second range is wrong as well. The last register is 0x830, will
+> > fix.
+> 
+> IIRC I used the register ranges from the section titles ("8.6.1 Device
+> ID and Interrupt/Diagnostic Flag Registers: 16'h0000 to 16'h002F") when
+> I added the {wr,rd}_table.
 
-The TCAN4550-Q1 variant has the 0x10 register documented, while the
-TCAN4550 (w/o -Q1) doesn't have.
+The second range in the driver was specified as 0x800-0x83c in the
+driver. The last documented register is 0x830 in both normal and Q1
+versions while the range in the title is 0x800-0x8ff. That's why I
+thought it was using the last register, just because it is closer.
 
-> I would prefer using the actual registers if that is ok with you, so
-> 0x10 here because I assume the remaining registers have internal use or
-> maybe don't exist at all?! If there is an undocumented register that
-> needs to be used at some point we can still modify the ranges.
+Anyways not really important.
 
-I'm fine with using 0x10 as the last register.
+I can put in whatever you feel comfortable with or keep as it is.
 
-> Also it seems the existing ranges are following the same logic and don't
-> list the whole range, just the documented registers.
->=20
-> The second range is wrong as well. The last register is 0x830, will
-> fix.
-
-IIRC I used the register ranges from the section titles ("8.6.1 Device
-ID and Interrupt/Diagnostic Flag Registers: 16'h0000 to 16'h002F") when
-I added the {wr,rd}_table.
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---d45yhfs3ex7kqilv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmONvZYACgkQrX5LkNig
-013z1QgAjPwBzVU/x6eVgTdQF2PdBSxxR0pwfZ5/P+K/RPjyWJaXjXlt/gjgeR0Y
-GHY6YFgMg1DoyVP8AQmJQzoX+fkNKNbkpbmO8gF034cE5W3Grxz2A4mG7fRYQpnb
-u1vQvzfRDROsmr257PgNQHy84zTVjK9l5KSmdSGZxsj+uA/Y8W+1LmsHyQDa3pBZ
-qmhhKtCKJ0hkUP7Az7ujfeiKsMzwdXqyvfdcbEzm2ytW89pa9361lTJ0/eCB9Zke
-OUin8fexcYc0pzx3fu5BdTt0uU1KWK4gvmR49ku8KtkEJmE9SvReQRbUwvzjY1B8
-Kz+lrElpIK7kmuH/3i/poGELti3y5A==
-=oU/3
------END PGP SIGNATURE-----
-
---d45yhfs3ex7kqilv--
+Thanks,
+Markus
