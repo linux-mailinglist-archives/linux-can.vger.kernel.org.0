@@ -2,124 +2,143 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66C066424FA
-	for <lists+linux-can@lfdr.de>; Mon,  5 Dec 2022 09:46:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50927642574
+	for <lists+linux-can@lfdr.de>; Mon,  5 Dec 2022 10:10:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231255AbiLEIqq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 5 Dec 2022 03:46:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37296 "EHLO
+        id S229938AbiLEJKv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 5 Dec 2022 04:10:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232318AbiLEIqV (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 5 Dec 2022 03:46:21 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F35E217894
-        for <linux-can@vger.kernel.org>; Mon,  5 Dec 2022 00:46:09 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1p276t-0004mn-5J; Mon, 05 Dec 2022 09:45:59 +0100
-Received: from pengutronix.de (hardanger-8.fritz.box [IPv6:2a03:f580:87bc:d400:c1b8:7ff9:10eb:2660])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id B9E471361CF;
-        Mon,  5 Dec 2022 08:45:56 +0000 (UTC)
-Date:   Mon, 5 Dec 2022 09:45:56 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Max Staudt <max@enpas.org>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Vincent Mailhol <vincent.mailhol@gmail.com>,
-        Oliver Neukum <oneukum@suse.com>, linux-kernel@vger.kernel.org,
-        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] can: can327: Flush tx_work on ldisc .close()
-Message-ID: <20221205084556.etpo2xufbsl5753d@pengutronix.de>
-References: <20221202160148.282564-1-max@enpas.org>
+        with ESMTP id S230092AbiLEJKU (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 5 Dec 2022 04:10:20 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C631928C
+        for <linux-can@vger.kernel.org>; Mon,  5 Dec 2022 01:09:35 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id d14so9876334edj.11
+        for <linux-can@vger.kernel.org>; Mon, 05 Dec 2022 01:09:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+mqkHAvBv1y5qS2y58nAD/iFpsVKp/726AYMa4PGL3o=;
+        b=wjJlMPQFvu5r3taMHZ7MUIsm8Y8OlsIkDMO05PgJsPs10HD6/mSS6m0uS1B3uXHyuJ
+         Zx8f3AQsRj27lhL7oAgx0ggwJvcJx5JItoPWXovLhk9mlAhoXzJNy3iokvxTjChNDLNa
+         wk2TyEe/S2g+Ww12WtM9km3V/aJo1QEghKMBZkghK7EY/VOpVhfVqq3Netjy9wlLKKs8
+         5a+QXKJmClAT1PPbHbqkX+T9B2zAsZZwbkpEhfd7MlAWEyy6i5DXMhpzPncwYBc6uZwO
+         wiFjYkpDOqD/VLUuEWdJ6aQ4Q9GJMA94PecIzJRhQ61BFNT2r5B7YPzz+IEdax2XbDkh
+         vJCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+mqkHAvBv1y5qS2y58nAD/iFpsVKp/726AYMa4PGL3o=;
+        b=pN3PYWvNv2j/dLvR/QfSlUtRvRkOFmLM4PZVUOTxzhfpqPsqtZ+BVj+NO/8xy2I1re
+         TlQJ9L9nDlXL7UQwy50uYe/TlkjhLApQjmiPLD3334cvOQ8s77twjbkI9plueQY+9EZ/
+         2a2nA9IUF2uNy7Z62CL9AQeTy28qLj/Vr/AthuHpPYRBr7yJLIEMtbo0CgjPwyLo+3AE
+         o+SYSWpEBjT4DNKOiNthTuJ0kxMpVtc3Unlk8XZ84FUxCTWcKQzXDmkaqtkZZ4heovTI
+         7qrpPAwhmF+CHUbDISRtw+p2Uo5U4zY7oHOYPWpwO/sHJdouJ9np3aKa1HO+klnDkBoH
+         Ljvg==
+X-Gm-Message-State: ANoB5pmZjiEePPvfjn4JZKBm3i7i5bmiqPRL7umZ7iEibONBiPIAhG9W
+        kr7rDu5I2hmzpFVCx/PXLpNMBw==
+X-Google-Smtp-Source: AA0mqf7zDgFbgzzL9zXGb6oaRV02L0v0dT9PAg4S7vuf7JqCuhV2WiTd4pIf7FjDQkpvwEGAHc2Ydg==
+X-Received: by 2002:a05:6402:290:b0:46b:81d2:e3d0 with SMTP id l16-20020a056402029000b0046b81d2e3d0mr23709060edv.314.1670231373853;
+        Mon, 05 Dec 2022 01:09:33 -0800 (PST)
+Received: from blmsp ([185.238.219.11])
+        by smtp.gmail.com with ESMTPSA id b17-20020a1709063cb100b007b4bc423b41sm5917994ejh.190.2022.12.05.01.09.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 01:09:33 -0800 (PST)
+Date:   Mon, 5 Dec 2022 10:09:32 +0100
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/15] can: m_can: Optimizations for tcan and peripheral
+ chips
+Message-ID: <20221205090932.zdoqxifsf6aty4k6@blmsp>
+References: <20221116205308.2996556-1-msp@baylibre.com>
+ <20221202140306.n3iy74ru5f6bxmco@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="y3v7ghucklse6fhe"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221202160148.282564-1-max@enpas.org>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221202140306.n3iy74ru5f6bxmco@pengutronix.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Good Morning Marc,
 
---y3v7ghucklse6fhe
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Fri, Dec 02, 2022 at 03:03:06PM +0100, Marc Kleine-Budde wrote:
+> On 16.11.2022 21:52:53, Markus Schneider-Pargmann wrote:
+> > Hi,
+> > 
+> > this series is aimed at optimizing the driver code for tcan chips and
+> > more generally for peripheral m_can chips.
+> > 
+> > I did different things to improve the performance:
+> > - Reduce the number of SPI transfers.
+> > - Reduce the number of interrupts.
+> > - Enable use of FIFOs.
+> > 
+> > I am working with a tcan4550 in loopback mode attached to a beaglebone
+> > black. I am currently working on optimizing the receive path as well
+> > which will be submitted in another series once it is done.
+> 
+> The patches I've not commented on look fine. If you re-spin the series
+> only containing those, I'll include them in my next pull request, which
+> I'll send out soonish.
 
-On 03.12.2022 01:01:48, Max Staudt wrote:
-> Additionally, remove it from .ndo_stop().
->=20
-> This ensures that the worker is not called after being freed, and that
-> the UART TX queue remains active to send final commands when the netdev
-> is stopped.
->=20
-> Thanks to Jiri Slaby for finding this in slcan:
->=20
->   https://lore.kernel.org/linux-can/20221201073426.17328-1-jirislaby@kern=
-el.org/
->=20
-> A variant of this patch for slcan, with the flush in .ndo_stop() still
-> present, has been tested successfully on physical hardware:
->=20
->   https://bugzilla.suse.com/show_bug.cgi?id=3D1205597
->=20
-> Fixes: 43da2f07622f ("can: can327: CAN/ldisc driver for ELM327 based OBD-=
-II adapters")
-> Cc: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-> Cc: Max Staudt <max@enpas.org>
-> Cc: Wolfgang Grandegger <wg@grandegger.com>
-> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: linux-can@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Max Staudt <max@enpas.org>
+Ok, thank you, I will send a subset of the patches today.
 
-Applied to linux-can.
+> 
+> regards,
+> Marc
+> 
+> > Best,
+> > Markus
+> > 
+> > Markus Schneider-Pargmann (15):
+> >   can: m_can: Eliminate double read of TXFQS in tx_handler
+> >   can: m_can: Wakeup net queue once tx was issued
+> >   can: m_can: Cache tx putidx and transmits in flight
+> >   can: m_can: Use transmit event FIFO watermark level interrupt
+> >   can: m_can: Disable unused interrupts
+> >   can: m_can: Avoid reading irqstatus twice
+> >   can: m_can: Read register PSR only on error
+> >   can: m_can: Count TXE FIFO getidx in the driver
+> >   can: m_can: Count read getindex in the driver
+> >   can: m_can: Batch acknowledge rx fifo
+> >   can: m_can: Batch acknowledge transmit events
+> >   can: tcan4x5x: Remove invalid write in clear_interrupts
+> >   can: tcan4x5x: Fix use of register error status mask
+> >   can: tcan4x5x: Fix register range of first block
+> >   can: tcan4x5x: Specify separate read/write ranges
+> > 
+> >  drivers/net/can/m_can/m_can.c           | 140 +++++++++++++++---------
+> >  drivers/net/can/m_can/m_can.h           |   5 +
+> >  drivers/net/can/m_can/tcan4x5x-core.c   |  19 ++--
+> >  drivers/net/can/m_can/tcan4x5x-regmap.c |  45 ++++++--
+> >  4 files changed, 141 insertions(+), 68 deletions(-)
+> > 
+> > 
+> > base-commit: 094226ad94f471a9f19e8f8e7140a09c2625abaa
+> > prerequisite-patch-id: e9df6751d43bb0d1e3b8938d7e93bc1cfa22cef2
+> > prerequisite-patch-id: dad9ec37af766bcafe54cb156f896267a0f47fe1
+> > prerequisite-patch-id: f4e6f1a213a31df2741a5fa3baa87aa45ef6707a
+> 
+> BTW: I don't have access to these prerequisite-patch-id.
 
-regards,
-Marc
+I think I messed up here. I have three patches, SPI fixes and devicetree
+snippet that this series is based on. I guess I shouldn't have used
+--base then or rebase on something without these patches first.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Thanks,
+Markus
 
---y3v7ghucklse6fhe
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmONr8EACgkQrX5LkNig
-012LCwf8CMDCZv6PnSKRAlBjjjDBvBq29KA/kv21asReFn7i+WoSd6hqvKIT0mnM
-7oKfo57cdk2qPJC1hjzsRtnMHlvgEXlqHFFkJtqD08IXPW/n+hJt3O3R4qpe6q0Q
-ooLTpZTC7l8Ze6MEdeO95DOfFj71ziLBk+583Xjm+caUNwE9IeDzXHBlv3F6+Sji
-efgmaCKqsgmEoJMc7Enz+412PAiMtN/8mHfH4par5n3WP0nIOD4njkWXpyOu7WnU
-ORiRJideTEgeSQwDkiUJkjfDo+iFVvtWLeSVViYcUXlOeOfDTYvhhYGjTofRd6Ja
-XWGZDP69+co9pHGh58o78sd+jbI+ag==
-=urxd
------END PGP SIGNATURE-----
-
---y3v7ghucklse6fhe--
