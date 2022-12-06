@@ -2,152 +2,69 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 731126442BD
-	for <lists+linux-can@lfdr.de>; Tue,  6 Dec 2022 12:58:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91BD86444A1
+	for <lists+linux-can@lfdr.de>; Tue,  6 Dec 2022 14:34:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235296AbiLFL6X (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 6 Dec 2022 06:58:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51132 "EHLO
+        id S234253AbiLFNeT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 6 Dec 2022 08:34:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235187AbiLFL5s (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 6 Dec 2022 06:57:48 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05247B1E4
-        for <linux-can@vger.kernel.org>; Tue,  6 Dec 2022 03:57:45 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id gh17so5589844ejb.6
-        for <linux-can@vger.kernel.org>; Tue, 06 Dec 2022 03:57:45 -0800 (PST)
+        with ESMTP id S231144AbiLFNeS (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 6 Dec 2022 08:34:18 -0500
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E955252A9
+        for <linux-can@vger.kernel.org>; Tue,  6 Dec 2022 05:34:16 -0800 (PST)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-3bf4ade3364so151843337b3.3
+        for <linux-can@vger.kernel.org>; Tue, 06 Dec 2022 05:34:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ETAV5GbK15ksIb7Y/2hAQrE1+2csG56eJ5O31jfiSm0=;
-        b=DsfemFw96NwbJCFj2aFQGgrtCd2kXAYLnSqdxWwK+f1C3ozv2O2qwOA162mGChL6hn
-         6I8b6+MpLsRWGQ819BWKWHuvh1pk4JJwfFFq5sZbdmqFSxYOgMaXX7rKn93GpyuDU2UM
-         h5KKd8pg+2P+K+zmKtJ/mqUMtoyDqHdgVCEk+rCn/GRBXHyMCW+INlcHnX5ff/IH/dhh
-         ngzvdJTJTYXIr/Rkgt7Z2UtfSw73i5H6jbxRqHzhD+lA6Z+QcIb+UbW7AP4SfJ2zc+dz
-         R5gcQq8CvqHxKE6Ju1pQQRc2JNIv/7wcy8FwdrRHsATiQb5fx6TjiACsYI+HbPtLeLG5
-         6s6A==
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
+        b=plIPv+lnMIRiOFIe1dV+2tGtFokN2PX8I8Vl98aLxQc9p4eid896+qqRiD3cj5lfhx
+         z1hiGYil0vHTQsGiaUgsnmnfx7Jsn5jop25MSUm4B/gJqMPAdiI+jqYGT4X+agKLBheY
+         M4kLaJ4VYCDPrPdHz+VgEOo7V/8+VLiplXwZ5AxhmuB3ZAIj06bRIm6vVBa+cxsfUC69
+         p7oJjaq1f7uQyzM8lwAnIzamm5TXtetx0xVW4yZv8ZN22bVtgp/BSdTYcvwessuJv/HS
+         +NRVIrLiepTygJiUKe8fSjaB2LODMLrNxWaYxbpkKlISbamBewTovVPI3Q2nv//3DE4C
+         AORg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ETAV5GbK15ksIb7Y/2hAQrE1+2csG56eJ5O31jfiSm0=;
-        b=Uj6Ciu6g2CGcnOXbEnx7CSPa9I8lQWIjyzG6u4FJjPikZ0ZDMqAmaQ4mIo9a1C+dht
-         Gal9LMbPNYPRL3A+VdQTPqoQVSq6nnCU+OpkSn8nJ0zwHpl9Eaw05ueK6YdykMMtdqRz
-         Isfx3MOuFb85uuiD60IutDZZSCR8oIIEQZaM/awO8wI92O4XH8ZWDeL6z1zSfpRsWXYs
-         XN5SjU3nCmVHUZ+CSkPOMqi8tcvmCodbq25itxEnAc9w1rbeFXfAj0Ko9C87Y7txforv
-         8havUF0h0F3rJjR7/56ykUmDiu3PgBTJvIYGs7hM9bgY7JofD/R5/Y57zj00Lg6buchR
-         rE/A==
-X-Gm-Message-State: ANoB5pnZ2xdSBcqIQOFne6qjFe+xFFKIQ1IcDFPdVtJVdLzsagZT6l4U
-        hM4i9ajOYB8N5nG1yAM3tIM78g==
-X-Google-Smtp-Source: AA0mqf7GzGmbIAawAMwe6NRH9KO4raa68YejfLxvVTFxOOTu1R7RNxVCX6OXkVFF6vVz1mIthTIjtQ==
-X-Received: by 2002:a17:906:2552:b0:7ad:917b:61ec with SMTP id j18-20020a170906255200b007ad917b61ecmr59356203ejb.513.1670327865402;
-        Tue, 06 Dec 2022 03:57:45 -0800 (PST)
-Received: from blmsp.fritz.box ([2001:4091:a245:805c:8713:84e4:2a9e:cbe8])
-        by smtp.gmail.com with ESMTPSA id ky20-20020a170907779400b007c0ac4e6b6esm6472076ejc.143.2022.12.06.03.57.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 03:57:45 -0800 (PST)
-From:   Markus Schneider-Pargmann <msp@baylibre.com>
-To:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Markus Schneider-Pargmann <msp@baylibre.com>
-Subject: [PATCH v2 11/11] can: tcan4x5x: Specify separate read/write ranges
-Date:   Tue,  6 Dec 2022 12:57:28 +0100
-Message-Id: <20221206115728.1056014-12-msp@baylibre.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221206115728.1056014-1-msp@baylibre.com>
-References: <20221206115728.1056014-1-msp@baylibre.com>
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
+        b=1QbzEOK044EX3PG7f0pCi3twPx3NKiRSjmIeEDl2zGruBxF97aLcblb1PIb9h5AtDJ
+         syCwOee2P5xJoMQK4Ba2teMxWg9KuWqmvB+iuPJusilRewPTF0ZJy8yNrrRQ0i1jVFjC
+         7WpcjgiZSRfz8MYw5bnrhe4ct1DRGRal28pqkNqhBf2hShdt27aANKpKZK5lRS6fzSFz
+         rJHRN3Jo0N+GbIgCRn7ICDvqRzpo14HRQpYp0H8WvFD4AWhlvaHc6LpKMUvc92RvrQcm
+         2HK7IFM2qNlf8S7rejHfaNqsPIsgbeDIaEK+VA9tRJ0HXRbCYCq9g75MZlAVvx8yYXcp
+         iPLQ==
+X-Gm-Message-State: ANoB5pkzZ2053UAU68DcpG0mLWqRwTMbHy+UzWlHw4dvPGXMMZa3pq32
+        VSgYRLxqQMjl0D31Zme3DXS0T7pr389qn4Ey/Hs=
+X-Google-Smtp-Source: AA0mqf5LIFZdFA8gXtM15wCQVGRPhLW0DnkI1aVHz2d7yBbqXPecX+J2gwBesGTmYMSfngKxp/YLH/vq5s11h8+sSxc=
+X-Received: by 2002:a81:5243:0:b0:3d2:2098:c5fb with SMTP id
+ g64-20020a815243000000b003d22098c5fbmr31224498ywb.121.1670333655770; Tue, 06
+ Dec 2022 05:34:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:7010:a205:b0:314:d2a3:70a with HTTP; Tue, 6 Dec 2022
+ 05:34:15 -0800 (PST)
+Reply-To: mr.abraham022@gmail.com
+From:   "Mr.Abraham" <mrkojofofone01@gmail.com>
+Date:   Tue, 6 Dec 2022 13:34:15 +0000
+Message-ID: <CACJtp8tgBjrWD7ywREfL1yUK0-utTuArETnYq7P42dWiPJKSBA@mail.gmail.com>
+Subject: Hi
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Specify exactly which registers are read/writeable in the chip. This
-is supposed to help detect any violations in the future.
-
-Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
----
- drivers/net/can/m_can/tcan4x5x-regmap.c | 43 +++++++++++++++++++++----
- 1 file changed, 37 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/net/can/m_can/tcan4x5x-regmap.c b/drivers/net/can/m_can/tcan4x5x-regmap.c
-index 33aed989e42a..2b218ce04e9f 100644
---- a/drivers/net/can/m_can/tcan4x5x-regmap.c
-+++ b/drivers/net/can/m_can/tcan4x5x-regmap.c
-@@ -90,16 +90,47 @@ static int tcan4x5x_regmap_read(void *context,
- 	return 0;
- }
- 
--static const struct regmap_range tcan4x5x_reg_table_yes_range[] = {
-+static const struct regmap_range tcan4x5x_reg_table_wr_range[] = {
-+	/* Device ID and SPI Registers */
-+	regmap_reg_range(0x000c, 0x0010),
-+	/* Device configuration registers and Interrupt Flags*/
-+	regmap_reg_range(0x0800, 0x080c),
-+	regmap_reg_range(0x0814, 0x0814),
-+	regmap_reg_range(0x0820, 0x0820),
-+	regmap_reg_range(0x0830, 0x0830),
-+	/* M_CAN */
-+	regmap_reg_range(0x100c, 0x102c),
-+	regmap_reg_range(0x1048, 0x1048),
-+	regmap_reg_range(0x1050, 0x105c),
-+	regmap_reg_range(0x1080, 0x1088),
-+	regmap_reg_range(0x1090, 0x1090),
-+	regmap_reg_range(0x1098, 0x10a0),
-+	regmap_reg_range(0x10a8, 0x10b0),
-+	regmap_reg_range(0x10b8, 0x10c0),
-+	regmap_reg_range(0x10c8, 0x10c8),
-+	regmap_reg_range(0x10d0, 0x10d4),
-+	regmap_reg_range(0x10e0, 0x10e4),
-+	regmap_reg_range(0x10f0, 0x10f0),
-+	regmap_reg_range(0x10f8, 0x10f8),
-+	/* MRAM */
-+	regmap_reg_range(0x8000, 0x87fc),
-+};
-+
-+static const struct regmap_range tcan4x5x_reg_table_rd_range[] = {
- 	regmap_reg_range(0x0000, 0x0010),	/* Device ID and SPI Registers */
- 	regmap_reg_range(0x0800, 0x0830),	/* Device configuration registers and Interrupt Flags*/
- 	regmap_reg_range(0x1000, 0x10fc),	/* M_CAN */
- 	regmap_reg_range(0x8000, 0x87fc),	/* MRAM */
- };
- 
--static const struct regmap_access_table tcan4x5x_reg_table = {
--	.yes_ranges = tcan4x5x_reg_table_yes_range,
--	.n_yes_ranges = ARRAY_SIZE(tcan4x5x_reg_table_yes_range),
-+static const struct regmap_access_table tcan4x5x_reg_table_wr = {
-+	.yes_ranges = tcan4x5x_reg_table_wr_range,
-+	.n_yes_ranges = ARRAY_SIZE(tcan4x5x_reg_table_wr_range),
-+};
-+
-+static const struct regmap_access_table tcan4x5x_reg_table_rd = {
-+	.yes_ranges = tcan4x5x_reg_table_rd_range,
-+	.n_yes_ranges = ARRAY_SIZE(tcan4x5x_reg_table_rd_range),
- };
- 
- static const struct regmap_config tcan4x5x_regmap = {
-@@ -107,8 +138,8 @@ static const struct regmap_config tcan4x5x_regmap = {
- 	.reg_stride = 4,
- 	.pad_bits = 8,
- 	.val_bits = 32,
--	.wr_table = &tcan4x5x_reg_table,
--	.rd_table = &tcan4x5x_reg_table,
-+	.wr_table = &tcan4x5x_reg_table_wr,
-+	.rd_table = &tcan4x5x_reg_table_rd,
- 	.max_register = TCAN4X5X_MAX_REGISTER,
- 	.cache_type = REGCACHE_NONE,
- 	.read_flag_mask = (__force unsigned long)
--- 
-2.38.1
-
+My Greeting, Did you receive the letter i sent to you. Please answer me.
+Regard, Mr.Abraham
