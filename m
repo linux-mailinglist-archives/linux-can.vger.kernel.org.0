@@ -2,54 +2,79 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E997C645835
-	for <lists+linux-can@lfdr.de>; Wed,  7 Dec 2022 11:53:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 433C46458A4
+	for <lists+linux-can@lfdr.de>; Wed,  7 Dec 2022 12:12:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbiLGKxQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 7 Dec 2022 05:53:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43138 "EHLO
+        id S230095AbiLGLLz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 7 Dec 2022 06:11:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbiLGKwz (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 7 Dec 2022 05:52:55 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9782130F5D
-        for <linux-can@vger.kernel.org>; Wed,  7 Dec 2022 02:52:50 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1p2s2i-00074G-Rb
-        for linux-can@vger.kernel.org; Wed, 07 Dec 2022 11:52:48 +0100
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 3A55D1387EC
-        for <linux-can@vger.kernel.org>; Wed,  7 Dec 2022 10:52:47 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id C8C6F1387D0;
-        Wed,  7 Dec 2022 10:52:45 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id f38bb238;
-        Wed, 7 Dec 2022 10:52:44 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Frank Jungclaus <frank.jungclaus@esd.eu>,
-        stable@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net 4/4] can: esd_usb: Allow REC and TEC to return to zero
-Date:   Wed,  7 Dec 2022 11:52:43 +0100
-Message-Id: <20221207105243.2483884-5-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221207105243.2483884-1-mkl@pengutronix.de>
-References: <20221207105243.2483884-1-mkl@pengutronix.de>
+        with ESMTP id S229562AbiLGLLM (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 7 Dec 2022 06:11:12 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7AEE4E42A
+        for <linux-can@vger.kernel.org>; Wed,  7 Dec 2022 03:10:48 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id z4so20497083ljq.6
+        for <linux-can@vger.kernel.org>; Wed, 07 Dec 2022 03:10:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=I/R5XEHqvCv/dBJza85IzDRA+R2OE43AsS1vbZaQBr0=;
+        b=MFZC1oy5osqOw+1EcI33RRoMIrqyMvVdz9q1tlc8qEYjRXYLFL0ElS1kzbNBPCEmvq
+         hH3ubXPSURQsejaawIOjYBWA8SkQgo2PWeeh+2OdmmXunDnnSKNqIm3Zgq5H+mhqNKFo
+         2BYO334lgakhlywxAJokep+bQ9dq90AkgJ8D+v5H950Jyk4uTCMPFX8h8LzzucaGdQ1e
+         IveDyC7Xwf/QpPxtifO7GV+IY2J9tz8dFShJdiHyT9em1eLDn2I11oM/xAZb6FTnwcKH
+         tkfzMlVQQyAga+IdD+cRX+tZgSsUR2J41sJclHSggdk4bkYFCblwDrMytVs4REXp4Ix6
+         W7BA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=I/R5XEHqvCv/dBJza85IzDRA+R2OE43AsS1vbZaQBr0=;
+        b=OrLKkHu6xjXZtKqF3MKEyGoF9rEGcU1Nr+sIFnZZSahWhD77w9BlWxF15DUjfAiznM
+         JjTb7ZEtF2jIxpJh7k/scaPJp4nQhfhbSIEoR6sTM09XXdjL4f9ltAoGyNRQVUSk5syZ
+         n76pXEySXfWhja29+a9uJvfa1LoVCqlxJUbTde8KNdgu+gBPcr0fo7mmtjLAOlVj0RUw
+         0KSdrfrwXoDjI/7Ehy96sKDQOVMczx3KaSv687lbk5eVHVugTMj/oqjzCs6IVq1IWoDY
+         DGQGUI1aTFoePoG7Q1IJGaazVfLU7Ag116DjVcv6ilVOYTXHC2i7rhHFLN96rAnfAYGD
+         wisw==
+X-Gm-Message-State: ANoB5plbhso90p79W6POgmR2Wx24lXqLZmSR1okDCTwfeVejl0zetRAf
+        E6/938pr3L956UXPfmXn/t5+DA==
+X-Google-Smtp-Source: AA0mqf5p3BNj3uFb2TP1cT3jHeb6hwLnSTS2eYcwieYUGt8yyC0uxli65OWvuygEPrZf2y0huoo+dQ==
+X-Received: by 2002:a2e:808e:0:b0:27a:1e62:6fb5 with SMTP id i14-20020a2e808e000000b0027a1e626fb5mr323775ljg.58.1670411447010;
+        Wed, 07 Dec 2022 03:10:47 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id m4-20020a056512114400b00492e3c8a986sm2792625lfg.264.2022.12.07.03.10.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Dec 2022 03:10:46 -0800 (PST)
+Message-ID: <ee0d323c-cd55-c486-500e-93dc693ade3f@linaro.org>
+Date:   Wed, 7 Dec 2022 12:10:44 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [Patch v4 2/2] arm64: dts: fsd: Add MCAN device node
+Content-Language: en-US
+To:     Vivek Yadav <vivek.2311@samsung.com>, rcsekar@samsung.com,
+        krzysztof.kozlowski+dt@linaro.org, wg@grandegger.com,
+        mkl@pengutronix.de, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, pankaj.dubey@samsung.com,
+        ravi.patel@samsung.com, alim.akhtar@samsung.com,
+        linux-fsd@tesla.com, robh+dt@kernel.org
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        aswani.reddy@samsung.com, sriranjani.p@samsung.com
+References: <20221207100632.96200-1-vivek.2311@samsung.com>
+ <CGME20221207100700epcas5p408c436aaaf0edd215b54f36f500cd02c@epcas5p4.samsung.com>
+ <20221207100632.96200-3-vivek.2311@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221207100632.96200-3-vivek.2311@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,51 +83,30 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Frank Jungclaus <frank.jungclaus@esd.eu>
+On 07/12/2022 11:06, Vivek Yadav wrote:
+> Add MCAN device node and enable the same for FSD platform.
+> This also adds the required pin configuration for the same.
+> 
+> Signed-off-by: Sriranjani P <sriranjani.p@samsung.com>
+> Signed-off-by: Vivek Yadav <vivek.2311@samsung.com>
 
-We don't get any further EVENT from an esd CAN USB device for changes
-on REC or TEC while those counters converge to 0 (with ecc == 0). So
-when handling the "Back to Error Active"-event force txerr = rxerr =
-0, otherwise the berr-counters might stay on values like 95 forever.
+This is a friendly reminder during the review process.
 
-Also, to make life easier during the ongoing development a
-netdev_dbg() has been introduced to allow dumping error events send by
-an esd CAN USB device.
+It looks like you received a tag and forgot to add it.
 
-Fixes: 96d8e90382dc ("can: Add driver for esd CAN-USB/2 device")
-Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
-Link: https://lore.kernel.org/all/20221130202242.3998219-2-frank.jungclaus@esd.eu
-Cc: stable@vger.kernel.org
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/usb/esd_usb.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+If you do not know the process, here is a short explanation:
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+versions. However, there's no need to repost patches *only* to add the
+tags. The upstream maintainer will do that for acks received on the
+version they apply.
 
-diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_usb.c
-index 81b88e9e5bdc..42323f5e6f3a 100644
---- a/drivers/net/can/usb/esd_usb.c
-+++ b/drivers/net/can/usb/esd_usb.c
-@@ -234,6 +234,10 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
- 		u8 rxerr = msg->msg.rx.data[2];
- 		u8 txerr = msg->msg.rx.data[3];
- 
-+		netdev_dbg(priv->netdev,
-+			   "CAN_ERR_EV_EXT: dlc=%#02x state=%02x ecc=%02x rec=%02x tec=%02x\n",
-+			   msg->msg.rx.dlc, state, ecc, rxerr, txerr);
-+
- 		skb = alloc_can_err_skb(priv->netdev, &cf);
- 		if (skb == NULL) {
- 			stats->rx_dropped++;
-@@ -260,6 +264,8 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
- 				break;
- 			default:
- 				priv->can.state = CAN_STATE_ERROR_ACTIVE;
-+				txerr = 0;
-+				rxerr = 0;
- 				break;
- 			}
- 		} else {
--- 
-2.35.1
+https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
 
+If a tag was not added on purpose, please state why and what changed.
+
+
+Applied for v6.3.
+
+Best regards,
+Krzysztof
 
