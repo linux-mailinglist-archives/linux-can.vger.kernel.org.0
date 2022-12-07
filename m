@@ -2,120 +2,89 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FC3F644D1C
-	for <lists+linux-can@lfdr.de>; Tue,  6 Dec 2022 21:14:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 444596450CD
+	for <lists+linux-can@lfdr.de>; Wed,  7 Dec 2022 02:10:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229745AbiLFUOS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 6 Dec 2022 15:14:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52598 "EHLO
+        id S229748AbiLGBJp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 6 Dec 2022 20:09:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbiLFUNy (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 6 Dec 2022 15:13:54 -0500
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F78A442DF;
-        Tue,  6 Dec 2022 12:13:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1670357590;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=cEy9I3IooZKqrPiC5qfTfxbUZuX41PuBOXe1+pD769A=;
-    b=Usv/ZHWEFAZKFNn7BOzB1LHOyE2AwCSTD86cfS3ghtC8X7ff939qu4/zDPyS22dh78
-    69eLq/wEl0iZGHEHX/O5HK4K7T98qypOOcxzA8NJh9w/2el/PXsw1vhYdVXyBf6pWBc6
-    k2ZCK0I4hBL8i7CO6cL36bop+9MUrmP68LjZu98dqGk1pn6cdQOl51oMX5tkme7AEVVM
-    zUgF/nUh4mzk5gzDFPaC7OvnWtIFMZw+naivyoB4FOow6IZde9vSMlgT/Lthl3UGskvy
-    HuYIpJZzNfaqBxKrDCfWnPbSjtt28GHiOWuOTLIamA0ewE2Gvx9aWPmq1InVC+s+sWWF
-    ZfQA==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS/xvEBL7X5sbo3UIh9JiLceSWNadhq4/jU"
-X-RZG-CLASS-ID: mo00
-Received: from silver.lan
-    by smtp.strato.de (RZmta 48.2.1 AUTH)
-    with ESMTPSA id Dde783yB6KD9wNO
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Tue, 6 Dec 2022 21:13:09 +0100 (CET)
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-To:     linux-can@vger.kernel.org
-Cc:     netdev@vger.kernel.org, Oliver Hartkopp <socketcan@hartkopp.net>,
-        syzbot+2d7f58292cb5b29eb5ad@syzkaller.appspotmail.com,
-        Wei Chen <harperchen1110@gmail.com>
-Subject: [PATCH v2] can: af_can: fix NULL pointer dereference in can_rcv_filter
-Date:   Tue,  6 Dec 2022 21:12:59 +0100
-Message-Id: <20221206201259.3028-1-socketcan@hartkopp.net>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229737AbiLGBJe (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 6 Dec 2022 20:09:34 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEABB60E7;
+        Tue,  6 Dec 2022 17:09:32 -0800 (PST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NRfMH0SZrz8RV7G;
+        Wed,  7 Dec 2022 09:09:31 +0800 (CST)
+Received: from szxlzmapp05.zte.com.cn ([10.5.230.85])
+        by mse-fl2.zte.com.cn with SMTP id 2B71984p063121;
+        Wed, 7 Dec 2022 09:09:08 +0800 (+08)
+        (envelope-from yang.yang29@zte.com.cn)
+Received: from mapi (szxlzmapp02[null])
+        by mapi (Zmail) with MAPI id mid14;
+        Wed, 7 Dec 2022 09:09:09 +0800 (CST)
+Date:   Wed, 7 Dec 2022 09:09:09 +0800 (CST)
+X-Zmail-TransId: 2b04638fe7b575b72e87
+X-Mailer: Zmail v1.0
+Message-ID: <202212070909095189693@zte.com.cn>
+Mime-Version: 1.0
+From:   <yang.yang29@zte.com.cn>
+To:     <wg@grandegger.com>
+Cc:     <mkl@pengutronix.de>, <davem@davemloft.net>, <edumazet@google.com>,
+        <kuba@kernel.org>, <pabeni@redhat.com>,
+        <mailhol.vincent@wanadoo.fr>, <stefan.maetje@esd.eu>,
+        <socketcan@hartkopp.net>, <dzm91@hust.edu.cn>,
+        <julia.lawall@inria.fr>, <gustavoars@kernel.org>,
+        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <xu.panda@zte.com.cn>,
+        <yang.yang29@zte.com.cn>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIGNhbjogdWNhbjogdXNlIHN0cnNjcHkoKSB0byBpbnN0ZWFkIG9mIHN0cm5jcHkoKQ==?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 2B71984p063121
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 638FE7CB.000 by FangMail milter!
+X-FangMail-Envelope: 1670375371/4NRfMH0SZrz8RV7G/638FE7CB.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<yang.yang29@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 638FE7CB.000/4NRfMH0SZrz8RV7G
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Analogue to commit 8aa59e355949 ("can: af_can: fix NULL pointer dereference
-in can_rx_register()") we need to check for a missing initialization of
-ml_priv in the receive path of CAN frames. Since commit 4e096a18867a
-("net: introduce CAN specific pointer in the struct net_device") the check
-for dev->type to be ARPHRD_CAN is not sufficient anymore since bonding or
-tun netdevices claim to be CAN devices but do not initialize ml_priv
-accordingly.
+From: Xu Panda <xu.panda@zte.com.cn>
 
-Fixes: 4e096a18867a ("net: introduce CAN specific pointer in the struct net_device")
-Reported-by: syzbot+2d7f58292cb5b29eb5ad@syzkaller.appspotmail.com
-Reported-by: Wei Chen <harperchen1110@gmail.com>
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+The implementation of strscpy() is more robust and safer.
+That's now the recommended way to copy NUL terminated strings.
+
+Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+Signed-off-by: Yang Yang <yang.yang29@zte.com>
 ---
+ drivers/net/can/usb/ucan.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-V2: fix misspeling detected by checkpatch
-
-net/can/af_can.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/net/can/af_can.c b/net/can/af_can.c
-index 27dcdcc0b808..c69168f11e44 100644
---- a/net/can/af_can.c
-+++ b/net/can/af_can.c
-@@ -675,11 +675,11 @@ static void can_receive(struct sk_buff *skb, struct net_device *dev)
- }
- 
- static int can_rcv(struct sk_buff *skb, struct net_device *dev,
- 		   struct packet_type *pt, struct net_device *orig_dev)
- {
--	if (unlikely(dev->type != ARPHRD_CAN || (!can_is_can_skb(skb)))) {
-+	if (unlikely(dev->type != ARPHRD_CAN || !can_get_ml_priv(dev) || !can_is_can_skb(skb))) {
- 		pr_warn_once("PF_CAN: dropped non conform CAN skbuff: dev type %d, len %d\n",
- 			     dev->type, skb->len);
- 
- 		kfree_skb(skb);
- 		return NET_RX_DROP;
-@@ -690,11 +690,11 @@ static int can_rcv(struct sk_buff *skb, struct net_device *dev,
- }
- 
- static int canfd_rcv(struct sk_buff *skb, struct net_device *dev,
- 		     struct packet_type *pt, struct net_device *orig_dev)
- {
--	if (unlikely(dev->type != ARPHRD_CAN || (!can_is_canfd_skb(skb)))) {
-+	if (unlikely(dev->type != ARPHRD_CAN || !can_get_ml_priv(dev) || !can_is_canfd_skb(skb))) {
- 		pr_warn_once("PF_CAN: dropped non conform CAN FD skbuff: dev type %d, len %d\n",
- 			     dev->type, skb->len);
- 
- 		kfree_skb(skb);
- 		return NET_RX_DROP;
-@@ -705,11 +705,11 @@ static int canfd_rcv(struct sk_buff *skb, struct net_device *dev,
- }
- 
- static int canxl_rcv(struct sk_buff *skb, struct net_device *dev,
- 		     struct packet_type *pt, struct net_device *orig_dev)
- {
--	if (unlikely(dev->type != ARPHRD_CAN || (!can_is_canxl_skb(skb)))) {
-+	if (unlikely(dev->type != ARPHRD_CAN || !can_get_ml_priv(dev) || !can_is_canxl_skb(skb))) {
- 		pr_warn_once("PF_CAN: dropped non conform CAN XL skbuff: dev type %d, len %d\n",
- 			     dev->type, skb->len);
- 
- 		kfree_skb(skb);
- 		return NET_RX_DROP;
+diff --git a/drivers/net/can/usb/ucan.c b/drivers/net/can/usb/ucan.c
+index ffa38f533c35..159e25ffa337 100644
+--- a/drivers/net/can/usb/ucan.c
++++ b/drivers/net/can/usb/ucan.c
+@@ -1534,9 +1534,8 @@ static int ucan_probe(struct usb_interface *intf,
+ 				     sizeof(union ucan_ctl_payload));
+ 	if (ret > 0) {
+ 		/* copy string while ensuring zero termination */
+-		strncpy(firmware_str, up->ctl_msg_buffer->raw,
+-			sizeof(union ucan_ctl_payload));
+-		firmware_str[sizeof(union ucan_ctl_payload)] = '\0';
++		strscpy(firmware_str, up->ctl_msg_buffer->raw,
++			sizeof(union ucan_ctl_payload) + 1);
+ 	} else {
+ 		strcpy(firmware_str, "unknown");
+ 	}
 -- 
-2.30.2
-
+2.15.2
