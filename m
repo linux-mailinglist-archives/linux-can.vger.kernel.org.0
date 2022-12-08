@@ -2,92 +2,95 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A29FB646AFA
-	for <lists+linux-can@lfdr.de>; Thu,  8 Dec 2022 09:49:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B569A646B74
+	for <lists+linux-can@lfdr.de>; Thu,  8 Dec 2022 10:07:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbiLHItT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 8 Dec 2022 03:49:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48878 "EHLO
+        id S230241AbiLHJH4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 8 Dec 2022 04:07:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230003AbiLHItF (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 8 Dec 2022 03:49:05 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C24EC;
-        Thu,  8 Dec 2022 00:48:51 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NSSVj4cnnz4f3r6C;
-        Thu,  8 Dec 2022 16:48:45 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP1 (Coremail) with SMTP id cCh0CgAnG6rupJFj_X4FBw--.10136S4;
-        Thu, 08 Dec 2022 16:48:48 +0800 (CST)
-From:   Ye Bin <yebin@huaweicloud.com>
-To:     socketcan@hartkopp.net, mkl@pengutronix.de, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Cc:     yebin10@huawei.com
-Subject: [PATCH net-next] net: af_can: remove useless parameter 'err' in 'can_rx_register()'
-Date:   Thu,  8 Dec 2022 17:09:40 +0800
-Message-Id: <20221208090940.3695670-1-yebin@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
+        with ESMTP id S230244AbiLHJHV (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 8 Dec 2022 04:07:21 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB43249B70
+        for <linux-can@vger.kernel.org>; Thu,  8 Dec 2022 01:06:52 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1p3CrR-0005XE-14; Thu, 08 Dec 2022 10:06:33 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:92e:b9fb:f0e7:2adf])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 786E713948F;
+        Thu,  8 Dec 2022 09:06:30 +0000 (UTC)
+Date:   Thu, 8 Dec 2022 10:06:22 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Ye Bin <yebin@huaweicloud.com>
+Cc:     socketcan@hartkopp.net, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, yebin10@huawei.com
+Subject: Re: [PATCH net-next] net: af_can: remove useless parameter 'err' in
+ 'can_rx_register()'
+Message-ID: <20221208090622.7vp6xjkyh26jzvpz@pengutronix.de>
+References: <20221208090940.3695670-1-yebin@huaweicloud.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cCh0CgAnG6rupJFj_X4FBw--.10136S4
-X-Coremail-Antispam: 1UD129KBjvdXoWrtw4rtry8Jw4xWr1UKFW3ZFb_yoWDZrbE9r
-        yI9r18WF17tr43Kr15Cw4fXF1vk3yrGF4xXFySy34vv3WagFZ5Gw1kGF9xXr98Gryxtr15
-        Wwn8Xr92gr1fujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUboAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Y
-        z7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zV
-        AF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4l
-        IxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s
-        0DMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
-        daVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
-X-CM-SenderInfo: p1hex046kxt4xhlfz01xgou0bp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="nqaj6drbuy6wf66i"
+Content-Disposition: inline
+In-Reply-To: <20221208090940.3695670-1-yebin@huaweicloud.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Ye Bin <yebin10@huawei.com>
 
-Since commit bdfb5765e45b remove NULL-ptr checks from users of
-can_dev_rcv_lists_find(). 'err' parameter is useless, so remove it.
+--nqaj6drbuy6wf66i
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Ye Bin <yebin10@huawei.com>
----
- net/can/af_can.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+On 08.12.2022 17:09:40, Ye Bin wrote:
+> From: Ye Bin <yebin10@huawei.com>
+>=20
+> Since commit bdfb5765e45b remove NULL-ptr checks from users of
+> can_dev_rcv_lists_find(). 'err' parameter is useless, so remove it.
+>=20
+> Signed-off-by: Ye Bin <yebin10@huawei.com>
 
-diff --git a/net/can/af_can.c b/net/can/af_can.c
-index 27dcdcc0b808..ec3f7e658295 100644
---- a/net/can/af_can.c
-+++ b/net/can/af_can.c
-@@ -446,7 +446,6 @@ int can_rx_register(struct net *net, struct net_device *dev, canid_t can_id,
- 	struct hlist_head *rcv_list;
- 	struct can_dev_rcv_lists *dev_rcv_lists;
- 	struct can_rcv_lists_stats *rcv_lists_stats = net->can.rcv_lists_stats;
--	int err = 0;
- 
- 	/* insert new receiver  (dev,canid,mask) -> (func,data) */
- 
-@@ -481,7 +480,7 @@ int can_rx_register(struct net *net, struct net_device *dev, canid_t can_id,
- 					       rcv_lists_stats->rcv_entries);
- 	spin_unlock_bh(&net->can.rcvlists_lock);
- 
--	return err;
-+	return 0;
- }
- EXPORT_SYMBOL(can_rx_register);
- 
--- 
-2.31.1
+Applied to linux-can-next.
 
+Thanks,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--nqaj6drbuy6wf66i
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmORqQsACgkQrX5LkNig
+010ZUwf+MGBRuJnw3cRwCfUcjhjmK4LSK4B4C9xyb6aeorVds6iQ9kunEeZp/kUP
+c1JLeGBu48d+ruONAUgBfH0THAfYiiTJSjp6jfwsCM5N/nr2Z+Yex5TL2kTORVBU
+BFuT+POvP0HhCGgEHgrzKhCLmmAJYaCBc4y24pHuwqezEfJtnKX873OSOLIDLiQa
+Q+/EKlvmbHNNGOXjNFXn8itsSjNgntsdXulDc23d9lJQnw82FvQfORgjTOAf76HI
+FH8IB2C9CWrr0V3dQYzZ2IsdUZrVXVMDmZlJTG8/wHM3KVaT7tkV81uTnnlaOrC1
+g2Wnd7gsq6/tg7rg4A49mImf3AkT+A==
+=xiRa
+-----END PGP SIGNATURE-----
+
+--nqaj6drbuy6wf66i--
