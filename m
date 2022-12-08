@@ -2,233 +2,95 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DBD3646218
-	for <lists+linux-can@lfdr.de>; Wed,  7 Dec 2022 21:07:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96321646786
+	for <lists+linux-can@lfdr.de>; Thu,  8 Dec 2022 04:10:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbiLGUHR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 7 Dec 2022 15:07:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36026 "EHLO
+        id S229911AbiLHDKe (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 7 Dec 2022 22:10:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbiLGUHQ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 7 Dec 2022 15:07:16 -0500
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29BD686BC
-        for <linux-can@vger.kernel.org>; Wed,  7 Dec 2022 12:07:14 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:947e:1fc0:ebbb:447b])
-        by xavier.telenet-ops.be with bizsmtp
-        id tY792800J4BwbnS01Y79el; Wed, 07 Dec 2022 21:07:11 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1p30Qd-002rg7-HJ; Wed, 07 Dec 2022 20:50:03 +0100
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1p2xcj-002Xs4-Ri; Wed, 07 Dec 2022 17:50:21 +0100
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc:     Ulrich Hecht <uli+renesas@fpond.eu>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-can@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v2] dt-bindings: can: renesas,rcar-canfd: Fix number of channels for R-Car V3U
-Date:   Wed,  7 Dec 2022 17:50:21 +0100
-Message-Id: <7d41d72cd7db2e90bae069ce57dbb672f17500ae.1670431681.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229777AbiLHDKS (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 7 Dec 2022 22:10:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD26F7616E;
+        Wed,  7 Dec 2022 19:10:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5821D61D4B;
+        Thu,  8 Dec 2022 03:10:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9C1CFC433D7;
+        Thu,  8 Dec 2022 03:10:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670469016;
+        bh=JKY8taeO76lQp+JsyteED53SJMrGqBbdviof8+x0utc=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=t0XrHDgWndWrQZvfUAb2kzAcTS/n0KqiLeQoEDqroVWuPtYtp1sAwRayd8phD6ZSv
+         kJb730fQ6U7Wi5ewjkN8Wce1dNFfSPOQ8dCVn7hzmvFQdTjnfvv177jtkew19R2Xyl
+         YhRscrdOey9YCqAeEILt/a3cycLszEOcfzT5vcHH1NmbxxWd2jZELClHlIpirnlOwJ
+         V1pgLS9yOgdg3mnmyGjCdlEQpr2z7BO6RjrKmqBy0qHZdgpmlZmrXIe/z/yuYeWbH/
+         C8TAFdS0Vkp+RCays2LkNyBWu4cFnflJX4EwXb0Bbw5Rf23RXbkGilqVHNmVQ0IZPX
+         Obc6ZTCbuKEBg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7FC9CE4D02C;
+        Thu,  8 Dec 2022 03:10:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH net 1/4] can: af_can: fix NULL pointer dereference in
+ can_rcv_filter
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167046901651.21108.4760310811680515367.git-patchwork-notify@kernel.org>
+Date:   Thu, 08 Dec 2022 03:10:16 +0000
+References: <20221207105243.2483884-2-mkl@pengutronix.de>
+In-Reply-To: <20221207105243.2483884-2-mkl@pengutronix.de>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        linux-can@vger.kernel.org, kernel@pengutronix.de,
+        socketcan@hartkopp.net,
+        syzbot+2d7f58292cb5b29eb5ad@syzkaller.appspotmail.com,
+        harperchen1110@gmail.com, stable@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-According to the bindings, only two channels are supported.
-However, R-Car V3U supports eight, leading to "make dtbs" failures:
+Hello:
 
-        arch/arm64/boot/dts/renesas/r8a779a0-falcon.dtb: can@e6660000: Unevaluated properties are not allowed ('channel2', 'channel3', 'channel4', 'channel5', 'channel6', 'channel7' were unexpected)
+This series was applied to netdev/net.git (master)
+by Marc Kleine-Budde <mkl@pengutronix.de>:
 
-Update the number of channels to 8 on R-Car V3U.
-While at it, prevent adding more properties to the channel nodes, as
-they must contain no other properties than a status property.
+On Wed,  7 Dec 2022 11:52:40 +0100 you wrote:
+> From: Oliver Hartkopp <socketcan@hartkopp.net>
+> 
+> Analogue to commit 8aa59e355949 ("can: af_can: fix NULL pointer
+> dereference in can_rx_register()") we need to check for a missing
+> initialization of ml_priv in the receive path of CAN frames.
+> 
+> Since commit 4e096a18867a ("net: introduce CAN specific pointer in the
+> struct net_device") the check for dev->type to be ARPHRD_CAN is not
+> sufficient anymore since bonding or tun netdevices claim to be CAN
+> devices but do not initialize ml_priv accordingly.
+> 
+> [...]
 
-Fixes: d6254d52d70de530 ("dt-bindings: can: renesas,rcar-canfd: Document r8a779a0 support")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-v2:
-  - s/unevaluatedProperties/additionalProperties/.
----
- .../bindings/net/can/renesas,rcar-canfd.yaml  | 133 ++++++++++--------
- 1 file changed, 72 insertions(+), 61 deletions(-)
+Here is the summary with links:
+  - [net,1/4] can: af_can: fix NULL pointer dereference in can_rcv_filter
+    https://git.kernel.org/netdev/net/c/0acc442309a0
+  - [net,2/4] can: slcan: fix freed work crash
+    https://git.kernel.org/netdev/net/c/fb855e9f3b6b
+  - [net,3/4] can: can327: flush TX_work on ldisc .close()
+    https://git.kernel.org/netdev/net/c/f4a4d121ebec
+  - [net,4/4] can: esd_usb: Allow REC and TEC to return to zero
+    https://git.kernel.org/netdev/net/c/918ee4911f7a
 
-diff --git a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-index 6f71fc96bc4e3156..5228fd513ca89a3c 100644
---- a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-+++ b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-@@ -9,9 +9,6 @@ title: Renesas R-Car CAN FD Controller
- maintainers:
-   - Fabrizio Castro <fabrizio.castro.jz@renesas.com>
- 
--allOf:
--  - $ref: can-controller.yaml#
--
- properties:
-   compatible:
-     oneOf:
-@@ -77,12 +74,13 @@ properties:
-     description: Maximum frequency of the CANFD clock.
- 
- patternProperties:
--  "^channel[01]$":
-+  "^channel[0-7]$":
-     type: object
-     description:
--      The controller supports two channels and each is represented as a child
--      node.  Each child node supports the "status" property only, which
--      is used to enable/disable the respective channel.
-+      The controller supports multiple channels and each is represented as a
-+      child node.  Each channel can be enabled/disabled individually.
-+
-+    additionalProperties: false
- 
- required:
-   - compatible
-@@ -98,60 +96,73 @@ required:
-   - channel0
-   - channel1
- 
--if:
--  properties:
--    compatible:
--      contains:
--        enum:
--          - renesas,rzg2l-canfd
--then:
--  properties:
--    interrupts:
--      items:
--        - description: CAN global error interrupt
--        - description: CAN receive FIFO interrupt
--        - description: CAN0 error interrupt
--        - description: CAN0 transmit interrupt
--        - description: CAN0 transmit/receive FIFO receive completion interrupt
--        - description: CAN1 error interrupt
--        - description: CAN1 transmit interrupt
--        - description: CAN1 transmit/receive FIFO receive completion interrupt
--
--    interrupt-names:
--      items:
--        - const: g_err
--        - const: g_recc
--        - const: ch0_err
--        - const: ch0_rec
--        - const: ch0_trx
--        - const: ch1_err
--        - const: ch1_rec
--        - const: ch1_trx
--
--    resets:
--      maxItems: 2
--
--    reset-names:
--      items:
--        - const: rstp_n
--        - const: rstc_n
--
--  required:
--    - reset-names
--else:
--  properties:
--    interrupts:
--      items:
--        - description: Channel interrupt
--        - description: Global interrupt
--
--    interrupt-names:
--      items:
--        - const: ch_int
--        - const: g_int
--
--    resets:
--      maxItems: 1
-+allOf:
-+  - $ref: can-controller.yaml#
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - renesas,rzg2l-canfd
-+    then:
-+      properties:
-+        interrupts:
-+          items:
-+            - description: CAN global error interrupt
-+            - description: CAN receive FIFO interrupt
-+            - description: CAN0 error interrupt
-+            - description: CAN0 transmit interrupt
-+            - description: CAN0 transmit/receive FIFO receive completion interrupt
-+            - description: CAN1 error interrupt
-+            - description: CAN1 transmit interrupt
-+            - description: CAN1 transmit/receive FIFO receive completion interrupt
-+
-+        interrupt-names:
-+          items:
-+            - const: g_err
-+            - const: g_recc
-+            - const: ch0_err
-+            - const: ch0_rec
-+            - const: ch0_trx
-+            - const: ch1_err
-+            - const: ch1_rec
-+            - const: ch1_trx
-+
-+        resets:
-+          maxItems: 2
-+
-+        reset-names:
-+          items:
-+            - const: rstp_n
-+            - const: rstc_n
-+
-+      required:
-+        - reset-names
-+    else:
-+      properties:
-+        interrupts:
-+          items:
-+            - description: Channel interrupt
-+            - description: Global interrupt
-+
-+        interrupt-names:
-+          items:
-+            - const: ch_int
-+            - const: g_int
-+
-+        resets:
-+          maxItems: 1
-+
-+  - if:
-+      not:
-+        properties:
-+          compatible:
-+            contains:
-+              const: renesas,r8a779a0-canfd
-+    then:
-+      patternProperties:
-+        "^channel[2-7]$": false
- 
- unevaluatedProperties: false
- 
+You are awesome, thank you!
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
