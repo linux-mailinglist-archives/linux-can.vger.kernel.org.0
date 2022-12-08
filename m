@@ -2,77 +2,88 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE8D3646A2B
-	for <lists+linux-can@lfdr.de>; Thu,  8 Dec 2022 09:12:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43988646B3F
+	for <lists+linux-can@lfdr.de>; Thu,  8 Dec 2022 10:01:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229829AbiLHIMD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 8 Dec 2022 03:12:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53094 "EHLO
+        id S229785AbiLHJBA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 8 Dec 2022 04:01:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbiLHIMB (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 8 Dec 2022 03:12:01 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CABA05654F;
-        Thu,  8 Dec 2022 00:12:00 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id jn7so797190plb.13;
-        Thu, 08 Dec 2022 00:12:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0GbBuAv7YkpRPrYej1n/dTHTQXaEfO/DfSmjGAaefU4=;
-        b=TzzNFzXhmb+jTb3KAIgvWhqVZneiIiWuEMcLzlPWqT0WtktgVQQcdHgTlyWu+L3L4/
-         +p9GJ1jUpEW9UnxiKFlBvOCMkSB/0cEyxhECBjuofAcc0wPFmrHvlGNNqA2e4swjLEut
-         iA6p5+HTaVtjBVUS+5H8jpmYlm4O6oMT0MpNlbDw2IaFaJ9NQ+A7HIo83J9+SKOt1Dfy
-         ah6GpCO/NfOMyaSB+rJkOgaP49NfaExW5C9sStHQ3nimdViVktIBlFRzesqrg/PGyxCe
-         KRWSNZKqGbJABNQQL8VHcKAx4AZ+9oKUO+RBLxbQhdTYbIKPvAWPhZo7wbag8sTxrvZH
-         lbRg==
+        with ESMTP id S229514AbiLHJA6 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 8 Dec 2022 04:00:58 -0500
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141134874C;
+        Thu,  8 Dec 2022 01:00:58 -0800 (PST)
+Received: by mail-pj1-f47.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso4020636pjt.0;
+        Thu, 08 Dec 2022 01:00:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=0GbBuAv7YkpRPrYej1n/dTHTQXaEfO/DfSmjGAaefU4=;
-        b=c/PPcSdkyYO7SjAiAUqIQl8DVGc6k6pt9rKWkHc/oZUYoaY7ilLd1G8+kzkRIwGPCq
-         uBEmLbseSYIXf3c0KlecVZneQL6RUNBYDAOYDtAVj6B/yDLKMuaGfoqg3PDSCp6rGaLG
-         He27VW/Q+W/z951L4ILV55/JFrJQdbQf7NmI/BzVTCHG1KziMTAYNGe8X88YThdEE3yM
-         OdgMmhhi6UpSYrzDINwc14RzAxkCkYtzcoq9WPutDGWgqF6lJkjl9y9fJvuKwnRTyn3t
-         lmbPcaznPQR3eICmw9N7zFyc63O/8OsVmZdr7wcv0lJDyJtZaELlyW9EGq2XkHLInBzA
-         DDSw==
-X-Gm-Message-State: ANoB5pk0oOVyhwwfN/8Gz8HQ9qd4wNMmUpNGaPfjUUvwTYjQRmUeGYZr
-        CLBe647VF2lONTwmRPacnjg=
-X-Google-Smtp-Source: AA0mqf4v+10yeuc5ZehzvAJqNEdeHWLFcCVk502K4ZANGUAFPLLWAQM9Z2JqVAZcjJkq30PbOhkuPg==
-X-Received: by 2002:a17:902:ce07:b0:180:f32c:7501 with SMTP id k7-20020a170902ce0700b00180f32c7501mr2005292plg.0.1670487120063;
-        Thu, 08 Dec 2022 00:12:00 -0800 (PST)
-Received: from XH22050090-L.ad.ts.tri-ad.global ([103.175.111.222])
-        by smtp.gmail.com with ESMTPSA id b12-20020a1709027e0c00b00188f07c9eedsm15735729plm.176.2022.12.08.00.11.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 00:11:59 -0800 (PST)
-Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
-Cc:     Martin Elshuber <martin.elshuber@theobroma-systems.com>,
-        Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>,
-        Maximilian Schneider <mws@schneidersoft.net>,
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gnfeenGHSX8pxGcDHDGsgu5jtWy1vtL2VR1fK04qMGU=;
+        b=0+3NAgORvJfV2qMO3lsVn+H3Lqjdoqrb7AmM3DiJFy0jS58oKrf/zhFiC7/uc03CGI
+         xOeY5msMsMNqGSx8gVsg5SvpQtVbCetLzkae8X3t7L2Uxa3FKuBrBapLmglCSbF8rlrI
+         Rrh2v30VjcGLAdspYJLhKZ6A3ND0O5d1ODWut35u9qAFtqXbJeXT4qCBY5Q4Nr+ZYmZ/
+         4sdrte7qg5W7/SL2wjLbJGWI1y5t6m/MpM0uUhpkFy5q/k0VqLaO6eMHQerB++ybv+dp
+         HJkNevC6AVrIlAbtdPonQbAmaPaAhZxOFMDjhjV+EdU1fuwdWF2A2BcxuoSxq0hOZXA/
+         1tOQ==
+X-Gm-Message-State: ANoB5pn98sgA59AO+uIwrrWojjlYBwc8y551g0piXsOFHAVo90tQZHUF
+        zEpjjrssnLtppy+FMc/HGSXkYAULG5HVumNakKY=
+X-Google-Smtp-Source: AA0mqf659+OdeqLrf+FQ+LZZtgdCdNVN8yytNzkVh+PKns/Z4xwYuquj032CQR+ovzq7ynBjBRLwhOyGjC4yQm2+kIg=
+X-Received: by 2002:a17:903:452:b0:189:6574:7ac2 with SMTP id
+ iw18-20020a170903045200b0018965747ac2mr64198640plb.65.1670490057258; Thu, 08
+ Dec 2022 01:00:57 -0800 (PST)
+MIME-Version: 1.0
+References: <20221203133159.94414-1-mailhol.vincent@wanadoo.fr> <9493232b-c8fa-5612-fb13-fccf58b01942@suse.com>
+In-Reply-To: <9493232b-c8fa-5612-fb13-fccf58b01942@suse.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Thu, 8 Dec 2022 18:00:46 +0900
+Message-ID: <CAMZ6RqJejJCOUk+MSvxjw9Us0gYhTuoOB4MUTk9jji6Bk=ix3A@mail.gmail.com>
+Subject: Re: [PATCH 0/8] can: usb: remove all usb_set_intfdata(intf, NULL) in
+ drivers' disconnect()
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Frank Jungclaus <frank.jungclaus@esd.eu>, socketcan@esd.eu,
+        Yasushi SHOJI <yashi@spacecubics.com>,
+        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        Hangyu Hua <hbh25y@gmail.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
         Peter Fink <pfink@christ-es.de>,
         Jeroen Hofstee <jhofstee@victronenergy.com>,
-        =?UTF-8?q?Christoph=20M=C3=B6hring?= <cmoehring@christ-es.de>,
+        =?UTF-8?Q?Christoph_M=C3=B6hring?= <cmoehring@christ-es.de>,
         John Whittington <git@jbrengineering.co.uk>,
         Vasanth Sadhasivan <vasanth.sadhasivan@samsara.com>,
+        Jimmy Assarsson <extja@kvaser.com>,
+        Anssi Hannula <anssi.hannula@bitwise.fi>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Stephane Grosjean <s.grosjean@peak-system.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Dongliang Mu <dzm91@hust.edu.cn>,
+        Sebastian Haas <haas@ems-wuensche.com>,
+        Maximilian Schneider <max@schneidersoft.net>,
+        Daniel Berglund <db@kvaser.com>,
+        Olivier Sobrie <olivier@sobrie.be>,
+        =?UTF-8?B?UmVtaWdpdXN6IEtvxYLFgsSFdGFq?= 
+        <remigiusz.kollataj@mobica.com>,
+        Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>,
+        Martin Elshuber <martin.elshuber@theobroma-systems.com>,
+        Philipp Tomsich <philipp.tomsich@theobroma-systems.com>,
+        Bernd Krumboeck <b.krumboeck@gmail.com>,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH 2/2] can: gs_usb: remove gs_can::iface
-Date:   Thu,  8 Dec 2022 17:11:42 +0900
-Message-Id: <20221208081142.16936-3-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221208081142.16936-1-mailhol.vincent@wanadoo.fr>
-References: <20221208081142.16936-1-mailhol.vincent@wanadoo.fr>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,127 +91,116 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The iface field of struct gs_can is only used to retrieve the
-usb_device which is already available in gs_can::udev.
+On Mon. 5 Dec. 2022 at 17:39, Oliver Neukum <oneukum@suse.com> wrote:
+> On 03.12.22 14:31, Vincent Mailhol wrote:
+> > The core sets the usb_interface to NULL in [1]. Also setting it to
+> > NULL in usb_driver::disconnects() is at best useless, at worse risky.
+>
+> Hi,
+>
+> I am afraid there is a major issue with your series of patches.
+> The drivers you are removing this from often have a subsequent check
+> for the data they got from usb_get_intfdata() being NULL.
 
-Replace each occurrence of interface_to_usbdev(dev->iface) with
-dev->udev. This done, remove gs_can::iface.
+ACK, but I do not see the connection.
 
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- drivers/net/can/usb/gs_usb.c | 29 +++++++++--------------------
- 1 file changed, 9 insertions(+), 20 deletions(-)
+> That pattern is taken from drivers like btusb or CDC-ACM
 
-diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
-index 838744d2ce34..d476c2884008 100644
---- a/drivers/net/can/usb/gs_usb.c
-+++ b/drivers/net/can/usb/gs_usb.c
-@@ -299,7 +299,6 @@ struct gs_can {
- 
- 	struct net_device *netdev;
- 	struct usb_device *udev;
--	struct usb_interface *iface;
- 
- 	struct can_bittiming_const bt_const, data_bt_const;
- 	unsigned int channel;	/* channel number */
-@@ -383,8 +382,7 @@ static int gs_cmd_reset(struct gs_can *dev)
- 		.mode = GS_CAN_MODE_RESET,
- 	};
- 
--	return usb_control_msg_send(interface_to_usbdev(dev->iface), 0,
--				    GS_USB_BREQ_MODE,
-+	return usb_control_msg_send(dev->udev, 0, GS_USB_BREQ_MODE,
- 				    USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_INTERFACE,
- 				    dev->channel, 0, &dm, sizeof(dm), 1000,
- 				    GFP_KERNEL);
-@@ -396,8 +394,7 @@ static inline int gs_usb_get_timestamp(const struct gs_can *dev,
- 	__le32 timestamp;
- 	int rc;
- 
--	rc = usb_control_msg_recv(interface_to_usbdev(dev->iface), 0,
--				  GS_USB_BREQ_TIMESTAMP,
-+	rc = usb_control_msg_recv(dev->udev, 0, GS_USB_BREQ_TIMESTAMP,
- 				  USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_INTERFACE,
- 				  dev->channel, 0,
- 				  &timestamp, sizeof(timestamp),
-@@ -674,8 +671,7 @@ static int gs_usb_set_bittiming(struct net_device *netdev)
- 	};
- 
- 	/* request bit timings */
--	return usb_control_msg_send(interface_to_usbdev(dev->iface), 0,
--				    GS_USB_BREQ_BITTIMING,
-+	return usb_control_msg_send(dev->udev, 0, GS_USB_BREQ_BITTIMING,
- 				    USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_INTERFACE,
- 				    dev->channel, 0, &dbt, sizeof(dbt), 1000,
- 				    GFP_KERNEL);
-@@ -698,8 +694,7 @@ static int gs_usb_set_data_bittiming(struct net_device *netdev)
- 		request = GS_USB_BREQ_QUIRK_CANTACT_PRO_DATA_BITTIMING;
- 
- 	/* request data bit timings */
--	return usb_control_msg_send(interface_to_usbdev(dev->iface), 0,
--				    request,
-+	return usb_control_msg_send(dev->udev, 0, request,
- 				    USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_INTERFACE,
- 				    dev->channel, 0, &dbt, sizeof(dbt), 1000,
- 				    GFP_KERNEL);
-@@ -941,8 +936,7 @@ static int gs_can_open(struct net_device *netdev)
- 	/* finally start device */
- 	dev->can.state = CAN_STATE_ERROR_ACTIVE;
- 	dm.flags = cpu_to_le32(flags);
--	rc = usb_control_msg_send(interface_to_usbdev(dev->iface), 0,
--				  GS_USB_BREQ_MODE,
-+	rc = usb_control_msg_send(dev->udev, 0, GS_USB_BREQ_MODE,
- 				  USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_INTERFACE,
- 				  dev->channel, 0, &dm, sizeof(dm), 1000,
- 				  GFP_KERNEL);
-@@ -969,8 +963,7 @@ static int gs_usb_get_state(const struct net_device *netdev,
- 	struct gs_device_state ds;
- 	int rc;
- 
--	rc = usb_control_msg_recv(interface_to_usbdev(dev->iface), 0,
--				  GS_USB_BREQ_GET_STATE,
-+	rc = usb_control_msg_recv(dev->udev, 0, GS_USB_BREQ_GET_STATE,
- 				  USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_INTERFACE,
- 				  dev->channel, 0,
- 				  &ds, sizeof(ds),
-@@ -1064,8 +1057,7 @@ static int gs_usb_set_identify(struct net_device *netdev, bool do_identify)
- 	else
- 		imode.mode = cpu_to_le32(GS_CAN_IDENTIFY_OFF);
- 
--	return usb_control_msg_send(interface_to_usbdev(dev->iface), 0,
--				    GS_USB_BREQ_IDENTIFY,
-+	return usb_control_msg_send(dev->udev, 0, GS_USB_BREQ_IDENTIFY,
- 				    USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_INTERFACE,
- 				    dev->channel, 0, &imode, sizeof(imode), 100,
- 				    GFP_KERNEL);
-@@ -1118,8 +1110,7 @@ static int gs_usb_get_termination(struct net_device *netdev, u16 *term)
- 	struct gs_device_termination_state term_state;
- 	int rc;
- 
--	rc = usb_control_msg_recv(interface_to_usbdev(dev->iface), 0,
--				  GS_USB_BREQ_GET_TERMINATION,
-+	rc = usb_control_msg_recv(dev->udev, 0, GS_USB_BREQ_GET_TERMINATION,
- 				  USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_INTERFACE,
- 				  dev->channel, 0,
- 				  &term_state, sizeof(term_state), 1000,
-@@ -1145,8 +1136,7 @@ static int gs_usb_set_termination(struct net_device *netdev, u16 term)
- 	else
- 		term_state.state = cpu_to_le32(GS_CAN_TERMINATION_STATE_OFF);
- 
--	return usb_control_msg_send(interface_to_usbdev(dev->iface), 0,
--				    GS_USB_BREQ_SET_TERMINATION,
-+	return usb_control_msg_send(dev->udev, 0, GS_USB_BREQ_SET_TERMINATION,
- 				    USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_INTERFACE,
- 				    dev->channel, 0,
- 				    &term_state, sizeof(term_state), 1000,
-@@ -1210,7 +1200,6 @@ static struct gs_can *gs_make_candev(unsigned int channel,
- 	dev->bt_const.brp_inc = le32_to_cpu(bt_const.brp_inc);
- 
- 	dev->udev = interface_to_usbdev(intf);
--	dev->iface = intf;
- 	dev->netdev = netdev;
- 	dev->channel = channel;
- 
--- 
-2.25.1
+Where does CDC-ACM set *his* interface to NULL? Looking at:
 
+  https://elixir.bootlin.com/linux/v6.0/source/drivers/usb/class/cdc-acm.c#L1531
+
+I can see that cdc-acm sets acm->control and acm->data to NULL in his
+disconnect(), but it doesn't set its own usb_interface to NULL.
+
+> which claim secondary interfaces disconnect() will be called a second time
+> for.
+
+Are you saying that the disconnect() of those CAN USB drivers is being
+called twice? I do not see this in the source code. The only caller of
+usb_driver::disconnect() I can see is:
+
+  https://elixir.bootlin.com/linux/v6.0/source/drivers/usb/core/driver.c#L458
+
+> In addition, a driver can use setting intfdata to NULL as a flag
+> for disconnect() having proceeded to a point where certain things
+> can no longer be safely done.
+
+Any reference that a driver can do that? This pattern seems racy.
+
+By the way, I did check all the drivers:
+
+  * ems_usb: intf is only used in ems_usb_probe() and
+ems_usb_disconnect() functions.
+
+  * esd_usb: intf is only used in the esd_usb_probe(),
+    esd_usb_probe_one_net() (which is part of probing),
+    esd_usb_disconnect() and a couple of sysfs functions (which only
+    use intf to get a pointer to struct esd_usb).
+
+  * gs_usb: intf is used several time but only to retrive struct
+    usb_device. This seems useless, I will sent this patch to remove
+    it:
+    https://lore.kernel.org/linux-can/20221208081142.16936-3-mailhol.vincent@wanadoo.fr/
+    Aside of that, intf is only used in gs_usb_probe(),
+    gs_make_candev() (which is part of probing) and
+    gs_usb_disconnect() functions.
+
+  * kvaser_usb: intf is only used in kvaser_usb_probe() and
+    kvaser_usb_disconnect() functions.
+
+  * mcba_usb: intf is only used in mcba_usb_probe() and
+    mcba_usb_disconnect() functions.
+
+  * ucan: intf is only used in ucan_probe() and
+    ucan_disconnect(). struct ucan_priv also has a pointer to intf but
+    it is never used. I sent this patch to remove it:
+    https://lore.kernel.org/linux-can/20221208081142.16936-2-mailhol.vincent@wanadoo.fr/
+
+  * usb_8dev: intf is only used in usb_8dev_probe() and
+    usb_8dev_disconnect().
+
+With no significant use of intf outside of the probe() and
+disconnect(), there is definitely no such "use intf as a flag" in any
+of these drivers.
+
+> You need to check for that in every driver
+> you remove this code from and if you decide that it can safely be removed,
+
+What makes you assume that I didn't check this in the first place? Or
+do you see something I missed?
+
+> which is likely, then please also remove checks like this:
+>
+>         struct ems_usb *dev = usb_get_intfdata(intf);
+>
+>         usb_set_intfdata(intf, NULL);
+>
+>         if (dev) {
+>                 unregister_netdev(dev->netdev);
+
+How is the if (dev) check related? There is no correlation between
+setting intf to NULL and dev not being NULL.
+
+I think dev is never NULL, but I did not assess that dev could not be NULL.
+
+> Either it can be called a second time, then you need to leave it
+> as is,
+
+Really?! The first thing disconnect() does is calling
+usb_get_intfdata(intf) which dereferences intf without checking if it
+is NULL, c.f.:
+
+  https://elixir.bootlin.com/linux/v6.0/source/include/linux/usb.h#L265
+
+Then it sets intf to NULL.
+
+The second time you call disconnect(), the usb_get_intfdata(intf)
+would be a NULL pointer dereference.
+
+> or the check for NULL is superfluous. But only removing setting
+> the pointer to NULL never makes sense.
+
+
+Yours sincerely,
+Vincent Mailhol
