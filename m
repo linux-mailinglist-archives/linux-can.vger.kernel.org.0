@@ -2,97 +2,130 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FC7864B671
-	for <lists+linux-can@lfdr.de>; Tue, 13 Dec 2022 14:39:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AC3964BAA6
+	for <lists+linux-can@lfdr.de>; Tue, 13 Dec 2022 18:10:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235561AbiLMNjF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 13 Dec 2022 08:39:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51424 "EHLO
+        id S235529AbiLMRKk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 13 Dec 2022 12:10:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235344AbiLMNjF (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 13 Dec 2022 08:39:05 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B6522C
-        for <linux-can@vger.kernel.org>; Tue, 13 Dec 2022 05:39:03 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1p55Ul-0005G3-Gf; Tue, 13 Dec 2022 14:38:55 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:7718:f6d6:39bc:6089])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 751B613DE93;
-        Tue, 13 Dec 2022 13:38:53 +0000 (UTC)
-Date:   Tue, 13 Dec 2022 14:38:47 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     haibo.chen@nxp.com
-Cc:     wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-imx@nxp.com
-Subject: Re: [PATCH] can: flexcan: avoid unbalanced pm_runtime_enable warning
-Message-ID: <20221213133847.cm2qzzymdb6t4njm@pengutronix.de>
-References: <20221213094351.3023858-1-haibo.chen@nxp.com>
+        with ESMTP id S235183AbiLMRKj (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 13 Dec 2022 12:10:39 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899E2DF09
+        for <linux-can@vger.kernel.org>; Tue, 13 Dec 2022 09:10:37 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id h7so16346125wrs.6
+        for <linux-can@vger.kernel.org>; Tue, 13 Dec 2022 09:10:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=w7bINMp8tykjrtmdTLoMymqvaH8kKY42pvQKrznvouI=;
+        b=j6prwx0GnzEerg7Au3dHa0SfMc9i9k16MzGFk9+Pbcxt2Vzml6Z695tAZx+8NKLHX7
+         01hRw45+/9m7O+apb/mP+1GnBZ2r8Wn5Fg2Jgd128IitWDClPnotNtTl4xeiTs1vClKe
+         sT+Oi/n1klUvoX1QC1lpvkk2F8VwhCfcGvhv0a5/ZL7Shx6sqx2u8GdDj7Q2wSA6bimp
+         rzZ9zooNPDIRGGmxQ/hWEhxRtkl8yKt0TR6VP9hfOlTxdlEWPydKAOszVMCQJwAFDSTf
+         YXQBqjo/WIVf4xtEvE+WlPgMCg+edOfyqK4gskAuA77Dmx11sQD/Kjch3gciHBBGHFO8
+         tVGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=w7bINMp8tykjrtmdTLoMymqvaH8kKY42pvQKrznvouI=;
+        b=f+Za8dnJP9BUn4uWED2TcAJn63mgsFtL8AiLk29F9xTF+3MkAv4hp2QUdGBtBZb/r5
+         /5U15v5FaoCKoB8ilPs9ulqDEAM9Cb4hxp15jjm1bynPQe6tTTtIP6lXmo9rowSo1OPr
+         32fU4LFlQc/GIwJ5AI0o2Ryw8xoFj92uDaJDA7vQ1+lpWo3czmmVW4lHPZr1ZqxCWQgI
+         c0sPhXmJLix+H7ErBcFgKmCajgPUdq40Pxfo/VtR33MADjtWx6HC+EYa1J2OvhQxoIS9
+         CAu4hmKBxCmv8tIDEg2782kiY/IIC5EoLwNQCnUahDtQ0D1SENtzdKk7ma9zAxD5Z2/h
+         TpQw==
+X-Gm-Message-State: ANoB5pkyqKEeQUfq4UiP9FyICxGUjzqJXsFvVuLPGtclp3ZvJQ/VBMgL
+        LEtu9CjFbiqWf8rbs54NEKvq2w==
+X-Google-Smtp-Source: AA0mqf7FG7OAA2/Kw4X12f6YFjw23Tz7jc9JtZqHG/iwnPNMHjHcPtIFwW/Uc2icFKVoRTvLyBD3dA==
+X-Received: by 2002:adf:fa0c:0:b0:242:1a1e:e074 with SMTP id m12-20020adffa0c000000b002421a1ee074mr12979095wrr.61.1670951436100;
+        Tue, 13 Dec 2022 09:10:36 -0800 (PST)
+Received: from blmsp ([2001:4091:a245:805c:8713:84e4:2a9e:cbe8])
+        by smtp.gmail.com with ESMTPSA id j23-20020adfa557000000b00241ce5d605dsm275175wrb.110.2022.12.13.09.10.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Dec 2022 09:10:35 -0800 (PST)
+Date:   Tue, 13 Dec 2022 18:10:34 +0100
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 11/11] can: tcan4x5x: Specify separate read/write
+ ranges
+Message-ID: <20221213171034.7fg7m5zdehj2ksmj@blmsp>
+References: <20221206115728.1056014-1-msp@baylibre.com>
+ <20221206115728.1056014-12-msp@baylibre.com>
+ <20221206162001.3cgtod46h5d5j7fx@pengutronix.de>
+ <20221212105444.cdzzh2noebni4ibj@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qhhbnn5cffyxdz4f"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221213094351.3023858-1-haibo.chen@nxp.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221212105444.cdzzh2noebni4ibj@pengutronix.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi Marc,
 
---qhhbnn5cffyxdz4f
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+sorry for the delay.
 
-On 13.12.2022 17:43:51, haibo.chen@nxp.com wrote:
-> From: Haibo Chen <haibo.chen@nxp.com>
->=20
-> When do suspend/resume, meet the following warning message:
-> [   30.028336] flexcan 425b0000.can: Unbalanced pm_runtime_enable!
->=20
-> Balance the pm_runtime_force_suspend() and pm_runtime_force_resume().
->=20
-> Fixes: 8cb53b485f18 ("can: flexcan: add auto stop mode for IMX93 to suppo=
-rt wakeup")
-> Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
+On Mon, Dec 12, 2022 at 11:54:44AM +0100, Marc Kleine-Budde wrote:
+> On 06.12.2022 17:20:01, Marc Kleine-Budde wrote:
+> > On 06.12.2022 12:57:28, Markus Schneider-Pargmann wrote:
+> > > Specify exactly which registers are read/writeable in the chip. This
+> > > is supposed to help detect any violations in the future.
+> > > 
+> > > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > > ---
+> > >  drivers/net/can/m_can/tcan4x5x-regmap.c | 43 +++++++++++++++++++++----
+> > >  1 file changed, 37 insertions(+), 6 deletions(-)
+> > > 
+> > > diff --git a/drivers/net/can/m_can/tcan4x5x-regmap.c b/drivers/net/can/m_can/tcan4x5x-regmap.c
+> > > index 33aed989e42a..2b218ce04e9f 100644
+> > > --- a/drivers/net/can/m_can/tcan4x5x-regmap.c
+> > > +++ b/drivers/net/can/m_can/tcan4x5x-regmap.c
+> > > @@ -90,16 +90,47 @@ static int tcan4x5x_regmap_read(void *context,
+> > >  	return 0;
+> > >  }
+> > >  
+> > > -static const struct regmap_range tcan4x5x_reg_table_yes_range[] = {
+> > > +static const struct regmap_range tcan4x5x_reg_table_wr_range[] = {
+> > > +	/* Device ID and SPI Registers */
+> > > +	regmap_reg_range(0x000c, 0x0010),
+> > 
+> > According to "Table 8-8" 0xc is RO, but in "8.6.1.4 Status (address =
+> > h000C) [reset = h0000000U]" it clearly says it has write 1 to clear bits
+> > :/.
 
-Looks good. Applied to linux-can-next.
+I am trying to clarify this. I guess table 8-8 is not correct, but we
+will see.
 
-Marc
+> > 
+> > > +	/* Device configuration registers and Interrupt Flags*/
+> > > +	regmap_reg_range(0x0800, 0x080c),
+> > > +	regmap_reg_range(0x0814, 0x0814),
+> > 
+> > 0x814 is marked as reserved in "SLLSEZ5D – JANUARY 2018 – REVISED JUNE
+> > 2022"?
+> 
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Yes that's a mistake, sorry. I will add a fixup for the upcoming series.
 
---qhhbnn5cffyxdz4f
-Content-Type: application/pgp-signature; name="signature.asc"
+> I'll take the series as is, that can be fixed later.
 
------BEGIN PGP SIGNATURE-----
+Thank you!.
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOYgGUACgkQrX5LkNig
-010nxAf+NjBJ+1wRVVVJ37nm2cK+BlXmFrC/hOi/0Nr4dgjBsBgyljqUvnNyKceB
-1JpcjNCyX9eqWFcKpvC4dOSWg5n99jPeDEcJVwK2EiR647LxrJ5DlEElq+vKuaZ6
-N7+TabuaRwTxPFsPsgqNuyiZi6vBNm6MJobH0Wf9iEihiWqRxAIEqeL/yXjHovuu
-rN7lawEvNG8HDfpzNbHuNhdwgojsYWiQ65mmeDBr6s8pUqgq1GX4xLJq+ETuBhup
-uWOItTINoV2WLEvONYOzeZsnBJ7MVIHlU/zlEI4GJIRQoU5eM6hZPthechyonEQ1
-y4I2FQD+/IGzjUA+SgQnNkx8SoFFDg==
-=azsO
------END PGP SIGNATURE-----
-
---qhhbnn5cffyxdz4f--
+Best,
+Markus
