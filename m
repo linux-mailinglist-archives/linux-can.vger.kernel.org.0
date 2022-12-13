@@ -2,77 +2,74 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DB5664BAE1
-	for <lists+linux-can@lfdr.de>; Tue, 13 Dec 2022 18:20:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9898B64BCC5
+	for <lists+linux-can@lfdr.de>; Tue, 13 Dec 2022 20:10:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235689AbiLMRTz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 13 Dec 2022 12:19:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44862 "EHLO
+        id S236330AbiLMTKc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 13 Dec 2022 14:10:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236251AbiLMRTv (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 13 Dec 2022 12:19:51 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F9E22BF2
-        for <linux-can@vger.kernel.org>; Tue, 13 Dec 2022 09:19:48 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id ay14-20020a05600c1e0e00b003cf6ab34b61so8438976wmb.2
-        for <linux-can@vger.kernel.org>; Tue, 13 Dec 2022 09:19:48 -0800 (PST)
+        with ESMTP id S235993AbiLMTKa (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 13 Dec 2022 14:10:30 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28DA9220E4
+        for <linux-can@vger.kernel.org>; Tue, 13 Dec 2022 11:10:28 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id ay2-20020a05600c1e0200b003d22e3e796dso3103499wmb.0
+        for <linux-can@vger.kernel.org>; Tue, 13 Dec 2022 11:10:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3EhMA6MMSu4b3D077MyxeOEBc3NixPe7QR4AlMv00C8=;
-        b=6zr23JVIZwJKfOEfOAIHU80gTz21PGMoILrZJWuBVj2+3ReU+NUtdHX4lYRSlw1iwW
-         nNXXjro6uxrP9zFiG//8W0znYdENXyWwpxDu6IhYzrvXx1vzyrcdPd8d6+PmR7DaypUJ
-         YYGL287lOUoAR3Haq+2KREXNxFA/d1WQrc02txsK6LSDdFfXnQryWp9jeIW9vb+dBrCi
-         LmfVJ7X5LuUmebgKkeT/2xIurygLi1VDF1c99nt7pRzyIVgUmEYweV96Nl+5froTqzPV
-         sk5YEA3/M6KnNOWm8AhyadA3avXxB5P/BdzPILHThKNztUtZBW5ovpOc6kPKI9q6Guqi
-         rKbQ==
+        bh=YB2zoZgzfOVD0XLCaIjp6ouesB1j3+hq28sBf8VmRvs=;
+        b=o6LMJPH4/JumqJrtckqwMsecIkzo9XW5STBjmxMmpaAbosMIEjAzDvLrfi+XDlxUFD
+         5YMmfh2L4vK7PpeJMgBFOC40jZBnF7hvalMqDluw5jy6HiI+6jOh1FaTXV2Q3pU6e98U
+         iqIHZpEUMDGZuLavrXT6imbpG+QtxlDxrXIXrBbOsMx1IjUwbKP2PTur93gbUsm1Ge04
+         hVfoVNA+bPIKbrqxc7/Jr2Yyb5LRHgqC6HfKK1G32vtuMFtudGyvqTPo/k7a6CasMXOx
+         F2mCm0orS/kZyto4+34T1Ln7auUE6RQJY5nXFnktS6Kpqr7oVG6sgu1+zRRKQfflDVYL
+         40fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3EhMA6MMSu4b3D077MyxeOEBc3NixPe7QR4AlMv00C8=;
-        b=GTdCk10lh2lsWiFxjmwS0J2bq1sO076Kp1iBC6jUzqhouOIWPlq75hs8wGgb72khes
-         8W9XRocCb82wYZMEsfBwn2WGn0R+m57aSHWfhc/M75MEn40CjuM8DTimjdLJ8VmKqL3r
-         vtXE4UHzFtqseiS7gQ4cUOk6uXpxyV9IU7zfAT464PF9cL7BMJTMrR60wpOmi5ZtlWoG
-         rj80Vn4JCsqihrgb/jqWtZHFeqX87oPU7mfYOqtVeSOmsAXGH1FvxSx9JMhCh8Y8Op7F
-         t6Uh8P9fOrQqgtybYIiURtFxT2x2o2kphNwh6BHy42thZZK5e+wPcoeMoh9CVYlQ8PR/
-         D4LA==
-X-Gm-Message-State: ANoB5pmbNuB7I0a3D6cOoKzk387iSKKdiypMqIOAj0Pa10UvY8+H8BZH
-        3aX/xq7X/2OM/46drdgbHGeQgw==
-X-Google-Smtp-Source: AA0mqf6HuubEdSO6ViNbsmRGhbOFKBkYZ1FySXG5n3yoR1Uww9vgN0+1tuohDwdiPwnjF6shxTfySA==
-X-Received: by 2002:a05:600c:3acc:b0:3cf:9ac8:c537 with SMTP id d12-20020a05600c3acc00b003cf9ac8c537mr16411148wms.14.1670951987318;
-        Tue, 13 Dec 2022 09:19:47 -0800 (PST)
+        bh=YB2zoZgzfOVD0XLCaIjp6ouesB1j3+hq28sBf8VmRvs=;
+        b=cUJG/l810bwT9hSDWMDSudZnQ7jyaaiX1DeVVXRXCq/SML1eYIaySB1QntUH0hjWWr
+         ECA2l4/xz7tRkghOQprfawQr5VWym8otIxTzB4Dcj00Mpw551v0oOag+arubtDQi/2gt
+         N1cc/mfSOmyzuWB80Fa4+WzKZekblDZHRcI5qhWAnev+z6QV3MorgXk7rYxnwsQHwhfZ
+         OtjrUsk7C0SbrAOaUXbyib3ieLSYY9gPKP4M1vFf0KOwqkpJWw1+qKuEJZuLEzskt7wt
+         OZKaR0donUZv5lgvcaXwhj6urcBEqaz7IA1WSU6SsoJhU8TZNS6qMuYOAyVYda+NrN9V
+         rNRA==
+X-Gm-Message-State: ANoB5pmRCMWQkkghHDl9bBrE6K1Qr14zYDmTTCMD/Ywa3lioYEmsb1gC
+        swXl5YshHDw2+8gf4gEe/jqscw==
+X-Google-Smtp-Source: AA0mqf4GIk6Ad2m/IdywSoCDctE4xpAPLCBCANrj6yaQajiufhi1EHkzLrv2soIQ9DAVoVapFK+kuQ==
+X-Received: by 2002:a05:600c:1e26:b0:3d2:2043:9cb7 with SMTP id ay38-20020a05600c1e2600b003d220439cb7mr9380463wmb.5.1670958626589;
+        Tue, 13 Dec 2022 11:10:26 -0800 (PST)
 Received: from blmsp ([2001:4091:a245:805c:8713:84e4:2a9e:cbe8])
-        by smtp.gmail.com with ESMTPSA id 18-20020a05600c22d200b003c6bd12ac27sm13255188wmg.37.2022.12.13.09.19.46
+        by smtp.gmail.com with ESMTPSA id n41-20020a05600c3ba900b003d23928b654sm28772wms.11.2022.12.13.11.10.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 09:19:46 -0800 (PST)
-Date:   Tue, 13 Dec 2022 18:19:46 +0100
+        Tue, 13 Dec 2022 11:10:26 -0800 (PST)
+Date:   Tue, 13 Dec 2022 20:10:25 +0100
 From:   Markus Schneider-Pargmann <msp@baylibre.com>
 To:     Marc Kleine-Budde <mkl@pengutronix.de>
 Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 04/15] can: m_can: Use transmit event FIFO watermark
- level interrupt
-Message-ID: <20221213171946.ejrb2glgo77jueff@blmsp>
-References: <20221116205308.2996556-1-msp@baylibre.com>
- <20221116205308.2996556-5-msp@baylibre.com>
- <20221130171715.nujptzwnut7silbm@pengutronix.de>
- <20221201082521.3tqevaygz4nhw52u@blmsp>
- <20221201090508.jh5iymwmhs3orb2v@pengutronix.de>
- <20221201101220.r63fvussavailwh5@blmsp>
- <20221201110033.r7hnvpw6fp2fquni@pengutronix.de>
- <20221201165951.5a4srb7zjrsdr3vd@blmsp>
+Subject: Re: [PATCH v2 11/11] can: tcan4x5x: Specify separate read/write
+ ranges
+Message-ID: <20221213191025.ibq4xjhxcrlmcp45@blmsp>
+References: <20221206115728.1056014-1-msp@baylibre.com>
+ <20221206115728.1056014-12-msp@baylibre.com>
+ <20221206162001.3cgtod46h5d5j7fx@pengutronix.de>
+ <20221212105444.cdzzh2noebni4ibj@pengutronix.de>
+ <20221213171034.7fg7m5zdehj2ksmj@blmsp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221201165951.5a4srb7zjrsdr3vd@blmsp>
+In-Reply-To: <20221213171034.7fg7m5zdehj2ksmj@blmsp>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -81,41 +78,43 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 Hi Marc,
 
-On Thu, Dec 01, 2022 at 05:59:53PM +0100, Markus Schneider-Pargmann wrote:
-> On Thu, Dec 01, 2022 at 12:00:33PM +0100, Marc Kleine-Budde wrote:
-> > On 01.12.2022 11:12:20, Markus Schneider-Pargmann wrote:
-> > > > > For the upcoming receive side patch I already added a hrtimer. I may try
-> > > > > to use the same timer for both directions as it is going to do the exact
-> > > > > same thing in both cases (call the interrupt routine). Of course that
-> > > > > depends on the details of the coalescing support. Any objections on
-> > > > > that?
-> > > > 
-> > > > For the mcp251xfd I implemented the RX and TX coalescing independent of
-> > > > each other and made it configurable via ethtool's IRQ coalescing
-> > > > options.
-> > > > 
-> > > > The hardware doesn't support any timeouts and only FIFO not empty, FIFO
-> > > > half full and FIFO full IRQs and the on chip RAM for mailboxes is rather
-> > > > limited. I think the mcan core has the same limitations.
-> > > 
-> > > Yes and no, the mcan core provides watermark levels so it has more
-> > > options, but there is no hardware timer as well (at least I didn't see
-> > > anything usable).
-> > 
-> > Are there any limitations to the water mark level?
+On Tue, Dec 13, 2022 at 06:10:36PM +0100, Markus Schneider-Pargmann wrote:
+> Hi Marc,
 > 
-> Anything specific? I can't really see any limitation. You can set the
-> watermark between 1 and 32. I guess we could also always use it instead
-> of the new-element interrupt, but I haven't tried that yet. That may
-> simplify the code.
+> sorry for the delay.
+> 
+> On Mon, Dec 12, 2022 at 11:54:44AM +0100, Marc Kleine-Budde wrote:
+> > On 06.12.2022 17:20:01, Marc Kleine-Budde wrote:
+> > > On 06.12.2022 12:57:28, Markus Schneider-Pargmann wrote:
+> > > > Specify exactly which registers are read/writeable in the chip. This
+> > > > is supposed to help detect any violations in the future.
+> > > > 
+> > > > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > > > ---
+> > > >  drivers/net/can/m_can/tcan4x5x-regmap.c | 43 +++++++++++++++++++++----
+> > > >  1 file changed, 37 insertions(+), 6 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/net/can/m_can/tcan4x5x-regmap.c b/drivers/net/can/m_can/tcan4x5x-regmap.c
+> > > > index 33aed989e42a..2b218ce04e9f 100644
+> > > > --- a/drivers/net/can/m_can/tcan4x5x-regmap.c
+> > > > +++ b/drivers/net/can/m_can/tcan4x5x-regmap.c
+> > > > @@ -90,16 +90,47 @@ static int tcan4x5x_regmap_read(void *context,
+> > > >  	return 0;
+> > > >  }
+> > > >  
+> > > > -static const struct regmap_range tcan4x5x_reg_table_yes_range[] = {
+> > > > +static const struct regmap_range tcan4x5x_reg_table_wr_range[] = {
+> > > > +	/* Device ID and SPI Registers */
+> > > > +	regmap_reg_range(0x000c, 0x0010),
+> > > 
+> > > According to "Table 8-8" 0xc is RO, but in "8.6.1.4 Status (address =
+> > > h000C) [reset = h0000000U]" it clearly says it has write 1 to clear bits
+> > > :/.
+> 
+> I am trying to clarify this. I guess table 8-8 is not correct, but we
+> will see.
 
-Just a quick comment here after trying this, I decided against it.
-- I can't modify the watermark levels once the chip is active.
-- Using interrupt (un)masking I can change the behavior for tx and rx
-  with a single register write instead of two to the two fifo
-  configuration registers.
-
-You will see this in the second part of the series then.
+So it is indeed a typo in table 8-8. The register is R/W.
 
 Best,
 Markus
