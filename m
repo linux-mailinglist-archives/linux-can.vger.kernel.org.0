@@ -2,72 +2,68 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 174BE64C51C
-	for <lists+linux-can@lfdr.de>; Wed, 14 Dec 2022 09:32:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E347064C5A6
+	for <lists+linux-can@lfdr.de>; Wed, 14 Dec 2022 10:14:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237611AbiLNIcx (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 14 Dec 2022 03:32:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50318 "EHLO
+        id S237385AbiLNJOT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 14 Dec 2022 04:14:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237726AbiLNIcv (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 14 Dec 2022 03:32:51 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39AAC5FE2
-        for <linux-can@vger.kernel.org>; Wed, 14 Dec 2022 00:32:50 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id fc4so42665847ejc.12
-        for <linux-can@vger.kernel.org>; Wed, 14 Dec 2022 00:32:50 -0800 (PST)
+        with ESMTP id S237214AbiLNJOM (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 14 Dec 2022 04:14:12 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1FC6167C1
+        for <linux-can@vger.kernel.org>; Wed, 14 Dec 2022 01:14:09 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id m18so42929652eji.5
+        for <linux-can@vger.kernel.org>; Wed, 14 Dec 2022 01:14:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TwUMu2azzipq45IwQjtmcCDGi09cxl5lBCyxvhXvDUI=;
-        b=qiDm5J9XGRu+Px/wzUOGgM5s6Nwx/c7lf9skC//hTRRfTOer14reYby3/VSTDZIETg
-         h6bYXf6fymtIbh/MAs3KQsrZB8gpvlzuWKTbrUIvrn0HtRNro/cjFt3G7i8hz5puGfTD
-         55SMYFcUJDl5TGZdR0IgHvMFcHlxIMCAwYkY9iXK3P5O8BgIRNloFpHQxy9y2Skei/2u
-         /wUkeRrRLmAwG1ylwmfypfugptDKxHugbi4d97Nh0jnW4/SIGrbcG5oL2enJrWwcnzT4
-         lm72Y6wDPRXZBa+Udu/iF4CLIEdavkkqIJuI/5d8qNP1Tq14MYZSk7Sv3RRwEp0rIrP4
-         BrHQ==
+        bh=uWkMxa5MLgkbzdYiOGyURygCOSuCzD/0jnB9r1qxWTs=;
+        b=TcGAPjxR9F6gw8xpoGK2DjJ+OF1X1Kwmirxn+f1vVC6ZrCogbLdvYMSA45jSe5obuT
+         auY5It6QRqAisUJ0D0lKegv8tJKrxhiEU3UMMnsXw9navQBet5mrgf3zrBj4O6s/szRB
+         F0ONb8u0wLbZa7QxTpsQ6bNk8X14u0Xf8B7hS/scpjMsPG13JkyGmjXvElukHQix7+zn
+         wEo5+GIceH543hYpmLLOa7lmNoqvhEI6dNY/xg8dlxDX5tRduSUZOjSAPR3YUPu0dzP9
+         1SW2Gh1WF3jwREjOXZ2b3/OpBcsl2O+7uJVbhyAIwpX+Ap+37eEAXlu9d0tR/R3siZGl
+         hZtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TwUMu2azzipq45IwQjtmcCDGi09cxl5lBCyxvhXvDUI=;
-        b=rvJnnS2/SEaT2DsgXZFU1XqvqNDtDNPIFj7yMWzrd5IgRTuIu0p/aXpac0TgoHmW/O
-         HIjP1yAMGmIxCtzxnhegAEJKT5SIlM9FcmbU67GhNsCPdarypQNi7Q8r75Xf9maxzac5
-         s4X44LxO3uLNl2AAr3YIC50k2eKZOVwPHGsMUjo64bdw2sina4ujqrxbMa+5B5J+aNYT
-         0Gb3piy9l1FYPNS2oWI2ROIaIM2YkSUF9dM9sL4+uOOly24QvAd1iu254dp2Eo87V1LZ
-         dUTBRb1KzERIPX2hGX7P962JIY0LCjKJ3DXpAYgQcQOiKPfwA0nn8WUqxHFrNoA+PNqn
-         jczg==
-X-Gm-Message-State: ANoB5pmuQPFTGJLGV8yU5eLLBNRgTXKxVJPYzHn6b4NoDGc3cAEs9+fg
-        T79YWYvcKmpQmqiZ0Aq9oiOp0A==
-X-Google-Smtp-Source: AA0mqf4UkhwNzLmopxuJ6G8JXG8IJsRsGhBNWdFj1CJ2U5Y2qlvwvamXR4Vzha9eUI74RaQkj7rdHA==
-X-Received: by 2002:a17:906:2bd7:b0:7c1:4c46:30a0 with SMTP id n23-20020a1709062bd700b007c14c4630a0mr15273928ejg.65.1671006768834;
-        Wed, 14 Dec 2022 00:32:48 -0800 (PST)
-Received: from blmsp ([185.238.219.41])
-        by smtp.gmail.com with ESMTPSA id z20-20020a1709060ad400b0077077c62cadsm5539676ejf.31.2022.12.14.00.32.47
+        bh=uWkMxa5MLgkbzdYiOGyURygCOSuCzD/0jnB9r1qxWTs=;
+        b=oOMwXQ/mkykqW7E2cqfz1ZMfa5oQbt+wnr/rPgZDTdUTVZZ67aNL9FDN1He+QgloF0
+         40pODw732lhc/O1B/tb0d/EAC97d5uZ9jas3PoPjjx87VVUYgvy5mCLcxbx8MJUFK6s2
+         rZ7GxvDlf8/DhfQl8eepieRe9IxLXcRZPHx8d+/C/9a4Etz3mKdcoO45s9YQfw52JzJT
+         Nt2sujJuHofTIIvnPWNv/VaV6U3KFL4Yn3gxMsJGtuHYzBODeZCPGNPxssOF9VV4Q7sM
+         G5nAgklw27G8odoKLRKuK8RdtdXtGpgQWEiD1/KiO5KqqJbTHFwCxttpwAjkBeeMAlzD
+         qnFw==
+X-Gm-Message-State: ANoB5plqccvTh6ggHVv4RJE5cYsFW/b9i6gffQ+YaqEAtVpFWIqlluMS
+        5jhwWokqmX55DpC9WUmuMtbdMg==
+X-Google-Smtp-Source: AA0mqf5Hh2vYaRSCkuOt0e+bO9Bytz2NDRllVNqTlpXkMHlnUyydFlzhOsdwMBeV0ocC3UEihjU6JA==
+X-Received: by 2002:a17:906:1f53:b0:7bc:bf97:169c with SMTP id d19-20020a1709061f5300b007bcbf97169cmr19058269ejk.77.1671009248480;
+        Wed, 14 Dec 2022 01:14:08 -0800 (PST)
+Received: from blmsp ([185.238.219.9])
+        by smtp.gmail.com with ESMTPSA id k24-20020a17090632d800b007ad94fd48dfsm5529083ejk.139.2022.12.14.01.14.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 00:32:48 -0800 (PST)
-Date:   Wed, 14 Dec 2022 09:32:47 +0100
+        Wed, 14 Dec 2022 01:14:08 -0800 (PST)
+Date:   Wed, 14 Dec 2022 10:14:06 +0100
 From:   Markus Schneider-Pargmann <msp@baylibre.com>
 To:     Marc Kleine-Budde <mkl@pengutronix.de>
 Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 03/15] can: m_can: Cache tx putidx and transmits in flight
-Message-ID: <20221214083247.u7ixomwsu46dbfxm@blmsp>
+Subject: Re: [PATCH 02/15] can: m_can: Wakeup net queue once tx was issued
+Message-ID: <20221214091406.g6vim5hvlkm34naf@blmsp>
 References: <20221116205308.2996556-1-msp@baylibre.com>
- <20221116205308.2996556-4-msp@baylibre.com>
- <20221201111450.fpadmwscjyhefs2u@pengutronix.de>
- <20221202083740.moa7whqd52oasbar@blmsp>
- <20221202144630.l4jil6spb4er5vzk@pengutronix.de>
- <20221213171309.c4nrdhwjj2ivrqim@blmsp>
- <20221213191717.422omlznn2cjjwjz@pengutronix.de>
+ <20221116205308.2996556-3-msp@baylibre.com>
+ <20221130172100.ef4xn6j6kzrymdyn@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221213191717.422omlznn2cjjwjz@pengutronix.de>
+In-Reply-To: <20221130172100.ef4xn6j6kzrymdyn@pengutronix.de>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
@@ -79,18 +75,26 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 Hi Marc,
 
-On Tue, Dec 13, 2022 at 08:17:17PM +0100, Marc Kleine-Budde wrote:
-> On 13.12.2022 18:13:09, Markus Schneider-Pargmann wrote:
-> > > > The tcan mram size is limited to 2048 so I would like to avoid limiting
-> > > > the possible sizes of the tx fifos.
-> > > 
-> > > What FIFO sizes are you using currently?
+On Wed, Nov 30, 2022 at 06:21:00PM +0100, Marc Kleine-Budde wrote:
+> On 16.11.2022 21:52:55, Markus Schneider-Pargmann wrote:
+> > Currently the driver waits to wakeup the queue until the interrupt for
+> > the transmit event is received and acknowledged. If we want to use the
+> > hardware FIFO, this is too late.
 > > 
-> > I am currently using 13 for TXB, TXE and RXF0.
+> > Instead release the queue as soon as the transmit was transferred into
+> > the hardware FIFO. We are then ready for the next transmit to be
+> > transferred.
 > 
-> Have you CAN-FD enabled?
+> If you want to really speed up the TX path, remove the worker and use
+> the spi_async() API from the xmit callback, see mcp251xfd_start_xmit().
+> 
+> Extra bonus if you implement xmit_more() and transfer more than 1 skb
+> per SPI transfer.
 
-yes, it is enabled.
+Just a quick question here, I mplemented a xmit_more() call and I am
+testing it right now, but it always returns false even under high
+pressure. The device has a txqueuelen set to 1000. Do I need to turn
+some other knob for this to work?
 
-Best,
+Thanks,
 Markus
