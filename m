@@ -2,145 +2,242 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1D0A64D8A1
-	for <lists+linux-can@lfdr.de>; Thu, 15 Dec 2022 10:32:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E506664DC63
+	for <lists+linux-can@lfdr.de>; Thu, 15 Dec 2022 14:41:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbiLOJcV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 15 Dec 2022 04:32:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37050 "EHLO
+        id S229602AbiLONlH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 15 Dec 2022 08:41:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbiLOJbo (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 15 Dec 2022 04:31:44 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03064AE75
-        for <linux-can@vger.kernel.org>; Thu, 15 Dec 2022 01:31:43 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id kw15so50826280ejc.10
-        for <linux-can@vger.kernel.org>; Thu, 15 Dec 2022 01:31:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q0YAKGDMlZN4p7SGu1vmDkPv/Bp6BjxoeHp4dwkcNfc=;
-        b=2f3RUKhIBSh486JTHI1LtttZ415mWNa9U2TLd2xJ81N+di7BPRGccKUXO+B3tWnv6e
-         MxQp+ywMvY0KT2MHPteX66Cdkxc4vDCFl8wwsT2H/KnrJtqboZ4v4xVW1WIcOwscQJtk
-         EXzS14okcECBa5A0LwliClUG49W/vadFAt5c5kXewKUNjocHSDwjLDc1/F56FHMDmNf6
-         OhFVmx9F5p6v/4cL58/0nfgyDfLhxNeazfLAv/ACjn8x/rwopoNPKgfp6LdUVQsy0oyn
-         zbQ7+wvE/BNvLJdFrWw1SsyUq9c9qS5NRtSaD2PcPuLLfl9gJZfzc0B0tZ6aXUCUA3eR
-         tLIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q0YAKGDMlZN4p7SGu1vmDkPv/Bp6BjxoeHp4dwkcNfc=;
-        b=bl47X3hZ0mZzXA0VepELgXN6hRm20Cky5MpuuB6F/64erkLiPvBiGf2W1twUQg+Tzj
-         ka7RUfIev7JvSEXBh6sNCwxf/Ntwpwjb74MGXJ3ZnstCelCPhmzdbOT2Lp8ehvfseGIr
-         tBNujceLguGenSL5i9n61yKMYz9+SdNpSX9necy+AwwbhpZmPfgAXzcqTGMAwRnhrguj
-         A3cXqe9rMUTDh+cHiaeoHgPYWCkq4cjcPl5Oqlbosoz+JEbkeLc0yU3MtC9KOPoPgPxi
-         txkNUnxUxc7+v+/+qKTihP+AmlTvPFZ7lHjjvzJ/pr1FV0nLolEH2FGE9zMtHEtqLnrw
-         oryQ==
-X-Gm-Message-State: AFqh2kquOeMHOuAECVNjuXamfjnwPgEchf5OxNRrkUSHkC0eDXoz6k9D
-        gyDadZKI/gElT9UqtMG8mVmv8Q==
-X-Google-Smtp-Source: AA0mqf5MMcU0t1oncbTYHhV2o2kO+I4zfDKxm6R/liP0XWxOGWAI0R3zjT2Yg8Zg/LZRDrkiN4wcbg==
-X-Received: by 2002:a17:906:26c6:b0:7c5:fd:4352 with SMTP id u6-20020a17090626c600b007c500fd4352mr5582566ejc.49.1671096701556;
-        Thu, 15 Dec 2022 01:31:41 -0800 (PST)
-Received: from blmsp ([185.238.219.6])
-        by smtp.gmail.com with ESMTPSA id v2-20020a170906292200b007c09d37eac7sm6796931ejd.216.2022.12.15.01.31.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Dec 2022 01:31:41 -0800 (PST)
-Date:   Thu, 15 Dec 2022 10:31:40 +0100
-From:   Markus Schneider-Pargmann <msp@baylibre.com>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 02/15] can: m_can: Wakeup net queue once tx was issued
-Message-ID: <20221215093140.fwpezasd6whhk7p7@blmsp>
-References: <20221116205308.2996556-1-msp@baylibre.com>
- <20221116205308.2996556-3-msp@baylibre.com>
- <20221130172100.ef4xn6j6kzrymdyn@pengutronix.de>
- <20221214091406.g6vim5hvlkm34naf@blmsp>
- <20221214091820.geugui5ws3f7a5ng@pengutronix.de>
- <20221214092201.xpb3rnwp5rtvrpkr@pengutronix.de>
- <CAMZ6RqLAZNj9dm_frbKExHK8AYDj9D0rX_9=c8_wk9kFrO-srw@mail.gmail.com>
- <20221214103542.c5g32qtbuvn5mv4u@blmsp>
+        with ESMTP id S229488AbiLONlG (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 15 Dec 2022 08:41:06 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A5214D16;
+        Thu, 15 Dec 2022 05:41:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671111664; x=1702647664;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4wh4eb0YGFGHFG9dwz94YTVzd1p9vAC1js7+jLRKDKY=;
+  b=n7t//DygNOpd2Qp8Gv7lDTHud79cspZN1qhTzOYjMJe9l3OwHUFEuVeG
+   9y6E/xDHX16yD4w3U2JHlQKiVN1UjGHHoh2i/aSngka0tWXtqd6le1mtP
+   /k++BJoMhk3AwPIs/oOG2ASDabvO1E5nn0danVvIRvwwbANDIWzFmunMk
+   kaptnTg+GWfUB9FbB0JdnXhSGHRDSB78i1qJb0mlEqPoljcgKAseeObvl
+   sdOqbwKGrtwTEbaQDsdkEIPCukdtu+HsiKEhuzvgybUSx2m37yrmZG6cC
+   RuTjyqwq7dQ4OZ9DjCD6RHhZE/vt5B29GQOcE0mEUyv9x3QHr+qVWSSZW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="319819371"
+X-IronPort-AV: E=Sophos;i="5.96,247,1665471600"; 
+   d="scan'208";a="319819371"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2022 05:40:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="738110965"
+X-IronPort-AV: E=Sophos;i="5.96,247,1665471600"; 
+   d="scan'208";a="738110965"
+Received: from lkp-server01.sh.intel.com (HELO b5d47979f3ad) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 15 Dec 2022 05:40:52 -0800
+Received: from kbuild by b5d47979f3ad with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1p5oTj-0006Iw-0a;
+        Thu, 15 Dec 2022 13:40:51 +0000
+Date:   Thu, 15 Dec 2022 21:40:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     loongarch@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
+        linux-xfs@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, kvm@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master] BUILD REGRESSION
+ 459c73db4069c27c1d4a0e20d055b837396364b8
+Message-ID: <639b23c8.DdUNqMCLdxZ7gLv2%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221214103542.c5g32qtbuvn5mv4u@blmsp>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+branch HEAD: 459c73db4069c27c1d4a0e20d055b837396364b8  Add linux-next specific files for 20221215
 
-On Wed, Dec 14, 2022 at 11:35:43AM +0100, Markus Schneider-Pargmann wrote:
-> Hi Vincent,
-> 
-> On Wed, Dec 14, 2022 at 07:15:25PM +0900, Vincent MAILHOL wrote:
-> > On Wed. 14 Dec. 2022 at 18:28, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> > > On 14.12.2022 10:18:20, Marc Kleine-Budde wrote:
-> > > > On 14.12.2022 10:14:06, Markus Schneider-Pargmann wrote:
-> > > > > Hi Marc,
-> > > > >
-> > > > > On Wed, Nov 30, 2022 at 06:21:00PM +0100, Marc Kleine-Budde wrote:
-> > > > > > On 16.11.2022 21:52:55, Markus Schneider-Pargmann wrote:
-> > > > > > > Currently the driver waits to wakeup the queue until the interrupt for
-> > > > > > > the transmit event is received and acknowledged. If we want to use the
-> > > > > > > hardware FIFO, this is too late.
-> > > > > > >
-> > > > > > > Instead release the queue as soon as the transmit was transferred into
-> > > > > > > the hardware FIFO. We are then ready for the next transmit to be
-> > > > > > > transferred.
-> > > > > >
-> > > > > > If you want to really speed up the TX path, remove the worker and use
-> > > > > > the spi_async() API from the xmit callback, see mcp251xfd_start_xmit().
-> > > > > >
-> > > > > > Extra bonus if you implement xmit_more() and transfer more than 1 skb
-> > > > > > per SPI transfer.
-> > > > >
-> > > > > Just a quick question here, I mplemented a xmit_more() call and I am
-> > > > > testing it right now, but it always returns false even under high
-> > > > > pressure. The device has a txqueuelen set to 1000. Do I need to turn
-> > > > > some other knob for this to work?
-> > 
-> > I was the first to use BQL in a CAN driver. It also took me time to
-> > first figure out the existence of xmit_more() and even more to
-> > understand how to make it so that it would return true.
-> > 
-> > > > AFAIK you need BQL support: see 0084e298acfe ("can: mcp251xfd: add BQL support").
-> > > >
-> > > > The etas_es58x driver implements xmit_more(), I added the Author Vincent
-> > > > on Cc.
-> > >
-> > > Have a look at netdev_queue_set_dql_min_limit() in the etas driver.
-> > 
-> > The functions you need are the netdev_send_queue() and the
-> > netdev_complete_queue():
-> > 
-> >   https://elixir.bootlin.com/linux/latest/source/include/linux/netdevice.h#L3424
-> > 
-> > For CAN, you probably want to have a look to can_skb_get_frame_len().
-> > 
-> >   https://elixir.bootlin.com/linux/latest/source/include/linux/can/length.h#L166
-> > 
-> > The netdev_queue_set_dql_min_limit() gives hints by setting a minimum
-> > value for BQL. It is optional (and as of today I am the only user of
-> > it).
-> 
-> Thank you for this summary, great that you already invested the time to
-> make it work with a CAN driver. I will give it a try in the m_can
-> driver.
+Error/Warning reports:
 
-Thanks again, it looks like it is working after adding netdev_sent_queue
-and netdev_complete_queue.
+https://lore.kernel.org/oe-kbuild-all/202211242120.MzZVGULn-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202212141410.IlFkWqph-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202212142121.vendKsOc-lkp@intel.com
 
-Best,
-Markus
+Error/Warning: (recently discovered and may have been fixed)
+
+Documentation/gpu/drm-internals:179: ./include/drm/drm_file.h:411: WARNING: undefined label: drm_accel_node (if the link has no caption the label must precede a section header)
+Documentation/networking/devlink/etas_es58x.rst: WARNING: document isn't included in any toctree
+Warning: tools/power/cpupower/man/cpupower-powercap-info.1 references a file that doesn't exist: Documentation/power/powercap/powercap.txt
+arch/loongarch/kernel/asm-offsets.c:265:6: warning: no previous prototype for 'output_pbe_defines' [-Wmissing-prototypes]
+arch/parisc/include/asm/pgtable.h:154:32: warning: "PMD_SHIFT" is not defined, evaluates to 0 [-Wundef]
+arch/powerpc/kernel/kvm_emul.o: warning: objtool: kvm_template_end(): can't find starting instruction
+arch/powerpc/kernel/optprobes_head.o: warning: objtool: optprobe_template_end(): can't find starting instruction
+drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn201/irq_service_dcn201.c:40:20: warning: no previous prototype for 'to_dal_irq_source_dcn201' [-Wmissing-prototypes]
+drivers/regulator/tps65219-regulator.c:310:60: warning: parameter 'dev' set but not used [-Wunused-but-set-parameter]
+drivers/regulator/tps65219-regulator.c:370:26: warning: ordered comparison of pointer with integer zero [-Wextra]
+
+Unverified Error/Warning (likely false positive, please contact us if interested):
+
+drivers/i2c/busses/i2c-qcom-geni.c:1028:28: sparse: sparse: symbol 'i2c_master_hub' was not declared. Should it be static?
+fs/xfs/xfs_iomap.c:86:29: sparse: sparse: symbol 'xfs_iomap_page_ops' was not declared. Should it be static?
+
+Error/Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- alpha-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-irq-dcn201-irq_service_dcn201.c:warning:no-previous-prototype-for-to_dal_irq_source_dcn201
+|   |-- drivers-regulator-tps65219-regulator.c:warning:ordered-comparison-of-pointer-with-integer-zero
+|   `-- drivers-regulator-tps65219-regulator.c:warning:parameter-dev-set-but-not-used
+|-- arc-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-irq-dcn201-irq_service_dcn201.c:warning:no-previous-prototype-for-to_dal_irq_source_dcn201
+|   |-- drivers-regulator-tps65219-regulator.c:warning:ordered-comparison-of-pointer-with-integer-zero
+|   `-- drivers-regulator-tps65219-regulator.c:warning:parameter-dev-set-but-not-used
+|-- arm-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-irq-dcn201-irq_service_dcn201.c:warning:no-previous-prototype-for-to_dal_irq_source_dcn201
+|   |-- drivers-regulator-tps65219-regulator.c:warning:ordered-comparison-of-pointer-with-integer-zero
+|   `-- drivers-regulator-tps65219-regulator.c:warning:parameter-dev-set-but-not-used
+|-- arm-randconfig-c033-20221214
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-irq-dcn201-irq_service_dcn201.c:warning:no-previous-prototype-for-to_dal_irq_source_dcn201
+|-- arm64-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-irq-dcn201-irq_service_dcn201.c:warning:no-previous-prototype-for-to_dal_irq_source_dcn201
+|   |-- drivers-regulator-tps65219-regulator.c:warning:ordered-comparison-of-pointer-with-integer-zero
+|   `-- drivers-regulator-tps65219-regulator.c:warning:parameter-dev-set-but-not-used
+|-- i386-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-irq-dcn201-irq_service_dcn201.c:warning:no-previous-prototype-for-to_dal_irq_source_dcn201
+|   |-- drivers-regulator-tps65219-regulator.c:warning:ordered-comparison-of-pointer-with-integer-zero
+|   `-- drivers-regulator-tps65219-regulator.c:warning:parameter-dev-set-but-not-used
+|-- i386-randconfig-s002
+|   `-- fs-xfs-xfs_iomap.c:sparse:sparse:symbol-xfs_iomap_page_ops-was-not-declared.-Should-it-be-static
+|-- ia64-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-irq-dcn201-irq_service_dcn201.c:warning:no-previous-prototype-for-to_dal_irq_source_dcn201
+|   |-- drivers-regulator-tps65219-regulator.c:warning:ordered-comparison-of-pointer-with-integer-zero
+|   `-- drivers-regulator-tps65219-regulator.c:warning:parameter-dev-set-but-not-used
+|-- ia64-randconfig-r032-20221214
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-irq-dcn201-irq_service_dcn201.c:warning:no-previous-prototype-for-to_dal_irq_source_dcn201
+|-- loongarch-allyesconfig
+|   `-- arch-loongarch-kernel-asm-offsets.c:warning:no-previous-prototype-for-output_pbe_defines
+|-- m68k-allmodconfig
+|   |-- drivers-regulator-tps65219-regulator.c:warning:ordered-comparison-of-pointer-with-integer-zero
+|   `-- drivers-regulator-tps65219-regulator.c:warning:parameter-dev-set-but-not-used
+|-- m68k-allyesconfig
+|   |-- drivers-regulator-tps65219-regulator.c:warning:ordered-comparison-of-pointer-with-integer-zero
+|   `-- drivers-regulator-tps65219-regulator.c:warning:parameter-dev-set-but-not-used
+|-- microblaze-randconfig-r033-20221214
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-irq-dcn201-irq_service_dcn201.c:warning:no-previous-prototype-for-to_dal_irq_source_dcn201
+|-- mips-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-irq-dcn201-irq_service_dcn201.c:warning:no-previous-prototype-for-to_dal_irq_source_dcn201
+|   |-- drivers-regulator-tps65219-regulator.c:warning:ordered-comparison-of-pointer-with-integer-zero
+|   `-- drivers-regulator-tps65219-regulator.c:warning:parameter-dev-set-but-not-used
+|-- parisc-randconfig-r015-20221214
+|   `-- arch-parisc-include-asm-pgtable.h:warning:PMD_SHIFT-is-not-defined-evaluates-to
+|-- parisc-randconfig-r032-20221214
+|   `-- arch-parisc-include-asm-pgtable.h:warning:PMD_SHIFT-is-not-defined-evaluates-to
+|-- parisc-randconfig-r034-20221214
+|   `-- arch-parisc-include-asm-pgtable.h:warning:PMD_SHIFT-is-not-defined-evaluates-to
+
+elapsed time: 722m
+
+configs tested: 80
+configs skipped: 2
+
+gcc tested configs:
+powerpc                           allnoconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+arc                                 defconfig
+i386                                defconfig
+s390                             allmodconfig
+x86_64                        randconfig-a004
+alpha                               defconfig
+x86_64                        randconfig-a002
+s390                                defconfig
+x86_64                               rhel-8.3
+arc                  randconfig-r043-20221214
+x86_64                           rhel-8.3-bpf
+ia64                             allmodconfig
+x86_64                           allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+s390                             allyesconfig
+arm                                 defconfig
+i386                          randconfig-a014
+s390                 randconfig-r044-20221214
+sh                   secureedge5410_defconfig
+i386                          randconfig-a001
+x86_64                        randconfig-a013
+riscv                randconfig-r042-20221214
+x86_64                        randconfig-a006
+x86_64                        randconfig-a011
+x86_64                          rhel-8.3-rust
+i386                          randconfig-a003
+alpha                            allyesconfig
+x86_64                           rhel-8.3-syz
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+i386                          randconfig-a005
+arm64                            allyesconfig
+x86_64                        randconfig-a015
+sh                               allmodconfig
+m68k                             allyesconfig
+i386                          randconfig-a012
+sh                          urquell_defconfig
+arm                              allyesconfig
+i386                          randconfig-a016
+x86_64                            allnoconfig
+sparc                               defconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+i386                             allyesconfig
+arm                          pxa3xx_defconfig
+sh                                  defconfig
+powerpc                     rainier_defconfig
+powerpc                         wii_defconfig
+sh                           se7705_defconfig
+loongarch                         allnoconfig
+sh                        sh7763rdp_defconfig
+sh                             espt_defconfig
+powerpc                 canyonlands_defconfig
+i386                          randconfig-c001
+
+clang tested configs:
+arm                  randconfig-r046-20221214
+hexagon              randconfig-r041-20221214
+hexagon              randconfig-r045-20221214
+x86_64                        randconfig-a014
+x86_64                        randconfig-a001
+i386                          randconfig-a013
+x86_64                        randconfig-a003
+x86_64                        randconfig-a016
+x86_64                        randconfig-a012
+x86_64                        randconfig-a005
+i386                          randconfig-a002
+i386                          randconfig-a011
+i386                          randconfig-a004
+arm                          ixp4xx_defconfig
+i386                          randconfig-a015
+i386                          randconfig-a006
+powerpc                      obs600_defconfig
+x86_64                        randconfig-k001
+mips                        bcm63xx_defconfig
+arm                      pxa255-idp_defconfig
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
