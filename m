@@ -2,323 +2,310 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55DFB650CD0
-	for <lists+linux-can@lfdr.de>; Mon, 19 Dec 2022 14:49:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B619650D60
+	for <lists+linux-can@lfdr.de>; Mon, 19 Dec 2022 15:35:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231881AbiLSNs7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 19 Dec 2022 08:48:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48420 "EHLO
+        id S232294AbiLSOfS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 19 Dec 2022 09:35:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231712AbiLSNs6 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 19 Dec 2022 08:48:58 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3EB765E5
-        for <linux-can@vger.kernel.org>; Mon, 19 Dec 2022 05:48:56 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id cf42so13754862lfb.1
-        for <linux-can@vger.kernel.org>; Mon, 19 Dec 2022 05:48:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kvaser.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZU30zHG3ERwUbIm3zRdx4MfSZLdB8Gimo0F8FKq1kn4=;
-        b=xQXmmwmD8EMjBGpHfvoT9+vRe4EwRIc7KCgH6R3IAUtLxBjVEHFEiyGkxWsvlTPkPy
-         wZCoah3Giye9DunT1nO5yngfCUMkkbdvPXFi3/Y32Sg7VqKN1qxKJJcEGq+qPSrOGxG/
-         XW211yKSgCy3Yw/WKzXn4Xj2dmY3vLTuMTN+PkAviXpVa5MODsofTzcs/YyHGRDiKayR
-         SiefcdUOEsavhbgC4/AOjUFtdjsBNxpI80LUrT5mRxK3Z3jZdte9IyBGJR0Q0dnKpwnC
-         uIIsaqbEORqvWydgITj9v3fpx9OyyP/g0lS3lEzZjIvOnvg1f8YM891SIEvDSiclPsfD
-         3UGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZU30zHG3ERwUbIm3zRdx4MfSZLdB8Gimo0F8FKq1kn4=;
-        b=jvmDd1ekiD/7/RFvhyHr38YmBaNRA0cf8NbcvA2wZIJw4Fqs/XWyDRkzpEUyhQv9M5
-         svfJTUoiU9j9Kd5ze9DH93nWvFPmUjt4EQDQV30tX8xRUTNAzO1+4s13I8Z8BjpvCqHM
-         i5am7dLThp28BUIR9byl+CzTtblmKlAmt3vGGELz+cYwvpzWEYIcLEx9Ook14LsxB5oC
-         iFEj04Bl0OdTLLY8LR67PEoTv0vHmE6JvU8yhOJBrAk2Jy/pc2QMld7dBk96GaY86mPY
-         AmuKhPaCnzWwuDMIOo3IbT5BZBbAMKqg42sXdFFdTC5qAbWkxPtYeKOLZbwJNQOghEUr
-         KMpA==
-X-Gm-Message-State: ANoB5pns1Aqnum0dKqhbRvTuw9GmKpb8BzFmJ/GkgHnM6d6hSPlLaQkY
-        kzAE3T7AqKGeP+GAEDybHk3Ktg==
-X-Google-Smtp-Source: AA0mqf4mkuwwDQjzv9PR4v+nSyCjng3KXWhFM6iuvlsXq9HQdBUJdRWRJcjpOWCwACAubEPuRHsVtQ==
-X-Received: by 2002:a05:6512:13a2:b0:4a4:68b7:d61d with SMTP id p34-20020a05651213a200b004a468b7d61dmr14424612lfa.4.1671457735274;
-        Mon, 19 Dec 2022 05:48:55 -0800 (PST)
-Received: from [192.168.16.142] (h-155-4-68-234.A785.priv.bahnhof.se. [155.4.68.234])
-        by smtp.gmail.com with ESMTPSA id z9-20020a056512376900b004b5785b1d9csm1119143lft.302.2022.12.19.05.48.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Dec 2022 05:48:54 -0800 (PST)
-Message-ID: <85b15eee-1f34-4590-063b-6e59eb6bf15a@kvaser.com>
-Date:   Mon, 19 Dec 2022 14:48:53 +0100
+        with ESMTP id S232261AbiLSOfP (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 19 Dec 2022 09:35:15 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA613B49;
+        Mon, 19 Dec 2022 06:35:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671460514; x=1702996514;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=LVsOQvzkOtTm5a/HbIKG/rvJvKxEXOkq5De3oJvkS9U=;
+  b=PHRdOQHDJgwpccjshx6HRAg49Xw+dcOe5J/pLeWnkBWlegxpHelOxiGd
+   OhgiCHhkpPQZy1PV4BFMvtxeuP9+xseqMQGnAbIzJJa6zwb8g8FEKjpoy
+   n0xmgqOy51XogRJCh+EvsxUDasUATYZ4j2dRUUJHeMO3rtBAhk/KZBdeu
+   qkwIo4LLsotxyvRwinPgmNlS5p8z7FBsTz0jPGDd9DUrR/qM4f837REvX
+   WDt/f1zfCIbcDVis9RJMW3SPPm6287nhDgoBfAlfTEi0KT4/Bi92nCqKz
+   FA6DcKAKoo6WSdKp+Rta8KqHRUTee7z3l7nU4uuky8mKVDMvGaGCSWbDI
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="307034207"
+X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
+   d="scan'208";a="307034207"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 06:35:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="896064818"
+X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
+   d="scan'208";a="896064818"
+Received: from lkp-server01.sh.intel.com (HELO b5d47979f3ad) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 19 Dec 2022 06:35:09 -0800
+Received: from kbuild by b5d47979f3ad with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1p7HES-0008kZ-17;
+        Mon, 19 Dec 2022 14:35:08 +0000
+Date:   Mon, 19 Dec 2022 22:34:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     speakup@linux-speakup.org, netdev@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-xfs@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-cxl@vger.kernel.org,
+        linux-can@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master] BUILD REGRESSION
+ d650871875b2ccc670f1044be7f3cc90f276745d
+Message-ID: <63a07692.6I76+dHvnFt0bil/%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH] can: kvaser_usb: hydra: help gcc-13 to figure out cmd_len
-Content-Language: en-US
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
-        kernel@pengutronix.de
-Cc:     Anssi Hannula <anssi.hannula@bitwise.fi>
-References: <20221219110104.1073881-1-mkl@pengutronix.de>
-From:   Jimmy Assarsson <extja@kvaser.com>
-In-Reply-To: <20221219110104.1073881-1-mkl@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 12/19/22 12:01, Marc Kleine-Budde wrote:
-> Debian's gcc-13 [1] throws the following error in
-> kvaser_usb_hydra_cmd_size():
-> 
-> [1] gcc version 13.0.0 20221214 (experimental) [master r13-4693-g512098a3316] (Debian 13-20221214-1)
-> 
-> | drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c:502:65: error:
-> | array subscript ‘struct kvaser_cmd_ext[0]’ is partly outside array
-> | bounds of ‘unsigned char[32]’ [-Werror=array-bounds=]
-> |   502 |                 ret = le16_to_cpu(((struct kvaser_cmd_ext *)cmd)->len);
-> 
-> kvaser_usb_hydra_cmd_size() returns the size of given command. It
-> depends on the command number (cmd->header.cmd_no). For extended
-> commands (cmd->header.cmd_no == CMD_EXTENDED) the above shown code is
-> executed.
-> 
-> Help gcc to recognize that this code path is not taken in all cases,
-> by calling kvaser_usb_hydra_cmd_size() directly after assigning the
-> command number.
-> 
-> Cc: Jimmy Assarsson <extja@kvaser.com>
-> Cc: Anssi Hannula <anssi.hannula@bitwise.fi>
-> Fixes: aec5fb2268b7 ("can: kvaser_usb: Add support for Kvaser USB hydra family")
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> ---
-> 
-> Hello,
-> 
-> Jimmy, Anssi can you test this patch on real hardware?
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+branch HEAD: d650871875b2ccc670f1044be7f3cc90f276745d  Add linux-next specific files for 20221219
 
-Hi Marc,
+Error/Warning reports:
 
-Yes. Now I've tested it and it's working.
-Tested-by: Jimmy Assarsson <extja@kvaser.com>
+https://lore.kernel.org/oe-kbuild-all/202211242120.MzZVGULn-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202212020520.0OkMIno3-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202212040713.rVney9e8-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202212061455.6GE7y0jg-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202212090509.NjAl9tbo-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202212142121.vendKsOc-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202212191708.Xk9yBj52-lkp@intel.com
 
-Thanks for fixing this!
+Error/Warning: (recently discovered and may have been fixed)
 
-Best regards,
-jimmy
+Documentation/gpu/drm-internals:179: ./include/drm/drm_file.h:411: WARNING: undefined label: drm_accel_node (if the link has no caption the label must precede a section header)
+Documentation/networking/devlink/etas_es58x.rst: WARNING: document isn't included in any toctree
+Warning: tools/power/cpupower/man/cpupower-powercap-info.1 references a file that doesn't exist: Documentation/power/powercap/powercap.txt
+aarch64-linux-ld: ID map text too big or misaligned
+arch/arm/kernel/entry-armv.S:485:5: warning: "CONFIG_ARM_THUMB" is not defined, evaluates to 0 [-Wundef]
+arch/powerpc/kernel/kvm_emul.o: warning: objtool: kvm_template_end(): can't find starting instruction
+arch/powerpc/kernel/optprobes_head.o: warning: objtool: optprobe_template_end(): can't find starting instruction
+cistpl.c:(.text+0x82): undefined reference to `iounmap'
+drivers/regulator/tps65219-regulator.c:310:32: warning: parameter 'dev' set but not used [-Wunused-but-set-parameter]
+drivers/regulator/tps65219-regulator.c:310:60: warning: parameter 'dev' set but not used [-Wunused-but-set-parameter]
+drivers/regulator/tps65219-regulator.c:370:26: warning: ordered comparison of pointer with integer zero [-Wextra]
+irq-al-fic.c:(.init.text+0x2e): undefined reference to `of_iomap'
+lib/dhry_run.c:61:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+s390x-linux-ld: cistpl.c:(.text+0x210): undefined reference to `iounmap'
+s390x-linux-ld: cistpl.c:(.text+0x222): undefined reference to `ioremap'
+s390x-linux-ld: irq-al-fic.c:(.init.text+0x898): undefined reference to `iounmap'
 
-> regards,
-> Marc
-> 
->   .../net/can/usb/kvaser_usb/kvaser_usb_hydra.c | 33 ++++++++++++++-----
->   1 file changed, 24 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-> index f688124d6d66..ef341c4254fc 100644
-> --- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-> +++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-> @@ -545,6 +545,7 @@ static int kvaser_usb_hydra_send_simple_cmd(struct kvaser_usb *dev,
->   					    u8 cmd_no, int channel)
->   {
->   	struct kvaser_cmd *cmd;
-> +	size_t cmd_len;
->   	int err;
->   
->   	cmd = kzalloc(sizeof(*cmd), GFP_KERNEL);
-> @@ -552,6 +553,7 @@ static int kvaser_usb_hydra_send_simple_cmd(struct kvaser_usb *dev,
->   		return -ENOMEM;
->   
->   	cmd->header.cmd_no = cmd_no;
-> +	cmd_len = kvaser_usb_hydra_cmd_size(cmd);
->   	if (channel < 0) {
->   		kvaser_usb_hydra_set_cmd_dest_he
->   				(cmd, KVASER_USB_HYDRA_HE_ADDRESS_ILLEGAL);
-> @@ -568,7 +570,7 @@ static int kvaser_usb_hydra_send_simple_cmd(struct kvaser_usb *dev,
->   	kvaser_usb_hydra_set_cmd_transid
->   				(cmd, kvaser_usb_hydra_get_next_transid(dev));
->   
-> -	err = kvaser_usb_send_cmd(dev, cmd, kvaser_usb_hydra_cmd_size(cmd));
-> +	err = kvaser_usb_send_cmd(dev, cmd, cmd_len);
->   	if (err)
->   		goto end;
->   
-> @@ -584,6 +586,7 @@ kvaser_usb_hydra_send_simple_cmd_async(struct kvaser_usb_net_priv *priv,
->   {
->   	struct kvaser_cmd *cmd;
->   	struct kvaser_usb *dev = priv->dev;
-> +	size_t cmd_len;
->   	int err;
->   
->   	cmd = kzalloc(sizeof(*cmd), GFP_ATOMIC);
-> @@ -591,14 +594,14 @@ kvaser_usb_hydra_send_simple_cmd_async(struct kvaser_usb_net_priv *priv,
->   		return -ENOMEM;
->   
->   	cmd->header.cmd_no = cmd_no;
-> +	cmd_len = kvaser_usb_hydra_cmd_size(cmd);
->   
->   	kvaser_usb_hydra_set_cmd_dest_he
->   		(cmd, dev->card_data.hydra.channel_to_he[priv->channel]);
->   	kvaser_usb_hydra_set_cmd_transid
->   				(cmd, kvaser_usb_hydra_get_next_transid(dev));
->   
-> -	err = kvaser_usb_send_cmd_async(priv, cmd,
-> -					kvaser_usb_hydra_cmd_size(cmd));
-> +	err = kvaser_usb_send_cmd_async(priv, cmd, cmd_len);
->   	if (err)
->   		kfree(cmd);
->   
-> @@ -742,6 +745,7 @@ static int kvaser_usb_hydra_get_single_capability(struct kvaser_usb *dev,
->   {
->   	struct kvaser_usb_dev_card_data *card_data = &dev->card_data;
->   	struct kvaser_cmd *cmd;
-> +	size_t cmd_len;
->   	u32 value = 0;
->   	u32 mask = 0;
->   	u16 cap_cmd_res;
-> @@ -753,13 +757,14 @@ static int kvaser_usb_hydra_get_single_capability(struct kvaser_usb *dev,
->   		return -ENOMEM;
->   
->   	cmd->header.cmd_no = CMD_GET_CAPABILITIES_REQ;
-> +	cmd_len = kvaser_usb_hydra_cmd_size(cmd);
->   	cmd->cap_req.cap_cmd = cpu_to_le16(cap_cmd_req);
->   
->   	kvaser_usb_hydra_set_cmd_dest_he(cmd, card_data->hydra.sysdbg_he);
->   	kvaser_usb_hydra_set_cmd_transid
->   				(cmd, kvaser_usb_hydra_get_next_transid(dev));
->   
-> -	err = kvaser_usb_send_cmd(dev, cmd, kvaser_usb_hydra_cmd_size(cmd));
-> +	err = kvaser_usb_send_cmd(dev, cmd, cmd_len);
->   	if (err)
->   		goto end;
->   
-> @@ -1578,6 +1583,7 @@ static int kvaser_usb_hydra_get_busparams(struct kvaser_usb_net_priv *priv,
->   	struct kvaser_usb *dev = priv->dev;
->   	struct kvaser_usb_net_hydra_priv *hydra = priv->sub_priv;
->   	struct kvaser_cmd *cmd;
-> +	size_t cmd_len;
->   	int err;
->   
->   	if (!hydra)
-> @@ -1588,6 +1594,7 @@ static int kvaser_usb_hydra_get_busparams(struct kvaser_usb_net_priv *priv,
->   		return -ENOMEM;
->   
->   	cmd->header.cmd_no = CMD_GET_BUSPARAMS_REQ;
-> +	cmd_len = kvaser_usb_hydra_cmd_size(cmd);
->   	kvaser_usb_hydra_set_cmd_dest_he
->   		(cmd, dev->card_data.hydra.channel_to_he[priv->channel]);
->   	kvaser_usb_hydra_set_cmd_transid
-> @@ -1597,7 +1604,7 @@ static int kvaser_usb_hydra_get_busparams(struct kvaser_usb_net_priv *priv,
->   
->   	reinit_completion(&priv->get_busparams_comp);
->   
-> -	err = kvaser_usb_send_cmd(dev, cmd, kvaser_usb_hydra_cmd_size(cmd));
-> +	err = kvaser_usb_send_cmd(dev, cmd, cmd_len);
->   	if (err)
->   		return err;
->   
-> @@ -1624,6 +1631,7 @@ static int kvaser_usb_hydra_set_bittiming(const struct net_device *netdev,
->   	struct kvaser_cmd *cmd;
->   	struct kvaser_usb_net_priv *priv = netdev_priv(netdev);
->   	struct kvaser_usb *dev = priv->dev;
-> +	size_t cmd_len;
->   	int err;
->   
->   	cmd = kzalloc(sizeof(*cmd), GFP_KERNEL);
-> @@ -1631,6 +1639,7 @@ static int kvaser_usb_hydra_set_bittiming(const struct net_device *netdev,
->   		return -ENOMEM;
->   
->   	cmd->header.cmd_no = CMD_SET_BUSPARAMS_REQ;
-> +	cmd_len = kvaser_usb_hydra_cmd_size(cmd);
->   	memcpy(&cmd->set_busparams_req.busparams_nominal, busparams,
->   	       sizeof(cmd->set_busparams_req.busparams_nominal));
->   
-> @@ -1639,7 +1648,7 @@ static int kvaser_usb_hydra_set_bittiming(const struct net_device *netdev,
->   	kvaser_usb_hydra_set_cmd_transid
->   				(cmd, kvaser_usb_hydra_get_next_transid(dev));
->   
-> -	err = kvaser_usb_send_cmd(dev, cmd, kvaser_usb_hydra_cmd_size(cmd));
-> +	err = kvaser_usb_send_cmd(dev, cmd, cmd_len);
->   
->   	kfree(cmd);
->   
-> @@ -1652,6 +1661,7 @@ static int kvaser_usb_hydra_set_data_bittiming(const struct net_device *netdev,
->   	struct kvaser_cmd *cmd;
->   	struct kvaser_usb_net_priv *priv = netdev_priv(netdev);
->   	struct kvaser_usb *dev = priv->dev;
-> +	size_t cmd_len;
->   	int err;
->   
->   	cmd = kzalloc(sizeof(*cmd), GFP_KERNEL);
-> @@ -1659,6 +1669,7 @@ static int kvaser_usb_hydra_set_data_bittiming(const struct net_device *netdev,
->   		return -ENOMEM;
->   
->   	cmd->header.cmd_no = CMD_SET_BUSPARAMS_FD_REQ;
-> +	cmd_len = kvaser_usb_hydra_cmd_size(cmd);
->   	memcpy(&cmd->set_busparams_req.busparams_data, busparams,
->   	       sizeof(cmd->set_busparams_req.busparams_data));
->   
-> @@ -1676,7 +1687,7 @@ static int kvaser_usb_hydra_set_data_bittiming(const struct net_device *netdev,
->   	kvaser_usb_hydra_set_cmd_transid
->   				(cmd, kvaser_usb_hydra_get_next_transid(dev));
->   
-> -	err = kvaser_usb_send_cmd(dev, cmd, kvaser_usb_hydra_cmd_size(cmd));
-> +	err = kvaser_usb_send_cmd(dev, cmd, cmd_len);
->   
->   	kfree(cmd);
->   
-> @@ -1804,6 +1815,7 @@ static int kvaser_usb_hydra_get_software_info(struct kvaser_usb *dev)
->   static int kvaser_usb_hydra_get_software_details(struct kvaser_usb *dev)
->   {
->   	struct kvaser_cmd *cmd;
-> +	size_t cmd_len;
->   	int err;
->   	u32 flags;
->   	struct kvaser_usb_dev_card_data *card_data = &dev->card_data;
-> @@ -1813,6 +1825,7 @@ static int kvaser_usb_hydra_get_software_details(struct kvaser_usb *dev)
->   		return -ENOMEM;
->   
->   	cmd->header.cmd_no = CMD_GET_SOFTWARE_DETAILS_REQ;
-> +	cmd_len = kvaser_usb_hydra_cmd_size(cmd);
->   	cmd->sw_detail_req.use_ext_cmd = 1;
->   	kvaser_usb_hydra_set_cmd_dest_he
->   				(cmd, KVASER_USB_HYDRA_HE_ADDRESS_ILLEGAL);
-> @@ -1820,7 +1833,7 @@ static int kvaser_usb_hydra_get_software_details(struct kvaser_usb *dev)
->   	kvaser_usb_hydra_set_cmd_transid
->   				(cmd, kvaser_usb_hydra_get_next_transid(dev));
->   
-> -	err = kvaser_usb_send_cmd(dev, cmd, kvaser_usb_hydra_cmd_size(cmd));
-> +	err = kvaser_usb_send_cmd(dev, cmd, cmd_len);
->   	if (err)
->   		goto end;
->   
-> @@ -1938,6 +1951,7 @@ static int kvaser_usb_hydra_set_opt_mode(const struct kvaser_usb_net_priv *priv)
->   {
->   	struct kvaser_usb *dev = priv->dev;
->   	struct kvaser_cmd *cmd;
-> +	size_t cmd_len;
->   	int err;
->   
->   	if ((priv->can.ctrlmode &
-> @@ -1953,6 +1967,7 @@ static int kvaser_usb_hydra_set_opt_mode(const struct kvaser_usb_net_priv *priv)
->   		return -ENOMEM;
->   
->   	cmd->header.cmd_no = CMD_SET_DRIVERMODE_REQ;
-> +	cmd_len = kvaser_usb_hydra_cmd_size(cmd);
->   	kvaser_usb_hydra_set_cmd_dest_he
->   		(cmd, dev->card_data.hydra.channel_to_he[priv->channel]);
->   	kvaser_usb_hydra_set_cmd_transid
-> @@ -1962,7 +1977,7 @@ static int kvaser_usb_hydra_set_opt_mode(const struct kvaser_usb_net_priv *priv)
->   	else
->   		cmd->set_ctrlmode.mode = KVASER_USB_HYDRA_CTRLMODE_NORMAL;
->   
-> -	err = kvaser_usb_send_cmd(dev, cmd, kvaser_usb_hydra_cmd_size(cmd));
-> +	err = kvaser_usb_send_cmd(dev, cmd, cmd_len);
->   	kfree(cmd);
->   
->   	return err;
+Unverified Error/Warning (likely false positive, please contact us if interested):
+
+drivers/accessibility/speakup/main.c:1290:26: sparse: sparse: obsolete array initializer, use C99 syntax
+drivers/cxl/core/mbox.c:832:18: sparse: sparse: cast from non-scalar
+drivers/cxl/core/mbox.c:832:18: sparse: sparse: cast to non-scalar
+drivers/i2c/busses/i2c-qcom-geni.c:1028:28: sparse: sparse: symbol 'i2c_master_hub' was not declared. Should it be static?
+drivers/media/test-drivers/visl/visl-video.c:690:22: sparse: sparse: symbol 'visl_qops' was not declared. Should it be static?
+drivers/usb/misc/sisusbvga/sisusbvga.c:528:9: sparse: sparse: incorrect type in assignment (different base types)
+fs/xfs/xfs_iomap.c:86:29: sparse: sparse: symbol 'xfs_iomap_page_ops' was not declared. Should it be static?
+hidma.c:(.text+0x9a): undefined reference to `devm_ioremap_resource'
+s390x-linux-ld: fsl-edma.c:(.text+0x15c): undefined reference to `devm_ioremap_resource'
+s390x-linux-ld: fsl-edma.c:(.text+0x49c): undefined reference to `devm_ioremap_resource'
+timer-of.c:(.init.text+0x1aee): undefined reference to `iounmap'
+timer-of.c:(.init.text+0x5a2): undefined reference to `of_iomap'
+
+Error/Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- alpha-randconfig-s031-20221218
+|   |-- drivers-cxl-core-mbox.c:sparse:sparse:cast-from-non-scalar
+|   `-- drivers-cxl-core-mbox.c:sparse:sparse:cast-to-non-scalar
+|-- arc-randconfig-r031-20221219
+|   |-- drivers-regulator-tps65219-regulator.c:warning:ordered-comparison-of-pointer-with-integer-zero
+|   `-- drivers-regulator-tps65219-regulator.c:warning:parameter-dev-set-but-not-used
+|-- arc-randconfig-s033-20221218
+|   |-- drivers-cxl-core-mbox.c:sparse:sparse:cast-from-non-scalar
+|   `-- drivers-cxl-core-mbox.c:sparse:sparse:cast-to-non-scalar
+|-- arm-cerfcube_defconfig
+|   `-- arch-arm-kernel-entry-armv.S:warning:CONFIG_ARM_THUMB-is-not-defined-evaluates-to
+|-- arm-footbridge_defconfig
+|   `-- arch-arm-kernel-entry-armv.S:warning:CONFIG_ARM_THUMB-is-not-defined-evaluates-to
+|-- arm64-allyesconfig
+|   `-- aarch64-linux-ld:ID-map-text-too-big-or-misaligned
+|-- csky-randconfig-s051-20221218
+|   |-- drivers-nvmem-u-boot-env.c:sparse:sparse:cast-to-restricted-__le32
+|   `-- drivers-nvmem-u-boot-env.c:sparse:sparse:restricted-__le32-degrades-to-integer
+|-- i386-allyesconfig
+|   |-- drivers-regulator-tps65219-regulator.c:warning:ordered-comparison-of-pointer-with-integer-zero
+|   `-- drivers-regulator-tps65219-regulator.c:warning:parameter-dev-set-but-not-used
+|-- i386-randconfig-s002
+|   `-- fs-xfs-xfs_iomap.c:sparse:sparse:symbol-xfs_iomap_page_ops-was-not-declared.-Should-it-be-static
+|-- ia64-allmodconfig
+|   |-- drivers-regulator-tps65219-regulator.c:warning:ordered-comparison-of-pointer-with-integer-zero
+|   `-- drivers-regulator-tps65219-regulator.c:warning:parameter-dev-set-but-not-used
+|-- loongarch-randconfig-s053-20221218
+|   |-- drivers-cxl-core-mbox.c:sparse:sparse:cast-from-non-scalar
+|   |-- drivers-cxl-core-mbox.c:sparse:sparse:cast-to-non-scalar
+|   `-- drivers-media-test-drivers-visl-visl-video.c:sparse:sparse:symbol-visl_qops-was-not-declared.-Should-it-be-static
+|-- microblaze-randconfig-s052-20221218
+|   |-- drivers-cxl-core-mbox.c:sparse:sparse:cast-from-non-scalar
+|   `-- drivers-cxl-core-mbox.c:sparse:sparse:cast-to-non-scalar
+|-- nios2-allyesconfig
+|   |-- drivers-regulator-tps65219-regulator.c:warning:ordered-comparison-of-pointer-with-integer-zero
+|   `-- drivers-regulator-tps65219-regulator.c:warning:parameter-dev-set-but-not-used
+|-- openrisc-allyesconfig
+|   |-- drivers-regulator-tps65219-regulator.c:warning:ordered-comparison-of-pointer-with-integer-zero
+|   `-- drivers-regulator-tps65219-regulator.c:warning:parameter-dev-set-but-not-used
+|-- openrisc-randconfig-r025-20221219
+|   |-- drivers-regulator-tps65219-regulator.c:warning:ordered-comparison-of-pointer-with-integer-zero
+|   `-- drivers-regulator-tps65219-regulator.c:warning:parameter-dev-set-but-not-used
+|-- parisc-allyesconfig
+|   |-- drivers-regulator-tps65219-regulator.c:warning:ordered-comparison-of-pointer-with-integer-zero
+|   `-- drivers-regulator-tps65219-regulator.c:warning:parameter-dev-set-but-not-used
+|-- powerpc-allmodconfig
+|   |-- arch-powerpc-kernel-kvm_emul.o:warning:objtool:kvm_template_end():can-t-find-starting-instruction
+|   |-- arch-powerpc-kernel-optprobes_head.o:warning:objtool:optprobe_template_end():can-t-find-starting-instruction
+|   |-- drivers-regulator-tps65219-regulator.c:warning:ordered-comparison-of-pointer-with-integer-zero
+|   `-- drivers-regulator-tps65219-regulator.c:warning:parameter-dev-set-but-not-used
+clang_recent_errors
+|-- riscv-randconfig-r024-20221219
+|   |-- drivers-regulator-tps65219-regulator.c:warning:parameter-dev-set-but-not-used
+|   `-- lib-dhry_run.c:warning:variable-ret-is-used-uninitialized-whenever-if-condition-is-false
+|-- s390-randconfig-r003-20221218
+|   |-- hidma.c:(.text):undefined-reference-to-devm_ioremap_resource
+|   |-- irq-al-fic.c:(.init.text):undefined-reference-to-of_iomap
+|   |-- s39-linux-ld:fsl-edma.c:(.text):undefined-reference-to-devm_ioremap_resource
+|   |-- s39-linux-ld:irq-al-fic.c:(.init.text):undefined-reference-to-iounmap
+|   |-- timer-of.c:(.init.text):undefined-reference-to-iounmap
+|   `-- timer-of.c:(.init.text):undefined-reference-to-of_iomap
+|-- s390-randconfig-r036-20221218
+|   |-- cistpl.c:(.text):undefined-reference-to-iounmap
+|   |-- s39-linux-ld:cistpl.c:(.text):undefined-reference-to-ioremap
+|   |-- s39-linux-ld:cistpl.c:(.text):undefined-reference-to-iounmap
+|   `-- s39-linux-ld:fsl-edma.c:(.text):undefined-reference-to-devm_ioremap_resource
+`-- x86_64-rhel-8.3-rust
+    `-- vmlinux.o:warning:objtool:___ksymtab_gpl-_RNvNtCsfATHBUcknU9_6kernel5print16call_printk_cont:data-relocation-to-ENDBR:_RNvNtCsfATHBUcknU9_6kernel5print16call_printk_cont
+
+elapsed time: 745m
+
+configs tested: 109
+configs skipped: 3
+
+gcc tested configs:
+x86_64               randconfig-a002-20221219
+um                             i386_defconfig
+x86_64                            allnoconfig
+x86_64               randconfig-a003-20221219
+x86_64               randconfig-a001-20221219
+um                           x86_64_defconfig
+x86_64               randconfig-a004-20221219
+x86_64               randconfig-a005-20221219
+x86_64               randconfig-a006-20221219
+i386                 randconfig-a001-20221219
+i386                 randconfig-a003-20221219
+arm                            pleb_defconfig
+i386                 randconfig-a002-20221219
+i386                 randconfig-a004-20221219
+i386                 randconfig-a006-20221219
+ia64                             allmodconfig
+i386                 randconfig-a005-20221219
+powerpc                     taishan_defconfig
+powerpc                   currituck_defconfig
+arm                        cerfcube_defconfig
+arc                          axs103_defconfig
+powerpc                     ep8248e_defconfig
+arm                           sama5_defconfig
+openrisc                            defconfig
+powerpc                           allnoconfig
+x86_64                           rhel-8.3-bpf
+x86_64                           rhel-8.3-syz
+i386                                defconfig
+x86_64                    rhel-8.3-kselftests
+riscv                randconfig-r042-20221218
+alpha                            allyesconfig
+m68k                             allyesconfig
+x86_64                         rhel-8.3-kunit
+m68k                             allmodconfig
+x86_64                          rhel-8.3-func
+arc                              allyesconfig
+x86_64                              defconfig
+x86_64                           rhel-8.3-kvm
+sh                               allmodconfig
+arc                                 defconfig
+sh                             sh03_defconfig
+s390                             allmodconfig
+alpha                               defconfig
+mips                             allyesconfig
+arm                                 defconfig
+powerpc                      ppc40x_defconfig
+x86_64                               rhel-8.3
+powerpc                          allmodconfig
+s390                             allyesconfig
+arm64                            allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+arm                              allyesconfig
+mips                      fuloong2e_defconfig
+ia64                                defconfig
+x86_64                           allyesconfig
+m68k                            mac_defconfig
+riscv                               defconfig
+i386                          randconfig-c001
+arc                  randconfig-r043-20221219
+arm                      footbridge_defconfig
+arm                  randconfig-r046-20221219
+powerpc                  storcenter_defconfig
+arc                  randconfig-r043-20221218
+s390                 randconfig-r044-20221218
+mips                    maltaup_xpa_defconfig
+powerpc                  iss476-smp_defconfig
+nios2                               defconfig
+parisc                              defconfig
+riscv                             allnoconfig
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+i386                          debian-10.3-kvm
+riscv                    nommu_virt_defconfig
+riscv                    nommu_k210_defconfig
+parisc64                            defconfig
+riscv                          rv32_defconfig
+i386                              debian-10.3
+nios2                            allyesconfig
+parisc                           allyesconfig
+
+clang tested configs:
+powerpc                     ppa8548_defconfig
+arm                          pxa168_defconfig
+x86_64               randconfig-a011-20221219
+x86_64               randconfig-a012-20221219
+mips                       rbtx49xx_defconfig
+arm                         s5pv210_defconfig
+x86_64               randconfig-a014-20221219
+x86_64               randconfig-a015-20221219
+x86_64               randconfig-a013-20221219
+x86_64                          rhel-8.3-rust
+arm                  randconfig-r046-20221218
+x86_64               randconfig-a016-20221219
+i386                 randconfig-a014-20221219
+i386                 randconfig-a012-20221219
+i386                 randconfig-a013-20221219
+i386                 randconfig-a011-20221219
+hexagon              randconfig-r041-20221218
+hexagon              randconfig-r045-20221219
+s390                 randconfig-r044-20221219
+i386                 randconfig-a015-20221219
+hexagon              randconfig-r041-20221219
+powerpc                     tqm8560_defconfig
+i386                 randconfig-a016-20221219
+hexagon              randconfig-r045-20221218
+riscv                randconfig-r042-20221219
+mips                     cu1830-neo_defconfig
+arm                       imx_v4_v5_defconfig
+x86_64                        randconfig-k001
+powerpc                      ppc44x_defconfig
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
