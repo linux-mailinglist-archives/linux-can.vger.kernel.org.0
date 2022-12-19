@@ -2,139 +2,299 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A54E650A39
-	for <lists+linux-can@lfdr.de>; Mon, 19 Dec 2022 11:37:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F0CE650A86
+	for <lists+linux-can@lfdr.de>; Mon, 19 Dec 2022 12:01:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231470AbiLSKhz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 19 Dec 2022 05:37:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47186 "EHLO
+        id S231856AbiLSLBU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 19 Dec 2022 06:01:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230226AbiLSKhx (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 19 Dec 2022 05:37:53 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A114CE0C8
-        for <linux-can@vger.kernel.org>; Mon, 19 Dec 2022 02:37:50 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id 7-20020a056e0220c700b0030386f0d0e6so6362291ilq.3
-        for <linux-can@vger.kernel.org>; Mon, 19 Dec 2022 02:37:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7B2A3LAzKRUV4e9LaRMFQt27MqLLZOh1ssrRfHyxhM8=;
-        b=XOpai6SLE1VBMsJdnqGRl0LgsTpxn8F2gsk9i2vEguyBRULrXzFC1SNZ31l1VWG6/J
-         2YN6xwbMHBG+ouOy5ECgQLjIltp1gVZ7yR1kofyBy8QZlP0giV1g3HB48w6u+QQe0bX8
-         +ZX9PRHrcAEubwdG1OrkZYwUS3wlZ4jczT3WSWdAFc0TBHarLUF0iuwa7mkaJ+HJdCSb
-         dhmObU7cVRncDk+bGp7RfSdcef5E39p35q3JolpSDxi/3ZjG4v47iqR5PLa7S33ms7/M
-         FpbavvnaadPH6kovzUXjwu/pfcFskAyOyZOERYPKx8fFsyQ5k608vebEpbm6CJF0QqrK
-         uXVQ==
-X-Gm-Message-State: ANoB5pnjVpdT3H1Zjt0ABFPEbi+39A9rlbMHP0i0p0sNo+WsALn+GHy6
-        VOht7Z0KNDuJRkg1YTY4Di8l5tjQaNcQII+NpneMHQa/bv96
-X-Google-Smtp-Source: AA0mqf4FH0q6MBTKDkJhbb64Atq5DhZJG3MVmi5SJgsNrdM7bMc2xOo5SlggsRG31/+OCTmJrVkl87Y4Ao8gLTrvvKgzXq2qmrzz
+        with ESMTP id S231453AbiLSLBQ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 19 Dec 2022 06:01:16 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A797E75
+        for <linux-can@vger.kernel.org>; Mon, 19 Dec 2022 03:01:12 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1p7DtO-0006xK-Oz
+        for linux-can@vger.kernel.org; Mon, 19 Dec 2022 12:01:10 +0100
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 22525142F4D
+        for <linux-can@vger.kernel.org>; Mon, 19 Dec 2022 11:01:10 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 07826142F48;
+        Mon, 19 Dec 2022 11:01:09 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 7af1da23;
+        Mon, 19 Dec 2022 11:01:07 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     linux-can@vger.kernel.org, kernel@pengutronix.de
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Jimmy Assarsson <extja@kvaser.com>,
+        Anssi Hannula <anssi.hannula@bitwise.fi>
+Subject: [PATCH] can: kvaser_usb: hydra: help gcc-13 to figure out cmd_len
+Date:   Mon, 19 Dec 2022 12:01:04 +0100
+Message-Id: <20221219110104.1073881-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-Received: by 2002:a6b:f015:0:b0:6e2:bed4:c2d5 with SMTP id
- w21-20020a6bf015000000b006e2bed4c2d5mr5218562ioc.177.1671446269922; Mon, 19
- Dec 2022 02:37:49 -0800 (PST)
-Date:   Mon, 19 Dec 2022 02:37:49 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000002e17d105f02be919@google.com>
-Subject: [syzbot] WARNING in print_tainted
-From:   syzbot <syzbot+5aed6c3aaba661f5b917@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mkl@pengutronix.de, netdev@vger.kernel.org, pabeni@redhat.com,
-        socketcan@hartkopp.net, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Debian's gcc-13 [1] throws the following error in
+kvaser_usb_hydra_cmd_size():
+
+[1] gcc version 13.0.0 20221214 (experimental) [master r13-4693-g512098a3316] (Debian 13-20221214-1)
+
+| drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c:502:65: error:
+| array subscript ‘struct kvaser_cmd_ext[0]’ is partly outside array
+| bounds of ‘unsigned char[32]’ [-Werror=array-bounds=]
+|   502 |                 ret = le16_to_cpu(((struct kvaser_cmd_ext *)cmd)->len);
+
+kvaser_usb_hydra_cmd_size() returns the size of given command. It
+depends on the command number (cmd->header.cmd_no). For extended
+commands (cmd->header.cmd_no == CMD_EXTENDED) the above shown code is
+executed.
+
+Help gcc to recognize that this code path is not taken in all cases,
+by calling kvaser_usb_hydra_cmd_size() directly after assigning the
+command number.
+
+Cc: Jimmy Assarsson <extja@kvaser.com>
+Cc: Anssi Hannula <anssi.hannula@bitwise.fi>
+Fixes: aec5fb2268b7 ("can: kvaser_usb: Add support for Kvaser USB hydra family")
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+
 Hello,
 
-syzbot found the following issue on:
+Jimmy, Anssi can you test this patch on real hardware?
 
-HEAD commit:    77856d911a8c Merge tag 'arm64-fixes' of git://git.kernel.o..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=15cddf1f880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b3c64cceddc7988
-dashboard link: https://syzkaller.appspot.com/bug?extid=5aed6c3aaba661f5b917
-compiler:       arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm
+regards,
+Marc
 
-Unfortunately, I don't have any reproducer for this issue yet.
+ .../net/can/usb/kvaser_usb/kvaser_usb_hydra.c | 33 ++++++++++++++-----
+ 1 file changed, 24 insertions(+), 9 deletions(-)
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5aed6c3aaba661f5b917@syzkaller.appspotmail.com
+diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
+index f688124d6d66..ef341c4254fc 100644
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
+@@ -545,6 +545,7 @@ static int kvaser_usb_hydra_send_simple_cmd(struct kvaser_usb *dev,
+ 					    u8 cmd_no, int channel)
+ {
+ 	struct kvaser_cmd *cmd;
++	size_t cmd_len;
+ 	int err;
+ 
+ 	cmd = kzalloc(sizeof(*cmd), GFP_KERNEL);
+@@ -552,6 +553,7 @@ static int kvaser_usb_hydra_send_simple_cmd(struct kvaser_usb *dev,
+ 		return -ENOMEM;
+ 
+ 	cmd->header.cmd_no = cmd_no;
++	cmd_len = kvaser_usb_hydra_cmd_size(cmd);
+ 	if (channel < 0) {
+ 		kvaser_usb_hydra_set_cmd_dest_he
+ 				(cmd, KVASER_USB_HYDRA_HE_ADDRESS_ILLEGAL);
+@@ -568,7 +570,7 @@ static int kvaser_usb_hydra_send_simple_cmd(struct kvaser_usb *dev,
+ 	kvaser_usb_hydra_set_cmd_transid
+ 				(cmd, kvaser_usb_hydra_get_next_transid(dev));
+ 
+-	err = kvaser_usb_send_cmd(dev, cmd, kvaser_usb_hydra_cmd_size(cmd));
++	err = kvaser_usb_send_cmd(dev, cmd, cmd_len);
+ 	if (err)
+ 		goto end;
+ 
+@@ -584,6 +586,7 @@ kvaser_usb_hydra_send_simple_cmd_async(struct kvaser_usb_net_priv *priv,
+ {
+ 	struct kvaser_cmd *cmd;
+ 	struct kvaser_usb *dev = priv->dev;
++	size_t cmd_len;
+ 	int err;
+ 
+ 	cmd = kzalloc(sizeof(*cmd), GFP_ATOMIC);
+@@ -591,14 +594,14 @@ kvaser_usb_hydra_send_simple_cmd_async(struct kvaser_usb_net_priv *priv,
+ 		return -ENOMEM;
+ 
+ 	cmd->header.cmd_no = cmd_no;
++	cmd_len = kvaser_usb_hydra_cmd_size(cmd);
+ 
+ 	kvaser_usb_hydra_set_cmd_dest_he
+ 		(cmd, dev->card_data.hydra.channel_to_he[priv->channel]);
+ 	kvaser_usb_hydra_set_cmd_transid
+ 				(cmd, kvaser_usb_hydra_get_next_transid(dev));
+ 
+-	err = kvaser_usb_send_cmd_async(priv, cmd,
+-					kvaser_usb_hydra_cmd_size(cmd));
++	err = kvaser_usb_send_cmd_async(priv, cmd, cmd_len);
+ 	if (err)
+ 		kfree(cmd);
+ 
+@@ -742,6 +745,7 @@ static int kvaser_usb_hydra_get_single_capability(struct kvaser_usb *dev,
+ {
+ 	struct kvaser_usb_dev_card_data *card_data = &dev->card_data;
+ 	struct kvaser_cmd *cmd;
++	size_t cmd_len;
+ 	u32 value = 0;
+ 	u32 mask = 0;
+ 	u16 cap_cmd_res;
+@@ -753,13 +757,14 @@ static int kvaser_usb_hydra_get_single_capability(struct kvaser_usb *dev,
+ 		return -ENOMEM;
+ 
+ 	cmd->header.cmd_no = CMD_GET_CAPABILITIES_REQ;
++	cmd_len = kvaser_usb_hydra_cmd_size(cmd);
+ 	cmd->cap_req.cap_cmd = cpu_to_le16(cap_cmd_req);
+ 
+ 	kvaser_usb_hydra_set_cmd_dest_he(cmd, card_data->hydra.sysdbg_he);
+ 	kvaser_usb_hydra_set_cmd_transid
+ 				(cmd, kvaser_usb_hydra_get_next_transid(dev));
+ 
+-	err = kvaser_usb_send_cmd(dev, cmd, kvaser_usb_hydra_cmd_size(cmd));
++	err = kvaser_usb_send_cmd(dev, cmd, cmd_len);
+ 	if (err)
+ 		goto end;
+ 
+@@ -1578,6 +1583,7 @@ static int kvaser_usb_hydra_get_busparams(struct kvaser_usb_net_priv *priv,
+ 	struct kvaser_usb *dev = priv->dev;
+ 	struct kvaser_usb_net_hydra_priv *hydra = priv->sub_priv;
+ 	struct kvaser_cmd *cmd;
++	size_t cmd_len;
+ 	int err;
+ 
+ 	if (!hydra)
+@@ -1588,6 +1594,7 @@ static int kvaser_usb_hydra_get_busparams(struct kvaser_usb_net_priv *priv,
+ 		return -ENOMEM;
+ 
+ 	cmd->header.cmd_no = CMD_GET_BUSPARAMS_REQ;
++	cmd_len = kvaser_usb_hydra_cmd_size(cmd);
+ 	kvaser_usb_hydra_set_cmd_dest_he
+ 		(cmd, dev->card_data.hydra.channel_to_he[priv->channel]);
+ 	kvaser_usb_hydra_set_cmd_transid
+@@ -1597,7 +1604,7 @@ static int kvaser_usb_hydra_get_busparams(struct kvaser_usb_net_priv *priv,
+ 
+ 	reinit_completion(&priv->get_busparams_comp);
+ 
+-	err = kvaser_usb_send_cmd(dev, cmd, kvaser_usb_hydra_cmd_size(cmd));
++	err = kvaser_usb_send_cmd(dev, cmd, cmd_len);
+ 	if (err)
+ 		return err;
+ 
+@@ -1624,6 +1631,7 @@ static int kvaser_usb_hydra_set_bittiming(const struct net_device *netdev,
+ 	struct kvaser_cmd *cmd;
+ 	struct kvaser_usb_net_priv *priv = netdev_priv(netdev);
+ 	struct kvaser_usb *dev = priv->dev;
++	size_t cmd_len;
+ 	int err;
+ 
+ 	cmd = kzalloc(sizeof(*cmd), GFP_KERNEL);
+@@ -1631,6 +1639,7 @@ static int kvaser_usb_hydra_set_bittiming(const struct net_device *netdev,
+ 		return -ENOMEM;
+ 
+ 	cmd->header.cmd_no = CMD_SET_BUSPARAMS_REQ;
++	cmd_len = kvaser_usb_hydra_cmd_size(cmd);
+ 	memcpy(&cmd->set_busparams_req.busparams_nominal, busparams,
+ 	       sizeof(cmd->set_busparams_req.busparams_nominal));
+ 
+@@ -1639,7 +1648,7 @@ static int kvaser_usb_hydra_set_bittiming(const struct net_device *netdev,
+ 	kvaser_usb_hydra_set_cmd_transid
+ 				(cmd, kvaser_usb_hydra_get_next_transid(dev));
+ 
+-	err = kvaser_usb_send_cmd(dev, cmd, kvaser_usb_hydra_cmd_size(cmd));
++	err = kvaser_usb_send_cmd(dev, cmd, cmd_len);
+ 
+ 	kfree(cmd);
+ 
+@@ -1652,6 +1661,7 @@ static int kvaser_usb_hydra_set_data_bittiming(const struct net_device *netdev,
+ 	struct kvaser_cmd *cmd;
+ 	struct kvaser_usb_net_priv *priv = netdev_priv(netdev);
+ 	struct kvaser_usb *dev = priv->dev;
++	size_t cmd_len;
+ 	int err;
+ 
+ 	cmd = kzalloc(sizeof(*cmd), GFP_KERNEL);
+@@ -1659,6 +1669,7 @@ static int kvaser_usb_hydra_set_data_bittiming(const struct net_device *netdev,
+ 		return -ENOMEM;
+ 
+ 	cmd->header.cmd_no = CMD_SET_BUSPARAMS_FD_REQ;
++	cmd_len = kvaser_usb_hydra_cmd_size(cmd);
+ 	memcpy(&cmd->set_busparams_req.busparams_data, busparams,
+ 	       sizeof(cmd->set_busparams_req.busparams_data));
+ 
+@@ -1676,7 +1687,7 @@ static int kvaser_usb_hydra_set_data_bittiming(const struct net_device *netdev,
+ 	kvaser_usb_hydra_set_cmd_transid
+ 				(cmd, kvaser_usb_hydra_get_next_transid(dev));
+ 
+-	err = kvaser_usb_send_cmd(dev, cmd, kvaser_usb_hydra_cmd_size(cmd));
++	err = kvaser_usb_send_cmd(dev, cmd, cmd_len);
+ 
+ 	kfree(cmd);
+ 
+@@ -1804,6 +1815,7 @@ static int kvaser_usb_hydra_get_software_info(struct kvaser_usb *dev)
+ static int kvaser_usb_hydra_get_software_details(struct kvaser_usb *dev)
+ {
+ 	struct kvaser_cmd *cmd;
++	size_t cmd_len;
+ 	int err;
+ 	u32 flags;
+ 	struct kvaser_usb_dev_card_data *card_data = &dev->card_data;
+@@ -1813,6 +1825,7 @@ static int kvaser_usb_hydra_get_software_details(struct kvaser_usb *dev)
+ 		return -ENOMEM;
+ 
+ 	cmd->header.cmd_no = CMD_GET_SOFTWARE_DETAILS_REQ;
++	cmd_len = kvaser_usb_hydra_cmd_size(cmd);
+ 	cmd->sw_detail_req.use_ext_cmd = 1;
+ 	kvaser_usb_hydra_set_cmd_dest_he
+ 				(cmd, KVASER_USB_HYDRA_HE_ADDRESS_ILLEGAL);
+@@ -1820,7 +1833,7 @@ static int kvaser_usb_hydra_get_software_details(struct kvaser_usb *dev)
+ 	kvaser_usb_hydra_set_cmd_transid
+ 				(cmd, kvaser_usb_hydra_get_next_transid(dev));
+ 
+-	err = kvaser_usb_send_cmd(dev, cmd, kvaser_usb_hydra_cmd_size(cmd));
++	err = kvaser_usb_send_cmd(dev, cmd, cmd_len);
+ 	if (err)
+ 		goto end;
+ 
+@@ -1938,6 +1951,7 @@ static int kvaser_usb_hydra_set_opt_mode(const struct kvaser_usb_net_priv *priv)
+ {
+ 	struct kvaser_usb *dev = priv->dev;
+ 	struct kvaser_cmd *cmd;
++	size_t cmd_len;
+ 	int err;
+ 
+ 	if ((priv->can.ctrlmode &
+@@ -1953,6 +1967,7 @@ static int kvaser_usb_hydra_set_opt_mode(const struct kvaser_usb_net_priv *priv)
+ 		return -ENOMEM;
+ 
+ 	cmd->header.cmd_no = CMD_SET_DRIVERMODE_REQ;
++	cmd_len = kvaser_usb_hydra_cmd_size(cmd);
+ 	kvaser_usb_hydra_set_cmd_dest_he
+ 		(cmd, dev->card_data.hydra.channel_to_he[priv->channel]);
+ 	kvaser_usb_hydra_set_cmd_transid
+@@ -1962,7 +1977,7 @@ static int kvaser_usb_hydra_set_opt_mode(const struct kvaser_usb_net_priv *priv)
+ 	else
+ 		cmd->set_ctrlmode.mode = KVASER_USB_HYDRA_CTRLMODE_NORMAL;
+ 
+-	err = kvaser_usb_send_cmd(dev, cmd, kvaser_usb_hydra_cmd_size(cmd));
++	err = kvaser_usb_send_cmd(dev, cmd, cmd_len);
+ 	kfree(cmd);
+ 
+ 	return err;
+-- 
+2.35.1
 
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 0 at net/can/isotp.c:920 isotp_tx_timer_handler+0xe0/0x148 net/can/isotp.c:920
-can-isotp: tx timer state 00000000 cfecho 00000000
-Modules linked in:
-Kernel panic - not syncing: kernel: panic_on_warn set ...
-CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.1.0-syzkaller #0
-Hardware name: ARM-Versatile Express
-Backtrace: frame pointer underflow
-[<81764cd8>] (dump_backtrace) from [<81764dcc>] (show_stack+0x18/0x1c arch/arm/kernel/traps.c:256)
- r7:81d77dbc r6:824229dc r5:60000193 r4:81d86398
-[<81764db4>] (show_stack) from [<817811c0>] (__dump_stack lib/dump_stack.c:88 [inline])
-[<81764db4>] (show_stack) from [<817811c0>] (dump_stack_lvl+0x48/0x54 lib/dump_stack.c:106)
-[<81781178>] (dump_stack_lvl) from [<817811e4>] (dump_stack+0x18/0x1c lib/dump_stack.c:113)
- r5:00000000 r4:82646d14
-[<817811cc>] (dump_stack) from [<81765974>] (panic+0x11c/0x360 kernel/panic.c:315)
-[<81765858>] (panic) from [<802416b0>] (print_tainted+0x0/0xa0 kernel/panic.c:236)
- r3:00000001 r2:8240c488 r1:81d7031c r0:81d77dbc
- r7:81611f88
-[<80241634>] (check_panic_on_warn) from [<802418a4>] (__warn+0x7c/0x18c kernel/panic.c:661)
-[<80241828>] (__warn) from [<81765c54>] (warn_slowpath_fmt+0x9c/0xd4 kernel/panic.c:691)
- r8:00000009 r7:81611f88 r6:00000398 r5:81f315e8 r4:81f315bc
-[<81765bbc>] (warn_slowpath_fmt) from [<81611f88>] (isotp_tx_timer_handler+0xe0/0x148 net/can/isotp.c:920)
- r8:dddde3a0 r7:000000a0 r6:dddde300 r5:00000000 r4:85280278
-[<81611ea8>] (isotp_tx_timer_handler) from [<802e8efc>] (__run_hrtimer kernel/time/hrtimer.c:1685 [inline])
-[<81611ea8>] (isotp_tx_timer_handler) from [<802e8efc>] (__hrtimer_run_queues+0x1b0/0x46c kernel/time/hrtimer.c:1749)
- r5:dddde3e0 r4:85280278
-[<802e8d4c>] (__hrtimer_run_queues) from [<802e9244>] (hrtimer_run_softirq+0x8c/0xb8 kernel/time/hrtimer.c:1766)
- r10:828f3980 r9:00000101 r8:00000100 r7:00000000 r6:00000000 r5:20000113
- r4:dddde300
-[<802e91b8>] (hrtimer_run_softirq) from [<80201338>] (__do_softirq+0x16c/0x498 kernel/softirq.c:571)
- r7:df85df08 r6:00000008 r5:00000009 r4:824040a0
-[<802011cc>] (__do_softirq) from [<8024a3c8>] (invoke_softirq kernel/softirq.c:445 [inline])
-[<802011cc>] (__do_softirq) from [<8024a3c8>] (__irq_exit_rcu kernel/softirq.c:650 [inline])
-[<802011cc>] (__do_softirq) from [<8024a3c8>] (__irq_exit_rcu kernel/softirq.c:640 [inline])
-[<802011cc>] (__do_softirq) from [<8024a3c8>] (irq_exit+0x9c/0xe8 kernel/softirq.c:674)
- r10:825d998e r9:828f3980 r8:00000000 r7:df85df08 r6:81f3b940 r5:81f3b958
- r4:822aac40
-[<8024a32c>] (irq_exit) from [<817818b8>] (generic_handle_arch_irq+0x7c/0x80 kernel/irq/handle.c:240)
- r5:81f3b958 r4:822aac1c
-[<8178183c>] (generic_handle_arch_irq) from [<817371d4>] (call_with_stack+0x1c/0x20 arch/arm/lib/call_with_stack.S:40)
- r9:828f3980 r8:00000000 r7:df85df3c r6:ffffffff r5:60000013 r4:80208f08
-[<817371b8>] (call_with_stack) from [<80200b44>] (__irq_svc+0x84/0xac arch/arm/kernel/entry-armv.S:221)
-Exception stack(0xdf85df08 to 0xdf85df50)
-df00:                   00000001 00000000 0048bc31 8021c240 828f3980 00000001
-df20: 828f3980 8240c5e0 00000000 00000000 825d998e df85df64 df85df68 df85df58
-df40: 80208f04 80208f08 60000013 ffffffff
-[<80208ec8>] (arch_cpu_idle) from [<8178bb9c>] (default_idle_call+0x38/0x1b4 kernel/sched/idle.c:109)
-[<8178bb64>] (default_idle_call) from [<8028f138>] (cpuidle_idle_call kernel/sched/idle.c:191 [inline])
-[<8178bb64>] (default_idle_call) from [<8028f138>] (do_idle+0x218/0x2a0 kernel/sched/idle.c:303)
- r7:8240c5e0 r6:828f3980 r5:8240c49c r4:00000001
-[<8028ef20>] (do_idle) from [<8028f4dc>] (cpu_startup_entry+0x20/0x24 kernel/sched/idle.c:400)
- r10:00000000 r9:412fc0f1 r8:80003010 r7:82646464 r6:828f3980 r5:00000001
- r4:0000009c
-[<8028f4bc>] (cpu_startup_entry) from [<80210b70>] (secondary_start_kernel+0x138/0x194 arch/arm/kernel/smp.c:481)
-[<80210a38>] (secondary_start_kernel) from [<80201714>] (__enable_mmu+0x0/0xc arch/arm/kernel/head.S:438)
- r7:82646464 r6:30c0387d r5:00000000 r4:82a0d6c0
-Rebooting in 86400 seconds..
 
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
