@@ -2,120 +2,129 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7DAF651A38
-	for <lists+linux-can@lfdr.de>; Tue, 20 Dec 2022 06:27:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F2C1651A66
+	for <lists+linux-can@lfdr.de>; Tue, 20 Dec 2022 06:49:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbiLTF1c convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Tue, 20 Dec 2022 00:27:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50212 "EHLO
+        id S232394AbiLTFtn (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 20 Dec 2022 00:49:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiLTF1a (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Dec 2022 00:27:30 -0500
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8084FB9;
-        Mon, 19 Dec 2022 21:27:29 -0800 (PST)
-Received: by mail-pf1-f176.google.com with SMTP id 124so7818735pfy.0;
-        Mon, 19 Dec 2022 21:27:29 -0800 (PST)
+        with ESMTP id S229500AbiLTFtm (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Dec 2022 00:49:42 -0500
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EEEE20D;
+        Mon, 19 Dec 2022 21:49:41 -0800 (PST)
+Received: by mail-pj1-f54.google.com with SMTP id b13-20020a17090a5a0d00b0021906102d05so11042181pjd.5;
+        Mon, 19 Dec 2022 21:49:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9fgdIcNnHtv/UvgykaD5KYGncbrMyeY4TxNRMdBaCn4=;
-        b=LUEOG8MgTans4f30L2NcYeXm80k6UeeTVN6/YSumqyr1lAx4ghQXLfotJwxEWB5Bl3
-         Vvm2XlPQvFTk1A38TQu35mWDN8sxQiSHhHfYvP2BX1UmaJfU6DZivotRFo5jqfarDYb6
-         qPe4p3SKFWw/TPcnIBVxAPhdXAQbTWkvHSZwJeNqy5cA0UMIDGaUH+oJJ0ZFzrmlkPdD
-         0ftArsZ/4ErMsSkYs4XOg7+KOf2XCK1VdV30Q/mWZH5E295/ryJ2tWvPY1O4Sj2Y7wDc
-         blcqOXHxbxBXzAQvDPkuvB0HOOKZaCN3AszxSnVoJLilK3TAwmKOP8IR31IyPxLb+SFM
-         z35w==
-X-Gm-Message-State: AFqh2koqscvnC/i2VNTOXrYsEd4e1Fta5G8qdGtHTjSyMFL8FzZloYGG
-        EgXRD2EzJht8qxkuTSWMV+lq7OtddnLtcvEee0s=
-X-Google-Smtp-Source: AMrXdXuMHderDr6lO+hCyLC5OapmMH7udHPoJpowuLYkKofpHWJueSqy55RTn/lwwS+K7Ow/nnFJSwHN0+UusvdXErE=
-X-Received: by 2002:a63:584c:0:b0:484:2672:2c6a with SMTP id
- i12-20020a63584c000000b0048426722c6amr854698pgm.535.1671514048877; Mon, 19
- Dec 2022 21:27:28 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NRazUl1sRq3nHsv4iSumaCdK0OTW7rNnCuqNd/Xi384=;
+        b=yg88aU2ybi63pXPdtjQRhVODu9Ij/SEnSJYYXCEaFOcW2rNwe7TzsnI+VzX1jboYLF
+         N6cxQcECvRxgKTe4visDmUj98dGfnL7hsC/ju2+Ch6ARKQ+XzINm9WfozS8bsHkm0jI8
+         VZEG6qXFKMcI7q6DkjPv3NEg/IcH3qMIKUKXVDFn/fKawiB0SYqKrCkuR1dH6T+RKDPB
+         mlHfvs0Uj2GoQ03AUj+lDZMuNxy1urJ9SNsZevSjB2N6bxYj/OXL+3zmV6tCq8g/CGmQ
+         fniz+2oUcMOOaIYIA0Tq6+ATOOpJgWPUR/zZq0M1rMspNDmnkjR/77k08atOXCBiKLC3
+         Sz+Q==
+X-Gm-Message-State: AFqh2kr7rTm7byK/lipr+9Xc9LloyBgw3lpKRxE//hzd9xGMtfgQVM61
+        klKZZuT3lFUv08oiT8V0JFOYdND5yf3fSDI2KhE=
+X-Google-Smtp-Source: AMrXdXvfV1TvcAeZAo3YfDXWC5f/F5u6QP1TLuI8WS42DPMzbxPHdhhk5CIMP1LTlwDre2hjczIfEVotQS10Gt+3a4c=
+X-Received: by 2002:a17:90b:23ca:b0:221:4b1c:3b29 with SMTP id
+ md10-20020a17090b23ca00b002214b1c3b29mr1650503pjb.92.1671515380691; Mon, 19
+ Dec 2022 21:49:40 -0800 (PST)
 MIME-Version: 1.0
-References: <20221219212717.1298282-1-frank.jungclaus@esd.eu> <20221219212717.1298282-2-frank.jungclaus@esd.eu>
-In-Reply-To: <20221219212717.1298282-2-frank.jungclaus@esd.eu>
+References: <20221219212717.1298282-1-frank.jungclaus@esd.eu>
+In-Reply-To: <20221219212717.1298282-1-frank.jungclaus@esd.eu>
 From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Tue, 20 Dec 2022 14:27:17 +0900
-Message-ID: <CAMZ6RqKMSGpxBbgfD6Q4DB9V0EWmzXknUW6btWudtjDu=uF4iQ@mail.gmail.com>
-Subject: Re: [PATCH 3/3] can: esd_usb: Improved decoding for
- ESD_EV_CAN_ERROR_EXT messages
+Date:   Tue, 20 Dec 2022 14:49:29 +0900
+Message-ID: <CAMZ6RqKAmrgQUKLehUZx+hiSk3jD+o44uGtzrRFk+RBk8Bt81A@mail.gmail.com>
+Subject: Re: [PATCH 2/3] can: esd_usb: Improved behavior on esd CAN_ERROR_EXT
+ event (2)
 To:     Frank Jungclaus <frank.jungclaus@esd.eu>
 Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
         Wolfgang Grandegger <wg@grandegger.com>,
         =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Le mar. 20 déc. 2022 à 06:28, Frank Jungclaus <frank.jungclaus@esd.eu> a écrit :
+On Tue. 20 Dec. 2022 at 06:29, Frank Jungclaus <frank.jungclaus@esd.eu> wrote:
+> Started a rework initiated by Vincents remarks "You should not report
+> the greatest of txerr and rxerr but the one which actually increased."
+> [1]
+
+I do not see this comment being addressed. You are still assigning the
+flags depending on the highest value, not the one which actually
+changed.
+
+> and "As far as I understand, those flags should be set only when
+> the threshold is *reached*" [2] .
 >
-> As suggested by Marc there now is a union plus a struct ev_can_err_ext
-> for easier decoding of an ESD_EV_CAN_ERROR_EXT event message (which
-> simply is a rx_msg with some dedicated data).
+> Now setting the flags for CAN_ERR_CRTL_[RT]X_WARNING and
+> CAN_ERR_CRTL_[RT]X_PASSIVE regarding REC and TEC, when the
+> appropriate threshold is reached.
 >
-> Suggested-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> Link: https://lore.kernel.org/linux-can/20220621071152.ggyhrr5sbzvwpkpx@pengutronix.de/
+> Fixes: 96d8e90382dc ("can: Add driver for esd CAN-USB/2 device")
 > Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
+> Link: [1] https://lore.kernel.org/all/CAMZ6RqKGBWe15aMkf8-QLf-cOQg99GQBebSm+1wEzTqHgvmNuw@mail.gmail.com/
+> Link: [2] https://lore.kernel.org/all/CAMZ6Rq+QBO1yTX_o6GV0yhdBj-RzZSRGWDZBS0fs7zbSTy4hmA@mail.gmail.com/
 > ---
->  drivers/net/can/usb/esd_usb.c | 18 +++++++++++++-----
->  1 file changed, 13 insertions(+), 5 deletions(-)
+>  drivers/net/can/usb/esd_usb.c | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
 >
 > diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_usb.c
-> index 09745751f168..f90bb2c0ba15 100644
+> index 5e182fadd875..09745751f168 100644
 > --- a/drivers/net/can/usb/esd_usb.c
 > +++ b/drivers/net/can/usb/esd_usb.c
-> @@ -127,7 +127,15 @@ struct rx_msg {
->         u8 dlc;
->         __le32 ts;
->         __le32 id; /* upper 3 bits contain flags */
-> -       u8 data[8];
-> +       union {
-> +               u8 data[8];
-> +               struct {
-> +                       u8 status; /* CAN Controller Status */
-> +                       u8 ecc;    /* Error Capture Register */
-> +                       u8 rec;    /* RX Error Counter */
-> +                       u8 tec;    /* TX Error Counter */
-> +               } ev_can_err_ext;  /* For ESD_EV_CAN_ERROR_EXT */
-> +       };
->  };
+> @@ -255,10 +255,18 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
+>                                 can_bus_off(priv->netdev);
+>                                 break;
+>                         case ESD_BUSSTATE_WARN:
+> +                               cf->can_id |= CAN_ERR_CRTL;
+> +                               cf->data[1] = (txerr > rxerr) ?
+> +                                               CAN_ERR_CRTL_TX_WARNING :
+> +                                               CAN_ERR_CRTL_RX_WARNING;
+
+Nitpick: when a ternary operator is too long to fit on one line,
+prefer an if/else.
+
+>                                 priv->can.state = CAN_STATE_ERROR_WARNING;
+>                                 priv->can.can_stats.error_warning++;
+>                                 break;
+>                         case ESD_BUSSTATE_ERRPASSIVE:
+> +                               cf->can_id |= CAN_ERR_CRTL;
+> +                               cf->data[1] = (txerr > rxerr) ?
+> +                                               CAN_ERR_CRTL_TX_PASSIVE :
+> +                                               CAN_ERR_CRTL_RX_PASSIVE;
+
+Same.
+
+>                                 priv->can.state = CAN_STATE_ERROR_PASSIVE;
+>                                 priv->can.can_stats.error_passive++;
+>                                 break;
+> @@ -296,12 +304,6 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
+>                         /* Bit stream position in CAN frame as the error was detected */
+>                         cf->data[3] = ecc & SJA1000_ECC_SEG;
 >
->  struct tx_msg {
-> @@ -229,10 +237,10 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
->         u32 id = le32_to_cpu(msg->msg.rx.id) & ESD_IDMASK;
->
->         if (id == ESD_EV_CAN_ERROR_EXT) {
-> -               u8 state = msg->msg.rx.data[0];
-> -               u8 ecc = msg->msg.rx.data[1];
-> -               u8 rxerr = msg->msg.rx.data[2];
-> -               u8 txerr = msg->msg.rx.data[3];
-> +               u8 state = msg->msg.rx.ev_can_err_ext.status;
-> +               u8 ecc = msg->msg.rx.ev_can_err_ext.ecc;
-> +               u8 rxerr = msg->msg.rx.ev_can_err_ext.rec;
-> +               u8 txerr = msg->msg.rx.ev_can_err_ext.tec;
+> -                       if (priv->can.state == CAN_STATE_ERROR_WARNING ||
+> -                           priv->can.state == CAN_STATE_ERROR_PASSIVE) {
+> -                               cf->data[1] = (txerr > rxerr) ?
+> -                                       CAN_ERR_CRTL_TX_PASSIVE :
+> -                                       CAN_ERR_CRTL_RX_PASSIVE;
+> -                       }
+>                         cf->data[6] = txerr;
+>                         cf->data[7] = rxerr;
+>                 }
 
-I do not like how you have to write msg->msg.rx.something. I think it
-would be better to make the union within struct esd_usb_msg anonymous:
-
-  https://elixir.bootlin.com/linux/latest/source/drivers/net/can/usb/esd_usb.c#L169
-
-That said, this is not a criticism of this patch but more something to
-be addressed in a separate clean-up patch.
-
->                 netdev_dbg(priv->netdev,
->                            "CAN_ERR_EV_EXT: dlc=%#02x state=%02x ecc=%02x rec=%02x tec=%02x\n",
-> --
-> 2.25.1
->
+Yours sincerely,
+Vincent Mailhol
