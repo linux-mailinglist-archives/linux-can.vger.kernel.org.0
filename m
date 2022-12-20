@@ -2,88 +2,101 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A764A65189B
-	for <lists+linux-can@lfdr.de>; Tue, 20 Dec 2022 03:00:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EE2A651A32
+	for <lists+linux-can@lfdr.de>; Tue, 20 Dec 2022 06:17:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232801AbiLTCAV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 19 Dec 2022 21:00:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53352 "EHLO
+        id S229500AbiLTFQz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 20 Dec 2022 00:16:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231987AbiLTCAU (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 19 Dec 2022 21:00:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2D12BDE;
-        Mon, 19 Dec 2022 18:00:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E37EC611CA;
-        Tue, 20 Dec 2022 02:00:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 41844C433D2;
-        Tue, 20 Dec 2022 02:00:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671501618;
-        bh=FB92SJH8/78WpyjWYz65ANUM0x4mULE8VcFQ1X0GBkI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=AI7u4FFslaHCgeswT1cpOrWcZQJoZGWmeFrQyZ0oYBRePxYSq9bbytrB/A+WvdsuT
-         undNu2nwMMgse5dvuJC4MPU2EmAqiawXNmKobrKVV2Ewp/FHB7bSrde8TBQqwrGPlR
-         9rlrnweqpuG7rvxxsjvYPfK4+O4fhZ3EI2EIGxh9pntSx7K8ffNgi79arqTG9Af5dn
-         U2AOcEgmQXGYCcT7dpy/LO8+emcQgPpS0q+894uNimbwSieB1BYpwjlu955xLTeyEG
-         tn8KQpA8TXGm/lJGWPBzKCdHNaYY/3Du33m7SnGWe3c5RgElbOWzQnhig7YD2hrRhf
-         X9vdd/ZmGTNOg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1E57BC41622;
-        Tue, 20 Dec 2022 02:00:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229454AbiLTFQx (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Dec 2022 00:16:53 -0500
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6038E60DF;
+        Mon, 19 Dec 2022 21:16:51 -0800 (PST)
+Received: by mail-pf1-f175.google.com with SMTP id k79so7759040pfd.7;
+        Mon, 19 Dec 2022 21:16:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=y+Qr8XUVpxB/+TLY0Usi8j5C3U+ntsf3C3rD3sN9jR4=;
+        b=s4tZtPN2g9gpUdRv1EJX0cbBYlfQotV2IW2D8jRMG5Jucu1czIFnR3hL9t96Umth3j
+         Ph//UGAQegLEjx4P3dB4Tz2Ek/4VqFkkJRKIn4VUOWjT3TX7E8REvGF6bLWaVpOSygnh
+         X4c+lu7+0bOTkNRUYRQLvOxdhXrUtmyxqhmo5zQoZGf55EnTPNJeKt3vfyfI614uChyd
+         Ii3op6cnuHLg1IecjWC69dIJKivYm6AF5ypSHU4f7wFN47EX5agxWEg6bOOkIVcvFXjI
+         142RmAHkoerDJlHzZzRoDWHaA1eyZHkuai7DT9NmZmKC4jnsgTHU22dsGTXm4N6WY7kk
+         ogIA==
+X-Gm-Message-State: AFqh2kpHJT2ePNaOlBhoK3KI2L9g9sobNJMHLVkhrVMiKbrPns4oWObD
+        blyaECJoYpjKj+RbmL7/IAqE65Ps95cLoYNvabU=
+X-Google-Smtp-Source: AMrXdXs15pGNbOpDcT2+T1FhTjoIu/dIQv+ESXHxbEPaBKEcsgo0JwldUymd3df/4+UrhYKmOdn//GLV9KFNmSUVd0k=
+X-Received: by 2002:a63:2163:0:b0:483:f80c:cdf3 with SMTP id
+ s35-20020a632163000000b00483f80ccdf3mr798360pgm.70.1671513410744; Mon, 19 Dec
+ 2022 21:16:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 1/3] Documentation: devlink: add missing toc entry for
- etas_es58x devlink doc
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167150161811.12144.14366546302831051201.git-patchwork-notify@kernel.org>
-Date:   Tue, 20 Dec 2022 02:00:18 +0000
-References: <20221219155210.1143439-2-mkl@pengutronix.de>
-In-Reply-To: <20221219155210.1143439-2-mkl@pengutronix.de>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, kernel@pengutronix.de,
-        mailhol.vincent@wanadoo.fr, sfr@canb.auug.org.au, lkp@intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221219212013.1294820-1-frank.jungclaus@esd.eu> <20221219212013.1294820-2-frank.jungclaus@esd.eu>
+In-Reply-To: <20221219212013.1294820-2-frank.jungclaus@esd.eu>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Tue, 20 Dec 2022 14:16:39 +0900
+Message-ID: <CAMZ6RqKc0mvfQGEGb7gCE69Mskhzq5YKF88Jhe+1VR=43YW3Xg@mail.gmail.com>
+Subject: Re: [PATCH 1/3] can: esd_usb: Improved behavior on esd CAN_ERROR_EXT
+ event (1)
+To:     Frank Jungclaus <frank.jungclaus@esd.eu>
+Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello:
+On Tue. 20 Dec. 2022 at 06:25, Frank Jungclaus <frank.jungclaus@esd.eu> wrote:
+>
+> Moved the supply for cf->data[3] (bit stream position of CAN error)
+> outside of the "switch (ecc & SJA1000_ECC_MASK){}"-statement, because
+> this position is independent of the error type.
+>
+> Fixes: 96d8e90382dc ("can: Add driver for esd CAN-USB/2 device")
+> Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
+> ---
+>  drivers/net/can/usb/esd_usb.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_usb.c
+> index 42323f5e6f3a..5e182fadd875 100644
+> --- a/drivers/net/can/usb/esd_usb.c
+> +++ b/drivers/net/can/usb/esd_usb.c
+> @@ -286,7 +286,6 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
+>                                 cf->data[2] |= CAN_ERR_PROT_STUFF;
+>                                 break;
+>                         default:
+> -                               cf->data[3] = ecc & SJA1000_ECC_SEG;
+>                                 break;
+>                         }
+>
+> @@ -294,6 +293,9 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
+>                         if (!(ecc & SJA1000_ECC_DIR))
+>                                 cf->data[2] |= CAN_ERR_PROT_TX;
+>
+> +                       /* Bit stream position in CAN frame as the error was detected */
+> +                       cf->data[3] = ecc & SJA1000_ECC_SEG;
 
-This series was applied to netdev/net.git (master)
-by Marc Kleine-Budde <mkl@pengutronix.de>:
+Can you confirm that the value returned by the device matches the
+specifications from linux/can/error.h?
 
-On Mon, 19 Dec 2022 16:52:08 +0100 you wrote:
-> From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> 
-> toc entry is missing for etas_es58x devlink doc and triggers this warning:
-> 
->   Documentation/networking/devlink/etas_es58x.rst: WARNING: document isn't included in any toctree
-> 
-> Add the missing toc entry.
-> 
-> [...]
+  https://elixir.bootlin.com/linux/latest/source/include/uapi/linux/can/error.h#L90
 
-Here is the summary with links:
-  - [net,1/3] Documentation: devlink: add missing toc entry for etas_es58x devlink doc
-    https://git.kernel.org/netdev/net/c/115dd5469019
-  - [net,2/3] can: flexcan: avoid unbalanced pm_runtime_enable warning
-    https://git.kernel.org/netdev/net/c/3bc2afcba812
-  - [net,3/3] can: kvaser_usb: hydra: help gcc-13 to figure out cmd_len
-    https://git.kernel.org/netdev/net/c/f006229135b7
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+>                         if (priv->can.state == CAN_STATE_ERROR_WARNING ||
+>                             priv->can.state == CAN_STATE_ERROR_PASSIVE) {
+>                                 cf->data[1] = (txerr > rxerr) ?
+> --
+> 2.25.1
+>
