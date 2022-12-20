@@ -2,126 +2,125 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C07FA651CA4
-	for <lists+linux-can@lfdr.de>; Tue, 20 Dec 2022 09:53:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BED71651CCF
+	for <lists+linux-can@lfdr.de>; Tue, 20 Dec 2022 10:07:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233148AbiLTIxm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Tue, 20 Dec 2022 03:53:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52920 "EHLO
+        id S233240AbiLTJHI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 20 Dec 2022 04:07:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiLTIxl (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Dec 2022 03:53:41 -0500
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004485FB8;
-        Tue, 20 Dec 2022 00:53:40 -0800 (PST)
-Received: by mail-pj1-f52.google.com with SMTP id gt4so11765393pjb.1;
-        Tue, 20 Dec 2022 00:53:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gYfOI5g0mVdE94ssvdHEuS1TjAEmKRYHyW9ESDKrcA4=;
-        b=emWqv9vdcgwTplhb4c3XNNCJCPsIFPUeIGwJMzRTS4q0iY+e8myfQjXo1WFsWiTsm0
-         Vk1MmCqoS+ip12P/nM2+Ji8buJr+nYKpcl4/dDCawLQbkJbdxiFl5290GZG5jMjtRjL7
-         1YpbjI13Uuki2QvdfZp+adQndBXT9463BEuZwBrdM4D3gXWr9sY2zh6eVxjprd2/mJjI
-         qQxMmdY/37u7s2pmkTdtV93QKDM9kUM+RicYdgNdYszDMrGcpuWaPABRyPndCvu3FHbG
-         ycegMvgekACIRW6rtyJv2xYiBGFqCoNYefT/dCCiPmhRTBh2HmE2YYt0KjokthT+Ilfu
-         6WGg==
-X-Gm-Message-State: AFqh2kpAYXuF76z30WZgXhlJmmujSyrdXqbrY5QPcyJfHkazlPEKoa74
-        1jNUNJ+zR6p2qcs9k72q15OMmS5PPaOt0jXSTcc=
-X-Google-Smtp-Source: AMrXdXsZ2KHkjkBDRh6WyLUmshs+zkXMjFWlFSM4tkglDiTe7syCyGap/78L8ZfxENi/dlDCU3nsO45stSaQPa4aMiQ=
-X-Received: by 2002:a17:90a:c7d3:b0:21c:bc8b:b080 with SMTP id
- gf19-20020a17090ac7d300b0021cbc8bb080mr1574916pjb.19.1671526419769; Tue, 20
- Dec 2022 00:53:39 -0800 (PST)
-MIME-Version: 1.0
-References: <20221219212717.1298282-1-frank.jungclaus@esd.eu>
- <20221219212717.1298282-2-frank.jungclaus@esd.eu> <CAMZ6RqKMSGpxBbgfD6Q4DB9V0EWmzXknUW6btWudtjDu=uF4iQ@mail.gmail.com>
-In-Reply-To: <CAMZ6RqKMSGpxBbgfD6Q4DB9V0EWmzXknUW6btWudtjDu=uF4iQ@mail.gmail.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Tue, 20 Dec 2022 17:53:28 +0900
-Message-ID: <CAMZ6RqKRzJwmMShVT9QKwiQ5LJaQupYqkPkKjhRBsP=12QYpfA@mail.gmail.com>
+        with ESMTP id S232442AbiLTJG5 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Dec 2022 04:06:57 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7A76540
+        for <linux-can@vger.kernel.org>; Tue, 20 Dec 2022 01:06:54 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1p7YZ4-0002Et-EN; Tue, 20 Dec 2022 10:05:34 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:8d35:355:a4c0:ddb8])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 760C2143A12;
+        Tue, 20 Dec 2022 09:05:33 +0000 (UTC)
+Date:   Tue, 20 Dec 2022 10:05:25 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Frank Jungclaus <frank.jungclaus@esd.eu>,
+        linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
+        Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 3/3] can: esd_usb: Improved decoding for
  ESD_EV_CAN_ERROR_EXT messages
-To:     Frank Jungclaus <frank.jungclaus@esd.eu>
-Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Message-ID: <20221220090525.tvmgmtffmy7ruyi3@pengutronix.de>
+References: <20221219212717.1298282-1-frank.jungclaus@esd.eu>
+ <20221219212717.1298282-2-frank.jungclaus@esd.eu>
+ <CAMZ6RqKMSGpxBbgfD6Q4DB9V0EWmzXknUW6btWudtjDu=uF4iQ@mail.gmail.com>
+ <CAMZ6RqKRzJwmMShVT9QKwiQ5LJaQupYqkPkKjhRBsP=12QYpfA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="l2o3hyqitwoctluq"
+Content-Disposition: inline
+In-Reply-To: <CAMZ6RqKRzJwmMShVT9QKwiQ5LJaQupYqkPkKjhRBsP=12QYpfA@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue. 20 Dec. 2022 at 14:27, Vincent MAILHOL
-<mailhol.vincent@wanadoo.fr> wrote:
-> Le mar. 20 déc. 2022 à 06:28, Frank Jungclaus <frank.jungclaus@esd.eu> a écrit :
-> > As suggested by Marc there now is a union plus a struct ev_can_err_ext
-> > for easier decoding of an ESD_EV_CAN_ERROR_EXT event message (which
-> > simply is a rx_msg with some dedicated data).
-> >
-> > Suggested-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> > Link: https://lore.kernel.org/linux-can/20220621071152.ggyhrr5sbzvwpkpx@pengutronix.de/
-> > Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
-> > ---
-> >  drivers/net/can/usb/esd_usb.c | 18 +++++++++++++-----
-> >  1 file changed, 13 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_usb.c
-> > index 09745751f168..f90bb2c0ba15 100644
-> > --- a/drivers/net/can/usb/esd_usb.c
-> > +++ b/drivers/net/can/usb/esd_usb.c
-> > @@ -127,7 +127,15 @@ struct rx_msg {
-> >         u8 dlc;
-> >         __le32 ts;
-> >         __le32 id; /* upper 3 bits contain flags */
-> > -       u8 data[8];
-> > +       union {
-> > +               u8 data[8];
-> > +               struct {
-> > +                       u8 status; /* CAN Controller Status */
-> > +                       u8 ecc;    /* Error Capture Register */
-> > +                       u8 rec;    /* RX Error Counter */
-> > +                       u8 tec;    /* TX Error Counter */
-> > +               } ev_can_err_ext;  /* For ESD_EV_CAN_ERROR_EXT */
-> > +       };
-> >  };
-> >
-> >  struct tx_msg {
-> > @@ -229,10 +237,10 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
-> >         u32 id = le32_to_cpu(msg->msg.rx.id) & ESD_IDMASK;
-> >
-> >         if (id == ESD_EV_CAN_ERROR_EXT) {
-> > -               u8 state = msg->msg.rx.data[0];
-> > -               u8 ecc = msg->msg.rx.data[1];
-> > -               u8 rxerr = msg->msg.rx.data[2];
-> > -               u8 txerr = msg->msg.rx.data[3];
-> > +               u8 state = msg->msg.rx.ev_can_err_ext.status;
-> > +               u8 ecc = msg->msg.rx.ev_can_err_ext.ecc;
-> > +               u8 rxerr = msg->msg.rx.ev_can_err_ext.rec;
-> > +               u8 txerr = msg->msg.rx.ev_can_err_ext.tec;
->
-> I do not like how you have to write msg->msg.rx.something. I think it
-> would be better to make the union within struct esd_usb_msg anonymous:
->
->   https://elixir.bootlin.com/linux/latest/source/drivers/net/can/usb/esd_usb.c#L169
 
-Or maybe just declare esd_usb_msg as an union instead of a struct:
+--l2o3hyqitwoctluq
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-  union esd_usb_msg {
-          struct header_msg hdr;
-          struct version_msg version;
-          struct version_reply_msg version_reply;
-          struct rx_msg rx;
-          struct tx_msg tx;
-          struct tx_done_msg txdone;
-          struct set_baudrate_msg setbaud;
-          struct id_filter_msg filter;
-  };
+On 20.12.2022 17:53:28, Vincent MAILHOL wrote:
+> > >  struct tx_msg {
+> > > @@ -229,10 +237,10 @@ static void esd_usb_rx_event(struct esd_usb_net=
+_priv *priv,
+> > >         u32 id =3D le32_to_cpu(msg->msg.rx.id) & ESD_IDMASK;
+> > >
+> > >         if (id =3D=3D ESD_EV_CAN_ERROR_EXT) {
+> > > -               u8 state =3D msg->msg.rx.data[0];
+> > > -               u8 ecc =3D msg->msg.rx.data[1];
+> > > -               u8 rxerr =3D msg->msg.rx.data[2];
+> > > -               u8 txerr =3D msg->msg.rx.data[3];
+> > > +               u8 state =3D msg->msg.rx.ev_can_err_ext.status;
+> > > +               u8 ecc =3D msg->msg.rx.ev_can_err_ext.ecc;
+> > > +               u8 rxerr =3D msg->msg.rx.ev_can_err_ext.rec;
+> > > +               u8 txerr =3D msg->msg.rx.ev_can_err_ext.tec;
+> >
+> > I do not like how you have to write msg->msg.rx.something. I think it
+> > would be better to make the union within struct esd_usb_msg anonymous:
+> >
+> >   https://elixir.bootlin.com/linux/latest/source/drivers/net/can/usb/es=
+d_usb.c#L169
+>=20
+> Or maybe just declare esd_usb_msg as an union instead of a struct:
+
++1
+
+>   union esd_usb_msg {
+>           struct header_msg hdr;
+>           struct version_msg version;
+>           struct version_reply_msg version_reply;
+>           struct rx_msg rx;
+>           struct tx_msg tx;
+>           struct tx_done_msg txdone;
+>           struct set_baudrate_msg setbaud;
+>           struct id_filter_msg filter;
+>   };
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--l2o3hyqitwoctluq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOhetIACgkQrX5LkNig
+012WuQf+IkVianuuTf4emi0PthBoG9enYth6Nfh6yWTLf0lV3jR5vcMvxG8yumAm
+zx1cOZCy5lJmn+TWdEAuqGl7Pe4jC+JNsoZSDMe/2psnH9EVwMonpQFkC5LLi1vt
+7+6zDZRHV6xxbAvu4m3cZaGFrWpYFSmUubbXZdnrrvw2TNbX7vMAC5oRXOv6Bio5
+3yAX5F7Ax6sKiG/YmkrzaqxlvFWwhu2VT4L4qInKAW0D7ePx7V+IWZ1muKaNUV+j
+LqFUqQlAaHJ3CFTkbXaSfw2Y+wGonZ+9mmuPz7j9hUM9PUIATlUAfDrAsbv5y+NZ
+c1g2LnpW73YZndeI7oPwqfCf/Tb+Eg==
+=9Pzh
+-----END PGP SIGNATURE-----
+
+--l2o3hyqitwoctluq--
