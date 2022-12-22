@@ -2,45 +2,42 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B989165436D
-	for <lists+linux-can@lfdr.de>; Thu, 22 Dec 2022 15:56:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8CB465436C
+	for <lists+linux-can@lfdr.de>; Thu, 22 Dec 2022 15:56:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbiLVO4e (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 22 Dec 2022 09:56:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47938 "EHLO
+        id S235299AbiLVO4d (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 22 Dec 2022 09:56:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230354AbiLVO4d (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 22 Dec 2022 09:56:33 -0500
+        with ESMTP id S229811AbiLVO4c (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 22 Dec 2022 09:56:32 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825551EAD5
-        for <linux-can@vger.kernel.org>; Thu, 22 Dec 2022 06:56:32 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 787151EAD0
+        for <linux-can@vger.kernel.org>; Thu, 22 Dec 2022 06:56:31 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1p8Mzm-00025w-9H; Thu, 22 Dec 2022 15:56:30 +0100
+        id 1p8Mzl-00025u-V6; Thu, 22 Dec 2022 15:56:30 +0100
 Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id E64B814548F;
-        Thu, 22 Dec 2022 13:02:20 +0000 (UTC)
-Date:   Thu, 22 Dec 2022 14:02:19 +0100
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 5B7F11455D3;
+        Thu, 22 Dec 2022 14:51:28 +0000 (UTC)
+Date:   Thu, 22 Dec 2022 15:51:28 +0100
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     Stefan =?utf-8?B?QWx0aMO2ZmVy?= <Stefan.Althoefer@janztec.com>
-Cc:     "Thomas.Kopp@microchip.com" <Thomas.Kopp@microchip.com>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Subject: Re: AW: mcp251xfd: Bad message receiption
-Message-ID: <20221222130219.xrfnm54g6lfjozvs@pengutronix.de>
+Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Subject: Re: mcp251xfd: Bad message receiption
+Message-ID: <20221222145128.y4j2iyngywprecoy@pengutronix.de>
 References: <FR0P281MB1966273C216630B120ABB6E197E89@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
- <PH7PR11MB6498DA4A162106BD4ACB7551FBE89@PH7PR11MB6498.namprd11.prod.outlook.com>
- <FR0P281MB1966CA0C12ED24574368A36E97E89@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="s3ewm6inoau7ko35"
+        protocol="application/pgp-signature"; boundary="5nckhx5cxjusyhay"
 Content-Disposition: inline
-In-Reply-To: <FR0P281MB1966CA0C12ED24574368A36E97E89@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
+In-Reply-To: <FR0P281MB1966273C216630B120ABB6E197E89@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -54,86 +51,79 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---s3ewm6inoau7ko35
+--5nckhx5cxjusyhay
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 22.12.2022 10:30:22, Stefan Alth=C3=B6fer wrote:
-> Hi Thomas,
+On 22.12.2022 07:44:59, Stefan Alth=C3=B6fer wrote:
+> I'm using the MCP2518FD CAN controller with Rasperry PI 4 and are
+> suffering from wrong data reception.
 >=20
-> > Do I read the pdf correctly (based on the /var/log stuff) that you have=
- two MCP2518FD connected to a Pi4B and=20
-> > both of them are running in internal/external loopback mode no interact=
-ion between them and the SPIs are separate?
+> My hardware is a Model 4 B with MCP2581 Click board(s) attached with a
+> prototype (hand-made) interface PCB, as well as baseboards for a CM4
+> with a single MCP2518 on it. The error occurs on both of them.
+
+Do you get the same error if the test is only running on a single
+mcp2518fd?
+
+Do you get the same error if only a single mcp2518fd is attached to the
+raspi?
+
+> I have reduced my test case to a simple single thread self-receipt test:
+>     * TX two messages
+>     * Wait for RX and send out a new message on every receipt
+>     * TX for messages in total
+
+Can you share the config/scripts/... to set up the interfaces?
+Can you share the test code?
+
+> Refer to the attached PDF for some error cases.
+
+The text in the PDF is rendered down to paths only. So not select- nor
+searchable, please send plain text files for further logs.
+
+> Last send frames are at the top of the logs. You can see that wrong
+> messages appear in the RX queue, which have been successfully
+> transmitted in previous test loop. The data that is actually sent out
+> is correct however (checked with an external logger for some cases).
+
+Looking at the first page, there are 2 identical lines marked in red.
+The next page show 4 red lines.
+
+So under certain load situations you see that old messages are received
+twice. If I remember correctly I heard something similar from someone
+else before. It occurred with a modified driver. For various reasons
+that has never debugged. I think I've fixed the root cause of the
+problem during the v5.18 development cycle.
+
+> The error appeared very often (every 1..10 minutes) when I was using
+> kernel raspberrypi 5.15.32-v7l+ and reduced to once in several hours
+> when I switched to raspberrypi 6.0.12-v7l+. BTW I modified the
+> loopback to external loopback To check for correct transmission. No
+> other changes to the driver as taken from the Raspbian repository.
+
+Can you share your kernel, including the modifications?
+
+> I see infrequent mcp251xfd CRC read errors. I think those are due to
+> the 2518 SPI errata. However they don't occur at the time when the
+> wrong messages are received (refer to the PDF).
 >=20
-> Yes. For the loopback test the CANs are separate. Errors also occur when =
-sending messages between
-> the controllers, but I think that is more difficult to analyze.
->=20
-> root@raspberrypi:~# ip -d -s a s can0
-> 4: can0: <NOARP,UP,LOWER_UP,ECHO> mtu 72 qdisc pfifo_fast state UP group =
-default qlen 1000
->     link/can  promiscuity 0 minmtu 0 maxmtu 0
->     can <LOOPBACK,BERR-REPORTING,FD> state ERROR-ACTIVE (berr-counter tx =
-0 rx 0) restart-ms 0
->           bitrate 1000000 sample-point 0.800
->           tq 25 prop-seg 15 phase-seg1 16 phase-seg2 8 sjw 6
->           mcp251xfd: tseg1 2..256 tseg2 1..128 sjw 1..128 brp 1..256 brp-=
-inc 1
->           dbitrate 4000000 dsample-point 0.800
->           dtq 25 dprop-seg 3 dphase-seg1 4 dphase-seg2 2 dsjw 2
->           mcp251xfd: dtseg1 1..32 dtseg2 1..16 dsjw 1..16 dbrp 1..256 dbr=
-p-inc 1
->           clock 40000000
->           re-started bus-errors arbit-lost error-warn error-pass bus-off
->           0          0          0          0          0          0       =
-  numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535
->     RX: bytes  packets  errors  dropped missed  mcast
->     3097429872 2517466658 0       0       0       0
->     TX: bytes  packets  errors  dropped carrier collsns
->     3696197680 1258733264 0       0       0       0
-> root@raspberrypi:~# ip -d -s a s can1
-> 5: can1: <NOARP,UP,LOWER_UP,ECHO> mtu 72 qdisc pfifo_fast state UP group =
-default qlen 1000
->     link/can  promiscuity 0 minmtu 0 maxmtu 0
->     can <LOOPBACK,BERR-REPORTING,FD> state ERROR-ACTIVE (berr-counter tx =
-0 rx 0) restart-ms 0
->           bitrate 1000000 sample-point 0.800
->           tq 25 prop-seg 15 phase-seg1 16 phase-seg2 8 sjw 6
->           mcp251xfd: tseg1 2..256 tseg2 1..128 sjw 1..128 brp 1..256 brp-=
-inc 1
->           dbitrate 4000000 dsample-point 0.800
->           dtq 25 dprop-seg 3 dphase-seg1 4 dphase-seg2 2 dsjw 2
->           mcp251xfd: dtseg1 1..32 dtseg2 1..16 dsjw 1..16 dbrp 1..256 dbr=
-p-inc 1
->           clock 40000000
->           re-started bus-errors arbit-lost error-warn error-pass bus-off
->           0          112256     0          1          3          1       =
-  numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535
-                       ^^^^^^                ^          ^          ^
->     RX: bytes  packets  errors  dropped missed  mcasta
->     2590649888 773910314 3       0       0       0
->     TX: bytes  packets  errors  dropped carrier collsns
->     3442619696 386944310 112254  12      0       0
+> Questions:
+> - Is this a known problem?
 
-Why do you have so many errors on can1? The device event went into bus-off.
+No - it should not happen on any mainline kernel.
 
-> This is the SPI setup for the dual CAN PI:
->=20
-> dtparam=3Dspi=3Don
-> dtoverlay=3Dspi6-1cs
-> # mcp251xfd DTS for RPI4 default CAN on SPI6.0
-> dtoverlay=3Dmcp251xfd-spi6-0,interrupt_pin=3D25,oscillator=3D40000000
-> # mcp251xfd DTS for RPI4 CAN extension on SPI0.0
-> dtoverlay=3Dmcp251xfd,spi0-0,interrupt=3D16,oscillator=3D40000000
->=20
-> Or did you mean something else with "script"?
+> - What did change from 5.15.32 to 6.0.12 to reduce the error rate?
+>   Maybe this is just because of a change in execution timing?
 
-Can you share your "scselftest" program?
+Quite a lot: Next to probably unrelated changes (e.g. PLL support), the
+workarounds for CRC errors were updated, in v5.18 multiple RX FIFOs are
+used and IRQ coalescing support has been added.
 
-> I'll try the register dump when I suffer the next error ;-)
+> - Any suggestion how I can step further in fixing this issue.
 
+regards,
 Marc
 
 --=20
@@ -142,19 +132,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---s3ewm6inoau7ko35
+--5nckhx5cxjusyhay
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOkVVcACgkQrX5LkNig
-013hzggAh32Kh5OycMwfn2lQQeN/0XDzNyZelNlNTvO4l8gmh5Md6NoUGL0/9taK
-bJDLD8cvw53sSuoPn9w4TTY+9W3ouOchR0Tnb/5/lkG2B/7LcaSMJQPUdKEe1cw8
-FE9PCRdX5tl4+2w+EzUfGHVm8s6ug5+QeRv/rAQPAnTI5598MV/UFnCtPTcfI5ZX
-6dU89gFSxrOj2JVL2Nek/IXaCMPzSGWNOoZ0peFDHroAHHkuufkrHz2ZyO/zFTkV
-YlpOfB1gra0NG95RBRB3tdZMeMHbCJ6n91QOiJaMocSZGjWmj/0n4CGyqYJS4L99
-KG/1NnbotMhaEFc6ycy5Ld+3arhN9A==
-=EeM5
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOkbuwACgkQrX5LkNig
+011JKQgApMbjEdy/6ESscPmeqftEsjN2eShDty8RJwNB17bv27c4CQcpFUOG8hqO
+QeMksqMlYu+LI9ncHWnPyYfySBYvxoCkA/wP1lNZP2U22Ipbb5mqI10Ak4kxtqN9
+IEg0dgxgI1CsES7J8jrWXaCaE+4UaA56hlHX/T/X3sSjz16/N/IQqY5KltM20xrQ
+hC+hJyId5aWjdwdktMIJCHMzngkTqAJ5jT1GV7Hj3ZduWxu6YdgtZjxmDdO0zhJz
+u0l45N7cJNpFskwNw0V8pvpB4c8Gcbc1zQWvB/XWWAb6E2QBepvidtgUuevygWBx
+CiA6c5M7ELV1j0EQdoNM3qW8lR6HpQ==
+=1c+V
 -----END PGP SIGNATURE-----
 
---s3ewm6inoau7ko35--
+--5nckhx5cxjusyhay--
