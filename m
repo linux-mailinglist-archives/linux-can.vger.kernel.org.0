@@ -2,1333 +2,500 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4096A66168E
-	for <lists+linux-can@lfdr.de>; Sun,  8 Jan 2023 17:26:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D519661F05
+	for <lists+linux-can@lfdr.de>; Mon,  9 Jan 2023 08:10:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233311AbjAHQ0P (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 8 Jan 2023 11:26:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60488 "EHLO
+        id S233500AbjAIHK3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 9 Jan 2023 02:10:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233502AbjAHQ0K (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 8 Jan 2023 11:26:10 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A7A1E1
-        for <linux-can@vger.kernel.org>; Sun,  8 Jan 2023 08:26:07 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id s5so9166349edc.12
-        for <linux-can@vger.kernel.org>; Sun, 08 Jan 2023 08:26:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=H7yzO8MAfcrZVpps2XPs/dks+o5rTT0Vq51pznY+xeQ=;
-        b=Bpr/4xCX97jqh2SVgvzn1xcxVP+4Goip5q/qIr0GAxR1PTknNIJw0v0qR/5XcTGLGA
-         9A94BNQkDlX6NXXiKCUzrDQ3H5l9SdqpZFZ6pCFTP4UZFTpuTHugqVbFy8cepCTrh1H3
-         Pz0VYOOdf6BrTUH83iuYCVbpdC6aUUW+wHOnc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=H7yzO8MAfcrZVpps2XPs/dks+o5rTT0Vq51pznY+xeQ=;
-        b=ENHrB2TbLygY9K9OUOuNN4Ea+xvPaGAXGL6jsu3kbTg6Falf1oAyboM6g9mkrKhDwS
-         yMWwckucakprxpoHrifj6iRWlYBA0oxEX7uudKPbNUNCS7DwbA9A9Wgrngdd44WvB8du
-         aLwbFcF4bckHp9sFYzGcnxrYYNOiRcj+7A+Cffb3eV+GTy1XCdIaucaOjffX7VMGrMk0
-         WAdRCgnDrcCyrZ+FALZbttMQCRJ86/9fkCyrl0BE7aBbAxwzDPHwbQQgfiR6feFY2yYP
-         CQ9OHLSAUx407fAsR5vsndUtu0gEJdExHU+HVH2p+Iri8d5VVXZ8tH0rxVVt9YFp0NKp
-         mX2Q==
-X-Gm-Message-State: AFqh2kov2PxuChjNpDglNr17fQmWsu/lxM4tBsvnyW/Hpr6UV+aUJUCf
-        tMrHzt7H6wlOLyahP2jZOLJAVw==
-X-Google-Smtp-Source: AMrXdXvL/Klq/xoIXYEcEeU5uMF0RS6whtpbJt64jzSG3Sutt2huzYSnzXywATqXosFAaNHgC7zpOg==
-X-Received: by 2002:a05:6402:95a:b0:496:37c9:b8e6 with SMTP id h26-20020a056402095a00b0049637c9b8e6mr7443555edz.8.1673195165786;
-        Sun, 08 Jan 2023 08:26:05 -0800 (PST)
-Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-80-180-23-57.pool80180.interbusiness.it. [80.180.23.57])
-        by smtp.gmail.com with ESMTPSA id n3-20020aa7c443000000b00486074b4ce4sm2659614edr.68.2023.01.08.08.26.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Jan 2023 08:26:05 -0800 (PST)
-From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>, michael@amarulasolutions.com,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: [RESEND RFC PATCH v5 5/5] can: bxcan: add support for ST bxCAN controller
-Date:   Sun,  8 Jan 2023 17:25:54 +0100
-Message-Id: <20230108162554.8375-6-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20230108162554.8375-1-dario.binacchi@amarulasolutions.com>
-References: <20230108162554.8375-1-dario.binacchi@amarulasolutions.com>
+        with ESMTP id S229650AbjAIHK0 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 9 Jan 2023 02:10:26 -0500
+Received: from DEU01-FR2-obe.outbound.protection.outlook.com (mail-fr2deu01on2062.outbound.protection.outlook.com [40.107.135.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A30C2674
+        for <linux-can@vger.kernel.org>; Sun,  8 Jan 2023 23:10:21 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LCtY/I2WmCnaNliNirx3AONKIQ+Et5E4q6NmKJhkc9C79uwgbNuKo9peTsuKsGkgGu1NjswpTynyngg3++RZKR1NICmHUE/7Rc0rIxkoX0wJI0ILcDhjSrPFPIKCuOhkmD41iW9BOQEdWuUDNMtBWmS2it88lKBj9dAvc1BXiKEOuh8+RIAkzG818+PZLUqmPkHhfBTrKIArnGChE+gNBVBcCyFlU7l/UDqQNC+8IEYrcb7CTw2F/VRWKTEFlHgBLhOg5ov0UyQ+enV9ZJ//YiCbdYHTdW+1Yn3zJk/+up1uyV1Di2aWi/+u23viIi9eYT5EoRb0HIrV1/QAcqzfaQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=39CIyLSZpUL3WbvXUzThPA2QUnHW5XYs+BovOqw7zCc=;
+ b=HOJ+t0LunRJtGRgwY+mutvkl/vVUHhGmNPiA07BzbO8gjCGPc1MqeQ9cvArQFipK3eU71quGVfIz29PoC3ft3nfoi76fsvqo9ZLMyjLLUYTucBVNqI8yvuM585kkdv5oX0bL1WHSsdTZIUUwnVLqMSdIoB6ViJOp/ziBD5+LG4rcqLAOsIqNtpJvxPmh/YSUwU9h6QXxgwAed9diy/fSfvwWh6YdJCBSP60a8IMik2oYaXY22KG2lIe9hzzRtG9AJwxZ6bQVFeXa+LxuQP1xG2iz7sAXRmvZ8Nxd5DKTby82odIemKhIhlyq/kPFdnN0ufAAP/36El8zNKa2vBzkVw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=janztec.com; dmarc=pass action=none header.from=janztec.com;
+ dkim=pass header.d=janztec.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=janzag.onmicrosoft.de;
+ s=selector1-janzag-onmicrosoft-de;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=39CIyLSZpUL3WbvXUzThPA2QUnHW5XYs+BovOqw7zCc=;
+ b=Exj83/lHD4xXhIw/DlY6mnDng2AcyYqnXYNVS8ZuSHoWDW9tNCiRtcrFcXXanaZMDYx4njlC1XHHrhmJEh+kRJc2fXdvhTKjm7GFKyRB0RppQnzY8ISqzntZ/g4tLgt1uIph4CQvdVeRq0czyIr4MXCJVBhfdCKLFEd5+c+Xstw=
+Received: from FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:26::13)
+ by FR0P281MB1433.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:80::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Mon, 9 Jan
+ 2023 07:10:18 +0000
+Received: from FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM
+ ([fe80::d76a:8be5:c810:d1ba]) by FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM
+ ([fe80::d76a:8be5:c810:d1ba%6]) with mapi id 15.20.5986.018; Mon, 9 Jan 2023
+ 07:10:18 +0000
+From:   =?utf-8?B?U3RlZmFuIEFsdGjDtmZlcg==?= <Stefan.Althoefer@janztec.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+CC:     "Thomas.Kopp@microchip.com" <Thomas.Kopp@microchip.com>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Subject: AW: AW: AW: mcp251xfd: Bad message receiption (1/2)
+Thread-Topic: AW: AW: mcp251xfd: Bad message receiption (1/2)
+Thread-Index: AQHZI/lueTKWMOy3G0yoWF24wQLcEg==
+Date:   Mon, 9 Jan 2023 07:10:18 +0000
+Message-ID: <FR0P281MB1966801F8A7BCC540D40A4DE97FE9@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
+References: <FR0P281MB1966273C216630B120ABB6E197E89@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
+ <PH7PR11MB6498DA4A162106BD4ACB7551FBE89@PH7PR11MB6498.namprd11.prod.outlook.com>
+ <FR0P281MB1966CA0C12ED24574368A36E97E89@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
+ <20221222130219.xrfnm54g6lfjozvs@pengutronix.de>
+ <FR0P281MB19666A63278AAA9D20B6989297E99@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
+ <20221224155705.l6qx3xu34nmo3ehn@pengutronix.de>
+ <FR0P281MB196615471DB16E566528E7F097F09@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
+ <FR0P281MB1966783A50BDAD455BBC7F1A97F69@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
+ <FR0P281MB1966543302DB6485C49F8A2E97F59@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
+In-Reply-To: <FR0P281MB1966543302DB6485C49F8A2E97F59@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: yes
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=janztec.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: FR0P281MB1966:EE_|FR0P281MB1433:EE_
+x-ms-office365-filtering-correlation-id: 9ada567c-0740-49ba-766e-08daf2109093
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: nyb6Tym2Ico4uZzRHe4/SmJLVejC2QzVGGXjfqqLeve2O2l7Ty0J2WfHGarzKzk6rx4jFB9w50L/tsY93NH2tIoOHNCX+TmorzF05qOkvjUsg6Vsi+9cFRXth7m3TNEKulf3TD4aQdpFn8esoNomC+1rF8qQUssSVJ2xVcdTh5EPodqbq4+uq//XS20+VDzXnaOfu2pL2e6W5qkX4cyJqhl9MSjAfwXmSmuYStHlg1UkkpriW30p/qw2wyZPy2WiQ+OInv+UUmktDpspVlpQNx5BxivPtSPOCir3W7iaHfdzT+FYbjnH0A8ivnpZqKvcIH2ixaP1mKgshRMjwqNHqOKhK5tLOmtnXCs23RDbhzbDPE9kZb44ZdTdp7znoABRLhx6WvCFRG0y8LMGRR3FlUGti6z3wiIFEW7Y/HeDdkDNMUHzFQ/4QfS48T2Ds46Gl1Vt2zEDHtL+MOGBGzy95IIK3d4uMxvE+YlgEqRlKIqOJPNHfpOH5CYJ/1k/qLuUFD8ZDVkHUCuxO0feebz0hmIsTbIJKXj85uZQ8jWcXL/bFXiqixTwwx7ljNYSNwRVIqqGGwyE2hjEvZ/J6VWjCSTPAmafHFc+5sUCOsIOHHkGVZpDorA7VHpMieeKk5D1pSK2TI/SLxPHP37Kg9OOEQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(366004)(39830400003)(396003)(346002)(451199015)(33656002)(4744005)(5660300002)(316002)(85202003)(71200400001)(26005)(7696005)(186003)(9686003)(478600001)(41300700001)(4326008)(6916009)(66556008)(66446008)(54906003)(64756008)(8676002)(76116006)(66476007)(66946007)(8936002)(85182001)(52536014)(38070700005)(86362001)(55016003)(99936003)(6506007)(122000001)(38100700002)(2906002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?eXBRV1dlWjJCR3lwMUFmc0MzOFZLam9GZkpVVXdKVzh0VkxZK3UyUkNjbUVI?=
+ =?utf-8?B?NWlBVnNGU3ExRGoreFc2bElnSkgvemU4NVlkUFZuTytKQzVrV1ZaY2hROVlN?=
+ =?utf-8?B?M0FjTjBrM1JyY2FOZlZOL2x0bnhCZHN1UkpDZlE5VEdPQzdPNGp6RDVGNnA5?=
+ =?utf-8?B?WWI3NVBDOHhPcFpDdHU4bjZwK3p3Zml2WGNYeWtIeWxld0dreGt3bXBTRi93?=
+ =?utf-8?B?N0dSalQrNmxjYzRHa2tWeStkMmJPRDdYY1V5K3c5K3FobzYrcFYzRzJGV0Rs?=
+ =?utf-8?B?Z0d0RElkVkY2alArUDZZSEZSekJmZDlMRGdiWVE2d1l5UUVMREluVXNZcWRw?=
+ =?utf-8?B?d3RVMXBKYXR2Y1o1OC9mNTREdGtVQmUvMkdQWHdUbU1zWGcrRjB2a3V5NmZa?=
+ =?utf-8?B?bndmL3E4VVluK2lqVktRTHJqUXV2MndONlNuRHFOendRWWlwWjBaaGV6TXhU?=
+ =?utf-8?B?UDZnTWZHQ1pPQjV5MkU5QzFwbS9QZ3ZINm9mbUxMUjdKeXUyRG1UVDB3bElC?=
+ =?utf-8?B?QmFTa3Z5ZGg3cXJnMGtleEE1Sk50WUtkQkp1T2NxeUY5Tnl0YXplNEVESDJu?=
+ =?utf-8?B?UHFsb0VOOGhlanpEZkNyQzJUdUx2RnBHTDRRa1RHSkR3S1BIcVppOG1oSFd0?=
+ =?utf-8?B?a1FIaHhRYys2UGxCdVVGOWZEemN5d2pZQU5MN29rVmJsa0lOTFkyS0lqeTRF?=
+ =?utf-8?B?ekRVbGtaWmpvZ3NqK3ViMUU4N3B3YmUwckpqaHJlSE80eGYyRi9aL1dJMUhG?=
+ =?utf-8?B?VHkzQjdFVWoycERHQmg2ZGRFbFpXcXRtZ3lLT3NPM1Eyc0F0V1JYOGcwMzZE?=
+ =?utf-8?B?Kys4bHVxemxYOU43K3l1aXRSWTJ1OGJQM3RvcW9XK0UycXhZcjJPRXB3Q2pa?=
+ =?utf-8?B?ZUxKY1dCanFRblJXaEZzSHVHSkpUU2NMUVN2anRjUFhIalFudDl1Vm9qeEFO?=
+ =?utf-8?B?RXpMMW1BWUlQQnlnL3VDNlFLTkkzQ1AwNmNpSnRxQWtVUzdPM3RzVS94OUxl?=
+ =?utf-8?B?MytWWVFHdC9UNDBjSWZONXpUSTF6ZmJUaXlVZDJ2NzlVNXRsSDJSSXN6bWc5?=
+ =?utf-8?B?QXhlU0tYUkl3ck9nV3dpb1VHbnFKR3F1VnN3L2NZRkFNZjZxMGlrVnpZelpQ?=
+ =?utf-8?B?cmVtaW9FNm1rRVRacUtMZE1ha3R1K3VxRG9XcCtQUi9vZzU3bzhZblhBN3I4?=
+ =?utf-8?B?STZnYVdYT0xHWG1mbFROczJtV2N1Uy9iaTliK0NoTzA5MFlFVk1FRlgzaTNT?=
+ =?utf-8?B?WENSQXNFenhtQThaOC9YV3dVS2lRVE9wSFRXaDd0SGVLMWd4QkQwU1BFVkdJ?=
+ =?utf-8?B?ZTNMc290QmFwZDFVZ1hDZGp4djZDdXRwdmdxLzNUUEt3bDBlZVd6SDFGYkJE?=
+ =?utf-8?B?TGpoaUJ0ZVBJN2xPWFRwV1R3Qy9PQWZZU2RaWng2aTFYcUwxcVQ5QThqdHVr?=
+ =?utf-8?B?Qk5IWVlOZWhFYkdLQUxqaCtEdVdaQ01sZkdBb0g3Z2o0c0NBUVIzUlZuSlN6?=
+ =?utf-8?B?UTQrWkorRXczWjU2QVNiL1FaZE10R1lUVzV3TE51cnZXdDlCR3VrZytoN1d2?=
+ =?utf-8?B?bnRZUHNiVHhCc2VxUlVmR1l0N0MzbFR6NU5Eb1BCQzdsODdYZHhVQThvTHR4?=
+ =?utf-8?B?N1dXVmJDOVpsaysyc0JlS3liZ2hJRENXMXNuN0hya3AzVVFXUVBSOHpKd0xJ?=
+ =?utf-8?B?SEgxK0pyMDJPanVvanhxS0JLZEp2NThib2JKc1lOMGFYTDZDNU1iakl6eDhQ?=
+ =?utf-8?B?MFNyZGpaOFp4U1RpZkRqMUZteWt2V2dpMDJ6MDM4c0ZPT1ozWEE2cTFjNkVr?=
+ =?utf-8?B?d1R6eEFjUk9GNW14Y3pMNlprYVhRMXZqSDVuRnFnT2ZObFRPdkRwODMrRXR6?=
+ =?utf-8?B?bkhXRTV5MDFDUTV5NnpSRVRtU2xMN3phcDlUVnJCZ2w5eVlGNHFEdTB0N2Nx?=
+ =?utf-8?B?Q1l0WmF6M3diY0l1SkN3UWxoazhCZ1V3NDhIcmNmSlgybUlGaTkzSUhBTlBX?=
+ =?utf-8?B?Q2tDNUI3QlkyaUZ0TTJFeWkvUVY4YXRCZVJPRlc5V1NlUXA2cS9vNWw0ck5s?=
+ =?utf-8?B?bHhQQmtWZUllMGRQdEVOaXRUWXhGcmVLM1JwTXNiRUpsc0syK3Q0ZVVWOWc2?=
+ =?utf-8?B?OElQTEY1Z3JUTnFodkVqaXd3eEN2ZDBhaHdWUlU5U2Y2aW1hQTY3YjF4OWZU?=
+ =?utf-8?B?Qnc9PQ==?=
+Content-Type: multipart/mixed;
+        boundary="_003_FR0P281MB1966801F8A7BCC540D40A4DE97FE9FR0P281MB1966DEUP_"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: janztec.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9ada567c-0740-49ba-766e-08daf2109093
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jan 2023 07:10:18.5015
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c1dae847-7bcf-493f-b143-af65743cbb23
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: EGWcH5l8BwLIDbrJOk+ZmbSm28UWar9eeoG4PTU0LsIT0kg9n5RjAO/xWa41/Dc1t00ei07ovD23xNTup7dFbheNBIKN4RudbRA8+d5IgjQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: FR0P281MB1433
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Add support for the basic extended CAN controller (bxCAN) found in many
-low- to middle-end STM32 SoCs. It supports the Basic Extended CAN
-protocol versions 2.0A and B with a maximum bit rate of 1 Mbit/s.
+--_003_FR0P281MB1966801F8A7BCC540D40A4DE97FE9FR0P281MB1966DEUP_
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 
-The controller supports two channels (CAN1 as master and CAN2 as slave)
-and the driver can enable either or both of the channels. They share
-some of the required logic (e. g. clocks and filters), and that means
-you cannot use the slave CAN without enabling some hardware resources
-managed by the master CAN.
+SG9wZSB0aGlzIGRvZXNuJ3Qgc3RhcnQgdG8gZ2V0IGFubm95aW5nIQ0KDQpJIGNhcHR1cmVkIHR3
+byBtb3JlIGNhc2VzIGZvciB0aGUgcmVjZWl2ZWQtd3JvbmctYW5kLWR1cGxpY2F0ZSBjYXNlLiBB
+dHRhY2hlZC4NCkFsc28gSSBjb3VsZG7igJl0IHJlc2lzdCB0byBjcmVhdGUgYSBQREYgd2l0aCBz
+b21lIHRoaW5ncyBoaWdobGlnaHRlZCA7LSkgUGVyaGFwcyBJIHNob3VsZCBtZW50aW9uIHRoYXQg
+Zm9yIHRoZSBQREYgSToNCiAgICogcmV2ZXJzZWQgdGhlIGxhc3Qtb24tdG9wIG91dHB1dCBvZiBz
+Y3Rlc3RzZWxmDQogICAqIHJlbW92ZWQgdGhlIFRYIGxvZyBsaW5lcyBvZiBzY3Rlc3RzZWxmDQog
+ICAqIHJlbW92ZWQgZXZlcnkgc2VuZCBsaW5lIG9mIHRoZSBjYW5kdW1wIGxvZw0KDQpGb3IgdGhl
+IGxhc3QgY2FzZSwgSSBhdHRhY2hlZCBkZWJ1Z2dlciBhZnRlciB0aGUgZmFpbCBhbiB0cmllZCB0
+byByZWFkIGZyb20gdGhlIHNvY2tldCB1bnRpbCByZWFkIHJldHVybmVkIC0xOg0KICAgIChnZGIp
+IHAgbWFsbG9jKDcyKQ0KICAgIChnZGIpIHAgcmVhZChzb2NrZmQsJDEsNzIpDQogICAgKGdkYikg
+cHJpbnQgZnByaW50X2NhbmZyYW1lX210dShzdGRvdXQsICQxLCAiXG4iLCA0LCA3MikgQW5kIHN1
+cnByaXNlIHN1cnByaXNlLCB0aGVyZSB3ZXJlIG1vcmUgQ0FOIGZyYW1lcyBpbiBzdG9yZS4gUmVm
+ZXIgdG8gdGhlIGxvZy9wZGYuDQoNCi0tIFN0ZWZhbg0K
 
-Each channel has 3 transmit mailboxes, 2 receive FIFOs with 3 stages and
-28 scalable filter banks.
-It also manages 4 dedicated interrupt vectors:
-- transmit interrupt
-- FIFO 0 receive interrupt
-- FIFO 1 receive interrupt
-- status change error interrupt
+--_003_FR0P281MB1966801F8A7BCC540D40A4DE97FE9FR0P281MB1966DEUP_
+Content-Type: application/x-compressed; name="20230106T1822.tgz"
+Content-Description: 20230106T1822.tgz
+Content-Disposition: attachment; filename="20230106T1822.tgz"; size=7765;
+	creation-date="Mon, 09 Jan 2023 07:08:38 GMT";
+	modification-date="Mon, 09 Jan 2023 07:10:18 GMT"
+Content-Transfer-Encoding: base64
 
-Driver uses all 3 available mailboxes for transmission and FIFO 0 for
-reception. Rx filter rules are configured to the minimum. They accept
-all messages and assign filter 0 to CAN1 and filter 14 to CAN2 in
-identifier mask mode with 32 bits width. It enables and uses transmit,
-receive buffers for FIFO 0 and error and status change interrupts.
+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
+rjxH+Qv53PDlAMgAAA==
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+--_003_FR0P281MB1966801F8A7BCC540D40A4DE97FE9FR0P281MB1966DEUP_
+Content-Type: application/x-compressed; name="20230107T1352.tgz"
+Content-Description: 20230107T1352.tgz
+Content-Disposition: attachment; filename="20230107T1352.tgz"; size=10957;
+	creation-date="Mon, 09 Jan 2023 07:08:00 GMT";
+	modification-date="Mon, 09 Jan 2023 07:10:18 GMT"
+Content-Transfer-Encoding: base64
 
----
+H4sIAAAAAAAAA+yc244kN3KGdd1PQWBvJEhdIpk89l0dsnyzuzC8MrCA4QvWaTxAa3rQ01rLb++I
+rO5q/kkWOQWs1jasQmPVnEn+GRXJLyLIjB0t9SCV9D+pweofv/lNPpI+3trpv/SZ/3f6XZnBusEq
+p+k6pZQevhH2tzEHP798eUnPQnzz/PT00rqu9/f/Rz8anv8vv8k9+AE7Y64+f37Y5+evBqMkP3/t
+zTdC/ibWzD7/z5//Hz9++uVX8Zy+fN4dn5//6/NH4RZyofT93/zj9+IPSvzlT/8s/vT0SWyOe6G0
+UMOD8g8qiPX4k6DFo0V6/pmuFf/053/9cRK7+5/+Sr9/bvgg/49PH+T97nh6ej7efzjs/k73aPNv
+KOibC/+WwJdq8Op3/v8hnz8+PX0WUVtmebiX6n5aCg9WP1gvHtOXl+/NF/Hy9JIeH9R/2J/vvheL
+H7/sX45fXr4cH0/ififuPwkj7h9FjFHcvwgt7v8m9j9/pmjyAy2nn798EPdb8Xw8fXx8PKSX9MPj
+kVQPTy9ffkiPj0//+fHTyyPZsPvhy8vT56dPNO3pWdz/VaioF8qFhV1orR4MZQlxfxBB7NMnebde
+/lnw/dmO6U/EYvHx8KugjxQvvz7opf2DlIJ+thuxXgkXxKjEGIQxd+Lt8/x+nRabQZgg4iiWmn/s
+5u5VT+V6ir6l2EqxWortUmgSdrfq6VyP/s6KYS2WXmzoF4qqqqo3iGEplCPzxUC/a+Hlm96Q6w1i
+tRFWCW2EdkIH4bdfrbcX3yptvxOn9PHxTj6If/mr1+Jb4vNHKYfvyPDG3Nnlun/5T6+XD8Xl5TfI
+1PlylV1ec3SmrovLS39n6ny5/Hp1Nbu8tjqyy+Xs8tribPrdKeHWYhtFoGu3Yrtq+Z1SdRRuYPWN
+F3b5evl1vzfV535XQklhlBjoS6yFWpL5bb9Xjbnmd/qhB2+Fk2JYiSU9r1Xb701jSr9X1a/73a+F
+24jRCLURm7VYhY7fldiOQnsxDmybt22/N9VLvxt6QJIh2XoRBxGWHb/XjLnu92hEsGJciU0kS8ik
+tt+bxpR+r6pf9zvRtAxT1PDCLInYtt8dobQVS8n/uzF0m7bfm+ql30k90gNSPNWMNLvt96ox1/2+
+9nztcqT6Wqx5Dbf93jSm9HtV/e8U3zsxsvR7U730u6Yv6YU0wll+TLrj96ox1/2+odVLSzeIlRLr
+QPGp7femMaXfq+qN+D6KYRRmJfSan7DtxBk/iNFzwFZrTjbRdOJ7S730O+Umb8R6y9F6taUv0fZ7
+1Zjrfh9Icc2LwAyCik83tv3eNKb0e1X9ut8NXSvFKDmN0D16650goqe6oqi6EZKyR8fvTfXKevec
+iZdcDYhIj0l34nvNmOt+p8RO6nbD62BNDyt21nvLmNLvVfXrfqdQRKGRaAqRUKKyqe33wXDptqbL
+t/yjx7bfm+qVembN5Q8VD5YylBVq2/Z71ZhGXg18FWV4in7LKNad9d40ppJXa+qN+E7pYOBSicqx
+FXlp3fa7sWLjprLcipUV604901Qv/U7bTKrJLS0uClFLMXTq96oxjbw68FqkQt9HIWnqtu33pjGV
+vFpTv+53zk2SsxI9WMoIo277faTn6biopdqZwsfQ2Tc11Sv1zJq2VhyTNluuh8dOnKkac93vVG5Q
+XbudCBm12Oq235vGlH6vqjfqSOKI1gz9UMnnxKbAY1ZHkjotNCe8mjwa235vqlfi+8gVG6XIJe2C
+tq9hqVFH1oxpxJmNUCMnYwp6Gy1kJ840janEmZp6Y71bvpx28s6JraNNdyevWiHpBpTkJW/8R99Z
+7y310u/052HN26H1KJzu1pFVY6773a84/NKiJPIoFK9c2+9NY0q/V9Wv+53speQ30uWGV+eys28i
+5w0bEZXYUBqh+O3afm+ql37nleV4o61WvA8Jtu33qjHX/U6FIUfrNScFRWWKb/u9aUz1fKZUv+53
+snfjOUwSq5SJ8WypklcDZzBaB7QIKHasO+u9qV5Z75brwXGKHZzTZNvvVWMa+6ZRbA3VsrwH5c1z
+53ymaUxl31RTb6x3xcUpnylspsOF4hhtFmdG3pSPIx9IhRX9dNZ7S716LkaFYXCvW92V6cSZmjGN
+ekbzBnQznTTShk528mrTmEo9U1O/7ncZeZu11Zz/qFpa9vwup7OKNYdUPh9Vbb831Uu/c0G+5PKQ
+amfKU6ux4/eaMQ2/jyIYsR2mw7Sxez7TNKbi95p6o55Z8x6egoGjeEBwFekA/U4lIXO0mdCmimLd
+qWda6qXfKSURrlyarPlwb9XJq1VjGufAKxrwyQLhQUX21rT93jSmcg5cU7/ud9oU+I3QW04j2s9y
+U+V8ZsnnLOsl70Ej7Yw78b2pXjkH5kMWflKj4jJl3VnvVWOu+53Ptwi+Fb8pYc/Ytt+bxpR+r6o3
+4szAD5b2ZkQspRHTqd9pBazDtJVbcjhzvTjTUq/4fdp4hCUfXxLapuP3qjHX/U51CWX4aDkXECqx
+cz7TNKb0e1W9cU5Aa5FENZ8tbfvx/Vxc0VKgmol+UZ06sqle2TetOCNQ5Unz6BfbizM1Y6773U4v
+7igSLBVvKped+N40pvR7Vb3hd3qqissf2hYTrr06cuUn8ja8Ghxt/DvnYk310u+ku50CK+eplRg7
+9UzVmMZ5pOH6Shn+PWwoRLX93jSmch5ZU7/ud9rTaIpMns8N129vs677PZKo5oCtNL+xHjvvPZrq
+lfMZOVVAVgx22op06veqMY34brgUV7SlWPJLmFVn39Q0phLfa+qNvDpyCFtNZ54UKcfOeST5z05Z
+O44cPnr9BE310u9BMdTky/WWj9U3nfOZqjGNfZPnjLCx/MKU5tlOnGkaU9k31dQb633LPRbe8dJc
+GtomdParnuOppIS2mV61h856b6mXfqeyU264QBkDHy+te/vVmjHX/T5aPregDO9HXgSyU0c2jSn9
+XlVvvl/lU7fpEJOq1F6cofRFupTnqTykbUvvvXZTvfQ77fno8jC9Zxip8uycA1eNue73lRPrqdjz
+Uxq2nfP3pjGl36vq1/1OJc96eu+v+Qyt0n4we980crjjvhLPG1DXOQduqlfWu+HoGChwaN7+rzrv
+ParGNOqZMLVPaV7JfGqrOuu9ZUylnqmpN+r3LfuEnhS/PtCVYzT0O1VLw5SvaUMc3gJHo35vqVfq
+dzfttSO7k19vrtp+rxrTeK+94YhH23gqOugGvb6lpjGV99qF+vjry/H5U3oUj08fPhyfBXdYPtx9
+q9XDYBbOh4WmwDR9vpcL6ex3ZLtYifvzn5GyEP8mw78LcfZl0XsnRC6maJ98FhsW2qmmWKXVLhcz
+i0iXvFumm2KVzjoUC7TnfxMzna9Z6btDscHbG3xW9M3NxFRm2dD+mpU2uVxsWAQfbvBZ0RU3E1Mu
+85nr+KzomUOxwcrMMtPxWdHzhmI6ZJYN7QdQaXHLxfQi0Ir+ep8VHW0o5qka+Pp1VvS7odhAoH29
+z4p+NRTTLltnurfOiva0XEwtwpCvM9nxWdGNhmI+W7TGh47Pil41FBvkLeus6DVDMT3k62zo+Kxo
+LcvF5CLIIbOsLVbpJEMxf1M8K/rMUExDPOv5rOgTm4mpd5yM7uWAoi0sE3Nx4WP+NNtilS6wmZjO
+2Wx/zUqPGIppd0sOKHq8ZmLyFjaLlq5cLABO0sbeOpt3cM3EVO6zXg4o+rtQTNvhBp8V/VkopkIW
+NbrrrGjHysX8wjt/wzoruq9mYjLPm90cMO/NQjFt8uzUjWfz3ioUU97f4LOilSoXcwtvXWZZLwcU
+nVMo5mLmM99etJW+KhTTyt/gs6IvCsVUtmjN0PNZ0QaVi1kKQXlN28sBRdcTijmbs+k7Pit6olBM
+RX2Dz4qepplYtqno17RFC1MuZmBp9OuzomNpJjaYzGe9eFb0M6GYcnkV1H6alX6kmZi0mc/allXa
+j3KxgZPKu2W2LVbpNpqJqYyA7jorepFQTBl3g8+KXiIUkyFns71oK61DuZheOJP5rJsDik4hFLN5
+durWGkUfEYop2Af08mbRB4RiMo8aXTaLtp9cTC2cziNtr9YounxQzNrcZ92adt4DhGIyfn21Xenh
+mYkNeX3WywFFy04uJhdO3rLOig4dFLMm91kvnhX9Oygmw9dnp0r/zUwsrxy7bBbtNpmYjYSTvcFn
+RXfNTEznOaDHZtF7g2LS3bLfLHpncrGwiHkV1GWzaJVBMevyqNHLm0VnzEwsO4z7irOged8Misnh
+lhxQ9L3kYn4RfZYD+vvNeZsLilmbE9BbZ0VXC4qZmO2Eu3mz6HlBMXnTWVDRs5KLuUXMz4KGdule
+aVFBMZsFR+l7+4CiIwXFjLvlXKPoV8nFLOF0yx696DeZiUEO6PmsaC9BMavyqNHzWdFNgmLG5j7r
+xbOi1yQXM4sY3C0+m/eKzMR0fhbUi2dFawiKmZjXtO1jwkonyEws21b3TvYqfSIoJuUt71CKPo9c
+bFhEc8t+s2jrQDGrbolnRRcHihmbx7NeDih6PHIxTevsljPHokdjJpavs27eLFoyUMyEvD7r5c2i
+A2MmlhXIfTaL/oxcTFHYvuX8rOivQLEQ8/OzXjwr2ilQzPhb3gcU3RMzMZXXtL28WfRW5GJyEeHt
+TjeezXsjUCzAe6e2ZZVWCBQzsN9sL41K5wOKDRlO1rcXbaUvIhMzcRHU8NWWVfoaUMxnX9Oo9hax
+0saAYkNea3TPtouuBRTTPo9n3bw572nIxcIiyHwn3N07zXsSUMybbIfSrWmLFgQUG3T+NLs17bzj
+AMW0y/cBvbxZ9COQ2OHp01F8e6++u/vLy9Pnz8fDQqxfnh/v1+LlSRx//fiy+P0fiPtf9MF//+35
++OHwy8+f/873aP/7b5oW8Pu//2ak+kYqbeXw+7//9o/40AN4ENKmnfRO3klpaCTVkTZ6lkaBR5Tw
+lVQ02k8jTX9HVyqaF0Ky/hAPNJrm0R/K6e9onpGGfjc8onm7k0o8vKPp05XyfKU2MAow2uejAeYN
+MG+AecPbPHUKd2QBjYZpoUUawTwD8wzcz073c/R74NH7PPKLvczj/x+8pXnH09sd3JudgVXc2zwd
+eUTzjhdbHNzPv80zJx4ZvpLvzvP8u52eRm/znKa/Cxc7WSXA9wtv8zw/h7DPr4zgz/g2z/P/NzMG
+uBLsTG/zpvWSTH5lAn+mt3meu6J3YOcO7Nxd7GRf78DOPdi5v9jJftmDnXuw83CxM/EI7DyAnYeL
+nTsaHcHOI9h5vNi55xHYeQI7Txc7DzwCO0+5nUpe7DzyKLdTyQBXXuykFaJUbqdSuZ1Kvc0L0yi3
+UwF/6sJfUDwKcCXYeeEvaB6BncCfuvAXiA5lwE7gT134C4ZHYKcFOy/8BcsjsNOCne/8OR6BnQ7s
+vPAXaH0qD3Z6sPPCXwg8AjsD2HnhL0QegZ0B7LzwFxKPwM4Idl74C7Q+VQI7E9h54S/seQR27sDO
+C3/hwCOwcwd2XvgLvD73YOce7LzwF3h9vvEXdFA0AjuBP3WA+x3BTuBPHWHeEeYBf+oE804wD/jT
+UsLIwCjACOYpmAf8aQXzFMwD/jTkPw35TwN/GvKfhvyngT89wDwD84A/DflPQ/7TwJ+2MM/CPOBP
+O5jnYB7wpyH/aQ/zgD/tYZ6HecCfhvynA8wD/jTkPx1hHvCnIf/pBPOAPw35TyeYB/xpyH96B/OA
+Pw35T+9hHvCnIf/pA8wD/jTwp4E/Dfxp4E8Dfxr4MxeOdLI0Os8bjmEfaDTNM6e9TTza51e+cjQc
+E1955oiuPA2JRgGu3L9euecrzxxZijoUl8yFo+nKV46G43G6cn++8uDV/s4MYOc7R3zl8GqntvFI
+I5pH5VA4fz/mKO3Sftg5HuV+McCRAY4McGSAIwMcGeDIAEcGODLAkQGODHBkgCMDHBkPz+GdI/ZE
+eH0OenoOzJGhioPrexpxvRtUOu0pvxvgyABHBjgywJEBjgxwZIAjAxwZ4MgARwY4MsCRAY4McGT2
+sM7eOWJPnDkyJ6+PmkY0j7apkbYxNI85Ou1sOnjHV8L9gCMDHBngyCBHkMcM5DEDecxAHrOQxyzk
+MQt5zEIes5DHrMo5su95jDxhz/yRJ/bH/Z1l/tzeKd5b0ciwJ8jAcIo0gvtBHrOQxyzkMQt5zEIe
+s5DHLPBngT8L/FngzwJ/FvizwJ91eZywLo8T1uXxzDJ/+93pcJ7H/Bl6wkeqNmkE9wP+LOQxC3nM
+Qh6zkMcs5DEL/FngzwJ/FvizwJ8F/izwZ1MeJ+wujxN2l8dry/ydZIxTnLDMn3N6d6KweWeBPwv8
+WchjFvKYhTxmIY9ZyGMW+LPAnwX+LPBngT8L/Fngz57yOGFPeZxwMs9Hjvkb9slOccIxf3vaJR1s
+8jTK7+eAPwd1pIM60kEd6aCOdFBHOuDPAX8O+HPAnwP+HPDngD9n8jjhTB4nnMnzrWP+rNodpjjh
+mD9/0kGTxTSC+wF/DvKfg/znIP85yH8O8p8D/hzw54A/B/w54M8Bfw74czGPEy7mccKd+TOHox94
+RPOS3PvzPOaPtmi0LNKRRnA/4M9B/nOQ/xzkPwf5z0H+c8CfA/4c8OeAPwf8OeDPAX/ukMcJd8zj
+hDvzZw4n2urTiObFA30VjhOO+YuREuZwUHcO+HPAn4P85yD/ech/HvKfh/zngT8P/HngzwN/Hvjz
+wJ8H/rzO44TXeZzwZ/7McdD+SCOuJ07kCY4Tnvk77g7GnRKP4H7An4f85yH/ech/HvKfh/zngT8P
+/HngzwN/HvjzwJ8H/rzP44T3eZzwZ/7IE3tv7jzzlwLlDo4Tnvk7WJMGPww0gvsBfx7yn4f85yH/
+ech/HvKfB/488OeBPw/8eeDPA38e+PP7PE74fR4n/Jk/KhqsdjSieYEy+Xke86cOu3CIxx2N4H7A
+n4f85yH/ech/HvKfh/zngT8P/HngzwN/AfgLwF8A/gLs/4LK40R43f9R+URZNDB/JHWuJwLzF1Ic
+Tn53uAvAXwD+AuS/APkvQP4LkP8C5L8A/AXgLwB/AfgLwF8A/gLwF2weJ4LN40Rwr3HiQHt+GnF9
+faQtGMeJwPwR2IqDCI3gfsBfgPwXIP8FyH8B8l+A/BeAvwD8BeAvAH8B+AvAXwD+QsrjREh5nAjp
+NU4c9lRHBubPHQgnjhOB+SM29upwJC8BfwH4C5D/AuS/APkvQP4LkP8C8BeAvwD8BeAvAH8B+AvA
+XwD+AvAXgL8A/EXgLwJ/EfiLkP8i5L8I+S9C/ouQ/yLwF4G/CPxF4C8CfxH4i8BfBP4i8BeBvwj8
+ReAvAn8R+IuQ/yLkvwj5L0L+i5D/IvAXgb8I/EXgLwJ/EfiLwF8E/iLwF4G/CPxF4C8CfxH4i5D/
+IuS/CPkvQv6LkP8i8BeBvwj8ReAvAn8R+IvAXwT+IvAXgb8I/EXgLwJ/EfiLwF8E/iLwF4G/BPwl
+4C8Bfwn4S8BfAv4S8JeAv3ThjyNm0vl5a2L+LicSifm7nEgk4C8Bfwn4S8BfAv4S8JeAvwT8JeAv
+AX8J+EvAXwL+EvCXLvxN3929nQvzCXJi/i5nEIn5u5xBJOAvAX8J+EvAXwL+EvCXgL8E/CXgLwF/
+CfhLwF8C/hLwl3bw3Hdvz53PxBPzdzl1SMzf5dThv9u7vuc2biR9r9FfgarkwamYkxnMb9bWVlmy
+nPWdK3Ipzm7qXlIDidLqQpEKSSXe++sPGMkWer5GA4wS565O82CT4nwfmz1odKOnpzEQ+xuI/Q3E
+/gZifwOxv4HY30DsbyD2NxD7G4j9DcT+BmJ/A7G/gdjfQPIvw8WH6+6y/Cb38wwm9/MMhtifIfZn
+iP0ZYn+G2J8h9meI/zPE/xni/wzxf4bYnyH2Z4j9GWJ/htifIfZniP0ZYn+G2J8h9meI/Rlif4bY
+nyH2Z4j/M8T/GeL/DPF/htifIfZniP0ZYn+G2J8h9meI/Rlif4bYnyH2Z4j9GWJ/htifIfZniP8z
+xP8Z4v8M8X+G2J8h9meI/Rlif4bYnyH2Z4j9GWJ/htifIfZniP0ZYn+G2J8h9meI/zPE/y0++r/K
+epnF6P/Kse6qtO+6+V0NVpnX9t0Drj1YEPtbEPv7s2vj/j8ctP7zbFi5+s/fufDSXcxw/acdE1X7
+sf6zKdqx/rOpn+o/P8Xx+edqY24vlutLsgNwO7f2XNXq2fHJqy/V5x+OA/WsaNoy7+u+bV2BuHbP
+Vt3twJvwWBXCq+px8C4E53oFA7wOCp8Cb3UbgnN9kAFePg5e6RCc6/GM8OYR8EqHv51rdw3w+pHw
+oOq43twAd09J/HZ4WwZVx/UdB3glXPcEeFh1XE91hEvXPQavdRtUHddeHuCdcN1T4EHhuV74AO+F
+6x6Ht41w4bDPP8Dbx8HDquP2MEC4cN2j8EZ3wjyP2zkAvBfm+RS4MM/j3hNTeJkL83wc3rp+VaEL
+h/tqALx7HDysOm7PEIQHVZcAty+DcKYNBMKL4G9PgmvhwuFeLwgX3EQc3uVBi+P2sQF4ERQ+DS5c
+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
+/qzjfwAww5ucABgBAA==
 
-Changes in v5:
-- Put static in front of bxcan_enable_filters() definition.
-
-Changes in v4:
-- Add "dt-bindings: arm: stm32: add compatible for syscon gcan node" patch.
-- Drop the core driver. Thus bxcan-drv.c has been renamed to bxcan.c and
-  moved to the drivers/net/can folder. The drivers/net/can/bxcan directory
-  has therefore been removed.
-- Use the regmap_*() functions to access the shared memory registers.
-- Use spinlock to protect bxcan_rmw().
-- Use 1 space, instead of tabs, in the macros definition.
-- Drop clock ref-counting.
-- Drop unused code.
-- Drop the _SHIFT macros and use FIELD_GET()/FIELD_PREP() directly.
-- Add BXCAN_ prefix to lec error codes.
-- Add the macro BXCAN_RX_MB_NUM.
-- Enable time triggered mode and use can_rx_offload().
-- Use readx_poll_timeout() in function with timeouts.
-- Loop from tail to head in bxcan_tx_isr().
-- Check bits of tsr register instead of pkts variable in bxcan_tx_isr().
-- Don't return from bxcan_handle_state_change() if skb/cf are NULL.
-- Enable/disable the generation of the bus error interrupt depending
-  on can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING.
-- Don't return from bxcan_handle_bus_err() if skb is NULL.
-- Drop statistics updating from bxcan_handle_bus_err().
-- Add an empty line in front of 'return IRQ_HANDLED;'
-- Rename bxcan_start() to bxcan_chip_start().
-- Rename bxcan_stop() to bxcan_chip_stop().
-- Disable all IRQs in bxcan_chip_stop().
-- Rename bxcan_close() to bxcan_ndo_stop().
-- Use writel instead of bxcan_rmw() to update the dlc register.
-
-Changes in v3:
-- Remove 'Dario Binacchi <dariobin@libero.it>' SOB.
-- Fix the documentation file path in the MAINTAINERS entry.
-- Do not increment the "stats->rx_bytes" if the frame is remote.
-- Remove pr_debug() call from bxcan_rmw().
-
-Changes in v2:
-- Fix sparse errors.
-- Create a MAINTAINERS entry.
-- Remove the print of the registers address.
-- Remove the volatile keyword from bxcan_rmw().
-- Use tx ring algorithm to manage tx mailboxes.
-- Use can_{get|put}_echo_skb().
-- Update DT properties.
-
- MAINTAINERS              |    7 +
- drivers/net/can/Kconfig  |   12 +
- drivers/net/can/Makefile |    1 +
- drivers/net/can/bxcan.c  | 1110 ++++++++++++++++++++++++++++++++++++++
- 4 files changed, 1130 insertions(+)
- create mode 100644 drivers/net/can/bxcan.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a36df9ed283d..bd246991a3b0 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4565,6 +4565,13 @@ S:	Maintained
- F:	drivers/scsi/BusLogic.*
- F:	drivers/scsi/FlashPoint.*
- 
-+BXCAN CAN NETWORK DRIVER
-+M:	Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+L:	linux-can@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/net/can/st,stm32-bxcan.yaml
-+F:	drivers/net/can/bxcan.c
-+
- C-MEDIA CMI8788 DRIVER
- M:	Clemens Ladisch <clemens@ladisch.de>
- L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
-diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
-index cd34e8dc9394..3ceccafd701b 100644
---- a/drivers/net/can/Kconfig
-+++ b/drivers/net/can/Kconfig
-@@ -93,6 +93,18 @@ config CAN_AT91
- 	  This is a driver for the SoC CAN controller in Atmel's AT91SAM9263
- 	  and AT91SAM9X5 processors.
- 
-+config CAN_BXCAN
-+	tristate "STM32 Basic Extended CAN (bxCAN) devices"
-+	depends on OF || ARCH_STM32 || COMPILE_TEST
-+	depends on HAS_IOMEM
-+	select CAN_RX_OFFLOAD
-+	help
-+	  Say yes here to build support for the STMicroelectronics STM32 basic
-+	  extended CAN Controller (bxCAN).
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called bxcan.
-+
- config CAN_CAN327
- 	tristate "Serial / USB serial ELM327 based OBD-II Interfaces (can327)"
- 	depends on TTY
-diff --git a/drivers/net/can/Makefile b/drivers/net/can/Makefile
-index 52b0f6e10668..ff8f76295d13 100644
---- a/drivers/net/can/Makefile
-+++ b/drivers/net/can/Makefile
-@@ -14,6 +14,7 @@ obj-y				+= usb/
- obj-y				+= softing/
- 
- obj-$(CONFIG_CAN_AT91)		+= at91_can.o
-+obj-$(CONFIG_CAN_BXCAN)		+= bxcan.o
- obj-$(CONFIG_CAN_CAN327)	+= can327.o
- obj-$(CONFIG_CAN_CC770)		+= cc770/
- obj-$(CONFIG_CAN_C_CAN)		+= c_can/
-diff --git a/drivers/net/can/bxcan.c b/drivers/net/can/bxcan.c
-new file mode 100644
-index 000000000000..7f8831aef9c9
---- /dev/null
-+++ b/drivers/net/can/bxcan.c
-@@ -0,0 +1,1110 @@
-+// SPDX-License-Identifier: GPL-2.0
-+//
-+// bxcan.c - STM32 Basic Extended CAN controller driver
-+//
-+// Copyright (c) 2022 Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+//
-+
-+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-+
-+#include <linux/bitfield.h>
-+#include <linux/can.h>
-+#include <linux/can/dev.h>
-+#include <linux/can/error.h>
-+#include <linux/can/rx-offload.h>
-+#include <linux/clk.h>
-+#include <linux/interrupt.h>
-+#include <linux/io.h>
-+#include <linux/iopoll.h>
-+#include <linux/kernel.h>
-+#include <linux/mfd/syscon.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+
-+#define BXCAN_NAPI_WEIGHT 3
-+#define BXCAN_TIMEOUT_US 10000
-+
-+#define BXCAN_RX_MB_NUM 2
-+#define BXCAN_TX_MB_NUM 3
-+
-+/* Master control register (MCR) bits */
-+#define BXCAN_MCR_DBF BIT(16)
-+#define BXCAN_MCR_RESET BIT(15)
-+#define BXCAN_MCR_TTCM BIT(7)
-+#define BXCAN_MCR_ABOM BIT(6)
-+#define BXCAN_MCR_AWUM BIT(5)
-+#define BXCAN_MCR_NART BIT(4)
-+#define BXCAN_MCR_RFLM BIT(3)
-+#define BXCAN_MCR_TXFP BIT(2)
-+#define BXCAN_MCR_SLEEP BIT(1)
-+#define BXCAN_MCR_INRQ BIT(0)
-+
-+/* Master status register (MSR) bits */
-+#define BXCAN_MSR_RX BIT(11)
-+#define BXCAN_MSR_SAMP BIT(10)
-+#define BXCAN_MSR_RXM BIT(9)
-+#define BXCAN_MSR_TXM BIT(8)
-+#define BXCAN_MSR_SLAKI BIT(4)
-+#define BXCAN_MSR_WKUI BIT(3)
-+#define BXCAN_MSR_ERRI BIT(2)
-+#define BXCAN_MSR_SLAK BIT(1)
-+#define BXCAN_MSR_INAK BIT(0)
-+
-+/* Transmit status register (TSR) bits */
-+#define BXCAN_TSR_LOW2 BIT(31)
-+#define BXCAN_TSR_LOW1 BIT(30)
-+#define BXCAN_TSR_LOW0 BIT(29)
-+#define BXCAN_TSR_TME_MASK GENMASK(28, 26)
-+#define BXCAN_TSR_TME2 BIT(28)
-+#define BXCAN_TSR_TME1 BIT(27)
-+#define BXCAN_TSR_TME0 BIT(26)
-+#define BXCAN_TSR_CODE_MASK GENMASK(25, 24)
-+#define BXCAN_TSR_ABRQ2 BIT(23)
-+#define BXCAN_TSR_TERR2 BIT(19)
-+#define BXCAN_TSR_ALST2 BIT(18)
-+#define BXCAN_TSR_TXOK2 BIT(17)
-+#define BXCAN_TSR_RQCP2 BIT(16)
-+#define BXCAN_TSR_ABRQ1 BIT(15)
-+#define BXCAN_TSR_TERR1 BIT(11)
-+#define BXCAN_TSR_ALST1 BIT(10)
-+#define BXCAN_TSR_TXOK1 BIT(9)
-+#define BXCAN_TSR_RQCP1 BIT(8)
-+#define BXCAN_TSR_ABRQ0 BIT(7)
-+#define BXCAN_TSR_TERR0 BIT(3)
-+#define BXCAN_TSR_ALST0 BIT(2)
-+#define BXCAN_TSR_TXOK0 BIT(1)
-+#define BXCAN_TSR_RQCP0 BIT(0)
-+
-+/* Receive FIFO 0 register (RF0R) bits */
-+#define BXCAN_RF0R_RFOM0 BIT(5)
-+#define BXCAN_RF0R_FOVR0 BIT(4)
-+#define BXCAN_RF0R_FULL0 BIT(3)
-+#define BXCAN_RF0R_FMP0_MASK GENMASK(1, 0)
-+
-+/* Interrupt enable register (IER) bits */
-+#define BXCAN_IER_SLKIE BIT(17)
-+#define BXCAN_IER_WKUIE BIT(16)
-+#define BXCAN_IER_ERRIE BIT(15)
-+#define BXCAN_IER_LECIE BIT(11)
-+#define BXCAN_IER_BOFIE BIT(10)
-+#define BXCAN_IER_EPVIE BIT(9)
-+#define BXCAN_IER_EWGIE BIT(8)
-+#define BXCAN_IER_FOVIE1 BIT(6)
-+#define BXCAN_IER_FFIE1 BIT(5)
-+#define BXCAN_IER_FMPIE1 BIT(4)
-+#define BXCAN_IER_FOVIE0 BIT(3)
-+#define BXCAN_IER_FFIE0 BIT(2)
-+#define BXCAN_IER_FMPIE0 BIT(1)
-+#define BXCAN_IER_TMEIE BIT(0)
-+
-+/* Error status register (ESR) bits */
-+#define BXCAN_ESR_REC_MASK GENMASK(31, 24)
-+#define BXCAN_ESR_TEC_MASK GENMASK(23, 16)
-+#define BXCAN_ESR_LEC_MASK GENMASK(6, 4)
-+#define BXCAN_ESR_BOFF BIT(2)
-+#define BXCAN_ESR_EPVF BIT(1)
-+#define BXCAN_ESR_EWGF BIT(0)
-+
-+/* Bit timing register (BTR) bits */
-+#define BXCAN_BTR_SILM BIT(31)
-+#define BXCAN_BTR_LBKM BIT(30)
-+#define BXCAN_BTR_SJW_MASK GENMASK(25, 24)
-+#define BXCAN_BTR_TS2_MASK GENMASK(22, 20)
-+#define BXCAN_BTR_TS1_MASK GENMASK(19, 16)
-+#define BXCAN_BTR_BRP_MASK GENMASK(9, 0)
-+
-+/* TX mailbox identifier register (TIxR, x = 0..2) bits */
-+#define BXCAN_TIxR_STID_MASK GENMASK(31, 21)
-+#define BXCAN_TIxR_EXID_MASK GENMASK(31, 3)
-+#define BXCAN_TIxR_IDE BIT(2)
-+#define BXCAN_TIxR_RTR BIT(1)
-+#define BXCAN_TIxR_TXRQ BIT(0)
-+
-+/* TX mailbox data length and time stamp register (TDTxR, x = 0..2 bits */
-+#define BXCAN_TDTxR_TIME_MASK GENMASK(31, 16)
-+#define BXCAN_TDTxR_TGT BIT(8)
-+#define BXCAN_TDTxR_DLC_MASK GENMASK(3, 0)
-+
-+/* RX FIFO mailbox identifier register (RIxR, x = 0..1 */
-+#define BXCAN_RIxR_STID_MASK GENMASK(31, 21)
-+#define BXCAN_RIxR_EXID_MASK GENMASK(31, 3)
-+#define BXCAN_RIxR_IDE BIT(2)
-+#define BXCAN_RIxR_RTR BIT(1)
-+
-+/* RX FIFO mailbox data length and timestamp register (RDTxR, x = 0..1) bits */
-+#define BXCAN_RDTxR_TIME_MASK GENMASK(31, 16)
-+#define BXCAN_RDTxR_FMI_MASK GENMASK(15, 8)
-+#define BXCAN_RDTxR_DLC_MASK GENMASK(3, 0)
-+
-+#define BXCAN_FMR_REG 0x00
-+#define BXCAN_FM1R_REG 0x04
-+#define BXCAN_FS1R_REG 0x0c
-+#define BXCAN_FFA1R_REG 0x14
-+#define BXCAN_FA1R_REG 0x1c
-+#define BXCAN_FiR1_REG(b) (0x40 + (b) * 8)
-+#define BXCAN_FiR2_REG(b) (0x44 + (b) * 8)
-+
-+#define BXCAN_FILTER_ID(master)       (master ? 0 : 14)
-+
-+/* Filter master register (FMR) bits */
-+#define BXCAN_FMR_CANSB_MASK GENMASK(13, 8)
-+#define BXCAN_FMR_FINIT BIT(0)
-+
-+enum bxcan_lec_code {
-+	BXCAN_LEC_NO_ERROR = 0,
-+	BXCAN_LEC_STUFF_ERROR,
-+	BXCAN_LEC_FORM_ERROR,
-+	BXCAN_LEC_ACK_ERROR,
-+	BXCAN_LEC_BIT1_ERROR,
-+	BXCAN_LEC_BIT0_ERROR,
-+	BXCAN_LEC_CRC_ERROR,
-+	BXCAN_LEC_UNUSED
-+};
-+
-+/* Structure of the message buffer */
-+struct bxcan_mb {
-+	u32 id;			/* can identifier */
-+	u32 dlc;		/* data length control and timestamp */
-+	u32 data[2];		/* data */
-+};
-+
-+/* Structure of the hardware registers */
-+struct bxcan_regs {
-+	u32 mcr;			/* 0x00 - master control */
-+	u32 msr;			/* 0x04 - master status */
-+	u32 tsr;			/* 0x08 - transmit status */
-+	u32 rf0r;			/* 0x0c - FIFO 0 */
-+	u32 rf1r;			/* 0x10 - FIFO 1 */
-+	u32 ier;			/* 0x14 - interrupt enable */
-+	u32 esr;			/* 0x18 - error status */
-+	u32 btr;			/* 0x1c - bit timing*/
-+	u32 reserved0[88];		/* 0x20 */
-+	struct bxcan_mb tx_mb[BXCAN_TX_MB_NUM];	/* 0x180 - tx mailbox */
-+	struct bxcan_mb rx_mb[BXCAN_RX_MB_NUM];	/* 0x1b0 - rx mailbox */
-+};
-+
-+struct bxcan_priv {
-+	struct can_priv can;
-+	struct can_rx_offload offload;
-+	struct device *dev;
-+	struct net_device *ndev;
-+
-+	struct bxcan_regs __iomem *regs;
-+	struct regmap *gcan;
-+	int tx_irq;
-+	int sce_irq;
-+	bool master;
-+	struct clk *clk;
-+	spinlock_t rmw_lock;	/* lock for read-modify-write operations */
-+	unsigned int tx_head;
-+	unsigned int tx_tail;
-+	u32 timestamp;
-+};
-+
-+static const struct can_bittiming_const bxcan_bittiming_const = {
-+	.name = KBUILD_MODNAME,
-+	.tseg1_min = 1,
-+	.tseg1_max = 16,
-+	.tseg2_min = 1,
-+	.tseg2_max = 8,
-+	.sjw_max = 4,
-+	.brp_min = 1,
-+	.brp_max = 1024,
-+	.brp_inc = 1,
-+};
-+
-+static inline void bxcan_rmw(struct bxcan_priv *priv, void __iomem *addr,
-+			     u32 clear, u32 set)
-+{
-+	unsigned long flags;
-+	u32 old, val;
-+
-+	spin_lock_irqsave(&priv->rmw_lock, flags);
-+	old = readl(addr);
-+	val = (old & ~clear) | set;
-+	if (val != old)
-+		writel(val, addr);
-+
-+	spin_unlock_irqrestore(&priv->rmw_lock, flags);
-+}
-+
-+static void bxcan_disable_filters(struct bxcan_priv *priv, bool master)
-+{
-+	unsigned int fid = BXCAN_FILTER_ID(master);
-+	u32 fmask = BIT(fid);
-+
-+	regmap_update_bits(priv->gcan, BXCAN_FA1R_REG, fmask, 0);
-+}
-+
-+static void bxcan_enable_filters(struct bxcan_priv *priv, bool master)
-+{
-+	unsigned int fid = BXCAN_FILTER_ID(master);
-+	u32 fmask = BIT(fid);
-+
-+	/* Filter settings:
-+	 *
-+	 * Accept all messages.
-+	 * Assign filter 0 to CAN1 and filter 14 to CAN2 in identifier
-+	 * mask mode with 32 bits width.
-+	 */
-+
-+	/* Enter filter initialization mode and assing filters to CAN
-+	 * controllers.
-+	 */
-+	regmap_update_bits(priv->gcan, BXCAN_FMR_REG,
-+			   BXCAN_FMR_CANSB_MASK | BXCAN_FMR_FINIT,
-+			   FIELD_PREP(BXCAN_FMR_CANSB_MASK, 14) |
-+			   BXCAN_FMR_FINIT);
-+
-+	/* Deactivate filter */
-+	regmap_update_bits(priv->gcan, BXCAN_FA1R_REG, fmask, 0);
-+
-+	/* Two 32-bit registers in identifier mask mode */
-+	regmap_update_bits(priv->gcan, BXCAN_FM1R_REG, fmask, 0);
-+
-+	/* Single 32-bit scale configuration */
-+	regmap_update_bits(priv->gcan, BXCAN_FS1R_REG, fmask, fmask);
-+
-+	/* Assign filter to FIFO 0 */
-+	regmap_update_bits(priv->gcan, BXCAN_FFA1R_REG, fmask, 0);
-+
-+	/* Accept all messages */
-+	regmap_write(priv->gcan, BXCAN_FiR1_REG(fid), 0);
-+	regmap_write(priv->gcan, BXCAN_FiR2_REG(fid), 0);
-+
-+	/* Activate filter */
-+	regmap_update_bits(priv->gcan, BXCAN_FA1R_REG, fmask, fmask);
-+
-+	/* Exit filter initialization mode */
-+	regmap_update_bits(priv->gcan, BXCAN_FMR_REG, BXCAN_FMR_FINIT, 0);
-+}
-+
-+static inline u8 bxcan_get_tx_head(const struct bxcan_priv *priv)
-+{
-+	return priv->tx_head % BXCAN_TX_MB_NUM;
-+}
-+
-+static inline u8 bxcan_get_tx_tail(const struct bxcan_priv *priv)
-+{
-+	return priv->tx_tail % BXCAN_TX_MB_NUM;
-+}
-+
-+static inline u8 bxcan_get_tx_free(const struct bxcan_priv *priv)
-+{
-+	return BXCAN_TX_MB_NUM - (priv->tx_head - priv->tx_tail);
-+}
-+
-+static bool bxcan_tx_busy(const struct bxcan_priv *priv)
-+{
-+	if (bxcan_get_tx_free(priv) > 0)
-+		return false;
-+
-+	netif_stop_queue(priv->ndev);
-+
-+	/* Memory barrier before checking tx_free (head and tail) */
-+	smp_mb();
-+
-+	if (bxcan_get_tx_free(priv) == 0) {
-+		netdev_dbg(priv->ndev,
-+			   "Stopping tx-queue (tx_head=0x%08x, tx_tail=0x%08x, len=%d).\n",
-+			   priv->tx_head, priv->tx_tail,
-+			   priv->tx_head - priv->tx_tail);
-+
-+		return true;
-+	}
-+
-+	netif_start_queue(priv->ndev);
-+
-+	return false;
-+}
-+
-+static int bxcan_chip_softreset(struct bxcan_priv *priv)
-+{
-+	struct bxcan_regs __iomem *regs = priv->regs;
-+	u32 value;
-+
-+	bxcan_rmw(priv, &regs->mcr, 0, BXCAN_MCR_RESET);
-+	return readx_poll_timeout(readl, &regs->msr, value,
-+				  value & BXCAN_MSR_SLAK, BXCAN_TIMEOUT_US,
-+				  USEC_PER_SEC);
-+}
-+
-+static int bxcan_enter_init_mode(struct bxcan_priv *priv)
-+{
-+	struct bxcan_regs __iomem *regs = priv->regs;
-+	u32 value;
-+
-+	bxcan_rmw(priv, &regs->mcr, 0, BXCAN_MCR_INRQ);
-+	return readx_poll_timeout(readl, &regs->msr, value,
-+				  value & BXCAN_MSR_INAK, BXCAN_TIMEOUT_US,
-+				  USEC_PER_SEC);
-+}
-+
-+static int bxcan_leave_init_mode(struct bxcan_priv *priv)
-+{
-+	struct bxcan_regs __iomem *regs = priv->regs;
-+	u32 value;
-+
-+	bxcan_rmw(priv, &regs->mcr, BXCAN_MCR_INRQ, 0);
-+	return readx_poll_timeout(readl, &regs->msr, value,
-+				  !(value & BXCAN_MSR_INAK), BXCAN_TIMEOUT_US,
-+				  USEC_PER_SEC);
-+}
-+
-+static int bxcan_enter_sleep_mode(struct bxcan_priv *priv)
-+{
-+	struct bxcan_regs __iomem *regs = priv->regs;
-+	u32 value;
-+
-+	bxcan_rmw(priv, &regs->mcr, 0, BXCAN_MCR_SLEEP);
-+	return readx_poll_timeout(readl, &regs->msr, value,
-+				  value & BXCAN_MSR_SLAK, BXCAN_TIMEOUT_US,
-+				  USEC_PER_SEC);
-+}
-+
-+static int bxcan_leave_sleep_mode(struct bxcan_priv *priv)
-+{
-+	struct bxcan_regs __iomem *regs = priv->regs;
-+	u32 value;
-+
-+	bxcan_rmw(priv, &regs->mcr, BXCAN_MCR_SLEEP, 0);
-+	return readx_poll_timeout(readl, &regs->msr, value,
-+				  !(value & BXCAN_MSR_SLAK), BXCAN_TIMEOUT_US,
-+				  USEC_PER_SEC);
-+}
-+
-+static inline
-+struct bxcan_priv *rx_offload_to_priv(struct can_rx_offload *offload)
-+{
-+	return container_of(offload, struct bxcan_priv, offload);
-+}
-+
-+static struct sk_buff *bxcan_mailbox_read(struct can_rx_offload *offload,
-+					  unsigned int mbxno, u32 *timestamp,
-+					  bool drop)
-+{
-+	struct bxcan_priv *priv = rx_offload_to_priv(offload);
-+	struct bxcan_regs __iomem *regs = priv->regs;
-+	struct bxcan_mb __iomem *mb_regs = &regs->rx_mb[0];
-+	struct sk_buff *skb = NULL;
-+	struct can_frame *cf;
-+	u32 rf0r, id, dlc;
-+
-+	rf0r = readl(&regs->rf0r);
-+	if (unlikely(drop)) {
-+		skb = ERR_PTR(-ENOBUFS);
-+		goto mark_as_read;
-+	}
-+
-+	if (!(rf0r & BXCAN_RF0R_FMP0_MASK))
-+		goto mark_as_read;
-+
-+	skb = alloc_can_skb(offload->dev, &cf);
-+	if (unlikely(!skb)) {
-+		skb = ERR_PTR(-ENOMEM);
-+		goto mark_as_read;
-+	}
-+
-+	id = readl(&mb_regs->id);
-+	if (id & BXCAN_RIxR_IDE)
-+		cf->can_id = FIELD_GET(BXCAN_RIxR_EXID_MASK, id) | CAN_EFF_FLAG;
-+	else
-+		cf->can_id = FIELD_GET(BXCAN_RIxR_STID_MASK, id) & CAN_SFF_MASK;
-+
-+	dlc = readl(&mb_regs->dlc);
-+	priv->timestamp = FIELD_GET(BXCAN_RDTxR_TIME_MASK, dlc);
-+	cf->len = can_cc_dlc2len(FIELD_GET(BXCAN_RDTxR_DLC_MASK, dlc));
-+
-+	if (id & BXCAN_RIxR_RTR) {
-+		cf->can_id |= CAN_RTR_FLAG;
-+	} else {
-+		int i, j;
-+
-+		for (i = 0, j = 0; i < cf->len; i += 4, j++)
-+			*(u32 *)(cf->data + i) = readl(&mb_regs->data[j]);
-+	}
-+
-+ mark_as_read:
-+	rf0r |= BXCAN_RF0R_RFOM0;
-+	writel(rf0r, &regs->rf0r);
-+	return skb;
-+}
-+
-+static irqreturn_t bxcan_rx_isr(int irq, void *dev_id)
-+{
-+	struct net_device *ndev = dev_id;
-+	struct bxcan_priv *priv = netdev_priv(ndev);
-+
-+	can_rx_offload_irq_offload_fifo(&priv->offload);
-+	can_rx_offload_irq_finish(&priv->offload);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static irqreturn_t bxcan_tx_isr(int irq, void *dev_id)
-+{
-+	struct net_device *ndev = dev_id;
-+	struct bxcan_priv *priv = netdev_priv(ndev);
-+	struct bxcan_regs __iomem *regs = priv->regs;
-+	struct net_device_stats *stats = &ndev->stats;
-+	u32 tsr, rqcp_bit;
-+	int idx;
-+
-+	tsr = readl(&regs->tsr);
-+	if (!(tsr & (BXCAN_TSR_RQCP0 | BXCAN_TSR_RQCP1 | BXCAN_TSR_RQCP2)))
-+		return IRQ_HANDLED;
-+
-+	while (priv->tx_head - priv->tx_tail > 0) {
-+		idx = bxcan_get_tx_tail(priv);
-+		rqcp_bit = BXCAN_TSR_RQCP0 << (idx << 3);
-+		if (!(tsr & rqcp_bit))
-+			break;
-+
-+		stats->tx_packets++;
-+		stats->tx_bytes += can_get_echo_skb(ndev, idx, NULL);
-+		priv->tx_tail++;
-+	}
-+
-+	writel(tsr, &regs->tsr);
-+
-+	if (bxcan_get_tx_free(priv)) {
-+		/* Make sure that anybody stopping the queue after
-+		 * this sees the new tx_ring->tail.
-+		 */
-+		smp_mb();
-+		netif_wake_queue(ndev);
-+	}
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static void bxcan_handle_state_change(struct net_device *ndev, u32 esr)
-+{
-+	struct bxcan_priv *priv = netdev_priv(ndev);
-+	enum can_state new_state = priv->can.state;
-+	struct can_berr_counter bec;
-+	enum can_state rx_state, tx_state;
-+	struct sk_buff *skb;
-+	struct can_frame *cf;
-+
-+	/* Early exit if no error flag is set */
-+	if (!(esr & (BXCAN_ESR_EWGF | BXCAN_ESR_EPVF | BXCAN_ESR_BOFF)))
-+		return;
-+
-+	bec.txerr = FIELD_GET(BXCAN_ESR_TEC_MASK, esr);
-+	bec.rxerr = FIELD_GET(BXCAN_ESR_REC_MASK, esr);
-+
-+	if (esr & BXCAN_ESR_BOFF)
-+		new_state = CAN_STATE_BUS_OFF;
-+	else if (esr & BXCAN_ESR_EPVF)
-+		new_state = CAN_STATE_ERROR_PASSIVE;
-+	else if (esr & BXCAN_ESR_EWGF)
-+		new_state = CAN_STATE_ERROR_WARNING;
-+
-+	/* state hasn't changed */
-+	if (unlikely(new_state == priv->can.state))
-+		return;
-+
-+	skb = alloc_can_err_skb(ndev, &cf);
-+
-+	tx_state = bec.txerr >= bec.rxerr ? new_state : 0;
-+	rx_state = bec.txerr <= bec.rxerr ? new_state : 0;
-+	can_change_state(ndev, cf, tx_state, rx_state);
-+
-+	if (new_state == CAN_STATE_BUS_OFF) {
-+		can_bus_off(ndev);
-+	} else if (skb) {
-+		cf->data[6] = bec.txerr;
-+		cf->data[7] = bec.rxerr;
-+	}
-+
-+	if (skb) {
-+		int err;
-+
-+		err = can_rx_offload_queue_timestamp(&priv->offload, skb,
-+						     priv->timestamp);
-+		if (err)
-+			ndev->stats.rx_fifo_errors++;
-+	}
-+}
-+
-+static void bxcan_handle_bus_err(struct net_device *ndev, u32 esr)
-+{
-+	struct bxcan_priv *priv = netdev_priv(ndev);
-+	enum bxcan_lec_code lec_code;
-+	struct can_frame *cf;
-+	struct sk_buff *skb;
-+
-+	lec_code = FIELD_GET(BXCAN_ESR_LEC_MASK, esr);
-+
-+	/* Early exit if no lec update or no error.
-+	 * No lec update means that no CAN bus event has been detected
-+	 * since CPU wrote BXCAN_LEC_UNUSED value to status reg.
-+	 */
-+	if (lec_code == BXCAN_LEC_UNUSED || lec_code == BXCAN_LEC_NO_ERROR)
-+		return;
-+
-+	/* Common for all type of bus errors */
-+	priv->can.can_stats.bus_error++;
-+
-+	/* Propagate the error condition to the CAN stack */
-+	skb = alloc_can_err_skb(ndev, &cf);
-+	if (skb)
-+		cf->can_id |= CAN_ERR_PROT | CAN_ERR_BUSERROR;
-+
-+	switch (lec_code) {
-+	case BXCAN_LEC_STUFF_ERROR:
-+		netdev_dbg(ndev, "Stuff error\n");
-+		ndev->stats.rx_errors++;
-+		if (skb)
-+			cf->data[2] |= CAN_ERR_PROT_STUFF;
-+
-+		break;
-+	case BXCAN_LEC_FORM_ERROR:
-+		netdev_dbg(ndev, "Form error\n");
-+		ndev->stats.rx_errors++;
-+		if (skb)
-+			cf->data[2] |= CAN_ERR_PROT_FORM;
-+
-+		break;
-+	case BXCAN_LEC_ACK_ERROR:
-+		netdev_dbg(ndev, "Ack error\n");
-+		ndev->stats.tx_errors++;
-+		if (skb) {
-+			cf->can_id |= CAN_ERR_ACK;
-+			cf->data[3] = CAN_ERR_PROT_LOC_ACK;
-+		}
-+
-+		break;
-+	case BXCAN_LEC_BIT1_ERROR:
-+		netdev_dbg(ndev, "Bit error (recessive)\n");
-+		ndev->stats.tx_errors++;
-+		if (skb)
-+			cf->data[2] |= CAN_ERR_PROT_BIT1;
-+
-+		break;
-+	case BXCAN_LEC_BIT0_ERROR:
-+		netdev_dbg(ndev, "Bit error (dominant)\n");
-+		ndev->stats.tx_errors++;
-+		if (skb)
-+			cf->data[2] |= CAN_ERR_PROT_BIT0;
-+
-+		break;
-+	case BXCAN_LEC_CRC_ERROR:
-+		netdev_dbg(ndev, "CRC error\n");
-+		ndev->stats.rx_errors++;
-+		if (skb) {
-+			cf->data[2] |= CAN_ERR_PROT_BIT;
-+			cf->data[3] = CAN_ERR_PROT_LOC_CRC_SEQ;
-+		}
-+
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	if (skb) {
-+		int err;
-+
-+		err = can_rx_offload_queue_timestamp(&priv->offload, skb,
-+						     priv->timestamp);
-+		if (err)
-+			ndev->stats.rx_fifo_errors++;
-+	}
-+}
-+
-+static irqreturn_t bxcan_state_change_isr(int irq, void *dev_id)
-+{
-+	struct net_device *ndev = dev_id;
-+	struct bxcan_priv *priv = netdev_priv(ndev);
-+	struct bxcan_regs __iomem *regs = priv->regs;
-+	u32 msr, esr;
-+
-+	msr = readl(&regs->msr);
-+	if (!(msr & BXCAN_MSR_ERRI))
-+		return IRQ_NONE;
-+
-+	esr = readl(&regs->esr);
-+	bxcan_handle_state_change(ndev, esr);
-+
-+	if (priv->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING)
-+		bxcan_handle_bus_err(ndev, esr);
-+
-+	msr |= BXCAN_MSR_ERRI;
-+	writel(msr, &regs->msr);
-+	can_rx_offload_irq_finish(&priv->offload);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int bxcan_chip_start(struct net_device *ndev)
-+{
-+	struct bxcan_priv *priv = netdev_priv(ndev);
-+	struct bxcan_regs __iomem *regs = priv->regs;
-+	struct can_bittiming *bt = &priv->can.bittiming;
-+	u32 clr, set;
-+	int err;
-+
-+	err = bxcan_chip_softreset(priv);
-+	if (err) {
-+		netdev_err(ndev, "failed to reset chip, error %d\n", err);
-+		return err;
-+	}
-+
-+	err = bxcan_leave_sleep_mode(priv);
-+	if (err) {
-+		netdev_err(ndev, "failed to leave sleep mode, error %d\n", err);
-+		goto failed_leave_sleep;
-+	}
-+
-+	err = bxcan_enter_init_mode(priv);
-+	if (err) {
-+		netdev_err(ndev, "failed to enter init mode, error %d\n", err);
-+		goto failed_enter_init;
-+	}
-+
-+	/* MCR
-+	 *
-+	 * select request order priority
-+	 * enable time triggered mode
-+	 * bus-off state left on sw request
-+	 * sleep mode left on sw request
-+	 * retransmit automatically on error
-+	 * do not lock RX FIFO on overrun
-+	 */
-+	bxcan_rmw(priv, &regs->mcr,
-+		  BXCAN_MCR_ABOM | BXCAN_MCR_AWUM | BXCAN_MCR_NART |
-+		  BXCAN_MCR_RFLM, BXCAN_MCR_TTCM | BXCAN_MCR_TXFP);
-+
-+	/* Bit timing register settings */
-+	set = FIELD_PREP(BXCAN_BTR_BRP_MASK, bt->brp - 1) |
-+		FIELD_PREP(BXCAN_BTR_TS1_MASK, bt->phase_seg1 +
-+			   bt->prop_seg - 1) |
-+		FIELD_PREP(BXCAN_BTR_TS2_MASK, bt->phase_seg2 - 1) |
-+		FIELD_PREP(BXCAN_BTR_SJW_MASK, bt->sjw - 1);
-+
-+	/* loopback + silent mode put the controller in test mode,
-+	 * useful for hot self-test
-+	 */
-+	if (priv->can.ctrlmode & CAN_CTRLMODE_LOOPBACK)
-+		set |= BXCAN_BTR_LBKM;
-+
-+	if (priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
-+		set |= BXCAN_BTR_SILM;
-+
-+	netdev_dbg(ndev,
-+		   "TQ[ns]: %d, PrS: %d, PhS1: %d, PhS2: %d, SJW: %d, BRP: %d, CAN_BTR: 0x%08x\n",
-+		   bt->tq, bt->prop_seg, bt->phase_seg1, bt->phase_seg2,
-+		   bt->sjw, bt->brp, set);
-+	bxcan_rmw(priv, &regs->btr, BXCAN_BTR_SILM | BXCAN_BTR_LBKM |
-+		  BXCAN_BTR_BRP_MASK | BXCAN_BTR_TS1_MASK | BXCAN_BTR_TS2_MASK |
-+		  BXCAN_BTR_SJW_MASK, set);
-+
-+	bxcan_enable_filters(priv, priv->master);
-+
-+	/* Clear all internal status */
-+	priv->tx_head = 0;
-+	priv->tx_tail = 0;
-+
-+	err = bxcan_leave_init_mode(priv);
-+	if (err) {
-+		netdev_err(ndev, "failed to leave init mode, error %d\n", err);
-+		goto failed_leave_init;
-+	}
-+
-+	/* Set a `lec` value so that we can check for updates later */
-+	bxcan_rmw(priv, &regs->esr, BXCAN_ESR_LEC_MASK,
-+		  FIELD_PREP(BXCAN_ESR_LEC_MASK, BXCAN_LEC_UNUSED));
-+
-+	/* IER
-+	 *
-+	 * Enable interrupt for:
-+	 * bus-off
-+	 * passive error
-+	 * warning error
-+	 * last error code
-+	 * RX FIFO pending message
-+	 * TX mailbox empty
-+	 */
-+	clr = BXCAN_IER_WKUIE | BXCAN_IER_SLKIE |  BXCAN_IER_FOVIE1 |
-+		BXCAN_IER_FFIE1 | BXCAN_IER_FMPIE1 | BXCAN_IER_FOVIE0 |
-+		BXCAN_IER_FFIE0;
-+	set = BXCAN_IER_ERRIE | BXCAN_IER_BOFIE | BXCAN_IER_EPVIE |
-+		BXCAN_IER_EWGIE | BXCAN_IER_FMPIE0 | BXCAN_IER_TMEIE;
-+
-+	if (priv->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING)
-+		set |= BXCAN_IER_LECIE;
-+	else
-+		clr |= BXCAN_IER_LECIE;
-+
-+	bxcan_rmw(priv, &regs->ier, clr, set);
-+
-+	priv->can.state = CAN_STATE_ERROR_ACTIVE;
-+	return 0;
-+
-+failed_leave_init:
-+failed_enter_init:
-+failed_leave_sleep:
-+	bxcan_chip_softreset(priv);
-+	return err;
-+}
-+
-+static int bxcan_open(struct net_device *ndev)
-+{
-+	struct bxcan_priv *priv = netdev_priv(ndev);
-+	int err;
-+
-+	err = open_candev(ndev);
-+	if (err) {
-+		netdev_err(ndev, "open_candev() failed, error %d\n", err);
-+		return err;
-+	}
-+
-+	can_rx_offload_enable(&priv->offload);
-+	err = request_irq(ndev->irq, bxcan_rx_isr, IRQF_SHARED, ndev->name,
-+			  ndev);
-+	if (err) {
-+		netdev_err(ndev, "failed to register rx irq(%d), error %d\n",
-+			   ndev->irq, err);
-+		goto out_close_candev;
-+	}
-+
-+	err = request_irq(priv->tx_irq, bxcan_tx_isr, IRQF_SHARED, ndev->name,
-+			  ndev);
-+	if (err) {
-+		netdev_err(ndev, "failed to register tx irq(%d), error %d\n",
-+			   priv->tx_irq, err);
-+		goto out_free_rx_irq;
-+	}
-+
-+	err = request_irq(priv->sce_irq, bxcan_state_change_isr, IRQF_SHARED,
-+			  ndev->name, ndev);
-+	if (err) {
-+		netdev_err(ndev, "failed to register sce irq(%d), error %d\n",
-+			   priv->sce_irq, err);
-+		goto out_free_tx_irq;
-+	}
-+
-+	err = bxcan_chip_start(ndev);
-+	if (err)
-+		goto out_free_sce_irq;
-+
-+	netif_start_queue(ndev);
-+	return 0;
-+
-+out_free_sce_irq:
-+	free_irq(priv->sce_irq, ndev);
-+out_free_tx_irq:
-+	free_irq(priv->tx_irq, ndev);
-+out_free_rx_irq:
-+	free_irq(ndev->irq, ndev);
-+out_close_candev:
-+	can_rx_offload_disable(&priv->offload);
-+	close_candev(ndev);
-+	return err;
-+}
-+
-+static void bxcan_chip_stop(struct net_device *ndev)
-+{
-+	struct bxcan_priv *priv = netdev_priv(ndev);
-+	struct bxcan_regs __iomem *regs = priv->regs;
-+
-+	/* disable all interrupts */
-+	bxcan_rmw(priv, &regs->ier, BXCAN_IER_SLKIE | BXCAN_IER_WKUIE |
-+		  BXCAN_IER_ERRIE | BXCAN_IER_LECIE | BXCAN_IER_BOFIE |
-+		  BXCAN_IER_EPVIE | BXCAN_IER_EWGIE | BXCAN_IER_FOVIE1 |
-+		  BXCAN_IER_FFIE1 | BXCAN_IER_FMPIE1 | BXCAN_IER_FOVIE0 |
-+		  BXCAN_IER_FFIE0 | BXCAN_IER_FMPIE0 | BXCAN_IER_TMEIE, 0);
-+	bxcan_disable_filters(priv, priv->master);
-+	bxcan_enter_sleep_mode(priv);
-+	priv->can.state = CAN_STATE_STOPPED;
-+}
-+
-+static int bxcan_stop(struct net_device *ndev)
-+{
-+	struct bxcan_priv *priv = netdev_priv(ndev);
-+
-+	netif_stop_queue(ndev);
-+	bxcan_chip_stop(ndev);
-+	free_irq(ndev->irq, ndev);
-+	free_irq(priv->tx_irq, ndev);
-+	free_irq(priv->sce_irq, ndev);
-+	can_rx_offload_disable(&priv->offload);
-+	close_candev(ndev);
-+	return 0;
-+}
-+
-+static netdev_tx_t bxcan_start_xmit(struct sk_buff *skb,
-+				    struct net_device *ndev)
-+{
-+	struct bxcan_priv *priv = netdev_priv(ndev);
-+	struct can_frame *cf = (struct can_frame *)skb->data;
-+	struct bxcan_regs __iomem *regs = priv->regs;
-+	struct bxcan_mb __iomem *mb_regs;
-+	unsigned int idx;
-+	u32 id;
-+	int i, j;
-+
-+	if (can_dropped_invalid_skb(ndev, skb))
-+		return NETDEV_TX_OK;
-+
-+	if (bxcan_tx_busy(priv))
-+		return NETDEV_TX_BUSY;
-+
-+	idx = bxcan_get_tx_head(priv);
-+	priv->tx_head++;
-+	if (bxcan_get_tx_free(priv) == 0)
-+		netif_stop_queue(ndev);
-+
-+	mb_regs = &regs->tx_mb[idx];
-+	if (cf->can_id & CAN_EFF_FLAG)
-+		id = FIELD_PREP(BXCAN_TIxR_EXID_MASK, cf->can_id) |
-+			BXCAN_TIxR_IDE;
-+	else
-+		id = FIELD_PREP(BXCAN_TIxR_STID_MASK, cf->can_id);
-+
-+	if (cf->can_id & CAN_RTR_FLAG)
-+		id |= BXCAN_TIxR_RTR;
-+
-+	writel(FIELD_PREP(BXCAN_TDTxR_DLC_MASK, cf->len), &mb_regs->dlc);
-+
-+	for (i = 0, j = 0; i < cf->len; i += 4, j++)
-+		writel(*(u32 *)(cf->data + i), &mb_regs->data[j]);
-+
-+	can_put_echo_skb(skb, ndev, idx, 0);
-+
-+	/* Start transmission */
-+	writel(id | BXCAN_TIxR_TXRQ, &mb_regs->id);
-+
-+	return NETDEV_TX_OK;
-+}
-+
-+static const struct net_device_ops bxcan_netdev_ops = {
-+	.ndo_open = bxcan_open,
-+	.ndo_stop = bxcan_stop,
-+	.ndo_start_xmit = bxcan_start_xmit,
-+	.ndo_change_mtu = can_change_mtu,
-+};
-+
-+static int bxcan_do_set_mode(struct net_device *ndev, enum can_mode mode)
-+{
-+	int err;
-+
-+	switch (mode) {
-+	case CAN_MODE_START:
-+		err = bxcan_chip_start(ndev);
-+		if (err)
-+			return err;
-+
-+		netif_wake_queue(ndev);
-+		break;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+
-+	return 0;
-+}
-+
-+static int bxcan_get_berr_counter(const struct net_device *ndev,
-+				  struct can_berr_counter *bec)
-+{
-+	struct bxcan_priv *priv = netdev_priv(ndev);
-+	struct bxcan_regs __iomem *regs = priv->regs;
-+	u32 esr;
-+	int err;
-+
-+	err = clk_prepare_enable(priv->clk);
-+	if (err)
-+		return err;
-+
-+	esr = readl(&regs->esr);
-+	bec->txerr = FIELD_GET(BXCAN_ESR_TEC_MASK, esr);
-+	bec->rxerr = FIELD_GET(BXCAN_ESR_REC_MASK, esr);
-+	clk_disable_unprepare(priv->clk);
-+	return 0;
-+}
-+
-+static int bxcan_probe(struct platform_device *pdev)
-+{
-+	struct device_node *np = pdev->dev.of_node;
-+	struct device *dev = &pdev->dev;
-+	struct net_device *ndev;
-+	struct bxcan_priv *priv;
-+	struct clk *clk = NULL;
-+	void __iomem *regs;
-+	struct regmap *gcan;
-+	bool master;
-+	int err, rx_irq, tx_irq, sce_irq;
-+
-+	regs = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(regs)) {
-+		dev_err(dev, "failed to get base address\n");
-+		return PTR_ERR(regs);
-+	}
-+
-+	gcan = syscon_regmap_lookup_by_phandle(np, "st,gcan");
-+	if (IS_ERR(gcan)) {
-+		dev_err(dev, "failed to get shared memory base address\n");
-+		return PTR_ERR(gcan);
-+	}
-+
-+	master = of_property_read_bool(np, "st,can-master");
-+	clk = devm_clk_get(dev, NULL);
-+	if (IS_ERR(clk)) {
-+		dev_err(dev, "failed to get clock\n");
-+		return PTR_ERR(clk);
-+	}
-+
-+	rx_irq = platform_get_irq_byname(pdev, "rx0");
-+	if (rx_irq < 0) {
-+		dev_err(dev, "failed to get rx0 irq\n");
-+		return rx_irq;
-+	}
-+
-+	tx_irq = platform_get_irq_byname(pdev, "tx");
-+	if (tx_irq < 0) {
-+		dev_err(dev, "failed to get tx irq\n");
-+		return tx_irq;
-+	}
-+
-+	sce_irq = platform_get_irq_byname(pdev, "sce");
-+	if (sce_irq < 0) {
-+		dev_err(dev, "failed to get sce irq\n");
-+		return sce_irq;
-+	}
-+
-+	ndev = alloc_candev(sizeof(struct bxcan_priv), BXCAN_TX_MB_NUM);
-+	if (!ndev) {
-+		dev_err(dev, "alloc_candev() failed\n");
-+		return -ENOMEM;
-+	}
-+
-+	priv = netdev_priv(ndev);
-+	platform_set_drvdata(pdev, ndev);
-+	SET_NETDEV_DEV(ndev, dev);
-+	ndev->netdev_ops = &bxcan_netdev_ops;
-+	ndev->irq = rx_irq;
-+	ndev->flags |= IFF_ECHO;
-+
-+	priv->dev = dev;
-+	priv->ndev = ndev;
-+	priv->regs = regs;
-+	priv->gcan = gcan;
-+	priv->clk = clk;
-+	priv->tx_irq = tx_irq;
-+	priv->sce_irq = sce_irq;
-+	priv->master = master;
-+	priv->can.clock.freq = clk_get_rate(clk);
-+	spin_lock_init(&priv->rmw_lock);
-+	priv->tx_head = 0;
-+	priv->tx_tail = 0;
-+	priv->can.bittiming_const = &bxcan_bittiming_const;
-+	priv->can.do_set_mode = bxcan_do_set_mode;
-+	priv->can.do_get_berr_counter = bxcan_get_berr_counter;
-+	priv->can.ctrlmode_supported = CAN_CTRLMODE_LOOPBACK |
-+		CAN_CTRLMODE_LISTENONLY	| CAN_CTRLMODE_BERR_REPORTING;
-+
-+	priv->offload.mailbox_read = bxcan_mailbox_read;
-+	err = can_rx_offload_add_fifo(ndev, &priv->offload, BXCAN_NAPI_WEIGHT);
-+	if (err) {
-+		dev_err(dev, "failed to add FIFO rx_offload\n");
-+		goto out_free_candev;
-+	}
-+
-+	err = clk_prepare_enable(priv->clk);
-+	if (err) {
-+		dev_err(dev, "failed to enable clock\n");
-+		goto out_can_rx_offload_del;
-+	}
-+
-+	err = register_candev(ndev);
-+	if (err) {
-+		dev_err(dev, "failed to register netdev\n");
-+		goto out_clk_disable_unprepare;
-+	}
-+
-+	dev_info(dev, "clk: %d Hz, IRQs: %d, %d, %d\n", priv->can.clock.freq,
-+		 tx_irq, rx_irq, sce_irq);
-+	return 0;
-+
-+out_clk_disable_unprepare:
-+	clk_disable_unprepare(priv->clk);
-+out_can_rx_offload_del:
-+	can_rx_offload_del(&priv->offload);
-+out_free_candev:
-+	free_candev(ndev);
-+	return err;
-+}
-+
-+static int bxcan_remove(struct platform_device *pdev)
-+{
-+	struct net_device *ndev = platform_get_drvdata(pdev);
-+	struct bxcan_priv *priv = netdev_priv(ndev);
-+
-+	unregister_candev(ndev);
-+	clk_disable_unprepare(priv->clk);
-+	can_rx_offload_del(&priv->offload);
-+	free_candev(ndev);
-+	return 0;
-+}
-+
-+static int __maybe_unused bxcan_suspend(struct device *dev)
-+{
-+	struct net_device *ndev = dev_get_drvdata(dev);
-+	struct bxcan_priv *priv = netdev_priv(ndev);
-+
-+	if (!netif_running(ndev))
-+		return 0;
-+
-+	netif_stop_queue(ndev);
-+	netif_device_detach(ndev);
-+
-+	bxcan_enter_sleep_mode(priv);
-+	priv->can.state = CAN_STATE_SLEEPING;
-+	clk_disable_unprepare(priv->clk);
-+	return 0;
-+}
-+
-+static int __maybe_unused bxcan_resume(struct device *dev)
-+{
-+	struct net_device *ndev = dev_get_drvdata(dev);
-+	struct bxcan_priv *priv = netdev_priv(ndev);
-+
-+	if (!netif_running(ndev))
-+		return 0;
-+
-+	clk_prepare_enable(priv->clk);
-+	bxcan_leave_sleep_mode(priv);
-+	priv->can.state = CAN_STATE_ERROR_ACTIVE;
-+
-+	netif_device_attach(ndev);
-+	netif_start_queue(ndev);
-+	return 0;
-+}
-+
-+static SIMPLE_DEV_PM_OPS(bxcan_pm_ops, bxcan_suspend, bxcan_resume);
-+
-+static const struct of_device_id bxcan_of_match[] = {
-+	{.compatible = "st,stm32f4-bxcan"},
-+	{ /* sentinel */ },
-+};
-+MODULE_DEVICE_TABLE(of, bxcan_of_match);
-+
-+static struct platform_driver bxcan_driver = {
-+	.driver = {
-+		.name = KBUILD_MODNAME,
-+		.pm = &bxcan_pm_ops,
-+		.of_match_table = bxcan_of_match,
-+	},
-+	.probe = bxcan_probe,
-+	.remove = bxcan_remove,
-+};
-+
-+module_platform_driver(bxcan_driver);
-+
-+MODULE_AUTHOR("Dario Binacchi <dario.binacchi@amarulasolutions.com>");
-+MODULE_DESCRIPTION("STMicroelectronics Basic Extended CAN controller driver");
-+MODULE_LICENSE("GPL");
--- 
-2.32.0
-
+--_003_FR0P281MB1966801F8A7BCC540D40A4DE97FE9FR0P281MB1966DEUP_--
