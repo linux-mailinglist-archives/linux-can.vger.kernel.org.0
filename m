@@ -2,35 +2,35 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10EEF66661C
+	by mail.lfdr.de (Postfix) with ESMTP id D615B66661E
 	for <lists+linux-can@lfdr.de>; Wed, 11 Jan 2023 23:22:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234552AbjAKWWE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 11 Jan 2023 17:22:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36586 "EHLO
+        id S234801AbjAKWWG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 11 Jan 2023 17:22:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235708AbjAKWWC (ORCPT
+        with ESMTP id S235873AbjAKWWC (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Wed, 11 Jan 2023 17:22:02 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0EEC43DBA
-        for <linux-can@vger.kernel.org>; Wed, 11 Jan 2023 14:22:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 353E143E43
+        for <linux-can@vger.kernel.org>; Wed, 11 Jan 2023 14:22:01 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1pFjTr-0003yk-56
+        id 1pFjTr-0003yp-Jx
         for linux-can@vger.kernel.org; Wed, 11 Jan 2023 23:21:59 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id B0DBA154C83
-        for <linux-can@vger.kernel.org>; Wed, 11 Jan 2023 22:20:46 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id BE53A154C8F
+        for <linux-can@vger.kernel.org>; Wed, 11 Jan 2023 22:20:47 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 4AD7E154C4A;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 55EDF154C4C;
         Wed, 11 Jan 2023 22:20:45 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 684edb8c;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 62ca2ade;
         Wed, 11 Jan 2023 22:20:44 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     linux-can@vger.kernel.org
@@ -38,9 +38,9 @@ Cc:     Manivannan Sadhasivam <mani@kernel.org>,
         Thomas Kopp <thomas.kopp@microchip.com>,
         =?UTF-8?q?Stefan=20Alth=C3=B6fer?= <Stefan.Althoefer@janztec.com>,
         kernel@pengutroniux.de, Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 4/5] can: mcp251xfd: rx: mcp251xfd_handle_rxif_ring()
-Date:   Wed, 11 Jan 2023 23:20:41 +0100
-Message-Id: <20230111222042.1139027-5-mkl@pengutronix.de>
+Subject: [PATCH 5/5] can: mcp251xfd: implement workaround for double-RX erratum
+Date:   Wed, 11 Jan 2023 23:20:42 +0100
+Message-Id: <20230111222042.1139027-6-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230111222042.1139027-1-mkl@pengutronix.de>
 References: <20230111222042.1139027-1-mkl@pengutronix.de>
@@ -60,194 +60,97 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- .../net/can/spi/mcp251xfd/mcp251xfd-ring.c    |  3 +-
- drivers/net/can/spi/mcp251xfd/mcp251xfd-rx.c  | 75 +++++++++++++------
- drivers/net/can/spi/mcp251xfd/mcp251xfd.h     | 12 +--
- 3 files changed, 57 insertions(+), 33 deletions(-)
+ .../net/can/spi/mcp251xfd/mcp251xfd-ring.c    |  1 +
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-rx.c  | 26 ++++++++++++++++---
+ drivers/net/can/spi/mcp251xfd/mcp251xfd.h     |  3 +++
+ 3 files changed, 27 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-ring.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-ring.c
-index bf3f0f150199..cbfba958e3b5 100644
+index cbfba958e3b5..f90a83390db2 100644
 --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-ring.c
 +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-ring.c
-@@ -2,7 +2,7 @@
- //
- // mcp251xfd - Microchip MCP251xFD Family CAN controller driver
- //
--// Copyright (c) 2019, 2020, 2021 Pengutronix,
-+// Copyright (c) 2019, 2020, 2021, 2022 Pengutronix,
- //               Marc Kleine-Budde <kernel@pengutronix.de>
- //
- // Based on:
-@@ -497,6 +497,7 @@ int mcp251xfd_ring_alloc(struct mcp251xfd_priv *priv)
- 		}
+@@ -196,6 +196,7 @@ mcp251xfd_ring_init_rx(struct mcp251xfd_priv *priv, u16 *base, u8 *fifo_nr)
+ 	int i, j;
  
- 		rx_ring->obj_num = rx_obj_num;
-+		rx_ring->obj_num_shift = ilog2(rx_obj_num);
- 		rx_ring->obj_size = rx_obj_size;
- 		priv->rx[i] = rx_ring;
- 	}
+ 	mcp251xfd_for_each_rx_ring(priv, rx_ring, i) {
++		rx_ring->last_valid = timecounter_read(&priv->tc);
+ 		rx_ring->head = 0;
+ 		rx_ring->tail = 0;
+ 		rx_ring->base = *base;
 diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-rx.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-rx.c
-index 1b18867a9cd5..811c4487c6fe 100644
+index 811c4487c6fe..b9c4f7148b53 100644
 --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-rx.c
 +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-rx.c
-@@ -79,32 +79,59 @@ mcp251xfd_check_rx_tail(const struct mcp251xfd_priv *priv,
- 	return 0;
+@@ -175,8 +175,6 @@ mcp251xfd_hw_rx_obj_to_skb(const struct mcp251xfd_priv *priv,
+ 
+ 	if (!(hw_rx_obj->flags & MCP251XFD_OBJ_FLAGS_RTR))
+ 		memcpy(cfd->data, hw_rx_obj->data, cfd->len);
+-
+-	mcp251xfd_skb_set_timestamp_from_tbc(priv, skb, hw_rx_obj->ts);
  }
  
-+static inline bool mcp251xfd_rx_fifo_sta_empty(u32 fifo_sta)
-+{
-+	return !(fifo_sta & MCP251XFD_REG_FIFOSTA_TFNRFNIF);
-+}
-+
-+static inline bool mcp251xfd_rx_fifo_sta_full(u32 fifo_sta)
-+{
-+	return fifo_sta & MCP251XFD_REG_FIFOSTA_TFERFFIF;
-+}
-+
  static int
--mcp251xfd_rx_ring_update(const struct mcp251xfd_priv *priv,
--			 struct mcp251xfd_rx_ring *ring)
-+mcp251xfd_get_rx_len(struct mcp251xfd_priv *priv,
-+		     struct mcp251xfd_rx_ring *ring,
-+		     u8 *len_p)
- {
--	u32 new_head;
--	u8 chip_rx_head;
--	bool fifo_empty;
-+	u8 head, tail, shift, len;
-+	u32 fifo_sta;
+@@ -187,8 +185,21 @@ mcp251xfd_handle_rxif_one(struct mcp251xfd_priv *priv,
+ 	struct net_device_stats *stats = &priv->ndev->stats;
+ 	struct sk_buff *skb;
+ 	struct canfd_frame *cfd;
++	u64 timestamp;
  	int err;
  
--	err = mcp251xfd_rx_head_get_from_chip(priv, ring, &chip_rx_head,
--					      &fifo_empty);
--	if (err || fifo_empty)
-+	err = regmap_read(priv->map_reg, MCP251XFD_REG_FIFOSTA(ring->fifo_nr),
-+			  &fifo_sta);
-+	if (err)
- 		return err;
- 
--	/* chip_rx_head, is the next RX-Object filled by the HW.
--	 * The new RX head must be >= the old head.
--	 */
--	new_head = round_down(ring->head, ring->obj_num) + chip_rx_head;
--	if (new_head <= ring->head)
--		new_head += ring->obj_num;
-+	if (mcp251xfd_rx_fifo_sta_empty(fifo_sta)) {
-+		*len_p = 0;
-+		return 0;
++	timestamp = timecounter_cyc2time(&priv->tc, hw_rx_obj->ts);
++	if (timestamp <= ring->last_valid ) {
++		netdev_dbg(priv->ndev, "%s: last_valid=0x%016llx ts=0x%016llx d=0x%016llx data=%*ph - Dropping\n", __func__,
++			   ring->last_valid, timestamp,
++			   timestamp - ring->last_valid,
++			   8, hw_rx_obj->data);
++		stats->rx_fifo_errors++;
++
++		return -EBADMSG;
 +	}
- 
--	ring->head = new_head;
-+	if (mcp251xfd_rx_fifo_sta_full(fifo_sta)) {
-+		*len_p = ring->obj_num;
-+		return 0;
-+	}
++	ring->last_valid = timestamp;
 +
-+	head = FIELD_GET(MCP251XFD_REG_FIFOSTA_FIFOCI_MASK, fifo_sta);
-+
-+	err =  mcp251xfd_check_rx_tail(priv, ring);
-+	if (err)
-+		return err;
-+	tail = mcp251xfd_get_rx_tail(ring);
- 
--	return mcp251xfd_check_rx_tail(priv, ring);
-+	/* First shift to full u8. The subtraction then works on
-+	 * singed values, that keeps difference steady around the u8
-+	 * overflow. The right shift acts on len, which is an u8.
-+	 */
-+	shift = BITS_PER_BYTE - ring->obj_num_shift;
-+	len = (head << shift) - (tail << shift);
-+	*len_p = len >> shift;
-+
-+	return 0;
- }
- 
-+
- static void
- mcp251xfd_hw_rx_obj_to_skb(const struct mcp251xfd_priv *priv,
- 			   const struct mcp251xfd_hw_rx_obj_canfd *hw_rx_obj,
-@@ -208,6 +235,8 @@ mcp251xfd_handle_rxif_ring_uinc(const struct mcp251xfd_priv *priv,
- 	if (!len)
+ 	if (hw_rx_obj->flags & MCP251XFD_OBJ_FLAGS_FDF)
+ 		skb = alloc_canfd_skb(priv->ndev, &cfd);
+ 	else
+@@ -199,6 +210,7 @@ mcp251xfd_handle_rxif_one(struct mcp251xfd_priv *priv,
  		return 0;
+ 	}
  
-+	ring->head += len;
-+
- 	/* Increment the RX FIFO tail pointer 'len' times in a
- 	 * single SPI message.
- 	 *
-@@ -233,22 +262,22 @@ mcp251xfd_handle_rxif_ring(struct mcp251xfd_priv *priv,
- 			   struct mcp251xfd_rx_ring *ring)
- {
- 	struct mcp251xfd_hw_rx_obj_canfd *hw_rx_obj = ring->obj;
--	u8 rx_tail, len;
-+	u8 rx_tail, len, l;
- 	int err, i;
- 
--	err = mcp251xfd_rx_ring_update(priv, ring);
-+	err = mcp251xfd_get_rx_len(priv, ring, &len);
++	mcp251xfd_skb_set_timestamp(skb, timestamp);
+ 	mcp251xfd_hw_rx_obj_to_skb(priv, hw_rx_obj, skb);
+ 	err = can_rx_offload_queue_timestamp(&priv->offload, skb, hw_rx_obj->ts);
  	if (err)
- 		return err;
- 
--	while ((len = mcp251xfd_get_rx_linear_len(ring))) {
-+	while ((l = mcp251xfd_get_rx_linear_len(ring, len))) {
- 		rx_tail = mcp251xfd_get_rx_tail(ring);
- 
- 		err = mcp251xfd_rx_obj_read(priv, ring, hw_rx_obj,
--					    rx_tail, len);
-+					    rx_tail, l);
- 		if (err)
- 			return err;
- 
--		for (i = 0; i < len; i++) {
-+		for (i = 0; i < l; i++) {
+@@ -281,7 +293,15 @@ mcp251xfd_handle_rxif_ring(struct mcp251xfd_priv *priv,
  			err = mcp251xfd_handle_rxif_one(priv, ring,
  							(void *)hw_rx_obj +
  							i * ring->obj_size);
-@@ -256,9 +285,11 @@ mcp251xfd_handle_rxif_ring(struct mcp251xfd_priv *priv,
+-			if (err)
++			/* -EBADMSG means we're affected by an
++			 * erratum, i.e. that timestamp in the RX
++			 * object is older that the last valid
++			 * received CAN frame. Don't process any
++			 * further.
++			 */
++			if (err == -EBADMSG)
++				return mcp251xfd_handle_rxif_ring_uinc(priv, ring, i);
++			else if (err)
  				return err;
  		}
  
--		err = mcp251xfd_handle_rxif_ring_uinc(priv, ring, len);
-+		err = mcp251xfd_handle_rxif_ring_uinc(priv, ring, l);
- 		if (err)
- 			return err;
-+
-+		len -= l;
- 	}
- 
- 	return 0;
 diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-index 5d396f1311f5..11f6e1c6fc60 100644
+index 11f6e1c6fc60..d973a89cf7f8 100644
 --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
 +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-@@ -550,6 +550,7 @@ struct mcp251xfd_rx_ring {
+@@ -546,6 +546,9 @@ struct mcp251xfd_rx_ring {
+ 	unsigned int head;
+ 	unsigned int tail;
+ 
++	/* timestamp of the last valid received CAN frame */
++	u64 last_valid;
++
+ 	u16 base;
  	u8 nr;
  	u8 fifo_nr;
- 	u8 obj_num;
-+	u8 obj_num_shift;
- 	u8 obj_size;
- 
- 	union mcp251xfd_write_reg_buf irq_enable_buf;
-@@ -908,18 +909,9 @@ static inline u8 mcp251xfd_get_rx_tail(const struct mcp251xfd_rx_ring *ring)
- 	return ring->tail & (ring->obj_num - 1);
- }
- 
--static inline u8 mcp251xfd_get_rx_len(const struct mcp251xfd_rx_ring *ring)
--{
--	return ring->head - ring->tail;
--}
--
- static inline u8
--mcp251xfd_get_rx_linear_len(const struct mcp251xfd_rx_ring *ring)
-+mcp251xfd_get_rx_linear_len(const struct mcp251xfd_rx_ring *ring, u8 len)
- {
--	u8 len;
--
--	len = mcp251xfd_get_rx_len(ring);
--
- 	return min_t(u8, len, ring->obj_num - mcp251xfd_get_rx_tail(ring));
- }
- 
 -- 
 2.39.0
 
