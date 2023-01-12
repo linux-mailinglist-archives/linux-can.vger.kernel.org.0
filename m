@@ -2,67 +2,112 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23AD1666CFA
-	for <lists+linux-can@lfdr.de>; Thu, 12 Jan 2023 09:52:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C489F667F38
+	for <lists+linux-can@lfdr.de>; Thu, 12 Jan 2023 20:29:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235483AbjALIwt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 12 Jan 2023 03:52:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46598 "EHLO
+        id S240566AbjALT3b (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 12 Jan 2023 14:29:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236034AbjALIvt (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 12 Jan 2023 03:51:49 -0500
-Received: from mail.glencoeaur.com (mail.glencoeaur.com [217.61.97.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F6F32E8F
-        for <linux-can@vger.kernel.org>; Thu, 12 Jan 2023 00:50:03 -0800 (PST)
-Received: by mail.glencoeaur.com (Postfix, from userid 1001)
-        id 1330D8216B; Thu, 12 Jan 2023 08:31:10 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=glencoeaur.com;
-        s=mail; t=1673512277;
-        bh=2S0GQFScndXkBEK4sqdoOhOYLqsB2sEH8Q5XQfVvKpo=;
-        h=Date:From:To:Subject:From;
-        b=rbhQkO0S27i570S4t2qTQNPLvsF1DtYiRNau7s2vh2xq5VmdeVmV52ta9WGulkjAh
-         1E+rtAsafo9xPTG95Nfiw5pB7Ts6pyD0PQYJ3pxjNeW+EOpVGVJOtlvow6XtbstYSA
-         ZH4uJjgmbyFUeQUkWTVSrnxVSyN0GZLmDOhu5LtlBAIuuZ+o/pxXSx42/zfiJb64wU
-         h4VfK0Fz2IUAgcsXUkDzxUkUkdrKKEt10vMxZeKCzADz0wxFoRdff/A8T7Y4h2iqVT
-         q9FWoDGNOl1P7o/qugmM/IrUo0HviLBVl0UMW9LgOK0pNizvMXY4g5O3wSqFx+TgJC
-         5pnINfWhnqBKg==
-Received: by mail.glencoeaur.com for <linux-can@vger.kernel.org>; Thu, 12 Jan 2023 08:31:00 GMT
-Message-ID: <20230112074500-0.1.z.3f51.0.dffiqmpgvb@glencoeaur.com>
-Date:   Thu, 12 Jan 2023 08:31:00 GMT
-From:   "Zbynek Spacek" <zbynek.spacek@glencoeaur.com>
-To:     <linux-can@vger.kernel.org>
-Subject: Silikonmischungen
-X-Mailer: mail.glencoeaur.com
+        with ESMTP id S240679AbjALT2y (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 12 Jan 2023 14:28:54 -0500
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.160])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33170183B7;
+        Thu, 12 Jan 2023 11:24:00 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1673551438; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=d1H0iHv3eINUjSVI/qw9sh3R6EuiW1xEagXO3p1EoN13ZdLqGwzJ/wIuvVNY9EI3bb
+    jiMlT6NDAqNLIw+0dNlJJ8q6/8xgTsKUWWkBqSE4VbvMQbkTsiCTY0tmmrstQTVaAL9s
+    dTYMggaSQ2xfsdNDyJncWbVo/kGqLii9djag27E0E9yeGFQSjzgHZfPqpMFQAtNA4tF3
+    BXCLjFDgocr6Whpzd77PUrVZ85ZqN5Gxt5Mdm8csA1vOQ25N2/UTbaQilmVWleHeSInP
+    m2JQjMnxDtEYzECBvMP755bRRoXlJ4i1OLKJ+1ykR8cqT8F1uBFmG0TXdfrkzba/KlBC
+    +BJg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1673551438;
+    s=strato-dkim-0002; d=strato.com;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=3S1+jFNEPkXS93Zqg3C7m1AxZE5xUILlZQ/gHF3AgC8=;
+    b=UxP/8Dcfm/T8pifgoABs9Eg8ZSstrAAlY58NVBexS4OEZpTEk93+VPSNJqyfzDXm7v
+    TqXlorGee/GzMHM4mv4j7H+pWQjxHz5Cw0xlhRg4Hc9e/WXjctD4nw4wtwKssWQT3Rra
+    yU2Vy/I6UPHqhVool7u7zZwh/jazELB5LzRGUMIJg5tiBBc3jXLDPx0nYG6Rj1fjsHnm
+    qvcFITQSBDk/tgtaPEfufQuR0W7M5fGY4wkHGz8iMWmkh+Q2TVdbkRgG0f4jkxV8UZyM
+    PYIfYHAa2JfBt8PC2l9b1K5/kjOjzf1/E3K3CGSGZ41yqOq7gtnEdg+q9uh82xPg/XxL
+    DRbA==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1673551438;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=3S1+jFNEPkXS93Zqg3C7m1AxZE5xUILlZQ/gHF3AgC8=;
+    b=XMOd94Y1jZJQ4pz0ZvpcUcTQbZBQaz4QT2UvbOKiWYVAMijAqOJrliF7zEoiVYmfZl
+    6OAjC27FidlckvJXcUpyQFlyngVMjWquaDyLjc3dlypeLtf02FqUgv/V11h0KEA8dkSq
+    b0olrWkwN2BLfHiyUYCeJRFzuzdaTOa2Pb0KZrLzlvKwAwKSY4leeCfZ3IqUbFrsFqHX
+    TVq5SyXp62CNg6IQKYaFsod/rU0V/ZYNi3GQqkcRrmBfAiLygiBk5PeUMQRosYAqxDnY
+    28lNJvFTR0KRpLSEln0PTlJDm70vW25vV/JRsN7QJQG4PooE5n6h3Z3/KUzma3fOZt7U
+    RK/Q==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS0k+8CejudJygjsS+Kjg=="
+Received: from silver.lan
+    by smtp.strato.de (RZmta 48.6.2 DYNA|AUTH)
+    with ESMTPSA id ifa639z0CJNw4OA
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 12 Jan 2023 20:23:58 +0100 (CET)
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+To:     linux-can@vger.kernel.org
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>, stable@vger.kernel.org
+Subject: [PATCH v4] can: isotp: handle wait_event_interruptible() return values
+Date:   Thu, 12 Jan 2023 20:23:47 +0100
+Message-Id: <20230112192347.1944-1-socketcan@hartkopp.net>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_05,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Good morning,
+When wait_event_interruptible() has been interrupted by a signal the
+tx.state value might not be ISOTP_IDLE. Force the state machines
+into idle state to inhibit the timer handlers to continue working.
 
-do you need intermediates for processing, plastics (e.g. rubber) or silic=
-one mixtures?
+Fixes: 866337865f37 ("can: isotp: fix tx state handling for echo tx
+processing")
+Cc: stable@vger.kernel.org
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+---
 
-We provide a wide range of silicone rubbers with various properties, sili=
-cone mixtures from renowned manufacturers such as Wacker, Elastosil LR an=
-d dyes, stabilizers, primers and anti-adhesive additives.
+V2: fixed checkpatch warnings m(
+V3: added 'Fixes:' tag
+V4: change 'Fixes:' tag to reduce WARN(1) possibility
 
-We also produce technical silicone compounds with increased resistance to=
- oils, resistant to high temperatures and water vapor, conductive and man=
-y more.
+ net/can/isotp.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-We provide fast order fulfillment, timely deliveries and cost optimizatio=
-n.
+diff --git a/net/can/isotp.c b/net/can/isotp.c
+index 0476a506d4a4..fc81d77724a1 100644
+--- a/net/can/isotp.c
++++ b/net/can/isotp.c
+@@ -1150,10 +1150,14 @@ static int isotp_release(struct socket *sock)
+ 	net = sock_net(sk);
+ 
+ 	/* wait for complete transmission of current pdu */
+ 	wait_event_interruptible(so->wait, so->tx.state == ISOTP_IDLE);
+ 
++	/* force state machines to be idle also when a signal occurred */
++	so->tx.state = ISOTP_IDLE;
++	so->rx.state = ISOTP_IDLE;
++
+ 	spin_lock(&isotp_notifier_lock);
+ 	while (isotp_busy_notifier == so) {
+ 		spin_unlock(&isotp_notifier_lock);
+ 		schedule_timeout_uninterruptible(1);
+ 		spin_lock(&isotp_notifier_lock);
+-- 
+2.30.2
 
-Can I introduce what we can offer you?
-
-
-Best regards
-Zbynek Spacek
