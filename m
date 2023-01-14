@@ -2,130 +2,77 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF2F566984A
-	for <lists+linux-can@lfdr.de>; Fri, 13 Jan 2023 14:19:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABC6566AD15
+	for <lists+linux-can@lfdr.de>; Sat, 14 Jan 2023 18:36:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241877AbjAMNTt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 13 Jan 2023 08:19:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50260 "EHLO
+        id S230160AbjANRgh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 14 Jan 2023 12:36:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233157AbjAMNTW (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 13 Jan 2023 08:19:22 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083205D698
-        for <linux-can@vger.kernel.org>; Fri, 13 Jan 2023 05:08:47 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pGJnZ-0003ZM-Hk; Fri, 13 Jan 2023 14:08:45 +0100
-Received: from pengutronix.de (hardanger-4.fritz.box [IPv6:2a03:f580:87bc:d400:b2c0:1450:f38b:4cbb])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 76968156859;
-        Fri, 13 Jan 2023 13:08:44 +0000 (UTC)
-Date:   Fri, 13 Jan 2023 14:08:44 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Stefan =?utf-8?B?QWx0aMO2ZmVy?= <Stefan.Althoefer@janztec.com>
-Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        Thomas Kopp <thomas.kopp@microchip.com>
-Subject: Re: AW: [PATCH 0/5] can: mcp251xfd: workaround double-RX erratum
-Message-ID: <20230113130844.spbdtq2kumcjn42k@pengutronix.de>
-References: <20230111222042.1139027-1-mkl@pengutronix.de>
- <20230111223004.w7z4ghdahe7jvebe@pengutronix.de>
- <20230112075452.4v3ba2hibxx3i5rm@pengutronix.de>
- <FR0P281MB1966D75DB56E45D225313B5697C29@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
+        with ESMTP id S229932AbjANRgg (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 14 Jan 2023 12:36:36 -0500
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A50D44AE;
+        Sat, 14 Jan 2023 09:36:34 -0800 (PST)
+Received: from fedcomp.intra.ispras.ru (unknown [46.242.14.200])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 133AE419E9D1;
+        Sat, 14 Jan 2023 17:36:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 133AE419E9D1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1673717791;
+        bh=QNbLvYRd7r/KjTcK2MsGuCJX9/CO/nTDz1fspNQ7yyI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=XNKepNMDDVHkDZP6WcR/P4sRocfpt0CNfcyV9d1RkURQ3XlvRbih2UNh7dgx0l/Db
+         PURiJ49IeSSTRQ0LsQ6Y9qDgawK0fHktHOGK1w6LN+iLRBL1TSo+g6CdMR85rWQ+T2
+         Pgqbj6katobvUNAE5Kj2O9Vq4IhxbrNjiWmGyR0I=
+From:   Fedor Pchelkin <pchelkin@ispras.ru>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Fedor Pchelkin <pchelkin@ispras.ru>,
+        Ziyang Xuan <william.xuanziyang@huawei.com>, robin@protonic.nl,
+        linux@rempel-privat.de, Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        lvc-project@linuxtesting.org
+Subject: Re: [PATCH net] can: j1939: fix errant WARN_ON_ONCE in j1939_session_deactivate
+Date:   Sat, 14 Jan 2023 20:35:46 +0300
+Message-Id: <20230114173546.38340-1-pchelkin@ispras.ru>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20210910124005.GJ26100@pengutronix.de>
+References: 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nvkkrxt7ugbnbqso"
-Content-Disposition: inline
-In-Reply-To: <FR0P281MB1966D75DB56E45D225313B5697C29@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello,
 
---nvkkrxt7ugbnbqso
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Fri, 10 Sep 2021 14:40:05 +0200, Oleksij Rempel wrote:
+> Ok, I see, this warning makes sense only if session will actually be
+> deactivated.
+>
+> Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
+>
+> Thank you!
 
-On 13.01.2023 12:39:58, Stefan Alth=C3=B6fer wrote:
-> > In my over night test the workaround triggered 31 times. The test
-> > has found no problems.
->=20
-> This is frustrating: how did you manage to get that much triggers ;-)
+As Ziyang Xuan stated, the patch was not applied to upstream.
 
-I don't know. In an older version of the workaround it triggered about
-every 12 Minutes.
+Usage of WARN_ON_ONCE in this case is actually discouraged: it erroneusly
+complains in a valid situation.
 
-> I ran 4 targets in parallel and got 3 fifo errors in total after 20 h
-> and no test failures.
+So the macro should be removed with the aforementioned patch. If it makes
+some sense for debugging purposes, WARN_ON_ONCE can be replaced with
+netdev_warn/netdev_notice but anyway discard of WARN_ON_ONCE.
 
-At least the workaround triggered and the test didn't fail! \o/
+--
+Regards,
 
-> I will now switch my setup from doing the selft-receiption test to a
-> two-node-same-host transmission test which is where I first detected
-> the error.
-
-Makes sense. If you're happy please reply to the patches with a
-"Tested-by: Stefan Alth=C3=B6fer <Stefan.Althoefer@janztec.com>" tag.
-
-> BTW: "... (applies) against current net/main" - is this kh-lingo for
-> using this: git clone
-> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/ ?
-
-Yes - it means that I applied the patches to the main branch of that
-tree. On older kernels it might not apply without problems.
-
-But you don't have to clone the tree, you better add it as a remote to
-your existing tree, e.g.:
-
-| git remote add -f net git://git.kernel.org/pub/scm/linux/kernel/git/netde=
-v/net.git
-
-=2E..and then check it out:
-
-| git checkout -b my-net-main net/main
-
-> Oh and I "backported" the patched driver source into my 6.0.12
-> raspbian kernel.
-
-I think the patches apply without problems, there we not many changes
-since v6.0.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---nvkkrxt7ugbnbqso
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmPBV9kACgkQrX5LkNig
-013Kzwf/c7BCaEtOOQ9OjHB4qn3EZVIVQqNn1ZEM3UN0mqJFTZJvK3N64s79FTgy
-gk8pGMz4bEpmh5+hIUQT2PcbapwEfJtfLiPWm/hCqRzcoPyNyclnunFLUa7yTO8A
-4Ua3UxgI4S/iFUf4D15d8MDCpwx5AuE0fZfW1cRKxCRA3EkUESYnmxoZm28qw4cZ
-tdFcDjxNSdly6TjegWeLvMRZuhkZiezv9/FTJ/g2r/Ansjq8OP3Sh/ONcq5nq7jz
-92ealAYW1dh88BG+EcGKubZKLKJ10MpA/zyMJNHfBj4cnp4prjuKClolwUUmjM/r
-tW2YlgxkKTyP1YzEZdjC5e/5ruJJ/g==
-=9PfJ
------END PGP SIGNATURE-----
-
---nvkkrxt7ugbnbqso--
+Fedor
