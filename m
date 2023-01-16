@@ -2,49 +2,48 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A859566CFE6
-	for <lists+linux-can@lfdr.de>; Mon, 16 Jan 2023 21:12:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75C4566CFE7
+	for <lists+linux-can@lfdr.de>; Mon, 16 Jan 2023 21:12:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232682AbjAPUMB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 16 Jan 2023 15:12:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59224 "EHLO
+        id S232841AbjAPUMD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 16 Jan 2023 15:12:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233095AbjAPUL7 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 16 Jan 2023 15:11:59 -0500
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BCDA23D95
-        for <linux-can@vger.kernel.org>; Mon, 16 Jan 2023 12:11:57 -0800 (PST)
+        with ESMTP id S232856AbjAPUMC (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 16 Jan 2023 15:12:02 -0500
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB2825283
+        for <linux-can@vger.kernel.org>; Mon, 16 Jan 2023 12:11:58 -0800 (PST)
 Received: from submission (posteo.de [185.67.36.169]) 
-        by mout02.posteo.de (Postfix) with ESMTPS id B903F24025A
-        for <linux-can@vger.kernel.org>; Mon, 16 Jan 2023 21:11:55 +0100 (CET)
+        by mout01.posteo.de (Postfix) with ESMTPS id 753872401AC
+        for <linux-can@vger.kernel.org>; Mon, 16 Jan 2023 21:11:57 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-        t=1673899915; bh=+uE24Ak0eKodWFYfRsVkR+AWzq716mPgrY50OFmHUhw=;
+        t=1673899917; bh=fTapH+pdUPmT7qAjid5cBZYCXIUO9HC8JnYJutHMbFQ=;
         h=From:To:Cc:Subject:Date:From;
-        b=prjc0HXwpOWp3jGY+4RxDsCghZEuTANcP1omA5/t4Nutw/3C+Amn0PM2uqShyurTf
-         wWu/tYspRbUNu2peF2HaWEqwN76UxDj1fuwkF2qVx9XfGUW6vtaFt91SjEZEIGfxf1
-         dQmg3FnpfuLDyjSIFruFHhWDt/oLp99uw5W+X6VRRY5Nyj+CxAa3mWcyob4+Jh2SJh
-         i+wdyzBmOl2PPsmaxtwmrA7RVm6b9rlZMaM1nOYZNMLQXoW8oVpWbRwCle5Scx8rEX
-         +J+9ilYBSjXJLaXl09NygQncp2NOr6A7c+6cTGqJO7QQSRjjs8NBOUgO0tWlcY37Ow
-         ckJL4RSqdNcJw==
+        b=h7fD8lya4dpXJIsld4dNXek4y+eMN1Wzg6j1PvdXB9OaDaJnbM57k7Vg7ymh2MHob
+         VRIWOSrcuvO/WYya8NFDNOk1fVZjSiZpoW4syirKvJbELAzBYbFp+ieqWnrnQ7l/3Z
+         rQTOVZgy7IIpUscM1LBQGbKha+vCkZZBL74HwJEbK17L6pxZbVmyzlHBlIFcfAER+F
+         aZejuPENH2Gcz5mzi8g5S1jh9hfrIl12CdxCG9cukKAl6BJmNjRpAUJyEjlYQKWYOi
+         mKwni/WeIFbCF0ct325xIYwCQBxiR1G6KcK4CtCUpSWfLryBMNqrfXil4kOmRfOO4o
+         UtimbdqbgaDqg==
 Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4Nwjpz1BvGz9rxG;
-        Mon, 16 Jan 2023 21:11:55 +0100 (CET)
+        by submission (posteo.de) with ESMTPSA id 4Nwjq05fS1z9rxG;
+        Mon, 16 Jan 2023 21:11:56 +0100 (CET)
 From:   Lukas Magel <lukas.magel@posteo.net>
 To:     linux-can@vger.kernel.org
 Cc:     Stephane Grosjean <s.grosjean@peak-system.com>,
         Lukas Magel <lukas.magel@posteo.net>
-Subject: [PATCH v3 4/8] can: peak_usb: replace unregister_netdev() with unregister_candev()
-Date:   Mon, 16 Jan 2023 20:09:28 +0000
-Message-Id: <20230116200932.157769-5-lukas.magel@posteo.net>
+Subject: [PATCH v3 5/8] can: peak_usb: add ethtool interface to user-configurable CAN channel identifier
+Date:   Mon, 16 Jan 2023 20:09:29 +0000
+Message-Id: <20230116200932.157769-6-lukas.magel@posteo.net>
 In-Reply-To: <20230116200932.157769-1-lukas.magel@posteo.net>
 References: <20220801080446.36374-1-lukas.magel@posteo.net>
  <20230116200932.157769-1-lukas.magel@posteo.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -53,28 +52,187 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 From: Stephane Grosjean <s.grosjean@peak-system.com>
 
-This patch changes the call to unregister_netdev() in
-peak_usb_disconnect() with unregister_candev().
+This patch introduces 3 new functions implementing support for ethtool
+access to the CAN channel ID of all USB CAN network interfaces managed by
+the driver. With this patch, it is possible to read/write the CAN
+channel ID from/to the EEPROM via the ethtool interface.
+
+The CAN channel ID is a user-configurable device identifier that can be
+set individually for each CAN interface of a PEAK USB device. Depending on
+the device, the identifier has a length of 8 or 32 bit. The identifier
+is stored in the non-volatile memory of the device.
+
+The identifier of a CAN interface can be read/written as an 8 or 32 bit
+byte string in native (little-endian) byte order, where the length depends
+on the device type.
 
 Signed-off-by: Stephane Grosjean <s.grosjean@peak-system.com>
 Signed-off-by: Lukas Magel <lukas.magel@posteo.net>
 ---
- drivers/net/can/usb/peak_usb/pcan_usb_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/can/usb/peak_usb/pcan_usb.c      |  9 +++
+ drivers/net/can/usb/peak_usb/pcan_usb_core.c | 80 ++++++++++++++++++++
+ drivers/net/can/usb/peak_usb/pcan_usb_core.h |  6 ++
+ drivers/net/can/usb/peak_usb/pcan_usb_fd.c   |  3 +
+ drivers/net/can/usb/peak_usb/pcan_usb_pro.c  |  3 +
+ 5 files changed, 101 insertions(+)
 
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb.c b/drivers/net/can/usb/peak_usb/pcan_usb.c
+index 92472149cfba..5a712a2beb5a 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb.c
++++ b/drivers/net/can/usb/peak_usb/pcan_usb.c
+@@ -984,9 +984,18 @@ static int pcan_usb_set_phys_id(struct net_device *netdev,
+ 	return err;
+ }
+ 
++/* This device only handles 8-bit CAN channel id. */
++static int pcan_usb_get_eeprom_len(struct net_device *netdev)
++{
++	return sizeof(u8);
++}
++
+ static const struct ethtool_ops pcan_usb_ethtool_ops = {
+ 	.set_phys_id = pcan_usb_set_phys_id,
+ 	.get_ts_info = pcan_get_ts_info,
++	.get_eeprom_len	= pcan_usb_get_eeprom_len,
++	.get_eeprom = peak_usb_get_eeprom,
++	.set_eeprom = peak_usb_set_eeprom,
+ };
+ 
+ /*
 diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.c b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
-index 54e2481cce30..4eff4b4706b9 100644
+index 4eff4b4706b9..d5ebcee7b7ed 100644
 --- a/drivers/net/can/usb/peak_usb/pcan_usb_core.c
 +++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
-@@ -963,7 +963,7 @@ static void peak_usb_disconnect(struct usb_interface *intf)
- 		dev->state &= ~PCAN_USB_STATE_CONNECTED;
- 		strscpy(name, netdev->name, IFNAMSIZ);
+@@ -808,6 +808,86 @@ static const struct net_device_ops peak_usb_netdev_ops = {
+ 	.ndo_change_mtu = can_change_mtu,
+ };
  
--		unregister_netdev(netdev);
-+		unregister_candev(netdev);
++/* CAN-USB devices generally handle 32-bit CAN channel IDs.
++ * In case one doesn't, then it have to overload this function.
++ */
++int peak_usb_get_eeprom_len(struct net_device *netdev)
++{
++	return sizeof(u32);
++}
++
++/* Every CAN-USB device exports the dev_get_can_channel_id() operation. It is used
++ * here to fill the data buffer with the user defined CAN channel ID.
++ */
++int peak_usb_get_eeprom(struct net_device *netdev,
++			struct ethtool_eeprom *eeprom, u8 *data)
++{
++	struct peak_usb_device *dev = netdev_priv(netdev);
++	u32 ch_id;
++	__le32 ch_id_le;
++	int err;
++
++	err = dev->adapter->dev_get_can_channel_id(dev, &ch_id);
++	if (err)
++		return err;
++
++	/* ethtool operates on individual bytes. The byte order of the CAN
++	 * channel id in memory depends on the kernel architecture. We
++	 * convert the CAN channel id back to the native byte order of the PEAK
++	 * device itself to ensure that the order is consistent for all
++	 * host architectures.
++	 */
++	ch_id_le = cpu_to_le32(ch_id);
++	memcpy(data, (u8 *)&ch_id_le + eeprom->offset, eeprom->len);
++
++	/* update cached value */
++	dev->can_channel_id = ch_id;
++	return err;
++}
++
++/* Every CAN-USB device exports the dev_get_can_channel_id()/dev_set_can_channel_id()
++ * operations. They are used here to set the new user defined CAN channel ID.
++ */
++int peak_usb_set_eeprom(struct net_device *netdev,
++			struct ethtool_eeprom *eeprom, u8 *data)
++{
++	struct peak_usb_device *dev = netdev_priv(netdev);
++	u32 ch_id;
++	__le32 ch_id_le;
++	int err;
++
++	/* first, read the current user defined CAN channel ID */
++	err = dev->adapter->dev_get_can_channel_id(dev, &ch_id);
++	if (err) {
++		netdev_err(netdev, "Failed to init CAN channel id (err %d)\n", err);
++		return err;
++	}
++
++	/* do update the value with user given bytes.
++	 * ethtool operates on individual bytes. The byte order of the CAN
++	 * channel ID in memory depends on the kernel architecture. We
++	 * convert the CAN channel ID back to the native byte order of the PEAK
++	 * device itself to ensure that the order is consistent for all
++	 * host architectures.
++	 */
++	ch_id_le = cpu_to_le32(ch_id);
++	memcpy((u8 *)&ch_id_le + eeprom->offset, data, eeprom->len);
++	ch_id = le32_to_cpu(ch_id_le);
++
++	/* flash the new value now */
++	err = dev->adapter->dev_set_can_channel_id(dev, ch_id);
++	if (err) {
++		netdev_err(netdev, "Failed to write new CAN channel id (err %d)\n",
++			   err);
++		return err;
++	}
++
++	/* update cached value with the new one */
++	dev->can_channel_id = ch_id;
++
++	return 0;
++}
++
+ int pcan_get_ts_info(struct net_device *dev, struct ethtool_ts_info *info)
+ {
+ 	info->so_timestamping =
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.h b/drivers/net/can/usb/peak_usb/pcan_usb_core.h
+index 1e461aef0f2a..980e315186cf 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb_core.h
++++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.h
+@@ -149,4 +149,10 @@ void peak_usb_async_complete(struct urb *urb);
+ void peak_usb_restart_complete(struct peak_usb_device *dev);
+ int pcan_get_ts_info(struct net_device *dev, struct ethtool_ts_info *info);
  
- 		kfree(dev->cmd_buf);
- 		dev->next_siblings = NULL;
++/* common 32-bit CAN channel ID ethtool management */
++int peak_usb_get_eeprom_len(struct net_device *netdev);
++int peak_usb_get_eeprom(struct net_device *netdev,
++			struct ethtool_eeprom *eeprom, u8 *data);
++int peak_usb_set_eeprom(struct net_device *netdev,
++			struct ethtool_eeprom *eeprom, u8 *data);
+ #endif
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
+index 1ea4cfdfd640..fd925ae96331 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
++++ b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
+@@ -1124,6 +1124,9 @@ static int pcan_usb_fd_set_phys_id(struct net_device *netdev,
+ static const struct ethtool_ops pcan_usb_fd_ethtool_ops = {
+ 	.set_phys_id = pcan_usb_fd_set_phys_id,
+ 	.get_ts_info = pcan_get_ts_info,
++	.get_eeprom_len	= peak_usb_get_eeprom_len,
++	.get_eeprom = peak_usb_get_eeprom,
++	.set_eeprom = peak_usb_set_eeprom,
+ };
+ 
+ /* describes the PCAN-USB FD adapter */
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_pro.c b/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
+index 061f04c20f96..0c805d9672bf 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
++++ b/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
+@@ -1037,6 +1037,9 @@ static int pcan_usb_pro_set_phys_id(struct net_device *netdev,
+ static const struct ethtool_ops pcan_usb_pro_ethtool_ops = {
+ 	.set_phys_id = pcan_usb_pro_set_phys_id,
+ 	.get_ts_info = pcan_get_ts_info,
++	.get_eeprom_len	= peak_usb_get_eeprom_len,
++	.get_eeprom = peak_usb_get_eeprom,
++	.set_eeprom = peak_usb_set_eeprom,
+ };
+ 
+ /*
 -- 
 2.38.1
 
