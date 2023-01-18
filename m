@@ -2,159 +2,193 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F45466D1A8
-	for <lists+linux-can@lfdr.de>; Mon, 16 Jan 2023 23:17:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89C8C67120F
+	for <lists+linux-can@lfdr.de>; Wed, 18 Jan 2023 04:41:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235193AbjAPWRV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 16 Jan 2023 17:17:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52072 "EHLO
+        id S229553AbjARDlk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 17 Jan 2023 22:41:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235125AbjAPWQb (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 16 Jan 2023 17:16:31 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004AA25E0A
-        for <linux-can@vger.kernel.org>; Mon, 16 Jan 2023 14:16:14 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pHXlu-0000Px-BC; Mon, 16 Jan 2023 23:16:06 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:8359:bf47:e3ab:940b])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id B6C3215923D;
-        Mon, 16 Jan 2023 22:16:04 +0000 (UTC)
-Date:   Mon, 16 Jan 2023 23:15:59 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Stefan =?utf-8?B?QWx0aMO2ZmVy?= <Stefan.Althoefer@janztec.com>
-Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Thomas Kopp <thomas.kopp@microchip.com>,
-        "kernel@pengutroniux.de" <kernel@pengutroniux.de>
-Subject: Re: AW: [PATCH 0/5] can: mcp251xfd: workaround double-RX erratum
-Message-ID: <20230116221559.nx6syqwnjmumwily@pengutronix.de>
-References: <20230111222042.1139027-1-mkl@pengutronix.de>
- <FR0P281MB1966455B1F0ED61EBCE5702097C19@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
+        with ESMTP id S229457AbjARDlk (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 17 Jan 2023 22:41:40 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFAD853558
+        for <linux-can@vger.kernel.org>; Tue, 17 Jan 2023 19:41:38 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id h4-20020a056e021b8400b0030d901a84d9so23186514ili.6
+        for <linux-can@vger.kernel.org>; Tue, 17 Jan 2023 19:41:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=74X7kAcEj4fU0m5Re0lmRYJTEgxMAcwvfPdyS/kczFQ=;
+        b=ra/1XewXELsxk6NXJ/F9p2s+9WfwjlkoaFWHfVq9BRJ4jSwyoLO2czOsjs646tRGqa
+         OmCEFILDxAn4/DTNEcc1xTHiSpQJyxet0kJze9J9f0cn6Hh9eY1I6WWVTUEHdDFvKhKv
+         Pum1FS4j8ORmkkRuug1mgfZKWnImSFgcmIVKUD862dRsUFSzbp91mzTH2yZCsl9zqI2d
+         M2E43wBA8DLZkR/FdJwxZSh3WWyHr8v5hzCA6KPi7FnXrGdkbzbr6znSjLn3xsjkdDGs
+         Wpnaq0ZCjjhstU1Ztzhis/NzMtt077kbMZ8i53EHeSsa+DYQQTOCg6q2MbVXEoIDpvEU
+         h7Tw==
+X-Gm-Message-State: AFqh2kpfVB24pP6GrFKt1NinXKbl7mLyR+DiNJ0EsDkseXaEN2xDWtSw
+        GWArYAXAcGg5uRe8gy+Tc36dftghPJR/oKXLkIerK1nBJ+wR
+X-Google-Smtp-Source: AMrXdXucyuTnzhjQ57Y1trDIyz3uY02HOBd5CqFkkNCb76J+vaqIkQzHmgHPmZ1lhguKRGmPq256CFday39JBnw2liZq1QeNjQXj
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5mkifrcdzpzzrqwu"
-Content-Disposition: inline
-In-Reply-To: <FR0P281MB1966455B1F0ED61EBCE5702097C19@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:c001:0:b0:39d:72ab:a7c5 with SMTP id
+ y1-20020a02c001000000b0039d72aba7c5mr529641jai.247.1674013298341; Tue, 17 Jan
+ 2023 19:41:38 -0800 (PST)
+Date:   Tue, 17 Jan 2023 19:41:38 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ff3e7a05f28197c4@google.com>
+Subject: [syzbot] memory leak in j1939_session_new
+From:   syzbot <syzbot+e11e4ccbf72be52c556b@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, kernel@pengutronix.de,
+        kuba@kernel.org, linux-can@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux@rempel-privat.de,
+        mkl@pengutronix.de, netdev@vger.kernel.org, pabeni@redhat.com,
+        robin@protonic.nl, socketcan@hartkopp.net,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello,
 
---5mkifrcdzpzzrqwu
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+syzbot found the following issue on:
 
-On 16.01.2023 19:49:18, Stefan Alth=C3=B6fer wrote:
-> > With the help of Thomas we found out that the chip has a time window
-> > after receiving a CAN frame where the RX FIFO STA register content
-> > is not read correctly.
->=20
-> Does the workaround assume that most of the messages in the fifo are
-> old (already read) content?
+HEAD commit:    d9fc1511728c Merge tag 'net-6.2-rc4' of git://git.kernel.o..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=10ef774a480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=277a06a151173742
+dashboard link: https://syzkaller.appspot.com/bug?extid=e11e4ccbf72be52c556b
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11390e7e480000
 
-Before this change the driver used to read the RX FIFO head from the
-chip (it points to the index that is written to next by the driver).
-Then all CAN frames between the FIFO tail and head index are read from
-the chip's RAM, pushed into the networking stack and finally marked as
-read in the chip.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/c69b02bb465e/disk-d9fc1511.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/7cbf6be156ee/vmlinux-d9fc1511.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/2d087daee200/bzImage-d9fc1511.xz
 
-The driver 100% trusts the FIFO head read from the chip, in the bad case
-it 1) pushed old messages into the networking stack and 2) confuses the
-chip with marking "too many" messages as read. The rest are follow up
-errors.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e11e4ccbf72be52c556b@syzkaller.appspotmail.com
+
+BUG: memory leak
+unreferenced object 0xffff88810b04c600 (size 512):
+  comm "syz-executor.3", pid 5457, jiffies 4294949672 (age 11.860s)
+  hex dump (first 32 bytes):
+    00 80 16 17 81 88 ff ff 08 c6 04 0b 81 88 ff ff  ................
+    08 c6 04 0b 81 88 ff ff 18 c6 04 0b 81 88 ff ff  ................
+  backtrace:
+    [<ffffffff814f94f0>] kmalloc_trace+0x20/0x90 mm/slab_common.c:1062
+    [<ffffffff8413311b>] kmalloc include/linux/slab.h:580 [inline]
+    [<ffffffff8413311b>] kzalloc include/linux/slab.h:720 [inline]
+    [<ffffffff8413311b>] j1939_session_new+0x5b/0x160 net/can/j1939/transport.c:1491
+    [<ffffffff84138410>] j1939_tp_send+0x150/0x350 net/can/j1939/transport.c:2001
+    [<ffffffff84131d24>] j1939_sk_send_loop net/can/j1939/socket.c:1133 [inline]
+    [<ffffffff84131d24>] j1939_sk_sendmsg+0x4a4/0x810 net/can/j1939/socket.c:1256
+    [<ffffffff83af8fa6>] sock_sendmsg_nosec net/socket.c:714 [inline]
+    [<ffffffff83af8fa6>] sock_sendmsg+0x56/0x80 net/socket.c:734
+    [<ffffffff83affebf>] sock_no_sendpage+0x8f/0xc0 net/core/sock.c:3241
+    [<ffffffff83af9b2d>] kernel_sendpage net/socket.c:3555 [inline]
+    [<ffffffff83af9b2d>] kernel_sendpage+0xcd/0x2b0 net/socket.c:3549
+    [<ffffffff83af9d50>] sock_sendpage+0x40/0x50 net/socket.c:1054
+    [<ffffffff81669be2>] pipe_to_sendpage+0xa2/0x110 fs/splice.c:361
+    [<ffffffff8166affd>] splice_from_pipe_feed fs/splice.c:415 [inline]
+    [<ffffffff8166affd>] __splice_from_pipe+0x1ed/0x330 fs/splice.c:559
+    [<ffffffff8166b8ef>] splice_from_pipe fs/splice.c:594 [inline]
+    [<ffffffff8166b8ef>] generic_splice_sendpage+0x6f/0xa0 fs/splice.c:743
+    [<ffffffff81669c9b>] do_splice_from fs/splice.c:764 [inline]
+    [<ffffffff81669c9b>] direct_splice_actor+0x4b/0x70 fs/splice.c:931
+    [<ffffffff8166a439>] splice_direct_to_actor+0x149/0x350 fs/splice.c:886
+    [<ffffffff8166a728>] do_splice_direct+0xe8/0x150 fs/splice.c:974
+    [<ffffffff816069df>] do_sendfile+0x57f/0x7e0 fs/read_write.c:1255
+    [<ffffffff8160a7d2>] __do_sys_sendfile64 fs/read_write.c:1323 [inline]
+    [<ffffffff8160a7d2>] __se_sys_sendfile64 fs/read_write.c:1309 [inline]
+    [<ffffffff8160a7d2>] __x64_sys_sendfile64+0xe2/0x100 fs/read_write.c:1309
+
+BUG: memory leak
+unreferenced object 0xffff8881198de300 (size 240):
+  comm "syz-executor.3", pid 5457, jiffies 4294949672 (age 11.860s)
+  hex dump (first 32 bytes):
+    00 e8 8d 19 81 88 ff ff 68 c6 04 0b 81 88 ff ff  ........h.......
+    00 80 d3 13 81 88 ff ff 00 d4 f0 18 81 88 ff ff  ................
+  backtrace:
+    [<ffffffff83b0d902>] __alloc_skb+0x202/0x270 net/core/skbuff.c:552
+    [<ffffffff83b11f6a>] alloc_skb include/linux/skbuff.h:1270 [inline]
+    [<ffffffff83b11f6a>] alloc_skb_with_frags+0x6a/0x340 net/core/skbuff.c:6195
+    [<ffffffff83b0431f>] sock_alloc_send_pskb+0x39f/0x3d0 net/core/sock.c:2741
+    [<ffffffff84131b52>] sock_alloc_send_skb include/net/sock.h:1888 [inline]
+    [<ffffffff84131b52>] j1939_sk_alloc_skb net/can/j1939/socket.c:864 [inline]
+    [<ffffffff84131b52>] j1939_sk_send_loop net/can/j1939/socket.c:1121 [inline]
+    [<ffffffff84131b52>] j1939_sk_sendmsg+0x2d2/0x810 net/can/j1939/socket.c:1256
+    [<ffffffff83af8fa6>] sock_sendmsg_nosec net/socket.c:714 [inline]
+    [<ffffffff83af8fa6>] sock_sendmsg+0x56/0x80 net/socket.c:734
+    [<ffffffff83affebf>] sock_no_sendpage+0x8f/0xc0 net/core/sock.c:3241
+    [<ffffffff83af9b2d>] kernel_sendpage net/socket.c:3555 [inline]
+    [<ffffffff83af9b2d>] kernel_sendpage+0xcd/0x2b0 net/socket.c:3549
+    [<ffffffff83af9d50>] sock_sendpage+0x40/0x50 net/socket.c:1054
+    [<ffffffff81669be2>] pipe_to_sendpage+0xa2/0x110 fs/splice.c:361
+    [<ffffffff8166affd>] splice_from_pipe_feed fs/splice.c:415 [inline]
+    [<ffffffff8166affd>] __splice_from_pipe+0x1ed/0x330 fs/splice.c:559
+    [<ffffffff8166b8ef>] splice_from_pipe fs/splice.c:594 [inline]
+    [<ffffffff8166b8ef>] generic_splice_sendpage+0x6f/0xa0 fs/splice.c:743
+    [<ffffffff81669c9b>] do_splice_from fs/splice.c:764 [inline]
+    [<ffffffff81669c9b>] direct_splice_actor+0x4b/0x70 fs/splice.c:931
+    [<ffffffff8166a439>] splice_direct_to_actor+0x149/0x350 fs/splice.c:886
+    [<ffffffff8166a728>] do_splice_direct+0xe8/0x150 fs/splice.c:974
+    [<ffffffff816069df>] do_sendfile+0x57f/0x7e0 fs/read_write.c:1255
+    [<ffffffff8160a7d2>] __do_sys_sendfile64 fs/read_write.c:1323 [inline]
+    [<ffffffff8160a7d2>] __se_sys_sendfile64 fs/read_write.c:1309 [inline]
+    [<ffffffff8160a7d2>] __x64_sys_sendfile64+0xe2/0x100 fs/read_write.c:1309
+
+BUG: memory leak
+unreferenced object 0xffff8881198de800 (size 240):
+  comm "syz-executor.3", pid 5457, jiffies 4294949672 (age 11.860s)
+  hex dump (first 32 bytes):
+    68 c6 04 0b 81 88 ff ff 00 e3 8d 19 81 88 ff ff  h...............
+    00 80 d3 13 81 88 ff ff 00 d4 f0 18 81 88 ff ff  ................
+  backtrace:
+    [<ffffffff83b0d902>] __alloc_skb+0x202/0x270 net/core/skbuff.c:552
+    [<ffffffff83b11f6a>] alloc_skb include/linux/skbuff.h:1270 [inline]
+    [<ffffffff83b11f6a>] alloc_skb_with_frags+0x6a/0x340 net/core/skbuff.c:6195
+    [<ffffffff83b0431f>] sock_alloc_send_pskb+0x39f/0x3d0 net/core/sock.c:2741
+    [<ffffffff84131b52>] sock_alloc_send_skb include/net/sock.h:1888 [inline]
+    [<ffffffff84131b52>] j1939_sk_alloc_skb net/can/j1939/socket.c:864 [inline]
+    [<ffffffff84131b52>] j1939_sk_send_loop net/can/j1939/socket.c:1121 [inline]
+    [<ffffffff84131b52>] j1939_sk_sendmsg+0x2d2/0x810 net/can/j1939/socket.c:1256
+    [<ffffffff83af8fa6>] sock_sendmsg_nosec net/socket.c:714 [inline]
+    [<ffffffff83af8fa6>] sock_sendmsg+0x56/0x80 net/socket.c:734
+    [<ffffffff83affebf>] sock_no_sendpage+0x8f/0xc0 net/core/sock.c:3241
+    [<ffffffff83af9b2d>] kernel_sendpage net/socket.c:3555 [inline]
+    [<ffffffff83af9b2d>] kernel_sendpage+0xcd/0x2b0 net/socket.c:3549
+    [<ffffffff83af9d50>] sock_sendpage+0x40/0x50 net/socket.c:1054
+    [<ffffffff81669be2>] pipe_to_sendpage+0xa2/0x110 fs/splice.c:361
+    [<ffffffff8166affd>] splice_from_pipe_feed fs/splice.c:415 [inline]
+    [<ffffffff8166affd>] __splice_from_pipe+0x1ed/0x330 fs/splice.c:559
+    [<ffffffff8166b8ef>] splice_from_pipe fs/splice.c:594 [inline]
+    [<ffffffff8166b8ef>] generic_splice_sendpage+0x6f/0xa0 fs/splice.c:743
+    [<ffffffff81669c9b>] do_splice_from fs/splice.c:764 [inline]
+    [<ffffffff81669c9b>] direct_splice_actor+0x4b/0x70 fs/splice.c:931
+    [<ffffffff8166a439>] splice_direct_to_actor+0x149/0x350 fs/splice.c:886
+    [<ffffffff8166a728>] do_splice_direct+0xe8/0x150 fs/splice.c:974
+    [<ffffffff816069df>] do_sendfile+0x57f/0x7e0 fs/read_write.c:1255
+    [<ffffffff8160a7d2>] __do_sys_sendfile64 fs/read_write.c:1323 [inline]
+    [<ffffffff8160a7d2>] __se_sys_sendfile64 fs/read_write.c:1309 [inline]
+    [<ffffffff8160a7d2>] __x64_sys_sendfile64+0xe2/0x100 fs/read_write.c:1309
 
 
-With the patch the driver still reads the RX FIFO head, but calculates
-the number of RX'ed CAN frames waiting in the FIFO. (That is the
-difference between the FIFO head and tail, plus taking wraparounds and
-the FIFO full and empty bits into account.) The driver reads the waiting
-CAN frames from the chip's RAM, and iterates over them.
 
-In the good case the timestamps of the messages are always increasing.
-(Again taking wraparounds and long pauses between messages into
-account.)
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-In the bad case the driver encounters a timestamp that is older than the
-last successfully received one, it assumes due to the erratum. The RX
-FIFO head was read as too big, resulting in too many read messages. The
-processing is stopped.
-
-The driver still trusts that the RX messages are filled in FIFO manner
-into the ring-buffer in the RAM. As soon as an old messages is
-encountered, the driver assumes it has read too far and only "old"
-messages will follow.
-
-Thomas did some test on a =C2=B5C, where the RX FIFO head index in read 2x =
-in
-a row. With the right timing the 1st head index is broken, while the 2nd
-read shows correct data again.
-
-In both the good and bad case now the driver's FIFO head and tail are
-updated with the successful processed messages. These number of messages
-are marked as read in the chip.
-
-> What happens if there is mostly new (not yet read) content in the
-> fifo? Suppose a slow host or coalescing. Can the temporarily incorrect
-> RX FIFO STA register point to one of those (ahead of next-to-read)?
-
-Let me explain how I understood you scenario:
-- there are 4 messages pending
-- the driver reads the FIFO head, read hit by erratum
-- driver thinks it has to read 8 messages
-- the host is slow and on the CAN bus 2 new messages arrive
-- on the chip a 4+2=3D6 messages pending
-- the driver reads 8 messages from the chip
-- the driver iterates over the 8 messages
-- the timestamp of message 6 is newer than message 7
-- the driver stops processing after message 6
-- 6 messages are marked are read in the chip
-- with the next RX-IRQ the next loop begins...
-  note: the next message that is processed is message 7
-  because we stopped processing after 6 in the previous loop
-
-> Wouldn't we drop messages or cause a deadlock then?
-
-The driver doesn't "step over" old messages in the FIFO, it stops
-processing, finishes, and waits for the next RX-IRQ to come.
-
-Hope that makes it a bit clearer,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---5mkifrcdzpzzrqwu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmPFzJsACgkQrX5LkNig
-01249AgAtPqfWkX39aNjrVT6BA9qMH5n5YXjqR4hrb5wUR16CQdpVotywzteT3Pg
-Ln7C9vCe8ilGk294ZfubmunyIWUPwaE2i0GNXGGhoOhzsMPjCWwJieOl3dtuwd7n
-fjZbRoaIMoFilLWycEL2Lx4vn4DcYdTPxcOsuVfdIpeehrjF58i6a7uN6Uqazm8J
-+XhCKMW7SxvBdH2Bu446rikWNig6aS77uTmAKmoh5096aUsfq7BWDfH8ZwckjCIj
-22DtYPQ+GXaITB8d3i0GNFcXhOtryHSy0xhEPLIVoYaLcCiujz3cVA8TUKNrCA38
-cPjDHb+C7h1ZTjqiJG4B0wMO33yoeA==
-=SmVx
------END PGP SIGNATURE-----
-
---5mkifrcdzpzzrqwu--
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
