@@ -2,56 +2,56 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB3DD674739
-	for <lists+linux-can@lfdr.de>; Fri, 20 Jan 2023 00:28:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CED7674740
+	for <lists+linux-can@lfdr.de>; Fri, 20 Jan 2023 00:33:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbjASX2z (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 19 Jan 2023 18:28:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40782 "EHLO
+        id S229789AbjASXdu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 19 Jan 2023 18:33:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbjASX2y (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 19 Jan 2023 18:28:54 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88A859CF
-        for <linux-can@vger.kernel.org>; Thu, 19 Jan 2023 15:28:53 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id n20-20020a17090aab9400b00229ca6a4636so6565893pjq.0
-        for <linux-can@vger.kernel.org>; Thu, 19 Jan 2023 15:28:53 -0800 (PST)
+        with ESMTP id S229637AbjASXdt (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 19 Jan 2023 18:33:49 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C1B93736
+        for <linux-can@vger.kernel.org>; Thu, 19 Jan 2023 15:33:46 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id r18so2834865pgr.12
+        for <linux-can@vger.kernel.org>; Thu, 19 Jan 2023 15:33:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QQ4DzURW3gb3artfl+ORegwlhY85u6mxhqyFx2drihc=;
-        b=JX/z9fT2UNs1YEVuaweF+9fB+rnrEwa1c3/ru4RxWyj/JtrajJ9BypHgOgAxMQ9FGT
-         07PWlUSEjVTnnsqLlfdUCYxJc02SJnDFiPQ9m1FrM3XsrYBfgZlXZCxCmZIA25XQwfmN
-         tyJxkXDwMVzp6vt2uUhSYznHJN5RAQAlWFoL2ks/IQUyNjiOBZ9p7t/38QLj/V0xelSS
-         NKleyd5NH5sUUQ37YcM0q4MK4o7nC6Bui2Z1GvhnnrWC9EaJ9maOO+dkcrTuiIHLEy2c
-         QzlLhLgA6yzQs+Q9nZ2DmQCZv44GxFMjP5bqXD7KOU90QoeV5wAZ7ORr/TosIQvLuMaR
-         7nHQ==
+        bh=yjo0gMRMcadCKrIqh2W3sAJv61NGQNflc72AqHbz+GU=;
+        b=fCLGI7+Vu17ND3Fi3fYvUvfVLIETg63ZRyVgedDgdPKyL914Rgnop/acLWWeICvQMm
+         KkBcqdb/L80mBp10n51n1AFTI4et/4rjxIsHnTRfG5oT1AGsbuA9YcLMyGo78y08G+BU
+         ewoIm/vSkZhlXmkWNGf5C4ZnZpzibRYunx0umwMW0nliDYq5pyOmzkmHcNMiZRv0eNfa
+         KRAYPNKcf4Dz1hgg2h8DIUtyuIZ8KwPd/uMW9mqr2XlgisxoN8DJQ6v8za10mIQwpkMs
+         YV7fOLNqybQFQkwhDR3LMGispVtdcu60ja6ZCQxns3ho5vVGmKwZtosSN9MSxuULhBPL
+         N2hQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=QQ4DzURW3gb3artfl+ORegwlhY85u6mxhqyFx2drihc=;
-        b=0eqR5jSxx/UFMKzkkGt5JkfDxgUTtc5EFDudvAHOIE182v6i8+0pJOPlJC8IDc9ePs
-         wphmB954jmUM5yl290y/LQI6V2LVSlZYc9rMOtHtHtz5TCwK9m0d6H8kWXFHAjt8xY6w
-         b9jC+FWSeXURzvVhkqHFn577BZjiHFsUrXtQiANZZ3FM7vk8wcqlz7c1Y3W/3PJwW1iH
-         xg822OWbScgaHAjO5soBiMt51ZPQWP5d4BHMBujYE3MB8ZDu2rG22gomZ213RIbj0RgP
-         6M/O5OioP1U06/6UnSnm5eQyEss1VXbCwZiCoN6XyakpS8TIAx0y1cYafMJJ3JpH14VQ
-         GjqA==
-X-Gm-Message-State: AFqh2kpGqWEoEf0ExA/pRuyJY4mys54aEZeqszB6Dhd7eKKKGeU3MGPw
-        fNRAQa/dXdj92z10OMMa5rkqF8y2WxsdY9nqPpVxRppK97U=
-X-Google-Smtp-Source: AMrXdXv3Dy2Ah4zH6iaKUm38EFA6ALgavKEQpz0smoo5ENcmVY/aQaPjb43YV0RkY8cD9vPhXXH7c8iFXgbByfhYSD8=
-X-Received: by 2002:a17:90a:e501:b0:229:d9d0:6df6 with SMTP id
- t1-20020a17090ae50100b00229d9d06df6mr624396pjy.222.1674170932980; Thu, 19 Jan
- 2023 15:28:52 -0800 (PST)
+        bh=yjo0gMRMcadCKrIqh2W3sAJv61NGQNflc72AqHbz+GU=;
+        b=Lr6uQBVS6g0oOmL/lSP9EhVkN5saemYwvCbZOavt3Wj7Csoqf7Uzrid8Gsq2ENVBvi
+         gXQJc7c/sAooYUqbQCY7r5FonEkqu7oV+fBiEkNQyejKGTIyKyETx9s8U0QUIOgrdVc+
+         UIVUJxnwQycZzP/pfR1Ymk2MlTuisgyeqMLgV3wgCJROpozA4CvSiMxY8SN8uCwnBOSx
+         Fegok+BAlRqLy11decNxIgcxhApsgR50nqcVEDEg9qEKAdQq1CJ0PlFzVrZ4R+6KqvXi
+         2Q+R1Wi+CRTIJSgp+i4LfOSouuFPq+4weYVrV35gegwk7/DGzZZxywFQFdbu3sbyv1WU
+         hqmA==
+X-Gm-Message-State: AFqh2kqmIceE9efywOyF11wZx/f+1//PbhXBjiBWGimGfh8qRQk1UBqm
+        6B4CVaUXD5azzVhhZT/mo4EBVExezb5W661U3po=
+X-Google-Smtp-Source: AMrXdXtI0O4fWKyXagHc+zHucepZDmCTP5Vjq/dUVnlmxB4dD+rw4FxZFrA/WjW2rRaQem56/RM464ISe+6KqqsreoQ=
+X-Received: by 2002:a05:6a00:26c4:b0:58d:9588:88f8 with SMTP id
+ p4-20020a056a0026c400b0058d958888f8mr1123323pfw.69.1674171225644; Thu, 19 Jan
+ 2023 15:33:45 -0800 (PST)
 MIME-Version: 1.0
-References: <20230119154528.28425-1-uttenthaler@ems-wuensche.com>
-In-Reply-To: <20230119154528.28425-1-uttenthaler@ems-wuensche.com>
+References: <20230119154528.28425-1-uttenthaler@ems-wuensche.com> <20230119154528.28425-9-uttenthaler@ems-wuensche.com>
+In-Reply-To: <20230119154528.28425-9-uttenthaler@ems-wuensche.com>
 From:   Vincent Mailhol <vincent.mailhol@gmail.com>
-Date:   Fri, 20 Jan 2023 08:28:41 +0900
-Message-ID: <CAMZ6Rq+5yUCPv9MuTof8xe3UcSzzq+aS9bXzZjUd=8d0jjtMvA@mail.gmail.com>
-Subject: Re: [PATCH 0/8] can: ems_pci: Add support for CPC-PCIe v3
+Date:   Fri, 20 Jan 2023 08:33:34 +0900
+Message-ID: <CAMZ6RqJbYu=OVcd36hHtrieMdBEcfeg73y2H0Z4myH-6gJzL=Q@mail.gmail.com>
+Subject: Re: [PATCH 8/8] can: ems_pci: Added MODULE_AUTHOR
 To:     Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
 Cc:     mkl@pengutronix.de, linux-can@vger.kernel.org, wg@grandegger.com
 Content-Type: text/plain; charset="UTF-8"
@@ -65,48 +65,63 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Gerhard,
-
-I had a quick look at your series. I have a couple of nitpicks. The
-rest looks good.
-
-On Fri. 20 Jan. 2023 at 01:02, Gerhard Uttenthaler
+On Fri. 20 Jan 2023 at 01:15, Gerhard Uttenthaler
 <uttenthaler@ems-wuensche.com> wrote:
-> The CPC-PCIe v3 uses a Asix AX99100 instead of the discontinued
-> PLX PCI9030 bridge chip. This patch series adds support for this
-> card version and cleaned some code styling issues.
 >
-> Gerhard Uttenthaler (8):
->   Fixed code style, copyright and email address
->   Added Asix AX99100 definitions
->   Initialize BAR registers
->   Added read/write register and post irq functions
->   Initialize CAN controller base addresses
->   Added IRQ enable
->   Deassert hardware reset
->   Added MODULE_AUTHOR
-
->   Fixed code style, copyright and email address
-    ^^^^^
->   Added Asix AX99100 definitions
-    ^^^^^
->   Initialize BAR registers
->   Added read/write register and post irq functions
-    ^^^^^
->   Initialize CAN controller base addresses
->   Added IRQ enable
-    ^^^^^
->   Deassert hardware reset
->   Added MODULE_AUTHOR
-    ^^^^^
-
-For the titles, please use imperative (e.g. add) instead of past
-tense (e.g. Added). This also applies to the description.
+> Added myself ass module author and fix three code style issues
+               ^^^
+A self esteem lapsus? :)
 
 >
->  drivers/net/can/sja1000/ems_pci.c | 152 ++++++++++++++++++++++--------
->  1 file changed, 113 insertions(+), 39 deletions(-)
+> Signed-off-by: Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
+> ---
+>  drivers/net/can/sja1000/ems_pci.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
 >
+> diff --git a/drivers/net/can/sja1000/ems_pci.c b/drivers/net/can/sja1000/ems_pci.c
+> index 68fdead6ad74..5c2f4afba2d0 100644
+> --- a/drivers/net/can/sja1000/ems_pci.c
+> +++ b/drivers/net/can/sja1000/ems_pci.c
+> @@ -21,6 +21,7 @@
+>  #define DRV_NAME  "ems_pci"
+>
+>  MODULE_AUTHOR("Sebastian Haas <support@ems-wuenche.com>");
+> +MODULE_AUTHOR("Gerhard Uttenthaler <uttenthaler@ems-wuenche.com>");
+>  MODULE_DESCRIPTION("Socket-CAN driver for EMS CPC-PCI/PCIe/104P CAN cards");
+>  MODULE_LICENSE("GPL v2");
+>
+> @@ -283,7 +284,6 @@ static int ems_pci_add_card(struct pci_dev *pdev,
+>                 conf_bar = EMS_PCI_V3_CONF_BAR;
+>                 conf_size = EMS_PCI_V3_CONF_SIZE;
+>         } else if (pdev->vendor == PCI_VENDOR_ID_PLX) {
+> -
+
+This line was inadvertently added in PATCH 4/8 and is now removed
+here. Fix please.
+
+>                 card->version = 2; /* CPC-PCI v2 */
+>                 max_chan = EMS_PCI_V2_MAX_CHAN;
+>                 base_bar = EMS_PCI_V2_BASE_BAR;
+> @@ -331,7 +331,8 @@ static int ems_pci_add_card(struct pci_dev *pdev,
+>                 /* ASIX chip asserts local reset to CAN controllers
+>                  * after bootup until it is deasserted
+>                  */
+> -               writel(readl(card->conf_addr + ASIX_LIEMR) & ~ASIX_LIEMR_LRST, card->conf_addr + ASIX_LIEMR);
+> +               writel(readl(card->conf_addr + ASIX_LIEMR) & ~ASIX_LIEMR_LRST,
+> +                      card->conf_addr + ASIX_LIEMR);
+>         }
+>
+>         ems_pci_card_reset(card);
+> @@ -392,7 +393,8 @@ static int ems_pci_add_card(struct pci_dev *pdev,
+>                                 /* Enable IRQ in AX99100 */
+>                                 writel(ASIX_LINTSR_INT0AC, card->conf_addr + ASIX_LINTSR);
+>                                 /* Enable local INT0 input enable */
+> -                               writel(readl(card->conf_addr + ASIX_LIEMR) | ASIX_LIEMR_L0EINTEN, card->conf_addr + ASIX_LIEMR);
+> +                               writel(readl(card->conf_addr + ASIX_LIEMR) | ASIX_LIEMR_L0EINTEN,
+> +                                      card->conf_addr + ASIX_LIEMR);
+>                         }
+>
+>                         /* Register SJA1000 device */
 > --
 > 2.35.3
 >
