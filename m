@@ -2,160 +2,190 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C8B6739AD
-	for <lists+linux-can@lfdr.de>; Thu, 19 Jan 2023 14:13:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC7E067397D
+	for <lists+linux-can@lfdr.de>; Thu, 19 Jan 2023 14:08:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231243AbjASNNI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 19 Jan 2023 08:13:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52412 "EHLO
+        id S231165AbjASNIw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 19 Jan 2023 08:08:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231251AbjASNMi (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 19 Jan 2023 08:12:38 -0500
+        with ESMTP id S229751AbjASNIH (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 19 Jan 2023 08:08:07 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87B17D66F
-        for <linux-can@vger.kernel.org>; Thu, 19 Jan 2023 05:11:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 611045EFB7
+        for <linux-can@vger.kernel.org>; Thu, 19 Jan 2023 05:08:05 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1pIUhE-0004bm-0k
-        for linux-can@vger.kernel.org; Thu, 19 Jan 2023 14:11:12 +0100
+        id 1pIUeB-0003iU-N6
+        for linux-can@vger.kernel.org; Thu, 19 Jan 2023 14:08:03 +0100
 Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:7961:17f5:9ae5:1a41])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 78DCB15D3B2
-        for <linux-can@vger.kernel.org>; Thu, 19 Jan 2023 13:11:11 +0000 (UTC)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 3AA3515D398
+        for <linux-can@vger.kernel.org>; Thu, 19 Jan 2023 13:08:03 +0000 (UTC)
 Received: from bjornoya.blackshift.org
         by bjornoya with LMTP
-        id Q4+YJiM8yWMt6g0As6a69A
-        (envelope-from <Stefan.Althoefer@janztec.com>)
-        for <mkl-all@blackshift.org>; Thu, 19 Jan 2023 12:48:35 +0000
+        id UArBIAtAyWNq7A0As6a69A
+        (envelope-from <Thomas.Kopp@microchip.com>)
+        for <mkl-all@blackshift.org>; Thu, 19 Jan 2023 13:05:15 +0000
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 763FE15D34C
-        for <mkl-all@blackshift.org>; Thu, 19 Jan 2023 12:48:35 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id 6B75115D392
+        for <mkl-all@blackshift.org>; Thu, 19 Jan 2023 13:05:15 +0000 (UTC)
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 22F8215D34B
-        for <ptx@kleine-budde.de>; Thu, 19 Jan 2023 12:48:35 +0000 (UTC)
-Received: from mail-be0deu01on2042.outbound.protection.outlook.com ([40.107.127.42] helo=DEU01-BE0-obe.outbound.protection.outlook.com)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 2420F15D391
+        for <ptx@kleine-budde.de>; Thu, 19 Jan 2023 13:05:14 +0000 (UTC)
+Received: from esa.microchip.iphmx.com ([68.232.153.233])
         by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
-        (envelope-from <Stefan.Althoefer@janztec.com>)
-        id 1pIULI-0007sS-Cl
-        for mkl@pengutronix.de; Thu, 19 Jan 2023 13:48:33 +0100
+        (envelope-from <Thomas.Kopp@microchip.com>)
+        id 1pIUbL-0003Bv-Ph
+        for mkl@pengutronix.de; Thu, 19 Jan 2023 14:05:13 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1674133507; x=1705669507;
+  h=from:to:subject:date:message-id:references:in-reply-to:
+   content-transfer-encoding:mime-version;
+  bh=T+I5I8AgsrFKg601WVjf2eonvHXHDtrPOdjLvNw93CA=;
+  b=0goo0lu2zQ9RAr3ExusoSmnNlL84ML37WDBOCRtaaBKcMm2bFkE94ml0
+   6akG/U+JOXcqzq2bCO8PAGGYoDRYRyuYMi4Axk3Mrb30nticruI3dfVz0
+   +P3rBlJfd8KFT/33ffJrH7zi1/H2/X0hSIn2wuK5wNJUMxL/GdDfRHVSs
+   aQBTCGNq7KCGtHFGOn6jw2LPk4AWM4kqxRCyv06M6RCTxiQldzvibgU39
+   IMZX5KYsKlU1ZyOAnZsgxYDDet1MQmnjJnkWRXWSDcaFPIxWVffvdY8dM
+   mXQ2sYtoa2ysnnausu3Mtb2wgrZOGucfWX+kjF8U0iYmFG16Bj7AxHqiS
+   A==;
+X-IronPort-AV: E=Sophos;i="5.97,229,1669100400"; 
+   d="scan'208";a="208465222"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Jan 2023 06:05:04 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 19 Jan 2023 06:05:04 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Thu, 19 Jan 2023 06:05:04 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RPLg+U3J10ZlHJXmjckg3QVqLelgtdyWxchci1g7cWCMxVsbDIzGOWEpOhJA3sQw4YAVNs0l7fNMhLThjeY/I2CeA+6jPKpsErwd1rquVGobyOL2XJeJMgAOiUMXyHRF7sA0yWbm4Rb2J3Y2CiggRehXeyZSb4F8Xum3aoCwt6P/mTcXf/6INyUMsh+Ysez0qpPFT3xxbznX0M5rs2r9MJVoi79hDx6BTMWEMUVJfvwqyJ7t8Lr86ovX5vYgMb3fFNBV4BT30YzBByDCQ15ExzQsgyMqDahVrTelk1fMqbpBj5dXkKka3oZK/IxVY5l0wLVcLKWrYQzBaJGMo7DF+w==
+ b=EoVl432/ASHAo5WiLikUEj9XaUR1tvfCgfE1sYPf0JmejaUoGLX5pEVruCDc+LWLrfBHFUzik89TGALeE4BCekgvDjlu87Kpr0KEQLEiSmJ6Pdi3Qlw47fvmhnQpwaLAlBLdqQcw0qWeHZABJK53y8stIlv7S0AfN9dr0ldlXniaokN14NR856YpugeUR85wYIpozy1B10/YeA6s4eH678y+8iQm3vk5VyvebBNQULvC8SrIZuKO/Trzdz8wcg/YNcwJVioWj9LCEkbtcpSZxrkxJa/6A0C8wEeL8huVQVhK5ebyHGIoyxv4YbXeyuQ/DwBdutj4IBDCBNKYd4qd2w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vR1gZLxEcCpNhZRmYURUhbfHiZJA6NiteG3t089pwFM=;
- b=VVLPS7INSR2mM06Qg032TVYT3jkS0PY9N5fq6MwRz4CH1CoeGEp8vLOygmhi14uBragg7xjUnwpXT53eGHxa2kx6ID4HG+5ZefcnXvY8iwv8SppeQNNt/rICfdj4vsuu9qn/auSwkgkJt4/yrWjOQ9rWC7/JKENRaod1oNOY4ieYHfysalgIIjwe/q1n/KKKrhfq3uVKBweYHsl7y4j4I6UZROvChB6nxxFSRgMWvlJ1kUfxsOirJ209KPKkA28qJr0LQR9jRRl7JLWve0zGe3pdE/av3LyPM3PSN4+s7O8NAGexb6onmvj9I2mzeAZMM9TBiLBb89908incvS0+OA==
+ bh=T+I5I8AgsrFKg601WVjf2eonvHXHDtrPOdjLvNw93CA=;
+ b=i/IJ3AftbwRNqJ2CdoZrrK7Zdosk92yXOMzUWSK2PHUCQmLSSuZPNl8IaJ4PdhthvM7y/BW8rPbzTLfbSqBzLYNDgypBHO6kKM6YybtPQoUX+2DeLRQfaAh8VGkDYmmcYX7s5nt7Lz3fOdB9w8zJxZzQ9h3xpQlrDgQhbC2srgfwcuN9D+L3VHg6lFk9Lu6DGAJldTD8CnK6rUBSY/+aSW0wppWZmQ+5K9PX9+RxxbGZjBrsvVxYoq/hNJPCRGpK278TQUkFIMZjcKWU1d/eUJoZmZpzC16al5vRSotuxaPsvF6R2L6StIrniZ7wbjCDC73SjRe7RZp790BK2cmnyg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=janztec.com; dmarc=pass action=none header.from=janztec.com;
- dkim=pass header.d=janztec.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=janzag.onmicrosoft.de;
- s=selector1-janzag-onmicrosoft-de;
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vR1gZLxEcCpNhZRmYURUhbfHiZJA6NiteG3t089pwFM=;
- b=eVoO2wRgY50X+g0FZb6tGMSNmvdRIvmQZC+KqIzzNZLywuReP0cA8UnhkvOajg9GcRk2MMmt/3jHfThgBiDqibqnYMX6MBs7f0l1Uh7HI95HMjluRcoGG+pY49tyyDVjZh2r9F76s6QpN00yrAywH4e/FLRqMKXzWd2iKDCtgEs=
-Received: from FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:26::13)
- by FR2P281MB1639.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:8e::13) with
+ bh=T+I5I8AgsrFKg601WVjf2eonvHXHDtrPOdjLvNw93CA=;
+ b=KFZuGB/1/d0xWS42srzoNv1nbpeyX2F4W+ge4ic0e9fOZfSeI65UccMpiJs1Z6Ovb2vLmfiyYCkRkxzfdxXSTwT2xFbCnkSueB1QwooQhV73O4aEn/pFVb6sd8dTE0Nboyth6qkhJQ/I4U3JwgdFAyR/Fytl49JycFhxCUm8374=
+Received: from BL3PR11MB6484.namprd11.prod.outlook.com (2603:10b6:208:3bf::19)
+ by CY8PR11MB7797.namprd11.prod.outlook.com (2603:10b6:930:76::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.24; Thu, 19 Jan
- 2023 12:48:28 +0000
-Received: from FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM
- ([fe80::d76a:8be5:c810:d1ba]) by FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM
- ([fe80::d76a:8be5:c810:d1ba%6]) with mapi id 15.20.6002.025; Thu, 19 Jan 2023
- 12:48:28 +0000
-From:   =?iso-8859-1?Q?Stefan_Alth=F6fer?= <Stefan.Althoefer@janztec.com>
-To:     "Thomas.Kopp@microchip.com" <Thomas.Kopp@microchip.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.25; Thu, 19 Jan
+ 2023 13:05:03 +0000
+Received: from BL3PR11MB6484.namprd11.prod.outlook.com
+ ([fe80::cb80:ece0:6de6:f096]) by BL3PR11MB6484.namprd11.prod.outlook.com
+ ([fe80::cb80:ece0:6de6:f096%3]) with mapi id 15.20.6002.026; Thu, 19 Jan 2023
+ 13:05:02 +0000
+From:   <Thomas.Kopp@microchip.com>
+To:     <Stefan.Althoefer@janztec.com>, <mkl@pengutronix.de>,
         linux-can@vger.kernel.org
 Thread-Topic: mcp251xfd: rx frame truncation (1/2)
-Thread-Index: AQHZKzjliniR2Rjet0qunKK2mAziB66kQAkAgAATQtCAARGHgIAAD7xXgAA3PL0=
-Date:   Thu, 19 Jan 2023 12:48:28 +0000
-Message-ID: <FR0P281MB196633E4F8E1195086E2402B97C49@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
+Thread-Index: AQHZKz4szMq49nyLkUucW5HyhGITIq6kOILggAAd4YCAAPuhYIAARQeAgAAbIACAAACgIA==
+Date:   Thu, 19 Jan 2023 13:05:02 +0000
+Message-ID: <BL3PR11MB648434F2B7DE7F75E291E159FBC49@BL3PR11MB6484.namprd11.prod.outlook.com>
 References: <FR0P281MB1966C774C1ED0752CCD6B80497C79@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
  <FR0P281MB1966F32AD422DDD867F8C53A97C79@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
  <BL3PR11MB6484911640CCC738ED799E6FFBC79@BL3PR11MB6484.namprd11.prod.outlook.com>
  <FR0P281MB19663A60B0F7CE7F684A7A6297C79@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
  <BL3PR11MB64842584529FAEF279F7B137FBC49@BL3PR11MB6484.namprd11.prod.outlook.com>
  <FR0P281MB19669083201C1B9C2DFB9E5497C49@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
-In-Reply-To: <FR0P281MB19669083201C1B9C2DFB9E5497C49@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
+ <FR0P281MB196633E4F8E1195086E2402B97C49@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
+In-Reply-To: <FR0P281MB196633E4F8E1195086E2402B97C49@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
+Accept-Language: en-US
+Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 msip_labels: 
 authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=janztec.com;
+ header.d=none;dmarc=none action=none header.from=microchip.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: FR0P281MB1966:EE_|FR2P281MB1639:EE_
-x-ms-office365-filtering-correlation-id: c21210d0-4d90-480f-e64a-08dafa1b7699
+x-ms-traffictypediagnostic: BL3PR11MB6484:EE_|CY8PR11MB7797:EE_
+x-ms-office365-filtering-correlation-id: 8f354815-786f-40af-47aa-08dafa1dc70d
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: lTvBtfRCXgIYEZfFxRd4jMcA0u4ATX7cIaoUa+RukxytXRA1FAy72WjizVpMHs7Bggr5iF+x4vIE7addu43isddCsBil1XuOfdciONLh1DnvF9edcaklwRDHEIqrIEodbAg+vbqfeaVE/gnjBx+0UnyPcFycT/WdS6e6X4dVi/zOZJP4cq01nli5aK2DJyOBDebkg4cCb+WGHK0yJ1KTE+6PH+QkXL0ps+eKPStGCY1/cETLSdqmQBlQpfTujb7xKfOf7SHjDk4o/q7xAvzPbfmJZyLjmDeH0z7EbwrHZM8fwmPCNnyRG3Kx+8z5HBldkmyMoOHTxFBCz7njEuPCIzmYwMlUy8GiPVskbjOXD/LrAXFn07yoLJTix5xmYMH1VCzbOgbN49QbWp7EtLzLpFzlp2j/UpUA3cR3sMMlEWQ8c/TRWI7f+d4dIwDzJmevIsdDuaqBtECq5RwQNkb9x/Lag3xwYaaSNFsUH9mffR3/LSLZfd1KPH0+zotHMry4XiYjMkyEnmP3fxLZe5rJj0xXS9GSiXn4LIFaAj6ikWGjJC3Ev5LAoEE44/jt/eeRL2j8uBk5zWBuPdKiY15tFNHi/4M2e3BvyCv/L2OJCJMl7lIvXeE2Y/mJBtF/hwRBUM0HJjmzGZahAUT5SLxv3MKLglDhttsx80D4K3a+yApaeTuunZS+kBITvjmfE4gZH6SpP8I3aAWmTyDaMuuV9w==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(366004)(376002)(39830400003)(346002)(136003)(451199015)(122000001)(55016003)(38100700002)(38070700005)(52536014)(66446008)(8676002)(64756008)(5660300002)(76116006)(8936002)(66946007)(41300700001)(66476007)(66556008)(86362001)(2906002)(478600001)(110136005)(186003)(71200400001)(9686003)(7696005)(26005)(316002)(2940100002)(19627405001)(83380400001)(33656002)(6506007);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: uzm8km49pHpAcFo4yoq5YKBEQjW6UZAO3cqISacaWd0IUsyfr7SyaJyhkQWdcvfe4/YDMyxhPna6iDaLOCKDEoVO7mVHNJQRzFK+d8NvzpxmtYKnH1oKCFYMWlPww5AtCR07Ei5jH0JMl7TMoWdnxLjz+/h07mLyDa4zNujEunYKfkONefXnuBs8jWYEz2lw+cJ98NDR1b5/FjkLTRSB90uHD//fdQkgWzp2P5mXDfULcfA9x71ki4Q/hwjNTjsADCdpzvcZtgdWJaJ8FslQvoihaSIH90HlTg/0ak6XFuUAz4yaqjWrwm+KQcdNx0H5ZNNu9YuI0zkJGB4chdlTlH5bQItUN9g6dzOk6evTQuSBgZ1kwKVY3vnx8ufrczSstDg3t03DZMQDcyreY+b92I+LLzHdAhNOyyGA6oknEqczvFqTKrZqVPyBv29loZEgpumg0Wn8Gdc/77Do4Myi4eYqu9y+qaOOwXnytdzdNrHyvWvGkEmJrBFu8NTLp3Z2ldmvtRBm6kfNOUtJVjIJdrVv0uJfbCmNO5PGxSrUCG0TEZ9ovWon9FxkJucBJMDQ/5rwO32wJovSmuJiXxMeBCQ2fhxBEVSlrGQiFQeWxAzJRA1Z+f0YqJDI+SUegt0n2O+5dNCnzakPo8WVdV/6vmumzVcJ8znN2its/V/DguYCsVpFD6dOdJA6cLvccbOILJw+72px1mU3ZEqbOOtFzg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL3PR11MB6484.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(376002)(366004)(396003)(39860400002)(136003)(451199015)(55016003)(33656002)(41300700001)(66446008)(76116006)(64756008)(66556008)(66476007)(66946007)(8676002)(83380400001)(5660300002)(8936002)(52536014)(478600001)(9686003)(186003)(26005)(6506007)(110136005)(7696005)(316002)(71200400001)(86362001)(38070700005)(2906002)(122000001)(38100700002);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?Ih76BP6mJJZUiuV0PHsR57qHsCQoW1aDid+Bcc/jipn2e9m5wLUhDL2KBj?=
- =?iso-8859-1?Q?oqNulkFgksYtO539lzr0deZc/o2/lfm7hY5r9r7JjPVTSLRLdT6s2IexML?=
- =?iso-8859-1?Q?M5nLyn19JNlqzsbrfX3ZxoAT3AqejUbdk9t/kYlLutcaG/mnbtGWvXE3d9?=
- =?iso-8859-1?Q?5gg6wqMg5l5vuCOi68zrjMDDtcPf+NTI8SbxwchPOX+glAmYxTFyi6UW5v?=
- =?iso-8859-1?Q?yj4z4vj8cCs/6LmQpbxx9cRscyRO2AkOS5zi7N/xQc9L1Atrc3hVpGDGfb?=
- =?iso-8859-1?Q?8ZaX1Ef0yGtN9jci9ZuRl05Cz+VdjnKu+3ychu/kkE8K0dsN/CNdUmgJiR?=
- =?iso-8859-1?Q?wsYcJHGI+XEsJOwq9n04ZKKSI/JujNJOXRghzw0p7mTg4UN9/4S7ehPUiK?=
- =?iso-8859-1?Q?P+1KhZ1n1oMsImRMAI6PIj9lLXUv4Xh7D0Aro5fufwQ7pKboo0xAmo8ADV?=
- =?iso-8859-1?Q?Ug3eQMaJGs7Nn+mkAD+rym35ZGvsHSSYadBTcqr4xXC6/vNQ750rqdwEck?=
- =?iso-8859-1?Q?ZCz6qGnjtHNcg+fvIHKlDg0eWB/QtvZRZuFzDNWZqMA/Z7lR2mWSpgd0ag?=
- =?iso-8859-1?Q?s120dydQjPhQb0sI1wCdUpidYJAdKV+ZTWPYP/t7WPaZN7/EaxQaPwQzgo?=
- =?iso-8859-1?Q?N94eDaN5Y85ziWu12IFYjlnnqmxA59563fyBQ/Vqr6krtYgAGGdMmdwU91?=
- =?iso-8859-1?Q?pPPIZVbK10Peck2anuLF09ZuYXdPqMW1iLrIC5R6TSRi5mcpiP4OcUElmF?=
- =?iso-8859-1?Q?oB4C8pNJyCD+L5B0NCnwroV3bi54LPa761867RrppSdw8r1r6S0nHPQ9cs?=
- =?iso-8859-1?Q?ayHnz1w8UY/yvKEa2TiaJQtSZzGI+WEdnnWaJveHsIn9il8brIMdsiZoQY?=
- =?iso-8859-1?Q?FWcHQdV2AcyyiuxAWaoC1XEgkbBx5JmqBvO34WhO267MY2ffsSOTD9/DQI?=
- =?iso-8859-1?Q?BCsabm5/I2p4wl93gu9ttG4VOHviNjsV9v6kcl/ciUPAjGvJewcGHLQDSx?=
- =?iso-8859-1?Q?e5tQ3yZFQRfYHLR0dXi3uboD6zqGpXzYBfez/Gcrx7QytaAtYOyXa9d+xV?=
- =?iso-8859-1?Q?MhzbQWZLA+bUOfVxfOEc+jxxPSwa83nTszP7VNhai/fjScwEQMACO8T+dx?=
- =?iso-8859-1?Q?1kBYNZHEfLibWkfo5tQfQKdexRtvAp1n6rH+e8Fde+2qhVLMtS8OHGuv/H?=
- =?iso-8859-1?Q?yHlmjiRCUfuSqvQj/jWA+gU9VswpnAOdY7KhpIzK7h5xQ11ZoRpU6fup9l?=
- =?iso-8859-1?Q?wr63PYCqpf8z5HdBrl2j1eQDd39z5vDsO0qlGukCHg8SuNM23r5yF9F2yK?=
- =?iso-8859-1?Q?UQDylkqVvGa5GyPM+so0auvwb+o0vtBLUpfhxnCWAL2mdzS6KrN0JG826x?=
- =?iso-8859-1?Q?YjH7oX/Y8oTYbXNxDheIqYuZol3E3LnWmCitR0Q9OgOkEK2pDBln6f82kM?=
- =?iso-8859-1?Q?P6kW36DoQN2TWi4oTVsIc05HcR2OhAD5iP5yw3fVTuAzB6jrl3gzDPjqHl?=
- =?iso-8859-1?Q?dv1zjZ5Um/vQbzDe6JIHWB2CcD4HANLNXCj7ilCpyyZF7k1qhhtUodoK/0?=
- =?iso-8859-1?Q?VmrUw2ug8a6tq4wbwMjbx4ZQVn8U9aXctvqkOg4paNzEiASC2K8N2HFbfa?=
- =?iso-8859-1?Q?npALRHtLryoRNQeOyXHJ3nhRCGWm634Ixcpzx+5alQyFnFnB6mNkF7Hw?=
- =?iso-8859-1?Q?=3D=3D?=
-Content-Type: multipart/alternative;
-        boundary="_000_FR0P281MB196633E4F8E1195086E2402B97C49FR0P281MB1966DEUP_"
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?c204TW5Gd3dPSEVqYnFFMHR4L25CckZOaXVxdVpGMm80WVVEbkRlemp6NWVh?=
+ =?utf-8?B?aktXMnJ6UGRLb1RuMkwyV2NBMlFoVUJqQW14TUM4cktwTkpnV3JCTEZaZTIw?=
+ =?utf-8?B?SlE3U3RnUzdEb0RUZVIwV3k5TzYzSnFWNTZnUmZjT3BKRVFoSGZsWkhoU2NC?=
+ =?utf-8?B?UWVnTW1HdlorL3NQUlRmY3dQbXNHRktjYUVYZVgrWi9XTmVqTzRrandyd0xR?=
+ =?utf-8?B?cW5Kc0pJaUtlVGxSa1hJVnIvc1cwckVOUGlRS0k5bDEyUW44OFk4TUx4UEpo?=
+ =?utf-8?B?UlNTb0pPdU5jMlJEYkt4QytVTmFGZ0NEU2xxd2E2S25tekx1V3hVL2loYkhU?=
+ =?utf-8?B?Ny80cEVMK2s5V3ZMUnVvOFVGNGZVSngyMEo2RzVHSjJKMVBoMFJZaG5BeFU5?=
+ =?utf-8?B?WEtiOE1VL0FKZ1pJNkpudEF2Y0YxWUtjc3VRQlBmc1pkTGFkc0ZoVEowTVJJ?=
+ =?utf-8?B?MGZGL3pJcVhtdHFSOUNuSlZRb3RoTDA2V2dVUm1KN3AzWmxUY3pGOW1GTXJK?=
+ =?utf-8?B?WmFOWUh2UjB3T0hVbU81dDExTkUyNXZ5SWpZV0xycDdBTmVKVU5NL0pNRG9l?=
+ =?utf-8?B?djFHNVI4WmdabE5MZmkxRURmR1IrbWh4SitCVWFyMWs5WEkvVXZqMERabjlW?=
+ =?utf-8?B?MmszTWNqWmowVE0xektmMDE2R3F3bTl0QW9xcit5S21ZMUoyamZ1UXdPRUhl?=
+ =?utf-8?B?VlNYcVNSWllnd2Zzb1dvOS85dlg1TjlxaExKeFFac2hRcWk1YU1nVWdCM0dR?=
+ =?utf-8?B?Z3crZStFSjA5ekNWMDJsZEc0Nk9sQ29oTmJad3RTTmR3RWJadWNqVkZETzIz?=
+ =?utf-8?B?L080aDE4aG81L3pnTysybjBiZTNSTy9OVEhBbnYwMmxOQVNhZnVqZkF4YndI?=
+ =?utf-8?B?RFAzS0FqVEVyeFZkZEE1M0thWjdVZW5nSDZHWjZWK1hORStoVmFGa3pxMUpq?=
+ =?utf-8?B?cTNPV0xEeUYzTS9lL0M0cmI3TCszOFpOTk1EdENMbGpNRFVYYlVWOWRQVHZv?=
+ =?utf-8?B?RjkrM1dwZndzVGpNODdsdW5pZCtyVUNkdHdTbXp2OTRWSWJkc05rZ2p2NlRv?=
+ =?utf-8?B?OXAzTE91U1FSVzhoUXFHeWJwSGh5OXF0dnY3bmZxVEgzYmdVLzZCbzE4eVc2?=
+ =?utf-8?B?TXNkMDcrRVBhYzViRXZLT1F0SXVTNFg4WUhaVEFIOUlXMk5LUFhqMXlyZHBT?=
+ =?utf-8?B?RkdCVVVONjFrOUtPN2pEbDJ2dWpNdVRSZld1R0QvR3hvSmpuVExXUGY1UVN5?=
+ =?utf-8?B?ZjJIbkUzYVVjdlhkZ2hVNGJsanlQdFB3QThYYjBwa3VTbDZYL2ZLZE50TU0w?=
+ =?utf-8?B?SlE4M2lsZWs2cnA1cFA1ZWoxMjQrYlZKZDJzOEF5OGlyYW9XMFl5Y1RsYlRH?=
+ =?utf-8?B?amx0dmFrNkpsRWRkMFJLdWRDRThhMm82K28yTXU2Z3BhekdjWFVsYmZHTW80?=
+ =?utf-8?B?UGMyb2dWT1VBZG83THBQcllHMjJNcUMyN0lTSEM0QjErSFRlb0lxMldsWTFZ?=
+ =?utf-8?B?ckk0UVhnSWRYVmpUaDZ6OTRaejdiak1oWFV5Y0pFdWU0K1RWNFVKZW1pVU9V?=
+ =?utf-8?B?SWU4YjJ0YmoxOW13bFlEdnZIYlYyTzVYdndaelpLejVsTER5cjJTTWgxNjVm?=
+ =?utf-8?B?QytJZmZvTm9uRU9Oakc4UStZbUJCOTJibnhFK09GWm1zR3RqcXF2UXVOdXVH?=
+ =?utf-8?B?cTY5ekF3RVc3TmFucVRqNzZnTUgxV2xwK3FyNkVlRStIZzRoc2NWeG9aNllx?=
+ =?utf-8?B?UlZ4Zno0dG5JWmlUZjgyQWZ5YlBGbnJrSm9teXBIeWVDQ0lJV3hPN3BmU1Jk?=
+ =?utf-8?B?aEo5MjczR1NjdkJ1TGwrQ01TbVdMTVcvSUxTOUVKU3ZueWdJMHhaZkx2QWJm?=
+ =?utf-8?B?eFo5TjByeHg0aVVjcUpFYmJnSmdLZFJQV3h6c0pZUEpJOWI5TlgwaHBBQklV?=
+ =?utf-8?B?RnE0aGczRTM0MERCMkVYaDJYYVIxSHRIUnNBYUlIaXU1SUY0b3FHck5EdVNO?=
+ =?utf-8?B?S09Fcm5ORXd2dStNSXlhSE42ajVwU2hFbkloS3FXVGFHYnJmNnpWZmlZYkFN?=
+ =?utf-8?B?TklTcnlNd3EwSmJQck96cmZteUFVWlRFMWgzM0YzYXVOTmlHUHY3NFBoR2Nq?=
+ =?utf-8?Q?IAr7OARFMNBkGw0hrM0B+H2dy?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-OriginatorOrg: janztec.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: c21210d0-4d90-480f-e64a-08dafa1b7699
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jan 2023 12:48:28.6577
+X-MS-Exchange-CrossTenant-AuthSource: BL3PR11MB6484.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8f354815-786f-40af-47aa-08dafa1dc70d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jan 2023 13:05:02.6565
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c1dae847-7bcf-493f-b143-af65743cbb23
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: u91aoappzfgeUjx3qEcBayxYpVYuxVgdSV0qaO/BQ2cJZkO5trZyAu0zg7FQAl8OHuh7QBa57QC5L64POZWHfF0OhQ5C/5DXZtOd4kSZYqc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: FR2P281MB1639
+X-MS-Exchange-CrossTenant-userprincipalname: XmKa3CHsGYNfQiMP/jvQVWnnsVD3NdTaPp3gBK5jttiX5FLKM0ZL3CrgTVslI1wc6oZbPzAIBb/sgpzAsms4L5yH73GZXLcw/4Isef2tLUg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB7797
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Subject: AW: mcp251xfd: rx frame truncation (1/2)
+Subject: RE: mcp251xfd: rx frame truncation (1/2)
 X-PTX-Original-Recipient: mkl@pengutronix.de
 X-PTX-Original-Recipient: ptx@kleine-budde.de
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -164,135 +194,82 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-I'm having some email issues, so I'm not sure what actually left the buildi=
-ng. So I re-send to you directly.
+DQoNCj5VcGRhdGU6DQo+SSBtb3ZlZCBteSBjbGljayBib2FyZHMgdG8gdGhlIHN0YW5kYXJkIFJQ
+SSBhbmQgYXR0YWNoZWQgdGhlIGxvZ2ljIGFuYWx5emVyLiBUaGUgc2FtZSBzcGkwL3NwaTYgMTYv
+MTAgTUh6IHNldHVwLg0KPkhvd2V2ZXIgdGhlIHRydW5jYXRpb24gZXJyb3IgaGFzIG5vdCBhcHBl
+YXJlZCB3aXRoaW4gMTZoLiBOZXZlcnRoZWxlc3MgSSBzZWUgbG90cyBvZiBUcmFuc21pdCBFdmVu
+dA0KPmlzc3VlczoNCiBNaG0g4pi5IFRoYXQgY291bGQgZXhwbGFpbiB3aHkgSSBjYW4ndCBjYXRj
+aCBhbnl0aGluZy4gSSdtIHVzaW5nIHRoZSBQaTQgd2l0aCB0aGUgb3JpZ2luYWwgU2VlZWQgU3R1
+ZGlvIEhBVChzb2xkZXJlZCB0aGUgMThGRCBvbnRvIGl0IGluc3RlYWQgb2YgdGhlIDE3RkQpIG9u
+IFNQSTAgYW5kIFNQSTYgYW5kIG1hdGNoZWQgeW91ciBTUEkgZnJlcXVlbmNpZXMuDQoNCkphbiAx
+OSAwNDoxNzo1MiByYXNwYmVycnlwaSBrZXJuZWw6IFs0MzE1NS4yODA5NjddIG1jcDI1MXhmZCBz
+cGk2LjAgY2FuMTogVHJhbnNtaXQgRXZlbnQgRklGTyBidWZmZXIgbm90IGVtcHR5LiAoc2VxPTB4
+MDAwMDE4YWEsIHRlZl90YWlsPTB4MDAwMDE4YWUsIHRlZl9oZWFkPTB4MDAwMDE4YWYsIHR4X2hl
+YWQ9MHgwMDAwMThhZikuIA0KSmFuIDE5IDA0OjE4OjM4IHJhc3BiZXJyeXBpIGtlcm5lbDogWzQz
+MjAwLjg1OTA0MF0gbWNwMjUxeGZkIHNwaTYuMCBjYW4xOiBUcmFuc21pdCBFdmVudCBGSUZPIGJ1
+ZmZlciBmdWxsLiAoc2VxPTB4MDAwMDBkNDIsIHRlZl90YWlsPTB4MDAwMDBkNDYsIHRlZl9oZWFk
+PTB4MDAwMDBkNDcsIHR4X2hlYWQ9MHgwMDAwMGQ0NykuDQpKYW4gMTkgMDQ6NDg6MDQgcmFzcGJl
+cnJ5cGkga2VybmVsOiBbNDQ5NjcuNTE4MDI4XSBtY3AyNTF4ZmQgc3BpMC4wIGNhbjA6IFRyYW5z
+bWl0IEV2ZW50IEZJRk8gYnVmZmVyIG5vdCBlbXB0eS4gKHNlcT0weDAwMDAwMGFlLCB0ZWZfdGFp
+bD0weDAwMDAwMGIyLCB0ZWZfaGVhZD0weDAwMDAwMGIzLCB0eF9oZWFkPTB4MDAwMDAwYjMpLg0K
+SmFuIDE5IDA0OjQ5OjAzIHJhc3BiZXJyeXBpIGtlcm5lbDogWzQ1MDI2LjExNDkwM10gbWNwMjUx
+eGZkIHNwaTAuMCBjYW4wOiBUcmFuc21pdCBFdmVudCBGSUZPIGJ1ZmZlciBub3QgZW1wdHkuIChz
+ZXE9MHgwMDAwMTViMCwgdGVmX3RhaWw9MHgwMDAwMTViNCwgdGVmX2hlYWQ9MHgwMDAwMTViNSwg
+dHhfaGVhZD0weDAwMDAxNWI1KS4NCkphbiAxOSAwNDo1MToyMiByYXNwYmVycnlwaSBrZXJuZWw6
+IFs0NTE2NS4wMTIyMDZdIG1jcDI1MXhmZCBzcGk2LjAgY2FuMTogVHJhbnNtaXQgRXZlbnQgRklG
+TyBidWZmZXIgbm90IGVtcHR5LiAoc2VxPTB4MDAwMDBlMTIsIHRlZl90YWlsPTB4MDAwMDBlMTYs
+IHRlZl9oZWFkPTB4MDAwMDBlMTcsIHR4X2hlYWQ9MHgwMDAwMGUxOCkuDQpKYW4gMTkgMDU6MTM6
+MzMgcmFzcGJlcnJ5cGkga2VybmVsOiBbNDY0OTYuMjIyMzIxXSBtY3AyNTF4ZmQgc3BpMC4wIGNh
+bjA6IFRyYW5zbWl0IEV2ZW50IEZJRk8gYnVmZmVyIG5vdCBlbXB0eS4gKHNlcT0weDAwMDAxYzNl
+LCB0ZWZfdGFpbD0weDAwMDAxYzQyLCB0ZWZfaGVhZD0weDAwMDAxYzQzLCB0eF9oZWFkPTB4MDAw
+MDFjNDMpLg0KSmFuIDE5IDA1OjM0OjUyIHJhc3BiZXJyeXBpIGtlcm5lbDogWzQ3Nzc1LjgwNTE2
+MF0gbWNwMjUxeGZkIHNwaTAuMCBjYW4wOiBUcmFuc21pdCBFdmVudCBGSUZPIGJ1ZmZlciBub3Qg
+ZW1wdHkuIChzZXE9MHgwMDAwMjQ0ZSwgdGVmX3RhaWw9MHgwMDAwMjQ1MiwgdGVmX2hlYWQ9MHgw
+MDAwMjQ1MywgdHhfaGVhZD0weDAwMDAyNDUzKS4NCkphbiAxOSAwNjowNDo1NyByYXNwYmVycnlw
+aSBrZXJuZWw6IFs0OTU4MC44NTA2MjZdIG1jcDI1MXhmZCBzcGkwLjAgY2FuMDogVHJhbnNtaXQg
+RXZlbnQgRklGTyBidWZmZXIgbm90IGVtcHR5LiAoc2VxPTB4MDAwMDEwM2EsIHRlZl90YWlsPTB4
+MDAwMDEwM2UsIHRlZl9oZWFkPTB4MDAwMDEwM2YsIHR4X2hlYWQ9MHgwMDAwMTAzZikuDQpKYW4g
+MTkgMDY6Mjg6MzMgcmFzcGJlcnJ5cGkga2VybmVsOiBbNTA5OTYuNDAzNDQ1XSBtY3AyNTF4ZmQg
+c3BpNi4wIGNhbjE6IFRyYW5zbWl0IEV2ZW50IEZJRk8gYnVmZmVyIGZ1bGwuIChzZXE9MHgwMDAw
+MWVkNiwgdGVmX3RhaWw9MHgwMDAwMWVkYSwgdGVmX2hlYWQ9MHgwMDAwMWVkYiwgdHhfaGVhZD0w
+eDAwMDAxZWRiKS4NCkphbiAxOSAwOTo0NzoxMyByYXNwYmVycnlwaSBrZXJuZWw6IFs2MjkxNi4z
+MzU3NTFdIG1jcDI1MXhmZCBzcGk2LjAgY2FuMTogVHJhbnNtaXQgRXZlbnQgRklGTyBidWZmZXIg
+bm90IGVtcHR5LiAoc2VxPTB4MDAwMDE0M2UsIHRlZl90YWlsPTB4MDAwMDE0NDIsIHRlZl9oZWFk
+PTB4MDAwMDE0NDMsIHR4X2hlYWQ9MHgwMDAwMTQ0NCkuDQpKYW4gMTkgMDk6NTY6MTQgcmFzcGJl
+cnJ5cGkga2VybmVsOiBbNjM0NTcuNzIxNDA2XSBtY3AyNTF4ZmQgc3BpNi4wIGNhbjE6IFRyYW5z
+bWl0IEV2ZW50IEZJRk8gYnVmZmVyIG5vdCBlbXB0eS4gKHNlcT0weDAwMDAxODA4LCB0ZWZfdGFp
+bD0weDAwMDAxODBjLCB0ZWZfaGVhZD0weDAwMDAxODBkLCB0eF9oZWFkPTB4MDAwMDE4MGQpLg0K
+SmFuIDE5IDExOjEyOjQ0IHJhc3BiZXJyeXBpIGtlcm5lbDogWzY4MDQ3LjM0NjAzOF0gbWNwMjUx
+eGZkIHNwaTAuMCBjYW4wOiBUcmFuc21pdCBFdmVudCBGSUZPIGJ1ZmZlciBub3QgZW1wdHkuIChz
+ZXE9MHgwMDAwMjJmZSwgdGVmX3RhaWw9MHgwMDAwMjMwMiwgdGVmX2hlYWQ9MHgwMDAwMjMwMywg
+dHhfaGVhZD0weDAwMDAyMzAzKS4NCkphbiAxOSAxMTo0ODo0MSByYXNwYmVycnlwaSBrZXJuZWw6
+IFs3MDIwNC41NjAxNzFdIG1jcDI1MXhmZCBzcGk2LjAgY2FuMTogVHJhbnNtaXQgRXZlbnQgRklG
+TyBidWZmZXIgbm90IGVtcHR5LiAoc2VxPTB4MDAwMDFlYTgsIHRlZl90YWlsPTB4MDAwMDFlYWMs
+IHRlZl9oZWFkPTB4MDAwMDFlYWQsIHR4X2hlYWQ9MHgwMDAwMWVhZCkuDQpKYW4gMTkgMTE6NTk6
+NTQgcmFzcGJlcnJ5cGkga2VybmVsOiBbNzA4NzcuNjQ1OTY1XSBtY3AyNTF4ZmQgc3BpMC4wIGNh
+bjA6IFRyYW5zbWl0IEV2ZW50IEZJRk8gYnVmZmVyIG5vdCBlbXB0eS4gKHNlcT0weDAwMDAwOTMy
+LCB0ZWZfdGFpbD0weDAwMDAwOTM2LCB0ZWZfaGVhZD0weDAwMDAwOTM3LCB0eF9oZWFkPTB4MDAw
+MDA5MzgpLg0KSmFuIDE5IDEyOjEwOjIzIHJhc3BiZXJyeXBpIGtlcm5lbDogWzcxNTA2LjUyMTA2
+Ml0gbWNwMjUxeGZkIHNwaTAuMCBjYW4wOiBUcmFuc21pdCBFdmVudCBGSUZPIGJ1ZmZlciBub3Qg
+ZW1wdHkuIChzZXE9MHgwMDAwMTM1ZSwgdGVmX3RhaWw9MHgwMDAwMTM2MiwgdGVmX2hlYWQ9MHgw
+MDAwMTM2MywgdHhfaGVhZD0weDAwMDAxMzYzKS4NCg0KQXJlIHlvdSBpbnRlcnJlc3RlZCBpbiBh
+bmFseXppbmcgd2hhdCdzIGdvaW5nIG9uIGF0IHRob3NlIHRpbWVzPyBJZiBzbywgd2hhdCB0byBk
+byBpbiB0aGUgZHJpdmVyIHRvIHN0b3Agb3BlcmF0aW9uDQphZnRlciB0aGUgbWVzc2FnZSBoYXMg
+YmVlbiBpc3N1ZWQgc28gSSBjYW4gc3RvcCB0aGUgYW5hbHl6ZXIgYW5kIHNhbXBsZSB0aGUgY2hp
+cCByZWdpc3RlcnM/DQoNCkFic29sdXRlbHkgaW50ZXJlc3RlZCwgeWVzLiAgSSBzZWUgdGhlIG5v
+dCBlbXB0eSBjYXNlcyBwcmV0dHkgb2Z0ZW4gYXMgd2VsbCBhbmQgdGhleSBzaG91bGRuJ3QgYmUg
+YW4gaXNzdWUuIEkgc3RpbGwgY2FuJ3QgcmVwcm9kdWNlIHRoZSBidWZmZXIgZnVsbCB0aG91Z2gu
+IEkgcHJldHR5IG11Y2ggb25seSBsb29rIGF0IHRoZSByYXcgU1BJIGNvbW11bmljYXRpb24gd2hl
+biBhbmFseXppbmcgdGhpcy4gU28gd2hhdGV2ZXIgeW91IGNhbiBjYXB0dXJlIG9uIHRoZSBTUEkg
+dHJhY2VzIGZvciBTUEk2IHdvdWxkIGJlIGludGVyZXN0aW5nIGZvciBtZSB0byBsb29rIGF0LiBJ
+ZiBwb3NzaWJsZSBpdCB3b3VsZCBiZSBncmVhdCB0byBjYXB0dXJlIGVpdGhlciBDQU5MIG9yIENB
+TkggYXMgd2VsbC4gWWVzLCBhIGZ1bGwgZHVtcCBvZiB0aGUgY2hpcCByZWdpc3RlcnMgYW5kIFJB
+TSBoZWxwIHRvIGNvcnJlbGF0ZSB0aGluZ3MgYnV0IGluIHRoZSBlbmQgaXQncyB0aGUgcHVyZSBT
+UEkgdHJhY2VzIHRoYXQgaGVscCBmaW5kIHByb2JsZW1hdGljIHRpbWluZ3MuDQpOb3Qgc3VyZSBo
+b3cgbXVjaCB5b3UgY2FuIGxvZyBhdCBhIHRpbWUgYnV0IG1heWJlIGl0J3MgcG9zc2libGUgdG8g
+Y2hlY2sgdGhlIGRtZXNnIGxvZyBhbmQgdGhlbiBraWxsIHlvdXIgdGVzdHNjcmlwdCBhbmQgc2V0
+IGEgR1BJTyBvbiB0aGUgcGkgdG8gdHJpZ2dlciB5b3VyIGxvZ2ljIGFuYWx5emVyIHRvIHN0b3Ag
+YWNxdWlyaW5nIGRhdGE/IFRoYXQgd291bGQgd29yayBpZiB0aGUgYW5hbHl6ZXIgY2FuIGtlZXAg
+YSBjb3VwbGUgc2Vjb25kcyBpbiBhIFJpbmdidWZmZXIgb3Igc29tZXRoaW5nLg0KDQpUaGFua3Ms
+DQpUaG9tYXMNCg0KDQo=
 
-
-> Is that something deliberately limited in your DT or where does that come=
- from?
-
-On our CM4 baseboard there is also a UART on SPI6. So we limited the speed =
-in the CAN dts to 10MHz. At the
-time when I noticed the error, the overlay for the UART was not installed, =
-so it should not be active at all.
-
-> ./sctest -b -l 990 -v cmperr,logmsg -F refilldata,lessdots,stoponerror,ra=
-ndomize -d 64 -n 10 -t 3 can0 can1
-
-yes
-
-> CRC errors are very rare in a non-noisy environment.
-
-As they do not appear, I'm quite confident that my wireing/layout is ok.
-
-Update:
-I moved my click boards to the standard RPI and attached the logic analyzer=
-. The same spi0/spi6 16/10 MHz setup.
-However the truncation error has not appeared within 16h. Nevertheless I se=
-e lots of Transmit Event
-issues:
-
-Jan 19 04:17:52 raspberrypi kernel: [43155.280967] mcp251xfd spi6.0 can1: T=
-ransmit Event FIFO buffer not empty. (seq=3D0x000018aa, tef_tail=3D0x000018=
-ae, tef_head=3D0x000018af, tx_head=3D0x000018af).
-Jan 19 04:18:38 raspberrypi kernel: [43200.859040] mcp251xfd spi6.0 can1: T=
-ransmit Event FIFO buffer full. (seq=3D0x00000d42, tef_tail=3D0x00000d46, t=
-ef_head=3D0x00000d47, tx_head=3D0x00000d47).
-Jan 19 04:48:04 raspberrypi kernel: [44967.518028] mcp251xfd spi0.0 can0: T=
-ransmit Event FIFO buffer not empty. (seq=3D0x000000ae, tef_tail=3D0x000000=
-b2, tef_head=3D0x000000b3, tx_head=3D0x000000b3).
-Jan 19 04:49:03 raspberrypi kernel: [45026.114903] mcp251xfd spi0.0 can0: T=
-ransmit Event FIFO buffer not empty. (seq=3D0x000015b0, tef_tail=3D0x000015=
-b4, tef_head=3D0x000015b5, tx_head=3D0x000015b5).
-Jan 19 04:51:22 raspberrypi kernel: [45165.012206] mcp251xfd spi6.0 can1: T=
-ransmit Event FIFO buffer not empty. (seq=3D0x00000e12, tef_tail=3D0x00000e=
-16, tef_head=3D0x00000e17, tx_head=3D0x00000e18).
-Jan 19 05:13:33 raspberrypi kernel: [46496.222321] mcp251xfd spi0.0 can0: T=
-ransmit Event FIFO buffer not empty. (seq=3D0x00001c3e, tef_tail=3D0x00001c=
-42, tef_head=3D0x00001c43, tx_head=3D0x00001c43).
-Jan 19 05:34:52 raspberrypi kernel: [47775.805160] mcp251xfd spi0.0 can0: T=
-ransmit Event FIFO buffer not empty. (seq=3D0x0000244e, tef_tail=3D0x000024=
-52, tef_head=3D0x00002453, tx_head=3D0x00002453).
-Jan 19 06:04:57 raspberrypi kernel: [49580.850626] mcp251xfd spi0.0 can0: T=
-ransmit Event FIFO buffer not empty. (seq=3D0x0000103a, tef_tail=3D0x000010=
-3e, tef_head=3D0x0000103f, tx_head=3D0x0000103f).
-Jan 19 06:28:33 raspberrypi kernel: [50996.403445] mcp251xfd spi6.0 can1: T=
-ransmit Event FIFO buffer full. (seq=3D0x00001ed6, tef_tail=3D0x00001eda, t=
-ef_head=3D0x00001edb, tx_head=3D0x00001edb).
-Jan 19 06:30:13 raspberrypi kernel: [51096.376812] mcp251xfd spi0.0 can0: T=
-ransmit Event FIFO buffer not empty. (seq=3D0x0000104e, tef_tail=3D0x000010=
-52, tef_head=3D0x00001053, tx_head=3D0x00001053).
-Jan 19 06:51:24 raspberrypi kernel: [52367.751181] mcp251xfd spi6.0 can1: T=
-ransmit Event FIFO buffer not empty. (seq=3D0x000020aa, tef_tail=3D0x000020=
-ae, tef_head=3D0x000020af, tx_head=3D0x000020af).
-Jan 19 06:51:24 raspberrypi kernel: [52367.751459] mcp251xfd spi6.0 can1: T=
-ransmit Event FIFO buffer not empty. (seq=3D0x000020ab, tef_tail=3D0x000020=
-af, tef_head=3D0x000020b1, tx_head=3D0x000020b2).
-Jan 19 07:27:37 raspberrypi kernel: [54540.514853] mcp251xfd spi0.0 can0: T=
-ransmit Event FIFO buffer not empty. (seq=3D0x000014fe, tef_tail=3D0x000015=
-02, tef_head=3D0x00001503, tx_head=3D0x00001503).
-Jan 19 07:36:59 raspberrypi kernel: [55102.928987] mcp251xfd spi6.0 can1: T=
-ransmit Event FIFO buffer not empty. (seq=3D0x000003aa, tef_tail=3D0x000003=
-ae, tef_head=3D0x000003af, tx_head=3D0x000003af).
-Jan 19 07:38:34 raspberrypi kernel: [55197.329940] mcp251xfd spi6.0 can1: T=
-ransmit Event FIFO buffer not empty. (seq=3D0x00000fb6, tef_tail=3D0x00000f=
-ba, tef_head=3D0x00000fbb, tx_head=3D0x00000fbb).
-Jan 19 07:55:19 raspberrypi kernel: [56202.156373] mcp251xfd spi0.0 can0: T=
-ransmit Event FIFO buffer not empty. (seq=3D0x00001aa6, tef_tail=3D0x00001a=
-aa, tef_head=3D0x00001aab, tx_head=3D0x00001aab).
-Jan 19 07:58:12 raspberrypi kernel: [56375.706280] mcp251xfd spi0.0 can0: T=
-ransmit Event FIFO buffer not empty. (seq=3D0x00000aea, tef_tail=3D0x00000a=
-ee, tef_head=3D0x00000aef, tx_head=3D0x00000aef).
-Jan 19 08:17:11 raspberrypi kernel: [57514.699211] mcp251xfd spi6.0 can1: T=
-ransmit Event FIFO buffer not empty. (seq=3D0x000001ac, tef_tail=3D0x000001=
-b0, tef_head=3D0x000001b1, tx_head=3D0x000001b1).
-Jan 19 08:18:14 raspberrypi kernel: [57577.895401] mcp251xfd spi0.0 can0: T=
-ransmit Event FIFO buffer not empty. (seq=3D0x00000f08, tef_tail=3D0x00000f=
-0c, tef_head=3D0x00000f0d, tx_head=3D0x00000f0d).
-Jan 19 08:22:15 raspberrypi kernel: [57818.229608] mcp251xfd spi0.0 can0: T=
-ransmit Event FIFO buffer not empty. (seq=3D0x00000d82, tef_tail=3D0x00000d=
-86, tef_head=3D0x00000d87, tx_head=3D0x00000d87).
-Jan 19 08:55:53 raspberrypi kernel: [59836.704617] mcp251xfd spi6.0 can1: T=
-ransmit Event FIFO buffer not empty. (seq=3D0x00001632, tef_tail=3D0x000016=
-36, tef_head=3D0x00001637, tx_head=3D0x00001637).
-Jan 19 08:55:53 raspberrypi kernel: [59836.704913] mcp251xfd spi6.0 can1: T=
-ransmit Event FIFO buffer not empty. (seq=3D0x00001633, tef_tail=3D0x000016=
-37, tef_head=3D0x00001639, tx_head=3D0x0000163a).
-Jan 19 08:55:53 raspberrypi kernel: [59836.705011] mcp251xfd spi6.0 can1: T=
-ransmit Event FIFO buffer not empty. (seq=3D0x00001634, tef_tail=3D0x000016=
-38, tef_head=3D0x0000163a, tx_head=3D0x0000163a).
-Jan 19 08:56:45 raspberrypi kernel: [59888.907279] mcp251xfd spi0.0 can0: T=
-ransmit Event FIFO buffer not empty. (seq=3D0x000011de, tef_tail=3D0x000011=
-e2, tef_head=3D0x000011e3, tx_head=3D0x000011e3).
-Jan 19 09:13:14 raspberrypi kernel: [60877.922701] mcp251xfd spi0.0 can0: T=
-ransmit Event FIFO buffer not empty. (seq=3D0x000000ea, tef_tail=3D0x000000=
-ee, tef_head=3D0x000000ef, tx_head=3D0x000000ef).
-Jan 19 09:44:16 raspberrypi kernel: [62739.076163] mcp251xfd spi0.0 can0: T=
-ransmit Event FIFO buffer not empty. (seq=3D0x000020ac, tef_tail=3D0x000020=
-b0, tef_head=3D0x000020b1, tx_head=3D0x000020b1).
-Jan 19 09:47:13 raspberrypi kernel: [62916.335751] mcp251xfd spi6.0 can1: T=
-ransmit Event FIFO buffer not empty. (seq=3D0x0000143e, tef_tail=3D0x000014=
-42, tef_head=3D0x00001443, tx_head=3D0x00001444).
-Jan 19 09:56:14 raspberrypi kernel: [63457.721406] mcp251xfd spi6.0 can1: T=
-ransmit Event FIFO buffer not empty. (seq=3D0x00001808, tef_tail=3D0x000018=
-0c, tef_head=3D0x0000180d, tx_head=3D0x0000180d).
-Jan 19 11:12:44 raspberrypi kernel: [68047.346038] mcp251xfd spi0.0 can0: T=
-ransmit Event FIFO buffer not empty. (seq=3D0x000022fe, tef_tail=3D0x000023=
-02, tef_head=3D0x00002303, tx_head=3D0x00002303).
-Jan 19 11:48:41 raspberrypi kernel: [70204.560171] mcp251xfd spi6.0 can1: T=
-ransmit Event FIFO buffer not empty. (seq=3D0x00001ea8, tef_tail=3D0x00001e=
-ac, tef_head=3D0x00001ead, tx_head=3D0x00001ead).
-Jan 19 11:59:54 raspberrypi kernel: [70877.645965] mcp251xfd spi0.0 can0: T=
-ransmit Event FIFO buffer not empty. (seq=3D0x00000932, tef_tail=3D0x000009=
-36, tef_head=3D0x00000937, tx_head=3D0x00000938).
-Jan 19 12:10:23 raspberrypi kernel: [71506.521062] mcp251xfd spi0.0 can0: T=
-ransmit Event FIFO buffer not empty. (seq=3D0x0000135e, tef_tail=3D0x000013=
-62, tef_head=3D0x00001363, tx_head=3D0x00001363).
-
-Are you interrested in analyzing what's going on at those times? If so, wha=
-t to do in the driver to stop operation
-after the message has been issued so I can stop the analyzer and sample the=
- chip registers?
-
---
-Stefan
