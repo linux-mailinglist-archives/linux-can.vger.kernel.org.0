@@ -2,21 +2,21 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74172675365
-	for <lists+linux-can@lfdr.de>; Fri, 20 Jan 2023 12:27:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07A74675366
+	for <lists+linux-can@lfdr.de>; Fri, 20 Jan 2023 12:27:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbjATL1U (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 20 Jan 2023 06:27:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47064 "EHLO
+        id S229657AbjATL1X (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 20 Jan 2023 06:27:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbjATL1T (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 20 Jan 2023 06:27:19 -0500
+        with ESMTP id S229678AbjATL1W (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 20 Jan 2023 06:27:22 -0500
 Received: from mail3.ems-wuensche.com (mail3.ems-wuensche.com [81.169.186.156])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 23EAC49011
-        for <linux-can@vger.kernel.org>; Fri, 20 Jan 2023 03:27:17 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 154C24E53A
+        for <linux-can@vger.kernel.org>; Fri, 20 Jan 2023 03:27:18 -0800 (PST)
 Received: from localhost (unknown [127.0.0.1])
-        by h2257714.serverkompetenz.net (Postfix) with ESMTP id 6C7B8FF6F3
-        for <linux-can@vger.kernel.org>; Fri, 20 Jan 2023 11:27:16 +0000 (UTC)
+        by h2257714.serverkompetenz.net (Postfix) with ESMTP id 3B86EFF4E9
+        for <linux-can@vger.kernel.org>; Fri, 20 Jan 2023 11:27:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at h2257714.serverkompetenz.net
 X-Spam-Score: -1.902
 X-Spam-Level: 
@@ -24,15 +24,15 @@ X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 Received: from mail3.ems-wuensche.com ([81.169.186.156])
         by localhost (h2257714.serverkompetenz.net [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id QEhlUxn8mecx for <linux-can@vger.kernel.org>;
-        Fri, 20 Jan 2023 12:27:15 +0100 (CET)
+        with ESMTP id 3_7Q0uAmG5p7 for <linux-can@vger.kernel.org>;
+        Fri, 20 Jan 2023 12:27:16 +0100 (CET)
 From:   Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
 To:     linux-can@vger.kernel.org, mkl@pengutronix.de
 Cc:     vincent.mailhol@gmail.com, wg@grandegger.com,
         Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
-Subject: [PATCH v2 7/8] can: ems_pci: Deassert hardware reset
-Date:   Fri, 20 Jan 2023 12:26:15 +0100
-Message-Id: <20230120112616.6071-8-uttenthaler@ems-wuensche.com>
+Subject: [PATCH v2 8/8] can: ems_pci: Add myself as module author
+Date:   Fri, 20 Jan 2023 12:26:16 +0100
+Message-Id: <20230120112616.6071-9-uttenthaler@ems-wuensche.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20230120112616.6071-1-uttenthaler@ems-wuensche.com>
 References: <20230120112616.6071-1-uttenthaler@ems-wuensche.com>
@@ -44,33 +44,25 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The reset line from the Asix chip to the SJA1000 is asserted after boot up
-until it is deasserted by a register write
+Added myself as module author
 
 Signed-off-by: Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
 ---
- drivers/net/can/sja1000/ems_pci.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/net/can/sja1000/ems_pci.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/drivers/net/can/sja1000/ems_pci.c b/drivers/net/can/sja1000/ems_pci.c
-index 73f3ca9ebe02..e720b7f3db34 100644
+index e720b7f3db34..6c6baaeb06f9 100644
 --- a/drivers/net/can/sja1000/ems_pci.c
 +++ b/drivers/net/can/sja1000/ems_pci.c
-@@ -326,6 +326,14 @@ static int ems_pci_add_card(struct pci_dev *pdev,
- 		}
- 	}
+@@ -21,6 +21,7 @@
+ #define DRV_NAME  "ems_pci"
  
-+	if (card->version == 3) {
-+		/* ASIX chip asserts local reset to CAN controllers
-+		 * after bootup until it is deasserted
-+		 */
-+		writel(readl(card->conf_addr + ASIX_LIEMR) & ~ASIX_LIEMR_LRST,
-+		       card->conf_addr + ASIX_LIEMR);
-+	}
-+
- 	ems_pci_card_reset(card);
+ MODULE_AUTHOR("Sebastian Haas <support@ems-wuensche.com>");
++MODULE_AUTHOR("Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>");
+ MODULE_DESCRIPTION("Socket-CAN driver for EMS CPC-PCI/PCIe/104P CAN cards");
+ MODULE_LICENSE("GPL v2");
  
- 	/* Detect available channels */
 -- 
 2.35.3
 
