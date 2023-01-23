@@ -2,38 +2,55 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C05B167865D
-	for <lists+linux-can@lfdr.de>; Mon, 23 Jan 2023 20:29:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0C27678686
+	for <lists+linux-can@lfdr.de>; Mon, 23 Jan 2023 20:38:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232717AbjAWT3R (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 23 Jan 2023 14:29:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37738 "EHLO
+        id S232448AbjAWTiD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 23 Jan 2023 14:38:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232693AbjAWT3J (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 23 Jan 2023 14:29:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA46635267;
-        Mon, 23 Jan 2023 11:28:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 374AE61028;
-        Mon, 23 Jan 2023 19:28:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D05EC4339B;
-        Mon, 23 Jan 2023 19:28:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674502136;
-        bh=9NZXkPdmw/iB9Zkyv6wXQtlGAjxqyjWERvaxcrJqUrs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rPXXFP4UpDa/wyVGKxnJhAw75MJAFwnhNF/TMHqQdXN/wKQ/dfUM9cRBvIOMFP+oe
-         lcdbBuVkbA5BK8dY3/yK0IflJTdU213skxB5wW8DJmSNsGBY3FBIUrEFXaS4I3/lz7
-         dMiXuLgrBeRDdLqpHepeh4+6C0RFXlnQuwz8xsVE2pndVxIsdhmkEOqRCJbdYlc4pm
-         /fdTEdVwHltWcZ0RDmn0ZDmHhOsrLXk5X1eWKCwvpHucQ1wjp/N4FZMjz46+oRGNrO
-         LUtsfjdeaH6m8asTOLqaamUkFK63c/jA4txZmEzZO+/jicbSH1eFQP57nZV4JFn8t9
-         911fNT9Dv7FCA==
-Date:   Mon, 23 Jan 2023 20:28:44 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
+        with ESMTP id S231989AbjAWTh7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 23 Jan 2023 14:37:59 -0500
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99CFEEFAD;
+        Mon, 23 Jan 2023 11:37:54 -0800 (PST)
+Received: by mail-qv1-f43.google.com with SMTP id y8so9860713qvn.11;
+        Mon, 23 Jan 2023 11:37:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EETY68yoLxveEOtuKaWLmvNjFo4bmFiVe2JWu/xgnSs=;
+        b=IUiA2f3r79C5cFX5PLhZMah9Ino8OCRhcVqPuYXtIiCMdq/7/yqpKSKonV+Topax+4
+         tcjjdg2hiv1a0MLM6u7syFP9jNymmXuZ/DSSXqzN/Ti0cVy76l/6S6Yb+8MxnYGcOEN4
+         Sskx8GgI7AR6v1Z8bnzufE1aP7eu1QRRD4NjgUDWVOnLExfpwZGYekd32+IkzImTLEhx
+         e9CuEaniZCt/bVpOng54eoS7Pnlwjtu975p8I+ZjwxHVgQc/psDAn7SWeRhfDmdKtoL1
+         OzT/VlORIrwYb4OO3WWxlFRP3wNiEm1rVMylpDGwiUOgoM0G6oNuKIlKzZGM5i5DVCF1
+         9xGw==
+X-Gm-Message-State: AFqh2koMrEOZbvcVgURfyYzWEvpDiKUmN9YE7WSShEVqZx/ivMk2LVpW
+        8qhIsRY/cv1kPl3pWmTax+3adWJoQ6ffIw==
+X-Google-Smtp-Source: AMrXdXvBRSmEoqf6VZPO06csQBhxNNiwgq5sdcIYDHn8DlIOzyRi3+ju0ZC9vLwzPfwUji/KYWqrNQ==
+X-Received: by 2002:ad4:44b1:0:b0:534:b991:26cf with SMTP id n17-20020ad444b1000000b00534b99126cfmr37419036qvt.39.1674502673341;
+        Mon, 23 Jan 2023 11:37:53 -0800 (PST)
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
+        by smtp.gmail.com with ESMTPSA id j129-20020a378787000000b00706a1551428sm77957qkd.6.2023.01.23.11.37.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 11:37:52 -0800 (PST)
+Received: by mail-yb1-f173.google.com with SMTP id m199so503376ybm.4;
+        Mon, 23 Jan 2023 11:37:52 -0800 (PST)
+X-Received: by 2002:a25:d88c:0:b0:77a:b5f3:d0ac with SMTP id
+ p134-20020a25d88c000000b0077ab5f3d0acmr2416932ybg.202.1674502672667; Mon, 23
+ Jan 2023 11:37:52 -0800 (PST)
+MIME-Version: 1.0
+References: <cover.1674499048.git.geert+renesas@glider.be> <Y87f7BPchIcT2BQa@shikoro>
+In-Reply-To: <Y87f7BPchIcT2BQa@shikoro>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 23 Jan 2023 20:37:40 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUF3ZAyp44wagw5vPGy5Qd8+1hF9bt9JwrascmXtLC8Zg@mail.gmail.com>
+Message-ID: <CAMuHMdUF3ZAyp44wagw5vPGy5Qd8+1hF9bt9JwrascmXtLC8Zg@mail.gmail.com>
+Subject: Re: [PATCH 00/12] can: rcar_canfd: Add support for R-Car V4H systems
+To:     Wolfram Sang <wsa@kernel.org>
 Cc:     Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         Rob Herring <robh+dt@kernel.org>,
@@ -41,76 +58,41 @@ Cc:     Wolfgang Grandegger <wg@grandegger.com>,
         Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Ulrich Hecht <uli+renesas@fpond.eu>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH 00/12] can: rcar_canfd: Add support for R-Car V4H systems
-Message-ID: <Y87f7BPchIcT2BQa@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Ulrich Hecht <uli+renesas@fpond.eu>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-References: <cover.1674499048.git.geert+renesas@glider.be>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+GiX6MlQAA4givF7"
-Content-Disposition: inline
-In-Reply-To: <cover.1674499048.git.geert+renesas@glider.be>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        netdev@vger.kernel.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi Wolfram,
 
---+GiX6MlQAA4givF7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Mon, Jan 23, 2023 at 8:29 PM Wolfram Sang <wsa@kernel.org> wrote:
+> > Hence despite the new fixes, the test results are similar to what Ulrich
+> > Hecht reported for R-Car V3U on the Falcon development board before,
+> > i.e. only channels 0 and 1 work (FTR, [2] does not help).
+>
+> IIRC Ulrich reported that the other channels did not even work with the
+> BSP on V3U.
 
-Hi Geert,
+Same on V4H.  In fact I'm not surprised, due to lingering bugs like the one
+fixed by "can: rcar_canfd: Fix R-Car V3U GAFLCFG field accesses".
 
-thanks for this work! You not only added V4H support bu fixed/improved
-quite some things on the way.
+Gr{oetje,eeting}s,
 
-> Hence despite the new fixes, the test results are similar to what Ulrich
-> Hecht reported for R-Car V3U on the Falcon development board before,
-> i.e. only channels 0 and 1 work (FTR, [2] does not help).
+                        Geert
 
-IIRC Ulrich reported that the other channels did not even work with the
-BSP on V3U.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Happy hacking,
-
-   Wolfram
-
-
---+GiX6MlQAA4givF7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPO3+gACgkQFA3kzBSg
-Kbb92w//ZDtw+CG21FXOjfI3qtgakd1FudDQYcDoSv+JiVYwSQxD1gMvGcoT+R4S
-1mep29/AXaz9WFNRA+L7lej8wwP+BXfGne2PcXhJSv3qXRyYhxaooN1Ws/Ut3nrX
-RZLaDZIjhctd2OgJ1qJlYCW8OTLq6oksbmaWD7BEMfRB9lkh6/HHo3dKG327QMaG
-hOjvx2Wp0w92SjTf9WBq4DZn17TuTdTslAdwzgXiQRWNqdEO99nGVc9mz3fnU3SM
-7ADxWmnUDmXI0dwLvRu28AvWIzuHdz5tto++AD//miNKJVf9rHuOI8wceDcb4JpR
-XAs/lgGLaBwCd7AkZnTijaTZuJfmWqxcNiLHfhDJVn4kYy+IWFQOPppzPAPef4oK
-soFiUBpgeCuujqOPwrOyNbwVuI15S1C8xfYxZguc1ZNrF52iKR3G3n13xXVmkoy/
-x1NiKza5ueFnJrisopWj8rOdChUwdaFt2k5zTRXmwYE1C5KW7J5AA1DQrAyYmgc0
-WpuvfN56cBrseAuSdi5156+xKJnN7gY9DTJcVUw3PzY8KmTeY8fcvNNXrGw914Bn
-dkVajyH5Ju7dYp49Sf3RCb7o61AWUMn0tbDbQBfmHPBVDcGHQeRECyKIbNo7RfHH
-FkN29pw9izxIT1ewuokGW4nUkKT7f4dvnuJCsPG4Bcl4H3Z+ZL8=
-=m5rR
------END PGP SIGNATURE-----
-
---+GiX6MlQAA4givF7--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
