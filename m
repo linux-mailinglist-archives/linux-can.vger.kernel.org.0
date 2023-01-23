@@ -2,324 +2,115 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B1656785BE
-	for <lists+linux-can@lfdr.de>; Mon, 23 Jan 2023 20:04:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C05B167865D
+	for <lists+linux-can@lfdr.de>; Mon, 23 Jan 2023 20:29:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231664AbjAWTEj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 23 Jan 2023 14:04:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45098 "EHLO
+        id S232717AbjAWT3R (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 23 Jan 2023 14:29:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjAWTEh (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 23 Jan 2023 14:04:37 -0500
-X-Greylist: delayed 467 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 23 Jan 2023 11:04:12 PST
-Received: from weierstrass.telenet-ops.be (weierstrass.telenet-ops.be [IPv6:2a02:1800:110:4::f00:11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C75130190
-        for <linux-can@vger.kernel.org>; Mon, 23 Jan 2023 11:04:12 -0800 (PST)
-Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
-        by weierstrass.telenet-ops.be (Postfix) with ESMTPS id 4P0zpY4TgWz4x1b0
-        for <linux-can@vger.kernel.org>; Mon, 23 Jan 2023 19:56:21 +0100 (CET)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:6083:1fd7:ba05:ea8d])
-        by baptiste.telenet-ops.be with bizsmtp
-        id CJwJ2900F4604Ck01JwJ30; Mon, 23 Jan 2023 19:56:21 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pK1zG-0076Kn-NF;
-        Mon, 23 Jan 2023 19:56:18 +0100
-Received: from geert by rox.of.borg with local (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pK1zO-00Ekhn-KP;
-        Mon, 23 Jan 2023 19:56:18 +0100
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
+        with ESMTP id S232693AbjAWT3J (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 23 Jan 2023 14:29:09 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA46635267;
+        Mon, 23 Jan 2023 11:28:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 374AE61028;
+        Mon, 23 Jan 2023 19:28:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D05EC4339B;
+        Mon, 23 Jan 2023 19:28:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674502136;
+        bh=9NZXkPdmw/iB9Zkyv6wXQtlGAjxqyjWERvaxcrJqUrs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rPXXFP4UpDa/wyVGKxnJhAw75MJAFwnhNF/TMHqQdXN/wKQ/dfUM9cRBvIOMFP+oe
+         lcdbBuVkbA5BK8dY3/yK0IflJTdU213skxB5wW8DJmSNsGBY3FBIUrEFXaS4I3/lz7
+         dMiXuLgrBeRDdLqpHepeh4+6C0RFXlnQuwz8xsVE2pndVxIsdhmkEOqRCJbdYlc4pm
+         /fdTEdVwHltWcZ0RDmn0ZDmHhOsrLXk5X1eWKCwvpHucQ1wjp/N4FZMjz46+oRGNrO
+         LUtsfjdeaH6m8asTOLqaamUkFK63c/jA4txZmEzZO+/jicbSH1eFQP57nZV4JFn8t9
+         911fNT9Dv7FCA==
+Date:   Mon, 23 Jan 2023 20:28:44 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         Ulrich Hecht <uli+renesas@fpond.eu>, linux-can@vger.kernel.org,
         netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH 11/12] can: rcar_canfd: Add helper variable dev
-Date:   Mon, 23 Jan 2023 19:56:13 +0100
-Message-Id: <2965edc7992ab54dc6c862910775f3466fca6b29.1674499048.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1674499048.git.geert+renesas@glider.be>
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH 00/12] can: rcar_canfd: Add support for R-Car V4H systems
+Message-ID: <Y87f7BPchIcT2BQa@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Ulrich Hecht <uli+renesas@fpond.eu>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
 References: <cover.1674499048.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="+GiX6MlQAA4givF7"
+Content-Disposition: inline
+In-Reply-To: <cover.1674499048.git.geert+renesas@glider.be>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-rcar_canfd_channel_probe() and rcar_canfd_probe() have many users of
-"pdev->dev".  Introduce shorthands to simplify the code.
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/net/can/rcar/rcar_canfd.c | 86 +++++++++++++++----------------
- 1 file changed, 42 insertions(+), 44 deletions(-)
+--+GiX6MlQAA4givF7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index cfcf1a93fb58c36f..ef4e1b9a9e1ee280 100644
---- a/drivers/net/can/rcar/rcar_canfd.c
-+++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -1715,13 +1715,14 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
- {
- 	const struct rcar_canfd_hw_info *info = gpriv->info;
- 	struct platform_device *pdev = gpriv->pdev;
-+	struct device *dev = &pdev->dev;
- 	struct rcar_canfd_channel *priv;
- 	struct net_device *ndev;
- 	int err = -ENODEV;
- 
- 	ndev = alloc_candev(sizeof(*priv), RCANFD_FIFO_DEPTH);
- 	if (!ndev) {
--		dev_err(&pdev->dev, "alloc_candev() failed\n");
-+		dev_err(dev, "alloc_candev() failed\n");
- 		return -ENOMEM;
- 	}
- 	priv = netdev_priv(ndev);
-@@ -1734,7 +1735,7 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
- 	priv->channel = ch;
- 	priv->gpriv = gpriv;
- 	priv->can.clock.freq = fcan_freq;
--	dev_info(&pdev->dev, "can_clk rate is %u\n", priv->can.clock.freq);
-+	dev_info(dev, "can_clk rate is %u\n", priv->can.clock.freq);
- 
- 	if (info->multi_channel_irqs) {
- 		char *irq_name;
-@@ -1753,31 +1754,31 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
- 			goto fail;
- 		}
- 
--		irq_name = devm_kasprintf(&pdev->dev, GFP_KERNEL,
--					  "canfd.ch%d_err", ch);
-+		irq_name = devm_kasprintf(dev, GFP_KERNEL, "canfd.ch%d_err",
-+					  ch);
- 		if (!irq_name) {
- 			err = -ENOMEM;
- 			goto fail;
- 		}
--		err = devm_request_irq(&pdev->dev, err_irq,
-+		err = devm_request_irq(dev, err_irq,
- 				       rcar_canfd_channel_err_interrupt, 0,
- 				       irq_name, priv);
- 		if (err) {
--			dev_err(&pdev->dev, "devm_request_irq CH Err(%d) failed, error %d\n",
-+			dev_err(dev, "devm_request_irq CH Err(%d) failed, error %d\n",
- 				err_irq, err);
- 			goto fail;
- 		}
--		irq_name = devm_kasprintf(&pdev->dev, GFP_KERNEL,
--					  "canfd.ch%d_trx", ch);
-+		irq_name = devm_kasprintf(dev, GFP_KERNEL, "canfd.ch%d_trx",
-+					  ch);
- 		if (!irq_name) {
- 			err = -ENOMEM;
- 			goto fail;
- 		}
--		err = devm_request_irq(&pdev->dev, tx_irq,
-+		err = devm_request_irq(dev, tx_irq,
- 				       rcar_canfd_channel_tx_interrupt, 0,
- 				       irq_name, priv);
- 		if (err) {
--			dev_err(&pdev->dev, "devm_request_irq Tx (%d) failed, error %d\n",
-+			dev_err(dev, "devm_request_irq Tx (%d) failed, error %d\n",
- 				tx_irq, err);
- 			goto fail;
- 		}
-@@ -1801,7 +1802,7 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
- 
- 	priv->can.do_set_mode = rcar_canfd_do_set_mode;
- 	priv->can.do_get_berr_counter = rcar_canfd_get_berr_counter;
--	SET_NETDEV_DEV(ndev, &pdev->dev);
-+	SET_NETDEV_DEV(ndev, dev);
- 
- 	netif_napi_add_weight(ndev, &priv->napi, rcar_canfd_rx_poll,
- 			      RCANFD_NAPI_WEIGHT);
-@@ -1809,11 +1810,10 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
- 	gpriv->ch[priv->channel] = priv;
- 	err = register_candev(ndev);
- 	if (err) {
--		dev_err(&pdev->dev,
--			"register_candev() failed, error %d\n", err);
-+		dev_err(dev, "register_candev() failed, error %d\n", err);
- 		goto fail_candev;
- 	}
--	dev_info(&pdev->dev, "device registered (channel %u)\n", priv->channel);
-+	dev_info(dev, "device registered (channel %u)\n", priv->channel);
- 	return 0;
- 
- fail_candev:
-@@ -1837,6 +1837,7 @@ static void rcar_canfd_channel_remove(struct rcar_canfd_global *gpriv, u32 ch)
- static int rcar_canfd_probe(struct platform_device *pdev)
- {
- 	const struct rcar_canfd_hw_info *info;
-+	struct device *dev = &pdev->dev;
- 	void __iomem *addr;
- 	u32 sts, ch, fcan_freq;
- 	struct rcar_canfd_global *gpriv;
-@@ -1848,14 +1849,14 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 	char name[9] = "channelX";
- 	int i;
- 
--	info = of_device_get_match_data(&pdev->dev);
-+	info = of_device_get_match_data(dev);
- 
--	if (of_property_read_bool(pdev->dev.of_node, "renesas,no-can-fd"))
-+	if (of_property_read_bool(dev->of_node, "renesas,no-can-fd"))
- 		fdmode = false;			/* Classical CAN only mode */
- 
- 	for (i = 0; i < info->max_channels; ++i) {
- 		name[7] = '0' + i;
--		of_child = of_get_child_by_name(pdev->dev.of_node, name);
-+		of_child = of_get_child_by_name(dev->of_node, name);
- 		if (of_child && of_device_is_available(of_child))
- 			channels_mask |= BIT(i);
- 		of_node_put(of_child);
-@@ -1888,7 +1889,7 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 	}
- 
- 	/* Global controller context */
--	gpriv = devm_kzalloc(&pdev->dev, sizeof(*gpriv), GFP_KERNEL);
-+	gpriv = devm_kzalloc(dev, sizeof(*gpriv), GFP_KERNEL);
- 	if (!gpriv)
- 		return -ENOMEM;
- 
-@@ -1897,32 +1898,30 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 	gpriv->fdmode = fdmode;
- 	gpriv->info = info;
- 
--	gpriv->rstc1 = devm_reset_control_get_optional_exclusive(&pdev->dev,
--								 "rstp_n");
-+	gpriv->rstc1 = devm_reset_control_get_optional_exclusive(dev, "rstp_n");
- 	if (IS_ERR(gpriv->rstc1))
--		return dev_err_probe(&pdev->dev, PTR_ERR(gpriv->rstc1),
-+		return dev_err_probe(dev, PTR_ERR(gpriv->rstc1),
- 				     "failed to get rstp_n\n");
- 
--	gpriv->rstc2 = devm_reset_control_get_optional_exclusive(&pdev->dev,
--								 "rstc_n");
-+	gpriv->rstc2 = devm_reset_control_get_optional_exclusive(dev, "rstc_n");
- 	if (IS_ERR(gpriv->rstc2))
--		return dev_err_probe(&pdev->dev, PTR_ERR(gpriv->rstc2),
-+		return dev_err_probe(dev, PTR_ERR(gpriv->rstc2),
- 				     "failed to get rstc_n\n");
- 
- 	/* Peripheral clock */
--	gpriv->clkp = devm_clk_get(&pdev->dev, "fck");
-+	gpriv->clkp = devm_clk_get(dev, "fck");
- 	if (IS_ERR(gpriv->clkp))
--		return dev_err_probe(&pdev->dev, PTR_ERR(gpriv->clkp),
-+		return dev_err_probe(dev, PTR_ERR(gpriv->clkp),
- 				     "cannot get peripheral clock\n");
- 
- 	/* fCAN clock: Pick External clock. If not available fallback to
- 	 * CANFD clock
- 	 */
--	gpriv->can_clk = devm_clk_get(&pdev->dev, "can_clk");
-+	gpriv->can_clk = devm_clk_get(dev, "can_clk");
- 	if (IS_ERR(gpriv->can_clk) || (clk_get_rate(gpriv->can_clk) == 0)) {
--		gpriv->can_clk = devm_clk_get(&pdev->dev, "canfd");
-+		gpriv->can_clk = devm_clk_get(dev, "canfd");
- 		if (IS_ERR(gpriv->can_clk))
--			return dev_err_probe(&pdev->dev, PTR_ERR(gpriv->can_clk),
-+			return dev_err_probe(dev, PTR_ERR(gpriv->can_clk),
- 					     "cannot get canfd clock\n");
- 
- 		gpriv->fcan = RCANFD_CANFDCLK;
-@@ -1945,39 +1944,38 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 
- 	/* Request IRQ that's common for both channels */
- 	if (info->shared_global_irqs) {
--		err = devm_request_irq(&pdev->dev, ch_irq,
-+		err = devm_request_irq(dev, ch_irq,
- 				       rcar_canfd_channel_interrupt, 0,
- 				       "canfd.ch_int", gpriv);
- 		if (err) {
--			dev_err(&pdev->dev, "devm_request_irq(%d) failed, error %d\n",
-+			dev_err(dev, "devm_request_irq(%d) failed, error %d\n",
- 				ch_irq, err);
- 			goto fail_dev;
- 		}
- 
--		err = devm_request_irq(&pdev->dev, g_irq,
--				       rcar_canfd_global_interrupt, 0,
--				       "canfd.g_int", gpriv);
-+		err = devm_request_irq(dev, g_irq, rcar_canfd_global_interrupt,
-+				       0, "canfd.g_int", gpriv);
- 		if (err) {
--			dev_err(&pdev->dev, "devm_request_irq(%d) failed, error %d\n",
-+			dev_err(dev, "devm_request_irq(%d) failed, error %d\n",
- 				g_irq, err);
- 			goto fail_dev;
- 		}
- 	} else {
--		err = devm_request_irq(&pdev->dev, g_recc_irq,
-+		err = devm_request_irq(dev, g_recc_irq,
- 				       rcar_canfd_global_receive_fifo_interrupt, 0,
- 				       "canfd.g_recc", gpriv);
- 
- 		if (err) {
--			dev_err(&pdev->dev, "devm_request_irq(%d) failed, error %d\n",
-+			dev_err(dev, "devm_request_irq(%d) failed, error %d\n",
- 				g_recc_irq, err);
- 			goto fail_dev;
- 		}
- 
--		err = devm_request_irq(&pdev->dev, g_err_irq,
-+		err = devm_request_irq(dev, g_err_irq,
- 				       rcar_canfd_global_err_interrupt, 0,
- 				       "canfd.g_err", gpriv);
- 		if (err) {
--			dev_err(&pdev->dev, "devm_request_irq(%d) failed, error %d\n",
-+			dev_err(dev, "devm_request_irq(%d) failed, error %d\n",
- 				g_err_irq, err);
- 			goto fail_dev;
- 		}
-@@ -1995,14 +1993,14 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 	/* Enable peripheral clock for register access */
- 	err = clk_prepare_enable(gpriv->clkp);
- 	if (err) {
--		dev_err(&pdev->dev,
--			"failed to enable peripheral clock, error %d\n", err);
-+		dev_err(dev, "failed to enable peripheral clock, error %d\n",
-+			err);
- 		goto fail_reset;
- 	}
- 
- 	err = rcar_canfd_reset_controller(gpriv);
- 	if (err) {
--		dev_err(&pdev->dev, "reset controller failed\n");
-+		dev_err(dev, "reset controller failed\n");
- 		goto fail_clk;
- 	}
- 
-@@ -2032,7 +2030,7 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 	err = readl_poll_timeout((gpriv->base + RCANFD_GSTS), sts,
- 				 !(sts & RCANFD_GSTS_GNOPM), 2, 500000);
- 	if (err) {
--		dev_err(&pdev->dev, "global operational mode failed\n");
-+		dev_err(dev, "global operational mode failed\n");
- 		goto fail_mode;
- 	}
- 
-@@ -2043,7 +2041,7 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 	}
- 
- 	platform_set_drvdata(pdev, gpriv);
--	dev_info(&pdev->dev, "global operational state (clk %d, fdmode %d)\n",
-+	dev_info(dev, "global operational state (clk %d, fdmode %d)\n",
- 		 gpriv->fcan, gpriv->fdmode);
- 	return 0;
- 
--- 
-2.34.1
+Hi Geert,
 
+thanks for this work! You not only added V4H support bu fixed/improved
+quite some things on the way.
+
+> Hence despite the new fixes, the test results are similar to what Ulrich
+> Hecht reported for R-Car V3U on the Falcon development board before,
+> i.e. only channels 0 and 1 work (FTR, [2] does not help).
+
+IIRC Ulrich reported that the other channels did not even work with the
+BSP on V3U.
+
+Happy hacking,
+
+   Wolfram
+
+
+--+GiX6MlQAA4givF7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPO3+gACgkQFA3kzBSg
+Kbb92w//ZDtw+CG21FXOjfI3qtgakd1FudDQYcDoSv+JiVYwSQxD1gMvGcoT+R4S
+1mep29/AXaz9WFNRA+L7lej8wwP+BXfGne2PcXhJSv3qXRyYhxaooN1Ws/Ut3nrX
+RZLaDZIjhctd2OgJ1qJlYCW8OTLq6oksbmaWD7BEMfRB9lkh6/HHo3dKG327QMaG
+hOjvx2Wp0w92SjTf9WBq4DZn17TuTdTslAdwzgXiQRWNqdEO99nGVc9mz3fnU3SM
+7ADxWmnUDmXI0dwLvRu28AvWIzuHdz5tto++AD//miNKJVf9rHuOI8wceDcb4JpR
+XAs/lgGLaBwCd7AkZnTijaTZuJfmWqxcNiLHfhDJVn4kYy+IWFQOPppzPAPef4oK
+soFiUBpgeCuujqOPwrOyNbwVuI15S1C8xfYxZguc1ZNrF52iKR3G3n13xXVmkoy/
+x1NiKza5ueFnJrisopWj8rOdChUwdaFt2k5zTRXmwYE1C5KW7J5AA1DQrAyYmgc0
+WpuvfN56cBrseAuSdi5156+xKJnN7gY9DTJcVUw3PzY8KmTeY8fcvNNXrGw914Bn
+dkVajyH5Ju7dYp49Sf3RCb7o61AWUMn0tbDbQBfmHPBVDcGHQeRECyKIbNo7RfHH
+FkN29pw9izxIT1ewuokGW4nUkKT7f4dvnuJCsPG4Bcl4H3Z+ZL8=
+=m5rR
+-----END PGP SIGNATURE-----
+
+--+GiX6MlQAA4givF7--
