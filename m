@@ -2,29 +2,29 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4317267857E
-	for <lists+linux-can@lfdr.de>; Mon, 23 Jan 2023 19:57:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5675F678592
+	for <lists+linux-can@lfdr.de>; Mon, 23 Jan 2023 19:57:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232333AbjAWS5A (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 23 Jan 2023 13:57:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36396 "EHLO
+        id S232758AbjAWS5B (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 23 Jan 2023 13:57:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231764AbjAWS4e (ORCPT
+        with ESMTP id S231717AbjAWS4e (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Mon, 23 Jan 2023 13:56:34 -0500
-Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2767032E5E
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 254403252C
         for <linux-can@vger.kernel.org>; Mon, 23 Jan 2023 10:56:23 -0800 (PST)
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:6083:1fd7:ba05:ea8d])
-        by michel.telenet-ops.be with bizsmtp
-        id CJwJ2900c4604Ck06JwJ2x; Mon, 23 Jan 2023 19:56:21 +0100
+        by albert.telenet-ops.be with bizsmtp
+        id CJwJ2900c4604Ck06JwJtq; Mon, 23 Jan 2023 19:56:21 +0100
 Received: from rox.of.borg ([192.168.97.57])
         by ramsan.of.borg with esmtp (Exim 4.95)
         (envelope-from <geert@linux-m68k.org>)
-        id 1pK1zG-0076KY-Ky;
+        id 1pK1zG-0076Kc-La;
         Mon, 23 Jan 2023 19:56:18 +0100
 Received: from geert by rox.of.borg with local (Exim 4.95)
         (envelope-from <geert@linux-m68k.org>)
-        id 1pK1zO-00EkhY-IP;
+        id 1pK1zO-00Ekhd-J1;
         Mon, 23 Jan 2023 19:56:18 +0100
 From:   Geert Uytterhoeven <geert+renesas@glider.be>
 To:     Wolfgang Grandegger <wg@grandegger.com>,
@@ -37,9 +37,9 @@ Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
         netdev@vger.kernel.org, devicetree@vger.kernel.org,
         linux-renesas-soc@vger.kernel.org,
         Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH 08/12] can: rcar_canfd: Fix R-Car Gen4 DCFG.DSJW field width
-Date:   Mon, 23 Jan 2023 19:56:10 +0100
-Message-Id: <c4e8bc220bf87e6c7e375f7a2ce51e2aa89ea8a7.1674499048.git.geert+renesas@glider.be>
+Subject: [PATCH 09/12] can: rcar_canfd: Fix R-Car Gen4 CFCC.CFTML field width
+Date:   Mon, 23 Jan 2023 19:56:11 +0100
+Message-Id: <9c37aaa799a2391be272dbaa474379cf9a7af147.1674499048.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1674499048.git.geert+renesas@glider.be>
 References: <cover.1674499048.git.geert+renesas@glider.be>
@@ -54,37 +54,29 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On R-Car Gen4 CAN_FD variants, the Data Bit Rate Resynchronization Jump
-Width Control (DSJW) field in the Channel n Data Bitrate Configuration
-Register (DCFG) register is one bit wider than on older variants.
+On R-Car Gen4 CAN_FD variants, the Common FIFO TX Message Buffer Link
+(CFTML) field in the Common FIFO Configuration / Control Register (CCFC)
+register is one bit wider than on older variants.
 
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
- drivers/net/can/rcar/rcar_canfd.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/can/rcar/rcar_canfd.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index aa7fcd4a47d38bc9..ee7bbd9d1151201b 100644
+index ee7bbd9d1151201b..376a5d606acc66c2 100644
 --- a/drivers/net/can/rcar/rcar_canfd.c
 +++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -186,7 +186,7 @@
- #define RCANFD_CERFL_ERR(x)		((x) & (0x7fff)) /* above bits 14:0 */
+@@ -233,7 +233,8 @@
+ /* Common FIFO bits */
  
- /* RSCFDnCFDCmDCFG */
--#define RCANFD_DCFG_DSJW(x)		(((x) & 0x7) << 24)
-+#define RCANFD_DCFG_DSJW(gpriv, x)	(((x) & reg_gen4(gpriv, 0xf, 0x7)) << 24)
- 
- #define RCANFD_DCFG_DTSEG2(gpriv, x) \
- 	(((x) & reg_gen4(gpriv, 0x0f, 0x7)) << reg_gen4(gpriv, 16, 20))
-@@ -1343,7 +1343,7 @@ static void rcar_canfd_set_bittiming(struct net_device *dev)
- 		tseg2 = dbt->phase_seg2 - 1;
- 
- 		cfg = (RCANFD_DCFG_DTSEG1(gpriv, tseg1) | RCANFD_DCFG_DBRP(brp) |
--		       RCANFD_DCFG_DSJW(sjw) | RCANFD_DCFG_DTSEG2(gpriv, tseg2));
-+		       RCANFD_DCFG_DSJW(gpriv, sjw) | RCANFD_DCFG_DTSEG2(gpriv, tseg2));
- 
- 		rcar_canfd_write(priv->base, RCANFD_F_DCFG(gpriv, ch), cfg);
- 		netdev_dbg(priv->ndev, "drate: brp %u, sjw %u, tseg1 %u, tseg2 %u\n",
+ /* RSCFDnCFDCFCCk */
+-#define RCANFD_CFCC_CFTML(gpriv, x)	(((x) & 0xf) << reg_gen4(gpriv, 16, 20))
++#define RCANFD_CFCC_CFTML(gpriv, x)	\
++	(((x) & reg_gen4(gpriv, 0x1f, 0xf)) << reg_gen4(gpriv, 16, 20))
+ #define RCANFD_CFCC_CFM(gpriv, x)	(((x) & 0x3) << reg_gen4(gpriv,  8, 16))
+ #define RCANFD_CFCC_CFIM		BIT(12)
+ #define RCANFD_CFCC_CFDC(gpriv, x)	(((x) & 0x7) << reg_gen4(gpriv, 21,  8))
 -- 
 2.34.1
 
