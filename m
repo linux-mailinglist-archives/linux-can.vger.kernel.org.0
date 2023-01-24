@@ -2,143 +2,100 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6EDE679D6F
-	for <lists+linux-can@lfdr.de>; Tue, 24 Jan 2023 16:27:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C5F567A186
+	for <lists+linux-can@lfdr.de>; Tue, 24 Jan 2023 19:42:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234227AbjAXP1j (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 24 Jan 2023 10:27:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40682 "EHLO
+        id S233858AbjAXSm5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 24 Jan 2023 13:42:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234964AbjAXP1i (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 24 Jan 2023 10:27:38 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15BB4B180
-        for <linux-can@vger.kernel.org>; Tue, 24 Jan 2023 07:27:34 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pKLCv-0006ul-6X
-        for linux-can@vger.kernel.org; Tue, 24 Jan 2023 16:27:33 +0100
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 92793162AE5
-        for <linux-can@vger.kernel.org>; Tue, 24 Jan 2023 15:27:32 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 26040162AD4;
-        Tue, 24 Jan 2023 15:27:31 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id ecc66f1e;
-        Tue, 24 Jan 2023 15:27:30 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org
-Cc:     Manivannan Sadhasivam <mani@kernel.org>,
-        Thomas Kopp <thomas.kopp@microchip.com>,
-        =?UTF-8?q?Stefan=20Alth=C3=B6fer?= <Stefan.Althoefer@janztec.com>,
-        kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH v1 2/2] can: mcp251xfd: tef: use new workaround
-Date:   Tue, 24 Jan 2023 16:27:29 +0100
-Message-Id: <20230124152729.814840-3-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230124152729.814840-1-mkl@pengutronix.de>
-References: <20230124152729.814840-1-mkl@pengutronix.de>
+        with ESMTP id S233900AbjAXSmw (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 24 Jan 2023 13:42:52 -0500
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7D145BCD;
+        Tue, 24 Jan 2023 10:42:16 -0800 (PST)
+Received: by mail-qt1-x833.google.com with SMTP id v19so1318148qtq.13;
+        Tue, 24 Jan 2023 10:42:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iVcjuX1DrPzpms/qqm55UTZi+ADxFT6DDuGfNYewlYI=;
+        b=2ei6fTcIr9X2ixQHZ+EPC5V6182JQumzNihDMIy/75cdok5VCufdVppWkbV2cOKbum
+         tQUQQcf6dsT3oTGntcYphPDjpvez7fvKdHXcbHhtOHQ0/SWzPUd9ukVR7LTJZEuYix0x
+         P2xjoNcrVulWScTqD+uZ2IyHi5SG0pteiI7q4WDE63zV/otmUwGtYbwE6kvjjylqLPlj
+         ayPG91xOnYTsF8kEBOLWxRHAzAMoUrFFF8Kwg7PjWj30qfHhZlED8SyjFzjbHvBMR2HN
+         7w35XDzm7cBN5HKqAM4aCMHe4Tc4wtQD6Byj0eM2T2KWcpkFpgHAOBb2yTeCn88fOMyY
+         qTng==
+X-Gm-Message-State: AFqh2krBnSQrUR4ncDKxd6xTipHHyJZK9GetrXShZ9TcY698CdCH97b3
+        pe8bKeWDB4HwgUeNSEtUNm9OjtGstnsAIA==
+X-Google-Smtp-Source: AMrXdXtMjycl63rqLtCwxpqXzLnyoJpcGZdndPK/mZ5/XadjpLZLQHbavo2VN7ZRW0m7s00iLnvggg==
+X-Received: by 2002:ac8:524c:0:b0:3b6:378c:5cd7 with SMTP id y12-20020ac8524c000000b003b6378c5cd7mr41300962qtn.61.1674585675773;
+        Tue, 24 Jan 2023 10:41:15 -0800 (PST)
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
+        by smtp.gmail.com with ESMTPSA id l4-20020a37f504000000b00705be892191sm1877987qkk.56.2023.01.24.10.41.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Jan 2023 10:41:15 -0800 (PST)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-4ff07dae50dso186269157b3.2;
+        Tue, 24 Jan 2023 10:41:14 -0800 (PST)
+X-Received: by 2002:a05:690c:c89:b0:4dd:7a8e:1cf3 with SMTP id
+ cm9-20020a05690c0c8900b004dd7a8e1cf3mr3096734ywb.384.1674585674575; Tue, 24
+ Jan 2023 10:41:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1674499048.git.geert+renesas@glider.be> <e825b50a843ffe40e33f34e4d858c07c1b2ff259.1674499048.git.geert+renesas@glider.be>
+In-Reply-To: <e825b50a843ffe40e33f34e4d858c07c1b2ff259.1674499048.git.geert+renesas@glider.be>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 24 Jan 2023 19:41:03 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXtiC-Oo01Y-vCbokjF=L+YXMN=TucgqCS4Vtcg5gt==g@mail.gmail.com>
+Message-ID: <CAMuHMdXtiC-Oo01Y-vCbokjF=L+YXMN=TucgqCS4Vtcg5gt==g@mail.gmail.com>
+Subject: Re: [PATCH 12/12] can: rcar_canfd: Add transceiver support
+To:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Ulrich Hecht <uli+renesas@fpond.eu>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Cc: Stefan Althöfer <Stefan.Althoefer@janztec.com>
-Cc: Thomas Kopp <thomas.kopp@microchip.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/spi/mcp251xfd/mcp251xfd-tef.c | 46 +++++--------------
- 1 file changed, 11 insertions(+), 35 deletions(-)
+On Mon, Jan 23, 2023 at 7:56 PM Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
+> Add support for CAN transceivers described as PHYs.
+>
+> While simple CAN transceivers can do without, this is needed for CAN
+> transceivers like NXP TJR1443 that need a configuration step (like
+> pulling standby or enable lines), and/or impose a bitrate limit.
+>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+> This depends on "[PATCH 1/7] phy: Add devm_of_phy_optional_get() helper".
+> https://lore.kernel.org/all/f53a1bcca637ceeafb04ce3540a605532d3bc34a.1674036164.git.geert+renesas@glider.be
 
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-tef.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-tef.c
-index e0c5ac943d8b..7e42c5077c8a 100644
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-tef.c
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-tef.c
-@@ -55,34 +55,6 @@ static int mcp251xfd_check_tef_tail(const struct mcp251xfd_priv *priv)
- 	return 0;
- }
- 
--static int
--mcp251xfd_handle_tefif_recover(const struct mcp251xfd_priv *priv, const u32 seq)
--{
--	const struct mcp251xfd_tx_ring *tx_ring = priv->tx;
--	u32 tef_sta;
--	int err;
--
--	err = regmap_read(priv->map_reg, MCP251XFD_REG_TEFSTA, &tef_sta);
--	if (err)
--		return err;
--
--	if (tef_sta & MCP251XFD_REG_TEFSTA_TEFOVIF) {
--		netdev_err(priv->ndev,
--			   "Transmit Event FIFO buffer overflow.\n");
--		return -ENOBUFS;
--	}
--
--	netdev_info(priv->ndev,
--		    "Transmit Event FIFO buffer %s. (seq=0x%08x, tef_tail=0x%08x, tef_head=0x%08x, tx_head=0x%08x).\n",
--		    tef_sta & MCP251XFD_REG_TEFSTA_TEFFIF ?
--		    "full" : tef_sta & MCP251XFD_REG_TEFSTA_TEFNEIF ?
--		    "not empty" : "empty",
--		    seq, priv->tef->tail, priv->tef->head, tx_ring->head);
--
--	/* The Sequence Number in the TEF doesn't match our tef_tail. */
--	return -EAGAIN;
--}
--
- static int
- mcp251xfd_handle_tefif_one(struct mcp251xfd_priv *priv,
- 			   const struct mcp251xfd_hw_tef_obj *hw_tef_obj,
-@@ -103,8 +75,13 @@ mcp251xfd_handle_tefif_one(struct mcp251xfd_priv *priv,
- 		field_mask(MCP251XFD_OBJ_FLAGS_SEQ_MCP2517FD_MASK);
- 	tef_tail_masked = priv->tef->tail &
- 		field_mask(MCP251XFD_OBJ_FLAGS_SEQ_MCP2517FD_MASK);
--	if (seq_masked != tef_tail_masked)
--		return mcp251xfd_handle_tefif_recover(priv, seq);
-+	if (seq_masked != tef_tail_masked) {
-+		netdev_dbg(priv->ndev, "%s: chip=0x%02x ring=0x%02x\n", __func__,
-+			   seq_masked, tef_tail_masked);
-+		stats->tx_fifo_errors++;
-+		
-+		return -EBADMSG;
-+	}
- 
- 	tef_tail = mcp251xfd_get_tef_tail(priv);
- 	skb = priv->can.echo_skb[tef_tail];
-@@ -223,12 +200,11 @@ int mcp251xfd_handle_tefif(struct mcp251xfd_priv *priv)
- 		unsigned int frame_len = 0;
- 
- 		err = mcp251xfd_handle_tefif_one(priv, &hw_tef_obj[i], &frame_len);
--		/* -EAGAIN means the Sequence Number in the TEF
--		 * doesn't match our tef_tail. This can happen if we
--		 * read the TEF objects too early. Leave loop let the
--		 * interrupt handler call us again.
-+		/* -EBADMSG means we're affected by an erratum, the
-+		 * Sequence Number in the TEF doesn't match our
-+		 * tef_tail. Don't process any further.
- 		 */
--		if (err == -EAGAIN)
-+		if (err == -EBADMSG)
- 			goto out_netif_wake_queue;
- 		if (err)
- 			return err;
--- 
-2.39.0
+v2: "[PATCH v2 3/9] phy: Add devm_of_phy_optional_get() helper"
+    https://lore.kernel.org/all/4cd0069bcff424ffc5c3a102397c02370b91985b.1674584626.git.geert+renesas@glider.be
 
+I'll keep you updated when/if this ends up on an immutable branch.
 
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
