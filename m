@@ -2,56 +2,38 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F82C67B6DF
-	for <lists+linux-can@lfdr.de>; Wed, 25 Jan 2023 17:23:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABA4767B7E0
+	for <lists+linux-can@lfdr.de>; Wed, 25 Jan 2023 18:07:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234138AbjAYQXy (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 25 Jan 2023 11:23:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57394 "EHLO
+        id S235526AbjAYRHG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 25 Jan 2023 12:07:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235099AbjAYQXk (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 25 Jan 2023 11:23:40 -0500
-Received: from DEU01-FR2-obe.outbound.protection.outlook.com (mail-fr2deu01on2075.outbound.protection.outlook.com [40.107.135.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075B65AA5B
-        for <linux-can@vger.kernel.org>; Wed, 25 Jan 2023 08:23:29 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YKQ8TooNQcb3/wPpwkn+s4P4db/uW9vKGpnj0OMHqEInMU7w1d4hlHaKTbf434+J4dV3GEIQ4KRC2UyHAhhtUPdt3+/IowaTu7nQi9Joq9aUk7yZ/xwKHN+xDA+2pqKEUzSLS0G6TTfTLP310xlLvVtJYbOFmEVV5dz9AQGnvUTMOZSsB7sVhaICadeEOX6pmuKR1iGKXv4tlpI9FZp4FcyGUw2F75cyU0jMrJWuNa0fnoXgjeB/dJ+AiETbppJ5SUjFSYyb6C4OW/xngJskmxuI5ZlwDYrZtB0RHo99MVcBwvsnPtqqKqGt+ggZXLsmn//6uiK06Uk/wULvjf5TKg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ev6qh++N4G0jrPp9xxGflsUooTCS+PBKeYa2rHMUjxI=;
- b=a+efA6EPTLWagyg6W8qusYk7P9lFCsFMdHa7wH4N6SfXHb/ovdnwbkCUdySXsV0E5CVyjqcJq5c2EcpvXnzlriNu3ImeSMu12XnyEpmjftaRhmPbUu2Og2R8Jb0u0YFvjJ1bM+lhgUxKSlWd1rMGIfycnaZRhAYafTytr0veTg4B/2YDmTzNgUMKtxcAplyNMD8pnrrSwyCuM+Zb7CGBBkGjcRCkfGt6JDlSA/Aa/NiJEaaaiMkdnq55ZTEOt8hYeKJ2CMy674ZqmGHSN3Fz6VQUn8LrE6qS2uUwOHJ54VI1lpAO255fjyV+YpON84P+tpiLPNgUFMo6+QBsZ+PBvA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=janztec.com; dmarc=pass action=none header.from=janztec.com;
- dkim=pass header.d=janztec.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=janzag.onmicrosoft.de;
- s=selector1-janzag-onmicrosoft-de;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ev6qh++N4G0jrPp9xxGflsUooTCS+PBKeYa2rHMUjxI=;
- b=Dwn0aLuYK84Wp+WwPPJTTRTUofe0ooHb9TRjQVkHbJ8D1UNLag9xOPgzkhlV4IVnC7cUm4In9OilKNlAsKkG2oc1DQdjtiEUuvMv0xlWV0JohROMFQ9wNGscR4OfxflyAeTAi0Y0JRVr/G+/kk9dbLVD4MgHq9bo+moQ7fs0bBA=
-Received: from FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:26::13)
- by FR2P281MB2992.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:67::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33; Wed, 25 Jan
- 2023 16:23:27 +0000
-Received: from FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM
- ([fe80::fa47:ffd4:d4ca:76e1]) by FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM
- ([fe80::fa47:ffd4:d4ca:76e1%7]) with mapi id 15.20.6043.017; Wed, 25 Jan 2023
- 16:23:27 +0000
-From:   =?utf-8?B?U3RlZmFuIEFsdGjDtmZlcg==?= <Stefan.Althoefer@janztec.com>
-To:     "Thomas.Kopp@microchip.com" <Thomas.Kopp@microchip.com>,
-        "mkl@pengutronix.de" <mkl@pengutronix.de>
-CC:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Subject: AW: AW: RE: mcp251xfd: rx frame truncation (1/2)
-Thread-Topic: AW: RE: mcp251xfd: rx frame truncation (1/2)
-Thread-Index: AQHZKzjliniR2Rjet0qunKK2mAziB66kQAkAgAATQtCAARGHgIAAD7xXgAA3PL2AAAsMAIAAB5oAgAIDZiCAABufgIAADiiAgAF7qSCABfGn4A==
-Date:   Wed, 25 Jan 2023 16:23:27 +0000
-Message-ID: <FR0P281MB1966E1E84C055E268432571197CE9@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
-References: <FR0P281MB1966C774C1ED0752CCD6B80497C79@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
- <FR0P281MB1966F32AD422DDD867F8C53A97C79@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
- <BL3PR11MB6484911640CCC738ED799E6FFBC79@BL3PR11MB6484.namprd11.prod.outlook.com>
- <FR0P281MB19663A60B0F7CE7F684A7A6297C79@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
- <BL3PR11MB64842584529FAEF279F7B137FBC49@BL3PR11MB6484.namprd11.prod.outlook.com>
+        with ESMTP id S236027AbjAYRHD (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 25 Jan 2023 12:07:03 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA4B5AB74
+        for <linux-can@vger.kernel.org>; Wed, 25 Jan 2023 09:06:37 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pKjEI-0003da-Oh; Wed, 25 Jan 2023 18:06:34 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:6554:ecba:20de:b047])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id B8B63163B70;
+        Wed, 25 Jan 2023 17:06:33 +0000 (UTC)
+Date:   Wed, 25 Jan 2023 18:06:25 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Stefan =?utf-8?B?QWx0aMO2ZmVy?= <Stefan.Althoefer@janztec.com>
+Cc:     "Thomas.Kopp@microchip.com" <Thomas.Kopp@microchip.com>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Subject: Re: AW: AW: RE: mcp251xfd: rx frame truncation (1/2)
+Message-ID: <20230125170625.sudokyujzf3slmas@pengutronix.de>
+References: <BL3PR11MB64842584529FAEF279F7B137FBC49@BL3PR11MB6484.namprd11.prod.outlook.com>
  <FR0P281MB19669083201C1B9C2DFB9E5497C49@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
  <FR0P281MB196633E4F8E1195086E2402B97C49@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
  <BL3PR11MB648434F2B7DE7F75E291E159FBC49@BL3PR11MB6484.namprd11.prod.outlook.com>
@@ -60,128 +42,123 @@ References: <FR0P281MB1966C774C1ED0752CCD6B80497C79@FR0P281MB1966.DEUP281.PROD.O
  <20230120215547.ewa5npqsxf5jxjcr@pengutronix.de>
  <BL3PR11MB64841AD10C3CFBC21A2A16FFFBC59@BL3PR11MB6484.namprd11.prod.outlook.com>
  <FR0P281MB19669C3FDDBE07D6B320C18997CA9@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
-In-Reply-To: <FR0P281MB19669C3FDDBE07D6B320C18997CA9@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=janztec.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: FR0P281MB1966:EE_|FR2P281MB2992:EE_
-x-ms-office365-filtering-correlation-id: 0ce13b5d-ca6b-4625-a947-08dafef07d2a
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: W1xXlrgdYnWg4N81LaCX9+YDWRN8RM0xyqhSAr5OISy6hspwBYIZ9U6VcI0vLWglL4PK1kDmX3gK/rrYg6EwI82xwRCV2ciOOGh9auMw750DJ7P0NY6LKCDM49xAx9OAZbh9/p+qDdDaabvIDqAgSm0Ps1PI6HzEYRK+loBg/ncSKCDya8Ne9HOKZvAoZN0/15H+TFl3CcYKSm+IQ0z7ZS17uhOVb5TfmD7ma1X3pL0JvXRvkqJxib+QkTEAnhFYwYSRkd6kwuKE9LlL7YI1a3J6PWpm9cXpGEnv+0zeproyr44e95nVjsGhFJNENwnu5rCOs8Dg1Fc3+ZefKUfaany7RcO/4VE/lcwCJrExg+JOeWC4865VaSo8W9IMBCGrH3vSGlPqbbdLyT8zPRwaiP6Dp+4biUYE6VDANHemXN8E010cpK/cPD6UVhchbT7juTrvLnpD0GeI9txfn/F/6MXZPOw9Pmk3FhBNMuUidMxjOV4OGAbUD0f475jOpuuTPNtPWU84Ay/oaNYqljN7QnKs//UgG+JRp/EhZXZQwe0/3/t+C0lMFSITDSkGuNIzXVVNocRZl0r9CHdm9eqBj6LCiTGHbsRl8WmLOjXCNTz3mkHhn+P+6YVvbO2HWhdfOIECMLTVzeCfBziOZ+C382wbIkPLX0o0/9yWttQ5elhnzp/VVAcQJ7LBDTWjiprHwBVTny91GhfQb3b1B5O20A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39830400003)(396003)(346002)(366004)(376002)(136003)(451199018)(76116006)(85182001)(66556008)(64756008)(86362001)(66446008)(83380400001)(33656002)(52536014)(122000001)(5660300002)(38070700005)(41300700001)(38100700002)(66476007)(66946007)(2906002)(8936002)(71200400001)(9686003)(85202003)(4326008)(8676002)(316002)(6506007)(7696005)(478600001)(55016003)(186003)(26005)(110136005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dUxwTEdKR1dtVG9hcGlHMFoyZHdWclJlVDJwMWVYZnhTeDNkQk0zQ2tJV3hl?=
- =?utf-8?B?U2J2QU1QajVFK2txanFRWHFRaUFnY2poT25sUjRLUXF5QjNJYXB0OEtsMmlm?=
- =?utf-8?B?RDI3djk2UkJoMW9MVlY1Z0c1dTdYQU5xU2dONXp6ZjlWWC9pSjZGSS9kT2pB?=
- =?utf-8?B?cU54aXZWNXRYZDlIMHBHaVhqNEpRNkZUeTF3WFFWK1o4MHhiNlNSZ3ZjdStn?=
- =?utf-8?B?WHNEY2U3WjJkd3lSNmpTOVhRTU9jWWl3L05WRmk5VGRwdXFIUHozZ1BBL3Ux?=
- =?utf-8?B?WVJTZ1JxN2VjNFZpV3BZa2diVUtuc3RsZjhZdFA4aE5WV3ljaXVVOXFVcVdm?=
- =?utf-8?B?cmJ5Z1pCNDh1WU5FdDFhOGp6bisrakZnOG51TkVkaHkxQmlESmJGWkh0VFd2?=
- =?utf-8?B?eFJnWUpIdTdzWTc0cyszaDNBRGlwSmR0b3V4NnVEQnpuUEZUM05BT29SUTVt?=
- =?utf-8?B?YUw4Qk11VXpjTGQzbllEbTFhcGZkL0loS0tJaXJ3MFBSVzNuRVQ5RmdHMVZk?=
- =?utf-8?B?QXZEcHRPVWVFVzNURUhGb0xpVy82OGtOUXh3Z2ZpRGZBSVlJZThsTERqTTZN?=
- =?utf-8?B?RGtYZzZDQStYMTN6cGRvTkc1dlREZ3dJeW1KcS94YXZwY2pzc1pTZG13Mk1Y?=
- =?utf-8?B?Y0tSU2NiSWY4amlQOUY3Mmp0andPNVdad0o1V1R1Wk1Qc0FMbGtrWFdMYm5l?=
- =?utf-8?B?Y2g2UzgzTHQyWDhQdVYycUR0cmJPQnZQaXc3bVF2aHQyLzNkdUEwZG9HMHhq?=
- =?utf-8?B?UHF2QzNoY2FJb0dXbmhFRXJMYlhVMUs0aU5tR3d2ZTZuS0dkK09WTWg1MjMv?=
- =?utf-8?B?dFlwSHE3SjFZdWRqaEpYWHVGSjhDdy9mS0U3ZnZGaERneEp1aWN2aEVNYnVw?=
- =?utf-8?B?TW1kcGxwY29MOEVWTW5va2t3S2Fhbm94Y1BSMG1YeVpEYWtqMVczSjJGUE14?=
- =?utf-8?B?WEZHVXVhMS9qdWI2MmhhTnZVb2Rzd3RTazZQSVdXa0g3aUFEZmZlcU1GNWl4?=
- =?utf-8?B?WVNMUFMyYmdkZkhpTll6bW1PQnNpU0lsYmQ5bnZGOTc3SndUYXlSVHZtbjI3?=
- =?utf-8?B?bE5mYm5ncDVPdnozTXVQbHcwSzBUdzdqc3NpTnZxdHRadmRxMi8yMFovUENs?=
- =?utf-8?B?R2d1M3ZDM0I5cmlRTHltdjh2OXRmLytMd2ozemJiRGFYc0o3N01xTlcyNGpS?=
- =?utf-8?B?R2hzVlpUcmlPeUI2cG5hNDhYSGhET1UyREtzQ2MvT2VUTFA1dG1rTWFkRGR1?=
- =?utf-8?B?NjdXaHZWRjZzd1oyOXRieGhTekdPK3RvakhSTGdhSFZTbWw2RDhzZzc5c3hK?=
- =?utf-8?B?aEZ1YTdhcHZzWnVxZW0vdkFQNDVkTUlxOWVFYzVOTVZJT0hMUHJSVjlRcGlv?=
- =?utf-8?B?anVQRjJORHdXME4rancvY2dJSnFjUGF2bHJxVi9PQzhCQmk0UjFleEJGZ2xK?=
- =?utf-8?B?dmxYUytQOTdUd1ZWNittajV1UnBaTFF1WUlLYWxEZVdReFlEQ3kxVGFCMHhT?=
- =?utf-8?B?N1loSWkwY29NNEdGcENTaWdYb2RxajVhVEw3ZC9BMXJSdm0zODBvY0ZkVjBE?=
- =?utf-8?B?UlpYVmdPRTVTWGFaSUpxV2Nob2NFTGtiUDUxVGY4Z3lCMUlzOUFaRDBEdkF6?=
- =?utf-8?B?QXJyZFZ5eGNQZ2xFV3pVRDlIaDQxc1JNTVozUGxpRjRpSFYzRDlzc3Z5blI0?=
- =?utf-8?B?WXJROTFhS0U4Y09SNUtvMXd3Q0JibjFhdjRJcDYrY0g1K0RxWkdLdUQxZGRw?=
- =?utf-8?B?aVo3dVpFU3ZEOFdYbE5NNVJDZWN1eVJEcFAzV2xmNW9nMjhZM2I4UG5nRG5Y?=
- =?utf-8?B?R3JHQm01K2lLSUZmdTQ1MGR5VmwyRVZETTFqR2xtVHZRV2Z6RW90NGEvN1NJ?=
- =?utf-8?B?Tzk1RkhQaTg0bEQ3bHhxZ25XR3FkYTRGcit5aFYzM3EvQitzcUc3VDlSdHJl?=
- =?utf-8?B?TTVMWTlaczR4YmdNOVFIZEFxSHVJSjRPemNQdTZlekR5NklaVHZKekZucWw2?=
- =?utf-8?B?K2E1dXhBVzlma0FOREM2Vm54WHFOOVJrSVF3T2ovU08rdGJLbnBYL3dOSjE4?=
- =?utf-8?B?QmhSUkFrMHJmVk03NkZnc1JqZmlvQzUrYXhDUHVSTVpkU25tWDBmQTF6dGFn?=
- =?utf-8?B?UjFEK1NlZkN5V1pXL3JPUmtCY3Q3QS8zck9hSWsxTU9Ocm9UWWVncGxzTTVl?=
- =?utf-8?B?VHc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ <FR0P281MB1966E1E84C055E268432571197CE9@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-X-OriginatorOrg: janztec.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0ce13b5d-ca6b-4625-a947-08dafef07d2a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Jan 2023 16:23:27.1744
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c1dae847-7bcf-493f-b143-af65743cbb23
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: +umsj903nXrlN3NcEAlNo3q7CysxeZ+DcrECV8YMJ6EVaKBt/ALjvc4K1yOh4BFMC1TAg72FMA7szP/+bUqzPGYVZOjUqOOMXcVW8X0IKII=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: FR2P281MB2992
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="isyv3to6diemw325"
+Content-Disposition: inline
+In-Reply-To: <FR0P281MB1966E1E84C055E268432571197CE9@FR0P281MB1966.DEUP281.PROD.OUTLOOK.COM>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-SSBkb250IGtub3cgaWYgdGhpcyBpcyBzdGlsbCBvZiBpbnRlcmVzdDoNCg0KQXMgaXQgc2VlbWVk
-IHRoYXQgYWxsIG15IHRydW5jYXRpb24gZXJyb3JzIGFwcGVhcmVkIGZvciBETEVOPTY0IHBhY2tl
-dHMsIEkNCkxpbWl0ZWQgdG8gRExFTj0zMi4NCg0KQWZ0ZXIgMzggaCBJIGdvdCBhbiAiaW5jcmVh
-c2UgZXJyb3IiLiBTZWVtcyBsb2dpY2FsIHRoYXQgdGhpcyBjYW4gaGFwcGVuIGlmIHRoZSBETEVO
-IGlzIHJlYWQgd3JvbmcuDQoNCjE6IGlkeCAgICA4IGV4cDoyQTUjMDAgMDggMjcgMDUgQTggOUYg
-NDggMDIgOTQgMzAgRjQgREEgQUQgM0QgMEMgNTMgOEMgN0YgOTEgN0UgNTMgODQgOUIgRUINCjE6
-ICAgICAgICAgICByeDoyQTUjMDAgMDggMjcgMDUgQTggOUYgNDggMDIgOTQgMzAgRjQgREEgQUQg
-M0QgMEMgNTMgOEMgN0YgOTEgN0UgNTMgODQgOUIgRUIgQzcgMUQgOTIgMjQgRDEgQjQgNzIgMjkN
-Cg0KTm93IHRoZSBpbnRlcmVzdGluZyBwYXJ0Og0KDQoxOiBSWDcyICgwMTAvMDA5KSAgMkE1IzAw
-IDA5IEQyIDkxIDM1IDUyIDAzIEE1IDQxIERBIDJBIDY4IERGIEQzIDA3IDI3IEQ1IDlCIDU3IEM5
-IDc2IDA0IDA2IDgyDQoxOiBSWDcyICgwMTAvMDA4KSAgMkE1IzAwIDA4IDI3IDA1IEE4IDlGIDQ4
-IDAyIDk0IDMwIEY0IERBIEFEIDNEIDBDIDUzIDhDIDdGIDkxIDdFIDUzIDg0IDlCIEVCIEM3IDFE
-IDkyIDI0IEQxIEI0IDcyIDI5ICAgICoqKioqKioqDQoxOiBSWDcyICgwMTAvMDA3KSAgMkE1IzAw
-IDA3IDdGIDcyIDcwIEVGIEQ3IDg1DQoxOiBSWDcyICgwMTAvMDA2KSAgMkE1IzAwIDA2IEU3IEYy
-IDQ2IDdEIDQ5IDMyIEE2IDRFIDcyIDNEIEYyIEQ0IEYzIDFEIDk4IDRFIEY1IDRBDQoxOiBSWDcy
-ICgwMTAvMDA1KSAgMkE1IzAwIDA1IDZGIDY1IDE1IDM4IDJFIDIzIDc4IDQzIDU5IEY1DQoxOiBS
-WDcyICgwMDkvMDA0KSAgMkE1IzAwIDA0IDk1IDU3IEVDIDI5IDA1IDQwIDk3IEEzIDYyIEI1IDJC
-IEMzIDVCIEQ4IEIyIDMxIDdDIDI2DQoxOiBSWDcyICgwMDgvMDAzKSAgMkE1IzAwIDAzIDFFIDg4
-IDYxIEE2IEFDIEVFIEQ1IEE0IDc0IDNFIEU4IEVGIEM4IEM5IDBFIDQwIDE1IDM2IDdEIEE0IDk4
-IDUwDQoxOiBSWDcyICgwMDUvMDAyKSAgMkE1IzAwIDAyIEU5IDQwIDg3IDI0IDhEIDJGIEY4IDg1
-IDY5IDQ0IDdCIDhBIEUwIDFGIDc3IDRDIDI3IDNEIDhFIDYyIEQzIEYxIEJGIDlCIDk0IEFEIDU0
-IDZEIDlFIDIxDQoxOiBSWDcyICgwMDQvMDAxKSAgMkE1IzAwIDAxIDYzIDVDIEM4IEEyIEVFIEI5
-IEQ5IEYxIENEIEIxDQoxOiBSWDcyICgwMDQvMDAwKSAgMkE1IzAwIDAwIEY4IDM5IDRDIEY1IDIx
-IDlDIEE0IEVEIDZDIDA4IEM2IDQyIDNCIDk1DQoxOiBSWDcyICgwMTAvMDA5KSAgMkE1IzAwIDA5
-IEIyIDU0IEVDIEFCIDFCIDNBIEEwIEQ5IDAxIEFEIEJCIDNFIDEyIDJGIEVEIEI3IDUwIDQxIEMx
-IDlGIDMxIDc2DQoxOiBSWDcyICgwMTAvMDA4KSAgMkE1IzAwIDA4IDBDIEUyIDNEIDY1IDc0IEFG
-IEE0IDIxIDUzIDBBIDRFIEYwIEI1IDhEIEFCIDc1IDkxIEY1IDczIEFFIEE0IEJDDQoxOiBSWDcy
-ICgwMTAvMDA3KSAgMkE1IzAwIDA3IEY4IEM3IDREIEY1IEJFIEM3DQoxOiBSWDcyICgwMTAvMDA2
-KSAgMkE1IzAwIDA2IEFEIEE0IDY2IDJEIDlEIEFBIDNFIEJBIEMwIDA0IDRBIEZFIDFEIEFGIDQ4
-IDA0IEFGIDMwDQoxOiBSWDcyICgwMTAvMDA1KSAgMkE1IzAwIDA1IEZEIEY3IDc5IDE3IDI0IDc2
-IDU5IDkyIDcyIDNGDQoxOiBSWDcyICgwMTAvMDA0KSAgMkE1IzAwIDA0IDdGIEY5IDQ0IDExIDFE
-IDE1IEM2IDkwIDNFIDE4IDY0IDRBIEU3IDAwIEU4IEY0IDE3IDFEDQoxOiBSWDcyICgwMDkvMDAz
-KSAgMkE1IzAwIDAzIDUyIEQ0IDBCIENFIDlDIDlFIDBEIDE3IDM1IDA4IERGIDVDIDFBIDJEIEZD
-IDQyIDZFIEZDIEU2IDFCIDMxIDI3DQoxOiBSWDcyICgwMDYvMDAyKSAgMkE1IzAwIDAyIDYyIEUy
-IDdDIEM3IDkyIDNGIDdCIDk3IEZCIEM4IDI3IDExIDREIEEwIDI4IDQxIDAwIEE0IEFEIDM1IDQx
-IDY0IEM3IDFEIDkyIDI0IEQxIEI0IDcyIDI5ICAgKioqKioqKioqDQoxOiBSWDcyICgwMDUvMDAx
-KSAgMkE1IzAwIDAxIEI2IDkyIERDIDJFIDVEIEIzIDIyIDRFIDU4IDlFDQoxOiBSWDcyICgwMDQv
-MDAwKSAgMkE1IzAwIDAwIDA0IEJDIDREIDkwIDE2IDg1IDc4IDE2IEYzIDYwIDdDIDZDIDM1IDlE
-DQoxOiBSWDcyICgwMTAvMDA5KSAgMkE1IzAwIDA5IDlFIDZBIEUyIDdFIDRGIDgxIDFGIEJFIEFE
-IDg0IDE1IEU1IDUwIEQxIDgwIDAzIDNBIDQ2IDYzIDg1IEYyIENCDQoxOiBSWDcyICgwMTAvMDA4
-KSAgMkE1IzAwIDA4IDY1IDU2IDM4IENDIEJDIDlCIEIyIDY5IEM1IDYwIDRCIEFDIDY4IDk0IEM3
-IDk3IDVEIEVBIDNBIDkyIEJBIEVGDQoxOiBSWDcyICgwMTAvMDA3KSAgMkE1IzAwIDA3IEUwIEU1
-IDlFIEEwIDZGIDJDDQoxOiBSWDcyICgwMTAvMDA2KSAgMkE1IzAwIDA2IEFDIDJBIEFEIEUyIEU2
-IDA4IDQ5IDFCIDJFIEM4IDIzIEEzIDM1IEQwIEI1IDBDIEIwIEYzDQoNClRoZSBvbi10b3AgZGF0
-YSBoYXMgYmVlbiByZWNlaXZlZCBiZWZvcmUgKHNlZSBtYXJrZWQgbGluZXMpLiBIb3dldmVyIGF0
-IGEgcXVldWUgbGVuZ3RoIG9mDQoyMCAoYWNjb3JkaW5nIHRvIGV0aHRvb2wpIEkgd291bGQgbm90
-IGhhdmUgZXhwZWN0ZWQgdGhhdCB0aGUgZGlzdGFuY2UgdG8gdGhpcyBmcmFtZQ0KV291bGQgYmUg
-MTYsIGJ1dCAyMC4gRG9lc24ndCB0aGUgY2hpcC9kcml2ZXIgdXNlIHRoZSBxdWV1ZSBlbGVtZW50
-cyBvbmUtYnktb25lPw0KDQotLQ0KU3RlZmFuDQoNCg==
+
+--isyv3to6diemw325
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 25.01.2023 16:23:27, Stefan Alth=C3=B6fer wrote:
+> I dont know if this is still of interest:
+>=20
+> As it seemed that all my truncation errors appeared for DLEN=3D64 packets=
+, I
+> Limited to DLEN=3D32.
+
+Changing the transmitted length influences the timing on the sending
+code path, it's the same on the RX path.
+
+> After 38 h I got an "increase error". Seems logical that this can happen =
+if the DLEN is read wrong.
+>=20
+> 1: idx    8 exp:2A5#00 08 27 05 A8 9F 48 02 94 30 F4 DA AD 3D 0C 53 8C 7F=
+ 91 7E 53 84 9B EB
+> 1:           rx:2A5#00 08 27 05 A8 9F 48 02 94 30 F4 DA AD 3D 0C 53 8C 7F=
+ 91 7E 53 84 9B EB C7 1D 92 24 D1 B4 72 29
+
+It looks like the new data (including the timestamp) has already been
+written, but the DLC is not yet updated.
+
+> Now the interesting part:
+>=20
+> 1: RX72 (010/009)  2A5#00 09 D2 91 35 52 03 A5 41 DA 2A 68 DF D3 07 27 D5=
+ 9B 57 C9 76 04 06 82
+> 1: RX72 (010/008)  2A5#00 08 27 05 A8 9F 48 02 94 30 F4 DA AD 3D 0C 53 8C=
+ 7F 91 7E 53 84 9B EB C7 1D 92 24 D1 B4 72 29    ********
+> 1: RX72 (010/007)  2A5#00 07 7F 72 70 EF D7 85
+> 1: RX72 (010/006)  2A5#00 06 E7 F2 46 7D 49 32 A6 4E 72 3D F2 D4 F3 1D 98=
+ 4E F5 4A
+> 1: RX72 (010/005)  2A5#00 05 6F 65 15 38 2E 23 78 43 59 F5
+> 1: RX72 (009/004)  2A5#00 04 95 57 EC 29 05 40 97 A3 62 B5 2B C3 5B D8 B2=
+ 31 7C 26
+> 1: RX72 (008/003)  2A5#00 03 1E 88 61 A6 AC EE D5 A4 74 3E E8 EF C8 C9 0E=
+ 40 15 36 7D A4 98 50
+> 1: RX72 (005/002)  2A5#00 02 E9 40 87 24 8D 2F F8 85 69 44 7B 8A E0 1F 77=
+ 4C 27 3D 8E 62 D3 F1 BF 9B 94 AD 54 6D 9E 21
+> 1: RX72 (004/001)  2A5#00 01 63 5C C8 A2 EE B9 D9 F1 CD B1
+> 1: RX72 (004/000)  2A5#00 00 F8 39 4C F5 21 9C A4 ED 6C 08 C6 42 3B 95
+> 1: RX72 (010/009)  2A5#00 09 B2 54 EC AB 1B 3A A0 D9 01 AD BB 3E 12 2F ED=
+ B7 50 41 C1 9F 31 76
+> 1: RX72 (010/008)  2A5#00 08 0C E2 3D 65 74 AF A4 21 53 0A 4E F0 B5 8D AB=
+ 75 91 F5 73 AE A4 BC
+> 1: RX72 (010/007)  2A5#00 07 F8 C7 4D F5 BE C7
+> 1: RX72 (010/006)  2A5#00 06 AD A4 66 2D 9D AA 3E BA C0 04 4A FE 1D AF 48=
+ 04 AF 30
+> 1: RX72 (010/005)  2A5#00 05 FD F7 79 17 24 76 59 92 72 3F
+> 1: RX72 (010/004)  2A5#00 04 7F F9 44 11 1D 15 C6 90 3E 18 64 4A E7 00 E8=
+ F4 17 1D
+> 1: RX72 (009/003)  2A5#00 03 52 D4 0B CE 9C 9E 0D 17 35 08 DF 5C 1A 2D FC=
+ 42 6E FC E6 1B 31 27
+> 1: RX72 (006/002)  2A5#00 02 62 E2 7C C7 92 3F 7B 97 FB C8 27 11 4D A0 28=
+ 41 00 A4 AD 35 41 64 C7 1D 92 24 D1 B4 72 29   *********
+> 1: RX72 (005/001)  2A5#00 01 B6 92 DC 2E 5D B3 22 4E 58 9E
+> 1: RX72 (004/000)  2A5#00 00 04 BC 4D 90 16 85 78 16 F3 60 7C 6C 35 9D
+> 1: RX72 (010/009)  2A5#00 09 9E 6A E2 7E 4F 81 1F BE AD 84 15 E5 50 D1 80=
+ 03 3A 46 63 85 F2 CB
+> 1: RX72 (010/008)  2A5#00 08 65 56 38 CC BC 9B B2 69 C5 60 4B AC 68 94 C7=
+ 97 5D EA 3A 92 BA EF
+> 1: RX72 (010/007)  2A5#00 07 E0 E5 9E A0 6F 2C
+> 1: RX72 (010/006)  2A5#00 06 AC 2A AD E2 E6 08 49 1B 2E C8 23 A3 35 D0 B5=
+ 0C B0 F3
+>=20
+> The on-top data has been received before (see marked lines). However
+> at a queue length of 20 (according to ethtool) I would not have
+> expected that the distance to this frame Would be 16, but 20. Doesn't
+> the chip/driver use the queue elements one-by-one?
+
+The driver uses internally power-of-two sized FIFOs: FIFO 1 with depth
+of 16 and FIFO 2 with depth of 4. So this looks correct.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--isyv3to6diemw325
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmPRYYwACgkQrX5LkNig
+010Z6gf/V730FahR//khcNUeW6/jKlTCT5k3QYu/vlewkdVDURtcMHURwkE/AI9W
+Maho3sieiVDjPGj8SAsaIZy47LmN2HZ3yh8p4cuYlVMJlO7ZaAtet0nsI/1G/1BZ
+weAbY0MopI3UTSCZJbTnHBy9mJ6R/22dLKptsoLwDSiOWFqpX2f3qKnVgwk1PlDW
+CFVeHBAin1TJ32Khw9hrdo8tI2jyi2BEeLJ6/c4E0BxQ7lm9rXgdFhGk5Itn/jFt
+QmUM9dMTTU5aPBbW65Kw39fkgpxnsckkEZ4/o8a8tV1NI3GiB/DgWINlF7WByQBD
+7NYvBPtbzCqOja73RitBlcgPGdeHpQ==
+=xbqD
+-----END PGP SIGNATURE-----
+
+--isyv3to6diemw325--
