@@ -2,52 +2,53 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29A1F67BB01
+	by mail.lfdr.de (Postfix) with ESMTP id CC66567BB03
 	for <lists+linux-can@lfdr.de>; Wed, 25 Jan 2023 20:51:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235552AbjAYTvK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 25 Jan 2023 14:51:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48410 "EHLO
+        id S235574AbjAYTvL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 25 Jan 2023 14:51:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235339AbjAYTvI (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 25 Jan 2023 14:51:08 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 012CF45236
+        with ESMTP id S229481AbjAYTvJ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 25 Jan 2023 14:51:09 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0643058971
         for <linux-can@vger.kernel.org>; Wed, 25 Jan 2023 11:51:06 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id ss4so50472891ejb.11
-        for <linux-can@vger.kernel.org>; Wed, 25 Jan 2023 11:51:05 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id vw16so50581845ejc.12
+        for <linux-can@vger.kernel.org>; Wed, 25 Jan 2023 11:51:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zCu9ReBp8rsUO7BPnJkennx1RK9hssnXuHiiktJzKeY=;
-        b=t0nV3aR/PpIjUcTvkuLzezyONXZoGiYlCSyzddvcFBdl1eRAIwg6doXK+FpyXwM7ps
-         q/FAjrEdff4IjIwjZfezT1VIyxIH/vTDHxvDT10L+c5Y0DNAlq8L3rKQ17ot0EGAeHWC
-         LuHJkj26o0qYMm85yao9HuvfDsMBOdX1ESIaZ0I8iJtk+NNHzR6qZWU3lvMgJ3kAmXa6
-         gneikFnIHIiiuFBeZRRPxQxmDRGLYecZjkMQ89NMK1G3f6VsyMGegGhbVE3vmL1I2uUW
-         1tA7AaJI0EEBkdOpLVkkz+G8JHnWDuSq9qoDGCxs6K+mt0hTzwv+/SXK/Bj+yVLSHrvP
-         T6gw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mxWtntR87QPQtBcaxG7QqCrr8e8g6sulYm7WbYMis/Y=;
+        b=Wa6R4LehTz4hL1fyn0Tgu/fMCKHyh1QO1mweKkity5p91CDaaEV5PERR3qAPxCSGAh
+         mS5bkPYot/aFGWq7p4pHq+bNwx1/aH2BpNsaXWt+yXGOz63x88/JJ0gkhKoj4qja7n/Q
+         z4XNkx/ING9Fc+3wYKLZgW4UolnLMqi8Xmp1Yp1aXeiz/UB0UOqRNjbNjgXJ5/IzPefm
+         E3YRtHpM0xIVoC0zjPJ2KFYu/UgA9EIrY2FJzoyw8j6Bu2V9e8EWWLXxOvy7PoOtU6vt
+         oy7qUwBPOAHvTFvSD6PchZp5CxiaaK4KRRxPYcWRwX9B9akyczvbsXMTpjNYnZA0MxUv
+         IoCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zCu9ReBp8rsUO7BPnJkennx1RK9hssnXuHiiktJzKeY=;
-        b=3EI496f/dAVaYM3JZFpBnmDAc0E958I+xhnRbITKreTJi1YSy9o5297WUN2vTEWrFI
-         IE6UzFbWLGgv+dgi4SO+9APc6xhHH+P2d62xFcZFyQ4Sbv+W+KuplqsDjGfPGBTCae19
-         5vZQVoFonwLA5psefi2qEIDyoTRL7ffrZBcQAyWj2FjAHYdDUaaMJe4g68MY5X4X7gPj
-         riPRpRYqXAqpl0s6CisKEGrerTiASCOpZo6M4TCfw4/puBRuy6PK6+hmadWT/RdhFqXb
-         IeJlarMUuDDwyRIsyVR6Sd3J51KlIG+4qKPFe9a4BPqYqMYZp42RzhpmtFOuNduH6+6q
-         6M1w==
-X-Gm-Message-State: AFqh2kopEjFgs9y46FmnNYSWSalUE6P/6PtLHtbXjpx5lRmSDqrnherc
-        WXyryOtEka1a+rhjPS6DEOA/9g==
-X-Google-Smtp-Source: AMrXdXv15kHa1dGmlL79wyog14d50xdg7+O1i+O7wOxn7Vzp9LxrmOLhHmtM/BEYVKhhwJFvIsK8Hg==
-X-Received: by 2002:a17:907:1dcd:b0:877:6288:eff2 with SMTP id og13-20020a1709071dcd00b008776288eff2mr28762238ejc.75.1674676264497;
-        Wed, 25 Jan 2023 11:51:04 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mxWtntR87QPQtBcaxG7QqCrr8e8g6sulYm7WbYMis/Y=;
+        b=LWgBAzvQ8WuqyaE3cdiqJbuMWtItnLsxalVv3gp+nZuZGd63MVj07ARMyASmSg1Mai
+         m/9d7k8MUPqwlOowiFLvKP46RE1bTWxcnV8uLPh0f15yyVsWaPMlVR/ssyNW7y20obBG
+         MGxSSpKZV+1dclIPxEy4b6zQtBNj9RBLqV2GxLBs/V1aTXoE8P+Q8rxn4ymjlETXDQF1
+         3hWrZyPhvgHQvKm9gLAv6VuFYxnwdjRuFHgwhxPXnc4No3+SnfrG8AN6+wbsVlOHgJuc
+         pTPGjteXGKqwvasT8ACtzlhAcJVwGl0w5KKl5zm8gJsritQvT4xxr3r0I67STH5CQR8O
+         hZoA==
+X-Gm-Message-State: AFqh2krNTjdhiPsPFHizdU8J42XYBk7ar/TrBYzy+cK0Bx+Dmw+COQ5Y
+        RPn6sl2k9t9IcefPTqMTsi/KvA==
+X-Google-Smtp-Source: AMrXdXvA810tjhCEaeVq1GUR/jtyFVYXE5HaCazshldGxxf389uSU646RypmMq75NV3CDGuNck604Q==
+X-Received: by 2002:a17:907:8a1d:b0:84d:3822:2fc7 with SMTP id sc29-20020a1709078a1d00b0084d38222fc7mr45785644ejc.77.1674676265435;
+        Wed, 25 Jan 2023 11:51:05 -0800 (PST)
 Received: from blmsp.fritz.box ([2001:4091:a247:815f:ef74:e427:628a:752c])
-        by smtp.gmail.com with ESMTPSA id s15-20020a170906454f00b00872c0bccab2sm2778830ejq.35.2023.01.25.11.51.03
+        by smtp.gmail.com with ESMTPSA id s15-20020a170906454f00b00872c0bccab2sm2778830ejq.35.2023.01.25.11.51.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 11:51:04 -0800 (PST)
+        Wed, 25 Jan 2023 11:51:05 -0800 (PST)
 From:   Markus Schneider-Pargmann <msp@baylibre.com>
 To:     Marc Kleine-Budde <mkl@pengutronix.de>,
         Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
@@ -56,10 +57,12 @@ Cc:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Markus Schneider-Pargmann <msp@baylibre.com>
-Subject: [PATCH v2 00/18] can: m_can: Optimizations for m_can/tcan part 2
-Date:   Wed, 25 Jan 2023 20:50:41 +0100
-Message-Id: <20230125195059.630377-1-msp@baylibre.com>
+Subject: [PATCH v2 01/18] can: tcan4x5x: Remove reserved register 0x814 from writable table
+Date:   Wed, 25 Jan 2023 20:50:42 +0100
+Message-Id: <20230125195059.630377-2-msp@baylibre.com>
 X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230125195059.630377-1-msp@baylibre.com>
+References: <20230125195059.630377-1-msp@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,57 +74,27 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Marc and everyone,
+The mentioned register is not writable. It is reserved and should not be
+written.
 
-second version part 2, I fixed the bug I noticed for integrated m_can
-devices. The accounting was wrong or missing for these. I don't have the
-integrated hardware myself so any testing is appreciated (I only have
-the tcan device to test the mcan driver). Also v2 rebases on top of
-v6.2-rc5.
+Fixes: 39dbb21b6a29 ("can: tcan4x5x: Specify separate read/write ranges")
+Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+---
+ drivers/net/can/m_can/tcan4x5x-regmap.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-The series implements many small and bigger throughput improvements and
-adds rx/tx coalescing at the end.
-
-Best,
-Markus
-
-Changes in v2:
-- Rebased on v6.2-rc5
-- Fixed missing/broken accounting for non peripheral m_can devices.
-
-part 1:
-v1 - https://lore.kernel.org/lkml/20221116205308.2996556-1-msp@baylibre.com
-v2 - https://lore.kernel.org/lkml/20221206115728.1056014-1-msp@baylibre.com
-
-part 2:
-v1 - https://lore.kernel.org/lkml/20221221152537.751564-1-msp@baylibre.com
-
-Markus Schneider-Pargmann (18):
-  can: tcan4x5x: Remove reserved register 0x814 from writable table
-  can: tcan4x5x: Check size of mram configuration
-  can: m_can: Remove repeated check for is_peripheral
-  can: m_can: Always acknowledge all interrupts
-  can: m_can: Remove double interrupt enable
-  can: m_can: Disable unused interrupts
-  can: m_can: Keep interrupts enabled during peripheral read
-  can: m_can: Write transmit header and data in one transaction
-  can: m_can: Implement receive coalescing
-  can: m_can: Implement transmit coalescing
-  can: m_can: Add rx coalescing ethtool support
-  can: m_can: Add tx coalescing ethtool support
-  can: m_can: Cache tx putidx
-  can: m_can: Use the workqueue as queue
-  can: m_can: Introduce a tx_fifo_in_flight counter
-  can: m_can: Use tx_fifo_in_flight for netif_queue control
-  can: m_can: Implement BQL
-  can: m_can: Implement transmit submission coalescing
-
- drivers/net/can/m_can/m_can.c           | 514 ++++++++++++++++++------
- drivers/net/can/m_can/m_can.h           |  36 +-
- drivers/net/can/m_can/tcan4x5x-core.c   |   5 +
- drivers/net/can/m_can/tcan4x5x-regmap.c |   1 -
- 4 files changed, 432 insertions(+), 124 deletions(-)
-
+diff --git a/drivers/net/can/m_can/tcan4x5x-regmap.c b/drivers/net/can/m_can/tcan4x5x-regmap.c
+index 2b218ce04e9f..fafa6daa67e6 100644
+--- a/drivers/net/can/m_can/tcan4x5x-regmap.c
++++ b/drivers/net/can/m_can/tcan4x5x-regmap.c
+@@ -95,7 +95,6 @@ static const struct regmap_range tcan4x5x_reg_table_wr_range[] = {
+ 	regmap_reg_range(0x000c, 0x0010),
+ 	/* Device configuration registers and Interrupt Flags*/
+ 	regmap_reg_range(0x0800, 0x080c),
+-	regmap_reg_range(0x0814, 0x0814),
+ 	regmap_reg_range(0x0820, 0x0820),
+ 	regmap_reg_range(0x0830, 0x0830),
+ 	/* M_CAN */
 -- 
 2.39.0
 
