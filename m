@@ -2,143 +2,172 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F02067C581
-	for <lists+linux-can@lfdr.de>; Thu, 26 Jan 2023 09:08:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B17A67E5A5
+	for <lists+linux-can@lfdr.de>; Fri, 27 Jan 2023 13:43:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235298AbjAZIIA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 26 Jan 2023 03:08:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42548 "EHLO
+        id S233983AbjA0Mn2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 27 Jan 2023 07:43:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbjAZIH6 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 26 Jan 2023 03:07:58 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3239729E14;
-        Thu, 26 Jan 2023 00:07:57 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ce57g4R5aTt0gxqEuFugM1Zc5lzRk4jk6lMqCvNcWygeER65lBCzPi8V3jSQSx7SXMx/1+eAhygPoFoFZsLZ9x4pcmYPrhNEOYrVNkiiGTYO6AvAlsvRQKynMFTS1y5LKzGfIbXs33fVeF24BFHeqBKjG+pYmswqD+Z+uGajoUyJ1OodaJc7ccOSD6DqHuCqCATSq4psb6+tPKsfK3S66fGhqMV9AdGZBNo68ODpz93kr1w5BnrkR+ErBukdbg8v1XP02UZZMxhEEUvJJ7qXYZtVgPndBzRafv1HUwFPtf8EZO8p0mCdVlP5fkBGWB040oajwJ1vrYGqLpyBM/OwVg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/X1RHNBiylHrurdoGaUkuRyWrYD+HNVsejju+ZSIBho=;
- b=f26HdhO3k2BLip7keQlMsg/P6M0M/WP+kwzJxMK+i5yD2p4toD3dFpSRK97U4ZJTcNDRrHkAXnSc+iKIWrzPpMzDwHDUF0s/M2z237POIRCMr0rT6zH9mtcM3U7lUbmyIOM93izdISA13AS/dbYn0VGHvt4p3/+jcjzzL2F34OCRqdkdqkbSd/MujzLQY7x4UFOIF2dRd9p6Xt4tDWcwniSIBqnUlrM+bUTh8yi1WtsDkZ6usjIhs5H+Rkvqa2aVcZtXsxUJdk6jdF0A0m6Hw5JPTDEeBrVyri6b01EXL6I4HRa67lDe1arXDiMOWY4ia1K7woOFzmKoPT1vjTT7Kg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/X1RHNBiylHrurdoGaUkuRyWrYD+HNVsejju+ZSIBho=;
- b=QJ6/bJsDpbulqelf5fHDrmFbVDNpiQmH8kBM86fI4KDz4Ex1VVzqHr18PXePYlAkcs7/UMmGhvzjnD/Z4Pnssk3LvH7NGxJVHbFgkB2GYjGKX8DRPL28zFOJsW0jAgO4HPQ1o8xUcVOVEI9/CnjckkCkzzaoPRTiLdamg/UjOlk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by BL3PR13MB5074.namprd13.prod.outlook.com (2603:10b6:208:33d::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.22; Thu, 26 Jan
- 2023 08:07:54 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb5c:910f:3730:fd65]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb5c:910f:3730:fd65%6]) with mapi id 15.20.6043.021; Thu, 26 Jan 2023
- 08:07:54 +0000
-Date:   Thu, 26 Jan 2023 09:07:48 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Markus Schneider-Pargmann <msp@baylibre.com>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 06/18] can: m_can: Disable unused interrupts
-Message-ID: <Y9I01AN65Uvdxp9E@corigine.com>
-References: <20230125195059.630377-1-msp@baylibre.com>
- <20230125195059.630377-7-msp@baylibre.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230125195059.630377-7-msp@baylibre.com>
-X-ClientProxiedBy: AS4P192CA0007.EURP192.PROD.OUTLOOK.COM
- (2603:10a6:20b:5da::19) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        with ESMTP id S233317AbjA0Mn1 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 27 Jan 2023 07:43:27 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06A3344AA
+        for <linux-can@vger.kernel.org>; Fri, 27 Jan 2023 04:43:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1674823383; x=1706359383;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Q4SaEovnqMGDqrzfHSH65vskG4bqNg/7W598Odq2q1s=;
+  b=n/9NxD55oq6ho288LlznSc+Wqr6OHLYCt+6k0CkJB00xxaRHqY1t1yav
+   b1twIF+eNvqUgFaoSCmn0KckzVkxnjqJonNAm6QIXCo4f7WbBmaA0r9gk
+   rdndUOR7r2GCyiwXrq3xN0/FmMM/I5ehD41BDYGxAOcAu4E+B1XQ7jXgX
+   7y/+oOhmRGT+M4uKtf4K19bFjv3B9OBNtVd/iAfAe3I6Qqf8/Z/WWBSbq
+   Hi+EkjesXPDwys7MCnpauOURVb2NO1/ZMVcX11NeiuKuFb+GgYBaEPR0d
+   ISXq1JnAnIknVf21v79+81vIVUEznO/LhHKWlecNVAp1qUatVKU0E2Srn
+   A==;
+X-IronPort-AV: E=Sophos;i="5.97,251,1669100400"; 
+   d="scan'208";a="198283086"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Jan 2023 05:42:57 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 27 Jan 2023 05:42:57 -0700
+Received: from HNO-LT-M43677A.mchp-main.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Fri, 27 Jan 2023 05:42:56 -0700
+From:   Thomas Kopp <thomas.kopp@microchip.com>
+To:     <linux-can@vger.kernel.org>, <mkl@pengutronix.de>
+CC:     <mani@kernel.org>, <thomas.kopp@microchip.com>
+Subject: [PATCH] can: mcp251xfd: optimizing transfer size for CRC transfers size 1
+Date:   Fri, 27 Jan 2023 13:42:58 +0100
+Message-ID: <20230127124258.2764-1-thomas.kopp@microchip.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BL3PR13MB5074:EE_
-X-MS-Office365-Filtering-Correlation-Id: bcf6c054-161b-4266-dcf3-08daff746d33
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iS6f1jyqf0aaUXMgGdFoFp98V5+RlauRaIuc65CNH8ycXXowAt3MlI6a/2LqE9v2eJyvqRhWdPsjoP7m8CZH1oz7yPNQBhsVkidRETl30+2R6K1MHGuwXAu200KN62ZJyadzPoM0US8ws1OMTP3y6giiE1xuR5IswXM/FA+YNZCpUytK8yOUEhHZ2AjHf9XWE8fHlYTTWzxnBbFEPyEWzOMxF6Ogs9ytaDdEoZuSJciDnkTSaiO79/uKm7QmA1cvyMdn3IH0YKN9q+4ZH/NdxuNOrNCaUBDnBwTIkniKPEf34Qvc5CkeSQzQoAnOeTTrJS5jhtIVxIK+oZvTvcZ+r4o8sr+dl1/aDMrSuqXhTh1Jbu2xKlJvs9hhyyCrdoHbVBwX+/waQ1AonsjNRp7uraOdoki/Op859XZu2Rdn5iO2EZ8VorUaWRHCqShsL4PaRw5GJtxWAOxrM7xcWCsIsLanKEWkOcAybAUsUvdSfvNSRVNzYZcD3GAMeplkDnAt40PJknwXBfA/Bg6HAa6wq7PHlbwSXeRQ/1h/o2VPRgiaOYazj6Fq8p5PO6MliyRSrRZAYcslMZSrJslPkL/96OYz/fR64nZaIr3AfiUoeVN14sxNBOtwrJtr8hBK9laql4g2/wTnQ6e5UD8ioZzvnA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(376002)(346002)(366004)(136003)(39830400003)(451199018)(36756003)(8676002)(54906003)(316002)(478600001)(6666004)(6506007)(6486002)(44832011)(5660300002)(4744005)(2906002)(4326008)(66476007)(66946007)(6916009)(66556008)(8936002)(41300700001)(86362001)(38100700002)(83380400001)(2616005)(186003)(6512007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?erWg9owEJ9d7gAB66sV16KVyCE4ciUnGHhBxyqAxxmfDSPSc18+aBt5P1xND?=
- =?us-ascii?Q?25SdgiESP6a8A3yU81QqRnXdHnLPTuLWm75jTFva8RVC533yk0p7A9e7mGRH?=
- =?us-ascii?Q?G42wnHs378HLAiL8vCsd+BeyqAyjtfO1Sc06nBL9ELU7vHSr3uL5KqVZkA5T?=
- =?us-ascii?Q?iEZluQE99vWwstHlKUHsoTkFaZKJJ10Gzuc3EwhAktV8cLMkMqBAKIdgWx2W?=
- =?us-ascii?Q?IdEJVr1bO8ycphEfHm0vLFbJLVHR196MS/IbGZtFbDiaWryX8jFjWkDsCogy?=
- =?us-ascii?Q?CM6FuPJfgaIUQnzK9qQ1a6AxRZ29EuvAcwSCKrSWiCyFx8o40lWSjB79kL8S?=
- =?us-ascii?Q?aJEad0nic7hqURC6kRtHeYq6cD/YXARQkSmMDky75/FXMs8EX3pBTPXZCJe9?=
- =?us-ascii?Q?j9CTA4mMhvUBFsfFHD4SZW1teVWg1xM+g0jeWIWk/+89MGUspJV09QMGA3LY?=
- =?us-ascii?Q?vWHGI3cCsPRFvIJhVWkt0NoQDk+JPo9YrUOqYcvxbApod+pqLYzRd/OiYVDK?=
- =?us-ascii?Q?vN+cku0MAUrWXYu8hxQba5r78acipd4qfZV6k+LNLoPb9rXHaWbjHcjqyhn2?=
- =?us-ascii?Q?E2K2z+zQhnY7Pj4hXk67smPF4uIf7Eg5zLw6jKpmToN9RsuXK3rpThKbtDpW?=
- =?us-ascii?Q?Qmih2rrinjHpslXY0BeRyBK+HLpnllPXGbkyCLjo7Q6EPXt+n7wmJer82qGf?=
- =?us-ascii?Q?pnT8/SFCIdTEfjwy542qxqeOoRXjZ7f0dP6nFQCMdvFF73mqJw8pBsr5yRKL?=
- =?us-ascii?Q?6BqJKrkadLW63pFpLyNCvb8/pQwiGn1KwFbHh2VfC4RWlbZewwD+S2hvpiQS?=
- =?us-ascii?Q?xdM9reYMPgyZCPcMZvQre0uiG0RnzioV9ak07GHmhb7St9aEy5SAfmp55oy0?=
- =?us-ascii?Q?4oVOmWIGjg/V4XzDKX1+GlWwRZRlluFh8XL8Eb6sdxWb5YhSPeGjOjPQIa6k?=
- =?us-ascii?Q?trKP4ef58CBWecqBXfAqXInGTlT/jfBSuHwSlIzqNmM2WpVjDz9KGuy/o7jZ?=
- =?us-ascii?Q?G6uQzUwQyR1lY1xO7T2EJ+UmGVzU1Gmr4gGdWcMee3d6O26tb5DJPvzuzjjT?=
- =?us-ascii?Q?DMpd1IAnxZVa/AahOv8l3KMNgHjEtyuA14/1E/gDNjRwwbQqfSnCxFstoJij?=
- =?us-ascii?Q?dpD/lvm6soLYeqL6I+KiedQrcZiJSLglX/ZfStrGCK9LjXFWNozUaqAoBAYN?=
- =?us-ascii?Q?oJ1sZrThhPHgHZRqvZzD4vG6t/lu7hHqdJYhd5VeH0LdPrtlurKVAPyHePbf?=
- =?us-ascii?Q?J/av6Y9uKJvCX86XUpE4+ejGp5IMbOt1OvH3i+dPlHolg9Vk2B//aXdCUmgy?=
- =?us-ascii?Q?3Lv4s/F3SMPkDZMNOdKIKMtngsKQwRTafyMRUYdLuGqtApoiiFETg+xI7O7r?=
- =?us-ascii?Q?pLSlhhVvm5RZFmMYJDU1YhmFTUt/k8PwZV5+m9ILN94LsYLGBH8rzWW9L+c6?=
- =?us-ascii?Q?6wH5EA4CMBMCRrMZA/tY1a6FKK2xuEZ1J0c6b0hPqRUKiI5xvrHDQ9ARj0Wx?=
- =?us-ascii?Q?QUXHTsH/sU8hvhEyO9dj2FlshCROh+i2YUD+dxUoqJm8RHPNXAHd0JUiEij/?=
- =?us-ascii?Q?RWlYy2CPgR8McZXkjr5FTzYXgabw00xjqtgN67551ahUF4+a+8kspFZZ/gKG?=
- =?us-ascii?Q?hc923i4AqgHiI4aesQF5gUKU5c5CMZ3hcafbQI3kg13hF1Iv7jlqSgZTJU8+?=
- =?us-ascii?Q?o6dfqQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bcf6c054-161b-4266-dcf3-08daff746d33
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2023 08:07:54.1604
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ier+wh7P8yP30gwfBjOoXis1dXGqteTq6FfFADj9TTVxNoiapVC4qUfxCE0mJIUsWGZmvj8R41zihDaR4E4YzKO2wMJC8lhIOZI2TZzsA9U=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR13MB5074
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 08:50:47PM +0100, Markus Schneider-Pargmann wrote:
-> There are a number of interrupts that are not used by the driver at the
-> moment. Disable all of these.
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> ---
->  drivers/net/can/m_can/m_can.c | 18 +++++++++++-------
->  1 file changed, 11 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-> index a668a5836cf8..ef5ca5d37b0d 100644
-> --- a/drivers/net/can/m_can/m_can.c
-> +++ b/drivers/net/can/m_can/m_can.c
-> @@ -1262,6 +1262,7 @@ static int m_can_chip_config(struct net_device *dev)
->  {
->  	struct m_can_classdev *cdev = netdev_priv(dev);
->  	u32 cccr, test;
-> +	u32 interrupts = IR_ALL_INT;
->  	int err;
+For CRC transfers with size 1 it is more efficient to use the write_safe command instead of the write_crc command. This saves the length byte on the SPI transfer.
 
-nit: reverse xmas tree (longest line to shortest line) for local variable
-declarations.
+Signed-off-by: Thomas Kopp <thomas.kopp@microchip.com>
+---
+ .../net/can/spi/mcp251xfd/mcp251xfd-ring.c    | 31 ++++++++++++-------
+ drivers/net/can/spi/mcp251xfd/mcp251xfd.h     | 26 +++++++++++++---
+ 2 files changed, 42 insertions(+), 15 deletions(-)
 
-...
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-ring.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-ring.c
+index f69d5fc8c9afd..3c3bc9be1f295 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-ring.c
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-ring.c
+@@ -30,22 +30,31 @@ mcp251xfd_cmd_prepare_write_reg(const struct mcp251xfd_priv *priv,
+ 	last_byte = mcp251xfd_last_byte_set(mask);
+ 	len = last_byte - first_byte + 1;
+ 
+-	data = mcp251xfd_spi_cmd_write(priv, write_reg_buf, reg + first_byte);
++	data = mcp251xfd_spi_cmd_write(priv, write_reg_buf, reg + first_byte, len);
+ 	val_le32 = cpu_to_le32(val >> BITS_PER_BYTE * first_byte);
+ 	memcpy(data, &val_le32, len);
+ 
+ 	if (priv->devtype_data.quirks & MCP251XFD_QUIRK_CRC_REG) {
+ 		u16 crc;
+-
+-		mcp251xfd_spi_cmd_crc_set_len_in_reg(&write_reg_buf->crc.cmd,
+-						     len);
+-		/* CRC */
+-		len += sizeof(write_reg_buf->crc.cmd);
+-		crc = mcp251xfd_crc16_compute(&write_reg_buf->crc, len);
+-		put_unaligned_be16(crc, (void *)write_reg_buf + len);
+-
+-		/* Total length */
+-		len += sizeof(write_reg_buf->crc.crc);
++		if (len == 1) {
++			/* CRC */
++			len += sizeof(write_reg_buf->safe.cmd);
++			crc = mcp251xfd_crc16_compute(&write_reg_buf->safe, len);
++			put_unaligned_be16(crc, (void *)write_reg_buf + len);
++
++			/* Total length */
++			len += sizeof(write_reg_buf->safe.crc);
++		} else {
++			mcp251xfd_spi_cmd_crc_set_len_in_reg(&write_reg_buf->crc.cmd,
++							     len);
++			/* CRC */
++			len += sizeof(write_reg_buf->crc.cmd);
++			crc = mcp251xfd_crc16_compute(&write_reg_buf->crc, len);
++			put_unaligned_be16(crc, (void *)write_reg_buf + len);
++
++			/* Total length */
++			len += sizeof(write_reg_buf->crc.crc);
++		}
+ 	} else {
+ 		len += sizeof(write_reg_buf->nocrc.cmd);
+ 	}
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
+index 6008d38810e98..5d82eb2676182 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
+@@ -504,6 +504,11 @@ union mcp251xfd_write_reg_buf {
+ 		u8 data[4];
+ 		__be16 crc;
+ 	} crc;
++	struct __packed {
++		struct mcp251xfd_buf_cmd cmd;
++		u8 data[1];
++		__be16 crc;
++	} safe;
+ } ____cacheline_aligned;
+ 
+ struct mcp251xfd_tx_obj {
+@@ -762,6 +767,13 @@ mcp251xfd_spi_cmd_write_crc_set_addr(struct mcp251xfd_buf_cmd_crc *cmd,
+ 	cmd->cmd = cpu_to_be16(MCP251XFD_SPI_INSTRUCTION_WRITE_CRC | addr);
+ }
+ 
++static inline void
++mcp251xfd_spi_cmd_write_safe_set_addr(struct mcp251xfd_buf_cmd *cmd,
++				     u16 addr)
++{
++	cmd->cmd = cpu_to_be16(MCP251XFD_SPI_INSTRUCTION_WRITE_CRC_SAFE | addr);
++}
++
+ static inline void
+ mcp251xfd_spi_cmd_write_crc(struct mcp251xfd_buf_cmd_crc *cmd,
+ 			    u16 addr, u16 len)
+@@ -773,14 +785,20 @@ mcp251xfd_spi_cmd_write_crc(struct mcp251xfd_buf_cmd_crc *cmd,
+ static inline u8 *
+ mcp251xfd_spi_cmd_write(const struct mcp251xfd_priv *priv,
+ 			union mcp251xfd_write_reg_buf *write_reg_buf,
+-			u16 addr)
++			u16 addr, u8 len)
+ {
+ 	u8 *data;
+ 
+ 	if (priv->devtype_data.quirks & MCP251XFD_QUIRK_CRC_REG) {
+-		mcp251xfd_spi_cmd_write_crc_set_addr(&write_reg_buf->crc.cmd,
+-						     addr);
+-		data = write_reg_buf->crc.data;
++		if (len == 1) {
++			mcp251xfd_spi_cmd_write_safe_set_addr(&write_reg_buf->safe.cmd,
++							     addr);
++			data = write_reg_buf->safe.data;
++		} else {
++			mcp251xfd_spi_cmd_write_crc_set_addr(&write_reg_buf->crc.cmd,
++							     addr);
++			data = write_reg_buf->crc.data;
++		}
+ 	} else {
+ 		mcp251xfd_spi_cmd_write_nocrc(&write_reg_buf->nocrc.cmd,
+ 					      addr);
+-- 
+2.34.1
+
