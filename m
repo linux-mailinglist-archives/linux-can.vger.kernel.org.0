@@ -2,71 +2,70 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C08A3682893
-	for <lists+linux-can@lfdr.de>; Tue, 31 Jan 2023 10:19:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 798D6682AE5
+	for <lists+linux-can@lfdr.de>; Tue, 31 Jan 2023 11:56:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232524AbjAaJT2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 31 Jan 2023 04:19:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45592 "EHLO
+        id S229680AbjAaK4X (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 31 Jan 2023 05:56:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232528AbjAaJTP (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 31 Jan 2023 04:19:15 -0500
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A03DCD
-        for <linux-can@vger.kernel.org>; Tue, 31 Jan 2023 01:18:32 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1675156710; cv=none;
+        with ESMTP id S230481AbjAaK4W (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 31 Jan 2023 05:56:22 -0500
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F63F753
+        for <linux-can@vger.kernel.org>; Tue, 31 Jan 2023 02:56:21 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1675162579; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=pSchHMZ2VZpS9TCFo1Gs/WM0PAy75rZMR5pPhtK0S57Gez73mAWqW8OQdk/QOW3+V4
-    NzmN7SaxqbLZlC1EFDI4UisygltOh1464KND2QAtDloFNeOGFmeFQw+Bbgco1FMUL2pY
-    H9dZWf2ci2Tkm9WImfM6pB5RNkwtKdQ5eRC7+F/9EDJawL85nzPtqsxvTwIzvCrlibCo
-    Er9HByeVjZkOxkm4c1veyaX18cuug88Ox4yvInOdkJ3yD1diL8mafMHgJKcg3uX4dTrX
-    8MBAJOpgdPgkaee7xhZDl3cnpn+OZ0HpKRBD9phQYJTUj+Ydf/EMIZTPy2aHNsCAokjJ
-    4QFA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1675156710;
+    b=rMMEy0+nRMde/RZv8UDYN3Cc7WM+FfFmrIIwurbl+qZvUgRyfm1IAcVrlwm+knD/b7
+    TUvNusPfed6LyLdna2K3h4JUwQp8NP8XugwUj8teYBh092wffrknrd7S2/Y0R+dd4/Jw
+    57eZ7nvOZGEJ+cAXfCg+iVaYkAL4rrVViL8ZyY4GZbHzzocVUIS4ybhZvn5gNULqCYU7
+    euGOUDv6Qf0Bxokp7+Emw3rbQvlJyS3MrW/MyouJa3R/iVob4MH+yHte8/ukkGAXia9V
+    vjmwQK1/LolPH4U5XRTNBY9t5jAG+BzZqHigrLW6T5WHIloAGVQY5Fmpb8QvAAR559Ac
+    ePVg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1675162579;
     s=strato-dkim-0002; d=strato.com;
     h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=g63u2Jweh/D4aQsfFDzfVgihSr28iVRNErhdUzc307I=;
-    b=qlBsT/q4+3a9Iygt2kSgQImZPDomIFiinrtENv/xRcHE/RSKPLk+nVJcs1E4v3zPMI
-    y4auR11oMgUB1/Ux7Q4OWzJS9vaxFCq+oKtxBpGrrqNBYT4sGZUoehQB2ZWIt+IQWuZv
-    9BnnHwmUD64lzTp8u/oRe1qjhtO8dHaMEc59WXoTi7opi3yGfYILXDgkGYmKPpexiygY
-    DjLS7WgwJtrd2ZQnuN5dz6KaNykiEbDTOFUI8qDaBqhhi95wWEO0EaPqbyMz5SqLi0w0
-    msHDoaBbfgEw30I7sn2k88aNQlViXgG5TV7snSfwkxgr3wtRMRv1/Lo6PM3toOaEnES4
-    IbdQ==
+    bh=Y+ln3ZxSHdg2+01xgOh9azftVdmWqEpj7NEduA8Y1ao=;
+    b=jnj4F9E058Xlg/6sQ/sME23P0YJIaAlPvaCaeNaeIxU9C9YfLwtVUk4UkfCU3dhJVn
+    41z48rd+Xxu5GFjFlum9fcUeRBxBysxTGpM112ODMChzTzJxCBQqgc6bvOy9b+WQuy8w
+    dSncyLHSBPOwuq04h1PNVjJ2wjQuRGJTpM0fYR7lFqUddc1UU3ekr5e/Jd76O/DUI71T
+    7IDv+Tb0XPRVJWaqRkeleW7HyK4wRoN3gCEPm6deCvwTqqxyfJ3/lYiqnHaS72IYJ3Dc
+    wcBL69rNcmUmobx685meLRaSmD7pxeAobj3Maen1GA8ZqqYSoSIewe2hk31rY9+Xd8An
+    J3pA==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
 X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1675156710;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1675162579;
     s=strato-dkim-0002; d=hartkopp.net;
     h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=g63u2Jweh/D4aQsfFDzfVgihSr28iVRNErhdUzc307I=;
-    b=eCm0pTg+D2dDnECfR+rAoHVa0GFvbQrf/2BOVXNFGjGjPSHNaib2KUgFKqQJyatobz
-    9458spaB8/D/9VIbNtdVXCGi2Il8unV/H8EOqo17sLx8UrXPSA+l3T3g7XMNk5pHQ2Of
-    595QMA9l+5VpCE1J3hbPj/uDCNkSLcF5IPGzwcb6riuKBV58PRMAWLwL1hQMC13EaD1+
-    MtbIX7HygwR9MLoxWo1Kg1ai+Sz6BmC8paweHO0IXU9sukGrTiojvtpcXIVUOw9WpStd
-    UxWjyAjBNDwRb1HpZkZoPHaMVnjs5RE+ko9d/buWYcjXAcNLY2ZschdyUU0rVETQfr35
-    2H3g==
+    bh=Y+ln3ZxSHdg2+01xgOh9azftVdmWqEpj7NEduA8Y1ao=;
+    b=g+4O4BjRI6Fz5RgsiO0UuRjQnbqUKX4g7rCHOsKFxLgRJ9A4sHTAcvdjW8jABVeCHH
+    dkKNBLTSdfR9F7Yk4A6TV/q6f7CWD4GbwSF70Cm0sQFYotoPPJU4Yhia1iP1J1tITuz/
+    cxX887+XRl5wKHTKzsLfMUvzFb4BgDEo5X6nrynShW33FhiNf3vyktLaqHU626Yd0o9l
+    W7+oQkLU5O9i3mCuQZOuKlCcarGzR72CKOucO0eCkxECAddwwDFd7fz1gzIrBUsXubUL
+    RTZrhld2V6H6zd8DbxQgCoa3Ob4mFZuO6FmARzi7fcTbaf32/jcJBo9vaOXSPE3y6+Cm
+    RTGA==
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS/xvEBL7X5sbo3VYpXsQi7qV3YmQgR17+6Jkvj2j0lZGWSpaEyoLOt"
 Received: from blue.lan
     by smtp.strato.de (RZmta 49.2.2 AUTH)
-    with ESMTPSA id qa71b9z0V9IUIFf
+    with ESMTPSA id qa71b9z0VAuJJ05
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-    Tue, 31 Jan 2023 10:18:30 +0100 (CET)
+    Tue, 31 Jan 2023 11:56:19 +0100 (CET)
 From:   Oliver Hartkopp <socketcan@hartkopp.net>
 To:     linux-can@vger.kernel.org
 Cc:     Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: [PATCH v2] can: raw: fix CAN FD frame transmissions over CAN XL devices
-Date:   Tue, 31 Jan 2023 10:18:24 +0100
-Message-Id: <20230131091824.51026-1-socketcan@hartkopp.net>
+Subject: [PATCH v3] can: raw: fix CAN FD frame transmissions over CAN XL devices
+Date:   Tue, 31 Jan 2023 11:56:13 +0100
+Message-Id: <20230131105613.55228-1-socketcan@hartkopp.net>
 X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -81,34 +80,38 @@ With this patch the CAN FD feature is enabled automatically when CAN XL
 is switched on - and CAN FD cannot be switch off while CAN XL is enabled.
 
 This precondition also leads to a clean up and reduction of checks in the
-hot path in raw_rcv() and raw_sendmsg().
+hot path in raw_rcv() and raw_sendmsg(). Some conditions are reordered to
+handle simple checks first.
 
 Fixes: 626332696d75 ("can: raw: add CAN XL support")
 Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 ---
 
 V2: fixed typo: devive -> device
+V3: reorder checks in if statements to handle simple checks first
 
-net/can/raw.c | 45 ++++++++++++++++++++++++++++++---------------
- 1 file changed, 30 insertions(+), 15 deletions(-)
+ net/can/raw.c | 47 +++++++++++++++++++++++++++++++----------------
+ 1 file changed, 31 insertions(+), 16 deletions(-)
 
 diff --git a/net/can/raw.c b/net/can/raw.c
-index 81071cdb0301..c505d315a7a9 100644
+index 81071cdb0301..ba86782ba8bb 100644
 --- a/net/can/raw.c
 +++ b/net/can/raw.c
-@@ -130,11 +130,11 @@ static void raw_rcv(struct sk_buff *oskb, void *data)
+@@ -130,12 +130,12 @@ static void raw_rcv(struct sk_buff *oskb, void *data)
  	/* check the received tx sock reference */
  	if (!ro->recv_own_msgs && oskb->sk == sk)
  		return;
  
  	/* make sure to not pass oversized frames to the socket */
 -	if ((can_is_canfd_skb(oskb) && !ro->fd_frames && !ro->xl_frames) ||
-+	if ((can_is_canfd_skb(oskb) && !ro->fd_frames) ||
- 	    (can_is_canxl_skb(oskb) && !ro->xl_frames))
+-	    (can_is_canxl_skb(oskb) && !ro->xl_frames))
++	if ((!ro->fd_frames && can_is_canfd_skb(oskb)) ||
++	    (!ro->xl_frames && can_is_canxl_skb(oskb)))
  		return;
  
  	/* eliminate multiple filter matches for the same skb */
  	if (this_cpu_ptr(ro->uniq)->skb == oskb &&
+ 	    this_cpu_ptr(ro->uniq)->skbcnt == can_skb_prv(oskb)->skbcnt) {
 @@ -668,19 +668,27 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
  			return -EINVAL;
  
@@ -150,12 +153,12 @@ index 81071cdb0301..c505d315a7a9 100644
 +		return false;
 +
 +	/* CAN FD -> needs to be enabled and a CAN FD or CAN XL device */
-+	if (can_is_canfd_skb(skb) && ro->fd_frames &&
++	if (ro->fd_frames && can_is_canfd_skb(skb) &&
 +	    (mtu == CANFD_MTU || can_is_canxl_dev_mtu(mtu)))
 +		return false;
 +
 +	/* CAN XL -> needs to be enabled and a CAN XL device */
-+	if (can_is_canxl_skb(skb) && ro->xl_frames &&
++	if (ro->xl_frames && can_is_canxl_skb(skb) &&
 +	    can_is_canxl_dev_mtu(mtu))
 +		return false;
 +
