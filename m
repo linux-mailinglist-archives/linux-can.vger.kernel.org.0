@@ -2,35 +2,35 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CE7A687B98
-	for <lists+linux-can@lfdr.de>; Thu,  2 Feb 2023 12:09:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBB6E687B9C
+	for <lists+linux-can@lfdr.de>; Thu,  2 Feb 2023 12:09:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbjBBLJI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 2 Feb 2023 06:09:08 -0500
+        id S231766AbjBBLJK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 2 Feb 2023 06:09:10 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231479AbjBBLJH (ORCPT
+        with ESMTP id S231644AbjBBLJH (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Thu, 2 Feb 2023 06:09:07 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A09A9EC0
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41046F74C
         for <linux-can@vger.kernel.org>; Thu,  2 Feb 2023 03:09:01 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1pNXSd-0006mh-EQ
+        id 1pNXSd-0006mj-K7
         for linux-can@vger.kernel.org; Thu, 02 Feb 2023 12:08:59 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 5B8E916D2B1
+        by bjornoya.blackshift.org (Postfix) with SMTP id 6068316D2B2
         for <linux-can@vger.kernel.org>; Thu,  2 Feb 2023 11:08:58 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id EAE2A16D286;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 0021416D287;
         Thu,  2 Feb 2023 11:08:56 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 2531a070;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 52a34c04;
         Thu, 2 Feb 2023 11:08:56 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     linux-can@vger.kernel.org
@@ -38,9 +38,9 @@ Cc:     Thomas Kopp <thomas.kopp@microchip.com>, kernel@pengutronix.de,
         Vincent Mailhol <vincent.mailhol@gmail.com>,
         Mark Bath <mark@baggywrinkle.co.uk>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH v2 03/17] can: bittiming: can_fixup_bittiming(): set effective tq
-Date:   Thu,  2 Feb 2023 12:08:40 +0100
-Message-Id: <20230202110854.2318594-4-mkl@pengutronix.de>
+Subject: [PATCH v2 04/17] can: bittiming: can_get_bittiming(): use direct return and remove unneeded else
+Date:   Thu,  2 Feb 2023 12:08:41 +0100
+Message-Id: <20230202110854.2318594-5-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230202110854.2318594-1-mkl@pengutronix.de>
 References: <20230202110854.2318594-1-mkl@pengutronix.de>
@@ -58,35 +58,47 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The can_fixup_bittiming() function is used to validate the
-user-supplied low-level bit timing parameters and calculate the
-bitrate prescaler (brp) from the requested time quanta (tq) and the
-CAN clock of the controller.
-
-can_fixup_bittiming() selects the best matching integer bit rate
-prescaler, which may result in a different time quantum than the value
-specified by the user.
-
-Calculate the resulting time quantum and assign it so that the user
-sees the effective time quantum.
+Clean up the code flow a bit, don't assign err variable but directly
+return. Remove the unneeded else, too.
 
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/dev/bittiming.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/can/dev/bittiming.c | 18 +++++++-----------
+ 1 file changed, 7 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/net/can/dev/bittiming.c b/drivers/net/can/dev/bittiming.c
-index 5e111dbbe090..e4917c2f34d3 100644
+index e4917c2f34d3..263e46a1f648 100644
 --- a/drivers/net/can/dev/bittiming.c
 +++ b/drivers/net/can/dev/bittiming.c
-@@ -40,6 +40,8 @@ static int can_fixup_bittiming(const struct net_device *dev, struct can_bittimin
+@@ -67,22 +67,18 @@ int can_get_bittiming(const struct net_device *dev, struct can_bittiming *bt,
+ 		      const u32 *bitrate_const,
+ 		      const unsigned int bitrate_const_cnt)
+ {
+-	int err;
+-
+ 	/* Depending on the given can_bittiming parameter structure the CAN
+ 	 * timing parameters are calculated based on the provided bitrate OR
+ 	 * alternatively the CAN timing parameters (tq, prop_seg, etc.) are
+ 	 * provided directly which are then checked and fixed up.
+ 	 */
+ 	if (!bt->tq && bt->bitrate && btc)
+-		err = can_calc_bittiming(dev, bt, btc);
+-	else if (bt->tq && !bt->bitrate && btc)
+-		err = can_fixup_bittiming(dev, bt, btc);
+-	else if (!bt->tq && bt->bitrate && bitrate_const)
+-		err = can_validate_bitrate(dev, bt, bitrate_const,
+-					   bitrate_const_cnt);
+-	else
+-		err = -EINVAL;
++		return can_calc_bittiming(dev, bt, btc);
++	if (bt->tq && !bt->bitrate && btc)
++		return can_fixup_bittiming(dev, bt, btc);
++	if (!bt->tq && bt->bitrate && bitrate_const)
++		return can_validate_bitrate(dev, bt, bitrate_const,
++					    bitrate_const_cnt);
  
- 	bt->bitrate = priv->clock.freq / (bt->brp * can_bit_time(bt));
- 	bt->sample_point = ((CAN_SYNC_SEG + tseg1) * 1000) / can_bit_time(bt);
-+	bt->tq = DIV_U64_ROUND_CLOSEST(mul_u32_u32(bt->brp, NSEC_PER_SEC),
-+				       priv->clock.freq);
- 
- 	return 0;
+-	return err;
++	return -EINVAL;
  }
 -- 
 2.39.1
