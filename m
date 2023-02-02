@@ -2,112 +2,122 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD16D687CD7
-	for <lists+linux-can@lfdr.de>; Thu,  2 Feb 2023 13:05:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 695FF687CE1
+	for <lists+linux-can@lfdr.de>; Thu,  2 Feb 2023 13:07:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231482AbjBBMFf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 2 Feb 2023 07:05:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45076 "EHLO
+        id S229988AbjBBMHv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 2 Feb 2023 07:07:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbjBBMFf (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 2 Feb 2023 07:05:35 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D8F0234F1
-        for <linux-can@vger.kernel.org>; Thu,  2 Feb 2023 04:05:34 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id 144so1003503pfv.11
-        for <linux-can@vger.kernel.org>; Thu, 02 Feb 2023 04:05:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=V/jl/lMiwpSBMY+xly4nlRKIncWFHa0mIGwp+kAO2rc=;
-        b=m7vb8dRnFMFUerFt6POyNiiNg63WcecbeopcUC/uRNuaUmMoyRMo0zFlWj+Myd/Tsz
-         +j7rPckPdUgw7/58pta50UYbpvOeOg4S7qOguDBXjwmRi0gMvJOYUCkl2QYa3AAIow0O
-         yumUfODwok0Z24Mpt2/yian8CZs3YaSes+GoUin89e3z3+JLrwSaRZGUVhvyQpCx++if
-         hBkcLQySElKZOHtxVeGO2XeJ8UX0kYqdr3sSO/TPvsgEhIamd2ZnymF1Od9hF4jRpu8Q
-         HZz+3648BSboazc3x58j2OVeimFJyqaqgHoRsxLI3nKDtaP8njs4p0vmTzBOpVGkrgcY
-         /YBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=V/jl/lMiwpSBMY+xly4nlRKIncWFHa0mIGwp+kAO2rc=;
-        b=moBDXIjLD3oM7GP5C7MbWBI06chK8rB3M/8fgHx05oinXQ4DkT5wCQsjJwLtVMNKLf
-         vZCaFFnFqBHJTBJ+6sdJkU3onDYdD7piupf5OHxsOISZZBklug0BoVwHZd3EJUnWxONO
-         Vgtn3KzZaaJgLaaplZ/1Si6AModSZy4maPqv/wo807btZLqmnWK5NcUDHJ/uq8syJwjZ
-         r3tYErFmIQM7Vtwk7VvGlHdhebq59182ECMFDZux/Mk5SAuiXUH/5GwUOEASWMn4Ko13
-         LaqRxTcGDlEK4i0jcpP9WYU2htx2CQSpG0METtjTJ3rOXeS9wn5xQHzEo4UCEo6XbCDD
-         77dw==
-X-Gm-Message-State: AO0yUKWGo3GjWhSMVA5nsFQmFHBTMQvIH8gS5+fVla0UyZGDo99+biUq
-        m2jy74eBUwkWt8WJS3SRZrOHKieScTM+3l+09NNHXStY
-X-Google-Smtp-Source: AK7set+Wt9Xy1UrJKpSI/aeIqlzka1TFbWr35BsCCULUe54YhyNMYU4RZ5S36s/7xxbB4p/kVIDuFCRJrWmYTWTeYgQ=
-X-Received: by 2002:aa7:959a:0:b0:592:a8af:4ffc with SMTP id
- z26-20020aa7959a000000b00592a8af4ffcmr1534661pfj.52.1675339533953; Thu, 02
- Feb 2023 04:05:33 -0800 (PST)
-MIME-Version: 1.0
-References: <20230202110854.2318594-1-mkl@pengutronix.de>
-In-Reply-To: <20230202110854.2318594-1-mkl@pengutronix.de>
-From:   Vincent Mailhol <vincent.mailhol@gmail.com>
-Date:   Thu, 2 Feb 2023 21:05:23 +0900
-Message-ID: <CAMZ6Rq+LkkjBb+F8gfVCFcCJG4BU0aFTikvaZhR8TdYeEP8=hg@mail.gmail.com>
-Subject: Re: [PATCH v2 00/17] can: bittiming: cleanups and rework SJW handling
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
+        with ESMTP id S229755AbjBBMHu (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 2 Feb 2023 07:07:50 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E42FE3F28D
+        for <linux-can@vger.kernel.org>; Thu,  2 Feb 2023 04:07:49 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pNYNX-0007Bd-B0; Thu, 02 Feb 2023 13:07:47 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:fff9:bfd9:c514:9ad9])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id C24D616D453;
+        Thu,  2 Feb 2023 12:07:46 +0000 (UTC)
+Date:   Thu, 2 Feb 2023 13:07:38 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent Mailhol <vincent.mailhol@gmail.com>
 Cc:     linux-can@vger.kernel.org, Thomas Kopp <thomas.kopp@microchip.com>,
         kernel@pengutronix.de, Mark Bath <mark@baggywrinkle.co.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 14/17] can: bittiming: can_sjw_set_default(): use
+ Phase Seg2 / 2 as default for SJW
+Message-ID: <20230202120738.3f3amaj5bdntjmhc@pengutronix.de>
+References: <20230202110854.2318594-1-mkl@pengutronix.de>
+ <20230202110854.2318594-15-mkl@pengutronix.de>
+ <CAMZ6Rq+5AKC2X+vNwbs0wvTGbx1zssF8tTS4TdhxnOH0=6nhrw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vanpiwzhnz5h5epg"
+Content-Disposition: inline
+In-Reply-To: <CAMZ6Rq+5AKC2X+vNwbs0wvTGbx1zssF8tTS4TdhxnOH0=6nhrw@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-I finished a first quick review and sent my nitpicks. Really great
-work, thank you!
 
-On Thu. 2 Feb 2023 at 20:08, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> Hello,
->
-> several people noticed that on modern CAN controllers with wide bit
-> timing registers the default SJW of 1 can result in unstable or no
-> synchronization to the CAN network. See Patch 14/17 for details.
+--vanpiwzhnz5h5epg
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-If this series addresses an actual issue, should it be backported to
-stable branches?
+On 02.02.2023 20:57:42, Vincent Mailhol wrote:
+> On Thu. 2 Feb 2023 at 20:09, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> > "The (Re-)Synchronization Jump Width (SJW) defines how far a
+> >  resynchronization may move the Sample Point inside the limits defined
+> >  by the Phase Buffer Segments to compensate for edge phase errors." [1]
+> >
+> > In other words, this means that the SJW parameter controls the CAN
+> > controller's tolerance to frequency errors compared to other CAN
+> > controllers.
+> >
+> > If the user space doesn't provide a SJW parameter, the
+> > kernel chooses a default value of 1. This has proven to be a good
+> > default value for CAN controllers, but no longer for modern
+>                     ^^^^^^^^^^^^^^^
+> > controllers.
+>=20
+> Are you missing a word here? You oppose CAN controllers to modern
+> ones.
+>=20
+> I think the point is Classical CAN only controllers vs. CAN-FD
+> controllers. A CAN-FD controller is able to sample at bitrates up to 5
+> or 8 Mbits and have maximum bitimming values five or eight times the
+> ones of a Classical CAN only controller (which is only capable of
+> sampling 1 Mbits).
+>=20
+> I propose this instead:
+>=20
+>   This has proven to be a good default value for Classical CAN
+>   controllers, but no longer for modern CAN-FD ones.
 
-> During review of v1 Vincent pointed out that the original code and the
-> series doesn't always check user provided bit timing parameters,
-> sometimes silently limits them and the return error values are not
-> consistent.
->
-> This series first cleans up some code in bittiming.c, replacing
-> open-coded variants by macros or functions (Patches 1, 2).
->
-> Patch 3 adds the missing assignment of the effective TQ if the
-> interface is configured with low level timing parameters.
->
-> Patch 4 is another code cleanup.
->
-> Patches 5, 6 check the bit timing parameter during interface
-> registration.
->
-> Patch 7 adds a validation of the sample point.
->
-> The patches 8-13 convert the error messages from netdev_err() to
-> NL_SET_ERR_MSG_FMT, factor out the SJW handling from
-> can_fixup_bittiming(), add checking and error messages for the
-> individual limits and harmonize the error return values.
->
-> Patch 14 changes the default SJW value from 1 to min(Phase Seg1, Phase
-> Seg2 / 2).
->
-> Patch 15 switches can_calc_bittiming() to use the new SJW handling.
->
-> Patch 16 converts can_calc_bittiming() to NL_SET_ERR_MSG_FMT().
->
-> And patch 16 adds a NL_SET_ERR_MSG_FMT() error message to
-> can_validate_bitrate().
+The difference that matters here is not that the controllers support
+CAN-FD, but that they have a much greater max tseg{1,2} compared to the
+sja1000. But that's only the case on CAN-FD controller.
+
+Will change the description as you proposed!
+
+Thanks,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--vanpiwzhnz5h5epg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmPbp4cACgkQvlAcSiqK
+BOj4CAf/bLen0uPo3mzJS9u2tUXc2HFacUUszsFfxLi23548mLfnX7lAMoFPOA9K
+h0lWlWBeub9Z8T6fqAy7i1E9ePCtD5A3gLV3FWPFbb197xWWg9QF0YZDf/WXmNrO
+UjysLhKt5Ym/s3Am7qXyV3P9F/Y1j1WB9hdem12j9S3Heq6/knYPdWRnOPU83DPE
+TnWVvDpPCaj0AAQTUlOkPMmdPnSd36Akowci0QKnDX+sn7bdpa71KfpDIPDBlUV6
+g9Hy/Oxx+trSNDSdrfXBH6wdzXa8nJyUcrmh8zJyo878sh+GTwGgcNA39fTXQSl6
+HdEcvdtNXyWF1uClrnmUHF6C2vbLLw==
+=C6HN
+-----END PGP SIGNATURE-----
+
+--vanpiwzhnz5h5epg--
