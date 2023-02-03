@@ -2,95 +2,130 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C3926887EA
-	for <lists+linux-can@lfdr.de>; Thu,  2 Feb 2023 21:00:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 969E2689329
+	for <lists+linux-can@lfdr.de>; Fri,  3 Feb 2023 10:10:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229554AbjBBUAV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 2 Feb 2023 15:00:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46532 "EHLO
+        id S232524AbjBCJIZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 3 Feb 2023 04:08:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232478AbjBBUAU (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 2 Feb 2023 15:00:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7625774C00;
-        Thu,  2 Feb 2023 12:00:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 12AEA61CB4;
-        Thu,  2 Feb 2023 20:00:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5C584C4339B;
-        Thu,  2 Feb 2023 20:00:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675368018;
-        bh=O4DJ8D3JjwDWB9LK5kVI4nu5xSpL/iitMXyDRQKEgBE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=LDdtRSpOzAd8mHkCSfQfZUtI8yf32kx7v8IloBAzzbx+t6uhU3gBPCFGRzDveQimV
-         0YOnDparmXKEGGBVn8Fw1ELZI0azrg57Aheo4++j3S1/Rfg9IMb8uY6FrxeT/9tF3Z
-         qI/5Z27DyOL0sTaonYCTzeFEIuwktVq+xRgRXpq6NXXtmRJefJlzUwnzAy7nLU+JU+
-         0ffKxlxpZkCyZ/lgqOnBzzX+Fj2Q8gLrlqtu/kWhdxkXF+5Qr7mHFFzHD8fiSy4UC+
-         EznViQ5v9/Glt9ASrxMlZmitbRwyiSmdBq8HivrjyuMJ6TM8qIOfTLknZAVkvpj+oV
-         7Flo22fPi55sA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 337AAC0C40E;
-        Thu,  2 Feb 2023 20:00:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S232570AbjBCJIW (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 3 Feb 2023 04:08:22 -0500
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13CB0298E3
+        for <linux-can@vger.kernel.org>; Fri,  3 Feb 2023 01:08:20 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1675415297; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=Zj7qnxGaYWQynn+2tidBnjytzfMqd/az4iEoEzw4QJRMol7R2M/vb6SYj12cDzI0cU
+    m1dVVQUEZst+b9q6S7DQXae8Zb6gB/V6FYW1rh5K2+BHSSe531JaHXrPwkcusnjxLVx/
+    WMxapmbtUj00VdIDR8ZfYwCF1c/exM+8KyRX7lYUy7e4CoRgCOMb1ktNI+46g/XK0cYx
+    wWK2uKQ1mDat0tJdJlkQSjc2+EqACFzngtPOx4WHZqObJT0/Q4GzVNRcnB17VZVO7K7O
+    Lce1O2YtZsIFyY2LmulrkfLGJw7RAI5nYtCxyuwK3Fr4dnkCtRat+0EGZeBurHMbSKyD
+    oHLw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1675415297;
+    s=strato-dkim-0002; d=strato.com;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=732n/VjfELq1nbsMWMBwOfUg0ntThAcZEBmqKGrVwfY=;
+    b=pxGSUtkX21eYaqzF6UXfiXPqfqCiJiE6jP32TA12qi1boG4xWru+Q/ir0M2XOQTNMi
+    8z3cR7+KbsGfO2gL0WaDYjIs31cEMsAM/KkVrI18PM8QupRCsPahp4zm31JvQKxG+20P
+    KT6Huta4k6KDMBkm72Am+Y+uugBhNtAMpJsyK1LwFkAxPRRG8veJixGYms9DiLIn3E3j
+    RjecbgJffEM8EtEBt1rm39sNLgWVFwUAp/BAkNkZ+EIF7bjRBCTf4dNKJByltyAOw51p
+    17+7WMZ2vmuDpzM9H2O+J6mufTaq8TROKO5oOG4h4Lr1dKTd59hsmAXk65/ZylEK0KJS
+    vmKw==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1675415297;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=732n/VjfELq1nbsMWMBwOfUg0ntThAcZEBmqKGrVwfY=;
+    b=UGT7QYHXfI+r+QNW/i6ECLW8ixxXqMymG+UYC/fTJmfpVM65qkwMCzNF0R9uMtJLAG
+    j4tUiSLf3/jAVfy79m9JhqGGE/bkKj49OYdQEKLvwu6JHsEe2RtwaGpCWdCYI3jGcZhX
+    s+ELB3I+mw17RvHsGzLRMqNF1Wvc35kPwYh0RjYBK+rhkITGw/yjAOqFP/x6Iak+wuld
+    EY/2T4NaCQr4n4LLmDsUk3SE9Ae0xsiF4hE2osLW62flE/43KmzDyrbFK4pTKOwDGZiM
+    PAcL/9ufesVhXf0bGqzvLDhw8mN1hmVENlgSfKJNs/dgU4kGlyHIrvQd4aPYFDjqirRV
+    r3zQ==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS/xvEBL7X5sbo3VYpXsQi7qV3YmVcehrrd"
+Received: from blue.lan
+    by smtp.strato.de (RZmta 49.2.2 AUTH)
+    with ESMTPSA id qa71b9z1398GUBK
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Fri, 3 Feb 2023 10:08:16 +0100 (CET)
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+To:     linux-can@vger.kernel.org
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [can-next] can: raw: use temp variable instead of rolling back config
+Date:   Fri,  3 Feb 2023 10:08:07 +0100
+Message-Id: <20230203090807.97100-1-socketcan@hartkopp.net>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 1/5] can: j1939: fix errant WARN_ON_ONCE in
- j1939_session_deactivate
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167536801820.2266.16323260245473548715.git-patchwork-notify@kernel.org>
-Date:   Thu, 02 Feb 2023 20:00:18 +0000
-References: <20230202094135.2293939-2-mkl@pengutronix.de>
-In-Reply-To: <20230202094135.2293939-2-mkl@pengutronix.de>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, kernel@pengutronix.de,
-        william.xuanziyang@huawei.com,
-        syzbot+9981a614060dcee6eeca@syzkaller.appspotmail.com,
-        o.rempel@pengutronix.de
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello:
+Introduce a temporary variable to check for an invalid configuration
+attempt from user space. Before this patch the value was copied to
+the real config variable and rolled back in the case of an error.
 
-This series was applied to netdev/net.git (master)
-by Marc Kleine-Budde <mkl@pengutronix.de>:
+Suggested-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+---
+ net/can/raw.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-On Thu,  2 Feb 2023 10:41:31 +0100 you wrote:
-> From: Ziyang Xuan <william.xuanziyang@huawei.com>
-> 
-> The conclusion "j1939_session_deactivate() should be called with a
-> session ref-count of at least 2" is incorrect. In some concurrent
-> scenarios, j1939_session_deactivate can be called with the session
-> ref-count less than 2. But there is not any problem because it
-> will check the session active state before session putting in
-> j1939_session_deactivate_locked().
-> 
-> [...]
-
-Here is the summary with links:
-  - [net,1/5] can: j1939: fix errant WARN_ON_ONCE in j1939_session_deactivate
-    https://git.kernel.org/netdev/net/c/d0553680f94c
-  - [net,2/5] can: raw: fix CAN FD frame transmissions over CAN XL devices
-    https://git.kernel.org/netdev/net/c/3793301cbaa4
-  - [net,3/5] can: isotp: handle wait_event_interruptible() return values
-    https://git.kernel.org/netdev/net/c/823b2e42720f
-  - [net,4/5] can: isotp: split tx timer into transmission and timeout
-    https://git.kernel.org/netdev/net/c/4f027cba8216
-  - [net,5/5] can: mcp251xfd: mcp251xfd_ring_set_ringparam(): assign missing tx_obj_num_coalesce_irq
-    https://git.kernel.org/netdev/net/c/1613fff7a32e
-
-You are awesome, thank you!
+diff --git a/net/can/raw.c b/net/can/raw.c
+index ba86782ba8bb..f64469b98260 100644
+--- a/net/can/raw.c
++++ b/net/can/raw.c
+@@ -521,10 +521,11 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
+ 	struct raw_sock *ro = raw_sk(sk);
+ 	struct can_filter *filter = NULL;  /* dyn. alloc'ed filters */
+ 	struct can_filter sfilter;         /* single filter */
+ 	struct net_device *dev = NULL;
+ 	can_err_mask_t err_mask = 0;
++	int fd_frames;
+ 	int count = 0;
+ 	int err = 0;
+ 
+ 	if (level != SOL_CAN_RAW)
+ 		return -EINVAL;
+@@ -662,21 +663,21 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
+ 			return -EFAULT;
+ 
+ 		break;
+ 
+ 	case CAN_RAW_FD_FRAMES:
+-		if (optlen != sizeof(ro->fd_frames))
++		if (optlen != sizeof(fd_frames))
+ 			return -EINVAL;
+ 
+-		if (copy_from_sockptr(&ro->fd_frames, optval, optlen))
++		if (copy_from_sockptr(&fd_frames, optval, optlen))
+ 			return -EFAULT;
+ 
+ 		/* Enabling CAN XL includes CAN FD */
+-		if (ro->xl_frames && !ro->fd_frames) {
+-			ro->fd_frames = ro->xl_frames;
++		if (ro->xl_frames && !fd_frames)
+ 			return -EINVAL;
+-		}
++
++		ro->fd_frames = fd_frames;
+ 		break;
+ 
+ 	case CAN_RAW_XL_FRAMES:
+ 		if (optlen != sizeof(ro->xl_frames))
+ 			return -EINVAL;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.39.0
 
