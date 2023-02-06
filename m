@@ -2,35 +2,35 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7B5E68BDE2
-	for <lists+linux-can@lfdr.de>; Mon,  6 Feb 2023 14:20:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10BE868BDF5
+	for <lists+linux-can@lfdr.de>; Mon,  6 Feb 2023 14:20:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbjBFNTZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 6 Feb 2023 08:19:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52016 "EHLO
+        id S230482AbjBFNTf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 6 Feb 2023 08:19:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230412AbjBFNSl (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 6 Feb 2023 08:18:41 -0500
+        with ESMTP id S230328AbjBFNS4 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 6 Feb 2023 08:18:56 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A535246
-        for <linux-can@vger.kernel.org>; Mon,  6 Feb 2023 05:17:49 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3AD56E93
+        for <linux-can@vger.kernel.org>; Mon,  6 Feb 2023 05:17:54 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1pP1NO-0008VX-2V
-        for linux-can@vger.kernel.org; Mon, 06 Feb 2023 14:17:42 +0100
+        id 1pP1NQ-0000DJ-It
+        for linux-can@vger.kernel.org; Mon, 06 Feb 2023 14:17:44 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id D5E66171386
+        by bjornoya.blackshift.org (Postfix) with SMTP id EA28F171388
         for <linux-can@vger.kernel.org>; Mon,  6 Feb 2023 13:16:25 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id DC3F61712AD;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id EB0E21712B0;
         Mon,  6 Feb 2023 13:16:22 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 3abf1074;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id c823a68f;
         Mon, 6 Feb 2023 13:16:22 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
@@ -38,9 +38,9 @@ Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
         kernel@pengutronix.de,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next 11/47] can: rcar_canfd: Fix R-Car Gen4 DCFG.DSJW field width
-Date:   Mon,  6 Feb 2023 14:15:44 +0100
-Message-Id: <20230206131620.2758724-12-mkl@pengutronix.de>
+Subject: [PATCH net-next 12/47] can: rcar_canfd: Fix R-Car Gen4 CFCC.CFTML field width
+Date:   Mon,  6 Feb 2023 14:15:45 +0100
+Message-Id: <20230206131620.2758724-13-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230206131620.2758724-1-mkl@pengutronix.de>
 References: <20230206131620.2758724-1-mkl@pengutronix.de>
@@ -61,39 +61,31 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 
-On R-Car Gen4 CAN_FD variants, the Data Bit Rate Resynchronization Jump
-Width Control (DSJW) field in the Channel n Data Bitrate Configuration
-Register (DCFG) register is one bit wider than on older variants.
+On R-Car Gen4 CAN_FD variants, the Common FIFO TX Message Buffer Link
+(CFTML) field in the Common FIFO Configuration / Control Register (CCFC)
+register is one bit wider than on older variants.
 
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Link: https://lore.kernel.org/all/c4e8bc220bf87e6c7e375f7a2ce51e2aa89ea8a7.1674499048.git.geert+renesas@glider.be
+Link: https://lore.kernel.org/all/9c37aaa799a2391be272dbaa474379cf9a7af147.1674499048.git.geert+renesas@glider.be
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/rcar/rcar_canfd.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/can/rcar/rcar_canfd.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index aa7fcd4a47d3..ee7bbd9d1151 100644
+index ee7bbd9d1151..376a5d606acc 100644
 --- a/drivers/net/can/rcar/rcar_canfd.c
 +++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -186,7 +186,7 @@
- #define RCANFD_CERFL_ERR(x)		((x) & (0x7fff)) /* above bits 14:0 */
+@@ -233,7 +233,8 @@
+ /* Common FIFO bits */
  
- /* RSCFDnCFDCmDCFG */
--#define RCANFD_DCFG_DSJW(x)		(((x) & 0x7) << 24)
-+#define RCANFD_DCFG_DSJW(gpriv, x)	(((x) & reg_gen4(gpriv, 0xf, 0x7)) << 24)
- 
- #define RCANFD_DCFG_DTSEG2(gpriv, x) \
- 	(((x) & reg_gen4(gpriv, 0x0f, 0x7)) << reg_gen4(gpriv, 16, 20))
-@@ -1343,7 +1343,7 @@ static void rcar_canfd_set_bittiming(struct net_device *dev)
- 		tseg2 = dbt->phase_seg2 - 1;
- 
- 		cfg = (RCANFD_DCFG_DTSEG1(gpriv, tseg1) | RCANFD_DCFG_DBRP(brp) |
--		       RCANFD_DCFG_DSJW(sjw) | RCANFD_DCFG_DTSEG2(gpriv, tseg2));
-+		       RCANFD_DCFG_DSJW(gpriv, sjw) | RCANFD_DCFG_DTSEG2(gpriv, tseg2));
- 
- 		rcar_canfd_write(priv->base, RCANFD_F_DCFG(gpriv, ch), cfg);
- 		netdev_dbg(priv->ndev, "drate: brp %u, sjw %u, tseg1 %u, tseg2 %u\n",
+ /* RSCFDnCFDCFCCk */
+-#define RCANFD_CFCC_CFTML(gpriv, x)	(((x) & 0xf) << reg_gen4(gpriv, 16, 20))
++#define RCANFD_CFCC_CFTML(gpriv, x)	\
++	(((x) & reg_gen4(gpriv, 0x1f, 0xf)) << reg_gen4(gpriv, 16, 20))
+ #define RCANFD_CFCC_CFM(gpriv, x)	(((x) & 0x3) << reg_gen4(gpriv,  8, 16))
+ #define RCANFD_CFCC_CFIM		BIT(12)
+ #define RCANFD_CFCC_CFDC(gpriv, x)	(((x) & 0x7) << reg_gen4(gpriv, 21,  8))
 -- 
 2.39.1
 
