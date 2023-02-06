@@ -2,35 +2,35 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D24068BDAE
-	for <lists+linux-can@lfdr.de>; Mon,  6 Feb 2023 14:17:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F57D68BDB6
+	for <lists+linux-can@lfdr.de>; Mon,  6 Feb 2023 14:18:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbjBFNRo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 6 Feb 2023 08:17:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51490 "EHLO
+        id S230310AbjBFNSK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 6 Feb 2023 08:18:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230334AbjBFNRl (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 6 Feb 2023 08:17:41 -0500
+        with ESMTP id S229874AbjBFNRm (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 6 Feb 2023 08:17:42 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EDEC23C70
-        for <linux-can@vger.kernel.org>; Mon,  6 Feb 2023 05:17:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35FA423D9C
+        for <linux-can@vger.kernel.org>; Mon,  6 Feb 2023 05:17:25 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1pP1N3-0007Xb-Oj
-        for linux-can@vger.kernel.org; Mon, 06 Feb 2023 14:17:21 +0100
+        id 1pP1N5-0007a4-CC
+        for linux-can@vger.kernel.org; Mon, 06 Feb 2023 14:17:23 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 45E7E171431
+        by bjornoya.blackshift.org (Postfix) with SMTP id 57CA7171438
         for <linux-can@vger.kernel.org>; Mon,  6 Feb 2023 13:16:27 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 64C711712CB;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 8FA1F1712D1;
         Mon,  6 Feb 2023 13:16:23 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 5cdf3883;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id cb881da8;
         Mon, 6 Feb 2023 13:16:22 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
@@ -38,9 +38,9 @@ Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
         kernel@pengutronix.de,
         Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next 19/47] can: ems_pci: Initialize CAN controller base addresses
-Date:   Mon,  6 Feb 2023 14:15:52 +0100
-Message-Id: <20230206131620.2758724-20-mkl@pengutronix.de>
+Subject: [PATCH net-next 20/47] can: ems_pci: Add IRQ enable
+Date:   Mon,  6 Feb 2023 14:15:53 +0100
+Message-Id: <20230206131620.2758724-21-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230206131620.2758724-1-mkl@pengutronix.de>
 References: <20230206131620.2758724-1-mkl@pengutronix.de>
@@ -60,47 +60,43 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 From: Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
 
-Add CAN controller base registers
+Add IRQ enable
 
 Signed-off-by: Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
-Link: https://lore.kernel.org/all/20230120112616.6071-6-uttenthaler@ems-wuensche.com
+Link: https://lore.kernel.org/all/20230120112616.6071-7-uttenthaler@ems-wuensche.com
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/sja1000/ems_pci.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/net/can/sja1000/ems_pci.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/net/can/sja1000/ems_pci.c b/drivers/net/can/sja1000/ems_pci.c
-index 0d6289fda447..d1e8758d8043 100644
+index d1e8758d8043..1f237acd7bd1 100644
 --- a/drivers/net/can/sja1000/ems_pci.c
 +++ b/drivers/net/can/sja1000/ems_pci.c
-@@ -342,20 +342,25 @@ static int ems_pci_add_card(struct pci_dev *pdev,
- 		priv->irq_flags = IRQF_SHARED;
+@@ -372,14 +372,21 @@ static int ems_pci_add_card(struct pci_dev *pdev,
+ 			SET_NETDEV_DEV(dev, &pdev->dev);
+ 			dev->dev_id = i;
  
- 		dev->irq = pdev->irq;
--		priv->reg_base = card->base_addr + EMS_PCI_CAN_BASE_OFFSET
--					+ (i * EMS_PCI_CAN_CTRL_SIZE);
-+
- 		if (card->version == 1) {
- 			priv->read_reg  = ems_pci_v1_read_reg;
- 			priv->write_reg = ems_pci_v1_write_reg;
- 			priv->post_irq  = ems_pci_v1_post_irq;
-+			priv->reg_base = card->base_addr + EMS_PCI_V1_CAN_BASE_OFFSET
-+					+ (i * EMS_PCI_V1_CAN_CTRL_SIZE);
- 		} else if (card->version == 2) {
- 			priv->read_reg  = ems_pci_v2_read_reg;
- 			priv->write_reg = ems_pci_v2_write_reg;
- 			priv->post_irq  = ems_pci_v2_post_irq;
-+			priv->reg_base = card->base_addr + EMS_PCI_V2_CAN_BASE_OFFSET
-+					+ (i * EMS_PCI_V2_CAN_CTRL_SIZE);
- 		} else {
- 			priv->read_reg  = ems_pci_v3_read_reg;
- 			priv->write_reg = ems_pci_v3_write_reg;
- 			priv->post_irq  = ems_pci_v3_post_irq;
-+			priv->reg_base = card->base_addr + EMS_PCI_V3_CAN_BASE_OFFSET
-+					+ (i * EMS_PCI_V3_CAN_CTRL_SIZE);
- 		}
+-			if (card->version == 1)
++			if (card->version == 1) {
+ 				/* reset int flag of pita */
+ 				writel(PITA2_ICR_INT0_EN | PITA2_ICR_INT0,
+ 				       card->conf_addr + PITA2_ICR);
+-			else
++			} else if (card->version == 2) {
+ 				/* enable IRQ in PLX 9030 */
+ 				writel(PLX_ICSR_ENA_CLR,
+ 				       card->conf_addr + PLX_ICSR);
++			} else {
++				/* Enable IRQ in AX99100 */
++				writel(ASIX_LINTSR_INT0AC, card->conf_addr + ASIX_LINTSR);
++				/* Enable local INT0 input enable */
++				writel(readl(card->conf_addr + ASIX_LIEMR) | ASIX_LIEMR_L0EINTEN,
++				       card->conf_addr + ASIX_LIEMR);
++			}
  
- 		/* Check if channel is present */
+ 			/* Register SJA1000 device */
+ 			err = register_sja1000dev(dev);
 -- 
 2.39.1
 
