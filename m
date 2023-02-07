@@ -2,161 +2,179 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA3C268D5B7
-	for <lists+linux-can@lfdr.de>; Tue,  7 Feb 2023 12:40:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE0BE68D9AD
+	for <lists+linux-can@lfdr.de>; Tue,  7 Feb 2023 14:51:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231477AbjBGLkM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 7 Feb 2023 06:40:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56326 "EHLO
+        id S231559AbjBGNvZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 7 Feb 2023 08:51:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231189AbjBGLkL (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 7 Feb 2023 06:40:11 -0500
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD7A1167C
-        for <linux-can@vger.kernel.org>; Tue,  7 Feb 2023 03:40:09 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1675770007; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=D0vS9DdydzoSluKkTVqLNSwtv+161Y/nv4haDKiCUT+nJHUNI4T8x6sUtZyaviUMeE
-    8z8Ou65mFRNFbk1q8wbDEcQItnVWo2UQ7Q9n7zc335IdsAW1tiIB69+b9hTEy+d6RaKx
-    yUqJhckWmvVF8AMSIvFUIbs0cDl+7fWrq4GeYvlhZ8LCQqU9IwVMytF/FqJFZZS6MOkL
-    8Kqopsxzyz3/VuP00PQANtSirwv0ql5racy+9zfz5PF1oBy20E+JOGDQI7iX3ODFcZp3
-    b0p//Eon5t5Djaj+b/J5AK4TylQIzNUoU/NieI5M9GMkGnRMj6Aaw9inU/Y429ASsoRQ
-    iT9Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1675770007;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Cc:To:From:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=LnCt92lfRqiAStwbwZSi3KLPRzbLwhyso3g47+hcdhc=;
-    b=k6ZVIvTgcAJOiwvLJjct5zm1GZnoc6OUbmdz84uRDRDWL8yu41Qx5EBh3uF1O9VciZ
-    d3nRc1zxPg4w4fkCaCE9cUNteYkmrcOwiLjUo1mM+kOe/afHGBfvHfXpoxGEJftUeEaS
-    7Icn+jqQ2T9ijVJnsaoqCVmrVaW1YRCW7PzQYC/L+WoJ/zsl+vFTbqPVYUu634AknCsB
-    D4u6XopCDljslYyG/g8WOdkKLAucWXKGCap5vs/PbdNxMReDUSGpp8ipRLGD62+PzZva
-    sMJIilQxaX1q2McZbCkO8cvrC/Ihb7E7l5E/0PccQjHxYtMZ/01cKCFq8R7aWJu/WfC/
-    M0Lw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1675770007;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:References:Cc:To:From:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=LnCt92lfRqiAStwbwZSi3KLPRzbLwhyso3g47+hcdhc=;
-    b=lViNkPJoc7DaGBM7NU0eWhy4qyvKuK1HKz37iM5w3ZaNmUzoCfon6Zs4+P/08El92+
-    y2n351rXhfK2GZN2xCoM/i05t2GzKmSgo9Q7M/Lie49IXnGaUfYXNRlyWtjM0wTw22OC
-    R3QTJPCvhUq0WvFSuvTjanqkIVVSAcGKZT9mogMfQ0hz0cP1Ha046/FNIoR8bssc36Ql
-    qjm0rRa34sBVI/kJGW12fHvkkcr5rMSmX8cj/tWv8CcfDyTiUVhbXk9mBGFUGFUmmiP0
-    uJDkU734txJ/OwWmA5WuDkBZJ5acHuV7kRVMOFIEBn7LUVbeGOrErFVU2kBYbEdd6UIR
-    CwbQ==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusl129OHEdFq0USNbW+gMKb67ekIdBrit00vb0RFTw=="
-Received: from [IPV6:2a00:6020:4a8e:5000:3841:88c3:2941:ee56]
-    by smtp.strato.de (RZmta 49.3.0 AUTH)
-    with ESMTPSA id x84a76z17Be70LV
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Tue, 7 Feb 2023 12:40:07 +0100 (CET)
-Message-ID: <22087122-a054-b751-f403-c075ec5f1ca3@hartkopp.net>
-Date:   Tue, 7 Feb 2023 12:40:07 +0100
+        with ESMTP id S231258AbjBGNvY (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 7 Feb 2023 08:51:24 -0500
+X-Greylist: delayed 60 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 07 Feb 2023 05:51:20 PST
+Received: from smtpcmd03116.aruba.it (smtpcmd03116.aruba.it [62.149.158.116])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B17783C1
+        for <linux-can@vger.kernel.org>; Tue,  7 Feb 2023 05:51:20 -0800 (PST)
+Received: from [192.168.1.189] ([213.215.163.55])
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id POMRpOrLjQC6APOMSpnlcj; Tue, 07 Feb 2023 14:50:17 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+        t=1675777817; bh=NcFSD1+hQkDyhML9faTlgcz6QoKVti5xKqEWWp0kIPQ=;
+        h=Subject:From:To:Date:Content-Type:MIME-Version;
+        b=GQ4ZVZoTUQiZ0bHywdXm2iNKSQwKGsDqoXPfhrLNIpC+Pvlv2g3MAbGgF5kd0zkJv
+         9YT/wWJtNSgp1iNoihuXViqU/eolc+MZ0BpcbUuBDljIPLfglQ6sEz+i5FU2OO7z3A
+         wlk+JcPHxoVl+aZP4hkikqQvasQ6g7wkKdELTgQSvA+zYdoCNCsu0Z/JOWhdjwZIRS
+         on/kUbqElLF3h4g17M5O4nreU2JMcOxNtWASrt4Rg5b0KwueOpNok8j3Z05Wu0wBiP
+         +K8f6Q+ZH71jxTzg+Xc2t/N4nF9ZxwOQFwqqbTR9MZNYBPv9OlC+2pCNx3pWWLHZv5
+         ZHN/3Rvca0WqA==
+Message-ID: <1ae01ab918876941dc57d01d4c2f1d7376dda87b.camel@egluetechnologies.com>
+Subject: Re: [PATCH v2] can: j1939: do not wait 250 ms if the same addr was
+ already claimed
+From:   Devid Antonio Filoni <devid.filoni@egluetechnologies.com>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Robin van der Gracht <robin@protonic.nl>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Oleksij Rempel <linux@rempel-privat.de>, kernel@pengutronix.de,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 07 Feb 2023 14:50:15 +0100
+In-Reply-To: <20221126102840.GA21761@pengutronix.de>
+References: <20221124051611.GA7870@pengutronix.de>
+         <20221125170418.34575-1-devid.filoni@egluetechnologies.com>
+         <20221126102840.GA21761@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] can: proc: properly format table
-Content-Language: en-US
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
-Cc:     kernel@pengutronix.de
-References: <20230206194305.2827376-1-mkl@pengutronix.de>
- <20230206194559.lv5ana7slnw2u2st@pengutronix.de>
- <9e7141f8-6e3e-1988-af6c-5a9e7dae4f83@hartkopp.net>
-In-Reply-To: <9e7141f8-6e3e-1988-af6c-5a9e7dae4f83@hartkopp.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,TRACKER_ID autolearn=ham autolearn_force=no
-        version=3.4.6
+X-CMAE-Envelope: MS4xfHjTsmG/3kzQnWEX/yQougaeflBWS+XaKBGWU4V8UDcseLaVHyFCE9JSBHXVmUsVWEPWtvKkARZggLEfHIuv4nJf7v4bOEMxFgXQcKoN//sqtcKHNzrA
+ Zv7AkeePhZKn9JrhUmqKhQbmTzg9uXS9N6SEwrz6gyNAdC4Vlug/cbL3LkcVfdcOmbZLJI7te/K3uU4FTAbiJQFEE/kX5ocDXTUejTmodZZeUi5wRXiPqhsb
+ OeZkBLZAAijGiCZoTXdH/I4J+d/12pqU2O0KmUZSIB3NQQkXlAPIeQIvLo/w0IFe5Z8Qo/wkNNcZgVDJh+enPklAqbZxmBWrdgl2D6YiOmtY+tc59JeJqKXO
+ Hb+hcluVAaPVxLOoBpkp+sGnysQq1OAaKIS0Aazw3ucCu2vmTMFoUuAqw5u/hg7VDTT6MKoIjE2rbmA0s9Gwid6z21QE3IcWh2IIa5DxcJeqChroebYssoWS
+ BGyIEXAM7l374FVzt8bz5+8QTSbijvD4fn3rqvzVeCJfeM6smlTsMxW4PM9FCzFhdLIrDS44ebdwKRLfnxvYHKFg1+S+y/TSMmsFXDxxauwb3CweVMxRf+qM
+ M2dd8JdgyXytwouHxjqH2FB5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-What about this kind of layout?
+On Sat, 2022-11-26 at 11:28 +0100, Oleksij Rempel wrote:
+> On Fri, Nov 25, 2022 at 06:04:18PM +0100, Devid Antonio Filoni wrote:
+> > The ISO 11783-5 standard, in "4.5.2 - Address claim requirements", stat=
+es:
+> >   d) No CF shall begin, or resume, transmission on the network until 25=
+0
+> >      ms after it has successfully claimed an address except when
+> >      responding to a request for address-claimed.
+> >=20
+> > But "Figure 6" and "Figure 7" in "4.5.4.2 - Address-claim
+> > prioritization" show that the CF begins the transmission after 250 ms
+> > from the first AC (address-claimed) message even if it sends another AC
+> > message during that time window to resolve the address contention with
+> > another CF.
+> >=20
+> > As stated in "4.4.2.3 - Address-claimed message":
+> >   In order to successfully claim an address, the CF sending an address
+> >   claimed message shall not receive a contending claim from another CF
+> >   for at least 250 ms.
+> >=20
+> > As stated in "4.4.3.2 - NAME management (NM) message":
+> >   1) A commanding CF can
+> >      d) request that a CF with a specified NAME transmit the address-
+> >         claimed message with its current NAME.
+> >   2) A target CF shall
+> >      d) send an address-claimed message in response to a request for a
+> >         matching NAME
+> >=20
+> > Taking the above arguments into account, the 250 ms wait is requested
+> > only during network initialization.
+> >=20
+> > Do not restart the timer on AC message if both the NAME and the address
+> > match and so if the address has already been claimed (timer has expired=
+)
+> > or the AC message has been sent to resolve the contention with another
+> > CF (timer is still running).
+> >=20
+> > Signed-off-by: Devid Antonio Filoni <devid.filoni@egluetechnologies.com=
+>
+>=20
+> Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
+>=20
+> > ---
+> >  v1 -> v2: Added ISO 11783-5 standard references
+> >=20
+> >  net/can/j1939/address-claim.c | 40 +++++++++++++++++++++++++++++++++++
+> >  1 file changed, 40 insertions(+)
+> >=20
+> > diff --git a/net/can/j1939/address-claim.c b/net/can/j1939/address-clai=
+m.c
+> > index f33c47327927..ca4ad6cdd5cb 100644
+> > --- a/net/can/j1939/address-claim.c
+> > +++ b/net/can/j1939/address-claim.c
+> > @@ -165,6 +165,46 @@ static void j1939_ac_process(struct j1939_priv *pr=
+iv, struct sk_buff *skb)
+> >  	 * leaving this function.
+> >  	 */
+> >  	ecu =3D j1939_ecu_get_by_name_locked(priv, name);
+> > +
+> > +	if (ecu && ecu->addr =3D=3D skcb->addr.sa) {
+> > +		/* The ISO 11783-5 standard, in "4.5.2 - Address claim
+> > +		 * requirements", states:
+> > +		 *   d) No CF shall begin, or resume, transmission on the
+> > +		 *      network until 250 ms after it has successfully claimed
+> > +		 *      an address except when responding to a request for
+> > +		 *      address-claimed.
+> > +		 *
+> > +		 * But "Figure 6" and "Figure 7" in "4.5.4.2 - Address-claim
+> > +		 * prioritization" show that the CF begins the transmission
+> > +		 * after 250 ms from the first AC (address-claimed) message
+> > +		 * even if it sends another AC message during that time window
+> > +		 * to resolve the address contention with another CF.
+> > +		 *
+> > +		 * As stated in "4.4.2.3 - Address-claimed message":
+> > +		 *   In order to successfully claim an address, the CF sending
+> > +		 *   an address claimed message shall not receive a contending
+> > +		 *   claim from another CF for at least 250 ms.
+> > +		 *
+> > +		 * As stated in "4.4.3.2 - NAME management (NM) message":
+> > +		 *   1) A commanding CF can
+> > +		 *      d) request that a CF with a specified NAME transmit
+> > +		 *         the address-claimed message with its current NAME.
+> > +		 *   2) A target CF shall
+> > +		 *      d) send an address-claimed message in response to a
+> > +		 *         request for a matching NAME
+> > +		 *
+> > +		 * Taking the above arguments into account, the 250 ms wait is
+> > +		 * requested only during network initialization.
+> > +		 *
+> > +		 * Do not restart the timer on AC message if both the NAME and
+> > +		 * the address match and so if the address has already been
+> > +		 * claimed (timer has expired) or the AC message has been sent
+> > +		 * to resolve the contention with another CF (timer is still
+> > +		 * running).
+> > +		 */
+> > +		goto out_ecu_put;
+> > +	}
+> > +
+> >  	if (!ecu && j1939_address_is_unicast(skcb->addr.sa))
+> >  		ecu =3D j1939_ecu_create_locked(priv, name);
+> > =20
+> > --=20
+> > 2.34.1
+> >=20
+> >=20
+>=20
 
-           device    can_id  can_mask  userdata  matches  ident
-1234567812345678       123  12345678  12345678  1234567  isotpe
+Hello,
+I noticed that this patch has not been integrated in upstream yet. Are
+there problems with it?
 
-           device    can_id  can_mask  userdata  matches  ident
-             can0  12345678  12345678  12345678  1234567  isotpe
-
-           device    can_id  can_mask      userdata      matches  ident
-1234567812345678       123  12345678  0000000012345678  1234567  isotpe
-
-           device    can_id  can_mask      userdata      matches  ident
-       mcp251xfd0  12345678  12345678  0000000012345678  1234567  isotpe
-
-12345678901234567890123456789012345678901234567890123456789012345678901234567890
-
-Only the "matches" could lead to a length beyond 7 characters then and 
-would lead to a garbled output at the end of that line.
-
-Best regards,
-Oliver
-
-On 2/7/23 10:17, Oliver Hartkopp wrote:
-> Hi Marc,
-> 
-> not sure on which architecture your proc output was created.
-> 
-> On 2/6/23 20:45, Marc Kleine-Budde wrote:
->> On 06.02.2023 20:43:05, Marc Kleine-Budde wrote:
->>> The table "/proc/net/can/rcvlist_all" is garbled if the interface
->>> names are longer than 5 characters.
->>>
->>> Consider IFNAMSIZ when formatting the table so that it looks like
->>> this:
->>>
->>> | receive list 'rx_all':
->>> |   device              can_id   can_mask  function  userdata   
->>> matches  ident
->>> |    any                   000   00000000  8e807747  9bc49fd8         
->>> 0  raw
->>> |   device              can_id   can_mask  function  userdata   
->>> matches  ident
->>> |    mcp251xfd0            000   00000000  8e807747  ec6d80a2
->>> |   0  raw
->>        ^^^^^^
->> Doh! That's my fault, the proc output is OK. fixed.
->>
-> 
-> On my x86-64 with IS_ENABLED(CONFIG_64BIT) it looks even worse:
-> 
-> cat /proc/net/can/rcvlist_all
-> 
-> receive list 'rx_all':
->    (any: no entry)
->    device   can_id   can_mask      function          userdata matches  
-> ident
->     vcan0     000    00000000  00000000cb627637  00000000afdf543a  0  raw
->    device   can_id   can_mask      function          userdata matches  
-> ident
->     vcan1     000    00000000  00000000cb627637  0000000020f218f6  0  raw
-> 
-> I wonder if we should clean up this proc stuff in general.
-> 
-> As you can see the "function" value is identical and points to "raw_rcv" 
-> but the pointer is (of course) a pseudonym to not leak any kernel 
-> pointer to the user space. IMO we could drop this column as the "ident" 
-> column identifies the can_rx_register() user anyway.
-> 
-> The 'userdata' column is still helpful to identify different socket 
-> instances while debugging. But maybe we can "fold" the address in a way 
-> that it is always 32 bit?!?
-> 
-> With such kind of clean up the output of a proc line would fit into 80 
-> chars again - even with your suggestion for IFNAMSZ.
-> 
-> What do you think about such clean up?
-> 
-> Best regards,
-> Oliver
+Thank you,
+Devid
