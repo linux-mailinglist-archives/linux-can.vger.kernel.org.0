@@ -2,50 +2,55 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0237168E29C
-	for <lists+linux-can@lfdr.de>; Tue,  7 Feb 2023 22:04:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF91268E782
+	for <lists+linux-can@lfdr.de>; Wed,  8 Feb 2023 06:30:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbjBGVEf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 7 Feb 2023 16:04:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53458 "EHLO
+        id S229822AbjBHFaU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 8 Feb 2023 00:30:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbjBGVEe (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 7 Feb 2023 16:04:34 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B42A7AE
-        for <linux-can@vger.kernel.org>; Tue,  7 Feb 2023 13:04:33 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pPV8i-0004kv-4I; Tue, 07 Feb 2023 22:04:32 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:1929:cbfc:e29:aaab])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 087A5172CAD;
-        Tue,  7 Feb 2023 21:04:31 +0000 (UTC)
-Date:   Tue, 7 Feb 2023 22:04:22 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
-        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
-        linux-can <linux-can@vger.kernel.org>,
-        hsweeten@visionengravers.com
-Subject: Re: xlinix_can: bug when sending two RTR frames
-Message-ID: <20230207210422.qk5jdhgpvbkgtlfb@pengutronix.de>
-References: <94e3c5bc-6af9-f240-86fa-2b780a58533f@hartkopp.net>
+        with ESMTP id S229796AbjBHFaT (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 8 Feb 2023 00:30:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA1693CF;
+        Tue,  7 Feb 2023 21:30:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F9A761419;
+        Wed,  8 Feb 2023 05:30:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D1228C433D2;
+        Wed,  8 Feb 2023 05:30:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675834217;
+        bh=Sbwp6bk3yq+2Gihsh+3y6AUdSmobR4ucTlz8pYf+S80=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=WF0xihe7NeVI7xlkvWGdslbgq3/4CZoqaNZ2bVZu7yclJh4o2tgcvnb2jHsB/7E3o
+         mgmzAMBQ9mZSEscHoNZsOTZO9oR06B9E2wu/Y91ZbFLjHlByMzNEiuRfkMyGoTYFKT
+         F1RRFkOfv2nwwYGluZXG4npsRH5SZIMyw1JlGf6xaPQYzpmFmUz4l0BH5Aks3B8+lE
+         ZKAPn1UTtPIr8fxscFEyUx3/E1989s9so9RDQ+fckeuc3NRzLr5PRqgLHYJjhKplBI
+         mvxbUnUiIvPFWDQCFco84nJjXCPcTP/Zoy4ZGk1NCA0+dWpmKCqbMkeAv4Yyht09UX
+         Ji/DycffpEZCw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B51E8E55F06;
+        Wed,  8 Feb 2023 05:30:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pqmvve6pnyma2yrz"
-Content-Disposition: inline
-In-Reply-To: <94e3c5bc-6af9-f240-86fa-2b780a58533f@hartkopp.net>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] can: j1939: do not wait 250 ms if the same addr was
+ already claimed
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167583421773.16532.4513589437331313526.git-patchwork-notify@kernel.org>
+Date:   Wed, 08 Feb 2023 05:30:17 +0000
+References: <20230207140514.2885065-2-mkl@pengutronix.de>
+In-Reply-To: <20230207140514.2885065-2-mkl@pengutronix.de>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        linux-can@vger.kernel.org, kernel@pengutronix.de,
+        devid.filoni@egluetechnologies.com, o.rempel@pengutronix.de,
+        stable@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,56 +58,28 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello:
 
---pqmvve6pnyma2yrz
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This patch was applied to netdev/net.git (master)
+by Marc Kleine-Budde <mkl@pengutronix.de>:
 
-On 07.02.2023 21:45:20, Oliver Hartkopp wrote:
-> Hi xilinx_can maintainers,
->=20
-> Hartley Sweeten reported a bug when sending RTR frames with the xilinx_can
-> driver here:
->=20
-> https://github.com/linux-can/can-utils/issues/405#
->=20
-> The problem: When sending a single RTR frame (e.g. with 'cansend can0
-> 001#R') nothing happens.
->=20
-> Only after sending a *second* RTR frame with 'cansend can0 001#R' the two
-> (pending) RTR-frames are sent directly after each other.
->=20
-> This faulty behavior of RTR frame sending is independent of the time gap
-> between the two cansend attempts.
+On Tue,  7 Feb 2023 15:05:14 +0100 you wrote:
+> From: Devid Antonio Filoni <devid.filoni@egluetechnologies.com>
+> 
+> The ISO 11783-5 standard, in "4.5.2 - Address claim requirements", states:
+>   d) No CF shall begin, or resume, transmission on the network until 250
+>      ms after it has successfully claimed an address except when
+>      responding to a request for address-claimed.
+> 
+> [...]
 
-More info:
+Here is the summary with links:
+  - [net] can: j1939: do not wait 250 ms if the same addr was already claimed
+    https://git.kernel.org/netdev/net/c/4ae5e1e97c44
 
-| Also, this is with a kernel/rootfs created using Petalinux 2020.2.
-| Linux s6 5.4.0-xilinx-v2020.2 #1 SMP PREEMPT Fri Feb 3 17:27:45 UTC 2023 =
-armv7l GNU/Linux
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---pqmvve6pnyma2yrz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmPivNMACgkQvlAcSiqK
-BOgyLgf/eQTc4kNlx8aE8EhohcZGJSjp10vN/jBYZW19x8/AeCCrfPfeAl4HNQlS
-tTcs+KKRUk84sFXShLFwRkZQcj7VWNUqyrNjVfxKJfhwgitHDJil1UCQEkTBi5UX
-dV227CO089fOT/aqeTlfbsfHlTBF4tr8pLTD/k0/TUT1niqNE8c2NMstkHZ8nMK/
-06Z+Jo3Y3ofWVxaoYuMDDJhr0aSpwHBsNqVmtD7aPmlVWLpHg5Dhy+ETiZN13BF3
-H8LLHMcobeH23XMUZCw8Lqqh8JoTE37Ao4iGRwYiHKTKHhtqxLuTuLh/FJSPsLWG
-PCYI8Dlt1JJVyEqYUqmBMkgX9wGq5A==
-=nqdP
------END PGP SIGNATURE-----
-
---pqmvve6pnyma2yrz--
