@@ -2,105 +2,86 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE7AC69115A
-	for <lists+linux-can@lfdr.de>; Thu,  9 Feb 2023 20:30:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC0E691679
+	for <lists+linux-can@lfdr.de>; Fri, 10 Feb 2023 03:05:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbjBITab (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 9 Feb 2023 14:30:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55254 "EHLO
+        id S229695AbjBJCFK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 9 Feb 2023 21:05:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbjBITaa (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 9 Feb 2023 14:30:30 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461FF6A305
-        for <linux-can@vger.kernel.org>; Thu,  9 Feb 2023 11:30:29 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pQCck-0002Gj-6v; Thu, 09 Feb 2023 20:30:26 +0100
-Received: from pengutronix.de (hardanger-9.fritz.box [IPv6:2a03:f580:87bc:d400:3254:7f93:f3b2:3e1b])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id B9C4E174D02;
-        Thu,  9 Feb 2023 19:30:23 +0000 (UTC)
-Date:   Thu, 9 Feb 2023 20:30:23 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Frank Jungclaus <Frank.Jungclaus@esd.eu>
-Cc:     Stefan =?utf-8?B?TcOkdGpl?= <Stefan.Maetje@esd.eu>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "wg@grandegger.com" <wg@grandegger.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mailhol.vincent@wanadoo.fr" <mailhol.vincent@wanadoo.fr>
-Subject: Re: [PATCH 2/3] can: esd_usb: Improved behavior on esd CAN_ERROR_EXT
- event (2)
-Message-ID: <20230209193023.uyb2isvrrjguhtbc@pengutronix.de>
-References: <20221219212717.1298282-1-frank.jungclaus@esd.eu>
- <CAMZ6RqKAmrgQUKLehUZx+hiSk3jD+o44uGtzrRFk+RBk8Bt81A@mail.gmail.com>
- <a1d253bacdf296947a45fb069a0fd64eabb7e117.camel@esd.eu>
- <CAMZ6RqLeHNzZyKdCmqXDDtd5GZC8KZ0Y1hESYyPaaMbFe=ryYQ@mail.gmail.com>
- <786db8fae65a2ed415b5dd0c3001b4dfc8c7112b.camel@esd.eu>
- <20230202152256.kc5xh4e4m6panumw@pengutronix.de>
- <da0551556e42fd67c0b743d6d066fb09702571ef.camel@esd.eu>
+        with ESMTP id S229483AbjBJCFJ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 9 Feb 2023 21:05:09 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9494A6E889;
+        Thu,  9 Feb 2023 18:05:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=7vWptRrr6ZcyxNo05+kCpak7wSWep3HJR4uaRpVpmZg=; b=tPoovkBE8eL2H9L85pgbKbKo48
+        qZpC4v/tbRt1gEyRbNAJCY+lDtOhw/I0qlPyFefi8Rq+99Tk4jtsSHlcUWQUROfuCiOJ2fGsNjsXy
+        9+7uGng7ulApgSqh4Q8sijFui4OoXNCTvhn34LsHUaIuEdLAaxjhyAvuclerVrbxa1tWKKU1Qq+zK
+        Dh25Rpm1rOVcDku5O7IUckm4etl/JeWCHM0vKw/079cdVfsPU129fqC3KsRNtQoP9EULZ1TCCEGkJ
+        r84Xy7ExbcjVlVXS6merQQ55e/zfh3SQnyEQ/5XwSk/z3/byPMt/AFxRkJwS/6RR8GbAHjXCqh6aW
+        9OXcMo8A==;
+Received: from [2601:1c2:980:9ec0::df2f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pQImh-003trK-PY; Fri, 10 Feb 2023 02:05:07 +0000
+Message-ID: <63c3edef-35c6-867a-0ea7-06ed03ac74b9@infradead.org>
+Date:   Thu, 9 Feb 2023 18:05:06 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ls46os5cfnvtd7aa"
-Content-Disposition: inline
-In-Reply-To: <da0551556e42fd67c0b743d6d066fb09702571ef.camel@esd.eu>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: =?UTF-8?Q?Re=3a_error=3a_too_many_arguments_to_function_=e2=80=98ca?=
+ =?UTF-8?B?bl9jYWxjX2JpdHRpbWluZ+KAmQ==?=
+Content-Language: en-US
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     Network Development <netdev@vger.kernel.org>,
+        linux-can@vger.kernel.org
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+References: <42ffb65d-31da-fc5e-0e47-5f24fa1e4f88@infradead.org>
+In-Reply-To: <42ffb65d-31da-fc5e-0e47-5f24fa1e4f88@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+[corrected linux-can@ email address]
 
---ls46os5cfnvtd7aa
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On 09.02.2023 19:00:54, Frank Jungclaus wrote:
-> > Not taking this series, waiting for the reworked version.
-> >=20
-> > Marc
-> >=20
-> Marc, can I just send a reworked patch of [PATCH 2/3], let's say
-> with subject [PATCH v2 2/3] as a reply to this thread or should I
-> better resend the complete patch series as [PATCH v2 0/3] up to
-> [PATCH v2 3/3]?
+On 2/9/23 17:56, Randy Dunlap wrote:
+> Hi,
+> 
+> It's possible to have a kernel .config (randconfig) file with
+> # CONFIG_CAN_CALC_BITTIMING is not set
+> 
+> which ends up with different number of arguments to can_calc_bittiming().
+> 
+> Full compiler error listing is:
+> 
+> ../drivers/net/can/dev/bittiming.c: In function ‘can_get_bittiming’:
+> ../drivers/net/can/dev/bittiming.c:145:24: error: too many arguments to function ‘can_calc_bittiming’
+>   145 |                 return can_calc_bittiming(dev, bt, btc, extack);
+>       |                        ^~~~~~~~~~~~~~~~~~
+> In file included from ../include/linux/can/dev.h:18,
+>                  from ../drivers/net/can/dev/bittiming.c:7:
+> ../include/linux/can/bittiming.h:126:1: note: declared here
+>   126 | can_calc_bittiming(const struct net_device *dev, struct can_bittiming *bt,
+>       | ^~~~~~~~~~~~~~~~~~
+> 
+> 
+> A failing i386 .config file is attached.
+> 
+> Do you have any suggestions for resolving this error?
+> 
+> Thank you.
 
-Just re-post the whole series. Complete series are easier to handle.
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---ls46os5cfnvtd7aa
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmPlScsACgkQvlAcSiqK
-BOgN3gf5AXwvdYF1Okk+KgXGxwMVb1X/CBxO0Xes1mA6DzRZZRUxdw3UU1wDwTc5
-K+5wR3iWcm7bt/PzgDk1kukyQZ7+uVh69IUCGtzP6GgZtOPJjfbP6/lifkJSn7Qc
-ujH1Ay+7Pq/AD9Z4pcSo7CxG/QvCOLL1XaA0eIXqkuPA7jqoSkgqr6rvHz2dFjoZ
-Fd2MJFSPTtYK8qJwTuoYadp070vvRSUajVcT6G+lWQM3m42b9Be+URY345P07PFO
-qY2Dh0B49owZvZ5m4fe/VFwFvkAYyNlwB7p2X8alUwa3is/SzIYCfb1XyTQLYlck
-5EqnUmol4RBRgCgkIYiEPEBdb98qOA==
-=P+AW
------END PGP SIGNATURE-----
-
---ls46os5cfnvtd7aa--
+-- 
+~Randy
