@@ -2,86 +2,117 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BC0E691679
-	for <lists+linux-can@lfdr.de>; Fri, 10 Feb 2023 03:05:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D71C692363
+	for <lists+linux-can@lfdr.de>; Fri, 10 Feb 2023 17:34:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbjBJCFK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 9 Feb 2023 21:05:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48746 "EHLO
+        id S232438AbjBJQek (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 10 Feb 2023 11:34:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjBJCFJ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 9 Feb 2023 21:05:09 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9494A6E889;
-        Thu,  9 Feb 2023 18:05:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=7vWptRrr6ZcyxNo05+kCpak7wSWep3HJR4uaRpVpmZg=; b=tPoovkBE8eL2H9L85pgbKbKo48
-        qZpC4v/tbRt1gEyRbNAJCY+lDtOhw/I0qlPyFefi8Rq+99Tk4jtsSHlcUWQUROfuCiOJ2fGsNjsXy
-        9+7uGng7ulApgSqh4Q8sijFui4OoXNCTvhn34LsHUaIuEdLAaxjhyAvuclerVrbxa1tWKKU1Qq+zK
-        Dh25Rpm1rOVcDku5O7IUckm4etl/JeWCHM0vKw/079cdVfsPU129fqC3KsRNtQoP9EULZ1TCCEGkJ
-        r84Xy7ExbcjVlVXS6merQQ55e/zfh3SQnyEQ/5XwSk/z3/byPMt/AFxRkJwS/6RR8GbAHjXCqh6aW
-        9OXcMo8A==;
-Received: from [2601:1c2:980:9ec0::df2f]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pQImh-003trK-PY; Fri, 10 Feb 2023 02:05:07 +0000
-Message-ID: <63c3edef-35c6-867a-0ea7-06ed03ac74b9@infradead.org>
-Date:   Thu, 9 Feb 2023 18:05:06 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: =?UTF-8?Q?Re=3a_error=3a_too_many_arguments_to_function_=e2=80=98ca?=
- =?UTF-8?B?bl9jYWxjX2JpdHRpbWluZ+KAmQ==?=
-Content-Language: en-US
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     Network Development <netdev@vger.kernel.org>,
-        linux-can@vger.kernel.org
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
+        with ESMTP id S232384AbjBJQej (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 10 Feb 2023 11:34:39 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B5671F2F
+        for <linux-can@vger.kernel.org>; Fri, 10 Feb 2023 08:34:38 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pQWM8-000739-GD; Fri, 10 Feb 2023 17:34:36 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:46c4:4a2c:1d53:628e])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id C24F21759C1;
+        Fri, 10 Feb 2023 16:34:35 +0000 (UTC)
+Date:   Fri, 10 Feb 2023 17:34:27 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Network Development <netdev@vger.kernel.org>,
+        linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>
+Subject: Re: error: too many arguments to function =?utf-8?B?4oCYY2FuX2Nh?=
+ =?utf-8?B?bGNfYml0dGltaW5n4oCZ?=
+Message-ID: <20230210163427.icau6xcqefx6boni@pengutronix.de>
 References: <42ffb65d-31da-fc5e-0e47-5f24fa1e4f88@infradead.org>
-In-Reply-To: <42ffb65d-31da-fc5e-0e47-5f24fa1e4f88@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+ <63c3edef-35c6-867a-0ea7-06ed03ac74b9@infradead.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3ov3mzutprghk5le"
+Content-Disposition: inline
+In-Reply-To: <63c3edef-35c6-867a-0ea7-06ed03ac74b9@infradead.org>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-[corrected linux-can@ email address]
 
+--3ov3mzutprghk5le
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 2/9/23 17:56, Randy Dunlap wrote:
-> Hi,
-> 
-> It's possible to have a kernel .config (randconfig) file with
-> # CONFIG_CAN_CALC_BITTIMING is not set
-> 
-> which ends up with different number of arguments to can_calc_bittiming().
-> 
-> Full compiler error listing is:
-> 
-> ../drivers/net/can/dev/bittiming.c: In function ‘can_get_bittiming’:
-> ../drivers/net/can/dev/bittiming.c:145:24: error: too many arguments to function ‘can_calc_bittiming’
->   145 |                 return can_calc_bittiming(dev, bt, btc, extack);
->       |                        ^~~~~~~~~~~~~~~~~~
-> In file included from ../include/linux/can/dev.h:18,
->                  from ../drivers/net/can/dev/bittiming.c:7:
-> ../include/linux/can/bittiming.h:126:1: note: declared here
->   126 | can_calc_bittiming(const struct net_device *dev, struct can_bittiming *bt,
->       | ^~~~~~~~~~~~~~~~~~
-> 
-> 
-> A failing i386 .config file is attached.
-> 
-> Do you have any suggestions for resolving this error?
-> 
-> Thank you.
+On 09.02.2023 18:05:06, Randy Dunlap wrote:
+> > It's possible to have a kernel .config (randconfig) file with
+> > # CONFIG_CAN_CALC_BITTIMING is not set
+> >=20
+> > which ends up with different number of arguments to can_calc_bittiming(=
+).
+> >=20
+> > Full compiler error listing is:
+> >=20
+> > ../drivers/net/can/dev/bittiming.c: In function =E2=80=98can_get_bittim=
+ing=E2=80=99:
+> > ../drivers/net/can/dev/bittiming.c:145:24: error: too many arguments to=
+ function =E2=80=98can_calc_bittiming=E2=80=99
+> >   145 |                 return can_calc_bittiming(dev, bt, btc, extack);
+> >       |                        ^~~~~~~~~~~~~~~~~~
+> > In file included from ../include/linux/can/dev.h:18,
+> >                  from ../drivers/net/can/dev/bittiming.c:7:
+> > ../include/linux/can/bittiming.h:126:1: note: declared here
+> >   126 | can_calc_bittiming(const struct net_device *dev, struct can_bit=
+timing *bt,
+> >       | ^~~~~~~~~~~~~~~~~~
+> >=20
+> >=20
+> > A failing i386 .config file is attached.
+> >=20
+> > Do you have any suggestions for resolving this error?
 
--- 
-~Randy
+The problem is already fixed in current net-next/main:
+
+| 65db3d8b5231 ("can: bittiming: can_calc_bittiming(): add missing paramete=
+r to no-op function")
+
+sorry for the mess,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--3ov3mzutprghk5le
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmPmchAACgkQvlAcSiqK
+BOgQXQf/ahtKScqaQeOPRH0PnchOf1FNCrVRGqhF3A8akeAWohV6EiB34QvgeFfP
+4KynPtGrmpcXbU2QbccxUnCsqOu29FeOTMM2PsmyZMdLLxE0ZpzA3od+LNdkEuCk
+H/7vDohUZ2wbuwci1ZkEAKnawVbB2hPVe1Ri1yHnjLlG4Q1LNuZZYNDN9HxWqzVQ
++qP+FKhpC7bkOXP9MQmA5FtZxgo8PeNWyU3WqhEt5RH86IacvCEiUJaMgsnGT4MC
+HogfGa4XnvcIt7+xnBr7jw7f0yt5BOMaPLqVzt65VseGPQrqMAMp4tk67+hn7mR1
+MugBJ50zK8XHUkgs8ovZ7rAVVw6cYQ==
+=cXnC
+-----END PGP SIGNATURE-----
+
+--3ov3mzutprghk5le--
