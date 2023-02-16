@@ -2,173 +2,153 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 241E9699AC9
-	for <lists+linux-can@lfdr.de>; Thu, 16 Feb 2023 18:10:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 397A7699C64
+	for <lists+linux-can@lfdr.de>; Thu, 16 Feb 2023 19:36:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229475AbjBPRKM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 16 Feb 2023 12:10:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59520 "EHLO
+        id S230009AbjBPSg3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 16 Feb 2023 13:36:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjBPRKL (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 16 Feb 2023 12:10:11 -0500
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.219])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA5631E0F
-        for <linux-can@vger.kernel.org>; Thu, 16 Feb 2023 09:10:09 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1676567405; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=okmfDFnlPr6Gproh1Lp7WrDijZQITG51KCqq3KQ9hutzI9e9EUFbZIZrnN5Fm2Fc9N
-    XNhQ62iwkEkk1pHdAW6u7bK5oLvGKX6bWyoSUacmRBYo9w8Oer8y9B1oRQWrNKjosaOV
-    7uJDks5rR+frmMbQ9XEfgO9RtCUXj7sgjxWPurMcaUOLgIUL4Oj08yhbL3fWWJRA87dc
-    dq/CvGD705hzY7ABUBhZ06Per+1ijS8kQm9+gkOaL7maxrqwbNEl0mc4S1vgWoyedwii
-    5L8bL+0qY2niVI9UBq5MEgMc7g5299sA5JawpHZOQiAAJ/4SJv2LLRGySfxaLkfBKgfl
-    sXcw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1676567405;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=HCtW9HGx2Q6YBiyIxMmNj0XRkYtbQpYtYL3jYqp2dRg=;
-    b=SW/AcCrdYTE8HNNVFOzl2+AkQbgyJQPRVm0YnB6FFWHJWs5wowC0XHIAuJmnoq26Dy
-    21xL1ekiPGLqhrllWEC7VP0H269G8FKeKGj2JhWbuVYfGNIrc2ikMwoucRkPhYDw1q4h
-    Spc4Ma0qcQDpDTo0oOt7BQpRZY7nL/i/z+taRmW9crAOEkhY1VJ+83K3VJd4xKAEi80C
-    nQYMhR1sSNYyVYRzNwrmZiJroqOc1TojSIHog9zStegniadjMt1ca7H1ZD/hSl37cW/6
-    AQmzjVexuZ79nOKJt+N5rIDi/582id5mOh050hDAuG2gLLmk82Ln+4Ug6vEKWRs58F8G
-    fs7Q==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1676567405;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=HCtW9HGx2Q6YBiyIxMmNj0XRkYtbQpYtYL3jYqp2dRg=;
-    b=DwBwYKdVNeWUQsJE6lH0EOZORoa+SqfMT0Kirn3Abr7aGrxKxpmMPz2eVQMftc286q
-    DHoS76Z6IRGp4Btlll/bQfOWArj/ON1j0tsqdCDRr0w2S9hrcmx6mUrN50GFihl0qizN
-    UnjVVwItC8f2sDppy0vdP+1oZGh8BIrvcNlhqjVee+NRERIAcycku3yGY6qjPTH2soDm
-    3TKRkAMLriIbxG1vDr5tWF3iNizAuWLtxBgFxcYGbajavgEUxMTAaXNOomIZNZcBDKyj
-    VdNO9Ed47bNKvFQIvMoQvHraNBS0kY5aqBs+fw0CwvVimfoAlsEq2P5lTOxgOKi7HF+x
-    xBuA==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusl129OHEdFq0USEbVLYqA=="
-Received: from [IPV6:2a00:6020:4a8e:5000::83c]
-    by smtp.strato.de (RZmta 49.3.0 AUTH)
-    with ESMTPSA id x84a76z1GHA4RkD
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Thu, 16 Feb 2023 18:10:04 +0100 (CET)
-Message-ID: <5b5acff7-30ee-433c-ab59-59da4b371a49@hartkopp.net>
-Date:   Thu, 16 Feb 2023 18:09:58 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: xlinix_can: bug when sending two RTR frames
-To:     Hartley Sweeten <HartleyS@visionengravers.com>,
-        Michal Simek <michal.simek@amd.com>,
-        Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
-        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
-        linux-can <linux-can@vger.kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>
-References: <94e3c5bc-6af9-f240-86fa-2b780a58533f@hartkopp.net>
- <a2256c85-4253-dff5-fa8e-00fc02916095@hartkopp.net>
- <ea15524a-1ed9-0dbb-9511-c333a66a2555@amd.com>
- <BY3PR01MB6515CC4390A51A5564C69634D0A09@BY3PR01MB6515.prod.exchangelabs.com>
+        with ESMTP id S229616AbjBPSg3 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 16 Feb 2023 13:36:29 -0500
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2098.outbound.protection.outlook.com [40.107.6.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E917A4C3F6;
+        Thu, 16 Feb 2023 10:36:24 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XtHgB0iLR8c1Vj3Sgc7e3DS6GzjxKTA57+i2Mtio6XeXSHl1o4g0ehDmaD1ecbEGSSa5Cx05cFPfNR+Mygux5WNrH+QHn8Nd20UkZ9hiXXV4cSk8osmclzzK/NCBI9/sEqXsP7VBD7W1fLSZB0JImSM4KlQVHodHQGVLJsXnsjHpWGVT9rf+OT2eaap8cUA87xBVfalN4gMbFCzwK7PIq3O1aHroNq8UXx5a/5Tp0t4Nq/hOhvkx+TBk/CJ88fiysZ9pNzad7z8SaxQECMGjZSORlYgz8tFwvNo0oT7LGWB3XRISBH1aapq02XPeMNlA5OJ+bl+wLUcScv88RxoM4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ApvXXlacK68D92N/g/lry1LUN9AISzXIhQGJT1Vydgs=;
+ b=kBAWI49ZeM5GEOzvS57qfEABsFNm3b9g6PvGG5CFLNOlBy8UzDZR6kOg+VqTiN/pchnWVbieQBoNJEYkHAahUErBtdqrxiZKGMOgZD6g1aWrkAfaWaaU2xnYk8fcpi2/BIeXwdw0o9kpNwb7bbpVr8u0aq99LhqfzohntY3WMAxN3E+BiAVcM/E6FaGi5UQd+P4pkT/KJtL3uTXk5FqhIt7bZevtBaR1hx9fMKRhmLxLegvD7AFU5m4IKri2/G6dz3dkG/F6UX2MjPG5m4mJFL6osYabE9pFQ3u1bhD5GoaC5O/rh6RxknGjQZTr8bqnMZ/ojkMUgVxgCB66eHYb8Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=esd.eu; dmarc=pass action=none header.from=esd.eu; dkim=pass
+ header.d=esd.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=esdhannover.onmicrosoft.com; s=selector1-esdhannover-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ApvXXlacK68D92N/g/lry1LUN9AISzXIhQGJT1Vydgs=;
+ b=V5Frj679PV8jf3CY/aL/EpOGpDH+tLAz2tu5irAU/JaIUMa7WCp9dMW97ezeE4M5iHldD4lF1vjG18kWAJNgs7V2qJfUHW8bdpKagHBJMP5iCbWnx6o2X7kHjFKxnJm3DhZ2xEu2sMUZGb2sLiN5+DTemG7pYFG18c2WQYtW1KE=
+Received: from GVXPR03MB8426.eurprd03.prod.outlook.com (2603:10a6:150:4::9) by
+ AS8PR03MB9745.eurprd03.prod.outlook.com (2603:10a6:20b:61e::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.24; Thu, 16 Feb
+ 2023 18:36:22 +0000
+Received: from GVXPR03MB8426.eurprd03.prod.outlook.com
+ ([fe80::e7f7:70e0:d33:df60]) by GVXPR03MB8426.eurprd03.prod.outlook.com
+ ([fe80::e7f7:70e0:d33:df60%4]) with mapi id 15.20.6086.024; Thu, 16 Feb 2023
+ 18:36:22 +0000
+From:   Frank Jungclaus <Frank.Jungclaus@esd.eu>
+To:     "mkl@pengutronix.de" <mkl@pengutronix.de>
+CC:     =?iso-8859-15?Q?Stefan_M=E4tje?= <Stefan.Maetje@esd.eu>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        "wg@grandegger.com" <wg@grandegger.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mailhol.vincent@wanadoo.fr" <mailhol.vincent@wanadoo.fr>
+Subject: Re: [PATCH v2 0/3] can: esd_usb: Some more preparation for supporting
+ esd CAN-USB/3
+Thread-Topic: [PATCH v2 0/3] can: esd_usb: Some more preparation for
+ supporting esd CAN-USB/3
+Thread-Index: AQHZQI3AHq+50zbsy02NehykOhMEJK7PtIyAgAI1eAA=
+Date:   Thu, 16 Feb 2023 18:36:21 +0000
+Message-ID: <12296b28afc0848f1989d3eaab06946471de5077.camel@esd.eu>
+References: <20230214160223.1199464-1-frank.jungclaus@esd.eu>
+         <20230215085227.sqpqtzprsmpzdthu@pengutronix.de>
+In-Reply-To: <20230215085227.sqpqtzprsmpzdthu@pengutronix.de>
+Accept-Language: en-001, de-DE, en-US
 Content-Language: en-US
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <BY3PR01MB6515CC4390A51A5564C69634D0A09@BY3PR01MB6515.prod.exchangelabs.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.44.4-0ubuntu1 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=esd.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: GVXPR03MB8426:EE_|AS8PR03MB9745:EE_
+x-ms-office365-filtering-correlation-id: 7df335b6-d28d-404c-bb78-08db104cb3b9
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Y9E05Jq4ieEr2XVzt7CxhXFcRA5JYOpIH9ftIiBcIK0x1F/n/rUFcDfhBHs5r+9GQgP4Wxi4GNhLaWSjNmGNfIMvrkjXyrQd1vJafeE4I7WKRZram4DlozuiSaDnfhBp4encIH+A9bu7bcLUHFBx1r1p232imms9tkXSizgpbUeM/K2pRanmZ/p7hWdTJGDX/4SlbwUx1kruBbzDXAPzKivtDrZWBebQ+QwMwURKLNI6MlAu8+GUGPgXm1O/fr+ZS2RSg7iIMtJik7XxtZsrHma+7Ve2CFq/CAdgFWZ6fHrgg6CiSipCaArktN9c3jobRK+VTFgXSg9uL/hY4twnlPnT80w7guN+5Sx0x2fTUA6W0ZCy05esT8jZw30YKSTKkpUPLqDovoM738qBt1SvLCAlxk2Pisjmnk0UCp2zoveJ2ViCqXU8n8yO7t+DgoNIYajwRUw4HLpeqFH8orZ+nhQC9WLvsmuzq9/5JNSuvAjv3v/TlT0Cg/cTCD50NxvHujyVPMJbUF8kQ7mFW0JaOOmQB6MsQETvuR6Tl3BF6rIcOLXuEknTA9QR5q5ktFx4C5aXWIThRv3/IDXZu5tBFSerAlY2ZA485rXUGPPHpntmVEwGz1MFBSVcG6zqdYqBYh/y077nLVC1Zv9TN/T1WD7mn2i3v9BqADh1leLl7pecMTMf4VaCpAgeEfjwZvHIynEszPB5df6qUQfIoIkLtg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GVXPR03MB8426.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(136003)(346002)(366004)(396003)(39840400004)(451199018)(6486002)(71200400001)(478600001)(122000001)(38070700005)(38100700002)(86362001)(36756003)(2616005)(26005)(53546011)(6512007)(186003)(6506007)(66556008)(316002)(66946007)(64756008)(4744005)(5660300002)(6916009)(66476007)(66446008)(8676002)(41300700001)(54906003)(8936002)(76116006)(91956017)(2906002)(4326008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-15?Q?wjce4WjdvkhLl3jXPH+7ETRyV/dzhTen3UG61yf7PA10cudw/OkTyje9x?=
+ =?iso-8859-15?Q?oGPK34jIifwvMyHQMJ8/5rmiKpWne7KUp12qymV+rtY7rGdwxCrnkmtUf?=
+ =?iso-8859-15?Q?7J7RZDFD9QD+eUSfK/5mVDxJZ0SkTB8Kup3lCTEKh9vL4bQoknOspjHJP?=
+ =?iso-8859-15?Q?kUNWIOOWd2bJC3ibnM2TcIZTj7da2PwkjfuytpSzHnLfTs65b38AbzOuJ?=
+ =?iso-8859-15?Q?FnfDvJHlwvubinXSmJNXt8J9MfNUFiO25nc7JaQJA4h743X7jT6LzF+gF?=
+ =?iso-8859-15?Q?9JQNCliGXwsau1a79XVDNRltyTDp7Vl4VG1x6Ai24N/WiMg9JSz4yawWQ?=
+ =?iso-8859-15?Q?Y5I/7hw97pbpYKmVLbBJnR2Uwsvu1CLj/ka7y4fWuHsgppWoaiUYCO7wf?=
+ =?iso-8859-15?Q?/dLklH4dOpS83RFCl1zTZt2ITq3Ozz0w0/R1Du0e2sQiBoz1Yp1tyEN0k?=
+ =?iso-8859-15?Q?FZ77rM2kbTJUL5JiySR9RgsLX6Pf+mYdyZ22G3MdsdjMeMaBohoRKEUAE?=
+ =?iso-8859-15?Q?8/Bcoalpvn56Knpi20k58dzULINiTNaigwrL0OhuIF14WHmdNwG1uy/QU?=
+ =?iso-8859-15?Q?ydsNzb2KOgx8p4HmPC/T7nXNddxWnoef3c8tVibbQkNm9+lGCbDWzh4d4?=
+ =?iso-8859-15?Q?ZQB2oxwOvNcxqjrW6VTYRJuPXrCtC/tOQQgT6yA5uKn22PCELZyeWRZgH?=
+ =?iso-8859-15?Q?9QLg4KcsqSo8PdZ/T1CqZmpu8oYMNcolGjMUxkFt9TABQ+O9x4seTyLPY?=
+ =?iso-8859-15?Q?TRIsYcBArbbxi7qSHJ6q0LaOMFnn5zUc/uA+Pb892emMMld2PP2WwK4AL?=
+ =?iso-8859-15?Q?4kshPie3eAlF5kb//EENl/Mrkb99dmfdpIdoAvaQ9OOCgKNRh1IS82+FB?=
+ =?iso-8859-15?Q?nqglfqMizRcCCPObb5Itr6o5+jT+lq5BQi0d2nmIUxd/P32+ALPAA9s+2?=
+ =?iso-8859-15?Q?qvYW2GL+s8f3dMIuibf7fFX7MJzoW8OWA/DzUGNVj4htzyPoO/MoZp2/w?=
+ =?iso-8859-15?Q?R3+ASOU+ji7A+pYXjytYLvLnO0ALpiSOgc7l8AT8KykFsPabt669z0VRt?=
+ =?iso-8859-15?Q?mAC1/Mi2yqClZe/UmQ7uYmeY2oaP5bRDOB6YndVjjvTvgvOo1bRze78Wt?=
+ =?iso-8859-15?Q?NYOw/rp/2eiLZJvne1pjHSJS/BRPPvgesBTDKoVccFuSm7i1hP1S2vppa?=
+ =?iso-8859-15?Q?cQivwQ5wzJQgCemLTnVI8xcM1Vf2Mb1J4oti0hKJIeJh0bUPWS7748wuu?=
+ =?iso-8859-15?Q?LCPG5HrUM99q3XCYql36wG2Yjds5RLrGrrrWYz0ed5dPmnjz3RucDo5aU?=
+ =?iso-8859-15?Q?WiN/liYsUcqaUIXCCxdgLSc/IIik3p3vcaIPL67wBIv/PPYkoy3p7KBqX?=
+ =?iso-8859-15?Q?L0XmnYT93GOhlhy87LnhbRIBrIk+BweDKVnDVi80pkA4mlLd5id0WuikE?=
+ =?iso-8859-15?Q?je5cWnP1p+RNim4hWdvihU+nKHxPwp1/Ns8/hg1ydXtZYnCYmjeNKVAVP?=
+ =?iso-8859-15?Q?6k6A/yR3rsmiCQN6TerUriFdowlOUIDVnlULAlzwTVJ4SMXMXjMCFVds5?=
+ =?iso-8859-15?Q?S4eGFFdPpUK3TEMY4tG8NNDS4tvqWFWkVhZ3Ez8Tz/MqS+pWavdaCP1ha?=
+ =?iso-8859-15?Q?urFjU6MbtJcbq9wY3dUtz9F9xdmFSWAM3UKWmQuBq+Tzrwo5BwNLLe3We?=
+ =?iso-8859-15?Q?dEuDeNRVfvoyEufyyf5b6852qA=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-15"
+Content-ID: <330ED70570372247A73A86F8EDDF359D@eurprd03.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: esd.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: GVXPR03MB8426.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7df335b6-d28d-404c-bb78-08db104cb3b9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Feb 2023 18:36:22.0772
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5a9c3a1d-52db-4235-b74c-9fd851db2e6b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 4WM3rZlvDG+CYg8q1rfaVuU1tWIqhQDdqSYHjoki/33SxHKloEUNd0tcFIyfu7P/JRALF4RkUK9ON4dBR/EqFw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR03MB9745
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Michal,
+On Wed, 2023-02-15 at 09:52 +0100, Marc Kleine-Budde wrote:
+> On 14.02.2023 17:02:20, Frank Jungclaus wrote:
+> > Another small batch of patches to be seen as preparation for adding
+> > support of the newly available esd CAN-USB/3 to esd_usb.c.
+> >=20
+> > Due to some unresolved questions adding support for
+> > CAN_CTRLMODE_BERR_REPORTING has been postponed to one of the future
+> > patches.
+> >=20
+> > *Resend of the whole series as v2 for easier handling.*
+>=20
+> As Vincent pointed out in review of a completely different patch series,
+> bu this applies here, too:
+>=20
+> > For the titles, please use imperative (e.g. add) instead of past tense
+> > (e.g. Added). This also applies to the description.
+>=20
+> Further, the subject ob patches 1 and 2 can be improved a bit, e.g.
+> patch 1 could mention to move the SJA1000_ECC_SEG for a specific reason.
+>=20
+> regards,
+> Marc
+>=20
+Hi Marc,=20
+ok, I'll resend this series as v3 soon to address your comments.
 
-On 2/16/23 16:34, Hartley Sweeten wrote:
-> On Thursday, February 16, 2023 4:19 AM, Michal Simek wrote:
->>> On 2/7/23 21:45, Oliver Hartkopp wrote:
->>> Hi xilinx_can maintainers,
->>>>
->>>> Hartley Sweeten reported a bug when sending RTR frames with the
->>>> xilinx_can driver here:
->>>>
->>>> https://github.com/linux-can/can-utils/issues/405#
->>>>
->>>> The problem: When sending a single RTR frame (e.g. with 'cansend can0
->>>> 001#R') nothing happens.
->>>>
->>>> Only after sending a *second* RTR frame with 'cansend can0 001#R' the
->>>> two (pending) RTR-frames are sent directly after each other.
->>>>
->>>> This faulty behavior of RTR frame sending is independent of the time
->>>> gap between the two cansend attempts.
->>
->> I read that thread and I am missing details about Zynq board.
->> Are you using any custom zynq board or any xilinx standard evaluation board?
-> 
-> The system is a Trenz TE0720 SoM on a custom carrier board.
-> 
-> CAN0 is routed to EMIO.
-> 	Tx -> pin E16 (LVCMOS33)
-> 	Rx -> pin F16 (LVCMOS33)
-> 
-> The CAN implementation on the carrier board is like on the ZC702 (TXS0104 buffer / TJA1040T transceiver).
-> 
->> Can you please c&p dt fragment you use?
-> 
-> All of the can@e0008000 node information is from what is created automatically by PetaLinux.
-> 
-> This is the node info from 'dtc -I fs /sys/firmware/devicetree/base'
-> 
->                  can@e0008000 {
->                          compatible = "xlnx,zynq-can-1.0";
->                          clocks = <0x01 0x13 0x01 0x24>;
->                          tx-fifo-depth = <0x40>;
->                          clock-names = "can_clk\0pclk";
->                          status = "okay";
->                          interrupt-parent = <0x04>;
->                          interrupts = <0x00 0x1c 0x04>;
->                          phandle = <0x1a>;
->                          reg = <0xe0008000 0x1000>;
->                          rx-fifo-depth = <0x40>;
->                  };
-> 
->> You are using 5.4 kernel which is quite old. Can you please switch to the latest upstream or 5.15 xilinx?
-> 
-> Uh.. Difficult.
-> 
-> I'm using PetaLinux 2020.2 right now and _finally_ have something working with it after spending the last year trying to figure it out.
-> 
-> I'm a bit nervous about installing a newer version of Vivado/Vitis/PetaLinux right now. And I don't know how to make PetaLinux 2020.2 use a different kernel version.
-> 
-
-Thanks for picking up this topic!
-
-I double-checked the code and commits from either
-
-- 
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/log/drivers/net/can/xilinx_can.c?h=linux-5.15.y
-
-- 
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/log/drivers/net/can/xilinx_can.c?h=linux-5.4.y
-
-- 
-https://github.com/Xilinx/linux-xlnx/blob/xlnx_rebase_v5.15_LTS/drivers/net/can/xilinx_can.c
-
-- xilinx_can.c from the latest 6.2-rc8
-
-And the code sections relevant for this bug report (in the tx path) - 
-especially xcan_write_frame() 
-https://github.com/Xilinx/linux-xlnx/blob/xlnx_rebase_v5.15_LTS/drivers/net/can/xilinx_can.c#L569 
-- do not differ.
-
-So the bug should show up with all the Linux versions and you should be 
-able to see it whatever setup you have on your desk.
-
-Best regards,
-Oliver
+Regards, Frank
