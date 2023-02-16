@@ -2,105 +2,75 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 106606979BE
-	for <lists+linux-can@lfdr.de>; Wed, 15 Feb 2023 11:20:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDC51698F45
+	for <lists+linux-can@lfdr.de>; Thu, 16 Feb 2023 10:06:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233974AbjBOKUR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 15 Feb 2023 05:20:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46360 "EHLO
+        id S229749AbjBPJGS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 16 Feb 2023 04:06:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbjBOKUO (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 15 Feb 2023 05:20:14 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E50CB3772E
-        for <linux-can@vger.kernel.org>; Wed, 15 Feb 2023 02:20:05 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pSEtO-0000ix-SZ; Wed, 15 Feb 2023 11:20:02 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:6014:f321:bfec:f7c2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 2E9EB17A07B;
-        Wed, 15 Feb 2023 08:52:29 +0000 (UTC)
-Date:   Wed, 15 Feb 2023 09:52:27 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Frank Jungclaus <frank.jungclaus@esd.eu>
-Cc:     linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] can: esd_usb: Some more preparation for
- supporting esd CAN-USB/3
-Message-ID: <20230215085227.sqpqtzprsmpzdthu@pengutronix.de>
-References: <20230214160223.1199464-1-frank.jungclaus@esd.eu>
+        with ESMTP id S229510AbjBPJGR (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 16 Feb 2023 04:06:17 -0500
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D28562E837;
+        Thu, 16 Feb 2023 01:06:15 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0Vbnt.KT_1676538372;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0Vbnt.KT_1676538372)
+          by smtp.aliyun-inc.com;
+          Thu, 16 Feb 2023 17:06:12 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     kuba@kernel.org
+Cc:     davem@davemloft.net, edumazet@google.com, pisa@cmp.felk.cvut.cz,
+        ondrej.ille@gmail.com, wg@grandegger.com, mkl@pengutronix.de,
+        pabeni@redhat.com, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>
+Subject: [PATCH -next] can: ctucanfd: Use devm_platform_ioremap_resource()
+Date:   Thu, 16 Feb 2023 17:06:10 +0800
+Message-Id: <20230216090610.130860-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4irvznxndggari5u"
-Content-Disposition: inline
-In-Reply-To: <20230214160223.1199464-1-frank.jungclaus@esd.eu>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Convert platform_get_resource(), devm_ioremap_resource() to a single
+call to Use devm_platform_ioremap_resource(), as this is exactly
+what this function does.
 
---4irvznxndggari5u
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ drivers/net/can/ctucanfd/ctucanfd_platform.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-On 14.02.2023 17:02:20, Frank Jungclaus wrote:
-> Another small batch of patches to be seen as preparation for adding
-> support of the newly available esd CAN-USB/3 to esd_usb.c.
->=20
-> Due to some unresolved questions adding support for
-> CAN_CTRLMODE_BERR_REPORTING has been postponed to one of the future
-> patches.
->=20
-> *Resend of the whole series as v2 for easier handling.*
+diff --git a/drivers/net/can/ctucanfd/ctucanfd_platform.c b/drivers/net/can/ctucanfd/ctucanfd_platform.c
+index f83684f006ea..a17561d97192 100644
+--- a/drivers/net/can/ctucanfd/ctucanfd_platform.c
++++ b/drivers/net/can/ctucanfd/ctucanfd_platform.c
+@@ -47,7 +47,6 @@ static void ctucan_platform_set_drvdata(struct device *dev,
+  */
+ static int ctucan_platform_probe(struct platform_device *pdev)
+ {
+-	struct resource *res; /* IO mem resources */
+ 	struct device	*dev = &pdev->dev;
+ 	void __iomem *addr;
+ 	int ret;
+@@ -55,8 +54,7 @@ static int ctucan_platform_probe(struct platform_device *pdev)
+ 	int irq;
+ 
+ 	/* Get the virtual base address for the device */
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	addr = devm_ioremap_resource(dev, res);
++	addr = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(addr)) {
+ 		ret = PTR_ERR(addr);
+ 		goto err;
+-- 
+2.20.1.7.g153144c
 
-As Vincent pointed out in review of a completely different patch series,
-bu this applies here, too:
-
-| For the titles, please use imperative (e.g. add) instead of past tense
-| (e.g. Added). This also applies to the description.
-
-Further, the subject ob patches 1 and 2 can be improved a bit, e.g.
-patch 1 could mention to move the SJA1000_ECC_SEG for a specific reason.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---4irvznxndggari5u
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmPsnUgACgkQvlAcSiqK
-BOjykgf9GgEzqesqTvurBmGYMYtYtRIf0caqQYhbycWjabYH4DmHYEgVo73nTjjV
-52eSMJ29gikMy9bNO9WW2D1VEAdGdPAwHtCWCc4z4YP5VqC0T92zdDa2K7a3Eaqp
-YV2b9aQqovOHhvV5tKk1AAlqgqkj8o16o5WRnu5ZKzCwpTonHumNgOyreUPXAtJj
-KCHUACfZHVdbhL5JTGWiUvdPCTCD3WAk15i10kKoQkpYBZgKBR2wKeQKwVuEAQUK
-mefWPYsDG2RL8Y/k9G9O+F/HY670A9+UAGD3RzXeygjx9vwES0OZ0QjJxfZkoJ/K
-sHWxHfMH9AOGIjbTyYY8lpiSjpZNhg==
-=9mVM
------END PGP SIGNATURE-----
-
---4irvznxndggari5u--
