@@ -2,84 +2,91 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB445699F1D
-	for <lists+linux-can@lfdr.de>; Thu, 16 Feb 2023 22:46:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CBF469ABA6
+	for <lists+linux-can@lfdr.de>; Fri, 17 Feb 2023 13:39:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229541AbjBPVqK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 16 Feb 2023 16:46:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33358 "EHLO
+        id S229659AbjBQMjz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 17 Feb 2023 07:39:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjBPVqK (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 16 Feb 2023 16:46:10 -0500
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 589D8442CF
-        for <linux-can@vger.kernel.org>; Thu, 16 Feb 2023 13:45:33 -0800 (PST)
-Received: by mail-vs1-xe33.google.com with SMTP id j40so1464054vsv.2
-        for <linux-can@vger.kernel.org>; Thu, 16 Feb 2023 13:45:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1676583932;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=w+ocBNrNCUm5aE7elb8BeJRIn6ryZfZu4ud6FDTnrHg=;
-        b=V2W+bvFO02K+9Zv1X1mdAiIRGKZ6OusYIdT3a82EJbIT2GlgisttD4LxAuil0vXVCp
-         6zIFAVTzpR2lp4FZwXtJKmcjId+TDNiYjlgYoi0Vs55FdEgxvr7ZgHAnF3aiGBQ7TJqc
-         th32eKOpAawr41eA1k7qyDxlPGLNgH342OpbhaDDbYQm/RzVn+E3r8oJ3flKAtNyO2Fk
-         smAbmxrrdA0vOj8NkHYF+V3nI8ysnsAqjRKF0G9SF7EypU4uhyIlUJwTTYYtKLVmo00Z
-         fCNqSXZQfUX+B5olGqB1xDtF5A3w9Ki2fiuzW2dXRj4wulOyOY4HF6Y/O1NeK9EsKWJE
-         V57A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676583932;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=w+ocBNrNCUm5aE7elb8BeJRIn6ryZfZu4ud6FDTnrHg=;
-        b=sHkO2zJrffw9f6ghFxZtXYxHKnQEBhv7+NaNYAPbNItCcWJG6xzW+3TMHpz6KQXT3S
-         mEm5uTB/sTcVN40+ITV0UF317pGeKKDXsfutOoJsFLxVCg6kJ36OcgVSLyUCiQnHHJAK
-         DeRkjfImvMbJepqxdFmWax5yr55vC8miwbxCfwHGt/QeNyMm54cQuw35zE5sW/jEFZcE
-         tB9dnZ116JJZkojtbEN3U4rGL1Om0gs63LJBwbNWQouf0jdHYfsHF+xYsl4lgIgfurzm
-         mCo4a56YrWYa/BLPfPQkmIVb4q4heItwDbI/QCbfoXrJCvp1YJgatYPBDDKrG7ge8yux
-         sJRg==
-X-Gm-Message-State: AO0yUKWY5gwlr3tRAr+YtEM23mBWwmKRRQ2JJiOcpm/1vzJQWwk/m9I+
-        sA8VN41LmOycRJlwja/OKifgM1Aco9VtUyuZ+6U=
-X-Google-Smtp-Source: AK7set9Nh9Q/Ju0WUeMDIzwYu3NvTixQDdb7x486eiLLwkZ77yW8HqHiS9O07drZbuSzls+sd9DLozIZBVY7yBlnvms=
-X-Received: by 2002:a67:dc18:0:b0:3d0:d3fe:3d48 with SMTP id
- x24-20020a67dc18000000b003d0d3fe3d48mr1136119vsj.32.1676583932251; Thu, 16
- Feb 2023 13:45:32 -0800 (PST)
+        with ESMTP id S229714AbjBQMjt (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 17 Feb 2023 07:39:49 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1D363BEE
+        for <linux-can@vger.kernel.org>; Fri, 17 Feb 2023 04:39:48 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pT01j-00074P-B9
+        for linux-can@vger.kernel.org; Fri, 17 Feb 2023 13:39:47 +0100
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id BC23617C02C
+        for <linux-can@vger.kernel.org>; Fri, 17 Feb 2023 12:39:46 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id D803617C028;
+        Fri, 17 Feb 2023 12:39:45 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id bddbf01a;
+        Fri, 17 Feb 2023 12:39:45 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH net-next 0/4] pull-request: can-next 2023-02-17
+Date:   Fri, 17 Feb 2023 13:33:08 +0100
+Message-Id: <20230217123311.3713766-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Received: by 2002:ab0:134a:0:0:0:0:0 with HTTP; Thu, 16 Feb 2023 13:45:31
- -0800 (PST)
-Reply-To: mrslorencegonzalez@gmail.com
-From:   "Mrs.lorence Gonzalez" <jameswilliamsfernandez0@gmail.com>
-Date:   Thu, 16 Feb 2023 13:45:31 -0800
-Message-ID: <CAOD8V8OEs+WN2cD8L0s-zR63CFGamCs-H+r0W191v8iZs4ciTA@mail.gmail.com>
-Subject: Mrs.lorence Gonzalez
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_HK_NAME_FM_MR_MRS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello My Dearest One,
+Hello netdev-team,
 
-Am a dying woman here in the hospital, i was diagnose as a Cancer
-patient over  2 Years ago.
-I am A business woman how dealing with Gold Exportation. I Am from Us
-California I have a
- charitable and unfulfilled project that am about to handover to you,
-if you are interested
-please reply.
+this is a pull request of 4 patches for net-next/master.
 
-Hope to hear from you.
+---
 
-Regard
+The following changes since commit 40967f77dfa9fa728b7f36a5d2eb432f39de185c:
 
-mrslorencegonzalez@gmail.com
+  Merge branch 'seg6-add-psp-flavor-support-for-srv6-end-behavior' (2023-02-16 13:30:06 +0100)
 
-Mrs.lorence Gonzalez
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git 
+
+for you to fetch changes up to 6ad172748db49deef0da9038d29019aedf991a7e:
+
+  Merge patch series "can: esd_usb: Some more preparation for supporting esd CAN-USB/3" (2023-02-16 20:59:53 +0100)
+
+----------------------------------------------------------------
+Frank Jungclaus (3):
+      can: esd_usb: Move mislocated storage of SJA1000_ECC_SEG bits in case of a bus error
+      can: esd_usb: Make use of can_change_state() and relocate checking skb for NULL
+      can: esd_usb: Improve readability on decoding ESD_EV_CAN_ERROR_EXT messages
+
+Marc Kleine-Budde (1):
+      Merge patch series "can: esd_usb: Some more preparation for supporting esd CAN-USB/3"
+
+Yang Li (1):
+      can: ctucanfd: ctucan_platform_probe(): use devm_platform_ioremap_resource()
+
+ drivers/net/can/ctucanfd/ctucanfd_platform.c |  4 +-
+ drivers/net/can/usb/esd_usb.c                | 70 ++++++++++++++++------------
+ 2 files changed, 41 insertions(+), 33 deletions(-)
+
+
+
