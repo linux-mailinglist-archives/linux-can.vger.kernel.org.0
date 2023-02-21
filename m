@@ -2,64 +2,65 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AC0869D71A
-	for <lists+linux-can@lfdr.de>; Tue, 21 Feb 2023 00:32:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B5FA69D8BD
+	for <lists+linux-can@lfdr.de>; Tue, 21 Feb 2023 03:45:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232113AbjBTXcZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 20 Feb 2023 18:32:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47434 "EHLO
+        id S233161AbjBUCpt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 20 Feb 2023 21:45:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232039AbjBTXcY (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 20 Feb 2023 18:32:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F691ADD6;
-        Mon, 20 Feb 2023 15:32:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8B02FB80D5C;
-        Mon, 20 Feb 2023 23:32:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09B9DC433D2;
-        Mon, 20 Feb 2023 23:32:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676935941;
-        bh=3C8uxzTPAOYSon5yitWkWX6C2ymLgEK0IoJ5AKUZ2hA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=RO8KOGA1nLzl9mhtpLENHDIc2Lx3LkxSOdSdxTNws6lsg89cxqKdzx9MiNV9ThJA/
-         6jN8g/teGyYvyYeDLxnA5E8YbxhtE8uEgIXHpq+BmhMZIhF4ME1LXZipJpfbV0e4LW
-         CbtFGeD0Iq6W/OZfs9m2zKEUEHNJR+EA1Kk2oCzJca9DmNPZ9nPBsDUdvx+Yzgl0tZ
-         4Wtr1Ry+SdQwNc69yp9MqmVmf6CclsaLMlNnuKUAjUsEJtNWMESdpR0Wh1d9NQ8PMA
-         /UDG0U4SHfp3Hw1/75xUBLfGBwm3QpC4uygHxii90hgziL4uDY6MwABqXYtwNrteFK
-         a6cjPn99w+Brw==
-Date:   Mon, 20 Feb 2023 15:32:19 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net,
-        linux-can@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH net-next 0/4] pull-request: can-next 2023-02-17 - fixed
-Message-ID: <20230220153219.422a18a6@kernel.org>
-In-Reply-To: <20230217141029.3734802-1-mkl@pengutronix.de>
-References: <20230217141029.3734802-1-mkl@pengutronix.de>
+        with ESMTP id S233166AbjBUCps (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 20 Feb 2023 21:45:48 -0500
+Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B369206A3;
+        Mon, 20 Feb 2023 18:45:46 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R231e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0Vc9zDCy_1676947542;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0Vc9zDCy_1676947542)
+          by smtp.aliyun-inc.com;
+          Tue, 21 Feb 2023 10:45:43 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     kuba@kernel.org
+Cc:     davem@davemloft.net, wg@grandegger.com, mkl@pengutronix.de,
+        edumazet@google.com, pabeni@redhat.com, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>
+Subject: [PATCH -next] can: mscan: mpc5xxx: Use of_property_present() helper
+Date:   Tue, 21 Feb 2023 10:45:41 +0800
+Message-Id: <20230221024541.105199-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri, 17 Feb 2023 15:10:25 +0100 Marc Kleine-Budde wrote:
-> this is a pull request of 4 patches for net-next/master.
-> 
-> The first patch is by Yang Li and converts the ctucanfd driver to
-> devm_platform_ioremap_resource().
-> 
-> The last 3 patches are by Frank Jungclaus, target the esd_usb driver
-> and contains preparations for the upcoming support of the esd
-> CAN-USB/3 hardware.
+Use of_property_present() instead of of_get_property/of_find_property()
+in places where we just need to test presence of a property.
 
-Appears pulled, thanks!
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ drivers/net/can/mscan/mpc5xxx_can.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/can/mscan/mpc5xxx_can.c b/drivers/net/can/mscan/mpc5xxx_can.c
+index b0ed798ae70f..8981c223181f 100644
+--- a/drivers/net/can/mscan/mpc5xxx_can.c
++++ b/drivers/net/can/mscan/mpc5xxx_can.c
+@@ -315,7 +315,7 @@ static int mpc5xxx_can_probe(struct platform_device *ofdev)
+ 	priv->reg_base = base;
+ 	dev->irq = irq;
+ 
+-	clock_name = of_get_property(np, "fsl,mscan-clock-source", NULL);
++	clock_name = of_property_present(np, "fsl,mscan-clock-source");
+ 
+ 	priv->type = data->type;
+ 	priv->can.clock.freq = data->get_clock(ofdev, clock_name,
+-- 
+2.20.1.7.g153144c
+
