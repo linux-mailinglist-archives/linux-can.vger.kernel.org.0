@@ -2,181 +2,111 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CF3B69DA1C
-	for <lists+linux-can@lfdr.de>; Tue, 21 Feb 2023 05:36:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F63C69DC4D
+	for <lists+linux-can@lfdr.de>; Tue, 21 Feb 2023 09:43:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232411AbjBUEgN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 20 Feb 2023 23:36:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47896 "EHLO
+        id S230233AbjBUImr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 21 Feb 2023 03:42:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232718AbjBUEgL (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 20 Feb 2023 23:36:11 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC00252B1
-        for <linux-can@vger.kernel.org>; Mon, 20 Feb 2023 20:36:03 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id bh1so3697149plb.11
-        for <linux-can@vger.kernel.org>; Mon, 20 Feb 2023 20:36:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1676954163;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=65W9myRjO64ylLGEb17auLyxarN5Z7El4NBLPg+9CRI=;
-        b=HXS4HnWKKB6yNwsF8ppysc3hr5umQbX9ib8Ouoo7oX47KFCrpu1m3QJg2qm3vSum4h
-         iXyycyjeU/q4OIvhAiWGqbj302OkuWWncr1W0WKouRak2SR4t7v99NhqHMPJ9PH+GNF1
-         gPtT+uqQOhXKPgqKmS/RnXO38jDb3X3bn1few=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676954163;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=65W9myRjO64ylLGEb17auLyxarN5Z7El4NBLPg+9CRI=;
-        b=2XJ8F7RxM5nCfBJPXBCGhxgX9DnUIne4NjAgtGbFwkO56TEwlSghmZXunSzigB/eEh
-         Od1n7Hyjjiu4eyt0PmJbsTAK1hL52VQrWNa5os9WWKPTEXXshq1EYfy5YTOHrNcND0Qt
-         wag1IcdsIbSCsGXRL/xzRGRQQKAIh4vrbBTUbLvH+QeMfhVmCuxArggcR0tZsh26AJkQ
-         BarpzC1fP6rX4k6wfNYY9LDGVwN+jdG1vklpK9DxbtnNPtJG/n1eCAODZXVEPtzhx/eg
-         6BLV7Vb/38Gk3oTJjIF5cJnu1jA0Md9vd6CxSLfZzASdBP80LS+Zuvu/uEIECc5pDF/R
-         qkPw==
-X-Gm-Message-State: AO0yUKXg8gOjyqki5VbVqBKKeMh9AiXShB6D+yV6hqnD2Zcadd1NvRdu
-        zP53T4t2gm+k1Tjk4BbkEN7ssj2cxvhxxoHQhypVWw==
-X-Google-Smtp-Source: AK7set+cIxLNhtuArkfV7IAaLnmnGdNvWEHrGlpv5AtSVcsY3baiWip0421/80UPVIh/xFmTf91jfWixKcz0kPHyrwI=
-X-Received: by 2002:a17:903:2283:b0:196:7587:5d64 with SMTP id
- b3-20020a170903228300b0019675875d64mr425311plh.24.1676954162992; Mon, 20 Feb
- 2023 20:36:02 -0800 (PST)
-MIME-Version: 1.0
-References: <20230221024541.105199-1-yang.lee@linux.alibaba.com>
-In-Reply-To: <20230221024541.105199-1-yang.lee@linux.alibaba.com>
-From:   Pavan Chebbi <pavan.chebbi@broadcom.com>
-Date:   Tue, 21 Feb 2023 10:05:50 +0530
-Message-ID: <CALs4sv3-4_oMt412b8p1HfYrFfCV0eXq1KChTi7gx1brzRaBNg@mail.gmail.com>
-Subject: Re: [PATCH -next] can: mscan: mpc5xxx: Use of_property_present() helper
+        with ESMTP id S233839AbjBUImh (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 21 Feb 2023 03:42:37 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D78A234E5
+        for <linux-can@vger.kernel.org>; Tue, 21 Feb 2023 00:42:29 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pUOE5-0003GS-Lg; Tue, 21 Feb 2023 09:42:17 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:27e2:f49:4c60:b961])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 816B117E52E;
+        Tue, 21 Feb 2023 08:42:16 +0000 (UTC)
+Date:   Tue, 21 Feb 2023 09:42:06 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     Yang Li <yang.lee@linux.alibaba.com>
 Cc:     kuba@kernel.org, davem@davemloft.net, wg@grandegger.com,
-        mkl@pengutronix.de, edumazet@google.com, pabeni@redhat.com,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000038be0905f52e51f8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        edumazet@google.com, pabeni@redhat.com, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] can: mscan: mpc5xxx: Use of_property_present()
+ helper
+Message-ID: <20230221084206.zxnyanfoox4gqghm@pengutronix.de>
+References: <20230221024541.105199-1-yang.lee@linux.alibaba.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hrfcdqcbjtwwh3d5"
+Content-Disposition: inline
+In-Reply-To: <20230221024541.105199-1-yang.lee@linux.alibaba.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
---00000000000038be0905f52e51f8
-Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Feb 21, 2023 at 8:15 AM Yang Li <yang.lee@linux.alibaba.com> wrote:
->
+--hrfcdqcbjtwwh3d5
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 21.02.2023 10:45:41, Yang Li wrote:
 > Use of_property_present() instead of of_get_property/of_find_property()
 > in places where we just need to test presence of a property.
->
-
-Please fix the subject and make sure validation is done. I doubt this will pass.
-What problem is the patch trying to solve?
-
+>=20
 > Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> ---
->  drivers/net/can/mscan/mpc5xxx_can.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/net/can/mscan/mpc5xxx_can.c b/drivers/net/can/mscan/mpc5xxx_can.c
-> index b0ed798ae70f..8981c223181f 100644
-> --- a/drivers/net/can/mscan/mpc5xxx_can.c
-> +++ b/drivers/net/can/mscan/mpc5xxx_can.c
-> @@ -315,7 +315,7 @@ static int mpc5xxx_can_probe(struct platform_device *ofdev)
->         priv->reg_base = base;
->         dev->irq = irq;
->
-> -       clock_name = of_get_property(np, "fsl,mscan-clock-source", NULL);
-> +       clock_name = of_property_present(np, "fsl,mscan-clock-source");
->
->         priv->type = data->type;
->         priv->can.clock.freq = data->get_clock(ofdev, clock_name,
-> --
-> 2.20.1.7.g153144c
->
 
---00000000000038be0905f52e51f8
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+NAK!
 
-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
-OltyqaGBuzv+bJTUL+bmV7E4QBLIqGt4jVr1R9hJdH6KxXwJdyfHZ9C6qXmoe2NQhiFUyBOJ0wgk
-dB9Z1IU7nCwvNKYg2JMoJs93tIgbhPJg/D7pqW8gabkCAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
-BB0wG4EZcGF2YW4uY2hlYmJpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
-HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUEV6y/89alKPoFbKUaJXsvWu5
-fdowDQYJKoZIhvcNAQELBQADggEBAEHSIB6g652wVb+r2YCmfHW47Jo+5TuCBD99Hla8PYhaWGkd
-9HIyD3NPhb6Vb6vtMWJW4MFGQF42xYRrAS4LZj072DuMotr79rI09pbOiWg0FlRRFt6R9vgUgebu
-pWSH7kmwVXcPtY94XSMMak4b7RSKig2mKbHDpD4bC7eGlwl5RxzYkgrHtMNRmHmQor5Nvqe52cFJ
-25Azqtwvjt5nbrEd81iBmboNTEnLaKuxbbCtLaMEP8xKeDjAKnNOqHUMps0AsQT8c0EGq39YHpjp
-Wn1l67VU0rMShbEFsiUf9WYgE677oinpdm0t2mdCjxr35tryxptoTZXKHDxr/Yy6l6ExggJtMIIC
-aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
-EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwV/XkICjVscn4SNZMw
-DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEINEUdJQiiMSb+v/lqdSqPW9KeTtUiLZ8
-3YG7g2OQIhPfMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDIy
-MTA0MzYwM1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
-SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
-ATANBgkqhkiG9w0BAQEFAASCAQAU36NZ/2U+a/BZZZbPDXW7A/od4N2+HSchMpTfIIwNxyAcYsg2
-R7G4pNGqoDq7gv+ZpdjVB8047P2zlDYmpYQ0p7rfkHNv1U8Os9DsKycNbAEjHNe6EMpyCuWWsT3n
-Ux71m5mn8JknhSuxr1rBEFSjKvondDV0Kveiya2HSr5iMhDs2T0q2eWW4brZBLyZgEJ/HD+99nGS
-Qs0dtLTSCb2h7/iCQ+YKVff+iCUuGHByt454akeCpXQqZoTADjiwZrlw8W7pfN1vyJSrwSv9RJOu
-ijU7SaPU/6K8xL79kkv8lmkcG1D3kqXEEcAk4EeJtnLuDWxcf7l2mZ8Y2h4yv6Ju
---00000000000038be0905f52e51f8--
+Besides the things Pavan Chebbi says, this is not even compile:
+
+| drivers/net/can/mscan/mpc5xxx_can.c: In function =E2=80=98mpc5xxx_can_pro=
+be=E2=80=99:
+| drivers/net/can/mscan/mpc5xxx_can.c:318:22: error: implicit declaration o=
+f function =E2=80=98of_property_present=E2=80=99; did you mean =E2=80=98fwn=
+ode_property_present=E2=80=99? [-Werror=3Dimplicit-function-declaration]
+|   318 |         clock_name =3D of_property_present(np, "fsl,mscan-clock-s=
+ource");
+|       |                      ^~~~~~~~~~~~~~~~~~~
+|       |                      fwnode_property_present
+| drivers/net/can/mscan/mpc5xxx_can.c:318:20: error: assignment to =E2=80=
+=98const char *=E2=80=99 from =E2=80=98int=E2=80=99 makes pointer from inte=
+ger without a cast [-Werror=3Dint-conversion]
+|   318 |         clock_name =3D of_property_present(np, "fsl,mscan-clock-s=
+ource");
+|       |                    ^
+| cc1: all warnings being treated as errors
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--hrfcdqcbjtwwh3d5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmP0g9oACgkQvlAcSiqK
+BOhvUQf/awzwQM9W9569EDy3SCHweMikyRD4Gh2zYeaayAxKMr4y9Sd7P3XhLDy3
+RpUPH1KiYHdhGKogTU0bQ6zIMt+l+pWe0HL1YQtb7EcIpyMOCl276QfDTOH+nE0W
+X4OCmwQkZwtHDo09cKsw9YpZroqBMV0/fZhD0QO/71aiLqBYE/TLQ1gKndWwTI9T
+gyl5v30P3BFIlLvKHMNQ7fGC31A1qiIjpJrz59AZydNj92pY89nyy0FXf6kewuRP
+Es4dZZxnGF0OexUeEJJS2xeccBzxaE9z3OpKu7pRK/H1QdTcY59FbzuRUE5WPk2t
+wXTPxV/51pr82Hr59Clrcg0lmPDNcA==
+=yKkm
+-----END PGP SIGNATURE-----
+
+--hrfcdqcbjtwwh3d5--
