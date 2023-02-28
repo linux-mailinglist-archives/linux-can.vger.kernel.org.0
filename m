@@ -2,131 +2,91 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89D366A5482
-	for <lists+linux-can@lfdr.de>; Tue, 28 Feb 2023 09:37:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C56406A6087
+	for <lists+linux-can@lfdr.de>; Tue, 28 Feb 2023 21:42:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbjB1Ihs (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 28 Feb 2023 03:37:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47206 "EHLO
+        id S229652AbjB1Um6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 28 Feb 2023 15:42:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjB1Ihr (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 28 Feb 2023 03:37:47 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2023919F25;
-        Tue, 28 Feb 2023 00:37:46 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id E32B15C0145;
-        Tue, 28 Feb 2023 03:37:42 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 28 Feb 2023 03:37:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1677573462; x=1677659862; bh=bNOL6dMp9i
-        YZZl04z0RBXD9l8jOntO4AqkKsmgHnVhU=; b=CHUa3o94TMUNVsX9/Zz0vsJdyc
-        h35O81glpTkF7T0THcVqLDhw2FyfsdFJ/CK9ibW6acuCcCoPKvcmqdUy6EXTgqyU
-        /oWv2XbimJgMoK8YgkMagzaGMp3WodRMpaaQyIxiquJPBgIfQLjYFR1Tu2jVX9AV
-        8upruDIliKA4pIK/5SFjYlz2oI9sM6VJ8FMAURTEZscP4haviwvn1Wv0sZTtdQDg
-        YWQwesFjdPS8gHKuX13hkgU4YwPdObQpg72Y0OkKLkye8COjw1bxJxYWlxw8WecJ
-        u39EFqpRYLdWZGJIScKAfUg8yX+2DSD3kF1S/47nUV9aDyQ9qHaAO36TjyVg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1677573462; x=1677659862; bh=bNOL6dMp9iYZZl04z0RBXD9l8jOn
-        tO4AqkKsmgHnVhU=; b=FcIAbpq39dKkCVB7/nrEL0HSMu/Goub43y5d3EMN0I0B
-        hzTD0gTG4c/SID9bYAUMxXKiW0OQvCaWQ9sXTGkCQFkK/4V+JNG/yCqYeG6WAx0Q
-        WI0pmNVzARviAS8ZDHZ3PrAITMpMp8JYOcICgHsfbmLzCYaGZO4UbDu+NOL2smxe
-        KSx6oKNNyIbLmZOWgjoL41PWAXwPPEvxq8iMJWznfIRkJ1qDDvGLjxrcSkJI8fbW
-        31jSogKn/joHfvRO2J03jWZdPLmauq/77zkShzY+cm8aiVdSID7oK8gyXTDh2JXI
-        0Cr/f//NBEAZkj5miFjq1mUoX8loHNumTfR+koU4MA==
-X-ME-Sender: <xms:Vb39Y331EKqm317YZFalHXGw8zQZYR56_YI_8Ma2KFR43yiU-eTUjg>
-    <xme:Vb39Y2Hw-KK-HVckWZ7vg9_kcZKjlo4iBxBiEEpJjazvu_7gR7_s6QOddmrCSM3ba
-    srY65NA69GG6gx5Uhw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeluddguddulecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:Vb39Y37Xwbp3uTv7MbACAMzNl093eYyjGC3A5tvrsC11pLDiafXMNA>
-    <xmx:Vb39Y81gL92BaiTKkD-Z36O4mNZee3sVHnl1bnzw7cPWPumBMzhWjw>
-    <xmx:Vb39Y6EpZP0HNBSt-sGMUio4fM51BHjkEol9LDUiXqzcpMJwW-yy8g>
-    <xmx:Vr39Y9mYuRWLy_dmJncffFhN8xGp91P4cbj8JMvmINamP-ovc-JHmg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 8CBFFB60089; Tue, 28 Feb 2023 03:37:41 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-183-gbf7d00f500-fm-20230220.001-gbf7d00f5
-Mime-Version: 1.0
-Message-Id: <31fee002-db3b-43d9-b8bc-5a869516c2d7@app.fastmail.com>
-In-Reply-To: <18be9b45-e7c1-9f81-afeb-3e0d4cfe5f73@lwfinger.net>
-References: <20230227133457.431729-1-arnd@kernel.org>
- <3d8f28d7-78df-5276-612c-85b5262a987a@lwfinger.net>
- <c17bff4e-031e-4101-8564-51f6298b1c68@app.fastmail.com>
- <e9f8501f-ede0-4d38-6585-d3dc2469d3fe@lwfinger.net>
- <7085019b-4fad-4d8d-89c0-1dd33fb27bb7@app.fastmail.com>
- <18be9b45-e7c1-9f81-afeb-3e0d4cfe5f73@lwfinger.net>
-Date:   Tue, 28 Feb 2023 09:37:21 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Larry Finger" <Larry.Finger@lwfinger.net>,
-        "Arnd Bergmann" <arnd@kernel.org>,
-        "Dominik Brodowski" <linux@dominikbrodowski.net>,
-        linux-kernel@vger.kernel.org
-Cc:     "Bjorn Helgaas" <bhelgaas@google.com>,
-        "Florian Fainelli" <f.fainelli@gmail.com>,
-        "Hartley Sweeten" <hsweeten@visionengravers.com>,
-        "Ian Abbott" <abbotti@mev.co.uk>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Kevin Cernekee" <cernekee@gmail.com>,
-        "Lukas Wunner" <lukas@wunner.de>,
-        "Manuel Lauss" <manuel.lauss@gmail.com>,
-        "Oliver Hartkopp" <socketcan@hartkopp.net>,
-        "Olof Johansson" <olof@lixom.net>,
-        "Robert Jarzmik" <robert.jarzmik@free.fr>,
-        "YOKOTA Hiroshi" <yokota@netlab.is.tsukuba.ac.jp>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-wireless@vger.kernel.org, Netdev <netdev@vger.kernel.org>
-Subject: Re: [RFC 0/6] pcmcia: separate 16-bit support from cardbus
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229615AbjB1Um5 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 28 Feb 2023 15:42:57 -0500
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA6D34F52
+        for <linux-can@vger.kernel.org>; Tue, 28 Feb 2023 12:42:48 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1677616966; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=GeCP424wrm7ImZzpp0+iM4tV3ge4ZWmR9mYGYGDnG9KnFB91gjFBr8ItBQ2XmmY030
+    s4IHb8SK7sstDa2F0dNh7iYemf4rAvIP8KOgR8O09bxd7leDu1HHTQPVe+RmHhR5RGSq
+    HRZ73yVR0LwmJjDLt5nA1ukuM7WSCJ3yJoOVjTabl/rAeePw+vmlidvszrUOjbBcGC8B
+    4pqtx/+jEFZGFJFbEeo0GOSy5FnyOPHBJOD+cEhQ79eeNnpA92WDz2rwtlFsEpxkela2
+    NyMkNwdm9bNPu5f1DINhlSUSo8ZB6EiF1OzCo3f5FQXv0N+6kG6aUQFqUxB468Qtd9Nr
+    N48g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1677616966;
+    s=strato-dkim-0002; d=strato.com;
+    h=Subject:From:Cc:To:Date:Message-ID:Cc:Date:From:Subject:Sender;
+    bh=Cp9AkkC/o9drd+cHOkHXHDX7CE5e8ylHz/mj4kwk8vw=;
+    b=M15duxqHn13//E2X1JPeKMFBXTb14UrPJWoyZMESAakRWN4lNKKhvCd3RqE+MJ1OBy
+    8SwH04WeMwNr3ev8uRbmXd7GEJtYHMJKJRadU0txsYcMKvhdyGcbvjCvvgciwTEcJunJ
+    6NoVj/2k3C9uQM7hgM7+oQ5hzv/jaf3ouOT15Vi8SjtcVwUzOj4o/tZF4mUE8e6OHMJz
+    CbEkORdICbHplaanuzyMi9pWiPjt1mAxUThic77AclMmtcpJAUqZfx0utQjkZUOt0UON
+    COebU8IoAvynhSPBUUtjEo/Gt7vCaHZgQ7l0YH7aHF7IyuzwMagboSpqs2QTmXZM2Rc5
+    ru2A==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1677616966;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=Subject:From:Cc:To:Date:Message-ID:Cc:Date:From:Subject:Sender;
+    bh=Cp9AkkC/o9drd+cHOkHXHDX7CE5e8ylHz/mj4kwk8vw=;
+    b=alheTWr6TQFuyIs1g6VwNJs1b33INN6P9yU+5tMy3W+Htdaxfy1IzJRPrA1Mcr5sMS
+    vKQNgNzyX4xsnFnxi25rUpL16I2MOQGDJMCp4jNO9l60xfj7CBXc8aOG2xnVP8n5btWz
+    fXaCZOQMGU2XLJMLOrfoAxf0/2EqfZpodPqeVfUT0vJRVM8z7mxhA2P9Pep13kwL5xz+
+    fviVCNnTrJsJlVzXDuarC2GDqDrO5muHBAS2eOUbVgiVwv8QKOtNzCNRe4QcGuraPjbY
+    znSwJumsjkM4naHaSaibVeNfZ/rJ1Z2A7o6kkDGbeRI7TR9Nt6XglXBcseGJCL1xj9ew
+    zsaA==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusl129OHEdFq0USEbDUQnQ=="
+Received: from [IPV6:2a00:6020:4a8e:5000::923]
+    by smtp.strato.de (RZmta 49.3.0 AUTH)
+    with ESMTPSA id c675b3z1SKgk1CO
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Tue, 28 Feb 2023 21:42:46 +0100 (CET)
+Message-ID: <b53a04a2-ba1f-3858-84c1-d3eb3301ae15@hartkopp.net>
+Date:   Tue, 28 Feb 2023 21:42:37 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US
+To:     Michal Sojka <michal.sojka@cvut.cz>
+Cc:     linux-can <linux-can@vger.kernel.org>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: please re-send [RFC PATCH] can: isotp: fix poll() to not report false
+ positive EPOLLOUT events
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue, Feb 28, 2023, at 04:57, Larry Finger wrote:
-> On 2/27/23 15:30, Arnd Bergmann wrote:
->
-> It was a configuration problem. In the .config obtained by installing 
-> your 
-> patches, and doing a make, CONFIG_CARDBUS was not mentioned, and 
-> CONFIG_PCI_HOTPLUG was not selected. When I deleted the reference to 
-> the latter, 
-> did a make, and set ..._HOTPLUG, I got CONFIG+CARDBUS set to "m", and 
-> the yenta 
-> modules were built. This version sees the BCM4318 in the lspci scan, 
-> and the 
-> interface works. Your patches are OK.
+Hi Michal,
 
-Ok, great, thanks for testing!
+I'm currently testing some isotp traffic with your 'poll' patch but 
+unfortunately I did not see this mail in my in-box:
 
-> I am not sure how to warn people about the configuration change possible 
-> breaking things.
+https://lore.kernel.org/linux-can/20230224010659.48420-1-michal.sojka@cvut.cz/T/#u
 
-My intention was to keep Cardbus support working with old defconfig files,
-and I've not moved CONFIG_CARDBUS into a separate submenu between
-CONFIG_PCI_HOTPLUG and CONFIG_PCI_CONTROLLER but left the driver in
-drivers/pci/hotplug. I think that's the best compromise here, but maybe
-the PCI maintainers have a better idea.
+It is visible on the mail archive but obviously something went wrong on 
+my mail server side ¯\_(ツ)_/¯
 
-     Arnd
+Can you please re-send your patch, so that I can comment inside?
+
+Many thanks,
+Oliver
