@@ -2,148 +2,196 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E10F6A6EB4
-	for <lists+linux-can@lfdr.de>; Wed,  1 Mar 2023 15:46:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D25276A73EE
+	for <lists+linux-can@lfdr.de>; Wed,  1 Mar 2023 19:59:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229437AbjCAOqI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 1 Mar 2023 09:46:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42138 "EHLO
+        id S229949AbjCAS7N (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 1 Mar 2023 13:59:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjCAOqH (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 1 Mar 2023 09:46:07 -0500
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C146643931
-        for <linux-can@vger.kernel.org>; Wed,  1 Mar 2023 06:45:39 -0800 (PST)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-5384ff97993so368583477b3.2
-        for <linux-can@vger.kernel.org>; Wed, 01 Mar 2023 06:45:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=c5fRwh/q88qnR4rLODR5aN06oeaTsbFFIXqxWtKoAdA=;
-        b=Skkgc1pJVdMg4lM3S/QvC70xPPr5jlTmvz4EOn+Pc6rF3VpQhVc4iGugen9Q06wzaW
-         YU5vBuwqleOCYoFdAyxRZHQORMrJn2alOT/fjacfQLA291X6YhVykyxziMNBllMvYuaY
-         rKWSJgX2G7dhiWsfoI33lKF5ZUW3nVjhcxCb4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=c5fRwh/q88qnR4rLODR5aN06oeaTsbFFIXqxWtKoAdA=;
-        b=T5ZR2IeN46F6fKZJHfnkFyWt7StuDq33oPB15RxLrd2bHMaVeGRnm9xavqzMxWHr/u
-         IjWz7UrerW62k0xbEo02IvpIGI1piI97AAzetMiZ3qLuF89nCZazu/ObW2DHpgBxTSKn
-         l3USyARkFIPkWBIq8ORNUkjgvZoBrs+l6cWB1gR4rWi+9d0GpPh9d3rNomHPc6U/+PUW
-         SE1eOrb5+oFR7sxIFPDgIDYx0jCgIG7hrubbZCzvPnqQYrvnUQ31UJy/uwDiSVLMt1pw
-         0FMaatUjcG1HimEROPtekkOCmjA+AJtnhOMdIlfwq8dG28lqIcHCknFxbDfRNzM7HSyq
-         f0tA==
-X-Gm-Message-State: AO0yUKXZMoL11+UVdbZ2QRgGyrg56eN5JnDsgNT4VmcPiHPqKBMRzYSb
-        xJZm4A2RI/cYkUqI7zLwLxWvLBEUrSPMTC/Uuv4WVA==
-X-Google-Smtp-Source: AK7set/9RgMm3XRu83JsW4Wbbsi1f43oJuRNJ4GJnMD9Ynj6+QG8QTN/H949zZF90kB3oY5EYLAgq26FWAoCc+/6F5A=
-X-Received: by 2002:a81:ae0e:0:b0:53c:7c33:9d25 with SMTP id
- m14-20020a81ae0e000000b0053c7c339d25mr726867ywh.8.1677681938671; Wed, 01 Mar
- 2023 06:45:38 -0800 (PST)
+        with ESMTP id S229847AbjCAS7M (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 1 Mar 2023 13:59:12 -0500
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.220])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F38A1F5EC
+        for <linux-can@vger.kernel.org>; Wed,  1 Mar 2023 10:59:11 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1677697149; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=QgVbGRb1TO+TXvFz6EugiLIOeOa3buj7DLO+wlDjOy2DIriP7m0cctS76Vi5vybYNt
+    ugHOrl1chAuVgEHV5Ah21uPxCx44FtP64mSqnITwXA55pGbVEUZq2v7L5t4BkukUy+B1
+    tfjkcmypqGBlwePVoxxG/DMLL3R74g5+USij3r6cwUUemuZQwq8ZCo+FgtEXgySJulaX
+    j1Y9q7PjcK8c04uIYEkeCliij3qRVZbqxtPR3Bu/hpSOs2wW764mrtBVS8p067n/Qxiv
+    0eCfz5lY5/F1gO2KRLY/9QGSzv62A1tvFPFKP+vP1zCojplQ9Stu0pLik8Vc5hlCb9IA
+    Gj7A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1677697149;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=O7VkGRpIK6vJ1JUTBkjb3HCzKWTcq9RawZByyB6y/lw=;
+    b=E1MRw68UurgiSWTrwtMh3DFmAIK2CN9E0VmvukIVpc5c3H9Tr17Fq39vxmWzbgoJp+
+    lXRE80RCXlsPSzmlBn1MzDDRj73Z9EK17vfLDI1ovFKI2xPTrjpfa3TKooIctpV1I6/U
+    JR5aodS4dkyX2yJc5/ee4ncz+pTEifQRxRDVx090MZ33CQ/RkLrDMT5xFS727YrIAZm8
+    /VpSjBGOYux4O1KQdFvwmmQVghlGfGsTvwdX3xVEfic5pgK0uiFJIw3YEhyjohpBny4F
+    AtmNZqzO8BQ5Ks4SwuOclMh0Urxd6Lq+ED+Yat1+eA4lV0f021/2VX0s28+FpEFYRyPh
+    1S6Q==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1677697149;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=O7VkGRpIK6vJ1JUTBkjb3HCzKWTcq9RawZByyB6y/lw=;
+    b=pJRULPTmBNHH+ZDfRIX9XVFMzWsHNeMwElmRk9/kuxH4TnBW0e4ZJkopVprpo4ixQZ
+    x33sjbEdpWymVfK74fi4rnEpdAEToavNDV7UjjzSqBZ+DIjBk89acrUb4B3RDSJNhEBC
+    hyoFTGkZoPL/bXHf+iLCceEk3PbKLR6yN1nfcv+nX66OoGykB4ADv5RgWTIQIrkwYsuE
+    hguzeDVm+IFH3/uaudfCfCJbEdlabn1XLFg94k33+vyBz52CFVa4BEoZKqq5r/3FwiUb
+    u6gsySWj80Sa2/IOOrMSeHSB1fNlhkT7UXAkKZnvlJqoqOoC90FhKk5w3RIs1GWFML6i
+    KstQ==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusl129OHEdFq0USEbDUQnQ=="
+Received: from [IPV6:2a00:6020:4a8e:5000::923]
+    by smtp.strato.de (RZmta 49.3.0 AUTH)
+    with ESMTPSA id c675b3z21Ix84Vl
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Wed, 1 Mar 2023 19:59:08 +0100 (CET)
+Message-ID: <08d8e225-0e7a-a75f-f8fa-e4a8ce99d4a4@hartkopp.net>
+Date:   Wed, 1 Mar 2023 19:59:08 +0100
 MIME-Version: 1.0
-References: <20230228215433.3944508-1-robh@kernel.org>
-In-Reply-To: <20230228215433.3944508-1-robh@kernel.org>
-From:   Simon Glass <sjg@chromium.org>
-Date:   Wed, 1 Mar 2023 07:45:19 -0700
-Message-ID: <CAPnjgZ1=UPMf72JjejpdSvss5+d1tnMv=efYUgJcH6T09YAKTw@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Fix SPI and I2C bus node names in examples
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-pm@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: please re-send [RFC PATCH] can: isotp: fix poll() to not report
+ false positive EPOLLOUT events
+Content-Language: en-US
+To:     Michal Sojka <michal.sojka@cvut.cz>,
+        Jakub Jira <jirajak2@fel.cvut.cz>
+Cc:     linux-can <linux-can@vger.kernel.org>
+References: <b53a04a2-ba1f-3858-84c1-d3eb3301ae15@hartkopp.net>
+ <878rghtt0p.fsf@steelpick.2x.cz>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <878rghtt0p.fsf@steelpick.2x.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue, 28 Feb 2023 at 14:54, Rob Herring <robh@kernel.org> wrote:
->
-> SPI and I2C bus node names are expected to be "spi" or "i2c",
-> respectively, with nothing else, a unit-address, or a '-N' index. A
-> pattern of 'spi0' or 'i2c0' or similar has crept in. Fix all these
-> cases. Mostly scripted with the following commands:
->
-> git grep -l '\si2c[0-9] {' Documentation/devicetree/ | xargs sed -i -e 's/i2c[0-9] {/i2c {/'
-> git grep -l '\sspi[0-9] {' Documentation/devicetree/ | xargs sed -i -e 's/spi[0-9] {/spi {/'
->
-> With this, a few errors in examples were exposed and fixed.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> Cc: Miguel Ojeda <ojeda@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: Benson Leung <bleung@chromium.org>
-> Cc: Guenter Roeck <groeck@chromium.org>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Andrzej Hajda <andrzej.hajda@intel.com>
-> Cc: Neil Armstrong <neil.armstrong@linaro.org>
-> Cc: Robert Foss <rfoss@kernel.org>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Sam Ravnborg <sam@ravnborg.org>
-> Cc: MyungJoo Ham <myungjoo.ham@samsung.com>
-> Cc: Chanwoo Choi <cw00.choi@samsung.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Lee Jones <lee@kernel.org>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Wolfgang Grandegger <wg@grandegger.com>
-> Cc: Kalle Valo <kvalo@kernel.org>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: linux-clk@vger.kernel.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-gpio@vger.kernel.org
-> Cc: linux-i2c@vger.kernel.org
-> Cc: linux-leds@vger.kernel.org
-> Cc: linux-media@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-can@vger.kernel.org
-> Cc: linux-wireless@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-usb@vger.kernel.org
-> ---
+Hi Michal,
 
-Reviewed-by: Simon Glass <sjg@chromium.org>
+just copied the text to answer your patch ...
+
+On 28.02.23 21:49, Michal Sojka wrote:
+
+ > When using select/poll/epoll() with a non-blocking ISOTP socket to
+ > wait for when non-blocking write is possible, false EPOLLOUT event is
+ > sometimes returned. This can happen at least after sending a message
+ > which must be split to multiple CAN frames.
+ >
+ > The reason is that isotp_sendmsg() returns -EAGAIN when tx.state is
+ > not equal to ISOTP_IDLE and this behavior is not reflected in
+ > datagram_poll(), which is used in isotp_ops.
+ >
+ > This is fixed by introducing ISOTP-specific poll function, which
+ > suppresses the EPOLLOUT events in that case.
+
+
+Good improvement!
+
+ > Below is a program that can trigger the problem on a vcan interface.
+ > When running the program as:
+ >
+ >      ./isotp-poll-test -s 123 -d 321 -o
+ >
+ > it starts sending ISOTP messages that include increasing ASCII
+ > numbers. poll() is used to wait before next transmission.
+ >
+ > With current mainline Linux, once the message length is greater than 7
+ > bytes, write() returns -EAGAIN and the program terminates. This should
+ > not happen, because the previous poll() reported that the write()
+ > would not block.
+ >
+ > After applying this patch, the above command doesn't fail - if one
+ > runs some ISOTP reader such as:
+ >
+ >      isotprecv -l -s 321 -d 123 vcan0
+ >
+
+Yes, I can confirm that the above setup works - but not reliable:
+
+ > This test program can also show another problem. When running:
+ >
+ >      ./isotp-poll-test -s 321 -d 123 -i -a
+ >
+ > and then in another terminal:
+ >
+ >      ./isotp-poll-test -s 123 -d 321 -o
+ >
+ > The first program receives the messages and uses the counter values to
+ > check for lost messages. After a random number of iterations a lost
+ > message is always detected. I believe that ISOTP should be reliable
+ > protocol, at least on vcan, shouldn't it?
+
+The problem seems to occur with the new introduced POLL feature.
+
+When using
+
+	./isotp-poll-test -s 123 -d 321 -o
+
+together with
+
+	isotprecv -l -s 321 -d 123 vcan0
+
+the transmission of isotp PDUs stops at some point
+#8179 #6204 #1787 #373 #69321 etc
+
+I can not see problems or drops when using
+
+./isotpsend vcan0 -s 123 -d 321 -D 9 -li
+
+as data producer where I added a counter:
+
+diff --git a/isotpsend.c b/isotpsend.c
+index deac601..815c254 100644
+--- a/isotpsend.c
++++ b/isotpsend.c
+@@ -96,10 +96,11 @@ int main(int argc, char **argv)
+      useconds_t usecs = 0; /* wait before sending the PDU */
+      __u32 force_tx_stmin = 0;
+      unsigned char buf[BUFSIZE];
+      int buflen = 0;
+      int datalen = 0;
++    u_int32_t datainc = 0;
+      int retval = 0;
+
+      addr.can_addr.tp.tx_id = addr.can_addr.tp.rx_id = NO_CAN_ID;
+
+      while ((opt = getopt(argc, argv, "s:d:x:p:P:t:f:D:l:g:bSCL:?")) != 
+-1) {
+@@ -295,10 +296,13 @@ int main(int argc, char **argv)
+
+  loop:
+      if (usecs)
+             usleep(usecs);
+
++    memcpy(&buf[datalen - 4], &datainc, 4);
++    datainc++;
++
+      retval = write(s, buf, buflen);
+      if (retval < 0) {
+             perror("write");
+             return retval;
+      }
+
+
+Maybe the 'poll' patch needs to check for something else. I will take a 
+look at it.
+
+Many thanks,
+Oliver
+
