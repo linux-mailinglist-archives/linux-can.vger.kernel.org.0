@@ -2,155 +2,399 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE4336A779C
-	for <lists+linux-can@lfdr.de>; Thu,  2 Mar 2023 00:17:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B356A77EB
+	for <lists+linux-can@lfdr.de>; Thu,  2 Mar 2023 00:45:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbjCAXRl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 1 Mar 2023 18:17:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50076 "EHLO
+        id S229822AbjCAXp1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 1 Mar 2023 18:45:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjCAXRj (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 1 Mar 2023 18:17:39 -0500
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2092.outbound.protection.outlook.com [40.107.21.92])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632104393B
-        for <linux-can@vger.kernel.org>; Wed,  1 Mar 2023 15:17:38 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DQM+C+XLdON8cbAbgvqt2Ssb31/muvFTICZMBBtomf8rs8GBqLfZbqzCHjFtKugXsuqZAMZjJISMu1LDcXw1tugVbaSW3oQWxvohFuhT9homM/EecsDyNItUXi0CEX5rpz63sPRxeWA0JFR4Jm54iY17jhF99azCzJ/HSycI1LRFlxOoV5iL1oaqtURiGmmXVSmzqaaaoxfsDomgqAR30QBXszR7BVgdx1Bh8J+9s3VOkTaX/6u7vFlCY759s0RVSoMc4oUww0hYhno3/YqGoLtG7PdTmJqhHcxvxLJw2VV9AsWLRT703V6mmYWVFfdPvgAeiIaPm4z7I7R9DoZKgg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vqlqiqv7VSFg/jIoQyXNrQ0n47p8Uurk/ruJQpjByCs=;
- b=YXMID84ooyRuyGa9REEiPdX54QafbJSf6D7h8F99+dxj/uDGsAdJJct9sE84If4ruG+IlUZpn/cT3tEV84OwE/6O9ff0xy4ijg2OTRLaDaHEUMQ/WbthqBq4hDNNSX4nsdzC/lVM6qh1DZWaOuciBfQfgP55xtcCrh0nn2GJ6DZaH2DRZF5C0AznjDm5/oD0geO5majuH7NUPFLY+K6ktP6qf4AsxHoGuckOdriUq9orqVsThKHWNx2sCXbsm/6HOdy212+6tiXzJPtQ+3sp0mBC6oHB7TKB7VqkXTXdW9IrlBoskzepaWRgzQdj76673zRCSmKHOTQ9Er0pmAjXOw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cvut.cz; dmarc=pass action=none header.from=cvut.cz; dkim=pass
- header.d=cvut.cz; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cvut.cz; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vqlqiqv7VSFg/jIoQyXNrQ0n47p8Uurk/ruJQpjByCs=;
- b=KfU1tpoq1KvnIEbHbxkpPP/taU+GLfCMVB+0saQZ6GM1+6lIsDXusQEaiaMLUib08UWOqe81RWw17j8dG+2PcEZfXefnKUoNwpddRx1oDqg74cGMl4HMWNRcVOnH7rInisScfZSfTYPtyGe6pOH+iTODjQBHVyUR4PQjesD+Sq+jtJ+sOlZUrda2WAT5Y9itMgRf4Xgp5oKNDKq34ZRRkRSVk52887upEInIZp/P5GvHgvwU0Cag8GT0kyk7qsaI2HZSMtvp9w+B9qOXk5IEeky3CQ0d0KvwKHAboLB/I4GwX1JGUXWqC8/tOxKus7AHW6Ecrj/Sel7Xo8+pk62StA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=cvut.cz;
-Received: from AM7PR06MB6550.eurprd06.prod.outlook.com (2603:10a6:20b:11a::12)
- by DB7PR06MB4203.eurprd06.prod.outlook.com (2603:10a6:5:2e::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.18; Wed, 1 Mar
- 2023 23:17:30 +0000
-Received: from AM7PR06MB6550.eurprd06.prod.outlook.com
- ([fe80::d096:71e4:dcf6:ad6d]) by AM7PR06MB6550.eurprd06.prod.outlook.com
- ([fe80::d096:71e4:dcf6:ad6d%8]) with mapi id 15.20.6156.018; Wed, 1 Mar 2023
- 23:17:29 +0000
-From:   Michal Sojka <michal.sojka@cvut.cz>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        Jakub Jira <jirajak2@fel.cvut.cz>
-Cc:     linux-can <linux-can@vger.kernel.org>
-Subject: Re: please re-send [RFC PATCH] can: isotp: fix poll() to not report
- false positive EPOLLOUT events
-In-Reply-To: <3020cefb-0dc5-bed6-a31c-39bbc7fec3f4@hartkopp.net>
-References: <b53a04a2-ba1f-3858-84c1-d3eb3301ae15@hartkopp.net>
- <878rghtt0p.fsf@steelpick.2x.cz>
- <08d8e225-0e7a-a75f-f8fa-e4a8ce99d4a4@hartkopp.net>
- <3020cefb-0dc5-bed6-a31c-39bbc7fec3f4@hartkopp.net>
-Date:   Thu, 02 Mar 2023 00:17:26 +0100
-Message-ID: <878rggxdrt.fsf@steelpick.2x.cz>
-Content-Type: text/plain
-X-ClientProxiedBy: VI1PR0102CA0063.eurprd01.prod.exchangelabs.com
- (2603:10a6:803::40) To AM7PR06MB6550.eurprd06.prod.outlook.com
- (2603:10a6:20b:11a::12)
+        with ESMTP id S229498AbjCAXp0 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 1 Mar 2023 18:45:26 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43ECB2333A;
+        Wed,  1 Mar 2023 15:44:57 -0800 (PST)
+Received: from mercury (unknown [185.254.75.29])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 011E566023A1;
+        Wed,  1 Mar 2023 23:43:53 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1677714233;
+        bh=F+cZ+xDuekZhvpQI6VN6wkOdiaibL0XhB6hG3ryOj8E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dzCs/Tm9RSF8obSF20Si7kicthqzvDNKc0LEyZ/LT3XbIHWQZIVgfzN4ExOkzO8NJ
+         lWUfgMqSTjI9TkKkd040M1hY1jQDw4TxO6favlO1RPjGjfCPWRRLqk6aOslCKf6e3o
+         i2+/FqlsKmBk8NuTMrgB4hdqMg33alpN0gwEz7wtzNDNAFKJpjmnTvhJyVSnpSKzuu
+         hu4bn5l4fnOEMFIDMpShkAoNaJjXy1lU+1fV6CpYhB896ljnVwaJD69yd3bwEmZgek
+         kaBy3VsggBld0JJRhg8GtDkJJpjlysSQxCTVEJqJJXotG5InA+EG6D1sq97Kf2wxxz
+         gsB3GMOtnNeLQ==
+Received: by mercury (Postfix, from userid 1000)
+        id 30A9D1061E59; Thu,  2 Mar 2023 00:43:50 +0100 (CET)
+Date:   Thu, 2 Mar 2023 00:43:50 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Kalle Valo <kvalo@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-pm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Fix SPI and I2C bus node names in examples
+Message-ID: <4c4b6904-69b8-4e33-9c35-a5a6a855528d@mercury.local>
+References: <20230228215433.3944508-1-robh@kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM7PR06MB6550:EE_|DB7PR06MB4203:EE_
-X-MS-Office365-Filtering-Correlation-Id: dc57c2d2-56bc-469e-df12-08db1aab202b
-X-LD-Processed: f345c406-5268-43b0-b19f-5862fa6833f8,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6ZuDQGhng321nVq86tqkB2iKy9VRdmhR5bP22k7Sepb2GldCgAvCqsBk3C3iZeHcu4tKO5gY84tAK1fENZjXN1uJ+4TmbsS+DTXS7j9ZAAJn3h1dt0am4r8iD0N6A7r0R9EbpPyftuS+RYm4JsGdIgbpoql54N8PuOlh5T//YJC0RpVLNaB7/QBS3Tt5AeoR8MrMLrXvUIK3YKKiyipZHx2Ba85q3qWZ5plz8uqMbl70ISMN3UF9b5vapvlQgm8dj+X07DWJcrQkdo5UV5TRcmuNTg/+xLbmyoxpQskUf9oydkCXHaQPt696Hv5UR0bxcBjKNK1ZiXdHkbRaeg/lYVSZH8pXuZInpxVSPq2UzVNbnw0cM1o0HxvtdN62l1jR9yCO0UCRnNilKWZDuvPRKPPAIoAf405Kx/N3ymfSESjPzl63cP/+mZZQPEaU5FihLHfhHUV20mADzQ01KSPxj7pqWyEt5xiW5y+wDX0Qb+TWmuIVsXbadB1LEPHL+9aMvcEq18Or29zuott5c/wFEVIQNEOOPTpsvhfTZlZ+MdIi8yboS8D1i8VTRvE4eqku6ph2ltBFq8NtdQ2VVuk0RG8W5VYg1iBWKReZEzyYOGak0kXHRcEZ1NGEqSqC+BsJrgSmRboVDOyq3WuGYM7sXQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR06MB6550.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(136003)(376002)(39850400004)(346002)(396003)(451199018)(6486002)(110136005)(316002)(786003)(4326008)(41320700001)(2906002)(83380400001)(8936002)(41300700001)(5660300002)(44832011)(8676002)(478600001)(9686003)(186003)(6666004)(6506007)(6512007)(66946007)(26005)(86362001)(66476007)(66556008)(38100700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LUFxWDd4vCzoIDyplSB71auyOlv30Tl9lGZpcB6wSjeZbje0C4X7PLuMdsri?=
- =?us-ascii?Q?wNLbuZu3LdYbQ3Rd2bEgz/dNvid6Tckyz0xYhg7YmCiaZ3XgndMttBdrVkCS?=
- =?us-ascii?Q?gRntlP3JI8S75ZXUG2rHn02OFxQG65TpqgJ0T1QBY0uXndZN634saOlvrczg?=
- =?us-ascii?Q?YT+28gtDv6zPxX+nelPQvgGsoRPlxs6m7NFli24P3QBI/gRHw0lkKv6wAHxj?=
- =?us-ascii?Q?hU/eT5kMoOHc5ISNXPUWAiax6/RCi4r+nZXh0qSsz2gJ6f7NRv8lfYaRSaB/?=
- =?us-ascii?Q?Wa2QtLt6FZmOSfUe69BQpSVpsWJZEGsjzN/L3UEj1UoAYlnRYIugSfswe286?=
- =?us-ascii?Q?0GdXljyBt6nx+grKdiWm4IXcYHXj7kctZo6+Oa/v9wixREsKOLYyCucUDUnb?=
- =?us-ascii?Q?MlubpJvFpTYwaWNwxA+mVu1wQRq8fitzFiNcTNGq/PtobrFlfoIw2pFgYk+E?=
- =?us-ascii?Q?ZNVypxreAEBXHbEeiLsjf3iSbE8Dpr0SVugK3YfYLJTyKj4+9NC3gNapkqab?=
- =?us-ascii?Q?IsRpKceKAhq5e0Yc3Y+PV52sfpCxwQo2Q+hpLV1zfmoZ2JzVyEg+TrIJUaVh?=
- =?us-ascii?Q?GKxBmhtVNV0bTG148L9pSgmoqSVs/heMZ8OrON6sRe1Z2mZVFMv50ohH56V3?=
- =?us-ascii?Q?d7PQsB/DW9OOrfN5yYyTwge9wT6DlvX2e7gw5uItHoZ4O/NjbBeUOuSrDwvR?=
- =?us-ascii?Q?j/CotwB8u3PGjFlRsXUL0/ri3fYed8OtnEydmpw5W0ZNho9qf2U98RzWB4VQ?=
- =?us-ascii?Q?i8H3xTt6/gwu5YYPDcEvHfld5WJ2kWC39RbqCBgon4tWQq87zfjCrSExnCvV?=
- =?us-ascii?Q?vIzZjS+eMCvn1k7frY41mtzkJHX/+ycFhTNXMIcPyVBBi0WLVQYRkB2liz9T?=
- =?us-ascii?Q?EGHOwq/GFoY+1wAbfZ+lD3Eqp0WmS8wpjy4zT9wfk2lXxhUfBMzpMiAtuyjm?=
- =?us-ascii?Q?ZnVpEcduG66PTlOuK7EZCYZHj9/NvZT8cvs5OX1Jil6EbV/UD4nQwmUk8Ylb?=
- =?us-ascii?Q?1CZ/4V3vKjMsRVWLE+Fz6wbG4nXe4HKRhanloutGN8AjlSTrH9yvqgHvH1Q2?=
- =?us-ascii?Q?3woLOTbCjAk7HXwn3GmVxDYAkUC6tT2R76IHXJYS7ZtqQulqBujEHwp59wOj?=
- =?us-ascii?Q?rnOlYIhCAhPcVuZ7yXy4+sVY36+fLZ9EruCW7Q7Fiu95ahckXVB25ACVCul4?=
- =?us-ascii?Q?jbSWn/2XiL8hWBRAvx0MV3QLNgc6l9ffC56TTdTsqKwe6vks3Xwp4hViHuCY?=
- =?us-ascii?Q?ItWBJhQA9Vxkl+WTKw/l3yvwapZns+Xx5lBDsxMHAnzxqVqRLQZ2rYbKZjmg?=
- =?us-ascii?Q?IZFSOr9Qg0vFw3fHJQHKNIE8GDC3iz79Q9npaBzENMCAvsPDTnemrXXOBosi?=
- =?us-ascii?Q?wndOc1cNZE+BH98K2HhvMFzLSJ4k/mW1PEq+Tcw1fhq26yItAP5g87Dd6Y0O?=
- =?us-ascii?Q?Q2rpcMD5EIXRO+8OPsAYffmEb/tSFXPyZd9j+7s9qG6EhC8sAUebpmMCR6oZ?=
- =?us-ascii?Q?FG1SelZLCwSqZ9JNJv71ZnE2pOvDUN3gJTBro0+BTqqHHMdr2HkI4Wg/sCqB?=
- =?us-ascii?Q?iKUerIJ+A+zD+AabQmRyborDncEq1zJcwylCZJcc?=
-X-OriginatorOrg: cvut.cz
-X-MS-Exchange-CrossTenant-Network-Message-Id: dc57c2d2-56bc-469e-df12-08db1aab202b
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR06MB6550.eurprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2023 23:17:29.5473
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f345c406-5268-43b0-b19f-5862fa6833f8
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Bavo2r1K15JplN+nDIY71SLsX7+yFCZaSR0c9jyJLOsO5K1QkgVLcfFvtT79HbO5
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR06MB4203
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="iicycb2qvy4rthvm"
+Content-Disposition: inline
+In-Reply-To: <20230228215433.3944508-1-robh@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed, Mar 01 2023, Oliver Hartkopp wrote:
-> I added the sockopt CAN_ISOTP_WAIT_TX_DONE in isotp-poll-test.c which 
-> fixes the problem:
 
-I saw CAN_ISOTP_WAIT_TX_DONE but didn't want to use it, because the
-whole point of (e)poll/select is to wait only in poll() and have write()
-execute without any blocking. In a sense, CAN_ISOTP_WAIT_TX_DONE is
-incompatible with O_NONBLOCK sockets.
+--iicycb2qvy4rthvm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> The sockopt uses a wait queue and returns from the write() syscall when 
-> tx.state becomes ISOTP_IDLE.
+Hi,
 
-That should be the point of poll() too: Waiting until the socket is
-ready for the next write(). As I understand it, the poll()
-implementation is "connected" to all relevant wait queues and whenever a
-wait queue is woken up, protocol's poll method is called. It checks if
-the wake really made the socket writable (or readable) and if so, the
-poll() syscall returns.
+On Tue, Feb 28, 2023 at 03:54:33PM -0600, Rob Herring wrote:
+> SPI and I2C bus node names are expected to be "spi" or "i2c",
+> respectively, with nothing else, a unit-address, or a '-N' index. A
+> pattern of 'spi0' or 'i2c0' or similar has crept in. Fix all these
+> cases. Mostly scripted with the following commands:
+>=20
+> git grep -l '\si2c[0-9] {' Documentation/devicetree/ | xargs sed -i -e 's=
+/i2c[0-9] {/i2c {/'
+> git grep -l '\sspi[0-9] {' Documentation/devicetree/ | xargs sed -i -e 's=
+/spi[0-9] {/spi {/'
+>=20
+> With this, a few errors in examples were exposed and fixed.
+>=20
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
 
-When thinking about that, I guess I know where is the problem.
-Currently, we call datagram_poll(), which checks only sock->wq.wait
-queue and not the isotp wait queue so->wait.
+Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com> # for power-s=
+upply
 
-Tomorrow, I'll try to look at how to wait also for so->wait.
+-- Sebastian
 
-> Using the isotp socket without CAN_ISOTP_WAIT_TX_DONE turned out to be 
-> not such good idea. But this results from the original API which had 
-> some kind of "fire-and-forget" mode.
->
-> Today the tx.state is set back to ISOTP_IDLE in isotp_rcv_echo() - and 
-> with this short 9 byte PDU the interaction with the receiving entity is 
-> really fast on vcan's. Maybe faster than the the write syscall
-> returns.
+=2E..
 
-If it is faster, then we wouldn't see write() returning EAGAIN in our
-poll() tests (without CAN_ISOTP_WAIT_TX_DONE).
+>  .../devicetree/bindings/power/supply/bq2415x.yaml |  2 +-
+>  .../devicetree/bindings/power/supply/bq24190.yaml |  2 +-
+>  .../devicetree/bindings/power/supply/bq24257.yaml |  4 ++--
+>  .../devicetree/bindings/power/supply/bq24735.yaml |  2 +-
+>  .../devicetree/bindings/power/supply/bq2515x.yaml |  2 +-
+>  .../devicetree/bindings/power/supply/bq25890.yaml |  2 +-
+>  .../devicetree/bindings/power/supply/bq25980.yaml |  2 +-
+>  .../devicetree/bindings/power/supply/bq27xxx.yaml | 15 ++++++++-------
+>  .../bindings/power/supply/lltc,ltc294x.yaml       |  2 +-
+>  .../bindings/power/supply/ltc4162-l.yaml          |  2 +-
+>  .../bindings/power/supply/maxim,max14656.yaml     |  2 +-
+>  .../bindings/power/supply/maxim,max17040.yaml     |  4 ++--
+>  .../bindings/power/supply/maxim,max17042.yaml     |  2 +-
+>  .../bindings/power/supply/richtek,rt9455.yaml     |  2 +-
+>  .../bindings/power/supply/ti,lp8727.yaml          |  2 +-
 
-Best regards,
--Michal
+=2E..
+
+> diff --git a/Documentation/devicetree/bindings/power/supply/bq2415x.yaml =
+b/Documentation/devicetree/bindings/power/supply/bq2415x.yaml
+> index f7287ffd4b12..13822346e708 100644
+> --- a/Documentation/devicetree/bindings/power/supply/bq2415x.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/bq2415x.yaml
+> @@ -77,7 +77,7 @@ additionalProperties: false
+> =20
+>  examples:
+>    - |
+> -    i2c0 {
+> +    i2c {
+>        #address-cells =3D <1>;
+>        #size-cells =3D <0>;
+> =20
+> diff --git a/Documentation/devicetree/bindings/power/supply/bq24190.yaml =
+b/Documentation/devicetree/bindings/power/supply/bq24190.yaml
+> index 001c0ffb408d..d3ebc9de8c0b 100644
+> --- a/Documentation/devicetree/bindings/power/supply/bq24190.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/bq24190.yaml
+> @@ -75,7 +75,7 @@ examples:
+>        charge-term-current-microamp =3D <128000>;
+>      };
+> =20
+> -    i2c0 {
+> +    i2c {
+>        #address-cells =3D <1>;
+>        #size-cells =3D <0>;
+> =20
+> diff --git a/Documentation/devicetree/bindings/power/supply/bq24257.yaml =
+b/Documentation/devicetree/bindings/power/supply/bq24257.yaml
+> index cc45939d385b..eb064bbf876c 100644
+> --- a/Documentation/devicetree/bindings/power/supply/bq24257.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/bq24257.yaml
+> @@ -84,7 +84,7 @@ examples:
+>    - |
+>      #include <dt-bindings/gpio/gpio.h>
+>      #include <dt-bindings/interrupt-controller/irq.h>
+> -    i2c0 {
+> +    i2c {
+>        #address-cells =3D <1>;
+>        #size-cells =3D <0>;
+> =20
+> @@ -104,7 +104,7 @@ examples:
+>    - |
+>      #include <dt-bindings/gpio/gpio.h>
+>      #include <dt-bindings/interrupt-controller/irq.h>
+> -    i2c0 {
+> +    i2c {
+>        #address-cells =3D <1>;
+>        #size-cells =3D <0>;
+> =20
+> diff --git a/Documentation/devicetree/bindings/power/supply/bq24735.yaml =
+b/Documentation/devicetree/bindings/power/supply/bq24735.yaml
+> index 388ee16f8a1e..af41e7ccd784 100644
+> --- a/Documentation/devicetree/bindings/power/supply/bq24735.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/bq24735.yaml
+> @@ -77,7 +77,7 @@ examples:
+>    - |
+>      #include <dt-bindings/gpio/gpio.h>
+> =20
+> -    i2c0 {
+> +    i2c {
+>        #address-cells =3D <1>;
+>        #size-cells =3D <0>;
+> =20
+> diff --git a/Documentation/devicetree/bindings/power/supply/bq2515x.yaml =
+b/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
+> index 1a1b240034ef..845822c87f2a 100644
+> --- a/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
+> @@ -73,7 +73,7 @@ examples:
+>        constant-charge-voltage-max-microvolt =3D <4000000>;
+>      };
+>      #include <dt-bindings/gpio/gpio.h>
+> -    i2c0 {
+> +    i2c {
+>        #address-cells =3D <1>;
+>        #size-cells =3D <0>;
+> =20
+> diff --git a/Documentation/devicetree/bindings/power/supply/bq25890.yaml =
+b/Documentation/devicetree/bindings/power/supply/bq25890.yaml
+> index dae27e93af09..0ad302ab2bcc 100644
+> --- a/Documentation/devicetree/bindings/power/supply/bq25890.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/bq25890.yaml
+> @@ -102,7 +102,7 @@ unevaluatedProperties: false
+>  examples:
+>    - |
+>      #include <dt-bindings/interrupt-controller/irq.h>
+> -    i2c0 {
+> +    i2c {
+>        #address-cells =3D <1>;
+>        #size-cells =3D <0>;
+> =20
+> diff --git a/Documentation/devicetree/bindings/power/supply/bq25980.yaml =
+b/Documentation/devicetree/bindings/power/supply/bq25980.yaml
+> index b687b8bcd705..b70ce8d7f86c 100644
+> --- a/Documentation/devicetree/bindings/power/supply/bq25980.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/bq25980.yaml
+> @@ -95,7 +95,7 @@ examples:
+>      };
+>      #include <dt-bindings/gpio/gpio.h>
+>      #include <dt-bindings/interrupt-controller/irq.h>
+> -    i2c0 {
+> +    i2c {
+>        #address-cells =3D <1>;
+>        #size-cells =3D <0>;
+> =20
+> diff --git a/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml =
+b/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml
+> index 347d4433adc5..309ea33b5b25 100644
+> --- a/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml
+> @@ -75,15 +75,16 @@ additionalProperties: false
+> =20
+>  examples:
+>    - |
+> -    i2c0 {
+> +    bat: battery {
+> +      compatible =3D "simple-battery";
+> +      voltage-min-design-microvolt =3D <3200000>;
+> +      energy-full-design-microwatt-hours =3D <5290000>;
+> +      charge-full-design-microamp-hours =3D <1430000>;
+> +    };
+> +
+> +    i2c {
+>        #address-cells =3D <1>;
+>        #size-cells =3D <0>;
+> -      bat: battery {
+> -        compatible =3D "simple-battery";
+> -        voltage-min-design-microvolt =3D <3200000>;
+> -        energy-full-design-microwatt-hours =3D <5290000>;
+> -        charge-full-design-microamp-hours =3D <1430000>;
+> -      };
+> =20
+>        bq27510g3: fuel-gauge@55 {
+>          compatible =3D "ti,bq27510g3";
+> diff --git a/Documentation/devicetree/bindings/power/supply/lltc,ltc294x.=
+yaml b/Documentation/devicetree/bindings/power/supply/lltc,ltc294x.yaml
+> index 774582cd3a2c..e68a97cb49fe 100644
+> --- a/Documentation/devicetree/bindings/power/supply/lltc,ltc294x.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/lltc,ltc294x.yaml
+> @@ -54,7 +54,7 @@ additionalProperties: false
+> =20
+>  examples:
+>    - |
+> -    i2c0 {
+> +    i2c {
+>        #address-cells =3D <1>;
+>        #size-cells =3D <0>;
+>        battery@64 {
+> diff --git a/Documentation/devicetree/bindings/power/supply/ltc4162-l.yam=
+l b/Documentation/devicetree/bindings/power/supply/ltc4162-l.yaml
+> index cfffaeef8b09..29d536541152 100644
+> --- a/Documentation/devicetree/bindings/power/supply/ltc4162-l.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/ltc4162-l.yaml
+> @@ -54,7 +54,7 @@ additionalProperties: false
+> =20
+>  examples:
+>    - |
+> -    i2c0 {
+> +    i2c {
+>        #address-cells =3D <1>;
+>        #size-cells =3D <0>;
+>        charger: battery-charger@68 {
+> diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max1465=
+6.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max14656.yaml
+> index 711066b8cdb9..b444b799848e 100644
+> --- a/Documentation/devicetree/bindings/power/supply/maxim,max14656.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/maxim,max14656.yaml
+> @@ -32,7 +32,7 @@ additionalProperties: false
+>  examples:
+>    - |
+>      #include <dt-bindings/interrupt-controller/irq.h>
+> -    i2c0 {
+> +    i2c {
+>        #address-cells =3D <1>;
+>        #size-cells =3D <0>;
+> =20
+> diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max1704=
+0.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max17040.yaml
+> index 3a529326ecbd..2627cd3eed83 100644
+> --- a/Documentation/devicetree/bindings/power/supply/maxim,max17040.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/maxim,max17040.yaml
+> @@ -68,7 +68,7 @@ unevaluatedProperties: false
+> =20
+>  examples:
+>    - |
+> -    i2c0 {
+> +    i2c {
+>        #address-cells =3D <1>;
+>        #size-cells =3D <0>;
+> =20
+> @@ -82,7 +82,7 @@ examples:
+>      };
+>    - |
+>      #include <dt-bindings/interrupt-controller/irq.h>
+> -    i2c0 {
+> +    i2c {
+>        #address-cells =3D <1>;
+>        #size-cells =3D <0>;
+> =20
+> diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max1704=
+2.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml
+> index 64a0edb7bc47..085e2504d0dc 100644
+> --- a/Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml
+> @@ -69,7 +69,7 @@ additionalProperties: false
+> =20
+>  examples:
+>    - |
+> -    i2c0 {
+> +    i2c {
+>        #address-cells =3D <1>;
+>        #size-cells =3D <0>;
+> =20
+> diff --git a/Documentation/devicetree/bindings/power/supply/richtek,rt945=
+5.yaml b/Documentation/devicetree/bindings/power/supply/richtek,rt9455.yaml
+> index 27bebc1757ba..07e38be39f1b 100644
+> --- a/Documentation/devicetree/bindings/power/supply/richtek,rt9455.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/richtek,rt9455.yaml
+> @@ -68,7 +68,7 @@ additionalProperties: false
+>  examples:
+>    - |
+>      #include <dt-bindings/interrupt-controller/irq.h>
+> -    i2c0 {
+> +    i2c {
+>        #address-cells =3D <1>;
+>        #size-cells =3D <0>;
+> =20
+> diff --git a/Documentation/devicetree/bindings/power/supply/ti,lp8727.yam=
+l b/Documentation/devicetree/bindings/power/supply/ti,lp8727.yaml
+> index ce6fbdba8f6b..3a9e4310b433 100644
+> --- a/Documentation/devicetree/bindings/power/supply/ti,lp8727.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/ti,lp8727.yaml
+> @@ -61,7 +61,7 @@ additionalProperties: false
+>  examples:
+>    - |
+>      #include <dt-bindings/interrupt-controller/irq.h>
+> -    i2c0 {
+> +    i2c {
+>        #address-cells =3D <1>;
+>        #size-cells =3D <0>;
+> =20
+
+=2E..
+
+--iicycb2qvy4rthvm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmP/4zIACgkQ2O7X88g7
++pqxgBAAj3F4gb6RlI0Z6x4ZQhCWN+DLukelA2aUhkYhJyBC2UXCy5KWL1cNzB6P
+Y/hjl2FRmX0zNrcfRZ8kPynFwBHGbqcob8mgiAmOxCCFjczYKEIBMDbV3dZ6RDPA
+gz2uAVm2ioYkgXNjee6TC9knDQ34wmmkR1MwV2u7V4YVH/Xvxu164dQE1ZAeMs8I
+dXJByJltLKNqRQtOQabhGSP3+6//tZ3Cu/b+Zmdk+f+r+VTvvsWH+rJlxLKJbiE3
+znCN7kp3Ty1yvzd8PgM+MDt0o4mXlnfcfX5Vb+PtVTwMMJVtHvCFDYZL2Z71mwQr
+8R49nVhm4pkHMpI5nZz/eYXmrsU/hpRBSVbLhd+oSNI76YqPpm/+xGWKF5JZgMIm
+YAxRZjxs45EP2ST8nMa7/SYXygYCp9qekwcN39+IV2LSgRkjo1Iz+qJn5sOXvYMb
+dJ/q0IGA8cWQ4lG3LNzwAVkfQMzfw8OFFxbTVxDFDVBM/mAHr06M86TGcLyGEYxa
+r5YDSv8596Ep4y67xHrdzXCLASbYgQANlOBoNkX/ZMm3YcCGXsHSl/DQdGw5KSEr
+4zeoAsdANn6jGsLJurLrMFXTXcKMUEk9vHjE+N+bEjBxrMFQ9QyIk9d5MlCdp1Tn
+ptHuPPrunQ82d7+YC/fRCc28y/rDpEOlrFfdXej3Z3IJIkLQusE=
+=cMEP
+-----END PGP SIGNATURE-----
+
+--iicycb2qvy4rthvm--
