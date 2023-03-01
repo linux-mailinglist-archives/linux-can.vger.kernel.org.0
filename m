@@ -2,170 +2,133 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44E116A684D
-	for <lists+linux-can@lfdr.de>; Wed,  1 Mar 2023 08:42:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E822A6A6882
+	for <lists+linux-can@lfdr.de>; Wed,  1 Mar 2023 09:01:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229470AbjCAHmu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 1 Mar 2023 02:42:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49890 "EHLO
+        id S229615AbjCAIBy (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 1 Mar 2023 03:01:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjCAHmt (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 1 Mar 2023 02:42:49 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5918414228
-        for <linux-can@vger.kernel.org>; Tue, 28 Feb 2023 23:42:48 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pXH6G-0008PW-07; Wed, 01 Mar 2023 08:42:08 +0100
-Received: from pengutronix.de (hardanger-7.fritz.box [IPv6:2a03:f580:87bc:d400:23fb:f67d:29a6:be20])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 923BE1866E1;
-        Wed,  1 Mar 2023 07:42:03 +0000 (UTC)
-Date:   Wed, 1 Mar 2023 08:42:03 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-pm@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Fix SPI and I2C bus node names in examples
-Message-ID: <87lekgrk9v.fsf@hardanger.mail-host-address-is-not-set>
-References: <20230228215433.3944508-1-robh@kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6qigqggvs4mi6q4z"
-Content-Disposition: inline
-In-Reply-To: <20230228215433.3944508-1-robh@kernel.org>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        with ESMTP id S229470AbjCAIBx (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 1 Mar 2023 03:01:53 -0500
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7671D37569;
+        Wed,  1 Mar 2023 00:01:52 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 3F37F5C006E;
+        Wed,  1 Mar 2023 03:01:49 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 01 Mar 2023 03:01:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1677657709; x=1677744109; bh=HiNMFVsaBw
+        wCxMOFcvgCnu4C3JGr7mO5AhegKiv449U=; b=Iek9K2kvPfnHfSxaaV5b+LYbwJ
+        2Wvnq9VrP6J2WyAB/D87b5aW1f1L0puj8CMuHlCgSLSoW/VkH2Uf6EIM3hfvOjJY
+        wLaIc+8W5OzSjRJ+iwL9wAV2Z6b4HfBeVde0BGPE7VUz0eSVgrv835TKt4UNUNTv
+        N8yf+04nEu40z7AnBjAg/UcSP88fmZkQLjq0vN7g2Co68qH1N5QVBjUbVPVwauNT
+        EsZK50EnmveqUWgo/Im/fGY4neKa8v2rDs8DVvOs1D+pK0CnsstgekihohKOSbKB
+        JZlK2bTvs38Fa8JJVgp7yaUP5F9udIRrf41NCahNhKsmANgNB0KtFX8Rt9rQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1677657709; x=1677744109; bh=HiNMFVsaBwwCxMOFcvgCnu4C3JGr
+        7mO5AhegKiv449U=; b=hH5nYC9cimwawQ4osP7+SYD2eF6xutXdIAi9tcrpZZgR
+        MSEM13ehfcMamfy1q6ri+sEm4qYYyrDa9TUc4h/Dz2QngWk7QkFuiIYdyaGQIUDw
+        LHCB9Gy/Kg3LLqiGUKzkHbBjBnw0J0IneN3Al5JevOQn1VzVQ4lYznAdjV1zYE1q
+        UxZpScMbg+0gVQXHt4GbY86Y2ocBl5TL5GQpLkVEAjwENqTl10xcmeZpPZAktf6p
+        bMs7LdmXKmC1f2s6DUWI1N5yMGmuGmCK/YQ93E7IsMA+9/tiHxNndeIC/fRW+DjH
+        L2vpNSAD1mYgOvpH78nRpdF20O1dlIKxMwm0xW0Rww==
+X-ME-Sender: <xms:awb_YxNsQZBw_husNUreOec4Nsq7E5jwO7RsMTDtW3fpPI7zHXk2BA>
+    <xme:awb_Yz8ybpZ-CBl2KR3OpPStkcfsHJJ9CQyNC1bqGlAwFzyF4YEgurcmejq_DgWPT
+    9--MorystY6eBbv7dk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudelgedguddtlecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeu
+    feehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:awb_YwRXhPnqjcjcTOFwlPAJwwF2MaowW_aeYBJI88QXyaIWZaqboA>
+    <xmx:awb_Y9sQGhgvWIBrfQejaZTGXI9OE-bTU8zmkzZgAAMD08L57u79ag>
+    <xmx:awb_Y5ezZV44Fw1hiFCUQD8B3C9REGfdEOyv1oN03lMnJm8HGsg1Hw>
+    <xmx:bQb_Y_9WfNm3G3sMwT_z2CYwZMVOiwvUkT5p_ruxxvCU-NVmXfpVwQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id A5E78B60086; Wed,  1 Mar 2023 03:01:47 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-183-gbf7d00f500-fm-20230220.001-gbf7d00f5
+Mime-Version: 1.0
+Message-Id: <6cfc194b-9d30-47d5-8ea9-fa5c13ad0e7c@app.fastmail.com>
+In-Reply-To: <866973b7-1f54-21a3-79aa-992ed0594c1a@lwfinger.net>
+References: <20230227133457.431729-1-arnd@kernel.org>
+ <3d8f28d7-78df-5276-612c-85b5262a987a@lwfinger.net>
+ <c17bff4e-031e-4101-8564-51f6298b1c68@app.fastmail.com>
+ <e9f8501f-ede0-4d38-6585-d3dc2469d3fe@lwfinger.net>
+ <7085019b-4fad-4d8d-89c0-1dd33fb27bb7@app.fastmail.com>
+ <18be9b45-e7c1-9f81-afeb-3e0d4cfe5f73@lwfinger.net>
+ <31fee002-db3b-43d9-b8bc-5a869516c2d7@app.fastmail.com>
+ <866973b7-1f54-21a3-79aa-992ed0594c1a@lwfinger.net>
+Date:   Wed, 01 Mar 2023 09:01:27 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Larry Finger" <Larry.Finger@lwfinger.net>,
+        "Arnd Bergmann" <arnd@kernel.org>,
+        "Dominik Brodowski" <linux@dominikbrodowski.net>,
+        linux-kernel@vger.kernel.org
+Cc:     "Bjorn Helgaas" <bhelgaas@google.com>,
+        "Florian Fainelli" <f.fainelli@gmail.com>,
+        "Hartley Sweeten" <hsweeten@visionengravers.com>,
+        "Ian Abbott" <abbotti@mev.co.uk>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Kevin Cernekee" <cernekee@gmail.com>,
+        "Lukas Wunner" <lukas@wunner.de>,
+        "Manuel Lauss" <manuel.lauss@gmail.com>,
+        "Oliver Hartkopp" <socketcan@hartkopp.net>,
+        "Olof Johansson" <olof@lixom.net>,
+        "Robert Jarzmik" <robert.jarzmik@free.fr>,
+        "YOKOTA Hiroshi" <yokota@netlab.is.tsukuba.ac.jp>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-wireless@vger.kernel.org, Netdev <netdev@vger.kernel.org>
+Subject: Re: [RFC 0/6] pcmcia: separate 16-bit support from cardbus
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Wed, Mar 1, 2023, at 02:13, Larry Finger wrote:
+> On 2/28/23 02:37, Arnd Bergmann wrote:
+>> My intention was to keep Cardbus support working with old defconfig files,
+>> and I've not moved CONFIG_CARDBUS into a separate submenu between
+>> CONFIG_PCI_HOTPLUG and CONFIG_PCI_CONTROLLER but left the driver in
+>> drivers/pci/hotplug. I think that's the best compromise here, but maybe
+>> the PCI maintainers have a better idea.
+>
+> I did a bit more investigation. My original .config had CONFIG_PCI_HOTPLUG not 
+> defined, but did have CONFIG_CARDBUS and the various yenta modules turned on. 
+> With your changes, the CONFIG_PCI_HOTPLUG overrode CARDBUS.
+>
+> I thought mine was a corner case, but now I am not sure. As stated above, the 
+> Debian 12 factory configuration for ppc32 does not turn on PCI hotplug, but the 
+> x86_64 configuration for openSUSE Tumbleweed does. The x86_64 configuration in 
+> Fedora 37 does not contain CONFIG_PCI_HOTPLUG, but does have CARDBUS set.
+>
+> It seems that several distros may get the wrong result with this change,
 
---6qigqggvs4mi6q4z
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+As far as I can tell, this should work with the changes I described
+above, since CONFIG_CARDBUS no longer depends on CONFIG_PCI_HOTPLUG.
+I now uploaded the changed version to
 
-On 28.02.2023 15:54:33, Rob Herring wrote:
-> SPI and I2C bus node names are expected to be "spi" or "i2c",
-> respectively, with nothing else, a unit-address, or a '-N' index. A
-> pattern of 'spi0' or 'i2c0' or similar has crept in. Fix all these
-> cases. Mostly scripted with the following commands:
->=20
-> git grep -l '\si2c[0-9] {' Documentation/devicetree/ | xargs sed -i -e 's=
-/i2c[0-9] {/i2c {/'
-> git grep -l '\sspi[0-9] {' Documentation/devicetree/ | xargs sed -i -e 's=
-/spi[0-9] {/spi {/'
->=20
-> With this, a few errors in examples were exposed and fixed.
->=20
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> Cc: Miguel Ojeda <ojeda@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: Benson Leung <bleung@chromium.org>
-> Cc: Guenter Roeck <groeck@chromium.org>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Andrzej Hajda <andrzej.hajda@intel.com>
-> Cc: Neil Armstrong <neil.armstrong@linaro.org>
-> Cc: Robert Foss <rfoss@kernel.org>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Sam Ravnborg <sam@ravnborg.org>
-> Cc: MyungJoo Ham <myungjoo.ham@samsung.com>
-> Cc: Chanwoo Choi <cw00.choi@samsung.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Lee Jones <lee@kernel.org>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Wolfgang Grandegger <wg@grandegger.com>
-> Cc: Kalle Valo <kvalo@kernel.org>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: linux-clk@vger.kernel.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-gpio@vger.kernel.org
-> Cc: linux-i2c@vger.kernel.org
-> Cc: linux-leds@vger.kernel.org
-> Cc: linux-media@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-can@vger.kernel.org
-> Cc: linux-wireless@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-usb@vger.kernel.org
-> ---
+https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git/log/?h=pccard-rework-2
 
->  .../bindings/net/can/microchip,mcp251xfd.yaml     |  2 +-
-
-Acked-by: Marc Kleine-Budde <mkl@pengutronix.de> # for the microchip,mcp251=
-xfd.yaml
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---6qigqggvs4mi6q4z
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmP/AcgACgkQvlAcSiqK
-BOi6Sgf+JKpaaA+WNPAITJwHhJ6KXpNOhPUfPrEJugitHdIDb6xJeU+KLdpQRHpT
-q3SPi/g56vowFbK8p+8n5g77heG7OjMB2fANmHb+AkMg1Cor8h0cXk+hsKmErvcx
-by+P11OhFxZEVk1lwfMmL9gRHWEvllRcEldvKGZ8cBE5/Wa0yrjRMP50Ocf+cZLT
-11GsPq6kGYbkC8zuIIVCVKZCpfAiLDZiMn3fXwFNELYwb336yBEi98pfAeCdiEWi
-Ko7HE8RwUjZP911rwg6b2eaN/qFHnQ48Rd353T5GUz36nC/+dktJ+V3qMnygq918
-wG5da/tbojnXrBmOBeLNZIqvIJc3pg==
-=0CPB
------END PGP SIGNATURE-----
-
---6qigqggvs4mi6q4z--
+    Arnd
