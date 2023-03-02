@@ -2,134 +2,195 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C0716A8727
-	for <lists+linux-can@lfdr.de>; Thu,  2 Mar 2023 17:45:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 683986A8AED
+	for <lists+linux-can@lfdr.de>; Thu,  2 Mar 2023 22:03:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbjCBQpT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 2 Mar 2023 11:45:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53662 "EHLO
+        id S229537AbjCBVDv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 2 Mar 2023 16:03:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230032AbjCBQpP (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 2 Mar 2023 11:45:15 -0500
-Received: from mailrelay1-1.pub.mailoutpod2-cph3.one.com (mailrelay1-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:400::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36DC2ED78
-        for <linux-can@vger.kernel.org>; Thu,  2 Mar 2023 08:45:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa2;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=sAIc9DICHOwHXe3hoL0M1Cz46v91ph++acz6kjkneyk=;
-        b=kDFUay36skYmps2/wdqt4fAH3ooPZbYWVp4pqBqM961wiZduj7P0xLgJw2P+NpMGf7kg1DoicLT6s
-         g6l09K8HwL4RYQ8zGGoaFGn4km6zQYbAroP+EN+9HlyJrhV1W8t5cDqTAwscYUwdLDpYbIiHboO9rZ
-         aMzoAa0S/vUdoj1kf/OGdJTZUpW+MrjaNGUTQavNWIRuYfGMKTi7Tl3hROfbZVtoTWtbKeUCJQ2L0I
-         vgAjzdLxgJIXjLXCeRFb3ZpkshGAWy49N0muwOqA6SWUqwPx0aPY3DSGC5+6RFk99RSbDSFXHj01s6
-         xLMWjzebL84uGzeen8v31LzBEjuhwEg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed2;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=sAIc9DICHOwHXe3hoL0M1Cz46v91ph++acz6kjkneyk=;
-        b=dTZtzyqF/jIMi0Zr3bfFJbyk3/PAmHQdX/XPn81EeMGXIgD+hYOJ9q2VlxqlJBJy6Rr6S2UsHglzv
-         pur80rgBQ==
-X-HalOne-ID: 943971d9-b919-11ed-babc-11abd97b9443
-Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay1 (Halon) with ESMTPSA
-        id 943971d9-b919-11ed-babc-11abd97b9443;
-        Thu, 02 Mar 2023 16:45:06 +0000 (UTC)
-Date:   Thu, 2 Mar 2023 17:45:04 +0100
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-pm@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Fix SPI and I2C bus node names in examples
-Message-ID: <ZADSkGa6dK4H9p75@ravnborg.org>
-References: <20230228215433.3944508-1-robh@kernel.org>
+        with ESMTP id S229555AbjCBVDu (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 2 Mar 2023 16:03:50 -0500
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358B4193CB
+        for <linux-can@vger.kernel.org>; Thu,  2 Mar 2023 13:03:49 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1677790842; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=l+rzK9p4Ugl7TTK/1cxewF8r5BHbifXCRSnlQHO7WCRauDYCZOYZp4UA6QhwTMHHkU
+    +2AonqlB01XGB/YJdKjH9WMxzV1nLtMz9ZyuFG34EYeJKd76p9ka5WIjckZIuVPyyVRg
+    ZmU8aBd29bcLFgLtOzbmiZr/oRspc1W7FvLz+IP2YXruxH350U5W4Mnf6q6sP2m5lmSf
+    YiZaDP0/lgpM9NlxmwrV//KavNwLLZuP7GYODupfv60wo8mODI1rzePyzwq70CTN+zyl
+    1OrMOrGj42nTz6pNmr1j01TzsvayRbDP2fs2gf4eI4n3KmYil7MnPbI+HN9urD6xs4bu
+    77xw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1677790842;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=MXzeWwsizsGpLRmnKztwU0mO2yQnN00JLvU0JJkpzCE=;
+    b=LHkqPa1Os+QhwpHvzF+wd0jOCT5T2293tIqhatM/VMINJCOfdTSBVZZAVS0Wp22XUX
+    LJRjhyRBOto5/X8dj0kQqjk4vnu3OYXkWud5ZfcjvVuIYeAcCc+z+Laot44V+aS6czNB
+    WRSTgmdDc1MUvvVDhibytrnC51qRHhTozkTFgPAc6hudxEVSpOTepEWeL8tbYGV8QSXM
+    BRoGLTrHu+9hyesFCnI33CiUMhH1XwtF+dvdAzSu9bF+fyo4lel30gbK8/YzOa5GHvwD
+    tYvKin04aHKdkZXatWJ8p0li6HTN/Cr4VO7RmzMQtrIJf9IKbdmDcyFuRbxy1kKcl2f4
+    puGw==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1677790842;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=MXzeWwsizsGpLRmnKztwU0mO2yQnN00JLvU0JJkpzCE=;
+    b=eUCfQ4igf5fBIUMDV38ral63yFn2qmpbQS5U8IZKi7rNe9kErhYZsd4icbxwekJXQl
+    ZAcPyeHCu8vl1WGwoD5DB949FGsZeIZM0Qt1vCykHdW2T8il0NpSb3vU+O85Zlgds5iW
+    eMOx3HSwwHUn3D6sMTn5YjwSaEKyMylMZpefL1oat8KbDDhH4CjFX1AkMD6khTve9Nmu
+    0XYCYGDW/z32DiCoTuLcUeOtHowv9lcHHv+mg96NG7FD5672134SoKjNqFn1qbgX5eRO
+    4rbcJC+Hl8vB9bd8fiR+Ap+t9lFdNgjUUgoQTBgOiLo1O12obhR8OYVJVeVxFswyYX6B
+    FfTA==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusl129OHEdFq0USEbDUQnQ=="
+Received: from [IPV6:2a00:6020:4a8e:5000::923]
+    by smtp.strato.de (RZmta 49.3.0 AUTH)
+    with ESMTPSA id c675b3z22L0g7vU
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 2 Mar 2023 22:00:42 +0100 (CET)
+Message-ID: <40f9aad6-81be-e442-2668-cb349fe7313f@hartkopp.net>
+Date:   Thu, 2 Mar 2023 22:00:36 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230228215433.3944508-1-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: please re-send [RFC PATCH] can: isotp: fix poll() to not report
+ false positive EPOLLOUT events
+To:     Michal Sojka <michal.sojka@cvut.cz>,
+        Jakub Jira <jirajak2@fel.cvut.cz>
+Cc:     linux-can <linux-can@vger.kernel.org>
+References: <b53a04a2-ba1f-3858-84c1-d3eb3301ae15@hartkopp.net>
+ <878rghtt0p.fsf@steelpick.2x.cz>
+ <08d8e225-0e7a-a75f-f8fa-e4a8ce99d4a4@hartkopp.net>
+ <87zg8vjyqg.fsf@steelpick.2x.cz>
+Content-Language: en-US
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <87zg8vjyqg.fsf@steelpick.2x.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Rob.
+Hi Michal,
 
->  .../bindings/display/bridge/analogix,anx7625.yaml |  2 +-
->  .../bindings/display/bridge/anx6345.yaml          |  2 +-
->  .../bindings/display/bridge/lontium,lt8912b.yaml  |  2 +-
->  .../bindings/display/bridge/nxp,ptn3460.yaml      |  2 +-
->  .../bindings/display/bridge/ps8640.yaml           |  2 +-
->  .../bindings/display/bridge/sil,sii9234.yaml      |  2 +-
->  .../bindings/display/bridge/ti,dlpc3433.yaml      |  2 +-
->  .../bindings/display/bridge/toshiba,tc358762.yaml |  2 +-
->  .../bindings/display/bridge/toshiba,tc358768.yaml |  2 +-
->  .../bindings/display/panel/nec,nl8048hl11.yaml    |  2 +-
-Acked-by: Sam Ravnborg <sam@ravnborg.org>
+On 02.03.23 10:20, Michal Sojka wrote:
+
+> On Wed, Mar 01 2023, Oliver Hartkopp wrote:
+>> I can not see problems or drops when using
+>>
+>> ./isotpsend vcan0 -s 123 -d 321 -D 9 -li
+>>
+>> as data producer where I added a counter:
+> 
+> Really? 
+
+Yes ;-)
+
+> I tried to modify my test program to also support blocking
+> operation (without poll()) and setting CAN_ISOTP_WAIT_TX_DONE. It's
+> available at https://github.com/wentasah/isotp-poll-test/blob/fd095b2242c49dc5d3e36faf5ac9f4f47fd002c7/isotp-poll-test.c.
+
+Cloned it.
+
+> With it, I detect lost message in mainline Linux 6.2, but sometimes, it
+> takes quite long time (a minute) before it happens.
+
+Hm. Everything fine here with 6.2.0-12944-ge492250d5252.
+
+> What happens is well visible with strace. When I run the receiver as (-b
+> stands for blocking operation without poll()):
+> 
+>      strace ./isotp-poll-test -s 321 -d 123 -i -a -b -q
+> 
+> and then the sender (-w means to use CAN_ISOTP_WAIT_TX_DONE):
+> 
+>      strace ./isotp-poll-test -s 123 -d 321 -o -w -b -q
+
+Running these two (without strace) for 15 mins now:
+
+Hello20160713
+
+and counting ...
 
 
+> The output of the receiver is:
+> 
+>      read(3, "Hello122813", 99)              = 11
+>      read(3, "Hello122814", 99)              = 11
+>      read(3, "Hello122815", 99)              = 11
+>      read(3, "Hello122816", 99)              = 11
+>      read(3, "Hello122817", 99)              = 11
+>      read(3, "Hello122847", 99)              = 11
+>      write(2, "isotp-poll-test: ", 17isotp-poll-test: )       = 17
+>      write(2, "Lost messages. Expected: #122818"..., 50Lost messages. Expected: #122818, received #122847) = 50
+>      write(2, "\n", 1
+>      )                       = 1
+>      exit_group(1)                           = ?
+> 
+> Sender's output looks as follows:
+> 
+>      write(3, "Hello122813", 11)             = 11
+>      write(3, "Hello122814", 11)             = 11
+>      write(3, "Hello122815", 11)             = 11
+>      write(3, "Hello122816", 11)             = 11
+>      write(3, "Hello122817", 11)             = 11
+>      write(3, "Hello122818", 11)             = 11
+>      write(3, "Hello122819", 11)             = 11
+>      write(3, "Hello122820", 11)             = 11
+>      ...
+>      write(3, "Hello123116", 11)             = 11
+>      write(3, "Hello123117", 11)             = 11
+>      write(3, "Hello123118", 11)             = 11
+>      write(3, "Hello123119", 11)             = -1 ECOMM (Communication error on send)
+>      write(2, "isotp-poll-test: ", 17isotp-poll-test: )       = 17
+>      write(2, "write(sock, str, strlen(str))", 29write(sock, str, strlen(str))) = 29
+>      write(2, ": Communication error on send\n", 30: Communication error on send
+>      ) = 30
+>      exit_group(1)                           = ?
+> 
+> So my impression is that this does not relate to poll() implementation
+> changes.
 
-> index 669f70b1b4c4..8bd58913804a 100644
-> --- a/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
-> +++ b/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
-> @@ -226,7 +226,7 @@ unevaluatedProperties: false
->  
->  examples:
->    - |
-> -    i2c1 {
-> +    i2c {
->              #address-cells = <1>;
->              #size-cells = <0>;
->  
-> @@ -239,7 +239,7 @@ examples:
->  
->              ssd1306_i2c: oled@3d {
->                      compatible = "solomon,ssd1306";
-> -                    reg = <0x3c>;
-> +                    reg = <0x3d>;
->                      pwms = <&pwm 4 3000>;
->                      reset-gpios = <&gpio2 7>;
->                      solomon,com-lrremap;
+With strace too.
 
-I can see this align the example with i2c-mux-gpio.yaml so the change
-should be fine. I am just positive surprised the tooling caught it.
+strace ./isotp-poll-test -s 123 -d 321 -o -b -q
 
-The change is
-Acked-by: Sam Ravnborg <sam@ravnborg.org>
+strace ./isotp-poll-test -s 321 -d 123 -i -a -b -q
 
-the above was just me thinking loud.
+No problems with your V2 patch either.
 
-	Sam
+> I also tried to update my poll patch to take into account the so->wait
+> wait queue. But the result is the same as without it. I will send it in
+> a separate mail.
+
+I only get a problem when removing '-b'
+
+strace ./isotp-poll-test -s 321 -d 123 -i -a -q
+
+poll([{fd=3, events=POLLIN}], 1, -1)    = 1 ([{fd=3, revents=POLLIN}])
+read(3, "Hello716", 99)                 = 8
+write(2, "isotp-poll-test: ", 17isotp-poll-test: )       = 17
+write(2, "Lost messages. Expected: #715, r"..., 44Lost messages. 
+Expected: #715, received #716) = 44
+write(2, "\n", 1
+)                       = 1
+exit_group(1)                           = ?
++++ exited with 1 +++
+
+Hm.
+
+Best regards,
+Oliver
