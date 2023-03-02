@@ -2,108 +2,108 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8818D6A7D87
-	for <lists+linux-can@lfdr.de>; Thu,  2 Mar 2023 10:21:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2A236A7DA4
+	for <lists+linux-can@lfdr.de>; Thu,  2 Mar 2023 10:28:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbjCBJVc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 2 Mar 2023 04:21:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54538 "EHLO
+        id S229457AbjCBJ20 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 2 Mar 2023 04:28:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbjCBJU7 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 2 Mar 2023 04:20:59 -0500
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2130.outbound.protection.outlook.com [40.107.6.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E1961BAF1
-        for <linux-can@vger.kernel.org>; Thu,  2 Mar 2023 01:20:56 -0800 (PST)
+        with ESMTP id S229453AbjCBJ2Z (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 2 Mar 2023 04:28:25 -0500
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2097.outbound.protection.outlook.com [40.107.241.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F10815577
+        for <linux-can@vger.kernel.org>; Thu,  2 Mar 2023 01:28:24 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GFSU1q2kB22I6HXFJlfcm13wDBsS5KgnOLiGYs5wGZcVdUwBVa2G0bqXu+jb1I3E9NZ1KpuUh9u3224Banodr8LbOb1fppiXUbDBTxoXtWTGx0oH2aEfikG37CRb5FGbJa9PpOgEe0/E5VcVebwUtiUX6uQ8NDM4U5V571UZY0LlahwE8mI5I2qr/VFNsyyFVj5ZJNdjLzqDMOrHp1O2DjSc1Zo4M68tOOZTTsDJ8DDereUiqNZsN2mOTIM/JVqZd488Nq1+V3CVfV4lX9i70iCvpD0UJkg0Yf2sKxAmXlHvUuQC0FdTLpVdRe7Gno8E8oH7zuQGrHoOYwu6eoEfBQ==
+ b=hTrSj4JQBCEKfbrkT0Px6Ja8Ew9Rk/1UqSMTSIkUWn56j1j8YrClketP21ptakHONxS7+8bp3dCVgIqS91EW3r7WNwD0A+q8v4CTLghchLMrd83sUYXpl1X7INjI8VqttoR/iV1TAgxh/S6gguA/nYfQNAdFDn8LvT0jR0cabKZbSzBrrP9+sRfC9uOyvW2Dal7VW56U37ixl0S/OwgrWU8SyHfQ0J7glEYjqiNj5W6h4+S/JHQfvEb8TbsWxRbBTLHn711dVqiKTqqG6G0LtAbxWyqPbWP2u9aLB4IHJQ4ALtoU56v/cAewgxRI57pxGtbLwV/WUx8KB2PtSugwcA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2BzoO+IN0fCXQUkuOeI/LfW1qo6lOozsbT2tLQ6gXXk=;
- b=Z6EO/IdSdHqBfuIrtgX+ZBoLe+HvLUHP7Yrhoic/5QvJHeoI/E5SPt8AwBiNYQ41Zxk9nZsuQfO8WMQKciPHUsyAMdYXF5VeBVMeNfYHRjAjiKgjzUhpI99Fj+YqcCWZh6Nq2pHsVhWGW4HIYntYKjd4S/oYoHc1T7GJQnLnLd9DHnFrXRJO9fjLbrkK6GTfwKPksx0//07FUCS7xwx43VUhWx+gD2DmlXkKOE+lyal0fzqAQfjkQMCrahAO9nTdQZAmO0AIRaJTmyVbDFlxoyUtPl4+WAoKm00BEswl0IW2kmS2EO9nBRsTsEOfP9njx83w19rNjdk2iGABzBtrbg==
+ bh=rirS+RqRQmxeYag5r2bITox3FcZTxFDd9cz4Rn+qMBs=;
+ b=E0P4pQTWWdbvWF/J/WCYFbkHYWKUmyy2G1KNeeyWS0Rs926OMRs3QfYABkpt6lFdYhOfNvr6skJxX3ICQ3XeOESwdjTpNDTc5RncuDAkYpmbaQka7BU5PlxbhDUNRUyQVkCXSzrNEZtZtsgek1VfuIULYrGvvxDGWC5CrT/jKqUMXvg2mAE5pGUCO6P+MY9bUlf1voXNO6M00PnexcXOKQaZFIE85hzM5TwpH6x2RuH0WsdrEx40dXaU8AcusgFc/VJ2vRLDtpb4yXuAsDfwyu1PPUs4y/yy8dIs5XFk/nORi9h5Hc49Lvga3lLZPUsKTThokXtr4jtW03UKDMR69w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=cvut.cz; dmarc=pass action=none header.from=cvut.cz; dkim=pass
  header.d=cvut.cz; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cvut.cz; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2BzoO+IN0fCXQUkuOeI/LfW1qo6lOozsbT2tLQ6gXXk=;
- b=FOiW7zqrRJ8mTm4MSC+C8JbP0UH8fpLwxbm6ZGbDRR/UhUbcCXzY5lP+ALRaCxPemMoJNJSTMEU8/Mz0lPDhgFteeHhddQyOcIzuTM7GUPwFp5BD9jRxTO7vWE1epJN1CtYd5kZc7mvcqX8uCFmQ5kD3BxsuqXwMMedPkqWwZNoCrOPyaanCeUMYKVmegHNnosJW5JMlaREO3qyffylIv95fdMBM0kvw5I1vNg+QFPF0L6qinZNrSyi75cGoWEF7+bJn2BUKB7Irc8G69zBLGAT+WMX1yUt/LrJ1B7BTwhZlgZJApGpDDdXlkuTq0a03RiR5EUcrmPvABQvwMy3gmw==
+ bh=rirS+RqRQmxeYag5r2bITox3FcZTxFDd9cz4Rn+qMBs=;
+ b=1fzjRMQC2UG0PMFvdD3+/0xPnRnMUd7enqyWVmoO9Uq8pRnFLzxNJGzd1TBeNN0P+VhbYD9hQk+yJ7vblVjxKnoRKGItrMVsvuEOXLudgNBdL5OGBUqJCxloP6S/GdFS+68UJtir6bDn6JjpaLH/P3d2jFjGazEBDyC+Ylx+FZqb4O63EUkMCy9Re5GMlGcN8Gnq+G359P3Bl9XodsJb7oQQVSOBS2oKf7I4xD9QuCt4frJX+i3MfQbqJcWoc3y7HY5EJ3XOUpUUHG8ge8reNrZpP711zo0cMeq19HdXgxdklw03aqOFIXb1Bbjw1uQ/m06QQK/AOIncWMu1XR992w==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=cvut.cz;
 Received: from AM0PR06MB6548.eurprd06.prod.outlook.com (2603:10a6:208:195::14)
- by HE1PR0601MB2603.eurprd06.prod.outlook.com (2603:10a6:3:53::19) with
+ by AS8PR06MB7333.eurprd06.prod.outlook.com (2603:10a6:20b:256::5) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.17; Thu, 2 Mar
- 2023 09:20:47 +0000
+ 2023 09:28:21 +0000
 Received: from AM0PR06MB6548.eurprd06.prod.outlook.com
  ([fe80::a3db:1265:91f3:b6fe]) by AM0PR06MB6548.eurprd06.prod.outlook.com
  ([fe80::a3db:1265:91f3:b6fe%4]) with mapi id 15.20.6156.019; Thu, 2 Mar 2023
- 09:20:41 +0000
+ 09:28:21 +0000
 From:   Michal Sojka <michal.sojka@cvut.cz>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>,
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     linux-can <linux-can@vger.kernel.org>,
+        Michal Sojka <michal.sojka@cvut.cz>,
         Jakub Jira <jirajak2@fel.cvut.cz>
-Cc:     linux-can <linux-can@vger.kernel.org>
-Subject: Re: please re-send [RFC PATCH] can: isotp: fix poll() to not report
- false positive EPOLLOUT events
-In-Reply-To: <08d8e225-0e7a-a75f-f8fa-e4a8ce99d4a4@hartkopp.net>
-References: <b53a04a2-ba1f-3858-84c1-d3eb3301ae15@hartkopp.net>
- <878rghtt0p.fsf@steelpick.2x.cz>
- <08d8e225-0e7a-a75f-f8fa-e4a8ce99d4a4@hartkopp.net>
-Date:   Thu, 02 Mar 2023 10:20:39 +0100
-Message-ID: <87zg8vjyqg.fsf@steelpick.2x.cz>
+Subject: [RFC PATCH v2] can: isotp: fix poll() to not report false EPOLLOUT events
+Date:   Thu,  2 Mar 2023 10:28:12 +0100
+Message-Id: <20230302092812.320643-1-michal.sojka@cvut.cz>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <87zg8vjyqg.fsf@steelpick.2x.cz>
+References: <87zg8vjyqg.fsf@steelpick.2x.cz>
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: VI1P195CA0021.EURP195.PROD.OUTLOOK.COM
- (2603:10a6:800:d0::31) To AM0PR06MB6548.eurprd06.prod.outlook.com
+X-ClientProxiedBy: VI1PR04CA0090.eurprd04.prod.outlook.com
+ (2603:10a6:803:64::25) To AM0PR06MB6548.eurprd06.prod.outlook.com
  (2603:10a6:208:195::14)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR06MB6548:EE_|HE1PR0601MB2603:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4c072bd8-3efa-4abf-015c-08db1aff64d9
+X-MS-TrafficTypeDiagnostic: AM0PR06MB6548:EE_|AS8PR06MB7333:EE_
+X-MS-Office365-Filtering-Correlation-Id: b9207679-65d4-4b16-15d1-08db1b00771e
 X-LD-Processed: f345c406-5268-43b0-b19f-5862fa6833f8,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XZX5rumqBqZsavH5AsmLVT6gVTz+WOJPYUNdivdBOsp9iYTxo4NrPepsKIs85iSqFQC8Kunnk/S9UjKu2/+ROAs5jIg6RJvlAqpP3taSjkBMldQKrX81o86uN7bqY3HS3EExSWmLrt0jAZt0gXLUyzPJzmyZbRjjDgQEeGLKursCA0Wx5VBnsqH/bzDdjzPk8nQnL8NIq7ajDFx+BcNe1TdRXz6E6uToOOhC70RrVNGQcoWmz3Pe8SFca5mcm84MGPHP7h0sOkI7lrHg9tp5IDI89vHsjy8OTmbH0pTy5Kfc6vWuYSFG7ivjEcUHdopEvY2lEM32c8JzQChxsylw+Jb1+npvgX6k0qbCw15Ubnsh3mZeKiQ/95RnYrA8spbUub9Xgo9Bgm38cU/lv7Lwsvb2hO42ytJQmkm4pFzG0/G4RPO2CEtoCAdkhTHALvy8jBmFmY1TzFKbwsUrsPY3p2jyDaxsSNf1BFyFcjBVetB1r9uSxFvdCwEFkyZinetDs/dueTtjZ2/9SbxmLbOnd5H79mV06GSNCiPuWOClHvp6s+0vHLaeSSE41m4BKXp87g/Tm/G/e9aqED9uQTH57cjkvADElP2+u3W9u09c5NiXtEzGhBLr1+9X1z8heaD5
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR06MB6548.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(366004)(136003)(39850400004)(346002)(396003)(451199018)(41320700001)(478600001)(83380400001)(110136005)(786003)(316002)(4326008)(38100700002)(8676002)(66476007)(6512007)(186003)(6506007)(5660300002)(26005)(9686003)(966005)(6486002)(8936002)(66556008)(66946007)(44832011)(41300700001)(86362001)(2906002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: Ud/Ag3zEjkXN97vuop007FfjTX47Dm2xFvAJdNsc461oy9You6WkH/txaxnoazMVV7WAGoDxlrW3Whidmu9YD8sDgma6cHSKgq4r2dmn6jgS5SHTtfuOTP0RLpkQaKzsJRhwOEsmKdpMPkgufmrf5ndxTrhWR8rtJohG1MUgPkHQ+OGkrLL2JQmT9UuPnU4NTq2q2AV9fly/aqOcEO8glSyDWmJWDcadbI1BJ+EQgzJCQ3CnKZ2OSJMx2ALWRfe/FlrHOc3d9fETY4KenNof9gzu3HvL78nslgw9uggE9O92uHGLB9wAI5XvXWfejFYQaJZq64+IUVluuc6m3ymOCHRNnxQcyag5dH7T2fXJBwckHy5gaoh7ZW5PdvJrGqoPC0VrJx8wbYM8GVPCPKyDm7wlhU5ddada43B3P9xGQyzxgl4j6XUxHIfI3DZDF0xjIypnVRQ/F6DDtTNDoeCHs44KCY+AtRBlWEaRmZT2iK3TuUClGriA8tMKhGw+hCzRHJBig47yiIwSGRzt8ENAfoqVQkeK1uw6afKtqSKKKW5P/Asm7PPIqSMWaqB1UXcFOzIB5J3HpFhRmOMuiZYhWubRV4XxiT61uPjf5JTVjkmmHBP8IX41zh3aEk4JKbBu
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR06MB6548.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(136003)(396003)(366004)(346002)(39850400004)(451199018)(36756003)(66556008)(4326008)(66946007)(86362001)(2906002)(66476007)(41300700001)(6916009)(44832011)(8936002)(5660300002)(38100700002)(8676002)(107886003)(966005)(6486002)(6666004)(478600001)(316002)(786003)(54906003)(41320700001)(83380400001)(26005)(6506007)(1076003)(2616005)(6512007)(186003);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?CTelG0kGJu03lxZ6XW+DHucRpan7krjyUG9723Ng9aQILdvWuvWgXjR30Jen?=
- =?us-ascii?Q?AHvC2lySxdkq+Ic8kWOUc28IkvUjFY1LA1d3ccbllAPMNhvBl65+oWFR64MI?=
- =?us-ascii?Q?poKAl5nOxKk20ChyU6fXI3bQ++EWixLZ1bUgvbVfYw+YUeviDVOMmzh+Va7u?=
- =?us-ascii?Q?rCLu4ldTuKryew707EtZTqR4qIhfkkgE/Fb5XDTjp/REMjNamaHrdo8bob9M?=
- =?us-ascii?Q?5oilkMV5Of3lW0OLaj18NJ9DIi5/fnh9Xlpkx6CONQVr26LGheX3QrXFL6+m?=
- =?us-ascii?Q?g1t7a8/dGLhjPPfooqwCf0jKRJ995m+bHB8MhYTOduO5gvtfH4bikOOvF5WF?=
- =?us-ascii?Q?hA/+ADBEB/Oj0YAxWQ2E+E3Ii8LRkMJSellYh0zPXzUJKZ6FusCOyC+PHsAa?=
- =?us-ascii?Q?oA1JvE8pZqDQaMkoDgzA4R/PmKjfS2We7d0weCITNXTAxDFNBDnfPqTphdj5?=
- =?us-ascii?Q?POI+uF+p/ynL6DJYU48vm7ZPjzWlC9VlEaJeiJVJCcZkYtNd9ExOc5g/wkCr?=
- =?us-ascii?Q?tpcZuODIHxYX08sNUKDbyWgfbj4lfyN5Col3B8R4ir9T5l9kiQ+eojxepfdJ?=
- =?us-ascii?Q?HcNpwLZMcwjPi4Xbz6HnQ5HGrt+IcmYgBnXTT9G1be4sLPOMoCs5MkBdloQN?=
- =?us-ascii?Q?qeKOPsTnxc7F2Z5UMMmpZdrEws9IKUsJYU2+3M/WGC594B62MVsJ8/Jdt5AJ?=
- =?us-ascii?Q?WC6C604BGbRaKFS7luovM1pvmVdmXDxn1+caLUc9GURbTWiPUbaDSCyHlDJt?=
- =?us-ascii?Q?rUkSCvwlFzgnkp5PLN98gCZIBAc92LLKZrhjEYujmxv7vfo1Y7NuArW+9xDh?=
- =?us-ascii?Q?g3LcNAwoBv6vxDtPitvmuUFQjPDgFyGmwi/24dChs2JW5WBSeVIX3joHdWUl?=
- =?us-ascii?Q?g/AMJvLqsp5wRgXJ73e6On2ArS7d29pAXTycHstp9jXuE2ZzA39CqxtPldOS?=
- =?us-ascii?Q?n5kUu2zDI+O1Q4uyYdJ8XziBjp0M106IU6kjF2h7HI9hn5PqPPXUQF5SbON2?=
- =?us-ascii?Q?oaU/i638k/BSq+zYVutCvGIlra3UumYuKwPGx8PN28yn8dbL4segpZy3tnbL?=
- =?us-ascii?Q?IJ0+RGjWXMWmBtm0BjuptsDkzGlL5N7NRlCvsRAgoZqCf1a31XegSTxSqTXr?=
- =?us-ascii?Q?+Jl5VCyT1VGWUHeheXfBqhcO3T9VIb/LgAtXzcB8ph9R4fNMlwBsr0GsZpXJ?=
- =?us-ascii?Q?12Ffip9MxYT7wl9yPQxcGMtOgBE1MCf0sgvy7p26e80Y3rk2xq8bP45R8Xa8?=
- =?us-ascii?Q?wAki6+6NdUoysGO0NftAvIp1f6W7o/W4i8Rrhs5hNbYDevjUTG6z7gvMjj5l?=
- =?us-ascii?Q?kqMqHOzyTWPNmbHd8txDK34BbZjS0Z7pU0jshNTCYC6I3GnKg11PgAWkAlcV?=
- =?us-ascii?Q?Shif3gDI2g2fWrQudyLyhZyQcrYKf/1IGGUCmxwNFzaqbpPRWNOiFpVN7oAH?=
- =?us-ascii?Q?vTOnMIOtmpuaA92gV1PjyfM4ypeLF84Crw60p83htING0LlVQ1/Ag0tT1HAM?=
- =?us-ascii?Q?QtX9k03Zu8++ImxMymXDbaJuENFpzYW8ZeKGO2FzFYMiHeMYrMGgwIz82noK?=
- =?us-ascii?Q?1+NHCYEIfc44KMfDXHE=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?k1qf0rsrTxZtnZ51mqVF8RG7l6I8v+NjBITBkxwp6V+P+nFkl6V6QJttU6aH?=
+ =?us-ascii?Q?fA6IRRSpXOgbBVtLtMg3dR8MhXv1T0MsoFpdsA+DWhjd+EfOs6F5LUX85q18?=
+ =?us-ascii?Q?mGy8ZmNP0vw5+7Kv9d1Uv8djlxMyAM6tkknMIw1ZM9spIU+M1hRlDuj0WqS8?=
+ =?us-ascii?Q?D1d/mFEtaKYW5vyLNRfXcykxwKNwa1zGkRM/TTmSrPlYczKwDHpwvS4T1Djx?=
+ =?us-ascii?Q?mUpFJi4On3Pir3WkB5ckPyAkPOWmPx5ENU11Xj9PEuWToHAdwv11hd6WuuK6?=
+ =?us-ascii?Q?2hOHS56KydsHGED8+jTnHarpFHID8xBUhpONAQiTK15zFFWIa8hOswHcG88b?=
+ =?us-ascii?Q?SmVypXXPOksj5g8CPZ3ABEu52A5QQ3+18RpBgcWwSjZ7lRA+C8931RYXCLdN?=
+ =?us-ascii?Q?oir+NE32AI2B1Pweq39rcDYP3UT4jX/dQNs2MvIjF1s9XGaAPTItgUW00C1T?=
+ =?us-ascii?Q?YM3VHdkzONau1dpWUjWJR8K5alGdnmxYqnKH7o1AHmTuotYrXiI8BV5bSej+?=
+ =?us-ascii?Q?C/ChPjCTMvSIEuefTwDh2NH1z8DTBSYsjGVeaG8iWEpp/IOQLMMY+iOFxHrM?=
+ =?us-ascii?Q?w1oAGquUggffQNBLdycqeivQC9JW6XF4CXZffByRjVBbSpc6rY2JjrjNGYOF?=
+ =?us-ascii?Q?LY/cPcCZohHADD4V1f4lZv5CURuaoZQuKsrzMGZl9LdPi8Pa7ndLyM6uTKeh?=
+ =?us-ascii?Q?29H5py6AeclUJyMZ63/gJR64TFN8t99oW9rV3AkCLK7So2GvIJ8pS51d9Z8H?=
+ =?us-ascii?Q?TQNePmdyYiemo9+lUFb1g+DH08wux6zMwNyglZo6tmq57wCAYqrSTkQNi+8v?=
+ =?us-ascii?Q?Dh4dOAzvm4AKpRUfk1iKx1iBO2mix6MsZVBF6HK20FrvqfCp/8P9XE8VGAyS?=
+ =?us-ascii?Q?79aQkEjd8Xzhry/IrlLF/qgx7JlyH1fjB6EUaPjnQhKAoqsX9AHeP92kpq3H?=
+ =?us-ascii?Q?xC4WFF+YmG0hS2OzGciTTL1Y9WKLl8XB5R3c6UodWdnp6cJUlQbyoY0TU42j?=
+ =?us-ascii?Q?1yqfUcfHJaQH5kq4tFpBV64Uos5SZ47iZCvxCFtE3qsMhGYKQ4z7gUJt4wHX?=
+ =?us-ascii?Q?0HdwFMuCHoQ8tjBDR30w1ro0cCoxA/qywB86SjJugucI0U9VATLJELu4Ilfz?=
+ =?us-ascii?Q?bCDFVk/QzyTZVolwqtrqkDlq2f3jb1Upe2mbOwtNhGUpKjMMJ53McmOru0wn?=
+ =?us-ascii?Q?CdoUIZjDXSlW6XdST5Ixw/t4ra7Blb4iBTmZ//5yjyC95VIXBsocJVVPmse+?=
+ =?us-ascii?Q?UKSE0niBRSSAaJ4wzcWMl5+ZtWyqukA7Onhzt55BOrlUBYAkOislKtL+ZFnt?=
+ =?us-ascii?Q?fOld19Ezs4RApFU1LhCkrtTNVL7rSN0n3obd8HSlcMikxfJ/ZYMp+JjQGel8?=
+ =?us-ascii?Q?WwklAkw+1mU2zLTHxJJIPZpC3qiJ3tot99bmLv9dvo77OfiF5Ifog7+wmdu4?=
+ =?us-ascii?Q?1yMXDhUy8MiLwI7BTSGUNH+pqCo6tlvNFAjvm4E4W/8k6Pj55oVTHJib5uyU?=
+ =?us-ascii?Q?l5wDkIt5lpOZSFfiTYFBZYT8rA9Nl8mM5fP9rRjS444twM4ab/UB67gXt1Q6?=
+ =?us-ascii?Q?ww6wH04Fz6EhE2XD1zo=3D?=
 X-OriginatorOrg: cvut.cz
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4c072bd8-3efa-4abf-015c-08db1aff64d9
+X-MS-Exchange-CrossTenant-Network-Message-Id: b9207679-65d4-4b16-15d1-08db1b00771e
 X-MS-Exchange-CrossTenant-AuthSource: AM0PR06MB6548.eurprd06.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2023 09:20:41.8044
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2023 09:28:21.7342
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: f345c406-5268-43b0-b19f-5862fa6833f8
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wgpE6uS625nFN22zk+XhUuT3jt130i2rHVpp5gGUGYbQ5W7Bll4YnmMmWbnGxAVf
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR0601MB2603
+X-MS-Exchange-CrossTenant-UserPrincipalName: F/x8KsLTGBu1diHn3EVxXanGVZUGL/Rx1OAGsp96X7DrjHI6XM5+s/mTWt7K33TP
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR06MB7333
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -114,72 +114,99 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Oliver,
+When using select/poll/epoll() with a non-blocking ISOTP socket to
+wait for when non-blocking write is possible, false EPOLLOUT event is
+sometimes returned. This can happen at least after sending a message
+which must be split to multiple CAN frames.
 
-On Wed, Mar 01 2023, Oliver Hartkopp wrote:
-> I can not see problems or drops when using
->
-> ./isotpsend vcan0 -s 123 -d 321 -D 9 -li
->
-> as data producer where I added a counter:
+The reason is that isotp_sendmsg() returns -EAGAIN when tx.state is
+not equal to ISOTP_IDLE and this behavior is not reflected in
+datagram_poll(), which is used in isotp_ops.
 
-Really? I tried to modify my test program to also support blocking
-operation (without poll()) and setting CAN_ISOTP_WAIT_TX_DONE. It's
-available at https://github.com/wentasah/isotp-poll-test/blob/fd095b2242c49dc5d3e36faf5ac9f4f47fd002c7/isotp-poll-test.c.
+This is fixed by introducing ISOTP-specific poll function, which
+suppresses the EPOLLOUT events in that case.
 
-With it, I detect lost message in mainline Linux 6.2, but sometimes, it
-takes quite long time (a minute) before it happens.
+This can be tested with a program available at
+https://github.com/wentasah/isotp-poll-test/blob/fd095b2242c49dc5d3e36faf5ac9f4f47fd002c7/isotp-poll-test.c
+which can trigger the problem on a vcan interface. When running the
+program as:
 
-What happens is well visible with strace. When I run the receiver as (-b
-stands for blocking operation without poll()):
+    ./isotp-poll-test -s 123 -d 321 -o
 
-    strace ./isotp-poll-test -s 321 -d 123 -i -a -b -q
+it starts sending ISOTP messages that include increasing ASCII
+numbers. poll() is used to wait before the next transmission.
 
-and then the sender (-w means to use CAN_ISOTP_WAIT_TX_DONE):
+With current mainline Linux, once the message length is greater than 7
+bytes, write() returns -EAGAIN and the program terminates. This should
+not happen, because the previous poll() reported that the write()
+would not block.
 
-    strace ./isotp-poll-test -s 123 -d 321 -o -w -b -q
+After applying this patch, the above command doesn't fail - if one
+runs some ISOTP reader such as:
 
-The output of the receiver is:
+    isotprecv -l -s 321 -d 123 vcan0
 
-    read(3, "Hello122813", 99)              = 11
-    read(3, "Hello122814", 99)              = 11
-    read(3, "Hello122815", 99)              = 11
-    read(3, "Hello122816", 99)              = 11
-    read(3, "Hello122817", 99)              = 11
-    read(3, "Hello122847", 99)              = 11
-    write(2, "isotp-poll-test: ", 17isotp-poll-test: )       = 17
-    write(2, "Lost messages. Expected: #122818"..., 50Lost messages. Expected: #122818, received #122847) = 50
-    write(2, "\n", 1
-    )                       = 1
-    exit_group(1)                           = ?
+This test program can also show another problem. When running:
 
-Sender's output looks as follows:
+    ./isotp-poll-test -s 321 -d 123 -i -a
 
-    write(3, "Hello122813", 11)             = 11
-    write(3, "Hello122814", 11)             = 11
-    write(3, "Hello122815", 11)             = 11
-    write(3, "Hello122816", 11)             = 11
-    write(3, "Hello122817", 11)             = 11
-    write(3, "Hello122818", 11)             = 11
-    write(3, "Hello122819", 11)             = 11
-    write(3, "Hello122820", 11)             = 11
-    ...
-    write(3, "Hello123116", 11)             = 11
-    write(3, "Hello123117", 11)             = 11
-    write(3, "Hello123118", 11)             = 11
-    write(3, "Hello123119", 11)             = -1 ECOMM (Communication error on send)
-    write(2, "isotp-poll-test: ", 17isotp-poll-test: )       = 17
-    write(2, "write(sock, str, strlen(str))", 29write(sock, str, strlen(str))) = 29
-    write(2, ": Communication error on send\n", 30: Communication error on send
-    ) = 30
-    exit_group(1)                           = ?
+and then in another terminal:
 
-So my impression is that this does not relate to poll() implementation
-changes.
+    ./isotp-poll-test -s 123 -d 321 -o
 
-I also tried to update my poll patch to take into account the so->wait
-wait queue. But the result is the same as without it. I will send it in
-a separate mail.
+The first program receives the messages and uses the counter values to
+check for lost messages. After a random number of iterations a lost
+message is always detected. I believe that ISOTP should be reliable
+protocol, at least on vcan, shouldn't it?
 
-Best regards,
--Michal
+Anyway, this patch doesn't try to address this problem.
+
+Signed-off-by: Michal Sojka <michal.sojka@cvut.cz>
+Reported-by: Jakub Jira <jirajak2@fel.cvut.cz>
+
+---
+Changelog:
+
+v2: Added waiting for isotp-specific wait queue: poll_wait(file, &so->wait, wait).
+---
+ net/can/isotp.c | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/net/can/isotp.c b/net/can/isotp.c
+index 9bc344851704..ec163e36ac53 100644
+--- a/net/can/isotp.c
++++ b/net/can/isotp.c
+@@ -1608,6 +1608,21 @@ static int isotp_init(struct sock *sk)
+ 	return 0;
+ }
+ 
++static __poll_t isotp_poll(struct file *file, struct socket *sock, poll_table *wait)
++{
++	struct sock *sk = sock->sk;
++	struct isotp_sock *so = isotp_sk(sk);
++
++	__poll_t mask = datagram_poll(file, sock, wait);
++	poll_wait(file, &so->wait, wait);
++
++	/* Check for false positives due to TX state */
++	if ((mask & EPOLLWRNORM) && (so->tx.state != ISOTP_IDLE))
++		mask &= ~(EPOLLOUT | EPOLLWRNORM);
++
++	return mask;
++}
++
+ static int isotp_sock_no_ioctlcmd(struct socket *sock, unsigned int cmd,
+ 				  unsigned long arg)
+ {
+@@ -1623,7 +1638,7 @@ static const struct proto_ops isotp_ops = {
+ 	.socketpair = sock_no_socketpair,
+ 	.accept = sock_no_accept,
+ 	.getname = isotp_getname,
+-	.poll = datagram_poll,
++	.poll = isotp_poll,
+ 	.ioctl = isotp_sock_no_ioctlcmd,
+ 	.gettstamp = sock_gettstamp,
+ 	.listen = sock_no_listen,
+-- 
+2.39.2
+
