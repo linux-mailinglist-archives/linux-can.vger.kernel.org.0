@@ -2,80 +2,112 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 683986A8AED
-	for <lists+linux-can@lfdr.de>; Thu,  2 Mar 2023 22:03:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA5FA6A917D
+	for <lists+linux-can@lfdr.de>; Fri,  3 Mar 2023 08:13:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbjCBVDv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 2 Mar 2023 16:03:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58386 "EHLO
+        id S229564AbjCCHNW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 3 Mar 2023 02:13:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjCBVDu (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 2 Mar 2023 16:03:50 -0500
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358B4193CB
-        for <linux-can@vger.kernel.org>; Thu,  2 Mar 2023 13:03:49 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1677790842; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=l+rzK9p4Ugl7TTK/1cxewF8r5BHbifXCRSnlQHO7WCRauDYCZOYZp4UA6QhwTMHHkU
-    +2AonqlB01XGB/YJdKjH9WMxzV1nLtMz9ZyuFG34EYeJKd76p9ka5WIjckZIuVPyyVRg
-    ZmU8aBd29bcLFgLtOzbmiZr/oRspc1W7FvLz+IP2YXruxH350U5W4Mnf6q6sP2m5lmSf
-    YiZaDP0/lgpM9NlxmwrV//KavNwLLZuP7GYODupfv60wo8mODI1rzePyzwq70CTN+zyl
-    1OrMOrGj42nTz6pNmr1j01TzsvayRbDP2fs2gf4eI4n3KmYil7MnPbI+HN9urD6xs4bu
-    77xw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1677790842;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=MXzeWwsizsGpLRmnKztwU0mO2yQnN00JLvU0JJkpzCE=;
-    b=LHkqPa1Os+QhwpHvzF+wd0jOCT5T2293tIqhatM/VMINJCOfdTSBVZZAVS0Wp22XUX
-    LJRjhyRBOto5/X8dj0kQqjk4vnu3OYXkWud5ZfcjvVuIYeAcCc+z+Laot44V+aS6czNB
-    WRSTgmdDc1MUvvVDhibytrnC51qRHhTozkTFgPAc6hudxEVSpOTepEWeL8tbYGV8QSXM
-    BRoGLTrHu+9hyesFCnI33CiUMhH1XwtF+dvdAzSu9bF+fyo4lel30gbK8/YzOa5GHvwD
-    tYvKin04aHKdkZXatWJ8p0li6HTN/Cr4VO7RmzMQtrIJf9IKbdmDcyFuRbxy1kKcl2f4
-    puGw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1677790842;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=MXzeWwsizsGpLRmnKztwU0mO2yQnN00JLvU0JJkpzCE=;
-    b=eUCfQ4igf5fBIUMDV38ral63yFn2qmpbQS5U8IZKi7rNe9kErhYZsd4icbxwekJXQl
-    ZAcPyeHCu8vl1WGwoD5DB949FGsZeIZM0Qt1vCykHdW2T8il0NpSb3vU+O85Zlgds5iW
-    eMOx3HSwwHUn3D6sMTn5YjwSaEKyMylMZpefL1oat8KbDDhH4CjFX1AkMD6khTve9Nmu
-    0XYCYGDW/z32DiCoTuLcUeOtHowv9lcHHv+mg96NG7FD5672134SoKjNqFn1qbgX5eRO
-    4rbcJC+Hl8vB9bd8fiR+Ap+t9lFdNgjUUgoQTBgOiLo1O12obhR8OYVJVeVxFswyYX6B
-    FfTA==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusl129OHEdFq0USEbDUQnQ=="
-Received: from [IPV6:2a00:6020:4a8e:5000::923]
-    by smtp.strato.de (RZmta 49.3.0 AUTH)
-    with ESMTPSA id c675b3z22L0g7vU
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Thu, 2 Mar 2023 22:00:42 +0100 (CET)
-Message-ID: <40f9aad6-81be-e442-2668-cb349fe7313f@hartkopp.net>
-Date:   Thu, 2 Mar 2023 22:00:36 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: please re-send [RFC PATCH] can: isotp: fix poll() to not report
- false positive EPOLLOUT events
-To:     Michal Sojka <michal.sojka@cvut.cz>,
+        with ESMTP id S229455AbjCCHNW (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 3 Mar 2023 02:13:22 -0500
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2135.outbound.protection.outlook.com [40.107.7.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5316CC662
+        for <linux-can@vger.kernel.org>; Thu,  2 Mar 2023 23:13:20 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XknLMeANdeg8pZSm7P5zEAYSLKVFSy4/SVW3TLtkCKvoH9Ax1Iart8bn/wv2WnAf099g7jWXeFOMF+xUP3a8t8hOBIfn9IIJGXSeODkHqLUtSWi31gbS8L9uR5uQkVrNMw+L0pBWQLg1+bilpcukaVapTEqQ113W1Pgzva8w/dvtAeU8KRCRhyAZW9zH20K5Sz3KnER0tY435hibXWbNCQOzTZGt9dQlwUh+s3+QlBVMYTaGRXzZg8ESggAxoEWvqTFDyszMcB7If6Aec6CMROaTMlBhWRLzwtP0eH3btUv5kOamJRFnTgzade1OfvUtr9DIkj9D51O9yiq+5ZZOjA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JqX35S0mIyl7kRPrsmIZTRKsxuBitnRNlheEzwobRQc=;
+ b=ETcMIhEzNEjaJzA+zj2pK8HEOx4bldbKFL5FxTU0tMcJ540HyabqDmm9uJ4RMPTG2o+nT/81ax+CC2ToLnUtpqrGYpwipejjHa0VBV7ZYRNv+EQDPMiOea0NoDOVZDwgMYvsXI1j9o3rchp2XZegWmXizlqiukNXk2ZJBylBEgp0+WUGA599mmCBdyL3GSyYuawn7pn79zKqEtXpE4cFZqTiHOSKvk5xBW/NuN/uOBdPbXhDMmd/1AkWfBIYCMguOvvq+rwnPyXQdT/dYKD+KeymDRsUdxQWHvtoYHdKNbVys22bbgQvvtAt4IN7xiVlLpM37MBiPe4tRN6LbWLdsw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cvut.cz; dmarc=pass action=none header.from=cvut.cz; dkim=pass
+ header.d=cvut.cz; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cvut.cz; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JqX35S0mIyl7kRPrsmIZTRKsxuBitnRNlheEzwobRQc=;
+ b=eyylNV9ABH0YGUk7ZX21DkEdhpXTlIEjTEbBuMbw616ksvgn08odEqv7v0aO52ecH+w1s3R3nTW5RHfJ+PUE1uB3cJdtG6/+OhM9uDi4MXWmvrVfSfx7iwUvlCXYOmWdWc7Bg3rogAtFlmzNKIsY3ewO4FhzorlwXenJp4TVxjK7SXzaYq77BDfMQYZEzgB0FYukyQtQc1k9U6SloUo2HeBG4xMAoYvIyYV35uYKAP34xvdMEE4CvKUSSyA0rDjRoBu4Jjxwls/aliHdnKuukKrJhRXz2ToJHdBYl2gF7MtsTTaKJLupxK96aF+6JemnSJ++k5AHxFeWatrEhmRnIA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=cvut.cz;
+Received: from AM0PR06MB6548.eurprd06.prod.outlook.com (2603:10a6:208:195::14)
+ by VI1PR06MB5278.eurprd06.prod.outlook.com (2603:10a6:803:ba::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.18; Fri, 3 Mar
+ 2023 07:13:15 +0000
+Received: from AM0PR06MB6548.eurprd06.prod.outlook.com
+ ([fe80::a3db:1265:91f3:b6fe]) by AM0PR06MB6548.eurprd06.prod.outlook.com
+ ([fe80::a3db:1265:91f3:b6fe%3]) with mapi id 15.20.6156.021; Fri, 3 Mar 2023
+ 07:13:10 +0000
+From:   Michal Sojka <michal.sojka@cvut.cz>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>,
         Jakub Jira <jirajak2@fel.cvut.cz>
 Cc:     linux-can <linux-can@vger.kernel.org>
+Subject: Re: please re-send [RFC PATCH] can: isotp: fix poll() to not report
+ false positive EPOLLOUT events
+In-Reply-To: <40f9aad6-81be-e442-2668-cb349fe7313f@hartkopp.net>
 References: <b53a04a2-ba1f-3858-84c1-d3eb3301ae15@hartkopp.net>
  <878rghtt0p.fsf@steelpick.2x.cz>
  <08d8e225-0e7a-a75f-f8fa-e4a8ce99d4a4@hartkopp.net>
  <87zg8vjyqg.fsf@steelpick.2x.cz>
-Content-Language: en-US
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <87zg8vjyqg.fsf@steelpick.2x.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+ <40f9aad6-81be-e442-2668-cb349fe7313f@hartkopp.net>
+Date:   Fri, 03 Mar 2023 08:13:07 +0100
+Message-ID: <87v8jiux30.fsf@steelpick.2x.cz>
+Content-Type: text/plain
+X-ClientProxiedBy: VI1PR0601CA0026.eurprd06.prod.outlook.com
+ (2603:10a6:800:1e::36) To AM0PR06MB6548.eurprd06.prod.outlook.com
+ (2603:10a6:208:195::14)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0PR06MB6548:EE_|VI1PR06MB5278:EE_
+X-MS-Office365-Filtering-Correlation-Id: a8344e20-5e14-4631-4687-08db1bb6be98
+X-LD-Processed: f345c406-5268-43b0-b19f-5862fa6833f8,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mNo5Faj+3p+uN9nqdtfxP0bKxjl9U69b1PQABgefh3kxuaDgmNPlxGflFStj+QhYIpmbbrbtJBBY/8Q5/i0gNs6OqDDH+lZ4a54J/7ftqJfV/HRbDIj4d1PB2BXl7HNuIgoud0c5y04aU4zA6XPWD3D+s91Wb1k4+sb1GrzMtYnsOQqADY7ngtW+apbQJbQy8ElLxo1SJ6TxKSTs95yo1DXTVU6NMLsyfY1kquH2VPkL6UfsawEIdnK/mWqZW9yGqr0fQ9ZVqu9ERJXf7flKNwicYE/JMJ00wIVB8Igl6FqW4+MMn6U54u80w1rqJ30GawwkyltU9xaIsIB+Z5hYdwtCSx/28jmYfVUGcN/N6m7AAN1Mo54jyj9O4+HzhbjYIq5obpGB5c/uKjjmGDlMFY8GALg9kNnOPeCZ4xzYhjv4+FeRE7kXrVDQANJg8+MeGeFFai0vE0IezqkaJAb69Jg+pJwpiBNzBd/ausUGR7SriRW3ICR4OEdtAVBXxJw3mO3DzaSISRg9OCCT7w1/QZDRMQcfh5WTlaSxy4jKSHO6G5DS7AUNwpaSr8I2pyvYSbVRi4g/K3hAi4oJsiLVs6D0vdu/kNe2iku1peV4oYvZ+/Wlu37VEchLc0gVzdLuWbOn0PzMGniqxwv22OxGng==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR06MB6548.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39850400004)(136003)(376002)(396003)(366004)(346002)(451199018)(786003)(316002)(2906002)(4744005)(5660300002)(86362001)(8936002)(44832011)(6506007)(41300700001)(6512007)(186003)(66476007)(66946007)(8676002)(4326008)(53546011)(9686003)(38100700002)(110136005)(41320700001)(26005)(66556008)(83380400001)(6666004)(478600001)(6486002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LWMdWu10Atf5l+DGnL38+Obb5r1kuKtUeiVbx7q9FK3Rckql5nfsv3wutOHp?=
+ =?us-ascii?Q?RHF6SZRDSuE2MJbFfwwrCiRlye1GXTnn6Z/74iUA+3Ivr+bs7+ABmvepxzp1?=
+ =?us-ascii?Q?bAOvHhgQ9Di5FxnBnIbT2y+WQB6W061ktVxn4n0GQHrjlmpQfweQ+giXsbRu?=
+ =?us-ascii?Q?VPiA4lghPlw5BnxH3kbekPmrvY/ugdgpnT9hxSTR3CRM8E1EGIEklYf/dNYJ?=
+ =?us-ascii?Q?723wcVIKrazpa0UyMsiKzmzGW6EpGEB5QXLDwiUGm2ODsjXhSpvxcKVNBQ8J?=
+ =?us-ascii?Q?ZClTyTVo+S5mEoGbNAHUu60zke03c6LRio5cLwbR8cCRL1+rRSrVAyFsNIKW?=
+ =?us-ascii?Q?vMXKgkyWnMJmPkCnbkdTXysKMpC7YE6ElIIoQQc771P09HzOR5Yy61lRLkvT?=
+ =?us-ascii?Q?gJLM3IHyMtYWYMlG0eUd65fj/J9LOTzJSskDn0OLknmboBC1B7O/0yna0MeW?=
+ =?us-ascii?Q?0WOO4QkdSayQWipL4UKMbC8S5THMGvitopNbVcSOLoVG6dOsM4oj0G2Q0PxI?=
+ =?us-ascii?Q?O3mHF28q1Bv+IcDQ1omy3UL029QjgzoJUo/xbdF+1FcMjPjooGsgzNdlFwBy?=
+ =?us-ascii?Q?vIsqsLSbv70XutaqLmQAxySolfk0fiqvWVsecQq8PH8e1iOFdGsrlKV7DsUJ?=
+ =?us-ascii?Q?8h1/z8t1wUkmpLSPozDyUXa+ytdzNlJ99DX/Iqk30lUUMmtmj5u1Bo0Em2xX?=
+ =?us-ascii?Q?fZ3Vesvpg7uY4LoaPubPJxwfVSeGfNPOYZVifz34M5l30GrvfBXRAHFe07jN?=
+ =?us-ascii?Q?LKrXGqPclYBCvIznZ3uNuHtqVhrM4CHjwo1Q3Qg+GoONMn/8pL9WhPwG1wWu?=
+ =?us-ascii?Q?jkGIHqnEkwE3qp8VMTFEgVM93JPsooxrTyn1a3k3BR42I5LpStXZDIC3tXVr?=
+ =?us-ascii?Q?8VTRQeJhP6Vy0ocgL6fHDVUxTjDgwg/UeYFoYKFtC86IRf+F9C+KJzMhorZz?=
+ =?us-ascii?Q?Hb/nVj4+e2lkbii4z7iTobbvIvXWvRZNBgxcVSWNwx3EYeHo5NyahGsNZMkB?=
+ =?us-ascii?Q?ZCUBYD3CWGnxJMzVpO8lZtNsmqEYD85kRprMUT5X9Dz54oWpuWTzHYuS7Y/X?=
+ =?us-ascii?Q?jNJriazR+1EDGPUaiGZceWar08sGRlQfOv03uslq3rSpOZn9i7vz2zbbWTzr?=
+ =?us-ascii?Q?Ky6dgKdG3V4RRPKn0ZjYD4NjiVZJMJrKzQ465Qv1etorbKEd/oQ9HixQP+xt?=
+ =?us-ascii?Q?IJZ6a9iq198jOQnIOSne6b9hoduveZ9VoOeWK6aHkhzKaNzFkXdPWqdCyYzq?=
+ =?us-ascii?Q?cc43N8CFs9Fa3oXFyotlk73Dw5vulsDSpGZ+0jWn/eZPJ3+msvPDLGgTipJE?=
+ =?us-ascii?Q?chBiXWm9HHmY0KczLwl68P1Sd7EOWGISYXNlw0Q9dYwaGIGkqi0cQxYI1DZh?=
+ =?us-ascii?Q?AXYDpThMu/n5Zqw9v2D9tz7ooD0FBqoSWp98rcucvrfikizRxaB6hYifgEQp?=
+ =?us-ascii?Q?kRdzFXmQNQXqazz/TOM3e6gXceEzsmZ6CI65xgUrJh8u6qYe0+ywPgieZ2lf?=
+ =?us-ascii?Q?lBVLOVkn9DLsbqc/ts/GnGNG09ilyNjd5kAJc/yYnTCuCqqi35jY/YFnJcD0?=
+ =?us-ascii?Q?56n91gdZW5/pRxyDZqg=3D?=
+X-OriginatorOrg: cvut.cz
+X-MS-Exchange-CrossTenant-Network-Message-Id: a8344e20-5e14-4631-4687-08db1bb6be98
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR06MB6548.eurprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2023 07:13:10.1205
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f345c406-5268-43b0-b19f-5862fa6833f8
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 78ZhROsn2ARNllDdfQvsnXw7wkDGXk9WSPrBvJcagf/uIt+Hi8U58U2rwpboZtYJ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR06MB5278
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,113 +116,27 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Michal,
+On Thu, Mar 02 2023, Oliver Hartkopp wrote:
+> Hi Michal,
+>
+> On 02.03.23 10:20, Michal Sojka wrote:
+>
+>> On Wed, Mar 01 2023, Oliver Hartkopp wrote:
+>>> I can not see problems or drops when using
+>>>
+>>> ./isotpsend vcan0 -s 123 -d 321 -D 9 -li
+>>>
+>>> as data producer where I added a counter:
+>> 
+>> Really? 
+>
+> Yes ;-)
 
-On 02.03.23 10:20, Michal Sojka wrote:
+You're right. I have just forgotten that I added the poll patch to my
+default kernel. Thanks for testing.
 
-> On Wed, Mar 01 2023, Oliver Hartkopp wrote:
->> I can not see problems or drops when using
->>
->> ./isotpsend vcan0 -s 123 -d 321 -D 9 -li
->>
->> as data producer where I added a counter:
-> 
-> Really? 
-
-Yes ;-)
-
-> I tried to modify my test program to also support blocking
-> operation (without poll()) and setting CAN_ISOTP_WAIT_TX_DONE. It's
-> available at https://github.com/wentasah/isotp-poll-test/blob/fd095b2242c49dc5d3e36faf5ac9f4f47fd002c7/isotp-poll-test.c.
-
-Cloned it.
-
-> With it, I detect lost message in mainline Linux 6.2, but sometimes, it
-> takes quite long time (a minute) before it happens.
-
-Hm. Everything fine here with 6.2.0-12944-ge492250d5252.
-
-> What happens is well visible with strace. When I run the receiver as (-b
-> stands for blocking operation without poll()):
-> 
->      strace ./isotp-poll-test -s 321 -d 123 -i -a -b -q
-> 
-> and then the sender (-w means to use CAN_ISOTP_WAIT_TX_DONE):
-> 
->      strace ./isotp-poll-test -s 123 -d 321 -o -w -b -q
-
-Running these two (without strace) for 15 mins now:
-
-Hello20160713
-
-and counting ...
-
-
-> The output of the receiver is:
-> 
->      read(3, "Hello122813", 99)              = 11
->      read(3, "Hello122814", 99)              = 11
->      read(3, "Hello122815", 99)              = 11
->      read(3, "Hello122816", 99)              = 11
->      read(3, "Hello122817", 99)              = 11
->      read(3, "Hello122847", 99)              = 11
->      write(2, "isotp-poll-test: ", 17isotp-poll-test: )       = 17
->      write(2, "Lost messages. Expected: #122818"..., 50Lost messages. Expected: #122818, received #122847) = 50
->      write(2, "\n", 1
->      )                       = 1
->      exit_group(1)                           = ?
-> 
-> Sender's output looks as follows:
-> 
->      write(3, "Hello122813", 11)             = 11
->      write(3, "Hello122814", 11)             = 11
->      write(3, "Hello122815", 11)             = 11
->      write(3, "Hello122816", 11)             = 11
->      write(3, "Hello122817", 11)             = 11
->      write(3, "Hello122818", 11)             = 11
->      write(3, "Hello122819", 11)             = 11
->      write(3, "Hello122820", 11)             = 11
->      ...
->      write(3, "Hello123116", 11)             = 11
->      write(3, "Hello123117", 11)             = 11
->      write(3, "Hello123118", 11)             = 11
->      write(3, "Hello123119", 11)             = -1 ECOMM (Communication error on send)
->      write(2, "isotp-poll-test: ", 17isotp-poll-test: )       = 17
->      write(2, "write(sock, str, strlen(str))", 29write(sock, str, strlen(str))) = 29
->      write(2, ": Communication error on send\n", 30: Communication error on send
->      ) = 30
->      exit_group(1)                           = ?
-> 
-> So my impression is that this does not relate to poll() implementation
-> changes.
-
-With strace too.
-
-strace ./isotp-poll-test -s 123 -d 321 -o -b -q
-
-strace ./isotp-poll-test -s 321 -d 123 -i -a -b -q
-
-No problems with your V2 patch either.
-
-> I also tried to update my poll patch to take into account the so->wait
-> wait queue. But the result is the same as without it. I will send it in
-> a separate mail.
-
-I only get a problem when removing '-b'
-
-strace ./isotp-poll-test -s 321 -d 123 -i -a -q
-
-poll([{fd=3, events=POLLIN}], 1, -1)    = 1 ([{fd=3, revents=POLLIN}])
-read(3, "Hello716", 99)                 = 8
-write(2, "isotp-poll-test: ", 17isotp-poll-test: )       = 17
-write(2, "Lost messages. Expected: #715, r"..., 44Lost messages. 
-Expected: #715, received #716) = 44
-write(2, "\n", 1
-)                       = 1
-exit_group(1)                           = ?
-+++ exited with 1 +++
-
-Hm.
+I'll continue investigating it. It's not clear to me how can poll
+implementation influence behaviour of blocking I/O.
 
 Best regards,
-Oliver
+-Michal
