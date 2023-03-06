@@ -2,163 +2,99 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00FB26AB867
-	for <lists+linux-can@lfdr.de>; Mon,  6 Mar 2023 09:33:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F3D6AB902
+	for <lists+linux-can@lfdr.de>; Mon,  6 Mar 2023 10:00:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbjCFIdq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 6 Mar 2023 03:33:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34978 "EHLO
+        id S229543AbjCFI7r (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 6 Mar 2023 03:59:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbjCFIdn (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 6 Mar 2023 03:33:43 -0500
-X-Greylist: delayed 966 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Mar 2023 00:33:03 PST
-Received: from smtp16.bhosted.nl (smtp16.bhosted.nl [IPv6:2a02:9e0:8000::27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5581E5CC
-        for <linux-can@vger.kernel.org>; Mon,  6 Mar 2023 00:33:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=protonic.nl; s=202111;
-        h=message-id:references:in-reply-to:reply-to:subject:cc:to:from:date:
-         content-transfer-encoding:content-type:mime-version:from;
-        bh=iGJBerep9CUnwc0kKc070FLg5wgjahdY5flMGzZYQMs=;
-        b=oDYibHiF3QQbdSnLfVFRXWqS6z3NQmb6kugL8YV+AzvXesLHyr5JzoQv36TlUtoc6W5KCotN1l9wN
-         9LSOB4Bu9Yfgb0XpMplMCVfXibebalo7a5aESxI1lFy0L3DA6RZo6UFgR79W8gl98jQrxQ/tLvd2T2
-         0xEQnuRgzH1ORWF+wpRq+raboR/TqFqi3nosbBYytoNMkARO5GE2FASMRvbgozacXT968pNevzID08
-         kd2Bb6hh7pzuv819gTpRFHFjwmhc4+RnlmqnZW8aNjXY3z24ty79Y1uQG7spYocRbf484LhNNLEwf4
-         6CAVA7hl0v6jQA7FXN1mdH2h85/uHYw==
-X-MSG-ID: 412d5329-bbf7-11ed-829c-0050569d2c73
+        with ESMTP id S229712AbjCFI7p (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 6 Mar 2023 03:59:45 -0500
+X-Greylist: delayed 503 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Mar 2023 00:59:41 PST
+Received: from mail.amblevebiz.com (mail.amblevebiz.com [80.211.239.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00384449D
+        for <linux-can@vger.kernel.org>; Mon,  6 Mar 2023 00:59:41 -0800 (PST)
+Received: by mail.amblevebiz.com (Postfix, from userid 1002)
+        id CBABA82B56; Mon,  6 Mar 2023 09:51:12 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=amblevebiz.com;
+        s=mail; t=1678092676;
+        bh=mG5KF9rXIT2hCcIXZaMY449X9Ndwb1czFhgZLlqDg7A=;
+        h=Date:From:To:Subject:From;
+        b=mnF5uAnstueoPkQnpduQVNVtfwRGgj6qqXe8kPqm4gEl7JH3absJIPrqWj9X7xyIW
+         V5TzEX44NzazqYwNaDSulOwKe0oAlHnhSaK2I9o8V/ghDtywJFQOZkS3fizeuRFsCg
+         wNAejZ1FAfORNNynklylVz7FbKmC7we+yioDAjxq9ZDz5GFwmcjHRarAhmgL5A70fg
+         jRDlpGp6OPf07hLZz6jMTVWzAkqrddC0Bz+TCry/PRAsVlkja88UQqiBNwdz4t0b01
+         riapDH5hgXxRvclCFrtKpgMivHvQFPs8uHaHhFDlVfwzuXAxfoqH8Xa6amaf4MhVs8
+         SfM3GQgAKLWFA==
+Received: by mail.amblevebiz.com for <linux-can@vger.kernel.org>; Mon,  6 Mar 2023 08:51:10 GMT
+Message-ID: <20230306084500-0.1.i.y2i.0.rgk4l787jq@amblevebiz.com>
+Date:   Mon,  6 Mar 2023 08:51:10 GMT
+From:   =?UTF-8?Q? "Luk=C3=A1=C5=A1_Horv=C3=A1th" ?= 
+        <lukas.horvath@amblevebiz.com>
+To:     <linux-can@vger.kernel.org>
+Subject: =?UTF-8?Q?Technick=C3=BD_audit_podlah?=
+X-Mailer: mail.amblevebiz.com
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Mon, 06 Mar 2023 09:16:54 +0100
-From:   Robin van der Gracht <robin@protonic.nl>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-pm@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Fix SPI and I2C bus node names in examples
-Organization: Protonic Holland
-Reply-To: robin@protonic.nl
-Mail-Reply-To: robin@protonic.nl
-In-Reply-To: <CANiq72mm9qX8uuS2y_vvtcza2hAgG3zFEy24koQTfSEOWkKDYQ@mail.gmail.com>
-References: <20230228215433.3944508-1-robh@kernel.org>
- <CANiq72mm9qX8uuS2y_vvtcza2hAgG3zFEy24koQTfSEOWkKDYQ@mail.gmail.com>
-Message-ID: <61190cb766083d73ef3b1455dcf3ff61@protonic.nl>
-X-Sender: robin@protonic.nl
-User-Agent: Roundcube Webmail/1.3.1 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=7.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM28,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,URIBL_CSS_A,URIBL_DBL_SPAM
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  2.5 URIBL_DBL_SPAM Contains a spam URL listed in the Spamhaus DBL
+        *      blocklist
+        *      [URIs: amblevebiz.com]
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *      [80.211.239.97 listed in zen.spamhaus.org]
+        *  0.1 URIBL_CSS_A Contains URL's A record listed in the Spamhaus CSS
+        *      blocklist
+        *      [URIs: amblevebiz.com]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4999]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.8 FROM_FMBLA_NEWDOM28 From domain was registered in last 14-28
+        *      days
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-> From: Rob Herring <robh@kernel.org>
-> Date: Tue, Feb 28, 2023 at 10:54 PM
-> Subject: [PATCH] dt-bindings: Fix SPI and I2C bus node names in 
-> examples
-> To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: <devicetree@vger.kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
-> Benson Leung <bleung@chromium.org>, Guenter Roeck
-> <groeck@chromium.org>, Stephen Boyd <sboyd@kernel.org>, Andrzej Hajda
-> <andrzej.hajda@intel.com>, Neil Armstrong <neil.armstrong@linaro.org>,
-> Robert Foss <rfoss@kernel.org>, Thierry Reding
-> <thierry.reding@gmail.com>, Sam Ravnborg <sam@ravnborg.org>, MyungJoo
-> Ham <myungjoo.ham@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>,
-> Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski
-> <brgl@bgdev.pl>, Pavel Machek <pavel@ucw.cz>, Lee Jones
-> <lee@kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, David S.
-> Miller <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
-> Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-> Wolfgang Grandegger <wg@grandegger.com>, Kalle Valo
-> <kvalo@kernel.org>, Sebastian Reichel <sre@kernel.org>, Mark Brown
-> <broonie@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-> <linux-clk@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-> <linux-gpio@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-> <linux-leds@vger.kernel.org>, <linux-media@vger.kernel.org>,
-> <netdev@vger.kernel.org>, <linux-can@vger.kernel.org>,
-> <linux-wireless@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-> <alsa-devel@alsa-project.org>, <linux-usb@vger.kernel.org>
-> 
-> 
-> SPI and I2C bus node names are expected to be "spi" or "i2c",
-> respectively, with nothing else, a unit-address, or a '-N' index. A
-> pattern of 'spi0' or 'i2c0' or similar has crept in. Fix all these
-> cases. Mostly scripted with the following commands:
-> 
-> git grep -l '\si2c[0-9] {' Documentation/devicetree/ | xargs sed -i -e
-> 's/i2c[0-9] {/i2c {/'
-> git grep -l '\sspi[0-9] {' Documentation/devicetree/ | xargs sed -i -e
-> 's/spi[0-9] {/spi {/'
-> 
-> With this, a few errors in examples were exposed and fixed.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> Cc: Miguel Ojeda <ojeda@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: Benson Leung <bleung@chromium.org>
-> Cc: Guenter Roeck <groeck@chromium.org>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Andrzej Hajda <andrzej.hajda@intel.com>
-> Cc: Neil Armstrong <neil.armstrong@linaro.org>
-> Cc: Robert Foss <rfoss@kernel.org>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Sam Ravnborg <sam@ravnborg.org>
-> Cc: MyungJoo Ham <myungjoo.ham@samsung.com>
-> Cc: Chanwoo Choi <cw00.choi@samsung.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Lee Jones <lee@kernel.org>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Wolfgang Grandegger <wg@grandegger.com>
-> Cc: Kalle Valo <kvalo@kernel.org>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: linux-clk@vger.kernel.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-gpio@vger.kernel.org
-> Cc: linux-i2c@vger.kernel.org
-> Cc: linux-leds@vger.kernel.org
-> Cc: linux-media@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-can@vger.kernel.org
-> Cc: linux-wireless@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-usb@vger.kernel.org
-> ---
->  .../bindings/auxdisplay/holtek,ht16k33.yaml       |  2 +-
+Dobr=C3=A9 r=C3=A1no,
 
-....
+uva=C5=BEujete o bezesp=C3=A1rov=C3=A9 podlaze pro v=C3=BDrobn=C3=AD prov=
+oz?
 
->  86 files changed, 110 insertions(+), 103 deletions(-)
-> 
-> diff --git 
-> a/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
-> b/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
-> index fc4873deb76f..286e726cd052 100644
-> --- a/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
-> +++ b/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
-> @@ -72,7 +72,7 @@ examples:
->      #include <dt-bindings/interrupt-controller/irq.h>
->      #include <dt-bindings/input/input.h>
->      #include <dt-bindings/leds/common.h>
-> -    i2c1 {
-> +    i2c {
->              #address-cells = <1>;
->              #size-cells = <0>;
+Jako sv=C4=9Btov=C3=BD l=C3=ADdr ve v=C3=BDrob=C4=9B a pokl=C3=A1dce podl=
+ah =C5=99e=C5=A1=C3=ADme probl=C3=A9my vypl=C3=BDvaj=C3=ADc=C3=AD z vlivu=
+ chemick=C3=BDch slou=C4=8Denin, ot=C4=9Bru, n=C3=A1raz=C5=AF, vlhkosti n=
+ebo n=C3=A1hl=C3=BDch zm=C4=9Bn teplot - na=C5=A1e podlahov=C3=A9 syst=C3=
+=A9my jsou p=C5=99izp=C5=AFsobeny nejt=C4=9B=C5=BE=C5=A1=C3=ADm podm=C3=AD=
+nk=C3=A1m prost=C5=99ed=C3=AD.
 
-Acked-by: Robin van der Gracht <robin@protonic.nl>
+Garantujeme v=C3=A1m =C5=99e=C5=A1en=C3=AD, kter=C3=A1 jsou =C5=A1etrn=C3=
+=A1 k =C5=BEivotn=C3=ADmu prost=C5=99ed=C3=AD, odoln=C3=A1 a snadno se =C4=
+=8Dist=C3=AD, hygienick=C3=A1, protiskluzov=C3=A1 a bezpe=C4=8Dn=C3=A1 pr=
+o zam=C4=9Bstnance.
+
+Poskytujeme kr=C3=A1tkou dobu instalace a nep=C5=99etr=C5=BEit=C3=BD prov=
+oz i o v=C3=ADkendech a sv=C3=A1tc=C3=ADch, =C4=8D=C3=ADm=C5=BE eliminuje=
+me riziko prostoj=C5=AF.
+
+Mohu V=C3=A1m zdarma nab=C3=ADdnout technick=C3=BD audit podlah s komplex=
+n=C3=ADm rozborem podkladu.
+
+M=C5=AF=C5=BEeme pro v=C3=A1s mluvit o =C5=99e=C5=A1en=C3=ADch?
+
+
+Luk=C3=A1=C5=A1 Horv=C3=A1th
