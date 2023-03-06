@@ -2,99 +2,174 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61F3D6AB902
-	for <lists+linux-can@lfdr.de>; Mon,  6 Mar 2023 10:00:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 054786AB9CE
+	for <lists+linux-can@lfdr.de>; Mon,  6 Mar 2023 10:27:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbjCFI7r (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 6 Mar 2023 03:59:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35254 "EHLO
+        id S229740AbjCFJ1N (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 6 Mar 2023 04:27:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbjCFI7p (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 6 Mar 2023 03:59:45 -0500
-X-Greylist: delayed 503 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Mar 2023 00:59:41 PST
-Received: from mail.amblevebiz.com (mail.amblevebiz.com [80.211.239.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00384449D
-        for <linux-can@vger.kernel.org>; Mon,  6 Mar 2023 00:59:41 -0800 (PST)
-Received: by mail.amblevebiz.com (Postfix, from userid 1002)
-        id CBABA82B56; Mon,  6 Mar 2023 09:51:12 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=amblevebiz.com;
-        s=mail; t=1678092676;
-        bh=mG5KF9rXIT2hCcIXZaMY449X9Ndwb1czFhgZLlqDg7A=;
-        h=Date:From:To:Subject:From;
-        b=mnF5uAnstueoPkQnpduQVNVtfwRGgj6qqXe8kPqm4gEl7JH3absJIPrqWj9X7xyIW
-         V5TzEX44NzazqYwNaDSulOwKe0oAlHnhSaK2I9o8V/ghDtywJFQOZkS3fizeuRFsCg
-         wNAejZ1FAfORNNynklylVz7FbKmC7we+yioDAjxq9ZDz5GFwmcjHRarAhmgL5A70fg
-         jRDlpGp6OPf07hLZz6jMTVWzAkqrddC0Bz+TCry/PRAsVlkja88UQqiBNwdz4t0b01
-         riapDH5hgXxRvclCFrtKpgMivHvQFPs8uHaHhFDlVfwzuXAxfoqH8Xa6amaf4MhVs8
-         SfM3GQgAKLWFA==
-Received: by mail.amblevebiz.com for <linux-can@vger.kernel.org>; Mon,  6 Mar 2023 08:51:10 GMT
-Message-ID: <20230306084500-0.1.i.y2i.0.rgk4l787jq@amblevebiz.com>
-Date:   Mon,  6 Mar 2023 08:51:10 GMT
-From:   =?UTF-8?Q? "Luk=C3=A1=C5=A1_Horv=C3=A1th" ?= 
-        <lukas.horvath@amblevebiz.com>
-To:     <linux-can@vger.kernel.org>
-Subject: =?UTF-8?Q?Technick=C3=BD_audit_podlah?=
-X-Mailer: mail.amblevebiz.com
+        with ESMTP id S229947AbjCFJ1K (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 6 Mar 2023 04:27:10 -0500
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718512311C
+        for <linux-can@vger.kernel.org>; Mon,  6 Mar 2023 01:27:07 -0800 (PST)
+Received: by mail-ua1-x935.google.com with SMTP id p2so5971678uap.1
+        for <linux-can@vger.kernel.org>; Mon, 06 Mar 2023 01:27:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678094826;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zhS37jgP1oSKDQocHToehtxxyITsXcT+owYbmJ0INPU=;
+        b=4t56tDC/G+oovfdiW5rxFZCyYsIfw/WmqyS1QgC9FKLy44l3wGWvPNPrKaEI6mAvIe
+         ELD4XcqhLxDYPapof54et2VAMu4KrZDT7kUwAj9Hrs6wS7u5XxJjEWAUEaYcKiG/Zn39
+         LbYGMfhwfIZ4JLhat+2hMudxk6CM3YJdkOXGSLSfaulwOvc6XpKpqL1F+6VUjzq55xQy
+         y2JSmDTTT0sTDy7JHDzT8MfLrGyiRKAqCmO15rXFhnzLrphpS2zddGj0+LqedgxxL0hV
+         0N2PQS1jMZSutIFgUay8tQ8K/XSrnWtb4nxvfgnG2GPyXj9/IYPjvJKK9fj6DB19DqZ2
+         l4GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678094826;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zhS37jgP1oSKDQocHToehtxxyITsXcT+owYbmJ0INPU=;
+        b=7EoYTkx0qd7a9aKXWjPvPv8xsg0urWMNvEi9oXcF84E6Bziv97MT+V72FTu7bpVZ+w
+         LoE3zjSUvQn+VkzEDDn88x8SyBcqIZbFaLBOoNNwh55mBUGlqBi2SdcpHBLoyBLbhjNz
+         OVQMTj11F7ODv3qC6h1in+AH4IwP4HFDqzxYyE0rPxGlGkaik6RKFk9WyU2JhOM9SVjl
+         qParD1GF0WjDgpl/TFee+K4yIEkZJm9odvLkuppd4p4Zms8rQRyS3USXyo9+ISCBvbpa
+         aPZxsWiKnWXdEz5MqOWndHcSKSSSdZWqqWLrRQujdaR7nLyKxtfSkWxPpnDWrnawuI4C
+         eIqg==
+X-Gm-Message-State: AO0yUKWe5tkAjt5QJ41dFz1sbOlsI/eBW/0RagL3oArvkTarZSuIMGu+
+        ZrI503dPCMOjTizQ5DU+iAyc5ga2BmizjsMBPHkjRg==
+X-Google-Smtp-Source: AK7set+CHskqiSsm+6Cmi6WHgSSwP4myqJ1YcVc2LU1gm2fnO90Xr69irT8NxRARr/yjxDC8cjTLGID26SceOFHbVxE=
+X-Received: by 2002:a9f:3104:0:b0:687:afc8:ffb9 with SMTP id
+ m4-20020a9f3104000000b00687afc8ffb9mr6636458uab.2.1678094826467; Mon, 06 Mar
+ 2023 01:27:06 -0800 (PST)
 MIME-Version: 1.0
+References: <20230228215433.3944508-1-robh@kernel.org>
+In-Reply-To: <20230228215433.3944508-1-robh@kernel.org>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 6 Mar 2023 10:26:55 +0100
+Message-ID: <CAMRc=Mfouay5Z6M6VYnBX7Pe+ahTVfvfQsJ+kToWAwZJxZWJZg@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: Fix SPI and I2C bus node names in examples
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-pm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-usb@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=7.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM28,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,URIBL_CSS_A,URIBL_DBL_SPAM
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  2.5 URIBL_DBL_SPAM Contains a spam URL listed in the Spamhaus DBL
-        *      blocklist
-        *      [URIs: amblevebiz.com]
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *      [80.211.239.97 listed in zen.spamhaus.org]
-        *  0.1 URIBL_CSS_A Contains URL's A record listed in the Spamhaus CSS
-        *      blocklist
-        *      [URIs: amblevebiz.com]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4999]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.8 FROM_FMBLA_NEWDOM28 From domain was registered in last 14-28
-        *      days
-X-Spam-Level: *******
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Dobr=C3=A9 r=C3=A1no,
+On Tue, Feb 28, 2023 at 10:54=E2=80=AFPM Rob Herring <robh@kernel.org> wrot=
+e:
+>
+> SPI and I2C bus node names are expected to be "spi" or "i2c",
+> respectively, with nothing else, a unit-address, or a '-N' index. A
+> pattern of 'spi0' or 'i2c0' or similar has crept in. Fix all these
+> cases. Mostly scripted with the following commands:
+>
+> git grep -l '\si2c[0-9] {' Documentation/devicetree/ | xargs sed -i -e 's=
+/i2c[0-9] {/i2c {/'
+> git grep -l '\sspi[0-9] {' Documentation/devicetree/ | xargs sed -i -e 's=
+/spi[0-9] {/spi {/'
+>
+> With this, a few errors in examples were exposed and fixed.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> Cc: Miguel Ojeda <ojeda@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Cc: Benson Leung <bleung@chromium.org>
+> Cc: Guenter Roeck <groeck@chromium.org>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: Andrzej Hajda <andrzej.hajda@intel.com>
+> Cc: Neil Armstrong <neil.armstrong@linaro.org>
+> Cc: Robert Foss <rfoss@kernel.org>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Sam Ravnborg <sam@ravnborg.org>
+> Cc: MyungJoo Ham <myungjoo.ham@samsung.com>
+> Cc: Chanwoo Choi <cw00.choi@samsung.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Lee Jones <lee@kernel.org>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: Wolfgang Grandegger <wg@grandegger.com>
+> Cc: Kalle Valo <kvalo@kernel.org>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-clk@vger.kernel.org
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-gpio@vger.kernel.org
+> Cc: linux-i2c@vger.kernel.org
+> Cc: linux-leds@vger.kernel.org
+> Cc: linux-media@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-can@vger.kernel.org
+> Cc: linux-wireless@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-usb@vger.kernel.org
+> ---
+>  .../bindings/auxdisplay/holtek,ht16k33.yaml       |  2 +-
+>  .../bindings/chrome/google,cros-ec-typec.yaml     |  2 +-
+>  .../chrome/google,cros-kbd-led-backlight.yaml     |  2 +-
+>  .../devicetree/bindings/clock/ti,lmk04832.yaml    |  2 +-
+>  .../bindings/display/bridge/analogix,anx7625.yaml |  2 +-
+>  .../bindings/display/bridge/anx6345.yaml          |  2 +-
+>  .../bindings/display/bridge/lontium,lt8912b.yaml  |  2 +-
+>  .../bindings/display/bridge/nxp,ptn3460.yaml      |  2 +-
+>  .../bindings/display/bridge/ps8640.yaml           |  2 +-
+>  .../bindings/display/bridge/sil,sii9234.yaml      |  2 +-
+>  .../bindings/display/bridge/ti,dlpc3433.yaml      |  2 +-
+>  .../bindings/display/bridge/toshiba,tc358762.yaml |  2 +-
+>  .../bindings/display/bridge/toshiba,tc358768.yaml |  2 +-
+>  .../bindings/display/panel/nec,nl8048hl11.yaml    |  2 +-
+>  .../bindings/display/solomon,ssd1307fb.yaml       |  4 ++--
+>  .../devicetree/bindings/eeprom/at25.yaml          |  2 +-
+>  .../bindings/extcon/extcon-usbc-cros-ec.yaml      |  2 +-
+>  .../bindings/extcon/extcon-usbc-tusb320.yaml      |  2 +-
+>  .../devicetree/bindings/gpio/gpio-pca9570.yaml    |  2 +-
+>  .../devicetree/bindings/gpio/gpio-pca95xx.yaml    |  8 ++++----
 
-uva=C5=BEujete o bezesp=C3=A1rov=C3=A9 podlaze pro v=C3=BDrobn=C3=AD prov=
-oz?
-
-Jako sv=C4=9Btov=C3=BD l=C3=ADdr ve v=C3=BDrob=C4=9B a pokl=C3=A1dce podl=
-ah =C5=99e=C5=A1=C3=ADme probl=C3=A9my vypl=C3=BDvaj=C3=ADc=C3=AD z vlivu=
- chemick=C3=BDch slou=C4=8Denin, ot=C4=9Bru, n=C3=A1raz=C5=AF, vlhkosti n=
-ebo n=C3=A1hl=C3=BDch zm=C4=9Bn teplot - na=C5=A1e podlahov=C3=A9 syst=C3=
-=A9my jsou p=C5=99izp=C5=AFsobeny nejt=C4=9B=C5=BE=C5=A1=C3=ADm podm=C3=AD=
-nk=C3=A1m prost=C5=99ed=C3=AD.
-
-Garantujeme v=C3=A1m =C5=99e=C5=A1en=C3=AD, kter=C3=A1 jsou =C5=A1etrn=C3=
-=A1 k =C5=BEivotn=C3=ADmu prost=C5=99ed=C3=AD, odoln=C3=A1 a snadno se =C4=
-=8Dist=C3=AD, hygienick=C3=A1, protiskluzov=C3=A1 a bezpe=C4=8Dn=C3=A1 pr=
-o zam=C4=9Bstnance.
-
-Poskytujeme kr=C3=A1tkou dobu instalace a nep=C5=99etr=C5=BEit=C3=BD prov=
-oz i o v=C3=ADkendech a sv=C3=A1tc=C3=ADch, =C4=8D=C3=ADm=C5=BE eliminuje=
-me riziko prostoj=C5=AF.
-
-Mohu V=C3=A1m zdarma nab=C3=ADdnout technick=C3=BD audit podlah s komplex=
-n=C3=ADm rozborem podkladu.
-
-M=C5=AF=C5=BEeme pro v=C3=A1s mluvit o =C5=99e=C5=A1en=C3=ADch?
-
-
-Luk=C3=A1=C5=A1 Horv=C3=A1th
+Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
