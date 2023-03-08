@@ -2,233 +2,213 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3CCC6B0AA7
-	for <lists+linux-can@lfdr.de>; Wed,  8 Mar 2023 15:12:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE5236B0D6B
+	for <lists+linux-can@lfdr.de>; Wed,  8 Mar 2023 16:53:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232214AbjCHOM1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 8 Mar 2023 09:12:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57836 "EHLO
+        id S231270AbjCHPxZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 8 Mar 2023 10:53:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232210AbjCHOLz (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 8 Mar 2023 09:11:55 -0500
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E621C5A18B;
-        Wed,  8 Mar 2023 06:11:07 -0800 (PST)
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-17711f56136so3904840fac.12;
-        Wed, 08 Mar 2023 06:11:07 -0800 (PST)
+        with ESMTP id S229605AbjCHPxY (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 8 Mar 2023 10:53:24 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45FA45B41C;
+        Wed,  8 Mar 2023 07:53:23 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id u5so18050655plq.7;
+        Wed, 08 Mar 2023 07:53:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678290802;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ERPte+GLfYGNUQKc38j5roO9NGI1HxeNMKiYrmWUlXw=;
+        b=qaMwRlCwSijTyKp3Ko45Pr5e8WKRVmkg/VTmJlMslvXucCm7TcC7q5uBeHcvROo4T4
+         mVqn6u+V19tLzdRFgpoNgRnXAzMghGpstb89cnPX/T1yUSMSfaC80QlhBSrW2v1hP3/W
+         zAQ6MGDFFC1QCXWjRs55AZAGLn8rcjRaSAC467+4lqSZfNethlMm7ExrsuYJ3dHPk/Gc
+         QkFXXT47F+BpP54zGO6qc4X/OkVsZXg+ZSck7Rha718WDhabAhyF7IWL7GOyxKqsjy9U
+         6KpYDc8JIy5hJoDMvP0sU32j84h5U4vzTihT4RVpzJ+sBTlYa/EpyQ3RtS5g6jDv17KZ
+         Hjqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678284654;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BG0LVvFn1C/Da2Gc5O3YD8isCIsXrAwtxSQEVgE87AI=;
-        b=RuXhJut4bN5ftmAJRq/9tiPeccWmierAJ/UbTICusRzkQoNjOG8YL+iO6w9GSVNIuM
-         MPtwwCiEy+25yUZFLSJsd3hKagE0EjYwuuHWlDHqKe5tzf12n1eJ8OjJtouxIvAr3QC7
-         88GZUJLP+OkfWqJCL7HTpUXun+wYZU/uG+o3MEAa5LXcru31ZdoY7MX5vzll1Rv8Dzct
-         zAzR5KnmZc84jvww4EXmvexiilrLMwn6PYBZvDlTfaWgpNgoc0KZZ7lol0aCX4VVNSwg
-         cZ+eAEv1WLNX71i5WEP4zviOzQlZyshApKdpJpw7tMGOzzPVduiQ+NL3jgxyN0jZAyhZ
-         ubGA==
-X-Gm-Message-State: AO0yUKXuLLm7p33VFPZHs4Jkv2fwt77YSwXkDWEog9cgBmjuS5E4ggJk
-        14ELtuV8z/AxECVO1tdDZw==
-X-Google-Smtp-Source: AK7set/cT2sp1M7e47IzQCQD2W8xtmPnZuAp+jI6K0s2N6oikhajQ93ypk71x4/YPZM2+Kr1qDFxTg==
-X-Received: by 2002:a05:6871:b11:b0:176:3849:4e96 with SMTP id fq17-20020a0568710b1100b0017638494e96mr10140723oab.13.1678284654485;
-        Wed, 08 Mar 2023 06:10:54 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id f8-20020a9d2c08000000b00690dc5d9b9esm6498673otb.6.2023.03.08.06.10.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 06:10:54 -0800 (PST)
-Received: (nullmailer pid 2719199 invoked by uid 1000);
-        Wed, 08 Mar 2023 14:10:52 -0000
-Date:   Wed, 8 Mar 2023 08:10:52 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Pavel Machek <pavel@ucw.cz>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        devicetree@vger.kernel.org, linux-wireless@vger.kernel.org,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        linux-leds@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Lee Jones <lee@kernel.org>, Kalle Valo <kvalo@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        alsa-devel@alsa-project.org, netdev@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>, linux-can@vger.kernel.org,
-        Guenter Roeck <groeck@chromium.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Benson Leung <bleung@chromium.org>, linux-i2c@vger.kernel.org,
-        Wolfgang Grandegger <wg@grandegger.com>
-Subject: Re: [PATCH] dt-bindings: Fix SPI and I2C bus node names in examples
-Message-ID: <167828463126.2715010.4541489267949266802.robh@kernel.org>
-References: <20230228215433.3944508-1-robh@kernel.org>
+        d=1e100.net; s=20210112; t=1678290802;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ERPte+GLfYGNUQKc38j5roO9NGI1HxeNMKiYrmWUlXw=;
+        b=vPuBZVhUqPVz6Teoeb6gl6v43mTnvxyPZBnV7cvL5NxG1zTvvhtXtKL+xrGYEQlvLp
+         UR6oTj/0N6q+kJyM+Z9/zZPYgYY4XMyFHK8QBGTC1hvkJfm9poINhp24wcHFTRa0F9Kz
+         qlzTyRqrwvz4aUFEek7WPkKqJBcaPXSXcLpqGngU1wT8Esp6Z0TRRtPU5PBMcdCksMRD
+         o4ltATYoVwb3BPMXegzsCdyfe0Jd5CYW2B9pywrKpBgKnCXiI+JQfme4KIGaWG9s64xX
+         82pfNXXOGnA1Ai1bIsHsaw0adh8cV5hfP8CnQDh4G6DWe+hB2v5I4KWRdrr8L30DUx8x
+         /erA==
+X-Gm-Message-State: AO0yUKXcM2sOE7004c5tBrTub/sTctXkbJdH7vZ0Zar1UU3znTlZyADu
+        ulF8JfqwloFSBJBers04IKx33iuv3pPr8fFjpK0On97YphM=
+X-Google-Smtp-Source: AK7set80cozO5AtE2fAewN604E9TLifg4kLOn5BU89f5fABOnEqXgZCcTCaIPHQoguw0Ky62vebKUUJgaXViBHeJ+Uo=
+X-Received: by 2002:a17:902:f812:b0:19c:140d:aad7 with SMTP id
+ ix18-20020a170902f81200b0019c140daad7mr7175448plb.4.1678290802552; Wed, 08
+ Mar 2023 07:53:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230228215433.3944508-1-robh@kernel.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <e825b50a843ffe40e33f34e4d858c07c1b2ff259.1678280913.git.geert+renesas@glider.be>
+In-Reply-To: <e825b50a843ffe40e33f34e4d858c07c1b2ff259.1678280913.git.geert+renesas@glider.be>
+From:   Vincent Mailhol <vincent.mailhol@gmail.com>
+Date:   Thu, 9 Mar 2023 00:53:11 +0900
+Message-ID: <CAMZ6RqJ-3fyLFMjuyq4euNB-1sz0sBU5YswMeRduXO4TJ1QmLw@mail.gmail.com>
+Subject: Re: [PATCH v2] can: rcar_canfd: Add transceiver support
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Simon Horman <simon.horman@corigine.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Wed. 8 Mar. 2023 at 22:20, Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
+> Add support for CAN transceivers described as PHYs.
+>
+> While simple CAN transceivers can do without, this is needed for CAN
+> transceivers like NXP TJR1443 that need a configuration step (like
+> pulling standby or enable lines), and/or impose a bitrate limit.
+>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
-On Tue, 28 Feb 2023 15:54:33 -0600, Rob Herring wrote:
-> SPI and I2C bus node names are expected to be "spi" or "i2c",
-> respectively, with nothing else, a unit-address, or a '-N' index. A
-> pattern of 'spi0' or 'i2c0' or similar has crept in. Fix all these
-> cases. Mostly scripted with the following commands:
-> 
-> git grep -l '\si2c[0-9] {' Documentation/devicetree/ | xargs sed -i -e 's/i2c[0-9] {/i2c {/'
-> git grep -l '\sspi[0-9] {' Documentation/devicetree/ | xargs sed -i -e 's/spi[0-9] {/spi {/'
-> 
-> With this, a few errors in examples were exposed and fixed.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+I have one nitpick (see below). Aside from that:
+Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+
 > ---
-> Cc: Miguel Ojeda <ojeda@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: Benson Leung <bleung@chromium.org>
-> Cc: Guenter Roeck <groeck@chromium.org>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Andrzej Hajda <andrzej.hajda@intel.com>
-> Cc: Neil Armstrong <neil.armstrong@linaro.org>
-> Cc: Robert Foss <rfoss@kernel.org>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Sam Ravnborg <sam@ravnborg.org>
-> Cc: MyungJoo Ham <myungjoo.ham@samsung.com>
-> Cc: Chanwoo Choi <cw00.choi@samsung.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Lee Jones <lee@kernel.org>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Wolfgang Grandegger <wg@grandegger.com>
-> Cc: Kalle Valo <kvalo@kernel.org>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: linux-clk@vger.kernel.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-gpio@vger.kernel.org
-> Cc: linux-i2c@vger.kernel.org
-> Cc: linux-leds@vger.kernel.org
-> Cc: linux-media@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-can@vger.kernel.org
-> Cc: linux-wireless@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-usb@vger.kernel.org
+> v2:
+>   - Add Reviewed-by.
 > ---
->  .../bindings/auxdisplay/holtek,ht16k33.yaml       |  2 +-
->  .../bindings/chrome/google,cros-ec-typec.yaml     |  2 +-
->  .../chrome/google,cros-kbd-led-backlight.yaml     |  2 +-
->  .../devicetree/bindings/clock/ti,lmk04832.yaml    |  2 +-
->  .../bindings/display/bridge/analogix,anx7625.yaml |  2 +-
->  .../bindings/display/bridge/anx6345.yaml          |  2 +-
->  .../bindings/display/bridge/lontium,lt8912b.yaml  |  2 +-
->  .../bindings/display/bridge/nxp,ptn3460.yaml      |  2 +-
->  .../bindings/display/bridge/ps8640.yaml           |  2 +-
->  .../bindings/display/bridge/sil,sii9234.yaml      |  2 +-
->  .../bindings/display/bridge/ti,dlpc3433.yaml      |  2 +-
->  .../bindings/display/bridge/toshiba,tc358762.yaml |  2 +-
->  .../bindings/display/bridge/toshiba,tc358768.yaml |  2 +-
->  .../bindings/display/panel/nec,nl8048hl11.yaml    |  2 +-
->  .../bindings/display/solomon,ssd1307fb.yaml       |  4 ++--
->  .../devicetree/bindings/eeprom/at25.yaml          |  2 +-
->  .../bindings/extcon/extcon-usbc-cros-ec.yaml      |  2 +-
->  .../bindings/extcon/extcon-usbc-tusb320.yaml      |  2 +-
->  .../devicetree/bindings/gpio/gpio-pca9570.yaml    |  2 +-
->  .../devicetree/bindings/gpio/gpio-pca95xx.yaml    |  8 ++++----
->  .../bindings/i2c/google,cros-ec-i2c-tunnel.yaml   |  2 +-
->  .../bindings/leds/cznic,turris-omnia-leds.yaml    |  2 +-
->  .../devicetree/bindings/leds/issi,is31fl319x.yaml |  2 +-
->  .../devicetree/bindings/leds/leds-aw2013.yaml     |  2 +-
->  .../devicetree/bindings/leds/leds-rt4505.yaml     |  2 +-
->  .../devicetree/bindings/leds/ti,tca6507.yaml      |  2 +-
->  .../bindings/media/i2c/aptina,mt9p031.yaml        |  2 +-
->  .../bindings/media/i2c/aptina,mt9v111.yaml        |  2 +-
->  .../devicetree/bindings/media/i2c/imx219.yaml     |  2 +-
->  .../devicetree/bindings/media/i2c/imx258.yaml     |  4 ++--
->  .../devicetree/bindings/media/i2c/mipi-ccs.yaml   |  2 +-
->  .../bindings/media/i2c/ovti,ov5648.yaml           |  2 +-
->  .../bindings/media/i2c/ovti,ov772x.yaml           |  2 +-
->  .../bindings/media/i2c/ovti,ov8865.yaml           |  2 +-
->  .../bindings/media/i2c/ovti,ov9282.yaml           |  2 +-
->  .../bindings/media/i2c/rda,rda5807.yaml           |  2 +-
->  .../bindings/media/i2c/sony,imx214.yaml           |  2 +-
->  .../bindings/media/i2c/sony,imx274.yaml           |  2 +-
->  .../bindings/media/i2c/sony,imx334.yaml           |  2 +-
->  .../bindings/media/i2c/sony,imx335.yaml           |  2 +-
->  .../bindings/media/i2c/sony,imx412.yaml           |  2 +-
->  .../devicetree/bindings/mfd/actions,atc260x.yaml  |  2 +-
->  .../devicetree/bindings/mfd/google,cros-ec.yaml   |  6 +++---
->  .../devicetree/bindings/mfd/ti,tps65086.yaml      |  2 +-
->  .../devicetree/bindings/mfd/x-powers,axp152.yaml  |  4 ++--
->  .../devicetree/bindings/net/asix,ax88796c.yaml    |  2 +-
->  .../bindings/net/can/microchip,mcp251xfd.yaml     |  2 +-
->  .../bindings/net/dsa/microchip,ksz.yaml           |  2 +-
->  .../bindings/net/nfc/samsung,s3fwrn5.yaml         |  2 +-
->  .../bindings/net/vertexcom-mse102x.yaml           |  2 +-
->  .../bindings/net/wireless/ti,wlcore.yaml          | 10 ++++++++--
->  .../devicetree/bindings/pinctrl/pinmux-node.yaml  |  2 +-
->  .../bindings/pinctrl/starfive,jh7100-pinctrl.yaml |  2 +-
->  .../devicetree/bindings/power/supply/bq2415x.yaml |  2 +-
->  .../devicetree/bindings/power/supply/bq24190.yaml |  2 +-
->  .../devicetree/bindings/power/supply/bq24257.yaml |  4 ++--
->  .../devicetree/bindings/power/supply/bq24735.yaml |  2 +-
->  .../devicetree/bindings/power/supply/bq2515x.yaml |  2 +-
->  .../devicetree/bindings/power/supply/bq25890.yaml |  2 +-
->  .../devicetree/bindings/power/supply/bq25980.yaml |  2 +-
->  .../devicetree/bindings/power/supply/bq27xxx.yaml | 15 ++++++++-------
->  .../bindings/power/supply/lltc,ltc294x.yaml       |  2 +-
->  .../bindings/power/supply/ltc4162-l.yaml          |  2 +-
->  .../bindings/power/supply/maxim,max14656.yaml     |  2 +-
->  .../bindings/power/supply/maxim,max17040.yaml     |  4 ++--
->  .../bindings/power/supply/maxim,max17042.yaml     |  2 +-
->  .../bindings/power/supply/richtek,rt9455.yaml     |  2 +-
->  .../bindings/power/supply/ti,lp8727.yaml          |  2 +-
->  .../bindings/regulator/active-semi,act8865.yaml   |  2 +-
->  .../regulator/google,cros-ec-regulator.yaml       |  2 +-
->  .../bindings/regulator/nxp,pf8x00-regulator.yaml  |  2 +-
->  .../devicetree/bindings/sound/everest,es8316.yaml |  2 +-
->  .../devicetree/bindings/sound/tas2562.yaml        |  2 +-
->  .../devicetree/bindings/sound/tas2770.yaml        |  2 +-
->  .../devicetree/bindings/sound/tas27xx.yaml        |  2 +-
->  .../devicetree/bindings/sound/tas5805m.yaml       |  2 +-
->  .../devicetree/bindings/sound/tlv320adcx140.yaml  |  2 +-
->  .../devicetree/bindings/sound/zl38060.yaml        |  2 +-
->  .../devicetree/bindings/usb/maxim,max33359.yaml   |  2 +-
->  .../bindings/usb/maxim,max3420-udc.yaml           |  2 +-
->  .../bindings/usb/mediatek,mt6360-tcpc.yaml        |  2 +-
->  .../devicetree/bindings/usb/richtek,rt1711h.yaml  |  2 +-
->  .../devicetree/bindings/usb/richtek,rt1719.yaml   |  2 +-
->  .../devicetree/bindings/usb/st,stusb160x.yaml     |  2 +-
->  .../devicetree/bindings/usb/ti,hd3ss3220.yaml     |  2 +-
->  .../devicetree/bindings/usb/ti,tps6598x.yaml      |  2 +-
->  86 files changed, 110 insertions(+), 103 deletions(-)
-> 
+>  drivers/net/can/rcar/rcar_canfd.c | 30 +++++++++++++++++++++++++-----
+>  1 file changed, 25 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
+> index ef4e1b9a9e1ee280..6df9a259e5e4f92c 100644
+> --- a/drivers/net/can/rcar/rcar_canfd.c
+> +++ b/drivers/net/can/rcar/rcar_canfd.c
+> @@ -35,6 +35,7 @@
+>  #include <linux/netdevice.h>
+>  #include <linux/of.h>
+>  #include <linux/of_device.h>
+> +#include <linux/phy/phy.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/reset.h>
+>  #include <linux/types.h>
+> @@ -530,6 +531,7 @@ struct rcar_canfd_channel {
+>         struct net_device *ndev;
+>         struct rcar_canfd_global *gpriv;        /* Controller reference */
+>         void __iomem *base;                     /* Register base address */
+> +       struct phy *transceiver;                /* Optional transceiver */
+>         struct napi_struct napi;
+>         u32 tx_head;                            /* Incremented on xmit */
+>         u32 tx_tail;                            /* Incremented on xmit done */
+> @@ -1413,11 +1415,17 @@ static int rcar_canfd_open(struct net_device *ndev)
+>         struct rcar_canfd_global *gpriv = priv->gpriv;
+>         int err;
+>
+> +       err = phy_power_on(priv->transceiver);
+> +       if (err) {
+> +               netdev_err(ndev, "failed to power on PHY, error %d\n", err);
+> +               return err;
+> +       }
+> +
+>         /* Peripheral clock is already enabled in probe */
+>         err = clk_prepare_enable(gpriv->can_clk);
+>         if (err) {
+>                 netdev_err(ndev, "failed to enable CAN clock, error %d\n", err);
+                                                                      ^^
 
-Applied, thanks!
+Nitpick: can you print the mnemotechnic instead of the error value?
 
+                netdev_err(ndev, "failed to enable CAN clock, error
+%pe\n", ERR_PTR(err));
+
+> -               goto out_clock;
+> +               goto out_phy;
+>         }
+>
+>         err = open_candev(ndev);
+> @@ -1437,7 +1445,8 @@ static int rcar_canfd_open(struct net_device *ndev)
+>         close_candev(ndev);
+>  out_can_clock:
+>         clk_disable_unprepare(gpriv->can_clk);
+> -out_clock:
+> +out_phy:
+> +       phy_power_off(priv->transceiver);
+>         return err;
+>  }
+>
+> @@ -1480,6 +1489,7 @@ static int rcar_canfd_close(struct net_device *ndev)
+>         napi_disable(&priv->napi);
+>         clk_disable_unprepare(gpriv->can_clk);
+>         close_candev(ndev);
+> +       phy_power_off(priv->transceiver);
+>         return 0;
+>  }
+>
+> @@ -1711,7 +1721,7 @@ static const struct ethtool_ops rcar_canfd_ethtool_ops = {
+>  };
+>
+>  static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
+> -                                   u32 fcan_freq)
+> +                                   u32 fcan_freq, struct phy *transceiver)
+>  {
+>         const struct rcar_canfd_hw_info *info = gpriv->info;
+>         struct platform_device *pdev = gpriv->pdev;
+> @@ -1732,8 +1742,11 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
+>         ndev->flags |= IFF_ECHO;
+>         priv->ndev = ndev;
+>         priv->base = gpriv->base;
+> +       priv->transceiver = transceiver;
+>         priv->channel = ch;
+>         priv->gpriv = gpriv;
+> +       if (transceiver)
+> +               priv->can.bitrate_max = transceiver->attrs.max_link_rate;
+>         priv->can.clock.freq = fcan_freq;
+>         dev_info(dev, "can_clk rate is %u\n", priv->can.clock.freq);
+>
+> @@ -1836,6 +1849,7 @@ static void rcar_canfd_channel_remove(struct rcar_canfd_global *gpriv, u32 ch)
+>
+>  static int rcar_canfd_probe(struct platform_device *pdev)
+>  {
+> +       struct phy *transceivers[RCANFD_NUM_CHANNELS] = { 0, };
+>         const struct rcar_canfd_hw_info *info;
+>         struct device *dev = &pdev->dev;
+>         void __iomem *addr;
+> @@ -1857,9 +1871,14 @@ static int rcar_canfd_probe(struct platform_device *pdev)
+>         for (i = 0; i < info->max_channels; ++i) {
+>                 name[7] = '0' + i;
+>                 of_child = of_get_child_by_name(dev->of_node, name);
+> -               if (of_child && of_device_is_available(of_child))
+> +               if (of_child && of_device_is_available(of_child)) {
+>                         channels_mask |= BIT(i);
+> +                       transceivers[i] = devm_of_phy_optional_get(dev,
+> +                                                       of_child, NULL);
+> +               }
+>                 of_node_put(of_child);
+> +               if (IS_ERR(transceivers[i]))
+> +                       return PTR_ERR(transceivers[i]);
+>         }
+>
+>         if (info->shared_global_irqs) {
+> @@ -2035,7 +2054,8 @@ static int rcar_canfd_probe(struct platform_device *pdev)
+>         }
+>
+>         for_each_set_bit(ch, &gpriv->channels_mask, info->max_channels) {
+> -               err = rcar_canfd_channel_probe(gpriv, ch, fcan_freq);
+> +               err = rcar_canfd_channel_probe(gpriv, ch, fcan_freq,
+> +                                              transceivers[ch]);
+>                 if (err)
+>                         goto fail_channel;
+>         }
+> --
+> 2.34.1
+>
