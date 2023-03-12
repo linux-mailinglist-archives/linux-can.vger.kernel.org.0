@@ -2,135 +2,114 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 860E86B6019
-	for <lists+linux-can@lfdr.de>; Sat, 11 Mar 2023 20:17:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C2C06B64D0
+	for <lists+linux-can@lfdr.de>; Sun, 12 Mar 2023 11:17:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbjCKTRL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 11 Mar 2023 14:17:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34140 "EHLO
+        id S229473AbjCLKR0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 12 Mar 2023 06:17:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjCKTRK (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 11 Mar 2023 14:17:10 -0500
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D09034F60
-        for <linux-can@vger.kernel.org>; Sat, 11 Mar 2023 11:17:09 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1678562227; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=CXYU3KwBwwE8VnUrQre38nt4k8PP1looLhFzBxB7Gdsqlk+fAdV96pSZ6bhJg6MSOg
-    jjEQXhdXsUONw539ZVNgPlCSR04K2TYrD/PKuvpdIBwIi5EFQVkAGEpej2c2J9E4eiiE
-    H4q7HYRVW3lIo74mMc6onDWQPo/GUinVqhrNoVMgt+gYvCK0fGfDoPCzhQphMH7l1kYV
-    VsbZmoyh0S9o9pn2Pi0XfZ3qHMPigwf+wJOfXc0Nsx5X9uE3+4cNDQ8+1L+nevPCnt4d
-    /mwgNONB2ULN9TRPpzpZqqgBnYVSUpVuNyMrMXxCk5UTGZ+GUwLfPRoZQOEM0I/H3Wk6
-    KMGg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1678562227;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
-    Subject:Sender;
-    bh=/jKafbPTO2Z4s0vTgiyN8lvGP1Fg0JS/NFmhD3Evi/8=;
-    b=J2Rook2HGEXD3qe+JiXpkQmFaOCcgBoiqzVC5YCq6+CLV4a1xzRJzjxOzC9HPc5B+A
-    3mAuwuMGzuvWaEVfCvhRXtRh2k2KjNVb6UOfdyGItSOTbguR1dWKUydc/BQWI9+S2eg0
-    xc6StdNhy667OZ+Zw074mmLT5KMNBcOOXY8lg0CONBwmU+BVx8uSr3vCAZig5ihaHvpN
-    3/2aAEyEIH34WWTPzusmUuF5arTGpWY4rxhSyZOGbQiH0m/INVP7eLKiyAjXYH3rf1GQ
-    HZg37E27VtHI1+xJ8ekI3DmGmUMmThzBMjZXSBkeX9UDay8ZaNzH8H63N3YqNKR+ottL
-    9dcw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1678562227;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
-    Subject:Sender;
-    bh=/jKafbPTO2Z4s0vTgiyN8lvGP1Fg0JS/NFmhD3Evi/8=;
-    b=iPyoiA8qxk0LxEgRqH3UOxWqxc+vqk4N39iDsgpopiCE5pGQ6Ye9ZUXDMXASKVbXZe
-    cAkMHJgy4I77jav7xnPo+K3s3I+FfhGfgGOU3d8I0KkILLq9xHOqxIAwhn87vdhxATFv
-    69hejKXyAfOoHsus6zd8hDi7RyqjDnNz6bCbIELacGjT8leCON+Eb+jsE0XNwYBUsDlQ
-    p6J5uOppahfVzmFC1tly7ZIY7NqXl6h+GZN7VbuXDIERa6dpB7r63yy9/ULy0MzZ+75R
-    PK82RK4CskIvMdnxGuab9ieOijH5tvrQLv7OMZoUHVz4F5XAcaD881oU0NJNlGdnsY/I
-    7zeQ==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusl129OHEdFq0USEbDUQnQ=="
-Received: from [IPV6:2a00:6020:4a8e:5000::923]
-    by smtp.strato.de (RZmta 49.3.0 AUTH)
-    with ESMTPSA id c675b3z2BJH6W7w
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Sat, 11 Mar 2023 20:17:06 +0100 (CET)
-Message-ID: <405b08b7-df80-dc09-3a94-70bff3bb6e0b@hartkopp.net>
-Date:   Sat, 11 Mar 2023 20:17:00 +0100
+        with ESMTP id S229665AbjCLKRZ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 12 Mar 2023 06:17:25 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B2C36FE7
+        for <linux-can@vger.kernel.org>; Sun, 12 Mar 2023 03:17:20 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pbIlQ-0001NS-NQ; Sun, 12 Mar 2023 11:17:17 +0100
+Received: from pengutronix.de (unknown [IPv6:2a00:20:4047:f0aa:709:fab:bab8:4a48])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 5164C18F87F;
+        Sun, 12 Mar 2023 10:13:43 +0000 (UTC)
+Date:   Sun, 12 Mar 2023 11:13:42 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     "Fink, Peter" <pfink@christ-es.de>
+Cc:     linux-can <linux-can@vger.kernel.org>,
+        Ben Evans <benny.j.evans92@gmail.com>,
+        Christoph =?utf-8?Q?M=C3=B6hring?= <cmoehring@christ-es.de>,
+        "Schartner, Alexander" <aschartner@christ-es.de>,
+        Eric Evenchick <eric@evenchick.com>,
+        Venelin Efremov <ghent360@iqury.us>
+Subject: Re: AW: candlelight CAN-FD TX echo
+Message-ID: <20230312101342.oez4ciqx7lrg2cpd@pengutronix.de>
+References: <20230217153233.m2k4qcecux2up22k@pengutronix.de>
+ <24224723ec0a48a8bde8abf682da7d31@christ-es.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC PATCH] can: isotp: add module parameter for maximum pdu size
-To:     Patrick Menschel <menschel.p@posteo.de>, linux-can@vger.kernel.org
-References: <20230311143446.3183-1-socketcan@hartkopp.net>
- <fd198411-dc23-1c57-7599-d8b5214d0ce7@posteo.de>
-Content-Language: en-US
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <fd198411-dc23-1c57-7599-d8b5214d0ce7@posteo.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ytgneeercykhbchy"
+Content-Disposition: inline
+In-Reply-To: <24224723ec0a48a8bde8abf682da7d31@christ-es.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Patrick,
 
-On 11.03.23 18:23, Patrick Menschel wrote:
+--ytgneeercykhbchy
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> IMO it is the right direction but it is just half the story.
-> 
-> I remember having problems with the txqueuelen even with 4KB PDUs 
-> originally and I'm not sure if that has been improved already.
-> 
-> https://gitlab.com/Menschel/socketcan#can-isotp-overflows-when-the-tx-queue-is-too-small
-> 
-> It would be great to have all of those size options in one place and 
-> some intelligent IO buffer.
+On 08.03.2023 15:54:37, Fink, Peter wrote:
+> > I'm currently adding CAN-FD support to the Candlelight firmware and loo=
+king
+> > at the TX echo message from the CAN device to Linux. In your firmware f=
+or
+> > CAN-FD frames, are you echoing the whole CAN FD structure gs_host_frame
+> > with 64 byte data, or the classic CAN gs_host_frame with 8 byte data?
+>=20
+> In our firmware the whole 64 byte data is echoed back.
 
-I solved that problem since Linux 6.0 \o/
+Thanks for the info.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/net/can/isotp.c?id=4b7fe92c06901f4563af0e36d25223a5ab343782
+> > The Candlelight I use only works in full-speed USB (12 Mbit/s) max, whi=
+ch
+> > means that the maximum transmission size is 64, which results in a TX e=
+cho
+> > consisting of 2 USB transmissions. The Linux driver makes no use of the=
+ data
+> > in the TX echo frame, so a classic CAN TX echo would suffice.
+>=20
+> Our device supports USB high-speed USB (480Mbit/s).
 
-> Apart from that the PDU size does not matter for UDS, because UDS splits 
-> the data into chunks that are sent via transfer_data service and 
-> concatenated on the receiver end again, sort of the protocol's built-in 
-> IO buffer.
-> 
-> https://gitlab.com/Menschel/socketcan-uds/-/blob/master/uds/programmer.py#L495
+With 480 Mbit/s it should be less of a problem than with 12 Mbit/s. If
+we run into performance and/or throughput issues, we could introduce an
+optional "shallow echo" where only the index and the timestamp will be
+send back.
 
-Yes. It is not needed for UDS as you stated correctly.
+regards,
+Marc
 
-The reason for the increased PDU length was discussed when we created 
-the CAN FD support for ISO TP in 2014. Some guy talked about the 
-flashing of bootloader firmware "in one piece". The firmware was about 
-64kbyte but then we decided to go for a 32 bit value. IMHO 24 bits would 
-have made it too :-D
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-Best regards,
-Oliver
+--ytgneeercykhbchy
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> -- 
-> 
-> Am 11.03.23 um 15:34 schrieb Oliver Hartkopp:
->> With ISO 15765-2:2016 the PDU size is not limited to 2^12 - 1 (4095) 
->> bytes
->> but can be represented as a 32 bit unsigned integer value which allows
->> 2^32 - 1 bytes (~4GB). The use-cases like automotive unified diagnostic
->> services (UDS) and flashing of ECUs still use the small static buffers
->> which are provided at socket creation time.
->>
->> When a use-case requires to transfer PDUs up to 1025 kByte the maximum
->> PDU size can now be extended by setting the module parameter 
->> max_pdu_size.
->> The extended size buffers are only allocated on a per-socket/connection
->> base when needed at run-time.
->>
->> Link: https://github.com/raspberrypi/linux/issues/5371
->> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-> 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQNpdMACgkQvlAcSiqK
+BOhdJQgAlmUcQL6jrfSrBsTfZvam5XWgA1uSy0W91JcBkfq9ojxZ6ERo7D1IH4jq
+4uVsdBZP0frnu4nzLIn2yy7iJu6BAS5JAB0C4WysJ/2A2hSVrLdxUCccEH4M4klE
+FpSVHYsm4u3EocxRVMA79ALaHxVeiidwjxOZ3gApn6kbLprXWh5cT4S4SgFGCkxk
+uCq74PUSvGTOQbb3q3UfkuVH+8y2k2jE/09q/1tkssExhSfwhE/XPCQ2/cv/hCbY
+gcJcH7ewIfJgkB7YYVdZdTlGGxWJrpUyZXFNWoAbDvDaSmdH/DFuIy/8pz5uyk1V
+oL0HvIDP+EzTYACLlnmXkn2H1H/lhg==
+=gEtk
+-----END PGP SIGNATURE-----
+
+--ytgneeercykhbchy--
