@@ -2,45 +2,60 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E228E6B8DFF
-	for <lists+linux-can@lfdr.de>; Tue, 14 Mar 2023 10:01:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB02B6B8F45
+	for <lists+linux-can@lfdr.de>; Tue, 14 Mar 2023 11:09:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230223AbjCNJAu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 14 Mar 2023 05:00:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54882 "EHLO
+        id S230035AbjCNKJc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Tue, 14 Mar 2023 06:09:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230454AbjCNJAo (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 14 Mar 2023 05:00:44 -0400
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB9C92F13
-        for <linux-can@vger.kernel.org>; Tue, 14 Mar 2023 02:00:32 -0700 (PDT)
-Received: from ramsan.of.borg ([84.195.187.55])
-        by xavier.telenet-ops.be with bizsmtp
-        id Y90U290011C8whw0190UJp; Tue, 14 Mar 2023 10:00:29 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pc0Va-00C9G1-Er;
-        Tue, 14 Mar 2023 10:00:27 +0100
-Received: from geert by rox.of.borg with local (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pc0WB-00AlNE-QE;
-        Tue, 14 Mar 2023 10:00:27 +0100
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v2] can: rcar_canfd: Improve error messages
-Date:   Tue, 14 Mar 2023 10:00:26 +0100
-Message-Id: <e67f2f58d00faeba74558ae2696aa22cd0897740.1678784404.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S229793AbjCNKJb (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 14 Mar 2023 06:09:31 -0400
+X-Greylist: delayed 2400 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 14 Mar 2023 03:09:23 PDT
+Received: from ns.iliad.fr (ns.iliad.fr [212.27.33.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAEEA126EF;
+        Tue, 14 Mar 2023 03:09:22 -0700 (PDT)
+Received: from ns.iliad.fr (localhost [127.0.0.1])
+        by ns.iliad.fr (Postfix) with ESMTP id C1ECC20449;
+        Tue, 14 Mar 2023 09:53:09 +0100 (CET)
+Received: from [192.168.108.4] (freebox.vlq16.iliad.fr [213.36.7.13])
+        by ns.iliad.fr (Postfix) with ESMTP id AA0F320126;
+        Tue, 14 Mar 2023 09:53:09 +0100 (CET)
+Message-ID: <ea21b14025085e7934ddfbb84bee0a5020d67d4d.camel@freebox.fr>
+Subject: Re: [RFC 1/6] pccard: remove bcm63xx socket driver
+From:   Maxime Bizon <mbizon@freebox.fr>
+Reply-To: mbizon@freebox.fr
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        linux-kernel@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>, Bjorn Helgaas <bhelgaas@google.com>,
+        H Hartley Sweeten <hsweeten@visionengravers.com>,
+        Ian Abbott <abbotti@mev.co.uk>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Kevin Cernekee <cernekee@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Manuel Lauss <manuel.lauss@gmail.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Olof Johansson <olof@lixom.net>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        YOKOTA Hiroshi <yokota@netlab.is.tsukuba.ac.jp>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Date:   Tue, 14 Mar 2023 09:53:09 +0100
+In-Reply-To: <8d6896f5-3710-0b35-582a-fb482e5f4196@gmail.com>
+References: <20230227133457.431729-1-arnd@kernel.org>
+         <20230227133457.431729-2-arnd@kernel.org>
+         <8d6896f5-3710-0b35-582a-fb482e5f4196@gmail.com>
+Organization: Freebox
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,159 +63,22 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Improve printed error messages:
-  - Replace numerical error codes by mnemotechnic error codes, to
-    improve the user experience in case of errors,
-  - Drop parentheses around printed numbers, cfr.
-    Documentation/process/coding-style.rst,
-  - Drop printing of an error message in case of out-of-memory, as the
-    core memory allocation code already takes care of this.
 
-Suggested-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
-This is v2 of "[PATCH] can: rcar_canfd: Print mnemotechnic error codes".
-I haven't added any tags given on v1, as half of the printed message
-changed.
+On Mon, 2023-02-27 at 13:33 -0800, Florian Fainelli wrote:
 
-This depends on "[PATCH v2] can: rcar_canfd: Add transceiver support"
-https://lore.kernel.org/r/e825b50a843ffe40e33f34e4d858c07c1b2ff259.1678280913.git.geert+renesas@glider.be
----
- drivers/net/can/rcar/rcar_canfd.c | 43 +++++++++++++++----------------
- 1 file changed, 21 insertions(+), 22 deletions(-)
+Hello Florian,
 
-diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index 6df9a259e5e4f92c..ecdb8ffe2f670c9b 100644
---- a/drivers/net/can/rcar/rcar_canfd.c
-+++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -1417,20 +1417,20 @@ static int rcar_canfd_open(struct net_device *ndev)
- 
- 	err = phy_power_on(priv->transceiver);
- 	if (err) {
--		netdev_err(ndev, "failed to power on PHY, error %d\n", err);
-+		netdev_err(ndev, "failed to power on PHY, %pe\n", ERR_PTR(err));
- 		return err;
- 	}
- 
- 	/* Peripheral clock is already enabled in probe */
- 	err = clk_prepare_enable(gpriv->can_clk);
- 	if (err) {
--		netdev_err(ndev, "failed to enable CAN clock, error %d\n", err);
-+		netdev_err(ndev, "failed to enable CAN clock, %pe\n", ERR_PTR(err));
- 		goto out_phy;
- 	}
- 
- 	err = open_candev(ndev);
- 	if (err) {
--		netdev_err(ndev, "open_candev() failed, error %d\n", err);
-+		netdev_err(ndev, "open_candev() failed, %pe\n", ERR_PTR(err));
- 		goto out_can_clock;
- 	}
- 
-@@ -1731,10 +1731,9 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
- 	int err = -ENODEV;
- 
- 	ndev = alloc_candev(sizeof(*priv), RCANFD_FIFO_DEPTH);
--	if (!ndev) {
--		dev_err(dev, "alloc_candev() failed\n");
-+	if (!ndev)
- 		return -ENOMEM;
--	}
-+
- 	priv = netdev_priv(ndev);
- 
- 	ndev->netdev_ops = &rcar_canfd_netdev_ops;
-@@ -1777,8 +1776,8 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
- 				       rcar_canfd_channel_err_interrupt, 0,
- 				       irq_name, priv);
- 		if (err) {
--			dev_err(dev, "devm_request_irq CH Err(%d) failed, error %d\n",
--				err_irq, err);
-+			dev_err(dev, "devm_request_irq CH Err %d failed, %pe\n",
-+				err_irq, ERR_PTR(err));
- 			goto fail;
- 		}
- 		irq_name = devm_kasprintf(dev, GFP_KERNEL, "canfd.ch%d_trx",
-@@ -1791,8 +1790,8 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
- 				       rcar_canfd_channel_tx_interrupt, 0,
- 				       irq_name, priv);
- 		if (err) {
--			dev_err(dev, "devm_request_irq Tx (%d) failed, error %d\n",
--				tx_irq, err);
-+			dev_err(dev, "devm_request_irq Tx %d failed, %pe\n",
-+				tx_irq, ERR_PTR(err));
- 			goto fail;
- 		}
- 	}
-@@ -1823,7 +1822,7 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
- 	gpriv->ch[priv->channel] = priv;
- 	err = register_candev(ndev);
- 	if (err) {
--		dev_err(dev, "register_candev() failed, error %d\n", err);
-+		dev_err(dev, "register_candev() failed, %pe\n", ERR_PTR(err));
- 		goto fail_candev;
- 	}
- 	dev_info(dev, "device registered (channel %u)\n", priv->channel);
-@@ -1967,16 +1966,16 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 				       rcar_canfd_channel_interrupt, 0,
- 				       "canfd.ch_int", gpriv);
- 		if (err) {
--			dev_err(dev, "devm_request_irq(%d) failed, error %d\n",
--				ch_irq, err);
-+			dev_err(dev, "devm_request_irq %d failed, %pe\n",
-+				ch_irq, ERR_PTR(err));
- 			goto fail_dev;
- 		}
- 
- 		err = devm_request_irq(dev, g_irq, rcar_canfd_global_interrupt,
- 				       0, "canfd.g_int", gpriv);
- 		if (err) {
--			dev_err(dev, "devm_request_irq(%d) failed, error %d\n",
--				g_irq, err);
-+			dev_err(dev, "devm_request_irq %d failed, %pe\n",
-+				g_irq, ERR_PTR(err));
- 			goto fail_dev;
- 		}
- 	} else {
-@@ -1985,8 +1984,8 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 				       "canfd.g_recc", gpriv);
- 
- 		if (err) {
--			dev_err(dev, "devm_request_irq(%d) failed, error %d\n",
--				g_recc_irq, err);
-+			dev_err(dev, "devm_request_irq %d failed, %pe\n",
-+				g_recc_irq, ERR_PTR(err));
- 			goto fail_dev;
- 		}
- 
-@@ -1994,8 +1993,8 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 				       rcar_canfd_global_err_interrupt, 0,
- 				       "canfd.g_err", gpriv);
- 		if (err) {
--			dev_err(dev, "devm_request_irq(%d) failed, error %d\n",
--				g_err_irq, err);
-+			dev_err(dev, "devm_request_irq %d failed, %pe\n",
-+				g_err_irq, ERR_PTR(err));
- 			goto fail_dev;
- 		}
- 	}
-@@ -2012,14 +2011,14 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 	/* Enable peripheral clock for register access */
- 	err = clk_prepare_enable(gpriv->clkp);
- 	if (err) {
--		dev_err(dev, "failed to enable peripheral clock, error %d\n",
--			err);
-+		dev_err(dev, "failed to enable peripheral clock, %pe\n",
-+			ERR_PTR(err));
- 		goto fail_reset;
- 	}
- 
- 	err = rcar_canfd_reset_controller(gpriv);
- 	if (err) {
--		dev_err(dev, "reset controller failed\n");
-+		dev_err(dev, "reset controller failed, %pe\n", ERR_PTR(err));
- 		goto fail_clk;
- 	}
- 
+
+> This is probably fine because PCMCIA on BCM63xx was only needed for
+> the very old and early devices like the 6348 which modern kernels are
+> unlikely to be able to run on since they are usually RAM constrained 
+> with 16MB or 32MB of DRAM populated. Maxime, do you care if this
+> driver gets removed?
+
+Not at all, thanks for asking.
+
 -- 
-2.34.1
+Maxime
+
+
 
