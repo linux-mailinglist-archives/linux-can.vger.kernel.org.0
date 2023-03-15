@@ -2,271 +2,127 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26AB76BAEA8
-	for <lists+linux-can@lfdr.de>; Wed, 15 Mar 2023 12:07:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0113C6BAF2F
+	for <lists+linux-can@lfdr.de>; Wed, 15 Mar 2023 12:26:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232007AbjCOLHQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 15 Mar 2023 07:07:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44498 "EHLO
+        id S230205AbjCOL0Z (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 15 Mar 2023 07:26:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231785AbjCOLGs (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 15 Mar 2023 07:06:48 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D0E980E34
-        for <linux-can@vger.kernel.org>; Wed, 15 Mar 2023 04:06:40 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id j19-20020a05600c191300b003eb3e1eb0caso828809wmq.1
-        for <linux-can@vger.kernel.org>; Wed, 15 Mar 2023 04:06:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678878399;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Mmse28A41MDTbbOZve6pZwq9r+Apwq0OhP9O66IiwcY=;
-        b=snClEnuf/onBHGLARSF8/jnvi0Vvmuoe8oIpj23fRHjXeNGHBHagrkhTRPTTAZctwp
-         KY6fwU4DKtoh+7RderEhs/cYX2QZsOV3ccEils52G46N40xJDoiuEIil887N7p/3bllk
-         Uz9dAzyBGRF19ElieVACbNB4ktTlIUlbn2SRLv7AqprDuYYF0MnviKWXWJE4tyDscNtX
-         E520AfueYvRNg4iE3kPsxq0AOWNcujxibHdaMmsXeSXlVtVg52yMV5Rw3lZSGfGCXSS6
-         JN7ZPmPiVc6TfeoPK2brrpTki1Y2OFbi7IKRAMP94dS8MkRh7y08v8G/lbLZwjPwKvqz
-         BJJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678878399;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Mmse28A41MDTbbOZve6pZwq9r+Apwq0OhP9O66IiwcY=;
-        b=xMcQ/lTw83rVtNmBMBxt3pIhIElju7lzX0uB7cH2M258dWugTxyyViPMSBsDGlcVnp
-         iDOYH9pg4WhlxGG2AK9M7TUPScZYdyW2eYOuvrjM3pzAnnFZLlQxueke2xBQmTV13yP6
-         qptIyQawfBLUTOrlyKgjoCF7aSPo8a/9xAOEHSjY4zdqwujs/gXEwFzUlWYdCYGZor2Q
-         lYILlzjO4sa0SYbCMAAfctdd0a00FLS9hQoYUYo8HmQ/NQwU4wXShwNt+sydbfHM69R0
-         aw6b88a/mPHcQ5xnAUiK0aKZAgsfSWlx7Hs+Y7ncBwGjiwEOZjEL3QPQHGLLLRt4TJYR
-         W6ZQ==
-X-Gm-Message-State: AO0yUKXfBGsXpkjtaolpu1jErIib9Cla4v/OStCVt1jrX/2b9VOTFpiB
-        VqatdAbZ5wPQGIuraIzUgjnLSQ==
-X-Google-Smtp-Source: AK7set+Ns1HCJqYSmy7ma6ydGSwfGO5XyJBh54KmFPSF/OdFTApS5Hle9MCI8NmpQI794RcP72vNgA==
-X-Received: by 2002:a05:600c:3588:b0:3ed:3993:6a93 with SMTP id p8-20020a05600c358800b003ed39936a93mr370247wmq.19.1678878399164;
-        Wed, 15 Mar 2023 04:06:39 -0700 (PDT)
-Received: from blmsp.fritz.box ([2001:4090:a247:8056:be7d:83e:a6a5:4659])
-        by smtp.gmail.com with ESMTPSA id l4-20020a7bc444000000b003eafc47eb09sm1460563wmi.43.2023.03.15.04.06.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 04:06:38 -0700 (PDT)
-From:   Markus Schneider-Pargmann <msp@baylibre.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        with ESMTP id S231393AbjCOL0H (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 15 Mar 2023 07:26:07 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D9BF22788
+        for <linux-can@vger.kernel.org>; Wed, 15 Mar 2023 04:25:27 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pcPFq-0007N7-0Q; Wed, 15 Mar 2023 12:25:14 +0100
+Received: from pengutronix.de (unknown [IPv6:2a00:20:3059:9eeb:8134:2053:cf60:de3a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 1289F1939D4;
+        Wed, 15 Mar 2023 11:25:09 +0000 (UTC)
+Date:   Wed, 15 Mar 2023 12:25:08 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Markus Schneider-Pargmann <msp@baylibre.com>,
         Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>
-Cc:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
         Simon Horman <simon.horman@corigine.com>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Markus Schneider-Pargmann <msp@baylibre.com>
-Subject: [PATCH v3 16/16] can: m_can: Implement transmit submission coalescing
-Date:   Wed, 15 Mar 2023 12:05:46 +0100
-Message-Id: <20230315110546.2518305-17-msp@baylibre.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230315110546.2518305-1-msp@baylibre.com>
-References: <20230315110546.2518305-1-msp@baylibre.com>
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/5] dt-bindings: can: tcan4x5x: Add tcan4552 and
+ tcan4553 variants
+Message-ID: <20230315112508.6q52rekhmk66uiwj@pengutronix.de>
+References: <20230314151201.2317134-1-msp@baylibre.com>
+ <20230314151201.2317134-2-msp@baylibre.com>
+ <680053bc-66fb-729f-ecdc-2f5fe511cecd@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="xsnxip2xjomqa2cp"
+Content-Disposition: inline
+In-Reply-To: <680053bc-66fb-729f-ecdc-2f5fe511cecd@linaro.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-m_can supports submitting multiple transmits with one register write.
-This is an interesting option to reduce the number of SPI transfers for
-peripheral chips.
 
-The m_can_tx_op is extended with a bool that signals if it is the last
-transmission and the submit should be executed immediately.
+--xsnxip2xjomqa2cp
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The worker then writes the skb to the FIFO and submits it only if the
-submit bool is set. If it isn't set, the worker will write the next skb
-which is waiting in the workqueue to the FIFO, etc.
+On 14.03.2023 21:01:10, Krzysztof Kozlowski wrote:
+> On 14/03/2023 16:11, Markus Schneider-Pargmann wrote:
+> > These two new chips do not have state or wake pins.
+> >=20
+> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > ---
+> >  .../devicetree/bindings/net/can/tcan4x5x.txt          | 11 ++++++++---
+> >  1 file changed, 8 insertions(+), 3 deletions(-)
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/net/can/tcan4x5x.txt b/D=
+ocumentation/devicetree/bindings/net/can/tcan4x5x.txt
+> > index e3501bfa22e9..38a2b5369b44 100644
+> > --- a/Documentation/devicetree/bindings/net/can/tcan4x5x.txt
+> > +++ b/Documentation/devicetree/bindings/net/can/tcan4x5x.txt
+> > @@ -4,7 +4,10 @@ Texas Instruments TCAN4x5x CAN Controller
+> >  This file provides device node information for the TCAN4x5x interface =
+contains.
+> > =20
+> >  Required properties:
+> > -	- compatible: "ti,tcan4x5x"
+> > +	- compatible:
+> > +		"ti,tcan4x5x" or
+> > +		"ti,tcan4552" or
+> > +		"ti,tcan4553"
+>=20
+> Awesome, they nicely fit into wildcard... Would be useful to deprecate
+> the wildcard at some point and switch to proper compatibles in such
+> case, because now they became confusing.
 
-Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
----
+I plead for DT stability!
 
-Notes:
-    Notes:
-    - I ran into lost messages in the receive FIFO when using this
-      implementation. I guess this only shows up with my test setup in
-      loopback mode and maybe not enough CPU power.
-    - I put this behind the tx-frames ethtool coalescing option as we do
-      wait before submitting packages but it is something different than the
-      tx-frames-irq option. I am not sure if this is the correct option,
-      please let me know.
+As I understand correctly, the exact version of the chip (4550, 4552, or
+4553) can be detected via the ID2 register.
 
- drivers/net/can/m_can/m_can.c | 55 ++++++++++++++++++++++++++++++++---
- drivers/net/can/m_can/m_can.h |  6 ++++
- 2 files changed, 57 insertions(+), 4 deletions(-)
+regards,
+Marc
 
-diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index 63d6e95717e3..1f758894e122 100644
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -1508,6 +1508,9 @@ static int m_can_start(struct net_device *dev)
- 	if (ret)
- 		return ret;
- 
-+	netdev_queue_set_dql_min_limit(netdev_get_tx_queue(cdev->net, 0),
-+				       cdev->tx_max_coalesced_frames);
-+
- 	cdev->can.state = CAN_STATE_ERROR_ACTIVE;
- 
- 	m_can_enable_all_interrupts(cdev);
-@@ -1818,8 +1821,13 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev,
- 		 */
- 		can_put_echo_skb(skb, dev, putidx, frame_len);
- 
--		/* Enable TX FIFO element to start transfer  */
--		m_can_write(cdev, M_CAN_TXBAR, (1 << putidx));
-+		if (cdev->is_peripheral) {
-+			/* Delay enabling TX FIFO element */
-+			cdev->tx_peripheral_submit |= BIT(putidx);
-+		} else {
-+			/* Enable TX FIFO element to start transfer  */
-+			m_can_write(cdev, M_CAN_TXBAR, BIT(putidx));
-+		}
- 		cdev->tx_fifo_putidx = (++cdev->tx_fifo_putidx >= cdev->can.echo_skb_max ?
- 					0 : cdev->tx_fifo_putidx);
- 	}
-@@ -1832,6 +1840,17 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev,
- 	return NETDEV_TX_BUSY;
- }
- 
-+static void m_can_tx_submit(struct m_can_classdev *cdev)
-+{
-+	if (cdev->version == 30)
-+		return;
-+	if (!cdev->is_peripheral)
-+		return;
-+
-+	m_can_write(cdev, M_CAN_TXBAR, cdev->tx_peripheral_submit);
-+	cdev->tx_peripheral_submit = 0;
-+}
-+
- static void m_can_tx_work_queue(struct work_struct *ws)
- {
- 	struct m_can_tx_op *op = container_of(ws, struct m_can_tx_op, work);
-@@ -1840,11 +1859,15 @@ static void m_can_tx_work_queue(struct work_struct *ws)
- 
- 	op->skb = NULL;
- 	m_can_tx_handler(cdev, skb);
-+	if (op->submit)
-+		m_can_tx_submit(cdev);
- }
- 
--static void m_can_tx_queue_skb(struct m_can_classdev *cdev, struct sk_buff *skb)
-+static void m_can_tx_queue_skb(struct m_can_classdev *cdev, struct sk_buff *skb,
-+			       bool submit)
- {
- 	cdev->tx_ops[cdev->next_tx_op].skb = skb;
-+	cdev->tx_ops[cdev->next_tx_op].submit = submit;
- 	queue_work(cdev->tx_wq, &cdev->tx_ops[cdev->next_tx_op].work);
- 
- 	++cdev->next_tx_op;
-@@ -1856,6 +1879,7 @@ static netdev_tx_t m_can_start_peripheral_xmit(struct m_can_classdev *cdev,
- 					       struct sk_buff *skb)
- {
- 	netdev_tx_t err;
-+	bool submit;
- 
- 	if (cdev->can.state == CAN_STATE_BUS_OFF) {
- 		m_can_clean(cdev->net);
-@@ -1866,7 +1890,15 @@ static netdev_tx_t m_can_start_peripheral_xmit(struct m_can_classdev *cdev,
- 	if (err != NETDEV_TX_OK)
- 		return err;
- 
--	m_can_tx_queue_skb(cdev, skb);
-+	++cdev->nr_txs_without_submit;
-+	if (cdev->nr_txs_without_submit >= cdev->tx_max_coalesced_frames ||
-+	    !netdev_xmit_more()) {
-+		cdev->nr_txs_without_submit = 0;
-+		submit = true;
-+	} else {
-+		submit = false;
-+	}
-+	m_can_tx_queue_skb(cdev, skb, submit);
- 
- 	return NETDEV_TX_OK;
- }
-@@ -1998,6 +2030,7 @@ static int m_can_get_coalesce(struct net_device *dev,
- 
- 	ec->rx_max_coalesced_frames_irq = cdev->rx_max_coalesced_frames_irq;
- 	ec->rx_coalesce_usecs_irq = cdev->rx_coalesce_usecs_irq;
-+	ec->tx_max_coalesced_frames = cdev->tx_max_coalesced_frames;
- 	ec->tx_max_coalesced_frames_irq = cdev->tx_max_coalesced_frames_irq;
- 	ec->tx_coalesce_usecs_irq = cdev->tx_coalesce_usecs_irq;
- 
-@@ -2042,6 +2075,18 @@ static int m_can_set_coalesce(struct net_device *dev,
- 		netdev_err(dev, "tx-frames-irq and tx-usecs-irq can only be set together\n");
- 		return -EINVAL;
- 	}
-+	if (ec->tx_max_coalesced_frames > cdev->mcfg[MRAM_TXE].num) {
-+		netdev_err(dev, "tx-frames %u greater than the TX event FIFO %u\n",
-+			   ec->tx_max_coalesced_frames,
-+			   cdev->mcfg[MRAM_TXE].num);
-+		return -EINVAL;
-+	}
-+	if (ec->tx_max_coalesced_frames > cdev->mcfg[MRAM_TXB].num) {
-+		netdev_err(dev, "tx-frames %u greater than the TX FIFO %u\n",
-+			   ec->tx_max_coalesced_frames,
-+			   cdev->mcfg[MRAM_TXB].num);
-+		return -EINVAL;
-+	}
- 	if (ec->rx_coalesce_usecs_irq != 0 && ec->tx_coalesce_usecs_irq != 0 &&
- 	    ec->rx_coalesce_usecs_irq != ec->tx_coalesce_usecs_irq) {
- 		netdev_err(dev, "rx-usecs-irq %u needs to be equal to tx-usecs-irq %u if both are enabled\n",
-@@ -2052,6 +2097,7 @@ static int m_can_set_coalesce(struct net_device *dev,
- 
- 	cdev->rx_max_coalesced_frames_irq = ec->rx_max_coalesced_frames_irq;
- 	cdev->rx_coalesce_usecs_irq = ec->rx_coalesce_usecs_irq;
-+	cdev->tx_max_coalesced_frames = ec->tx_max_coalesced_frames;
- 	cdev->tx_max_coalesced_frames_irq = ec->tx_max_coalesced_frames_irq;
- 	cdev->tx_coalesce_usecs_irq = ec->tx_coalesce_usecs_irq;
- 
-@@ -2069,6 +2115,7 @@ static const struct ethtool_ops m_can_ethtool_ops = {
- 	.supported_coalesce_params = ETHTOOL_COALESCE_RX_USECS_IRQ |
- 		ETHTOOL_COALESCE_RX_MAX_FRAMES_IRQ |
- 		ETHTOOL_COALESCE_TX_USECS_IRQ |
-+		ETHTOOL_COALESCE_TX_MAX_FRAMES |
- 		ETHTOOL_COALESCE_TX_MAX_FRAMES_IRQ,
- 	.get_ts_info = ethtool_op_get_ts_info,
- 	.get_coalesce = m_can_get_coalesce,
-diff --git a/drivers/net/can/m_can/m_can.h b/drivers/net/can/m_can/m_can.h
-index e230cf320a6c..a2a6d10015fd 100644
---- a/drivers/net/can/m_can/m_can.h
-+++ b/drivers/net/can/m_can/m_can.h
-@@ -74,6 +74,7 @@ struct m_can_tx_op {
- 	struct m_can_classdev *cdev;
- 	struct work_struct work;
- 	struct sk_buff *skb;
-+	bool submit;
- };
- 
- struct m_can_classdev {
-@@ -103,6 +104,7 @@ struct m_can_classdev {
- 	u32 active_interrupts;
- 	u32 rx_max_coalesced_frames_irq;
- 	u32 rx_coalesce_usecs_irq;
-+	u32 tx_max_coalesced_frames;
- 	u32 tx_max_coalesced_frames_irq;
- 	u32 tx_coalesce_usecs_irq;
- 
-@@ -117,6 +119,10 @@ struct m_can_classdev {
- 	int tx_fifo_size;
- 	int next_tx_op;
- 
-+	int nr_txs_without_submit;
-+	/* bitfield of fifo elements that will be submitted together */
-+	u32 tx_peripheral_submit;
-+
- 	struct mram_cfg mcfg[MRAM_CFG_NUM];
- };
- 
--- 
-2.39.2
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
+--xsnxip2xjomqa2cp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQRqxEACgkQvlAcSiqK
+BOghIQf/ZgV3avB8NtfGcBCaSkjb49+xElz9iVMO1MC38MLDBpE3gS6L153KLyDr
+Nti7xNBDeSBDVNLtiRVAsY8YHKktFGoY48Gd7jttdEQT/eZHH9Suw0qLonmzVQvm
+aHUTyNIVaQvP50l1E+SKRqprFfNRBtDT98NswxWCpPO9P+5xWUSrigH84sw+HRl1
+Vc5C14Au9rOXy2hhrbNpD13HIM/IBWy1y3L+0tjPx2xIF+Rre5+59iR9qUxmvb1g
+844EJUwgEEjbTP2jPztjgWAq+PReg9VuB3bv32lXBImsD0kCgFdKt0kqJ/AEWoqA
+eiYFt7TUQwb5g0rJJ0wZNIFffmKs3g==
+=csys
+-----END PGP SIGNATURE-----
+
+--xsnxip2xjomqa2cp--
