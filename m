@@ -2,106 +2,186 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61D276BAC83
-	for <lists+linux-can@lfdr.de>; Wed, 15 Mar 2023 10:48:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1EFA6BADED
+	for <lists+linux-can@lfdr.de>; Wed, 15 Mar 2023 11:41:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232130AbjCOJsn (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 15 Mar 2023 05:48:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56906 "EHLO
+        id S232444AbjCOKli (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 15 Mar 2023 06:41:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232139AbjCOJsM (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 15 Mar 2023 05:48:12 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A76836703B;
-        Wed, 15 Mar 2023 02:47:11 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id D2BC392009C; Wed, 15 Mar 2023 10:47:04 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id CAFB692009B;
-        Wed, 15 Mar 2023 09:47:04 +0000 (GMT)
-Date:   Wed, 15 Mar 2023 09:47:04 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-cc:     Arnd Bergmann <arnd@arndb.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        with ESMTP id S232083AbjCOKlg (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 15 Mar 2023 06:41:36 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E34659813
+        for <linux-can@vger.kernel.org>; Wed, 15 Mar 2023 03:41:33 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id bi20so2317637wmb.2
+        for <linux-can@vger.kernel.org>; Wed, 15 Mar 2023 03:41:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678876891;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fQc3aK0PHt9rmJAAmXdXsneRAxNxZg6X2oIcvnsB4ag=;
+        b=CEi/i7aP31CARW73WsTU9g1Xtnix658fs2k9k87+qR+zWeZXb9vKZgrkmpeJ2QTtne
+         UED/7PXdiW9I1RJnQFe0lBrhhJZcJ+uczfXgwFupZItDyiZHG/PinC+GNmuHEKFNdShu
+         VGfr4y19XEdtWGs1NhdNbeqtHfVHlRWCZdZgsdcu+JKLt0+COXqHJDyOgTjDKLRPsoHI
+         VeTT3T6F2UzusxWjhAU9crsJPUwrTijggv/lA5yNaZDfqev+nCAT/uRolpw4SG4SlXuY
+         9P0dmdl6rrZPPjKf4KtwWahuzbejKoYeuu01g8KYkNTKmkOl0DCVpmnnKKvPEfM4P7A8
+         MWXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678876891;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fQc3aK0PHt9rmJAAmXdXsneRAxNxZg6X2oIcvnsB4ag=;
+        b=B9LpO3Ux36IU+6CqXSqEz9tBl8ub5zkR6Y91xOZrY+00oBJi94XhRFlhkLTsPQ2qst
+         1kYTX5Jv3Sx3B4gOQ/b6+KgRrf8rgEtEhN9l5eESJO/IOldY1sGkXD5v5fUpeS3m2UiU
+         YS87KtkN1A7MimD4iNnlIZqpGbaNU+ELed5lu4racRPThnj30GiHJBOkHKoOfQ6VrGrN
+         F8CxX8XdyHoVfEiwAg36crK5kosJ/khXL3YAY40RzcoUzDBuIDPwzaaZbHjv+zDSRecg
+         fiQ9Zt4SULsLagyLzPTvSsrjcqhYxvl/AcZ3LiUyAb7g7PmPe/YZGvgutcrMok/LEo0J
+         lyaw==
+X-Gm-Message-State: AO0yUKUAoUVb79Ll1rkJLKIkwK6/zsoW4cLUBfJf5099e2jWI2pMRfAG
+        nAb/Hr/c/qhwP7bC2QSaGJVWhQ==
+X-Google-Smtp-Source: AK7set8Mtk0LwWhyWB9/FpteoEVjLr4r+ag7RPu/JlMVnxgB+wBS0IqCE+l9iUpMhT1JTniLvkKJwg==
+X-Received: by 2002:a7b:ca41:0:b0:3ea:f75d:4626 with SMTP id m1-20020a7bca41000000b003eaf75d4626mr17114460wml.38.1678876891602;
+        Wed, 15 Mar 2023 03:41:31 -0700 (PDT)
+Received: from blmsp ([2001:4090:a247:8056:be7d:83e:a6a5:4659])
+        by smtp.gmail.com with ESMTPSA id 22-20020a05600c021600b003ecc64edf7esm1382047wmi.39.2023.03.15.03.41.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 03:41:31 -0700 (PDT)
+Date:   Wed, 15 Mar 2023 11:41:30 +0100
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, linux-hams@vger.kernel.org
-Subject: Re: [PATCH v3 20/38] net: handle HAS_IOPORT dependencies
-In-Reply-To: <20230314121216.413434-21-schnelle@linux.ibm.com>
-Message-ID: <alpine.DEB.2.21.2303150938001.53876@angie.orcam.me.uk>
-References: <20230314121216.413434-1-schnelle@linux.ibm.com> <20230314121216.413434-21-schnelle@linux.ibm.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/5] can: tcan4x5x: Add support for tcan4552/4553
+Message-ID: <20230315104130.qadwmybimn2rhkmx@blmsp>
+References: <20230314151201.2317134-1-msp@baylibre.com>
+ <20230314151201.2317134-6-msp@baylibre.com>
+ <ZBCfKhPZrIMqvmbO@corigine.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZBCfKhPZrIMqvmbO@corigine.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue, 14 Mar 2023, Niklas Schnelle wrote:
+Hi Simon,
 
-> those drivers requiring them. For the DEFXX driver there use of I/O
-> ports is optional and we only need to fence those paths.can It also
+On Tue, Mar 14, 2023 at 05:22:02PM +0100, Simon Horman wrote:
+> On Tue, Mar 14, 2023 at 04:12:01PM +0100, Markus Schneider-Pargmann wrote:
+> > tcan4552 and tcan4553 do not have wake or state pins, so they are
+> > currently not compatible with the generic driver. The generic driver
+> > uses tcan4x5x_disable_state() and tcan4x5x_disable_wake() if the gpios
+> > are not defined. These functions use register bits that are not
+> > available in tcan4552/4553.
+> > 
+> > This patch adds support by introducing version information to reflect if
+> > the chip has wake and state pins. Also the version is now checked.
+> > 
+> > Signed-off-by: Markus Schneider-Pargmann
+> 
+> Hi Markus,
+> 
+> you forgot your email address in the signed-off-by line.
 
- Some writing mess-up here, should it read:
+Thank you, I am wondering how I managed to do that :D.
 
-"For the DEFXX driver the use of I/O ports is optional and we only need to 
-fence those paths. It also [...]"
+> 
+> > ---
+> >  drivers/net/can/m_can/tcan4x5x-core.c | 113 ++++++++++++++++++++------
+> >  1 file changed, 89 insertions(+), 24 deletions(-)
+> > 
+> > diff --git a/drivers/net/can/m_can/tcan4x5x-core.c b/drivers/net/can/m_can/tcan4x5x-core.c
+> > index fb9375fa20ec..e7fa509dacc9 100644
+> > --- a/drivers/net/can/m_can/tcan4x5x-core.c
+> > +++ b/drivers/net/can/m_can/tcan4x5x-core.c
+> 
+> ...
+> 
+> > @@ -254,18 +262,53 @@ static int tcan4x5x_disable_state(struct m_can_classdev *cdev)
+> >  				  TCAN4X5X_DISABLE_INH_MSK, 0x01);
+> >  }
+> >  
+> > -static int tcan4x5x_get_gpios(struct m_can_classdev *cdev)
+> > +static int tcan4x5x_verify_version(
+> > +		struct tcan4x5x_priv *priv,
+> > +		const struct tcan4x5x_version_info *version_info)
+> 
+> nit:
+> 
+> static int
+> tcan4x5x_verify_version(struct tcan4x5x_priv *priv,                                                     const struct tcan4x5x_version_info *version_info)
+> 
+> or:
+> 
+> static int tcan4x5x_verify_version(struct tcan4x5x_priv *priv,                                                     const struct tcan4x5x_version_info *version_info)
+> 
+> Your could make the line shorter by renaming the 'version_info' parameter,
+> say to 'info'.
 
-?
+Thanks, fixed. I would like to keep version_info as it is used like that
+everywhere else. I think/hope breaking the 80c here is fine.
 
-> diff --git a/drivers/net/fddi/Kconfig b/drivers/net/fddi/Kconfig
-> index 846bf41c2717..fa3f1e0fe143 100644
-> --- a/drivers/net/fddi/Kconfig
-> +++ b/drivers/net/fddi/Kconfig
-> @@ -29,7 +29,7 @@ config DEFZA
->  
->  config DEFXX
->  	tristate "Digital DEFTA/DEFEA/DEFPA adapter support"
-> -	depends on FDDI && (PCI || EISA || TC)
-> +	depends on FDDI && (PCI || EISA || TC) && HAS_IOPORT
+> 
+> ...
+> 
+> > @@ -394,21 +448,32 @@ static void tcan4x5x_can_remove(struct spi_device *spi)
+> >  	m_can_class_free_dev(priv->cdev.net);
+> >  }
+> >  
+> > +static const struct tcan4x5x_version_info tcan4x5x_generic = {
+> > +	.has_state_pin = true,
+> > +	.has_wake_pin = true,
+> > +};
+> > +
+> > +static const struct tcan4x5x_version_info tcan4x5x_tcan4552 = {
+> > +	.id2_register = 0x32353534, /* ASCII = 4552 */
+> > +};
+> > +
+> > +static const struct tcan4x5x_version_info tcan4x5x_tcan4553 = {
+> > +	.id2_register = 0x33353534, /* ASCII = 4553 */
+> > +};
+> > +
+> >  static const struct of_device_id tcan4x5x_of_match[] = {
+> > -	{
+> > -		.compatible = "ti,tcan4x5x",
+> > -	}, {
+> > -		/* sentinel */
+> > -	},
+> > +	{ .compatible = "ti,tcan4x5x", .data = &tcan4x5x_generic },
+> > +	{ .compatible = "ti,tcan4552", .data = &tcan4x5x_tcan4552 },
+> > +	{ .compatible = "ti,tcan4553", .data = &tcan4x5x_tcan4553 },
+> > +	{ /* sentinel */ }
+> >  };
+> >  MODULE_DEVICE_TABLE(of, tcan4x5x_of_match);
+> >  
+> >  static const struct spi_device_id tcan4x5x_id_table[] = {
+> > -	{
+> > -		.name = "tcan4x5x",
+> > -	}, {
+> > -		/* sentinel */
+> > -	},
+> > +	{ .name = "tcan4x5x", .driver_data = (unsigned long) &tcan4x5x_generic, },
+> > +	{ .name = "tcan4552", .driver_data = (unsigned long) &tcan4x5x_tcan4552, },
+> > +	{ .name = "tcan4553", .driver_data = (unsigned long) &tcan4x5x_tcan4553, },
+> 
+> nit: checkpatch tells me that no space is necessary after a cast.
 
- This part would incorrectly disable the driver for !HAS_IOPORT and is not 
-needed given the change below:
+Fixed as well.
 
-> diff --git a/drivers/net/fddi/defxx.c b/drivers/net/fddi/defxx.c
-> index 1fef8a9b1a0f..5f386eba9618 100644
-> --- a/drivers/net/fddi/defxx.c
-> +++ b/drivers/net/fddi/defxx.c
-> @@ -254,7 +254,7 @@ static const char version[] =
->  #define DFX_BUS_TC(dev) 0
->  #endif
->  
-> -#if defined(CONFIG_EISA) || defined(CONFIG_PCI)
-> +#ifdef HAS_IOPORT
->  #define dfx_use_mmio bp->mmio
->  #else
->  #define dfx_use_mmio true
+Thanks for reviewing.
 
-is it?
-
-  Maciej
+Best,
+Markus
