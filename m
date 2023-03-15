@@ -2,34 +2,63 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DDB56BAF35
-	for <lists+linux-can@lfdr.de>; Wed, 15 Mar 2023 12:29:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 107966BB431
+	for <lists+linux-can@lfdr.de>; Wed, 15 Mar 2023 14:15:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbjCOL3V (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 15 Mar 2023 07:29:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56596 "EHLO
+        id S231437AbjCONPS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 15 Mar 2023 09:15:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231431AbjCOL3R (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 15 Mar 2023 07:29:17 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065C2136F0
-        for <linux-can@vger.kernel.org>; Wed, 15 Mar 2023 04:29:16 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pcPJc-0007nK-Ro; Wed, 15 Mar 2023 12:29:08 +0100
-Received: from pengutronix.de (unknown [IPv6:2a00:20:3059:9eeb:8134:2053:cf60:de3a])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 06E301939E5;
-        Wed, 15 Mar 2023 11:29:06 +0000 (UTC)
-Date:   Wed, 15 Mar 2023 12:29:05 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Markus Schneider-Pargmann <msp@baylibre.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        with ESMTP id S232003AbjCONO6 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 15 Mar 2023 09:14:58 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F7F6A17E7
+        for <linux-can@vger.kernel.org>; Wed, 15 Mar 2023 06:14:31 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id z21so10040979edb.4
+        for <linux-can@vger.kernel.org>; Wed, 15 Mar 2023 06:14:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678886069;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ko8uIaVTtfK98OPtq0RbCtmBQ5zzSH/lzWDgsNNPcGE=;
+        b=kssdTtT8POAG8MVoPg4E3KHsJGK4vMa/mFMHgzOQKrLzka5xTyBd4krZ2yg6dBB3Jl
+         mIANJsj8iYfru04IwdD4CvNg7Ej8rUELE7sLJp4bnOjZnaZPdDjlGtEu+6A7ZiVMypgf
+         5jRcg+HDExItHNTgZ+3q0CmDdNoVjpupKMOgV7DaB/D6/rlyuR3jHynwZSW1MXh8d58h
+         biNcc98lJafN6jrub5MpB1uayIwcqpfeLhKS1xreOU+1nRjWp4l5DrrSYimArdUYwL6T
+         ZTGFOEgaqS7ls51CIc0Xic+SCpbOahiMqVCyzWUqRwDwEG9jnjpEF65T5m2Yn3ksiMPe
+         w8/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678886069;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ko8uIaVTtfK98OPtq0RbCtmBQ5zzSH/lzWDgsNNPcGE=;
+        b=XTwiGtvQxSm7lt4H9DQa7YhB/ObTMNm51Jj73eBudaV0V+3m3SANvJCUT77qejhh5b
+         JkEUAuN+2ilRxp1ZYKlSURtnGwr2JbYRBjPVh+JpJkn1RxTQrZ32UjpBDyBhxQeTA9i+
+         XperxuwASz1tiAXFxR+iYbRoQIVBbSr37cLFsM7WwollT4oKH9X+ZnM0IajGSBpaotrt
+         UyCmoqDfodCmmNs1r4zqxPhByQenvPGu6IifARGpXFHIFPTNSWnIIJKSFK/0GJvh5qux
+         tyRp4Z41HzmBFsW+jdRdDk7GuO7LifZ9Ns1RbsOMh3Fqg4iPuqwr/C5JoHLMIIEM1AkA
+         yk2g==
+X-Gm-Message-State: AO0yUKWFT+rqT/maBShc3e1qjTLXaYyuhjzPFhQPkVI2z9hbkk6BJSge
+        BSuoaQnCOEcjHgRNlN4KIkg4YQ==
+X-Google-Smtp-Source: AK7set/zo2nQvhu3yQ8tXP5JkC8OVGgJOgcta7DN6Bw6XOHhr8ldC9OwaIy35bcMX3a5DV02+BT8uA==
+X-Received: by 2002:a17:907:a582:b0:92f:3e2b:fbb7 with SMTP id vs2-20020a170907a58200b0092f3e2bfbb7mr1805219ejc.14.1678886069514;
+        Wed, 15 Mar 2023 06:14:29 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:940e:8615:37dc:c2bd? ([2a02:810d:15c0:828:940e:8615:37dc:c2bd])
+        by smtp.gmail.com with ESMTPSA id g12-20020a1709064e4c00b008df7d2e122dsm2511882ejw.45.2023.03.15.06.14.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 06:14:28 -0700 (PDT)
+Message-ID: <54aae3b8-ee85-c7eb-ecda-f574cb140675@linaro.org>
+Date:   Wed, 15 Mar 2023 14:14:27 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 1/5] dt-bindings: can: tcan4x5x: Add tcan4552 and tcan4553
+ variants
+Content-Language: en-US
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Markus Schneider-Pargmann <msp@baylibre.com>,
         Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -38,102 +67,60 @@ Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Simon Horman <simon.horman@corigine.com>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/5] dt-bindings: can: tcan4x5x: Add tcan4552 and
- tcan4553 variants
-Message-ID: <20230315112905.qutggrdnpsttbase@pengutronix.de>
 References: <20230314151201.2317134-1-msp@baylibre.com>
  <20230314151201.2317134-2-msp@baylibre.com>
  <680053bc-66fb-729f-ecdc-2f5fe511cecd@linaro.org>
- <20230315104914.qpwhnv6drjwau5jr@blmsp>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nomegujo7vfexmwg"
-Content-Disposition: inline
-In-Reply-To: <20230315104914.qpwhnv6drjwau5jr@blmsp>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+ <20230315112508.6q52rekhmk66uiwj@pengutronix.de>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230315112508.6q52rekhmk66uiwj@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On 15/03/2023 12:25, Marc Kleine-Budde wrote:
+> On 14.03.2023 21:01:10, Krzysztof Kozlowski wrote:
+>> On 14/03/2023 16:11, Markus Schneider-Pargmann wrote:
+>>> These two new chips do not have state or wake pins.
+>>>
+>>> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+>>> ---
+>>>  .../devicetree/bindings/net/can/tcan4x5x.txt          | 11 ++++++++---
+>>>  1 file changed, 8 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/net/can/tcan4x5x.txt b/Documentation/devicetree/bindings/net/can/tcan4x5x.txt
+>>> index e3501bfa22e9..38a2b5369b44 100644
+>>> --- a/Documentation/devicetree/bindings/net/can/tcan4x5x.txt
+>>> +++ b/Documentation/devicetree/bindings/net/can/tcan4x5x.txt
+>>> @@ -4,7 +4,10 @@ Texas Instruments TCAN4x5x CAN Controller
+>>>  This file provides device node information for the TCAN4x5x interface contains.
+>>>  
+>>>  Required properties:
+>>> -	- compatible: "ti,tcan4x5x"
+>>> +	- compatible:
+>>> +		"ti,tcan4x5x" or
+>>> +		"ti,tcan4552" or
+>>> +		"ti,tcan4553"
+>>
+>> Awesome, they nicely fit into wildcard... Would be useful to deprecate
+>> the wildcard at some point and switch to proper compatibles in such
+>> case, because now they became confusing.
+> 
+> I plead for DT stability!
+> 
+> As I understand correctly, the exact version of the chip (4550, 4552, or
+> 4553) can be detected via the ID2 register.
 
---nomegujo7vfexmwg
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+So maybe there is no need for this patch at all? Or the new compatibles
+should be made compatible with generic fallback?
 
-On 15.03.2023 11:49:14, Markus Schneider-Pargmann wrote:
-> Hi Krzysztof,
->=20
-> On Tue, Mar 14, 2023 at 09:01:10PM +0100, Krzysztof Kozlowski wrote:
-> > On 14/03/2023 16:11, Markus Schneider-Pargmann wrote:
-> > > These two new chips do not have state or wake pins.
-> > >=20
-> > > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> > > ---
-> > >  .../devicetree/bindings/net/can/tcan4x5x.txt          | 11 ++++++++-=
---
-> > >  1 file changed, 8 insertions(+), 3 deletions(-)
-> > >=20
-> > > diff --git a/Documentation/devicetree/bindings/net/can/tcan4x5x.txt b=
-/Documentation/devicetree/bindings/net/can/tcan4x5x.txt
-> > > index e3501bfa22e9..38a2b5369b44 100644
-> > > --- a/Documentation/devicetree/bindings/net/can/tcan4x5x.txt
-> > > +++ b/Documentation/devicetree/bindings/net/can/tcan4x5x.txt
-> > > @@ -4,7 +4,10 @@ Texas Instruments TCAN4x5x CAN Controller
-> > >  This file provides device node information for the TCAN4x5x interfac=
-e contains.
-> > > =20
-> > >  Required properties:
-> > > -	- compatible: "ti,tcan4x5x"
-> > > +	- compatible:
-> > > +		"ti,tcan4x5x" or
-> > > +		"ti,tcan4552" or
-> > > +		"ti,tcan4553"
-> >=20
-> > Awesome, they nicely fit into wildcard... Would be useful to deprecate
-> > the wildcard at some point and switch to proper compatibles in such
-> > case, because now they became confusing.
-> >=20
-> > Anyway:
-> >=20
-> > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->=20
-> Thank you. Indeed the old generic name could be replaced, unfortunately
-> I don't have a list of devices that this generic wildcard matches.
+Best regards,
+Krzysztof
 
-The mcp251xfd driver supports "microchip,mcp2517fd",
-"microchip,mcp2518fd", "microchip,mcp251863", and "microchip,mcp251xfd".
-It always does auto detection and throws a warning if the found chip is
-not consistent with the firmware (DT, ACPI).
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---nomegujo7vfexmwg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQRq/8ACgkQvlAcSiqK
-BOhz7Af+Ijf/SfgPsTnfv7fBmVGkSnNMyFFNZrx4qRYBaKVOQLO/yM1cbTi9nvpB
-+8Jb+Dar80wua5kHmFcb/Uipad3/MF/JtA8TPKB1CAagvEWgw2MIAKyzTVGJzPxR
-sSIlDOINkWgmmhEvN0C+jNT51CgvO/6+0j4ZidDf3lwBgyofKAK6lSD+y5UupLYJ
-/eKt/oQFhlgDMVeatstmBGh0eMO2XV+T2Q5t/MVdqa/teoUrIfp3i98MPLpfB1uh
-nPXml9k3s5LDhFGnq31TrCBfcQ8n/S0QnphX+dyIKIuHBoa9YhbYgLXZrCQEm+fu
-HwpLvTBfsA9deh1Xx9r4avsdU5zz0Q==
-=AotW
------END PGP SIGNATURE-----
-
---nomegujo7vfexmwg--
