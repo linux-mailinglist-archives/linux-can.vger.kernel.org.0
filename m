@@ -2,92 +2,56 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CA026C10E8
-	for <lists+linux-can@lfdr.de>; Mon, 20 Mar 2023 12:37:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE3FF6C1A3C
+	for <lists+linux-can@lfdr.de>; Mon, 20 Mar 2023 16:50:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231219AbjCTLhG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 20 Mar 2023 07:37:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41750 "EHLO
+        id S231602AbjCTPuW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 20 Mar 2023 11:50:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbjCTLhF (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 20 Mar 2023 07:37:05 -0400
+        with ESMTP id S231836AbjCTPtd (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 20 Mar 2023 11:49:33 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A01C132DF
-        for <linux-can@vger.kernel.org>; Mon, 20 Mar 2023 04:37:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86F60268E
+        for <linux-can@vger.kernel.org>; Mon, 20 Mar 2023 08:41:08 -0700 (PDT)
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1peDmk-0005Mb-3u; Mon, 20 Mar 2023 12:34:42 +0100
-Received: from pengutronix.de (unknown [IPv6:2a00:20:c04b:45e4:1953:f0f4:6a85:b0])
+        id 1peHd3-0003kL-Nu; Mon, 20 Mar 2023 16:40:57 +0100
+Received: from pengutronix.de (unknown [IPv6:2a00:20:c01f:3d56:6ab1:6a2f:e979:45b0])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 05ADB19732D;
-        Mon, 20 Mar 2023 09:23:50 +0000 (UTC)
-Date:   Mon, 20 Mar 2023 10:23:49 +0100
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 193DD197A1C;
+        Mon, 20 Mar 2023 15:40:55 +0000 (UTC)
+Date:   Mon, 20 Mar 2023 16:40:53 +0100
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Rob Herring <robh@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
-        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Tobias Waldekranz <tobias@waldekranz.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Daniel Machon <daniel.machon@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, linux-aspeed@lists.ozlabs.org,
-        linux-can@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] dt-bindings: net: Drop unneeded quotes
-Message-ID: <20230320092349.7eqjqiblksjpw3fb@pengutronix.de>
-References: <20230317233605.3967621-1-robh@kernel.org>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, himadrispandya@gmail.com,
+        skhan@linuxfoundation.org,
+        syzbot+c9bfd85eca611ebf5db1@syzkaller.appspotmail.com
+Subject: Re: [PATCH] FS, NET: Fix KMSAN uninit-value in vfs_write
+Message-ID: <20230320154053.x3h54b2s3r7iclby@pengutronix.de>
+References: <20230314120445.12407-1-ivan.orlov0322@gmail.com>
+ <0e7090c4-ca9b-156f-5922-fd7ddb55fee4@hartkopp.net>
+ <ff0a4ed4-9fde-7a9f-da39-d799dfb946f1@gmail.com>
+ <b4abefa2-16d0-a18c-4614-1786eb94ffab@hartkopp.net>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5rfbuzw7ieky3r2g"
+        protocol="application/pgp-signature"; boundary="p67maiohpxc2m32e"
 Content-Disposition: inline
-In-Reply-To: <20230317233605.3967621-1-robh@kernel.org>
+In-Reply-To: <b4abefa2-16d0-a18c-4614-1786eb94ffab@hartkopp.net>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -95,21 +59,124 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---5rfbuzw7ieky3r2g
+--p67maiohpxc2m32e
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 17.03.2023 18:36:03, Rob Herring wrote:
-> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-> checking for this can be enabled in yamllint.
+On 14.03.2023 20:23:47, Oliver Hartkopp wrote:
 >=20
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-[...]
->  .../devicetree/bindings/net/can/xilinx,can.yaml    |  6 +++---
+>=20
+> On 14.03.23 16:37, Ivan Orlov wrote:
+> > On 3/14/23 18:38, Oliver Hartkopp wrote:
+> > > Hello Ivan,
+> > >=20
+> > > besides the fact that we would read some uninitialized value the
+> > > outcome of the original implementation would have been an error and
+> > > a termination of the copy process too. Maybe throwing a different
+> > > error number.
+> > >=20
+> > > But it is really interesting to see what KMSAN is able to detect
+> > > these days! Many thanks for the finding and your effort to
+> > > contribute this fix!
+> > >=20
+> > > Best regards,
+> > > Oliver
+> > >=20
+> > >=20
+> > > On 14.03.23 13:04, Ivan Orlov wrote:
+> > > > Syzkaller reported the following issue:
+> > >=20
+> > > (..)
+> > >=20
+> > > >=20
+> > > > Reported-by: syzbot+c9bfd85eca611ebf5db1@syzkaller.appspotmail.com
+> > > > Link: https://syzkaller.appspot.com/bug?id=3D47f897f8ad958bbde5790e=
+bf389b5e7e0a345089
+> > > > Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+> > >=20
+> > > Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
+> > >=20
+> > >=20
+> > > > ---
+> > > > =C2=A0 net/can/bcm.c | 16 ++++++++++------
+> > > > =C2=A0 1 file changed, 10 insertions(+), 6 deletions(-)
+> > > >=20
+> > > > diff --git a/net/can/bcm.c b/net/can/bcm.c
+> > > > index 27706f6ace34..a962ec2b8ba5 100644
+> > > > --- a/net/can/bcm.c
+> > > > +++ b/net/can/bcm.c
+> > > > @@ -941,6 +941,8 @@ static int bcm_tx_setup(struct bcm_msg_head
+> > > > *msg_head, struct msghdr *msg,
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 cf =3D op->frames + op->cfsiz * i;
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 err =3D memcpy_from_msg((u8 *)cf, msg, op->cfsiz);
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+ if (err < 0)
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 goto free_op;
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 if (op->flags & CAN_FD_FRAME) {
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (cf->len > 64)
+> > > > @@ -950,12 +952,8 @@ static int bcm_tx_setup(struct bcm_msg_head
+> > > > *msg_head, struct msghdr *msg,
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 err =3D -EINVA=
+L;
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 }
+> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+ if (err < 0) {
+> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 if (op->frames !=3D &op->sframe)
+> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kfree(op->frames);
+> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 kfree(op);
+> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 return err;
+> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+ }
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+ if (err < 0)
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 goto free_op;
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 if (msg_head->flags & TX_CP_CAN_ID) {
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* copy can_id into frame */
+> > > > @@ -1026,6 +1024,12 @@ static int bcm_tx_setup(struct
+> > > > bcm_msg_head *msg_head, struct msghdr *msg,
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 bcm_tx_start=
+_timer(op);
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return msg_head->nframes * op->cfsiz=
+ + MHSIZ;
+> > > > +
+> > > > +free_op:
+> > > > +=C2=A0=C2=A0=C2=A0 if (op->frames !=3D &op->sframe)
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kfree(op->frames);
+> > > > +=C2=A0=C2=A0=C2=A0 kfree(op);
+> > > > +=C2=A0=C2=A0=C2=A0 return err;
+> > > > =C2=A0 }
+> > > > =C2=A0 /*
+> >=20
+> > Thank you for the quick answer! I totally agree that this patch will not
+> > change the behavior a lot. However, I think a little bit more error
+> > processing will not be bad (considering this will not bring any
+> > performance overhead). If someone in the future tries to use the "cf"
+> > object right after "memcpy_from_msg" call without proper error
+> > processing it will lead to a bug (which will be hard to trigger). Maybe
+> > fixing it now to avoid possible future mistakes in the future makes
+> > sense?
+>=20
+> Yes! Definitely!
+>=20
+> Therefore I added my Acked-by: tag. Marc will likely pick this patch for
+> upstream.
 
-Acked-by: Marc Kleine-Budde <mkl@pengutronix.de> # for bindings/net/can
+Can you create a proper Fixes tag?
 
 Marc
 
@@ -118,19 +185,19 @@ Pengutronix e.K.                 | Marc Kleine-Budde           |
 Embedded Linux                   | https://www.pengutronix.de  |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---5rfbuzw7ieky3r2g
+--p67maiohpxc2m32e
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQYJiIACgkQvlAcSiqK
-BOhjVQf/acPAkVlZAgSx2EeDlEf8hS1lf2sRkjDcvxt3kTD2h5jAh5U3kLV5DTD4
-MjEV9UTZecOll5eioSnCl1DrrqCemegxaoOeML/pQDa4hNYWmm5JHZFLOKdQbL0T
-B9Jl3hxOtVzm95NTggCnKp31A7Q7ft8wfQgSN//1++W90f7Yot/HEv/oPR68ElzX
-J2GyX741B6AfKBqEztJ6OYDWiB2lHw6zzIxacqqM+zn9vjVteFg2FsbKvCRAbUCV
-Bxg0WyzixKLhUf2Of1QOnEW70UfVtICWJ25BjPXp9+WGomovd5nb0MbV+2lou9kk
-0u595tSMCR5sWDa8jKOahMLP+4ZClA==
-=xkke
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQYfnoACgkQvlAcSiqK
+BOgJHggAs4kxDY/WxmiaOlQ4jg5qtMM36yenwMmqwGTbSHRs6ShzX/B8pK7R9XQA
+Z3VLNf9gc8MqivXTSF9tbSfPQPOadGoCVAjUc4UNN9AacC9gcYA30wM3m7REYX3Q
+qsud6oe/nyrnAOens7bprqUJnRX1W/qKPhJZ6hs/IlIuuRFCxvuzMqj8X0JvEPIm
+51d7WPCfcVQsUrEaad7W0QLxdjreX61mtRWyDY9p1HS9kBt7n0wHToMizWMOtPjQ
+lu3outarT8zLrAHaV6CPJ8v3lgtrhC4JPzcXhh5AsPtp0wAUjxedYqaxV+d/2Z4h
+mR8ip99WHeYPrbWhxXB9xGfM3hIV+A==
+=sdPM
 -----END PGP SIGNATURE-----
 
---5rfbuzw7ieky3r2g--
+--p67maiohpxc2m32e--
