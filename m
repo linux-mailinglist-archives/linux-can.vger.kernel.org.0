@@ -2,131 +2,166 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7DB06C015E
-	for <lists+linux-can@lfdr.de>; Sun, 19 Mar 2023 13:06:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5F0E6C0920
+	for <lists+linux-can@lfdr.de>; Mon, 20 Mar 2023 04:01:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230368AbjCSMGw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 19 Mar 2023 08:06:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51734 "EHLO
+        id S229637AbjCTDBD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 19 Mar 2023 23:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230266AbjCSMGq (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 19 Mar 2023 08:06:46 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B67EB2212F
-        for <linux-can@vger.kernel.org>; Sun, 19 Mar 2023 05:06:35 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id ek18so36785592edb.6
-        for <linux-can@vger.kernel.org>; Sun, 19 Mar 2023 05:06:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679227593;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3GQ0kuX+CANTyKsciGzMU4Vb8Jeilt6T7QwH/C5HtcI=;
-        b=q/Wwmwtmi5ctcH6j5K3nCXBiz9uR0+OP/odaZ0yeLNMn0P9OkvfGw11VAgRnOyicjD
-         dRjK50152RNnjgjge6gAAt5Oam85/MTmtLQltFikeLXblNNntYLDxeIl/jxH7cl6DlQU
-         sY4XtUDCoocxbk8uJ7HOQfu1jUXU17C+IKRJby/o8bWFg/PmAAU/fafUO6CqreFLjueK
-         aMRfAOGK16sg24DvYuSU3+cwAV/ypTXHaiO1E7FzvjPIDtQxYYpxTuvdJPLO5wV+DQCA
-         oFGeTeBYPJtHdqLfLxMfW+FmzXsQe40biKcOOPKt9peVzMslgC29+L/CA9QbxDf/a150
-         Ne3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679227593;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3GQ0kuX+CANTyKsciGzMU4Vb8Jeilt6T7QwH/C5HtcI=;
-        b=YpNnwOoEFASWig4onBrsdVgvPcE5jTJH6wMxeSuTy4jeDZUs++xbaA6vaBLMC4FbdE
-         jUAkGbVOVzMHGGz8h6JI8J+HajudkIu0ntHt5//XHDX6EDqzD15fOe1PxZrSuI2NRCnY
-         +bPcRm3PkzJhJS4HTg/M7XIoiWSqJp1ZuCxLpg6OWLVcNaEhhMQ3BvYm1Cg4x3or3sDE
-         uLJL/WoZ+0HCu0XYN8KK6UOEyb23QV+/pnXZv1WIMQiT4mxbnUgggUnunGyzzEG7RN6U
-         c8qkyWVU4KcTdrgjJP8N0NdtnbCOLf2KWW/RnesXDu75fPHODCbGGq41V40qvJAV+Xae
-         9gew==
-X-Gm-Message-State: AO0yUKWsf4j2JkyA0BakVtQbhDYltgACbztC8rI7UxV9ZTDJYekCVwRg
-        HlkZt6rFmNzw2FgvOLMzL1eXKA==
-X-Google-Smtp-Source: AK7set9NHq4wBQYJWJ/ZRlVN9Tlxwe4UcNKkxGkrS38jM5S1VezeVO4DSvYLo/+tr/EvFNS6LaAQbQ==
-X-Received: by 2002:a17:907:2101:b0:8d6:626d:7e03 with SMTP id qn1-20020a170907210100b008d6626d7e03mr5390303ejb.40.1679227593238;
-        Sun, 19 Mar 2023 05:06:33 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:5b5f:f22b:a0b:559d? ([2a02:810d:15c0:828:5b5f:f22b:a0b:559d])
-        by smtp.gmail.com with ESMTPSA id i3-20020a508703000000b004fbd365fb33sm3468506edb.38.2023.03.19.05.06.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Mar 2023 05:06:32 -0700 (PDT)
-Message-ID: <efc29278-b1b6-c30c-5c89-294e5198b80a@linaro.org>
-Date:   Sun, 19 Mar 2023 13:06:30 +0100
+        with ESMTP id S229622AbjCTDBC (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 19 Mar 2023 23:01:02 -0400
+Received: from mail.fintek.com.tw (mail.fintek.com.tw [59.120.186.242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E904EB79;
+        Sun, 19 Mar 2023 20:00:59 -0700 (PDT)
+Received: from vmMailSRV.fintek.com.tw ([192.168.1.1])
+        by mail.fintek.com.tw with ESMTP id 32K2xZ3J060873;
+        Mon, 20 Mar 2023 10:59:35 +0800 (+08)
+        (envelope-from peter_hong@fintek.com.tw)
+Received: from [192.168.1.111] (192.168.1.111) by vmMailSRV.fintek.com.tw
+ (192.168.1.1) with Microsoft SMTP Server id 14.3.498.0; Mon, 20 Mar 2023
+ 10:59:33 +0800
+Message-ID: <186901f9-5d52-2315-f532-26471adcfb55@fintek.com.tw>
+Date:   Mon, 20 Mar 2023 10:59:33 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] dt-bindings: net: Drop unneeded quotes
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] can: usb: f81604: add Fintek F81604 support
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
-        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Tobias Waldekranz <tobias@waldekranz.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Daniel Machon <daniel.machon@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, linux-aspeed@lists.ozlabs.org,
-        linux-can@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-mediatek@lists.infradead.org
-References: <20230317233605.3967621-1-robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230317233605.3967621-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+To:     Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
+CC:     <wg@grandegger.com>, <mkl@pengutronix.de>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <mailhol.vincent@wanadoo.fr>, <frank.jungclaus@esd.eu>,
+        <linux-kernel@vger.kernel.org>, <linux-can@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <hpeter+linux_kernel@gmail.com>
+References: <20230317093352.3979-1-peter_hong@fintek.com.tw>
+ <ZBRoCVHV3S3ugEoO@localhost.localdomain>
+From:   Peter Hong <peter_hong@fintek.com.tw>
+In-Reply-To: <ZBRoCVHV3S3ugEoO@localhost.localdomain>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [192.168.1.111]
+X-TM-AS-Product-Ver: SMEX-12.5.0.2055-9.0.1002-27514.001
+X-TM-AS-Result: No-19.988400-8.000000-10
+X-TMASE-MatchedRID: UuaOI1zLN1j/9O/B1c/QyzjNGpWCIvfTlmG/61+LLCeqvcIF1TcLYANw
+        091XoRE6sLe9OFkv+Id3TaF7+lCZvoToZqUCO9J5UgKYbZFF6GjcAmu1xqeets+WYjg3WzyKByy
+        VimjmJJMPHd/OW2VyD6ve1RQ6Ydsa4EtSNBzFpGASEYfcJF0pRdhQO8CvZj/XK36BWK75QOTVr0
+        bDpfV8iIw9rt9E8A4oWo0SBooXS7Tm30AqBxefhDiEPRj9j9rvTJDl9FKHbrmhBPc4ZBrNkb6YV
+        RYkPkYC+JitU/PMe9hkCRQbR4V/6j1I7Q1NCxg0+GYt8f/VhTvGYnoF/CTeZQAheUymmndfsMBr
+        Nxxo1t/wOGawsB401V5974JFP0LmXHEPHmpuRH2DGx/OQ1GV8rHlqZYrZqdI+gtHj7OwNO0CpgE
+        TeT0ynA==
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--19.988400-8.000000
+X-TMASE-Version: SMEX-12.5.0.2055-9.0.1002-27514.001
+X-TM-SNTS-SMTP: E9B5BD1048C40DCF5A422C23447762A0AFA39FCD6982378C40C5FF645BFD0AAA2000:8
+X-DNSRBL: 
+X-SPAM-SOURCE-CHECK: pass
+X-MAIL: mail.fintek.com.tw 32K2xZ3J060873
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 18/03/2023 00:36, Rob Herring wrote:
-> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-> checking for this can be enabled in yamllint.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
+Hi,
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Michal Swiatkowski 於 2023/3/17 下午 09:15 寫道:
+> On Fri, Mar 17, 2023 at 05:33:52PM +0800, Ji-Ze Hong (Peter Hong) wrote:
+>
+> --- a/drivers/net/can/usb/Kconfig
+> +++ b/drivers/net/can/usb/Kconfig
+> @@ -147,4 +147,13 @@ config CAN_UCAN
+>   	          from Theobroma Systems like the A31-ÂľQ7 and the RK3399-Q7
+>   	          (https://www.theobroma-systems.com/rk3399-q7)
+>   
+> Hi,
+>
+> I am not familiar with CAN, so only style review :)
 
-Best regards,
-Krzysztof
+Thanks for your reviews :D
+> +
+> +	if (status) {
+> +		dev_err(&dev->dev, "%s: reg: %x data: %x failed: %d\n",
+> +			__func__, reg, data, status);
+> +	}
+> The { and } aren't needed as inside if is only one line.
 
+Could I remove the { and } when the logical line to split multi-line ?
+
+>> +static int f81604_set_normal_mode(struct net_device *netdev)
+>> +{
+>> +	struct f81604_port_priv *priv = netdev_priv(netdev);
+>> +	int status, i;
+>> +	u8 mod_reg_val = 0x00;
+> RCT, mod_reg should be one line above
+
+What mean about "RCT"?
+
+Is this section should change to above like ??
+
+     u8 mod_reg_val;
+     ...
+
+     mod_reg_val = 0;
+>> +static int f81604_register_urbs(struct net_device *netdev)
+>> +{
+>> +	struct f81604_port_priv *priv = netdev_priv(netdev);
+>> +	int status, i;
+>> +
+>> +	for (i = 0; i < F81604_MAX_RX_URBS; ++i) {
+>> +		status = usb_submit_urb(priv->read_urb[i], GFP_KERNEL);
+>> +		if (status) {
+>> +			netdev_warn(netdev, "%s: submit rx urb failed: %d\n",
+>> +				    __func__, status);
+>> +			return status;
+> Don't know usb subsytem, but shouldn't previously submitted urb be
+> killed?
+
+Yes, I had made kill operations in
+     f81604_start()
+         -> f81604_unregister_urbs()
+
+>> +static void f81604_process_rx_packet(struct urb *urb)
+>> +{
+>> +	struct net_device_stats *stats;
+>> +	struct net_device *netdev;
+>> +	struct can_frame *cf;
+>> +	struct sk_buff *skb;
+>> +	u8 *data;
+>> +	u8 *ptr;
+>> +	int i;
+>> +	int count;
+> RCT
+>
+>> +
+>> +	netdev = urb->context;
+>> +	stats = &netdev->stats;
+>> +	data = urb->transfer_buffer;
+> netdev and data can be set in declaration
+
+why only netdev & data ?? Could I set netdev, stats & data in declaration ?
+
+
+>> +/* Called by the usb core when driver is unloaded or device is removed */
+>> +static void f81604_disconnect(struct usb_interface *intf)
+>> +{
+>> +	struct f81604_priv *priv = usb_get_intfdata(intf);
+>> +	int i;
+>> +
+>> +	for (i = 0; i < F81604_MAX_DEV; ++i) {
+>> +		if (!priv->netdev[i])
+>> +			continue;
+>> +
+>> +		unregister_netdev(priv->netdev[i]);
+>> +		free_candev(priv->netdev[i]);
+>> +	}
+> What about closing USB device? It is called brefore disconnect or it
+> should be done here?
+
+When candev close in f81604_close(), It will call f81604_set_reset_mode() to
+make candev to reset mode.
+
+Thanks
