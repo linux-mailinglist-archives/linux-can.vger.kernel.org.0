@@ -2,166 +2,196 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5F0E6C0920
-	for <lists+linux-can@lfdr.de>; Mon, 20 Mar 2023 04:01:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 017A16C0B4C
+	for <lists+linux-can@lfdr.de>; Mon, 20 Mar 2023 08:25:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbjCTDBD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 19 Mar 2023 23:01:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53170 "EHLO
+        id S229635AbjCTHZI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 20 Mar 2023 03:25:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjCTDBC (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 19 Mar 2023 23:01:02 -0400
-Received: from mail.fintek.com.tw (mail.fintek.com.tw [59.120.186.242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E904EB79;
-        Sun, 19 Mar 2023 20:00:59 -0700 (PDT)
-Received: from vmMailSRV.fintek.com.tw ([192.168.1.1])
-        by mail.fintek.com.tw with ESMTP id 32K2xZ3J060873;
-        Mon, 20 Mar 2023 10:59:35 +0800 (+08)
-        (envelope-from peter_hong@fintek.com.tw)
-Received: from [192.168.1.111] (192.168.1.111) by vmMailSRV.fintek.com.tw
- (192.168.1.1) with Microsoft SMTP Server id 14.3.498.0; Mon, 20 Mar 2023
- 10:59:33 +0800
-Message-ID: <186901f9-5d52-2315-f532-26471adcfb55@fintek.com.tw>
-Date:   Mon, 20 Mar 2023 10:59:33 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
+        with ESMTP id S229497AbjCTHZH (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 20 Mar 2023 03:25:07 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48DE61CAE4;
+        Mon, 20 Mar 2023 00:25:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679297106; x=1710833106;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=sckrP9DIwS5nXONc32/B3DuRvwTDeY7P3PNd34uwKrc=;
+  b=J1/Q4IL1YY9vEXAgBwR34VF7uHoziVlHDatzQ2dmgUZFL5rl3FxsmlW3
+   5+z3dXA8BnxVerG9o+Wb7EQXOxTErozoAe1ThgidnaHGYgmHhoZZ87bdH
+   Ai2KYUxU5XG11x2ALijX44SFlP7bew5py5JmvfvDHrmKoOZquyxJ13P9F
+   suYiXy3OC7k5caPWEe1sT5eNIg7DlASNyNbjoJwn4AsHBecSjGYwBUmlo
+   qMyBtS0f6z792fxRsWv0VOB8tKjCFYkUontzxpmVqOZY9VSeOlwcnD69b
+   riQQCsqctllN+g7xzldt6ERYK3z5xeDVXsCHi4diem4+ZFVEJyh6ROCGI
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="403465133"
+X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
+   d="scan'208";a="403465133"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 00:25:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10654"; a="711221338"
+X-IronPort-AV: E=Sophos;i="5.98,274,1673942400"; 
+   d="scan'208";a="711221338"
+Received: from unknown (HELO localhost.localdomain) ([10.237.112.144])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2023 00:25:02 -0700
+Date:   Mon, 20 Mar 2023 08:24:58 +0100
+From:   Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
+To:     Peter Hong <peter_hong@fintek.com.tw>
+Cc:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        mailhol.vincent@wanadoo.fr, frank.jungclaus@esd.eu,
+        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, hpeter+linux_kernel@gmail.com
 Subject: Re: [PATCH] can: usb: f81604: add Fintek F81604 support
-Content-Language: en-US
-To:     Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-CC:     <wg@grandegger.com>, <mkl@pengutronix.de>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <mailhol.vincent@wanadoo.fr>, <frank.jungclaus@esd.eu>,
-        <linux-kernel@vger.kernel.org>, <linux-can@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <hpeter+linux_kernel@gmail.com>
+Message-ID: <ZBgKSqaFiImtTThv@localhost.localdomain>
 References: <20230317093352.3979-1-peter_hong@fintek.com.tw>
  <ZBRoCVHV3S3ugEoO@localhost.localdomain>
-From:   Peter Hong <peter_hong@fintek.com.tw>
-In-Reply-To: <ZBRoCVHV3S3ugEoO@localhost.localdomain>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+ <186901f9-5d52-2315-f532-26471adcfb55@fintek.com.tw>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [192.168.1.111]
-X-TM-AS-Product-Ver: SMEX-12.5.0.2055-9.0.1002-27514.001
-X-TM-AS-Result: No-19.988400-8.000000-10
-X-TMASE-MatchedRID: UuaOI1zLN1j/9O/B1c/QyzjNGpWCIvfTlmG/61+LLCeqvcIF1TcLYANw
-        091XoRE6sLe9OFkv+Id3TaF7+lCZvoToZqUCO9J5UgKYbZFF6GjcAmu1xqeets+WYjg3WzyKByy
-        VimjmJJMPHd/OW2VyD6ve1RQ6Ydsa4EtSNBzFpGASEYfcJF0pRdhQO8CvZj/XK36BWK75QOTVr0
-        bDpfV8iIw9rt9E8A4oWo0SBooXS7Tm30AqBxefhDiEPRj9j9rvTJDl9FKHbrmhBPc4ZBrNkb6YV
-        RYkPkYC+JitU/PMe9hkCRQbR4V/6j1I7Q1NCxg0+GYt8f/VhTvGYnoF/CTeZQAheUymmndfsMBr
-        Nxxo1t/wOGawsB401V5974JFP0LmXHEPHmpuRH2DGx/OQ1GV8rHlqZYrZqdI+gtHj7OwNO0CpgE
-        TeT0ynA==
-X-TM-AS-User-Approved-Sender: No
-X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--19.988400-8.000000
-X-TMASE-Version: SMEX-12.5.0.2055-9.0.1002-27514.001
-X-TM-SNTS-SMTP: E9B5BD1048C40DCF5A422C23447762A0AFA39FCD6982378C40C5FF645BFD0AAA2000:8
-X-DNSRBL: 
-X-SPAM-SOURCE-CHECK: pass
-X-MAIL: mail.fintek.com.tw 32K2xZ3J060873
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <186901f9-5d52-2315-f532-26471adcfb55@fintek.com.tw>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi,
-
-Michal Swiatkowski 於 2023/3/17 下午 09:15 寫道:
-> On Fri, Mar 17, 2023 at 05:33:52PM +0800, Ji-Ze Hong (Peter Hong) wrote:
->
-> --- a/drivers/net/can/usb/Kconfig
-> +++ b/drivers/net/can/usb/Kconfig
-> @@ -147,4 +147,13 @@ config CAN_UCAN
->   	          from Theobroma Systems like the A31-ÂľQ7 and the RK3399-Q7
->   	          (https://www.theobroma-systems.com/rk3399-q7)
->   
+On Mon, Mar 20, 2023 at 10:59:33AM +0800, Peter Hong wrote:
 > Hi,
+> 
+> Michal Swiatkowski 於 2023/3/17 下午 09:15 寫道:
+> > On Fri, Mar 17, 2023 at 05:33:52PM +0800, Ji-Ze Hong (Peter Hong) wrote:
+> > 
+> > --- a/drivers/net/can/usb/Kconfig
+> > +++ b/drivers/net/can/usb/Kconfig
+> > @@ -147,4 +147,13 @@ config CAN_UCAN
+> >   	          from Theobroma Systems like the A31-ÂľQ7 and the RK3399-Q7
+> >   	          (https://www.theobroma-systems.com/rk3399-q7)
+> > Hi,
+> > 
+> > I am not familiar with CAN, so only style review :)
+> 
+> Thanks for your reviews :D
+> > +
+> > +	if (status) {
+> > +		dev_err(&dev->dev, "%s: reg: %x data: %x failed: %d\n",
+> > +			__func__, reg, data, status);
+> > +	}
+> > The { and } aren't needed as inside if is only one line.
+> 
+> Could I remove the { and } when the logical line to split multi-line ?
+> 
+
+Yes You can, and You should :)
+
+> > > +static int f81604_set_normal_mode(struct net_device *netdev)
+> > > +{
+> > > +	struct f81604_port_priv *priv = netdev_priv(netdev);
+> > > +	int status, i;
+> > > +	u8 mod_reg_val = 0x00;
+> > RCT, mod_reg should be one line above
+> 
+> What mean about "RCT"?
+> 
+> Is this section should change to above like ??
+> 
+>     u8 mod_reg_val;
+>     ...
+> 
+>     mod_reg_val = 0;
+
+reverse christmas tree, it is about how variable definition should look
+like. In Your case:
+
+struct f81604_port_priv *priv = netdev_priv(netdev);
+u8 mod_reg_val = 0x00;
+int status, i;
+
+instead of
+
+
+struct f81604_port_priv *priv = netdev_priv(netdev);
+int status, i;
+u8 mod_reg_val = 0x00;
+
+Cosmetic Linux style rule
+
+> > > +static int f81604_register_urbs(struct net_device *netdev)
+> > > +{
+> > > +	struct f81604_port_priv *priv = netdev_priv(netdev);
+> > > +	int status, i;
+> > > +
+> > > +	for (i = 0; i < F81604_MAX_RX_URBS; ++i) {
+> > > +		status = usb_submit_urb(priv->read_urb[i], GFP_KERNEL);
+> > > +		if (status) {
+> > > +			netdev_warn(netdev, "%s: submit rx urb failed: %d\n",
+> > > +				    __func__, status);
+> > > +			return status;
+> > Don't know usb subsytem, but shouldn't previously submitted urb be
+> > killed?
+> 
+> Yes, I had made kill operations in
+>     f81604_start()
+>         -> f81604_unregister_urbs()
 >
-> I am not familiar with CAN, so only style review :)
 
-Thanks for your reviews :D
-> +
-> +	if (status) {
-> +		dev_err(&dev->dev, "%s: reg: %x data: %x failed: %d\n",
-> +			__func__, reg, data, status);
-> +	}
-> The { and } aren't needed as inside if is only one line.
+Ok, thanks
 
-Could I remove the { and } when the logical line to split multi-line ?
+> > > +static void f81604_process_rx_packet(struct urb *urb)
+> > > +{
+> > > +	struct net_device_stats *stats;
+> > > +	struct net_device *netdev;
+> > > +	struct can_frame *cf;
+> > > +	struct sk_buff *skb;
+> > > +	u8 *data;
+> > > +	u8 *ptr;
+> > > +	int i;
+> > > +	int count;
+> > RCT
+> > 
+> > > +
+> > > +	netdev = urb->context;
+> > > +	stats = &netdev->stats;
+> > > +	data = urb->transfer_buffer;
+> > netdev and data can be set in declaration
+> 
+> why only netdev & data ?? Could I set netdev, stats & data in declaration ?
+> 
 
->> +static int f81604_set_normal_mode(struct net_device *netdev)
->> +{
->> +	struct f81604_port_priv *priv = netdev_priv(netdev);
->> +	int status, i;
->> +	u8 mod_reg_val = 0x00;
-> RCT, mod_reg should be one line above
+You can, but it will be hard to still have declaration as RCT (netdev
+declaration have to be before stats declaration).
 
-What mean about "RCT"?
+> 
+> > > +/* Called by the usb core when driver is unloaded or device is removed */
+> > > +static void f81604_disconnect(struct usb_interface *intf)
+> > > +{
+> > > +	struct f81604_priv *priv = usb_get_intfdata(intf);
+> > > +	int i;
+> > > +
+> > > +	for (i = 0; i < F81604_MAX_DEV; ++i) {
+> > > +		if (!priv->netdev[i])
+> > > +			continue;
+> > > +
+> > > +		unregister_netdev(priv->netdev[i]);
+> > > +		free_candev(priv->netdev[i]);
+> > > +	}
+> > What about closing USB device? It is called brefore disconnect or it
+> > should be done here?
+> 
+> When candev close in f81604_close(), It will call f81604_set_reset_mode() to
+> make candev to reset mode.
+> 
 
-Is this section should change to above like ??
+Understand, thanks
 
-     u8 mod_reg_val;
-     ...
-
-     mod_reg_val = 0;
->> +static int f81604_register_urbs(struct net_device *netdev)
->> +{
->> +	struct f81604_port_priv *priv = netdev_priv(netdev);
->> +	int status, i;
->> +
->> +	for (i = 0; i < F81604_MAX_RX_URBS; ++i) {
->> +		status = usb_submit_urb(priv->read_urb[i], GFP_KERNEL);
->> +		if (status) {
->> +			netdev_warn(netdev, "%s: submit rx urb failed: %d\n",
->> +				    __func__, status);
->> +			return status;
-> Don't know usb subsytem, but shouldn't previously submitted urb be
-> killed?
-
-Yes, I had made kill operations in
-     f81604_start()
-         -> f81604_unregister_urbs()
-
->> +static void f81604_process_rx_packet(struct urb *urb)
->> +{
->> +	struct net_device_stats *stats;
->> +	struct net_device *netdev;
->> +	struct can_frame *cf;
->> +	struct sk_buff *skb;
->> +	u8 *data;
->> +	u8 *ptr;
->> +	int i;
->> +	int count;
-> RCT
->
->> +
->> +	netdev = urb->context;
->> +	stats = &netdev->stats;
->> +	data = urb->transfer_buffer;
-> netdev and data can be set in declaration
-
-why only netdev & data ?? Could I set netdev, stats & data in declaration ?
-
-
->> +/* Called by the usb core when driver is unloaded or device is removed */
->> +static void f81604_disconnect(struct usb_interface *intf)
->> +{
->> +	struct f81604_priv *priv = usb_get_intfdata(intf);
->> +	int i;
->> +
->> +	for (i = 0; i < F81604_MAX_DEV; ++i) {
->> +		if (!priv->netdev[i])
->> +			continue;
->> +
->> +		unregister_netdev(priv->netdev[i]);
->> +		free_candev(priv->netdev[i]);
->> +	}
-> What about closing USB device? It is called brefore disconnect or it
-> should be done here?
-
-When candev close in f81604_close(), It will call f81604_set_reset_mode() to
-make candev to reset mode.
-
-Thanks
+> Thanks
