@@ -2,214 +2,259 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D42726C36B8
-	for <lists+linux-can@lfdr.de>; Tue, 21 Mar 2023 17:15:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CA256C389D
+	for <lists+linux-can@lfdr.de>; Tue, 21 Mar 2023 18:50:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230377AbjCUQP4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 21 Mar 2023 12:15:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43612 "EHLO
+        id S229990AbjCURus (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 21 Mar 2023 13:50:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230361AbjCUQPc (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 21 Mar 2023 12:15:32 -0400
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD1C4DE0C
-        for <linux-can@vger.kernel.org>; Tue, 21 Mar 2023 09:15:17 -0700 (PDT)
-Received: from ramsan.of.borg ([84.195.187.55])
-        by xavier.telenet-ops.be with bizsmtp
-        id b4F32900A1C8whw014F30Q; Tue, 21 Mar 2023 17:15:03 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1peecv-00EAk0-Gu;
-        Tue, 21 Mar 2023 17:15:03 +0100
-Received: from geert by rox.of.borg with local (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1peedb-00B9C6-7K;
-        Tue, 21 Mar 2023 17:15:03 +0100
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Simon Horman <simon.horman@corigine.com>
-Subject: [PATCH v4 2/2] can: rcar_canfd: Improve error messages
-Date:   Tue, 21 Mar 2023 17:15:01 +0100
-Message-Id: <4162cc46f72257ec191007675933985b6df394b9.1679414936.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1679414936.git.geert+renesas@glider.be>
-References: <cover.1679414936.git.geert+renesas@glider.be>
+        with ESMTP id S229513AbjCURuq (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 21 Mar 2023 13:50:46 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4EED515D6;
+        Tue, 21 Mar 2023 10:50:44 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32LFCjkB011925;
+        Tue, 21 Mar 2023 18:50:18 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=y0KlYJt6rx8ndn2XMFbV20udYR6+jSpQILTQmqixjj0=;
+ b=S4Kt+hmBPcC+fMY/0pngwOonkxa5Pu/evww+5KfD+YZKMuV7eG82Xi5Pk8YuCZkBM1C6
+ uaBXpB1rt8IGKkstX9uIMxdUuvbCqiAmfx4VXERxix8wvbAUVJ5ed0CBf0kb0icpOtUS
+ CTAqFWbrtZIWlDj5rSYlIdED2FQVVEpPjJ/OpYIqah2ltXkqR2Rq3qnzxgO4TmzxThYd
+ YvY4ZfjBLaZn39QRzu+1Qd5g3gfzs2xmcQD6sI5+NV7gVqSLnMrnsQv/IdiHHUvK0zxP
+ jyA4SQTLDAjkyjFCKfclHKvOW8JqsjuaQ/A5i1BNIfWjWx8ocsFXCvSF59wmSpnY9OUr ew== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3pfb67agfm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Mar 2023 18:50:18 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9A40010002A;
+        Tue, 21 Mar 2023 18:50:16 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8DABE21B529;
+        Tue, 21 Mar 2023 18:50:16 +0100 (CET)
+Received: from [10.201.21.93] (10.201.21.93) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Tue, 21 Mar
+ 2023 18:50:15 +0100
+Message-ID: <d1f31c4f-d752-4702-7888-06bd7a6080d9@foss.st.com>
+Date:   Tue, 21 Mar 2023 18:50:15 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [RESEND PATCH v7 0/5] can: bxcan: add support for ST bxCAN
+ controller
+Content-Language: en-US
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        <linux-kernel@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Rob Herring <robh@kernel.org>, Rob Herring <robh+dt@kernel.org>
+CC:     Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        <michael@amarulasolutions.com>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-can@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <netdev@vger.kernel.org>
+References: <20230315211040.2455855-1-dario.binacchi@amarulasolutions.com>
+ <CABGWkvpHHLNzZHDMzWveoHtApmR3czVvoCOnuWBZt-UoLVU-6g@mail.gmail.com>
+From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
+In-Reply-To: <CABGWkvpHHLNzZHDMzWveoHtApmR3czVvoCOnuWBZt-UoLVU-6g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Originating-IP: [10.201.21.93]
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-21_11,2023-03-21_01,2023-02-09_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Improve printed error messages:
-  - Replace numerical error codes by mnemotechnic error codes, to
-    improve the user experience in case of errors,
-  - Drop parentheses around printed numbers, cfr.
-    Documentation/process/coding-style.rst,
-  - Drop printing of an error message in case of out-of-memory, as the
-    core memory allocation code already takes care of this.
+Hi Dario,
 
-Suggested-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
----
-v4:
-  - Reviewed-by: Simon Horman <simon.horman@corigine.com>,
 
-v3:
-  - Add missing SoB,
+On 3/21/23 12:25, Dario Binacchi wrote:
+> A gentle ping to remind you of this series.
+> I have no idea why it hasn't deserved any response for quite some
+> time.
+> Is there anything I am still missing?
+> 
+> Please let me know.
 
-v2:
-  - This is v2 of "[PATCH] can: rcar_canfd: Print mnemotechnic error
-    codes".  I haven't added any tags given on v1, as half of the
-    printed message changed.
----
- drivers/net/can/rcar/rcar_canfd.c | 43 +++++++++++++++----------------
- 1 file changed, 21 insertions(+), 22 deletions(-)
+I'm just waiting driver (+dt-binding) merge. I prefer that dt-bindings 
+and driver patches are merged first (to avoid yaml issue with DT 
+pacthes). To be honest, I have not checked the status about those patches.
 
-diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index 6df9a259e5e4f92c..ecdb8ffe2f670c9b 100644
---- a/drivers/net/can/rcar/rcar_canfd.c
-+++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -1417,20 +1417,20 @@ static int rcar_canfd_open(struct net_device *ndev)
- 
- 	err = phy_power_on(priv->transceiver);
- 	if (err) {
--		netdev_err(ndev, "failed to power on PHY, error %d\n", err);
-+		netdev_err(ndev, "failed to power on PHY, %pe\n", ERR_PTR(err));
- 		return err;
- 	}
- 
- 	/* Peripheral clock is already enabled in probe */
- 	err = clk_prepare_enable(gpriv->can_clk);
- 	if (err) {
--		netdev_err(ndev, "failed to enable CAN clock, error %d\n", err);
-+		netdev_err(ndev, "failed to enable CAN clock, %pe\n", ERR_PTR(err));
- 		goto out_phy;
- 	}
- 
- 	err = open_candev(ndev);
- 	if (err) {
--		netdev_err(ndev, "open_candev() failed, error %d\n", err);
-+		netdev_err(ndev, "open_candev() failed, %pe\n", ERR_PTR(err));
- 		goto out_can_clock;
- 	}
- 
-@@ -1731,10 +1731,9 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
- 	int err = -ENODEV;
- 
- 	ndev = alloc_candev(sizeof(*priv), RCANFD_FIFO_DEPTH);
--	if (!ndev) {
--		dev_err(dev, "alloc_candev() failed\n");
-+	if (!ndev)
- 		return -ENOMEM;
--	}
-+
- 	priv = netdev_priv(ndev);
- 
- 	ndev->netdev_ops = &rcar_canfd_netdev_ops;
-@@ -1777,8 +1776,8 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
- 				       rcar_canfd_channel_err_interrupt, 0,
- 				       irq_name, priv);
- 		if (err) {
--			dev_err(dev, "devm_request_irq CH Err(%d) failed, error %d\n",
--				err_irq, err);
-+			dev_err(dev, "devm_request_irq CH Err %d failed, %pe\n",
-+				err_irq, ERR_PTR(err));
- 			goto fail;
- 		}
- 		irq_name = devm_kasprintf(dev, GFP_KERNEL, "canfd.ch%d_trx",
-@@ -1791,8 +1790,8 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
- 				       rcar_canfd_channel_tx_interrupt, 0,
- 				       irq_name, priv);
- 		if (err) {
--			dev_err(dev, "devm_request_irq Tx (%d) failed, error %d\n",
--				tx_irq, err);
-+			dev_err(dev, "devm_request_irq Tx %d failed, %pe\n",
-+				tx_irq, ERR_PTR(err));
- 			goto fail;
- 		}
- 	}
-@@ -1823,7 +1822,7 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
- 	gpriv->ch[priv->channel] = priv;
- 	err = register_candev(ndev);
- 	if (err) {
--		dev_err(dev, "register_candev() failed, error %d\n", err);
-+		dev_err(dev, "register_candev() failed, %pe\n", ERR_PTR(err));
- 		goto fail_candev;
- 	}
- 	dev_info(dev, "device registered (channel %u)\n", priv->channel);
-@@ -1967,16 +1966,16 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 				       rcar_canfd_channel_interrupt, 0,
- 				       "canfd.ch_int", gpriv);
- 		if (err) {
--			dev_err(dev, "devm_request_irq(%d) failed, error %d\n",
--				ch_irq, err);
-+			dev_err(dev, "devm_request_irq %d failed, %pe\n",
-+				ch_irq, ERR_PTR(err));
- 			goto fail_dev;
- 		}
- 
- 		err = devm_request_irq(dev, g_irq, rcar_canfd_global_interrupt,
- 				       0, "canfd.g_int", gpriv);
- 		if (err) {
--			dev_err(dev, "devm_request_irq(%d) failed, error %d\n",
--				g_irq, err);
-+			dev_err(dev, "devm_request_irq %d failed, %pe\n",
-+				g_irq, ERR_PTR(err));
- 			goto fail_dev;
- 		}
- 	} else {
-@@ -1985,8 +1984,8 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 				       "canfd.g_recc", gpriv);
- 
- 		if (err) {
--			dev_err(dev, "devm_request_irq(%d) failed, error %d\n",
--				g_recc_irq, err);
-+			dev_err(dev, "devm_request_irq %d failed, %pe\n",
-+				g_recc_irq, ERR_PTR(err));
- 			goto fail_dev;
- 		}
- 
-@@ -1994,8 +1993,8 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 				       rcar_canfd_global_err_interrupt, 0,
- 				       "canfd.g_err", gpriv);
- 		if (err) {
--			dev_err(dev, "devm_request_irq(%d) failed, error %d\n",
--				g_err_irq, err);
-+			dev_err(dev, "devm_request_irq %d failed, %pe\n",
-+				g_err_irq, ERR_PTR(err));
- 			goto fail_dev;
- 		}
- 	}
-@@ -2012,14 +2011,14 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 	/* Enable peripheral clock for register access */
- 	err = clk_prepare_enable(gpriv->clkp);
- 	if (err) {
--		dev_err(dev, "failed to enable peripheral clock, error %d\n",
--			err);
-+		dev_err(dev, "failed to enable peripheral clock, %pe\n",
-+			ERR_PTR(err));
- 		goto fail_reset;
- 	}
- 
- 	err = rcar_canfd_reset_controller(gpriv);
- 	if (err) {
--		dev_err(dev, "reset controller failed\n");
-+		dev_err(dev, "reset controller failed, %pe\n", ERR_PTR(err));
- 		goto fail_clk;
- 	}
- 
--- 
-2.34.1
+
+Cheers
+Alex
+
+
+
+> Thanks and regards,
+> 
+> Dario
+> 
+> 
+> On Wed, Mar 15, 2023 at 10:10 PM Dario Binacchi
+> <dario.binacchi@amarulasolutions.com> wrote:
+>>
+>> The series adds support for the basic extended CAN controller (bxCAN)
+>> found in many low- to middle-end STM32 SoCs.
+>>
+>> The driver design (one core module and one driver module) was inspired
+>> by other ST drivers (e. g. drivers/iio/adc/stm32-adc.c,
+>> drivers/iio/adc/stm32-adc-core.c) where device instances share resources.
+>> The shared resources functions are implemented in the core module, the
+>> device driver in a separate module.
+>>
+>> The driver has been tested on the stm32f469i-discovery board with a
+>> kernel version 5.19.0-rc2 in loopback + silent mode:
+>>
+>> ip link set can0 type can bitrate 125000 loopback on listen-only on
+>> ip link set up can0
+>> candump can0 -L &
+>> cansend can0 300#AC.AB.AD.AE.75.49.AD.D1
+>>
+>> For uboot and kernel compilation, as well as for rootfs creation I used
+>> buildroot:
+>>
+>> make stm32f469_disco_sd_defconfig
+>> make
+>>
+>> but I had to patch can-utils and busybox as can-utils and iproute are
+>> not compiled for MMU-less microcotrollers. In the case of can-utils,
+>> replacing the calls to fork() with vfork(), I was able to compile the
+>> package with working candump and cansend applications, while in the
+>> case of iproute, I ran into more than one problem and finally I decided
+>> to extend busybox's ip link command for CAN-type devices. I'm still
+>> wondering if it was really necessary, but this way I was able to test
+>> the driver.
+>>
+>> Changes in v7:
+>> - Add Vincent Mailhol's Reviewed-by tag.
+>> - Remove all unused macros for reading/writing the controller registers.
+>> - Add CAN_ERR_CNT flag to notify availability of error counter.
+>> - Move the "break" before the newline in the switch/case statements.
+>> - Print the mnemotechnic instead of the error value in each netdev_err().
+>> - Remove the debug print for timings parameter.
+>> - Do not copy the data if CAN_RTR_FLAG is set in bxcan_start_xmit().
+>> - Populate ndev->ethtool_ops with the default timestamp info.
+>>
+>> Changes in v6:
+>> - move can1 node before gcan to keep ordering by address.
+>>
+>> Changes in v5:
+>> - Add Rob Herring's Acked-by tag.
+>> - Add Rob Herring's Reviewed-by tag.
+>> - Put static in front of bxcan_enable_filters() definition.
+>>
+>> Changes in v4:
+>> - Remove "st,stm32f4-bxcan-core" compatible. In this way the can nodes
+>>   (compatible "st,stm32f4-bxcan") are no longer children of a parent
+>>    node with compatible "st,stm32f4-bxcan-core".
+>> - Add the "st,gcan" property (global can memory) to can nodes which
+>>    references a "syscon" node containing the shared clock and memory
+>>    addresses.
+>> - Replace the node can@40006400 (compatible "st,stm32f4-bxcan-core")
+>>    with the gcan@40006600 node ("sysnode" compatible). The gcan node
+>>    contains clocks and memory addresses shared by the two can nodes
+>>    of which it's no longer the parent.
+>> - Add to can nodes the "st,gcan" property (global can memory) which
+>>    references the gcan@40006600 node ("sysnode compatibble).
+>> - Add "dt-bindings: arm: stm32: add compatible for syscon gcan node" patch.
+>> - Drop the core driver. Thus bxcan-drv.c has been renamed to bxcan.c and
+>>    moved to the drivers/net/can folder. The drivers/net/can/bxcan directory
+>>    has therefore been removed.
+>> - Use the regmap_*() functions to access the shared memory registers.
+>> - Use spinlock to protect bxcan_rmw().
+>> - Use 1 space, instead of tabs, in the macros definition.
+>> - Drop clock ref-counting.
+>> - Drop unused code.
+>> - Drop the _SHIFT macros and use FIELD_GET()/FIELD_PREP() directly.
+>> - Add BXCAN_ prefix to lec error codes.
+>> - Add the macro BXCAN_RX_MB_NUM.
+>> - Enable time triggered mode and use can_rx_offload().
+>> - Use readx_poll_timeout() in function with timeouts.
+>> - Loop from tail to head in bxcan_tx_isr().
+>> - Check bits of tsr register instead of pkts variable in bxcan_tx_isr().
+>> - Don't return from bxcan_handle_state_change() if skb/cf are NULL.
+>> - Enable/disable the generation of the bus error interrupt depending
+>>    on can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING.
+>> - Don't return from bxcan_handle_bus_err() if skb is NULL.
+>> - Drop statistics updating from bxcan_handle_bus_err().
+>> - Add an empty line in front of 'return IRQ_HANDLED;'
+>> - Rename bxcan_start() to bxcan_chip_start().
+>> - Rename bxcan_stop() to bxcan_chip_stop().
+>> - Disable all IRQs in bxcan_chip_stop().
+>> - Rename bxcan_close() to bxcan_ndo_stop().
+>> - Use writel instead of bxcan_rmw() to update the dlc register.
+>>
+>> Changes in v3:
+>> - Remove 'Dario Binacchi <dariobin@libero.it>' SOB.
+>> - Add description to the parent of the two child nodes.
+>> - Move "patterProperties:" after "properties: in top level before "required".
+>> - Add "clocks" to the "required:" list of the child nodes.
+>> - Remove 'Dario Binacchi <dariobin@libero.it>' SOB.
+>> - Add "clocks" to can@0 node.
+>> - Remove 'Dario Binacchi <dariobin@libero.it>' SOB.
+>> - Remove a blank line.
+>> - Remove 'Dario Binacchi <dariobin@libero.it>' SOB.
+>> - Fix the documentation file path in the MAINTAINERS entry.
+>> - Do not increment the "stats->rx_bytes" if the frame is remote.
+>> - Remove pr_debug() call from bxcan_rmw().
+>>
+>> Changes in v2:
+>> - Change the file name into 'st,stm32-bxcan-core.yaml'.
+>> - Rename compatibles:
+>>    - st,stm32-bxcan-core -> st,stm32f4-bxcan-core
+>>    - st,stm32-bxcan -> st,stm32f4-bxcan
+>> - Rename master property to st,can-master.
+>> - Remove the status property from the example.
+>> - Put the node child properties as required.
+>> - Remove a blank line.
+>> - Fix sparse errors.
+>> - Create a MAINTAINERS entry.
+>> - Remove the print of the registers address.
+>> - Remove the volatile keyword from bxcan_rmw().
+>> - Use tx ring algorithm to manage tx mailboxes.
+>> - Use can_{get|put}_echo_skb().
+>> - Update DT properties.
+>>
+>> Dario Binacchi (5):
+>>    dt-bindings: arm: stm32: add compatible for syscon gcan node
+>>    dt-bindings: net: can: add STM32 bxcan DT bindings
+>>    ARM: dts: stm32: add CAN support on stm32f429
+>>    ARM: dts: stm32: add pin map for CAN controller on stm32f4
+>>    can: bxcan: add support for ST bxCAN controller
+>>
+>>   .../bindings/arm/stm32/st,stm32-syscon.yaml   |    2 +
+>>   .../bindings/net/can/st,stm32-bxcan.yaml      |   83 ++
+>>   MAINTAINERS                                   |    7 +
+>>   arch/arm/boot/dts/stm32f4-pinctrl.dtsi        |   30 +
+>>   arch/arm/boot/dts/stm32f429.dtsi              |   29 +
+>>   drivers/net/can/Kconfig                       |   12 +
+>>   drivers/net/can/Makefile                      |    1 +
+>>   drivers/net/can/bxcan.c                       | 1088 +++++++++++++++++
+>>   8 files changed, 1252 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/net/can/st,stm32-bxcan.yaml
+>>   create mode 100644 drivers/net/can/bxcan.c
+>>
+>> --
+>> 2.32.0
+>>
+> 
+> 
 
