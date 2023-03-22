@@ -2,239 +2,193 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CD6F6C46B7
-	for <lists+linux-can@lfdr.de>; Wed, 22 Mar 2023 10:42:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E0F06C5325
+	for <lists+linux-can@lfdr.de>; Wed, 22 Mar 2023 18:59:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbjCVJmb convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Wed, 22 Mar 2023 05:42:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46852 "EHLO
+        id S230362AbjCVR7J (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 22 Mar 2023 13:59:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230363AbjCVJm1 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 22 Mar 2023 05:42:27 -0400
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62245BD94;
-        Wed, 22 Mar 2023 02:42:25 -0700 (PDT)
-Received: by mail-pf1-f176.google.com with SMTP id i15so6665805pfo.8;
-        Wed, 22 Mar 2023 02:42:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679478145;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NhZUtTtMRX3iHKSkNc847opMuxtybiEK1qLunXYiYUg=;
-        b=zcNJ+eVs8nEDLyQlYr1Dc3lIF/xLuMbS5fGXHBpWTy66GJv6XReMEnpCEqhAKsUKVF
-         FwjZvs4td0HJLTnUldItZ//0GAmtTd4DSbse0VqNK5TpqmdvQP9rvXjhuMMW7TNbXEXK
-         6FbL6SK9M8NKERlhMkuFa5Xjxds7BN7839U4aCPNLBCjg+9fMeRFeCtpoGdyEZn8e/wm
-         71S9w+qY3diNekbTc4PGYz1/JDrRobRWRYpc3yJCq0SLMCtmoZlMd2/7vrL3gN421mJU
-         886ubgHzDDW254ziKTS3sUmqUtxn6Fi+rtPasR/I3PMfoG45V2u7FqwB3bG7Yp30KMnf
-         8/cg==
-X-Gm-Message-State: AO0yUKXYZLNNQ3GAc7rYtFR6WhUf9DoJ6W0py+cfB4VZR6AyTqcFzDOg
-        1UAERPGYtssL7dzDMVKpH5weT0fdd4+ljp74Aig=
-X-Google-Smtp-Source: AK7set8tTSoGJeYe9Juyd5/U1PJ1GRZCIYADXwoDW4axal2mDpbqDwLspDVA+ZWO0YRlKoX7aMnpZWiCV4VachuvlWc=
-X-Received: by 2002:a05:6a00:174c:b0:628:123c:99be with SMTP id
- j12-20020a056a00174c00b00628123c99bemr1453184pfc.2.1679478144816; Wed, 22 Mar
- 2023 02:42:24 -0700 (PDT)
+        with ESMTP id S230323AbjCVR7J (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 22 Mar 2023 13:59:09 -0400
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.161])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B7C3BC72
+        for <linux-can@vger.kernel.org>; Wed, 22 Mar 2023 10:59:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1679507944; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=MrzHEX6jUo0h+PchHzoU3kXRMj+6wJKYv0+lbutpYwX9LjKDgkrWV4tfwhGaJJ7M2G
+    LObCbjCt7wZP5X0ryPODCE0RabLtwno8zUdeUBp0hz+XJqOZ1A4pTIjCKUfHsn2rKGAN
+    pQabdLCYc4g0f/9Mw10UKjWfGKE+UneWDvb0NSyGy4jBMvhP0yFp++BSopc0WJ1qc2r4
+    Rt0jCe/shbNj+USzO8G5wrzHasr+QNbnytgoGGZ7gl5/yGg8kjLSRToceKXlUG96ZfOm
+    pZIgJgK//YjE6oUcXC3MG5RxoLg7zvbmsQEuLkzbLcaQxGSwzdS3wVR+Kt16g1Dl95z0
+    IKUQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1679507944;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=y7mH3fyNlh7zWQ3LO7JNB08Y7u4fhFEEdP7bAywjo3w=;
+    b=Wqr146dEJbQK6IxdBYw/5r/bsBYAmRmKToZ4D67IhPwilolWNQdJXpiA9NcP9i13vp
+    /w8QrJvGnedymfXC5AeZdya30y1LfPyUp+0I1Iaa0Y+12L8J2APwjSBs6UahEqWUr7ls
+    CPiVbJqywyj3UC81NO6bqY0UCglmDEIqQEiuEL3KZtKKOruCfQYmioHNEo0ppVSZBD4n
+    vNrtg/b1FU/ikC3V2efiwizO02eiX9qkqeGlggvZOOrjTri2cUosilNnlCm3BrtyN/i0
+    PSG4j0rUBl2QrNncm9+IG4krfGm/04CC0tfVFzRLsevubF7dF0nxc9l8f9CQEvNFU4z+
+    32Lg==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1679507944;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=y7mH3fyNlh7zWQ3LO7JNB08Y7u4fhFEEdP7bAywjo3w=;
+    b=LkC1ex6FzYO+5LosaCLpSCBe0b3YRH2+zGWctpRbmBurOEszXQunnhu5aqZk6IlyQt
+    VpWdOcF+rmlPDC5+tlASE5tO2enLPwZYC0R8C2Gm9FgDQZIsdOlvMWSgnuLUr/ZiaSMM
+    OKtt0NuBy5nTxgQ+bj/HWoZqyVRmROxYP4OgRdLqvnhJLpJ8ue/+q5a5+1fx62xqJjj5
+    0ny6q6fhUmMAS92rmHQXAvMan0MqmEVdARub9UlwHQ5GjAtHeG+hGVr7lmo9z0wBReU3
+    zfra3xCk46je7xfqMzIvNtwSpcmnqsjfK3w3I3tIXe+Ns8jZb2tdOJcP82i5QitppG6H
+    d/ig==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusl129OHEdFq0USEbDUQnQ=="
+Received: from [IPV6:2a00:6020:4a8e:5000::923]
+    by smtp.strato.de (RZmta 49.3.1 AUTH)
+    with ESMTPSA id n9397fz2MHx4KJx
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Wed, 22 Mar 2023 18:59:04 +0100 (CET)
+Message-ID: <a91369b3-9615-4300-a617-e3edbb2c628c@hartkopp.net>
+Date:   Wed, 22 Mar 2023 18:59:04 +0100
 MIME-Version: 1.0
-References: <cover.1679414936.git.geert+renesas@glider.be> <4162cc46f72257ec191007675933985b6df394b9.1679414936.git.geert+renesas@glider.be>
-In-Reply-To: <4162cc46f72257ec191007675933985b6df394b9.1679414936.git.geert+renesas@glider.be>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Wed, 22 Mar 2023 18:42:13 +0900
-Message-ID: <CAMZ6Rq+KxHxT_vm1rVW0Q6UZpfKo=63mmgn5pSwn40M-Dke9PA@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] can: rcar_canfd: Improve error messages
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Simon Horman <simon.horman@corigine.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RFC PATCH v2] can: isotp: add module parameter for maximum pdu
+ size
+Content-Language: en-US
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org
+References: <20230313172510.3851-1-socketcan@hartkopp.net>
+ <20230320162406.5mkbvcmyx7nyqvjc@pengutronix.de>
+ <c5451b95-5732-b3ed-38f5-1b09e74c0541@hartkopp.net>
+ <20230322085633.zwxip56fyr7qqguu@pengutronix.de>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20230322085633.zwxip56fyr7qqguu@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed. 22 Mar 2023 à 01:26, Geert Uytterhoeven <geert+renesas@glider.be> wrote:
-> Improve printed error messages:
->   - Replace numerical error codes by mnemotechnic error codes, to
->     improve the user experience in case of errors,
->   - Drop parentheses around printed numbers, cfr.
->     Documentation/process/coding-style.rst,
->   - Drop printing of an error message in case of out-of-memory, as the
->     core memory allocation code already takes care of this.
->
-> Suggested-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Reviewed-by: Simon Horman <simon.horman@corigine.com>
+On 22.03.23 09:56, Marc Kleine-Budde wrote:
+> On 20.03.2023 22:07:56, Oliver Hartkopp wrote:
 
-I added a nitpick. If you prefer to keep as-is, OK for me.
+>>
+>>> Why are you allocating the max_pdu_size, not rx.len?
+>>
+>> There is one upper limit which is selected when the 8300 bytes (99,9% of
+>> isotp use-cases) are not enough.
+>>
+>> I intentionally did not want to handle re-allocations for every increase of
+>> received PDU size on this socket.
+>>
+>> Just for simplicity reasons.
+> 
+> Hmmm. The worst case would be ~1MiB of contiguous kernel memory used, if
+> a 8301 bytes message would be send. That puts a lot of pressure on the
+> kernel memory for IMHO no good reason.
 
-Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+No, that's not the plan.
 
-> ---
-> v4:
->   - Reviewed-by: Simon Horman <simon.horman@corigine.com>,
->
-> v3:
->   - Add missing SoB,
->
-> v2:
->   - This is v2 of "[PATCH] can: rcar_canfd: Print mnemotechnic error
->     codes".  I haven't added any tags given on v1, as half of the
->     printed message changed.
-> ---
->  drivers/net/can/rcar/rcar_canfd.c | 43 +++++++++++++++----------------
->  1 file changed, 21 insertions(+), 22 deletions(-)
->
-> diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-> index 6df9a259e5e4f92c..ecdb8ffe2f670c9b 100644
-> --- a/drivers/net/can/rcar/rcar_canfd.c
-> +++ b/drivers/net/can/rcar/rcar_canfd.c
-> @@ -1417,20 +1417,20 @@ static int rcar_canfd_open(struct net_device *ndev)
->
->         err = phy_power_on(priv->transceiver);
->         if (err) {
-> -               netdev_err(ndev, "failed to power on PHY, error %d\n", err);
-> +               netdev_err(ndev, "failed to power on PHY, %pe\n", ERR_PTR(err));
-                                                          ^
+The max_pdu_size is a module parameter that simplifies the process, when 
+someone needs unusually long PDUs without changing the static buffer 
+size in the kernel code.
 
-Nitpick, consider a colon instead of the coma:
+When you have the use-case to transfer PDUs with 128 kByte you would set 
+the max_pdu_size to 128 kByte.
 
-                 netdev_err(ndev, "failed to power on PHY: %pe\n",
-ERR_PTR(err));
+If you need 8301 bytes you set it to 8301.
 
-N.B. This is more a personal preference than an official Linux style.
-If you prefer the coma, you can ignore my nitpick and keep it as it is
-:)
+It is very likely that only one or two isotp socket instances would ever 
+allocate this extended buffer on one system at one time.
 
->                 return err;
->         }
->
->         /* Peripheral clock is already enabled in probe */
->         err = clk_prepare_enable(gpriv->can_clk);
->         if (err) {
-> -               netdev_err(ndev, "failed to enable CAN clock, error %d\n", err);
-> +               netdev_err(ndev, "failed to enable CAN clock, %pe\n", ERR_PTR(err));
->                 goto out_phy;
->         }
->
->         err = open_candev(ndev);
->         if (err) {
-> -               netdev_err(ndev, "open_candev() failed, error %d\n", err);
-> +               netdev_err(ndev, "open_candev() failed, %pe\n", ERR_PTR(err));
->                 goto out_can_clock;
->         }
->
-> @@ -1731,10 +1731,9 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
->         int err = -ENODEV;
->
->         ndev = alloc_candev(sizeof(*priv), RCANFD_FIFO_DEPTH);
-> -       if (!ndev) {
-> -               dev_err(dev, "alloc_candev() failed\n");
-> +       if (!ndev)
->                 return -ENOMEM;
-> -       }
-> +
->         priv = netdev_priv(ndev);
->
->         ndev->netdev_ops = &rcar_canfd_netdev_ops;
-> @@ -1777,8 +1776,8 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
->                                        rcar_canfd_channel_err_interrupt, 0,
->                                        irq_name, priv);
->                 if (err) {
-> -                       dev_err(dev, "devm_request_irq CH Err(%d) failed, error %d\n",
-> -                               err_irq, err);
-> +                       dev_err(dev, "devm_request_irq CH Err %d failed, %pe\n",
-> +                               err_irq, ERR_PTR(err));
->                         goto fail;
->                 }
->                 irq_name = devm_kasprintf(dev, GFP_KERNEL, "canfd.ch%d_trx",
-> @@ -1791,8 +1790,8 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
->                                        rcar_canfd_channel_tx_interrupt, 0,
->                                        irq_name, priv);
->                 if (err) {
-> -                       dev_err(dev, "devm_request_irq Tx (%d) failed, error %d\n",
-> -                               tx_irq, err);
-> +                       dev_err(dev, "devm_request_irq Tx %d failed, %pe\n",
-> +                               tx_irq, ERR_PTR(err));
->                         goto fail;
->                 }
->         }
-> @@ -1823,7 +1822,7 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
->         gpriv->ch[priv->channel] = priv;
->         err = register_candev(ndev);
->         if (err) {
-> -               dev_err(dev, "register_candev() failed, error %d\n", err);
-> +               dev_err(dev, "register_candev() failed, %pe\n", ERR_PTR(err));
->                 goto fail_candev;
->         }
->         dev_info(dev, "device registered (channel %u)\n", priv->channel);
-> @@ -1967,16 +1966,16 @@ static int rcar_canfd_probe(struct platform_device *pdev)
->                                        rcar_canfd_channel_interrupt, 0,
->                                        "canfd.ch_int", gpriv);
->                 if (err) {
-> -                       dev_err(dev, "devm_request_irq(%d) failed, error %d\n",
-> -                               ch_irq, err);
-> +                       dev_err(dev, "devm_request_irq %d failed, %pe\n",
-> +                               ch_irq, ERR_PTR(err));
->                         goto fail_dev;
->                 }
->
->                 err = devm_request_irq(dev, g_irq, rcar_canfd_global_interrupt,
->                                        0, "canfd.g_int", gpriv);
->                 if (err) {
-> -                       dev_err(dev, "devm_request_irq(%d) failed, error %d\n",
-> -                               g_irq, err);
-> +                       dev_err(dev, "devm_request_irq %d failed, %pe\n",
-> +                               g_irq, ERR_PTR(err));
->                         goto fail_dev;
->                 }
->         } else {
-> @@ -1985,8 +1984,8 @@ static int rcar_canfd_probe(struct platform_device *pdev)
->                                        "canfd.g_recc", gpriv);
->
->                 if (err) {
-> -                       dev_err(dev, "devm_request_irq(%d) failed, error %d\n",
-> -                               g_recc_irq, err);
-> +                       dev_err(dev, "devm_request_irq %d failed, %pe\n",
-> +                               g_recc_irq, ERR_PTR(err));
->                         goto fail_dev;
->                 }
->
-> @@ -1994,8 +1993,8 @@ static int rcar_canfd_probe(struct platform_device *pdev)
->                                        rcar_canfd_global_err_interrupt, 0,
->                                        "canfd.g_err", gpriv);
->                 if (err) {
-> -                       dev_err(dev, "devm_request_irq(%d) failed, error %d\n",
-> -                               g_err_irq, err);
-> +                       dev_err(dev, "devm_request_irq %d failed, %pe\n",
-> +                               g_err_irq, ERR_PTR(err));
->                         goto fail_dev;
->                 }
->         }
-> @@ -2012,14 +2011,14 @@ static int rcar_canfd_probe(struct platform_device *pdev)
->         /* Enable peripheral clock for register access */
->         err = clk_prepare_enable(gpriv->clkp);
->         if (err) {
-> -               dev_err(dev, "failed to enable peripheral clock, error %d\n",
-> -                       err);
-> +               dev_err(dev, "failed to enable peripheral clock, %pe\n",
-> +                       ERR_PTR(err));
->                 goto fail_reset;
->         }
->
->         err = rcar_canfd_reset_controller(gpriv);
->         if (err) {
-> -               dev_err(dev, "reset controller failed\n");
-> +               dev_err(dev, "reset controller failed, %pe\n", ERR_PTR(err));
->                 goto fail_clk;
->         }
->
-> --
-> 2.34.1
->
+All other isotp sockets stay with the static buffer of 8300 bytes.
+
+>>> This patch is also taken if the kmalloc() fails, right?
+>>
+>> s/patch/path/ ?!
+> 
+> doh!
+> 
+>> Yes. At the end even the extended buffer might be too small. And when we
+>> don't have enough space - either with our without kmalloc() - it throws and
+>> error.
+>>
+>> For that reason a failed kmalloc() does not create any stress. We just stay
+>> on the default buffer.
+> 
+> Just out of interest: How does ISOTP handle this situation? Is an error
+> message forwarded to the sender?
+> 
+>>>>    		/* send FC frame with overflow status */
+>>>>    		isotp_send_fc(sk, ae, ISOTP_FC_OVFLW);
+
+Yes. As you can see here the receiver sends and "overflow" error message 
+to the sender, when the receive buffer can not handle the PDU size 
+announced in the "first frame" of the PDU transmission.
+
+The PDU transmission failure is therefore detected by the sender.
+
+This is also implemented on the sender side where the flow control with 
+ISOTP_FC_OVFLW leads to -EMSGSIZE as return value
+
+https://elixir.bootlin.com/linux/v6.2/source/net/can/isotp.c#L419
+
+
+>> I've been thinking about some sendfile() implementation too. But this again
+>> would bloat the code and would not solve the rx side.
+> 
+> I'm not talking about sendfile. Have a look at j1939's
+> j1939_sk_send_loop();
+> 
+> | https://elixir.bootlin.com/linux/v6.2/source/net/can/j1939/socket.c#L1114
+> 
+
+This does not work for isotp like this as you have to handle different 
+block sizes in the flow control message.
+
+>>> what about: ARRAY_SIZE(so->rx.sbuf)
+>>>
+>>
+>> Looks good. I was just unsure which macro to use ;-)
+> 
+> You can also use sizeof(so->rx.sbuf).
+> 
+> ARRAY_SIZE would cause a compile error if you convert so->rx.sbuf to a
+> pointer to dynamically allocated mem, while sizeof() still compiles.
+
+so->rx.sbuf is always a static buffer.
+
+Only so->rx.buf can point to either so->rx.sbuf or to a dynamically 
+allocated memory.
+
+But when sizeof() is always safe it would take this for the v3 patch.
+
+Best regards,
+Oliver
+
+> 
+>>
+>>>> +	so->tx.buflen = DEFAULT_MAX_PDU_SIZE;
+>>>> +
+>>
+>> here too. This would use the DEFAULT_MAX_PDU_SIZE at one single point. No
+>> chance to get these values out of sync.
+> 
+> ACK
+> 
+> Marc
+> 
