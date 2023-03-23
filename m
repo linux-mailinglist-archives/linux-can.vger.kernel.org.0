@@ -2,94 +2,90 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A47826C54B5
-	for <lists+linux-can@lfdr.de>; Wed, 22 Mar 2023 20:16:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93AE66C5E51
+	for <lists+linux-can@lfdr.de>; Thu, 23 Mar 2023 06:00:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbjCVTQa convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Wed, 22 Mar 2023 15:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39028 "EHLO
+        id S229903AbjCWFAl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 23 Mar 2023 01:00:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbjCVTQ1 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 22 Mar 2023 15:16:27 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601215DC95;
-        Wed, 22 Mar 2023 12:16:25 -0700 (PDT)
-Received: from p5b12767e.dip0.t-ipconnect.de ([91.18.118.126] helo=phil.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1pf3w2-0003vB-AH; Wed, 22 Mar 2023 20:15:46 +0100
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andreas =?ISO-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
-        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Tobias Waldekranz <tobias@waldekranz.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Daniel Machon <daniel.machon@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
+        with ESMTP id S229639AbjCWFAU (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 23 Mar 2023 01:00:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 491446EA8;
+        Wed, 22 Mar 2023 22:00:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D94BE623BD;
+        Thu, 23 Mar 2023 05:00:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 467FEC4339E;
+        Thu, 23 Mar 2023 05:00:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679547618;
+        bh=NPnB/UKnNUercF44HUDX/+E3dqZ3zJVMKeECg6m+d1A=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=IsZJcdwN7BEzr41ZzVOxogP/fo9bLZra4v8eGb4EUa1bebhFu3AHFwAuHzM+uW3j4
+         FVEGqDpUtiyjsw6cxk/EY51PNCkW5TDrwdTjTsd51ePOQUek5onn2Tl45jGa/lPq7B
+         IrTXp0IXIZHn9lfxZ7RvJ23PQuYkYopnkYjMbLUUsMtjrHPdokfHMkQCvc4qPucy3i
+         87hhPSfaDMVrjblhVr9BbaSaj6CmkEPSrOyN5Fqm7vs01FRYrO2P4wqjGa7Gb80a6N
+         4bncUA09GxrPJxzloqiV5FOTNOtkvYP1pWr5dwyhHFQJHmeSVQfZaM7bnhYKVJbr9U
+         grdHl1qm9Jsfg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1A7FDE4F0D7;
+        Thu, 23 Mar 2023 05:00:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] dt-bindings: net: Drop unneeded quotes
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167954761809.22889.18341092686850307793.git-patchwork-notify@kernel.org>
+Date:   Thu, 23 Mar 2023 05:00:18 +0000
+References: <20230320233758.2918972-1-robh@kernel.org>
+In-Reply-To: <20230320233758.2918972-1-robh@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, krzysztof.kozlowski+dt@linaro.org,
+        afaerber@suse.de, mani@kernel.org, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        neil.armstrong@linaro.org, khilman@baylibre.com,
+        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
+        joel@jms.id.au, andrew@aj.id.au, rafal@milecki.pl,
+        bcm-kernel-feedback-list@broadcom.com, f.fainelli@gmail.com,
+        appana.durga.rao@xilinx.com, naga.sureshkumar.relli@xilinx.com,
+        wg@grandegger.com, mkl@pengutronix.de, michal.simek@xilinx.com,
+        andrew@lunn.ch, olteanv@gmail.com, hkallweit1@gmail.com,
+        linux@armlinux.org.uk, tobias@waldekranz.com,
+        lars.povlsen@microchip.com, Steen.Hegelund@microchip.com,
+        daniel.machon@microchip.com, UNGLinuxDriver@microchip.com,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        heiko@sntech.de, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, nobuhiro1.iwamatsu@toshiba.co.jp,
+        richardcochran@gmail.com, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com,
+        krzysztof.kozlowski@linaro.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-sunxi@lists.linux.dev, linux-amlogic@lists.infradead.org,
         linux-aspeed@lists.ozlabs.org, linux-can@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-rockchip@lists.infradead.org,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v2] dt-bindings: net: Drop unneeded quotes
-Date:   Wed, 22 Mar 2023 20:15:44 +0100
-Message-ID: <3745510.ElGaqSPkdT@phil>
-In-Reply-To: <20230320233758.2918972-1-robh@kernel.org>
-References: <20230320233758.2918972-1-robh@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_PASS,T_SPF_HELO_TEMPERROR
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Am Dienstag, 21. März 2023, 00:37:54 CET schrieb Rob Herring:
+Hello:
+
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Mon, 20 Mar 2023 18:37:54 -0500 you wrote:
 > Cleanup bindings dropping unneeded quotes. Once all these are fixed,
 > checking for this can be enabled in yamllint.
 > 
@@ -99,13 +95,16 @@ Am Dienstag, 21. März 2023, 00:37:54 CET schrieb Rob Herring:
 > Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 > Reviewed-by: Steen Hegelund <Steen.Hegelund@microchip.com>
 > Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> v2:
->  - Also drop quotes on URLs
+> 
+> [...]
 
->  .../devicetree/bindings/net/rockchip,emac.yaml |  2 +-
->  .../bindings/net/rockchip-dwmac.yaml           |  4 ++--
+Here is the summary with links:
+  - [v2] dt-bindings: net: Drop unneeded quotes
+    https://git.kernel.org/netdev/net-next/c/3079bfdbda6c
 
-Reviewed-by: Heiko Stuebner <heiko@sntech.de> #rockchip
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
