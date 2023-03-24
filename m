@@ -2,46 +2,47 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE92F6C7E5B
-	for <lists+linux-can@lfdr.de>; Fri, 24 Mar 2023 14:01:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A87F6C8099
+	for <lists+linux-can@lfdr.de>; Fri, 24 Mar 2023 16:01:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbjCXNB6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 24 Mar 2023 09:01:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46622 "EHLO
+        id S232267AbjCXPBB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 24 Mar 2023 11:01:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231308AbjCXNB5 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 24 Mar 2023 09:01:57 -0400
+        with ESMTP id S230015AbjCXPBB (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 24 Mar 2023 11:01:01 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4CA1F929
-        for <linux-can@vger.kernel.org>; Fri, 24 Mar 2023 06:01:56 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A5661A669
+        for <linux-can@vger.kernel.org>; Fri, 24 Mar 2023 08:01:00 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pfh3H-0001HZ-53; Fri, 24 Mar 2023 14:01:51 +0100
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pfh39-006O5F-EK; Fri, 24 Mar 2023 14:01:43 +0100
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pfh38-008wqg-My; Fri, 24 Mar 2023 14:01:42 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Robin van der Gracht <robin@protonic.nl>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        syzbot+ee1cd780f69483a8616b@syzkaller.appspotmail.com,
-        Hillf Danton <hdanton@sina.com>, kernel@pengutronix.de,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1] can: j1939: prevent deadlock by moving j1939_sk_errqueue()
-Date:   Fri, 24 Mar 2023 14:01:41 +0100
-Message-Id: <20230324130141.2132787-1-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pfiuX-00033W-Ul; Fri, 24 Mar 2023 16:00:58 +0100
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 4F95A19B907;
+        Fri, 24 Mar 2023 14:57:43 +0000 (UTC)
+Date:   Fri, 24 Mar 2023 15:57:42 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH v4 0/2] can: rcar_canfd: Add transceiver support
+Message-ID: <20230324145742.j4ec237uxcehivsx@pengutronix.de>
+References: <cover.1679414936.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5ikkmcmpcuvjoqhk"
+Content-Disposition: inline
+In-Reply-To: <cover.1679414936.git.geert+renesas@glider.be>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
@@ -53,83 +54,46 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This commit addresses a deadlock situation that can occur in certain
-scenarios, such as when running data TP/ETP transfer and subscribing to
-the error queue while receiving a net down event. The deadlock involves
-locks in the following order:
 
-3
-  j1939_session_list_lock ->  active_session_list_lock
-  j1939_session_activate
-  ...
-  j1939_sk_queue_activate_next -> sk_session_queue_lock
-  ...
-  j1939_xtp_rx_eoma_one
+--5ikkmcmpcuvjoqhk
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-2
-  j1939_sk_queue_drop_all  ->  sk_session_queue_lock
-  ...
-  j1939_sk_netdev_event_netdown -> j1939_socks_lock
-  j1939_netdev_notify
+On 21.03.2023 17:14:59, Geert Uytterhoeven wrote:
+> 	Hi all,
+>=20
+> This patch series adds transceiver support to the Renesas R-Car CAN-FD
+> driver, and improves the printing of error messages, as requested by
+> Vincent.
+>=20
+> Originally, both patches were submitted separately, but as the latter
+> depends on the former, I absorbed it within this series for the resend.
 
-1
-  j1939_sk_errqueue -> j1939_socks_lock
-  __j1939_session_cancel -> active_session_list_lock
-  j1939_tp_rxtimer
+Thanks. Applied to can-next, I've replaced the colons by comma, as
+Vincent suggested.
 
-       CPU0                    CPU1
-       ----                    ----
-  lock(&priv->active_session_list_lock);
-                               lock(&jsk->sk_session_queue_lock);
-                               lock(&priv->active_session_list_lock);
-  lock(&priv->j1939_socks_lock);
+Marc
 
-The solution implemented in this commit is to move the
-j1939_sk_errqueue() call out of the active_session_list_lock context,
-thus preventing the deadlock situation.
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129  |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-Reported-by: syzbot+ee1cd780f69483a8616b@syzkaller.appspotmail.com
-Fixes: 5b9272e93f2e ("can: j1939: extend UAPI to notify about RX status")
-Co-developed-by: Hillf Danton <hdanton@sina.com>
-Signed-off-by: Hillf Danton <hdanton@sina.com>
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- net/can/j1939/transport.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+--5ikkmcmpcuvjoqhk
+Content-Type: application/pgp-signature; name="signature.asc"
 
-diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
-index fce9b9ebf13f..fb92c3609e17 100644
---- a/net/can/j1939/transport.c
-+++ b/net/can/j1939/transport.c
-@@ -1124,8 +1124,6 @@ static void __j1939_session_cancel(struct j1939_session *session,
- 
- 	if (session->sk)
- 		j1939_sk_send_loop_abort(session->sk, session->err);
--	else
--		j1939_sk_errqueue(session, J1939_ERRQUEUE_RX_ABORT);
- }
- 
- static void j1939_session_cancel(struct j1939_session *session,
-@@ -1140,6 +1138,9 @@ static void j1939_session_cancel(struct j1939_session *session,
- 	}
- 
- 	j1939_session_list_unlock(session->priv);
-+
-+	if (!session->sk)
-+		j1939_sk_errqueue(session, J1939_ERRQUEUE_RX_ABORT);
- }
- 
- static enum hrtimer_restart j1939_tp_txtimer(struct hrtimer *hrtimer)
-@@ -1253,6 +1254,9 @@ static enum hrtimer_restart j1939_tp_rxtimer(struct hrtimer *hrtimer)
- 			__j1939_session_cancel(session, J1939_XTP_ABORT_TIMEOUT);
- 		}
- 		j1939_session_list_unlock(session->priv);
-+
-+		if (!session->sk)
-+			j1939_sk_errqueue(session, J1939_ERRQUEUE_RX_ABORT);
- 	}
- 
- 	j1939_session_put(session);
--- 
-2.30.2
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQdumIACgkQvlAcSiqK
+BOgNPAgAhGtrMn4SrYmt4r929BMsV3fb4ZH2NvyjrIjebzSgwk8f73q8tZmCFtW9
+ysA1Hzk2zcpDwMiIQgcfeiVPSB8vzMX35CVXMxYSt2iOmog+fwcGLGSJfXsYMSxF
+4XtnIYrQJkf6fuse5/2EE77i5G4MO9a33yzJf9UMYuzw44Fz7GJPCxY+zR6nT70s
+oa3N0v6TmpH1WtRVmo3xKW9fPrf6bOKkfWc6Bbx3KXUobn6lQcQ2Sn0rnQCWJx1Q
+BxVlu9PmQQv4kN9qoLI+OhvDpVMkFt4kKnTgmdwr8/69jVt3L1EAMjuNih1cTsMa
+kDwWLMXAxd7SVaTNpg/pPKbYVsd88A==
+=MSlf
+-----END PGP SIGNATURE-----
+
+--5ikkmcmpcuvjoqhk--
