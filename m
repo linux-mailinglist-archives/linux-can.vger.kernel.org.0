@@ -2,55 +2,54 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EDA96C81E2
-	for <lists+linux-can@lfdr.de>; Fri, 24 Mar 2023 16:54:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D2CB6C81F3
+	for <lists+linux-can@lfdr.de>; Fri, 24 Mar 2023 16:56:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232006AbjCXPyh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 24 Mar 2023 11:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44616 "EHLO
+        id S231289AbjCXP4t (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 24 Mar 2023 11:56:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232178AbjCXPye (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 24 Mar 2023 11:54:34 -0400
+        with ESMTP id S231614AbjCXP4s (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 24 Mar 2023 11:56:48 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBDB18B2A
-        for <linux-can@vger.kernel.org>; Fri, 24 Mar 2023 08:54:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B1920D2F
+        for <linux-can@vger.kernel.org>; Fri, 24 Mar 2023 08:56:46 -0700 (PDT)
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1pfjkE-0003wQ-UE; Fri, 24 Mar 2023 16:54:23 +0100
+        id 1pfjmN-0004MT-Sc; Fri, 24 Mar 2023 16:56:35 +0100
 Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 0D55919B9E7;
-        Fri, 24 Mar 2023 15:54:19 +0000 (UTC)
-Date:   Fri, 24 Mar 2023 16:54:18 +0100
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 884E219B9F1;
+        Fri, 24 Mar 2023 15:56:33 +0000 (UTC)
+Date:   Fri, 24 Mar 2023 16:56:32 +0100
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Cc:     linux-kernel@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Amarula patchwork <linux-amarula@amarulasolutions.com>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        michael@amarulasolutions.com, Rob Herring <robh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [RESEND PATCH v7 5/5] can: bxcan: add support for ST bxCAN
+        michael@amarulasolutions.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org
+Subject: Re: [RESEND PATCH v7 0/5] can: bxcan: add support for ST bxCAN
  controller
-Message-ID: <20230324155418.nn44wxwjjjiqqhdf@pengutronix.de>
+Message-ID: <20230324155632.24chi5ndo23awhhp@pengutronix.de>
 References: <20230315211040.2455855-1-dario.binacchi@amarulasolutions.com>
- <20230315211040.2455855-6-dario.binacchi@amarulasolutions.com>
+ <CABGWkvpHHLNzZHDMzWveoHtApmR3czVvoCOnuWBZt-UoLVU-6g@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cpmjthz5s44cl3qg"
+        protocol="application/pgp-signature"; boundary="cnvdke4jgm2e3ndt"
 Content-Disposition: inline
-In-Reply-To: <20230315211040.2455855-6-dario.binacchi@amarulasolutions.com>
+In-Reply-To: <CABGWkvpHHLNzZHDMzWveoHtApmR3czVvoCOnuWBZt-UoLVU-6g@mail.gmail.com>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -65,38 +64,19 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---cpmjthz5s44cl3qg
+--cnvdke4jgm2e3ndt
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 15.03.2023 22:10:40, Dario Binacchi wrote:
-[...]
+On 21.03.2023 12:25:15, Dario Binacchi wrote:
+> A gentle ping to remind you of this series.
+> I have no idea why it hasn't deserved any response for quite some
+> time.
+> Is there anything I am still missing?
 
-> +static int __maybe_unused bxcan_suspend(struct device *dev)
-> +{
-> +	struct net_device *ndev =3D dev_get_drvdata(dev);
-> +	struct bxcan_priv *priv =3D netdev_priv(ndev);
-> +
-> +	if (!netif_running(ndev))
-> +		return 0;
-> +
-> +	netif_stop_queue(ndev);
-> +	netif_device_detach(ndev);
-> +
-> +	bxcan_enter_sleep_mode(priv);
-> +	priv->can.state =3D CAN_STATE_SLEEPING;
-> +	clk_disable_unprepare(priv->clk);
-
-The driver enabled the clock in probe, right? So in case the interface
-is down you don't disable the clock and keep it running during
-suspend. Is this a problem?
-
-You can disable the clock in probe and enable it in open/disable in
-close.
-
-> +	return 0;
-> +}
+I wonder if we want to do a s/master/primary/ in the DT bindings and
+driver?
 
 regards,
 Marc
@@ -107,19 +87,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129  |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---cpmjthz5s44cl3qg
+--cnvdke4jgm2e3ndt
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQdx6cACgkQvlAcSiqK
-BOhIzAf/QrMxYd4klMcThRsnQ4udN8k2Eaj/CiWuJ172yNqr0dk3sAwYuvvpbwal
-R1HzHoAkcTECNx+HOmGYSmZKNDONrWm84brl+wsZPSPIY1BmguVe3MyDKVD8Hv5/
-Mu8eMml9CzKNdvV6n1GpCiCOGl4QTAJzRxVmzJ7QH1UTlXSWj8z0jh3JEP/SBp5Q
-uyZM4JyS+UbFCz6Ic5Vdnod+1kGJfC9oN8hYkp91s1WEmGkYvZjWzrK1Etuycch0
-Sugr0VPvKlxSQ8Mi0heuO7ms09iF3pgs1k6SVSpKHhNAEXS/wTmdT4IHQqljaPDR
-o9JdAlJOEEXmCRL+Bb/AwISMZSv2uA==
-=8O6F
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQdyC0ACgkQvlAcSiqK
+BOjDgggAgzBxnVVNE5XscW/qYXMVblL8TcW+JtgR2e6p+TtN0u7OioDJmlfvtl9q
+IlRl7/cJkB9uAyVo4dUILKfekHx18vxAqc0txekYY2KQRHAjv5jtuVzaIJylaJEA
+9EyCMp8t1jMBHK0irZ4q8xfzaON5deaFT2/rKyuWGfQA5650ZaTjoZYL9dHCSEiB
+I9KBbbOxVS2ILDPyMcmj5ESg/rbig4VhoDObjz1VeFwd3mrCTg4N74lCO9jvphiB
+tz0r/IX5oLQcwK++eafeLnPUywTnBL6nu09zhn9pz5EFSDScpmvasXZ0uSZigy26
+PE1s/CCS31M48DSu1689rSXu7SSI3A==
+=dNbz
 -----END PGP SIGNATURE-----
 
---cpmjthz5s44cl3qg--
+--cnvdke4jgm2e3ndt--
