@@ -2,54 +2,57 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D4F26C822F
-	for <lists+linux-can@lfdr.de>; Fri, 24 Mar 2023 17:13:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 159026C82AE
+	for <lists+linux-can@lfdr.de>; Fri, 24 Mar 2023 17:56:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231313AbjCXQNo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 24 Mar 2023 12:13:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51052 "EHLO
+        id S231418AbjCXQ4L (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 24 Mar 2023 12:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjCXQNo (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 24 Mar 2023 12:13:44 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87BFAD37
-        for <linux-can@vger.kernel.org>; Fri, 24 Mar 2023 09:13:42 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pfk2j-0006RS-R7; Fri, 24 Mar 2023 17:13:29 +0100
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 6AD9119BA18;
-        Fri, 24 Mar 2023 16:13:21 +0000 (UTC)
-Date:   Fri, 24 Mar 2023 17:13:20 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     "Ji-Ze Hong (Peter Hong)" <peter_hong@fintek.com.tw>,
-        wg@grandegger.com, michal.swiatkowski@linux.intel.com,
-        Steen.Hegelund@microchip.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        frank.jungclaus@esd.eu, linux-kernel@vger.kernel.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        hpeter+linux_kernel@gmail.com
-Subject: Re: [PATCH V2] can: usb: f81604: add Fintek F81604 support
-Message-ID: <20230324161320.jutuyor7jrbqu37p@pengutronix.de>
-References: <20230321081152.26510-1-peter_hong@fintek.com.tw>
- <CAMZ6RqJWg1H6Yo3nhsa-Kk-WdU=ZH39ecWaE6wiuKRJe1gLMkQ@mail.gmail.com>
+        with ESMTP id S231839AbjCXQ4K (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 24 Mar 2023 12:56:10 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4C0D12D
+        for <linux-can@vger.kernel.org>; Fri, 24 Mar 2023 09:56:09 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id p203so2934502ybb.13
+        for <linux-can@vger.kernel.org>; Fri, 24 Mar 2023 09:56:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679676969;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=/hldnmZsxI6STeMly6M1GZxdok1Qf0nxjxXh00EY1v4=;
+        b=jRSF9ACUxgYOKtVsRgFO6bWaaB04YaEJZqBLCzxW9AioOJPld/NT4Klv0k+IVS+jg6
+         0/q8DBAans0cJ56Kq5KXJTGgREZCd+m46fZRqrfg/Vbx87FqcfLzJyUlIwYKxUkUmsLN
+         ZvrVmRJK2KKf+Q9DZtvBaghnZiXiAQj8jWm9UCwff9YIn59UFsKDBQ2L5wDQSw07fiQL
+         qRVO/yReS1EVZc+Bv/PTzc5JYxlvunOWJNGHMZhg7PmQV5Cgkd5THcGAyDt3HY+yWK4j
+         uou6j+KL2/T6gz143biJvL3E1UADwJ1+Mx0WJq1xucffbKkrA8Nw+0aIWJHupX2ExuRY
+         RWwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679676969;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/hldnmZsxI6STeMly6M1GZxdok1Qf0nxjxXh00EY1v4=;
+        b=XRyH2WKLezts9UISUVQMgszN4dF05R43qtp+vYsD/VHV4NBRPhZ0NQYkxezsU/CXYd
+         A1BAdz5Jx6bscHUkk0/MbMsWHtMkgNTUtzrZPyswJYESOngEkbyYsOKJvd6LR65SvGgM
+         2jqNffi8Nd4zU8Yc0bwvCSA7fwpFQQnCmqYoUZSQSR/UVuqi1uy+oSEcnkf+WtpJrNFq
+         XKuYH1LQYKyiwYUsvnM6llZl00NOn9HENdhiT5msz4vk/1TNKCljq2Z/R7SQstnG+Jpl
+         rkWOV/FHlvxAk/oj3tpirAJRmV+QiWjpHXaOOdVrtCQmlCAo5vvdvQFh7ZoKCZlEgB2R
+         5SPA==
+X-Gm-Message-State: AAQBX9e2aaUCMKzQGJv4FET6JJUlr5tvPptVJQ0lxT9Vs7jnZQHqcyce
+        quPABSTWPd5c/UqOO1TrRrv32lyOoaAUxezw5NWkhcMI0ek=
+X-Google-Smtp-Source: AKy350ZljrTdbn+O95j9WWpal0+RQAZ0Gw7ViROhby6xViP+GPvYbaSYonNMEUCsHmI9o+5YsACfp2NGy4NojB88scs=
+X-Received: by 2002:a05:6902:709:b0:b21:5fb4:c6e6 with SMTP id
+ k9-20020a056902070900b00b215fb4c6e6mr1462018ybt.11.1679676968788; Fri, 24 Mar
+ 2023 09:56:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ul6oruy6cmrmas5h"
-Content-Disposition: inline
-In-Reply-To: <CAMZ6RqJWg1H6Yo3nhsa-Kk-WdU=ZH39ecWaE6wiuKRJe1gLMkQ@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+From:   Quinton Cook <quinton.cook@gmail.com>
+Date:   Fri, 24 Mar 2023 09:55:58 -0700
+Message-ID: <CAAL29+00Rur1AWfj-gbzTo2afyYgsg-zY0B9rvgPoPaLaz8wNw@mail.gmail.com>
+Subject: J1939-22
+To:     linux-can@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,63 +61,9 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello my name is Quinton Cook. I was wondering if anyone was planning
+on implementing the new J1939-22 protocol in the linux kernel? If not
+I would love to implement it! Any help on getting started with linux
+kernel development would be greatly appreciated.
 
---ul6oruy6cmrmas5h
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 22.03.2023 00:50:20, Vincent MAILHOL wrote:
-> Hi Peter,
->=20
-> Welcome to the linux-can mailing list.
-> This is my first review, I will wait for the next version to give a
-> more thorough look.
->=20
-> On Tue. 21 Mar 2023 at 17:14, Ji-Ze Hong (Peter Hong)
-> <peter_hong@fintek.com.tw> wrote:
->=20
-> From your email header:
-> > Content-Type: text/plain; charset=3D"y"
->=20
-> It gives me below error when applying:
->=20
->   $ wget -o f81604.patch
-> https://lore.kernel.org/linux-can/20230321081152.26510-1-peter_hong@finte=
-k.com.tw/raw
->   $ git am f81604.patch
->   error : cannot convert from y to UTF-8
->   fatal : could not parse patch
-
-I'm using b4 [1] for this:
-
-$ b4 shazam -l -s 20230321081152.26510-1-peter_hong@fintek.com.tw
-
-and it works.
-
-Marc
-
-[1] https://github.com/mricon/b4
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129  |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---ul6oruy6cmrmas5h
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQdzB0ACgkQvlAcSiqK
-BOhOLwf+IA/6cxPWXp0P3mZ8oxuZk5hBKe0zEC4xRcOqLECtcb98HHwDN8aSPO/h
-KwTSer7luMLSI1XOp7Z5xzI4unZIFcoJs+8ARJ1qSZU8BpxJk3wWkgNQKs4Uof1b
-whX5N+0pl+dgZE5KujUiC01shK7kJs52a/JvEIZVgL2KHVYv8jiHbrhcpM1gD/FO
-06jhufbklHOMDVBoNsi2CqWU915diRGYtT4DRJVQgm0yuNfcNbdUXf/H/grwtmoU
-bHcFlLs1sMiJo/SnuTPFa8YmK0T0v1XUwtCM/fYRaGiulC6BjggaU7Ck9extZiZt
-d3kIeCl5NjpTgYGhOkrhT1V+b+/dIA==
-=kfUO
------END PGP SIGNATURE-----
-
---ul6oruy6cmrmas5h--
+Thank you and have a great day!
