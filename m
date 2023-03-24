@@ -2,57 +2,52 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 159026C82AE
-	for <lists+linux-can@lfdr.de>; Fri, 24 Mar 2023 17:56:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCCC06C835C
+	for <lists+linux-can@lfdr.de>; Fri, 24 Mar 2023 18:29:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231418AbjCXQ4L (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 24 Mar 2023 12:56:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44058 "EHLO
+        id S229649AbjCXR35 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 24 Mar 2023 13:29:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231839AbjCXQ4K (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 24 Mar 2023 12:56:10 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4C0D12D
-        for <linux-can@vger.kernel.org>; Fri, 24 Mar 2023 09:56:09 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id p203so2934502ybb.13
-        for <linux-can@vger.kernel.org>; Fri, 24 Mar 2023 09:56:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679676969;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=/hldnmZsxI6STeMly6M1GZxdok1Qf0nxjxXh00EY1v4=;
-        b=jRSF9ACUxgYOKtVsRgFO6bWaaB04YaEJZqBLCzxW9AioOJPld/NT4Klv0k+IVS+jg6
-         0/q8DBAans0cJ56Kq5KXJTGgREZCd+m46fZRqrfg/Vbx87FqcfLzJyUlIwYKxUkUmsLN
-         ZvrVmRJK2KKf+Q9DZtvBaghnZiXiAQj8jWm9UCwff9YIn59UFsKDBQ2L5wDQSw07fiQL
-         qRVO/yReS1EVZc+Bv/PTzc5JYxlvunOWJNGHMZhg7PmQV5Cgkd5THcGAyDt3HY+yWK4j
-         uou6j+KL2/T6gz143biJvL3E1UADwJ1+Mx0WJq1xucffbKkrA8Nw+0aIWJHupX2ExuRY
-         RWwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679676969;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/hldnmZsxI6STeMly6M1GZxdok1Qf0nxjxXh00EY1v4=;
-        b=XRyH2WKLezts9UISUVQMgszN4dF05R43qtp+vYsD/VHV4NBRPhZ0NQYkxezsU/CXYd
-         A1BAdz5Jx6bscHUkk0/MbMsWHtMkgNTUtzrZPyswJYESOngEkbyYsOKJvd6LR65SvGgM
-         2jqNffi8Nd4zU8Yc0bwvCSA7fwpFQQnCmqYoUZSQSR/UVuqi1uy+oSEcnkf+WtpJrNFq
-         XKuYH1LQYKyiwYUsvnM6llZl00NOn9HENdhiT5msz4vk/1TNKCljq2Z/R7SQstnG+Jpl
-         rkWOV/FHlvxAk/oj3tpirAJRmV+QiWjpHXaOOdVrtCQmlCAo5vvdvQFh7ZoKCZlEgB2R
-         5SPA==
-X-Gm-Message-State: AAQBX9e2aaUCMKzQGJv4FET6JJUlr5tvPptVJQ0lxT9Vs7jnZQHqcyce
-        quPABSTWPd5c/UqOO1TrRrv32lyOoaAUxezw5NWkhcMI0ek=
-X-Google-Smtp-Source: AKy350ZljrTdbn+O95j9WWpal0+RQAZ0Gw7ViROhby6xViP+GPvYbaSYonNMEUCsHmI9o+5YsACfp2NGy4NojB88scs=
-X-Received: by 2002:a05:6902:709:b0:b21:5fb4:c6e6 with SMTP id
- k9-20020a056902070900b00b215fb4c6e6mr1462018ybt.11.1679676968788; Fri, 24 Mar
- 2023 09:56:08 -0700 (PDT)
+        with ESMTP id S229505AbjCXR34 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 24 Mar 2023 13:29:56 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732667EF3
+        for <linux-can@vger.kernel.org>; Fri, 24 Mar 2023 10:29:55 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pflEf-0007bW-Ty; Fri, 24 Mar 2023 18:29:53 +0100
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id D682919BAB8;
+        Fri, 24 Mar 2023 17:29:52 +0000 (UTC)
+Date:   Fri, 24 Mar 2023 18:29:51 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     linux-can@vger.kernel.org
+Subject: Re: [RFC PATCH v2] can: isotp: add module parameter for maximum pdu
+ size
+Message-ID: <20230324172951.3zvcujiof7xnh3u7@pengutronix.de>
+References: <20230313172510.3851-1-socketcan@hartkopp.net>
+ <20230320162406.5mkbvcmyx7nyqvjc@pengutronix.de>
+ <c5451b95-5732-b3ed-38f5-1b09e74c0541@hartkopp.net>
+ <20230322085633.zwxip56fyr7qqguu@pengutronix.de>
+ <a91369b3-9615-4300-a617-e3edbb2c628c@hartkopp.net>
 MIME-Version: 1.0
-From:   Quinton Cook <quinton.cook@gmail.com>
-Date:   Fri, 24 Mar 2023 09:55:58 -0700
-Message-ID: <CAAL29+00Rur1AWfj-gbzTo2afyYgsg-zY0B9rvgPoPaLaz8wNw@mail.gmail.com>
-Subject: J1939-22
-To:     linux-can@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="s5ldsmqkmgfkb3z2"
+Content-Disposition: inline
+In-Reply-To: <a91369b3-9615-4300-a617-e3edbb2c628c@hartkopp.net>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,9 +56,75 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello my name is Quinton Cook. I was wondering if anyone was planning
-on implementing the new J1939-22 protocol in the linux kernel? If not
-I would love to implement it! Any help on getting started with linux
-kernel development would be greatly appreciated.
 
-Thank you and have a great day!
+--s5ldsmqkmgfkb3z2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 22.03.2023 18:59:04, Oliver Hartkopp wrote:
+=2E> > > I've been thinking about some sendfile() implementation too. But t=
+his again
+> > > would bloat the code and would not solve the rx side.
+> >=20
+> > I'm not talking about sendfile. Have a look at j1939's
+> > j1939_sk_send_loop();
+> >=20
+> > | https://elixir.bootlin.com/linux/v6.2/source/net/can/j1939/socket.c#L=
+1114
+> >=20
+>=20
+> This does not work for isotp like this as you have to handle different bl=
+ock
+> sizes in the flow control message.
+
+Let this be a task for future us. :)
+
+> > > > what about: ARRAY_SIZE(so->rx.sbuf)
+> > > >=20
+> > >=20
+> > > Looks good. I was just unsure which macro to use ;-)
+> >=20
+> > You can also use sizeof(so->rx.sbuf).
+> >=20
+> > ARRAY_SIZE would cause a compile error if you convert so->rx.sbuf to a
+> > pointer to dynamically allocated mem, while sizeof() still compiles.
+>=20
+> so->rx.sbuf is always a static buffer.
+
+Yes, in the current code. I was showing the difference between
+ARRAY_SIZE() and sizeof(). ARRAY_SIZE has a bit of type checking, while
+sizeof() doesn't - this becomes important once you change the code.
+
+> Only so->rx.buf can point to either so->rx.sbuf or to a dynamically
+> allocated memory.
+>=20
+> But when sizeof() is always safe it would take this for the v3 patch.
+
+Use ARRAY_SIZE().
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129  |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--s5ldsmqkmgfkb3z2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQd3gwACgkQvlAcSiqK
+BOi3LwgAjy0T63FpbRpzeh4WzORXDVQSn1qTq31Joo8/ljUQbYPzS6zqownebuZO
+6pEz/jvT56dGpeYNV8otcIXq7SnPJrqVjFjE61TqGQQT677JY3L6T1pYyJXmdJrR
+Bj8uz5/CNsyvrGp/TnT8jRgD+lY4E2pdxTi0qLasi/GIlVg7UKVX7EMZiX2u9Lt7
+Gut540Ozzl3iLt4zwsQp4Omff3IAUOMG3KVYuwQHuqV+COpzniQN9jpuR0hWvLxM
+xh52i1PanS6OAbjTjRHLZ97H3AtKgclKO0QbgAhYLu6FPSKyvlOgL+9SPevDhPvm
++1n5Kmp9vQ0sJJ6Os/WYMxcMIwlWkw==
+=RA9U
+-----END PGP SIGNATURE-----
+
+--s5ldsmqkmgfkb3z2--
