@@ -2,66 +2,79 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30B2C6C930E
-	for <lists+linux-can@lfdr.de>; Sun, 26 Mar 2023 10:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A9D56C93EE
+	for <lists+linux-can@lfdr.de>; Sun, 26 Mar 2023 13:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbjCZIKP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 26 Mar 2023 04:10:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60564 "EHLO
+        id S229627AbjCZLPg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 26 Mar 2023 07:15:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjCZIKO (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 26 Mar 2023 04:10:14 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 091AB5FC2;
-        Sun, 26 Mar 2023 01:10:14 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id f22so1607781plr.0;
-        Sun, 26 Mar 2023 01:10:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679818213;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=J1/B+9iVvI5dzcNRBNyfENWdpUqP//bX1siwDilnCMQ=;
-        b=qcPvHm8nga+RfdbuzKxuEXi3xRtekVEOGjsv60y0VG42t1/ElEGbaCBVC4oVgaDFT5
-         UesD2Z/cVtxV7ImrXKUMoHptPCyfzqPw5PZ/kR5VvZzBY8ndykQIOZz4FGMBxbVPmJ8t
-         9ILCylZuQbeIktCiccpRFSaR8pAlBTGUOGF9WDlYb3p8rODb39CeSrYiWWhmpv8Xzlzy
-         HhOAaO2gXvZ0rzesTal/Od0v8VmDTrEBMI4UY3Iurmc1FLeyHVLCeaN3BWMMVc1JLCFM
-         x25MWrZ4UoBzvpD7qoVIW0uSDl0EQ2V2AbgweQCSIMCNiJCyPR3LSeMyyuLNVuYSWWdI
-         tKCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679818213;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=J1/B+9iVvI5dzcNRBNyfENWdpUqP//bX1siwDilnCMQ=;
-        b=SJLRzME+ii72yRD8Zds6dIFXRiKFo1ozBSvMiEw+6W3iCLjhVNL/Lg8sEnXWKWRsh7
-         hREdet/FiYw/3OZuiDxjunPslyXKJX0tIOzN0C/+zEmh4oUDoQ0v/Cvq9Uih7fTU4XIt
-         2ap3pPWdqu2Q+dQRa+hUUxqltJthmiWBNUAqqtCU6QKFuXChsgQ7i4IhcGEP6vrZ4uUZ
-         djapN2PjLtQIOo+J2yXupU1vyfJypLB9wcXJ/IC2E/1BRW74Jq7menzNxyhSlZDoc6vz
-         cODqGYLsV3j2Ylgs2hGDE8yVjv3xhuZOl9lNaCUfHspe0bE2mE631rTnQ2dKBEyGGWoT
-         0KLA==
-X-Gm-Message-State: AO0yUKWNe3VG8dbm724N+3p0yOJ/jWBOjnmHb64Z0nFCYC4E7vM+UY/x
-        kJLsusWLLyHmYKTnucUbebo=
-X-Google-Smtp-Source: AK7set8ySV+myqe2AQZuOsybwlNOJW4KrrPUt7tGNYbn1piaXcfX/9pMeDEesOfhSi8xzpw4XQTe6Q==
-X-Received: by 2002:a05:6a20:2a08:b0:da:5e10:799b with SMTP id e8-20020a056a202a0800b000da5e10799bmr7552372pzh.10.1679818213198;
-        Sun, 26 Mar 2023 01:10:13 -0700 (PDT)
-Received: from dragonet (dragonet.kaist.ac.kr. [143.248.133.220])
-        by smtp.gmail.com with ESMTPSA id j4-20020aa783c4000000b006281f4a54bdsm8667870pfn.154.2023.03.26.01.10.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Mar 2023 01:10:12 -0700 (PDT)
-Date:   Sun, 26 Mar 2023 17:10:07 +0900
-From:   "Dae R. Jeong" <threeearcat@gmail.com>
-To:     socketcan@hartkopp.net, mkl@pengutronix.de, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: WARNING in isotp_tx_timer_handler and WARNING in print_tainted
-Message-ID: <ZB/93xJxq/BUqAgG@dragonet>
+        with ESMTP id S229573AbjCZLPf (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 26 Mar 2023 07:15:35 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08E84EF5;
+        Sun, 26 Mar 2023 04:15:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1679829326; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=gvu1PBAcSOcdZPWgnTBkS9BB1pOOBAACHG9/bgqKMFIldg/1sW601ARmglHmrTBmjQ
+    HcGZzXBiuYJDvcC6oPGjUlTKJP2w7dSTVnSciSkP3XxMTJbMaDvfHIU2BK1GpSjDGKxa
+    GIj2o7wEj110krhxJ+cdLoJa3oPHatW+hN3+OzOKg1cQ2m4/KkSj4kEfCgQ0EYOR0Hzg
+    NG9/CuvqFe7WRxSTJHeGLpWxHgC2Ze2oSwtDZditZNUN7mU8m97UGKN4qp7r0nahAiMb
+    y79+5XrJqCFHKOTTnxj7NJIX6FKgNyp2qM1FD5PU7MNI9HajDECRzuyUugvKe2UtMMXa
+    vMvw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1679829326;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
+    Subject:Sender;
+    bh=gzuaxz9sjVMiVIadcyYNO7aKkqVL68IqsYnkniUFExE=;
+    b=hR0+gnFh+36P9UAQ7jYo2mBf9D+AdQmapfxIq0cakYruLANmKa50FC09Q5Yan+vkPb
+    YaTBcMfx6XV8tHpaGlT8+K1jMNSeM7iwi/2ynWW0ovANcnZ6GaPj0DUTNHceAxY0bRYX
+    dAks3MzRCNt1qvMRraFv0Wz+ZtkA3DXy76GjzbZxhv46n+Uwpqj45Te3hOl0nFNoFr/S
+    SxkFG0o3y7ehL7vztvPsHVBB+y1CEBKixE4yz1lTXBxct54OB4TxZwJ94/nIUFoTvMsk
+    lGwltJ7R4tGsXMySJAbCzu9QDOzW+0HI7BKKhVkiT0iDSRcyz22bCRFc6Z7dhiq029u7
+    ihzA==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1679829326;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
+    Subject:Sender;
+    bh=gzuaxz9sjVMiVIadcyYNO7aKkqVL68IqsYnkniUFExE=;
+    b=G77sLgJXgLbkC7ThmA9oavxAxgxvy/lVIf+oB+tvUqger4/RufrwN2rvi/k8Shq/CE
+    AV0E0OijEEW7TKVaDmCkYXBgjJiDdxj8vxf9YU6AMMTwQfkx3bHGsvteZVFk0eLZIJOi
+    wmX1V1+nCr1Bd86dfp9WALprZeI6jVXGLQVWp6GiU4uJBwTcL1QWsdcLn31aCqhFtJvc
+    tny5nOO5hLBWKh4t9FUO4P9v7fvJypNPubebfHx/kJRuwCdlysD4U4EWaDlvwfjgQtS6
+    HDPKrwkvbHO4JRME1S6xdbdnjcNWshhtro5H2n326hSG+9yOHfAZ/o+T7cY5JcVRsF46
+    lLEg==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusl129OHEdFq0USEbDUQnQ=="
+Received: from [IPV6:2a00:6020:4a8e:5000::923]
+    by smtp.strato.de (RZmta 49.3.1 AUTH)
+    with ESMTPSA id n9397fz2QBFQSDP
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Sun, 26 Mar 2023 13:15:26 +0200 (CEST)
+Message-ID: <31c4a218-ee1b-4b64-59b6-ba5ef6ecce3c@hartkopp.net>
+Date:   Sun, 26 Mar 2023 13:15:19 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: WARNING in isotp_tx_timer_handler and WARNING in print_tainted
+To:     "Dae R. Jeong" <threeearcat@gmail.com>, mkl@pengutronix.de,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <ZB/93xJxq/BUqAgG@dragonet>
+Content-Language: en-US
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <ZB/93xJxq/BUqAgG@dragonet>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -70,58 +83,124 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 Hi,
 
-I am curious about the error handling logic in isotp_sendmsg() which
-looks a bit unclear to me.
+On 26.03.23 10:10, Dae R. Jeong wrote:
+> Hi,
+> 
+> I am curious about the error handling logic in isotp_sendmsg() which
+> looks a bit unclear to me.
+> 
+> I was looking the `WARNING in isotp_tx_timer_handler` warning [1],
+> which was firstly addressed by a commit [2] but reoccured even after
+> the commit.
+> [1]: https://syzkaller.appspot.com/bug?id=4f492d593461a5e44d76dd9322e179d13191a8ef
+> [2]: c6adf659a8ba can: isotp: check CAN address family in isotp_bind()
+> 
+> I thought that the warning is caused by the concurrent execution of
+> two isotp_sendmsg() as described below (I'm not 100% sure though).
+> 
+> CPU1                             CPU2
+> isotp_sendmsg()                  isotp_sendmsg()
+> -----                            -----
+> old_state = so->tx.state; // ISOTP_IDLE
+> 
+>                                   cmpxchg(&so->tx.state, ISTOP_IDLE, ISOTP_SENDING) // success
+> 							     ...
+> 							     so->tx.state = ISTOP_WAIT_FIRST_FC;
+> 							     hrtimer_start(&so->txtimer);
+> 
+> cmpxchg(&so->tx.state, ISTOP_IDLE, ISOTP_SENDING) // failed
+> // if MSG_DONTWAIT is set in msg->msg_flags or
+> // a signal is delivered during wait_event_interruptible()
+> goto err_out;
+> err_out:
+>      so->tx.state = old_state; // ISTOP_IDLE
+> 
+>                                   isotp_tx_timer_handler()
+> 								 -----
+> 								 switch (so->tx.state) {
+> 								 default:
+> 								     WARN_ONCE();
+> 								 }
+> 
+> Then, a commit [3] changed the logic of tx timer, and removed the
+> WARN_ONCE() statement. So I thought that the issue is completely
+> handled.
+> [3]: 4f027cba8216 can: isotp: split tx timer into transmission and timeout
+> 
+> But even after [3] is applied, I found a warning that seems related
+> occurred [4] (in the kernel commit: 478a351ce0d6).
+> [4]: https://syzkaller.appspot.com/bug?id=11d0e5f6fef53a0ea486bbd07ddd3cba66132150
+> 
+> So I wonder whether the `err_out` logic in isotp_sendmsg() is safe.
+> For me, it looks like isotp_sendmsg() can change so->tx.state to
+> ISTOP_IDLE at any time. It may not be a problem if all other locations
+> are aware of this. Is this an intended behavior?
+> 
+> Thank you in advance.
 
-I was looking the `WARNING in isotp_tx_timer_handler` warning [1],
-which was firstly addressed by a commit [2] but reoccured even after
-the commit.
-[1]: https://syzkaller.appspot.com/bug?id=4f492d593461a5e44d76dd9322e179d13191a8ef
-[2]: c6adf659a8ba can: isotp: check CAN address family in isotp_bind()
+Thank you for picking this up!
 
-I thought that the warning is caused by the concurrent execution of
-two isotp_sendmsg() as described below (I'm not 100% sure though).
+In fact I was not aware of the possibility of a concurrent execution of 
+isotp_sendmsg() and thought cmpxchg() would just make it ...
 
-CPU1                             CPU2
-isotp_sendmsg()                  isotp_sendmsg()
------                            -----
-old_state = so->tx.state; // ISOTP_IDLE
+But looking at other *_sendmsg() implementations a lock_sock() seems to 
+be a common pattern to handle concurrent syscalls, see:
 
-                                 cmpxchg(&so->tx.state, ISTOP_IDLE, ISOTP_SENDING) // success
-							     ...
-							     so->tx.state = ISTOP_WAIT_FIRST_FC;
-							     hrtimer_start(&so->txtimer);
+git grep -p lock_sock net | grep sendmsg
 
-cmpxchg(&so->tx.state, ISTOP_IDLE, ISOTP_SENDING) // failed
-// if MSG_DONTWAIT is set in msg->msg_flags or
-// a signal is delivered during wait_event_interruptible()
-goto err_out;
-err_out:
-    so->tx.state = old_state; // ISTOP_IDLE
-
-                                 isotp_tx_timer_handler()
-								 -----
-								 switch (so->tx.state) {
-								 default:
-								     WARN_ONCE();
-								 }
-
-Then, a commit [3] changed the logic of tx timer, and removed the
-WARN_ONCE() statement. So I thought that the issue is completely
-handled.
-[3]: 4f027cba8216 can: isotp: split tx timer into transmission and timeout
-
-But even after [3] is applied, I found a warning that seems related
-occurred [4] (in the kernel commit: 478a351ce0d6).
-[4]: https://syzkaller.appspot.com/bug?id=11d0e5f6fef53a0ea486bbd07ddd3cba66132150
-
-So I wonder whether the `err_out` logic in isotp_sendmsg() is safe.
-For me, it looks like isotp_sendmsg() can change so->tx.state to
-ISTOP_IDLE at any time. It may not be a problem if all other locations
-are aware of this. Is this an intended behavior?
-
-Thank you in advance.
-
+What do you think about adopting this to isotp_sendmsg()? See patch below.
 
 Best regards,
-Dae R. Jeong
+Oliver
+
+diff --git a/net/can/isotp.c b/net/can/isotp.c
+index 9bc344851704..0b95c0df7a63 100644
+--- a/net/can/isotp.c
++++ b/net/can/isotp.c
+@@ -912,13 +912,12 @@ static enum hrtimer_restart 
+isotp_txfr_timer_handler(struct hrtimer *hrtimer)
+  		isotp_send_cframe(so);
+
+  	return HRTIMER_NORESTART;
+  }
+
+-static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, 
+size_t size)
++static int isotp_sendmsg_locked(struct sock *sk, struct msghdr *msg, 
+size_t size)
+  {
+-	struct sock *sk = sock->sk;
+  	struct isotp_sock *so = isotp_sk(sk);
+  	u32 old_state = so->tx.state;
+  	struct sk_buff *skb;
+  	struct net_device *dev;
+  	struct canfd_frame *cf;
+@@ -1091,10 +1090,22 @@ static int isotp_sendmsg(struct socket *sock, 
+struct msghdr *msg, size_t size)
+  		wake_up_interruptible(&so->wait);
+
+  	return err;
+  }
+
++static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, 
+size_t size)
++{
++	struct sock *sk = sock->sk;
++	int ret;
++
++	lock_sock(sk);
++	ret = isotp_sendmsg_locked(sk, msg, size);
++	release_sock(sk);
++
++	return ret;
++}
++
+  static int isotp_recvmsg(struct socket *sock, struct msghdr *msg, 
+size_t size,
+  			 int flags)
+  {
+  	struct sock *sk = sock->sk;
+  	struct sk_buff *skb;
+
+
+
