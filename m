@@ -2,101 +2,90 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C70F16C852A
-	for <lists+linux-can@lfdr.de>; Fri, 24 Mar 2023 19:33:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0F176C921C
+	for <lists+linux-can@lfdr.de>; Sun, 26 Mar 2023 04:30:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231833AbjCXSdu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 24 Mar 2023 14:33:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49332 "EHLO
+        id S229795AbjCZCaw convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Sat, 25 Mar 2023 22:30:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230271AbjCXSdf (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 24 Mar 2023 14:33:35 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30778902C
-        for <linux-can@vger.kernel.org>; Fri, 24 Mar 2023 11:33:05 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pfmDk-0000Jh-3A; Fri, 24 Mar 2023 19:33:00 +0100
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id C68F919BB99;
-        Fri, 24 Mar 2023 18:32:58 +0000 (UTC)
-Date:   Fri, 24 Mar 2023 19:32:57 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Markus Schneider-Pargmann <msp@baylibre.com>
-Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        Simon Horman <simon.horman@corigine.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 00/16] can: m_can: Optimizations for m_can/tcan part 2
-Message-ID: <20230324183257.qpis4cip5cp4gebu@pengutronix.de>
-References: <20230315110546.2518305-1-msp@baylibre.com>
+        with ESMTP id S229446AbjCZCav (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 25 Mar 2023 22:30:51 -0400
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4EFA5E3;
+        Sat, 25 Mar 2023 19:30:50 -0700 (PDT)
+Received: by mail-pf1-f173.google.com with SMTP id fb38so3551608pfb.7;
+        Sat, 25 Mar 2023 19:30:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679797850;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=16zeEm3Yx86eXVp/qbGCAi0MIpRJKwJZlSDFwjFpw+o=;
+        b=yfuf8wV8TFo/3D3PUb93rl/hozXz/NwnH/ZzK4Z1uKuRcXRAvdShVvlSKOpPs/CQ6V
+         jTM3+VNnG0Ose5GVRpceMr8mYOSYSBy41tvf659knJCb/EE8WuCZXCLMZgytGs0LA2Lb
+         Fz/TDCa/7vHg+7H7Zzt4JvKB3qchjSbfyJJmkEEW1F0XIke+E7tryUhJ1vsDz6T9Hfh7
+         JDKK6smfHOPBQ/9pq+1ryDLDAQ3FAFL+Mip8SMleIJ91PJ2+2xogOyHtjV6YkG5LiDm/
+         WE0MZ4xzGc8l+WMFgOqNO/FP+ok2BgoKw3MpWICGeAphtXpD5WqASSzL0DLdJUrOfK/M
+         tvNw==
+X-Gm-Message-State: AAQBX9fReYgebGiU4IgpswTMXPNUGBEYIiqDqSs7ZdUItRtkyu9PBu16
+        lqkD5Q7VjS3XYO6E7sAWdQWAGIfZ9n2XhC65axA=
+X-Google-Smtp-Source: AKy350ZyiXVXqUs1LdjJV3le8Hl08j5qOc6C8xX3M4B2dQPsX/8enbe0vFReza0cI1e1ZcxpUPerYFKADVSMFKZFQoc=
+X-Received: by 2002:a63:5f02:0:b0:507:3e33:43e3 with SMTP id
+ t2-20020a635f02000000b005073e3343e3mr1874010pgb.7.1679797849615; Sat, 25 Mar
+ 2023 19:30:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="maei3lwmc22rxdz5"
-Content-Disposition: inline
-In-Reply-To: <20230315110546.2518305-1-msp@baylibre.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230321081152.26510-1-peter_hong@fintek.com.tw>
+ <CAMZ6RqJWg1H6Yo3nhsa-Kk-WdU=ZH39ecWaE6wiuKRJe1gLMkQ@mail.gmail.com>
+ <f71f1f59-f729-2c8c-f6da-8474be2074b1@fintek.com.tw> <CAMZ6Rq+xSCLe8CYm6K0CyPABo-Gzrt-JUO7_XGgXum+G8k5FCQ@mail.gmail.com>
+In-Reply-To: <CAMZ6Rq+xSCLe8CYm6K0CyPABo-Gzrt-JUO7_XGgXum+G8k5FCQ@mail.gmail.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Sun, 26 Mar 2023 11:30:37 +0900
+Message-ID: <CAMZ6RqLNQG30GJH6OJR6bb4yqACn+HiTMEbhbh19Zok=5njJsQ@mail.gmail.com>
+Subject: Re: [PATCH V2] can: usb: f81604: add Fintek F81604 support
+To:     Peter Hong <peter_hong@fintek.com.tw>
+Cc:     wg@grandegger.com, mkl@pengutronix.de,
+        michal.swiatkowski@linux.intel.com, Steen.Hegelund@microchip.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, frank.jungclaus@esd.eu,
+        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, hpeter+linux_kernel@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Tue. 23 Mar 2023 at 14:54, Vincent MAILHOL
+<mailhol.vincent@wanadoo.fr> wrote:
+> Le jeu. 23 mars 2023 à 14:14, Peter Hong <peter_hong@fintek.com.tw> a écrit :
 
---maei3lwmc22rxdz5
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+(...)
 
-On 15.03.2023 12:05:30, Markus Schneider-Pargmann wrote:
-> Hi Marc and everyone,
->=20
-> third version part 2, functionally I had to move from spin_lock to
-> spin_lock_irqsave because of an interrupt that was calling start_xmit,
-> see attached stack. This is tested on tcan455x but I don't have the
-> integrated hardware myself so any testing is appreciated.
->=20
-> The series implements many small and bigger throughput improvements and
-> adds rx/tx coalescing at the end.
+> > struct f81604_bulk_data {
+> >      u8 cmd;
+> >      u8 dlc;
+> >
+> >      union {
+> >          struct {
+> >              u8 id1, id2;
+> >              u8 data[CAN_MAX_DLEN];
+> >          } sff;
+> >
+> >          struct {
+> >              u8 id1, id2, id3, id4;
+> >              u8 data[CAN_MAX_DLEN];
+> >          } eff;
+> >      };
+> > } __attribute__((packed));
 
-I've applied patches 1...5 to can-next.
+Actually, there is an alias for this attribute. Just use __packed
+instead of __attribute__((packed)).
 
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129  |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---maei3lwmc22rxdz5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQd7NcACgkQvlAcSiqK
-BOho7Af/W+9fuaKIaN99W/mZF0Xe48ZngWQMU7/COYFSUIWFiX6RcLORYZRRPrxK
-zMp/1uFYmTK9VBxQPd/dyHA7IA1Fa1Yf7xaRRw+XdmIxzQgfGSpQDg0gnyRc/fty
-7tBr5RElXS9E2pFyuza48H+lkejkwFO9W5w+KhUjfF9FX9WkeUhMOMBbVzC6XLMT
-tQTbmpD4pN53ov8JpeQYFjSGGmsPrp8e6HP2yRJxXEOX15ac+tGypBjOh52769k0
-eERaA3LMXAQmYZezfDsvZkFHjD+Xe4EChmcUjQ0iqOReDxYoHjzTNjrcaPVyckYy
-JhIyZVKbGp0cHEnAA915bVBI7cxscA==
-=YQla
------END PGP SIGNATURE-----
-
---maei3lwmc22rxdz5--
+(...)
