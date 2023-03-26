@@ -2,94 +2,126 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D58246C921F
-	for <lists+linux-can@lfdr.de>; Sun, 26 Mar 2023 04:37:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30B2C6C930E
+	for <lists+linux-can@lfdr.de>; Sun, 26 Mar 2023 10:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbjCZChd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 25 Mar 2023 22:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44540 "EHLO
+        id S229523AbjCZIKP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 26 Mar 2023 04:10:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjCZChc (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 25 Mar 2023 22:37:32 -0400
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B8AAD1C;
-        Sat, 25 Mar 2023 19:37:32 -0700 (PDT)
-Received: by mail-pf1-f174.google.com with SMTP id fb38so3555087pfb.7;
-        Sat, 25 Mar 2023 19:37:32 -0700 (PDT)
+        with ESMTP id S229483AbjCZIKO (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 26 Mar 2023 04:10:14 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 091AB5FC2;
+        Sun, 26 Mar 2023 01:10:14 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id f22so1607781plr.0;
+        Sun, 26 Mar 2023 01:10:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679818213;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=J1/B+9iVvI5dzcNRBNyfENWdpUqP//bX1siwDilnCMQ=;
+        b=qcPvHm8nga+RfdbuzKxuEXi3xRtekVEOGjsv60y0VG42t1/ElEGbaCBVC4oVgaDFT5
+         UesD2Z/cVtxV7ImrXKUMoHptPCyfzqPw5PZ/kR5VvZzBY8ndykQIOZz4FGMBxbVPmJ8t
+         9ILCylZuQbeIktCiccpRFSaR8pAlBTGUOGF9WDlYb3p8rODb39CeSrYiWWhmpv8Xzlzy
+         HhOAaO2gXvZ0rzesTal/Od0v8VmDTrEBMI4UY3Iurmc1FLeyHVLCeaN3BWMMVc1JLCFM
+         x25MWrZ4UoBzvpD7qoVIW0uSDl0EQ2V2AbgweQCSIMCNiJCyPR3LSeMyyuLNVuYSWWdI
+         tKCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679798251;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xHcEk5icyFpIFsnzV+XrESkp/yZHE58RIgb+N7Pys8E=;
-        b=SXfl8D5KGSHXDObziZsM0PrZZgeIN+pTXPJ+k3A80ARaLrvUatbwfNjya7asM8eZj5
-         4S91k6ljwDGZqnYMSMvNi7yfIvRS5Ez+qbq7Mnp55iXlkXdc7WQsK+6/8wO+01DnsGev
-         kwlYMz/3zd9Z2d1N2ysddUFxtxMqPEk9mzlvejFhV5z3clDRRZm1aZ7a60TriSgFVuCH
-         5+2j9JLdxVkuGdD9S+Ytevuhrpw2pZQhtBW95xiHrIsbGN0kmqz8rps70vIqs5m9HbGi
-         wePxvos9/sh+txE8+1AVMVPu7zias2GOsOlIDfaYCAyPUUmCIQNLz0hRwBUBvkvyIhXj
-         nzrQ==
-X-Gm-Message-State: AAQBX9ejIFF4NzJ2XEB1CVgxan7nUQaWHEJ+my/5FMjsc6bU5SDpMWI6
-        gUX5g6kODtPNo8ZcDnJprYx5z54BUnQ5LgB1I4xitHR83hk=
-X-Google-Smtp-Source: AKy350ZSRgjB4+CEYz+LxcJSgzmMD1WKybLUEJytm6bXOQ5Bb7+ST1EQ5pz8zOtr1YKBTH6Zi8Mk612LVVyIjicja14=
-X-Received: by 2002:a05:6a00:1894:b0:622:b78d:f393 with SMTP id
- x20-20020a056a00189400b00622b78df393mr4140493pfh.2.1679798251148; Sat, 25 Mar
- 2023 19:37:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230321081152.26510-1-peter_hong@fintek.com.tw>
- <CAMZ6RqJWg1H6Yo3nhsa-Kk-WdU=ZH39ecWaE6wiuKRJe1gLMkQ@mail.gmail.com> <20230324161320.jutuyor7jrbqu37p@pengutronix.de>
-In-Reply-To: <20230324161320.jutuyor7jrbqu37p@pengutronix.de>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Sun, 26 Mar 2023 11:37:19 +0900
-Message-ID: <CAMZ6Rq+0MQFXeQAJigqUzbQnbMFHXbOfViXQkkBMUBm29k1U+A@mail.gmail.com>
-Subject: Re: [PATCH V2] can: usb: f81604: add Fintek F81604 support
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     "Ji-Ze Hong (Peter Hong)" <peter_hong@fintek.com.tw>,
-        wg@grandegger.com, michal.swiatkowski@linux.intel.com,
-        Steen.Hegelund@microchip.com, davem@davemloft.net,
+        d=1e100.net; s=20210112; t=1679818213;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=J1/B+9iVvI5dzcNRBNyfENWdpUqP//bX1siwDilnCMQ=;
+        b=SJLRzME+ii72yRD8Zds6dIFXRiKFo1ozBSvMiEw+6W3iCLjhVNL/Lg8sEnXWKWRsh7
+         hREdet/FiYw/3OZuiDxjunPslyXKJX0tIOzN0C/+zEmh4oUDoQ0v/Cvq9Uih7fTU4XIt
+         2ap3pPWdqu2Q+dQRa+hUUxqltJthmiWBNUAqqtCU6QKFuXChsgQ7i4IhcGEP6vrZ4uUZ
+         djapN2PjLtQIOo+J2yXupU1vyfJypLB9wcXJ/IC2E/1BRW74Jq7menzNxyhSlZDoc6vz
+         cODqGYLsV3j2Ylgs2hGDE8yVjv3xhuZOl9lNaCUfHspe0bE2mE631rTnQ2dKBEyGGWoT
+         0KLA==
+X-Gm-Message-State: AO0yUKWNe3VG8dbm724N+3p0yOJ/jWBOjnmHb64Z0nFCYC4E7vM+UY/x
+        kJLsusWLLyHmYKTnucUbebo=
+X-Google-Smtp-Source: AK7set8ySV+myqe2AQZuOsybwlNOJW4KrrPUt7tGNYbn1piaXcfX/9pMeDEesOfhSi8xzpw4XQTe6Q==
+X-Received: by 2002:a05:6a20:2a08:b0:da:5e10:799b with SMTP id e8-20020a056a202a0800b000da5e10799bmr7552372pzh.10.1679818213198;
+        Sun, 26 Mar 2023 01:10:13 -0700 (PDT)
+Received: from dragonet (dragonet.kaist.ac.kr. [143.248.133.220])
+        by smtp.gmail.com with ESMTPSA id j4-20020aa783c4000000b006281f4a54bdsm8667870pfn.154.2023.03.26.01.10.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Mar 2023 01:10:12 -0700 (PDT)
+Date:   Sun, 26 Mar 2023 17:10:07 +0900
+From:   "Dae R. Jeong" <threeearcat@gmail.com>
+To:     socketcan@hartkopp.net, mkl@pengutronix.de, davem@davemloft.net,
         edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        frank.jungclaus@esd.eu, linux-kernel@vger.kernel.org,
         linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        hpeter+linux_kernel@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        linux-kernel@vger.kernel.org
+Subject: WARNING in isotp_tx_timer_handler and WARNING in print_tainted
+Message-ID: <ZB/93xJxq/BUqAgG@dragonet>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue. 25 Mar 2023 at 01:13, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> On 22.03.2023 00:50:20, Vincent MAILHOL wrote:
-> > Hi Peter,
-> >
-> > Welcome to the linux-can mailing list.
-> > This is my first review, I will wait for the next version to give a
-> > more thorough look.
-> >
-> > On Tue. 21 Mar 2023 at 17:14, Ji-Ze Hong (Peter Hong)
-> > <peter_hong@fintek.com.tw> wrote:
-> >
-> > From your email header:
-> > > Content-Type: text/plain; charset="y"
-> >
-> > It gives me below error when applying:
-> >
-> >   $ wget -o f81604.patch
-> > https://lore.kernel.org/linux-can/20230321081152.26510-1-peter_hong@fintek.com.tw/raw
-> >   $ git am f81604.patch
-> >   error : cannot convert from y to UTF-8
-> >   fatal : could not parse patch
->
-> I'm using b4 [1] for this:
->
-> $ b4 shazam -l -s 20230321081152.26510-1-peter_hong@fintek.com.tw
->
-> and it works.
+Hi,
 
-Thanks for the tip. I was suspecting such a tool to exist but never
-heard about b4 before. It is kind of very well hidden in the document.
+I am curious about the error handling logic in isotp_sendmsg() which
+looks a bit unclear to me.
 
-@Peter: Then, no need to fix. Please ignore the above comment.
+I was looking the `WARNING in isotp_tx_timer_handler` warning [1],
+which was firstly addressed by a commit [2] but reoccured even after
+the commit.
+[1]: https://syzkaller.appspot.com/bug?id=4f492d593461a5e44d76dd9322e179d13191a8ef
+[2]: c6adf659a8ba can: isotp: check CAN address family in isotp_bind()
+
+I thought that the warning is caused by the concurrent execution of
+two isotp_sendmsg() as described below (I'm not 100% sure though).
+
+CPU1                             CPU2
+isotp_sendmsg()                  isotp_sendmsg()
+-----                            -----
+old_state = so->tx.state; // ISOTP_IDLE
+
+                                 cmpxchg(&so->tx.state, ISTOP_IDLE, ISOTP_SENDING) // success
+							     ...
+							     so->tx.state = ISTOP_WAIT_FIRST_FC;
+							     hrtimer_start(&so->txtimer);
+
+cmpxchg(&so->tx.state, ISTOP_IDLE, ISOTP_SENDING) // failed
+// if MSG_DONTWAIT is set in msg->msg_flags or
+// a signal is delivered during wait_event_interruptible()
+goto err_out;
+err_out:
+    so->tx.state = old_state; // ISTOP_IDLE
+
+                                 isotp_tx_timer_handler()
+								 -----
+								 switch (so->tx.state) {
+								 default:
+								     WARN_ONCE();
+								 }
+
+Then, a commit [3] changed the logic of tx timer, and removed the
+WARN_ONCE() statement. So I thought that the issue is completely
+handled.
+[3]: 4f027cba8216 can: isotp: split tx timer into transmission and timeout
+
+But even after [3] is applied, I found a warning that seems related
+occurred [4] (in the kernel commit: 478a351ce0d6).
+[4]: https://syzkaller.appspot.com/bug?id=11d0e5f6fef53a0ea486bbd07ddd3cba66132150
+
+So I wonder whether the `err_out` logic in isotp_sendmsg() is safe.
+For me, it looks like isotp_sendmsg() can change so->tx.state to
+ISTOP_IDLE at any time. It may not be a problem if all other locations
+are aware of this. Is this an intended behavior?
+
+Thank you in advance.
+
+
+Best regards,
+Dae R. Jeong
