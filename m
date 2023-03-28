@@ -2,50 +2,43 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A72FD6CB717
-	for <lists+linux-can@lfdr.de>; Tue, 28 Mar 2023 08:26:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BED2A6CB73C
+	for <lists+linux-can@lfdr.de>; Tue, 28 Mar 2023 08:34:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232590AbjC1G01 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 28 Mar 2023 02:26:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44998 "EHLO
+        id S229664AbjC1GeS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 28 Mar 2023 02:34:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232600AbjC1G0I (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 28 Mar 2023 02:26:08 -0400
+        with ESMTP id S232348AbjC1GeQ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 28 Mar 2023 02:34:16 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A1B49D4
-        for <linux-can@vger.kernel.org>; Mon, 27 Mar 2023 23:25:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A92581982
+        for <linux-can@vger.kernel.org>; Mon, 27 Mar 2023 23:33:55 -0700 (PDT)
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1ph2lX-00081R-6e; Tue, 28 Mar 2023 08:25:07 +0200
+        id 1ph2u2-0000fN-5D; Tue, 28 Mar 2023 08:33:54 +0200
 Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 25D5119DDFA;
-        Tue, 28 Mar 2023 06:24:58 +0000 (UTC)
-Date:   Tue, 28 Mar 2023 08:24:56 +0200
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 1F73D19DEA6;
+        Tue, 28 Mar 2023 06:33:53 +0000 (UTC)
+Date:   Tue, 28 Mar 2023 08:33:51 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Peter Hong <peter_hong@fintek.com.tw>, wg@grandegger.com,
-        michal.swiatkowski@linux.intel.com, Steen.Hegelund@microchip.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, frank.jungclaus@esd.eu,
-        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, hpeter+linux_kernel@gmail.com
-Subject: Re: [PATCH V3] can: usb: f81604: add Fintek F81604 support
-Message-ID: <20230328062456.wjk5gj4vbriu7fzq@pengutronix.de>
-References: <20230327051048.11589-1-peter_hong@fintek.com.tw>
- <CAMZ6Rq+ps1tLii1VfYyAqfD4ck_TGWBUo_ouK_vLfhoNEg-BPg@mail.gmail.com>
- <5bdee736-7868-81c3-e63f-a28787bd0007@fintek.com.tw>
- <CAMZ6Rq++N9ui5srP2uBYz0FPXttBYd2m982K8X-ESCC=qu1dAQ@mail.gmail.com>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     linux-can@vger.kernel.org
+Subject: Re: [RFC PATCH v3] can: isotp: add module parameter for maximum pdu
+ size
+Message-ID: <20230328063351.ysgaza6yesiersmh@pengutronix.de>
+References: <20230326115911.15094-1-socketcan@hartkopp.net>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rqa5tlkfbiozleiu"
+        protocol="application/pgp-signature"; boundary="y4hxs7qowhtel3hf"
 Content-Disposition: inline
-In-Reply-To: <CAMZ6Rq++N9ui5srP2uBYz0FPXttBYd2m982K8X-ESCC=qu1dAQ@mail.gmail.com>
+In-Reply-To: <20230326115911.15094-1-socketcan@hartkopp.net>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -60,45 +53,29 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---rqa5tlkfbiozleiu
+--y4hxs7qowhtel3hf
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 28.03.2023 13:49:05, Vincent MAILHOL wrote:
-[...]
-> > >> +       int status, len;
-> > >> +
-> > >> +       if (can_dropped_invalid_skb(netdev, skb))
-> > >> +               return NETDEV_TX_OK;
-> > >> +
-> > >> +       netif_stop_queue(netdev);
-> > > In your driver, you send the CAN frames one at a time and wait for the
-> > > rx_handler to restart the queue. This approach dramatically degrades
-> > > the throughput. Is this a device limitation? Is the device not able to
-> > > manage more than one frame at a time?
-> > >
-> >
-> > This device will not NAK on TX frame not complete, it only NAK on TX
-> > endpoint
-> > memory not processed, so we'll send next frame unitl TX complete(TI)
-> > interrupt
-> > received.
-> >
-> > The device can polling status register via TX/RX endpoint, but it's more
-> > complex.
-> > We'll plan to do it when first driver landing in mainstream.
+On 26.03.2023 13:59:11, Oliver Hartkopp wrote:
+> With ISO 15765-2:2016 the PDU size is not limited to 2^12 - 1 (4095) bytes
+> but can be represented as a 32 bit unsigned integer value which allows
+> 2^32 - 1 bytes (~4GB). The use-cases like automotive unified diagnostic
+> services (UDS) and flashing of ECUs still use the small static buffers
+> which are provided at socket creation time.
 >=20
-> OK for me to have this as a next step. Marc, what do you think?
+> When a use-case requires to transfer PDUs up to 1025 kByte the maximum
+> PDU size can now be extended by setting the module parameter max_pdu_size.
+> The extended size buffers are only allocated on a per-socket/connection
+> base when needed at run-time.
+>=20
+> Link: https://github.com/raspberrypi/linux/issues/5371
+> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 
-Fine with me. First make it work, then make it fast.
+Applied to linux-can-next.
 
-But I think this will never be a fast and resource-efficient USB CAN
-adapter. There are exiting drivers with an open and documented USB
-interface (gs_usb) and Open Source =C2=B5C implementations (candlelight) wi=
-th
-better performance.
-
+Thanks,
 Marc
 
 --=20
@@ -107,19 +84,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129  |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---rqa5tlkfbiozleiu
+--y4hxs7qowhtel3hf
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQiiDUACgkQvlAcSiqK
-BOh0cwf+OIsyfvXP3U85cp2q7trhkPiSxchYbsU7gUaDHBWKN1VDhNOwWYIyBpl3
-8iCh88sGwjX0Q9Ib1qmNJvNibgf4kr0ekK0sUgHhVg3IJjA/nEatAXNDO9vtEjGt
-vsHz+UPuLWWGnwxXmIAjbUiKpzvk7UO3uzlaQu4TKRMUKX0gG3ZzhVt1KNf5hj6J
-P2XQO2/AfQ3ve1rEGLJBf4T0Y6Y+D7EDiYVV7070yYt43/N9Z8z+sdB/1YRDZ5RD
-Fh7QDzGSM/91ZDlNpO120YyWX5Eu8UzDOaP7sCcwnd/Y+8Je3/fcyGXW6He1Sf6t
-HW9clTQNLjK5nrQenqZymCyeOCj1+w==
-=BXc1
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQiikwACgkQvlAcSiqK
+BOhgrggAjnBbpDwykXBV4+ywDKw1dE5+OtRUOJLKP1ezibW/xww9Y9st1cts2ccw
+qg2AYJqd2mQGd2UliESKuSY3VFbAGpoclYyF/e7dNkBuuWkvpnbHnrWJcth1BK9p
+zcMgGBqr8mqZI1V+cP/Wz1xZEgUgdTMftDrGl1hlBwiWM6J+Zbw6fBnPwK43nBbV
+kLn6VoUsF2ZyGFRN2qOgk2NF2tyEiVrFNHRhUNiA5BEgC4BTZ4s8JjFmTR+rJE0R
+ICf0SR4udhljK/gwJT82FjjN6v2cnVQd1k6j2GTmltmpuxzZihY0CvO1TMdKXf4Y
+2fDjHHvYiNTtSw/aVi2mHjxbP9NXbQ==
+=UUny
 -----END PGP SIGNATURE-----
 
---rqa5tlkfbiozleiu--
+--y4hxs7qowhtel3hf--
