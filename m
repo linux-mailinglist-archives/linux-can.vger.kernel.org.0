@@ -2,219 +2,241 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF6536CB7E4
-	for <lists+linux-can@lfdr.de>; Tue, 28 Mar 2023 09:22:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED1866CB82D
+	for <lists+linux-can@lfdr.de>; Tue, 28 Mar 2023 09:34:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbjC1HWF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 28 Mar 2023 03:22:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59548 "EHLO
+        id S231126AbjC1Hds (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 28 Mar 2023 03:33:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230282AbjC1HWC (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 28 Mar 2023 03:22:02 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7866C3C0A
-        for <linux-can@vger.kernel.org>; Tue, 28 Mar 2023 00:22:01 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id h9so11490705ljq.2
-        for <linux-can@vger.kernel.org>; Tue, 28 Mar 2023 00:22:01 -0700 (PDT)
+        with ESMTP id S230047AbjC1Hdq (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 28 Mar 2023 03:33:46 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E37A420A
+        for <linux-can@vger.kernel.org>; Tue, 28 Mar 2023 00:33:44 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id ew6so45729613edb.7
+        for <linux-can@vger.kernel.org>; Tue, 28 Mar 2023 00:33:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kvaser.com; s=google; t=1679988120;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+6627CT3SbKGwcYm3l44erksg/Zqs3LxPLVQr6+OlQM=;
-        b=edpioqGD8gH8KfEpEvdhBBmri0PGPpHvclm3fvkJRAHpSg4a3HslF9gxlWQecF4fto
-         VXnG1O2HHJgEIpmttmxTdVeMPXukUccQWM3m3PwIAlYHPHBtdhShaTn5BAo8qhQoTBD1
-         Id6C7evulh4DYAAPC0iEHHaJ16wgLnEhQsPG62RIbPSpoGXBU0weSFEM14r/o2Whe3us
-         iMJvUK/OCCpDreL5F2++3uISfZAcsBpAUl4pGmcxcJ6CytFru2XCYc3/YvMFvw62g8YZ
-         hmpxv4Gvy8UaouyD27whMiVZ+UR7GtY/IlX8Ve2kbB9QJtU++KpaqDs5OyHU+IDAIPua
-         zqdA==
+        d=amarulasolutions.com; s=google; t=1679988823;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IQemtvhch+zpychTw2wPnm8AfYz48LBPAqThlF3dIgU=;
+        b=DDUJo2LUdaN/EQ7qfHi1KDLV00MZH5/PH2X5hnuvjtJigIGuxkr6lgHi454/0Ic6dV
+         wZuw1pNJuhb0fuh8Fo1T+E25Y1FXav1kSDre2Veb0Dytbkh0LzQD0fIVtPtbJ7lX/45V
+         l171wS7bvsLBAL2BZf2Ps9xCSKcQ1PnFqY8ho=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679988120;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+6627CT3SbKGwcYm3l44erksg/Zqs3LxPLVQr6+OlQM=;
-        b=zHikzkJj33aMXg67d4Fho5ywVQgYVVf6tONRyPEoXG+1ECKH+7jb5blDlDj8Cs1kWq
-         /eaw8aX/MksRV3bnsO+v1TVjvgHkDYaBIMBchUC5sAGrQy9JtOoC9sBbVw6yqABypuxw
-         4nHi8HM4ZDotFgq6f+EMww42O5fOPgro9yX5XeNShtRkeJ70af6wkWxdeUSQigU3rUv+
-         lJJfaJbUpfFC5DoePlK8wQ3c/jMG7DzXudw714H3Fa1STbR4isYg6VaLywhGzeWh91nb
-         5UcLB4iMXSZizwwosoxnW8MdmvrQNGxV4wzhlAS4RJuE6ZnCvc2RcSBrUyxkBAWy1hsb
-         kyOA==
-X-Gm-Message-State: AAQBX9eliVCiTBmFDdWKzzTmCNbFb/0UBYKPrfO8OcP7n/Pk1GAei5Ay
-        gBVJAgyiGphoHbX7Kf9yaRIFS2QvFI1B8+K1Fts=
-X-Google-Smtp-Source: AKy350ZuWhYvQHTUL9pcxrJdhUYBRHyT2C0pR73Al9oHrEc5fo8CeRaoFkTmf9ltshKPa0VkLmFMgA==
-X-Received: by 2002:a2e:7a05:0:b0:295:b0c6:834c with SMTP id v5-20020a2e7a05000000b00295b0c6834cmr4377025ljc.41.1679988119719;
-        Tue, 28 Mar 2023 00:21:59 -0700 (PDT)
-Received: from [192.168.16.142] (h-98-128-173-232.A785.priv.bahnhof.se. [98.128.173.232])
-        by smtp.gmail.com with ESMTPSA id c1-20020a2e6801000000b002a421ac8629sm1545157lja.49.2023.03.28.00.21.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Mar 2023 00:21:59 -0700 (PDT)
-Message-ID: <d67784aa-aa21-d7b0-c79a-fa592685110e@kvaser.com>
-Date:   Tue, 28 Mar 2023 09:21:58 +0200
+        d=1e100.net; s=20210112; t=1679988823;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IQemtvhch+zpychTw2wPnm8AfYz48LBPAqThlF3dIgU=;
+        b=pFY6NGHGbIR9jqHoOJ6zPf//migwNPL4ny0TckTUC1rcQqxWVPgBvB7J2kIXu7F8U3
+         NrHtluYmbROoEhntQkVazlSR8rXAUbQ9h/4BXLVpR3x0zWKjEOPppByAxkM1zH0BAiQJ
+         6cNVBhMEew9MjrYMe6hRSqfcxyNXjxcDbS7hOdlkkyLDWQGY35NGzS+3diPtgMsoX+oc
+         DKNrQl8ipgymZT299COuekpN7eKMDlmHCPHHwhdMIp0OG2i2rrfjjh96jauhI/qxnoi7
+         tDSuOWBNIUJkW21iZEjpDWbinWUZBYI58QLQH2lUzrWyn4FQHwfwrHn8TmutEqCRT3fg
+         0Vsg==
+X-Gm-Message-State: AAQBX9e+ir9NsFik67MbaLui338u8GcOEx+QucV6ER0M5K6AGysUY28c
+        FwUOdFkjHjcpRo8UIJqOlsES4Q==
+X-Google-Smtp-Source: AKy350ZKKZTwjymwVYKuJHzbW08nK3OTt+QV0Hz6QQXW10YOGTYY6Tbp/bTXgkSwuXUVY1zISzfGFQ==
+X-Received: by 2002:a17:906:c453:b0:90b:53f6:fd8a with SMTP id ck19-20020a170906c45300b0090b53f6fd8amr16162637ejb.10.1679988822894;
+        Tue, 28 Mar 2023 00:33:42 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-87-0-102-254.retail.telecomitalia.it. [87.0.102.254])
+        by smtp.gmail.com with ESMTPSA id 15-20020a508e4f000000b004fa99a22c3bsm15478850edx.61.2023.03.28.00.33.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 00:33:42 -0700 (PDT)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Rob Herring <robh@kernel.org>,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        michael@amarulasolutions.com,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        Christophe Roullier <christophe.roullier@foss.st.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-can@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org
+Subject: [PATCH v10 0/5] can: bxcan: add support for ST bxCAN controller
+Date:   Tue, 28 Mar 2023 09:33:23 +0200
+Message-Id: <20230328073328.3949796-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH can-next] kvaser_usb: convert USB IDs to hexadecimal
- values
-Content-Language: en-US
-To:     Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
-References: <20230327175344.4668-1-socketcan@hartkopp.net>
-From:   Jimmy Assarsson <extja@kvaser.com>
-In-Reply-To: <20230327175344.4668-1-socketcan@hartkopp.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=0.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 3/27/23 19:53, Oliver Hartkopp wrote:
-> USB IDs are usually represented in 16 bit hexadecimal values.
-> To match the common representation in lsusb and for searching USB IDs
-> in the internet convert the decimal values to hexadecimal.
+The series adds support for the basic extended CAN controller (bxCAN)
+found in many low- to middle-end STM32 SoCs.
 
-Thanks for the patch!
+The driver has been tested on the stm32f469i-discovery board with a
+kernel version 5.19.0-rc2 in loopback + silent mode:
 
-I'm about drop the aligned block indentation, in favour of consistent
-one space indentation, for the entire driver. Feel free to update the
-patch, or I'll fix it in a separate patch later.
+ip link set can0 type can bitrate 125000 loopback on listen-only on
+ip link set up can0
+candump can0 -L &
+cansend can0 300#AC.AB.AD.AE.75.49.AD.D1
 
-Acked-by: Jimmy Assarsson <extja@kvaser.com>
+For uboot and kernel compilation, as well as for rootfs creation I used
+buildroot:
 
-Best regards,
-jimmy
+make stm32f469_disco_sd_defconfig
+make
 
-> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-> Cc: Jimmy Assarsson <extja@kvaser.com>
-> ---
->   .../net/can/usb/kvaser_usb/kvaser_usb_core.c  | 102 +++++++++---------
->   1 file changed, 51 insertions(+), 51 deletions(-)
-> 
-> diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-> index d4c5356d5884..d0015f83f924 100644
-> --- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-> +++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-> @@ -29,67 +29,67 @@
->   #include <linux/can/netlink.h>
->   
->   #include "kvaser_usb.h"
->   
->   /* Kvaser USB vendor id. */
-> -#define KVASER_VENDOR_ID			0x0bfd
-> +#define KVASER_VENDOR_ID			0x0BFD
->   
->   /* Kvaser Leaf USB devices product ids */
-> -#define USB_LEAF_DEVEL_PRODUCT_ID		10
-> -#define USB_LEAF_LITE_PRODUCT_ID		11
-> -#define USB_LEAF_PRO_PRODUCT_ID			12
-> -#define USB_LEAF_SPRO_PRODUCT_ID		14
-> -#define USB_LEAF_PRO_LS_PRODUCT_ID		15
-> -#define USB_LEAF_PRO_SWC_PRODUCT_ID		16
-> -#define USB_LEAF_PRO_LIN_PRODUCT_ID		17
-> -#define USB_LEAF_SPRO_LS_PRODUCT_ID		18
-> -#define USB_LEAF_SPRO_SWC_PRODUCT_ID		19
-> -#define USB_MEMO2_DEVEL_PRODUCT_ID		22
-> -#define USB_MEMO2_HSHS_PRODUCT_ID		23
-> -#define USB_UPRO_HSHS_PRODUCT_ID		24
-> -#define USB_LEAF_LITE_GI_PRODUCT_ID		25
-> -#define USB_LEAF_PRO_OBDII_PRODUCT_ID		26
-> -#define USB_MEMO2_HSLS_PRODUCT_ID		27
-> -#define USB_LEAF_LITE_CH_PRODUCT_ID		28
-> -#define USB_BLACKBIRD_SPRO_PRODUCT_ID		29
-> -#define USB_OEM_MERCURY_PRODUCT_ID		34
-> -#define USB_OEM_LEAF_PRODUCT_ID			35
-> -#define USB_CAN_R_PRODUCT_ID			39
-> -#define USB_LEAF_LITE_V2_PRODUCT_ID		288
-> -#define USB_MINI_PCIE_HS_PRODUCT_ID		289
-> -#define USB_LEAF_LIGHT_HS_V2_OEM_PRODUCT_ID	290
-> -#define USB_USBCAN_LIGHT_2HS_PRODUCT_ID		291
-> -#define USB_MINI_PCIE_2HS_PRODUCT_ID		292
-> -#define USB_USBCAN_R_V2_PRODUCT_ID		294
-> -#define USB_LEAF_LIGHT_R_V2_PRODUCT_ID		295
-> -#define USB_LEAF_LIGHT_HS_V2_OEM2_PRODUCT_ID	296
-> +#define USB_LEAF_DEVEL_PRODUCT_ID		0x000A
-> +#define USB_LEAF_LITE_PRODUCT_ID		0x000B
-> +#define USB_LEAF_PRO_PRODUCT_ID			0x000C
-> +#define USB_LEAF_SPRO_PRODUCT_ID		0x000E
-> +#define USB_LEAF_PRO_LS_PRODUCT_ID		0x000F
-> +#define USB_LEAF_PRO_SWC_PRODUCT_ID		0x0010
-> +#define USB_LEAF_PRO_LIN_PRODUCT_ID		0x0011
-> +#define USB_LEAF_SPRO_LS_PRODUCT_ID		0x0012
-> +#define USB_LEAF_SPRO_SWC_PRODUCT_ID		0x0013
-> +#define USB_MEMO2_DEVEL_PRODUCT_ID		0x0016
-> +#define USB_MEMO2_HSHS_PRODUCT_ID		0x0017
-> +#define USB_UPRO_HSHS_PRODUCT_ID		0x0018
-> +#define USB_LEAF_LITE_GI_PRODUCT_ID		0x0019
-> +#define USB_LEAF_PRO_OBDII_PRODUCT_ID		0x001A
-> +#define USB_MEMO2_HSLS_PRODUCT_ID		0x001B
-> +#define USB_LEAF_LITE_CH_PRODUCT_ID		0x001C
-> +#define USB_BLACKBIRD_SPRO_PRODUCT_ID		0x001D
-> +#define USB_OEM_MERCURY_PRODUCT_ID		0x0022
-> +#define USB_OEM_LEAF_PRODUCT_ID			0x0023
-> +#define USB_CAN_R_PRODUCT_ID			0x0027
-> +#define USB_LEAF_LITE_V2_PRODUCT_ID		0x0120
-> +#define USB_MINI_PCIE_HS_PRODUCT_ID		0x0121
-> +#define USB_LEAF_LIGHT_HS_V2_OEM_PRODUCT_ID	0x0122
-> +#define USB_USBCAN_LIGHT_2HS_PRODUCT_ID		0x0123
-> +#define USB_MINI_PCIE_2HS_PRODUCT_ID		0x0124
-> +#define USB_USBCAN_R_V2_PRODUCT_ID		0x0126
-> +#define USB_LEAF_LIGHT_R_V2_PRODUCT_ID		0x0127
-> +#define USB_LEAF_LIGHT_HS_V2_OEM2_PRODUCT_ID	0x0128
->   
->   /* Kvaser USBCan-II devices product ids */
-> -#define USB_USBCAN_REVB_PRODUCT_ID		2
-> -#define USB_VCI2_PRODUCT_ID			3
-> -#define USB_USBCAN2_PRODUCT_ID			4
-> -#define USB_MEMORATOR_PRODUCT_ID		5
-> +#define USB_USBCAN_REVB_PRODUCT_ID		0x0002
-> +#define USB_VCI2_PRODUCT_ID			0x0003
-> +#define USB_USBCAN2_PRODUCT_ID			0x0004
-> +#define USB_MEMORATOR_PRODUCT_ID		0x0005
->   
->   /* Kvaser Minihydra USB devices product ids */
-> -#define USB_BLACKBIRD_V2_PRODUCT_ID		258
-> -#define USB_MEMO_PRO_5HS_PRODUCT_ID		260
-> -#define USB_USBCAN_PRO_5HS_PRODUCT_ID		261
-> -#define USB_USBCAN_LIGHT_4HS_PRODUCT_ID		262
-> -#define USB_LEAF_PRO_HS_V2_PRODUCT_ID		263
-> -#define USB_USBCAN_PRO_2HS_V2_PRODUCT_ID	264
-> -#define USB_MEMO_2HS_PRODUCT_ID			265
-> -#define USB_MEMO_PRO_2HS_V2_PRODUCT_ID		266
-> -#define USB_HYBRID_2CANLIN_PRODUCT_ID		267
-> -#define USB_ATI_USBCAN_PRO_2HS_V2_PRODUCT_ID	268
-> -#define USB_ATI_MEMO_PRO_2HS_V2_PRODUCT_ID	269
-> -#define USB_HYBRID_PRO_2CANLIN_PRODUCT_ID	270
-> -#define USB_U100_PRODUCT_ID			273
-> -#define USB_U100P_PRODUCT_ID			274
-> -#define USB_U100S_PRODUCT_ID			275
-> -#define USB_USBCAN_PRO_4HS_PRODUCT_ID		276
-> -#define USB_HYBRID_CANLIN_PRODUCT_ID		277
-> -#define USB_HYBRID_PRO_CANLIN_PRODUCT_ID	278
-> +#define USB_BLACKBIRD_V2_PRODUCT_ID		0x0102
-> +#define USB_MEMO_PRO_5HS_PRODUCT_ID		0x0104
-> +#define USB_USBCAN_PRO_5HS_PRODUCT_ID		0x0105
-> +#define USB_USBCAN_LIGHT_4HS_PRODUCT_ID		0x0106
-> +#define USB_LEAF_PRO_HS_V2_PRODUCT_ID		0x0107
-> +#define USB_USBCAN_PRO_2HS_V2_PRODUCT_ID	0x0108
-> +#define USB_MEMO_2HS_PRODUCT_ID			0x0109
-> +#define USB_MEMO_PRO_2HS_V2_PRODUCT_ID		0x010A
-> +#define USB_HYBRID_2CANLIN_PRODUCT_ID		0x010B
-> +#define USB_ATI_USBCAN_PRO_2HS_V2_PRODUCT_ID	0x010C
-> +#define USB_ATI_MEMO_PRO_2HS_V2_PRODUCT_ID	0x010D
-> +#define USB_HYBRID_PRO_2CANLIN_PRODUCT_ID	0x010E
-> +#define USB_U100_PRODUCT_ID			0x0111
-> +#define USB_U100P_PRODUCT_ID			0x0112
-> +#define USB_U100S_PRODUCT_ID			0x0113
-> +#define USB_USBCAN_PRO_4HS_PRODUCT_ID		0x0114
-> +#define USB_HYBRID_CANLIN_PRODUCT_ID		0x0115
-> +#define USB_HYBRID_PRO_CANLIN_PRODUCT_ID	0x0116
->   
->   static const struct kvaser_usb_driver_info kvaser_usb_driver_info_hydra = {
->   	.quirks = KVASER_USB_QUIRK_HAS_HARDWARE_TIMESTAMP,
->   	.ops = &kvaser_usb_hydra_dev_ops,
->   };
+but I had to patch can-utils and busybox as can-utils and iproute are
+not compiled for MMU-less microcotrollers. In the case of can-utils,
+replacing the calls to fork() with vfork(), I was able to compile the
+package with working candump and cansend applications, while in the
+case of iproute, I ran into more than one problem and finally I decided
+to extend busybox's ip link command for CAN-type devices. I'm still
+wondering if it was really necessary, but this way I was able to test
+the driver.
+
+Changes in v10:
+- Fix errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'.
+  Fix the "st,can-primary" description removing the "Note:" word that
+  caused the failure.
+- Slightly change the note text at the top of the driver module. No
+  functional changes.
+
+Changes in v9:
+- Fix commit description formatting. No semantic changes have been made.
+- Replace master/slave terms with primary/secondary.
+- Replace master/slave terms with primary/secondary.
+- Replace master/slave terms with primary/secondary.
+
+Changes in v8:
+- Do not enable the clock in probe and enable/disable it in open/close.
+- Return IRQ_NONE if no IRQ is active.
+
+Changes in v7:
+- Add Vincent Mailhol's Reviewed-by tag.
+- Remove all unused macros for reading/writing the controller registers.
+- Add CAN_ERR_CNT flag to notify availability of error counter.
+- Move the "break" before the newline in the switch/case statements.
+- Print the mnemotechnic instead of the error value in each netdev_err().
+- Remove the debug print for timings parameter.
+- Do not copy the data if CAN_RTR_FLAG is set in bxcan_start_xmit().
+- Populate ndev->ethtool_ops with the default timestamp info.
+
+Changes in v6:
+- move can1 node before gcan to keep ordering by address.
+
+Changes in v5:
+- Add Rob Herring's Acked-by tag.
+- Add Rob Herring's Reviewed-by tag.
+- Put static in front of bxcan_enable_filters() definition.
+
+Changes in v4:
+- Remove "st,stm32f4-bxcan-core" compatible. In this way the can nodes
+ (compatible "st,stm32f4-bxcan") are no longer children of a parent
+  node with compatible "st,stm32f4-bxcan-core".
+- Add the "st,gcan" property (global can memory) to can nodes which
+  references a "syscon" node containing the shared clock and memory
+  addresses.
+- Replace the node can@40006400 (compatible "st,stm32f4-bxcan-core")
+  with the gcan@40006600 node ("sysnode" compatible). The gcan node
+  contains clocks and memory addresses shared by the two can nodes
+  of which it's no longer the parent.
+- Add to can nodes the "st,gcan" property (global can memory) which
+  references the gcan@40006600 node ("sysnode compatibble).
+- Add "dt-bindings: arm: stm32: add compatible for syscon gcan node" patch.
+- Drop the core driver. Thus bxcan-drv.c has been renamed to bxcan.c and
+  moved to the drivers/net/can folder. The drivers/net/can/bxcan directory
+  has therefore been removed.
+- Use the regmap_*() functions to access the shared memory registers.
+- Use spinlock to protect bxcan_rmw().
+- Use 1 space, instead of tabs, in the macros definition.
+- Drop clock ref-counting.
+- Drop unused code.
+- Drop the _SHIFT macros and use FIELD_GET()/FIELD_PREP() directly.
+- Add BXCAN_ prefix to lec error codes.
+- Add the macro BXCAN_RX_MB_NUM.
+- Enable time triggered mode and use can_rx_offload().
+- Use readx_poll_timeout() in function with timeouts.
+- Loop from tail to head in bxcan_tx_isr().
+- Check bits of tsr register instead of pkts variable in bxcan_tx_isr().
+- Don't return from bxcan_handle_state_change() if skb/cf are NULL.
+- Enable/disable the generation of the bus error interrupt depending
+  on can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING.
+- Don't return from bxcan_handle_bus_err() if skb is NULL.
+- Drop statistics updating from bxcan_handle_bus_err().
+- Add an empty line in front of 'return IRQ_HANDLED;'
+- Rename bxcan_start() to bxcan_chip_start().
+- Rename bxcan_stop() to bxcan_chip_stop().
+- Disable all IRQs in bxcan_chip_stop().
+- Rename bxcan_close() to bxcan_ndo_stop().
+- Use writel instead of bxcan_rmw() to update the dlc register.
+
+Changes in v3:
+- Remove 'Dario Binacchi <dariobin@libero.it>' SOB.
+- Add description to the parent of the two child nodes.
+- Move "patterProperties:" after "properties: in top level before "required".
+- Add "clocks" to the "required:" list of the child nodes.
+- Remove 'Dario Binacchi <dariobin@libero.it>' SOB.
+- Add "clocks" to can@0 node.
+- Remove 'Dario Binacchi <dariobin@libero.it>' SOB.
+- Remove a blank line.
+- Remove 'Dario Binacchi <dariobin@libero.it>' SOB.
+- Fix the documentation file path in the MAINTAINERS entry.
+- Do not increment the "stats->rx_bytes" if the frame is remote.
+- Remove pr_debug() call from bxcan_rmw().
+
+Changes in v2:
+- Change the file name into 'st,stm32-bxcan-core.yaml'.
+- Rename compatibles:
+  - st,stm32-bxcan-core -> st,stm32f4-bxcan-core
+  - st,stm32-bxcan -> st,stm32f4-bxcan
+- Rename master property to st,can-master.
+- Remove the status property from the example.
+- Put the node child properties as required.
+- Remove a blank line.
+- Fix sparse errors.
+- Create a MAINTAINERS entry.
+- Remove the print of the registers address.
+- Remove the volatile keyword from bxcan_rmw().
+- Use tx ring algorithm to manage tx mailboxes.
+- Use can_{get|put}_echo_skb().
+- Update DT properties.
+
+Dario Binacchi (5):
+  dt-bindings: arm: stm32: add compatible for syscon gcan node
+  dt-bindings: net: can: add STM32 bxcan DT bindings
+  ARM: dts: stm32: add CAN support on stm32f429
+  ARM: dts: stm32: add pin map for CAN controller on stm32f4
+  can: bxcan: add support for ST bxCAN controller
+
+ .../bindings/arm/stm32/st,stm32-syscon.yaml   |    2 +
+ .../bindings/net/can/st,stm32-bxcan.yaml      |   85 ++
+ MAINTAINERS                                   |    7 +
+ arch/arm/boot/dts/stm32f4-pinctrl.dtsi        |   30 +
+ arch/arm/boot/dts/stm32f429.dtsi              |   29 +
+ drivers/net/can/Kconfig                       |   12 +
+ drivers/net/can/Makefile                      |    1 +
+ drivers/net/can/bxcan.c                       | 1098 +++++++++++++++++
+ 8 files changed, 1264 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/can/st,stm32-bxcan.yaml
+ create mode 100644 drivers/net/can/bxcan.c
+
+-- 
+2.32.0
+
