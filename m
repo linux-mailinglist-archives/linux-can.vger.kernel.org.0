@@ -2,205 +2,133 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8FB26CB9F0
-	for <lists+linux-can@lfdr.de>; Tue, 28 Mar 2023 10:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C57A36CB9C3
+	for <lists+linux-can@lfdr.de>; Tue, 28 Mar 2023 10:47:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbjC1I4H (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 28 Mar 2023 04:56:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50674 "EHLO
+        id S230376AbjC1Iro (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 28 Mar 2023 04:47:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjC1I4H (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 28 Mar 2023 04:56:07 -0400
-X-Greylist: delayed 524 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 28 Mar 2023 01:56:02 PDT
-Received: from mail.thorsis.com (mail.thorsis.com [92.198.35.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB764C3C
-        for <linux-can@vger.kernel.org>; Tue, 28 Mar 2023 01:56:02 -0700 (PDT)
-Date:   Tue, 28 Mar 2023 10:46:21 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=thorsis.com; s=default;
-        t=1679993235;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:content-type:content-type:in-reply-to:in-reply-to:
-         references:references; bh=If2jsVMA2BX5lfw/5B618J24wOj7kR16E9WbHDnxnIA=;
-        b=MsxUy4YTJoqsoE+Hj34hEFS3JQ1tGtxSk8rtBZZuDHvuh7CjyEnmqwBsG7UH/QsfqBSemK
-        La5ujuO7bQb22qIDpu+DV7i27PIXzgbVN6ihcdogslDv6XfElXbNP4LyAnxHOJpy7jffgg
-        WnA1kTAhV0GM/Gq2ijQA3AudR00qFgPm5FV4Z3JlKnVBfyB/kskMTeG5rQy1kJBM1fp0nL
-        eCkBUxBkq07A/5FS2Fu54k91xMCfSqUmclfkeix3bQr4H1tVtxPlMQUWGBJ/YwVG17Ts+S
-        ezj8U0gbJm0lmtUwhmpWps9kee9Az4/SlfF6LEb86whQw38yPhBZaYgzYUYjJA==
-From:   Alexander Dahl <ada@thorsis.com>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     linux-can@vger.kernel.org, Jimmy Assarsson <extja@kvaser.com>
-Subject: Re: [PATCH can-next] kvaser_usb: convert USB IDs to hexadecimal
- values
-Message-ID: <4178cf9c-acdd-4e59-ab70-34623121936a@thorsis.com>
-Mail-Followup-To: Oliver Hartkopp <socketcan@hartkopp.net>,
-        linux-can@vger.kernel.org, Jimmy Assarsson <extja@kvaser.com>
-References: <20230327175344.4668-1-socketcan@hartkopp.net>
-Content-Type: text/plain; charset=us-ascii
+        with ESMTP id S230210AbjC1Irn (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 28 Mar 2023 04:47:43 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14F934C04
+        for <linux-can@vger.kernel.org>; Tue, 28 Mar 2023 01:47:40 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1ph4z7-00020w-1P; Tue, 28 Mar 2023 10:47:17 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id EB51019E085;
+        Tue, 28 Mar 2023 08:47:11 +0000 (UTC)
+Date:   Tue, 28 Mar 2023 10:47:10 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Rob Herring <robh@kernel.org>,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        michael@amarulasolutions.com,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Christophe Roullier <christophe.roullier@foss.st.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-can@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org
+Subject: Re: [PATCH v10 0/5] can: bxcan: add support for ST bxCAN controller
+Message-ID: <20230328084710.jnrwvydewx3atxti@pengutronix.de>
+References: <20230328073328.3949796-1-dario.binacchi@amarulasolutions.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jrabto3ooziwdlnq"
 Content-Disposition: inline
-In-Reply-To: <20230327175344.4668-1-socketcan@hartkopp.net>
-X-Spam-Status: No, score=0.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230328073328.3949796-1-dario.binacchi@amarulasolutions.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Oliver,
 
-Am Mon, Mar 27, 2023 at 07:53:44PM +0200 schrieb Oliver Hartkopp:
-> USB IDs are usually represented in 16 bit hexadecimal values.
-> To match the common representation in lsusb and for searching USB IDs
-> in the internet convert the decimal values to hexadecimal.
+--jrabto3ooziwdlnq
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-lsusb representation on my machines is lowercase for the letters a-f.
-From a quick grep over drivers/usb I can see no clear preference, but
-I'd say more use lowercase.
+On 28.03.2023 09:33:23, Dario Binacchi wrote:
+> The series adds support for the basic extended CAN controller (bxCAN)
+> found in many low- to middle-end STM32 SoCs.
+>=20
+> The driver has been tested on the stm32f469i-discovery board with a
+> kernel version 5.19.0-rc2 in loopback + silent mode:
+>=20
+> ip link set can0 type can bitrate 125000 loopback on listen-only on
+> ip link set up can0
+> candump can0 -L &
+> cansend can0 300#AC.AB.AD.AE.75.49.AD.D1
+>=20
+> For uboot and kernel compilation, as well as for rootfs creation I used
+> buildroot:
+>=20
+> make stm32f469_disco_sd_defconfig
+> make
+>=20
+> but I had to patch can-utils and busybox as can-utils and iproute are
+> not compiled for MMU-less microcotrollers. In the case of can-utils,
+> replacing the calls to fork() with vfork(), I was able to compile the
+> package with working candump and cansend applications, while in the
+> case of iproute, I ran into more than one problem and finally I decided
+> to extend busybox's ip link command for CAN-type devices. I'm still
+> wondering if it was really necessary, but this way I was able to test
+> the driver.
 
-> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-> Cc: Jimmy Assarsson <extja@kvaser.com>
-> ---
->  .../net/can/usb/kvaser_usb/kvaser_usb_core.c  | 102 +++++++++---------
->  1 file changed, 51 insertions(+), 51 deletions(-)
-> 
-> diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-> index d4c5356d5884..d0015f83f924 100644
-> --- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-> +++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-> @@ -29,67 +29,67 @@
->  #include <linux/can/netlink.h>
->  
->  #include "kvaser_usb.h"
->  
->  /* Kvaser USB vendor id. */
-> -#define KVASER_VENDOR_ID			0x0bfd
-> +#define KVASER_VENDOR_ID			0x0BFD
+Applied to linux-can-next.
 
-That would also make this change not needed.
+Thanks,
+Marc
 
->  /* Kvaser Leaf USB devices product ids */
-> -#define USB_LEAF_DEVEL_PRODUCT_ID		10
-> -#define USB_LEAF_LITE_PRODUCT_ID		11
-> -#define USB_LEAF_PRO_PRODUCT_ID			12
-> -#define USB_LEAF_SPRO_PRODUCT_ID		14
-> -#define USB_LEAF_PRO_LS_PRODUCT_ID		15
-> -#define USB_LEAF_PRO_SWC_PRODUCT_ID		16
-> -#define USB_LEAF_PRO_LIN_PRODUCT_ID		17
-> -#define USB_LEAF_SPRO_LS_PRODUCT_ID		18
-> -#define USB_LEAF_SPRO_SWC_PRODUCT_ID		19
-> -#define USB_MEMO2_DEVEL_PRODUCT_ID		22
-> -#define USB_MEMO2_HSHS_PRODUCT_ID		23
-> -#define USB_UPRO_HSHS_PRODUCT_ID		24
-> -#define USB_LEAF_LITE_GI_PRODUCT_ID		25
-> -#define USB_LEAF_PRO_OBDII_PRODUCT_ID		26
-> -#define USB_MEMO2_HSLS_PRODUCT_ID		27
-> -#define USB_LEAF_LITE_CH_PRODUCT_ID		28
-> -#define USB_BLACKBIRD_SPRO_PRODUCT_ID		29
-> -#define USB_OEM_MERCURY_PRODUCT_ID		34
-> -#define USB_OEM_LEAF_PRODUCT_ID			35
-> -#define USB_CAN_R_PRODUCT_ID			39
-> -#define USB_LEAF_LITE_V2_PRODUCT_ID		288
-> -#define USB_MINI_PCIE_HS_PRODUCT_ID		289
-> -#define USB_LEAF_LIGHT_HS_V2_OEM_PRODUCT_ID	290
-> -#define USB_USBCAN_LIGHT_2HS_PRODUCT_ID		291
-> -#define USB_MINI_PCIE_2HS_PRODUCT_ID		292
-> -#define USB_USBCAN_R_V2_PRODUCT_ID		294
-> -#define USB_LEAF_LIGHT_R_V2_PRODUCT_ID		295
-> -#define USB_LEAF_LIGHT_HS_V2_OEM2_PRODUCT_ID	296
-> +#define USB_LEAF_DEVEL_PRODUCT_ID		0x000A
-> +#define USB_LEAF_LITE_PRODUCT_ID		0x000B
-> +#define USB_LEAF_PRO_PRODUCT_ID			0x000C
-> +#define USB_LEAF_SPRO_PRODUCT_ID		0x000E
-> +#define USB_LEAF_PRO_LS_PRODUCT_ID		0x000F
-> +#define USB_LEAF_PRO_SWC_PRODUCT_ID		0x0010
-> +#define USB_LEAF_PRO_LIN_PRODUCT_ID		0x0011
-> +#define USB_LEAF_SPRO_LS_PRODUCT_ID		0x0012
-> +#define USB_LEAF_SPRO_SWC_PRODUCT_ID		0x0013
-> +#define USB_MEMO2_DEVEL_PRODUCT_ID		0x0016
-> +#define USB_MEMO2_HSHS_PRODUCT_ID		0x0017
-> +#define USB_UPRO_HSHS_PRODUCT_ID		0x0018
-> +#define USB_LEAF_LITE_GI_PRODUCT_ID		0x0019
-> +#define USB_LEAF_PRO_OBDII_PRODUCT_ID		0x001A
-> +#define USB_MEMO2_HSLS_PRODUCT_ID		0x001B
-> +#define USB_LEAF_LITE_CH_PRODUCT_ID		0x001C
-> +#define USB_BLACKBIRD_SPRO_PRODUCT_ID		0x001D
-> +#define USB_OEM_MERCURY_PRODUCT_ID		0x0022
-> +#define USB_OEM_LEAF_PRODUCT_ID			0x0023
-> +#define USB_CAN_R_PRODUCT_ID			0x0027
-> +#define USB_LEAF_LITE_V2_PRODUCT_ID		0x0120
-> +#define USB_MINI_PCIE_HS_PRODUCT_ID		0x0121
-> +#define USB_LEAF_LIGHT_HS_V2_OEM_PRODUCT_ID	0x0122
-> +#define USB_USBCAN_LIGHT_2HS_PRODUCT_ID		0x0123
-> +#define USB_MINI_PCIE_2HS_PRODUCT_ID		0x0124
-> +#define USB_USBCAN_R_V2_PRODUCT_ID		0x0126
-> +#define USB_LEAF_LIGHT_R_V2_PRODUCT_ID		0x0127
-> +#define USB_LEAF_LIGHT_HS_V2_OEM2_PRODUCT_ID	0x0128
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129  |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-Decimal match hex.
+--jrabto3ooziwdlnq
+Content-Type: application/pgp-signature; name="signature.asc"
 
->  /* Kvaser USBCan-II devices product ids */
-> -#define USB_USBCAN_REVB_PRODUCT_ID		2
-> -#define USB_VCI2_PRODUCT_ID			3
-> -#define USB_USBCAN2_PRODUCT_ID			4
-> -#define USB_MEMORATOR_PRODUCT_ID		5
-> +#define USB_USBCAN_REVB_PRODUCT_ID		0x0002
-> +#define USB_VCI2_PRODUCT_ID			0x0003
-> +#define USB_USBCAN2_PRODUCT_ID			0x0004
-> +#define USB_MEMORATOR_PRODUCT_ID		0x0005
+-----BEGIN PGP SIGNATURE-----
 
-Decimal match hex.
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQiqYsACgkQvlAcSiqK
+BOgCXAf+NWJnGcM64I8QZW2GZ+4p1b5BV4hNDu4ehwwXOtajDqX0icFMJ+ADogBm
+1OPOaNIWM5FLmL8Psn9S2O7DIH30kTJub7X58xxQl2vw9AVvg2ufgXFsrWrNcbR0
+7lrbOzY4ghA7jXXWu7bya2sZ2OPp4xvF4zJRHF1axJ9Y4mWZ5UUomyhMc2It6nNV
+MImbzZWnuFBLQxbUXefUz0CgEMCdi8N1hpJ2rHkNR0LPTVIGFDLtxBkj7rsvn/nj
+eG2Q6WVQEFz/BWdc2e0xMjbvH5cWfp+tDDhh8UAwjSzUFCHm9sbZsXQQ5+j1S2kh
+y2zuT0AX2HJPn+sJLsz9wM8SsswTmQ==
+=7WBc
+-----END PGP SIGNATURE-----
 
->  /* Kvaser Minihydra USB devices product ids */
-> -#define USB_BLACKBIRD_V2_PRODUCT_ID		258
-> -#define USB_MEMO_PRO_5HS_PRODUCT_ID		260
-> -#define USB_USBCAN_PRO_5HS_PRODUCT_ID		261
-> -#define USB_USBCAN_LIGHT_4HS_PRODUCT_ID		262
-> -#define USB_LEAF_PRO_HS_V2_PRODUCT_ID		263
-> -#define USB_USBCAN_PRO_2HS_V2_PRODUCT_ID	264
-> -#define USB_MEMO_2HS_PRODUCT_ID			265
-> -#define USB_MEMO_PRO_2HS_V2_PRODUCT_ID		266
-> -#define USB_HYBRID_2CANLIN_PRODUCT_ID		267
-> -#define USB_ATI_USBCAN_PRO_2HS_V2_PRODUCT_ID	268
-> -#define USB_ATI_MEMO_PRO_2HS_V2_PRODUCT_ID	269
-> -#define USB_HYBRID_PRO_2CANLIN_PRODUCT_ID	270
-> -#define USB_U100_PRODUCT_ID			273
-> -#define USB_U100P_PRODUCT_ID			274
-> -#define USB_U100S_PRODUCT_ID			275
-> -#define USB_USBCAN_PRO_4HS_PRODUCT_ID		276
-> -#define USB_HYBRID_CANLIN_PRODUCT_ID		277
-> -#define USB_HYBRID_PRO_CANLIN_PRODUCT_ID	278
-> +#define USB_BLACKBIRD_V2_PRODUCT_ID		0x0102
-> +#define USB_MEMO_PRO_5HS_PRODUCT_ID		0x0104
-> +#define USB_USBCAN_PRO_5HS_PRODUCT_ID		0x0105
-> +#define USB_USBCAN_LIGHT_4HS_PRODUCT_ID		0x0106
-> +#define USB_LEAF_PRO_HS_V2_PRODUCT_ID		0x0107
-> +#define USB_USBCAN_PRO_2HS_V2_PRODUCT_ID	0x0108
-> +#define USB_MEMO_2HS_PRODUCT_ID			0x0109
-> +#define USB_MEMO_PRO_2HS_V2_PRODUCT_ID		0x010A
-> +#define USB_HYBRID_2CANLIN_PRODUCT_ID		0x010B
-> +#define USB_ATI_USBCAN_PRO_2HS_V2_PRODUCT_ID	0x010C
-> +#define USB_ATI_MEMO_PRO_2HS_V2_PRODUCT_ID	0x010D
-> +#define USB_HYBRID_PRO_2CANLIN_PRODUCT_ID	0x010E
-> +#define USB_U100_PRODUCT_ID			0x0111
-> +#define USB_U100P_PRODUCT_ID			0x0112
-> +#define USB_U100S_PRODUCT_ID			0x0113
-> +#define USB_USBCAN_PRO_4HS_PRODUCT_ID		0x0114
-> +#define USB_HYBRID_CANLIN_PRODUCT_ID		0x0115
-> +#define USB_HYBRID_PRO_CANLIN_PRODUCT_ID	0x0116
-
-Decimal match hex.  So for the actual values:
-
-Reviewed-by: Alexander Dahl <ada@thorsis.com>
-
-Greets
-Alex
-
->  
->  static const struct kvaser_usb_driver_info kvaser_usb_driver_info_hydra = {
->  	.quirks = KVASER_USB_QUIRK_HAS_HARDWARE_TIMESTAMP,
->  	.ops = &kvaser_usb_hydra_dev_ops,
->  };
-> -- 
-> 2.30.2
-> 
+--jrabto3ooziwdlnq--
