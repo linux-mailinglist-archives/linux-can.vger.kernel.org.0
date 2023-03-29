@@ -2,72 +2,77 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BFE06CCC66
-	for <lists+linux-can@lfdr.de>; Tue, 28 Mar 2023 23:57:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9EA66CD22D
+	for <lists+linux-can@lfdr.de>; Wed, 29 Mar 2023 08:41:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbjC1V5X (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 28 Mar 2023 17:57:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53650 "EHLO
+        id S229738AbjC2GlM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 29 Mar 2023 02:41:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbjC1V5U (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 28 Mar 2023 17:57:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087D3270B;
-        Tue, 28 Mar 2023 14:57:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F316DB81EE3;
-        Tue, 28 Mar 2023 21:57:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EF81C433D2;
-        Tue, 28 Mar 2023 21:56:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680040619;
-        bh=EPCiwUL07Ou55Zwnf38AT7f1Gi9ehHg91AFs035DmEk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=c8SOygukOymSpvK1qkQba/J6jUIMOfj9hwR1mWvFIoq7Z/msNqRtIzBb8NUVc+yVC
-         1xuXpNhA5XjIySaBOn+E8NxSpRX+lANf77N/NojM8vAPqW9OoBcXUulZe3BED2uc7O
-         IYmmfIWWqJbyVwLrY8t5sU1kS8p/vYtQalgXMIgR5yXLdODBidshZgACcieVJufKM3
-         pn+WopttQMu5FLnDfG3TY3Su3nLs+j1yuVZkhTj5ClPdD+/+QpYRXe7yJ811s912KK
-         17xR7n/K8UXd3S2lmOwtIYlhD/O/kREY4Ns4CJf3yMGCm4kP2cazr9d4Iu3rgP1LYP
-         gPpXrHe7kKKMw==
-Date:   Tue, 28 Mar 2023 14:56:58 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net,
-        linux-can@vger.kernel.org, kernel@pengutronix.de,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Simon Horman <simon.horman@corigine.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: Re: [PATCH net-next 01/11] can: rcar_canfd: Add transceiver support
-Message-ID: <20230328145658.7fdbc394@kernel.org>
-In-Reply-To: <20230327073354.1003134-2-mkl@pengutronix.de>
-References: <20230327073354.1003134-1-mkl@pengutronix.de>
-        <20230327073354.1003134-2-mkl@pengutronix.de>
+        with ESMTP id S229730AbjC2GlL (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 29 Mar 2023 02:41:11 -0400
+Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF09530E8
+        for <linux-can@vger.kernel.org>; Tue, 28 Mar 2023 23:41:04 -0700 (PDT)
+Received: from ramsan.of.borg ([84.195.187.55])
+        by xavier.telenet-ops.be with bizsmtp
+        id e6gy2900J1C8whw016gyme; Wed, 29 Mar 2023 08:41:02 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1phPTi-00FCaj-HO;
+        Wed, 29 Mar 2023 08:40:58 +0200
+Received: from geert by rox.of.borg with local (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1phPUQ-006YmR-JE;
+        Wed, 29 Mar 2023 08:40:58 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] can: rcar_canfd: Fix plain integer in transceivers[] init
+Date:   Wed, 29 Mar 2023 08:40:55 +0200
+Message-Id: <7f7b0dde0caa2d2977b4fb5b65b63036e75f5022.1680071972.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.4 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, 27 Mar 2023 09:33:44 +0200 Marc Kleine-Budde wrote:
-> @@ -1836,6 +1849,7 @@ static void rcar_canfd_channel_remove(struct rcar_canfd_global *gpriv, u32 ch)
->  
->  static int rcar_canfd_probe(struct platform_device *pdev)
->  {
-> +	struct phy *transceivers[RCANFD_NUM_CHANNELS] = { 0, };
->  	const struct rcar_canfd_hw_info *info;
->  	struct device *dev = &pdev->dev;
->  	void __iomem *addr;
+With C=1:
 
-[somehow this got stuck in my outgoing mail]
+    drivers/net/can/rcar/rcar_canfd.c:1852:59: warning: Using plain integer as NULL pointer
 
-drivers/net/can/rcar/rcar_canfd.c:1852:59: warning: Using plain integer as NULL pointer
+Fixes: a0340df7eca4f28e ("can: rcar_canfd: Add transceiver support")
+Reported-by: Jakub Kicinski <kuba@kernel.org>
+Link: https://lore.kernel.org/r/20230328145658.7fdbc394@kernel.org
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ drivers/net/can/rcar/rcar_canfd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Could you follow up with a fix fix?
+diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
+index ecdb8ffe2f670c9b..11626d2a0afb1a90 100644
+--- a/drivers/net/can/rcar/rcar_canfd.c
++++ b/drivers/net/can/rcar/rcar_canfd.c
+@@ -1848,7 +1848,7 @@ static void rcar_canfd_channel_remove(struct rcar_canfd_global *gpriv, u32 ch)
+ 
+ static int rcar_canfd_probe(struct platform_device *pdev)
+ {
+-	struct phy *transceivers[RCANFD_NUM_CHANNELS] = { 0, };
++	struct phy *transceivers[RCANFD_NUM_CHANNELS] = { NULL, };
+ 	const struct rcar_canfd_hw_info *info;
+ 	struct device *dev = &pdev->dev;
+ 	void __iomem *addr;
+-- 
+2.34.1
+
