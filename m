@@ -2,102 +2,135 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D72B6D0C21
-	for <lists+linux-can@lfdr.de>; Thu, 30 Mar 2023 19:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C3386D0CBB
+	for <lists+linux-can@lfdr.de>; Thu, 30 Mar 2023 19:25:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbjC3RDM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 30 Mar 2023 13:03:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54120 "EHLO
+        id S232420AbjC3RZ1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 30 Mar 2023 13:25:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231587AbjC3RDJ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 30 Mar 2023 13:03:09 -0400
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6127B213C
-        for <linux-can@vger.kernel.org>; Thu, 30 Mar 2023 10:02:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1680195775; cv=none;
+        with ESMTP id S232410AbjC3RZL (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 30 Mar 2023 13:25:11 -0400
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CAAE1A0
+        for <linux-can@vger.kernel.org>; Thu, 30 Mar 2023 10:25:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1680197105; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=EZwFkqYw6UVslz7DiFo24Q79VTju0uogACAsWRw7/6W3kex35FqGjLl/to6Eh8Deja
-    7toaVLSYNdRlH7drAQkLSj21dmsZliGkQTvP3d6D90o5hibhEdc4/qHqn06vev3kokP1
-    5x5cRFYSElq8azKxBI+fi8hrQ3KC4H4Nnz4pg61QMDAWB8CyOZ2q04hSoXqn8r3ug3nE
-    vmo5tM0nJTWL5gSbFiY5+tdq8WSjUjpRKt2e2m7Ht5PKK2L5UuPrsabMwFL+YEyX1FTL
-    Dl6jPmmVccndIt6JiVcUOrmxSzgm6Q0WIDUTknwE7BwLPHhrxQljKCY8Z1KN1D8PrPVv
-    mg+Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1680195775;
+    b=isXloYelLA1tYBgEPb8gEhl8R2XjQxexpVZoOoDAoduGvPLiFL6fNGgCPZCnUONs7+
+    1y1MrJQq1HI+ia1Q+CRTY9E8mx8h+msQTpPvlG3MkiF8lD3cZVbKz8DHZKeSSA59PduE
+    scu4GmUPuZdyD9DhiC66Ukw37OD8oXyccCS2jwgSJ7fre5nbgsMMG/xgrKKE1lmzTlZb
+    6h/QvksW/6vOjKIuGs9czpz3w9xtG/0nWqwt0nqyaTJuu6ZStmem6uFFrkViHHy3VWbV
+    VU6SQxctwNT7CrEU1el6hlvbpwZY0Xqfu1d7mAR53dsqxkrzge5cnc2e4Bq3zRIwqNn7
+    iRPA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1680197105;
     s=strato-dkim-0002; d=strato.com;
-    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=PnrJ49A8P2QXYkF261xzJD2DOzYc2TPKoQ5uUNNMR1Y=;
-    b=bVpfVbGP9bMBEDut55D5v8kWWsPc9ZyzhXhOGPFluUOJoIFG1bR3XjyC1Ga8DrqtD6
-    OGPqCB5tW7L9dD0giyEv8gervY4d9zNDdWGkN7exqrBSJMrkYXPhjIcB78MLzMOW49Kl
-    jR7EGy9PzIyqNCrtP4o+DxRkG2O3Yqperkv8T8zUTjJ2SYkuKB93FHrRuVtp6JiUe47c
-    DT0ul1ky97Ru5gMqd5cnaxQ1YS5x/Ab/TA4Urr0WA8i47TwWu5peP9WNyeQ/C49jsL8s
-    5D7gS86h2uoOPltfgu1D444I9Sa9+9GhnwKNjFLZ39G0bY/5KcLsocE4UEqayQpOSaQb
-    u9WA==
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=0eP5jMK/9gfK1S6yl7hP7Hslg5r2p4GX6yEXMmg0tHk=;
+    b=SjGOvzWS5RK0ZFxVygcOPee+OiXohXPjb1Vd+3+fgXEyE9+ctHzJpzPU7+Q4chUUdD
+    b2jGjm8d9E9amS+TCQglsCTaCo38wr96duRxKoyZmfa6mj5vME4ynXRTfylnWnvBGXT6
+    raZwJdtxpi3LwJ8CIP5+iZC71RC7/WHLXb1icNxziJj5x2cZy5URppy+0BRXM+7ApFi0
+    sNpbYtwqLbem1r1Jk5RKaJoWxb6Cucr5D3ogXdGTbtD8bdri8yYl6qfh+6FV7v2+1yrU
+    USGYleG7vNUb6p7/Eixehd8vHUkXHkyIzpnb+NqwBtnmnlavxLGk+MFk0NePwJZV5UWV
+    jZow==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
 X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1680195775;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1680197105;
     s=strato-dkim-0002; d=hartkopp.net;
-    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=PnrJ49A8P2QXYkF261xzJD2DOzYc2TPKoQ5uUNNMR1Y=;
-    b=QjAzhQ8UabWdzZtUezwtJ6EyLaounS6pFES/RWLlzzOYAgDjh1sy957inREwf+X+od
-    geMlM8TCatLwXqzbEaDCFkNSk6pFbPvCowuFIIbjOBfbHbKCq2bMYXrIF7fqhivzeCyY
-    kzIA/9OeE+2gifuGQEuMWd7pN8PJv+U8GRzTXPPxQLpQJKXugL07LblJM1x8c3TqFXfk
-    EMBPmYY0edsKGWitJjhcVekmGf/3ptk0Tn7jvYb42fgrQBlBBKa3U2tJAEPFovvaO5IK
-    P74i2H0y2XqrXSfcIM0JfWTjuKMlPtwDoOGauhzCQVYAR2U3iMWG2t3uRusSwhIsjP1N
-    JKJw==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS/xvEBL7X5sbo3VYpXsQi7qV3YmVcfh+rd"
-Received: from silver.lan
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=0eP5jMK/9gfK1S6yl7hP7Hslg5r2p4GX6yEXMmg0tHk=;
+    b=KxEoZW3iyybdqJRSQQWuphF9uSZDOoMVEonsgBx54QlOFluZQTH3BBuGYc0EcakUwJ
+    fvgJ2z3bhwGgMQ+U4Hvzw+gpDSppO/gMdqelHTWKwgMhXFV8Iplm1OU6NHAXMruL3d13
+    z9icwETE91nHrTs8EVn3f8fgKs1yywxaZ2US5wme/SIkTSoDpfGVj5BWZCrn4pIZ1Tb+
+    /2Jvq22oAD6w7E5PI1A0CQ3yaX4PSBn0hMLJ2MsnW2ShCgQwEZGD+BHblEJ1AYwAirT0
+    HIsySq3ogQ67lGH9zqRBi4pvIxqHg+UOjPT3SauLHEqk7TxqZ93OxxkbkphG22DZWe0M
+    l9iw==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusl129OHEdFq0USEbDUQnQ=="
+Received: from [IPV6:2a00:6020:4a8e:5000::923]
     by smtp.strato.de (RZmta 49.3.1 AUTH)
-    with ESMTPSA id n9397fz2UH2sgtL
+    with ESMTPSA id n9397fz2UHP5gun
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-    Thu, 30 Mar 2023 19:02:54 +0200 (CEST)
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-To:     linux-can@vger.kernel.org
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: [PATCH] can: isotp: use sock_recv_cmsgs() to get SOCK_RXQ_OVFL infos
-Date:   Thu, 30 Mar 2023 19:02:48 +0200
-Message-Id: <20230330170248.62342-1-socketcan@hartkopp.net>
-X-Mailer: git-send-email 2.30.2
+    Thu, 30 Mar 2023 19:25:05 +0200 (CEST)
+Message-ID: <11c6b18a-c445-41f1-c11e-b42573d1621c@hartkopp.net>
+Date:   Thu, 30 Mar 2023 19:24:59 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="us-ascii"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: Lost packets on ISO-TP and vcan
+To:     Michal Sojka <michal.sojka@cvut.cz>,
+        Jakub Jira <jirajak2@fel.cvut.cz>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can <linux-can@vger.kernel.org>
+References: <b53a04a2-ba1f-3858-84c1-d3eb3301ae15@hartkopp.net>
+ <878rghtt0p.fsf@steelpick.2x.cz>
+ <08d8e225-0e7a-a75f-f8fa-e4a8ce99d4a4@hartkopp.net>
+ <87zg8vjyqg.fsf@steelpick.2x.cz>
+ <40f9aad6-81be-e442-2668-cb349fe7313f@hartkopp.net>
+ <87mt4tu4ow.fsf@steelpick.2x.cz>
+Content-Language: en-US
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <87mt4tu4ow.fsf@steelpick.2x.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-isotp.c was still using sock_recv_timestamp() which does not provide
-control messages to detect dropped PDUs in the receive path.
+Hi all,
 
-Fixes: e057dd3fc20f ("can: add ISO 15765-2:2016 transport protocol")
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
----
- net/can/isotp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 03.03.23 18:26, Michal Sojka wrote:
 
-diff --git a/net/can/isotp.c b/net/can/isotp.c
-index 9bc344851704..47c2ebad10ed 100644
---- a/net/can/isotp.c
-+++ b/net/can/isotp.c
-@@ -1118,11 +1118,11 @@ static int isotp_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
- 
- 	ret = memcpy_to_msg(msg, skb->data, size);
- 	if (ret < 0)
- 		goto out_err;
- 
--	sock_recv_timestamp(msg, sk, skb);
-+	sock_recv_cmsgs(msg, sk, skb);
- 
- 	if (msg->msg_name) {
- 		__sockaddr_check_size(ISOTP_MIN_NAMELEN);
- 		msg->msg_namelen = ISOTP_MIN_NAMELEN;
- 		memcpy(msg->msg_name, skb->cb, msg->msg_namelen);
--- 
-2.30.2
+> I tried the exact same commit. When the system running the test is
+> mostly idle, I have to wait many minutes to loose the packet. But when I
+> run the test simultaneously with Linux kernel compilation on all CPUs
+> (make -j$(nproc)), the packet is lost almost immediately.
+> 
+> I'm still testing with:
+> 
+> - receiver: ./isotp-poll-test -s 321 -d 123 -i -a -b -q
+> - sender:   ./isotp-poll-test -s 123 -d 321 -o -w -b
+> 
 
+I've performed some more tests.
+
+The poll V2 patch seems to do the job!
+
+The problem with the kernel compilation is caused by scheduling in the 
+way that the receiving process is not fast enough to grab the PDUs from 
+the socket until the socket receive buffer gets an overflow.
+
+To prove this idea I added the possibility to detect dropped PDUs in the 
+recvmsg() syscall of isotp.c, see:
+
+https://lore.kernel.org/linux-can/20230330170248.62342-1-socketcan@hartkopp.net/T/#u
+
+Additionally the isotp-pool-test was extended to retrieve the 
+SOCK_RXQ_OVFL information.
+
+And then "compiling the kernel" the drop counter triggered every time.
+
+So I added the option the increase the sockets receive buffer and with
+
+./isotp-poll-test -s 321 -d 123 -i -a -b -r 20000000
+
+(as root)
+
+the drops were gone - even when compiling the kernel.
+
+See https://github.com/hartkopp/isotp-poll-test for the extensions of 
+isotp-pool-test.c
+
+@Michal/Jakub: Feel free to try this out.
+
+Thanks & best regards,
+Oliver
