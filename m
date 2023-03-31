@@ -2,71 +2,71 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 973946D2125
-	for <lists+linux-can@lfdr.de>; Fri, 31 Mar 2023 15:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC0F26D2163
+	for <lists+linux-can@lfdr.de>; Fri, 31 Mar 2023 15:20:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232739AbjCaNHN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 31 Mar 2023 09:07:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43420 "EHLO
+        id S231775AbjCaNUO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 31 Mar 2023 09:20:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232734AbjCaNHM (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 31 Mar 2023 09:07:12 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA631206C
-        for <linux-can@vger.kernel.org>; Fri, 31 Mar 2023 06:07:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1680268019; cv=none;
+        with ESMTP id S232466AbjCaNTu (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 31 Mar 2023 09:19:50 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46B02061F
+        for <linux-can@vger.kernel.org>; Fri, 31 Mar 2023 06:19:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1680268781; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=IuzCKHqRRcX2KYcK9k6b6aCn/GGekkUWd6L/3u/QvB7N+OkztzYAuoFrh8EVQXpUjY
-    kK2jO/Vj7jlaZFpVB1TGNefr+4UszxPO8b4NEnT6VlYEL6vT+yA1ef4LDKv+SylxA/Yq
-    uyDcrgKl+5PRfgix1VGJ1bMIRPBe8LuGZNk80LIUDNatOMfnQRg7N+rrZnlDOtf+kep8
-    ml2dLK1YMZ9fnGmHyNLbi1wIoJAVpkrU7FCg6hiFXtNYzYfG5KU9WqS2kutBDFS4CjDi
-    vq9CaUCPDhMEkIdquI7ZSENrjeh9AKiWB14PHrO9/wUPKhcbYA2Dcf7gs32g4eINK/na
-    zjfA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1680268019;
+    b=DO2S4DkIXxYp4G1ESUUmEo4i+11iXiM9fPRif5CRH8aU2RBevGNj8EGt1SPRn13mSr
+    yWvB167+0UVRWCeRjtPcWCzFhDSmj0TxuJx1npVOyp2ogUGuBmm4/fmtwEyenobSh/bB
+    KRKKhi+UOZ1YVqTyIJuXQbyKJsS2j67yZzPNbxaa7yy0myJuQoN+LrLN2VtbMY34Yyt9
+    Q5t2/0JQioDGYH5oKMYN+WJtjdhYI7TK0ns9W/I5CeD3574UpjyMe3mvr3+dvCPT6uAo
+    40C/am82hvy7qW12jyQMivpOLTSKJpfWxTT9B1ftFTzTWbrEQJ0q8z3/I4h1iPPRusms
+    RWYA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1680268781;
     s=strato-dkim-0002; d=strato.com;
     h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=oNxeZ2eVNxHzSD9+MOvqgG3dnPpOJ5ZoVEw8lgSs83Q=;
-    b=EIAzRGu0rvS0/jmztY9C2OHouNo5POLTNRoY9w3qPH1gtjbEF+EAoIYdwrQC2QGSGd
-    JwQEkCxEo0fsv9JCesgw5eLT17+bD909ynmcYPigLUCoR8gJ99aCpKGcBshShKythTPw
-    tkL5pRk07ad/FBvInNaFAChAaic8oWVIUl95pDWBD7FRMFoa7io0+7s4Y45lQeB+me2s
-    NDajvb4wwziiuc2OhvEqG1adCoVpjufdNcJH10cEo97igS3jf3bZBsOlp7jvFHZ0/iiQ
-    Tvyp4Ba8oxJ3/yzhTdigMCYOoUhDOyW6kQUc6N3TbUxFW6V9pg1JbvfI75wjEm872A5h
-    /TnA==
+    bh=09P2NJkLlDUQBTMaurZVBxCduoKUiiwVyLlWmL4EEyo=;
+    b=m3o6cLV3/oRsuDNls8w+JNVtSfvkBmm6JSIv0Vv0miGgevUj3bYBfU/GmcOiOBx+cI
+    sOlx8+vlkaG01MhFVBqNqSMdQBD1jfIY5hgJF0LAcslTV6/kWU3wIMD3j83U+bmAviG4
+    7hyhBp84Xwa4xld4UNJD8ZyARx1X5gyNz0ESMRGm764IgNiivaIg/jXFqSF98hmfl2JJ
+    Wy69t6i2u/5pRg+hiZY+eCoA/n0QrtFm5Jddi5ZJERKOzX+ta5fAz2rWEkWHFKPytzkA
+    3Qp3NH4BeGLuKnJTIXpWsaNnrcsN2QuqBAIMSgQvgTjcQAW7TTtAtmMTE2eUTvNbF9TY
+    YMdQ==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
 X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1680268019;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1680268781;
     s=strato-dkim-0002; d=hartkopp.net;
     h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=oNxeZ2eVNxHzSD9+MOvqgG3dnPpOJ5ZoVEw8lgSs83Q=;
-    b=qPbPC75SZ6q6y/oCnqS09WjnpPT2v/onpggXYy6/o2zAQI94V4NjjJmqLlEthYKNFP
-    5HqR2dgTBkZIu/VfzHMWkVjTRDPhCbnJfnoFyhlHrGG2rkPqqHF+HjJUnaSXsN+btMPD
-    YhA4Jkjy3s0HHss1FryYuiO1vAhUMK8TaKYUKWfGWdkZJB/t75MDBPqAb9LT6fEEoSx6
-    1hklA7XQW7v8khpukhgqDi4JmxgpOW0PQfGvv2JCvHEFdq3IIC0t1TvLo1l/B1HRyCs+
-    zsrLTTtn7t2s8pF71Ka6J2crsJNehetP8QN8/wDIOg7GIIHhAwAjx0+sOSsgWng+I644
-    FVLA==
+    bh=09P2NJkLlDUQBTMaurZVBxCduoKUiiwVyLlWmL4EEyo=;
+    b=DC3N376pclMkUoZuzqEvLEA4pmZ5y2opD+qnQO4iymAWVdpHIMuGXYmXhu9SNat7eB
+    UzgEpeaSNbC2LaOwPDv8yHt+jLttMmpXIm030jA5FuJjbImKiJS6j4wm0mT03WFjAugn
+    Gf8qvtzJhrbtIH7AiMxuTYF5PDMjisKISHwuhYhmOApylX+CuEchkLlHrQO/M4UIRjuD
+    CQu4N0StFtgiaZDc9Z5OoQHYsFGasuQdwFVgwVFV1tyuj5cbsDBub9+/7uuxHiZo27W7
+    ZY590ZvICVX+wIKnjTNPw1ERCSIdeW2NhDT4lNnk6czHK9j4qH8pBn9EsnpyM4K7R7/V
+    t8CA==
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS/xvEBL7X5sbo3VYpXsQi7qV3YmVcfh+rd"
 Received: from silver.lan
     by smtp.strato.de (RZmta 49.3.1 AUTH)
-    with ESMTPSA id n9397fz2VD6xjNv
+    with ESMTPSA id n9397fz2VDJejQ7
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-    Fri, 31 Mar 2023 15:06:59 +0200 (CEST)
+    Fri, 31 Mar 2023 15:19:40 +0200 (CEST)
 From:   Oliver Hartkopp <socketcan@hartkopp.net>
 To:     linux-can@vger.kernel.org
 Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
         "Dae R . Jeong" <threeearcat@gmail.com>,
         Hillf Danton <hdanton@sina.com>
-Subject: [RFC PATCH v3] can: isotp: fix race between isotp_sendsmg() and isotp_release()
-Date:   Fri, 31 Mar 2023 15:06:54 +0200
-Message-Id: <20230331130654.9886-1-socketcan@hartkopp.net>
+Subject: [RFC PATCH v4] can: isotp: fix race between isotp_sendsmg() and isotp_release()
+Date:   Fri, 31 Mar 2023 15:19:35 +0200
+Message-Id: <20230331131935.21465-1-socketcan@hartkopp.net>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,12 +93,14 @@ v2: take care of signal interrupts for wait_event_interruptible() in
     isotp_release()
 v3: take care of signal interrupts for wait_event_interruptible() in
     isotp_sendmsg() in the wait_tx_done case
-
+v4: take care of signal interrupts for wait_event_interruptible() in
+    isotp_sendmsg() in ALL cases
+    
  net/can/isotp.c | 55 ++++++++++++++++++++++++++++---------------------
  1 file changed, 31 insertions(+), 24 deletions(-)
 
 diff --git a/net/can/isotp.c b/net/can/isotp.c
-index 9bc344851704..7928dc9ddb80 100644
+index 9bc344851704..f70ee4cf4997 100644
 --- a/net/can/isotp.c
 +++ b/net/can/isotp.c
 @@ -117,11 +117,12 @@ MODULE_ALIAS("can-proto-6");
@@ -168,7 +170,7 @@ index 9bc344851704..7928dc9ddb80 100644
 +	/* wait for complete transmission of current pdu */
 +	err = wait_event_interruptible(so->wait, so->tx.state == ISOTP_IDLE);
 +	if (err)
-+		return err;
++		goto err_event_drop;
  
 -		so->tx.state = ISOTP_SENDING;
 +	if (cmpxchg(&so->tx.state, ISOTP_IDLE, ISOTP_SENDING) != ISOTP_IDLE) {
@@ -189,13 +191,8 @@ index 9bc344851704..7928dc9ddb80 100644
  		/* wait for complete transmission of current pdu */
 -		wait_event_interruptible(so->wait, so->tx.state == ISOTP_IDLE);
 +		err = wait_event_interruptible(so->wait, so->tx.state == ISOTP_IDLE);
-+		if (err) {
-+			/* got signal: force tx state machine to be idle */
-+			so->tx.state = ISOTP_IDLE;
-+			hrtimer_cancel(&so->txfrtimer);
-+			hrtimer_cancel(&so->txtimer);
-+			goto err_out_drop;
-+		}
++		if (err)
++			goto err_event_drop;
  
  		if (sk->sk_err)
  			return -sk->sk_err;
@@ -203,6 +200,11 @@ index 9bc344851704..7928dc9ddb80 100644
  
  	return size;
  
++err_event_drop:
++	/* got signal: force tx state machine to be idle */
++	so->tx.state = ISOTP_IDLE;
++	hrtimer_cancel(&so->txfrtimer);
++	hrtimer_cancel(&so->txtimer);
  err_out_drop:
  	/* drop this PDU and unlock a potential wait queue */
 -	old_state = ISOTP_IDLE;
