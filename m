@@ -2,94 +2,147 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBCAF6D21A8
-	for <lists+linux-can@lfdr.de>; Fri, 31 Mar 2023 15:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 856AB6D23EE
+	for <lists+linux-can@lfdr.de>; Fri, 31 Mar 2023 17:26:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232234AbjCaNrY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 31 Mar 2023 09:47:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44008 "EHLO
+        id S232077AbjCaP0w (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 31 Mar 2023 11:26:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232198AbjCaNrX (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 31 Mar 2023 09:47:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 976CEC5;
-        Fri, 31 Mar 2023 06:47:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 43B38B82FCD;
-        Fri, 31 Mar 2023 13:47:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26BE9C4339B;
-        Fri, 31 Mar 2023 13:47:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680270439;
-        bh=orPaOgx6J/LUi114f9kSqd4A7XlXiiksN/BvFn+cS3U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IYHAqMf3Z9huvpJapTAR+uF4zpKFsOVOqB7p8GER0qI2ESstHl5N5glcyPZhHRf0S
-         47MaoxN3r7v8jQN7CRY5zf2YkHGchK2S6qkXgmxn5jJLwaxm7swEweFwgvJMcgLGLz
-         4iUSnuOLpwV+QPmNR7TCTJBqDjyXW/fnjVGfi3/xr6v4mLxCgVSQrhHulyySzlbPxC
-         dI4gx+dSvi+zF3IEljngIukwhS5dz9OhZ8QonfmJteoKoXjyYw1cwGqsdpD5AU0rWN
-         4mx2vBSal6nd8k1WmEeN90I6rYVvjnYr7/48oeBD/6gYI8q4FTF9uf65aJpvmlGpcH
-         6d4OgZjU0etTQ==
-Date:   Fri, 31 Mar 2023 19:17:15 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Kishon Vijay Abraham I <kishon@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Yu Chen <chenyu56@huawei.com>,
-        Binghui Wang <wangbinghui@hisilicon.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Vincent Shih <vincent.sunplus@gmail.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-usb@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-can@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: phy: Drop unneeded quotes
-Message-ID: <ZCbkY3z9Lquad41t@matsya>
-References: <20230320233955.2921179-1-robh@kernel.org>
+        with ESMTP id S231654AbjCaP0v (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 31 Mar 2023 11:26:51 -0400
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23DE51CBBB
+        for <linux-can@vger.kernel.org>; Fri, 31 Mar 2023 08:26:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1680276400; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=lwYeGNeRjNaJ2f272Q5j+MrqIvHLQEdKvNyP4/4PFfVxmic1rekiFxsxGsXOz5c02d
+    BofhLWgfSA8DZq0hMLWE6cv/fp/c9RyjRpRbzGN8NlP3PhcV6QwG5z742Zc/QjFQCSZo
+    29vOAK06SSzyn3j6om73u5zdjv6ldPBpUODNPE6v56dx2WS9jirOkZouMF/9jM0Eefre
+    /xoDfSnY2LMPgp+fyVtIZe+yoXJpCm9uxUdZ4CUODnbJv+4FKHu1C0hnF9YXgY1Ukq1d
+    PWa6UAL/Tqh+nl1+was74eJnzzu00famBZvZepr0/S4TW4+LfNaoo4GUbHtABJkkDuFk
+    aX/Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1680276400;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=6xqVUMCNbkmZUIx5Bfhyaz90659QaAmLq+zX3Vuu+2U=;
+    b=GpFKUIztrFRfvHoXh49GXrNSInwdmQbqg3VOSHRdYKS5Fe5ElFVRySXG9enJSgDB4/
+    JsugWcwLmR7wi7p5uY0rtB1uMkS2XkvLDrp/SGprfMEGs7KsPlMVsdv7kGLwvhRK7wA7
+    Do2oYTYzHMdygzbXFONk8Sn1DITsN/oCtWA5l9khQve2Vf9F/OdoEfP6jz+/xSbArC7r
+    8f7YAFpBejMLI9mT0d3X2bwdTfnaZigKGbLnRkqkLqz5FBOP5hDzr5RpTQvOTZ4YksD3
+    L3h9TBayNl5MUBYzs8sBHCgxl7s74c7PY9m+NXsBZRen3xnpFHAKzf6RkP+jbfLrMNoZ
+    yuFg==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1680276400;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=6xqVUMCNbkmZUIx5Bfhyaz90659QaAmLq+zX3Vuu+2U=;
+    b=g8FHYeo1VFJTYL2BmA4sqm6E8JqRLD8F7ICXKJchyfyGDUtqRIWBoqc82FHvuraGk+
+    qkxJquznDFSlQqFNODk4RVzN3M6qiU8cKIk8mAmw47FUJwRdzQIb4rzcwJLsoKCsqInN
+    WCgcj56H6VfI4d3tXUmVkGdddWDNJ6i3tLn3slQsTRAoZdiudbJyDE6TvMx8cRs+mFtF
+    NF+OZoOMpWiJX0SbmhVFcPUS+OuLU32Njb5l0aaET4IRsc0KaFCae9UhQQhDotvRTYrX
+    YunbptWIldWxWNBSsfLqNHGihbMiUc/KDwjWw42F5+mhhizmxstoDJyoGqqb44SlE9jy
+    BdDQ==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusl129OHEdFq0USEbDUQnQ=="
+Received: from [IPV6:2a00:6020:4a8e:5000::923]
+    by smtp.strato.de (RZmta 49.3.1 AUTH)
+    with ESMTPSA id n9397fz2VFQejll
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Fri, 31 Mar 2023 17:26:40 +0200 (CEST)
+Message-ID: <a3d6f5b6-c830-6d2b-5cfa-10fe3e567909@hartkopp.net>
+Date:   Fri, 31 Mar 2023 17:26:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230320233955.2921179-1-robh@kernel.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RFC PATCH] can: isotp: fix race between isotp_sendsmg() and
+ isotp_release()
+To:     "Dae R. Jeong" <threeearcat@gmail.com>
+Cc:     linux-can@vger.kernel.org, Hillf Danton <hdanton@sina.com>
+References: <20230331102114.15164-1-socketcan@hartkopp.net>
+ <ZCbM0mTZFgfyWndH@dragonet>
+ <bb365ad4-815f-4dac-6e40-83b7197b5033@hartkopp.net>
+ <CACsK=jdYFQATbs_u-AQr8ota4he17xVY--t3jFAx5y5WW-qqxg@mail.gmail.com>
+Content-Language: en-US
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <CACsK=jdYFQATbs_u-AQr8ota4he17xVY--t3jFAx5y5WW-qqxg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 20-03-23, 18:39, Rob Herring wrote:
-> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-> checking for this can be enabled in yamllint.
 
-Applied, thanks
 
--- 
-~Vinod
+On 31.03.23 15:37, Dae R. Jeong wrote:
+> On Fri, Mar 31, 2023 at 9:23 PM Oliver Hartkopp <socketcan@hartkopp.net> wrote:
+>>
+>> Hi Dae,
+>>
+> (...)
+>>
+>> /* wait for complete transmission of current pdu */
+>> while (wait_event_interruptible(so->wait, so->tx.state == ISOTP_IDLE) ==
+>> 0 &&
+>>          cmpxchg(&so->tx.state, ISOTP_IDLE, ISOTP_SHUTDOWN) != ISOTP_IDLE);
+> 
+> I'm not sure, but your intention in this condition is probably
+> while (wait_event_interruptible() != 0 || cmpxchg() != ISOTP_IDLE)?
+> So, release() can get out of the loop only if
+> wait_event_interruptible() returns 0 and cmpxchg() successes?
+
+No it is the other way around.
+
+When wait_event_interruptible() returns 0 the state has been properly 
+set to ISOTP_IDLE (the good case).
+
+And THEN we try to grab the tx.state to be ISOTP_SHUTDOWN.
+
+The while() statement is left when either the tx.state is ISOTP_SHUTDOWN 
+(after it was ISOTP_IDLE) 'OR' when a signal occurred which terminated 
+wait_event_interruptible().
+
+In the latter case we do not know the value from tx.state.
+
+Therefore I set the tx.state to ISOTP_IDLE/ISOTP_SHUTDOWN in the V4 
+patch after checking each wait_event_interruptible() return value:
+
+https://lore.kernel.org/linux-can/20230331131935.21465-1-socketcan@hartkopp.net/
+
+I think this is the best way to handle the signal interrupt case for 
+wait_event_interruptible() ?!?
+
+Best regards,
+Oliver
+
+> 
+>> /* force state machines to be idle also when a signal occurred */
+>> so->tx.state = ISOTP_SHUTDOWN;
+>> so->rx.state = ISOTP_IDLE;
+>>
+>> When wait_event_interruptible() does not return '0' we can neither rely
+>> on tx.state to be ISOTP_IDLE nor on anybody else taking care for that.
+>>
+>> So I would suggest to continue removing the socket.
+>>
+>>> Thank you for your hard work!
+>>
+>> Thanks for the review and the request to take an additional look at the
+>> code!
+>>
+>> Best regards,
+>> Oliver
+> 
+> Best regards,
+> Dae R. Jeong
