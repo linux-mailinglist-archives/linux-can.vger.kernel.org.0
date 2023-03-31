@@ -2,107 +2,94 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 739C56D2185
-	for <lists+linux-can@lfdr.de>; Fri, 31 Mar 2023 15:37:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBCAF6D21A8
+	for <lists+linux-can@lfdr.de>; Fri, 31 Mar 2023 15:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232531AbjCaNhf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 31 Mar 2023 09:37:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37006 "EHLO
+        id S232234AbjCaNrY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 31 Mar 2023 09:47:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232119AbjCaNhe (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 31 Mar 2023 09:37:34 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E81821EA17
-        for <linux-can@vger.kernel.org>; Fri, 31 Mar 2023 06:37:33 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id cn12so89727910edb.4
-        for <linux-can@vger.kernel.org>; Fri, 31 Mar 2023 06:37:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680269852;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lA2jo3l12jR13M/qRztMCg7kF6jWkpPXK6bkSm4Oy2w=;
-        b=BqfgpGl7uDSihtIfEVsOsypXEK7oC5E4OOqT8BfuO6FM6/+BPmOoFYHMfj2O5ma4js
-         VY/I+q87h6KHqWHrritdcBs/a0XGOSPFZG4vFTbSxeJHy+G9IMc89RzIVGSh6IqwYUiU
-         M2q7pIKlEGoxhh4qeOoaXsq13d0uSwto1lf+hClZ93x4JUjvqSXsp9zKCUjeG5Qve0hN
-         Yl4YHQTFOIiKKeBSvygJqDx+FJZvnd02eKZU7Sniop9/YHZIMiFgeWsgIzn8C6t74ury
-         xz94gEW100SBtMAoRVu+ruRr1uxjrYz37wPD8rjxCrhjU775uW3iXkEtQ+dcZTo4AjLY
-         hxEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680269852;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lA2jo3l12jR13M/qRztMCg7kF6jWkpPXK6bkSm4Oy2w=;
-        b=3y2TyFxxK4R8OCN522XbxJvBt6iVPGIAnyVi8bGDzZELyXFfTho3wKedff4YYM+RP5
-         EkxthbLNvS4EXmFyntEriJIq+kY0Lg1fOD9BlNDegCziFqMPybmOAX6u0Kz8CzQ7efp9
-         IiziNxUQpX++QJeJjTaBbOIYgJffqFxr3BpYUinAwma9bivuKGXDGgzwXF/OIiUyZtEB
-         YAbRCsb5t9xlUIXrHPNnZwdzco+G07D3/pswcqCOMJKntFBseVwBvwQ28P36p5pxkHVM
-         h7XTmZrqk1A4Xnd4+PATnltkE/trpZptFHj3hXUwNo5vME8ivXf2uVB57lXLXrXc0Rbs
-         SOWA==
-X-Gm-Message-State: AAQBX9cEM9X2qLwaOnUPDQrlhEp/K9tdUlh8zCq6zO7e572iBLiey5C2
-        dLiUFCdmIU1EGOck5RW7UXZ1gLYglmO24g+3ICg2FU0d
-X-Google-Smtp-Source: AKy350YSFE8uvblag6wxbEcuzdmZvD+2cPkWR/UQW65wQyn8JFwA8x+LKbvnzPiupZWvRig3PLkkGnkmmlk3fQva/dE=
-X-Received: by 2002:a17:907:d68c:b0:947:556e:ed3 with SMTP id
- wf12-20020a170907d68c00b00947556e0ed3mr3417224ejc.11.1680269852262; Fri, 31
- Mar 2023 06:37:32 -0700 (PDT)
+        with ESMTP id S232198AbjCaNrX (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 31 Mar 2023 09:47:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 976CEC5;
+        Fri, 31 Mar 2023 06:47:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 43B38B82FCD;
+        Fri, 31 Mar 2023 13:47:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26BE9C4339B;
+        Fri, 31 Mar 2023 13:47:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680270439;
+        bh=orPaOgx6J/LUi114f9kSqd4A7XlXiiksN/BvFn+cS3U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IYHAqMf3Z9huvpJapTAR+uF4zpKFsOVOqB7p8GER0qI2ESstHl5N5glcyPZhHRf0S
+         47MaoxN3r7v8jQN7CRY5zf2YkHGchK2S6qkXgmxn5jJLwaxm7swEweFwgvJMcgLGLz
+         4iUSnuOLpwV+QPmNR7TCTJBqDjyXW/fnjVGfi3/xr6v4mLxCgVSQrhHulyySzlbPxC
+         dI4gx+dSvi+zF3IEljngIukwhS5dz9OhZ8QonfmJteoKoXjyYw1cwGqsdpD5AU0rWN
+         4mx2vBSal6nd8k1WmEeN90I6rYVvjnYr7/48oeBD/6gYI8q4FTF9uf65aJpvmlGpcH
+         6d4OgZjU0etTQ==
+Date:   Fri, 31 Mar 2023 19:17:15 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Kishon Vijay Abraham I <kishon@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Yu Chen <chenyu56@huawei.com>,
+        Binghui Wang <wangbinghui@hisilicon.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Vincent Shih <vincent.sunplus@gmail.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-usb@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-can@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: phy: Drop unneeded quotes
+Message-ID: <ZCbkY3z9Lquad41t@matsya>
+References: <20230320233955.2921179-1-robh@kernel.org>
 MIME-Version: 1.0
-References: <20230331102114.15164-1-socketcan@hartkopp.net>
- <ZCbM0mTZFgfyWndH@dragonet> <bb365ad4-815f-4dac-6e40-83b7197b5033@hartkopp.net>
-In-Reply-To: <bb365ad4-815f-4dac-6e40-83b7197b5033@hartkopp.net>
-From:   "Dae R. Jeong" <threeearcat@gmail.com>
-Date:   Fri, 31 Mar 2023 22:37:16 +0900
-Message-ID: <CACsK=jdYFQATbs_u-AQr8ota4he17xVY--t3jFAx5y5WW-qqxg@mail.gmail.com>
-Subject: Re: [RFC PATCH] can: isotp: fix race between isotp_sendsmg() and isotp_release()
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     linux-can@vger.kernel.org, Hillf Danton <hdanton@sina.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230320233955.2921179-1-robh@kernel.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 9:23=E2=80=AFPM Oliver Hartkopp <socketcan@hartkopp=
-.net> wrote:
->
-> Hi Dae,
->
-(...)
->
-> /* wait for complete transmission of current pdu */
-> while (wait_event_interruptible(so->wait, so->tx.state =3D=3D ISOTP_IDLE)=
- =3D=3D
-> 0 &&
->         cmpxchg(&so->tx.state, ISOTP_IDLE, ISOTP_SHUTDOWN) !=3D ISOTP_IDL=
-E);
+On 20-03-23, 18:39, Rob Herring wrote:
+> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+> checking for this can be enabled in yamllint.
 
-I'm not sure, but your intention in this condition is probably
-while (wait_event_interruptible() !=3D 0 || cmpxchg() !=3D ISOTP_IDLE)?
-So, release() can get out of the loop only if
-wait_event_interruptible() returns 0 and cmpxchg() successes?
+Applied, thanks
 
-> /* force state machines to be idle also when a signal occurred */
-> so->tx.state =3D ISOTP_SHUTDOWN;
-> so->rx.state =3D ISOTP_IDLE;
->
-> When wait_event_interruptible() does not return '0' we can neither rely
-> on tx.state to be ISOTP_IDLE nor on anybody else taking care for that.
->
-> So I would suggest to continue removing the socket.
->
-> > Thank you for your hard work!
->
-> Thanks for the review and the request to take an additional look at the
-> code!
->
-> Best regards,
-> Oliver
-
-Best regards,
-Dae R. Jeong
+-- 
+~Vinod
