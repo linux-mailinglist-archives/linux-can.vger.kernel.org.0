@@ -2,90 +2,79 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 795546D640C
-	for <lists+linux-can@lfdr.de>; Tue,  4 Apr 2023 15:55:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B88C66D652C
+	for <lists+linux-can@lfdr.de>; Tue,  4 Apr 2023 16:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235408AbjDDNzH convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Tue, 4 Apr 2023 09:55:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57148 "EHLO
+        id S235822AbjDDOXx (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 4 Apr 2023 10:23:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235803AbjDDNy6 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 4 Apr 2023 09:54:58 -0400
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1B34C21;
-        Tue,  4 Apr 2023 06:54:39 -0700 (PDT)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-5456249756bso614801747b3.5;
-        Tue, 04 Apr 2023 06:54:39 -0700 (PDT)
+        with ESMTP id S235230AbjDDOXx (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 4 Apr 2023 10:23:53 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D641734
+        for <linux-can@vger.kernel.org>; Tue,  4 Apr 2023 07:23:51 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id j4-20020a6b5504000000b00758646159fbso20237216iob.20
+        for <linux-can@vger.kernel.org>; Tue, 04 Apr 2023 07:23:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680616478;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3M2LXzJQFG/OPsbte88DPWda3vmr3kZtIOno67qR5y4=;
-        b=q4A6JGoQ+DMemFF2Ier6fGOfqH8UCQFJLE8sxmRmCsYk/XQ6ahTWZgTSPNvZL8orao
-         2brD42+s6SqCYJ5BDJ3OfsBbqkxR152h2rIbo+2nbRQ45+5jtJpZ+m3UtD3l8jC6nzw1
-         IbTdRSuS7vt7weslsIjkenVKgfExMBstYXEY/3UGSN6op8A12V+33nDzEPVzBX8RmKWL
-         GSzs/KORH8SjeiF9qQozThJfBrPO0Zgm8c769ZaMewSqs3TREs6pArCWc2FnDoENODHr
-         q+Ck6jZr/ZfILOvD/Xf0EPOC0ZVUCoy2O/2JYB9w9TX44ddegAU30IE9MrN37thpLKfV
-         Fb5A==
-X-Gm-Message-State: AAQBX9eM8w3uqmuyOGDghkyYuDnDnpKYQaFDJbNPQlmOWVXehwkiHp7K
-        3k9NHVzpgmjcfto24FlOtpka8HtSU+qJHAMV
-X-Google-Smtp-Source: AKy350YY2ViyM9y1tEm3lIVNKzMDh0sv3sOzvO5w1tIOQ574Kp4L4i0F21IaNyqu4wvJF9cQl81Vpg==
-X-Received: by 2002:a81:4f90:0:b0:536:509a:a6a with SMTP id d138-20020a814f90000000b00536509a0a6amr2361825ywb.25.1680616478404;
-        Tue, 04 Apr 2023 06:54:38 -0700 (PDT)
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
-        by smtp.gmail.com with ESMTPSA id 186-20020a8117c3000000b00545a08184acsm3177229ywx.60.2023.04.04.06.54.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Apr 2023 06:54:37 -0700 (PDT)
-Received: by mail-yb1-f181.google.com with SMTP id p203so38710148ybb.13;
-        Tue, 04 Apr 2023 06:54:37 -0700 (PDT)
-X-Received: by 2002:a25:ca4b:0:b0:b77:d2db:5f8f with SMTP id
- a72-20020a25ca4b000000b00b77d2db5f8fmr1866265ybg.12.1680616477481; Tue, 04
- Apr 2023 06:54:37 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680618231; x=1683210231;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3SlLCphVS7COIvWP0KM6YgJ3hMpNmeYt4UE66TAXhBg=;
+        b=O8IcW5GLzyIgK2HBlf8mR1lWj1eAn7qK3jJZu8jNHXetj6SlW2ItTIvZmXZb1JPFC2
+         CSporG3nuPhCrhlaH9xx6jFA7fLfJVg+btYTZdrmnCNpB67H3L3cz/odaZhrbaeZjcsg
+         Agajrxo+JSyqp6TDt0DqXZyxekNvBAsBnJ0xan+RoJNMOkR+swWGkGiEB+DTIF5i2BaT
+         XMLNyukATUsEmkF/lHyhhU+sFGqJNDNhvYgHwTI1xR2Ump7/gRqaBYUrcdYp/Gns/r+F
+         +YZ+FqxLFGWilBnvv2Qxp8hVrNIXjfJT2kGjPc8kgT3cjO+oSTJV0uaHA/4hzMD8ivRB
+         Fb8A==
+X-Gm-Message-State: AAQBX9fty8OKA4nPiZNUNCLd57wSeXnm7ndhjbkGGQFsEldMDMT5Ss3L
+        Smd6E7jbVoH26icLOf9i+LPQ+LvsEUdYUwRoVl3gl4fu9LnqvUQ=
+X-Google-Smtp-Source: AKy350Z0mNNXT0EuW2xsOe+fbbOokf0xsR7PvAWET2NX2Ap9gCGDKbW7Ov0uRnJHREoKUMl/Ribj4Ux8NNaCk0LzFXekHJRl+9Rj
 MIME-Version: 1.0
-References: <20230404113429.1590300-1-mkl@pengutronix.de> <20230404113429.1590300-8-mkl@pengutronix.de>
-In-Reply-To: <20230404113429.1590300-8-mkl@pengutronix.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 4 Apr 2023 15:54:25 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWwLHYsbjvKuJ6M3an0nQWdcd9M8Y8io5wg0fAcgL9XDg@mail.gmail.com>
-Message-ID: <CAMuHMdWwLHYsbjvKuJ6M3an0nQWdcd9M8Y8io5wg0fAcgL9XDg@mail.gmail.com>
-Subject: Re: [PATCH net-next 07/10] can: rcar_canfd: ircar_canfd_probe(): fix
- plain integer in transceivers[] init
-To:     mkl@pengutronix.de
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, kernel@pengutronix.de,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>
+X-Received: by 2002:a05:6e02:b21:b0:326:1bf1:234 with SMTP id
+ e1-20020a056e020b2100b003261bf10234mr1696371ilu.3.1680618231103; Tue, 04 Apr
+ 2023 07:23:51 -0700 (PDT)
+Date:   Tue, 04 Apr 2023 07:23:51 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ab085f05f8836ccd@google.com>
+Subject: [syzbot] Monthly can report
+From:   syzbot <syzbot+list4d04fa20a60bb21c56c5@syzkaller.appspotmail.com>
+To:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mkl@pengutronix.de, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Marc,
+Hello can maintainers/developers,
 
-On Tue, Apr 4, 2023 at 1:34 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> From: Geert Uytterhoeven <geert+renesas@glider.be>
->
-> Fix the following compile warning with C=1:
->
-> | drivers/net/can/rcar/rcar_canfd.c:1852:59: warning: Using plain integer as NULL pointer
+This is a 30-day syzbot report for the can subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/can
 
-s/ircar_canfd_probe/rcar_canfd_probe/ in the patch summary.
+During the period, 0 new issues were detected and 1 were fixed.
+In total, 16 issues are still open and 39 have been fixed so far.
 
-Gr{oetje,eeting}s,
+Some of the still happening issues:
 
-                        Geert
+Crashes Repro Title
+1783    Yes   WARNING in j1939_session_deactivate
+              https://syzkaller.appspot.com/bug?extid=535e5aae63c0d0433473
+502     Yes   WARNING in j1939_session_deactivate_activate_next
+              https://syzkaller.appspot.com/bug?extid=3d2eaacbc2b94537c6c5
+277     Yes   possible deadlock in j1939_sk_queue_drop_all
+              https://syzkaller.appspot.com/bug?extid=3bd970a1887812621b4c
+55      No    possible deadlock in j1939_session_activate
+              https://syzkaller.appspot.com/bug?extid=f32cbede7fd867ce0d56
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
