@@ -2,45 +2,67 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D0C46D59AB
-	for <lists+linux-can@lfdr.de>; Tue,  4 Apr 2023 09:31:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A3B76D5EF3
+	for <lists+linux-can@lfdr.de>; Tue,  4 Apr 2023 13:28:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233392AbjDDHbo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 4 Apr 2023 03:31:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38226 "EHLO
+        id S229551AbjDDL2k (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 4 Apr 2023 07:28:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232916AbjDDHbn (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 4 Apr 2023 03:31:43 -0400
+        with ESMTP id S234295AbjDDL2k (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 4 Apr 2023 07:28:40 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695DAB7
-        for <linux-can@vger.kernel.org>; Tue,  4 Apr 2023 00:31:39 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB2E1FEF
+        for <linux-can@vger.kernel.org>; Tue,  4 Apr 2023 04:28:39 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pjb8g-00088U-N1; Tue, 04 Apr 2023 09:31:34 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pjb8c-008rdY-LS; Tue, 04 Apr 2023 09:31:30 +0200
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pjb8b-00DJgH-LJ; Tue, 04 Apr 2023 09:31:29 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Robin van der Gracht <robin@protonic.nl>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Shuangpeng Bai <sjb7183@psu.edu>, kernel@pengutronix.de,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1] net: can: j1939: Fix out-of-bounds memory access in j1939_tp_tx_dat_new
-Date:   Tue,  4 Apr 2023 09:31:28 +0200
-Message-Id: <20230404073128.3173900-1-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pjepm-00043P-Ln; Tue, 04 Apr 2023 13:28:18 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 42D791A6300;
+        Tue,  4 Apr 2023 11:28:13 +0000 (UTC)
+Date:   Tue, 4 Apr 2023 13:28:12 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Rob Herring <robh@kernel.org>,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        michael@amarulasolutions.com,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Christophe Roullier <christophe.roullier@foss.st.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-can@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org
+Subject: Re: [PATCH v10 0/5] can: bxcan: add support for ST bxCAN controller
+Message-ID: <20230404-postage-handprint-efdb77646082@pengutronix.de>
+References: <20230328073328.3949796-1-dario.binacchi@amarulasolutions.com>
+ <20230328084710.jnrwvydewx3atxti@pengutronix.de>
+ <CABGWkvq0gOMw2J9GpLS=w+qg-3xhAst6KN9kvCuZnV9bSBJ3CA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vrolgxtwhc7crda5"
+Content-Disposition: inline
+In-Reply-To: <CABGWkvq0gOMw2J9GpLS=w+qg-3xhAst6KN9kvCuZnV9bSBJ3CA@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
@@ -52,47 +74,61 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-In the j1939_tp_tx_dat_new function, an out-of-bounds memory access
-could occur during the memcpy operation if the size of skb->cb is
-larger than the size of struct j1939_sk_buff_cb. This is because the
-memcpy operation uses the size of skb->cb, leading to a read beyond
-the struct j1939_sk_buff_cb.
 
-To address this issue, we have updated the memcpy operation to use the
-size of struct j1939_sk_buff_cb instead of the size of skb->cb. This
-ensures that the memcpy operation only reads the memory within the
-bounds of struct j1939_sk_buff_cb, preventing out-of-bounds memory
-access.
+--vrolgxtwhc7crda5
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Additionally, a static_assert has been added to check that the size of
-skb->cb is greater than or equal to the size of struct j1939_sk_buff_cb.
-This ensures that the skb->cb buffer is large enough to hold the
-j1939_sk_buff_cb structure.
+On 28.03.2023 11:28:59, Dario Binacchi wrote:
+> > Applied to linux-can-next.
+>=20
+> Just one last question: To test this series, as described in the cover
+> letter, I could not use the iproute2 package since the microcontroller
+> is without MMU. I then extended busybox for the ip link command. I
+> actually also added the rtnl-link-can.c application to the libmnl
+> library. So now I find myself with two applications that have been
+> useful to me for this type of use case.
+>=20
+> Did I do useless work because I could use other tools?
 
-Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
-Reported-by: Shuangpeng Bai <sjb7183@psu.edu>
-Tested-by: Shuangpeng Bai <sjb7183@psu.edu>
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- net/can/j1939/transport.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+systemd-networkd also supports CAN configuration, but I this will
+probably not work on no-MMU systemd, too.
 
-diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
-index fb92c3609e17..fe3df23a2595 100644
---- a/net/can/j1939/transport.c
-+++ b/net/can/j1939/transport.c
-@@ -604,7 +604,10 @@ sk_buff *j1939_tp_tx_dat_new(struct j1939_priv *priv,
- 	/* reserve CAN header */
- 	skb_reserve(skb, offsetof(struct can_frame, data));
- 
--	memcpy(skb->cb, re_skcb, sizeof(skb->cb));
-+	/* skb->cb must be large enough to hold a j1939_sk_buff_cb structure */
-+	BUILD_BUG_ON(sizeof(skb->cb) < sizeof(*re_skcb));
-+
-+	memcpy(skb->cb, re_skcb, sizeof(*re_skcb));
- 	skcb = j1939_skb_to_cb(skb);
- 	if (swap_src_dst)
- 		j1939_skbcb_swap(skcb);
--- 
-2.39.2
+Then there is:
 
+| https://git.pengutronix.de/cgit/tools/canutils
+| https://git.pengutronix.de/cgit/tools/libsocketcan
+
+that contains canconfig, but it lacks CAN-FD support.
+
+> If instead the tools for this use case are missing, what do you think
+> is better to do? Submit to their respective repos or add this
+> functionality to another project that I haven't considered ?
+
+Yes, go ahead and upstream your changes!
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--vrolgxtwhc7crda5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQsCckACgkQvlAcSiqK
+BOiwvQf/bknW5120duEvKB4vzq6g1FE4pHri1PUIfK32NY2ZntW/rs/zYYH5KMTC
+A3DRsT4CsHVSXNDvW7JNgHJIxIZ8kFQGiAIfOv/a7OOYXZocvfBMW9yxgRqDlese
+N9BqaRggCBDhP829laPpXYntgW6k8lTMpWI7C6ANyis9tbKJ68Ut0d7bZ4eiYGme
++R4neMSudT1l+tzSobkBpDrXloivl9uXhme25xmFTtQeokwCaXSZ7CFDpNcTV2zw
+3wq4YYs3fnoxUbIauVk4mDGyoJTB0ZzDee5Kp8+ucH1+eukInkeHk37RerOpc4Wv
+Gl61KK/5ijUZNnIHiOJIS9C8Sv6kSQ==
+=L7qt
+-----END PGP SIGNATURE-----
+
+--vrolgxtwhc7crda5--
