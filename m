@@ -2,68 +2,105 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C88906D92EB
-	for <lists+linux-can@lfdr.de>; Thu,  6 Apr 2023 11:42:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B9D06D77F9
+	for <lists+linux-can@lfdr.de>; Wed,  5 Apr 2023 11:25:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235749AbjDFJmZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 6 Apr 2023 05:42:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51260 "EHLO
+        id S237148AbjDEJZB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 5 Apr 2023 05:25:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236180AbjDFJmY (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 6 Apr 2023 05:42:24 -0400
-X-Greylist: delayed 90248 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 06 Apr 2023 02:42:11 PDT
-Received: from mail.feshiecree.pl (mail.feshiecree.pl [89.40.114.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3143E7AA6
-        for <linux-can@vger.kernel.org>; Thu,  6 Apr 2023 02:42:11 -0700 (PDT)
-Received: by mail.feshiecree.pl (Postfix, from userid 1001)
-        id 36F3182DEC; Wed,  5 Apr 2023 09:27:49 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=feshiecree.pl;
-        s=mail; t=1680683276;
-        bh=hFxZwVw4rIL+JwfEOGI47p+fdoVOAeqVswP6NWoHSHQ=;
-        h=Date:From:To:Subject:From;
-        b=W3XWdq4Av6vxy34AkxNj2h1qikRImQVIV1Gw6/Z1Gu6oxBrpQH78peOxT8cZBC3nI
-         XbU5tSrCY3nk8LzXk1mDdkxK+vQk4kM8gvn/t+BWy2qCWGbKRiFJWfbNPy8tfJAbuR
-         b50IZzsAvHa7eRZlugsZROCB5Dfo6pCU2I+q7VlQaaEHr9j4MOnZFxccajdUaxvUJ3
-         WwraUFnPwDSS0g2ium8YmXKcf/hGGq9M87BUXuvtjFopw57n7TOrBuNubr1goEMWod
-         S14m4f19+jFYCGskqKXt3mQM9NAl/YmWHsy8FQh6IljbjDjYo8W2taNwDaG2YXw8TL
-         vDW5dDXUh9Xug==
-Received: by feshiecree.pl for <linux-can@vger.kernel.org>; Wed,  5 Apr 2023 08:27:41 GMT
-Message-ID: <20230405084211-0.1.1u.6hja.0.9kk4a0twxb@feshiecree.pl>
-Date:   Wed,  5 Apr 2023 08:27:41 GMT
-From:   "Krystian Wieczorek" <krystian.wieczorek@feshiecree.pl>
-To:     <linux-can@vger.kernel.org>
-Subject: W sprawie samochodu
-X-Mailer: mail.feshiecree.pl
+        with ESMTP id S237242AbjDEJZA (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 5 Apr 2023 05:25:00 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD904200
+        for <linux-can@vger.kernel.org>; Wed,  5 Apr 2023 02:24:58 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pjzNx-00046S-A4
+        for linux-can@vger.kernel.org; Wed, 05 Apr 2023 11:24:57 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 79EC91A7126
+        for <linux-can@vger.kernel.org>; Wed,  5 Apr 2023 09:24:56 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 347D71A7121;
+        Wed,  5 Apr 2023 09:24:55 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 3e90eda6;
+        Wed, 5 Apr 2023 09:24:54 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH net 0/4] pull-request: can 2023-04-05
+Date:   Wed,  5 Apr 2023 11:24:40 +0200
+Message-Id: <20230405092444.1802340-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=1.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SORBS_DUL,RCVD_IN_VALIDITY_RPBL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Hello netdev-team,
 
-chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
-, je=C5=9Bli chodzi o system monitoringu GPS.
+this is a pull request of 4 patches for net/master.
 
-Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
-e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
-a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
+The first patch is by Oleksij Rempel and fixes a out-of-bounds memory
+access in the j1939 protocol.
 
-Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
-dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
-szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
-mne znaczenie.
+The remaining 3 patches target the ISOTP protocol. Oliver Hartkopp
+fixes the ISOTP protocol to pass information about dropped PDUs to the
+user space via control messages. Michal Sojka's patch fixes poll() to
+not forward false EPOLLOUT events. And Oliver Hartkopp fixes a race
+condition between isotp_sendsmg() and isotp_release().
 
-Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
-b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
+regards,
+Marc
+
+---
+
+The following changes since commit 3ce9345580974863c060fa32971537996a7b2d57:
+
+  gve: Secure enough bytes in the first TX desc for all TCP pkts (2023-04-04 18:58:12 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-6.3-20230405
+
+for you to fetch changes up to 051737439eaee5bdd03d3c2ef5510d54a478fd05:
+
+  can: isotp: fix race between isotp_sendsmg() and isotp_release() (2023-04-05 11:16:37 +0200)
+
+----------------------------------------------------------------
+linux-can-fixes-for-6.3-20230405
+
+----------------------------------------------------------------
+Michal Sojka (1):
+      can: isotp: isotp_ops: fix poll() to not report false EPOLLOUT events
+
+Oleksij Rempel (1):
+      can: j1939: j1939_tp_tx_dat_new(): fix out-of-bounds memory access
+
+Oliver Hartkopp (2):
+      can: isotp: isotp_recvmsg(): use sock_recv_cmsgs() to get SOCK_RXQ_OVFL infos
+      can: isotp: fix race between isotp_sendsmg() and isotp_release()
+
+ net/can/isotp.c           | 74 ++++++++++++++++++++++++++++++-----------------
+ net/can/j1939/transport.c |  5 +++-
+ 2 files changed, 52 insertions(+), 27 deletions(-)
 
 
-Pozdrawiam
-Krystian Wieczorek
