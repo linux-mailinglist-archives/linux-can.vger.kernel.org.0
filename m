@@ -2,203 +2,93 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82E256D6692
-	for <lists+linux-can@lfdr.de>; Tue,  4 Apr 2023 17:00:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A92D6D74E5
+	for <lists+linux-can@lfdr.de>; Wed,  5 Apr 2023 09:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235099AbjDDPAK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 4 Apr 2023 11:00:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59716 "EHLO
+        id S237041AbjDEHAX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 5 Apr 2023 03:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232530AbjDDO7u (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 4 Apr 2023 10:59:50 -0400
+        with ESMTP id S237063AbjDEHAW (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 5 Apr 2023 03:00:22 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD8C40CD
-        for <linux-can@vger.kernel.org>; Tue,  4 Apr 2023 07:59:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E165210E
+        for <linux-can@vger.kernel.org>; Wed,  5 Apr 2023 00:00:20 -0700 (PDT)
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1pji80-0001oa-51
-        for linux-can@vger.kernel.org; Tue, 04 Apr 2023 16:59:20 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 22CF31A6899
-        for <linux-can@vger.kernel.org>; Tue,  4 Apr 2023 14:59:19 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        id 1pjx7y-0001a2-QE; Wed, 05 Apr 2023 09:00:18 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 9B7FA1A6876;
-        Tue,  4 Apr 2023 14:59:16 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 80860af6;
-        Tue, 4 Apr 2023 14:59:09 +0000 (UTC)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 55E3E1A6FB0;
+        Wed,  5 Apr 2023 07:00:17 +0000 (UTC)
+Date:   Wed, 5 Apr 2023 09:00:16 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Oliver Hartkopp <socketcan@hartkopp.net>,
-        Jimmy Assarsson <extja@kvaser.com>,
-        Alexander Dahl <ada@thorsis.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next 10/10] kvaser_usb: convert USB IDs to hexadecimal values
-Date:   Tue,  4 Apr 2023 16:59:08 +0200
-Message-Id: <20230404145908.1714400-11-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230404145908.1714400-1-mkl@pengutronix.de>
-References: <20230404145908.1714400-1-mkl@pengutronix.de>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     linux-can <linux-can@vger.kernel.org>
+Subject: Re: [PATCH] can: isotp: use sock_recv_cmsgs() to get SOCK_RXQ_OVFL
+ infos
+Message-ID: <20230405-untruth-friend-f367baa235a9@pengutronix.de>
+References: <20230330170248.62342-1-socketcan@hartkopp.net>
+ <3ebe8125-d950-65f2-8a5c-24156e0ae10a@hartkopp.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6efrbcafcm4fptdv"
+Content-Disposition: inline
+In-Reply-To: <3ebe8125-d950-65f2-8a5c-24156e0ae10a@hartkopp.net>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-1.5 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Oliver Hartkopp <socketcan@hartkopp.net>
 
-USB IDs are usually represented in 16 bit hexadecimal values. To match
-the common representation in lsusb and for searching USB IDs in the
-internet convert the decimal values to lowercase hexadecimal.
+--6efrbcafcm4fptdv
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-changes since v1: https://lore.kernel.org/all/20230327175344.4668-1-socketcan@hartkopp.net
-- drop the aligned block indentation (suggested by Jimmy)
-- use lowercase hex values (suggested by Alex)
+On 04.04.2023 14:56:42, Oliver Hartkopp wrote:
+> Hi Marc,
+>=20
+> can you please apply this one too?
+> I was using it to detect the poll receive buffer error.
 
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-Acked-by: Jimmy Assarsson <extja@kvaser.com>
-Reviewed-by: Alexander Dahl <ada@thorsis.com>
-Link: https://lore.kernel.org/all/20230329090915.3127-1-socketcan@hartkopp.net
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- .../net/can/usb/kvaser_usb/kvaser_usb_core.c  | 102 +++++++++---------
- 1 file changed, 51 insertions(+), 51 deletions(-)
+Applied. Was on my list, but it came with a fixes tag, so I don't have
+to ask for one. :)
 
-diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-index d4c5356d5884..7135ec851341 100644
---- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-+++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-@@ -31,63 +31,63 @@
- #include "kvaser_usb.h"
- 
- /* Kvaser USB vendor id. */
--#define KVASER_VENDOR_ID			0x0bfd
-+#define KVASER_VENDOR_ID 0x0bfd
- 
- /* Kvaser Leaf USB devices product ids */
--#define USB_LEAF_DEVEL_PRODUCT_ID		10
--#define USB_LEAF_LITE_PRODUCT_ID		11
--#define USB_LEAF_PRO_PRODUCT_ID			12
--#define USB_LEAF_SPRO_PRODUCT_ID		14
--#define USB_LEAF_PRO_LS_PRODUCT_ID		15
--#define USB_LEAF_PRO_SWC_PRODUCT_ID		16
--#define USB_LEAF_PRO_LIN_PRODUCT_ID		17
--#define USB_LEAF_SPRO_LS_PRODUCT_ID		18
--#define USB_LEAF_SPRO_SWC_PRODUCT_ID		19
--#define USB_MEMO2_DEVEL_PRODUCT_ID		22
--#define USB_MEMO2_HSHS_PRODUCT_ID		23
--#define USB_UPRO_HSHS_PRODUCT_ID		24
--#define USB_LEAF_LITE_GI_PRODUCT_ID		25
--#define USB_LEAF_PRO_OBDII_PRODUCT_ID		26
--#define USB_MEMO2_HSLS_PRODUCT_ID		27
--#define USB_LEAF_LITE_CH_PRODUCT_ID		28
--#define USB_BLACKBIRD_SPRO_PRODUCT_ID		29
--#define USB_OEM_MERCURY_PRODUCT_ID		34
--#define USB_OEM_LEAF_PRODUCT_ID			35
--#define USB_CAN_R_PRODUCT_ID			39
--#define USB_LEAF_LITE_V2_PRODUCT_ID		288
--#define USB_MINI_PCIE_HS_PRODUCT_ID		289
--#define USB_LEAF_LIGHT_HS_V2_OEM_PRODUCT_ID	290
--#define USB_USBCAN_LIGHT_2HS_PRODUCT_ID		291
--#define USB_MINI_PCIE_2HS_PRODUCT_ID		292
--#define USB_USBCAN_R_V2_PRODUCT_ID		294
--#define USB_LEAF_LIGHT_R_V2_PRODUCT_ID		295
--#define USB_LEAF_LIGHT_HS_V2_OEM2_PRODUCT_ID	296
-+#define USB_LEAF_DEVEL_PRODUCT_ID 0x000a
-+#define USB_LEAF_LITE_PRODUCT_ID 0x000b
-+#define USB_LEAF_PRO_PRODUCT_ID 0x000c
-+#define USB_LEAF_SPRO_PRODUCT_ID 0x000e
-+#define USB_LEAF_PRO_LS_PRODUCT_ID 0x000f
-+#define USB_LEAF_PRO_SWC_PRODUCT_ID 0x0010
-+#define USB_LEAF_PRO_LIN_PRODUCT_ID 0x0011
-+#define USB_LEAF_SPRO_LS_PRODUCT_ID 0x0012
-+#define USB_LEAF_SPRO_SWC_PRODUCT_ID 0x0013
-+#define USB_MEMO2_DEVEL_PRODUCT_ID 0x0016
-+#define USB_MEMO2_HSHS_PRODUCT_ID 0x0017
-+#define USB_UPRO_HSHS_PRODUCT_ID 0x0018
-+#define USB_LEAF_LITE_GI_PRODUCT_ID 0x0019
-+#define USB_LEAF_PRO_OBDII_PRODUCT_ID 0x001a
-+#define USB_MEMO2_HSLS_PRODUCT_ID 0x001b
-+#define USB_LEAF_LITE_CH_PRODUCT_ID 0x001c
-+#define USB_BLACKBIRD_SPRO_PRODUCT_ID 0x001d
-+#define USB_OEM_MERCURY_PRODUCT_ID 0x0022
-+#define USB_OEM_LEAF_PRODUCT_ID 0x0023
-+#define USB_CAN_R_PRODUCT_ID 0x0027
-+#define USB_LEAF_LITE_V2_PRODUCT_ID 0x0120
-+#define USB_MINI_PCIE_HS_PRODUCT_ID 0x0121
-+#define USB_LEAF_LIGHT_HS_V2_OEM_PRODUCT_ID 0x0122
-+#define USB_USBCAN_LIGHT_2HS_PRODUCT_ID 0x0123
-+#define USB_MINI_PCIE_2HS_PRODUCT_ID 0x0124
-+#define USB_USBCAN_R_V2_PRODUCT_ID 0x0126
-+#define USB_LEAF_LIGHT_R_V2_PRODUCT_ID 0x0127
-+#define USB_LEAF_LIGHT_HS_V2_OEM2_PRODUCT_ID 0x0128
- 
- /* Kvaser USBCan-II devices product ids */
--#define USB_USBCAN_REVB_PRODUCT_ID		2
--#define USB_VCI2_PRODUCT_ID			3
--#define USB_USBCAN2_PRODUCT_ID			4
--#define USB_MEMORATOR_PRODUCT_ID		5
-+#define USB_USBCAN_REVB_PRODUCT_ID 0x0002
-+#define USB_VCI2_PRODUCT_ID 0x0003
-+#define USB_USBCAN2_PRODUCT_ID 0x0004
-+#define USB_MEMORATOR_PRODUCT_ID 0x0005
- 
- /* Kvaser Minihydra USB devices product ids */
--#define USB_BLACKBIRD_V2_PRODUCT_ID		258
--#define USB_MEMO_PRO_5HS_PRODUCT_ID		260
--#define USB_USBCAN_PRO_5HS_PRODUCT_ID		261
--#define USB_USBCAN_LIGHT_4HS_PRODUCT_ID		262
--#define USB_LEAF_PRO_HS_V2_PRODUCT_ID		263
--#define USB_USBCAN_PRO_2HS_V2_PRODUCT_ID	264
--#define USB_MEMO_2HS_PRODUCT_ID			265
--#define USB_MEMO_PRO_2HS_V2_PRODUCT_ID		266
--#define USB_HYBRID_2CANLIN_PRODUCT_ID		267
--#define USB_ATI_USBCAN_PRO_2HS_V2_PRODUCT_ID	268
--#define USB_ATI_MEMO_PRO_2HS_V2_PRODUCT_ID	269
--#define USB_HYBRID_PRO_2CANLIN_PRODUCT_ID	270
--#define USB_U100_PRODUCT_ID			273
--#define USB_U100P_PRODUCT_ID			274
--#define USB_U100S_PRODUCT_ID			275
--#define USB_USBCAN_PRO_4HS_PRODUCT_ID		276
--#define USB_HYBRID_CANLIN_PRODUCT_ID		277
--#define USB_HYBRID_PRO_CANLIN_PRODUCT_ID	278
-+#define USB_BLACKBIRD_V2_PRODUCT_ID 0x0102
-+#define USB_MEMO_PRO_5HS_PRODUCT_ID 0x0104
-+#define USB_USBCAN_PRO_5HS_PRODUCT_ID 0x0105
-+#define USB_USBCAN_LIGHT_4HS_PRODUCT_ID 0x0106
-+#define USB_LEAF_PRO_HS_V2_PRODUCT_ID 0x0107
-+#define USB_USBCAN_PRO_2HS_V2_PRODUCT_ID 0x0108
-+#define USB_MEMO_2HS_PRODUCT_ID 0x0109
-+#define USB_MEMO_PRO_2HS_V2_PRODUCT_ID 0x010a
-+#define USB_HYBRID_2CANLIN_PRODUCT_ID 0x010b
-+#define USB_ATI_USBCAN_PRO_2HS_V2_PRODUCT_ID 0x010c
-+#define USB_ATI_MEMO_PRO_2HS_V2_PRODUCT_ID 0x010d
-+#define USB_HYBRID_PRO_2CANLIN_PRODUCT_ID 0x010e
-+#define USB_U100_PRODUCT_ID 0x0111
-+#define USB_U100P_PRODUCT_ID 0x0112
-+#define USB_U100S_PRODUCT_ID 0x0113
-+#define USB_USBCAN_PRO_4HS_PRODUCT_ID 0x0114
-+#define USB_HYBRID_CANLIN_PRODUCT_ID 0x0115
-+#define USB_HYBRID_PRO_CANLIN_PRODUCT_ID 0x0116
- 
- static const struct kvaser_usb_driver_info kvaser_usb_driver_info_hydra = {
- 	.quirks = KVASER_USB_QUIRK_HAS_HARDWARE_TIMESTAMP,
--- 
-2.39.2
+Marc
 
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
+--6efrbcafcm4fptdv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQtHH0ACgkQvlAcSiqK
+BOiuxgf/anezT210dVIW7mzuh2Kxc9yanKgMlJ3I+za29nWZI0LwsXa6rfb1J/CB
+e3i0LkYoQQmmHIaEXw0JSKM6V9u9zOtfSoYdMHh8hoiqxQDaVjtVCFl16rwyUZ6O
+avNn0CDXXxB19mNMTjcZ8WKbuYjavTHemhvMNVxJp8V3oUaygo5cAhyCGAzFf5q3
+0Y9SgT9xWVQhbha0JdGsr9jTaUMqxpq/QLURRZtqWdnC7n2M45jXj0XNULvh3WP2
+czEUIE6eN7QrazALt8HIxbKQ0YpC71v+gSyjXtvv2XZW5N0CC9txNgjXhYvQFm9D
+TL2znVNkFjeO9QwyPSdQ0NwZy6mBKg==
+=LHmt
+-----END PGP SIGNATURE-----
+
+--6efrbcafcm4fptdv--
