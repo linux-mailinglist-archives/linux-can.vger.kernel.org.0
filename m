@@ -2,112 +2,68 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 912386D76C8
-	for <lists+linux-can@lfdr.de>; Wed,  5 Apr 2023 10:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C88906D92EB
+	for <lists+linux-can@lfdr.de>; Thu,  6 Apr 2023 11:42:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237125AbjDEIYP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 5 Apr 2023 04:24:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46346 "EHLO
+        id S235749AbjDFJmZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 6 Apr 2023 05:42:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237483AbjDEIYO (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 5 Apr 2023 04:24:14 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F651FEC
-        for <linux-can@vger.kernel.org>; Wed,  5 Apr 2023 01:24:12 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pjyR6-0004QA-P7; Wed, 05 Apr 2023 10:24:08 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 3E3E81A7068;
-        Wed,  5 Apr 2023 08:24:04 +0000 (UTC)
-Date:   Wed, 5 Apr 2023 10:24:03 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Robin van der Gracht <robin@protonic.nl>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Shuangpeng Bai <sjb7183@psu.edu>, kernel@pengutronix.de,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] net: can: j1939: Fix out-of-bounds memory access in
- j1939_tp_tx_dat_new
-Message-ID: <20230405-backlit-unscathed-fab6044bdc4c@pengutronix.de>
-References: <20230404073128.3173900-1-o.rempel@pengutronix.de>
+        with ESMTP id S236180AbjDFJmY (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 6 Apr 2023 05:42:24 -0400
+X-Greylist: delayed 90248 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 06 Apr 2023 02:42:11 PDT
+Received: from mail.feshiecree.pl (mail.feshiecree.pl [89.40.114.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3143E7AA6
+        for <linux-can@vger.kernel.org>; Thu,  6 Apr 2023 02:42:11 -0700 (PDT)
+Received: by mail.feshiecree.pl (Postfix, from userid 1001)
+        id 36F3182DEC; Wed,  5 Apr 2023 09:27:49 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=feshiecree.pl;
+        s=mail; t=1680683276;
+        bh=hFxZwVw4rIL+JwfEOGI47p+fdoVOAeqVswP6NWoHSHQ=;
+        h=Date:From:To:Subject:From;
+        b=W3XWdq4Av6vxy34AkxNj2h1qikRImQVIV1Gw6/Z1Gu6oxBrpQH78peOxT8cZBC3nI
+         XbU5tSrCY3nk8LzXk1mDdkxK+vQk4kM8gvn/t+BWy2qCWGbKRiFJWfbNPy8tfJAbuR
+         b50IZzsAvHa7eRZlugsZROCB5Dfo6pCU2I+q7VlQaaEHr9j4MOnZFxccajdUaxvUJ3
+         WwraUFnPwDSS0g2ium8YmXKcf/hGGq9M87BUXuvtjFopw57n7TOrBuNubr1goEMWod
+         S14m4f19+jFYCGskqKXt3mQM9NAl/YmWHsy8FQh6IljbjDjYo8W2taNwDaG2YXw8TL
+         vDW5dDXUh9Xug==
+Received: by feshiecree.pl for <linux-can@vger.kernel.org>; Wed,  5 Apr 2023 08:27:41 GMT
+Message-ID: <20230405084211-0.1.1u.6hja.0.9kk4a0twxb@feshiecree.pl>
+Date:   Wed,  5 Apr 2023 08:27:41 GMT
+From:   "Krystian Wieczorek" <krystian.wieczorek@feshiecree.pl>
+To:     <linux-can@vger.kernel.org>
+Subject: W sprawie samochodu
+X-Mailer: mail.feshiecree.pl
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4l7fptulstbh7cod"
-Content-Disposition: inline
-In-Reply-To: <20230404073128.3173900-1-o.rempel@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=1.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SORBS_DUL,RCVD_IN_VALIDITY_RPBL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Dzie=C5=84 dobry,
 
---4l7fptulstbh7cod
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
+, je=C5=9Bli chodzi o system monitoringu GPS.
 
-On 04.04.2023 09:31:28, Oleksij Rempel wrote:
-> In the j1939_tp_tx_dat_new function, an out-of-bounds memory access
-> could occur during the memcpy operation if the size of skb->cb is
-> larger than the size of struct j1939_sk_buff_cb. This is because the
-> memcpy operation uses the size of skb->cb, leading to a read beyond
-> the struct j1939_sk_buff_cb.
->=20
-> To address this issue, we have updated the memcpy operation to use the
-> size of struct j1939_sk_buff_cb instead of the size of skb->cb. This
-> ensures that the memcpy operation only reads the memory within the
-> bounds of struct j1939_sk_buff_cb, preventing out-of-bounds memory
-> access.
->=20
-> Additionally, a static_assert has been added to check that the size of
-> skb->cb is greater than or equal to the size of struct j1939_sk_buff_cb.
-> This ensures that the skb->cb buffer is large enough to hold the
-> j1939_sk_buff_cb structure.
->=20
-> Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
-> Reported-by: Shuangpeng Bai <sjb7183@psu.edu>
-> Tested-by: Shuangpeng Bai <sjb7183@psu.edu>
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
+e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
+a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
 
-Applied.
+Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
+dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
+szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
+mne znaczenie.
 
-regards,
-Marc
+Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
+b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
---4l7fptulstbh7cod
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQtMCAACgkQvlAcSiqK
-BOjssAf+O9dv5x401qELD8L9Ah8/YlghfKAAA3rx9N8lJHSPIH97AjLbklcPLzTc
-Jmxi/SMQm0/RfKMkyFqHNxuv0xM0N41xFNNmjHR22PmS39TFIe5xtOdEEBccMZ2X
-22tUOXM7fXGLBQmeTlepA8JJxnoBUXQ2UQlsCAlAQboyQ1HIvAJHd/68jS96jz47
-zGVs8clal7jvE5kPVjxckgTotvOePCh/RB/AznSpq5Z1Fhc1sKVnG2InfJbI5QpQ
-BMBGU4HbRtQBuV50B5X8HiT2fJzwR05zQJHSQ/2OM+uoFts/yQOwceckWh4qGgjg
-cz73S0O0SfIWB/CSNUMWpsD/1j8sIw==
-=3uI+
------END PGP SIGNATURE-----
-
---4l7fptulstbh7cod--
+Pozdrawiam
+Krystian Wieczorek
