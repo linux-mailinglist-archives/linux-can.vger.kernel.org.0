@@ -2,221 +2,90 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8D626D7804
-	for <lists+linux-can@lfdr.de>; Wed,  5 Apr 2023 11:25:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3EAD6D8BE3
+	for <lists+linux-can@lfdr.de>; Thu,  6 Apr 2023 02:30:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237396AbjDEJZS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 5 Apr 2023 05:25:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49400 "EHLO
+        id S234444AbjDFAaW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 5 Apr 2023 20:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237350AbjDEJZG (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 5 Apr 2023 05:25:06 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36A5449C
-        for <linux-can@vger.kernel.org>; Wed,  5 Apr 2023 02:25:03 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pjzO2-0004EC-5i
-        for linux-can@vger.kernel.org; Wed, 05 Apr 2023 11:25:02 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 46F541A7150
-        for <linux-can@vger.kernel.org>; Wed,  5 Apr 2023 09:25:01 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 8852F1A7138;
-        Wed,  5 Apr 2023 09:24:58 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 0570bfc9;
-        Wed, 5 Apr 2023 09:24:54 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Oliver Hartkopp <socketcan@hartkopp.net>,
-        "Dae R . Jeong" <threeearcat@gmail.com>,
-        Hillf Danton <hdanton@sina.com>, stable@vger.kernel.org,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net 4/4] can: isotp: fix race between isotp_sendsmg() and isotp_release()
-Date:   Wed,  5 Apr 2023 11:24:44 +0200
-Message-Id: <20230405092444.1802340-5-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230405092444.1802340-1-mkl@pengutronix.de>
-References: <20230405092444.1802340-1-mkl@pengutronix.de>
+        with ESMTP id S232832AbjDFAaV (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 5 Apr 2023 20:30:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5561A65B9;
+        Wed,  5 Apr 2023 17:30:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B31A062838;
+        Thu,  6 Apr 2023 00:30:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 06EE4C4339B;
+        Thu,  6 Apr 2023 00:30:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680741019;
+        bh=YltVwM566EynBdXKC++louwOvG8Ao22xLaga+QCbfG4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=hRlx8XdCIgYU+kagKwT+YFpNvENrkBKQVXKPncWm3JWJBRFdwzH+28rAqNKkkzvGA
+         z4VGbZtyEDtnFuIIvYmBOeZn2UwBTXnjuXBzk18maVYK23DVCm1KXpkFxjsTmVxzk0
+         FlXZQDlCNrMMWRr8vkRMRFfvfKamNTCZsZ7ZKzl7HM+IBYNtN5K5W7htejQwcCqcnR
+         2nUSEADye0sLSiM+uOxRKbtez1J0NAHDhQqZeb1SIGAyie04sVPMPW/w99c7KULFyI
+         +AvoCzQMHh4k6mAf37+jRgXp00IAFZjRPfUQGByNcnO0c+7CZOQDt54IxaIPBmdlZc
+         O+29XyQ3BILlA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DFE32C41671;
+        Thu,  6 Apr 2023 00:30:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH net 1/4] can: j1939: j1939_tp_tx_dat_new(): fix out-of-bounds
+ memory access
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168074101891.1850.786445177337726896.git-patchwork-notify@kernel.org>
+Date:   Thu, 06 Apr 2023 00:30:18 +0000
+References: <20230405092444.1802340-2-mkl@pengutronix.de>
+In-Reply-To: <20230405092444.1802340-2-mkl@pengutronix.de>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        linux-can@vger.kernel.org, kernel@pengutronix.de,
+        o.rempel@pengutronix.de, sjb7183@psu.edu, stable@vger.kernel.org
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Oliver Hartkopp <socketcan@hartkopp.net>
+Hello:
 
-As discussed with Dae R. Jeong and Hillf Danton here [1] the sendmsg()
-function in isotp.c might get into a race condition when restoring the
-former tx.state from the old_state.
+This series was applied to netdev/net.git (main)
+by Marc Kleine-Budde <mkl@pengutronix.de>:
 
-Remove the old_state concept and implement proper locking for the
-ISOTP_IDLE transitions in isotp_sendmsg(), inspired by a
-simplification idea from Hillf Danton.
+On Wed,  5 Apr 2023 11:24:41 +0200 you wrote:
+> From: Oleksij Rempel <o.rempel@pengutronix.de>
+> 
+> In the j1939_tp_tx_dat_new() function, an out-of-bounds memory access
+> could occur during the memcpy() operation if the size of skb->cb is
+> larger than the size of struct j1939_sk_buff_cb. This is because the
+> memcpy() operation uses the size of skb->cb, leading to a read beyond
+> the struct j1939_sk_buff_cb.
+> 
+> [...]
 
-Introduce a new tx.state ISOTP_SHUTDOWN and use the same locking
-mechanism from isotp_release() which resolves a potential race between
-isotp_sendsmg() and isotp_release().
+Here is the summary with links:
+  - [net,1/4] can: j1939: j1939_tp_tx_dat_new(): fix out-of-bounds memory access
+    https://git.kernel.org/netdev/net/c/b45193cb4df5
+  - [net,2/4] can: isotp: isotp_recvmsg(): use sock_recv_cmsgs() to get SOCK_RXQ_OVFL infos
+    https://git.kernel.org/netdev/net/c/0145462fc802
+  - [net,3/4] can: isotp: isotp_ops: fix poll() to not report false EPOLLOUT events
+    https://git.kernel.org/netdev/net/c/79e19fa79cb5
+  - [net,4/4] can: isotp: fix race between isotp_sendsmg() and isotp_release()
+    https://git.kernel.org/netdev/net/c/051737439eae
 
-[1] https://lore.kernel.org/linux-can/ZB%2F93xJxq%2FBUqAgG@dragonet
-
-v1: https://lore.kernel.org/all/20230331102114.15164-1-socketcan@hartkopp.net
-v2: https://lore.kernel.org/all/20230331123600.3550-1-socketcan@hartkopp.net
-    take care of signal interrupts for wait_event_interruptible() in
-    isotp_release()
-v3: https://lore.kernel.org/all/20230331130654.9886-1-socketcan@hartkopp.net
-    take care of signal interrupts for wait_event_interruptible() in
-    isotp_sendmsg() in the wait_tx_done case
-v4: https://lore.kernel.org/all/20230331131935.21465-1-socketcan@hartkopp.net
-    take care of signal interrupts for wait_event_interruptible() in
-    isotp_sendmsg() in ALL cases
-
-Cc: Dae R. Jeong <threeearcat@gmail.com>
-Cc: Hillf Danton <hdanton@sina.com>
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-Fixes: 4f027cba8216 ("can: isotp: split tx timer into transmission and timeout")
-Link: https://lore.kernel.org/all/20230331131935.21465-1-socketcan@hartkopp.net
-Cc: stable@vger.kernel.org
-[mkl: rephrase commit message]
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- net/can/isotp.c | 55 ++++++++++++++++++++++++++++---------------------
- 1 file changed, 31 insertions(+), 24 deletions(-)
-
-diff --git a/net/can/isotp.c b/net/can/isotp.c
-index 281b7766c54e..5761d4ab839d 100644
---- a/net/can/isotp.c
-+++ b/net/can/isotp.c
-@@ -119,7 +119,8 @@ enum {
- 	ISOTP_WAIT_FIRST_FC,
- 	ISOTP_WAIT_FC,
- 	ISOTP_WAIT_DATA,
--	ISOTP_SENDING
-+	ISOTP_SENDING,
-+	ISOTP_SHUTDOWN,
- };
- 
- struct tpcon {
-@@ -880,8 +881,8 @@ static enum hrtimer_restart isotp_tx_timer_handler(struct hrtimer *hrtimer)
- 					     txtimer);
- 	struct sock *sk = &so->sk;
- 
--	/* don't handle timeouts in IDLE state */
--	if (so->tx.state == ISOTP_IDLE)
-+	/* don't handle timeouts in IDLE or SHUTDOWN state */
-+	if (so->tx.state == ISOTP_IDLE || so->tx.state == ISOTP_SHUTDOWN)
- 		return HRTIMER_NORESTART;
- 
- 	/* we did not get any flow control or echo frame in time */
-@@ -918,7 +919,6 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
- {
- 	struct sock *sk = sock->sk;
- 	struct isotp_sock *so = isotp_sk(sk);
--	u32 old_state = so->tx.state;
- 	struct sk_buff *skb;
- 	struct net_device *dev;
- 	struct canfd_frame *cf;
-@@ -928,23 +928,24 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
- 	int off;
- 	int err;
- 
--	if (!so->bound)
-+	if (!so->bound || so->tx.state == ISOTP_SHUTDOWN)
- 		return -EADDRNOTAVAIL;
- 
-+wait_free_buffer:
- 	/* we do not support multiple buffers - for now */
--	if (cmpxchg(&so->tx.state, ISOTP_IDLE, ISOTP_SENDING) != ISOTP_IDLE ||
--	    wq_has_sleeper(&so->wait)) {
--		if (msg->msg_flags & MSG_DONTWAIT) {
--			err = -EAGAIN;
--			goto err_out;
--		}
-+	if (wq_has_sleeper(&so->wait) && (msg->msg_flags & MSG_DONTWAIT))
-+		return -EAGAIN;
- 
--		/* wait for complete transmission of current pdu */
--		err = wait_event_interruptible(so->wait, so->tx.state == ISOTP_IDLE);
--		if (err)
--			goto err_out;
-+	/* wait for complete transmission of current pdu */
-+	err = wait_event_interruptible(so->wait, so->tx.state == ISOTP_IDLE);
-+	if (err)
-+		goto err_event_drop;
- 
--		so->tx.state = ISOTP_SENDING;
-+	if (cmpxchg(&so->tx.state, ISOTP_IDLE, ISOTP_SENDING) != ISOTP_IDLE) {
-+		if (so->tx.state == ISOTP_SHUTDOWN)
-+			return -EADDRNOTAVAIL;
-+
-+		goto wait_free_buffer;
- 	}
- 
- 	if (!size || size > MAX_MSG_LENGTH) {
-@@ -1074,7 +1075,9 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
- 
- 	if (wait_tx_done) {
- 		/* wait for complete transmission of current pdu */
--		wait_event_interruptible(so->wait, so->tx.state == ISOTP_IDLE);
-+		err = wait_event_interruptible(so->wait, so->tx.state == ISOTP_IDLE);
-+		if (err)
-+			goto err_event_drop;
- 
- 		if (sk->sk_err)
- 			return -sk->sk_err;
-@@ -1082,13 +1085,15 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
- 
- 	return size;
- 
-+err_event_drop:
-+	/* got signal: force tx state machine to be idle */
-+	so->tx.state = ISOTP_IDLE;
-+	hrtimer_cancel(&so->txfrtimer);
-+	hrtimer_cancel(&so->txtimer);
- err_out_drop:
- 	/* drop this PDU and unlock a potential wait queue */
--	old_state = ISOTP_IDLE;
--err_out:
--	so->tx.state = old_state;
--	if (so->tx.state == ISOTP_IDLE)
--		wake_up_interruptible(&so->wait);
-+	so->tx.state = ISOTP_IDLE;
-+	wake_up_interruptible(&so->wait);
- 
- 	return err;
- }
-@@ -1150,10 +1155,12 @@ static int isotp_release(struct socket *sock)
- 	net = sock_net(sk);
- 
- 	/* wait for complete transmission of current pdu */
--	wait_event_interruptible(so->wait, so->tx.state == ISOTP_IDLE);
-+	while (wait_event_interruptible(so->wait, so->tx.state == ISOTP_IDLE) == 0 &&
-+	       cmpxchg(&so->tx.state, ISOTP_IDLE, ISOTP_SHUTDOWN) != ISOTP_IDLE)
-+		;
- 
- 	/* force state machines to be idle also when a signal occurred */
--	so->tx.state = ISOTP_IDLE;
-+	so->tx.state = ISOTP_SHUTDOWN;
- 	so->rx.state = ISOTP_IDLE;
- 
- 	spin_lock(&isotp_notifier_lock);
+You are awesome, thank you!
 -- 
-2.39.2
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
