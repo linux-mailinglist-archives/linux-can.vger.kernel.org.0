@@ -2,96 +2,192 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C5216DB2F2
-	for <lists+linux-can@lfdr.de>; Fri,  7 Apr 2023 20:41:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 190DB6DC35A
+	for <lists+linux-can@lfdr.de>; Mon, 10 Apr 2023 07:51:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbjDGSlE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 7 Apr 2023 14:41:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53376 "EHLO
+        id S229503AbjDJFvy (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 10 Apr 2023 01:51:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbjDGSlC (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 7 Apr 2023 14:41:02 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F56BB92
-        for <linux-can@vger.kernel.org>; Fri,  7 Apr 2023 11:41:01 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id ix20so40668908plb.3
-        for <linux-can@vger.kernel.org>; Fri, 07 Apr 2023 11:41:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680892860;
-        h=fro:content-disposition:mime-version:message-id:subject:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kxr1xMxqf5mfDQTUmjqF4Od1A6dI7UcJsri67WdujmQ=;
-        b=UCzTj4DQFhPUFswbbN0gBvsRw2wT2xYE2ds0lekwKUhpreGnYLCZF8OhEkf0EFsr1g
-         uhchv67lu0VP3ym0l/gHAf935JgWEG0lgkE9RvIHVoJ1xiIcST186DXqNcg50Q7fNyrd
-         S6x+l1Elg38rmJIeYX9tZCAxpHMhYPj2HI0FPYxAkdQPLRdC6MSN+LlNIUHdh4U++yMP
-         QSprN3cyKOQrPtaAN6B578DNor72r5DX7ajuzSwv8ueU/uZEPDV6TA9SAEYBT2KJvvkF
-         MFrK3GJIfqU/G3RKJyFapc9Hokhi8okGGfG8yhR8PljQY5dMJmJnuckPcasRsUOEUzQ0
-         Qvmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680892860;
-        h=fro:content-disposition:mime-version:message-id:subject:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kxr1xMxqf5mfDQTUmjqF4Od1A6dI7UcJsri67WdujmQ=;
-        b=zIWBLvrwkV7Ck39MO+GzqCgXDDjL/F7suB5ywSBQF5OsMIx2pvZfWb4hkT2SmsW6bw
-         94Hd+HlmdEtpWMUIGs+2F2QW3OX5tzTydiDr5GSJD+9sCUWNim4rTiykIOdaWdwb8YEX
-         T8JWkPhCrSw4KSmhRR7JGpUYeShuGsCyIa4BKJsRoLDUA4moBnG872yWe6WGFEwEhfBM
-         PWRzmVFJo4wu14bPUyA6m1NeLGwNT3lCxMvznJnLQzEfimIkaTfk9Z0KaR3IDGB3Q5sV
-         mpbJSzcqWa9nzRmregtOAX/4A6Gjk8gfvF4SdchHhUsxve0yaKrfnk37n0eIjBxsGl+U
-         +awQ==
-X-Gm-Message-State: AAQBX9eraWxk8ZnG1xSC0eCi+TgkLqfSwYqwA11NqX8iUg9BTqotCGln
-        Z5T0OEUQz4rJTQspayyDIi2cF5i6e54=
-X-Google-Smtp-Source: AKy350apBG093aFrCEBHfBCw1Ld4lcxQrIAR5V4xpcWyYz8avm2r28K5DmBwTaFmSSOkLNHXO0DolQ==
-X-Received: by 2002:a17:90b:4d04:b0:23d:e0c1:8b93 with SMTP id mw4-20020a17090b4d0400b0023de0c18b93mr3404066pjb.34.1680892860322;
-        Fri, 07 Apr 2023 11:41:00 -0700 (PDT)
-Received: from inky-cap.rainforest.net (c-174-61-184-193.hsd1.wa.comcast.net. [174.61.184.193])
-        by smtp.gmail.com with ESMTPSA id y8-20020a17090a86c800b0022335f1dae2sm684717pjv.22.2023.04.07.11.40.59
-        for <linux-can@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 11:40:59 -0700 (PDT)
-Date:   Fri, 7 Apr 2023 11:40:58 -0700
-From:   quinton.cook@gmail.com
-To:     linux-can@vger.kernel.org
-Subject: J1939-22 implementation proposal
-Message-ID: <ZDBip6w2rz67G996@inky-cap.rainforest.net>
+        with ESMTP id S229482AbjDJFvx (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 10 Apr 2023 01:51:53 -0400
+Received: from mail.fintek.com.tw (mail.fintek.com.tw [59.120.186.242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCAD23AA1;
+        Sun,  9 Apr 2023 22:51:50 -0700 (PDT)
+Received: from vmMailSRV.fintek.com.tw ([192.168.1.1])
+        by mail.fintek.com.tw with ESMTP id 33A5oVrk078423;
+        Mon, 10 Apr 2023 13:50:31 +0800 (+08)
+        (envelope-from peter_hong@fintek.com.tw)
+Received: from [192.168.1.132] (192.168.1.132) by vmMailSRV.fintek.com.tw
+ (192.168.1.1) with Microsoft SMTP Server id 14.3.498.0; Mon, 10 Apr 2023
+ 13:50:30 +0800
+Message-ID: <7e9c01da-74be-3d8d-bb0c-d90935d82081@fintek.com.tw>
+Date:   Mon, 10 Apr 2023 13:50:30 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Fro:    Quinton Cook <quinton.cook@gmail.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH V3] can: usb: f81604: add Fintek F81604 support
+Content-Language: en-US
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+CC:     <wg@grandegger.com>, <mkl@pengutronix.de>,
+        <michal.swiatkowski@linux.intel.com>,
+        <Steen.Hegelund@microchip.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <frank.jungclaus@esd.eu>, <linux-kernel@vger.kernel.org>,
+        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <hpeter+linux_kernel@gmail.com>
+References: <20230327051048.11589-1-peter_hong@fintek.com.tw>
+ <CAMZ6Rq+ps1tLii1VfYyAqfD4ck_TGWBUo_ouK_vLfhoNEg-BPg@mail.gmail.com>
+ <5bdee736-7868-81c3-e63f-a28787bd0007@fintek.com.tw>
+ <CAMZ6Rq++N9ui5srP2uBYz0FPXttBYd2m982K8X-ESCC=qu1dAQ@mail.gmail.com>
+ <8f43fc07-39b1-4b1b-9dc6-257eb00c3a81@fintek.com.tw>
+ <CAMZ6RqLnWARxkJx0gBsee4NsyQicpg6=bPaysmoFo6KRc-j23g@mail.gmail.com>
+From:   Peter Hong <peter_hong@fintek.com.tw>
+In-Reply-To: <CAMZ6RqLnWARxkJx0gBsee4NsyQicpg6=bPaysmoFo6KRc-j23g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [192.168.1.132]
+X-TM-AS-Product-Ver: SMEX-12.5.0.2055-9.0.1002-27556.001
+X-TM-AS-Result: No-8.228900-8.000000-10
+X-TMASE-MatchedRID: QW5G6BKkLTr/9O/B1c/Qy3UVR7WQKpLPt3aeg7g/usDkMnUVL5d0E5tX
+        hf4dcLJZOelJXrqHws2rlQnbB6G4N82IoAvAG8Cy30kDaWZBE1R+tO36GYDlsgl4w4lfxz2cSnO
+        y7poAHRrWsfhGDQA5PTAws7fV6qWw7aXkNnpvXLLwlvzzUUaf2fi4nVERfgwd1YzbHoRn9L0raq
+        zVuCoM+DgcW36+ooYMdUeSBnFjAYDGY1kvv3J4DB1kSRHxj+Z5IfZjRfGTydhYfsHHDgAMI5Xwt
+        1rkqwjUWjOVO3UV6ptftuJwrFEhTbew1twePJJB3QfwsVk0UbvqwGfCk7KUsxO22CBRpq1UPBMN
+        rkVVX83sjZNB2Q/Fx0Av24nJL+j9q6WDBSb0v69tep0NvthBTC8Mf4EVVljDypn/B+ELFzmCGFs
+        tHoGsHHzlz/HUVCh2B6+0uCqc8tyLs8R3TAgGUSPYQweeBxKQftwZ3X11IV0=
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--8.228900-8.000000
+X-TMASE-Version: SMEX-12.5.0.2055-9.0.1002-27556.001
+X-TM-SNTS-SMTP: BB6645C25AD8B4BDB3877DC26628263DA85330F7ED6B42D0F785BF6F6B7E23D62000:8
+X-DNSRBL: 
+X-SPAM-SOURCE-CHECK: pass
+X-MAIL: mail.fintek.com.tw 33A5oVrk078423
+X-Spam-Status: No, score=-2.9 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-J1939-22 (-22) is a new recommended best practice from the SAE. Below is my proposal for the bare minimum needed to get a -22 implementation off the ground. Each sub section focuses on a particular feature that will need to be added.
+Hi Vincent,
 
-Stated goals of -22
-- Take better advantage of the increased bandwidth capabilities of CANFD
-- Ensure as much backwards compatibility with J1939-21 (-21) so that rewrites to existing applications are kept to a minimum.
+Vincent MAILHOL 於 2023/3/30 下午 09:11 寫道:
+> Hmm, I am still not a fan of setting a mutex for a single concurrency
+> issue which can only happen during probing.
+>
+> What about this:
+>
+>    static int __f81604_set_termination(struct net_device *netdev, u16 term)
+>    {
+>            struct f81604_port_priv *port_priv = netdev_priv(netdev);
+>            u8 mask, data = 0;
+>
+>            if (netdev->dev_id == 0)
+>                    mask = F81604_CAN0_TERM;
+>            else
+>                    mask = F81604_CAN1_TERM;
+>
+>            if (term == F81604_TERMINATION_ENABLED)
+>                    data = mask;
+>
+>            return f81604_mask_set_register(port_priv->dev, F81604_TERMINATOR_REG,
+>                                            mask, data);
+>    }
+>
+>    static int f81604_set_termination(struct net_device *netdev, u16 term)
+>    {
+>            ASSERT_RTNL();
+>
+>            return __f81604_set_termination(struct net_device *netdev, u16 term);
+>    }
+>
+>    static int f81604_init_termination(struct f81604_priv *priv)
+>    {
+>            int i, ret;
+>
+>            for (i = 0; i < ARRAY_SIZE(f81604_priv->netdev); i++) {
+>                    ret = __f81604_set_termination(f81604_priv->netdev[i],
+>                                                   F81604_TERMINATION_DISABLED);
+>                    if (ret)
+>                            return ret;
+>            }
+>    }
+>
+>    static int f81604_probe(struct usb_interface *intf,
+>                            const struct usb_device_id *id)
+>    {
+>            /* ... */
+>
+>            err = f81604_init_termination(priv);
+>            if (err)
+>                    goto failure_cleanup;
+>
+>            for (i = 0; i < ARRAY_SIZE(f81604_priv->netdev); i++) {
+>                    /* ... */
+>            }
+>
+>            /* ... */
+>    }
+>
+> Initialise all resistors with __f81604_set_termination() in probe()
+> before registering any network device. Use f81604_set_termination()
+> which has the lock assert elsewhere.
 
-Major changes from -21
-- Except in certain cases, you are not allowed to send classic can frames on a -22 network
-- Parameter groups that total less than 60 bytes will be packed together in a new CAN FD frame called a multipg. Multiple parameter groups are to be sent in one multipg
-- The transport protocol allows for up to 4 simultaneous BAM sessions per network to be active at once, as well as 8 simultaneous RTS/CTS sessions per application.
-- Large emphasis on assurance data for functional safety and cyber security
+The f81604_set_termination() will transform into the following code:
 
-1) Kernel implementation of multipg service:
-The method I propose for implementing the multipg service is as follows. A cyclic task within the kernel runs every 10ms. When the task is running it checks a send queue for each source address registered within the kernel. For each parameter group within the send queue a multipg is constructed from the contents of the queue and transmitted.
+static int f81604_write(struct usb_device *dev, u16 reg, u8 data);
+static int f81604_read(struct usb_device *dev, u16 reg, u8 *data);
+static int f81604_update_bits(struct usb_device *dev, u16 reg, u8 mask,
+                                                u8 data);
 
-2) Sending assurance data 
--22 provides a very clear format for where assurance data should go within a message. As a result, I believe it is the responsibility of the kernel to handle the packaging of assurance data on behalf of the application. When sending a message, applications have the option to include either 32bits or 64bits of assurance data for each parameter group. BAM and RTS/CTS messages can include assurance data as well, but the length in that case can be up to 52 bytes.
+static int __f81604_set_termination(struct usb_device *dev, int idx, u16 
+term)
+{
+     u8 mask, data = 0;
 
-I am open to ideas for how to pass this assurance data to the kernel, but I believe it needs to be separate from the data bytes that are written to the socket. One idea I have considered is expanding the sockaddr_can.can_addr.j1939 struct to include a pointer to the assurance data bytes as well as a length for the assurance data bytes. 
+     if (idx == 0)
+         mask = F81604_CAN0_TERM;
+     else
+         mask = F81604_CAN1_TERM;
 
-3) BAM
-Handling BAM messages is straightforward. The kernel will need to keep track of which source addresses are currently executing a BAM transfer. There is a maximum of 4 simultaneous BAM transfers allowed on a network. The kernel will need to issue an error to applications that attempt to start a BAM while there are 4 active transfers going on.
+     if (term)
+         data = mask;
 
-4) RTS/CTS
-These become a little trickier with -22 mostly since assurance data can be bundled with and RTS/CTS message. The kernel needs to be able to pass the data bytes to the receiving application. The application will then need to process the received payload and ensure that the received payload matches the supplied assurance data. At which point the application should give the OK to the sender and the session can be closed. It would be nice if the receiving application could supply a callback function to the kernel so that once the message was received the kernel could execute the callback function, verify the data bytes, and then acknowledge or abort the connection.
+     return f81604_update_bits(dev, F81604_TERMINATOR_REG, mask, data);
+}
 
-5) Simultaneous BAM and RTS/CTS handling
-Under the new scheme it is possible that a particular application on the network can be transmitting a BAM request as well as an RTS/CTS message at the same time. To avoid mixing up messages from the two transfer sessions the kernel will need to keep track of the: source address, destination address, and session number for each established transport protocol sessions.
+static int f81604_set_termination(struct net_device *netdev, u16 term)
+{
+     struct f81604_port_priv *port_priv = netdev_priv(netdev);
+     struct f81604_priv *priv;
+
+     ASSERT_RTNL();
+
+     priv = usb_get_intfdata(port_priv->intf);
+
+     return __f81604_set_termination(port_priv->dev, netdev->dev_id, term);
+}
+
+and also due to f81604_write() / f81604_read() / f81604_update_bits() 
+may use
+in f81604_probe() without port private data, so we'll change their first 
+parameter
+from "struct f81604_port_priv *priv" to "struct usb_device *dev". Is it OK ?
+
+
+> Also, looking at your probe() function, in label clean_candev:, if the
+> second can channel fails its initialization, you do not clean the
+> first can channel. I suggest adding a f81604_init_netdev() and
+> handling the netdev issue and cleanup in that function.
+
+When the second can channel failed its initialization, the label 
+"clean_candev" will
+clear second "netdev" object and the first "netdev" will cleanup in
+f81604_disconnect().
+
+Could I remain this section of code ?
+
+Thanks
