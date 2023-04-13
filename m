@@ -2,1402 +2,332 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D115D6E092B
-	for <lists+linux-can@lfdr.de>; Thu, 13 Apr 2023 10:44:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 261E86E0D16
+	for <lists+linux-can@lfdr.de>; Thu, 13 Apr 2023 13:51:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbjDMIol (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 13 Apr 2023 04:44:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42344 "EHLO
+        id S229845AbjDMLu7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 13 Apr 2023 07:50:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjDMIoj (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 13 Apr 2023 04:44:39 -0400
-Received: from mail.fintek.com.tw (mail.fintek.com.tw [59.120.186.242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8FA6183;
-        Thu, 13 Apr 2023 01:44:33 -0700 (PDT)
-Received: from vmMailSRV.fintek.com.tw ([192.168.1.1])
-        by mail.fintek.com.tw with ESMTP id 33D8h09D033654;
-        Thu, 13 Apr 2023 16:43:00 +0800 (+08)
-        (envelope-from peter_hong@fintek.com.tw)
-Received: from localhost (192.168.1.128) by vmMailSRV.fintek.com.tw
- (192.168.1.1) with Microsoft SMTP Server (TLS) id 14.3.498.0; Thu, 13 Apr
- 2023 16:43:02 +0800
-From:   "Ji-Ze Hong (Peter Hong)" <peter_hong@fintek.com.tw>
-To:     <wg@grandegger.com>, <mkl@pengutronix.de>,
-        <michal.swiatkowski@linux.intel.com>,
-        <Steen.Hegelund@microchip.com>, <mailhol.vincent@wanadoo.fr>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <frank.jungclaus@esd.eu>,
-        <linux-kernel@vger.kernel.org>, <linux-can@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <hpeter+linux_kernel@gmail.com>,
+        with ESMTP id S230011AbjDMLu6 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 13 Apr 2023 07:50:58 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B5F52717;
+        Thu, 13 Apr 2023 04:50:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681386654; x=1712922654;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5/91+NqLCJ3u7tp8EZonjuXYniF5+ZOmjo9E0OBcpqY=;
+  b=H8FWI9TraZItUw+L4aiGJdInkzYonayKIqFouLc62Ba09L21KD5wKhu7
+   ss3iJjrYqpDQ/tO/3xIQbKSqpAksgEXyEhmBK+Qi3ZcNriJ34oPSTZ+Dl
+   8nloihmXFGbghyxfDQ/OBqnRUfgtF4xigysSEXVer81qTryETC69kLuMl
+   fpqZnGLxP8dlVMNCJ4CWFfjgOvckeVXS8i08QLU6/wUdx1UTKnrpkU6fj
+   fAjJzbUSQXlDYMcJO0Sc9pAoB4OcURUsfouE1vpM29mEurBiR7PQnnyG5
+   QavrQ4OPW9mg5vDTfbOlnqsvK6chutcY2d/wnno/nZOlr/FREA+HY35qo
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="372013460"
+X-IronPort-AV: E=Sophos;i="5.99,341,1677571200"; 
+   d="scan'208";a="372013460"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2023 04:50:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="691929749"
+X-IronPort-AV: E=Sophos;i="5.99,341,1677571200"; 
+   d="scan'208";a="691929749"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 13 Apr 2023 04:50:46 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pmvTT-000YeL-0n;
+        Thu, 13 Apr 2023 11:50:47 +0000
+Date:   Thu, 13 Apr 2023 19:49:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Ji-Ze Hong (Peter Hong)" <peter_hong@fintek.com.tw>,
+        wg@grandegger.com, mkl@pengutronix.de,
+        michal.swiatkowski@linux.intel.com, Steen.Hegelund@microchip.com,
+        mailhol.vincent@wanadoo.fr
+Cc:     oe-kbuild-all@lists.linux.dev, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        frank.jungclaus@esd.eu, linux-kernel@vger.kernel.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        hpeter+linux_kernel@gmail.com,
         "Ji-Ze Hong (Peter Hong)" <peter_hong@fintek.com.tw>
-Subject: [PATCH V4] can: usb: f81604: add Fintek F81604 support
-Date:   Thu, 13 Apr 2023 16:42:53 +0800
-Message-ID: <20230413084253.1524-1-peter_hong@fintek.com.tw>
-X-Mailer: git-send-email 2.17.1
+Subject: Re: [PATCH V4] can: usb: f81604: add Fintek F81604 support
+Message-ID: <202304131914.TQf2Z1pL-lkp@intel.com>
+References: <20230413084253.1524-1-peter_hong@fintek.com.tw>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [192.168.1.128]
-X-TM-AS-Product-Ver: SMEX-12.5.0.2055-9.0.1002-27556.001
-X-TM-AS-Result: No-7.646100-8.000000-10
-X-TMASE-MatchedRID: fg7dWpSZHJI/TqR73SoO81lGa4Om1d9ncDzcoONn/M5UjspoiX02F8p5
-        o3o9IT9plXot2Ppma3G25jv9zW7S1VK4l8RZlJB8xOXNiR9cCFdxXefgn/TNQ8y2i0a2kXlWxWM
-        QQTjSQM1HvdVhWbjJSxPyW1JmU5j5Otq2MCn+D5XwlvzzUUaf2QeDbc64+XV0De+i4lPM57aNxG
-        pCKB1jXRKn6AzHWH6XgJx7HG4xAFpuk59MVAVjnc69emDs42ddlHLUcNM85dpIc5K5w+BzQ0Qy8
-        btyURq0ESdKpb3mwRU/iKxBhgT5cYgrKnsJ1GRgzYK5U+QI3O7BOVz0Jwcxl6vCrG0TnfVULPJt
-        WpbJjY0MV38Bdz1rorQd+RaWLRzG2qjKAYV8LUadVNZaI2n6/6EISxqFf1gSCI3e41pAMeozmw1
-        N47BwdTmtoki1u/CnL/8yUNGojyZRPwES1RXV2hqIkZUgoeP1AZn/4A9db2QbFxo211+Z/cuql5
-        PpRcegkOu9MSTw1T7uLuJvH1bf+Rs7n0Ur0F2YZj7E6vHnuNau2GmdldmiUNfVxEPp7g/k9z46O
-        72VQz4WOC8dCrYHZ0PPxiL69m93O5LKPA/ITAVFThfcy7XcjOMuseq8CJLLwRstnfXx+dl0IhmX
-        tI1gDD9HqmTUnvrEr1gZVzpnCNh0OOj2UitI2384FZpy/6JVndls9F9zmi3fc2Xd6VJ+ymLVaQz
-        5GwEzAott0LTrNd9tF7TiMxHpjaUFowf0SF6CzfqlpbtmcWie+9guUIa8kR//bz4/xYKAC/mZDf
-        WVzICpxOKkrn65/ajGdWX6IFpBvwDp0bY+NkGeAiCmPx4NwJuJ+Pb8n/VxSnQ4MjwaO9cqtq5d3
-        cxkNQP90fJP9eHt
-X-TM-AS-User-Approved-Sender: No
-X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--7.646100-8.000000
-X-TMASE-Version: SMEX-12.5.0.2055-9.0.1002-27556.001
-X-TM-SNTS-SMTP: CA13ADDB2B57618F432098D27FBA8E16A4CE0A93547FD84E8C508274EE5F2BFD2000:8
-X-DNSRBL: 
-X-SPAM-SOURCE-CHECK: pass
-X-MAIL: mail.fintek.com.tw 33D8h09D033654
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230413084253.1524-1-peter_hong@fintek.com.tw>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This patch adds support for Fintek USB to 2CAN controller.
+Hi Ji-Ze,
 
-Signed-off-by: Ji-Ze Hong (Peter Hong) <peter_hong@fintek.com.tw>
----
-Changelog:
-v4:
-	1. Remove f81604_prepare_urbs/f81604_remove_urbs() and alloc URB/buffer
-	   dynamically in f81604_register_urbs(), using "urbs_anchor" for manage
-	   all rx/int URBs.
-	2. Add F81604 to MAINTAINERS list.
-	3. Change handle_clear_reg_work/handle_clear_overrun_work to single
-	   clear_reg_work and using bitwise "clear_flags" to record it.
-	4. Move __f81604_set_termination in front of f81604_probe() to avoid
-	   rarely racing condition.
-	5. Add __aligned to struct f81604_int_data / f81604_sff / f81604_eff.
-	6. Add aligned operations in f81604_start_xmit/f81604_process_rx_packet().
-	7. Change lots of CANBUS functions first parameter from struct usb_device*
-	   to struct f81604_port_priv *priv. But remain f81604_write / f81604_read
-	   / f81604_update_bits() as struct usb_device* for
-	   __f81604_set_termination() in probe() stage.
-	8. Simplify f81604_read_int_callback() and separate into
-	   f81604_handle_tx / f81604_handle_can_bus_errors() functions.
+kernel test robot noticed the following build warnings:
 
-v3:
-	1. Change CAN clock to using MEGA units.
-	2. Remove USB set/get retry, only remain SJA1000 reset/operation retry.
-	3. Fix all numberic constant to define.
-	4. Add terminator control. (only 0 & 120 ohm)
-	5. Using struct data to represent INT/TX/RX endpoints data instead byte
-	   arrays.
-	6. Error message reports changed from %d to %pe for mnemotechnic values.
-	7. Some bit operations are changed to FIELD_PREP().
-	8. Separate TX functions from f81604_read_int_callback().
-	9. cf->can_id |= CAN_ERR_CNT in f81604_read_int_callback to report valid
-	   TX/RX error counts.
-	10. Move f81604_prepare_urbs/f81604_remove_urbs() from CAN open/close() to
-	    USB probe/disconnect().
-	11. coding style refactoring.
+[auto build test WARNING on mkl-can-next/testing]
+[also build test WARNING on linus/master v6.3-rc6 next-20230412]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-v2:
-	1. coding style refactoring.
-	2. some const number are defined to describe itself.
-	3. fix wrong usage for can_get_echo_skb() in f81604_write_bulk_callback().
+url:    https://github.com/intel-lab-lkp/linux/commits/Ji-Ze-Hong-Peter-Hong/can-usb-f81604-add-Fintek-F81604-support/20230413-164625
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git testing
+patch link:    https://lore.kernel.org/r/20230413084253.1524-1-peter_hong%40fintek.com.tw
+patch subject: [PATCH V4] can: usb: f81604: add Fintek F81604 support
+config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230413/202304131914.TQf2Z1pL-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/225b03ddc1d9e5b6a8dac065d29288fc8ceb1357
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ji-Ze-Hong-Peter-Hong/can-usb-f81604-add-Fintek-F81604-support/20230413-164625
+        git checkout 225b03ddc1d9e5b6a8dac065d29288fc8ceb1357
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/net/
 
- MAINTAINERS                  |    6 +
- drivers/net/can/usb/Kconfig  |   12 +
- drivers/net/can/usb/Makefile |    1 +
- drivers/net/can/usb/f81604.c | 1221 ++++++++++++++++++++++++++++++++++
- 4 files changed, 1240 insertions(+)
- create mode 100644 drivers/net/can/usb/f81604.c
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304131914.TQf2Z1pL-lkp@intel.com/
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f375bbf3bc80..fa573f637c2f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8058,6 +8058,12 @@ S:	Maintained
- F:	drivers/hwmon/f75375s.c
- F:	include/linux/f75375s.h
- 
-+FINTEK F81604 USB to 2xCANBUS DEVICE DRIVER
-+M:	Ji-Ze Hong (Peter Hong) <peter_hong@fintek.com.tw>
-+L:	linux-can@vger.kernel.org
-+S:	Maintained
-+F:	drivers/net/can/usb/f81604.c
-+
- FIREWIRE AUDIO DRIVERS and IEC 61883-1/6 PACKET STREAMING ENGINE
- M:	Clemens Ladisch <clemens@ladisch.de>
- M:	Takashi Sakamoto <o-takashi@sakamocchi.jp>
-diff --git a/drivers/net/can/usb/Kconfig b/drivers/net/can/usb/Kconfig
-index 445504ababce..58fcd2b34820 100644
---- a/drivers/net/can/usb/Kconfig
-+++ b/drivers/net/can/usb/Kconfig
-@@ -38,6 +38,18 @@ config CAN_ETAS_ES58X
- 	  To compile this driver as a module, choose M here: the module
- 	  will be called etas_es58x.
- 
-+config CAN_F81604
-+        tristate "Fintek F81604 USB to 2CAN interface"
-+        help
-+          This driver supports the Fintek F81604 USB to 2CAN interface.
-+          The device can support CAN2.0A/B protocol and also support
-+          2 output pins to control external terminator (optional).
-+
-+          To compile this driver as a module, choose M here: the module will
-+          be called f81604.
-+
-+          (see also https://www.fintek.com.tw).
-+
- config CAN_GS_USB
- 	tristate "Geschwister Schneider UG and candleLight compatible interfaces"
- 	help
-diff --git a/drivers/net/can/usb/Makefile b/drivers/net/can/usb/Makefile
-index 1ea16be5743b..8b11088e9a59 100644
---- a/drivers/net/can/usb/Makefile
-+++ b/drivers/net/can/usb/Makefile
-@@ -7,6 +7,7 @@ obj-$(CONFIG_CAN_8DEV_USB) += usb_8dev.o
- obj-$(CONFIG_CAN_EMS_USB) += ems_usb.o
- obj-$(CONFIG_CAN_ESD_USB) += esd_usb.o
- obj-$(CONFIG_CAN_ETAS_ES58X) += etas_es58x/
-+obj-$(CONFIG_CAN_F81604) += f81604.o
- obj-$(CONFIG_CAN_GS_USB) += gs_usb.o
- obj-$(CONFIG_CAN_KVASER_USB) += kvaser_usb/
- obj-$(CONFIG_CAN_MCBA_USB) += mcba_usb.o
-diff --git a/drivers/net/can/usb/f81604.c b/drivers/net/can/usb/f81604.c
-new file mode 100644
-index 000000000000..ce83a7993c4b
---- /dev/null
-+++ b/drivers/net/can/usb/f81604.c
-@@ -0,0 +1,1221 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Fintek F81604 USB-to-2CAN controller driver.
-+ *
-+ * Copyright (C) 2023 Ji-Ze Hong (Peter Hong) <peter_hong@fintek.com.tw>
-+ */
-+#include <linux/bitfield.h>
-+#include <linux/netdevice.h>
-+#include <linux/units.h>
-+#include <linux/usb.h>
-+
-+#include <linux/can.h>
-+#include <linux/can/dev.h>
-+#include <linux/can/error.h>
-+#include <linux/can/platform/sja1000.h>
-+
-+#include <asm-generic/unaligned.h>
-+
-+/* vendor and product id */
-+#define F81604_VENDOR_ID 0x2c42
-+#define F81604_PRODUCT_ID 0x1709
-+#define F81604_CAN_CLOCK (24 * MEGA / 2)
-+#define F81604_MAX_DEV 2
-+#define F81604_SET_DEVICE_RETRY 10
-+
-+#define F81604_USB_TIMEOUT 2000
-+#define F81604_SET_GET_REGISTER 0xA0
-+#define F81604_PORT_OFFSET 0x1000
-+
-+#define F81604_BULK_SIZE 64
-+#define F81604_INT_SIZE 16
-+#define F81604_DATA_SIZE 14
-+#define F81604_MAX_RX_URBS 4
-+
-+#define F81604_CMD_DATA 0x00
-+
-+#define F81604_DLC_LEN_MASK 0x0f
-+#define F81604_DLC_EFF_BIT BIT(7)
-+#define F81604_DLC_RTR_BIT BIT(6)
-+
-+#define F81604_BRP_MASK GENMASK(5, 0)
-+#define F81604_SJW_MASK GENMASK(7, 6)
-+
-+#define F81604_SEG1_MASK GENMASK(3, 0)
-+#define F81604_SEG2_MASK GENMASK(6, 4)
-+
-+#define F81604_CLEAR_ALC 0
-+#define F81604_CLEAR_ECC 1
-+#define F81604_CLEAR_OVERRUN 2
-+
-+/* device setting */
-+#define F81604_CTRL_MODE_REG 0x80
-+#define F81604_TX_ONESHOT (0x03 << 3)
-+#define F81604_TX_NORMAL (0x01 << 3)
-+#define F81604_RX_AUTO_RELEASE_BUF BIT(1)
-+#define F81604_INT_WHEN_CHANGE BIT(0)
-+
-+#define F81604_TERMINATOR_REG 0x105
-+#define F81604_CAN0_TERM BIT(2)
-+#define F81604_CAN1_TERM BIT(3)
-+
-+#define F81604_TERMINATION_DISABLED CAN_TERMINATION_DISABLED
-+#define F81604_TERMINATION_ENABLED 120
-+
-+/* SJA1000 registers - manual section 6.4 (Pelican Mode) */
-+#define F81604_SJA1000_MOD 0x00
-+#define F81604_SJA1000_CMR 0x01
-+#define F81604_SJA1000_IR 0x03
-+#define F81604_SJA1000_IER 0x04
-+#define F81604_SJA1000_ALC 0x0B
-+#define F81604_SJA1000_ECC 0x0C
-+#define F81604_SJA1000_RXERR 0x0E
-+#define F81604_SJA1000_TXERR 0x0F
-+#define F81604_SJA1000_ACCC0 0x10
-+#define F81604_SJA1000_ACCM0 0x14
-+#define F81604_MAX_FILTER_CNT 4
-+
-+/* Common registers - manual section 6.5 */
-+#define F81604_SJA1000_BTR0 0x06
-+#define F81604_SJA1000_BTR1 0x07
-+#define F81604_SJA1000_BTR1_SAMPLE_TRIPLE BIT(7)
-+#define F81604_SJA1000_OCR 0x08
-+#define F81604_SJA1000_CDR 0x1F
-+
-+/* mode register */
-+#define F81604_SJA1000_MOD_RM 0x01
-+#define F81604_SJA1000_MOD_LOM 0x02
-+#define F81604_SJA1000_MOD_STM 0x04
-+
-+/* commands */
-+#define F81604_SJA1000_CMD_CDO 0x08
-+
-+/* interrupt sources */
-+#define F81604_SJA1000_IRQ_BEI 0x80
-+#define F81604_SJA1000_IRQ_ALI 0x40
-+#define F81604_SJA1000_IRQ_EPI 0x20
-+#define F81604_SJA1000_IRQ_DOI 0x08
-+#define F81604_SJA1000_IRQ_EI 0x04
-+#define F81604_SJA1000_IRQ_TI 0x02
-+#define F81604_SJA1000_IRQ_RI 0x01
-+#define F81604_SJA1000_IRQ_ALL 0xFF
-+#define F81604_SJA1000_IRQ_OFF 0x00
-+
-+/* status register content */
-+#define F81604_SJA1000_SR_BS 0x80
-+#define F81604_SJA1000_SR_ES 0x40
-+#define F81604_SJA1000_SR_TCS 0x08
-+
-+/* ECC register */
-+#define F81604_SJA1000_ECC_SEG 0x1F
-+#define F81604_SJA1000_ECC_DIR 0x20
-+#define F81604_SJA1000_ECC_BIT 0x00
-+#define F81604_SJA1000_ECC_FORM 0x40
-+#define F81604_SJA1000_ECC_STUFF 0x80
-+#define F81604_SJA1000_ECC_MASK 0xc0
-+
-+/* ALC register */
-+#define F81604_SJA1000_ALC_MASK 0x1f
-+
-+/* table of devices that work with this driver */
-+static const struct usb_device_id f81604_table[] = {
-+	{ USB_DEVICE(F81604_VENDOR_ID, F81604_PRODUCT_ID) },
-+	{} /* Terminating entry */
-+};
-+
-+MODULE_DEVICE_TABLE(usb, f81604_table);
-+
-+static const struct ethtool_ops f81604_ethtool_ops = {
-+	.get_ts_info = ethtool_op_get_ts_info,
-+};
-+
-+static const u16 f81604_termination[] = { F81604_TERMINATION_DISABLED,
-+					  F81604_TERMINATION_ENABLED };
-+
-+struct f81604_priv {
-+	struct net_device *netdev[F81604_MAX_DEV];
-+};
-+
-+struct f81604_port_priv {
-+	struct can_priv can;
-+	struct net_device *netdev;
-+	struct sk_buff *echo_skb;
-+
-+	unsigned long clear_flags;
-+	struct work_struct clear_reg_work;
-+
-+	struct usb_device *dev;
-+	struct usb_interface *intf;
-+
-+	struct usb_anchor urbs_anchor;
-+};
-+
-+/* Interrupt endpoint data format:
-+ *	Byte 0: Status register.
-+ *	Byte 1: Interrupt register.
-+ *	Byte 2: Interrupt enable register.
-+ *	Byte 3: Arbitration lost capture(ALC) register.
-+ *	Byte 4: Error code capture(ECC) register.
-+ *	Byte 5: Error warning limit register.
-+ *	Byte 6: RX error counter register.
-+ *	Byte 7: TX error counter register.
-+ *	Byte 8: Reserved.
-+ */
-+struct f81604_int_data {
-+	u8 sr;
-+	u8 isrc;
-+	u8 ier;
-+	u8 alc;
-+	u8 ecc;
-+	u8 ewlr;
-+	u8 rxerr;
-+	u8 txerr;
-+	u8 val;
-+} __packed __aligned(4);
-+
-+struct f81604_sff {
-+	__be16 id;
-+	u8 data[CAN_MAX_DLEN];
-+} __packed __aligned(2);
-+
-+struct f81604_eff {
-+	__be32 id;
-+	u8 data[CAN_MAX_DLEN];
-+} __packed __aligned(2);
-+
-+struct f81604_can_frame {
-+	u8 cmd;
-+
-+	/* According for F81604 DLC define:
-+	 *	bit 3~0: data length (0~8)
-+	 *	bit6: is RTR flag.
-+	 *	bit7: is EFF frame.
-+	 */
-+	u8 dlc;
-+
-+	union {
-+		struct f81604_sff sff;
-+		struct f81604_eff eff;
-+	};
-+} __packed;
-+
-+static_assert(sizeof(struct f81604_can_frame) == F81604_DATA_SIZE);
-+
-+static const u8 bulk_in_addr[F81604_MAX_DEV] = { 2, 4 };
-+static const u8 bulk_out_addr[F81604_MAX_DEV] = { 1, 3 };
-+static const u8 int_in_addr[F81604_MAX_DEV] = { 1, 3 };
-+
-+static int f81604_write(struct usb_device *dev, u16 reg, u8 data)
-+{
-+	int ret;
-+
-+	ret = usb_control_msg_send(dev, 0, F81604_SET_GET_REGISTER,
-+				   USB_TYPE_VENDOR | USB_DIR_OUT, 0, reg,
-+				   &data, sizeof(data), F81604_USB_TIMEOUT,
-+				   GFP_KERNEL);
-+	if (ret)
-+		dev_err(&dev->dev, "%s: reg: %x data: %x failed: %pe\n",
-+			__func__, reg, data, ERR_PTR(ret));
-+
-+	return ret;
-+}
-+
-+static int f81604_read(struct usb_device *dev, u16 reg, u8 *data)
-+{
-+	int ret;
-+
-+	ret = usb_control_msg_recv(dev, 0, F81604_SET_GET_REGISTER,
-+				   USB_TYPE_VENDOR | USB_DIR_IN, 0, reg, data,
-+				   sizeof(*data), F81604_USB_TIMEOUT,
-+				   GFP_KERNEL);
-+
-+	if (ret < 0)
-+		dev_err(&dev->dev, "%s: reg: %x failed: %pe\n", __func__, reg,
-+			ERR_PTR(ret));
-+
-+	return ret;
-+}
-+
-+static int f81604_update_bits(struct usb_device *dev, u16 reg, u8 mask,
-+			      u8 data)
-+{
-+	int ret;
-+	u8 tmp;
-+
-+	ret = f81604_read(dev, reg, &tmp);
-+	if (ret)
-+		return ret;
-+
-+	tmp &= ~mask;
-+	tmp |= (mask & data);
-+
-+	return f81604_write(dev, reg, tmp);
-+}
-+
-+static int f81604_sja1000_write(struct f81604_port_priv *priv, u16 reg,
-+				u8 data)
-+{
-+	int port = priv->netdev->dev_id;
-+	int real_reg;
-+
-+	real_reg = reg + F81604_PORT_OFFSET * port + F81604_PORT_OFFSET;
-+	return f81604_write(priv->dev, real_reg, data);
-+}
-+
-+static int f81604_sja1000_read(struct f81604_port_priv *priv, u16 reg,
-+			       u8 *data)
-+{
-+	int port = priv->netdev->dev_id;
-+	int real_reg;
-+
-+	real_reg = reg + F81604_PORT_OFFSET * port + F81604_PORT_OFFSET;
-+	return f81604_read(priv->dev, real_reg, data);
-+}
-+
-+static int f81604_set_reset_mode(struct f81604_port_priv *priv)
-+{
-+	int ret, i;
-+	u8 tmp;
-+
-+	/* disable interrupts */
-+	ret = f81604_sja1000_write(priv, F81604_SJA1000_IER,
-+				   F81604_SJA1000_IRQ_OFF);
-+	if (ret)
-+		return ret;
-+
-+	for (i = 0; i < F81604_SET_DEVICE_RETRY; i++) {
-+		ret = f81604_sja1000_read(priv, F81604_SJA1000_MOD, &tmp);
-+		if (ret)
-+			return ret;
-+
-+		/* check reset bit */
-+		if (tmp & F81604_SJA1000_MOD_RM) {
-+			priv->can.state = CAN_STATE_STOPPED;
-+			return 0;
-+		}
-+
-+		/* reset chip */
-+		ret = f81604_sja1000_write(priv, F81604_SJA1000_MOD,
-+					   F81604_SJA1000_MOD_RM);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return -EPERM;
-+}
-+
-+static int f81604_set_normal_mode(struct f81604_port_priv *priv)
-+{
-+	u8 tmp, ier = 0;
-+	u8 mod_reg = 0;
-+	int ret, i;
-+
-+	for (i = 0; i < F81604_SET_DEVICE_RETRY; i++) {
-+		ret = f81604_sja1000_read(priv, F81604_SJA1000_MOD, &tmp);
-+		if (ret)
-+			return ret;
-+
-+		/* check reset bit */
-+		if ((tmp & F81604_SJA1000_MOD_RM) == 0) {
-+			priv->can.state = CAN_STATE_ERROR_ACTIVE;
-+			/* enable interrupts, RI handled by bulk-in */
-+			ier = F81604_SJA1000_IRQ_ALL & ~F81604_SJA1000_IRQ_RI;
-+			if (!(priv->can.ctrlmode &
-+			      CAN_CTRLMODE_BERR_REPORTING))
-+				ier &= ~F81604_SJA1000_IRQ_BEI;
-+
-+			return f81604_sja1000_write(priv, F81604_SJA1000_IER,
-+						    ier);
-+		}
-+
-+		/* set chip to normal mode */
-+		if (priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
-+			mod_reg |= F81604_SJA1000_MOD_LOM;
-+		if (priv->can.ctrlmode & CAN_CTRLMODE_PRESUME_ACK)
-+			mod_reg |= F81604_SJA1000_MOD_STM;
-+
-+		ret = f81604_sja1000_write(priv, F81604_SJA1000_MOD, mod_reg);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return -EPERM;
-+}
-+
-+static int f81604_chipset_init(struct f81604_port_priv *priv)
-+{
-+	int i, ret;
-+
-+	/* set clock divider and output control register */
-+	ret = f81604_sja1000_write(priv, F81604_SJA1000_CDR,
-+				   CDR_CBP | CDR_PELICAN);
-+	if (ret)
-+		return ret;
-+
-+	/* set acceptance filter (accept all) */
-+	for (i = 0; i < F81604_MAX_FILTER_CNT; ++i) {
-+		ret = f81604_sja1000_write(priv, F81604_SJA1000_ACCC0 + i, 0);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	for (i = 0; i < F81604_MAX_FILTER_CNT; ++i) {
-+		ret = f81604_sja1000_write(priv, F81604_SJA1000_ACCM0 + i,
-+					   0xFF);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return f81604_sja1000_write(priv, F81604_SJA1000_OCR,
-+				    OCR_TX0_PUSHPULL | OCR_TX1_PUSHPULL |
-+					    OCR_MODE_NORMAL);
-+}
-+
-+static void f81604_process_rx_packet(struct urb *urb)
-+{
-+	struct net_device *netdev = urb->context;
-+	struct net_device_stats *stats;
-+	struct f81604_can_frame *frame;
-+	struct can_frame *cf;
-+	struct sk_buff *skb;
-+	unsigned int count;
-+	unsigned int i;
-+	u8 *data;
-+
-+	data = urb->transfer_buffer;
-+	stats = &netdev->stats;
-+
-+	if (urb->actual_length % F81604_DATA_SIZE)
-+		netdev_warn(netdev, "URB length %u not multiple of %u\n",
-+			    urb->actual_length, F81604_DATA_SIZE);
-+	else if (!urb->actual_length)
-+		netdev_warn(netdev, "URB length is 0\n");
-+
-+	count = urb->actual_length / F81604_DATA_SIZE;
-+
-+	for (i = 0; i < count; ++i) {
-+		frame = (struct f81604_can_frame *)&data[i * F81604_DATA_SIZE];
-+
-+		if (frame->cmd != F81604_CMD_DATA)
-+			continue;
-+
-+		skb = alloc_can_skb(netdev, &cf);
-+		if (!skb) {
-+			stats->rx_dropped++;
-+			continue;
-+		}
-+
-+		cf->len = can_cc_dlc2len(frame->dlc & F81604_DLC_LEN_MASK);
-+
-+		if (frame->dlc & F81604_DLC_EFF_BIT) {
-+			cf->can_id = get_unaligned_be32(&frame->eff.id) >> 3;
-+			cf->can_id |= CAN_EFF_FLAG;
-+
-+			if (cf->len)
-+				memcpy(cf->data, frame->eff.data, cf->len);
-+		} else {
-+			cf->can_id = get_unaligned_be16(&frame->sff.id) >> 5;
-+
-+			if (cf->len)
-+				memcpy(cf->data, frame->sff.data, cf->len);
-+		}
-+
-+		if (frame->dlc & F81604_DLC_RTR_BIT)
-+			cf->can_id |= CAN_RTR_FLAG;
-+		else
-+			stats->rx_bytes += cf->len;
-+
-+		stats->rx_packets++;
-+		netif_rx(skb);
-+	}
-+}
-+
-+static void f81604_read_bulk_callback(struct urb *urb)
-+{
-+	struct net_device *netdev = urb->context;
-+	int ret;
-+
-+	if (!netif_device_present(netdev))
-+		return;
-+
-+	if (urb->status)
-+		netdev_info(netdev, "%s: URB aborted %pe\n", __func__,
-+			    ERR_PTR(urb->status));
-+
-+	switch (urb->status) {
-+	case 0: /* success */
-+		break;
-+
-+	case -ENOENT:
-+	case -EPIPE:
-+	case -EPROTO:
-+	case -ESHUTDOWN:
-+		return;
-+
-+	default:
-+		goto resubmit_urb;
-+	}
-+
-+	f81604_process_rx_packet(urb);
-+
-+resubmit_urb:
-+	ret = usb_submit_urb(urb, GFP_ATOMIC);
-+	if (ret == -ENODEV)
-+		netif_device_detach(netdev);
-+	else if (ret)
-+		netdev_err(netdev,
-+			   "%s: failed to resubmit read bulk urb: %pe\n",
-+			   __func__, ERR_PTR(ret));
-+}
-+
-+static void f81604_handle_tx(struct f81604_port_priv *priv,
-+			     struct f81604_int_data *data)
-+{
-+	struct net_device *netdev = priv->netdev;
-+	struct net_device_stats *stats;
-+
-+	stats = &netdev->stats;
-+
-+	/* transmission buffer released */
-+	if (priv->can.ctrlmode & CAN_CTRLMODE_ONE_SHOT &&
-+	    !(data->sr & F81604_SJA1000_SR_TCS)) {
-+		stats->tx_errors++;
-+		can_free_echo_skb(netdev, 0, NULL);
-+	} else {
-+		/* transmission complete */
-+		stats->tx_bytes += can_get_echo_skb(netdev, 0, NULL);
-+		stats->tx_packets++;
-+	}
-+
-+	netif_wake_queue(netdev);
-+}
-+
-+static void f81604_handle_can_bus_errors(struct f81604_port_priv *priv,
-+					 struct f81604_int_data *data)
-+{
-+	enum can_state can_state = priv->can.state;
-+	struct net_device *netdev = priv->netdev;
-+	enum can_state tx_state, rx_state;
-+	struct net_device_stats *stats;
-+	struct can_frame *cf;
-+	struct sk_buff *skb;
-+
-+	stats = &netdev->stats;
-+
-+	/* Note: ALC/ECC will not auto clear by read here, must be cleared by
-+	 * read register (via clear_reg_work).
-+	 */
-+
-+	skb = alloc_can_err_skb(netdev, &cf);
-+	if (skb) {
-+		cf->can_id |= CAN_ERR_CNT;
-+		cf->data[6] = data->txerr;
-+		cf->data[7] = data->rxerr;
-+	}
-+
-+	if (data->isrc & F81604_SJA1000_IRQ_DOI) {
-+		/* data overrun interrupt */
-+		netdev_dbg(netdev, "data overrun interrupt\n");
-+
-+		if (skb) {
-+			cf->can_id |= CAN_ERR_CRTL;
-+			cf->data[1] = CAN_ERR_CRTL_RX_OVERFLOW;
-+		}
-+
-+		stats->rx_over_errors++;
-+		stats->rx_errors++;
-+
-+		set_bit(F81604_CLEAR_OVERRUN, &priv->clear_flags);
-+	}
-+
-+	if (data->isrc & F81604_SJA1000_IRQ_EI) {
-+		/* error warning interrupt */
-+		netdev_dbg(netdev, "error warning interrupt\n");
-+
-+		if (data->sr & F81604_SJA1000_SR_BS)
-+			can_state = CAN_STATE_BUS_OFF;
-+		else if (data->sr & F81604_SJA1000_SR_ES)
-+			can_state = CAN_STATE_ERROR_WARNING;
-+		else
-+			can_state = CAN_STATE_ERROR_ACTIVE;
-+	}
-+
-+	if (data->isrc & F81604_SJA1000_IRQ_BEI) {
-+		/* bus error interrupt */
-+		netdev_dbg(netdev, "bus error interrupt\n");
-+
-+		priv->can.can_stats.bus_error++;
-+		stats->rx_errors++;
-+
-+		if (skb) {
-+			cf->can_id |= CAN_ERR_PROT | CAN_ERR_BUSERROR;
-+
-+			/* set error type */
-+			switch (data->ecc & F81604_SJA1000_ECC_MASK) {
-+			case F81604_SJA1000_ECC_BIT:
-+				cf->data[2] |= CAN_ERR_PROT_BIT;
-+				break;
-+			case F81604_SJA1000_ECC_FORM:
-+				cf->data[2] |= CAN_ERR_PROT_FORM;
-+				break;
-+			case F81604_SJA1000_ECC_STUFF:
-+				cf->data[2] |= CAN_ERR_PROT_STUFF;
-+				break;
-+			default:
-+				break;
-+			}
-+
-+			/* set error location */
-+			cf->data[3] = data->ecc & F81604_SJA1000_ECC_SEG;
-+
-+			/* Error occurred during transmission? */
-+			if ((data->ecc & F81604_SJA1000_ECC_DIR) == 0)
-+				cf->data[2] |= CAN_ERR_PROT_TX;
-+		}
-+
-+		set_bit(F81604_CLEAR_ECC, &priv->clear_flags);
-+	}
-+
-+	if (data->isrc & F81604_SJA1000_IRQ_EPI) {
-+		if (can_state == CAN_STATE_ERROR_PASSIVE)
-+			can_state = CAN_STATE_ERROR_WARNING;
-+		else
-+			can_state = CAN_STATE_ERROR_PASSIVE;
-+
-+		/* error passive interrupt */
-+		netdev_dbg(netdev, "error passive interrupt: %d\n", can_state);
-+	}
-+
-+	if (data->isrc & F81604_SJA1000_IRQ_ALI) {
-+		/* arbitration lost interrupt */
-+		netdev_dbg(netdev, "arbitration lost interrupt\n");
-+
-+		priv->can.can_stats.arbitration_lost++;
-+
-+		if (skb) {
-+			cf->can_id |= CAN_ERR_LOSTARB;
-+			cf->data[0] = data->alc & F81604_SJA1000_ALC_MASK;
-+		}
-+
-+		set_bit(F81604_CLEAR_ALC, &priv->clear_flags);
-+	}
-+
-+	if (can_state != priv->can.state) {
-+		tx_state = data->txerr >= data->rxerr ? can_state : 0;
-+		rx_state = data->txerr <= data->rxerr ? can_state : 0;
-+
-+		can_change_state(netdev, cf, tx_state, rx_state);
-+
-+		if (can_state == CAN_STATE_BUS_OFF)
-+			can_bus_off(netdev);
-+	}
-+
-+	if (priv->clear_flags)
-+		schedule_work(&priv->clear_reg_work);
-+
-+	if (skb)
-+		netif_rx(skb);
-+}
-+
-+static void f81604_read_int_callback(struct urb *urb)
-+{
-+	struct f81604_int_data *data = urb->transfer_buffer;
-+	struct net_device *netdev = urb->context;
-+	struct f81604_port_priv *priv;
-+	int ret;
-+
-+	priv = netdev_priv(netdev);
-+
-+	if (!netif_device_present(netdev))
-+		return;
-+
-+	if (urb->status)
-+		netdev_info(netdev, "%s: Int URB aborted: %pe\n", __func__,
-+			    ERR_PTR(urb->status));
-+
-+	switch (urb->status) {
-+	case 0: /* success */
-+		break;
-+
-+	case -ENOENT:
-+	case -EPIPE:
-+	case -EPROTO:
-+	case -ESHUTDOWN:
-+		return;
-+
-+	default:
-+		goto resubmit_urb;
-+	}
-+
-+	/* handle Errors */
-+	if (data->isrc & (F81604_SJA1000_IRQ_DOI | F81604_SJA1000_IRQ_EI |
-+			  F81604_SJA1000_IRQ_BEI | F81604_SJA1000_IRQ_EPI |
-+			  F81604_SJA1000_IRQ_ALI))
-+		f81604_handle_can_bus_errors(priv, data);
-+
-+	/* handle TX */
-+	if (priv->can.state != CAN_STATE_BUS_OFF &&
-+	    (data->isrc & F81604_SJA1000_IRQ_TI))
-+		f81604_handle_tx(priv, data);
-+
-+resubmit_urb:
-+	ret = usb_submit_urb(urb, GFP_ATOMIC);
-+	if (ret == -ENODEV)
-+		netif_device_detach(netdev);
-+	else if (ret)
-+		netdev_err(netdev, "%s: failed to resubmit int urb: %pe\n",
-+			   __func__, ERR_PTR(ret));
-+}
-+
-+static void f81604_unregister_urbs(struct f81604_port_priv *priv)
-+{
-+	usb_kill_anchored_urbs(&priv->urbs_anchor);
-+}
-+
-+static int f81604_register_urbs(struct f81604_port_priv *priv)
-+{
-+	struct net_device *netdev = priv->netdev;
-+	struct urb *rx_urb, *int_urb;
-+	int id = netdev->dev_id;
-+	u8 *rx_buf, *int_buf;
-+	int rx_urb_cnt;
-+	int ret;
-+
-+	for (rx_urb_cnt = 0; rx_urb_cnt < F81604_MAX_RX_URBS; ++rx_urb_cnt) {
-+		rx_urb = usb_alloc_urb(0, GFP_KERNEL);
-+		if (!rx_urb) {
-+			ret = -ENOMEM;
-+			break;
-+		}
-+
-+		rx_buf = kmalloc(F81604_BULK_SIZE, GFP_KERNEL);
-+		if (!rx_buf) {
-+			usb_free_urb(rx_urb);
-+			ret = -ENOMEM;
-+			break;
-+		}
-+
-+		usb_fill_bulk_urb(rx_urb, priv->dev,
-+				  usb_rcvbulkpipe(priv->dev, bulk_in_addr[id]),
-+				  rx_buf, F81604_BULK_SIZE,
-+				  f81604_read_bulk_callback, netdev);
-+
-+		rx_urb->transfer_flags |= URB_FREE_BUFFER;
-+		usb_anchor_urb(rx_urb, &priv->urbs_anchor);
-+
-+		ret = usb_submit_urb(rx_urb, GFP_KERNEL);
-+		if (ret) {
-+			usb_unanchor_urb(rx_urb);
-+			usb_free_urb(rx_urb);
-+
-+			break;
-+		}
-+
-+		/* Drop reference, USB core will take care of freeing it */
-+		usb_free_urb(rx_urb);
-+	}
-+
-+	if (rx_urb_cnt == 0) {
-+		netdev_warn(netdev, "%s: submit rx urb failed: %pe\n",
-+			    __func__, ERR_PTR(ret));
-+
-+		goto error;
-+	}
-+
-+	int_urb = usb_alloc_urb(0, GFP_KERNEL);
-+	if (!int_urb) {
-+		ret = -ENOMEM;
-+		goto error;
-+	}
-+
-+	int_buf = kmalloc(F81604_BULK_SIZE, GFP_KERNEL);
-+	if (!int_buf) {
-+		usb_free_urb(int_urb);
-+		ret = -ENOMEM;
-+		goto error;
-+	}
-+
-+	usb_fill_int_urb(int_urb, priv->dev,
-+			 usb_rcvintpipe(priv->dev, int_in_addr[id]), int_buf,
-+			 F81604_INT_SIZE, f81604_read_int_callback, netdev, 1);
-+
-+	int_urb->transfer_flags |= URB_FREE_BUFFER;
-+	usb_anchor_urb(int_urb, &priv->urbs_anchor);
-+
-+	ret = usb_submit_urb(int_urb, GFP_KERNEL);
-+	if (ret) {
-+		usb_unanchor_urb(int_urb);
-+		usb_free_urb(int_urb);
-+
-+		netdev_warn(netdev, "%s: submit int urb failed: %pe\n",
-+			    __func__, ERR_PTR(ret));
-+		goto error;
-+	}
-+
-+	/* Drop reference, USB core will take care of freeing it */
-+	usb_free_urb(int_urb);
-+
-+	return 0;
-+
-+error:
-+	f81604_unregister_urbs(priv);
-+	return ret;
-+}
-+
-+static int f81604_start(struct net_device *netdev)
-+{
-+	struct f81604_port_priv *priv = netdev_priv(netdev);
-+	int ret;
-+	u8 mode;
-+	u8 tmp;
-+
-+	mode = F81604_RX_AUTO_RELEASE_BUF | F81604_INT_WHEN_CHANGE;
-+
-+	/* Set TR/AT mode */
-+	if (priv->can.ctrlmode & CAN_CTRLMODE_ONE_SHOT)
-+		mode |= F81604_TX_ONESHOT;
-+	else
-+		mode |= F81604_TX_NORMAL;
-+
-+	ret = f81604_sja1000_write(priv, F81604_CTRL_MODE_REG, mode);
-+	if (ret)
-+		return ret;
-+
-+	/* set reset mode */
-+	ret = f81604_set_reset_mode(priv);
-+	if (ret)
-+		return ret;
-+
-+	ret = f81604_chipset_init(priv);
-+	if (ret)
-+		return ret;
-+
-+	/* Clear error counters and error code capture */
-+	ret = f81604_sja1000_write(priv, F81604_SJA1000_TXERR, 0);
-+	if (ret)
-+		return ret;
-+
-+	ret = f81604_sja1000_write(priv, F81604_SJA1000_RXERR, 0);
-+	if (ret)
-+		return ret;
-+
-+	/* Read clear for ECC/ALC/IR register */
-+	ret = f81604_sja1000_read(priv, F81604_SJA1000_ECC, &tmp);
-+	if (ret)
-+		return ret;
-+
-+	ret = f81604_sja1000_read(priv, F81604_SJA1000_ALC, &tmp);
-+	if (ret)
-+		return ret;
-+
-+	ret = f81604_sja1000_read(priv, F81604_SJA1000_IR, &tmp);
-+	if (ret)
-+		return ret;
-+
-+	ret = f81604_register_urbs(priv);
-+	if (ret)
-+		return ret;
-+
-+	ret = f81604_set_normal_mode(priv);
-+	if (ret) {
-+		f81604_unregister_urbs(priv);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int f81604_set_bittiming(struct net_device *dev)
-+{
-+	struct f81604_port_priv *priv = netdev_priv(dev);
-+	struct can_bittiming *bt = &priv->can.bittiming;
-+	u8 btr0, btr1;
-+	int ret;
-+
-+	btr0 = FIELD_PREP(F81604_BRP_MASK, bt->brp - 1) |
-+	       FIELD_PREP(F81604_SJW_MASK, bt->sjw - 1);
-+
-+	btr1 = FIELD_PREP(F81604_SEG1_MASK,
-+			  bt->prop_seg + bt->phase_seg1 - 1) |
-+	       FIELD_PREP(F81604_SEG2_MASK, bt->phase_seg2 - 1);
-+
-+	if (priv->can.ctrlmode & CAN_CTRLMODE_3_SAMPLES)
-+		btr1 |= F81604_SJA1000_BTR1_SAMPLE_TRIPLE;
-+
-+	ret = f81604_sja1000_write(priv, F81604_SJA1000_BTR0, btr0);
-+	if (ret) {
-+		netdev_warn(dev, "%s: Set BTR0 failed: %pe\n", __func__,
-+			    ERR_PTR(ret));
-+		return ret;
-+	}
-+
-+	ret = f81604_sja1000_write(priv, F81604_SJA1000_BTR1, btr1);
-+	if (ret) {
-+		netdev_warn(dev, "%s: Set BTR1 failed: %pe\n", __func__,
-+			    ERR_PTR(ret));
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int f81604_set_mode(struct net_device *netdev, enum can_mode mode)
-+{
-+	int ret;
-+
-+	switch (mode) {
-+	case CAN_MODE_START:
-+		ret = f81604_start(netdev);
-+		if (!ret && netif_queue_stopped(netdev))
-+			netif_wake_queue(netdev);
-+		break;
-+
-+	default:
-+		ret = -EOPNOTSUPP;
-+	}
-+
-+	return ret;
-+}
-+
-+static void f81604_write_bulk_callback(struct urb *urb)
-+{
-+	struct net_device *netdev = urb->context;
-+
-+	if (!netif_device_present(netdev))
-+		return;
-+
-+	if (urb->status)
-+		netdev_info(netdev, "%s: Tx URB error: %pe\n", __func__,
-+			    ERR_PTR(urb->status));
-+}
-+
-+static void f81604_clear_reg_work(struct work_struct *work)
-+{
-+	struct f81604_port_priv *priv;
-+	struct net_device *netdev;
-+	u8 tmp;
-+
-+	priv = container_of(work, struct f81604_port_priv, clear_reg_work);
-+	netdev = priv->netdev;
-+
-+	/* dummy read for clear Arbitration lost capture(ALC) register. */
-+	if (test_and_clear_bit(F81604_CLEAR_ALC, &priv->clear_flags))
-+		f81604_sja1000_read(priv, F81604_SJA1000_ALC, &tmp);
-+
-+	/* dummy read for clear Error code capture(ECC) register. */
-+	if (test_and_clear_bit(F81604_CLEAR_ECC, &priv->clear_flags))
-+		f81604_sja1000_read(priv, F81604_SJA1000_ECC, &tmp);
-+
-+	/* dummy write for clear data overrun flag. */
-+	if (test_and_clear_bit(F81604_CLEAR_OVERRUN, &priv->clear_flags))
-+		f81604_sja1000_write(priv, F81604_SJA1000_CMR,
-+				     F81604_SJA1000_CMD_CDO);
-+}
-+
-+static netdev_tx_t f81604_start_xmit(struct sk_buff *skb,
-+				     struct net_device *netdev)
-+{
-+	struct can_frame *cf = (struct can_frame *)skb->data;
-+	struct f81604_port_priv *priv = netdev_priv(netdev);
-+	struct net_device_stats *stats = &netdev->stats;
-+	struct f81604_can_frame *frame;
-+	u32 id = priv->netdev->dev_id;
-+	struct urb *write_urb;
-+	u8 *bulk_write_buffer;
-+	int ret;
-+
-+	if (can_dev_dropped_skb(netdev, skb))
-+		return NETDEV_TX_OK;
-+
-+	netif_stop_queue(netdev);
-+
-+	write_urb = usb_alloc_urb(0, GFP_ATOMIC);
-+	if (!write_urb)
-+		goto nomem_urb;
-+
-+	bulk_write_buffer = kzalloc(F81604_DATA_SIZE, GFP_ATOMIC);
-+	if (!bulk_write_buffer)
-+		goto nomem_buf;
-+
-+	usb_fill_bulk_urb(write_urb, priv->dev,
-+			  usb_sndbulkpipe(priv->dev, bulk_out_addr[id]),
-+			  bulk_write_buffer, F81604_DATA_SIZE,
-+			  f81604_write_bulk_callback, priv->netdev);
-+
-+	write_urb->transfer_flags |= URB_FREE_BUFFER;
-+
-+	frame = (struct f81604_can_frame *)bulk_write_buffer;
-+	frame->cmd = F81604_CMD_DATA;
-+	frame->dlc = cf->len;
-+
-+	if (cf->can_id & CAN_RTR_FLAG)
-+		frame->dlc |= F81604_DLC_RTR_BIT;
-+
-+	if (cf->can_id & CAN_EFF_FLAG) {
-+		id = (cf->can_id & CAN_EFF_MASK) << 3;
-+		put_unaligned_be32(id, &frame->eff.id);
-+
-+		frame->dlc |= F81604_DLC_EFF_BIT;
-+
-+		if (!(cf->can_id & CAN_RTR_FLAG))
-+			memcpy(&frame->eff.data, cf->data, cf->len);
-+	} else {
-+		id = (cf->can_id & CAN_SFF_MASK) << 5;
-+		put_unaligned_be16(id, &frame->sff.id);
-+
-+		if (!(cf->can_id & CAN_RTR_FLAG))
-+			memcpy(&frame->sff.data, cf->data, cf->len);
-+	}
-+
-+	can_put_echo_skb(skb, netdev, 0, 0);
-+
-+	ret = usb_submit_urb(write_urb, GFP_ATOMIC);
-+	if (ret) {
-+		netdev_err(netdev, "%s: failed to resubmit tx bulk urb: %pe\n",
-+			   __func__, ERR_PTR(ret));
-+
-+		can_free_echo_skb(netdev, 0, NULL);
-+		stats->tx_dropped++;
-+
-+		if (ret == -ENODEV)
-+			netif_device_detach(netdev);
-+		else
-+			netif_wake_queue(netdev);
-+	}
-+
-+	/* let usb core take care of this urb */
-+	usb_free_urb(write_urb);
-+
-+	return NETDEV_TX_OK;
-+
-+nomem_buf:
-+	usb_free_urb(write_urb);
-+
-+nomem_urb:
-+	dev_kfree_skb(skb);
-+	stats->tx_dropped++;
-+	netif_wake_queue(netdev);
-+
-+	return NETDEV_TX_OK;
-+}
-+
-+static int f81604_get_berr_counter(const struct net_device *netdev,
-+				   struct can_berr_counter *bec)
-+{
-+	struct f81604_port_priv *priv = netdev_priv(netdev);
-+	u8 txerr, rxerr;
-+	int ret;
-+
-+	ret = f81604_sja1000_read(priv, F81604_SJA1000_TXERR, &txerr);
-+	if (ret)
-+		return ret;
-+
-+	ret = f81604_sja1000_read(priv, F81604_SJA1000_RXERR, &rxerr);
-+	if (ret)
-+		return ret;
-+
-+	bec->txerr = txerr;
-+	bec->rxerr = rxerr;
-+
-+	return 0;
-+}
-+
-+/* Open USB device */
-+static int f81604_open(struct net_device *netdev)
-+{
-+	int ret;
-+
-+	ret = open_candev(netdev);
-+	if (ret)
-+		return ret;
-+
-+	ret = f81604_start(netdev);
-+	if (ret)
-+		goto start_failed;
-+
-+	netif_start_queue(netdev);
-+	return 0;
-+
-+start_failed:
-+	if (ret == -ENODEV)
-+		netif_device_detach(netdev);
-+
-+	close_candev(netdev);
-+
-+	return ret;
-+}
-+
-+/* Close USB device */
-+static int f81604_close(struct net_device *netdev)
-+{
-+	struct f81604_port_priv *priv = netdev_priv(netdev);
-+
-+	f81604_set_reset_mode(priv);
-+
-+	netif_stop_queue(netdev);
-+	cancel_work_sync(&priv->clear_reg_work);
-+	close_candev(netdev);
-+
-+	f81604_unregister_urbs(priv);
-+
-+	return 0;
-+}
-+
-+static const struct net_device_ops f81604_netdev_ops = {
-+	.ndo_open = f81604_open,
-+	.ndo_stop = f81604_close,
-+	.ndo_start_xmit = f81604_start_xmit,
-+	.ndo_change_mtu = can_change_mtu,
-+};
-+
-+static const struct can_bittiming_const f81604_bittiming_const = {
-+	.name = KBUILD_MODNAME,
-+	.tseg1_min = 1,
-+	.tseg1_max = 16,
-+	.tseg2_min = 1,
-+	.tseg2_max = 8,
-+	.sjw_max = 4,
-+	.brp_min = 1,
-+	.brp_max = 64,
-+	.brp_inc = 1,
-+};
-+
-+/* Called by the usb core when driver is unloaded or device is removed */
-+static void f81604_disconnect(struct usb_interface *intf)
-+{
-+	struct f81604_priv *priv = usb_get_intfdata(intf);
-+	struct f81604_port_priv *port_priv;
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(priv->netdev); ++i) {
-+		if (!priv->netdev[i])
-+			continue;
-+
-+		port_priv = netdev_priv(priv->netdev[i]);
-+
-+		unregister_netdev(priv->netdev[i]);
-+		free_candev(priv->netdev[i]);
-+	}
-+}
-+
-+static int __f81604_set_termination(struct usb_device *dev, int idx, u16 term)
-+{
-+	u8 mask, data = 0;
-+
-+	if (idx == 0)
-+		mask = F81604_CAN0_TERM;
-+	else
-+		mask = F81604_CAN1_TERM;
-+
-+	if (term)
-+		data = mask;
-+
-+	return f81604_update_bits(dev, F81604_TERMINATOR_REG, mask, data);
-+}
-+
-+static int f81604_set_termination(struct net_device *netdev, u16 term)
-+{
-+	struct f81604_port_priv *port_priv = netdev_priv(netdev);
-+
-+	ASSERT_RTNL();
-+
-+	return __f81604_set_termination(port_priv->dev, netdev->dev_id, term);
-+}
-+
-+static int f81604_probe(struct usb_interface *intf,
-+			const struct usb_device_id *id)
-+{
-+	struct usb_device *dev = interface_to_usbdev(intf);
-+	struct f81604_port_priv *port_priv;
-+	struct net_device *netdev;
-+	struct f81604_priv *priv;
-+	int i, ret;
-+
-+	priv = devm_kzalloc(&intf->dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	usb_set_intfdata(intf, priv);
-+
-+	for (i = 0; i < ARRAY_SIZE(priv->netdev); ++i) {
-+		ret = __f81604_set_termination(dev, i, 0);
-+		if (ret) {
-+			dev_err(&intf->dev,
-+				"Set can%d termination failed: %pe\n", i,
-+				ERR_PTR(ret));
-+			return ret;
-+		}
-+	}
-+
-+	for (i = 0; i < ARRAY_SIZE(priv->netdev); ++i) {
-+		netdev = alloc_candev(sizeof(*port_priv), 1);
-+		if (!netdev) {
-+			dev_err(&intf->dev, "Couldn't alloc candev: %d\n", i);
-+			ret = -ENOMEM;
-+
-+			goto failure_cleanup;
-+		}
-+
-+		port_priv = netdev_priv(netdev);
-+		netdev->dev_id = i;
-+
-+		INIT_WORK(&port_priv->clear_reg_work, f81604_clear_reg_work);
-+		init_usb_anchor(&port_priv->urbs_anchor);
-+
-+		port_priv->intf = intf;
-+		port_priv->dev = dev;
-+		port_priv->netdev = netdev;
-+		port_priv->can.clock.freq = F81604_CAN_CLOCK;
-+
-+		port_priv->can.termination_const = f81604_termination;
-+		port_priv->can.termination_const_cnt =
-+			ARRAY_SIZE(f81604_termination);
-+		port_priv->can.bittiming_const = &f81604_bittiming_const;
-+		port_priv->can.do_set_bittiming = f81604_set_bittiming;
-+		port_priv->can.do_set_mode = f81604_set_mode;
-+		port_priv->can.do_set_termination = f81604_set_termination;
-+		port_priv->can.do_get_berr_counter = f81604_get_berr_counter;
-+		port_priv->can.ctrlmode_supported =
-+			CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_3_SAMPLES |
-+			CAN_CTRLMODE_ONE_SHOT | CAN_CTRLMODE_BERR_REPORTING |
-+			CAN_CTRLMODE_PRESUME_ACK;
-+
-+		netdev->ethtool_ops = &f81604_ethtool_ops;
-+		netdev->netdev_ops = &f81604_netdev_ops;
-+		netdev->flags |= IFF_ECHO;
-+
-+		SET_NETDEV_DEV(netdev, &intf->dev);
-+
-+		ret = register_candev(netdev);
-+		if (ret) {
-+			netdev_err(netdev, "register CAN device failed: %pe\n",
-+				   ERR_PTR(ret));
-+			free_candev(netdev);
-+
-+			goto failure_cleanup;
-+		}
-+
-+		priv->netdev[i] = netdev;
-+
-+		dev_info(&intf->dev, "Channel #%d registered as %s\n", i,
-+			 netdev->name);
-+	}
-+
-+	return 0;
-+
-+failure_cleanup:
-+	f81604_disconnect(intf);
-+	return ret;
-+}
-+
-+static struct usb_driver f81604_driver = {
-+	.name = KBUILD_MODNAME,
-+	.probe = f81604_probe,
-+	.disconnect = f81604_disconnect,
-+	.id_table = f81604_table,
-+};
-+
-+module_usb_driver(f81604_driver);
-+
-+MODULE_AUTHOR("Ji-Ze Hong (Peter Hong) <peter_hong@fintek.com.tw>");
-+MODULE_DESCRIPTION("Fintek F81604 USB to 2xCANBUS");
-+MODULE_LICENSE("GPL");
+All warnings (new ones prefixed by >>):
+
+   drivers/net/can/usb/f81604.c: In function 'f81604_clear_reg_work':
+>> drivers/net/can/usb/f81604.c:894:28: warning: variable 'netdev' set but not used [-Wunused-but-set-variable]
+     894 |         struct net_device *netdev;
+         |                            ^~~~~~
+   drivers/net/can/usb/f81604.c: In function 'f81604_disconnect':
+>> drivers/net/can/usb/f81604.c:1086:34: warning: variable 'port_priv' set but not used [-Wunused-but-set-variable]
+    1086 |         struct f81604_port_priv *port_priv;
+         |                                  ^~~~~~~~~
+
+
+vim +/netdev +894 drivers/net/can/usb/f81604.c
+
+   890	
+   891	static void f81604_clear_reg_work(struct work_struct *work)
+   892	{
+   893		struct f81604_port_priv *priv;
+ > 894		struct net_device *netdev;
+   895		u8 tmp;
+   896	
+   897		priv = container_of(work, struct f81604_port_priv, clear_reg_work);
+   898		netdev = priv->netdev;
+   899	
+   900		/* dummy read for clear Arbitration lost capture(ALC) register. */
+   901		if (test_and_clear_bit(F81604_CLEAR_ALC, &priv->clear_flags))
+   902			f81604_sja1000_read(priv, F81604_SJA1000_ALC, &tmp);
+   903	
+   904		/* dummy read for clear Error code capture(ECC) register. */
+   905		if (test_and_clear_bit(F81604_CLEAR_ECC, &priv->clear_flags))
+   906			f81604_sja1000_read(priv, F81604_SJA1000_ECC, &tmp);
+   907	
+   908		/* dummy write for clear data overrun flag. */
+   909		if (test_and_clear_bit(F81604_CLEAR_OVERRUN, &priv->clear_flags))
+   910			f81604_sja1000_write(priv, F81604_SJA1000_CMR,
+   911					     F81604_SJA1000_CMD_CDO);
+   912	}
+   913	
+   914	static netdev_tx_t f81604_start_xmit(struct sk_buff *skb,
+   915					     struct net_device *netdev)
+   916	{
+   917		struct can_frame *cf = (struct can_frame *)skb->data;
+   918		struct f81604_port_priv *priv = netdev_priv(netdev);
+   919		struct net_device_stats *stats = &netdev->stats;
+   920		struct f81604_can_frame *frame;
+   921		u32 id = priv->netdev->dev_id;
+   922		struct urb *write_urb;
+   923		u8 *bulk_write_buffer;
+   924		int ret;
+   925	
+   926		if (can_dev_dropped_skb(netdev, skb))
+   927			return NETDEV_TX_OK;
+   928	
+   929		netif_stop_queue(netdev);
+   930	
+   931		write_urb = usb_alloc_urb(0, GFP_ATOMIC);
+   932		if (!write_urb)
+   933			goto nomem_urb;
+   934	
+   935		bulk_write_buffer = kzalloc(F81604_DATA_SIZE, GFP_ATOMIC);
+   936		if (!bulk_write_buffer)
+   937			goto nomem_buf;
+   938	
+   939		usb_fill_bulk_urb(write_urb, priv->dev,
+   940				  usb_sndbulkpipe(priv->dev, bulk_out_addr[id]),
+   941				  bulk_write_buffer, F81604_DATA_SIZE,
+   942				  f81604_write_bulk_callback, priv->netdev);
+   943	
+   944		write_urb->transfer_flags |= URB_FREE_BUFFER;
+   945	
+   946		frame = (struct f81604_can_frame *)bulk_write_buffer;
+   947		frame->cmd = F81604_CMD_DATA;
+   948		frame->dlc = cf->len;
+   949	
+   950		if (cf->can_id & CAN_RTR_FLAG)
+   951			frame->dlc |= F81604_DLC_RTR_BIT;
+   952	
+   953		if (cf->can_id & CAN_EFF_FLAG) {
+   954			id = (cf->can_id & CAN_EFF_MASK) << 3;
+   955			put_unaligned_be32(id, &frame->eff.id);
+   956	
+   957			frame->dlc |= F81604_DLC_EFF_BIT;
+   958	
+   959			if (!(cf->can_id & CAN_RTR_FLAG))
+   960				memcpy(&frame->eff.data, cf->data, cf->len);
+   961		} else {
+   962			id = (cf->can_id & CAN_SFF_MASK) << 5;
+   963			put_unaligned_be16(id, &frame->sff.id);
+   964	
+   965			if (!(cf->can_id & CAN_RTR_FLAG))
+   966				memcpy(&frame->sff.data, cf->data, cf->len);
+   967		}
+   968	
+   969		can_put_echo_skb(skb, netdev, 0, 0);
+   970	
+   971		ret = usb_submit_urb(write_urb, GFP_ATOMIC);
+   972		if (ret) {
+   973			netdev_err(netdev, "%s: failed to resubmit tx bulk urb: %pe\n",
+   974				   __func__, ERR_PTR(ret));
+   975	
+   976			can_free_echo_skb(netdev, 0, NULL);
+   977			stats->tx_dropped++;
+   978	
+   979			if (ret == -ENODEV)
+   980				netif_device_detach(netdev);
+   981			else
+   982				netif_wake_queue(netdev);
+   983		}
+   984	
+   985		/* let usb core take care of this urb */
+   986		usb_free_urb(write_urb);
+   987	
+   988		return NETDEV_TX_OK;
+   989	
+   990	nomem_buf:
+   991		usb_free_urb(write_urb);
+   992	
+   993	nomem_urb:
+   994		dev_kfree_skb(skb);
+   995		stats->tx_dropped++;
+   996		netif_wake_queue(netdev);
+   997	
+   998		return NETDEV_TX_OK;
+   999	}
+  1000	
+  1001	static int f81604_get_berr_counter(const struct net_device *netdev,
+  1002					   struct can_berr_counter *bec)
+  1003	{
+  1004		struct f81604_port_priv *priv = netdev_priv(netdev);
+  1005		u8 txerr, rxerr;
+  1006		int ret;
+  1007	
+  1008		ret = f81604_sja1000_read(priv, F81604_SJA1000_TXERR, &txerr);
+  1009		if (ret)
+  1010			return ret;
+  1011	
+  1012		ret = f81604_sja1000_read(priv, F81604_SJA1000_RXERR, &rxerr);
+  1013		if (ret)
+  1014			return ret;
+  1015	
+  1016		bec->txerr = txerr;
+  1017		bec->rxerr = rxerr;
+  1018	
+  1019		return 0;
+  1020	}
+  1021	
+  1022	/* Open USB device */
+  1023	static int f81604_open(struct net_device *netdev)
+  1024	{
+  1025		int ret;
+  1026	
+  1027		ret = open_candev(netdev);
+  1028		if (ret)
+  1029			return ret;
+  1030	
+  1031		ret = f81604_start(netdev);
+  1032		if (ret)
+  1033			goto start_failed;
+  1034	
+  1035		netif_start_queue(netdev);
+  1036		return 0;
+  1037	
+  1038	start_failed:
+  1039		if (ret == -ENODEV)
+  1040			netif_device_detach(netdev);
+  1041	
+  1042		close_candev(netdev);
+  1043	
+  1044		return ret;
+  1045	}
+  1046	
+  1047	/* Close USB device */
+  1048	static int f81604_close(struct net_device *netdev)
+  1049	{
+  1050		struct f81604_port_priv *priv = netdev_priv(netdev);
+  1051	
+  1052		f81604_set_reset_mode(priv);
+  1053	
+  1054		netif_stop_queue(netdev);
+  1055		cancel_work_sync(&priv->clear_reg_work);
+  1056		close_candev(netdev);
+  1057	
+  1058		f81604_unregister_urbs(priv);
+  1059	
+  1060		return 0;
+  1061	}
+  1062	
+  1063	static const struct net_device_ops f81604_netdev_ops = {
+  1064		.ndo_open = f81604_open,
+  1065		.ndo_stop = f81604_close,
+  1066		.ndo_start_xmit = f81604_start_xmit,
+  1067		.ndo_change_mtu = can_change_mtu,
+  1068	};
+  1069	
+  1070	static const struct can_bittiming_const f81604_bittiming_const = {
+  1071		.name = KBUILD_MODNAME,
+  1072		.tseg1_min = 1,
+  1073		.tseg1_max = 16,
+  1074		.tseg2_min = 1,
+  1075		.tseg2_max = 8,
+  1076		.sjw_max = 4,
+  1077		.brp_min = 1,
+  1078		.brp_max = 64,
+  1079		.brp_inc = 1,
+  1080	};
+  1081	
+  1082	/* Called by the usb core when driver is unloaded or device is removed */
+  1083	static void f81604_disconnect(struct usb_interface *intf)
+  1084	{
+  1085		struct f81604_priv *priv = usb_get_intfdata(intf);
+> 1086		struct f81604_port_priv *port_priv;
+  1087		int i;
+  1088	
+  1089		for (i = 0; i < ARRAY_SIZE(priv->netdev); ++i) {
+  1090			if (!priv->netdev[i])
+  1091				continue;
+  1092	
+  1093			port_priv = netdev_priv(priv->netdev[i]);
+  1094	
+  1095			unregister_netdev(priv->netdev[i]);
+  1096			free_candev(priv->netdev[i]);
+  1097		}
+  1098	}
+  1099	
+
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
