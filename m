@@ -2,90 +2,123 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B138F6E1C38
-	for <lists+linux-can@lfdr.de>; Fri, 14 Apr 2023 08:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55A306E1DB4
+	for <lists+linux-can@lfdr.de>; Fri, 14 Apr 2023 10:01:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbjDNGNP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 14 Apr 2023 02:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46554 "EHLO
+        id S229924AbjDNIBE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 14 Apr 2023 04:01:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjDNGNO (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 14 Apr 2023 02:13:14 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8314C2D;
-        Thu, 13 Apr 2023 23:13:12 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33E6CvUM121911;
-        Fri, 14 Apr 2023 01:12:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1681452777;
-        bh=5fzgEE5rhEgibICZ0O25CWXhfNZmGZDqlt0vq4RXvyM=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=URVsDq7rIRMqNYXlhoOuQJmyn0xTjbHWqn4Juvnls0SIrvnYAYRllnFPrDu4Dfc3S
-         yiiWHAEWiLDp0Ad9P77YDV7rBeWPdsTR6xVd1nHgBSocBpBDY7SysXraIGnRnNMWvu
-         qooD9ng3eJxu0rTDOE686cgGhxfV085TkyWawdPg=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33E6CvA9027034
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 14 Apr 2023 01:12:57 -0500
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 14
- Apr 2023 01:12:57 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Fri, 14 Apr 2023 01:12:57 -0500
-Received: from [172.24.145.182] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33E6CrH8054033;
-        Fri, 14 Apr 2023 01:12:53 -0500
-Message-ID: <8552c377-b2e9-749a-9f0c-7c444fe012c6@ti.com>
-Date:   Fri, 14 Apr 2023 11:42:52 +0530
+        with ESMTP id S229689AbjDNIBD (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 14 Apr 2023 04:01:03 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0F3559B
+        for <linux-can@vger.kernel.org>; Fri, 14 Apr 2023 01:01:01 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id si1so13412207ejb.10
+        for <linux-can@vger.kernel.org>; Fri, 14 Apr 2023 01:01:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681459260; x=1684051260;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uj24E0utItoUj+eQLTC83uT9r1QSYEGR8TG8+GQ0L+o=;
+        b=GcPL057XYpipwF4+iBqYzZ1J5xhLB+5K+M+EuKVsxXtSi59foLRiM+JtVNK+nt1Feh
+         b3AttSE8tWSI5gizSo07QQu2UDGjiXZc+sxlfeoSOc05YSgnxdxbHeO0M7d5hNWVQ05t
+         5/ckfvwNXR5C6kbrkP1PgN3sz5Ach5Y8vOQggId/xrlyFxc5oY/atvWKAmYqUdaAc8FR
+         53gVoNfNQvUUI/HloYdr09F83g+fOw5V1rGAAaJ7QluHyGF8F20GkUNFePVIJmS0v0dU
+         pRMAov2UBVimTOcmlx5nky8B1VWzoQgK111fPPQGb/4EqdUChxy4CRhOgtHcxotXmeYH
+         c+6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681459260; x=1684051260;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uj24E0utItoUj+eQLTC83uT9r1QSYEGR8TG8+GQ0L+o=;
+        b=etafkcNCkMNH4tbYagGhQynMa64zY6W5BlED4WXV7geUDLyIocpxBsOSBWMP/EZjB3
+         mGf/yVHnRxM+LXQufu85KAsJW/wtmrdLlhQHJ3tHcbLz8yDzEXUEToipm6EfzW8h25FW
+         +PJgpOTvkFDvtUe5JByo4WhuvhZXYzCnB0TUwLBAGrLsHWZO7geG05EUEUAKINubB11h
+         BuDDgrbCc2dDCbBskCgT/IH+d9mQfhnzZaWVlJv5vIBc0IJ6914cIGaf6VLglhREYXcn
+         AZcUbP0p9js08vnsTRkR1fnei+HpHFimxvCb6ip4PUbyi9XOl7vn0CCWm1KvhWI55nYD
+         1q6Q==
+X-Gm-Message-State: AAQBX9fc0jT9bfSDPfeE3F08Nw68pXyJG2FSUvMuYMkZ0Tzswd2Ltip2
+        nhi4m4FUQxCJ3J/DcAq52un+6A==
+X-Google-Smtp-Source: AKy350bCXmdaTRCL/M+/LO6/ppWZKpBcQqXzDRpPqeaDbdg5FRk8xkQKylplO4qaCD4qcxjYDUetPw==
+X-Received: by 2002:a17:906:37c2:b0:8b2:c2fc:178e with SMTP id o2-20020a17090637c200b008b2c2fc178emr4972329ejc.74.1681459260184;
+        Fri, 14 Apr 2023 01:01:00 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:8a60:6b0f:105a:eefb? ([2a02:810d:15c0:828:8a60:6b0f:105a:eefb])
+        by smtp.gmail.com with ESMTPSA id q13-20020a1709066acd00b0094e44445f30sm2049063ejs.215.2023.04.14.01.00.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Apr 2023 01:00:59 -0700 (PDT)
+Message-ID: <083e67e6-3e9f-27fe-64c9-431541c943e8@linaro.org>
+Date:   Fri, 14 Apr 2023 10:00:58 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [RFC PATCH 0/5] Enable multiple MCAN on AM62x
+ Thunderbird/102.9.1
+Subject: Re: [RFC PATCH 3/5] dt-binding: can: m_can: Remove required interrupt
+ attributes
 Content-Language: en-US
 To:     Judith Mendez <jm@ti.com>,
         Chandrasekar Ramakrishnan <rcsekar@samsung.com>
-CC:     Nishanth Menon <nm@ti.com>, Andrew Davis <afd@ti.com>,
+Cc:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Andrew Davis <afd@ti.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-can@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <netdev@vger.kernel.org>,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
         Schuyler Patton <spatton@ti.com>
 References: <20230413223051.24455-1-jm@ti.com>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-In-Reply-To: <20230413223051.24455-1-jm@ti.com>
-Content-Type: text/plain; charset="UTF-8"
+ <20230413223051.24455-4-jm@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230413223051.24455-4-jm@ti.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Judith,
+On 14/04/2023 00:30, Judith Mendez wrote:
+> Remove required attributes for interrupt and interrupt names
+> since some MCANs may not have hardware interrupt routed to A53
 
-On 14/04/23 04:00, Judith Mendez wrote:
-> Judith Mendez (5):
->   arm64: dts: ti: Add AM62x MCAN MAIN domain transceiver overlay
->   arm64: defconfig: Enable MCAN driver
->   dt-binding: can: m_can: Remove required interrupt attributes
->   arm64: dts: ti: Enable multiple MCAN for AM62x in MCU MCAN overlay
->   can: m_can: Add hrtimer to generate software interrupt
+Like which? Can you give specific model names?
 
-This is fine for RFC, but next time, please split DT and defconfig
-changes (1/5,2/5, and 4/5) to separate series as they have to go via
-arm64 tree.
+> Linux.
+> 
 
--- 
-Regards
-Vignesh
+Use subject prefixes matching the subsystem (which you can get for
+example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+your patch is touching).
+
+It's dt-bindings:
+
+
+> Signed-off-by: Judith Mendez <jm@ti.com>
+> ---
+>  Documentation/devicetree/bindings/net/can/bosch,m_can.yaml | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> index 67879aab623b..43f1aa9addc0 100644
+> --- a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> +++ b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> @@ -122,8 +122,6 @@ required:
+>    - compatible
+>    - reg
+>    - reg-names
+> -  - interrupts
+> -  - interrupt-names
+>    - clocks
+>    - clock-names
+>    - bosch,mram-cfg
+
+Best regards,
+Krzysztof
+
