@@ -2,65 +2,83 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7D596E2A99
-	for <lists+linux-can@lfdr.de>; Fri, 14 Apr 2023 21:20:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3EF6E2B3E
+	for <lists+linux-can@lfdr.de>; Fri, 14 Apr 2023 22:44:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbjDNTUs (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 14 Apr 2023 15:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47580 "EHLO
+        id S229998AbjDNUoF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 14 Apr 2023 16:44:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbjDNTUr (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 14 Apr 2023 15:20:47 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4271C40E1
-        for <linux-can@vger.kernel.org>; Fri, 14 Apr 2023 12:20:46 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pnOyG-0000Gd-PD; Fri, 14 Apr 2023 21:20:32 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id D19891AF431;
-        Fri, 14 Apr 2023 19:20:27 +0000 (UTC)
-Date:   Fri, 14 Apr 2023 21:20:25 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Harald Mommer <hmo@opensynergy.com>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Harald Mommer <harald.mommer@opensynergy.com>,
-        virtio-dev@lists.oasis-open.org, linux-can@vger.kernel.org,
-        Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Dariusz Stojaczyk <Dariusz.Stojaczyk@opensynergy.com>,
-        stratos-dev@op-lists.linaro.org,
-        Matti Moell <Matti.Moell@opensynergy.com>
-Subject: Re: [virtio-dev] Re: [RFC PATCH 1/1] can: virtio: Initial virtio CAN
- driver.
-Message-ID: <20230414-scariness-disrupt-5ec9cc82b20c-mkl@pengutronix.de>
-References: <20220825134449.18803-1-harald.mommer@opensynergy.com>
- <20220827093909.ag3zi7k525k4zuqq@pengutronix.de>
- <40e3d678-b840-e780-c1da-367000724f69@opensynergy.com>
- <c2c0ba34-2985-21ea-0809-b96a3aa5e401@siemens.com>
- <36bb910c-4874-409b-ac71-d141cd1d8ecb@app.fastmail.com>
- <c20ee6cf-2aae-25ef-e97f-0e7fc3f9c5b6@opensynergy.com>
+        with ESMTP id S229864AbjDNUoE (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 14 Apr 2023 16:44:04 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EDB7E4A
+        for <linux-can@vger.kernel.org>; Fri, 14 Apr 2023 13:44:03 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id kt6so10492679ejb.0
+        for <linux-can@vger.kernel.org>; Fri, 14 Apr 2023 13:44:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681505042; x=1684097042;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=k/nx/yKVbSsYFF5X0g9blNxbC1WsVq39ejbZ4qWxfM4=;
+        b=Ka24PG3jdtgMZW+uR4p/SVUg5cMBUtdd3X/qmhLPC52CEUJbbs59MkyYCFent9DH2d
+         E0xG3C6UMAr5vpG+BrO4blJSsiRtGeghEB6SPsyLiSu1llEBoGJFaujchENgVyC5d3H+
+         IdVE9Opq0NfJAUYJJ3ZyuR+/evAehUq6h9uncJkKg0wq+IJMnYXCmzyDmfOqi74LI2oT
+         eSZps8MaYm54Y/Y5bdKhtMnYf+2U0J7FK0YYRWLqLT3w37gmyeATunCmWsc6m/9VPIwc
+         OUB3Dyskhgl532D0H1hWlJnUNIsDjx48wBav2YQUcJMBThdmL/ZVEh20Bm81b5f1numX
+         q96g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681505042; x=1684097042;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=k/nx/yKVbSsYFF5X0g9blNxbC1WsVq39ejbZ4qWxfM4=;
+        b=eP0IHOHA4sX4OrxlXuU1/XXj2GjRm53LY6+p43+IhAwTbku53zbXB4uWs0PM/y4TXW
+         On6QM/KferYAXDIVCVpcVi/A7yBs2m3dXhXbNrNxYyiTgdiJsIPQ5skD1C+049EEzPeK
+         DkSNeGVXXQ+Jr6K5GEciV9eMh3i+AbQ9E0eeexP526euTxj36tDpzTXX4NvKprqPWrpb
+         VK/w4pJ0t9gmegNiztWB776VL9veTCJJdjMpcSGR3RRo0UwWkpA95eFMI4NZlN4PUohJ
+         Lu2ROqjutcUOlPs9R7NCTYM8F5cREBrQTnl9BWTLOWQX4nTl/I4v3sK6lt28vTjp4atc
+         Kzvw==
+X-Gm-Message-State: AAQBX9ew3qphQXHk7ztQbx1Y2kQbgfwvWQEjcrIlDRJIv4qiCQJBrmQ+
+        JIoCDngLupaKtZc4MModMTZSyA==
+X-Google-Smtp-Source: AKy350ZOjOg5ES3cZwD713h6zSPRrL5WIGdTryxXFTVy1eJJGbtMQ8icDtPg15fL8avEWmLCkrIbUA==
+X-Received: by 2002:a17:906:7295:b0:947:3d04:61dc with SMTP id b21-20020a170906729500b009473d0461dcmr324838ejl.77.1681505041758;
+        Fri, 14 Apr 2023 13:44:01 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:ffae:8aab:ae5a:4688? ([2a02:810d:15c0:828:ffae:8aab:ae5a:4688])
+        by smtp.gmail.com with ESMTPSA id qf29-20020a1709077f1d00b0094a2f92aaeesm2852341ejc.158.2023.04.14.13.44.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Apr 2023 13:44:01 -0700 (PDT)
+Message-ID: <342dd9b0-35cd-1715-ee67-6a6628a3a9a6@linaro.org>
+Date:   Fri, 14 Apr 2023 22:44:00 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xnmhcrr72x5qdecz"
-Content-Disposition: inline
-In-Reply-To: <c20ee6cf-2aae-25ef-e97f-0e7fc3f9c5b6@opensynergy.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [RFC PATCH 4/5] arm64: dts: ti: Enable multiple MCAN for AM62x in
+ MCU MCAN overlay
+Content-Language: en-US
+To:     Nishanth Menon <nm@ti.com>
+Cc:     Judith Mendez <jm@ti.com>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Andrew Davis <afd@ti.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        Schuyler Patton <spatton@ti.com>
+References: <20230413223051.24455-1-jm@ti.com>
+ <20230413223051.24455-5-jm@ti.com>
+ <9ab56180-328e-1416-56cb-bbf71af0c26d@linaro.org>
+ <20230414182925.ya3fe2n6mtyuqotb@detached>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230414182925.ya3fe2n6mtyuqotb@detached>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,53 +87,32 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On 14/04/2023 20:29, Nishanth Menon wrote:
+>>> +
+>>> +&cbass_mcu {
+>>> +	mcu_mcan1: can@4e00000 {
+>>> +		compatible = "bosch,m_can";
+>>> +		reg = <0x00 0x4e00000 0x00 0x8000>,
+>>> +			  <0x00 0x4e08000 0x00 0x200>;
+>>> +		reg-names = "message_ram", "m_can";
+>>> +		power-domains = <&k3_pds 188 TI_SCI_PD_EXCLUSIVE>;
+>>> +		clocks = <&k3_clks 188 6>, <&k3_clks 188 1>;
+>>> +		clock-names = "hclk", "cclk";
+>>> +		bosch,mram-cfg = <0x0 128 64 64 64 64 32 32>;
+>>> +		pinctrl-names = "default";
+>>> +		pinctrl-0 = <&mcu_mcan1_pins_default>;
+>>> +		phys = <&transceiver2>;
+>>> +		status = "okay";
+>>
+>> okay is by default. Why do you need it?
+> 
+> mcan is not functional without pinmux, so it has been disabled by
+> default in SoC. this overlay is supposed to enable it. But this is done
+> entirely wrongly.
 
---xnmhcrr72x5qdecz
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Ah, so this is override of existing node? Why not overriding by
+label/phandle?
 
-On 03.02.2023 16:02:04, Harald Mommer wrote:
-> we had here at OpenSynergy an internal discussion about an open source
-> virtio-can device implementation.
->=20
-> The outcome of this is now that an open source virtio-can device is to be
-> developed.
->=20
-> It has not yet been decided whether the open source device implementation
-> will be done using qemu or kvmtool (or something else?). Negative or
-> positive feedback for or against one of those is likely to influence the
-> decision what will be used as basis for the development. Using kvmtool may
-> be easier to do for me (to be investigated in detail) but on the other ha=
-nd
-> we have some people around in the team who have the knowledge to support
-> with qemu.
+Best regards,
+Krzysztof
 
-It there some code available yet? We as Pengutronix will be on our
-yearly techweek soon and I want to look into the VirtIO CAN stuff.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---xnmhcrr72x5qdecz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQ5p3EACgkQvlAcSiqK
-BOjfHwf+O/dOtHi/KVZ0/GZIlgqpUhXJ3osE2M7NmHrLC0JYVkbg62cVTjVl2G/k
-ACcNQR8dbjUiFwlRF/jh1hie27J1NHkBmILuSLcjXU/a1zIq1JfNyNWo7ECS0VOG
-7zg3Oryjh7oGqPmafPjSFPeqJ8xmp65NRm4y5CoAoceL/rn/+Qyuw+Qgyuk/3+q2
-7xSWXNV2ZnPwIziZkjGgE87XD+osDnyan6P4XVhguFcQmSrVdzVDKaQAvBlPoujE
-GZ3aopCKYpnNIdcdGxYrZWnLRFTGKpnXbMemf+JP2OQX9yIxiFL7KwFMylSuk0H+
-JSM2kVdA5fptgdB8wOdwlgyrhMA7sQ==
-=91Bh
------END PGP SIGNATURE-----
-
---xnmhcrr72x5qdecz--
