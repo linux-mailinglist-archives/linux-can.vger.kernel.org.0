@@ -2,188 +2,137 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 980D36E1DB9
-	for <lists+linux-can@lfdr.de>; Fri, 14 Apr 2023 10:01:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14F296E29B0
+	for <lists+linux-can@lfdr.de>; Fri, 14 Apr 2023 19:50:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbjDNIBm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 14 Apr 2023 04:01:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46630 "EHLO
+        id S229773AbjDNRux (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 14 Apr 2023 13:50:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbjDNIBl (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 14 Apr 2023 04:01:41 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38C965B6
-        for <linux-can@vger.kernel.org>; Fri, 14 Apr 2023 01:01:38 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id c9so4724142ejz.1
-        for <linux-can@vger.kernel.org>; Fri, 14 Apr 2023 01:01:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681459297; x=1684051297;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xje8D9sa7nkYBBtoZ60rXI27tiHKZTyz3H3ko6glfWs=;
-        b=SNzhq9yJd9kEmkttqZyGlJGyME1zSO4jRes4LYWjxfYh998ByIMuuMTsRUC891pvxw
-         5AbB3DkE+/EOqA2BNkBBk8hUjWFZ/fsDHsISSnQjmlvPXuU+ZIjNOAu5lpXAwpfJfTEA
-         yO5q6VoErPQyjATCG48//JjePz1qHYt2qjl4TzMF9ZlJVwNabncUPeq+tecx6EDJUKf1
-         SmJBsa6PEJixtGxDfajFmw+YdCKCVQXPhhvgr9ARk8zGh5bbnAwaR8WlRfTPIIMRv581
-         skHZEIVneM3xKjRXv+yhfg+Kzzu/zgEY9CydYX7AmUffCqlQBHKN8c655e6lzeHPdX4E
-         d/Pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681459297; x=1684051297;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xje8D9sa7nkYBBtoZ60rXI27tiHKZTyz3H3ko6glfWs=;
-        b=i0pDa6e9jnnvhi8ycbRSuP36ePJUMASLBRRpbP6bl+k/mB5TEN3ZVXBFjegFrttGtN
-         NAVhoKYxABBXN/zJhFZ1kwi+ClF0tUzHaWNjgMXLWXzG/bqdJEQIUu1e/MhiBiou7p/x
-         CWMN43R5gpwPFW+B4pNXcXBuom/WxlSRaH+SKKcFTCopVIU7ymMnYYM0QtH1lpoOEnTV
-         g3MVI6LGPpP8kGFu96q8StP3Tf9DT04JYhRINILlMKm9zIJ6oDaLbCdP+mIHCe3Gppjs
-         TYQ+WZ0aRViMPggVMe/I1Edt3ly+Nebi6B9E46I8DukFne4Cmv3IUhEXFrrvGhrvyr0/
-         Moiw==
-X-Gm-Message-State: AAQBX9eBupeMPJ11Krwv4VPIanox72McguJqOgaZMJXEVhiCwvCdLp2D
-        j1wAqKb6LprxmTAIwYTvs3I0iw==
-X-Google-Smtp-Source: AKy350ZpPz0lsPYf/WDpVV1jLkM/RaqXPVT1AUiSTHl5MrL2rJ/rUIEn3+7mlYfUZuE5d3lI///K/w==
-X-Received: by 2002:a17:906:4d1:b0:94e:8aeb:f8f3 with SMTP id g17-20020a17090604d100b0094e8aebf8f3mr5886098eja.57.1681459297579;
-        Fri, 14 Apr 2023 01:01:37 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:8a60:6b0f:105a:eefb? ([2a02:810d:15c0:828:8a60:6b0f:105a:eefb])
-        by smtp.gmail.com with ESMTPSA id gj19-20020a170906e11300b0094a83007249sm2129846ejb.16.2023.04.14.01.01.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Apr 2023 01:01:37 -0700 (PDT)
-Message-ID: <9ab56180-328e-1416-56cb-bbf71af0c26d@linaro.org>
-Date:   Fri, 14 Apr 2023 10:01:36 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [RFC PATCH 4/5] arm64: dts: ti: Enable multiple MCAN for AM62x in
- MCU MCAN overlay
-Content-Language: en-US
-To:     Judith Mendez <jm@ti.com>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>
-Cc:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+        with ESMTP id S229829AbjDNRux (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 14 Apr 2023 13:50:53 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826E5B74D
+        for <linux-can@vger.kernel.org>; Fri, 14 Apr 2023 10:50:37 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pnNZ1-0007g5-WD; Fri, 14 Apr 2023 19:50:24 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 2FC941AF3A6;
+        Fri, 14 Apr 2023 17:49:16 +0000 (UTC)
+Date:   Fri, 14 Apr 2023 19:49:13 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Judith Mendez <jm@ti.com>
+Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
         Andrew Davis <afd@ti.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, netdev@vger.kernel.org,
         Schuyler Patton <spatton@ti.com>
+Subject: Re: [RFC PATCH 0/5] Enable multiple MCAN on AM62x
+Message-ID: <20230414-tubular-service-3404c64c6c62-mkl@pengutronix.de>
 References: <20230413223051.24455-1-jm@ti.com>
- <20230413223051.24455-5-jm@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230413223051.24455-5-jm@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="faqeusbrotl4pfoh"
+Content-Disposition: inline
+In-Reply-To: <20230413223051.24455-1-jm@ti.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 14/04/2023 00:30, Judith Mendez wrote:
-> Enable two MCAN in MCU domain. AM62x does not have on-board CAN
-> transcievers, so instead of changing the DTB permanently, add
-> MCU MCAN nodes and transceiver nodes to a MCU MCAN overlay.
-> 
-> If there are no hardware interrupts rounted to the GIC interrupt
-> controller for MCAN IP, A53 Linux will not receive hardware
-> interrupts. If an hrtimer is used to generate software interrupts,
-> the two required interrupt attributes in the MCAN node do not have
-> to be included.
-> 
-> Signed-off-by: Judith Mendez <jm@ti.com>
-> ---
->  arch/arm64/boot/dts/ti/Makefile               |  2 +-
->  .../boot/dts/ti/k3-am625-sk-mcan-mcu.dtso     | 75 +++++++++++++++++++
->  2 files changed, 76 insertions(+), 1 deletion(-)
->  create mode 100644 arch/arm64/boot/dts/ti/k3-am625-sk-mcan-mcu.dtso
-> 
-> diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
-> index abe15e76b614..c76be3888e4d 100644
-> --- a/arch/arm64/boot/dts/ti/Makefile
-> +++ b/arch/arm64/boot/dts/ti/Makefile
-> @@ -9,7 +9,7 @@
->  # alphabetically.
->  
->  # Boards with AM62x SoC
-> -k3-am625-sk-mcan-dtbs := k3-am625-sk.dtb k3-am625-sk-mcan-main.dtbo
-> +k3-am625-sk-mcan-dtbs := k3-am625-sk.dtb k3-am625-sk-mcan-main.dtbo k3-am625-sk-mcan-mcu.dtbo
->  dtb-$(CONFIG_ARCH_K3) += k3-am625-beagleplay.dtb
->  dtb-$(CONFIG_ARCH_K3) += k3-am625-sk.dtb
->  dtb-$(CONFIG_ARCH_K3) += k3-am625-sk-mcan.dtb
-> diff --git a/arch/arm64/boot/dts/ti/k3-am625-sk-mcan-mcu.dtso b/arch/arm64/boot/dts/ti/k3-am625-sk-mcan-mcu.dtso
-> new file mode 100644
-> index 000000000000..777705aea546
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/ti/k3-am625-sk-mcan-mcu.dtso
-> @@ -0,0 +1,75 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/**
-> + * DT overlay for MCAN in MCU domain on AM625 SK
-> + *
-> + * Copyright (C) 2022 Texas Instruments Incorporated - https://www.ti.com/
-> + */
-> +
-> +/dts-v1/;
-> +/plugin/;
-> +
-> +#include <dt-bindings/pinctrl/k3.h>
-> +#include <dt-bindings/soc/ti,sci_pm_domain.h>
-> +
-> +
-> +&{/} {
-> +	transceiver2: can-phy1 {
-> +		compatible = "ti,tcan1042";
-> +		#phy-cells = <0>;
-> +		max-bitrate = <5000000>;
-> +	};
-> +
-> +	transceiver3: can-phy2 {
-> +		compatible = "ti,tcan1042";
-> +		#phy-cells = <0>;
-> +		max-bitrate = <5000000>;
-> +	};
-> +};
-> +
-> +&mcu_pmx0 {
-> +	mcu_mcan1_pins_default: mcu-mcan1-pins-default {
-> +		pinctrl-single,pins = <
-> +			AM62X_IOPAD(0x038, PIN_INPUT, 0) /* (B3) MCU_MCAN0_RX */
-> +			AM62X_IOPAD(0x034, PIN_OUTPUT, 0) /* (D6) MCU_MCAN0_TX */
-> +		>;
-> +	};
-> +
-> +	mcu_mcan2_pins_default: mcu-mcan2-pins-default {
-> +		pinctrl-single,pins = <
-> +			AM62X_IOPAD(0x040, PIN_INPUT, 0) /* (D4) MCU_MCAN1_RX */
-> +			AM62X_IOPAD(0x03C, PIN_OUTPUT, 0) /* (E5) MCU_MCAN1_TX */
-> +		>;
-> +	};
-> +};
-> +
-> +&cbass_mcu {
-> +	mcu_mcan1: can@4e00000 {
-> +		compatible = "bosch,m_can";
-> +		reg = <0x00 0x4e00000 0x00 0x8000>,
-> +			  <0x00 0x4e08000 0x00 0x200>;
-> +		reg-names = "message_ram", "m_can";
-> +		power-domains = <&k3_pds 188 TI_SCI_PD_EXCLUSIVE>;
-> +		clocks = <&k3_clks 188 6>, <&k3_clks 188 1>;
-> +		clock-names = "hclk", "cclk";
-> +		bosch,mram-cfg = <0x0 128 64 64 64 64 32 32>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&mcu_mcan1_pins_default>;
-> +		phys = <&transceiver2>;
-> +		status = "okay";
 
-okay is by default. Why do you need it?
+--faqeusbrotl4pfoh
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On 13.04.2023 17:30:46, Judith Mendez wrote:
+> On AM62x there is one MCAN in MAIN domain and two in MCU domain.
+> The MCANs in MCU domain were not enabled since there is no
+> hardware interrupt routed to A53 GIC interrupt controller.
+> Therefore A53 Linux cannot be interrupted by MCU MCANs.
 
+Is this a general hardware limitation, that effects all MCU domain
+peripherals? Is there a mailbox mechanism between the MCU and the MAIN
+domain, would it be possible to pass the IRQ with a small firmware on
+the MCU? Anyways, that's future optimization.
 
-Best regards,
-Krzysztof
+> This solution instantiates a hrtimer with 1 ms polling interval
+> for a MCAN when there is no hardware interrupt. This hrtimer
+> generates a recurring software interrupt which allows to call the
+> isr. The isr will check if there is pending transaction by reading
+> a register and proceed normally if there is.
+>=20
+> On AM62x this series enables two MCU MCAN which will use the hrtimer
+> implementation. MCANs with hardware interrupt routed to A53 Linux
+> will continue to use the hardware interrupt as expected.
+>=20
+> Timer polling method was tested on both classic CAN and CAN-FD
+> at 125 KBPS, 250 KBPS, 1 MBPS and 2.5 MBPS with 4 MBPS bitrate
+> switching.
+>=20
+> Letency and CPU load benchmarks were tested on 3x MCAN on AM62x.
+> 1 MBPS timer polling interval is the better timer polling interval
+> since it has comparable latency to hardware interrupt with the worse
+> case being 1ms + CAN frame propagation time and CPU load is not
+> substantial. Latency can be improved further with less than 1 ms
+> polling intervals, howerver it is at the cost of CPU usage since CPU
+> load increases at 0.5 ms and lower polling periods than 1ms.
 
+Some Linux input drivers have the property poll-interval, would it make
+sense to ass this here too?
+
+> Note that in terms of power, enabling MCU MCANs with timer-polling
+> implementation might have negative impact since we will have to wake
+> up every 1 ms whether there are CAN packets pending in the RX FIFO or
+> not. This might prevent the CPU from entering into deeper idle states
+> for extended periods of time.
+>=20
+> This patch series depends on 'Enable CAN PHY transceiver driver':
+> https://lore.kernel.org/lkml/775ec9ce-7668-429c-a977-6c8995968d6e@app.fas=
+tmail.com/T/
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--faqeusbrotl4pfoh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQ5kgYACgkQvlAcSiqK
+BOi8yAf+NQ1sGpY+JsIDIIU5iJz6hTu6JRL8rVVwXcJ0IuXgW9D877Gep4/5bAwF
+GA1yEfBwJYq/6WzYe5flkwNeHAZ9aiiyrLPtKLY2NHlOjqpHY5j+0skKLeOU9nrD
+Vn4eEBqPevkKPTrObp8WqFYEIGJ8upuRduBNDCkygc1mPjZxW8APaSvBLDhLKd4I
+kRi8iMi6xv7kzSgi/lj+n3dDCTRCs6A4ireI3Yz1KpRx/2KujAef5HuDRma0xunv
+FgqYz1GUPO6hCBBD4xpv80RyfL06Li4i6nkIOgjIIqPlbUtl0YMVDfceMtsOxaXu
+l9ewAD+YepbkU542Luj6WaHP1oI9Ww==
+=3Y9X
+-----END PGP SIGNATURE-----
+
+--faqeusbrotl4pfoh--
