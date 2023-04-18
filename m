@@ -2,132 +2,134 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 890BC6E60AB
-	for <lists+linux-can@lfdr.de>; Tue, 18 Apr 2023 14:08:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C22C6E6924
+	for <lists+linux-can@lfdr.de>; Tue, 18 Apr 2023 18:16:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231631AbjDRMI6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 18 Apr 2023 08:08:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42238 "EHLO
+        id S232001AbjDRQQB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 18 Apr 2023 12:16:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjDRMIg (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 18 Apr 2023 08:08:36 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1996B75B
-        for <linux-can@vger.kernel.org>; Tue, 18 Apr 2023 05:06:54 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pok6b-0004Ph-Q3; Tue, 18 Apr 2023 14:06:41 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id B607A1B218A;
-        Tue, 18 Apr 2023 12:06:39 +0000 (UTC)
-Date:   Tue, 18 Apr 2023 14:06:39 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Harald Mommer <hmo@opensynergy.com>
-Cc:     Mikhail Golubev <Mikhail.Golubev@opensynergy.com>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Harald Mommer <harald.mommer@opensynergy.com>,
-        virtio-dev@lists.oasis-open.org, linux-can@vger.kernel.org,
-        Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Dariusz Stojaczyk <Dariusz.Stojaczyk@opensynergy.com>,
-        stratos-dev@op-lists.linaro.org,
-        Matti Moell <Matti.Moell@opensynergy.com>
-Subject: Re: [virtio-dev] Re: [RFC PATCH 1/1] can: virtio: Initial virtio CAN
- driver.
-Message-ID: <20230418-pull-negligee-f253a3c8e7db-mkl@pengutronix.de>
-References: <20220825134449.18803-1-harald.mommer@opensynergy.com>
- <20220827093909.ag3zi7k525k4zuqq@pengutronix.de>
- <40e3d678-b840-e780-c1da-367000724f69@opensynergy.com>
- <c2c0ba34-2985-21ea-0809-b96a3aa5e401@siemens.com>
- <36bb910c-4874-409b-ac71-d141cd1d8ecb@app.fastmail.com>
- <c20ee6cf-2aae-25ef-e97f-0e7fc3f9c5b6@opensynergy.com>
- <20230414-scariness-disrupt-5ec9cc82b20c-mkl@pengutronix.de>
- <9786872e-1063-e1ff-dc0d-6be5952a1826@opensynergy.com>
+        with ESMTP id S231874AbjDRQQA (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 18 Apr 2023 12:16:00 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 201309015;
+        Tue, 18 Apr 2023 09:15:58 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33IGFZBV066640;
+        Tue, 18 Apr 2023 11:15:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1681834535;
+        bh=b2Muf9dAA40HdBdETNXJB5N4N/DA+1zVrwJXAjg9daI=;
+        h=Date:Subject:To:References:From:CC:In-Reply-To;
+        b=VTZiIC/ITCgUJh36OJI1SkfMDN5QGiLg2ijgpecW+kqi+6VVdF7n0Bkh8wUPZ9By/
+         2uYskEJ56d2qeTyEiA7O2hwDju2j6q/gBFOdKAxUDVQb63Ng4+7QEzFkZMzqxiFCl/
+         IzgigGjLVcA3kOzDip1NpvCYL2/zcywxUycvbFFw=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33IGFZhc017910
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 18 Apr 2023 11:15:35 -0500
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 18
+ Apr 2023 11:15:35 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 18 Apr 2023 11:15:35 -0500
+Received: from [128.247.81.102] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33IGFZ19006354;
+        Tue, 18 Apr 2023 11:15:35 -0500
+Message-ID: <6eb588ef-ab12-186d-b0d3-35fc505a225a@ti.com>
+Date:   Tue, 18 Apr 2023 11:15:35 -0500
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qbejfhwai7v6uczb"
-Content-Disposition: inline
-In-Reply-To: <9786872e-1063-e1ff-dc0d-6be5952a1826@opensynergy.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [RFC PATCH 0/5] Enable multiple MCAN on AM62x
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+References: <20230413223051.24455-1-jm@ti.com>
+ <20230414-tubular-service-3404c64c6c62-mkl@pengutronix.de>
+Content-Language: en-US
+From:   "Mendez, Judith" <jm@ti.com>
+CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-can@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Andrew Davis <afd@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Nishanth Menon <nm@ti.com>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        <linux-can@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <netdev@vger.kernel.org>
+In-Reply-To: <20230414-tubular-service-3404c64c6c62-mkl@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello Marc,
 
---qbejfhwai7v6uczb
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 4/14/2023 12:49 PM, Marc Kleine-Budde wrote:
+> On 13.04.2023 17:30:46, Judith Mendez wrote:
+>> On AM62x there is one MCAN in MAIN domain and two in MCU domain.
+>> The MCANs in MCU domain were not enabled since there is no
+>> hardware interrupt routed to A53 GIC interrupt controller.
+>> Therefore A53 Linux cannot be interrupted by MCU MCANs.
+> 
+> Is this a general hardware limitation, that effects all MCU domain
+> peripherals? Is there a mailbox mechanism between the MCU and the MAIN
+> domain, would it be possible to pass the IRQ with a small firmware on
+> the MCU? Anyways, that's future optimization.
+> 
 
-On 18.04.2023 11:50:56, Harald Mommer wrote:
-> there is now an implementation of the device for qemu internally under
-> review.
+This is a hardware limitation that affects AM62x SoC and has been 
+carried over to at least 1 other SoC. Using the MCU is an idea that we 
+have juggled around for a while, we will definitely keep it in mind for 
+future optimization. Thanks for your feedback.
 
-Great news!
-
-> The paperwork with the company lawyer to publish source code has also been
-> done.
-
-This was probably more work than the actual coding :)
-
-> At the same time we changed the driver and the specification draft also,
-> especially the bus off indication is now done by a config space bit inste=
-ad
-> of having a dedicated indication queue. Minor updates to some other
-> structures. This means what we have will match an updated driver and
-> specification version not yet sent out. Also to be done so that people can
-> play around.
-
-Looking forward to see the code.
-
-> So an open source qemu device is in the work and we are close to publish
-> this in our public github repository but until now nothing has been pushed
-> yet to github.
-
-Next week is our yearly hacking week. Some working qemu and Linux
-drivers would be excellent.
+>> This solution instantiates a hrtimer with 1 ms polling interval
+>> for a MCAN when there is no hardware interrupt. This hrtimer
+>> generates a recurring software interrupt which allows to call the
+>> isr. The isr will check if there is pending transaction by reading
+>> a register and proceed normally if there is.
+>>
+>> On AM62x this series enables two MCU MCAN which will use the hrtimer
+>> implementation. MCANs with hardware interrupt routed to A53 Linux
+>> will continue to use the hardware interrupt as expected.
+>>
+>> Timer polling method was tested on both classic CAN and CAN-FD
+>> at 125 KBPS, 250 KBPS, 1 MBPS and 2.5 MBPS with 4 MBPS bitrate
+>> switching.
+>>
+>> Letency and CPU load benchmarks were tested on 3x MCAN on AM62x.
+>> 1 MBPS timer polling interval is the better timer polling interval
+>> since it has comparable latency to hardware interrupt with the worse
+>> case being 1ms + CAN frame propagation time and CPU load is not
+>> substantial. Latency can be improved further with less than 1 ms
+>> polling intervals, howerver it is at the cost of CPU usage since CPU
+>> load increases at 0.5 ms and lower polling periods than 1ms.
+> 
+> Some Linux input drivers have the property poll-interval, would it make
+> sense to ass this here too?
+> 
+>> Note that in terms of power, enabling MCU MCANs with timer-polling
+>> implementation might have negative impact since we will have to wake
+>> up every 1 ms whether there are CAN packets pending in the RX FIFO or
+>> not. This might prevent the CPU from entering into deeper idle states
+>> for extended periods of time.
+>>
+>> This patch series depends on 'Enable CAN PHY transceiver driver':
+>> https://lore.kernel.org/lkml/775ec9ce-7668-429c-a977-6c8995968d6e@app.fastmail.com/T/
+> 
+> Marc
+> 
 
 regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---qbejfhwai7v6uczb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQ+h8wACgkQvlAcSiqK
-BOiFFgf/XM5nIh2LYk0Iu4Ns08EGdD12H+7cz4mwTAm26MgLjkcJGG5bEMD4AZ6e
-OnrKmz+c7hsBk0h+BwF18phQqH3prdje2vnKaczvjD4iNnpId57mCu2hNWP05NhP
-x46zraLhQwcy3qS5qpki9gWAV4oMzSAFBhZpV2qp4wwy0HMc2MQhefzJgCa1HxVg
-emwNT/3vuf38IslMUlSqZGsnKhCvOajZVTcyo1hpo5DSVf3J0aYWXNRJj/bGaHS3
-3KNXmRQjvCCRi5u8VJyYIEp3FGMK6cGtWiNMX+TkIRH6uO/PK9yjLcz/N+1RJbzH
-uTR79ceo/ekik35HjzYGnUCxgmtmpw==
-=LT/a
------END PGP SIGNATURE-----
-
---qbejfhwai7v6uczb--
+Judith
