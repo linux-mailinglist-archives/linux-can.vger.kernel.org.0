@@ -2,143 +2,143 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B90FB6E6DC6
-	for <lists+linux-can@lfdr.de>; Tue, 18 Apr 2023 23:00:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 243746E72E0
+	for <lists+linux-can@lfdr.de>; Wed, 19 Apr 2023 08:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232406AbjDRVAU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 18 Apr 2023 17:00:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55670 "EHLO
+        id S231309AbjDSGKo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 19 Apr 2023 02:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbjDRVAU (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 18 Apr 2023 17:00:20 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C744940FA;
-        Tue, 18 Apr 2023 14:00:17 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33IKxvUv027084;
-        Tue, 18 Apr 2023 15:59:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1681851597;
-        bh=l+g/rrVq/gexW1MWXpawC7favKvdCG3qnBu/DVzf5vw=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=ilAQ52XaWO7kl8gbzfujSGsgaUovOS9czXPHtyb1tfLfm9gGfjO3T0rv2AHdGNNVi
-         8jOj+uOXl3lbCORlUSiDLi22pMpF823aD7qULmSidInGxrJGX/xLBa7CmGDoDht7rJ
-         AdtQko4dLMhcdvRwVdQxN6VY15Rimgq9pWv9oMBQ=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33IKxvlj087223
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 18 Apr 2023 15:59:57 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 18
- Apr 2023 15:59:57 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 18 Apr 2023 15:59:57 -0500
-Received: from [128.247.81.102] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33IKxvWe100302;
-        Tue, 18 Apr 2023 15:59:57 -0500
-Message-ID: <5ece3561-4690-a721-aa83-adf80d0be9f5@ti.com>
-Date:   Tue, 18 Apr 2023 15:59:57 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RFC PATCH 5/5] can: m_can: Add hrtimer to generate software
- interrupt
-Content-Language: en-US
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Oliver Hartkopp <socketcan@hartkopp.net>
-CC:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Andrew Davis <afd@ti.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
+        with ESMTP id S231251AbjDSGKn (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 19 Apr 2023 02:10:43 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 627455FEC
+        for <linux-can@vger.kernel.org>; Tue, 18 Apr 2023 23:10:42 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pp11Q-0006RU-9L; Wed, 19 Apr 2023 08:10:28 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id DEC751B2A81;
+        Wed, 19 Apr 2023 06:10:25 +0000 (UTC)
+Date:   Wed, 19 Apr 2023 08:10:24 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     "Mendez, Judith" <jm@ti.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-can@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <netdev@vger.kernel.org>,
-        Schuyler Patton <spatton@ti.com>
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Andrew Davis <afd@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Nishanth Menon <nm@ti.com>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [RFC PATCH 0/5] Enable multiple MCAN on AM62x
+Message-ID: <20230419-stretch-tarantula-e0d21d067483-mkl@pengutronix.de>
 References: <20230413223051.24455-1-jm@ti.com>
- <20230413223051.24455-6-jm@ti.com>
- <20230414-bounding-guidance-262dffacd05c-mkl@pengutronix.de>
- <4a6c66eb-2ccf-fc42-a6fc-9f411861fcef@hartkopp.net>
- <20230416-failing-washbasin-e4fa5caea267-mkl@pengutronix.de>
- <f58e8dce-898c-8797-5293-1001c9a75381@hartkopp.net>
- <20230417-taking-relieving-f2c8532864c0-mkl@pengutronix.de>
- <25806ec7-64c5-3421-aea1-c0d431e3f27f@hartkopp.net>
- <20230417-unsafe-porridge-0b712d137530-mkl@pengutronix.de>
-From:   "Mendez, Judith" <jm@ti.com>
-In-Reply-To: <20230417-unsafe-porridge-0b712d137530-mkl@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+ <20230414-tubular-service-3404c64c6c62-mkl@pengutronix.de>
+ <6eb588ef-ab12-186d-b0d3-35fc505a225a@ti.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qu67lay6cc3reoxa"
+Content-Disposition: inline
+In-Reply-To: <6eb588ef-ab12-186d-b0d3-35fc505a225a@ti.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Marc,
 
-On 4/17/2023 2:26 PM, Marc Kleine-Budde wrote:
-> On 17.04.2023 19:34:03, Oliver Hartkopp wrote:
->> On 17.04.23 09:26, Marc Kleine-Budde wrote:
->>> On 16.04.2023 21:46:40, Oliver Hartkopp wrote:
->>>>> I had the 5ms that are actually used in the code in mind. But this is a
->>>>> good calculation.
->>>>
->>>> @Judith: Can you acknowledge the value calculation?
->>>>
->>>>>> The "shortest" 11 bit CAN ID CAN frame is a Classical CAN frame with DLC = 0
->>>>>> and 1 Mbit/s (arbitration) bitrate. This should be 48 bits @1Mbit => ~50
->>>>>> usecs
->>>>>>
->>>>>> So it should be something about
->>>>>>
->>>>>>        50 usecs * (FIFO queue len - 2)
->>>>>
->>>>> Where does the "2" come from?
->>>>
->>>> I thought about handling the FIFO earlier than it gets completely "full".
->>>>
->>>> The fetching routine would need some time too and the hrtimer could also
->>>> jitter to some extend.
->>>
->>> I was assuming something like this.
->>>
->>> I would argue that the polling time should be:
->>>
->>>       50 µs * FIFO length - IRQ overhead.
->>>
->>> The max IRQ overhead depends on your SoC and kernel configuration.
->>
->> I just tried an educated guess to prevent the FIFO to be filled up
->> completely. How can you estimate the "IRQ overhead"? And how do you catch
->> the CAN frames that are received while the IRQ is handled?
-> 
-> We're talking about polling, better call it "overhead" or "latency from
-> timer expiration until FIFO has at least one frame room". This value
-> depends on your system.
-> 
-> It depends on many, many factors, SoC, Kernel configuration (preempt RT,
-> powersaving, frequency scaling, system load. In your example it's 100
-> µs. I wanted to say there's an overhead (or latency) and we need enough
-> space in the FIFO, to cover it.
-> 
+--qu67lay6cc3reoxa
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I am not sure how to estimate IRQ overhead, but FIFO length should be 64
-elements.
+On 18.04.2023 11:15:35, Mendez, Judith wrote:
+> Hello Marc,
+>=20
+> On 4/14/2023 12:49 PM, Marc Kleine-Budde wrote:
+> > On 13.04.2023 17:30:46, Judith Mendez wrote:
+> > > On AM62x there is one MCAN in MAIN domain and two in MCU domain.
+> > > The MCANs in MCU domain were not enabled since there is no
+> > > hardware interrupt routed to A53 GIC interrupt controller.
+> > > Therefore A53 Linux cannot be interrupted by MCU MCANs.
+> >=20
+> > Is this a general hardware limitation, that effects all MCU domain
+> > peripherals? Is there a mailbox mechanism between the MCU and the MAIN
+> > domain, would it be possible to pass the IRQ with a small firmware on
+> > the MCU? Anyways, that's future optimization.
+>=20
+> This is a hardware limitation that affects AM62x SoC and has been carried
+> over to at least 1 other SoC. Using the MCU is an idea that we have juggl=
+ed
+> around for a while, we will definitely keep it in mind for future
+> optimization. Thanks for your feedback.
 
-50 us * 62 is about 3.1 ms and we are using 1 ms timer polling interval.
+Once you have a proper IRQ de-multiplexer, you can integrate it into the
+system with a DT change only. No need for changes in the m_can driver.
 
-Running a few benchmarks showed that using 0.5 ms timer polling interval 
-starts to take a toll on CPU load, that is why I chose 1 ms polling 
-interval.
+> > > This solution instantiates a hrtimer with 1 ms polling interval
+> > > for a MCAN when there is no hardware interrupt. This hrtimer
+> > > generates a recurring software interrupt which allows to call the
+> > > isr. The isr will check if there is pending transaction by reading
+> > > a register and proceed normally if there is.
+> > >=20
+> > > On AM62x this series enables two MCU MCAN which will use the hrtimer
+> > > implementation. MCANs with hardware interrupt routed to A53 Linux
+> > > will continue to use the hardware interrupt as expected.
+> > >=20
+> > > Timer polling method was tested on both classic CAN and CAN-FD
+> > > at 125 KBPS, 250 KBPS, 1 MBPS and 2.5 MBPS with 4 MBPS bitrate
+> > > switching.
+> > >=20
+> > > Letency and CPU load benchmarks were tested on 3x MCAN on AM62x.
+> > > 1 MBPS timer polling interval is the better timer polling interval
+> > > since it has comparable latency to hardware interrupt with the worse
+> > > case being 1ms + CAN frame propagation time and CPU load is not
+> > > substantial. Latency can be improved further with less than 1 ms
+> > > polling intervals, howerver it is at the cost of CPU usage since CPU
+> > > load increases at 0.5 ms and lower polling periods than 1ms.
 
-regards,
-Judith
+Have you seen my suggestion of the poll-interval?
+
+Some Linux input drivers have the property poll-interval, would it make
+sense to ass this here too?
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--qu67lay6cc3reoxa
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQ/hc0ACgkQvlAcSiqK
+BOiAWQgAjh1+EBUoAAUPx2ZOawWvxaMJ29t7nK75GAf+/TYlKVR0v4S1Mv1Z/qnM
+rK65q4JaAcNgYSqxJso/6F9hwXxuLGZqhyitmfOPE5Wb3Gk9lP11h4GwfhSMBece
+3Q/Bf0nvujl699psPIJq2vLZknERGkSGaMpsV1QsClPMxiPOAwlkk9GeYynvqkHo
+9On1oPYV/SOtC23zV/h+v0etNxww+uXlgy3W7HNxDBzTfUpeiXf4R+X2TH99qjDZ
+Uk8Zw8Htg/rhiYAGvOYZVTPeHKtTu6HQL3kh400kcqh2kJA0PI1DGQd353XQhXvf
+DN8cR/kl4t5PaUITQ7WWYn777ZJp6g==
+=+SWM
+-----END PGP SIGNATURE-----
+
+--qu67lay6cc3reoxa--
