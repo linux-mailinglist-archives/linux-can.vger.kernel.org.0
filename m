@@ -2,168 +2,149 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83B786E9829
-	for <lists+linux-can@lfdr.de>; Thu, 20 Apr 2023 17:18:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADF4F6E98B5
+	for <lists+linux-can@lfdr.de>; Thu, 20 Apr 2023 17:47:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229821AbjDTPSN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 20 Apr 2023 11:18:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57866 "EHLO
+        id S232455AbjDTPry (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 20 Apr 2023 11:47:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbjDTPSJ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 20 Apr 2023 11:18:09 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E451BE3;
-        Thu, 20 Apr 2023 08:18:07 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33KFHrWo067020;
-        Thu, 20 Apr 2023 10:17:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1682003873;
-        bh=z5ZDIfkTBWset+JPHbeRmxbumF2JbTl0MOP6EZjUj/0=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=qAuZ3iyLCv6cj4k1qfql91McTKwLEqp0zEfyUHha0u3/v9zyFsYDtk5/YGakefVL8
-         ziNn6gODDLROVi2HZyUrtsnT2gWR14jGktcMHkXjcuu8sMX4H41oJUDFVi3j8ltS5Q
-         4Vmq3G3CjximcDDrfYmtSphr+ziF9ww9wbF2Himc=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33KFHr9L027393
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 20 Apr 2023 10:17:53 -0500
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 20
- Apr 2023 10:17:52 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 20 Apr 2023 10:17:52 -0500
-Received: from [128.247.81.102] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33KFHq4M010599;
-        Thu, 20 Apr 2023 10:17:52 -0500
-Message-ID: <19d8ae7f-7b74-a869-a818-93b74d106709@ti.com>
-Date:   Thu, 20 Apr 2023 10:17:52 -0500
+        with ESMTP id S232401AbjDTPrw (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 20 Apr 2023 11:47:52 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173711B5
+        for <linux-can@vger.kernel.org>; Thu, 20 Apr 2023 08:47:51 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id u3so7292882ejj.12
+        for <linux-can@vger.kernel.org>; Thu, 20 Apr 2023 08:47:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682005669; x=1684597669;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ii0rJDmD6wGcfR9R86o46jWR7Sx2THT0mFJ55bpx/lc=;
+        b=XK4cAxcm9V+tmT5sYaMjsisB8fWSfvuQ3Whf7RuncKhI7VhoZ4bCjDetHGvfTfIm5f
+         TvT4iDeOzqgdC7mdtXMmOezBUtCgt6BrOOlodawLenZ6trC1ZceJ6OfZV9CV5NpBxRXx
+         k3+pXE/yBt55rJ7IGr13BDleUvH2P3i8F4cIhwVd30YHPkfVKjEIFZIj39cl8zk+9AVx
+         XvhwAiQr9lz0VL+itTJCDEoEofnBo2a7IfNvV/DD6vNAodHU9yIR4vyU7Gldv8cCwxdm
+         aRH8ewKOrL/gfzSc7kCFKR3paTDTKNOG2/Hwho1K/uFh38sH3Lv7q1roYKsx54I3RTP0
+         r5sA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682005669; x=1684597669;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ii0rJDmD6wGcfR9R86o46jWR7Sx2THT0mFJ55bpx/lc=;
+        b=gfFkbebwO2UXtHlBsp3DJVGuJcT9vVKDEHOivh6XXjnMRDptZcbNzgeGHlbjr5XJP0
+         tAbxjonYHW7s7n5I4eXmnCLEF+4PqLpreXCJm5Yt0rpp4T1iBpiZZUBoRTulLzCu/s4i
+         j6rvgmlqODUjIvHrB30hA/uNavBY1RaSbT+fpyBhLfAPYuNqRmn3jk17IFAj9x+JSBfk
+         7g7z+yojMyFUMMco3hBq9td0vuHPwdhFULOfYSKCj50A1Ox3r48+jnNGAItC1egKfPLT
+         p6sLwmIUyYopp0V/jXbT7eaTO4eiMGqhBiiVQqICZ1dl65jxoRxUeBpI8R+3Q3muVL09
+         6jgg==
+X-Gm-Message-State: AAQBX9cYAf62m0BsL6zwZ7SFPgbVDZ8XHWoe8CNbkOjuB1vni8J/Ww3N
+        tJ9WJcf4MHodXono4dXkje3VUQ==
+X-Google-Smtp-Source: AKy350bigdojBVAu1yf8DpxqzPZ+1OFcdgyfRolFxaaBBS3Mmcpps74+3jkoTtBj2wvJL7j/Sn3gIQ==
+X-Received: by 2002:a17:906:7215:b0:94f:61b2:c990 with SMTP id m21-20020a170906721500b0094f61b2c990mr2092604ejk.25.1682005669571;
+        Thu, 20 Apr 2023 08:47:49 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:bcb8:77e6:8f45:4771? ([2a02:810d:15c0:828:bcb8:77e6:8f45:4771])
+        by smtp.gmail.com with ESMTPSA id a8-20020a1709063e8800b0094e4684e5c0sm867274ejj.25.2023.04.20.08.47.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Apr 2023 08:47:49 -0700 (PDT)
+Message-ID: <c7be28da-45f0-c743-9bd9-cfac2114f167@linaro.org>
+Date:   Thu, 20 Apr 2023 17:47:47 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [RFC PATCH 0/5] Enable multiple MCAN on AM62x
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-can@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Andrew Davis <afd@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Nishanth Menon <nm@ti.com>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        <devicetree@vger.kernel.org>, <netdev@vger.kernel.org>
-References: <20230413223051.24455-1-jm@ti.com>
- <20230414-tubular-service-3404c64c6c62-mkl@pengutronix.de>
- <6eb588ef-ab12-186d-b0d3-35fc505a225a@ti.com>
- <20230419-stretch-tarantula-e0d21d067483-mkl@pengutronix.de>
- <52a37e51-4143-9017-42ee-8d17c67028e3@ti.com>
- <20230420-scarf-landscape-86202cc821ca-mkl@pengutronix.de>
+Subject: Re: [PATCH 2/4] dt-bindings: net: can: Make interrupt attributes
+ optional for MCAN
 Content-Language: en-US
-From:   "Mendez, Judith" <jm@ti.com>
-In-Reply-To: <20230420-scarf-landscape-86202cc821ca-mkl@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, Judith Mendez <jm@ti.com>
+Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Schuyler Patton <spatton@ti.com>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20230419223323.20384-1-jm@ti.com>
+ <20230419223323.20384-3-jm@ti.com>
+ <20230420-zoom-demystify-c31d6bf25295-mkl@pengutronix.de>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230420-zoom-demystify-c31d6bf25295-mkl@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Marc,
-
-On 4/20/2023 4:36 AM, Marc Kleine-Budde wrote:
-> On 19.04.2023 15:40:24, Mendez, Judith wrote:
->> Hello Marc,
+On 20/04/2023 12:01, Marc Kleine-Budde wrote:
+> On 19.04.2023 17:33:21, Judith Mendez wrote:
+>> For MCAN, remove interrupt and interrupt names from the required
+>> section.
 >>
->> On 4/19/2023 1:10 AM, Marc Kleine-Budde wrote:
->>> On 18.04.2023 11:15:35, Mendez, Judith wrote:
->>>> Hello Marc,
->>>>
->>>> On 4/14/2023 12:49 PM, Marc Kleine-Budde wrote:
->>>>> On 13.04.2023 17:30:46, Judith Mendez wrote:
->>>>>> On AM62x there is one MCAN in MAIN domain and two in MCU domain.
->>>>>> The MCANs in MCU domain were not enabled since there is no
->>>>>> hardware interrupt routed to A53 GIC interrupt controller.
->>>>>> Therefore A53 Linux cannot be interrupted by MCU MCANs.
->>>>>
->>>>> Is this a general hardware limitation, that effects all MCU domain
->>>>> peripherals? Is there a mailbox mechanism between the MCU and the MAIN
->>>>> domain, would it be possible to pass the IRQ with a small firmware on
->>>>> the MCU? Anyways, that's future optimization.
->>>>
->>>> This is a hardware limitation that affects AM62x SoC and has been carried
->>>> over to at least 1 other SoC. Using the MCU is an idea that we have juggled
->>>> around for a while, we will definitely keep it in mind for future
->>>> optimization. Thanks for your feedback.
->>>
->>> Once you have a proper IRQ de-multiplexer, you can integrate it into the
->>> system with a DT change only. No need for changes in the m_can driver.
->>>
+>> On AM62x SoC, MCANs on MCU domain do not have hardware interrupt
+>> routed to A53 Linux, instead they will use software interrupt
+>> by hrtimer. Make interrupt attributes optional in MCAN node
+>> by removing from required section.
 >>
->> Is this a recommendation for the current patch?
+>> Signed-off-by: Judith Mendez <jm@ti.com>
 > 
-> It is a recommendation on how to get around the hardware limitation,
-> instead of falling back to polling.
+> This series basically adds polling support to the driver, which is
+> needed due to HW limitations.
 > 
->> The reason I am asking is because adding firmware for the M4 to forward
->> a mailbox with the IRQ to the A53 sounds like a good idea and we have been
->> juggling the idea, but it is not an ideal solution if customers are
->> using the M4 for other purposes like safety.
+> The proposed logic in the driver is to use polling if
+> platform_get_irq_byname() fails (due to whatever reason) use polling
+> with a hard-coded interval.
 > 
-> Of course, the feasibility of this approach depends on your system
-> design.
-
-I understand your concern. Like mentioned, using the M4 approach may not 
-be the best solution since some customers use the M4 for various reasons 
-that could provide problems for this design.
-
-I think the best way to go would be to enable polling + your suggestion 
-of using poll-interval in device tree. If poll-interval is specified, 
-then we can enable polling mode for MCAN.
-
->>>>>> This solution instantiates a hrtimer with 1 ms polling interval
->>>>>> for a MCAN when there is no hardware interrupt. This hrtimer
->>>>>> generates a recurring software interrupt which allows to call the
->>>>>> isr. The isr will check if there is pending transaction by reading
->>>>>> a register and proceed normally if there is.
->>>>>>
->>>>>> On AM62x this series enables two MCU MCAN which will use the hrtimer
->>>>>> implementation. MCANs with hardware interrupt routed to A53 Linux
->>>>>> will continue to use the hardware interrupt as expected.
->>>>>>
->>>>>> Timer polling method was tested on both classic CAN and CAN-FD
->>>>>> at 125 KBPS, 250 KBPS, 1 MBPS and 2.5 MBPS with 4 MBPS bitrate
->>>>>> switching.
->>>>>>
->>>>>> Letency and CPU load benchmarks were tested on 3x MCAN on AM62x.
->>>>>> 1 MBPS timer polling interval is the better timer polling interval
->>>>>> since it has comparable latency to hardware interrupt with the worse
->>>>>> case being 1ms + CAN frame propagation time and CPU load is not
->>>>>> substantial. Latency can be improved further with less than 1 ms
->>>>>> polling intervals, howerver it is at the cost of CPU usage since CPU
->>>>>> load increases at 0.5 ms and lower polling periods than 1ms.
->>>
->>> Have you seen my suggestion of the poll-interval?
->>>
->>> Some Linux input drivers have the property poll-interval, would it make
->>> sense to ass this here too?
->>
->> Looking at some examples, I do think we could implement this poll-interval
->> attribute, then read in the driver and initialize the hrtimer based on this.
->> I like the idea to submit as a future optimization patch, thanks!
+> In the kernel I've found the following properties that describe the
+> polling interval:
 > 
-> I would like to have the DT bindings in place, as handling legacy DT
-> without poll interval adds unnecessary complexity.
+> bindings/input/input.yaml:
+> 
+> |   poll-interval:
+> |     description: Poll interval time in milliseconds.
+> |     $ref: /schemas/types.yaml#/definitions/uint32
+> 
+> 
+> bindings/thermal/thermal-zones.yaml:
+> 
+> |       polling-delay:
+> |         $ref: /schemas/types.yaml#/definitions/uint32
+> |         description:
+> |           The maximum number of milliseconds to wait between polls when
+> |           checking this thermal zone. Setting this to 0 disables the polling
+> |           timers setup by the thermal framework and assumes that the thermal
+> |           sensors in this zone support interrupts.
+> 
+> bindings/regulator/dlg,da9121.yaml
+> 
+> |   dlg,irq-polling-delay-passive-ms:
+> |     minimum: 1000
+> |     maximum: 10000
+> |     description: |
+> |       Specify the polling period, measured in milliseconds, between interrupt status
+> |       update checks. Range 1000-10000 ms.
+> 
+> From my point of view the poll-interval from the input subsystem looks
+> good. Any objections to use it to specify the polling interval for
+> IRQ-less devices, too?
 
-Understood, thanks so much for your feedback.
+Better to skip it, if delay can be figured out by driver based on
+something else (e.g. clocks).
 
-regards,
-Judith
+Best regards,
+Krzysztof
+
