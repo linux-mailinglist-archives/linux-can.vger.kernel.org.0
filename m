@@ -2,62 +2,178 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7EF66E8BFD
-	for <lists+linux-can@lfdr.de>; Thu, 20 Apr 2023 10:02:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FE586E8E51
+	for <lists+linux-can@lfdr.de>; Thu, 20 Apr 2023 11:38:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234220AbjDTICd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 20 Apr 2023 04:02:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38086 "EHLO
+        id S233807AbjDTJht (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 20 Apr 2023 05:37:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234014AbjDTICc (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 20 Apr 2023 04:02:32 -0400
-Received: from mail.craftsplex.pl (mail.craftsplex.pl [162.19.155.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA8C139
-        for <linux-can@vger.kernel.org>; Thu, 20 Apr 2023 01:02:31 -0700 (PDT)
-Received: by mail.craftsplex.pl (Postfix, from userid 1002)
-        id 8C28D24376; Thu, 20 Apr 2023 08:01:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=craftsplex.pl;
-        s=mail; t=1681977699;
-        bh=PcMncQpBfIZCnTOfZJY5G1G+gaLn4c9QPfFvoXrE4rA=;
-        h=Date:From:To:Subject:From;
-        b=Ek51aLWO4UnTbx4OVP3LlKy4doh8phLK/6XeQVBULTbQMivW98RxSZuJIKE1uNNwX
-         BNanJKbvKeQ++ZpYg66XH1+Gk4NGeGQiWM/wio6bQVN1U1C7dhFlB6r8GJPLG0K15R
-         HgMBDcMBfG5ONV5ankV0Zynv1FcjXsDqBttK9mCAC5LrEWRBEv8euzRWf2kwTaT1N4
-         9KUn7pvKATCDw6WUXuC8dul0H3n6JXkBwWLK8Tm+NX3Iwft5gBuon+JH4T9krU6a2a
-         RUajREeYyA/4aEDkWFLOhQiy+l5/G5m4dU+xoEpqhx0UqBFM2q+eMhXeOu11KthjqU
-         GQZfOLFlHzCAg==
-Received: by mail.craftsplex.pl for <linux-can@vger.kernel.org>; Thu, 20 Apr 2023 08:00:45 GMT
-Message-ID: <20230420064500-0.1.5o.q8vn.0.0e87iw9pw9@craftsplex.pl>
-Date:   Thu, 20 Apr 2023 08:00:45 GMT
-From:   "Kamil Tralewski" <kamil.tralewski@craftsplex.pl>
-To:     <linux-can@vger.kernel.org>
-Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
-X-Mailer: mail.craftsplex.pl
+        with ESMTP id S234179AbjDTJgr (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 20 Apr 2023 05:36:47 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6054ECB
+        for <linux-can@vger.kernel.org>; Thu, 20 Apr 2023 02:36:29 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1ppQi7-0007zh-Cf; Thu, 20 Apr 2023 11:36:15 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id D72831B3CD1;
+        Thu, 20 Apr 2023 09:36:12 +0000 (UTC)
+Date:   Thu, 20 Apr 2023 11:36:12 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     "Mendez, Judith" <jm@ti.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Andrew Davis <afd@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Nishanth Menon <nm@ti.com>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [RFC PATCH 0/5] Enable multiple MCAN on AM62x
+Message-ID: <20230420-scarf-landscape-86202cc821ca-mkl@pengutronix.de>
+References: <20230413223051.24455-1-jm@ti.com>
+ <20230414-tubular-service-3404c64c6c62-mkl@pengutronix.de>
+ <6eb588ef-ab12-186d-b0d3-35fc505a225a@ti.com>
+ <20230419-stretch-tarantula-e0d21d067483-mkl@pengutronix.de>
+ <52a37e51-4143-9017-42ee-8d17c67028e3@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4xgtlkkfta6kixje"
+Content-Disposition: inline
+In-Reply-To: <52a37e51-4143-9017-42ee-8d17c67028e3@ti.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Dzie=C5=84 dobry,
 
-zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
-=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
-o dalszych rozm=C3=B3w.=20
+--4xgtlkkfta6kixje
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
-=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
-=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
-strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
+On 19.04.2023 15:40:24, Mendez, Judith wrote:
+> Hello Marc,
+>=20
+> On 4/19/2023 1:10 AM, Marc Kleine-Budde wrote:
+> > On 18.04.2023 11:15:35, Mendez, Judith wrote:
+> > > Hello Marc,
+> > >=20
+> > > On 4/14/2023 12:49 PM, Marc Kleine-Budde wrote:
+> > > > On 13.04.2023 17:30:46, Judith Mendez wrote:
+> > > > > On AM62x there is one MCAN in MAIN domain and two in MCU domain.
+> > > > > The MCANs in MCU domain were not enabled since there is no
+> > > > > hardware interrupt routed to A53 GIC interrupt controller.
+> > > > > Therefore A53 Linux cannot be interrupted by MCU MCANs.
+> > > >=20
+> > > > Is this a general hardware limitation, that effects all MCU domain
+> > > > peripherals? Is there a mailbox mechanism between the MCU and the M=
+AIN
+> > > > domain, would it be possible to pass the IRQ with a small firmware =
+on
+> > > > the MCU? Anyways, that's future optimization.
+> > >=20
+> > > This is a hardware limitation that affects AM62x SoC and has been car=
+ried
+> > > over to at least 1 other SoC. Using the MCU is an idea that we have j=
+uggled
+> > > around for a while, we will definitely keep it in mind for future
+> > > optimization. Thanks for your feedback.
+> >=20
+> > Once you have a proper IRQ de-multiplexer, you can integrate it into the
+> > system with a DT change only. No need for changes in the m_can driver.
+> >=20
+>=20
+> Is this a recommendation for the current patch?
 
-Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
+It is a recommendation on how to get around the hardware limitation,
+instead of falling back to polling.
 
-Pozdrawiam
-Kamil Tralewski
+> The reason I am asking is because adding firmware for the M4 to forward
+> a mailbox with the IRQ to the A53 sounds like a good idea and we have been
+> juggling the idea, but it is not an ideal solution if customers are
+> using the M4 for other purposes like safety.
+
+Of course, the feasibility of this approach depends on your system
+design.
+
+> > > > > This solution instantiates a hrtimer with 1 ms polling interval
+> > > > > for a MCAN when there is no hardware interrupt. This hrtimer
+> > > > > generates a recurring software interrupt which allows to call the
+> > > > > isr. The isr will check if there is pending transaction by reading
+> > > > > a register and proceed normally if there is.
+> > > > >=20
+> > > > > On AM62x this series enables two MCU MCAN which will use the hrti=
+mer
+> > > > > implementation. MCANs with hardware interrupt routed to A53 Linux
+> > > > > will continue to use the hardware interrupt as expected.
+> > > > >=20
+> > > > > Timer polling method was tested on both classic CAN and CAN-FD
+> > > > > at 125 KBPS, 250 KBPS, 1 MBPS and 2.5 MBPS with 4 MBPS bitrate
+> > > > > switching.
+> > > > >=20
+> > > > > Letency and CPU load benchmarks were tested on 3x MCAN on AM62x.
+> > > > > 1 MBPS timer polling interval is the better timer polling interval
+> > > > > since it has comparable latency to hardware interrupt with the wo=
+rse
+> > > > > case being 1ms + CAN frame propagation time and CPU load is not
+> > > > > substantial. Latency can be improved further with less than 1 ms
+> > > > > polling intervals, howerver it is at the cost of CPU usage since =
+CPU
+> > > > > load increases at 0.5 ms and lower polling periods than 1ms.
+> >=20
+> > Have you seen my suggestion of the poll-interval?
+> >=20
+> > Some Linux input drivers have the property poll-interval, would it make
+> > sense to ass this here too?
+>=20
+> Looking at some examples, I do think we could implement this poll-interval
+> attribute, then read in the driver and initialize the hrtimer based on th=
+is.
+> I like the idea to submit as a future optimization patch, thanks!
+
+I would like to have the DT bindings in place, as handling legacy DT
+without poll interval adds unnecessary complexity.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--4xgtlkkfta6kixje
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRBB4kACgkQvlAcSiqK
+BOi3tQgAncJzwRYQqm5rHunLZQBQJZ76dTGRYf7AFrYVzqwbbW1wO2e2uv8H4Drg
+hCSh+DaPGLyBBi0ZCUtvO0dql90ZD0wLvX/Eis8q2R/qkWdor3VTNiWBhwGcuTIa
+WITJE1rmdTBbpRXZ6M6KMyJi4MFaM8mKr11VXsHK2HJIRVDcL3nMy6DM5/mMhjzf
+n8JgumGKM5+VxTNSdyQVWpZxe9GSQC3yYrSTYvIw/VGcrITBdnSn92Svpc6jE+PF
+DNLcCOMBYU3cNtdqEsNsej7TCKEJQIYY+ImhaQ8ya9bE3coIwdVqq2BPJW19q5TN
+BgEwQXsNBy+Eq9WSPE4QKLyWvKxHRA==
+=JDN9
+-----END PGP SIGNATURE-----
+
+--4xgtlkkfta6kixje--
