@@ -2,65 +2,66 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADF4F6E98B5
-	for <lists+linux-can@lfdr.de>; Thu, 20 Apr 2023 17:47:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CA716E98BA
+	for <lists+linux-can@lfdr.de>; Thu, 20 Apr 2023 17:48:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232455AbjDTPry (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 20 Apr 2023 11:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45474 "EHLO
+        id S232685AbjDTPsC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 20 Apr 2023 11:48:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232401AbjDTPrw (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 20 Apr 2023 11:47:52 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173711B5
-        for <linux-can@vger.kernel.org>; Thu, 20 Apr 2023 08:47:51 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id u3so7292882ejj.12
-        for <linux-can@vger.kernel.org>; Thu, 20 Apr 2023 08:47:51 -0700 (PDT)
+        with ESMTP id S232420AbjDTPr7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 20 Apr 2023 11:47:59 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0871330EE
+        for <linux-can@vger.kernel.org>; Thu, 20 Apr 2023 08:47:58 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id xi5so7264899ejb.13
+        for <linux-can@vger.kernel.org>; Thu, 20 Apr 2023 08:47:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682005669; x=1684597669;
+        d=linaro.org; s=google; t=1682005676; x=1684597676;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ii0rJDmD6wGcfR9R86o46jWR7Sx2THT0mFJ55bpx/lc=;
-        b=XK4cAxcm9V+tmT5sYaMjsisB8fWSfvuQ3Whf7RuncKhI7VhoZ4bCjDetHGvfTfIm5f
-         TvT4iDeOzqgdC7mdtXMmOezBUtCgt6BrOOlodawLenZ6trC1ZceJ6OfZV9CV5NpBxRXx
-         k3+pXE/yBt55rJ7IGr13BDleUvH2P3i8F4cIhwVd30YHPkfVKjEIFZIj39cl8zk+9AVx
-         XvhwAiQr9lz0VL+itTJCDEoEofnBo2a7IfNvV/DD6vNAodHU9yIR4vyU7Gldv8cCwxdm
-         aRH8ewKOrL/gfzSc7kCFKR3paTDTKNOG2/Hwho1K/uFh38sH3Lv7q1roYKsx54I3RTP0
-         r5sA==
+        bh=zma1GNPt9EEK7iZLlPOEbxI0+LETt5GJfYYZFjvw0+A=;
+        b=Hwltqq0sRptiTJu2kS+pPX1lsWf9yS0Gmpz43opbyCUKIKu9Y5T4tAikJC964N+gf2
+         M1igOljc4GVr/RoALtQaKQi8p6E3AIEWKdE8NrkFoLQ6Ps2buGQ/bAWXYwWf1E4vyROb
+         4AIVLWD3zuhVDi/vSB9tKDzdB8fO9xbb6OCNxcrofSgi8TdstjEScxRyTKAYlv9r62qS
+         J3exWydC8/Os2bBW+i6WCTn1/1NkfS7V26AZIYK2BaWJb3RDQ3PSrjE9h40yN0WU4NPZ
+         8Aw2gBx+a2kpujAKn/fyXtUkK1VmOIKgH03htOi+0RkHF4ecl3DU6MmPJGIv4Py+RlC0
+         Yq0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682005669; x=1684597669;
+        d=1e100.net; s=20221208; t=1682005676; x=1684597676;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ii0rJDmD6wGcfR9R86o46jWR7Sx2THT0mFJ55bpx/lc=;
-        b=gfFkbebwO2UXtHlBsp3DJVGuJcT9vVKDEHOivh6XXjnMRDptZcbNzgeGHlbjr5XJP0
-         tAbxjonYHW7s7n5I4eXmnCLEF+4PqLpreXCJm5Yt0rpp4T1iBpiZZUBoRTulLzCu/s4i
-         j6rvgmlqODUjIvHrB30hA/uNavBY1RaSbT+fpyBhLfAPYuNqRmn3jk17IFAj9x+JSBfk
-         7g7z+yojMyFUMMco3hBq9td0vuHPwdhFULOfYSKCj50A1Ox3r48+jnNGAItC1egKfPLT
-         p6sLwmIUyYopp0V/jXbT7eaTO4eiMGqhBiiVQqICZ1dl65jxoRxUeBpI8R+3Q3muVL09
-         6jgg==
-X-Gm-Message-State: AAQBX9cYAf62m0BsL6zwZ7SFPgbVDZ8XHWoe8CNbkOjuB1vni8J/Ww3N
-        tJ9WJcf4MHodXono4dXkje3VUQ==
-X-Google-Smtp-Source: AKy350bigdojBVAu1yf8DpxqzPZ+1OFcdgyfRolFxaaBBS3Mmcpps74+3jkoTtBj2wvJL7j/Sn3gIQ==
-X-Received: by 2002:a17:906:7215:b0:94f:61b2:c990 with SMTP id m21-20020a170906721500b0094f61b2c990mr2092604ejk.25.1682005669571;
-        Thu, 20 Apr 2023 08:47:49 -0700 (PDT)
+        bh=zma1GNPt9EEK7iZLlPOEbxI0+LETt5GJfYYZFjvw0+A=;
+        b=FyLVQrSXaSskOhJSFpX6ltDDYLFoPRGo76UjnPJBv0gma/2+hwI7bE7vBYuV4pGuDM
+         /eHzLmngUZQVYe6t5BPjCaeRGreq/QATc4C3+K4c5S1gdVo1E4H4KK5dU8imU8sxf9hP
+         vucYeWdy7TIp+GF/shVAfbstXjrf6qPMx39T0+gLmUYpNFgDdRHWVfCOrQ1KEfLuGMhm
+         /G1K9IcsGBUtyGj3xkqIRfh7b2tL8duW303DvtuQ3BORIO6oNctP7Gj+ik0AxN8WO1i2
+         lGRq4D4KmCzxk+uKiA86/q6D6WzHLVAU6K30iT33MdahelVsqTtMVZWyspwKqoikUYLe
+         bW8g==
+X-Gm-Message-State: AAQBX9c1rroPU2/+XPBoijrPsDyvRQNOLERBWTTnFaI7AX9SwYAK+Fcf
+        XloyIe2zMgYHteSi1w8Ob4NbUA==
+X-Google-Smtp-Source: AKy350an5EXsmftkmGrxqo8qUQvDzhHWDnvbfN6Kdn+/2buiI5e5pQb6qso779JHSTxr4BbWt5vUkA==
+X-Received: by 2002:a17:906:171b:b0:94e:1764:b09b with SMTP id c27-20020a170906171b00b0094e1764b09bmr1968487eje.45.1682005676356;
+        Thu, 20 Apr 2023 08:47:56 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:bcb8:77e6:8f45:4771? ([2a02:810d:15c0:828:bcb8:77e6:8f45:4771])
-        by smtp.gmail.com with ESMTPSA id a8-20020a1709063e8800b0094e4684e5c0sm867274ejj.25.2023.04.20.08.47.48
+        by smtp.gmail.com with ESMTPSA id e7-20020a170906844700b0094f7b713e40sm847299ejy.126.2023.04.20.08.47.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Apr 2023 08:47:49 -0700 (PDT)
-Message-ID: <c7be28da-45f0-c743-9bd9-cfac2114f167@linaro.org>
-Date:   Thu, 20 Apr 2023 17:47:47 +0200
+        Thu, 20 Apr 2023 08:47:55 -0700 (PDT)
+Message-ID: <39c875ec-1e2f-407f-4684-52a5901df7d7@linaro.org>
+Date:   Thu, 20 Apr 2023 17:47:54 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
 Subject: Re: [PATCH 2/4] dt-bindings: net: can: Make interrupt attributes
  optional for MCAN
 Content-Language: en-US
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, Judith Mendez <jm@ti.com>
-Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+To:     Judith Mendez <jm@ti.com>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
-        "David S . Miller" <davem@davemloft.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     "David S . Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
@@ -75,14 +76,13 @@ Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
         netdev@vger.kernel.org
 References: <20230419223323.20384-1-jm@ti.com>
  <20230419223323.20384-3-jm@ti.com>
- <20230420-zoom-demystify-c31d6bf25295-mkl@pengutronix.de>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230420-zoom-demystify-c31d6bf25295-mkl@pengutronix.de>
+In-Reply-To: <20230419223323.20384-3-jm@ti.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,60 +90,20 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 20/04/2023 12:01, Marc Kleine-Budde wrote:
-> On 19.04.2023 17:33:21, Judith Mendez wrote:
->> For MCAN, remove interrupt and interrupt names from the required
->> section.
->>
->> On AM62x SoC, MCANs on MCU domain do not have hardware interrupt
->> routed to A53 Linux, instead they will use software interrupt
->> by hrtimer. Make interrupt attributes optional in MCAN node
->> by removing from required section.
->>
->> Signed-off-by: Judith Mendez <jm@ti.com>
+On 20/04/2023 00:33, Judith Mendez wrote:
+> For MCAN, remove interrupt and interrupt names from the required
+> section.
 > 
-> This series basically adds polling support to the driver, which is
-> needed due to HW limitations.
+> On AM62x SoC, MCANs on MCU domain do not have hardware interrupt
+> routed to A53 Linux, instead they will use software interrupt
+> by hrtimer. Make interrupt attributes optional in MCAN node
+> by removing from required section.
 > 
-> The proposed logic in the driver is to use polling if
-> platform_get_irq_byname() fails (due to whatever reason) use polling
-> with a hard-coded interval.
-> 
-> In the kernel I've found the following properties that describe the
-> polling interval:
-> 
-> bindings/input/input.yaml:
-> 
-> |   poll-interval:
-> |     description: Poll interval time in milliseconds.
-> |     $ref: /schemas/types.yaml#/definitions/uint32
-> 
-> 
-> bindings/thermal/thermal-zones.yaml:
-> 
-> |       polling-delay:
-> |         $ref: /schemas/types.yaml#/definitions/uint32
-> |         description:
-> |           The maximum number of milliseconds to wait between polls when
-> |           checking this thermal zone. Setting this to 0 disables the polling
-> |           timers setup by the thermal framework and assumes that the thermal
-> |           sensors in this zone support interrupts.
-> 
-> bindings/regulator/dlg,da9121.yaml
-> 
-> |   dlg,irq-polling-delay-passive-ms:
-> |     minimum: 1000
-> |     maximum: 10000
-> |     description: |
-> |       Specify the polling period, measured in milliseconds, between interrupt status
-> |       update checks. Range 1000-10000 ms.
-> 
-> From my point of view the poll-interval from the input subsystem looks
-> good. Any objections to use it to specify the polling interval for
-> IRQ-less devices, too?
+> Signed-off-by: Judith Mendez <jm@ti.com>
+> ---
 
-Better to skip it, if delay can be figured out by driver based on
-something else (e.g. clocks).
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
