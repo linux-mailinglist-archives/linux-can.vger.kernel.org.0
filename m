@@ -2,185 +2,286 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 391A56ED609
-	for <lists+linux-can@lfdr.de>; Mon, 24 Apr 2023 22:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94BA36ED695
+	for <lists+linux-can@lfdr.de>; Mon, 24 Apr 2023 23:10:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbjDXURc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 24 Apr 2023 16:17:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39822 "EHLO
+        id S232545AbjDXVKZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 24 Apr 2023 17:10:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232494AbjDXURb (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 24 Apr 2023 16:17:31 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A834EF3
-        for <linux-can@vger.kernel.org>; Mon, 24 Apr 2023 13:17:29 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pr2cX-0001Uq-2a; Mon, 24 Apr 2023 22:17:09 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 263201B6632;
-        Mon, 24 Apr 2023 20:17:07 +0000 (UTC)
-Date:   Mon, 24 Apr 2023 22:17:06 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Judith Mendez <jm@ti.com>
-Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        with ESMTP id S232594AbjDXVKR (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 24 Apr 2023 17:10:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF581985
+        for <linux-can@vger.kernel.org>; Mon, 24 Apr 2023 14:09:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682370570;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=l2DIw9E0DWGPudpd861Kjkn+cGauwIMc/nQBn5q2geI=;
+        b=ZfnipAACu4Y+gzAn8d8ChCn6ivRv5P8CFPPDnUw4QPFOp46ex7utZuTQrGGnbnMzI4nV5G
+        AQ4xFXzF+OvzLmUczXsGgOQeCOfuvPb3W27YLcLa3W+6jpmMME5Ts2wFU6CGObB1n/H9jT
+        04exScTtKAmNrBYOnkBfWq0Jv4AUzVE=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-608-yS9Aim1PP26A8s7iTjjKZg-1; Mon, 24 Apr 2023 17:09:29 -0400
+X-MC-Unique: yS9Aim1PP26A8s7iTjjKZg-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-301a3715507so2545167f8f.2
+        for <linux-can@vger.kernel.org>; Mon, 24 Apr 2023 14:09:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682370568; x=1684962568;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=l2DIw9E0DWGPudpd861Kjkn+cGauwIMc/nQBn5q2geI=;
+        b=Ve7GxF2l51VQOttjj+guIj1L0k/bD8BPs863aFVOxXhzjz4VAqqS3Gp9cv5137leMv
+         dWa0HudeTx6nD2+qlzQm8iSdTYaffhAUKTQnCgVWU834TKkLJnuKv5qkgPUglW6hZ5Eg
+         FDeddi+UcPEzEoBuecxIVJlna1evJ8bKP6BkCOyVlO11tOobn5AiDxjwrBUlM4l4JISm
+         pY9ELk3KZsovsjcHj45DJoKh7f4Hnwnh1kHymn7gqR/Rb943Xja9lPZXAsSJF4m12dgG
+         amuVS9VcTEhR1zEvJeuY6f2zM2nXTkbkmBNaDKEQaH8U/zA3Wm/N0QJuW03Yf4sc0qn5
+         iXYw==
+X-Gm-Message-State: AAQBX9euwOmq/kBrhdGcTk9/gtCpSLy4AG+0UwYWRrIc/5DBy1To221v
+        mHHnqQ4aZN5kLRIZdkV0SCF1WWrT0aOoVJA69L8EvO+GMHEpUqTcbwS3i5aBmx2s8Im87lgGw4n
+        fqGN3oWF1oL3SiTeRU1WR
+X-Received: by 2002:a5d:404e:0:b0:2f8:2d4:74ef with SMTP id w14-20020a5d404e000000b002f802d474efmr10698169wrp.43.1682370568254;
+        Mon, 24 Apr 2023 14:09:28 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YHMM9T0V0+QlHyo0phBynPWZ5d4SFmalLRfzRfQMsm6PgmZ6pd6ITCa8CU1e9IDifaQL432g==
+X-Received: by 2002:a5d:404e:0:b0:2f8:2d4:74ef with SMTP id w14-20020a5d404e000000b002f802d474efmr10698158wrp.43.1682370567918;
+        Mon, 24 Apr 2023 14:09:27 -0700 (PDT)
+Received: from redhat.com ([2.55.17.255])
+        by smtp.gmail.com with ESMTPSA id j14-20020adfea4e000000b002fc3d8c134bsm11560929wrn.74.2023.04.24.14.09.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Apr 2023 14:09:27 -0700 (PDT)
+Date:   Mon, 24 Apr 2023 17:09:23 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Mikhail Golubev-Ciuchea <Mikhail.Golubev-Ciuchea@opensynergy.com>,
+        virtio-dev@lists.oasis-open.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
         Wolfgang Grandegger <wg@grandegger.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         "David S . Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Schuyler Patton <spatton@ti.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: Re: [PATCH v2 2/4] dt-bindings: net: can: Add poll-interval for MCAN
-Message-ID: <20230424-pessimist-stability-0b86683e469e-mkl@pengutronix.de>
-References: <20230424195402.516-1-jm@ti.com>
- <20230424195402.516-3-jm@ti.com>
+        Paolo Abeni <pabeni@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Harald Mommer <harald.mommer@opensynergy.com>
+Subject: Re: [PATCH] can: virtio-can: cleanups
+Message-ID: <20230424170901-mutt-send-email-mst@kernel.org>
+References: <20230424-modular-rebate-e54ac16374c8-mkl@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4nll47yvmo6txgb2"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230424195402.516-3-jm@ti.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230424-modular-rebate-e54ac16374c8-mkl@pengutronix.de>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Mon, Apr 24, 2023 at 09:47:58PM +0200, Marc Kleine-Budde wrote:
+> Address the topics raised in
+> 
+> https://lore.kernel.org/20230424-footwear-daily-9339bd0ec428-mkl@pengutronix.de
+> 
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 
---4nll47yvmo6txgb2
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 24.04.2023 14:54:00, Judith Mendez wrote:
-> On AM62x SoC, MCANs on MCU domain do not have hardware interrupt
-> routed to A53 Linux, instead they will use software interrupt by
-> hrtimer. To enable timer method, interrupts should be optional so
-> remove interrupts property from required section and introduce
-> poll-interval property.
->=20
-> Signed-off-by: Judith Mendez <jm@ti.com>
-
-The bindings update should go in before the patch.
+given base patch is rfc this should be too?
 
 > ---
-> Changelog:
-> v2:
->   1. Add poll-interval property to enable timer polling method
->   2. Add example using poll-interval property
->  =20
->  .../bindings/net/can/bosch,m_can.yaml         | 26 ++++++++++++++++---
->  1 file changed, 23 insertions(+), 3 deletions(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml b=
-/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-> index 67879aab623b..1c64c7a0c3df 100644
-> --- a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-> +++ b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-> @@ -40,6 +40,10 @@ properties:
->        - const: int1
->      minItems: 1
-> =20
-> +  poll-interval:
-> +    $ref: /schemas/types.yaml#/definitions/flag
-> +    description: Poll interval time in milliseconds.
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-That's not what the code does.
-
+>  drivers/net/can/Makefile        |  4 +--
+>  drivers/net/can/virtio_can.c    | 56 ++++++++++++++-------------------
+>  include/uapi/linux/virtio_can.h |  4 +--
+>  3 files changed, 28 insertions(+), 36 deletions(-)
+> 
+> diff --git a/drivers/net/can/Makefile b/drivers/net/can/Makefile
+> index e409f61d8e93..19314adaff59 100644
+> --- a/drivers/net/can/Makefile
+> +++ b/drivers/net/can/Makefile
+> @@ -17,8 +17,8 @@ obj-$(CONFIG_CAN_AT91)		+= at91_can.o
+>  obj-$(CONFIG_CAN_BXCAN)		+= bxcan.o
+>  obj-$(CONFIG_CAN_CAN327)	+= can327.o
+>  obj-$(CONFIG_CAN_CC770)		+= cc770/
+> -obj-$(CONFIG_CAN_C_CAN)		+= c_can/
+>  obj-$(CONFIG_CAN_CTUCANFD)	+= ctucanfd/
+> +obj-$(CONFIG_CAN_C_CAN)		+= c_can/
+>  obj-$(CONFIG_CAN_FLEXCAN)	+= flexcan/
+>  obj-$(CONFIG_CAN_GRCAN)		+= grcan.o
+>  obj-$(CONFIG_CAN_IFI_CANFD)	+= ifi_canfd/
+> @@ -30,7 +30,7 @@ obj-$(CONFIG_CAN_PEAK_PCIEFD)	+= peak_canfd/
+>  obj-$(CONFIG_CAN_SJA1000)	+= sja1000/
+>  obj-$(CONFIG_CAN_SUN4I)		+= sun4i_can.o
+>  obj-$(CONFIG_CAN_TI_HECC)	+= ti_hecc.o
+> -obj-$(CONFIG_CAN_XILINXCAN)	+= xilinx_can.o
+>  obj-$(CONFIG_CAN_VIRTIO_CAN)	+= virtio_can.o
+> +obj-$(CONFIG_CAN_XILINXCAN)	+= xilinx_can.o
+>  
+>  subdir-ccflags-$(CONFIG_CAN_DEBUG_DEVICES) += -DDEBUG
+> diff --git a/drivers/net/can/virtio_can.c b/drivers/net/can/virtio_can.c
+> index 23f9c1b6446d..c11a652613d0 100644
+> --- a/drivers/net/can/virtio_can.c
+> +++ b/drivers/net/can/virtio_can.c
+> @@ -312,13 +312,12 @@ static netdev_tx_t virtio_can_start_xmit(struct sk_buff *skb,
+>  	struct scatterlist sg_in[1];
+>  	struct scatterlist *sgs[2];
+>  	unsigned long flags;
+> -	size_t len;
+>  	u32 can_flags;
+>  	int err;
+>  	netdev_tx_t xmit_ret = NETDEV_TX_OK;
+>  	const unsigned int hdr_size = offsetof(struct virtio_can_tx_out, sdu);
+>  
+> -	if (can_dropped_invalid_skb(dev, skb))
+> +	if (can_dev_dropped_skb(dev, skb))
+>  		goto kick; /* No way to return NET_XMIT_DROP here */
+>  
+>  	/* Virtio CAN does not support error message frames */
+> @@ -338,27 +337,25 @@ static netdev_tx_t virtio_can_start_xmit(struct sk_buff *skb,
+>  
+>  	can_tx_msg->tx_out.msg_type = cpu_to_le16(VIRTIO_CAN_TX);
+>  	can_flags = 0;
+> -	if (cf->can_id & CAN_EFF_FLAG)
 > +
->    clocks:
->      items:
->        - description: peripheral clock
-> @@ -122,15 +126,13 @@ required:
->    - compatible
->    - reg
->    - reg-names
-> -  - interrupts
-> -  - interrupt-names
->    - clocks
->    - clock-names
->    - bosch,mram-cfg
-
-Is it possible to specify that you either need "interrupts" and
-"interrupt-names" or "poll-interval"?
-
-> =20
->  additionalProperties: false
-> =20
-> -examples:
-> +example with interrupts:
->    - |
->      #include <dt-bindings/clock/imx6sx-clock.h>
->      can@20e8000 {
-> @@ -149,4 +151,22 @@ examples:
->        };
->      };
-> =20
-> +example with timer polling:
-> +  - |
-> +    #include <dt-bindings/clock/imx6sx-clock.h>
-> +    can@20e8000 {
-> +      compatible =3D "bosch,m_can";
-> +      reg =3D <0x020e8000 0x4000>, <0x02298000 0x4000>;
-> +      reg-names =3D "m_can", "message_ram";
-> +      poll-interval;
-> +      clocks =3D <&clks IMX6SX_CLK_CANFD>,
-> +               <&clks IMX6SX_CLK_CANFD>;
-> +      clock-names =3D "hclk", "cclk";
-> +      bosch,mram-cfg =3D <0x0 0 0 32 0 0 0 1>;
+> +	if (cf->can_id & CAN_EFF_FLAG) {
+>  		can_flags |= VIRTIO_CAN_FLAGS_EXTENDED;
+> +		can_tx_msg->tx_out.can_id = cpu_to_le32(cf->can_id & CAN_EFF_MASK);
+> +	} else {
+> +		can_tx_msg->tx_out.can_id = cpu_to_le32(cf->can_id & CAN_SFF_MASK);
+> +	}
+>  	if (cf->can_id & CAN_RTR_FLAG)
+>  		can_flags |= VIRTIO_CAN_FLAGS_RTR;
+> +	else
+> +		memcpy(can_tx_msg->tx_out.sdu, cf->data, cf->len);
+>  	if (can_is_canfd_skb(skb))
+>  		can_flags |= VIRTIO_CAN_FLAGS_FD;
 > +
-> +      can-transceiver {
-> +        max-bitrate =3D <5000000>;
-> +      };
-> +    };
-> +
->  ...
-> --=20
-> 2.17.1
->=20
->=20
+>  	can_tx_msg->tx_out.flags = cpu_to_le32(can_flags);
+> -	can_tx_msg->tx_out.can_id = cpu_to_le32(cf->can_id & CAN_EFF_MASK);
+> -	len = cf->len;
+> -	can_tx_msg->tx_out.length = len;
+> -	if (len > sizeof(cf->data))
+> -		len = sizeof(cf->data);
+> -	if (len > sizeof(can_tx_msg->tx_out.sdu))
+> -		len = sizeof(can_tx_msg->tx_out.sdu);
+> -	if (!(can_flags & VIRTIO_CAN_FLAGS_RTR)) {
+> -		/* Copy if not a RTR frame. RTR frames have a DLC but no payload */
+> -		memcpy(can_tx_msg->tx_out.sdu, cf->data, len);
+> -	}
+> +	can_tx_msg->tx_out.length = cpu_to_le16(cf->len);
+>  
+>  	/* Prepare sending of virtio message */
+> -	sg_init_one(&sg_out[0], &can_tx_msg->tx_out, hdr_size + len);
+> +	sg_init_one(&sg_out[0], &can_tx_msg->tx_out, hdr_size + cf->len);
+>  	sg_init_one(&sg_in[0], &can_tx_msg->tx_in, sizeof(can_tx_msg->tx_in));
+>  	sgs[0] = sg_out;
+>  	sgs[1] = sg_in;
+> @@ -895,8 +892,8 @@ static int virtio_can_probe(struct virtio_device *vdev)
+>  	priv->tx_putidx_list =
+>  		kcalloc(echo_skb_max, sizeof(struct list_head), GFP_KERNEL);
+>  	if (!priv->tx_putidx_list) {
+> -		free_candev(dev);
+> -		return -ENOMEM;
+> +		err = -ENOMEM;
+> +		goto on_failure;
+>  	}
+>  
+>  	INIT_LIST_HEAD(&priv->tx_putidx_free);
+> @@ -914,7 +911,6 @@ static int virtio_can_probe(struct virtio_device *vdev)
+>  	vdev->priv = priv;
+>  
+>  	priv->can.do_set_mode = virtio_can_set_mode;
+> -	priv->can.state = CAN_STATE_STOPPED;
+>  	/* Set Virtio CAN supported operations */
+>  	priv->can.ctrlmode_supported = CAN_CTRLMODE_BERR_REPORTING;
+>  	if (virtio_has_feature(vdev, VIRTIO_CAN_F_CAN_FD)) {
+> @@ -968,11 +964,10 @@ static int virtio_can_probe(struct virtio_device *vdev)
+>  	return err;
+>  }
+>  
+> -#ifdef CONFIG_PM_SLEEP
+>  /* Compare with m_can.c/m_can_suspend(), virtio_net.c/virtnet_freeze() and
+>   * virtio_card.c/virtsnd_freeze()
+>   */
+> -static int virtio_can_freeze(struct virtio_device *vdev)
+> +static int __maybe_unused virtio_can_freeze(struct virtio_device *vdev)
+>  {
+>  	struct virtio_can_priv *priv = vdev->priv;
+>  	struct net_device *ndev = priv->dev;
+> @@ -996,7 +991,7 @@ static int virtio_can_freeze(struct virtio_device *vdev)
+>  /* Compare with m_can.c/m_can_resume(), virtio_net.c/virtnet_restore() and
+>   * virtio_card.c/virtsnd_restore()
+>   */
+> -static int virtio_can_restore(struct virtio_device *vdev)
+> +static int __maybe_unused virtio_can_restore(struct virtio_device *vdev)
+>  {
+>  	struct virtio_can_priv *priv = vdev->priv;
+>  	struct net_device *ndev = priv->dev;
+> @@ -1020,7 +1015,6 @@ static int virtio_can_restore(struct virtio_device *vdev)
+>  
+>  	return 0;
+>  }
+> -#endif /* #ifdef CONFIG_PM_SLEEP */
+>  
+>  static struct virtio_device_id virtio_can_id_table[] = {
+>  	{ VIRTIO_ID_CAN, VIRTIO_DEV_ANY_ID },
+> @@ -1037,18 +1031,16 @@ static unsigned int features[] = {
+>  static struct virtio_driver virtio_can_driver = {
+>  	.feature_table = features,
+>  	.feature_table_size = ARRAY_SIZE(features),
+> -	.feature_table_legacy = NULL,
+> -	.feature_table_size_legacy = 0,
+> -	.driver.name =	KBUILD_MODNAME,
+> -	.driver.owner =	THIS_MODULE,
+> -	.id_table =	virtio_can_id_table,
+> -	.validate =	virtio_can_validate,
+> -	.probe =	virtio_can_probe,
+> -	.remove =	virtio_can_remove,
+> +	.driver.name = KBUILD_MODNAME,
+> +	.driver.owner = THIS_MODULE,
+> +	.id_table = virtio_can_id_table,
+> +	.validate = virtio_can_validate,
+> +	.probe = virtio_can_probe,
+> +	.remove = virtio_can_remove,
+>  	.config_changed = virtio_can_config_changed,
+>  #ifdef CONFIG_PM_SLEEP
+> -	.freeze =	virtio_can_freeze,
+> -	.restore =	virtio_can_restore,
+> +	.freeze = virtio_can_freeze,
+> +	.restore = virtio_can_restore,
+>  #endif
+>  };
+>  
+> diff --git a/include/uapi/linux/virtio_can.h b/include/uapi/linux/virtio_can.h
+> index de85918aa7dc..f59a2ca6ebd1 100644
+> --- a/include/uapi/linux/virtio_can.h
+> +++ b/include/uapi/linux/virtio_can.h
+> @@ -35,7 +35,7 @@ struct virtio_can_config {
+>  struct virtio_can_tx_out {
+>  #define VIRTIO_CAN_TX                   0x0001
+>  	__le16 msg_type;
+> -	__le16 length; /* 0..8 CC, 0..64 CAN­FD, 0..2048 CAN­XL, 12 bits */
+> +	__le16 length; /* 0..8 CC, 0..64 CAN-FD, 0..2048 CAN-XL, 12 bits */
+>  	__le32 reserved; /* May be needed in part for CAN XL priority */
+>  	__le32 flags;
+>  	__le32 can_id;
+> @@ -50,7 +50,7 @@ struct virtio_can_tx_in {
+>  struct virtio_can_rx {
+>  #define VIRTIO_CAN_RX                   0x0101
+>  	__le16 msg_type;
+> -	__le16 length; /* 0..8 CC, 0..64 CAN­FD, 0..2048 CAN­XL, 12 bits */
+> +	__le16 length; /* 0..8 CC, 0..64 CAN-FD, 0..2048 CAN-XL, 12 bits */
+>  	__le32 reserved; /* May be needed in part for CAN XL priority */
+>  	__le32 flags;
+>  	__le32 can_id;
+> -- 
+> 2.39.2
+> 
 
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---4nll47yvmo6txgb2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRG478ACgkQvlAcSiqK
-BOh3iQgAhiH/Oo1tJ2SG+P1STaBF17i+tU9zbvB8eHpMdMUAM9LG9a04Mxe67Mi/
-Wn93/J3l4VZvFt/Xv9Jn7zGbh8mraj2xhrtrsIjjjDsmuvEHMy2nDSEduZ162hfg
-aMYku2xpo0znEwL4sZT9egnDgwI55t770t4kLIjGhrojc3//QH7pxDsXNl+oczIl
-82RV/kJd5eWGHDW/zxIS9lq7jevPt6x05lAXe1jINL5uLgzmcyJf3q8h/1znOlH9
-KJo6rhQ7pyM8z3rqkNz+Ro3HB5O92QHAI4uGpHqR5Y4CJ5pozk+3SRg1Vbiq6tdc
-VVGxrT4kHRnjlx+yCDnW1vwAYMgL4g==
-=lyyE
------END PGP SIGNATURE-----
-
---4nll47yvmo6txgb2--
