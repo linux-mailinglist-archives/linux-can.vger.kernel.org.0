@@ -2,74 +2,51 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 563BA6ED93D
-	for <lists+linux-can@lfdr.de>; Tue, 25 Apr 2023 02:13:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B78DB6EDD96
+	for <lists+linux-can@lfdr.de>; Tue, 25 Apr 2023 10:05:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231543AbjDYANU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 24 Apr 2023 20:13:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39596 "EHLO
+        id S233181AbjDYIFB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 25 Apr 2023 04:05:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231189AbjDYANU (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 24 Apr 2023 20:13:20 -0400
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3883B4C16;
-        Mon, 24 Apr 2023 17:13:19 -0700 (PDT)
-Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-38e4c98e5ceso1738347b6e.1;
-        Mon, 24 Apr 2023 17:13:19 -0700 (PDT)
+        with ESMTP id S233436AbjDYIFA (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 25 Apr 2023 04:05:00 -0400
+Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA4E49E1
+        for <linux-can@vger.kernel.org>; Tue, 25 Apr 2023 01:04:59 -0700 (PDT)
+Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-32addcf3a73so202492085ab.0
+        for <linux-can@vger.kernel.org>; Tue, 25 Apr 2023 01:04:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682381598; x=1684973598;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=pFwtgW0wvfFjibNHY+PyADwbRVqhSb57mZWqoTJnZz4=;
-        b=NtQ83Wkc0rMiMEIdF7D5L1qpsogTz9NbZR4moigHipQhtkKpIxF2lmkqwlvxkpsiPb
-         CsRu0nSA2Q2Ce+81W++eJfAZU8ZY0/c2iDeGkaUawYOKaMRX86fetaP38HLUqFTIlsOJ
-         lBdXTe+2A2QgzMxVGG962NRacgqoUE4d/k3O/t9vayN5lNLMB66k1LTAxwa2eAopcR7K
-         8laTmKU4AB/WS/tpR2GBueO0wPSGfSUtwy5QpIyxQ4EiDkcqP5QAaL0skCRvDmdriwvy
-         MrwrNCPv2YT8nHadBVJXJ5yL4Om3WsIiZbihGXj0jCg7iXy7f4cRLCpvbnV//RAMzbTW
-         NPgQ==
-X-Gm-Message-State: AAQBX9cMLyRo6Jd2MU4TZ4SxK3rGeKLrS3SeTwrurzLPD0iysUOAwDHD
-        I7GOWhD79BZR30Tln/Ku5Q==
-X-Google-Smtp-Source: AKy350ZBoEkCK7vqTj0PueqwGaZpxLzKNT2QhoPIdll+DNVILUuxcLSXtlVd1pmbxqFa/wSrqUeXjg==
-X-Received: by 2002:a05:6870:a706:b0:17e:dc2b:f4b4 with SMTP id g6-20020a056870a70600b0017edc2bf4b4mr11693226oam.15.1682381598317;
-        Mon, 24 Apr 2023 17:13:18 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id n3-20020a056870e40300b00172ac40356csm4963304oag.50.2023.04.24.17.13.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Apr 2023 17:13:17 -0700 (PDT)
-Received: (nullmailer pid 4124744 invoked by uid 1000);
-        Tue, 25 Apr 2023 00:13:16 -0000
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+        d=1e100.net; s=20221208; t=1682409898; x=1685001898;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oDbboGji8S9RFRkieJ6BiDoqNdOz27qLK7fsOLzCHr4=;
+        b=kPt+LhDomkAGpZa/oy8y6U1WOETVM/Cagn1rfD5gXUuZ5paXj7vx+mO+ZzVeReL0FE
+         W8PyXfyGLLaHx1Nf8A/k2x3l4ujdipHC4RcdH8DZEeXjVFVFoksxnxlM3EEqf+hToMUm
+         eNyyz8PYlGEG1VOixaOZYIxD58YiFaatpbV3zcTJ2BkmTN0alPcvVkLlp3qy7vomjwc0
+         pt/Yl7Av6aoWjZkUi9LQvID2bLXHt9ybAm3oV4woqzpHm2rmh0kOUtQYOI3fs/+pJFrK
+         Euaji66KQTjwwu26R+0y5WC+0JUqBasiYDq+PRctn1/aYTSEYCEe+7+Bx23DMt7BTJmR
+         7kCQ==
+X-Gm-Message-State: AAQBX9ejphM67yW8rs+d7NVwzAsMgulzLqUvAaox1DmQyJB73w/cQBym
+        U7IZjMYbEoQioCnAnoXAJcU6dnPfZMJpZ1pRlf2YDtDhqv4h
+X-Google-Smtp-Source: AKy350b0Vn8qRA/kq9zT/VbbUS4MsOHoIXUfffRq2twtfLFiGMj7gJK+xVkrpcuY2tByzTKrp6PGKIFmoEKkgH1gnDbR/SK8biLz
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Judith Mendez <jm@ti.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        devicetree@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        linux-can@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Eric Dumazet <edumazet@google.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Schuyler Patton <spatton@ti.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230424195402.516-3-jm@ti.com>
-References: <20230424195402.516-1-jm@ti.com>
- <20230424195402.516-3-jm@ti.com>
-Message-Id: <168238155801.4123790.14706903991436332296.robh@kernel.org>
-Subject: Re: [PATCH v2 2/4] dt-bindings: net: can: Add poll-interval for
- MCAN
-Date:   Mon, 24 Apr 2023 19:13:16 -0500
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+X-Received: by 2002:a05:6638:1504:b0:3c2:c1c9:8bca with SMTP id
+ b4-20020a056638150400b003c2c1c98bcamr11438606jat.2.1682409898235; Tue, 25 Apr
+ 2023 01:04:58 -0700 (PDT)
+Date:   Tue, 25 Apr 2023 01:04:58 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000059e1b705fa2494e4@google.com>
+Subject: [syzbot] [can?] KCSAN: data-race in bcm_can_tx / bcm_tx_setup (3)
+From:   syzbot <syzbot+e1786f049e71693263bf@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mkl@pengutronix.de, netdev@vger.kernel.org, pabeni@redhat.com,
+        socketcan@hartkopp.net, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,50 +55,92 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello,
 
-On Mon, 24 Apr 2023 14:54:00 -0500, Judith Mendez wrote:
-> On AM62x SoC, MCANs on MCU domain do not have hardware interrupt
-> routed to A53 Linux, instead they will use software interrupt by
-> hrtimer. To enable timer method, interrupts should be optional so
-> remove interrupts property from required section and introduce
-> poll-interval property.
-> 
-> Signed-off-by: Judith Mendez <jm@ti.com>
-> ---
-> Changelog:
-> v2:
->   1. Add poll-interval property to enable timer polling method
->   2. Add example using poll-interval property
-> 
->  .../bindings/net/can/bosch,m_can.yaml         | 26 ++++++++++++++++---
->  1 file changed, 23 insertions(+), 3 deletions(-)
-> 
+syzbot found the following issue on:
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+HEAD commit:    1a0beef98b58 Merge tag 'tpmdd-v6.4-rc1' of git://git.kerne..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1485f1dbc80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=501f7c86f7a05a13
+dashboard link: https://syzkaller.appspot.com/bug?extid=e1786f049e71693263bf
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
 
-yamllint warnings/errors:
+Unfortunately, I don't have any reproducer for this issue yet.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml: 'example with interrupts' is not one of ['$id', '$schema', 'title', 'description', 'examples', 'required', 'allOf', 'anyOf', 'oneOf', 'definitions', '$defs', 'additionalProperties', 'dependencies', 'dependentRequired', 'dependentSchemas', 'patternProperties', 'properties', 'not', 'if', 'then', 'else', 'unevaluatedProperties', 'deprecated', 'maintainers', 'select', '$ref']
-	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml: 'example with timer polling' is not one of ['$id', '$schema', 'title', 'description', 'examples', 'required', 'allOf', 'anyOf', 'oneOf', 'definitions', '$defs', 'additionalProperties', 'dependencies', 'dependentRequired', 'dependentSchemas', 'patternProperties', 'properties', 'not', 'if', 'then', 'else', 'unevaluatedProperties', 'deprecated', 'maintainers', 'select', '$ref']
-	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/f06c11683242/disk-1a0beef9.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/5c0a1cd5a059/vmlinux-1a0beef9.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/e4c318183ce3/bzImage-1a0beef9.xz
 
-doc reference errors (make refcheckdocs):
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e1786f049e71693263bf@syzkaller.appspotmail.com
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230424195402.516-3-jm@ti.com
+==================================================================
+BUG: KCSAN: data-race in bcm_can_tx / bcm_tx_setup
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+write to 0xffff888137fcff10 of 4 bytes by task 10792 on cpu 0:
+ bcm_tx_setup+0x698/0xd30 net/can/bcm.c:995
+ bcm_sendmsg+0x38b/0x470 net/can/bcm.c:1355
+ sock_sendmsg_nosec net/socket.c:724 [inline]
+ sock_sendmsg net/socket.c:747 [inline]
+ ____sys_sendmsg+0x375/0x4c0 net/socket.c:2501
+ ___sys_sendmsg net/socket.c:2555 [inline]
+ __sys_sendmsg+0x1e3/0x270 net/socket.c:2584
+ __do_sys_sendmsg net/socket.c:2593 [inline]
+ __se_sys_sendmsg net/socket.c:2591 [inline]
+ __x64_sys_sendmsg+0x46/0x50 net/socket.c:2591
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+write to 0xffff888137fcff10 of 4 bytes by interrupt on cpu 1:
+ bcm_can_tx+0x38a/0x410
+ bcm_tx_timeout_handler+0xdb/0x260
+ __run_hrtimer kernel/time/hrtimer.c:1685 [inline]
+ __hrtimer_run_queues+0x217/0x700 kernel/time/hrtimer.c:1749
+ hrtimer_run_softirq+0xd6/0x120 kernel/time/hrtimer.c:1766
+ __do_softirq+0xc1/0x265 kernel/softirq.c:571
+ invoke_softirq kernel/softirq.c:445 [inline]
+ __irq_exit_rcu+0x57/0xa0 kernel/softirq.c:650
+ sysvec_apic_timer_interrupt+0x6d/0x80 arch/x86/kernel/apic/apic.c:1107
+ asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:645
+ kcsan_setup_watchpoint+0x3fe/0x410 kernel/kcsan/core.c:696
+ string_nocheck lib/vsprintf.c:648 [inline]
+ string+0x16c/0x200 lib/vsprintf.c:726
+ vsnprintf+0xa09/0xe20 lib/vsprintf.c:2796
+ add_uevent_var+0xf0/0x1c0 lib/kobject_uevent.c:665
+ kobject_uevent_env+0x225/0x5b0 lib/kobject_uevent.c:539
+ kobject_uevent+0x1c/0x20 lib/kobject_uevent.c:642
+ __loop_clr_fd+0x1e0/0x3b0 drivers/block/loop.c:1167
+ lo_release+0xe4/0xf0 drivers/block/loop.c:1745
+ blkdev_put+0x3fb/0x470
+ kill_block_super+0x83/0xa0 fs/super.c:1410
+ deactivate_locked_super+0x6b/0xd0 fs/super.c:331
+ deactivate_super+0x9b/0xb0 fs/super.c:362
+ cleanup_mnt+0x272/0x2e0 fs/namespace.c:1177
+ __cleanup_mnt+0x19/0x20 fs/namespace.c:1184
+ task_work_run+0x123/0x160 kernel/task_work.c:179
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop+0xd1/0xe0 kernel/entry/common.c:171
+ exit_to_user_mode_prepare+0x6c/0xb0 kernel/entry/common.c:204
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+ syscall_exit_to_user_mode+0x26/0x140 kernel/entry/common.c:297
+ do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-pip3 install dtschema --upgrade
+value changed: 0x00000059 -> 0x00000000
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+Reported by Kernel Concurrency Sanitizer on:
+CPU: 1 PID: 3096 Comm: syz-executor.5 Not tainted 6.3.0-syzkaller-00113-g1a0beef98b58 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+==================================================================
 
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
