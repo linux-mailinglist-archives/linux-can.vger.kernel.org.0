@@ -2,163 +2,141 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA4F66EE221
-	for <lists+linux-can@lfdr.de>; Tue, 25 Apr 2023 14:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01EE06EE8D8
+	for <lists+linux-can@lfdr.de>; Tue, 25 Apr 2023 22:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233800AbjDYMrv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 25 Apr 2023 08:47:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57104 "EHLO
+        id S236262AbjDYUK0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 25 Apr 2023 16:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233862AbjDYMru (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 25 Apr 2023 08:47:50 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 743F3BB8D;
-        Tue, 25 Apr 2023 05:47:49 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33PClMng069057;
-        Tue, 25 Apr 2023 07:47:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1682426842;
-        bh=OwWheics6M72Ry4e2WdjO4f48sALqJDkHHsdbEnwqD0=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=jYq4VmqRZ9uiIsPFJcHfbk4se0j+PpR19reqO0nuPYXVYI5ZUiZ6pMG2/fIcvQ8hR
-         25MLE4KM84v5D7CIWdpTthK9nCvcmYRAsCquHGPOBaqQ+EqcKnouquy+YS0ncIX9q9
-         MNeYeXcdv0I5EnxgEoULMpCB/IY2Nh3JYMUss1pQ=
-Received: from DFLE107.ent.ti.com (dfle107.ent.ti.com [10.64.6.28])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33PClMqN035520
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 25 Apr 2023 07:47:22 -0500
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 25
- Apr 2023 07:47:22 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 25 Apr 2023 07:47:22 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33PClMYT001603;
-        Tue, 25 Apr 2023 07:47:22 -0500
-Date:   Tue, 25 Apr 2023 07:47:22 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Judith Mendez <jm@ti.com>
-CC:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "David S . Miller" <davem@davemloft.net>,
+        with ESMTP id S236257AbjDYUKU (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 25 Apr 2023 16:10:20 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F44C1544D
+        for <linux-can@vger.kernel.org>; Tue, 25 Apr 2023 13:10:18 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-54fc94476e2so74447487b3.1
+        for <linux-can@vger.kernel.org>; Tue, 25 Apr 2023 13:10:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google; t=1682453417; x=1685045417;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ajM0LwQkx5V/I2/UibvsrZZndqIviz/M9DBiru/mXQg=;
+        b=dTvvZyFpBT/vP4cJvDwecqbyU3C1xxDniswbOHTFkvd0pEIf0axd4MmboZLWTzEgH9
+         muG1HEnAOXQVlKjiu6CWR/NK5EL8p/F4SqMJPUKKJbRxmitYmgvkaCysoxwKpcvlAU7n
+         UPXVEZFigyrCV9ZpEjJDoinTLybvaQr+AdOmQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682453417; x=1685045417;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ajM0LwQkx5V/I2/UibvsrZZndqIviz/M9DBiru/mXQg=;
+        b=Jg9CxRKHuxXVu8ZvykWRTMsjJqO/7VbvplmJ7REMgG0fjEiSvaxrfq2cTXBy4u8ETT
+         RfFqXLDfMpiHsQnRrrULgYYH3PZM/kODSsI87kY3fydlmHaOM9UHlsHdywUjeiSX1k/z
+         ePzwLX6pxG3tZaHRItf/bAniBs0Fc54j5TcY3KPItYaai1xtGtbYfO5tl1ow1UYtLRvd
+         b0iMKHROX5kvM9ZMTk1PEfkcdqIMAgn85AN7ExLWaTYek/fYiUTn02+rmpHy/UM3Risj
+         YEO5OI/jw1eqVG67n1FJOpcEaV+bl/NAQla87dStHBfupca99mQLwBhMTdKj3p+TUPWH
+         eNnQ==
+X-Gm-Message-State: AAQBX9froFm1m9JL9NLzyMz42RC/4FpwHOxsscqlaVE6tyAqYDKECbEJ
+        tYTkdGTB5miiQupKXHbXwgitJjSLrwwvBdnfSFlWhg==
+X-Google-Smtp-Source: AKy350aQ40+4HpZ6RTwx6wGwaL/ZQkmDudx4fSWnKEsjw/eI3Ll2kkGSGGDzzDshudDy4AnnqGlIXyWsPZ8R7tXg9+w=
+X-Received: by 2002:a81:6742:0:b0:54c:b26:b0e with SMTP id b63-20020a816742000000b0054c0b260b0emr11871415ywc.25.1682453416722;
+ Tue, 25 Apr 2023 13:10:16 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230423172528.1398158-1-dario.binacchi@amarulasolutions.com>
+ <20230423172528.1398158-5-dario.binacchi@amarulasolutions.com>
+ <20230423-surplus-spoon-4e8194434663-mkl@pengutronix.de> <CABGWkvqA2hwgfGvVWS08Qu-2ZUbwc82ynhvq8-FqFuhHoV-vhw@mail.gmail.com>
+ <20230424-fracture-going-5dcaf06a9e6c-mkl@pengutronix.de>
+In-Reply-To: <20230424-fracture-going-5dcaf06a9e6c-mkl@pengutronix.de>
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date:   Tue, 25 Apr 2023 22:10:05 +0200
+Message-ID: <CABGWkvp+ffrHgOVF48Zug+b4MfTbsQeCkiKDUAMm+M3NHwutJg@mail.gmail.com>
+Subject: Re: [PATCH 4/4] can: bxcan: add support for single peripheral configuration
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        michael@amarulasolutions.com,
+        "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, <linux-can@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Schuyler Patton <spatton@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: Re: [PATCH v2 3/4] DO_NOT_MERGE arm64: dts: ti: Add AM62x MCAN MAIN
- domain transceiver overlay
-Message-ID: <20230425124722.pnp7rkuanoml2zvj@nanny>
-References: <20230424195402.516-1-jm@ti.com>
- <20230424195402.516-4-jm@ti.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230424195402.516-4-jm@ti.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 14:54-20230424, Judith Mendez wrote:
-> Add an overlay for main domain MCAN on AM62x SK. The AM62x
-> SK board does not have on-board CAN transceiver so instead
-> of changing the DTB permanently, add an overlay to enable
-> MAIN domain MCAN and support for 1 CAN transceiver.
-> 
-> Signed-off-by: Judith Mendez <jm@ti.com>
-> ---
->  arch/arm64/boot/dts/ti/Makefile               |  2 ++
->  .../boot/dts/ti/k3-am625-sk-mcan-main.dtso    | 35 +++++++++++++++++++
->  2 files changed, 37 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/ti/k3-am625-sk-mcan-main.dtso
-> 
+Hi Marc,
 
-Just a headsup - for a formal patch, for the overlay, please ensure we
-provide link to the specific board. I dont want to end up with 1000s
-of overlay files, each enabling one specific peripheral instance of a
-small subgroup of peripheral instance. Overlays should be describing a
-real platform with product link.
+On Mon, Apr 24, 2023 at 12:06=E2=80=AFPM Marc Kleine-Budde <mkl@pengutronix=
+.de> wrote:
+>
+> On 24.04.2023 08:56:03, Dario Binacchi wrote:
+> > > This probably works. Can we do better, i.e. without this additional c=
+ode?
+> > >
+> > > If you add a syscon node for the single instance CAN, too, you don't
+> > > need a code change here, right?
+> >
+> > I think so.
+> >
+> > I have only one doubt about it. This implementation allows,
+> > implicitly, to distinguish if the peripheral is in single
+> > configuration (without handle to the gcan node) or in double
+> > configuration (with handle to the gcan node). For example, in single
+> > configuration the peripheral has 14 filter banks, while in double
+> > configuration there are 26 shared banks. Without code changes, this
+> > kind of information is lost. Is it better then, for future
+> > developments, to add a new boolean property to the can node of the dts
+> > (e.g. single-conf)?
+>
+> The DT ist not yet mainline, so we can still change it. Another option
+> is to have "st,can-primary" and "st,can-secondary" for the shared
+> peripherals and nothing for the single instance.
 
-> diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
-> index c83c9d772b81..abe15e76b614 100644
-> --- a/arch/arm64/boot/dts/ti/Makefile
-> +++ b/arch/arm64/boot/dts/ti/Makefile
-> @@ -9,8 +9,10 @@
->  # alphabetically.
->  
->  # Boards with AM62x SoC
-> +k3-am625-sk-mcan-dtbs := k3-am625-sk.dtb k3-am625-sk-mcan-main.dtbo
->  dtb-$(CONFIG_ARCH_K3) += k3-am625-beagleplay.dtb
->  dtb-$(CONFIG_ARCH_K3) += k3-am625-sk.dtb
-> +dtb-$(CONFIG_ARCH_K3) += k3-am625-sk-mcan.dtb
->  dtb-$(CONFIG_ARCH_K3) += k3-am62-lp-sk.dtb
->  
->  # Boards with AM62Ax SoC
-> diff --git a/arch/arm64/boot/dts/ti/k3-am625-sk-mcan-main.dtso b/arch/arm64/boot/dts/ti/k3-am625-sk-mcan-main.dtso
-> new file mode 100644
-> index 000000000000..0a7b2f394f87
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/ti/k3-am625-sk-mcan-main.dtso
-> @@ -0,0 +1,35 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/**
-> + * DT overlay for MCAN transceiver in main domain on AM625 SK
-> + *
-> + * Copyright (C) 2022 Texas Instruments Incorporated - https://www.ti.com/
-> + */
-> +
-> +/dts-v1/;
-> +/plugin/;
-> +
-> +#include "k3-pinctrl.h"
-> +
-> +&{/} {
-> +	transceiver1: can-phy0 {
-> +		compatible = "ti,tcan1042";
-> +		#phy-cells = <0>;
-> +		max-bitrate = <5000000>;
-> +	};
-> +};
-> +
-> +&main_pmx0 {
-> +	main_mcan0_pins_default: main-mcan0-pins-default {
-> +		pinctrl-single,pins = <
-> +			AM62X_IOPAD(0x1dc, PIN_INPUT, 0) /* (E15) MCAN0_RX */
-> +			AM62X_IOPAD(0x1d8, PIN_OUTPUT, 0) /* (C15) MCAN0_TX */
-> +		>;
-> +	};
-> +};
-> +
-> +&main_mcan0 {
-> +	status = "okay";
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&main_mcan0_pins_default>;
-> +	phys = <&transceiver1>;
-> +};
-> -- 
-> 2.17.1
-> 
+I did some tests following your suggestion. It is however necessary to
+make some small changes to the driver.
+I will send v2 as soon as possible.
 
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+Thanks and regards,
+Dario
+
+>
+> regards,
+> Marc
+>
+> --
+> Pengutronix e.K.                 | Marc Kleine-Budde          |
+> Embedded Linux                   | https://www.pengutronix.de |
+> Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+
+
+--=20
+
+Dario Binacchi
+
+Senior Embedded Linux Developer
+
+dario.binacchi@amarulasolutions.com
+
+__________________________________
+
+
+Amarula Solutions SRL
+
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+
+T. +39 042 243 5310
+info@amarulasolutions.com
+
+www.amarulasolutions.com
