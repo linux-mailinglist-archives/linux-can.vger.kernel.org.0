@@ -2,59 +2,74 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A577C6EDEF8
-	for <lists+linux-can@lfdr.de>; Tue, 25 Apr 2023 11:18:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27C716EE1E3
+	for <lists+linux-can@lfdr.de>; Tue, 25 Apr 2023 14:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233081AbjDYJSF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 25 Apr 2023 05:18:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58190 "EHLO
+        id S234093AbjDYMcj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 25 Apr 2023 08:32:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233252AbjDYJSE (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 25 Apr 2023 05:18:04 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F1C5274
-        for <linux-can@vger.kernel.org>; Tue, 25 Apr 2023 02:17:43 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1prEnf-0007gm-LC; Tue, 25 Apr 2023 11:17:27 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 2DB771B6C6E;
-        Tue, 25 Apr 2023 09:17:21 +0000 (UTC)
-Date:   Tue, 25 Apr 2023 11:17:20 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Mikhail Golubev-Ciuchea <Mikhail.Golubev-Ciuchea@opensynergy.com>,
-        virtio-dev@lists.oasis-open.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
+        with ESMTP id S229653AbjDYMci (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 25 Apr 2023 08:32:38 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517294EC0;
+        Tue, 25 Apr 2023 05:32:37 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33PCWAhk066095;
+        Tue, 25 Apr 2023 07:32:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1682425930;
+        bh=CFPzwDmySEzg1N62RTR8ZiaR751KuV8ALtFldAAMJJ4=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=NWqJp9FsU8dhh+M/g5toTnXg1tkP8GLMCqgpCmGsz45eoV8Eq9q4uGB6l1IvYYW5F
+         I/iBa4mX73qoV55kDZODjK5hNl2AiQORw6xikm6ZTnKiwMTkIYsgFWp3+6+y3EhMpu
+         sChzTE1lqOYOyPzlS/c4Atkdq5Yd7V07dGgJq0Z4=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33PCW9ce065338
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 25 Apr 2023 07:32:10 -0500
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 25
+ Apr 2023 07:32:09 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 25 Apr 2023 07:32:09 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33PCW9SC021943;
+        Tue, 25 Apr 2023 07:32:09 -0500
+Date:   Tue, 25 Apr 2023 07:32:09 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Judith Mendez <jm@ti.com>
+CC:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         "David S . Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Harald Mommer <harald.mommer@opensynergy.com>
-Subject: Re: [PATCH] can: virtio-can: cleanups
-Message-ID: <20230425-oxidizing-blandness-ca9cc2cf114e-mkl@pengutronix.de>
-References: <20230424-modular-rebate-e54ac16374c8-mkl@pengutronix.de>
- <20230424170901-mutt-send-email-mst@kernel.org>
+        Paolo Abeni <pabeni@redhat.com>, <linux-can@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Schuyler Patton <spatton@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: Re: [PATCH v2 2/4] dt-bindings: net: can: Add poll-interval for MCAN
+Message-ID: <20230425123209.g3jocqvnnpkv4jk5@stingy>
+References: <20230424195402.516-1-jm@ti.com>
+ <20230424195402.516-3-jm@ti.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wrzhwsd3655udnop"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230424170901-mutt-send-email-mst@kernel.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+In-Reply-To: <20230424195402.516-3-jm@ti.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,49 +77,97 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On 14:54-20230424, Judith Mendez wrote:
+> On AM62x SoC, MCANs on MCU domain do not have hardware interrupt
+> routed to A53 Linux, instead they will use software interrupt by
+> hrtimer. To enable timer method, interrupts should be optional so
+> remove interrupts property from required section and introduce
+> poll-interval property.
+> 
+> Signed-off-by: Judith Mendez <jm@ti.com>
+> ---
+> Changelog:
+> v2:
+>   1. Add poll-interval property to enable timer polling method
+>   2. Add example using poll-interval property
+>   
+>  .../bindings/net/can/bosch,m_can.yaml         | 26 ++++++++++++++++---
+>  1 file changed, 23 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> index 67879aab623b..1c64c7a0c3df 100644
+> --- a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> +++ b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> @@ -40,6 +40,10 @@ properties:
+>        - const: int1
+>      minItems: 1
+>  
+> +  poll-interval:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +    description: Poll interval time in milliseconds.
+> +
+>    clocks:
+>      items:
+>        - description: peripheral clock
+> @@ -122,15 +126,13 @@ required:
+>    - compatible
+>    - reg
+>    - reg-names
+> -  - interrupts
+> -  - interrupt-names
+>    - clocks
+>    - clock-names
+>    - bosch,mram-cfg
+>  
+>  additionalProperties: false
+>  
+> -examples:
+> +example with interrupts:
+>    - |
+>      #include <dt-bindings/clock/imx6sx-clock.h>
+>      can@20e8000 {
+> @@ -149,4 +151,22 @@ examples:
+>        };
+>      };
+>  
+> +example with timer polling:
 
---wrzhwsd3655udnop
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+did you run dt_binding_check?
+make -j`nproc` ARCH=arm64 LLVM=1 dt_binding_check DT_CHECKER_FLAGS=-m DT_SCHEMA_FILES=Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
 
-On 24.04.2023 17:09:23, Michael S. Tsirkin wrote:
-> On Mon, Apr 24, 2023 at 09:47:58PM +0200, Marc Kleine-Budde wrote:
-> > Address the topics raised in
-> >=20
-> > https://lore.kernel.org/20230424-footwear-daily-9339bd0ec428-mkl@pengut=
-ronix.de
-> >=20
-> > Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
->=20
-> given base patch is rfc this should be too?
+tells me:
 
-This is an incremental patch that fixes the topics I raised in the
-review of "[RFC PATCH v2] can: virtio: Initial virtio CAN driver.", see
-linked discussion thread.
+  LINT    Documentation/devicetree/bindings
+  DTEX    Documentation/devicetree/bindings/net/can/bosch,m_can.example.dts
+  CHKDT   Documentation/devicetree/bindings/processed-schema.json
+/workdir/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml: 'example with interrupts' is not one of ['$id', '$schema', 'title', 'description', 'examples', 'required', 'allOf', 'anyOf', 'oneOf', 'definitions', '$defs', 'additionalProperties', 'dependencies', 'dependentRequired', 'dependentSchemas', 'patternProperties', 'properties', 'not', 'if', 'then', 'else', 'unevaluatedProperties', 'deprecated', 'maintainers', 'select', '$ref']
+	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
+/workdir/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml: 'example with timer polling' is not one of ['$id', '$schema', 'title', 'description', 'examples', 'required', 'allOf', 'anyOf', 'oneOf', 'definitions', '$defs', 'additionalProperties', 'dependencies', 'dependentRequired', 'dependentSchemas', 'patternProperties', 'properties', 'not', 'if', 'then', 'else', 'unevaluatedProperties', 'deprecated', 'maintainers', 'select', '$ref']
+	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
 
-regards,
-Marc
+> +  - |
+> +    #include <dt-bindings/clock/imx6sx-clock.h>
+> +    can@20e8000 {
+> +      compatible = "bosch,m_can";
+> +      reg = <0x020e8000 0x4000>, <0x02298000 0x4000>;
+> +      reg-names = "m_can", "message_ram";
+> +      poll-interval;
+> +      clocks = <&clks IMX6SX_CLK_CANFD>,
+> +               <&clks IMX6SX_CLK_CANFD>;
+> +      clock-names = "hclk", "cclk";
+> +      bosch,mram-cfg = <0x0 0 0 32 0 0 0 1>;
+> +
+> +      can-transceiver {
+> +        max-bitrate = <5000000>;
+> +      };
+> +    };
+> +
+>  ...
+> -- 
+> 2.17.1
+> 
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---wrzhwsd3655udnop
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRHmp0ACgkQvlAcSiqK
-BOhdHwf/elII+CN8WhgoClA6Y9+l7RyecrlVcqKWmgZNO5hTG6BmvkzP//T6m9Lq
-3XEmvI6TFszxDp+0yHDIaRS1fqBDCKaSpjRZEozRyE1df4BH7XBFIkcVyI5M3oEZ
-BJ6O94BtlJ+/vlg5pn9mebyFo6TYwaHLQuVwVcB9Gxc3S6JGqgYcE0N6uW2hdr9t
-0tk/zZTu+jwul+wlzo1vhd/xkmpiGshP2Z5TCJA8XkAokqz4LcLxOfGtSKS6Xey8
-4+qgTgCDpkkX+yhAZrycTfQii7JcMxbOtnBjGONXMkG3vMQo2ueIDaonqlGLvC+/
-WWX2HB7sfw7YZMKZ5h7ov7ottPC2ew==
-=7r0O
------END PGP SIGNATURE-----
-
---wrzhwsd3655udnop--
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
