@@ -2,176 +2,109 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE34F6EDE48
-	for <lists+linux-can@lfdr.de>; Tue, 25 Apr 2023 10:40:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A577C6EDEF8
+	for <lists+linux-can@lfdr.de>; Tue, 25 Apr 2023 11:18:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233480AbjDYIkb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 25 Apr 2023 04:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57614 "EHLO
+        id S233081AbjDYJSF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 25 Apr 2023 05:18:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233950AbjDYIjx (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 25 Apr 2023 04:39:53 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5515AC168
-        for <linux-can@vger.kernel.org>; Tue, 25 Apr 2023 01:38:00 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4edc63e066fso1007e87.1
-        for <linux-can@vger.kernel.org>; Tue, 25 Apr 2023 01:38:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682411823; x=1685003823;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XXW/aseN5mXuotIa/yEkh2bdTo682NvMfHu/VUn7fZ4=;
-        b=XmgtDHUuBipVTZPUOiFntnaV3plFHTBEUMVX6ZzTveiI5RNHzhbJAS4owqd5Uf2wdn
-         LjSPgp8P/AjOCVqQ4+KDy8PQz8x4RdUBEuE0+g57YZ6FHmT9UDb+GW1Lk1ufgDXCLvzQ
-         qWUcl1Skk1nk80BbsQg0k+VxjT/IihbMtTcn5bIUVqybGx+D36N/C6ESx8tSWvRJLnoX
-         HY1uEjN5nF4WDQwLN/BUDaZDLJdhL8q4gs+tbq9+2u2HweRVgD9MhhF7Fp8Z1NoM7OmQ
-         wxlsn04NTFHfFINdrNryFOjrXFFOx00CtfMs0zXW5Mkf8UQuzpVEk7GH6Xb5wQikgDRz
-         Qifg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682411823; x=1685003823;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XXW/aseN5mXuotIa/yEkh2bdTo682NvMfHu/VUn7fZ4=;
-        b=GL/zT1valeXbUtomHH7m4Kr7LR43t2Et/6DB6dPVGfpn0PEhQuMXSiIcltrxx77HLv
-         53FVM/lEhIr52DB5SEu6hL6kBXQCJmBo7jMDV2mTSjMcB1zlw+855ziKXF72gnouH++G
-         ULJsskm4t/QtxhR3cdcXfgA4QA+b+dQIbKcfVwf1EYwEQ1olKGmYExSIlztm3cqoEGKF
-         eNKmCMr9Ah+Wh7lVqAVDMNfUlZElrS6A7cDtqwuT+hPl2UXHnZRc5ulenL1OyATvUgy0
-         COOsfUO1GD54P4pQAubtXjss8c8u1KMAdCRwF+GxQ7VA6pbHU4aiKP/eKOnk+jnOMnwN
-         xfkA==
-X-Gm-Message-State: AC+VfDwXI/5CFn1rpBNPqWL0i9hGzFdbM/fK1gyig8vscfZTZJIPweQm
-        AAr3R2wsopVOe8a8i1rePWlOxHQbyONz6IUEomB9MQ==
-X-Google-Smtp-Source: ACHHUZ4ZQVitrq0MqOhQ4d7dv8Gnc3ryLTlv8xLgz1rnFURT2OfEFSn0WQ5z358EeBKQM+qPXMw0XCAFzTwwaiWgez8=
-X-Received: by 2002:a05:6512:3e17:b0:4ed:af48:f8bb with SMTP id
- i23-20020a0565123e1700b004edaf48f8bbmr96406lfv.5.1682411823172; Tue, 25 Apr
- 2023 01:37:03 -0700 (PDT)
+        with ESMTP id S233252AbjDYJSE (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 25 Apr 2023 05:18:04 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F1C5274
+        for <linux-can@vger.kernel.org>; Tue, 25 Apr 2023 02:17:43 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1prEnf-0007gm-LC; Tue, 25 Apr 2023 11:17:27 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 2DB771B6C6E;
+        Tue, 25 Apr 2023 09:17:21 +0000 (UTC)
+Date:   Tue, 25 Apr 2023 11:17:20 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Mikhail Golubev-Ciuchea <Mikhail.Golubev-Ciuchea@opensynergy.com>,
+        virtio-dev@lists.oasis-open.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Harald Mommer <harald.mommer@opensynergy.com>
+Subject: Re: [PATCH] can: virtio-can: cleanups
+Message-ID: <20230425-oxidizing-blandness-ca9cc2cf114e-mkl@pengutronix.de>
+References: <20230424-modular-rebate-e54ac16374c8-mkl@pengutronix.de>
+ <20230424170901-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-References: <00000000000059e1b705fa2494e4@google.com>
-In-Reply-To: <00000000000059e1b705fa2494e4@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 25 Apr 2023 10:36:51 +0200
-Message-ID: <CACT4Y+YDzXb6WoMtBu5O-dpWOkVYwhUNKM7szC5gJ9ewtMUPDQ@mail.gmail.com>
-Subject: Re: [syzbot] [can?] KCSAN: data-race in bcm_can_tx / bcm_tx_setup (3)
-To:     syzbot <syzbot+e1786f049e71693263bf@syzkaller.appspotmail.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mkl@pengutronix.de, netdev@vger.kernel.org, pabeni@redhat.com,
-        socketcan@hartkopp.net, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="wrzhwsd3655udnop"
+Content-Disposition: inline
+In-Reply-To: <20230424170901-mutt-send-email-mst@kernel.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue, 25 Apr 2023 at 10:05, syzbot
-<syzbot+e1786f049e71693263bf@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    1a0beef98b58 Merge tag 'tpmdd-v6.4-rc1' of git://git.kerne..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1485f1dbc80000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=501f7c86f7a05a13
-> dashboard link: https://syzkaller.appspot.com/bug?extid=e1786f049e71693263bf
-> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
->
-> Unfortunately, I don't have any reproducer for this issue yet.
->
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/f06c11683242/disk-1a0beef9.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/5c0a1cd5a059/vmlinux-1a0beef9.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/e4c318183ce3/bzImage-1a0beef9.xz
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+e1786f049e71693263bf@syzkaller.appspotmail.com
 
-op->currframe and probably other op fields are concurrently
-read/modified by both bcm_tx_setup() and bcm_can_tx().
-If I am reading the code correctly, it can lead to a wide range of
-misbehavior, e.g. sending wrong/uninit data, reading/writing data
-out-of-bounds, etc.
-I think these functions need to be somehow serialized (stopping timers
-before doing any modifications to op?).
+--wrzhwsd3655udnop
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> ==================================================================
-> BUG: KCSAN: data-race in bcm_can_tx / bcm_tx_setup
->
-> write to 0xffff888137fcff10 of 4 bytes by task 10792 on cpu 0:
->  bcm_tx_setup+0x698/0xd30 net/can/bcm.c:995
->  bcm_sendmsg+0x38b/0x470 net/can/bcm.c:1355
->  sock_sendmsg_nosec net/socket.c:724 [inline]
->  sock_sendmsg net/socket.c:747 [inline]
->  ____sys_sendmsg+0x375/0x4c0 net/socket.c:2501
->  ___sys_sendmsg net/socket.c:2555 [inline]
->  __sys_sendmsg+0x1e3/0x270 net/socket.c:2584
->  __do_sys_sendmsg net/socket.c:2593 [inline]
->  __se_sys_sendmsg net/socket.c:2591 [inline]
->  __x64_sys_sendmsg+0x46/0x50 net/socket.c:2591
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->
-> write to 0xffff888137fcff10 of 4 bytes by interrupt on cpu 1:
->  bcm_can_tx+0x38a/0x410
->  bcm_tx_timeout_handler+0xdb/0x260
->  __run_hrtimer kernel/time/hrtimer.c:1685 [inline]
->  __hrtimer_run_queues+0x217/0x700 kernel/time/hrtimer.c:1749
->  hrtimer_run_softirq+0xd6/0x120 kernel/time/hrtimer.c:1766
->  __do_softirq+0xc1/0x265 kernel/softirq.c:571
->  invoke_softirq kernel/softirq.c:445 [inline]
->  __irq_exit_rcu+0x57/0xa0 kernel/softirq.c:650
->  sysvec_apic_timer_interrupt+0x6d/0x80 arch/x86/kernel/apic/apic.c:1107
->  asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:645
->  kcsan_setup_watchpoint+0x3fe/0x410 kernel/kcsan/core.c:696
->  string_nocheck lib/vsprintf.c:648 [inline]
->  string+0x16c/0x200 lib/vsprintf.c:726
->  vsnprintf+0xa09/0xe20 lib/vsprintf.c:2796
->  add_uevent_var+0xf0/0x1c0 lib/kobject_uevent.c:665
->  kobject_uevent_env+0x225/0x5b0 lib/kobject_uevent.c:539
->  kobject_uevent+0x1c/0x20 lib/kobject_uevent.c:642
->  __loop_clr_fd+0x1e0/0x3b0 drivers/block/loop.c:1167
->  lo_release+0xe4/0xf0 drivers/block/loop.c:1745
->  blkdev_put+0x3fb/0x470
->  kill_block_super+0x83/0xa0 fs/super.c:1410
->  deactivate_locked_super+0x6b/0xd0 fs/super.c:331
->  deactivate_super+0x9b/0xb0 fs/super.c:362
->  cleanup_mnt+0x272/0x2e0 fs/namespace.c:1177
->  __cleanup_mnt+0x19/0x20 fs/namespace.c:1184
->  task_work_run+0x123/0x160 kernel/task_work.c:179
->  resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
->  exit_to_user_mode_loop+0xd1/0xe0 kernel/entry/common.c:171
->  exit_to_user_mode_prepare+0x6c/0xb0 kernel/entry/common.c:204
->  __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
->  syscall_exit_to_user_mode+0x26/0x140 kernel/entry/common.c:297
->  do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->
-> value changed: 0x00000059 -> 0x00000000
->
-> Reported by Kernel Concurrency Sanitizer on:
-> CPU: 1 PID: 3096 Comm: syz-executor.5 Not tainted 6.3.0-syzkaller-00113-g1a0beef98b58 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-> ==================================================================
->
->
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
->
-> --
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/00000000000059e1b705fa2494e4%40google.com.
+On 24.04.2023 17:09:23, Michael S. Tsirkin wrote:
+> On Mon, Apr 24, 2023 at 09:47:58PM +0200, Marc Kleine-Budde wrote:
+> > Address the topics raised in
+> >=20
+> > https://lore.kernel.org/20230424-footwear-daily-9339bd0ec428-mkl@pengut=
+ronix.de
+> >=20
+> > Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+>=20
+> given base patch is rfc this should be too?
+
+This is an incremental patch that fixes the topics I raised in the
+review of "[RFC PATCH v2] can: virtio: Initial virtio CAN driver.", see
+linked discussion thread.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--wrzhwsd3655udnop
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRHmp0ACgkQvlAcSiqK
+BOhdHwf/elII+CN8WhgoClA6Y9+l7RyecrlVcqKWmgZNO5hTG6BmvkzP//T6m9Lq
+3XEmvI6TFszxDp+0yHDIaRS1fqBDCKaSpjRZEozRyE1df4BH7XBFIkcVyI5M3oEZ
+BJ6O94BtlJ+/vlg5pn9mebyFo6TYwaHLQuVwVcB9Gxc3S6JGqgYcE0N6uW2hdr9t
+0tk/zZTu+jwul+wlzo1vhd/xkmpiGshP2Z5TCJA8XkAokqz4LcLxOfGtSKS6Xey8
+4+qgTgCDpkkX+yhAZrycTfQii7JcMxbOtnBjGONXMkG3vMQo2ueIDaonqlGLvC+/
+WWX2HB7sfw7YZMKZ5h7ov7ottPC2ew==
+=7r0O
+-----END PGP SIGNATURE-----
+
+--wrzhwsd3655udnop--
