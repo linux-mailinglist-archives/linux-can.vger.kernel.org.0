@@ -2,66 +2,77 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C84476EF998
-	for <lists+linux-can@lfdr.de>; Wed, 26 Apr 2023 19:48:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D9306F0D60
+	for <lists+linux-can@lfdr.de>; Thu, 27 Apr 2023 22:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239148AbjDZRsJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 26 Apr 2023 13:48:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35770 "EHLO
+        id S1344088AbjD0Upr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 27 Apr 2023 16:45:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239049AbjDZRsI (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 26 Apr 2023 13:48:08 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8341A10EA
-        for <linux-can@vger.kernel.org>; Wed, 26 Apr 2023 10:48:06 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1prjEt-0002VF-LH; Wed, 26 Apr 2023 19:47:35 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 86BFD1B7C6B;
-        Wed, 26 Apr 2023 17:47:30 +0000 (UTC)
-Date:   Wed, 26 Apr 2023 19:47:28 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     "Mendez, Judith" <jm@ti.com>
-Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "David S . Miller" <davem@davemloft.net>,
+        with ESMTP id S231563AbjD0Upr (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 27 Apr 2023 16:45:47 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1FAAE55
+        for <linux-can@vger.kernel.org>; Thu, 27 Apr 2023 13:45:45 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-94f1d0d2e03so1352010566b.0
+        for <linux-can@vger.kernel.org>; Thu, 27 Apr 2023 13:45:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google; t=1682628344; x=1685220344;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5k9dCctWANQe/yEgS6tS+0M8nlHpydDuo0y2/2pb4aE=;
+        b=NQgjyC4xn/Uej85mqcMFusgacST3cB5Z7SBtNd98Z10faKY6VMJ3EhbjgaIlTrwPlN
+         AmmDe6Uzg8BXmwDnPtLGQ4zkAlZ9AfSYWf3MQzUi1LSDes0If5aWc7M/CRPMxb5nkk/H
+         Un5NIvV4OPhgBJBBZWZ4pOrBPRskv/Z9jCMmU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682628344; x=1685220344;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5k9dCctWANQe/yEgS6tS+0M8nlHpydDuo0y2/2pb4aE=;
+        b=HK2j0zChszR/6ZVAerKwa28t4lw6AaPNXgOieURSP+pzA2iJjI1n+6QVY2GoCZ9Ldh
+         5eHkjKnfwlsOADTQWdUc3VLDMlmp/SsVsoJfy+zUaGmq+TCRqLRz/BSBYFryL2nCPIoC
+         KolPaB/YyuJExERQuzwOdYErLp6C6mVB63uKNVqlAEQv+icYpKGSCubgxysuCoiNqSRP
+         /w7ngrAcrvdq3IuYZZkOLlqc7ZSYsnN+AWg1fuVRRkUJwUWfs6QF2QxWN8hFPmNe7bAb
+         pH0Xs56O7FEgBa/cCKuiEjmLjahwyf2uTjpC50fB7VoxfMsQNttl+xibwALouZOE0uE2
+         k8Ag==
+X-Gm-Message-State: AC+VfDxQpsFCejDOeBltgrt4n4JbiADGpDifO1YC4jTas8UylflBYm7K
+        NyIpNNmp9zv8GjM/dLRGwTyvTA==
+X-Google-Smtp-Source: ACHHUZ7Pu2xm4uXxSJcjBpr1Hhq7iFPzZY8LJppkL07oeAowkmx49KIhfg1j3b4w/tixepn51IrZ7A==
+X-Received: by 2002:a17:907:7fa1:b0:94e:fe77:3f47 with SMTP id qk33-20020a1709077fa100b0094efe773f47mr4225933ejc.67.1682628344213;
+        Thu, 27 Apr 2023 13:45:44 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-87-5-99-194.retail.telecomitalia.it. [87.5.99.194])
+        by smtp.gmail.com with ESMTPSA id s12-20020a170906bc4c00b00947ed087a2csm10171360ejv.154.2023.04.27.13.45.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Apr 2023 13:45:43 -0700 (PDT)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     michael@amarulasolutions.com,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Schuyler Patton <spatton@ti.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
         Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: Re: [PATCH v2 1/4] can: m_can: Add hrtimer to generate software
- interrupt
-Message-ID: <20230426-engine-pueblo-9967197ace5a-mkl@pengutronix.de>
-References: <20230424195402.516-1-jm@ti.com>
- <20230424195402.516-2-jm@ti.com>
- <20230424-canon-primal-ece722b184d4-mkl@pengutronix.de>
- <0261131b-35b5-4570-0283-651432a9d537@ti.com>
+        Wolfgang Grandegger <wg@grandegger.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-can@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org
+Subject: [PATCH v2 0/5] can: bxcan: add support for single peripheral configuration
+Date:   Thu, 27 Apr 2023 22:45:35 +0200
+Message-Id: <20230427204540.3126234-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="sy6skchj6wehju3r"
-Content-Disposition: inline
-In-Reply-To: <0261131b-35b5-4570-0283-651432a9d537@ti.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -69,44 +80,57 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---sy6skchj6wehju3r
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The series adds support for managing bxCAN controllers in single peripheral
+configuration.
+Unlike stm32f4 SOCs, where bxCAN controllers are only in dual peripheral
+configuration, stm32f7 SOCs contain three CAN peripherals, CAN1 and CAN2
+in dual peripheral configuration and CAN3 in single peripheral
+configuration:
+- Dual CAN peripheral configuration:
+ * CAN1: Primary bxCAN for managing the communication between a secondary
+   bxCAN and the 512-byte SRAM memory.
+ * CAN2: Secondary bxCAN with no direct access to the SRAM memory.
+   This means that the two bxCAN cells share the 512-byte SRAM memory and
+   CAN2 can't be used without enabling CAN1.
+- Single CAN peripheral configuration:
+ * CAN3: Primary bxCAN with dedicated Memory Access Controller unit and
+   512-byte SRAM memory.
 
-On 26.04.2023 11:11:12, Mendez, Judith wrote:
-[...]
-> > print a proper error message using dev_err_probe("IRQ %s not found and
-> > polling not activated\n")
-> >=20
-> Why %s when MCAN requests 1 IRQ which is "int0"? If we want to print "int=
-0",
-> should it be hardcoded into the print error message?
+The driver has been tested on the stm32f769i-discovery board with a
+kernel version 5.19.0-rc2 in loopback + silent mode:
 
-I think I copied the error message from platform_get_irq_byname() and
-extended it. Of course it makes sense to hardcode the IRQ name.
+ip link set can[0-2] type can bitrate 125000 loopback on listen-only on
+ip link set up can[0-2]
+candump can[0-2] -L &
+cansend can[0-2] 300#AC.AB.AD.AE.75.49.AD.D1
 
-Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+Changes in v2:
+- s/fiter/filter/ in the commit message
+- Replace struct bxcan_mb::primary with struct bxcan_mb::cfg.
+- Move after the patch "can: bxcan: add support for single peripheral configuration".
+- Add node gcan3.
+- Rename gcan as gcan1.
+- Add property "st,can-secondary" to can2 node.
+- Drop patch "dt-bindings: mfd: stm32f7: add binding definition for CAN3"
+  because it has been accepted.
+- Add patch "ARM: dts: stm32f429: put can2 in secondary mode".
+- Add patch "dt-bindings: net: can: add "st,can-secondary" property".
 
---sy6skchj6wehju3r
-Content-Type: application/pgp-signature; name="signature.asc"
+Dario Binacchi (5):
+  dt-bindings: net: can: add "st,can-secondary" property
+  ARM: dts: stm32f429: put can2 in secondary mode
+  ARM: dts: stm32: add pin map for CAN controller on stm32f7
+  can: bxcan: add support for single peripheral configuration
+  ARM: dts: stm32: add CAN support on stm32f746
 
------BEGIN PGP SIGNATURE-----
+ .../bindings/net/can/st,stm32-bxcan.yaml      | 19 ++++-
+ arch/arm/boot/dts/stm32f429.dtsi              |  1 +
+ arch/arm/boot/dts/stm32f7-pinctrl.dtsi        | 82 +++++++++++++++++++
+ arch/arm/boot/dts/stm32f746.dtsi              | 47 +++++++++++
+ drivers/net/can/bxcan.c                       | 34 +++++---
+ 5 files changed, 168 insertions(+), 15 deletions(-)
 
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRJY64ACgkQvlAcSiqK
-BOg2Bgf/XL6ENIVYIeH/OuUT86EybAyKIzENCqwDozaSalVYGwgnuG3umI+/cLfW
-Vw1/8IBXKkoC5YN8KPt+Kkjbc1FF8H1SC495I8qW2f2IJ605BArcF5/LZOqSB/s2
-ekqNjshR9Y5EJBVa/Lmlskq/H2UuQI7+/Z47aEPyS3OpVNbvLktJkgdVjxQLJHa9
-tFW28wcyBEvaM2lUaVnqYZ8lDmWp+poAEOBGxwGpX9OZjDGtzDwwEJysL4MsEkRs
-PSt4a0m1MdjJvmsi3dIc7rIrMm5FEBYSNmBA4/btjkfx2HdyGhWTC3mDQHHLCCIx
-zDaCyzB/YLEZmndoh0zOPK3uX6XwGQ==
-=Z3Pe
------END PGP SIGNATURE-----
+-- 
+2.32.0
 
---sy6skchj6wehju3r--
