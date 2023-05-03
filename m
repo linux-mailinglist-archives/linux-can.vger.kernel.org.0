@@ -2,79 +2,58 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C306E6F4979
-	for <lists+linux-can@lfdr.de>; Tue,  2 May 2023 20:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8E536F5A38
+	for <lists+linux-can@lfdr.de>; Wed,  3 May 2023 16:38:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233669AbjEBSJh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 2 May 2023 14:09:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50512 "EHLO
+        id S229924AbjECOiV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 3 May 2023 10:38:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233644AbjEBSJh (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 2 May 2023 14:09:37 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B604BEE;
-        Tue,  2 May 2023 11:09:34 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 342I92lw033054;
-        Tue, 2 May 2023 13:09:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1683050942;
-        bh=57AUrOMbyVCCGvx1oTX7k++sR74io/rLQrdY43bX9yM=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=AR/LAfNKRaeC2FuuLHFOnnSczCZYRfVFVquOLTGm3ZlxwRzO/0BCv2F9EsmBgBqQ3
-         xYdyiX8UNx/Zq2V9ywJbYhbdoEpO/TmCJc70Ys0F4S1ByiQMRwKCWlT7CxE49JsrdI
-         xy16u6fGz6b9zD/bFze1ETIg1dZ+088UzITSs994=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 342I92KR089102
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 2 May 2023 13:09:02 -0500
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 2
- May 2023 13:09:01 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 2 May 2023 13:09:01 -0500
-Received: from [128.247.81.95] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 342I91S0052079;
-        Tue, 2 May 2023 13:09:01 -0500
-Message-ID: <b31f3a6a-e6ab-71a3-fb78-d01f2fe00464@ti.com>
-Date:   Tue, 2 May 2023 13:09:01 -0500
+        with ESMTP id S229585AbjECOiU (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 3 May 2023 10:38:20 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFCD24EC9
+        for <linux-can@vger.kernel.org>; Wed,  3 May 2023 07:38:18 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1puDc9-00088a-Id; Wed, 03 May 2023 16:37:53 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 1E13E1BD106;
+        Wed,  3 May 2023 14:37:45 +0000 (UTC)
+Date:   Wed, 3 May 2023 16:37:44 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Peter Hong <peter_hong@fintek.com.tw>
+Cc:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        wg@grandegger.com, Steen.Hegelund@microchip.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, frank.jungclaus@esd.eu,
+        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, hpeter+linux_kernel@gmail.com
+Subject: Re: [PATCH V5] can: usb: f81604: add Fintek F81604 support
+Message-ID: <20230503-companion-sincere-573fc8d234d8-mkl@pengutronix.de>
+References: <20230420024403.13830-1-peter_hong@fintek.com.tw>
+ <CAMZ6RqKWrtBMFSD=BzGuCbvj=+3X-A-oW9haJ7=4kyL2AbEuHQ@mail.gmail.com>
+ <51991fc1-0746-608f-b3bb-78b64e6d1a3e@fintek.com.tw>
+ <CAMZ6Rq+zsC4F-mNhjKvqgPQuLhnnX1y79J=qOT8szPvkHY86VQ@mail.gmail.com>
+ <f9c007ae-fcfb-4091-c202-2c27e3ba1151@fintek.com.tw>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 2/4] can: m_can: Add hrtimer to generate software
- interrupt
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-CC:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, <linux-can@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Schuyler Patton <spatton@ti.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Simon Horman <simon.horman@corigine.com>
-References: <20230501224624.13866-1-jm@ti.com>
- <20230501224624.13866-3-jm@ti.com>
- <20230502-twiddling-threaten-d032287d4630-mkl@pengutronix.de>
-Content-Language: en-US
-From:   Judith Mendez <jm@ti.com>
-In-Reply-To: <20230502-twiddling-threaten-d032287d4630-mkl@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2zdnzbummcllnzbh"
+Content-Disposition: inline
+In-Reply-To: <f9c007ae-fcfb-4091-c202-2c27e3ba1151@fintek.com.tw>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,29 +61,98 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Marc
 
-On 5/2/23 01:37, Marc Kleine-Budde wrote:
-> On 01.05.2023 17:46:22, Judith Mendez wrote:
->> Add an hrtimer to MCAN class device. Each MCAN will have its own
->> hrtimer instantiated if there is no hardware interrupt found and
->> poll-interval property is defined in device tree M_CAN node.
->>
->> The hrtimer will generate a software interrupt every 1 ms. In
->> hrtimer callback, we check if there is a transaction pending by
->> reading a register, then process by calling the isr if there is.
->>
->> Signed-off-by: Judith Mendez <jm@ti.com>
-> 
-> I think this patch is as good as it gets, given the HW and SW
-> limitations of the coprocessor.
-> 
-> Some minor nitpicks inline. No need to resend from my point of view,
-> I'll fixup while applying the patch.
+--2zdnzbummcllnzbh
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks Marc, really appreciate your feedback and attention.
+On 02.05.2023 10:53:43, Peter Hong wrote:
+> Hi Vincent, Michal and Marc,
+>=20
+> Vincent MAILHOL =E6=96=BC 2023/4/21 =E4=B8=8B=E5=8D=88 03:30 =E5=AF=AB=E9=
+=81=93:
+> > Hi Peter and Michal,
+> >=20
+> > On Fry. 21 Apr. 2023 at 12:14, Peter Hong <peter_hong@fintek.com.tw> wr=
+ote:
+> > > Hi Vincent,
+> > >=20
+> > > Vincent MAILHOL =E6=96=BC 2023/4/20 =E4=B8=8B=E5=8D=88 08:02 =E5=AF=
+=AB=E9=81=93:
+> > > > Hi Peter,
+> > > >=20
+> > > > Here are my comments. Now, it is mostly nitpicks. I guess that this=
+ is
+> > > > the final round.
+> > > >=20
+> > > > On Thu. 20 avr. 2023 at 11:44, Ji-Ze Hong (Peter Hong)
+> > > > <peter_hong@fintek.com.tw> wrote:
+> > > > > +static void f81604_handle_tx(struct f81604_port_priv *priv,
+> > > > > +                            struct f81604_int_data *data)
+> > > > > +{
+> > > > > +       struct net_device *netdev =3D priv->netdev;
+> > > > > +       struct net_device_stats *stats;
+> > > > > +
+> > > > > +       stats =3D &netdev->stats;
+> > > > Merge the declaration with the initialization.
+> > > If I merge initialization into declaration, it's may violation RCT?
+> > > How could I change about this ?
+> > @Michal: You requested RTC in:
+> >=20
+> > https://lore.kernel.org/linux-can/ZBgKSqaFiImtTThv@localhost.localdomai=
+n/
+> >=20
+> > I looked at the kernel documentation but I could not find "Reverse
+> > Chistmas Tree". Can you point me to where this is defined?
+> >=20
+> > In the above case, I do not think RCT should apply.
+> >=20
+> > I think that this:
+> >=20
+> >          struct net_device *netdev =3D priv->netdev;
+> >          struct net_device_stats *stats =3D &netdev->stats;
+> >=20
+> > Is better than that:
+> >=20
+> >          struct net_device *netdev =3D priv->netdev;
+> >          struct net_device_stats *stats;
+> >=20
+> >          stats =3D &netdev->stats;
+> >=20
+> > Arbitrarily splitting the definition and assignment does not make sense=
+ to me.
+> >=20
+> > Thank you for your comments.
+>=20
+> The RCT coding style seems a bit confuse. How about refactoring of next
+> step? @Marc ?
 
-Same to everyone who helped make these patches better. (:
+I don't are that much about RCT (so far my upstream has not complained).
+Either of the above is fine with me.
 
 regards,
-Judith
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--2zdnzbummcllnzbh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRScbUACgkQvlAcSiqK
+BOg7fgf/Rcocbit+eYsSyvu1J/b+f2NEUYAwjDYH8JKZ3qY1jHq4uPsd81dYGTJA
+MqBRikUZ9+9uIBf7oZPCapOYuVbSn8oRjphmRogLpJhos3xFOj9YyvK/ghypUbce
+5Ywi7RI5VFeoSuxBYh/7uCyWB5dpGi59SUNXACijeBVva1cFluCvBeNVOJ98mAjV
+oJp00jvJOtnsr8ARwxUWcM/y4N7N3276FQInKisfPCiiVPoec8xhplJRkr8kLcMB
+aBsL29t4yy+5LTZJ4cE8GPS9sn1buJqnmKjKrLc1IWTsaWabv1QrKRKPx1SLK3ro
+DeWlwoup2kKYXnccclJTGR6hmIlrhg==
+=SrP+
+-----END PGP SIGNATURE-----
+
+--2zdnzbummcllnzbh--
