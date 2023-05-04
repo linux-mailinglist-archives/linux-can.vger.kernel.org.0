@@ -2,118 +2,122 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAA486F7039
-	for <lists+linux-can@lfdr.de>; Thu,  4 May 2023 18:51:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78AAB6F77B3
+	for <lists+linux-can@lfdr.de>; Thu,  4 May 2023 23:02:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229462AbjEDQvR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 4 May 2023 12:51:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33920 "EHLO
+        id S230328AbjEDVCv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 4 May 2023 17:02:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjEDQvQ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 4 May 2023 12:51:16 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A0DF5
-        for <linux-can@vger.kernel.org>; Thu,  4 May 2023 09:51:15 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id d75a77b69052e-3ef34c49cb9so787121cf.1
-        for <linux-can@vger.kernel.org>; Thu, 04 May 2023 09:51:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683219075; x=1685811075;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=smUXkej0xPzQw1tg67ntvigJgPPhrNFSnWepihD6ur8=;
-        b=K1oJeQe320jy4VAtg3hw+5lreYPqWQXRA2DhbRqCx+JumP5I+wGtVUapJkj4xbP5Gc
-         LekZghaozR/4Qo4Man59/cjwsyO1mWdp1HYs2Up0YspSfb5Y09KyJUACWQO64fh2SfhT
-         /WrgNUBfJy561g+iLGCchaOa0QJrOGh+51kgnejTI4ms2xjEgy0cE0eYTdIcQfuaBbj2
-         laz1HzpEdBlAd4yN3mcFlfSFxvlDATXF+jgnemjKagcvfb4oBUn6y5WhU1hAzE9eLHd8
-         YBShAagG+6NldxNv9bhLZFUy84FIwetvoEpA2oDHLtvoPB+boKrhKz9OSAuX1NBtfLR1
-         3Mtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683219075; x=1685811075;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=smUXkej0xPzQw1tg67ntvigJgPPhrNFSnWepihD6ur8=;
-        b=Goyzg/W6rOdvH6tD4CxlO4cI9QRMg0oMMhdD/k5yNIaFzYi0R4Ki8C1EXQFpitlZol
-         j7//9fIGHf0OvsZoaVgrkBiNIV46VLEpRz3Bdyo0bjklaRduE3o46DHE4vbcDEkEHmqV
-         o/9qOFuwxhzI9OZBb2l909m9bIthzVu3r3CGgmmDQAXUuNHD2vR2HMDp1GmvKtUGaMgx
-         Cul7IaEwVmfPrZE1eYWRvXloQwaxAWHCRp5pFUr7NLameY4EAFIaPGYsT8qwlbHtPvM7
-         uOV03yqNtsApba9fMpwblx5fRGe4VSXdYN6xJyGwjvt1SdK4RZXxiE+24bQY6qDqSG9d
-         Z8rA==
-X-Gm-Message-State: AC+VfDyfdpfgQxsxOsPMYW9Xng9w5U4IGp1ESISNztIWbk01g+/Urxav
-        PHotl2aNMl3XylqnkPVdfAeR7LMrJAL2PVrY04fX1w==
-X-Google-Smtp-Source: ACHHUZ57M6XvrZOUlJI4JuZPd/5ZX1/+KJTt4pAsY8OkJ3eOXQG7rcN0DdhPWJ3waUZhDaSXwPJ+uOusE1Vz1WLvmCE=
-X-Received: by 2002:ac8:7f8c:0:b0:3f1:f8d0:a3a7 with SMTP id
- z12-20020ac87f8c000000b003f1f8d0a3a7mr498652qtj.8.1683219074618; Thu, 04 May
- 2023 09:51:14 -0700 (PDT)
+        with ESMTP id S230334AbjEDVCU (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 4 May 2023 17:02:20 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 307EE1BDC
+        for <linux-can@vger.kernel.org>; Thu,  4 May 2023 14:01:46 -0700 (PDT)
+Received: from tr.lan (ip-86-49-120-218.bb.vodafone.cz [86.49.120.218])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 7FEDA857D1;
+        Thu,  4 May 2023 21:51:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1683229872;
+        bh=39q+3mKLqbdOiR49RDTryunT33wypaGaC2ptWrAA6WM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=IenDkw5V+E3faRBMOxdA8afGLCczCkygqVVIAW0lNZoz0XFyqQ1U+8y/eDnXRNvET
+         k1+2BsAGORubxzdBBPF824nBYCIYuZigDAHR3lx4a95xPgPj+8/KUNr6Z03xKEwgz5
+         OGlM09pS9g5+boHkZOE+1OY4cm8kC0tt4PVOeEjTSqHuKLTJSmJm3a+t7DGjAKSOb3
+         4XOr6GWrxrR2hiuVYOEXkRMhiopRPMDZ54JeyZ7ZMP8yXqPp3Lwpt4PuISILO+L7NY
+         8fCrp4edNsFxUfO5NQf7MPLnJsVidBAl7JiklCBfbSd+V3XWc510bd61x2Ns0BesCl
+         kDXEWFni8bd+A==
+From:   Marek Vasut <marex@denx.de>
+To:     linux-can@vger.kernel.org
+Cc:     Fedor Ross <fedor.ross@ifm.com>, Marek Vasut <marex@denx.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Thomas Kopp <thomas.kopp@microchip.com>,
+        Wolfgang Grandegger <wg@grandegger.com>
+Subject: [PATCH] can: mcp251xfd: Increase poll timeout
+Date:   Thu,  4 May 2023 21:50:59 +0200
+Message-Id: <20230504195059.4706-1-marex@denx.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <000000000000951c2505d8a0a8e5@google.com> <00000000000091b72905fae0eda2@google.com>
-In-Reply-To: <00000000000091b72905fae0eda2@google.com>
-From:   Aleksandr Nogikh <nogikh@google.com>
-Date:   Thu, 4 May 2023 18:51:03 +0200
-Message-ID: <CANp29Y6PHCKRWSQvhs2gKTMC3u95Zo8VLTmXRxP1=5X00EKh-w@mail.gmail.com>
-Subject: Re: [syzbot] [can?] WARNING in j1939_session_deactivate_activate_next
-To:     syzbot <syzbot+3d2eaacbc2b94537c6c5@syzkaller.appspotmail.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kernel@pengutronix.de,
-        kuba@kernel.org, linux-can@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux@rempel-privat.de,
-        mkl@pengutronix.de, netdev@vger.kernel.org,
-        o.rempel@pengutronix.de, pabeni@redhat.com, robin@protonic.nl,
-        socketcan@hartkopp.net, syzkaller-bugs@googlegroups.com,
-        william.xuanziyang@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Thu, May 4, 2023 at 6:47=E2=80=AFPM syzbot
-<syzbot+3d2eaacbc2b94537c6c5@syzkaller.appspotmail.com> wrote:
->
-> syzbot suspects this issue was fixed by commit:
->
-> commit d0553680f94c49bbe0e39eb50d033ba563b4212d
-> Author: Ziyang Xuan <william.xuanziyang@huawei.com>
-> Date:   Mon Sep 6 09:42:00 2021 +0000
->
->     can: j1939: fix errant WARN_ON_ONCE in j1939_session_deactivate
->
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D10cf099028=
-0000
-> start commit:   fa182ea26ff0 net: phy: micrel: Fixes FIELD_GET assertion
-> git tree:       net
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D796b7c2847a68=
-66a
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3D3d2eaacbc2b9453=
-7c6c5
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D1455e3b2880=
-000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D10296e7c88000=
-0
->
-> If the result looks correct, please mark the issue as fixed by replying w=
-ith:
->
-> #syz fix: can: j1939: fix errant WARN_ON_ONCE in j1939_session_deactivate
+From: Fedor Ross <fedor.ross@ifm.com>
 
-Looks correct.
-#syz fix: can: j1939: fix errant WARN_ON_ONCE in j1939_session_deactivate
+Make `MCP251XFD_POLL_TIMEOUT_US` timeout calculation dynamic. Use
+maximum of 1ms and bit time of one full 72 bytes CANFD frame at the
+current bitrate. This seems to be necessary when configuring low
+bit rates like 10 Kbit/s for example. Otherwise during polling for
+the CAN controller to enter 'Normal CAN 2.0 mode' the timeout limit
+is exceeded and the configuration fails with:
 
->
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisect=
-ion
->
-> --
-> You received this message because you are subscribed to the Google Groups=
- "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgi=
-d/syzkaller-bugs/00000000000091b72905fae0eda2%40google.com.
+$ ip link set dev can1 up type can bitrate 10000
+[  731.911072] mcp251xfd spi2.1 can1: Controller failed to enter mode CAN 2.0 Mode (6) and stays in Configuration Mode (4) (con=0x068b0760, osc=0x00000468).
+[  731.927192] mcp251xfd spi2.1 can1: CRC read error at address 0x0e0c (length=4, data=00 00 00 00, CRC=0x0000) retrying.
+[  731.938101] A link change request failed with some changes committed already. Interface can1 may have been left with an inconsistent configuration, please check.
+RTNETLINK answers: Connection timed out
+
+Fixes: 55e5b97f003e8 ("can: mcp25xxfd: add driver for Microchip MCP25xxFD SPI CAN")
+Signed-off-by: Fedor Ross <fedor.ross@ifm.com>
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Liam Girdwood <lgirdwood@gmail.com>
+Cc: Manivannan Sadhasivam <mani@kernel.org>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: Marek Vasut <marex@denx.de>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Thomas Kopp <thomas.kopp@microchip.com>
+Cc: Wolfgang Grandegger <wg@grandegger.com>
+Cc: linux-can@vger.kernel.org
+---
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+index 68df6d4641b5c..9908843798cef 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+@@ -227,6 +227,7 @@ static int
+ __mcp251xfd_chip_set_mode(const struct mcp251xfd_priv *priv,
+ 			  const u8 mode_req, bool nowait)
+ {
++	const struct can_bittiming *bt = &priv->can.bittiming;
+ 	u32 con = 0, con_reqop, osc = 0;
+ 	u8 mode;
+ 	int err;
+@@ -251,7 +252,8 @@ __mcp251xfd_chip_set_mode(const struct mcp251xfd_priv *priv,
+ 				       FIELD_GET(MCP251XFD_REG_CON_OPMOD_MASK,
+ 						 con) == mode_req,
+ 				       MCP251XFD_POLL_SLEEP_US,
+-				       MCP251XFD_POLL_TIMEOUT_US);
++				       max(MCP251XFD_POLL_TIMEOUT_US,
++					   576 * USEC_PER_SEC / bt->bitrate));
+ 	if (err != -ETIMEDOUT && err != -EBADMSG)
+ 		return err;
+ 
+-- 
+2.39.2
+
