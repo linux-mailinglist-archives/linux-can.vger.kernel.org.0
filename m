@@ -2,49 +2,42 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A376F812C
-	for <lists+linux-can@lfdr.de>; Fri,  5 May 2023 13:03:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91AE86F8133
+	for <lists+linux-can@lfdr.de>; Fri,  5 May 2023 13:05:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231588AbjEELDQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 5 May 2023 07:03:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53286 "EHLO
+        id S231344AbjEELFQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 5 May 2023 07:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjEELDP (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 5 May 2023 07:03:15 -0400
+        with ESMTP id S231322AbjEELFQ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 5 May 2023 07:05:16 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4BF1A1EC
-        for <linux-can@vger.kernel.org>; Fri,  5 May 2023 04:03:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42CCE19D42
+        for <linux-can@vger.kernel.org>; Fri,  5 May 2023 04:05:15 -0700 (PDT)
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1putDU-0004Ww-PT
-        for linux-can@vger.kernel.org; Fri, 05 May 2023 13:03:12 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 3A39F1BE810
-        for <linux-can@vger.kernel.org>; Fri,  5 May 2023 11:03:12 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        id 1putFR-0004oS-LV; Fri, 05 May 2023 13:05:13 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 106FE1BE805;
-        Fri,  5 May 2023 11:03:11 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 4ed3be17;
-        Fri, 5 May 2023 11:03:10 +0000 (UTC)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 0B88C1BE824;
+        Fri,  5 May 2023 11:05:13 +0000 (UTC)
+Date:   Fri, 5 May 2023 13:05:12 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     linux-can@vger.kernel.org
-Cc:     kernel@pengutronix.de, Oliver Hartkopp <socketcan@hartkopp.net>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH v3 2/2] can: j1939: recvmsg(): allow MSG_CMSG_COMPAT flag
-Date:   Fri,  5 May 2023 13:03:08 +0200
-Message-Id: <20230505110308.81087-3-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230505110308.81087-1-mkl@pengutronix.de>
+Cc:     kernel@pengutronix.de
+Subject: Re: [PATCH v3 0/2] can: isotp: recvmsg(): allow MSG_CMSG_COMPAT flag
+Message-ID: <20230505-dwindling-hut-a6ee800036ea-mkl@pengutronix.de>
 References: <20230505110308.81087-1-mkl@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="eyvb73jcbfv3kcqy"
+Content-Disposition: inline
+In-Reply-To: <20230505110308.81087-1-mkl@pengutronix.de>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -58,38 +51,44 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Oliver Hartkopp <socketcan@hartkopp.net>
 
-The control message provided by J1939 support MSG_CMSG_COMPAT but
-blocked recvmsg() syscalls that have set this flag, i.e. on 32bit user
-space on 64 bit kernels.
+--eyvb73jcbfv3kcqy
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Link: https://github.com/hartkopp/can-isotp/issues/59
-Cc: Oleksij Rempel <o.rempel@pengutronix.de>
-Suggested-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-Tested-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- net/can/j1939/socket.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 05.05.2023 13:03:06, Marc Kleine-Budde wrote:
+> sending v3 of Oliver's original patch
+> (https://lore.kernel.org/all/20230406110845.5180-1-socketcan@hartkopp.net=
+/).
+>=20
+> No code change since v2, but resending with standard git Message-Id
+> headers. I wasn't satisfied with my headers experiment. Sorry for the
+> noise.
 
-diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
-index 7e90f9e61d9b..1790469b2580 100644
---- a/net/can/j1939/socket.c
-+++ b/net/can/j1939/socket.c
-@@ -798,7 +798,7 @@ static int j1939_sk_recvmsg(struct socket *sock, struct msghdr *msg,
- 	struct j1939_sk_buff_cb *skcb;
- 	int ret = 0;
- 
--	if (flags & ~(MSG_DONTWAIT | MSG_ERRQUEUE))
-+	if (flags & ~(MSG_DONTWAIT | MSG_ERRQUEUE | MSG_CMSG_COMPAT))
- 		return -EINVAL;
- 
- 	if (flags & MSG_ERRQUEUE)
--- 
-2.39.2
+I've also added stable on Cc while applying the series.
 
+Marc
 
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--eyvb73jcbfv3kcqy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRU4uMACgkQvlAcSiqK
+BOjE1wf9GacURImvk0NHLG3FhJVSVdDS4qttWiCFjRifMIMBg+jrFTK2grdi/r2w
+hkMisygnQZi4E8iOn5NVzpnO0KSmpy/DZXuffLq6ii/YuqItwTeSq5jNPZ0r0NH/
+UNtWu6x/N/phyrdAwF/IGHX0W2gJhEWMvsBNYFmJT6uFbKvPGWtFJS8HE7Tq+SvL
+OdrN2TL34A9TUWwf8Xsbg15Sv69JIgBpHDCbna7TPjc8+Lgln4TYQx0yucPUdpj7
+4aPvzO9FyXT9mW5GHVQhSMJq8uHTSoCXe4z/2AIIMF7SdOMSzik2CyEFOCWtcX4j
+RpT7YUKp5pWceeANWm/ormzIeGVemA==
+=Ldqi
+-----END PGP SIGNATURE-----
+
+--eyvb73jcbfv3kcqy--
