@@ -2,71 +2,69 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D89FA6F89D4
-	for <lists+linux-can@lfdr.de>; Fri,  5 May 2023 21:51:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DC486F8B0E
+	for <lists+linux-can@lfdr.de>; Fri,  5 May 2023 23:30:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233145AbjEETvE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 5 May 2023 15:51:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38666 "EHLO
+        id S233498AbjEEV36 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 5 May 2023 17:29:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232549AbjEETvD (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 5 May 2023 15:51:03 -0400
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45470138;
-        Fri,  5 May 2023 12:51:02 -0700 (PDT)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-192814aa343so1848090fac.1;
-        Fri, 05 May 2023 12:51:02 -0700 (PDT)
+        with ESMTP id S233557AbjEEV3w (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 5 May 2023 17:29:52 -0400
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7A5DF;
+        Fri,  5 May 2023 14:29:51 -0700 (PDT)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-18f4a6d2822so20160837fac.1;
+        Fri, 05 May 2023 14:29:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683316261; x=1685908261;
+        d=1e100.net; s=20221208; t=1683322191; x=1685914191;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dguMNfMk4wcW3nSZUAYy0tuJ0r9bBR9l9tF40g9fY7I=;
-        b=H32MLflslUzjFmRaKQ9PT9wGDVM76NV1o0IyFvk9wwBBfG4zp8jEB00Cmt30fTti0F
-         okkAiYVWB662fS/qFCXwo5kMMxyBu3jsw+9ZiuCO1Jwi14dxRenshYHKg+KazFKClrk/
-         wWkCKrF/dxRszwDyAhhpuMzzubsr9TrSh70Or/t4cFI6Pr3h0eeQDjNDhkFLj7dfIw5y
-         jmqphdXoVpE2UXKdIvVuwF3pj6JOLL8i3p2Wd3cGDOpaw8Rw66Ddc/mHQQCulaJZ+nAb
-         qeZvBF7gyRk6L1+hF6AI3hU/xyeMoiXG11Wm02l2GHImIjFxbM38VgUtVEbSCJGaabVy
-         Sjkw==
-X-Gm-Message-State: AC+VfDyOYOFp1yDiEAq2Xdfov+sQi24vnH3H3LxI9J0EjzX6qeD/OEoQ
-        NnTFC9Gtdw6hQ9kxzqNUlA==
-X-Google-Smtp-Source: ACHHUZ7b1sGcz+WaT+MXyYJMCCmoh/Da9MtxtY9aquw0oa5YHEQhZYwLP6Ds8cyve+AMTX6K19GXTw==
-X-Received: by 2002:a05:6870:304:b0:187:85c1:8075 with SMTP id m4-20020a056870030400b0018785c18075mr1432649oaf.15.1683316261202;
-        Fri, 05 May 2023 12:51:01 -0700 (PDT)
+        bh=HFeDUyo6AKuXS79TAn9Cc44Tads4aooewVV9T4r6M0g=;
+        b=dZyPWFywv32sonGj/fAdNDXMxS3ceDkBqPG/W0Pn1QkowDFTfjqIAYxwrdT7qTCnPr
+         Qakn+Ecegs2igeWnW+cDw79ATc4oE8y0X7hu7yHsC61qY/rKvZ+wV2KYlxZyQX5+HBbn
+         TcmVG++8ZNJpWc7ax5uuhImvQBsnF1cLlakouWT3cYvivMqCBI3ygl7yH2iZhPsDRlLd
+         0kHm3BA6Xe7eLXdx8mMAe5B0SvVA4h9VwvxF3vrVXpsoTBpN9MGXlNYZJyHj8V3HKd7t
+         sxhvE3FIc8odS8kaM2dJ7HJbk2fc0DxvHlBOdhry/MouBaQk76v4F3v12ACsjLAVE9fQ
+         W6Ng==
+X-Gm-Message-State: AC+VfDyoYDaG+6BRq28RdVCtJVEDwVeSWfJSgxReBnkioPTldAhajKJC
+        vFXxveDooSB+tGPGhfW9zw==
+X-Google-Smtp-Source: ACHHUZ7aycN1QluDBhyWe/IUee4uCc1VOdrIKAR+AJ7bfwvk/TZdgDz4IwmG4Ng6bzcWJOffABFmaA==
+X-Received: by 2002:a05:6871:7a4:b0:192:6fdd:6e36 with SMTP id o36-20020a05687107a400b001926fdd6e36mr3229320oap.17.1683322190696;
+        Fri, 05 May 2023 14:29:50 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id e1-20020a056870c34100b0018449ae08cesm2222138oak.13.2023.05.05.12.50.59
+        by smtp.gmail.com with ESMTPSA id t1-20020a9d7f81000000b006a62aac5736sm1369180otp.28.2023.05.05.14.29.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 May 2023 12:51:00 -0700 (PDT)
-Received: (nullmailer pid 3459191 invoked by uid 1000);
-        Fri, 05 May 2023 19:50:58 -0000
-Date:   Fri, 5 May 2023 14:50:58 -0500
+        Fri, 05 May 2023 14:29:49 -0700 (PDT)
+Received: (nullmailer pid 3595549 invoked by uid 1000);
+        Fri, 05 May 2023 21:29:48 -0000
+Date:   Fri, 5 May 2023 16:29:48 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-can@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        michael@amarulasolutions.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
+To:     Judith Mendez <jm@ti.com>
+Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] dt-bindings: net: can: add "st,can-secondary"
- property
-Message-ID: <168331625833.3459132.18047945812995754036.robh@kernel.org>
-References: <20230427204540.3126234-1-dario.binacchi@amarulasolutions.com>
- <20230427204540.3126234-2-dario.binacchi@amarulasolutions.com>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Schuyler Patton <spatton@ti.com>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Simon Horman <simon.horman@corigine.com>
+Subject: Re: [PATCH v4 1/4] dt-bindings: net: can: Add poll-interval for MCAN
+Message-ID: <20230505212948.GA3590042-robh@kernel.org>
+References: <20230501224624.13866-1-jm@ti.com>
+ <20230501224624.13866-2-jm@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230427204540.3126234-2-dario.binacchi@amarulasolutions.com>
+In-Reply-To: <20230501224624.13866-2-jm@ti.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
@@ -78,24 +76,115 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-
-On Thu, 27 Apr 2023 22:45:36 +0200, Dario Binacchi wrote:
-> On the stm32f7 Socs the can peripheral can be in single or dual
-> configuration. In the dual configuration, in turn, it can be in primary
-> or secondary mode. The addition of the 'st,can-secondary' property allows
-> you to specify this mode in the dual configuration.
+On Mon, May 01, 2023 at 05:46:21PM -0500, Judith Mendez wrote:
+> On AM62x SoC, MCANs on MCU domain do not have hardware interrupt
+> routed to A53 Linux, instead they will use software interrupt by
+> hrtimer. To enable timer method, interrupts should be optional so
+> remove interrupts property from required section and introduce
+> poll-interval property.
 > 
-> CAN peripheral nodes in single configuration contain neither
-> "st,can-primary" nor "st,can-secondary".
-> 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> Signed-off-by: Judith Mendez <jm@ti.com>
 > ---
+> Changelog:
+> v3:
+>  1. Move binding patch to first in series
+>  2. Update description for poll-interval
+>  3. Add oneOf to specify using interrupts/interrupt-names or poll-interval
+>  4. Fix example property: add comment below 'example'
 > 
-> (no changes since v1)
+> v2:
+>   1. Add poll-interval property to enable timer polling method
+>   2. Add example using poll-interval property
+>   
+>  .../bindings/net/can/bosch,m_can.yaml         | 36 +++++++++++++++++--
+>  1 file changed, 34 insertions(+), 2 deletions(-)
 > 
->  .../bindings/net/can/st,stm32-bxcan.yaml      | 19 +++++++++++++++----
->  1 file changed, 15 insertions(+), 4 deletions(-)
-> 
+> diff --git a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> index 67879aab623b..c024ee49962c 100644
+> --- a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> +++ b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> @@ -14,6 +14,13 @@ maintainers:
+>  allOf:
+>    - $ref: can-controller.yaml#
+>  
+> +oneOf:
+> +  - required:
+> +      - interrupts
+> +      - interrupt-names
+> +  - required:
+> +      - poll-interval
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Move this next to 'required'.
 
+> +
+>  properties:
+>    compatible:
+>      const: bosch,m_can
+> @@ -40,6 +47,14 @@ properties:
+>        - const: int1
+>      minItems: 1
+>  
+> +  poll-interval:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+
+This is a common property already defined as a uint32. You shouldn't 
+define a new type.
+
+A flag doesn't even make sense. If that's all you need, then just enable 
+polling if no interrupt is present.
+
+> +    description: Enable hrtimer polling method for an M_CAN device.
+> +      If this property is defined in MCAN node, it tells the driver to
+> +      enable polling method for an MCAN device. If for an MCAN device,
+> +      hardware interrupt is found and hrtimer polling method is enabled,
+
+What's hrtimer? (Don't put Linuxisms in bindings)
+
+> +      the driver will use hardware interrupt method.
+> +
+>    clocks:
+>      items:
+>        - description: peripheral clock
+> @@ -122,8 +137,6 @@ required:
+>    - compatible
+>    - reg
+>    - reg-names
+> -  - interrupts
+> -  - interrupt-names
+>    - clocks
+>    - clock-names
+>    - bosch,mram-cfg
+> @@ -132,6 +145,7 @@ additionalProperties: false
+>  
+>  examples:
+>    - |
+> +    // Example with interrupts
+>      #include <dt-bindings/clock/imx6sx-clock.h>
+>      can@20e8000 {
+>        compatible = "bosch,m_can";
+> @@ -149,4 +163,22 @@ examples:
+>        };
+>      };
+>  
+> +  - |
+> +    // Example with timer polling
+> +    #include <dt-bindings/clock/imx6sx-clock.h>
+> +    can@20e8000 {
+> +      compatible = "bosch,m_can";
+> +      reg = <0x020e8000 0x4000>, <0x02298000 0x4000>;
+> +      reg-names = "m_can", "message_ram";
+> +      poll-interval;
+> +      clocks = <&clks IMX6SX_CLK_CANFD>,
+> +               <&clks IMX6SX_CLK_CANFD>;
+> +      clock-names = "hclk", "cclk";
+> +      bosch,mram-cfg = <0x0 0 0 32 0 0 0 1>;
+> +
+> +      can-transceiver {
+> +        max-bitrate = <5000000>;
+> +      };
+> +    };
+> +
+>  ...
+> -- 
+> 2.17.1
+> 
