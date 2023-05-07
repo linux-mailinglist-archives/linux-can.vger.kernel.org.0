@@ -2,628 +2,271 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4EFC6F981D
-	for <lists+linux-can@lfdr.de>; Sun,  7 May 2023 11:58:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C6776F9989
+	for <lists+linux-can@lfdr.de>; Sun,  7 May 2023 17:55:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230300AbjEGJ65 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 7 May 2023 05:58:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53340 "EHLO
+        id S231881AbjEGPzT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 7 May 2023 11:55:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbjEGJ64 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 7 May 2023 05:58:56 -0400
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCADF559A;
-        Sun,  7 May 2023 02:58:53 -0700 (PDT)
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-24df6bbf765so3138571a91.0;
-        Sun, 07 May 2023 02:58:53 -0700 (PDT)
+        with ESMTP id S230399AbjEGPzS (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 7 May 2023 11:55:18 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573DD6A5B;
+        Sun,  7 May 2023 08:55:17 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-64115eef620so29325663b3a.1;
+        Sun, 07 May 2023 08:55:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683474917; x=1686066917;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=GYb3dk460XgtsVCvhsWMRMsftl/DXZ2mh7rVvkm2EDw=;
+        b=k7CifHgNsCWx5LvdF7fIHaYUiiTtEulUmBd6XZrJknUjjn9gzQN56bL4M435r+xkMl
+         7Yt8MHg/JaTgzNMCV+lz1ELsQYjd49CRYEKKVe9vOEex0DnO/VaYVcdtRt/Iw3j6QwDn
+         0waaqU1MtlaJkvTS9RvbFJEZxngjIqnvlpuhfjazqsq948lSgvrGNMSkIWxi75d1mVZr
+         CV3nvxtJ27sEBAVqxFlP6UGkO2huCjmsP1foSNdsysFbKizFLU0X1aHJ9DI4uLJsojuu
+         sJ0jUHkxAlfbmUF5++5TTfO/Pyy1ODG/jh9WzpPDgiBA4r2ay23mwY8zbWWIshHXuRXI
+         Pq6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683453533; x=1686045533;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oBIAHGn0KAxvYdKD6xUNalflSued6Yl8FyrXJmVWpxE=;
-        b=CYn/UdsWmyFIaaijxwwQ2XZj0JCWoTpLYhvPHvS+1gM0nnBiA13k+/gWoGVJ0DSzth
-         a4JVHbEE3JlbAqTjOHmJMifpar4oEdg5TNIg+z35cV+VDpT7ZA42esEJnGzdiBuF3Bkj
-         xtw6YACn9U0EunEItHRG1xXytw0WzkL/tbz+Wo2H9i6npT+hyyOUoj8eXUblg069l7on
-         c7YDtXlVMxx8/iupr1VpVDEVBsdxdIJY9W5gy9zhTEYSFonoRY3GzZHPrSVaLLkZA734
-         Gohn/EfE22fT7GZGpKjrAS4UNYoViJ/RCuPNUZcbyWbGWkBA3hEc+FKZXfxvfwtVwU+a
-         j7EA==
-X-Gm-Message-State: AC+VfDwm9V/iLisN61sgTJ22fMCCRnkDx2o3/5K/XcJa4VrPXM4B1J7+
-        Vz/jSKuTYLUcMERgaBjeknSifLSYe+7tn8ABANjKdteFizs=
-X-Google-Smtp-Source: ACHHUZ7XpRKvzNlVB5xYgyzi/qrEaPRCYr9ljf0mQu36+Zfm1UeVzL0+f5/7OGqyn7DqPrqlGLtm15xKNEnmxx0tSho=
-X-Received: by 2002:a17:90a:a683:b0:23e:f855:79ed with SMTP id
- d3-20020a17090aa68300b0023ef85579edmr7218107pjq.28.1683453533002; Sun, 07 May
- 2023 02:58:53 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683474917; x=1686066917;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GYb3dk460XgtsVCvhsWMRMsftl/DXZ2mh7rVvkm2EDw=;
+        b=Ip9m4hFq+Ny0GimrYuM5nZq2RQhhowJwZyGz6Ywz4suLcpLw2NeAY2JC6Oat9lQDZe
+         uI+aa5eY7g7tA4fEkSw31wCzCUcUTi3yjVgKEYWREQCg5SnHqYbfS/DUk7u/oNzqdNtL
+         KC4gt26w/OmdHtuSIPoJnUgeg10u8fa3AqzB27izekd2mspOSApPLCk4PX4Z0qc+w3Ot
+         FU+axNUnEUjGYqZdmu7DVUpxn7ayJ4psqLGb0emBfHCs0OvgkMDBqHSNmVqGZTZ1BFHI
+         4Id/DQaX5SZSw8wyA3fjF0NBgtkbeOzErMPOLA1N1kR3jCwACRngqr/CgWjpF0Dqm2B9
+         hc3A==
+X-Gm-Message-State: AC+VfDwymy9lWglVJ+Ko43kq4lWlkd/IXy5ZbMV8vBr+qdpI1wlsvXgC
+        jOAPkaZwFzDvJJ2Y7S0QVBE=
+X-Google-Smtp-Source: ACHHUZ6gBz4FXcclZPm+RTBXlHXIsHpELQy7700mjt1mMbOqWvrSVyTfrE1uE5Cp9knWG/+eauqCAA==
+X-Received: by 2002:a17:902:f685:b0:1ac:731b:bc9a with SMTP id l5-20020a170902f68500b001ac731bbc9amr1448873plg.27.1683474916488;
+        Sun, 07 May 2023 08:55:16 -0700 (PDT)
+Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
+        by smtp.gmail.com with ESMTPSA id z6-20020a170903018600b001a3d041ca71sm5338360plg.275.2023.05.07.08.55.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 May 2023 08:55:16 -0700 (PDT)
+Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
+        Marek Vasut <marex@denx.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH] can: length: add definitions for frame lengths in bits
+Date:   Mon,  8 May 2023 00:55:06 +0900
+Message-Id: <20230507155506.3179711-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.39.3
 MIME-Version: 1.0
-References: <20230504154414.1864615-1-frank.jungclaus@esd.eu> <20230504154414.1864615-3-frank.jungclaus@esd.eu>
-In-Reply-To: <20230504154414.1864615-3-frank.jungclaus@esd.eu>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Sun, 7 May 2023 18:58:41 +0900
-Message-ID: <CAMZ6RqKgJs-yJaaqREmN1SkUzE1EkGtjBzXiATKx5WL+=J48dQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] can: esd_usb: Add support for esd CAN-USB/3
-To:     Frank Jungclaus <frank.jungclaus@esd.eu>
-Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Frank,
+When created in [1], frames length definitions were added to implement
+byte queue limits (bql). Because bql expects lengths in bytes, bit
+length definitions were not considered back then.
 
-Thank you for your patch. Here is my first batch of comments.
+Recently, a need to refer to the exact frame length in bits, with CAN
+bit stuffing, appeared in [2].
 
-Some comments also apply to the existing code. So you may want to
-address those in separate clean-up patches first.
+Add 9 frames length definitions:
 
-On Fri. 5 May 2023 at 01:16, Frank Jungclaus <frank.jungclaus@esd.eu> wrote:
-> Add support for esd CAN-USB/3 and CAN FD to esd_usb.
->
-> Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
-> ---
->  drivers/net/can/usb/esd_usb.c | 282 ++++++++++++++++++++++++++++++----
->  1 file changed, 249 insertions(+), 33 deletions(-)
->
-> diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_usb.c
-> index e24fa48b9b42..48cf5e88d216 100644
-> --- a/drivers/net/can/usb/esd_usb.c
-> +++ b/drivers/net/can/usb/esd_usb.c
-> @@ -1,6 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0-only
->  /*
-> - * CAN driver for esd electronics gmbh CAN-USB/2 and CAN-USB/Micro
-> + * CAN driver for esd electronics gmbh CAN-USB/2, CAN-USB/3 and CAN-USB/Micro
->   *
->   * Copyright (C) 2010-2012 esd electronic system design gmbh, Matthias Fuchs <socketcan@esd.eu>
->   * Copyright (C) 2022-2023 esd electronics gmbh, Frank Jungclaus <frank.jungclaus@esd.eu>
-> @@ -18,17 +18,19 @@
->
->  MODULE_AUTHOR("Matthias Fuchs <socketcan@esd.eu>");
->  MODULE_AUTHOR("Frank Jungclaus <frank.jungclaus@esd.eu>");
-> -MODULE_DESCRIPTION("CAN driver for esd electronics gmbh CAN-USB/2 and CAN-USB/Micro interfaces");
-> +MODULE_DESCRIPTION("CAN driver for esd electronics gmbh CAN-USB/2, CAN-USB/3 and CAN-USB/Micro interfaces");
->  MODULE_LICENSE("GPL v2");
->
->  /* USB vendor and product ID */
->  #define USB_ESDGMBH_VENDOR_ID  0x0ab4
->  #define USB_CANUSB2_PRODUCT_ID 0x0010
->  #define USB_CANUSBM_PRODUCT_ID 0x0011
-> +#define USB_CANUSB3_PRODUCT_ID 0x0014
->
->  /* CAN controller clock frequencies */
->  #define ESD_USB2_CAN_CLOCK     60000000
->  #define ESD_USBM_CAN_CLOCK     36000000
-> +#define ESD_USB3_CAN_CLOCK     80000000
+ - CAN_FRAME_OVERHEAD_SFF_BITS:
+ - CAN_FRAME_OVERHEAD_EFF_BITS
+ - CANFD_FRAME_OVERHEAD_SFF_BITS
+ - CANFD_FRAME_OVERHEAD_EFF_BITS
+ - CAN_BIT_STUFFING_OVERHEAD
+ - CAN_FRAME_LEN_MAX_BITS_NO_STUFFING
+ - CAN_FRAME_LEN_MAX_BITS_STUFFING
+ - CANFD_FRAME_LEN_MAX_BITS_NO_STUFFING
+ - CANFD_FRAME_LEN_MAX_BITS_STUFFING
 
-Nitpick: consider using the unit suffixes from linux/units.h:
+CAN_FRAME_LEN_MAX_BITS_STUFFING and CANFD_FRAME_LEN_MAX_BITS_STUFFING
+define respectively the maximum number of bits in a classical CAN and
+CAN-FD frame including bit stuffing. The other definitions are
+intermediate values.
 
-  #define ESD_USB3_CAN_CLOCK (80 * MEGA)
+In addition to the above:
 
->  /* Maximum number of CAN nets */
->  #define ESD_USB_MAX_NETS       2
-> @@ -43,6 +45,9 @@ MODULE_LICENSE("GPL v2");
->
->  /* esd CAN message flags - dlc field */
->  #define ESD_DLC_RTR            0x10
-> +#define ESD_DLC_NO_BRS         0x10
-> +#define ESD_DLC_ESI            0x20
-> +#define ESD_DLC_FD             0x80
+ - Include linux/bits.h and then replace the value 8 by BITS_PER_BYTE
+   whenever relevant.
+ - Include linux/math.h because of DIV_ROUND_UP(). N.B: the use of
+   DIV_ROUND_UP() is not new to this patch, but the include was
+   previously omitted.
+ - Update the existing length definitions to use the newly defined values.
+ - Add myself as copyright owner for 2020 (as coauthor of the initial
+   version, c.f. [1]) and for 2023 (this patch).
 
-Use the BIT() macro:
+[1] commit 85d99c3e2a13 ("can: length: can_skb_get_frame_len(): introduce
+    function to get data length of frame in data link layer")
+Link: https://git.kernel.org/torvalds/c/85d99c3e2a13
 
-#define ESD_DLC_NO_BRS BIT(4)
-#define ESD_DLC_ESI BIT(5)
-#define ESD_DLC_FD BIT(7)
+[2] RE: [PATCH] can: mcp251xfd: Increase poll timeout
+Link: https://lore.kernel.org/linux-can/BL3PR11MB64846C83ACD04E9330B0FE66FB729@BL3PR11MB6484.namprd11.prod.outlook.com/
 
-Also, if this is specific to the ESD_USB3 then add it in the prefix.
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+---
+As always, let me know if you have better inspiration than me for the
+naming.
+---
+ include/linux/can/length.h | 84 ++++++++++++++++++++++++++++++++------
+ 1 file changed, 72 insertions(+), 12 deletions(-)
 
->  /* esd CAN message flags - id field */
->  #define ESD_EXTID              0x20000000
-> @@ -72,6 +77,28 @@ MODULE_LICENSE("GPL v2");
->  #define ESD_USB2_BRP_INC       1
->  #define ESD_USB2_3_SAMPLES     0x00800000
->
-> +/* Bit timing CAN-USB/3 */
-> +#define ESD_USB3_TSEG1_MIN     1
-> +#define ESD_USB3_TSEG1_MAX     256
-> +#define ESD_USB3_TSEG2_MIN     1
-> +#define ESD_USB3_TSEG2_MAX     128
-> +#define ESD_USB3_SJW_MAX       128
-> +#define ESD_USB3_BRP_MIN       1
-> +#define ESD_USB3_BRP_MAX       1024
-> +#define ESD_USB3_BRP_INC       1
-> +/* Bit timing CAN-USB/3, data phase */
-> +#define ESD_USB3_DATA_TSEG1_MIN        1
-> +#define ESD_USB3_DATA_TSEG1_MAX        32
-> +#define ESD_USB3_DATA_TSEG2_MIN        1
-> +#define ESD_USB3_DATA_TSEG2_MAX        16
-> +#define ESD_USB3_DATA_SJW_MAX  8
-> +#define ESD_USB3_DATA_BRP_MIN  1
-> +#define ESD_USB3_DATA_BRP_MAX  32
-> +#define ESD_USB3_DATA_BRP_INC  1
+diff --git a/include/linux/can/length.h b/include/linux/can/length.h
+index 6995092b774e..60492fcbe34d 100644
+--- a/include/linux/can/length.h
++++ b/include/linux/can/length.h
+@@ -1,13 +1,17 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+ /* Copyright (C) 2020 Oliver Hartkopp <socketcan@hartkopp.net>
+  * Copyright (C) 2020 Marc Kleine-Budde <kernel@pengutronix.de>
++ * Copyright (C) 2020, 2023 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+  */
+ 
+ #ifndef _CAN_LENGTH_H
+ #define _CAN_LENGTH_H
+ 
++#include <linux/bits.h>
++#include <linux/math.h>
++
+ /*
+- * Size of a Classical CAN Standard Frame
++ * Size of a Classical CAN Standard Frame in bits
+  *
+  * Name of Field			Bits
+  * ---------------------------------------------------------
+@@ -25,12 +29,19 @@
+  * End-of-frame (EOF)			7
+  * Inter frame spacing			3
+  *
+- * rounded up and ignoring bitstuffing
++ * ignoring bitstuffing
+  */
+-#define CAN_FRAME_OVERHEAD_SFF DIV_ROUND_UP(47, 8)
++#define CAN_FRAME_OVERHEAD_SFF_BITS 47
+ 
+ /*
+- * Size of a Classical CAN Extended Frame
++ * Size of a Classical CAN Standard Frame
++ * (rounded up and ignoring bitstuffing)
++ */
++#define CAN_FRAME_OVERHEAD_SFF \
++	DIV_ROUND_UP(CAN_FRAME_OVERHEAD_SFF_BITS, BITS_PER_BYTE)
++
++/*
++ * Size of a Classical CAN Extended Frame in bits
+  *
+  * Name of Field			Bits
+  * ---------------------------------------------------------
+@@ -50,12 +61,19 @@
+  * End-of-frame (EOF)			7
+  * Inter frame spacing			3
+  *
+- * rounded up and ignoring bitstuffing
++ * ignoring bitstuffing
+  */
+-#define CAN_FRAME_OVERHEAD_EFF DIV_ROUND_UP(67, 8)
++#define CAN_FRAME_OVERHEAD_EFF_BITS 67
+ 
+ /*
+- * Size of a CAN-FD Standard Frame
++ * Size of a Classical CAN Extended Frame
++ * (rounded up and ignoring bitstuffing)
++ */
++#define CAN_FRAME_OVERHEAD_EFF \
++	DIV_ROUND_UP(CAN_FRAME_OVERHEAD_EFF_BITS, BITS_PER_BYTE)
++
++/*
++ * Size of a CAN-FD Standard Frame in bits
+  *
+  * Name of Field			Bits
+  * ---------------------------------------------------------
+@@ -77,12 +95,19 @@
+  * End-of-frame (EOF)			7
+  * Inter frame spacing			3
+  *
+- * assuming CRC21, rounded up and ignoring bitstuffing
++ * assuming CRC21 and ignoring bitstuffing
+  */
+-#define CANFD_FRAME_OVERHEAD_SFF DIV_ROUND_UP(61, 8)
++#define CANFD_FRAME_OVERHEAD_SFF_BITS 61
+ 
+ /*
+- * Size of a CAN-FD Extended Frame
++ * Size of a CAN-FD Standard Frame
++ * (assuming CRC21, rounded up and ignoring bitstuffing)
++ */
++#define CANFD_FRAME_OVERHEAD_SFF \
++	DIV_ROUND_UP(CANFD_FRAME_OVERHEAD_SFF_BITS, BITS_PER_BYTE)
++
++/*
++ * Size of a CAN-FD Extended Frame in bits
+  *
+  * Name of Field			Bits
+  * ---------------------------------------------------------
+@@ -106,9 +131,32 @@
+  * End-of-frame (EOF)			7
+  * Inter frame spacing			3
+  *
+- * assuming CRC21, rounded up and ignoring bitstuffing
++ * assuming CRC21 and ignoring bitstuffing
++ */
++#define CANFD_FRAME_OVERHEAD_EFF_BITS 80
++
++/*
++ * Size of a CAN-FD Extended Frame
++ * (assuming CRC21, rounded up and ignoring bitstuffing)
++ */
++#define CANFD_FRAME_OVERHEAD_EFF \
++	DIV_ROUND_UP(CANFD_FRAME_OVERHEAD_EFF_BITS, BITS_PER_BYTE)
++
++/* CAN bit stuffing overhead multiplication factor */
++#define CAN_BIT_STUFFING_OVERHEAD 1.2
++
++/*
++ * Maximum size of a Classical CAN frame in bits, ignoring bitstuffing
+  */
+-#define CANFD_FRAME_OVERHEAD_EFF DIV_ROUND_UP(80, 8)
++#define CAN_FRAME_LEN_MAX_BITS_NO_STUFFING \
++	(CAN_FRAME_OVERHEAD_EFF_BITS + CAN_MAX_DLEN * BITS_PER_BYTE)
++
++/*
++ * Maximum size of a Classical CAN frame in bits, including bitstuffing
++ */
++#define CAN_FRAME_LEN_MAX_BITS_STUFFING				\
++	((unsigned int)(CAN_FRAME_LEN_MAX_BITS_NO_STUFFING *	\
++			CAN_BIT_STUFFING_OVERHEAD))
+ 
+ /*
+  * Maximum size of a Classical CAN frame
+@@ -116,6 +164,18 @@
+  */
+ #define CAN_FRAME_LEN_MAX (CAN_FRAME_OVERHEAD_EFF + CAN_MAX_DLEN)
+ 
++/*
++ * Maximum size of a CAN-FD frame in bits, ignoring bitstuffing
++ */
++#define CANFD_FRAME_LEN_MAX_BITS_NO_STUFFING \
++	(CANFD_FRAME_OVERHEAD_EFF_BITS + CANFD_MAX_DLEN * BITS_PER_BYTE)
++
++/*
++ * Maximum size of a CAN-FD frame in bits, ignoring bitstuffing
++ */
++#define CANFD_FRAME_LEN_MAX_BITS_STUFFING			\
++	((unsigned int)(CANFD_FRAME_LEN_MAX_BITS_NO_STUFFING *	\
++			CAN_BIT_STUFFING_OVERHEAD))
+ /*
+  * Maximum size of a CAN-FD frame
+  * (rounded up and ignoring bitstuffing)
+-- 
+2.39.3
 
-There is no clear benefit to define macros for some initializers of a
-const struct.
-
-Doing as below has zero ambiguity:
-
-static const struct can_bittiming_const esd_usb3_bittiming_const = {
-         .name = "esd_usb3",
-         .tseg1_min = 1,
-         .tseg1_max = 256,
-         .tseg2_min = 1,
-         .tseg2_max = 128,
-         .sjw_max = 128,
-         .brp_min = 1,
-         .brp_max = 1024,
-         .brp_inc = 1,
-};
-
-> +/* Transmitter Delay Compensation */
-> +#define ESD_TDC_MODE_AUTO      0
-> +
->  /* esd IDADD message */
->  #define ESD_ID_ENABLE          0x80
->  #define ESD_MAX_ID_SEGMENT     64
-> @@ -95,6 +122,21 @@ MODULE_LICENSE("GPL v2");
->  #define MAX_RX_URBS            4
->  #define MAX_TX_URBS            16 /* must be power of 2 */
->
-> +/* Modes for NTCAN_BAUDRATE_X */
-> +#define ESD_BAUDRATE_MODE_DISABLE      0 /* remove from bus */
-> +#define ESD_BAUDRATE_MODE_INDEX                1 /* ESD (CiA) bit rate idx */
-> +#define ESD_BAUDRATE_MODE_BTR_CTRL     2 /* BTR values (Controller)*/
-> +#define ESD_BAUDRATE_MODE_BTR_CANONICAL        3 /* BTR values (Canonical) */
-> +#define ESD_BAUDRATE_MODE_NUM          4 /* numerical bit rate */
-> +#define ESD_BAUDRATE_MODE_AUTOBAUD     5 /* autobaud */
-> +
-> +/* Flags for NTCAN_BAUDRATE_X */
-> +#define ESD_BAUDRATE_FLAG_FD   0x0001 /* enable CAN FD Mode */
-> +#define ESD_BAUDRATE_FLAG_LOM  0x0002 /* enable Listen Only mode */
-> +#define ESD_BAUDRATE_FLAG_STM  0x0004 /* enable Self test mode */
-> +#define ESD_BAUDRATE_FLAG_TRS  0x0008 /* enable Triple Sampling */
-> +#define ESD_BAUDRATE_FLAG_TXP  0x0010 /* enable Transmit Pause */
-> +
->  struct header_msg {
->         u8 len; /* len is always the total message length in 32bit words */
->         u8 cmd;
-> @@ -129,6 +171,7 @@ struct rx_msg {
->         __le32 id; /* upper 3 bits contain flags */
->         union {
->                 u8 data[8];
-> +               u8 data_fd[64];
->                 struct {
->                         u8 status; /* CAN Controller Status */
->                         u8 ecc;    /* Error Capture Register */
-> @@ -144,8 +187,11 @@ struct tx_msg {
->         u8 net;
->         u8 dlc;
->         u32 hnd;        /* opaque handle, not used by device */
-> -       __le32 id; /* upper 3 bits contain flags */
-> -       u8 data[8];
-> +       __le32 id;      /* upper 3 bits contain flags */
-> +       union {
-> +               u8 data[8];
-> +               u8 data_fd[64];
-
-Nitpick, use the macro:
-
-                  u8 data[CAN_MAX_DLEN];
-                  u8 data_fd[CANFD_MAX_DLEN];
-
-> +       };
->  };
->
->  struct tx_done_msg {
-> @@ -165,12 +211,37 @@ struct id_filter_msg {
->         __le32 mask[ESD_MAX_ID_SEGMENT + 1];
->  };
->
-> +struct baudrate_x_cfg {
-> +       __le16 brp;     /* bit rate pre-scaler */
-> +       __le16 tseg1;   /* TSEG1 register */
-> +       __le16 tseg2;   /* TSEG2 register */
-> +       __le16 sjw;     /* SJW register */
-> +};
-> +
-> +struct tdc_cfg {
-
-Please prefix all the structures with the device name. e.g.
-
-  struct esd_usb3_tdc_cfg {
-
-> +       u8 tdc_mode;    /* transmitter Delay Compensation mode  */
-> +       u8 ssp_offset;  /* secondary Sample Point offset in mtq */
-> +       s8 ssp_shift;   /* secondary Sample Point shift in mtq */
-> +       u8 tdc_filter;  /* Transmitter Delay Compensation */
-> +};
-> +
-> +struct baudrate_x {
-
-The x in baudrate_x and baudrate_x_cfg is confusing me. Is it meant to
-signify that the structure applies to both nominal and data baudrate?
-In that case, just put a comment and remove the x from the name.
-
-> +       __le16 mode;    /* mode word */
-> +       __le16 flags;   /* control flags */
-> +       struct tdc_cfg tdc;     /* TDC configuration */
-> +       struct baudrate_x_cfg arb;      /* bit rate during arbitration phase  */
-
-/* nominal bit rate */
-
-The comment is incorrect. CAN-FD may use the nominal bitrate for the
-data phase if the bit rate switch (BRS) is not set.
-
-> +       struct baudrate_x_cfg data;     /* bit rate during data phase */
-
-/* data bit rate */
-
-Please adjust the field names accordingly.
-
-> +};
-> +
->  struct set_baudrate_msg {
->         u8 len;
->         u8 cmd;
->         u8 net;
->         u8 rsvd;
-> -       __le32 baud;
-> +       union {
-> +               __le32 baud;
-> +               struct baudrate_x baud_x;
-> +       };
->  };
->
->  /* Main message type used between library and application */
-> @@ -188,6 +259,7 @@ union __packed esd_usb_msg {
->  static struct usb_device_id esd_usb_table[] = {
->         {USB_DEVICE(USB_ESDGMBH_VENDOR_ID, USB_CANUSB2_PRODUCT_ID)},
->         {USB_DEVICE(USB_ESDGMBH_VENDOR_ID, USB_CANUSBM_PRODUCT_ID)},
-> +       {USB_DEVICE(USB_ESDGMBH_VENDOR_ID, USB_CANUSB3_PRODUCT_ID)},
->         {}
->  };
->  MODULE_DEVICE_TABLE(usb, esd_usb_table);
-> @@ -326,11 +398,13 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
->  static void esd_usb_rx_can_msg(struct esd_usb_net_priv *priv,
->                                union esd_usb_msg *msg)
->  {
-> +       bool is_canfd = msg->rx.dlc & ESD_DLC_FD ? true : false;
-
-This is redundant. Just this is enough:
-
-  bool is_canfd = msg->rx.dlc & ESD_DLC_FD;
-
-This variable being used only twice, you may want to consider not
-declaring it and simply doing directly:
-
-          if (msg->rx.dlc & ESD_DLC_FD)
-
->         struct net_device_stats *stats = &priv->netdev->stats;
->         struct can_frame *cf;
-> +       struct canfd_frame *cfd;
->         struct sk_buff *skb;
-> -       int i;
->         u32 id;
-> +       u8 len;
->
->         if (!netif_device_present(priv->netdev))
->                 return;
-> @@ -340,27 +414,42 @@ static void esd_usb_rx_can_msg(struct esd_usb_net_priv *priv,
->         if (id & ESD_EVENT) {
->                 esd_usb_rx_event(priv, msg);
->         } else {
-> -               skb = alloc_can_skb(priv->netdev, &cf);
-> +               if (is_canfd) {
-> +                       skb = alloc_canfd_skb(priv->netdev, &cfd);
-> +               } else {
-> +                       skb = alloc_can_skb(priv->netdev, &cf);
-> +                       cfd = (struct canfd_frame *)cf;
-> +               }
-> +
->                 if (skb == NULL) {
->                         stats->rx_dropped++;
->                         return;
->                 }
->
-> -               cf->can_id = id & ESD_IDMASK;
-> -               can_frame_set_cc_len(cf, msg->rx.dlc & ~ESD_DLC_RTR,
-> -                                    priv->can.ctrlmode);
-> -
-> -               if (id & ESD_EXTID)
-> -                       cf->can_id |= CAN_EFF_FLAG;
-> +               cfd->can_id = id & ESD_IDMASK;
->
-> -               if (msg->rx.dlc & ESD_DLC_RTR) {
-> -                       cf->can_id |= CAN_RTR_FLAG;
-> +               if (is_canfd) {
-> +                       /* masking by 0x0F is already done within can_fd_dlc2len() */
-> +                       cfd->len = can_fd_dlc2len(msg->rx.dlc);
-> +                       len = cfd->len;
-> +                       if ((msg->rx.dlc & ESD_DLC_NO_BRS) == 0)
-> +                               cfd->flags |= CANFD_BRS;
-> +                       if (msg->rx.dlc & ESD_DLC_ESI)
-> +                               cfd->flags |= CANFD_ESI;
->                 } else {
-> -                       for (i = 0; i < cf->len; i++)
-> -                               cf->data[i] = msg->rx.data[i];
-> -
-> -                       stats->rx_bytes += cf->len;
-> +                       can_frame_set_cc_len(cf, msg->rx.dlc & ~ESD_DLC_RTR, priv->can.ctrlmode);
-> +                       len = cf->len;
-> +                       if (msg->rx.dlc & ESD_DLC_RTR) {
-> +                               cf->can_id |= CAN_RTR_FLAG;
-> +                               len = 0;
-> +                       }
->                 }
-> +
-> +               if (id & ESD_EXTID)
-> +                       cfd->can_id |= CAN_EFF_FLAG;
-> +
-> +               memcpy(cfd->data, msg->rx.data_fd, len);
-> +               stats->rx_bytes += len;
->                 stats->rx_packets++;
->
->                 netif_rx(skb);
-> @@ -735,7 +824,7 @@ static netdev_tx_t esd_usb_start_xmit(struct sk_buff *skb,
->         struct esd_usb *dev = priv->usb;
->         struct esd_tx_urb_context *context = NULL;
->         struct net_device_stats *stats = &netdev->stats;
-> -       struct can_frame *cf = (struct can_frame *)skb->data;
-> +       struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
->         union esd_usb_msg *msg;
->         struct urb *urb;
->         u8 *buf;
-> @@ -768,19 +857,28 @@ static netdev_tx_t esd_usb_start_xmit(struct sk_buff *skb,
->         msg->hdr.len = 3; /* minimal length */
->         msg->hdr.cmd = CMD_CAN_TX;
->         msg->tx.net = priv->index;
-> -       msg->tx.dlc = can_get_cc_dlc(cf, priv->can.ctrlmode);
-> -       msg->tx.id = cpu_to_le32(cf->can_id & CAN_ERR_MASK);
->
-> -       if (cf->can_id & CAN_RTR_FLAG)
-> -               msg->tx.dlc |= ESD_DLC_RTR;
-> +       if (can_is_canfd_skb(skb)) {
-> +               msg->tx.dlc = can_fd_len2dlc(cfd->len);
-> +               msg->tx.dlc |= ESD_DLC_FD;
-> +
-> +               if ((cfd->flags & CANFD_BRS) == 0)
-> +                       msg->tx.dlc |= ESD_DLC_NO_BRS;
-> +       } else {
-> +               msg->tx.dlc = can_get_cc_dlc((struct can_frame *)cfd, priv->can.ctrlmode);
-> +
-> +               if (cfd->can_id & CAN_RTR_FLAG)
-> +                       msg->tx.dlc |= ESD_DLC_RTR;
-> +       }
->
-> -       if (cf->can_id & CAN_EFF_FLAG)
-> +       msg->tx.id = cpu_to_le32(cfd->can_id & CAN_ERR_MASK);
-> +
-> +       if (cfd->can_id & CAN_EFF_FLAG)
->                 msg->tx.id |= cpu_to_le32(ESD_EXTID);
->
-> -       for (i = 0; i < cf->len; i++)
-> -               msg->tx.data[i] = cf->data[i];
-> +       memcpy(msg->tx.data_fd, cfd->data, cfd->len);
->
-> -       msg->hdr.len += (cf->len + 3) >> 2;
-> +       msg->hdr.len += (cfd->len + 3) >> 2;
-
-I do not get the logic.
-
-Assuming cfd->len is 8. Then
-
-  hdr.len += (8 + 3) >> 2
-  hdr.len += 2
-
-And because hdr.len is initially 3, hdr.len becomes 5. Right? Shouldn't it be 8?
-
->         for (i = 0; i < MAX_TX_URBS; i++) {
->                 if (priv->tx_contexts[i].echo_index == MAX_TX_URBS) {
-> @@ -966,6 +1064,108 @@ static int esd_usb2_set_bittiming(struct net_device *netdev)
->         return err;
->  }
->
-> +static const struct can_bittiming_const esd_usb3_bittiming_const = {
-> +       .name = "esd_usb3",
-> +       .tseg1_min = ESD_USB3_TSEG1_MIN,
-> +       .tseg1_max = ESD_USB3_TSEG1_MAX,
-> +       .tseg2_min = ESD_USB3_TSEG2_MIN,
-> +       .tseg2_max = ESD_USB3_TSEG2_MAX,
-> +       .sjw_max = ESD_USB3_SJW_MAX,
-> +       .brp_min = ESD_USB3_BRP_MIN,
-> +       .brp_max = ESD_USB3_BRP_MAX,
-> +       .brp_inc = ESD_USB3_BRP_INC,
-> +};
-> +
-> +static const struct can_bittiming_const esd_usb3_data_bittiming_const = {
-> +       .name = "esd_usb3",
-> +       .tseg1_min = ESD_USB3_DATA_TSEG1_MIN,
-> +       .tseg1_max = ESD_USB3_DATA_TSEG1_MAX,
-> +       .tseg2_min = ESD_USB3_DATA_TSEG2_MIN,
-> +       .tseg2_max = ESD_USB3_DATA_TSEG2_MAX,
-> +       .sjw_max = ESD_USB3_DATA_SJW_MAX,
-> +       .brp_min = ESD_USB3_DATA_BRP_MIN,
-> +       .brp_max = ESD_USB3_DATA_BRP_MAX,
-> +       .brp_inc = ESD_USB3_DATA_BRP_INC,
-> +};
-> +
-> +static int esd_usb3_set_bittiming(struct net_device *netdev)
-> +{
-> +       struct esd_usb_net_priv *priv = netdev_priv(netdev);
-> +       struct can_bittiming *bt   = &priv->can.bittiming;
-> +       struct can_bittiming *d_bt = &priv->can.data_bittiming;
-> +       union esd_usb_msg *msg;
-> +       int err;
-> +       u16 mode;
-> +       u16 flags = 0;
-> +       u16 brp, tseg1, tseg2, sjw;
-> +       u16 d_brp, d_tseg1, d_tseg2, d_sjw;
-> +
-> +       msg = kmalloc(sizeof(*msg), GFP_KERNEL);
-> +       if (!msg)
-> +               return -ENOMEM;
-> +
-> +       /* Canonical is the most reasonable mode for SocketCAN on CAN-USB/3 ... */
-> +       mode = ESD_BAUDRATE_MODE_BTR_CANONICAL;
-> +
-> +       if (priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
-> +               flags |= ESD_BAUDRATE_FLAG_LOM;
-> +
-> +       if (priv->can.ctrlmode & CAN_CTRLMODE_3_SAMPLES)
-> +               flags |= ESD_BAUDRATE_FLAG_TRS;
-> +
-> +       brp = bt->brp & (ESD_USB3_BRP_MAX - 1);
-> +       sjw = bt->sjw & (ESD_USB3_SJW_MAX - 1);
-> +       tseg1 = (bt->prop_seg + bt->phase_seg1) & (ESD_USB3_TSEG1_MAX - 1);
-> +       tseg2 = bt->phase_seg2 & (ESD_USB3_TSEG2_MAX - 1);
-
-I am not convinced by the use of these intermediate variables brp,
-sjw, tseg1 and tseg2. I think you can directly assign them to baud_x.
-
-> +       msg->setbaud.baud_x.arb.brp = cpu_to_le16(brp);
-> +       msg->setbaud.baud_x.arb.sjw = cpu_to_le16(sjw);
-> +       msg->setbaud.baud_x.arb.tseg1 = cpu_to_le16(tseg1);
-> +       msg->setbaud.baud_x.arb.tseg2 = cpu_to_le16(tseg2);
-
-You may want to declare a local variable
-
-  struct baudrate_x *baud_x = &msg->setbaud.baud_x;
-
-so that you do not have to do msg->setbaud.baud_x each time.
-
-> +       if (priv->can.ctrlmode & CAN_CTRLMODE_FD) {
-> +               d_brp = d_bt->brp & (ESD_USB3_DATA_BRP_MAX - 1);
-> +               d_sjw = d_bt->sjw & (ESD_USB3_DATA_SJW_MAX - 1);
-> +               d_tseg1 = (d_bt->prop_seg + d_bt->phase_seg1) & (ESD_USB3_DATA_TSEG1_MAX - 1);
-> +               d_tseg2 = d_bt->phase_seg2 & (ESD_USB3_DATA_TSEG2_MAX - 1);
-> +               flags |= ESD_BAUDRATE_FLAG_FD;
-> +       } else {
-> +               d_brp = 0;
-> +               d_sjw = 0;
-> +               d_tseg1 = 0;
-> +               d_tseg2 = 0;
-> +       }
-> +
-> +       msg->setbaud.baud_x.data.brp = cpu_to_le16(d_brp);
-> +       msg->setbaud.baud_x.data.sjw = cpu_to_le16(d_sjw);
-> +       msg->setbaud.baud_x.data.tseg1 = cpu_to_le16(d_tseg1);
-> +       msg->setbaud.baud_x.data.tseg2 = cpu_to_le16(d_tseg2);
-> +       msg->setbaud.baud_x.mode = cpu_to_le16(mode);
-> +       msg->setbaud.baud_x.flags = cpu_to_le16(flags);
-> +       msg->setbaud.baud_x.tdc.tdc_mode = ESD_TDC_MODE_AUTO;
-> +       msg->setbaud.baud_x.tdc.ssp_offset = 0;
-> +       msg->setbaud.baud_x.tdc.ssp_shift = 0;
-> +       msg->setbaud.baud_x.tdc.tdc_filter = 0;
-
-It seems that your device supports TDC. What is the reason to not configure it?
-
-Please have a look at struct can_tdc:
-
-  https://elixir.bootlin.com/linux/v6.2/source/include/linux/can/bittiming.h#L21
-
-Please refer to this patch if you want an example of how to use TDC:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1010a8fa9608
-
-> +       msg->hdr.len = 7;
-
-What is this magic number? If possible, replace it with a sizeof().
-
-It seems that this relates to the size of struct set_baudrate_msg, but
-that structure is 8 bytes. Is the last byte of struct set_baudrate_msg
-really used? If not, reflect this in the declaration of the structure.
-
-> +       msg->hdr.cmd = CMD_SETBAUD;
-> +
-> +       msg->setbaud.net = priv->index;
-> +       msg->setbaud.rsvd = 0;
-> +
-> +       netdev_info(netdev,
-> +                   "ctrlmode=%#x/%#x, esd-net=%u, esd-mode=%#x, esd-flg=%#x, arb: brp=%u, ts1=%u, ts2=%u, sjw=%u, data: dbrp=%u, dts1=%u, dts2=%u dsjw=%u\n",
-> +                   priv->can.ctrlmode, priv->can.ctrlmode_supported,
-> +                   priv->index, mode, flags,
-> +                   brp, tseg1, tseg2, sjw,
-> +                   d_brp, d_tseg1, d_tseg2, d_sjw);
-
-Remove this debug message. The bittiming information can be retrieved
-with the ip tool.
-
-  ip --details link show canX
-
-> +       err = esd_usb_send_msg(priv->usb, msg);
-> +
-> +       kfree(msg);
-
-esd_usb_send_msg() uses usb_bulk_msg() which does a synchronous call.
-It would be great to go asynchronous and use usb_submit_urb() so that
-you minimize the time spent in the driver.
-
-I know that  esd_usb2_set_bittiming() also uses the synchronous call,
-so I am fine to have it as-is for this patch but for the future, it
-would be great to consider refactoring this.
-
-> +       return err;
-> +}
-> +
->  static int esd_usb_get_berr_counter(const struct net_device *netdev,
->                                     struct can_berr_counter *bec)
->  {
-> @@ -1023,16 +1223,32 @@ static int esd_usb_probe_one_net(struct usb_interface *intf, int index)
->                 CAN_CTRLMODE_CC_LEN8_DLC |
->                 CAN_CTRLMODE_BERR_REPORTING;
->
-> -       if (le16_to_cpu(dev->udev->descriptor.idProduct) ==
-> -           USB_CANUSBM_PRODUCT_ID)
-> +       switch (le16_to_cpu(dev->udev->descriptor.idProduct)) {
-
-Instead of doing a switch on idProduct, you can use the driver_info
-field from struct usb_device_id to store the device quirks.
-
-You can pass either a pointer or some flags into driver_info. Examples:
-
-  https://elixir.bootlin.com/linux/v6.2/source/drivers/net/can/usb/peak_usb/pcan_usb_core.c#L30
-  https://elixir.bootlin.com/linux/v6.2/source/drivers/net/can/usb/etas_es58x/es58x_core.c#L37
-
-> +       case USB_CANUSB3_PRODUCT_ID:
-> +               priv->can.clock.freq = ESD_USB3_CAN_CLOCK;
-> +               priv->can.ctrlmode_supported |= CAN_CTRLMODE_3_SAMPLES;
-> +               priv->can.ctrlmode_supported |= CAN_CTRLMODE_FD;
-> +               priv->can.bittiming_const = &esd_usb3_bittiming_const;
-> +               priv->can.data_bittiming_const = &esd_usb3_data_bittiming_const;
-> +               priv->can.do_set_bittiming = esd_usb3_set_bittiming;
-> +               priv->can.do_set_data_bittiming = esd_usb3_set_bittiming;
-> +               break;
-> +
-> +       case USB_CANUSBM_PRODUCT_ID:
->                 priv->can.clock.freq = ESD_USBM_CAN_CLOCK;
-> -       else {
-> +               priv->can.bittiming_const = &esd_usb2_bittiming_const;
-> +               priv->can.do_set_bittiming = esd_usb2_set_bittiming;
-> +               break;
-> +
-> +       case USB_CANUSB2_PRODUCT_ID:
-> +       default:
->                 priv->can.clock.freq = ESD_USB2_CAN_CLOCK;
->                 priv->can.ctrlmode_supported |= CAN_CTRLMODE_3_SAMPLES;
-> +               priv->can.bittiming_const = &esd_usb2_bittiming_const;
-> +               priv->can.do_set_bittiming = esd_usb2_set_bittiming;
-> +               break;
->         }
->
-> -       priv->can.bittiming_const = &esd_usb2_bittiming_const;
-> -       priv->can.do_set_bittiming = esd_usb2_set_bittiming;
->         priv->can.do_set_mode = esd_usb_set_mode;
->         priv->can.do_get_berr_counter = esd_usb_get_berr_counter;
->
-> --
-> 2.25.1
->
