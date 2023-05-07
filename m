@@ -2,54 +2,51 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAB3E6F97B9
-	for <lists+linux-can@lfdr.de>; Sun,  7 May 2023 10:37:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4EFC6F981D
+	for <lists+linux-can@lfdr.de>; Sun,  7 May 2023 11:58:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbjEGIhe convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Sun, 7 May 2023 04:37:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33586 "EHLO
+        id S230300AbjEGJ65 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 7 May 2023 05:58:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbjEGIhd (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 7 May 2023 04:37:33 -0400
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E2312EAC;
-        Sun,  7 May 2023 01:37:28 -0700 (PDT)
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-24e14a24c9dso2437771a91.0;
-        Sun, 07 May 2023 01:37:28 -0700 (PDT)
+        with ESMTP id S229920AbjEGJ64 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 7 May 2023 05:58:56 -0400
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCADF559A;
+        Sun,  7 May 2023 02:58:53 -0700 (PDT)
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-24df6bbf765so3138571a91.0;
+        Sun, 07 May 2023 02:58:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683448648; x=1686040648;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3KiM7vm8bnjyf6McbGGRDlq1vQhpMDzuC8g+iNcmofc=;
-        b=PeXXv78+gpCGlgTyIdQBNq++r5T4PROhbfhu2IpTNiP+3yapHMhCcrpQ5Kk9aPKZqV
-         woCphuzEoR2IqICvpwukTv7FZbYCB/se/yK/pt6jH5YEPOwZPmPew5tdTY0+p0lCs73U
-         MRML7i0xaAi3U2+fLiem572dqlfUklOPTTkIkexoURgAwVW+vhNIn8V9ezb7MVfkAnl8
-         UfzBfopJ9sjb0IBz+FwOluNy5hrEI/9Xa6CLr6ca+TPuDWkVQ1owCC0hdOHaqCcjVWI3
-         qlqHAndJhKsJ6qIg+VyThK82q030MkkZygeRImCnXs2TIvZ96qzFjuXSlcPkdeWkUs4n
-         TyFA==
-X-Gm-Message-State: AC+VfDxTeO/lmktKiTCurw6SLiLG1oIlbdeVHFrrFXW5Ue5nIzbsqSjp
-        eYBemS1xEjTFXyW+lMmqvDDbeeeAqMX8bJgfCmg=
-X-Google-Smtp-Source: ACHHUZ6CP3RAxS4MiPzEnnsu81W7pBZjzi4jFjIAbaMUczyZUYfF02xSSqtxx+KjMnDdqMzPkKPgNKQs3n5xAi3rGJ8=
-X-Received: by 2002:a17:90b:3881:b0:246:c097:6a17 with SMTP id
- mu1-20020a17090b388100b00246c0976a17mr7071081pjb.24.1683448647468; Sun, 07
- May 2023 01:37:27 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683453533; x=1686045533;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oBIAHGn0KAxvYdKD6xUNalflSued6Yl8FyrXJmVWpxE=;
+        b=CYn/UdsWmyFIaaijxwwQ2XZj0JCWoTpLYhvPHvS+1gM0nnBiA13k+/gWoGVJ0DSzth
+         a4JVHbEE3JlbAqTjOHmJMifpar4oEdg5TNIg+z35cV+VDpT7ZA42esEJnGzdiBuF3Bkj
+         xtw6YACn9U0EunEItHRG1xXytw0WzkL/tbz+Wo2H9i6npT+hyyOUoj8eXUblg069l7on
+         c7YDtXlVMxx8/iupr1VpVDEVBsdxdIJY9W5gy9zhTEYSFonoRY3GzZHPrSVaLLkZA734
+         Gohn/EfE22fT7GZGpKjrAS4UNYoViJ/RCuPNUZcbyWbGWkBA3hEc+FKZXfxvfwtVwU+a
+         j7EA==
+X-Gm-Message-State: AC+VfDwm9V/iLisN61sgTJ22fMCCRnkDx2o3/5K/XcJa4VrPXM4B1J7+
+        Vz/jSKuTYLUcMERgaBjeknSifLSYe+7tn8ABANjKdteFizs=
+X-Google-Smtp-Source: ACHHUZ7XpRKvzNlVB5xYgyzi/qrEaPRCYr9ljf0mQu36+Zfm1UeVzL0+f5/7OGqyn7DqPrqlGLtm15xKNEnmxx0tSho=
+X-Received: by 2002:a17:90a:a683:b0:23e:f855:79ed with SMTP id
+ d3-20020a17090aa68300b0023ef85579edmr7218107pjq.28.1683453533002; Sun, 07 May
+ 2023 02:58:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230505022317.22417-1-peter_hong@fintek.com.tw>
-In-Reply-To: <20230505022317.22417-1-peter_hong@fintek.com.tw>
+References: <20230504154414.1864615-1-frank.jungclaus@esd.eu> <20230504154414.1864615-3-frank.jungclaus@esd.eu>
+In-Reply-To: <20230504154414.1864615-3-frank.jungclaus@esd.eu>
 From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Sun, 7 May 2023 17:37:14 +0900
-Message-ID: <CAMZ6RqKD1X=mo3LiH37XLAuVWCMF-BoJkcfw7Hc_rYZQQ4nFAQ@mail.gmail.com>
-Subject: Re: [PATCH V6] can: usb: f81604: add Fintek F81604 support
-To:     "Ji-Ze Hong (Peter Hong)" <peter_hong@fintek.com.tw>
-Cc:     wg@grandegger.com, mkl@pengutronix.de,
-        michal.swiatkowski@linux.intel.com, Steen.Hegelund@microchip.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, frank.jungclaus@esd.eu,
-        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, hpeter+linux_kernel@gmail.com
+Date:   Sun, 7 May 2023 18:58:41 +0900
+Message-ID: <CAMZ6RqKgJs-yJaaqREmN1SkUzE1EkGtjBzXiATKx5WL+=J48dQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] can: esd_usb: Add support for esd CAN-USB/3
+To:     Frank Jungclaus <frank.jungclaus@esd.eu>
+Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
@@ -61,1363 +58,572 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Peter,
+Hi Frank,
 
-Thanks for the v6. I added two nitpicks. It is up to you where you
-want or not to fix those. Aside from that, it looks good.
+Thank you for your patch. Here is my first batch of comments.
 
-Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Some comments also apply to the existing code. So you may want to
+address those in separate clean-up patches first.
 
-Le ven. 5 mai 2023 à 11:25, Ji-Ze Hong (Peter Hong)
-<peter_hong@fintek.com.tw> a écrit :
+On Fri. 5 May 2023 at 01:16, Frank Jungclaus <frank.jungclaus@esd.eu> wrote:
+> Add support for esd CAN-USB/3 and CAN FD to esd_usb.
 >
-> This patch adds support for Fintek USB to 2CAN controller.
->
-> Signed-off-by: Ji-Ze Hong (Peter Hong) <peter_hong@fintek.com.tw>
+> Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
 > ---
-> Changelog:
-> v6:
->         1. Remove non-used define and change constant mask to GENMASK().
->         2. Move some variables declaration from function start to block start.
->         3. Move some variables initization into declaration.
->         4. Change variable "id" in f81604_start_xmit() only for CAN ID usage.
+>  drivers/net/can/usb/esd_usb.c | 282 ++++++++++++++++++++++++++++++----
+>  1 file changed, 249 insertions(+), 33 deletions(-)
 >
-> v5:
->         1. Change all u8 *buff to struct f81604_int_data/f81604_can_frame.
->         2. Change all netdev->dev_id to netdev->dev_port.
->         3. Remove over design for f81604_process_rx_packet(). This device only
->            report a frame at once, so the f81604_process_rx_packet() are reduced
->            to process 1 frame.
+> diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_usb.c
+> index e24fa48b9b42..48cf5e88d216 100644
+> --- a/drivers/net/can/usb/esd_usb.c
+> +++ b/drivers/net/can/usb/esd_usb.c
+> @@ -1,6 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  /*
+> - * CAN driver for esd electronics gmbh CAN-USB/2 and CAN-USB/Micro
+> + * CAN driver for esd electronics gmbh CAN-USB/2, CAN-USB/3 and CAN-USB/Micro
+>   *
+>   * Copyright (C) 2010-2012 esd electronic system design gmbh, Matthias Fuchs <socketcan@esd.eu>
+>   * Copyright (C) 2022-2023 esd electronics gmbh, Frank Jungclaus <frank.jungclaus@esd.eu>
+> @@ -18,17 +18,19 @@
 >
-> v4:
->         1. Remove f81604_prepare_urbs/f81604_remove_urbs() and alloc URB/buffer
->            dynamically in f81604_register_urbs(), using "urbs_anchor" for manage
->            all rx/int URBs.
->         2. Add F81604 to MAINTAINERS list.
->         3. Change handle_clear_reg_work/handle_clear_overrun_work to single
->            clear_reg_work and using bitwise "clear_flags" to record it.
->         4. Move __f81604_set_termination in front of f81604_probe() to avoid
->            rarely racing condition.
->         5. Add __aligned to struct f81604_int_data / f81604_sff / f81604_eff.
->         6. Add aligned operations in f81604_start_xmit/f81604_process_rx_packet().
->         7. Change lots of CANBUS functions first parameter from struct usb_device*
->            to struct f81604_port_priv *priv. But remain f81604_write / f81604_read
->            / f81604_update_bits() as struct usb_device* for
->            __f81604_set_termination() in probe() stage.
->         8. Simplify f81604_read_int_callback() and separate into
->            f81604_handle_tx / f81604_handle_can_bus_errors() functions.
+>  MODULE_AUTHOR("Matthias Fuchs <socketcan@esd.eu>");
+>  MODULE_AUTHOR("Frank Jungclaus <frank.jungclaus@esd.eu>");
+> -MODULE_DESCRIPTION("CAN driver for esd electronics gmbh CAN-USB/2 and CAN-USB/Micro interfaces");
+> +MODULE_DESCRIPTION("CAN driver for esd electronics gmbh CAN-USB/2, CAN-USB/3 and CAN-USB/Micro interfaces");
+>  MODULE_LICENSE("GPL v2");
 >
-> v3:
->         1. Change CAN clock to using MEGA units.
->         2. Remove USB set/get retry, only remain SJA1000 reset/operation retry.
->         3. Fix all numberic constant to define.
->         4. Add terminator control. (only 0 & 120 ohm)
->         5. Using struct data to represent INT/TX/RX endpoints data instead byte
->            arrays.
->         6. Error message reports changed from %d to %pe for mnemotechnic values.
->         7. Some bit operations are changed to FIELD_PREP().
->         8. Separate TX functions from f81604_read_int_callback().
->         9. cf->can_id |= CAN_ERR_CNT in f81604_read_int_callback to report valid
->            TX/RX error counts.
->         10. Move f81604_prepare_urbs/f81604_remove_urbs() from CAN open/close() to
->             USB probe/disconnect().
->         11. coding style refactoring.
+>  /* USB vendor and product ID */
+>  #define USB_ESDGMBH_VENDOR_ID  0x0ab4
+>  #define USB_CANUSB2_PRODUCT_ID 0x0010
+>  #define USB_CANUSBM_PRODUCT_ID 0x0011
+> +#define USB_CANUSB3_PRODUCT_ID 0x0014
 >
-> v2:
->         1. coding style refactoring.
->         2. some const number are defined to describe itself.
->         3. fix wrong usage for can_get_echo_skb() in f81604_write_bulk_callback().
+>  /* CAN controller clock frequencies */
+>  #define ESD_USB2_CAN_CLOCK     60000000
+>  #define ESD_USBM_CAN_CLOCK     36000000
+> +#define ESD_USB3_CAN_CLOCK     80000000
+
+Nitpick: consider using the unit suffixes from linux/units.h:
+
+  #define ESD_USB3_CAN_CLOCK (80 * MEGA)
+
+>  /* Maximum number of CAN nets */
+>  #define ESD_USB_MAX_NETS       2
+> @@ -43,6 +45,9 @@ MODULE_LICENSE("GPL v2");
 >
->  MAINTAINERS                  |    6 +
->  drivers/net/can/usb/Kconfig  |   12 +
->  drivers/net/can/usb/Makefile |    1 +
->  drivers/net/can/usb/f81604.c | 1205 ++++++++++++++++++++++++++++++++++
->  4 files changed, 1224 insertions(+)
->  create mode 100644 drivers/net/can/usb/f81604.c
+>  /* esd CAN message flags - dlc field */
+>  #define ESD_DLC_RTR            0x10
+> +#define ESD_DLC_NO_BRS         0x10
+> +#define ESD_DLC_ESI            0x20
+> +#define ESD_DLC_FD             0x80
+
+Use the BIT() macro:
+
+#define ESD_DLC_NO_BRS BIT(4)
+#define ESD_DLC_ESI BIT(5)
+#define ESD_DLC_FD BIT(7)
+
+Also, if this is specific to the ESD_USB3 then add it in the prefix.
+
+>  /* esd CAN message flags - id field */
+>  #define ESD_EXTID              0x20000000
+> @@ -72,6 +77,28 @@ MODULE_LICENSE("GPL v2");
+>  #define ESD_USB2_BRP_INC       1
+>  #define ESD_USB2_3_SAMPLES     0x00800000
 >
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index f375bbf3bc80..fa573f637c2f 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -8058,6 +8058,12 @@ S:       Maintained
->  F:     drivers/hwmon/f75375s.c
->  F:     include/linux/f75375s.h
+> +/* Bit timing CAN-USB/3 */
+> +#define ESD_USB3_TSEG1_MIN     1
+> +#define ESD_USB3_TSEG1_MAX     256
+> +#define ESD_USB3_TSEG2_MIN     1
+> +#define ESD_USB3_TSEG2_MAX     128
+> +#define ESD_USB3_SJW_MAX       128
+> +#define ESD_USB3_BRP_MIN       1
+> +#define ESD_USB3_BRP_MAX       1024
+> +#define ESD_USB3_BRP_INC       1
+> +/* Bit timing CAN-USB/3, data phase */
+> +#define ESD_USB3_DATA_TSEG1_MIN        1
+> +#define ESD_USB3_DATA_TSEG1_MAX        32
+> +#define ESD_USB3_DATA_TSEG2_MIN        1
+> +#define ESD_USB3_DATA_TSEG2_MAX        16
+> +#define ESD_USB3_DATA_SJW_MAX  8
+> +#define ESD_USB3_DATA_BRP_MIN  1
+> +#define ESD_USB3_DATA_BRP_MAX  32
+> +#define ESD_USB3_DATA_BRP_INC  1
+
+There is no clear benefit to define macros for some initializers of a
+const struct.
+
+Doing as below has zero ambiguity:
+
+static const struct can_bittiming_const esd_usb3_bittiming_const = {
+         .name = "esd_usb3",
+         .tseg1_min = 1,
+         .tseg1_max = 256,
+         .tseg2_min = 1,
+         .tseg2_max = 128,
+         .sjw_max = 128,
+         .brp_min = 1,
+         .brp_max = 1024,
+         .brp_inc = 1,
+};
+
+> +/* Transmitter Delay Compensation */
+> +#define ESD_TDC_MODE_AUTO      0
+> +
+>  /* esd IDADD message */
+>  #define ESD_ID_ENABLE          0x80
+>  #define ESD_MAX_ID_SEGMENT     64
+> @@ -95,6 +122,21 @@ MODULE_LICENSE("GPL v2");
+>  #define MAX_RX_URBS            4
+>  #define MAX_TX_URBS            16 /* must be power of 2 */
 >
-> +FINTEK F81604 USB to 2xCANBUS DEVICE DRIVER
-> +M:     Ji-Ze Hong (Peter Hong) <peter_hong@fintek.com.tw>
-> +L:     linux-can@vger.kernel.org
-> +S:     Maintained
-> +F:     drivers/net/can/usb/f81604.c
+> +/* Modes for NTCAN_BAUDRATE_X */
+> +#define ESD_BAUDRATE_MODE_DISABLE      0 /* remove from bus */
+> +#define ESD_BAUDRATE_MODE_INDEX                1 /* ESD (CiA) bit rate idx */
+> +#define ESD_BAUDRATE_MODE_BTR_CTRL     2 /* BTR values (Controller)*/
+> +#define ESD_BAUDRATE_MODE_BTR_CANONICAL        3 /* BTR values (Canonical) */
+> +#define ESD_BAUDRATE_MODE_NUM          4 /* numerical bit rate */
+> +#define ESD_BAUDRATE_MODE_AUTOBAUD     5 /* autobaud */
 > +
->  FIREWIRE AUDIO DRIVERS and IEC 61883-1/6 PACKET STREAMING ENGINE
->  M:     Clemens Ladisch <clemens@ladisch.de>
->  M:     Takashi Sakamoto <o-takashi@sakamocchi.jp>
-> diff --git a/drivers/net/can/usb/Kconfig b/drivers/net/can/usb/Kconfig
-> index 445504ababce..58fcd2b34820 100644
-> --- a/drivers/net/can/usb/Kconfig
-> +++ b/drivers/net/can/usb/Kconfig
-> @@ -38,6 +38,18 @@ config CAN_ETAS_ES58X
->           To compile this driver as a module, choose M here: the module
->           will be called etas_es58x.
->
-> +config CAN_F81604
-> +        tristate "Fintek F81604 USB to 2CAN interface"
-> +        help
-> +          This driver supports the Fintek F81604 USB to 2CAN interface.
-> +          The device can support CAN2.0A/B protocol and also support
-> +          2 output pins to control external terminator (optional).
+> +/* Flags for NTCAN_BAUDRATE_X */
+> +#define ESD_BAUDRATE_FLAG_FD   0x0001 /* enable CAN FD Mode */
+> +#define ESD_BAUDRATE_FLAG_LOM  0x0002 /* enable Listen Only mode */
+> +#define ESD_BAUDRATE_FLAG_STM  0x0004 /* enable Self test mode */
+> +#define ESD_BAUDRATE_FLAG_TRS  0x0008 /* enable Triple Sampling */
+> +#define ESD_BAUDRATE_FLAG_TXP  0x0010 /* enable Transmit Pause */
 > +
-> +          To compile this driver as a module, choose M here: the module will
-> +          be called f81604.
-> +
-> +          (see also https://www.fintek.com.tw).
-> +
->  config CAN_GS_USB
->         tristate "Geschwister Schneider UG and candleLight compatible interfaces"
->         help
-> diff --git a/drivers/net/can/usb/Makefile b/drivers/net/can/usb/Makefile
-> index 1ea16be5743b..8b11088e9a59 100644
-> --- a/drivers/net/can/usb/Makefile
-> +++ b/drivers/net/can/usb/Makefile
-> @@ -7,6 +7,7 @@ obj-$(CONFIG_CAN_8DEV_USB) += usb_8dev.o
->  obj-$(CONFIG_CAN_EMS_USB) += ems_usb.o
->  obj-$(CONFIG_CAN_ESD_USB) += esd_usb.o
->  obj-$(CONFIG_CAN_ETAS_ES58X) += etas_es58x/
-> +obj-$(CONFIG_CAN_F81604) += f81604.o
->  obj-$(CONFIG_CAN_GS_USB) += gs_usb.o
->  obj-$(CONFIG_CAN_KVASER_USB) += kvaser_usb/
->  obj-$(CONFIG_CAN_MCBA_USB) += mcba_usb.o
-> diff --git a/drivers/net/can/usb/f81604.c b/drivers/net/can/usb/f81604.c
-> new file mode 100644
-> index 000000000000..36839140ba5f
-> --- /dev/null
-> +++ b/drivers/net/can/usb/f81604.c
-> @@ -0,0 +1,1205 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Fintek F81604 USB-to-2CAN controller driver.
-> + *
-> + * Copyright (C) 2023 Ji-Ze Hong (Peter Hong) <peter_hong@fintek.com.tw>
-> + */
-> +#include <linux/bitfield.h>
-> +#include <linux/netdevice.h>
-> +#include <linux/units.h>
-> +#include <linux/usb.h>
-> +
-> +#include <linux/can.h>
-> +#include <linux/can/dev.h>
-> +#include <linux/can/error.h>
-> +#include <linux/can/platform/sja1000.h>
-> +
-> +#include <asm-generic/unaligned.h>
-> +
-> +/* vendor and product id */
-> +#define F81604_VENDOR_ID 0x2c42
-> +#define F81604_PRODUCT_ID 0x1709
-> +#define F81604_CAN_CLOCK (12 * MEGA)
-> +#define F81604_MAX_DEV 2
-> +#define F81604_SET_DEVICE_RETRY 10
-> +
-> +#define F81604_USB_TIMEOUT 2000
-> +#define F81604_SET_GET_REGISTER 0xA0
-> +#define F81604_PORT_OFFSET 0x1000
-> +#define F81604_MAX_RX_URBS 4
-> +
-> +#define F81604_CMD_DATA 0x00
-> +
-> +#define F81604_DLC_LEN_MASK GENMASK(3, 0)
-> +#define F81604_DLC_EFF_BIT BIT(7)
-> +#define F81604_DLC_RTR_BIT BIT(6)
-> +
-> +#define F81604_SFF_SHIFT 5
-> +#define F81604_EFF_SHIFT 3
-> +
-> +#define F81604_BRP_MASK GENMASK(5, 0)
-> +#define F81604_SJW_MASK GENMASK(7, 6)
-> +
-> +#define F81604_SEG1_MASK GENMASK(3, 0)
-> +#define F81604_SEG2_MASK GENMASK(6, 4)
-> +
-> +#define F81604_CLEAR_ALC 0
-> +#define F81604_CLEAR_ECC 1
-> +#define F81604_CLEAR_OVERRUN 2
-> +
-> +/* device setting */
-> +#define F81604_CTRL_MODE_REG 0x80
-> +#define F81604_TX_ONESHOT (0x03 << 3)
-> +#define F81604_TX_NORMAL (0x01 << 3)
-> +#define F81604_RX_AUTO_RELEASE_BUF BIT(1)
-> +#define F81604_INT_WHEN_CHANGE BIT(0)
-> +
-> +#define F81604_TERMINATOR_REG 0x105
-> +#define F81604_CAN0_TERM BIT(2)
-> +#define F81604_CAN1_TERM BIT(3)
-> +
-> +#define F81604_TERMINATION_DISABLED CAN_TERMINATION_DISABLED
-> +#define F81604_TERMINATION_ENABLED 120
-> +
-> +/* SJA1000 registers - manual section 6.4 (Pelican Mode) */
-> +#define F81604_SJA1000_MOD 0x00
-> +#define F81604_SJA1000_CMR 0x01
-> +#define F81604_SJA1000_IR 0x03
-> +#define F81604_SJA1000_IER 0x04
-> +#define F81604_SJA1000_ALC 0x0B
-> +#define F81604_SJA1000_ECC 0x0C
-> +#define F81604_SJA1000_RXERR 0x0E
-> +#define F81604_SJA1000_TXERR 0x0F
-> +#define F81604_SJA1000_ACCC0 0x10
-> +#define F81604_SJA1000_ACCM0 0x14
-> +#define F81604_MAX_FILTER_CNT 4
-> +
-> +/* Common registers - manual section 6.5 */
-> +#define F81604_SJA1000_BTR0 0x06
-> +#define F81604_SJA1000_BTR1 0x07
-> +#define F81604_SJA1000_BTR1_SAMPLE_TRIPLE BIT(7)
-> +#define F81604_SJA1000_OCR 0x08
-> +#define F81604_SJA1000_CDR 0x1F
-> +
-> +/* mode register */
-> +#define F81604_SJA1000_MOD_RM 0x01
-> +#define F81604_SJA1000_MOD_LOM 0x02
-> +#define F81604_SJA1000_MOD_STM 0x04
-> +
-> +/* commands */
-> +#define F81604_SJA1000_CMD_CDO 0x08
-> +
-> +/* interrupt sources */
-> +#define F81604_SJA1000_IRQ_BEI 0x80
-> +#define F81604_SJA1000_IRQ_ALI 0x40
-> +#define F81604_SJA1000_IRQ_EPI 0x20
-> +#define F81604_SJA1000_IRQ_DOI 0x08
-> +#define F81604_SJA1000_IRQ_EI 0x04
-> +#define F81604_SJA1000_IRQ_TI 0x02
-> +#define F81604_SJA1000_IRQ_RI 0x01
-> +#define F81604_SJA1000_IRQ_ALL 0xFF
-> +#define F81604_SJA1000_IRQ_OFF 0x00
-> +
-> +/* status register content */
-> +#define F81604_SJA1000_SR_BS 0x80
-> +#define F81604_SJA1000_SR_ES 0x40
-> +#define F81604_SJA1000_SR_TCS 0x08
-> +
-> +/* ECC register */
-> +#define F81604_SJA1000_ECC_SEG 0x1F
-> +#define F81604_SJA1000_ECC_DIR 0x20
-> +#define F81604_SJA1000_ECC_BIT 0x00
-> +#define F81604_SJA1000_ECC_FORM 0x40
-> +#define F81604_SJA1000_ECC_STUFF 0x80
-> +#define F81604_SJA1000_ECC_MASK 0xc0
-> +
-> +/* ALC register */
-> +#define F81604_SJA1000_ALC_MASK 0x1f
-> +
-> +/* table of devices that work with this driver */
-> +static const struct usb_device_id f81604_table[] = {
-> +       { USB_DEVICE(F81604_VENDOR_ID, F81604_PRODUCT_ID) },
-> +       {} /* Terminating entry */
-> +};
-> +
-> +MODULE_DEVICE_TABLE(usb, f81604_table);
-> +
-> +static const struct ethtool_ops f81604_ethtool_ops = {
-> +       .get_ts_info = ethtool_op_get_ts_info,
-> +};
-> +
-> +static const u16 f81604_termination[] = { F81604_TERMINATION_DISABLED,
-> +                                         F81604_TERMINATION_ENABLED };
-> +
-> +struct f81604_priv {
-> +       struct net_device *netdev[F81604_MAX_DEV];
-> +};
-> +
-> +struct f81604_port_priv {
-> +       struct can_priv can;
-> +       struct net_device *netdev;
-> +       struct sk_buff *echo_skb;
-> +
-> +       unsigned long clear_flags;
-> +       struct work_struct clear_reg_work;
-> +
-> +       struct usb_device *dev;
-> +       struct usb_interface *intf;
-> +
-> +       struct usb_anchor urbs_anchor;
-> +};
-> +
-> +/* Interrupt endpoint data format:
-> + *     Byte 0: Status register.
-> + *     Byte 1: Interrupt register.
-> + *     Byte 2: Interrupt enable register.
-> + *     Byte 3: Arbitration lost capture(ALC) register.
-> + *     Byte 4: Error code capture(ECC) register.
-> + *     Byte 5: Error warning limit register.
-> + *     Byte 6: RX error counter register.
-> + *     Byte 7: TX error counter register.
-> + *     Byte 8: Reserved.
-> + */
-> +struct f81604_int_data {
-> +       u8 sr;
-> +       u8 isrc;
-> +       u8 ier;
-> +       u8 alc;
-> +       u8 ecc;
-> +       u8 ewlr;
-> +       u8 rxerr;
-> +       u8 txerr;
-> +       u8 val;
-> +} __packed __aligned(4);
-> +
-> +struct f81604_sff {
-> +       __be16 id;
-> +       u8 data[CAN_MAX_DLEN];
-> +} __packed __aligned(2);
-> +
-> +struct f81604_eff {
-> +       __be32 id;
-> +       u8 data[CAN_MAX_DLEN];
-> +} __packed __aligned(2);
-> +
-> +struct f81604_can_frame {
-> +       u8 cmd;
-> +
-> +       /* According for F81604 DLC define:
-> +        *      bit 3~0: data length (0~8)
-> +        *      bit6: is RTR flag.
-> +        *      bit7: is EFF frame.
-> +        */
-> +       u8 dlc;
-> +
+>  struct header_msg {
+>         u8 len; /* len is always the total message length in 32bit words */
+>         u8 cmd;
+> @@ -129,6 +171,7 @@ struct rx_msg {
+>         __le32 id; /* upper 3 bits contain flags */
+>         union {
+>                 u8 data[8];
+> +               u8 data_fd[64];
+>                 struct {
+>                         u8 status; /* CAN Controller Status */
+>                         u8 ecc;    /* Error Capture Register */
+> @@ -144,8 +187,11 @@ struct tx_msg {
+>         u8 net;
+>         u8 dlc;
+>         u32 hnd;        /* opaque handle, not used by device */
+> -       __le32 id; /* upper 3 bits contain flags */
+> -       u8 data[8];
+> +       __le32 id;      /* upper 3 bits contain flags */
 > +       union {
-> +               struct f81604_sff sff;
-> +               struct f81604_eff eff;
+> +               u8 data[8];
+> +               u8 data_fd[64];
+
+Nitpick, use the macro:
+
+                  u8 data[CAN_MAX_DLEN];
+                  u8 data_fd[CANFD_MAX_DLEN];
+
 > +       };
-> +} __packed __aligned(2);
+>  };
+>
+>  struct tx_done_msg {
+> @@ -165,12 +211,37 @@ struct id_filter_msg {
+>         __le32 mask[ESD_MAX_ID_SEGMENT + 1];
+>  };
+>
+> +struct baudrate_x_cfg {
+> +       __le16 brp;     /* bit rate pre-scaler */
+> +       __le16 tseg1;   /* TSEG1 register */
+> +       __le16 tseg2;   /* TSEG2 register */
+> +       __le16 sjw;     /* SJW register */
+> +};
 > +
-> +static const u8 bulk_in_addr[F81604_MAX_DEV] = { 2, 4 };
-> +static const u8 bulk_out_addr[F81604_MAX_DEV] = { 1, 3 };
-> +static const u8 int_in_addr[F81604_MAX_DEV] = { 1, 3 };
+> +struct tdc_cfg {
+
+Please prefix all the structures with the device name. e.g.
+
+  struct esd_usb3_tdc_cfg {
+
+> +       u8 tdc_mode;    /* transmitter Delay Compensation mode  */
+> +       u8 ssp_offset;  /* secondary Sample Point offset in mtq */
+> +       s8 ssp_shift;   /* secondary Sample Point shift in mtq */
+> +       u8 tdc_filter;  /* Transmitter Delay Compensation */
+> +};
 > +
-> +static int f81604_write(struct usb_device *dev, u16 reg, u8 data)
-> +{
-> +       int ret;
+> +struct baudrate_x {
+
+The x in baudrate_x and baudrate_x_cfg is confusing me. Is it meant to
+signify that the structure applies to both nominal and data baudrate?
+In that case, just put a comment and remove the x from the name.
+
+> +       __le16 mode;    /* mode word */
+> +       __le16 flags;   /* control flags */
+> +       struct tdc_cfg tdc;     /* TDC configuration */
+> +       struct baudrate_x_cfg arb;      /* bit rate during arbitration phase  */
+
+/* nominal bit rate */
+
+The comment is incorrect. CAN-FD may use the nominal bitrate for the
+data phase if the bit rate switch (BRS) is not set.
+
+> +       struct baudrate_x_cfg data;     /* bit rate during data phase */
+
+/* data bit rate */
+
+Please adjust the field names accordingly.
+
+> +};
 > +
-> +       ret = usb_control_msg_send(dev, 0, F81604_SET_GET_REGISTER,
-> +                                  USB_TYPE_VENDOR | USB_DIR_OUT, 0, reg,
-> +                                  &data, sizeof(data), F81604_USB_TIMEOUT,
-> +                                  GFP_KERNEL);
-> +       if (ret)
-> +               dev_err(&dev->dev, "%s: reg: %x data: %x failed: %pe\n",
-> +                       __func__, reg, data, ERR_PTR(ret));
-> +
-> +       return ret;
-> +}
-> +
-> +static int f81604_read(struct usb_device *dev, u16 reg, u8 *data)
-> +{
-> +       int ret;
-> +
-> +       ret = usb_control_msg_recv(dev, 0, F81604_SET_GET_REGISTER,
-> +                                  USB_TYPE_VENDOR | USB_DIR_IN, 0, reg, data,
-> +                                  sizeof(*data), F81604_USB_TIMEOUT,
-> +                                  GFP_KERNEL);
-> +
-> +       if (ret < 0)
-> +               dev_err(&dev->dev, "%s: reg: %x failed: %pe\n", __func__, reg,
-> +                       ERR_PTR(ret));
-> +
-> +       return ret;
-> +}
-> +
-> +static int f81604_update_bits(struct usb_device *dev, u16 reg, u8 mask,
-> +                             u8 data)
-> +{
-> +       int ret;
-> +       u8 tmp;
-> +
-> +       ret = f81604_read(dev, reg, &tmp);
-> +       if (ret)
-> +               return ret;
-> +
-> +       tmp &= ~mask;
-> +       tmp |= (mask & data);
-> +
-> +       return f81604_write(dev, reg, tmp);
-> +}
-> +
-> +static int f81604_sja1000_write(struct f81604_port_priv *priv, u16 reg,
-> +                               u8 data)
-> +{
-> +       int port = priv->netdev->dev_port;
-> +       int real_reg;
-> +
-> +       real_reg = reg + F81604_PORT_OFFSET * port + F81604_PORT_OFFSET;
-> +       return f81604_write(priv->dev, real_reg, data);
-> +}
-> +
-> +static int f81604_sja1000_read(struct f81604_port_priv *priv, u16 reg,
-> +                              u8 *data)
-> +{
-> +       int port = priv->netdev->dev_port;
-> +       int real_reg;
-> +
-> +       real_reg = reg + F81604_PORT_OFFSET * port + F81604_PORT_OFFSET;
-> +       return f81604_read(priv->dev, real_reg, data);
-> +}
-> +
-> +static int f81604_set_reset_mode(struct f81604_port_priv *priv)
-> +{
-> +       int ret, i;
-> +       u8 tmp;
-> +
-> +       /* disable interrupts */
-> +       ret = f81604_sja1000_write(priv, F81604_SJA1000_IER,
-> +                                  F81604_SJA1000_IRQ_OFF);
-> +       if (ret)
-> +               return ret;
-> +
-> +       for (i = 0; i < F81604_SET_DEVICE_RETRY; i++) {
-> +               ret = f81604_sja1000_read(priv, F81604_SJA1000_MOD, &tmp);
-> +               if (ret)
-> +                       return ret;
-> +
-> +               /* check reset bit */
-> +               if (tmp & F81604_SJA1000_MOD_RM) {
-> +                       priv->can.state = CAN_STATE_STOPPED;
-> +                       return 0;
+>  struct set_baudrate_msg {
+>         u8 len;
+>         u8 cmd;
+>         u8 net;
+>         u8 rsvd;
+> -       __le32 baud;
+> +       union {
+> +               __le32 baud;
+> +               struct baudrate_x baud_x;
+> +       };
+>  };
+>
+>  /* Main message type used between library and application */
+> @@ -188,6 +259,7 @@ union __packed esd_usb_msg {
+>  static struct usb_device_id esd_usb_table[] = {
+>         {USB_DEVICE(USB_ESDGMBH_VENDOR_ID, USB_CANUSB2_PRODUCT_ID)},
+>         {USB_DEVICE(USB_ESDGMBH_VENDOR_ID, USB_CANUSBM_PRODUCT_ID)},
+> +       {USB_DEVICE(USB_ESDGMBH_VENDOR_ID, USB_CANUSB3_PRODUCT_ID)},
+>         {}
+>  };
+>  MODULE_DEVICE_TABLE(usb, esd_usb_table);
+> @@ -326,11 +398,13 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
+>  static void esd_usb_rx_can_msg(struct esd_usb_net_priv *priv,
+>                                union esd_usb_msg *msg)
+>  {
+> +       bool is_canfd = msg->rx.dlc & ESD_DLC_FD ? true : false;
+
+This is redundant. Just this is enough:
+
+  bool is_canfd = msg->rx.dlc & ESD_DLC_FD;
+
+This variable being used only twice, you may want to consider not
+declaring it and simply doing directly:
+
+          if (msg->rx.dlc & ESD_DLC_FD)
+
+>         struct net_device_stats *stats = &priv->netdev->stats;
+>         struct can_frame *cf;
+> +       struct canfd_frame *cfd;
+>         struct sk_buff *skb;
+> -       int i;
+>         u32 id;
+> +       u8 len;
+>
+>         if (!netif_device_present(priv->netdev))
+>                 return;
+> @@ -340,27 +414,42 @@ static void esd_usb_rx_can_msg(struct esd_usb_net_priv *priv,
+>         if (id & ESD_EVENT) {
+>                 esd_usb_rx_event(priv, msg);
+>         } else {
+> -               skb = alloc_can_skb(priv->netdev, &cf);
+> +               if (is_canfd) {
+> +                       skb = alloc_canfd_skb(priv->netdev, &cfd);
+> +               } else {
+> +                       skb = alloc_can_skb(priv->netdev, &cf);
+> +                       cfd = (struct canfd_frame *)cf;
 > +               }
 > +
-> +               /* reset chip */
-> +               ret = f81604_sja1000_write(priv, F81604_SJA1000_MOD,
-> +                                          F81604_SJA1000_MOD_RM);
-> +               if (ret)
-> +                       return ret;
-> +       }
-> +
-> +       return -EPERM;
-> +}
-> +
-> +static int f81604_set_normal_mode(struct f81604_port_priv *priv)
-> +{
-> +       u8 tmp, ier = 0;
-> +       u8 mod_reg = 0;
-> +       int ret, i;
-> +
-> +       for (i = 0; i < F81604_SET_DEVICE_RETRY; i++) {
-> +               ret = f81604_sja1000_read(priv, F81604_SJA1000_MOD, &tmp);
-> +               if (ret)
-> +                       return ret;
-> +
-> +               /* check reset bit */
-> +               if ((tmp & F81604_SJA1000_MOD_RM) == 0) {
-> +                       priv->can.state = CAN_STATE_ERROR_ACTIVE;
-> +                       /* enable interrupts, RI handled by bulk-in */
-> +                       ier = F81604_SJA1000_IRQ_ALL & ~F81604_SJA1000_IRQ_RI;
-> +                       if (!(priv->can.ctrlmode &
-> +                             CAN_CTRLMODE_BERR_REPORTING))
-> +                               ier &= ~F81604_SJA1000_IRQ_BEI;
-> +
-> +                       return f81604_sja1000_write(priv, F81604_SJA1000_IER,
-> +                                                   ier);
-> +               }
-> +
-> +               /* set chip to normal mode */
-> +               if (priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
-> +                       mod_reg |= F81604_SJA1000_MOD_LOM;
-> +               if (priv->can.ctrlmode & CAN_CTRLMODE_PRESUME_ACK)
-> +                       mod_reg |= F81604_SJA1000_MOD_STM;
-> +
-> +               ret = f81604_sja1000_write(priv, F81604_SJA1000_MOD, mod_reg);
-> +               if (ret)
-> +                       return ret;
-> +       }
-> +
-> +       return -EPERM;
-> +}
-> +
-> +static int f81604_chipset_init(struct f81604_port_priv *priv)
-> +{
-> +       int i, ret;
-> +
-> +       /* set clock divider and output control register */
-> +       ret = f81604_sja1000_write(priv, F81604_SJA1000_CDR,
-> +                                  CDR_CBP | CDR_PELICAN);
-> +       if (ret)
-> +               return ret;
-> +
-> +       /* set acceptance filter (accept all) */
-> +       for (i = 0; i < F81604_MAX_FILTER_CNT; ++i) {
-> +               ret = f81604_sja1000_write(priv, F81604_SJA1000_ACCC0 + i, 0);
-> +               if (ret)
-> +                       return ret;
-> +       }
-> +
-> +       for (i = 0; i < F81604_MAX_FILTER_CNT; ++i) {
-> +               ret = f81604_sja1000_write(priv, F81604_SJA1000_ACCM0 + i,
-> +                                          0xFF);
-> +               if (ret)
-> +                       return ret;
-> +       }
-> +
-> +       return f81604_sja1000_write(priv, F81604_SJA1000_OCR,
-> +                                   OCR_TX0_PUSHPULL | OCR_TX1_PUSHPULL |
-> +                                           OCR_MODE_NORMAL);
-> +}
-> +
-> +static void f81604_process_rx_packet(struct net_device *netdev,
-> +                                    struct f81604_can_frame *frame)
-> +{
-> +       struct net_device_stats *stats = &netdev->stats;
-> +       struct can_frame *cf;
-> +       struct sk_buff *skb;
-> +
-> +       if (frame->cmd != F81604_CMD_DATA)
-> +               return;
-> +
-> +       skb = alloc_can_skb(netdev, &cf);
-> +       if (!skb) {
-> +               stats->rx_dropped++;
-> +               return;
-> +       }
-> +
-> +       cf->len = can_cc_dlc2len(frame->dlc & F81604_DLC_LEN_MASK);
-> +
-> +       if (frame->dlc & F81604_DLC_EFF_BIT) {
-> +               cf->can_id = get_unaligned_be32(&frame->eff.id) >>
-> +                            F81604_EFF_SHIFT;
-> +               cf->can_id |= CAN_EFF_FLAG;
-> +
-> +               if (!(frame->dlc & F81604_DLC_RTR_BIT))
-> +                       memcpy(cf->data, frame->eff.data, cf->len);
-> +       } else {
-> +               cf->can_id = get_unaligned_be16(&frame->sff.id) >>
-> +                            F81604_SFF_SHIFT;
-> +
-> +               if (!(frame->dlc & F81604_DLC_RTR_BIT))
-> +                       memcpy(cf->data, frame->sff.data, cf->len);
-> +       }
-> +
-> +       if (frame->dlc & F81604_DLC_RTR_BIT)
-> +               cf->can_id |= CAN_RTR_FLAG;
-> +       else
-> +               stats->rx_bytes += cf->len;
-> +
-> +       stats->rx_packets++;
-> +       netif_rx(skb);
-> +}
-> +
-> +static void f81604_read_bulk_callback(struct urb *urb)
-> +{
-> +       struct f81604_can_frame *frame = urb->transfer_buffer;
-> +       struct net_device *netdev = urb->context;
-> +       int ret;
-> +
-> +       if (!netif_device_present(netdev))
-> +               return;
-> +
-> +       if (urb->status)
-> +               netdev_info(netdev, "%s: URB aborted %pe\n", __func__,
-> +                           ERR_PTR(urb->status));
-> +
-> +       switch (urb->status) {
-> +       case 0: /* success */
-> +               break;
-> +
-> +       case -ENOENT:
-> +       case -EPIPE:
-> +       case -EPROTO:
-> +       case -ESHUTDOWN:
-> +               return;
-> +
-> +       default:
-> +               goto resubmit_urb;
-> +       }
-> +
-> +       if (urb->actual_length != sizeof(*frame)) {
-> +               netdev_warn(netdev, "URB length %u not equal to %lu\n",
-> +                           urb->actual_length, sizeof(*frame));
-> +               goto resubmit_urb;
-> +       }
-> +
-> +       f81604_process_rx_packet(netdev, frame);
-> +
-> +resubmit_urb:
-> +       ret = usb_submit_urb(urb, GFP_ATOMIC);
-> +       if (ret == -ENODEV)
-> +               netif_device_detach(netdev);
-> +       else if (ret)
-> +               netdev_err(netdev,
-> +                          "%s: failed to resubmit read bulk urb: %pe\n",
-> +                          __func__, ERR_PTR(ret));
-> +}
-> +
-> +static void f81604_handle_tx(struct f81604_port_priv *priv,
-> +                            struct f81604_int_data *data)
-> +{
-> +       struct net_device *netdev = priv->netdev;
-> +       struct net_device_stats *stats = &netdev->stats;
-> +
-> +       /* transmission buffer released */
-> +       if (priv->can.ctrlmode & CAN_CTRLMODE_ONE_SHOT &&
-> +           !(data->sr & F81604_SJA1000_SR_TCS)) {
-> +               stats->tx_errors++;
-> +               can_free_echo_skb(netdev, 0, NULL);
-> +       } else {
-> +               /* transmission complete */
-> +               stats->tx_bytes += can_get_echo_skb(netdev, 0, NULL);
-> +               stats->tx_packets++;
-> +       }
-> +
-> +       netif_wake_queue(netdev);
-> +}
-> +
-> +static void f81604_handle_can_bus_errors(struct f81604_port_priv *priv,
-> +                                        struct f81604_int_data *data)
-> +{
-> +       enum can_state can_state = priv->can.state;
-> +       struct net_device *netdev = priv->netdev;
-> +       struct net_device_stats *stats = &netdev->stats;
-> +       struct can_frame *cf;
-> +       struct sk_buff *skb;
-> +
-> +       /* Note: ALC/ECC will not auto clear by read here, must be cleared by
-> +        * read register (via clear_reg_work).
-> +        */
-> +
-> +       skb = alloc_can_err_skb(netdev, &cf);
-> +       if (skb) {
-> +               cf->can_id |= CAN_ERR_CNT;
-> +               cf->data[6] = data->txerr;
-> +               cf->data[7] = data->rxerr;
-> +       }
-> +
-> +       if (data->isrc & F81604_SJA1000_IRQ_DOI) {
-> +               /* data overrun interrupt */
-> +               netdev_dbg(netdev, "data overrun interrupt\n");
-> +
-> +               if (skb) {
-> +                       cf->can_id |= CAN_ERR_CRTL;
-> +                       cf->data[1] = CAN_ERR_CRTL_RX_OVERFLOW;
-> +               }
-> +
-> +               stats->rx_over_errors++;
-> +               stats->rx_errors++;
-> +
-> +               set_bit(F81604_CLEAR_OVERRUN, &priv->clear_flags);
-> +       }
-> +
-> +       if (data->isrc & F81604_SJA1000_IRQ_EI) {
-> +               /* error warning interrupt */
-> +               netdev_dbg(netdev, "error warning interrupt\n");
-> +
-> +               if (data->sr & F81604_SJA1000_SR_BS)
-> +                       can_state = CAN_STATE_BUS_OFF;
-> +               else if (data->sr & F81604_SJA1000_SR_ES)
-> +                       can_state = CAN_STATE_ERROR_WARNING;
-> +               else
-> +                       can_state = CAN_STATE_ERROR_ACTIVE;
-> +       }
-> +
-> +       if (data->isrc & F81604_SJA1000_IRQ_BEI) {
-> +               /* bus error interrupt */
-> +               netdev_dbg(netdev, "bus error interrupt\n");
-> +
-> +               priv->can.can_stats.bus_error++;
-> +               stats->rx_errors++;
-> +
-> +               if (skb) {
-> +                       cf->can_id |= CAN_ERR_PROT | CAN_ERR_BUSERROR;
-> +
-> +                       /* set error type */
-> +                       switch (data->ecc & F81604_SJA1000_ECC_MASK) {
-> +                       case F81604_SJA1000_ECC_BIT:
-> +                               cf->data[2] |= CAN_ERR_PROT_BIT;
-> +                               break;
-> +                       case F81604_SJA1000_ECC_FORM:
-> +                               cf->data[2] |= CAN_ERR_PROT_FORM;
-> +                               break;
-> +                       case F81604_SJA1000_ECC_STUFF:
-> +                               cf->data[2] |= CAN_ERR_PROT_STUFF;
-> +                               break;
-> +                       default:
-> +                               break;
+>                 if (skb == NULL) {
+>                         stats->rx_dropped++;
+>                         return;
+>                 }
+>
+> -               cf->can_id = id & ESD_IDMASK;
+> -               can_frame_set_cc_len(cf, msg->rx.dlc & ~ESD_DLC_RTR,
+> -                                    priv->can.ctrlmode);
+> -
+> -               if (id & ESD_EXTID)
+> -                       cf->can_id |= CAN_EFF_FLAG;
+> +               cfd->can_id = id & ESD_IDMASK;
+>
+> -               if (msg->rx.dlc & ESD_DLC_RTR) {
+> -                       cf->can_id |= CAN_RTR_FLAG;
+> +               if (is_canfd) {
+> +                       /* masking by 0x0F is already done within can_fd_dlc2len() */
+> +                       cfd->len = can_fd_dlc2len(msg->rx.dlc);
+> +                       len = cfd->len;
+> +                       if ((msg->rx.dlc & ESD_DLC_NO_BRS) == 0)
+> +                               cfd->flags |= CANFD_BRS;
+> +                       if (msg->rx.dlc & ESD_DLC_ESI)
+> +                               cfd->flags |= CANFD_ESI;
+>                 } else {
+> -                       for (i = 0; i < cf->len; i++)
+> -                               cf->data[i] = msg->rx.data[i];
+> -
+> -                       stats->rx_bytes += cf->len;
+> +                       can_frame_set_cc_len(cf, msg->rx.dlc & ~ESD_DLC_RTR, priv->can.ctrlmode);
+> +                       len = cf->len;
+> +                       if (msg->rx.dlc & ESD_DLC_RTR) {
+> +                               cf->can_id |= CAN_RTR_FLAG;
+> +                               len = 0;
 > +                       }
-> +
-> +                       /* set error location */
-> +                       cf->data[3] = data->ecc & F81604_SJA1000_ECC_SEG;
-> +
-> +                       /* Error occurred during transmission? */
-> +                       if ((data->ecc & F81604_SJA1000_ECC_DIR) == 0)
-> +                               cf->data[2] |= CAN_ERR_PROT_TX;
-> +               }
-> +
-> +               set_bit(F81604_CLEAR_ECC, &priv->clear_flags);
-> +       }
-> +
-> +       if (data->isrc & F81604_SJA1000_IRQ_EPI) {
-> +               if (can_state == CAN_STATE_ERROR_PASSIVE)
-> +                       can_state = CAN_STATE_ERROR_WARNING;
-> +               else
-> +                       can_state = CAN_STATE_ERROR_PASSIVE;
-> +
-> +               /* error passive interrupt */
-> +               netdev_dbg(netdev, "error passive interrupt: %d\n", can_state);
-> +       }
-> +
-> +       if (data->isrc & F81604_SJA1000_IRQ_ALI) {
-> +               /* arbitration lost interrupt */
-> +               netdev_dbg(netdev, "arbitration lost interrupt\n");
-> +
-> +               priv->can.can_stats.arbitration_lost++;
-> +
-> +               if (skb) {
-> +                       cf->can_id |= CAN_ERR_LOSTARB;
-> +                       cf->data[0] = data->alc & F81604_SJA1000_ALC_MASK;
-> +               }
-> +
-> +               set_bit(F81604_CLEAR_ALC, &priv->clear_flags);
-> +       }
-> +
-> +       if (can_state != priv->can.state) {
-> +               enum can_state tx_state, rx_state;
-> +
-> +               tx_state = data->txerr >= data->rxerr ? can_state : 0;
-> +               rx_state = data->txerr <= data->rxerr ? can_state : 0;
-> +
-> +               can_change_state(netdev, cf, tx_state, rx_state);
-> +
-> +               if (can_state == CAN_STATE_BUS_OFF)
-> +                       can_bus_off(netdev);
-> +       }
-> +
-> +       if (priv->clear_flags)
-> +               schedule_work(&priv->clear_reg_work);
-> +
-> +       if (skb)
-> +               netif_rx(skb);
-> +}
-> +
-> +static void f81604_read_int_callback(struct urb *urb)
-> +{
-> +       struct f81604_int_data *data = urb->transfer_buffer;
-> +       struct net_device *netdev = urb->context;
-> +       struct f81604_port_priv *priv;
-> +       int ret;
-> +
-> +       priv = netdev_priv(netdev);
-> +
-> +       if (!netif_device_present(netdev))
-> +               return;
-> +
-> +       if (urb->status)
-> +               netdev_info(netdev, "%s: Int URB aborted: %pe\n", __func__,
-> +                           ERR_PTR(urb->status));
-> +
-> +       switch (urb->status) {
-> +       case 0: /* success */
-> +               break;
-> +
-> +       case -ENOENT:
-> +       case -EPIPE:
-> +       case -EPROTO:
-> +       case -ESHUTDOWN:
-> +               return;
-> +
-> +       default:
-> +               goto resubmit_urb;
-> +       }
-> +
-> +       /* handle Errors */
-> +       if (data->isrc & (F81604_SJA1000_IRQ_DOI | F81604_SJA1000_IRQ_EI |
-> +                         F81604_SJA1000_IRQ_BEI | F81604_SJA1000_IRQ_EPI |
-> +                         F81604_SJA1000_IRQ_ALI))
-> +               f81604_handle_can_bus_errors(priv, data);
-> +
-> +       /* handle TX */
-> +       if (priv->can.state != CAN_STATE_BUS_OFF &&
-> +           (data->isrc & F81604_SJA1000_IRQ_TI))
-> +               f81604_handle_tx(priv, data);
-> +
-> +resubmit_urb:
-> +       ret = usb_submit_urb(urb, GFP_ATOMIC);
-> +       if (ret == -ENODEV)
-> +               netif_device_detach(netdev);
-> +       else if (ret)
-> +               netdev_err(netdev, "%s: failed to resubmit int urb: %pe\n",
-> +                          __func__, ERR_PTR(ret));
-> +}
-> +
-> +static void f81604_unregister_urbs(struct f81604_port_priv *priv)
-> +{
-> +       usb_kill_anchored_urbs(&priv->urbs_anchor);
-> +}
-> +
-> +static int f81604_register_urbs(struct f81604_port_priv *priv)
-> +{
-> +       struct net_device *netdev = priv->netdev;
-> +       struct f81604_int_data *int_data;
-> +       int id = netdev->dev_port;
-> +       struct urb *int_urb;
-> +       int rx_urb_cnt;
-> +       int ret;
-
-Nitpick: your style is inconsistent. Sometimes you have a new line
-before the goto or return, sometimes not.
-
-> +       for (rx_urb_cnt = 0; rx_urb_cnt < F81604_MAX_RX_URBS; ++rx_urb_cnt) {
-> +               struct f81604_can_frame *frame;
-> +               struct urb *rx_urb;
-> +
-> +               rx_urb = usb_alloc_urb(0, GFP_KERNEL);
-> +               if (!rx_urb) {
-> +                       ret = -ENOMEM;
-> +                       break;
-> +               }
-> +
-> +               frame = kmalloc(sizeof(*frame), GFP_KERNEL);
-> +               if (!frame) {
-> +                       usb_free_urb(rx_urb);
-> +                       ret = -ENOMEM;
-> +                       break;
-
-...no new line, ...
-
-> +               }
-> +
-> +               usb_fill_bulk_urb(rx_urb, priv->dev,
-> +                                 usb_rcvbulkpipe(priv->dev, bulk_in_addr[id]),
-> +                                 frame, sizeof(*frame),
-> +                                 f81604_read_bulk_callback, netdev);
-> +
-> +               rx_urb->transfer_flags |= URB_FREE_BUFFER;
-> +               usb_anchor_urb(rx_urb, &priv->urbs_anchor);
-> +
-> +               ret = usb_submit_urb(rx_urb, GFP_KERNEL);
-> +               if (ret) {
-> +                       usb_unanchor_urb(rx_urb);
-> +                       usb_free_urb(rx_urb);
-> +
-> +                       break;
-
-...new line, ...
-
-> +               }
-> +
-> +               /* Drop reference, USB core will take care of freeing it */
-> +               usb_free_urb(rx_urb);
-> +       }
-> +
-> +       if (rx_urb_cnt == 0) {
-> +               netdev_warn(netdev, "%s: submit rx urb failed: %pe\n",
-> +                           __func__, ERR_PTR(ret));
-> +
-> +               goto error;
-
-...new line, ...
-
-> +       }
-> +
-> +       int_urb = usb_alloc_urb(0, GFP_KERNEL);
-> +       if (!int_urb) {
-> +               ret = -ENOMEM;
-> +               goto error;
-
-...no new line.
-
-It would be great to be consistent with a unique style.
-
-> +       }
-> +
-> +       int_data = kmalloc(sizeof(*int_data), GFP_KERNEL);
-> +       if (!int_data) {
-> +               usb_free_urb(int_urb);
-> +               ret = -ENOMEM;
-> +               goto error;
-> +       }
-> +
-> +       usb_fill_int_urb(int_urb, priv->dev,
-> +                        usb_rcvintpipe(priv->dev, int_in_addr[id]), int_data,
-> +                        sizeof(*int_data), f81604_read_int_callback, netdev,
-> +                        1);
-> +
-> +       int_urb->transfer_flags |= URB_FREE_BUFFER;
-> +       usb_anchor_urb(int_urb, &priv->urbs_anchor);
-> +
-> +       ret = usb_submit_urb(int_urb, GFP_KERNEL);
-> +       if (ret) {
-> +               usb_unanchor_urb(int_urb);
-> +               usb_free_urb(int_urb);
-> +
-> +               netdev_warn(netdev, "%s: submit int urb failed: %pe\n",
-> +                           __func__, ERR_PTR(ret));
-> +               goto error;
-> +       }
-> +
-> +       /* Drop reference, USB core will take care of freeing it */
-> +       usb_free_urb(int_urb);
-> +
-> +       return 0;
-> +
-> +error:
-> +       f81604_unregister_urbs(priv);
-> +       return ret;
-> +}
-> +
-> +static int f81604_start(struct net_device *netdev)
-> +{
-> +       struct f81604_port_priv *priv = netdev_priv(netdev);
-> +       int ret;
-> +       u8 mode;
-> +       u8 tmp;
-> +
-> +       mode = F81604_RX_AUTO_RELEASE_BUF | F81604_INT_WHEN_CHANGE;
-> +
-> +       /* Set TR/AT mode */
-> +       if (priv->can.ctrlmode & CAN_CTRLMODE_ONE_SHOT)
-> +               mode |= F81604_TX_ONESHOT;
-> +       else
-> +               mode |= F81604_TX_NORMAL;
-> +
-> +       ret = f81604_sja1000_write(priv, F81604_CTRL_MODE_REG, mode);
-> +       if (ret)
-> +               return ret;
-> +
-> +       /* set reset mode */
-> +       ret = f81604_set_reset_mode(priv);
-> +       if (ret)
-> +               return ret;
-> +
-> +       ret = f81604_chipset_init(priv);
-> +       if (ret)
-> +               return ret;
-> +
-> +       /* Clear error counters and error code capture */
-> +       ret = f81604_sja1000_write(priv, F81604_SJA1000_TXERR, 0);
-> +       if (ret)
-> +               return ret;
-> +
-> +       ret = f81604_sja1000_write(priv, F81604_SJA1000_RXERR, 0);
-> +       if (ret)
-> +               return ret;
-> +
-> +       /* Read clear for ECC/ALC/IR register */
-> +       ret = f81604_sja1000_read(priv, F81604_SJA1000_ECC, &tmp);
-> +       if (ret)
-> +               return ret;
-> +
-> +       ret = f81604_sja1000_read(priv, F81604_SJA1000_ALC, &tmp);
-> +       if (ret)
-> +               return ret;
-> +
-> +       ret = f81604_sja1000_read(priv, F81604_SJA1000_IR, &tmp);
-> +       if (ret)
-> +               return ret;
-> +
-> +       ret = f81604_register_urbs(priv);
-> +       if (ret)
-> +               return ret;
-> +
-> +       ret = f81604_set_normal_mode(priv);
-> +       if (ret) {
-> +               f81604_unregister_urbs(priv);
-> +               return ret;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +static int f81604_set_bittiming(struct net_device *dev)
-> +{
-> +       struct f81604_port_priv *priv = netdev_priv(dev);
-> +       struct can_bittiming *bt = &priv->can.bittiming;
-> +       u8 btr0, btr1;
-> +       int ret;
-> +
-> +       btr0 = FIELD_PREP(F81604_BRP_MASK, bt->brp - 1) |
-> +              FIELD_PREP(F81604_SJW_MASK, bt->sjw - 1);
-> +
-> +       btr1 = FIELD_PREP(F81604_SEG1_MASK,
-> +                         bt->prop_seg + bt->phase_seg1 - 1) |
-> +              FIELD_PREP(F81604_SEG2_MASK, bt->phase_seg2 - 1);
-> +
-> +       if (priv->can.ctrlmode & CAN_CTRLMODE_3_SAMPLES)
-> +               btr1 |= F81604_SJA1000_BTR1_SAMPLE_TRIPLE;
-> +
-> +       ret = f81604_sja1000_write(priv, F81604_SJA1000_BTR0, btr0);
-> +       if (ret) {
-> +               netdev_warn(dev, "%s: Set BTR0 failed: %pe\n", __func__,
-> +                           ERR_PTR(ret));
-> +               return ret;
-> +       }
-> +
-> +       ret = f81604_sja1000_write(priv, F81604_SJA1000_BTR1, btr1);
-> +       if (ret) {
-> +               netdev_warn(dev, "%s: Set BTR1 failed: %pe\n", __func__,
-> +                           ERR_PTR(ret));
-> +               return ret;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +static int f81604_set_mode(struct net_device *netdev, enum can_mode mode)
-> +{
-> +       int ret;
-> +
-> +       switch (mode) {
-> +       case CAN_MODE_START:
-> +               ret = f81604_start(netdev);
-> +               if (!ret && netif_queue_stopped(netdev))
-> +                       netif_wake_queue(netdev);
-> +               break;
-> +
-> +       default:
-> +               ret = -EOPNOTSUPP;
-> +       }
-> +
-> +       return ret;
-> +}
-> +
-> +static void f81604_write_bulk_callback(struct urb *urb)
-> +{
-> +       struct net_device *netdev = urb->context;
-> +
-> +       if (!netif_device_present(netdev))
-> +               return;
-> +
-> +       if (urb->status)
-> +               netdev_info(netdev, "%s: Tx URB error: %pe\n", __func__,
-> +                           ERR_PTR(urb->status));
-> +}
-> +
-> +static void f81604_clear_reg_work(struct work_struct *work)
-> +{
-> +       struct f81604_port_priv *priv;
-> +       u8 tmp;
-> +
-> +       priv = container_of(work, struct f81604_port_priv, clear_reg_work);
-> +
-> +       /* dummy read for clear Arbitration lost capture(ALC) register. */
-> +       if (test_and_clear_bit(F81604_CLEAR_ALC, &priv->clear_flags))
-> +               f81604_sja1000_read(priv, F81604_SJA1000_ALC, &tmp);
-> +
-> +       /* dummy read for clear Error code capture(ECC) register. */
-> +       if (test_and_clear_bit(F81604_CLEAR_ECC, &priv->clear_flags))
-> +               f81604_sja1000_read(priv, F81604_SJA1000_ECC, &tmp);
-> +
-> +       /* dummy write for clear data overrun flag. */
-> +       if (test_and_clear_bit(F81604_CLEAR_OVERRUN, &priv->clear_flags))
-> +               f81604_sja1000_write(priv, F81604_SJA1000_CMR,
-> +                                    F81604_SJA1000_CMD_CDO);
-> +}
-> +
-> +static netdev_tx_t f81604_start_xmit(struct sk_buff *skb,
-> +                                    struct net_device *netdev)
-> +{
-> +       struct can_frame *cf = (struct can_frame *)skb->data;
-> +       struct f81604_port_priv *priv = netdev_priv(netdev);
-> +       struct net_device_stats *stats = &netdev->stats;
-> +       struct f81604_can_frame *frame;
-> +       struct urb *write_urb;
-> +       int ret;
-> +
-> +       if (can_dev_dropped_skb(netdev, skb))
-> +               return NETDEV_TX_OK;
-> +
-> +       netif_stop_queue(netdev);
-> +
-> +       write_urb = usb_alloc_urb(0, GFP_ATOMIC);
-> +       if (!write_urb)
-> +               goto nomem_urb;
-> +
-> +       frame = kzalloc(sizeof(*frame), GFP_ATOMIC);
-> +       if (!frame)
-> +               goto nomem_buf;
-> +
-> +       usb_fill_bulk_urb(write_urb, priv->dev,
-> +                         usb_sndbulkpipe(priv->dev,
-> +                                         bulk_out_addr[netdev->dev_port]),
-> +                         frame, sizeof(*frame), f81604_write_bulk_callback,
-> +                         priv->netdev);
-> +
-> +       write_urb->transfer_flags |= URB_FREE_BUFFER;
-> +
-> +       frame->cmd = F81604_CMD_DATA;
-> +       frame->dlc = cf->len;
-> +
-> +       if (cf->can_id & CAN_RTR_FLAG)
-> +               frame->dlc |= F81604_DLC_RTR_BIT;
-> +
-> +       if (cf->can_id & CAN_EFF_FLAG) {
-> +               u32 id = (cf->can_id & CAN_EFF_MASK) << F81604_EFF_SHIFT;
-> +
-> +               put_unaligned_be32(id, &frame->eff.id);
-> +
-> +               frame->dlc |= F81604_DLC_EFF_BIT;
-> +
-> +               if (!(cf->can_id & CAN_RTR_FLAG))
-> +                       memcpy(&frame->eff.data, cf->data, cf->len);
+>                 }
+> +
+> +               if (id & ESD_EXTID)
+> +                       cfd->can_id |= CAN_EFF_FLAG;
+> +
+> +               memcpy(cfd->data, msg->rx.data_fd, len);
+> +               stats->rx_bytes += len;
+>                 stats->rx_packets++;
+>
+>                 netif_rx(skb);
+> @@ -735,7 +824,7 @@ static netdev_tx_t esd_usb_start_xmit(struct sk_buff *skb,
+>         struct esd_usb *dev = priv->usb;
+>         struct esd_tx_urb_context *context = NULL;
+>         struct net_device_stats *stats = &netdev->stats;
+> -       struct can_frame *cf = (struct can_frame *)skb->data;
+> +       struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
+>         union esd_usb_msg *msg;
+>         struct urb *urb;
+>         u8 *buf;
+> @@ -768,19 +857,28 @@ static netdev_tx_t esd_usb_start_xmit(struct sk_buff *skb,
+>         msg->hdr.len = 3; /* minimal length */
+>         msg->hdr.cmd = CMD_CAN_TX;
+>         msg->tx.net = priv->index;
+> -       msg->tx.dlc = can_get_cc_dlc(cf, priv->can.ctrlmode);
+> -       msg->tx.id = cpu_to_le32(cf->can_id & CAN_ERR_MASK);
+>
+> -       if (cf->can_id & CAN_RTR_FLAG)
+> -               msg->tx.dlc |= ESD_DLC_RTR;
+> +       if (can_is_canfd_skb(skb)) {
+> +               msg->tx.dlc = can_fd_len2dlc(cfd->len);
+> +               msg->tx.dlc |= ESD_DLC_FD;
+> +
+> +               if ((cfd->flags & CANFD_BRS) == 0)
+> +                       msg->tx.dlc |= ESD_DLC_NO_BRS;
 > +       } else {
-> +               u32 id = (cf->can_id & CAN_SFF_MASK) << F81604_SFF_SHIFT;
+> +               msg->tx.dlc = can_get_cc_dlc((struct can_frame *)cfd, priv->can.ctrlmode);
 > +
-> +               put_unaligned_be16(id, &frame->sff.id);
-> +
-> +               if (!(cf->can_id & CAN_RTR_FLAG))
-> +                       memcpy(&frame->sff.data, cf->data, cf->len);
+> +               if (cfd->can_id & CAN_RTR_FLAG)
+> +                       msg->tx.dlc |= ESD_DLC_RTR;
 > +       }
+>
+> -       if (cf->can_id & CAN_EFF_FLAG)
+> +       msg->tx.id = cpu_to_le32(cfd->can_id & CAN_ERR_MASK);
 > +
-> +       can_put_echo_skb(skb, netdev, 0, 0);
-> +
-> +       ret = usb_submit_urb(write_urb, GFP_ATOMIC);
-> +       if (ret) {
-> +               netdev_err(netdev, "%s: failed to resubmit tx bulk urb: %pe\n",
-> +                          __func__, ERR_PTR(ret));
-> +
-> +               can_free_echo_skb(netdev, 0, NULL);
-> +               stats->tx_dropped++;
-> +               stats->tx_errors++;
-> +
-> +               if (ret == -ENODEV)
-> +                       netif_device_detach(netdev);
-> +               else
-> +                       netif_wake_queue(netdev);
-> +       }
-> +
-> +       /* let usb core take care of this urb */
-> +       usb_free_urb(write_urb);
-> +
-> +       return NETDEV_TX_OK;
-> +
-> +nomem_buf:
-> +       usb_free_urb(write_urb);
-> +
-> +nomem_urb:
-> +       dev_kfree_skb(skb);
-> +       stats->tx_dropped++;
-> +       stats->tx_errors++;
-> +       netif_wake_queue(netdev);
-> +
-> +       return NETDEV_TX_OK;
-> +}
-> +
-> +static int f81604_get_berr_counter(const struct net_device *netdev,
-> +                                  struct can_berr_counter *bec)
-> +{
-> +       struct f81604_port_priv *priv = netdev_priv(netdev);
-> +       u8 txerr, rxerr;
-> +       int ret;
-> +
-> +       ret = f81604_sja1000_read(priv, F81604_SJA1000_TXERR, &txerr);
-> +       if (ret)
-> +               return ret;
-> +
-> +       ret = f81604_sja1000_read(priv, F81604_SJA1000_RXERR, &rxerr);
-> +       if (ret)
-> +               return ret;
-> +
-> +       bec->txerr = txerr;
-> +       bec->rxerr = rxerr;
-> +
-> +       return 0;
-> +}
-> +
-> +/* Open USB device */
-> +static int f81604_open(struct net_device *netdev)
-> +{
-> +       int ret;
-> +
-> +       ret = open_candev(netdev);
-> +       if (ret)
-> +               return ret;
-> +
-> +       ret = f81604_start(netdev);
-> +       if (ret)
-> +               goto start_failed;
+> +       if (cfd->can_id & CAN_EFF_FLAG)
+>                 msg->tx.id |= cpu_to_le32(ESD_EXTID);
+>
+> -       for (i = 0; i < cf->len; i++)
+> -               msg->tx.data[i] = cf->data[i];
+> +       memcpy(msg->tx.data_fd, cfd->data, cfd->len);
+>
+> -       msg->hdr.len += (cf->len + 3) >> 2;
+> +       msg->hdr.len += (cfd->len + 3) >> 2;
 
-Here, you have a single goto. You can remove the goto and put the
-clean up directly in this if block.
+I do not get the logic.
 
-> +       netif_start_queue(netdev);
-> +       return 0;
-> +
-> +start_failed:
-> +       if (ret == -ENODEV)
-> +               netif_device_detach(netdev);
-> +
-> +       close_candev(netdev);
-> +
-> +       return ret;
-> +}
-> +
-> +/* Close USB device */
-> +static int f81604_close(struct net_device *netdev)
-> +{
-> +       struct f81604_port_priv *priv = netdev_priv(netdev);
-> +
-> +       f81604_set_reset_mode(priv);
-> +
-> +       netif_stop_queue(netdev);
-> +       cancel_work_sync(&priv->clear_reg_work);
-> +       close_candev(netdev);
-> +
-> +       f81604_unregister_urbs(priv);
-> +
-> +       return 0;
-> +}
-> +
-> +static const struct net_device_ops f81604_netdev_ops = {
-> +       .ndo_open = f81604_open,
-> +       .ndo_stop = f81604_close,
-> +       .ndo_start_xmit = f81604_start_xmit,
-> +       .ndo_change_mtu = can_change_mtu,
+Assuming cfd->len is 8. Then
+
+  hdr.len += (8 + 3) >> 2
+  hdr.len += 2
+
+And because hdr.len is initially 3, hdr.len becomes 5. Right? Shouldn't it be 8?
+
+>         for (i = 0; i < MAX_TX_URBS; i++) {
+>                 if (priv->tx_contexts[i].echo_index == MAX_TX_URBS) {
+> @@ -966,6 +1064,108 @@ static int esd_usb2_set_bittiming(struct net_device *netdev)
+>         return err;
+>  }
+>
+> +static const struct can_bittiming_const esd_usb3_bittiming_const = {
+> +       .name = "esd_usb3",
+> +       .tseg1_min = ESD_USB3_TSEG1_MIN,
+> +       .tseg1_max = ESD_USB3_TSEG1_MAX,
+> +       .tseg2_min = ESD_USB3_TSEG2_MIN,
+> +       .tseg2_max = ESD_USB3_TSEG2_MAX,
+> +       .sjw_max = ESD_USB3_SJW_MAX,
+> +       .brp_min = ESD_USB3_BRP_MIN,
+> +       .brp_max = ESD_USB3_BRP_MAX,
+> +       .brp_inc = ESD_USB3_BRP_INC,
 > +};
 > +
-> +static const struct can_bittiming_const f81604_bittiming_const = {
-> +       .name = KBUILD_MODNAME,
-> +       .tseg1_min = 1,
-> +       .tseg1_max = 16,
-> +       .tseg2_min = 1,
-> +       .tseg2_max = 8,
-> +       .sjw_max = 4,
-> +       .brp_min = 1,
-> +       .brp_max = 64,
-> +       .brp_inc = 1,
+> +static const struct can_bittiming_const esd_usb3_data_bittiming_const = {
+> +       .name = "esd_usb3",
+> +       .tseg1_min = ESD_USB3_DATA_TSEG1_MIN,
+> +       .tseg1_max = ESD_USB3_DATA_TSEG1_MAX,
+> +       .tseg2_min = ESD_USB3_DATA_TSEG2_MIN,
+> +       .tseg2_max = ESD_USB3_DATA_TSEG2_MAX,
+> +       .sjw_max = ESD_USB3_DATA_SJW_MAX,
+> +       .brp_min = ESD_USB3_DATA_BRP_MIN,
+> +       .brp_max = ESD_USB3_DATA_BRP_MAX,
+> +       .brp_inc = ESD_USB3_DATA_BRP_INC,
 > +};
 > +
-> +/* Called by the usb core when driver is unloaded or device is removed */
-> +static void f81604_disconnect(struct usb_interface *intf)
+> +static int esd_usb3_set_bittiming(struct net_device *netdev)
 > +{
-> +       struct f81604_priv *priv = usb_get_intfdata(intf);
-> +       int i;
+> +       struct esd_usb_net_priv *priv = netdev_priv(netdev);
+> +       struct can_bittiming *bt   = &priv->can.bittiming;
+> +       struct can_bittiming *d_bt = &priv->can.data_bittiming;
+> +       union esd_usb_msg *msg;
+> +       int err;
+> +       u16 mode;
+> +       u16 flags = 0;
+> +       u16 brp, tseg1, tseg2, sjw;
+> +       u16 d_brp, d_tseg1, d_tseg2, d_sjw;
 > +
-> +       for (i = 0; i < ARRAY_SIZE(priv->netdev); ++i) {
-> +               if (!priv->netdev[i])
-> +                       continue;
-> +
-> +               unregister_netdev(priv->netdev[i]);
-> +               free_candev(priv->netdev[i]);
-> +       }
-> +}
-> +
-> +static int __f81604_set_termination(struct usb_device *dev, int idx, u16 term)
-> +{
-> +       u8 mask, data = 0;
-> +
-> +       if (idx == 0)
-> +               mask = F81604_CAN0_TERM;
-> +       else
-> +               mask = F81604_CAN1_TERM;
-> +
-> +       if (term)
-> +               data = mask;
-> +
-> +       return f81604_update_bits(dev, F81604_TERMINATOR_REG, mask, data);
-> +}
-> +
-> +static int f81604_set_termination(struct net_device *netdev, u16 term)
-> +{
-> +       struct f81604_port_priv *port_priv = netdev_priv(netdev);
-> +
-> +       ASSERT_RTNL();
-> +
-> +       return __f81604_set_termination(port_priv->dev, netdev->dev_port,
-> +                                       term);
-> +}
-> +
-> +static int f81604_probe(struct usb_interface *intf,
-> +                       const struct usb_device_id *id)
-> +{
-> +       struct usb_device *dev = interface_to_usbdev(intf);
-> +       struct net_device *netdev;
-> +       struct f81604_priv *priv;
-> +       int i, ret;
-> +
-> +       priv = devm_kzalloc(&intf->dev, sizeof(*priv), GFP_KERNEL);
-> +       if (!priv)
+> +       msg = kmalloc(sizeof(*msg), GFP_KERNEL);
+> +       if (!msg)
 > +               return -ENOMEM;
 > +
-> +       usb_set_intfdata(intf, priv);
+> +       /* Canonical is the most reasonable mode for SocketCAN on CAN-USB/3 ... */
+> +       mode = ESD_BAUDRATE_MODE_BTR_CANONICAL;
 > +
-> +       for (i = 0; i < ARRAY_SIZE(priv->netdev); ++i) {
-> +               ret = __f81604_set_termination(dev, i, 0);
-> +               if (ret) {
-> +                       dev_err(&intf->dev,
-> +                               "Setting termination of CH#%d failed: %pe\n",
-> +                               i, ERR_PTR(ret));
-> +                       return ret;
-> +               }
+> +       if (priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
+> +               flags |= ESD_BAUDRATE_FLAG_LOM;
+> +
+> +       if (priv->can.ctrlmode & CAN_CTRLMODE_3_SAMPLES)
+> +               flags |= ESD_BAUDRATE_FLAG_TRS;
+> +
+> +       brp = bt->brp & (ESD_USB3_BRP_MAX - 1);
+> +       sjw = bt->sjw & (ESD_USB3_SJW_MAX - 1);
+> +       tseg1 = (bt->prop_seg + bt->phase_seg1) & (ESD_USB3_TSEG1_MAX - 1);
+> +       tseg2 = bt->phase_seg2 & (ESD_USB3_TSEG2_MAX - 1);
+
+I am not convinced by the use of these intermediate variables brp,
+sjw, tseg1 and tseg2. I think you can directly assign them to baud_x.
+
+> +       msg->setbaud.baud_x.arb.brp = cpu_to_le16(brp);
+> +       msg->setbaud.baud_x.arb.sjw = cpu_to_le16(sjw);
+> +       msg->setbaud.baud_x.arb.tseg1 = cpu_to_le16(tseg1);
+> +       msg->setbaud.baud_x.arb.tseg2 = cpu_to_le16(tseg2);
+
+You may want to declare a local variable
+
+  struct baudrate_x *baud_x = &msg->setbaud.baud_x;
+
+so that you do not have to do msg->setbaud.baud_x each time.
+
+> +       if (priv->can.ctrlmode & CAN_CTRLMODE_FD) {
+> +               d_brp = d_bt->brp & (ESD_USB3_DATA_BRP_MAX - 1);
+> +               d_sjw = d_bt->sjw & (ESD_USB3_DATA_SJW_MAX - 1);
+> +               d_tseg1 = (d_bt->prop_seg + d_bt->phase_seg1) & (ESD_USB3_DATA_TSEG1_MAX - 1);
+> +               d_tseg2 = d_bt->phase_seg2 & (ESD_USB3_DATA_TSEG2_MAX - 1);
+> +               flags |= ESD_BAUDRATE_FLAG_FD;
+> +       } else {
+> +               d_brp = 0;
+> +               d_sjw = 0;
+> +               d_tseg1 = 0;
+> +               d_tseg2 = 0;
 > +       }
 > +
-> +       for (i = 0; i < ARRAY_SIZE(priv->netdev); ++i) {
-> +               struct f81604_port_priv *port_priv;
+> +       msg->setbaud.baud_x.data.brp = cpu_to_le16(d_brp);
+> +       msg->setbaud.baud_x.data.sjw = cpu_to_le16(d_sjw);
+> +       msg->setbaud.baud_x.data.tseg1 = cpu_to_le16(d_tseg1);
+> +       msg->setbaud.baud_x.data.tseg2 = cpu_to_le16(d_tseg2);
+> +       msg->setbaud.baud_x.mode = cpu_to_le16(mode);
+> +       msg->setbaud.baud_x.flags = cpu_to_le16(flags);
+> +       msg->setbaud.baud_x.tdc.tdc_mode = ESD_TDC_MODE_AUTO;
+> +       msg->setbaud.baud_x.tdc.ssp_offset = 0;
+> +       msg->setbaud.baud_x.tdc.ssp_shift = 0;
+> +       msg->setbaud.baud_x.tdc.tdc_filter = 0;
+
+It seems that your device supports TDC. What is the reason to not configure it?
+
+Please have a look at struct can_tdc:
+
+  https://elixir.bootlin.com/linux/v6.2/source/include/linux/can/bittiming.h#L21
+
+Please refer to this patch if you want an example of how to use TDC:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1010a8fa9608
+
+> +       msg->hdr.len = 7;
+
+What is this magic number? If possible, replace it with a sizeof().
+
+It seems that this relates to the size of struct set_baudrate_msg, but
+that structure is 8 bytes. Is the last byte of struct set_baudrate_msg
+really used? If not, reflect this in the declaration of the structure.
+
+> +       msg->hdr.cmd = CMD_SETBAUD;
 > +
-> +               netdev = alloc_candev(sizeof(*port_priv), 1);
-> +               if (!netdev) {
-> +                       dev_err(&intf->dev, "Couldn't alloc candev: %d\n", i);
-> +                       ret = -ENOMEM;
+> +       msg->setbaud.net = priv->index;
+> +       msg->setbaud.rsvd = 0;
 > +
-> +                       goto failure_cleanup;
-> +               }
+> +       netdev_info(netdev,
+> +                   "ctrlmode=%#x/%#x, esd-net=%u, esd-mode=%#x, esd-flg=%#x, arb: brp=%u, ts1=%u, ts2=%u, sjw=%u, data: dbrp=%u, dts1=%u, dts2=%u dsjw=%u\n",
+> +                   priv->can.ctrlmode, priv->can.ctrlmode_supported,
+> +                   priv->index, mode, flags,
+> +                   brp, tseg1, tseg2, sjw,
+> +                   d_brp, d_tseg1, d_tseg2, d_sjw);
+
+Remove this debug message. The bittiming information can be retrieved
+with the ip tool.
+
+  ip --details link show canX
+
+> +       err = esd_usb_send_msg(priv->usb, msg);
 > +
-> +               port_priv = netdev_priv(netdev);
-> +
-> +               INIT_WORK(&port_priv->clear_reg_work, f81604_clear_reg_work);
-> +               init_usb_anchor(&port_priv->urbs_anchor);
-> +
-> +               port_priv->intf = intf;
-> +               port_priv->dev = dev;
-> +               port_priv->netdev = netdev;
-> +               port_priv->can.clock.freq = F81604_CAN_CLOCK;
-> +
-> +               port_priv->can.termination_const = f81604_termination;
-> +               port_priv->can.termination_const_cnt =
-> +                       ARRAY_SIZE(f81604_termination);
-> +               port_priv->can.bittiming_const = &f81604_bittiming_const;
-> +               port_priv->can.do_set_bittiming = f81604_set_bittiming;
-> +               port_priv->can.do_set_mode = f81604_set_mode;
-> +               port_priv->can.do_set_termination = f81604_set_termination;
-> +               port_priv->can.do_get_berr_counter = f81604_get_berr_counter;
-> +               port_priv->can.ctrlmode_supported =
-> +                       CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_3_SAMPLES |
-> +                       CAN_CTRLMODE_ONE_SHOT | CAN_CTRLMODE_BERR_REPORTING |
-> +                       CAN_CTRLMODE_PRESUME_ACK;
-> +
-> +               netdev->ethtool_ops = &f81604_ethtool_ops;
-> +               netdev->netdev_ops = &f81604_netdev_ops;
-> +               netdev->flags |= IFF_ECHO;
-> +               netdev->dev_port = i;
-> +
-> +               SET_NETDEV_DEV(netdev, &intf->dev);
-> +
-> +               ret = register_candev(netdev);
-> +               if (ret) {
-> +                       netdev_err(netdev, "register CAN device failed: %pe\n",
-> +                                  ERR_PTR(ret));
-> +                       free_candev(netdev);
-> +
-> +                       goto failure_cleanup;
-> +               }
-> +
-> +               priv->netdev[i] = netdev;
-> +       }
-> +
-> +       return 0;
-> +
-> +failure_cleanup:
-> +       f81604_disconnect(intf);
-> +       return ret;
+> +       kfree(msg);
+
+esd_usb_send_msg() uses usb_bulk_msg() which does a synchronous call.
+It would be great to go asynchronous and use usb_submit_urb() so that
+you minimize the time spent in the driver.
+
+I know that  esd_usb2_set_bittiming() also uses the synchronous call,
+so I am fine to have it as-is for this patch but for the future, it
+would be great to consider refactoring this.
+
+> +       return err;
 > +}
 > +
-> +static struct usb_driver f81604_driver = {
-> +       .name = KBUILD_MODNAME,
-> +       .probe = f81604_probe,
-> +       .disconnect = f81604_disconnect,
-> +       .id_table = f81604_table,
-> +};
+>  static int esd_usb_get_berr_counter(const struct net_device *netdev,
+>                                     struct can_berr_counter *bec)
+>  {
+> @@ -1023,16 +1223,32 @@ static int esd_usb_probe_one_net(struct usb_interface *intf, int index)
+>                 CAN_CTRLMODE_CC_LEN8_DLC |
+>                 CAN_CTRLMODE_BERR_REPORTING;
+>
+> -       if (le16_to_cpu(dev->udev->descriptor.idProduct) ==
+> -           USB_CANUSBM_PRODUCT_ID)
+> +       switch (le16_to_cpu(dev->udev->descriptor.idProduct)) {
+
+Instead of doing a switch on idProduct, you can use the driver_info
+field from struct usb_device_id to store the device quirks.
+
+You can pass either a pointer or some flags into driver_info. Examples:
+
+  https://elixir.bootlin.com/linux/v6.2/source/drivers/net/can/usb/peak_usb/pcan_usb_core.c#L30
+  https://elixir.bootlin.com/linux/v6.2/source/drivers/net/can/usb/etas_es58x/es58x_core.c#L37
+
+> +       case USB_CANUSB3_PRODUCT_ID:
+> +               priv->can.clock.freq = ESD_USB3_CAN_CLOCK;
+> +               priv->can.ctrlmode_supported |= CAN_CTRLMODE_3_SAMPLES;
+> +               priv->can.ctrlmode_supported |= CAN_CTRLMODE_FD;
+> +               priv->can.bittiming_const = &esd_usb3_bittiming_const;
+> +               priv->can.data_bittiming_const = &esd_usb3_data_bittiming_const;
+> +               priv->can.do_set_bittiming = esd_usb3_set_bittiming;
+> +               priv->can.do_set_data_bittiming = esd_usb3_set_bittiming;
+> +               break;
 > +
-> +module_usb_driver(f81604_driver);
+> +       case USB_CANUSBM_PRODUCT_ID:
+>                 priv->can.clock.freq = ESD_USBM_CAN_CLOCK;
+> -       else {
+> +               priv->can.bittiming_const = &esd_usb2_bittiming_const;
+> +               priv->can.do_set_bittiming = esd_usb2_set_bittiming;
+> +               break;
 > +
-> +MODULE_AUTHOR("Ji-Ze Hong (Peter Hong) <peter_hong@fintek.com.tw>");
-> +MODULE_DESCRIPTION("Fintek F81604 USB to 2xCANBUS");
-> +MODULE_LICENSE("GPL");
+> +       case USB_CANUSB2_PRODUCT_ID:
+> +       default:
+>                 priv->can.clock.freq = ESD_USB2_CAN_CLOCK;
+>                 priv->can.ctrlmode_supported |= CAN_CTRLMODE_3_SAMPLES;
+> +               priv->can.bittiming_const = &esd_usb2_bittiming_const;
+> +               priv->can.do_set_bittiming = esd_usb2_set_bittiming;
+> +               break;
+>         }
+>
+> -       priv->can.bittiming_const = &esd_usb2_bittiming_const;
+> -       priv->can.do_set_bittiming = esd_usb2_set_bittiming;
+>         priv->can.do_set_mode = esd_usb_set_mode;
+>         priv->can.do_get_berr_counter = esd_usb_get_berr_counter;
+>
 > --
-> 2.17.1
+> 2.25.1
 >
