@@ -2,59 +2,51 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD9CB6FAA25
-	for <lists+linux-can@lfdr.de>; Mon,  8 May 2023 12:59:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95C306FAFB6
+	for <lists+linux-can@lfdr.de>; Mon,  8 May 2023 14:14:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235401AbjEHK7z (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 8 May 2023 06:59:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33340 "EHLO
+        id S233793AbjEHMOp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 8 May 2023 08:14:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235427AbjEHK7U (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 8 May 2023 06:59:20 -0400
-Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1613429C8A
-        for <linux-can@vger.kernel.org>; Mon,  8 May 2023 03:57:57 -0700 (PDT)
-Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-76c27782e30so166236139f.3
-        for <linux-can@vger.kernel.org>; Mon, 08 May 2023 03:57:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683543469; x=1686135469;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z4qQuGB5Gd1At6RmxvPzh/+T+MZCmyfXc4a+BLM5Q9w=;
-        b=gjJwcXirSpz4UlQ/TYR2X9TyZxEnDGE0AYuBgTtkViGHRsV+lv/dplCLKLEuYftfU+
-         W5KVWkxWSjUMHAjcTX9QpmBr8VhLudp/mvT/COXT7B9wM76TNN2wbP4Ivm2EBqW0awym
-         DXmiEs+K5KlUDI1XgPp6WprdCbt5LDrIccMH65l2YQWxwS2qwf0AHnaOABR5ms/TrW3Q
-         j2J9a1Mkwg+ml103XWiOUSh1/Q7BvKIC4fyk/0lhgSgj2IG0aBmiXtViJHw3/BeTX1yL
-         YgieZkd68dh0HThkJC93nSrDswC90zqZKdKr3dID0n2OiNK4U4awJ6a/SgTLYiUjpnwT
-         dAjA==
-X-Gm-Message-State: AC+VfDx3HaeZgJpMib01+xkTkp/FNWCATWdFHOS76sByt6HGvOjsZLme
-        fAu3ercSJO7agsoIKaXZJ3m4yDFeRRYEcv1MgDJFzjYLrfCB
-X-Google-Smtp-Source: ACHHUZ7hRUvohGuXcxsd/2ky5NLQqnBo134yJZYBac/reMymj4KJ2Q+G6mM31hEWJ78rrVBaNvo2gykcXUW0yO4C6kwJ93Y7EVvB
+        with ESMTP id S233792AbjEHMOo (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 8 May 2023 08:14:44 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F75838444
+        for <linux-can@vger.kernel.org>; Mon,  8 May 2023 05:14:42 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pvzlI-0006qX-3S; Mon, 08 May 2023 14:14:40 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id B3F361C00AC;
+        Mon,  8 May 2023 12:14:38 +0000 (UTC)
+Date:   Mon, 8 May 2023 14:14:38 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Thomas.Kopp@microchip.com
+Cc:     mailhol.vincent@wanadoo.fr, linux-can@vger.kernel.org,
+        marex@denx.de, linux-kernel@vger.kernel.org
+Subject: Re: RE: [PATCH] can: length: add definitions for frame lengths in
+ bits
+Message-ID: <20230508-paralysis-disarm-fecee3f8a625-mkl@pengutronix.de>
+References: <20230507155506.3179711-1-mailhol.vincent@wanadoo.fr>
+ <BL3PR11MB64842FA5ECB64DD2C6C9FA76FB719@BL3PR11MB6484.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:93c7:0:b0:414:401d:b69a with SMTP id
- z65-20020a0293c7000000b00414401db69amr5076647jah.3.1683543469395; Mon, 08 May
- 2023 03:57:49 -0700 (PDT)
-Date:   Mon, 08 May 2023 03:57:49 -0700
-In-Reply-To: <0000000000002e17d105f02be919@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000751a2d05fb2c824a@google.com>
-Subject: Re: [syzbot] [ext4?] WARNING in print_tainted
-From:   syzbot <syzbot+5aed6c3aaba661f5b917@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, edumazet@google.com,
-        gregkh@linuxfoundation.org, hawk@kernel.org,
-        john.fastabend@gmail.com, kernel@pengutronix.de, kuba@kernel.org,
-        linux-can@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mkl@pengutronix.de, netdev@vger.kernel.org, pabeni@redhat.com,
-        patches@lists.linux.dev, sashal@kernel.org, socketcan@hartkopp.net,
-        stable-commits@vger.kernel.org, stable@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rhe3bfto7rzywosp"
+Content-Disposition: inline
+In-Reply-To: <BL3PR11MB64842FA5ECB64DD2C6C9FA76FB719@BL3PR11MB6484.namprd11.prod.outlook.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,90 +54,117 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
 
-HEAD commit:    457391b03803 Linux 6.3
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=118e0b90280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=385e197a58ca4afe
-dashboard link: https://syzkaller.appspot.com/bug?extid=5aed6c3aaba661f5b917
-compiler:       arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=178650b8280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1646075a280000
+--rhe3bfto7rzywosp
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Downloadable assets:
-disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/c35b5b2731d2/non_bootable_disk-457391b0.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/2a1bf3bafeb6/vmlinux-457391b0.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/21f1e3b4a5a9/zImage-457391b0.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/bd66e85f728b/mount_0.gz
+On 08.05.2023 08:54:18, Thomas.Kopp@microchip.com wrote:
+> I was working on the same thing on Friday but didn't get around to
+> sending it off, so here are a couple thoughts I had when working on
+> the defines in length.h
+>=20
+> The definitions for IFS in here are called intermission in the
+> standard
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5aed6c3aaba661f5b917@syzkaller.appspotmail.com
+ACK, and IMF seems to be a common abbreviation.
 
-EXT4-fs (loop0): 1 truncate cleaned up
-EXT4-fs (loop0): mounted filesystem 00000000-0000-0000-0000-000000000000 without journal. Quota mode: writeback.
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 2947 at mm/slab_common.c:935 free_large_kmalloc+0x94/0xd0 mm/slab_common.c:935
-Modules linked in:
-Kernel panic - not syncing: kernel: panic_on_warn set ...
-CPU: 0 PID: 2947 Comm: syz-executor216 Not tainted 6.3.0-syzkaller #0
-Hardware name: ARM-Versatile Express
-Backtrace: 
-[<817b2528>] (dump_backtrace) from [<817b261c>] (show_stack+0x18/0x1c arch/arm/kernel/traps.c:256)
- r7:81d81ac0 r6:82422c04 r5:60000093 r4:81d901cc
-[<817b2604>] (show_stack) from [<817cec84>] (__dump_stack lib/dump_stack.c:88 [inline])
-[<817b2604>] (show_stack) from [<817cec84>] (dump_stack_lvl+0x48/0x54 lib/dump_stack.c:106)
-[<817cec3c>] (dump_stack_lvl) from [<817ceca8>] (dump_stack+0x18/0x1c lib/dump_stack.c:113)
- r5:00000000 r4:8264dd14
-[<817cec90>] (dump_stack) from [<817b3110>] (panic+0x11c/0x36c kernel/panic.c:340)
-[<817b2ff4>] (panic) from [<802422ec>] (print_tainted+0x0/0xa0 kernel/panic.c:236)
- r3:8240c488 r2:00000001 r1:81d79fcc r0:81d81ac0
- r7:80436a2c
-[<80242268>] (check_panic_on_warn) from [<802424e0>] (__warn+0x7c/0x180 kernel/panic.c:673)
-[<80242464>] (__warn) from [<802426bc>] (warn_slowpath_fmt+0xd8/0x1d8 kernel/panic.c:697)
- r8:00000009 r7:000003a7 r6:81da3124 r5:8240c954 r4:822ab6bc
-[<802425e8>] (warn_slowpath_fmt) from [<80436a2c>] (free_large_kmalloc+0x94/0xd0 mm/slab_common.c:935)
- r10:823e75a4 r9:00000704 r8:8436d7c0 r7:825dfc70 r6:823e75a4 r5:dde49c7c
- r4:dde49c7c
-[<80436998>] (free_large_kmalloc) from [<80436bb0>] (kfree+0x148/0x14c mm/slab_common.c:1013)
- r7:8436d880 r6:804292ac r5:dde49c7c r4:823e75a4
-[<80436a68>] (kfree) from [<804292ac>] (kvfree+0x2c/0x30 mm/util.c:649)
- r7:8436d880 r6:8436d700 r5:00000400 r4:823e75a4
-[<80429280>] (kvfree) from [<80619f90>] (ext4_xattr_move_to_block fs/ext4/xattr.c:2680 [inline])
-[<80429280>] (kvfree) from [<80619f90>] (ext4_xattr_make_inode_space fs/ext4/xattr.c:2743 [inline])
-[<80429280>] (kvfree) from [<80619f90>] (ext4_expand_extra_isize_ea+0x558/0x808 fs/ext4/xattr.c:2835)
- r5:00000400 r4:823e75a4
-[<80619a38>] (ext4_expand_extra_isize_ea) from [<805c514c>] (__ext4_expand_extra_isize+0xdc/0x148 fs/ext4/inode.c:5960)
- r10:8455e368 r9:8455e360 r8:00000001 r7:8455e5e4 r6:823e7500 r5:8455e3e8
- r4:00000040
-[<805c5070>] (__ext4_expand_extra_isize) from [<805cc188>] (ext4_try_to_expand_extra_isize fs/ext4/inode.c:6003 [inline])
-[<805c5070>] (__ext4_expand_extra_isize) from [<805cc188>] (__ext4_mark_inode_dirty+0x158/0x270 fs/ext4/inode.c:6081)
- r8:00000040 r7:00000cb7 r6:df969df4 r5:00000001 r4:8455e3e8
-[<805cc030>] (__ext4_mark_inode_dirty) from [<805ee79c>] (__ext4_unlink+0x2e0/0x370 fs/ext4/namei.c:3255)
- r10:df969e58 r9:82c9ac50 r8:00000000 r7:836ee3c0 r6:00000001 r5:8455e3e8
- r4:8455f0a8
-[<805ee4bc>] (__ext4_unlink) from [<805ee980>] (ext4_unlink+0x154/0x1e4 fs/ext4/namei.c:3298)
- r10:82c9ac38 r9:8455f130 r8:df969f3c r7:8455f0a8 r6:82c9ac38 r5:8455e3e8
- r4:00000000
-[<805ee82c>] (ext4_unlink) from [<804cc41c>] (vfs_unlink+0x13c/0x2e0 fs/namei.c:4250)
- r7:8455f0a8 r6:8455e3e8 r5:82c9ac38 r4:00000000
-[<804cc2e0>] (vfs_unlink) from [<804d0fa8>] (do_unlinkat+0x198/0x2b4 fs/namei.c:4316)
- r9:df969f38 r8:00000003 r7:8290b000 r6:00000000 r5:8455f0a8 r4:00000000
-[<804d0e10>] (do_unlinkat) from [<804d10fc>] (__do_sys_unlinkat fs/namei.c:4359 [inline])
-[<804d0e10>] (do_unlinkat) from [<804d10fc>] (sys_unlinkat+0x38/0x5c fs/namei.c:4352)
- r10:00000148 r9:831bae00 r8:80200288 r7:00000148 r6:00000000 r5:00000000
- r4:00000003
-[<804d10c4>] (sys_unlinkat) from [<80200060>] (ret_fast_syscall+0x0/0x1c arch/arm/mm/proc-v7.S:66)
-Exception stack(0xdf969fa8 to 0xdf969ff0)
-9fa0:                   00000000 00000000 00000003 20000000 00000000 00001015
-9fc0: 00000000 00000000 00000000 00000148 00000000 200002a2 20000276 00000000
-9fe0: 7ecdec50 7ecdec40 0001085c 0002bb80
- r5:00000000 r4:00000000
-Rebooting in 86400 seconds..
+> and I'd argue they shouldn't be part of the frame at all.
 
+The diagram in https://www.can-cia.org/can-knowledge/can/can-fd/
+suggests that IMF is part of the frame.
 
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+> To
+> quote the ISO: "DFs and RFs shall be separated from preceding frames,
+> whatever frame type they are (DF, RF, EF, OF), by a time period called
+> inter-frame space."
+>=20
+> So, my suggestion would be to pull out the 3 bit IFS definition that's
+> currently in and introduce 11 bit Bus idle and if necessary 3 bit
+> Intermission separately.
+>=20
+> index 6995092b774ec..62e92c1553376 100644
+> --- a/include/linux/can/length.h
+> +++ b/include/linux/can/length.h
+> @@ -6,6 +6,26 @@
+>  #ifndef _CAN_LENGTH_H
+>  #define _CAN_LENGTH_H
+>=20
+> +/*
+> + * First part of the Inter Frame Space
+> + */
+> +#define CAN_INTERMISSION_BITS 3
+> +
+> +/*
+> + * Number of consecutive recessive bits on the bus for integration etc.
+> + */
+> +#define CAN_IDLE_CONDITION_BITS 11
+> +
+>=20
+> The field currently called Stuff bit count (SBC) is also not correct
+> I'd say. I'm not sure about the history but given that this is
+> dependent on the DLC I think what's meant is the number of Fixed Stuff
+> bits (FSB) . The ISO does not define a term for the Stuff bit Count
+> but the CiA did define/document it this way. What's meant though is
+> not the number of fixed stuff bits (FSB) which the comment implies
+> here but the modulo 8 3 bit gray-code followed by the parity bit. So
+> for the FD frame definitions I'd propose something like this: Renaming
+> the current SBC to FSB and adding the SBC.
+
+> /*
+>   * Size of a CAN-FD Standard Frame
+> @@ -69,17 +87,17 @@
+>   * Error Status Indicator (ESI)                1
+>   * Data length code (DLC)              4
+>   * Data field                          0...512
+> - * Stuff Bit Count (SBC)               0...16: 4 20...64:5
+> + * Stuff Bit Count (SBC)               4
+
+ACK
+
+>   * CRC                                 0...16: 17 20...64:21
+>   * CRC delimiter (CD)                  1
+> + * Fixed Stuff bits (FSB)              0...16: 6 20...64:7
+
+As far as I understand
+https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=3D&arnumber=3D8338047 the FSB
+is 5 or 6.
+
+>   * ACK slot (AS)                       1
+>   * ACK delimiter (AD)                  1
+>   * End-of-frame (EOF)                  7
+> - * Inter frame spacing                 3
+>   *
+> - * assuming CRC21, rounded up and ignoring bitstuffing
+> + * assuming CRC21, rounded up and ignoring dynamic bitstuffing
+>   */
+>=20
+> Best Regards,
+> Thomas
+>=20
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--rhe3bfto7rzywosp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRY56sACgkQvlAcSiqK
+BOjP1AgAo2VKxVkGab/BWPGjlHnmenWeZkqYikbOl54hoC8Mtv4VmnAJpOxprZ4I
+jgrEuAnxA/8qDZwsB4lRN4Axd2KZPQPg9AeA/gg+qMyoLUtMwXIB/Rb92RJ+uTW1
+BJ++Jv8A930dF9gg42OGRXlkv8BaP8VowazsbVDTaieq8KcfFhjSe99clL722PAT
+8Yi2Rt8X+sJ8++FUrKa2XasT7/KrWVTYl62lvavyrCgf03bsUpIwsEOtCwuw7w8p
+krR5wkU7jYZVZbzBcORib/m32YlOcJ7fOOWs4vpYjyqHd3AoFal88N5mLgoc54OX
+Y7O/MEYDKQ5jKyRRo+BxEN7wiB0cSQ==
+=l4SA
+-----END PGP SIGNATURE-----
+
+--rhe3bfto7rzywosp--
