@@ -2,45 +2,43 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95C306FAFB6
-	for <lists+linux-can@lfdr.de>; Mon,  8 May 2023 14:14:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8209E6FAFC7
+	for <lists+linux-can@lfdr.de>; Mon,  8 May 2023 14:20:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233793AbjEHMOp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 8 May 2023 08:14:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46996 "EHLO
+        id S234070AbjEHMUP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 8 May 2023 08:20:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233792AbjEHMOo (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 8 May 2023 08:14:44 -0400
+        with ESMTP id S229520AbjEHMUM (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 8 May 2023 08:20:12 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F75838444
-        for <linux-can@vger.kernel.org>; Mon,  8 May 2023 05:14:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A502BCCE
+        for <linux-can@vger.kernel.org>; Mon,  8 May 2023 05:20:11 -0700 (PDT)
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1pvzlI-0006qX-3S; Mon, 08 May 2023 14:14:40 +0200
+        id 1pvzqb-0007PM-Va; Mon, 08 May 2023 14:20:10 +0200
 Received: from pengutronix.de (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id B3F361C00AC;
-        Mon,  8 May 2023 12:14:38 +0000 (UTC)
-Date:   Mon, 8 May 2023 14:14:38 +0200
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 5451C1C00B5;
+        Mon,  8 May 2023 12:20:09 +0000 (UTC)
+Date:   Mon, 8 May 2023 14:20:08 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Thomas.Kopp@microchip.com
-Cc:     mailhol.vincent@wanadoo.fr, linux-can@vger.kernel.org,
-        marex@denx.de, linux-kernel@vger.kernel.org
-Subject: Re: RE: [PATCH] can: length: add definitions for frame lengths in
- bits
-Message-ID: <20230508-paralysis-disarm-fecee3f8a625-mkl@pengutronix.de>
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     linux-can@vger.kernel.org, Marek Vasut <marex@denx.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] can: length: add definitions for frame lengths in bits
+Message-ID: <20230508-sprint-cause-80b4172d5a5a-mkl@pengutronix.de>
 References: <20230507155506.3179711-1-mailhol.vincent@wanadoo.fr>
- <BL3PR11MB64842FA5ECB64DD2C6C9FA76FB719@BL3PR11MB6484.namprd11.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rhe3bfto7rzywosp"
+        protocol="application/pgp-signature"; boundary="uabosgyhmp5zyosz"
 Content-Disposition: inline
-In-Reply-To: <BL3PR11MB64842FA5ECB64DD2C6C9FA76FB719@BL3PR11MB6484.namprd11.prod.outlook.com>
+In-Reply-To: <20230507155506.3179711-1-mailhol.vincent@wanadoo.fr>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -55,94 +53,190 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---rhe3bfto7rzywosp
+--uabosgyhmp5zyosz
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 08.05.2023 08:54:18, Thomas.Kopp@microchip.com wrote:
-> I was working on the same thing on Friday but didn't get around to
-> sending it off, so here are a couple thoughts I had when working on
-> the defines in length.h
+On 08.05.2023 00:55:06, Vincent Mailhol wrote:
+> When created in [1], frames length definitions were added to implement
+> byte queue limits (bql). Because bql expects lengths in bytes, bit
+> length definitions were not considered back then.
 >=20
-> The definitions for IFS in here are called intermission in the
-> standard
-
-ACK, and IMF seems to be a common abbreviation.
-
-> and I'd argue they shouldn't be part of the frame at all.
-
-The diagram in https://www.can-cia.org/can-knowledge/can/can-fd/
-suggests that IMF is part of the frame.
-
-> To
-> quote the ISO: "DFs and RFs shall be separated from preceding frames,
-> whatever frame type they are (DF, RF, EF, OF), by a time period called
-> inter-frame space."
+> Recently, a need to refer to the exact frame length in bits, with CAN
+> bit stuffing, appeared in [2].
 >=20
-> So, my suggestion would be to pull out the 3 bit IFS definition that's
-> currently in and introduce 11 bit Bus idle and if necessary 3 bit
-> Intermission separately.
+> Add 9 frames length definitions:
 >=20
-> index 6995092b774ec..62e92c1553376 100644
+>  - CAN_FRAME_OVERHEAD_SFF_BITS:
+>  - CAN_FRAME_OVERHEAD_EFF_BITS
+>  - CANFD_FRAME_OVERHEAD_SFF_BITS
+>  - CANFD_FRAME_OVERHEAD_EFF_BITS
+>  - CAN_BIT_STUFFING_OVERHEAD
+>  - CAN_FRAME_LEN_MAX_BITS_NO_STUFFING
+>  - CAN_FRAME_LEN_MAX_BITS_STUFFING
+>  - CANFD_FRAME_LEN_MAX_BITS_NO_STUFFING
+>  - CANFD_FRAME_LEN_MAX_BITS_STUFFING
+>=20
+> CAN_FRAME_LEN_MAX_BITS_STUFFING and CANFD_FRAME_LEN_MAX_BITS_STUFFING
+> define respectively the maximum number of bits in a classical CAN and
+> CAN-FD frame including bit stuffing. The other definitions are
+> intermediate values.
+>=20
+> In addition to the above:
+>=20
+>  - Include linux/bits.h and then replace the value 8 by BITS_PER_BYTE
+>    whenever relevant.
+>  - Include linux/math.h because of DIV_ROUND_UP(). N.B: the use of
+>    DIV_ROUND_UP() is not new to this patch, but the include was
+>    previously omitted.
+>  - Update the existing length definitions to use the newly defined values.
+>  - Add myself as copyright owner for 2020 (as coauthor of the initial
+>    version, c.f. [1]) and for 2023 (this patch).
+>=20
+> [1] commit 85d99c3e2a13 ("can: length: can_skb_get_frame_len(): introduce
+>     function to get data length of frame in data link layer")
+> Link: https://git.kernel.org/torvalds/c/85d99c3e2a13
+>=20
+> [2] RE: [PATCH] can: mcp251xfd: Increase poll timeout
+> Link: https://lore.kernel.org/linux-can/BL3PR11MB64846C83ACD04E9330B0FE66=
+FB729@BL3PR11MB6484.namprd11.prod.outlook.com/
+>=20
+> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> ---
+> As always, let me know if you have better inspiration than me for the
+> naming.
+> ---
+>  include/linux/can/length.h | 84 ++++++++++++++++++++++++++++++++------
+>  1 file changed, 72 insertions(+), 12 deletions(-)
+>=20
+> diff --git a/include/linux/can/length.h b/include/linux/can/length.h
+> index 6995092b774e..60492fcbe34d 100644
 > --- a/include/linux/can/length.h
 > +++ b/include/linux/can/length.h
-> @@ -6,6 +6,26 @@
+> @@ -1,13 +1,17 @@
+>  /* SPDX-License-Identifier: GPL-2.0 */
+>  /* Copyright (C) 2020 Oliver Hartkopp <socketcan@hartkopp.net>
+>   * Copyright (C) 2020 Marc Kleine-Budde <kernel@pengutronix.de>
+> + * Copyright (C) 2020, 2023 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+>   */
+> =20
 >  #ifndef _CAN_LENGTH_H
 >  #define _CAN_LENGTH_H
->=20
-> +/*
-> + * First part of the Inter Frame Space
+> =20
+> +#include <linux/bits.h>
+> +#include <linux/math.h>
+> +
+>  /*
+> - * Size of a Classical CAN Standard Frame
+> + * Size of a Classical CAN Standard Frame in bits
+>   *
+>   * Name of Field			Bits
+>   * ---------------------------------------------------------
+> @@ -25,12 +29,19 @@
+>   * End-of-frame (EOF)			7
+>   * Inter frame spacing			3
+>   *
+> - * rounded up and ignoring bitstuffing
+> + * ignoring bitstuffing
+>   */
+> -#define CAN_FRAME_OVERHEAD_SFF DIV_ROUND_UP(47, 8)
+> +#define CAN_FRAME_OVERHEAD_SFF_BITS 47
+> =20
+>  /*
+> - * Size of a Classical CAN Extended Frame
+> + * Size of a Classical CAN Standard Frame
+> + * (rounded up and ignoring bitstuffing)
 > + */
-> +#define CAN_INTERMISSION_BITS 3
+> +#define CAN_FRAME_OVERHEAD_SFF \
+> +	DIV_ROUND_UP(CAN_FRAME_OVERHEAD_SFF_BITS, BITS_PER_BYTE)
 > +
 > +/*
-> + * Number of consecutive recessive bits on the bus for integration etc.
+> + * Size of a Classical CAN Extended Frame in bits
+>   *
+>   * Name of Field			Bits
+>   * ---------------------------------------------------------
+> @@ -50,12 +61,19 @@
+>   * End-of-frame (EOF)			7
+>   * Inter frame spacing			3
+>   *
+> - * rounded up and ignoring bitstuffing
+> + * ignoring bitstuffing
+>   */
+> -#define CAN_FRAME_OVERHEAD_EFF DIV_ROUND_UP(67, 8)
+> +#define CAN_FRAME_OVERHEAD_EFF_BITS 67
+> =20
+>  /*
+> - * Size of a CAN-FD Standard Frame
+> + * Size of a Classical CAN Extended Frame
+> + * (rounded up and ignoring bitstuffing)
 > + */
-> +#define CAN_IDLE_CONDITION_BITS 11
+> +#define CAN_FRAME_OVERHEAD_EFF \
+> +	DIV_ROUND_UP(CAN_FRAME_OVERHEAD_EFF_BITS, BITS_PER_BYTE)
 > +
->=20
-> The field currently called Stuff bit count (SBC) is also not correct
-> I'd say. I'm not sure about the history but given that this is
-> dependent on the DLC I think what's meant is the number of Fixed Stuff
-> bits (FSB) . The ISO does not define a term for the Stuff bit Count
-> but the CiA did define/document it this way. What's meant though is
-> not the number of fixed stuff bits (FSB) which the comment implies
-> here but the modulo 8 3 bit gray-code followed by the parity bit. So
-> for the FD frame definitions I'd propose something like this: Renaming
-> the current SBC to FSB and adding the SBC.
-
-> /*
->   * Size of a CAN-FD Standard Frame
-> @@ -69,17 +87,17 @@
->   * Error Status Indicator (ESI)                1
->   * Data length code (DLC)              4
->   * Data field                          0...512
-> - * Stuff Bit Count (SBC)               0...16: 4 20...64:5
-> + * Stuff Bit Count (SBC)               4
-
-ACK
-
->   * CRC                                 0...16: 17 20...64:21
->   * CRC delimiter (CD)                  1
-> + * Fixed Stuff bits (FSB)              0...16: 6 20...64:7
-
-As far as I understand
-https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=3D&arnumber=3D8338047 the FSB
-is 5 or 6.
-
->   * ACK slot (AS)                       1
->   * ACK delimiter (AD)                  1
->   * End-of-frame (EOF)                  7
-> - * Inter frame spacing                 3
+> +/*
+> + * Size of a CAN-FD Standard Frame in bits
+>   *
+>   * Name of Field			Bits
+>   * ---------------------------------------------------------
+> @@ -77,12 +95,19 @@
+>   * End-of-frame (EOF)			7
+>   * Inter frame spacing			3
 >   *
 > - * assuming CRC21, rounded up and ignoring bitstuffing
-> + * assuming CRC21, rounded up and ignoring dynamic bitstuffing
+> + * assuming CRC21 and ignoring bitstuffing
 >   */
->=20
-> Best Regards,
-> Thomas
->=20
+> -#define CANFD_FRAME_OVERHEAD_SFF DIV_ROUND_UP(61, 8)
+> +#define CANFD_FRAME_OVERHEAD_SFF_BITS 61
+> =20
+>  /*
+> - * Size of a CAN-FD Extended Frame
+> + * Size of a CAN-FD Standard Frame
+> + * (assuming CRC21, rounded up and ignoring bitstuffing)
+> + */
+> +#define CANFD_FRAME_OVERHEAD_SFF \
+> +	DIV_ROUND_UP(CANFD_FRAME_OVERHEAD_SFF_BITS, BITS_PER_BYTE)
+> +
+> +/*
+> + * Size of a CAN-FD Extended Frame in bits
+>   *
+>   * Name of Field			Bits
+>   * ---------------------------------------------------------
+> @@ -106,9 +131,32 @@
+>   * End-of-frame (EOF)			7
+>   * Inter frame spacing			3
+>   *
+> - * assuming CRC21, rounded up and ignoring bitstuffing
+> + * assuming CRC21 and ignoring bitstuffing
+> + */
+> +#define CANFD_FRAME_OVERHEAD_EFF_BITS 80
+> +
+> +/*
+> + * Size of a CAN-FD Extended Frame
+> + * (assuming CRC21, rounded up and ignoring bitstuffing)
+> + */
+> +#define CANFD_FRAME_OVERHEAD_EFF \
+> +	DIV_ROUND_UP(CANFD_FRAME_OVERHEAD_EFF_BITS, BITS_PER_BYTE)
+> +
+> +/* CAN bit stuffing overhead multiplication factor */
+> +#define CAN_BIT_STUFFING_OVERHEAD 1.2
+> +
+> +/*
+> + * Maximum size of a Classical CAN frame in bits, ignoring bitstuffing
+>   */
+> -#define CANFD_FRAME_OVERHEAD_EFF DIV_ROUND_UP(80, 8)
+> +#define CAN_FRAME_LEN_MAX_BITS_NO_STUFFING \
+> +	(CAN_FRAME_OVERHEAD_EFF_BITS + CAN_MAX_DLEN * BITS_PER_BYTE)
+> +
+> +/*
+> + * Maximum size of a Classical CAN frame in bits, including bitstuffing
+> + */
+> +#define CAN_FRAME_LEN_MAX_BITS_STUFFING				\
+> +	((unsigned int)(CAN_FRAME_LEN_MAX_BITS_NO_STUFFING *	\
+> +			CAN_BIT_STUFFING_OVERHEAD))
+
+The 1.2 overhead doesn't apply to the whole frame, according to
+https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=3D&arnumber=3D8338047.
 
 Marc
 
@@ -152,19 +246,19 @@ Embedded Linux                   | https://www.pengutronix.de |
 Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
---rhe3bfto7rzywosp
+--uabosgyhmp5zyosz
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRY56sACgkQvlAcSiqK
-BOjP1AgAo2VKxVkGab/BWPGjlHnmenWeZkqYikbOl54hoC8Mtv4VmnAJpOxprZ4I
-jgrEuAnxA/8qDZwsB4lRN4Axd2KZPQPg9AeA/gg+qMyoLUtMwXIB/Rb92RJ+uTW1
-BJ++Jv8A930dF9gg42OGRXlkv8BaP8VowazsbVDTaieq8KcfFhjSe99clL722PAT
-8Yi2Rt8X+sJ8++FUrKa2XasT7/KrWVTYl62lvavyrCgf03bsUpIwsEOtCwuw7w8p
-krR5wkU7jYZVZbzBcORib/m32YlOcJ7fOOWs4vpYjyqHd3AoFal88N5mLgoc54OX
-Y7O/MEYDKQ5jKyRRo+BxEN7wiB0cSQ==
-=l4SA
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRY6PYACgkQvlAcSiqK
+BOhO+gf/apC8fM4dkkLelSSMAduJ4D0siAbWcbAA3IlVAMmm3ukEDvGngpci52tk
+qX3z5vGJ+mqBqCOO046wnqSAu9f+ee77b77t6rtu2LF3dQRzzc0zfaf9v9EQ+tg2
+MtsRD+2Zde7Il1w06KZgc+yFR0/aSMUllrICctcZ6vXtmyC82jU6ByU3r9SqVAJF
+iZ7grREqYiqfRPw554Sdnzxv52//FX6H7Ld/7bTmhMSoe/vsqq+VBADc6BMrraYp
+rbU/XuLrj5sVE43sj4D40fv1p4KN3DEGZJEQINFKY+/rXM+XDTdP4VSWx1Ie00ld
+ImbeJwAaCLMd6lL6ck6B1RF01EGLRw==
+=VPxl
 -----END PGP SIGNATURE-----
 
---rhe3bfto7rzywosp--
+--uabosgyhmp5zyosz--
