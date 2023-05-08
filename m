@@ -2,48 +2,74 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8209E6FAFC7
-	for <lists+linux-can@lfdr.de>; Mon,  8 May 2023 14:20:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A36B76FB563
+	for <lists+linux-can@lfdr.de>; Mon,  8 May 2023 18:41:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234070AbjEHMUP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 8 May 2023 08:20:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50208 "EHLO
+        id S234233AbjEHQlR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 8 May 2023 12:41:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjEHMUM (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 8 May 2023 08:20:12 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A502BCCE
-        for <linux-can@vger.kernel.org>; Mon,  8 May 2023 05:20:11 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pvzqb-0007PM-Va; Mon, 08 May 2023 14:20:10 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 5451C1C00B5;
-        Mon,  8 May 2023 12:20:09 +0000 (UTC)
-Date:   Mon, 8 May 2023 14:20:08 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can@vger.kernel.org, Marek Vasut <marex@denx.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] can: length: add definitions for frame lengths in bits
-Message-ID: <20230508-sprint-cause-80b4172d5a5a-mkl@pengutronix.de>
-References: <20230507155506.3179711-1-mailhol.vincent@wanadoo.fr>
+        with ESMTP id S234284AbjEHQlI (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 8 May 2023 12:41:08 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B1846E9B
+        for <linux-can@vger.kernel.org>; Mon,  8 May 2023 09:40:47 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4ec8eca56cfso5330875e87.0
+        for <linux-can@vger.kernel.org>; Mon, 08 May 2023 09:40:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kvaser.com; s=google; t=1683564039; x=1686156039;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iCkdmMjI1O+RAc2VzWyTB1ysipWka8FiyL8cMh+T6Go=;
+        b=RrbxUzRTNFmhsXoBivFUPotJZBKjPOe2fOKxCBiT5v1EtO4GadgYro+QoBv9dN59FQ
+         7D/BhMBMmYjguM9Qa+9aTcOj9CHzH4gW8FcSufl7JvMygHgiaDvQC5B+EKI3uojlxMLH
+         ILGZoGN4GP3H9wfwYWP5607ZodazEvjmQhoc7HGolz1toPaW1LTEorbpxQ3jenMFpSpu
+         oPlRAvSqjSUK/sLhhu7Ca+f9Hg2xlmKSP00GOhSsodl0qlIbWEJ3MsG+T1jnUL/F1KKs
+         7nK4NBXbqz1mjIQ+KMyrV8s5BNEnbB3AekgS9D0sckpLUwsy5oAyK6bVO4vZ0azWL2aI
+         65sQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683564039; x=1686156039;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iCkdmMjI1O+RAc2VzWyTB1ysipWka8FiyL8cMh+T6Go=;
+        b=Kq3IAM0ODq+WQMumZH0spMx6HB/z3aBUbnt1m44YvlfPeahpt0wAq8DE7eraD4QOLM
+         BvHYXISeL4dPD2xDSgQdgNvM2ZrA0OlLTgOOLw7CTvYynqE9Rw1yyAmsFQFwDnCJ+jWY
+         UgxBuOR9SlbMSwDOEx1I5jofpNXKLPjpaEmJA56JH9NqPgjajW6fMn1NugT5/giGuN4p
+         j23u2fsPc6tYgwLrgTrzTz+urpTHOg9sy6j7UaeHNrvmEIc1GnA8qt+4TiEvR45FyCyy
+         8Y/0hztAIaODa3fLkuAM0Dtzj1sRQVuF4o4R8uFTcWREcHXRnMb/MM9nQx6FyVZ4k/s4
+         L/Ng==
+X-Gm-Message-State: AC+VfDw2+W+txLswwLLzrH56e9HZ9Y+jggvyQePg214pOYQomTHsq935
+        cg58qkk+BJqdicur07V826jfJQ==
+X-Google-Smtp-Source: ACHHUZ5HHgeSBHdhYgZlpPzU/xmIsIXKM7XxtO99dI804vZAXdI6/7GayZI+EVQiyyngserLoIr7LA==
+X-Received: by 2002:ac2:494a:0:b0:4f2:4fa5:4bcc with SMTP id o10-20020ac2494a000000b004f24fa54bccmr941835lfi.24.1683564039400;
+        Mon, 08 May 2023 09:40:39 -0700 (PDT)
+Received: from [192.168.16.142] (h-98-128-173-232.A785.priv.bahnhof.se. [98.128.173.232])
+        by smtp.gmail.com with ESMTPSA id l10-20020ac2554a000000b004f195cc3918sm39196lfk.176.2023.05.08.09.40.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 May 2023 09:40:38 -0700 (PDT)
+Message-ID: <d4eb5d98-f62b-be58-58fb-9e9736d476bd@kvaser.com>
+Date:   Mon, 8 May 2023 18:40:38 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uabosgyhmp5zyosz"
-Content-Disposition: inline
-In-Reply-To: <20230507155506.3179711-1-mailhol.vincent@wanadoo.fr>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] can: kvaser_usb_leaf: Implement CAN 2.0 raw DLC
+ functionality.
+To:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        Carsten Schmidt <carsten.schmidt-achim@t-online.de>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        linux-can@vger.kernel.org
+References: <20230506105529.4023-1-carsten.schmidt-achim@t-online.de>
+ <7e25ba42-4aa9-0d88-e708-18462bc7cc48@hartkopp.net>
+Content-Language: en-US
+From:   Jimmy Assarsson <extja@kvaser.com>
+In-Reply-To: <7e25ba42-4aa9-0d88-e708-18462bc7cc48@hartkopp.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,213 +78,80 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi Carsten,
+Hi Oliver,
 
---uabosgyhmp5zyosz
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 5/6/23 21:10, Oliver Hartkopp wrote:
+> Thanks for your patch Carsten!
+> 
+> There should be at least one sentence in the commit message even when 
+> the subject almost covers the story ;-)
 
-On 08.05.2023 00:55:06, Vincent Mailhol wrote:
-> When created in [1], frames length definitions were added to implement
-> byte queue limits (bql). Because bql expects lengths in bytes, bit
-> length definitions were not considered back then.
->=20
-> Recently, a need to refer to the exact frame length in bits, with CAN
-> bit stuffing, appeared in [2].
->=20
-> Add 9 frames length definitions:
->=20
->  - CAN_FRAME_OVERHEAD_SFF_BITS:
->  - CAN_FRAME_OVERHEAD_EFF_BITS
->  - CANFD_FRAME_OVERHEAD_SFF_BITS
->  - CANFD_FRAME_OVERHEAD_EFF_BITS
->  - CAN_BIT_STUFFING_OVERHEAD
->  - CAN_FRAME_LEN_MAX_BITS_NO_STUFFING
->  - CAN_FRAME_LEN_MAX_BITS_STUFFING
->  - CANFD_FRAME_LEN_MAX_BITS_NO_STUFFING
->  - CANFD_FRAME_LEN_MAX_BITS_STUFFING
->=20
-> CAN_FRAME_LEN_MAX_BITS_STUFFING and CANFD_FRAME_LEN_MAX_BITS_STUFFING
-> define respectively the maximum number of bits in a classical CAN and
-> CAN-FD frame including bit stuffing. The other definitions are
-> intermediate values.
->=20
-> In addition to the above:
->=20
->  - Include linux/bits.h and then replace the value 8 by BITS_PER_BYTE
->    whenever relevant.
->  - Include linux/math.h because of DIV_ROUND_UP(). N.B: the use of
->    DIV_ROUND_UP() is not new to this patch, but the include was
->    previously omitted.
->  - Update the existing length definitions to use the newly defined values.
->  - Add myself as copyright owner for 2020 (as coauthor of the initial
->    version, c.f. [1]) and for 2023 (this patch).
->=20
-> [1] commit 85d99c3e2a13 ("can: length: can_skb_get_frame_len(): introduce
->     function to get data length of frame in data link layer")
-> Link: https://git.kernel.org/torvalds/c/85d99c3e2a13
->=20
-> [2] RE: [PATCH] can: mcp251xfd: Increase poll timeout
-> Link: https://lore.kernel.org/linux-can/BL3PR11MB64846C83ACD04E9330B0FE66=
-FB729@BL3PR11MB6484.namprd11.prod.outlook.com/
->=20
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> ---
-> As always, let me know if you have better inspiration than me for the
-> naming.
-> ---
->  include/linux/can/length.h | 84 ++++++++++++++++++++++++++++++++------
->  1 file changed, 72 insertions(+), 12 deletions(-)
->=20
-> diff --git a/include/linux/can/length.h b/include/linux/can/length.h
-> index 6995092b774e..60492fcbe34d 100644
-> --- a/include/linux/can/length.h
-> +++ b/include/linux/can/length.h
-> @@ -1,13 +1,17 @@
->  /* SPDX-License-Identifier: GPL-2.0 */
->  /* Copyright (C) 2020 Oliver Hartkopp <socketcan@hartkopp.net>
->   * Copyright (C) 2020 Marc Kleine-Budde <kernel@pengutronix.de>
-> + * Copyright (C) 2020, 2023 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
->   */
-> =20
->  #ifndef _CAN_LENGTH_H
->  #define _CAN_LENGTH_H
-> =20
-> +#include <linux/bits.h>
-> +#include <linux/math.h>
-> +
->  /*
-> - * Size of a Classical CAN Standard Frame
-> + * Size of a Classical CAN Standard Frame in bits
->   *
->   * Name of Field			Bits
->   * ---------------------------------------------------------
-> @@ -25,12 +29,19 @@
->   * End-of-frame (EOF)			7
->   * Inter frame spacing			3
->   *
-> - * rounded up and ignoring bitstuffing
-> + * ignoring bitstuffing
->   */
-> -#define CAN_FRAME_OVERHEAD_SFF DIV_ROUND_UP(47, 8)
-> +#define CAN_FRAME_OVERHEAD_SFF_BITS 47
-> =20
->  /*
-> - * Size of a Classical CAN Extended Frame
-> + * Size of a Classical CAN Standard Frame
-> + * (rounded up and ignoring bitstuffing)
-> + */
-> +#define CAN_FRAME_OVERHEAD_SFF \
-> +	DIV_ROUND_UP(CAN_FRAME_OVERHEAD_SFF_BITS, BITS_PER_BYTE)
-> +
-> +/*
-> + * Size of a Classical CAN Extended Frame in bits
->   *
->   * Name of Field			Bits
->   * ---------------------------------------------------------
-> @@ -50,12 +61,19 @@
->   * End-of-frame (EOF)			7
->   * Inter frame spacing			3
->   *
-> - * rounded up and ignoring bitstuffing
-> + * ignoring bitstuffing
->   */
-> -#define CAN_FRAME_OVERHEAD_EFF DIV_ROUND_UP(67, 8)
-> +#define CAN_FRAME_OVERHEAD_EFF_BITS 67
-> =20
->  /*
-> - * Size of a CAN-FD Standard Frame
-> + * Size of a Classical CAN Extended Frame
-> + * (rounded up and ignoring bitstuffing)
-> + */
-> +#define CAN_FRAME_OVERHEAD_EFF \
-> +	DIV_ROUND_UP(CAN_FRAME_OVERHEAD_EFF_BITS, BITS_PER_BYTE)
-> +
-> +/*
-> + * Size of a CAN-FD Standard Frame in bits
->   *
->   * Name of Field			Bits
->   * ---------------------------------------------------------
-> @@ -77,12 +95,19 @@
->   * End-of-frame (EOF)			7
->   * Inter frame spacing			3
->   *
-> - * assuming CRC21, rounded up and ignoring bitstuffing
-> + * assuming CRC21 and ignoring bitstuffing
->   */
-> -#define CANFD_FRAME_OVERHEAD_SFF DIV_ROUND_UP(61, 8)
-> +#define CANFD_FRAME_OVERHEAD_SFF_BITS 61
-> =20
->  /*
-> - * Size of a CAN-FD Extended Frame
-> + * Size of a CAN-FD Standard Frame
-> + * (assuming CRC21, rounded up and ignoring bitstuffing)
-> + */
-> +#define CANFD_FRAME_OVERHEAD_SFF \
-> +	DIV_ROUND_UP(CANFD_FRAME_OVERHEAD_SFF_BITS, BITS_PER_BYTE)
-> +
-> +/*
-> + * Size of a CAN-FD Extended Frame in bits
->   *
->   * Name of Field			Bits
->   * ---------------------------------------------------------
-> @@ -106,9 +131,32 @@
->   * End-of-frame (EOF)			7
->   * Inter frame spacing			3
->   *
-> - * assuming CRC21, rounded up and ignoring bitstuffing
-> + * assuming CRC21 and ignoring bitstuffing
-> + */
-> +#define CANFD_FRAME_OVERHEAD_EFF_BITS 80
-> +
-> +/*
-> + * Size of a CAN-FD Extended Frame
-> + * (assuming CRC21, rounded up and ignoring bitstuffing)
-> + */
-> +#define CANFD_FRAME_OVERHEAD_EFF \
-> +	DIV_ROUND_UP(CANFD_FRAME_OVERHEAD_EFF_BITS, BITS_PER_BYTE)
-> +
-> +/* CAN bit stuffing overhead multiplication factor */
-> +#define CAN_BIT_STUFFING_OVERHEAD 1.2
-> +
-> +/*
-> + * Maximum size of a Classical CAN frame in bits, ignoring bitstuffing
->   */
-> -#define CANFD_FRAME_OVERHEAD_EFF DIV_ROUND_UP(80, 8)
-> +#define CAN_FRAME_LEN_MAX_BITS_NO_STUFFING \
-> +	(CAN_FRAME_OVERHEAD_EFF_BITS + CAN_MAX_DLEN * BITS_PER_BYTE)
-> +
-> +/*
-> + * Maximum size of a Classical CAN frame in bits, including bitstuffing
-> + */
-> +#define CAN_FRAME_LEN_MAX_BITS_STUFFING				\
-> +	((unsigned int)(CAN_FRAME_LEN_MAX_BITS_NO_STUFFING *	\
-> +			CAN_BIT_STUFFING_OVERHEAD))
+@Carsten, thanks for the patch!
 
-The 1.2 overhead doesn't apply to the whole frame, according to
-https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=3D&arnumber=3D8338047.
+Acked-by: Jimmy Assarsson <extja@kvaser.com>
+Tested-by: Jimmy Assarsson <extja@kvaser.com>
 
-Marc
+> Can you also please change the subject to
+> 
+> can: kvaser_usb: add len8_dlc support for kvaser_usb_leaf
+> 
+> to follow up with the other len8_dlc patches?
+> 
+> @Jimmy: AFAIK Carsten only has a Kvaser USB Leaf for testing. Can you 
+> probably provide and test a similar improvement for the Kvaser USB Hydra 
+> hardware?
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
---uabosgyhmp5zyosz
-Content-Type: application/pgp-signature; name="signature.asc"
+@Oliver, yes, I'll fix this for the remaining Kvaser USB devices.
+I'll try to send a patch for it by the end of the week.
 
------BEGIN PGP SIGNATURE-----
+Best regards,
+jimmy
 
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRY6PYACgkQvlAcSiqK
-BOhO+gf/apC8fM4dkkLelSSMAduJ4D0siAbWcbAA3IlVAMmm3ukEDvGngpci52tk
-qX3z5vGJ+mqBqCOO046wnqSAu9f+ee77b77t6rtu2LF3dQRzzc0zfaf9v9EQ+tg2
-MtsRD+2Zde7Il1w06KZgc+yFR0/aSMUllrICctcZ6vXtmyC82jU6ByU3r9SqVAJF
-iZ7grREqYiqfRPw554Sdnzxv52//FX6H7Ld/7bTmhMSoe/vsqq+VBADc6BMrraYp
-rbU/XuLrj5sVE43sj4D40fv1p4KN3DEGZJEQINFKY+/rXM+XDTdP4VSWx1Ie00ld
-ImbeJwAaCLMd6lL6ck6B1RF01EGLRw==
-=VPxl
------END PGP SIGNATURE-----
-
---uabosgyhmp5zyosz--
+> Many thanks,
+> Oliver
+> 
+> On 06.05.23 12:55, Carsten Schmidt wrote:
+>> Signed-off-by: Carsten Schmidt <carsten.schmidt-achim@t-online.de>
+>> ---
+>>   drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c | 7 ++++---
+>>   1 file changed, 4 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c 
+>> b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+>> index 1c2f99ce4c6c..713b633773b1 100644
+>> --- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+>> +++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+>> @@ -573,7 +573,7 @@ kvaser_usb_leaf_frame_to_cmd(const struct 
+>> kvaser_usb_net_priv *priv,
+>>               cmd->u.tx_can.data[1] = cf->can_id & 0x3f;
+>>           }
+>> -        cmd->u.tx_can.data[5] = cf->len;
+>> +        cmd->u.tx_can.data[5] = can_get_cc_dlc(cf, priv->can.ctrlmode);
+>>           memcpy(&cmd->u.tx_can.data[6], cf->data, cf->len);
+>>           if (cf->can_id & CAN_RTR_FLAG)
+>> @@ -1349,7 +1349,7 @@ static void kvaser_usb_leaf_rx_can_msg(const 
+>> struct kvaser_usb *dev,
+>>           else
+>>               cf->can_id &= CAN_SFF_MASK;
+>> -        cf->len = can_cc_dlc2len(cmd->u.leaf.log_message.dlc);
+>> +        can_frame_set_cc_len(cf, cmd->u.leaf.log_message.dlc & 0xF, 
+>> priv->can.ctrlmode);
+>>           if (cmd->u.leaf.log_message.flags & MSG_FLAG_REMOTE_FRAME)
+>>               cf->can_id |= CAN_RTR_FLAG;
+>> @@ -1367,7 +1367,7 @@ static void kvaser_usb_leaf_rx_can_msg(const 
+>> struct kvaser_usb *dev,
+>>               cf->can_id |= CAN_EFF_FLAG;
+>>           }
+>> -        cf->len = can_cc_dlc2len(rx_data[5]);
+>> +        can_frame_set_cc_len(cf, rx_data[5] & 0xF, priv->can.ctrlmode);
+>>           if (cmd->u.rx_can_header.flag & MSG_FLAG_REMOTE_FRAME)
+>>               cf->can_id |= CAN_RTR_FLAG;
+>> @@ -1702,6 +1702,7 @@ static int kvaser_usb_leaf_init_card(struct 
+>> kvaser_usb *dev)
+>>       struct kvaser_usb_dev_card_data *card_data = &dev->card_data;
+>>       card_data->ctrlmode_supported |= CAN_CTRLMODE_3_SAMPLES;
+>> +    card_data->ctrlmode_supported |= CAN_CTRLMODE_CC_LEN8_DLC;
+>>       return 0;
+>>   }
