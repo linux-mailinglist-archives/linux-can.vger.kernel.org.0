@@ -2,95 +2,171 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9FB26FC1B4
-	for <lists+linux-can@lfdr.de>; Tue,  9 May 2023 10:26:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 903116FC3B0
+	for <lists+linux-can@lfdr.de>; Tue,  9 May 2023 12:18:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232812AbjEII0H (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 9 May 2023 04:26:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40636 "EHLO
+        id S234818AbjEIKSI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 9 May 2023 06:18:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234305AbjEIIZu (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 9 May 2023 04:25:50 -0400
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343118A67;
-        Tue,  9 May 2023 01:25:49 -0700 (PDT)
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-528dd896165so3913031a12.2;
-        Tue, 09 May 2023 01:25:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683620748; x=1686212748;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ERXKU7Iam0RWQoLv2yoyLcRLH7baQ0ZdyyRRjxqfMWs=;
-        b=Tg6DMIhez8FDhVEzoOaePA5i/wgyJigDk9g8TaVK8WcEX2jX1lXaGoH4IzZDJ21x8y
-         U/ho59rNCnfSAtFVnZFlWES8d86/4b2UB7e4Sf5ydNUZDHNyTfkZakBKcnGim1eXKshm
-         F7ccjcQGsgx4s5me9Acl44f5eCuI+6KdLvbLvDPV8tNaYUieJziN6GpUrTaOuuyd/YNU
-         vvWlk+OvJaQ3gcGsb7fBr/tXF9xFgoUG8CiX51oZlKN6QZqwDwtBDFtbSmAjYXhwDy4w
-         I3bkYru91T+bxDnxaRhqRAJql7HyHccCbDCwYbtFeze8X/I76UuwoW+Cj/EQpXOpxEGs
-         0dng==
-X-Gm-Message-State: AC+VfDw6ygOy5B4h/myy98MjNrZF0e4sEUbABEJ1niuPCrv/R4syq+VM
-        ePOh1x3sTj/U7JkNIAo0nGt7wpyR4EgXz0mrn0g=
-X-Google-Smtp-Source: ACHHUZ6AbeApD+lWtzuPxiPpr1RbbZxz2HJ1p7sIWMRDiK9gNYpoQk4D4GVSFvqbhjpT4crBlQHwoJ7LpHBdVBB6bFg=
-X-Received: by 2002:a17:90a:de91:b0:24b:2f85:13eb with SMTP id
- n17-20020a17090ade9100b0024b2f8513ebmr13457528pjv.30.1683620748590; Tue, 09
- May 2023 01:25:48 -0700 (PDT)
+        with ESMTP id S234553AbjEIKSG (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 9 May 2023 06:18:06 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB3A30FA;
+        Tue,  9 May 2023 03:18:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683627479; x=1715163479;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lFaYZaHglXHehMJ3FYW16hTblnm28QwUMGPBW9xCS3A=;
+  b=bLCgozb+3t+8MBp6RzVVCqWQ65ebWQp8fPdqdolMY2zDRgR5atvy7WYw
+   6Mqca8ahdsuxypLr90rhAutLF2fLw82emLOmjwb2JoMBbHvv/dTN5b4jo
+   n86FeJd8CKcDzI2cMNvKHGpIL12E08xOpfMJVRDYqnUjdvOAVIY/CC0X1
+   HnT61LRin0RgdaSDmED3hFpHjKOgXhQCvTOfll2FNjX1gQyIC1CTIFg8f
+   TJzl5aM97ie1EpOfqpTfK3fats/8/s/1QCKNLS+fFcPm57Fm+gVC/OCpJ
+   JsaavMDjV8m2j1YO3T9LZn8FA10lMDGe72FMhIqttBH93IYFHMQvxmW9s
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="413158406"
+X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
+   d="scan'208";a="413158406"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 03:17:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="873156762"
+X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
+   d="scan'208";a="873156762"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 09 May 2023 03:17:55 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pwKPq-000244-37;
+        Tue, 09 May 2023 10:17:54 +0000
+Date:   Tue, 9 May 2023 18:17:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Ji-Ze Hong (Peter Hong)" <peter_hong@fintek.com.tw>,
+        wg@grandegger.com, mkl@pengutronix.de,
+        michal.swiatkowski@linux.intel.com, Steen.Hegelund@microchip.com,
+        mailhol.vincent@wanadoo.fr
+Cc:     oe-kbuild-all@lists.linux.dev, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        frank.jungclaus@esd.eu, linux-kernel@vger.kernel.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        hpeter+linux_kernel@gmail.com,
+        "Ji-Ze Hong (Peter Hong)" <peter_hong@fintek.com.tw>
+Subject: Re: [PATCH V7] can: usb: f81604: add Fintek F81604 support
+Message-ID: <202305091802.pRFS6n2j-lkp@intel.com>
+References: <20230509073821.25289-1-peter_hong@fintek.com.tw>
 MIME-Version: 1.0
-References: <20230504154414.1864615-1-frank.jungclaus@esd.eu>
- <20230504154414.1864615-3-frank.jungclaus@esd.eu> <CAMZ6RqKgJs-yJaaqREmN1SkUzE1EkGtjBzXiATKx5WL+=J48dQ@mail.gmail.com>
- <ff1374d58d98a42d5f78a2685c748730b26926b9.camel@esd.eu> <CAMZ6RqLaDNy-fZ2G0+QMhUEckkXLL+ZyELVSDFmqpd++aBzZQg@mail.gmail.com>
- <20230509-smirk-viewing-5e13ea0abfeb-mkl@pengutronix.de>
-In-Reply-To: <20230509-smirk-viewing-5e13ea0abfeb-mkl@pengutronix.de>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Tue, 9 May 2023 17:25:37 +0900
-Message-ID: <CAMZ6RqKPbv+mMY0W4P9YR-HoiRAMg7VZgSrs2emnAOrBQyoWxg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] can: esd_usb: Add support for esd CAN-USB/3
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Frank Jungclaus <Frank.Jungclaus@esd.eu>,
-        =?UTF-8?Q?Stefan_M=C3=A4tje?= <Stefan.Maetje@esd.eu>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "wg@grandegger.com" <wg@grandegger.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230509073821.25289-1-peter_hong@fintek.com.tw>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue. 9 May 2023 at 16:12, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> On 09.05.2023 10:28:13, Vincent MAILHOL wrote:
-> > > > And because hdr.len is initially 3, hdr.len becomes 5. Right? Shouldn't it be 8?
-> > >
-> > > It might be a little confusing, but I think it's fine.
-> > > hdr.len is given in units of longwords (4 bytes each)! Therefore we
-> > > have 12 bytes (the initial 3 longwords) for struct tx_msg before
-> > > tx_msg.data[].
-> > > Than (8 + 3)/4=2 gives us 2 additional longwords for the 8 data bytes.
-> > > So that 3+2=5 (equal to 20 bytes) should be ok.
->
-> I think the term longword is more commonly used in non-Unix operating
-> systems :)
->
-> > OK. So you want to round up the length to the next sizeof(long) multiple, right?
-> >
-> > First, sizeof(long) being platform specific, you need to declare a
-> > macro to make your intent explicit.
-> >
-> > /* Size of a long int on esd devices */
-> > #define USB_ESD_SIZEOF_LONG 4
-> >
-> > Please test, but for what I understand, below line is an equivalent
-> > and a more readable way to achieve your goal:
-> >
-> >           msg->hdr.len = DIV_ROUND_UP(cf->len, USB_ESD_SIZEOF_LONG);
->
-> use "sizeof(u32)"
+Hi Ji-Ze,
 
-Marc is right, forget about USB_ESD_SIZEOF_LONG. sizeof(u32) does the
-job better.
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on mkl-can-next/testing]
+[also build test WARNING on linus/master v6.4-rc1 next-20230509]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ji-Ze-Hong-Peter-Hong/can-usb-f81604-add-Fintek-F81604-support/20230509-154045
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git testing
+patch link:    https://lore.kernel.org/r/20230509073821.25289-1-peter_hong%40fintek.com.tw
+patch subject: [PATCH V7] can: usb: f81604: add Fintek F81604 support
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20230509/202305091802.pRFS6n2j-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/9549380f8d5eea359f8c83f48e10a0becfd13541
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ji-Ze-Hong-Peter-Hong/can-usb-f81604-add-Fintek-F81604-support/20230509-154045
+        git checkout 9549380f8d5eea359f8c83f48e10a0becfd13541
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash drivers/net/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305091802.pRFS6n2j-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/net/can/usb/f81604.c: In function 'f81604_read_bulk_callback':
+>> drivers/net/can/usb/f81604.c:440:67: warning: format '%lu' expects argument of type 'long unsigned int', but argument 4 has type 'unsigned int' [-Wformat=]
+     440 |                 netdev_warn(netdev, "URB length %u not equal to %lu\n",
+         |                                                                 ~~^
+         |                                                                   |
+         |                                                                   long unsigned int
+         |                                                                 %u
+     441 |                             urb->actual_length, sizeof(*frame));
+         |                                                 ~~~~~~~~~~~~~~     
+         |                                                 |
+         |                                                 unsigned int
+
+
+vim +440 drivers/net/can/usb/f81604.c
+
+   411	
+   412	static void f81604_read_bulk_callback(struct urb *urb)
+   413	{
+   414		struct f81604_can_frame *frame = urb->transfer_buffer;
+   415		struct net_device *netdev = urb->context;
+   416		int ret;
+   417	
+   418		if (!netif_device_present(netdev))
+   419			return;
+   420	
+   421		if (urb->status)
+   422			netdev_info(netdev, "%s: URB aborted %pe\n", __func__,
+   423				    ERR_PTR(urb->status));
+   424	
+   425		switch (urb->status) {
+   426		case 0: /* success */
+   427			break;
+   428	
+   429		case -ENOENT:
+   430		case -EPIPE:
+   431		case -EPROTO:
+   432		case -ESHUTDOWN:
+   433			return;
+   434	
+   435		default:
+   436			goto resubmit_urb;
+   437		}
+   438	
+   439		if (urb->actual_length != sizeof(*frame)) {
+ > 440			netdev_warn(netdev, "URB length %u not equal to %lu\n",
+   441				    urb->actual_length, sizeof(*frame));
+   442			goto resubmit_urb;
+   443		}
+   444	
+   445		f81604_process_rx_packet(netdev, frame);
+   446	
+   447	resubmit_urb:
+   448		ret = usb_submit_urb(urb, GFP_ATOMIC);
+   449		if (ret == -ENODEV)
+   450			netif_device_detach(netdev);
+   451		else if (ret)
+   452			netdev_err(netdev,
+   453				   "%s: failed to resubmit read bulk urb: %pe\n",
+   454				   __func__, ERR_PTR(ret));
+   455	}
+   456	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
