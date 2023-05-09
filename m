@@ -2,53 +2,65 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D09456FC629
-	for <lists+linux-can@lfdr.de>; Tue,  9 May 2023 14:22:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A98BB6FC64D
+	for <lists+linux-can@lfdr.de>; Tue,  9 May 2023 14:27:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbjEIMWZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 9 May 2023 08:22:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60606 "EHLO
+        id S235316AbjEIM1l (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 9 May 2023 08:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235437AbjEIMWY (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 9 May 2023 08:22:24 -0400
+        with ESMTP id S229520AbjEIM1j (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 9 May 2023 08:27:39 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7839C448E
-        for <linux-can@vger.kernel.org>; Tue,  9 May 2023 05:22:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DCB33C3F
+        for <linux-can@vger.kernel.org>; Tue,  9 May 2023 05:27:32 -0700 (PDT)
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1pwMM2-0004Zj-En; Tue, 09 May 2023 14:22:06 +0200
+        id 1pwMQu-0005KF-Kj; Tue, 09 May 2023 14:27:08 +0200
 Received: from pengutronix.de (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id B3EC51C0DDB;
-        Tue,  9 May 2023 12:22:04 +0000 (UTC)
-Date:   Tue, 9 May 2023 14:22:04 +0200
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 7F6961C0DEB;
+        Tue,  9 May 2023 12:27:05 +0000 (UTC)
+Date:   Tue, 9 May 2023 14:27:04 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     dario.binacchi@amarulasolutions.com, wg@grandegger.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux-can@vger.kernel.org,
+To:     Rob Herring <robh@kernel.org>
+Cc:     Judith Mendez <jm@ti.com>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH] can: bxcan: Remove unnecessary print function dev_err()
-Message-ID: <20230509-sensitive-upper-bd97c6e9abe1-mkl@pengutronix.de>
-References: <20230506080725.68401-1-jiapeng.chong@linux.alibaba.com>
+        Schuyler Patton <spatton@ti.com>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Simon Horman <simon.horman@corigine.com>
+Subject: Re: [PATCH v4 1/4] dt-bindings: net: can: Add poll-interval for MCAN
+Message-ID: <20230509-strike-available-6b2378172a59-mkl@pengutronix.de>
+References: <20230501224624.13866-1-jm@ti.com>
+ <20230501224624.13866-2-jm@ti.com>
+ <20230505212948.GA3590042-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uke4yzmz6wgdsbsm"
+        protocol="application/pgp-signature"; boundary="ruyafeokmkujpvvo"
 Content-Disposition: inline
-In-Reply-To: <20230506080725.68401-1-jiapeng.chong@linux.alibaba.com>
+In-Reply-To: <20230505212948.GA3590042-robh@kernel.org>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -56,29 +68,74 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---uke4yzmz6wgdsbsm
+--ruyafeokmkujpvvo
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 06.05.2023 16:07:25, Jiapeng Chong wrote:
-> The print function dev_err() is redundant because
-> platform_get_irq_byname() already prints an error.
+On 05.05.2023 16:29:48, Rob Herring wrote:
+> On Mon, May 01, 2023 at 05:46:21PM -0500, Judith Mendez wrote:
+> > On AM62x SoC, MCANs on MCU domain do not have hardware interrupt
+> > routed to A53 Linux, instead they will use software interrupt by
+> > hrtimer. To enable timer method, interrupts should be optional so
+> > remove interrupts property from required section and introduce
+> > poll-interval property.
+> >=20
+> > Signed-off-by: Judith Mendez <jm@ti.com>
+> > ---
+> > Changelog:
+> > v3:
+> >  1. Move binding patch to first in series
+> >  2. Update description for poll-interval
+> >  3. Add oneOf to specify using interrupts/interrupt-names or poll-inter=
+val
+> >  4. Fix example property: add comment below 'example'
+> >=20
+> > v2:
+> >   1. Add poll-interval property to enable timer polling method
+> >   2. Add example using poll-interval property
+> >  =20
+> >  .../bindings/net/can/bosch,m_can.yaml         | 36 +++++++++++++++++--
+> >  1 file changed, 34 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml=
+ b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> > index 67879aab623b..c024ee49962c 100644
+> > --- a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> > +++ b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> > @@ -14,6 +14,13 @@ maintainers:
+> >  allOf:
+> >    - $ref: can-controller.yaml#
+> > =20
+> > +oneOf:
+> > +  - required:
+> > +      - interrupts
+> > +      - interrupt-names
+> > +  - required:
+> > +      - poll-interval
 >=20
-> ./drivers/net/can/bxcan.c:970:2-9: line 970 is redundant because platform=
-_get_irq() already prints an error.
-> ./drivers/net/can/bxcan.c:964:2-9: line 964 is redundant because platform=
-_get_irq() already prints an error.
-> ./drivers/net/can/bxcan.c:958:2-9: line 958 is redundant because platform=
-_get_irq() already prints an error.
+> Move this next to 'required'.
 >=20
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3D4878
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> > +
+> >  properties:
+> >    compatible:
+> >      const: bosch,m_can
+> > @@ -40,6 +47,14 @@ properties:
+> >        - const: int1
+> >      minItems: 1
+> > =20
+> > +  poll-interval:
+> > +    $ref: /schemas/types.yaml#/definitions/flag
+>=20
+> This is a common property already defined as a uint32. You shouldn't=20
+> define a new type.
+>=20
+> A flag doesn't even make sense. If that's all you need, then just enable=
+=20
+> polling if no interrupt is present.
 
-Applied to linux-can-next
+Ok, then it's implicit. No IRQs -> polling.
 
-Thanks,
 Marc
 
 --=20
@@ -87,19 +144,19 @@ Embedded Linux                   | https://www.pengutronix.de |
 Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
---uke4yzmz6wgdsbsm
+--ruyafeokmkujpvvo
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRaOukACgkQvlAcSiqK
-BOgvnAgAtQPyQ1WfKt2BrYRfZ8kxWYSXEQ4y8VEhvujRjZUvbCLLaZPzAPVM5lBN
-gBdiEuwbid/nlRlB70y/ihG0m1LLnex9IRlgoaVid/QYocRLQ+u9x+tNHh5Q/igQ
-o2WPJTsiV5QNxsY3rVqSWUG9iB/JOhlA/DEa5fNBxrYrgXbsfRf6GczLtx85FEZG
-Ixp4onofSdOLZ9eKwDNXP5Kz92lm35XnEKtEpv0cTtG/q4kd170kxowDMhfu8cUU
-Omx1iZfQ9tO//jN+7D9/eOe5dkqYTm2OVYdY2zfhbeZ6bcbGaA5Q5x3N/sEqO2wy
-1jj1OrFrgRLt7Kl82CupH1/mHevfAw==
-=JG2b
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRaPBYACgkQvlAcSiqK
+BOjU0Af+Ksj/LqHQdcZruoOFgMEePW+7vKeglTP2i2NgKhr1bAPQseZHWsrdZ/2w
+L2heATaiciw3M9roMdccpxRHix2NFMaYoE+yODdLUkEDcDWS+rQ+NKcJ7/MusnaJ
+K65j0alWcKxu2W934e7eP+3/xrf4dwJucPIxsydEbL2+JXBOadhcJTHRjUcuHz8k
+Jig4Xql76vsuccFjZZ1T6anurjbnxVg2lTcw8CBFdjMspC33RJd6QEw9QELrapem
+0s1iBupm+b0uo0X37y31rW6+4OM2sntEKWkhrb2FUzvLMAuJqnr5HOktnbZuiqwr
+Gb2/9REAlzjAgJefVzGeI/eSZtX48w==
+=yn5E
 -----END PGP SIGNATURE-----
 
---uke4yzmz6wgdsbsm--
+--ruyafeokmkujpvvo--
