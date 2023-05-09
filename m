@@ -2,51 +2,46 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F5736FC617
-	for <lists+linux-can@lfdr.de>; Tue,  9 May 2023 14:19:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D09456FC629
+	for <lists+linux-can@lfdr.de>; Tue,  9 May 2023 14:22:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235550AbjEIMTQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 9 May 2023 08:19:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58406 "EHLO
+        id S229520AbjEIMWZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 9 May 2023 08:22:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjEIMTO (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 9 May 2023 08:19:14 -0400
+        with ESMTP id S235437AbjEIMWY (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 9 May 2023 08:22:24 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4E3A4202
-        for <linux-can@vger.kernel.org>; Tue,  9 May 2023 05:19:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7839C448E
+        for <linux-can@vger.kernel.org>; Tue,  9 May 2023 05:22:19 -0700 (PDT)
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1pwMJC-00041Y-PX; Tue, 09 May 2023 14:19:10 +0200
+        id 1pwMM2-0004Zj-En; Tue, 09 May 2023 14:22:06 +0200
 Received: from pengutronix.de (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 10D761C0DCB;
-        Tue,  9 May 2023 12:19:10 +0000 (UTC)
-Date:   Tue, 9 May 2023 14:19:09 +0200
+        by smtp.blackshift.org (Postfix) with ESMTPSA id B3EC51C0DDB;
+        Tue,  9 May 2023 12:22:04 +0000 (UTC)
+Date:   Tue, 9 May 2023 14:22:04 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Frank Jungclaus <Frank.Jungclaus@esd.eu>,
-        Stefan =?utf-8?B?TcOkdGpl?= <Stefan.Maetje@esd.eu>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "wg@grandegger.com" <wg@grandegger.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] can: esd_usb: Add support for esd CAN-USB/3
-Message-ID: <20230509-superglue-hazy-38108aa66bfa-mkl@pengutronix.de>
-References: <20230504154414.1864615-1-frank.jungclaus@esd.eu>
- <20230504154414.1864615-3-frank.jungclaus@esd.eu>
- <CAMZ6RqKgJs-yJaaqREmN1SkUzE1EkGtjBzXiATKx5WL+=J48dQ@mail.gmail.com>
- <ff1374d58d98a42d5f78a2685c748730b26926b9.camel@esd.eu>
- <CAMZ6RqLaDNy-fZ2G0+QMhUEckkXLL+ZyELVSDFmqpd++aBzZQg@mail.gmail.com>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     dario.binacchi@amarulasolutions.com, wg@grandegger.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] can: bxcan: Remove unnecessary print function dev_err()
+Message-ID: <20230509-sensitive-upper-bd97c6e9abe1-mkl@pengutronix.de>
+References: <20230506080725.68401-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uhh5qae7tgsvriw6"
+        protocol="application/pgp-signature"; boundary="uke4yzmz6wgdsbsm"
 Content-Disposition: inline
-In-Reply-To: <CAMZ6RqLaDNy-fZ2G0+QMhUEckkXLL+ZyELVSDFmqpd++aBzZQg@mail.gmail.com>
+In-Reply-To: <20230506080725.68401-1-jiapeng.chong@linux.alibaba.com>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -61,36 +56,29 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---uhh5qae7tgsvriw6
+--uke4yzmz6wgdsbsm
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 09.05.2023 10:28:13, Vincent MAILHOL wrote:
-> > >   ip --details link show canX
-> > Yes, I know. But my intention was to exactly and directly see the
-> > individual values passed to the USB set baudrate command without using
-> > wireshark to sniff the USB, if anybody complains about problems with
-> > the bitrate.
+On 06.05.2023 16:07:25, Jiapeng Chong wrote:
+> The print function dev_err() is redundant because
+> platform_get_irq_byname() already prints an error.
 >=20
-> That's my point, this is meant for troubleshooting, not for normal
-> use. The calculation is not rocket science. If a user has an issue
-> with the bitrate, the values provided by the ip tool are enough for
-> you to recalculate the actual values passed to the device. You should
-> not spam the user just to save you the time to do this calculation.
+> ./drivers/net/can/bxcan.c:970:2-9: line 970 is redundant because platform=
+_get_irq() already prints an error.
+> ./drivers/net/can/bxcan.c:964:2-9: line 964 is redundant because platform=
+_get_irq() already prints an error.
+> ./drivers/net/can/bxcan.c:958:2-9: line 958 is redundant because platform=
+_get_irq() already prints an error.
 >=20
-> > This netdev_info is similar to the "netdev_info(netdev,
-> > "setting BTR=3D%#x\n", canbtr);" for CAN-USB/2.
->=20
-> This one should also be removed.
->=20
-> > So from my point of view this is an informational message too, and not
-> > a debug message.
->=20
-> NACK.
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3D4878
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 
-Please make it a debug message.
+Applied to linux-can-next
 
+Thanks,
 Marc
 
 --=20
@@ -99,19 +87,19 @@ Embedded Linux                   | https://www.pengutronix.de |
 Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
---uhh5qae7tgsvriw6
+--uke4yzmz6wgdsbsm
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRaOjkACgkQvlAcSiqK
-BOgycAgApYRXbll9dl2qMGc9KGKNISRW3MWQgapvVbKwNehDcKcXvE/Igkqp1Deu
-HmuShJFWm1umBSopEnzpf5ybHMIRckpcF8gOS6trB/PYZvvTlShDA6FYyApvv+4n
-kD0iwRL6obTAVA2CmTxMBnYICNHohsopKeDQxesBtsQ+s+tNDeP4sZx7xyWO/qiI
-UdJuJBS3YHZOcFvxnPrmAh6gBELj8+i/yHg4QIhG4vPVmm2QqeIBlYgPaJqBNCc8
-89Fd/xCrsLNH0vq2j2mAAjhmNx4/P41ObdyNbaP/owbwU7KrdvRlzRBD6gsY8UzQ
-5SG9vDEKU6mz9iWo67JgGWt0KVym/Q==
-=pdSt
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRaOukACgkQvlAcSiqK
+BOgvnAgAtQPyQ1WfKt2BrYRfZ8kxWYSXEQ4y8VEhvujRjZUvbCLLaZPzAPVM5lBN
+gBdiEuwbid/nlRlB70y/ihG0m1LLnex9IRlgoaVid/QYocRLQ+u9x+tNHh5Q/igQ
+o2WPJTsiV5QNxsY3rVqSWUG9iB/JOhlA/DEa5fNBxrYrgXbsfRf6GczLtx85FEZG
+Ixp4onofSdOLZ9eKwDNXP5Kz92lm35XnEKtEpv0cTtG/q4kd170kxowDMhfu8cUU
+Omx1iZfQ9tO//jN+7D9/eOe5dkqYTm2OVYdY2zfhbeZ6bcbGaA5Q5x3N/sEqO2wy
+1jj1OrFrgRLt7Kl82CupH1/mHevfAw==
+=JG2b
 -----END PGP SIGNATURE-----
 
---uhh5qae7tgsvriw6--
+--uke4yzmz6wgdsbsm--
