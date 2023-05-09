@@ -2,75 +2,74 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D60F26FC143
-	for <lists+linux-can@lfdr.de>; Tue,  9 May 2023 10:07:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A5AC6FC183
+	for <lists+linux-can@lfdr.de>; Tue,  9 May 2023 10:15:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234834AbjEIIHz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 9 May 2023 04:07:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50834 "EHLO
+        id S234305AbjEIIPJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 9 May 2023 04:15:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234885AbjEIIHk (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 9 May 2023 04:07:40 -0400
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0B3106C7;
-        Tue,  9 May 2023 01:07:01 -0700 (PDT)
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1ab267e3528so39026595ad.0;
-        Tue, 09 May 2023 01:07:01 -0700 (PDT)
+        with ESMTP id S234666AbjEIIOx (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 9 May 2023 04:14:53 -0400
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0F098;
+        Tue,  9 May 2023 01:14:52 -0700 (PDT)
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-24dea6d5ce8so5303033a91.2;
+        Tue, 09 May 2023 01:14:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683619614; x=1686211614;
+        d=1e100.net; s=20221208; t=1683620092; x=1686212092;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=40PV0VC+uLvo4YRnubUvGBAuoCKhqk9gddkp21ztTyw=;
-        b=eIznOlKFcFPz+FEinUg41oZYF5abf+aeOD8p6eq5sq/EBK7FZfPtTVw6+4FGM5MKYM
-         BhIGIywC7dXE6d+g6KnulFu4u99onmrY2nl2CyLXE6MQ5KVNu3Igo8MQUZ/9V0DMgbXE
-         +PPLZPBbPCeBRUq7H9cFZOwhLHDsrBleYn8pz3fN+O5NrDQe09fF72DASUvDHne7KzsI
-         uF9r2oKpjqWGtZn6vEpWMS7f4/8KYvIvLqmC/nNBXcJNZJ3/qSuibuIv9L+YY9KulMP/
-         qq/KVWGRCdUemDTSKEdlCK+KUhiTH8okivk6fpjppOqAwuey4bsgfOG8vxOZFXc3mTi+
-         IiKQ==
-X-Gm-Message-State: AC+VfDyl6AyB9QFs2soULm4jSKswOaOc6b/ZdOcx6HjLYd78Plwd8fbU
-        3TtJcPhzjT8TNcD0jX1btDwSpQ5csFE5domYpOI=
-X-Google-Smtp-Source: ACHHUZ5Y+vYnuLr8wBa6PI3ZwpqB724BhdZjdYM8a1RY54pVUhBYOam44+pOyn8tzox9nN+T9rcw9si5zYh4kn21yNo=
-X-Received: by 2002:a17:902:da89:b0:1a2:37fc:b591 with SMTP id
- j9-20020a170902da8900b001a237fcb591mr15463598plx.69.1683619614305; Tue, 09
- May 2023 01:06:54 -0700 (PDT)
+        bh=DZJaCcrG3WkS6P+WY8HNquPOtmx7oDilaWUheXN/6Uc=;
+        b=PGW5C6CJzZo/3gjB6pzHbMH2nwDefHZEiw7sHIN90e5Lx1vuIKur0QU8il2ztlpj08
+         XVgaCGwqO10hxELUxIxQBzY9OI94OnSNjid+jKL6gfvtK9r5hIt8fB8RnO/VxW5Lg5kO
+         OJbzXkaupZEA3iSpAB9QJvxvpQJDdNKYrn0n1axBgLsnSCGNofcuEOkUhfVsdb3VMd8j
+         HAGPbk08l5+GuZcLSrrHmcRfYhdNdDFohzkRH3XWn4OSol4Ww1auWN5/KZ89plpMbVAa
+         vOJ4NMXbVUT5OH9eg5UfeP7QzZzETV8IPzCKA+CivV7+Qh+A7mwgczeYInXfX5/YVJTA
+         84Rg==
+X-Gm-Message-State: AC+VfDyvhPG4YvYfuH9eiRCf+M4gB2GXNEXh9qWO71EGWTURCu82VU7l
+        GVGge2frHNzNoIi7Rnrj/9sz9j0nJn3tQjOhEjX/YN1Hfzc=
+X-Google-Smtp-Source: ACHHUZ7Gn5qMvzm0s0ZGKu9F2tKjuRsw+zEOiui58vsNB+7CKE8uPZ8/TaO3UKvuOFLppaGhpbdYuZtwuSNwKM3gBRU=
+X-Received: by 2002:a17:90a:ab81:b0:24b:a860:a09 with SMTP id
+ n1-20020a17090aab8100b0024ba8600a09mr12838101pjq.49.1683620091774; Tue, 09
+ May 2023 01:14:51 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230507155506.3179711-1-mailhol.vincent@wanadoo.fr>
- <20230508-sprint-cause-80b4172d5a5a-mkl@pengutronix.de> <CAMZ6RqKQw702HPjBTNJdBfL8yhkn5vDVDfn6dbrVMv7SX6NO2w@mail.gmail.com>
- <BL3PR11MB64841417866BA13DFEA3E373FB769@BL3PR11MB6484.namprd11.prod.outlook.com>
-In-Reply-To: <BL3PR11MB64841417866BA13DFEA3E373FB769@BL3PR11MB6484.namprd11.prod.outlook.com>
+ <BL3PR11MB64842FA5ECB64DD2C6C9FA76FB719@BL3PR11MB6484.namprd11.prod.outlook.com>
+ <20230508-paralysis-disarm-fecee3f8a625-mkl@pengutronix.de>
+ <CAMZ6RqL42d04S-pKuMEEMwd0ZoKhrHc2EDci8fv0SoSJVTf3Hg@mail.gmail.com> <20230509-helmet-oozy-c1136e384d2e-mkl@pengutronix.de>
+In-Reply-To: <20230509-helmet-oozy-c1136e384d2e-mkl@pengutronix.de>
 From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Tue, 9 May 2023 17:06:43 +0900
-Message-ID: <CAMZ6Rq+DW7Vdrjb+T2FVkh4iCFAGWQSUTpCAuFCsH_TJ-NYjTg@mail.gmail.com>
-Subject: Re: [PATCH] can: length: add definitions for frame lengths in bits
-To:     Thomas.Kopp@microchip.com
-Cc:     mkl@pengutronix.de, linux-can@vger.kernel.org, marex@denx.de,
-        linux-kernel@vger.kernel.org
+Date:   Tue, 9 May 2023 17:14:40 +0900
+Message-ID: <CAMZ6RqLh1kQvCaGwjOS2fQuLAVuF_XJyAEqLtS89ufxBRhXvWA@mail.gmail.com>
+Subject: Re: RE: [PATCH] can: length: add definitions for frame lengths in bits
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Thomas.Kopp@microchip.com, linux-can@vger.kernel.org,
+        marex@denx.de, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Thomas,
+On Tue. 9 May 2023 at 15:50, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> On 09.05.2023 13:16:08, Vincent MAILHOL wrote:
+> > > The diagram in https://www.can-cia.org/can-knowledge/can/can-fd/
+> > > suggests that IMF is part of the frame.
+> >
+> > ISO 11898-1:2015 section 10.4.6 "Specification of inter-frame space"
+> > makes it clear that the intermission is not part of the frame but part
+> > of the "Inter-frame space".
+>
+> For this reason, it is good to have open standards...oh wait!
 
-On Mon. 9 May 2023 at 16:12, <Thomas.Kopp@microchip.com> wrote:
+It is open is you (or your company, wink, wink) pay CHF 187:
 
-[...]
-
-> Right, do you plan on separating this for Arbitration bitrate and databitrate? It would probably make sense to use a fixed number of worst case stuffbits for the arbitration phase and the formula for the data phase.
-
-I have a few ideas how to implement it, but seeing how complex things
-are going, I am thinking of creating an inline helper function for the
-bitstuffing calculation (the compiler should be able to fold it into a
-constant expression, so there should be no penalty).
-
-For the exact details, I have not decided yet. I need to experiment.
-This not being so trivial and not having so much free time now, please
-wait a few days for the v2 ;)
+  https://www.iso.org/standard/63648.html
