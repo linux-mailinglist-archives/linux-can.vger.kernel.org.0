@@ -2,302 +2,217 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C54F16FBE79
-	for <lists+linux-can@lfdr.de>; Tue,  9 May 2023 06:58:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D157A6FBF2A
+	for <lists+linux-can@lfdr.de>; Tue,  9 May 2023 08:19:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234420AbjEIE6X (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 9 May 2023 00:58:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40314 "EHLO
+        id S234827AbjEIGTg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 9 May 2023 02:19:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjEIE6V (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 9 May 2023 00:58:21 -0400
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4568558D;
-        Mon,  8 May 2023 21:58:18 -0700 (PDT)
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1aae5c2423dso53058155ad.3;
-        Mon, 08 May 2023 21:58:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683608298; x=1686200298;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=//ImHbS+prnCv0z9ZkC0yFOD4796yFiX9w312WKCHmU=;
-        b=lpKbPKKYWlUqKvg3a+BbXzro4kdVTQ+jZPHqhTnvepIOraP/1gl+npMe1YpcuAJz2g
-         2azqsM7ZO8hDHfFgjehaJLuJG4wKzUz7DTLeuP/YBbPk+8s8VHTU/Uv1XrcF3TmEDH/p
-         w7s8sRwRHBpSJ2ozrBSihCGd55S8QsT3HVQNgITnXQ8jG0/JaZZZiFtuPIkvVpBsW84/
-         7vQDHthArfrmMCTjZKdkYHTuzc+lCbj7BYbHL/tpIM9WkFY2I9yHSnUoBDv3M2V0tSGd
-         HMQm/igYFzewV7w5jzjhGzMUwEEgrOQp9jZRESQZQCyaP92LD80xnfNb8kgbdOrcyte/
-         r2DA==
-X-Gm-Message-State: AC+VfDy0zfhl28qHF8M9bk4cKkfdb6I9HUKnPxfTzmmeOoRJvjqfqjKx
-        9TW/zO8MSsxBR0e8/YJvSdzjAYnE8vpuFhbN1gm1/mHlxs4=
-X-Google-Smtp-Source: ACHHUZ5mOThUlddoUQWby4/bUPdG/QEpsHRAURbSP5KnLKZkoeh1+DarxzEqIfHypuQmURRamZqMFtL7HnS48uWs0s0=
-X-Received: by 2002:a17:902:cecf:b0:1ac:96e7:e97d with SMTP id
- d15-20020a170902cecf00b001ac96e7e97dmr1040851plg.67.1683608297910; Mon, 08
- May 2023 21:58:17 -0700 (PDT)
+        with ESMTP id S234796AbjEIGTf (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 9 May 2023 02:19:35 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 654C846B9;
+        Mon,  8 May 2023 23:19:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1683613174; x=1715149174;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=YO1cAQFt845qhWbtfy9aH1s4ZmD29DVWO8F8wQmDbRs=;
+  b=EaOhWhxsruyneA768M2erSElnnEPLsMqJ0Rh3AeWM9CYLyEO5HhKIb45
+   Y3jvEaYDTPS9UsJzoWnBrQ6d79hUuGmHLlqprxzozx08ogmblFWUqm0w3
+   ZpdMI7854s26qcyPrra2K806PWbBiMd+SOylMmZu+e8xBsEGpORI7jBBW
+   YcCAFvUBopNcQ6OQlfEzV4e4K/zUtEcq1dzLJaVFirN88XTqZstIc4HVF
+   FOKvb2X76W/LL8rRp0U0idSHSbCsyq6ZDFJmu3cx983fRAaxHlzkxGefJ
+   lKIJsWSdy9iAe02TVS9htmPDUoXFoQtVnA8Hpir3VoES/wFL4oSeRD35+
+   g==;
+X-IronPort-AV: E=Sophos;i="5.99,261,1677567600"; 
+   d="scan'208";a="212515098"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 May 2023 23:19:33 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 8 May 2023 23:19:33 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Mon, 8 May 2023 23:19:33 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nzQiPd8tN88J9O8uv1TQu2Xl5p3425G0gICnOfhb0khgRIr/SNW5o+v7iffUuhZh3nZy9/XeCNpBS1adjoBawKkk6t1iDZRwjvM8BhlxMJhVLkTZ0+bZxlfNvHySOfNC/6D5if69kxtJLccgKa+IOItUzKJd5v3fAQwCvehmEdfvQO/Z9nfw3fTWWBIgiVPxaaaKhr43Y7tJPV6rHaIh3BcGbQCxMMOG5aKTCReVUKFRys0vyQRZ0bSGpUv271J3TWPxmexBonT1+8TEmSTHIl7liBjntZt3wFPzaHEG3VonP6qtz2QqZ2TXtpfPvVrmvktt42Q/8oQNaDHbltufkg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YO1cAQFt845qhWbtfy9aH1s4ZmD29DVWO8F8wQmDbRs=;
+ b=Q/cf+CKh+z0WV2x8/JR8Cs4kJVMPzyohMB8fhFrIkkVuR3y8LzNTGM8yJGdMwWpapJ11dQIxNpe2GjSB1xL17br5EYchp3TJMmYeABMHmqAaCNXgn6Mlbxt9QfAnoTeEX0tRkU/jM6gHgzXBtw02lSQHP8IdHMsqMllBNi6WLEpdUQpX2IzOtl6HPv+LUArEGoccCOFE4UGfGUpx+3ePxwhdDxDhDPEUl2XIMNxZaOsAMBYVpda7c7spH8dDu8A00hK1ABrhUHSFsdkiYgSyM+tC4Ta/iFYnR5rjgXqvyAIG5yo2KiLEeR3U2LVllxdoFy9Al6moOdfQHnH9EfVR4A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YO1cAQFt845qhWbtfy9aH1s4ZmD29DVWO8F8wQmDbRs=;
+ b=HkZfVnM+hUT3ohp1oldo0skW796u0v5N77BZVr1+CiYzzIIU2yeaemKv/pncxM35YQHIAQEYk0hjhp7xlpgdOrIyC+eiMIzxkRpypJUfZKwMUHjr2ZV1gZFEAaA/QXYNhyn4mAAQU/NT74Ao5UIStj7TaM78u++n8z03qMPoojo=
+Received: from BL3PR11MB6484.namprd11.prod.outlook.com (2603:10b6:208:3bf::19)
+ by CO6PR11MB5651.namprd11.prod.outlook.com (2603:10b6:5:356::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33; Tue, 9 May
+ 2023 06:19:29 +0000
+Received: from BL3PR11MB6484.namprd11.prod.outlook.com
+ ([fe80::c13:dcee:8af:bbfb]) by BL3PR11MB6484.namprd11.prod.outlook.com
+ ([fe80::c13:dcee:8af:bbfb%5]) with mapi id 15.20.6363.033; Tue, 9 May 2023
+ 06:19:29 +0000
+From:   <Thomas.Kopp@microchip.com>
+To:     <mkl@pengutronix.de>
+CC:     <mailhol.vincent@wanadoo.fr>, <linux-can@vger.kernel.org>,
+        <marex@denx.de>, <linux-kernel@vger.kernel.org>
+Subject: RE: RE: [PATCH] can: length: add definitions for frame lengths in
+ bits
+Thread-Topic: RE: [PATCH] can: length: add definitions for frame lengths in
+ bits
+Thread-Index: AQHZgPxeZaBnd1NvTEynohb4vwVjlK9QCmFwgABA9wCAAS8YwA==
+Date:   Tue, 9 May 2023 06:19:28 +0000
+Message-ID: <BL3PR11MB648455424B202C28F3352E7FFB769@BL3PR11MB6484.namprd11.prod.outlook.com>
+References: <20230507155506.3179711-1-mailhol.vincent@wanadoo.fr>
+ <BL3PR11MB64842FA5ECB64DD2C6C9FA76FB719@BL3PR11MB6484.namprd11.prod.outlook.com>
+ <20230508-paralysis-disarm-fecee3f8a625-mkl@pengutronix.de>
+In-Reply-To: <20230508-paralysis-disarm-fecee3f8a625-mkl@pengutronix.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL3PR11MB6484:EE_|CO6PR11MB5651:EE_
+x-ms-office365-filtering-correlation-id: dabf2787-8dce-4b66-4b4c-08db5055586d
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: P2Y8WjF11E5MNR7Gat5URsBJ4GxSwkm1av3TI3MeVzUN6qCc9SKBawUpBjfG7F0VaEWa8Oqas3tFHs9Mh0OLIYeo+sFMxOvpHmObG3zb4aB5q736B+S5+LTLCOCrTxADk76NZyjkwLK/WE8l6qflJR9m+G8K1CUMO9iKBXLQGzt5PkRdOA+4ethuRQGLn3qQvfiHIHW81/neA2Vjst9YND8u1uHzTtxCr1Iz0YvvHhgOJhzpGajlEg9v31XcfX7cw/wi2bYFyZAbYPTNt3iVitcQgRkmq/mthLNwalBvCG4k6nbRovJ1+L21kP9YaoMe2AJGlbOpCGsdIPdtj9VvgH9I5ItDfRDq8nGUMhv9EnYqJAmsEUFGbkvnxL43pkIrEvn3uQmPFAhNJjm3AnLASgicwJS8z3rs3gCZuT1iGA+dsmSoApm2SQV6Zfn2ta5fH/rsHE/5EtgL/ufePaDp3UpGadZPWOD36+TS8aJbb/4gLNPa7lFeu81vT+pHgvt77riz7K4JVvVkkstxRz4YELsBczecKF+nyPfrwR/Y/PvKrAAA/IEENGcTMvg89iI9nMB5qIrVLBKzEOo4op4wJHc8enwwe1OADFMrXdNmvA0=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL3PR11MB6484.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(396003)(346002)(366004)(376002)(39860400002)(451199021)(966005)(86362001)(54906003)(38070700005)(316002)(7696005)(66476007)(41300700001)(64756008)(71200400001)(66446008)(76116006)(66946007)(6916009)(66556008)(4326008)(52536014)(5660300002)(8936002)(8676002)(478600001)(9686003)(53546011)(26005)(38100700002)(6506007)(186003)(2906002)(33656002)(122000001)(83380400001)(55016003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TmxpTWp0amsrZzNGSzlFbk9EUmx1UUhXTTlJeklmTUxUZEJMUGJ5cGxPcWFi?=
+ =?utf-8?B?bktSVU05SVR1Y0NhS0FUemlqQ2NvbVBoaFppbm1tR09vaEg2em1nNlRLeVZt?=
+ =?utf-8?B?WGNKNThnN3N5d3d2NFJVR2ozenBVWG9ac2U4aWZNQUdUWkdGcnlFUlA4UTJF?=
+ =?utf-8?B?YTdWSHUwa3haaW5ucEliZjdRZVRDdnZDRStXSGRDa2tPOUw1Y0EwMldTM1pF?=
+ =?utf-8?B?TS9MTnczU2hSaFNjMnpnSEFZYjR3bTFFOVI5aDd4azFDVHVqampESCtkeUlV?=
+ =?utf-8?B?Tk9LRlFPaVhTTHQ5RzFkaWV1M2U3b0VtOVVmczlvdElKUDRldUVzRlE3TFpi?=
+ =?utf-8?B?Y3lOc0xuUWwzZVZtc0JDVGRQRGJ0cEhnaTJGbURuWjUyTzhPVjNKY09HTmU5?=
+ =?utf-8?B?MFhQQytvcDY4SXNnM2tSNU9idWV1NFp1OE55S0N1MVhGVXljdTNiQ3pYemZY?=
+ =?utf-8?B?NmkxaEd5UWVJVHVySVM5Rmx2MUxWemUwRVNNL2pRaGpWcEZtRVhGeXRBSzhu?=
+ =?utf-8?B?RElQeC9JbXM2bWhtZk1KbURFMGZKZFRXSHh5SGJrU0h2OGN3TFdqUDU0YW1P?=
+ =?utf-8?B?OVE2eHpkcFgxRm5GaHl3MEE3czkxV082NDN6cmtudi9vT0pyQ250dEp1ZGJG?=
+ =?utf-8?B?M3loWmQvU3JwQ2lHeUl4SDlPZ2pBbzVaZW5CL1JqRnhlcW1RY2V2a2JMcitZ?=
+ =?utf-8?B?S29kcy8yNTJLdUdFMlR3dVp4V2dwM05idEpFZmdVNlZNN211T2hsdDU5UGFy?=
+ =?utf-8?B?dTZWZEFZSXUzeGtuNm5LMklBUzlIeW5iK3A3dGxqZGRGUndWM2c1SU5JQW1D?=
+ =?utf-8?B?U1VNQytPMFpTYkFHUnlNMFR2b0w0clhSUWU1VEIwR1JUTERmRkd4ckExYXBV?=
+ =?utf-8?B?TzAyaUQ0S2VMVjFON21kUHBtQ3pCaGRkR01XbjZkUHhWdGhTSzZtc2JpdXkz?=
+ =?utf-8?B?c21VeDhtNTR4MmxOL1EzNEwvdWNlNDB3UEswTE1PWi84U1U3NmtURDVKTCsz?=
+ =?utf-8?B?OEtCT2VrWmxEM0hFcjJDWmpXcERpTUNKakVkVDBUdml3ZEdhSkNWcmQ4L0pO?=
+ =?utf-8?B?MGZqeHdBVXQ0Qlc0Z21OZFcxUWt5RVlPOFp4NGRyUDhLVGJnTERQQ242WTNJ?=
+ =?utf-8?B?TXN4b3VhSVdPc2dlVmcrZ2FzWitKenhBODJBWmFxMWQrczJSMFBtdTM3NENN?=
+ =?utf-8?B?UDlGSGN2cEhtL3YxSGJoYXFJSnBBRkZyTmE1VWx4M3lvUXFIKzVaQ0hHUUE1?=
+ =?utf-8?B?eVJmcmNORG1mQ05kWFpmOWFOUWQ0TFZRQnVMa09BSkY0NzVBNjFOSUJBRDls?=
+ =?utf-8?B?eXVBL0dKMDdWM2dlRTczWklxaHI3OEdLZzV3UjRzckZzNm1QaFhTSUEwRjN1?=
+ =?utf-8?B?bC82WWdyait3VVU0ejd1T2tpWkxYbFpUL3lJSW96U0dzLzRBY3hETHF6Ynh6?=
+ =?utf-8?B?cjhJT09Mb0xRWWc2bmw4OExIV01IaGozc0YzaUN2M0t0b3pFcHJ2UmZTVWZj?=
+ =?utf-8?B?cTJKSlV1MUZwUnZ1S2FTYzB1M1RlbHdYMmcvcDdudTl0MHBzMmRveVVNOG81?=
+ =?utf-8?B?bnhzY2hhYUtRcjkrYS9LTXdvNlY5NWlZU0kyeDBVbWJ5RUg0NmJYemJaTU5S?=
+ =?utf-8?B?MStRRk5Id29nNC8zTEo5NlRPZnVLei84UDdtckpRQVJGQ0RRNFJzK2JBYytH?=
+ =?utf-8?B?ZUwva2hzUFRnSjhnTlU2dkVKcWtPSmlISHJoM2NaT3JIUThROUw3WTZIQWcz?=
+ =?utf-8?B?K3dsd1JSVXhyYm1OWE1zczVhM3lhRnA4UHBzcFZ5L2R1ZjA3YTZsbk5KTW8w?=
+ =?utf-8?B?OXpnQW5HOVQ1THoxV09rWWJ4SnB3SHFHT0hVOGFmYmtTMGhCZGVDN2pEbFFp?=
+ =?utf-8?B?bS85cDZqNm5lMGdnN01ldFUrcGM0U0hrS010SmZ1LzhYVkxadDBJeHk5Y0JP?=
+ =?utf-8?B?OW1JL0hicGVlek1INXpEUzczQjRNaEYwRS9YZlVLaUNKVTFicXFla3k0OFFT?=
+ =?utf-8?B?dmo3T21Gd3dSaDlFOXdJeGNHWmFuSFg0bjdZMit5Y2pVak4xMWNHc0I4d1FG?=
+ =?utf-8?B?bkdIbnFlVmhBVDNyaURmM240R0tWbE5JMmRmMWd6by9VaTEzWlBQbFA5SFZt?=
+ =?utf-8?Q?7ki1drbGlhgSUKenfDrPPGbFq?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20230507155506.3179711-1-mailhol.vincent@wanadoo.fr> <20230508-sprint-cause-80b4172d5a5a-mkl@pengutronix.de>
-In-Reply-To: <20230508-sprint-cause-80b4172d5a5a-mkl@pengutronix.de>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Tue, 9 May 2023 13:58:06 +0900
-Message-ID: <CAMZ6RqKQw702HPjBTNJdBfL8yhkn5vDVDfn6dbrVMv7SX6NO2w@mail.gmail.com>
-Subject: Re: [PATCH] can: length: add definitions for frame lengths in bits
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org, Marek Vasut <marex@denx.de>,
-        linux-kernel@vger.kernel.org,
-        Thomas Kopp <thomas.kopp@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL3PR11MB6484.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dabf2787-8dce-4b66-4b4c-08db5055586d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 May 2023 06:19:28.8640
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: LZPEXtMJBVx9T2p8GysFjOzuWYLK8iBl5q1mBuQ23JqTqvl+Mavc77Not3cUck2OksQCCZtRN7ldNmm5NhtyH5ufK5KKpCruH2DP4QeslTc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR11MB5651
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED,URI_DOTEDU autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon. 8 May 2023 at 21:29, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> On 08.05.2023 00:55:06, Vincent Mailhol wrote:
-> > When created in [1], frames length definitions were added to implement
-> > byte queue limits (bql). Because bql expects lengths in bytes, bit
-> > length definitions were not considered back then.
-> >
-> > Recently, a need to refer to the exact frame length in bits, with CAN
-> > bit stuffing, appeared in [2].
-> >
-> > Add 9 frames length definitions:
-> >
-> >  - CAN_FRAME_OVERHEAD_SFF_BITS:
-> >  - CAN_FRAME_OVERHEAD_EFF_BITS
-> >  - CANFD_FRAME_OVERHEAD_SFF_BITS
-> >  - CANFD_FRAME_OVERHEAD_EFF_BITS
-> >  - CAN_BIT_STUFFING_OVERHEAD
-> >  - CAN_FRAME_LEN_MAX_BITS_NO_STUFFING
-> >  - CAN_FRAME_LEN_MAX_BITS_STUFFING
-> >  - CANFD_FRAME_LEN_MAX_BITS_NO_STUFFING
-> >  - CANFD_FRAME_LEN_MAX_BITS_STUFFING
-> >
-> > CAN_FRAME_LEN_MAX_BITS_STUFFING and CANFD_FRAME_LEN_MAX_BITS_STUFFING
-> > define respectively the maximum number of bits in a classical CAN and
-> > CAN-FD frame including bit stuffing. The other definitions are
-> > intermediate values.
-> >
-> > In addition to the above:
-> >
-> >  - Include linux/bits.h and then replace the value 8 by BITS_PER_BYTE
-> >    whenever relevant.
-> >  - Include linux/math.h because of DIV_ROUND_UP(). N.B: the use of
-> >    DIV_ROUND_UP() is not new to this patch, but the include was
-> >    previously omitted.
-> >  - Update the existing length definitions to use the newly defined values.
-> >  - Add myself as copyright owner for 2020 (as coauthor of the initial
-> >    version, c.f. [1]) and for 2023 (this patch).
-> >
-> > [1] commit 85d99c3e2a13 ("can: length: can_skb_get_frame_len(): introduce
-> >     function to get data length of frame in data link layer")
-> > Link: https://git.kernel.org/torvalds/c/85d99c3e2a13
-> >
-> > [2] RE: [PATCH] can: mcp251xfd: Increase poll timeout
-> > Link: https://lore.kernel.org/linux-can/BL3PR11MB64846C83ACD04E9330B0FE66FB729@BL3PR11MB6484.namprd11.prod.outlook.com/
-> >
-> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > ---
-> > As always, let me know if you have better inspiration than me for the
-> > naming.
-> > ---
-> >  include/linux/can/length.h | 84 ++++++++++++++++++++++++++++++++------
-> >  1 file changed, 72 insertions(+), 12 deletions(-)
-> >
-> > diff --git a/include/linux/can/length.h b/include/linux/can/length.h
-> > index 6995092b774e..60492fcbe34d 100644
-> > --- a/include/linux/can/length.h
-> > +++ b/include/linux/can/length.h
-> > @@ -1,13 +1,17 @@
-> >  /* SPDX-License-Identifier: GPL-2.0 */
-> >  /* Copyright (C) 2020 Oliver Hartkopp <socketcan@hartkopp.net>
-> >   * Copyright (C) 2020 Marc Kleine-Budde <kernel@pengutronix.de>
-> > + * Copyright (C) 2020, 2023 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> >   */
-> >
-> >  #ifndef _CAN_LENGTH_H
-> >  #define _CAN_LENGTH_H
-> >
-> > +#include <linux/bits.h>
-> > +#include <linux/math.h>
-> > +
-> >  /*
-> > - * Size of a Classical CAN Standard Frame
-> > + * Size of a Classical CAN Standard Frame in bits
-> >   *
-> >   * Name of Field                     Bits
-> >   * ---------------------------------------------------------
-> > @@ -25,12 +29,19 @@
-> >   * End-of-frame (EOF)                        7
-> >   * Inter frame spacing                       3
-> >   *
-> > - * rounded up and ignoring bitstuffing
-> > + * ignoring bitstuffing
-> >   */
-> > -#define CAN_FRAME_OVERHEAD_SFF DIV_ROUND_UP(47, 8)
-> > +#define CAN_FRAME_OVERHEAD_SFF_BITS 47
-> >
-> >  /*
-> > - * Size of a Classical CAN Extended Frame
-> > + * Size of a Classical CAN Standard Frame
-> > + * (rounded up and ignoring bitstuffing)
-> > + */
-> > +#define CAN_FRAME_OVERHEAD_SFF \
-> > +     DIV_ROUND_UP(CAN_FRAME_OVERHEAD_SFF_BITS, BITS_PER_BYTE)
-> > +
-> > +/*
-> > + * Size of a Classical CAN Extended Frame in bits
-> >   *
-> >   * Name of Field                     Bits
-> >   * ---------------------------------------------------------
-> > @@ -50,12 +61,19 @@
-> >   * End-of-frame (EOF)                        7
-> >   * Inter frame spacing                       3
-> >   *
-> > - * rounded up and ignoring bitstuffing
-> > + * ignoring bitstuffing
-> >   */
-> > -#define CAN_FRAME_OVERHEAD_EFF DIV_ROUND_UP(67, 8)
-> > +#define CAN_FRAME_OVERHEAD_EFF_BITS 67
-> >
-> >  /*
-> > - * Size of a CAN-FD Standard Frame
-> > + * Size of a Classical CAN Extended Frame
-> > + * (rounded up and ignoring bitstuffing)
-> > + */
-> > +#define CAN_FRAME_OVERHEAD_EFF \
-> > +     DIV_ROUND_UP(CAN_FRAME_OVERHEAD_EFF_BITS, BITS_PER_BYTE)
-> > +
-> > +/*
-> > + * Size of a CAN-FD Standard Frame in bits
-> >   *
-> >   * Name of Field                     Bits
-> >   * ---------------------------------------------------------
-> > @@ -77,12 +95,19 @@
-> >   * End-of-frame (EOF)                        7
-> >   * Inter frame spacing                       3
-> >   *
-> > - * assuming CRC21, rounded up and ignoring bitstuffing
-> > + * assuming CRC21 and ignoring bitstuffing
-> >   */
-> > -#define CANFD_FRAME_OVERHEAD_SFF DIV_ROUND_UP(61, 8)
-> > +#define CANFD_FRAME_OVERHEAD_SFF_BITS 61
-> >
-> >  /*
-> > - * Size of a CAN-FD Extended Frame
-> > + * Size of a CAN-FD Standard Frame
-> > + * (assuming CRC21, rounded up and ignoring bitstuffing)
-> > + */
-> > +#define CANFD_FRAME_OVERHEAD_SFF \
-> > +     DIV_ROUND_UP(CANFD_FRAME_OVERHEAD_SFF_BITS, BITS_PER_BYTE)
-> > +
-> > +/*
-> > + * Size of a CAN-FD Extended Frame in bits
-> >   *
-> >   * Name of Field                     Bits
-> >   * ---------------------------------------------------------
-> > @@ -106,9 +131,32 @@
-> >   * End-of-frame (EOF)                        7
-> >   * Inter frame spacing                       3
-> >   *
-> > - * assuming CRC21, rounded up and ignoring bitstuffing
-> > + * assuming CRC21 and ignoring bitstuffing
-> > + */
-> > +#define CANFD_FRAME_OVERHEAD_EFF_BITS 80
-> > +
-> > +/*
-> > + * Size of a CAN-FD Extended Frame
-> > + * (assuming CRC21, rounded up and ignoring bitstuffing)
-> > + */
-> > +#define CANFD_FRAME_OVERHEAD_EFF \
-> > +     DIV_ROUND_UP(CANFD_FRAME_OVERHEAD_EFF_BITS, BITS_PER_BYTE)
-> > +
-> > +/* CAN bit stuffing overhead multiplication factor */
-> > +#define CAN_BIT_STUFFING_OVERHEAD 1.2
-> > +
-> > +/*
-> > + * Maximum size of a Classical CAN frame in bits, ignoring bitstuffing
-> >   */
-> > -#define CANFD_FRAME_OVERHEAD_EFF DIV_ROUND_UP(80, 8)
-> > +#define CAN_FRAME_LEN_MAX_BITS_NO_STUFFING \
-> > +     (CAN_FRAME_OVERHEAD_EFF_BITS + CAN_MAX_DLEN * BITS_PER_BYTE)
-> > +
-> > +/*
-> > + * Maximum size of a Classical CAN frame in bits, including bitstuffing
-> > + */
-> > +#define CAN_FRAME_LEN_MAX_BITS_STUFFING                              \
-> > +     ((unsigned int)(CAN_FRAME_LEN_MAX_BITS_NO_STUFFING *    \
-> > +                     CAN_BIT_STUFFING_OVERHEAD))
->
-> The 1.2 overhead doesn't apply to the whole frame, according to
-> https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8338047.
-
-You are right. In fact, I realized this mistake before reading your
-message (while I was studying the standard to answer Thomas).
-
-ISO 11898-1:2015 section 10.5 "Frame coding" says:
-
-  the frame segment as SOF, arbitration field, control field,
-  data field, and CRC sequence shall be coded by the method of
-  bit stuffing.
-
-and:
-
-  The remaining bit fields of the DF or RF (CRC delimiter, ACK
-  field and EOF) shall be of fixed form and not stuffed.
-
-So, indeed, the bit stuffing does not apply to the last 10 bits (1 + 1 + 1 + 7).
-Furthermore, for FD frames, the CRC field already contains the fixed
-stuff bits. So the overhead shall not be applied again or else, stuff
-bits would be counted twice. In conclusion, for FD frames, the
-otherhead for dynamic bit stuffing overhead should apply to the SOF,
-arbitration field, control field and data field segments.
-
-After reading the standard, I thought again about the overhead ratio
-and it is more complicated than we all thought.
-
-Let's use below nomenclature in the following examples (borrowed from ISO):
-
-  - "0": dominant bit
-  - "o": dominant stuff bit
-  - "1": recessive bit
-  - "i": recessive stuff bit
-
-We probably all though below example to be the worst case:
-
-  Destuffed: 11111  11111  11111  11111
-  Stuffed:   11111o 11111o 11111o 11111o
-
-Here, indeed, one stuff bit is added every five bits giving us an
-overhead of 6/5 = 1.2.
-
-However, ISO 11898-1:2015 section 10.5 "Frame coding" also says:
-
-  Whenever a transmitter detects five consecutive bits (*including
-  stuff bits*) of identical value in the bit stream to be
-  transmitted, it shall automatically insert a complementary
-  bit (called stuff bit) ...
-
-Pay attention to the *including stuff bits* part. The worst case is
-actually a sequence in which dominant and recessive alternate every
-four bits:
-
-  Destuffed: 1 1111  0000  1111  0000  1111
-  Stuffed:   1 1111o 0000i 1111o 0000i 1111o
-
-Ignoring the first bit, one stuff bit is added every four bits giving
-us an overhead of 5/4 = 1.25.
-
-The exact formula taking in account the first bit we previously ignored then:
-
-  Number of dynamic stuff bit = 1 + round_down((len(stream) - 5) / 4)
-                              = round_down((len(stream) - 1) / 4)
-
-
-Yours sincerely,
-Vincent Mailhol
+PiBPbiAwOC4wNS4yMDIzIDA4OjU0OjE4LCBUaG9tYXMuS29wcEBtaWNyb2NoaXAuY29tIHdyb3Rl
+Og0KPiA+IEkgd2FzIHdvcmtpbmcgb24gdGhlIHNhbWUgdGhpbmcgb24gRnJpZGF5IGJ1dCBkaWRu
+J3QgZ2V0IGFyb3VuZCB0bw0KPiA+IHNlbmRpbmcgaXQgb2ZmLCBzbyBoZXJlIGFyZSBhIGNvdXBs
+ZSB0aG91Z2h0cyBJIGhhZCB3aGVuIHdvcmtpbmcgb24NCj4gPiB0aGUgZGVmaW5lcyBpbiBsZW5n
+dGguaA0KPiA+DQo+ID4gVGhlIGRlZmluaXRpb25zIGZvciBJRlMgaW4gaGVyZSBhcmUgY2FsbGVk
+IGludGVybWlzc2lvbiBpbiB0aGUNCj4gPiBzdGFuZGFyZA0KPiANCj4gQUNLLCBhbmQgSU1GIHNl
+ZW1zIHRvIGJlIGEgY29tbW9uIGFiYnJldmlhdGlvbi4NCj4gDQo+ID4gYW5kIEknZCBhcmd1ZSB0
+aGV5IHNob3VsZG4ndCBiZSBwYXJ0IG9mIHRoZSBmcmFtZSBhdCBhbGwuDQo+IA0KPiBUaGUgZGlh
+Z3JhbSBpbiBodHRwczovL3d3dy5jYW4tY2lhLm9yZy9jYW4ta25vd2xlZGdlL2Nhbi9jYW4tZmQv
+DQo+IHN1Z2dlc3RzIHRoYXQgSU1GIGlzIHBhcnQgb2YgdGhlIGZyYW1lLg0KDQpJJ2QgZGlzYWdy
+ZWUgYXMgdGhlIElTTyBzcGVjaWZpY2FsbHkgc2F5cyBpdCdzIG5vdCBwYXJ0IG9mIHRoZSBmcmFt
+ZS4gVGhlIGRpYWdyYW0gb24gcGFnZSBQREYgcGFnZSAyMSBvZiB0aGUgMi4wIHNwZWM6IGh0dHA6
+Ly9lc2QuY3MudWNyLmVkdS93ZWJyZXMvY2FuMjAucGRmIGlzIGFsc28gaW4gdGhlIElTTyBhbmQg
+c2hvd3MgdGhlIEludGVybWlzc2lvbiBvdXRzaWRlIHRoZSBmcmFtZS4gQWxzbyB0aGUgd29yZCBJ
+TlRFUmZyYW1lIHNwYWNlIHN1Z2dlc3RzIGl0IHNob3VsZG4ndCBiZSBwYXJ0IG9mIHRoZSBmcmFt
+ZSBhbmQgbGFzdGx5IHRoZSBkZWZpbml0aW9uIGlzIHVzZWQgZm9yIGEpIGRldGVybWluaW5nIGhv
+dyBtYW55IGJpdHMvYnl0ZXMgYXJlIG5lZWRlZCB0byBzdG9yZSBmcmFtZXMgd2hpY2ggZG9lc24n
+dCBuZWVkIHRoZSBpbnRlcm1pc3Npb24gYml0cyBhbmQgYikgdGltaW5nLCBidXQgZm9yIHRob3Nl
+IHB1cnBvc2UgdGhlIGZyYW1lIGhhcyBlbmRlZCBhbHJlYWR5IGFuZCBpZiB0aGUgdGltaW5nIG9m
+IHNldmVyYWwgZnJhbWVzIGlzIG5lZWRlZCwgY29tcGxldGUgIGludGVyZnJhbWUgc3BhY2VzIG5l
+ZWQgdG8gYmUgYWRkZWQuDQoNCj4gPiBUbw0KPiA+IHF1b3RlIHRoZSBJU086ICJERnMgYW5kIFJG
+cyBzaGFsbCBiZSBzZXBhcmF0ZWQgZnJvbSBwcmVjZWRpbmcgZnJhbWVzLA0KPiA+IHdoYXRldmVy
+IGZyYW1lIHR5cGUgdGhleSBhcmUgKERGLCBSRiwgRUYsIE9GKSwgYnkgYSB0aW1lIHBlcmlvZCBj
+YWxsZWQNCj4gPiBpbnRlci1mcmFtZSBzcGFjZS4iDQo+ID4NCj4gPiBTbywgbXkgc3VnZ2VzdGlv
+biB3b3VsZCBiZSB0byBwdWxsIG91dCB0aGUgMyBiaXQgSUZTIGRlZmluaXRpb24gdGhhdCdzDQo+
+ID4gY3VycmVudGx5IGluIGFuZCBpbnRyb2R1Y2UgMTEgYml0IEJ1cyBpZGxlIGFuZCBpZiBuZWNl
+c3NhcnkgMyBiaXQNCj4gPiBJbnRlcm1pc3Npb24gc2VwYXJhdGVseS4NCj4gPg0KPiA+IGluZGV4
+IDY5OTUwOTJiNzc0ZWMuLjYyZTkyYzE1NTMzNzYgMTAwNjQ0DQo+ID4gLS0tIGEvaW5jbHVkZS9s
+aW51eC9jYW4vbGVuZ3RoLmgNCj4gPiArKysgYi9pbmNsdWRlL2xpbnV4L2Nhbi9sZW5ndGguaA0K
+PiA+IEBAIC02LDYgKzYsMjYgQEANCj4gPiAgI2lmbmRlZiBfQ0FOX0xFTkdUSF9IDQo+ID4gICNk
+ZWZpbmUgX0NBTl9MRU5HVEhfSA0KPiA+DQo+ID4gKy8qDQo+ID4gKyAqIEZpcnN0IHBhcnQgb2Yg
+dGhlIEludGVyIEZyYW1lIFNwYWNlDQo+ID4gKyAqLw0KPiA+ICsjZGVmaW5lIENBTl9JTlRFUk1J
+U1NJT05fQklUUyAzDQo+ID4gKw0KPiA+ICsvKg0KPiA+ICsgKiBOdW1iZXIgb2YgY29uc2VjdXRp
+dmUgcmVjZXNzaXZlIGJpdHMgb24gdGhlIGJ1cyBmb3IgaW50ZWdyYXRpb24gZXRjLg0KPiA+ICsg
+Ki8NCj4gPiArI2RlZmluZSBDQU5fSURMRV9DT05ESVRJT05fQklUUyAxMQ0KPiA+ICsNCj4gPg0K
+PiA+IFRoZSBmaWVsZCBjdXJyZW50bHkgY2FsbGVkIFN0dWZmIGJpdCBjb3VudCAoU0JDKSBpcyBh
+bHNvIG5vdCBjb3JyZWN0DQo+ID4gSSdkIHNheS4gSSdtIG5vdCBzdXJlIGFib3V0IHRoZSBoaXN0
+b3J5IGJ1dCBnaXZlbiB0aGF0IHRoaXMgaXMNCj4gPiBkZXBlbmRlbnQgb24gdGhlIERMQyBJIHRo
+aW5rIHdoYXQncyBtZWFudCBpcyB0aGUgbnVtYmVyIG9mIEZpeGVkIFN0dWZmDQo+ID4gYml0cyAo
+RlNCKSAuIFRoZSBJU08gZG9lcyBub3QgZGVmaW5lIGEgdGVybSBmb3IgdGhlIFN0dWZmIGJpdCBD
+b3VudA0KPiA+IGJ1dCB0aGUgQ2lBIGRpZCBkZWZpbmUvZG9jdW1lbnQgaXQgdGhpcyB3YXkuIFdo
+YXQncyBtZWFudCB0aG91Z2ggaXMNCj4gPiBub3QgdGhlIG51bWJlciBvZiBmaXhlZCBzdHVmZiBi
+aXRzIChGU0IpIHdoaWNoIHRoZSBjb21tZW50IGltcGxpZXMNCj4gPiBoZXJlIGJ1dCB0aGUgbW9k
+dWxvIDggMyBiaXQgZ3JheS1jb2RlIGZvbGxvd2VkIGJ5IHRoZSBwYXJpdHkgYml0LiBTbw0KPiA+
+IGZvciB0aGUgRkQgZnJhbWUgZGVmaW5pdGlvbnMgSSdkIHByb3Bvc2Ugc29tZXRoaW5nIGxpa2Ug
+dGhpczogUmVuYW1pbmcNCj4gPiB0aGUgY3VycmVudCBTQkMgdG8gRlNCIGFuZCBhZGRpbmcgdGhl
+IFNCQy4NCj4gDQo+ID4gICAqIENSQyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAu
+Li4xNjogMTcgMjAuLi42NDoyMQ0KPiA+ICAgKiBDUkMgZGVsaW1pdGVyIChDRCkgICAgICAgICAg
+ICAgICAgICAxDQo+ID4gKyAqIEZpeGVkIFN0dWZmIGJpdHMgKEZTQikgICAgICAgICAgICAgIDAu
+Li4xNjogNiAyMC4uLjY0OjcNCj4gDQo+IEFzIGZhciBhcyBJIHVuZGVyc3RhbmQNCj4gaHR0cHM6
+Ly9pZWVleHBsb3JlLmllZWUub3JnL3N0YW1wL3N0YW1wLmpzcD90cD0mYXJudW1iZXI9ODMzODA0
+NyB0aGUNCj4gRlNCDQo+IGlzIDUgb3IgNi4NCkkgZG9uJ3Qga25vdyB3aGVyZSB0aGUgcGFwZXIg
+Z290IGl0cyBudW1iZXJzIGZyb20gYnV0IGl0IGFsc28gc2VlbXMgdG8gYmUgbWlzc2luZyB0aGUg
+U0JDIGZpZWxkIGNvbXBsZXRlbHk/IFRoZSBJU08gc2F5czogIiBUaGVyZSBzaGFsbCBiZSBhIGZp
+eGVkIHN0dWZmIGJpdCBiZWZvcmUgdGhlIGZpcnN0IGJpdCBvZiB0aGUgc3R1ZmYgY291bnRbLi4u
+XSIgIiBBIGZ1cnRoZXIgZml4ZWQgc3R1ZmYgYml0IHNoYWxsIGJlIGluc2VydGVkIGFmdGVyIGVh
+Y2ggZm91cnRoIGJpdCBvZiB0aGUgQ1JDIGZpZWxkIiBOb3QgdGhhdCB0aGUgQ1JDIGZpZWxkIGlu
+IEZEIGZyYW1lcyBhbHNvIGNvbnRhaW5zIHRoZSBTQkMgc28gdGhhdCBhZGRzIGZpeGVkIHN0dWZm
+IGJpdHMuDQpBIGdvb2QgdmlzdWFsIHJlcHJlc2VudGF0aW9uIG9mIHRoZSBGU0JzIGlzIG9uIHRo
+ZSBmaXJzdCBwYWdlIHlvdSBwcm92aWRlZCBhcyBhIHNvdXJjZTogaHR0cHM6Ly93d3cuY2FuLWNp
+YS5vcmcvY2FuLWtub3dsZWRnZS9jYW4vY2FuLWZkLyBhbGwgdGhlIHdheSBvbiB0aGUgYm90dG9t
+LiANCg0KDQpCZXN0IFJlZ2FyZHMsDQpUaG9tYXMgDQo=
