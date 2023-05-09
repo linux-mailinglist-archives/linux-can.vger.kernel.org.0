@@ -2,68 +2,56 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 903116FC3B0
-	for <lists+linux-can@lfdr.de>; Tue,  9 May 2023 12:18:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED4296FC60B
+	for <lists+linux-can@lfdr.de>; Tue,  9 May 2023 14:15:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234818AbjEIKSI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 9 May 2023 06:18:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52972 "EHLO
+        id S234503AbjEIMPd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 9 May 2023 08:15:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234553AbjEIKSG (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 9 May 2023 06:18:06 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB3A30FA;
-        Tue,  9 May 2023 03:18:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683627479; x=1715163479;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lFaYZaHglXHehMJ3FYW16hTblnm28QwUMGPBW9xCS3A=;
-  b=bLCgozb+3t+8MBp6RzVVCqWQ65ebWQp8fPdqdolMY2zDRgR5atvy7WYw
-   6Mqca8ahdsuxypLr90rhAutLF2fLw82emLOmjwb2JoMBbHvv/dTN5b4jo
-   n86FeJd8CKcDzI2cMNvKHGpIL12E08xOpfMJVRDYqnUjdvOAVIY/CC0X1
-   HnT61LRin0RgdaSDmED3hFpHjKOgXhQCvTOfll2FNjX1gQyIC1CTIFg8f
-   TJzl5aM97ie1EpOfqpTfK3fats/8/s/1QCKNLS+fFcPm57Fm+gVC/OCpJ
-   JsaavMDjV8m2j1YO3T9LZn8FA10lMDGe72FMhIqttBH93IYFHMQvxmW9s
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="413158406"
-X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
-   d="scan'208";a="413158406"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 03:17:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="873156762"
-X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
-   d="scan'208";a="873156762"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 09 May 2023 03:17:55 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pwKPq-000244-37;
-        Tue, 09 May 2023 10:17:54 +0000
-Date:   Tue, 9 May 2023 18:17:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Ji-Ze Hong (Peter Hong)" <peter_hong@fintek.com.tw>,
-        wg@grandegger.com, mkl@pengutronix.de,
-        michal.swiatkowski@linux.intel.com, Steen.Hegelund@microchip.com,
-        mailhol.vincent@wanadoo.fr
-Cc:     oe-kbuild-all@lists.linux.dev, davem@davemloft.net,
+        with ESMTP id S229741AbjEIMPc (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 9 May 2023 08:15:32 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE81B358C
+        for <linux-can@vger.kernel.org>; Tue,  9 May 2023 05:15:30 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pwMF8-0003R6-NN; Tue, 09 May 2023 14:14:58 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id C08281C0DC1;
+        Tue,  9 May 2023 12:14:51 +0000 (UTC)
+Date:   Tue, 9 May 2023 14:14:51 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     kernel test robot <lkp@intel.com>
+Cc:     "Ji-Ze Hong (Peter Hong)" <peter_hong@fintek.com.tw>,
+        wg@grandegger.com, michal.swiatkowski@linux.intel.com,
+        Steen.Hegelund@microchip.com, mailhol.vincent@wanadoo.fr,
+        oe-kbuild-all@lists.linux.dev, davem@davemloft.net,
         edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
         frank.jungclaus@esd.eu, linux-kernel@vger.kernel.org,
         linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        hpeter+linux_kernel@gmail.com,
-        "Ji-Ze Hong (Peter Hong)" <peter_hong@fintek.com.tw>
+        hpeter+linux_kernel@gmail.com
 Subject: Re: [PATCH V7] can: usb: f81604: add Fintek F81604 support
-Message-ID: <202305091802.pRFS6n2j-lkp@intel.com>
+Message-ID: <20230509-exert-remindful-0c0e89bf6649-mkl@pengutronix.de>
 References: <20230509073821.25289-1-peter_hong@fintek.com.tw>
+ <202305091802.pRFS6n2j-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="n6k4denxlayn7yaw"
 Content-Disposition: inline
-In-Reply-To: <20230509073821.25289-1-peter_hong@fintek.com.tw>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+In-Reply-To: <202305091802.pRFS6n2j-lkp@intel.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,102 +59,103 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Ji-Ze,
 
-kernel test robot noticed the following build warnings:
+--n6k4denxlayn7yaw
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[auto build test WARNING on mkl-can-next/testing]
-[also build test WARNING on linus/master v6.4-rc1 next-20230509]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Good Bot!
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ji-Ze-Hong-Peter-Hong/can-usb-f81604-add-Fintek-F81604-support/20230509-154045
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git testing
-patch link:    https://lore.kernel.org/r/20230509073821.25289-1-peter_hong%40fintek.com.tw
-patch subject: [PATCH V7] can: usb: f81604: add Fintek F81604 support
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20230509/202305091802.pRFS6n2j-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/9549380f8d5eea359f8c83f48e10a0becfd13541
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ji-Ze-Hong-Peter-Hong/can-usb-f81604-add-Fintek-F81604-support/20230509-154045
-        git checkout 9549380f8d5eea359f8c83f48e10a0becfd13541
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash drivers/net/
+On 09.05.2023 18:17:43, kernel test robot wrote:
+> Hi Ji-Ze,
+>=20
+> kernel test robot noticed the following build warnings:
+>=20
+> [auto build test WARNING on mkl-can-next/testing]
+> [also build test WARNING on linus/master v6.4-rc1 next-20230509]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>=20
+> url:    https://github.com/intel-lab-lkp/linux/commits/Ji-Ze-Hong-Peter-H=
+ong/can-usb-f81604-add-Fintek-F81604-support/20230509-154045
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-nex=
+t.git testing
+> patch link:    https://lore.kernel.org/r/20230509073821.25289-1-peter_hon=
+g%40fintek.com.tw
+> patch subject: [PATCH V7] can: usb: f81604: add Fintek F81604 support
+> config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20230509=
+/202305091802.pRFS6n2j-lkp@intel.com/config)
+> compiler: sh4-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=3D1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
+n/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/9549380f8d5eea359=
+f8c83f48e10a0becfd13541
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Ji-Ze-Hong-Peter-Hong/can-usb-f8=
+1604-add-Fintek-F81604-support/20230509-154045
+>         git checkout 9549380f8d5eea359f8c83f48e10a0becfd13541
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-12.1.0 make.cro=
+ss W=3D1 O=3Dbuild_dir ARCH=3Dsh olddefconfig
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-12.1.0 make.cro=
+ss W=3D1 O=3Dbuild_dir ARCH=3Dsh SHELL=3D/bin/bash drivers/net/
+>=20
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202305091802.pRFS6n2j-lkp@i=
+ntel.com/
+>=20
+> All warnings (new ones prefixed by >>):
+>=20
+>    drivers/net/can/usb/f81604.c: In function 'f81604_read_bulk_callback':
+> >> drivers/net/can/usb/f81604.c:440:67: warning: format '%lu' expects arg=
+ument of type 'long unsigned int', but argument 4 has type 'unsigned int' [=
+-Wformat=3D]
+>      440 |                 netdev_warn(netdev, "URB length %u not equal t=
+o %lu\n",
+>          |                                                               =
+  ~~^
+>          |                                                               =
+    |
+>          |                                                               =
+    long unsigned int
+>          |                                                               =
+  %u
+>      441 |                             urb->actual_length, sizeof(*frame)=
+);
+>          |                                                 ~~~~~~~~~~~~~~=
+    =20
+>          |                                                 |
+>          |                                                 unsigned int
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305091802.pRFS6n2j-lkp@intel.com/
+Replaced "%lu% by "%zu" while applying the patch.
 
-All warnings (new ones prefixed by >>):
+Marc
 
-   drivers/net/can/usb/f81604.c: In function 'f81604_read_bulk_callback':
->> drivers/net/can/usb/f81604.c:440:67: warning: format '%lu' expects argument of type 'long unsigned int', but argument 4 has type 'unsigned int' [-Wformat=]
-     440 |                 netdev_warn(netdev, "URB length %u not equal to %lu\n",
-         |                                                                 ~~^
-         |                                                                   |
-         |                                                                   long unsigned int
-         |                                                                 %u
-     441 |                             urb->actual_length, sizeof(*frame));
-         |                                                 ~~~~~~~~~~~~~~     
-         |                                                 |
-         |                                                 unsigned int
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
+--n6k4denxlayn7yaw
+Content-Type: application/pgp-signature; name="signature.asc"
 
-vim +440 drivers/net/can/usb/f81604.c
+-----BEGIN PGP SIGNATURE-----
 
-   411	
-   412	static void f81604_read_bulk_callback(struct urb *urb)
-   413	{
-   414		struct f81604_can_frame *frame = urb->transfer_buffer;
-   415		struct net_device *netdev = urb->context;
-   416		int ret;
-   417	
-   418		if (!netif_device_present(netdev))
-   419			return;
-   420	
-   421		if (urb->status)
-   422			netdev_info(netdev, "%s: URB aborted %pe\n", __func__,
-   423				    ERR_PTR(urb->status));
-   424	
-   425		switch (urb->status) {
-   426		case 0: /* success */
-   427			break;
-   428	
-   429		case -ENOENT:
-   430		case -EPIPE:
-   431		case -EPROTO:
-   432		case -ESHUTDOWN:
-   433			return;
-   434	
-   435		default:
-   436			goto resubmit_urb;
-   437		}
-   438	
-   439		if (urb->actual_length != sizeof(*frame)) {
- > 440			netdev_warn(netdev, "URB length %u not equal to %lu\n",
-   441				    urb->actual_length, sizeof(*frame));
-   442			goto resubmit_urb;
-   443		}
-   444	
-   445		f81604_process_rx_packet(netdev, frame);
-   446	
-   447	resubmit_urb:
-   448		ret = usb_submit_urb(urb, GFP_ATOMIC);
-   449		if (ret == -ENODEV)
-   450			netif_device_detach(netdev);
-   451		else if (ret)
-   452			netdev_err(netdev,
-   453				   "%s: failed to resubmit read bulk urb: %pe\n",
-   454				   __func__, ERR_PTR(ret));
-   455	}
-   456	
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRaOTgACgkQvlAcSiqK
+BOh9SggAgfKi9g6CXX8twuTW5gnJPOwYRXY17ehQj3aadTLd0SVqOV1IYSwJ5H0R
+JQmZmANMv/SXMRZveWaVm+PsJfiZr2YX2fB5wzTLiGmjo8ObVZD1rm0xVHFracNX
+oo1DovenPn8Qyj9/5p/dgIzbEWIUaM2hH7IWzzcvZ8EFkXD3TL3NXXdhxckIBBo1
+vpEKKLbcdNyFjgKg436XsxVBPFA2GHQFpHNF/9IGS/98nh7SO96Cjb+2sntSw3Rs
+KvoQy5lRMU+wb7ir+ewpKoPCJyYeBOUIsT6GOUDf4p4r7as7Bl6B1HvULDZiqeaZ
+7+233QdSU1x2MDN7qBHX4xvF9lzrZQ==
+=Pl8e
+-----END PGP SIGNATURE-----
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+--n6k4denxlayn7yaw--
