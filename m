@@ -2,322 +2,166 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81B256FF626
-	for <lists+linux-can@lfdr.de>; Thu, 11 May 2023 17:40:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB3F76FF644
+	for <lists+linux-can@lfdr.de>; Thu, 11 May 2023 17:42:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237973AbjEKPkb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 11 May 2023 11:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60798 "EHLO
+        id S238539AbjEKPm2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 11 May 2023 11:42:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238108AbjEKPka (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 11 May 2023 11:40:30 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2107.outbound.protection.outlook.com [40.107.94.107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1AC14C38;
-        Thu, 11 May 2023 08:40:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FDcdmlq4T1C/T3jtckb6mApGQ5+kYpmR7PzwQXV8HfAFnlyJgvSgd4PBNO5sLm1xt+TVYn5+5DQD7ncDy9CTcAg7C+c4ZaaG/oC+z0wdNI3u7sk/twPLFtbLGwFy/xcND0CV9/KG3V0CoVcGqxNdomBdq2clWnqDYnhp2a783ta7L58Jt36zZF9gGmz7pVFyG1TsEYbqj8WNy41i1sqrCp6U66LOwhjcL2tUvmUzx1tHY38AkGrEwIZbZXhGzfEkNQXps4KJA7i+9U76cm3UN7puqFvsamrogRFoHgK7b1tWOcqU1EXJxAU7dPelo9h5XOfDJWHwOi6G/Zk8cPVvSA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VSetS11EQZm/hfNdaOWfLHQ51veJ4TiUExi/8+wsPzQ=;
- b=NLUfBeeC/IQM6L7/xI6OVGPxWEIhKSmuucNNVVYT7ihmW3CYhhl2m/vHgFYxM9i94hZpLbViI1rvvvpkBq3IMsceG0jAl7b154GAZWnO9yx7WFM5jIJ3Hr/2EnE9wIt2Z5WSuMmP68u0GF9x6/wnpCnneYQ6APbvtlyVE2pgiaz/naYeINZaEvQ0ehvn3ClWOmpjrhUK5ev6NkjBM4I6zu31l5q59OP9s9U3iuAx2Ss3Ta7TbEGQ+ghwyOrg0WXnklYJ2EG8dtYKr+cT+zv7zXI+Rzo8wXNw27iTdTG2XGm18aro3y/+PNZ4D9YNs7OEdHBDv4OYej0K1E58iBqi3w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        with ESMTP id S238232AbjEKPm1 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 11 May 2023 11:42:27 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 590731A4
+        for <linux-can@vger.kernel.org>; Thu, 11 May 2023 08:42:26 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2ac826a1572so89994621fa.0
+        for <linux-can@vger.kernel.org>; Thu, 11 May 2023 08:42:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VSetS11EQZm/hfNdaOWfLHQ51veJ4TiUExi/8+wsPzQ=;
- b=XVCgW+VixqxZSvzlcS6Rq7QWKS37Owc/lQS2pOFqw8am/f7eX3WbjuxjpJoZmMRCY9Tq/IBCljiUNVPai7IQqR3vdn+RNqWEqHZLU8oItcSH3fWnTRkKXwAL0s3PfQL5vaDbmfOBJsSbkbZpXQ8AbMXN4mOXexazh4Q8N4yw5vg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by DS0PR13MB6207.namprd13.prod.outlook.com (2603:10b6:8:122::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.22; Thu, 11 May
- 2023 15:40:19 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6387.020; Thu, 11 May 2023
- 15:40:19 +0000
-Date:   Thu, 11 May 2023 17:40:12 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Mikhail Golubev-Ciuchea <Mikhail.Golubev-Ciuchea@opensynergy.com>
-Cc:     virtio-dev@lists.oasis-open.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Wolfgang Grandegger <wg@grandegger.com>,
+        d=kvaser.com; s=google; t=1683819744; x=1686411744;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:references:cc:to:from:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ahMi3XvObS5rBvCrn/EABKH0wmLSR9nuTXDDbTjqAno=;
+        b=f04MD/JPAT9Aq4hHbWybcWfZdd9lTRrH6Kf7my7IZADLkjAy9IgnsTX20EKY6/sfWx
+         UXjFmxca2/h0YJ9D5ExgXOAdCVj3LY60/hr0YwkcouNv/7lzmYHFLyfz2z22f2E5EztQ
+         UWd0cbufe55DFaJD/16eisoCPywzMhdA0NhMNM2gSEUJxy3dFEX4BKuGoYXQEjDC6ayY
+         7OO6Pe70lhRTQS8XCgAR4vtqhHo0ItR1dAjYBmQdWt7NxAehv3mRFBja3BZHjPHqbLsR
+         r/w3flBCsy+FDWsYN4lsySXov4MZGNdnGvLFY42gwxCENk5IN/yiFWSf3+Re2hc4nzHz
+         wO5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683819744; x=1686411744;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:references:cc:to:from:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ahMi3XvObS5rBvCrn/EABKH0wmLSR9nuTXDDbTjqAno=;
+        b=eWdLCLPopIVWc6rU8nKpA/6SaxZ5eFCtmCfjeMm258cY0Zy8OXTjegjdkTNMeOBWpB
+         CGeevMTibLooxoVaFik6Hd1IZDVov5vuCff8EB1Mqh6B763HYvJCNxqV8zzLa8aTGDEd
+         tBOpQu6Ac8pDsNAhziDalH0eMXcYOHrRYmSvFDW+pG+V6W0ML4S7t1DEuHydoqoor+uO
+         /UJYSYGo2uek7tb/27BUi+GTBp6puZzkgue+PNdup0xg+YlRYiw1naseo6jS2OQtRjt1
+         Bsj2PCBoGmAgEhg/cNBQUK3y+1ZTrYDVEa1xsbZLrXcaQvrPcNFWAONylbwRPAtoc4pi
+         GPTA==
+X-Gm-Message-State: AC+VfDxBWG+ksMB/Mx2q/b+P1Tx3KWCkkn+EuufcaApKC7m3htgbpemY
+        J7m27E3Zv391VUwRkvsdmuSkkoYfSEnrCwWrcns=
+X-Google-Smtp-Source: ACHHUZ5Rn8hBomMLdX4hIlKCXxSXiJbeT2jPC8PWDuylvZoDT1g5vIaPPuxWiGFQ9ACSs1RLGUv30A==
+X-Received: by 2002:a2e:9bd7:0:b0:2a8:ea1e:bde9 with SMTP id w23-20020a2e9bd7000000b002a8ea1ebde9mr3420172ljj.45.1683819744609;
+        Thu, 11 May 2023 08:42:24 -0700 (PDT)
+Received: from [10.8.0.3] (h-98-128-173-232.A785.priv.bahnhof.se. [98.128.173.232])
+        by smtp.gmail.com with ESMTPSA id b2-20020a2e8482000000b002adb98fdf81sm610354ljh.7.2023.05.11.08.42.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 May 2023 08:42:24 -0700 (PDT)
+Subject: Re: [PATCH] can: kvaser_usb_leaf: Implement CAN 2.0 raw DLC
+ functionality.
+From:   Jimmy Assarsson <extja@kvaser.com>
+To:     Carsten Schmidt <carsten.schmidt-achim@t-online.de>
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Damir Shaikhutdinov <Damir.Shaikhutdinov@opensynergy.com>,
-        Harald Mommer <harald.mommer@opensynergy.com>
-Subject: Re: [RFC PATCH v3] can: virtio: Initial virtio CAN driver.
-Message-ID: <ZF0MXKkK1tEN6QyV@corigine.com>
-References: <20230511151444.162882-1-Mikhail.Golubev-Ciuchea@opensynergy.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230511151444.162882-1-Mikhail.Golubev-Ciuchea@opensynergy.com>
-X-ClientProxiedBy: AS4P190CA0047.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:20b:656::11) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        linux-can@vger.kernel.org
+References: <20230506105529.4023-1-carsten.schmidt-achim@t-online.de>
+ <7e25ba42-4aa9-0d88-e708-18462bc7cc48@hartkopp.net>
+ <d4eb5d98-f62b-be58-58fb-9e9736d476bd@kvaser.com>
+Message-ID: <a81e55c3-66b9-1f84-b1a3-dd5184478da3@kvaser.com>
+Date:   Thu, 11 May 2023 17:42:22 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|DS0PR13MB6207:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9ce660de-bed6-4d71-dc61-08db52360692
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nYQK6Y7kJjvBAeZPj2iukoXkfVQVT2As2xWRINwsmA7hS+yIKT9/LC+TNru5ThJilcIXPWL/xGPmsHniKadGQgDhgNNDz7yRLDcJjKGQ5+J78lv4oAV4Fid8IFgoIuWqlLA/GpJqd4lry3vH5r8AhwmIGAePagisaDdwDEuCEgAEtFeXC+gbmifhLvqk9XzevFILYP0CK/qEglJJHH7hzAwrAmqc/8haewsR4aPWD6AOxo1FiEpN437B3Pu28uwW0YFLW41J0dBfQb0UojVdwHNrWUuQbo0wjwkdCmUdY6dTUc87qfkm5iQVeb/M/IYQPPrTbkrL3Bnu4QiZMW3FNcaKhVrY43FA6VPTNGCk/tKIEEh+oOY6AOshbofbAq3y9Ekf5SJXF6IaA6hVxbe1M8zJfcrC8pdOCI8GXtZgfxXKo1SgI5Zjv8ralFzO/tS6TSa0lXEsjH5x+c6NbPy5VyIu8GrscouA0GnIgQv9HZEGUd86/XQClNjnyd2zEUEqK1ArHnmIN8f9wsR8UZL1VvbzkGnqXj2SUJm1Z4XDC40=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(366004)(39850400004)(396003)(376002)(451199021)(54906003)(86362001)(478600001)(316002)(6916009)(4326008)(66476007)(66556008)(66946007)(38100700002)(6666004)(6486002)(966005)(5660300002)(41300700001)(44832011)(6512007)(6506007)(186003)(36756003)(7416002)(8676002)(8936002)(83380400001)(2906002)(2616005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?sTRsWK3D2A11DpUU7k6JUGKYqDZjQZU3GkglIU5U8ODs4YIlhTVPrGpxOnHI?=
- =?us-ascii?Q?tOqG687AZMM9LyFJvVY86xkPAWM4uSfbu/7r/X4ru1RXqLP/oYrHh85+Ykn2?=
- =?us-ascii?Q?HOfaYRhoKV4E+YUGzGf7WpyObV0km0yF5Dtl+Dv3CCgQO5GWDUcOfEpkMB8+?=
- =?us-ascii?Q?YHl+7/ObF5aBzZ1s9JdFX0DA+mFowsB+A94GsJAzM3n643M1lWtgCAGK0HIO?=
- =?us-ascii?Q?3Uiit9OMbm9Q3JkfK6l9UvmTNmjUy3eTzbzIySs0vigP9GkJdiM9/r/5QEXu?=
- =?us-ascii?Q?/K/IOlnnpvN0EIvmd0mHSn7JB1bqMP2H1d1N8H+HucR5oo95secc/AftGcKC?=
- =?us-ascii?Q?pubiytoxxanW2QqGb4jXGak3qnxduFVp4/45Fc4I4J5H2P1G8FD5esfQpRva?=
- =?us-ascii?Q?t0+P8AQF6nLTjDBSsfA5GP7/h8UGEzsZDorN/QceACL/adcVoWGQ/C+Cmi3z?=
- =?us-ascii?Q?/R7q+avfxx/OEc0SFa0Ub2nLAtQklVGfSTuE39ChvIwiMpQH+XCNtGmlDUuw?=
- =?us-ascii?Q?VJOpg9TFVMsA4K6SVA06LfthzmXmNaVJM0c6HbTxBMMu/K1FVYGSrKXzR9yO?=
- =?us-ascii?Q?N8/cNe0V2KdOo5BuXFnhKdw3o/JtfT6Yg/A04syruU3GrgbCcCCPvS2N/LjL?=
- =?us-ascii?Q?Jbg6gu5jZ5i1IOFOqT/YikeSLvX8IEJ0GwiR3Qyngjv121i8ohgUjGPfx+gp?=
- =?us-ascii?Q?i+AR9dCUjz6RNsJBaOnDWrOPUpZr9v/RE/Vvd8xYbABoErrDuA3InCJevWvN?=
- =?us-ascii?Q?J1iSykHXEQXDd8wB2ITy9JFTIoVfkBK5WCWkXAGEqfTd9N0uWQJFfei5Fqgs?=
- =?us-ascii?Q?5ZXDNdXcySGUWvQBg+fS1hkUk6PsxZiAM8LryIx680vl3rxXkXMOP1d5nGjK?=
- =?us-ascii?Q?mXyD1pdeOeZnfrJZwlmiVCg7XO+H0SYGlxtmT0QnOWZhQDp+kglwirzQJzrf?=
- =?us-ascii?Q?nyrI5H1JPHhWoEFXtnmr73nzK9wZ2VxxpA1+n6jtUrvh56enfUmUwZhEQZgA?=
- =?us-ascii?Q?0aVlOFjA6ZDrzp5QFrCVrFvraW4XguRTrbCiD8IxWihZCeXLnCp4FLjuHxee?=
- =?us-ascii?Q?+13jLfN0CUqOxASHUhpSQ4E8XK5XDOjz2Dcjt13WsiKjs+oHdNehao9o8kL5?=
- =?us-ascii?Q?h2+Tscl1b8GOBTs7DIJOCuSXkSAmKU+TwjqgjgYNcFeQJekx6GOce38ZWah7?=
- =?us-ascii?Q?V6k/HGZeHNEhX7Ha3UhpEIREVB/7bl2fXfIPBinWb8bL77eQpgTlrAv4MvVj?=
- =?us-ascii?Q?98WNwvA5d1Fq+6GjVEmxRPbAZHnHGtOEDYw1TM0xJKGeNmc2FYO4hE+YTBYa?=
- =?us-ascii?Q?9cg4S2NBn5O4wnQfdusXX/i93xRWIGt4ZG1FaB8rcCnsK3eBmddkSYNVcGFs?=
- =?us-ascii?Q?ySCORRGoaoEJLrCXKijmSGQ7Zigfu7QXjHSjZXjnZpdIuwTYsu5BF9IHZh8q?=
- =?us-ascii?Q?vTt8GkbYnyvAoB2tj/jBRWcTO/wwVJm8E6Rz8eaNGaaGIfZjgHpRCgr7nnxa?=
- =?us-ascii?Q?+hrNWRqB1nzCWxyKN3BCKHeyYfd/mYYhB7WGld8wBn2UbKYj9iQ0L9K0OQfL?=
- =?us-ascii?Q?+myTJw8nDGPT4zVldHBoyTJkkf8legmFvWaBl/3ULCf6fYAdmEdAG/g/8qg/?=
- =?us-ascii?Q?EcV+WG4ne46IBKVw5YP2E1B9iq8gsiCykbT2tF8in325rmTgI8pNRraaTakc?=
- =?us-ascii?Q?TjOG9A=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9ce660de-bed6-4d71-dc61-08db52360692
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2023 15:40:19.6673
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CRuOZwUX64rEDGNX2XJCbIU6YXiHZ3JRoF65243Y6IPS9OCWZ+vApHHpDPHznqDKzm0lfk/e0H1JKZYJ/wQxQGVdhu9188l/QLXvHDh4eHM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR13MB6207
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <d4eb5d98-f62b-be58-58fb-9e9736d476bd@kvaser.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Thu, May 11, 2023 at 05:14:44PM +0200, Mikhail Golubev-Ciuchea wrote:
-> From: Harald Mommer <harald.mommer@opensynergy.com>
+On 2023-05-08 18:40, Jimmy Assarsson wrote:
+> Hi Carsten,
+> Hi Oliver,
 > 
-> - CAN Control
+> On 5/6/23 21:10, Oliver Hartkopp wrote:
+>> Thanks for your patch Carsten!
+>>
+>> There should be at least one sentence in the commit message even when the 
+>> subject almost covers the story ;-)
 > 
->   - "ip link set up can0" starts the virtual CAN controller,
->   - "ip link set up can0" stops the virtual CAN controller
+> @Carsten, thanks for the patch!
 > 
-> - CAN RX
+> Acked-by: Jimmy Assarsson <extja@kvaser.com>
+> Tested-by: Jimmy Assarsson <extja@kvaser.com>
 > 
->   Receive CAN frames. CAN frames can be standard or extended, classic or
->   CAN FD. Classic CAN RTR frames are supported.
+>> Can you also please change the subject to
+>>
+>> can: kvaser_usb: add len8_dlc support for kvaser_usb_leaf
+>>
+>> to follow up with the other len8_dlc patches?
+>>
+>> @Jimmy: AFAIK Carsten only has a Kvaser USB Leaf for testing. Can you 
+>> probably provide and test a similar improvement for the Kvaser USB Hydra 
+>> hardware?
 > 
-> - CAN TX
 > 
->   Send CAN frames. CAN frames can be standard or extended, classic or
->   CAN FD. Classic CAN RTR frames are supported.
+> @Oliver, yes, I'll fix this for the remaining Kvaser USB devices.
+> I'll try to send a patch for it by the end of the week.
 > 
-> - CAN BusOff indication
-> 
->   CAN BusOff is handled by a bit in the configuration space.
-> 
-> Signed-off-by: Harald Mommer <Harald.Mommer@opensynergy.com>
-> Signed-off-by: Mikhail Golubev-Ciuchea <Mikhail.Golubev-Ciuchea@opensynergy.com>
-> Co-developed-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> Cc: Damir Shaikhutdinov <Damir.Shaikhutdinov@opensynergy.com>
+> Best regards,
+> jimmy
 
-Hi Mikhail,
+Hi Carsten,
 
-thanks for your patch.
-Some minor feedback from my side.
+I've implemented cc-len8-dlc support for the Kvaser USB Hydra devices.
+Is it OK if I add my changes to your patch, and send it is as a V2?
 
-...
+Best regards,
+jimmy
 
-> diff --git a/drivers/net/can/virtio_can.c b/drivers/net/can/virtio_can.c
-
-...
-
-> +/* Send a control message with message type either
-> + *
-> + * - VIRTIO_CAN_SET_CTRL_MODE_START or
-> + * - VIRTIO_CAN_SET_CTRL_MODE_STOP.
-> + *
-> + * Unlike AUTOSAR CAN Driver Can_SetControllerMode() there is no requirement
-> + * for this Linux driver to have an asynchronous implementation of the mode
-> + * setting function so in order to keep things simple the function is
-> + * implemented as synchronous function. Design pattern is
-> + * virtio_console.c/__send_control_msg() & virtio_net.c/virtnet_send_command().
-> + */
-> +static u8 virtio_can_send_ctrl_msg(struct net_device *ndev, u16 msg_type)
-> +{
-> +	struct virtio_can_priv *priv = netdev_priv(ndev);
-> +	struct device *dev = &priv->vdev->dev;
-> +	struct virtqueue *vq = priv->vqs[VIRTIO_CAN_QUEUE_CONTROL];
-> +	struct scatterlist sg_out[1];
-> +	struct scatterlist sg_in[1];
-> +	struct scatterlist *sgs[2];
-> +	int err;
-> +	unsigned int len;
-
-nit: For networking code please arrange local variables in reverse xmas
-     tree order - longest line to shortest.
-
-     You can check this using: https://github.com/ecree-solarflare/xmastree
-
-     In this case I think it would be:
-
-	struct virtio_can_priv *priv = netdev_priv(ndev);
-	struct device *dev = &priv->vdev->dev;
-	struct scatterlist sg_out[1];
-	struct scatterlist sg_in[1];
-	struct scatterlist *sgs[2];
-	struct virtqueue *vq;
-	unsigned int len;
-	int err;
-
-	vq = priv->vqs[VIRTIO_CAN_QUEUE_CONTROL];
-
-...
-
-> +static netdev_tx_t virtio_can_start_xmit(struct sk_buff *skb,
-> +					 struct net_device *dev)
-> +{
-> +	struct virtio_can_priv *priv = netdev_priv(dev);
-> +	struct canfd_frame *cf = (struct canfd_frame *)skb->data;
-> +	struct virtio_can_tx *can_tx_msg;
-> +	struct virtqueue *vq = priv->vqs[VIRTIO_CAN_QUEUE_TX];
-> +	struct scatterlist sg_out[1];
-> +	struct scatterlist sg_in[1];
-> +	struct scatterlist *sgs[2];
-> +	unsigned long flags;
-> +	u32 can_flags;
-> +	int err;
-> +	int putidx;
-> +	netdev_tx_t xmit_ret = NETDEV_TX_OK;
-> +	const unsigned int hdr_size = offsetof(struct virtio_can_tx_out, sdu);
-> +
-> +	if (can_dev_dropped_skb(dev, skb))
-> +		goto kick; /* No way to return NET_XMIT_DROP here */
-> +
-> +	/* No local check for CAN_RTR_FLAG or FD frame against negotiated
-> +	 * features. The device will reject those anyway if not supported.
-> +	 */
-> +
-> +	can_tx_msg = kzalloc(sizeof(*can_tx_msg), GFP_ATOMIC);
-> +	if (!can_tx_msg)
-> +		goto kick; /* No way to return NET_XMIT_DROP here */
-> +
-> +	can_tx_msg->tx_out.msg_type = cpu_to_le16(VIRTIO_CAN_TX);
-> +	can_flags = 0;
-> +
-> +	if (cf->can_id & CAN_EFF_FLAG) {
-> +		can_flags |= VIRTIO_CAN_FLAGS_EXTENDED;
-> +		can_tx_msg->tx_out.can_id = cpu_to_le32(cf->can_id & CAN_EFF_MASK);
-> +	} else {
-> +		can_tx_msg->tx_out.can_id = cpu_to_le32(cf->can_id & CAN_SFF_MASK);
-> +	}
-> +	if (cf->can_id & CAN_RTR_FLAG)
-> +		can_flags |= VIRTIO_CAN_FLAGS_RTR;
-> +	else
-> +		memcpy(can_tx_msg->tx_out.sdu, cf->data, cf->len);
-> +	if (can_is_canfd_skb(skb))
-> +		can_flags |= VIRTIO_CAN_FLAGS_FD;
-> +
-> +	can_tx_msg->tx_out.flags = cpu_to_le32(can_flags);
-> +	can_tx_msg->tx_out.length = cpu_to_le16(cf->len);
-> +
-> +	/* Prepare sending of virtio message */
-> +	sg_init_one(&sg_out[0], &can_tx_msg->tx_out, hdr_size + cf->len);
-> +	sg_init_one(&sg_in[0], &can_tx_msg->tx_in, sizeof(can_tx_msg->tx_in));
-> +	sgs[0] = sg_out;
-> +	sgs[1] = sg_in;
-> +
-> +	putidx = virtio_can_alloc_tx_idx(priv);
-> +
-> +	if (unlikely(putidx < 0)) {
-> +		netif_stop_queue(dev);
-> +		kfree(can_tx_msg);
-> +		netdev_warn(dev, "TX: Stop queue, no putidx available\n");
-
-If I understand things correctly, this code is on the datapath.
-So perhaps these should be rate limited, or only logged once.
-Likewise elsewhere in this function.
-
-> +		xmit_ret = NETDEV_TX_BUSY;
-> +		goto kick;
-> +	}
-> +
-> +	can_tx_msg->putidx = (unsigned int)putidx;
-> +
-> +	/* Protect list operation */
-> +	spin_lock_irqsave(&priv->tx_lock, flags);
-> +	list_add_tail(&can_tx_msg->list, &priv->tx_list);
-> +	spin_unlock_irqrestore(&priv->tx_lock, flags);
-> +
-> +	/* Push loopback echo. Will be looped back on TX interrupt/TX NAPI */
-> +	can_put_echo_skb(skb, dev, can_tx_msg->putidx, 0);
-> +
-> +	/* Protect queue and list operations */
-> +	spin_lock_irqsave(&priv->tx_lock, flags);
-> +	err = virtqueue_add_sgs(vq, sgs, 1u, 1u, can_tx_msg, GFP_ATOMIC);
-> +	if (err != 0) { /* unlikely when vq->num_free was considered */
-> +		list_del(&can_tx_msg->list);
-> +		can_free_echo_skb(dev, can_tx_msg->putidx, NULL);
-> +		virtio_can_free_tx_idx(priv, can_tx_msg->putidx);
-> +		spin_unlock_irqrestore(&priv->tx_lock, flags);
-> +		netif_stop_queue(dev);
-> +		kfree(can_tx_msg);
-> +		if (err == -ENOSPC)
-> +			netdev_dbg(dev, "TX: Stop queue, no space left\n");
-> +		else
-> +			netdev_warn(dev, "TX: Stop queue, reason = %d\n", err);
-> +		xmit_ret = NETDEV_TX_BUSY;
-> +		goto kick;
-> +	}
-> +
-> +	/* Normal queue stop when no transmission slots are left */
-> +	if (atomic_read(&priv->tx_inflight) >= priv->can.echo_skb_max ||
-> +	    vq->num_free == 0 || (vq->num_free < 2 &&
-> +	    !virtio_has_feature(vq->vdev, VIRTIO_RING_F_INDIRECT_DESC))) {
-> +		netif_stop_queue(dev);
-> +		netdev_dbg(dev, "TX: Normal stop queue\n");
-> +	}
-> +
-> +	spin_unlock_irqrestore(&priv->tx_lock, flags);
-> +
-> +kick:
-> +	if (netif_queue_stopped(dev) || !netdev_xmit_more()) {
-> +		if (!virtqueue_kick(vq))
-> +			netdev_err(dev, "%s(): Kick failed\n", __func__);
-> +	}
-> +
-> +	return xmit_ret;
-> +}
-
-...
+>> Many thanks,
+>> Oliver
+>>
+>> On 06.05.23 12:55, Carsten Schmidt wrote:
+>>> Signed-off-by: Carsten Schmidt <carsten.schmidt-achim@t-online.de>
+>>> ---
+>>>   drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c | 7 ++++---
+>>>   1 file changed, 4 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c 
+>>> b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+>>> index 1c2f99ce4c6c..713b633773b1 100644
+>>> --- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+>>> +++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+>>> @@ -573,7 +573,7 @@ kvaser_usb_leaf_frame_to_cmd(const struct 
+>>> kvaser_usb_net_priv *priv,
+>>>               cmd->u.tx_can.data[1] = cf->can_id & 0x3f;
+>>>           }
+>>> -        cmd->u.tx_can.data[5] = cf->len;
+>>> +        cmd->u.tx_can.data[5] = can_get_cc_dlc(cf, priv->can.ctrlmode);
+>>>           memcpy(&cmd->u.tx_can.data[6], cf->data, cf->len);
+>>>           if (cf->can_id & CAN_RTR_FLAG)
+>>> @@ -1349,7 +1349,7 @@ static void kvaser_usb_leaf_rx_can_msg(const 
+>>> struct kvaser_usb *dev,
+>>>           else
+>>>               cf->can_id &= CAN_SFF_MASK;
+>>> -        cf->len = can_cc_dlc2len(cmd->u.leaf.log_message.dlc);
+>>> +        can_frame_set_cc_len(cf, cmd->u.leaf.log_message.dlc & 0xF, 
+>>> priv->can.ctrlmode);
+>>>           if (cmd->u.leaf.log_message.flags & MSG_FLAG_REMOTE_FRAME)
+>>>               cf->can_id |= CAN_RTR_FLAG;
+>>> @@ -1367,7 +1367,7 @@ static void kvaser_usb_leaf_rx_can_msg(const 
+>>> struct kvaser_usb *dev,
+>>>               cf->can_id |= CAN_EFF_FLAG;
+>>>           }
+>>> -        cf->len = can_cc_dlc2len(rx_data[5]);
+>>> +        can_frame_set_cc_len(cf, rx_data[5] & 0xF, priv->can.ctrlmode);
+>>>           if (cmd->u.rx_can_header.flag & MSG_FLAG_REMOTE_FRAME)
+>>>               cf->can_id |= CAN_RTR_FLAG;
+>>> @@ -1702,6 +1702,7 @@ static int kvaser_usb_leaf_init_card(struct 
+>>> kvaser_usb *dev)
+>>>       struct kvaser_usb_dev_card_data *card_data = &dev->card_data;
+>>>       card_data->ctrlmode_supported |= CAN_CTRLMODE_3_SAMPLES;
+>>> +    card_data->ctrlmode_supported |= CAN_CTRLMODE_CC_LEN8_DLC;
+>>>       return 0;
+>>>   }
