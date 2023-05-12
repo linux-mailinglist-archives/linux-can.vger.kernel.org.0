@@ -2,104 +2,110 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9A6470116C
-	for <lists+linux-can@lfdr.de>; Fri, 12 May 2023 23:38:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1F73701230
+	for <lists+linux-can@lfdr.de>; Sat, 13 May 2023 00:30:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239600AbjELViO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 12 May 2023 17:38:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60720 "EHLO
+        id S239706AbjELWao (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 12 May 2023 18:30:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238676AbjELViO (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 12 May 2023 17:38:14 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E45635A0
-        for <linux-can@vger.kernel.org>; Fri, 12 May 2023 14:38:13 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pxaSY-0007zh-G2; Fri, 12 May 2023 23:37:54 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pxaSV-0033aR-4j; Fri, 12 May 2023 23:37:51 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pxaSU-003qld-8s; Fri, 12 May 2023 23:37:50 +0200
-Date:   Fri, 12 May 2023 23:37:46 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
+        with ESMTP id S239815AbjELWam (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 12 May 2023 18:30:42 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1934B4C15;
+        Fri, 12 May 2023 15:30:38 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34CKQAmH050150;
+        Fri, 12 May 2023 15:26:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1683923170;
+        bh=pgJzF1E1ke1uXdxCOXRhPbp9iOjFxxxNoopTt2gKb7Y=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=cUIjkX64IQMKLiCJf28GSwwhD+hjUfl1hCR60B7yMtVP2HMRxOiRPUCy8C+HaM02I
+         rezM8p0WQGgOm4HeIEX2Y2wLkP10XM2GLv9HtuBgmkdpRHHht95WLYBCpymgp+Znd6
+         f6BMHd0UVWNdqbY29nAf+PuP66qEIXD9McwJu6ig=
+Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34CKQAvO095225
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 12 May 2023 15:26:10 -0500
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 12
+ May 2023 15:26:10 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Fri, 12 May 2023 15:26:10 -0500
+Received: from [128.247.81.95] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34CKQAv3002127;
+        Fri, 12 May 2023 15:26:10 -0500
+Message-ID: <a5754d69-16c1-c217-f4cb-ea0b5e068bd2@ti.com>
+Date:   Fri, 12 May 2023 15:26:10 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v5 2/2] can: m_can: Add hrtimer to generate software
+ interrupt
+To:     Tony Lindgren <tony@atomide.com>
+CC:     <linux-can@vger.kernel.org>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
+        "David S . Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Dongliang Mu <dzm91@hust.edu.cn>
-Cc:     netdev@vger.kernel.org, kernel@pengutronix.de,
-        linux-can@vger.kernel.org
-Subject: Re: [PATCH 12/19] can: mscan/mpc5xxx_can.c -- Convert to platform
- remove callback returning void
-Message-ID: <20230512213746.u5ip4n2dy6crpghi@pengutronix.de>
-References: <20230512212725.143824-1-u.kleine-koenig@pengutronix.de>
- <20230512212725.143824-13-u.kleine-koenig@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vhk4jyixv5dls47a"
-Content-Disposition: inline
-In-Reply-To: <20230512212725.143824-13-u.kleine-koenig@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Paolo Abeni <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Schuyler Patton <spatton@ti.com>,
+        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20230510202952.27111-1-jm@ti.com>
+ <20230510202952.27111-3-jm@ti.com> <20230511062353.GE14287@atomide.com>
+Content-Language: en-US
+From:   Judith Mendez <jm@ti.com>
+In-Reply-To: <20230511062353.GE14287@atomide.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello Tony,
 
---vhk4jyixv5dls47a
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 5/11/23 01:23, Tony Lindgren wrote:
+> Hi,
+> 
+> * Judith Mendez <jm@ti.com> [230510 20:31]:
+>> Add an hrtimer to MCAN class device. Each MCAN will have its own
+>> hrtimer instantiated if there is no hardware interrupt found and
+>> poll-interval property is defined in device tree M_CAN node.
+>>
+>> The hrtimer will generate a software interrupt every 1 ms. In
+>> hrtimer callback, we check if there is a transaction pending by
+>> reading a register, then process by calling the isr if there is.
+> 
+> So what about system suspend, do you need to do something to
+> ensure the timer does not happen to run while suspending?
 
-Hello,
+Great question. Tested the MCAN using timer polling method and
 
-I fatfingered the subject. I didn't adapt completely in the first rebase
-round as I was unsure what to pick and then forgot to fix that before
-sending out. Looking at the history the suitable prefix would be
+it seems to suspend to RAM but not resume. Meanwhile MCAN using
 
-	can: mscan: mpc5xxx_can:
+hardware irq suspends and resumes from RAM just fine. Will look
 
-=2E Feel free to adapt whan applying, otherwise I can resend this patch
-individually or the complete series. Just tell me how you prefer it.
+deeper into this here soon. Thank you Tony for bringing this up.
 
-Best regards
-Uwe
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
---vhk4jyixv5dls47a
-Content-Type: application/pgp-signature; name="signature.asc"
+regards,
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmResagACgkQj4D7WH0S
-/k45fQf+K0RxBCTaHwASNUK8deKJH4D53RkNdw/oDyfNTjfdpD5i3fV4vL7O76wN
-XIHe/sRfpsFX/OHIycxAd0r6D07XUIr/wdZxLkQaMqttp15CJa9oP6BhXa5UC/H7
-LBlwLUVU7RJW5CPQdbnsJZM1fHdCVmjR+9qZ8lGYoKYccWw0Xjjex4AOaI45ri02
-lB1+ooVlImOG5ONHYktVpA4gL+CrXr/QlJ1O/kTZKcwtU05EI15GaxTPuZ65OuSs
-W/zwlnw+xej1eIZV6bq1PwZoVrvW7bXSN8/qSfN3115ACyuWLM9UhptBR6Q+1p0Q
-snUkmBr0U9w7VquMgceHmIHXHcZ0Jg==
-=7Msi
------END PGP SIGNATURE-----
-
---vhk4jyixv5dls47a--
+Judith
