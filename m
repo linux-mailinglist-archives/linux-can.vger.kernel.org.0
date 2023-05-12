@@ -2,30 +2,30 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECDA9701125
-	for <lists+linux-can@lfdr.de>; Fri, 12 May 2023 23:28:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC6EE701118
+	for <lists+linux-can@lfdr.de>; Fri, 12 May 2023 23:28:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbjELV2E (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 12 May 2023 17:28:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53456 "EHLO
+        id S240263AbjELV16 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 12 May 2023 17:27:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239981AbjELV14 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 12 May 2023 17:27:56 -0400
+        with ESMTP id S238707AbjELV1x (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 12 May 2023 17:27:53 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C3F093F6
-        for <linux-can@vger.kernel.org>; Fri, 12 May 2023 14:27:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930073599
+        for <linux-can@vger.kernel.org>; Fri, 12 May 2023 14:27:46 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pxaIa-0005KV-9K; Fri, 12 May 2023 23:27:36 +0200
+        id 1pxaIa-0005Ku-6h; Fri, 12 May 2023 23:27:36 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pxaIY-0033X1-Ty; Fri, 12 May 2023 23:27:34 +0200
+        id 1pxaIZ-0033X9-63; Fri, 12 May 2023 23:27:35 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pxaIY-003qiZ-0T; Fri, 12 May 2023 23:27:34 +0200
+        id 1pxaIY-003qie-AW; Fri, 12 May 2023 23:27:34 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Wolfgang Grandegger <wg@grandegger.com>,
@@ -33,21 +33,18 @@ To:     Wolfgang Grandegger <wg@grandegger.com>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>
+        Paolo Abeni <pabeni@redhat.com>
 Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         kernel@pengutronix.de
-Subject: [PATCH 17/19] can: sun4i_can: Convert to platform remove callback returning void
-Date:   Fri, 12 May 2023 23:27:23 +0200
-Message-Id: <20230512212725.143824-18-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 18/19] can: ti_hecc: Convert to platform remove callback returning void
+Date:   Fri, 12 May 2023 23:27:24 +0200
+Message-Id: <20230512212725.143824-19-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230512212725.143824-1-u.kleine-koenig@pengutronix.de>
 References: <20230512212725.143824-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1738; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=vEDIuWMQZGyuzjSJCDfeA2Tz5oPjwkAzpFxYPKklLv0=; b=owGbwMvMwMXY3/A7olbonx/jabUkhpS49eZNt3wqZ1YsFC0/8aQybJvL2cqlYn/DF966czFPV FjAO7Sjk9GYhYGRi0FWTJHFvnFNplWVXGTn2n+XYQaxMoFMYeDiFICJNNSx/0/5qG3UkK6SkX+m t29ZoY90t8tjCTVnR7/TDtmbuG8dfPsmxWaDfVr/jkBZu45dpyI1smOvygmFHtzx6hvv4Q4DnVL PLzMLtpV+eDhB7mnEzBlXvJ71OHXc8jxne01b1SAzPvs135JfShcY3ly9+VNQfnPQ9ftcZmyzlZ Sl1wUzvrTzOjctdkd0q94Jp7mMgVrSCfPnNdeHL5/oF7R1+RP2kHdCr+QX2s5Z4+J5e2bO/MseQ maps9NezWFx7FrWvohpWbw2z/NsAeHG7/qTpZZPVmj0eFnlpaL5st7OKfmn/8vm+Q3Xpu/3kffk PXN/JeumtW+cU1XXW4loJIlobets/tjx0MIg0v97xl1WAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1821; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=c4YDZjlvuwi+NrNdZM2p4wmykATVvDSlWFTtsAs1Ip0=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkXq84oZyncF9k07znLqDAa4KEE+wi3HrTjPp/8 l3Iy6dgL8uJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZF6vOAAKCRCPgPtYfRL+ TuW2B/41ErL4anDcV2GnqbOXhqKj/9aJeOUoYh+TKagaBfetPwe2yIDUjcm5cefKgYGh8TjBET8 j6KdG4WLggFVctQOxGdUBFynLMFOTzosqzn10NFvLsOt323tzhGFzN6lElKEnVF5i8ZfBwnpvDE tSCRLCoH4DZUd6TKOlx0R6NwBnZD3OIHx8JB71sutAReWFtwWhuaoPDMgLsgGt8qowXN9yIRpNo 1k1CIPIFalstTDOBuzmPD60CPhJJJu2Qz84mGl76CHm0Tng43xHe2HjRKuEPTIyaRmf7r+8ShVX MvU2Z5dZK/lrI9rf6cDFuzrL8vHsgJmVExmDwHMOlnzWfsV7
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -77,38 +74,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/net/can/sun4i_can.c | 6 ++----
+ drivers/net/can/ti_hecc.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/can/sun4i_can.c b/drivers/net/can/sun4i_can.c
-index 2b78f9197681..0827830bbf28 100644
---- a/drivers/net/can/sun4i_can.c
-+++ b/drivers/net/can/sun4i_can.c
-@@ -791,14 +791,12 @@ static const struct of_device_id sun4ican_of_match[] = {
+diff --git a/drivers/net/can/ti_hecc.c b/drivers/net/can/ti_hecc.c
+index 27700f72eac2..9bab0b4cc449 100644
+--- a/drivers/net/can/ti_hecc.c
++++ b/drivers/net/can/ti_hecc.c
+@@ -963,7 +963,7 @@ static int ti_hecc_probe(struct platform_device *pdev)
+ 	return err;
+ }
  
- MODULE_DEVICE_TABLE(of, sun4ican_of_match);
- 
--static int sun4ican_remove(struct platform_device *pdev)
-+static void sun4ican_remove(struct platform_device *pdev)
+-static int ti_hecc_remove(struct platform_device *pdev)
++static void ti_hecc_remove(struct platform_device *pdev)
  {
- 	struct net_device *dev = platform_get_drvdata(pdev);
- 
- 	unregister_netdev(dev);
- 	free_candev(dev);
+ 	struct net_device *ndev = platform_get_drvdata(pdev);
+ 	struct ti_hecc_priv *priv = netdev_priv(ndev);
+@@ -973,8 +973,6 @@ static int ti_hecc_remove(struct platform_device *pdev)
+ 	clk_put(priv->clk);
+ 	can_rx_offload_del(&priv->offload);
+ 	free_candev(ndev);
 -
 -	return 0;
  }
  
- static int sun4ican_probe(struct platform_device *pdev)
-@@ -901,7 +899,7 @@ static struct platform_driver sun4i_can_driver = {
- 		.of_match_table = sun4ican_of_match,
+ #ifdef CONFIG_PM
+@@ -1028,7 +1026,7 @@ static struct platform_driver ti_hecc_driver = {
+ 		.of_match_table = ti_hecc_dt_ids,
  	},
- 	.probe = sun4ican_probe,
--	.remove = sun4ican_remove,
-+	.remove_new = sun4ican_remove,
+ 	.probe = ti_hecc_probe,
+-	.remove = ti_hecc_remove,
++	.remove_new = ti_hecc_remove,
+ 	.suspend = ti_hecc_suspend,
+ 	.resume = ti_hecc_resume,
  };
- 
- module_platform_driver(sun4i_can_driver);
 -- 
 2.39.2
 
