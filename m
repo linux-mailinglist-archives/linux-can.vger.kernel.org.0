@@ -2,111 +2,104 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98287701124
-	for <lists+linux-can@lfdr.de>; Fri, 12 May 2023 23:28:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9A6470116C
+	for <lists+linux-can@lfdr.de>; Fri, 12 May 2023 23:38:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239199AbjELV2C (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 12 May 2023 17:28:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53462 "EHLO
+        id S239600AbjELViO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 12 May 2023 17:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239936AbjELV14 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 12 May 2023 17:27:56 -0400
+        with ESMTP id S238676AbjELViO (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 12 May 2023 17:38:14 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C7839ECA
-        for <linux-can@vger.kernel.org>; Fri, 12 May 2023 14:27:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E45635A0
+        for <linux-can@vger.kernel.org>; Fri, 12 May 2023 14:38:13 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pxaIa-0005LF-HX; Fri, 12 May 2023 23:27:36 +0200
+        id 1pxaSY-0007zh-G2; Fri, 12 May 2023 23:37:54 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pxaIZ-0033XC-8y; Fri, 12 May 2023 23:27:35 +0200
+        id 1pxaSV-0033aR-4j; Fri, 12 May 2023 23:37:51 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pxaIY-003qii-H4; Fri, 12 May 2023 23:27:34 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
+        id 1pxaSU-003qld-8s; Fri, 12 May 2023 23:37:50 +0200
+Date:   Fri, 12 May 2023 23:37:46 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
-        Michal Simek <michal.simek@amd.com>
-Cc:     Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de
-Subject: [PATCH 19/19] can: xilinx: Convert to platform remove callback returning void
-Date:   Fri, 12 May 2023 23:27:25 +0200
-Message-Id: <20230512212725.143824-20-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230512212725.143824-1-u.kleine-koenig@pengutronix.de>
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Dongliang Mu <dzm91@hust.edu.cn>
+Cc:     netdev@vger.kernel.org, kernel@pengutronix.de,
+        linux-can@vger.kernel.org
+Subject: Re: [PATCH 12/19] can: mscan/mpc5xxx_can.c -- Convert to platform
+ remove callback returning void
+Message-ID: <20230512213746.u5ip4n2dy6crpghi@pengutronix.de>
 References: <20230512212725.143824-1-u.kleine-koenig@pengutronix.de>
+ <20230512212725.143824-13-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1689; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=eh5Ov0LEGxYf4zIXoE5bjScSEhdFT8d4JGdB7L+f0K4=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkXq852/yC1xvyajrdLWmDYbqblAGsv8L3O+OA8 AQRa8ehvF+JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZF6vOQAKCRCPgPtYfRL+ TqQ3CAC6uCwtwjc0E4hV2pd3ZEDfYC3k/N5vHOyN4nrpGoIDbWJU2ZFTqSlASWQuUqV4E1qA2/2 yIz6GBM23u2z/GZ/6uCgSCxn2ppGfRiia8S1mDabRLiGadhpcqIzjReT7tVQrh1PXlyWeeIH17z D1/tpdoq3UnG9peTsVI6bR+D5+qR/Gka8fq85jdzKjw8qzH3yWO8GCq+0GUifisR8zPXE+W9lxn xObv4DRak1uzonEsKEzFJhcY/v/tIr6Df2+aCQOF0l8MCdqPtuYa+N/Q/tHEHqtDRbFTAncIgwF da5UsoRCFhMwYCVdAFPE8X9DZr7konNUpmfm0WBwG9rZibk9
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vhk4jyixv5dls47a"
+Content-Disposition: inline
+In-Reply-To: <20230512212725.143824-13-u.kleine-koenig@pengutronix.de>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: ukl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The .remove() callback for a platform driver returns an int which makes
-many driver authors wrongly assume it's possible to do error handling by
-returning an error code. However the value returned is ignored (apart from
-emitting a warning) and this typically results in resource leaks. To improve
-here there is a quest to make the remove callback return void. In the first
-step of this quest all drivers are converted to .remove_new() which already
-returns void. Eventually after all drivers are converted, .remove_new() is
-renamed to .remove().
 
-Trivially convert this driver from always returning zero in the remove
-callback to the void returning variant.
+--vhk4jyixv5dls47a
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/net/can/xilinx_can.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+Hello,
 
-diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.c
-index 43c812ea1de0..797c69a0314d 100644
---- a/drivers/net/can/xilinx_can.c
-+++ b/drivers/net/can/xilinx_can.c
-@@ -1898,20 +1898,18 @@ static int xcan_probe(struct platform_device *pdev)
-  * This function frees all the resources allocated to the device.
-  * Return: 0 always
-  */
--static int xcan_remove(struct platform_device *pdev)
-+static void xcan_remove(struct platform_device *pdev)
- {
- 	struct net_device *ndev = platform_get_drvdata(pdev);
- 
- 	unregister_candev(ndev);
- 	pm_runtime_disable(&pdev->dev);
- 	free_candev(ndev);
--
--	return 0;
- }
- 
- static struct platform_driver xcan_driver = {
- 	.probe = xcan_probe,
--	.remove	= xcan_remove,
-+	.remove_new = xcan_remove,
- 	.driver	= {
- 		.name = DRIVER_NAME,
- 		.pm = &xcan_dev_pm_ops,
--- 
-2.39.2
+I fatfingered the subject. I didn't adapt completely in the first rebase
+round as I was unsure what to pick and then forgot to fix that before
+sending out. Looking at the history the suitable prefix would be
 
+	can: mscan: mpc5xxx_can:
+
+=2E Feel free to adapt whan applying, otherwise I can resend this patch
+individually or the complete series. Just tell me how you prefer it.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--vhk4jyixv5dls47a
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmResagACgkQj4D7WH0S
+/k45fQf+K0RxBCTaHwASNUK8deKJH4D53RkNdw/oDyfNTjfdpD5i3fV4vL7O76wN
+XIHe/sRfpsFX/OHIycxAd0r6D07XUIr/wdZxLkQaMqttp15CJa9oP6BhXa5UC/H7
+LBlwLUVU7RJW5CPQdbnsJZM1fHdCVmjR+9qZ8lGYoKYccWw0Xjjex4AOaI45ri02
+lB1+ooVlImOG5ONHYktVpA4gL+CrXr/QlJ1O/kTZKcwtU05EI15GaxTPuZ65OuSs
+W/zwlnw+xej1eIZV6bq1PwZoVrvW7bXSN8/qSfN3115ACyuWLM9UhptBR6Q+1p0Q
+snUkmBr0U9w7VquMgceHmIHXHcZ0Jg==
+=7Msi
+-----END PGP SIGNATURE-----
+
+--vhk4jyixv5dls47a--
