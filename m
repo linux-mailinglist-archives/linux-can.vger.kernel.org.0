@@ -2,30 +2,30 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 562BD701120
-	for <lists+linux-can@lfdr.de>; Fri, 12 May 2023 23:28:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 026E7701122
+	for <lists+linux-can@lfdr.de>; Fri, 12 May 2023 23:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239636AbjELV2F (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 12 May 2023 17:28:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53494 "EHLO
+        id S239480AbjELV2G (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 12 May 2023 17:28:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239480AbjELV1x (ORCPT
+        with ESMTP id S240220AbjELV1x (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Fri, 12 May 2023 17:27:53 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1C9B5FEF
-        for <linux-can@vger.kernel.org>; Fri, 12 May 2023 14:27:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC098A7D
+        for <linux-can@vger.kernel.org>; Fri, 12 May 2023 14:27:48 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pxaIZ-0005Ix-8L; Fri, 12 May 2023 23:27:35 +0200
+        id 1pxaIZ-0005KY-Vb; Fri, 12 May 2023 23:27:36 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pxaIY-0033Ws-8g; Fri, 12 May 2023 23:27:34 +0200
+        id 1pxaIY-0033X2-V9; Fri, 12 May 2023 23:27:34 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pxaIX-003qiS-J7; Fri, 12 May 2023 23:27:33 +0200
+        id 1pxaIX-003qiW-Pt; Fri, 12 May 2023 23:27:33 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Wolfgang Grandegger <wg@grandegger.com>,
@@ -34,19 +34,20 @@ To:     Wolfgang Grandegger <wg@grandegger.com>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Oliver Hartkopp <socketcan@hartkopp.net>
 Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
         kernel@pengutronix.de
-Subject: [PATCH 15/19] can: sja1000_platform: Convert to platform remove callback returning void
-Date:   Fri, 12 May 2023 23:27:21 +0200
-Message-Id: <20230512212725.143824-16-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 16/19] can: softing: Convert to platform remove callback returning void
+Date:   Fri, 12 May 2023 23:27:22 +0200
+Message-Id: <20230512212725.143824-17-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230512212725.143824-1-u.kleine-koenig@pengutronix.de>
 References: <20230512212725.143824-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1643; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=beU9Z79Mhvu1iNXv5U5ONcMq8jqKn7LM/G783yqIaEE=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkXq81w66g39cZJL6Iz3ESXu8qRt9rSRK2PqOb5 C1FC+sLu3GJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZF6vNQAKCRCPgPtYfRL+ TlHRCACnob2Sne1vnZmq5/gLckjOeF7U59+db12Amhv7G3PS/6IeWX4n7i1AwXwfCRN2K/nmtsq NWzKMktjNSSqHHFvvaG7VsNiSho95LeS/H8f3DxhBET2mxt0PNgCJP3H+ke1l8XbxWyZCRO+aal /nVsgcQwzDypP5OVojMRmGS12Gm14fIAJQyAyu0I7rQgjDtauU1lxwzoGxP8k0U3+FAemdiuYct NBXBy4EbDXWfBBM/aZbRyohGNdfDsKeunNssOKkbVQTNg94gNF0pft9e8cBkNjK7H/H8aI4rrV9 Ot0eFHWExeZ8jiSqSN1H+4j2DYD35rPVHo1sMFBe2vVcvK22
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1859; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=jTXzgKrUMDN72Axnj5aYxzcmMIg+A+FIUaiSoDTwQZk=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkXq82HAJiamGEBpDtcygtkbBSbIUHpAhhXT29f 6jMHiLkAuCJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZF6vNgAKCRCPgPtYfRL+ TjLNCACphNuXo0WYCs2SRbUjXKGGdmt7QvfCUWb7/BjYFWzBwROeP1+Hpb9fmxKKDHAaxi2OILW 3Ofumi52rY2Qx2tLzcUMK5E33LnjBhWzw+AgtSxA4t5He2jCfDrvZvmH4t4sMXdGPCge4DR7bpL FYEiwiQJR3pMH7yCqPpwVCHZ1wjOg3rOQvUL4c59aLpkZaJeeSAO2rofimWXn4IPYDyqhDTdHCd cb3YfjP3iqD5KnColY7HoimRn2jzwkPpuKATepLwJ/zoCoSh81cvUgHKpMb1XMTUTvQ9JbGffyZ 58PjFA7kD6ceoBuiA4JnBlw6ntN0g4GLJImz/P7CJzdCUr7R
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -76,35 +77,39 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/net/can/sja1000/sja1000_platform.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/net/can/softing/softing_main.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/can/sja1000/sja1000_platform.c b/drivers/net/can/sja1000/sja1000_platform.c
-index 6779d5357069..b4889b5746e5 100644
---- a/drivers/net/can/sja1000/sja1000_platform.c
-+++ b/drivers/net/can/sja1000/sja1000_platform.c
-@@ -317,19 +317,17 @@ static int sp_probe(struct platform_device *pdev)
- 	return err;
- }
- 
--static int sp_remove(struct platform_device *pdev)
-+static void sp_remove(struct platform_device *pdev)
+diff --git a/drivers/net/can/softing/softing_main.c b/drivers/net/can/softing/softing_main.c
+index c72f505d29fe..bd25137062c5 100644
+--- a/drivers/net/can/softing/softing_main.c
++++ b/drivers/net/can/softing/softing_main.c
+@@ -729,7 +729,7 @@ static const struct attribute_group softing_pdev_group = {
+ /*
+  * platform driver
+  */
+-static int softing_pdev_remove(struct platform_device *pdev)
++static void softing_pdev_remove(struct platform_device *pdev)
  {
- 	struct net_device *dev = platform_get_drvdata(pdev);
+ 	struct softing *card = platform_get_drvdata(pdev);
+ 	int j;
+@@ -747,7 +747,6 @@ static int softing_pdev_remove(struct platform_device *pdev)
  
- 	unregister_sja1000dev(dev);
- 	free_sja1000dev(dev);
--
+ 	iounmap(card->dpram);
+ 	kfree(card);
 -	return 0;
  }
  
- static struct platform_driver sp_driver = {
- 	.probe = sp_probe,
--	.remove = sp_remove,
-+	.remove_new = sp_remove,
- 	.driver = {
- 		.name = DRV_NAME,
- 		.of_match_table = sp_of_table,
+ static int softing_pdev_probe(struct platform_device *pdev)
+@@ -855,7 +854,7 @@ static struct platform_driver softing_driver = {
+ 		.name = KBUILD_MODNAME,
+ 	},
+ 	.probe = softing_pdev_probe,
+-	.remove = softing_pdev_remove,
++	.remove_new = softing_pdev_remove,
+ };
+ 
+ module_platform_driver(softing_driver);
 -- 
 2.39.2
 
