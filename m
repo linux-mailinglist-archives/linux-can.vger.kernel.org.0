@@ -2,110 +2,107 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1F73701230
-	for <lists+linux-can@lfdr.de>; Sat, 13 May 2023 00:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 505977014A7
+	for <lists+linux-can@lfdr.de>; Sat, 13 May 2023 08:37:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239706AbjELWao (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 12 May 2023 18:30:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49466 "EHLO
+        id S229901AbjEMGhF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 13 May 2023 02:37:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239815AbjELWam (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 12 May 2023 18:30:42 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1934B4C15;
-        Fri, 12 May 2023 15:30:38 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34CKQAmH050150;
-        Fri, 12 May 2023 15:26:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1683923170;
-        bh=pgJzF1E1ke1uXdxCOXRhPbp9iOjFxxxNoopTt2gKb7Y=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=cUIjkX64IQMKLiCJf28GSwwhD+hjUfl1hCR60B7yMtVP2HMRxOiRPUCy8C+HaM02I
-         rezM8p0WQGgOm4HeIEX2Y2wLkP10XM2GLv9HtuBgmkdpRHHht95WLYBCpymgp+Znd6
-         f6BMHd0UVWNdqbY29nAf+PuP66qEIXD9McwJu6ig=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34CKQAvO095225
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 12 May 2023 15:26:10 -0500
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 12
- May 2023 15:26:10 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 12 May 2023 15:26:10 -0500
-Received: from [128.247.81.95] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34CKQAv3002127;
-        Fri, 12 May 2023 15:26:10 -0500
-Message-ID: <a5754d69-16c1-c217-f4cb-ea0b5e068bd2@ti.com>
-Date:   Fri, 12 May 2023 15:26:10 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v5 2/2] can: m_can: Add hrtimer to generate software
- interrupt
-To:     Tony Lindgren <tony@atomide.com>
-CC:     <linux-can@vger.kernel.org>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
+        with ESMTP id S229527AbjEMGhD (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 13 May 2023 02:37:03 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC252D5A;
+        Fri, 12 May 2023 23:37:00 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so95813909a12.0;
+        Fri, 12 May 2023 23:37:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683959819; x=1686551819;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uYFpbAhkvFBTjOnXoqutGtIEzJiI9XzWLyx/evSFRPs=;
+        b=ZDwCPoKhDsaMVA4DZ28mz5uv7DdK9kqQIbuBPI5TTiGMn6p3f3usZotGU5qDDyqaIO
+         ng0xO05Jd8LrdLvSkwQmRU5TPujOB8sxvBgIChoecRAcX/QSO3XWNN+IpRT6bh0q5+w+
+         oXPKoIceDsgbWl7iPXcwMMQmvGmssj06/bnklDRL/wzCfK+TDuYK0AvSKhdS94L+yoKt
+         iCpNIqfNeWQswOkoXX/ssGY4HoTRvjwmv7hine31YNafEsenfklnoLWuBIr95nLHmUJM
+         dIx72fBXWOWigU1QSfejbLAJK0W0nwit3wMb6Cc63bAa5qnjrkDN0DY0EUw7f+b1EpkV
+         Cx4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683959819; x=1686551819;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uYFpbAhkvFBTjOnXoqutGtIEzJiI9XzWLyx/evSFRPs=;
+        b=KEBmzf4Q/UxFPZfZubLGGg9QeIvmVgelYg+NUAsRwz+ewWsPS9o5WctQdOX11BLiQ5
+         PpPC20AeWuam7sb0VxLXza/NbB9zL0qyq2hYMX6UoZlNqhMjhMgXx2yqNCOXhyQXlyPX
+         2Uph0+2ecal04NFupUhWycv9IjP7GocW610xi8VElom3V7anhp4XFWC6Lt/OEQR53Xo8
+         akydQ/2i7MMuaUd7bpytBbk1HxclmXngcXA7NzhHB6z3DAIWQxswm6dwsF1CFo1D+8HM
+         2rQY7wWj+wr4OgAxXiVuXUiUBNIyXr8fbIqSD22a8A+7oFKLOWpVwNxfiHQlv/BLfVvK
+         oPtA==
+X-Gm-Message-State: AC+VfDxrQEESEx6fgoBGiIw2OnV86FEZFuHyE8Xly1m9fevzWMHai7/M
+        qakHgsUaglqGDLUzRElhpDndSGPK478=
+X-Google-Smtp-Source: ACHHUZ6U/3VzZBDjJhchWHFsH0R1I/SSBEmKisnb8+MCxNQXGXdvu+WFC+oPYObLvSAMQjHue5mW8g==
+X-Received: by 2002:a17:907:6e11:b0:96a:2210:7dd8 with SMTP id sd17-20020a1709076e1100b0096a22107dd8mr10416560ejc.38.1683959819039;
+        Fri, 12 May 2023 23:36:59 -0700 (PDT)
+Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
+        by smtp.gmail.com with ESMTPSA id d4-20020a170907272400b00965e9b435dfsm6425131ejl.65.2023.05.12.23.36.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 May 2023 23:36:58 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S . Miller" <davem@davemloft.net>,
+        "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Schuyler Patton <spatton@ti.com>,
-        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230510202952.27111-1-jm@ti.com>
- <20230510202952.27111-3-jm@ti.com> <20230511062353.GE14287@atomide.com>
-Content-Language: en-US
-From:   Judith Mendez <jm@ti.com>
-In-Reply-To: <20230511062353.GE14287@atomide.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Paolo Abeni <pabeni@redhat.com>, Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Uwe =?ISO-8859-1?Q?Kleine=2DK=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@pengutronix.de
+Subject: Re: [PATCH 17/19] can: sun4i_can: Convert to platform remove callback
+ returning void
+Date:   Sat, 13 May 2023 08:36:57 +0200
+Message-ID: <5672483.DvuYhMxLoT@jernej-laptop>
+In-Reply-To: <20230512212725.143824-18-u.kleine-koenig@pengutronix.de>
+References: <20230512212725.143824-1-u.kleine-koenig@pengutronix.de>
+ <20230512212725.143824-18-u.kleine-koenig@pengutronix.de>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Tony,
+Dne petek, 12. maj 2023 ob 23:27:23 CEST je Uwe Kleine-K=F6nig napisal(a):
+> The .remove() callback for a platform driver returns an int which makes
+> many driver authors wrongly assume it's possible to do error handling by
+> returning an error code. However the value returned is ignored (apart from
+> emitting a warning) and this typically results in resource leaks. To impr=
+ove
+> here there is a quest to make the remove callback return void. In the fir=
+st
+> step of this quest all drivers are converted to .remove_new() which alrea=
+dy
+> returns void. Eventually after all drivers are converted, .remove_new() is
+> renamed to .remove().
+>=20
+> Trivially convert this driver from always returning zero in the remove
+> callback to the void returning variant.
+>=20
+> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 
-On 5/11/23 01:23, Tony Lindgren wrote:
-> Hi,
-> 
-> * Judith Mendez <jm@ti.com> [230510 20:31]:
->> Add an hrtimer to MCAN class device. Each MCAN will have its own
->> hrtimer instantiated if there is no hardware interrupt found and
->> poll-interval property is defined in device tree M_CAN node.
->>
->> The hrtimer will generate a software interrupt every 1 ms. In
->> hrtimer callback, we check if there is a transaction pending by
->> reading a register, then process by calling the isr if there is.
-> 
-> So what about system suspend, do you need to do something to
-> ensure the timer does not happen to run while suspending?
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-Great question. Tested the MCAN using timer polling method and
-
-it seems to suspend to RAM but not resume. Meanwhile MCAN using
-
-hardware irq suspends and resumes from RAM just fine. Will look
-
-deeper into this here soon. Thank you Tony for bringing this up.
+Best regards,
+Jernej
 
 
-
-regards,
-
-Judith
