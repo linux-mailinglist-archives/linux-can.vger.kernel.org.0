@@ -2,78 +2,138 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4640F701E9E
-	for <lists+linux-can@lfdr.de>; Sun, 14 May 2023 19:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFED0701FA0
+	for <lists+linux-can@lfdr.de>; Sun, 14 May 2023 23:04:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231506AbjENRMc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 14 May 2023 13:12:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48966 "EHLO
+        id S235025AbjENVEK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 14 May 2023 17:04:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbjENRMa (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 14 May 2023 13:12:30 -0400
-X-Greylist: delayed 435 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 14 May 2023 10:12:29 PDT
-Received: from mail.rdts.de (mail.rdts.de [195.243.153.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183B840C0;
-        Sun, 14 May 2023 10:12:28 -0700 (PDT)
-Received: from webmail.rdts.de (php1.rdts.de [82.223.13.20])
-        by mail.rdts.de (Postfix) with ESMTPSA id A06F1BABA4;
-        Sun, 14 May 2023 19:05:08 +0200 (CEST)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Sun, 14 May 2023 19:05:08 +0200
-From:   Gerhard Bertelsmann <info@gerhard-bertelsmann.de>
-To:     =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
+        with ESMTP id S230147AbjENVEJ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 14 May 2023 17:04:09 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04D310D9
+        for <linux-can@vger.kernel.org>; Sun, 14 May 2023 14:04:08 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pyIsh-0008IM-NV; Sun, 14 May 2023 23:03:51 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 2BF241C3D1B;
+        Sun, 14 May 2023 20:09:51 +0000 (UTC)
+Date:   Sun, 14 May 2023 22:09:50 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Harald Mommer <harald.mommer@opensynergy.com>
+Cc:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        Mikhail Golubev-Ciuchea <Mikhail.Golubev-Ciuchea@opensynergy.com>,
+        virtio-dev@lists.oasis-open.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S . Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        kernel@pengutronix.de
-Subject: Re: [PATCH 17/19] can: sun4i_can: Convert to platform remove callback
- returning void
-In-Reply-To: <20230512212725.143824-18-u.kleine-koenig@pengutronix.de>
-References: <20230512212725.143824-1-u.kleine-koenig@pengutronix.de>
- <20230512212725.143824-18-u.kleine-koenig@pengutronix.de>
-Message-ID: <e8d411e1e01f3c7ae8bf97f2f1700e3d@gerhard-bertelsmann.de>
-X-Sender: info@gerhard-bertelsmann.de
-User-Agent: Roundcube Webmail/1.2.3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Paolo Abeni <pabeni@redhat.com>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Damir Shaikhutdinov <Damir.Shaikhutdinov@opensynergy.com>
+Subject: Re: [RFC PATCH v3] can: virtio: Initial virtio CAN driver.
+Message-ID: <20230514-senior-container-bf049eb882a9-mkl@pengutronix.de>
+References: <20230511151444.162882-1-Mikhail.Golubev-Ciuchea@opensynergy.com>
+ <CAMZ6RqJbjoApwZbiivbvJRYQyBWfWXG4azmwuXGaicrMq0Lozg@mail.gmail.com>
+ <a83e29fd-09d0-64b4-ce56-c7f7a5e44f66@opensynergy.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="i6qfmmn4wmyaeefb"
+Content-Disposition: inline
+In-Reply-To: <a83e29fd-09d0-64b4-ce56-c7f7a5e44f66@opensynergy.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Am 2023-05-12 23:27, schrieb Uwe Kleine-König:
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling 
-> by
-> returning an error code. However the value returned is ignored (apart 
-> from
-> emitting a warning) and this typically results in resource leaks. To 
-> improve
-> here there is a quest to make the remove callback return void. In the 
-> first
-> step of this quest all drivers are converted to .remove_new() which 
-> already
-> returns void. Eventually after all drivers are converted, .remove_new() 
-> is
-> renamed to .remove().
-> 
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-Acked-by: Gerhard Bertelsmann <info@gerhard-bertelsmann.de>
+--i6qfmmn4wmyaeefb
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks Uwe :-)
+On 12.05.2023 19:39:40, Harald Mommer wrote:
+> > > diff --git a/drivers/net/can/Makefile b/drivers/net/can/Makefile
+> > > index ff8f76295d13..19314adaff59 100644
+> > > --- a/drivers/net/can/Makefile
+> > > +++ b/drivers/net/can/Makefile
+> > > @@ -17,8 +17,8 @@ obj-$(CONFIG_CAN_AT91)                +=3D at91_can=
+=2Eo
+> > >   obj-$(CONFIG_CAN_BXCAN)                +=3D bxcan.o
+> > >   obj-$(CONFIG_CAN_CAN327)       +=3D can327.o
+> > >   obj-$(CONFIG_CAN_CC770)                +=3D cc770/
+> > > -obj-$(CONFIG_CAN_C_CAN)                +=3D c_can/
+> > >   obj-$(CONFIG_CAN_CTUCANFD)     +=3D ctucanfd/
+> > > +obj-$(CONFIG_CAN_C_CAN)                +=3D c_can/
+> > This reordering is unrelated to this patch goal. Please send it as a
+> > separate patch.
+>=20
+> @Marc Kleine-Budde: We got this reordering change from you.
+
+That reordering was not intended.
+
+> How to proceed?
+
+Remove that change and sorry for the confusion.
+
+> We can split this in 2 commits, reordering and on top adding virtio CAN. =
+No
+> issue, a question of minutes and done. Fine. But here the word "patch" was
+> used, not the word "commit".
+
+I think in first approximation patches and commits can be/are used
+interchangeably :) (One thought process might be: If you make it a
+separate commit and send it here, it's no longer in git and thus just a
+patch, no longer a commit.)
+
+> Sending a separate patch to somewhere? Maybe
+> Mikhail does this fight to get this in (unlikely), I personally would pre=
+fer
+> to run away. Or we don't reorder at all, wrong ordering remains and we wi=
+ll
+> not make only you unhappy.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--i6qfmmn4wmyaeefb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRhQAsACgkQvlAcSiqK
+BOiLrwf+MivjvW3UCXg71VmfmbA3FMZQOYEREO80Bd/GD1zKMbD3PtaN/jFo2bHo
+kYXOW4N67y4TYbwHFVoY4wYzzv+1OSfUzVc5xYgYbcGzBBxS80zmGlvMpEmI4H2z
+50XyMbZVBZOhxUrAvfQc40KY05IIoSWnkT1ReBN7nmYtm+FK0Ctpww1jgmyGK9/G
+9W0ZoIOfmoQWXSTp7KtocxpUWNiU4uCgZYFt9I5bNag/qZDztgjVTFbct1lCYejs
+jvNjWvWqXPneFd1B1I6Tca3zup1hTKTpT2C6uOZ1/GcN8GWoIbLdNtBZYIHnnlXg
+IhaMq27QJd3111vs57wiCmwwyWcZXQ==
+=kAT9
+-----END PGP SIGNATURE-----
+
+--i6qfmmn4wmyaeefb--
