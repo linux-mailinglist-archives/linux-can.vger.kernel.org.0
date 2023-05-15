@@ -2,61 +2,64 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFED0701FA0
-	for <lists+linux-can@lfdr.de>; Sun, 14 May 2023 23:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6B577020FC
+	for <lists+linux-can@lfdr.de>; Mon, 15 May 2023 03:13:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235025AbjENVEK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 14 May 2023 17:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40840 "EHLO
+        id S234481AbjEOBNH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 14 May 2023 21:13:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbjENVEJ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 14 May 2023 17:04:09 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04D310D9
-        for <linux-can@vger.kernel.org>; Sun, 14 May 2023 14:04:08 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pyIsh-0008IM-NV; Sun, 14 May 2023 23:03:51 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 2BF241C3D1B;
-        Sun, 14 May 2023 20:09:51 +0000 (UTC)
-Date:   Sun, 14 May 2023 22:09:50 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Harald Mommer <harald.mommer@opensynergy.com>
-Cc:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        Mikhail Golubev-Ciuchea <Mikhail.Golubev-Ciuchea@opensynergy.com>,
-        virtio-dev@lists.oasis-open.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Damir Shaikhutdinov <Damir.Shaikhutdinov@opensynergy.com>
-Subject: Re: [RFC PATCH v3] can: virtio: Initial virtio CAN driver.
-Message-ID: <20230514-senior-container-bf049eb882a9-mkl@pengutronix.de>
-References: <20230511151444.162882-1-Mikhail.Golubev-Ciuchea@opensynergy.com>
- <CAMZ6RqJbjoApwZbiivbvJRYQyBWfWXG4azmwuXGaicrMq0Lozg@mail.gmail.com>
- <a83e29fd-09d0-64b4-ce56-c7f7a5e44f66@opensynergy.com>
+        with ESMTP id S229950AbjEOBNH (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 14 May 2023 21:13:07 -0400
+Received: from mail.fintek.com.tw (mail.fintek.com.tw [59.120.186.242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6142F10E9;
+        Sun, 14 May 2023 18:13:04 -0700 (PDT)
+Received: from vmMailSRV.fintek.com.tw ([192.168.1.1])
+        by mail.fintek.com.tw with ESMTP id 34F1AcMn020536;
+        Mon, 15 May 2023 09:10:38 +0800 (+08)
+        (envelope-from peter_hong@fintek.com.tw)
+Received: from [192.168.1.132] (192.168.1.132) by vmMailSRV.fintek.com.tw
+ (192.168.1.1) with Microsoft SMTP Server id 14.3.498.0; Mon, 15 May 2023
+ 09:11:34 +0800
+Message-ID: <39d076f3-e569-4b3b-84bf-95222cd61084@fintek.com.tw>
+Date:   Mon, 15 May 2023 09:11:34 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="i6qfmmn4wmyaeefb"
-Content-Disposition: inline
-In-Reply-To: <a83e29fd-09d0-64b4-ce56-c7f7a5e44f66@opensynergy.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH V7] can: usb: f81604: add Fintek F81604 support
+Content-Language: en-US
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        kernel test robot <lkp@intel.com>
+CC:     <wg@grandegger.com>, <michal.swiatkowski@linux.intel.com>,
+        <Steen.Hegelund@microchip.com>, <mailhol.vincent@wanadoo.fr>,
+        <oe-kbuild-all@lists.linux.dev>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <frank.jungclaus@esd.eu>, <linux-kernel@vger.kernel.org>,
+        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <hpeter+linux_kernel@gmail.com>
+References: <20230509073821.25289-1-peter_hong@fintek.com.tw>
+ <202305091802.pRFS6n2j-lkp@intel.com>
+ <20230509-exert-remindful-0c0e89bf6649-mkl@pengutronix.de>
+From:   Peter Hong <peter_hong@fintek.com.tw>
+In-Reply-To: <20230509-exert-remindful-0c0e89bf6649-mkl@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [192.168.1.132]
+X-TM-AS-Product-Ver: SMEX-12.5.0.2055-9.0.1002-27556.001
+X-TM-AS-Result: No-4.907600-8.000000-10
+X-TMASE-MatchedRID: u1zqiMeMcrr/9O/B1c/Qy2lHv4vQHqYTlmG/61+LLCeqvcIF1TcLYLsV
+        j+wJQ/DT1jypNY0wtaY54EyL9veg949oUcx9VMLggxsfzkNRlfLDFBDwCdpNg0wQJkEy6Z1woHE
+        PeeNER2GyO81X3yak84d8CtEuyFUaA2q11tvr8mMjdLV77rKHnlPf+ByMkMZD+e3Avc4jI5OvBz
+        U2rdyC9DF/WWtww9VAdk6Voc0bfMvlHW8KsUL5rQ==
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--4.907600-8.000000
+X-TMASE-Version: SMEX-12.5.0.2055-9.0.1002-27556.001
+X-TM-SNTS-SMTP: 8B2FD82F36336AD536AF1B47D7B2C316C4C70055CAD1C471AF148E44ED80F2F02000:8
+X-DNSRBL: 
+X-SPAM-SOURCE-CHECK: pass
+X-MAIL: mail.fintek.com.tw 34F1AcMn020536
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,75 +68,15 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi Marc,
 
---i6qfmmn4wmyaeefb
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Marc Kleine-Budde 於 2023/5/9 下午 08:14 寫道:
+> Replaced "%lu% by "%zu" while applying the patch.
+>
+> Marc
+>
 
-On 12.05.2023 19:39:40, Harald Mommer wrote:
-> > > diff --git a/drivers/net/can/Makefile b/drivers/net/can/Makefile
-> > > index ff8f76295d13..19314adaff59 100644
-> > > --- a/drivers/net/can/Makefile
-> > > +++ b/drivers/net/can/Makefile
-> > > @@ -17,8 +17,8 @@ obj-$(CONFIG_CAN_AT91)                +=3D at91_can=
-=2Eo
-> > >   obj-$(CONFIG_CAN_BXCAN)                +=3D bxcan.o
-> > >   obj-$(CONFIG_CAN_CAN327)       +=3D can327.o
-> > >   obj-$(CONFIG_CAN_CC770)                +=3D cc770/
-> > > -obj-$(CONFIG_CAN_C_CAN)                +=3D c_can/
-> > >   obj-$(CONFIG_CAN_CTUCANFD)     +=3D ctucanfd/
-> > > +obj-$(CONFIG_CAN_C_CAN)                +=3D c_can/
-> > This reordering is unrelated to this patch goal. Please send it as a
-> > separate patch.
->=20
-> @Marc Kleine-Budde: We got this reordering change from you.
+Should I fix the warning and resend the patch as v8? or you will modify 
+the v7 before apply it?
 
-That reordering was not intended.
-
-> How to proceed?
-
-Remove that change and sorry for the confusion.
-
-> We can split this in 2 commits, reordering and on top adding virtio CAN. =
-No
-> issue, a question of minutes and done. Fine. But here the word "patch" was
-> used, not the word "commit".
-
-I think in first approximation patches and commits can be/are used
-interchangeably :) (One thought process might be: If you make it a
-separate commit and send it here, it's no longer in git and thus just a
-patch, no longer a commit.)
-
-> Sending a separate patch to somewhere? Maybe
-> Mikhail does this fight to get this in (unlikely), I personally would pre=
-fer
-> to run away. Or we don't reorder at all, wrong ordering remains and we wi=
-ll
-> not make only you unhappy.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---i6qfmmn4wmyaeefb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRhQAsACgkQvlAcSiqK
-BOiLrwf+MivjvW3UCXg71VmfmbA3FMZQOYEREO80Bd/GD1zKMbD3PtaN/jFo2bHo
-kYXOW4N67y4TYbwHFVoY4wYzzv+1OSfUzVc5xYgYbcGzBBxS80zmGlvMpEmI4H2z
-50XyMbZVBZOhxUrAvfQc40KY05IIoSWnkT1ReBN7nmYtm+FK0Ctpww1jgmyGK9/G
-9W0ZoIOfmoQWXSTp7KtocxpUWNiU4uCgZYFt9I5bNag/qZDztgjVTFbct1lCYejs
-jvNjWvWqXPneFd1B1I6Tca3zup1hTKTpT2C6uOZ1/GcN8GWoIbLdNtBZYIHnnlXg
-IhaMq27QJd3111vs57wiCmwwyWcZXQ==
-=kAT9
------END PGP SIGNATURE-----
-
---i6qfmmn4wmyaeefb--
+Thanks
