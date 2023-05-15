@@ -2,35 +2,35 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56364703F14
+	by mail.lfdr.de (Postfix) with ESMTP id EA09C703F15
 	for <lists+linux-can@lfdr.de>; Mon, 15 May 2023 22:58:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245012AbjEOU6y (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 15 May 2023 16:58:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33304 "EHLO
+        id S245233AbjEOU6z (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 15 May 2023 16:58:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245233AbjEOU6s (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 15 May 2023 16:58:48 -0400
+        with ESMTP id S245224AbjEOU6u (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 15 May 2023 16:58:50 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D8710A0A
-        for <linux-can@vger.kernel.org>; Mon, 15 May 2023 13:58:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A1F811B58
+        for <linux-can@vger.kernel.org>; Mon, 15 May 2023 13:58:36 -0700 (PDT)
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1pyfGo-0006rB-LX
-        for linux-can@vger.kernel.org; Mon, 15 May 2023 22:58:14 +0200
+        id 1pyfGp-0006rU-2k
+        for linux-can@vger.kernel.org; Mon, 15 May 2023 22:58:15 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 184EB1C5D57
+        by bjornoya.blackshift.org (Postfix) with SMTP id 21DBE1C5D5A
         for <linux-can@vger.kernel.org>; Mon, 15 May 2023 20:58:07 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id B3C101C5CF7;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id E057C1C5CFD;
         Mon, 15 May 2023 20:58:04 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 97617ab5;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id bcdc9d9f;
         Mon, 15 May 2023 20:58:02 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
@@ -39,9 +39,9 @@ Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next 17/22] can: sja1000_isa: Convert to platform remove callback returning void
-Date:   Mon, 15 May 2023 22:57:54 +0200
-Message-Id: <20230515205759.1003118-18-mkl@pengutronix.de>
+Subject: [PATCH net-next 18/22] can: sja1000_platform: Convert to platform remove callback returning void
+Date:   Mon, 15 May 2023 22:57:55 +0200
+Message-Id: <20230515205759.1003118-19-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230515205759.1003118-1-mkl@pengutronix.de>
 References: <20230515205759.1003118-1-mkl@pengutronix.de>
@@ -76,40 +76,38 @@ Trivially convert this driver from always returning zero in the remove
 callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Link: https://lore.kernel.org/r/20230512212725.143824-15-u.kleine-koenig@pengutronix.de
+Link: https://lore.kernel.org/r/20230512212725.143824-16-u.kleine-koenig@pengutronix.de
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/sja1000/sja1000_isa.c | 6 ++----
+ drivers/net/can/sja1000/sja1000_platform.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/can/sja1000/sja1000_isa.c b/drivers/net/can/sja1000/sja1000_isa.c
-index db3e767d5320..fca5a9a1d857 100644
---- a/drivers/net/can/sja1000/sja1000_isa.c
-+++ b/drivers/net/can/sja1000/sja1000_isa.c
-@@ -223,7 +223,7 @@ static int sja1000_isa_probe(struct platform_device *pdev)
+diff --git a/drivers/net/can/sja1000/sja1000_platform.c b/drivers/net/can/sja1000/sja1000_platform.c
+index 6779d5357069..b4889b5746e5 100644
+--- a/drivers/net/can/sja1000/sja1000_platform.c
++++ b/drivers/net/can/sja1000/sja1000_platform.c
+@@ -317,19 +317,17 @@ static int sp_probe(struct platform_device *pdev)
  	return err;
  }
  
--static int sja1000_isa_remove(struct platform_device *pdev)
-+static void sja1000_isa_remove(struct platform_device *pdev)
+-static int sp_remove(struct platform_device *pdev)
++static void sp_remove(struct platform_device *pdev)
  {
  	struct net_device *dev = platform_get_drvdata(pdev);
- 	struct sja1000_priv *priv = netdev_priv(dev);
-@@ -241,13 +241,11 @@ static int sja1000_isa_remove(struct platform_device *pdev)
- 			release_region(port[idx], SJA1000_IOSIZE);
- 	}
+ 
+ 	unregister_sja1000dev(dev);
  	free_sja1000dev(dev);
 -
 -	return 0;
  }
  
- static struct platform_driver sja1000_isa_driver = {
- 	.probe = sja1000_isa_probe,
--	.remove = sja1000_isa_remove,
-+	.remove_new = sja1000_isa_remove,
+ static struct platform_driver sp_driver = {
+ 	.probe = sp_probe,
+-	.remove = sp_remove,
++	.remove_new = sp_remove,
  	.driver = {
  		.name = DRV_NAME,
- 	},
+ 		.of_match_table = sp_of_table,
 -- 
 2.39.2
 
