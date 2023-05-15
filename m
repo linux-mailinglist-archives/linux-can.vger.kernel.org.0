@@ -2,63 +2,110 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6436A70265D
-	for <lists+linux-can@lfdr.de>; Mon, 15 May 2023 09:50:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44863702675
+	for <lists+linux-can@lfdr.de>; Mon, 15 May 2023 09:53:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232353AbjEOHuQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 15 May 2023 03:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58664 "EHLO
+        id S229898AbjEOHx1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Mon, 15 May 2023 03:53:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230500AbjEOHuO (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 15 May 2023 03:50:14 -0400
-X-Greylist: delayed 544 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 15 May 2023 00:50:11 PDT
-Received: from mail.melynllyn.pl (mail.melynllyn.pl [51.75.66.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F32F9C
-        for <linux-can@vger.kernel.org>; Mon, 15 May 2023 00:50:11 -0700 (PDT)
-Received: by mail.melynllyn.pl (Postfix, from userid 1002)
-        id 6710BA2506; Mon, 15 May 2023 07:41:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=melynllyn.pl; s=mail;
-        t=1684136464; bh=YRRXO3jEu97VPQQgC6v1VliieJbhUvx3UFrtvEDC9os=;
-        h=Date:From:To:Subject:From;
-        b=NpSRgRo/JxB+B9Zktpe5xSsTohgSvVX1wRI8/pZp/aRA1BHgWRzfEzRxJ8g87oLqh
-         lYzQky9wX+NHu6s9bdKpyLKF+1zRcUMio8Z3XtR82EBFpInkv+W6flDhZeYg3X5Ji/
-         y4a1/WwMEnpKeW/zRqqNDquQX15y2cYwpgvbgtZVN72JX8b286Jwk05xgP9QgdJLbe
-         6RdHj0AAS+927zbifLima7NEWPJd+mc3WsEuESIG1aU1ponStBikOBKnKoE5uJHi2D
-         gbfoqpn6q8pH+OeTIpQ5iXl2ErgrP+XJOwabUt+rWjbAuDf8NGh6WxKy10wLmpmxXu
-         QwSWZxMVnsClg==
-Received: by mail.melynllyn.pl for <linux-can@vger.kernel.org>; Mon, 15 May 2023 07:41:03 GMT
-Message-ID: <20230515064500-0.1.av.18354.0.3i7ul4a7rv@melynllyn.pl>
-Date:   Mon, 15 May 2023 07:41:03 GMT
-From:   "Urszula Wasiak" <urszula.wasiak@melynllyn.pl>
-To:     <linux-can@vger.kernel.org>
-Subject: Faktoring
-X-Mailer: mail.melynllyn.pl
+        with ESMTP id S239441AbjEOHx0 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 15 May 2023 03:53:26 -0400
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93DBBD;
+        Mon, 15 May 2023 00:53:22 -0700 (PDT)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-55b7630a736so182997097b3.1;
+        Mon, 15 May 2023 00:53:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684137201; x=1686729201;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JERc9IUVRqk4tjUXjqhcThAzcCzz7kZRH46NjyT79tk=;
+        b=J0jOv9zyW1RRGzumstQ9oZxx/XrZ9L92v0FUPhoAovtAzR9uTv4G188MHN0/R81C74
+         +594LUWc+RvPoZjGlimRMRT933F7CsMwgbUhJaPkZitx8h+1YuNebeSxISZyOuz3rGAQ
+         mtyvK3tzBAH0h3xBuvIoq8on+jPv6i/dRjlMBf/BjNaVZ0g0WhGxHIpAc7cb/EP7pXxF
+         JAhwySJ/8lGQk3W7+wvWxQXnolVqA4yGMMDXMFYlywZHDPyB7P3rTeE/ZFD2dFGzWWuW
+         1USzq0KcGzUaL4xZLWKV7Axrbi3Oq6KBZ43xJS+Qsgd62XeFdfvhyCqRu99/oPxyO9nr
+         RSCw==
+X-Gm-Message-State: AC+VfDxYVoYBLqbP4FhMvHvwkdjVyjKRSuJraQ6hheACspMcIALklOXN
+        iUkqGJ8HKWZ9eh0BSDLtUqv3vhyLBizCag==
+X-Google-Smtp-Source: ACHHUZ6JkJIYJSySCOHbRo+xuKvYtW5Wp+tO6UebIeOS2ZeO5CMe2qeAMYTskOKwrZfPJkj3lMyRfA==
+X-Received: by 2002:a0d:d705:0:b0:55a:792:8c20 with SMTP id z5-20020a0dd705000000b0055a07928c20mr31296750ywd.6.1684137201624;
+        Mon, 15 May 2023 00:53:21 -0700 (PDT)
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
+        by smtp.gmail.com with ESMTPSA id l65-20020a0dfb44000000b005461671a79csm4813655ywf.138.2023.05.15.00.53.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 00:53:21 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-55a76ed088aso182863377b3.2;
+        Mon, 15 May 2023 00:53:20 -0700 (PDT)
+X-Received: by 2002:a0d:e808:0:b0:55a:4ff4:f97d with SMTP id
+ r8-20020a0de808000000b0055a4ff4f97dmr31597295ywe.48.1684137200429; Mon, 15
+ May 2023 00:53:20 -0700 (PDT)
 MIME-Version: 1.0
+References: <20230512212725.143824-1-u.kleine-koenig@pengutronix.de> <20230512212725.143824-14-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20230512212725.143824-14-u.kleine-koenig@pengutronix.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 15 May 2023 09:53:09 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVAy2RKkAesNi1PDJmzWUTQqViho7zGOmZr0ooGD+je_g@mail.gmail.com>
+Message-ID: <CAMuHMdVAy2RKkAesNi1PDJmzWUTQqViho7zGOmZr0ooGD+je_g@mail.gmail.com>
+Subject: Re: [PATCH 13/19] can: rcar: Convert to platform remove callback
+ returning void
+To:     u.kleine-koenig@pengutronix.de
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        kernel@pengutronix.de
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On Fri, May 12, 2023 at 11:27 PM Uwe Kleine-König
+<u.kleine-koenig@pengutronix.de> wrote:
+> The .remove() callback for a platform driver returns an int which makes
+> many driver authors wrongly assume it's possible to do error handling by
+> returning an error code. However the value returned is ignored (apart from
+> emitting a warning) and this typically results in resource leaks. To improve
+> here there is a quest to make the remove callback return void. In the first
+> step of this quest all drivers are converted to .remove_new() which already
+> returns void. Eventually after all drivers are converted, .remove_new() is
+> renamed to .remove().
+>
+> Trivially convert this driver from always returning zero in the remove
 
-rozwa=C5=BCali Pa=C5=84stwo wyb=C3=B3r finansowania, kt=C3=B3re spe=C5=82=
-ni potrzeby firmy, zapewniaj=C4=85c natychmiastowy dost=C4=99p do got=C3=B3=
-wki, bez zb=C4=99dnych przestoj=C3=B3w?=20
+these drivers
 
-Przygotowali=C5=9Bmy rozwi=C4=85zania faktoringowe dopasowane do Pa=C5=84=
-stwa bran=C5=BCy i wielko=C5=9Bci firmy, dzi=C4=99ki kt=C3=B3rym, nie mus=
-z=C4=85 Pa=C5=84stwo martwi=C4=87 si=C4=99 o niewyp=C5=82acalno=C5=9B=C4=87=
- kontrahent=C3=B3w, poniewa=C5=BC transakcje s=C4=85 zabezpieczone i posi=
-adaj=C4=85 gwarancj=C4=99 sp=C5=82aty.=20
+> callback to the void returning variant.
+>
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-Chc=C4=85 Pa=C5=84stwo przeanalizowa=C4=87 dost=C4=99pne opcje?
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
+Gr{oetje,eeting}s,
 
-Pozdrawiam
-Urszula Wasiak
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
