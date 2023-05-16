@@ -2,447 +2,197 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 550E0704BED
-	for <lists+linux-can@lfdr.de>; Tue, 16 May 2023 13:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FFF0704E2B
+	for <lists+linux-can@lfdr.de>; Tue, 16 May 2023 14:54:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232559AbjEPLKd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 16 May 2023 07:10:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59762 "EHLO
+        id S232378AbjEPMyP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 16 May 2023 08:54:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232846AbjEPLJn (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 16 May 2023 07:09:43 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD174EFF;
-        Tue, 16 May 2023 04:09:01 -0700 (PDT)
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GB44nj006505;
-        Tue, 16 May 2023 11:07:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=BmSGV7X4oc4NMEhAbmNjzPqRnq5D2JIeblSLzp/XN+w=;
- b=reFRE9Q98P5lYlmf/BiCoeYB/AsUuJu11UZg2s8Q3JQAbzDCJGit+4p0jf0L3XxU1PLh
- aVG05EnrR6+CaD8c79A96Baufi2hGsdS2qjeucXsYnQ0iH/3hrW3UIID3gJF5MtLURXx
- CTIx0EeBAZ/CWPfaOF3B2fpEy7DKPHfXEol8726TxFQhPXGzCA/GarNiZRfzqFh1Zac1
- F924x+CO4bDFfysob8lymXTQGfowmEZBfmOmIh7BR60KUPvmxIlnXLUmy0Sj2e2WfbL5
- OrDUlU1566Brs10nrDM8DBleLZa60sMjT6H2+trZSUyqBzs19BiFEAaWq0au22IV88nr TQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qm8mrr9fn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 11:07:38 +0000
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34GB4F9w007371;
-        Tue, 16 May 2023 11:06:31 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qm8mrr6bg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 11:06:31 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34G4UVsf012372;
-        Tue, 16 May 2023 11:01:00 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3qj264sk93-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 11:01:00 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34GB0vJj52429142
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 May 2023 11:00:57 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A74912004B;
-        Tue, 16 May 2023 11:00:57 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 15E2F20040;
-        Tue, 16 May 2023 11:00:57 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 16 May 2023 11:00:57 +0000 (GMT)
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
+        with ESMTP id S231878AbjEPMyO (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 16 May 2023 08:54:14 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF6DD527B
+        for <linux-can@vger.kernel.org>; Tue, 16 May 2023 05:54:00 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f1411e8111so16270303e87.1
+        for <linux-can@vger.kernel.org>; Tue, 16 May 2023 05:54:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kvaser.com; s=google; t=1684241639; x=1686833639;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gqTSA5dxNmyOozjrwEAz+B63/gsO+95tgk0FW+23SfM=;
+        b=g6Ungqb3umDChgnojAI4yc8Mn3FngITkxIxAnUy9uroRxSBtluIaQyLhhWz5kcDeNt
+         6towdjWZmeDiBrmrZcwoccUZRm0h5DeZoWSsaSlJlA5WbPgOA5637sWrPi5oGkoIsFf+
+         Vm0e8XM9DltJtV3+kknnkaruiq5sxuiPWo9lFjIzDcfZXEunzZukFGJQyFaNQ/fQkSOg
+         6L2CXyB1hEpOswiuGvfWA6+R9F+w+McMqb9moP8TcUL/+JKa69IdJM5CMo3+wpha4ooo
+         H1BvzHJbA42P4YKKelv3QNbb2nc4LqTqFgFJxTAscOJfdlcJy9fHgziPV8M+Jkgz5d1/
+         MuYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684241639; x=1686833639;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gqTSA5dxNmyOozjrwEAz+B63/gsO+95tgk0FW+23SfM=;
+        b=HyK19dFgsx2nfq0Yeu6Y4Wkewi9aINzrWXT6bxNQFnxWcUzxALnd8SZ2oqY+a3HLZo
+         jc/cTGQJp2mZeCG4rHmprwi0cbSPiKSmbBwnSIx5qD8FklekSDb4yGs+rg8J7SfQMkeD
+         p+QPlW7qYafnk+Ob2EZZTCEQCI8AfUpYKAKC+1xkX0n4H/IlUms3KzYTOupJeuByL0j2
+         NzcYB5REllc4lNDboO2HeHeJw6HdWLgD38maeGP/I/Gz3IkJgZTJPT2f0lXnvV6Jy/53
+         UaFvwD2owdXBhSsqGOjTHYsMpNkd8yFsMh6uHy5Xyvz3Np3pV5NVKAvZZpVouQyRGdH/
+         Ksew==
+X-Gm-Message-State: AC+VfDwOqphuTQDjnwy2ssg87TuPBeApb08BV0NOwL/r+qgyAxIiqTWT
+        xv6UTm0hmPw1t1qEarN3zFdjv+Tm9WCRDfK4VBwMZQ==
+X-Google-Smtp-Source: ACHHUZ7KXywt6Sm8eP37qY0wnAWeEmcNpXVYgDDDbRpIkRJrjKFKfeLnQPPXpvdjMe4d2cnCZja47Q==
+X-Received: by 2002:a05:6512:21a:b0:4f1:1de7:1ab6 with SMTP id a26-20020a056512021a00b004f11de71ab6mr7415644lfo.20.1684241638958;
+        Tue, 16 May 2023 05:53:58 -0700 (PDT)
+Received: from archyz.. (h-98-128-173-232.A785.priv.bahnhof.se. [98.128.173.232])
+        by smtp.gmail.com with ESMTPSA id w4-20020ac25d44000000b004f139712835sm2953395lfd.293.2023.05.16.05.53.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 05:53:58 -0700 (PDT)
+From:   Jimmy Assarsson <extja@kvaser.com>
+To:     linux-can@vger.kernel.org,
+        Carsten Schmidt <carsten.schmidt-achim@t-online.de>
+Cc:     Jimmy Assarsson <jimmyassarsson@gmail.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Ralf Baechle <ralf@linux-mips.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, linux-hams@vger.kernel.org
-Subject: [PATCH v4 20/41] net: handle HAS_IOPORT dependencies
-Date:   Tue, 16 May 2023 13:00:16 +0200
-Message-Id: <20230516110038.2413224-21-schnelle@linux.ibm.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230516110038.2413224-1-schnelle@linux.ibm.com>
-References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Jimmy Assarsson <extja@kvaser.com>
+Subject: [PATCH v2] can: kvaser_usb: Add len8_dlc support
+Date:   Tue, 16 May 2023 14:53:32 +0200
+Message-Id: <20230516125332.82894-1-extja@kvaser.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 5KjlPr0pW8Gy4eFSG5zht_wptMVAV7j3
-X-Proofpoint-GUID: s_B6O6hrKQup073aT0YnpVY4_cFow43b
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-16_04,2023-05-16_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 spamscore=0 impostorscore=0 mlxscore=0 mlxlogscore=999
- lowpriorityscore=0 suspectscore=0 adultscore=0 phishscore=0 bulkscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305160094
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-not being declared. We thus need to add HAS_IOPORT as dependency for
-those drivers requiring them. For the DEFXX driver the use of I/O
-ports is optional and we only need to fence specific code paths. It also
-turns out that with HAS_IOPORT handled explicitly HAMRADIO does not need
-the !S390 dependency and successfully builds the bpqether driver.
+From: Carsten Schmidt <carsten.schmidt-achim@t-online.de>
 
-Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-Acked-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+Add support for the Classical CAN raw DLC functionality to send and receive
+DLC values from 9 .. 15.
+
+Signed-off-by: Carsten Schmidt <carsten.schmidt-achim@t-online.de>
+Tested-by: Jimmy Assarsson <extja@kvaser.com>
+Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
 ---
-Note: The HAS_IOPORT Kconfig option was added in v6.4-rc1 so
-      per-subsystem patches may be applied independently
+This patch was originally posted as
+[PATCH] can: kvaser_usb_leaf: Implement CAN 2.0 raw DLC functionality
+by Carsten Schmidt <carsten.schmidt-achim@t-online.de>
+https://lore.kernel.org/linux-can/a81e55c3-66b9-1f84-b1a3-dd5184478da3@kvaser.com/T/#md546eb98c84099a46204a21b64aa547adc62dd34
 
- drivers/net/Kconfig                  | 2 +-
- drivers/net/arcnet/Kconfig           | 2 +-
- drivers/net/can/cc770/Kconfig        | 1 +
- drivers/net/can/sja1000/Kconfig      | 1 +
- drivers/net/ethernet/3com/Kconfig    | 4 ++--
- drivers/net/ethernet/8390/Kconfig    | 6 +++---
- drivers/net/ethernet/amd/Kconfig     | 4 ++--
- drivers/net/ethernet/fujitsu/Kconfig | 2 +-
- drivers/net/ethernet/intel/Kconfig   | 2 +-
- drivers/net/ethernet/sis/Kconfig     | 4 ++--
- drivers/net/ethernet/smsc/Kconfig    | 2 +-
- drivers/net/ethernet/ti/Kconfig      | 2 +-
- drivers/net/ethernet/via/Kconfig     | 1 +
- drivers/net/ethernet/xircom/Kconfig  | 2 +-
- drivers/net/fddi/defxx.c             | 2 +-
- drivers/net/hamradio/Kconfig         | 6 +++---
- drivers/net/wan/Kconfig              | 2 +-
- net/ax25/Kconfig                     | 2 +-
- 18 files changed, 25 insertions(+), 22 deletions(-)
+Changes in v2:
+  - Update subject and add commit message
+  - Add len8_dlc support for Kvaser Hydra devices
+  - Move assignment of can.ctrlmode_supported = CAN_CTRLMODE_CC_LEN8_DLC
+    from kvaser_usb_leaf.c to kvaser_usb_core.c
 
-diff --git a/drivers/net/Kconfig b/drivers/net/Kconfig
-index d0a1ed216d15..817322605825 100644
---- a/drivers/net/Kconfig
-+++ b/drivers/net/Kconfig
-@@ -476,7 +476,7 @@ source "drivers/net/ipa/Kconfig"
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c  |  2 +-
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c | 13 +++++++++----
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c  |  6 +++---
+ 3 files changed, 13 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
+index 7135ec851341..71ef4db5c09f 100644
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
+@@ -816,7 +816,7 @@ static int kvaser_usb_init_one(struct kvaser_usb *dev, int channel)
+ 	init_completion(&priv->stop_comp);
+ 	init_completion(&priv->flush_comp);
+ 	init_completion(&priv->get_busparams_comp);
+-	priv->can.ctrlmode_supported = 0;
++	priv->can.ctrlmode_supported = CAN_CTRLMODE_CC_LEN8_DLC;
  
- config NET_SB1000
- 	tristate "General Instruments Surfboard 1000"
--	depends on PNP
-+	depends on ISA && PNP
- 	help
- 	  This is a driver for the General Instrument (also known as
- 	  NextLevel) SURFboard 1000 internal
-diff --git a/drivers/net/arcnet/Kconfig b/drivers/net/arcnet/Kconfig
-index a51b9dab6d3a..d1d07a1d4fbc 100644
---- a/drivers/net/arcnet/Kconfig
-+++ b/drivers/net/arcnet/Kconfig
-@@ -4,7 +4,7 @@
- #
+ 	priv->dev = dev;
+ 	priv->netdev = netdev;
+diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
+index ef341c4254fc..c7ba768dfe17 100644
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
+@@ -1263,7 +1263,7 @@ static void kvaser_usb_hydra_rx_msg_std(const struct kvaser_usb *dev,
+ 	if (flags & KVASER_USB_HYDRA_CF_FLAG_OVERRUN)
+ 		kvaser_usb_can_rx_over_error(priv->netdev);
  
- menuconfig ARCNET
--	depends on NETDEVICES && (ISA || PCI || PCMCIA)
-+	depends on NETDEVICES && (ISA || PCI || PCMCIA) && HAS_IOPORT
- 	tristate "ARCnet support"
- 	help
- 	  If you have a network card of this type, say Y and check out the
-diff --git a/drivers/net/can/cc770/Kconfig b/drivers/net/can/cc770/Kconfig
-index 9ef1359319f0..467ef19de1c1 100644
---- a/drivers/net/can/cc770/Kconfig
-+++ b/drivers/net/can/cc770/Kconfig
-@@ -7,6 +7,7 @@ if CAN_CC770
+-	cf->len = can_cc_dlc2len(cmd->rx_can.dlc);
++	can_frame_set_cc_len((struct can_frame *)cf, cmd->rx_can.dlc, priv->can.ctrlmode);
  
- config CAN_CC770_ISA
- 	tristate "ISA Bus based legacy CC770 driver"
-+	depends on ISA
- 	help
- 	  This driver adds legacy support for CC770 and AN82527 chips
- 	  connected to the ISA bus using I/O port, memory mapped or
-diff --git a/drivers/net/can/sja1000/Kconfig b/drivers/net/can/sja1000/Kconfig
-index 4b2f9cb17fc3..01168db4c106 100644
---- a/drivers/net/can/sja1000/Kconfig
-+++ b/drivers/net/can/sja1000/Kconfig
-@@ -87,6 +87,7 @@ config CAN_PLX_PCI
+ 	if (flags & KVASER_USB_HYDRA_CF_FLAG_REMOTE_FRAME) {
+ 		cf->can_id |= CAN_RTR_FLAG;
+@@ -1342,7 +1342,7 @@ static void kvaser_usb_hydra_rx_msg_ext(const struct kvaser_usb *dev,
+ 		if (flags & KVASER_USB_HYDRA_CF_FLAG_ESI)
+ 			cf->flags |= CANFD_ESI;
+ 	} else {
+-		cf->len = can_cc_dlc2len(dlc);
++		can_frame_set_cc_len((struct can_frame *)cf, dlc, priv->can.ctrlmode);
+ 	}
  
- config CAN_SJA1000_ISA
- 	tristate "ISA Bus based legacy SJA1000 driver"
-+	depends on ISA
- 	help
- 	  This driver adds legacy support for SJA1000 chips connected to
- 	  the ISA bus using I/O port, memory mapped or indirect access.
-diff --git a/drivers/net/ethernet/3com/Kconfig b/drivers/net/ethernet/3com/Kconfig
-index 706bd59bf645..1fbab79e2be4 100644
---- a/drivers/net/ethernet/3com/Kconfig
-+++ b/drivers/net/ethernet/3com/Kconfig
-@@ -44,7 +44,7 @@ config 3C515
+ 	if (flags & KVASER_USB_HYDRA_CF_FLAG_REMOTE_FRAME) {
+@@ -1442,7 +1442,7 @@ kvaser_usb_hydra_frame_to_cmd_ext(const struct kvaser_usb_net_priv *priv,
+ 	struct kvaser_usb *dev = priv->dev;
+ 	struct kvaser_cmd_ext *cmd;
+ 	struct canfd_frame *cf = (struct canfd_frame *)skb->data;
+-	u8 dlc = can_fd_len2dlc(cf->len);
++	u8 dlc;
+ 	u8 nbr_of_bytes = cf->len;
+ 	u32 flags;
+ 	u32 id;
+@@ -1467,6 +1467,11 @@ kvaser_usb_hydra_frame_to_cmd_ext(const struct kvaser_usb_net_priv *priv,
  
- config PCMCIA_3C574
- 	tristate "3Com 3c574 PCMCIA support"
--	depends on PCMCIA
-+	depends on PCMCIA && HAS_IOPORT
- 	help
- 	  Say Y here if you intend to attach a 3Com 3c574 or compatible PCMCIA
- 	  (PC-card) Fast Ethernet card to your computer.
-@@ -54,7 +54,7 @@ config PCMCIA_3C574
+ 	cmd->len = cpu_to_le16(*cmd_len);
  
- config PCMCIA_3C589
- 	tristate "3Com 3c589 PCMCIA support"
--	depends on PCMCIA
-+	depends on PCMCIA && HAS_IOPORT
- 	help
- 	  Say Y here if you intend to attach a 3Com 3c589 or compatible PCMCIA
- 	  (PC-card) Ethernet card to your computer.
-diff --git a/drivers/net/ethernet/8390/Kconfig b/drivers/net/ethernet/8390/Kconfig
-index a4130e643342..345f250781c6 100644
---- a/drivers/net/ethernet/8390/Kconfig
-+++ b/drivers/net/ethernet/8390/Kconfig
-@@ -19,7 +19,7 @@ if NET_VENDOR_8390
++	if (can_is_canfd_skb(skb))
++		dlc = can_fd_len2dlc(cf->len);
++	else
++		dlc = can_get_cc_dlc((struct can_frame *)cf, priv->can.ctrlmode);
++
+ 	cmd->tx_can.databytes = nbr_of_bytes;
+ 	cmd->tx_can.dlc = dlc;
  
- config PCMCIA_AXNET
- 	tristate "Asix AX88190 PCMCIA support"
--	depends on PCMCIA
-+	depends on PCMCIA && HAS_IOPORT
- 	help
- 	  Say Y here if you intend to attach an Asix AX88190-based PCMCIA
- 	  (PC-card) Fast Ethernet card to your computer.  These cards are
-@@ -117,7 +117,7 @@ config NE2000
+@@ -1542,7 +1547,7 @@ kvaser_usb_hydra_frame_to_cmd_std(const struct kvaser_usb_net_priv *priv,
+ 		id = cf->can_id & CAN_SFF_MASK;
+ 	}
  
- config NE2K_PCI
- 	tristate "PCI NE2000 and clones support (see help)"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	select CRC32
- 	help
- 	  This driver is for NE2000 compatible PCI cards. It will not work
-@@ -146,7 +146,7 @@ config APNE
+-	cmd->tx_can.dlc = cf->len;
++	cmd->tx_can.dlc = can_get_cc_dlc(cf, priv->can.ctrlmode);
  
- config PCMCIA_PCNET
- 	tristate "NE2000 compatible PCMCIA support"
--	depends on PCMCIA
-+	depends on PCMCIA && HAS_IOPORT
- 	select CRC32
- 	help
- 	  Say Y here if you intend to attach an NE2000 compatible PCMCIA
-diff --git a/drivers/net/ethernet/amd/Kconfig b/drivers/net/ethernet/amd/Kconfig
-index f8cc8925161c..b39c6f3e1eda 100644
---- a/drivers/net/ethernet/amd/Kconfig
-+++ b/drivers/net/ethernet/amd/Kconfig
-@@ -56,7 +56,7 @@ config LANCE
+ 	flags = (cf->can_id & CAN_EFF_FLAG ?
+ 		 KVASER_USB_HYDRA_CF_FLAG_EXTENDED_ID : 0);
+diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+index 1c2f99ce4c6c..23bd7574b1c7 100644
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+@@ -573,7 +573,7 @@ kvaser_usb_leaf_frame_to_cmd(const struct kvaser_usb_net_priv *priv,
+ 			cmd->u.tx_can.data[1] = cf->can_id & 0x3f;
+ 		}
  
- config PCNET32
- 	tristate "AMD PCnet32 PCI support"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	select CRC32
- 	select MII
- 	help
-@@ -122,7 +122,7 @@ config MVME147_NET
+-		cmd->u.tx_can.data[5] = cf->len;
++		cmd->u.tx_can.data[5] = can_get_cc_dlc(cf, priv->can.ctrlmode);
+ 		memcpy(&cmd->u.tx_can.data[6], cf->data, cf->len);
  
- config PCMCIA_NMCLAN
- 	tristate "New Media PCMCIA support"
--	depends on PCMCIA
-+	depends on PCMCIA && HAS_IOPORT
- 	help
- 	  Say Y here if you intend to attach a New Media Ethernet or LiveWire
- 	  PCMCIA (PC-card) Ethernet card to your computer.
-diff --git a/drivers/net/ethernet/fujitsu/Kconfig b/drivers/net/ethernet/fujitsu/Kconfig
-index 0a1400cb410a..06a28bce5d27 100644
---- a/drivers/net/ethernet/fujitsu/Kconfig
-+++ b/drivers/net/ethernet/fujitsu/Kconfig
-@@ -18,7 +18,7 @@ if NET_VENDOR_FUJITSU
+ 		if (cf->can_id & CAN_RTR_FLAG)
+@@ -1349,7 +1349,7 @@ static void kvaser_usb_leaf_rx_can_msg(const struct kvaser_usb *dev,
+ 		else
+ 			cf->can_id &= CAN_SFF_MASK;
  
- config PCMCIA_FMVJ18X
- 	tristate "Fujitsu FMV-J18x PCMCIA support"
--	depends on PCMCIA
-+	depends on PCMCIA && HAS_IOPORT
- 	select CRC32
- 	help
- 	  Say Y here if you intend to attach a Fujitsu FMV-J18x or compatible
-diff --git a/drivers/net/ethernet/intel/Kconfig b/drivers/net/ethernet/intel/Kconfig
-index 9bc0a9519899..f48289a82a16 100644
---- a/drivers/net/ethernet/intel/Kconfig
-+++ b/drivers/net/ethernet/intel/Kconfig
-@@ -41,7 +41,7 @@ config E100
+-		cf->len = can_cc_dlc2len(cmd->u.leaf.log_message.dlc);
++		can_frame_set_cc_len(cf, cmd->u.leaf.log_message.dlc & 0xF, priv->can.ctrlmode);
  
- config E1000
- 	tristate "Intel(R) PRO/1000 Gigabit Ethernet support"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	help
- 	  This driver supports Intel(R) PRO/1000 gigabit ethernet family of
- 	  adapters.  For more information on how to identify your adapter, go
-diff --git a/drivers/net/ethernet/sis/Kconfig b/drivers/net/ethernet/sis/Kconfig
-index 775d76d9890e..7e498bdbca73 100644
---- a/drivers/net/ethernet/sis/Kconfig
-+++ b/drivers/net/ethernet/sis/Kconfig
-@@ -19,7 +19,7 @@ if NET_VENDOR_SIS
+ 		if (cmd->u.leaf.log_message.flags & MSG_FLAG_REMOTE_FRAME)
+ 			cf->can_id |= CAN_RTR_FLAG;
+@@ -1367,7 +1367,7 @@ static void kvaser_usb_leaf_rx_can_msg(const struct kvaser_usb *dev,
+ 			cf->can_id |= CAN_EFF_FLAG;
+ 		}
  
- config SIS900
- 	tristate "SiS 900/7016 PCI Fast Ethernet Adapter support"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	select CRC32
- 	select MII
- 	help
-@@ -35,7 +35,7 @@ config SIS900
+-		cf->len = can_cc_dlc2len(rx_data[5]);
++		can_frame_set_cc_len(cf, rx_data[5] & 0xF, priv->can.ctrlmode);
  
- config SIS190
- 	tristate "SiS190/SiS191 gigabit ethernet support"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	select CRC32
- 	select MII
- 	help
-diff --git a/drivers/net/ethernet/smsc/Kconfig b/drivers/net/ethernet/smsc/Kconfig
-index 5f22a8a4d27b..13ce9086a9ca 100644
---- a/drivers/net/ethernet/smsc/Kconfig
-+++ b/drivers/net/ethernet/smsc/Kconfig
-@@ -54,7 +54,7 @@ config SMC91X
- 
- config PCMCIA_SMC91C92
- 	tristate "SMC 91Cxx PCMCIA support"
--	depends on PCMCIA
-+	depends on PCMCIA && HAS_IOPORT
- 	select CRC32
- 	select MII
- 	help
-diff --git a/drivers/net/ethernet/ti/Kconfig b/drivers/net/ethernet/ti/Kconfig
-index fce06663e1e1..20068acce9fe 100644
---- a/drivers/net/ethernet/ti/Kconfig
-+++ b/drivers/net/ethernet/ti/Kconfig
-@@ -161,7 +161,7 @@ config TI_KEYSTONE_NETCP_ETHSS
- 
- config TLAN
- 	tristate "TI ThunderLAN support"
--	depends on (PCI || EISA)
-+	depends on (PCI || EISA) && HAS_IOPORT
- 	help
- 	  If you have a PCI Ethernet network card based on the ThunderLAN chip
- 	  which is supported by this driver, say Y here.
-diff --git a/drivers/net/ethernet/via/Kconfig b/drivers/net/ethernet/via/Kconfig
-index da287ef65be7..00773f5e4d7e 100644
---- a/drivers/net/ethernet/via/Kconfig
-+++ b/drivers/net/ethernet/via/Kconfig
-@@ -20,6 +20,7 @@ config VIA_RHINE
- 	tristate "VIA Rhine support"
- 	depends on PCI || (OF_IRQ && GENERIC_PCI_IOMAP)
- 	depends on PCI || ARCH_VT8500 || COMPILE_TEST
-+	depends on HAS_IOPORT
- 	depends on HAS_DMA
- 	select CRC32
- 	select MII
-diff --git a/drivers/net/ethernet/xircom/Kconfig b/drivers/net/ethernet/xircom/Kconfig
-index 7497b9bea511..bfbdcf758afb 100644
---- a/drivers/net/ethernet/xircom/Kconfig
-+++ b/drivers/net/ethernet/xircom/Kconfig
-@@ -19,7 +19,7 @@ if NET_VENDOR_XIRCOM
- 
- config PCMCIA_XIRC2PS
- 	tristate "Xircom 16-bit PCMCIA support"
--	depends on PCMCIA
-+	depends on PCMCIA && HAS_IOPORT
- 	help
- 	  Say Y here if you intend to attach a Xircom 16-bit PCMCIA (PC-card)
- 	  Ethernet or Fast Ethernet card to your computer.
-diff --git a/drivers/net/fddi/defxx.c b/drivers/net/fddi/defxx.c
-index 1fef8a9b1a0f..0fbbb7286008 100644
---- a/drivers/net/fddi/defxx.c
-+++ b/drivers/net/fddi/defxx.c
-@@ -254,7 +254,7 @@ static const char version[] =
- #define DFX_BUS_TC(dev) 0
- #endif
- 
--#if defined(CONFIG_EISA) || defined(CONFIG_PCI)
-+#ifdef CONFIG_HAS_IOPORT
- #define dfx_use_mmio bp->mmio
- #else
- #define dfx_use_mmio true
-diff --git a/drivers/net/hamradio/Kconfig b/drivers/net/hamradio/Kconfig
-index a94c7bd5db2e..887c61971841 100644
---- a/drivers/net/hamradio/Kconfig
-+++ b/drivers/net/hamradio/Kconfig
-@@ -83,7 +83,7 @@ config SCC_TRXECHO
- 
- config BAYCOM_SER_FDX
- 	tristate "BAYCOM ser12 fullduplex driver for AX.25"
--	depends on AX25 && !S390
-+	depends on AX25 && HAS_IOPORT
- 	select CRC_CCITT
- 	help
- 	  This is one of two drivers for Baycom style simple amateur radio
-@@ -103,7 +103,7 @@ config BAYCOM_SER_FDX
- 
- config BAYCOM_SER_HDX
- 	tristate "BAYCOM ser12 halfduplex driver for AX.25"
--	depends on AX25 && !S390
-+	depends on AX25 && HAS_IOPORT
- 	select CRC_CCITT
- 	help
- 	  This is one of two drivers for Baycom style simple amateur radio
-@@ -151,7 +151,7 @@ config BAYCOM_EPP
- 
- config YAM
- 	tristate "YAM driver for AX.25"
--	depends on AX25 && !S390
-+	depends on AX25 && HAS_IOPORT
- 	help
- 	  The YAM is a modem for packet radio which connects to the serial
- 	  port and includes some of the functions of a Terminal Node
-diff --git a/drivers/net/wan/Kconfig b/drivers/net/wan/Kconfig
-index dcb069dde66b..417e2c2d349d 100644
---- a/drivers/net/wan/Kconfig
-+++ b/drivers/net/wan/Kconfig
-@@ -178,7 +178,7 @@ config C101
- 
- config FARSYNC
- 	tristate "FarSync T-Series support"
--	depends on HDLC && PCI
-+	depends on HDLC && PCI && HAS_IOPORT
- 	help
- 	  Support for the FarSync T-Series X.21 (and V.35/V.24) cards by
- 	  FarSite Communications Ltd.
-diff --git a/net/ax25/Kconfig b/net/ax25/Kconfig
-index d3a9843a043d..f769e8f4bd02 100644
---- a/net/ax25/Kconfig
-+++ b/net/ax25/Kconfig
-@@ -4,7 +4,7 @@
- #
- 
- menuconfig HAMRADIO
--	depends on NET && !S390
-+	depends on NET
- 	bool "Amateur Radio support"
- 	help
- 	  If you want to connect your Linux box to an amateur radio, answer Y
+ 		if (cmd->u.rx_can_header.flag & MSG_FLAG_REMOTE_FRAME)
+ 			cf->can_id |= CAN_RTR_FLAG;
 -- 
-2.39.2
+2.40.0
 
