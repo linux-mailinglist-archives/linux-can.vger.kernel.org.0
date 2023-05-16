@@ -2,68 +2,77 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FFF0704E2B
-	for <lists+linux-can@lfdr.de>; Tue, 16 May 2023 14:54:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9686704E7A
+	for <lists+linux-can@lfdr.de>; Tue, 16 May 2023 15:01:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232378AbjEPMyP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 16 May 2023 08:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35822 "EHLO
+        id S232657AbjEPNBI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 16 May 2023 09:01:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231878AbjEPMyO (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 16 May 2023 08:54:14 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF6DD527B
-        for <linux-can@vger.kernel.org>; Tue, 16 May 2023 05:54:00 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f1411e8111so16270303e87.1
-        for <linux-can@vger.kernel.org>; Tue, 16 May 2023 05:54:00 -0700 (PDT)
+        with ESMTP id S232491AbjEPNBG (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 16 May 2023 09:01:06 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 572A83AB1
+        for <linux-can@vger.kernel.org>; Tue, 16 May 2023 06:01:02 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f00d41df22so4243476e87.1
+        for <linux-can@vger.kernel.org>; Tue, 16 May 2023 06:01:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kvaser.com; s=google; t=1684241639; x=1686833639;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gqTSA5dxNmyOozjrwEAz+B63/gsO+95tgk0FW+23SfM=;
-        b=g6Ungqb3umDChgnojAI4yc8Mn3FngITkxIxAnUy9uroRxSBtluIaQyLhhWz5kcDeNt
-         6towdjWZmeDiBrmrZcwoccUZRm0h5DeZoWSsaSlJlA5WbPgOA5637sWrPi5oGkoIsFf+
-         Vm0e8XM9DltJtV3+kknnkaruiq5sxuiPWo9lFjIzDcfZXEunzZukFGJQyFaNQ/fQkSOg
-         6L2CXyB1hEpOswiuGvfWA6+R9F+w+McMqb9moP8TcUL/+JKa69IdJM5CMo3+wpha4ooo
-         H1BvzHJbA42P4YKKelv3QNbb2nc4LqTqFgFJxTAscOJfdlcJy9fHgziPV8M+Jkgz5d1/
-         MuYQ==
+        d=kvaser.com; s=google; t=1684242060; x=1686834060;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HLrdjhlmtGafeaYWv0dVakAGfOhbyuXhLBJ6ZpXGY5w=;
+        b=drdFiMykbkydw6ax0+H/dlaJE+9mV9PIXqlHr/bYTdd9WtBiktPZ5WJDu3iDBSJvaJ
+         VXkZhKjl6fS0gOGMaMsgHWRvkxp/ymlTO2feYO9uZPQOzwkzIpLp32ljcs9RqWmuCmvH
+         jOFFL6P4rqVm7BtyI6QvyECG05DeDC4pBZuxb0HZUzh80O9xPMPi0qo9pwsifZUyDwr8
+         YwV/+Q/IedolG6BS9/2X52H+0PmHXEdziQTaTvrtwq4O1CKsA3bL/FdFDm+zn9+8C2K5
+         uUO3mKUnnVKY9HonNwHfjr27gROmmQ6X13FZnXHm9v8c9XOEqFVpdMyMcViIiAjTxZAE
+         AnUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684241639; x=1686833639;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gqTSA5dxNmyOozjrwEAz+B63/gsO+95tgk0FW+23SfM=;
-        b=HyK19dFgsx2nfq0Yeu6Y4Wkewi9aINzrWXT6bxNQFnxWcUzxALnd8SZ2oqY+a3HLZo
-         jc/cTGQJp2mZeCG4rHmprwi0cbSPiKSmbBwnSIx5qD8FklekSDb4yGs+rg8J7SfQMkeD
-         p+QPlW7qYafnk+Ob2EZZTCEQCI8AfUpYKAKC+1xkX0n4H/IlUms3KzYTOupJeuByL0j2
-         NzcYB5REllc4lNDboO2HeHeJw6HdWLgD38maeGP/I/Gz3IkJgZTJPT2f0lXnvV6Jy/53
-         UaFvwD2owdXBhSsqGOjTHYsMpNkd8yFsMh6uHy5Xyvz3Np3pV5NVKAvZZpVouQyRGdH/
-         Ksew==
-X-Gm-Message-State: AC+VfDwOqphuTQDjnwy2ssg87TuPBeApb08BV0NOwL/r+qgyAxIiqTWT
-        xv6UTm0hmPw1t1qEarN3zFdjv+Tm9WCRDfK4VBwMZQ==
-X-Google-Smtp-Source: ACHHUZ7KXywt6Sm8eP37qY0wnAWeEmcNpXVYgDDDbRpIkRJrjKFKfeLnQPPXpvdjMe4d2cnCZja47Q==
-X-Received: by 2002:a05:6512:21a:b0:4f1:1de7:1ab6 with SMTP id a26-20020a056512021a00b004f11de71ab6mr7415644lfo.20.1684241638958;
-        Tue, 16 May 2023 05:53:58 -0700 (PDT)
-Received: from archyz.. (h-98-128-173-232.A785.priv.bahnhof.se. [98.128.173.232])
-        by smtp.gmail.com with ESMTPSA id w4-20020ac25d44000000b004f139712835sm2953395lfd.293.2023.05.16.05.53.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 05:53:58 -0700 (PDT)
-From:   Jimmy Assarsson <extja@kvaser.com>
-To:     linux-can@vger.kernel.org,
-        Carsten Schmidt <carsten.schmidt-achim@t-online.de>
-Cc:     Jimmy Assarsson <jimmyassarsson@gmail.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
+        d=1e100.net; s=20221208; t=1684242060; x=1686834060;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HLrdjhlmtGafeaYWv0dVakAGfOhbyuXhLBJ6ZpXGY5w=;
+        b=ND1iIfpbHGzte22LJSyQDQGMVecvHyh+T+4SbqaJe9Q0rnaEusBEJuhHSE8wKdy+un
+         6AVoNr9/8K1ftWm2deLPZrees5rD6p6figYOSSTNePMEEAkUKSHwCfN6DJKq+pQxoGLa
+         K/0rn4CA/pXWD1MoBv3OMVDeTOaGGmBEpLqh8vyTB6I4kFjTNjHCqNQhZ+Fco9rhPFE6
+         7INaboWxSdsPN1yM/fVnFeEA0slnLPMX09bDpctAnhFvrzGQqMfrXtlxy7K7dXzAuo9o
+         IFjL4phLaOFiQ8pfVAdbES/sJCop1ndB8/Svz1hY65lfm62ri2hY6YT+CBREPh9vFEEV
+         x6bA==
+X-Gm-Message-State: AC+VfDwzGeXL/aKcg+ipeYXDzenxojQmoPwLlVUw2oyQexbH9Jpdh86k
+        /NqPg4mTCsKRHq6enk6IowiZ/g==
+X-Google-Smtp-Source: ACHHUZ7S7VffUxYVzM+pTmxj6kKpgUyvq6z+elDJvWckL1CFoGlAUT2AJCfnTv4Pfvij9ZI71AMd7Q==
+X-Received: by 2002:a2e:9643:0:b0:2a8:ccd3:4c40 with SMTP id z3-20020a2e9643000000b002a8ccd34c40mr7269121ljh.13.1684242060566;
+        Tue, 16 May 2023 06:01:00 -0700 (PDT)
+Received: from [192.168.16.142] (h-98-128-173-232.A785.priv.bahnhof.se. [98.128.173.232])
+        by smtp.gmail.com with ESMTPSA id p21-20020a2e8055000000b002ad8cbb7349sm3636223ljg.98.2023.05.16.06.00.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 May 2023 06:00:59 -0700 (PDT)
+Message-ID: <d9a7667c-8a0a-bdb3-532f-0b9e686dac74@kvaser.com>
+Date:   Tue, 16 May 2023 15:00:58 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] can: kvaser_usb_leaf: Implement CAN 2.0 raw DLC
+ functionality.
+To:     Carsten Schmidt <carsten.schmidt-achim@t-online.de>
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Jimmy Assarsson <extja@kvaser.com>
-Subject: [PATCH v2] can: kvaser_usb: Add len8_dlc support
-Date:   Tue, 16 May 2023 14:53:32 +0200
-Message-Id: <20230516125332.82894-1-extja@kvaser.com>
-X-Mailer: git-send-email 2.40.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        linux-can@vger.kernel.org
+References: <20230506105529.4023-1-carsten.schmidt-achim@t-online.de>
+ <7e25ba42-4aa9-0d88-e708-18462bc7cc48@hartkopp.net>
+ <d4eb5d98-f62b-be58-58fb-9e9736d476bd@kvaser.com>
+ <a81e55c3-66b9-1f84-b1a3-dd5184478da3@kvaser.com>
+ <645E8D12.5060901@t-online.de>
+Content-Language: en-US
+From:   Jimmy Assarsson <extja@kvaser.com>
+In-Reply-To: <645E8D12.5060901@t-online.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,127 +81,72 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Carsten Schmidt <carsten.schmidt-achim@t-online.de>
+On 5/12/23 21:01, Carsten Schmidt wrote:
+> Hello Jimmy,
 
-Add support for the Classical CAN raw DLC functionality to send and receive
-DLC values from 9 .. 15.
+Hi Carsten,
 
-Signed-off-by: Carsten Schmidt <carsten.schmidt-achim@t-online.de>
-Tested-by: Jimmy Assarsson <extja@kvaser.com>
-Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
----
-This patch was originally posted as
-[PATCH] can: kvaser_usb_leaf: Implement CAN 2.0 raw DLC functionality
-by Carsten Schmidt <carsten.schmidt-achim@t-online.de>
-https://lore.kernel.org/linux-can/a81e55c3-66b9-1f84-b1a3-dd5184478da3@kvaser.com/T/#md546eb98c84099a46204a21b64aa547adc62dd34
+> yes, please do make a v2 patch!
 
-Changes in v2:
-  - Update subject and add commit message
-  - Add len8_dlc support for Kvaser Hydra devices
-  - Move assignment of can.ctrlmode_supported = CAN_CTRLMODE_CC_LEN8_DLC
-    from kvaser_usb_leaf.c to kvaser_usb_core.c
+Now I've sent an updated patch:
+https://lore.kernel.org/linux-can/20230516125332.82894-1-extja@kvaser.com
 
- drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c  |  2 +-
- drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c | 13 +++++++++----
- drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c  |  6 +++---
- 3 files changed, 13 insertions(+), 8 deletions(-)
+> As this is my first patch, I am very thankful for any support to get
+> the work into the main kernel! Thank you!
 
-diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-index 7135ec851341..71ef4db5c09f 100644
---- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-+++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-@@ -816,7 +816,7 @@ static int kvaser_usb_init_one(struct kvaser_usb *dev, int channel)
- 	init_completion(&priv->stop_comp);
- 	init_completion(&priv->flush_comp);
- 	init_completion(&priv->get_busparams_comp);
--	priv->can.ctrlmode_supported = 0;
-+	priv->can.ctrlmode_supported = CAN_CTRLMODE_CC_LEN8_DLC;
- 
- 	priv->dev = dev;
- 	priv->netdev = netdev;
-diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-index ef341c4254fc..c7ba768dfe17 100644
---- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-+++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-@@ -1263,7 +1263,7 @@ static void kvaser_usb_hydra_rx_msg_std(const struct kvaser_usb *dev,
- 	if (flags & KVASER_USB_HYDRA_CF_FLAG_OVERRUN)
- 		kvaser_usb_can_rx_over_error(priv->netdev);
- 
--	cf->len = can_cc_dlc2len(cmd->rx_can.dlc);
-+	can_frame_set_cc_len((struct can_frame *)cf, cmd->rx_can.dlc, priv->can.ctrlmode);
- 
- 	if (flags & KVASER_USB_HYDRA_CF_FLAG_REMOTE_FRAME) {
- 		cf->can_id |= CAN_RTR_FLAG;
-@@ -1342,7 +1342,7 @@ static void kvaser_usb_hydra_rx_msg_ext(const struct kvaser_usb *dev,
- 		if (flags & KVASER_USB_HYDRA_CF_FLAG_ESI)
- 			cf->flags |= CANFD_ESI;
- 	} else {
--		cf->len = can_cc_dlc2len(dlc);
-+		can_frame_set_cc_len((struct can_frame *)cf, dlc, priv->can.ctrlmode);
- 	}
- 
- 	if (flags & KVASER_USB_HYDRA_CF_FLAG_REMOTE_FRAME) {
-@@ -1442,7 +1442,7 @@ kvaser_usb_hydra_frame_to_cmd_ext(const struct kvaser_usb_net_priv *priv,
- 	struct kvaser_usb *dev = priv->dev;
- 	struct kvaser_cmd_ext *cmd;
- 	struct canfd_frame *cf = (struct canfd_frame *)skb->data;
--	u8 dlc = can_fd_len2dlc(cf->len);
-+	u8 dlc;
- 	u8 nbr_of_bytes = cf->len;
- 	u32 flags;
- 	u32 id;
-@@ -1467,6 +1467,11 @@ kvaser_usb_hydra_frame_to_cmd_ext(const struct kvaser_usb_net_priv *priv,
- 
- 	cmd->len = cpu_to_le16(*cmd_len);
- 
-+	if (can_is_canfd_skb(skb))
-+		dlc = can_fd_len2dlc(cf->len);
-+	else
-+		dlc = can_get_cc_dlc((struct can_frame *)cf, priv->can.ctrlmode);
-+
- 	cmd->tx_can.databytes = nbr_of_bytes;
- 	cmd->tx_can.dlc = dlc;
- 
-@@ -1542,7 +1547,7 @@ kvaser_usb_hydra_frame_to_cmd_std(const struct kvaser_usb_net_priv *priv,
- 		id = cf->can_id & CAN_SFF_MASK;
- 	}
- 
--	cmd->tx_can.dlc = cf->len;
-+	cmd->tx_can.dlc = can_get_cc_dlc(cf, priv->can.ctrlmode);
- 
- 	flags = (cf->can_id & CAN_EFF_FLAG ?
- 		 KVASER_USB_HYDRA_CF_FLAG_EXTENDED_ID : 0);
-diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
-index 1c2f99ce4c6c..23bd7574b1c7 100644
---- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
-+++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
-@@ -573,7 +573,7 @@ kvaser_usb_leaf_frame_to_cmd(const struct kvaser_usb_net_priv *priv,
- 			cmd->u.tx_can.data[1] = cf->can_id & 0x3f;
- 		}
- 
--		cmd->u.tx_can.data[5] = cf->len;
-+		cmd->u.tx_can.data[5] = can_get_cc_dlc(cf, priv->can.ctrlmode);
- 		memcpy(&cmd->u.tx_can.data[6], cf->data, cf->len);
- 
- 		if (cf->can_id & CAN_RTR_FLAG)
-@@ -1349,7 +1349,7 @@ static void kvaser_usb_leaf_rx_can_msg(const struct kvaser_usb *dev,
- 		else
- 			cf->can_id &= CAN_SFF_MASK;
- 
--		cf->len = can_cc_dlc2len(cmd->u.leaf.log_message.dlc);
-+		can_frame_set_cc_len(cf, cmd->u.leaf.log_message.dlc & 0xF, priv->can.ctrlmode);
- 
- 		if (cmd->u.leaf.log_message.flags & MSG_FLAG_REMOTE_FRAME)
- 			cf->can_id |= CAN_RTR_FLAG;
-@@ -1367,7 +1367,7 @@ static void kvaser_usb_leaf_rx_can_msg(const struct kvaser_usb *dev,
- 			cf->can_id |= CAN_EFF_FLAG;
- 		}
- 
--		cf->len = can_cc_dlc2len(rx_data[5]);
-+		can_frame_set_cc_len(cf, rx_data[5] & 0xF, priv->can.ctrlmode);
- 
- 		if (cmd->u.rx_can_header.flag & MSG_FLAG_REMOTE_FRAME)
- 			cf->can_id |= CAN_RTR_FLAG;
--- 
-2.40.0
+Ahh, nice :)
+And again, thanks for this patch!
 
+Best regards,
+jimmy
+
+> @Oliver: Thanx for the encouragement and guidance with the patch!
+> 
+> Sincerely,
+> Carsten
+> 
+> 
+> 
+> Am 11.05.2023 um 17:42 schrieb Jimmy Assarsson:
+>> On 2023-05-08 18:40, Jimmy Assarsson wrote:
+>>> Hi Carsten,
+>>> Hi Oliver,
+>>>
+>>> On 5/6/23 21:10, Oliver Hartkopp wrote:
+>>>> Thanks for your patch Carsten!
+>>>>
+>>>> There should be at least one sentence in the commit message even when
+>>>> the subject almost covers the story ;-)
+>>>
+>>> @Carsten, thanks for the patch!
+>>>
+>>> Acked-by: Jimmy Assarsson <extja@kvaser.com>
+>>> Tested-by: Jimmy Assarsson <extja@kvaser.com>
+>>>
+>>>> Can you also please change the subject to
+>>>>
+>>>> can: kvaser_usb: add len8_dlc support for kvaser_usb_leaf
+>>>>
+>>>> to follow up with the other len8_dlc patches?
+>>>>
+>>>> @Jimmy: AFAIK Carsten only has a Kvaser USB Leaf for testing. Can you
+>>>> probably provide and test a similar improvement for the Kvaser USB
+>>>> Hydra hardware?
+>>>
+>>>
+>>> @Oliver, yes, I'll fix this for the remaining Kvaser USB devices.
+>>> I'll try to send a patch for it by the end of the week.
+>>>
+>>> Best regards,
+>>> jimmy
+>>
+>> Hi Carsten,
+>>
+>> I've implemented cc-len8-dlc support for the Kvaser USB Hydra devices.
+>> Is it OK if I add my changes to your patch, and send it is as a V2?
+>>
+>> Best regards,
+>> jimmy
+>>
+>>>> Many thanks,
+>>>> Oliver
