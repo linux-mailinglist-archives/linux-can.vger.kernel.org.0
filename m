@@ -2,33 +2,62 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AE53706AE0
-	for <lists+linux-can@lfdr.de>; Wed, 17 May 2023 16:17:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 641BB706C8F
+	for <lists+linux-can@lfdr.de>; Wed, 17 May 2023 17:23:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbjEQORS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 17 May 2023 10:17:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42968 "EHLO
+        id S231968AbjEQPXV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 17 May 2023 11:23:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231582AbjEQORO (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 17 May 2023 10:17:14 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C492696
-        for <linux-can@vger.kernel.org>; Wed, 17 May 2023 07:17:09 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pzHxX-0005eR-EI; Wed, 17 May 2023 16:16:55 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 4E94F1C72FC;
-        Wed, 17 May 2023 14:16:53 +0000 (UTC)
-Date:   Wed, 17 May 2023 16:16:52 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Lee Jones <lee@kernel.org>
+        with ESMTP id S229712AbjEQPXU (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 17 May 2023 11:23:20 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557EB1B7
+        for <linux-can@vger.kernel.org>; Wed, 17 May 2023 08:23:16 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-510dabb3989so609492a12.0
+        for <linux-can@vger.kernel.org>; Wed, 17 May 2023 08:23:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684336995; x=1686928995;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9+zkVtFJZH/s/sKmb4Z8mX0ZyNeCSr7JQnjUSM8vJbU=;
+        b=XOJ7UidV7vBcKsNvYy0i6hI3SXR8MinSpo8BS2kNkNEr6R3kCJ6pLCTX7WGWZTxIUL
+         EJ3Nce8MX7iCpyr1f5uKpeKDizDGNwsRfIDHEVeUZMMIbR7HuRIruxcXeVhwCPvVBq5q
+         dYfjXwks/D4nWnLJexNp3QucAB4g9L/FdSTaT53bS+wfnJqJb5PVxw0yTMnDQdomE4vU
+         Hc0ZlFT0wpU0Q8SYC9hBzhcFUMyc/Y9jhI2bgMC1KxSWwVETcbfOSXC2EyBA08Wq4oyL
+         vCvFPFylERfz980CDSp7ul5mtAp3QCSMBUdc5OhUzN/afS+RTViUQLSp61lAQr+KCwzl
+         8QmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684336995; x=1686928995;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9+zkVtFJZH/s/sKmb4Z8mX0ZyNeCSr7JQnjUSM8vJbU=;
+        b=SplpCf4L87KBEp8XR3jRbBiW2dIq10HBHz9L2sGAeWuiXpWBEQ7bSiJtnpjp9ry3vd
+         hzhCfBHBn5CqIsiw0lSYvt1xH6CVGe+KVAgX5iDIo3opLZ8OkPOwXbqmKHPIdbzvcuTV
+         dwQ4FGsPSeWbl/cIaiz2qfCR6BQW0rwZ3VNqg97NB3ae0DWUUqLvbirBxhR1kG7vACmk
+         CGhkNEz0aNKo5A5V/zaLZ4TvamXZsVjzqcouBhoj4LNVRHNwVi1+er83/3MATqaZFzbe
+         vYjO7HntT1/WV2uz8hnc620NNbCQlWpB9x3i+WPByAW1Hhi9QdnFNTMe4DVQIbXCewja
+         LwXA==
+X-Gm-Message-State: AC+VfDzJx6HINix6YAYMkKeiGY+QerztJfcl/OnL7Fx1m9yHi3bNe0qM
+        QE79KxRN14aUDDtn5pgaaVCWPg==
+X-Google-Smtp-Source: ACHHUZ7DdgZpbkeB08gqVo1Il+baYyg2vTm+oBF8DTFemau8YO/NFvnHReGV+WIt97skRr1LrjBtRQ==
+X-Received: by 2002:aa7:c2d7:0:b0:509:c6e6:c002 with SMTP id m23-20020aa7c2d7000000b00509c6e6c002mr2084928edp.39.1684336994785;
+        Wed, 17 May 2023 08:23:14 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:c9ff:4c84:dd21:568d? ([2a02:810d:15c0:828:c9ff:4c84:dd21:568d])
+        by smtp.gmail.com with ESMTPSA id ay20-20020a056402203400b00502689a06b2sm9512864edb.91.2023.05.17.08.23.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 08:23:14 -0700 (PDT)
+Message-ID: <28889e6c-0040-5adb-25e1-f8284931947a@linaro.org>
+Date:   Wed, 17 May 2023 17:23:13 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/4] dt-bindings: mfd: stm32f7: add binding definition for
+ CAN3
+Content-Language: en-US
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, Lee Jones <lee@kernel.org>
 Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
         linux-kernel@vger.kernel.org,
         Amarula patchwork <linux-amarula@amarulasolutions.com>,
@@ -40,22 +69,16 @@ Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-can@vger.kernel.org, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH 1/4] dt-bindings: mfd: stm32f7: add binding definition
- for CAN3
-Message-ID: <20230517-corset-pelvis-5b0c41f519c9-mkl@pengutronix.de>
 References: <20230423172528.1398158-1-dario.binacchi@amarulasolutions.com>
  <20230423172528.1398158-2-dario.binacchi@amarulasolutions.com>
  <20230424090229.GB8035@google.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="q5imvd4u3okupx2w"
-Content-Disposition: inline
-In-Reply-To: <20230424090229.GB8035@google.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+ <20230517-corset-pelvis-5b0c41f519c9-mkl@pengutronix.de>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230517-corset-pelvis-5b0c41f519c9-mkl@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,67 +87,43 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On 17/05/2023 16:16, Marc Kleine-Budde wrote:
+> Hey Lee Jones,
+> 
+> On 24.04.2023 10:02:29, Lee Jones wrote:
+>> On Sun, 23 Apr 2023, Dario Binacchi wrote:
+>>
+>>> Add binding definition for CAN3 peripheral.
+>>>
+>>> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+>>> ---
+>>>
+>>>  include/dt-bindings/mfd/stm32f7-rcc.h | 1 +
+>>>  1 file changed, 1 insertion(+)
+>>
+>> Applied, thanks
+> 
+> I upstreamed the v2 of this series
+> (https://lore.kernel.org/all/20230427204540.3126234-1-dario.binacchi@amarulasolutions.com/)
+> that doesn't contain this change to net/main without noticing that the
+> DT changes in that series depend on it.
+> 
+> This broke the DT compilation of the stm32f746.dtsi in the net/main
+> tree. I don't see the stm32f7-rcc.h changes in linus/master so I'm
+> afraid this will break mainline too :/
+> 
+> What are the possible solutions? I see:
+> 1) revert the stm32f746.dtsi changes via net/main
+> 2) upstream the stm32f7-rcc.h changes via net/main, too
+> 3) upstream the stm32f7-rcc.h changes via you tree, so that it hits
+>    mainline in the v6.4 release cycle.
+> 
+> I'm in favor of solution number 1. Thoughts?
 
---q5imvd4u3okupx2w
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+DTS should never go with driver changes or with driver trees, not only
+because it hides ABI breaks but also for above reasons. The best if you
+just drop or revert DTS commits, so they can go via platform maintainer.
 
-Hey Lee Jones,
+Best regards,
+Krzysztof
 
-On 24.04.2023 10:02:29, Lee Jones wrote:
-> On Sun, 23 Apr 2023, Dario Binacchi wrote:
->=20
-> > Add binding definition for CAN3 peripheral.
-> >=20
-> > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> > ---
-> >=20
-> >  include/dt-bindings/mfd/stm32f7-rcc.h | 1 +
-> >  1 file changed, 1 insertion(+)
->=20
-> Applied, thanks
-
-I upstreamed the v2 of this series
-(https://lore.kernel.org/all/20230427204540.3126234-1-dario.binacchi@amarul=
-asolutions.com/)
-that doesn't contain this change to net/main without noticing that the
-DT changes in that series depend on it.
-
-This broke the DT compilation of the stm32f746.dtsi in the net/main
-tree. I don't see the stm32f7-rcc.h changes in linus/master so I'm
-afraid this will break mainline too :/
-
-What are the possible solutions? I see:
-1) revert the stm32f746.dtsi changes via net/main
-2) upstream the stm32f7-rcc.h changes via net/main, too
-3) upstream the stm32f7-rcc.h changes via you tree, so that it hits
-   mainline in the v6.4 release cycle.
-
-I'm in favor of solution number 1. Thoughts?
-
-Sorry for the mess,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---q5imvd4u3okupx2w
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEyBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRk4dAACgkQvlAcSiqK
-BOikxAf2M/Ykg/MJoF/7udP97hi5VrUGxB6DSWdGY2T6kl8FVmJbHgx+vib1h2X2
-/sj75GpkMhGNwdyysYP0KSFtzVnvI5bt/YHDwT/JnbljFw6xETEOllILKQbw5tat
-29kjQUDmlVwzC8+L3itlu//IEu0NpQzNDPc+H5sxxlqVOIm8//kp8EUAjlWnD4LN
-1fVKXi8UgK9paGixIiKbWYdvdLoYR5PcJFYFvWUEZEl0A7VtL0lXvZqdrnCo8ol5
-Iza8FIAN6dBUlxAIzw7u96gg7r4jo9Q+IjtVXbr4DrAQyA4eJ638VJKOU5fiHVzE
-qdyGlnD8b0opJO3QJPclwaQl3g/Q
-=epl8
------END PGP SIGNATURE-----
-
---q5imvd4u3okupx2w--
