@@ -2,115 +2,117 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC1A57070C9
-	for <lists+linux-can@lfdr.de>; Wed, 17 May 2023 20:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83AB87071F1
+	for <lists+linux-can@lfdr.de>; Wed, 17 May 2023 21:23:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229476AbjEQScq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 17 May 2023 14:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58938 "EHLO
+        id S230122AbjEQTXR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 17 May 2023 15:23:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjEQScp (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 17 May 2023 14:32:45 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9C695FC4
-        for <linux-can@vger.kernel.org>; Wed, 17 May 2023 11:32:39 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pzLwz-0000vL-Me; Wed, 17 May 2023 20:32:37 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 9E2E51C751A;
-        Wed, 17 May 2023 18:32:36 +0000 (UTC)
-Date:   Wed, 17 May 2023 20:32:36 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Peter Seiderer <ps.report@gmx.net>
-Cc:     linux-can@vger.kernel.org, Florian Ferg <flfe@hms-networks.de>
-Subject: Re: Any update for the IXXAT USB-to-CAN adapters drivers?
-Message-ID: <20230517-prefix-animation-aefb320e253a-mkl@pengutronix.de>
-References: <20230514151221.049873cb@gmx.net>
- <20230515-repurpose-essential-7f66fdcde4d5-mkl@pengutronix.de>
- <20230515-salon-sherry-cabae5cf7c49-mkl@pengutronix.de>
- <20230516205249.334acea3@gmx.net>
+        with ESMTP id S230104AbjEQTXP (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 17 May 2023 15:23:15 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2099.outbound.protection.outlook.com [40.107.21.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7E3271C;
+        Wed, 17 May 2023 12:23:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RQYQoTTY+KWV3+amLi8FxiTvbBYHlzOdyBC9SnSJEMm0g+hGftER2c8YGzs19thhNl91MhZExTSaBV7kYySjONpL2GJcU6fLCg/jnUqRTL/8ku26HUpbgE6nR+2ixyrIF4yjEFsB2Ac871dlJWBRpxK6RLg4H2LLN0j7eGSf9rO0aXzFaB82k/iskQkjLzVZlEAcHpu6RnJA/g2is25xTG5G15Q2kXBQKjB0ZvmNCdbJpVFSlJUdItglErZ3jPoWawq17XUIwnsLh/M89y8uv9FWMnBm8KmE/8XW3YJnVL07zmxEDRuHTsEZRJ+waEzKMEZO1Gswxnwkq0rvJ1WqMQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eUJW4C0hUDB+USndlFz/vHyiJqSIKRU7esnI0JWh7hY=;
+ b=dFCHlM0wV57R2U4Zy8gE/fnquoY6PrI6zGtHt+rU8gjdRhTtMZhTUNt/x00+qEEaR2Xj+gfB24TwMySIv7sUP5Ljf8OnRflw2cKXvTb95GCDd5oZIEGhqbVAsJ8Ar8AFkZzPCsVI4oJNnYXN3IPUs/D8GGezlLwyQ5fC3ZPGKtMFcj0dIR5j934qV2SN9m59eoVO8jeCX2VlJNVhOpUnlE/whI2pT89fAr07KNd95nY72PA91V/wslGwL6PL0lpl/oB1T0aW2LmtGqOkNCAPCeDRYN9jcSXInVQoeg3+ff576r0121JTsZXexCw5YD+qw4UIs64pZkBVNvTpaTY6Bw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
+ is 80.151.164.27) smtp.rcpttodomain=esd.eu smtp.mailfrom=esd.eu; dmarc=none
+ action=none header.from=esd.eu; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=esdhannover.onmicrosoft.com; s=selector1-esdhannover-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eUJW4C0hUDB+USndlFz/vHyiJqSIKRU7esnI0JWh7hY=;
+ b=iAxkmWfYPXpY0H6z5ECBC0yPC29DSS3/rUgjF/sEcKmFNPTjSjSQE4b5cRAKPeTSkSBW95baRaFRSzSz7p7mibHrREkUN2JS2NFN2IbynJDLtEK4QrytGj4fpZZq5KXG3n+Lp7HkRkha2meFj5GNK3BVHnAEkyutmMOxlUs9rfo=
+Received: from AS9PR05CA0084.eurprd05.prod.outlook.com (2603:10a6:20b:499::24)
+ by DB9PR03MB8798.eurprd03.prod.outlook.com (2603:10a6:10:3c5::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.17; Wed, 17 May
+ 2023 19:22:56 +0000
+Received: from AM7EUR06FT042.eop-eur06.prod.protection.outlook.com
+ (2603:10a6:20b:499:cafe::b0) by AS9PR05CA0084.outlook.office365.com
+ (2603:10a6:20b:499::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.33 via Frontend
+ Transport; Wed, 17 May 2023 19:22:56 +0000
+X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
+ 80.151.164.27) smtp.mailfrom=esd.eu; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=esd.eu;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning esd.eu
+ discourages use of 80.151.164.27 as permitted sender)
+Received: from esd-s7.esd (80.151.164.27) by
+ AM7EUR06FT042.mail.protection.outlook.com (10.233.255.77) with Microsoft SMTP
+ Server id 15.20.6411.18 via Frontend Transport; Wed, 17 May 2023 19:22:56
+ +0000
+Received: from esd-s20.esd.local (jenkins.esd.local [10.0.0.190])
+        by esd-s7.esd (Postfix) with ESMTPS id DBDC87C162F;
+        Wed, 17 May 2023 21:22:55 +0200 (CEST)
+Received: by esd-s20.esd.local (Postfix, from userid 2046)
+        id CD81E2E1801; Wed, 17 May 2023 21:22:55 +0200 (CEST)
+From:   Frank Jungclaus <frank.jungclaus@esd.eu>
+To:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Frank Jungclaus <frank.jungclaus@esd.eu>
+Subject: [PATCH 0/6] *** can: esd_usb: More preparation before supporting esd CAN-USB/3 ***
+Date:   Wed, 17 May 2023 21:22:45 +0200
+Message-Id: <20230517192251.2405290-1-frank.jungclaus@esd.eu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vwbydsehtydn3q7o"
-Content-Disposition: inline
-In-Reply-To: <20230516205249.334acea3@gmx.net>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM7EUR06FT042:EE_|DB9PR03MB8798:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 7b1d2c2d-9959-4bfe-0a47-08db570c1e70
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xHo3QT2Aw2HH7L5Ddy/gna1jaqzq9Jgr00PKfUPw7lbqOHL8MT7AikOvX0nlfNgp2U5UlahcswfoIf/VH9Ztz3ppJlKzC+6KdE+gB+kKr+3EjfbKhQz+VgpKVUvNC0adCHSItGxtisB4Rln4TSKs1AMdP+fh9wzs5a3hfGMrEPuCk69lrfclTquCu5OPP5FhCt/JOLc+ovJyKyVZsY9T0BFvnpywMU85wQbv1PzypreZd6tp0JLw7LL20ARQbzqVMRtOmKhnAPhpAf8ZYpKpQ7ydaVgElizSEvnHr8m/f1N+3/7RpUZ+ahXV6cvxSuCNoUTLePohvML5ZhioZrJj5rou5tdSSwynmF4aXRKSZLXF0muzQrPXeyI/fq49YrteL34goDN4AGSaii0IsUhktk80zkzl2a2L9M07tHr84casvN1IRNTRbtwQ97ibvEAKX+j2lSeN00TXR90HyMBpslIHME/AdK5KMSYbmSg8GLuSiHuua+L4noHCkREo5NerbEroHnV6wGlit46e+wdz1CcO9A0rFyd7s0b+PYSEgfodszPqUK+V72bylV35K6QBfBdFLZlxD4JflWUqS+2HCcMDXkguEQaBG8XdBg+xxz4R2EmB63xszmX6bhE5mKXmj6TueN8EpLhrz8306O+8eJJui0uUNIFaMVZyQeOwuV6kLxWTJvP3yLI27p3uhkep+XkC7KkdUqxC7OshDUGaOe21M9VNFBYVeeoQ4ww4sfIgK1sX7aIaSgMrbAUF7ePE
+X-Forefront-Antispam-Report: CIP:80.151.164.27;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:esd-s7.esd;PTR:p5097a41b.dip0.t-ipconnect.de;CAT:NONE;SFS:(13230028)(4636009)(39840400004)(346002)(136003)(396003)(376002)(451199021)(36840700001)(46966006)(110136005)(8936002)(5660300002)(44832011)(83380400001)(47076005)(186003)(36860700001)(6266002)(26005)(43170500006)(1076003)(81166007)(356005)(86362001)(2616005)(336012)(40480700001)(8676002)(6666004)(41300700001)(316002)(70206006)(70586007)(36756003)(4326008)(82310400005)(478600001)(54906003)(2906002)(42186006)(4744005);DIR:OUT;SFP:1102;
+X-OriginatorOrg: esd.eu
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2023 19:22:56.4159
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7b1d2c2d-9959-4bfe-0a47-08db570c1e70
+X-MS-Exchange-CrossTenant-Id: 5a9c3a1d-52db-4235-b74c-9fd851db2e6b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5a9c3a1d-52db-4235-b74c-9fd851db2e6b;Ip=[80.151.164.27];Helo=[esd-s7.esd]
+X-MS-Exchange-CrossTenant-AuthSource: AM7EUR06FT042.eop-eur06.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR03MB8798
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Apply another small batch of patches as preparation for adding support
+of the newly available esd CAN-USB/3 to esd_usb.c.
 
---vwbydsehtydn3q7o
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Frank Jungclaus (6):
+  can: esd_usb: Make use of existing kernel macros
+  can: esd_usb: Replace initializer macros used for struct
+    can_bittiming_const
+  can: esd_usb: Use consistent prefixes for macros
+  can: esd_usb: Prefix all structures with the device name
+  can: esd_usb: Replace hardcoded message length given to USB commands
+  can: esd_usb: Don't bother the user with nonessential log message
 
-On 16.05.2023 20:52:49, Peter Seiderer wrote:
-> Thanks for investigation, in the meanwhile found all the missing
-> references up to v7:
->=20
->   [PATCH] can: usb: IXXAT USB-to-CAN adapters drivers
->   https://marc.info/?l=3Dlinux-can&m=3D152845162427920&q=3Dmbox
->=20
->   [PATCH v2] can: usb: IXXAT USB-to-CAN adapters drivers
->   https://marc.info/?l=3Dlinux-can&m=3D152996258423265&q=3Dmbox
->=20
->   [PATCH v3] can: usb: IXXAT USB-to-CAN adapters drivers
->   https://marc.info/?l=3Dlinux-can&m=3D153019414431266&q=3Dmbox
->=20
->   [PATCH v4] can: usb: IXXAT USB-to-CAN adapters drivers
->   https://marc.info/?l=3Dlinux-can&m=3D153113773029121&q=3Dmbox
->=20
->   [PATCH v5] can: usb: IXXAT USB-to-CAN adapters drivers
->   https://marc.info/?l=3Dlinux-can&m=3D153390928701300&q=3Dmbox
->=20
->   [PATCH v6] can: usb: IXXAT USB-to-CAN adapters drivers
->   https://marc.info/?l=3Dlinux-can&m=3D153596357327489&q=3Dmbox
->=20
->   [PATCH v7] can: usb: IXXAT USB-to-CAN adapters drivers
->   https://marc.info/?l=3Dlinux-can&m=3D153805714622658&q=3Dmbox
+ drivers/net/can/usb/esd_usb.c | 339 +++++++++++++++++-----------------
+ 1 file changed, 168 insertions(+), 171 deletions(-)
 
-Really nice archaeology! You should definitely link to the README.md of
-your codeberg repo:
 
-| https://codeberg.org/psreport/socketcan-linux-ix-usb-can
+base-commit: 14575e3b5f3ece74e9143d7f7f195f3e5ff085f5
+-- 
+2.25.1
 
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---vwbydsehtydn3q7o
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRlHcEACgkQvlAcSiqK
-BOi1fgf/UCW6ypwzeu1RV87PoaomYnFXASCK9no8J5734oxWn8FAbQLpcugwuwfT
-DsUrCfbl8NdfWTSxWZdUMl6kxHwltch2T9b+SQpEr9DIn2bPHhjSeRoXi+rb/wQE
-yhiwBZTbhiOM3ChNQrSPpF3HW2w/G6XgSDXNUuCsxT2j8j8SB7P1s8utAGme7BWL
-TG90tboFy/gOVIIWWwwfLM1OnUPSGMrGMrTEhbfFlNzDdX1BJTKMnQz5xartjFV3
-pYw42tcaGxLU4WBg5ZuttwGjDWLV0MznmhUtobz1tPX56PIOtq8mjB2VupQgonil
-Keodag3QqNvQqOI9kfgXqs4ple+j1w==
-=gxi1
------END PGP SIGNATURE-----
-
---vwbydsehtydn3q7o--
