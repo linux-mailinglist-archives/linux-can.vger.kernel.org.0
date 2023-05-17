@@ -2,151 +2,141 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E8BA707099
-	for <lists+linux-can@lfdr.de>; Wed, 17 May 2023 20:20:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C47C7070B1
+	for <lists+linux-can@lfdr.de>; Wed, 17 May 2023 20:22:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbjEQSUI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 17 May 2023 14:20:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49784 "EHLO
+        id S229542AbjEQSWk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 17 May 2023 14:22:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbjEQSUF (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 17 May 2023 14:20:05 -0400
+        with ESMTP id S229521AbjEQSWj (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 17 May 2023 14:22:39 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19CBE7EDC
-        for <linux-can@vger.kernel.org>; Wed, 17 May 2023 11:20:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C320D076
+        for <linux-can@vger.kernel.org>; Wed, 17 May 2023 11:22:20 -0700 (PDT)
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1pzLko-0007UA-Ie
-        for linux-can@vger.kernel.org; Wed, 17 May 2023 20:20:02 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id EF0FA1C74E9
-        for <linux-can@vger.kernel.org>; Wed, 17 May 2023 18:20:01 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        id 1pzLmh-0007yW-S9; Wed, 17 May 2023 20:21:59 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 489EF1C74E1;
-        Wed, 17 May 2023 18:20:00 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id ff52fbe0;
-        Wed, 17 May 2023 18:19:59 +0000 (UTC)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 93EA41C74F0;
+        Wed, 17 May 2023 18:21:57 +0000 (UTC)
+Date:   Wed, 17 May 2023 20:21:57 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org
-Cc:     kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Lee Jones <lee@kernel.org>,
         Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Alexandre TORGUE <alexandre.torgue@foss.st.com>,
-        kernel test robot <lkp@intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] Revert "ARM: dts: stm32: add CAN support on stm32f746"
-Date:   Wed, 17 May 2023 20:19:50 +0200
-Message-Id: <20230517181950.1106697-1-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
+        linux-kernel@vger.kernel.org,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        michael@amarulasolutions.com,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-can@vger.kernel.org, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 1/4] dt-bindings: mfd: stm32f7: add binding definition
+ for CAN3
+Message-ID: <20230517-prescribe-duller-5457a674a3af-mkl@pengutronix.de>
+References: <20230423172528.1398158-1-dario.binacchi@amarulasolutions.com>
+ <20230423172528.1398158-2-dario.binacchi@amarulasolutions.com>
+ <20230424090229.GB8035@google.com>
+ <20230517-corset-pelvis-5b0c41f519c9-mkl@pengutronix.de>
+ <28889e6c-0040-5adb-25e1-f8284931947a@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qnusropkbmgywkyd"
+Content-Disposition: inline
+In-Reply-To: <28889e6c-0040-5adb-25e1-f8284931947a@linaro.org>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This reverts commit 0920ccdf41e3078a4dd2567eb905ea154bc826e6.
 
-The commit 0920ccdf41e3 ("ARM: dts: stm32: add CAN support on
-stm32f746") depends on the patch "dt-bindings: mfd: stm32f7: add
-binding definition for CAN3" [1], which is not in net/main, yet. This
-results in a parsing error of "stm32f746.dtsi".
+--qnusropkbmgywkyd
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-So revert this commit.
+On 17.05.2023 17:23:13, Krzysztof Kozlowski wrote:
+> On 17/05/2023 16:16, Marc Kleine-Budde wrote:
+> > Hey Lee Jones,
+> >=20
+> > On 24.04.2023 10:02:29, Lee Jones wrote:
+> >> On Sun, 23 Apr 2023, Dario Binacchi wrote:
+> >>
+> >>> Add binding definition for CAN3 peripheral.
+> >>>
+> >>> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> >>> ---
+> >>>
+> >>>  include/dt-bindings/mfd/stm32f7-rcc.h | 1 +
+> >>>  1 file changed, 1 insertion(+)
+> >>
+> >> Applied, thanks
+> >=20
+> > I upstreamed the v2 of this series
+> > (https://lore.kernel.org/all/20230427204540.3126234-1-dario.binacchi@am=
+arulasolutions.com/)
+> > that doesn't contain this change to net/main without noticing that the
+> > DT changes in that series depend on it.
+> >=20
+> > This broke the DT compilation of the stm32f746.dtsi in the net/main
+> > tree. I don't see the stm32f7-rcc.h changes in linus/master so I'm
+> > afraid this will break mainline too :/
+> >=20
+> > What are the possible solutions? I see:
+> > 1) revert the stm32f746.dtsi changes via net/main
+> > 2) upstream the stm32f7-rcc.h changes via net/main, too
+> > 3) upstream the stm32f7-rcc.h changes via you tree, so that it hits
+> >    mainline in the v6.4 release cycle.
+> >=20
+> > I'm in favor of solution number 1. Thoughts?
+>=20
+> DTS should never go with driver changes or with driver trees, not only
+> because it hides ABI breaks but also for above reasons. The best if you
+> just drop or revert DTS commits, so they can go via platform maintainer.
 
-[1] https://lore.kernel.org/all/20230423172528.1398158-2-dario.binacchi@amarulasolutions.com
+Reverted: https://lore.kernel.org/20230517181950.1106697-1-mkl@pengutronix.=
+de
 
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc: Alexandre TORGUE <alexandre.torgue@foss.st.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202305172108.x5acbaQG-lkp@intel.com
-Closes: https://lore.kernel.org/oe-kbuild-all/202305172130.eGGEUhpi-lkp@intel.com
-Fixes: 0920ccdf41e3 ("ARM: dts: stm32: add CAN support on stm32f746")
-Suggested-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- arch/arm/boot/dts/stm32f746.dtsi | 47 --------------------------------
- 1 file changed, 47 deletions(-)
+Thanks,
+Marc
 
-diff --git a/arch/arm/boot/dts/stm32f746.dtsi b/arch/arm/boot/dts/stm32f746.dtsi
-index 973698bc9ef4..dc868e6da40e 100644
---- a/arch/arm/boot/dts/stm32f746.dtsi
-+++ b/arch/arm/boot/dts/stm32f746.dtsi
-@@ -257,23 +257,6 @@ rtc: rtc@40002800 {
- 			status = "disabled";
- 		};
- 
--		can3: can@40003400 {
--			compatible = "st,stm32f4-bxcan";
--			reg = <0x40003400 0x200>;
--			interrupts = <104>, <105>, <106>, <107>;
--			interrupt-names = "tx", "rx0", "rx1", "sce";
--			resets = <&rcc STM32F7_APB1_RESET(CAN3)>;
--			clocks = <&rcc 0 STM32F7_APB1_CLOCK(CAN3)>;
--			st,gcan = <&gcan3>;
--			status = "disabled";
--		};
--
--		gcan3: gcan@40003600 {
--			compatible = "st,stm32f4-gcan", "syscon";
--			reg = <0x40003600 0x200>;
--			clocks = <&rcc 0 STM32F7_APB1_CLOCK(CAN3)>;
--		};
--
- 		usart2: serial@40004400 {
- 			compatible = "st,stm32f7-uart";
- 			reg = <0x40004400 0x400>;
-@@ -354,36 +337,6 @@ i2c4: i2c@40006000 {
- 			status = "disabled";
- 		};
- 
--		can1: can@40006400 {
--			compatible = "st,stm32f4-bxcan";
--			reg = <0x40006400 0x200>;
--			interrupts = <19>, <20>, <21>, <22>;
--			interrupt-names = "tx", "rx0", "rx1", "sce";
--			resets = <&rcc STM32F7_APB1_RESET(CAN1)>;
--			clocks = <&rcc 0 STM32F7_APB1_CLOCK(CAN1)>;
--			st,can-primary;
--			st,gcan = <&gcan1>;
--			status = "disabled";
--		};
--
--		gcan1: gcan@40006600 {
--			compatible = "st,stm32f4-gcan", "syscon";
--			reg = <0x40006600 0x200>;
--			clocks = <&rcc 0 STM32F7_APB1_CLOCK(CAN1)>;
--		};
--
--		can2: can@40006800 {
--			compatible = "st,stm32f4-bxcan";
--			reg = <0x40006800 0x200>;
--			interrupts = <63>, <64>, <65>, <66>;
--			interrupt-names = "tx", "rx0", "rx1", "sce";
--			resets = <&rcc STM32F7_APB1_RESET(CAN2)>;
--			clocks = <&rcc 0 STM32F7_APB1_CLOCK(CAN2)>;
--			st,can-secondary;
--			st,gcan = <&gcan1>;
--			status = "disabled";
--		};
--
- 		cec: cec@40006c00 {
- 			compatible = "st,stm32-cec";
- 			reg = <0x40006C00 0x400>;
--- 
-2.39.2
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
+--qnusropkbmgywkyd
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRlG0IACgkQvlAcSiqK
+BOgvtggAs1aeq0u5rmdza+38M15JChcsOtvTbSMIoePcRPC8ygd/ZihgaHb7qs2y
+i1+Nf64kuyjBt787Gf3/YsL72Rs5SOSYXXMJZNX3tNmNQSAgatZqrNSR308SVars
+DfBTlhgmMsDj5fnDF7NL9XZHOSG20oRNWJ9dwZ5FIOwMuxP6rXtR7wAA8A9d51Y1
+ZTDzYvBp5qkxqqfeD+Ap4s6kQ6G9r8Csj2h/C3nm1aNo82T8yrgtq6bAslk3rpTE
++NVp9T5olP/H7BayFdy/BlRS6lu+o7g58HQw6KCEKrFGYk4OkbAze/Vo1pq/+o0p
+chq9aL6I5s9k2EwKMJvmg1Y2Cl+byg==
+=8ejs
+-----END PGP SIGNATURE-----
+
+--qnusropkbmgywkyd--
