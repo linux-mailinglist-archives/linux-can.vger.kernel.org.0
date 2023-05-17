@@ -2,159 +2,108 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A60170565F
-	for <lists+linux-can@lfdr.de>; Tue, 16 May 2023 20:53:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33F84705E7E
+	for <lists+linux-can@lfdr.de>; Wed, 17 May 2023 06:00:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbjEPSw5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 16 May 2023 14:52:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59118 "EHLO
+        id S229640AbjEQEAa (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 17 May 2023 00:00:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjEPSw5 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 16 May 2023 14:52:57 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3B27699
-        for <linux-can@vger.kernel.org>; Tue, 16 May 2023 11:52:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1684263170; i=ps.report@gmx.net;
-        bh=jTq5kdq+zfRlNlEARuF1H26BVja+yx6BoHB48XZAcHs=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
-        b=QsRBXciLV94F2F0V419gM6GxRI78C7/QUIwURuR2Y3XWki5D9zHoJAQs7sGgBPhMJ
-         eXdr8ZdKygnLrOhKaGBft8ok3Roe6JtW+E4LFR0EWf3ZsVF66hg268gdj5ThgqqGWQ
-         DMR2HvZ1u3Fwq30nqWm7rIvQkXeZzGZ/MH75U1fYf0AWVz1Nev9egEjX84ReCqClPS
-         +rFGY7zSL/PkiRP+/SYZhlCwiLqruur531gmbCvA4qGxvDuKKaA3D6n4MnE7gQ/+NT
-         hI2AMrO9Rm7g+E/O5pnOOCElOANO8S58GG/IWoGQXD0eVIVlrGYZ5Mx3d1SRxUNeEv
-         f+sD2RjM/PBJg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost ([62.216.209.78]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MvsIv-1qGfZ71Pct-00srR4; Tue, 16
- May 2023 20:52:50 +0200
-Date:   Tue, 16 May 2023 20:52:49 +0200
-From:   Peter Seiderer <ps.report@gmx.net>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org, Florian Ferg <flfe@hms-networks.de>
-Subject: Re: Any update for the IXXAT USB-to-CAN adapters drivers?
-Message-ID: <20230516205249.334acea3@gmx.net>
-In-Reply-To: <20230515-salon-sherry-cabae5cf7c49-mkl@pengutronix.de>
-References: <20230514151221.049873cb@gmx.net>
-        <20230515-repurpose-essential-7f66fdcde4d5-mkl@pengutronix.de>
-        <20230515-salon-sherry-cabae5cf7c49-mkl@pengutronix.de>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-suse-linux-gnu)
+        with ESMTP id S229437AbjEQEA3 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 17 May 2023 00:00:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 741D03A8D;
+        Tue, 16 May 2023 21:00:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE38064182;
+        Wed, 17 May 2023 04:00:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 554D0C433A1;
+        Wed, 17 May 2023 04:00:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684296024;
+        bh=VcGyi2cEUycSSurqDF8cL5uSfKMIcWqmuHxfeGZBgC0=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=CGBD3luDeY/n8Zq/uEbNLWm7TlmvbUPovje+ovN/geBzLfpxHH9wcdW9xzpdb2nHQ
+         sDj5CtCj18/CTkBD/nS8f3zMX3omETsddAvr58IY5wDsAgOvzoW4l9TMnR/dEKtsbK
+         TSZav9csSzAWWYIMuHrMm1Ugp8yCmr+LkhwxZPAttDK19UWIx2g+zVtEtuw/oD6kR+
+         DQsMqsOmmLKZiRxR/G2u3NhAPQLPSw/NgqjrFZS9BeLQ0TpVGcIhVdiN3a6GrUPdrS
+         /YtMR6K0WIQbOw+b7wytcYZSKOE6i1yPpp3Hmweszqk6rH3eGqrMTvLTGmYGaLwfVp
+         wzQOlSlEJP9rw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 41451C73FE2;
+        Wed, 17 May 2023 04:00:24 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:+3CQSDFboosR1Ths21rlSpYadpCx1cSA22Mr46pQBW2VAoVLsmY
- 83D3W+TTnLAE8EH+k9MNLBjyPJqHDNsb2QvLRjGYq9QZW3LHub2Y8Uvbhv5wP2kIxIAMNB/
- uw7SBj1hbYxcXBXIvoZp7Fmj8NX15ZkbElc/0ENsdg7WorWpiqarG+LoHWT/6sN56JiiIzN
- 6JFfhyyHck7wHVLfmqEEA==
-UI-OutboundReport: notjunk:1;M01:P0:gk6emh6otoo=;zQ3ivRGJ83pu7QwksmvP0FHCoIC
- 83AtITpY6VNgfl/DHiRv94qJVbhuqaSmwQJoCUojGI0GumryTiqW7RF+7GT/TqN5IIXxPOcZO
- OvtMX2CXKhppfiRZe5dkluz6rK6HV5x0uUSjMtJAv4vevTMIfbnK7f/GY2PjEbKK4bilBunlm
- m8c4wPP/d+G3Np4VgI00ZNpE8D5M3dqv/JOAf7UK4cjYVFhuNbiIbaQh5YlyK4usm8Gezvftd
- 0VAieZkoJ/7BrnyUZUAazCg/FNfIRbHByICEj3DSsBv8ah+MmExQfb1oh9x0jYj4Xfi4FoaXN
- RKpSrfLyJwPfpcjxofctYNQxubtof4u2Vnf/7a2wUNt5/9fgyI96VxaEe7zjB0V5o0Ee8M+l0
- L9Yr7gkLYwfB1s3+CNJphIZ9askEfyt828whGANm/a0Ohr2iZVpzhM/MzEH+vX8lBdm2NWXbX
- o+ugEEhkFocXddy16vwgCaz5PY5EpIwOpUVNhQdVE5Q4Qb1P/RED1wyUR1BOu66FXgVS5BxLJ
- rGTjOsjJZwqcxDyxlmqzDQ13GL1f9aF76AoDW6GwA+8syO43ApJiWc15/FE2Hob6bNk/Tthzp
- win7ClxPVKC7ynWHUjrAgI6RLVL8bX2ECk6DyTnN2RLsldxaoA2LbvsUYIUvAss0FRCXbe204
- +BvE3y9ASLgw03eXTi3d/ktTHonYdsideZVfLp157ERmyl2a0df+wwFrMql+MwK9C4nxn/Rpo
- q71ICpbrQ6hMRINclenAMbOiBq+RZLFck+qenovKrSrMk79vjTXFgT+EnRrUbCsgKbzXxEu6d
- lKAWDPd1xC4NIgPu3aN37yKg+9BXzsSU73nP2+uFSYyD5yXq5WJ+TpK781/YATu2U/hik46Tl
- OM/ye5bZBU8FOpwIoJpuu84Xd5TlPHBU3p6lqXuse0XV4B73fP9KK1f7VzLGFG4kPv8QN1VEo
- L8nCMA==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 1/9] can: isotp: recvmsg(): allow MSG_CMSG_COMPAT flag
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168429602426.23839.18000337535981617540.git-patchwork-notify@kernel.org>
+Date:   Wed, 17 May 2023 04:00:24 +0000
+References: <20230515204722.1000957-2-mkl@pengutronix.de>
+In-Reply-To: <20230515204722.1000957-2-mkl@pengutronix.de>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        linux-can@vger.kernel.org, kernel@pengutronix.de,
+        socketcan@hartkopp.net, o.rempel@pengutronix.de,
+        stable@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Marc,
+Hello:
 
-On Mon, 15 May 2023 23:32:09 +0200, Marc Kleine-Budde <mkl@pengutronix.de>=
- wrote:
+This series was applied to netdev/net.git (main)
+by Marc Kleine-Budde <mkl@pengutronix.de>:
 
-> On 15.05.2023 23:07:51, Marc Kleine-Budde wrote:
-> > On 14.05.2023 15:12:21, Peter Seiderer wrote:
-> > > does anybody know what happened with the IXXAT USB-to-CAN adapters d=
-rivers
-> > > attempts to bring the patches upstream?
-> >
-> > I think upstreaming starved due to lack of enough reviewing power in t=
-he
-> > community.
-> >
-> > > I found the following attempts
-> > >
-> > > - 'Re: [PATCH] can: usb: IXXAT USB-to-CAN adapters drivers' ([1] fro=
-m June 2018)
-> > > - '[PATCH v6] can: usb: IXXAT USB-to-CAN adapters drivers' ([2] from=
- Sep 2018)
-> > >
-> > > but now follow ups and/or references in the actual linux source
-> > > tree...
-> >
-> > The newest I have in my archive is:
-> >
-> > | Date: Thu, 27 Sep 2018 16:04:43 +0200
-> > | From: Florian Ferg <flfe@hms-networks.de>
-> > | To: linux-can@vger.kernel.org
-> > | CC: Florian Ferg <flfe@hms-networks.de>
-> > | Message-ID: <20180927140443.29051-1-flfe@hms-networks.de>
-> > | Subject: [PATCH v7] can: usb: IXXAT USB-to-CAN adapters drivers
-> >
-> > If you're interested to bring the driver mainline, I can forward you
-> > that mail.
+On Mon, 15 May 2023 22:47:14 +0200 you wrote:
+> From: Oliver Hartkopp <socketcan@hartkopp.net>
+> 
+> The control message provided by isotp support MSG_CMSG_COMPAT but
+> blocked recvmsg() syscalls that have set this flag, i.e. on 32bit user
+> space on 64 bit kernels.
+> 
+> Link: https://github.com/hartkopp/can-isotp/issues/59
+> Cc: Oleksij Rempel <o.rempel@pengutronix.de>
+> Suggested-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+> Fixes: 42bf50a1795a ("can: isotp: support MSG_TRUNC flag when reading from socket")
+> Link: https://lore.kernel.org/20230505110308.81087-2-mkl@pengutronix.de
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> 
+> [...]
 
-Thanks for investigation, in the meanwhile found all the missing
-references up to v7:
+Here is the summary with links:
+  - [net,1/9] can: isotp: recvmsg(): allow MSG_CMSG_COMPAT flag
+    https://git.kernel.org/netdev/net/c/db2773d65b02
+  - [net,2/9] can: j1939: recvmsg(): allow MSG_CMSG_COMPAT flag
+    https://git.kernel.org/netdev/net/c/1db080cbdbab
+  - [net,3/9] can: dev: fix missing CAN XL support in can_put_echo_skb()
+    https://git.kernel.org/netdev/net/c/6bffdc38f993
+  - [net,4/9] can: CAN_BXCAN should depend on ARCH_STM32
+    https://git.kernel.org/netdev/net/c/4920bded3ee0
+  - [net,5/9] dt-bindings: net: can: add "st,can-secondary" property
+    https://git.kernel.org/netdev/net/c/caf78f0f4919
+  - [net,6/9] ARM: dts: stm32f429: put can2 in secondary mode
+    https://git.kernel.org/netdev/net/c/6b443faa313c
+  - [net,7/9] ARM: dts: stm32: add pin map for CAN controller on stm32f7
+    https://git.kernel.org/netdev/net/c/011644249686
+  - [net,8/9] can: bxcan: add support for single peripheral configuration
+    https://git.kernel.org/netdev/net/c/85a79b971164
+  - [net,9/9] ARM: dts: stm32: add CAN support on stm32f746
+    https://git.kernel.org/netdev/net/c/0920ccdf41e3
 
-  [PATCH] can: usb: IXXAT USB-to-CAN adapters drivers
-  https://marc.info/?l=3Dlinux-can&m=3D152845162427920&q=3Dmbox
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-  [PATCH v2] can: usb: IXXAT USB-to-CAN adapters drivers
-  https://marc.info/?l=3Dlinux-can&m=3D152996258423265&q=3Dmbox
-
-  [PATCH v3] can: usb: IXXAT USB-to-CAN adapters drivers
-  https://marc.info/?l=3Dlinux-can&m=3D153019414431266&q=3Dmbox
-
-  [PATCH v4] can: usb: IXXAT USB-to-CAN adapters drivers
-  https://marc.info/?l=3Dlinux-can&m=3D153113773029121&q=3Dmbox
-
-  [PATCH v5] can: usb: IXXAT USB-to-CAN adapters drivers
-  https://marc.info/?l=3Dlinux-can&m=3D153390928701300&q=3Dmbox
-
-  [PATCH v6] can: usb: IXXAT USB-to-CAN adapters drivers
-  https://marc.info/?l=3Dlinux-can&m=3D153596357327489&q=3Dmbox
-
-  [PATCH v7] can: usb: IXXAT USB-to-CAN adapters drivers
-  https://marc.info/?l=3Dlinux-can&m=3D153805714622658&q=3Dmbox
-
->
-> ported (+ compile tested only) to recent net-net/main:
->
-> https://lore.kernel.org/all/20230515212930.1019702-1-mkl@pengutronix.de/
-
-Thanks for update (would have been my next task as I did something
-similar for the latest upstream version [3] and a little bugfix [4])...
-
-Will try your version the next days and take a look at the latest/new
-review comments (and take a look at the differences of v7/v8 version
-against the upstream version [5])...
-
-Regards,
-Peter
-
-[3] https://codeberg.org/psreport/socketcan-linux-ix-usb-can/commit/c5464a=
-c
-[4] https://codeberg.org/psreport/socketcan-linux-ix-usb-can/commit/51b302=
-1
-[5] https://codeberg.org/psreport/socketcan-linux-ix-usb-can/commit/7c327a=
-5
-
->
-> Marc
->
 
