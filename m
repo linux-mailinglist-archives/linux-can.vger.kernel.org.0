@@ -2,128 +2,151 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 641BB706C8F
-	for <lists+linux-can@lfdr.de>; Wed, 17 May 2023 17:23:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E8BA707099
+	for <lists+linux-can@lfdr.de>; Wed, 17 May 2023 20:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231968AbjEQPXV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 17 May 2023 11:23:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52396 "EHLO
+        id S229897AbjEQSUI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 17 May 2023 14:20:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbjEQPXU (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 17 May 2023 11:23:20 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557EB1B7
-        for <linux-can@vger.kernel.org>; Wed, 17 May 2023 08:23:16 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-510dabb3989so609492a12.0
-        for <linux-can@vger.kernel.org>; Wed, 17 May 2023 08:23:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684336995; x=1686928995;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9+zkVtFJZH/s/sKmb4Z8mX0ZyNeCSr7JQnjUSM8vJbU=;
-        b=XOJ7UidV7vBcKsNvYy0i6hI3SXR8MinSpo8BS2kNkNEr6R3kCJ6pLCTX7WGWZTxIUL
-         EJ3Nce8MX7iCpyr1f5uKpeKDizDGNwsRfIDHEVeUZMMIbR7HuRIruxcXeVhwCPvVBq5q
-         dYfjXwks/D4nWnLJexNp3QucAB4g9L/FdSTaT53bS+wfnJqJb5PVxw0yTMnDQdomE4vU
-         Hc0ZlFT0wpU0Q8SYC9hBzhcFUMyc/Y9jhI2bgMC1KxSWwVETcbfOSXC2EyBA08Wq4oyL
-         vCvFPFylERfz980CDSp7ul5mtAp3QCSMBUdc5OhUzN/afS+RTViUQLSp61lAQr+KCwzl
-         8QmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684336995; x=1686928995;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9+zkVtFJZH/s/sKmb4Z8mX0ZyNeCSr7JQnjUSM8vJbU=;
-        b=SplpCf4L87KBEp8XR3jRbBiW2dIq10HBHz9L2sGAeWuiXpWBEQ7bSiJtnpjp9ry3vd
-         hzhCfBHBn5CqIsiw0lSYvt1xH6CVGe+KVAgX5iDIo3opLZ8OkPOwXbqmKHPIdbzvcuTV
-         dwQ4FGsPSeWbl/cIaiz2qfCR6BQW0rwZ3VNqg97NB3ae0DWUUqLvbirBxhR1kG7vACmk
-         CGhkNEz0aNKo5A5V/zaLZ4TvamXZsVjzqcouBhoj4LNVRHNwVi1+er83/3MATqaZFzbe
-         vYjO7HntT1/WV2uz8hnc620NNbCQlWpB9x3i+WPByAW1Hhi9QdnFNTMe4DVQIbXCewja
-         LwXA==
-X-Gm-Message-State: AC+VfDzJx6HINix6YAYMkKeiGY+QerztJfcl/OnL7Fx1m9yHi3bNe0qM
-        QE79KxRN14aUDDtn5pgaaVCWPg==
-X-Google-Smtp-Source: ACHHUZ7DdgZpbkeB08gqVo1Il+baYyg2vTm+oBF8DTFemau8YO/NFvnHReGV+WIt97skRr1LrjBtRQ==
-X-Received: by 2002:aa7:c2d7:0:b0:509:c6e6:c002 with SMTP id m23-20020aa7c2d7000000b00509c6e6c002mr2084928edp.39.1684336994785;
-        Wed, 17 May 2023 08:23:14 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:c9ff:4c84:dd21:568d? ([2a02:810d:15c0:828:c9ff:4c84:dd21:568d])
-        by smtp.gmail.com with ESMTPSA id ay20-20020a056402203400b00502689a06b2sm9512864edb.91.2023.05.17.08.23.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 08:23:14 -0700 (PDT)
-Message-ID: <28889e6c-0040-5adb-25e1-f8284931947a@linaro.org>
-Date:   Wed, 17 May 2023 17:23:13 +0200
+        with ESMTP id S229752AbjEQSUF (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 17 May 2023 14:20:05 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19CBE7EDC
+        for <linux-can@vger.kernel.org>; Wed, 17 May 2023 11:20:04 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pzLko-0007UA-Ie
+        for linux-can@vger.kernel.org; Wed, 17 May 2023 20:20:02 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id EF0FA1C74E9
+        for <linux-can@vger.kernel.org>; Wed, 17 May 2023 18:20:01 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 489EF1C74E1;
+        Wed, 17 May 2023 18:20:00 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id ff52fbe0;
+        Wed, 17 May 2023 18:19:59 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     linux-can@vger.kernel.org
+Cc:     kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        Alexandre TORGUE <alexandre.torgue@foss.st.com>,
+        kernel test robot <lkp@intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] Revert "ARM: dts: stm32: add CAN support on stm32f746"
+Date:   Wed, 17 May 2023 20:19:50 +0200
+Message-Id: <20230517181950.1106697-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/4] dt-bindings: mfd: stm32f7: add binding definition for
- CAN3
-Content-Language: en-US
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, Lee Jones <lee@kernel.org>
-Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        linux-kernel@vger.kernel.org,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        michael@amarulasolutions.com,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-can@vger.kernel.org, oe-kbuild-all@lists.linux.dev
-References: <20230423172528.1398158-1-dario.binacchi@amarulasolutions.com>
- <20230423172528.1398158-2-dario.binacchi@amarulasolutions.com>
- <20230424090229.GB8035@google.com>
- <20230517-corset-pelvis-5b0c41f519c9-mkl@pengutronix.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230517-corset-pelvis-5b0c41f519c9-mkl@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 17/05/2023 16:16, Marc Kleine-Budde wrote:
-> Hey Lee Jones,
-> 
-> On 24.04.2023 10:02:29, Lee Jones wrote:
->> On Sun, 23 Apr 2023, Dario Binacchi wrote:
->>
->>> Add binding definition for CAN3 peripheral.
->>>
->>> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
->>> ---
->>>
->>>  include/dt-bindings/mfd/stm32f7-rcc.h | 1 +
->>>  1 file changed, 1 insertion(+)
->>
->> Applied, thanks
-> 
-> I upstreamed the v2 of this series
-> (https://lore.kernel.org/all/20230427204540.3126234-1-dario.binacchi@amarulasolutions.com/)
-> that doesn't contain this change to net/main without noticing that the
-> DT changes in that series depend on it.
-> 
-> This broke the DT compilation of the stm32f746.dtsi in the net/main
-> tree. I don't see the stm32f7-rcc.h changes in linus/master so I'm
-> afraid this will break mainline too :/
-> 
-> What are the possible solutions? I see:
-> 1) revert the stm32f746.dtsi changes via net/main
-> 2) upstream the stm32f7-rcc.h changes via net/main, too
-> 3) upstream the stm32f7-rcc.h changes via you tree, so that it hits
->    mainline in the v6.4 release cycle.
-> 
-> I'm in favor of solution number 1. Thoughts?
+This reverts commit 0920ccdf41e3078a4dd2567eb905ea154bc826e6.
 
-DTS should never go with driver changes or with driver trees, not only
-because it hides ABI breaks but also for above reasons. The best if you
-just drop or revert DTS commits, so they can go via platform maintainer.
+The commit 0920ccdf41e3 ("ARM: dts: stm32: add CAN support on
+stm32f746") depends on the patch "dt-bindings: mfd: stm32f7: add
+binding definition for CAN3" [1], which is not in net/main, yet. This
+results in a parsing error of "stm32f746.dtsi".
 
-Best regards,
-Krzysztof
+So revert this commit.
+
+[1] https://lore.kernel.org/all/20230423172528.1398158-2-dario.binacchi@amarulasolutions.com
+
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: Alexandre TORGUE <alexandre.torgue@foss.st.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202305172108.x5acbaQG-lkp@intel.com
+Closes: https://lore.kernel.org/oe-kbuild-all/202305172130.eGGEUhpi-lkp@intel.com
+Fixes: 0920ccdf41e3 ("ARM: dts: stm32: add CAN support on stm32f746")
+Suggested-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+ arch/arm/boot/dts/stm32f746.dtsi | 47 --------------------------------
+ 1 file changed, 47 deletions(-)
+
+diff --git a/arch/arm/boot/dts/stm32f746.dtsi b/arch/arm/boot/dts/stm32f746.dtsi
+index 973698bc9ef4..dc868e6da40e 100644
+--- a/arch/arm/boot/dts/stm32f746.dtsi
++++ b/arch/arm/boot/dts/stm32f746.dtsi
+@@ -257,23 +257,6 @@ rtc: rtc@40002800 {
+ 			status = "disabled";
+ 		};
+ 
+-		can3: can@40003400 {
+-			compatible = "st,stm32f4-bxcan";
+-			reg = <0x40003400 0x200>;
+-			interrupts = <104>, <105>, <106>, <107>;
+-			interrupt-names = "tx", "rx0", "rx1", "sce";
+-			resets = <&rcc STM32F7_APB1_RESET(CAN3)>;
+-			clocks = <&rcc 0 STM32F7_APB1_CLOCK(CAN3)>;
+-			st,gcan = <&gcan3>;
+-			status = "disabled";
+-		};
+-
+-		gcan3: gcan@40003600 {
+-			compatible = "st,stm32f4-gcan", "syscon";
+-			reg = <0x40003600 0x200>;
+-			clocks = <&rcc 0 STM32F7_APB1_CLOCK(CAN3)>;
+-		};
+-
+ 		usart2: serial@40004400 {
+ 			compatible = "st,stm32f7-uart";
+ 			reg = <0x40004400 0x400>;
+@@ -354,36 +337,6 @@ i2c4: i2c@40006000 {
+ 			status = "disabled";
+ 		};
+ 
+-		can1: can@40006400 {
+-			compatible = "st,stm32f4-bxcan";
+-			reg = <0x40006400 0x200>;
+-			interrupts = <19>, <20>, <21>, <22>;
+-			interrupt-names = "tx", "rx0", "rx1", "sce";
+-			resets = <&rcc STM32F7_APB1_RESET(CAN1)>;
+-			clocks = <&rcc 0 STM32F7_APB1_CLOCK(CAN1)>;
+-			st,can-primary;
+-			st,gcan = <&gcan1>;
+-			status = "disabled";
+-		};
+-
+-		gcan1: gcan@40006600 {
+-			compatible = "st,stm32f4-gcan", "syscon";
+-			reg = <0x40006600 0x200>;
+-			clocks = <&rcc 0 STM32F7_APB1_CLOCK(CAN1)>;
+-		};
+-
+-		can2: can@40006800 {
+-			compatible = "st,stm32f4-bxcan";
+-			reg = <0x40006800 0x200>;
+-			interrupts = <63>, <64>, <65>, <66>;
+-			interrupt-names = "tx", "rx0", "rx1", "sce";
+-			resets = <&rcc STM32F7_APB1_RESET(CAN2)>;
+-			clocks = <&rcc 0 STM32F7_APB1_CLOCK(CAN2)>;
+-			st,can-secondary;
+-			st,gcan = <&gcan1>;
+-			status = "disabled";
+-		};
+-
+ 		cec: cec@40006c00 {
+ 			compatible = "st,stm32-cec";
+ 			reg = <0x40006C00 0x400>;
+-- 
+2.39.2
+
 
