@@ -2,52 +2,70 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D22E707D71
-	for <lists+linux-can@lfdr.de>; Thu, 18 May 2023 12:00:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3476708865
+	for <lists+linux-can@lfdr.de>; Thu, 18 May 2023 21:37:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbjERKAI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 18 May 2023 06:00:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39382 "EHLO
+        id S229461AbjERTgw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 18 May 2023 15:36:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230321AbjERKAG (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 18 May 2023 06:00:06 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19884E7B
-        for <linux-can@vger.kernel.org>; Thu, 18 May 2023 03:00:05 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pzaQU-0001ZA-4G; Thu, 18 May 2023 12:00:02 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 518761C7B79;
-        Thu, 18 May 2023 10:00:01 +0000 (UTC)
-Date:   Thu, 18 May 2023 12:00:00 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Frank Jungclaus <frank.jungclaus@esd.eu>
-Cc:     linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/6] can: esd_usb: Make use of existing kernel macros
-Message-ID: <20230518-grower-film-ea8b5f853f3e-mkl@pengutronix.de>
-References: <20230517192251.2405290-1-frank.jungclaus@esd.eu>
- <20230517192251.2405290-2-frank.jungclaus@esd.eu>
+        with ESMTP id S230006AbjERTgv (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 18 May 2023 15:36:51 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D9EEE;
+        Thu, 18 May 2023 12:36:49 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34IJaEN3076166;
+        Thu, 18 May 2023 14:36:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1684438574;
+        bh=SD8y2gafDdujxzLm4oJ2xXRRLyYIT05sQjn7ZYJf0F0=;
+        h=From:To:CC:Subject:Date;
+        b=O7Yrnd3bekefKOuBiqiQOz88aaxMDd6rO7jOn2bKJtSOCrYnxIuvuT5/Nl9M5ttQA
+         jHq4qrZ5KEuYkdUYDlcIUiBJEIt4uBlQIv56NgNoyl+JN8/RPUhqs8MyM/8Jhr34/u
+         c6g24smKDDzbzVc/WGAZuQgruZW7jCZzsbCzk7VQ=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34IJaE4E002970
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 18 May 2023 14:36:14 -0500
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 18
+ May 2023 14:36:13 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 18 May 2023 14:36:13 -0500
+Received: from a0498204.dal.design.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34IJaDvT053146;
+        Thu, 18 May 2023 14:36:13 -0500
+From:   Judith Mendez <jm@ti.com>
+To:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        <linux-can@vger.kernel.org>
+CC:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Schuyler Patton <spatton@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Conor Dooley <conor+dt@kernel.org>
+Subject: [PATCH v6 0/2] Enable multiple MCAN on AM62x
+Date:   Thu, 18 May 2023 14:36:11 -0500
+Message-ID: <20230518193613.15185-1-jm@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xuxstbtrrmjtjzza"
-Content-Disposition: inline
-In-Reply-To: <20230517192251.2405290-2-frank.jungclaus@esd.eu>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,142 +73,91 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On AM62x there are two MCANs in MCU domain. The MCANs in MCU domain
+were not enabled since there is no hardware interrupt routed to A53
+GIC interrupt controller. Therefore A53 Linux cannot be interrupted
+by MCU MCANs.
 
---xuxstbtrrmjtjzza
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This solution instantiates a hrtimer with 1 ms polling interval
+for MCAN device when there is no hardware interrupt property in
+DTB MCAN node. The hrtimer generates a recurring software interrupt
+which allows to call the isr. The isr will check if there is pending
+transaction by reading a register and proceed normally if there is.
+MCANs with hardware interrupt routed to A53 Linux will continue to
+use the hardware interrupt as expected.
 
-On 17.05.2023 21:22:46, Frank Jungclaus wrote:
-> As suggested by Vincent Mailhol make use of existing kernel macros:
-> - Use the unit suffixes from linux/units.h for the controller clock
-> frequencies
-> - Use the BIT() macro to set specific bits in some constants
-> - Use CAN_MAX_DLEN (instead of directly using the value 8) for the
-> maximum CAN payload length
->=20
-> Additionally:
-> - Spend some commenting for the previously changed constants
-> - Add the current year to the copyright notice
-> - While adding the header linux/units.h to the list of include files
-> also sort that list alphabetically
->=20
-> Suggested-by: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-> Link: https://lore.kernel.org/all/CAMZ6RqLaDNy-fZ2G0+QMhUEckkXLL+ZyELVSDF=
-mqpd++aBzZQg@mail.gmail.com/
-> Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
-> ---
->  drivers/net/can/usb/esd_usb.c | 38 ++++++++++++++++++-----------------
->  1 file changed, 20 insertions(+), 18 deletions(-)
->=20
-> diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_usb.c
-> index d33bac3a6c10..042dda98b3db 100644
-> --- a/drivers/net/can/usb/esd_usb.c
-> +++ b/drivers/net/can/usb/esd_usb.c
-> @@ -3,19 +3,20 @@
->   * CAN driver for esd electronics gmbh CAN-USB/2 and CAN-USB/Micro
->   *
->   * Copyright (C) 2010-2012 esd electronic system design gmbh, Matthias F=
-uchs <socketcan@esd.eu>
-> - * Copyright (C) 2022 esd electronics gmbh, Frank Jungclaus <frank.jungc=
-laus@esd.eu>
-> + * Copyright (C) 2022-2023 esd electronics gmbh, Frank Jungclaus <frank.=
-jungclaus@esd.eu>
->   */
-> +#include <linux/can.h>
-> +#include <linux/can/dev.h>
-> +#include <linux/can/error.h>
-> +
->  #include <linux/ethtool.h>
-> -#include <linux/signal.h>
-> -#include <linux/slab.h>
->  #include <linux/module.h>
->  #include <linux/netdevice.h>
-> +#include <linux/signal.h>
-> +#include <linux/slab.h>
-> +#include <linux/units.h>
->  #include <linux/usb.h>
-> =20
-> -#include <linux/can.h>
-> -#include <linux/can/dev.h>
-> -#include <linux/can/error.h>
-> -
->  MODULE_AUTHOR("Matthias Fuchs <socketcan@esd.eu>");
->  MODULE_AUTHOR("Frank Jungclaus <frank.jungclaus@esd.eu>");
->  MODULE_DESCRIPTION("CAN driver for esd electronics gmbh CAN-USB/2 and CA=
-N-USB/Micro interfaces");
-> @@ -27,8 +28,8 @@ MODULE_LICENSE("GPL v2");
->  #define USB_CANUSBM_PRODUCT_ID	0x0011
-> =20
->  /* CAN controller clock frequencies */
-> -#define ESD_USB2_CAN_CLOCK	60000000
-> -#define ESD_USBM_CAN_CLOCK	36000000
-> +#define ESD_USB2_CAN_CLOCK	(60 * MEGA) /* Hz */
-> +#define ESD_USBM_CAN_CLOCK	(36 * MEGA) /* Hz */
-> =20
->  /* Maximum number of CAN nets */
->  #define ESD_USB_MAX_NETS	2
-> @@ -42,20 +43,21 @@ MODULE_LICENSE("GPL v2");
->  #define CMD_IDADD		6 /* also used for IDADD_REPLY */
-> =20
->  /* esd CAN message flags - dlc field */
-> -#define ESD_RTR			0x10
-> +#define ESD_RTR	BIT(4) /* 0x10 */
+Timer polling method was tested on both classic CAN and CAN-FD
+at 125 KBPS, 250 KBPS, 1 MBPS and 2.5 MBPS with 4 MBPS bitrate
+switching.
 
-Nitpick, personal style preference, maintainability: For me the hex
-constant is redundant information, and it's not checked by the compiler,
-please remove it.
+Letency and CPU load benchmarks were tested on 3x MCAN on AM62x.
+1 MBPS timer polling interval is the better timer polling interval
+since it has comparable latency to hardware interrupt with the worse
+case being 1ms + CAN frame propagation time and CPU load is not
+substantial. Latency can be improved further with less than 1 ms
+polling intervals, howerver it is at the cost of CPU usage since CPU
+load increases at 0.5 ms.
 
-> +
-> =20
->  /* esd CAN message flags - id field */
-> -#define ESD_EXTID		0x20000000
-> -#define ESD_EVENT		0x40000000
-> -#define ESD_IDMASK		0x1fffffff
-> +#define ESD_EXTID	BIT(29) /* 0x20000000 */
-> +#define ESD_EVENT	BIT(30) /* 0x40000000 */
-> +#define ESD_IDMASK	0x1fffffff
+Note that in terms of power, enabling MCU MCANs with timer-polling
+implementation might have negative impact since we will have to wake
+up every 1 ms whether there are CAN packets pending in the RX FIFO or
+not. This might prevent the CPU from entering into deeper idle states
+for extended periods of time.
 
-Please use GEN_MASK.
+v5:
+Link: https://lore.kernel.org/linux-can/20230510202952.27111-1-jm@ti.com/T/#t
 
-> =20
->  /* esd CAN event ids */
->  #define ESD_EV_CAN_ERROR_EXT	2 /* CAN controller specific diagnostic dat=
-a */
-> =20
->  /* baudrate message flags */
-> -#define ESD_USB_UBR		0x80000000
-> -#define ESD_USB_LOM		0x40000000
-> -#define ESD_USB_NO_BAUDRATE	0x7fffffff
-> +#define ESD_USB_LOM	BIT(30) /* 0x40000000, Listen Only Mode */
-> +#define ESD_USB_UBR	BIT(31) /* 0x80000000, User Bit Rate (controller BTR=
-) in bits 0..27 */
-> +#define ESD_USB_NO_BAUDRATE	0x7fffffff /* bit rate unconfigured */
+v4:
+Link: https://lore.kernel.org/linux-can/c3395692-7dbf-19b2-bd3f-31ba86fa4ac9@linaro.org/T/#t
 
-You might use GEN_MASK here, too.
+v2:
+Link: https://lore.kernel.org/linux-can/20230424195402.516-1-jm@ti.com/T/#t
 
-regards,
-Marc
+V1:
+Link: https://lore.kernel.org/linux-can/19d8ae7f-7b74-a869-a818-93b74d106709@ti.com/T/#t
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+RFC:
+Link: https://lore.kernel.org/linux-can/52a37e51-4143-9017-42ee-8d17c67028e3@ti.com/T/#t
 
---xuxstbtrrmjtjzza
-Content-Type: application/pgp-signature; name="signature.asc"
+v6:
+- Move hrtimer stop/start function calls to m_can_open and m_can_close to
+support power suspend/resume
 
------BEGIN PGP SIGNATURE-----
+v5:
+- Remove poll-interval in bindings
+- Change dev_dbg to dev_info if hardware int exists and polling
+is enabled
 
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRl9x0ACgkQvlAcSiqK
-BOg+cAf+KzVa9cmUPggy1Tcco5Isoib0g1IdvOmpg9f/yNn8bvRP7hh3eiwkZD8z
-txb3kHedg4loWwnlGnZtjFebuyRPwOVgRnwDoWvHG6rhJ40YSyPHbcGMXl5e+oht
-iAwx+Fd46Bz5WANelqEcGXmnZBix+pKvVhzCeRwhaksf1nE6YfpUNyHguVqiUXul
-N8LuE+eWcG49PbilEJ7xwBY77S5ymnO7giaG/AbA24XZ3aPBwk1E83wkJWmyXYes
-t7NFLaDm5vlhSoOSjfVi74b9FIL9mBVnBbXOKwfXG/MKAAjzJ12RxcffuggPtXrC
-AYwijWBPDmUCWw42kDiO4X6XBYtekw==
-=lOIs
------END PGP SIGNATURE-----
+v4:
+- Wrong patches sent
 
---xuxstbtrrmjtjzza--
+v3:
+- Update binding poll-interval description
+- Add oneOf to select either interrupts/interrupt-names or poll-interval
+- Create a define for 1 ms polling interval
+- Change plarform_get_irq to optional to not print error msg
+
+v2:
+- Add poll-interval property to bindings and MCAN DTB node
+- Add functionality to check for 'poll-interval' property in MCAN node 
+- Bindings: add an example using poll-interval
+- Add 'polling' flag in driver to check if device is using polling method
+- Check for timer polling and hardware interrupt cases, default to
+hardware interrupt method
+- Change ns_to_ktime() to ms_to_ktime()
+
+Judith Mendez (2):
+  dt-bindings: net: can: Remove interrupt properties for MCAN
+  can: m_can: Add hrtimer to generate software interrupt
+
+ .../bindings/net/can/bosch,m_can.yaml         | 20 +++++++++--
+ drivers/net/can/m_can/m_can.c                 | 31 +++++++++++++++-
+ drivers/net/can/m_can/m_can.h                 |  4 +++
+ drivers/net/can/m_can/m_can_platform.c        | 35 +++++++++++++++++--
+ 4 files changed, 84 insertions(+), 6 deletions(-)
+
+
+base-commit: 798d276b39e984345d52b933a900a71fa0815928
+-- 
+2.17.1
+
