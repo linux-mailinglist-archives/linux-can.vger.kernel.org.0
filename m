@@ -2,125 +2,192 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8FD770A024
-	for <lists+linux-can@lfdr.de>; Fri, 19 May 2023 21:56:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF3A170AD27
+	for <lists+linux-can@lfdr.de>; Sun, 21 May 2023 11:16:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230502AbjEST4O (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 19 May 2023 15:56:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43806 "EHLO
+        id S229880AbjEUJQ1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 21 May 2023 05:16:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230157AbjEST4M (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 19 May 2023 15:56:12 -0400
-Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01on2138.outbound.protection.outlook.com [40.107.13.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D8CE46;
-        Fri, 19 May 2023 12:56:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=b+r6YVTWc5cDvrzoD2wSWAxf51iFBc1gBLmO1RG9DnCztypLhUXyOPP8Wl7TFvv1iS3rhBioS4bgIDowLKsEINwdsStFCma6rIcivfkqBVfbNbirRusUaLAYk1UY2377DucseZ5SwMX1nYMcrxT9y/XaRx3DWInaQ2H3bou/a5rehBNLZb8qDK4vYTpys3vc5d1Lk8wnqzRNztlH+aniI0zlxV2/SwBfkW4nabFSTIh6OqWaFhy4TPChbjlWc2WfaJPZnDhV1tuwS504qn2CmfJFcGQy3CowYWss54DsqT6T/DWNd6mPbnohKwly8k3axocJn/RgPUjHdkjtEffGhg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/QWpBiDRmFm4yjR+LObQ0bmAXofs8H1x/5P3UBkH2oQ=;
- b=gtpRwKShScmkK2u78Hpx9+JjXdtWaWymT8zruRZAmYqtAvEfmIJnARlSqOKw7U0baDWwWzPQX79Ka0K1hRV4+lhdNpoWDZ6eUC0unH1tNbkf00uGU//DToD/T7yJAr2z4jRAwK/JH69/RtrALuCbWm2opJbKMvvtkgB43MkcxCYZks8v1eDbVQaAy/3QP1GJsrxdn3IPuvi8N+bzbTn1cUSkz7qoqaKWQzty1Q2EXii5rzTzqxy1KnTeCEfzbWb01zcRGCYlSV1HPk5p/SbjmpdN9mEZbfWpar/sd0RP20v2nZ9LDCs1IbxQqpZgKlgDW3wDngyPSQsKn8GX7vyIuw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
- is 80.151.164.27) smtp.rcpttodomain=esd.eu smtp.mailfrom=esd.eu; dmarc=none
- action=none header.from=esd.eu; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=esdhannover.onmicrosoft.com; s=selector1-esdhannover-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/QWpBiDRmFm4yjR+LObQ0bmAXofs8H1x/5P3UBkH2oQ=;
- b=aKVE3X99P3DW7+TvDSRtlTKm679dcSuelu6rH2cWqshJETLHfUJUlQuiszRfl7JZ4HGULzriOiazsBd1aJFlR4Sc5KtCnj58Jr+tt9npiktErtn5t+ATPAvenQx9sZp6QUagDKjGVwAFs6yHCCL4UL3tYdkQI/YrgFZIOxV8fpM=
-Received: from FR0P281CA0002.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:15::7) by
- DU0PR03MB9518.eurprd03.prod.outlook.com (2603:10a6:10:41d::22) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6411.17; Fri, 19 May 2023 19:56:05 +0000
-Received: from VI1EUR06FT054.eop-eur06.prod.protection.outlook.com
- (2603:10a6:d10:15:cafe::2f) by FR0P281CA0002.outlook.office365.com
- (2603:10a6:d10:15::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.6 via Frontend
- Transport; Fri, 19 May 2023 19:56:05 +0000
-X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
- 80.151.164.27) smtp.mailfrom=esd.eu; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=esd.eu;
-Received-SPF: SoftFail (protection.outlook.com: domain of transitioning esd.eu
- discourages use of 80.151.164.27 as permitted sender)
-Received: from esd-s7.esd (80.151.164.27) by
- VI1EUR06FT054.mail.protection.outlook.com (10.13.6.124) with Microsoft SMTP
- Server id 15.20.6411.21 via Frontend Transport; Fri, 19 May 2023 19:56:05
- +0000
-Received: from esd-s20.esd.local (jenkins.esd.local [10.0.0.190])
-        by esd-s7.esd (Postfix) with ESMTPS id E70DE7C16CE;
-        Fri, 19 May 2023 21:56:03 +0200 (CEST)
-Received: by esd-s20.esd.local (Postfix, from userid 2046)
-        id E32DD2E1808; Fri, 19 May 2023 21:56:03 +0200 (CEST)
-From:   Frank Jungclaus <frank.jungclaus@esd.eu>
-To:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Frank Jungclaus <frank.jungclaus@esd.eu>
-Subject: [PATCH v2 6/6] can: esd_usb: Don't bother the user with nonessential log message
-Date:   Fri, 19 May 2023 21:56:00 +0200
-Message-Id: <20230519195600.420644-7-frank.jungclaus@esd.eu>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230519195600.420644-1-frank.jungclaus@esd.eu>
-References: <20230519195600.420644-1-frank.jungclaus@esd.eu>
+        with ESMTP id S229481AbjEUJQ0 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 21 May 2023 05:16:26 -0400
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E11CF;
+        Sun, 21 May 2023 02:16:25 -0700 (PDT)
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-52867360efcso3377189a12.2;
+        Sun, 21 May 2023 02:16:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684660585; x=1687252585;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Es75wE1TSD9/bxpBEraTqQGgh/2Yg3IpDVhaSa9N/Z8=;
+        b=XkIYN9rgpERLMyhUOV+cMWlBUHjQYm7Rdx/JmysPFfsdpTNlN5ukWx0I61lv0b3V+o
+         w/HqWt/6p86P9dd4oqboAbbX1HY9ZKPhlINmtYM04lh4UIaaP4ESQuwn/Y9wdXVGDfqA
+         UKULTNS9Sm9r82MzzLJlep0ImpntZSYXRgmgbU+2sNk7BIgWQKh786CJBsWEWh3AgI1/
+         vCLyQ1ASJIkJnFxY6gzhF7QFAUCuuHdUsHNo3NOTTNiOmXtif1cvGzpmDSnYSHWSLXeM
+         L9rxXchfZYdr22kfWlfSB7zx2Og5+chK+bejy5WFi9Od3nbMI3vWkvDLEMlkQ8/vmw50
+         fVDA==
+X-Gm-Message-State: AC+VfDz/TyYeyQUlVEpq1huA07GhhvrAeKPLbk71foecoc+N5flJ7MMC
+        rmsCIHltnBMUXSqZuHwj2dndTeTyfQh4U/QNd8g=
+X-Google-Smtp-Source: ACHHUZ6xvmdUQ7UA8O/mJrSNvBDBD+JdVbnKgQYo2ZkCX5YaJgRtWvqNbFTWz7AM32S8Xrul2lID3OzeJEPgNIy1rPI=
+X-Received: by 2002:a17:90a:9cf:b0:250:bb6:47ed with SMTP id
+ 73-20020a17090a09cf00b002500bb647edmr6796360pjo.33.1684660584928; Sun, 21 May
+ 2023 02:16:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1EUR06FT054:EE_|DU0PR03MB9518:EE_
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: 5bb73f85-4aea-4492-a684-08db58a314ce
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uC9cQuz7k9cLJtN4QD3Rc+Rwjkkq7R9fvWjAeZoc4FBcxpftiRUZsv4w5WnDzsUvMfcBsE5HItb5aqJiaOhasaa4H9VZK1xxC+Cx0OVC+9uBvNBi3k9YSOK7ymP4sguPrvL/JDm6NUczm++7uQSkUPZG6fzth2TmrllSdltTY48fBVmJY1ObSK8Rv07NY+OIsRotJ5KGqjeuXY9QOcoFa91H06CpS8jO+Qe2YSOqXJ6Mp/DUSjJIhfVxnBtai3lEeVcGkYOltjJUrA9NNeymRsI2U2cZRpR7Vc24SxBfu0fO8EZS83HUqgNJr2so2fGtfNha8qGCrpKDQQu97XQdXuK/pVdJ+bbKYXJ9ofTv+5mDupamOd+v9OYRaEMFs7cV+8mA8vnkUcUOqCdOBhjMVkcMomW+V40Ry+C2gYXYPJD0GPZ3OWR+uUadrrC6p9omKD4RC57QO9vQOyFMWTe1iRTiGZ9gku0Dfetzc/PyYMMeeu/T7aBhx6si7TFygkSXuqTih/eBwLotE2/fix9OvlA1lgIvIsS1A2nMe48C+Ldb6yjXIrY9NCF5rynb5zTC45RcCw7JiDGLcdXpESdGj1Oa9p45Im2zaacyW7G494KWypJhKDRliJ/qHZy7riI96YU2FoyjxyTjgt2nwtQFdaYCjy5Dq0nQuWBgD8PQ04S1JqVf0+WpjYqXF6nJGsES9by/xs3U58ZwEtLBEUrGNQ==
-X-Forefront-Antispam-Report: CIP:80.151.164.27;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:esd-s7.esd;PTR:p5097a41b.dip0.t-ipconnect.de;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(39840400004)(346002)(396003)(451199021)(46966006)(36840700001)(36756003)(478600001)(86362001)(316002)(54906003)(110136005)(966005)(70586007)(4326008)(70206006)(42186006)(4744005)(356005)(82310400005)(8936002)(5660300002)(336012)(15650500001)(40480700001)(8676002)(2906002)(41300700001)(44832011)(81166007)(36860700001)(2616005)(26005)(6266002)(47076005)(1076003)(83380400001)(186003);DIR:OUT;SFP:1102;
-X-OriginatorOrg: esd.eu
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2023 19:56:05.4120
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5bb73f85-4aea-4492-a684-08db58a314ce
-X-MS-Exchange-CrossTenant-Id: 5a9c3a1d-52db-4235-b74c-9fd851db2e6b
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5a9c3a1d-52db-4235-b74c-9fd851db2e6b;Ip=[80.151.164.27];Helo=[esd-s7.esd]
-X-MS-Exchange-CrossTenant-AuthSource: VI1EUR06FT054.eop-eur06.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR03MB9518
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230519195600.420644-1-frank.jungclaus@esd.eu> <20230519195600.420644-2-frank.jungclaus@esd.eu>
+In-Reply-To: <20230519195600.420644-2-frank.jungclaus@esd.eu>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Sun, 21 May 2023 18:16:13 +0900
+Message-ID: <CAMZ6Rq+V4HRLa2bzADnsvaKHuCwi6O5jKo39mhon_+OnMDEJbQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/6] can: esd_usb: Make use of existing kernel macros
+To:     Frank Jungclaus <frank.jungclaus@esd.eu>
+Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Replace a netdev_info(), emitting an informational message about the
-BTR value to be send to the controller, with a debug message by means
-of netdev_dbg().
+Thanks for the patch.
 
-Link: https://lore.kernel.org/all/20230509-superglue-hazy-38108aa66bfa-mkl@pengutronix.de/
-Suggested-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Suggested-by: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
----
- drivers/net/can/usb/esd_usb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sat. 20 May 2023 at 04:57, Frank Jungclaus <frank.jungclaus@esd.eu> wrote:
+> Make use of existing kernel macros:
+> - Use the unit suffixes from linux/units.h for the controller clock
+> frequencies
+> - Use the BIT() and the GENMASK() macro to set specific bits in some
+>   constants
+> - Use CAN_MAX_DLEN (instead of directly using the value 8) for the
+> maximum CAN payload length
+>
+> Additionally:
+> - Spend some commenting for the previously changed constants
+> - Add the current year to the copyright notice
+> - While adding the header linux/units.h to the list of include files
+> also sort that list alphabetically
+>
+> Suggested-by: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+> Link: https://lore.kernel.org/all/CAMZ6RqLaDNy-fZ2G0+QMhUEckkXLL+ZyELVSDFmqpd++aBzZQg@mail.gmail.com/
+> Link: https://lore.kernel.org/all/CAMZ6RqKdg5YBufa0C+ttzJvoG=9yuti-8AmthCi4jBbd08JEtw@mail.gmail.com/
+> Suggested-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> Link: https://lore.kernel.org/all/20230518-grower-film-ea8b5f853f3e-mkl@pengutronix.de/
+> Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
+> ---
+>  drivers/net/can/usb/esd_usb.c | 40 ++++++++++++++++++-----------------
+>  1 file changed, 21 insertions(+), 19 deletions(-)
+>
+> diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_usb.c
+> index d33bac3a6c10..32354cfdf151 100644
+> --- a/drivers/net/can/usb/esd_usb.c
+> +++ b/drivers/net/can/usb/esd_usb.c
+> @@ -3,19 +3,20 @@
+>   * CAN driver for esd electronics gmbh CAN-USB/2 and CAN-USB/Micro
+>   *
+>   * Copyright (C) 2010-2012 esd electronic system design gmbh, Matthias Fuchs <socketcan@esd.eu>
+> - * Copyright (C) 2022 esd electronics gmbh, Frank Jungclaus <frank.jungclaus@esd.eu>
+> + * Copyright (C) 2022-2023 esd electronics gmbh, Frank Jungclaus <frank.jungclaus@esd.eu>
+>   */
+> +#include <linux/can.h>
+> +#include <linux/can/dev.h>
+> +#include <linux/can/error.h>
+> +
+>  #include <linux/ethtool.h>
+> -#include <linux/signal.h>
+> -#include <linux/slab.h>
+>  #include <linux/module.h>
+>  #include <linux/netdevice.h>
+> +#include <linux/signal.h>
+> +#include <linux/slab.h>
+> +#include <linux/units.h>
+>  #include <linux/usb.h>
+>
+> -#include <linux/can.h>
+> -#include <linux/can/dev.h>
+> -#include <linux/can/error.h>
+> -
+>  MODULE_AUTHOR("Matthias Fuchs <socketcan@esd.eu>");
+>  MODULE_AUTHOR("Frank Jungclaus <frank.jungclaus@esd.eu>");
+>  MODULE_DESCRIPTION("CAN driver for esd electronics gmbh CAN-USB/2 and CAN-USB/Micro interfaces");
+> @@ -27,8 +28,8 @@ MODULE_LICENSE("GPL v2");
+>  #define USB_CANUSBM_PRODUCT_ID 0x0011
+>
+>  /* CAN controller clock frequencies */
+> -#define ESD_USB2_CAN_CLOCK     60000000
+> -#define ESD_USBM_CAN_CLOCK     36000000
+> +#define ESD_USB2_CAN_CLOCK     (60 * MEGA) /* Hz */
+> +#define ESD_USBM_CAN_CLOCK     (36 * MEGA) /* Hz */
+>
+>  /* Maximum number of CAN nets */
+>  #define ESD_USB_MAX_NETS       2
+> @@ -42,20 +43,21 @@ MODULE_LICENSE("GPL v2");
+>  #define CMD_IDADD              6 /* also used for IDADD_REPLY */
+>
+>  /* esd CAN message flags - dlc field */
+> -#define ESD_RTR                        0x10
+> +#define ESD_RTR        BIT(4)
+> +
+>
+>  /* esd CAN message flags - id field */
+> -#define ESD_EXTID              0x20000000
+> -#define ESD_EVENT              0x40000000
+> -#define ESD_IDMASK             0x1fffffff
+> +#define ESD_EXTID      BIT(29)
+> +#define ESD_EVENT      BIT(30)
+> +#define ESD_IDMASK     GENMASK(28, 0)
+>
+>  /* esd CAN event ids */
+>  #define ESD_EV_CAN_ERROR_EXT   2 /* CAN controller specific diagnostic data */
+>
+>  /* baudrate message flags */
+> -#define ESD_USB_UBR            0x80000000
+> -#define ESD_USB_LOM            0x40000000
+> -#define ESD_USB_NO_BAUDRATE    0x7fffffff
+> +#define ESD_USB_LOM    BIT(30) /* 0x40000000, Listen Only Mode */
+> +#define ESD_USB_UBR    BIT(31) /* 0x80000000, User Bit Rate (controller BTR) in bits 0..27 */
+                                     ^^^^^^^^^^
 
-diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_usb.c
-index a6a3ecb6eac6..4c0da3ff3a9d 100644
---- a/drivers/net/can/usb/esd_usb.c
-+++ b/drivers/net/can/usb/esd_usb.c
-@@ -955,7 +955,7 @@ static int esd_usb_2_set_bittiming(struct net_device *netdev)
- 	msg->setbaud.rsvd = 0;
- 	msg->setbaud.baud = cpu_to_le32(canbtr);
- 
--	netdev_info(netdev, "setting BTR=%#x\n", canbtr);
-+	netdev_dbg(netdev, "setting BTR=%#x\n", canbtr);
- 
- 	err = esd_usb_send_msg(priv->usb, msg);
- 
--- 
-2.25.1
+As pointented by Marc, no need for redundant comment with the hexadecimal value.
 
+> +#define ESD_USB_NO_BAUDRATE    GENMASK(30, 0) /* bit rate unconfigured */
+>
+>  /* bit timing CAN-USB/2 */
+>  #define ESD_USB2_TSEG1_MIN     1
+> @@ -70,7 +72,7 @@ MODULE_LICENSE("GPL v2");
+>  #define ESD_USB2_BRP_MIN       1
+>  #define ESD_USB2_BRP_MAX       1024
+>  #define ESD_USB2_BRP_INC       1
+> -#define ESD_USB2_3_SAMPLES     0x00800000
+> +#define ESD_USB2_3_SAMPLES     BIT(23)
+>
+>  /* esd IDADD message */
+>  #define ESD_ID_ENABLE          0x80
+> @@ -128,7 +130,7 @@ struct rx_msg {
+>         __le32 ts;
+>         __le32 id; /* upper 3 bits contain flags */
+>         union {
+> -               u8 data[8];
+> +               u8 data[CAN_MAX_DLEN];
+>                 struct {
+>                         u8 status; /* CAN Controller Status */
+>                         u8 ecc;    /* Error Capture Register */
+> @@ -145,7 +147,7 @@ struct tx_msg {
+>         u8 dlc;
+>         u32 hnd;        /* opaque handle, not used by device */
+>         __le32 id; /* upper 3 bits contain flags */
+> -       u8 data[8];
+> +       u8 data[CAN_MAX_DLEN];
+>  };
+>
+>  struct tx_done_msg {
+> --
+> 2.25.1
+>
