@@ -2,2722 +2,1101 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1994D70CA06
-	for <lists+linux-can@lfdr.de>; Mon, 22 May 2023 21:54:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91A4070CA49
+	for <lists+linux-can@lfdr.de>; Mon, 22 May 2023 22:02:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235500AbjEVTyJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 22 May 2023 15:54:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48592 "EHLO
+        id S231984AbjEVUCw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 22 May 2023 16:02:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235493AbjEVTyI (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 22 May 2023 15:54:08 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91AF995
-        for <linux-can@vger.kernel.org>; Mon, 22 May 2023 12:54:03 -0700 (PDT)
+        with ESMTP id S231439AbjEVUCu (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 22 May 2023 16:02:50 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A39B1A5;
+        Mon, 22 May 2023 13:02:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1684785235; i=ps.report@gmx.net;
-        bh=X2XH+LEb2sQQAITuDi3WC3YGwM0s/n7vGfGHV4ch5X4=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
-        b=dHyrItw/hliMp4nfCxT6qAPcImffpJQ309nGtoa07vl/1gb0TiZQ8QkHh6pfciR3N
-         LrEYL+/sX3HpxobRZqz+t4/1rFT1kH/l6EU+37gZoLsp1kvFXNqlzxA7oNVtLxoSUm
-         YRn8hVCDtC2c3iKxbZRHkfDyPRlbz5UH3oIdZ3x/QApuhdXqWdEbyAU4jQr93WmV8u
-         e5xKmgcItg/cTkZKXnbOGC7QVLt3rIw+qlm46HjT6JAuwpDt7KaPzz2LfYo0sYLcOc
-         oNSWliE9LY0R2GqlZEx3MArXd4nA8EOpBap8uKz/Ti0dCE3zo9QscGRn5+Rn5R/lrf
-         SkyjaRdrrBSeg==
+        t=1684785727; i=ps.report@gmx.net;
+        bh=nao6uyuQHto+LCIE2B02jIMUT45rOiW4em4xC7+uKEs=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=ZSaBQb2o12JD3v35LWI4uyxet8GjrrIxAcKbwxEVEKz8+lVSKewMx5XfP208cEFFz
+         mzaRThn6FtfPAHNbK1vOSvF2D3c1AG5DyoaK33WUIfrlaJP7wltSH4ymP2UZ+t42nb
+         8K66/mx1iZNCklQKGiU1PKKYWaj31vweMzEYkckV2dvUPwhtaTSgoO9Ab4xaaCTXRG
+         YtPpgV7dTKV/N9tq6Cp1bPV0d5rIevhSs2IAa7oBRrhj+lK/8GIITBCzqCgjatkmKZ
+         plg1VRIf+tB5KXKt5oCsTXDhmgGsoLphgVXVAVQdeiBJMdJis/TInWEAr7+tVlKEkl
+         kHjYHPBLckTjw==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost ([62.216.209.74]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mt79P-1qG63e20aX-00tQA1; Mon, 22
- May 2023 21:53:55 +0200
-Date:   Mon, 22 May 2023 21:53:54 +0200
+Received: from localhost.fritz.box ([62.216.209.74]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MjS5A-1qOito2p3q-00kzfp; Mon, 22
+ May 2023 22:02:06 +0200
 From:   Peter Seiderer <ps.report@gmx.net>
-To:     Vincent Mailhol <vincent.mailhol@gmail.com>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
-        Florian Ferg <flfe@hms-networks.de>, socketcan@hms-networks.de
-Subject: Re: [PATCH v8] can: usb: IXXAT USB-to-CAN adapters drivers
-Message-ID: <20230522215354.2c79c007@gmx.net>
-In-Reply-To: <CAMZ6RqKToYbfsOX4v_jK7X28hLyiYnH7j784eVeFuKrj7ujRSA@mail.gmail.com>
-References: <20230515212930.1019702-1-mkl@pengutronix.de>
-        <CAMZ6RqKToYbfsOX4v_jK7X28hLyiYnH7j784eVeFuKrj7ujRSA@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-suse-linux-gnu)
+To:     linux-can@vger.kernel.org
+Cc:     Florian Ferg <flfe@hms-networks.de>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Vincent Mailhol <vincent.mailhol@gmail.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        socketcan@hms-networks.de, linux-kernel@vger.kernel.org,
+        Peter Seiderer <ps.report@gmx.net>
+Subject: [PATCH v9] can: usb: IXXAT USB-to-CAN adapters drivers
+Date:   Mon, 22 May 2023 22:01:44 +0200
+Message-Id: <20230522200144.15949-1-ps.report@gmx.net>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:sQ4cj69yJw+khCOeKNW1XUu4Q+bujIr9Ne1ol6CTRoeFtXv7tIn
- pUEzePP+h7oDWcc8fRpt3xNycajnQ1VHgOUg8tT7SfdtbLP+QzxZJppouvlzHUfy2X3GxhF
- +hcEObanvmuZL65+FK2LxwsbFrl/p+sle3/5H/Ef8gta8UxWfauh5xq7mViJ0CzQR4dHS2r
- Eo2dHzX0wJDXU9jtBW40w==
-UI-OutboundReport: notjunk:1;M01:P0:8K8CG7up1BA=;0NwHYmzcdHjeel0mhncNE1B8jtW
- 3iY+tnEkYDpHdf/Q5wr9lINN93u+LCh9ujXEV8LRWRCO7gnOcpuJ/R6J3KcOi+zi0YGSAJXRS
- ALUL9Yj9mIrSdwLOa82rDbB1aM4lJCHG+QRNt29lrzLCQiwzfZeOO6NjgXbF9Dc5r0OBWo1Q5
- n1BhcBf/iSv12uT923C4b8siwXaBBjt9ORRxVECAQYRM0I1kg8qdB5cz2/+CgtK0B9WeDxT+g
- l6Ce6l+G2mrzoPl3aymGl2kJQD8OZIQUjpDdIKQcA00M14nto0+IUDm3FMs439mm4hzsGBESe
- rfU91ZISMZ0yCMEXJKqzjXWb3+vmoyH70P+A4+odTljNJh7pNwCT+WCnUd9tGd6UYOM1w5wEK
- jawHOLJsJdhAScc4KGghFMBXlDSEU0jWDJLghQIW/PqhRLpyMkmSa16+Xry5sqMhMOs5EcpG8
- So1kKT5N0Sos2nAf/NaoucGZn98j8KVHvLpy+45N19hd/is2oR4MTPx2gVDdSkFcivywc4y4X
- qSINoKNkQPXKrdYpzROIAyD62kz1J9YCvznpCS829MhCoVECABQGwzCfpr1kDFsp4j4fVSrub
- /enn+WPy0oNZ3Rg6Hdy3deizojeXdhMcaR+MGfRlAAWEjraueCT9/HeMdUI6AeDD/YggAd2xL
- HOowsfHSk9XnGDEMl6d+Emi+4oZqZfEJhw97Y/Shdifmy8CsdVlz/NOHH/DZHhPf6WNg/NDlD
- FXRztWuH4gL+HVk6gkLTpGKjKJNVUZuVSkJEoUpOOOYGi8F+h/EPz9whM3G1lXQ6j+WgguVOB
- YS+vauMvilVUPh3R0A6hfSEgjXSQfQB61xXR+KDdIDC20K0xBQfT1W25aH3KAXHY0IhdWEu+n
- lC2dwNawP0NCtaEE+DtnHQ8jX+6FVufRrDCl/ZUSOdEQ8gUgtTMjGt+ybz0CClWR9pATNCuOI
- ZhsOGLokLD9rI1agIDsmxmiKRr0=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+X-Provags-ID: V03:K1:uS37nkfLUX+QlQdlPd7/9Sg4Bzqhr1B/EbrstN6HnfTREyuyS9P
+ qOOJ9wISlT3P3YH4jTOJOCWbMUvpOovl2RDaHHXtEKzGsPHNSHCmbmO9o/QxMpuJVcTEg/Z
+ G9gBv3udAM/QvEW5gSqm7ELwGNWtVL8W8R/99AkEeSmYtMT6GM+xKql4N2rPjLM1J/oBNce
+ N8aPIwNmSplAi6IYS8wKQ==
+UI-OutboundReport: notjunk:1;M01:P0:3d6P4lPNEBg=;4zUB54WTAcjSAm4U8R413HGmmme
+ wMj6xQwketQOI4XfRCclSyEBSsh5DXbc6o+PiXJj2hyVzDErg9KIb1f01AHgY3ZqNjVQYugCz
+ VXn570C+7d01nhS6Jl1xRo/GFwkZhtyJ1KGL/R+9x69omuxZPdBaBf8PAPW1rhCgGNSG229XW
+ f4NzOvs8pJnkq51T1kbnAflUEZQ2zMN8j0k4sXpsdOaXQ+CDsYaN5lge2HgsLF8ApWtfRgdan
+ CQ4PGDCqOUJIqglwphFkCtrVr7QKZCVUw4OcvtSxrwIV6R1qH1AMp25KkjEh6oSKYyEpIdXdf
+ pfEnEl6rllJr/hfgvBkry2YyRovP2uDl0iJgcWwHml0CMyRFQMwCSSXtmbPg2cyHfqktvg5fB
+ OEGg6IXhZyaKg7IdufYgj67nJDWKL1PHxot7MqaQih7WJQMM3UeI0gug+MaqGhnld1l25W+Eo
+ Mb8QytXQT9pgt5o5K8EB746aNGkFW/xzy9aDhQd5+COf5+r3BiMTFFHosYBAJ1N1a4FyhJ+iG
+ HQ1ipXkTAIiHvzVJYQqVKscQXAtt4lY7Z4pqyk3Eqd109bfl8bUPpwEx1seBh7u/FJrUA20q+
+ wsx3PJ72AgZWaAkPc7DjqqC+5UO6x5Fj8PErS0gbRk541KTgVMksjSk2tGOnFljUJBafwoak0
+ GFgGzUJtimXtH6CD6dhaZ2FHl6HErT6NcKQHFqBT+tqcL1Njy6XypV8dVmO7sAVKa5DJhiGlG
+ DKxPPR8m0+9lvGrihAKcAwu3hqIqA+i1BJdkj9OFDlC3lYovQ6hCrmnJqsl4mxGz5XLFoMhal
+ kpZD93h51wQJyeT0hGbNjhl0DHkhUA9Ic+XYJSOLuQ+XznyyEL9zBl+0UmWUBd9WIBHol8bA8
+ XrE4b/VjMC2UIIpPms4PC2lAPB62+4OO8+bCxg6FkG+79+zS1JQDo/LE+m7RIhsmpD/VHHqA7
+ RRnfhnWKwBb6zGYGLPphNBiZ4pE=
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,MIME_BASE64_TEXT,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Vincent, Marc,
-
-Added CC: socketcan@hms-networks.de (taken from the copyright headers)
-
-@Marc: Your updated version (still) works for me...
-
-@Vincent: Thanks for review (and for the detailed links), will send out an
-updated version addressing most (all but one) of your review comments,
-see remarks/questions below...
-
-On Tue, 16 May 2023 18:30:18 +0900, Vincent Mailhol <vincent.mailhol@gmail.=
-com> wrote:
-
-> On Tue. 16 May 2023 =C3=A0 06:30, Marc Kleine-Budde <mkl@pengutronix.de> =
-wrote:
-> > From: Florian Ferg <flfe@hms-networks.de>
-> >
-> > This patch adds the driver for the IXXAT USB-to-CAN interfaces. There
-> > is an adapter for the older communication layer cl1 and another
-> > adapter for the newer communication layer cl2.
-> >
-> > Cc: Peter Seiderer <ps.report@gmx.net>
-> > Signed-off-by: Florian Ferg <flfe@hms-networks.de>
-> > Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> > ---
-> > Hello,
-> >
-> > this is a quick port of Florian's driver to recent net-next. Compile
-> > tested only. =20
->=20
-> And this is my quick review. I did not try to understand the full
-> logic, just looked for the usual suspect. If someone is willing to
-> address these comments, then I would do another deeper review.
->=20
-> > regards,
-> > Marc
-> >
-> >  drivers/net/can/usb/Kconfig                   |   17 +
-> >  drivers/net/can/usb/Makefile                  |    1 +
-> >  drivers/net/can/usb/ixxat_usb/Makefile        |    2 +
-> >  drivers/net/can/usb/ixxat_usb/ixxat_usb_cl1.c |  132 ++
-> >  drivers/net/can/usb/ixxat_usb/ixxat_usb_cl2.c |  255 ++++
-> >  .../net/can/usb/ixxat_usb/ixxat_usb_core.c    | 1299 +++++++++++++++++
-> >  .../net/can/usb/ixxat_usb/ixxat_usb_core.h    |  519 +++++++
-> >  7 files changed, 2225 insertions(+)
-> >  create mode 100644 drivers/net/can/usb/ixxat_usb/Makefile
-> >  create mode 100644 drivers/net/can/usb/ixxat_usb/ixxat_usb_cl1.c
-> >  create mode 100644 drivers/net/can/usb/ixxat_usb/ixxat_usb_cl2.c
-> >  create mode 100644 drivers/net/can/usb/ixxat_usb/ixxat_usb_core.c
-> >  create mode 100644 drivers/net/can/usb/ixxat_usb/ixxat_usb_core.h
-> >
-> > diff --git a/drivers/net/can/usb/Kconfig b/drivers/net/can/usb/Kconfig
-> > index 445504ababce..9ce31848d257 100644
-> > --- a/drivers/net/can/usb/Kconfig
-> > +++ b/drivers/net/can/usb/Kconfig
-> > @@ -50,6 +50,23 @@ config CAN_GS_USB
-> >           choose Y for built in support,
-> >           M to compile as module (module will be named: gs_usb).
-> >
-> > +config CAN_IXXAT_USB
-> > +       tristate "IXXAT USB-to-CAN interfaces"
-> > +       help
-> > +         This driver adds support for IXXAT USB-to-CAN devices.
-> > +
-> > +         The driver provides support for the following devices:
-> > +           - IXXAT USB-to-CAN compact
-> > +           - IXXAT USB-to-CAN embedded
-> > +           - IXXAT USB-to-CAN professional
-> > +           - IXXAT USB-to-CAN automotive
-> > +           - IXXAT USB-to-CAN FD compact
-> > +           - IXXAT USB-to-CAN FD professional
-> > +           - IXXAT USB-to-CAN FD automotive
-> > +           - IXXAT USB-to-CAN FD MiniPCIe
-> > +           - IXXAT USB-to-CAR
-> > +           - IXXAT CAN-IDM101
-> > +
-> >  config CAN_KVASER_USB
-> >         tristate "Kvaser CAN/USB interface"
-> >         help
-> > diff --git a/drivers/net/can/usb/Makefile b/drivers/net/can/usb/Makefile
-> > index 1ea16be5743b..d57c06e95751 100644
-> > --- a/drivers/net/can/usb/Makefile
-> > +++ b/drivers/net/can/usb/Makefile
-> > @@ -8,6 +8,7 @@ obj-$(CONFIG_CAN_EMS_USB) +=3D ems_usb.o
-> >  obj-$(CONFIG_CAN_ESD_USB) +=3D esd_usb.o
-> >  obj-$(CONFIG_CAN_ETAS_ES58X) +=3D etas_es58x/
-> >  obj-$(CONFIG_CAN_GS_USB) +=3D gs_usb.o
-> > +obj-$(CONFIG_CAN_IXXAT_USB) +=3D ixxat_usb/
-> >  obj-$(CONFIG_CAN_KVASER_USB) +=3D kvaser_usb/
-> >  obj-$(CONFIG_CAN_MCBA_USB) +=3D mcba_usb.o
-> >  obj-$(CONFIG_CAN_PEAK_USB) +=3D peak_usb/
-> > diff --git a/drivers/net/can/usb/ixxat_usb/Makefile b/drivers/net/can/u=
-sb/ixxat_usb/Makefile
-> > new file mode 100644
-> > index 000000000000..125d2705979f
-> > --- /dev/null
-> > +++ b/drivers/net/can/usb/ixxat_usb/Makefile
-> > @@ -0,0 +1,2 @@
-> > +obj-$(CONFIG_CAN_IXXAT_USB) +=3D ixxat_usb2can.o
-> > +ixxat_usb2can-y =3D ixxat_usb_cl1.o ixxat_usb_cl2.o ixxat_usb_core.o
-> > diff --git a/drivers/net/can/usb/ixxat_usb/ixxat_usb_cl1.c b/drivers/ne=
-t/can/usb/ixxat_usb/ixxat_usb_cl1.c
-> > new file mode 100644
-> > index 000000000000..2a17392db583
-> > --- /dev/null
-> > +++ b/drivers/net/can/usb/ixxat_usb/ixxat_usb_cl1.c
-> > @@ -0,0 +1,132 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +
-> > +/* CAN driver adapter for IXXAT USB-to-CAN CL1
-> > + *
-> > + * Copyright (C) 2018 HMS Industrial Networks <socketcan@hms-networks.=
-de>
-> > + *
-> > + * This program is free software; you can redistribute it and/or modif=
-y it
-> > + * under the terms of the GNU General Public License as published
-> > + * by the Free Software Foundation; version 2 of the License.
-> > + *
-> > + * This program is distributed in the hope that it will be useful, but
-> > + * WITHOUT ANY WARRANTY; without even the implied warranty of
-> > + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-> > + * General Public License for more details.
-> > + */ =20
->=20
-> The SPDX identifier is enough. No need to add the full GPL
-> boilerplate. This comment also applies to the other files.
-
-O.k, and did change all SPDX-License identifier to GPL-2.0-only accordingly=
-..
-
->=20
-> > +#include <linux/kernel.h>
-> > +#include <linux/can/dev.h>
-> > +#include <linux/usb.h> =20
->=20
-> Please reorder the includes by lexicographic order. The same comment
-> applies to the other #includes from the other files.
-
-O.k.
-
->=20
-> > +#include "ixxat_usb_core.h"
-> > +
-> > +#define IXXAT_USB_CLOCK 8000000
-> > +
-> > +#define IXXAT_USB_BUFFER_SIZE_RX 512
-> > +#define IXXAT_USB_BUFFER_SIZE_TX 256
-> > +
-> > +#define IXXAT_USB_MODES (CAN_CTRLMODE_3_SAMPLES | \
-> > +                        CAN_CTRLMODE_BERR_REPORTING | \
-> > +                        CAN_CTRLMODE_LISTENONLY) \ =20
->=20
-> Remove this #define and put them directly in the declaration of struct
-> ixxat_usb_adapter usb2can_cl1. The same comment applies to the other
-> *_USB_MODES declarations.
-
-O.k.
-
->=20
-> > +#define IXXAT_USB_BTMODE_TSM_CL1 0x80
-> > +
-> > +/* bittiming parameters */
-> > +#define IXXAT_USB2CAN_TSEG1_MIN 1
-> > +#define IXXAT_USB2CAN_TSEG1_MAX 16
-> > +#define IXXAT_USB2CAN_TSEG2_MIN 1
-> > +#define IXXAT_USB2CAN_TSEG2_MAX 8
-> > +#define IXXAT_USB2CAN_SJW_MAX 4
-> > +#define IXXAT_USB2CAN_BRP_MIN 1
-> > +#define IXXAT_USB2CAN_BRP_MAX 64
-> > +#define IXXAT_USB2CAN_BRP_INC 1 =20
->=20
-> Remove the #defines and put the value directly in struct
-> can_bittiming_const usb2can_b. The same comment also applies the the
-> other bittiming parameter declarations.
-
-O.k.
-
->=20
-> > +/* USB endpoint mapping for CL1 */
-> > +#define IXXAT_USB2CAN_EP1_IN (1 | USB_DIR_IN)
-> > +#define IXXAT_USB2CAN_EP2_IN (2 | USB_DIR_IN)
-> > +#define IXXAT_USB2CAN_EP3_IN (3 | USB_DIR_IN)
-> > +#define IXXAT_USB2CAN_EP4_IN (4 | USB_DIR_IN)
-> > +#define IXXAT_USB2CAN_EP5_IN (5 | USB_DIR_IN)
-> > +
-> > +#define IXXAT_USB2CAN_EP1_OUT (1 | USB_DIR_OUT)
-> > +#define IXXAT_USB2CAN_EP2_OUT (2 | USB_DIR_OUT)
-> > +#define IXXAT_USB2CAN_EP3_OUT (3 | USB_DIR_OUT)
-> > +#define IXXAT_USB2CAN_EP4_OUT (4 | USB_DIR_OUT)
-> > +#define IXXAT_USB2CAN_EP5_OUT (5 | USB_DIR_OUT) =20
->=20
-> Remove the #defines and put the value directly instruct
-> ixxat_usb_adapter usb2can_cl1. The same comment also applies the the
-> other USB end points declarations.
-
-O.k.
-
->=20
-> > +#define IXXAT_USB_CAN_CMD_INIT 0x325
-> > +
-> > +static const struct can_bittiming_const usb2can_bt =3D {
-> > +       .name =3D IXXAT_USB_CTRL_NAME,
-> > +       .tseg1_min =3D IXXAT_USB2CAN_TSEG1_MIN,
-> > +       .tseg1_max =3D IXXAT_USB2CAN_TSEG1_MAX,
-> > +       .tseg2_min =3D IXXAT_USB2CAN_TSEG2_MIN,
-> > +       .tseg2_max =3D IXXAT_USB2CAN_TSEG2_MAX,
-> > +       .sjw_max =3D IXXAT_USB2CAN_SJW_MAX,
-> > +       .brp_min =3D IXXAT_USB2CAN_BRP_MIN,
-> > +       .brp_max =3D IXXAT_USB2CAN_BRP_MAX,
-> > +       .brp_inc =3D IXXAT_USB2CAN_BRP_INC,
-> > +};
-> > +
-> > +static int ixxat_usb_init_ctrl(struct ixxat_usb_device *dev)
-> > +{
-> > +       const struct can_bittiming *bt =3D &dev->can.bittiming;
-> > +       const u16 port =3D dev->ctrl_index;
-> > +       int err;
-> > +       struct ixxat_usb_init_cl1_cmd *cmd;
-> > +       const u32 rcv_size =3D sizeof(cmd->res);
-> > +       const u32 snd_size =3D sizeof(*cmd); =20
->=20
-> Remove those size variables and directly use sizeof(cmd->res) and
-> sizeof(*cmd) in the code.
-
-O.k.
-
->=20
-> > +       u8 opmode =3D IXXAT_USB_OPMODE_EXTENDED | IXXAT_USB_OPMODE_STAN=
-DARD;
-> > +       u8 btr0 =3D ((bt->brp - 1) & 0x3f) | (((bt->sjw - 1) & 0x3) << =
-6); =20
->=20
-> Add a macro definition for the 0x3f  and 0x3 masks using GENMASK() and
-> then calculate the value using FIELD_PREP().
-
-O.k., define names o.k.?
-
-+#define IXXAT_USB_CAN_BTR0_BRP_MASK GENMASK(5, 0)
-+#define IXXAT_USB_CAN_BTR0_SJW_MASK GENMASK(7, 6)
-
->=20
-> > +       u8 btr1 =3D ((bt->prop_seg + bt->phase_seg1 - 1) & 0xf) |
-> > +                 (((bt->phase_seg2 - 1) & 0x7) << 4); =20
->=20
-> Same: GENMASK() and FIELD_PREP().
-
-O.k., define names o.k.?
-
-+#define IXXAT_USB_CAN_BTR1_TIME_SEG1_MASK GENMASK(3, 0)
-+#define IXXAT_USB_CAN_BTR1_TIME_SEG2_MASK GENMASK(6, 4)
-
->=20
-> > +       cmd =3D kmalloc(snd_size, GFP_KERNEL);
-> > +       if (!cmd)
-> > +               return -ENOMEM;
-> > +
-> > +       if (dev->can.ctrlmode & CAN_CTRLMODE_3_SAMPLES)
-> > +               btr1 |=3D IXXAT_USB_BTMODE_TSM_CL1;
-> > +       if (dev->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING)
-> > +               opmode |=3D IXXAT_USB_OPMODE_ERRFRAME;
-> > +       if (dev->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
-> > +               opmode |=3D IXXAT_USB_OPMODE_LISTONLY;
-> > +
-> > +       ixxat_usb_setup_cmd(&cmd->req, &cmd->res);
-> > +       cmd->req.size =3D cpu_to_le32(snd_size - rcv_size);
-> > +       cmd->req.code =3D cpu_to_le32(IXXAT_USB_CAN_CMD_INIT);
-> > +       cmd->req.port =3D cpu_to_le16(port);
-> > +       cmd->mode =3D opmode;
-> > +       cmd->btr0 =3D btr0;
-> > +       cmd->btr1 =3D btr1;
-> > +
-> > +       err =3D ixxat_usb_send_cmd(dev->udev, port, cmd, snd_size, &cmd=
-->res,
-> > +                                rcv_size);
-> > +       kfree(cmd);
-> > +       return err;
-> > +}
-> > +
-> > +const struct ixxat_usb_adapter usb2can_cl1 =3D {
-> > +       .clock =3D IXXAT_USB_CLOCK,
-> > +       .bt =3D &usb2can_bt,
-> > +       .btd =3D NULL,
-> > +       .modes =3D IXXAT_USB_MODES,
-> > +       .buffer_size_rx =3D IXXAT_USB_BUFFER_SIZE_RX,
-> > +       .buffer_size_tx =3D IXXAT_USB_BUFFER_SIZE_TX,
-> > +       .ep_msg_in =3D {
-> > +               IXXAT_USB2CAN_EP1_IN,
-> > +               IXXAT_USB2CAN_EP2_IN,
-> > +               IXXAT_USB2CAN_EP3_IN,
-> > +               IXXAT_USB2CAN_EP4_IN,
-> > +               IXXAT_USB2CAN_EP5_IN
-> > +       },
-> > +       .ep_msg_out =3D {
-> > +               IXXAT_USB2CAN_EP1_OUT,
-> > +               IXXAT_USB2CAN_EP2_OUT,
-> > +               IXXAT_USB2CAN_EP3_OUT,
-> > +               IXXAT_USB2CAN_EP4_OUT,
-> > +               IXXAT_USB2CAN_EP5_OUT
-> > +       },
-> > +       .ep_offs =3D 0,
-> > +       .init_ctrl =3D ixxat_usb_init_ctrl
-> > +};
-> > diff --git a/drivers/net/can/usb/ixxat_usb/ixxat_usb_cl2.c b/drivers/ne=
-t/can/usb/ixxat_usb/ixxat_usb_cl2.c
-> > new file mode 100644
-> > index 000000000000..c08f323c5765
-> > --- /dev/null
-> > +++ b/drivers/net/can/usb/ixxat_usb/ixxat_usb_cl2.c
-> > @@ -0,0 +1,255 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +
-> > +/* CAN driver adapter for IXXAT USB-to-CAN CL2
-> > + *
-> > + * Copyright (C) 2018 HMS Industrial Networks <socketcan@hms-networks.=
-de>
-> > + *
-> > + * This program is free software; you can redistribute it and/or modif=
-y it
-> > + * under the terms of the GNU General Public License as published
-> > + * by the Free Software Foundation; version 2 of the License.
-> > + *
-> > + * This program is distributed in the hope that it will be useful, but
-> > + * WITHOUT ANY WARRANTY; without even the implied warranty of
-> > + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-> > + * General Public License for more details.
-> > + */
-> > +
-> > +#include <linux/kernel.h>
-> > +#include <linux/can/dev.h>
-> > +#include <linux/usb.h>
-> > +
-> > +#include "ixxat_usb_core.h"
-> > +
-> > +#define IXXAT_USB_CLOCK 80000000
-> > +
-> > +#define IXXAT_USB_BUFFER_SIZE_RX 512
-> > +#define IXXAT_USB_BUFFER_SIZE_TX 512
-> > +
-> > +#define IXXAT_USB_MODES (CAN_CTRLMODE_3_SAMPLES | \
-> > +                        CAN_CTRLMODE_LISTENONLY | \
-> > +                        CAN_CTRLMODE_BERR_REPORTING | \
-> > +                        CAN_CTRLMODE_FD | \
-> > +                        CAN_CTRLMODE_FD_NON_ISO)
-> > +
-> > +/* bittiming parameters CL2 */
-> > +#define IXXAT_USB2CAN_TSEG1_MIN 1
-> > +#define IXXAT_USB2CAN_TSEG1_MAX 256
-> > +#define IXXAT_USB2CAN_TSEG2_MIN 1
-> > +#define IXXAT_USB2CAN_TSEG2_MAX 256
-> > +#define IXXAT_USB2CAN_SJW_MAX 128
-> > +#define IXXAT_USB2CAN_BRP_MIN 2
-> > +#define IXXAT_USB2CAN_BRP_MAX 513
-> > +#define IXXAT_USB2CAN_BRP_INC 1
-> > +
-> > +#define IXXAT_USB2CAN_TSEG1_MIN_DATA 1
-> > +#define IXXAT_USB2CAN_TSEG1_MAX_DATA 256
-> > +#define IXXAT_USB2CAN_TSEG2_MIN_DATA 1
-> > +#define IXXAT_USB2CAN_TSEG2_MAX_DATA 256
-> > +#define IXXAT_USB2CAN_SJW_MAX_DATA 128
-> > +#define IXXAT_USB2CAN_BRP_MIN_DATA 2
-> > +#define IXXAT_USB2CAN_BRP_MAX_DATA 513
-> > +#define IXXAT_USB2CAN_BRP_INC_DATA 1
-> > +
-> > +/* bittiming parameters CAN IDM */
-> > +#define IXXAT_CANIDM_TSEG1_MIN 1
-> > +#define IXXAT_CANIDM_TSEG1_MAX 256
-> > +#define IXXAT_CANIDM_TSEG2_MIN 1
-> > +#define IXXAT_CANIDM_TSEG2_MAX 128
-> > +#define IXXAT_CANIDM_SJW_MAX 128
-> > +#define IXXAT_CANIDM_BRP_MIN 1
-> > +#define IXXAT_CANIDM_BRP_MAX 512
-> > +#define IXXAT_CANIDM_BRP_INC 1
-> > +
-> > +#define IXXAT_CANIDM_TSEG1_MIN_DATA 1
-> > +#define IXXAT_CANIDM_TSEG1_MAX_DATA 32
-> > +#define IXXAT_CANIDM_TSEG2_MIN_DATA 1
-> > +#define IXXAT_CANIDM_TSEG2_MAX_DATA 16
-> > +#define IXXAT_CANIDM_SJW_MAX_DATA 8
-> > +#define IXXAT_CANIDM_BRP_MIN_DATA 1
-> > +#define IXXAT_CANIDM_BRP_MAX_DATA 32
-> > +#define IXXAT_CANIDM_BRP_INC_DATA 1
-> > +
-> > +/* USB endpoint mapping for CL2 */
-> > +#define IXXAT_USB2CAN_EP1_IN (1 | USB_DIR_IN)
-> > +#define IXXAT_USB2CAN_EP2_IN (2 | USB_DIR_IN)
-> > +#define IXXAT_USB2CAN_EP3_IN (3 | USB_DIR_IN)
-> > +#define IXXAT_USB2CAN_EP4_IN (4 | USB_DIR_IN)
-> > +#define IXXAT_USB2CAN_EP5_IN (5 | USB_DIR_IN)
-> > +
-> > +#define IXXAT_USB2CAN_EP1_OUT (1 | USB_DIR_OUT)
-> > +#define IXXAT_USB2CAN_EP2_OUT (2 | USB_DIR_OUT)
-> > +#define IXXAT_USB2CAN_EP3_OUT (3 | USB_DIR_OUT)
-> > +#define IXXAT_USB2CAN_EP4_OUT (4 | USB_DIR_OUT)
-> > +#define IXXAT_USB2CAN_EP5_OUT (5 | USB_DIR_OUT)
-> > +
-> > +/* USB endpoint mapping for CAN IDM */
-> > +#define IXXAT_CANIDM_EP1_IN (2 | USB_DIR_IN)
-> > +#define IXXAT_CANIDM_EP2_IN (4 | USB_DIR_IN)
-> > +#define IXXAT_CANIDM_EP3_IN (6 | USB_DIR_IN)
-> > +#define IXXAT_CANIDM_EP4_IN (8 | USB_DIR_IN)
-> > +#define IXXAT_CANIDM_EP5_IN (10 | USB_DIR_IN)
-> > +
-> > +#define IXXAT_CANIDM_EP1_OUT (1 | USB_DIR_OUT)
-> > +#define IXXAT_CANIDM_EP2_OUT (3 | USB_DIR_OUT)
-> > +#define IXXAT_CANIDM_EP3_OUT (5 | USB_DIR_OUT)
-> > +#define IXXAT_CANIDM_EP4_OUT (7 | USB_DIR_OUT)
-> > +#define IXXAT_CANIDM_EP5_OUT (9 | USB_DIR_OUT)
-> > +
-> > +#define IXXAT_USB_CAN_CMD_INIT 0x337
-> > +
-> > +static const struct can_bittiming_const usb2can_bt =3D {
-> > +       .name =3D IXXAT_USB_CTRL_NAME,
-> > +       .tseg1_min =3D IXXAT_USB2CAN_TSEG1_MIN,
-> > +       .tseg1_max =3D IXXAT_USB2CAN_TSEG1_MAX,
-> > +       .tseg2_min =3D IXXAT_USB2CAN_TSEG2_MIN,
-> > +       .tseg2_max =3D IXXAT_USB2CAN_TSEG2_MAX,
-> > +       .sjw_max =3D IXXAT_USB2CAN_SJW_MAX,
-> > +       .brp_min =3D IXXAT_USB2CAN_BRP_MIN,
-> > +       .brp_max =3D IXXAT_USB2CAN_BRP_MAX,
-> > +       .brp_inc =3D IXXAT_USB2CAN_BRP_INC,
-> > +};
-> > +
-> > +static const struct can_bittiming_const usb2can_btd =3D {
-> > +       .name =3D IXXAT_USB_CTRL_NAME,
-> > +       .tseg1_min =3D IXXAT_USB2CAN_TSEG1_MIN_DATA,
-> > +       .tseg1_max =3D IXXAT_USB2CAN_TSEG1_MAX_DATA,
-> > +       .tseg2_min =3D IXXAT_USB2CAN_TSEG2_MIN_DATA,
-> > +       .tseg2_max =3D IXXAT_USB2CAN_TSEG2_MAX_DATA,
-> > +       .sjw_max =3D IXXAT_USB2CAN_SJW_MAX_DATA,
-> > +       .brp_min =3D IXXAT_USB2CAN_BRP_MIN_DATA,
-> > +       .brp_max =3D IXXAT_USB2CAN_BRP_MAX_DATA,
-> > +       .brp_inc =3D IXXAT_USB2CAN_BRP_INC_DATA,
-> > +};
-> > +
-> > +static const struct can_bittiming_const canidm_bt =3D {
-> > +       .name =3D IXXAT_USB_CTRL_NAME,
-> > +       .tseg1_min =3D IXXAT_CANIDM_TSEG1_MIN,
-> > +       .tseg1_max =3D IXXAT_CANIDM_TSEG1_MAX,
-> > +       .tseg2_min =3D IXXAT_CANIDM_TSEG2_MIN,
-> > +       .tseg2_max =3D IXXAT_CANIDM_TSEG2_MAX,
-> > +       .sjw_max =3D IXXAT_CANIDM_SJW_MAX,
-> > +       .brp_min =3D IXXAT_CANIDM_BRP_MIN,
-> > +       .brp_max =3D IXXAT_CANIDM_BRP_MAX,
-> > +       .brp_inc =3D IXXAT_CANIDM_BRP_INC
-> > +};
-> > +
-> > +static const struct can_bittiming_const canidm_btd =3D {
-> > +       .name =3D IXXAT_USB_CTRL_NAME,
-> > +       .tseg1_min =3D IXXAT_CANIDM_TSEG1_MIN_DATA,
-> > +       .tseg1_max =3D IXXAT_CANIDM_TSEG1_MAX_DATA,
-> > +       .tseg2_min =3D IXXAT_CANIDM_TSEG2_MIN_DATA,
-> > +       .tseg2_max =3D IXXAT_CANIDM_TSEG2_MAX_DATA,
-> > +       .sjw_max =3D IXXAT_CANIDM_SJW_MAX_DATA,
-> > +       .brp_min =3D IXXAT_CANIDM_BRP_MIN_DATA,
-> > +       .brp_max =3D IXXAT_CANIDM_BRP_MAX_DATA,
-> > +       .brp_inc =3D IXXAT_CANIDM_BRP_INC_DATA
-> > +};
-> > +
-> > +static int ixxat_usb_init_ctrl(struct ixxat_usb_device *dev)
-> > +{
-> > +       const struct can_bittiming *bt =3D &dev->can.bittiming;
-> > +       const struct can_bittiming *btd =3D &dev->can.data_bittiming;
-> > +       const u16 port =3D dev->ctrl_index;
-> > +       int err;
-> > +       struct ixxat_usb_init_cl2_cmd *cmd;
-> > +       const u32 rcv_size =3D sizeof(cmd->res);
-> > +       const u32 snd_size =3D sizeof(*cmd);
-> > +       u32 btmode =3D IXXAT_USB_BTMODE_NAT;
-> > +       u8 exmode =3D 0;
-> > +       u8 opmode =3D IXXAT_USB_OPMODE_EXTENDED | IXXAT_USB_OPMODE_STAN=
-DARD;
-> > +
-> > +       cmd =3D kmalloc(snd_size, GFP_KERNEL);
-> > +       if (!cmd)
-> > +               return -ENOMEM;
-> > +
-> > +       if (dev->can.ctrlmode & CAN_CTRLMODE_3_SAMPLES)
-> > +               btmode =3D IXXAT_USB_BTMODE_TSM;
-> > +       if (dev->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING)
-> > +               opmode |=3D IXXAT_USB_OPMODE_ERRFRAME;
-> > +       if (dev->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
-> > +               opmode |=3D IXXAT_USB_OPMODE_LISTONLY;
-> > +       if (dev->can.ctrlmode & (CAN_CTRLMODE_FD | CAN_CTRLMODE_FD_NON_=
-ISO)) {
-> > +               exmode |=3D IXXAT_USB_EXMODE_EXTDATA | IXXAT_USB_EXMODE=
-_FASTDATA;
-> > +
-> > +               if (!(dev->can.ctrlmode & CAN_CTRLMODE_FD_NON_ISO))
-> > +                       exmode |=3D IXXAT_USB_EXMODE_ISOFD;
-> > +       }
-> > +
-> > +       ixxat_usb_setup_cmd(&cmd->req, &cmd->res);
-> > +       cmd->req.size =3D cpu_to_le32(snd_size - rcv_size);
-> > +       cmd->req.code =3D cpu_to_le32(IXXAT_USB_CAN_CMD_INIT);
-> > +       cmd->req.port =3D cpu_to_le16(port);
-> > +       cmd->opmode =3D opmode;
-> > +       cmd->exmode =3D exmode;
-> > +       cmd->sdr.mode =3D cpu_to_le32(btmode);
-> > +       cmd->sdr.bps =3D cpu_to_le32(bt->brp);
-> > +       cmd->sdr.ts1 =3D cpu_to_le16(bt->prop_seg + bt->phase_seg1);
-> > +       cmd->sdr.ts2 =3D cpu_to_le16(bt->phase_seg2);
-> > +       cmd->sdr.sjw =3D cpu_to_le16(bt->sjw);
-> > +       cmd->sdr.tdo =3D 0;
-> > +
-> > +       if (exmode) {
-> > +               cmd->fdr.mode =3D cpu_to_le32(btmode);
-> > +               cmd->fdr.bps =3D cpu_to_le32(btd->brp);
-> > +               cmd->fdr.ts1 =3D cpu_to_le16(btd->prop_seg + btd->phase=
-_seg1);
-> > +               cmd->fdr.ts2 =3D cpu_to_le16(btd->phase_seg2);
-> > +               cmd->fdr.sjw =3D cpu_to_le16(btd->sjw);
-> > +               cmd->fdr.tdo =3D cpu_to_le16(btd->brp * (btd->phase_seg=
-1 + 1 +
-> > +                                                      btd->prop_seg));
-> > +       }
-> > +
-> > +       err =3D ixxat_usb_send_cmd(dev->udev, port, cmd, snd_size, &cmd=
-->res,
-> > +                                rcv_size);
-> > +       kfree(cmd);
-> > +       return err;
-> > +}
-> > +
-> > +const struct ixxat_usb_adapter usb2can_cl2 =3D {
-> > +       .clock =3D IXXAT_USB_CLOCK,
-> > +       .bt =3D &usb2can_bt,
-> > +       .btd =3D &usb2can_btd,
-> > +       .modes =3D IXXAT_USB_MODES,
-> > +       .buffer_size_rx =3D IXXAT_USB_BUFFER_SIZE_RX,
-> > +       .buffer_size_tx =3D IXXAT_USB_BUFFER_SIZE_TX,
-> > +       .ep_msg_in =3D {
-> > +               IXXAT_USB2CAN_EP1_IN,
-> > +               IXXAT_USB2CAN_EP2_IN,
-> > +               IXXAT_USB2CAN_EP3_IN,
-> > +               IXXAT_USB2CAN_EP4_IN,
-> > +               IXXAT_USB2CAN_EP5_IN
-> > +       },
-> > +       .ep_msg_out =3D {
-> > +               IXXAT_USB2CAN_EP1_OUT,
-> > +               IXXAT_USB2CAN_EP2_OUT,
-> > +               IXXAT_USB2CAN_EP3_OUT,
-> > +               IXXAT_USB2CAN_EP4_OUT,
-> > +               IXXAT_USB2CAN_EP5_OUT
-> > +       },
-> > +       .ep_offs =3D 1,
-> > +       .init_ctrl =3D ixxat_usb_init_ctrl
-> > +};
-> > +
-> > +const struct ixxat_usb_adapter can_idm =3D {
-> > +       .clock =3D IXXAT_USB_CLOCK,
-> > +       .bt =3D &canidm_bt,
-> > +       .btd =3D &canidm_btd,
-> > +       .modes =3D IXXAT_USB_MODES,
-> > +       .buffer_size_rx =3D IXXAT_USB_BUFFER_SIZE_RX,
-> > +       .buffer_size_tx =3D IXXAT_USB_BUFFER_SIZE_TX,
-> > +       .ep_msg_in =3D {
-> > +               IXXAT_CANIDM_EP1_IN,
-> > +               IXXAT_CANIDM_EP2_IN,
-> > +               IXXAT_CANIDM_EP3_IN,
-> > +               IXXAT_CANIDM_EP4_IN,
-> > +               IXXAT_CANIDM_EP5_IN
-> > +       },
-> > +       .ep_msg_out =3D {
-> > +               IXXAT_CANIDM_EP1_OUT,
-> > +               IXXAT_CANIDM_EP2_OUT,
-> > +               IXXAT_CANIDM_EP3_OUT,
-> > +               IXXAT_CANIDM_EP4_OUT,
-> > +               IXXAT_CANIDM_EP5_OUT
-> > +       },
-> > +       .ep_offs =3D 0,
-> > +       .init_ctrl =3D ixxat_usb_init_ctrl
-> > +};
-> > diff --git a/drivers/net/can/usb/ixxat_usb/ixxat_usb_core.c b/drivers/n=
-et/can/usb/ixxat_usb/ixxat_usb_core.c
-> > new file mode 100644
-> > index 000000000000..eee5a6b39774
-> > --- /dev/null
-> > +++ b/drivers/net/can/usb/ixxat_usb/ixxat_usb_core.c
-> > @@ -0,0 +1,1299 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +
-> > +/* CAN driver for IXXAT USB-to-CAN
-> > + *
-> > + * Copyright (C) 2018 HMS Industrial Networks <socketcan@hms-networks.=
-de>
-> > + *
-> > + * This program is free software; you can redistribute it and/or modif=
-y it
-> > + * under the terms of the GNU General Public License as published
-> > + * by the Free Software Foundation; version 2 of the License.
-> > + *
-> > + * This program is distributed in the hope that it will be useful, but
-> > + * WITHOUT ANY WARRANTY; without even the implied warranty of
-> > + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-> > + * General Public License for more details.
-> > + */
-> > +
-> > +#include <linux/module.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/can/dev.h>
-> > +#include <linux/kthread.h>
-> > +#include <linux/usb.h>
-> > +
-> > +#include "ixxat_usb_core.h"
-> > +
-> > +MODULE_AUTHOR("Marcel Schmidt <socketcan@hms-networks.de>");
-> > +MODULE_DESCRIPTION("CAN driver for IXXAT USB-to-CAN / CAN FD adapters"=
-);
-> > +MODULE_LICENSE("GPL v2");
-> > +
-> > +/* Table of devices that work with this driver */
-> > +static const struct usb_device_id ixxat_usb_table[] =3D {
-> > +       { USB_DEVICE(IXXAT_USB_VENDOR_ID, USB2CAN_COMPACT_PRODUCT_ID) },
-> > +       { USB_DEVICE(IXXAT_USB_VENDOR_ID, USB2CAN_EMBEDDED_PRODUCT_ID) =
-},
-> > +       { USB_DEVICE(IXXAT_USB_VENDOR_ID, USB2CAN_PROFESSIONAL_PRODUCT_=
-ID) },
-> > +       { USB_DEVICE(IXXAT_USB_VENDOR_ID, USB2CAN_AUTOMOTIVE_PRODUCT_ID=
-) },
-> > +       { USB_DEVICE(IXXAT_USB_VENDOR_ID, USB2CAN_FD_COMPACT_PRODUCT_ID=
-) },
-> > +       { USB_DEVICE(IXXAT_USB_VENDOR_ID, USB2CAN_FD_PROFESSIONAL_PRODU=
-CT_ID) },
-> > +       { USB_DEVICE(IXXAT_USB_VENDOR_ID, USB2CAN_FD_AUTOMOTIVE_PRODUCT=
-_ID) },
-> > +       { USB_DEVICE(IXXAT_USB_VENDOR_ID, USB2CAN_FD_PCIE_MINI_PRODUCT_=
-ID) },
-> > +       { USB_DEVICE(IXXAT_USB_VENDOR_ID, USB2CAR_PRODUCT_ID) },
-> > +       { USB_DEVICE(IXXAT_USB_VENDOR_ID, CAN_IDM101_PRODUCT_ID) },
-> > +       { USB_DEVICE(IXXAT_USB_VENDOR_ID, CAN_IDM200_PRODUCT_ID) },
-> > +       { } /* Terminating entry */
-> > +};
-> > +
-> > +MODULE_DEVICE_TABLE(usb, ixxat_usb_table);
-> > +
-> > +void ixxat_usb_setup_cmd(struct ixxat_usb_dal_req *req,
-> > +                        struct ixxat_usb_dal_res *res)
-> > +{
-> > +       req->size =3D cpu_to_le32(sizeof(*req));
-> > +       req->port =3D cpu_to_le16(0xffff);
-> > +       req->socket =3D cpu_to_le16(0xffff);
-> > +       req->code =3D cpu_to_le32(0);
-> > +
-> > +       res->res_size =3D cpu_to_le32(sizeof(*res));
-> > +       res->ret_size =3D cpu_to_le32(0);
-> > +       res->code =3D cpu_to_le32(0xffffffff);
-> > +}
-> > +
-> > +int ixxat_usb_send_cmd(struct usb_device *dev, const u16 port, void *r=
-eq,
-> > +                      const u16 req_size, void *res, const u16 res_siz=
-e)
-> > +{
-> > +       const int to =3D msecs_to_jiffies(IXXAT_USB_MSG_TIMEOUT);
-> > +       const u8 rq =3D 0xff;
-> > +       const u8 rti =3D USB_TYPE_VENDOR | USB_DIR_IN;
-> > +       const u8 rto =3D USB_TYPE_VENDOR | USB_DIR_OUT;
-> > +       int i;
-> > +       int pos =3D 0;
-> > +       int rcp =3D usb_rcvctrlpipe(dev, 0);
-> > +       int scp =3D usb_sndctrlpipe(dev, 0);
-> > +       int ret =3D 0;
-> > +       struct ixxat_usb_dal_res *dal_res =3D res;
-> > +
-> > +       for (i =3D 0; i < IXXAT_USB_MAX_COM_REQ; ++i) {
-> > +               ret =3D usb_control_msg(dev, scp, rq, rto, port, 0, req=
-, req_size,
-> > +                                     to);
-> > +               if (ret < 0)
-> > +                       msleep(IXXAT_USB_MSG_CYCLE);
-> > +               else
-> > +                       break;
-> > +       }
-> > +
-> > +       if (ret < 0) {
-> > +               dev_err(&dev->dev, "Error %d: TX command failure\n", re=
-t); =20
->=20
-> For all your errors, use %pe to print the mnemonic instead of the error c=
-ode.
->=20
->                  dev_err(&dev->dev, "TX command failure: %pe\n", ERR_PTR(=
-ret));
->=20
-
-O.K.
-
-> > +               goto fail;
-> > +       }
-> > +
-> > +       for (i =3D 0; i < IXXAT_USB_MAX_COM_REQ; ++i) {
-> > +               const int rs =3D res_size - pos;
-> > +               void *rb =3D res + pos;
-> > +
-> > +               ret =3D usb_control_msg(dev, rcp, rq, rti, port, 0, rb,=
- rs, to);
-> > +               if (ret < 0) {
-> > +                       msleep(IXXAT_USB_MSG_CYCLE);
-> > +                       continue;
-> > +               }
-> > +
-> > +               pos +=3D ret;
-> > +               if (pos < res_size)
-> > +                       msleep(IXXAT_USB_MSG_CYCLE);
-> > +               else
-> > +                       break;
-> > +       }
-> > +
-> > +       if (pos !=3D res_size)
-> > +               ret =3D -EBADMSG;
-> > +
-> > +       if (ret < 0) {
-> > +               dev_err(&dev->dev, "Error %d: RX command failure\n", re=
-t);
-> > +               goto fail;
-> > +       }
-> > +
-> > +       ret =3D le32_to_cpu(dal_res->code);
-> > +
-> > +fail:
-> > +       return ret;
-> > +}
-> > +
-> > +static void ixxat_usb_update_ts_now(struct ixxat_usb_device *dev, u32 =
-ts_now)
-> > +{
-> > +       u32 *ts_dev =3D &dev->time_ref.ts_dev_0;
-> > +       ktime_t *kt_host =3D &dev->time_ref.kt_host_0;
-> > +       u64 timebase =3D (u64)0x00000000FFFFFFFF - (u64)(*ts_dev) + (u6=
-4)ts_now; =20
->=20
-> Replace 0x00000000FFFFFFFF by U32_MAX from linux/limits.h
-
-O.k.
-
->=20
-> > +       *kt_host =3D ktime_add_us(*kt_host, timebase);
-> > +       *ts_dev =3D ts_now;
-> > +}
-> > +
-> > +static void ixxat_usb_get_ts_tv(struct ixxat_usb_device *dev, u32 ts,
-> > +                               ktime_t *k_time)
-> > +{
-> > +       ktime_t tmp_time =3D dev->time_ref.kt_host_0;
-> > +
-> > +       if (ts < dev->time_ref.ts_dev_last)
-> > +               ixxat_usb_update_ts_now(dev, ts);
-> > +
-> > +       dev->time_ref.ts_dev_last =3D ts;
-> > +       tmp_time =3D ktime_add_us(tmp_time, ts - dev->time_ref.ts_dev_0=
-);
-> > +
-> > +       if (k_time)
-> > +               *k_time =3D tmp_time;
-> > +}
-> > +
-> > +static void ixxat_usb_set_ts_now(struct ixxat_usb_device *dev, u32 ts_=
-now)
-> > +{
-> > +       dev->time_ref.ts_dev_0 =3D ts_now;
-> > +       dev->time_ref.kt_host_0 =3D ktime_get_real();
-> > +       dev->time_ref.ts_dev_last =3D ts_now;
-> > +}
-> > +
-> > +static int ixxat_usb_get_dev_caps(struct usb_device *dev,
-> > +                                 struct ixxat_dev_caps *dev_caps)
-> > +{
-> > +       int i;
-> > +       int err;
-> > +       struct ixxat_usb_caps_cmd *cmd;
-> > +       const u32 cmd_size =3D sizeof(*cmd);
-> > +       const u32 req_size =3D sizeof(cmd->req);
-> > +       const u32 rcv_size =3D cmd_size - req_size;
-> > +       const u32 snd_size =3D req_size + sizeof(cmd->res);
-> > +       u16 num_ctrl;
-> > +
-> > +       cmd =3D kmalloc(cmd_size, GFP_KERNEL);
-> > +       if (!cmd)
-> > +               return -ENOMEM;
-> > +
-> > +       ixxat_usb_setup_cmd(&cmd->req, &cmd->res);
-> > +       cmd->req.code =3D cpu_to_le32(IXXAT_USB_BRD_CMD_GET_DEVCAPS);
-> > +       cmd->res.res_size =3D cpu_to_le32(rcv_size);
-> > +
-> > +       err =3D ixxat_usb_send_cmd(dev, le16_to_cpu(cmd->req.port), cmd=
-, snd_size,
-> > +                                &cmd->res, rcv_size);
-> > +       if (err)
-> > +               goto fail;
-> > +
-> > +       dev_caps->bus_ctrl_count =3D cmd->caps.bus_ctrl_count;
-> > +       num_ctrl =3D le16_to_cpu(dev_caps->bus_ctrl_count);
-> > +       if (num_ctrl > ARRAY_SIZE(dev_caps->bus_ctrl_types)) {
-> > +               err =3D -EINVAL;
-> > +               goto fail;
-> > +       }
-> > +
-> > +       for (i =3D 0; i < num_ctrl; i++)
-> > +               dev_caps->bus_ctrl_types[i] =3D cmd->caps.bus_ctrl_type=
-s[i];
-> > +
-> > +fail:
-> > +       kfree(cmd);
-> > +       return err;
-> > +}
-> > +
-> > +static int ixxat_usb_get_dev_info(struct usb_device *dev,
-> > +                                 struct ixxat_dev_info *dev_info)
-> > +{
-> > +       int err;
-> > +       struct ixxat_usb_info_cmd *cmd;
-> > +       const u32 cmd_size =3D sizeof(*cmd);
-> > +       const u32 req_size =3D sizeof(cmd->req);
-> > +       const u32 rcv_size =3D cmd_size - req_size;
-> > +       const u32 snd_size =3D req_size + sizeof(cmd->res);
-> > +
-> > +       cmd =3D kmalloc(cmd_size, GFP_KERNEL);
-> > +       if (!cmd)
-> > +               return -ENOMEM;
-> > +
-> > +       ixxat_usb_setup_cmd(&cmd->req, &cmd->res);
-> > +       cmd->req.code =3D cpu_to_le32(IXXAT_USB_BRD_CMD_GET_DEVINFO);
-> > +       cmd->res.res_size =3D cpu_to_le32(rcv_size);
-> > +
-> > +       err =3D ixxat_usb_send_cmd(dev, le16_to_cpu(cmd->req.port), cmd=
-, snd_size,
-> > +                                &cmd->res, rcv_size);
-> > +       if (err)
-> > +               goto fail;
-> > +
-> > +       if (dev_info) {
-> > +               memcpy(dev_info->device_id, &cmd->info.device_id,
-> > +                      sizeof(cmd->info.device_id));
-> > +               memcpy(dev_info->device_name, &cmd->info.device_name,
-> > +                      sizeof(cmd->info.device_name));
-> > +               dev_info->device_fpga_version =3D cmd->info.device_fpga=
-_version;
-> > +               dev_info->device_version =3D cmd->info.device_version;
-> > +       }
-> > +
-> > +fail:
-> > +       kfree(cmd);
-> > +       return err;
-> > +}
-> > +
-> > +static int ixxat_usb_start_ctrl(struct ixxat_usb_device *dev, u32 *tim=
-e_ref)
-> > +{
-> > +       const u16 port =3D dev->ctrl_index;
-> > +       int err;
-> > +       struct ixxat_usb_start_cmd *cmd;
-> > +       const u32 cmd_size =3D sizeof(*cmd);
-> > +       const u32 req_size =3D sizeof(cmd->req);
-> > +       const u32 rcv_size =3D cmd_size - req_size;
-> > +       const u32 snd_size =3D req_size + sizeof(cmd->res);
-> > +
-> > +       cmd =3D kmalloc(cmd_size, GFP_KERNEL);
-> > +       if (!cmd)
-> > +               return -ENOMEM;
-> > +
-> > +       ixxat_usb_setup_cmd(&cmd->req, &cmd->res);
-> > +       cmd->req.code =3D cpu_to_le32(IXXAT_USB_CAN_CMD_START);
-> > +       cmd->req.port =3D cpu_to_le16(port);
-> > +       cmd->res.res_size =3D cpu_to_le32(rcv_size);
-> > +       cmd->time =3D 0;
-> > +
-> > +       err =3D ixxat_usb_send_cmd(dev->udev, port, cmd, snd_size, &cmd=
-->res,
-> > +                                rcv_size);
-> > +       if (err)
-> > +               goto fail;
-> > +
-> > +       if (time_ref)
-> > +               *time_ref =3D le32_to_cpu(cmd->time);
-> > +
-> > +fail:
-> > +       kfree(cmd);
-> > +       return err;
-> > +}
-> > +
-> > +static int ixxat_usb_stop_ctrl(struct ixxat_usb_device *dev)
-> > +{
-> > +       const u16 port =3D dev->ctrl_index;
-> > +       int err;
-> > +       struct ixxat_usb_stop_cmd *cmd;
-> > +       const u32 rcv_size =3D sizeof(cmd->res);
-> > +       const u32 snd_size =3D sizeof(*cmd);
-> > +
-> > +       cmd =3D kmalloc(snd_size, GFP_KERNEL);
-> > +       if (!cmd)
-> > +               return -ENOMEM;
-> > +
-> > +       ixxat_usb_setup_cmd(&cmd->req, &cmd->res);
-> > +       cmd->req.size =3D cpu_to_le32(snd_size - rcv_size);
-> > +       cmd->req.code =3D cpu_to_le32(IXXAT_USB_CAN_CMD_STOP);
-> > +       cmd->req.port =3D cpu_to_le16(port);
-> > +       cmd->action =3D cpu_to_le32(IXXAT_USB_STOP_ACTION_CLEARALL);
-> > +
-> > +       err =3D ixxat_usb_send_cmd(dev->udev, port, cmd, snd_size, &cmd=
-->res,
-> > +                                rcv_size);
-> > +       kfree(cmd);
-> > +       return err;
-> > +}
-> > +
-> > +static int ixxat_usb_power_ctrl(struct usb_device *dev, u8 mode)
-> > +{
-> > +       int err;
-> > +       struct ixxat_usb_power_cmd *cmd;
-> > +       const u32 rcv_size =3D sizeof(cmd->res);
-> > +       const u32 snd_size =3D sizeof(*cmd);
-> > +
-> > +       cmd =3D kmalloc(snd_size, GFP_KERNEL);
-> > +       if (!cmd)
-> > +               return -ENOMEM;
-> > +
-> > +       ixxat_usb_setup_cmd(&cmd->req, &cmd->res);
-> > +       cmd->req.size =3D cpu_to_le32(snd_size - rcv_size);
-> > +       cmd->req.code =3D cpu_to_le32(IXXAT_USB_BRD_CMD_POWER);
-> > +       cmd->mode =3D mode;
-> > +
-> > +       err =3D ixxat_usb_send_cmd(dev, le16_to_cpu(cmd->req.port), cmd=
-, snd_size,
-> > +                                &cmd->res, rcv_size);
-> > +       kfree(cmd);
-> > +       return err;
-> > +}
-> > +
-> > +static int ixxat_usb_reset_ctrl(struct ixxat_usb_device *dev)
-> > +{
-> > +       const u16 port =3D dev->ctrl_index;
-> > +       int err;
-> > +       struct ixxat_usb_dal_cmd *cmd;
-> > +       const u32 snd_size =3D sizeof(*cmd);
-> > +       const u32 rcv_size =3D sizeof(cmd->res);
-> > +
-> > +       cmd =3D kmalloc(snd_size, GFP_KERNEL);
-> > +       if (!cmd)
-> > +               return -ENOMEM;
-> > +
-> > +       ixxat_usb_setup_cmd(&cmd->req, &cmd->res);
-> > +       cmd->req.code =3D cpu_to_le32(IXXAT_USB_CAN_CMD_RESET);
-> > +       cmd->req.port =3D cpu_to_le16(port);
-> > +
-> > +       err =3D ixxat_usb_send_cmd(dev->udev, port, cmd, snd_size, &cmd=
-->res,
-> > +                                rcv_size);
-> > +       kfree(cmd);
-> > +       return err;
-> > +}
-> > +
-> > +static void ixxat_usb_stop_queue(struct ixxat_usb_device *dev)
-> > +{
-> > +       struct net_device *netdev =3D dev->netdev;
-> > +       u32 i;
-> > +
-> > +       netif_stop_queue(netdev);
-> > +       usb_kill_anchored_urbs(&dev->rx_submitted);
-> > +       usb_kill_anchored_urbs(&dev->tx_submitted);
-> > +       atomic_set(&dev->active_tx_urbs, 0);
-> > +       for (i =3D 0; i < IXXAT_USB_MAX_TX_URBS; i++) {
-> > +               if (dev->tx_contexts[i].echo_index !=3D IXXAT_USB_MAX_T=
-X_URBS) {
-> > +                       can_free_echo_skb(netdev, i, NULL);
-> > +                       dev->tx_contexts[i].echo_index =3D IXXAT_USB_MA=
-X_TX_URBS;
-> > +               }
-> > +       }
-> > +}
-> > +
-> > +static int ixxat_usb_restart(struct ixxat_usb_device *dev)
-> > +{
-> > +       int err;
-> > +       struct net_device *netdev =3D dev->netdev;
-> > +       u32 t;
-> > +
-> > +       ixxat_usb_stop_queue(dev);
-> > +       err =3D ixxat_usb_stop_ctrl(dev);
-> > +       if (err)
-> > +               goto fail;
-> > +
-> > +       err =3D ixxat_usb_start_ctrl(dev, &t);
-> > +       if (err)
-> > +               goto fail;
-> > +
-> > +       dev->can.state =3D CAN_STATE_ERROR_ACTIVE;
-> > +       netif_wake_queue(netdev);
-> > +
-> > +fail:
-> > +       return err;
-> > +}
-> > +
-> > +static int ixxat_usb_set_mode(struct net_device *netdev, enum can_mode=
- mode)
-> > +{
-> > +       struct ixxat_usb_device *dev =3D netdev_priv(netdev);
-> > +
-> > +       if (mode !=3D CAN_MODE_START)
-> > +               return -EOPNOTSUPP;
-> > +
-> > +       return ixxat_usb_restart(dev);
-> > +}
-> > +
-> > +static int ixxat_usb_get_berr_counter(const struct net_device *netdev,
-> > +                                     struct can_berr_counter *bec)
-> > +{
-> > +       struct ixxat_usb_device *dev =3D netdev_priv(netdev);
-> > +
-> > +       *bec =3D dev->bec;
-> > +       return 0;
-> > +}
-> > +
-> > +static int ixxat_usb_handle_canmsg(struct ixxat_usb_device *dev,
-> > +                                  struct ixxat_can_msg *rx)
-> > +{
-> > +       const u32 ixx_flags =3D le32_to_cpu(rx->base.flags);
-> > +       const u8 dlc =3D IXXAT_USB_DECODE_DLC(ixx_flags);
-> > +       struct canfd_frame *cf;
-> > +       struct net_device *netdev =3D dev->netdev;
-> > +       struct sk_buff *skb;
-> > +       u8 flags =3D 0;
-> > +       u8 len;
-> > +       u8 min_size;
-> > +
-> > +       if (ixx_flags & IXXAT_USB_FDMSG_FLAGS_EDL) {
-> > +               if (ixx_flags & IXXAT_USB_FDMSG_FLAGS_FDR)
-> > +                       flags |=3D CANFD_BRS;
-> > +
-> > +               if (ixx_flags & IXXAT_USB_FDMSG_FLAGS_ESI)
-> > +                       flags |=3D CANFD_ESI;
-> > +
-> > +               len =3D can_fd_dlc2len(dlc);
-> > +       } else {
-> > +               len =3D can_cc_dlc2len(dlc);
-> > +       }
-> > +
-> > +       min_size =3D sizeof(rx->base) + len;
-> > +
-> > +       if (dev->adapter =3D=3D &usb2can_cl1)
-> > +               min_size +=3D sizeof(rx->cl1) - sizeof(rx->cl1.data);
-> > +       else
-> > +               min_size +=3D sizeof(rx->cl2) - sizeof(rx->cl2.data);
-> > +
-> > +       if (rx->base.size < (min_size - 1)) {
-> > +               netdev_err(netdev, "Error: Invalid can data message siz=
-e\n");
-> > +               return -EBADMSG;
-> > +       }
-> > +
-> > +       if (ixx_flags & IXXAT_USB_MSG_FLAGS_OVR) {
-> > +               netdev->stats.rx_over_errors++;
-> > +               netdev->stats.rx_errors++;
-> > +               netdev_err(netdev, "Error: Message overflow\n");
-> > +       }
-> > +
-> > +       if (ixx_flags & IXXAT_USB_FDMSG_FLAGS_EDL)
-> > +               skb =3D alloc_canfd_skb(netdev, &cf);
-> > +       else
-> > +               skb =3D alloc_can_skb(netdev, (struct can_frame **)&cf);
-> > +
-> > +       if (!skb)
-> > +               return -ENOMEM;
-> > +
-> > +       cf->can_id =3D le32_to_cpu(rx->base.msg_id);
-> > +       cf->len =3D len;
-> > +       cf->flags |=3D flags;
-> > +
-> > +       if (ixx_flags & IXXAT_USB_MSG_FLAGS_EXT)
-> > +               cf->can_id |=3D CAN_EFF_FLAG;
-> > +
-> > +       if (ixx_flags & IXXAT_USB_MSG_FLAGS_RTR) {
-> > +               cf->can_id |=3D CAN_RTR_FLAG;
-> > +       } else {
-> > +               if (dev->adapter =3D=3D &usb2can_cl1)
-> > +                       memcpy(cf->data, rx->cl1.data, len);
-> > +               else
-> > +                       memcpy(cf->data, rx->cl2.data, len);
-> > +       }
-> > +
-> > +       ixxat_usb_get_ts_tv(dev, le32_to_cpu(rx->base.time), &skb->tsta=
-mp);
-> > +
-> > +       netdev->stats.rx_packets++;
-> > +       netdev->stats.rx_bytes +=3D cf->len; =20
->=20
-> Do not increase the rx_bytes count when receiving a remove frame.
-
-O.k.
-
->=20
-> > +       netif_rx(skb);
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static int ixxat_usb_handle_status(struct ixxat_usb_device *dev,
-> > +                                  struct ixxat_can_msg *rx)
-> > +{
-> > +       struct net_device *netdev =3D dev->netdev;
-> > +       struct can_frame *can_frame;
-> > +       struct sk_buff *skb;
-> > +       enum can_state new_state =3D CAN_STATE_ERROR_ACTIVE;
-> > +       u32 raw_status;
-> > +       u8 min_size =3D sizeof(rx->base) + sizeof(raw_status);
-> > +
-> > +       if (dev->adapter =3D=3D &usb2can_cl1)
-> > +               min_size +=3D sizeof(rx->cl1) - sizeof(rx->cl1.data);
-> > +       else
-> > +               min_size +=3D sizeof(rx->cl2) - sizeof(rx->cl2.data);
-> > +
-> > +       if (rx->base.size < (min_size - 1)) {
-> > +               netdev_err(netdev, "Error: Invalid can status message s=
-ize\n");
-> > +               return -EBADMSG;
-> > +       }
-> > +
-> > +       if (dev->adapter =3D=3D &usb2can_cl1)
-> > +               raw_status =3D le32_to_cpup((__le32 *)rx->cl1.data);
-> > +       else
-> > +               raw_status =3D le32_to_cpup((__le32 *)rx->cl2.data); =20
->=20
-> Use a union in the declaration of struct ixxat_can_msg_cl1 and struct
-> ixxat_can_msg_cl2 and add a:
->=20
->          __le32 status;
->=20
-> field in both of those unions.
->=20
-
-O.k.
-
-> > +
-> > +       if (raw_status !=3D IXXAT_USB_CAN_STATUS_OK) {
-> > +               if (raw_status & IXXAT_USB_CAN_STATUS_BUSOFF) {
-> > +                       dev->can.can_stats.bus_off++;
-> > +                       new_state =3D CAN_STATE_BUS_OFF;
-> > +                       can_bus_off(netdev);
-> > +               } else {
-> > +                       if (raw_status & IXXAT_USB_CAN_STATUS_ERRLIM) {
-> > +                               dev->can.can_stats.error_warning++;
-> > +                               new_state =3D CAN_STATE_ERROR_WARNING;
-> > +                       }
-> > +
-> > +                       if (raw_status & IXXAT_USB_CAN_STATUS_ERR_PAS) {
-> > +                               dev->can.can_stats.error_passive++;
-> > +                               new_state =3D CAN_STATE_ERROR_PASSIVE;
-> > +                       }
-> > +
-> > +                       if (raw_status & IXXAT_USB_CAN_STATUS_OVERRUN)
-> > +                               new_state =3D CAN_STATE_MAX;
-> > +               }
-> > +       }
-> > +
-> > +       if (new_state =3D=3D CAN_STATE_ERROR_ACTIVE) {
-> > +               dev->bec.txerr =3D 0;
-> > +               dev->bec.rxerr =3D 0;
-> > +       }
-> > +
-> > +       if (new_state !=3D CAN_STATE_MAX)
-> > +               dev->can.state =3D new_state;
-> > +
-> > +       skb =3D alloc_can_err_skb(netdev, &can_frame);
-> > +       if (!skb)
-> > +               return -ENOMEM;
-> > +
-> > +       switch (new_state) {
-> > +       case CAN_STATE_ERROR_ACTIVE:
-> > +               can_frame->can_id |=3D CAN_ERR_CRTL;
-> > +               can_frame->data[1] |=3D CAN_ERR_CRTL_ACTIVE;
-> > +               break;
-> > +       case CAN_STATE_ERROR_WARNING:
-> > +               can_frame->can_id |=3D CAN_ERR_CRTL;
-> > +               can_frame->data[1] |=3D CAN_ERR_CRTL_TX_WARNING;
-> > +               can_frame->data[1] |=3D CAN_ERR_CRTL_RX_WARNING;
-> > +               break;
-> > +       case CAN_STATE_ERROR_PASSIVE:
-> > +               can_frame->can_id |=3D CAN_ERR_CRTL;
-> > +               can_frame->data[1] |=3D CAN_ERR_CRTL_TX_PASSIVE;
-> > +               can_frame->data[1] |=3D CAN_ERR_CRTL_RX_PASSIVE;
-> > +               break;
-> > +       case CAN_STATE_BUS_OFF:
-> > +               can_frame->can_id |=3D CAN_ERR_BUSOFF;
-> > +               break;
-> > +       case CAN_STATE_MAX:
-> > +               can_frame->can_id |=3D CAN_ERR_CRTL;
-> > +               can_frame->data[1] |=3D CAN_ERR_CRTL_RX_OVERFLOW;
-> > +               break;
-> > +       default:
-> > +               netdev_err(netdev, "Error: Unhandled can status %d\n",
-> > +                          new_state);
-> > +               break;
-> > +       }
-> > +
-> > +       netdev->stats.rx_packets++;
-> > +       netdev->stats.rx_bytes +=3D can_frame->can_dlc; =20
->=20
-> Do not increase the statistics when generating an SocketCAN error frame.
-
-O.k.
-
->=20
-> > +       netif_rx(skb);
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static int ixxat_usb_handle_error(struct ixxat_usb_device *dev,
-> > +                                 struct ixxat_can_msg *rx)
-> > +{
-> > +       struct net_device *netdev =3D dev->netdev;
-> > +       struct can_frame *can_frame;
-> > +       struct sk_buff *skb;
-> > +       u8 raw_error;
-> > +       u8 min_size =3D sizeof(rx->base) + IXXAT_USB_CAN_ERROR_LEN;
-> > +
-> > +       if (dev->adapter =3D=3D &usb2can_cl1)
-> > +               min_size +=3D sizeof(rx->cl1) - sizeof(rx->cl1.data);
-> > +       else
-> > +               min_size +=3D sizeof(rx->cl2) - sizeof(rx->cl2.data);
-> > +
-> > +       if (rx->base.size < (min_size - 1)) {
-> > +               netdev_err(netdev, "Error: Invalid can error message si=
-ze\n");
-> > +               return -EBADMSG;
-> > +       }
-> > +
-> > +       if (dev->can.state =3D=3D CAN_STATE_BUS_OFF)
-> > +               return 0;
-> > +
-> > +       if (dev->adapter =3D=3D &usb2can_cl1) {
-> > +               raw_error =3D rx->cl1.data[IXXAT_USB_CAN_ERROR_CODE];
-> > +               dev->bec.rxerr =3D rx->cl1.data[IXXAT_USB_CAN_ERROR_COU=
-NTER_RX];
-> > +               dev->bec.txerr =3D rx->cl1.data[IXXAT_USB_CAN_ERROR_COU=
-NTER_TX];
-> > +       } else {
-> > +               raw_error =3D rx->cl2.data[IXXAT_USB_CAN_ERROR_CODE];
-> > +               dev->bec.rxerr =3D rx->cl2.data[IXXAT_USB_CAN_ERROR_COU=
-NTER_RX];
-> > +               dev->bec.txerr =3D rx->cl2.data[IXXAT_USB_CAN_ERROR_COU=
-NTER_TX];
-> > +       }
-> > +
-> > +       if (raw_error =3D=3D IXXAT_USB_CAN_ERROR_ACK)
-> > +               netdev->stats.tx_errors++;
-> > +       else
-> > +               netdev->stats.rx_errors++;
-> > +
-> > +       skb =3D alloc_can_err_skb(netdev, &can_frame);
-> > +       if (!skb)
-> > +               return -ENOMEM;
-> > +
-> > +       switch (raw_error) {
-> > +       case IXXAT_USB_CAN_ERROR_ACK:
-> > +               can_frame->can_id |=3D CAN_ERR_ACK;
-> > +               break;
-> > +       case IXXAT_USB_CAN_ERROR_BIT:
-> > +               can_frame->can_id |=3D CAN_ERR_PROT;
-> > +               can_frame->data[2] |=3D CAN_ERR_PROT_BIT;
-> > +               break;
-> > +       case IXXAT_USB_CAN_ERROR_CRC:
-> > +               can_frame->can_id |=3D CAN_ERR_PROT;
-> > +               can_frame->data[3] |=3D CAN_ERR_PROT_LOC_CRC_SEQ;
-> > +               break;
-> > +       case IXXAT_USB_CAN_ERROR_FORM:
-> > +               can_frame->can_id |=3D CAN_ERR_PROT;
-> > +               can_frame->data[2] |=3D CAN_ERR_PROT_FORM;
-> > +               break;
-> > +       case IXXAT_USB_CAN_ERROR_STUFF:
-> > +               can_frame->can_id |=3D CAN_ERR_PROT;
-> > +               can_frame->data[2] |=3D CAN_ERR_PROT_STUFF;
-> > +               break;
-> > +       default:
-> > +               can_frame->can_id |=3D CAN_ERR_PROT;
-> > +               can_frame->data[2] |=3D CAN_ERR_PROT_UNSPEC;
-> > +               break;
-> > +       }
-> > +
-> > +       netdev->stats.rx_packets++;
-> > +       netdev->stats.rx_bytes +=3D can_frame->can_dlc; =20
->=20
-> Do not increase the statistics when generating an SocketCAN error frame.
->=20
-
-O.k.
-
-> > +       netif_rx(skb);
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static void ixxat_usb_decode_buf(struct urb *urb)
-> > +{
-> > +       struct ixxat_usb_device *dev =3D urb->context;
-> > +       struct net_device *netdev =3D dev->netdev;
-> > +       struct ixxat_can_msg *can_msg;
-> > +       int err =3D 0;
-> > +       u32 pos =3D 0;
-> > +       u8 *data =3D urb->transfer_buffer;
-> > +
-> > +       while (pos < urb->actual_length) {
-> > +               u32 time;
-> > +               u8 size;
-> > +               u8 type;
-> > +
-> > +               can_msg =3D (struct ixxat_can_msg *)&data[pos];
-> > +               if (!can_msg || !can_msg->base.size) {
-> > +                       err =3D -ENOTSUPP;
-
-checkpatch.pl warns about this one:
-
-	WARNING: ENOTSUPP is not a SUSV4 error code, prefer EOPNOTSUPP
-	#1045: FILE: drivers/net/can/usb/ixxat_usb/ixxat_usb_core.c:644:
-	+			err =3D -ENOTSUPP;
-
-Is EOPNOTSUPP appropriate (or EBADMSG as below)?
-=20
-> > +                       netdev_err(netdev, "Error %d: Unsupported usb m=
-sg\n",
-> > +                                  err);
-> > +                       break;
-> > +               }
-> > +
-> > +               size =3D can_msg->base.size + 1;
-> > +               if (size < sizeof(can_msg->base) ||
-> > +                   (pos + size) > urb->actual_length) {
-> > +                       err =3D -EBADMSG;
-> > +                       netdev_err(netdev,
-> > +                                  "Error %d: Invalid usb message size\=
-n",
-> > +                                  err);
-> > +                       break;
-> > +               }
-> > +
-> > +               type =3D le32_to_cpu(can_msg->base.flags);
-> > +               type &=3D IXXAT_USB_MSG_FLAGS_TYPE;
-> > +               time =3D le32_to_cpu(can_msg->base.time);
-> > +
-> > +               switch (type) {
-> > +               case IXXAT_USB_CAN_DATA:
-> > +                       err =3D ixxat_usb_handle_canmsg(dev, can_msg);
-> > +                       if (err)
-> > +                               goto fail;
-> > +                       break;
-> > +               case IXXAT_USB_CAN_STATUS:
-> > +                       err =3D ixxat_usb_handle_status(dev, can_msg);
-> > +                       if (err)
-> > +                               goto fail;
-> > +                       break;
-> > +               case IXXAT_USB_CAN_ERROR:
-> > +                       err =3D ixxat_usb_handle_error(dev, can_msg);
-> > +                       if (err)
-> > +                               goto fail;
-> > +                       break;
-> > +               case IXXAT_USB_CAN_TIMEOVR:
-> > +                       ixxat_usb_get_ts_tv(dev, time, NULL);
-> > +                       break;
-> > +               case IXXAT_USB_CAN_INFO:
-> > +               case IXXAT_USB_CAN_WAKEUP:
-> > +               case IXXAT_USB_CAN_TIMERST:
-> > +                       break;
-> > +               default:
-> > +                       netdev_err(netdev,
-> > +                                  "Unhandled rec type 0x%02x (%d): ign=
-ored\n", =20
->=20
-> Do not use parenthesis in log messages.
->=20
-> Ref: https://www.kernel.org/doc/html/latest/process/coding-style.html#pri=
-nting-kernel-messages
->=20
->   Printing numbers in parentheses (%d) adds no value and should be avoide=
-d.
->=20
-> I do not think you need to print the same value in both hexadecimal
-> and decimal. Better to simply remove the decimal one.
-
-O.k.
-
->=20
-> > +                                  type, type);
-> > +                       break;
-> > +               }
-> > +
-> > +               pos +=3D size;
-> > +       }
-> > +
-> > +fail:
-> > +       if (err)
-> > +               netdev_err(netdev, "Error %d: Buffer decoding failed\n"=
-, err);
-> > +}
-> > +
-> > +static int ixxat_usb_encode_msg(struct ixxat_usb_device *dev,
-> > +                               struct sk_buff *skb, u8 *obuf)
-> > +{
-> > +       int size;
-> > +       struct canfd_frame *cf =3D (struct canfd_frame *)skb->data;
-> > +       struct ixxat_can_msg can_msg =3D { {0} }; =20
->=20
-> I think that there was a bug in sparse in the part requiring you to do
-> {{ 0 }} initialization when the first member of the structure was
-> itself a structure. This being fixed, you can just do:
->=20
->          struct ixxat_can_msg can_msg =3D { 0 };
->=20
-
-O.k.
-
-> > +       struct ixxat_can_msg_base *msg_base =3D &can_msg.base;
-> > +       u32 flags =3D 0;
-> > +       u32 msg_id =3D 0;
-> > +
-> > +       if (cf->can_id & CAN_RTR_FLAG)
-> > +               flags |=3D IXXAT_USB_MSG_FLAGS_RTR;
-> > +
-> > +       if (cf->can_id & CAN_EFF_FLAG) {
-> > +               flags |=3D IXXAT_USB_MSG_FLAGS_EXT;
-> > +               msg_id =3D cf->can_id & CAN_EFF_MASK;
-> > +       } else {
-> > +               msg_id =3D cf->can_id & CAN_SFF_MASK;
-> > +       }
-> > +
-> > +       if (can_is_canfd_skb(skb)) {
-> > +               flags |=3D IXXAT_USB_FDMSG_FLAGS_EDL;
-> > +
-> > +               if (!(cf->can_id & CAN_RTR_FLAG) && (cf->flags & CANFD_=
-BRS))
-> > +                       flags |=3D IXXAT_USB_FDMSG_FLAGS_FDR;
-> > +
-> > +               flags |=3D IXXAT_USB_ENCODE_DLC(can_fd_len2dlc(cf->len)=
-);
-> > +       } else {
-> > +               flags |=3D IXXAT_USB_ENCODE_DLC(cf->len);
-> > +       }
-> > +
-> > +       msg_base->flags =3D cpu_to_le32(flags);
-> > +       msg_base->msg_id =3D cpu_to_le32(msg_id);
-> > +       msg_base->size =3D sizeof(*msg_base) + cf->len - 1;
-> > +       if (dev->adapter =3D=3D &usb2can_cl1) {
-> > +               msg_base->size +=3D sizeof(can_msg.cl1);
-> > +               msg_base->size -=3D sizeof(can_msg.cl1.data);
-> > +               memcpy(can_msg.cl1.data, cf->data, cf->len);
-> > +       } else {
-> > +               msg_base->size +=3D sizeof(can_msg.cl2);
-> > +               msg_base->size -=3D sizeof(can_msg.cl2.data);
-> > +               memcpy(can_msg.cl2.data, cf->data, cf->len);
-> > +       }
-> > +
-> > +       size =3D msg_base->size + 1;
-> > +       memcpy(obuf, &can_msg, size);
-> > +       return size;
-> > +}
-> > +
-> > +static void ixxat_usb_read_bulk_callback(struct urb *urb)
-> > +{
-> > +       struct ixxat_usb_device *dev =3D urb->context;
-> > +       const struct ixxat_usb_adapter *adapter =3D dev->adapter;
-> > +       struct net_device *netdev =3D dev->netdev;
-> > +       struct usb_device *udev =3D dev->udev;
-> > +       int err;
-> > +
-> > +       if (!netif_device_present(netdev))
-> > +               return;
-> > +
-> > +       switch (urb->status) {
-> > +       case 0: /* success */
-> > +               break;
-> > +       case -EPROTO:
-> > +       case -EILSEQ:
-> > +       case -ENOENT:
-> > +       case -ECONNRESET:
-> > +       case -ESHUTDOWN:
-> > +               return;
-> > +       default:
-> > +               netdev_err(netdev, "Rx urb aborted /(%d)\n", urb->statu=
-s); =20
->=20
-> Do not use parenthesis in log messages.
->=20
-> Ref: https://www.kernel.org/doc/html/latest/process/coding-style.html#pri=
-nting-kernel-messages
->=20
->   Printing numbers in parentheses (%d) adds no value and should be avoide=
-d.
->=20
-
-O.k., seems a common pattern, at least the same logging used in peak_usb,
-change it there as well (but seems you answered this in another thread
-already '...but bonus points if you send a clean-up patch to fix
-the existing log messages...')?
-
-> > +               goto resubmit_urb;
-> > +       }
-> > +
-> > +       if (urb->actual_length > 0)
-> > +               if (dev->state & IXXAT_USB_STATE_STARTED)
-> > +                       ixxat_usb_decode_buf(urb);
-> > +
-> > +resubmit_urb:
-> > +       usb_fill_bulk_urb(urb, udev, usb_rcvbulkpipe(udev, dev->ep_msg_=
-in),
-> > +                         urb->transfer_buffer, adapter->buffer_size_rx,
-> > +                         ixxat_usb_read_bulk_callback, dev);
-> > +
-> > +       usb_anchor_urb(urb, &dev->rx_submitted);
-> > +       err =3D usb_submit_urb(urb, GFP_ATOMIC);
-> > +       if (!err)
-> > +               return;
-> > +
-> > +       usb_unanchor_urb(urb);
-> > +
-> > +       if (err =3D=3D -ENODEV)
-> > +               netif_device_detach(netdev);
-> > +       else
-> > +               netdev_err(netdev,
-> > +                          "Error %d: Failed to resubmit read bulk urb\=
-n", err);
-> > +}
-> > +
-> > +static void ixxat_usb_write_bulk_callback(struct urb *urb)
-> > +{
-> > +       struct ixxat_tx_urb_context *context =3D urb->context;
-> > +       struct ixxat_usb_device *dev;
-> > +       struct net_device *netdev;
-> > +
-> > +       if (WARN_ON(!context))
-> > +               return;
-> > +
-> > +       dev =3D context->dev;
-> > +       netdev =3D dev->netdev;
-> > +
-> > +       if (!netif_device_present(netdev))
-> > +               return;
-> > +
-> > +       if (!urb->status) {
-> > +               netdev->stats.tx_packets++;
-> > +               netdev->stats.tx_bytes +=3D can_get_echo_skb(netdev, co=
-ntext->echo_index, NULL);
-> > +       } else {
-> > +               netdev_err(netdev, "Error %d: Tx urb aborted\n", urb->s=
-tatus);
-> > +               can_free_echo_skb(netdev, context->echo_index, NULL);
-> > +       }
-> > +
-> > +       context->echo_index =3D IXXAT_USB_MAX_TX_URBS;
-> > +       atomic_dec(&dev->active_tx_urbs);
-> > +
-> > +       if (!urb->status)
-> > +               netif_wake_queue(netdev);
-> > +}
-> > +
-> > +static netdev_tx_t ixxat_usb_start_xmit(struct sk_buff *skb,
-> > +                                       struct net_device *netdev)
-> > +{
-> > +       int err;
-> > +       int size;
-> > +       struct ixxat_usb_device *dev =3D netdev_priv(netdev);
-> > +       struct ixxat_tx_urb_context *context =3D NULL;
-> > +       struct net_device_stats *stats =3D &netdev->stats;
-> > +       struct urb *urb;
-> > +       u8 *obuf;
-> > +       u32 i;
-> > +
-> > +       if (can_dropped_invalid_skb(netdev, skb))
-> > +               return NETDEV_TX_OK;
-> > +
-> > +       for (i =3D 0; i < IXXAT_USB_MAX_TX_URBS; i++) {
-> > +               if (dev->tx_contexts[i].echo_index =3D=3D IXXAT_USB_MAX=
-_TX_URBS) {
-> > +                       context =3D dev->tx_contexts + i;
-> > +                       break;
-> > +               }
-> > +       }
-> > +
-> > +       if (WARN_ON_ONCE(!context))
-> > +               return NETDEV_TX_BUSY;
-> > +
-> > +       urb =3D context->urb;
-> > +       obuf =3D urb->transfer_buffer;
-> > +
-> > +       size =3D ixxat_usb_encode_msg(dev, skb, obuf);
-> > +
-> > +       context->echo_index =3D i;
-> > +
-> > +       urb->transfer_buffer_length =3D size;
-> > +       usb_anchor_urb(urb, &dev->tx_submitted);
-> > +       can_put_echo_skb(skb, netdev, i, 0);
-> > +       atomic_inc(&dev->active_tx_urbs);
-> > +
-> > +       err =3D usb_submit_urb(urb, GFP_ATOMIC);
-> > +       if (err) {
-> > +               can_free_echo_skb(netdev, i, NULL);
-> > +               usb_unanchor_urb(urb);
-> > +               atomic_dec(&dev->active_tx_urbs);
-> > +
-> > +               context->echo_index =3D IXXAT_USB_MAX_TX_URBS;
-> > +
-> > +               if (err =3D=3D -ENODEV) {
-> > +                       netif_device_detach(netdev);
-> > +               } else {
-> > +                       stats->tx_dropped++;
-> > +                       netdev_err(netdev,
-> > +                                  "Error %d: Submitting tx-urb failed\=
-n", err);
-> > +               }
-> > +       } else {
-> > +               if (atomic_read(&dev->active_tx_urbs) >=3D IXXAT_USB_MA=
-X_TX_URBS)
-> > +                       netif_stop_queue(netdev);
-> > +       }
-> > +
-> > +       return NETDEV_TX_OK;
-> > +}
-> > +
-> > +static int ixxat_usb_setup_rx_urbs(struct ixxat_usb_device *dev)
-> > +{
-> > +       int i;
-> > +       int err =3D 0;
-> > +       const struct ixxat_usb_adapter *adapter =3D dev->adapter;
-> > +       struct net_device *netdev =3D dev->netdev;
-> > +       struct usb_device *udev =3D dev->udev;
-> > +
-> > +       for (i =3D 0; i < IXXAT_USB_MAX_RX_URBS; i++) {
-> > +               struct urb *urb;
-> > +               u8 *buf;
-> > +
-> > +               urb =3D usb_alloc_urb(0, GFP_KERNEL);
-> > +               if (!urb) {
-> > +                       err =3D -ENOMEM;
-> > +                       netdev_err(netdev, "Error %d: No memory for URB=
-s\n",
-> > +                                  err);
-> > +                       break;
-> > +               }
-> > +
-> > +               buf =3D kmalloc(adapter->buffer_size_rx, GFP_KERNEL);
-> > +               if (!buf) {
-> > +                       usb_free_urb(urb);
-> > +                       err =3D -ENOMEM;
-> > +                       netdev_err(netdev,
-> > +                                  "Error %d: No memory for USB-buffer\=
-n", err);
-> > +                       break;
-> > +               }
-> > +
-> > +               usb_fill_bulk_urb(urb, udev,
-> > +                                 usb_rcvbulkpipe(udev, dev->ep_msg_in)=
-, buf,
-> > +                                 adapter->buffer_size_rx,
-> > +                                 ixxat_usb_read_bulk_callback, dev);
-> > +
-> > +               urb->transfer_flags |=3D URB_FREE_BUFFER;
-> > +               usb_anchor_urb(urb, &dev->rx_submitted);
-> > +
-> > +               err =3D usb_submit_urb(urb, GFP_KERNEL);
-> > +               if (err) {
-> > +                       usb_unanchor_urb(urb);
-> > +                       kfree(buf);
-> > +                       usb_free_urb(urb);
-> > +
-> > +                       if (err =3D=3D -ENODEV)
-> > +                               netif_device_detach(netdev);
-> > +
-> > +                       break;
-> > +               }
-> > +
-> > +               usb_free_urb(urb);
-> > +       }
-> > +
-> > +       if (i =3D=3D 0)
-> > +               netdev_err(netdev, "Error: Couldn't setup any rx-URBs\n=
-");
-> > +
-> > +       return err;
-> > +}
-> > +
-> > +static int ixxat_usb_setup_tx_urbs(struct ixxat_usb_device *dev)
-> > +{
-> > +       int i;
-> > +       int ret =3D 0;
-> > +       const struct ixxat_usb_adapter *adapter =3D dev->adapter;
-> > +       struct net_device *netdev =3D dev->netdev;
-> > +       struct usb_device *udev =3D dev->udev;
-> > +
-> > +       for (i =3D 0; i < IXXAT_USB_MAX_TX_URBS; i++) {
-> > +               struct ixxat_tx_urb_context *context;
-> > +               struct urb *urb;
-> > +               u8 *buf;
-> > +
-> > +               urb =3D usb_alloc_urb(0, GFP_KERNEL);
-> > +               if (!urb) {
-> > +                       ret =3D -ENOMEM;
-> > +                       netdev_err(netdev, "Error %d: No memory for URB=
-s\n",
-> > +                                  ret);
-> > +                       break;
-> > +               }
-> > +
-> > +               buf =3D kmalloc(adapter->buffer_size_tx, GFP_KERNEL);
-> > +               if (!buf) {
-> > +                       usb_free_urb(urb);
-> > +                       ret =3D -ENOMEM;
-> > +                       netdev_err(netdev,
-> > +                                  "Error %d: No memory for USB-buffer\=
-n", ret);
-> > +                       break;
-> > +               }
-> > +
-> > +               context =3D dev->tx_contexts + i;
-> > +               context->dev =3D dev;
-> > +               context->urb =3D urb;
-> > +
-> > +               usb_fill_bulk_urb(urb, udev,
-> > +                                 usb_sndbulkpipe(udev, dev->ep_msg_out=
-), buf,
-> > +                                 adapter->buffer_size_tx,
-> > +                                 ixxat_usb_write_bulk_callback, contex=
-t);
-> > +
-> > +               urb->transfer_flags |=3D URB_FREE_BUFFER;
-> > +       }
-> > +
-> > +       if (i =3D=3D 0) {
-> > +               netdev_err(netdev, "Error: Couldn't setup any tx-URBs\n=
-");
-> > +               usb_kill_anchored_urbs(&dev->rx_submitted);
-> > +       }
-> > +
-> > +       return ret;
-> > +}
-> > +
-> > +static void ixxat_usb_disconnect(struct usb_interface *intf)
-> > +{
-> > +       struct ixxat_usb_device *dev;
-> > +       struct ixxat_usb_device *prev_dev;
-> > +
-> > +       /* unregister the given device and all previous devices */
-> > +       for (dev =3D usb_get_intfdata(intf); dev; dev =3D prev_dev) {
-> > +               prev_dev =3D dev->prev_dev;
-> > +               unregister_netdev(dev->netdev);
-> > +               free_candev(dev->netdev);
-> > +       }
-> > +
-> > +       usb_set_intfdata(intf, NULL);
-> > +}
-> > +
-> > +static int ixxat_usb_start(struct ixxat_usb_device *dev)
-> > +{
-> > +       int err;
-> > +       int i;
-> > +       u32 time_ref =3D 0;
-> > +       const struct ixxat_usb_adapter *adapter =3D dev->adapter;
-> > +
-> > +       err =3D ixxat_usb_setup_rx_urbs(dev);
-> > +       if (err)
-> > +               return err;
-> > +
-> > +       err =3D ixxat_usb_setup_tx_urbs(dev);
-> > +       if (err)
-> > +               return err;
-> > +
-> > +       /* Try to reset the controller, in case it is already initializ=
-ed
-> > +        * from a previous unclean shutdown
-> > +        */
-> > +       ixxat_usb_reset_ctrl(dev);
-> > +
-> > +       if (adapter->init_ctrl) {
-> > +               err =3D adapter->init_ctrl(dev);
-> > +               if (err)
-> > +                       goto fail;
-> > +       }
-> > +
-> > +       if (!(dev->state & IXXAT_USB_STATE_STARTED)) {
-> > +               err =3D ixxat_usb_start_ctrl(dev, &time_ref);
-> > +               if (err)
-> > +                       goto fail;
-> > +
-> > +               ixxat_usb_set_ts_now(dev, time_ref);
-> > +       }
-> > +
-> > +       dev->bec.txerr =3D 0;
-> > +       dev->bec.rxerr =3D 0;
-> > +
-> > +       dev->state |=3D IXXAT_USB_STATE_STARTED;
-> > +       dev->can.state =3D CAN_STATE_ERROR_ACTIVE;
-> > +       return 0;
-> > +
-> > +fail:
-> > +       if (err =3D=3D -ENODEV)
-> > +               netif_device_detach(dev->netdev);
-> > +
-> > +       netdev_err(dev->netdev, "Error %d: Couldn't submit control\n", =
-err);
-> > +
-> > +       for (i =3D 0; i < IXXAT_USB_MAX_TX_URBS; i++) {
-> > +               usb_free_urb(dev->tx_contexts[i].urb);
-> > +               dev->tx_contexts[i].urb =3D NULL;
-> > +       }
-> > +
-> > +       return err;
-> > +}
-> > +
-> > +static int ixxat_usb_open(struct net_device *netdev)
-> > +{
-> > +       struct ixxat_usb_device *dev =3D netdev_priv(netdev);
-> > +       int err;
-> > +
-> > +       /* common open */
-> > +       err =3D open_candev(netdev);
-> > +       if (err)
-> > +               goto fail;
-> > +
-> > +       /* finally start device */
-> > +       err =3D ixxat_usb_start(dev);
-> > +       if (err) {
-> > +               netdev_err(netdev, "Error %d: Couldn't start device.\n"=
-, err);
-> > +               close_candev(netdev);
-> > +               goto fail;
-> > +       }
-> > +
-> > +       netif_start_queue(netdev);
-> > +
-> > +fail:
-> > +       return err;
-> > +}
-> > +
-> > +static int ixxat_usb_stop(struct net_device *netdev)
-> > +{
-> > +       int err =3D 0;
-> > +       struct ixxat_usb_device *dev =3D netdev_priv(netdev);
-> > +
-> > +       ixxat_usb_stop_queue(dev);f
-> > +       if (dev->state & IXXAT_USB_STATE_STARTED) {
-> > +               err =3D ixxat_usb_stop_ctrl(dev);
-> > +               if (err)
-> > +                       netdev_warn(netdev, "Error %d: Cannot stop devi=
-ce\n",
-> > +                                   err);
-> > +       }
-> > +
-> > +       dev->state &=3D ~IXXAT_USB_STATE_STARTED;
-> > +       close_candev(netdev);
-> > +       dev->can.state =3D CAN_STATE_STOPPED;
-> > +       return err;
-> > +}
-> > +
-> > +static const struct net_device_ops ixxat_usb_netdev_ops =3D {
-> > +       .ndo_open =3D ixxat_usb_open,
-> > +       .ndo_stop =3D ixxat_usb_stop,
-> > +       .ndo_start_xmit =3D ixxat_usb_start_xmit
-> > +};
-> > +
-> > +static const struct ixxat_usb_adapter *ixxat_usb_get_adapter(const u16=
- id)
-> > +{
-> > +       switch (id) { =20
->=20
-> Instead of doing a switch on idProduct, you can use the driver_info
-> field from struct usb_device_id to store the device quirks.
->=20
-> You can then pass a pointer to your usb2can_cl1, usb2can_cl2 or
-> can_idm structures into driver_info. Examples:
->=20
->   https://elixir.bootlin.com/linux/v6.2/source/drivers/net/can/usb/peak_u=
-sb/pcan_usb_core.c#L30
->=20
-
-O.k.
-
-> > +       case USB2CAN_COMPACT_PRODUCT_ID:
-> > +       case USB2CAN_EMBEDDED_PRODUCT_ID:
-> > +       case USB2CAN_PROFESSIONAL_PRODUCT_ID:
-> > +       case USB2CAN_AUTOMOTIVE_PRODUCT_ID:
-> > +               return &usb2can_cl1;
-> > +       case USB2CAN_FD_COMPACT_PRODUCT_ID:
-> > +       case USB2CAN_FD_PROFESSIONAL_PRODUCT_ID:
-> > +       case USB2CAN_FD_AUTOMOTIVE_PRODUCT_ID:
-> > +       case USB2CAN_FD_PCIE_MINI_PRODUCT_ID:
-> > +       case USB2CAR_PRODUCT_ID:
-> > +               return &usb2can_cl2;
-> > +       case CAN_IDM101_PRODUCT_ID:
-> > +       case CAN_IDM200_PRODUCT_ID:
-> > +               return &can_idm;
-> > +       default:
-> > +               return NULL;
-> > +       }
-> > +}
-> > +
-> > +static int ixxat_usb_create_dev(struct usb_interface *intf,
-> > +                               const struct ixxat_usb_adapter *adapter,
-> > +                               u16 ctrl_index)
-> > +{
-> > +       struct usb_device *udev =3D interface_to_usbdev(intf);
-> > +       struct ixxat_usb_device *dev;
-> > +       struct net_device *netdev;
-> > +       int err;
-> > +       int i;
-> > +
-> > +       netdev =3D alloc_candev(sizeof(*dev), IXXAT_USB_MAX_TX_URBS);
-> > +       if (!netdev) {
-> > +               dev_err(&intf->dev, "Cannot allocate candev\n");
-> > +               return -ENOMEM;
-> > +       }
-> > +
-> > +       dev =3D netdev_priv(netdev);
-> > +       dev->udev =3D udev;
-> > +       dev->netdev =3D netdev;
-> > +       dev->adapter =3D adapter;
-> > +       dev->ctrl_index =3D ctrl_index;
-> > +       dev->state =3D IXXAT_USB_STATE_CONNECTED;
-> > +
-> > +       i =3D ctrl_index + adapter->ep_offs;
-> > +       dev->ep_msg_in =3D adapter->ep_msg_in[i];
-> > +       dev->ep_msg_out =3D adapter->ep_msg_out[i];
-> > +
-> > +       dev->can.clock.freq =3D adapter->clock;
-> > +       dev->can.bittiming_const =3D adapter->bt;
-> > +       dev->can.data_bittiming_const =3D adapter->btd;
-> > +
-> > +       dev->can.do_set_mode =3D ixxat_usb_set_mode;
-> > +       dev->can.do_get_berr_counter =3D ixxat_usb_get_berr_counter;
-> > +
-> > +       dev->can.ctrlmode_supported =3D adapter->modes;
-> > +
-> > +       netdev->netdev_ops =3D &ixxat_usb_netdev_ops; =20
->=20
-> Can you also populate ndev->ethtool_ops with the default timestamp info? =
-c.f.
->=20
->   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/comm=
-it/?id=3D409c188c57cd
->=20
-
-O.k.
-
-> > +       netdev->flags |=3D IFF_ECHO; =20
->=20
-> ctrl_index indicates the channer number, right? If so, add:
->=20
->           netdev->dev_port =3D ctrl_index
->=20
-> Ref:
->=20
->   https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-class-net
->=20
-
-O.k.
-
->=20
-> > +       init_usb_anchor(&dev->rx_submitted);
-> > +       init_usb_anchor(&dev->tx_submitted);
-> > +
-> > +       atomic_set(&dev->active_tx_urbs, 0);
-> > +
-> > +       for (i =3D 0; i < IXXAT_USB_MAX_TX_URBS; i++)
-> > +               dev->tx_contexts[i].echo_index =3D IXXAT_USB_MAX_TX_URB=
-S;
-> > +
-> > +       dev->prev_dev =3D usb_get_intfdata(intf);
-> > +       usb_set_intfdata(intf, dev);
-> > +
-> > +       SET_NETDEV_DEV(netdev, &intf->dev);
-> > +       err =3D register_candev(netdev);
-> > +       if (err) {
-> > +               dev_err(&intf->dev, "Error %d: Failed to register can d=
-evice\n",
-> > +                       err);
-> > +               goto free_candev;
-> > +       }
-> > +
-> > +       if (dev->prev_dev)
-> > +               (dev->prev_dev)->next_dev =3D dev;
-> > +
-> > +       err =3D ixxat_usb_get_dev_info(udev, &dev->dev_info);
-> > +       if (err) {
-> > +               dev_err(&intf->dev,
-> > +                       "Error %d: Failed to get device information\n",=
- err);
-> > +               goto unreg_candev;
-> > +       }
-> > +
-> > +       netdev_info(netdev, "%s: Connected Channel %u (device %s)\n",
-> > +                   dev->dev_info.device_name, ctrl_index,
-> > +                   dev->dev_info.device_id);
-> > +
-> > +       return 0;
-> > +
-> > +unreg_candev:
-> > +       unregister_candev(netdev);
-> > +free_candev:
-> > +       usb_set_intfdata(intf, dev->prev_dev);
-> > +       free_candev(netdev);
-> > +       return err;
-> > +}
-> > +
-> > +static int ixxat_usb_probe(struct usb_interface *intf,
-> > +                          const struct usb_device_id *id)
-> > +{
-> > +       struct usb_device *udev =3D interface_to_usbdev(intf);
-> > +       struct usb_host_interface *host_intf =3D intf->altsetting;
-> > +       const struct ixxat_usb_adapter *adapter;
-> > +       struct ixxat_dev_caps dev_caps;
-> > +       u16 i;
-> > +       int err;
-> > +
-> > +       usb_reset_configuration(udev);
-> > +
-> > +       adapter =3D ixxat_usb_get_adapter(id->idProduct);
-> > +       if (!adapter) {
-> > +               dev_err(&intf->dev, "%s: Unknown device id %d\n",
-> > +                       IXXAT_USB_DRIVER_NAME, id->idProduct);
-> > +               return -ENODEV;
-> > +       }
-> > +
-> > +       for (i =3D 0; i < host_intf->desc.bNumEndpoints; i++) {
-> > +               const u8 epaddr =3D host_intf->endpoint[i].desc.bEndpoi=
-ntAddress;
-> > +               int match;
-> > +               u8 j;
-> > +
-> > +               /* Check if usb-endpoint address matches known usb-endp=
-oints */
-> > +               for (j =3D 0; j < IXXAT_USB_MAX_CHANNEL; j++) {
-> > +                       u8 ep_msg_in =3D adapter->ep_msg_in[j];
-> > +                       u8 ep_msg_out =3D adapter->ep_msg_in[j];
-> > +
-> > +                       if (epaddr =3D=3D ep_msg_in || epaddr =3D=3D ep=
-_msg_out) {
-> > +                               match =3D 1;
-> > +                               break;
-> > +                       }
-> > +               }
-> > +
-> > +               if (!match)
-> > +                       return -ENODEV;
-> > +       }
-> > +
-> > +       err =3D ixxat_usb_power_ctrl(udev, IXXAT_USB_POWER_WAKEUP);
-> > +       if (err)
-> > +               return err;
-> > +
-> > +       msleep(IXXAT_USB_POWER_WAKEUP_TIME);
-> > +
-> > +       err =3D ixxat_usb_get_dev_caps(udev, &dev_caps);
-> > +       if (err) {
-> > +               dev_err(&intf->dev,
-> > +                       "Error %d: Failed to get device capabilities\n"=
-, err);
-> > +               return err;
-> > +       }
-> > +
-> > +       err =3D -ENODEV;
-> > +       for (i =3D 0; i < le16_to_cpu(dev_caps.bus_ctrl_count); i++) {
-> > +               u16 dev_bustype =3D le16_to_cpu(dev_caps.bus_ctrl_types=
-[i]);
-> > +               u8 bustype =3D IXXAT_USB_BUS_TYPE(dev_bustype);
-> > +
-> > +               if (bustype =3D=3D IXXAT_USB_BUS_CAN)
-> > +                       err =3D ixxat_usb_create_dev(intf, adapter, i);
-> > +
-> > +               if (err) {
-> > +                       /* deregister already created devices */
-> > +                       ixxat_usb_disconnect(intf);
-> > +                       return err;
-> > +               }
-> > +       }
-> > +
-> > +       return err;
-> > +}
-> > +
-> > +static struct usb_driver ixxat_usb_driver =3D {
-> > +       .name =3D IXXAT_USB_DRIVER_NAME,
-> > +       .probe =3D ixxat_usb_probe,
-> > +       .disconnect =3D ixxat_usb_disconnect,
-> > +       .id_table =3D ixxat_usb_table,
-> > +};
-> > +
-> > +module_usb_driver(ixxat_usb_driver);
-> > diff --git a/drivers/net/can/usb/ixxat_usb/ixxat_usb_core.h b/drivers/n=
-et/can/usb/ixxat_usb/ixxat_usb_core.h
-> > new file mode 100644
-> > index 000000000000..0f3e4c0b9f1b
-> > --- /dev/null
-> > +++ b/drivers/net/can/usb/ixxat_usb/ixxat_usb_core.h
-> > @@ -0,0 +1,519 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +
-> > +/* CAN driver base for IXXAT USB-to-CAN
-> > + *
-> > + * Copyright (C) 2018 HMS Industrial Networks <socketcan@hms-networks.=
-de>
-> > + *
-> > + * This program is free software; you can redistribute it and/or modif=
-y it
-> > + * under the terms of the GNU General Public License as published
-> > + * by the Free Software Foundation; version 2 of the License.
-> > + *
-> > + * This program is distributed in the hope that it will be useful, but
-> > + * WITHOUT ANY WARRANTY; without even the implied warranty of
-> > + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-> > + * General Public License for more details.
-> > + */
-> > +
-> > +#ifndef IXXAT_USB_CORE_H
-> > +#define IXXAT_USB_CORE_H
-> > +
-> > +#define IXXAT_USB_DRIVER_NAME "ixxat_usb2can"
-> > +#define IXXAT_USB_CTRL_NAME "ixxat_usb"
-> > +
-> > +#define IXXAT_USB_VENDOR_ID 0x08d8
-> > +
-> > +/* supported device ids: CL1 */
-> > +#define USB2CAN_COMPACT_PRODUCT_ID 0x0008
-> > +#define USB2CAN_EMBEDDED_PRODUCT_ID 0x0009
-> > +#define USB2CAN_PROFESSIONAL_PRODUCT_ID 0x000A
-> > +#define USB2CAN_AUTOMOTIVE_PRODUCT_ID 0x000B
-> > +
-> > +/* supported device ids: CL2 */
-> > +#define USB2CAN_FD_COMPACT_PRODUCT_ID 0x0014
-> > +#define USB2CAN_FD_PROFESSIONAL_PRODUCT_ID 0x0016
-> > +#define USB2CAN_FD_AUTOMOTIVE_PRODUCT_ID 0x0017
-> > +#define USB2CAN_FD_PCIE_MINI_PRODUCT_ID 0x001B
-> > +#define USB2CAR_PRODUCT_ID 0x001C
-> > +#define CAN_IDM101_PRODUCT_ID 0xFF12
-> > +#define CAN_IDM200_PRODUCT_ID 0xFF13
-> > +
-> > +#define IXXAT_USB_BUS_CAN 1
-> > +
-> > +#define IXXAT_USB_BUS_TYPE(type) ((u8)(((type) >> 8) & 0x00FF))
-> > +
-> > +#define IXXAT_USB_STATE_CONNECTED BIT(0)
-> > +#define IXXAT_USB_STATE_STARTED BIT(1)
-> > +
-> > +#define IXXAT_USB_MAX_CHANNEL 5
-> > +#define IXXAT_USB_MAX_TYPES 32
-> > +#define IXXAT_USB_MAX_RX_URBS 4
-> > +#define IXXAT_USB_MAX_TX_URBS 10
-> > +#define IXXAT_USB_MAX_COM_REQ 10
-> > +
-> > +#define IXXAT_USB_MSG_TIMEOUT 50
-> > +#define IXXAT_USB_MSG_CYCLE 20
-> > +
-> > +#define IXXAT_USB_POWER_WAKEUP 0
-> > +#define IXXAT_USB_POWER_WAKEUP_TIME 500
-> > +
-> > +#define IXXAT_USB_OPMODE_STANDARD BIT(0)
-> > +#define IXXAT_USB_OPMODE_EXTENDED BIT(1)
-> > +#define IXXAT_USB_OPMODE_ERRFRAME BIT(2)
-> > +#define IXXAT_USB_OPMODE_LISTONLY BIT(3)
-> > +
-> > +#define IXXAT_USB_EXMODE_EXTDATA BIT(0)
-> > +#define IXXAT_USB_EXMODE_FASTDATA BIT(1)
-> > +#define IXXAT_USB_EXMODE_ISOFD BIT(2)
-> > +
-> > +#define IXXAT_USB_BTMODE_NAT BIT(0)
-> > +#define IXXAT_USB_BTMODE_TSM BIT(1)
-> > +
-> > +#define IXXAT_USB_STOP_ACTION_CLEARALL 3
-> > +
-> > +#define IXXAT_RESTART_TASK_CYCLE_TIME 20
-> > +
-> > +#define IXXAT_USB_CAN_DATA 0x00
-> > +#define IXXAT_USB_CAN_INFO 0x01
-> > +#define IXXAT_USB_CAN_ERROR 0x02
-> > +#define IXXAT_USB_CAN_STATUS 0x03
-> > +#define IXXAT_USB_CAN_WAKEUP 0x04
-> > +#define IXXAT_USB_CAN_TIMEOVR 0x05
-> > +#define IXXAT_USB_CAN_TIMERST 0x06
-> > +
-> > +#define IXXAT_USB_CAN_STATUS_OK 0x00000000
-> > +#define IXXAT_USB_CAN_STATUS_OVERRUN 0x00000002
-> > +#define IXXAT_USB_CAN_STATUS_ERRLIM 0x00000004
-> > +#define IXXAT_USB_CAN_STATUS_BUSOFF 0x00000008
-> > +#define IXXAT_USB_CAN_STATUS_ERR_PAS 0x00002000
-> > +
-> > +#define IXXAT_USB_CAN_ERROR_LEN 5
-> > +
-> > +#define IXXAT_USB_CAN_ERROR_CODE 0
-> > +#define IXXAT_USB_CAN_ERROR_COUNTER_RX 3
-> > +#define IXXAT_USB_CAN_ERROR_COUNTER_TX 4
-> > +
-> > +#define IXXAT_USB_CAN_ERROR_STUFF 1
-> > +#define IXXAT_USB_CAN_ERROR_FORM 2
-> > +#define IXXAT_USB_CAN_ERROR_ACK 3
-> > +#define IXXAT_USB_CAN_ERROR_BIT 4
-> > +#define IXXAT_USB_CAN_ERROR_CRC 6
-> > +
-> > +#define IXXAT_USB_MSG_FLAGS_TYPE 0x000000FF
-> > +#define IXXAT_USB_MSG_FLAGS_DLC 0x000F0000
-> > +#define IXXAT_USB_MSG_FLAGS_OVR 0x00100000
-> > +#define IXXAT_USB_MSG_FLAGS_RTR 0x00400000
-> > +#define IXXAT_USB_MSG_FLAGS_EXT 0x00800000
-> > +
-> > +#define IXXAT_USB_DECODE_DLC(flags) (((flags) & IXXAT_USB_MSG_FLAGS_DL=
-C) >> 16)
-> > +#define IXXAT_USB_ENCODE_DLC(len) (((len) << 16) & IXXAT_USB_MSG_FLAGS=
-_DLC) =20
->=20
-> Remove those two #define. Instead, use FIELD_GET() and FIELD_PREP()
-> directly in the code.
->=20
-
-O.k.
-
-> > +#define IXXAT_USB_FDMSG_FLAGS_EDL 0x00000400
-> > +#define IXXAT_USB_FDMSG_FLAGS_FDR 0x00000800
-> > +#define IXXAT_USB_FDMSG_FLAGS_ESI 0x00001000
-> > +
-> > +#define IXXAT_USB_CAN_CMD_START 0x326
-> > +#define IXXAT_USB_CAN_CMD_STOP 0x327
-> > +#define IXXAT_USB_CAN_CMD_RESET 0x328
-> > +
-> > +#define IXXAT_USB_BRD_CMD_GET_DEVCAPS 0x401
-> > +#define IXXAT_USB_BRD_CMD_GET_DEVINFO 0x402
-> > +#define IXXAT_USB_BRD_CMD_POWER 0x421
-> > +
-> > +/**
-> > + * struct ixxat_can_msg_base - IXXAT CAN message base (CL1/CL2)
-> > + * @size: Message size (this field excluded)
-> > + * @time: Message timestamp
-> > + * @msg_id: Message ID
-> > + * @flags: Message flags
-> > + *
-> > + * Contains the common fields of an IXXAT CAN message on both CL1 and =
-CL2
-> > + * devices
-> > + */
-> > +struct ixxat_can_msg_base {
-> > +       u8 size;
-> > +       __le32 time;
-> > +       __le32 msg_id;
-> > +       __le32 flags;
-> > +} __packed;
-> > +
-> > +/**
-> > + * struct ixxat_can_msg_cl1 - IXXAT CAN message (CL1)
-> > + * @data: Message data (standard CAN frame)
-> > + *
-> > + * Contains the fields of an IXXAT CAN message on CL1 devices
-> > + */
-> > +struct ixxat_can_msg_cl1 {
-> > +       u8 data[CAN_MAX_DLEN];
-> > +} __packed;
-> > +
-> > +/**
-> > + * struct ixxat_can_msg_cl2 - IXXAT CAN message (CL2)
-> > + * @client_id: Client ID
-> > + * @data: Message data (CAN FD frame)
-> > + *
-> > + * Contains the fields of an IXXAT CAN message on CL2 devices
-> > + */
-> > +struct ixxat_can_msg_cl2 {
-> > +       __le32 client_id;
-> > +       u8 data[CANFD_MAX_DLEN];
-> > +} __packed;
-> > +
-> > +/**
-> > + * struct ixxat_can_msg - IXXAT CAN message
-> > + * @base: Base message
-> > + * @cl1: Cl1 message
-> > + * @cl2: Cl2 message
-> > + *
-> > + * Contains an IXXAT CAN message
-> > + */
-> > +struct ixxat_can_msg {
-> > +       struct ixxat_can_msg_base base;
-> > +       union {
-> > +               struct ixxat_can_msg_cl1 cl1;
-> > +               struct ixxat_can_msg_cl2 cl2;
-> > +       };
-> > +} __packed;
-> > +
-> > +/**
-> > + * struct ixxat_dev_caps - Device capabilities
-> > + * @bus_ctrl_count: Stores the bus controller counter
-> > + * @bus_ctrl_types: Stores the bus controller types
-> > + *
-> > + * Contains the device capabilities
-> > + */
-> > +struct ixxat_dev_caps {
-> > +       __le16 bus_ctrl_count;
-> > +       __le16 bus_ctrl_types[IXXAT_USB_MAX_TYPES];
-> > +} __packed;
-> > +
-> > +/**
-> > + * struct ixxat_canbtp Bittiming parameters (CL2)
-> > + * @mode: Operation mode
-> > + * @bps: Bits per second
-> > + * @ts1: First time segment
-> > + * @ts2: Second time segment
-> > + * @sjw: Synchronization jump width
-> > + * @tdo: Transmitter delay offset
-> > + *
-> > + * Bittiming parameters of a CL2 initialization request
-> > + */
-> > +struct ixxat_canbtp {
-> > +       __le32 mode;
-> > +       __le32 bps;
-> > +       __le16 ts1;
-> > +       __le16 ts2;
-> > +       __le16 sjw;
-> > +       __le16 tdo; =20
->=20
-> It seems that your device supports TDC. What is the reason to not configu=
-re it?
->=20
-> Please have a look at struct can_tdc:
->=20
->   https://elixir.bootlin.com/linux/v6.2/source/include/linux/can/bittimin=
-g.h#L21
->=20
-> Please refer to this patch if you want an example of how to use TDC:
->=20
->   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/comm=
-it/?id=3D1010a8fa9608
->=20
-
-Not sure about this one (and I have limited knowledge of the hardware detai=
-ls),
-seems I need to find more (spare) time to look into this one, or maybe
-something better for an follow-up patch?
-
-Regards,
-Peter
-
-> > +} __packed;
-> > +
-> > +/**
-> > + * struct ixxat_dev_info IXXAT usb device information
-> > + * @device_name: Name of the device
-> > + * @device_id: Device identification ( unique device id)
-> > + * @device_version: Device version ( 0, 1, ...)
-> > + * @device_fpga_version: Version of FPGA design
-> > + *
-> > + * Contains device information of IXXAT USB devices
-> > + */
-> > +struct ixxat_dev_info {
-> > +       char device_name[16];
-> > +       char device_id[16];
-> > +       __le16 device_version;
-> > +       __le32 device_fpga_version;
-> > +} __packed;
-> > +
-> > +/**
-> > + * struct ixxat_time_ref Time reference
-> > + * @kt_host_0: Latest time on the host
-> > + * @ts_dev_0: Latest time stamp on the device
-> > + * @ts_dev_last: Last device time stamp
-> > + *
-> > + * Contains time references of the device and the host
-> > + */
-> > +struct ixxat_time_ref {
-> > +       ktime_t kt_host_0;
-> > +       u32 ts_dev_0;
-> > +       u32 ts_dev_last;
-> > +};
-> > +
-> > +/**
-> > + * struct ixxat_tx_urb_context URB content for transmission
-> > + * @dev: IXXAT USB device
-> > + * @urb: USB request block
-> > + * @echo_index: Echo index
-> > + * @dlc: Data length code
-> > + * @count: Counter
-> > + *
-> > + * Contains content for USB request block transmissions
-> > + */
-> > +struct ixxat_tx_urb_context {
-> > +       struct ixxat_usb_device *dev;
-> > +       struct urb *urb;
-> > +       u32 echo_index;
-> > +};
-> > +
-> > +/**
-> > + * struct ixxat_usb_device IXXAT USB device
-> > + * @can: CAN common private data
-> > + * @adapter: USB network descriptor
-> > + * @udev: USB device
-> > + * @netdev: Net_device
-> > + * @active_tx_urbs: Active tx urbs
-> > + * @tx_submitted: Submitted tx usb anchor
-> > + * @tx_contexts: Buffer for tx contexts
-> > + * @rx_submitted: Submitted rx usb anchor
-> > + * @state: Device state
-> > + * @ctrl_index: Controller index
-> > + * @ep_msg_in: USB endpoint for incoming messages
-> > + * @ep_msg_out: USB endpoint for outgoing messages
-> > + * @prev_dev: Previous opened device
-> > + * @next_dev: Next opened device in list
-> > + * @time_ref: Time reference
-> > + * @dev_info: Device information
-> > + * @bec: CAN error counter
-> > + *
-> > + * IXXAT USB-to-CAN device
-> > + */
-> > +struct ixxat_usb_device {
-> > +       struct can_priv can;
-> > +       const struct ixxat_usb_adapter *adapter;
-> > +       struct usb_device *udev;
-> > +       struct net_device *netdev;
-> > +
-> > +       atomic_t active_tx_urbs;
-> > +       struct usb_anchor tx_submitted;
-> > +       struct ixxat_tx_urb_context tx_contexts[IXXAT_USB_MAX_TX_URBS];
-> > +       struct usb_anchor rx_submitted;
-> > +
-> > +       u32 state;
-> > +       u16 ctrl_index;
-> > +
-> > +       u8 ep_msg_in;
-> > +       u8 ep_msg_out;
-> > +
-> > +       struct ixxat_usb_device *prev_dev;
-> > +       struct ixxat_usb_device *next_dev;
-> > +
-> > +       struct ixxat_time_ref time_ref;
-> > +       struct ixxat_dev_info dev_info;
-> > +
-> > +       struct can_berr_counter bec;
-> > +};
-> > +
-> > +/**
-> > + * struct ixxat_usb_dal_req IXXAT device request block
-> > + * @size: Request size
-> > + * @port: Request port
-> > + * @socket: Request socket
-> > + * @code: Request code
-> > + *
-> > + * IXXAT device request block
-> > + */
-> > +struct ixxat_usb_dal_req {
-> > +       __le32 size;
-> > +       __le16 port;
-> > +       __le16 socket;
-> > +       __le32 code;
-> > +} __packed;
-> > +
-> > +/**
-> > + * struct ixxat_usb_dal_res IXXAT device response block
-> > + * @res_size: Expected response size
-> > + * @ret_size: Actual response size
-> > + * @code: Return code
-> > + *
-> > + * IXXAT device response block
-> > + */
-> > +struct ixxat_usb_dal_res {
-> > +       __le32 res_size;
-> > +       __le32 ret_size;
-> > +       __le32 code;
-> > +} __packed;
-> > +
-> > +/**
-> > + * struct ixxat_usb_dal_cmd IXXAT device command
-> > + * @req: Request block
-> > + * @req: Response block
-> > + *
-> > + * IXXAT device command
-> > + */
-> > +struct ixxat_usb_dal_cmd {
-> > +       struct ixxat_usb_dal_req req;
-> > +       struct ixxat_usb_dal_res res;
-> > +} __packed;
-> > +
-> > +/**
-> > + * struct ixxat_usb_caps_cmd Device capabilities command
-> > + * @req: Request block
-> > + * @res: Response block
-> > + * @caps: Device capabilities
-> > + *
-> > + * Can be sent to a device to request its capabilities
-> > + */
-> > +struct ixxat_usb_caps_cmd {
-> > +       struct ixxat_usb_dal_req req;
-> > +       struct ixxat_usb_dal_res res;
-> > +       struct ixxat_dev_caps caps;
-> > +} __packed;
-> > +
-> > +/**
-> > + * struct ixxat_usb_init_cl1_cmd Initialization command (CL1)
-> > + * @req: Request block
-> > + * @mode: Operation mode
-> > + * @btr0: Bittiming register 0
-> > + * @btr1: Bittiming register 1
-> > + * @padding: 1 byte padding
-> > + * @res: Response block
-> > + *
-> > + * Can be sent to a CL1 device to initialize it
-> > + */
-> > +struct ixxat_usb_init_cl1_cmd {
-> > +       struct ixxat_usb_dal_req req;
-> > +       u8 mode;
-> > +       u8 btr0;
-> > +       u8 btr1;
-> > +       u8 padding;
-> > +       struct ixxat_usb_dal_res res;
-> > +} __packed;
-> > +
-> > +/**
-> > + * struct ixxat_usb_init_cl2_cmd Initialization command (CL2)
-> > + * @req: Request block
-> > + * @opmode: Operation mode
-> > + * @exmode: Extended mode
-> > + * @sdr: Stadard bittiming parameters
-> > + * @fdr: Fast data bittiming parameters
-> > + * @_padding: 2 bytes padding
-> > + * @res: Response block
-> > + *
-> > + * Can be sent to a CL2 device to initialize it
-> > + */
-> > +struct ixxat_usb_init_cl2_cmd {
-> > +       struct ixxat_usb_dal_req req;
-> > +       u8 opmode;
-> > +       u8 exmode;
-> > +       struct ixxat_canbtp sdr;
-> > +       struct ixxat_canbtp fdr;
-> > +       __le16 _padding;
-> > +       struct ixxat_usb_dal_res res;
-> > +} __packed;
-> > +
-> > +/**
-> > + * struct ixxat_usb_start_cmd Controller start command
-> > + * @req: Request block
-> > + * @res: Response block
-> > + * @time: Timestamp
-> > + *
-> > + * Can be sent to a device to start its controller
-> > + */
-> > +struct ixxat_usb_start_cmd {
-> > +       struct ixxat_usb_dal_req req;
-> > +       struct ixxat_usb_dal_res res;
-> > +       __le32 time;
-> > +} __packed;
-> > +
-> > +/**
-> > + * struct ixxat_usb_stop_cmd Controller stop command
-> > + * @req: Request block
-> > + * @action: Stop action
-> > + * @res: Response block
-> > + *
-> > + * Can be sent to a device to start its controller
-> > + */
-> > +struct ixxat_usb_stop_cmd {
-> > +       struct ixxat_usb_dal_req req;
-> > +       __le32 action;
-> > +       struct ixxat_usb_dal_res res;
-> > +} __packed;
-> > +
-> > +/**
-> > + * struct ixxat_usb_power_cmd Power command
-> > + * @req: Request block
-> > + * @mode: Power mode
-> > + * @_padding1: 1 byte padding
-> > + * @_padding2: 2 byte padding
-> > + * @res: Response block
-> > + *
-> > + * Can be sent to a device to set its power mode
-> > + */
-> > +struct ixxat_usb_power_cmd {
-> > +       struct ixxat_usb_dal_req req;
-> > +       u8 mode;
-> > +       u8 _padding1;
-> > +       __le16 _padding2;
-> > +       struct ixxat_usb_dal_res res;
-> > +} __packed;
-> > +
-> > +/**
-> > + * struct ixxat_usb_info_cmd Device information command
-> > + * @req: Request block
-> > + * @res: Response block
-> > + * @info: Device information
-> > + *
-> > + * Can be sent to a device to request its device information
-> > + */
-> > +struct ixxat_usb_info_cmd {
-> > +       struct ixxat_usb_dal_req req;
-> > +       struct ixxat_usb_dal_res res;
-> > +       struct ixxat_dev_info info;
-> > +} __packed;
-> > +
-> > +/**
-> > + * struct ixxat_usb_adapter IXXAT USB device adapter
-> > + * @clock: Clock frequency
-> > + * @bt: Bittiming constants
-> > + * @btd: Data bittiming constants
-> > + * @modes: Supported modes
-> > + * @buffer_size_rx: Buffer size for receiving
-> > + * @buffer_size_tx: Buffer size for transfer
-> > + * @ep_msg_in: USB endpoint buffer for incoming messages
-> > + * @ep_msg_out: USB endpoint buffer for outgoing messages
-> > + * @ep_offs: Endpoint offset (device depended)
-> > + *
-> > + * Device Adapter for IXXAT USB devices
-> > + */
-> > +struct ixxat_usb_adapter {
-> > +       const u32 clock;
-> > +       const struct can_bittiming_const *bt;
-> > +       const struct can_bittiming_const *btd;
-> > +       const u32 modes;
-> > +       const u16 buffer_size_rx;
-> > +       const u16 buffer_size_tx;
-> > +       const u8 ep_msg_in[IXXAT_USB_MAX_CHANNEL];
-> > +       const u8 ep_msg_out[IXXAT_USB_MAX_CHANNEL];
-> > +       const u8 ep_offs;
-> > +       int (*init_ctrl)(struct ixxat_usb_device *dev);
-> > +};
-> > +
-> > +extern const struct ixxat_usb_adapter usb2can_cl1;
-> > +extern const struct ixxat_usb_adapter usb2can_cl2;
-> > +extern const struct ixxat_usb_adapter can_idm;
-> > +
-> > +/**
-> > + * ixxat_usb_setup_cmd() - Setup a device command
-> > + * @req: Request block
-> > + * @res: Response block
-> > + *
-> > + * This function sets the default values in the request and the respon=
-se block
-> > + * of a device command
-> > + */
-> > +void ixxat_usb_setup_cmd(struct ixxat_usb_dal_req *req,
-> > +                        struct ixxat_usb_dal_res *res);
-> > +
-> > +/**
-> > + * ixxat_usb_send_cmd() - Send a command to the device
-> > + * @dev: USB device
-> > + * @port: Command port
-> > + * @req: Command request buffer
-> > + * @req_size: Command request size
-> > + * @res: Command response buffer
-> > + * @res_size: Command response size
-> > + *
-> > + * This function sends a specific command to the device
-> > + *
-> > + * Return: Negative error code or zero on success
-> > + */
-> > +int ixxat_usb_send_cmd(struct usb_device *dev, const u16 port, void *r=
-eq,
-> > +                      const u16 req_size, void *res, const u16 res_siz=
-e);
-> > +
-> > +#endif /* IXXAT_USB_CORE_H */
-> > --
-> > 2.39.2
-> >
-> > =20
-
+RnJvbTogRmxvcmlhbiBGZXJnIDxmbGZlQGhtcy1uZXR3b3Jrcy5kZT4KClRoaXMgcGF0Y2ggYWRk
+cyB0aGUgZHJpdmVyIGZvciB0aGUgSVhYQVQgVVNCLXRvLUNBTiBpbnRlcmZhY2VzLiBUaGVyZQpp
+cyBhbiBhZGFwdGVyIGZvciB0aGUgb2xkZXIgY29tbXVuaWNhdGlvbiBsYXllciBjbDEgYW5kIGFu
+b3RoZXIKYWRhcHRlciBmb3IgdGhlIG5ld2VyIGNvbW11bmljYXRpb24gbGF5ZXIgY2wyLgoKU2ln
+bmVkLW9mZi1ieTogRmxvcmlhbiBGZXJnIDxmbGZlQGhtcy1uZXR3b3Jrcy5kZT4KU2lnbmVkLW9m
+Zi1ieTogTWFyYyBLbGVpbmUtQnVkZGUgPG1rbEBwZW5ndXRyb25peC5kZT4KU2lnbmVkLW9mZi1i
+eTogUGV0ZXIgU2VpZGVyZXIgPHBzLnJlcG9ydEBnbXgubmV0PgotLS0KQ2hhbmdlcyB2MSAtPiB2
+NyAoRmxvcmlhbiBGZXJnIDxmbGZlQGhtcy1uZXR3b3Jrcy5kZT4pOgogIC0gZm9yIGRldGFpbGVk
+IGhpc3Rvcnkgc2VlCiAgICBodHRwczovL2NvZGViZXJnLm9yZy9wc3JlcG9ydC9zb2NrZXRjYW4t
+bGludXgtaXgtdXNiLWNhbgoKQ2hhbmdlcyB2NyAtPiB2OCAoTWFyYyBLbGVpbmUtQnVkZGUgPG1r
+bEBwZW5ndXRyb25peC5kZT4pCiAgLSBwb3J0IHRvIHJlY2VudCBuZXQtbmV4dAoKQ2hhbmdlcyB2
+OCAtPiB2OSAoUGV0ZXIgU2VpZGVyZXIgPHBzLnJlcG9ydEBnbXgubmV0PikKICBBZGRyZXNzZWQg
+cmV2aWV3IGNvbW1lbnRzIGJ5IFZpbmNlbnQgTWFpbGhvbDoKICAtIHVwZGF0ZSBjb3B5cmlnaHQg
+aGVhZGVycyAodXNlIFNQRFggaWRlbnRpZmllciAnR1BMLTIuMC1vbmx5JwogICAgaW5zdGVhZCBv
+ZiAnR1BMLTIuMCcsIHJlbW92ZSBmdWxsIEdQTCBib2lsZXJwbGF0ZSkKICAtIHJlb3JkZXIgaW5j
+bHVkZXMgKGxleGljb2dyYXBoaWMgb3JkZXIpCiAgLSByZW1vdmUgSVhYQVRfVVNCX01PREVTIGRl
+ZmluZXMgKG1vdmUgbW9kZXMgZGlyZWN0bHkgaW4gdGhlCiAgICBkZWNsYXJhdGlvbiBvZiBzdHJ1
+Y3RzKQogIC0gcmVtb3ZlIGJpdHRpbWluZyBkZWZpbmVzIChtb3ZlIGRpcmVjdGx5IGluIGRlY2xh
+cmF0aW9uIG9mIHN0cnVjdHMpCiAgLSByZW1vdmUgX0VQMV9JTi9fRVAxX09VVCBkZWZpbmVzICht
+b3ZlIGRpcmVjdGx5IGluIGRlY2xhcmF0aW9uIG9mIHN0cnVjdHMpCiAgLSByZW1vdmUgcmN2X3Np
+emUvc25kX3NpemUgdmFycyAodXNlIHNpemVvZigqY21kKSBhbmQgc2l6ZW9mKGNtZC0+cmVzKSBk
+aXJlY3RseSkKICAtIHVzZSBHRU5NQVNLL0ZJRUxEX1BSRVAgKElYWEFUX1VTQl9DQU5fQlRSMV9U
+SU1FX1NFRzFfTUFTSy9JWFhBVF9VU0JfQ0FOX0JUUjFfVElNRV9TRUcyX01BU0spCiAgLSB1cGRh
+dGUgZGV2X2Vyci9uZXRkZXZfZXJyICh1c2UgJXBlLCByZW1vdmUgJ0Vycm9yOicgcHJlZml4KQog
+IC0gdXNlIFUzMl9NQVggaW5zdGVhZCBvZiAweDAwMDAwMDAwRkZGRkZGRkYKICAtIGRvIG5vdCBp
+bmNyZWFzZSB0aGUgcnhfYnl0ZXMgY291bnQgd2hlbiByZWNlaXZpbmcgYSByZW1vdmUgZnJhbWUK
+ICAtIGl4eGF0X2Nhbl9tc2dfY2wxL2l4eGF0X2Nhbl9tc2dfY2wyIHVzZSB1bmlvbiBfX2xlMzIg
+c3RhdHVzCiAgLSBkbyBub3QgaW5jcmVhc2UgdGhlIHN0YXRpc3RpY3MgZm9yIGVycm9yIGZyYW1l
+cwogIC0gZG8gbm90IHVzZSBwYXJlbnRoZXNpcyBpbiBsb2cgbWVzc2FnZXMKICAtIHJlbW92ZSBk
+b3VibGUgYnJhY2tldHMgKHNwYXJzZSB3b3JrYXJvdW5kIGZvciBzdHJ1Y3QgaW5pdCkKICAtIGZp
+bGwgbmV0ZGV2LT5ldGh0b29sX29wcyB3aXRoIGRlZmF1bHQKICAtIGZpbGwgbmV0ZGV2LT5kZXZf
+cG9ydAogIC0gdXNlIEZJRUxEX0dFVC9GSUVMRF9QUkVQIGluc3RlYWQgb2YgSVhYQVRfVVNCX0RF
+Q09ERV9ETEMvSVhYQVRfVVNCX0VOQ09ERV9ETEMKICAtIHVzZSBkcml2ZXJfaW5mbyBpbnRlYWQg
+b2Ygb3BlbiBjb2RlZCBpeHhhdF91c2JfZ2V0X2FkYXB0ZXIKIEFkZHJlc3NlZCBjaGVja3BhdGNo
+LnBsIHdhcm5pbmdzOgogIC0gY2hhbmdlIE1PRFVMRV9MSUNFTlNFIHRvICdHUEwnIC0gY2hlY2tw
+YXRjaC5wbCBXQVJOSU5HOiBQcmVmZXIgIkdQTCIgb3ZlciAiR1BMIHYyIgotLS0KIGRyaXZlcnMv
+bmV0L2Nhbi91c2IvS2NvbmZpZyAgICAgICAgICAgICAgICAgICB8ICAgMTcgKwogZHJpdmVycy9u
+ZXQvY2FuL3VzYi9NYWtlZmlsZSAgICAgICAgICAgICAgICAgIHwgICAgMSArCiBkcml2ZXJzL25l
+dC9jYW4vdXNiL2l4eGF0X3VzYi9NYWtlZmlsZSAgICAgICAgfCAgICAyICsKIGRyaXZlcnMvbmV0
+L2Nhbi91c2IvaXh4YXRfdXNiL2l4eGF0X3VzYl9jbDEuYyB8ICAxMDAgKysKIGRyaXZlcnMvbmV0
+L2Nhbi91c2IvaXh4YXRfdXNiL2l4eGF0X3VzYl9jbDIuYyB8ICAxNzYgKysrCiAuLi4vbmV0L2Nh
+bi91c2IvaXh4YXRfdXNiL2l4eGF0X3VzYl9jb3JlLmMgICAgfCAxMjc3ICsrKysrKysrKysrKysr
+KysrCiAuLi4vbmV0L2Nhbi91c2IvaXh4YXRfdXNiL2l4eGF0X3VzYl9jb3JlLmggICAgfCAgNTEx
+ICsrKysrKysKIDcgZmlsZXMgY2hhbmdlZCwgMjA4NCBpbnNlcnRpb25zKCspCiBjcmVhdGUgbW9k
+ZSAxMDA2NDQgZHJpdmVycy9uZXQvY2FuL3VzYi9peHhhdF91c2IvTWFrZWZpbGUKIGNyZWF0ZSBt
+b2RlIDEwMDY0NCBkcml2ZXJzL25ldC9jYW4vdXNiL2l4eGF0X3VzYi9peHhhdF91c2JfY2wxLmMK
+IGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL25ldC9jYW4vdXNiL2l4eGF0X3VzYi9peHhhdF91
+c2JfY2wyLmMKIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL25ldC9jYW4vdXNiL2l4eGF0X3Vz
+Yi9peHhhdF91c2JfY29yZS5jCiBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy9uZXQvY2FuL3Vz
+Yi9peHhhdF91c2IvaXh4YXRfdXNiX2NvcmUuaAoKZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L2Nh
+bi91c2IvS2NvbmZpZyBiL2RyaXZlcnMvbmV0L2Nhbi91c2IvS2NvbmZpZwppbmRleCA1OGZjZDJi
+MzQ4MjAuLmI1MDcwNmYyYTVlNiAxMDA2NDQKLS0tIGEvZHJpdmVycy9uZXQvY2FuL3VzYi9LY29u
+ZmlnCisrKyBiL2RyaXZlcnMvbmV0L2Nhbi91c2IvS2NvbmZpZwpAQCAtNjIsNiArNjIsMjMgQEAg
+Y29uZmlnIENBTl9HU19VU0IKIAkgIGNob29zZSBZIGZvciBidWlsdCBpbiBzdXBwb3J0LAogCSAg
+TSB0byBjb21waWxlIGFzIG1vZHVsZSAobW9kdWxlIHdpbGwgYmUgbmFtZWQ6IGdzX3VzYikuCiAK
+K2NvbmZpZyBDQU5fSVhYQVRfVVNCCisJdHJpc3RhdGUgIklYWEFUIFVTQi10by1DQU4gaW50ZXJm
+YWNlcyIKKwloZWxwCisJICBUaGlzIGRyaXZlciBhZGRzIHN1cHBvcnQgZm9yIElYWEFUIFVTQi10
+by1DQU4gZGV2aWNlcy4KKworCSAgVGhlIGRyaXZlciBwcm92aWRlcyBzdXBwb3J0IGZvciB0aGUg
+Zm9sbG93aW5nIGRldmljZXM6CisJICAgIC0gSVhYQVQgVVNCLXRvLUNBTiBjb21wYWN0CisJICAg
+IC0gSVhYQVQgVVNCLXRvLUNBTiBlbWJlZGRlZAorCSAgICAtIElYWEFUIFVTQi10by1DQU4gcHJv
+ZmVzc2lvbmFsCisJICAgIC0gSVhYQVQgVVNCLXRvLUNBTiBhdXRvbW90aXZlCisJICAgIC0gSVhY
+QVQgVVNCLXRvLUNBTiBGRCBjb21wYWN0CisJICAgIC0gSVhYQVQgVVNCLXRvLUNBTiBGRCBwcm9m
+ZXNzaW9uYWwKKwkgICAgLSBJWFhBVCBVU0ItdG8tQ0FOIEZEIGF1dG9tb3RpdmUKKwkgICAgLSBJ
+WFhBVCBVU0ItdG8tQ0FOIEZEIE1pbmlQQ0llCisJICAgIC0gSVhYQVQgVVNCLXRvLUNBUgorCSAg
+ICAtIElYWEFUIENBTi1JRE0xMDEKKwogY29uZmlnIENBTl9LVkFTRVJfVVNCCiAJdHJpc3RhdGUg
+Ikt2YXNlciBDQU4vVVNCIGludGVyZmFjZSIKIAloZWxwCmRpZmYgLS1naXQgYS9kcml2ZXJzL25l
+dC9jYW4vdXNiL01ha2VmaWxlIGIvZHJpdmVycy9uZXQvY2FuL3VzYi9NYWtlZmlsZQppbmRleCA4
+YjExMDg4ZTlhNTkuLjUyYjRjYzY2ZmYzMCAxMDA2NDQKLS0tIGEvZHJpdmVycy9uZXQvY2FuL3Vz
+Yi9NYWtlZmlsZQorKysgYi9kcml2ZXJzL25ldC9jYW4vdXNiL01ha2VmaWxlCkBAIC05LDYgKzks
+NyBAQCBvYmotJChDT05GSUdfQ0FOX0VTRF9VU0IpICs9IGVzZF91c2Iubwogb2JqLSQoQ09ORklH
+X0NBTl9FVEFTX0VTNThYKSArPSBldGFzX2VzNTh4Lwogb2JqLSQoQ09ORklHX0NBTl9GODE2MDQp
+ICs9IGY4MTYwNC5vCiBvYmotJChDT05GSUdfQ0FOX0dTX1VTQikgKz0gZ3NfdXNiLm8KK29iai0k
+KENPTkZJR19DQU5fSVhYQVRfVVNCKSArPSBpeHhhdF91c2IvCiBvYmotJChDT05GSUdfQ0FOX0tW
+QVNFUl9VU0IpICs9IGt2YXNlcl91c2IvCiBvYmotJChDT05GSUdfQ0FOX01DQkFfVVNCKSArPSBt
+Y2JhX3VzYi5vCiBvYmotJChDT05GSUdfQ0FOX1BFQUtfVVNCKSArPSBwZWFrX3VzYi8KZGlmZiAt
+LWdpdCBhL2RyaXZlcnMvbmV0L2Nhbi91c2IvaXh4YXRfdXNiL01ha2VmaWxlIGIvZHJpdmVycy9u
+ZXQvY2FuL3VzYi9peHhhdF91c2IvTWFrZWZpbGUKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXgg
+MDAwMDAwMDAwMDAwLi4xMjVkMjcwNTk3OWYKLS0tIC9kZXYvbnVsbAorKysgYi9kcml2ZXJzL25l
+dC9jYW4vdXNiL2l4eGF0X3VzYi9NYWtlZmlsZQpAQCAtMCwwICsxLDIgQEAKK29iai0kKENPTkZJ
+R19DQU5fSVhYQVRfVVNCKSArPSBpeHhhdF91c2IyY2FuLm8KK2l4eGF0X3VzYjJjYW4teSA9IGl4
+eGF0X3VzYl9jbDEubyBpeHhhdF91c2JfY2wyLm8gaXh4YXRfdXNiX2NvcmUubwpkaWZmIC0tZ2l0
+IGEvZHJpdmVycy9uZXQvY2FuL3VzYi9peHhhdF91c2IvaXh4YXRfdXNiX2NsMS5jIGIvZHJpdmVy
+cy9uZXQvY2FuL3VzYi9peHhhdF91c2IvaXh4YXRfdXNiX2NsMS5jCm5ldyBmaWxlIG1vZGUgMTAw
+NjQ0CmluZGV4IDAwMDAwMDAwMDAwMC4uY2ZkOTVmZjcyMmNkCi0tLSAvZGV2L251bGwKKysrIGIv
+ZHJpdmVycy9uZXQvY2FuL3VzYi9peHhhdF91c2IvaXh4YXRfdXNiX2NsMS5jCkBAIC0wLDAgKzEs
+MTAwIEBACisvLyBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogR1BMLTIuMC1vbmx5CisvKgorICog
+Q29weXJpZ2h0IChDKSAyMDE4IEhNUyBJbmR1c3RyaWFsIE5ldHdvcmtzIDxzb2NrZXRjYW5AaG1z
+LW5ldHdvcmtzLmRlPgorICovCisKKyNpbmNsdWRlIDxsaW51eC9jYW4vZGV2Lmg+CisjaW5jbHVk
+ZSA8bGludXgva2VybmVsLmg+CisjaW5jbHVkZSA8bGludXgvdXNiLmg+CisKKyNpbmNsdWRlICJp
+eHhhdF91c2JfY29yZS5oIgorCisjZGVmaW5lIElYWEFUX1VTQl9DTE9DSyA4MDAwMDAwCisKKyNk
+ZWZpbmUgSVhYQVRfVVNCX0JVRkZFUl9TSVpFX1JYIDUxMgorI2RlZmluZSBJWFhBVF9VU0JfQlVG
+RkVSX1NJWkVfVFggMjU2CisKKyNkZWZpbmUgSVhYQVRfVVNCX0JUTU9ERV9UU01fQ0wxIDB4ODAK
+KworI2RlZmluZSBJWFhBVF9VU0JfQ0FOX0NNRF9JTklUIDB4MzI1CisKKyNkZWZpbmUgSVhYQVRf
+VVNCX0NBTl9CVFIwX0JSUF9NQVNLIEdFTk1BU0soNSwgMCkKKyNkZWZpbmUgSVhYQVRfVVNCX0NB
+Tl9CVFIwX1NKV19NQVNLIEdFTk1BU0soNywgNikKKworI2RlZmluZSBJWFhBVF9VU0JfQ0FOX0JU
+UjFfVElNRV9TRUcxX01BU0sgR0VOTUFTSygzLCAwKQorI2RlZmluZSBJWFhBVF9VU0JfQ0FOX0JU
+UjFfVElNRV9TRUcyX01BU0sgR0VOTUFTSyg2LCA0KQorCitzdGF0aWMgY29uc3Qgc3RydWN0IGNh
+bl9iaXR0aW1pbmdfY29uc3QgdXNiMmNhbl9idCA9IHsKKwkubmFtZSA9IElYWEFUX1VTQl9DVFJM
+X05BTUUsCisJLnRzZWcxX21pbiA9IDEsCisJLnRzZWcxX21heCA9IDE2LAorCS50c2VnMl9taW4g
+PSAxLAorCS50c2VnMl9tYXggPSA4LAorCS5zandfbWF4ID0gNCwKKwkuYnJwX21pbiA9IDEsCisJ
+LmJycF9tYXggPSA2NCwKKwkuYnJwX2luYyA9IDEsCit9OworCitzdGF0aWMgaW50IGl4eGF0X3Vz
+Yl9pbml0X2N0cmwoc3RydWN0IGl4eGF0X3VzYl9kZXZpY2UgKmRldikKK3sKKwljb25zdCBzdHJ1
+Y3QgY2FuX2JpdHRpbWluZyAqYnQgPSAmZGV2LT5jYW4uYml0dGltaW5nOworCWNvbnN0IHUxNiBw
+b3J0ID0gZGV2LT5jdHJsX2luZGV4OworCWludCBlcnI7CisJc3RydWN0IGl4eGF0X3VzYl9pbml0
+X2NsMV9jbWQgKmNtZDsKKwl1OCBvcG1vZGUgPSBJWFhBVF9VU0JfT1BNT0RFX0VYVEVOREVEIHwg
+SVhYQVRfVVNCX09QTU9ERV9TVEFOREFSRDsKKwl1OCBidHIwID0gRklFTERfUFJFUChJWFhBVF9V
+U0JfQ0FOX0JUUjBfQlJQX01BU0ssIGJ0LT5icnAgLSAxKSB8CisJCUZJRUxEX1BSRVAoSVhYQVRf
+VVNCX0NBTl9CVFIwX1NKV19NQVNLLCBidC0+c2p3IC0gMSk7CisJdTggYnRyMSA9IEZJRUxEX1BS
+RVAoSVhYQVRfVVNCX0NBTl9CVFIxX1RJTUVfU0VHMV9NQVNLLCBidC0+cHJvcF9zZWcgKyBidC0+
+cGhhc2Vfc2VnMSAtIDEpIHwKKwkJRklFTERfUFJFUChJWFhBVF9VU0JfQ0FOX0JUUjFfVElNRV9T
+RUcyX01BU0ssIGJ0LT5waGFzZV9zZWcyIC0gMSk7CisKKwljbWQgPSBrbWFsbG9jKHNpemVvZigq
+Y21kKSwgR0ZQX0tFUk5FTCk7CisJaWYgKCFjbWQpCisJCXJldHVybiAtRU5PTUVNOworCisJaWYg
+KGRldi0+Y2FuLmN0cmxtb2RlICYgQ0FOX0NUUkxNT0RFXzNfU0FNUExFUykKKwkJYnRyMSB8PSBJ
+WFhBVF9VU0JfQlRNT0RFX1RTTV9DTDE7CisJaWYgKGRldi0+Y2FuLmN0cmxtb2RlICYgQ0FOX0NU
+UkxNT0RFX0JFUlJfUkVQT1JUSU5HKQorCQlvcG1vZGUgfD0gSVhYQVRfVVNCX09QTU9ERV9FUlJG
+UkFNRTsKKwlpZiAoZGV2LT5jYW4uY3RybG1vZGUgJiBDQU5fQ1RSTE1PREVfTElTVEVOT05MWSkK
+KwkJb3Btb2RlIHw9IElYWEFUX1VTQl9PUE1PREVfTElTVE9OTFk7CisKKwlpeHhhdF91c2Jfc2V0
+dXBfY21kKCZjbWQtPnJlcSwgJmNtZC0+cmVzKTsKKwljbWQtPnJlcS5zaXplID0gY3B1X3RvX2xl
+MzIoc2l6ZW9mKCpjbWQpIC0gc2l6ZW9mKGNtZC0+cmVzKSk7CisJY21kLT5yZXEuY29kZSA9IGNw
+dV90b19sZTMyKElYWEFUX1VTQl9DQU5fQ01EX0lOSVQpOworCWNtZC0+cmVxLnBvcnQgPSBjcHVf
+dG9fbGUxNihwb3J0KTsKKwljbWQtPm1vZGUgPSBvcG1vZGU7CisJY21kLT5idHIwID0gYnRyMDsK
+KwljbWQtPmJ0cjEgPSBidHIxOworCisJZXJyID0gaXh4YXRfdXNiX3NlbmRfY21kKGRldi0+dWRl
+diwgcG9ydCwgY21kLCBzaXplb2YoKmNtZCksICZjbWQtPnJlcywKKwkJCQkgc2l6ZW9mKGNtZC0+
+cmVzKSk7CisJa2ZyZWUoY21kKTsKKwlyZXR1cm4gZXJyOworfQorCitjb25zdCBzdHJ1Y3QgaXh4
+YXRfdXNiX2FkYXB0ZXIgdXNiMmNhbl9jbDEgPSB7CisJLmNsb2NrID0gSVhYQVRfVVNCX0NMT0NL
+LAorCS5idCA9ICZ1c2IyY2FuX2J0LAorCS5idGQgPSBOVUxMLAorCS5tb2RlcyA9IENBTl9DVFJM
+TU9ERV8zX1NBTVBMRVMgfCBDQU5fQ1RSTE1PREVfQkVSUl9SRVBPUlRJTkcgfAorCQlDQU5fQ1RS
+TE1PREVfTElTVEVOT05MWSwKKwkuYnVmZmVyX3NpemVfcnggPSBJWFhBVF9VU0JfQlVGRkVSX1NJ
+WkVfUlgsCisJLmJ1ZmZlcl9zaXplX3R4ID0gSVhYQVRfVVNCX0JVRkZFUl9TSVpFX1RYLAorCS5l
+cF9tc2dfaW4gPSB7CisJCTEgfCBVU0JfRElSX0lOLAorCQkyIHwgVVNCX0RJUl9JTiwKKwkJMyB8
+IFVTQl9ESVJfSU4sCisJCTQgfCBVU0JfRElSX0lOLAorCQk1IHwgVVNCX0RJUl9JTiwKKwl9LAor
+CS5lcF9tc2dfb3V0ID0geworCQkxIHwgVVNCX0RJUl9PVVQsCisJCTIgfCBVU0JfRElSX09VVCwK
+KwkJMyB8IFVTQl9ESVJfT1VULAorCQk0IHwgVVNCX0RJUl9PVVQsCisJCTUgfCBVU0JfRElSX09V
+VCwKKwl9LAorCS5lcF9vZmZzID0gMCwKKwkuaW5pdF9jdHJsID0gaXh4YXRfdXNiX2luaXRfY3Ry
+bAorfTsKZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L2Nhbi91c2IvaXh4YXRfdXNiL2l4eGF0X3Vz
+Yl9jbDIuYyBiL2RyaXZlcnMvbmV0L2Nhbi91c2IvaXh4YXRfdXNiL2l4eGF0X3VzYl9jbDIuYwpu
+ZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAwMDAuLjI2ODU0NGY1MmYxZQotLS0g
+L2Rldi9udWxsCisrKyBiL2RyaXZlcnMvbmV0L2Nhbi91c2IvaXh4YXRfdXNiL2l4eGF0X3VzYl9j
+bDIuYwpAQCAtMCwwICsxLDE3NiBAQAorLy8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0y
+LjAtb25seQorLyoKKyAqIENvcHlyaWdodCAoQykgMjAxOCBITVMgSW5kdXN0cmlhbCBOZXR3b3Jr
+cyA8c29ja2V0Y2FuQGhtcy1uZXR3b3Jrcy5kZT4KKyAqLworCisjaW5jbHVkZSA8bGludXgvY2Fu
+L2Rldi5oPgorI2luY2x1ZGUgPGxpbnV4L2tlcm5lbC5oPgorI2luY2x1ZGUgPGxpbnV4L3VzYi5o
+PgorCisjaW5jbHVkZSAiaXh4YXRfdXNiX2NvcmUuaCIKKworI2RlZmluZSBJWFhBVF9VU0JfQ0xP
+Q0sgODAwMDAwMDAKKworI2RlZmluZSBJWFhBVF9VU0JfQlVGRkVSX1NJWkVfUlggNTEyCisjZGVm
+aW5lIElYWEFUX1VTQl9CVUZGRVJfU0laRV9UWCA1MTIKKworI2RlZmluZSBJWFhBVF9VU0JfQ0FO
+X0NNRF9JTklUIDB4MzM3CisKK3N0YXRpYyBjb25zdCBzdHJ1Y3QgY2FuX2JpdHRpbWluZ19jb25z
+dCB1c2IyY2FuX2J0ID0geworCS5uYW1lID0gSVhYQVRfVVNCX0NUUkxfTkFNRSwKKwkudHNlZzFf
+bWluID0gMSwKKwkudHNlZzFfbWF4ID0gMjU2LAorCS50c2VnMl9taW4gPSAxLAorCS50c2VnMl9t
+YXggPSAyNTYsCisJLnNqd19tYXggPSAxMjgsCisJLmJycF9taW4gPSAyLAorCS5icnBfbWF4ID0g
+NTEzLAorCS5icnBfaW5jID0gMSwKK307CisKK3N0YXRpYyBjb25zdCBzdHJ1Y3QgY2FuX2JpdHRp
+bWluZ19jb25zdCB1c2IyY2FuX2J0ZCA9IHsKKwkubmFtZSA9IElYWEFUX1VTQl9DVFJMX05BTUUs
+CisJLnRzZWcxX21pbiA9IDEsCisJLnRzZWcxX21heCA9IDI1NiwKKwkudHNlZzJfbWluID0gMSwK
+KwkudHNlZzJfbWF4ID0gMjU2LAorCS5zandfbWF4ID0gMTI4LAorCS5icnBfbWluID0gMiwKKwku
+YnJwX21heCA9IDUxMywKKwkuYnJwX2luYyA9IDEsCit9OworCitzdGF0aWMgY29uc3Qgc3RydWN0
+IGNhbl9iaXR0aW1pbmdfY29uc3QgY2FuaWRtX2J0ID0geworCS5uYW1lID0gSVhYQVRfVVNCX0NU
+UkxfTkFNRSwKKwkudHNlZzFfbWluID0gMSwKKwkudHNlZzFfbWF4ID0gMjU2LAorCS50c2VnMl9t
+aW4gPSAxLAorCS50c2VnMl9tYXggPSAxMjgsCisJLnNqd19tYXggPSAxMjgsCisJLmJycF9taW4g
+PSAxLAorCS5icnBfbWF4ID0gNTEyLAorCS5icnBfaW5jID0gMQorfTsKKworc3RhdGljIGNvbnN0
+IHN0cnVjdCBjYW5fYml0dGltaW5nX2NvbnN0IGNhbmlkbV9idGQgPSB7CisJLm5hbWUgPSBJWFhB
+VF9VU0JfQ1RSTF9OQU1FLAorCS50c2VnMV9taW4gPSAxLAorCS50c2VnMV9tYXggPSAzMiwKKwku
+dHNlZzJfbWluID0gMSwKKwkudHNlZzJfbWF4ID0gMTYsCisJLnNqd19tYXggPSA4LAorCS5icnBf
+bWluID0gMSwKKwkuYnJwX21heCA9IDMyLAorCS5icnBfaW5jID0gMQorfTsKKworc3RhdGljIGlu
+dCBpeHhhdF91c2JfaW5pdF9jdHJsKHN0cnVjdCBpeHhhdF91c2JfZGV2aWNlICpkZXYpCit7CisJ
+Y29uc3Qgc3RydWN0IGNhbl9iaXR0aW1pbmcgKmJ0ID0gJmRldi0+Y2FuLmJpdHRpbWluZzsKKwlj
+b25zdCBzdHJ1Y3QgY2FuX2JpdHRpbWluZyAqYnRkID0gJmRldi0+Y2FuLmRhdGFfYml0dGltaW5n
+OworCWNvbnN0IHUxNiBwb3J0ID0gZGV2LT5jdHJsX2luZGV4OworCWludCBlcnI7CisJc3RydWN0
+IGl4eGF0X3VzYl9pbml0X2NsMl9jbWQgKmNtZDsKKwl1MzIgYnRtb2RlID0gSVhYQVRfVVNCX0JU
+TU9ERV9OQVQ7CisJdTggZXhtb2RlID0gMDsKKwl1OCBvcG1vZGUgPSBJWFhBVF9VU0JfT1BNT0RF
+X0VYVEVOREVEIHwgSVhYQVRfVVNCX09QTU9ERV9TVEFOREFSRDsKKworCWNtZCA9IGttYWxsb2Mo
+c2l6ZW9mKCpjbWQpLCBHRlBfS0VSTkVMKTsKKwlpZiAoIWNtZCkKKwkJcmV0dXJuIC1FTk9NRU07
+CisKKwlpZiAoZGV2LT5jYW4uY3RybG1vZGUgJiBDQU5fQ1RSTE1PREVfM19TQU1QTEVTKQorCQli
+dG1vZGUgPSBJWFhBVF9VU0JfQlRNT0RFX1RTTTsKKwlpZiAoZGV2LT5jYW4uY3RybG1vZGUgJiBD
+QU5fQ1RSTE1PREVfQkVSUl9SRVBPUlRJTkcpCisJCW9wbW9kZSB8PSBJWFhBVF9VU0JfT1BNT0RF
+X0VSUkZSQU1FOworCWlmIChkZXYtPmNhbi5jdHJsbW9kZSAmIENBTl9DVFJMTU9ERV9MSVNURU5P
+TkxZKQorCQlvcG1vZGUgfD0gSVhYQVRfVVNCX09QTU9ERV9MSVNUT05MWTsKKwlpZiAoZGV2LT5j
+YW4uY3RybG1vZGUgJiAoQ0FOX0NUUkxNT0RFX0ZEIHwgQ0FOX0NUUkxNT0RFX0ZEX05PTl9JU08p
+KSB7CisJCWV4bW9kZSB8PSBJWFhBVF9VU0JfRVhNT0RFX0VYVERBVEEgfCBJWFhBVF9VU0JfRVhN
+T0RFX0ZBU1REQVRBOworCisJCWlmICghKGRldi0+Y2FuLmN0cmxtb2RlICYgQ0FOX0NUUkxNT0RF
+X0ZEX05PTl9JU08pKQorCQkJZXhtb2RlIHw9IElYWEFUX1VTQl9FWE1PREVfSVNPRkQ7CisJfQor
+CisJaXh4YXRfdXNiX3NldHVwX2NtZCgmY21kLT5yZXEsICZjbWQtPnJlcyk7CisJY21kLT5yZXEu
+c2l6ZSA9IGNwdV90b19sZTMyKHNpemVvZigqY21kKSAtIHNpemVvZihjbWQtPnJlcykpOworCWNt
+ZC0+cmVxLmNvZGUgPSBjcHVfdG9fbGUzMihJWFhBVF9VU0JfQ0FOX0NNRF9JTklUKTsKKwljbWQt
+PnJlcS5wb3J0ID0gY3B1X3RvX2xlMTYocG9ydCk7CisJY21kLT5vcG1vZGUgPSBvcG1vZGU7CisJ
+Y21kLT5leG1vZGUgPSBleG1vZGU7CisJY21kLT5zZHIubW9kZSA9IGNwdV90b19sZTMyKGJ0bW9k
+ZSk7CisJY21kLT5zZHIuYnBzID0gY3B1X3RvX2xlMzIoYnQtPmJycCk7CisJY21kLT5zZHIudHMx
+ID0gY3B1X3RvX2xlMTYoYnQtPnByb3Bfc2VnICsgYnQtPnBoYXNlX3NlZzEpOworCWNtZC0+c2Ry
+LnRzMiA9IGNwdV90b19sZTE2KGJ0LT5waGFzZV9zZWcyKTsKKwljbWQtPnNkci5zancgPSBjcHVf
+dG9fbGUxNihidC0+c2p3KTsKKwljbWQtPnNkci50ZG8gPSAwOworCisJaWYgKGV4bW9kZSkgewor
+CQljbWQtPmZkci5tb2RlID0gY3B1X3RvX2xlMzIoYnRtb2RlKTsKKwkJY21kLT5mZHIuYnBzID0g
+Y3B1X3RvX2xlMzIoYnRkLT5icnApOworCQljbWQtPmZkci50czEgPSBjcHVfdG9fbGUxNihidGQt
+PnByb3Bfc2VnICsgYnRkLT5waGFzZV9zZWcxKTsKKwkJY21kLT5mZHIudHMyID0gY3B1X3RvX2xl
+MTYoYnRkLT5waGFzZV9zZWcyKTsKKwkJY21kLT5mZHIuc2p3ID0gY3B1X3RvX2xlMTYoYnRkLT5z
+ancpOworCQljbWQtPmZkci50ZG8gPSBjcHVfdG9fbGUxNihidGQtPmJycCAqIChidGQtPnBoYXNl
+X3NlZzEgKyAxICsKKwkJCQkJCSAgICAgICBidGQtPnByb3Bfc2VnKSk7CisJfQorCisJZXJyID0g
+aXh4YXRfdXNiX3NlbmRfY21kKGRldi0+dWRldiwgcG9ydCwgY21kLCBzaXplb2YoKmNtZCksICZj
+bWQtPnJlcywKKwkJCQkgc2l6ZW9mKGNtZC0+cmVzKSk7CisJa2ZyZWUoY21kKTsKKwlyZXR1cm4g
+ZXJyOworfQorCitjb25zdCBzdHJ1Y3QgaXh4YXRfdXNiX2FkYXB0ZXIgdXNiMmNhbl9jbDIgPSB7
+CisJLmNsb2NrID0gSVhYQVRfVVNCX0NMT0NLLAorCS5idCA9ICZ1c2IyY2FuX2J0LAorCS5idGQg
+PSAmdXNiMmNhbl9idGQsCisJLm1vZGVzID0gQ0FOX0NUUkxNT0RFXzNfU0FNUExFUyB8IENBTl9D
+VFJMTU9ERV9MSVNURU5PTkxZIHwKKwkJQ0FOX0NUUkxNT0RFX0JFUlJfUkVQT1JUSU5HIHwgQ0FO
+X0NUUkxNT0RFX0ZEIHwKKwkJQ0FOX0NUUkxNT0RFX0ZEX05PTl9JU08sCisJLmJ1ZmZlcl9zaXpl
+X3J4ID0gSVhYQVRfVVNCX0JVRkZFUl9TSVpFX1JYLAorCS5idWZmZXJfc2l6ZV90eCA9IElYWEFU
+X1VTQl9CVUZGRVJfU0laRV9UWCwKKwkuZXBfbXNnX2luID0geworCQkxIHwgVVNCX0RJUl9JTiwK
+KwkJMiB8IFVTQl9ESVJfSU4sCisJCTMgfCBVU0JfRElSX0lOLAorCQk0IHwgVVNCX0RJUl9JTiwK
+KwkJNSB8IFVTQl9ESVJfSU4KKwl9LAorCS5lcF9tc2dfb3V0ID0geworCQkxIHwgVVNCX0RJUl9P
+VVQsCisJCTIgfCBVU0JfRElSX09VVCwKKwkJMyB8IFVTQl9ESVJfT1VULAorCQk0IHwgVVNCX0RJ
+Ul9PVVQsCisJCTUgfCBVU0JfRElSX09VVCwKKwl9LAorCS5lcF9vZmZzID0gMSwKKwkuaW5pdF9j
+dHJsID0gaXh4YXRfdXNiX2luaXRfY3RybAorfTsKKworY29uc3Qgc3RydWN0IGl4eGF0X3VzYl9h
+ZGFwdGVyIGNhbl9pZG0gPSB7CisJLmNsb2NrID0gSVhYQVRfVVNCX0NMT0NLLAorCS5idCA9ICZj
+YW5pZG1fYnQsCisJLmJ0ZCA9ICZjYW5pZG1fYnRkLAorCS5tb2RlcyA9IENBTl9DVFJMTU9ERV8z
+X1NBTVBMRVMgfCBDQU5fQ1RSTE1PREVfTElTVEVOT05MWSB8CisJCUNBTl9DVFJMTU9ERV9CRVJS
+X1JFUE9SVElORyB8IENBTl9DVFJMTU9ERV9GRCB8CisJCUNBTl9DVFJMTU9ERV9GRF9OT05fSVNP
+LAorCS5idWZmZXJfc2l6ZV9yeCA9IElYWEFUX1VTQl9CVUZGRVJfU0laRV9SWCwKKwkuYnVmZmVy
+X3NpemVfdHggPSBJWFhBVF9VU0JfQlVGRkVSX1NJWkVfVFgsCisJLmVwX21zZ19pbiA9IHsKKwkJ
+MiB8IFVTQl9ESVJfSU4sCisJCTQgfCBVU0JfRElSX0lOLAorCQk2IHwgVVNCX0RJUl9JTiwKKwkJ
+OCB8IFVTQl9ESVJfSU4sCisJCTEwIHwgVVNCX0RJUl9JTiwKKwl9LAorCS5lcF9tc2dfb3V0ID0g
+eworCQkxIHwgVVNCX0RJUl9PVVQsCisJCTMgfCBVU0JfRElSX09VVCwKKwkJNSB8IFVTQl9ESVJf
+T1VULAorCQk3IHwgVVNCX0RJUl9PVVQsCisJCTkgfCBVU0JfRElSX09VVCwKKwl9LAorCS5lcF9v
+ZmZzID0gMCwKKwkuaW5pdF9jdHJsID0gaXh4YXRfdXNiX2luaXRfY3RybAorfTsKZGlmZiAtLWdp
+dCBhL2RyaXZlcnMvbmV0L2Nhbi91c2IvaXh4YXRfdXNiL2l4eGF0X3VzYl9jb3JlLmMgYi9kcml2
+ZXJzL25ldC9jYW4vdXNiL2l4eGF0X3VzYi9peHhhdF91c2JfY29yZS5jCm5ldyBmaWxlIG1vZGUg
+MTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAwMC4uODc4N2QyN2EzODg2Ci0tLSAvZGV2L251bGwKKysr
+IGIvZHJpdmVycy9uZXQvY2FuL3VzYi9peHhhdF91c2IvaXh4YXRfdXNiX2NvcmUuYwpAQCAtMCww
+ICsxLDEyNzcgQEAKKy8vIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wLW9ubHkKKy8q
+CisgKiBDb3B5cmlnaHQgKEMpIDIwMTggSE1TIEluZHVzdHJpYWwgTmV0d29ya3MgPHNvY2tldGNh
+bkBobXMtbmV0d29ya3MuZGU+CisgKi8KKworI2luY2x1ZGUgPGxpbnV4L2Nhbi9kZXYuaD4KKyNp
+bmNsdWRlIDxsaW51eC9ldGh0b29sLmg+CisjaW5jbHVkZSA8bGludXgva2VybmVsLmg+CisjaW5j
+bHVkZSA8bGludXgva3RocmVhZC5oPgorI2luY2x1ZGUgPGxpbnV4L21vZHVsZS5oPgorI2luY2x1
+ZGUgPGxpbnV4L3VzYi5oPgorCisjaW5jbHVkZSAiaXh4YXRfdXNiX2NvcmUuaCIKKworTU9EVUxF
+X0FVVEhPUigiTWFyY2VsIFNjaG1pZHQgPHNvY2tldGNhbkBobXMtbmV0d29ya3MuZGU+Iik7CitN
+T0RVTEVfREVTQ1JJUFRJT04oIkNBTiBkcml2ZXIgZm9yIElYWEFUIFVTQi10by1DQU4gLyBDQU4g
+RkQgYWRhcHRlcnMiKTsKK01PRFVMRV9MSUNFTlNFKCJHUEwiKTsKKworLyogVGFibGUgb2YgZGV2
+aWNlcyB0aGF0IHdvcmsgd2l0aCB0aGlzIGRyaXZlciAqLworc3RhdGljIGNvbnN0IHN0cnVjdCB1
+c2JfZGV2aWNlX2lkIGl4eGF0X3VzYl90YWJsZVtdID0geworCXsgVVNCX0RFVklDRShJWFhBVF9V
+U0JfVkVORE9SX0lELCBVU0IyQ0FOX0NPTVBBQ1RfUFJPRFVDVF9JRCksCisJICAuZHJpdmVyX2lu
+Zm8gPSAoa2VybmVsX3Vsb25nX3QpJnVzYjJjYW5fY2wxLCB9LAorCXsgVVNCX0RFVklDRShJWFhB
+VF9VU0JfVkVORE9SX0lELCBVU0IyQ0FOX0VNQkVEREVEX1BST0RVQ1RfSUQpLAorCSAgLmRyaXZl
+cl9pbmZvID0gKGtlcm5lbF91bG9uZ190KSZ1c2IyY2FuX2NsMSwgfSwKKwl7IFVTQl9ERVZJQ0Uo
+SVhYQVRfVVNCX1ZFTkRPUl9JRCwgVVNCMkNBTl9QUk9GRVNTSU9OQUxfUFJPRFVDVF9JRCksCisJ
+ICAuZHJpdmVyX2luZm8gPSAoa2VybmVsX3Vsb25nX3QpJnVzYjJjYW5fY2wxLCB9LAorCXsgVVNC
+X0RFVklDRShJWFhBVF9VU0JfVkVORE9SX0lELCBVU0IyQ0FOX0FVVE9NT1RJVkVfUFJPRFVDVF9J
+RCksCisJICAuZHJpdmVyX2luZm8gPSAoa2VybmVsX3Vsb25nX3QpJnVzYjJjYW5fY2wxLCB9LAor
+CXsgVVNCX0RFVklDRShJWFhBVF9VU0JfVkVORE9SX0lELCBVU0IyQ0FOX0ZEX0NPTVBBQ1RfUFJP
+RFVDVF9JRCksCisJICAuZHJpdmVyX2luZm8gPSAoa2VybmVsX3Vsb25nX3QpJnVzYjJjYW5fY2wy
+LCB9LAorCXsgVVNCX0RFVklDRShJWFhBVF9VU0JfVkVORE9SX0lELCBVU0IyQ0FOX0ZEX1BST0ZF
+U1NJT05BTF9QUk9EVUNUX0lEKSwKKwkgIC5kcml2ZXJfaW5mbyA9IChrZXJuZWxfdWxvbmdfdCkm
+dXNiMmNhbl9jbDIsIH0sCisJeyBVU0JfREVWSUNFKElYWEFUX1VTQl9WRU5ET1JfSUQsIFVTQjJD
+QU5fRkRfQVVUT01PVElWRV9QUk9EVUNUX0lEKSwKKwkgIC5kcml2ZXJfaW5mbyA9IChrZXJuZWxf
+dWxvbmdfdCkmdXNiMmNhbl9jbDIsIH0sCisJeyBVU0JfREVWSUNFKElYWEFUX1VTQl9WRU5ET1Jf
+SUQsIFVTQjJDQU5fRkRfUENJRV9NSU5JX1BST0RVQ1RfSUQpLAorCSAgLmRyaXZlcl9pbmZvID0g
+KGtlcm5lbF91bG9uZ190KSZ1c2IyY2FuX2NsMiwgfSwKKwl7IFVTQl9ERVZJQ0UoSVhYQVRfVVNC
+X1ZFTkRPUl9JRCwgVVNCMkNBUl9QUk9EVUNUX0lEKSwKKwkgIC5kcml2ZXJfaW5mbyA9IChrZXJu
+ZWxfdWxvbmdfdCkmdXNiMmNhbl9jbDIsIH0sCisJeyBVU0JfREVWSUNFKElYWEFUX1VTQl9WRU5E
+T1JfSUQsIENBTl9JRE0xMDFfUFJPRFVDVF9JRCksCisJICAuZHJpdmVyX2luZm8gPSAoa2VybmVs
+X3Vsb25nX3QpJmNhbl9pZG0sIH0sCisJeyBVU0JfREVWSUNFKElYWEFUX1VTQl9WRU5ET1JfSUQs
+IENBTl9JRE0yMDBfUFJPRFVDVF9JRCksCisJICAuZHJpdmVyX2luZm8gPSAoa2VybmVsX3Vsb25n
+X3QpJmNhbl9pZG0sIH0sCisJeyB9IC8qIFRlcm1pbmF0aW5nIGVudHJ5ICovCit9OworCitNT0RV
+TEVfREVWSUNFX1RBQkxFKHVzYiwgaXh4YXRfdXNiX3RhYmxlKTsKKwordm9pZCBpeHhhdF91c2Jf
+c2V0dXBfY21kKHN0cnVjdCBpeHhhdF91c2JfZGFsX3JlcSAqcmVxLAorCQkJIHN0cnVjdCBpeHhh
+dF91c2JfZGFsX3JlcyAqcmVzKQoreworCXJlcS0+c2l6ZSA9IGNwdV90b19sZTMyKHNpemVvZigq
+cmVxKSk7CisJcmVxLT5wb3J0ID0gY3B1X3RvX2xlMTYoMHhmZmZmKTsKKwlyZXEtPnNvY2tldCA9
+IGNwdV90b19sZTE2KDB4ZmZmZik7CisJcmVxLT5jb2RlID0gY3B1X3RvX2xlMzIoMCk7CisKKwly
+ZXMtPnJlc19zaXplID0gY3B1X3RvX2xlMzIoc2l6ZW9mKCpyZXMpKTsKKwlyZXMtPnJldF9zaXpl
+ID0gY3B1X3RvX2xlMzIoMCk7CisJcmVzLT5jb2RlID0gY3B1X3RvX2xlMzIoMHhmZmZmZmZmZik7
+Cit9CisKK2ludCBpeHhhdF91c2Jfc2VuZF9jbWQoc3RydWN0IHVzYl9kZXZpY2UgKmRldiwgY29u
+c3QgdTE2IHBvcnQsIHZvaWQgKnJlcSwKKwkJICAgICAgIGNvbnN0IHUxNiByZXFfc2l6ZSwgdm9p
+ZCAqcmVzLCBjb25zdCB1MTYgcmVzX3NpemUpCit7CisJY29uc3QgaW50IHRvID0gbXNlY3NfdG9f
+amlmZmllcyhJWFhBVF9VU0JfTVNHX1RJTUVPVVQpOworCWNvbnN0IHU4IHJxID0gMHhmZjsKKwlj
+b25zdCB1OCBydGkgPSBVU0JfVFlQRV9WRU5ET1IgfCBVU0JfRElSX0lOOworCWNvbnN0IHU4IHJ0
+byA9IFVTQl9UWVBFX1ZFTkRPUiB8IFVTQl9ESVJfT1VUOworCWludCBpOworCWludCBwb3MgPSAw
+OworCWludCByY3AgPSB1c2JfcmN2Y3RybHBpcGUoZGV2LCAwKTsKKwlpbnQgc2NwID0gdXNiX3Nu
+ZGN0cmxwaXBlKGRldiwgMCk7CisJaW50IHJldCA9IDA7CisJc3RydWN0IGl4eGF0X3VzYl9kYWxf
+cmVzICpkYWxfcmVzID0gcmVzOworCisJZm9yIChpID0gMDsgaSA8IElYWEFUX1VTQl9NQVhfQ09N
+X1JFUTsgKytpKSB7CisJCXJldCA9IHVzYl9jb250cm9sX21zZyhkZXYsIHNjcCwgcnEsIHJ0bywg
+cG9ydCwgMCwgcmVxLCByZXFfc2l6ZSwKKwkJCQkgICAgICB0byk7CisJCWlmIChyZXQgPCAwKQor
+CQkJbXNsZWVwKElYWEFUX1VTQl9NU0dfQ1lDTEUpOworCQllbHNlCisJCQlicmVhazsKKwl9CisK
+KwlpZiAocmV0IDwgMCkgeworCQlkZXZfZXJyKCZkZXYtPmRldiwgIlRYIGNvbW1hbmQgZmFpbHVy
+ZTogJXBlXG4iLCBFUlJfUFRSKHJldCkpOworCQlnb3RvIGZhaWw7CisJfQorCisJZm9yIChpID0g
+MDsgaSA8IElYWEFUX1VTQl9NQVhfQ09NX1JFUTsgKytpKSB7CisJCWNvbnN0IGludCBycyA9IHJl
+c19zaXplIC0gcG9zOworCQl2b2lkICpyYiA9IHJlcyArIHBvczsKKworCQlyZXQgPSB1c2JfY29u
+dHJvbF9tc2coZGV2LCByY3AsIHJxLCBydGksIHBvcnQsIDAsIHJiLCBycywgdG8pOworCQlpZiAo
+cmV0IDwgMCkgeworCQkJbXNsZWVwKElYWEFUX1VTQl9NU0dfQ1lDTEUpOworCQkJY29udGludWU7
+CisJCX0KKworCQlwb3MgKz0gcmV0OworCQlpZiAocG9zIDwgcmVzX3NpemUpCisJCQltc2xlZXAo
+SVhYQVRfVVNCX01TR19DWUNMRSk7CisJCWVsc2UKKwkJCWJyZWFrOworCX0KKworCWlmIChwb3Mg
+IT0gcmVzX3NpemUpCisJCXJldCA9IC1FQkFETVNHOworCisJaWYgKHJldCA8IDApIHsKKwkJZGV2
+X2VycigmZGV2LT5kZXYsICJSWCBjb21tYW5kIGZhaWx1cmU6ICVwZVxuIiwgRVJSX1BUUihyZXQp
+KTsKKwkJZ290byBmYWlsOworCX0KKworCXJldCA9IGxlMzJfdG9fY3B1KGRhbF9yZXMtPmNvZGUp
+OworCitmYWlsOgorCXJldHVybiByZXQ7Cit9CisKK3N0YXRpYyB2b2lkIGl4eGF0X3VzYl91cGRh
+dGVfdHNfbm93KHN0cnVjdCBpeHhhdF91c2JfZGV2aWNlICpkZXYsIHUzMiB0c19ub3cpCit7CisJ
+dTMyICp0c19kZXYgPSAmZGV2LT50aW1lX3JlZi50c19kZXZfMDsKKwlrdGltZV90ICprdF9ob3N0
+ID0gJmRldi0+dGltZV9yZWYua3RfaG9zdF8wOworCXU2NCB0aW1lYmFzZSA9ICh1NjQpVTMyX01B
+WCAtICh1NjQpKCp0c19kZXYpICsgKHU2NCl0c19ub3c7CisKKwkqa3RfaG9zdCA9IGt0aW1lX2Fk
+ZF91cygqa3RfaG9zdCwgdGltZWJhc2UpOworCSp0c19kZXYgPSB0c19ub3c7Cit9CisKK3N0YXRp
+YyB2b2lkIGl4eGF0X3VzYl9nZXRfdHNfdHYoc3RydWN0IGl4eGF0X3VzYl9kZXZpY2UgKmRldiwg
+dTMyIHRzLAorCQkJCWt0aW1lX3QgKmtfdGltZSkKK3sKKwlrdGltZV90IHRtcF90aW1lID0gZGV2
+LT50aW1lX3JlZi5rdF9ob3N0XzA7CisKKwlpZiAodHMgPCBkZXYtPnRpbWVfcmVmLnRzX2Rldl9s
+YXN0KQorCQlpeHhhdF91c2JfdXBkYXRlX3RzX25vdyhkZXYsIHRzKTsKKworCWRldi0+dGltZV9y
+ZWYudHNfZGV2X2xhc3QgPSB0czsKKwl0bXBfdGltZSA9IGt0aW1lX2FkZF91cyh0bXBfdGltZSwg
+dHMgLSBkZXYtPnRpbWVfcmVmLnRzX2Rldl8wKTsKKworCWlmIChrX3RpbWUpCisJCSprX3RpbWUg
+PSB0bXBfdGltZTsKK30KKworc3RhdGljIHZvaWQgaXh4YXRfdXNiX3NldF90c19ub3coc3RydWN0
+IGl4eGF0X3VzYl9kZXZpY2UgKmRldiwgdTMyIHRzX25vdykKK3sKKwlkZXYtPnRpbWVfcmVmLnRz
+X2Rldl8wID0gdHNfbm93OworCWRldi0+dGltZV9yZWYua3RfaG9zdF8wID0ga3RpbWVfZ2V0X3Jl
+YWwoKTsKKwlkZXYtPnRpbWVfcmVmLnRzX2Rldl9sYXN0ID0gdHNfbm93OworfQorCitzdGF0aWMg
+aW50IGl4eGF0X3VzYl9nZXRfZGV2X2NhcHMoc3RydWN0IHVzYl9kZXZpY2UgKmRldiwKKwkJCQkg
+IHN0cnVjdCBpeHhhdF9kZXZfY2FwcyAqZGV2X2NhcHMpCit7CisJaW50IGk7CisJaW50IGVycjsK
+KwlzdHJ1Y3QgaXh4YXRfdXNiX2NhcHNfY21kICpjbWQ7CisJY29uc3QgdTMyIGNtZF9zaXplID0g
+c2l6ZW9mKCpjbWQpOworCWNvbnN0IHUzMiByZXFfc2l6ZSA9IHNpemVvZihjbWQtPnJlcSk7CisJ
+Y29uc3QgdTMyIHJjdl9zaXplID0gY21kX3NpemUgLSByZXFfc2l6ZTsKKwljb25zdCB1MzIgc25k
+X3NpemUgPSByZXFfc2l6ZSArIHNpemVvZihjbWQtPnJlcyk7CisJdTE2IG51bV9jdHJsOworCisJ
+Y21kID0ga21hbGxvYyhjbWRfc2l6ZSwgR0ZQX0tFUk5FTCk7CisJaWYgKCFjbWQpCisJCXJldHVy
+biAtRU5PTUVNOworCisJaXh4YXRfdXNiX3NldHVwX2NtZCgmY21kLT5yZXEsICZjbWQtPnJlcyk7
+CisJY21kLT5yZXEuY29kZSA9IGNwdV90b19sZTMyKElYWEFUX1VTQl9CUkRfQ01EX0dFVF9ERVZD
+QVBTKTsKKwljbWQtPnJlcy5yZXNfc2l6ZSA9IGNwdV90b19sZTMyKHJjdl9zaXplKTsKKworCWVy
+ciA9IGl4eGF0X3VzYl9zZW5kX2NtZChkZXYsIGxlMTZfdG9fY3B1KGNtZC0+cmVxLnBvcnQpLCBj
+bWQsIHNuZF9zaXplLAorCQkJCSAmY21kLT5yZXMsIHJjdl9zaXplKTsKKwlpZiAoZXJyKQorCQln
+b3RvIGZhaWw7CisKKwlkZXZfY2Fwcy0+YnVzX2N0cmxfY291bnQgPSBjbWQtPmNhcHMuYnVzX2N0
+cmxfY291bnQ7CisJbnVtX2N0cmwgPSBsZTE2X3RvX2NwdShkZXZfY2Fwcy0+YnVzX2N0cmxfY291
+bnQpOworCWlmIChudW1fY3RybCA+IEFSUkFZX1NJWkUoZGV2X2NhcHMtPmJ1c19jdHJsX3R5cGVz
+KSkgeworCQllcnIgPSAtRUlOVkFMOworCQlnb3RvIGZhaWw7CisJfQorCisJZm9yIChpID0gMDsg
+aSA8IG51bV9jdHJsOyBpKyspCisJCWRldl9jYXBzLT5idXNfY3RybF90eXBlc1tpXSA9IGNtZC0+
+Y2Fwcy5idXNfY3RybF90eXBlc1tpXTsKKworZmFpbDoKKwlrZnJlZShjbWQpOworCXJldHVybiBl
+cnI7Cit9CisKK3N0YXRpYyBpbnQgaXh4YXRfdXNiX2dldF9kZXZfaW5mbyhzdHJ1Y3QgdXNiX2Rl
+dmljZSAqZGV2LAorCQkJCSAgc3RydWN0IGl4eGF0X2Rldl9pbmZvICpkZXZfaW5mbykKK3sKKwlp
+bnQgZXJyOworCXN0cnVjdCBpeHhhdF91c2JfaW5mb19jbWQgKmNtZDsKKwljb25zdCB1MzIgY21k
+X3NpemUgPSBzaXplb2YoKmNtZCk7CisJY29uc3QgdTMyIHJlcV9zaXplID0gc2l6ZW9mKGNtZC0+
+cmVxKTsKKwljb25zdCB1MzIgcmN2X3NpemUgPSBjbWRfc2l6ZSAtIHJlcV9zaXplOworCWNvbnN0
+IHUzMiBzbmRfc2l6ZSA9IHJlcV9zaXplICsgc2l6ZW9mKGNtZC0+cmVzKTsKKworCWNtZCA9IGtt
+YWxsb2MoY21kX3NpemUsIEdGUF9LRVJORUwpOworCWlmICghY21kKQorCQlyZXR1cm4gLUVOT01F
+TTsKKworCWl4eGF0X3VzYl9zZXR1cF9jbWQoJmNtZC0+cmVxLCAmY21kLT5yZXMpOworCWNtZC0+
+cmVxLmNvZGUgPSBjcHVfdG9fbGUzMihJWFhBVF9VU0JfQlJEX0NNRF9HRVRfREVWSU5GTyk7CisJ
+Y21kLT5yZXMucmVzX3NpemUgPSBjcHVfdG9fbGUzMihyY3Zfc2l6ZSk7CisKKwllcnIgPSBpeHhh
+dF91c2Jfc2VuZF9jbWQoZGV2LCBsZTE2X3RvX2NwdShjbWQtPnJlcS5wb3J0KSwgY21kLCBzbmRf
+c2l6ZSwKKwkJCQkgJmNtZC0+cmVzLCByY3Zfc2l6ZSk7CisJaWYgKGVycikKKwkJZ290byBmYWls
+OworCisJaWYgKGRldl9pbmZvKSB7CisJCW1lbWNweShkZXZfaW5mby0+ZGV2aWNlX2lkLCAmY21k
+LT5pbmZvLmRldmljZV9pZCwKKwkJICAgICAgIHNpemVvZihjbWQtPmluZm8uZGV2aWNlX2lkKSk7
+CisJCW1lbWNweShkZXZfaW5mby0+ZGV2aWNlX25hbWUsICZjbWQtPmluZm8uZGV2aWNlX25hbWUs
+CisJCSAgICAgICBzaXplb2YoY21kLT5pbmZvLmRldmljZV9uYW1lKSk7CisJCWRldl9pbmZvLT5k
+ZXZpY2VfZnBnYV92ZXJzaW9uID0gY21kLT5pbmZvLmRldmljZV9mcGdhX3ZlcnNpb247CisJCWRl
+dl9pbmZvLT5kZXZpY2VfdmVyc2lvbiA9IGNtZC0+aW5mby5kZXZpY2VfdmVyc2lvbjsKKwl9CisK
+K2ZhaWw6CisJa2ZyZWUoY21kKTsKKwlyZXR1cm4gZXJyOworfQorCitzdGF0aWMgaW50IGl4eGF0
+X3VzYl9zdGFydF9jdHJsKHN0cnVjdCBpeHhhdF91c2JfZGV2aWNlICpkZXYsIHUzMiAqdGltZV9y
+ZWYpCit7CisJY29uc3QgdTE2IHBvcnQgPSBkZXYtPmN0cmxfaW5kZXg7CisJaW50IGVycjsKKwlz
+dHJ1Y3QgaXh4YXRfdXNiX3N0YXJ0X2NtZCAqY21kOworCWNvbnN0IHUzMiBjbWRfc2l6ZSA9IHNp
+emVvZigqY21kKTsKKwljb25zdCB1MzIgcmVxX3NpemUgPSBzaXplb2YoY21kLT5yZXEpOworCWNv
+bnN0IHUzMiByY3Zfc2l6ZSA9IGNtZF9zaXplIC0gcmVxX3NpemU7CisJY29uc3QgdTMyIHNuZF9z
+aXplID0gcmVxX3NpemUgKyBzaXplb2YoY21kLT5yZXMpOworCisJY21kID0ga21hbGxvYyhjbWRf
+c2l6ZSwgR0ZQX0tFUk5FTCk7CisJaWYgKCFjbWQpCisJCXJldHVybiAtRU5PTUVNOworCisJaXh4
+YXRfdXNiX3NldHVwX2NtZCgmY21kLT5yZXEsICZjbWQtPnJlcyk7CisJY21kLT5yZXEuY29kZSA9
+IGNwdV90b19sZTMyKElYWEFUX1VTQl9DQU5fQ01EX1NUQVJUKTsKKwljbWQtPnJlcS5wb3J0ID0g
+Y3B1X3RvX2xlMTYocG9ydCk7CisJY21kLT5yZXMucmVzX3NpemUgPSBjcHVfdG9fbGUzMihyY3Zf
+c2l6ZSk7CisJY21kLT50aW1lID0gMDsKKworCWVyciA9IGl4eGF0X3VzYl9zZW5kX2NtZChkZXYt
+PnVkZXYsIHBvcnQsIGNtZCwgc25kX3NpemUsICZjbWQtPnJlcywKKwkJCQkgcmN2X3NpemUpOwor
+CWlmIChlcnIpCisJCWdvdG8gZmFpbDsKKworCWlmICh0aW1lX3JlZikKKwkJKnRpbWVfcmVmID0g
+bGUzMl90b19jcHUoY21kLT50aW1lKTsKKworZmFpbDoKKwlrZnJlZShjbWQpOworCXJldHVybiBl
+cnI7Cit9CisKK3N0YXRpYyBpbnQgaXh4YXRfdXNiX3N0b3BfY3RybChzdHJ1Y3QgaXh4YXRfdXNi
+X2RldmljZSAqZGV2KQoreworCWNvbnN0IHUxNiBwb3J0ID0gZGV2LT5jdHJsX2luZGV4OworCWlu
+dCBlcnI7CisJc3RydWN0IGl4eGF0X3VzYl9zdG9wX2NtZCAqY21kOworCWNvbnN0IHUzMiByY3Zf
+c2l6ZSA9IHNpemVvZihjbWQtPnJlcyk7CisJY29uc3QgdTMyIHNuZF9zaXplID0gc2l6ZW9mKCpj
+bWQpOworCisJY21kID0ga21hbGxvYyhzbmRfc2l6ZSwgR0ZQX0tFUk5FTCk7CisJaWYgKCFjbWQp
+CisJCXJldHVybiAtRU5PTUVNOworCisJaXh4YXRfdXNiX3NldHVwX2NtZCgmY21kLT5yZXEsICZj
+bWQtPnJlcyk7CisJY21kLT5yZXEuc2l6ZSA9IGNwdV90b19sZTMyKHNuZF9zaXplIC0gcmN2X3Np
+emUpOworCWNtZC0+cmVxLmNvZGUgPSBjcHVfdG9fbGUzMihJWFhBVF9VU0JfQ0FOX0NNRF9TVE9Q
+KTsKKwljbWQtPnJlcS5wb3J0ID0gY3B1X3RvX2xlMTYocG9ydCk7CisJY21kLT5hY3Rpb24gPSBj
+cHVfdG9fbGUzMihJWFhBVF9VU0JfU1RPUF9BQ1RJT05fQ0xFQVJBTEwpOworCisJZXJyID0gaXh4
+YXRfdXNiX3NlbmRfY21kKGRldi0+dWRldiwgcG9ydCwgY21kLCBzbmRfc2l6ZSwgJmNtZC0+cmVz
+LAorCQkJCSByY3Zfc2l6ZSk7CisJa2ZyZWUoY21kKTsKKwlyZXR1cm4gZXJyOworfQorCitzdGF0
+aWMgaW50IGl4eGF0X3VzYl9wb3dlcl9jdHJsKHN0cnVjdCB1c2JfZGV2aWNlICpkZXYsIHU4IG1v
+ZGUpCit7CisJaW50IGVycjsKKwlzdHJ1Y3QgaXh4YXRfdXNiX3Bvd2VyX2NtZCAqY21kOworCWNv
+bnN0IHUzMiByY3Zfc2l6ZSA9IHNpemVvZihjbWQtPnJlcyk7CisJY29uc3QgdTMyIHNuZF9zaXpl
+ID0gc2l6ZW9mKCpjbWQpOworCisJY21kID0ga21hbGxvYyhzbmRfc2l6ZSwgR0ZQX0tFUk5FTCk7
+CisJaWYgKCFjbWQpCisJCXJldHVybiAtRU5PTUVNOworCisJaXh4YXRfdXNiX3NldHVwX2NtZCgm
+Y21kLT5yZXEsICZjbWQtPnJlcyk7CisJY21kLT5yZXEuc2l6ZSA9IGNwdV90b19sZTMyKHNuZF9z
+aXplIC0gcmN2X3NpemUpOworCWNtZC0+cmVxLmNvZGUgPSBjcHVfdG9fbGUzMihJWFhBVF9VU0Jf
+QlJEX0NNRF9QT1dFUik7CisJY21kLT5tb2RlID0gbW9kZTsKKworCWVyciA9IGl4eGF0X3VzYl9z
+ZW5kX2NtZChkZXYsIGxlMTZfdG9fY3B1KGNtZC0+cmVxLnBvcnQpLCBjbWQsIHNuZF9zaXplLAor
+CQkJCSAmY21kLT5yZXMsIHJjdl9zaXplKTsKKwlrZnJlZShjbWQpOworCXJldHVybiBlcnI7Cit9
+CisKK3N0YXRpYyBpbnQgaXh4YXRfdXNiX3Jlc2V0X2N0cmwoc3RydWN0IGl4eGF0X3VzYl9kZXZp
+Y2UgKmRldikKK3sKKwljb25zdCB1MTYgcG9ydCA9IGRldi0+Y3RybF9pbmRleDsKKwlpbnQgZXJy
+OworCXN0cnVjdCBpeHhhdF91c2JfZGFsX2NtZCAqY21kOworCWNvbnN0IHUzMiBzbmRfc2l6ZSA9
+IHNpemVvZigqY21kKTsKKwljb25zdCB1MzIgcmN2X3NpemUgPSBzaXplb2YoY21kLT5yZXMpOwor
+CisJY21kID0ga21hbGxvYyhzbmRfc2l6ZSwgR0ZQX0tFUk5FTCk7CisJaWYgKCFjbWQpCisJCXJl
+dHVybiAtRU5PTUVNOworCisJaXh4YXRfdXNiX3NldHVwX2NtZCgmY21kLT5yZXEsICZjbWQtPnJl
+cyk7CisJY21kLT5yZXEuY29kZSA9IGNwdV90b19sZTMyKElYWEFUX1VTQl9DQU5fQ01EX1JFU0VU
+KTsKKwljbWQtPnJlcS5wb3J0ID0gY3B1X3RvX2xlMTYocG9ydCk7CisKKwllcnIgPSBpeHhhdF91
+c2Jfc2VuZF9jbWQoZGV2LT51ZGV2LCBwb3J0LCBjbWQsIHNuZF9zaXplLCAmY21kLT5yZXMsCisJ
+CQkJIHJjdl9zaXplKTsKKwlrZnJlZShjbWQpOworCXJldHVybiBlcnI7Cit9CisKK3N0YXRpYyB2
+b2lkIGl4eGF0X3VzYl9zdG9wX3F1ZXVlKHN0cnVjdCBpeHhhdF91c2JfZGV2aWNlICpkZXYpCit7
+CisJc3RydWN0IG5ldF9kZXZpY2UgKm5ldGRldiA9IGRldi0+bmV0ZGV2OworCXUzMiBpOworCisJ
+bmV0aWZfc3RvcF9xdWV1ZShuZXRkZXYpOworCXVzYl9raWxsX2FuY2hvcmVkX3VyYnMoJmRldi0+
+cnhfc3VibWl0dGVkKTsKKwl1c2Jfa2lsbF9hbmNob3JlZF91cmJzKCZkZXYtPnR4X3N1Ym1pdHRl
+ZCk7CisJYXRvbWljX3NldCgmZGV2LT5hY3RpdmVfdHhfdXJicywgMCk7CisJZm9yIChpID0gMDsg
+aSA8IElYWEFUX1VTQl9NQVhfVFhfVVJCUzsgaSsrKSB7CisJCWlmIChkZXYtPnR4X2NvbnRleHRz
+W2ldLmVjaG9faW5kZXggIT0gSVhYQVRfVVNCX01BWF9UWF9VUkJTKSB7CisJCQljYW5fZnJlZV9l
+Y2hvX3NrYihuZXRkZXYsIGksIE5VTEwpOworCQkJZGV2LT50eF9jb250ZXh0c1tpXS5lY2hvX2lu
+ZGV4ID0gSVhYQVRfVVNCX01BWF9UWF9VUkJTOworCQl9CisJfQorfQorCitzdGF0aWMgaW50IGl4
+eGF0X3VzYl9yZXN0YXJ0KHN0cnVjdCBpeHhhdF91c2JfZGV2aWNlICpkZXYpCit7CisJaW50IGVy
+cjsKKwlzdHJ1Y3QgbmV0X2RldmljZSAqbmV0ZGV2ID0gZGV2LT5uZXRkZXY7CisJdTMyIHQ7CisK
+KwlpeHhhdF91c2Jfc3RvcF9xdWV1ZShkZXYpOworCWVyciA9IGl4eGF0X3VzYl9zdG9wX2N0cmwo
+ZGV2KTsKKwlpZiAoZXJyKQorCQlnb3RvIGZhaWw7CisKKwllcnIgPSBpeHhhdF91c2Jfc3RhcnRf
+Y3RybChkZXYsICZ0KTsKKwlpZiAoZXJyKQorCQlnb3RvIGZhaWw7CisKKwlkZXYtPmNhbi5zdGF0
+ZSA9IENBTl9TVEFURV9FUlJPUl9BQ1RJVkU7CisJbmV0aWZfd2FrZV9xdWV1ZShuZXRkZXYpOwor
+CitmYWlsOgorCXJldHVybiBlcnI7Cit9CisKK3N0YXRpYyBpbnQgaXh4YXRfdXNiX3NldF9tb2Rl
+KHN0cnVjdCBuZXRfZGV2aWNlICpuZXRkZXYsIGVudW0gY2FuX21vZGUgbW9kZSkKK3sKKwlzdHJ1
+Y3QgaXh4YXRfdXNiX2RldmljZSAqZGV2ID0gbmV0ZGV2X3ByaXYobmV0ZGV2KTsKKworCWlmICht
+b2RlICE9IENBTl9NT0RFX1NUQVJUKQorCQlyZXR1cm4gLUVPUE5PVFNVUFA7CisKKwlyZXR1cm4g
+aXh4YXRfdXNiX3Jlc3RhcnQoZGV2KTsKK30KKworc3RhdGljIGludCBpeHhhdF91c2JfZ2V0X2Jl
+cnJfY291bnRlcihjb25zdCBzdHJ1Y3QgbmV0X2RldmljZSAqbmV0ZGV2LAorCQkJCSAgICAgIHN0
+cnVjdCBjYW5fYmVycl9jb3VudGVyICpiZWMpCit7CisJc3RydWN0IGl4eGF0X3VzYl9kZXZpY2Ug
+KmRldiA9IG5ldGRldl9wcml2KG5ldGRldik7CisKKwkqYmVjID0gZGV2LT5iZWM7CisJcmV0dXJu
+IDA7Cit9CisKK3N0YXRpYyBpbnQgaXh4YXRfdXNiX2hhbmRsZV9jYW5tc2coc3RydWN0IGl4eGF0
+X3VzYl9kZXZpY2UgKmRldiwKKwkJCQkgICBzdHJ1Y3QgaXh4YXRfY2FuX21zZyAqcngpCit7CisJ
+Y29uc3QgdTMyIGl4eF9mbGFncyA9IGxlMzJfdG9fY3B1KHJ4LT5iYXNlLmZsYWdzKTsKKwljb25z
+dCB1OCBkbGMgPSBGSUVMRF9HRVQoSVhYQVRfVVNCX01TR19GTEFHU19ETEMsIGl4eF9mbGFncyk7
+CisJc3RydWN0IGNhbmZkX2ZyYW1lICpjZjsKKwlzdHJ1Y3QgbmV0X2RldmljZSAqbmV0ZGV2ID0g
+ZGV2LT5uZXRkZXY7CisJc3RydWN0IHNrX2J1ZmYgKnNrYjsKKwl1OCBmbGFncyA9IDA7CisJdTgg
+bGVuOworCXU4IG1pbl9zaXplOworCisJaWYgKGl4eF9mbGFncyAmIElYWEFUX1VTQl9GRE1TR19G
+TEFHU19FREwpIHsKKwkJaWYgKGl4eF9mbGFncyAmIElYWEFUX1VTQl9GRE1TR19GTEFHU19GRFIp
+CisJCQlmbGFncyB8PSBDQU5GRF9CUlM7CisKKwkJaWYgKGl4eF9mbGFncyAmIElYWEFUX1VTQl9G
+RE1TR19GTEFHU19FU0kpCisJCQlmbGFncyB8PSBDQU5GRF9FU0k7CisKKwkJbGVuID0gY2FuX2Zk
+X2RsYzJsZW4oZGxjKTsKKwl9IGVsc2UgeworCQlsZW4gPSBjYW5fY2NfZGxjMmxlbihkbGMpOwor
+CX0KKworCW1pbl9zaXplID0gc2l6ZW9mKHJ4LT5iYXNlKSArIGxlbjsKKworCWlmIChkZXYtPmFk
+YXB0ZXIgPT0gJnVzYjJjYW5fY2wxKQorCQltaW5fc2l6ZSArPSBzaXplb2YocngtPmNsMSkgLSBz
+aXplb2YocngtPmNsMS5kYXRhKTsKKwllbHNlCisJCW1pbl9zaXplICs9IHNpemVvZihyeC0+Y2wy
+KSAtIHNpemVvZihyeC0+Y2wyLmRhdGEpOworCisJaWYgKHJ4LT5iYXNlLnNpemUgPCAobWluX3Np
+emUgLSAxKSkgeworCQluZXRkZXZfZXJyKG5ldGRldiwgIkludmFsaWQgY2FuIGRhdGEgbWVzc2Fn
+ZSBzaXplXG4iKTsKKwkJcmV0dXJuIC1FQkFETVNHOworCX0KKworCWlmIChpeHhfZmxhZ3MgJiBJ
+WFhBVF9VU0JfTVNHX0ZMQUdTX09WUikgeworCQluZXRkZXYtPnN0YXRzLnJ4X292ZXJfZXJyb3Jz
+Kys7CisJCW5ldGRldi0+c3RhdHMucnhfZXJyb3JzKys7CisJCW5ldGRldl9lcnIobmV0ZGV2LCAi
+TWVzc2FnZSBvdmVyZmxvd1xuIik7CisJfQorCisJaWYgKGl4eF9mbGFncyAmIElYWEFUX1VTQl9G
+RE1TR19GTEFHU19FREwpCisJCXNrYiA9IGFsbG9jX2NhbmZkX3NrYihuZXRkZXYsICZjZik7CisJ
+ZWxzZQorCQlza2IgPSBhbGxvY19jYW5fc2tiKG5ldGRldiwgKHN0cnVjdCBjYW5fZnJhbWUgKiop
+JmNmKTsKKworCWlmICghc2tiKQorCQlyZXR1cm4gLUVOT01FTTsKKworCWNmLT5jYW5faWQgPSBs
+ZTMyX3RvX2NwdShyeC0+YmFzZS5tc2dfaWQpOworCWNmLT5sZW4gPSBsZW47CisJY2YtPmZsYWdz
+IHw9IGZsYWdzOworCisJaWYgKGl4eF9mbGFncyAmIElYWEFUX1VTQl9NU0dfRkxBR1NfRVhUKQor
+CQljZi0+Y2FuX2lkIHw9IENBTl9FRkZfRkxBRzsKKworCWlmIChpeHhfZmxhZ3MgJiBJWFhBVF9V
+U0JfTVNHX0ZMQUdTX1JUUikgeworCQljZi0+Y2FuX2lkIHw9IENBTl9SVFJfRkxBRzsKKwl9IGVs
+c2UgeworCQlpZiAoZGV2LT5hZGFwdGVyID09ICZ1c2IyY2FuX2NsMSkKKwkJCW1lbWNweShjZi0+
+ZGF0YSwgcngtPmNsMS5kYXRhLCBsZW4pOworCQllbHNlCisJCQltZW1jcHkoY2YtPmRhdGEsIHJ4
+LT5jbDIuZGF0YSwgbGVuKTsKKworCQluZXRkZXYtPnN0YXRzLnJ4X2J5dGVzICs9IGNmLT5sZW47
+CisJfQorCisJaXh4YXRfdXNiX2dldF90c190dihkZXYsIGxlMzJfdG9fY3B1KHJ4LT5iYXNlLnRp
+bWUpLCAmc2tiLT50c3RhbXApOworCisJbmV0ZGV2LT5zdGF0cy5yeF9wYWNrZXRzKys7CisKKwlu
+ZXRpZl9yeChza2IpOworCisJcmV0dXJuIDA7Cit9CisKK3N0YXRpYyBpbnQgaXh4YXRfdXNiX2hh
+bmRsZV9zdGF0dXMoc3RydWN0IGl4eGF0X3VzYl9kZXZpY2UgKmRldiwKKwkJCQkgICBzdHJ1Y3Qg
+aXh4YXRfY2FuX21zZyAqcngpCit7CisJc3RydWN0IG5ldF9kZXZpY2UgKm5ldGRldiA9IGRldi0+
+bmV0ZGV2OworCXN0cnVjdCBjYW5fZnJhbWUgKmNhbl9mcmFtZTsKKwlzdHJ1Y3Qgc2tfYnVmZiAq
+c2tiOworCWVudW0gY2FuX3N0YXRlIG5ld19zdGF0ZSA9IENBTl9TVEFURV9FUlJPUl9BQ1RJVkU7
+CisJdTMyIHJhd19zdGF0dXM7CisJdTggbWluX3NpemUgPSBzaXplb2YocngtPmJhc2UpICsgc2l6
+ZW9mKHJhd19zdGF0dXMpOworCisJaWYgKGRldi0+YWRhcHRlciA9PSAmdXNiMmNhbl9jbDEpCisJ
+CW1pbl9zaXplICs9IHNpemVvZihyeC0+Y2wxKSAtIHNpemVvZihyeC0+Y2wxLmRhdGEpOworCWVs
+c2UKKwkJbWluX3NpemUgKz0gc2l6ZW9mKHJ4LT5jbDIpIC0gc2l6ZW9mKHJ4LT5jbDIuZGF0YSk7
+CisKKwlpZiAocngtPmJhc2Uuc2l6ZSA8IChtaW5fc2l6ZSAtIDEpKSB7CisJCW5ldGRldl9lcnIo
+bmV0ZGV2LCAiSW52YWxpZCBjYW4gc3RhdHVzIG1lc3NhZ2Ugc2l6ZVxuIik7CisJCXJldHVybiAt
+RUJBRE1TRzsKKwl9CisKKwlpZiAoZGV2LT5hZGFwdGVyID09ICZ1c2IyY2FuX2NsMSkKKwkJcmF3
+X3N0YXR1cyA9IGxlMzJfdG9fY3B1KHJ4LT5jbDEuc3RhdHVzKTsKKwllbHNlCisJCXJhd19zdGF0
+dXMgPSBsZTMyX3RvX2NwdShyeC0+Y2wyLnN0YXR1cyk7CisKKwlpZiAocmF3X3N0YXR1cyAhPSBJ
+WFhBVF9VU0JfQ0FOX1NUQVRVU19PSykgeworCQlpZiAocmF3X3N0YXR1cyAmIElYWEFUX1VTQl9D
+QU5fU1RBVFVTX0JVU09GRikgeworCQkJZGV2LT5jYW4uY2FuX3N0YXRzLmJ1c19vZmYrKzsKKwkJ
+CW5ld19zdGF0ZSA9IENBTl9TVEFURV9CVVNfT0ZGOworCQkJY2FuX2J1c19vZmYobmV0ZGV2KTsK
+KwkJfSBlbHNlIHsKKwkJCWlmIChyYXdfc3RhdHVzICYgSVhYQVRfVVNCX0NBTl9TVEFUVVNfRVJS
+TElNKSB7CisJCQkJZGV2LT5jYW4uY2FuX3N0YXRzLmVycm9yX3dhcm5pbmcrKzsKKwkJCQluZXdf
+c3RhdGUgPSBDQU5fU1RBVEVfRVJST1JfV0FSTklORzsKKwkJCX0KKworCQkJaWYgKHJhd19zdGF0
+dXMgJiBJWFhBVF9VU0JfQ0FOX1NUQVRVU19FUlJfUEFTKSB7CisJCQkJZGV2LT5jYW4uY2FuX3N0
+YXRzLmVycm9yX3Bhc3NpdmUrKzsKKwkJCQluZXdfc3RhdGUgPSBDQU5fU1RBVEVfRVJST1JfUEFT
+U0lWRTsKKwkJCX0KKworCQkJaWYgKHJhd19zdGF0dXMgJiBJWFhBVF9VU0JfQ0FOX1NUQVRVU19P
+VkVSUlVOKQorCQkJCW5ld19zdGF0ZSA9IENBTl9TVEFURV9NQVg7CisJCX0KKwl9CisKKwlpZiAo
+bmV3X3N0YXRlID09IENBTl9TVEFURV9FUlJPUl9BQ1RJVkUpIHsKKwkJZGV2LT5iZWMudHhlcnIg
+PSAwOworCQlkZXYtPmJlYy5yeGVyciA9IDA7CisJfQorCisJaWYgKG5ld19zdGF0ZSAhPSBDQU5f
+U1RBVEVfTUFYKQorCQlkZXYtPmNhbi5zdGF0ZSA9IG5ld19zdGF0ZTsKKworCXNrYiA9IGFsbG9j
+X2Nhbl9lcnJfc2tiKG5ldGRldiwgJmNhbl9mcmFtZSk7CisJaWYgKCFza2IpCisJCXJldHVybiAt
+RU5PTUVNOworCisJc3dpdGNoIChuZXdfc3RhdGUpIHsKKwljYXNlIENBTl9TVEFURV9FUlJPUl9B
+Q1RJVkU6CisJCWNhbl9mcmFtZS0+Y2FuX2lkIHw9IENBTl9FUlJfQ1JUTDsKKwkJY2FuX2ZyYW1l
+LT5kYXRhWzFdIHw9IENBTl9FUlJfQ1JUTF9BQ1RJVkU7CisJCWJyZWFrOworCWNhc2UgQ0FOX1NU
+QVRFX0VSUk9SX1dBUk5JTkc6CisJCWNhbl9mcmFtZS0+Y2FuX2lkIHw9IENBTl9FUlJfQ1JUTDsK
+KwkJY2FuX2ZyYW1lLT5kYXRhWzFdIHw9IENBTl9FUlJfQ1JUTF9UWF9XQVJOSU5HOworCQljYW5f
+ZnJhbWUtPmRhdGFbMV0gfD0gQ0FOX0VSUl9DUlRMX1JYX1dBUk5JTkc7CisJCWJyZWFrOworCWNh
+c2UgQ0FOX1NUQVRFX0VSUk9SX1BBU1NJVkU6CisJCWNhbl9mcmFtZS0+Y2FuX2lkIHw9IENBTl9F
+UlJfQ1JUTDsKKwkJY2FuX2ZyYW1lLT5kYXRhWzFdIHw9IENBTl9FUlJfQ1JUTF9UWF9QQVNTSVZF
+OworCQljYW5fZnJhbWUtPmRhdGFbMV0gfD0gQ0FOX0VSUl9DUlRMX1JYX1BBU1NJVkU7CisJCWJy
+ZWFrOworCWNhc2UgQ0FOX1NUQVRFX0JVU19PRkY6CisJCWNhbl9mcmFtZS0+Y2FuX2lkIHw9IENB
+Tl9FUlJfQlVTT0ZGOworCQlicmVhazsKKwljYXNlIENBTl9TVEFURV9NQVg6CisJCWNhbl9mcmFt
+ZS0+Y2FuX2lkIHw9IENBTl9FUlJfQ1JUTDsKKwkJY2FuX2ZyYW1lLT5kYXRhWzFdIHw9IENBTl9F
+UlJfQ1JUTF9SWF9PVkVSRkxPVzsKKwkJYnJlYWs7CisJZGVmYXVsdDoKKwkJbmV0ZGV2X2Vycihu
+ZXRkZXYsICJVbmhhbmRsZWQgY2FuIHN0YXR1cyAlZFxuIiwKKwkJCSAgIG5ld19zdGF0ZSk7CisJ
+CWJyZWFrOworCX0KKworCW5ldGlmX3J4KHNrYik7CisKKwlyZXR1cm4gMDsKK30KKworc3RhdGlj
+IGludCBpeHhhdF91c2JfaGFuZGxlX2Vycm9yKHN0cnVjdCBpeHhhdF91c2JfZGV2aWNlICpkZXYs
+CisJCQkJICBzdHJ1Y3QgaXh4YXRfY2FuX21zZyAqcngpCit7CisJc3RydWN0IG5ldF9kZXZpY2Ug
+Km5ldGRldiA9IGRldi0+bmV0ZGV2OworCXN0cnVjdCBjYW5fZnJhbWUgKmNhbl9mcmFtZTsKKwlz
+dHJ1Y3Qgc2tfYnVmZiAqc2tiOworCXU4IHJhd19lcnJvcjsKKwl1OCBtaW5fc2l6ZSA9IHNpemVv
+ZihyeC0+YmFzZSkgKyBJWFhBVF9VU0JfQ0FOX0VSUk9SX0xFTjsKKworCWlmIChkZXYtPmFkYXB0
+ZXIgPT0gJnVzYjJjYW5fY2wxKQorCQltaW5fc2l6ZSArPSBzaXplb2YocngtPmNsMSkgLSBzaXpl
+b2YocngtPmNsMS5kYXRhKTsKKwllbHNlCisJCW1pbl9zaXplICs9IHNpemVvZihyeC0+Y2wyKSAt
+IHNpemVvZihyeC0+Y2wyLmRhdGEpOworCisJaWYgKHJ4LT5iYXNlLnNpemUgPCAobWluX3NpemUg
+LSAxKSkgeworCQluZXRkZXZfZXJyKG5ldGRldiwgIkludmFsaWQgY2FuIGVycm9yIG1lc3NhZ2Ug
+c2l6ZVxuIik7CisJCXJldHVybiAtRUJBRE1TRzsKKwl9CisKKwlpZiAoZGV2LT5jYW4uc3RhdGUg
+PT0gQ0FOX1NUQVRFX0JVU19PRkYpCisJCXJldHVybiAwOworCisJaWYgKGRldi0+YWRhcHRlciA9
+PSAmdXNiMmNhbl9jbDEpIHsKKwkJcmF3X2Vycm9yID0gcngtPmNsMS5kYXRhW0lYWEFUX1VTQl9D
+QU5fRVJST1JfQ09ERV07CisJCWRldi0+YmVjLnJ4ZXJyID0gcngtPmNsMS5kYXRhW0lYWEFUX1VT
+Ql9DQU5fRVJST1JfQ09VTlRFUl9SWF07CisJCWRldi0+YmVjLnR4ZXJyID0gcngtPmNsMS5kYXRh
+W0lYWEFUX1VTQl9DQU5fRVJST1JfQ09VTlRFUl9UWF07CisJfSBlbHNlIHsKKwkJcmF3X2Vycm9y
+ID0gcngtPmNsMi5kYXRhW0lYWEFUX1VTQl9DQU5fRVJST1JfQ09ERV07CisJCWRldi0+YmVjLnJ4
+ZXJyID0gcngtPmNsMi5kYXRhW0lYWEFUX1VTQl9DQU5fRVJST1JfQ09VTlRFUl9SWF07CisJCWRl
+di0+YmVjLnR4ZXJyID0gcngtPmNsMi5kYXRhW0lYWEFUX1VTQl9DQU5fRVJST1JfQ09VTlRFUl9U
+WF07CisJfQorCisJaWYgKHJhd19lcnJvciA9PSBJWFhBVF9VU0JfQ0FOX0VSUk9SX0FDSykKKwkJ
+bmV0ZGV2LT5zdGF0cy50eF9lcnJvcnMrKzsKKwllbHNlCisJCW5ldGRldi0+c3RhdHMucnhfZXJy
+b3JzKys7CisKKwlza2IgPSBhbGxvY19jYW5fZXJyX3NrYihuZXRkZXYsICZjYW5fZnJhbWUpOwor
+CWlmICghc2tiKQorCQlyZXR1cm4gLUVOT01FTTsKKworCXN3aXRjaCAocmF3X2Vycm9yKSB7CisJ
+Y2FzZSBJWFhBVF9VU0JfQ0FOX0VSUk9SX0FDSzoKKwkJY2FuX2ZyYW1lLT5jYW5faWQgfD0gQ0FO
+X0VSUl9BQ0s7CisJCWJyZWFrOworCWNhc2UgSVhYQVRfVVNCX0NBTl9FUlJPUl9CSVQ6CisJCWNh
+bl9mcmFtZS0+Y2FuX2lkIHw9IENBTl9FUlJfUFJPVDsKKwkJY2FuX2ZyYW1lLT5kYXRhWzJdIHw9
+IENBTl9FUlJfUFJPVF9CSVQ7CisJCWJyZWFrOworCWNhc2UgSVhYQVRfVVNCX0NBTl9FUlJPUl9D
+UkM6CisJCWNhbl9mcmFtZS0+Y2FuX2lkIHw9IENBTl9FUlJfUFJPVDsKKwkJY2FuX2ZyYW1lLT5k
+YXRhWzNdIHw9IENBTl9FUlJfUFJPVF9MT0NfQ1JDX1NFUTsKKwkJYnJlYWs7CisJY2FzZSBJWFhB
+VF9VU0JfQ0FOX0VSUk9SX0ZPUk06CisJCWNhbl9mcmFtZS0+Y2FuX2lkIHw9IENBTl9FUlJfUFJP
+VDsKKwkJY2FuX2ZyYW1lLT5kYXRhWzJdIHw9IENBTl9FUlJfUFJPVF9GT1JNOworCQlicmVhazsK
+KwljYXNlIElYWEFUX1VTQl9DQU5fRVJST1JfU1RVRkY6CisJCWNhbl9mcmFtZS0+Y2FuX2lkIHw9
+IENBTl9FUlJfUFJPVDsKKwkJY2FuX2ZyYW1lLT5kYXRhWzJdIHw9IENBTl9FUlJfUFJPVF9TVFVG
+RjsKKwkJYnJlYWs7CisJZGVmYXVsdDoKKwkJY2FuX2ZyYW1lLT5jYW5faWQgfD0gQ0FOX0VSUl9Q
+Uk9UOworCQljYW5fZnJhbWUtPmRhdGFbMl0gfD0gQ0FOX0VSUl9QUk9UX1VOU1BFQzsKKwkJYnJl
+YWs7CisJfQorCisJbmV0aWZfcngoc2tiKTsKKworCXJldHVybiAwOworfQorCitzdGF0aWMgdm9p
+ZCBpeHhhdF91c2JfZGVjb2RlX2J1ZihzdHJ1Y3QgdXJiICp1cmIpCit7CisJc3RydWN0IGl4eGF0
+X3VzYl9kZXZpY2UgKmRldiA9IHVyYi0+Y29udGV4dDsKKwlzdHJ1Y3QgbmV0X2RldmljZSAqbmV0
+ZGV2ID0gZGV2LT5uZXRkZXY7CisJc3RydWN0IGl4eGF0X2Nhbl9tc2cgKmNhbl9tc2c7CisJaW50
+IGVyciA9IDA7CisJdTMyIHBvcyA9IDA7CisJdTggKmRhdGEgPSB1cmItPnRyYW5zZmVyX2J1ZmZl
+cjsKKworCXdoaWxlIChwb3MgPCB1cmItPmFjdHVhbF9sZW5ndGgpIHsKKwkJdTMyIHRpbWU7CisJ
+CXU4IHNpemU7CisJCXU4IHR5cGU7CisKKwkJY2FuX21zZyA9IChzdHJ1Y3QgaXh4YXRfY2FuX21z
+ZyAqKSZkYXRhW3Bvc107CisJCWlmICghY2FuX21zZyB8fCAhY2FuX21zZy0+YmFzZS5zaXplKSB7
+CisJCQllcnIgPSAtRU5PVFNVUFA7CisJCQluZXRkZXZfZXJyKG5ldGRldiwgIlVuc3VwcG9ydGVk
+IHVzYiBtc2c6ICVwZVxuIiwKKwkJCQkgICBFUlJfUFRSKGVycikpOworCQkJYnJlYWs7CisJCX0K
+KworCQlzaXplID0gY2FuX21zZy0+YmFzZS5zaXplICsgMTsKKwkJaWYgKHNpemUgPCBzaXplb2Yo
+Y2FuX21zZy0+YmFzZSkgfHwKKwkJICAgIChwb3MgKyBzaXplKSA+IHVyYi0+YWN0dWFsX2xlbmd0
+aCkgeworCQkJZXJyID0gLUVCQURNU0c7CisJCQluZXRkZXZfZXJyKG5ldGRldiwKKwkJCQkgICAi
+SW52YWxpZCB1c2IgbWVzc2FnZSBzaXplOiAlcGVcbiIsCisJCQkJICAgRVJSX1BUUihlcnIpKTsK
+KwkJCWJyZWFrOworCQl9CisKKwkJdHlwZSA9IGxlMzJfdG9fY3B1KGNhbl9tc2ctPmJhc2UuZmxh
+Z3MpOworCQl0eXBlICY9IElYWEFUX1VTQl9NU0dfRkxBR1NfVFlQRTsKKwkJdGltZSA9IGxlMzJf
+dG9fY3B1KGNhbl9tc2ctPmJhc2UudGltZSk7CisKKwkJc3dpdGNoICh0eXBlKSB7CisJCWNhc2Ug
+SVhYQVRfVVNCX0NBTl9EQVRBOgorCQkJZXJyID0gaXh4YXRfdXNiX2hhbmRsZV9jYW5tc2coZGV2
+LCBjYW5fbXNnKTsKKwkJCWlmIChlcnIpCisJCQkJZ290byBmYWlsOworCQkJYnJlYWs7CisJCWNh
+c2UgSVhYQVRfVVNCX0NBTl9TVEFUVVM6CisJCQllcnIgPSBpeHhhdF91c2JfaGFuZGxlX3N0YXR1
+cyhkZXYsIGNhbl9tc2cpOworCQkJaWYgKGVycikKKwkJCQlnb3RvIGZhaWw7CisJCQlicmVhazsK
+KwkJY2FzZSBJWFhBVF9VU0JfQ0FOX0VSUk9SOgorCQkJZXJyID0gaXh4YXRfdXNiX2hhbmRsZV9l
+cnJvcihkZXYsIGNhbl9tc2cpOworCQkJaWYgKGVycikKKwkJCQlnb3RvIGZhaWw7CisJCQlicmVh
+azsKKwkJY2FzZSBJWFhBVF9VU0JfQ0FOX1RJTUVPVlI6CisJCQlpeHhhdF91c2JfZ2V0X3RzX3R2
+KGRldiwgdGltZSwgTlVMTCk7CisJCQlicmVhazsKKwkJY2FzZSBJWFhBVF9VU0JfQ0FOX0lORk86
+CisJCWNhc2UgSVhYQVRfVVNCX0NBTl9XQUtFVVA6CisJCWNhc2UgSVhYQVRfVVNCX0NBTl9USU1F
+UlNUOgorCQkJYnJlYWs7CisJCWRlZmF1bHQ6CisJCQluZXRkZXZfZXJyKG5ldGRldiwKKwkJCQkg
+ICAiVW5oYW5kbGVkIHJlYyB0eXBlIDB4JTAyeCA6IGlnbm9yZWRcbiIsCisJCQkJICAgdHlwZSk7
+CisJCQlicmVhazsKKwkJfQorCisJCXBvcyArPSBzaXplOworCX0KKworZmFpbDoKKwlpZiAoZXJy
+KQorCQluZXRkZXZfZXJyKG5ldGRldiwgIkJ1ZmZlciBkZWNvZGluZyBmYWlsZWQ6ICVwZVxuIiwg
+RVJSX1BUUihlcnIpKTsKK30KKworc3RhdGljIGludCBpeHhhdF91c2JfZW5jb2RlX21zZyhzdHJ1
+Y3QgaXh4YXRfdXNiX2RldmljZSAqZGV2LAorCQkJCXN0cnVjdCBza19idWZmICpza2IsIHU4ICpv
+YnVmKQoreworCWludCBzaXplOworCXN0cnVjdCBjYW5mZF9mcmFtZSAqY2YgPSAoc3RydWN0IGNh
+bmZkX2ZyYW1lICopc2tiLT5kYXRhOworCXN0cnVjdCBpeHhhdF9jYW5fbXNnIGNhbl9tc2cgPSB7
+IDAgfTsKKwlzdHJ1Y3QgaXh4YXRfY2FuX21zZ19iYXNlICptc2dfYmFzZSA9ICZjYW5fbXNnLmJh
+c2U7CisJdTMyIGZsYWdzID0gMDsKKwl1MzIgbXNnX2lkID0gMDsKKworCWlmIChjZi0+Y2FuX2lk
+ICYgQ0FOX1JUUl9GTEFHKQorCQlmbGFncyB8PSBJWFhBVF9VU0JfTVNHX0ZMQUdTX1JUUjsKKwor
+CWlmIChjZi0+Y2FuX2lkICYgQ0FOX0VGRl9GTEFHKSB7CisJCWZsYWdzIHw9IElYWEFUX1VTQl9N
+U0dfRkxBR1NfRVhUOworCQltc2dfaWQgPSBjZi0+Y2FuX2lkICYgQ0FOX0VGRl9NQVNLOworCX0g
+ZWxzZSB7CisJCW1zZ19pZCA9IGNmLT5jYW5faWQgJiBDQU5fU0ZGX01BU0s7CisJfQorCisJaWYg
+KGNhbl9pc19jYW5mZF9za2Ioc2tiKSkgeworCQlmbGFncyB8PSBJWFhBVF9VU0JfRkRNU0dfRkxB
+R1NfRURMOworCisJCWlmICghKGNmLT5jYW5faWQgJiBDQU5fUlRSX0ZMQUcpICYmIChjZi0+Zmxh
+Z3MgJiBDQU5GRF9CUlMpKQorCQkJZmxhZ3MgfD0gSVhYQVRfVVNCX0ZETVNHX0ZMQUdTX0ZEUjsK
+KworCQlmbGFncyB8PSBGSUVMRF9QUkVQKElYWEFUX1VTQl9NU0dfRkxBR1NfRExDLCBjYW5fZmRf
+bGVuMmRsYyhjZi0+bGVuKSk7CisJfSBlbHNlIHsKKwkJZmxhZ3MgfD0gRklFTERfUFJFUChJWFhB
+VF9VU0JfTVNHX0ZMQUdTX0RMQywgY2YtPmxlbik7CisJfQorCisJbXNnX2Jhc2UtPmZsYWdzID0g
+Y3B1X3RvX2xlMzIoZmxhZ3MpOworCW1zZ19iYXNlLT5tc2dfaWQgPSBjcHVfdG9fbGUzMihtc2df
+aWQpOworCW1zZ19iYXNlLT5zaXplID0gc2l6ZW9mKCptc2dfYmFzZSkgKyBjZi0+bGVuIC0gMTsK
+KwlpZiAoZGV2LT5hZGFwdGVyID09ICZ1c2IyY2FuX2NsMSkgeworCQltc2dfYmFzZS0+c2l6ZSAr
+PSBzaXplb2YoY2FuX21zZy5jbDEpOworCQltc2dfYmFzZS0+c2l6ZSAtPSBzaXplb2YoY2FuX21z
+Zy5jbDEuZGF0YSk7CisJCW1lbWNweShjYW5fbXNnLmNsMS5kYXRhLCBjZi0+ZGF0YSwgY2YtPmxl
+bik7CisJfSBlbHNlIHsKKwkJbXNnX2Jhc2UtPnNpemUgKz0gc2l6ZW9mKGNhbl9tc2cuY2wyKTsK
+KwkJbXNnX2Jhc2UtPnNpemUgLT0gc2l6ZW9mKGNhbl9tc2cuY2wyLmRhdGEpOworCQltZW1jcHko
+Y2FuX21zZy5jbDIuZGF0YSwgY2YtPmRhdGEsIGNmLT5sZW4pOworCX0KKworCXNpemUgPSBtc2df
+YmFzZS0+c2l6ZSArIDE7CisJbWVtY3B5KG9idWYsICZjYW5fbXNnLCBzaXplKTsKKwlyZXR1cm4g
+c2l6ZTsKK30KKworc3RhdGljIHZvaWQgaXh4YXRfdXNiX3JlYWRfYnVsa19jYWxsYmFjayhzdHJ1
+Y3QgdXJiICp1cmIpCit7CisJc3RydWN0IGl4eGF0X3VzYl9kZXZpY2UgKmRldiA9IHVyYi0+Y29u
+dGV4dDsKKwljb25zdCBzdHJ1Y3QgaXh4YXRfdXNiX2FkYXB0ZXIgKmFkYXB0ZXIgPSBkZXYtPmFk
+YXB0ZXI7CisJc3RydWN0IG5ldF9kZXZpY2UgKm5ldGRldiA9IGRldi0+bmV0ZGV2OworCXN0cnVj
+dCB1c2JfZGV2aWNlICp1ZGV2ID0gZGV2LT51ZGV2OworCWludCBlcnI7CisKKwlpZiAoIW5ldGlm
+X2RldmljZV9wcmVzZW50KG5ldGRldikpCisJCXJldHVybjsKKworCXN3aXRjaCAodXJiLT5zdGF0
+dXMpIHsKKwljYXNlIDA6IC8qIHN1Y2Nlc3MgKi8KKwkJYnJlYWs7CisJY2FzZSAtRVBST1RPOgor
+CWNhc2UgLUVJTFNFUToKKwljYXNlIC1FTk9FTlQ6CisJY2FzZSAtRUNPTk5SRVNFVDoKKwljYXNl
+IC1FU0hVVERPV046CisJCXJldHVybjsKKwlkZWZhdWx0OgorCQluZXRkZXZfZXJyKG5ldGRldiwg
+IlJ4IHVyYiBhYm9ydGVkICVkXG4iLCB1cmItPnN0YXR1cyk7CisJCWdvdG8gcmVzdWJtaXRfdXJi
+OworCX0KKworCWlmICh1cmItPmFjdHVhbF9sZW5ndGggPiAwKQorCQlpZiAoZGV2LT5zdGF0ZSAm
+IElYWEFUX1VTQl9TVEFURV9TVEFSVEVEKQorCQkJaXh4YXRfdXNiX2RlY29kZV9idWYodXJiKTsK
+KworcmVzdWJtaXRfdXJiOgorCXVzYl9maWxsX2J1bGtfdXJiKHVyYiwgdWRldiwgdXNiX3JjdmJ1
+bGtwaXBlKHVkZXYsIGRldi0+ZXBfbXNnX2luKSwKKwkJCSAgdXJiLT50cmFuc2Zlcl9idWZmZXIs
+IGFkYXB0ZXItPmJ1ZmZlcl9zaXplX3J4LAorCQkJICBpeHhhdF91c2JfcmVhZF9idWxrX2NhbGxi
+YWNrLCBkZXYpOworCisJdXNiX2FuY2hvcl91cmIodXJiLCAmZGV2LT5yeF9zdWJtaXR0ZWQpOwor
+CWVyciA9IHVzYl9zdWJtaXRfdXJiKHVyYiwgR0ZQX0FUT01JQyk7CisJaWYgKCFlcnIpCisJCXJl
+dHVybjsKKworCXVzYl91bmFuY2hvcl91cmIodXJiKTsKKworCWlmIChlcnIgPT0gLUVOT0RFVikK
+KwkJbmV0aWZfZGV2aWNlX2RldGFjaChuZXRkZXYpOworCWVsc2UKKwkJbmV0ZGV2X2VycihuZXRk
+ZXYsCisJCQkgICAiRmFpbGVkIHRvIHJlc3VibWl0IHJlYWQgYnVsayB1cmI6ICVwZVxuIiwgRVJS
+X1BUUihlcnIpKTsKK30KKworc3RhdGljIHZvaWQgaXh4YXRfdXNiX3dyaXRlX2J1bGtfY2FsbGJh
+Y2soc3RydWN0IHVyYiAqdXJiKQoreworCXN0cnVjdCBpeHhhdF90eF91cmJfY29udGV4dCAqY29u
+dGV4dCA9IHVyYi0+Y29udGV4dDsKKwlzdHJ1Y3QgaXh4YXRfdXNiX2RldmljZSAqZGV2OworCXN0
+cnVjdCBuZXRfZGV2aWNlICpuZXRkZXY7CisKKwlpZiAoV0FSTl9PTighY29udGV4dCkpCisJCXJl
+dHVybjsKKworCWRldiA9IGNvbnRleHQtPmRldjsKKwluZXRkZXYgPSBkZXYtPm5ldGRldjsKKwor
+CWlmICghbmV0aWZfZGV2aWNlX3ByZXNlbnQobmV0ZGV2KSkKKwkJcmV0dXJuOworCisJaWYgKCF1
+cmItPnN0YXR1cykgeworCQluZXRkZXYtPnN0YXRzLnR4X3BhY2tldHMrKzsKKwkJbmV0ZGV2LT5z
+dGF0cy50eF9ieXRlcyArPSBjYW5fZ2V0X2VjaG9fc2tiKG5ldGRldiwgY29udGV4dC0+ZWNob19p
+bmRleCwgTlVMTCk7CisJfSBlbHNlIHsKKwkJbmV0ZGV2X2VycihuZXRkZXYsICJUeCB1cmIgYWJv
+cnRlZDogJXBlXG4iLCBFUlJfUFRSKHVyYi0+c3RhdHVzKSk7CisJCWNhbl9mcmVlX2VjaG9fc2ti
+KG5ldGRldiwgY29udGV4dC0+ZWNob19pbmRleCwgTlVMTCk7CisJfQorCisJY29udGV4dC0+ZWNo
+b19pbmRleCA9IElYWEFUX1VTQl9NQVhfVFhfVVJCUzsKKwlhdG9taWNfZGVjKCZkZXYtPmFjdGl2
+ZV90eF91cmJzKTsKKworCWlmICghdXJiLT5zdGF0dXMpCisJCW5ldGlmX3dha2VfcXVldWUobmV0
+ZGV2KTsKK30KKworc3RhdGljIG5ldGRldl90eF90IGl4eGF0X3VzYl9zdGFydF94bWl0KHN0cnVj
+dCBza19idWZmICpza2IsCisJCQkJCXN0cnVjdCBuZXRfZGV2aWNlICpuZXRkZXYpCit7CisJaW50
+IGVycjsKKwlpbnQgc2l6ZTsKKwlzdHJ1Y3QgaXh4YXRfdXNiX2RldmljZSAqZGV2ID0gbmV0ZGV2
+X3ByaXYobmV0ZGV2KTsKKwlzdHJ1Y3QgaXh4YXRfdHhfdXJiX2NvbnRleHQgKmNvbnRleHQgPSBO
+VUxMOworCXN0cnVjdCBuZXRfZGV2aWNlX3N0YXRzICpzdGF0cyA9ICZuZXRkZXYtPnN0YXRzOwor
+CXN0cnVjdCB1cmIgKnVyYjsKKwl1OCAqb2J1ZjsKKwl1MzIgaTsKKworCWlmIChjYW5fZHJvcHBl
+ZF9pbnZhbGlkX3NrYihuZXRkZXYsIHNrYikpCisJCXJldHVybiBORVRERVZfVFhfT0s7CisKKwlm
+b3IgKGkgPSAwOyBpIDwgSVhYQVRfVVNCX01BWF9UWF9VUkJTOyBpKyspIHsKKwkJaWYgKGRldi0+
+dHhfY29udGV4dHNbaV0uZWNob19pbmRleCA9PSBJWFhBVF9VU0JfTUFYX1RYX1VSQlMpIHsKKwkJ
+CWNvbnRleHQgPSBkZXYtPnR4X2NvbnRleHRzICsgaTsKKwkJCWJyZWFrOworCQl9CisJfQorCisJ
+aWYgKFdBUk5fT05fT05DRSghY29udGV4dCkpCisJCXJldHVybiBORVRERVZfVFhfQlVTWTsKKwor
+CXVyYiA9IGNvbnRleHQtPnVyYjsKKwlvYnVmID0gdXJiLT50cmFuc2Zlcl9idWZmZXI7CisKKwlz
+aXplID0gaXh4YXRfdXNiX2VuY29kZV9tc2coZGV2LCBza2IsIG9idWYpOworCisJY29udGV4dC0+
+ZWNob19pbmRleCA9IGk7CisKKwl1cmItPnRyYW5zZmVyX2J1ZmZlcl9sZW5ndGggPSBzaXplOwor
+CXVzYl9hbmNob3JfdXJiKHVyYiwgJmRldi0+dHhfc3VibWl0dGVkKTsKKwljYW5fcHV0X2VjaG9f
+c2tiKHNrYiwgbmV0ZGV2LCBpLCAwKTsKKwlhdG9taWNfaW5jKCZkZXYtPmFjdGl2ZV90eF91cmJz
+KTsKKworCWVyciA9IHVzYl9zdWJtaXRfdXJiKHVyYiwgR0ZQX0FUT01JQyk7CisJaWYgKGVycikg
+eworCQljYW5fZnJlZV9lY2hvX3NrYihuZXRkZXYsIGksIE5VTEwpOworCQl1c2JfdW5hbmNob3Jf
+dXJiKHVyYik7CisJCWF0b21pY19kZWMoJmRldi0+YWN0aXZlX3R4X3VyYnMpOworCisJCWNvbnRl
+eHQtPmVjaG9faW5kZXggPSBJWFhBVF9VU0JfTUFYX1RYX1VSQlM7CisKKwkJaWYgKGVyciA9PSAt
+RU5PREVWKSB7CisJCQluZXRpZl9kZXZpY2VfZGV0YWNoKG5ldGRldik7CisJCX0gZWxzZSB7CisJ
+CQlzdGF0cy0+dHhfZHJvcHBlZCsrOworCQkJbmV0ZGV2X2VycihuZXRkZXYsCisJCQkJICAgIlN1
+Ym1pdHRpbmcgdHgtdXJiIGZhaWxlZDogJXBlXG4iLCBFUlJfUFRSKGVycikpOworCQl9CisJfSBl
+bHNlIHsKKwkJaWYgKGF0b21pY19yZWFkKCZkZXYtPmFjdGl2ZV90eF91cmJzKSA+PSBJWFhBVF9V
+U0JfTUFYX1RYX1VSQlMpCisJCQluZXRpZl9zdG9wX3F1ZXVlKG5ldGRldik7CisJfQorCisJcmV0
+dXJuIE5FVERFVl9UWF9PSzsKK30KKworc3RhdGljIGludCBpeHhhdF91c2Jfc2V0dXBfcnhfdXJi
+cyhzdHJ1Y3QgaXh4YXRfdXNiX2RldmljZSAqZGV2KQoreworCWludCBpOworCWludCBlcnIgPSAw
+OworCWNvbnN0IHN0cnVjdCBpeHhhdF91c2JfYWRhcHRlciAqYWRhcHRlciA9IGRldi0+YWRhcHRl
+cjsKKwlzdHJ1Y3QgbmV0X2RldmljZSAqbmV0ZGV2ID0gZGV2LT5uZXRkZXY7CisJc3RydWN0IHVz
+Yl9kZXZpY2UgKnVkZXYgPSBkZXYtPnVkZXY7CisKKwlmb3IgKGkgPSAwOyBpIDwgSVhYQVRfVVNC
+X01BWF9SWF9VUkJTOyBpKyspIHsKKwkJc3RydWN0IHVyYiAqdXJiOworCQl1OCAqYnVmOworCisJ
+CXVyYiA9IHVzYl9hbGxvY191cmIoMCwgR0ZQX0tFUk5FTCk7CisJCWlmICghdXJiKSB7CisJCQll
+cnIgPSAtRU5PTUVNOworCQkJbmV0ZGV2X2VycihuZXRkZXYsICJObyBtZW1vcnkgZm9yIFVSQnM6
+ICVwZVxuIiwKKwkJCQkgICBFUlJfUFRSKGVycikpOworCQkJYnJlYWs7CisJCX0KKworCQlidWYg
+PSBrbWFsbG9jKGFkYXB0ZXItPmJ1ZmZlcl9zaXplX3J4LCBHRlBfS0VSTkVMKTsKKwkJaWYgKCFi
+dWYpIHsKKwkJCXVzYl9mcmVlX3VyYih1cmIpOworCQkJZXJyID0gLUVOT01FTTsKKwkJCW5ldGRl
+dl9lcnIobmV0ZGV2LAorCQkJCSAgICJObyBtZW1vcnkgZm9yIFVTQi1idWZmZXI6ICVwZVxuIiwg
+RVJSX1BUUihlcnIpKTsKKwkJCWJyZWFrOworCQl9CisKKwkJdXNiX2ZpbGxfYnVsa191cmIodXJi
+LCB1ZGV2LAorCQkJCSAgdXNiX3JjdmJ1bGtwaXBlKHVkZXYsIGRldi0+ZXBfbXNnX2luKSwgYnVm
+LAorCQkJCSAgYWRhcHRlci0+YnVmZmVyX3NpemVfcngsCisJCQkJICBpeHhhdF91c2JfcmVhZF9i
+dWxrX2NhbGxiYWNrLCBkZXYpOworCisJCXVyYi0+dHJhbnNmZXJfZmxhZ3MgfD0gVVJCX0ZSRUVf
+QlVGRkVSOworCQl1c2JfYW5jaG9yX3VyYih1cmIsICZkZXYtPnJ4X3N1Ym1pdHRlZCk7CisKKwkJ
+ZXJyID0gdXNiX3N1Ym1pdF91cmIodXJiLCBHRlBfS0VSTkVMKTsKKwkJaWYgKGVycikgeworCQkJ
+dXNiX3VuYW5jaG9yX3VyYih1cmIpOworCQkJa2ZyZWUoYnVmKTsKKwkJCXVzYl9mcmVlX3VyYih1
+cmIpOworCisJCQlpZiAoZXJyID09IC1FTk9ERVYpCisJCQkJbmV0aWZfZGV2aWNlX2RldGFjaChu
+ZXRkZXYpOworCisJCQlicmVhazsKKwkJfQorCisJCXVzYl9mcmVlX3VyYih1cmIpOworCX0KKwor
+CWlmIChpID09IDApCisJCW5ldGRldl9lcnIobmV0ZGV2LCAiQ291bGRuJ3Qgc2V0dXAgYW55IHJ4
+LVVSQnNcbiIpOworCisJcmV0dXJuIGVycjsKK30KKworc3RhdGljIGludCBpeHhhdF91c2Jfc2V0
+dXBfdHhfdXJicyhzdHJ1Y3QgaXh4YXRfdXNiX2RldmljZSAqZGV2KQoreworCWludCBpOworCWlu
+dCByZXQgPSAwOworCWNvbnN0IHN0cnVjdCBpeHhhdF91c2JfYWRhcHRlciAqYWRhcHRlciA9IGRl
+di0+YWRhcHRlcjsKKwlzdHJ1Y3QgbmV0X2RldmljZSAqbmV0ZGV2ID0gZGV2LT5uZXRkZXY7CisJ
+c3RydWN0IHVzYl9kZXZpY2UgKnVkZXYgPSBkZXYtPnVkZXY7CisKKwlmb3IgKGkgPSAwOyBpIDwg
+SVhYQVRfVVNCX01BWF9UWF9VUkJTOyBpKyspIHsKKwkJc3RydWN0IGl4eGF0X3R4X3VyYl9jb250
+ZXh0ICpjb250ZXh0OworCQlzdHJ1Y3QgdXJiICp1cmI7CisJCXU4ICpidWY7CisKKwkJdXJiID0g
+dXNiX2FsbG9jX3VyYigwLCBHRlBfS0VSTkVMKTsKKwkJaWYgKCF1cmIpIHsKKwkJCXJldCA9IC1F
+Tk9NRU07CisJCQluZXRkZXZfZXJyKG5ldGRldiwgIk5vIG1lbW9yeSBmb3IgVVJCczogJXBlXG4i
+LAorCQkJCSAgIEVSUl9QVFIocmV0KSk7CisJCQlicmVhazsKKwkJfQorCisJCWJ1ZiA9IGttYWxs
+b2MoYWRhcHRlci0+YnVmZmVyX3NpemVfdHgsIEdGUF9LRVJORUwpOworCQlpZiAoIWJ1Zikgewor
+CQkJdXNiX2ZyZWVfdXJiKHVyYik7CisJCQlyZXQgPSAtRU5PTUVNOworCQkJbmV0ZGV2X2Vycihu
+ZXRkZXYsCisJCQkJICAgIk5vIG1lbW9yeSBmb3IgVVNCLWJ1ZmZlcjogJXBlXG4iLCBFUlJfUFRS
+KHJldCkpOworCQkJYnJlYWs7CisJCX0KKworCQljb250ZXh0ID0gZGV2LT50eF9jb250ZXh0cyAr
+IGk7CisJCWNvbnRleHQtPmRldiA9IGRldjsKKwkJY29udGV4dC0+dXJiID0gdXJiOworCisJCXVz
+Yl9maWxsX2J1bGtfdXJiKHVyYiwgdWRldiwKKwkJCQkgIHVzYl9zbmRidWxrcGlwZSh1ZGV2LCBk
+ZXYtPmVwX21zZ19vdXQpLCBidWYsCisJCQkJICBhZGFwdGVyLT5idWZmZXJfc2l6ZV90eCwKKwkJ
+CQkgIGl4eGF0X3VzYl93cml0ZV9idWxrX2NhbGxiYWNrLCBjb250ZXh0KTsKKworCQl1cmItPnRy
+YW5zZmVyX2ZsYWdzIHw9IFVSQl9GUkVFX0JVRkZFUjsKKwl9CisKKwlpZiAoaSA9PSAwKSB7CisJ
+CW5ldGRldl9lcnIobmV0ZGV2LCAiQ291bGRuJ3Qgc2V0dXAgYW55IHR4LVVSQnNcbiIpOworCQl1
+c2Jfa2lsbF9hbmNob3JlZF91cmJzKCZkZXYtPnJ4X3N1Ym1pdHRlZCk7CisJfQorCisJcmV0dXJu
+IHJldDsKK30KKworc3RhdGljIHZvaWQgaXh4YXRfdXNiX2Rpc2Nvbm5lY3Qoc3RydWN0IHVzYl9p
+bnRlcmZhY2UgKmludGYpCit7CisJc3RydWN0IGl4eGF0X3VzYl9kZXZpY2UgKmRldjsKKwlzdHJ1
+Y3QgaXh4YXRfdXNiX2RldmljZSAqcHJldl9kZXY7CisKKwkvKiB1bnJlZ2lzdGVyIHRoZSBnaXZl
+biBkZXZpY2UgYW5kIGFsbCBwcmV2aW91cyBkZXZpY2VzICovCisJZm9yIChkZXYgPSB1c2JfZ2V0
+X2ludGZkYXRhKGludGYpOyBkZXY7IGRldiA9IHByZXZfZGV2KSB7CisJCXByZXZfZGV2ID0gZGV2
+LT5wcmV2X2RldjsKKwkJdW5yZWdpc3Rlcl9uZXRkZXYoZGV2LT5uZXRkZXYpOworCQlmcmVlX2Nh
+bmRldihkZXYtPm5ldGRldik7CisJfQorCisJdXNiX3NldF9pbnRmZGF0YShpbnRmLCBOVUxMKTsK
+K30KKworc3RhdGljIGludCBpeHhhdF91c2Jfc3RhcnQoc3RydWN0IGl4eGF0X3VzYl9kZXZpY2Ug
+KmRldikKK3sKKwlpbnQgZXJyOworCWludCBpOworCXUzMiB0aW1lX3JlZiA9IDA7CisJY29uc3Qg
+c3RydWN0IGl4eGF0X3VzYl9hZGFwdGVyICphZGFwdGVyID0gZGV2LT5hZGFwdGVyOworCisJZXJy
+ID0gaXh4YXRfdXNiX3NldHVwX3J4X3VyYnMoZGV2KTsKKwlpZiAoZXJyKQorCQlyZXR1cm4gZXJy
+OworCisJZXJyID0gaXh4YXRfdXNiX3NldHVwX3R4X3VyYnMoZGV2KTsKKwlpZiAoZXJyKQorCQly
+ZXR1cm4gZXJyOworCisJLyogVHJ5IHRvIHJlc2V0IHRoZSBjb250cm9sbGVyLCBpbiBjYXNlIGl0
+IGlzIGFscmVhZHkgaW5pdGlhbGl6ZWQKKwkgKiBmcm9tIGEgcHJldmlvdXMgdW5jbGVhbiBzaHV0
+ZG93bgorCSAqLworCWl4eGF0X3VzYl9yZXNldF9jdHJsKGRldik7CisKKwlpZiAoYWRhcHRlci0+
+aW5pdF9jdHJsKSB7CisJCWVyciA9IGFkYXB0ZXItPmluaXRfY3RybChkZXYpOworCQlpZiAoZXJy
+KQorCQkJZ290byBmYWlsOworCX0KKworCWlmICghKGRldi0+c3RhdGUgJiBJWFhBVF9VU0JfU1RB
+VEVfU1RBUlRFRCkpIHsKKwkJZXJyID0gaXh4YXRfdXNiX3N0YXJ0X2N0cmwoZGV2LCAmdGltZV9y
+ZWYpOworCQlpZiAoZXJyKQorCQkJZ290byBmYWlsOworCisJCWl4eGF0X3VzYl9zZXRfdHNfbm93
+KGRldiwgdGltZV9yZWYpOworCX0KKworCWRldi0+YmVjLnR4ZXJyID0gMDsKKwlkZXYtPmJlYy5y
+eGVyciA9IDA7CisKKwlkZXYtPnN0YXRlIHw9IElYWEFUX1VTQl9TVEFURV9TVEFSVEVEOworCWRl
+di0+Y2FuLnN0YXRlID0gQ0FOX1NUQVRFX0VSUk9SX0FDVElWRTsKKwlyZXR1cm4gMDsKKworZmFp
+bDoKKwlpZiAoZXJyID09IC1FTk9ERVYpCisJCW5ldGlmX2RldmljZV9kZXRhY2goZGV2LT5uZXRk
+ZXYpOworCisJbmV0ZGV2X2VycihkZXYtPm5ldGRldiwgIkNvdWxkbid0IHN1Ym1pdCBjb250cm9s
+OiAlcGVcbiIsIEVSUl9QVFIoZXJyKSk7CisKKwlmb3IgKGkgPSAwOyBpIDwgSVhYQVRfVVNCX01B
+WF9UWF9VUkJTOyBpKyspIHsKKwkJdXNiX2ZyZWVfdXJiKGRldi0+dHhfY29udGV4dHNbaV0udXJi
+KTsKKwkJZGV2LT50eF9jb250ZXh0c1tpXS51cmIgPSBOVUxMOworCX0KKworCXJldHVybiBlcnI7
+Cit9CisKK3N0YXRpYyBpbnQgaXh4YXRfdXNiX29wZW4oc3RydWN0IG5ldF9kZXZpY2UgKm5ldGRl
+dikKK3sKKwlzdHJ1Y3QgaXh4YXRfdXNiX2RldmljZSAqZGV2ID0gbmV0ZGV2X3ByaXYobmV0ZGV2
+KTsKKwlpbnQgZXJyOworCisJLyogY29tbW9uIG9wZW4gKi8KKwllcnIgPSBvcGVuX2NhbmRldihu
+ZXRkZXYpOworCWlmIChlcnIpCisJCWdvdG8gZmFpbDsKKworCS8qIGZpbmFsbHkgc3RhcnQgZGV2
+aWNlICovCisJZXJyID0gaXh4YXRfdXNiX3N0YXJ0KGRldik7CisJaWYgKGVycikgeworCQluZXRk
+ZXZfZXJyKG5ldGRldiwgIkNvdWxkbid0IHN0YXJ0IGRldmljZTogJXBlXG4iLCBFUlJfUFRSKGVy
+cikpOworCQljbG9zZV9jYW5kZXYobmV0ZGV2KTsKKwkJZ290byBmYWlsOworCX0KKworCW5ldGlm
+X3N0YXJ0X3F1ZXVlKG5ldGRldik7CisKK2ZhaWw6CisJcmV0dXJuIGVycjsKK30KKworc3RhdGlj
+IGludCBpeHhhdF91c2Jfc3RvcChzdHJ1Y3QgbmV0X2RldmljZSAqbmV0ZGV2KQoreworCWludCBl
+cnIgPSAwOworCXN0cnVjdCBpeHhhdF91c2JfZGV2aWNlICpkZXYgPSBuZXRkZXZfcHJpdihuZXRk
+ZXYpOworCisJaXh4YXRfdXNiX3N0b3BfcXVldWUoZGV2KTsKKwlpZiAoZGV2LT5zdGF0ZSAmIElY
+WEFUX1VTQl9TVEFURV9TVEFSVEVEKSB7CisJCWVyciA9IGl4eGF0X3VzYl9zdG9wX2N0cmwoZGV2
+KTsKKwkJaWYgKGVycikKKwkJCW5ldGRldl93YXJuKG5ldGRldiwgIkVycm9yICVkOiBDYW5ub3Qg
+c3RvcCBkZXZpY2VcbiIsCisJCQkJICAgIGVycik7CisJfQorCisJZGV2LT5zdGF0ZSAmPSB+SVhY
+QVRfVVNCX1NUQVRFX1NUQVJURUQ7CisJY2xvc2VfY2FuZGV2KG5ldGRldik7CisJZGV2LT5jYW4u
+c3RhdGUgPSBDQU5fU1RBVEVfU1RPUFBFRDsKKwlyZXR1cm4gZXJyOworfQorCitzdGF0aWMgY29u
+c3Qgc3RydWN0IG5ldF9kZXZpY2Vfb3BzIGl4eGF0X3VzYl9uZXRkZXZfb3BzID0geworCS5uZG9f
+b3BlbiA9IGl4eGF0X3VzYl9vcGVuLAorCS5uZG9fc3RvcCA9IGl4eGF0X3VzYl9zdG9wLAorCS5u
+ZG9fc3RhcnRfeG1pdCA9IGl4eGF0X3VzYl9zdGFydF94bWl0Cit9OworCitzdGF0aWMgY29uc3Qg
+c3RydWN0IGV0aHRvb2xfb3BzIGl4eGF0X3VzYl9ldGh0b29sX29wcyA9IHsKKwkuZ2V0X3RzX2lu
+Zm8gPSBldGh0b29sX29wX2dldF90c19pbmZvLAorfTsKKworc3RhdGljIGludCBpeHhhdF91c2Jf
+Y3JlYXRlX2RldihzdHJ1Y3QgdXNiX2ludGVyZmFjZSAqaW50ZiwKKwkJCQljb25zdCBzdHJ1Y3Qg
+aXh4YXRfdXNiX2FkYXB0ZXIgKmFkYXB0ZXIsCisJCQkJdTE2IGN0cmxfaW5kZXgpCit7CisJc3Ry
+dWN0IHVzYl9kZXZpY2UgKnVkZXYgPSBpbnRlcmZhY2VfdG9fdXNiZGV2KGludGYpOworCXN0cnVj
+dCBpeHhhdF91c2JfZGV2aWNlICpkZXY7CisJc3RydWN0IG5ldF9kZXZpY2UgKm5ldGRldjsKKwlp
+bnQgZXJyOworCWludCBpOworCisJbmV0ZGV2ID0gYWxsb2NfY2FuZGV2KHNpemVvZigqZGV2KSwg
+SVhYQVRfVVNCX01BWF9UWF9VUkJTKTsKKwlpZiAoIW5ldGRldikgeworCQlkZXZfZXJyKCZpbnRm
+LT5kZXYsICJDYW5ub3QgYWxsb2NhdGUgY2FuZGV2XG4iKTsKKwkJcmV0dXJuIC1FTk9NRU07CisJ
+fQorCisJZGV2ID0gbmV0ZGV2X3ByaXYobmV0ZGV2KTsKKwlkZXYtPnVkZXYgPSB1ZGV2OworCWRl
+di0+bmV0ZGV2ID0gbmV0ZGV2OworCWRldi0+YWRhcHRlciA9IGFkYXB0ZXI7CisJZGV2LT5jdHJs
+X2luZGV4ID0gY3RybF9pbmRleDsKKwlkZXYtPnN0YXRlID0gSVhYQVRfVVNCX1NUQVRFX0NPTk5F
+Q1RFRDsKKworCWkgPSBjdHJsX2luZGV4ICsgYWRhcHRlci0+ZXBfb2ZmczsKKwlkZXYtPmVwX21z
+Z19pbiA9IGFkYXB0ZXItPmVwX21zZ19pbltpXTsKKwlkZXYtPmVwX21zZ19vdXQgPSBhZGFwdGVy
+LT5lcF9tc2dfb3V0W2ldOworCisJZGV2LT5jYW4uY2xvY2suZnJlcSA9IGFkYXB0ZXItPmNsb2Nr
+OworCWRldi0+Y2FuLmJpdHRpbWluZ19jb25zdCA9IGFkYXB0ZXItPmJ0OworCWRldi0+Y2FuLmRh
+dGFfYml0dGltaW5nX2NvbnN0ID0gYWRhcHRlci0+YnRkOworCisJZGV2LT5jYW4uZG9fc2V0X21v
+ZGUgPSBpeHhhdF91c2Jfc2V0X21vZGU7CisJZGV2LT5jYW4uZG9fZ2V0X2JlcnJfY291bnRlciA9
+IGl4eGF0X3VzYl9nZXRfYmVycl9jb3VudGVyOworCisJZGV2LT5jYW4uY3RybG1vZGVfc3VwcG9y
+dGVkID0gYWRhcHRlci0+bW9kZXM7CisKKwluZXRkZXYtPm5ldGRldl9vcHMgPSAmaXh4YXRfdXNi
+X25ldGRldl9vcHM7CisJbmV0ZGV2LT5ldGh0b29sX29wcyA9ICZpeHhhdF91c2JfZXRodG9vbF9v
+cHM7CisKKwluZXRkZXYtPmZsYWdzIHw9IElGRl9FQ0hPOworCW5ldGRldi0+ZGV2X3BvcnQgPSBj
+dHJsX2luZGV4OworCisJaW5pdF91c2JfYW5jaG9yKCZkZXYtPnJ4X3N1Ym1pdHRlZCk7CisJaW5p
+dF91c2JfYW5jaG9yKCZkZXYtPnR4X3N1Ym1pdHRlZCk7CisKKwlhdG9taWNfc2V0KCZkZXYtPmFj
+dGl2ZV90eF91cmJzLCAwKTsKKworCWZvciAoaSA9IDA7IGkgPCBJWFhBVF9VU0JfTUFYX1RYX1VS
+QlM7IGkrKykKKwkJZGV2LT50eF9jb250ZXh0c1tpXS5lY2hvX2luZGV4ID0gSVhYQVRfVVNCX01B
+WF9UWF9VUkJTOworCisJZGV2LT5wcmV2X2RldiA9IHVzYl9nZXRfaW50ZmRhdGEoaW50Zik7CisJ
+dXNiX3NldF9pbnRmZGF0YShpbnRmLCBkZXYpOworCisJU0VUX05FVERFVl9ERVYobmV0ZGV2LCAm
+aW50Zi0+ZGV2KTsKKwllcnIgPSByZWdpc3Rlcl9jYW5kZXYobmV0ZGV2KTsKKwlpZiAoZXJyKSB7
+CisJCWRldl9lcnIoJmludGYtPmRldiwgIkZhaWxlZCB0byByZWdpc3RlciBjYW4gZGV2aWNlOiAl
+cGVcbiIsCisJCQlFUlJfUFRSKGVycikpOworCQlnb3RvIGZyZWVfY2FuZGV2OworCX0KKworCWlm
+IChkZXYtPnByZXZfZGV2KQorCQkoZGV2LT5wcmV2X2RldiktPm5leHRfZGV2ID0gZGV2OworCisJ
+ZXJyID0gaXh4YXRfdXNiX2dldF9kZXZfaW5mbyh1ZGV2LCAmZGV2LT5kZXZfaW5mbyk7CisJaWYg
+KGVycikgeworCQlkZXZfZXJyKCZpbnRmLT5kZXYsCisJCQkiRmFpbGVkIHRvIGdldCBkZXZpY2Ug
+aW5mb3JtYXRpb246ICVwZVxuIiwgRVJSX1BUUihlcnIpKTsKKwkJZ290byB1bnJlZ19jYW5kZXY7
+CisJfQorCisJbmV0ZGV2X2luZm8obmV0ZGV2LCAiJXM6IENvbm5lY3RlZCBDaGFubmVsICV1IChk
+ZXZpY2UgJXMpXG4iLAorCQkgICAgZGV2LT5kZXZfaW5mby5kZXZpY2VfbmFtZSwgY3RybF9pbmRl
+eCwKKwkJICAgIGRldi0+ZGV2X2luZm8uZGV2aWNlX2lkKTsKKworCXJldHVybiAwOworCit1bnJl
+Z19jYW5kZXY6CisJdW5yZWdpc3Rlcl9jYW5kZXYobmV0ZGV2KTsKK2ZyZWVfY2FuZGV2OgorCXVz
+Yl9zZXRfaW50ZmRhdGEoaW50ZiwgZGV2LT5wcmV2X2Rldik7CisJZnJlZV9jYW5kZXYobmV0ZGV2
+KTsKKwlyZXR1cm4gZXJyOworfQorCitzdGF0aWMgaW50IGl4eGF0X3VzYl9wcm9iZShzdHJ1Y3Qg
+dXNiX2ludGVyZmFjZSAqaW50ZiwKKwkJCSAgIGNvbnN0IHN0cnVjdCB1c2JfZGV2aWNlX2lkICpp
+ZCkKK3sKKwlzdHJ1Y3QgdXNiX2RldmljZSAqdWRldiA9IGludGVyZmFjZV90b191c2JkZXYoaW50
+Zik7CisJc3RydWN0IHVzYl9ob3N0X2ludGVyZmFjZSAqaG9zdF9pbnRmID0gaW50Zi0+YWx0c2V0
+dGluZzsKKwljb25zdCBzdHJ1Y3QgaXh4YXRfdXNiX2FkYXB0ZXIgKmFkYXB0ZXI7CisJc3RydWN0
+IGl4eGF0X2Rldl9jYXBzIGRldl9jYXBzOworCXUxNiBpOworCWludCBlcnI7CisKKwl1c2JfcmVz
+ZXRfY29uZmlndXJhdGlvbih1ZGV2KTsKKworCWFkYXB0ZXIgPSAoY29uc3Qgc3RydWN0IGl4eGF0
+X3VzYl9hZGFwdGVyICopaWQtPmRyaXZlcl9pbmZvOworCisJZm9yIChpID0gMDsgaSA8IGhvc3Rf
+aW50Zi0+ZGVzYy5iTnVtRW5kcG9pbnRzOyBpKyspIHsKKwkJY29uc3QgdTggZXBhZGRyID0gaG9z
+dF9pbnRmLT5lbmRwb2ludFtpXS5kZXNjLmJFbmRwb2ludEFkZHJlc3M7CisJCWludCBtYXRjaDsK
+KwkJdTggajsKKworCQkvKiBDaGVjayBpZiB1c2ItZW5kcG9pbnQgYWRkcmVzcyBtYXRjaGVzIGtu
+b3duIHVzYi1lbmRwb2ludHMgKi8KKwkJZm9yIChqID0gMDsgaiA8IElYWEFUX1VTQl9NQVhfQ0hB
+Tk5FTDsgaisrKSB7CisJCQl1OCBlcF9tc2dfaW4gPSBhZGFwdGVyLT5lcF9tc2dfaW5bal07CisJ
+CQl1OCBlcF9tc2dfb3V0ID0gYWRhcHRlci0+ZXBfbXNnX2luW2pdOworCisJCQlpZiAoZXBhZGRy
+ID09IGVwX21zZ19pbiB8fCBlcGFkZHIgPT0gZXBfbXNnX291dCkgeworCQkJCW1hdGNoID0gMTsK
+KwkJCQlicmVhazsKKwkJCX0KKwkJfQorCisJCWlmICghbWF0Y2gpCisJCQlyZXR1cm4gLUVOT0RF
+VjsKKwl9CisKKwllcnIgPSBpeHhhdF91c2JfcG93ZXJfY3RybCh1ZGV2LCBJWFhBVF9VU0JfUE9X
+RVJfV0FLRVVQKTsKKwlpZiAoZXJyKQorCQlyZXR1cm4gZXJyOworCisJbXNsZWVwKElYWEFUX1VT
+Ql9QT1dFUl9XQUtFVVBfVElNRSk7CisKKwllcnIgPSBpeHhhdF91c2JfZ2V0X2Rldl9jYXBzKHVk
+ZXYsICZkZXZfY2Fwcyk7CisJaWYgKGVycikgeworCQlkZXZfZXJyKCZpbnRmLT5kZXYsCisJCQki
+RmFpbGVkIHRvIGdldCBkZXZpY2UgY2FwYWJpbGl0aWVzOiAlcGVcbiIsIEVSUl9QVFIoZXJyKSk7
+CisJCXJldHVybiBlcnI7CisJfQorCisJZXJyID0gLUVOT0RFVjsKKwlmb3IgKGkgPSAwOyBpIDwg
+bGUxNl90b19jcHUoZGV2X2NhcHMuYnVzX2N0cmxfY291bnQpOyBpKyspIHsKKwkJdTE2IGRldl9i
+dXN0eXBlID0gbGUxNl90b19jcHUoZGV2X2NhcHMuYnVzX2N0cmxfdHlwZXNbaV0pOworCQl1OCBi
+dXN0eXBlID0gSVhYQVRfVVNCX0JVU19UWVBFKGRldl9idXN0eXBlKTsKKworCQlpZiAoYnVzdHlw
+ZSA9PSBJWFhBVF9VU0JfQlVTX0NBTikKKwkJCWVyciA9IGl4eGF0X3VzYl9jcmVhdGVfZGV2KGlu
+dGYsIGFkYXB0ZXIsIGkpOworCisJCWlmIChlcnIpIHsKKwkJCS8qIGRlcmVnaXN0ZXIgYWxyZWFk
+eSBjcmVhdGVkIGRldmljZXMgKi8KKwkJCWl4eGF0X3VzYl9kaXNjb25uZWN0KGludGYpOworCQkJ
+cmV0dXJuIGVycjsKKwkJfQorCX0KKworCXJldHVybiBlcnI7Cit9CisKK3N0YXRpYyBzdHJ1Y3Qg
+dXNiX2RyaXZlciBpeHhhdF91c2JfZHJpdmVyID0geworCS5uYW1lID0gSVhYQVRfVVNCX0RSSVZF
+Ul9OQU1FLAorCS5wcm9iZSA9IGl4eGF0X3VzYl9wcm9iZSwKKwkuZGlzY29ubmVjdCA9IGl4eGF0
+X3VzYl9kaXNjb25uZWN0LAorCS5pZF90YWJsZSA9IGl4eGF0X3VzYl90YWJsZSwKK307CisKK21v
+ZHVsZV91c2JfZHJpdmVyKGl4eGF0X3VzYl9kcml2ZXIpOwpkaWZmIC0tZ2l0IGEvZHJpdmVycy9u
+ZXQvY2FuL3VzYi9peHhhdF91c2IvaXh4YXRfdXNiX2NvcmUuaCBiL2RyaXZlcnMvbmV0L2Nhbi91
+c2IvaXh4YXRfdXNiL2l4eGF0X3VzYl9jb3JlLmgKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXgg
+MDAwMDAwMDAwMDAwLi41NmM2ZjNiOTM4ZDgKLS0tIC9kZXYvbnVsbAorKysgYi9kcml2ZXJzL25l
+dC9jYW4vdXNiL2l4eGF0X3VzYi9peHhhdF91c2JfY29yZS5oCkBAIC0wLDAgKzEsNTExIEBACisv
+KiBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogR1BMLTIuMC1vbmx5ICovCisvKgorICogQ29weXJp
+Z2h0IChDKSAyMDE4IEhNUyBJbmR1c3RyaWFsIE5ldHdvcmtzIDxzb2NrZXRjYW5AaG1zLW5ldHdv
+cmtzLmRlPgorICovCisKKyNpZm5kZWYgSVhYQVRfVVNCX0NPUkVfSAorI2RlZmluZSBJWFhBVF9V
+U0JfQ09SRV9ICisKKyNkZWZpbmUgSVhYQVRfVVNCX0RSSVZFUl9OQU1FICJpeHhhdF91c2IyY2Fu
+IgorI2RlZmluZSBJWFhBVF9VU0JfQ1RSTF9OQU1FICJpeHhhdF91c2IiCisKKyNkZWZpbmUgSVhY
+QVRfVVNCX1ZFTkRPUl9JRCAweDA4ZDgKKworLyogc3VwcG9ydGVkIGRldmljZSBpZHM6IENMMSAq
+LworI2RlZmluZSBVU0IyQ0FOX0NPTVBBQ1RfUFJPRFVDVF9JRCAweDAwMDgKKyNkZWZpbmUgVVNC
+MkNBTl9FTUJFRERFRF9QUk9EVUNUX0lEIDB4MDAwOQorI2RlZmluZSBVU0IyQ0FOX1BST0ZFU1NJ
+T05BTF9QUk9EVUNUX0lEIDB4MDAwQQorI2RlZmluZSBVU0IyQ0FOX0FVVE9NT1RJVkVfUFJPRFVD
+VF9JRCAweDAwMEIKKworLyogc3VwcG9ydGVkIGRldmljZSBpZHM6IENMMiAqLworI2RlZmluZSBV
+U0IyQ0FOX0ZEX0NPTVBBQ1RfUFJPRFVDVF9JRCAweDAwMTQKKyNkZWZpbmUgVVNCMkNBTl9GRF9Q
+Uk9GRVNTSU9OQUxfUFJPRFVDVF9JRCAweDAwMTYKKyNkZWZpbmUgVVNCMkNBTl9GRF9BVVRPTU9U
+SVZFX1BST0RVQ1RfSUQgMHgwMDE3CisjZGVmaW5lIFVTQjJDQU5fRkRfUENJRV9NSU5JX1BST0RV
+Q1RfSUQgMHgwMDFCCisjZGVmaW5lIFVTQjJDQVJfUFJPRFVDVF9JRCAweDAwMUMKKyNkZWZpbmUg
+Q0FOX0lETTEwMV9QUk9EVUNUX0lEIDB4RkYxMgorI2RlZmluZSBDQU5fSURNMjAwX1BST0RVQ1Rf
+SUQgMHhGRjEzCisKKyNkZWZpbmUgSVhYQVRfVVNCX0JVU19DQU4gMQorCisjZGVmaW5lIElYWEFU
+X1VTQl9CVVNfVFlQRSh0eXBlKSAoKHU4KSgoKHR5cGUpID4+IDgpICYgMHgwMEZGKSkKKworI2Rl
+ZmluZSBJWFhBVF9VU0JfU1RBVEVfQ09OTkVDVEVEIEJJVCgwKQorI2RlZmluZSBJWFhBVF9VU0Jf
+U1RBVEVfU1RBUlRFRCBCSVQoMSkKKworI2RlZmluZSBJWFhBVF9VU0JfTUFYX0NIQU5ORUwgNQor
+I2RlZmluZSBJWFhBVF9VU0JfTUFYX1RZUEVTIDMyCisjZGVmaW5lIElYWEFUX1VTQl9NQVhfUlhf
+VVJCUyA0CisjZGVmaW5lIElYWEFUX1VTQl9NQVhfVFhfVVJCUyAxMAorI2RlZmluZSBJWFhBVF9V
+U0JfTUFYX0NPTV9SRVEgMTAKKworI2RlZmluZSBJWFhBVF9VU0JfTVNHX1RJTUVPVVQgNTAKKyNk
+ZWZpbmUgSVhYQVRfVVNCX01TR19DWUNMRSAyMAorCisjZGVmaW5lIElYWEFUX1VTQl9QT1dFUl9X
+QUtFVVAgMAorI2RlZmluZSBJWFhBVF9VU0JfUE9XRVJfV0FLRVVQX1RJTUUgNTAwCisKKyNkZWZp
+bmUgSVhYQVRfVVNCX09QTU9ERV9TVEFOREFSRCBCSVQoMCkKKyNkZWZpbmUgSVhYQVRfVVNCX09Q
+TU9ERV9FWFRFTkRFRCBCSVQoMSkKKyNkZWZpbmUgSVhYQVRfVVNCX09QTU9ERV9FUlJGUkFNRSBC
+SVQoMikKKyNkZWZpbmUgSVhYQVRfVVNCX09QTU9ERV9MSVNUT05MWSBCSVQoMykKKworI2RlZmlu
+ZSBJWFhBVF9VU0JfRVhNT0RFX0VYVERBVEEgQklUKDApCisjZGVmaW5lIElYWEFUX1VTQl9FWE1P
+REVfRkFTVERBVEEgQklUKDEpCisjZGVmaW5lIElYWEFUX1VTQl9FWE1PREVfSVNPRkQgQklUKDIp
+CisKKyNkZWZpbmUgSVhYQVRfVVNCX0JUTU9ERV9OQVQgQklUKDApCisjZGVmaW5lIElYWEFUX1VT
+Ql9CVE1PREVfVFNNIEJJVCgxKQorCisjZGVmaW5lIElYWEFUX1VTQl9TVE9QX0FDVElPTl9DTEVB
+UkFMTCAzCisKKyNkZWZpbmUgSVhYQVRfUkVTVEFSVF9UQVNLX0NZQ0xFX1RJTUUgMjAKKworI2Rl
+ZmluZSBJWFhBVF9VU0JfQ0FOX0RBVEEgMHgwMAorI2RlZmluZSBJWFhBVF9VU0JfQ0FOX0lORk8g
+MHgwMQorI2RlZmluZSBJWFhBVF9VU0JfQ0FOX0VSUk9SIDB4MDIKKyNkZWZpbmUgSVhYQVRfVVNC
+X0NBTl9TVEFUVVMgMHgwMworI2RlZmluZSBJWFhBVF9VU0JfQ0FOX1dBS0VVUCAweDA0CisjZGVm
+aW5lIElYWEFUX1VTQl9DQU5fVElNRU9WUiAweDA1CisjZGVmaW5lIElYWEFUX1VTQl9DQU5fVElN
+RVJTVCAweDA2CisKKyNkZWZpbmUgSVhYQVRfVVNCX0NBTl9TVEFUVVNfT0sgMHgwMDAwMDAwMAor
+I2RlZmluZSBJWFhBVF9VU0JfQ0FOX1NUQVRVU19PVkVSUlVOIDB4MDAwMDAwMDIKKyNkZWZpbmUg
+SVhYQVRfVVNCX0NBTl9TVEFUVVNfRVJSTElNIDB4MDAwMDAwMDQKKyNkZWZpbmUgSVhYQVRfVVNC
+X0NBTl9TVEFUVVNfQlVTT0ZGIDB4MDAwMDAwMDgKKyNkZWZpbmUgSVhYQVRfVVNCX0NBTl9TVEFU
+VVNfRVJSX1BBUyAweDAwMDAyMDAwCisKKyNkZWZpbmUgSVhYQVRfVVNCX0NBTl9FUlJPUl9MRU4g
+NQorCisjZGVmaW5lIElYWEFUX1VTQl9DQU5fRVJST1JfQ09ERSAwCisjZGVmaW5lIElYWEFUX1VT
+Ql9DQU5fRVJST1JfQ09VTlRFUl9SWCAzCisjZGVmaW5lIElYWEFUX1VTQl9DQU5fRVJST1JfQ09V
+TlRFUl9UWCA0CisKKyNkZWZpbmUgSVhYQVRfVVNCX0NBTl9FUlJPUl9TVFVGRiAxCisjZGVmaW5l
+IElYWEFUX1VTQl9DQU5fRVJST1JfRk9STSAyCisjZGVmaW5lIElYWEFUX1VTQl9DQU5fRVJST1Jf
+QUNLIDMKKyNkZWZpbmUgSVhYQVRfVVNCX0NBTl9FUlJPUl9CSVQgNAorI2RlZmluZSBJWFhBVF9V
+U0JfQ0FOX0VSUk9SX0NSQyA2CisKKyNkZWZpbmUgSVhYQVRfVVNCX01TR19GTEFHU19UWVBFIDB4
+MDAwMDAwRkYKKyNkZWZpbmUgSVhYQVRfVVNCX01TR19GTEFHU19ETEMgMHgwMDBGMDAwMAorI2Rl
+ZmluZSBJWFhBVF9VU0JfTVNHX0ZMQUdTX09WUiAweDAwMTAwMDAwCisjZGVmaW5lIElYWEFUX1VT
+Ql9NU0dfRkxBR1NfUlRSIDB4MDA0MDAwMDAKKyNkZWZpbmUgSVhYQVRfVVNCX01TR19GTEFHU19F
+WFQgMHgwMDgwMDAwMAorCisjZGVmaW5lIElYWEFUX1VTQl9GRE1TR19GTEFHU19FREwgMHgwMDAw
+MDQwMAorI2RlZmluZSBJWFhBVF9VU0JfRkRNU0dfRkxBR1NfRkRSIDB4MDAwMDA4MDAKKyNkZWZp
+bmUgSVhYQVRfVVNCX0ZETVNHX0ZMQUdTX0VTSSAweDAwMDAxMDAwCisKKyNkZWZpbmUgSVhYQVRf
+VVNCX0NBTl9DTURfU1RBUlQgMHgzMjYKKyNkZWZpbmUgSVhYQVRfVVNCX0NBTl9DTURfU1RPUCAw
+eDMyNworI2RlZmluZSBJWFhBVF9VU0JfQ0FOX0NNRF9SRVNFVCAweDMyOAorCisjZGVmaW5lIElY
+WEFUX1VTQl9CUkRfQ01EX0dFVF9ERVZDQVBTIDB4NDAxCisjZGVmaW5lIElYWEFUX1VTQl9CUkRf
+Q01EX0dFVF9ERVZJTkZPIDB4NDAyCisjZGVmaW5lIElYWEFUX1VTQl9CUkRfQ01EX1BPV0VSIDB4
+NDIxCisKKy8qKgorICogc3RydWN0IGl4eGF0X2Nhbl9tc2dfYmFzZSAtIElYWEFUIENBTiBtZXNz
+YWdlIGJhc2UgKENMMS9DTDIpCisgKiBAc2l6ZTogTWVzc2FnZSBzaXplICh0aGlzIGZpZWxkIGV4
+Y2x1ZGVkKQorICogQHRpbWU6IE1lc3NhZ2UgdGltZXN0YW1wCisgKiBAbXNnX2lkOiBNZXNzYWdl
+IElECisgKiBAZmxhZ3M6IE1lc3NhZ2UgZmxhZ3MKKyAqCisgKiBDb250YWlucyB0aGUgY29tbW9u
+IGZpZWxkcyBvZiBhbiBJWFhBVCBDQU4gbWVzc2FnZSBvbiBib3RoIENMMSBhbmQgQ0wyCisgKiBk
+ZXZpY2VzCisgKi8KK3N0cnVjdCBpeHhhdF9jYW5fbXNnX2Jhc2UgeworCXU4IHNpemU7CisJX19s
+ZTMyIHRpbWU7CisJX19sZTMyIG1zZ19pZDsKKwlfX2xlMzIgZmxhZ3M7Cit9IF9fcGFja2VkOwor
+CisvKioKKyAqIHN0cnVjdCBpeHhhdF9jYW5fbXNnX2NsMSAtIElYWEFUIENBTiBtZXNzYWdlIChD
+TDEpCisgKiBAZGF0YTogTWVzc2FnZSBkYXRhIChzdGFuZGFyZCBDQU4gZnJhbWUpCisgKgorICog
+Q29udGFpbnMgdGhlIGZpZWxkcyBvZiBhbiBJWFhBVCBDQU4gbWVzc2FnZSBvbiBDTDEgZGV2aWNl
+cworICovCitzdHJ1Y3QgaXh4YXRfY2FuX21zZ19jbDEgeworCXVuaW9uIHsKKwkJdTggZGF0YVtD
+QU5fTUFYX0RMRU5dOworCQlfX2xlMzIgc3RhdHVzOworCX0gX19wYWNrZWQ7Cit9IF9fcGFja2Vk
+OworCisvKioKKyAqIHN0cnVjdCBpeHhhdF9jYW5fbXNnX2NsMiAtIElYWEFUIENBTiBtZXNzYWdl
+IChDTDIpCisgKiBAY2xpZW50X2lkOiBDbGllbnQgSUQKKyAqIEBkYXRhOiBNZXNzYWdlIGRhdGEg
+KENBTiBGRCBmcmFtZSkKKyAqCisgKiBDb250YWlucyB0aGUgZmllbGRzIG9mIGFuIElYWEFUIENB
+TiBtZXNzYWdlIG9uIENMMiBkZXZpY2VzCisgKi8KK3N0cnVjdCBpeHhhdF9jYW5fbXNnX2NsMiB7
+CisJX19sZTMyIGNsaWVudF9pZDsKKwl1bmlvbiB7CisJCXU4IGRhdGFbQ0FORkRfTUFYX0RMRU5d
+OworCQlfX2xlMzIgc3RhdHVzOworCX0gX19wYWNrZWQ7Cit9IF9fcGFja2VkOworCisvKioKKyAq
+IHN0cnVjdCBpeHhhdF9jYW5fbXNnIC0gSVhYQVQgQ0FOIG1lc3NhZ2UKKyAqIEBiYXNlOiBCYXNl
+IG1lc3NhZ2UKKyAqIEBjbDE6IENsMSBtZXNzYWdlCisgKiBAY2wyOiBDbDIgbWVzc2FnZQorICoK
+KyAqIENvbnRhaW5zIGFuIElYWEFUIENBTiBtZXNzYWdlCisgKi8KK3N0cnVjdCBpeHhhdF9jYW5f
+bXNnIHsKKwlzdHJ1Y3QgaXh4YXRfY2FuX21zZ19iYXNlIGJhc2U7CisJdW5pb24geworCQlzdHJ1
+Y3QgaXh4YXRfY2FuX21zZ19jbDEgY2wxOworCQlzdHJ1Y3QgaXh4YXRfY2FuX21zZ19jbDIgY2wy
+OworCX07Cit9IF9fcGFja2VkOworCisvKioKKyAqIHN0cnVjdCBpeHhhdF9kZXZfY2FwcyAtIERl
+dmljZSBjYXBhYmlsaXRpZXMKKyAqIEBidXNfY3RybF9jb3VudDogU3RvcmVzIHRoZSBidXMgY29u
+dHJvbGxlciBjb3VudGVyCisgKiBAYnVzX2N0cmxfdHlwZXM6IFN0b3JlcyB0aGUgYnVzIGNvbnRy
+b2xsZXIgdHlwZXMKKyAqCisgKiBDb250YWlucyB0aGUgZGV2aWNlIGNhcGFiaWxpdGllcworICov
+CitzdHJ1Y3QgaXh4YXRfZGV2X2NhcHMgeworCV9fbGUxNiBidXNfY3RybF9jb3VudDsKKwlfX2xl
+MTYgYnVzX2N0cmxfdHlwZXNbSVhYQVRfVVNCX01BWF9UWVBFU107Cit9IF9fcGFja2VkOworCisv
+KioKKyAqIHN0cnVjdCBpeHhhdF9jYW5idHAgQml0dGltaW5nIHBhcmFtZXRlcnMgKENMMikKKyAq
+IEBtb2RlOiBPcGVyYXRpb24gbW9kZQorICogQGJwczogQml0cyBwZXIgc2Vjb25kCisgKiBAdHMx
+OiBGaXJzdCB0aW1lIHNlZ21lbnQKKyAqIEB0czI6IFNlY29uZCB0aW1lIHNlZ21lbnQKKyAqIEBz
+anc6IFN5bmNocm9uaXphdGlvbiBqdW1wIHdpZHRoCisgKiBAdGRvOiBUcmFuc21pdHRlciBkZWxh
+eSBvZmZzZXQKKyAqCisgKiBCaXR0aW1pbmcgcGFyYW1ldGVycyBvZiBhIENMMiBpbml0aWFsaXph
+dGlvbiByZXF1ZXN0CisgKi8KK3N0cnVjdCBpeHhhdF9jYW5idHAgeworCV9fbGUzMiBtb2RlOwor
+CV9fbGUzMiBicHM7CisJX19sZTE2IHRzMTsKKwlfX2xlMTYgdHMyOworCV9fbGUxNiBzanc7CisJ
+X19sZTE2IHRkbzsKK30gX19wYWNrZWQ7CisKKy8qKgorICogc3RydWN0IGl4eGF0X2Rldl9pbmZv
+IElYWEFUIHVzYiBkZXZpY2UgaW5mb3JtYXRpb24KKyAqIEBkZXZpY2VfbmFtZTogTmFtZSBvZiB0
+aGUgZGV2aWNlCisgKiBAZGV2aWNlX2lkOiBEZXZpY2UgaWRlbnRpZmljYXRpb24gKCB1bmlxdWUg
+ZGV2aWNlIGlkKQorICogQGRldmljZV92ZXJzaW9uOiBEZXZpY2UgdmVyc2lvbiAoIDAsIDEsIC4u
+LikKKyAqIEBkZXZpY2VfZnBnYV92ZXJzaW9uOiBWZXJzaW9uIG9mIEZQR0EgZGVzaWduCisgKgor
+ICogQ29udGFpbnMgZGV2aWNlIGluZm9ybWF0aW9uIG9mIElYWEFUIFVTQiBkZXZpY2VzCisgKi8K
+K3N0cnVjdCBpeHhhdF9kZXZfaW5mbyB7CisJY2hhciBkZXZpY2VfbmFtZVsxNl07CisJY2hhciBk
+ZXZpY2VfaWRbMTZdOworCV9fbGUxNiBkZXZpY2VfdmVyc2lvbjsKKwlfX2xlMzIgZGV2aWNlX2Zw
+Z2FfdmVyc2lvbjsKK30gX19wYWNrZWQ7CisKKy8qKgorICogc3RydWN0IGl4eGF0X3RpbWVfcmVm
+IFRpbWUgcmVmZXJlbmNlCisgKiBAa3RfaG9zdF8wOiBMYXRlc3QgdGltZSBvbiB0aGUgaG9zdAor
+ICogQHRzX2Rldl8wOiBMYXRlc3QgdGltZSBzdGFtcCBvbiB0aGUgZGV2aWNlCisgKiBAdHNfZGV2
+X2xhc3Q6IExhc3QgZGV2aWNlIHRpbWUgc3RhbXAKKyAqCisgKiBDb250YWlucyB0aW1lIHJlZmVy
+ZW5jZXMgb2YgdGhlIGRldmljZSBhbmQgdGhlIGhvc3QKKyAqLworc3RydWN0IGl4eGF0X3RpbWVf
+cmVmIHsKKwlrdGltZV90IGt0X2hvc3RfMDsKKwl1MzIgdHNfZGV2XzA7CisJdTMyIHRzX2Rldl9s
+YXN0OworfTsKKworLyoqCisgKiBzdHJ1Y3QgaXh4YXRfdHhfdXJiX2NvbnRleHQgVVJCIGNvbnRl
+bnQgZm9yIHRyYW5zbWlzc2lvbgorICogQGRldjogSVhYQVQgVVNCIGRldmljZQorICogQHVyYjog
+VVNCIHJlcXVlc3QgYmxvY2sKKyAqIEBlY2hvX2luZGV4OiBFY2hvIGluZGV4CisgKiBAZGxjOiBE
+YXRhIGxlbmd0aCBjb2RlCisgKiBAY291bnQ6IENvdW50ZXIKKyAqCisgKiBDb250YWlucyBjb250
+ZW50IGZvciBVU0IgcmVxdWVzdCBibG9jayB0cmFuc21pc3Npb25zCisgKi8KK3N0cnVjdCBpeHhh
+dF90eF91cmJfY29udGV4dCB7CisJc3RydWN0IGl4eGF0X3VzYl9kZXZpY2UgKmRldjsKKwlzdHJ1
+Y3QgdXJiICp1cmI7CisJdTMyIGVjaG9faW5kZXg7Cit9OworCisvKioKKyAqIHN0cnVjdCBpeHhh
+dF91c2JfZGV2aWNlIElYWEFUIFVTQiBkZXZpY2UKKyAqIEBjYW46IENBTiBjb21tb24gcHJpdmF0
+ZSBkYXRhCisgKiBAYWRhcHRlcjogVVNCIG5ldHdvcmsgZGVzY3JpcHRvcgorICogQHVkZXY6IFVT
+QiBkZXZpY2UKKyAqIEBuZXRkZXY6IE5ldF9kZXZpY2UKKyAqIEBhY3RpdmVfdHhfdXJiczogQWN0
+aXZlIHR4IHVyYnMKKyAqIEB0eF9zdWJtaXR0ZWQ6IFN1Ym1pdHRlZCB0eCB1c2IgYW5jaG9yCisg
+KiBAdHhfY29udGV4dHM6IEJ1ZmZlciBmb3IgdHggY29udGV4dHMKKyAqIEByeF9zdWJtaXR0ZWQ6
+IFN1Ym1pdHRlZCByeCB1c2IgYW5jaG9yCisgKiBAc3RhdGU6IERldmljZSBzdGF0ZQorICogQGN0
+cmxfaW5kZXg6IENvbnRyb2xsZXIgaW5kZXgKKyAqIEBlcF9tc2dfaW46IFVTQiBlbmRwb2ludCBm
+b3IgaW5jb21pbmcgbWVzc2FnZXMKKyAqIEBlcF9tc2dfb3V0OiBVU0IgZW5kcG9pbnQgZm9yIG91
+dGdvaW5nIG1lc3NhZ2VzCisgKiBAcHJldl9kZXY6IFByZXZpb3VzIG9wZW5lZCBkZXZpY2UKKyAq
+IEBuZXh0X2RldjogTmV4dCBvcGVuZWQgZGV2aWNlIGluIGxpc3QKKyAqIEB0aW1lX3JlZjogVGlt
+ZSByZWZlcmVuY2UKKyAqIEBkZXZfaW5mbzogRGV2aWNlIGluZm9ybWF0aW9uCisgKiBAYmVjOiBD
+QU4gZXJyb3IgY291bnRlcgorICoKKyAqIElYWEFUIFVTQi10by1DQU4gZGV2aWNlCisgKi8KK3N0
+cnVjdCBpeHhhdF91c2JfZGV2aWNlIHsKKwlzdHJ1Y3QgY2FuX3ByaXYgY2FuOworCWNvbnN0IHN0
+cnVjdCBpeHhhdF91c2JfYWRhcHRlciAqYWRhcHRlcjsKKwlzdHJ1Y3QgdXNiX2RldmljZSAqdWRl
+djsKKwlzdHJ1Y3QgbmV0X2RldmljZSAqbmV0ZGV2OworCisJYXRvbWljX3QgYWN0aXZlX3R4X3Vy
+YnM7CisJc3RydWN0IHVzYl9hbmNob3IgdHhfc3VibWl0dGVkOworCXN0cnVjdCBpeHhhdF90eF91
+cmJfY29udGV4dCB0eF9jb250ZXh0c1tJWFhBVF9VU0JfTUFYX1RYX1VSQlNdOworCXN0cnVjdCB1
+c2JfYW5jaG9yIHJ4X3N1Ym1pdHRlZDsKKworCXUzMiBzdGF0ZTsKKwl1MTYgY3RybF9pbmRleDsK
+KworCXU4IGVwX21zZ19pbjsKKwl1OCBlcF9tc2dfb3V0OworCisJc3RydWN0IGl4eGF0X3VzYl9k
+ZXZpY2UgKnByZXZfZGV2OworCXN0cnVjdCBpeHhhdF91c2JfZGV2aWNlICpuZXh0X2RldjsKKwor
+CXN0cnVjdCBpeHhhdF90aW1lX3JlZiB0aW1lX3JlZjsKKwlzdHJ1Y3QgaXh4YXRfZGV2X2luZm8g
+ZGV2X2luZm87CisKKwlzdHJ1Y3QgY2FuX2JlcnJfY291bnRlciBiZWM7Cit9OworCisvKioKKyAq
+IHN0cnVjdCBpeHhhdF91c2JfZGFsX3JlcSBJWFhBVCBkZXZpY2UgcmVxdWVzdCBibG9jaworICog
+QHNpemU6IFJlcXVlc3Qgc2l6ZQorICogQHBvcnQ6IFJlcXVlc3QgcG9ydAorICogQHNvY2tldDog
+UmVxdWVzdCBzb2NrZXQKKyAqIEBjb2RlOiBSZXF1ZXN0IGNvZGUKKyAqCisgKiBJWFhBVCBkZXZp
+Y2UgcmVxdWVzdCBibG9jaworICovCitzdHJ1Y3QgaXh4YXRfdXNiX2RhbF9yZXEgeworCV9fbGUz
+MiBzaXplOworCV9fbGUxNiBwb3J0OworCV9fbGUxNiBzb2NrZXQ7CisJX19sZTMyIGNvZGU7Cit9
+IF9fcGFja2VkOworCisvKioKKyAqIHN0cnVjdCBpeHhhdF91c2JfZGFsX3JlcyBJWFhBVCBkZXZp
+Y2UgcmVzcG9uc2UgYmxvY2sKKyAqIEByZXNfc2l6ZTogRXhwZWN0ZWQgcmVzcG9uc2Ugc2l6ZQor
+ICogQHJldF9zaXplOiBBY3R1YWwgcmVzcG9uc2Ugc2l6ZQorICogQGNvZGU6IFJldHVybiBjb2Rl
+CisgKgorICogSVhYQVQgZGV2aWNlIHJlc3BvbnNlIGJsb2NrCisgKi8KK3N0cnVjdCBpeHhhdF91
+c2JfZGFsX3JlcyB7CisJX19sZTMyIHJlc19zaXplOworCV9fbGUzMiByZXRfc2l6ZTsKKwlfX2xl
+MzIgY29kZTsKK30gX19wYWNrZWQ7CisKKy8qKgorICogc3RydWN0IGl4eGF0X3VzYl9kYWxfY21k
+IElYWEFUIGRldmljZSBjb21tYW5kCisgKiBAcmVxOiBSZXF1ZXN0IGJsb2NrCisgKiBAcmVxOiBS
+ZXNwb25zZSBibG9jaworICoKKyAqIElYWEFUIGRldmljZSBjb21tYW5kCisgKi8KK3N0cnVjdCBp
+eHhhdF91c2JfZGFsX2NtZCB7CisJc3RydWN0IGl4eGF0X3VzYl9kYWxfcmVxIHJlcTsKKwlzdHJ1
+Y3QgaXh4YXRfdXNiX2RhbF9yZXMgcmVzOworfSBfX3BhY2tlZDsKKworLyoqCisgKiBzdHJ1Y3Qg
+aXh4YXRfdXNiX2NhcHNfY21kIERldmljZSBjYXBhYmlsaXRpZXMgY29tbWFuZAorICogQHJlcTog
+UmVxdWVzdCBibG9jaworICogQHJlczogUmVzcG9uc2UgYmxvY2sKKyAqIEBjYXBzOiBEZXZpY2Ug
+Y2FwYWJpbGl0aWVzCisgKgorICogQ2FuIGJlIHNlbnQgdG8gYSBkZXZpY2UgdG8gcmVxdWVzdCBp
+dHMgY2FwYWJpbGl0aWVzCisgKi8KK3N0cnVjdCBpeHhhdF91c2JfY2Fwc19jbWQgeworCXN0cnVj
+dCBpeHhhdF91c2JfZGFsX3JlcSByZXE7CisJc3RydWN0IGl4eGF0X3VzYl9kYWxfcmVzIHJlczsK
+KwlzdHJ1Y3QgaXh4YXRfZGV2X2NhcHMgY2FwczsKK30gX19wYWNrZWQ7CisKKy8qKgorICogc3Ry
+dWN0IGl4eGF0X3VzYl9pbml0X2NsMV9jbWQgSW5pdGlhbGl6YXRpb24gY29tbWFuZCAoQ0wxKQor
+ICogQHJlcTogUmVxdWVzdCBibG9jaworICogQG1vZGU6IE9wZXJhdGlvbiBtb2RlCisgKiBAYnRy
+MDogQml0dGltaW5nIHJlZ2lzdGVyIDAKKyAqIEBidHIxOiBCaXR0aW1pbmcgcmVnaXN0ZXIgMQor
+ICogQHBhZGRpbmc6IDEgYnl0ZSBwYWRkaW5nCisgKiBAcmVzOiBSZXNwb25zZSBibG9jaworICoK
+KyAqIENhbiBiZSBzZW50IHRvIGEgQ0wxIGRldmljZSB0byBpbml0aWFsaXplIGl0CisgKi8KK3N0
+cnVjdCBpeHhhdF91c2JfaW5pdF9jbDFfY21kIHsKKwlzdHJ1Y3QgaXh4YXRfdXNiX2RhbF9yZXEg
+cmVxOworCXU4IG1vZGU7CisJdTggYnRyMDsKKwl1OCBidHIxOworCXU4IHBhZGRpbmc7CisJc3Ry
+dWN0IGl4eGF0X3VzYl9kYWxfcmVzIHJlczsKK30gX19wYWNrZWQ7CisKKy8qKgorICogc3RydWN0
+IGl4eGF0X3VzYl9pbml0X2NsMl9jbWQgSW5pdGlhbGl6YXRpb24gY29tbWFuZCAoQ0wyKQorICog
+QHJlcTogUmVxdWVzdCBibG9jaworICogQG9wbW9kZTogT3BlcmF0aW9uIG1vZGUKKyAqIEBleG1v
+ZGU6IEV4dGVuZGVkIG1vZGUKKyAqIEBzZHI6IFN0YWRhcmQgYml0dGltaW5nIHBhcmFtZXRlcnMK
+KyAqIEBmZHI6IEZhc3QgZGF0YSBiaXR0aW1pbmcgcGFyYW1ldGVycworICogQF9wYWRkaW5nOiAy
+IGJ5dGVzIHBhZGRpbmcKKyAqIEByZXM6IFJlc3BvbnNlIGJsb2NrCisgKgorICogQ2FuIGJlIHNl
+bnQgdG8gYSBDTDIgZGV2aWNlIHRvIGluaXRpYWxpemUgaXQKKyAqLworc3RydWN0IGl4eGF0X3Vz
+Yl9pbml0X2NsMl9jbWQgeworCXN0cnVjdCBpeHhhdF91c2JfZGFsX3JlcSByZXE7CisJdTggb3Bt
+b2RlOworCXU4IGV4bW9kZTsKKwlzdHJ1Y3QgaXh4YXRfY2FuYnRwIHNkcjsKKwlzdHJ1Y3QgaXh4
+YXRfY2FuYnRwIGZkcjsKKwlfX2xlMTYgX3BhZGRpbmc7CisJc3RydWN0IGl4eGF0X3VzYl9kYWxf
+cmVzIHJlczsKK30gX19wYWNrZWQ7CisKKy8qKgorICogc3RydWN0IGl4eGF0X3VzYl9zdGFydF9j
+bWQgQ29udHJvbGxlciBzdGFydCBjb21tYW5kCisgKiBAcmVxOiBSZXF1ZXN0IGJsb2NrCisgKiBA
+cmVzOiBSZXNwb25zZSBibG9jaworICogQHRpbWU6IFRpbWVzdGFtcAorICoKKyAqIENhbiBiZSBz
+ZW50IHRvIGEgZGV2aWNlIHRvIHN0YXJ0IGl0cyBjb250cm9sbGVyCisgKi8KK3N0cnVjdCBpeHhh
+dF91c2Jfc3RhcnRfY21kIHsKKwlzdHJ1Y3QgaXh4YXRfdXNiX2RhbF9yZXEgcmVxOworCXN0cnVj
+dCBpeHhhdF91c2JfZGFsX3JlcyByZXM7CisJX19sZTMyIHRpbWU7Cit9IF9fcGFja2VkOworCisv
+KioKKyAqIHN0cnVjdCBpeHhhdF91c2Jfc3RvcF9jbWQgQ29udHJvbGxlciBzdG9wIGNvbW1hbmQK
+KyAqIEByZXE6IFJlcXVlc3QgYmxvY2sKKyAqIEBhY3Rpb246IFN0b3AgYWN0aW9uCisgKiBAcmVz
+OiBSZXNwb25zZSBibG9jaworICoKKyAqIENhbiBiZSBzZW50IHRvIGEgZGV2aWNlIHRvIHN0YXJ0
+IGl0cyBjb250cm9sbGVyCisgKi8KK3N0cnVjdCBpeHhhdF91c2Jfc3RvcF9jbWQgeworCXN0cnVj
+dCBpeHhhdF91c2JfZGFsX3JlcSByZXE7CisJX19sZTMyIGFjdGlvbjsKKwlzdHJ1Y3QgaXh4YXRf
+dXNiX2RhbF9yZXMgcmVzOworfSBfX3BhY2tlZDsKKworLyoqCisgKiBzdHJ1Y3QgaXh4YXRfdXNi
+X3Bvd2VyX2NtZCBQb3dlciBjb21tYW5kCisgKiBAcmVxOiBSZXF1ZXN0IGJsb2NrCisgKiBAbW9k
+ZTogUG93ZXIgbW9kZQorICogQF9wYWRkaW5nMTogMSBieXRlIHBhZGRpbmcKKyAqIEBfcGFkZGlu
+ZzI6IDIgYnl0ZSBwYWRkaW5nCisgKiBAcmVzOiBSZXNwb25zZSBibG9jaworICoKKyAqIENhbiBi
+ZSBzZW50IHRvIGEgZGV2aWNlIHRvIHNldCBpdHMgcG93ZXIgbW9kZQorICovCitzdHJ1Y3QgaXh4
+YXRfdXNiX3Bvd2VyX2NtZCB7CisJc3RydWN0IGl4eGF0X3VzYl9kYWxfcmVxIHJlcTsKKwl1OCBt
+b2RlOworCXU4IF9wYWRkaW5nMTsKKwlfX2xlMTYgX3BhZGRpbmcyOworCXN0cnVjdCBpeHhhdF91
+c2JfZGFsX3JlcyByZXM7Cit9IF9fcGFja2VkOworCisvKioKKyAqIHN0cnVjdCBpeHhhdF91c2Jf
+aW5mb19jbWQgRGV2aWNlIGluZm9ybWF0aW9uIGNvbW1hbmQKKyAqIEByZXE6IFJlcXVlc3QgYmxv
+Y2sKKyAqIEByZXM6IFJlc3BvbnNlIGJsb2NrCisgKiBAaW5mbzogRGV2aWNlIGluZm9ybWF0aW9u
+CisgKgorICogQ2FuIGJlIHNlbnQgdG8gYSBkZXZpY2UgdG8gcmVxdWVzdCBpdHMgZGV2aWNlIGlu
+Zm9ybWF0aW9uCisgKi8KK3N0cnVjdCBpeHhhdF91c2JfaW5mb19jbWQgeworCXN0cnVjdCBpeHhh
+dF91c2JfZGFsX3JlcSByZXE7CisJc3RydWN0IGl4eGF0X3VzYl9kYWxfcmVzIHJlczsKKwlzdHJ1
+Y3QgaXh4YXRfZGV2X2luZm8gaW5mbzsKK30gX19wYWNrZWQ7CisKKy8qKgorICogc3RydWN0IGl4
+eGF0X3VzYl9hZGFwdGVyIElYWEFUIFVTQiBkZXZpY2UgYWRhcHRlcgorICogQGNsb2NrOiBDbG9j
+ayBmcmVxdWVuY3kKKyAqIEBidDogQml0dGltaW5nIGNvbnN0YW50cworICogQGJ0ZDogRGF0YSBi
+aXR0aW1pbmcgY29uc3RhbnRzCisgKiBAbW9kZXM6IFN1cHBvcnRlZCBtb2RlcworICogQGJ1ZmZl
+cl9zaXplX3J4OiBCdWZmZXIgc2l6ZSBmb3IgcmVjZWl2aW5nCisgKiBAYnVmZmVyX3NpemVfdHg6
+IEJ1ZmZlciBzaXplIGZvciB0cmFuc2ZlcgorICogQGVwX21zZ19pbjogVVNCIGVuZHBvaW50IGJ1
+ZmZlciBmb3IgaW5jb21pbmcgbWVzc2FnZXMKKyAqIEBlcF9tc2dfb3V0OiBVU0IgZW5kcG9pbnQg
+YnVmZmVyIGZvciBvdXRnb2luZyBtZXNzYWdlcworICogQGVwX29mZnM6IEVuZHBvaW50IG9mZnNl
+dCAoZGV2aWNlIGRlcGVuZGVkKQorICoKKyAqIERldmljZSBBZGFwdGVyIGZvciBJWFhBVCBVU0Ig
+ZGV2aWNlcworICovCitzdHJ1Y3QgaXh4YXRfdXNiX2FkYXB0ZXIgeworCWNvbnN0IHUzMiBjbG9j
+azsKKwljb25zdCBzdHJ1Y3QgY2FuX2JpdHRpbWluZ19jb25zdCAqYnQ7CisJY29uc3Qgc3RydWN0
+IGNhbl9iaXR0aW1pbmdfY29uc3QgKmJ0ZDsKKwljb25zdCB1MzIgbW9kZXM7CisJY29uc3QgdTE2
+IGJ1ZmZlcl9zaXplX3J4OworCWNvbnN0IHUxNiBidWZmZXJfc2l6ZV90eDsKKwljb25zdCB1OCBl
+cF9tc2dfaW5bSVhYQVRfVVNCX01BWF9DSEFOTkVMXTsKKwljb25zdCB1OCBlcF9tc2dfb3V0W0lY
+WEFUX1VTQl9NQVhfQ0hBTk5FTF07CisJY29uc3QgdTggZXBfb2ZmczsKKwlpbnQgKCppbml0X2N0
+cmwpKHN0cnVjdCBpeHhhdF91c2JfZGV2aWNlICpkZXYpOworfTsKKworZXh0ZXJuIGNvbnN0IHN0
+cnVjdCBpeHhhdF91c2JfYWRhcHRlciB1c2IyY2FuX2NsMTsKK2V4dGVybiBjb25zdCBzdHJ1Y3Qg
+aXh4YXRfdXNiX2FkYXB0ZXIgdXNiMmNhbl9jbDI7CitleHRlcm4gY29uc3Qgc3RydWN0IGl4eGF0
+X3VzYl9hZGFwdGVyIGNhbl9pZG07CisKKy8qKgorICogaXh4YXRfdXNiX3NldHVwX2NtZCgpIC0g
+U2V0dXAgYSBkZXZpY2UgY29tbWFuZAorICogQHJlcTogUmVxdWVzdCBibG9jaworICogQHJlczog
+UmVzcG9uc2UgYmxvY2sKKyAqCisgKiBUaGlzIGZ1bmN0aW9uIHNldHMgdGhlIGRlZmF1bHQgdmFs
+dWVzIGluIHRoZSByZXF1ZXN0IGFuZCB0aGUgcmVzcG9uc2UgYmxvY2sKKyAqIG9mIGEgZGV2aWNl
+IGNvbW1hbmQKKyAqLwordm9pZCBpeHhhdF91c2Jfc2V0dXBfY21kKHN0cnVjdCBpeHhhdF91c2Jf
+ZGFsX3JlcSAqcmVxLAorCQkJIHN0cnVjdCBpeHhhdF91c2JfZGFsX3JlcyAqcmVzKTsKKworLyoq
+CisgKiBpeHhhdF91c2Jfc2VuZF9jbWQoKSAtIFNlbmQgYSBjb21tYW5kIHRvIHRoZSBkZXZpY2UK
+KyAqIEBkZXY6IFVTQiBkZXZpY2UKKyAqIEBwb3J0OiBDb21tYW5kIHBvcnQKKyAqIEByZXE6IENv
+bW1hbmQgcmVxdWVzdCBidWZmZXIKKyAqIEByZXFfc2l6ZTogQ29tbWFuZCByZXF1ZXN0IHNpemUK
+KyAqIEByZXM6IENvbW1hbmQgcmVzcG9uc2UgYnVmZmVyCisgKiBAcmVzX3NpemU6IENvbW1hbmQg
+cmVzcG9uc2Ugc2l6ZQorICoKKyAqIFRoaXMgZnVuY3Rpb24gc2VuZHMgYSBzcGVjaWZpYyBjb21t
+YW5kIHRvIHRoZSBkZXZpY2UKKyAqCisgKiBSZXR1cm46IE5lZ2F0aXZlIGVycm9yIGNvZGUgb3Ig
+emVybyBvbiBzdWNjZXNzCisgKi8KK2ludCBpeHhhdF91c2Jfc2VuZF9jbWQoc3RydWN0IHVzYl9k
+ZXZpY2UgKmRldiwgY29uc3QgdTE2IHBvcnQsIHZvaWQgKnJlcSwKKwkJICAgICAgIGNvbnN0IHUx
+NiByZXFfc2l6ZSwgdm9pZCAqcmVzLCBjb25zdCB1MTYgcmVzX3NpemUpOworCisjZW5kaWYgLyog
+SVhYQVRfVVNCX0NPUkVfSCAqLwotLSAKMi40MC4xCgo=
