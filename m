@@ -2,72 +2,125 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 121C970D45A
-	for <lists+linux-can@lfdr.de>; Tue, 23 May 2023 08:53:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C26870D48F
+	for <lists+linux-can@lfdr.de>; Tue, 23 May 2023 09:11:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232666AbjEWGxG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 23 May 2023 02:53:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46566 "EHLO
+        id S229883AbjEWHK6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 23 May 2023 03:10:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232057AbjEWGxB (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 23 May 2023 02:53:01 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CF1118;
-        Mon, 22 May 2023 23:52:59 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1ae79528d4dso46303095ad.2;
-        Mon, 22 May 2023 23:52:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684824779; x=1687416779;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pHVJOrZTLhWxfI/dA1jc/7StnNnfOvKPoL5oGZLJdis=;
-        b=mCssCrHbRZzxaj8bWmxvVy63hBj2eLFh5dSTr4sfFOMScdQYPJ4mpxJUP9Hu5mxx12
-         FCjR7liO0CSm2do/4NiubfpRliyKtLT3v15PzXqRmGeze0VRti85inMdTVpxwxeN2OpI
-         p94QNGuigm3z62c59zixUlpXCzmvl3INRJaT0RDvyXF1BTBABuN5GuKNkXQgxOiwp6zS
-         GgETo9PQvH4CB72r6TW/tWbf6RUnC1zeqxDHMFaEtXHjGV7NX8xQCT1DJBnVFzqSxp74
-         pwbGL03u+GADOja3nTV/vjd5hcaKLVFCOnux/KDPH2a5EpAyXbY9MgEuRl3Xwy4oUZeT
-         xj+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684824779; x=1687416779;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=pHVJOrZTLhWxfI/dA1jc/7StnNnfOvKPoL5oGZLJdis=;
-        b=L2zhi7I3nDRW4ORPQDw7FVvQ7eB+KUkuhN7QboZLz6CO+xjqs5z0jhDdoNTCT1Xsjm
-         HZ2k3ZxurAbSRKQRwNSpeG3aYvddWpnkEEPi0oRyyO2aJFBxRVEYOIlXsEXTPTk9mr46
-         tBWNtKICUTXu61hi8lb8ksNlmXVfWHIIXh7LY2x1xKZSEN7L+dvlxNAKAFlz279l1Wyj
-         7ns158LV5RDO4/5Yy1RSpGrXtHjOyCiJPjjgKzvZSiu8+yJwbA0cmf7lgQZCw7GaodYZ
-         i5lfu6y+8gm8yt5acxIL08gVNdE1eyS1lCf+hlQVJ71bwSjs04+DyMyYxW5rGgcMmyHu
-         9S9g==
-X-Gm-Message-State: AC+VfDyjaRy0GwqXHdDnTWyj58RmCC2zDMHl6jCNHSiN//gxnz06eb+6
-        JZyjuF5o9QJ0c5SypNYbsLUU7LeVnZ4=
-X-Google-Smtp-Source: ACHHUZ56VO7pRIv3NwujIPlTt9j7JaggLiXDEl86vjoqZ8eleL2NRPo30ZftRRxYForZv7Uaf0/DWw==
-X-Received: by 2002:a17:902:d04a:b0:1ac:5b6b:df4c with SMTP id l10-20020a170902d04a00b001ac5b6bdf4cmr10768105pll.69.1684824779002;
-        Mon, 22 May 2023 23:52:59 -0700 (PDT)
-Received: from XH22050090-L.ad.ts.tri-ad.global ([103.175.111.222])
-        by smtp.gmail.com with ESMTPSA id d10-20020a170902ceca00b001aafa2e212esm5963920plg.52.2023.05.22.23.52.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 23:52:58 -0700 (PDT)
-Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
-        Thomas.Kopp@microchip.com
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>, netdev@vger.kernel.org,
-        marex@denx.de, Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v2 3/3] can: length: refactor frame lengths definition to add size in bits
-Date:   Tue, 23 May 2023 15:52:18 +0900
-Message-Id: <20230523065218.51227-4-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230523065218.51227-1-mailhol.vincent@wanadoo.fr>
-References: <20230507155506.3179711-1-mailhol.vincent@wanadoo.fr>
- <20230523065218.51227-1-mailhol.vincent@wanadoo.fr>
+        with ESMTP id S229836AbjEWHK5 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 23 May 2023 03:10:57 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on20602.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e1b::602])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9839B109
+        for <linux-can@vger.kernel.org>; Tue, 23 May 2023 00:10:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ido/+jr3VjpZW4ftjeGghXuBfJPs2EkWRS5ooLdHE1jn/XRcp7jMxr5xVQJL1zCp4aeifbJeEgxCdXacP4DBHd8CsUjK6rbxqwvzyTIiod/FJDljWbZ0Xv5hOZPkhNFzw7PIJjyM++MU9fmyrdYVNVKDSrgevXrykTA6nnH7FjGEpoZSIZDHIFgpe4TCSeFDW3YUNaN0cuwwGP7r9+EXw6e91KwqurHPh5vy/Lqbf0oUwFscnxkDH54JkrUT1ysJwBavbRcHL2ypZ+QOYTduBB4bnr5sfqNtnV2UY1ZuZvlBthrAIKfPOp/BfISMkzFNGyehHXp6a7r+jq73jE2G/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uLxsfd3ICUXSi+Y/zT1vaMS267P37sPgoGUrApTfPlg=;
+ b=C8qhglVBeZhAAdUJocX1iWsWLOvUC1sBYXW60NguBj58bIxtvu3+qMOHX3nUd/Op7qga1wUZOG65juH/T7SNzHX8/LEsMwWYyeRWHkHKR9JKOz/mGZ9KhuMQywm9CrOXbaMXNJvCN+TX+Z2J20B3Gg8lEqZpIidIYFwM6ss9eZhQkJ9qFx5qtwBr3Of5ZoTL3WSozQ1br5Ek3cyrlKgzKDVuPaihnMdVtje+ESiAjAj68i98QVjnyWIGuC2h9Ci1QhzNHuVcT4L2uj9GcRLQ6JaqWFm4kp6Sp+mob4TOT+jic+HvJ3sxFJ5h21uYgI9QpvwPwpCPxlFTyXxZOPA+8g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=hms-networks.de; dmarc=pass action=none
+ header.from=hms-networks.de; dkim=pass header.d=hms-networks.de; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hms-networks.de;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uLxsfd3ICUXSi+Y/zT1vaMS267P37sPgoGUrApTfPlg=;
+ b=S7PaLVPRyR8gjMF6NJTUTxAdWTei80cj/obIuPKQ+VAtZeAe76NVTyTfGulTD5gvjA7Msw7MGh8Wv7Whc6c6HfS4tfCLi7QamyX1QuemZhSH5Ccxz5Uznp01rmtJr0LlStot02aEwPnBbylUwVI+vYitMZeN1mUk9gpvsEjcdZ8=
+Received: from AM0PR10MB3683.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:15b::22)
+ by AS8PR10MB7428.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:5ac::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Tue, 23 May
+ 2023 07:10:51 +0000
+Received: from AM0PR10MB3683.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::cc8d:5b2d:e8bf:75f5]) by AM0PR10MB3683.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::cc8d:5b2d:e8bf:75f5%4]) with mapi id 15.20.6411.029; Tue, 23 May 2023
+ 07:10:51 +0000
+From:   Markus Marb <marm@hms-networks.de>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Peter Seiderer <ps.report@gmx.net>
+CC:     Vincent Mailhol <vincent.mailhol@gmail.com>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Subject: RE: [PATCH v8] can: usb: IXXAT USB-to-CAN adapters drivers
+Thread-Topic: [PATCH v8] can: usb: IXXAT USB-to-CAN adapters drivers
+Thread-Index: AQHZh3RprfN70Qe1Z0yJ29whKaeAAa9coyUAgAocOACAALRAAIAAB3Bg
+Date:   Tue, 23 May 2023 07:10:50 +0000
+Message-ID: <AM0PR10MB3683AE142BDEC9A4551527B190409@AM0PR10MB3683.EURPRD10.PROD.OUTLOOK.COM>
+References: <20230515212930.1019702-1-mkl@pengutronix.de>
+ <CAMZ6RqKToYbfsOX4v_jK7X28hLyiYnH7j784eVeFuKrj7ujRSA@mail.gmail.com>
+ <20230522215354.2c79c007@gmx.net>
+ <20230523-outlet-vaseline-b53d42733536-mkl@pengutronix.de>
+In-Reply-To: <20230523-outlet-vaseline-b53d42733536-mkl@pengutronix.de>
+Accept-Language: de-DE, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=hms-networks.de;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AM0PR10MB3683:EE_|AS8PR10MB7428:EE_
+x-ms-office365-filtering-correlation-id: e72b5929-eb03-4955-6642-08db5b5cd742
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: CS0q61kpr3qsHJxur3F+FmYrmwZ1KevDJTs2A6CHBe4foiAz2tZLuTlJ+IJTIJ1Sd/IHddVny8vK5tNryY8r82MBXGbTmTyh/s4DOH9ZKLNj3PT+sU90jgQhlmbchkZbzaAqFCWqHiNpllLkIVUnqxziTb1x1k5Ho81lxITgtp3Sp9iZAyIW/rZ8aaaN+oUKMnEY9K9AC+S5KtAlo57AO2XQu5NkvP99x3PFx/hik0Lka27hinzuo9M0ta1Cdw+RFgNBxPbrUc7I0hzcyzP1eCOgYFiZPcHLKtrCy0S0HNv6gUCP0B/IBoilhKROBPEcaKX/Dcfh9/LvIB5IA3tm1CJsWi/ieuphjThRXrfrEcQLiDOFDFdfgV+3aKQJidOD0WvC5nIhbQQuzyHvFwqgqhWplSlXUH7gajcq85qIndpqp4qA/wHzn20qGDQlPfrGC2n6Hf0zDdOOqPgpJwl7yJfqkSIqQpxcDtGQXEIpeJHcbUwTXFHt78TFb0jbx4NEZOuj5CXRIuFAYbMWjNYniJztBgo2dJ4giMpfHoeyWysimXL0aIz5MTYvPcYdYgzoQwKUPImrGuHDS6BVbpw/6qVBbMyMxe4psRiM+dv/hMo=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR10MB3683.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(366004)(396003)(39850400004)(346002)(451199021)(8676002)(8936002)(52536014)(5660300002)(186003)(53546011)(6506007)(86362001)(9686003)(122000001)(26005)(38100700002)(83380400001)(38070700005)(41300700001)(7696005)(66446008)(71200400001)(33656002)(55016003)(966005)(66476007)(66556008)(66946007)(76116006)(64756008)(316002)(478600001)(4326008)(110136005)(54906003)(4744005)(2906002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VGV1Z1Arc0ZTN0NpSW5TanVpSWJUZWdMTmM0QW9nQ0o0UFpBTWcreGovZ2Ny?=
+ =?utf-8?B?UUkrN1FiT3hIb2I5bXdITGlYc2x5WGt6bjhNSThEUGNNQmkrUThJSFRObHk5?=
+ =?utf-8?B?WDNrckZCK0JKbmtOdVNZMCtqamJzLzJIZUpCTHFtWnNmU3djZVlBbVk3bFFU?=
+ =?utf-8?B?N1ZiZnNHakFqeWt2VjNqN3JSdGp2YmZYSGlOenVBNEJtenByQUxtQk01V3Q3?=
+ =?utf-8?B?LzVFZTRzam9xdE9hSFdUVzEzUlZzcDFVeU1zVXN5MG9lQlVHYndjNE15YmhF?=
+ =?utf-8?B?bnZXbStDRDhqKzJkZ3NkWDViOXFNbkttd1pvb2RxaFVFakM1SmcrQVp5Mnk2?=
+ =?utf-8?B?akZhMlJ2ZDBQZEFUQXZJZnRLM0hkdVBCdFNPTGVqdGxROG5UMEdheVcwMldi?=
+ =?utf-8?B?RnJaYkJhNW1wV0VOOHVScm9HMGlBMmNtcmN2Z0tMQW02TXZCN2VaQmg1NXpz?=
+ =?utf-8?B?Q0RWckx4d2sxaDBKUUFrZkE0ZWt2dGVIU3IxUjNBVFVhb01mU2pXdnI0ODdE?=
+ =?utf-8?B?a3lCelk1OTh5WmhZVHF5eDlSbEF0UERRVTNRelZKdDdiRGM2Y0JwL2dGQ1Jx?=
+ =?utf-8?B?VHpqRGs2Nk12UFBncm9kRlhlL1p0ZjhSOCtjN0JOUlFVNjVSeXRJOWRWUEpM?=
+ =?utf-8?B?ZmtyZGxVbVpVdStFYzdDaWRBNFhnVTJ0U0xVenJyQ1RkOFRrN0ZkbE5NNDZZ?=
+ =?utf-8?B?c3hkRjBwR3hlcXJPZVQ3K3ZwWHltdjRMS0c1VWt0TlB0K0RacUUvRHJvVDJr?=
+ =?utf-8?B?Zi9uc0V4MFZKQ0k4OVlrZmU1eW1hN09KYlI2OTJOVXE0K0hIekpwb09UMWww?=
+ =?utf-8?B?aFpVTk5mQnBYV1lTTlVkdFV4ZGtMcHQ5NnRWV2Q3TkorMGFzUnVWM1k0NGNZ?=
+ =?utf-8?B?aktjSlI4SmRsT21KV2xWVS9vNElQODZpQlgzcUwrWmFBd0xFeFFYc05kMGJu?=
+ =?utf-8?B?aDlUS3RpbEJOVlBtOEhITURZTjEvMXdNVlN6TTRmZXhZNE9GbmJ1VGVxb3Rv?=
+ =?utf-8?B?T2FrSm5acjMyYytpMGdQTUY4czZlMTJUNExBZFBJZkozNFdqM05vVm8vMXpx?=
+ =?utf-8?B?N0hydWdhWVVxV2ltdjgzZFhEQ3pRbTVMeExIaVBQOGlUejM0Zy9abWpzYkRY?=
+ =?utf-8?B?ZmdocWh6TUYvQU50QzE1d0NwZkYvMFVyQVVwWDFYT3BzcE54MGpweTB4cXo1?=
+ =?utf-8?B?ZityaFdBRm1xZ3ZUM1Y5TEs5S0ZvS3JxZE5xR1cyZ282T0IrbzBGMEFNWi9s?=
+ =?utf-8?B?VVc1bVE5WWNpZGtibnQ4dFF0d1VwRlNvSnU3ZmFyZFRLMTB0bGphMGxURnRX?=
+ =?utf-8?B?azNvZjNPYjlRcForK0E2ekQ2ak1jdHB5dzBHOExwYitEUyt2cWIyeFIyM0tn?=
+ =?utf-8?B?emU3RWNXSllMUzROeXNacDBBQ0xheE4rdWZaS01ocXQ1bXg5QVdoWVRMRmFH?=
+ =?utf-8?B?YmVHNU1Td3piL20wTld3K3JVNTdscnY1MjVESkYrOFIxMzhkdWVhbThHK1lL?=
+ =?utf-8?B?TEJGb1cyNGRyaWFxdU0ya3dhY2UybWVVaHBWTEoyNEI4cCtNQ2NRRkZLUDZt?=
+ =?utf-8?B?OEJuVkRNRmVLRGN3eW1qTzJzM0xWWTZrZFFqUHNLZU1ITGpxVFV6ME5mYjJP?=
+ =?utf-8?B?NEViaGJzeDlubS9Kd21GdjVkL3dGRTBiMUJKbm90bmJLL09abU9JekdsbUNN?=
+ =?utf-8?B?OEJSZ2FoUWlVeCsvSW1kemVxU1E5WGV1T3dtY1ZTMWZ2aGFIQ09peXBBd1Qx?=
+ =?utf-8?B?LzBHZUd5WTd3UnJoN0xTUkZGSkd0Z0cySUU2Q2RQRUtEODlFMXhxQkQzVXUr?=
+ =?utf-8?B?MzNub29mYmJZeUN5U2lwa29TZWVQcHkxcEdiODE0TVE3R0xMeC9PWGFEYWV1?=
+ =?utf-8?B?eHM2Wkt3Um0vcTZxNjF0WUx2VEpIZklmZU5aeHFNTnQvWGp1UUk3bDByNkdr?=
+ =?utf-8?B?Q0dKOFA1RjJ3cWJNclo2d0hEK2JVRmRCNG9PSWJCUGZCZ09XbG1SWXV1R3Y2?=
+ =?utf-8?B?S1QzbTV1dGdhQ3RTR0dnNDF3bjVDcTJKMjVMQmV3b254ci9QbWtranNzRUx2?=
+ =?utf-8?B?UjJkbjZMRUxqcTBEMW5BRlRuSlhxRTI3MGVWTy91K0U1REJKRFVnem5FcDBC?=
+ =?utf-8?Q?PRgw=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+X-OriginatorOrg: hms-networks.de
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR10MB3683.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: e72b5929-eb03-4955-6642-08db5b5cd742
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 May 2023 07:10:50.9070
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5c7c1590-4488-4e42-bc9c-15218f8ac994
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: LEL/8uOR+B1zlepSkTONwjfZaJtsXx0qvTjC3LM75SmD2wBTGGTDYFrO0LiTmPNo
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR10MB7428
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,491 +128,24 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Introduce a method to calculate the exact size in bits of a CAN(-FD)
-frame with or without dynamic bitsuffing.
-
-These are all the possible combinations taken into account:
-
-  - Classical CAN or CAN-FD
-  - Standard or Extended frame format
-  - CAN-FD CRC17 or CRC21
-  - Include or not intermission
-
-Instead of doing several macro definitions, declare the
-can_frame_bits() static inline function. To this extend, do a full
-refactoring of the length definitions.
-
-If given integer constant expressions as argument, can_frame_bits()
-folds into a compile time constant expression, giving no penalty over
-the use of macros.
-
-Also add the can_frame_bytes(). This function replaces the existing
-macro:
-
-  - CAN_FRAME_OVERHEAD_SFF: can_frame_bytes(false, false, 0)
-  - CAN_FRAME_OVERHEAD_EFF: can_frame_bytes(false, true, 0)
-  - CANFD_FRAME_OVERHEAD_SFF: can_frame_bytes(true, false, 0)
-  - CANFD_FRAME_OVERHEAD_EFF: can_frame_bytes(true, true, 0)
-
-The different frame lengths (including intermission) are as follow:
-
-   Frame type				bits	bytes
-  ----------------------------------------------------------
-   Classic CAN SFF no-bitstuffing	111	14
-   Classic CAN EFF no-bitstuffing	131	17
-   Classic CAN SFF bitstuffing		135	17
-   Classic CAN EFF bitstuffing		160	20
-   CAN-FD SFF no-bitstuffing		579	73
-   CAN-FD EFF no-bitstuffing		598	75
-   CAN-FD SFF bitstuffing		712	89
-   CAN-FD EFF bitstuffing		736	92
-
-The macro CAN_FRAME_LEN_MAX and CANFD_FRAME_LEN_MAX are kept to be
-used in const struct declarations (folding of can_frame_bytes() occurs
-too late in the compilation to be used in struct declarations).
-
-In addition to the above:
-
- - Use ISO 11898-1:2015 definitions for the name of the CAN frame
-   fields.
- - Include linux/bits.h for use of BITS_PER_BYTE.
- - Include linux/math.h for use of mult_frac() and
-   DIV_ROUND_UP(). N.B: the use of DIV_ROUND_UP() is not new to this
-   patch, but the include was previously omitted.
- - Add copyright 2023 for myself.
-
-[1] commit 85d99c3e2a13 ("can: length: can_skb_get_frame_len(): introduce
-    function to get data length of frame in data link layer")
-Link: https://git.kernel.org/torvalds/c/85d99c3e2a13
-
-[2] RE: [PATCH] can: mcp251xfd: Increase poll timeout
-Link: https://lore.kernel.org/linux-can/BL3PR11MB64846C83ACD04E9330B0FE66FB729@BL3PR11MB6484.namprd11.prod.outlook.com/
-
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
-In case you ask, here is the proof that can_frame_bits() folds into
-a compile time constant expression.
-
-This file:
-
-  #include <linux/can/length.h>
-
-  unsigned int canfd_max_len_bitsuffing(void)
-  {
-	return can_frame_bytes(true, true, true, CANFD_MAX_DLEN);
-  }
-
-Produces this assembly code:
-
-  0000000000000010 <canfd_max_len_bitsuffing>:
-    10:	f3 0f 1e fa          	endbr64
-    14:	b8 5c 00 00 00       	mov    $0x5c,%eax
-    19:	e9 00 00 00 00       	jmpq   1e <canfd_max_len_bitsuffing+0xe>
-
-where 0x5c corresponds to the expected value of 92 bytes.
----
- drivers/net/can/dev/length.c |  15 +-
- include/linux/can/length.h   | 326 +++++++++++++++++++++++++----------
- 2 files changed, 238 insertions(+), 103 deletions(-)
-
-diff --git a/drivers/net/can/dev/length.c b/drivers/net/can/dev/length.c
-index b48140b1102e..b7f4d76dd444 100644
---- a/drivers/net/can/dev/length.c
-+++ b/drivers/net/can/dev/length.c
-@@ -78,18 +78,7 @@ unsigned int can_skb_get_frame_len(const struct sk_buff *skb)
- 	else
- 		len = cf->len;
- 
--	if (can_is_canfd_skb(skb)) {
--		if (cf->can_id & CAN_EFF_FLAG)
--			len += CANFD_FRAME_OVERHEAD_EFF;
--		else
--			len += CANFD_FRAME_OVERHEAD_SFF;
--	} else {
--		if (cf->can_id & CAN_EFF_FLAG)
--			len += CAN_FRAME_OVERHEAD_EFF;
--		else
--			len += CAN_FRAME_OVERHEAD_SFF;
--	}
--
--	return len;
-+	return can_frame_bytes(can_is_canfd_skb(skb), cf->can_id & CAN_EFF_FLAG,
-+			       false, len);
- }
- EXPORT_SYMBOL_GPL(can_skb_get_frame_len);
-diff --git a/include/linux/can/length.h b/include/linux/can/length.h
-index 521fdbce2d69..7518117ee5fc 100644
---- a/include/linux/can/length.h
-+++ b/include/linux/can/length.h
-@@ -1,132 +1,278 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- /* Copyright (C) 2020 Oliver Hartkopp <socketcan@hartkopp.net>
-  * Copyright (C) 2020 Marc Kleine-Budde <kernel@pengutronix.de>
-- * Copyright (C) 2020 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-+ * Copyright (C) 2020, 2023 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-  */
- 
- #ifndef _CAN_LENGTH_H
- #define _CAN_LENGTH_H
- 
-+#include <linux/bits.h>
- #include <linux/can.h>
- #include <linux/can/netlink.h>
-+#include <linux/math.h>
- 
- /*
-- * Size of a Classical CAN Standard Frame
-+ * Size of a Classical CAN Standard Frame header in bits
-+ *
-+ * Name of Field				Bits
-+ * ---------------------------------------------------------
-+ * Start Of Frame (SOF)				1
-+ * Arbitration field:
-+ *	base ID					11
-+ *	Remote Transmission Request (RTR)	1
-+ * Control field:
-+ *	IDentifier Extension bit (IDE)		1
-+ *	FD Format indicatior (FDF)		1
-+ *	Data Length Code (DLC)			4
-+ *
-+ * including all fields preceding the data field, ignoring bitstuffing
-+ */
-+#define CAN_FRAME_HEADER_SFF_BITS 19
-+
-+/*
-+ * Size of a Classical CAN Extended Frame header in bits
-+ *
-+ * Name of Field				Bits
-+ * ---------------------------------------------------------
-+ * Start Of Frame (SOF)				1
-+ * Arbitration field:
-+ *	base ID					11
-+ *	Substitute Remote Request (SRR)		1
-+ *	IDentifier Extension bit (IDE)		1
-+ *	ID extension				18
-+ *	Remote Transmission Request (RTR)	1
-+ * Control field:
-+ *	FD Format indicatior (FDF)		1
-+ *	Reserved bit (r0)			1
-+ *	Data length code (DLC)			4
-+ *
-+ * including all fields preceding the data field, ignoring bitstuffing
-+ */
-+#define CAN_FRAME_HEADER_EFF_BITS 39
-+
-+/*
-+ * Size of a CAN-FD Standard Frame in bits
-+ *
-+ * Name of Field				Bits
-+ * ---------------------------------------------------------
-+ * Start Of Frame (SOF)				1
-+ * Arbitration field:
-+ *	base ID					11
-+ *	Remote Request Substitution (RRS)	1
-+ * Control field:
-+ *	IDentifier Extension bit (IDE)		1
-+ *	FD Format indicator (FDF)		1
-+ *	Reserved bit (res)			1
-+ *	Bit Rate Switch (BRS)			1
-+ *	Error Status Indicator (ESI)		1
-+ *	Data length code (DLC)			4
-+ *
-+ * including all fields preceding the data field, ignoring bitstuffing
-+ */
-+#define CANFD_FRAME_HEADER_SFF_BITS 22
-+
-+/*
-+ * Size of a CAN-FD Extended Frame in bits
-+ *
-+ * Name of Field				Bits
-+ * ---------------------------------------------------------
-+ * Start Of Frame (SOF)				1
-+ * Arbitration field:
-+ *	base ID					11
-+ *	Substitute Remote Request (SRR)		1
-+ *	IDentifier Extension bit (IDE)		1
-+ *	ID extension				18
-+ *	Remote Request Substitution (RRS)	1
-+ * Control field:
-+ *	FD Format indicator (FDF)		1
-+ *	Reserved bit (res)			1
-+ *	Bit Rate Switch (BRS)			1
-+ *	Error Status Indicator (ESI)		1
-+ *	Data length code (DLC)			4
-+ *
-+ * including all fields preceding the data field, ignoring bitstuffing
-+ */
-+#define CANFD_FRAME_HEADER_EFF_BITS 41
-+
-+/*
-+ * Size of a CAN CRC Field in bits
-+ *
-+ * Name of Field			Bits
-+ * ---------------------------------------------------------
-+ * CRC sequence (CRC15)			15
-+ * CRC Delimiter			1
-+ *
-+ * ignoring bitstuffing
-+ */
-+#define CAN_FRAME_CRC_FIELD_BITS 16
-+
-+/*
-+ * Size of a CAN-FD CRC17 Field in bits (length: 0..16)
-+ *
-+ * Name of Field			Bits
-+ * ---------------------------------------------------------
-+ * Stuff Count				4
-+ * CRC Sequence (CRC17)			17
-+ * CRC Delimiter			1
-+ * Fixed stuff bits			6
-+ */
-+#define CANFD_FRAME_CRC17_FIELD_BITS 28
-+
-+/*
-+ * Size of a CAN-FD CRC21 Field in bits (length: 20..64)
-+ *
-+ * Name of Field			Bits
-+ * ---------------------------------------------------------
-+ * Stuff Count				4
-+ * CRC sequence (CRC21)			21
-+ * CRC Delimiter			1
-+ * Fixed stuff bits			7
-+ */
-+#define CANFD_FRAME_CRC21_FIELD_BITS 33
-+
-+/*
-+ * Size of a CAN(-FD) Frame footer in bits
-  *
-  * Name of Field			Bits
-  * ---------------------------------------------------------
-- * Start-of-frame			1
-- * Identifier				11
-- * Remote transmission request (RTR)	1
-- * Identifier extension bit (IDE)	1
-- * Reserved bit (r0)			1
-- * Data length code (DLC)		4
-- * Data field				0...64
-- * CRC					15
-- * CRC delimiter			1
-  * ACK slot				1
-  * ACK delimiter			1
-- * End-of-frame (EOF)			7
-- * Inter frame spacing			3
-+ * End Of Frame (EOF)			7
-  *
-- * rounded up and ignoring bitstuffing
-+ * including all fields following the CRC field
-  */
--#define CAN_FRAME_OVERHEAD_SFF DIV_ROUND_UP(47, 8)
-+#define CAN_FRAME_FOOTER_BITS 9
- 
- /*
-- * Size of a Classical CAN Extended Frame
-- *
-- * Name of Field			Bits
-- * ---------------------------------------------------------
-- * Start-of-frame			1
-- * Identifier A				11
-- * Substitute remote request (SRR)	1
-- * Identifier extension bit (IDE)	1
-- * Identifier B				18
-- * Remote transmission request (RTR)	1
-- * Reserved bits (r1, r0)		2
-- * Data length code (DLC)		4
-- * Data field				0...64
-- * CRC					15
-- * CRC delimiter			1
-- * ACK slot				1
-- * ACK delimiter			1
-- * End-of-frame (EOF)			7
-- * Inter frame spacing			3
-- *
-- * rounded up and ignoring bitstuffing
-+ * First part of the Inter Frame Space
-+ * (a.k.a. IMF - intermission field)
-  */
--#define CAN_FRAME_OVERHEAD_EFF DIV_ROUND_UP(67, 8)
-+#define CAN_INTERMISSION_BITS 3
- 
- /*
-- * Size of a CAN-FD Standard Frame
-+ * CAN bit stuffing overhead multiplication factor
-  *
-- * Name of Field			Bits
-- * ---------------------------------------------------------
-- * Start-of-frame			1
-- * Identifier				11
-- * Remote Request Substitution (RRS)	1
-- * Identifier extension bit (IDE)	1
-- * Flexible data rate format (FDF)	1
-- * Reserved bit (r0)			1
-- * Bit Rate Switch (BRS)		1
-- * Error Status Indicator (ESI)		1
-- * Data length code (DLC)		4
-- * Data field				0...512
-- * Stuff Bit Count (SBC)		4
-- * CRC					0...16: 17 20...64:21
-- * CRC delimiter (CD)			1
-- * Fixed Stuff bits (FSB)		0...16: 6 20...64:7
-- * ACK slot (AS)			1
-- * ACK delimiter (AD)			1
-- * End-of-frame (EOF)			7
-- * Inter frame spacing			3
-+ * The worst bit stuffing case is a sequence in which dominant and
-+ * recessive bits alternate every four bits:
-  *
-- * assuming CRC21, rounded up and ignoring dynamic bitstuffing
-+ *   Destuffed: 1 1111  0000  1111  0000  1111
-+ *   Stuffed:   1 1111o 0000i 1111o 0000i 1111o
-+ *
-+ * Nomenclature:
-+ *
-+ *  - "0": dominant bit
-+ *  - "o": dominant stuff bit
-+ *  - "1": recessive bit
-+ *  - "i": recessive stuff bit
-+ *
-+ * Ignoring the first bit, one stuff bit is added every four bits
-+ * giving us an overhead of 1/4 = 0.25.
-  */
--#define CANFD_FRAME_OVERHEAD_SFF DIV_ROUND_UP(67, 8)
-+#define can_bit_stuffing_overhead(stream_len) mult_frac(stream_len, 1, 4)
-+
-+/**
-+ * can_frame_bits() - Calculate the number of bits in on the wire in a
-+ *	CAN frame
-+ * @is_eff: true: Extended Frame; false: Standard Frame.
-+ * @bitstuffing: if true, calculate the bitsuffing worst case, if
-+ *	false, calculated the bitsuffing best case (no dynamic
-+ *	bitsuffing). Fixed stuff bits always get included.
-+ * @intermission: if and only if true, include the inter frame space
-+ *	assuming no bus idle (i.e. only the intermission gets added).
-+ * @data_len: length of the data field in bytes. Correspond to
-+ *	can(fd)_frame->len. Should be zero for remote frames. No
-+ *	sanitization is done on @data_len.
-+ *
-+ * Return: the numbers of bits on the wire of a CAN frame.
-+ */
-+static inline
-+unsigned int can_frame_bits(bool is_fd, bool is_eff,
-+			    bool bitstuffing, bool intermission,
-+			    unsigned int data_len)
-+{
-+	unsigned int bits;
-+
-+	if (is_fd) {
-+		if (is_eff)
-+			bits = CANFD_FRAME_HEADER_EFF_BITS;
-+		else
-+			bits = CANFD_FRAME_HEADER_SFF_BITS;
-+	} else {
-+		if (is_eff)
-+			bits = CAN_FRAME_HEADER_EFF_BITS;
-+		else
-+			bits = CAN_FRAME_HEADER_SFF_BITS;
-+	}
-+
-+	bits += data_len * BITS_PER_BYTE;
-+
-+	if (!is_fd) {
-+		bits += CAN_FRAME_CRC_FIELD_BITS;
-+		/*
-+		 * In Classical CAN, bit stuffing applies to all field
-+		 * from SOF to CRC delimiter
-+		 */
-+		if (bitstuffing)
-+			bits += can_bit_stuffing_overhead(bits);
-+	} else {
-+		/*
-+		 * In CAN-FD, the fields preceding the CRC field have
-+		 * dynamic bit stuffing; but the CRC field has fixed
-+		 * bitstuffing
-+		 */
-+		if (bitstuffing)
-+			bits += can_bit_stuffing_overhead(bits - 1);
-+		if (data_len <= 16)
-+			bits += CANFD_FRAME_CRC17_FIELD_BITS;
-+		else
-+			bits += CANFD_FRAME_CRC21_FIELD_BITS;
-+	}
-+
-+	bits += CAN_FRAME_FOOTER_BITS;
-+
-+	if (intermission)
-+		bits += CAN_INTERMISSION_BITS;
-+
-+	return bits;
-+}
- 
- /*
-- * Size of a CAN-FD Extended Frame
-- *
-- * Name of Field			Bits
-- * ---------------------------------------------------------
-- * Start-of-frame			1
-- * Identifier A				11
-- * Substitute remote request (SRR)	1
-- * Identifier extension bit (IDE)	1
-- * Identifier B				18
-- * Remote Request Substitution (RRS)	1
-- * Flexible data rate format (FDF)	1
-- * Reserved bit (r0)			1
-- * Bit Rate Switch (BRS)		1
-- * Error Status Indicator (ESI)		1
-- * Data length code (DLC)		4
-- * Data field				0...512
-- * Stuff Bit Count (SBC)		4
-- * CRC					0...16: 17 20...64:21
-- * CRC delimiter (CD)			1
-- * Fixed Stuff bits (FSB)		0...16: 6 20...64:7
-- * ACK slot (AS)			1
-- * ACK delimiter (AD)			1
-- * End-of-frame (EOF)			7
-- * Inter frame spacing			3
-- *
-- * assuming CRC21, rounded up and ignoring dynamic bitstuffing
-+ * Number of bytes in a CAN frame
-+ * (rounded up, including intermission)
-  */
--#define CANFD_FRAME_OVERHEAD_EFF DIV_ROUND_UP(86, 8)
-+static inline
-+unsigned int can_frame_bytes(bool is_fd, bool is_eff, bool bitstuffing,
-+			     unsigned int data_len)
-+{
-+	return DIV_ROUND_UP(can_frame_bits(is_fd, is_eff, bitstuffing, true,
-+					   data_len),
-+			    BITS_PER_BYTE);
-+}
- 
- /*
-  * Maximum size of a Classical CAN frame
-- * (rounded up and ignoring bitstuffing)
-+ * (rounded up, ignoring bitstuffing but including intermission)
-  */
--#define CAN_FRAME_LEN_MAX (CAN_FRAME_OVERHEAD_EFF + CAN_MAX_DLEN)
-+#define CAN_FRAME_LEN_MAX				\
-+	DIV_ROUND_UP(CAN_FRAME_HEADER_EFF_BITS +	\
-+		     CAN_MAX_DLEN * BITS_PER_BYTE +	\
-+		     CAN_FRAME_CRC_FIELD_BITS +		\
-+		     CAN_FRAME_FOOTER_BITS +		\
-+		     CAN_INTERMISSION_BITS,		\
-+		     BITS_PER_BYTE)
- 
- /*
-  * Maximum size of a CAN-FD frame
-  * (rounded up and ignoring bitstuffing)
-  */
--#define CANFD_FRAME_LEN_MAX (CANFD_FRAME_OVERHEAD_EFF + CANFD_MAX_DLEN)
-+#define CANFD_FRAME_LEN_MAX				\
-+	DIV_ROUND_UP(CANFD_FRAME_HEADER_EFF_BITS +	\
-+		     CANFD_MAX_DLEN * BITS_PER_BYTE +	\
-+		     CANFD_FRAME_CRC21_FIELD_BITS	\
-+		     CAN_FRAME_FOOTER_BITS +		\
-+		     CAN_INTERMISSION_BITS,		\
-+		     BITS_PER_BYTE)
- 
- /*
-  * can_cc_dlc2len(value) - convert a given data length code (dlc) of a
--- 
-2.25.1
-
+SGksDQoNCnRoYW5rIHlvdSBmb3IgeW91ciBoaW50ISBJIGZpeGVkIHNvY2tldGNhbkBobXMtbmV0
+d29ya3MuZGUsIGl0IHNob3VsZCBub3QgYm91bmNlIGFueW1vcmUuDQoNCkJlc3QgcmVnYXJkcw0K
+TWFya3VzDQoNCi0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQpGcm9tOiBNYXJjIEtsZWluZS1C
+dWRkZSA8bWtsQHBlbmd1dHJvbml4LmRlPiANClNlbnQ6IFR1ZXNkYXksIE1heSAyMywgMjAyMyA4
+OjM5IEFNDQpUbzogUGV0ZXIgU2VpZGVyZXIgPHBzLnJlcG9ydEBnbXgubmV0Pg0KQ2M6IFZpbmNl
+bnQgTWFpbGhvbCA8dmluY2VudC5tYWlsaG9sQGdtYWlsLmNvbT47IGxpbnV4LWNhbkB2Z2VyLmtl
+cm5lbC5vcmcNClN1YmplY3Q6IFJlOiBbUEFUQ0ggdjhdIGNhbjogdXNiOiBJWFhBVCBVU0ItdG8t
+Q0FOIGFkYXB0ZXJzIGRyaXZlcnMNCg0KT24gMjIuMDUuMjAyMyAyMTo1Mzo1NCwgUGV0ZXIgU2Vp
+ZGVyZXIgd3JvdGU6DQo+IEFkZGVkIENDOiBzb2NrZXRjYW5AaG1zLW5ldHdvcmtzLmRlICh0YWtl
+biBmcm9tIHRoZSBjb3B5cmlnaHQgaGVhZGVycykNCg0KUGxlYXNlIHJlbW92ZSwgdGhhdCBtYWls
+IGlzIGJvdW5jaW5nLg0KDQp8IFlvdXIgbWVzc2FnZSB0byBzb2NrZXRjYW5AaG1zLW5ldHdvcmtz
+LmRlIGNvdWxkbid0IGJlIGRlbGl2ZXJlZC4NCg0KZmxmZUBobXMtbmV0d29ya3MuZGUgaXMgYm91
+bmNpbmcsIHRvbzoNCg0KfCBGbG9yaWFuIEZlcmcgKGZsZmVAaG1zLW5ldHdvcmtzLmRlKTxtYWls
+dG86ZmxmZUBobXMtbmV0d29ya3MuZGU+DQp8IEEgcHJvYmxlbSBvY2N1cnJlZCBkdXJpbmcgdGhl
+IGRlbGl2ZXJ5IG9mIHRoaXMgbWVzc2FnZS4gUGxlYXNlIHRyeSB0byByZXNlbmQgdGhlIG1lc3Nh
+Z2UgbGF0ZXIuDQoNCk1hcmMNCg0KLS0gDQpQZW5ndXRyb25peCBlLksuICAgICAgICAgICAgICAg
+ICB8IE1hcmMgS2xlaW5lLUJ1ZGRlICAgICAgICAgIHwNCkVtYmVkZGVkIExpbnV4ICAgICAgICAg
+ICAgICAgICAgIHwgaHR0cHM6Ly93d3cucGVuZ3V0cm9uaXguZGUgfA0KVmVydHJldHVuZyBOw7xy
+bmJlcmcgICAgICAgICAgICAgIHwgUGhvbmU6ICs0OS01MTIxLTIwNjkxNy0xMjkgfA0KQW10c2dl
+cmljaHQgSGlsZGVzaGVpbSwgSFJBIDI2ODYgfCBGYXg6ICAgKzQ5LTUxMjEtMjA2OTE3LTkgICB8
+DQo=
