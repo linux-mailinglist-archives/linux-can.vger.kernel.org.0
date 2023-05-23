@@ -2,122 +2,67 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB89170D499
-	for <lists+linux-can@lfdr.de>; Tue, 23 May 2023 09:13:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE8A570D528
+	for <lists+linux-can@lfdr.de>; Tue, 23 May 2023 09:35:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235346AbjEWHNO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 23 May 2023 03:13:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54346 "EHLO
+        id S232706AbjEWHfp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 23 May 2023 03:35:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbjEWHNN (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 23 May 2023 03:13:13 -0400
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E56109;
-        Tue, 23 May 2023 00:13:12 -0700 (PDT)
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1ae85b71141so37690405ad.0;
-        Tue, 23 May 2023 00:13:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684825991; x=1687417991;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=03EqkJXrRuiNBz5G1C16TV++ckfGe0uKcUGxtIlIN1c=;
-        b=Zb4idYWQadrH3kXRI8U5kCNJ3Sacwsusl7jhhu33TFZ0+ov7vCD7mCuOd/+R4DU5FU
-         aZwMZmkidkOGioKvsb3766ikx5iVJVQWuaaYF9HhbkUN85QNqyf16tlWazTu1gZj79ye
-         7JbVySMAN5MdsI5jpu/XmFqt3/HtTXzYCWhvFCsSxqNRQULmm0A2Kc6Co/oesvZxV2zU
-         F8fl1W7vJ238pK4bgcNj12NOCe/59tU+d4+WLvXHCMvQ+AEXeDD5uqXlQ4ZXKgkjojgu
-         gCbnxUkBm16EBiGi4StNQl5rBolSWp7Otnik3XEmLKbtztIIiCCBczHGdJ/ti7AFYKjV
-         2Pgg==
-X-Gm-Message-State: AC+VfDz2vDwUF1eBqXiFoZ1s9CqJKE5InEtZS+zQZF8SITZ9k7jFatHy
-        OItPP8iM5433v+cqWqijS/o+8K63urHWgxWY7GuM4TrySvo=
-X-Google-Smtp-Source: ACHHUZ6ItpQuMW2CtPldc9cn7XBOWsBXE2AZtmcG775brwPZlyqtLqXHSVzRpJt9g7Btt+oQVp/stuHoKGIg57fxV+8=
-X-Received: by 2002:a17:903:124b:b0:1ae:a44:841c with SMTP id
- u11-20020a170903124b00b001ae0a44841cmr14940907plh.42.1684825991089; Tue, 23
- May 2023 00:13:11 -0700 (PDT)
+        with ESMTP id S235685AbjEWHfD (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 23 May 2023 03:35:03 -0400
+Received: from mail.feshiecree.pl (unknown [89.40.114.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED6C173E
+        for <linux-can@vger.kernel.org>; Tue, 23 May 2023 00:33:43 -0700 (PDT)
+Received: by mail.feshiecree.pl (Postfix, from userid 1001)
+        id 7D17283F8A; Tue, 23 May 2023 08:31:30 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=feshiecree.pl;
+        s=mail; t=1684827136;
+        bh=hFxZwVw4rIL+JwfEOGI47p+fdoVOAeqVswP6NWoHSHQ=;
+        h=Date:From:To:Subject:From;
+        b=2iaiIWDQJ4cKnmvuOtoyr9WfzdkwlS715Y0KFPpGbA3441YcdZGXpkus2PhtEB43m
+         dOZmGK16kyXtiY20aX1igtS6RfnYhwXLifm3I6afgFKnaJD+MxSKCseWy+s9F9wQf2
+         6FTHQ2sfF+7hELOYukRAJknIt5AxWPpvuaLhOyMfstY/YrbE1d9sMSOwzIGID5Uxp2
+         I4PQYlYC+f4ORhv81hQM1aa09GnwCwWmKp6CGNVlP3I/bb2DsdHLGkEazc139b1TUQ
+         kknHUM39qOSnZawWrP24HRFRcZZraIrGm9JauIbtssaW54+u1CH7NgMWDXiSXLoeYf
+         /OdBwlVS+6nlg==
+Received: by mail.feshiecree.pl for <linux-can@vger.kernel.org>; Tue, 23 May 2023 07:30:58 GMT
+Message-ID: <20230523074503-0.1.2p.jv2k.0.b96k78qymx@feshiecree.pl>
+Date:   Tue, 23 May 2023 07:30:58 GMT
+From:   "Krystian Wieczorek" <krystian.wieczorek@feshiecree.pl>
+To:     <linux-can@vger.kernel.org>
+Subject: W sprawie samochodu
+X-Mailer: mail.feshiecree.pl
 MIME-Version: 1.0
-References: <20230507155506.3179711-1-mailhol.vincent@wanadoo.fr>
- <20230523065218.51227-1-mailhol.vincent@wanadoo.fr> <20230523065218.51227-4-mailhol.vincent@wanadoo.fr>
-In-Reply-To: <20230523065218.51227-4-mailhol.vincent@wanadoo.fr>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Tue, 23 May 2023 16:13:00 +0900
-Message-ID: <CAMZ6Rq+EgMW4zLPVWP8e0DT2R0WO5swxxuc3qUAewAe6fgubOw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] can: length: refactor frame lengths definition to
- add size in bits
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
-        Thomas.Kopp@microchip.com
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>, netdev@vger.kernel.org,
-        marex@denx.de
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,RCVD_IN_SORBS_DUL,T_SCC_BODY_TEXT_LINE,
+        T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Sorry for the late reply, I wanted to have this completed earlier but
-other imperatives and the time needed to debug decided differently.
+Dzie=C5=84 dobry,
 
-On Tue. 23 May 2023 at 15:52, Vincent Mailhol
-<mailhol.vincent@wanadoo.fr> wrote:
-> Introduce a method to calculate the exact size in bits of a CAN(-FD)
-> frame with or without dynamic bitsuffing.
->
-> These are all the possible combinations taken into account:
->
->   - Classical CAN or CAN-FD
->   - Standard or Extended frame format
->   - CAN-FD CRC17 or CRC21
->   - Include or not intermission
->
-> Instead of doing several macro definitions, declare the
-> can_frame_bits() static inline function. To this extend, do a full
-                                                   ^^^^^^
-Typo: extent
-(I will not send a v3 just for that).
+chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
+, je=C5=9Bli chodzi o system monitoringu GPS.
 
-> refactoring of the length definitions.
->
-> If given integer constant expressions as argument, can_frame_bits()
-> folds into a compile time constant expression, giving no penalty over
-> the use of macros.
->
-> Also add the can_frame_bytes(). This function replaces the existing
-> macro:
->
->   - CAN_FRAME_OVERHEAD_SFF: can_frame_bytes(false, false, 0)
->   - CAN_FRAME_OVERHEAD_EFF: can_frame_bytes(false, true, 0)
->   - CANFD_FRAME_OVERHEAD_SFF: can_frame_bytes(true, false, 0)
->   - CANFD_FRAME_OVERHEAD_EFF: can_frame_bytes(true, true, 0)
->
-> The different frame lengths (including intermission) are as follow:
->
->    Frame type                           bits    bytes
->   ----------------------------------------------------------
->    Classic CAN SFF no-bitstuffing       111     14
->    Classic CAN EFF no-bitstuffing       131     17
->    Classic CAN SFF bitstuffing          135     17
->    Classic CAN EFF bitstuffing          160     20
->    CAN-FD SFF no-bitstuffing            579     73
->    CAN-FD EFF no-bitstuffing            598     75
->    CAN-FD SFF bitstuffing               712     89
->    CAN-FD EFF bitstuffing               736     92
->
-> The macro CAN_FRAME_LEN_MAX and CANFD_FRAME_LEN_MAX are kept to be
-> used in const struct declarations (folding of can_frame_bytes() occurs
-> too late in the compilation to be used in struct declarations).
+Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
+e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
+a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
 
-To be fair, I am not fully happy with that part. The fact that
-can_frame_bits() and can_frame_bytes() can not be used in structure
-declaration even if these are compile time constants is unfortunate.
-But after reflection, I still see those inline functions as a better
-compromise than a collection of macro definitions. Let me know your
-thoughts.
+Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
+dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
+szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
+mne znaczenie.
 
-(...)
+Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
+b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
 
-Yours sincerely,
-Vincent Mailhol
+
+Pozdrawiam
+Krystian Wieczorek
