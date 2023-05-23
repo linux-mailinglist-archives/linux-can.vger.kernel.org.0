@@ -2,67 +2,95 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE8A570D528
-	for <lists+linux-can@lfdr.de>; Tue, 23 May 2023 09:35:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CBF270D959
+	for <lists+linux-can@lfdr.de>; Tue, 23 May 2023 11:45:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232706AbjEWHfp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 23 May 2023 03:35:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34814 "EHLO
+        id S232887AbjEWJpF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 23 May 2023 05:45:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235685AbjEWHfD (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 23 May 2023 03:35:03 -0400
-Received: from mail.feshiecree.pl (unknown [89.40.114.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED6C173E
-        for <linux-can@vger.kernel.org>; Tue, 23 May 2023 00:33:43 -0700 (PDT)
-Received: by mail.feshiecree.pl (Postfix, from userid 1001)
-        id 7D17283F8A; Tue, 23 May 2023 08:31:30 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=feshiecree.pl;
-        s=mail; t=1684827136;
-        bh=hFxZwVw4rIL+JwfEOGI47p+fdoVOAeqVswP6NWoHSHQ=;
-        h=Date:From:To:Subject:From;
-        b=2iaiIWDQJ4cKnmvuOtoyr9WfzdkwlS715Y0KFPpGbA3441YcdZGXpkus2PhtEB43m
-         dOZmGK16kyXtiY20aX1igtS6RfnYhwXLifm3I6afgFKnaJD+MxSKCseWy+s9F9wQf2
-         6FTHQ2sfF+7hELOYukRAJknIt5AxWPpvuaLhOyMfstY/YrbE1d9sMSOwzIGID5Uxp2
-         I4PQYlYC+f4ORhv81hQM1aa09GnwCwWmKp6CGNVlP3I/bb2DsdHLGkEazc139b1TUQ
-         kknHUM39qOSnZawWrP24HRFRcZZraIrGm9JauIbtssaW54+u1CH7NgMWDXiSXLoeYf
-         /OdBwlVS+6nlg==
-Received: by mail.feshiecree.pl for <linux-can@vger.kernel.org>; Tue, 23 May 2023 07:30:58 GMT
-Message-ID: <20230523074503-0.1.2p.jv2k.0.b96k78qymx@feshiecree.pl>
-Date:   Tue, 23 May 2023 07:30:58 GMT
-From:   "Krystian Wieczorek" <krystian.wieczorek@feshiecree.pl>
-To:     <linux-can@vger.kernel.org>
-Subject: W sprawie samochodu
-X-Mailer: mail.feshiecree.pl
+        with ESMTP id S235175AbjEWJpE (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 23 May 2023 05:45:04 -0400
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BE0126
+        for <linux-can@vger.kernel.org>; Tue, 23 May 2023 02:45:02 -0700 (PDT)
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-4f3b5881734so4079800e87.0
+        for <linux-can@vger.kernel.org>; Tue, 23 May 2023 02:45:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kvaser.com; s=google; t=1684835041; x=1687427041;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QjpW9ahG+/8q9jsJ1vhDrawaCPOvaqpaxRQ3/3mMpV4=;
+        b=YBS0piTMtS14hDz/0Xgmd6oRsPmwxRJYdwNbnsRB3Xc8oabQGSyg6YM+pfuBOXox32
+         ZvgyHWhQHliHTeKEj3MO9LAop6ZdU6QeSyuvsW8+W3oZs2lTtzObR2zxQgQGn/Odh2Kx
+         +bJQLPpEdhHXPeVX9ehp+6V2N0YmICNVgFCasO/0NgodXUeCM9Gvu8nw7RVzJRJazHgy
+         AF0AYbiKtcOcJ6q9/8mpbL3t2io+VKQ+psjWbxtA8HRmTBctyqL5v/eiAwLHtKkiNvSK
+         UQEBrBeptGgebCgbAfKSxyEVlpsaqbKNSrCM1f0gWul5A+Lz8cZldkulvobjHMGn9mIN
+         Horg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684835041; x=1687427041;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QjpW9ahG+/8q9jsJ1vhDrawaCPOvaqpaxRQ3/3mMpV4=;
+        b=efM6dxR6mZo0S0C60X9o7Az43ACM2AEy4FMo3Kogorp/aiuMXGW3lnVkervdZ8ByBH
+         42syZW3EV4pRL5wBZsVmvq8/A8+sP6TUr22FtTAB7TG2+yHYTC9rC088/pCy/D+EQ7VM
+         O5DJ3neI7WdzbI4Qwh7pzW64Ay8mXmX23GQMCg9OqCyMWH7XEGy7iBvI/lkviYWNY8nU
+         PvqB+u3QN6tYAv47t4nMiJ1br6UiRsY4s9He1DjNfdg5dXFNZIrYDBs0CFThZ1pQTa5K
+         xrBnBBFWV0sVk8b0lbjwbeZYOl1Lrv46t1fEX9bhoPsTphqwhD/4SmGpBZcH8lTuVukt
+         +6uQ==
+X-Gm-Message-State: AC+VfDxpCSf5WdirCjFIHJttuYiuMdC9zEWus8oYRVN5KHoPBgjetJqx
+        28vwDLjeupLFt8EXNUUH2jqBKbtNp99BwPvYZgc=
+X-Google-Smtp-Source: ACHHUZ7XwBbdqBF8eNnxRxO17LVbyfZSUjSEXfhhdPQ3Lx92+3Qbw7Vb+Ytdv6oXlX7RBDQ4EUWH+w==
+X-Received: by 2002:ac2:489c:0:b0:4f2:4d0a:7bde with SMTP id x28-20020ac2489c000000b004f24d0a7bdemr4002920lfc.31.1684835040714;
+        Tue, 23 May 2023 02:44:00 -0700 (PDT)
+Received: from archyz.. (h-98-128-173-232.A785.priv.bahnhof.se. [98.128.173.232])
+        by smtp.gmail.com with ESMTPSA id c16-20020a2e9490000000b002ac87c15fd4sm1535551ljh.95.2023.05.23.02.43.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 May 2023 02:44:00 -0700 (PDT)
+From:   Jimmy Assarsson <extja@kvaser.com>
+To:     linux-can@vger.kernel.org
+Cc:     Jimmy Assarsson <jimmyassarsson@gmail.com>,
+        Jimmy Assarsson <extja@kvaser.com>
+Subject: [PATCH 00/12] can: kvaser_pciefd: Fixes and improvments
+Date:   Tue, 23 May 2023 11:43:38 +0200
+Message-Id: <20230523094354.83792-1-extja@kvaser.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,RCVD_IN_SORBS_DUL,T_SCC_BODY_TEXT_LINE,
-        T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Dzie=C5=84 dobry,
+This patch series contains various non critical fixes and improvments for
+the kvaser_pciefd driver.
 
-chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
-, je=C5=9Bli chodzi o system monitoringu GPS.
+Jimmy Assarsson (12):
+  can: kvaser_pciefd: Remove useless write to interrupt register
+  can: kvaser_pciefd: Remove handler for unused
+    KVASER_PCIEFD_PACK_TYPE_EFRAME_ACK
+  can: kvaser_pciefd: Add function to set skb hwtstamps
+  can: kvaser_pciefd: Set hardware timestamp on transmitted packets
+  can: kvaser_pciefd: Define unsigned constants with type suffix 'U'
+  can: kvaser_pciefd: Remove SPI flash parameter read functionality
+  can: kvaser_pciefd: Sort includes in alphabetic order
+  can: kvaser_pciefd: Rename device ID defines
+  can: kvaser_pciefd: Change return type for
+    kvaser_pciefd_{receive,transmit,set_tx}_irq()
+  can: kvaser_pciefd: Add len8_dlc support
+  can: kvaser_pciefd: Refactor code
+  can: kvaser_pciefd: Use TX FIFO size read from CAN controller
 
-Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
-e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
-a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
+ drivers/net/can/Kconfig         |   3 +-
+ drivers/net/can/kvaser_pciefd.c | 622 +++++++++-----------------------
+ 2 files changed, 168 insertions(+), 457 deletions(-)
 
-Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
-dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
-szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
-mne znaczenie.
+-- 
+2.40.0
 
-Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
-b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
-
-
-Pozdrawiam
-Krystian Wieczorek
