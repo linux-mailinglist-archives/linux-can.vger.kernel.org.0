@@ -2,60 +2,60 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4692F70D962
+	by mail.lfdr.de (Postfix) with ESMTP id B1C7A70D963
 	for <lists+linux-can@lfdr.de>; Tue, 23 May 2023 11:45:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235572AbjEWJp1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        id S235175AbjEWJp1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
         Tue, 23 May 2023 05:45:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60598 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236182AbjEWJpV (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 23 May 2023 05:45:21 -0400
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC251A4
-        for <linux-can@vger.kernel.org>; Tue, 23 May 2023 02:45:12 -0700 (PDT)
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2af2451b3f1so54491491fa.2
-        for <linux-can@vger.kernel.org>; Tue, 23 May 2023 02:45:11 -0700 (PDT)
+        with ESMTP id S236238AbjEWJpW (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 23 May 2023 05:45:22 -0400
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EDED1A8
+        for <linux-can@vger.kernel.org>; Tue, 23 May 2023 02:45:13 -0700 (PDT)
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2af225e5b4bso53878201fa.3
+        for <linux-can@vger.kernel.org>; Tue, 23 May 2023 02:45:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kvaser.com; s=google; t=1684835050; x=1687427050;
+        d=kvaser.com; s=google; t=1684835051; x=1687427051;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7EDURFAaglACphGgXjm8quJBGDeyprKNcuWBd0EAFRw=;
-        b=lTUTo+Y9XMb7mHdWB023T8+naqSRikzCBI8RJRdiyYqKi4/JL7MBB/FQdq6X6bITjX
-         YhSL/AAN7zxKV10S79kPqngAGHyr37g09F1YP9ut+qT3W7Mdh1DoVhuOQKrIwFvYHghd
-         vY8dUiXT+HUWXrqASg1V4+BzcMQK5Hruc9p3tSaBqdRP+Z8ztEZCDCwuVt0tRB4uxHgv
-         ucZd6nAfcjSewLm32IrW1i3RNZBjiXwKaw4BTkXEsPEYcFrYmiZlkM/564ccvTGLbnhb
-         LdlZCQ0hsuhnpVsxIusODed/527bs/I+0zIz+zHISm4jstZTpu+Zpl2ShB4uT5FUwKCU
-         X5Fw==
+        bh=Oa7B8GEydmyfj0htsZqCe/cj3nA9mtvYayndQWD/16Y=;
+        b=b1rraEaDRAgaPoQGPV+gaaGjYHGSTSWtIGE1nnwQKqaxVN/HvuGVBg+WRNWTSroTKp
+         63DGG8EfTUCAvQnUdnAlnWK+2HLDCUiPQ/g8ISekq5QsbRXu+gmHmJqfs0xOy7cDjXsU
+         GNbLUqpRP/5ajku7sFqFSRyiRPqEs7GLu5emhsJb6eLI7FtZlYj18nvaD5x3sxTZPVg/
+         mItiatTMidrcEIX4yvqjj+4Y0ti/f09UZb2insUheE9AgG9Xywy/Il1cLIGxSVDRmXqq
+         XGa2IJC9tzP1rCvnf2we9pU9us0TWgwitpf3B6SDhbhQvxZS0UGE1Tyue+A5nsPpUAGF
+         LCKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684835050; x=1687427050;
+        d=1e100.net; s=20221208; t=1684835051; x=1687427051;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7EDURFAaglACphGgXjm8quJBGDeyprKNcuWBd0EAFRw=;
-        b=CpgsrTwGkV1SVpGVtu6ucPXVxj2HemFq5D8wzW1JqC1dGAZDQ3fhOUAhXcLnLomuU2
-         HCWsOL7CzO9TPdzh53/x5D9/oCHW/6UC3Y1dUjEeW/x1lZYEsWhzqrrQ355drXEGWriz
-         MlfiuyKwYOSkxXIqe5spPiaF/tD4kFrJlClsmVfztYuMHe8QLMBdHLmOZPxzKV7jng0c
-         40+KiwGVYAEpJZRyBFJeNeCdsqyJIm7bdAF/xbJ9i7xKoQeZGVdUKkOTJLX3gxanKp55
-         ApxtXZ9Pzqt8j1R7Ojr44IP/tnaRzsEkUuEPpcrIBBxV+1Rlw9YwQSOJGnOOrftJFAm9
-         nahQ==
-X-Gm-Message-State: AC+VfDzZrqyiU4mEuLz/gaL/DpIPzbVehZzuowgx9D4pKQ/Z5mKt8S0f
-        QkIuC4TNGnZftl2MrHUznlcU1PBG5clLcSq0BzE=
-X-Google-Smtp-Source: ACHHUZ5M3/5T4ppXi3Gq+VW7WRm2szVgbGgdKPV9catg+txRbD9hjZQLbmJBPG5AP4m5h1PJuCfGzw==
-X-Received: by 2002:a2e:3213:0:b0:2af:1eee:84af with SMTP id y19-20020a2e3213000000b002af1eee84afmr5159281ljy.26.1684835050565;
-        Tue, 23 May 2023 02:44:10 -0700 (PDT)
+        bh=Oa7B8GEydmyfj0htsZqCe/cj3nA9mtvYayndQWD/16Y=;
+        b=YzPtDKAbGbpJQkmGU/rgD2qB4BGSc1GUlKjycII6bYE5ddCP9vU4jTLxOPcueaWXYl
+         ZVFEUvIfGvTeSTDsMsjj1Z7SNLsnFoBN/j4XI7K3upzaZZNJEk6CXUB4nC7tVGGnXBOy
+         sWS/byC04XpE/avNs04QEMAJN4ZncHKxs9qxT2Ma3djIz6qiguqf4hSyeBcWgKLs23Ir
+         wPgVbBryas6LdgV3zeL4S0j+LGrtlsGG3g6c1Hzs50tkaAfJayRJg7xhPYxz6jY45x2B
+         R4UivOactUDrchr5LyJ202YTzTxbh15ZZUPB+w3V+8uFwcrIOq12zoorlSsLapFycgT7
+         VmVA==
+X-Gm-Message-State: AC+VfDyoc9ajcwREjwdaSfhujvtAQmxI2+rF4Wb5fOfZTKK0qva81hnj
+        bl/R9MJFZ9kb09dv6P0vmZ1gH5R3/MCfaTRsS0o=
+X-Google-Smtp-Source: ACHHUZ7CHdSvsGWhTVnVaa1C89uCAvgtr8+aDEadSR8HJ2xquyXab3DwohS3NhHLIgN6B5tS6ADBTQ==
+X-Received: by 2002:a2e:8092:0:b0:2ac:7973:6751 with SMTP id i18-20020a2e8092000000b002ac79736751mr5198759ljg.32.1684835051399;
+        Tue, 23 May 2023 02:44:11 -0700 (PDT)
 Received: from archyz.. (h-98-128-173-232.A785.priv.bahnhof.se. [98.128.173.232])
-        by smtp.gmail.com with ESMTPSA id c16-20020a2e9490000000b002ac87c15fd4sm1535551ljh.95.2023.05.23.02.44.09
+        by smtp.gmail.com with ESMTPSA id c16-20020a2e9490000000b002ac87c15fd4sm1535551ljh.95.2023.05.23.02.44.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 23 May 2023 02:44:10 -0700 (PDT)
 From:   Jimmy Assarsson <extja@kvaser.com>
 To:     linux-can@vger.kernel.org
 Cc:     Jimmy Assarsson <jimmyassarsson@gmail.com>,
         Jimmy Assarsson <extja@kvaser.com>
-Subject: [PATCH 09/12] can: kvaser_pciefd: Change return type for kvaser_pciefd_{receive,transmit,set_tx}_irq()
-Date:   Tue, 23 May 2023 11:43:47 +0200
-Message-Id: <20230523094354.83792-10-extja@kvaser.com>
+Subject: [PATCH 10/12] can: kvaser_pciefd: Add len8_dlc support
+Date:   Tue, 23 May 2023 11:43:48 +0200
+Message-Id: <20230523094354.83792-11-extja@kvaser.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230523094354.83792-1-extja@kvaser.com>
 References: <20230523094354.83792-1-extja@kvaser.com>
@@ -71,66 +71,88 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Change return type to void for kvaser_pciefd_transmit_irq(),
-kvaser_pciefd_receive_irq() and kvaser_pciefd_set_tx_irq().
-These functions always return zero.
+Add support for the Classical CAN raw DLC functionality to send and receive
+DLC values from 9 .. 15.
 
 Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
 ---
- drivers/net/can/kvaser_pciefd.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+ drivers/net/can/kvaser_pciefd.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/net/can/kvaser_pciefd.c b/drivers/net/can/kvaser_pciefd.c
-index bf3fa51069a9..feef044c6b0a 100644
+index feef044c6b0a..3237c71afd2b 100644
 --- a/drivers/net/can/kvaser_pciefd.c
 +++ b/drivers/net/can/kvaser_pciefd.c
-@@ -338,7 +338,7 @@ static void kvaser_pciefd_disable_err_gen(struct kvaser_pciefd_can *can)
- 	spin_unlock_irqrestore(&can->lock, irq);
- }
+@@ -572,15 +572,19 @@ static int kvaser_pciefd_prepare_tx_packet(struct kvaser_pciefd_tx_packet *p,
+ 		p->header[0] |= KVASER_PCIEFD_RPACKET_IDE;
  
--static int kvaser_pciefd_set_tx_irq(struct kvaser_pciefd_can *can)
-+static void kvaser_pciefd_set_tx_irq(struct kvaser_pciefd_can *can)
- {
- 	u32 msk;
+ 	p->header[0] |= cf->can_id & CAN_EFF_MASK;
+-	p->header[1] |= can_fd_len2dlc(cf->len) << KVASER_PCIEFD_RPACKET_DLC_SHIFT;
+ 	p->header[1] |= KVASER_PCIEFD_TPACKET_AREQ;
  
-@@ -349,8 +349,6 @@ static int kvaser_pciefd_set_tx_irq(struct kvaser_pciefd_can *can)
- 	      KVASER_PCIEFD_KCAN_IRQ_TAR;
+ 	if (can_is_canfd_skb(skb)) {
++		p->header[1] |= can_fd_len2dlc(cf->len) << KVASER_PCIEFD_RPACKET_DLC_SHIFT;
+ 		p->header[1] |= KVASER_PCIEFD_RPACKET_FDF;
+ 		if (cf->flags & CANFD_BRS)
+ 			p->header[1] |= KVASER_PCIEFD_RPACKET_BRS;
+ 		if (cf->flags & CANFD_ESI)
+ 			p->header[1] |= KVASER_PCIEFD_RPACKET_ESI;
++	} else {
++		p->header[1] |= can_get_cc_dlc((struct can_frame *)cf,
++					       can->can.ctrlmode)
++				<< KVASER_PCIEFD_RPACKET_DLC_SHIFT;
+ 	}
  
- 	iowrite32(msk, can->reg_base + KVASER_PCIEFD_KCAN_IEN_REG);
+ 	p->header[1] |= seq & KVASER_PCIEFD_PACKET_SEQ_MSK;
+@@ -816,7 +820,8 @@ static int kvaser_pciefd_setup_can_ctrls(struct kvaser_pciefd *pcie)
+ 
+ 		can->can.ctrlmode_supported = CAN_CTRLMODE_LISTENONLY |
+ 					      CAN_CTRLMODE_FD |
+-					      CAN_CTRLMODE_FD_NON_ISO;
++					      CAN_CTRLMODE_FD_NON_ISO |
++					      CAN_CTRLMODE_CC_LEN8_DLC;
+ 
+ 		status = ioread32(can->reg_base + KVASER_PCIEFD_KCAN_STAT_REG);
+ 		if (!(status & KVASER_PCIEFD_KCAN_STAT_FD)) {
+@@ -977,12 +982,14 @@ static int kvaser_pciefd_handle_data_packet(struct kvaser_pciefd *pcie,
+ 	struct can_priv *priv;
+ 	struct net_device_stats *stats;
+ 	u8 ch_id = (p->header[1] >> KVASER_PCIEFD_PACKET_CHID_SHIFT) & 0x7;
++	u8 dlc;
+ 
+ 	if (ch_id >= pcie->nr_channels)
+ 		return -EIO;
+ 
+ 	priv = &pcie->can[ch_id]->can;
+ 	stats = &priv->dev->stats;
++	dlc = (p->header[1] >> KVASER_PCIEFD_RPACKET_DLC_SHIFT) & 0xf;
+ 
+ 	if (p->header[1] & KVASER_PCIEFD_RPACKET_FDF) {
+ 		skb = alloc_canfd_skb(priv->dev, &cf);
+@@ -991,6 +998,7 @@ static int kvaser_pciefd_handle_data_packet(struct kvaser_pciefd *pcie,
+ 			return -ENOMEM;
+ 		}
+ 
++		cf->len = can_fd_dlc2len(dlc);
+ 		if (p->header[1] & KVASER_PCIEFD_RPACKET_BRS)
+ 			cf->flags |= CANFD_BRS;
+ 
+@@ -1002,14 +1010,13 @@ static int kvaser_pciefd_handle_data_packet(struct kvaser_pciefd *pcie,
+ 			stats->rx_dropped++;
+ 			return -ENOMEM;
+ 		}
++		can_frame_set_cc_len((struct can_frame *)cf, dlc, priv->ctrlmode);
+ 	}
+ 
+ 	cf->can_id = p->header[0] & CAN_EFF_MASK;
+ 	if (p->header[0] & KVASER_PCIEFD_RPACKET_IDE)
+ 		cf->can_id |= CAN_EFF_FLAG;
+ 
+-	cf->len = can_fd_dlc2len(p->header[1] >> KVASER_PCIEFD_RPACKET_DLC_SHIFT);
 -
--	return 0;
- }
- 
- static inline void kvaser_pciefd_set_skb_timestamp(const struct kvaser_pciefd *pcie,
-@@ -1456,7 +1454,7 @@ static int kvaser_pciefd_read_buffer(struct kvaser_pciefd *pcie, int dma_buf)
- 	return res;
- }
- 
--static int kvaser_pciefd_receive_irq(struct kvaser_pciefd *pcie)
-+static void kvaser_pciefd_receive_irq(struct kvaser_pciefd *pcie)
- {
- 	u32 irq;
- 
-@@ -1482,10 +1480,9 @@ static int kvaser_pciefd_receive_irq(struct kvaser_pciefd *pcie)
- 		dev_err(&pcie->pci->dev, "DMA IRQ error 0x%08X\n", irq);
- 
- 	iowrite32(irq, pcie->reg_base + KVASER_PCIEFD_SRB_IRQ_REG);
--	return 0;
- }
- 
--static int kvaser_pciefd_transmit_irq(struct kvaser_pciefd_can *can)
-+static void kvaser_pciefd_transmit_irq(struct kvaser_pciefd_can *can)
- {
- 	u32 irq = ioread32(can->reg_base + KVASER_PCIEFD_KCAN_IRQ_REG);
- 
-@@ -1503,7 +1500,6 @@ static int kvaser_pciefd_transmit_irq(struct kvaser_pciefd_can *can)
- 		netdev_err(can->can.dev, "Rx FIFO overflow\n");
- 
- 	iowrite32(irq, can->reg_base + KVASER_PCIEFD_KCAN_IRQ_REG);
--	return 0;
- }
- 
- static irqreturn_t kvaser_pciefd_irq_handler(int irq, void *dev)
+ 	if (p->header[0] & KVASER_PCIEFD_RPACKET_RTR) {
+ 		cf->can_id |= CAN_RTR_FLAG;
+ 	} else {
 -- 
 2.40.0
 
