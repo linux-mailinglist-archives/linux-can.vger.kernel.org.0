@@ -2,56 +2,57 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AD0070FFE8
-	for <lists+linux-can@lfdr.de>; Wed, 24 May 2023 23:20:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 111FA710001
+	for <lists+linux-can@lfdr.de>; Wed, 24 May 2023 23:29:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229447AbjEXVUx (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 24 May 2023 17:20:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56150 "EHLO
+        id S231688AbjEXV3b (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 24 May 2023 17:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbjEXVUw (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 24 May 2023 17:20:52 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9B2132;
-        Wed, 24 May 2023 14:20:45 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34OLKFGp073915;
-        Wed, 24 May 2023 16:20:15 -0500
+        with ESMTP id S231278AbjEXV33 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 24 May 2023 17:29:29 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54992132;
+        Wed, 24 May 2023 14:29:28 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34OLT2i8064437;
+        Wed, 24 May 2023 16:29:02 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1684963215;
-        bh=Anjqsreye1B4ntfPOBld6ZtkWYZAP0DjCad9lmUAkGE=;
+        s=ti-com-17Q1; t=1684963742;
+        bh=e4GDbMukzYM0sutIg07akQTX4m7teKg+iSzWf6JpbVw=;
         h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=uQVDZHbmTkpA/mH3J5yqgWVx2chzOoe0h/S9rI0FvmWZg2RLr8kCNiD+0QI/l7vN7
-         GHz9zCK1uhebWqdfMjN3GVdd85YboWrt2a2CcVyggl1AIqVb6lrYn8rF+RPNqE36Ze
-         v3G0ScixR4azV1CH8ODECmuYMLsxDuRC9nEG+D4A=
+        b=osx4bQruuwfuw/qTFQTJi70kmOO9xoW5EbPAmzdfupB844Gj4QdAoglP+DmHV+2Oy
+         zv1H4PxxOFmGNej8TT5KPGmbb+bOhpxap8HmZ86fpAOb5Vu4SQbPRoR/vpgoRKFSmQ
+         fHKE6aJWNJORuKCAM92E00NL24xQPHihIVWAM/DA=
 Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34OLKFcM030529
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34OLT2jn105929
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 24 May 2023 16:20:15 -0500
-Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE102.ent.ti.com
+        Wed, 24 May 2023 16:29:02 -0500
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE102.ent.ti.com
  (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 24
- May 2023 16:20:15 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ May 2023 16:29:01 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 24 May 2023 16:20:15 -0500
+ Frontend Transport; Wed, 24 May 2023 16:29:01 -0500
 Received: from [128.247.81.105] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34OLKFEC109050;
-        Wed, 24 May 2023 16:20:15 -0500
-Message-ID: <351cbfcc-a3be-ff23-ead7-5fc38013ecbb@ti.com>
-Date:   Wed, 24 May 2023 16:20:15 -0500
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34OLT1fJ007319;
+        Wed, 24 May 2023 16:29:01 -0500
+Message-ID: <8985ea03-a7dc-a0bc-a238-3099caadf740@ti.com>
+Date:   Wed, 24 May 2023 16:29:01 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
 Subject: Re: [PATCH v7 2/2] can: m_can: Add hrtimer to generate software
  interrupt
 Content-Language: en-US
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Simon Horman <simon.horman@corigine.com>
 CC:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
         <linux-can@vger.kernel.org>,
         Wolfgang Grandegger <wg@grandegger.com>,
-        "David S . Miller" <davem@davemloft.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>, <netdev@vger.kernel.org>,
@@ -64,10 +65,9 @@ CC:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
         Oliver Hartkopp <socketcan@hartkopp.net>,
         Tony Lindgren <tony@atomide.com>
 References: <20230523023749.4526-1-jm@ti.com>
- <20230523023749.4526-3-jm@ti.com>
- <20230523-crawlers-cupbearer-7a7cbfed010b-mkl@pengutronix.de>
+ <20230523023749.4526-3-jm@ti.com> <ZGyfAhp8op4GMElN@corigine.com>
 From:   Judith Mendez <jm@ti.com>
-In-Reply-To: <20230523-crawlers-cupbearer-7a7cbfed010b-mkl@pengutronix.de>
+In-Reply-To: <ZGyfAhp8op4GMElN@corigine.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
@@ -81,185 +81,22 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Marc,
+Hello Simon,
 
-On 5/23/23 1:35 AM, Marc Kleine-Budde wrote:
-> On 22.05.2023 21:37:49, Judith Mendez wrote:
+On 5/23/23 6:09 AM, Simon Horman wrote:
+> On Mon, May 22, 2023 at 09:37:49PM -0500, Judith Mendez wrote:
 >> Add an hrtimer to MCAN class device. Each MCAN will have its own
 >> hrtimer instantiated if there is no hardware interrupt found in
 >> device tree M_CAN node.
-> 
-> Please add a sentence why you introduce polling mode, i.e. there are
-> SoCs where the M_CAN interrupt is not available on the CPUs (which are
-> running Linux).
-
-Sure, I can do that, thanks.
-
-> 
+>>
 >> The hrtimer will generate a software interrupt every 1 ms. In
 >> hrtimer callback, we check if there is a transaction pending by
 >> reading a register, then process by calling the isr if there is.
 >>
 >> Signed-off-by: Judith Mendez <jm@ti.com>
->> ---
->> Changelog:
->> v7:
->> - Clean up m_can_platform.c if/else section after removing poll-interval
->> - Remove poll-interval from patch description
->> v6:
->> - Move hrtimer stop/start function calls to m_can_open and m_can_close to
->> support power suspend/resume
->> v5:
->> - Change dev_dbg to dev_info if hardware interrupt exists and polling
->> is enabled
->> v4:
->> - No changes
->> v3:
->> - Create a define for 1 ms polling interval
->> - Change plarform_get_irq to optional to not print error msg
->> v2:
->> - Add functionality to check for 'poll-interval' property in MCAN node
->> - Add 'polling' flag in driver to check if device is using polling method
->> - Check for timer polling and hardware interrupt cases, default to
->> hardware interrupt method
->> - Change ns_to_ktime() to ms_to_ktime()
->> ---
->>   drivers/net/can/m_can/m_can.c          | 33 ++++++++++++++++++++++++--
->>   drivers/net/can/m_can/m_can.h          |  4 ++++
->>   drivers/net/can/m_can/m_can_platform.c | 25 ++++++++++++++++---
->>   3 files changed, 57 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
->> index a5003435802b..f273d989bdff 100644
->> --- a/drivers/net/can/m_can/m_can.c
->> +++ b/drivers/net/can/m_can/m_can.c
->> @@ -11,6 +11,7 @@
->>   #include <linux/bitfield.h>
->>   #include <linux/can/dev.h>
->>   #include <linux/ethtool.h>
->> +#include <linux/hrtimer.h>
->>   #include <linux/interrupt.h>
->>   #include <linux/io.h>
->>   #include <linux/iopoll.h>
->> @@ -308,6 +309,9 @@ enum m_can_reg {
->>   #define TX_EVENT_MM_MASK	GENMASK(31, 24)
->>   #define TX_EVENT_TXTS_MASK	GENMASK(15, 0)
->>   
->> +/* Hrtimer polling interval */
->> +#define HRTIMER_POLL_INTERVAL		1
->> +
->>   /* The ID and DLC registers are adjacent in M_CAN FIFO memory,
->>    * and we can save a (potentially slow) bus round trip by combining
->>    * reads and writes to them.
->> @@ -895,7 +899,7 @@ static int m_can_handle_bus_errors(struct net_device *dev, u32 irqstatus,
->>   			netdev_dbg(dev, "Arbitration phase error detected\n");
->>   			work_done += m_can_handle_lec_err(dev, lec);
->>   		}
->> -		
->> +
 > 
-> Unrelated change. I've send a separate patch to fix the problem.
-
-Sorry about this, this was not intentional.
-
+> ...
 > 
->>   		if (is_lec_err(dlec)) {
->>   			netdev_dbg(dev, "Data phase error detected\n");
->>   			work_done += m_can_handle_lec_err(dev, dlec);
->> @@ -1414,6 +1418,12 @@ static int m_can_start(struct net_device *dev)
->>   
->>   	m_can_enable_all_interrupts(cdev);
->>   
->> +	if (cdev->polling) {
->> +		dev_dbg(cdev->dev, "Start hrtimer\n");
->> +		hrtimer_start(&cdev->hrtimer, ms_to_ktime(HRTIMER_POLL_INTERVAL),
->> +			      HRTIMER_MODE_REL_PINNED);
->> +	}
->> +
->>   	return 0;
->>   }
->>   
->> @@ -1571,6 +1581,11 @@ static void m_can_stop(struct net_device *dev)
->>   	/* disable all interrupts */
->>   	m_can_disable_all_interrupts(cdev);
->>   
->> +	if (cdev->polling) {
->> +		dev_dbg(cdev->dev, "Disabling the hrtimer\n");
->> +		hrtimer_cancel(&cdev->hrtimer);
->> +	}
->> +
-> 
-> This might be a racy. Please move the disabling of the hrtimer before
-> disabling all interrupts. This makes it also symmetric with respect to
-> m_can_start().
-
-This makes sense.
-
-> 
->>   	/* Set init mode to disengage from the network */
->>   	m_can_config_endisable(cdev, true);
->>   
->> @@ -1793,6 +1808,18 @@ static netdev_tx_t m_can_start_xmit(struct sk_buff *skb,
->>   	return NETDEV_TX_OK;
->>   }
->>   
->> +static enum hrtimer_restart hrtimer_callback(struct hrtimer *timer)
->> +{
->> +	struct m_can_classdev *cdev = container_of(timer, struct
->> +						   m_can_classdev, hrtimer);
->> +
->> +	m_can_isr(0, cdev->net);
->> +
->> +	hrtimer_forward_now(timer, ms_to_ktime(HRTIMER_POLL_INTERVAL));
->> +
->> +	return HRTIMER_RESTART;
->> +}
->> +
->>   static int m_can_open(struct net_device *dev)
->>   {
->>   	struct m_can_classdev *cdev = netdev_priv(dev);
->> @@ -1831,9 +1858,11 @@ static int m_can_open(struct net_device *dev)
->>   		err = request_threaded_irq(dev->irq, NULL, m_can_isr,
->>   					   IRQF_ONESHOT,
->>   					   dev->name, dev);
->> -	} else {
->> +	} else if (!cdev->polling) {
->>   		err = request_irq(dev->irq, m_can_isr, IRQF_SHARED, dev->name,
->>   				  dev);
->> +	} else {
->> +		cdev->hrtimer.function = &hrtimer_callback;
-> 
-> I think you can move this assignment to m_can_class_register(). We only
-> need to set the function once.
-
-Great idea!
-
-> 
->>   	}
->>   
->>   	if (err < 0) {
->> diff --git a/drivers/net/can/m_can/m_can.h b/drivers/net/can/m_can/m_can.h
->> index a839dc71dc9b..e9db5cce4e68 100644
->> --- a/drivers/net/can/m_can/m_can.h
->> +++ b/drivers/net/can/m_can/m_can.h
->> @@ -15,6 +15,7 @@
->>   #include <linux/device.h>
->>   #include <linux/dma-mapping.h>
->>   #include <linux/freezer.h>
->> +#include <linux/hrtimer.h>
->>   #include <linux/interrupt.h>
->>   #include <linux/io.h>
->>   #include <linux/iopoll.h>
->> @@ -93,6 +94,9 @@ struct m_can_classdev {
->>   	int is_peripheral;
->>   
->>   	struct mram_cfg mcfg[MRAM_CFG_NUM];
->> +
->> +	struct hrtimer hrtimer;
->> +	bool polling;
->>   };
->>   
->>   struct m_can_classdev *m_can_class_allocate_dev(struct device *dev, int sizeof_priv);
 >> diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m_can/m_can_platform.c
 >> index 94dc82644113..b639c9e645d3 100644
 >> --- a/drivers/net/can/m_can/m_can_platform.c
@@ -277,19 +114,6 @@ Great idea!
 >>   
 >>   	addr = devm_platform_ioremap_resource_byname(pdev, "m_can");
 >> -	irq = platform_get_irq_byname(pdev, "int0");
-> 
-> I think irq will be uninitialized after this change. Although the
-> compiler doesn't complain :(
-
-Agreed, I did notice this when testing. But is it an issue?
-
-> 
-> BTW: I think we don't need the "polling" variable in the priv. We can
-> make use of "irq". "irq" being 0 means use polling.
-
-True, but is using the polling flag easier for the user to read?
-
-> 
 >> -	if (IS_ERR(addr) || irq < 0) {
 >> -		ret = -EINVAL;
 >> +	if (IS_ERR(addr)) {
@@ -307,13 +131,6 @@ True, but is using the polling flag easier for the user to read?
 >> +		}
 >> +		if (irq < 0) {
 >> +			ret = -ENXIO;
-
-EINVAL? Wouldn't ENXIO (No such device or address) be more appropriate than
-invalid argument?
-
-> 
-> Please return the original error code.
-> 
 >> +			goto probe_fail;
 >> +		}
 >> +	} else {
@@ -322,9 +139,32 @@ invalid argument?
 >> +		hrtimer_init(&mcan_class->hrtimer, CLOCK_MONOTONIC,
 >> +			     HRTIMER_MODE_REL_PINNED);
 >> +	}
+> 
+> Hi Judith,
+> 
+> it seems that with this change irq is only set in the first arm of
+> the above conditional. But later on it is used unconditionally.
+> That is, it may be used uninitialised.
+> 
+> Reported by gcc-12 as:
+> 
+>   drivers/net/can/m_can/m_can_platform.c: In function 'm_can_plat_probe':
+>   drivers/net/can/m_can/m_can_platform.c:150:30: warning: 'irq' may be used uninitialized [-Wmaybe-uninitialized]
+>     150 |         mcan_class->net->irq = irq;
+>         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~
+>   drivers/net/can/m_can/m_can_platform.c:86:13: note: 'irq' was declared here
+>      86 |         int irq, ret = 0;
+>         |             ^~~
+> 
+
+Maybe a good solution is to initialize irq=0 here.
+
 >> +
 >>   	/* message ram could be shared */
 >>   	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "message_ram");
 >>   	if (!res) {
+>> -- 
+>> 2.17.1
+
 
 ~Judith
