@@ -2,51 +2,72 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC4670EF2E
-	for <lists+linux-can@lfdr.de>; Wed, 24 May 2023 09:16:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ACF970EF98
+	for <lists+linux-can@lfdr.de>; Wed, 24 May 2023 09:40:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239760AbjEXHQe (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 24 May 2023 03:16:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53560 "EHLO
+        id S235054AbjEXHkO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 24 May 2023 03:40:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239654AbjEXHQD (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 24 May 2023 03:16:03 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9C0B3
-        for <linux-can@vger.kernel.org>; Wed, 24 May 2023 00:15:48 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1q1iin-0008Vs-V2; Wed, 24 May 2023 09:15:46 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id CF1751CAECB;
-        Wed, 24 May 2023 07:15:44 +0000 (UTC)
-Date:   Wed, 24 May 2023 09:15:44 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Frank Jungclaus <frank.jungclaus@esd.eu>
-Cc:     linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] can: esd_usb: More preparation before supporting esd
- CAN-USB/3 (addendum)
-Message-ID: <20230524-brownnose-spinster-6f4a9d600b21-mkl@pengutronix.de>
-References: <20230523173105.3175086-1-frank.jungclaus@esd.eu>
+        with ESMTP id S234173AbjEXHkN (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 24 May 2023 03:40:13 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CED490
+        for <linux-can@vger.kernel.org>; Wed, 24 May 2023 00:40:11 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b03d3e41fcso17852191fa.0
+        for <linux-can@vger.kernel.org>; Wed, 24 May 2023 00:40:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kvaser.com; s=google; t=1684914009; x=1687506009;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wPEoHWWWFcR8ugYvJb1slJS1oYz2dG1SRLSh7TBkM5w=;
+        b=kvl0r0/EK5/IRVKEzcd6S6U72sgKZcE6Rr5+bW4uCVlWxPa0jdsTuNVSam4Ut3WOgn
+         0NvtKFO6o+idYHg33L4QSRNJUAI59GEeCoRS/3UCkCQ2rcH+qd1mV30F5Z/xY2mzGUZn
+         iJ4kG1KwGQEO3Kpqx2cB/7EmMuYZynpBunnwnDOuxerLKMVt3uPOC81GIoC19AMbToOx
+         y4F5RxguZvsq6J2YrTAFcK75Z/irxeKQQF0xmQWRt4+QtErSSsmLTt51S/W+2G1zTOwn
+         YAkPh6lZhjcoxOJbFHrCqZ6UD5z7DcW+Mcd0VB3pX1vIS/ug/E5P/Rw4n+lAsrP58YF1
+         bMYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684914009; x=1687506009;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wPEoHWWWFcR8ugYvJb1slJS1oYz2dG1SRLSh7TBkM5w=;
+        b=jR88erWnunDJHpC1fOIDr5dBcVzSRhBxCFcRWasvMmxtw2zYb+xY4mr9kLaCEv18XJ
+         YCze4VCGy6qLfUXrAYGAwCIO4sbeCzt3CcHtx82h/X+VLhZizcQtJkgYDMARsnHq61Am
+         qPLxIW20hV8pdhILulIuFFgC6PJfeli4Pfu88nVrcaJrPVZcX2ARK5T23x9oIFralUQa
+         1UvITEspLQRZhKfO0rfyp8AiYdXioAvuoM132He8chen/9rqnAhrsdyvWbcTe4SN2kcF
+         k+xZLZ7EIcZdgWyv06rThEHY92/vCSlwklN8+N83L8nSFoEB+zW/0RPlo1SK60uUyjpJ
+         cTPA==
+X-Gm-Message-State: AC+VfDwjv6YuuY4jKkHlqdr4VGXFuNO8D3xeMOiEP/Lk/Qv7FTG0Uusc
+        N0+jHk1iASAagadroqRTkwsGJw==
+X-Google-Smtp-Source: ACHHUZ6C3jfzezlLYuzWNwC0NWciyqeWgU+0DPmnOz4xeGf2EHNYHSF5WgVf0ttwQevigKFG/tDR4w==
+X-Received: by 2002:a05:6512:90d:b0:4f1:4898:d183 with SMTP id e13-20020a056512090d00b004f14898d183mr5093677lft.25.1684914009280;
+        Wed, 24 May 2023 00:40:09 -0700 (PDT)
+Received: from [10.0.6.3] (rota.kvaser.com. [195.22.86.90])
+        by smtp.gmail.com with ESMTPSA id q11-20020ac246eb000000b004f001b0eda2sm1622017lfo.56.2023.05.24.00.40.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 May 2023 00:40:08 -0700 (PDT)
+Subject: Re: [PATCH 11/12] can: kvaser_pciefd: Refactor code
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     linux-can@vger.kernel.org,
+        Jimmy Assarsson <jimmyassarsson@gmail.com>
+References: <20230523094354.83792-1-extja@kvaser.com>
+ <20230523094354.83792-12-extja@kvaser.com>
+ <CAMZ6RqJbT_rfd=Ueds502b12JaJOG9xevZdSDSV50v5epqtwug@mail.gmail.com>
+From:   Jimmy Assarsson <extja@kvaser.com>
+Message-ID: <01b58f55-7d54-cbc6-9af8-7a7a88b53fae@kvaser.com>
+Date:   Wed, 24 May 2023 09:40:07 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zezrvyawup3qxqy4"
-Content-Disposition: inline
-In-Reply-To: <20230523173105.3175086-1-frank.jungclaus@esd.eu>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+In-Reply-To: <CAMZ6RqJbT_rfd=Ueds502b12JaJOG9xevZdSDSV50v5epqtwug@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,46 +76,44 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On 2023-05-23 13:27, Vincent MAILHOL wrote:
+> Hi Jimmy,
+> 
+> I have one single comment for this series.
 
---zezrvyawup3qxqy4
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Vincent,
 
-On 23.05.2023 19:31:03, Frank Jungclaus wrote:
-> While trying to again merge my code changes for CAN-USB/3, I came
-> across some more places where it could make sense to change them
-> analogous to the previous clean-up patch series [1].
->=20
-> [1] [PATCH v2 0/6] can: esd_usb: More preparation before supporting esd C=
-AN-USB/3
-> Link: https://lore.kernel.org/all/20230519195600.420644-1-frank.jungclaus=
-@esd.eu/
+Thanks for the feedback!
 
-Applied to linux-can-next.
+> On Tue. 23 May 2023 at 18:55, Jimmy Assarsson <extja@kvaser.com> wrote:
+>> Refactor code;
+>>   - Format code
+>>   - Replace constants with macros
+>>   - Rename variables and macros
+>>   - Remove intermediate variable
+>>   - Add/remove blank lines
+>>   - Add function to fetch channel id from Rx packets
+>>   - Reduce scope of variables
+>>
+>> Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
+>> ---
 
-Thanks,
-Marc
+...
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+>> +static inline u8 kvaser_pciefd_rx_packet_get_ch_id(struct kvaser_pciefd_rx_packet *p)
+>> +{
+>> +       return (p->header[1] >> KVASER_PCIEFD_PACKET_CHID_SHIFT) & KVASER_PCIEFD_PACKET_CHID_MASK;
+> 
+> Instead of shifting and appliying the mask, define a mask which is
+> already shifted with GEN_MASK.
+> 
+>    Then use the FIELD_GET and FIELD_PREP from linux/bitfield.h.
+> 
+> The same comment applies to the other shift and mask operations.
+> 
+> This GEN_MASK, FIELD_GET and FIELD_PREP can be a separate patch.
 
---zezrvyawup3qxqy4
-Content-Type: application/pgp-signature; name="signature.asc"
+Good point, will fix this in v2.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRtuZ0ACgkQvlAcSiqK
-BOiaDAgAk8zZ0dPy7U85VzvgRKUxB9JKLi/zjcsbhjpgfZTB84AmOPgiOLNU1z2r
-G1C5FoTH4SKl6v1gICkNMp+6X67g3V+hnP6inrpRMs1Z5Ki2p/MWy3g8GTWMkMOZ
-0qU0dc0TwGqQ++/AAl+zKSa9MkBieo7dsGWdqYW4CDPgeaElDNliLE12/D3G3YZR
-sSpRdHgpLmowBPSI7x/FtowfRkGp0CctwrYywVERR+jmfacSH/sKwK+nX525zk+Z
-i6GnvF+yabuXJtpR3ztzmPe1K5CVjH7mXTqLEWam1WOMN7aJm588b8+7AMD8c4Yh
-I1WFL110Kjp1DXEAt/7/i2jX2LzidQ==
-=wh88
------END PGP SIGNATURE-----
-
---zezrvyawup3qxqy4--
+Best regards,
+jimmy
