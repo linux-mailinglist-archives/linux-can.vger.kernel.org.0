@@ -2,93 +2,64 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AC8670E3F1
-	for <lists+linux-can@lfdr.de>; Tue, 23 May 2023 19:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6889970ED17
+	for <lists+linux-can@lfdr.de>; Wed, 24 May 2023 07:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236069AbjEWRb4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 23 May 2023 13:31:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34036 "EHLO
+        id S232881AbjEXFbf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 24 May 2023 01:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237109AbjEWRbv (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 23 May 2023 13:31:51 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on20707.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e1b::707])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFFB10EA;
-        Tue, 23 May 2023 10:31:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lqg0aTWdBjAS/MtGIGFfDVjaxn28JBYQy90Rhlmk2n6MtYNLoCMjpYCyvsvlSwTYKqwklqHV1l2pEHlTnr+yqviLF7X30wSXZWUqJPiOjtTCvSiW8yOa9OWveiuKIcFpsY0t2LNoDyJO2sDicWQJBZe0ThGUcZok9JvPRfr40hsVd+dUleuvCaEjJmUWoQs9Kt9hN626bRGAXoAS9iAZF4OxCbyM4+EwelUQXKl4AEiG96Qk+sK84du9NAJXXz5bi5arOT4Tts/hILMwSHUtNQjYbWKPdwzjakXXhfg5fpuh6PKMdY5/aqiRHSiaF+Jg19m1NIw+lGB0IYvCjw0yAQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tfJRPzi2hkbffzi6LCRoAYKv7B2ODW65P9OLf03cknE=;
- b=hW0NsLGmEhXIRWRoKp6XPv2ugIbrRu308Ci6fpB7SI6uVXBPI7W7S/L4fy+VV5RnTjTAPu+dZe9syjD1PwPwaPT+k4XSs38ky3UErx5mjCDqsEccwe+Dy+mXkxURCtDiCfcsKKkXiDxgEBZVwJCz/v9QS/gWSX0rpA2Q0c43qLDCh3WB/rWB5BsjonhX0Wh1xx0sxYe9jltRis002tmi9dQclBLf4uy6iWQ7hHaRpgWMYpfECiBw0GQ1MVuXMyKNdpBBCU2KDZJKxNuYiCWhpaoN87J6kQaSP+ronmuMz8j2SSP0KzfGR0AaoNoSck2zUAnyNTDsZfEkR3/hpndkhA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
- is 80.151.164.27) smtp.rcpttodomain=esd.eu smtp.mailfrom=esd.eu; dmarc=none
- action=none header.from=esd.eu; dkim=none (message not signed); arc=none
+        with ESMTP id S239424AbjEXFb1 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 24 May 2023 01:31:27 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C69E41
+        for <linux-can@vger.kernel.org>; Tue, 23 May 2023 22:31:10 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-25332422531so630416a91.0
+        for <linux-can@vger.kernel.org>; Tue, 23 May 2023 22:31:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=esdhannover.onmicrosoft.com; s=selector1-esdhannover-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tfJRPzi2hkbffzi6LCRoAYKv7B2ODW65P9OLf03cknE=;
- b=IrOtSE+ZPEy+Sy7nIlGx1D8497gyT8vG22WmPcUgBak+D9U5mdwTa8msz1I/DQdUpWPcYymq0LupimTYFxQ6+ruFVczSDdeSzKa0Tq7CNVW255lgTHmSYvdt1Cv3+L0cCc3NCGs/KNQ5lCXglfYkMIKmfniLQUm4geEMmupMYZU=
-Received: from AM0PR03CA0061.eurprd03.prod.outlook.com (2603:10a6:208::38) by
- AS8PR03MB7477.eurprd03.prod.outlook.com (2603:10a6:20b:2b7::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6411.29; Tue, 23 May 2023 17:31:07 +0000
-Received: from AM7EUR06FT063.eop-eur06.prod.protection.outlook.com
- (2603:10a6:208:0:cafe::66) by AM0PR03CA0061.outlook.office365.com
- (2603:10a6:208::38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.29 via Frontend
- Transport; Tue, 23 May 2023 17:31:07 +0000
-X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
- 80.151.164.27) smtp.mailfrom=esd.eu; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=esd.eu;
-Received-SPF: SoftFail (protection.outlook.com: domain of transitioning esd.eu
- discourages use of 80.151.164.27 as permitted sender)
-Received: from esd-s7.esd (80.151.164.27) by
- AM7EUR06FT063.mail.protection.outlook.com (10.233.255.147) with Microsoft
- SMTP Server id 15.20.6433.14 via Frontend Transport; Tue, 23 May 2023
- 17:31:07 +0000
-Received: from esd-s20.esd.local (jenkins.esd [10.0.0.190])
-        by esd-s7.esd (Postfix) with ESMTPS id 03EDE7C16E3;
-        Tue, 23 May 2023 19:31:07 +0200 (CEST)
-Received: by esd-s20.esd.local (Postfix, from userid 2046)
-        id EC1E42E1806; Tue, 23 May 2023 19:31:06 +0200 (CEST)
-From:   Frank Jungclaus <frank.jungclaus@esd.eu>
-To:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Frank Jungclaus <frank.jungclaus@esd.eu>
-Subject: [PATCH 2/2] can: esd_usb: Use consistent prefix ESD_USB_ for macros
-Date:   Tue, 23 May 2023 19:31:05 +0200
-Message-Id: <20230523173105.3175086-3-frank.jungclaus@esd.eu>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230523173105.3175086-1-frank.jungclaus@esd.eu>
-References: <20230523173105.3175086-1-frank.jungclaus@esd.eu>
+        d=gmail.com; s=20221208; t=1684906270; x=1687498270;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z936gOiVRN2f8CxYaPFNRFl4gZMz9wRY2If+p7ka5q8=;
+        b=UTMPljeFGiX/NgU/J4v67fgH/24dbVzC3tHLBNBqoOxdpKQDjXm3d+MuS6bO7aXO4S
+         mOVvWXmCADr6CuucQYKNY2tdC2//Zc7/I9fWbkf8QYs5Cioo/07X6hGMq5WODnLX5Doz
+         878CIl5MTZQdMROitPjhX1hJen1yWTv+D2lmdeN5Rj2EGj8/SGbXs2++1vOBh6Gt/TAl
+         S96HaXYJX2Wrn1au1G6EUf7xIgBG19kttkFu37QHpGI9eZJ2Hmq5mbW5ot2rcIqpflzT
+         BcnsbgEJNLuTLZo5sD+buAX6vFRLJ0IRCssBaowayDxjEo8xp2RTX9sPfKzP5OhxT+fd
+         yA4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684906270; x=1687498270;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Z936gOiVRN2f8CxYaPFNRFl4gZMz9wRY2If+p7ka5q8=;
+        b=TDJbZzlJRKrdN0jvBt5NnayY1hXtN/KI2WSu+1bSRYiG1Ikri0E1feR2NQTEaqTaEV
+         hVTfvU1SgrJsPOfdo28guEyuWKSEAnN0eWMs9zZkCNvPcp5jqWgmSAbusFE5p517vi/+
+         Y8Kj3ILQjXnpF3Wa+KgTE+DMaSqKDryaeRUWhgVP0ZEVwXSW78sqBMk6M/adqbnbAGyU
+         TP/HqZv9JEqZJwq2iYRWBcJ8Pyj58IR9UPzOuC4nNBLvW11YmeSZ4HqU+Qqfq2Hj1xm8
+         4t9QBzTOmyQq+/D6zyn87pCmFnzDZoVvfLQdSr53Lm9WxFMCimYLjMdw1/N/kXSEku4q
+         xV/g==
+X-Gm-Message-State: AC+VfDw1Tk5VDLpeWnAShOybImZ0X4wQ21/THKlqB5PyMpSMnWaFRfI9
+        Gr6SZ8GIYd6yza3LwZbntF292301psAj3fljppI=
+X-Google-Smtp-Source: ACHHUZ4jm9C1qG/XfqEdtSBHk2arTcFEXcVKWgN53ECDsez0Ft47NLqFG3kOkUg4SWW8EPWbVFBkLVNWOIfFGEyiFZM=
+X-Received: by 2002:a17:90b:4f8b:b0:255:c061:9e6b with SMTP id
+ qe11-20020a17090b4f8b00b00255c0619e6bmr2850056pjb.11.1684906269996; Tue, 23
+ May 2023 22:31:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM7EUR06FT063:EE_|AS8PR03MB7477:EE_
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: ce9ae933-4035-4392-f8ea-08db5bb37e1f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1BupReRPjtI9hZzcaN6gC5LDbZllAaMg7Kv8cbpDIrJ0XH6rNc+ixSqNzmIlUDnS14ipMu+BpHFZZRZHsAI2uyYdOSnzc7Cf//ITZab/uiJw3OGtEMINvB5M+fF4/bV1s/3IGK9OAKl0oXdYGly9qxQ7e6ijPPYefSGNnNBWkHnnXbs5O0gSOI1Q4KDILIOZtfLiXKisE+n0vuCiDbwCEAGM8v9f/eLAjNftW0TvPZm8YzHKtI5j9YE8XLSWiDN9fLbpnAxCqqH7zyzZjrW9VtDpDnBIQYIQgD/uHC55Bgx1JMAQunxwDpM17r0W+5uqFT6CHxPLBwDfBCjKGWgCTD84IpCqRzajmp+DIDXG0jXuAgxa2mo8Dsw4mDLvodq+gEV8cmtah9TNYnHnzi/U3sm5xNdpQEQWYVI9Lgdn8Jh1mKwQnm1aAXBn4CnSn2WC84sGR53PIi2pgddDfyIIVBY7XyI1IgErDZFkdAQSqYVM2ObPUUPtdmRdW2ys21sauzq64lRt3CMeMKPlvQryRXo94kYKPNRmUBqNWJ2lzH1a+jehLPPnyAez6bslLP0/fGHHjogXatPew8NFBfh90Y9MuQawdTQ2d4pOWvuvlAcGxn5qJ7TKiH6x0Kh/3GV68w/u7emjqoScvZRFi0asTyLaXS23iBKHhNpbGuUtpDVxvW/FDUFeYk2UMQdGsxWZredzkZC5dU08mDiVQS/cYQ==
-X-Forefront-Antispam-Report: CIP:80.151.164.27;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:esd-s7.esd;PTR:p5097a41b.dip0.t-ipconnect.de;CAT:NONE;SFS:(13230028)(4636009)(396003)(39840400004)(376002)(346002)(136003)(451199021)(46966006)(36840700001)(54906003)(42186006)(110136005)(70586007)(70206006)(82310400005)(478600001)(86362001)(4326008)(316002)(36860700001)(81166007)(47076005)(356005)(83380400001)(41300700001)(336012)(186003)(2616005)(36756003)(6266002)(44832011)(2906002)(1076003)(26005)(5660300002)(40480700001)(8676002)(8936002);DIR:OUT;SFP:1102;
-X-OriginatorOrg: esd.eu
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2023 17:31:07.5574
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ce9ae933-4035-4392-f8ea-08db5bb37e1f
-X-MS-Exchange-CrossTenant-Id: 5a9c3a1d-52db-4235-b74c-9fd851db2e6b
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5a9c3a1d-52db-4235-b74c-9fd851db2e6b;Ip=[80.151.164.27];Helo=[esd-s7.esd]
-X-MS-Exchange-CrossTenant-AuthSource: AM7EUR06FT063.eop-eur06.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR03MB7477
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230515212930.1019702-1-mkl@pengutronix.de> <CAMZ6RqKToYbfsOX4v_jK7X28hLyiYnH7j784eVeFuKrj7ujRSA@mail.gmail.com>
+ <20230522215354.2c79c007@gmx.net> <20230522-hesitant-dehydrate-d2af514565d0-mkl@pengutronix.de>
+In-Reply-To: <20230522-hesitant-dehydrate-d2af514565d0-mkl@pengutronix.de>
+From:   Vincent Mailhol <vincent.mailhol@gmail.com>
+Date:   Wed, 24 May 2023 14:30:58 +0900
+Message-ID: <CAMZ6Rq+-4D_W8d_2wxuN5TnTmRZ4+C3MwGuBOVNH_vQ2UveTbw@mail.gmail.com>
+Subject: Re: [PATCH v8] can: usb: IXXAT USB-to-CAN adapters drivers
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Peter Seiderer <ps.report@gmx.net>, linux-can@vger.kernel.org,
+        Florian Ferg <flfe@hms-networks.de>, socketcan@hms-networks.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,75 +67,197 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Rename the following macros:
-- ESD_RTR to ESD_USB_RTR
-- ESD_EV_CAN_ERROR_EXT to ESD_USB_EV_CAN_ERROR_EXT
+On Tue. 23 May 2023 at 05:06, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> On 22.05.2023 21:53:54, Peter Seiderer wrote:
+> > > > +static int ixxat_usb_init_ctrl(struct ixxat_usb_device *dev)
+> > > > +{
+> > > > +       const struct can_bittiming *bt = &dev->can.bittiming;
+> > > > +       const u16 port = dev->ctrl_index;
+> > > > +       int err;
+> > > > +       struct ixxat_usb_init_cl1_cmd *cmd;
+> > > > +       const u32 rcv_size = sizeof(cmd->res);
+> > > > +       const u32 snd_size = sizeof(*cmd);
+> > >
+> > > Remove those size variables and directly use sizeof(cmd->res) and
+> > > sizeof(*cmd) in the code.
+> >
+> > O.k.
+> >
+> > >
+> > > > +       u8 opmode = IXXAT_USB_OPMODE_EXTENDED | IXXAT_USB_OPMODE_STANDARD;
+> > > > +       u8 btr0 = ((bt->brp - 1) & 0x3f) | (((bt->sjw - 1) & 0x3) << 6);
+> > >
+> > > Add a macro definition for the 0x3f  and 0x3 masks using GENMASK() and
+> > > then calculate the value using FIELD_PREP().
+> >
+> > O.k., define names o.k.?
+>
+> ACK
+>
+> > +#define IXXAT_USB_CAN_BTR0_BRP_MASK GENMASK(5, 0)
+> > +#define IXXAT_USB_CAN_BTR0_SJW_MASK GENMASK(7, 6)
+>
+> Now use:
+>         btr0 = FIELD_PREP(IXXAT_USB_CAN_BTR0_BRP_MASK, bt->brp - 1) |
+>                 FIELD_PREP(IXXAT_USB_CAN_BTR0_SJW_MASK, bt->sjw - 1);
+>
+> [...]
+>
+> > > > +static void ixxat_usb_update_ts_now(struct ixxat_usb_device *dev, u32 ts_now)
+> > > > +{
+> > > > +       u32 *ts_dev = &dev->time_ref.ts_dev_0;
+> > > > +       ktime_t *kt_host = &dev->time_ref.kt_host_0;
+> > > > +       u64 timebase = (u64)0x00000000FFFFFFFF - (u64)(*ts_dev) + (u64)ts_now;
+> > >
+> > > Replace 0x00000000FFFFFFFF by U32_MAX from linux/limits.h
+> >
+> > O.k.
+>
+> Can you read the free running timer register a USB transfer? If so, it's
+> better to use the cyclecounter/timecounter framework.
+>
+> [...]
+>
+> > > > +static void ixxat_usb_decode_buf(struct urb *urb)
+> > > > +{
+> > > > +       struct ixxat_usb_device *dev = urb->context;
+> > > > +       struct net_device *netdev = dev->netdev;
+> > > > +       struct ixxat_can_msg *can_msg;
+> > > > +       int err = 0;
+> > > > +       u32 pos = 0;
+> > > > +       u8 *data = urb->transfer_buffer;
+> > > > +
+> > > > +       while (pos < urb->actual_length) {
+> > > > +               u32 time;
+> > > > +               u8 size;
+> > > > +               u8 type;
+> > > > +
+> > > > +               can_msg = (struct ixxat_can_msg *)&data[pos];
+> > > > +               if (!can_msg || !can_msg->base.size) {
+> > > > +                       err = -ENOTSUPP;
+> >
+> > checkpatch.pl warns about this one:
+> >
+> >       WARNING: ENOTSUPP is not a SUSV4 error code, prefer EOPNOTSUPP
+> >       #1045: FILE: drivers/net/can/usb/ixxat_usb/ixxat_usb_core.c:644:
+> >       +                       err = -ENOTSUPP;
+> >
+> > Is EOPNOTSUPP appropriate (or EBADMSG as below)?
+>
+> EBADMSG sounds good.
 
-Additionally remove the double newline trailing to definition
-of ESD_USB_RTR.
+These being used within your driver, I think it is fine to use what
+you think is convenient. At the end of the day, if there is an issue,
+the error code will be reported to the maintainer (you?). Of course,
+it is always better to silence the checkpatch.pl warnings.
 
-Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
----
- drivers/net/can/usb/esd_usb.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+EBADMSG is good. I also like EMSGSIZE. While EMSGSIZE is normally
+reserved for "Message[s] too long":
 
-diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_usb.c
-index d40a04db7458..6201637ac0ff 100644
---- a/drivers/net/can/usb/esd_usb.c
-+++ b/drivers/net/can/usb/esd_usb.c
-@@ -43,8 +43,7 @@ MODULE_LICENSE("GPL v2");
- #define ESD_USB_CMD_IDADD		6 /* also used for IDADD_REPLY */
- 
- /* esd CAN message flags - dlc field */
--#define ESD_RTR	BIT(4)
--
-+#define ESD_USB_RTR	BIT(4)
- 
- /* esd CAN message flags - id field */
- #define ESD_USB_EXTID	BIT(29)
-@@ -52,7 +51,7 @@ MODULE_LICENSE("GPL v2");
- #define ESD_USB_IDMASK	GENMASK(28, 0)
- 
- /* esd CAN event ids */
--#define ESD_EV_CAN_ERROR_EXT	2 /* CAN controller specific diagnostic data */
-+#define ESD_USB_EV_CAN_ERROR_EXT	2 /* CAN controller specific diagnostic data */
- 
- /* baudrate message flags */
- #define ESD_USB_LOM	BIT(30) /* Listen Only Mode */
-@@ -228,7 +227,7 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
- 	struct sk_buff *skb;
- 	u32 id = le32_to_cpu(msg->rx.id) & ESD_USB_IDMASK;
- 
--	if (id == ESD_EV_CAN_ERROR_EXT) {
-+	if (id == ESD_USB_EV_CAN_ERROR_EXT) {
- 		u8 state = msg->rx.ev_can_err_ext.status;
- 		u8 ecc = msg->rx.ev_can_err_ext.ecc;
- 
-@@ -341,13 +340,13 @@ static void esd_usb_rx_can_msg(struct esd_usb_net_priv *priv,
- 		}
- 
- 		cf->can_id = id & ESD_USB_IDMASK;
--		can_frame_set_cc_len(cf, msg->rx.dlc & ~ESD_RTR,
-+		can_frame_set_cc_len(cf, msg->rx.dlc & ~ESD_USB_RTR,
- 				     priv->can.ctrlmode);
- 
- 		if (id & ESD_USB_EXTID)
- 			cf->can_id |= CAN_EFF_FLAG;
- 
--		if (msg->rx.dlc & ESD_RTR) {
-+		if (msg->rx.dlc & ESD_USB_RTR) {
- 			cf->can_id |= CAN_RTR_FLAG;
- 		} else {
- 			for (i = 0; i < cf->len; i++)
-@@ -767,7 +766,7 @@ static netdev_tx_t esd_usb_start_xmit(struct sk_buff *skb,
- 	msg->tx.id = cpu_to_le32(cf->can_id & CAN_ERR_MASK);
- 
- 	if (cf->can_id & CAN_RTR_FLAG)
--		msg->tx.dlc |= ESD_RTR;
-+		msg->tx.dlc |= ESD_USB_RTR;
- 
- 	if (cf->can_id & CAN_EFF_FLAG)
- 		msg->tx.id |= cpu_to_le32(ESD_USB_EXTID);
--- 
-2.25.1
+  https://elixir.bootlin.com/linux/latest/source/include/uapi/asm-generic/errno.h#L73
 
+it describes the issue pretty well.
+
+> [...]
+>
+> > > > +static void ixxat_usb_read_bulk_callback(struct urb *urb)
+> > > > +{
+> > > > +       struct ixxat_usb_device *dev = urb->context;
+> > > > +       const struct ixxat_usb_adapter *adapter = dev->adapter;
+> > > > +       struct net_device *netdev = dev->netdev;
+> > > > +       struct usb_device *udev = dev->udev;
+> > > > +       int err;
+> > > > +
+> > > > +       if (!netif_device_present(netdev))
+> > > > +               return;
+> > > > +
+> > > > +       switch (urb->status) {
+> > > > +       case 0: /* success */
+> > > > +               break;
+> > > > +       case -EPROTO:
+> > > > +       case -EILSEQ:
+> > > > +       case -ENOENT:
+> > > > +       case -ECONNRESET:
+> > > > +       case -ESHUTDOWN:
+> > > > +               return;
+> > > > +       default:
+> > > > +               netdev_err(netdev, "Rx urb aborted /(%d)\n", urb->status);
+> > >
+> > > Do not use parenthesis in log messages.
+> > >
+> > > Ref: https://www.kernel.org/doc/html/latest/process/coding-style.html#printing-kernel-messages
+> > >
+> > >   Printing numbers in parentheses (%d) adds no value and should be avoided.
+> > >
+> >
+> > O.k., seems a common pattern, at least the same logging used in peak_usb,
+> > change it there as well (but seems you answered this in another thread
+> > already '...but bonus points if you send a clean-up patch to fix
+> > the existing log messages...')?
+>
+> IIRC the %pe is quite new compared to the peak_usb driver. Code evolves
+> and new code should not be based on outdated examples/drivers.
+
+Yes, that was added in October 2019:
+
+  commit 57f5677e535b ("printf: add support for printing symbolic error names")
+  Link: https://git.kernel.org/torvalds/c/57f5677e535b
+
+There is no strong rule to use %pe but I think this gives a better
+user experience, so I encourage any new code to use it. The ban of
+parentheses (%d) is a way older rule which predates the git history,
+it is just that humans are humans and that went through the cracks in
+past reviews.
+
+For the existing code, it is as it is. If someone courageous enough
+wants to do a big clean-up, it would be great, but there are style
+discrepancies everywhere in the code base.
+
+> [...]
+>
+> > > > +/**
+> > > > + * struct ixxat_canbtp Bittiming parameters (CL2)
+> > > > + * @mode: Operation mode
+> > > > + * @bps: Bits per second
+> > > > + * @ts1: First time segment
+> > > > + * @ts2: Second time segment
+> > > > + * @sjw: Synchronization jump width
+> > > > + * @tdo: Transmitter delay offset
+> > > > + *
+> > > > + * Bittiming parameters of a CL2 initialization request
+> > > > + */
+> > > > +struct ixxat_canbtp {
+> > > > +       __le32 mode;
+> > > > +       __le32 bps;
+> > > > +       __le16 ts1;
+> > > > +       __le16 ts2;
+> > > > +       __le16 sjw;
+> > > > +       __le16 tdo;
+> > >
+> > > It seems that your device supports TDC. What is the reason to not configure it?
+> > >
+> > > Please have a look at struct can_tdc:
+> > >
+> > >   https://elixir.bootlin.com/linux/v6.2/source/include/linux/can/bittiming.h#L21
+> > >
+> > > Please refer to this patch if you want an example of how to use TDC:
+> > >
+> > >   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1010a8fa9608
+> > >
+> >
+> > Not sure about this one (and I have limited knowledge of the hardware details),
+> > seems I need to find more (spare) time to look into this one, or maybe
+> > something better for an follow-up patch?
+>
+> We usually need TDC for bit rates > 1..2 MBit/s
+
+If you do not have the hardware specification (or at least the
+documentation of ixxat_canbtp->tdo) then it will be hard for you to do
+anything here.
+
+I am fine to skip the TDC features for now and have it as a follow-up
+patch if you manage to figure it out someday.
+
+
+Yours sincerely,
+Vincent Mailhol
