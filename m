@@ -2,135 +2,217 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3DA5710543
-	for <lists+linux-can@lfdr.de>; Thu, 25 May 2023 07:22:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ED28710634
+	for <lists+linux-can@lfdr.de>; Thu, 25 May 2023 09:23:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239589AbjEYFWt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 25 May 2023 01:22:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43588 "EHLO
+        id S237399AbjEYHXS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 25 May 2023 03:23:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239604AbjEYFWY (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 25 May 2023 01:22:24 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45C21AC
-        for <linux-can@vger.kernel.org>; Wed, 24 May 2023 22:16:49 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1ae454844edso7786125ad.1
-        for <linux-can@vger.kernel.org>; Wed, 24 May 2023 22:16:49 -0700 (PDT)
+        with ESMTP id S229885AbjEYHXR (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 25 May 2023 03:23:17 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2070e.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eb2::70e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB939C;
+        Thu, 25 May 2023 00:23:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RgoKMsSmYqqD0dpQgIp6kz5726T3ZxQfkxcX5e3FG2j9BTbbFqhSesb85Fh7wosKPVsXN9kubfTL4G4khtZDUHXPYSutBsTKbman5LCbM7nTNaySnm2WJOmRFKyoThpK1bXnI60VVpL5ksmU5zbjAOAPUlQ9P0k5b5XJUK/ze06cappTpysqI3h8foyOvKcvPSVFrB2Aw5Z+hvopUsMFKvOMa3+KzJj6yyogyOY46aNl9e0ldAWMbku/qU8Htsgq6dZ14x5nsiGTsPky0LNyHx7EdtOkWHet7VDExwVnLEaAXw/cMkzMtCDePOWEze+ipFF63kSg7eIcgzcWGtm7Og==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=w/megE2YfryWlCKWpxNZuimecRZzVeiX6r0U2A2pSDQ=;
+ b=VsGzrxPH98HrYBm6BCyhrznvus9e9AqOC7ecZXnYLjFHstTfw3fGKb8sKut0cJ2YVchdoetg6jGZwFLErBNlb5Sj/Gz1+XA4Ucbygyt7ocyHRRNvSFpT4+hetcPbAbVxPrk9GjJAWln4Z7ujYm/vatQAWo3h8i+fZEkxcLCSY6EttphGwPTOr+FPMcIXJOP4wfE9KXS7jTzLRpAd8R6FU50rn5wKjJK4cLE6PLcgXGkF2d3FefslOZHQHrhRPwbYjQLxBZ8Coh+b2fAWtFXflA1O+9pNl2wIxRWpyrYKqWi3CtaqujWxGa3lO2bAR99USFHtg8QsXQ/UF04e/OfM6w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684991809; x=1687583809;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=w6KR3HMaO2Ce1KtsONQ+tcBMpRdgbXx21IhlWiizFF0=;
-        b=E6mIq+sK7StbgvuAfq1SyzRa7ze8wqqORKQEzXPU1vUJ6fC3PX8zbYoPnDEWf82h+9
-         Dweu6qMOVUEtVTYbGUsC2ErI+eynOc8haXkGxVWxTwF3dg/FRWe+DOSwFjOzotsyGYPj
-         w7to0MIsRG+nQll+SHjtXkbK+IWH3i/kDAvRkUJio1LdaFPV5ZKHkUKVz3K9pWDziGKT
-         kmTu0VUVzxBoldg+yL1ogzqnSbkCMl6kINMDqkK+nKYeJ9e+FfCFZggFox4ygMiQF892
-         d3iBjCZom1pd35b6Pbw6HAfwk8fHa5JIBaTouhVZMeLK4ZjYsrl34VZv3opgs7Uhc9iW
-         Qx9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684991809; x=1687583809;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w6KR3HMaO2Ce1KtsONQ+tcBMpRdgbXx21IhlWiizFF0=;
-        b=GzCQZiS0qppYj0Cs5ZrFBL4xnT6QV3kdvxhzVVzPZ+52ilb7mlUSCGhzLFMqAupUzz
-         5T7f4pl0JRvVGBIjoZi1x1JOtFaqCfTG66X0+nq+ww/gLTe0yaw3J32QhkS8Yl85DRir
-         oK5GIAImHsXo3aheP5YZ7A4oDXc6Z1KLx4EZj1WqEN+dXGnY+B1KDxb37//tNDGfEbIR
-         wjDipIq01U4dRFBC1spf/WvlA/bRe4F1i/PmWlLV8wbi5oVlk3ArZePFiNB2ImqNZtpD
-         5BX700l9Aa3xLi39CoOXSxLf4FNpZo7BbY7eL9UGGDooaQAToTJV2I/KS3xN4Xo+cnAk
-         QGiw==
-X-Gm-Message-State: AC+VfDzBwbV87/PNyqVpuHmiiPlNc8Bu+t7+Y69rgsyOo6CGCzCHMv8E
-        Nvva6mS9QUXcrDxIk0Nk5vaoqLY4AHK4iFX8CFMNhj3ZmK4=
-X-Google-Smtp-Source: ACHHUZ4qKorKpNOo3XfkS2gh93rVtP0YrtWPRguYB6kQ2GDVcyf5NRElL4I1YiXHMIclZpwCACbgdW49Wd5x/Jtfgto=
-X-Received: by 2002:a17:903:2287:b0:1a9:bdf8:f551 with SMTP id
- b7-20020a170903228700b001a9bdf8f551mr367557plh.69.1684991809221; Wed, 24 May
- 2023 22:16:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230515212930.1019702-1-mkl@pengutronix.de> <CAMZ6RqKToYbfsOX4v_jK7X28hLyiYnH7j784eVeFuKrj7ujRSA@mail.gmail.com>
- <20230522215354.2c79c007@gmx.net> <20230522-hesitant-dehydrate-d2af514565d0-mkl@pengutronix.de>
- <CAMZ6Rq+-4D_W8d_2wxuN5TnTmRZ4+C3MwGuBOVNH_vQ2UveTbw@mail.gmail.com> <AM0PR10MB3683D7C815CD334AE831F60490419@AM0PR10MB3683.EURPRD10.PROD.OUTLOOK.COM>
-In-Reply-To: <AM0PR10MB3683D7C815CD334AE831F60490419@AM0PR10MB3683.EURPRD10.PROD.OUTLOOK.COM>
-From:   Vincent Mailhol <vincent.mailhol@gmail.com>
-Date:   Thu, 25 May 2023 14:16:38 +0900
-Message-ID: <CAMZ6RqKmmEHitD7Aaq+zjyBUHvvbu0szhxnRQS71wxATydjYSA@mail.gmail.com>
-Subject: Re: [PATCH v8] can: usb: IXXAT USB-to-CAN adapters drivers
-To:     Markus Marb <marm@hms-networks.de>
-Cc:     Peter Seiderer <ps.report@gmx.net>,
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=w/megE2YfryWlCKWpxNZuimecRZzVeiX6r0U2A2pSDQ=;
+ b=jsuj5aqeOEAzSbyiczwSj7ZRuQU8NhUKfn+adeTOeWlPRRsBaIq33ahdn4dnpg4pv9mSOGovRuzZfWW2TIRSl7SRRLGStanJThYj4Uou+6mnbRnEr4hCD9zE1VG5c9Z5PGlKCjiFB2kvpQSQCOrQQdbEyPsJY4nEO0+7tPrHjO8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by CO1PR13MB4949.namprd13.prod.outlook.com (2603:10b6:303:f9::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.15; Thu, 25 May
+ 2023 07:23:12 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6411.029; Thu, 25 May 2023
+ 07:23:12 +0000
+Date:   Thu, 25 May 2023 09:23:04 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Judith Mendez <jm@ti.com>
+Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        socketcan <socketcan@hms-networks.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Schuyler Patton <spatton@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Tony Lindgren <tony@atomide.com>
+Subject: Re: [PATCH v7 2/2] can: m_can: Add hrtimer to generate software
+ interrupt
+Message-ID: <ZG8M2EDSG/NtiTwF@corigine.com>
+References: <20230523023749.4526-1-jm@ti.com>
+ <20230523023749.4526-3-jm@ti.com>
+ <ZGyfAhp8op4GMElN@corigine.com>
+ <8985ea03-a7dc-a0bc-a238-3099caadf740@ti.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8985ea03-a7dc-a0bc-a238-3099caadf740@ti.com>
+X-ClientProxiedBy: AM3PR07CA0093.eurprd07.prod.outlook.com
+ (2603:10a6:207:6::27) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CO1PR13MB4949:EE_
+X-MS-Office365-Filtering-Correlation-Id: da8b8678-d339-4ac6-ea5e-08db5cf0e5b5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mLSTwQQW60J3+7Nf5Z+/zXPQbB5KqA9qpbUISDKK03ohY+naN95EAVhpAaF3tprO/k67N5HQQ3GGEcVWvjWBdBN0wKPJPXlfohViloQN+zLd9p05iimrACVZj99PLKWZ0kH5TfyZTuO2695MgglnlLONmRcNuIgshHfGzHxpZDUQrylRYjoXMT8PzVUtvwIa4CM59oJXeqamfwu2EU/GKR0TrNJShd5lfKI1JzwW/o3FKlL6xe1yhkeiqHOrgSovtvvx9Wp7q6By5NdEXd+6fHQhgONZxRuwNGf7GNNJcCx0Uukw5gYTGTnmLPJw9rlhxPcwgfvkMENKp8ziVgmhicLF736GXq5DdXRDnVv5fyeMQdUiMkBXNAB2PubfDWKqzrmltMM9AEKklUyGZypI4zWkLNnifKIWzRiVB78mLzEuI4yNO5usBo5Jkeur0mkenQPS+j7pHYPgLmlRTn/abFuo1KWXixEMQLkZQqBVhSM6RolKtQjP6yXpfBfuqmiwsRlBczxUsJniY7EOPZiLJ3WbtReB949f25RDsiQA8XE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(396003)(346002)(376002)(39840400004)(451199021)(66556008)(4326008)(66946007)(66476007)(6916009)(8936002)(7416002)(36756003)(8676002)(5660300002)(44832011)(316002)(54906003)(478600001)(41300700001)(6486002)(6666004)(966005)(38100700002)(186003)(6512007)(2906002)(53546011)(83380400001)(6506007)(2616005)(86362001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rFnSqE1yBiIyV89lxHWSoukKXT/Wc5U0ZYn7gCbYCNtIfY73vQ+4lwkL36we?=
+ =?us-ascii?Q?Hn/JRltrhHWJdyVOfy02JfStNe3061eZpXKlBm1SddpztUBgYDPJUW5eObu/?=
+ =?us-ascii?Q?OcxYwHtxdxxZjg6iRiO0sBShkM0VK0Qw2AxUl/tyy9mDQT0OBSIIL/Xv1e4p?=
+ =?us-ascii?Q?bhaD0DNj5CyyE7s4c/5cphTwitHnl9z+UKudL4BOlkjI+rXpwt1lcm/Av3kQ?=
+ =?us-ascii?Q?c5XO5YSoZWpATezTfsCvQTy4MWzgtmhVMnUmwQMIzf0bKSAouI6J+VBiWqQx?=
+ =?us-ascii?Q?cakicJKtJtFQgSxbHgoby3p2MURfkeUiuXK5C+8XaurG6DinabGWviDFldJt?=
+ =?us-ascii?Q?7foHlWZ/QCrM3WPfNI/e9BbCgLfMM6Zavgm1NJhBNhf9FCMa6FxQj/hAXBgT?=
+ =?us-ascii?Q?iEkgziPvb+6qLtKYEZA40L9rae+slBPsjAJkgNgyE9tnJP1eWlrkyQgbnl5v?=
+ =?us-ascii?Q?VqBCua38u7fA0jYkYxHMCCWQa88YWJw8vBMV6GOxKhBSN5Jzt/UV3woNk0c0?=
+ =?us-ascii?Q?rsB1uiCg8LPzq51tV6JuhqUtYVEul7w7Za40l/B/0QfkhfUPPluPPApYEnMa?=
+ =?us-ascii?Q?djzka9bsF5HsJ+30XuUHv9X5Lh9N2U23MDe92MabWHwqglW9F2MAZEBQyM3J?=
+ =?us-ascii?Q?Ltv6OQp3moLpIug0x4LA+fYy3kssbVTxt28lwxsqoHfLyxyqCMf5nKIIvmCy?=
+ =?us-ascii?Q?at8kxeVdKrjeana9BSIHTzUtNXddhjA3UgwCNgOS0wFB/iFzXZ81KMWMnaqy?=
+ =?us-ascii?Q?PkaR1Le6tbTnyJhhKAQ59u8BW7+lRy6SB5igcphYggAkgjh0EzLDQG5p+PiC?=
+ =?us-ascii?Q?7UnAXB+VYD6wlsBeTe6J8AW/b2LZO5/8fSNvRFpVmlUrFMzCQAYs/HE+8d2z?=
+ =?us-ascii?Q?4r3jsfqk1+jRZTYhBBaoHyeeKZyf8L+/TTXn1D54qNY0N2PzObUIzvXjr9bb?=
+ =?us-ascii?Q?NSary6pjU9qysvcDqS3f+auoryzCyTX84Oe+WhxnzVGMVWyh+UOrMShBgL59?=
+ =?us-ascii?Q?70za5KOvqois6sZ6NgaJ8Nqb0cf9HzRQqIfOjs5RpjM/+iUtx9lZlu06ClRv?=
+ =?us-ascii?Q?guqNAh3OeawZBd0UjOGpScNu0XueTWPWyhim/mUCYxVaaaIAZGiyWklKx28C?=
+ =?us-ascii?Q?QHBPnkaLeU+5VG6YAz25KpoUDsqIXHZwDtyub3sR4cVSNEOFW6N1qnpKwb9r?=
+ =?us-ascii?Q?5oTVNvqTjVtXnBBFuRBJ4wIy0Da3p5i6/fI7sOKuKO70+nrBVHN8CN9ru4I+?=
+ =?us-ascii?Q?WJLeKHJJmBC+2HYi3zwkgYAoYt2svtyV/MbuVbVRolKYCy/KIzLns+alu1Tm?=
+ =?us-ascii?Q?NacoRgxpmX7rpJXSyRNJInBPvV2XaOGw9bXSPK4kMI4HfKxPNM3t2TH1H4FF?=
+ =?us-ascii?Q?cY7gUPlTEHBvuty+rwJJh2aKCgHUc0fifyE16wq/LUvkmnO5t/sjb0vm5vwU?=
+ =?us-ascii?Q?QOKRZk+B5r+d3XAStbFcc3S9sAQoWNzT8ThgXYVcLNcRAz8ZUyC4IJH5cg/r?=
+ =?us-ascii?Q?qa/Q2a8KzCr7E01jjVt2BTBrYxTDG9RsRjtMm+q7abOJdlCftwoiPu4cMdPC?=
+ =?us-ascii?Q?qejgXVTLWlHXpT2UmP4ZKZexuiKrco3BGsXjVNzhwxUkj3lEOxVJ7mLBbms3?=
+ =?us-ascii?Q?G61IpisRvbBF6yV5rllZsvnBYfYC9BcbOZJDxrGZNs/VPAbshtM3HRXQT5yX?=
+ =?us-ascii?Q?NoNzQQ=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: da8b8678-d339-4ac6-ea5e-08db5cf0e5b5
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2023 07:23:12.0376
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: GWajdZrPI6M+6PPig4Ei/XgAq0n2RbpvNIys3IFYqNmTtEYwbfzMZvqMarDRGuy4vankqhhSk3LCFK59qBGsmnWtjAYCRxRsKQoX6cgWoOY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR13MB4949
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Markus,
+On Wed, May 24, 2023 at 04:29:01PM -0500, Judith Mendez wrote:
+> Hello Simon,
+> 
+> On 5/23/23 6:09 AM, Simon Horman wrote:
+> > On Mon, May 22, 2023 at 09:37:49PM -0500, Judith Mendez wrote:
+> > > Add an hrtimer to MCAN class device. Each MCAN will have its own
+> > > hrtimer instantiated if there is no hardware interrupt found in
+> > > device tree M_CAN node.
+> > > 
+> > > The hrtimer will generate a software interrupt every 1 ms. In
+> > > hrtimer callback, we check if there is a transaction pending by
+> > > reading a register, then process by calling the isr if there is.
+> > > 
+> > > Signed-off-by: Judith Mendez <jm@ti.com>
+> > 
+> > ...
+> > 
+> > > diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m_can/m_can_platform.c
+> > > index 94dc82644113..b639c9e645d3 100644
+> > > --- a/drivers/net/can/m_can/m_can_platform.c
+> > > +++ b/drivers/net/can/m_can/m_can_platform.c
+> > > @@ -5,6 +5,7 @@
+> > >   //
+> > >   // Copyright (C) 2018-19 Texas Instruments Incorporated - http://www.ti.com/
+> > > +#include <linux/hrtimer.h>
+> > >   #include <linux/phy/phy.h>
+> > >   #include <linux/platform_device.h>
+> > > @@ -96,12 +97,30 @@ static int m_can_plat_probe(struct platform_device *pdev)
+> > >   		goto probe_fail;
+> > >   	addr = devm_platform_ioremap_resource_byname(pdev, "m_can");
+> > > -	irq = platform_get_irq_byname(pdev, "int0");
+> > > -	if (IS_ERR(addr) || irq < 0) {
+> > > -		ret = -EINVAL;
+> > > +	if (IS_ERR(addr)) {
+> > > +		ret = PTR_ERR(addr);
+> > >   		goto probe_fail;
+> > >   	}
+> > > +	if (device_property_present(mcan_class->dev, "interrupts") ||
+> > > +	    device_property_present(mcan_class->dev, "interrupt-names")) {
+> > > +		irq = platform_get_irq_byname(pdev, "int0");
+> > > +		mcan_class->polling = false;
+> > > +		if (irq == -EPROBE_DEFER) {
+> > > +			ret = -EPROBE_DEFER;
+> > > +			goto probe_fail;
+> > > +		}
+> > > +		if (irq < 0) {
+> > > +			ret = -ENXIO;
+> > > +			goto probe_fail;
+> > > +		}
+> > > +	} else {
+> > > +		mcan_class->polling = true;
+> > > +		dev_dbg(mcan_class->dev, "Polling enabled, initialize hrtimer");
+> > > +		hrtimer_init(&mcan_class->hrtimer, CLOCK_MONOTONIC,
+> > > +			     HRTIMER_MODE_REL_PINNED);
+> > > +	}
+> > 
+> > Hi Judith,
+> > 
+> > it seems that with this change irq is only set in the first arm of
+> > the above conditional. But later on it is used unconditionally.
+> > That is, it may be used uninitialised.
+> > 
+> > Reported by gcc-12 as:
+> > 
+> >   drivers/net/can/m_can/m_can_platform.c: In function 'm_can_plat_probe':
+> >   drivers/net/can/m_can/m_can_platform.c:150:30: warning: 'irq' may be used uninitialized [-Wmaybe-uninitialized]
+> >     150 |         mcan_class->net->irq = irq;
+> >         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~
+> >   drivers/net/can/m_can/m_can_platform.c:86:13: note: 'irq' was declared here
+> >      86 |         int irq, ret = 0;
+> >         |             ^~~
+> > 
+> 
+> Maybe a good solution is to initialize irq=0 here.
 
-On Wed. 24 May 2023 at 20:24, Markus Marb <marm@hms-networks.de> wrote:
-> Hi,
->
-> > If you do not have the hardware specification (or at least the documentation of ixxat_canbtp->tdo) then it will be hard for you to do anything here.
-> The tdo field is documented in our windows drivers manual[1]. The socketcan driver seems to use CAN_BTMODE_RAW(IXXAT_USB_BTMODE_NAT), so the hardware specific number of CAN clock cycles is expected here.
->
-> From the manual:
-> wTDO:
-> Offset to the transceiver delay (or Secondary Sample Point SSP) that is
-> automatically determined by the controller. Value is only relevant with fast data
-> bit rate. If in field dwMode the bit CAN_BTMODE_RAW is set, the hardware
-> specific number of CAN clock cycles is expected here. If not, the value defines
-> the Secondary Sample Point (SSP) in relation to the total number of time quanta
-> per bit (example: if wTS1+wTS2=100 and wTDO=65 the SSP is 65% of a bit time).
-> Value 0 deactivates the SSP.
->
-> [1]: https://www.ixxat.com/docs/librariesprovider8/ixxat-english-new/pc-can-interfaces/02---windows-drivers/vci-v4.0.1133.0-windows-11-10.zip?sfvrsn=2d1dfdd7_20
-> See "./VCI V4.0.1133.0 - Windows 11, 10/Manuals/VCI V4 C-CanFD Software Design Guide English.pdf"
+If it is valid for mcan_class->net->irq to be 0 in this case,
+then, yes, I agree.
 
-This seems enough to implement the feature. Unless documented
-elsewhere, it seems that you have no TDCV or TDCF support. So
-something like that should do the job:
-
-  static const struct can_tdc_const es58x_tdc_const = {
-          .tdcv_min = 0,
-          .tdcv_max = 0, /* Manual mode not supported. */
-          .tdco_min = <Minimum value wTDO can take, should be
-documented somewhere>,
-          .tdco_max = <Maximum value wTDO can take, should be
-documented somewhere>,
-          .tdcf_min = 0,
-          .tdcf_max = 0, /* Manual mode not supported. */
-};
-
-Look at the doc of struct can_tdc and can_tdc_const for the details:
-
-  https://elixir.bootlin.com/linux/v6.3/source/include/linux/can/bittiming.h#L20
-
-Then add the CAN_CTRLMODE_TDC_AUTO capabilities.
-
-Finally, using it should be something in this spirit:
-
-  if (can_tdc_is_enabled(&priv->can)) {
-          ixxat_canbtp->tdo = cpu_to_le16(priv->can.tdc.tdco);
-  } else {
-          ixxat_canbtp->tdo = 0;
-  }
-
-The else branch can be omitted in case you already memset()
-ixxat_canbtp to zero.
-
-You can test it by running your device at the maximum supported data
-bitrate. Below ip command should show you the tdco value:
-
-  ip --details link show can0
-
-> Please note that for example the simplified SSP positioning (setting tdo to 0XFFFF) described in the document is handled in the windows driver and not in the device firmware, so it cannot be used here.
-
-That part will be out of scope of the linux driver, I guess.
-
-> Best regards
-> Markus
+> > > +
+> > >   	/* message ram could be shared */
+> > >   	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "message_ram");
+> > >   	if (!res) {
+> > > -- 
+> > > 2.17.1
+> 
+> 
+> ~Judith
