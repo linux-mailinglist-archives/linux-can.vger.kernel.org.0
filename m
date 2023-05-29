@@ -2,61 +2,61 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2216A714A8C
+	by mail.lfdr.de (Postfix) with ESMTP id 9B5CE714A8D
 	for <lists+linux-can@lfdr.de>; Mon, 29 May 2023 15:44:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbjE2Nox (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        id S229896AbjE2Nox (ORCPT <rfc822;lists+linux-can@lfdr.de>);
         Mon, 29 May 2023 09:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59120 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229896AbjE2Nov (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 29 May 2023 09:44:51 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4BC9C
-        for <linux-can@vger.kernel.org>; Mon, 29 May 2023 06:44:50 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f3b9755961so3538940e87.0
+        with ESMTP id S229806AbjE2Now (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 29 May 2023 09:44:52 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C83DA0
+        for <linux-can@vger.kernel.org>; Mon, 29 May 2023 06:44:51 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f3b4ed6fdeso3430714e87.3
         for <linux-can@vger.kernel.org>; Mon, 29 May 2023 06:44:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kvaser.com; s=google; t=1685367888; x=1687959888;
+        d=kvaser.com; s=google; t=1685367889; x=1687959889;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xzVOv7hNYuzU6xDeRF9d44eaUEeVDuI93b5g5p8Z0Cg=;
-        b=ab5Isl9Rho3xv6qb6Nl9bTzX8MyE+54hkEE+9wrHJR368BIUUVV0Un2WvvWQITWAJT
-         hZTsn7NO58ZNXpWDmTEK4qOhUdAbO8/1/tNpEOIxOqaZ3566xA8aofhRWlutAehBOc6a
-         QXwRKibI1VId4YOR2wp61KjAyB089NaGszDG3u4lQlUkTBuK620j3iVDB4yciqmuRCWM
-         kHVQkfap0KeamkDriQOuAFrhiWzmTZCRDf6KnK1req5pueNRq0PDgCCx/wny/irQgdrd
-         zFzc8ibhnWIR9BTHOeOgCLLJ36T69HEpPPfg3AZ5A0836hVQlnNMNPv7KrbNWh/r+Gcx
-         Ynmw==
+        bh=7Kh3GE/onMXlqrdTcNUXpV+Llc2FWPUXYEluUub7yYQ=;
+        b=W0T7YoRhr1f5GhGMwQTrhexns4qVMJ7bqjbNtx74w3CVFJ+cb5oJZvFCNoPrsNEnwu
+         jRYlpaB2L0213nHdk1lVa8NM4aoMFbEsjJZdAmSSLVd2izjkf1p7jLK04UhHbavf8JHg
+         Rl/C2L4/wUeAgdDIEtyCuTvTs0lVi9JHgxRp4miM7KUorW8295noTNYdOEeom8cjY7tO
+         6bpIyqgHq6i8Fdo2vWyOdpFhzTSZevV04tE4txCP4R4G4RosQJcUpKZv5keIyWyfu2ML
+         ps8oc+liWY9pikSar6FFES0Kd6s4iajY9ih/CxfbakU8cUmgDUWHWsygP7/N8avrj20i
+         2hFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685367888; x=1687959888;
+        d=1e100.net; s=20221208; t=1685367889; x=1687959889;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xzVOv7hNYuzU6xDeRF9d44eaUEeVDuI93b5g5p8Z0Cg=;
-        b=FcoLKjmF+lbUcBpz7WvLDEFyEBlqkvS5aPh2Enj64WABnMIyZl0aLwWPYOSP6xBxaa
-         Ue5aCo0HlICt+IWhnDgBuFP0pq7bOaYpCKC8rrn71EVpL4+TnW9KDuhi1gKgTaajqTrf
-         SF7fWfLDMpgLQZb5s+7IN0dpU3ZDhF//6X5pkPBEfBPzThmRobibChzRJO/dNmXyuAju
-         UjOsoNc+T+amp+yljRfjoftZHQrkQ/wlSzzAfjn6lfnZPk/5eJvMoSk5SC/lEi/ms95W
-         vLjMtWx6Bx2NCcplMpjZl6RdGa1Z2ZBwOoKDA0gXl68n8q7gFN/ldJqyE/XlQ77XgGNe
-         qAbw==
-X-Gm-Message-State: AC+VfDwBeSnIKbd2PUuq/f4Qxwm6ravZ/ivcVdLv47tmXRWYHPw2Q8RY
-        DEM17ZtQcc+W5YB8xVGNgC34EubYtNz7+F5S32Y=
-X-Google-Smtp-Source: ACHHUZ7MFQMrHXH9bMNpc+J9zYxx7HP3pqBCP2907Z3zEGC/ivhNa3XPOKlTuzR0mu8HVYxLY1CBxQ==
-X-Received: by 2002:ac2:4d18:0:b0:4f3:79af:fcb7 with SMTP id r24-20020ac24d18000000b004f379affcb7mr4112682lfi.26.1685367888524;
-        Mon, 29 May 2023 06:44:48 -0700 (PDT)
+        bh=7Kh3GE/onMXlqrdTcNUXpV+Llc2FWPUXYEluUub7yYQ=;
+        b=W87YHMOsDHhLC4PpYE7fk2Lwq9DrMNBZ67guVgsQloo75tZa/NjZN660URU3Snbmuw
+         6HckG0Zs3UShPTZiN8uexhpLlb89rnMkElIOhwExJJqoD+fE24ZxTaShxxQ6MnRT0xc4
+         aD6+lwZbdkNg7qOf0a82ZeNIKYJAaOfobSXYauZXsWUrSSJAB1eBsx2/dVMzjYZXyeFm
+         32jzTVldr8P1OrbXQFAYZW7IdbG/bqsumzF5dVmRweFdpKJ6Vg+u8h1t+u80s2kgwWBl
+         JgvldwCffjLY12nSJ7/BmWiA2uwP2tJTRvs0zzEdoQTjsW5K9DnZpPiGAOYhTm8Vnclg
+         /yUA==
+X-Gm-Message-State: AC+VfDxuqoYBqoO6DgWvlCZIcBjQ+WWHRLhAYWH8zbK1l8BdIgIL+dL0
+        OvOL3AT811I+96YMM57SFnFaf3MpuZl3dKIB9aU=
+X-Google-Smtp-Source: ACHHUZ5+WixBpoEDa2snd2/o97MidBa4OFdhwiNuoL6Aa5rKKOzesAKT7S/gy9GasW7q3hUV7zAyTw==
+X-Received: by 2002:ac2:5339:0:b0:4f4:b28f:6b9c with SMTP id f25-20020ac25339000000b004f4b28f6b9cmr3293665lfh.29.1685367889431;
+        Mon, 29 May 2023 06:44:49 -0700 (PDT)
 Received: from freke.kvaser.se (h-98-128-173-232.A785.priv.bahnhof.se. [98.128.173.232])
-        by smtp.gmail.com with ESMTPSA id s7-20020a19ad47000000b004ebae99cc1dsm580lfd.159.2023.05.29.06.44.47
+        by smtp.gmail.com with ESMTPSA id s7-20020a19ad47000000b004ebae99cc1dsm580lfd.159.2023.05.29.06.44.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 May 2023 06:44:48 -0700 (PDT)
+        Mon, 29 May 2023 06:44:49 -0700 (PDT)
 From:   Jimmy Assarsson <extja@kvaser.com>
 To:     linux-can@vger.kernel.org,
         Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
 Cc:     Jimmy Assarsson <jimmyassarsson@gmail.com>,
         Jimmy Assarsson <extja@kvaser.com>
-Subject: [PATCH v2 04/14] can: kvaser_pciefd: Set hardware timestamp on transmitted packets
-Date:   Mon, 29 May 2023 15:42:38 +0200
-Message-Id: <20230529134248.752036-5-extja@kvaser.com>
+Subject: [PATCH v2 05/14] can: kvaser_pciefd: Define unsigned constants with type suffix 'U'
+Date:   Mon, 29 May 2023 15:42:39 +0200
+Message-Id: <20230529134248.752036-6-extja@kvaser.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20230529134248.752036-1-extja@kvaser.com>
 References: <20230529134248.752036-1-extja@kvaser.com>
@@ -72,44 +72,35 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Set hardware timestamp on transmitted packets.
+Define unsigned constants with type suffix 'U'
 
-Fixes: 26ad340e582d ("can: kvaser_pciefd: Add driver for Kvaser PCIEcan devices")
 Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
 ---
- drivers/net/can/kvaser_pciefd.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ drivers/net/can/kvaser_pciefd.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/net/can/kvaser_pciefd.c b/drivers/net/can/kvaser_pciefd.c
-index 7646338d4d44..88bad2c2b641 100644
+index 88bad2c2b641..abb556fb5cb6 100644
 --- a/drivers/net/can/kvaser_pciefd.c
 +++ b/drivers/net/can/kvaser_pciefd.c
-@@ -1485,6 +1485,7 @@ static void kvaser_pciefd_handle_nack_packet(struct kvaser_pciefd_can *can,
+@@ -25,12 +25,12 @@ MODULE_DESCRIPTION("CAN driver for Kvaser CAN/PCIe devices");
  
- 	if (skb) {
- 		cf->can_id |= CAN_ERR_BUSERROR;
-+		kvaser_pciefd_set_skb_timestamp(can->kv_pcie, skb, p->timestamp);
- 		netif_rx(skb);
- 	} else {
- 		stats->rx_dropped++;
-@@ -1516,8 +1517,15 @@ static int kvaser_pciefd_handle_ack_packet(struct kvaser_pciefd *pcie,
- 		netdev_dbg(can->can.dev, "Packet was flushed\n");
- 	} else {
- 		int echo_idx = p->header[0] & KVASER_PCIEFD_PACKET_SEQ_MSK;
--		int dlc = can_get_echo_skb(can->can.dev, echo_idx, NULL);
--		u8 count = ioread32(can->reg_base +
-+		int dlc;
-+		u8 count;
-+		struct sk_buff *skb;
-+
-+		skb = can->can.echo_skb[echo_idx];
-+		if (skb)
-+			kvaser_pciefd_set_skb_timestamp(pcie, skb, p->timestamp);
-+		dlc = can_get_echo_skb(can->can.dev, echo_idx, NULL);
-+		count = ioread32(can->reg_base +
- 				    KVASER_PCIEFD_KCAN_TX_NPACKETS_REG) & 0xff;
+ #define KVASER_PCIEFD_WAIT_TIMEOUT msecs_to_jiffies(1000)
+ #define KVASER_PCIEFD_BEC_POLL_FREQ (jiffies + msecs_to_jiffies(200))
+-#define KVASER_PCIEFD_MAX_ERR_REP 256
+-#define KVASER_PCIEFD_CAN_TX_MAX_COUNT 17
+-#define KVASER_PCIEFD_MAX_CAN_CHANNELS 4
+-#define KVASER_PCIEFD_DMA_COUNT 2
++#define KVASER_PCIEFD_MAX_ERR_REP 256U
++#define KVASER_PCIEFD_CAN_TX_MAX_COUNT 17U
++#define KVASER_PCIEFD_MAX_CAN_CHANNELS 4U
++#define KVASER_PCIEFD_DMA_COUNT 2U
  
- 		if (count < KVASER_PCIEFD_CAN_TX_MAX_COUNT &&
+-#define KVASER_PCIEFD_DMA_SIZE (4 * 1024)
++#define KVASER_PCIEFD_DMA_SIZE (4U * 1024U)
+ #define KVASER_PCIEFD_64BIT_DMA_BIT BIT(0)
+ 
+ #define KVASER_PCIEFD_VENDOR 0x1a07
 -- 
 2.40.0
 
