@@ -2,61 +2,61 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14CC4714A8A
+	by mail.lfdr.de (Postfix) with ESMTP id 733CB714A8B
 	for <lists+linux-can@lfdr.de>; Mon, 29 May 2023 15:44:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbjE2Now (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        id S229894AbjE2Now (ORCPT <rfc822;lists+linux-can@lfdr.de>);
         Mon, 29 May 2023 09:44:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59098 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbjE2Not (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 29 May 2023 09:44:49 -0400
+        with ESMTP id S229944AbjE2Nou (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 29 May 2023 09:44:50 -0400
 Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C03A8E
-        for <linux-can@vger.kernel.org>; Mon, 29 May 2023 06:44:48 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f3baf04f0cso3576585e87.1
-        for <linux-can@vger.kernel.org>; Mon, 29 May 2023 06:44:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E18C9
+        for <linux-can@vger.kernel.org>; Mon, 29 May 2023 06:44:49 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f3b9c88af8so3739599e87.2
+        for <linux-can@vger.kernel.org>; Mon, 29 May 2023 06:44:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kvaser.com; s=google; t=1685367886; x=1687959886;
+        d=kvaser.com; s=google; t=1685367887; x=1687959887;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7vI+QgWQ2DMzBFFxUrz1+8rCe6YyqzMwcF40P0c1WSU=;
-        b=pIHS3zv/0+k5mIECSBwaS8zPO8OL618uZp0uswS5e+9c+QK+LXeKC19SMOQorvmbkl
-         yhpzAHIqiMdHUcVf+uufN2wXTq0g/v2DEQo8RCvrPV4gmXQ4+1o/B5PB+wcLcvP/VgbW
-         ROK1AMWfG5+bD5i2t+NnpUDE3uybYXg2WB5LFZLUcjgBOyiqxEfY/cv1diD4eclhtU1l
-         JVs8VZVUjDr60To+b6BSOXBtEaLMBOR1so6i5kKtoGOvYKKB1N6+4yhYPU6gbz6cFBtr
-         g6FF2SmTRjHDfO1W/n8G0Mz5n0sd5sfY2DcwrlkHlf9aazXEYLg50mOmXmIYGhQSVBon
-         1XYQ==
+        bh=EDz85CgYz9ViMIuawotBn/rMfmJ7JaWBqAhHGDsW2UM=;
+        b=mzVI7Aoa0kLbfu7pQTzdM5RiMxrKSSsHE9+Y/lXObCU7upioHim6iaSLvSyk2/hjsH
+         bXpROUL2nfSpmYucDESG8JrDSidpVXrCeEiVvxby9SV1NFUDXQWcOXr0KvcZVhrBJzTa
+         +smsn7jbtF2Mz4eXwITgCOtD+5FcHRkEs5Qy7cVxoiJpDwpgx3uPkA8UhL0fNhtJKOMo
+         oVg2zy6YgYCgFZr+jnXtqHWyL8F0Q+rKYG2hfhwVGmDsK1zQsPCeSg5m4ZJNklwl7DH4
+         jEbAKXgsYmrWKNAr5hHq0dcT/jvW0QMmDQho63lJMwaV6B17KVECxps3wk1cFSf5O889
+         NpBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685367886; x=1687959886;
+        d=1e100.net; s=20221208; t=1685367887; x=1687959887;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7vI+QgWQ2DMzBFFxUrz1+8rCe6YyqzMwcF40P0c1WSU=;
-        b=AU9Bs6MpFn5A+poD1R4w80YPTeWwhJoky3yd57U1I2tpw+2fXKChEmnwpztAW3uvGv
-         xIKg6fqpt/b8cZg9dH8PfzrbNgbMP0TW2b8But3aLooqqpa+vPsJLO3I6NBFRVKYV2Cv
-         vq6Ck9QLCV3HVo425jSxSM3eahFp1CYQc47gZv8AiX9o8eGbjEt9ZEU2kMCs9gc7pOiL
-         HzJWryseywNaKIqYheiynjfZE1UGQIB3d3Yg1xclA9USRwImavKhyGUclr6pbHqjLypZ
-         Ccz9TvRQHuYXLuEexwpm7hLxEDSjf5XnAYpgNoWneZ9LPiF1es5gIGkB2uiy1fE/PIyS
-         BE3w==
-X-Gm-Message-State: AC+VfDwsQb9kXdTwCWxyxUvIOwA5GSmd/nTonR0GGVb0DOWsa6g4Bldw
-        nj5wgKm2xhHkaZk5CJnRXvMsKeXuY6FPCYsWlZk=
-X-Google-Smtp-Source: ACHHUZ5nUwEBwdo7wrmMqctMBPml6rLoMFEm04Zq4bPMV/IlhU6ZSbM+UOxUvwBwAdH/twuY+VhMIw==
-X-Received: by 2002:ac2:5605:0:b0:4e9:9e45:3470 with SMTP id v5-20020ac25605000000b004e99e453470mr3179784lfd.3.1685367886500;
-        Mon, 29 May 2023 06:44:46 -0700 (PDT)
+        bh=EDz85CgYz9ViMIuawotBn/rMfmJ7JaWBqAhHGDsW2UM=;
+        b=f2i6sizhkN+vHi1U8EWdlIuRzjNLTl+Ght4NOaunvgKteLBbHUVIJsjbpylHykc+lj
+         fYL4J85WXzNeqViT9J2Ct0QbGgCPtYwr7bWUjV1duACUOOf6OialwbSYaHVscQQ5q5zY
+         SUJtdvRN/pQLy2jU47ElPkqC7lK8bsvW7tTTDAFk1NWmAmF27yJlRNlqJV/BtL5mbh0n
+         IR2K+B6jkgnLGC5wAOJy0oZfCwRiiC0T/bMJeWRURe0YdAe+ehAQ4Secz0xaXoYmcIQX
+         Xo+MBc46gYP3F5p5xABLTG7NmF3pzW4CR4aaGuK/qrePEDn1NL/7Vv4bOti5MRdWocYT
+         XW5A==
+X-Gm-Message-State: AC+VfDyHxvdpi0D6zS9z3ISpX70lcvo85W5e7HiqXGk7xenwNPlFdkVG
+        9QPZGl6sDWDsGWzFkZkJh//itgHrVJzSeEL4lnI=
+X-Google-Smtp-Source: ACHHUZ4Ujaje3FcZ0cWi1ex/w7+NTpIuIoLPCqJaKM0wsDa2jiSs4/DFLPfrV3Ywk3cC/Rfe5UEwjg==
+X-Received: by 2002:ac2:47eb:0:b0:4f3:aa09:5566 with SMTP id b11-20020ac247eb000000b004f3aa095566mr3274846lfp.65.1685367887585;
+        Mon, 29 May 2023 06:44:47 -0700 (PDT)
 Received: from freke.kvaser.se (h-98-128-173-232.A785.priv.bahnhof.se. [98.128.173.232])
-        by smtp.gmail.com with ESMTPSA id s7-20020a19ad47000000b004ebae99cc1dsm580lfd.159.2023.05.29.06.44.45
+        by smtp.gmail.com with ESMTPSA id s7-20020a19ad47000000b004ebae99cc1dsm580lfd.159.2023.05.29.06.44.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 May 2023 06:44:46 -0700 (PDT)
+        Mon, 29 May 2023 06:44:47 -0700 (PDT)
 From:   Jimmy Assarsson <extja@kvaser.com>
 To:     linux-can@vger.kernel.org,
         Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
 Cc:     Jimmy Assarsson <jimmyassarsson@gmail.com>,
         Jimmy Assarsson <extja@kvaser.com>
-Subject: [PATCH v2 02/14] can: kvaser_pciefd: Remove handler for unused KVASER_PCIEFD_PACK_TYPE_EFRAME_ACK
-Date:   Mon, 29 May 2023 15:42:36 +0200
-Message-Id: <20230529134248.752036-3-extja@kvaser.com>
+Subject: [PATCH v2 03/14] can: kvaser_pciefd: Add function to set skb hwtstamps
+Date:   Mon, 29 May 2023 15:42:37 +0200
+Message-Id: <20230529134248.752036-4-extja@kvaser.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20230529134248.752036-1-extja@kvaser.com>
 References: <20230529134248.752036-1-extja@kvaser.com>
@@ -72,81 +72,93 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The Kvaser KCAN controller got a feature to send error frames on request.
-The packet KVASER_PCIEFD_PACK_TYPE_EFRAME_ACK signals that the requested
-error frame was transmitted.
-Since this feature is not supported by the driver, drop the handler and add
-KVASER_PCIEFD_PACK_TYPE_EFRAME_ACK to the list of unexpected packet types.
+Add new function, kvaser_pciefd_set_skb_timestamp(), to set skb hwtstamps.
 
-Fixes: 26ad340e582d ("can: kvaser_pciefd: Add driver for Kvaser PCIEcan devices")
 Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
 ---
- drivers/net/can/kvaser_pciefd.c | 39 +--------------------------------
- 1 file changed, 1 insertion(+), 38 deletions(-)
+ drivers/net/can/kvaser_pciefd.c | 27 ++++++++++-----------------
+ 1 file changed, 10 insertions(+), 17 deletions(-)
 
 diff --git a/drivers/net/can/kvaser_pciefd.c b/drivers/net/can/kvaser_pciefd.c
-index d60d17199a1b..1821ffa4ca79 100644
+index 1821ffa4ca79..7646338d4d44 100644
 --- a/drivers/net/can/kvaser_pciefd.c
 +++ b/drivers/net/can/kvaser_pciefd.c
-@@ -1472,40 +1472,6 @@ static int kvaser_pciefd_handle_status_packet(struct kvaser_pciefd *pcie,
+@@ -538,6 +538,13 @@ static int kvaser_pciefd_set_tx_irq(struct kvaser_pciefd_can *can)
  	return 0;
  }
  
--static int kvaser_pciefd_handle_eack_packet(struct kvaser_pciefd *pcie,
--					    struct kvaser_pciefd_rx_packet *p)
--{
--	struct kvaser_pciefd_can *can;
--	u8 ch_id = (p->header[1] >> KVASER_PCIEFD_PACKET_CHID_SHIFT) & 0x7;
--
--	if (ch_id >= pcie->nr_channels)
--		return -EIO;
--
--	can = pcie->can[ch_id];
--
--	/* If this is the last flushed packet, send end of flush */
--	if (p->header[0] & KVASER_PCIEFD_APACKET_FLU) {
--		u8 count = ioread32(can->reg_base +
--				    KVASER_PCIEFD_KCAN_TX_NPACKETS_REG) & 0xff;
--
--		if (count == 0)
--			iowrite32(KVASER_PCIEFD_KCAN_CTRL_EFLUSH,
--				  can->reg_base + KVASER_PCIEFD_KCAN_CTRL_REG);
--	} else {
--		int echo_idx = p->header[0] & KVASER_PCIEFD_PACKET_SEQ_MSK;
--		int dlc = can_get_echo_skb(can->can.dev, echo_idx, NULL);
--		struct net_device_stats *stats = &can->can.dev->stats;
--
--		stats->tx_bytes += dlc;
--		stats->tx_packets++;
--
--		if (netif_queue_stopped(can->can.dev))
--			netif_wake_queue(can->can.dev);
--	}
--
--	return 0;
--}
--
- static void kvaser_pciefd_handle_nack_packet(struct kvaser_pciefd_can *can,
- 					     struct kvaser_pciefd_rx_packet *p)
++static inline void kvaser_pciefd_set_skb_timestamp(const struct kvaser_pciefd *pcie,
++						   struct sk_buff *skb, u64 timestamp)
++{
++	skb_hwtstamps(skb)->hwtstamp =
++		ns_to_ktime(div_u64(timestamp * 1000, pcie->freq_to_ticks_div));
++}
++
+ static void kvaser_pciefd_setup_controller(struct kvaser_pciefd_can *can)
  {
-@@ -1644,16 +1610,13 @@ static int kvaser_pciefd_read_packet(struct kvaser_pciefd *pcie, int *start_pos,
- 		ret = kvaser_pciefd_handle_error_packet(pcie, p);
- 		break;
+ 	u32 mode;
+@@ -1171,7 +1178,6 @@ static int kvaser_pciefd_handle_data_packet(struct kvaser_pciefd *pcie,
+ 	struct canfd_frame *cf;
+ 	struct can_priv *priv;
+ 	struct net_device_stats *stats;
+-	struct skb_shared_hwtstamps *shhwtstamps;
+ 	u8 ch_id = (p->header[1] >> KVASER_PCIEFD_PACKET_CHID_SHIFT) & 0x7;
  
--	case KVASER_PCIEFD_PACK_TYPE_EFRAME_ACK:
--		ret = kvaser_pciefd_handle_eack_packet(pcie, p);
--		break;
+ 	if (ch_id >= pcie->nr_channels)
+@@ -1214,12 +1220,7 @@ static int kvaser_pciefd_handle_data_packet(struct kvaser_pciefd *pcie,
+ 		stats->rx_bytes += cf->len;
+ 	}
+ 	stats->rx_packets++;
 -
- 	case KVASER_PCIEFD_PACK_TYPE_EFLUSH_ACK:
- 		ret = kvaser_pciefd_handle_eflush_packet(pcie, p);
- 		break;
+-	shhwtstamps = skb_hwtstamps(skb);
+-
+-	shhwtstamps->hwtstamp =
+-		ns_to_ktime(div_u64(p->timestamp * 1000,
+-				    pcie->freq_to_ticks_div));
++	kvaser_pciefd_set_skb_timestamp(pcie, skb, p->timestamp);
  
- 	case KVASER_PCIEFD_PACK_TYPE_ACK_DATA:
- 	case KVASER_PCIEFD_PACK_TYPE_BUS_LOAD:
-+	case KVASER_PCIEFD_PACK_TYPE_EFRAME_ACK:
- 	case KVASER_PCIEFD_PACK_TYPE_TXRQ:
- 		dev_info(&pcie->pci->dev,
- 			 "Received unexpected packet type 0x%08X\n", type);
+ 	return netif_rx(skb);
+ }
+@@ -1282,7 +1283,6 @@ static int kvaser_pciefd_rx_error_frame(struct kvaser_pciefd_can *can,
+ 	struct net_device *ndev = can->can.dev;
+ 	struct sk_buff *skb;
+ 	struct can_frame *cf = NULL;
+-	struct skb_shared_hwtstamps *shhwtstamps;
+ 	struct net_device_stats *stats = &ndev->stats;
+ 
+ 	old_state = can->can.state;
+@@ -1323,10 +1323,7 @@ static int kvaser_pciefd_rx_error_frame(struct kvaser_pciefd_can *can,
+ 		return -ENOMEM;
+ 	}
+ 
+-	shhwtstamps = skb_hwtstamps(skb);
+-	shhwtstamps->hwtstamp =
+-		ns_to_ktime(div_u64(p->timestamp * 1000,
+-				    can->kv_pcie->freq_to_ticks_div));
++	kvaser_pciefd_set_skb_timestamp(can->kv_pcie, skb, p->timestamp);
+ 	cf->can_id |= CAN_ERR_BUSERROR | CAN_ERR_CNT;
+ 
+ 	cf->data[6] = bec.txerr;
+@@ -1374,7 +1371,6 @@ static int kvaser_pciefd_handle_status_resp(struct kvaser_pciefd_can *can,
+ 		struct net_device *ndev = can->can.dev;
+ 		struct sk_buff *skb;
+ 		struct can_frame *cf;
+-		struct skb_shared_hwtstamps *shhwtstamps;
+ 
+ 		skb = alloc_can_err_skb(ndev, &cf);
+ 		if (!skb) {
+@@ -1394,10 +1390,7 @@ static int kvaser_pciefd_handle_status_resp(struct kvaser_pciefd_can *can,
+ 			cf->can_id |= CAN_ERR_RESTARTED;
+ 		}
+ 
+-		shhwtstamps = skb_hwtstamps(skb);
+-		shhwtstamps->hwtstamp =
+-			ns_to_ktime(div_u64(p->timestamp * 1000,
+-					    can->kv_pcie->freq_to_ticks_div));
++		kvaser_pciefd_set_skb_timestamp(can->kv_pcie, skb, p->timestamp);
+ 
+ 		cf->data[6] = bec.txerr;
+ 		cf->data[7] = bec.rxerr;
 -- 
 2.40.0
 
