@@ -2,51 +2,65 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97C067147C6
-	for <lists+linux-can@lfdr.de>; Mon, 29 May 2023 12:15:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E126714A88
+	for <lists+linux-can@lfdr.de>; Mon, 29 May 2023 15:44:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231983AbjE2KPV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 29 May 2023 06:15:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58318 "EHLO
+        id S229494AbjE2Nov (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 29 May 2023 09:44:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbjE2KPT (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 29 May 2023 06:15:19 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1266B83
-        for <linux-can@vger.kernel.org>; Mon, 29 May 2023 03:15:14 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1q3ZuA-0000jf-C7; Mon, 29 May 2023 12:15:10 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id EE7461CDDD2;
-        Mon, 29 May 2023 10:15:08 +0000 (UTC)
-Date:   Mon, 29 May 2023 12:15:08 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Robin van der Gracht <robin@protonic.nl>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        David Jander <david@protonic.nl>, kernel@pengutronix.de,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] can: j1939: j1939_sk_send_loop_abort(): improved
- error queue handling in J1939 Socket
-Message-ID: <20230529-escalate-petticoat-976947c5ff2c-mkl@pengutronix.de>
-References: <20230526081946.715190-1-o.rempel@pengutronix.de>
+        with ESMTP id S229924AbjE2Nor (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 29 May 2023 09:44:47 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115EB8E
+        for <linux-can@vger.kernel.org>; Mon, 29 May 2023 06:44:46 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2af29b37bd7so34849751fa.1
+        for <linux-can@vger.kernel.org>; Mon, 29 May 2023 06:44:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kvaser.com; s=google; t=1685367884; x=1687959884;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Kfb8jEOCvi7etT7or4n95CsCpdDAsL2PKRW85iGysfY=;
+        b=R9PZT468xPBOY4Tgz2QzUg+mjy7H3gmeauJyP9zaWTdj5vFmfFbo+f7zbqGevvAUeL
+         TYjOxE5Yon0g/8c4RtEhLPz1n5FpajKFZbXnJ/7bA9kYB7bbIlOQGwvXQW7ZE9vvptqp
+         2xG4/XCOdBYOZRB8/N0251zD98cEu/vzpNnmFtnOXUsRqMvFPGVVa7ummieVbLNlsIWZ
+         xj9j76mw/Qud206MORQ6WKuMyZF3JxpgVY6/9P4sKQtYQ9hs72THn3+Mn30iwFJNiELG
+         cJq21OCK0S765u4drRCNo4eMltf+k9IoBJ3JfvbJzUIP1kSxyRyj1d1zG8h2eR8eVgYu
+         Bgww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685367884; x=1687959884;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Kfb8jEOCvi7etT7or4n95CsCpdDAsL2PKRW85iGysfY=;
+        b=Rkue7W1+87Kf3Rfxy3IgcHysi5AxH7ffUNRApJTbzn1Y5r2IjoLwMP+UMuRkVXANod
+         SaYn/2Schw55QuVcrR+oDUOatVu72ULN3lkq2WSJQSOFo2te/KtjXPPKSaB47i9aHObL
+         WwfNgxmy8lWTr52Ay+SZj9beQJfLjy2GLlU5LwJu2gYRqtqZN/DNeKwqbpUQcNamdi+M
+         t8tKje5/7whFRYuKoBpc1VLdDixekDY9BtIwsjtRePbAdVxn8KISARaIvIWQIKAFzyY5
+         VoFEiiu+IWn+USlNVPRred0kDVKGHiSJfPFzaHvj415pqmzaxTeEvaQtORzHiFOOzoWw
+         CkVw==
+X-Gm-Message-State: AC+VfDw7/qqLaZPP8Ggncz4D0KnP+70BTKzyKTaXsl0YMJz93FV/oRMu
+        sz0jW59nIG+2gx6lAROCCUKPPlVHQ7v228lXhRk=
+X-Google-Smtp-Source: ACHHUZ70EIUH6MTTCzWduECaw2CunuqfomFqz64mXaSEI/4vDXP6w3dJZP2xSaWIfH2ozumsHIgN+A==
+X-Received: by 2002:ac2:424e:0:b0:4ee:dafa:cb00 with SMTP id m14-20020ac2424e000000b004eedafacb00mr3534612lfl.60.1685367884248;
+        Mon, 29 May 2023 06:44:44 -0700 (PDT)
+Received: from freke.kvaser.se (h-98-128-173-232.A785.priv.bahnhof.se. [98.128.173.232])
+        by smtp.gmail.com with ESMTPSA id s7-20020a19ad47000000b004ebae99cc1dsm580lfd.159.2023.05.29.06.44.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 May 2023 06:44:43 -0700 (PDT)
+From:   Jimmy Assarsson <extja@kvaser.com>
+To:     linux-can@vger.kernel.org,
+        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Jimmy Assarsson <jimmyassarsson@gmail.com>,
+        Jimmy Assarsson <extja@kvaser.com>
+Subject: [PATCH v2 00/14] can: kvaser_pciefd: Fixes and improvments
+Date:   Mon, 29 May 2023 15:42:34 +0200
+Message-Id: <20230529134248.752036-1-extja@kvaser.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mvongy46xmtqqt6x"
-Content-Disposition: inline
-In-Reply-To: <20230526081946.715190-1-o.rempel@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,70 +69,37 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+This patch series contains various non critical fixes and improvments for
+the kvaser_pciefd driver.
 
---mvongy46xmtqqt6x
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Jimmy Assarsson (14):
+  can: kvaser_pciefd: Remove useless write to interrupt register
+  can: kvaser_pciefd: Remove handler for unused
+    KVASER_PCIEFD_PACK_TYPE_EFRAME_ACK
+  can: kvaser_pciefd: Add function to set skb hwtstamps
+  can: kvaser_pciefd: Set hardware timestamp on transmitted packets
+  can: kvaser_pciefd: Define unsigned constants with type suffix 'U'
+  can: kvaser_pciefd: Remove SPI flash parameter read functionality
+  can: kvaser_pciefd: Sort includes in alphabetic order
+  can: kvaser_pciefd: Rename device ID defines
+  can: kvaser_pciefd: Change return type for
+    kvaser_pciefd_{receive,transmit,set_tx}_irq()
+  can: kvaser_pciefd: Sort register definitions
+  can: kvaser_pciefd: Use FIELD_{GET,PREP} and GENMASK where appropriate
+  can: kvaser_pciefd: Add len8_dlc support
+  can: kvaser_pciefd: Refactor code
+  can: kvaser_pciefd: Use TX FIFO size read from CAN controller
 
-On 26.05.2023 10:19:46, Oleksij Rempel wrote:
-> This patch addresses an issue within the j1939_sk_send_loop_abort()
-> function in the j1939/socket.c file, specifically in the context of
-> Transport Protocol (TP) sessions.
->=20
-> Without this patch, when a TP session is initiated and a Clear To Send
-> (CTS) frame is received from the remote side requesting one data packet,
-> the kernel dispatches the first Data Transport (DT) frame and then waits
-> for the next CTS. If the remote side doesn't respond with another CTS,
-> the kernel aborts due to a timeout. This leads to the user-space
-> receiving an EPOLLERR on the socket, and the socket becomes active.
->=20
-> However, when trying to read the error queue from the socket with
-> sock.recvmsg(, , socket.MSG_ERRQUEUE), it returns -EAGAIN,
-> given that the socket is non-blocking. This situation results in an
-> infinite loop: the user-space repeatedly calls epoll(), epoll() returns
-> the socket file descriptor with EPOLLERR, but the socket then blocks on
-> the recv() of ERRQUEUE.
->=20
-> This patch introduces an additional check for the J1939_SOCK_ERRQUEUE
-> flag within the j1939_sk_send_loop_abort() function. If the flag is set,
-> it indicates that the application has subscribed to receive error queue
-> messages. In such cases, the kernel can communicate the current transfer
-> state via the error queue. This allows for the function to return early,
-> preventing the unnecessary setting of the socket into an error state,
-> and breaking the infinite loop. It is crucial to note that a socket
-> error is only needed if the application isn't using the error queue, as,
-> without it, the application wouldn't be aware of transfer issues.
->=20
-> Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
-> Reported-by: David Jander <david@protonic.nl>
-> Tested-by: David Jander <david@protonic.nl>
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+ drivers/net/can/Kconfig         |   3 +-
+ drivers/net/can/kvaser_pciefd.c | 955 ++++++++++++--------------------
+ 2 files changed, 342 insertions(+), 616 deletions(-)
 
-Applied to linux-can, added stable on Cc.
+-- 
+Changes in v2:
+  - Add new patches, to replace opencoded masking+shifting with
+    FIELD_{GET,PREP} and GENMASK, suggested by Vincent MAILHOL [1]
 
-Thanks,
-Marc
+[1] https://lore.kernel.org/linux-can/5b10f6cd-c96c-3198-3df4-557e5e91b2e7@kvaser.com/T/#m14c3851e70cfb8c903388e068968a4a379d183e6
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+2.40.0
 
---mvongy46xmtqqt6x
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmR0eykACgkQvlAcSiqK
-BOgQiggAquFQWp8JcNGEW3M8XDLDriPJI++T9TNxvt18R2mvq9dp3avKNDso7B0b
-PA6A8m3RwS/gb7ibqOJtIOKt8fh0RGcraKEuYgUvEijNGfQ8L1WtjJjIV9o+gAfz
-aNeXUrdf+Nq+4s3TlZpvdPQfOIuLxuxX6mIeauq2rYmTEJLrAX8Wzqrh8H/l+Qy4
-zutQnmixVDiefKLi3Gm8/Sj7J1EtepjVa6E6e5VKdM/JdGEZ6SRzwXAtTviGy8BX
-yP7z/ced3z0C31lXnyR4oxpCYPSEfbGm1iGqZJz/jQVy+tWKLWRZ9vZCIK1tGbrG
-bcIGjG9vVvt3fkmjpTHT09ZtqcVoCw==
-=6eIq
------END PGP SIGNATURE-----
-
---mvongy46xmtqqt6x--
