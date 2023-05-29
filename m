@@ -2,61 +2,61 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B71BC714A8F
-	for <lists+linux-can@lfdr.de>; Mon, 29 May 2023 15:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9381714A91
+	for <lists+linux-can@lfdr.de>; Mon, 29 May 2023 15:44:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbjE2Noz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 29 May 2023 09:44:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59170 "EHLO
+        id S229909AbjE2No5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 29 May 2023 09:44:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbjE2Noz (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 29 May 2023 09:44:55 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C112A0
-        for <linux-can@vger.kernel.org>; Mon, 29 May 2023 06:44:53 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f122ff663eso3566056e87.2
+        with ESMTP id S229899AbjE2No4 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 29 May 2023 09:44:56 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E27ECF
+        for <linux-can@vger.kernel.org>; Mon, 29 May 2023 06:44:54 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f4f89f71b8so1619122e87.3
         for <linux-can@vger.kernel.org>; Mon, 29 May 2023 06:44:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kvaser.com; s=google; t=1685367891; x=1687959891;
+        d=kvaser.com; s=google; t=1685367892; x=1687959892;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gFqle+aQr+WeC7JcKvfVVfPpkjYxj43P/KuYGKD2iOM=;
-        b=szcPFlQq/niOgD0Y2q4s4PijkiGH6lnSw/ShkEOHBS9znxCNr0QwrIsTUYW7L1dbkH
-         u/l4zhfi7TVXprvzwnn93/z+lopzg/HMZG79Qz7wO77q4XnvZ+QUOM+GolAPzSrl4oaE
-         CI0Pw1r0LOHUdZ863QYoiNyrTL8v/g9FO1vaN0eTER0ubZkxo+0z8tiQvA9XlklHcuti
-         m1fibWx3QNgBHTr7W+wscR0SrkmmmaXSGtCqi5Fy6O6r7CS2reGCJf44TEpAAGUfbD4w
-         GpoISoRronG7l2OhTRBiq6Ke7t3K/fRaO+mkVReeOuFZTYA+RjC7uwN27oOjPBx3KESr
-         P/eA==
+        bh=SNNdqqUob1SakIS3eb+xfDdXt1uyZAOVpzPP+BwNjjs=;
+        b=Y/QQO0t14KXrRTqlC9Mj5TnFn+tMURMfGKY9DUvww143qxqhQElkcJBWLsbIBrRazV
+         hfG2TwetUVT5UeLScTJzkIlCtsr3t8/Avx6YQMz+cjxpUkGnEv7FsX5RAgwRGE3/UUPY
+         pvQOBAP/Q1RGJ8qLX6VC8d+vd9hUgEUInU4RpR0pBJBvzYZB+rriiSiLzBsgEhaSP439
+         VIVutwoTQ07z7frjJFXaw6/onU9GRMDuZpyKa9XxlNInUvNk8ZDJG7L7QkRBUwZBkK6u
+         edCVTY1HTSUQJFocfMovpbi5TiYj7vxCyUjKLr4gEdZRkSSvJ4/Lrqw+a6Znec3YYJms
+         ZA3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685367891; x=1687959891;
+        d=1e100.net; s=20221208; t=1685367892; x=1687959892;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gFqle+aQr+WeC7JcKvfVVfPpkjYxj43P/KuYGKD2iOM=;
-        b=hSEFQtqCmYqPUwxD44/68HQ7yA3X8090lp46jaJdr1gpvsfaSfIO+1SiuaN1ZJ52wZ
-         bxo9bwtmFhCygf5kF/WksfjjkXx0sAMOv92VJ2StRdHKg1JsV7WHVtzF63Vn+EqyXddj
-         lfzfxN2WSje0J4p0KLouPTiEx0aV5ItEorRfS4Ojx42LNlIjJtBeJNKvpMBKyXBrjasf
-         ygyWnDQPT4MMgcCQNTFpSJQy95ufRiYiUYnTqQ4jZLBy9AqO5j1lfme8L+e6qWVaEN7C
-         qCZFwz4uNmKRQx4NEraUS6FddjR0zabGujiWHXuFv/g4ugCYfBkAjpA49k/KgwzMYQ2I
-         vyAA==
-X-Gm-Message-State: AC+VfDxMWRLdPhPfQmL4qyjhxH4V+KgTW1O4qgi5QxX2w5eIHkXMmxyL
-        KCOT6OqHu88fV9oFOS6+B0T666YdoTur2QEywsY=
-X-Google-Smtp-Source: ACHHUZ7gII7uHhYgzeZCzgisJh8gnA5t+7ErVypD0pLb5JBMpIZ/Zk4HA7K97bW1N/7b7uL6tDZ9+Q==
-X-Received: by 2002:ac2:51ac:0:b0:4f0:ff66:b4f1 with SMTP id f12-20020ac251ac000000b004f0ff66b4f1mr3771953lfk.22.1685367891443;
-        Mon, 29 May 2023 06:44:51 -0700 (PDT)
+        bh=SNNdqqUob1SakIS3eb+xfDdXt1uyZAOVpzPP+BwNjjs=;
+        b=CLulDQ/x2XLanXjAwkNaKBitqtfj+5gk4/ELdft7vyE3qTv1TlvfyY/+sHXpJ3XGf0
+         k/OOC7BEs20fBMq00zaPWz5La0gxLbvp8+BeD29x114I7wMzQ0l2GsQVEhY07V8ANWGw
+         xMGauqtDiKOCbhZzG+zhne/iU1qom89tQ8wGZGhbwQojjc7negxDKDEoggQyx43Zp2QT
+         SPmaGZe8eG1gEvPrM4ndLoMM/3fHiYbPHLk5iNryGz0gAp2lP9BKzxXnkyGejYgnDjno
+         MXzQPHIpvVe7y9ucc4PTdlzftyUnFrL7xvqkvMKdeKF0pM6nYLfzt0sq5uhaAbe3cX80
+         0ysQ==
+X-Gm-Message-State: AC+VfDzof0Khrk63IuKPr+YEBOZZjM7sO2vn3bLAPPEXdmMNJhI8uGYe
+        4fW+mm9NK7Aynamz8VTdvcOLqPofeabZuWQnIDw=
+X-Google-Smtp-Source: ACHHUZ5uO01+xWmn3Er/Btr1FFFSNzosBo1wxTNyAzj5QFP1m8EO4S7zq+PDhHB1WIcT7CKbXeKf+A==
+X-Received: by 2002:ac2:5a44:0:b0:4f4:ca58:e852 with SMTP id r4-20020ac25a44000000b004f4ca58e852mr3777417lfn.58.1685367892425;
+        Mon, 29 May 2023 06:44:52 -0700 (PDT)
 Received: from freke.kvaser.se (h-98-128-173-232.A785.priv.bahnhof.se. [98.128.173.232])
-        by smtp.gmail.com with ESMTPSA id s7-20020a19ad47000000b004ebae99cc1dsm580lfd.159.2023.05.29.06.44.50
+        by smtp.gmail.com with ESMTPSA id s7-20020a19ad47000000b004ebae99cc1dsm580lfd.159.2023.05.29.06.44.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 May 2023 06:44:51 -0700 (PDT)
+        Mon, 29 May 2023 06:44:52 -0700 (PDT)
 From:   Jimmy Assarsson <extja@kvaser.com>
 To:     linux-can@vger.kernel.org,
         Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
 Cc:     Jimmy Assarsson <jimmyassarsson@gmail.com>,
         Jimmy Assarsson <extja@kvaser.com>
-Subject: [PATCH v2 07/14] can: kvaser_pciefd: Sort includes in alphabetic order
-Date:   Mon, 29 May 2023 15:42:41 +0200
-Message-Id: <20230529134248.752036-8-extja@kvaser.com>
+Subject: [PATCH v2 08/14] can: kvaser_pciefd: Rename device ID defines
+Date:   Mon, 29 May 2023 15:42:42 +0200
+Message-Id: <20230529134248.752036-9-extja@kvaser.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20230529134248.752036-1-extja@kvaser.com>
 References: <20230529134248.752036-1-extja@kvaser.com>
@@ -64,47 +64,76 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Sort the includes in alphabetic order.
+Rename device ID defines to better match the product name of the supported
+device.
+Use 16 bit hexadecimal values for device IDs.
+And format kvaser_pciefd_id_table using clang-format.
 
 Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
 ---
- drivers/net/can/kvaser_pciefd.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/net/can/kvaser_pciefd.c | 34 ++++++++++++++++++++++-----------
+ 1 file changed, 23 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/net/can/kvaser_pciefd.c b/drivers/net/can/kvaser_pciefd.c
-index e24a8e77aef1..8be27a7dc7e9 100644
+index 8be27a7dc7e9..bf3fa51069a9 100644
 --- a/drivers/net/can/kvaser_pciefd.c
 +++ b/drivers/net/can/kvaser_pciefd.c
-@@ -5,16 +5,16 @@
-  *  - PEAK linux canfd driver
-  */
+@@ -33,11 +33,11 @@ MODULE_DESCRIPTION("CAN driver for Kvaser CAN/PCIe devices");
+ #define KVASER_PCIEFD_64BIT_DMA_BIT BIT(0)
  
-+#include <linux/can/dev.h>
-+#include <linux/device.h>
-+#include <linux/ethtool.h>
-+#include <linux/iopoll.h>
- #include <linux/kernel.h>
- #include <linux/minmax.h>
- #include <linux/module.h>
--#include <linux/device.h>
--#include <linux/ethtool.h>
-+#include <linux/netdevice.h>
- #include <linux/pci.h>
--#include <linux/can/dev.h>
- #include <linux/timer.h>
--#include <linux/netdevice.h>
--#include <linux/iopoll.h>
+ #define KVASER_PCIEFD_VENDOR 0x1a07
+-#define KVASER_PCIEFD_4HS_ID 0x0d
+-#define KVASER_PCIEFD_2HS_ID 0x0e
+-#define KVASER_PCIEFD_HS_ID 0x0f
+-#define KVASER_PCIEFD_MINIPCIE_HS_ID 0x10
+-#define KVASER_PCIEFD_MINIPCIE_2HS_ID 0x11
++#define KVASER_PCIEFD_4HS_DEVICE_ID 0x000d
++#define KVASER_PCIEFD_2HS_V2_DEVICE_ID 0x000e
++#define KVASER_PCIEFD_HS_V2_DEVICE_ID 0x000f
++#define KVASER_PCIEFD_MINIPCIE_HS_V2_DEVICE_ID 0x0010
++#define KVASER_PCIEFD_MINIPCIE_2HS_V2_DEVICE_ID 0x0011
  
- MODULE_LICENSE("Dual BSD/GPL");
- MODULE_AUTHOR("Kvaser AB <support@kvaser.com>");
+ /* PCIe IRQ registers */
+ #define KVASER_PCIEFD_IRQ_REG 0x40
+@@ -282,12 +282,24 @@ static const struct can_bittiming_const kvaser_pciefd_bittiming_const = {
+ };
+ 
+ static struct pci_device_id kvaser_pciefd_id_table[] = {
+-	{ PCI_DEVICE(KVASER_PCIEFD_VENDOR, KVASER_PCIEFD_4HS_ID), },
+-	{ PCI_DEVICE(KVASER_PCIEFD_VENDOR, KVASER_PCIEFD_2HS_ID), },
+-	{ PCI_DEVICE(KVASER_PCIEFD_VENDOR, KVASER_PCIEFD_HS_ID), },
+-	{ PCI_DEVICE(KVASER_PCIEFD_VENDOR, KVASER_PCIEFD_MINIPCIE_HS_ID), },
+-	{ PCI_DEVICE(KVASER_PCIEFD_VENDOR, KVASER_PCIEFD_MINIPCIE_2HS_ID), },
+-	{ 0,},
++	{
++		PCI_DEVICE(KVASER_PCIEFD_VENDOR, KVASER_PCIEFD_4HS_DEVICE_ID),
++	},
++	{
++		PCI_DEVICE(KVASER_PCIEFD_VENDOR, KVASER_PCIEFD_2HS_V2_DEVICE_ID),
++	},
++	{
++		PCI_DEVICE(KVASER_PCIEFD_VENDOR, KVASER_PCIEFD_HS_V2_DEVICE_ID),
++	},
++	{
++		PCI_DEVICE(KVASER_PCIEFD_VENDOR, KVASER_PCIEFD_MINIPCIE_HS_V2_DEVICE_ID),
++	},
++	{
++		PCI_DEVICE(KVASER_PCIEFD_VENDOR, KVASER_PCIEFD_MINIPCIE_2HS_V2_DEVICE_ID),
++	},
++	{
++		0,
++	},
+ };
+ MODULE_DEVICE_TABLE(pci, kvaser_pciefd_id_table);
+ 
 -- 
 2.40.0
 
