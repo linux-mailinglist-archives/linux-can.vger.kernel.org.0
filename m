@@ -2,204 +2,153 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15DBC716800
-	for <lists+linux-can@lfdr.de>; Tue, 30 May 2023 17:52:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADFCC716AF7
+	for <lists+linux-can@lfdr.de>; Tue, 30 May 2023 19:30:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232759AbjE3Pw0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 30 May 2023 11:52:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39788 "EHLO
+        id S232034AbjE3RaQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 30 May 2023 13:30:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232915AbjE3PwJ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 30 May 2023 11:52:09 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on20731.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e88::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DFE10DC;
-        Tue, 30 May 2023 08:51:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=U1rg2UTmhvWCMrIWfsu2bi54JQJQ5Yc2aXO66Gd2zBqDfFghOXm0QqURskY9X7SCtpsnISla/He2vRY/rvdBOvrDhOMS1E7ON30F0YEELdqO69rGoTtMvdOfd4CBl98xwkV3rboH7o0/fNFjcQfeJmDH1gYRD/5FuowbHTCutqpvPmc+EQ6u1Lk+2uL8x/YkwPdm4E0Wkyv0tvoRYtbEjtPGzQLcRwTLrfa36mz7mphygfaJd8BRo2XOUy4pxfiCPOt7dU6iDElJSxM/HRG3tO/ATyK003UWwHE3O7Yaf97EGHan5MFED88+8xKw8my/3zFDoXI+N8rglCR6LEoX5g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hHGwTEJGDoptGTTSNvnDTd1LTLZl3fJ3KBk1CCQp0fE=;
- b=F2ULGBKsl746PkQocCibUuDhMMMsl07Tm/v7dknQBzV2C4Dp44Ks0oPfLWwAo3KxutrkxYxIIXQbYKssWx2WArqNjvo5q0yKRJmky394qPZKWPZ9pq+AXL0w9AIltWc9Nx0iOqcoAOM4ijpjYJF3qFJshSM7O3bosD7IB72QrZ1AdexLegt4kEpK6kJ/b8gk/6z2eWbNBD3AcvfcB0e+yfc+P7YBagcb55hMrHaIwTgpJPPODIhAQQPGQd17L7U3GscdtWCKa9Vqr8p6C0ECyR6Zgm5COMgOz6Dyf4bOqm6Zv6z6Ybd13R6PE5mYyw4qBv8JI1js6wJsR2V9SERo8g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hHGwTEJGDoptGTTSNvnDTd1LTLZl3fJ3KBk1CCQp0fE=;
- b=A+WykMXjoSPgWhPQESCCJe8hYxMeUx0sOXRlSJFAmqthTp0AnNuf3m3TUuixVvxswbQKmofNGmxcxsXYTgK8ob4BMwrRMB0b8x8mygt4mGgcwp6o/ar6fOws0UaXo5E6Db4iBJkwfGF0MdXhow0UZ1zDuUTPmFweqGRCFEshYgo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by MN2PR13MB3872.namprd13.prod.outlook.com (2603:10b6:208:1ef::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Tue, 30 May
- 2023 15:51:13 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6433.022; Tue, 30 May 2023
- 15:51:13 +0000
-Date:   Tue, 30 May 2023 17:51:05 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+        with ESMTP id S233653AbjE3RaP (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 30 May 2023 13:30:15 -0400
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4BD89C;
+        Tue, 30 May 2023 10:29:55 -0700 (PDT)
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-52cb8e5e9f5so34254a12.0;
+        Tue, 30 May 2023 10:29:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685467795; x=1688059795;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QVRaZG2eM/gohyhY2fboQdC7q4wdMVSPr7qxCPkqPm8=;
+        b=Ibqwv9ArAqbL9+kZoGxmE8qDprx+l8vtVBDwhCAQ7kvJsL6VZKNzhKDzUIgytYbHhg
+         C8L61hLHsmzsZ0BgrflxV8MXYu9g9ZijXNP5zbS1+TC+yYar0C6vlGNu3ZUhdPlBFIr9
+         nfsFru0HKaeRsIeyGleeFhxS9XTg6cvHVFO94dUVm1+ZA6fNcBLUIGkAberioJwMSikA
+         PzuCGx12K/c/MzckJJnAYwNz0bxv5qonjvijlvWEqcPmWk3JLNbP9lHgtlqF3z7kQ5WA
+         lRDprzc/d6nY/RopgO2B1m+Tlz6kqy8SdT4zOboUKcJOWW2ulGluOVFXIAVk5mljNHPm
+         bpow==
+X-Gm-Message-State: AC+VfDwT4SF5IbX3/MzkqORDMz1z8H6zZejd1e/vvTqQ+bB/zdozggXt
+        HkRN/TL3smWXDKxgkIzGJjJYNiTxZK6YGL2G7Cs=
+X-Google-Smtp-Source: ACHHUZ5A4A3O+7txlbeFTK3FPQBbhzfelt3pPcztJKmBPhBSbQJ/44iVbEwp9i8wHQpP8t5FZ/ddJ0htHD9ZXwIBdiQ=
+X-Received: by 2002:a17:90b:1190:b0:256:6462:e399 with SMTP id
+ gk16-20020a17090b119000b002566462e399mr9840472pjb.5.1685467794923; Tue, 30
+ May 2023 10:29:54 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230507155506.3179711-1-mailhol.vincent@wanadoo.fr>
+ <20230530144637.4746-1-mailhol.vincent@wanadoo.fr> <20230530144637.4746-4-mailhol.vincent@wanadoo.fr>
+ <ZHYbaYWeIaDcUhhw@corigine.com>
+In-Reply-To: <ZHYbaYWeIaDcUhhw@corigine.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Wed, 31 May 2023 02:29:43 +0900
+Message-ID: <CAMZ6RqK2vr0KRq76UNOSKzHMEfhz1YPFdg7CdQJqq4pBH3hj5w@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] can: length: refactor frame lengths definition to
+ add size in bits
+To:     Simon Horman <simon.horman@corigine.com>
 Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
         Thomas.Kopp@microchip.com,
         Oliver Hartkopp <socketcan@hartkopp.net>,
         netdev@vger.kernel.org, marex@denx.de, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] can: length: refactor frame lengths definition to
- add size in bits
-Message-ID: <ZHYbaYWeIaDcUhhw@corigine.com>
-References: <20230507155506.3179711-1-mailhol.vincent@wanadoo.fr>
- <20230530144637.4746-1-mailhol.vincent@wanadoo.fr>
- <20230530144637.4746-4-mailhol.vincent@wanadoo.fr>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230530144637.4746-4-mailhol.vincent@wanadoo.fr>
-X-ClientProxiedBy: AM0PR06CA0079.eurprd06.prod.outlook.com
- (2603:10a6:208:fa::20) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|MN2PR13MB3872:EE_
-X-MS-Office365-Filtering-Correlation-Id: a99aa63a-1a13-40cf-d6cc-08db6125b225
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: L+qlKB7nS5ysZecxkO4rLQZelXJbNNmC1RSWUcg1hHWg9Is000Dqjvm/U39VEphoEQ/NmNVdlEkyiSTyKTot5l2AzCbvqP+gjdId+LeC1YjG8Dsg/2ziq7fJzkhuII6ETcw36n7tvNhYlKUP89GWeEzxG2k/b9ca7hR2IIWXKtoU2La+GAkKVd/VnrJ2cPJxLEu3u2zgcA2riMP4jD/e0+iOKPgIJcyr6/ekqNYVGe15NU1nZafnt/0am8ISd4pHeD17AfK9Enwi44oQma2/wGf1n3ECbxM1xchmNQLH/A4nUJZikoXMHrrR6WKas6GxD6GIeenPIzicXqJ6tj7Vm0iFs/TgCIvKYb4mbufYQTAcQygzq32R0eiA9UBY0kU8QuWJeXlRXfdSwhc4PI/7tVUt+7m8/jtjCvqMLlvc76mpBrhMfxjBNihRHYKC2yYJvS+/bUvjZLOUSM6qSGz/0Fd6iWRMJ/Vx5T4xyBkrTYfLx0jTyCiJHo3nTCYe3a9xXqRjUdGeP/ZyC3PawOhI8WXciquISU2XQIgt1ryviecPxxGs2EEkM1tIKOnr0uAv
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(396003)(366004)(39840400004)(376002)(451199021)(6916009)(4326008)(66946007)(66556008)(66476007)(86362001)(478600001)(5660300002)(41300700001)(6486002)(8936002)(8676002)(44832011)(54906003)(6512007)(6666004)(316002)(6506007)(186003)(2616005)(83380400001)(2906002)(36756003)(38100700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?eBHw3gzkYvWy5cWbiXLSCOaCWso3bQc0VO4JgdNSgzD4BckLNxQY95aQaVxC?=
- =?us-ascii?Q?WBFksaoBedpHYr0fOeAojS/YXWkclefEZtmKEzGnxWAYbL62C4Bk4boftaAK?=
- =?us-ascii?Q?Ns6f6+Ybd0J8jI6md1wY/w5pIBgF2QSSdkywbzzYubVAqeXy2Z6ckmKfuva8?=
- =?us-ascii?Q?GyYo8ovDaNCr1kloiGAx70XQkGOYDfUwc/wAZP3fo/JRCutDwKYIk1FF0l++?=
- =?us-ascii?Q?wHSAGZEfpEY8NxLTVB9srOIkAWJFwRKAOTn4ZSzfQIRquV4ALMEYpX94WKEf?=
- =?us-ascii?Q?MB3Vnb9hYFEK9y0lifsMG6FPqE6B0NCCMoNk/Eek8FDc6YsMQCHdmdpSZdDF?=
- =?us-ascii?Q?Exl4FTET1GnYa4dCC8ee3HnOedR0SjksRNhdjHDFKZxYkVdnaO67bCimO7p7?=
- =?us-ascii?Q?ahcNgq7iUwqLGQcFCJB0GWeoZn61rv162eoQWtdofDxEB2CqKA5bkERepRE2?=
- =?us-ascii?Q?HiYUCud0OW87F/6gFMsUILAan94drcZzTBfrYxpbPdFX4aE82ccNImxUIexD?=
- =?us-ascii?Q?QmSMXFalGhuxr2z5Z76QlS/NzVIoy7pUMT6ti0iffiEMW5dmMXgeuHUvKgNm?=
- =?us-ascii?Q?gftH/WbIP66ENHAiqkm5AOzipSUbvCiYIWdP7wT6r9bYrKbyglHZ1LyLUo9o?=
- =?us-ascii?Q?7enbezVkHHyw5CWiptevd9NC+HKVDbdSkBikyuTsaWCiKKBfD4KVvhBLzEsh?=
- =?us-ascii?Q?FilXe1fRj6nL7lSwY08415brLK7FXpDG3JdDbzsoepFf3A4DL+AVhQO0l4Ng?=
- =?us-ascii?Q?X6enLA+rZWQLz9uNLArt0UPvL/gmvO286wcxw5TpnHUSSY6kWMczB/5lJ18n?=
- =?us-ascii?Q?1LwKpI2Xc+oTrxpYutNcf/F0egXqNvBuUzp7HWtyoP+J8BtkhVyaoc0Hoihq?=
- =?us-ascii?Q?/taO0j5+/qhm4MaN69+ow+jYnSFnZE92fozsp85civv0j5gORxCq2xGH0F6t?=
- =?us-ascii?Q?4Uh9FK0RM1VPT7Uu0RgHlUtJ3VtxNXEFKqa+q+5XfubZCmHMTgHC6GLl5oFe?=
- =?us-ascii?Q?x1KoS6dGMyVLL4LZ3qy39s0lzCpCXX22jgNAYEP5Uqg/rSRpXfy1vyRYKEUy?=
- =?us-ascii?Q?VBcJNYPmb8+cKycGrWwXyJzmY8mJvJGl856b6uJDzpllzly8bMwPyUaHk+uy?=
- =?us-ascii?Q?GWtWLhUt1eUMi8+f8PcvnHmFVXJM6KmnVt5ibVQ7aQvDRtdoPfHYQEFlNgOe?=
- =?us-ascii?Q?2hmNPrTxzDydT+SsnQdxwhPhqEi+PEXUpcC1gQMJKxmEp7Y3SCfpSaF/H0M4?=
- =?us-ascii?Q?TWkcoBnBI61U0AoYlsqLLoka7VDvY8bPkrDJ6Grae/QNPB4Wkn2hpjDCHrL4?=
- =?us-ascii?Q?wAH7T42jJpO7xLoW022njHtGbeTksjaGezVU2Gid3hR3d0BOk0CU9TNQvENm?=
- =?us-ascii?Q?ZAyQGBl9MTw1/kTVAYK2XhRvFe/dNlv9GXdWQ77Mq8e3XIgDMOOHSF9+5UJO?=
- =?us-ascii?Q?CLtRhp+eAdaSG10sXmvww39jvofjLaLa7BQ4m3tQt98Wsdehb8nGcxTzmVo7?=
- =?us-ascii?Q?CAo7RCRBWYQ65XFSRrlBlpDY2Yz37nSsoe2LiJQnNpING9Jh/GK2+TUfH/P/?=
- =?us-ascii?Q?67RdRxIJdVOow28O0FFUqL7ELExKCXGujNhVfvWDB1oLD43IO0lGlOFo0+Nv?=
- =?us-ascii?Q?+4jtOwJLOfCkEyl8veeBtccLtim483elrqexIMJ3ckK1m7JVKGX4kEbE/1Zf?=
- =?us-ascii?Q?o7EDTg=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a99aa63a-1a13-40cf-d6cc-08db6125b225
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2023 15:51:13.4983
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4oVp0uSfKcDXpVEg9iAuan/xzgMQn6PeZfpO5IpwZf4SWbxPsHwHMeFzucyeDT/wQJ5FnWLqPSRB0gWSHayDtf7WiS20X/flpKPMpaSrt68=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR13MB3872
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue, May 30, 2023 at 11:46:37PM +0900, Vincent Mailhol wrote:
-> Introduce a method to calculate the exact size in bits of a CAN(-FD)
-> frame with or without dynamic bitsuffing.
-> 
-> These are all the possible combinations taken into account:
-> 
->   - Classical CAN or CAN-FD
->   - Standard or Extended frame format
->   - CAN-FD CRC17 or CRC21
->   - Include or not intermission
-> 
-> Instead of doing several individual macro definitions, declare the
-> can_frame_bits() function-like macro. To this extent, do a full
-> refactoring of the length definitions.
-> 
-> In addition add the can_frame_bytes(). This function-like macro
-> replaces the existing macro:
-> 
->   - CAN_FRAME_OVERHEAD_SFF: can_frame_bytes(false, false, 0)
->   - CAN_FRAME_OVERHEAD_EFF: can_frame_bytes(false, true, 0)
->   - CANFD_FRAME_OVERHEAD_SFF: can_frame_bytes(true, false, 0)
->   - CANFD_FRAME_OVERHEAD_EFF: can_frame_bytes(true, true, 0)
-> 
-> The different maximum frame lengths (maximum data length, including
-> intermission) are as follow:
-> 
->    Frame type				bits	bytes
->   -------------------------------------------------------
->    Classic CAN SFF no-bitstuffing	111	14
->    Classic CAN EFF no-bitstuffing	131	17
->    Classic CAN SFF bitstuffing		135	17
->    Classic CAN EFF bitstuffing		160	20
->    CAN-FD SFF no-bitstuffing		579	73
->    CAN-FD EFF no-bitstuffing		598	75
->    CAN-FD SFF bitstuffing		712	89
->    CAN-FD EFF bitstuffing		736	92
-> 
-> The macro CAN_FRAME_LEN_MAX and CANFD_FRAME_LEN_MAX are kept as an
-> alias to, respectively, can_frame_bytes(false, true, CAN_MAX_DLEN) and
-> can_frame_bytes(true, true, CANFD_MAX_DLEN).
-> 
-> In addition to the above:
-> 
->  - Use ISO 11898-1:2015 definitions for the name of the CAN frame
->    fields.
->  - Include linux/bits.h for use of BITS_PER_BYTE.
->  - Include linux/math.h for use of mult_frac() and
->    DIV_ROUND_UP(). N.B: the use of DIV_ROUND_UP() is not new to this
->    patch, but the include was previously omitted.
->  - Add copyright 2023 for myself.
-> 
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+On Wed. 31 May 2023 at 00:56, Simon Horman <simon.horman@corigine.com> wrote:
+> On Tue, May 30, 2023 at 11:46:37PM +0900, Vincent Mailhol wrote:
+> > Introduce a method to calculate the exact size in bits of a CAN(-FD)
+> > frame with or without dynamic bitsuffing.
+> >
+> > These are all the possible combinations taken into account:
+> >
+> >   - Classical CAN or CAN-FD
+> >   - Standard or Extended frame format
+> >   - CAN-FD CRC17 or CRC21
+> >   - Include or not intermission
+> >
+> > Instead of doing several individual macro definitions, declare the
+> > can_frame_bits() function-like macro. To this extent, do a full
+> > refactoring of the length definitions.
+> >
+> > In addition add the can_frame_bytes(). This function-like macro
+> > replaces the existing macro:
+> >
+> >   - CAN_FRAME_OVERHEAD_SFF: can_frame_bytes(false, false, 0)
+> >   - CAN_FRAME_OVERHEAD_EFF: can_frame_bytes(false, true, 0)
+> >   - CANFD_FRAME_OVERHEAD_SFF: can_frame_bytes(true, false, 0)
+> >   - CANFD_FRAME_OVERHEAD_EFF: can_frame_bytes(true, true, 0)
+> >
+> > The different maximum frame lengths (maximum data length, including
+> > intermission) are as follow:
+> >
+> >    Frame type                         bits    bytes
+> >   -------------------------------------------------------
+> >    Classic CAN SFF no-bitstuffing     111     14
+> >    Classic CAN EFF no-bitstuffing     131     17
+> >    Classic CAN SFF bitstuffing                135     17
+> >    Classic CAN EFF bitstuffing                160     20
+> >    CAN-FD SFF no-bitstuffing          579     73
+> >    CAN-FD EFF no-bitstuffing          598     75
+> >    CAN-FD SFF bitstuffing             712     89
+> >    CAN-FD EFF bitstuffing             736     92
+> >
+> > The macro CAN_FRAME_LEN_MAX and CANFD_FRAME_LEN_MAX are kept as an
+> > alias to, respectively, can_frame_bytes(false, true, CAN_MAX_DLEN) and
+> > can_frame_bytes(true, true, CANFD_MAX_DLEN).
+> >
+> > In addition to the above:
+> >
+> >  - Use ISO 11898-1:2015 definitions for the name of the CAN frame
+> >    fields.
+> >  - Include linux/bits.h for use of BITS_PER_BYTE.
+> >  - Include linux/math.h for use of mult_frac() and
+> >    DIV_ROUND_UP(). N.B: the use of DIV_ROUND_UP() is not new to this
+> >    patch, but the include was previously omitted.
+> >  - Add copyright 2023 for myself.
+> >
+> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+>
+> ...
+>
+> > +/**
+> > + * can_bitstuffing_len() - Calculate the maximum length with bitsuffing
+> > + * @bitstream_len: length of a destuffed bit stream
+>
+> Hi Vincent,
+>
+> it looks like an editing error has crept in here:
+>
+>         s/bitstream_len/destuffed_len/
 
-...
+Doh! Thanks for picking this up.
 
-> +/**
-> + * can_bitstuffing_len() - Calculate the maximum length with bitsuffing
-> + * @bitstream_len: length of a destuffed bit stream
+I already prepared a v4 locally. Before sending it, I will wait one
+day to see if there are other comments.
 
-Hi Vincent,
-
-it looks like an editing error has crept in here:
-
-	s/bitstream_len/destuffed_len/
-
-> + *
-> + * The worst bit stuffing case is a sequence in which dominant and
-> + * recessive bits alternate every four bits:
-> + *
-> + *   Destuffed: 1 1111  0000  1111  0000  1111
-> + *   Stuffed:   1 1111o 0000i 1111o 0000i 1111o
-> + *
-> + * Nomenclature
-> + *
-> + *  - "0": dominant bit
-> + *  - "o": dominant stuff bit
-> + *  - "1": recessive bit
-> + *  - "i": recessive stuff bit
-> + *
-> + * Aside of the first bit, one stuff bit is added every four bits.
-> + *
-> + * Return: length of the stuffed bit stream in the worst case scenario.
-> + */
-> +#define can_bitstuffing_len(destuffed_len)			\
-> +	(destuffed_len + (destuffed_len - 1) / 4)
+> > + *
+> > + * The worst bit stuffing case is a sequence in which dominant and
+> > + * recessive bits alternate every four bits:
+> > + *
+> > + *   Destuffed: 1 1111  0000  1111  0000  1111
+> > + *   Stuffed:   1 1111o 0000i 1111o 0000i 1111o
+> > + *
+> > + * Nomenclature
+> > + *
+> > + *  - "0": dominant bit
+> > + *  - "o": dominant stuff bit
+> > + *  - "1": recessive bit
+> > + *  - "i": recessive stuff bit
+> > + *
+> > + * Aside of the first bit, one stuff bit is added every four bits.
+> > + *
+> > + * Return: length of the stuffed bit stream in the worst case scenario.
+> > + */
+> > +#define can_bitstuffing_len(destuffed_len)                   \
+> > +     (destuffed_len + (destuffed_len - 1) / 4)
