@@ -2,130 +2,96 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79190714A96
-	for <lists+linux-can@lfdr.de>; Mon, 29 May 2023 15:45:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83F677152A2
+	for <lists+linux-can@lfdr.de>; Tue, 30 May 2023 02:46:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229539AbjE2NpN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 29 May 2023 09:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59560 "EHLO
+        id S229494AbjE3Aqj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 29 May 2023 20:46:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbjE2NpM (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 29 May 2023 09:45:12 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B84D0E3
-        for <linux-can@vger.kernel.org>; Mon, 29 May 2023 06:45:00 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f3edc05aa5so3566765e87.3
-        for <linux-can@vger.kernel.org>; Mon, 29 May 2023 06:45:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kvaser.com; s=google; t=1685367899; x=1687959899;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9xxhb5aEZpD3+WBkM+NW9x4nVd6k3ixrIRRsc45uHdo=;
-        b=unwtn3lC3pzVlL0Y9/RZ4e+0nXng7kdvsG/FKoO0G6cLHzXZ4WUSNDoDday0x2kF34
-         +SKXQN5Qh0XvJJTsHs1JqI+PpsxnaaSm+XWg+Cs5C2kkZxyACYzuRcrEfT91sXAA83wN
-         kyN2Pqn0ctj9X+dr9mtd0qKCzQA7cRK0ekvQpC6eiCgrPqax/p3xzynxnIejAv/CuUq6
-         bM8vxDt8rEQPh/aimwQPbw0gkHQhFHSlcVW/NJ3vSmf+13FK3P3m0A7RpdMrJzZahfGP
-         jx9ODu6MwWq8Q1JWG+SIfOphSsL3E+1Wt33IkWu+61xMA0SoMCBWxG5q97iy/zifT498
-         yENg==
+        with ESMTP id S229478AbjE3Aqj (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 29 May 2023 20:46:39 -0400
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3044FC7
+        for <linux-can@vger.kernel.org>; Mon, 29 May 2023 17:46:38 -0700 (PDT)
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1b04949e4e9so7368775ad.3
+        for <linux-can@vger.kernel.org>; Mon, 29 May 2023 17:46:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685367899; x=1687959899;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9xxhb5aEZpD3+WBkM+NW9x4nVd6k3ixrIRRsc45uHdo=;
-        b=mA5ibvMSQrPHYphAc/niGHRHaQuAfoc+tIM988k1K5xHirBmYOYbACLis1D3S/TBln
-         QQrpMUQeu/KIf63GoFDJsJ3gH+uNGD9Cdb0+xN417kOksndLNXm7T3NJNBfINXvhzRaC
-         CHatNaHF9PQD8+IlZzf4pr26y9ECcC70v/H4lYOZ1boW8ixLjbSxCtfU1fUMoLW2nTTO
-         0TcDsIL9ThAMR6XCnwh7q+qDZ/AVjz18wH4+gY/jFW4aagIu0dDkQlp2mb3eIpMX+EmH
-         ObmP/hgek2xrEIKO0vccOZwPjp3KvluL5H+tBbW0LA1HUL2JON32JX4pMGisI79hDmPg
-         RkpA==
-X-Gm-Message-State: AC+VfDyucbpVPY/VU1o9NE5cOfgShyzEs66jEDXNm4Y0G5bkCvmmsaIf
-        n2gXyTR6emBybs7C67VyT3kPmKlfh8HY1Pj8Y6I=
-X-Google-Smtp-Source: ACHHUZ7W2oE4MOSmLLS3Jv7Wa+YacjEalHNoJRL9lauJg7Y8hPcRvm/fRU+rGxz8o+96hz5H0JtVhQ==
-X-Received: by 2002:ac2:532d:0:b0:4e9:74a8:134c with SMTP id f13-20020ac2532d000000b004e974a8134cmr3195197lfh.43.1685367898867;
-        Mon, 29 May 2023 06:44:58 -0700 (PDT)
-Received: from freke.kvaser.se (h-98-128-173-232.A785.priv.bahnhof.se. [98.128.173.232])
-        by smtp.gmail.com with ESMTPSA id s7-20020a19ad47000000b004ebae99cc1dsm580lfd.159.2023.05.29.06.44.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 May 2023 06:44:58 -0700 (PDT)
-From:   Jimmy Assarsson <extja@kvaser.com>
-To:     linux-can@vger.kernel.org,
-        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Jimmy Assarsson <jimmyassarsson@gmail.com>,
-        Jimmy Assarsson <extja@kvaser.com>
-Subject: [PATCH v2 14/14] can: kvaser_pciefd: Use TX FIFO size read from CAN controller
-Date:   Mon, 29 May 2023 15:42:48 +0200
-Message-Id: <20230529134248.752036-15-extja@kvaser.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20230529134248.752036-1-extja@kvaser.com>
-References: <20230529134248.752036-1-extja@kvaser.com>
+        d=1e100.net; s=20221208; t=1685407597; x=1687999597;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LSqA+J38MgSr1tUZYIk9mTn6j85AbTnuALoH/4moN7I=;
+        b=CIt7RgTn+cMDUMn7ddsnC+PcbclBW9icNo2NkPyF7774VBDAyZdt3Gk1PIDM9lJgPM
+         C4WmwXqRj/1BcUQIu+8MHTK9qpQ0W77mXo6IecaeJXD5FNKsoLx6okJUAHtbYF8IE0qv
+         nn+X/JYBx3X3VPygw46GgAghYLlLDUgaMq3RT98Zt5kb4a34D5IOQTpo6GvYfw+EdsSC
+         zUkADdY/h/0bBOf3NDIcK58BbKOGxB8xSRwSFrXeYSTlcwUaKunpT+dEAlHg8M6rAL8q
+         7JdUbVjxHWr/JjNTzhcj2FvTJnyPDPWBD0pm9dl+kuCRUt5h23tDlmsnEOupMV95TryH
+         Hyeg==
+X-Gm-Message-State: AC+VfDz6cuJxXaTRqfMv0N6v8UOJ/5DKQYe4f6MyrZp9W7TMslhcKfAL
+        ULJPiVNhPmT6ziSDDl+dPvOzP50O7Dz2OxBVrimP0jQHukE=
+X-Google-Smtp-Source: ACHHUZ7EsFwB80RcIXQlzeKmWqjANQRVO6plc2vyjb4exoTktQgGGw+uCPOhWndRBt98YIPxfYfNCZKQ1BtQIO+bV6c=
+X-Received: by 2002:a17:902:e5c2:b0:1a9:8d57:6d6c with SMTP id
+ u2-20020a170902e5c200b001a98d576d6cmr842111plf.24.1685407597290; Mon, 29 May
+ 2023 17:46:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230529134248.752036-1-extja@kvaser.com>
+In-Reply-To: <20230529134248.752036-1-extja@kvaser.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Tue, 30 May 2023 09:46:25 +0900
+Message-ID: <CAMZ6RqK1v3v1+v4S-1bpMVmYWnHjvEbJAU6+6V+a8jtM7jLFGA@mail.gmail.com>
+Subject: Re: [PATCH v2 00/14] can: kvaser_pciefd: Fixes and improvments
+To:     Jimmy Assarsson <extja@kvaser.com>
+Cc:     linux-can@vger.kernel.org,
+        Jimmy Assarsson <jimmyassarsson@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Use the TX FIFO size read from CAN controller register, instead of using
-hard coded value.
+On Mon. 29 May 2023 at 22:42, Jimmy Assarsson <extja@kvaser.com> wrote:
+> This patch series contains various non critical fixes and improvments for
+> the kvaser_pciefd driver.
+>
+> Jimmy Assarsson (14):
+>   can: kvaser_pciefd: Remove useless write to interrupt register
+>   can: kvaser_pciefd: Remove handler for unused
+>     KVASER_PCIEFD_PACK_TYPE_EFRAME_ACK
+>   can: kvaser_pciefd: Add function to set skb hwtstamps
+>   can: kvaser_pciefd: Set hardware timestamp on transmitted packets
+>   can: kvaser_pciefd: Define unsigned constants with type suffix 'U'
+>   can: kvaser_pciefd: Remove SPI flash parameter read functionality
+>   can: kvaser_pciefd: Sort includes in alphabetic order
+>   can: kvaser_pciefd: Rename device ID defines
+>   can: kvaser_pciefd: Change return type for
+>     kvaser_pciefd_{receive,transmit,set_tx}_irq()
+>   can: kvaser_pciefd: Sort register definitions
+>   can: kvaser_pciefd: Use FIELD_{GET,PREP} and GENMASK where appropriate
+>   can: kvaser_pciefd: Add len8_dlc support
+>   can: kvaser_pciefd: Refactor code
+>   can: kvaser_pciefd: Use TX FIFO size read from CAN controller
+>
+>  drivers/net/can/Kconfig         |   3 +-
+>  drivers/net/can/kvaser_pciefd.c | 955 ++++++++++++--------------------
+>  2 files changed, 342 insertions(+), 616 deletions(-)
+>
+> --
+> Changes in v2:
+>   - Add new patches, to replace opencoded masking+shifting with
+>     FIELD_{GET,PREP} and GENMASK, suggested by Vincent MAILHOL [1]
 
-Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
----
-Changes in v2:
- - Rebased on
-  can: kvaser_pciefd: Use FIELD_{GET,PREP} and GENMASK where appropriate
+Thanks for addressing my comments.
 
- drivers/net/can/kvaser_pciefd.c | 15 +++------------
- 1 file changed, 3 insertions(+), 12 deletions(-)
+Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
-diff --git a/drivers/net/can/kvaser_pciefd.c b/drivers/net/can/kvaser_pciefd.c
-index 0321b70a3b71..db6256f2b1b3 100644
---- a/drivers/net/can/kvaser_pciefd.c
-+++ b/drivers/net/can/kvaser_pciefd.c
-@@ -658,8 +658,7 @@ static netdev_tx_t kvaser_pciefd_start_xmit(struct sk_buff *skb,
- 	/* No room for a new message, stop the queue until at least one
- 	 * successful transmit
- 	 */
--	if (count >= KVASER_PCIEFD_CAN_TX_MAX_COUNT ||
--	    can->can.echo_skb[can->echo_idx])
-+	if (count >= can->can.echo_skb_max || can->can.echo_skb[can->echo_idx])
- 		netif_stop_queue(netdev);
- 	spin_unlock_irqrestore(&can->echo_lock, irq_flags);
- 
-@@ -802,16 +801,9 @@ static int kvaser_pciefd_setup_can_ctrls(struct kvaser_pciefd *pcie)
- 		tx_nr_packets_max =
- 			FIELD_GET(KVASER_PCIEFD_KCAN_TX_NR_PACKETS_MAX_MASK,
- 				  ioread32(can->reg_base + KVASER_PCIEFD_KCAN_TX_NR_PACKETS_REG));
--		if (tx_nr_packets_max < KVASER_PCIEFD_CAN_TX_MAX_COUNT) {
--			dev_err(&pcie->pci->dev,
--				"Max Tx count is smaller than expected\n");
--
--			free_candev(netdev);
--			return -ENODEV;
--		}
- 
- 		can->can.clock.freq = pcie->freq;
--		can->can.echo_skb_max = KVASER_PCIEFD_CAN_TX_MAX_COUNT;
-+		can->can.echo_skb_max = min(KVASER_PCIEFD_CAN_TX_MAX_COUNT, tx_nr_packets_max - 1);
- 		can->echo_idx = 0;
- 		spin_lock_init(&can->echo_lock);
- 		spin_lock_init(&can->lock);
-@@ -1311,8 +1303,7 @@ static int kvaser_pciefd_handle_ack_packet(struct kvaser_pciefd *pcie,
- 		count = FIELD_GET(KVASER_PCIEFD_KCAN_TX_NR_PACKETS_CURRENT_MASK,
- 				  ioread32(can->reg_base + KVASER_PCIEFD_KCAN_TX_NR_PACKETS_REG));
- 
--		if (count < KVASER_PCIEFD_CAN_TX_MAX_COUNT &&
--		    netif_queue_stopped(can->can.dev))
-+		if (count < can->can.echo_skb_max && netif_queue_stopped(can->can.dev))
- 			netif_wake_queue(can->can.dev);
- 
- 		if (!one_shot_fail) {
--- 
-2.40.0
-
+> [1] https://lore.kernel.org/linux-can/5b10f6cd-c96c-3198-3df4-557e5e91b2e7@kvaser.com/T/#m14c3851e70cfb8c903388e068968a4a379d183e6
+>
+> 2.40.0
+>
