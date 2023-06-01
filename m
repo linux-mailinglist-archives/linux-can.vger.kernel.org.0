@@ -2,58 +2,155 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7542D719A6A
-	for <lists+linux-can@lfdr.de>; Thu,  1 Jun 2023 13:00:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E3BA719AF2
+	for <lists+linux-can@lfdr.de>; Thu,  1 Jun 2023 13:26:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231979AbjFALAg convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Thu, 1 Jun 2023 07:00:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53658 "EHLO
+        id S231970AbjFAL0e (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 1 Jun 2023 07:26:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232594AbjFALAb (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 1 Jun 2023 07:00:31 -0400
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB52F2;
-        Thu,  1 Jun 2023 04:00:27 -0700 (PDT)
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1b075e13a5eso5848255ad.3;
-        Thu, 01 Jun 2023 04:00:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685617227; x=1688209227;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FTsv4PYBizV6sLpd+w0VSA9HwuBz7E/owV6KuyoF9Rk=;
-        b=jhcr/bn0yTT8h6YBB/Z0N38G6W3bsF3+va1TT0V7WIgj09C8GHYZA6lemLvlLLvNDs
-         MrJRpELaeLFhovVmdqgthrBY/l7tO11D4u0pv5BL8hkrT9F7dN3iyVrkggbGXqotLx5G
-         EQes3mTpTfTP2jnaH3oQWYECQqZQO/qtdPfRDKnHrQk29iR9YZmeOn1t86E8zxYzQBy9
-         j7wIJxmumwxZclan9I3HO5r/zN81QWN/a2IxPP9CSp9REonY3CVVa/Z9PcfUAgsU/h2b
-         9ERzw2+eCaRruYupUpDBQP0iDbMw2NDI31VxRBsZbys+HcvKgbkU9IZEvmNl0CSfEzRr
-         8V2g==
-X-Gm-Message-State: AC+VfDwkwVUjBR1YNDU4gtFfs97ZKvnQVBkuupvhoABZaVQ9+c5a9fn6
-        H3unEl1mEsZYjr3YF/SX6g5KKDCDUSRRcnXBLhI=
-X-Google-Smtp-Source: ACHHUZ5prWlUUsEM4Uq79F6qJrW8WkqcbxtswDcDcxSswVdHxkTW3ACVJvQDA15mj3ABousHMjl4eV/34mh46IRS8xw=
-X-Received: by 2002:a17:903:230d:b0:1af:f660:1689 with SMTP id
- d13-20020a170903230d00b001aff6601689mr9262221plh.31.1685617227065; Thu, 01
- Jun 2023 04:00:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230507155506.3179711-1-mailhol.vincent@wanadoo.fr>
- <20230530144637.4746-1-mailhol.vincent@wanadoo.fr> <20230530144637.4746-4-mailhol.vincent@wanadoo.fr>
- <BL3PR11MB648443FA9C5B9FAD7E862949FB499@BL3PR11MB6484.namprd11.prod.outlook.com>
-In-Reply-To: <BL3PR11MB648443FA9C5B9FAD7E862949FB499@BL3PR11MB6484.namprd11.prod.outlook.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Thu, 1 Jun 2023 20:00:15 +0900
-Message-ID: <CAMZ6Rq+3zqDoOe1VhTJrivQ77vhuNFshHWMHcf8YvTiaYZ7cow@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] can: length: refactor frame lengths definition to
+        with ESMTP id S231969AbjFAL0c (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 1 Jun 2023 07:26:32 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31578123;
+        Thu,  1 Jun 2023 04:26:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1685618790; x=1717154790;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=RYXGr+AGCGJLtAbdJqpZMDjDjMq7D3BBE9EfysCbzpo=;
+  b=M59ud64IHKAbBu5Sg0v5cZA8XCzmDtjeo9ChQu8AVnBhf8B/QOnYQ8tp
+   W9HMI53paMX5h0U7VZsyUDcQFNzckXV39I4KzgAwFNqukcgynElpyeMUt
+   SjsuL1kY/rv4eHcq5MzV2uSnp/vJ8JaX2X2qwDg6Wr/fXV3K/56wKBTin
+   BuuT2NHPWxvFMwzjilsgAsHTHRaBxQ7WG/H2p85MEq+y1vHEjQ+yNCKtO
+   n9P4ApCQZYSlNCFpWnBvM8OoScBnSUfhZe6F/tgF6f9PJjIeVVF6vU1qe
+   lM96IyZVEVq0VmPP2Dua1iHpruVXkCQjpjknRjR/4aiZyLqwmy+XxaO4v
+   A==;
+X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
+   d="scan'208";a="214124991"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Jun 2023 04:26:29 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 1 Jun 2023 04:26:28 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Thu, 1 Jun 2023 04:26:28 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HZ4U60/upMrX8GUIS3VciLtXSpRBsoDna08r1ZDTo7+7+fwnKrC4VKKBl3XliRK7uWrcXqdxzvHXLTgUKQ892MDKFU8yEo1OXCrNKUKwHmWQkplECSBJi4hvk4PUFHp3Rr7hR7ekskAN2JpwOt+ky7qnuHUamP7+wksjGRfUeMR0Lf3cHZ8uhJYaz1pt64QBIHVkoi57HGY2mlXmU9i1aWO1x5JRA07Rqx4u2etrZMjpCkp10IkuMLeZuu3024JN2Fr7lnPRBPsUP7Qh/pV5TkqoJrZkR+12ug38uuFm/qpwQih0/PYO8jnO+OpQpxUDaQpJlCHI7T7tDtG2mXN5xQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RYXGr+AGCGJLtAbdJqpZMDjDjMq7D3BBE9EfysCbzpo=;
+ b=QKbl/4BzwdyvbspGPq0mP7AOj/Du3m7hNWSnUmOhSWShuYudCe4pwnwAsuCmMOjU3scz2ZcHTAAnNr4R+oVNc0MzpyAyMq3tDY4TeRszCjwCReBvlSDU6DXfwf3o125+qc8NB7yarYW9hLjgrr1LWqSsN2Cg8/sJKkXubJjcsuNFIHtRbhoUuGVwqol/oW3Y3lg/zxKc+bCgVdZdZijX9900iBNy7HgOdF3HSmxBlPmOf+FIUnzwW6a0k80mvD0U0Vzm5E425pb0Hf5rq1X4Pg2hf7dOOIbaBIAW+JOHA6ikC/Murpt/aVl9lTLZE0gGXFUGNENom8rjR9IFnzk7pw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RYXGr+AGCGJLtAbdJqpZMDjDjMq7D3BBE9EfysCbzpo=;
+ b=ph9Aoj+ZqHRaizWmcJaa7WbcHziNTkcZz+/R/MuvUwPnF9hsnUK8J2YSWMqMQoD4spNhj3w/D+BIzjyswF3OcLs9sDXYlZZ8BCkD4JinBcIMZKE68SDwg2MATPzf17i1Uv/GD4OjkS+ffNtNEO34NTW+AIG+yBWDV+e56/BJQm4=
+Received: from BL3PR11MB6484.namprd11.prod.outlook.com (2603:10b6:208:3bf::19)
+ by CH0PR11MB5523.namprd11.prod.outlook.com (2603:10b6:610:d6::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.23; Thu, 1 Jun
+ 2023 11:26:27 +0000
+Received: from BL3PR11MB6484.namprd11.prod.outlook.com
+ ([fe80::c13:dcee:8af:bbfb]) by BL3PR11MB6484.namprd11.prod.outlook.com
+ ([fe80::c13:dcee:8af:bbfb%7]) with mapi id 15.20.6433.024; Thu, 1 Jun 2023
+ 11:26:26 +0000
+From:   <Thomas.Kopp@microchip.com>
+To:     <mailhol.vincent@wanadoo.fr>
+CC:     <mkl@pengutronix.de>, <linux-can@vger.kernel.org>,
+        <socketcan@hartkopp.net>, <netdev@vger.kernel.org>,
+        <marex@denx.de>, <simon.horman@corigine.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v3 3/3] can: length: refactor frame lengths definition to
  add size in bits
-To:     Thomas.Kopp@microchip.com
-Cc:     mkl@pengutronix.de, linux-can@vger.kernel.org,
-        socketcan@hartkopp.net, netdev@vger.kernel.org, marex@denx.de,
-        simon.horman@corigine.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Thread-Topic: [PATCH v3 3/3] can: length: refactor frame lengths definition to
+ add size in bits
+Thread-Index: AQHZkwW54Wwzg7neV02strl4AYZUG691hr+ggABDsoCAAAOusA==
+Date:   Thu, 1 Jun 2023 11:26:26 +0000
+Message-ID: <BL3PR11MB64845866B586883F873EEA63FB499@BL3PR11MB6484.namprd11.prod.outlook.com>
+References: <20230507155506.3179711-1-mailhol.vincent@wanadoo.fr>
+ <20230530144637.4746-1-mailhol.vincent@wanadoo.fr>
+ <20230530144637.4746-4-mailhol.vincent@wanadoo.fr>
+ <BL3PR11MB648443FA9C5B9FAD7E862949FB499@BL3PR11MB6484.namprd11.prod.outlook.com>
+ <CAMZ6Rq+3zqDoOe1VhTJrivQ77vhuNFshHWMHcf8YvTiaYZ7cow@mail.gmail.com>
+In-Reply-To: <CAMZ6Rq+3zqDoOe1VhTJrivQ77vhuNFshHWMHcf8YvTiaYZ7cow@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL3PR11MB6484:EE_|CH0PR11MB5523:EE_
+x-ms-office365-filtering-correlation-id: ac73c43b-c42f-4a2d-80e3-08db629309e5
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 52Zgx0NQUmFGk4jUCHwFVFZ1+TzirRWAuUls++P+a7p8tW+hT1iLpMUVDbFsc90Js6rDMPsv7tl75kt/wbFyOqN3w4tAh/8d761Sgt8kj0bD4ZpNk2OtIpbL8y9misq1wIcnkWxaQPb20e7Sgf0k8uAeYtVWSJQK/9tU05ktUYBckrbpQYgAlBsWlL3Dg+b9INzk16WeTNpyuo4MyMRMUNaEb1zs/YCswGQ6MomVxirrUPKiYRxtozqYnbF9mujKg/LV7SXxfajSLWPrRQp36zTKxL0v9pU1qpH0Salb0j4MDPjj92UbKFQP6Y2aGJQbb+AM6/RlKqEdxHYZL2cUrFelFwlbs4YkbBEokdOwwpUlbL116qIFVkdFL5QiY5+6GeQ9FuOXts4e3VILRVN/OtGyAqP44tG2u1RY9RRuGBqpsjNwLMtShQ6yLld565E/A3emXKh579POPhZYSdl12+Qj8yfFbb2vNGoXd2/kg//6XYSU/HtWwfm5dg6paHCXBakBm1x4G8hcLQ7OoKI37EWBRwEO3LKIMajJVOy3pLMrXeEN5jepZZHyY7TaQjGNuZp/iHTWfS9KBhpz1viIGa1S1xWIoyh75yH0Ay+/6LYKUXNGyXiyhWFH87hQRJG7
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL3PR11MB6484.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(39860400002)(346002)(136003)(396003)(366004)(451199021)(8936002)(83380400001)(186003)(2906002)(4326008)(6916009)(64756008)(66476007)(66446008)(71200400001)(316002)(76116006)(66946007)(7696005)(54906003)(478600001)(30864003)(5660300002)(6506007)(26005)(9686003)(52536014)(8676002)(41300700001)(66556008)(55016003)(38100700002)(122000001)(38070700005)(33656002)(86362001)(579004);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UnFraVRJdEN2L0FsWlRhTnFuNytiMVJvSld5RTJDeEhmQzA3N1dqTDdsQU1S?=
+ =?utf-8?B?ZUgvbVlLNXhYMWQwTENra0xpemU4S1NLc0taWTR3dzlzT1MxdVNtNXlSdHFN?=
+ =?utf-8?B?UHd1UTIvU0FKRW5FdzBmZE5ZRDYwUUZyVXVzSklyZ1ZIeHVIa2czVVBrL0pG?=
+ =?utf-8?B?cnpmdVpxNHZOYlFsZ2d2dUZVL0g5eDdGYkZrY2tMNTh0RTFCVGJDKzdVQTIz?=
+ =?utf-8?B?QXlzOVRlVmpHSTMxMlJSZ0g1QzNNeVRwWHdjZXpHTVA3Q0dXYUN6eUYydG1H?=
+ =?utf-8?B?VjJ5WFNtTHRtbTV5WmpNWk5WN1g0Zk9JYnhtMU1IaUNGclNzQVlFSHh4T0ND?=
+ =?utf-8?B?WnJLWCtiVHc2djFsalRnaXd0VDU4Ujl6SnI3SVU1ZSsvSi8wMnNXOGxpQXVa?=
+ =?utf-8?B?bnU2ak5NK1lncmhNd0NtVVd1T1E5K2huc0dzR2dWcVY4elVjZnZldlZTTmlv?=
+ =?utf-8?B?M3pUOExjaWF3R2JmY0lCMGJlaWtES3lGT2E1a2tsemJreEkreEtXZ0w1VjEy?=
+ =?utf-8?B?NlFxZ1lqSk9ZYUJkNEVXRERQSUh4M0h4MlV6R0xwUjRWT2NwQkVJSVZkLzhJ?=
+ =?utf-8?B?QU51VUkwdmVxZjR6MDNzZkcxajBDTDhjdTFlcmlKcEJUREtZdEp1eGprdG9H?=
+ =?utf-8?B?dmJRR0x3clAvWWhHK0Nabm5rcGoxMmN0Ri82cW1Nc2o4eDRHUHh4dDlsbnRa?=
+ =?utf-8?B?c0NMaWQ1b1dBdW1SSFZaeEJENGQyQ1hvQTJvaXVINXo5TVg4MmE1YjF3NVda?=
+ =?utf-8?B?R09XQXIvSnJ0T2JBdDVxcW82eDI3NzhZMFFOLzVreFc3WGNkWXRabTdVSThW?=
+ =?utf-8?B?UXV1Ym9TU2Y0eUxPRGFkTzhrV2JuZ0xmRHhsQkxFem8vbEZsVWFWRG11Wm0y?=
+ =?utf-8?B?Y3FXQ3FUVzJEd0VLUWRBaVRKL1VHMjNTUDVDTkFsWTVnS1l5VTdIdjJzK3lu?=
+ =?utf-8?B?NkxiV05UUEh5N0pIQVArb1pnRFVZYWhiTERDT0g2MitBQkkxRFRoVENndWdC?=
+ =?utf-8?B?akZEMVExSEhIZlNWUitNRUhsNWpPUkdsM3FpVFNxa1VJR3dEdStqK0NlWUp6?=
+ =?utf-8?B?UE5vVjZKcWlBaE9QbUVpVUZxajB0STFLdTN3OVdkWDBSMysweklabUJDUG51?=
+ =?utf-8?B?aEZScnZVTVJpNHJvdE1MMjMxYTZGTzYyWU5jOEM1L2JRc2ZTMW5uWVVjSk96?=
+ =?utf-8?B?MEpLYzMwcnhCVERWYmZmTnhVTy91Skw1QmhHM3hCUWR5czhMd2RTZ3pnQk5s?=
+ =?utf-8?B?UytiWjBXWnNjeStXYkc4QkMzQmMxZXovMUhUcTIwd3pWcTRrOXh6aklZaHVu?=
+ =?utf-8?B?d0cvY2VtanpDQ0ZjZVpYZVZnMW9xYlEzTW5UQTlnUFExNi8vcU9aRlhRT1pu?=
+ =?utf-8?B?b01qdkV2aVgzalpQbkhaRTk1cCt2UGM0NEkxcWhyY3VhbDZBQUVHdGF1ZWhN?=
+ =?utf-8?B?cXF4Q0xXTEhvVkRsMFJhdllTSWVDRHFaRERRd1psUzZoemQwSHVVdDgwRHNl?=
+ =?utf-8?B?Uis2bUlUODlpdjZZRzUzZFRBV1dLdVJTTE92VEs2S096NWltRTJzYlVzdnVO?=
+ =?utf-8?B?Q0V4REc5MXpjSWpEYi9uZjJSVXhpaGh0N1lMMllvN1BaL0l6OVJTZW8wUVFQ?=
+ =?utf-8?B?aFRxVmVQbGx4UDJqZ0t3VmE4cTZjNk15bXIydVVwVWxkMm5iQlliK1p4UUx6?=
+ =?utf-8?B?RnR1amhXVjd6SUgwK2o1QzlUN1I0cWgzbS9mcGZPbGx1U0NSN1BVdzhYLzhL?=
+ =?utf-8?B?S29mOVFLR0luZXI4VWtmMmZvcS9GcWx3YXRkaUkrQ281YlkrdmF3NFBUN1Jm?=
+ =?utf-8?B?RzBEWjhpOHdoaXpFL00yc2xYeWRuYTFDTEtzTUY5V293eWxPSWtZSDJBQUxP?=
+ =?utf-8?B?TnMxRExza0pRbXI0cDZZa1Q1dGZzT3hxMlFMREVGWU1KQkc3Z1Z2T1pKK0tB?=
+ =?utf-8?B?ckFHWmRBdXBZb0ZrV2JLMFVyVmczVGJuS0lDa2xjdk1SRlVrMndOK0xUTlUz?=
+ =?utf-8?B?OVd2U3JpdWJCWjFXUzVydUtldTQ0UHQvQWJKMDNQK0tDVE5wMm9hdWQ3bUo4?=
+ =?utf-8?B?bjlnM2RBL3NORVl3TElMbWxnbXcvdFptSHFmby9oWnBvdTVueEtFNWtUdEw3?=
+ =?utf-8?Q?nbVPeqQu8a0V040CH/vHzjuVu?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL3PR11MB6484.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ac73c43b-c42f-4a2d-80e3-08db629309e5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jun 2023 11:26:26.8621
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: IBHSWTvRJwINbmnhvMh83UILtODt1IZiYVGjUKZCPL6Oqi/M3L3V/0F/JAL5+6+Gzymr9bRLWoqlC1qn6PpXTgFt6Wr7T4p0rLqTW4NtYCI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5523
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,487 +158,391 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Thu. 1 juin 2023 at19:42, <Thomas.Kopp@microchip.com> wrote:
-> > Introduce a method to calculate the exact size in bits of a CAN(-FD)
-> > frame with or without dynamic bitsuffing.
-> >
-> > These are all the possible combinations taken into account:
-> >
-> >   - Classical CAN or CAN-FD
-> >   - Standard or Extended frame format
-> >   - CAN-FD CRC17 or CRC21
-> >   - Include or not intermission
-> >
-> > Instead of doing several individual macro definitions, declare the
-> > can_frame_bits() function-like macro. To this extent, do a full
-> > refactoring of the length definitions.
-> >
-> > In addition add the can_frame_bytes(). This function-like macro
-> > replaces the existing macro:
-> >
-> >   - CAN_FRAME_OVERHEAD_SFF: can_frame_bytes(false, false, 0)
-> >   - CAN_FRAME_OVERHEAD_EFF: can_frame_bytes(false, true, 0)
-> >   - CANFD_FRAME_OVERHEAD_SFF: can_frame_bytes(true, false, 0)
-> >   - CANFD_FRAME_OVERHEAD_EFF: can_frame_bytes(true, true, 0)
-> >
-> > The different maximum frame lengths (maximum data length, including
-> > intermission) are as follow:
-> >
-> >    Frame type                           bits    bytes
-> >   -------------------------------------------------------
-> >    Classic CAN SFF no-bitstuffing       111     14
-> >    Classic CAN EFF no-bitstuffing       131     17
-> >    Classic CAN SFF bitstuffing          135     17
-> >    Classic CAN EFF bitstuffing          160     20
-> >    CAN-FD SFF no-bitstuffing            579     73
-> >    CAN-FD EFF no-bitstuffing            598     75
-> >    CAN-FD SFF bitstuffing               712     89
-> >    CAN-FD EFF bitstuffing               736     92
-> >
-> > The macro CAN_FRAME_LEN_MAX and CANFD_FRAME_LEN_MAX are kept as
-> > an
-> > alias to, respectively, can_frame_bytes(false, true, CAN_MAX_DLEN) and
-> > can_frame_bytes(true, true, CANFD_MAX_DLEN).
-> >
-> > In addition to the above:
-> >
-> >  - Use ISO 11898-1:2015 definitions for the name of the CAN frame
-> >    fields.
-> >  - Include linux/bits.h for use of BITS_PER_BYTE.
-> >  - Include linux/math.h for use of mult_frac() and
-> >    DIV_ROUND_UP(). N.B: the use of DIV_ROUND_UP() is not new to this
-> >    patch, but the include was previously omitted.
-> >  - Add copyright 2023 for myself.
-> >
-> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > ---
-> >  drivers/net/can/dev/length.c |  15 +-
-> >  include/linux/can/length.h   | 298 +++++++++++++++++++++++++----------
-> >  2 files changed, 213 insertions(+), 100 deletions(-)
-> >
-> > diff --git a/drivers/net/can/dev/length.c b/drivers/net/can/dev/length.c
-> > index b48140b1102e..b7f4d76dd444 100644
-> > --- a/drivers/net/can/dev/length.c
-> > +++ b/drivers/net/can/dev/length.c
-> > @@ -78,18 +78,7 @@ unsigned int can_skb_get_frame_len(const struct
-> > sk_buff *skb)
-> >         else
-> >                 len = cf->len;
-> >
-> > -       if (can_is_canfd_skb(skb)) {
-> > -               if (cf->can_id & CAN_EFF_FLAG)
-> > -                       len += CANFD_FRAME_OVERHEAD_EFF;
-> > -               else
-> > -                       len += CANFD_FRAME_OVERHEAD_SFF;
-> > -       } else {
-> > -               if (cf->can_id & CAN_EFF_FLAG)
-> > -                       len += CAN_FRAME_OVERHEAD_EFF;
-> > -               else
-> > -                       len += CAN_FRAME_OVERHEAD_SFF;
-> > -       }
-> > -
-> > -       return len;
-> > +       return can_frame_bytes(can_is_canfd_skb(skb), cf->can_id &
-> > CAN_EFF_FLAG,
-> > +                              false, len);
-> >  }
-> >  EXPORT_SYMBOL_GPL(can_skb_get_frame_len);
-> > diff --git a/include/linux/can/length.h b/include/linux/can/length.h
-> > index 521fdbce2d69..ef6e78fa95b9 100644
-> > --- a/include/linux/can/length.h
-> > +++ b/include/linux/can/length.h
-> > @@ -1,132 +1,256 @@
-> >  /* SPDX-License-Identifier: GPL-2.0 */
-> >  /* Copyright (C) 2020 Oliver Hartkopp <socketcan@hartkopp.net>
-> >   * Copyright (C) 2020 Marc Kleine-Budde <kernel@pengutronix.de>
-> > - * Copyright (C) 2020 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > + * Copyright (C) 2020, 2023 Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> >   */
-> >
-> >  #ifndef _CAN_LENGTH_H
-> >  #define _CAN_LENGTH_H
-> >
-> > +#include <linux/bits.h>
-> >  #include <linux/can.h>
-> >  #include <linux/can/netlink.h>
-> > +#include <linux/math.h>
-> >
-> >  /*
-> > - * Size of a Classical CAN Standard Frame
-> > + * Size of a Classical CAN Standard Frame header in bits
-> >   *
-> > - * Name of Field                       Bits
-> > + * Name of Field                               Bits
-> >   * ---------------------------------------------------------
-> > - * Start-of-frame                      1
-> > - * Identifier                          11
-> > - * Remote transmission request (RTR)   1
-> > - * Identifier extension bit (IDE)      1
-> > - * Reserved bit (r0)                   1
-> > - * Data length code (DLC)              4
-> > - * Data field                          0...64
-> > - * CRC                                 15
-> > - * CRC delimiter                       1
-> > - * ACK slot                            1
-> > - * ACK delimiter                       1
-> > - * End-of-frame (EOF)                  7
-> > - * Inter frame spacing                 3
-> > + * Start Of Frame (SOF)                                1
-> > + * Arbitration field:
-> > + *     base ID                                 11
-> > + *     Remote Transmission Request (RTR)       1
-> > + * Control field:
-> > + *     IDentifier Extension bit (IDE)          1
-> > + *     FD Format indicatior (FDF)              1
-> > + *     Data Length Code (DLC)                  4
-> > + *
-> > + * including all fields preceding the data field, ignoring bitstuffing
-> > + */
-> > +#define CAN_FRAME_HEADER_SFF_BITS 19
-> > +
-> > +/*
-> > + * Size of a Classical CAN Extended Frame header in bits
-> > + *
-> > + * Name of Field                               Bits
-> > + * ---------------------------------------------------------
-> > + * Start Of Frame (SOF)                                1
-> > + * Arbitration field:
-> > + *     base ID                                 11
-> > + *     Substitute Remote Request (SRR)         1
-> > + *     IDentifier Extension bit (IDE)          1
-> > + *     ID extension                            18
-> > + *     Remote Transmission Request (RTR)       1
-> > + * Control field:
-> > + *     FD Format indicatior (FDF)              1
-> Nit: indicator, same above
-
-ACK.
-
-> > + *     Reserved bit (r0)                       1
-> > + *     Data length code (DLC)                  4
-> > + *
-> > + * including all fields preceding the data field, ignoring bitstuffing
-> > + */
-> > +#define CAN_FRAME_HEADER_EFF_BITS 39
-> > +
-> > +/*
-> > + * Size of a CAN-FD Standard Frame in bits
-> > + *
-> > + * Name of Field                               Bits
-> > + * ---------------------------------------------------------
-> > + * Start Of Frame (SOF)                                1
-> > + * Arbitration field:
-> > + *     base ID                                 11
-> > + *     Remote Request Substitution (RRS)       1
-> > + * Control field:
-> > + *     IDentifier Extension bit (IDE)          1
-> > + *     FD Format indicator (FDF)               1
-> > + *     Reserved bit (res)                      1
-> > + *     Bit Rate Switch (BRS)                   1
-> > + *     Error Status Indicator (ESI)            1
-> > + *     Data length code (DLC)                  4
-> > + *
-> > + * including all fields preceding the data field, ignoring bitstuffing
-> > + */
-> > +#define CANFD_FRAME_HEADER_SFF_BITS 22
-> > +
-> > +/*
-> > + * Size of a CAN-FD Extended Frame in bits
-> > + *
-> > + * Name of Field                               Bits
-> > + * ---------------------------------------------------------
-> > + * Start Of Frame (SOF)                                1
-> > + * Arbitration field:
-> > + *     base ID                                 11
-> > + *     Substitute Remote Request (SRR)         1
-> > + *     IDentifier Extension bit (IDE)          1
-> > + *     ID extension                            18
-> > + *     Remote Request Substitution (RRS)       1
-> > + * Control field:
-> > + *     FD Format indicator (FDF)               1
-> > + *     Reserved bit (res)                      1
-> > + *     Bit Rate Switch (BRS)                   1
-> > + *     Error Status Indicator (ESI)            1
-> > + *     Data length code (DLC)                  4
-> >   *
-> > - * rounded up and ignoring bitstuffing
-> > + * including all fields preceding the data field, ignoring bitstuffing
-> >   */
-> > -#define CAN_FRAME_OVERHEAD_SFF DIV_ROUND_UP(47, 8)
-> > +#define CANFD_FRAME_HEADER_EFF_BITS 41
-> >
-> >  /*
-> > - * Size of a Classical CAN Extended Frame
-> > + * Size of a CAN CRC Field in bits
-> >   *
-> >   * Name of Field                       Bits
-> >   * ---------------------------------------------------------
-> > - * Start-of-frame                      1
-> > - * Identifier A                                11
-> > - * Substitute remote request (SRR)     1
-> > - * Identifier extension bit (IDE)      1
-> > - * Identifier B                                18
-> > - * Remote transmission request (RTR)   1
-> > - * Reserved bits (r1, r0)              2
-> > - * Data length code (DLC)              4
-> > - * Data field                          0...64
-> > - * CRC                                 15
-> > - * CRC delimiter                       1
-> > - * ACK slot                            1
-> > - * ACK delimiter                       1
-> > - * End-of-frame (EOF)                  7
-> > - * Inter frame spacing                 3
-> > + * CRC sequence (CRC15)                        15
-> > + * CRC Delimiter                       1
-> >   *
-> > - * rounded up and ignoring bitstuffing
-> > + * ignoring bitstuffing
-> >   */
-> > -#define CAN_FRAME_OVERHEAD_EFF DIV_ROUND_UP(67, 8)
-> > +#define CAN_FRAME_CRC_FIELD_BITS 16
-> >
-> >  /*
-> > - * Size of a CAN-FD Standard Frame
-> > + * Size of a CAN-FD CRC17 Field in bits (length: 0..16)
-> >   *
-> >   * Name of Field                       Bits
-> >   * ---------------------------------------------------------
-> > - * Start-of-frame                      1
-> > - * Identifier                          11
-> > - * Remote Request Substitution (RRS)   1
-> > - * Identifier extension bit (IDE)      1
-> > - * Flexible data rate format (FDF)     1
-> > - * Reserved bit (r0)                   1
-> > - * Bit Rate Switch (BRS)               1
-> > - * Error Status Indicator (ESI)                1
-> > - * Data length code (DLC)              4
-> > - * Data field                          0...512
-> > - * Stuff Bit Count (SBC)               4
-> > - * CRC                                 0...16: 17 20...64:21
-> > - * CRC delimiter (CD)                  1
-> > - * Fixed Stuff bits (FSB)              0...16: 6 20...64:7
-> > - * ACK slot (AS)                       1
-> > - * ACK delimiter (AD)                  1
-> > - * End-of-frame (EOF)                  7
-> > - * Inter frame spacing                 3
-> > - *
-> > - * assuming CRC21, rounded up and ignoring dynamic bitstuffing
-> > - */
-> > -#define CANFD_FRAME_OVERHEAD_SFF DIV_ROUND_UP(67, 8)
-> > + * Stuff Count                         4
-> > + * CRC Sequence (CRC17)                        17
-> > + * CRC Delimiter                       1
-> > + * Fixed stuff bits                    6
-> > + */
-> > +#define CANFD_FRAME_CRC17_FIELD_BITS 28
-> >
-> >  /*
-> > - * Size of a CAN-FD Extended Frame
-> > + * Size of a CAN-FD CRC21 Field in bits (length: 20..64)
-> >   *
-> >   * Name of Field                       Bits
-> >   * ---------------------------------------------------------
-> > - * Start-of-frame                      1
-> > - * Identifier A                                11
-> > - * Substitute remote request (SRR)     1
-> > - * Identifier extension bit (IDE)      1
-> > - * Identifier B                                18
-> > - * Remote Request Substitution (RRS)   1
-> > - * Flexible data rate format (FDF)     1
-> > - * Reserved bit (r0)                   1
-> > - * Bit Rate Switch (BRS)               1
-> > - * Error Status Indicator (ESI)                1
-> > - * Data length code (DLC)              4
-> > - * Data field                          0...512
-> > - * Stuff Bit Count (SBC)               4
-> > - * CRC                                 0...16: 17 20...64:21
-> > - * CRC delimiter (CD)                  1
-> > - * Fixed Stuff bits (FSB)              0...16: 6 20...64:7
-> > - * ACK slot (AS)                       1
-> > - * ACK delimiter (AD)                  1
-> > - * End-of-frame (EOF)                  7
-> > - * Inter frame spacing                 3
-> > - *
-> > - * assuming CRC21, rounded up and ignoring dynamic bitstuffing
-> > - */
-> > -#define CANFD_FRAME_OVERHEAD_EFF DIV_ROUND_UP(86, 8)
-> > + * Stuff Count                         4
-> > + * CRC sequence (CRC21)                        21
-> > + * CRC Delimiter                       1
-> > + * Fixed stuff bits                    7
-> > + */
-> > +#define CANFD_FRAME_CRC21_FIELD_BITS 33
-> > +
-> > +/*
-> > + * Size of a CAN(-FD) Frame footer in bits
-> > + *
-> > + * Name of Field                       Bits
-> > + * ---------------------------------------------------------
-> > + * ACK slot                            1
-> > + * ACK delimiter                       1
-> > + * End Of Frame (EOF)                  7
-> > + *
-> > + * including all fields following the CRC field
-> > + */
-> > +#define CAN_FRAME_FOOTER_BITS 9
-> > +
-> > +/*
-> > + * First part of the Inter Frame Space
-> > + * (a.k.a. IMF - intermission field)
-> > + */
-> > +#define CAN_INTERMISSION_BITS 3
-> > +
-> > +/**
-> > + * can_bitstuffing_len() - Calculate the maximum length with bitsuffing
-> Nit: bitstuffing, same further down
-
-ACK.
-
-> > + * @bitstream_len: length of a destuffed bit stream
-> > + *
-> > + * The worst bit stuffing case is a sequence in which dominant and
-> > + * recessive bits alternate every four bits:
-> > + *
-> > + *   Destuffed: 1 1111  0000  1111  0000  1111
-> > + *   Stuffed:   1 1111o 0000i 1111o 0000i 1111o
-> > + *
-> > + * Nomenclature
-> > + *
-> > + *  - "0": dominant bit
-> > + *  - "o": dominant stuff bit
-> > + *  - "1": recessive bit
-> > + *  - "i": recessive stuff bit
-> > + *
-> > + * Aside of the first bit, one stuff bit is added every four bits.
-> > + *
-> > + * Return: length of the stuffed bit stream in the worst case scenario.
-> > + */
-> > +#define can_bitstuffing_len(destuffed_len)                     \
-> > +       (destuffed_len + (destuffed_len - 1) / 4)
-> > +
-> > +#define __can_bitstuffing_len(bitstuffing, destuffed_len)      \
-> > +       (bitstuffing ? can_bitstuffing_len(destuffed_len) :     \
-> > +                      destuffed_len)
-> > +
-> > +#define __can_cc_frame_bits(is_eff, bitstuffing,               \
-> > +                           intermission, data_len)             \
-> > +(                                                              \
-> > +       __can_bitstuffing_len(bitstuffing,                      \
-> > +               (is_eff ? CAN_FRAME_HEADER_EFF_BITS :           \
-> > +                          CAN_FRAME_HEADER_SFF_BITS) +         \
-> > +               data_len * BITS_PER_BYTE +                      \
-> > +               CAN_FRAME_CRC_FIELD_BITS) +                     \
-> > +       CAN_FRAME_FOOTER_BITS +                                 \
-> > +       (intermission ? CAN_INTERMISSION_BITS : 0)              \
-> > +)
-> I think Footer and Intermission need to be pulled out of the parameter for __can_bitstuffing_length as these fields are never stuffed.
-
-Look again at the opening and closing bracket of
-__can_bitstuffing_len(). These are already out :)
-I indented the parameters of __can_bitstuffing_length() to highlight
-what is in and out.
-
-Maybe adding some newlines would help readability? Something like that:
-
-  #define __can_cc_frame_bits(is_eff, bitstuffing,                \
-                              intermission, data_len)             \
-  (                                                               \
-          __can_bitstuffing_len(                                  \
-                  bitstuffing,                                    \
-                  (is_eff ? CAN_FRAME_HEADER_EFF_BITS :           \
-                             CAN_FRAME_HEADER_SFF_BITS) +         \
-                  data_len * BITS_PER_BYTE +                      \
-                  CAN_FRAME_CRC_FIELD_BITS)                       \
-          +                                                       \
-          CAN_FRAME_FOOTER_BITS +                                 \
-          (intermission ? CAN_INTERMISSION_BITS : 0)              \
-  )
-
-> > +
-> > +#define __can_fd_frame_bits(is_eff, bitstuffing,               \
-> > +                           intermission, data_len)             \
-> > +(                                                              \
-> > +       __can_bitstuffing_len(bitstuffing,                      \
-> > +               (is_eff ? CANFD_FRAME_HEADER_EFF_BITS :         \
-> > +                          CANFD_FRAME_HEADER_SFF_BITS) +       \
-> > +               data_len * BITS_PER_BYTE) +                     \
-> > +       (data_len <= 16 ?                                       \
-> > +               CANFD_FRAME_CRC17_FIELD_BITS :                  \
-> > +               CANFD_FRAME_CRC21_FIELD_BITS) +                 \
-> > +       CAN_FRAME_FOOTER_BITS +                                 \
-> > +       (intermission ? CAN_INTERMISSION_BITS : 0)              \
-> > +)
-> I think Footer and Intermission need to be pulled out of the parameter for __can_bitstuffing_length as these fields are never stuffed.
-> The CAN_FRAME_CRC_FIELD_BITS bits need to be pulled out of the can_bitstuffing_len. That portion of the Frame is not dynamically stuffed in FD frames.
-
-Same as above, these are already out.
-
-> > +
-> > +/**
-> > + * can_frame_bits() - Calculate the number of bits in on the wire in a
-> Nit: "in on the wire" -in
-> > + *     CAN frame
-> > + * @is_fd: true: CAN-FD frame; false: Classical CAN frame.
-> > + * @is_eff: true: Extended frame; false: Standard frame.
-> > + * @bitstuffing: true: calculate the bitsuffing worst case; false:
-> > + *     calculate the bitsuffing best case (no dynamic
-> > + *     bitsuffing). Fixed stuff bits are always included.
-> > + * @intermission: if and only if true, include the inter frame space
-> > + *     assuming no bus idle (i.e. only the intermission gets added).
-> > + * @data_len: length of the data field in bytes. Correspond to
-> > + *     can(fd)_frame->len. Should be zero for remote frames. No
-> > + *     sanitization is done on @data_len.
-> > + *
-> > + * Return: the numbers of bits on the wire of a CAN frame.
-> > + */
-> > +#define can_frame_bits(is_fd, is_eff, bitstuffing,             \
-> > +                      intermission, data_len)                  \
-> > +(                                                              \
-> > +       is_fd ? __can_fd_frame_bits(is_eff, bitstuffing,        \
-> > +                                   intermission, data_len) :   \
-> > +               __can_cc_frame_bits(is_eff, bitstuffing,        \
-> > +                                   intermission, data_len)     \
-> > +)
-> > +
-> > +/*
-> > + * Number of bytes in a CAN frame
-> > + * (rounded up, including intermission)
-> > + */
-> > +#define can_frame_bytes(is_fd, is_eff, bitstuffing, data_len)  \
-> > +       DIV_ROUND_UP(can_frame_bits(is_fd, is_eff, bitstuffing, \
-> > +                                   true, data_len),            \
-> > +                    BITS_PER_BYTE)
-> >
-> >  /*
-> >   * Maximum size of a Classical CAN frame
-> > - * (rounded up and ignoring bitstuffing)
-> > + * (rounded up, ignoring bitstuffing but including intermission)
-> >   */
-> > -#define CAN_FRAME_LEN_MAX (CAN_FRAME_OVERHEAD_EFF +
-> > CAN_MAX_DLEN)
-> > +#define CAN_FRAME_LEN_MAX \
-> > +       can_frame_bytes(false, true, false, CAN_MAX_DLEN)
-> >
-> >  /*
-> >   * Maximum size of a CAN-FD frame
-> >   * (rounded up and ignoring bitstuffing)
-> Ignoring dynamic bitstuffing
-> >   */
-> > -#define CANFD_FRAME_LEN_MAX (CANFD_FRAME_OVERHEAD_EFF +
-> > CANFD_MAX_DLEN)
-> > +#define CANFD_FRAME_LEN_MAX \
-> > +       can_frame_bytes(true, true, false, CANFD_MAX_DLEN)
-> >
-> >  /*
-> >   * can_cc_dlc2len(value) - convert a given data length code (dlc) of a
-> > --
-> > 2.39.3
->
-> I think your attribution of suggested-by for myself is mixed up for the patches 2/3 and 3/3 😊
-
-ACK. I will remove it from 2/3 and add it to 3/3.
-
-> For the entire series you can add my reviewed-by.
-
-I will do so.
-Thanks for picking my typos!
+PiA+ID4gSW50cm9kdWNlIGEgbWV0aG9kIHRvIGNhbGN1bGF0ZSB0aGUgZXhhY3Qgc2l6ZSBpbiBi
+aXRzIG9mIGEgQ0FOKC1GRCkNCj4gPiA+IGZyYW1lIHdpdGggb3Igd2l0aG91dCBkeW5hbWljIGJp
+dHN1ZmZpbmcuDQo+ID4gPg0KPiA+ID4gVGhlc2UgYXJlIGFsbCB0aGUgcG9zc2libGUgY29tYmlu
+YXRpb25zIHRha2VuIGludG8gYWNjb3VudDoNCj4gPiA+DQo+ID4gPiAgIC0gQ2xhc3NpY2FsIENB
+TiBvciBDQU4tRkQNCj4gPiA+ICAgLSBTdGFuZGFyZCBvciBFeHRlbmRlZCBmcmFtZSBmb3JtYXQN
+Cj4gPiA+ICAgLSBDQU4tRkQgQ1JDMTcgb3IgQ1JDMjENCj4gPiA+ICAgLSBJbmNsdWRlIG9yIG5v
+dCBpbnRlcm1pc3Npb24NCj4gPiA+DQo+ID4gPiBJbnN0ZWFkIG9mIGRvaW5nIHNldmVyYWwgaW5k
+aXZpZHVhbCBtYWNybyBkZWZpbml0aW9ucywgZGVjbGFyZSB0aGUNCj4gPiA+IGNhbl9mcmFtZV9i
+aXRzKCkgZnVuY3Rpb24tbGlrZSBtYWNyby4gVG8gdGhpcyBleHRlbnQsIGRvIGEgZnVsbA0KPiA+
+ID4gcmVmYWN0b3Jpbmcgb2YgdGhlIGxlbmd0aCBkZWZpbml0aW9ucy4NCj4gPiA+DQo+ID4gPiBJ
+biBhZGRpdGlvbiBhZGQgdGhlIGNhbl9mcmFtZV9ieXRlcygpLiBUaGlzIGZ1bmN0aW9uLWxpa2Ug
+bWFjcm8NCj4gPiA+IHJlcGxhY2VzIHRoZSBleGlzdGluZyBtYWNybzoNCj4gPiA+DQo+ID4gPiAg
+IC0gQ0FOX0ZSQU1FX09WRVJIRUFEX1NGRjogY2FuX2ZyYW1lX2J5dGVzKGZhbHNlLCBmYWxzZSwg
+MCkNCj4gPiA+ICAgLSBDQU5fRlJBTUVfT1ZFUkhFQURfRUZGOiBjYW5fZnJhbWVfYnl0ZXMoZmFs
+c2UsIHRydWUsIDApDQo+ID4gPiAgIC0gQ0FORkRfRlJBTUVfT1ZFUkhFQURfU0ZGOiBjYW5fZnJh
+bWVfYnl0ZXModHJ1ZSwgZmFsc2UsIDApDQo+ID4gPiAgIC0gQ0FORkRfRlJBTUVfT1ZFUkhFQURf
+RUZGOiBjYW5fZnJhbWVfYnl0ZXModHJ1ZSwgdHJ1ZSwgMCkNCj4gPiA+DQo+ID4gPiBUaGUgZGlm
+ZmVyZW50IG1heGltdW0gZnJhbWUgbGVuZ3RocyAobWF4aW11bSBkYXRhIGxlbmd0aCwgaW5jbHVk
+aW5nDQo+ID4gPiBpbnRlcm1pc3Npb24pIGFyZSBhcyBmb2xsb3c6DQo+ID4gPg0KPiA+ID4gICAg
+RnJhbWUgdHlwZSAgICAgICAgICAgICAgICAgICAgICAgICAgIGJpdHMgICAgYnl0ZXMNCj4gPiA+
+ICAgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LQ0KPiA+ID4gICAgQ2xhc3NpYyBDQU4gU0ZGIG5vLWJpdHN0dWZmaW5nICAgICAgIDExMSAgICAg
+MTQNCj4gPiA+ICAgIENsYXNzaWMgQ0FOIEVGRiBuby1iaXRzdHVmZmluZyAgICAgICAxMzEgICAg
+IDE3DQo+ID4gPiAgICBDbGFzc2ljIENBTiBTRkYgYml0c3R1ZmZpbmcgICAgICAgICAgMTM1ICAg
+ICAxNw0KPiA+ID4gICAgQ2xhc3NpYyBDQU4gRUZGIGJpdHN0dWZmaW5nICAgICAgICAgIDE2MCAg
+ICAgMjANCj4gPiA+ICAgIENBTi1GRCBTRkYgbm8tYml0c3R1ZmZpbmcgICAgICAgICAgICA1Nzkg
+ICAgIDczDQo+ID4gPiAgICBDQU4tRkQgRUZGIG5vLWJpdHN0dWZmaW5nICAgICAgICAgICAgNTk4
+ICAgICA3NQ0KPiA+ID4gICAgQ0FOLUZEIFNGRiBiaXRzdHVmZmluZyAgICAgICAgICAgICAgIDcx
+MiAgICAgODkNCj4gPiA+ICAgIENBTi1GRCBFRkYgYml0c3R1ZmZpbmcgICAgICAgICAgICAgICA3
+MzYgICAgIDkyDQo+ID4gPg0KPiA+ID4gVGhlIG1hY3JvIENBTl9GUkFNRV9MRU5fTUFYIGFuZCBD
+QU5GRF9GUkFNRV9MRU5fTUFYIGFyZQ0KPiBrZXB0IGFzDQo+ID4gPiBhbg0KPiA+ID4gYWxpYXMg
+dG8sIHJlc3BlY3RpdmVseSwgY2FuX2ZyYW1lX2J5dGVzKGZhbHNlLCB0cnVlLCBDQU5fTUFYX0RM
+RU4pIGFuZA0KPiA+ID4gY2FuX2ZyYW1lX2J5dGVzKHRydWUsIHRydWUsIENBTkZEX01BWF9ETEVO
+KS4NCj4gPiA+DQo+ID4gPiBJbiBhZGRpdGlvbiB0byB0aGUgYWJvdmU6DQo+ID4gPg0KPiA+ID4g
+IC0gVXNlIElTTyAxMTg5OC0xOjIwMTUgZGVmaW5pdGlvbnMgZm9yIHRoZSBuYW1lIG9mIHRoZSBD
+QU4gZnJhbWUNCj4gPiA+ICAgIGZpZWxkcy4NCj4gPiA+ICAtIEluY2x1ZGUgbGludXgvYml0cy5o
+IGZvciB1c2Ugb2YgQklUU19QRVJfQllURS4NCj4gPiA+ICAtIEluY2x1ZGUgbGludXgvbWF0aC5o
+IGZvciB1c2Ugb2YgbXVsdF9mcmFjKCkgYW5kDQo+ID4gPiAgICBESVZfUk9VTkRfVVAoKS4gTi5C
+OiB0aGUgdXNlIG9mIERJVl9ST1VORF9VUCgpIGlzIG5vdCBuZXcgdG8gdGhpcw0KPiA+ID4gICAg
+cGF0Y2gsIGJ1dCB0aGUgaW5jbHVkZSB3YXMgcHJldmlvdXNseSBvbWl0dGVkLg0KPiA+ID4gIC0g
+QWRkIGNvcHlyaWdodCAyMDIzIGZvciBteXNlbGYuDQo+ID4gPg0KPiA+ID4gU2lnbmVkLW9mZi1i
+eTogVmluY2VudCBNYWlsaG9sIDxtYWlsaG9sLnZpbmNlbnRAd2FuYWRvby5mcj4NCj4gPiA+IC0t
+LQ0KPiA+ID4gIGRyaXZlcnMvbmV0L2Nhbi9kZXYvbGVuZ3RoLmMgfCAgMTUgKy0NCj4gPiA+ICBp
+bmNsdWRlL2xpbnV4L2Nhbi9sZW5ndGguaCAgIHwgMjk4ICsrKysrKysrKysrKysrKysrKysrKysr
+KystLS0tLS0tLQ0KPiAtLQ0KPiA+ID4gIDIgZmlsZXMgY2hhbmdlZCwgMjEzIGluc2VydGlvbnMo
+KyksIDEwMCBkZWxldGlvbnMoLSkNCj4gPiA+DQo+ID4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9u
+ZXQvY2FuL2Rldi9sZW5ndGguYyBiL2RyaXZlcnMvbmV0L2Nhbi9kZXYvbGVuZ3RoLmMNCj4gPiA+
+IGluZGV4IGI0ODE0MGIxMTAyZS4uYjdmNGQ3NmRkNDQ0IDEwMDY0NA0KPiA+ID4gLS0tIGEvZHJp
+dmVycy9uZXQvY2FuL2Rldi9sZW5ndGguYw0KPiA+ID4gKysrIGIvZHJpdmVycy9uZXQvY2FuL2Rl
+di9sZW5ndGguYw0KPiA+ID4gQEAgLTc4LDE4ICs3OCw3IEBAIHVuc2lnbmVkIGludCBjYW5fc2ti
+X2dldF9mcmFtZV9sZW4oY29uc3Qgc3RydWN0DQo+ID4gPiBza19idWZmICpza2IpDQo+ID4gPiAg
+ICAgICAgIGVsc2UNCj4gPiA+ICAgICAgICAgICAgICAgICBsZW4gPSBjZi0+bGVuOw0KPiA+ID4N
+Cj4gPiA+IC0gICAgICAgaWYgKGNhbl9pc19jYW5mZF9za2Ioc2tiKSkgew0KPiA+ID4gLSAgICAg
+ICAgICAgICAgIGlmIChjZi0+Y2FuX2lkICYgQ0FOX0VGRl9GTEFHKQ0KPiA+ID4gLSAgICAgICAg
+ICAgICAgICAgICAgICAgbGVuICs9IENBTkZEX0ZSQU1FX09WRVJIRUFEX0VGRjsNCj4gPiA+IC0g
+ICAgICAgICAgICAgICBlbHNlDQo+ID4gPiAtICAgICAgICAgICAgICAgICAgICAgICBsZW4gKz0g
+Q0FORkRfRlJBTUVfT1ZFUkhFQURfU0ZGOw0KPiA+ID4gLSAgICAgICB9IGVsc2Ugew0KPiA+ID4g
+LSAgICAgICAgICAgICAgIGlmIChjZi0+Y2FuX2lkICYgQ0FOX0VGRl9GTEFHKQ0KPiA+ID4gLSAg
+ICAgICAgICAgICAgICAgICAgICAgbGVuICs9IENBTl9GUkFNRV9PVkVSSEVBRF9FRkY7DQo+ID4g
+PiAtICAgICAgICAgICAgICAgZWxzZQ0KPiA+ID4gLSAgICAgICAgICAgICAgICAgICAgICAgbGVu
+ICs9IENBTl9GUkFNRV9PVkVSSEVBRF9TRkY7DQo+ID4gPiAtICAgICAgIH0NCj4gPiA+IC0NCj4g
+PiA+IC0gICAgICAgcmV0dXJuIGxlbjsNCj4gPiA+ICsgICAgICAgcmV0dXJuIGNhbl9mcmFtZV9i
+eXRlcyhjYW5faXNfY2FuZmRfc2tiKHNrYiksIGNmLT5jYW5faWQgJg0KPiA+ID4gQ0FOX0VGRl9G
+TEFHLA0KPiA+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGZhbHNlLCBsZW4pOw0K
+PiA+ID4gIH0NCj4gPiA+ICBFWFBPUlRfU1lNQk9MX0dQTChjYW5fc2tiX2dldF9mcmFtZV9sZW4p
+Ow0KPiA+ID4gZGlmZiAtLWdpdCBhL2luY2x1ZGUvbGludXgvY2FuL2xlbmd0aC5oIGIvaW5jbHVk
+ZS9saW51eC9jYW4vbGVuZ3RoLmgNCj4gPiA+IGluZGV4IDUyMWZkYmNlMmQ2OS4uZWY2ZTc4ZmE5
+NWI5IDEwMDY0NA0KPiA+ID4gLS0tIGEvaW5jbHVkZS9saW51eC9jYW4vbGVuZ3RoLmgNCj4gPiA+
+ICsrKyBiL2luY2x1ZGUvbGludXgvY2FuL2xlbmd0aC5oDQo+ID4gPiBAQCAtMSwxMzIgKzEsMjU2
+IEBADQo+ID4gPiAgLyogU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjAgKi8NCj4gPiA+
+ICAvKiBDb3B5cmlnaHQgKEMpIDIwMjAgT2xpdmVyIEhhcnRrb3BwIDxzb2NrZXRjYW5AaGFydGtv
+cHAubmV0Pg0KPiA+ID4gICAqIENvcHlyaWdodCAoQykgMjAyMCBNYXJjIEtsZWluZS1CdWRkZSA8
+a2VybmVsQHBlbmd1dHJvbml4LmRlPg0KPiA+ID4gLSAqIENvcHlyaWdodCAoQykgMjAyMCBWaW5j
+ZW50IE1haWxob2wgPG1haWxob2wudmluY2VudEB3YW5hZG9vLmZyPg0KPiA+ID4gKyAqIENvcHly
+aWdodCAoQykgMjAyMCwgMjAyMyBWaW5jZW50IE1haWxob2wNCj4gPG1haWxob2wudmluY2VudEB3
+YW5hZG9vLmZyPg0KPiA+ID4gICAqLw0KPiA+ID4NCj4gPiA+ICAjaWZuZGVmIF9DQU5fTEVOR1RI
+X0gNCj4gPiA+ICAjZGVmaW5lIF9DQU5fTEVOR1RIX0gNCj4gPiA+DQo+ID4gPiArI2luY2x1ZGUg
+PGxpbnV4L2JpdHMuaD4NCj4gPiA+ICAjaW5jbHVkZSA8bGludXgvY2FuLmg+DQo+ID4gPiAgI2lu
+Y2x1ZGUgPGxpbnV4L2Nhbi9uZXRsaW5rLmg+DQo+ID4gPiArI2luY2x1ZGUgPGxpbnV4L21hdGgu
+aD4NCj4gPiA+DQo+ID4gPiAgLyoNCj4gPiA+IC0gKiBTaXplIG9mIGEgQ2xhc3NpY2FsIENBTiBT
+dGFuZGFyZCBGcmFtZQ0KPiA+ID4gKyAqIFNpemUgb2YgYSBDbGFzc2ljYWwgQ0FOIFN0YW5kYXJk
+IEZyYW1lIGhlYWRlciBpbiBiaXRzDQo+ID4gPiAgICoNCj4gPiA+IC0gKiBOYW1lIG9mIEZpZWxk
+ICAgICAgICAgICAgICAgICAgICAgICBCaXRzDQo+ID4gPiArICogTmFtZSBvZiBGaWVsZCAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICBCaXRzDQo+ID4gPiAgICogLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQo+ID4gPiAtICogU3Rh
+cnQtb2YtZnJhbWUgICAgICAgICAgICAgICAgICAgICAgMQ0KPiA+ID4gLSAqIElkZW50aWZpZXIg
+ICAgICAgICAgICAgICAgICAgICAgICAgIDExDQo+ID4gPiAtICogUmVtb3RlIHRyYW5zbWlzc2lv
+biByZXF1ZXN0IChSVFIpICAgMQ0KPiA+ID4gLSAqIElkZW50aWZpZXIgZXh0ZW5zaW9uIGJpdCAo
+SURFKSAgICAgIDENCj4gPiA+IC0gKiBSZXNlcnZlZCBiaXQgKHIwKSAgICAgICAgICAgICAgICAg
+ICAxDQo+ID4gPiAtICogRGF0YSBsZW5ndGggY29kZSAoRExDKSAgICAgICAgICAgICAgNA0KPiA+
+ID4gLSAqIERhdGEgZmllbGQgICAgICAgICAgICAgICAgICAgICAgICAgIDAuLi42NA0KPiA+ID4g
+LSAqIENSQyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDE1DQo+ID4gPiAtICogQ1JD
+IGRlbGltaXRlciAgICAgICAgICAgICAgICAgICAgICAgMQ0KPiA+ID4gLSAqIEFDSyBzbG90ICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIDENCj4gPiA+IC0gKiBBQ0sgZGVsaW1pdGVyICAgICAg
+ICAgICAgICAgICAgICAgICAxDQo+ID4gPiAtICogRW5kLW9mLWZyYW1lIChFT0YpICAgICAgICAg
+ICAgICAgICAgNw0KPiA+ID4gLSAqIEludGVyIGZyYW1lIHNwYWNpbmcgICAgICAgICAgICAgICAg
+IDMNCj4gPiA+ICsgKiBTdGFydCBPZiBGcmFtZSAoU09GKSAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgMQ0KPiA+ID4gKyAqIEFyYml0cmF0aW9uIGZpZWxkOg0KPiA+ID4gKyAqICAgICBi
+YXNlIElEICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMTENCj4gPiA+ICsgKiAgICAg
+UmVtb3RlIFRyYW5zbWlzc2lvbiBSZXF1ZXN0IChSVFIpICAgICAgIDENCj4gPiA+ICsgKiBDb250
+cm9sIGZpZWxkOg0KPiA+ID4gKyAqICAgICBJRGVudGlmaWVyIEV4dGVuc2lvbiBiaXQgKElERSkg
+ICAgICAgICAgMQ0KPiA+ID4gKyAqICAgICBGRCBGb3JtYXQgaW5kaWNhdGlvciAoRkRGKSAgICAg
+ICAgICAgICAgMQ0KPiA+ID4gKyAqICAgICBEYXRhIExlbmd0aCBDb2RlIChETEMpICAgICAgICAg
+ICAgICAgICAgNA0KPiA+ID4gKyAqDQo+ID4gPiArICogaW5jbHVkaW5nIGFsbCBmaWVsZHMgcHJl
+Y2VkaW5nIHRoZSBkYXRhIGZpZWxkLCBpZ25vcmluZyBiaXRzdHVmZmluZw0KPiA+ID4gKyAqLw0K
+PiA+ID4gKyNkZWZpbmUgQ0FOX0ZSQU1FX0hFQURFUl9TRkZfQklUUyAxOQ0KPiA+ID4gKw0KPiA+
+ID4gKy8qDQo+ID4gPiArICogU2l6ZSBvZiBhIENsYXNzaWNhbCBDQU4gRXh0ZW5kZWQgRnJhbWUg
+aGVhZGVyIGluIGJpdHMNCj4gPiA+ICsgKg0KPiA+ID4gKyAqIE5hbWUgb2YgRmllbGQgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgQml0cw0KPiA+ID4gKyAqIC0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KPiA+ID4gKyAqIFN0YXJ0
+IE9mIEZyYW1lIChTT0YpICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAxDQo+ID4gPiAr
+ICogQXJiaXRyYXRpb24gZmllbGQ6DQo+ID4gPiArICogICAgIGJhc2UgSUQgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAxMQ0KPiA+ID4gKyAqICAgICBTdWJzdGl0dXRlIFJlbW90ZSBS
+ZXF1ZXN0IChTUlIpICAgICAgICAgMQ0KPiA+ID4gKyAqICAgICBJRGVudGlmaWVyIEV4dGVuc2lv
+biBiaXQgKElERSkgICAgICAgICAgMQ0KPiA+ID4gKyAqICAgICBJRCBleHRlbnNpb24gICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgMTgNCj4gPiA+ICsgKiAgICAgUmVtb3RlIFRyYW5zbWlzc2lv
+biBSZXF1ZXN0IChSVFIpICAgICAgIDENCj4gPiA+ICsgKiBDb250cm9sIGZpZWxkOg0KPiA+ID4g
+KyAqICAgICBGRCBGb3JtYXQgaW5kaWNhdGlvciAoRkRGKSAgICAgICAgICAgICAgMQ0KPiA+IE5p
+dDogaW5kaWNhdG9yLCBzYW1lIGFib3ZlDQo+IA0KPiBBQ0suDQo+IA0KPiA+ID4gKyAqICAgICBS
+ZXNlcnZlZCBiaXQgKHIwKSAgICAgICAgICAgICAgICAgICAgICAgMQ0KPiA+ID4gKyAqICAgICBE
+YXRhIGxlbmd0aCBjb2RlIChETEMpICAgICAgICAgICAgICAgICAgNA0KPiA+ID4gKyAqDQo+ID4g
+PiArICogaW5jbHVkaW5nIGFsbCBmaWVsZHMgcHJlY2VkaW5nIHRoZSBkYXRhIGZpZWxkLCBpZ25v
+cmluZyBiaXRzdHVmZmluZw0KPiA+ID4gKyAqLw0KPiA+ID4gKyNkZWZpbmUgQ0FOX0ZSQU1FX0hF
+QURFUl9FRkZfQklUUyAzOQ0KPiA+ID4gKw0KPiA+ID4gKy8qDQo+ID4gPiArICogU2l6ZSBvZiBh
+IENBTi1GRCBTdGFuZGFyZCBGcmFtZSBpbiBiaXRzDQo+ID4gPiArICoNCj4gPiA+ICsgKiBOYW1l
+IG9mIEZpZWxkICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEJpdHMNCj4gPiA+ICsgKiAt
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0N
+Cj4gPiA+ICsgKiBTdGFydCBPZiBGcmFtZSAoU09GKSAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgMQ0KPiA+ID4gKyAqIEFyYml0cmF0aW9uIGZpZWxkOg0KPiA+ID4gKyAqICAgICBiYXNl
+IElEICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMTENCj4gPiA+ICsgKiAgICAgUmVt
+b3RlIFJlcXVlc3QgU3Vic3RpdHV0aW9uIChSUlMpICAgICAgIDENCj4gPiA+ICsgKiBDb250cm9s
+IGZpZWxkOg0KPiA+ID4gKyAqICAgICBJRGVudGlmaWVyIEV4dGVuc2lvbiBiaXQgKElERSkgICAg
+ICAgICAgMQ0KPiA+ID4gKyAqICAgICBGRCBGb3JtYXQgaW5kaWNhdG9yIChGREYpICAgICAgICAg
+ICAgICAgMQ0KPiA+ID4gKyAqICAgICBSZXNlcnZlZCBiaXQgKHJlcykgICAgICAgICAgICAgICAg
+ICAgICAgMQ0KPiA+ID4gKyAqICAgICBCaXQgUmF0ZSBTd2l0Y2ggKEJSUykgICAgICAgICAgICAg
+ICAgICAgMQ0KPiA+ID4gKyAqICAgICBFcnJvciBTdGF0dXMgSW5kaWNhdG9yIChFU0kpICAgICAg
+ICAgICAgMQ0KPiA+ID4gKyAqICAgICBEYXRhIGxlbmd0aCBjb2RlIChETEMpICAgICAgICAgICAg
+ICAgICAgNA0KPiA+ID4gKyAqDQo+ID4gPiArICogaW5jbHVkaW5nIGFsbCBmaWVsZHMgcHJlY2Vk
+aW5nIHRoZSBkYXRhIGZpZWxkLCBpZ25vcmluZyBiaXRzdHVmZmluZw0KPiA+ID4gKyAqLw0KPiA+
+ID4gKyNkZWZpbmUgQ0FORkRfRlJBTUVfSEVBREVSX1NGRl9CSVRTIDIyDQo+ID4gPiArDQo+ID4g
+PiArLyoNCj4gPiA+ICsgKiBTaXplIG9mIGEgQ0FOLUZEIEV4dGVuZGVkIEZyYW1lIGluIGJpdHMN
+Cj4gPiA+ICsgKg0KPiA+ID4gKyAqIE5hbWUgb2YgRmllbGQgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgQml0cw0KPiA+ID4gKyAqIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KPiA+ID4gKyAqIFN0YXJ0IE9mIEZyYW1lIChTT0Yp
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAxDQo+ID4gPiArICogQXJiaXRyYXRpb24g
+ZmllbGQ6DQo+ID4gPiArICogICAgIGJhc2UgSUQgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAxMQ0KPiA+ID4gKyAqICAgICBTdWJzdGl0dXRlIFJlbW90ZSBSZXF1ZXN0IChTUlIpICAg
+ICAgICAgMQ0KPiA+ID4gKyAqICAgICBJRGVudGlmaWVyIEV4dGVuc2lvbiBiaXQgKElERSkgICAg
+ICAgICAgMQ0KPiA+ID4gKyAqICAgICBJRCBleHRlbnNpb24gICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgMTgNCj4gPiA+ICsgKiAgICAgUmVtb3RlIFJlcXVlc3QgU3Vic3RpdHV0aW9uIChSUlMp
+ICAgICAgIDENCj4gPiA+ICsgKiBDb250cm9sIGZpZWxkOg0KPiA+ID4gKyAqICAgICBGRCBGb3Jt
+YXQgaW5kaWNhdG9yIChGREYpICAgICAgICAgICAgICAgMQ0KPiA+ID4gKyAqICAgICBSZXNlcnZl
+ZCBiaXQgKHJlcykgICAgICAgICAgICAgICAgICAgICAgMQ0KPiA+ID4gKyAqICAgICBCaXQgUmF0
+ZSBTd2l0Y2ggKEJSUykgICAgICAgICAgICAgICAgICAgMQ0KPiA+ID4gKyAqICAgICBFcnJvciBT
+dGF0dXMgSW5kaWNhdG9yIChFU0kpICAgICAgICAgICAgMQ0KPiA+ID4gKyAqICAgICBEYXRhIGxl
+bmd0aCBjb2RlIChETEMpICAgICAgICAgICAgICAgICAgNA0KPiA+ID4gICAqDQo+ID4gPiAtICog
+cm91bmRlZCB1cCBhbmQgaWdub3JpbmcgYml0c3R1ZmZpbmcNCj4gPiA+ICsgKiBpbmNsdWRpbmcg
+YWxsIGZpZWxkcyBwcmVjZWRpbmcgdGhlIGRhdGEgZmllbGQsIGlnbm9yaW5nIGJpdHN0dWZmaW5n
+DQo+ID4gPiAgICovDQo+ID4gPiAtI2RlZmluZSBDQU5fRlJBTUVfT1ZFUkhFQURfU0ZGIERJVl9S
+T1VORF9VUCg0NywgOCkNCj4gPiA+ICsjZGVmaW5lIENBTkZEX0ZSQU1FX0hFQURFUl9FRkZfQklU
+UyA0MQ0KPiA+ID4NCj4gPiA+ICAvKg0KPiA+ID4gLSAqIFNpemUgb2YgYSBDbGFzc2ljYWwgQ0FO
+IEV4dGVuZGVkIEZyYW1lDQo+ID4gPiArICogU2l6ZSBvZiBhIENBTiBDUkMgRmllbGQgaW4gYml0
+cw0KPiA+ID4gICAqDQo+ID4gPiAgICogTmFtZSBvZiBGaWVsZCAgICAgICAgICAgICAgICAgICAg
+ICAgQml0cw0KPiA+ID4gICAqIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLQ0KPiA+ID4gLSAqIFN0YXJ0LW9mLWZyYW1lICAgICAgICAgICAg
+ICAgICAgICAgIDENCj4gPiA+IC0gKiBJZGVudGlmaWVyIEEgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIDExDQo+ID4gPiAtICogU3Vic3RpdHV0ZSByZW1vdGUgcmVxdWVzdCAoU1JSKSAg
+ICAgMQ0KPiA+ID4gLSAqIElkZW50aWZpZXIgZXh0ZW5zaW9uIGJpdCAoSURFKSAgICAgIDENCj4g
+PiA+IC0gKiBJZGVudGlmaWVyIEIgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDE4DQo+
+ID4gPiAtICogUmVtb3RlIHRyYW5zbWlzc2lvbiByZXF1ZXN0IChSVFIpICAgMQ0KPiA+ID4gLSAq
+IFJlc2VydmVkIGJpdHMgKHIxLCByMCkgICAgICAgICAgICAgIDINCj4gPiA+IC0gKiBEYXRhIGxl
+bmd0aCBjb2RlIChETEMpICAgICAgICAgICAgICA0DQo+ID4gPiAtICogRGF0YSBmaWVsZCAgICAg
+ICAgICAgICAgICAgICAgICAgICAgMC4uLjY0DQo+ID4gPiAtICogQ1JDICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgMTUNCj4gPiA+IC0gKiBDUkMgZGVsaW1pdGVyICAgICAgICAgICAg
+ICAgICAgICAgICAxDQo+ID4gPiAtICogQUNLIHNsb3QgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgMQ0KPiA+ID4gLSAqIEFDSyBkZWxpbWl0ZXIgICAgICAgICAgICAgICAgICAgICAgIDENCj4g
+PiA+IC0gKiBFbmQtb2YtZnJhbWUgKEVPRikgICAgICAgICAgICAgICAgICA3DQo+ID4gPiAtICog
+SW50ZXIgZnJhbWUgc3BhY2luZyAgICAgICAgICAgICAgICAgMw0KPiA+ID4gKyAqIENSQyBzZXF1
+ZW5jZSAoQ1JDMTUpICAgICAgICAgICAgICAgICAgICAgICAgMTUNCj4gPiA+ICsgKiBDUkMgRGVs
+aW1pdGVyICAgICAgICAgICAgICAgICAgICAgICAxDQo+ID4gPiAgICoNCj4gPiA+IC0gKiByb3Vu
+ZGVkIHVwIGFuZCBpZ25vcmluZyBiaXRzdHVmZmluZw0KPiA+ID4gKyAqIGlnbm9yaW5nIGJpdHN0
+dWZmaW5nDQo+ID4gPiAgICovDQo+ID4gPiAtI2RlZmluZSBDQU5fRlJBTUVfT1ZFUkhFQURfRUZG
+IERJVl9ST1VORF9VUCg2NywgOCkNCj4gPiA+ICsjZGVmaW5lIENBTl9GUkFNRV9DUkNfRklFTERf
+QklUUyAxNg0KPiA+ID4NCj4gPiA+ICAvKg0KPiA+ID4gLSAqIFNpemUgb2YgYSBDQU4tRkQgU3Rh
+bmRhcmQgRnJhbWUNCj4gPiA+ICsgKiBTaXplIG9mIGEgQ0FOLUZEIENSQzE3IEZpZWxkIGluIGJp
+dHMgKGxlbmd0aDogMC4uMTYpDQo+ID4gPiAgICoNCj4gPiA+ICAgKiBOYW1lIG9mIEZpZWxkICAg
+ICAgICAgICAgICAgICAgICAgICBCaXRzDQo+ID4gPiAgICogLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQo+ID4gPiAtICogU3RhcnQtb2Yt
+ZnJhbWUgICAgICAgICAgICAgICAgICAgICAgMQ0KPiA+ID4gLSAqIElkZW50aWZpZXIgICAgICAg
+ICAgICAgICAgICAgICAgICAgIDExDQo+ID4gPiAtICogUmVtb3RlIFJlcXVlc3QgU3Vic3RpdHV0
+aW9uIChSUlMpICAgMQ0KPiA+ID4gLSAqIElkZW50aWZpZXIgZXh0ZW5zaW9uIGJpdCAoSURFKSAg
+ICAgIDENCj4gPiA+IC0gKiBGbGV4aWJsZSBkYXRhIHJhdGUgZm9ybWF0IChGREYpICAgICAxDQo+
+ID4gPiAtICogUmVzZXJ2ZWQgYml0IChyMCkgICAgICAgICAgICAgICAgICAgMQ0KPiA+ID4gLSAq
+IEJpdCBSYXRlIFN3aXRjaCAoQlJTKSAgICAgICAgICAgICAgIDENCj4gPiA+IC0gKiBFcnJvciBT
+dGF0dXMgSW5kaWNhdG9yIChFU0kpICAgICAgICAgICAgICAgIDENCj4gPiA+IC0gKiBEYXRhIGxl
+bmd0aCBjb2RlIChETEMpICAgICAgICAgICAgICA0DQo+ID4gPiAtICogRGF0YSBmaWVsZCAgICAg
+ICAgICAgICAgICAgICAgICAgICAgMC4uLjUxMg0KPiA+ID4gLSAqIFN0dWZmIEJpdCBDb3VudCAo
+U0JDKSAgICAgICAgICAgICAgIDQNCj4gPiA+IC0gKiBDUkMgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAwLi4uMTY6IDE3IDIwLi4uNjQ6MjENCj4gPiA+IC0gKiBDUkMgZGVsaW1pdGVy
+IChDRCkgICAgICAgICAgICAgICAgICAxDQo+ID4gPiAtICogRml4ZWQgU3R1ZmYgYml0cyAoRlNC
+KSAgICAgICAgICAgICAgMC4uLjE2OiA2IDIwLi4uNjQ6Nw0KPiA+ID4gLSAqIEFDSyBzbG90IChB
+UykgICAgICAgICAgICAgICAgICAgICAgIDENCj4gPiA+IC0gKiBBQ0sgZGVsaW1pdGVyIChBRCkg
+ICAgICAgICAgICAgICAgICAxDQo+ID4gPiAtICogRW5kLW9mLWZyYW1lIChFT0YpICAgICAgICAg
+ICAgICAgICAgNw0KPiA+ID4gLSAqIEludGVyIGZyYW1lIHNwYWNpbmcgICAgICAgICAgICAgICAg
+IDMNCj4gPiA+IC0gKg0KPiA+ID4gLSAqIGFzc3VtaW5nIENSQzIxLCByb3VuZGVkIHVwIGFuZCBp
+Z25vcmluZyBkeW5hbWljIGJpdHN0dWZmaW5nDQo+ID4gPiAtICovDQo+ID4gPiAtI2RlZmluZSBD
+QU5GRF9GUkFNRV9PVkVSSEVBRF9TRkYgRElWX1JPVU5EX1VQKDY3LCA4KQ0KPiA+ID4gKyAqIFN0
+dWZmIENvdW50ICAgICAgICAgICAgICAgICAgICAgICAgIDQNCj4gPiA+ICsgKiBDUkMgU2VxdWVu
+Y2UgKENSQzE3KSAgICAgICAgICAgICAgICAgICAgICAgIDE3DQo+ID4gPiArICogQ1JDIERlbGlt
+aXRlciAgICAgICAgICAgICAgICAgICAgICAgMQ0KPiA+ID4gKyAqIEZpeGVkIHN0dWZmIGJpdHMg
+ICAgICAgICAgICAgICAgICAgIDYNCj4gPiA+ICsgKi8NCj4gPiA+ICsjZGVmaW5lIENBTkZEX0ZS
+QU1FX0NSQzE3X0ZJRUxEX0JJVFMgMjgNCj4gPiA+DQo+ID4gPiAgLyoNCj4gPiA+IC0gKiBTaXpl
+IG9mIGEgQ0FOLUZEIEV4dGVuZGVkIEZyYW1lDQo+ID4gPiArICogU2l6ZSBvZiBhIENBTi1GRCBD
+UkMyMSBGaWVsZCBpbiBiaXRzIChsZW5ndGg6IDIwLi42NCkNCj4gPiA+ICAgKg0KPiA+ID4gICAq
+IE5hbWUgb2YgRmllbGQgICAgICAgICAgICAgICAgICAgICAgIEJpdHMNCj4gPiA+ICAgKiAtLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCj4g
+PiA+IC0gKiBTdGFydC1vZi1mcmFtZSAgICAgICAgICAgICAgICAgICAgICAxDQo+ID4gPiAtICog
+SWRlbnRpZmllciBBICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAxMQ0KPiA+ID4gLSAq
+IFN1YnN0aXR1dGUgcmVtb3RlIHJlcXVlc3QgKFNSUikgICAgIDENCj4gPiA+IC0gKiBJZGVudGlm
+aWVyIGV4dGVuc2lvbiBiaXQgKElERSkgICAgICAxDQo+ID4gPiAtICogSWRlbnRpZmllciBCICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAxOA0KPiA+ID4gLSAqIFJlbW90ZSBSZXF1ZXN0
+IFN1YnN0aXR1dGlvbiAoUlJTKSAgIDENCj4gPiA+IC0gKiBGbGV4aWJsZSBkYXRhIHJhdGUgZm9y
+bWF0IChGREYpICAgICAxDQo+ID4gPiAtICogUmVzZXJ2ZWQgYml0IChyMCkgICAgICAgICAgICAg
+ICAgICAgMQ0KPiA+ID4gLSAqIEJpdCBSYXRlIFN3aXRjaCAoQlJTKSAgICAgICAgICAgICAgIDEN
+Cj4gPiA+IC0gKiBFcnJvciBTdGF0dXMgSW5kaWNhdG9yIChFU0kpICAgICAgICAgICAgICAgIDEN
+Cj4gPiA+IC0gKiBEYXRhIGxlbmd0aCBjb2RlIChETEMpICAgICAgICAgICAgICA0DQo+ID4gPiAt
+ICogRGF0YSBmaWVsZCAgICAgICAgICAgICAgICAgICAgICAgICAgMC4uLjUxMg0KPiA+ID4gLSAq
+IFN0dWZmIEJpdCBDb3VudCAoU0JDKSAgICAgICAgICAgICAgIDQNCj4gPiA+IC0gKiBDUkMgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAwLi4uMTY6IDE3IDIwLi4uNjQ6MjENCj4gPiA+
+IC0gKiBDUkMgZGVsaW1pdGVyIChDRCkgICAgICAgICAgICAgICAgICAxDQo+ID4gPiAtICogRml4
+ZWQgU3R1ZmYgYml0cyAoRlNCKSAgICAgICAgICAgICAgMC4uLjE2OiA2IDIwLi4uNjQ6Nw0KPiA+
+ID4gLSAqIEFDSyBzbG90IChBUykgICAgICAgICAgICAgICAgICAgICAgIDENCj4gPiA+IC0gKiBB
+Q0sgZGVsaW1pdGVyIChBRCkgICAgICAgICAgICAgICAgICAxDQo+ID4gPiAtICogRW5kLW9mLWZy
+YW1lIChFT0YpICAgICAgICAgICAgICAgICAgNw0KPiA+ID4gLSAqIEludGVyIGZyYW1lIHNwYWNp
+bmcgICAgICAgICAgICAgICAgIDMNCj4gPiA+IC0gKg0KPiA+ID4gLSAqIGFzc3VtaW5nIENSQzIx
+LCByb3VuZGVkIHVwIGFuZCBpZ25vcmluZyBkeW5hbWljIGJpdHN0dWZmaW5nDQo+ID4gPiAtICov
+DQo+ID4gPiAtI2RlZmluZSBDQU5GRF9GUkFNRV9PVkVSSEVBRF9FRkYgRElWX1JPVU5EX1VQKDg2
+LCA4KQ0KPiA+ID4gKyAqIFN0dWZmIENvdW50ICAgICAgICAgICAgICAgICAgICAgICAgIDQNCj4g
+PiA+ICsgKiBDUkMgc2VxdWVuY2UgKENSQzIxKSAgICAgICAgICAgICAgICAgICAgICAgIDIxDQo+
+ID4gPiArICogQ1JDIERlbGltaXRlciAgICAgICAgICAgICAgICAgICAgICAgMQ0KPiA+ID4gKyAq
+IEZpeGVkIHN0dWZmIGJpdHMgICAgICAgICAgICAgICAgICAgIDcNCj4gPiA+ICsgKi8NCj4gPiA+
+ICsjZGVmaW5lIENBTkZEX0ZSQU1FX0NSQzIxX0ZJRUxEX0JJVFMgMzMNCj4gPiA+ICsNCj4gPiA+
+ICsvKg0KPiA+ID4gKyAqIFNpemUgb2YgYSBDQU4oLUZEKSBGcmFtZSBmb290ZXIgaW4gYml0cw0K
+PiA+ID4gKyAqDQo+ID4gPiArICogTmFtZSBvZiBGaWVsZCAgICAgICAgICAgICAgICAgICAgICAg
+Qml0cw0KPiA+ID4gKyAqIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLQ0KPiA+ID4gKyAqIEFDSyBzbG90ICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIDENCj4gPiA+ICsgKiBBQ0sgZGVsaW1pdGVyICAgICAgICAgICAgICAgICAgICAgICAx
+DQo+ID4gPiArICogRW5kIE9mIEZyYW1lIChFT0YpICAgICAgICAgICAgICAgICAgNw0KPiA+ID4g
+KyAqDQo+ID4gPiArICogaW5jbHVkaW5nIGFsbCBmaWVsZHMgZm9sbG93aW5nIHRoZSBDUkMgZmll
+bGQNCj4gPiA+ICsgKi8NCj4gPiA+ICsjZGVmaW5lIENBTl9GUkFNRV9GT09URVJfQklUUyA5DQo+
+ID4gPiArDQo+ID4gPiArLyoNCj4gPiA+ICsgKiBGaXJzdCBwYXJ0IG9mIHRoZSBJbnRlciBGcmFt
+ZSBTcGFjZQ0KPiA+ID4gKyAqIChhLmsuYS4gSU1GIC0gaW50ZXJtaXNzaW9uIGZpZWxkKQ0KPiA+
+ID4gKyAqLw0KPiA+ID4gKyNkZWZpbmUgQ0FOX0lOVEVSTUlTU0lPTl9CSVRTIDMNCj4gPiA+ICsN
+Cj4gPiA+ICsvKioNCj4gPiA+ICsgKiBjYW5fYml0c3R1ZmZpbmdfbGVuKCkgLSBDYWxjdWxhdGUg
+dGhlIG1heGltdW0gbGVuZ3RoIHdpdGggYml0c3VmZmluZw0KPiA+IE5pdDogYml0c3R1ZmZpbmcs
+IHNhbWUgZnVydGhlciBkb3duDQo+IA0KPiBBQ0suDQo+IA0KPiA+ID4gKyAqIEBiaXRzdHJlYW1f
+bGVuOiBsZW5ndGggb2YgYSBkZXN0dWZmZWQgYml0IHN0cmVhbQ0KPiA+ID4gKyAqDQo+ID4gPiAr
+ICogVGhlIHdvcnN0IGJpdCBzdHVmZmluZyBjYXNlIGlzIGEgc2VxdWVuY2UgaW4gd2hpY2ggZG9t
+aW5hbnQgYW5kDQo+ID4gPiArICogcmVjZXNzaXZlIGJpdHMgYWx0ZXJuYXRlIGV2ZXJ5IGZvdXIg
+Yml0czoNCj4gPiA+ICsgKg0KPiA+ID4gKyAqICAgRGVzdHVmZmVkOiAxIDExMTEgIDAwMDAgIDEx
+MTEgIDAwMDAgIDExMTENCj4gPiA+ICsgKiAgIFN0dWZmZWQ6ICAgMSAxMTExbyAwMDAwaSAxMTEx
+byAwMDAwaSAxMTExbw0KPiA+ID4gKyAqDQo+ID4gPiArICogTm9tZW5jbGF0dXJlDQo+ID4gPiAr
+ICoNCj4gPiA+ICsgKiAgLSAiMCI6IGRvbWluYW50IGJpdA0KPiA+ID4gKyAqICAtICJvIjogZG9t
+aW5hbnQgc3R1ZmYgYml0DQo+ID4gPiArICogIC0gIjEiOiByZWNlc3NpdmUgYml0DQo+ID4gPiAr
+ICogIC0gImkiOiByZWNlc3NpdmUgc3R1ZmYgYml0DQo+ID4gPiArICoNCj4gPiA+ICsgKiBBc2lk
+ZSBvZiB0aGUgZmlyc3QgYml0LCBvbmUgc3R1ZmYgYml0IGlzIGFkZGVkIGV2ZXJ5IGZvdXIgYml0
+cy4NCj4gPiA+ICsgKg0KPiA+ID4gKyAqIFJldHVybjogbGVuZ3RoIG9mIHRoZSBzdHVmZmVkIGJp
+dCBzdHJlYW0gaW4gdGhlIHdvcnN0IGNhc2Ugc2NlbmFyaW8uDQo+ID4gPiArICovDQo+ID4gPiAr
+I2RlZmluZSBjYW5fYml0c3R1ZmZpbmdfbGVuKGRlc3R1ZmZlZF9sZW4pICAgICAgICAgICAgICAg
+ICAgICAgXA0KPiA+ID4gKyAgICAgICAoZGVzdHVmZmVkX2xlbiArIChkZXN0dWZmZWRfbGVuIC0g
+MSkgLyA0KQ0KPiA+ID4gKw0KPiA+ID4gKyNkZWZpbmUgX19jYW5fYml0c3R1ZmZpbmdfbGVuKGJp
+dHN0dWZmaW5nLCBkZXN0dWZmZWRfbGVuKSAgICAgIFwNCj4gPiA+ICsgICAgICAgKGJpdHN0dWZm
+aW5nID8gY2FuX2JpdHN0dWZmaW5nX2xlbihkZXN0dWZmZWRfbGVuKSA6ICAgICBcDQo+ID4gPiAr
+ICAgICAgICAgICAgICAgICAgICAgIGRlc3R1ZmZlZF9sZW4pDQo+ID4gPiArDQo+ID4gPiArI2Rl
+ZmluZSBfX2Nhbl9jY19mcmFtZV9iaXRzKGlzX2VmZiwgYml0c3R1ZmZpbmcsICAgICAgICAgICAg
+ICAgXA0KPiA+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgIGludGVybWlzc2lvbiwgZGF0
+YV9sZW4pICAgICAgICAgICAgIFwNCj4gPiA+ICsoICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcDQo+ID4gPiArICAgICAgIF9fY2Fu
+X2JpdHN0dWZmaW5nX2xlbihiaXRzdHVmZmluZywgICAgICAgICAgICAgICAgICAgICAgXA0KPiA+
+ID4gKyAgICAgICAgICAgICAgIChpc19lZmYgPyBDQU5fRlJBTUVfSEVBREVSX0VGRl9CSVRTIDog
+ICAgICAgICAgIFwNCj4gPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgIENBTl9GUkFNRV9I
+RUFERVJfU0ZGX0JJVFMpICsgICAgICAgICBcDQo+ID4gPiArICAgICAgICAgICAgICAgZGF0YV9s
+ZW4gKiBCSVRTX1BFUl9CWVRFICsgICAgICAgICAgICAgICAgICAgICAgXA0KPiA+ID4gKyAgICAg
+ICAgICAgICAgIENBTl9GUkFNRV9DUkNfRklFTERfQklUUykgKyAgICAgICAgICAgICAgICAgICAg
+IFwNCj4gPiA+ICsgICAgICAgQ0FOX0ZSQU1FX0ZPT1RFUl9CSVRTICsgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICBcDQo+ID4gPiArICAgICAgIChpbnRlcm1pc3Npb24gPyBDQU5fSU5U
+RVJNSVNTSU9OX0JJVFMgOiAwKSAgICAgICAgICAgICAgXA0KPiA+ID4gKykNCj4gPiBJIHRoaW5r
+IEZvb3RlciBhbmQgSW50ZXJtaXNzaW9uIG5lZWQgdG8gYmUgcHVsbGVkIG91dCBvZiB0aGUgcGFy
+YW1ldGVyIGZvcg0KPiBfX2Nhbl9iaXRzdHVmZmluZ19sZW5ndGggYXMgdGhlc2UgZmllbGRzIGFy
+ZSBuZXZlciBzdHVmZmVkLg0KPiANCj4gTG9vayBhZ2FpbiBhdCB0aGUgb3BlbmluZyBhbmQgY2xv
+c2luZyBicmFja2V0IG9mDQo+IF9fY2FuX2JpdHN0dWZmaW5nX2xlbigpLiBUaGVzZSBhcmUgYWxy
+ZWFkeSBvdXQgOikNCj4gSSBpbmRlbnRlZCB0aGUgcGFyYW1ldGVycyBvZiBfX2Nhbl9iaXRzdHVm
+ZmluZ19sZW5ndGgoKSB0byBoaWdobGlnaHQNCj4gd2hhdCBpcyBpbiBhbmQgb3V0Lg0KPiANCj4g
+TWF5YmUgYWRkaW5nIHNvbWUgbmV3bGluZXMgd291bGQgaGVscCByZWFkYWJpbGl0eT8gU29tZXRo
+aW5nIGxpa2UgdGhhdDoNCj4gDQo+ICAgI2RlZmluZSBfX2Nhbl9jY19mcmFtZV9iaXRzKGlzX2Vm
+ZiwgYml0c3R1ZmZpbmcsICAgICAgICAgICAgICAgIFwNCj4gICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgaW50ZXJtaXNzaW9uLCBkYXRhX2xlbikgICAgICAgICAgICAgXA0KPiAgICggICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICBcDQo+ICAgICAgICAgICBfX2Nhbl9iaXRzdHVmZmluZ19sZW4oICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIFwNCj4gICAgICAgICAgICAgICAgICAgYml0c3R1ZmZpbmcsICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXA0KPiAgICAgICAgICAgICAgICAgICAoaXNf
+ZWZmID8gQ0FOX0ZSQU1FX0hFQURFUl9FRkZfQklUUyA6ICAgICAgICAgICBcDQo+ICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgQ0FOX0ZSQU1FX0hFQURFUl9TRkZfQklUUykgKyAgICAgICAg
+IFwNCj4gICAgICAgICAgICAgICAgICAgZGF0YV9sZW4gKiBCSVRTX1BFUl9CWVRFICsgICAgICAg
+ICAgICAgICAgICAgICAgXA0KPiAgICAgICAgICAgICAgICAgICBDQU5fRlJBTUVfQ1JDX0ZJRUxE
+X0JJVFMpICAgICAgICAgICAgICAgICAgICAgICBcDQo+ICAgICAgICAgICArICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwNCj4gICAgICAgICAg
+IENBTl9GUkFNRV9GT09URVJfQklUUyArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+XA0KPiAgICAgICAgICAgKGludGVybWlzc2lvbiA/IENBTl9JTlRFUk1JU1NJT05fQklUUyA6IDAp
+ICAgICAgICAgICAgICBcDQo+ICAgKQ0KPiANCj4gPiA+ICsNCj4gPiA+ICsjZGVmaW5lIF9fY2Fu
+X2ZkX2ZyYW1lX2JpdHMoaXNfZWZmLCBiaXRzdHVmZmluZywgICAgICAgICAgICAgICBcDQo+ID4g
+PiArICAgICAgICAgICAgICAgICAgICAgICAgICAgaW50ZXJtaXNzaW9uLCBkYXRhX2xlbikgICAg
+ICAgICAgICAgXA0KPiA+ID4gKyggICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIFwNCj4gPiA+ICsgICAgICAgX19jYW5fYml0c3R1ZmZp
+bmdfbGVuKGJpdHN0dWZmaW5nLCAgICAgICAgICAgICAgICAgICAgICBcDQo+ID4gPiArICAgICAg
+ICAgICAgICAgKGlzX2VmZiA/IENBTkZEX0ZSQU1FX0hFQURFUl9FRkZfQklUUyA6ICAgICAgICAg
+XA0KPiA+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgQ0FORkRfRlJBTUVfSEVBREVSX1NG
+Rl9CSVRTKSArICAgICAgIFwNCj4gPiA+ICsgICAgICAgICAgICAgICBkYXRhX2xlbiAqIEJJVFNf
+UEVSX0JZVEUpICsgICAgICAgICAgICAgICAgICAgICBcDQo+ID4gPiArICAgICAgIChkYXRhX2xl
+biA8PSAxNiA/ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXA0KPiA+ID4g
+KyAgICAgICAgICAgICAgIENBTkZEX0ZSQU1FX0NSQzE3X0ZJRUxEX0JJVFMgOiAgICAgICAgICAg
+ICAgICAgIFwNCj4gPiA+ICsgICAgICAgICAgICAgICBDQU5GRF9GUkFNRV9DUkMyMV9GSUVMRF9C
+SVRTKSArICAgICAgICAgICAgICAgICBcDQo+ID4gPiArICAgICAgIENBTl9GUkFNRV9GT09URVJf
+QklUUyArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXA0KPiA+ID4gKyAgICAgICAo
+aW50ZXJtaXNzaW9uID8gQ0FOX0lOVEVSTUlTU0lPTl9CSVRTIDogMCkgICAgICAgICAgICAgIFwN
+Cj4gPiA+ICspDQo+ID4gSSB0aGluayBGb290ZXIgYW5kIEludGVybWlzc2lvbiBuZWVkIHRvIGJl
+IHB1bGxlZCBvdXQgb2YgdGhlIHBhcmFtZXRlciBmb3INCj4gX19jYW5fYml0c3R1ZmZpbmdfbGVu
+Z3RoIGFzIHRoZXNlIGZpZWxkcyBhcmUgbmV2ZXIgc3R1ZmZlZC4NCj4gPiBUaGUgQ0FOX0ZSQU1F
+X0NSQ19GSUVMRF9CSVRTIGJpdHMgbmVlZCB0byBiZSBwdWxsZWQgb3V0IG9mIHRoZQ0KPiBjYW5f
+Yml0c3R1ZmZpbmdfbGVuLiBUaGF0IHBvcnRpb24gb2YgdGhlIEZyYW1lIGlzIG5vdCBkeW5hbWlj
+YWxseSBzdHVmZmVkIGluIEZEDQo+IGZyYW1lcy4NCj4gDQo+IFNhbWUgYXMgYWJvdmUsIHRoZXNl
+IGFyZSBhbHJlYWR5IG91dC4NCldob29wcyAtIG15IGJhZCwgcmUtcmVhZGluZyB0aGVzZSBwb3J0
+aW9ucyBib3RoIG9sZCBhbmQgbmV3IGxvb2sgb2sgdG8gbWUuIE5vIG5lZWQgZm9yIGV4dHJhIG5l
+d2xpbmVzIGZyb20gbXkgcG9pbnQgb2YgdmlldywganVzdCBiZXR0ZXIgYXR0ZW50aW9uIGF0IHRo
+ZSByZWFkZXIgc2lkZSB0byB0aGUgaW5kZW50YXRpb24gd2hpY2ggaXMgYWxyZWFkeSB0aGVyZSAt
+IHRoYXQgZ3JlYXRseSBoZWxwcyDwn5iJDQoNCj4gDQo+ID4gPiArDQo+ID4gPiArLyoqDQo+ID4g
+PiArICogY2FuX2ZyYW1lX2JpdHMoKSAtIENhbGN1bGF0ZSB0aGUgbnVtYmVyIG9mIGJpdHMgaW4g
+b24gdGhlIHdpcmUgaW4gYQ0KPiA+IE5pdDogImluIG9uIHRoZSB3aXJlIiAtaW4NCj4gPiA+ICsg
+KiAgICAgQ0FOIGZyYW1lDQo+ID4gPiArICogQGlzX2ZkOiB0cnVlOiBDQU4tRkQgZnJhbWU7IGZh
+bHNlOiBDbGFzc2ljYWwgQ0FOIGZyYW1lLg0KPiA+ID4gKyAqIEBpc19lZmY6IHRydWU6IEV4dGVu
+ZGVkIGZyYW1lOyBmYWxzZTogU3RhbmRhcmQgZnJhbWUuDQo+ID4gPiArICogQGJpdHN0dWZmaW5n
+OiB0cnVlOiBjYWxjdWxhdGUgdGhlIGJpdHN1ZmZpbmcgd29yc3QgY2FzZTsgZmFsc2U6DQo+ID4g
+PiArICogICAgIGNhbGN1bGF0ZSB0aGUgYml0c3VmZmluZyBiZXN0IGNhc2UgKG5vIGR5bmFtaWMN
+Cj4gPiA+ICsgKiAgICAgYml0c3VmZmluZykuIEZpeGVkIHN0dWZmIGJpdHMgYXJlIGFsd2F5cyBp
+bmNsdWRlZC4NCj4gPiA+ICsgKiBAaW50ZXJtaXNzaW9uOiBpZiBhbmQgb25seSBpZiB0cnVlLCBp
+bmNsdWRlIHRoZSBpbnRlciBmcmFtZSBzcGFjZQ0KPiA+ID4gKyAqICAgICBhc3N1bWluZyBubyBi
+dXMgaWRsZSAoaS5lLiBvbmx5IHRoZSBpbnRlcm1pc3Npb24gZ2V0cyBhZGRlZCkuDQo+ID4gPiAr
+ICogQGRhdGFfbGVuOiBsZW5ndGggb2YgdGhlIGRhdGEgZmllbGQgaW4gYnl0ZXMuIENvcnJlc3Bv
+bmQgdG8NCj4gPiA+ICsgKiAgICAgY2FuKGZkKV9mcmFtZS0+bGVuLiBTaG91bGQgYmUgemVybyBm
+b3IgcmVtb3RlIGZyYW1lcy4gTm8NCj4gPiA+ICsgKiAgICAgc2FuaXRpemF0aW9uIGlzIGRvbmUg
+b24gQGRhdGFfbGVuLg0KPiA+ID4gKyAqDQo+ID4gPiArICogUmV0dXJuOiB0aGUgbnVtYmVycyBv
+ZiBiaXRzIG9uIHRoZSB3aXJlIG9mIGEgQ0FOIGZyYW1lLg0KPiA+ID4gKyAqLw0KPiA+ID4gKyNk
+ZWZpbmUgY2FuX2ZyYW1lX2JpdHMoaXNfZmQsIGlzX2VmZiwgYml0c3R1ZmZpbmcsICAgICAgICAg
+ICAgIFwNCj4gPiA+ICsgICAgICAgICAgICAgICAgICAgICAgaW50ZXJtaXNzaW9uLCBkYXRhX2xl
+bikgICAgICAgICAgICAgICAgICBcDQo+ID4gPiArKCAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXA0KPiA+ID4gKyAgICAgICBpc19m
+ZCA/IF9fY2FuX2ZkX2ZyYW1lX2JpdHMoaXNfZWZmLCBiaXRzdHVmZmluZywgICAgICAgIFwNCj4g
+PiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGludGVybWlzc2lvbiwgZGF0
+YV9sZW4pIDogICBcDQo+ID4gPiArICAgICAgICAgICAgICAgX19jYW5fY2NfZnJhbWVfYml0cyhp
+c19lZmYsIGJpdHN0dWZmaW5nLCAgICAgICAgXA0KPiA+ID4gKyAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgaW50ZXJtaXNzaW9uLCBkYXRhX2xlbikgICAgIFwNCj4gPiA+ICspDQo+
+ID4gPiArDQo+ID4gPiArLyoNCj4gPiA+ICsgKiBOdW1iZXIgb2YgYnl0ZXMgaW4gYSBDQU4gZnJh
+bWUNCj4gPiA+ICsgKiAocm91bmRlZCB1cCwgaW5jbHVkaW5nIGludGVybWlzc2lvbikNCj4gPiA+
+ICsgKi8NCj4gPiA+ICsjZGVmaW5lIGNhbl9mcmFtZV9ieXRlcyhpc19mZCwgaXNfZWZmLCBiaXRz
+dHVmZmluZywgZGF0YV9sZW4pICBcDQo+ID4gPiArICAgICAgIERJVl9ST1VORF9VUChjYW5fZnJh
+bWVfYml0cyhpc19mZCwgaXNfZWZmLCBiaXRzdHVmZmluZywgXA0KPiA+ID4gKyAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgdHJ1ZSwgZGF0YV9sZW4pLCAgICAgICAgICAgIFwNCj4g
+PiA+ICsgICAgICAgICAgICAgICAgICAgIEJJVFNfUEVSX0JZVEUpDQo+ID4gPg0KPiA+ID4gIC8q
+DQo+ID4gPiAgICogTWF4aW11bSBzaXplIG9mIGEgQ2xhc3NpY2FsIENBTiBmcmFtZQ0KPiA+ID4g
+LSAqIChyb3VuZGVkIHVwIGFuZCBpZ25vcmluZyBiaXRzdHVmZmluZykNCj4gPiA+ICsgKiAocm91
+bmRlZCB1cCwgaWdub3JpbmcgYml0c3R1ZmZpbmcgYnV0IGluY2x1ZGluZyBpbnRlcm1pc3Npb24p
+DQo+ID4gPiAgICovDQo+ID4gPiAtI2RlZmluZSBDQU5fRlJBTUVfTEVOX01BWCAoQ0FOX0ZSQU1F
+X09WRVJIRUFEX0VGRiArDQo+ID4gPiBDQU5fTUFYX0RMRU4pDQo+ID4gPiArI2RlZmluZSBDQU5f
+RlJBTUVfTEVOX01BWCBcDQo+ID4gPiArICAgICAgIGNhbl9mcmFtZV9ieXRlcyhmYWxzZSwgdHJ1
+ZSwgZmFsc2UsIENBTl9NQVhfRExFTikNCj4gPiA+DQo+ID4gPiAgLyoNCj4gPiA+ICAgKiBNYXhp
+bXVtIHNpemUgb2YgYSBDQU4tRkQgZnJhbWUNCj4gPiA+ICAgKiAocm91bmRlZCB1cCBhbmQgaWdu
+b3JpbmcgYml0c3R1ZmZpbmcpDQo+ID4gSWdub3JpbmcgZHluYW1pYyBiaXRzdHVmZmluZw0KPiA+
+ID4gICAqLw0KPiA+ID4gLSNkZWZpbmUgQ0FORkRfRlJBTUVfTEVOX01BWCAoQ0FORkRfRlJBTUVf
+T1ZFUkhFQURfRUZGICsNCj4gPiA+IENBTkZEX01BWF9ETEVOKQ0KPiA+ID4gKyNkZWZpbmUgQ0FO
+RkRfRlJBTUVfTEVOX01BWCBcDQo+ID4gPiArICAgICAgIGNhbl9mcmFtZV9ieXRlcyh0cnVlLCB0
+cnVlLCBmYWxzZSwgQ0FORkRfTUFYX0RMRU4pDQo+ID4gPg0KPiA+ID4gIC8qDQo+ID4gPiAgICog
+Y2FuX2NjX2RsYzJsZW4odmFsdWUpIC0gY29udmVydCBhIGdpdmVuIGRhdGEgbGVuZ3RoIGNvZGUg
+KGRsYykgb2YgYQ0KPiA+ID4gLS0NCj4gPiA+IDIuMzkuMw0KPiA+DQo+ID4gSSB0aGluayB5b3Vy
+IGF0dHJpYnV0aW9uIG9mIHN1Z2dlc3RlZC1ieSBmb3IgbXlzZWxmIGlzIG1peGVkIHVwIGZvciB0
+aGUNCj4gcGF0Y2hlcyAyLzMgYW5kIDMvMyDwn5iKDQo+IA0KPiBBQ0suIEkgd2lsbCByZW1vdmUg
+aXQgZnJvbSAyLzMgYW5kIGFkZCBpdCB0byAzLzMuDQo+IA0KPiA+IEZvciB0aGUgZW50aXJlIHNl
+cmllcyB5b3UgY2FuIGFkZCBteSByZXZpZXdlZC1ieS4NCj4gDQo+IEkgd2lsbCBkbyBzby4NCj4g
+VGhhbmtzIGZvciBwaWNraW5nIG15IHR5cG9zIQ0KDQpCZXN0IFJlZ2FyZHMsDQpUaG9tYXMNCg==
