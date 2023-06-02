@@ -2,69 +2,191 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A53DB720F2E
-	for <lists+linux-can@lfdr.de>; Sat,  3 Jun 2023 12:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5B9472021C
+	for <lists+linux-can@lfdr.de>; Fri,  2 Jun 2023 14:34:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbjFCKYz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 3 Jun 2023 06:24:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46608 "EHLO
+        id S234495AbjFBMee (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 2 Jun 2023 08:34:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbjFCKYx (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 3 Jun 2023 06:24:53 -0400
-X-Greylist: delayed 4200 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 03 Jun 2023 03:24:52 PDT
-Received: from mail.webtopbits.pl (mail.webtopbits.pl [195.231.64.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3E81A6
-        for <linux-can@vger.kernel.org>; Sat,  3 Jun 2023 03:24:52 -0700 (PDT)
-Received: by mail.webtopbits.pl (Postfix, from userid 1001)
-        id 18298A38F4; Fri,  2 Jun 2023 09:36:08 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=webtopbits.pl;
-        s=mail; t=1685694971;
-        bh=Eh8ECMiYd4baGAwPAzhz8mhJACXX7NSRkYjh+plaY18=;
-        h=Date:From:To:Subject:From;
-        b=MGPrHsjGosX6IQDjB+1MOeYybEaN70nuv2h94tcbr9Jv1IBFGDIugo6ZdZENc8ezU
-         wXnooQTDunaTf1uJslruHlBqh1FoTUHX17m4g1F0ECTK1lKktC2YPFDeadIjLW67Uc
-         SayY5u5DRa6sNk/QoexwAHb10/sJrK8ip4EwTDfzUPz2S8czckguztu5hxiJsNSG43
-         C1ytcC98JfFme2kGgLArxlnAQGm4jaXFONwv7wRJ+Q9WaN49dqwHFaEZt196i/+aVk
-         j2nPIABSA4dOQ2QNpz7obwmzsU1OO6elv8bm7euLvZeOWgo+ZUUrnZwLHGSbCmdh8w
-         vjYuvAGRbF1mg==
-Received: by mail.webtopbits.pl for <linux-can@vger.kernel.org>; Fri,  2 Jun 2023 08:35:59 GMT
-Message-ID: <20230602085530-0.1.8w.5k62.0.9hp44ejuxg@webtopbits.pl>
-Date:   Fri,  2 Jun 2023 08:35:59 GMT
-From:   "Kamil Durjasz" <kamil.durjasz@webtopbits.pl>
-To:     <linux-can@vger.kernel.org>
-Subject: =?UTF-8?Q?Wy=C5=BCsza_konwersja_w_e-sklepie_?=
-X-Mailer: mail.webtopbits.pl
+        with ESMTP id S229488AbjFBMed (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 2 Jun 2023 08:34:33 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95FDB1A8
+        for <linux-can@vger.kernel.org>; Fri,  2 Jun 2023 05:34:29 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1q53yT-0001Kq-Ip; Fri, 02 Jun 2023 14:33:45 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1q53yP-0000yE-Po; Fri, 02 Jun 2023 14:33:41 +0200
+Date:   Fri, 2 Jun 2023 14:33:41 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Fedor Pchelkin <pchelkin@ispras.ru>
+Cc:     Oleksij Rempel <linux@rempel-privat.de>,
+        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+        lvc-project@linuxtesting.org,
+        Robin van der Gracht <robin@protonic.nl>,
+        linux-can@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        netdev@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        kernel@pengutronix.de, Oliver Hartkopp <socketcan@hartkopp.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] can: j1939: change j1939_netdev_lock type to mutex
+Message-ID: <20230602123341.GG17237@pengutronix.de>
+References: <20230526171910.227615-1-pchelkin@ispras.ru>
+ <20230526171910.227615-2-pchelkin@ispras.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230526171910.227615-2-pchelkin@ispras.ru>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On Fri, May 26, 2023 at 08:19:09PM +0300, Fedor Pchelkin wrote:
+> It turns out access to j1939_can_rx_register() needs to be serialized,
+> otherwise j1939_priv can be corrupted when parallel threads call
+> j1939_netdev_start() and j1939_can_rx_register() fails. This issue is
+> thoroughly covered in other commit which serializes access to
+> j1939_can_rx_register().
+> 
+> Change j1939_netdev_lock type to mutex so that we do not need to remove
+> GFP_KERNEL from can_rx_register().
+> 
+> j1939_netdev_lock seems to be used in normal contexts where mutex usage
+> is not prohibited.
+> 
+> Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
+> 
+> Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
+> Suggested-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+> Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
 
-w jaki spos=C3=B3b docieraj=C4=85 Pa=C5=84stwo do odbiorc=C3=B3w?
+Tested-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-Tworzymy pot=C4=99=C5=BCne narz=C4=99dzia sprzeda=C5=BCy, kt=C3=B3re pozw=
-alaj=C4=85 kompleksowo rozwi=C4=85za=C4=87 problemy potencjalnych klient=C3=
-=B3w i skutecznie wp=C5=82yn=C4=85=C4=87 na ich decyzje zakupowe.=20
+Thank you!
 
-Skupiamy si=C4=99 na Pa=C5=84stwa potrzebach zwi=C4=85zanych z obs=C5=82u=
-g=C4=85 sklepu, oczekiwaniach i planach sprzeda=C5=BCowych. Szczeg=C3=B3=C5=
-=82owo dopasowujemy grafik=C4=99, funkcjonalno=C5=9Bci, struktur=C4=99 i =
-mikrointerakcje do Pa=C5=84stwa grupy docelowej, co przek=C5=82ada si=C4=99=
- na oczekiwane rezultaty.
+> ---
+> Note that it has been only tested via Syzkaller and not with real
+> hardware.
+> 
+>  net/can/j1939/main.c | 22 +++++++++++-----------
+>  1 file changed, 11 insertions(+), 11 deletions(-)
+> 
+> diff --git a/net/can/j1939/main.c b/net/can/j1939/main.c
+> index 821d4ff303b3..6ed79afe19a5 100644
+> --- a/net/can/j1939/main.c
+> +++ b/net/can/j1939/main.c
+> @@ -126,7 +126,7 @@ static void j1939_can_recv(struct sk_buff *iskb, void *data)
+>  #define J1939_CAN_ID CAN_EFF_FLAG
+>  #define J1939_CAN_MASK (CAN_EFF_FLAG | CAN_RTR_FLAG)
+>  
+> -static DEFINE_SPINLOCK(j1939_netdev_lock);
+> +static DEFINE_MUTEX(j1939_netdev_lock);
+>  
+>  static struct j1939_priv *j1939_priv_create(struct net_device *ndev)
+>  {
+> @@ -220,7 +220,7 @@ static void __j1939_rx_release(struct kref *kref)
+>  	j1939_can_rx_unregister(priv);
+>  	j1939_ecu_unmap_all(priv);
+>  	j1939_priv_set(priv->ndev, NULL);
+> -	spin_unlock(&j1939_netdev_lock);
+> +	mutex_unlock(&j1939_netdev_lock);
+>  }
+>  
+>  /* get pointer to priv without increasing ref counter */
+> @@ -248,9 +248,9 @@ static struct j1939_priv *j1939_priv_get_by_ndev(struct net_device *ndev)
+>  {
+>  	struct j1939_priv *priv;
+>  
+> -	spin_lock(&j1939_netdev_lock);
+> +	mutex_lock(&j1939_netdev_lock);
+>  	priv = j1939_priv_get_by_ndev_locked(ndev);
+> -	spin_unlock(&j1939_netdev_lock);
+> +	mutex_unlock(&j1939_netdev_lock);
+>  
+>  	return priv;
+>  }
+> @@ -260,14 +260,14 @@ struct j1939_priv *j1939_netdev_start(struct net_device *ndev)
+>  	struct j1939_priv *priv, *priv_new;
+>  	int ret;
+>  
+> -	spin_lock(&j1939_netdev_lock);
+> +	mutex_lock(&j1939_netdev_lock);
+>  	priv = j1939_priv_get_by_ndev_locked(ndev);
+>  	if (priv) {
+>  		kref_get(&priv->rx_kref);
+> -		spin_unlock(&j1939_netdev_lock);
+> +		mutex_unlock(&j1939_netdev_lock);
+>  		return priv;
+>  	}
+> -	spin_unlock(&j1939_netdev_lock);
+> +	mutex_unlock(&j1939_netdev_lock);
+>  
+>  	priv = j1939_priv_create(ndev);
+>  	if (!priv)
+> @@ -277,20 +277,20 @@ struct j1939_priv *j1939_netdev_start(struct net_device *ndev)
+>  	spin_lock_init(&priv->j1939_socks_lock);
+>  	INIT_LIST_HEAD(&priv->j1939_socks);
+>  
+> -	spin_lock(&j1939_netdev_lock);
+> +	mutex_lock(&j1939_netdev_lock);
+>  	priv_new = j1939_priv_get_by_ndev_locked(ndev);
+>  	if (priv_new) {
+>  		/* Someone was faster than us, use their priv and roll
+>  		 * back our's.
+>  		 */
+>  		kref_get(&priv_new->rx_kref);
+> -		spin_unlock(&j1939_netdev_lock);
+> +		mutex_unlock(&j1939_netdev_lock);
+>  		dev_put(ndev);
+>  		kfree(priv);
+>  		return priv_new;
+>  	}
+>  	j1939_priv_set(ndev, priv);
+> -	spin_unlock(&j1939_netdev_lock);
+> +	mutex_unlock(&j1939_netdev_lock);
+>  
+>  	ret = j1939_can_rx_register(priv);
+>  	if (ret < 0)
+> @@ -308,7 +308,7 @@ struct j1939_priv *j1939_netdev_start(struct net_device *ndev)
+>  
+>  void j1939_netdev_stop(struct j1939_priv *priv)
+>  {
+> -	kref_put_lock(&priv->rx_kref, __j1939_rx_release, &j1939_netdev_lock);
+> +	kref_put_mutex(&priv->rx_kref, __j1939_rx_release, &j1939_netdev_lock);
+>  	j1939_priv_put(priv);
+>  }
+>  
+> -- 
+> 2.34.1
+> 
+> 
+> 
 
-Ch=C4=99tnie przedstawi=C4=99 dotychczasowe realizacje, aby mogli Pa=C5=84=
-stwo przekona=C4=87 si=C4=99 o naszych mo=C5=BCliwo=C5=9Bciach. Mog=C4=99=
- si=C4=99 skontaktowa=C4=87?
-
-
-Pozdrawiam
-Kamil Durjasz
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
