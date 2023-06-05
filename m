@@ -2,56 +2,55 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65F1C721EA9
-	for <lists+linux-can@lfdr.de>; Mon,  5 Jun 2023 09:01:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89A7B72237B
+	for <lists+linux-can@lfdr.de>; Mon,  5 Jun 2023 12:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbjFEHBM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 5 Jun 2023 03:01:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34498 "EHLO
+        id S230511AbjFEKa1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 5 Jun 2023 06:30:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjFEHBH (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 5 Jun 2023 03:01:07 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599C5109
-        for <linux-can@vger.kernel.org>; Mon,  5 Jun 2023 00:00:53 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1q64Cx-0007nB-Ne
-        for linux-can@vger.kernel.org; Mon, 05 Jun 2023 09:00:51 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 941A61D20FD
-        for <linux-can@vger.kernel.org>; Mon,  5 Jun 2023 06:59:56 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id CED5D1D20CC;
-        Mon,  5 Jun 2023 06:59:54 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id cf40d3be;
-        Mon, 5 Jun 2023 06:59:53 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Fedor Pchelkin <pchelkin@ispras.ru>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        stable@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net 3/3] can: j1939: avoid possible use-after-free when j1939_can_rx_register fails
-Date:   Mon,  5 Jun 2023 08:59:52 +0200
-Message-Id: <20230605065952.1074928-4-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230605065952.1074928-1-mkl@pengutronix.de>
-References: <20230605065952.1074928-1-mkl@pengutronix.de>
+        with ESMTP id S231280AbjFEKa0 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 5 Jun 2023 06:30:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C210A6;
+        Mon,  5 Jun 2023 03:30:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 99E4E6225C;
+        Mon,  5 Jun 2023 10:30:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F1616C4339B;
+        Mon,  5 Jun 2023 10:30:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685961021;
+        bh=oPGdpYdRGs5prRqPkvlFOvNPOsOWKAiytl1FiPVuBog=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=f8lVuGxiC3+QUoqXniT8IKHc2GKtV7BvQ1DZPsibcYH9MnXwdAIVt268Bp9wTbqOr
+         yq+DQYJnAdbyKYHNA5EDKYy1uT08SkDvEIR9ccms1r3i1gm9ogcOhWgv0oT7WOp8+M
+         184iqTzGxu8Aw2u6gNySr+wois693lz6FIcbf6U4c5AoxQggs0lr6AN6jHmQKmRfFu
+         MeANAsCaFJlVFbISZJSAdCsMfuIOneSEJiNYj6vTtSFaU7cp/8izcvlnAqVX5jYF4n
+         K7+6DpjewC2m6RA1mgZHjPtzFYSd/ZSJ4T3bb32tTWI5urie3pjozB+qSIo0eeCZoJ
+         b46GFOtQDYVzQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D357CE87231;
+        Mon,  5 Jun 2023 10:30:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Subject: Re: [PATCH net 1/3] can: j1939: j1939_sk_send_loop_abort(): improved
+ error queue handling in J1939 Socket
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168596102085.26938.10931780487527852402.git-patchwork-notify@kernel.org>
+Date:   Mon, 05 Jun 2023 10:30:20 +0000
+References: <20230605065952.1074928-2-mkl@pengutronix.de>
+In-Reply-To: <20230605065952.1074928-2-mkl@pengutronix.de>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        linux-can@vger.kernel.org, kernel@pengutronix.de,
+        o.rempel@pengutronix.de, david@protonic.nl, stable@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,145 +58,38 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Fedor Pchelkin <pchelkin@ispras.ru>
+Hello:
 
-Syzkaller reports the following failure:
+This series was applied to netdev/net.git (main)
+by Marc Kleine-Budde <mkl@pengutronix.de>:
 
-BUG: KASAN: use-after-free in kref_put include/linux/kref.h:64 [inline]
-BUG: KASAN: use-after-free in j1939_priv_put+0x25/0xa0 net/can/j1939/main.c:172
-Write of size 4 at addr ffff888141c15058 by task swapper/3/0
+On Mon,  5 Jun 2023 08:59:50 +0200 you wrote:
+> From: Oleksij Rempel <o.rempel@pengutronix.de>
+> 
+> This patch addresses an issue within the j1939_sk_send_loop_abort()
+> function in the j1939/socket.c file, specifically in the context of
+> Transport Protocol (TP) sessions.
+> 
+> Without this patch, when a TP session is initiated and a Clear To Send
+> (CTS) frame is received from the remote side requesting one data packet,
+> the kernel dispatches the first Data Transport (DT) frame and then waits
+> for the next CTS. If the remote side doesn't respond with another CTS,
+> the kernel aborts due to a timeout. This leads to the user-space
+> receiving an EPOLLERR on the socket, and the socket becomes active.
+> 
+> [...]
 
-CPU: 3 PID: 0 Comm: swapper/3 Not tainted 5.10.144-syzkaller #0
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-1 04/01/2014
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x107/0x167 lib/dump_stack.c:118
- print_address_description.constprop.0+0x1c/0x220 mm/kasan/report.c:385
- __kasan_report mm/kasan/report.c:545 [inline]
- kasan_report.cold+0x1f/0x37 mm/kasan/report.c:562
- check_memory_region_inline mm/kasan/generic.c:186 [inline]
- check_memory_region+0x145/0x190 mm/kasan/generic.c:192
- instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
- atomic_fetch_sub_release include/asm-generic/atomic-instrumented.h:220 [inline]
- __refcount_sub_and_test include/linux/refcount.h:272 [inline]
- __refcount_dec_and_test include/linux/refcount.h:315 [inline]
- refcount_dec_and_test include/linux/refcount.h:333 [inline]
- kref_put include/linux/kref.h:64 [inline]
- j1939_priv_put+0x25/0xa0 net/can/j1939/main.c:172
- j1939_sk_sock_destruct+0x44/0x90 net/can/j1939/socket.c:374
- __sk_destruct+0x4e/0x820 net/core/sock.c:1784
- rcu_do_batch kernel/rcu/tree.c:2485 [inline]
- rcu_core+0xb35/0x1a30 kernel/rcu/tree.c:2726
- __do_softirq+0x289/0x9a3 kernel/softirq.c:298
- asm_call_irq_on_stack+0x12/0x20
- </IRQ>
- __run_on_irqstack arch/x86/include/asm/irq_stack.h:26 [inline]
- run_on_irqstack_cond arch/x86/include/asm/irq_stack.h:77 [inline]
- do_softirq_own_stack+0xaa/0xe0 arch/x86/kernel/irq_64.c:77
- invoke_softirq kernel/softirq.c:393 [inline]
- __irq_exit_rcu kernel/softirq.c:423 [inline]
- irq_exit_rcu+0x136/0x200 kernel/softirq.c:435
- sysvec_apic_timer_interrupt+0x4d/0x100 arch/x86/kernel/apic/apic.c:1095
- asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:635
+Here is the summary with links:
+  - [net,1/3] can: j1939: j1939_sk_send_loop_abort(): improved error queue handling in J1939 Socket
+    https://git.kernel.org/netdev/net/c/2a84aea80e92
+  - [net,2/3] can: j1939: change j1939_netdev_lock type to mutex
+    https://git.kernel.org/netdev/net/c/cd9c790de208
+  - [net,3/3] can: j1939: avoid possible use-after-free when j1939_can_rx_register fails
+    https://git.kernel.org/netdev/net/c/9f16eb106aa5
 
-Allocated by task 1141:
- kasan_save_stack+0x1b/0x40 mm/kasan/common.c:48
- kasan_set_track mm/kasan/common.c:56 [inline]
- __kasan_kmalloc.constprop.0+0xc9/0xd0 mm/kasan/common.c:461
- kmalloc include/linux/slab.h:552 [inline]
- kzalloc include/linux/slab.h:664 [inline]
- j1939_priv_create net/can/j1939/main.c:131 [inline]
- j1939_netdev_start+0x111/0x860 net/can/j1939/main.c:268
- j1939_sk_bind+0x8ea/0xd30 net/can/j1939/socket.c:485
- __sys_bind+0x1f2/0x260 net/socket.c:1645
- __do_sys_bind net/socket.c:1656 [inline]
- __se_sys_bind net/socket.c:1654 [inline]
- __x64_sys_bind+0x6f/0xb0 net/socket.c:1654
- do_syscall_64+0x33/0x40 arch/x86/entry/common.c:46
- entry_SYSCALL_64_after_hwframe+0x61/0xc6
-
-Freed by task 1141:
- kasan_save_stack+0x1b/0x40 mm/kasan/common.c:48
- kasan_set_track+0x1c/0x30 mm/kasan/common.c:56
- kasan_set_free_info+0x1b/0x30 mm/kasan/generic.c:355
- __kasan_slab_free+0x112/0x170 mm/kasan/common.c:422
- slab_free_hook mm/slub.c:1542 [inline]
- slab_free_freelist_hook+0xad/0x190 mm/slub.c:1576
- slab_free mm/slub.c:3149 [inline]
- kfree+0xd9/0x3b0 mm/slub.c:4125
- j1939_netdev_start+0x5ee/0x860 net/can/j1939/main.c:300
- j1939_sk_bind+0x8ea/0xd30 net/can/j1939/socket.c:485
- __sys_bind+0x1f2/0x260 net/socket.c:1645
- __do_sys_bind net/socket.c:1656 [inline]
- __se_sys_bind net/socket.c:1654 [inline]
- __x64_sys_bind+0x6f/0xb0 net/socket.c:1654
- do_syscall_64+0x33/0x40 arch/x86/entry/common.c:46
- entry_SYSCALL_64_after_hwframe+0x61/0xc6
-
-It can be caused by this scenario:
-
-CPU0					CPU1
-j1939_sk_bind(socket0, ndev0, ...)
-  j1939_netdev_start()
-					j1939_sk_bind(socket1, ndev0, ...)
-                                          j1939_netdev_start()
-  mutex_lock(&j1939_netdev_lock)
-  j1939_priv_set(ndev0, priv)
-  mutex_unlock(&j1939_netdev_lock)
-					  if (priv_new)
-					    kref_get(&priv_new->rx_kref)
-					    return priv_new;
-					  /* inside j1939_sk_bind() */
-					  jsk->priv = priv
-  j1939_can_rx_register(priv) // fails
-  j1939_priv_set(ndev, NULL)
-  kfree(priv)
-					j1939_sk_sock_destruct()
-					j1939_priv_put() // <- uaf
-
-To avoid this, call j1939_can_rx_register() under j1939_netdev_lock so
-that a concurrent thread cannot process j1939_priv before
-j1939_can_rx_register() returns.
-
-Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
-
-Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
-Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
-Tested-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Link: https://lore.kernel.org/r/20230526171910.227615-3-pchelkin@ispras.ru
-Cc: stable@vger.kernel.org
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- net/can/j1939/main.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/net/can/j1939/main.c b/net/can/j1939/main.c
-index 6ed79afe19a5..ecff1c947d68 100644
---- a/net/can/j1939/main.c
-+++ b/net/can/j1939/main.c
-@@ -290,16 +290,18 @@ struct j1939_priv *j1939_netdev_start(struct net_device *ndev)
- 		return priv_new;
- 	}
- 	j1939_priv_set(ndev, priv);
--	mutex_unlock(&j1939_netdev_lock);
- 
- 	ret = j1939_can_rx_register(priv);
- 	if (ret < 0)
- 		goto out_priv_put;
- 
-+	mutex_unlock(&j1939_netdev_lock);
- 	return priv;
- 
-  out_priv_put:
- 	j1939_priv_set(ndev, NULL);
-+	mutex_unlock(&j1939_netdev_lock);
-+
- 	dev_put(ndev);
- 	kfree(priv);
- 
+You are awesome, thank you!
 -- 
-2.39.2
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
