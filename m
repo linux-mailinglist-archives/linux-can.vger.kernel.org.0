@@ -2,97 +2,173 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43A2E7267C8
-	for <lists+linux-can@lfdr.de>; Wed,  7 Jun 2023 19:51:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 762D572727D
+	for <lists+linux-can@lfdr.de>; Thu,  8 Jun 2023 00:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232317AbjFGRvV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 7 Jun 2023 13:51:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47778 "EHLO
+        id S233441AbjFGW4p (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 7 Jun 2023 18:56:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbjFGRvU (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 7 Jun 2023 13:51:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207E41FC2;
-        Wed,  7 Jun 2023 10:51:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A994164247;
-        Wed,  7 Jun 2023 17:51:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4F26C433EF;
-        Wed,  7 Jun 2023 17:51:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686160279;
-        bh=ntiLTYcguWXdxyRVd95QDYdTgdqGqLgcSnpXeyhTLIA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VMIyp3sPP3MH59VYsFFpl5YuH4ki5veZ2kAVMFJLMyQ/yoQYDjc0CeDPpRs5KHWsz
-         9rCJ4u5LJ4xI4gaOFblTwnmrKNpIeQuJP6p/yQjyccP/P7r5vpy0k3oQ3hVNkf7oaa
-         NTxUWKhlONJsi7dHmTBqKXKfUYhBFQTGPMnJDjvheI7XAgc6oAJ/rXOFtL+P8epmR7
-         iER/mANVMc8QMs35lHlg80bmV4q7hi7JxbNsseTju9sbLgGUsZHMPqX366LURzMolu
-         xURY7x3z8tEiw+61WBrd21zD+t3CIB2jRghx3caAnd0nRr3uTSNSzONzLiuq0xunj9
-         CGE0H4WVkrVzA==
-Date:   Wed, 7 Jun 2023 18:51:13 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Leonard =?iso-8859-1?Q?G=F6hrs?= <l.goehrs@pengutronix.de>
-Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 4/8] dt-bindings: can: m_can: add
- termination-{gpios,ohms} properties
-Message-ID: <20230607-squire-anointer-762f08b27d3d@spud>
-References: <20230607115508.2964574-1-l.goehrs@pengutronix.de>
- <20230607115508.2964574-4-l.goehrs@pengutronix.de>
+        with ESMTP id S231674AbjFGW4S (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 7 Jun 2023 18:56:18 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7241FFA
+        for <linux-can@vger.kernel.org>; Wed,  7 Jun 2023 15:56:14 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-51458187be1so2544587a12.2
+        for <linux-can@vger.kernel.org>; Wed, 07 Jun 2023 15:56:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686178573; x=1688770573;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lwmqmz3SLTAm/5XHn54kA2Qkz1KiGdBlOiEDAaxIk1A=;
+        b=Vs2O3FJiGjOSsYkVdVVwQ8usUW0Na2c1JkRxzODLflg+DQkLHMSvDUTON1eOgoDd5p
+         icZX7jz85gtt675JIQoCg2qYDeGvdgrlIlnYsBqJCXY6A+wwUH4Pzx63GHJ70nVIOHpq
+         q8q4NwQWw9O7Ka1WcBWhtc95lIatv8n89RH1nSmTaJwpto6eirRVCg2zeJDk+R5CA+KG
+         ThXmo+FVEx7rMo/R9HxHw2025VcLT8t8EGl5ZKxML6giyeJpWVWuCmdmhwVTBmwvl+lO
+         4Pyzwb5XpDz845p07KZNMlaubUmeRc4L02Q7u93h4SKEXfacqvhkSvKzrJS0PjXfy7pG
+         yWrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686178573; x=1688770573;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lwmqmz3SLTAm/5XHn54kA2Qkz1KiGdBlOiEDAaxIk1A=;
+        b=O/vntLRyAtrnLsE3SFgLxrg/vb7V5raa25MWYy93TGSxoMRY4FYKPMxpCVYFuciuJk
+         bOfOniepG3SGkZ5dBOmeTV+1lLqqXlQN8x1BIsZLIgrPL+jddKFMcNjVi71dCkRHf216
+         dPIJSR2tNdhjmv1qZCbZR6P8TNeP9QBjPaveQQlkzwUFDt0w441tgC50NyaHlijc/p/w
+         T3Ky58Mxx6F4jMAMreIftAv9MiBBzK65+g4LbwD2uUvt6/4AppULHix4bAERNIotdPfF
+         wAnsaIDsQ7nMrolbh+KjMCSFe1PSJckEKxrOLbHn3hjK8mZELztkvuJL5dyuN4HrRJxS
+         zAtA==
+X-Gm-Message-State: AC+VfDzqHPGJBq7dhwiNcEvmOWdxOTvIvECqMzDgSwouUQjiSg8rlyYn
+        ttyHYmx3O2SuFCJlKTUBT6S6jJB2oz11Hrxu5PGQGRaE6HWSYA==
+X-Google-Smtp-Source: ACHHUZ5lc5uNG0II8N/7owu97MNYayebO2FU5BOHITGRdvZTCXANx0Yi1fv5Th/dfzvi0zTuZAaSCLE67mXxoPl8ud4=
+X-Received: by 2002:a17:907:8a08:b0:973:ad8f:ef9b with SMTP id
+ sc8-20020a1709078a0800b00973ad8fef9bmr8009971ejc.5.1686178552696; Wed, 07 Jun
+ 2023 15:55:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="WZNfJtvOS3jfTXvT"
-Content-Disposition: inline
-In-Reply-To: <20230607115508.2964574-4-l.goehrs@pengutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a54:2409:0:b0:217:72a9:f646 with HTTP; Wed, 7 Jun 2023
+ 15:55:52 -0700 (PDT)
+Reply-To: unitednationcompensationcoordinatortreasury@hotmail.com
+From:   "UNITED NATION DEPUTY SECRETARY-GENERAL (U.N)" 
+        <successikolo@gmail.com>
+Date:   Wed, 7 Jun 2023 15:55:52 -0700
+Message-ID: <CADFNGJ8EwbrtVXBod+yuxOPvcNStu1uNZVywED0Ra-jpG92ATw@mail.gmail.com>
+Subject: CONTACT DHL OFFICE IMMEDIATELY FOR YOUR ATM MASTER CARD 1.5 MILLION,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.6 required=5.0 tests=ADVANCE_FEE_3_NEW_FRM_MNY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FILL_THIS_FORM,FORM_FRAUD_5,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        LOTS_OF_MONEY,MONEY_FORM,MONEY_FRAUD_5,MONEY_FREEMAIL_REPTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        T_FILL_THIS_FORM_LOAN,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:530 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [successikolo[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  0.2 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  0.0 FILL_THIS_FORM Fill in a form with personal information
+        *  0.0 T_FILL_THIS_FORM_LOAN Answer loan question(s)
+        *  0.0 MONEY_FORM Lots of money if you fill out a form
+        *  1.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  0.0 ADVANCE_FEE_3_NEW_FRM_MNY Advance Fee fraud form and lots of
+        *      money
+        *  0.2 MONEY_FRAUD_5 Lots of money and many fraud phrases
+        *  0.0 FORM_FRAUD_5 Fill a form and many fraud phrases
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+UNITED NATION DEPUTY SECRETARY-GENERAL.
 
---WZNfJtvOS3jfTXvT
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This is to official inform you that we have been having meetings for
+the past three (3) weeks which ended two days ago with MR. JIM YONG
+KIM the world bank president and other seven continent presidents on
+the congress we treated on solution to scam victim problems.
 
-On Wed, Jun 07, 2023 at 01:55:03PM +0200, Leonard G=F6hrs wrote:
-> The termination-gpios property allows specifying a GPIO pin that
-> enables/disables a termination resistor on said CAN interface.
-> The termination-ohms property specifies the resistance of said resistor.
->=20
-> Signed-off-by: Leonard G=F6hrs <l.goehrs@pengutronix.de>
+ Note: we have decided to contact you following the reports we
+received from anti-fraud international monitoring group your
+name/email has been submitted to us therefore the united nations have
+agreed to compensate you with the sum of (USD$ 1.5 Million) this
+compensation is also including international business that failed you
+in the past due to government problems etc.
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+ We have arranged your payment through our ATM Master Card and
+deposited it in DHL Office to deliver it to you which is the latest
+instruction from the World Bank president MR. JIM YONG KIM, For your
+information=E2=80=99s, the delivery charges already paid by U.N treasury, t=
+he
+only money you will send to DHL office south Korea is
+($500). for security keeping fee, U.N coordinator already paid for
+others charges fees for delivery except the security keeping fee, the
+director of DHL refused to collect the security keeping fee from U.N
+coordinator, the Director of DHL office said that they don=E2=80=99t know
+exactly time you will contact them to reconfirm your details to avoid
+counting demur-rage that is why they refused collecting the ($500) .
+for security keeping fee.
 
-Cheers,
-Conor.
+ Therefore be advice to contact DHL Office agent south Korea. Rev:John
+Lee Tae-seok
+who is in position to deliver your ATM
+Master Card to your location address, contact DHL Office immediately
+with the bellow email & phone number as listed below.
 
---WZNfJtvOS3jfTXvT
-Content-Type: application/pgp-signature; name="signature.asc"
+ Contact name: John Lee Tae-seok
 
------BEGIN PGP SIGNATURE-----
+ Email:( dhlgeneralheadquartersrepublic@gmail.com )
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIDDkQAKCRB4tDGHoIJi
-0oEuAPwJc1/Z8ftPtfOnY/Sgc8KPdSdKO5wwVToMZDYksPiTwQD/a6uwG0LRepdo
-X/Vv1J3qe8cz0FCk2a5oY/eJnZ+Rcg0=
-=tfPj
------END PGP SIGNATURE-----
+ Do not hesitate to Contact Rev: John Lee Tae-seok, as soon as you
 
---WZNfJtvOS3jfTXvT--
+ read this message. Email:( dhlgeneralheadquartersrepublic@gmail.com )
+
+ Make sure you reconfirmed DHL Office your details ASAP as stated
+below to avoid wrong delivery.
+
+ Your full name..........
+
+ Home address:.........
+
+ Your country...........
+
+ Your city..............
+
+ Telephone......
+
+ Occupation:.......
+
+ Age:=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6..
+
+ Let us know as soon as possible you receive your ATM MasterCard
+for proper verification.
+
+ Regards,
+
+ Mrs Vivian kakadu.
+
+ DEPUTY SECRETARY-GENERAL (U.N)
