@@ -2,173 +2,106 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 762D572727D
-	for <lists+linux-can@lfdr.de>; Thu,  8 Jun 2023 00:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D68E7272A3
+	for <lists+linux-can@lfdr.de>; Thu,  8 Jun 2023 01:03:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233441AbjFGW4p (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 7 Jun 2023 18:56:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54748 "EHLO
+        id S232401AbjFGXDW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 7 Jun 2023 19:03:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231674AbjFGW4S (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 7 Jun 2023 18:56:18 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7241FFA
-        for <linux-can@vger.kernel.org>; Wed,  7 Jun 2023 15:56:14 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-51458187be1so2544587a12.2
-        for <linux-can@vger.kernel.org>; Wed, 07 Jun 2023 15:56:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686178573; x=1688770573;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lwmqmz3SLTAm/5XHn54kA2Qkz1KiGdBlOiEDAaxIk1A=;
-        b=Vs2O3FJiGjOSsYkVdVVwQ8usUW0Na2c1JkRxzODLflg+DQkLHMSvDUTON1eOgoDd5p
-         icZX7jz85gtt675JIQoCg2qYDeGvdgrlIlnYsBqJCXY6A+wwUH4Pzx63GHJ70nVIOHpq
-         q8q4NwQWw9O7Ka1WcBWhtc95lIatv8n89RH1nSmTaJwpto6eirRVCg2zeJDk+R5CA+KG
-         ThXmo+FVEx7rMo/R9HxHw2025VcLT8t8EGl5ZKxML6giyeJpWVWuCmdmhwVTBmwvl+lO
-         4Pyzwb5XpDz845p07KZNMlaubUmeRc4L02Q7u93h4SKEXfacqvhkSvKzrJS0PjXfy7pG
-         yWrw==
+        with ESMTP id S230424AbjFGXDV (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 7 Jun 2023 19:03:21 -0400
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBCEE11A;
+        Wed,  7 Jun 2023 16:03:20 -0700 (PDT)
+Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-777ac791935so168662439f.2;
+        Wed, 07 Jun 2023 16:03:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686178573; x=1688770573;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lwmqmz3SLTAm/5XHn54kA2Qkz1KiGdBlOiEDAaxIk1A=;
-        b=O/vntLRyAtrnLsE3SFgLxrg/vb7V5raa25MWYy93TGSxoMRY4FYKPMxpCVYFuciuJk
-         bOfOniepG3SGkZ5dBOmeTV+1lLqqXlQN8x1BIsZLIgrPL+jddKFMcNjVi71dCkRHf216
-         dPIJSR2tNdhjmv1qZCbZR6P8TNeP9QBjPaveQQlkzwUFDt0w441tgC50NyaHlijc/p/w
-         T3Ky58Mxx6F4jMAMreIftAv9MiBBzK65+g4LbwD2uUvt6/4AppULHix4bAERNIotdPfF
-         wAnsaIDsQ7nMrolbh+KjMCSFe1PSJckEKxrOLbHn3hjK8mZELztkvuJL5dyuN4HrRJxS
-         zAtA==
-X-Gm-Message-State: AC+VfDzqHPGJBq7dhwiNcEvmOWdxOTvIvECqMzDgSwouUQjiSg8rlyYn
-        ttyHYmx3O2SuFCJlKTUBT6S6jJB2oz11Hrxu5PGQGRaE6HWSYA==
-X-Google-Smtp-Source: ACHHUZ5lc5uNG0II8N/7owu97MNYayebO2FU5BOHITGRdvZTCXANx0Yi1fv5Th/dfzvi0zTuZAaSCLE67mXxoPl8ud4=
-X-Received: by 2002:a17:907:8a08:b0:973:ad8f:ef9b with SMTP id
- sc8-20020a1709078a0800b00973ad8fef9bmr8009971ejc.5.1686178552696; Wed, 07 Jun
- 2023 15:55:52 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686179000; x=1688771000;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TJmr8d4vIXjlqQuoPxUVCbEDrAJO2WI0A5hbY1xFW/M=;
+        b=kXMrhL34QMF89+khf1u9l+LXp92L7z3HhRhRltTxsutnEcZNt5Fu9/XP3knE5xbrA5
+         bZ5zcLfXWCplPjb2z+OY0XFTlUg7utAC0m6em9a6ZiGaiBwpnWFhG+tTV3MsOldmIZBe
+         wqdXPLiLhlAU/nkL6kDNe580UipqH9SnIzz+4NBpGBqk5JD22UJpdrYWX8vup7Ha8fI3
+         NCvC0+m/KC4Ol8dr/CChrbSuREhMUOFKOz6bH3Lq0xK19TY/UO/7z+hXn/F48cKQ+sSE
+         hBQcXeNI/Pml2LWh4g2CRQMm5divklX/o6ArnXr6wyIXDkW6FAKsQHexF/dBbsR9qI2p
+         R52w==
+X-Gm-Message-State: AC+VfDxoy7ojdZ3gP5HTuQx/Olvj9g+PBUukBkt6ZL/IkfUtk4NCQiWL
+        dcoyIjUnChvrcy7xS13c3g==
+X-Google-Smtp-Source: ACHHUZ44anLflGzxROAwGHEtAG2uexfjuAvsT+mvkm2zNj8Yil495qpTVuBzwUiFga9s18d4NWvDVA==
+X-Received: by 2002:a6b:e614:0:b0:760:f795:ccdf with SMTP id g20-20020a6be614000000b00760f795ccdfmr5743972ioh.8.1686179000100;
+        Wed, 07 Jun 2023 16:03:20 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id z25-20020a6b0a19000000b00760f256037dsm2289652ioi.44.2023.06.07.16.03.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 16:03:19 -0700 (PDT)
+Received: (nullmailer pid 150871 invoked by uid 1000);
+        Wed, 07 Jun 2023 23:03:15 -0000
+Date:   Wed, 7 Jun 2023 17:03:15 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Leonard =?iso-8859-1?Q?G=F6hrs?= <l.goehrs@pengutronix.de>
+Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 4/8] dt-bindings: can: m_can: add
+ termination-{gpios,ohms} properties
+Message-ID: <20230607230315.GA141591-robh@kernel.org>
+References: <20230607115508.2964574-1-l.goehrs@pengutronix.de>
+ <20230607115508.2964574-4-l.goehrs@pengutronix.de>
 MIME-Version: 1.0
-Received: by 2002:a54:2409:0:b0:217:72a9:f646 with HTTP; Wed, 7 Jun 2023
- 15:55:52 -0700 (PDT)
-Reply-To: unitednationcompensationcoordinatortreasury@hotmail.com
-From:   "UNITED NATION DEPUTY SECRETARY-GENERAL (U.N)" 
-        <successikolo@gmail.com>
-Date:   Wed, 7 Jun 2023 15:55:52 -0700
-Message-ID: <CADFNGJ8EwbrtVXBod+yuxOPvcNStu1uNZVywED0Ra-jpG92ATw@mail.gmail.com>
-Subject: CONTACT DHL OFFICE IMMEDIATELY FOR YOUR ATM MASTER CARD 1.5 MILLION,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.6 required=5.0 tests=ADVANCE_FEE_3_NEW_FRM_MNY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FILL_THIS_FORM,FORM_FRAUD_5,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        LOTS_OF_MONEY,MONEY_FORM,MONEY_FRAUD_5,MONEY_FREEMAIL_REPTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_FILL_THIS_FORM_LOAN,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:530 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [successikolo[at]gmail.com]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  0.2 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  0.0 FILL_THIS_FORM Fill in a form with personal information
-        *  0.0 T_FILL_THIS_FORM_LOAN Answer loan question(s)
-        *  0.0 MONEY_FORM Lots of money if you fill out a form
-        *  1.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  0.0 ADVANCE_FEE_3_NEW_FRM_MNY Advance Fee fraud form and lots of
-        *      money
-        *  0.2 MONEY_FRAUD_5 Lots of money and many fraud phrases
-        *  0.0 FORM_FRAUD_5 Fill a form and many fraud phrases
-X-Spam-Level: ******
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230607115508.2964574-4-l.goehrs@pengutronix.de>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-UNITED NATION DEPUTY SECRETARY-GENERAL.
+On Wed, Jun 07, 2023 at 01:55:03PM +0200, Leonard Göhrs wrote:
+> The termination-gpios property allows specifying a GPIO pin that
+> enables/disables a termination resistor on said CAN interface.
+> The termination-ohms property specifies the resistance of said resistor.
+> 
+> Signed-off-by: Leonard Göhrs <l.goehrs@pengutronix.de>
+> ---
+>  Documentation/devicetree/bindings/net/can/bosch,m_can.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> index 67879aab623b5..106c79fa560c3 100644
+> --- a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> +++ b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> @@ -118,6 +118,9 @@ properties:
+>    phys:
+>      maxItems: 1
+>  
+> +  termination-gpios: true
+> +  termination-ohms: true
 
-This is to official inform you that we have been having meetings for
-the past three (3) weeks which ended two days ago with MR. JIM YONG
-KIM the world bank president and other seven continent presidents on
-the congress we treated on solution to scam victim problems.
+All you should need here is change additionalProperties to 
+unevaluatedProperties as these are defined by can-controller.yaml.
 
- Note: we have decided to contact you following the reports we
-received from anti-fraud international monitoring group your
-name/email has been submitted to us therefore the united nations have
-agreed to compensate you with the sum of (USD$ 1.5 Million) this
-compensation is also including international business that failed you
-in the past due to government problems etc.
-
- We have arranged your payment through our ATM Master Card and
-deposited it in DHL Office to deliver it to you which is the latest
-instruction from the World Bank president MR. JIM YONG KIM, For your
-information=E2=80=99s, the delivery charges already paid by U.N treasury, t=
-he
-only money you will send to DHL office south Korea is
-($500). for security keeping fee, U.N coordinator already paid for
-others charges fees for delivery except the security keeping fee, the
-director of DHL refused to collect the security keeping fee from U.N
-coordinator, the Director of DHL office said that they don=E2=80=99t know
-exactly time you will contact them to reconfirm your details to avoid
-counting demur-rage that is why they refused collecting the ($500) .
-for security keeping fee.
-
- Therefore be advice to contact DHL Office agent south Korea. Rev:John
-Lee Tae-seok
-who is in position to deliver your ATM
-Master Card to your location address, contact DHL Office immediately
-with the bellow email & phone number as listed below.
-
- Contact name: John Lee Tae-seok
-
- Email:( dhlgeneralheadquartersrepublic@gmail.com )
-
- Do not hesitate to Contact Rev: John Lee Tae-seok, as soon as you
-
- read this message. Email:( dhlgeneralheadquartersrepublic@gmail.com )
-
- Make sure you reconfirmed DHL Office your details ASAP as stated
-below to avoid wrong delivery.
-
- Your full name..........
-
- Home address:.........
-
- Your country...........
-
- Your city..............
-
- Telephone......
-
- Occupation:.......
-
- Age:=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6..
-
- Let us know as soon as possible you receive your ATM MasterCard
-for proper verification.
-
- Regards,
-
- Mrs Vivian kakadu.
-
- DEPUTY SECRETARY-GENERAL (U.N)
+> +
+>  required:
+>    - compatible
+>    - reg
+> -- 
+> 2.39.2
+> 
