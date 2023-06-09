@@ -2,106 +2,120 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D68E7272A3
-	for <lists+linux-can@lfdr.de>; Thu,  8 Jun 2023 01:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3ED47295B7
+	for <lists+linux-can@lfdr.de>; Fri,  9 Jun 2023 11:44:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232401AbjFGXDW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 7 Jun 2023 19:03:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59126 "EHLO
+        id S241792AbjFIJoB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 9 Jun 2023 05:44:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230424AbjFGXDV (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 7 Jun 2023 19:03:21 -0400
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBCEE11A;
-        Wed,  7 Jun 2023 16:03:20 -0700 (PDT)
-Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-777ac791935so168662439f.2;
-        Wed, 07 Jun 2023 16:03:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686179000; x=1688771000;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TJmr8d4vIXjlqQuoPxUVCbEDrAJO2WI0A5hbY1xFW/M=;
-        b=kXMrhL34QMF89+khf1u9l+LXp92L7z3HhRhRltTxsutnEcZNt5Fu9/XP3knE5xbrA5
-         bZ5zcLfXWCplPjb2z+OY0XFTlUg7utAC0m6em9a6ZiGaiBwpnWFhG+tTV3MsOldmIZBe
-         wqdXPLiLhlAU/nkL6kDNe580UipqH9SnIzz+4NBpGBqk5JD22UJpdrYWX8vup7Ha8fI3
-         NCvC0+m/KC4Ol8dr/CChrbSuREhMUOFKOz6bH3Lq0xK19TY/UO/7z+hXn/F48cKQ+sSE
-         hBQcXeNI/Pml2LWh4g2CRQMm5divklX/o6ArnXr6wyIXDkW6FAKsQHexF/dBbsR9qI2p
-         R52w==
-X-Gm-Message-State: AC+VfDxoy7ojdZ3gP5HTuQx/Olvj9g+PBUukBkt6ZL/IkfUtk4NCQiWL
-        dcoyIjUnChvrcy7xS13c3g==
-X-Google-Smtp-Source: ACHHUZ44anLflGzxROAwGHEtAG2uexfjuAvsT+mvkm2zNj8Yil495qpTVuBzwUiFga9s18d4NWvDVA==
-X-Received: by 2002:a6b:e614:0:b0:760:f795:ccdf with SMTP id g20-20020a6be614000000b00760f795ccdfmr5743972ioh.8.1686179000100;
-        Wed, 07 Jun 2023 16:03:20 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id z25-20020a6b0a19000000b00760f256037dsm2289652ioi.44.2023.06.07.16.03.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 16:03:19 -0700 (PDT)
-Received: (nullmailer pid 150871 invoked by uid 1000);
-        Wed, 07 Jun 2023 23:03:15 -0000
-Date:   Wed, 7 Jun 2023 17:03:15 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Leonard =?iso-8859-1?Q?G=F6hrs?= <l.goehrs@pengutronix.de>
-Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 4/8] dt-bindings: can: m_can: add
- termination-{gpios,ohms} properties
-Message-ID: <20230607230315.GA141591-robh@kernel.org>
-References: <20230607115508.2964574-1-l.goehrs@pengutronix.de>
- <20230607115508.2964574-4-l.goehrs@pengutronix.de>
+        with ESMTP id S241800AbjFIJno (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 9 Jun 2023 05:43:44 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C713AAF
+        for <linux-can@vger.kernel.org>; Fri,  9 Jun 2023 02:38:23 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1q7YZA-00036g-4M; Fri, 09 Jun 2023 11:37:56 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id E92151D56B2;
+        Fri,  9 Jun 2023 09:37:54 +0000 (UTC)
+Date:   Fri, 9 Jun 2023 11:37:54 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Harald Mommer <harald.mommer@opensynergy.com>
+Cc:     Cornelia Huck <cohuck@redhat.com>,
+        virtio-comment@lists.oasis-open.org,
+        virtio-dev@lists.oasis-open.org, linux-can@vger.kernel.org,
+        Mikhail Golubev <Mikhail.Golubev@opensynergy.com>,
+        Dariusz Stojaczyk <Dariusz.Stojaczyk@opensynergy.com>
+Subject: Re: [virtio-dev] Re: [virtio-comment] [RFC PATCH v2 1/1] virtio-can:
+ Device specification - 2nd RFC draft.
+Message-ID: <20230609-greasily-jolliness-6b5bde46f390-mkl@pengutronix.de>
+References: <20220825133410.18367-1-harald.mommer@opensynergy.com>
+ <87o7tj2bgd.fsf@redhat.com>
+ <7f10427c-cad4-6eeb-31f0-e39ccdbc38ab@opensynergy.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="gvutexvarpe3wb7n"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230607115508.2964574-4-l.goehrs@pengutronix.de>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <7f10427c-cad4-6eeb-31f0-e39ccdbc38ab@opensynergy.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 01:55:03PM +0200, Leonard Göhrs wrote:
-> The termination-gpios property allows specifying a GPIO pin that
-> enables/disables a termination resistor on said CAN interface.
-> The termination-ohms property specifies the resistance of said resistor.
-> 
-> Signed-off-by: Leonard Göhrs <l.goehrs@pengutronix.de>
-> ---
->  Documentation/devicetree/bindings/net/can/bosch,m_can.yaml | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-> index 67879aab623b5..106c79fa560c3 100644
-> --- a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-> +++ b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-> @@ -118,6 +118,9 @@ properties:
->    phys:
->      maxItems: 1
->  
-> +  termination-gpios: true
-> +  termination-ohms: true
 
-All you should need here is change additionalProperties to 
-unevaluatedProperties as these are defined by can-controller.yaml.
+--gvutexvarpe3wb7n
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> +
->  required:
->    - compatible
->    - reg
-> -- 
-> 2.39.2
-> 
+On 07.06.2023 15:45:33, Harald Mommer wrote:
+> > > - Removal of priorities and config space. Priorities cannot be suppor=
+ted
+> > >    using SocketCAN, the information delivered in the config space can=
+not
+> > >    be determined using SocketCAN. Support of different priorities was
+> > >    anyway too much for a first version of a specification. If priorit=
+ies
+> > >    are supported in a future version there will probably be only 2
+> > >    different priorities, normal and high. In a future version of the
+> > >    specification high priority messages may either be supported by us=
+ing
+> > >    a flag bit in the TX message but most probably the better solution
+> > >    will be to add add a dedicated 2nd TX queue for high priority mess=
+ages
+> > >    in a review comment. But as already said priorities are not for no=
+w.
+> > Please keep the change log separate from the description.
+> >=20
+> > [Most people add a S-o-b, although we don't enforce DCO.]
+>=20
+> I understand neither "S-o-b" nor "DCO". Neither Wikipedia nor Google are
+> helpful, nothing fits.
+
+S-o-b: Signed-off-by
+DCO: Developer's Certificate of Origin
+
+See https://elixir.bootlin.com/linux/v6.3/source/Documentation/process/subm=
+itting-patches.rst#L379
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--gvutexvarpe3wb7n
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmSC8u8ACgkQvlAcSiqK
+BOjAlQgAmmmSbo1/9cD9bXx+ZSW2cq7d4S8RUeOOeCyiEurgasFP9EtVZqplvTlb
+yJ4CFh4HLb+6qdZYtVlEn284rTqGRpdUER3CqJmjIpXggzqKhpgObrYNoGZpDJM4
+SIo5xbQtE6nNsLAQB4t6QeLbbQSw6q+UmUsgFZxTaMzkh7/uZlrZ1j1VeZaj3RqM
+6yHvZrzmvBHUHqLa1ptjOqRGe2VwFE1K9bclsMTKyGXGvQr+WxthP0m2ZRDGBoNm
+97mh4jE8EZ95JFnKPeBogQxZxXA7XExCCOU2fPzJwqnjnnqcz4dQobD/JMUMtLvO
+SdrlMuCpfVjbAIUo8kVPQyozFsWTcg==
+=L29k
+-----END PGP SIGNATURE-----
+
+--gvutexvarpe3wb7n--
