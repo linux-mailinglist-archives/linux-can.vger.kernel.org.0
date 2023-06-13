@@ -2,330 +2,117 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48B0D72E1AD
-	for <lists+linux-can@lfdr.de>; Tue, 13 Jun 2023 13:30:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C57E72EA1D
+	for <lists+linux-can@lfdr.de>; Tue, 13 Jun 2023 19:43:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233271AbjFMLax (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 13 Jun 2023 07:30:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37806 "EHLO
+        id S231803AbjFMRmk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 13 Jun 2023 13:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232194AbjFMLaw (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 13 Jun 2023 07:30:52 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E4E92
-        for <linux-can@vger.kernel.org>; Tue, 13 Jun 2023 04:30:46 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1q92EK-0005Df-2i; Tue, 13 Jun 2023 13:30:32 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 0B1161D8969;
-        Tue, 13 Jun 2023 11:30:30 +0000 (UTC)
-Date:   Tue, 13 Jun 2023 13:30:29 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Srinivas Goud <srinivas.goud@amd.com>
-Cc:     wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, gcnu.goud@gmail.com,
-        git@amd.com, michal.simek@xilinx.com, linux-can@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] can: xilinx_can: Add ECC support
-Message-ID: <20230613-sprinkler-pasta-08ae2bd72ac8-mkl@pengutronix.de>
-References: <1686570177-2836108-1-git-send-email-srinivas.goud@amd.com>
- <1686570177-2836108-3-git-send-email-srinivas.goud@amd.com>
+        with ESMTP id S236376AbjFMRmZ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 13 Jun 2023 13:42:25 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74BECA6;
+        Tue, 13 Jun 2023 10:42:24 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35DHfu9W084100;
+        Tue, 13 Jun 2023 12:41:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1686678116;
+        bh=igyZvlOfVcSf4nGPg6BKktZlYY6keooO5jqV4M4Sjf8=;
+        h=Date:Subject:From:To:CC:References:In-Reply-To;
+        b=GxpXVusBEQWpKJk8EBWTP2BMfzh9WPp8AV+k33AdMWxN4P+v8hMs6zUxuJDgxnwbH
+         0Q+oKfWMpNgZBmev9FwdcO+h35SbYXjFwi/be+J+7xOCvrnwn3msEPUShT7FPrvgAm
+         oYLb8mIxa09TV4psU4JfK4DwyfphqOMFfSi4fG+o=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35DHfuOi122876
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 13 Jun 2023 12:41:56 -0500
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 13
+ Jun 2023 12:41:55 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 13 Jun 2023 12:41:55 -0500
+Received: from [128.247.81.105] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35DHftFR010861;
+        Tue, 13 Jun 2023 12:41:55 -0500
+Message-ID: <9905aefb-0d27-a4d6-b72d-5b852dc04465@ti.com>
+Date:   Tue, 13 Jun 2023 12:41:55 -0500
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="x5xvyuil73mjsnjs"
-Content-Disposition: inline
-In-Reply-To: <1686570177-2836108-3-git-send-email-srinivas.goud@amd.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v8 0/2] Enable multiple MCAN on AM62x
+Content-Language: en-US
+From:   Judith Mendez <jm@ti.com>
+To:     <linux-can@vger.kernel.org>, Marc Kleine-Budde <mkl@pengutronix.de>
+CC:     Wolfgang Grandegger <wg@grandegger.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Schuyler Patton <spatton@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <devicetree@vger.kernel.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Simon Horman <simon.horman@corigine.com>,
+        Conor Dooley <conor+dt@linaro.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>
+References: <20230530224820.303619-1-jm@ti.com>
+In-Reply-To: <20230530224820.303619-1-jm@ti.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi all,
 
---x5xvyuil73mjsnjs
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 5/30/23 5:48 PM, Judith Mendez wrote:
+> On AM62x there are two MCANs in MCU domain. The MCANs in MCU domain
+> were not enabled since there is no hardware interrupt routed to A53
+> GIC interrupt controller. Therefore A53 Linux cannot be interrupted
+> by MCU MCANs.
+> 
+> This solution instantiates a hrtimer with 1 ms polling interval
+> for MCAN device when there is no hardware interrupt property in
+> DTB MCAN node. The hrtimer generates a recurring software interrupt
+> which allows to call the isr. The isr will check if there is pending
+> transaction by reading a register and proceed normally if there is.
+> MCANs with hardware interrupt routed to A53 Linux will continue to
+> use the hardware interrupt as expected.
+> 
+> Timer polling method was tested on both classic CAN and CAN-FD
+> at 125 KBPS, 250 KBPS, 1 MBPS and 2.5 MBPS with 4 MBPS bitrate
+> switching.
+> 
+> Letency and CPU load benchmarks were tested on 3x MCAN on AM62x.
+> 1 MBPS timer polling interval is the better timer polling interval
+> since it has comparable latency to hardware interrupt with the worse
+> case being 1ms + CAN frame propagation time and CPU load is not
+> substantial. Latency can be improved further with less than 1 ms
+> polling intervals, howerver it is at the cost of CPU usage since CPU
+> load increases at 0.5 ms.
+> 
+> Note that in terms of power, enabling MCU MCANs with timer-polling
+> implementation might have negative impact since we will have to wake
+> up every 1 ms whether there are CAN packets pending in the RX FIFO or
+> not. This might prevent the CPU from entering into deeper idle states
+> for extended periods of time.
 
-On 12.06.2023 17:12:56, Srinivas Goud wrote:
-> Add ECC support for Xilinx CAN Controller, so this driver reports
-> 1bit/2bit ECC errors for FIFO's based on ECC error interrupt.
-> ECC feature for Xilinx CAN Controller selected through
-> 'xlnx,has-ecc' DT property
->=20
-> Signed-off-by: Srinivas Goud <srinivas.goud@amd.com>
-> ---
->  drivers/net/can/xilinx_can.c | 109 +++++++++++++++++++++++++++++++++++++=
-++++--
->  1 file changed, 104 insertions(+), 5 deletions(-)
->=20
-> diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.c
-> index 43c812e..311e435 100644
-> --- a/drivers/net/can/xilinx_can.c
-> +++ b/drivers/net/can/xilinx_can.c
-> @@ -63,6 +63,12 @@ enum xcan_reg {
->  	XCAN_RXMSG_2_BASE_OFFSET	=3D 0x2100, /* RX Message Space */
->  	XCAN_AFR_2_MASK_OFFSET	=3D 0x0A00, /* Acceptance Filter MASK */
->  	XCAN_AFR_2_ID_OFFSET	=3D 0x0A04, /* Acceptance Filter ID */
-> +
-> +	/* only on AXI CAN cores */
-> +	XCAN_ECC_CFG_OFFSET	=3D 0xC8,	/* ECC Configuration */
-> +	XCAN_TXTLFIFO_ECC_OFFSET	=3D 0xCC, /* TXTL FIFO ECC error counter */
-> +	XCAN_TXOLFIFO_ECC_OFFSET	=3D 0xD0, /* TXOL FIFO ECC error counter */
-> +	XCAN_RXFIFO_ECC_OFFSET		=3D 0xD4, /* RX FIFO ECC error counter */
->  };
-> =20
->  #define XCAN_FRAME_ID_OFFSET(frame_base)	((frame_base) + 0x00)
-> @@ -135,6 +141,17 @@ enum xcan_reg {
->  #define XCAN_2_FSR_RI_MASK		0x0000003F /* RX Read Index */
->  #define XCAN_DLCR_EDL_MASK		0x08000000 /* EDL Mask in DLC */
->  #define XCAN_DLCR_BRS_MASK		0x04000000 /* BRS Mask in DLC */
-> +#define XCAN_IXR_E2BERX_MASK		BIT(23) /* RX FIFO two bit ECC error */
-> +#define XCAN_IXR_E1BERX_MASK		BIT(22) /* RX FIFO one bit ECC error */
-> +#define XCAN_IXR_E2BETXOL_MASK		BIT(21) /* TXOL FIFO two bit ECC error */
-> +#define XCAN_IXR_E1BETXOL_MASK		BIT(20) /* TXOL FIFO One bit ECC error */
-> +#define XCAN_IXR_E2BETXTL_MASK		BIT(19) /* TXTL FIFO Two bit ECC error */
-> +#define XCAN_IXR_E1BETXTL_MASK		BIT(18) /* TXTL FIFO One bit ECC error */
-> +#define XCAN_ECC_CFG_REECRX_MASK	BIT(2) /* Reset RX FIFO ECC error count=
-ers */
-> +#define XCAN_ECC_CFG_REECTXOL_MASK	BIT(1) /* Reset TXOL FIFO ECC error c=
-ounters */
-> +#define XCAN_ECC_CFG_REECTXTL_MASK	BIT(0) /* Reset TXTL FIFO ECC error c=
-ounters */
-> +#define XCAN_ECC_1BIT_CNT_MASK		GENMASK(15, 0) /* FIFO ECC 1bit count ma=
-sk */
-> +#define XCAN_ECC_2BIT_CNT_MASK		GENMASK(31, 16) /* FIFO ECC 2bit count m=
-ask */
-> =20
->  /* CAN register bit shift - XCAN_<REG>_<BIT>_SHIFT */
->  #define XCAN_BRPR_TDC_ENABLE		BIT(16) /* Transmitter Delay Compensation =
-(TDC) Enable */
-> @@ -198,6 +215,13 @@ struct xcan_devtype_data {
->   * @bus_clk:			Pointer to struct clk
->   * @can_clk:			Pointer to struct clk
->   * @devtype:			Device type specific constants
-> + * @ecc_enable:			ECC enable flag
-> + * @ecc_2bit_rxfifo_cnt:	RXFIFO 2bit ECC count
-> + * @ecc_1bit_rxfifo_cnt:	RXFIFO 1bit ECC count
-> + * @ecc_2bit_txolfifo_cnt:	TXOLFIFO 2bit ECC count
-> + * @ecc_1bit_txolfifo_cnt:	TXOLFIFO 1bit ECC count
-> + * @ecc_2bit_txtlfifo_cnt:	TXTLFIFO 2bit ECC count
-> + * @ecc_1bit_txtlfifo_cnt:	TXTLFIFO 1bit ECC count
->   */
->  struct xcan_priv {
->  	struct can_priv can;
-> @@ -215,6 +239,13 @@ struct xcan_priv {
->  	struct clk *bus_clk;
->  	struct clk *can_clk;
->  	struct xcan_devtype_data devtype;
-> +	bool ecc_enable;
-> +	u32 ecc_2bit_rxfifo_cnt;
-> +	u32 ecc_1bit_rxfifo_cnt;
-> +	u32 ecc_2bit_txolfifo_cnt;
-> +	u32 ecc_1bit_txolfifo_cnt;
-> +	u32 ecc_2bit_txtlfifo_cnt;
-> +	u32 ecc_1bit_txtlfifo_cnt;
->  };
-> =20
->  /* CAN Bittiming constants as per Xilinx CAN specs */
-> @@ -517,6 +548,11 @@ static int xcan_chip_start(struct net_device *ndev)
->  		XCAN_IXR_ERROR_MASK | XCAN_IXR_RXOFLW_MASK |
->  		XCAN_IXR_ARBLST_MASK | xcan_rx_int_mask(priv);
-> =20
-> +	if (priv->ecc_enable)
-> +		ier |=3D XCAN_IXR_E2BERX_MASK | XCAN_IXR_E1BERX_MASK |
-> +			XCAN_IXR_E2BETXOL_MASK | XCAN_IXR_E1BETXOL_MASK |
-> +			XCAN_IXR_E2BETXTL_MASK | XCAN_IXR_E1BETXTL_MASK;
-> +
->  	if (priv->devtype.flags & XCAN_FLAG_RXMNF)
->  		ier |=3D XCAN_IXR_RXMNF_MASK;
-> =20
-> @@ -1121,6 +1157,56 @@ static void xcan_err_interrupt(struct net_device *=
-ndev, u32 isr)
->  		priv->can.can_stats.bus_error++;
->  	}
-> =20
-> +	if (priv->ecc_enable) {
-> +		u32 reg_ecc;
-> +
-> +		reg_ecc =3D priv->read_reg(priv, XCAN_RXFIFO_ECC_OFFSET);
-> +		if (isr & XCAN_IXR_E2BERX_MASK) {
-> +			priv->ecc_2bit_rxfifo_cnt +=3D
-> +				FIELD_GET(XCAN_ECC_2BIT_CNT_MASK, reg_ecc);
-> +			netdev_dbg(ndev, "%s: RX FIFO 2bit ECC error count %d\n",
-> +				   __func__, priv->ecc_2bit_rxfifo_cnt);
-> +		}
-> +		if (isr & XCAN_IXR_E1BERX_MASK) {
-> +			priv->ecc_1bit_rxfifo_cnt +=3D reg_ecc &
-> +				XCAN_ECC_1BIT_CNT_MASK;
+Was wondering if I am still pending some updates for this patch series? 
+Or if any other issues please let me know. (: Thanks all
 
-Please use FIELD_GET here, too.
-
-> +			netdev_dbg(ndev, "%s: RX FIFO 1bit ECC error count %d\n",
-> +				   __func__, priv->ecc_1bit_rxfifo_cnt);
-> +		}
-> +
-> +		reg_ecc =3D priv->read_reg(priv, XCAN_TXOLFIFO_ECC_OFFSET);
-> +		if (isr & XCAN_IXR_E2BETXOL_MASK) {
-> +			priv->ecc_2bit_txolfifo_cnt +=3D
-> +				FIELD_GET(XCAN_ECC_2BIT_CNT_MASK, reg_ecc);
-> +			netdev_dbg(ndev, "%s: TXOL FIFO 2bit ECC error count %d\n",
-> +				   __func__, priv->ecc_2bit_txolfifo_cnt);
-> +		}
-> +		if (isr & XCAN_IXR_E1BETXOL_MASK) {
-> +			priv->ecc_1bit_txolfifo_cnt +=3D reg_ecc &
-> +				XCAN_ECC_1BIT_CNT_MASK;
-
-same here
-
-> +			netdev_dbg(ndev, "%s: TXOL FIFO 1bit ECC error count %d\n",
-> +				   __func__, priv->ecc_1bit_txolfifo_cnt);
-> +		}
-> +
-> +		reg_ecc =3D priv->read_reg(priv, XCAN_TXTLFIFO_ECC_OFFSET);
-> +		if (isr & XCAN_IXR_E2BETXTL_MASK) {
-> +			priv->ecc_2bit_txtlfifo_cnt +=3D
-> +				FIELD_GET(XCAN_ECC_2BIT_CNT_MASK, reg_ecc);
-> +			netdev_dbg(ndev, "%s: TXTL FIFO 2bit ECC error count %d\n",
-> +				   __func__, priv->ecc_2bit_txtlfifo_cnt);
-> +		}
-> +		if (isr & XCAN_IXR_E1BETXTL_MASK) {
-> +			priv->ecc_1bit_txtlfifo_cnt +=3D reg_ecc &
-> +				XCAN_ECC_1BIT_CNT_MASK;
-
-same here
-
-> +			netdev_dbg(ndev, "%s: TXTL FIFO 1bit ECC error count %d\n",
-> +				   __func__, priv->ecc_1bit_txtlfifo_cnt);
-> +		}
-> +
-> +		/* Reset FIFO ECC counters */
-> +		priv->write_reg(priv, XCAN_ECC_CFG_OFFSET, XCAN_ECC_CFG_REECRX_MASK |
-> +				XCAN_ECC_CFG_REECTXOL_MASK | XCAN_ECC_CFG_REECTXTL_MASK);
-
-This is racy - you will lose events that occur between reading the
-register value and clearing the register. You can save the old value and
-add the difference between the new and the old value to the total
-counter. What happens when the counter overflows? The following
-pseudocode should handle the u16 counter rolling over to 0:
-
-    u16 old, new;
-    s16 inc;
-    u64 total;
-
-    ...
-
-    inc =3D (s16)(new - old);
-    if (inc < 0)
-        /* error handling */
-    total +=3D inc;
-
-BTW: When converting to ethtool statistics, a lock is required to keep
-the u64 values correct on 32-bit systems and the individual statistics
-consistent.
-
-> +	}
-> +
->  	if (cf.can_id) {
->  		struct can_frame *skb_cf;
->  		struct sk_buff *skb =3D alloc_can_err_skb(ndev, &skb_cf);
-> @@ -1348,9 +1434,8 @@ static irqreturn_t xcan_interrupt(int irq, void *de=
-v_id)
->  {
->  	struct net_device *ndev =3D (struct net_device *)dev_id;
->  	struct xcan_priv *priv =3D netdev_priv(ndev);
-> -	u32 isr, ier;
-> -	u32 isr_errors;
->  	u32 rx_int_mask =3D xcan_rx_int_mask(priv);
-> +	u32 isr, ier, isr_errors, mask;
-> =20
->  	/* Get the interrupt status from Xilinx CAN */
->  	isr =3D priv->read_reg(priv, XCAN_ISR_OFFSET);
-> @@ -1368,10 +1453,18 @@ static irqreturn_t xcan_interrupt(int irq, void *=
-dev_id)
->  	if (isr & XCAN_IXR_TXOK_MASK)
->  		xcan_tx_interrupt(ndev, isr);
-> =20
-> +	mask =3D XCAN_IXR_ERROR_MASK | XCAN_IXR_RXOFLW_MASK |
-> +		XCAN_IXR_BSOFF_MASK | XCAN_IXR_ARBLST_MASK |
-> +		XCAN_IXR_RXMNF_MASK;
-> +
-> +	if (priv->ecc_enable)
-> +		mask |=3D XCAN_IXR_E2BERX_MASK | XCAN_IXR_E1BERX_MASK |
-> +			XCAN_IXR_E2BETXOL_MASK | XCAN_IXR_E1BETXOL_MASK |
-> +			XCAN_IXR_E2BETXTL_MASK | XCAN_IXR_E1BETXTL_MASK;
-> +
->  	/* Check for the type of error interrupt and Processing it */
-> -	isr_errors =3D isr & (XCAN_IXR_ERROR_MASK | XCAN_IXR_RXOFLW_MASK |
-> -			    XCAN_IXR_BSOFF_MASK | XCAN_IXR_ARBLST_MASK |
-> -			    XCAN_IXR_RXMNF_MASK);
-> +	isr_errors =3D isr & mask;
-> +
-
-nitpick: don't add this extra newline
-
->  	if (isr_errors) {
->  		priv->write_reg(priv, XCAN_ICR_OFFSET, isr_errors);
->  		xcan_err_interrupt(ndev, isr);
-> @@ -1783,6 +1876,7 @@ static int xcan_probe(struct platform_device *pdev)
->  		return -ENOMEM;
-> =20
->  	priv =3D netdev_priv(ndev);
-> +	priv->ecc_enable =3D of_property_read_bool(pdev->dev.of_node, "xlnx,has=
--ecc");
->  	priv->dev =3D &pdev->dev;
->  	priv->can.bittiming_const =3D devtype->bittiming_const;
->  	priv->can.do_set_mode =3D xcan_do_set_mode;
-> @@ -1880,6 +1974,11 @@ static int xcan_probe(struct platform_device *pdev)
->  		   priv->reg_base, ndev->irq, priv->can.clock.freq,
->  		   hw_tx_max, priv->tx_max);
-> =20
-> +	if (priv->ecc_enable)
-> +		/* Reset FIFO ECC counters */
-> +		priv->write_reg(priv, XCAN_ECC_CFG_OFFSET, XCAN_ECC_CFG_REECRX_MASK |
-> +			XCAN_ECC_CFG_REECTXOL_MASK | XCAN_ECC_CFG_REECTXTL_MASK);
-> +
->  	return 0;
-> =20
->  err_disableclks:
-> --=20
-> 2.1.1
->=20
->=20
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---x5xvyuil73mjsnjs
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmSIU1IACgkQvlAcSiqK
-BOg4UAf+Nzsctgt3tbAv+7DLje/Eme8+r5w7djNvakpPYt6XSENx1HCHemOw2pe6
-i1DhC6kCixnk21dhCUYH4Mf2gzwyk7ZVPAAdtspE7wvLabdby/7En4nRTuDMAm+t
-fZ2706Sa2mLNLlEjCGHm1W8bVeUw1Q+jnrEif14suFvPZBXTO6xrM88607C2L4dX
-1wpszAMqCGbbTFy1wpfSDhQ0bgenyl9OkHRYiqJ0S1XRNdYrVEEZ8ENcQs/Nlfmu
-wdB7UBtbGLzEzTEehZREeI/yqmGxp+M1SPntgSlNBzceOfCWPSz1OKMaEabVv7GV
-Uu6+PhY42MT3XYyyq8Es+4cmk4Qodw==
-=1wZV
------END PGP SIGNATURE-----
-
---x5xvyuil73mjsnjs--
+~ Judith
