@@ -2,32 +2,40 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4102372FEC0
-	for <lists+linux-can@lfdr.de>; Wed, 14 Jun 2023 14:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 128467305D0
+	for <lists+linux-can@lfdr.de>; Wed, 14 Jun 2023 19:16:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244614AbjFNMdZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 14 Jun 2023 08:33:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38620 "EHLO
+        id S230117AbjFNRQ5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 14 Jun 2023 13:16:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244609AbjFNMdX (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 14 Jun 2023 08:33:23 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A990109
-        for <linux-can@vger.kernel.org>; Wed, 14 Jun 2023 05:33:08 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lgo@pengutronix.de>)
-        id 1q9Pg9-00017X-S0; Wed, 14 Jun 2023 14:32:49 +0200
-Received: from [2a0a:edc0:0:1101:1d::39] (helo=dude03.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <lgo@pengutronix.de>)
-        id 1q9Pg7-007LpW-60; Wed, 14 Jun 2023 14:32:47 +0200
-Received: from lgo by dude03.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <lgo@pengutronix.de>)
-        id 1q9Pg6-00HUKF-CO; Wed, 14 Jun 2023 14:32:46 +0200
-From:   =?UTF-8?q?Leonard=20G=C3=B6hrs?= <l.goehrs@pengutronix.de>
-To:     Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>,
+        with ESMTP id S230108AbjFNRQ4 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 14 Jun 2023 13:16:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED35ABA;
+        Wed, 14 Jun 2023 10:16:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8958F644D9;
+        Wed, 14 Jun 2023 17:16:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 539F2C433C8;
+        Wed, 14 Jun 2023 17:16:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686763014;
+        bh=NHe088c1o+Jq210BxHdiVxxRFtRSMBshsrQJ+SPLxbI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bWtgCU+6ufuU6Xdic33eWjkskELBMGTngTkrUEGc2GDt6cLDaNKiK2DCjtdr8rjuz
+         qkQ6ZI5OCnHqXWXmefvVWT++3kK5iYtLBPRMtGU2vgWztYuteLXv1C2zGDFYm28QUL
+         mKzhiSG4Jr0ve0wpMHL6KU+jSWgUWdJrkWnwpl86SV8lPoBDV7ay4pAzanQuaGXv54
+         LrF/JUgxDKJhYUJyYlpWEmLL6PnpykkHdHuLGXxiObMmO3bL55CeqvwXjYLsMOgVhD
+         QiiOvZFwOLKzoofqXFj/0a8TrXCSQNFnmqGCjZKC0gy3sYAzNrTFvr6Vjl1rJQc+a3
+         /an1uiIrjBY8g==
+Date:   Wed, 14 Jun 2023 18:16:49 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Leonard =?iso-8859-1?Q?G=F6hrs?= <l.goehrs@pengutronix.de>
+Cc:     Rob Herring <robh@kernel.org>,
         Alexandre TORGUE <alexandre.torgue@foss.st.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
@@ -36,28 +44,24 @@ To:     Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     kernel@pengutronix.de,
-        =?UTF-8?q?Leonard=20G=C3=B6hrs?= <l.goehrs@pengutronix.de>,
+        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>, linux-can@vger.kernel.org,
         netdev@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/8] dt-bindings: can: m_can: change from additional- to unevaluatedProperties
-Date:   Wed, 14 Jun 2023 14:32:18 +0200
-Message-Id: <20230614123222.4167460-5-l.goehrs@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230614123222.4167460-1-l.goehrs@pengutronix.de>
+Subject: Re: [PATCH v2 4/8] dt-bindings: can: m_can: change from additional-
+ to unevaluatedProperties
+Message-ID: <20230614-chomp-surfer-6866386bfa9b@spud>
 References: <20230614123222.4167460-1-l.goehrs@pengutronix.de>
+ <20230614123222.4167460-5-l.goehrs@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: lgo@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="NyTjScBlhm/mrubF"
+Content-Disposition: inline
+In-Reply-To: <20230614123222.4167460-5-l.goehrs@pengutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,29 +70,34 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This allows the usage of properties like termination-gpios and
-termination-ohms, which are specified in can-controller.yaml
-but were previously not usable due to additionalProperties: false.
 
-Signed-off-by: Leonard Göhrs <l.goehrs@pengutronix.de>
-Suggested-by: Rob Herring <robh@kernel.org>
----
- Documentation/devicetree/bindings/net/can/bosch,m_can.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--NyTjScBlhm/mrubF
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-index 67879aab623b5..76c5024b6423e 100644
---- a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-+++ b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-@@ -128,7 +128,7 @@ required:
-   - clock-names
-   - bosch,mram-cfg
- 
--additionalProperties: false
-+unevaluatedProperties: false
- 
- examples:
-   - |
--- 
-2.39.2
+On Wed, Jun 14, 2023 at 02:32:18PM +0200, Leonard G=F6hrs wrote:
+> This allows the usage of properties like termination-gpios and
+> termination-ohms, which are specified in can-controller.yaml
+> but were previously not usable due to additionalProperties: false.
+>=20
+> Signed-off-by: Leonard G=F6hrs <l.goehrs@pengutronix.de>
+> Suggested-by: Rob Herring <robh@kernel.org>
 
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+Cheers,
+Conor.
+
+--NyTjScBlhm/mrubF
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIn2AAAKCRB4tDGHoIJi
+0oSnAP9t/ky4bUHtrdCYyGTGf+rlOh9PaoIb1M2yCjvlHffP4QEA8GHfeb9pYWCG
+B95yVv/Jd4LlGTcac4lxeVqws9djzgw=
+=OjL8
+-----END PGP SIGNATURE-----
+
+--NyTjScBlhm/mrubF--
