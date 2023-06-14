@@ -2,102 +2,68 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD78573181B
-	for <lists+linux-can@lfdr.de>; Thu, 15 Jun 2023 14:05:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC7B17325E9
+	for <lists+linux-can@lfdr.de>; Fri, 16 Jun 2023 05:41:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231298AbjFOMFU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 15 Jun 2023 08:05:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50904 "EHLO
+        id S232209AbjFPDlu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 15 Jun 2023 23:41:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344768AbjFOMEx (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 15 Jun 2023 08:04:53 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6563B2976;
-        Thu, 15 Jun 2023 05:02:51 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-6658b869cf2so523696b3a.1;
-        Thu, 15 Jun 2023 05:02:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686830571; x=1689422571;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gtR5yyjqqOCcg96T40YDoUHPwlla3NqWVuy2D+ZwTIk=;
-        b=PhKz+v5RhdIZi9p3VwAdDvXQV5oRpln5h3H1OahPU9aPdUTrEDtHRZrQWyeNYkXDhQ
-         FW+GtnP5O4PQNfU7c2r1RSfrUsxyPAFnXmWW+HL0psVqM9niZcIAYtfP5rNoVRk4TNtA
-         1NnBSz0msntQ5g15c8mgesTGUDLTiopufKHo2jgbtnZjCRPcD+iOvpo8B+0YrVBPdzWj
-         V6etC3SrridTxb50fjzgznPI1RZxiKP3A1hIX+EKYTB6Bt9/Y3G7ccRoUuVtM96MUFXV
-         6fVkLBvdMEcOMh5w/qxg0mEj74/3VJSzLpmSzJwEZRtZMgrRkG82ll5H7pqgycrPVgbi
-         FGqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686830571; x=1689422571;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gtR5yyjqqOCcg96T40YDoUHPwlla3NqWVuy2D+ZwTIk=;
-        b=F28zpCSHpiY2uM3giO6LZc8uI6Cd4+EaLF8P/M6IgbYHQNk5DBMTXqVp+Cu6Kwwg0d
-         eObX21EWKLvJaSvDTrXb1JdPqjaqwQ8kS4M6iTM4QIWyk9CnNXPUKNC9FBP+pSP13lQL
-         BZ2lWXp9wGPnsRrPF8J4j+WelmV04zFDXQpBPnMzRnFtSMLt+MGHuHhnMnm6IGJpFeH1
-         5p2QADfOvG7A22LSGb0KZtfBsCsSL4KLghI6yUmeI006XC8t6QmIkeSIphL1gfnkDRfE
-         pYr6GtUOhbdSJFyYe4vX08inlxDrjDbih/gWjGuM1k2A2DzFFjvQXi5I8hzaQZDac/QL
-         C0VQ==
-X-Gm-Message-State: AC+VfDzm1jJhc6RtJC8bZQjyWBNJ5FDqPD1SIR02vRa+hDOfWNyNeXkM
-        z7Q4AW2yN9HUUVXzCxVSzbfy4eljVX9E16hXfR0=
-X-Google-Smtp-Source: ACHHUZ6+VxPro345cAyYns3wxBIQ8MkoqAQ7K0joSqII6JtVpNSXaEzuVfrY/vlsvBIaTx3vOplxpbmmOMkf991aJKQ=
-X-Received: by 2002:a17:90b:3614:b0:253:25c3:7a95 with SMTP id
- ml20-20020a17090b361400b0025325c37a95mr5822610pjb.14.1686830570764; Thu, 15
- Jun 2023 05:02:50 -0700 (PDT)
+        with ESMTP id S230414AbjFPDls (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 15 Jun 2023 23:41:48 -0400
+X-Greylist: delayed 4196 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Jun 2023 20:41:47 PDT
+Received: from mail.durme.pl (mail.durme.pl [217.182.69.186])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E9213E
+        for <linux-can@vger.kernel.org>; Thu, 15 Jun 2023 20:41:47 -0700 (PDT)
+Received: by mail.durme.pl (Postfix, from userid 1002)
+        id 3175E550EB; Wed, 14 Jun 2023 07:56:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=durme.pl; s=mail;
+        t=1686731244; bh=hFxZwVw4rIL+JwfEOGI47p+fdoVOAeqVswP6NWoHSHQ=;
+        h=Date:From:To:Subject:From;
+        b=O5ibZeOizYcvTahaZHNdAkyri/XYE3BUhAghsj8y574b0gwYQNtELqefPrAyBxWmI
+         uPY7U9Sf5SojMcm+7OpiW71pm/Ym8hktjxWfhg89yF1dh0AhSnrEqjr8vFJF/3aXmf
+         KmeASZZvD/BZbITz4xs2Wqe6widAWK9iV1dBd1ZAmkT9JO0kRbasS25DOjeTwm02/m
+         j49+ejOXz5v9HKWTPE8qfbWA9CV5ssZJjzZg2hvUwYQkfbsqNZbIAvN0T+jzWqXiHz
+         hCv8g6+LiS+P8lYJwbezyZmxe9gBsetnj0QlmJGj8MZfJaxE05fwuvnNhUrY78lfn5
+         ibUv0f52Z9HMQ==
+Received: by mail.durme.pl for <linux-can@vger.kernel.org>; Wed, 14 Jun 2023 07:56:05 GMT
+Message-ID: <20230614064501-0.1.2h.ay6j.0.60vixb1ebl@durme.pl>
+Date:   Wed, 14 Jun 2023 07:56:05 GMT
+From:   "Krystian Wieczorek" <krystian.wieczorek@durme.pl>
+To:     <linux-can@vger.kernel.org>
+Subject: W sprawie samochodu
+X-Mailer: mail.durme.pl
 MIME-Version: 1.0
-References: <20230530224820.303619-1-jm@ti.com> <20230530224820.303619-3-jm@ti.com>
-In-Reply-To: <20230530224820.303619-3-jm@ti.com>
-From:   Hiago Franco <hiagofranco@gmail.com>
-Date:   Thu, 15 Jun 2023 14:02:39 +0200
-Message-ID: <CAK4Znzk_9-nsEW16-ue4sSapixTn3UCPqKkj7iBX+Q_GKLUjoQ@mail.gmail.com>
-Subject: Re: [PATCH v8 2/2] can: m_can: Add hrtimer to generate software interrupt
-To:     Judith Mendez <jm@ti.com>
-Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Schuyler Patton <spatton@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Simon Horman <simon.horman@corigine.com>,
-        Conor Dooley <conor+dt@linaro.org>,
-        Tony Lindgren <tony@atomide.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,URIBL_CSS_A,URIBL_DBL_SPAM
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed, May 31, 2023 at 12:51=E2=80=AFAM Judith Mendez <jm@ti.com> wrote:
->
-> Introduce timer polling method to MCAN since some SoCs may not
-> have M_CAN interrupt routed to A53 Linux and do not have
-> interrupt property in device tree M_CAN node.
->
-> On AM62x SoC, MCANs on MCU domain do not have hardware interrupt
-> routed to A53 Linux, instead they will use timer polling method.
->
-> Add an hrtimer to MCAN class device. Each MCAN will have its own
-> hrtimer instantiated if there is no hardware interrupt found in
-> device tree M_CAN node. The timer will generate a software
-> interrupt every 1 ms. In hrtimer callback, we check if there is
-> a transaction pending by reading a register, then process by
-> calling the isr if there is.
->
-> Signed-off-by: Judith Mendez <jm@ti.com>
+Dzie=C5=84 dobry,
 
-Tested-by: Hiago De Franco <hiago.franco@toradex.com> # Toradex Verdin AM62
+chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
+, je=C5=9Bli chodzi o system monitoringu GPS.
+
+Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
+e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
+a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
+
+Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
+dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
+szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
+mne znaczenie.
+
+Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
+b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
+
+
+Pozdrawiam
+Krystian Wieczorek
