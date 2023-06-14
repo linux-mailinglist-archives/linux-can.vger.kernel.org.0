@@ -2,67 +2,75 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 128467305D0
-	for <lists+linux-can@lfdr.de>; Wed, 14 Jun 2023 19:16:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF9C730775
+	for <lists+linux-can@lfdr.de>; Wed, 14 Jun 2023 20:41:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbjFNRQ5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 14 Jun 2023 13:16:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43576 "EHLO
+        id S231493AbjFNSlS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 14 Jun 2023 14:41:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230108AbjFNRQ4 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 14 Jun 2023 13:16:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED35ABA;
-        Wed, 14 Jun 2023 10:16:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8958F644D9;
-        Wed, 14 Jun 2023 17:16:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 539F2C433C8;
-        Wed, 14 Jun 2023 17:16:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686763014;
-        bh=NHe088c1o+Jq210BxHdiVxxRFtRSMBshsrQJ+SPLxbI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bWtgCU+6ufuU6Xdic33eWjkskELBMGTngTkrUEGc2GDt6cLDaNKiK2DCjtdr8rjuz
-         qkQ6ZI5OCnHqXWXmefvVWT++3kK5iYtLBPRMtGU2vgWztYuteLXv1C2zGDFYm28QUL
-         mKzhiSG4Jr0ve0wpMHL6KU+jSWgUWdJrkWnwpl86SV8lPoBDV7ay4pAzanQuaGXv54
-         LrF/JUgxDKJhYUJyYlpWEmLL6PnpykkHdHuLGXxiObMmO3bL55CeqvwXjYLsMOgVhD
-         QiiOvZFwOLKzoofqXFj/0a8TrXCSQNFnmqGCjZKC0gy3sYAzNrTFvr6Vjl1rJQc+a3
-         /an1uiIrjBY8g==
-Date:   Wed, 14 Jun 2023 18:16:49 +0100
-From:   Conor Dooley <conor@kernel.org>
+        with ESMTP id S235477AbjFNSky (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 14 Jun 2023 14:40:54 -0400
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB732137;
+        Wed, 14 Jun 2023 11:40:51 -0700 (PDT)
+Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-777a78739ccso385800539f.3;
+        Wed, 14 Jun 2023 11:40:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686768051; x=1689360051;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=T9bkX1K24HhQtKumvGXLdDfYBuEzGgLYupOfZPyAl6Y=;
+        b=KuAsC7O2HanOH2kOAWp8ySa2VPeZzB8L8Qhhy1OkP5hihGclMilqCEqSr3xuIKGZda
+         b/ra30iqzdsLBepzqUtl+p2WUP6QIZ5ZfFOBbTpsQqaoW7tAKcJlThuNkJ77+jEXXEmf
+         K4YMBwhHXBpm7lIbrDZ+lPqkSQp5+NgQ2GO1eDK857mL7+8xNJ8LEUVGtdRND8TNbAef
+         F//rZEMUF9ISM+yMY7pCjUwgvUzyrg2kRC5VxITKbx4Cgq9Fq+nUHaRn8+aChLOvlLFB
+         V3ShVvDBlVycgZKsmBRsZwlTqSGsImqhyGrD2GtJGP3tXgNT+muoAr94MuhI83tanzt+
+         81gw==
+X-Gm-Message-State: AC+VfDymdriyRCk9XY59WSNrTKS1evpS+Os0ly+NF0S8DKw1An/z1c1i
+        rzqx02C1IPruG6//gU5vBg==
+X-Google-Smtp-Source: ACHHUZ79MrwRGKHIQnJ8LRcxJbjX5Yql+A6VplX9d0CEwLBnl2HrKPc91lQln9L3TOQdVAQZJrtVAQ==
+X-Received: by 2002:a5e:db07:0:b0:777:8e86:7636 with SMTP id q7-20020a5edb07000000b007778e867636mr15939318iop.15.1686768050943;
+        Wed, 14 Jun 2023 11:40:50 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id g14-20020a02b70e000000b00418ae2206b1sm5236807jam.107.2023.06.14.11.40.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 11:40:50 -0700 (PDT)
+Received: (nullmailer pid 2524554 invoked by uid 1000);
+        Wed, 14 Jun 2023 18:40:48 -0000
+Date:   Wed, 14 Jun 2023 12:40:48 -0600
+From:   Rob Herring <robh@kernel.org>
 To:     Leonard =?iso-8859-1?Q?G=F6hrs?= <l.goehrs@pengutronix.de>
-Cc:     Rob Herring <robh@kernel.org>,
-        Alexandre TORGUE <alexandre.torgue@foss.st.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
-        Rob Herring <robh+dt@kernel.org>,
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        Conor Dooley <conor@kernel.org>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, netdev@vger.kernel.org,
+        Alexandre TORGUE <alexandre.torgue@foss.st.com>,
+        devicetree@vger.kernel.org,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>, linux-can@vger.kernel.org,
+        kernel@pengutronix.de, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v2 4/8] dt-bindings: can: m_can: change from additional-
  to unevaluatedProperties
-Message-ID: <20230614-chomp-surfer-6866386bfa9b@spud>
+Message-ID: <168676804750.2524488.14056388147398744360.robh@kernel.org>
 References: <20230614123222.4167460-1-l.goehrs@pengutronix.de>
  <20230614123222.4167460-5-l.goehrs@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="NyTjScBlhm/mrubF"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 In-Reply-To: <20230614123222.4167460-5-l.goehrs@pengutronix.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,33 +79,17 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---NyTjScBlhm/mrubF
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Jun 14, 2023 at 02:32:18PM +0200, Leonard G=F6hrs wrote:
+On Wed, 14 Jun 2023 14:32:18 +0200, Leonard Göhrs wrote:
 > This allows the usage of properties like termination-gpios and
 > termination-ohms, which are specified in can-controller.yaml
 > but were previously not usable due to additionalProperties: false.
->=20
-> Signed-off-by: Leonard G=F6hrs <l.goehrs@pengutronix.de>
+> 
+> Signed-off-by: Leonard Göhrs <l.goehrs@pengutronix.de>
 > Suggested-by: Rob Herring <robh@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/net/can/bosch,m_can.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Acked-by: Rob Herring <robh@kernel.org>
 
-Cheers,
-Conor.
-
---NyTjScBlhm/mrubF
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIn2AAAKCRB4tDGHoIJi
-0oSnAP9t/ky4bUHtrdCYyGTGf+rlOh9PaoIb1M2yCjvlHffP4QEA8GHfeb9pYWCG
-B95yVv/Jd4LlGTcac4lxeVqws9djzgw=
-=OjL8
------END PGP SIGNATURE-----
-
---NyTjScBlhm/mrubF--
