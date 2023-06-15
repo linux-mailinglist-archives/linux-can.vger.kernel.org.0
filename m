@@ -2,233 +2,157 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 401A5730950
-	for <lists+linux-can@lfdr.de>; Wed, 14 Jun 2023 22:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54B47731032
+	for <lists+linux-can@lfdr.de>; Thu, 15 Jun 2023 09:10:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231971AbjFNUlR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 14 Jun 2023 16:41:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57456 "EHLO
+        id S243203AbjFOHKE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 15 Jun 2023 03:10:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233075AbjFNUlK (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 14 Jun 2023 16:41:10 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2068.outbound.protection.outlook.com [40.107.6.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2DFB2736;
-        Wed, 14 Jun 2023 13:40:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WZ5MFcD9pnBPlAvVEsOmF7SabUq1R3ifouNuGwMPEu7MNM5bECdKX3P3s4IEeBpdyw9pde5PFm+2VeqGtQWkxz4EnXBcHe9vCj0Vr48+zYu2YiXM1qJJnrkgJhJ2/2L2eg9fkcYonmkHun7wK32EMKmTktfVTU9jopSmHevmPibIq3NERkJmz/DX1kuoQC3tzExwBjqbSviXRnQi0vVeADakLxiS3LFD5BLwUe0D+vQz5lWQ1mbuf4I4a91fDAyBzaGH8CqxespefKcT/r1s3c+E1M8TFD0xToo1ecb5pJ0n11prdmzVUWJ+n+Zh2y5CEbFMdSMgq0dtvaqkYhcOvQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7/Qt08hwLn32Gr6xDQ3Iuu0NiF3hAxNnt9jZNjKiz9I=;
- b=Hb3cPq2oEp4Nsu4QghDL+kfhux6j9qiWBiUFapPN2GV5/wsoxTsV0hXx2tNwEqipguALNEhHTGng6bc6TIuCvi8anI74x6qpHD4FIZf3YkM3I2xniIrFygnAoDTShMOrt0XEfXHtYIwYHVq6sNZIm7ZKV2RCoXXTwSZLOBs60b1wiJDF/LmSmAiCgiwGuMG8IWB5Uo3NaNRQftZBC5Wf8YGxKErW/msZtp+tN/d3ugJusBT+FBCDl9DdEJurRd4w0qOmQgPHej1xg4w8U772+1OmtyyqUXQviTzksFa0hOhPT9s6PYF7xWcjXECx9vLt80E9fL1p34zetnX+/PZeIA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=hms.se; dmarc=pass action=none header.from=hms.se; dkim=pass
- header.d=hms.se; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hms.se; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7/Qt08hwLn32Gr6xDQ3Iuu0NiF3hAxNnt9jZNjKiz9I=;
- b=VhyMhaTjWIXTh1Hcp+QEzGq7keAqN3pEdgSkW12ACga4tjbRugOKRhhUg0A2OBG2vkooe2ROqWtzgvxFBkTIcMqaHLp7H8F9tUZZu8OIzKlgUs4+daWlDOhOeqoJaG/azDCZhoPipE11H7d/jxvhxlGHedpoO0hW41izK6wQEs0=
-Received: from PAVPR10MB7209.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:311::14)
- by AS2PR10MB7226.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:60a::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.37; Wed, 14 Jun
- 2023 20:40:49 +0000
-Received: from PAVPR10MB7209.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::7fb8:41fa:a2ba:6b25]) by PAVPR10MB7209.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::7fb8:41fa:a2ba:6b25%4]) with mapi id 15.20.6455.045; Wed, 14 Jun 2023
- 20:40:49 +0000
-From:   HMS Incident Management <Incidentmanagement@hms.se>
-To:     "mkl@pengutronix.de" <mkl@pengutronix.de>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "Thomas.Kopp@microchip.com" <Thomas.Kopp@microchip.com>
-CC:     "socketcan@hartkopp.net" <socketcan@hartkopp.net>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "marex@denx.de" <marex@denx.de>,
-        "simon.horman@corigine.com" <simon.horman@corigine.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mailhol.vincent@wanadoo.fr" <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v5 0/3] can: length: fix definitions and add bit length
- calculation
-Thread-Topic: [PATCH v5 0/3] can: length: fix definitions and add bit length
- calculation
-Thread-Index: AQHZnwCAm9EuWLy1L0qQ8ZLYBaqHug==
-Date:   Wed, 14 Jun 2023 20:40:49 +0000
-Message-ID: <PAVPR10MB7209C656747E19BED48FB0DCB15AA@PAVPR10MB7209.EURPRD10.PROD.OUTLOOK.COM>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=hms.se;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PAVPR10MB7209:EE_|AS2PR10MB7226:EE_
-x-ms-office365-filtering-correlation-id: 7e2cbfcc-1d3e-44a9-0fa8-08db6d17a375
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: s4/Dx/xzMLFMNsJfcgzZR8yiKfQzL5arspiq2giW9kj2P1G3IvNjUzhrOq06fcZ5Zu5jkzOWtvsONY5Acfk4gQguLa9i7ImLxoJvEFUD/3hevu2KSFGZNd9qMgOF378RnPA2uIPt8cvcil7Y+gPkyi/xcaMUPRs2h6kMwQnaMQxmx8q5Gf9kjM6F/U0Z1vOzxsTueJREqm38Zs8VnrAWKc4FHNSBJNYSpH9T9TOMDqlWKdQZJ0h4g+v5JlD+TTmzoFhRGOVKplPVQYejpcenAnAPiVdi9Duu48fhLOFIoVrV344U3qQL48MDs0dfaPxHacHf/V2C+oPwFwu6GaUhx0cC+DLvm901Oq6VQEMQNltKPC9OXY0O9xE5DdDuzhXY4niOQkqx3KLs6oppgVcVJaWRKEGs7Gc30gA2AkPhI8ICV7D/88io2yy2jeHqUQ5cnqDBpguFGV6SMNOFF9oybL2lhAqTa2ksO6/2BEbM/5mpdZy04sfHO4yAiWJjj0OwhTntmP+idm9EcGgdXUCzLw6cz+T82taVTs8f/r7tx8mAfTneJS0TyyGKLpcgsxe/jgBycYMJt9rJDybCbw6+GZP5sMvaI6W1creDIy9iSqvOhMXN2Gbg8FC605yG++Pn
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAVPR10MB7209.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39850400004)(376002)(396003)(366004)(346002)(136003)(451199021)(7696005)(71200400001)(55016003)(966005)(186003)(6506007)(26005)(9686003)(66946007)(66556008)(4326008)(64756008)(66476007)(66446008)(41300700001)(8676002)(8936002)(122000001)(38070700005)(2906002)(38100700002)(316002)(5660300002)(52536014)(76116006)(83380400001)(54906003)(86362001)(110136005)(45080400002)(33656002)(478600001)(3714002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?fpIoP2fpkYdb6C56l9ZCci1sED1q0n1wd8JpPgCLJeVdSeBdEZCKtF96z4ER?=
- =?us-ascii?Q?oi87V0mpIyLdwx0NlSuKXnX/m+/CBa4zDyn14z3GkVqdDa9ecmjPoQ9Oo9dI?=
- =?us-ascii?Q?vMbOMDR/pGsw6Uy6aIicrvwxwF6EXgEYmAsfQ9bQII4qGmB54JXzzDt7pe03?=
- =?us-ascii?Q?8qLgtbpCSHy9UcaF6hq4VGEIzv6lCIpeFxl1yaNaMlslt8lGqiImggjMH/61?=
- =?us-ascii?Q?SXg9zXF3CFDUotLw+1SdEgsVt7SYi9SWZrjkuzXhkH0j89GwXGMO4eudteHY?=
- =?us-ascii?Q?lderN8q0Bsvow7TX/yFrTUR3ioiE6i4tKYi+1j+FyGbkXXd9PZNYlHh1hgN0?=
- =?us-ascii?Q?e5pqI1YmUbh8aBKMVYoLOmz4Pesd+1eRNPheTfH8198lpga8SVzmIOBGPyTH?=
- =?us-ascii?Q?r9WF2mfyxtm/iRdzPuKBYIDYHV6vn0/ebNoj5cN5cMxHezhpO1b29OgZMwTM?=
- =?us-ascii?Q?B7ytoZNCPch+ZG6G7HHseCGw83W2adKmhUDk9wK8duiktzmjOehD3ws4H0ky?=
- =?us-ascii?Q?U6vhDWLB4MzdlFUUVvUmLXNU1JS6jq/AZrbwIY4HXZo/4EYA5BQbesKAHU0i?=
- =?us-ascii?Q?hrk5wQhTnrWXEHvEgx2Dr1SvQHbnIzmcAH5I9e0zZIKGBLX6Rz8YqY82m2h7?=
- =?us-ascii?Q?9+cqsTDCvzYz96Ps0pqJSJp7/OXs8+WJxETMYmuhyya162EU42WAZ2dbQA4O?=
- =?us-ascii?Q?wBbcvRVOymtXCf9+fOWZQIiwJ7FYgJsvBD37j+hvQ06CTMTlHWKvUwyeew/D?=
- =?us-ascii?Q?cXDEFRHkLpH6gzU5w2f2QhHblRKNodxf1nwWtoekbU5ED32V47flbd51mkv2?=
- =?us-ascii?Q?Px+ouw+JlD5OGYZmLBP4dss+CvA/Rvk1to2TLBLhhGzzohJERy1NxrzoAmjg?=
- =?us-ascii?Q?dZWNGg/cWpNpFGZhJR8MOI3+ALNRWLpx163m8W4+MB0CI0xttqBvowxQ+4+k?=
- =?us-ascii?Q?0G3E05hbKe7JsU5feEUyagTvWLt7F2Q1VzQiWuENSSibZIzDibPFfZCHvw0D?=
- =?us-ascii?Q?mQ3FZuWm6VniS8aYfEwGaOCW0v9/8T/AjQ2D5k6GB+IsolfhaGaayHKI0oES?=
- =?us-ascii?Q?T58sZdleHTPx3CiNv2a8pvcNwnwhVjMLHDeigAV3MRO5MOHZlU18nVIgL6mU?=
- =?us-ascii?Q?gFGO93dH3DTNZyh+CPUYcCLgexeN5XJmvT9jRpH7oPGPult+XgYq/dN/4BY3?=
- =?us-ascii?Q?qBcA3RRi4QuPIkqhDEzj8qnwFLduCfHnV4ExEmCwPuDRF6LpdV0OSt2YzstO?=
- =?us-ascii?Q?L43GUZM+4BOtF/Rbqq2gx7gdAG48N6+Y5MrROYr7S8wiD5ajlz4mVU3Wflh6?=
- =?us-ascii?Q?hfwUZfzSGsJ6WK4NSyG40Uq/5acegv1QF7KdXFLCu9oMiPHAC0zmgIs/stDL?=
- =?us-ascii?Q?lpCboMI51oP21Hx9AwMr+rXIC01REFpOr3dmqVkE/+G8lDr0KYbqgygnHAGi?=
- =?us-ascii?Q?htb8e1LtTXHpy0OJmr7G8mqTjSnvlIt4cjjBtNMbkfuz6yyqSM8JAoa64KtC?=
- =?us-ascii?Q?NPCBSo/gu4uyaAdr9m9TYbDuZYrjHHvALNuFVJql1RftaDfXu5xsC6sSWA11?=
- =?us-ascii?Q?KMfH827v91sJnUimc1KSf46Bzo0zo8YaK7PCQsiNGg/1f1+OSMUJ2L0mjtx7?=
- =?us-ascii?Q?1x+nL0YSKnS/VEQq58yPb9clPv7ryuC5OL6QFObn+GzY?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S244458AbjFOHJ2 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 15 Jun 2023 03:09:28 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76AB22970
+        for <linux-can@vger.kernel.org>; Thu, 15 Jun 2023 00:08:07 -0700 (PDT)
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230615070804epoutp04bf349628375ad9c84f566ace1801bd68~ow2GXcxk80240802408epoutp04T
+        for <linux-can@vger.kernel.org>; Thu, 15 Jun 2023 07:08:04 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230615070804epoutp04bf349628375ad9c84f566ace1801bd68~ow2GXcxk80240802408epoutp04T
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1686812884;
+        bh=EGcDW2JUgCyU9XRlFhBjJMiX44JWtj7BLhhL20mI6/0=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=AS2oT8R+F9B5iBBIUn8v1qb3owWdgNjirpu3OAG9knp6GTTCzFgoKdHLbpDi7lfGl
+         w3ZgQ1Od6gwoTzhW9OVUiZ1s+1Td7MuX6UtN75LDvXBVE65ONFufVJq/fBEPvPIWRw
+         WnoRAzHdpm3IDkUGXT/O3ne6q+x9ABxcT7IC77xc=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+        20230615070803epcas5p36465025387f9e56699ad4291dbb183da~ow2FznXib2015820158epcas5p3b;
+        Thu, 15 Jun 2023 07:08:03 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.181]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4QhYKD6mGvz4x9Pp; Thu, 15 Jun
+        2023 07:08:00 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        54.73.44881.0D8BA846; Thu, 15 Jun 2023 16:08:00 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+        20230615065406epcas5p361076a0d683d59a8bc82ac30b5ee48e7~owp6bvCW90557505575epcas5p39;
+        Thu, 15 Jun 2023 06:54:06 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230615065406epsmtrp16bb639768ac3e50b4acd97640f0c6563~owp6atjZz2692326923epsmtrp1R;
+        Thu, 15 Jun 2023 06:54:06 +0000 (GMT)
+X-AuditID: b6c32a4a-c47ff7000001af51-19-648ab8d01d50
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        F8.DC.28392.E85BA846; Thu, 15 Jun 2023 15:54:06 +0900 (KST)
+Received: from FDSFTE343 (unknown [107.122.81.111]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20230615065404epsmtip26e78c3c12bef2561775b262eb8833001~owp3xiMFH0988109881epsmtip2-;
+        Thu, 15 Jun 2023 06:54:03 +0000 (GMT)
+From:   "Chandrasekar R" <rcsekar@samsung.com>
+To:     =?UTF-8?Q?'Leonard_G=C3=B6hrs'?= <l.goehrs@pengutronix.de>,
+        "'Conor Dooley'" <conor@kernel.org>,
+        "'Rob Herring'" <robh@kernel.org>,
+        "'Alexandre TORGUE'" <alexandre.torgue@foss.st.com>,
+        "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
+        "'Wolfgang Grandegger'" <wg@grandegger.com>,
+        "'Marc Kleine-Budde'" <mkl@pengutronix.de>,
+        "'David S. Miller'" <davem@davemloft.net>,
+        "'Eric Dumazet'" <edumazet@google.com>,
+        "'Jakub Kicinski'" <kuba@kernel.org>,
+        "'Paolo Abeni'" <pabeni@redhat.com>
+Cc:     <kernel@pengutronix.de>, "'Rob Herring'" <robh+dt@kernel.org>,
+        "'Krzysztof Kozlowski'" <krzysztof.kozlowski+dt@linaro.org>,
+        "'Conor Dooley'" <conor+dt@kernel.org>,
+        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+In-Reply-To: <20230614123222.4167460-5-l.goehrs@pengutronix.de>
+Subject: RE: [PATCH v2 4/8] dt-bindings: can: m_can: change from additional-
+ to unevaluatedProperties
+Date:   Thu, 15 Jun 2023 12:24:02 +0530
+Message-ID: <11a001d99f56$2d94a360$88bdea20$@samsung.com>
 MIME-Version: 1.0
-X-OriginatorOrg: hms.se
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PAVPR10MB7209.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7e2cbfcc-1d3e-44a9-0fa8-08db6d17a375
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Jun 2023 20:40:49.6786
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5c7c1590-4488-4e42-bc9c-15218f8ac994
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: RkhC9vUkyJ+JKB0C6ukpGOfXypGfOjjG+GZBrhcZZkH0zm1hu6qJwW1AQjnTsC66W1q4nuH8qGq8daz0ZiGuJ2HMGNlT6mh/qRhI+eeCm0F/Ua5mUE3fIUCzj+Rs64vZFfdTPCC4eZpundNH2i3vJQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR10MB7226
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQJBfgczi9zBCP0v/3p/15qYfXGLHQLr7mzDAWe+ZPGumRKpwA==
+Content-Language: en-in
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrJJsWRmVeSWpSXmKPExsWy7bCmhu6FHV0pBpP2m1r8fDmN0WLN3nNM
+        FiunrmKzmHO+hcVi/pFzrBZPjz1it1g1dSeLRd+Lh8wWe19vZbe4sK2P1eLRhwZmi1XfpzJb
+        XN41h81i/aIpLBbHFohZfDv9htGide8Rdov/e3awWyy9t5PVQdhjy8qbTB5P+7eyeyzYVOrx
+        8dJtRo9NqzrZPO5c28Pm0f/XwOP9vqtsHp83yQVwRmXbZKQmpqQWKaTmJeenZOal2yp5B8c7
+        x5uaGRjqGlpamCsp5CXmptoqufgE6Lpl5gD9pKRQlphTChQKSCwuVtK3synKLy1JVcjILy6x
+        VUotSMkpMCnQK07MLS7NS9fLSy2xMjQwMDIFKkzIzmg5/5K94CBXxfxZF9kaGP9ydjFyckgI
+        mEh0vXnD1sXIxSEksJtRonf9BCYI5xOjxNXT76Ccz4wSf36cYoZpubdkKgtEYhejRP/cPVD9
+        Lxglri98xghSxSagI/G+7xtYQkTgB7PE0gOnWUEcZoHFTBITvm9nAqniFLCXuN3/C6iKg0NY
+        IF1i6wshkDCLgKrEk6sHwEp4BSwlmmedY4GwBSVOznwCZjMLaEssW/ga6iQFiZ9Pl7GC2CIC
+        ThIbryxhh6gRlzj6s4cZZK+EQDOnxMQNl6EaXCQW9H9mhbCFJV4d38IOYUtJvOxvg7KLJV59
+        n8wGYddI7Nu8GqrXXuLAlTksIDczC2hKrN+lDxGWlZh6ah0TxF4+id7fT5gg4rwSO+bB2IoS
+        07bOBGuVALrtyLyQCYxKs5B8NgvJZ7OQfDALYdkCRpZVjJKpBcW56anFpgVGeanl8BhPzs/d
+        xAhO81peOxgfPvigd4iRiYPxEKMEB7OSCO9TjfYUId6UxMqq1KL8+KLSnNTiQ4ymwOCeyCwl
+        mpwPzDR5JfGGJpYGJmZmZiaWxmaGSuK86rYnk4UE0hNLUrNTUwtSi2D6mDg4pRqYuD/oXsu8
+        Vt312orVn++7lDm/h9PHTFNbNtvQ/fHcJ3KWxK/0+DXfd9Wc0xeu/W34EWnLbeeouWqG39Uu
+        n8/9OdffFRarrzi1Za33MZV193fu37VBapvQBLFjvyYfeTl/CZNDz9PiXS8i997sEJVkmexd
+        HjbHQFgm4+8Pdq/7XdvMIjQYtSsCTeymFXw5faLog09cTKPBuifKHgyc7t3LpHfVRjk8CLxS
+        pl5dwOcop+sQa3VQ44Udz4HIj586Dc99TdKXuLWPr66oOj7PorHKO8ORa3OhaLlw2qUptgHv
+        OSfKfdWcn1cyaQ5flNOEm+68x7389P8JvTyV8+Z22iezqvK1i98mLJGQ3XlM558SS3FGoqEW
+        c1FxIgC0YitjfAQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA02RfUhTURiHO7t3d3fT5XWTPBp9MCjCyo8IOZI4i6BriQlGhkY2281W25RN
+        K6NgZBZazgpXOYZapG3LVWrWLC3T0iwzMw1jlixcU6y0pNmMNLYV+N8Dz/k9vHBITNCLh5Iy
+        ZS6jUkrkIoKH32sXLVurbSyWRp5+HI7cY5cAqm3pYSGTzkwgw+tTOKp82sNGjo5PHGTWNeFI
+        O2rHUMt4Iwf13tOy0adJDYbM0zoMvX1gINDta2U46qhahFwvvwBU2PKUg+aarRxU/bGJHS+k
+        75res2hHaSOHrqrPo7/32QBdby4i6KF3zQRd+ieSnng0QNBT9UuTuWm8WCkjlx1mVBFxe3kH
+        XA2nWDlXyaP2sUgNKOAUAy4JqfXw43UdXgx4pICyAvirp4nwiWBomez/x0JomnV6BwLqM4Al
+        w9DDBLUGTmhdhGccRGlwWKgrwD0Co0wsOGLl+artAH6bm/AKLiWGttIZb1VIMbCrtt1bxakV
+        cGSgleVhPhUDC/Q9uI8DYVf5yL/oalhiLwT/uebqOOa7bjl0O2rYHg6iNsG6/usc35tg+Mx9
+        DjsPhPp5Kf28lH5eSj9vUgVwMwhhctSKLIU6KmedkjkSrpYo1HnKrPB92Yp64P30sDAraDZP
+        hrcBFgnaACQxURDfseqMVMCXSvKPMarsDFWenFG3gcUkLgrm9xZ3ZQioLEkuc4hhchjVf8si
+        uaEaVmLKwQi3vCCg8bdYJRYN+Q3OXp5anNmdG1cTk/6ITtvT3ne5O8JdkZi63dhmOtHaer88
+        Vte641LC4JvehGSLSPnavzDe9iH1Ree3bZvqjNOibbErZ6J3f4U3Nw6Pyg1kacg+i0LrfOhI
+        LeL6B/R3hsRPJ/0wfo36dUcR/7ycPVSttlsq8l1GNBp3cs64Bf4uo/auvRJq+Nlp72jeMJZ/
+        IabEKRTzLZEXNj+Uy/ynqTjnUanjyXm3Nan/7M+tTWkuP9uMrFqWqXFmLiEVsdSr2qRobsqu
+        i+P7sePiupTA2cpb51oCzWK3bMENqiu9zNXQnbDzyUDiwqIvocO2zhARrj4giQrDVGrJXwBG
+        R7JjAwAA
+X-CMS-MailID: 20230615065406epcas5p361076a0d683d59a8bc82ac30b5ee48e7
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230614123256epcas5p4d6f139c203e63e7d2749c256806916ce
+References: <20230614123222.4167460-1-l.goehrs@pengutronix.de>
+        <CGME20230614123256epcas5p4d6f139c203e63e7d2749c256806916ce@epcas5p4.samsung.com>
+        <20230614123222.4167460-5-l.goehrs@pengutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-**We apologize for the delay in delivering this email, which was caused by =
-a mail incident that occurred over the weekend on June 10th. This email was=
- originally sent from vincent.mailhol@gmail.com on 06/11/2023 02:58:07=20
-
-When created in [1], frames length definitions were added to implement
-byte queue limits (bql). Because bql expects lengths in bytes, bit
-length definitions were not considered back then.
-   =20
-Recently, a need to refer to the exact frame length in bits, with CAN
-bit stuffing, appeared in [2].
-
-This series introduces can_frame_bits(): a function-like macro that
-can calculate the exact size of a CAN(-FD) frame in bits with or
-without bitsuffing.
-
-[1] commit 85d99c3e2a13 ("can: length: can_skb_get_frame_len(): introduce
-    function to get data length of frame in data link layer")
-Link: https://git.kernel.org/torvalds/c/85d99c3e2a13
-
-[2] RE: [PATCH] can: mcp251xfd: Increase poll timeout
-Link: https://lore.kernel.org/linux-can/BL3PR11MB64846C83ACD04E9330B0FE66FB=
-729@BL3PR11MB6484.namprd11.prod.outlook.com/
-
-
-* Changelog *
-
-v4 -> v5:
-
-  * In __can_cc_frame_bits() and __can_fd_frame_bits(), enclose
-    data_len in brackets to prevent operator precedence issues.
-
-  * Add a note in can_frame_bits() documentation to explain that
-    data_len shall have no side effects.
-
-  * While at it, make CAN(FD)_FRAME_LEN_MAX definition fit on a single
-    line.
-
-  * A few typo/grammar small fixes in the commit descriptions.
-
-Link: https://lore.kernel.org/linux-can/20230601165625.100040-1-mailhol.vin=
-cent@wanadoo.fr/
-
-v3 -> v4:
-
-  * No functional changes.
-
-  * as reported by Simon Horman, fix typo in the documentation of
-    can_bitstuffing_len(): "bitstream_len" -> "destuffed_len".
-
-  * as reported by Thomas Kopp, fix several other typos:
-      - "indicatior" -> "indicator"
-      - "in on the wire" -> "on the wire"
-      - "bitsuffing" -> "bitstuffing".
-
-  * in CAN_FRAME_LEN_MAX comment: specify that only the dynamic
-    bitstuffing gets ignored but that the intermission is included.
-
-  * move the Suggested-by: Thomas Kopp tag from patch 2 to patch 3.
-
-  * add Reviewed-by: Thomas Kopp tag on the full series.
-
-  * add an additional line of comment for the @intermission argument
-    of can_frame_bits().
-
-Link: https://lore.kernel.org/linux-can/20230530144637.4746-1-mailhol.vince=
-nt@wanadoo.fr/
-
-v2 -> v3:
-
-  * turn can_frame_bits() and can_frame_bytes() into function-like
-    macros. The fact that inline functions can not be used to
-    initialize constant struct fields was bothering me. I did my best
-    to make the macro look as less ugly as possible.
-
-  * as reported by Simon Horman, add missing document for the is_fd
-    argument of can_frame_bits().
-
-Link: https://lore.kernel.org/linux-can/20230523065218.51227-1-mailhol.vinc=
-ent@wanadoo.fr/
-
-v1 -> v2:
-
-  * as suggested by Thomas Kopp, add a new patch to the series to fix
-    the stuff bit count and the fixed stuff bits definitions
-
-  * and another patch to fix documentation of the Remote Request
-    Substitution (RRS).
-
-  * refactor the length definition. Instead of using individual macro,
-    rely on an inline function. One reason is to minimize the number
-    of definitions. Another reason is that because the dynamic bit
-    stuff is calculated differently for CAN and CAN-FD, it is just not
-    possible to multiply the existing CANFD_FRAME_OVERHEAD_SFF/EFF by
-    the overhead ratio to get the bitsuffing: for CAN-FD, the CRC
-    field is already stuffed by the fixed stuff bits and is out of
-    scope of the dynamic bitstuffing.
-
-Link: https://lore.kernel.org/linux-can/20230507155506.3179711-1-mailhol.vi=
-ncent@wanadoo.fr/
-
-Vincent Mailhol (3):
-  can: length: fix bitstuffing count
-  can: length: fix description of the RRS field
-  can: length: refactor frame lengths definition to add size in bits
-
- drivers/net/can/dev/length.c |  15 +-
- include/linux/can/length.h   | 299 +++++++++++++++++++++++++----------
- 2 files changed, 216 insertions(+), 98 deletions(-)
-
---=20
-2.39.3=
+ > This allows the usage of properties like termination-gpios and terminati=
+on-
+> ohms, which are specified in can-controller.yaml but were previously not
+> usable due to additionalProperties: false.
+>=20
+> Signed-off-by: Leonard G=C3=B6hrs=20<l.goehrs=40pengutronix.de>=0D=0A>=20=
+Suggested-by:=20Rob=20Herring=20<robh=40kernel.org>=0D=0ALooks=20good=20to=
+=20me,=0D=0AReviewed-by:=20Chandrasekar=20Ramakrishnan=20<rcsekar=40samsung=
+.com>=0D=0A>=20---=0D=0A>=20=20Documentation/devicetree/bindings/net/can/bo=
+sch,m_can.yaml=20=7C=202=20+-=0D=0A>=20=201=20file=20changed,=201=20inserti=
+on(+),=201=20deletion(-)=0D=0A>=20=0D=0A>=20diff=20--git=20a/Documentation/=
+devicetree/bindings/net/can/bosch,m_can.yaml=0D=0A>=20b/Documentation/devic=
+etree/bindings/net/can/bosch,m_can.yaml=0D=0A>=20index=2067879aab623b5..76c=
+5024b6423e=20100644=0D=0A>=20---=20a/Documentation/devicetree/bindings/net/=
+can/bosch,m_can.yaml=0D=0A>=20+++=20b/Documentation/devicetree/bindings/net=
+/can/bosch,m_can.yaml=0D=0A>=20=40=40=20-128,7=20+128,7=20=40=40=20required=
+:=0D=0A>=20=20=20=20-=20clock-names=0D=0A>=20=20=20=20-=20bosch,mram-cfg=0D=
+=0A>=20=0D=0A>=20-additionalProperties:=20false=0D=0A>=20+unevaluatedProper=
+ties:=20false=0D=0A>=20=0D=0A>=20=20examples:=0D=0A>=20=20=20=20-=20=7C=0D=
+=0A>=20--=0D=0A>=202.39.2=0D=0A=0D=0A=0D=0A
