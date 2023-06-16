@@ -2,68 +2,73 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC7B17325E9
-	for <lists+linux-can@lfdr.de>; Fri, 16 Jun 2023 05:41:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6829F732B30
+	for <lists+linux-can@lfdr.de>; Fri, 16 Jun 2023 11:12:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232209AbjFPDlu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 15 Jun 2023 23:41:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44904 "EHLO
+        id S244633AbjFPJM1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 16 Jun 2023 05:12:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230414AbjFPDls (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 15 Jun 2023 23:41:48 -0400
-X-Greylist: delayed 4196 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Jun 2023 20:41:47 PDT
-Received: from mail.durme.pl (mail.durme.pl [217.182.69.186])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E9213E
-        for <linux-can@vger.kernel.org>; Thu, 15 Jun 2023 20:41:47 -0700 (PDT)
-Received: by mail.durme.pl (Postfix, from userid 1002)
-        id 3175E550EB; Wed, 14 Jun 2023 07:56:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=durme.pl; s=mail;
-        t=1686731244; bh=hFxZwVw4rIL+JwfEOGI47p+fdoVOAeqVswP6NWoHSHQ=;
-        h=Date:From:To:Subject:From;
-        b=O5ibZeOizYcvTahaZHNdAkyri/XYE3BUhAghsj8y574b0gwYQNtELqefPrAyBxWmI
-         uPY7U9Sf5SojMcm+7OpiW71pm/Ym8hktjxWfhg89yF1dh0AhSnrEqjr8vFJF/3aXmf
-         KmeASZZvD/BZbITz4xs2Wqe6widAWK9iV1dBd1ZAmkT9JO0kRbasS25DOjeTwm02/m
-         j49+ejOXz5v9HKWTPE8qfbWA9CV5ssZJjzZg2hvUwYQkfbsqNZbIAvN0T+jzWqXiHz
-         hCv8g6+LiS+P8lYJwbezyZmxe9gBsetnj0QlmJGj8MZfJaxE05fwuvnNhUrY78lfn5
-         ibUv0f52Z9HMQ==
-Received: by mail.durme.pl for <linux-can@vger.kernel.org>; Wed, 14 Jun 2023 07:56:05 GMT
-Message-ID: <20230614064501-0.1.2h.ay6j.0.60vixb1ebl@durme.pl>
-Date:   Wed, 14 Jun 2023 07:56:05 GMT
-From:   "Krystian Wieczorek" <krystian.wieczorek@durme.pl>
-To:     <linux-can@vger.kernel.org>
-Subject: W sprawie samochodu
-X-Mailer: mail.durme.pl
+        with ESMTP id S245052AbjFPJMK (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 16 Jun 2023 05:12:10 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB893C19
+        for <linux-can@vger.kernel.org>; Fri, 16 Jun 2023 02:11:04 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-19f8af9aa34so555948fac.1
+        for <linux-can@vger.kernel.org>; Fri, 16 Jun 2023 02:11:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686906663; x=1689498663;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=/YQmPfaNN2xvCaGQ4ZNNpbl3kHI7ba/jcD2wLQvQQJU=;
+        b=btgMnNgmfZSFGKjVJqtNvaGjA/Kv4+f/iS4+Bie/GfoPfId1tjLxhqIz5KdECdAMq3
+         z35lcHg9gOvk1XQcMdHJ4u7El8qlVB2u+WfoJsVJm4PDa7XJxLOXZNfjpJC/sITNl/f2
+         gboSVTnaAlAXumj3GQcMk0vm6+DGuuytP/PXKaATWZ2e6aI7R+nEsxXbXL0YUE+U7OSW
+         SaQUq3FjSZ4rgrfFQ4vmISObjfS0q9cNPnI/1aM0jy1jNPWTwBmS+8iVW/zIt+EyhWr/
+         si8MHSypNuZrn4Mnk0zU803nGkjkQFgJ/mRktXr9rmn62zZuIaEfcKda8HRYClqhKtZG
+         GgOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686906663; x=1689498663;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/YQmPfaNN2xvCaGQ4ZNNpbl3kHI7ba/jcD2wLQvQQJU=;
+        b=enEACa9hiJCdtFV5VyxlhpX50V3qokjhb/5c9EuYkjIOj/3VCRItzWl7eWp5RVEWEe
+         EfaylgDRL3nTUm/5mbCiHKHSHbQk3OAFfGmYvX2HRVLje8866dL88bhp1YM+nbNUrATN
+         +++RkxBq5DX23BQvQe4i+ymuwLptJHlwlb54AEfUvAXhvA2XkWO+DsEWB2aO+LjIIHzo
+         +GF4k+ZHFo+4N4H7QjzWmNHcL9AuzrDw36LTI1/yGEX971E72CCvORje/zV9x1eIs/Go
+         OwSJfQB0mt3NuwDoQebJG9Dj5dCnj7+KrkRLKYp1q6tSSsBVfpOP2juEZGXq2B9zvbYf
+         Hhrg==
+X-Gm-Message-State: AC+VfDxbGyjZJObWXx3o9btCYGgZ1HrPoutzBmSPkL2RZYPxjhA6nDqh
+        IVCh4sZNsjcH9F4BldiWrRrZk2k4OHCGBAFWvmU=
+X-Google-Smtp-Source: ACHHUZ4stswAvYZFHWnMolGkL3HJU8mPSzvBea47zBBnhMJNrZ4kOYrPfCgqXn7Rlgkzspw1LPyfKeFqlJMpO7CakPs=
+X-Received: by 2002:a05:6870:1729:b0:1a9:ba28:99b3 with SMTP id
+ h41-20020a056870172900b001a9ba2899b3mr1495645oae.17.1686906662720; Fri, 16
+ Jun 2023 02:11:02 -0700 (PDT)
 MIME-Version: 1.0
+Received: by 2002:a05:6870:3925:b0:19b:2ddb:5580 with HTTP; Fri, 16 Jun 2023
+ 02:11:02 -0700 (PDT)
+From:   "M. Cheickna Toure" <barrtraore11@gmail.com>
+Date:   Fri, 16 Jun 2023 09:11:02 +0000
+Message-ID: <CAJabzdONa-ssbLyxwA+fybfP=VGJRDtJV+1SddHNq-e-AENQCw@mail.gmail.com>
+Subject: Hello, Good morning
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,URIBL_CSS_A,URIBL_DBL_SPAM
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+X-Spam-Status: No, score=1.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Dzie=C5=84 dobry,
-
-chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
-, je=C5=9Bli chodzi o system monitoringu GPS.
-
-Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
-e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
-a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
-
-Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
-dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
-szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
-mne znaczenie.
-
-Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
-b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
-
-
-Pozdrawiam
-Krystian Wieczorek
+Hello,
+Good morning and how are you?
+I have an important and favourable information/ proposal which might
+interest you,
+I will detail you as soon as I hear from you, it's important
+Sincerely,
+M.Cheickna
+tourecheickna@consultant.com
