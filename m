@@ -2,90 +2,131 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77B237330A2
-	for <lists+linux-can@lfdr.de>; Fri, 16 Jun 2023 14:01:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8036E73326B
+	for <lists+linux-can@lfdr.de>; Fri, 16 Jun 2023 15:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344778AbjFPMBQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 16 Jun 2023 08:01:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45002 "EHLO
+        id S229482AbjFPNp7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 16 Jun 2023 09:45:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233955AbjFPMBP (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 16 Jun 2023 08:01:15 -0400
-Received: from mail11.truemail.it (mail11.truemail.it [IPv6:2001:4b7e:0:8::81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49677273F;
-        Fri, 16 Jun 2023 05:01:12 -0700 (PDT)
-Received: from francesco-nb.int.toradex.com (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-        by mail11.truemail.it (Postfix) with ESMTPA id 345E22168C;
-        Fri, 16 Jun 2023 14:01:08 +0200 (CEST)
-Date:   Fri, 16 Jun 2023 14:01:02 +0200
-From:   Francesco Dolcini <francesco@dolcini.it>
-To:     Judith Mendez <jm@ti.com>
-Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
+        with ESMTP id S229653AbjFPNp6 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 16 Jun 2023 09:45:58 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B312683;
+        Fri, 16 Jun 2023 06:45:56 -0700 (PDT)
+X-GND-Sasl: miquel.raynal@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1686923155;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=iqNuk91ReidgvjGQ/uHdYSnJCuf4AbcP78tiAgRTYr4=;
+        b=Fcxde2Kb8PA/g6Jn3KysPKF0UEqV+mpnXTMjIJgs0J3FfmWbBKP47JcAjCEqagbRu9YbMm
+        5sU1ySqclwS+WcLumo1L0hM7DNbz4TMoqgOS5Uvr187qSZJZfay91G5rDlCouoj5FXsKoB
+        SEtEaJS2gPhLxmxArbts/J3b03/HwieOpO1MNT77EtIAKj93vqEkHQLSVFwejKQ6XypY+b
+        pGnAY3+XMKMgVDWeWAFm1qdyYOvGGm5zM/K4jsJJdy3Ymn/LhNT6RkS7qRenncRK+uU6gL
+        9hdJTv4tqluZS89Yyn+fHZAw82d+z2PFEPSfUKMImd3/P1/o/h4LDGY0Rg8qDQ==
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id AC07FC000C;
+        Fri, 16 Jun 2023 13:45:53 +0000 (UTC)
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
+        linux-can@vger.kernel.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
-        Schuyler Patton <spatton@ti.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 4/4] DO_NOT_MERGE arm64: dts: ti: Enable MCU MCANs for
- AM62x
-Message-ID: <ZIxO/uo7FICKsmdb@francesco-nb.int.toradex.com>
-References: <20230419223323.20384-1-jm@ti.com>
- <20230419223323.20384-5-jm@ti.com>
+        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
+        Sylvain Girard <sylvain.girard@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?q?J=C3=A9r=C3=A9mie=20Dautheribes?= 
+        <jeremie.dautheribes@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH net-next 1/2] can: sja1000: Prepare the use of a threaded handler
+Date:   Fri, 16 Jun 2023 15:45:52 +0200
+Message-Id: <20230616134553.2786391-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230419223323.20384-5-jm@ti.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 05:33:23PM -0500, Judith Mendez wrote:
-> On AM62x there are no hardware interrupts routed to GIC interrupt
-> controller for MCU MCAN IP, A53 Linux cannot receive hardware
-> interrupts. Since an hrtimer will be used to generate software
-> interrupts, add MCU MCAN nodes to dtsi and default to disabled.
-> 
-> AM62x does not carry on-board CAN transceivers, so instead of
-> changing DTB permanently use an overlay to enable MCU MCANs and to
-> add CAN transceiver nodes.
-> 
-> If an hrtimer is used to generate software interrupts, the two
-> required interrupt attributes in the MCAN node do not have to be
-> included.
-> 
-> Signed-off-by: Judith Mendez <jm@ti.com>
+In order to support a flavor of the sja1000 which sometimes freezes, it
+will be needed upon certain interrupts to perform a soft reset. The soft
+reset operation takes a bit of time, so better not do it within the hard
+interrupt handler but rather in a threaded handler. Let's prepare the
+possibility for sja1000_err() to request "interrupting" the current flow
+and request the threaded handler to be run while keeping the interrupt
+line low.
 
-[...]
+There is no functional change.
 
-> +	mcu_mcan1: can@4e00000 {
-this should be mcu_mcan0
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+---
+ drivers/net/can/sja1000/sja1000.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-> +		compatible = "bosch,m_can";
-> +		reg = <0x00 0x4e00000 0x00 0x8000>,
-> +			  <0x00 0x4e08000 0x00 0x200>;
+diff --git a/drivers/net/can/sja1000/sja1000.c b/drivers/net/can/sja1000/sja1000.c
+index aac5956e4a53..4719806e3a9f 100644
+--- a/drivers/net/can/sja1000/sja1000.c
++++ b/drivers/net/can/sja1000/sja1000.c
+@@ -501,7 +501,8 @@ irqreturn_t sja1000_interrupt(int irq, void *dev_id)
+ 	struct sja1000_priv *priv = netdev_priv(dev);
+ 	struct net_device_stats *stats = &dev->stats;
+ 	uint8_t isrc, status;
+-	int n = 0;
++	irqreturn_t ret = 0;
++	int n = 0, err;
+ 
+ 	if (priv->pre_irq)
+ 		priv->pre_irq(priv);
+@@ -546,19 +547,23 @@ irqreturn_t sja1000_interrupt(int irq, void *dev_id)
+ 		}
+ 		if (isrc & (IRQ_DOI | IRQ_EI | IRQ_BEI | IRQ_EPI | IRQ_ALI)) {
+ 			/* error interrupt */
+-			if (sja1000_err(dev, isrc, status))
++			err = sja1000_err(dev, isrc, status);
++			if (err)
+ 				break;
+ 		}
+ 		n++;
+ 	}
+ out:
++	if (!ret)
++		ret = (n) ? IRQ_HANDLED : IRQ_NONE;
++
+ 	if (priv->post_irq)
+ 		priv->post_irq(priv);
+ 
+ 	if (n >= SJA1000_MAX_IRQ)
+ 		netdev_dbg(dev, "%d messages handled in ISR", n);
+ 
+-	return (n) ? IRQ_HANDLED : IRQ_NONE;
++	return ret;
+ }
+ EXPORT_SYMBOL_GPL(sja1000_interrupt);
+ 
+-- 
+2.34.1
 
-[...]
-
-> +	mcu_mcan2: can@4e10000 {
-mcu_mcan1
-
-> +		compatible = "bosch,m_can";
-> +		reg = <0x00 0x4e10000 0x00 0x8000>,
-> +			  <0x00 0x4e18000 0x00 0x200>;
-
-Francesco
