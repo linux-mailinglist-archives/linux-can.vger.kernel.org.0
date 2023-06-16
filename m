@@ -2,103 +2,90 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49547732F8B
-	for <lists+linux-can@lfdr.de>; Fri, 16 Jun 2023 13:12:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77B237330A2
+	for <lists+linux-can@lfdr.de>; Fri, 16 Jun 2023 14:01:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232710AbjFPLMf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 16 Jun 2023 07:12:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35266 "EHLO
+        id S1344778AbjFPMBQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 16 Jun 2023 08:01:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343710AbjFPLMe (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 16 Jun 2023 07:12:34 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD6726BE
-        for <linux-can@vger.kernel.org>; Fri, 16 Jun 2023 04:12:23 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qA7NE-0001v0-5f; Fri, 16 Jun 2023 13:12:12 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id BD13B1DAC62;
-        Fri, 16 Jun 2023 11:12:10 +0000 (UTC)
-Date:   Fri, 16 Jun 2023 13:12:10 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Srinivas Goud <srinivas.goud@amd.com>
-Cc:     wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, gcnu.goud@gmail.com,
-        git@amd.com, michal.simek@xilinx.com, linux-can@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] can: xilinx_can: Add ECC feature support
-Message-ID: <20230616-unneeded-denote-eaa4053514d8-mkl@pengutronix.de>
-References: <1686570177-2836108-1-git-send-email-srinivas.goud@amd.com>
+        with ESMTP id S233955AbjFPMBP (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 16 Jun 2023 08:01:15 -0400
+Received: from mail11.truemail.it (mail11.truemail.it [IPv6:2001:4b7e:0:8::81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49677273F;
+        Fri, 16 Jun 2023 05:01:12 -0700 (PDT)
+Received: from francesco-nb.int.toradex.com (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+        by mail11.truemail.it (Postfix) with ESMTPA id 345E22168C;
+        Fri, 16 Jun 2023 14:01:08 +0200 (CEST)
+Date:   Fri, 16 Jun 2023 14:01:02 +0200
+From:   Francesco Dolcini <francesco@dolcini.it>
+To:     Judith Mendez <jm@ti.com>
+Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Schuyler Patton <spatton@ti.com>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH 4/4] DO_NOT_MERGE arm64: dts: ti: Enable MCU MCANs for
+ AM62x
+Message-ID: <ZIxO/uo7FICKsmdb@francesco-nb.int.toradex.com>
+References: <20230419223323.20384-1-jm@ti.com>
+ <20230419223323.20384-5-jm@ti.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="e3lc5j2mdmuoewkc"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1686570177-2836108-1-git-send-email-srinivas.goud@amd.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230419223323.20384-5-jm@ti.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Wed, Apr 19, 2023 at 05:33:23PM -0500, Judith Mendez wrote:
+> On AM62x there are no hardware interrupts routed to GIC interrupt
+> controller for MCU MCAN IP, A53 Linux cannot receive hardware
+> interrupts. Since an hrtimer will be used to generate software
+> interrupts, add MCU MCAN nodes to dtsi and default to disabled.
+> 
+> AM62x does not carry on-board CAN transceivers, so instead of
+> changing DTB permanently use an overlay to enable MCU MCANs and to
+> add CAN transceiver nodes.
+> 
+> If an hrtimer is used to generate software interrupts, the two
+> required interrupt attributes in the MCAN node do not have to be
+> included.
+> 
+> Signed-off-by: Judith Mendez <jm@ti.com>
 
---e3lc5j2mdmuoewkc
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[...]
 
-On 12.06.2023 17:12:54, Srinivas Goud wrote:
-> ECC feature added to Tx and Rx FIFO=E2=80=99s for Xilinx CAN Controller.
-> Part of this feature configuration and counter registers added=20
-> in Xilinx CAN Controller for 1bit/2bit ECC errors count and reset.
-> Please find more details in PG096 v5.1 document.
+> +	mcu_mcan1: can@4e00000 {
+this should be mcu_mcan0
 
-The document "PG096 (v5.1) May 16, 2023 CAN v5.1" [1] lists the
-XCAN_ECC_CFG_OFFSET as reserved, although it has a section "ECC
-Configuration Register".
+> +		compatible = "bosch,m_can";
+> +		reg = <0x00 0x4e00000 0x00 0x8000>,
+> +			  <0x00 0x4e08000 0x00 0x200>;
 
-[1] https://docs.xilinx.com/viewer/book-attachment/Bv6XZP9HRonCGi58fl10dw/c=
-h1ZLpOt4UKWNub7DXjJ7Q
+[...]
 
-The other registers (XCAN_TXTLFIFO_ECC_OFFSET, XCAN_TXOLFIFO_ECC_OFFSET,
-XCAN_TXOLFIFO_ECC_OFFSET) are also listed as reserved and not even
-mentioned on the document. Am I missing something?
+> +	mcu_mcan2: can@4e10000 {
+mcu_mcan1
 
-regards,
-Marc
+> +		compatible = "bosch,m_can";
+> +		reg = <0x00 0x4e10000 0x00 0x8000>,
+> +			  <0x00 0x4e18000 0x00 0x200>;
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---e3lc5j2mdmuoewkc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmSMQ4cACgkQvlAcSiqK
-BOif0gf9ENiFw1zub+JvpO4Z15pvxtf+Ge2LoyL6btmGQClJQngT0seWbZwx+qw/
-3HsN9fpCmDNQuRiujWa+1otoTC8VnFsbTewdIl3LNGe676uECIytmeptA2SFQN6J
-DGSaR4rMdK7yzVlj9Ku0vQxIs8zCEdEFRXsJ4mkgfW2enDNy6CZOd4cYMd8PfaI7
-0mXfcuUi4AYXqPWRZMR+ufem1daUvBBHPH77I6JzAtZKF3cc4SgFhrn1e6ywEduP
-GCwTUhP4cNVHAGxTVNlXPV+uXe5wwV9WTjtTTPuMhXiAyIz1sDhm2nPaXXnKQoQi
-jDvSFgZQlq+i2YRY8lOK4/f0V/FLUg==
-=9ddr
------END PGP SIGNATURE-----
-
---e3lc5j2mdmuoewkc--
+Francesco
