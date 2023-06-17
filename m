@@ -2,46 +2,46 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44112733F35
-	for <lists+linux-can@lfdr.de>; Sat, 17 Jun 2023 09:31:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94E16733F3A
+	for <lists+linux-can@lfdr.de>; Sat, 17 Jun 2023 09:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbjFQHbz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 17 Jun 2023 03:31:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47718 "EHLO
+        id S1346145AbjFQHdJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 17 Jun 2023 03:33:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbjFQHby (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 17 Jun 2023 03:31:54 -0400
+        with ESMTP id S234647AbjFQHdI (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 17 Jun 2023 03:33:08 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30696B5;
-        Sat, 17 Jun 2023 00:31:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7340297A;
+        Sat, 17 Jun 2023 00:33:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B9FCD60A5F;
-        Sat, 17 Jun 2023 07:31:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F064EC433C0;
-        Sat, 17 Jun 2023 07:31:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 48C5260A73;
+        Sat, 17 Jun 2023 07:33:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FC93C433C8;
+        Sat, 17 Jun 2023 07:33:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686987112;
-        bh=t6X3NymgEfIejj+0mMRY1uM4fmwiGJB8jfh4BMssApY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=e0GqLsY3JOWZfKQ/nbgTdCQz9AI6cC+BlFWeiC4XA6tMh8Mn42BzAhWrUmxXjZOHO
-         SglD5dIy5xect3cUl3phIcbhfkYHM9blsGT7hTUVSQHPNhGySDJseNW5aIzNr3Tyh8
-         FAAKeI3QZzFkV+Nas5t5pAFSeKHgaZJwuKgU60GGIE6XqNTqOJa3r49a44CH13uZXU
-         V9743IhyurtGs102+jA6HZxxXx1wUuLNEvtUnWEDKH9ISmzWby4uORXy4KNMSqqlYk
-         R8W4TfpnEmV/TS/vNASSGhXZIg2I3VEgK8GWmjZFIU17+VmmdBiDG1NQ9Z69tBlhy+
-         YxTLDk7VytS1Q==
-Message-ID: <4b66f578-b6c5-5d3e-98e2-d034fabb366c@kernel.org>
-Date:   Sat, 17 Jun 2023 09:31:42 +0200
+        s=k20201202; t=1686987185;
+        bh=ptIUt8Giy+UX+V4UbH0FVrL7yqzDEK1ImVjFGbruads=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=UD5QZAgungDxwbEEdJFqJAfYhiB0+n5c2GA+6l9UBZ4eiJksYv8Kh+bHX21yOZuYr
+         nmlR2AqeiR+JYFXlyEkfPtxKdUankyhT+z3CXp8YCUnHmreMPFZhTmJryzdyEVMdkY
+         bv4mekIv+PSTdkydKWM1q95Nlkn6HNOn/Pga5scSTlvVqz0444m/l5UALC0jsto92Y
+         laourqKUK5FmeHZsbDFP4AOgC/+1aMsS4nKxnKeKOBu2adlOPNtrRHQVtw6nhj5Oxm
+         YlmHaNDEC1peE9xdVgUX8K3FxprHNW5KghxoCp75Z/xB72sYTUS4jhusSvgY4YT3DI
+         AqEkwiXyQdGnQ==
+Message-ID: <aed1592f-927f-13ab-b692-7a0745ac5733@kernel.org>
+Date:   Sat, 17 Jun 2023 09:32:58 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
 Subject: =?UTF-8?Q?Re=3a_=5bPATCH_1/3=5d_dt-bindings=3a_can=3a_xilinx=5fcan?=
  =?UTF-8?B?OiBBZGQgRUNDIHByb3BlcnR5IOKAmHhsbngsaGFzLWVjY+KAmQ==?=
 Content-Language: en-US
-To:     Michal Simek <michal.simek@amd.com>,
-        "Goud, Srinivas" <srinivas.goud@amd.com>,
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     "Goud, Srinivas" <srinivas.goud@amd.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>
 Cc:     "wg@grandegger.com" <wg@grandegger.com>,
         "davem@davemloft.net" <davem@davemloft.net>,
@@ -60,13 +60,9 @@ References: <1686570177-2836108-1-git-send-email-srinivas.goud@amd.com>
  <20230613-outskirts-dove-e3e39b096647-mkl@pengutronix.de>
  <PH8PR12MB667577C4800ED8E82C36D57DE15AA@PH8PR12MB6675.namprd12.prod.outlook.com>
  <d12e3d8b-20e8-48bb-84d0-3fe7d3502c83@kernel.org>
- <PH8PR12MB6675D75114C7EE280235BE8CE158A@PH8PR12MB6675.namprd12.prod.outlook.com>
- <8555c686-c663-767e-ce1c-a3b76fdafe05@kernel.org>
- <ef7e8e53-4e7b-8384-6518-68657474db24@amd.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <ef7e8e53-4e7b-8384-6518-68657474db24@amd.com>
+In-Reply-To: <d12e3d8b-20e8-48bb-84d0-3fe7d3502c83@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -77,43 +73,42 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 16/06/2023 12:44, Michal Simek wrote:
-> 
-> 
-> On 6/16/23 12:38, Krzysztof Kozlowski wrote:
->> On 16/06/2023 12:13, Goud, Srinivas wrote:
->>>>>>> xlnx,has-ecc is optional property and added to Xilinx CAN Controller
->>>>>>> node if ECC block enabled in the HW.
->>>>>>>
->>>>>>> Signed-off-by: Srinivas Goud <srinivas.goud@amd.com>
->>>>>>
->>>>>> Is there a way to introspect the IP core to check if this feature is compiled in?
->>>>> There is no way(IP registers) to indicate whether ECC feature is enabled or
->>>> not.
->>>>
->>>> Isn't this then deductible from compatible? Your binding claims it is only for
->>>> AXI CAN, so xlnx,axi-can-1.00.a, even though you did not restrict it in the
->>>> binding.
->>> Agree it is only for AXI CAN(xlnx,axi-can-1.00.a) but ECC feature is
->>> configurable option to the user.
->>> ECC is added as optional configuration(enable/disable) feature
->>> to the existing AXI CAN.
+On 14/06/2023 13:11, Krzysztof Kozlowski wrote:
+> On 14/06/2023 12:22, Goud, Srinivas wrote:
+>> Hi,
 >>
->> Why boards would like not to have ECC? I understand that someone told
->> you "make it configurable in DTS", but that's not really a reason for
->> us. Why this is suitable for DTS?
+>>> -----Original Message-----
+>>> From: Marc Kleine-Budde <mkl@pengutronix.de>
+>>> Sent: Tuesday, June 13, 2023 1:23 PM
+>>> To: Goud, Srinivas <srinivas.goud@amd.com>
+>>> Cc: wg@grandegger.com; davem@davemloft.net; edumazet@google.com;
+>>> kuba@kernel.org; pabeni@redhat.com; gcnu.goud@gmail.com; git (AMD-
+>>> Xilinx) <git@amd.com>; michal.simek@xilinx.com; linux-can@vger.kernel.org;
+>>> linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org
+>>> Subject: Re: [PATCH 1/3] dt-bindings: can: xilinx_can: Add ECC property
+>>> ‘xlnx,has-ecc’
+>>>
+>>> On 12.06.2023 17:12:55, Srinivas Goud wrote:
+>>>> ECC feature added to Tx and Rx FIFO’s for Xilinx CAN Controller.
+>>>> Part of this feature configuration and counter registers added in IP
+>>>> for 1bit/2bit ECC errors.
+>>>> Please find more details in PG096 v5.1 document.
+>>>>
+>>>> xlnx,has-ecc is optional property and added to Xilinx CAN Controller
+>>>> node if ECC block enabled in the HW.
+>>>>
+>>>> Signed-off-by: Srinivas Goud <srinivas.goud@amd.com>
+>>>
+>>> Is there a way to introspect the IP core to check if this feature is compiled in?
+>> There is no way(IP registers) to indicate whether ECC feature is enabled or not.
 > 
-> Let me jump to this. This is core for programmable logic where HW designers of 
-> this IP added couple of feature which can be enabled or disable based on 
-> customer need. It means it is not SW option if ECC is enable but it is HW choice 
-> if ECC is present in the HW or not.
-> Selection if ECC should be used is up to every customer to decide.
-> We are not able to get information why customers choosing ECC enabled/disabled 
-> but I can imagine that with ECC disable less fpga resources are used.
+> Isn't this then deductible from compatible? Your binding claims it is
+> only for AXI CAN, so xlnx,axi-can-1.00.a, even though you did not
+> restrict it in the binding.
 
-Thanks for the explanation. Apologies for being picky, but you are in
-minority when adding such properties with true hardware meaning. Most of
-the submissions of such properties add them to control the bits in register.
+BTW, this is not an ACK, because this was not tested by automation. I
+don't understand why get_maintainers.pl are so tricky to use, but
+nevertheless I require resend to satisfy automation.
 
 Best regards,
 Krzysztof
