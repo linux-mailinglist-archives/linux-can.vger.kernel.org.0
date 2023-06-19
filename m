@@ -2,66 +2,146 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC9B57350A4
-	for <lists+linux-can@lfdr.de>; Mon, 19 Jun 2023 11:43:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1821735617
+	for <lists+linux-can@lfdr.de>; Mon, 19 Jun 2023 13:47:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229513AbjFSJni (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 19 Jun 2023 05:43:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34554 "EHLO
+        id S229552AbjFSLqx (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 19 Jun 2023 07:46:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231386AbjFSJnh (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 19 Jun 2023 05:43:37 -0400
-Received: from mail.durme.pl (mail.durme.pl [217.182.69.186])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0A7DB
-        for <linux-can@vger.kernel.org>; Mon, 19 Jun 2023 02:43:35 -0700 (PDT)
-Received: by mail.durme.pl (Postfix, from userid 1002)
-        id 154BF49C42; Mon, 19 Jun 2023 09:41:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=durme.pl; s=mail;
-        t=1687167738; bh=hFxZwVw4rIL+JwfEOGI47p+fdoVOAeqVswP6NWoHSHQ=;
-        h=Date:From:To:Subject:From;
-        b=apqI1oQ1f07B2KDkuZ9FIk7jya5JzzZvnXXp4UCvVqf4WkBvVX3aCoHgHTSgGppdm
-         R8M0DRkVYrA8Bam/B4+UuGKA6GH6PWDlvDNQzFSP/FDQP/bNiqbZGv80kpqu8v1ndK
-         liRntKgQJQmq3TPh1WsuQyL31T+7DSkAsSLmBMKq8B7ozUTxuYyye0V2I9frI5vKBD
-         58gQVz2dfwBr1wpwOU7g27bysFybA14iTnn4xEbsx8JPb0e6CyPbQ0wyjg4yx1rthR
-         eB7wF7hFxgxBhSoh78+IW+wfPi+6v5MfZxFQxYFol6CP42VGtQiEF/nH7QOoZ2qU/Z
-         iDhvOtjhrsybw==
-Received: by mail.durme.pl for <linux-can@vger.kernel.org>; Mon, 19 Jun 2023 09:41:18 GMT
-Message-ID: <20230619090058-0.1.2k.cm32.0.fjbyv85fu0@durme.pl>
-Date:   Mon, 19 Jun 2023 09:41:18 GMT
-From:   "Krystian Wieczorek" <krystian.wieczorek@durme.pl>
-To:     <linux-can@vger.kernel.org>
-Subject: W sprawie samochodu
-X-Mailer: mail.durme.pl
+        with ESMTP id S229778AbjFSLqt (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 19 Jun 2023 07:46:49 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A8BA130
+        for <linux-can@vger.kernel.org>; Mon, 19 Jun 2023 04:46:46 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-3111547c8f9so3954949f8f.1
+        for <linux-can@vger.kernel.org>; Mon, 19 Jun 2023 04:46:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1687175204; x=1689767204;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QdTN+h4pTxBF1R7xcHre9g6cPzO2KdkdTYscPEGzTLM=;
+        b=P4fDi611uOngEP6EdaSnzNOY1Y9HBEURzrdFMAmQOjvBAUoKi1jB05Cs3LxK3/mw+g
+         LCDriaIztJ+nbZHY6sIGxlOAKrFHUkIvt02Dh3shvokTI/PyjkyG0nvpcmPYnK3l5X6C
+         foXOQP5+h0yb29GFkAKAmNIrMBcZfzS4eqGGU3PVUOGta4hLMR5Pkj6yPS7HEuiLeMm+
+         SbtcJ5zRBk02AuOwps126whp2tqJcflBviVkMKBNjS9aHKnfOKJQjrqa6eJeFCu8CLkd
+         UhwONdMcDViELwP4lqM3sXMdYoB+J0b3oYlWSdVdlzbeyRBjc5LF+itHX6XNYJD2lTk8
+         ZCkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687175204; x=1689767204;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QdTN+h4pTxBF1R7xcHre9g6cPzO2KdkdTYscPEGzTLM=;
+        b=SOskJaO0g4khcsMAA/jd8jIAh/5kRTTWhUHLm4XP2Q7ZbZicrNOrcoSbYESeCioSOJ
+         fslRqo4a6EEabSnAqstCjAJ3W7Wz8V7bm5lnCH0ntV81uFHP5nPxG4ZTdV7M8SA+ani6
+         zex/pUiVrFnhhklzpiR7cZd796Pfhl4vV48exMF6208+0VJ3lGV9ZvQf8rkVGWvHcpsv
+         ersRc4/RRooFfbJD2T5/vHVdNOn2Rw4W0HrEOZ6uXSv+1nzLMIi6xyXQmHjbqlh7y1iw
+         GoyikenjRAOq79mLnem/QP32hcFyhCyb+8akP9hFqC3UlnOhvRr31sSWYsYDXLKQcx6T
+         oNKQ==
+X-Gm-Message-State: AC+VfDxB6yd3jd89xqRd6TDFzApmB12WZQAo3Hd/1UVOQLDzWoDrAxj4
+        E4hbJd2G0u7tLaRHPNfBOWNoGQ==
+X-Google-Smtp-Source: ACHHUZ48llS+kCE2mbeNkI9PvjAKHZDHQ6+DVkkVBa31lHuvuNsqCSvu6iqRvSbgnmoGOLso/x4MWA==
+X-Received: by 2002:a5d:62cc:0:b0:30d:2184:84c0 with SMTP id o12-20020a5d62cc000000b0030d218484c0mr8443200wrv.30.1687175204447;
+        Mon, 19 Jun 2023 04:46:44 -0700 (PDT)
+Received: from blmsp ([2001:4090:a245:802c:bc2b:8db8:9210:41eb])
+        by smtp.gmail.com with ESMTPSA id i1-20020a5d4381000000b0030c4d8930b1sm31281062wrq.91.2023.06.19.04.46.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 04:46:43 -0700 (PDT)
+Date:   Mon, 19 Jun 2023 13:46:42 +0200
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 06/16] can: m_can: Write transmit header and data in
+ one transaction
+Message-ID: <20230619114642.66sccv36i4sfonny@blmsp>
+References: <20230315110546.2518305-1-msp@baylibre.com>
+ <20230315110546.2518305-7-msp@baylibre.com>
+ <ZBLhDSl4a7AuCgNy@corigine.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZBLhDSl4a7AuCgNy@corigine.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Hi Simon,
 
-chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
-, je=C5=9Bli chodzi o system monitoringu GPS.
+On Thu, Mar 16, 2023 at 10:27:41AM +0100, Simon Horman wrote:
+> On Wed, Mar 15, 2023 at 12:05:36PM +0100, Markus Schneider-Pargmann wrote:
+> > Combine header and data before writing to the transmit fifo to reduce
+> > the overhead for peripheral chips.
+> > 
+> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> 
+> Thanks for addressing my comments on v2.
+> 
+> > ---
+> >  drivers/net/can/m_can/m_can.c | 11 ++++++-----
+> >  1 file changed, 6 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+> > index a5003435802b..35a2332464e5 100644
+> > --- a/drivers/net/can/m_can/m_can.c
+> > +++ b/drivers/net/can/m_can/m_can.c
+> > @@ -1681,6 +1681,8 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
+> >  		m_can_write(cdev, M_CAN_TXBAR, 0x1);
+> >  		/* End of xmit function for version 3.0.x */
+> >  	} else {
+> > +		char buf[TXB_ELEMENT_SIZE];
+> > +		u8 len_padded = DIV_ROUND_UP(cf->len, 4);
+> >  		/* Transmit routine for version >= v3.1.x */
+> >  
+> >  		txfqs = m_can_read(cdev, M_CAN_TXFQS);
+> > @@ -1720,12 +1722,11 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
+> >  		fifo_header.dlc = FIELD_PREP(TX_BUF_MM_MASK, putidx) |
+> >  			FIELD_PREP(TX_BUF_DLC_MASK, can_fd_len2dlc(cf->len)) |
+> >  			fdflags | TX_BUF_EFC;
+> > -		err = m_can_fifo_write(cdev, putidx, M_CAN_FIFO_ID, &fifo_header, 2);
+> > -		if (err)
+> > -			goto out_fail;
+> > +		memcpy(buf, &fifo_header, 8);
+> > +		memcpy_and_pad(&buf[8], len_padded, &cf->data, cf->len, 0);
+> 
+> I'm probably missing something obvious here but I'm seeing:
+> 
+> * len_padded is the number of 4-byte words
+> * but the 2nd argument to memcpy_and_pad should be a length in bytes
+> * so perhaps it should be: len_padded * 4
 
-Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
-e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
-a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
+Thank you Simon for all the reviews, finally some time to continue on
+this:
 
-Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
-dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
-szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
-mne znaczenie.
+Thanks for pointing this out. I updated my script used for testing so I
+catch something like this the next time. I will be using
+TXB_ELEMENT_SIZE - 8 to reflect the buffer size and the 8 byte offset.
 
-Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
-b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
+Best,
+Markus
 
-
-Pozdrawiam
-Krystian Wieczorek
+> 
+> >  
+> > -		err = m_can_fifo_write(cdev, putidx, M_CAN_FIFO_DATA,
+> > -				       cf->data, DIV_ROUND_UP(cf->len, 4));
+> > +		err = m_can_fifo_write(cdev, putidx, M_CAN_FIFO_ID,
+> > +				       buf, 2 + len_padded);
+> 
+> This part looks good to me :)
+> 
+> >  		if (err)
+> >  			goto out_fail;
+> >  
+> > -- 
+> > 2.39.2
+> > 
