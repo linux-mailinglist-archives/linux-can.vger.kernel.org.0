@@ -2,42 +2,42 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97E6E735817
+	by mail.lfdr.de (Postfix) with ESMTP id BF09B735818
 	for <lists+linux-can@lfdr.de>; Mon, 19 Jun 2023 15:11:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbjFSNLM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 19 Jun 2023 09:11:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50688 "EHLO
+        id S230283AbjFSNLN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 19 Jun 2023 09:11:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230397AbjFSNLK (ORCPT
+        with ESMTP id S230444AbjFSNLK (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Mon, 19 Jun 2023 09:11:10 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C55BE64
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7EA4E66
         for <linux-can@vger.kernel.org>; Mon, 19 Jun 2023 06:11:03 -0700 (PDT)
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1qBEer-0006xI-W7
+        id 1qBEes-0006xW-1o
         for linux-can@vger.kernel.org; Mon, 19 Jun 2023 15:11:02 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 50B071DCE70
+        by bjornoya.blackshift.org (Postfix) with SMTP id 644891DCE71
         for <linux-can@vger.kernel.org>; Mon, 19 Jun 2023 13:11:01 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 9E70A1DCE68;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id AF4331DCE69;
         Mon, 19 Jun 2023 13:11:00 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 8ddedb10;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 7c9eee3b;
         Mon, 19 Jun 2023 13:11:00 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     linux-can@vger.kernel.org
 Cc:     kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 1/2] can: rx-offload: fix coding style
-Date:   Mon, 19 Jun 2023 15:10:57 +0200
-Message-Id: <20230619131058.198769-2-mkl@pengutronix.de>
+Subject: [PATCH 2/2] can: ti_hecc: fix coding style
+Date:   Mon, 19 Jun 2023 15:10:58 +0200
+Message-Id: <20230619131058.198769-3-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230619131058.198769-1-mkl@pengutronix.de>
 References: <20230619131058.198769-1-mkl@pengutronix.de>
@@ -61,22 +61,22 @@ This patch aligns code to match open parenthesis.
 Fixes: eb38c2053b67 ("can: rx-offload: rename can_rx_offload_queue_sorted() -> can_rx_offload_queue_timestamp()")
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/dev/rx-offload.c | 2 +-
+ drivers/net/can/ti_hecc.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/can/dev/rx-offload.c b/drivers/net/can/dev/rx-offload.c
-index 81ebf0562c89..161e45a7e8c1 100644
---- a/drivers/net/can/dev/rx-offload.c
-+++ b/drivers/net/can/dev/rx-offload.c
-@@ -220,7 +220,7 @@ int can_rx_offload_irq_offload_fifo(struct can_rx_offload *offload)
- EXPORT_SYMBOL_GPL(can_rx_offload_irq_offload_fifo);
+diff --git a/drivers/net/can/ti_hecc.c b/drivers/net/can/ti_hecc.c
+index 9bab0b4cc449..54284661992e 100644
+--- a/drivers/net/can/ti_hecc.c
++++ b/drivers/net/can/ti_hecc.c
+@@ -625,7 +625,7 @@ static int ti_hecc_error(struct net_device *ndev, int int_status,
  
- int can_rx_offload_queue_timestamp(struct can_rx_offload *offload,
--				struct sk_buff *skb, u32 timestamp)
-+				   struct sk_buff *skb, u32 timestamp)
- {
- 	struct can_rx_offload_cb *cb;
- 
+ 		timestamp = hecc_read(priv, HECC_CANLNT);
+ 		err = can_rx_offload_queue_timestamp(&priv->offload, skb,
+-						  timestamp);
++						     timestamp);
+ 		if (err)
+ 			ndev->stats.rx_fifo_errors++;
+ 	}
 -- 
 2.39.2
 
