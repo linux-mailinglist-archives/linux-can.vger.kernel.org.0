@@ -2,146 +2,171 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1821735617
-	for <lists+linux-can@lfdr.de>; Mon, 19 Jun 2023 13:47:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1A09735670
+	for <lists+linux-can@lfdr.de>; Mon, 19 Jun 2023 14:07:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbjFSLqx (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 19 Jun 2023 07:46:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57752 "EHLO
+        id S230013AbjFSMHJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 19 Jun 2023 08:07:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbjFSLqt (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 19 Jun 2023 07:46:49 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A8BA130
-        for <linux-can@vger.kernel.org>; Mon, 19 Jun 2023 04:46:46 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-3111547c8f9so3954949f8f.1
-        for <linux-can@vger.kernel.org>; Mon, 19 Jun 2023 04:46:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1687175204; x=1689767204;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QdTN+h4pTxBF1R7xcHre9g6cPzO2KdkdTYscPEGzTLM=;
-        b=P4fDi611uOngEP6EdaSnzNOY1Y9HBEURzrdFMAmQOjvBAUoKi1jB05Cs3LxK3/mw+g
-         LCDriaIztJ+nbZHY6sIGxlOAKrFHUkIvt02Dh3shvokTI/PyjkyG0nvpcmPYnK3l5X6C
-         foXOQP5+h0yb29GFkAKAmNIrMBcZfzS4eqGGU3PVUOGta4hLMR5Pkj6yPS7HEuiLeMm+
-         SbtcJ5zRBk02AuOwps126whp2tqJcflBviVkMKBNjS9aHKnfOKJQjrqa6eJeFCu8CLkd
-         UhwONdMcDViELwP4lqM3sXMdYoB+J0b3oYlWSdVdlzbeyRBjc5LF+itHX6XNYJD2lTk8
-         ZCkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687175204; x=1689767204;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QdTN+h4pTxBF1R7xcHre9g6cPzO2KdkdTYscPEGzTLM=;
-        b=SOskJaO0g4khcsMAA/jd8jIAh/5kRTTWhUHLm4XP2Q7ZbZicrNOrcoSbYESeCioSOJ
-         fslRqo4a6EEabSnAqstCjAJ3W7Wz8V7bm5lnCH0ntV81uFHP5nPxG4ZTdV7M8SA+ani6
-         zex/pUiVrFnhhklzpiR7cZd796Pfhl4vV48exMF6208+0VJ3lGV9ZvQf8rkVGWvHcpsv
-         ersRc4/RRooFfbJD2T5/vHVdNOn2Rw4W0HrEOZ6uXSv+1nzLMIi6xyXQmHjbqlh7y1iw
-         GoyikenjRAOq79mLnem/QP32hcFyhCyb+8akP9hFqC3UlnOhvRr31sSWYsYDXLKQcx6T
-         oNKQ==
-X-Gm-Message-State: AC+VfDxB6yd3jd89xqRd6TDFzApmB12WZQAo3Hd/1UVOQLDzWoDrAxj4
-        E4hbJd2G0u7tLaRHPNfBOWNoGQ==
-X-Google-Smtp-Source: ACHHUZ48llS+kCE2mbeNkI9PvjAKHZDHQ6+DVkkVBa31lHuvuNsqCSvu6iqRvSbgnmoGOLso/x4MWA==
-X-Received: by 2002:a5d:62cc:0:b0:30d:2184:84c0 with SMTP id o12-20020a5d62cc000000b0030d218484c0mr8443200wrv.30.1687175204447;
-        Mon, 19 Jun 2023 04:46:44 -0700 (PDT)
-Received: from blmsp ([2001:4090:a245:802c:bc2b:8db8:9210:41eb])
-        by smtp.gmail.com with ESMTPSA id i1-20020a5d4381000000b0030c4d8930b1sm31281062wrq.91.2023.06.19.04.46.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 04:46:43 -0700 (PDT)
-Date:   Mon, 19 Jun 2023 13:46:42 +0200
-From:   Markus Schneider-Pargmann <msp@baylibre.com>
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 06/16] can: m_can: Write transmit header and data in
- one transaction
-Message-ID: <20230619114642.66sccv36i4sfonny@blmsp>
-References: <20230315110546.2518305-1-msp@baylibre.com>
- <20230315110546.2518305-7-msp@baylibre.com>
- <ZBLhDSl4a7AuCgNy@corigine.com>
+        with ESMTP id S229823AbjFSMHJ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 19 Jun 2023 08:07:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDCA41A8
+        for <linux-can@vger.kernel.org>; Mon, 19 Jun 2023 05:05:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687176346;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=flv0m9IzvhIUpKnDIyrInh56vnSxXK9hbzXv0isFig8=;
+        b=M9JCtW++3MldkWoyMk0kQvEIk/DKwI9QTupZT11/vB8N/s7XbxTLD2Xp7vwgFGjH5I4rA7
+        0Wk+0OwiaW+Rr/I0GOLEIBEGkIzJ57WIk1/b8a76hR+F0tRxPGMJsW3POr68oDyzFgGreu
+        3lQqIvPgDwKGhfElH531Mnf2oW/wN1k=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-98-6kJ1RmfDPwCBOHGN8dJYCQ-1; Mon, 19 Jun 2023 08:05:40 -0400
+X-MC-Unique: 6kJ1RmfDPwCBOHGN8dJYCQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7FC9A1C06EC1;
+        Mon, 19 Jun 2023 12:05:38 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.4])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 88C75C1603B;
+        Mon, 19 Jun 2023 12:05:34 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <648f36d02fe6e_33cfbc2944f@willemb.c.googlers.com.notmuch>
+References: <648f36d02fe6e_33cfbc2944f@willemb.c.googlers.com.notmuch> <20230617121146.716077-1-dhowells@redhat.com> <20230617121146.716077-18-dhowells@redhat.com>
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc:     dhowells@redhat.com, netdev@vger.kernel.org,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        dccp@vger.kernel.org, linux-afs@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-hams@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-wpan@vger.kernel.org, linux-x25@vger.kernel.org,
+        mptcp@lists.linux.dev, rds-devel@oss.oracle.com,
+        tipc-discussion@lists.sourceforge.net,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH net-next v2 17/17] net: Kill MSG_SENDPAGE_NOTLAST
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZBLhDSl4a7AuCgNy@corigine.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <784657.1687176327.1@warthog.procyon.org.uk>
+Date:   Mon, 19 Jun 2023 13:05:27 +0100
+Message-ID: <784658.1687176327@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Simon,
+Willem de Bruijn <willemdebruijn.kernel@gmail.com> wrote:
 
-On Thu, Mar 16, 2023 at 10:27:41AM +0100, Simon Horman wrote:
-> On Wed, Mar 15, 2023 at 12:05:36PM +0100, Markus Schneider-Pargmann wrote:
-> > Combine header and data before writing to the transmit fifo to reduce
-> > the overhead for peripheral chips.
-> > 
-> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Is it intentional to add MSG_MORE here in this patch?
 > 
-> Thanks for addressing my comments on v2.
-> 
-> > ---
-> >  drivers/net/can/m_can/m_can.c | 11 ++++++-----
-> >  1 file changed, 6 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-> > index a5003435802b..35a2332464e5 100644
-> > --- a/drivers/net/can/m_can/m_can.c
-> > +++ b/drivers/net/can/m_can/m_can.c
-> > @@ -1681,6 +1681,8 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
-> >  		m_can_write(cdev, M_CAN_TXBAR, 0x1);
-> >  		/* End of xmit function for version 3.0.x */
-> >  	} else {
-> > +		char buf[TXB_ELEMENT_SIZE];
-> > +		u8 len_padded = DIV_ROUND_UP(cf->len, 4);
-> >  		/* Transmit routine for version >= v3.1.x */
-> >  
-> >  		txfqs = m_can_read(cdev, M_CAN_TXFQS);
-> > @@ -1720,12 +1722,11 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
-> >  		fifo_header.dlc = FIELD_PREP(TX_BUF_MM_MASK, putidx) |
-> >  			FIELD_PREP(TX_BUF_DLC_MASK, can_fd_len2dlc(cf->len)) |
-> >  			fdflags | TX_BUF_EFC;
-> > -		err = m_can_fifo_write(cdev, putidx, M_CAN_FIFO_ID, &fifo_header, 2);
-> > -		if (err)
-> > -			goto out_fail;
-> > +		memcpy(buf, &fifo_header, 8);
-> > +		memcpy_and_pad(&buf[8], len_padded, &cf->data, cf->len, 0);
-> 
-> I'm probably missing something obvious here but I'm seeing:
-> 
-> * len_padded is the number of 4-byte words
-> * but the 2nd argument to memcpy_and_pad should be a length in bytes
-> * so perhaps it should be: len_padded * 4
+> I do see that patch 3 removes this branch:
 
-Thank you Simon for all the reviews, finally some time to continue on
-this:
+Yeah.  I think I may have tcp_bpf a bit wrong with regard to handling
+MSG_MORE.
 
-Thanks for pointing this out. I updated my script used for testing so I
-catch something like this the next time. I will be using
-TXB_ELEMENT_SIZE - 8 to reflect the buffer size and the 8 byte offset.
+How about the attached version of tcp_bpf_push()?
 
-Best,
-Markus
+I wonder if it's save to move the setting of MSG_SENDPAGE_NOPOLICY out of the
+loop as I've done here.  The caller holds the socket lock.
 
-> 
-> >  
-> > -		err = m_can_fifo_write(cdev, putidx, M_CAN_FIFO_DATA,
-> > -				       cf->data, DIV_ROUND_UP(cf->len, 4));
-> > +		err = m_can_fifo_write(cdev, putidx, M_CAN_FIFO_ID,
-> > +				       buf, 2 + len_padded);
-> 
-> This part looks good to me :)
-> 
-> >  		if (err)
-> >  			goto out_fail;
-> >  
-> > -- 
-> > 2.39.2
-> > 
+Also, I'm not sure whether to take account of apply/apply_bytes when setting
+MSG_MORE mid-message, or whether to just go on whether we've reached
+sge->length yet.  (I'm not sure exactly how tcp_bpf works).
+
+David
+---
+
+static int tcp_bpf_push(struct sock *sk, struct sk_msg *msg, u32 apply_bytes,
+			int flags, bool uncharge)
+{
+	bool apply = apply_bytes;
+	struct scatterlist *sge;
+	struct page *page;
+	int size, ret = 0;
+	u32 off;
+
+	flags |= MSG_SPLICE_PAGES;
+	if (tls_sw_has_ctx_tx(sk))
+		msghdr.msg_flags |= MSG_SENDPAGE_NOPOLICY;
+
+	while (1) {
+		struct msghdr msghdr = {};
+		struct bio_vec bvec;
+
+		sge = sk_msg_elem(msg, msg->sg.start);
+		size = (apply && apply_bytes < sge->length) ?
+			apply_bytes : sge->length;
+		off  = sge->offset;
+		page = sg_page(sge);
+
+		tcp_rate_check_app_limited(sk);
+retry:
+		msghdr.msg_flags = flags;
+
+		/* Determine if we need to set MSG_MORE. */
+		if (!(msghdr.msg_flags & MSG_MORE)) {
+			if (apply && size < apply_bytes)
+				msghdr.msg_flags |= MSG_MORE;
+			else if (!apply && size < sge->length &&
+				 msg->sg.start != msg->sg.end)
+				msghdr.msg_flags |= MSG_MORE;
+		}
+
+		bvec_set_page(&bvec, page, size, off);
+		iov_iter_bvec(&msghdr.msg_iter, ITER_SOURCE, &bvec, 1, size);
+		ret = tcp_sendmsg_locked(sk, &msghdr, size);
+		if (ret <= 0)
+			return ret;
+
+		if (apply)
+			apply_bytes -= ret;
+		msg->sg.size -= ret;
+		sge->offset += ret;
+		sge->length -= ret;
+		if (uncharge)
+			sk_mem_uncharge(sk, ret);
+		if (ret != size) {
+			size -= ret;
+			off  += ret;
+			goto retry;
+		}
+		if (!sge->length) {
+			put_page(page);
+			sk_msg_iter_next(msg, start);
+			sg_init_table(sge, 1);
+			if (msg->sg.start == msg->sg.end)
+				break;
+		}
+		if (apply && !apply_bytes)
+			break;
+	}
+
+	return 0;
+}
+
