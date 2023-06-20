@@ -2,235 +2,104 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 691157361E6
-	for <lists+linux-can@lfdr.de>; Tue, 20 Jun 2023 05:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57635736399
+	for <lists+linux-can@lfdr.de>; Tue, 20 Jun 2023 08:32:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230186AbjFTDDE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 19 Jun 2023 23:03:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48754 "EHLO
+        id S229597AbjFTGcK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 20 Jun 2023 02:32:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbjFTDCb (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 19 Jun 2023 23:02:31 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62B91BD6
-        for <linux-can@vger.kernel.org>; Mon, 19 Jun 2023 20:01:57 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b4769a2ee5so27265121fa.3
-        for <linux-can@vger.kernel.org>; Mon, 19 Jun 2023 20:01:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687230116; x=1689822116;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=BrbG7JxveYysVe86t5gOLnlc9dkaosvcFTwxzJdTEvM=;
-        b=Kf6bu6L4x5lzVBGRCdagk+XWCcWeD97KHAuE9tSb5aoYsnHyamttqunGIKsG4vnnyO
-         C+ndqLWH+6AsikmtI5/qdUwd2H/05ciMWN0S1MVzX51r69HMr8rDo/KVgPRH7m98XrBl
-         ORa4ZcUqWSekNXYF3kz3Y+g+drpmqkEsGckfPb1p1Z1XG89rkb4QhqTX2of9djnQjymi
-         pSHiC632aijqE9GjXR/eQ4xg/w5JbetsC7UNTVkcjf96x+oD+j1phSKFf4QcfqM4ov4x
-         fsOtzEsI64PtfD1dQgbixDkw63w/B3XrJ8FkaCzt5LZkE1Mj+JFJELvDg+xMSPcTE/27
-         MOnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687230116; x=1689822116;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BrbG7JxveYysVe86t5gOLnlc9dkaosvcFTwxzJdTEvM=;
-        b=PbkQT44jDxaPYJoLBjEx6LBOiY1l6K2QpiIDikVi3xgWRAKSXXPzuzmiNIGWw5/CGb
-         d+XS/wGcgjZuJBD5juNmXOgMnLmwxbe7kJ+mm8W6HmQuTP+81nr2gAvClxRg2z6NkAjU
-         qdu6awih6BvIyl9wk05b2Q3relgf1RYy/iJBhcbrwh/C3DxgQN/x0Z8fAgs8t4cM7C+x
-         Vvc+CLKvVirXaGEhBOu7jsgMYTjBW2k2Gh3mqt1bmnCdP3bOM2NiyeUMCc4QZRImFaoe
-         rwxOPfrsP8I4dvS4MF1/lLrGFLshMoRjxBZnHsk9/lnsphSmbItxH3/0KLvr9sJbeE83
-         zqyw==
-X-Gm-Message-State: AC+VfDzcI2jeebZTbYKX7YSqS3m3A0B46bePjrCURTAI6dN6zwwl/+oH
-        Y4NFd1AELUxNvuoZXC6BYw+JGRu00D3Tp627cao=
-X-Google-Smtp-Source: ACHHUZ47jNU4wezvDRDndldRHfasabDWENMhXMFfOBu7H1Pts5CzW2qbhu7U+2ZrABW+bcztS498BueSQOsDqrGe5/g=
-X-Received: by 2002:a2e:3210:0:b0:2b4:7559:32b0 with SMTP id
- y16-20020a2e3210000000b002b4755932b0mr3124285ljy.19.1687230115507; Mon, 19
- Jun 2023 20:01:55 -0700 (PDT)
+        with ESMTP id S229462AbjFTGcJ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Jun 2023 02:32:09 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7EE127
+        for <linux-can@vger.kernel.org>; Mon, 19 Jun 2023 23:32:04 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1qBUuD-0002zi-5i; Tue, 20 Jun 2023 08:31:57 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 669BE1DD5DE;
+        Tue, 20 Jun 2023 06:31:56 +0000 (UTC)
+Date:   Tue, 20 Jun 2023 08:31:54 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     linux-can@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH 2/2] can: ti_hecc: fix coding style
+Message-ID: <20230620-spoiler-willfully-fe2954517979-mkl@pengutronix.de>
+References: <20230619131058.198769-1-mkl@pengutronix.de>
+ <20230619131058.198769-3-mkl@pengutronix.de>
+ <c7472c24-9e16-7c2d-f5f6-a24b0fc5e5fa@hartkopp.net>
 MIME-Version: 1.0
-Received: by 2002:a17:906:4a90:b0:986:545c:2dc5 with HTTP; Mon, 19 Jun 2023
- 20:01:55 -0700 (PDT)
-From:   United Nations <cindylove276@gmail.com>
-Date:   Mon, 19 Jun 2023 23:01:55 -0400
-Message-ID: <CANHmF4BP8mwKLmoASmQz2zpk+kTQZ=yA1xdukOs=9JMTpxGK5g@mail.gmail.com>
-Subject: Congratulations
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.9 required=5.0 tests=ADVANCE_FEE_3_NEW_FRM_MNY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FILL_THIS_FORM,FILL_THIS_FORM_LONG,FORM_FRAUD_5,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,LOTS_OF_MONEY,
-        MONEY_FORM,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:230 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [cindylove276[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [cindylove276[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  1.0 FREEMAIL_REPLY From and body contain different freemails
-        *  0.0 FILL_THIS_FORM Fill in a form with personal information
-        *  2.0 FILL_THIS_FORM_LONG Fill in a form with personal information
-        *  0.0 MONEY_FORM Lots of money if you fill out a form
-        *  3.1 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  0.0 ADVANCE_FEE_3_NEW_FRM_MNY Advance Fee fraud form and lots of
-        *      money
-        *  0.0 MONEY_FRAUD_5 Lots of money and many fraud phrases
-        *  0.0 FORM_FRAUD_5 Fill a form and many fraud phrases
-X-Spam-Level: ******
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ampkijvy7sofjrjw"
+Content-Disposition: inline
+In-Reply-To: <c7472c24-9e16-7c2d-f5f6-a24b0fc5e5fa@hartkopp.net>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-V=C3=A1=C5=BEen=C3=BD vlastn=C3=ADk e-mailu/p=C5=99=C3=ADjemce fondu,
 
-Neodvolateln=C3=BD platebn=C3=AD p=C5=99=C3=ADkaz p=C5=99es western union
+--ampkijvy7sofjrjw
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Byli jsme pov=C4=9B=C5=99eni gener=C3=A1ln=C3=ADm tajemn=C3=ADkem Organizac=
-e spojen=C3=BDch n=C3=A1rod=C5=AF a
-=C5=99=C3=ADd=C3=ADc=C3=ADm org=C3=A1nem m=C4=9Bnov=C3=A9 jednotky OSN, aby=
-chom pro=C5=A1et=C5=99ili zbyte=C4=8Dn=C3=A9
-zpo=C5=BEd=C4=9Bn=C3=AD platby doporu=C4=8Den=C3=A9 a schv=C3=A1len=C3=A9 v=
-e v=C3=A1=C5=A1 prosp=C4=9Bch. B=C4=9Bhem na=C5=A1eho
-vy=C5=A1et=C5=99ov=C3=A1n=C3=AD jsme se zd=C4=9B=C5=A1en=C3=ADm zjistili, =
-=C5=BEe va=C5=A1e platba byla zbyte=C4=8Dn=C4=9B
-zdr=C5=BEov=C3=A1na zkorumpovan=C3=BDmi =C3=BA=C5=99edn=C3=ADky banky, kte=
-=C5=99=C3=AD se sna=C5=BEili p=C5=99esm=C4=9Brovat
-va=C5=A1e prost=C5=99edky na jejich soukrom=C3=A9 =C3=BA=C4=8Dty.
+On 19.06.2023 20:55:28, Oliver Hartkopp wrote:
+>=20
+>=20
+> On 19.06.23 15:10, Marc Kleine-Budde wrote:
+> > This patch aligns code to match open parenthesis.
+> >=20
+> > Fixes: eb38c2053b67 ("can: rx-offload: rename can_rx_offload_queue_sort=
+ed() -> can_rx_offload_queue_timestamp()")
+>=20
+> Does it really make sense to add a "Fixes:" tag for editorial stuff?
 
-Aby se tomu p=C5=99ede=C5=A1lo, bylo zabezpe=C4=8Den=C3=AD va=C5=A1ich fina=
-n=C4=8Dn=C3=ADch prost=C5=99edk=C5=AF
-zorganizov=C3=A1no ve form=C4=9B kontroln=C3=ADch =C4=8D=C3=ADsel p=C5=99ev=
-odu pen=C4=9Bz (MTCN) v
-Western Union, co=C5=BE v=C3=A1m umo=C5=BEn=C3=AD m=C3=ADt p=C5=99=C3=ADmou=
- kontrolu nad va=C5=A1imi
-finan=C4=8Dn=C3=ADmi prost=C5=99edky prost=C5=99ednictv=C3=ADm Western Unio=
-n. Tuto platbu
-budeme sami sledovat, abychom se vyhnuli bezv=C3=BDchodn=C3=A9 situaci, kte=
-rou
-vytvo=C5=99ili =C3=BA=C5=99edn=C3=ADci banky.
+Yes, why not. I like keeping track if things. Also the
+process/maintainer-netdev.rst says:
 
-Skupina Sv=C4=9Btov=C3=A9 banky a Mezin=C3=A1rodn=C3=AD m=C4=9Bnov=C3=BD fo=
-nd (MMF) na va=C5=A1i platbu
-vystavily neodvolatelnou platebn=C3=AD z=C3=A1ruku. Jsme v=C5=A1ak r=C3=A1d=
-i, =C5=BEe v=C3=A1m
-m=C5=AF=C5=BEeme ozn=C3=A1mit, =C5=BEe na z=C3=A1klad=C4=9B na=C5=A1eho dop=
-oru=C4=8Den=C3=AD/pokyn=C5=AF; va=C5=A1e kompletn=C3=AD
-finan=C4=8Dn=C3=AD prost=C5=99edky byly p=C5=99ips=C3=A1ny ve v=C3=A1=C5=A1=
- prosp=C4=9Bch prost=C5=99ednictv=C3=ADm
-pen=C4=9B=C5=BEenky western union a western union v=C3=A1m bude pos=C3=ADla=
-t =C4=8D=C3=A1stku p=C4=9Bt
-tis=C3=ADc dolar=C5=AF denn=C4=9B, dokud nebude celkov=C3=A1 =C4=8D=C3=A1st=
-ka kompenzace dokon=C4=8Dena.
+| - for fixes the ``Fixes:`` tag is required, regardless of the tree =20
 
-Proto V=C3=A1m doporu=C4=8Dujeme kontaktovat:
+> Will this potentially trigger the stable guys?
 
-pan=C3=AD Olga Martinezov=C3=A1
-=C5=98editel platebn=C3=ADho odd=C4=9Blen=C3=AD
-Glob=C3=A1ln=C3=AD obnova spot=C5=99ebitele
-Podpora operac=C3=AD Fcc
-E-mailov=C3=A1 adresa: (olgapatygmartinez@fastservice.com)
+If it does, it should be a big warning that they take too many patches.
 
-Kontaktujte ji nyn=C3=AD a =C5=99ekn=C4=9Bte j=C3=AD, aby v=C3=A1m poradila=
-, jak obdr=C5=BEet prvn=C3=AD
-platbu. Jakmile s n=C3=AD nav=C3=A1=C5=BEete kontakt, nasm=C4=9Bruje v=C3=
-=A1s, co m=C3=A1te d=C4=9Blat, a
-p=C5=99es Western Union budete dost=C3=A1vat =C4=8D=C3=A1stku p=C4=9Bt tis=
-=C3=ADc dolar=C5=AF (5000
-dolar=C5=AF) denn=C4=9B, dokud nebude celkov=C3=A1 =C4=8D=C3=A1stka dokon=
-=C4=8Dena.
+Marc
 
-Kdy=C5=BE ji budete kontaktovat, m=C4=9Bli byste ji kontaktovat se sv=C3=BD=
-mi =C3=BAdaji,
-jak je uvedeno n=C3=AD=C5=BEe:
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
-1. Va=C5=A1e cel=C3=A9 jm=C3=A9no:
-2. Va=C5=A1e adresa:
-3. V=C3=A1=C5=A1 v=C4=9Bk:
-4. Povol=C3=A1n=C3=AD:
-5. Telefonn=C3=AD =C4=8D=C3=ADsla:
-6. Zem=C4=9B:
+--ampkijvy7sofjrjw
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Pozn=C3=A1mka: Doporu=C4=8Dujeme v=C3=A1m, abyste pan=C3=AD Olze Martinezov=
-=C3=A9 poskytli
-spr=C3=A1vn=C3=A9 a platn=C3=A9 =C3=BAdaje. Bu=C4=8Fte tak=C3=A9 informov=
-=C3=A1ni, =C5=BEe va=C5=A1e celkov=C3=A1 =C4=8D=C3=A1stka
-m=C3=A1 hodnotu 1 000 000 00 $. Gratulujeme.
+-----BEGIN PGP SIGNATURE-----
 
-Zpr=C3=A1va od prof=C3=ADka
-Spojen=C3=A9 n=C3=A1rody
-...................................................
-Dear email owner/fund beneficiary,
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmSRR9gACgkQvlAcSiqK
+BOgJyAf/ejI/XBcznLWv1At/h/G/rqE6SVC9GXjJuxKLicOaWt8zoVmcwwbJTo0b
+nsxKtW+hSYx4/Kf/OF+A3SthTWZFXZQq7fNBN+dZOZLofUrc/nG/21ZWauHP5o+U
+serPUfLGpCSy4K1rmL1n7Sb+Xl/ewhaQ56GGxPgNslF4+uD4gaqBNUVINm5YtsVk
+qLCOG542gdXt/iCKNK0wPtDCqfaaEPhFhIz88GQuVsiAsWO5ZSK6p7+paOpfaEnv
+rP3/mF81jUSLNOrJz2PE+tEHri5o6iGS0MP9JVowk88XZLLxbr0jM7dg4jhqR0O1
+ITrhiZcvxWdSS+143YRrWk7BpCuMYA==
+=EdaZ
+-----END PGP SIGNATURE-----
 
-Irrevocable payment order via western union
-
-We have been authorized by the United Nations' secretary general, and
-the governing body of the United Nations' monetary unit, to
-investigate the unnecessary delay on the payment recommended and
-approved in your favor. During our investigation, we discovered with
-dismay that your payment has been unnecessarily delayed by corrupt
-officials of the bank who were trying to divert your funds into their
-private accounts.
-
-To forestall this, security for your funds was organized in the form
-of money transfer control numbers (MTCN) in western union, and this
-will enable only you to have direct control over your funds via
-western union. We will monitor this payment ourselves to avoid the
-hopeless situation created by the officials of the bank.
-
-An irrevocable payment guarantee has been issued by the World Bank
-group and the international monetary fund (IMF) on your payment.
-However, we are happy to inform you that based on our
-recommendation/instructions; your complete funds have been credited in
-your favor through western union wallet, and western union will be
-sending to you the sum of five thousand dollars per day until the
-total compensation amount is completed.
-
-You are therefore advised to contact:
-
-Mrs. Olga Martinez
-Director payment department
-Global consumer reinstatement
-Fcc operations support
-Email address:  (olgapatygmartinez@naver.com)
-
-Contact her now and tell her to advise you on how to receive your
-first payment. As soon as you establish a contact with her, she will
-direct you on what to do, and you will be receiving the sum of five
-thousand dollars ($5000) via western union per day until the total sum
-is completed.
-
-When contacting her, you should contact her with your data as stated below:
-
-1. Your full name:
-2. Your address:
-3. Your age:
-4. Occupation:
-5. Telephone numbers:
-6. Country:
-
-Note: you are advised to furnish Mrs. Olga Martinez with your correct
-and valid details. Also be informed that your total sum is valued $1,
-000, 000, 00. Congratulations.
-
-Message from the pro
-United Nations
+--ampkijvy7sofjrjw--
