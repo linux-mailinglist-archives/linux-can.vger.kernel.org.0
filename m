@@ -2,53 +2,50 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD64C736D51
-	for <lists+linux-can@lfdr.de>; Tue, 20 Jun 2023 15:27:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F8A736D68
+	for <lists+linux-can@lfdr.de>; Tue, 20 Jun 2023 15:35:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231426AbjFTN10 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 20 Jun 2023 09:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59552 "EHLO
+        id S232203AbjFTNfO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 20 Jun 2023 09:35:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232384AbjFTN1X (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Jun 2023 09:27:23 -0400
+        with ESMTP id S231495AbjFTNfN (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Jun 2023 09:35:13 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9BD1A4
-        for <linux-can@vger.kernel.org>; Tue, 20 Jun 2023 06:27:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058D8B7
+        for <linux-can@vger.kernel.org>; Tue, 20 Jun 2023 06:35:12 -0700 (PDT)
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1qBbO0-0001kM-Kn; Tue, 20 Jun 2023 15:27:08 +0200
+        id 1qBbVj-000348-FJ; Tue, 20 Jun 2023 15:35:07 +0200
 Received: from pengutronix.de (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 125FB1DDB46;
-        Tue, 20 Jun 2023 13:27:07 +0000 (UTC)
-Date:   Tue, 20 Jun 2023 15:27:06 +0200
+        by smtp.blackshift.org (Postfix) with ESMTPSA id F0B151DDB73;
+        Tue, 20 Jun 2023 13:35:05 +0000 (UTC)
+Date:   Tue, 20 Jun 2023 15:35:05 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>, linux-can@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
-        Sylvain Girard <sylvain.girard@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?utf-8?B?SsOpcsOpbWll?= Dautheribes 
-        <jeremie.dautheribes@bootlin.com>
-Subject: Re: [PATCH net-next 1/2] can: sja1000: Prepare the use of a threaded
- handler
-Message-ID: <20230620-unicycle-wifi-fbc8d73e51fb-mkl@pengutronix.de>
-References: <20230616134553.2786391-1-miquel.raynal@bootlin.com>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Simon Horman <simon.horman@corigine.com>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        "Thomas.Kopp@microchip.com" <Thomas.Kopp@microchip.com>,
+        "socketcan@hartkopp.net" <socketcan@hartkopp.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "marex@denx.de" <marex@denx.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 1/3] can: length: fix bitstuffing count
+Message-ID: <20230620-carmaker-carmaker-c9c2260cee1f-mkl@pengutronix.de>
+References: <PAVPR10MB7209CEA1F5AD12B2E5C8ED86B15AA@PAVPR10MB7209.EURPRD10.PROD.OUTLOOK.COM>
+ <ZIrC6DpjjtmpIsI9@corigine.com>
+ <CAMZ6RqKzkEL+zfNyqn_f46K_h3_cX-BwGQJb8X5hH-vms0P=cw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="twvrtwtwm6ooxttw"
+        protocol="application/pgp-signature"; boundary="5vqvtfit6tmnyh4c"
 Content-Disposition: inline
-In-Reply-To: <20230616134553.2786391-1-miquel.raynal@bootlin.com>
+In-Reply-To: <CAMZ6RqKzkEL+zfNyqn_f46K_h3_cX-BwGQJb8X5hH-vms0P=cw@mail.gmail.com>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -63,23 +60,39 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---twvrtwtwm6ooxttw
+--5vqvtfit6tmnyh4c
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 16.06.2023 15:45:52, Miquel Raynal wrote:
-> In order to support a flavor of the sja1000 which sometimes freezes, it
-> will be needed upon certain interrupts to perform a soft reset. The soft
-> reset operation takes a bit of time, so better not do it within the hard
-> interrupt handler but rather in a threaded handler. Let's prepare the
-> possibility for sja1000_err() to request "interrupting" the current flow
-> and request the threaded handler to be run while keeping the interrupt
-> line low.
+On 15.06.2023 18:58:04, Vincent MAILHOL wrote:
+> > Lastly, I'm not a CAN maintainer. But I think it's usual to separate
+> > fixes and enhancements into different series, likely the former
+> > targeting the can tree while the latter targets the can-next tree
+> > (I could be way off here).
 >=20
-> There is no functional change.
+> Hmm... The fact is that only the first two patches are fixes. The
+> third one is not.  The fixes being really minor, there is no urgency.
+> So I was thinking of having the full series go to the next branch and
+> as long as there is the Fix: tag, the two first patches will
+> eventually be picked by the stable team. I thought that this approach
+> was easier than sending two fixes to the stable branch, wait for these
+> to propagate to next and then send a second series of a single patch
+> for next.
+>=20
+> @Marc, let me know what you prefer. I am fine to split if this works
+> best for you. Also, I will wait for your answer before doing any
+> resend.
+>=20
+> > If on the other hand, the patches in this series are not bug fixes,
+> > then it is probably best to drop the 'fixes' language.
+>=20
+> I will keep the Fix tags. Even if minor (probably no visible
+> repercussions) it still fixes an existing inaccuracy (whether you call
+> it bug or not is another debate, but I often see typo fixes being
+> backported, and these are a bit more than a typo fix).
 
-Applied both to linux-can-next.
+I've taken the whole series as is to linux-can-next.
 
 Thanks,
 Marc
@@ -90,19 +103,19 @@ Embedded Linux                   | https://www.pengutronix.de |
 Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
---twvrtwtwm6ooxttw
+--5vqvtfit6tmnyh4c
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmSRqScACgkQvlAcSiqK
-BOixTQf/ZM+1W1w4QwaNlbaDdf6BotsAN1/sdJzb+iBdzdsp74JSePsBsOue9OGi
-pe/xto0QMzqd8Xed0Y1OYH52XJfRoCrEHWd/hQJT09SpX2tnvvG2FpH9n6F8LWdY
-AM54VixYtEipWEg+f7l1gnCqfKudzfaflu5XsRunAfpGKRXJNBKUnKgUZcRe36F9
-3gLyRqBcqDjRrKedzTdUHQ9orlFmUVxFr+WIGvQX6W7R5Z6nC+FAZj1gQlsNyLR4
-qnP+c8c7obcKhSy54DSTIC2psrO4oR7NVdnfkVXDxlLeC3eXdk2ODMpv1VyWOAUS
-zbSHzhshoLh7E0rHCrJkvB46sAWIew==
-=95zw
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmSRqwcACgkQvlAcSiqK
+BOiuAAgAsiTi4KQX+ACCtDflRuoZXbnAbf69UfUlZuprEeZ1Onk1p/x+nYh5fR7U
+BBgojXIVMau34lTCIDJYiDD1p8YKu/KV54UHtHL4bfZ+y3e65+5amrLb1ceoAd6n
+DVSnUJv8fbgPxC5GKDwRT+6pMCFzGuaHJsWXSWrgCuNzQGV2tUtFOGzah/0iE13G
+z+CvRwG3ZnUAsuixmcN8DgixMnhOX/nXcFYz4bB5g3Ux9X5nfwrCZj9RJkzF1iw/
+B4TkqxW99Dq35ptvGa59yFA3BYDZBkbyBawAijnaqgIyE5rUhF1wQRGMWxOqfE8H
+I9yORnmFb9xnoimX/WYyjg/9Iwx6bw==
+=VLYR
 -----END PGP SIGNATURE-----
 
---twvrtwtwm6ooxttw--
+--5vqvtfit6tmnyh4c--
