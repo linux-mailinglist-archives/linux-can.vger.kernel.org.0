@@ -2,124 +2,248 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8417363B4
-	for <lists+linux-can@lfdr.de>; Tue, 20 Jun 2023 08:41:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0B53736C66
+	for <lists+linux-can@lfdr.de>; Tue, 20 Jun 2023 14:54:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230437AbjFTGld (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 20 Jun 2023 02:41:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45452 "EHLO
+        id S231324AbjFTMyS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 20 Jun 2023 08:54:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbjFTGlc (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Jun 2023 02:41:32 -0400
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5B910FB
-        for <linux-can@vger.kernel.org>; Mon, 19 Jun 2023 23:41:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1687243288; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=CLWgLTiYPNrinNGcYOU3HxnJzdF0+fESUW3+6/04n3G7cDw9nGR4rQIyi0kiwMOpbo
-    5DUXJjUpolO9mPTcjXw+YAxdmAewODeSKUGHDX8AxMVn1hHcIaRZBOBsK/ppWjROc8Om
-    XHJagltodovjxkZLrGQi8cG6BGuIQfeIi1p7XHNBJS52M7fhNejEEgsfZK6KTigsfhR5
-    6UaoOPsV2L+MCmRRKI5rnTPOO0zRDSlCgNv0SNe/zLbVgWyeEKZE/nbuK1flz3yvEFT0
-    nHJSr/423bCrgLQSBF9nVO/OXJqsc9MRw/fAAXSl7jopb1Rn1qaFoJs9NW3/EwVNhDZb
-    Ro+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1687243288;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=4KVbMjaeKgsAbEm1IYXnezOslqbpwuz2exuFCascbWE=;
-    b=P3Qn0tFzjidu2a/VZfwE5+CqgVf40IXXUWpq5HQMPf8Bc8Pr1l0Bp/q2d4N2aIVcSv
-    Ho3/PhF3freakBJDky1StxdOS2EFvukLK8/Rkr24EyAQOaHHyG/lZp/Xrq87j+mc3gE5
-    tpr2IA5WpAo65E0vdckuidf+eDNRCl6O9qZCS+II/uuRou05JPtD/GwO1ZPL/yYe+d/0
-    PGTnN4u3GGw18z1MajPHRyZXK6KCQmh2Q5GtvJ8dFQnR68lsIsjmXHsySSOfVN1kgTNo
-    s9GrVUPZR2N6yJC+DfNBHxP4C/LSlaqRbkVCJSocMHcptFRqFpNM1bytP5ulCzvUKF33
-    4hNw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1687243288;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=4KVbMjaeKgsAbEm1IYXnezOslqbpwuz2exuFCascbWE=;
-    b=eJ3EZISLHjz6AWD29pq87/o00L4+AniDWt/VALV0QTFY4POFlhduehkotPFnV9D1nj
-    /2vVU0qSNCDaMTQbh8F8m+HsVJKxTs+AO/AsZ/nPabcnHrg6wsjqi4Tt0hbfr1D7Yi65
-    pJGLqzD6ofZdrCqloGaq8FzRg9Io07NpG22Tby07deiFh12EUtXywDWFgMQb+xJBB5OP
-    f4pH4mVLarYzdAz2xKvOvL7Jz0UcruUPvPAFEmwpPDMvMeGc+7UoUePTu9pxdA5Vcmse
-    5XzSaowRUg0JSps2ehRueuURBRUEQYE0Yprj2gp0wGtIDmCXPzE/iqkHy+7LwyfAT2p9
-    Ch1Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1687243288;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=4KVbMjaeKgsAbEm1IYXnezOslqbpwuz2exuFCascbWE=;
-    b=AaM5deuiDehTQwJ96kylWgn7FS1d1KQmDbg/kRmVR80t93rBCoVZVtL89vdyiMY1sO
-    GnrWEKqzJ4p87e7ftBAA==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusl129OHEdFq0USEbDUQnQ=="
-Received: from [IPV6:2a00:6020:4a8e:5000::923]
-    by smtp.strato.de (RZmta 49.6.0 AUTH)
-    with ESMTPSA id J16f43z5K6fSElj
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Tue, 20 Jun 2023 08:41:28 +0200 (CEST)
-Message-ID: <f79bd6da-d85b-9d01-ba66-41f9c9f6e6d5@hartkopp.net>
-Date:   Tue, 20 Jun 2023 08:41:22 +0200
+        with ESMTP id S231765AbjFTMyQ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Jun 2023 08:54:16 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C16119AB
+        for <linux-can@vger.kernel.org>; Tue, 20 Jun 2023 05:53:58 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f8c65020dfso50364015e9.2
+        for <linux-can@vger.kernel.org>; Tue, 20 Jun 2023 05:53:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1687265637; x=1689857637;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QJGugi0AoabsZM3ADn8QpFKvMhK21X8XWjMetdJYSPU=;
+        b=Lht61qXUpxtai5L5IfulLN94cqNusPntIL+h8rcY1xltCkiEe1IGAJQc47LeIelySy
+         WWIHngkQza38G5ogNO2OUYupMBZ+NbsBnbbh8T+7OqDyHWN+e/tIgHn/56ORmaHQx4qx
+         yWVEr7CvAk4uaOhTHANLUhxuSshqAbvRIto4bEBWP/Rp7ro2+/UisMuNdXg++Bsssuye
+         mIhFkyfXnqmY2ioYhKBRt8tK32KS8yPXjJWN0OqYg8q/7sbfPrk3xatz+SP+h51fm9bo
+         E8b99WmF7z5Jmrpe62J2spzoC333IbnyVxXtBCz1gPd48PXtr5qrEtzTiXvXea5NGCvk
+         U+vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687265637; x=1689857637;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QJGugi0AoabsZM3ADn8QpFKvMhK21X8XWjMetdJYSPU=;
+        b=I5p6atztqmtguj+7LHLNzmuSEmG9R3ys812r+png7x/qbMESPfmYj+RqhvHF0DSYjK
+         Mex+UPKuWALEoxZCQBuLFumMt+yUVl5VwP5TVX6Nzp+5o7mbe459fO0Cf9OcnMthpVPX
+         UEtQaflNUH0OxqJZEd4+jDULxSXLZcXQWH8QIaG8sL+LI/OD/5fA/x6zJbAhX7rngBtn
+         RsrsYMCA9c8tg6AJfMH5dWUmZ3epvCJi1j5IItymZW/BbyD9j/PjC1uoe9+auuHzzKqG
+         tarz1wXDYMZyIt7dzrlaDOXhfuYJW4+zISeIuX4C8/+lRquh0piSRScTDmDYhQBQGrFt
+         3+1A==
+X-Gm-Message-State: AC+VfDwqpkq0RCRSn4iOVSiLKkiAHAjd/xdSdvlqhkSuPURP7yVvVLLy
+        smxyOILBpBdW2SQzPNbsDSmyqTOosBUvwN9mnkI=
+X-Google-Smtp-Source: ACHHUZ6tQZPVmLhAqhmDZQg0KdDRUiLm3xx8V0N71PFIBHCK/ZEboUT51Ct62OpdZNMLZMZS5XZdZg==
+X-Received: by 2002:a7b:ce87:0:b0:3f9:b35:bf7f with SMTP id q7-20020a7bce87000000b003f90b35bf7fmr5757912wmj.41.1687265636860;
+        Tue, 20 Jun 2023 05:53:56 -0700 (PDT)
+Received: from blmsp ([2001:4090:a245:802c:bc2b:8db8:9210:41eb])
+        by smtp.gmail.com with ESMTPSA id 24-20020a05600c22d800b003f8c5ceeb77sm2297241wmg.21.2023.06.20.05.53.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jun 2023 05:53:56 -0700 (PDT)
+Date:   Tue, 20 Jun 2023 14:53:54 +0200
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 13/16] can: m_can: Introduce a tx_fifo_in_flight
+ counter
+Message-ID: <20230620125354.ipok6i43lvow66t4@blmsp>
+References: <20230315110546.2518305-1-msp@baylibre.com>
+ <20230315110546.2518305-14-msp@baylibre.com>
+ <ZBSPJHkcLG7gkZ7I@corigine.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 2/2] can: ti_hecc: fix coding style
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org, kernel@pengutronix.de
-References: <20230619131058.198769-1-mkl@pengutronix.de>
- <20230619131058.198769-3-mkl@pengutronix.de>
- <c7472c24-9e16-7c2d-f5f6-a24b0fc5e5fa@hartkopp.net>
- <20230620-spoiler-willfully-fe2954517979-mkl@pengutronix.de>
-Content-Language: en-US
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20230620-spoiler-willfully-fe2954517979-mkl@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZBSPJHkcLG7gkZ7I@corigine.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi Simon,
 
+On Fri, Mar 17, 2023 at 05:02:44PM +0100, Simon Horman wrote:
+> On Wed, Mar 15, 2023 at 12:05:43PM +0100, Markus Schneider-Pargmann wrote:
+> > Keep track of the number of transmits in flight.
+> > 
+> > This patch prepares the driver to control the network interface queue
+> > based on this counter. By itself this counter be
+> > implemented with an atomic, but as we need to do other things in the
+> > critical sections later I am using a spinlock instead.
+> > 
+> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
 
-On 20.06.23 08:31, Marc Kleine-Budde wrote:
-> On 19.06.2023 20:55:28, Oliver Hartkopp wrote:
->>
->>
->> On 19.06.23 15:10, Marc Kleine-Budde wrote:
->>> This patch aligns code to match open parenthesis.
->>>
->>> Fixes: eb38c2053b67 ("can: rx-offload: rename can_rx_offload_queue_sorted() -> can_rx_offload_queue_timestamp()")
->>
->> Does it really make sense to add a "Fixes:" tag for editorial stuff?
+Thank you for all your reviews, very helpful.
+
 > 
-> Yes, why not. I like keeping track if things. Also the
-> process/maintainer-netdev.rst says:
-> 
-> | - for fixes the ``Fixes:`` tag is required, regardless of the tree
+> Nit, assuming the values are always positive, I think
+> that unsigned might be a more appropriate type than int
+> for the tx_fifo_in_flight field, and associated function
+> parameters and local variables.
 
-I do not think that whitespace changes can be categorized as "fixes" as 
-they do not fix any functionality.
+I agree that tx_fifo_in_flight is and should always be a positive value.
+However as the code is operating with ++ and -- exclusively I would
+personally prefer int here as that shows off-by-one errors much easier
+in case there are any at some point.
 
-IMO this is not the intention of that sentence.
+Is that fine for you?
 
 Best,
-Oliver
+Markus
 
 > 
->> Will this potentially trigger the stable guys?
+> That notwithstanding,
 > 
-> If it does, it should be a big warning that they take too many patches.
+> Reviewed-by: Simon Horman <simon.horman@corigine.com>
 > 
-> Marc
-> 
+> > ---
+> >  drivers/net/can/m_can/m_can.c | 41 ++++++++++++++++++++++++++++++++++-
+> >  drivers/net/can/m_can/m_can.h |  4 ++++
+> >  2 files changed, 44 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+> > index 27d36bcc094c..4ad8f08f8284 100644
+> > --- a/drivers/net/can/m_can/m_can.c
+> > +++ b/drivers/net/can/m_can/m_can.c
+> > @@ -442,6 +442,7 @@ static u32 m_can_get_timestamp(struct m_can_classdev *cdev)
+> >  static void m_can_clean(struct net_device *net)
+> >  {
+> >  	struct m_can_classdev *cdev = netdev_priv(net);
+> > +	unsigned long irqflags;
+> >  
+> >  	for (int i = 0; i != cdev->tx_fifo_size; ++i) {
+> >  		if (!cdev->tx_ops[i].skb)
+> > @@ -453,6 +454,10 @@ static void m_can_clean(struct net_device *net)
+> >  
+> >  	for (int i = 0; i != cdev->can.echo_skb_max; ++i)
+> >  		can_free_echo_skb(cdev->net, i, NULL);
+> > +
+> > +	spin_lock_irqsave(&cdev->tx_handling_spinlock, irqflags);
+> > +	cdev->tx_fifo_in_flight = 0;
+> > +	spin_unlock_irqrestore(&cdev->tx_handling_spinlock, irqflags);
+> >  }
+> >  
+> >  /* For peripherals, pass skb to rx-offload, which will push skb from
+> > @@ -1023,6 +1028,24 @@ static void m_can_tx_update_stats(struct m_can_classdev *cdev,
+> >  	stats->tx_packets++;
+> >  }
+> >  
+> > +static void m_can_finish_tx(struct m_can_classdev *cdev, int transmitted)
+> > +{
+> > +	unsigned long irqflags;
+> > +
+> > +	spin_lock_irqsave(&cdev->tx_handling_spinlock, irqflags);
+> > +	cdev->tx_fifo_in_flight -= transmitted;
+> > +	spin_unlock_irqrestore(&cdev->tx_handling_spinlock, irqflags);
+> > +}
+> > +
+> > +static void m_can_start_tx(struct m_can_classdev *cdev)
+> > +{
+> > +	unsigned long irqflags;
+> > +
+> > +	spin_lock_irqsave(&cdev->tx_handling_spinlock, irqflags);
+> > +	++cdev->tx_fifo_in_flight;
+> > +	spin_unlock_irqrestore(&cdev->tx_handling_spinlock, irqflags);
+> > +}
+> > +
+> >  static int m_can_echo_tx_event(struct net_device *dev)
+> >  {
+> >  	u32 txe_count = 0;
+> > @@ -1032,6 +1055,7 @@ static int m_can_echo_tx_event(struct net_device *dev)
+> >  	int i = 0;
+> >  	int err = 0;
+> >  	unsigned int msg_mark;
+> > +	int processed = 0;
+> >  
+> >  	struct m_can_classdev *cdev = netdev_priv(dev);
+> >  
+> > @@ -1061,12 +1085,15 @@ static int m_can_echo_tx_event(struct net_device *dev)
+> >  
+> >  		/* update stats */
+> >  		m_can_tx_update_stats(cdev, msg_mark, timestamp);
+> > +		++processed;
+> >  	}
+> >  
+> >  	if (ack_fgi != -1)
+> >  		m_can_write(cdev, M_CAN_TXEFA, FIELD_PREP(TXEFA_EFAI_MASK,
+> >  							  ack_fgi));
+> >  
+> > +	m_can_finish_tx(cdev, processed);
+> > +
+> >  	return err;
+> >  }
+> >  
+> > @@ -1161,6 +1188,7 @@ static irqreturn_t m_can_isr(int irq, void *dev_id)
+> >  				timestamp = m_can_get_timestamp(cdev);
+> >  			m_can_tx_update_stats(cdev, 0, timestamp);
+> >  			netif_wake_queue(dev);
+> > +			m_can_finish_tx(cdev, 1);
+> >  		}
+> >  	} else  {
+> >  		if (ir & (IR_TEFN | IR_TEFW)) {
+> > @@ -1846,11 +1874,22 @@ static netdev_tx_t m_can_start_peripheral_xmit(struct m_can_classdev *cdev,
+> >  	}
+> >  
+> >  	netif_stop_queue(cdev->net);
+> > +
+> > +	m_can_start_tx(cdev);
+> > +
+> >  	m_can_tx_queue_skb(cdev, skb);
+> >  
+> >  	return NETDEV_TX_OK;
+> >  }
+> >  
+> > +static netdev_tx_t m_can_start_fast_xmit(struct m_can_classdev *cdev,
+> > +					 struct sk_buff *skb)
+> > +{
+> > +	m_can_start_tx(cdev);
+> > +
+> > +	return m_can_tx_handler(cdev, skb);
+> > +}
+> > +
+> >  static netdev_tx_t m_can_start_xmit(struct sk_buff *skb,
+> >  				    struct net_device *dev)
+> >  {
+> > @@ -1862,7 +1901,7 @@ static netdev_tx_t m_can_start_xmit(struct sk_buff *skb,
+> >  	if (cdev->is_peripheral)
+> >  		return m_can_start_peripheral_xmit(cdev, skb);
+> >  	else
+> > -		return m_can_tx_handler(cdev, skb);
+> > +		return m_can_start_fast_xmit(cdev, skb);
+> >  }
+> >  
+> >  static int m_can_open(struct net_device *dev)
+> > diff --git a/drivers/net/can/m_can/m_can.h b/drivers/net/can/m_can/m_can.h
+> > index 2e1a52980a18..e230cf320a6c 100644
+> > --- a/drivers/net/can/m_can/m_can.h
+> > +++ b/drivers/net/can/m_can/m_can.h
+> > @@ -109,6 +109,10 @@ struct m_can_classdev {
+> >  	// Store this internally to avoid fetch delays on peripheral chips
+> >  	int tx_fifo_putidx;
+> >  
+> > +	/* Protects shared state between start_xmit and m_can_isr */
+> > +	spinlock_t tx_handling_spinlock;
+> > +	int tx_fifo_in_flight;
+> > +
+> >  	struct m_can_tx_op *tx_ops;
+> >  	int tx_fifo_size;
+> >  	int next_tx_op;
+> > -- 
+> > 2.39.2
+> > 
