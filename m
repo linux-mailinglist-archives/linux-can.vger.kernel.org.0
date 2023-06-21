@@ -2,44 +2,49 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B76F7384FF
-	for <lists+linux-can@lfdr.de>; Wed, 21 Jun 2023 15:29:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECB4F738503
+	for <lists+linux-can@lfdr.de>; Wed, 21 Jun 2023 15:29:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231809AbjFUN3Z (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 21 Jun 2023 09:29:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56878 "EHLO
+        id S231698AbjFUN32 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 21 Jun 2023 09:29:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232578AbjFUN3Y (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 21 Jun 2023 09:29:24 -0400
+        with ESMTP id S232569AbjFUN31 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 21 Jun 2023 09:29:27 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC44191
-        for <linux-can@vger.kernel.org>; Wed, 21 Jun 2023 06:29:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE551BC6
+        for <linux-can@vger.kernel.org>; Wed, 21 Jun 2023 06:29:21 -0700 (PDT)
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1qBxte-0006R9-0j
-        for linux-can@vger.kernel.org; Wed, 21 Jun 2023 15:29:18 +0200
+        id 1qBxtf-0006SJ-MS
+        for linux-can@vger.kernel.org; Wed, 21 Jun 2023 15:29:19 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id EA4821DE866
-        for <linux-can@vger.kernel.org>; Wed, 21 Jun 2023 13:29:16 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id DA8B21DE87F
+        for <linux-can@vger.kernel.org>; Wed, 21 Jun 2023 13:29:17 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 02E911DE853;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 1B0C51DE854;
         Wed, 21 Jun 2023 13:29:16 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 0c105877;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 14507e34;
         Wed, 21 Jun 2023 13:29:15 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: [PATCH net-next 0/33] pull-request: can-next 2023-06-21
-Date:   Wed, 21 Jun 2023 15:28:41 +0200
-Message-Id: <20230621132914.412546-1-mkl@pengutronix.de>
+        kernel@pengutronix.de,
+        Carsten Schmidt <carsten.schmidt-achim@t-online.de>,
+        Jimmy Assarsson <extja@kvaser.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH net-next 01/33] can: kvaser_usb: Add len8_dlc support
+Date:   Wed, 21 Jun 2023 15:28:42 +0200
+Message-Id: <20230621132914.412546-2-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230621132914.412546-1-mkl@pengutronix.de>
+References: <20230621132914.412546-1-mkl@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
@@ -47,7 +52,7 @@ X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,132 +60,123 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello netdev-team,
+From: Carsten Schmidt <carsten.schmidt-achim@t-online.de>
 
-this is a pull request of 33 patches for net-next/master.
+Add support for the Classical CAN raw DLC functionality to send and
+receive DLC values from 9 .. 15.
 
-The first patch is by Carsten Schmidt, targets the kvaser_usb driver
-and adds len8_dlc support.
+v1: https://lore.kernel.org/all/20230506105529.4023-1-carsten.schmidt-achim@t-online.de
 
-Marcel Hellwig's patch for the xilinx_can driver adds support for CAN
-transceivers via the PHY framework.
-
-Frank Jungclaus contributes 6 patches for the esd_usb driver in
-preparation for the upcoming CAN-USB/3 support.
-
-A patch by me fixes the coding style in the m_can driver.
-
-Frank Jungclaus contributes 2 more patches for the esd_usb driver,
-again in preparation for the upcoming CAN-USB/3 support.
-
-The 2 patches by Miquel Raynal for the sja1000 driver work around
-overruns stalls on the Renesas SoCs.
-
-2 patches by me fix the coding style in the rx-offload helper and the
-ti_hecc driver.
-
-Vincent Mailhol contributes 3 patches to fix and update the
-calculation of the length of CAN frames on the wire.
-
-Oliver Hartkopp's patch moves the CAN_RAW_FILTER_MAX definition into
-the correct header.
-
-The remaining 14 patches are by Jimmy Assarsson, target the
-kvaser_pciefd driver and bring various updates and improvements.
-
-regards,
-Marc
-
+Signed-off-by: Carsten Schmidt <carsten.schmidt-achim@t-online.de>
+Tested-by: Jimmy Assarsson <extja@kvaser.com>
+Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
+Link: https://lore.kernel.org/r/20230516125332.82894-1-extja@kvaser.com
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c  |  2 +-
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c | 13 +++++++++----
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c  |  6 +++---
+ 3 files changed, 13 insertions(+), 8 deletions(-)
 
-The following changes since commit d49b9b07725f5dfa3344dc3eed59b8ccc0a0ddbc:
+diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
+index 7135ec851341..71ef4db5c09f 100644
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
+@@ -816,7 +816,7 @@ static int kvaser_usb_init_one(struct kvaser_usb *dev, int channel)
+ 	init_completion(&priv->stop_comp);
+ 	init_completion(&priv->flush_comp);
+ 	init_completion(&priv->get_busparams_comp);
+-	priv->can.ctrlmode_supported = 0;
++	priv->can.ctrlmode_supported = CAN_CTRLMODE_CC_LEN8_DLC;
+ 
+ 	priv->dev = dev;
+ 	priv->netdev = netdev;
+diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
+index ef341c4254fc..c7ba768dfe17 100644
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
+@@ -1263,7 +1263,7 @@ static void kvaser_usb_hydra_rx_msg_std(const struct kvaser_usb *dev,
+ 	if (flags & KVASER_USB_HYDRA_CF_FLAG_OVERRUN)
+ 		kvaser_usb_can_rx_over_error(priv->netdev);
+ 
+-	cf->len = can_cc_dlc2len(cmd->rx_can.dlc);
++	can_frame_set_cc_len((struct can_frame *)cf, cmd->rx_can.dlc, priv->can.ctrlmode);
+ 
+ 	if (flags & KVASER_USB_HYDRA_CF_FLAG_REMOTE_FRAME) {
+ 		cf->can_id |= CAN_RTR_FLAG;
+@@ -1342,7 +1342,7 @@ static void kvaser_usb_hydra_rx_msg_ext(const struct kvaser_usb *dev,
+ 		if (flags & KVASER_USB_HYDRA_CF_FLAG_ESI)
+ 			cf->flags |= CANFD_ESI;
+ 	} else {
+-		cf->len = can_cc_dlc2len(dlc);
++		can_frame_set_cc_len((struct can_frame *)cf, dlc, priv->can.ctrlmode);
+ 	}
+ 
+ 	if (flags & KVASER_USB_HYDRA_CF_FLAG_REMOTE_FRAME) {
+@@ -1442,7 +1442,7 @@ kvaser_usb_hydra_frame_to_cmd_ext(const struct kvaser_usb_net_priv *priv,
+ 	struct kvaser_usb *dev = priv->dev;
+ 	struct kvaser_cmd_ext *cmd;
+ 	struct canfd_frame *cf = (struct canfd_frame *)skb->data;
+-	u8 dlc = can_fd_len2dlc(cf->len);
++	u8 dlc;
+ 	u8 nbr_of_bytes = cf->len;
+ 	u32 flags;
+ 	u32 id;
+@@ -1467,6 +1467,11 @@ kvaser_usb_hydra_frame_to_cmd_ext(const struct kvaser_usb_net_priv *priv,
+ 
+ 	cmd->len = cpu_to_le16(*cmd_len);
+ 
++	if (can_is_canfd_skb(skb))
++		dlc = can_fd_len2dlc(cf->len);
++	else
++		dlc = can_get_cc_dlc((struct can_frame *)cf, priv->can.ctrlmode);
++
+ 	cmd->tx_can.databytes = nbr_of_bytes;
+ 	cmd->tx_can.dlc = dlc;
+ 
+@@ -1542,7 +1547,7 @@ kvaser_usb_hydra_frame_to_cmd_std(const struct kvaser_usb_net_priv *priv,
+ 		id = cf->can_id & CAN_SFF_MASK;
+ 	}
+ 
+-	cmd->tx_can.dlc = cf->len;
++	cmd->tx_can.dlc = can_get_cc_dlc(cf, priv->can.ctrlmode);
+ 
+ 	flags = (cf->can_id & CAN_EFF_FLAG ?
+ 		 KVASER_USB_HYDRA_CF_FLAG_EXTENDED_ID : 0);
+diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+index 1c2f99ce4c6c..23bd7574b1c7 100644
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+@@ -573,7 +573,7 @@ kvaser_usb_leaf_frame_to_cmd(const struct kvaser_usb_net_priv *priv,
+ 			cmd->u.tx_can.data[1] = cf->can_id & 0x3f;
+ 		}
+ 
+-		cmd->u.tx_can.data[5] = cf->len;
++		cmd->u.tx_can.data[5] = can_get_cc_dlc(cf, priv->can.ctrlmode);
+ 		memcpy(&cmd->u.tx_can.data[6], cf->data, cf->len);
+ 
+ 		if (cf->can_id & CAN_RTR_FLAG)
+@@ -1349,7 +1349,7 @@ static void kvaser_usb_leaf_rx_can_msg(const struct kvaser_usb *dev,
+ 		else
+ 			cf->can_id &= CAN_SFF_MASK;
+ 
+-		cf->len = can_cc_dlc2len(cmd->u.leaf.log_message.dlc);
++		can_frame_set_cc_len(cf, cmd->u.leaf.log_message.dlc & 0xF, priv->can.ctrlmode);
+ 
+ 		if (cmd->u.leaf.log_message.flags & MSG_FLAG_REMOTE_FRAME)
+ 			cf->can_id |= CAN_RTR_FLAG;
+@@ -1367,7 +1367,7 @@ static void kvaser_usb_leaf_rx_can_msg(const struct kvaser_usb *dev,
+ 			cf->can_id |= CAN_EFF_FLAG;
+ 		}
+ 
+-		cf->len = can_cc_dlc2len(rx_data[5]);
++		can_frame_set_cc_len(cf, rx_data[5] & 0xF, priv->can.ctrlmode);
+ 
+ 		if (cmd->u.rx_can_header.flag & MSG_FLAG_REMOTE_FRAME)
+ 			cf->can_id |= CAN_RTR_FLAG;
 
-  Merge branch '100GbE' of git://git.kernel.org/pub/scm/linux/kernel/git/tnguy/next-queue (2023-05-22 12:44:44 +0100)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git tags/linux-can-next-for-6.5-20230621
-
-for you to fetch changes up to 36f404dc6825db5fdb818235b0af502e24ce3331:
-
-  Merge patch series "can: kvaser_pciefd: Fixes and improvements" (2023-06-20 15:38:53 +0200)
-
-----------------------------------------------------------------
-linux-can-next-for-6.5-20230621
-
-----------------------------------------------------------------
-Carsten Schmidt (1):
-      can: kvaser_usb: Add len8_dlc support
-
-Frank Jungclaus (8):
-      can: esd_usb: Make use of existing kernel macros
-      can: esd_usb: Replace initializer macros used for struct can_bittiming_const
-      can: esd_usb: Use consistent prefixes for macros
-      can: esd_usb: Prefix all structures with the device name
-      can: esd_usb: Replace hardcoded message length given to USB commands
-      can: esd_usb: Don't bother the user with nonessential log message
-      can: esd_usb: Make use of kernel macros BIT() and GENMASK()
-      can: esd_usb: Use consistent prefix ESD_USB_ for macros
-
-Jimmy Assarsson (14):
-      can: kvaser_pciefd: Remove useless write to interrupt register
-      can: kvaser_pciefd: Remove handler for unused KVASER_PCIEFD_PACK_TYPE_EFRAME_ACK
-      can: kvaser_pciefd: Add function to set skb hwtstamps
-      can: kvaser_pciefd: Set hardware timestamp on transmitted packets
-      can: kvaser_pciefd: Define unsigned constants with type suffix 'U'
-      can: kvaser_pciefd: Remove SPI flash parameter read functionality
-      can: kvaser_pciefd: Sort includes in alphabetic order
-      can: kvaser_pciefd: Rename device ID defines
-      can: kvaser_pciefd: Change return type for kvaser_pciefd_{receive,transmit,set_tx}_irq()
-      can: kvaser_pciefd: Sort register definitions
-      can: kvaser_pciefd: Use FIELD_{GET,PREP} and GENMASK where appropriate
-      can: kvaser_pciefd: Add len8_dlc support
-      can: kvaser_pciefd: Refactor code
-      can: kvaser_pciefd: Use TX FIFO size read from CAN controller
-
-Marc Kleine-Budde (9):
-      Merge patch series "can: esd_usb: More preparation before supporting esd CAN-USB/3"
-      can: m_can: fix coding style
-      Merge patch series "can: esd_usb: More preparation before supporting esd CAN-USB/3 (addendum)"
-      Merge patch series "can: sja1000: Prepare the use of a threaded handler"
-      can: rx-offload: fix coding style
-      can: ti_hecc: fix coding style
-      Merge patch series "can: fix coding style"
-      Merge patch series "can: length: fix definitions and add bit length calculation"
-      Merge patch series "can: kvaser_pciefd: Fixes and improvements"
-
-Marcel Hellwig (1):
-      can: dev: add transceiver capabilities to xilinx_can
-
-Miquel Raynal (2):
-      can: sja1000: Prepare the use of a threaded handler
-      can: sja1000: Prevent overrun stalls with a soft reset on Renesas SoCs
-
-Oliver Hartkopp (1):
-      can: uapi: move CAN_RAW_FILTER_MAX definition to raw.h
-
-Vincent Mailhol (3):
-      can: length: fix bitstuffing count
-      can: length: fix description of the RRS field
-      can: length: refactor frame lengths definition to add size in bits
-
- drivers/net/can/Kconfig                           |   3 +-
- drivers/net/can/dev/length.c                      |  15 +-
- drivers/net/can/dev/rx-offload.c                  |   2 +-
- drivers/net/can/kvaser_pciefd.c                   | 945 ++++++++--------------
- drivers/net/can/m_can/m_can.c                     |   4 +-
- drivers/net/can/sja1000/sja1000.c                 |  40 +-
- drivers/net/can/sja1000/sja1000.h                 |   1 +
- drivers/net/can/sja1000/sja1000_platform.c        |   5 +-
- drivers/net/can/ti_hecc.c                         |   2 +-
- drivers/net/can/usb/esd_usb.c                     | 350 ++++----
- drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c  |   2 +-
- drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c |  13 +-
- drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c  |   6 +-
- drivers/net/can/xilinx_can.c                      |  19 +
- include/linux/can/length.h                        | 315 +++++---
- include/uapi/linux/can.h                          |   1 -
- include/uapi/linux/can/raw.h                      |   2 +
- 17 files changed, 811 insertions(+), 914 deletions(-)
+base-commit: d49b9b07725f5dfa3344dc3eed59b8ccc0a0ddbc
+-- 
+2.40.1
 
 
