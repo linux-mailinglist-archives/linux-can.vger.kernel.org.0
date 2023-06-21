@@ -2,75 +2,74 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDAEB736F99
-	for <lists+linux-can@lfdr.de>; Tue, 20 Jun 2023 17:00:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDCFB7381C1
+	for <lists+linux-can@lfdr.de>; Wed, 21 Jun 2023 13:11:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233453AbjFTPAT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 20 Jun 2023 11:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60302 "EHLO
+        id S231254AbjFUJYT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 21 Jun 2023 05:24:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233540AbjFTO7y (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Jun 2023 10:59:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108A319A8
-        for <linux-can@vger.kernel.org>; Tue, 20 Jun 2023 07:58:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687273089;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=096kfvQCNbO3jjvPJlb61wpL4gpNse4m8jbz5dQcH+U=;
-        b=NLlktuRXYst77c5i95xqGRYVxnBScqks2uhsnBPnfT50M3wKth80NqcUCDQHDnqu0h7gDY
-        AO94U3AdF5Hsc8yGTxLAllSVG+9kZ1uUCowcYltlmzC2hKBDYFkEBVQm3yGUuz+hvVNRTI
-        rH4d+VaalQeuqpDIuTOSpieAEpFQuVs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-246-cetdja7_MNaYUIl_PdTHIQ-1; Tue, 20 Jun 2023 10:58:01 -0400
-X-MC-Unique: cetdja7_MNaYUIl_PdTHIQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D63E710665CD;
-        Tue, 20 Jun 2023 14:54:49 +0000 (UTC)
-Received: from warthog.procyon.org.com (unknown [10.42.28.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D321E40C6CD2;
-        Tue, 20 Jun 2023 14:54:46 +0000 (UTC)
-From:   David Howells <dhowells@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     David Howells <dhowells@redhat.com>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        with ESMTP id S230414AbjFUJYQ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 21 Jun 2023 05:24:16 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9680F19AC
+        for <linux-can@vger.kernel.org>; Wed, 21 Jun 2023 02:23:57 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-311367a3e12so4736574f8f.2
+        for <linux-can@vger.kernel.org>; Wed, 21 Jun 2023 02:23:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1687339436; x=1689931436;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vhbmVt/bR7PxLH5MDA0JQvpls/C44+Igd7TpWMy2Ddg=;
+        b=E9519/hup4CMAG38i+j/WCtV5DI1Kh5Z2SC19XjwuKZvTXNn0+2iqh7XEWTEQrhH1c
+         VUkySYLxCcuzudOK5wkZnpBjwTN2NtQ1P/XGst7w3gw777jYCTu4ct31uEQfkm4h6cbx
+         r4Q3NKdB7EyXoWfzLfrJJTglVgmxbwgmWYC+JgZhExD1DIBU0l7QDfYubFjjT+mEadJ7
+         cD9YHjU81kcR04Oy2M/NrR3plx/1i22ssTKsiUCzWEN6yXEOow5RdtKWN9y0/yO1STEB
+         4qHtjQiieQ0gBfcm+73qQOmkRtiv/uLLw1qfofJxkVBg6VpJX9WHuccF6GN2UArE0/Mu
+         6bSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687339436; x=1689931436;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vhbmVt/bR7PxLH5MDA0JQvpls/C44+Igd7TpWMy2Ddg=;
+        b=Vc83bi8ZJVLv1cp1LndXeNNJEUMl+72RiKl1ah2QyMYddLrWaLczfyD25s+aDiul6W
+         bV1XcOhqFwvfTtRKJxmAYEIO+hYC4YiDM7ibbKx4gVpRhsnjL7DxGqjf+ccdVdnBiLPk
+         VU+tx670kg17VB/aTeFREV55PJ7iSBKZcNm1iD3MJL3BlRBuOJDzzOqyVLrJGYcjX8Cv
+         nR2M3RGOMtSrhGhtbYOz0jQGw2SUpnhDTaDP6odwlViRgxIHLKPeBjuHTgBDDHRfvW2O
+         9V8B7fPu05bwDisgTnESyT7M2TbRDK1HbKB8OkGGfAanv4GAMhyrqFgNc54IXnwmfiHl
+         XigA==
+X-Gm-Message-State: AC+VfDw4WQmh7wO4FGxDA0XXhj3lRlECnpgceecQbxJ1MNKQkgM5EyLN
+        Hokjtl5PBRZ9XKH9u0LrBusM+Q==
+X-Google-Smtp-Source: ACHHUZ64i4VroYQxlvRXhJe9FYH5d+yXc5wuFWWIfL3KpYkieBJG4/VRQB6oiFSVmTJi7H0hCivanw==
+X-Received: by 2002:a5d:6643:0:b0:311:1711:d897 with SMTP id f3-20020a5d6643000000b003111711d897mr13892428wrw.17.1687339435867;
+        Wed, 21 Jun 2023 02:23:55 -0700 (PDT)
+Received: from blmsp.fritz.box ([2001:4091:a247:82fa:b762:4f68:e1ed:5041])
+        by smtp.gmail.com with ESMTPSA id i11-20020adffdcb000000b002fda1b12a0bsm4022115wrs.2.2023.06.21.02.23.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 02:23:55 -0700 (PDT)
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>
+Cc:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        Simon Horman <simon.horman@corigine.com>,
+        "David S . Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        dccp@vger.kernel.org, linux-afs@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-hams@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-wpan@vger.kernel.org, linux-x25@vger.kernel.org,
-        mptcp@lists.linux.dev, rds-devel@oss.oracle.com,
-        tipc-discussion@lists.sourceforge.net,
-        virtualization@lists.linux-foundation.org
-Subject: [PATCH net-next v3 18/18] net: Kill MSG_SENDPAGE_NOTLAST
-Date:   Tue, 20 Jun 2023 15:53:37 +0100
-Message-ID: <20230620145338.1300897-19-dhowells@redhat.com>
-In-Reply-To: <20230620145338.1300897-1-dhowells@redhat.com>
-References: <20230620145338.1300897-1-dhowells@redhat.com>
+        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Julien Panis <jpanis@baylibre.com>,
+        Markus Schneider-Pargmann <msp@baylibre.com>
+Subject: [PATCH v4 00/12] can: m_can: Optimizations for m_can/tcan part 2
+Date:   Wed, 21 Jun 2023 11:23:38 +0200
+Message-Id: <20230621092350.3130866-1-msp@baylibre.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,136 +77,71 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Now that ->sendpage() has been removed, MSG_SENDPAGE_NOTLAST can be cleaned
-up.  Things were converted to use MSG_MORE instead, but the protocol
-sendpage stubs still convert MSG_SENDPAGE_NOTLAST to MSG_MORE, which is now
-unnecessary.
+Hi Marc, Simon and everyone,
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: "David S. Miller" <davem@davemloft.net>
-cc: Eric Dumazet <edumazet@google.com>
-cc: Jakub Kicinski <kuba@kernel.org>
-cc: Paolo Abeni <pabeni@redhat.com>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: bpf@vger.kernel.org
-cc: dccp@vger.kernel.org
-cc: linux-afs@lists.infradead.org
-cc: linux-arm-msm@vger.kernel.org
-cc: linux-can@vger.kernel.org
-cc: linux-crypto@vger.kernel.org
-cc: linux-doc@vger.kernel.org
-cc: linux-hams@vger.kernel.org
-cc: linux-perf-users@vger.kernel.org
-cc: linux-rdma@vger.kernel.org
-cc: linux-sctp@vger.kernel.org
-cc: linux-wpan@vger.kernel.org
-cc: linux-x25@vger.kernel.org
-cc: mptcp@lists.linux.dev
-cc: netdev@vger.kernel.org
-cc: rds-devel@oss.oracle.com
-cc: tipc-discussion@lists.sourceforge.net
-cc: virtualization@lists.linux-foundation.org
----
+thanks again for taking the time for review.
 
-Notes:
-    ver #3)
-     - tcp_bpf is now handled by an earlier patch.
+This version has the fixes for the issues you pointed out in v3.
+It is tested on tcan455x but I don't have hardware with mcan on the SoC
+myself so any testing is appreciated.
 
- include/linux/socket.h                         | 4 +---
- net/tls/tls_device.c                           | 3 +--
- net/tls/tls_main.c                             | 2 +-
- net/tls/tls_sw.c                               | 2 +-
- tools/perf/trace/beauty/include/linux/socket.h | 1 -
- tools/perf/trace/beauty/msg_flags.c            | 3 ---
- 6 files changed, 4 insertions(+), 11 deletions(-)
+The series implements many small and bigger throughput improvements and
+adds rx/tx coalescing at the end.
 
-diff --git a/include/linux/socket.h b/include/linux/socket.h
-index 58204700018a..39b74d83c7c4 100644
---- a/include/linux/socket.h
-+++ b/include/linux/socket.h
-@@ -319,7 +319,6 @@ struct ucred {
- #define MSG_MORE	0x8000	/* Sender will send more */
- #define MSG_WAITFORONE	0x10000	/* recvmmsg(): block until 1+ packets avail */
- #define MSG_SENDPAGE_NOPOLICY 0x10000 /* sendpage() internal : do no apply policy */
--#define MSG_SENDPAGE_NOTLAST 0x20000 /* sendpage() internal : not the last page */
- #define MSG_BATCH	0x40000 /* sendmmsg(): more messages coming */
- #define MSG_EOF         MSG_FIN
- #define MSG_NO_SHARED_FRAGS 0x80000 /* sendpage() internal : page frags are not shared */
-@@ -341,8 +340,7 @@ struct ucred {
- 
- /* Flags to be cleared on entry by sendmsg and sendmmsg syscalls */
- #define MSG_INTERNAL_SENDMSG_FLAGS \
--	(MSG_SPLICE_PAGES | MSG_SENDPAGE_NOPOLICY | MSG_SENDPAGE_NOTLAST | \
--	 MSG_SENDPAGE_DECRYPTED)
-+	(MSG_SPLICE_PAGES | MSG_SENDPAGE_NOPOLICY | MSG_SENDPAGE_DECRYPTED)
- 
- /* Setsockoptions(2) level. Thanks to BSD these must match IPPROTO_xxx */
- #define SOL_IP		0
-diff --git a/net/tls/tls_device.c b/net/tls/tls_device.c
-index 840ee06f1708..2021fe557e50 100644
---- a/net/tls/tls_device.c
-+++ b/net/tls/tls_device.c
-@@ -441,8 +441,7 @@ static int tls_push_data(struct sock *sk,
- 	long timeo;
- 
- 	if (flags &
--	    ~(MSG_MORE | MSG_DONTWAIT | MSG_NOSIGNAL | MSG_SENDPAGE_NOTLAST |
--	      MSG_SPLICE_PAGES))
-+	    ~(MSG_MORE | MSG_DONTWAIT | MSG_NOSIGNAL | MSG_SPLICE_PAGES))
- 		return -EOPNOTSUPP;
- 
- 	if (unlikely(sk->sk_err))
-diff --git a/net/tls/tls_main.c b/net/tls/tls_main.c
-index d5ed4d47b16e..b6896126bb92 100644
---- a/net/tls/tls_main.c
-+++ b/net/tls/tls_main.c
-@@ -127,7 +127,7 @@ int tls_push_sg(struct sock *sk,
- {
- 	struct bio_vec bvec;
- 	struct msghdr msg = {
--		.msg_flags = MSG_SENDPAGE_NOTLAST | MSG_SPLICE_PAGES | flags,
-+		.msg_flags = MSG_SPLICE_PAGES | flags,
- 	};
- 	int ret = 0;
- 	struct page *p;
-diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-index 9b3aa89a4292..53f944e6d8ef 100644
---- a/net/tls/tls_sw.c
-+++ b/net/tls/tls_sw.c
-@@ -1194,7 +1194,7 @@ int tls_sw_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
- 
- 	if (msg->msg_flags & ~(MSG_MORE | MSG_DONTWAIT | MSG_NOSIGNAL |
- 			       MSG_CMSG_COMPAT | MSG_SPLICE_PAGES |
--			       MSG_SENDPAGE_NOTLAST | MSG_SENDPAGE_NOPOLICY))
-+			       MSG_SENDPAGE_NOPOLICY))
- 		return -EOPNOTSUPP;
- 
- 	ret = mutex_lock_interruptible(&tls_ctx->tx_lock);
-diff --git a/tools/perf/trace/beauty/include/linux/socket.h b/tools/perf/trace/beauty/include/linux/socket.h
-index 13c3a237b9c9..3bef212a24d7 100644
---- a/tools/perf/trace/beauty/include/linux/socket.h
-+++ b/tools/perf/trace/beauty/include/linux/socket.h
-@@ -318,7 +318,6 @@ struct ucred {
- #define MSG_MORE	0x8000	/* Sender will send more */
- #define MSG_WAITFORONE	0x10000	/* recvmmsg(): block until 1+ packets avail */
- #define MSG_SENDPAGE_NOPOLICY 0x10000 /* sendpage() internal : do no apply policy */
--#define MSG_SENDPAGE_NOTLAST 0x20000 /* sendpage() internal : not the last page */
- #define MSG_BATCH	0x40000 /* sendmmsg(): more messages coming */
- #define MSG_EOF         MSG_FIN
- #define MSG_NO_SHARED_FRAGS 0x80000 /* sendpage() internal : page frags are not shared */
-diff --git a/tools/perf/trace/beauty/msg_flags.c b/tools/perf/trace/beauty/msg_flags.c
-index ea68db08b8e7..b5b580e5a77e 100644
---- a/tools/perf/trace/beauty/msg_flags.c
-+++ b/tools/perf/trace/beauty/msg_flags.c
-@@ -8,9 +8,6 @@
- #ifndef MSG_WAITFORONE
- #define MSG_WAITFORONE		   0x10000
- #endif
--#ifndef MSG_SENDPAGE_NOTLAST
--#define MSG_SENDPAGE_NOTLAST	   0x20000
--#endif
- #ifndef MSG_FASTOPEN
- #define MSG_FASTOPEN		0x20000000
- #endif
+Based on v6.4-rc1. Also available at
+https://gitlab.baylibre.com/msp8/linux/-/tree/topic/mcan-optimization/v6.4?ref_type=heads
+
+Best,
+Markus
+
+Changes in v4:
+- Create and use struct m_can_fifo_element in m_can_tx_handler
+- Fix memcpy_and_pad to copy the full buffer
+- Fixed a few checkpatch warnings
+- Change putidx to be unsigned
+- Print hard_xmit error only once when TX FIFO is full
+
+Changes in v3:
+- Remove parenthesis in error messages
+- Use memcpy_and_pad for buffer copy in 'can: m_can: Write transmit
+  header and data in one transaction'.
+- Replace spin_lock with spin_lock_irqsave. I got a report of a
+  interrupt that was calling start_xmit just after the netqueue was
+  woken up before the locked region was exited. spin_lock_irqsave should
+  fix this. I attached the full stack at the end of the mail if someone
+  wants to know.
+- Rebased to v6.3-rc1.
+- Removed tcan4x5x patches from this series.
+
+Changes in v2:
+- Rebased on v6.2-rc5
+- Fixed missing/broken accounting for non peripheral m_can devices.
+
+previous versions:
+v1 - https://lore.kernel.org/lkml/20221221152537.751564-1-msp@baylibre.com
+v2 - https://lore.kernel.org/lkml/20230125195059.630377-1-msp@baylibre.com
+v3 - https://lore.kernel.org/lkml/20230315110546.2518305-1-msp@baylibre.com/
+
+Markus Schneider-Pargmann (12):
+  can: m_can: Write transmit header and data in one transaction
+  can: m_can: Implement receive coalescing
+  can: m_can: Implement transmit coalescing
+  can: m_can: Add rx coalescing ethtool support
+  can: m_can: Add tx coalescing ethtool support
+  can: m_can: Use u32 for putidx
+  can: m_can: Cache tx putidx
+  can: m_can: Use the workqueue as queue
+  can: m_can: Introduce a tx_fifo_in_flight counter
+  can: m_can: Use tx_fifo_in_flight for netif_queue control
+  can: m_can: Implement BQL
+  can: m_can: Implement transmit submission coalescing
+
+ drivers/net/can/m_can/m_can.c | 516 +++++++++++++++++++++++++---------
+ drivers/net/can/m_can/m_can.h |  35 ++-
+ 2 files changed, 418 insertions(+), 133 deletions(-)
+
+
+base-commit: ac9a78681b921877518763ba0e89202254349d1b
+-- 
+2.40.1
 
