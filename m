@@ -2,171 +2,245 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EA157386B8
-	for <lists+linux-can@lfdr.de>; Wed, 21 Jun 2023 16:22:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3F3B738DA5
+	for <lists+linux-can@lfdr.de>; Wed, 21 Jun 2023 19:50:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbjFUOWZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 21 Jun 2023 10:22:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38036 "EHLO
+        id S231641AbjFURuo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 21 Jun 2023 13:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjFUOWY (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 21 Jun 2023 10:22:24 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2096.outbound.protection.outlook.com [40.107.220.96])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1E31A8;
-        Wed, 21 Jun 2023 07:22:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HYebmFaGQHw3JKoMNg/OHt43x0x1AqwDsIjjthJlBRJfgbwExiKSnhkoxw0vcGBpsJV8lwNnQE019BRwUmwO71cSl+N7idpBpfPgLimhTaYbkyhH8duIfDk9pDbqWBg0Q9CyZG/nClAWuNKbUTsdzgVdCcwYjr4Wmb/2FZ7UCsykYkFxwwFYBqzVyxPhL8xG2TgmOLL/J0hwA5GpeW0hYZNUZog8OuC33N0krRpUp6MMltuBNQMwcwfdyDMvu1qvWmhxd8j9z9cV6gpxvny4OsQdlVNd0uVqjFkoBozkdHYR7pNWTv83ChY1jY90K6qX5mo520Ee1BBXXfEoXyDAAg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/5QnfovQ49mRFNrqZ2pBPnVHS9ooOUAQE6qwbTqJt0A=;
- b=DFSokC65aJ/5X5dEJ8CQXCGKagHsgNNUUzeVpoc4Dc4/DxJQJkq3r42cwXEktyJRYMM1PGU9zNO5jgEXGJE5nv4pGUzRNUpMwAr8jr0T8gYL4EenZCWR1rfgdRQTkoNetB+5QzdNKfP43jSwlf1nvuSFiiFvAHHbnAagkOKOwjteqc8R9Zxfyv8QgU0wKxy7BtrukgKT7GZI/wQlQsqrqzlFKsfjhAj1GbjQg/cQDNXG+nw54oq+Dizx1yxE2vpEIyZ8CZ/aRFo9OZx8bbvH7AjKaFA+m+vPHRVNSxiw6iIs6dn1OiP2aU5vRcAUf6CiCeaCspJienIEI2Z1UINhAw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/5QnfovQ49mRFNrqZ2pBPnVHS9ooOUAQE6qwbTqJt0A=;
- b=oTPpttEIDvvngtWPne+XrX6PKb7VAXuevvJ2gxATsIpfscc4kuLrm52FvQTQfSo8a0SmyE1zzgin/5NE6CubzekFfNofkmelvHjVLLwQqLzcmVUFbKpeLCMxVdG/EVBidwfmtz5k3UlPVwuv/psO07shmH+VPl1rA/9+oBGUHcg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by SA0PR13MB4143.namprd13.prod.outlook.com (2603:10b6:806:94::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Wed, 21 Jun
- 2023 14:22:19 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e%5]) with mapi id 15.20.6521.023; Wed, 21 Jun 2023
- 14:22:19 +0000
-Date:   Wed, 21 Jun 2023 16:22:12 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Markus Schneider-Pargmann <msp@baylibre.com>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        with ESMTP id S231642AbjFURuf (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 21 Jun 2023 13:50:35 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87511BF4;
+        Wed, 21 Jun 2023 10:50:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687369823; x=1718905823;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FvgO26ZV8KFkH6De3TQgsHq/u7Q2rPq8oBE4FkR4Q30=;
+  b=MBjXn4Do7KNVo6cskuVkO43oNWEbvuGU/TIYfP4rVFKxQL83L/jJlmqe
+   4L/FqQweTRcYOJfjVY8p0+OQa7p1TP2/JxsIU2Awo/1SMa3i8gfF0jtyB
+   ERVOU3TqrVtKtA2EymkRBM06uRQuc2zVh7sClTIOJlGNyHDa+/nops3NZ
+   IExn69hWfdmbzihLoWK84fdS8CL/Nf1wJaSJjn0OOKoUGa2MjuH3K0WM2
+   /wGcitDFZacgaDCNZhfZgPg+U/mF7OD2I2kK4ESaLREfPHa7oVhuKsgq9
+   ngwsKG9oocTnRLkHGqG6LQRH5I/kfIkdjIeNjebkGe1Vro/Pt4qvzxvB3
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="357753995"
+X-IronPort-AV: E=Sophos;i="6.00,261,1681196400"; 
+   d="scan'208";a="357753995"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 10:50:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="664761236"
+X-IronPort-AV: E=Sophos;i="6.00,261,1681196400"; 
+   d="scan'208";a="664761236"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 21 Jun 2023 10:50:14 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qC1yA-0006zv-02;
+        Wed, 21 Jun 2023 17:50:14 +0000
+Date:   Thu, 22 Jun 2023 01:49:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Markus Schneider-Pargmann <msp@baylibre.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
         Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
+        Wolfgang Grandegger <wg@grandegger.com>
+Cc:     oe-kbuild-all@lists.linux.dev,
         Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        Simon Horman <simon.horman@corigine.com>,
         "David S . Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Julien Panis <jpanis@baylibre.com>
-Subject: Re: [PATCH v4 04/12] can: m_can: Add rx coalescing ethtool support
-Message-ID: <ZJMHlIp9x8HL97qT@corigine.com>
-References: <20230621092350.3130866-1-msp@baylibre.com>
- <20230621092350.3130866-5-msp@baylibre.com>
+        Julien Panis <jpanis@baylibre.com>,
+        Markus Schneider-Pargmann <msp@baylibre.com>
+Subject: Re: [PATCH v4 01/12] can: m_can: Write transmit header and data in
+ one transaction
+Message-ID: <202306220154.20bzOw90-lkp@intel.com>
+References: <20230621092350.3130866-2-msp@baylibre.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230621092350.3130866-5-msp@baylibre.com>
-X-ClientProxiedBy: AS4PR10CA0013.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:20b:5dc::20) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SA0PR13MB4143:EE_
-X-MS-Office365-Filtering-Correlation-Id: 15fa9438-6726-41ab-1a1d-08db7262ebd5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rfF2VJ2ZjDJ44L22uR7sI/qFp7XNbkQYPwILaiKYDcA9aP666l+5uxEHv+XLc8800ZdnsdKnsKE5/5v/FKHMhCx096PVbK+uBEV6m6OZVwKcpAu+zI1jc/KswwbLTO0mVbHx+uHdRn/6L8ROcIkpXXHB1hsnwk1KqCOZXpq/v/oiX8RZgv4hRd72qphRDOGcsxs536GTGvt7P4SIPod0nTqYtqpTNOSKLRagQr9jImUw2TyekbsMG+Wa9JMmnjGgbUN+WVFtxkAiVFZrTFd4StOSn1T5BppSKVmiZAV0/3ZQTuGGZBzDt727qirdpEvodt3bcdHVzNOwBZ7ky0BnLM2skbAIrGNyC7ynwR0MM4fOKJdDPBHW4TqM/NyeFnZ//YFBrWseGx33uCAEHCoKLjC8Jw6eCmqqWSggF38msg/SJ2Z8UvqFamwom2xDYn+XXPT/Woz+mB/GRtSAJbS0WVAb6aM5NIoUzL4IuaXbsymLJ7InKmNsVrvEAzKuNhXWNPVk2gn6Diku+HAzxq2xJZo0Ay4MvQNyu6a33xkXrlggHmQS0UL9U6K3HIOKHlq16vXYSpnhJkNFx+PF2IEp99apo8yWJWYYOfaknTuKjhw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39840400004)(346002)(366004)(376002)(136003)(396003)(451199021)(38100700002)(6512007)(6506007)(83380400001)(186003)(2616005)(44832011)(7416002)(2906002)(41300700001)(5660300002)(8676002)(8936002)(36756003)(6666004)(478600001)(6486002)(4326008)(6916009)(66556008)(66946007)(66476007)(316002)(54906003)(86362001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?QT8rZwBSSdohHEF22+IseKRLVZ5F/7UzzGpIwqHoRO3DAfaV/o//fRNYaXZz?=
- =?us-ascii?Q?HHGMwhfz/D66TN8hDVUmUSCk/sIezaGKoAhRnnhyu5+KZHnqVIIMN87iiPEx?=
- =?us-ascii?Q?DuaoVPmvcqeQzh2K57DJUcujpRQp8MVVOrtLoBecIO589o2nEVrbwPXPi+71?=
- =?us-ascii?Q?1mPgpDT78nsy3bxxufiOS168uEThEEZcRLK/8auO2swvd9GRIKdEmSvDAlBq?=
- =?us-ascii?Q?ZfxF3zEUNBywXQ5ea3JC/ArPF4iz2TfKWGNAWN2xlXm8cqDjk/5aDAoJppc0?=
- =?us-ascii?Q?/vPRljpLaL9j/OhiX0ARrCUSRv+r2dmtnRGP+Br1FbeyUaqFp+nzPp58Ry/M?=
- =?us-ascii?Q?ax4R/4CGj4u2K5KvGvc/xik6mY7FDpWkIxsyIP0/nKQgJ6DohAS09LjnDZCa?=
- =?us-ascii?Q?q1vomLTJSNvhKe8jzc1r2gzaSgY/PdOjPl/JN3rF09ng/mJut9KHIGROLBI6?=
- =?us-ascii?Q?Zbf82EhdLL4D4EC4k6eN+33NxEZlOH5xr49EFd5NqIs6oHHLbBFk2opQjEDG?=
- =?us-ascii?Q?8VEv69xRlaonBYWtyhTdVSYCWooy2gQ/8P0Oda09UiMNa9RIA4raUQLe9pdk?=
- =?us-ascii?Q?bfd+qXmPLiJkTb0JZ/CakbJEwW/ok1O/abBF247Chnmz+h3yTfrs0zBe3Cqt?=
- =?us-ascii?Q?t5illsbeZPfKBrRy70BG/ZX/cxNnJ+FqLgA5zne89EtRoZ4FwcPUOu5qkQtE?=
- =?us-ascii?Q?AGK3YPwGMy9uV5M0PTXDWzomQRTv67GZMHM+R9UZD2VcKFkI07+5nYjAFAkB?=
- =?us-ascii?Q?s5baOiEFRTyzsYTMUFopo6wcG9BgagDMTXtQPSxsPQk5J2RlwEzpWQyblgXL?=
- =?us-ascii?Q?jqwuk7M+4ytbpJe7d/aGeMeHnaIRUyhHW7dy1xds6/pBGj//W4PqPz3wltHi?=
- =?us-ascii?Q?eCG2lT1AYiO8bgDiMUfRxH3JAbszF4bABGrTbkaXkOrjgVWDA2EjsQ8KcVY4?=
- =?us-ascii?Q?aKOxsUqML9PZV6O6Q642n/m69eYA5459HlIJ5aa2gT5Kwv21swJaQTV8YSN2?=
- =?us-ascii?Q?/Q021Aeot8z+QbYJn131G3/7XSlnRGcUcPo3pTDw8KvLYTX9ptezf4AQkA9I?=
- =?us-ascii?Q?2PxcQx6p9KZMLu0Q/3mwxIVRr+tfjQKDipxba5LxheeKaDfVwFHfP0WAABlX?=
- =?us-ascii?Q?tnHgsFtB3VV4MrDoAYFvkX6Abd7Xs5/70zXyaJ5aAj9ryX9qXx/gYGXtykaX?=
- =?us-ascii?Q?ntNBAMXnim0mRs7UFifKySsjdW+wHKCt8sVcsM0jrxcslg+ys9lvvbf1hMxI?=
- =?us-ascii?Q?HHDT95plasmr7Uocv6HuU4kjdliiUIrZ3Rj3jf/DYBVAQqcwxCS88ybo6NZb?=
- =?us-ascii?Q?MiHlKG4pyHbe4EjBJyPpO01gQj4kKBXHCUKsxQ+NWs70ebN3xBqAIl3E/oia?=
- =?us-ascii?Q?YUBtR9cBsi47TVaZ+hli/sT7frpHKV2z0p4lMTLSowwdDO77dCPj1vSovsZk?=
- =?us-ascii?Q?F5oWiiWpy+CqnIBPY1M0aljNWKglPePz6nq3btE7d0BiL9sC7bkqpm3aAZc+?=
- =?us-ascii?Q?bwjPGWYgVSCW/XNA6OD1JxKcKfIENLPxjEyhP+WBsyfnA9DH+u3HqQgIO3zN?=
- =?us-ascii?Q?ByIPD7gOsCwu7PIgvDgLq6+caxKrUPejtlQTfyvG3TKq5gsmeF/T2bT7Akz3?=
- =?us-ascii?Q?EpKhAeuDtWam6nb9yCxNHpavQFGX/ifOzWFdAs4TveoeCDbOX8FTdkOOvzVH?=
- =?us-ascii?Q?56lVFw=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 15fa9438-6726-41ab-1a1d-08db7262ebd5
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2023 14:22:19.3099
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YHhEzqGY9NTUT585dc2tvEdMiBcuuCQ7cL8rjSbivhXMhE6cSqNvgzUDQIubJ+JDqAUxR/CXnrHHoRkAjUDjbvUxghjKgGezJVIT6ysutjs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR13MB4143
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230621092350.3130866-2-msp@baylibre.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 11:23:42AM +0200, Markus Schneider-Pargmann wrote:
-
-...
-
-> +static int m_can_set_coalesce(struct net_device *dev,
-> +			      struct ethtool_coalesce *ec,
-> +			      struct kernel_ethtool_coalesce *kec,
-> +			      struct netlink_ext_ack *ext_ack)
-> +{
-> +	struct m_can_classdev *cdev = netdev_priv(dev);
-> +
-> +	if (cdev->can.state != CAN_STATE_STOPPED) {
-> +		netdev_err(dev, "Device is in use, please shut it down first\n");
-> +		return -EBUSY;
-> +	}
-> +
-> +	if (ec->rx_max_coalesced_frames_irq > cdev->mcfg[MRAM_RXF0].num) {
-> +		netdev_err(dev, "rx-frames-irq %u greater than the RX FIFO %u\n",
-> +			   ec->rx_max_coalesced_frames_irq,
-> +			   cdev->mcfg[MRAM_RXF0].num);
-> +		return -EINVAL;
-> +	}
-> +	if (ec->rx_max_coalesced_frames_irq == 0 != ec->rx_coalesce_usecs_irq == 0) {
-
 Hi Markus,
 
-For a W=1 build GCC 12.3.0 suggests, rather forcefully, that it would like
-some more parentheses here.
+kernel test robot noticed the following build warnings:
 
- drivers/net/can/m_can/m_can.c: In function 'm_can_set_coalesce':
- drivers/net/can/m_can/m_can.c:1978:45: warning: suggest parentheses around comparison in operand of '!=' [-Wparentheses]
-  1978 |         if (ec->rx_max_coalesced_frames_irq == 0 != ec->rx_coalesce_usecs_irq == 0) {
-       |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
- drivers/net/can/m_can/m_can.c:1978:50: warning: suggest parentheses around comparison in operand of '==' [-Wparentheses]
-  1978 |         if (ec->rx_max_coalesced_frames_irq == 0 != ec->rx_coalesce_usecs_irq == 0) {
-       |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[auto build test WARNING on ac9a78681b921877518763ba0e89202254349d1b]
 
-> +		netdev_err(dev, "rx-frames-irq and rx-usecs-irq can only be set together\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	cdev->rx_max_coalesced_frames_irq = ec->rx_max_coalesced_frames_irq;
-> +	cdev->rx_coalesce_usecs_irq = ec->rx_coalesce_usecs_irq;
-> +
-> +	return 0;
-> +}
+url:    https://github.com/intel-lab-lkp/linux/commits/Markus-Schneider-Pargmann/can-m_can-Write-transmit-header-and-data-in-one-transaction/20230621-173848
+base:   ac9a78681b921877518763ba0e89202254349d1b
+patch link:    https://lore.kernel.org/r/20230621092350.3130866-2-msp%40baylibre.com
+patch subject: [PATCH v4 01/12] can: m_can: Write transmit header and data in one transaction
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230622/202306220154.20bzOw90-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce: (https://download.01.org/0day-ci/archive/20230622/202306220154.20bzOw90-lkp@intel.com/reproduce)
 
-...
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306220154.20bzOw90-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/net/can/m_can/m_can.c: In function 'm_can_tx_handler':
+>> drivers/net/can/m_can/m_can.c:1635:27: warning: unused variable 'fifo_header' [-Wunused-variable]
+    1635 |         struct id_and_dlc fifo_header;
+         |                           ^~~~~~~~~~~
+
+
+vim +/fifo_header +1635 drivers/net/can/m_can/m_can.c
+
+10c1c3975a6663 Mario Huettel             2017-04-08  1627  
+441ac340169b79 Dan Murphy                2019-05-09  1628  static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
+e0d1f4816f2a7e Dong Aisheng              2014-07-16  1629  {
+441ac340169b79 Dan Murphy                2019-05-09  1630  	struct canfd_frame *cf = (struct canfd_frame *)cdev->tx_skb->data;
+9a10b9d9f7e946 Markus Schneider-Pargmann 2023-06-21  1631  	u8 len_padded = DIV_ROUND_UP(cf->len, 4);
+9a10b9d9f7e946 Markus Schneider-Pargmann 2023-06-21  1632  	struct m_can_fifo_element fifo_element;
+441ac340169b79 Dan Murphy                2019-05-09  1633  	struct net_device *dev = cdev->net;
+441ac340169b79 Dan Murphy                2019-05-09  1634  	struct sk_buff *skb = cdev->tx_skb;
+812270e5445bd1 Matt Kline                2021-08-16 @1635  	struct id_and_dlc fifo_header;
+812270e5445bd1 Matt Kline                2021-08-16  1636  	u32 cccr, fdflags;
+c1eaf8b9bd3145 Markus Schneider-Pargmann 2022-12-06  1637  	u32 txfqs;
+812270e5445bd1 Matt Kline                2021-08-16  1638  	int err;
+10c1c3975a6663 Mario Huettel             2017-04-08  1639  	int putidx;
+e0d1f4816f2a7e Dong Aisheng              2014-07-16  1640  
+e04b2cfe61072c Marc Kleine-Budde         2021-05-05  1641  	cdev->tx_skb = NULL;
+e04b2cfe61072c Marc Kleine-Budde         2021-05-05  1642  
+10c1c3975a6663 Mario Huettel             2017-04-08  1643  	/* Generate ID field for TX buffer Element */
+10c1c3975a6663 Mario Huettel             2017-04-08  1644  	/* Common to all supported M_CAN versions */
+e0d1f4816f2a7e Dong Aisheng              2014-07-16  1645  	if (cf->can_id & CAN_EFF_FLAG) {
+9a10b9d9f7e946 Markus Schneider-Pargmann 2023-06-21  1646  		fifo_element.id = cf->can_id & CAN_EFF_MASK;
+9a10b9d9f7e946 Markus Schneider-Pargmann 2023-06-21  1647  		fifo_element.id |= TX_BUF_XTD;
+e0d1f4816f2a7e Dong Aisheng              2014-07-16  1648  	} else {
+9a10b9d9f7e946 Markus Schneider-Pargmann 2023-06-21  1649  		fifo_element.id = ((cf->can_id & CAN_SFF_MASK) << 18);
+e0d1f4816f2a7e Dong Aisheng              2014-07-16  1650  	}
+e0d1f4816f2a7e Dong Aisheng              2014-07-16  1651  
+e0d1f4816f2a7e Dong Aisheng              2014-07-16  1652  	if (cf->can_id & CAN_RTR_FLAG)
+9a10b9d9f7e946 Markus Schneider-Pargmann 2023-06-21  1653  		fifo_element.id |= TX_BUF_RTR;
+e0d1f4816f2a7e Dong Aisheng              2014-07-16  1654  
+441ac340169b79 Dan Murphy                2019-05-09  1655  	if (cdev->version == 30) {
+10c1c3975a6663 Mario Huettel             2017-04-08  1656  		netif_stop_queue(dev);
+10c1c3975a6663 Mario Huettel             2017-04-08  1657  
+9a10b9d9f7e946 Markus Schneider-Pargmann 2023-06-21  1658  		fifo_element.dlc = can_fd_len2dlc(cf->len) << 16;
+80646733f11c2e Dong Aisheng              2014-11-18  1659  
+812270e5445bd1 Matt Kline                2021-08-16  1660  		/* Write the frame ID, DLC, and payload to the FIFO element. */
+9a10b9d9f7e946 Markus Schneider-Pargmann 2023-06-21  1661  		err = m_can_fifo_write(cdev, 0, M_CAN_FIFO_ID, &fifo_element, 2);
+e39381770ec9ca Matt Kline                2021-08-16  1662  		if (err)
+e39381770ec9ca Matt Kline                2021-08-16  1663  			goto out_fail;
+e39381770ec9ca Matt Kline                2021-08-16  1664  
+812270e5445bd1 Matt Kline                2021-08-16  1665  		err = m_can_fifo_write(cdev, 0, M_CAN_FIFO_DATA,
+9a10b9d9f7e946 Markus Schneider-Pargmann 2023-06-21  1666  				       cf->data, len_padded);
+e39381770ec9ca Matt Kline                2021-08-16  1667  		if (err)
+e39381770ec9ca Matt Kline                2021-08-16  1668  			goto out_fail;
+80646733f11c2e Dong Aisheng              2014-11-18  1669  
+441ac340169b79 Dan Murphy                2019-05-09  1670  		if (cdev->can.ctrlmode & CAN_CTRLMODE_FD) {
+441ac340169b79 Dan Murphy                2019-05-09  1671  			cccr = m_can_read(cdev, M_CAN_CCCR);
+20779943a080c5 Torin Cooper-Bennun       2021-05-04  1672  			cccr &= ~CCCR_CMR_MASK;
+80646733f11c2e Dong Aisheng              2014-11-18  1673  			if (can_is_canfd_skb(skb)) {
+80646733f11c2e Dong Aisheng              2014-11-18  1674  				if (cf->flags & CANFD_BRS)
+20779943a080c5 Torin Cooper-Bennun       2021-05-04  1675  					cccr |= FIELD_PREP(CCCR_CMR_MASK,
+20779943a080c5 Torin Cooper-Bennun       2021-05-04  1676  							   CCCR_CMR_CANFD_BRS);
+80646733f11c2e Dong Aisheng              2014-11-18  1677  				else
+20779943a080c5 Torin Cooper-Bennun       2021-05-04  1678  					cccr |= FIELD_PREP(CCCR_CMR_MASK,
+20779943a080c5 Torin Cooper-Bennun       2021-05-04  1679  							   CCCR_CMR_CANFD);
+80646733f11c2e Dong Aisheng              2014-11-18  1680  			} else {
+20779943a080c5 Torin Cooper-Bennun       2021-05-04  1681  				cccr |= FIELD_PREP(CCCR_CMR_MASK, CCCR_CMR_CAN);
+80646733f11c2e Dong Aisheng              2014-11-18  1682  			}
+441ac340169b79 Dan Murphy                2019-05-09  1683  			m_can_write(cdev, M_CAN_CCCR, cccr);
+80646733f11c2e Dong Aisheng              2014-11-18  1684  		}
+441ac340169b79 Dan Murphy                2019-05-09  1685  		m_can_write(cdev, M_CAN_TXBTIE, 0x1);
+2e8e79c416aae1 Marc Kleine-Budde         2022-03-17  1686  
+2e8e79c416aae1 Marc Kleine-Budde         2022-03-17  1687  		can_put_echo_skb(skb, dev, 0, 0);
+2e8e79c416aae1 Marc Kleine-Budde         2022-03-17  1688  
+441ac340169b79 Dan Murphy                2019-05-09  1689  		m_can_write(cdev, M_CAN_TXBAR, 0x1);
+10c1c3975a6663 Mario Huettel             2017-04-08  1690  		/* End of xmit function for version 3.0.x */
+10c1c3975a6663 Mario Huettel             2017-04-08  1691  	} else {
+10c1c3975a6663 Mario Huettel             2017-04-08  1692  		/* Transmit routine for version >= v3.1.x */
+10c1c3975a6663 Mario Huettel             2017-04-08  1693  
+c1eaf8b9bd3145 Markus Schneider-Pargmann 2022-12-06  1694  		txfqs = m_can_read(cdev, M_CAN_TXFQS);
+c1eaf8b9bd3145 Markus Schneider-Pargmann 2022-12-06  1695  
+10c1c3975a6663 Mario Huettel             2017-04-08  1696  		/* Check if FIFO full */
+c1eaf8b9bd3145 Markus Schneider-Pargmann 2022-12-06  1697  		if (_m_can_tx_fifo_full(txfqs)) {
+10c1c3975a6663 Mario Huettel             2017-04-08  1698  			/* This shouldn't happen */
+10c1c3975a6663 Mario Huettel             2017-04-08  1699  			netif_stop_queue(dev);
+10c1c3975a6663 Mario Huettel             2017-04-08  1700  			netdev_warn(dev,
+10c1c3975a6663 Mario Huettel             2017-04-08  1701  				    "TX queue active although FIFO is full.");
+441ac340169b79 Dan Murphy                2019-05-09  1702  
+441ac340169b79 Dan Murphy                2019-05-09  1703  			if (cdev->is_peripheral) {
+f524f829b75a7d Dan Murphy                2019-05-09  1704  				kfree_skb(skb);
+f524f829b75a7d Dan Murphy                2019-05-09  1705  				dev->stats.tx_dropped++;
+f524f829b75a7d Dan Murphy                2019-05-09  1706  				return NETDEV_TX_OK;
+f524f829b75a7d Dan Murphy                2019-05-09  1707  			} else {
+10c1c3975a6663 Mario Huettel             2017-04-08  1708  				return NETDEV_TX_BUSY;
+10c1c3975a6663 Mario Huettel             2017-04-08  1709  			}
+f524f829b75a7d Dan Murphy                2019-05-09  1710  		}
+10c1c3975a6663 Mario Huettel             2017-04-08  1711  
+10c1c3975a6663 Mario Huettel             2017-04-08  1712  		/* get put index for frame */
+c1eaf8b9bd3145 Markus Schneider-Pargmann 2022-12-06  1713  		putidx = FIELD_GET(TXFQS_TFQPI_MASK, txfqs);
+812270e5445bd1 Matt Kline                2021-08-16  1714  
+812270e5445bd1 Matt Kline                2021-08-16  1715  		/* Construct DLC Field, with CAN-FD configuration.
+812270e5445bd1 Matt Kline                2021-08-16  1716  		 * Use the put index of the fifo as the message marker,
+812270e5445bd1 Matt Kline                2021-08-16  1717  		 * used in the TX interrupt for sending the correct echo frame.
+812270e5445bd1 Matt Kline                2021-08-16  1718  		 */
+10c1c3975a6663 Mario Huettel             2017-04-08  1719  
+10c1c3975a6663 Mario Huettel             2017-04-08  1720  		/* get CAN FD configuration of frame */
+10c1c3975a6663 Mario Huettel             2017-04-08  1721  		fdflags = 0;
+10c1c3975a6663 Mario Huettel             2017-04-08  1722  		if (can_is_canfd_skb(skb)) {
+10c1c3975a6663 Mario Huettel             2017-04-08  1723  			fdflags |= TX_BUF_FDF;
+10c1c3975a6663 Mario Huettel             2017-04-08  1724  			if (cf->flags & CANFD_BRS)
+10c1c3975a6663 Mario Huettel             2017-04-08  1725  				fdflags |= TX_BUF_BRS;
+10c1c3975a6663 Mario Huettel             2017-04-08  1726  		}
+10c1c3975a6663 Mario Huettel             2017-04-08  1727  
+9a10b9d9f7e946 Markus Schneider-Pargmann 2023-06-21  1728  		fifo_element.dlc = FIELD_PREP(TX_BUF_MM_MASK, putidx) |
+e39381770ec9ca Matt Kline                2021-08-16  1729  			FIELD_PREP(TX_BUF_DLC_MASK, can_fd_len2dlc(cf->len)) |
+e39381770ec9ca Matt Kline                2021-08-16  1730  			fdflags | TX_BUF_EFC;
+10c1c3975a6663 Mario Huettel             2017-04-08  1731  
+9a10b9d9f7e946 Markus Schneider-Pargmann 2023-06-21  1732  		memcpy_and_pad(fifo_element.data, CANFD_MAX_DLEN, &cf->data,
+9a10b9d9f7e946 Markus Schneider-Pargmann 2023-06-21  1733  			       cf->len, 0);
+9a10b9d9f7e946 Markus Schneider-Pargmann 2023-06-21  1734  
+9a10b9d9f7e946 Markus Schneider-Pargmann 2023-06-21  1735  		err = m_can_fifo_write(cdev, putidx, M_CAN_FIFO_ID,
+9a10b9d9f7e946 Markus Schneider-Pargmann 2023-06-21  1736  				       &fifo_element, 2 + len_padded);
+e39381770ec9ca Matt Kline                2021-08-16  1737  		if (err)
+e39381770ec9ca Matt Kline                2021-08-16  1738  			goto out_fail;
+10c1c3975a6663 Mario Huettel             2017-04-08  1739  
+10c1c3975a6663 Mario Huettel             2017-04-08  1740  		/* Push loopback echo.
+10c1c3975a6663 Mario Huettel             2017-04-08  1741  		 * Will be looped back on TX interrupt based on message marker
+10c1c3975a6663 Mario Huettel             2017-04-08  1742  		 */
+1dcb6e57db8334 Vincent Mailhol           2021-01-11  1743  		can_put_echo_skb(skb, dev, putidx, 0);
+10c1c3975a6663 Mario Huettel             2017-04-08  1744  
+10c1c3975a6663 Mario Huettel             2017-04-08  1745  		/* Enable TX FIFO element to start transfer  */
+441ac340169b79 Dan Murphy                2019-05-09  1746  		m_can_write(cdev, M_CAN_TXBAR, (1 << putidx));
+10c1c3975a6663 Mario Huettel             2017-04-08  1747  
+10c1c3975a6663 Mario Huettel             2017-04-08  1748  		/* stop network queue if fifo full */
+441ac340169b79 Dan Murphy                2019-05-09  1749  		if (m_can_tx_fifo_full(cdev) ||
+10c1c3975a6663 Mario Huettel             2017-04-08  1750  		    m_can_next_echo_skb_occupied(dev, putidx))
+10c1c3975a6663 Mario Huettel             2017-04-08  1751  			netif_stop_queue(dev);
+10c1c3975a6663 Mario Huettel             2017-04-08  1752  	}
+e0d1f4816f2a7e Dong Aisheng              2014-07-16  1753  
+e0d1f4816f2a7e Dong Aisheng              2014-07-16  1754  	return NETDEV_TX_OK;
+e39381770ec9ca Matt Kline                2021-08-16  1755  
+e39381770ec9ca Matt Kline                2021-08-16  1756  out_fail:
+e39381770ec9ca Matt Kline                2021-08-16  1757  	netdev_err(dev, "FIFO write returned %d\n", err);
+e39381770ec9ca Matt Kline                2021-08-16  1758  	m_can_disable_all_interrupts(cdev);
+e39381770ec9ca Matt Kline                2021-08-16  1759  	return NETDEV_TX_BUSY;
+e0d1f4816f2a7e Dong Aisheng              2014-07-16  1760  }
+e0d1f4816f2a7e Dong Aisheng              2014-07-16  1761  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
