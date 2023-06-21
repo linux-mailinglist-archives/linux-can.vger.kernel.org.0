@@ -2,192 +2,185 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12194738443
-	for <lists+linux-can@lfdr.de>; Wed, 21 Jun 2023 15:01:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B76F7384FF
+	for <lists+linux-can@lfdr.de>; Wed, 21 Jun 2023 15:29:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232138AbjFUNBA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 21 Jun 2023 09:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37994 "EHLO
+        id S231809AbjFUN3Z (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 21 Jun 2023 09:29:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231428AbjFUNA6 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 21 Jun 2023 09:00:58 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A7DE72
-        for <linux-can@vger.kernel.org>; Wed, 21 Jun 2023 06:00:56 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-311099fac92so6840834f8f.0
-        for <linux-can@vger.kernel.org>; Wed, 21 Jun 2023 06:00:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687352455; x=1689944455;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sKfFOA2VQNsIqUQ1flZDf0bxDWmVBHZhAudfMdk56p0=;
-        b=HWV31ax/NO65WpLHfIYRSaZG6yjRk9QNUXB+xA5HDAe9pfonOfYq5aly5BHQsGJ41N
-         gLbbLh2iUJO63XfOji067mFyQSm0CabxHJW1fprMrXNo0ORUe19uirV+KHs9np78ztV4
-         Rd3o4G8ZprBSE6j3jhLRwlLKb/gZvRezPqXtt0uWvbEvZeHdPPf1JIOIi7/EY6sdPc2b
-         XNAng8v5xYnTgGQO07o78tLXBvxg3rZjs5PkAzuB2UdDCd+Sv0a5Sl/F9nx3fBnNMY5L
-         7aXHvJyTtZswns6dUP1OiuyqRunxMqy+IGJuNiF+XSqcaK5cqvL1HR9lWxHFwEsRRfRj
-         z2rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687352455; x=1689944455;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sKfFOA2VQNsIqUQ1flZDf0bxDWmVBHZhAudfMdk56p0=;
-        b=mBJBfw97D/oBscI9BT1cO+v3YLKlpucccnpx9qx77HyqpuKHRvOhJc/nnRTV8zoL1r
-         KoYy46Tw4QtiHEwW5JkHJBdQHylSbXle40I5KATUwPxoFYF+Pvm1D/lO4cqnrwD+tE/m
-         /K2ncsdWjHRXbOntorsJVk+6zen6m5FjyDVINfQ/YoLgyYKEb6YH9FMNA5m9nMFy6wHX
-         ArKGu6jkheqRXnRagISWwDMADvBXCFabhhVAnGYMbj2spfJr4gJVv/wfexKRX+BvAfS1
-         gdrB0ayEaHMyH1sQvxHWTTA4GujIHO3d/pekCkYe3DtnRV4GCiDaELnpFpyrz3YQEuY+
-         pHAg==
-X-Gm-Message-State: AC+VfDzqZrtDWCgmCzhi4aoeTJZ/BwGX1uX5H8A6aZmrmffhEVh0QIJ6
-        eNinrCWde5WM2gXIB/XUJhUmmw==
-X-Google-Smtp-Source: ACHHUZ6JKqWTaaZfAwNeGlMyFJwUZ4r0dshdn49b3nRktAmqVPae+sEM6nHr+tXoRT63f9YhRex0EA==
-X-Received: by 2002:adf:e8c2:0:b0:30f:cf67:5658 with SMTP id k2-20020adfe8c2000000b0030fcf675658mr13179240wrn.9.1687352442778;
-        Wed, 21 Jun 2023 06:00:42 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id e10-20020a5d65ca000000b002f28de9f73bsm4420499wrw.55.2023.06.21.06.00.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Jun 2023 06:00:42 -0700 (PDT)
-Message-ID: <21f12495-ffa9-a0bf-190a-11b6ae30ca45@linaro.org>
-Date:   Wed, 21 Jun 2023 15:00:39 +0200
+        with ESMTP id S232578AbjFUN3Y (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 21 Jun 2023 09:29:24 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC44191
+        for <linux-can@vger.kernel.org>; Wed, 21 Jun 2023 06:29:19 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1qBxte-0006R9-0j
+        for linux-can@vger.kernel.org; Wed, 21 Jun 2023 15:29:18 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id EA4821DE866
+        for <linux-can@vger.kernel.org>; Wed, 21 Jun 2023 13:29:16 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 02E911DE853;
+        Wed, 21 Jun 2023 13:29:16 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 0c105877;
+        Wed, 21 Jun 2023 13:29:15 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH net-next 0/33] pull-request: can-next 2023-06-21
+Date:   Wed, 21 Jun 2023 15:28:41 +0200
+Message-Id: <20230621132914.412546-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 5/6] can: tcan4x5x: Add support for tcan4552/4553
-Content-Language: en-US
-To:     Markus Schneider-Pargmann <msp@baylibre.com>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Michal Kubiak <michal.kubiak@intel.com>,
-        Vivek Yadav <vivek.2311@samsung.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Simon Horman <simon.horman@corigine.com>
-References: <20230621093103.3134655-1-msp@baylibre.com>
- <20230621093103.3134655-6-msp@baylibre.com>
- <32557326-650c-192d-9a82-ca5451b01f70@linaro.org>
- <20230621123158.fd3pd6i7aefawobf@blmsp>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230621123158.fd3pd6i7aefawobf@blmsp>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 21/06/2023 14:31, Markus Schneider-Pargmann wrote:
-> Hi Krzysztof,
-> 
-> On Wed, Jun 21, 2023 at 12:28:34PM +0200, Krzysztof Kozlowski wrote:
->> On 21/06/2023 11:31, Markus Schneider-Pargmann wrote:
->>> tcan4552 and tcan4553 do not have wake or state pins, so they are
->>> currently not compatible with the generic driver. The generic driver
->>> uses tcan4x5x_disable_state() and tcan4x5x_disable_wake() if the gpios
->>> are not defined. These functions use register bits that are not
->>> available in tcan4552/4553.
->>>
->>> This patch adds support by introducing version information to reflect if
->>> the chip has wake and state pins. Also the version is now checked.
->>>
->>> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
->>> ---
->>>  drivers/net/can/m_can/tcan4x5x-core.c | 128 +++++++++++++++++++++-----
->>>  1 file changed, 104 insertions(+), 24 deletions(-)
->>>
->>> diff --git a/drivers/net/can/m_can/tcan4x5x-core.c b/drivers/net/can/m_can/tcan4x5x-core.c
->>> index fb9375fa20ec..756acd122075 100644
->>> --- a/drivers/net/can/m_can/tcan4x5x-core.c
->>> +++ b/drivers/net/can/m_can/tcan4x5x-core.c
->>> @@ -7,6 +7,7 @@
->>>  #define TCAN4X5X_EXT_CLK_DEF 40000000
->>>  
->>>  #define TCAN4X5X_DEV_ID1 0x00
->>> +#define TCAN4X5X_DEV_ID1_TCAN 0x4e414354 /* ASCII TCAN */
->>>  #define TCAN4X5X_DEV_ID2 0x04
->>>  #define TCAN4X5X_REV 0x08
->>>  #define TCAN4X5X_STATUS 0x0C
->>> @@ -103,6 +104,13 @@
->>>  #define TCAN4X5X_WD_3_S_TIMER BIT(29)
->>>  #define TCAN4X5X_WD_6_S_TIMER (BIT(28) | BIT(29))
->>>  
->>> +struct tcan4x5x_version_info {
->>> +	u32 id2_register;
->>> +
->>> +	bool has_wake_pin;
->>> +	bool has_state_pin;
->>> +};
->>> +
->>>  static inline struct tcan4x5x_priv *cdev_to_priv(struct m_can_classdev *cdev)
->>>  {
->>>  	return container_of(cdev, struct tcan4x5x_priv, cdev);
->>> @@ -254,18 +262,68 @@ static int tcan4x5x_disable_state(struct m_can_classdev *cdev)
->>>  				  TCAN4X5X_DISABLE_INH_MSK, 0x01);
->>>  }
->>>  
->>> -static int tcan4x5x_get_gpios(struct m_can_classdev *cdev)
->>> +static const struct tcan4x5x_version_info tcan4x5x_generic;
->>> +static const struct of_device_id tcan4x5x_of_match[];
->>> +
->>> +static const struct tcan4x5x_version_info
->>> +*tcan4x5x_find_version_info(struct tcan4x5x_priv *priv, u32 id2_value)
->>> +{
->>> +	for (int i = 0; tcan4x5x_of_match[i].data; ++i) {
->>> +		const struct tcan4x5x_version_info *vinfo =
->>> +			tcan4x5x_of_match[i].data;
->>> +		if (!vinfo->id2_register || id2_value == vinfo->id2_register) {
->>> +			dev_warn(&priv->spi->dev, "TCAN device is %s, please use it in DT\n",
->>> +				 tcan4x5x_of_match[i].compatible);
->>> +			return vinfo;
->>> +		}
->>> +	}
->>> +
->>> +	return &tcan4x5x_generic;
->>
->> I don't understand what do you want to achieve here. Kernel job is not
->> to validate DTB, so if DTB says you have 4552, there is no need to
->> double check. On the other hand, you have Id register so entire idea of
->> custom compatibles can be dropped and instead you should detect the
->> variant based on the ID.
-> 
-> I can read the ID register but tcan4552 and 4553 do not have two
-> devicetree properties that tcan4550 has, namely state and wake gpios.
+Hello netdev-team,
 
-Does not matter, you don't use OF matching to then differentiate
-handling of GPIOs to then read the register. You first read registers,
-so everything is auto-detectable.
+this is a pull request of 33 patches for net-next/master.
 
-> See v1 discussion about that [1].
+The first patch is by Carsten Schmidt, targets the kvaser_usb driver
+and adds len8_dlc support.
 
-Yeah, but your code is different, although maybe we just misunderstood
-each other. You wrote that you cannot use the GPIOs, so I assumed you
-need to know the variant before using the GPIOs. Then you need
-compatibles. It's not the case here. You can read the variant and based
-on this skip entirely GPIOs as they are entirely missing.
+Marcel Hellwig's patch for the xilinx_can driver adds support for CAN
+transceivers via the PHY framework.
 
-> 
-> In v1 Marc pointed out that mcp251xfd is using an autodetection and warn
-> mechanism which I implemented here as well. [2]
+Frank Jungclaus contributes 6 patches for the esd_usb driver in
+preparation for the upcoming CAN-USB/3 support.
 
-But why? Just read the ID and detect the variant based on this. Your DT
-still can have separate compatibles followed by fallback, that's not a
-problem.
+A patch by me fixes the coding style in the m_can driver.
 
+Frank Jungclaus contributes 2 more patches for the esd_usb driver,
+again in preparation for the upcoming CAN-USB/3 support.
 
-Best regards,
-Krzysztof
+The 2 patches by Miquel Raynal for the sja1000 driver work around
+overruns stalls on the Renesas SoCs.
+
+2 patches by me fix the coding style in the rx-offload helper and the
+ti_hecc driver.
+
+Vincent Mailhol contributes 3 patches to fix and update the
+calculation of the length of CAN frames on the wire.
+
+Oliver Hartkopp's patch moves the CAN_RAW_FILTER_MAX definition into
+the correct header.
+
+The remaining 14 patches are by Jimmy Assarsson, target the
+kvaser_pciefd driver and bring various updates and improvements.
+
+regards,
+Marc
+
+---
+
+The following changes since commit d49b9b07725f5dfa3344dc3eed59b8ccc0a0ddbc:
+
+  Merge branch '100GbE' of git://git.kernel.org/pub/scm/linux/kernel/git/tnguy/next-queue (2023-05-22 12:44:44 +0100)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git tags/linux-can-next-for-6.5-20230621
+
+for you to fetch changes up to 36f404dc6825db5fdb818235b0af502e24ce3331:
+
+  Merge patch series "can: kvaser_pciefd: Fixes and improvements" (2023-06-20 15:38:53 +0200)
+
+----------------------------------------------------------------
+linux-can-next-for-6.5-20230621
+
+----------------------------------------------------------------
+Carsten Schmidt (1):
+      can: kvaser_usb: Add len8_dlc support
+
+Frank Jungclaus (8):
+      can: esd_usb: Make use of existing kernel macros
+      can: esd_usb: Replace initializer macros used for struct can_bittiming_const
+      can: esd_usb: Use consistent prefixes for macros
+      can: esd_usb: Prefix all structures with the device name
+      can: esd_usb: Replace hardcoded message length given to USB commands
+      can: esd_usb: Don't bother the user with nonessential log message
+      can: esd_usb: Make use of kernel macros BIT() and GENMASK()
+      can: esd_usb: Use consistent prefix ESD_USB_ for macros
+
+Jimmy Assarsson (14):
+      can: kvaser_pciefd: Remove useless write to interrupt register
+      can: kvaser_pciefd: Remove handler for unused KVASER_PCIEFD_PACK_TYPE_EFRAME_ACK
+      can: kvaser_pciefd: Add function to set skb hwtstamps
+      can: kvaser_pciefd: Set hardware timestamp on transmitted packets
+      can: kvaser_pciefd: Define unsigned constants with type suffix 'U'
+      can: kvaser_pciefd: Remove SPI flash parameter read functionality
+      can: kvaser_pciefd: Sort includes in alphabetic order
+      can: kvaser_pciefd: Rename device ID defines
+      can: kvaser_pciefd: Change return type for kvaser_pciefd_{receive,transmit,set_tx}_irq()
+      can: kvaser_pciefd: Sort register definitions
+      can: kvaser_pciefd: Use FIELD_{GET,PREP} and GENMASK where appropriate
+      can: kvaser_pciefd: Add len8_dlc support
+      can: kvaser_pciefd: Refactor code
+      can: kvaser_pciefd: Use TX FIFO size read from CAN controller
+
+Marc Kleine-Budde (9):
+      Merge patch series "can: esd_usb: More preparation before supporting esd CAN-USB/3"
+      can: m_can: fix coding style
+      Merge patch series "can: esd_usb: More preparation before supporting esd CAN-USB/3 (addendum)"
+      Merge patch series "can: sja1000: Prepare the use of a threaded handler"
+      can: rx-offload: fix coding style
+      can: ti_hecc: fix coding style
+      Merge patch series "can: fix coding style"
+      Merge patch series "can: length: fix definitions and add bit length calculation"
+      Merge patch series "can: kvaser_pciefd: Fixes and improvements"
+
+Marcel Hellwig (1):
+      can: dev: add transceiver capabilities to xilinx_can
+
+Miquel Raynal (2):
+      can: sja1000: Prepare the use of a threaded handler
+      can: sja1000: Prevent overrun stalls with a soft reset on Renesas SoCs
+
+Oliver Hartkopp (1):
+      can: uapi: move CAN_RAW_FILTER_MAX definition to raw.h
+
+Vincent Mailhol (3):
+      can: length: fix bitstuffing count
+      can: length: fix description of the RRS field
+      can: length: refactor frame lengths definition to add size in bits
+
+ drivers/net/can/Kconfig                           |   3 +-
+ drivers/net/can/dev/length.c                      |  15 +-
+ drivers/net/can/dev/rx-offload.c                  |   2 +-
+ drivers/net/can/kvaser_pciefd.c                   | 945 ++++++++--------------
+ drivers/net/can/m_can/m_can.c                     |   4 +-
+ drivers/net/can/sja1000/sja1000.c                 |  40 +-
+ drivers/net/can/sja1000/sja1000.h                 |   1 +
+ drivers/net/can/sja1000/sja1000_platform.c        |   5 +-
+ drivers/net/can/ti_hecc.c                         |   2 +-
+ drivers/net/can/usb/esd_usb.c                     | 350 ++++----
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c  |   2 +-
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c |  13 +-
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c  |   6 +-
+ drivers/net/can/xilinx_can.c                      |  19 +
+ include/linux/can/length.h                        | 315 +++++---
+ include/uapi/linux/can.h                          |   1 -
+ include/uapi/linux/can/raw.h                      |   2 +
+ 17 files changed, 811 insertions(+), 914 deletions(-)
+
 
