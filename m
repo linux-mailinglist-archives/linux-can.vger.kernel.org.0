@@ -2,53 +2,53 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39338738386
-	for <lists+linux-can@lfdr.de>; Wed, 21 Jun 2023 14:21:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EF407383D7
+	for <lists+linux-can@lfdr.de>; Wed, 21 Jun 2023 14:32:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbjFUMUd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 21 Jun 2023 08:20:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45340 "EHLO
+        id S231955AbjFUMcG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 21 Jun 2023 08:32:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbjFUMUc (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 21 Jun 2023 08:20:32 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44D5ADD
-        for <linux-can@vger.kernel.org>; Wed, 21 Jun 2023 05:20:31 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-3128fcd58f3so408628f8f.1
-        for <linux-can@vger.kernel.org>; Wed, 21 Jun 2023 05:20:31 -0700 (PDT)
+        with ESMTP id S229567AbjFUMcF (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 21 Jun 2023 08:32:05 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D3219A9
+        for <linux-can@vger.kernel.org>; Wed, 21 Jun 2023 05:32:02 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f9c532fa45so3977025e9.2
+        for <linux-can@vger.kernel.org>; Wed, 21 Jun 2023 05:32:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1687350030; x=1689942030;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1687350720; x=1689942720;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7f4alMY8gg7nfg1Gs0Kc2GVyxt35f+NA4guvssPWclU=;
-        b=lKs5cUXYYqaa4f16tHzfNJrPFCCzhJtaAztXqUE097kYOmtiJjOaABWyrKAXCPONOk
-         HCEzDPXkRUoREd2xL8pmoswCagNNEGkNC1E8vamxQwKhfmNnXldOhoxOGeyyEErPffZD
-         eDvnqcG4devpqAZsJJaU8cjFEgW17P2mFV4so9NP0m9VnGXq5aeqy6jPe8XgeBsIflPD
-         vqqRa5Lasgy059HIWcH6n4rXIz5EPVDBQ0P/P6/u3aqLoCPzC+O4jbyziDsJ2RxX2uOk
-         LS5Av3YXeWfaE+eluRGJiSyKuSmynFV/M2cUgxxW5tMsjjyjrhqwjmWjGteCyqEH3HLQ
-         D/uQ==
+        bh=YzmtLOP7oc0tzQzkG240IPHIjmF5+AVL1tQJX0AniZE=;
+        b=t0MfzdapmYbvx4BeFguQWa3HWQjpRz+5fQYExp1X3ihFsm+dRN6suYDI00ZJ4rB8qn
+         X/iYsYk9AMmd36uyii2GYuUks47TPm3k3mAX6GbfUjGV840CvGvNOe1/0IiLBe3Eb5fO
+         kA7nArvXSjMpdkGwYUdekfSymBqHatorZ8gO8oq23K9Ihjm0ZoWtGESJNuNPydCOmTat
+         mGOfUKLUrKpmyRmI/IZW9noSw6waJUsxg/fxB9OEmm97NIdXNolw8S7NjKyZow8guHls
+         Bko5Nq9aJn9OZiqcJHZUFDroBcZxe0/08Byti6/wpsCc6buTfpKYBh5LyEIksIFHjC50
+         Uluw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687350030; x=1689942030;
+        d=1e100.net; s=20221208; t=1687350720; x=1689942720;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7f4alMY8gg7nfg1Gs0Kc2GVyxt35f+NA4guvssPWclU=;
-        b=RqLbY+U0DMKl05v8iGQrDUbkZdrgOs87zQYwQ52hwEGqgEE9U585QdqUSp4FcTKOYj
-         NFK+fGuc86otqya7bi66rlVQPYnX2V3JlrByiZLrLmi+NSLkjZP+yt9dM29MAsD81kvp
-         P30ujE8K5nuM13K5Kv/pAzJR2eeZwLhwGqv+RERNvsUO3unvpQ6Y5SaejSV7uSkktDga
-         Ip9XwZLu9IyqlfYERPSmuRQfRfdU9XXyp9cVy0mJl0Atr1x/Ox9tfER96UCKPTupHh+F
-         sgbEDK+eceFeMscvfQKtBG/xwmn5QMGYzf3bLtX8+LrRpFq+0sWJW8dfij+OGOAXUvqc
-         SuoA==
-X-Gm-Message-State: AC+VfDxYmhayT/XF3YZpYkog3EPoDmIQnyLm8ZuosrQpcXKyHTYOHSDR
-        en4haO3OIgI7oCOMT8K8sAmSDg==
-X-Google-Smtp-Source: ACHHUZ5t8NdTvEtIeoot5tiyijkCTUsXj5AqSCoheunglvmVvDncsNH8SuDZ8Z83VLfjYw/YHWh/ug==
-X-Received: by 2002:adf:f488:0:b0:311:1b0b:2ec8 with SMTP id l8-20020adff488000000b003111b0b2ec8mr13851189wro.52.1687350029774;
-        Wed, 21 Jun 2023 05:20:29 -0700 (PDT)
+        bh=YzmtLOP7oc0tzQzkG240IPHIjmF5+AVL1tQJX0AniZE=;
+        b=Rs6Lu2pan/ftzg243Hg8SDkl5xNcgO3JVqZJZNyzkz34YAIDpxzXZk/fQjZedDg74Y
+         ++zgf2ByHtrNf+XNRDRGgg3b9oRhZNt+O57FyADk/LEFqGBXL3HHEbyW/PNzqCz59aVJ
+         szXlEDoiEN8sc/dgWrpDgj4BVRot+ZhdjrskYogYgEq9StjtK0FVahaN/fhDgryCchWx
+         lfn5M+kIUIF2XFTZFQzul43fGvuUp69kPmMU8kWgD4wNmfuaB7omFvLFCAq9cb7btpuW
+         kZBDLWQ3nb3XA0cJhckXGXNjrQd99HkFOMl4T1LFLNZaIarasXSp3App87wdyMYsh/wd
+         5GWw==
+X-Gm-Message-State: AC+VfDz8qqF490oB+ANQctlhQmYezPWy+EEJCgjfHFHdd5SH1CumeK8P
+        R/vzYWWSuTb0w9Vrv/4ybiIQQw==
+X-Google-Smtp-Source: ACHHUZ4Vt/DXBCbpC79d+F7Gxz4ssIFP+pZFUveEp3RHBDcx3TTeI+y2mnOP8Y9byDYF7iDjiKlBvg==
+X-Received: by 2002:a05:600c:3799:b0:3f9:b540:862d with SMTP id o25-20020a05600c379900b003f9b540862dmr4300764wmr.28.1687350720552;
+        Wed, 21 Jun 2023 05:32:00 -0700 (PDT)
 Received: from blmsp ([2001:4091:a247:82fa:b762:4f68:e1ed:5041])
-        by smtp.gmail.com with ESMTPSA id w18-20020a5d4b52000000b003127a21e986sm4314528wrs.104.2023.06.21.05.20.28
+        by smtp.gmail.com with ESMTPSA id j2-20020adfe502000000b002ca864b807csm4518345wrm.0.2023.06.21.05.31.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 05:20:29 -0700 (PDT)
-Date:   Wed, 21 Jun 2023 14:20:27 +0200
+        Wed, 21 Jun 2023 05:32:00 -0700 (PDT)
+Date:   Wed, 21 Jun 2023 14:31:58 +0200
 From:   Markus Schneider-Pargmann <msp@baylibre.com>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Wolfgang Grandegger <wg@grandegger.com>,
@@ -66,16 +66,15 @@ Cc:     Wolfgang Grandegger <wg@grandegger.com>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Simon Horman <simon.horman@corigine.com>
-Subject: Re: [PATCH v2 1/6] dt-bindings: can: tcan4x5x: Add tcan4552 and
- tcan4553 variants
-Message-ID: <20230621122027.k37n23yn62ygi6cq@blmsp>
+Subject: Re: [PATCH v2 5/6] can: tcan4x5x: Add support for tcan4552/4553
+Message-ID: <20230621123158.fd3pd6i7aefawobf@blmsp>
 References: <20230621093103.3134655-1-msp@baylibre.com>
- <20230621093103.3134655-2-msp@baylibre.com>
- <315991a3-c825-5df8-2e68-40f24c524df1@linaro.org>
+ <20230621093103.3134655-6-msp@baylibre.com>
+ <32557326-650c-192d-9a82-ca5451b01f70@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <315991a3-c825-5df8-2e68-40f24c524df1@linaro.org>
+In-Reply-To: <32557326-650c-192d-9a82-ca5451b01f70@linaro.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -87,22 +86,87 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 Hi Krzysztof,
 
-On Wed, Jun 21, 2023 at 12:29:40PM +0200, Krzysztof Kozlowski wrote:
-> On 21/06/2023 11:30, Markus Schneider-Pargmann wrote:
-> > These two new chips do not have state or wake pins.
+On Wed, Jun 21, 2023 at 12:28:34PM +0200, Krzysztof Kozlowski wrote:
+> On 21/06/2023 11:31, Markus Schneider-Pargmann wrote:
+> > tcan4552 and tcan4553 do not have wake or state pins, so they are
+> > currently not compatible with the generic driver. The generic driver
+> > uses tcan4x5x_disable_state() and tcan4x5x_disable_wake() if the gpios
+> > are not defined. These functions use register bits that are not
+> > available in tcan4552/4553.
+> > 
+> > This patch adds support by introducing version information to reflect if
+> > the chip has wake and state pins. Also the version is now checked.
 > > 
 > > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > ---
+> >  drivers/net/can/m_can/tcan4x5x-core.c | 128 +++++++++++++++++++++-----
+> >  1 file changed, 104 insertions(+), 24 deletions(-)
+> > 
+> > diff --git a/drivers/net/can/m_can/tcan4x5x-core.c b/drivers/net/can/m_can/tcan4x5x-core.c
+> > index fb9375fa20ec..756acd122075 100644
+> > --- a/drivers/net/can/m_can/tcan4x5x-core.c
+> > +++ b/drivers/net/can/m_can/tcan4x5x-core.c
+> > @@ -7,6 +7,7 @@
+> >  #define TCAN4X5X_EXT_CLK_DEF 40000000
+> >  
+> >  #define TCAN4X5X_DEV_ID1 0x00
+> > +#define TCAN4X5X_DEV_ID1_TCAN 0x4e414354 /* ASCII TCAN */
+> >  #define TCAN4X5X_DEV_ID2 0x04
+> >  #define TCAN4X5X_REV 0x08
+> >  #define TCAN4X5X_STATUS 0x0C
+> > @@ -103,6 +104,13 @@
+> >  #define TCAN4X5X_WD_3_S_TIMER BIT(29)
+> >  #define TCAN4X5X_WD_6_S_TIMER (BIT(28) | BIT(29))
+> >  
+> > +struct tcan4x5x_version_info {
+> > +	u32 id2_register;
+> > +
+> > +	bool has_wake_pin;
+> > +	bool has_state_pin;
+> > +};
+> > +
+> >  static inline struct tcan4x5x_priv *cdev_to_priv(struct m_can_classdev *cdev)
+> >  {
+> >  	return container_of(cdev, struct tcan4x5x_priv, cdev);
+> > @@ -254,18 +262,68 @@ static int tcan4x5x_disable_state(struct m_can_classdev *cdev)
+> >  				  TCAN4X5X_DISABLE_INH_MSK, 0x01);
+> >  }
+> >  
+> > -static int tcan4x5x_get_gpios(struct m_can_classdev *cdev)
+> > +static const struct tcan4x5x_version_info tcan4x5x_generic;
+> > +static const struct of_device_id tcan4x5x_of_match[];
+> > +
+> > +static const struct tcan4x5x_version_info
+> > +*tcan4x5x_find_version_info(struct tcan4x5x_priv *priv, u32 id2_value)
+> > +{
+> > +	for (int i = 0; tcan4x5x_of_match[i].data; ++i) {
+> > +		const struct tcan4x5x_version_info *vinfo =
+> > +			tcan4x5x_of_match[i].data;
+> > +		if (!vinfo->id2_register || id2_value == vinfo->id2_register) {
+> > +			dev_warn(&priv->spi->dev, "TCAN device is %s, please use it in DT\n",
+> > +				 tcan4x5x_of_match[i].compatible);
+> > +			return vinfo;
+> > +		}
+> > +	}
+> > +
+> > +	return &tcan4x5x_generic;
 > 
-> BTW, why did you ignore the tag?
+> I don't understand what do you want to achieve here. Kernel job is not
+> to validate DTB, so if DTB says you have 4552, there is no need to
+> double check. On the other hand, you have Id register so entire idea of
+> custom compatibles can be dropped and instead you should detect the
+> variant based on the ID.
 
-Thanks for your Acked-by.
+I can read the ID register but tcan4552 and 4553 do not have two
+devicetree properties that tcan4550 has, namely state and wake gpios.
+See v1 discussion about that [1].
 
-I did not add it from v1 because:
-- We had a long discussion after you sent your tag
-- I changed the binding documentation according to the discussion on v1
-  as stated in the cover letter:
-    "- Update the binding documentation to specify tcan4552 and tcan4553 with
-       the tcan4x5x as fallback"
+In v1 Marc pointed out that mcp251xfd is using an autodetection and warn
+mechanism which I implemented here as well. [2]
 
-Thanks,
+Best,
 Markus
+
+
+[1] https://lore.kernel.org/lkml/5f9fe7fb-9483-7dee-82c8-bd6564abcaab@linaro.org/
+[2] https://lore.kernel.org/lkml/20230315112905.qutggrdnpsttbase@pengutronix.de/
