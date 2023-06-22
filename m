@@ -2,45 +2,44 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4210B73999D
+	by mail.lfdr.de (Postfix) with ESMTP id 8AB1173999E
 	for <lists+linux-can@lfdr.de>; Thu, 22 Jun 2023 10:27:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230327AbjFVI1z (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 22 Jun 2023 04:27:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45348 "EHLO
+        id S230301AbjFVI14 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 22 Jun 2023 04:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230266AbjFVI1u (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 22 Jun 2023 04:27:50 -0400
+        with ESMTP id S230312AbjFVI1w (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 22 Jun 2023 04:27:52 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1D72123
-        for <linux-can@vger.kernel.org>; Thu, 22 Jun 2023 01:27:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C601FD8
+        for <linux-can@vger.kernel.org>; Thu, 22 Jun 2023 01:27:29 -0700 (PDT)
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1qCFez-00031b-59
+        id 1qCFez-00030m-72
         for linux-can@vger.kernel.org; Thu, 22 Jun 2023 10:27:21 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 50C291DF423
+        by bjornoya.blackshift.org (Postfix) with SMTP id 4CE361DF41F
         for <linux-can@vger.kernel.org>; Thu, 22 Jun 2023 08:27:06 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 339B11DF3A0;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 534AC1DF3A6;
         Thu, 22 Jun 2023 08:27:04 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 62aed880;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 9293256a;
         Thu, 22 Jun 2023 08:27:01 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Jimmy Assarsson <extja@kvaser.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        kernel@pengutronix.de, Oliver Hartkopp <socketcan@hartkopp.net>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next 23/33] can: kvaser_pciefd: Define unsigned constants with type suffix 'U'
-Date:   Thu, 22 Jun 2023 10:26:48 +0200
-Message-Id: <20230622082658.571150-24-mkl@pengutronix.de>
+Subject: [PATCH net-next 24/33] can: uapi: move CAN_RAW_FILTER_MAX definition to raw.h
+Date:   Thu, 22 Jun 2023 10:26:49 +0200
+Message-Id: <20230622082658.571150-25-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230622082658.571150-1-mkl@pengutronix.de>
 References: <20230622082658.571150-1-mkl@pengutronix.de>
@@ -59,40 +58,44 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Jimmy Assarsson <extja@kvaser.com>
+From: Oliver Hartkopp <socketcan@hartkopp.net>
 
-Define unsigned constants with type suffix 'U'
+CAN_RAW_FILTER_MAX is only relevant for CAN_RAW sockets and used in
+linux/can/raw.c or in userspace applications that include the raw.h
+file anyway.
 
-Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
-Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Link: https://lore.kernel.org/all/20230529134248.752036-6-extja@kvaser.com
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+Link: https://lore.kernel.org/all/20230609121051.9631-1-socketcan@hartkopp.net
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/kvaser_pciefd.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ include/uapi/linux/can.h     | 1 -
+ include/uapi/linux/can/raw.h | 2 ++
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/can/kvaser_pciefd.c b/drivers/net/can/kvaser_pciefd.c
-index 88bad2c2b641..abb556fb5cb6 100644
---- a/drivers/net/can/kvaser_pciefd.c
-+++ b/drivers/net/can/kvaser_pciefd.c
-@@ -25,12 +25,12 @@ MODULE_DESCRIPTION("CAN driver for Kvaser CAN/PCIe devices");
+diff --git a/include/uapi/linux/can.h b/include/uapi/linux/can.h
+index dd645ea72306..939db2388208 100644
+--- a/include/uapi/linux/can.h
++++ b/include/uapi/linux/can.h
+@@ -285,6 +285,5 @@ struct can_filter {
+ };
  
- #define KVASER_PCIEFD_WAIT_TIMEOUT msecs_to_jiffies(1000)
- #define KVASER_PCIEFD_BEC_POLL_FREQ (jiffies + msecs_to_jiffies(200))
--#define KVASER_PCIEFD_MAX_ERR_REP 256
--#define KVASER_PCIEFD_CAN_TX_MAX_COUNT 17
--#define KVASER_PCIEFD_MAX_CAN_CHANNELS 4
--#define KVASER_PCIEFD_DMA_COUNT 2
-+#define KVASER_PCIEFD_MAX_ERR_REP 256U
-+#define KVASER_PCIEFD_CAN_TX_MAX_COUNT 17U
-+#define KVASER_PCIEFD_MAX_CAN_CHANNELS 4U
-+#define KVASER_PCIEFD_DMA_COUNT 2U
+ #define CAN_INV_FILTER 0x20000000U /* to be set in can_filter.can_id */
+-#define CAN_RAW_FILTER_MAX 512 /* maximum number of can_filter set via setsockopt() */
  
--#define KVASER_PCIEFD_DMA_SIZE (4 * 1024)
-+#define KVASER_PCIEFD_DMA_SIZE (4U * 1024U)
- #define KVASER_PCIEFD_64BIT_DMA_BIT BIT(0)
+ #endif /* !_UAPI_CAN_H */
+diff --git a/include/uapi/linux/can/raw.h b/include/uapi/linux/can/raw.h
+index ff12f525c37c..31622c9b7988 100644
+--- a/include/uapi/linux/can/raw.h
++++ b/include/uapi/linux/can/raw.h
+@@ -49,6 +49,8 @@
+ #include <linux/can.h>
  
- #define KVASER_PCIEFD_VENDOR 0x1a07
+ #define SOL_CAN_RAW (SOL_CAN_BASE + CAN_RAW)
++#define CAN_RAW_FILTER_MAX 512 /* maximum number of can_filter set via setsockopt() */
++
+ enum {
+ 	SCM_CAN_RAW_ERRQUEUE = 1,
+ };
 -- 
 2.40.1
 
