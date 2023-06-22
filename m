@@ -2,104 +2,140 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B472739C36
-	for <lists+linux-can@lfdr.de>; Thu, 22 Jun 2023 11:11:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11BE3739C41
+	for <lists+linux-can@lfdr.de>; Thu, 22 Jun 2023 11:11:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232023AbjFVJKy (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 22 Jun 2023 05:10:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53494 "EHLO
+        id S232170AbjFVJLj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 22 Jun 2023 05:11:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232502AbjFVJKa (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 22 Jun 2023 05:10:30 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A01925BB3
-        for <linux-can@vger.kernel.org>; Thu, 22 Jun 2023 02:01:27 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qCGBy-0001hA-4K
-        for linux-can@vger.kernel.org; Thu, 22 Jun 2023 11:01:26 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 906BD1DF623
-        for <linux-can@vger.kernel.org>; Thu, 22 Jun 2023 09:01:25 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id D5E891DF617;
-        Thu, 22 Jun 2023 09:01:23 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 6d1a0d89;
-        Thu, 22 Jun 2023 09:01:23 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Oliver Hartkopp <socketcan@hartkopp.net>,
-        Carsten Schmidt <carsten.schmidt-achim@t-online.de>,
-        stable@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net] can: isotp: isotp_sendmsg(): fix return error fix on TX path
-Date:   Thu, 22 Jun 2023 11:01:22 +0200
-Message-Id: <20230622090122.574506-2-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230622090122.574506-1-mkl@pengutronix.de>
-References: <20230622090122.574506-1-mkl@pengutronix.de>
+        with ESMTP id S232251AbjFVJLP (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 22 Jun 2023 05:11:15 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B284B3C3C
+        for <linux-can@vger.kernel.org>; Thu, 22 Jun 2023 02:02:09 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f9c0abc8b1so16415655e9.1
+        for <linux-can@vger.kernel.org>; Thu, 22 Jun 2023 02:02:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1687424528; x=1690016528;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FNA1YL50Xe6xIWLWDbv/5+owKWV0B11hHH1r7HBWhJQ=;
+        b=MgwAvf6ErqDqXvFqlTHH+VdQgYRKVikpI7RfA1KVMYaNdmdGKV1HgoQ4A779PIIoX2
+         ko8jojCsTVVOu3k/CwAJKJlOVq3baneWs+wurW2rUSBs1hjJQgssg2YVfztcTGRp1KFG
+         ef9cf0jcppd52qYVyslcLJPJ4GFtYzN8WZBGtEnOcs06AShqefslylE8LN/AgSWp8nhT
+         2u4atoEyw7zL/ckd/Fc6zfJWfkPTaFa2oL2XGFcs0sAvcK448xEZl+K5NU3XtVzbQ/6H
+         B26IiSFbDZ+0b/TqHS1vN4z3ul6Dp86JAFQNsVz63muCMoHHOYPOCXY5yIso6pSQ0CsX
+         LYrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687424528; x=1690016528;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FNA1YL50Xe6xIWLWDbv/5+owKWV0B11hHH1r7HBWhJQ=;
+        b=OqNtWaptN6bgbPRpzm2n8FrGjZerOwqQM+dDnF3iupAv67Z61fo7Q1gC0h10gfssA7
+         CuOlSkQ9rVSem4ouHwXZQhTXd0sjf3ELcAMLWFvYXx+h4rv+KWI0RgbxuQwzpHV9/2Fh
+         GkCP/gH1IocsnQqzaa6i3q7aK0CwsdxmaL1wd/v48SnfvmOkY4NHqAvLX+XJVGSaO0iC
+         EzLbdXAODcLkhBOSidCIEMOhbxr01KZKAXbs8OlnPK1hYgctNqa/b1CHy0HXvyJ44aP/
+         HrfANCPyD6IOaBBxntY+L0rzutOXbPp5ySn36xsp6X6c+NqlHTr+i6HuvVqPRW6rUcAS
+         kKww==
+X-Gm-Message-State: AC+VfDyxTa55a4BxB7xJTDameYmBAXW8MSjgJgP7l6WOcf2bxY8BV3MQ
+        5ImU1SQPasavIRm0UnVk9cgqoQ==
+X-Google-Smtp-Source: ACHHUZ6ULGTZVS356/YkGIuUHehLy8QCjNnTymSxu6WJeiQC839ut9fvHVvZsBmjcD0sdyahKdGqNA==
+X-Received: by 2002:a05:600c:3799:b0:3fa:6fc:679f with SMTP id o25-20020a05600c379900b003fa06fc679fmr1475598wmr.25.1687424528163;
+        Thu, 22 Jun 2023 02:02:08 -0700 (PDT)
+Received: from blmsp ([2001:4091:a247:82fa:b762:4f68:e1ed:5041])
+        by smtp.gmail.com with ESMTPSA id f9-20020a7bc8c9000000b003f9b0f640b1sm7074125wml.22.2023.06.22.02.02.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 02:02:07 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 11:02:06 +0200
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Julien Panis <jpanis@baylibre.com>
+Subject: Re: [PATCH v4 04/12] can: m_can: Add rx coalescing ethtool support
+Message-ID: <20230622090206.qkzts2qlbqeiukhs@blmsp>
+References: <20230621092350.3130866-1-msp@baylibre.com>
+ <20230621092350.3130866-5-msp@baylibre.com>
+ <ZJMHlIp9x8HL97qT@corigine.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZJMHlIp9x8HL97qT@corigine.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Oliver Hartkopp <socketcan@hartkopp.net>
+Hi Simon,
 
-With commit d674a8f123b4 ("can: isotp: isotp_sendmsg(): fix return
-error on FC timeout on TX path") the missing correct return value in
-the case of a protocol error was introduced.
+On Wed, Jun 21, 2023 at 04:22:12PM +0200, Simon Horman wrote:
+> On Wed, Jun 21, 2023 at 11:23:42AM +0200, Markus Schneider-Pargmann wrote:
+> 
+> ...
+> 
+> > +static int m_can_set_coalesce(struct net_device *dev,
+> > +			      struct ethtool_coalesce *ec,
+> > +			      struct kernel_ethtool_coalesce *kec,
+> > +			      struct netlink_ext_ack *ext_ack)
+> > +{
+> > +	struct m_can_classdev *cdev = netdev_priv(dev);
+> > +
+> > +	if (cdev->can.state != CAN_STATE_STOPPED) {
+> > +		netdev_err(dev, "Device is in use, please shut it down first\n");
+> > +		return -EBUSY;
+> > +	}
+> > +
+> > +	if (ec->rx_max_coalesced_frames_irq > cdev->mcfg[MRAM_RXF0].num) {
+> > +		netdev_err(dev, "rx-frames-irq %u greater than the RX FIFO %u\n",
+> > +			   ec->rx_max_coalesced_frames_irq,
+> > +			   cdev->mcfg[MRAM_RXF0].num);
+> > +		return -EINVAL;
+> > +	}
+> > +	if (ec->rx_max_coalesced_frames_irq == 0 != ec->rx_coalesce_usecs_irq == 0) {
+> 
+> Hi Markus,
+> 
+> For a W=1 build GCC 12.3.0 suggests, rather forcefully, that it would like
+> some more parentheses here.
+> 
+>  drivers/net/can/m_can/m_can.c: In function 'm_can_set_coalesce':
+>  drivers/net/can/m_can/m_can.c:1978:45: warning: suggest parentheses around comparison in operand of '!=' [-Wparentheses]
+>   1978 |         if (ec->rx_max_coalesced_frames_irq == 0 != ec->rx_coalesce_usecs_irq == 0) {
+>        |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+>  drivers/net/can/m_can/m_can.c:1978:50: warning: suggest parentheses around comparison in operand of '==' [-Wparentheses]
+>   1978 |         if (ec->rx_max_coalesced_frames_irq == 0 != ec->rx_coalesce_usecs_irq == 0) {
+>        |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-But the way the error value has been read and sent to the user space
-does not follow the common scheme to clear the error after reading
-which is provided by the sock_error() function. This leads to an error
-report at the following write() attempt although everything should be
-working.
+Thanks, yes I just changed it because checkpatch doesn't like it the
+other way. I am going to change it back. Also I am wondering why clang
+doesn't complain at this point.
 
-Fixes: d674a8f123b4 ("can: isotp: isotp_sendmsg(): fix return error on FC timeout on TX path")
-Reported-by: Carsten Schmidt <carsten.schmidt-achim@t-online.de>
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-Link: https://lore.kernel.org/all/20230607072708.38809-1-socketcan@hartkopp.net
-Cc: stable@vger.kernel.org
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- net/can/isotp.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Best,
+Markus
 
-diff --git a/net/can/isotp.c b/net/can/isotp.c
-index 84f9aba02901..ca9d728d6d72 100644
---- a/net/can/isotp.c
-+++ b/net/can/isotp.c
-@@ -1112,8 +1112,9 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
- 		if (err)
- 			goto err_event_drop;
- 
--		if (sk->sk_err)
--			return -sk->sk_err;
-+		err = sock_error(sk);
-+		if (err)
-+			return err;
- 	}
- 
- 	return size;
-
-base-commit: 7f4e09700bdc13ce9aafa279bc999051e9bcda35
--- 
-2.40.1
-
-
+> 
+> > +		netdev_err(dev, "rx-frames-irq and rx-usecs-irq can only be set together\n");
+> > +		return -EINVAL;
+> > +	}
+> > +
+> > +	cdev->rx_max_coalesced_frames_irq = ec->rx_max_coalesced_frames_irq;
+> > +	cdev->rx_coalesce_usecs_irq = ec->rx_coalesce_usecs_irq;
+> > +
+> > +	return 0;
+> > +}
+> 
+> ...
