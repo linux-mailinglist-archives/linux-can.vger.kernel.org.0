@@ -2,74 +2,81 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11BE3739C41
-	for <lists+linux-can@lfdr.de>; Thu, 22 Jun 2023 11:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3FFB73A0C5
+	for <lists+linux-can@lfdr.de>; Thu, 22 Jun 2023 14:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232170AbjFVJLj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 22 Jun 2023 05:11:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53394 "EHLO
+        id S231140AbjFVMXr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 22 Jun 2023 08:23:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232251AbjFVJLP (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 22 Jun 2023 05:11:15 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B284B3C3C
-        for <linux-can@vger.kernel.org>; Thu, 22 Jun 2023 02:02:09 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f9c0abc8b1so16415655e9.1
-        for <linux-can@vger.kernel.org>; Thu, 22 Jun 2023 02:02:09 -0700 (PDT)
+        with ESMTP id S230502AbjFVMXr (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 22 Jun 2023 08:23:47 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C151199D
+        for <linux-can@vger.kernel.org>; Thu, 22 Jun 2023 05:23:44 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f9b4bf99c2so40019525e9.3
+        for <linux-can@vger.kernel.org>; Thu, 22 Jun 2023 05:23:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1687424528; x=1690016528;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1687436622; x=1690028622;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FNA1YL50Xe6xIWLWDbv/5+owKWV0B11hHH1r7HBWhJQ=;
-        b=MgwAvf6ErqDqXvFqlTHH+VdQgYRKVikpI7RfA1KVMYaNdmdGKV1HgoQ4A779PIIoX2
-         ko8jojCsTVVOu3k/CwAJKJlOVq3baneWs+wurW2rUSBs1hjJQgssg2YVfztcTGRp1KFG
-         ef9cf0jcppd52qYVyslcLJPJ4GFtYzN8WZBGtEnOcs06AShqefslylE8LN/AgSWp8nhT
-         2u4atoEyw7zL/ckd/Fc6zfJWfkPTaFa2oL2XGFcs0sAvcK448xEZl+K5NU3XtVzbQ/6H
-         B26IiSFbDZ+0b/TqHS1vN4z3ul6Dp86JAFQNsVz63muCMoHHOYPOCXY5yIso6pSQ0CsX
-         LYrg==
+        bh=IZTvColTzRsoYYuXx98QVc9rgM+Sp5furEz7cmDxQqk=;
+        b=FrdrBAh1oY9rhtVQjUyUaFAaGqRpbvPQjKnSFRgHkGPfttcKiwR+y/3oj436ntxKTD
+         akF4OCyeqLPrY7j5rbRe2fiEkXmNPxKauFkmwgwqZeMjpiF5n5YJqff1Q6TZhOOVLufZ
+         JepgQ/bIl1KkLeJWfzYlgsMk4BvnDZqp6fC1hLEVn4+8SKF94e+LSm3LhepY8fUQRc7q
+         lGUC/S/Nj1OHp766ZJBxQxTdF5Nf/uRZ7jhrKyPyiVlH0u1Z3LWflIhvxkuZdqxJJYXe
+         8qMkkWX2jB9wG1MEBKsvnOlSsV/eYQNUlxHECwjqMJiWC+/gTV4X0NyH70KlVJKfTDCG
+         aepQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687424528; x=1690016528;
+        d=1e100.net; s=20221208; t=1687436622; x=1690028622;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FNA1YL50Xe6xIWLWDbv/5+owKWV0B11hHH1r7HBWhJQ=;
-        b=OqNtWaptN6bgbPRpzm2n8FrGjZerOwqQM+dDnF3iupAv67Z61fo7Q1gC0h10gfssA7
-         CuOlSkQ9rVSem4ouHwXZQhTXd0sjf3ELcAMLWFvYXx+h4rv+KWI0RgbxuQwzpHV9/2Fh
-         GkCP/gH1IocsnQqzaa6i3q7aK0CwsdxmaL1wd/v48SnfvmOkY4NHqAvLX+XJVGSaO0iC
-         EzLbdXAODcLkhBOSidCIEMOhbxr01KZKAXbs8OlnPK1hYgctNqa/b1CHy0HXvyJ44aP/
-         HrfANCPyD6IOaBBxntY+L0rzutOXbPp5ySn36xsp6X6c+NqlHTr+i6HuvVqPRW6rUcAS
-         kKww==
-X-Gm-Message-State: AC+VfDyxTa55a4BxB7xJTDameYmBAXW8MSjgJgP7l6WOcf2bxY8BV3MQ
-        5ImU1SQPasavIRm0UnVk9cgqoQ==
-X-Google-Smtp-Source: ACHHUZ6ULGTZVS356/YkGIuUHehLy8QCjNnTymSxu6WJeiQC839ut9fvHVvZsBmjcD0sdyahKdGqNA==
-X-Received: by 2002:a05:600c:3799:b0:3fa:6fc:679f with SMTP id o25-20020a05600c379900b003fa06fc679fmr1475598wmr.25.1687424528163;
-        Thu, 22 Jun 2023 02:02:08 -0700 (PDT)
+        bh=IZTvColTzRsoYYuXx98QVc9rgM+Sp5furEz7cmDxQqk=;
+        b=XbYftBZ8l4sbZwvWl8WoOyrzb+0ky8QFd3RAZixe63bkvplujiZsXJkWet2TKj6Lk4
+         7wyBpCpDhmX3+OkPaPlSep6Hvb2kZaPmxrJovejqHzh184RKjUd1wvFJajbIRAIUp8GI
+         G6/z6jSZCy6gS9hL1f5ruQb5KDoRkOqBc8cP2HvYoaDjVsWDdoyl8C/2pjoaARBW0pRi
+         Dhz6E+Wywn2GcvTfBJvu+EeAcRhtqGeRJmKcUCYAbK0NrBTadTf2nn1LKZuoE1Ko3CyN
+         +Rjx1wgyCwCasVU0AY1xf1MzqrW0DV64Tqre9MLK4FpDmxAd5VDYJutR1nfVcArWAsvc
+         aHqg==
+X-Gm-Message-State: AC+VfDzlGmCEqeXeTghkT8CnW7IVDMNjJLLAS+NMPVDLsc2FfDpWmAvm
+        bZjUk8F9qsNb8HIv4Ti5Bob+6w==
+X-Google-Smtp-Source: ACHHUZ49yPhRB3Bsa6UwNftE5A3qbasCqFJ2m3h6OWnmPw2gcLquyHRYJ35Gq1sHi5pE0z7HxWfdwg==
+X-Received: by 2002:a1c:7209:0:b0:3f9:a10:10d0 with SMTP id n9-20020a1c7209000000b003f90a1010d0mr10666150wmc.17.1687436621924;
+        Thu, 22 Jun 2023 05:23:41 -0700 (PDT)
 Received: from blmsp ([2001:4091:a247:82fa:b762:4f68:e1ed:5041])
-        by smtp.gmail.com with ESMTPSA id f9-20020a7bc8c9000000b003f9b0f640b1sm7074125wml.22.2023.06.22.02.02.07
+        by smtp.gmail.com with ESMTPSA id c25-20020a7bc859000000b003f90ab2fff9sm7600746wml.9.2023.06.22.05.23.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 02:02:07 -0700 (PDT)
-Date:   Thu, 22 Jun 2023 11:02:06 +0200
+        Thu, 22 Jun 2023 05:23:41 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 14:23:39 +0200
 From:   Markus Schneider-Pargmann <msp@baylibre.com>
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         "David S . Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Julien Panis <jpanis@baylibre.com>
-Subject: Re: [PATCH v4 04/12] can: m_can: Add rx coalescing ethtool support
-Message-ID: <20230622090206.qkzts2qlbqeiukhs@blmsp>
-References: <20230621092350.3130866-1-msp@baylibre.com>
- <20230621092350.3130866-5-msp@baylibre.com>
- <ZJMHlIp9x8HL97qT@corigine.com>
+        Paolo Abeni <pabeni@redhat.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Michal Kubiak <michal.kubiak@intel.com>,
+        Vivek Yadav <vivek.2311@samsung.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Simon Horman <simon.horman@corigine.com>
+Subject: Re: [PATCH v2 5/6] can: tcan4x5x: Add support for tcan4552/4553
+Message-ID: <20230622122339.6tkajdcenj5r3vdm@blmsp>
+References: <20230621093103.3134655-1-msp@baylibre.com>
+ <20230621093103.3134655-6-msp@baylibre.com>
+ <32557326-650c-192d-9a82-ca5451b01f70@linaro.org>
+ <20230621123158.fd3pd6i7aefawobf@blmsp>
+ <21f12495-ffa9-a0bf-190a-11b6ae30ca45@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZJMHlIp9x8HL97qT@corigine.com>
+In-Reply-To: <21f12495-ffa9-a0bf-190a-11b6ae30ca45@linaro.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
@@ -80,62 +87,121 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Simon,
+Hi Krzysztof,
 
-On Wed, Jun 21, 2023 at 04:22:12PM +0200, Simon Horman wrote:
-> On Wed, Jun 21, 2023 at 11:23:42AM +0200, Markus Schneider-Pargmann wrote:
+On Wed, Jun 21, 2023 at 03:00:39PM +0200, Krzysztof Kozlowski wrote:
+> On 21/06/2023 14:31, Markus Schneider-Pargmann wrote:
+> > Hi Krzysztof,
+> > 
+> > On Wed, Jun 21, 2023 at 12:28:34PM +0200, Krzysztof Kozlowski wrote:
+> >> On 21/06/2023 11:31, Markus Schneider-Pargmann wrote:
+> >>> tcan4552 and tcan4553 do not have wake or state pins, so they are
+> >>> currently not compatible with the generic driver. The generic driver
+> >>> uses tcan4x5x_disable_state() and tcan4x5x_disable_wake() if the gpios
+> >>> are not defined. These functions use register bits that are not
+> >>> available in tcan4552/4553.
+> >>>
+> >>> This patch adds support by introducing version information to reflect if
+> >>> the chip has wake and state pins. Also the version is now checked.
+> >>>
+> >>> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> >>> ---
+> >>>  drivers/net/can/m_can/tcan4x5x-core.c | 128 +++++++++++++++++++++-----
+> >>>  1 file changed, 104 insertions(+), 24 deletions(-)
+> >>>
+> >>> diff --git a/drivers/net/can/m_can/tcan4x5x-core.c b/drivers/net/can/m_can/tcan4x5x-core.c
+> >>> index fb9375fa20ec..756acd122075 100644
+> >>> --- a/drivers/net/can/m_can/tcan4x5x-core.c
+> >>> +++ b/drivers/net/can/m_can/tcan4x5x-core.c
+> >>> @@ -7,6 +7,7 @@
+> >>>  #define TCAN4X5X_EXT_CLK_DEF 40000000
+> >>>  
+> >>>  #define TCAN4X5X_DEV_ID1 0x00
+> >>> +#define TCAN4X5X_DEV_ID1_TCAN 0x4e414354 /* ASCII TCAN */
+> >>>  #define TCAN4X5X_DEV_ID2 0x04
+> >>>  #define TCAN4X5X_REV 0x08
+> >>>  #define TCAN4X5X_STATUS 0x0C
+> >>> @@ -103,6 +104,13 @@
+> >>>  #define TCAN4X5X_WD_3_S_TIMER BIT(29)
+> >>>  #define TCAN4X5X_WD_6_S_TIMER (BIT(28) | BIT(29))
+> >>>  
+> >>> +struct tcan4x5x_version_info {
+> >>> +	u32 id2_register;
+> >>> +
+> >>> +	bool has_wake_pin;
+> >>> +	bool has_state_pin;
+> >>> +};
+> >>> +
+> >>>  static inline struct tcan4x5x_priv *cdev_to_priv(struct m_can_classdev *cdev)
+> >>>  {
+> >>>  	return container_of(cdev, struct tcan4x5x_priv, cdev);
+> >>> @@ -254,18 +262,68 @@ static int tcan4x5x_disable_state(struct m_can_classdev *cdev)
+> >>>  				  TCAN4X5X_DISABLE_INH_MSK, 0x01);
+> >>>  }
+> >>>  
+> >>> -static int tcan4x5x_get_gpios(struct m_can_classdev *cdev)
+> >>> +static const struct tcan4x5x_version_info tcan4x5x_generic;
+> >>> +static const struct of_device_id tcan4x5x_of_match[];
+> >>> +
+> >>> +static const struct tcan4x5x_version_info
+> >>> +*tcan4x5x_find_version_info(struct tcan4x5x_priv *priv, u32 id2_value)
+> >>> +{
+> >>> +	for (int i = 0; tcan4x5x_of_match[i].data; ++i) {
+> >>> +		const struct tcan4x5x_version_info *vinfo =
+> >>> +			tcan4x5x_of_match[i].data;
+> >>> +		if (!vinfo->id2_register || id2_value == vinfo->id2_register) {
+> >>> +			dev_warn(&priv->spi->dev, "TCAN device is %s, please use it in DT\n",
+> >>> +				 tcan4x5x_of_match[i].compatible);
+> >>> +			return vinfo;
+> >>> +		}
+> >>> +	}
+> >>> +
+> >>> +	return &tcan4x5x_generic;
+> >>
+> >> I don't understand what do you want to achieve here. Kernel job is not
+> >> to validate DTB, so if DTB says you have 4552, there is no need to
+> >> double check. On the other hand, you have Id register so entire idea of
+> >> custom compatibles can be dropped and instead you should detect the
+> >> variant based on the ID.
+> > 
+> > I can read the ID register but tcan4552 and 4553 do not have two
+> > devicetree properties that tcan4550 has, namely state and wake gpios.
 > 
-> ...
+> Does not matter, you don't use OF matching to then differentiate
+> handling of GPIOs to then read the register. You first read registers,
+> so everything is auto-detectable.
 > 
-> > +static int m_can_set_coalesce(struct net_device *dev,
-> > +			      struct ethtool_coalesce *ec,
-> > +			      struct kernel_ethtool_coalesce *kec,
-> > +			      struct netlink_ext_ack *ext_ack)
-> > +{
-> > +	struct m_can_classdev *cdev = netdev_priv(dev);
-> > +
-> > +	if (cdev->can.state != CAN_STATE_STOPPED) {
-> > +		netdev_err(dev, "Device is in use, please shut it down first\n");
-> > +		return -EBUSY;
-> > +	}
-> > +
-> > +	if (ec->rx_max_coalesced_frames_irq > cdev->mcfg[MRAM_RXF0].num) {
-> > +		netdev_err(dev, "rx-frames-irq %u greater than the RX FIFO %u\n",
-> > +			   ec->rx_max_coalesced_frames_irq,
-> > +			   cdev->mcfg[MRAM_RXF0].num);
-> > +		return -EINVAL;
-> > +	}
-> > +	if (ec->rx_max_coalesced_frames_irq == 0 != ec->rx_coalesce_usecs_irq == 0) {
+> > See v1 discussion about that [1].
 > 
-> Hi Markus,
-> 
-> For a W=1 build GCC 12.3.0 suggests, rather forcefully, that it would like
-> some more parentheses here.
-> 
->  drivers/net/can/m_can/m_can.c: In function 'm_can_set_coalesce':
->  drivers/net/can/m_can/m_can.c:1978:45: warning: suggest parentheses around comparison in operand of '!=' [-Wparentheses]
->   1978 |         if (ec->rx_max_coalesced_frames_irq == 0 != ec->rx_coalesce_usecs_irq == 0) {
->        |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
->  drivers/net/can/m_can/m_can.c:1978:50: warning: suggest parentheses around comparison in operand of '==' [-Wparentheses]
->   1978 |         if (ec->rx_max_coalesced_frames_irq == 0 != ec->rx_coalesce_usecs_irq == 0) {
->        |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> Yeah, but your code is different, although maybe we just misunderstood
+> each other. You wrote that you cannot use the GPIOs, so I assumed you
+> need to know the variant before using the GPIOs. Then you need
+> compatibles. It's not the case here. You can read the variant and based
+> on this skip entirely GPIOs as they are entirely missing.
 
-Thanks, yes I just changed it because checkpatch doesn't like it the
-other way. I am going to change it back. Also I am wondering why clang
-doesn't complain at this point.
+The version information is always readable for that chip, regardless of
+state and wake GPIOs as far as I know. So yes it is possible to setup
+the GPIOs based on the content of the ID register.
+
+I personally would prefer separate compatibles. The binding
+documentation needs to address that wake and state GPIOs are not
+available for tcan4552/4553. I think having compatibles that are for
+these chips would make sense then. However this is my opinion, you are
+the maintainer.
 
 Best,
 Markus
 
 > 
-> > +		netdev_err(dev, "rx-frames-irq and rx-usecs-irq can only be set together\n");
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	cdev->rx_max_coalesced_frames_irq = ec->rx_max_coalesced_frames_irq;
-> > +	cdev->rx_coalesce_usecs_irq = ec->rx_coalesce_usecs_irq;
-> > +
-> > +	return 0;
-> > +}
+> > 
+> > In v1 Marc pointed out that mcp251xfd is using an autodetection and warn
+> > mechanism which I implemented here as well. [2]
 > 
-> ...
+> But why? Just read the ID and detect the variant based on this. Your DT
+> still can have separate compatibles followed by fallback, that's not a
+> problem.
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
