@@ -2,56 +2,57 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C79BF74055D
-	for <lists+linux-can@lfdr.de>; Tue, 27 Jun 2023 23:00:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C20B6741226
+	for <lists+linux-can@lfdr.de>; Wed, 28 Jun 2023 15:20:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbjF0VAO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Tue, 27 Jun 2023 17:00:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59374 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjF0VAN (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 27 Jun 2023 17:00:13 -0400
-Received: from mailgw.kefri.org (mail.kefri.org [197.139.36.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AA092F2
-        for <linux-can@vger.kernel.org>; Tue, 27 Jun 2023 14:00:07 -0700 (PDT)
-Received: by mailgw.kefri.org (Postfix, from userid 1001)
-        id 16742A7B382; Tue, 27 Jun 2023 22:37:59 +0300 (EAT)
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
-X-Spam-Level: ***
-X-Spam-Status: No, score=3.3 required=5.0 tests=ADVANCE_FEE_3_NEW_MONEY,
-        BAYES_50,LOTS_OF_MONEY,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
-Received: from [45.81.39.165] (unknown [10.10.1.178])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mailgw.kefri.org (Postfix) with ESMTPS id 389C3A459BC;
-        Tue, 27 Jun 2023 21:48:52 +0300 (EAT)
+        id S229686AbjF1NUZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Wed, 28 Jun 2023 09:20:25 -0400
+Received: from [102.23.136.209] ([102.23.136.209]:2597 "EHLO mail.nsts.go.ke"
+        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
+        id S231830AbjF1NUB (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 28 Jun 2023 09:20:01 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.nsts.go.ke (Postfix) with ESMTP id 9D16A5AF525
+        for <linux-can@vger.kernel.org>; Tue, 27 Jun 2023 22:02:48 +0300 (EAT)
+Received: from mail.nsts.go.ke ([127.0.0.1])
+        by localhost (mail.nsts.go.ke [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id zJrCjyZOB8Wn for <linux-can@vger.kernel.org>;
+        Tue, 27 Jun 2023 22:02:48 +0300 (EAT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.nsts.go.ke (Postfix) with ESMTP id D04F25A7FBC
+        for <linux-can@vger.kernel.org>; Tue, 27 Jun 2023 22:02:47 +0300 (EAT)
+X-Virus-Scanned: amavisd-new at nsts.go.ke
+Received: from mail.nsts.go.ke ([127.0.0.1])
+        by localhost (mail.nsts.go.ke [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id iyALMkA3mHJ6 for <linux-can@vger.kernel.org>;
+        Tue, 27 Jun 2023 22:02:47 +0300 (EAT)
+Received: from [193.169.252.111] (unknown [193.169.252.111])
+        by mail.nsts.go.ke (Postfix) with ESMTPSA id 5AF0B10638E
+        for <linux-can@vger.kernel.org>; Tue, 27 Jun 2023 22:02:47 +0300 (EAT)
 Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 Content-Description: Mail message body
-Subject: I will send you more details once you reply
-To:     Recipients <poballa@kefri.org>
-From:   "Ms. Al-Hashimi" <poballa@kefri.org>
-Date:   Tue, 27 Jun 2023 20:48:47 +0200
-Reply-To: nationalbureau@kakao.com
-Message-Id: <20230627203820.16742A7B382@mailgw.kefri.org>
+Subject: URGENT MAIL
+To:     linux-can@vger.kernel.org
+From:   "Mr. Ronald Evergreen <said"@desaque.com
+Date:   Tue, 27 Jun 2023 12:03:03 -0700
+Reply-To: evergreen5565343@gmail.com
+Message-Id: <20230627190247.5AF0B10638E@mail.nsts.go.ke>
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Friday,
+Hi There,
 
-My name is Mrs. Reem E. Al-Hashimi, the Emirates Minister of State . I am writing to you to stand as my partner to receive Funds as my partner.
+How are you doing? I am sorry to have contacted you this way but it is a matter of great urgency. I seek your partnership on an important business transaction which will be of great benefit to both of us. I seek to work with you to claim as next of kin to
+late John Shumejda who died in a plane crash some years back, You can read more about his death on the BBC news link below:
+http://news.bbc.co.uk/2/hi/uk_news/england/1742404.stm
 
-I reached with the foreign companies to direct the gratifications to an open beneficiary account with a financial institution where it will be possible for me to instruct further transfer of the fund to a third party account through bank transfer or Cryptocurrency.
+Write to me on:
+( evergreen5565343@gmail.com ) and we can talk more about this.
 
-The amount is valued at $ 47,745,533.00 with a financial institution waiting my instruction for further transfer to a destination account as soon as I have your information indicating interest and I will compensate you with 30% of the total amount and you will also benefit from the investment.
 
-Please take note that the details so explained is the condition I will work with you as a partner and also add  my  WhatsApp number: +971581890339 to enable chat more. 
-
-My details and profile is below my website. https://www.mofaic.gov.ae/en/the-ministry/the-ministers/uae-minister-of-state-for-international-cooperation/minister-of-the-state-for-international-cooperation
-
-Regards,
-Mrs. Reem
+Yours faithfully.
+Mr. Ronald Evergreen,
+Financial Officer.
