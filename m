@@ -2,63 +2,127 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87449743689
-	for <lists+linux-can@lfdr.de>; Fri, 30 Jun 2023 10:08:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C86C0743671
+	for <lists+linux-can@lfdr.de>; Fri, 30 Jun 2023 10:05:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231361AbjF3IIH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 30 Jun 2023 04:08:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33588 "EHLO
+        id S232371AbjF3IFL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 30 Jun 2023 04:05:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbjF3IIF (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 30 Jun 2023 04:08:05 -0400
-X-Greylist: delayed 522 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 30 Jun 2023 01:08:05 PDT
-Received: from mail.tradeharbor.pl (mail.tradeharbor.pl [217.61.97.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D34B2D50
-        for <linux-can@vger.kernel.org>; Fri, 30 Jun 2023 01:08:05 -0700 (PDT)
-Received: by mail.tradeharbor.pl (Postfix, from userid 1002)
-        id 3A93A832C4; Fri, 30 Jun 2023 09:59:20 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tradeharbor.pl;
-        s=mail; t=1688111962;
-        bh=+8JR9pbZKhAL6uRH+3YthTnulvnmSqiK0eDpljLgYE8=;
-        h=Date:From:To:Subject:From;
-        b=n+3sFqVnFw1I8HJno89xQ3hZGZyZsyildeb5SLJsgtp/mlOwA30YPmhHG336niEcF
-         4kv/fxWZ7KnN3THUxsu9gTJ4eELzK01ebg848t2MdYREbwQI7ZxA6zjgnnrSYtcDiP
-         c1Wmlsb7h3Stysuc1BVTGGtHSnqx+SxmVABORIlm5iXURu03jZcX/F3Py/IPzc+hMg
-         xRByzJqNkS2IGxdx9cilYBgzdM+AaMKOIicgmEcbeanFcxpsLQRNUWU29s3nWyZfq6
-         6nq72BqTkJ1Ag4aPkHf8l2hBBdIO1H/2BE21/H3rPCKhTy77rdgyrUg0ksD9NR2ihy
-         4Bx0U5mLb7UBg==
-Received: by mail.tradeharbor.pl for <linux-can@vger.kernel.org>; Fri, 30 Jun 2023 07:59:19 GMT
-Message-ID: <20230630083000-0.1.6.55z.0.q85amnkmwh@tradeharbor.pl>
-Date:   Fri, 30 Jun 2023 07:59:19 GMT
-From:   "Piotr Firek" <piotr.firek@tradeharbor.pl>
-To:     <linux-can@vger.kernel.org>
-Subject: =?UTF-8?Q?Prosz=C4=99_o_kontakt?=
-X-Mailer: mail.tradeharbor.pl
+        with ESMTP id S232406AbjF3IFF (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 30 Jun 2023 04:05:05 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4651B30C4
+        for <linux-can@vger.kernel.org>; Fri, 30 Jun 2023 01:05:03 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1qF97V-0001Tn-Fn; Fri, 30 Jun 2023 10:04:45 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 1178B1E5785;
+        Fri, 30 Jun 2023 08:04:42 +0000 (UTC)
+Date:   Fri, 30 Jun 2023 10:04:40 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Michal Simek <michal.simek@amd.com>
+Cc:     Srinivas Goud <srinivas.goud@amd.com>, wg@grandegger.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, gcnu.goud@gmail.com, git@amd.com,
+        michal.simek@xilinx.com, linux-can@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] can: xilinx_can: Add ECC feature support
+Message-ID: <20230630-drop-down-sloped-d00e26bd9085-mkl@pengutronix.de>
+References: <1686570177-2836108-1-git-send-email-srinivas.goud@amd.com>
+ <20230616-unneeded-denote-eaa4053514d8-mkl@pengutronix.de>
+ <8bda5b4b-54ac-0b20-4167-686856347e54@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="l4i42uioh2eh4lok"
+Content-Disposition: inline
+In-Reply-To: <8bda5b4b-54ac-0b20-4167-686856347e54@amd.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Dzie=C5=84 dobry,
 
-Czy jest mo=C5=BCliwo=C5=9B=C4=87 nawi=C4=85zania wsp=C3=B3=C5=82pracy z =
-Pa=C5=84stwem?
+--l4i42uioh2eh4lok
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Z ch=C4=99ci=C4=85 porozmawiam z osob=C4=85 zajmuj=C4=85c=C4=85 si=C4=99 =
-dzia=C5=82aniami zwi=C4=85zanymi ze sprzeda=C5=BC=C4=85.
+On 23.06.2023 09:48:16, Michal Simek wrote:
+> Hi Marc,
+>=20
+> On 6/16/23 13:12, Marc Kleine-Budde wrote:
+> > On 12.06.2023 17:12:54, Srinivas Goud wrote:
+> > > ECC feature added to Tx and Rx FIFO=E2=80=99s for Xilinx CAN Controll=
+er.
+> > > Part of this feature configuration and counter registers added
+> > > in Xilinx CAN Controller for 1bit/2bit ECC errors count and reset.
+> > > Please find more details in PG096 v5.1 document.
+> >=20
+> > The document "PG096 (v5.1) May 16, 2023 CAN v5.1" [1] lists the
+> > XCAN_ECC_CFG_OFFSET as reserved, although it has a section "ECC
+> > Configuration Register".
+> >=20
+> > [1] https://docs.xilinx.com/viewer/book-attachment/Bv6XZP9HRonCGi58fl10=
+dw/ch1ZLpOt4UKWNub7DXjJ7Q
+> >=20
+> > The other registers (XCAN_TXTLFIFO_ECC_OFFSET, XCAN_TXOLFIFO_ECC_OFFSET,
+> > XCAN_TXOLFIFO_ECC_OFFSET) are also listed as reserved and not even
+> > mentioned on the document. Am I missing something?
+>=20
+> We cross check available public documentation with HW team and there is no
+> public documentation for this feature yet. We didn't get any exact day wh=
+en
+> documentation is going to be released.
 
-Pomagamy skutecznie pozyskiwa=C4=87 nowych klient=C3=B3w.
+It's a pity, but's that the way it's sometimes is.
 
-Zapraszam do kontaktu.
+> Unfortunately it is not the first or even last time when this is happening
+> but I still think is good to get this feature done properly till the time
+> when documentation catch it up. Please let me know if you have any concern
+> about it.
 
+No problem, update the cover letter and mention that the documentation
+is not public available, yet. For reference we can keep the reference to
+the internal doc (and mention that).
 
-Pozdrawiam
-Piotr Firek
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--l4i42uioh2eh4lok
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmSejIkACgkQvlAcSiqK
+BOgQDAgApM6bEsPxOTvK98GSqYgvFZHiuJ5Ikc7xLbAKqQcvTOcM24fzd4+NeXm7
+DKj1h5BUg1TyiOUueBAhsf4jaKS1cRgi/MGLbKpcLn6nanhl5fhO7hnMcfk3cylg
+gp/dVEwcIC/zCq8waYVD6zAbkKSzsK6UUO8u7+d0+wlWxK8XF9SfQBXN46bCD26+
+4sP2Cm/S2Z9LIi36XZgKLAUoSdo8MnHkwcYYCSgAdZMcvG5d5sPPvMtU40cmmQhZ
+fgvnU7lL8SP8/gtrTYG5/IH9BBP1/Af/quEspcu7JgOcelQftPdpun6rQT/P2O5B
+kqNatB6pvlHBIkZY0pwWRGnjaNTqDA==
+=sUaS
+-----END PGP SIGNATURE-----
+
+--l4i42uioh2eh4lok--
