@@ -2,53 +2,70 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C86C0743671
-	for <lists+linux-can@lfdr.de>; Fri, 30 Jun 2023 10:05:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F279A744005
+	for <lists+linux-can@lfdr.de>; Fri, 30 Jun 2023 18:44:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232371AbjF3IFL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 30 Jun 2023 04:05:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60690 "EHLO
+        id S230009AbjF3QoU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 30 Jun 2023 12:44:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232406AbjF3IFF (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 30 Jun 2023 04:05:05 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4651B30C4
-        for <linux-can@vger.kernel.org>; Fri, 30 Jun 2023 01:05:03 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qF97V-0001Tn-Fn; Fri, 30 Jun 2023 10:04:45 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 1178B1E5785;
-        Fri, 30 Jun 2023 08:04:42 +0000 (UTC)
-Date:   Fri, 30 Jun 2023 10:04:40 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Michal Simek <michal.simek@amd.com>
-Cc:     Srinivas Goud <srinivas.goud@amd.com>, wg@grandegger.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, gcnu.goud@gmail.com, git@amd.com,
-        michal.simek@xilinx.com, linux-can@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] can: xilinx_can: Add ECC feature support
-Message-ID: <20230630-drop-down-sloped-d00e26bd9085-mkl@pengutronix.de>
-References: <1686570177-2836108-1-git-send-email-srinivas.goud@amd.com>
- <20230616-unneeded-denote-eaa4053514d8-mkl@pengutronix.de>
- <8bda5b4b-54ac-0b20-4167-686856347e54@amd.com>
+        with ESMTP id S229537AbjF3QoU (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 30 Jun 2023 12:44:20 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5F73AAF
+        for <linux-can@vger.kernel.org>; Fri, 30 Jun 2023 09:44:17 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3fbc1218262so18980415e9.3
+        for <linux-can@vger.kernel.org>; Fri, 30 Jun 2023 09:44:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mobile-devices.fr; s=google; t=1688143455; x=1690735455;
+        h=content-transfer-encoding:subject:cc:to:content-language:user-agent
+         :mime-version:date:message-id:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qKBfccrJBTzwPsKp9F16ppy62jt1IusEq5OosFTqNhM=;
+        b=L6uyS6gSmWW0LEFcLhBaGROe2QRiYaL5y2vDxaVytgFCbKcVwWTCDIKI+xSYkdawQJ
+         R8XXgwEJxEFFaP50qF891/Gyfh9xxsYNXvw1gGeBXUYKSbV9m9NNW2r+yYfanocUQKVr
+         VVqrtDu1iM9SsWUOUnm4fUhooVa2yUDT55ctE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688143455; x=1690735455;
+        h=content-transfer-encoding:subject:cc:to:content-language:user-agent
+         :mime-version:date:message-id:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qKBfccrJBTzwPsKp9F16ppy62jt1IusEq5OosFTqNhM=;
+        b=VxU3lIifJgkTtyVG/6ZrJryAp9gmah1PQEQv+mFadowf9JLJNv/twwp3ECmBXrDyaS
+         Vv1hvP/N4Pj8fAKLYCR+NwM+FKt3lwR9zQqeIakaK6Qcqh2KppW4BLUI058tmfUElzYv
+         RFKr8RW1XYzX9cmGALh6lizWdM4ZXHminuoUKdL9UJupZ3KXPjEVazbqGPKrYTOJGqS2
+         zbOlJKTkTvCEJHYZdYdj+/a741TaCdAkTOPJ+T2yvjULwB0YA1O4zHQd+EQBb5kmhpOk
+         14hPZxELw5RK5GLNE5ciqEexU7LAQh5EJLt4vwLoyigw5alIx3L/OMAvyi58qBZ9Vp9U
+         5bpg==
+X-Gm-Message-State: AC+VfDwOOnbHrX4A+NfwTyR/hRig82lrpFiRIMNJwMt5dh/295wtCA8S
+        tRKhF7ngfBpprWR4IzYIEs4LMg==
+X-Google-Smtp-Source: ACHHUZ4ByD+2TUO16Ne5E+K5eO4TL2k30sTEafqHWqmMmDw/d9Kd3NmTMrAYwXB8L2/yVvPuGaQGWw==
+X-Received: by 2002:a1c:770b:0:b0:3fa:9538:963e with SMTP id t11-20020a1c770b000000b003fa9538963emr2410893wmi.36.1688143455489;
+        Fri, 30 Jun 2023 09:44:15 -0700 (PDT)
+Received: from [10.42.42.90] (static-css-cqn-143221.business.bouyguestelecom.com. [176.149.143.221])
+        by smtp.gmail.com with ESMTPSA id t25-20020a7bc3d9000000b003fbb8c7c799sm4666532wmj.30.2023.06.30.09.44.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Jun 2023 09:44:15 -0700 (PDT)
+From:   Maxime Jayat <maxime.jayat@mobile-devices.fr>
+X-Google-Original-From: Maxime Jayat <maxime.jayat@munic.io>
+Message-ID: <11328958-453f-447f-9af8-3b5824dfb041@munic.io>
+Date:   Fri, 30 Jun 2023 18:44:14 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="l4i42uioh2eh4lok"
-Content-Disposition: inline
-In-Reply-To: <8bda5b4b-54ac-0b20-4167-686856347e54@amd.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Content-Language: en-US
+To:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Michal Sojka <michal.sojka@cvut.cz>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Dae R. Jeong" <threeearcat@gmail.com>,
+        Hillf Danton <hdanton@sina.com>
+Subject: can: isotp: epoll breaks isotp_sendmsg
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,72 +74,112 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi,
 
---l4i42uioh2eh4lok
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+There is something not clear happening with the non-blocking behavior
+of ISO-TP sockets in the TX path, but more importantly, using epoll now
+completely breaks isotp_sendmsg.
+I believe it is related to
+79e19fa79c ("can: isotp: isotp_ops: fix poll() to not report false 
+EPOLLOUT events"),
+but actually is probably deeper than that.
 
-On 23.06.2023 09:48:16, Michal Simek wrote:
-> Hi Marc,
->=20
-> On 6/16/23 13:12, Marc Kleine-Budde wrote:
-> > On 12.06.2023 17:12:54, Srinivas Goud wrote:
-> > > ECC feature added to Tx and Rx FIFO=E2=80=99s for Xilinx CAN Controll=
-er.
-> > > Part of this feature configuration and counter registers added
-> > > in Xilinx CAN Controller for 1bit/2bit ECC errors count and reset.
-> > > Please find more details in PG096 v5.1 document.
-> >=20
-> > The document "PG096 (v5.1) May 16, 2023 CAN v5.1" [1] lists the
-> > XCAN_ECC_CFG_OFFSET as reserved, although it has a section "ECC
-> > Configuration Register".
-> >=20
-> > [1] https://docs.xilinx.com/viewer/book-attachment/Bv6XZP9HRonCGi58fl10=
-dw/ch1ZLpOt4UKWNub7DXjJ7Q
-> >=20
-> > The other registers (XCAN_TXTLFIFO_ECC_OFFSET, XCAN_TXOLFIFO_ECC_OFFSET,
-> > XCAN_TXOLFIFO_ECC_OFFSET) are also listed as reserved and not even
-> > mentioned on the document. Am I missing something?
->=20
-> We cross check available public documentation with HW team and there is no
-> public documentation for this feature yet. We didn't get any exact day wh=
-en
-> documentation is going to be released.
+I don't completely understand what is exactly going on, so I am sharing
+the problem I face:
 
-It's a pity, but's that the way it's sometimes is.
+With an ISO-TP socket in non-blocking mode, using epoll seems to make
+isotp_sendmsg always return -EAGAIN.
 
-> Unfortunately it is not the first or even last time when this is happening
-> but I still think is good to get this feature done properly till the time
-> when documentation catch it up. Please let me know if you have any concern
-> about it.
+I have a non-blocking socket + epoll version of can-utils isotpsend 
+available for
+testing at https://gist.github.com/MJayat/4857da43ab154e4ba644d2446b5fa46d
+With this version I do the following test:
 
-No problem, update the cover letter and mention that the documentation
-is not public available, yet. For reference we can keep the reference to
-the internal doc (and mention that).
+isotprecv -l -m 0x80 -s 7e8 -d 7e0 vcan0 &
+echo "01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f" | strace ./isotpsend 
+-l10 -s 7E0 -d 7E8 vcan0
 
-regards,
-Marc
+I get:
+...
+15:37:02.456849 epoll_ctl(4, EPOLL_CTL_ADD, 3, 
+{events=EPOLLIN|EPOLLOUT|EPOLLRDHUP, data={u32=0, u64=0}}) = 0 <0.000249>
+15:37:02.457839 epoll_wait(4, [{events=EPOLLOUT, data={u32=0, u64=0}}], 
+1, 2000) = 1 <0.000200>
+15:37:02.458838 write(3, 
+"\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f", 15) = -1 
+EAGAIN (Resource temporarily unavailable) <0.000278>
+15:37:02.459908 epoll_wait(4, [{events=EPOLLOUT, data={u32=0, u64=0}}], 
+1, 2000) = 1 <0.000250>
+15:37:02.460879 write(3, 
+"\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f", 15) = -1 
+EAGAIN (Resource temporarily unavailable) <0.000272>
+15:37:02.461831 epoll_wait(4, [{events=EPOLLOUT, data={u32=0, u64=0}}], 
+1, 2000) = 1 <0.000199>
+...
+impossible to write on the socket, and busy-looping.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+With a change to epoll_ctl flags, now including EPOLLET, I get:
+...
+15:36:22.443689 epoll_ctl(4, EPOLL_CTL_ADD, 3, 
+{events=EPOLLIN|EPOLLOUT|EPOLLRDHUP|EPOLLET, data={u32=0, u64=0}}) = 0 
+<0.000171>
+15:36:22.444514 epoll_wait(4, [{events=EPOLLOUT, data={u32=0, u64=0}}], 
+1, 2000) = 1 <0.000188>
+15:36:22.445413 write(3, 
+"\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f", 15) = -1 
+EAGAIN (Resource temporarily unavailable) <0.000175>
+15:36:22.446335 epoll_wait(4, [], 1, 2000) = 0 <2.026006>
+...
+epoll_wait now blocks indefinitely.
 
---l4i42uioh2eh4lok
-Content-Type: application/pgp-signature; name="signature.asc"
+By reverting 79e19fa79c, I get better results but still incorrect:
+...
+15:41:43.890880 epoll_ctl(4, EPOLL_CTL_ADD, 3, 
+{events=EPOLLIN|EPOLLOUT|EPOLLRDHUP, data={u32=0, u64=0}}) = 0 <0.000200>
+15:41:43.892011 epoll_wait(4, [{events=EPOLLOUT, data={u32=0, u64=0}}], 
+1, 2000) = 1 <0.000408>
+15:41:43.893148 write(3, 
+"\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f", 15) = 15 
+<0.000458>
+15:41:43.894405 epoll_wait(4, [{events=EPOLLOUT, data={u32=0, u64=0}}], 
+1, 2000) = 1 <0.000257>
+15:41:43.895385 write(3, 
+"\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f", 15) = 15 
+<0.128429>
+15:41:44.028757 epoll_wait(4, [{events=EPOLLOUT, data={u32=0, u64=0}}], 
+1, 2000) = 1 <0.001886>
+15:41:44.040858 write(3, 
+"\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f", 15) = 15 
+<0.108069>
+...
+It is then possible to write on the socket but the write is blocking, 
+which is
+not the expected behavior for a non-blocking socket.
 
------BEGIN PGP SIGNATURE-----
+I don't know how to solve the problem. To me, using wq_has_sleeper seems 
+weird.
+The implementation of isotp_poll feels weird too (calling both 
+datagram_poll and
+poll_wait?). But I am not sure what would be the correct implementation.
 
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmSejIkACgkQvlAcSiqK
-BOgQDAgApM6bEsPxOTvK98GSqYgvFZHiuJ5Ikc7xLbAKqQcvTOcM24fzd4+NeXm7
-DKj1h5BUg1TyiOUueBAhsf4jaKS1cRgi/MGLbKpcLn6nanhl5fhO7hnMcfk3cylg
-gp/dVEwcIC/zCq8waYVD6zAbkKSzsK6UUO8u7+d0+wlWxK8XF9SfQBXN46bCD26+
-4sP2Cm/S2Z9LIi36XZgKLAUoSdo8MnHkwcYYCSgAdZMcvG5d5sPPvMtU40cmmQhZ
-fgvnU7lL8SP8/gtrTYG5/IH9BBP1/Af/quEspcu7JgOcelQftPdpun6rQT/P2O5B
-kqNatB6pvlHBIkZY0pwWRGnjaNTqDA==
-=sUaS
------END PGP SIGNATURE-----
+Note that this behavior is currently on all linux-stable branches. I am
+currently testing on v6.1.36 but I know it is failing on v6.3 too.
 
---l4i42uioh2eh4lok--
+My actual use-case is in Async Rust using tokio. Not using epoll is not an
+option and a non-blocking socket that sometimes blocks can be terrible for
+the performance of the whole application. Our embedded target runs with the
+out-of-tree module on an older linux version, but my colleagues with 
+up-to-date
+linux stable kernels have recently been prevented from running tests on 
+their
+PC.
+
+Is there someone with a good idea of how to proceed to fix this?
+I'll probably keep digging but I don't think I can spend so much time on 
+this,
+so any help is appreciated.
+
+Thanks,
+Maxime
+
+
