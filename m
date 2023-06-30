@@ -2,184 +2,180 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F279A744005
-	for <lists+linux-can@lfdr.de>; Fri, 30 Jun 2023 18:44:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9065F7444E8
+	for <lists+linux-can@lfdr.de>; Sat,  1 Jul 2023 00:35:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbjF3QoU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 30 Jun 2023 12:44:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48384 "EHLO
+        id S229484AbjF3Wff (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 30 Jun 2023 18:35:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjF3QoU (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 30 Jun 2023 12:44:20 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5F73AAF
-        for <linux-can@vger.kernel.org>; Fri, 30 Jun 2023 09:44:17 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3fbc1218262so18980415e9.3
-        for <linux-can@vger.kernel.org>; Fri, 30 Jun 2023 09:44:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mobile-devices.fr; s=google; t=1688143455; x=1690735455;
-        h=content-transfer-encoding:subject:cc:to:content-language:user-agent
-         :mime-version:date:message-id:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qKBfccrJBTzwPsKp9F16ppy62jt1IusEq5OosFTqNhM=;
-        b=L6uyS6gSmWW0LEFcLhBaGROe2QRiYaL5y2vDxaVytgFCbKcVwWTCDIKI+xSYkdawQJ
-         R8XXgwEJxEFFaP50qF891/Gyfh9xxsYNXvw1gGeBXUYKSbV9m9NNW2r+yYfanocUQKVr
-         VVqrtDu1iM9SsWUOUnm4fUhooVa2yUDT55ctE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688143455; x=1690735455;
-        h=content-transfer-encoding:subject:cc:to:content-language:user-agent
-         :mime-version:date:message-id:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qKBfccrJBTzwPsKp9F16ppy62jt1IusEq5OosFTqNhM=;
-        b=VxU3lIifJgkTtyVG/6ZrJryAp9gmah1PQEQv+mFadowf9JLJNv/twwp3ECmBXrDyaS
-         Vv1hvP/N4Pj8fAKLYCR+NwM+FKt3lwR9zQqeIakaK6Qcqh2KppW4BLUI058tmfUElzYv
-         RFKr8RW1XYzX9cmGALh6lizWdM4ZXHminuoUKdL9UJupZ3KXPjEVazbqGPKrYTOJGqS2
-         zbOlJKTkTvCEJHYZdYdj+/a741TaCdAkTOPJ+T2yvjULwB0YA1O4zHQd+EQBb5kmhpOk
-         14hPZxELw5RK5GLNE5ciqEexU7LAQh5EJLt4vwLoyigw5alIx3L/OMAvyi58qBZ9Vp9U
-         5bpg==
-X-Gm-Message-State: AC+VfDwOOnbHrX4A+NfwTyR/hRig82lrpFiRIMNJwMt5dh/295wtCA8S
-        tRKhF7ngfBpprWR4IzYIEs4LMg==
-X-Google-Smtp-Source: ACHHUZ4ByD+2TUO16Ne5E+K5eO4TL2k30sTEafqHWqmMmDw/d9Kd3NmTMrAYwXB8L2/yVvPuGaQGWw==
-X-Received: by 2002:a1c:770b:0:b0:3fa:9538:963e with SMTP id t11-20020a1c770b000000b003fa9538963emr2410893wmi.36.1688143455489;
-        Fri, 30 Jun 2023 09:44:15 -0700 (PDT)
-Received: from [10.42.42.90] (static-css-cqn-143221.business.bouyguestelecom.com. [176.149.143.221])
-        by smtp.gmail.com with ESMTPSA id t25-20020a7bc3d9000000b003fbb8c7c799sm4666532wmj.30.2023.06.30.09.44.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Jun 2023 09:44:15 -0700 (PDT)
-From:   Maxime Jayat <maxime.jayat@mobile-devices.fr>
-X-Google-Original-From: Maxime Jayat <maxime.jayat@munic.io>
-Message-ID: <11328958-453f-447f-9af8-3b5824dfb041@munic.io>
-Date:   Fri, 30 Jun 2023 18:44:14 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Michal Sojka <michal.sojka@cvut.cz>
+        with ESMTP id S229485AbjF3Wfe (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 30 Jun 2023 18:35:34 -0400
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2131.outbound.protection.outlook.com [40.107.105.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1175F3C01;
+        Fri, 30 Jun 2023 15:35:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BZoRw0qpqZLfkfcxNx6DJ3hW8VZKEOxH4prAQ8RjSK/Pv4vvZSkQGiVJJod44cekgvoaSujYpRqdVe6tLVwcXkScCsO7Jw5ssqQVmW/TL5kbziRRwk+Oi54St3G+2XGv2X45OyXGHAKnKujb/itheAQcZXZZrHU5/ZSZTi7dfGNJ88BRxjJDvcf6WdjQOOAi44N8rj4yLKcRdzue0mgc/ggdGYK8t449UtSgJuD79JZ5bEMS/9S2DAMSlxvyoenTHnbYNh6Y8FElPFQwnW/zwyyD7/SyZ7/ShGlr+GzAPKNQSXGdY3u8+rsVcd6l/pv4Bt5c8CthXHK8HUvdiFQBbg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hKAVY2BJw0Z3yET/eE2eSiJDvutEBXQjAhgEVZxMlPY=;
+ b=hCbLTQd82HjQ5y0gn/5/eYUSFC9gFpiybGxsNEtydCS1jqkOBFsNJ9twH1wZD5D6RH//ZVjhBVvIO7bmEbXN7qGJ1ds256vqGuWucsA4x1Pqkht3yiewEqYoPxJeqCd97zdBrSXV2+OxTEwNQ9TAsSUUDcJBjbsVDYGvPn4fPA+0ymVQHwLseHVxdUhEjcKFPvva75zYCYqRDQ3eQWRFdP89j5mzx4JkaT3Eyia6NTftgNDwEi8xga7YkROjJkhTOJtRIZQA/Wqm25GkIZtrvAecMJv9DbLkJZD9TGsDm7ifKcauk++egDhEdJAHOhpnZ+8S/WVB+13Lb7yspTZPSA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cvut.cz; dmarc=pass action=none header.from=cvut.cz; dkim=pass
+ header.d=cvut.cz; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cvut.cz; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hKAVY2BJw0Z3yET/eE2eSiJDvutEBXQjAhgEVZxMlPY=;
+ b=Wk9N/RFdZrIWDB3Ga7cy7ckS/HhuHQpXF9wH5ZOpJ96TDVDjJqbBlO/xxX9Ma7I8+8kO1tRsGgoP4Xh+m9Y0d5wEdQpQOqPtBP/NK3H63zKsl8RnQve62Oq7xo+i4nlUTbNB+qgoI+x2ugBopycGyyRMwjvKp4FYhOgrMt3WJg+UlNgTnIgxIbg8m99bHEvRboqWHFqB05ewYb0i4wIDqvzChMNk4kTNjxLbg04ZZ3Nlnx0XMvzW0bs5ySnDwLiDzA51MvSsUE7k1LzSkvd+rLAUztTMNRkNwU44bSLOBjJAGpw43cj4CzE7HHEvT7Y3Rlrzi2PYWv3+bu/IRv2RNQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=cvut.cz;
+Received: from AM6PR0602MB3749.eurprd06.prod.outlook.com
+ (2603:10a6:209:1e::32) by AM9PR06MB8019.eurprd06.prod.outlook.com
+ (2603:10a6:20b:3a5::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.19; Fri, 30 Jun
+ 2023 22:35:25 +0000
+Received: from AM6PR0602MB3749.eurprd06.prod.outlook.com
+ ([fe80::ae5:23c0:ec83:bedf]) by AM6PR0602MB3749.eurprd06.prod.outlook.com
+ ([fe80::ae5:23c0:ec83:bedf%6]) with mapi id 15.20.6544.019; Fri, 30 Jun 2023
+ 22:35:21 +0000
+From:   Michal Sojka <michal.sojka@cvut.cz>
+To:     Maxime Jayat <maxime.jayat@mobile-devices.fr>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
 Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         "Dae R. Jeong" <threeearcat@gmail.com>,
         Hillf Danton <hdanton@sina.com>
-Subject: can: isotp: epoll breaks isotp_sendmsg
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Subject: Re: can: isotp: epoll breaks isotp_sendmsg
+In-Reply-To: <11328958-453f-447f-9af8-3b5824dfb041@munic.io>
+References: <11328958-453f-447f-9af8-3b5824dfb041@munic.io>
+Date:   Sat, 01 Jul 2023 00:35:18 +0200
+Message-ID: <87cz1czihl.fsf@steelpick.2x.cz>
+Content-Type: text/plain
+X-ClientProxiedBy: VI1PR0102CA0032.eurprd01.prod.exchangelabs.com
+ (2603:10a6:802::45) To AM6PR0602MB3749.eurprd06.prod.outlook.com
+ (2603:10a6:209:1e::32)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM6PR0602MB3749:EE_|AM9PR06MB8019:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5144e4f1-8102-4848-11fb-08db79ba4985
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ih11j8Rkw/kW4ulFkZJHwkYwetP+R1BFwzhwBmaBFudYWpYPa8bGRqp5ydJP9COFGjBd0RDFQpyb9wXhRPu2YqeqpsTvf2oNlRwZkOYUiJqLwURArY53ISZ1L1ckcN4CRYjtt9Ykj5FV24M2piTp86Nj9zEF/GKg0HzGmqGH2et65jxQHlTR4TmxFpxvYZBepwcegSXag/+iqbNzes1NVrmj7Z1gsRBRsBS2mzKweCjP2jRjHHZbDx8oXY2iGT/ruuxTyT02UH3zRCZTuyXINbviHbDkdwYPX0XzizQIGm4U6MImp8vmYEalv3fxzEQxqk0j+KLfaJmu33+xIIgecCYnieRwQDdjFv9TvvnHEgNgYrewt1bVH0FJCpnFgtRcs1GJ8e4bgZL1/SOvvQq7rsOTr2qBm14A8eikgokdO3k1VUdpfEXg0dFENXJc3e5bcqydOSXpM2BK8xmi5jwYSLa0Kz6V+lfLL+sKuDpAZz+0zvO/FTFyfVAGhUYdLNM3HlD29I+n/L9tgJi/JTca5r2VynlR1pBtQc0jItiNklnFAuzDuzCVyIl0Do6VlsC/
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR0602MB3749.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(376002)(366004)(39850400004)(346002)(451199021)(54906003)(110136005)(4326008)(8676002)(8936002)(5660300002)(478600001)(6486002)(66946007)(6666004)(66476007)(66556008)(786003)(316002)(41300700001)(6512007)(38100700002)(186003)(6506007)(26005)(44832011)(9686003)(86362001)(83380400001)(2906002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vOzU4929Dp+ioscsozFG8zmjcYIthIS5C3z0TtnHhq+4j9n3u18npEjiNl+A?=
+ =?us-ascii?Q?KATeKbWPPM2oHyh/VxyVhBCkE+QwbvQu1yRR5ZgNJNmviSIXl1T6SgMIG8Ne?=
+ =?us-ascii?Q?0cAHmOjZiZy52JpPtekylIKAtAg1vHOLB4GLd621wbTaoRGS3IwLWySsrNIJ?=
+ =?us-ascii?Q?iWwvZMo20K1LzTaPEz3SvCTGWsyHqkCsl4u7lkpNayFpHSTUb9Ogy2zaR/Jo?=
+ =?us-ascii?Q?3dY9RLFnLJsD2CS1yJuCLa5RwK5Q8TwSS0U6hJ9SeXn702ajUXvNmdbsHMrM?=
+ =?us-ascii?Q?jB6bXiIrdXqM1era6t/CbP0nbln8Zprbs9eq3aubVwAG6ISYcA5oBPTGAENG?=
+ =?us-ascii?Q?d2jcARp3qGpOBBfwEL27Wg32X9tuKTcqjEU1nBmIsvy/aQfCK4AZ/cJtjiml?=
+ =?us-ascii?Q?hR6EMEFl/bh3bxsWc9hFOcbEnJhPKnjkF7b/DNym3WvFpAKc27YBP/cm+pDX?=
+ =?us-ascii?Q?iO9FYxSEBDdSsJeLoP6BShq4RTdyjyU8pk8uVXm87leGoctHvVCBUf3xMwwc?=
+ =?us-ascii?Q?cdh6f2/36ZB4l4NZ1uv9j/DXA5vL+VLi4hrVC+En09KVmVKk84Iwt2XOy8Ff?=
+ =?us-ascii?Q?mLebUOIc1VfmFaul0cbKgGXGKThvouWJcB37pwx6W7qkgkUP/7kZK2LPaPgA?=
+ =?us-ascii?Q?vTKw7Uw+5QhF3beJYsm1kHU4KP+a1bX1HDi60/L7rssI/kFuNigWLzsvJ62U?=
+ =?us-ascii?Q?/+DL6B6JemIBx/nwGRCyoYOau+eS6gdPxK2WfTkeXKZFxuyEM7CDMZ/hTeri?=
+ =?us-ascii?Q?94C1+UV3oqVr8PL80E80bK1xX6ZozwjpJEV9J3/Drsw9L7Lf1auV7IuED6Z/?=
+ =?us-ascii?Q?HBwBwE2WBjXwu6bgZNs6DZ9Ga7gBh+W/tXFwYstI7RSwisGvwKukC6mgFxEk?=
+ =?us-ascii?Q?5iwDtbQyb9cn/JtCOoqJer3Y4kOXjpVCv34p5KHE0ppkGkTv9lEjlFEjotvC?=
+ =?us-ascii?Q?GjJIFiueqduLPuye9Z+zetxlg+QzE6SVQcEvp69O37o4V09zmepRMQyWw8g1?=
+ =?us-ascii?Q?/zqda6PSJt9z7PSe99vVSzPBKnT2wnAfuOB44v+IZ7VzYsp2G/IhtwHlgpMe?=
+ =?us-ascii?Q?0lG8WQkANENM/IEsBayaJsco4fcXKev6TiFsrvh5iryV6O1UFYovxrVnPtf7?=
+ =?us-ascii?Q?H9gQMZOa63hVeNWuLcDQRg2n5H4L7hdwUITrXWWbVCpm54fqPKr/kwweFo4e?=
+ =?us-ascii?Q?JfbX+e4VwuuUZC5CIrx7u5wI7K1YJ5Bv2hgivfeENVbwirK8b4DfIq88JRbx?=
+ =?us-ascii?Q?1Y551w4s3tHZ4E2J48z6kmGokYqAFbh5q2rPVGbvOKfMXcJdEdel5APmdTOg?=
+ =?us-ascii?Q?+n1BwuNmAjapYMIcxA7/Y2hd3we/I67T24UJb/LpEaaGIB3LmwVEf9KXlpl8?=
+ =?us-ascii?Q?6mJY5/+M0vJS0cMjgfIhKCVkONZJtUW1JdLWohW+nYk/gIujQmQ8xT5ran9I?=
+ =?us-ascii?Q?QJw34Ar4v42S7yfYLzKLBQo1j0qmw+JPpyCANk9s9h6U7L837l9XRRZ+Y0wg?=
+ =?us-ascii?Q?iBwZ7XZOl4Gesaj6WS0gpNBnld6PxGmlxTMtgItz+BmioyQdeRTjTwHOxwqA?=
+ =?us-ascii?Q?1i49rf8zF1OPRwc2sZ2VQsCwEJqJ3asJhyTIzXyK?=
+X-OriginatorOrg: cvut.cz
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5144e4f1-8102-4848-11fb-08db79ba4985
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR0602MB3749.eurprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2023 22:35:20.8753
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f345c406-5268-43b0-b19f-5862fa6833f8
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: fL6aGrQ6PVrgVkFk1K5p/+ZzD+bqTQNhpWRNxFKQR41RLxP/fItWg3BvNdQ4K4jA
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR06MB8019
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi,
+Hi Maxime,
 
-There is something not clear happening with the non-blocking behavior
-of ISO-TP sockets in the TX path, but more importantly, using epoll now
-completely breaks isotp_sendmsg.
-I believe it is related to
-79e19fa79c ("can: isotp: isotp_ops: fix poll() to not report false 
-EPOLLOUT events"),
-but actually is probably deeper than that.
+On Fri, Jun 30 2023, Maxime Jayat wrote:
+> Hi,
+>
+> There is something not clear happening with the non-blocking behavior
+> of ISO-TP sockets in the TX path, but more importantly, using epoll now
+> completely breaks isotp_sendmsg.
+> I believe it is related to
+> 79e19fa79c ("can: isotp: isotp_ops: fix poll() to not report false 
+> EPOLLOUT events"),
+> but actually is probably deeper than that.
+>
+> I don't completely understand what is exactly going on, so I am sharing
+> the problem I face:
+>
+> With an ISO-TP socket in non-blocking mode, using epoll seems to make
+> isotp_sendmsg always return -EAGAIN.
 
-I don't completely understand what is exactly going on, so I am sharing
-the problem I face:
+That's definitely not expected behavior. I tested the patch only with
+poll, hoping that epoll would behave the same.
 
-With an ISO-TP socket in non-blocking mode, using epoll seems to make
-isotp_sendmsg always return -EAGAIN.
+[...]
 
-I have a non-blocking socket + epoll version of can-utils isotpsend 
-available for
-testing at https://gist.github.com/MJayat/4857da43ab154e4ba644d2446b5fa46d
-With this version I do the following test:
+>
+> By reverting 79e19fa79c, I get better results but still incorrect:
 
-isotprecv -l -m 0x80 -s 7e8 -d 7e0 vcan0 &
-echo "01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f" | strace ./isotpsend 
--l10 -s 7E0 -d 7E8 vcan0
+[...]
 
-I get:
-...
-15:37:02.456849 epoll_ctl(4, EPOLL_CTL_ADD, 3, 
-{events=EPOLLIN|EPOLLOUT|EPOLLRDHUP, data={u32=0, u64=0}}) = 0 <0.000249>
-15:37:02.457839 epoll_wait(4, [{events=EPOLLOUT, data={u32=0, u64=0}}], 
-1, 2000) = 1 <0.000200>
-15:37:02.458838 write(3, 
-"\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f", 15) = -1 
-EAGAIN (Resource temporarily unavailable) <0.000278>
-15:37:02.459908 epoll_wait(4, [{events=EPOLLOUT, data={u32=0, u64=0}}], 
-1, 2000) = 1 <0.000250>
-15:37:02.460879 write(3, 
-"\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f", 15) = -1 
-EAGAIN (Resource temporarily unavailable) <0.000272>
-15:37:02.461831 epoll_wait(4, [{events=EPOLLOUT, data={u32=0, u64=0}}], 
-1, 2000) = 1 <0.000199>
-...
-impossible to write on the socket, and busy-looping.
+> It is then possible to write on the socket but the write is blocking,
+> which is not the expected behavior for a non-blocking socket.
 
-With a change to epoll_ctl flags, now including EPOLLET, I get:
-...
-15:36:22.443689 epoll_ctl(4, EPOLL_CTL_ADD, 3, 
-{events=EPOLLIN|EPOLLOUT|EPOLLRDHUP|EPOLLET, data={u32=0, u64=0}}) = 0 
-<0.000171>
-15:36:22.444514 epoll_wait(4, [{events=EPOLLOUT, data={u32=0, u64=0}}], 
-1, 2000) = 1 <0.000188>
-15:36:22.445413 write(3, 
-"\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f", 15) = -1 
-EAGAIN (Resource temporarily unavailable) <0.000175>
-15:36:22.446335 epoll_wait(4, [], 1, 2000) = 0 <2.026006>
-...
-epoll_wait now blocks indefinitely.
+Yes, incorrect behavior was why we made the commit in question, however
+we saw write() returning -EAGAIN when it shouldn't.
 
-By reverting 79e19fa79c, I get better results but still incorrect:
-...
-15:41:43.890880 epoll_ctl(4, EPOLL_CTL_ADD, 3, 
-{events=EPOLLIN|EPOLLOUT|EPOLLRDHUP, data={u32=0, u64=0}}) = 0 <0.000200>
-15:41:43.892011 epoll_wait(4, [{events=EPOLLOUT, data={u32=0, u64=0}}], 
-1, 2000) = 1 <0.000408>
-15:41:43.893148 write(3, 
-"\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f", 15) = 15 
-<0.000458>
-15:41:43.894405 epoll_wait(4, [{events=EPOLLOUT, data={u32=0, u64=0}}], 
-1, 2000) = 1 <0.000257>
-15:41:43.895385 write(3, 
-"\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f", 15) = 15 
-<0.128429>
-15:41:44.028757 epoll_wait(4, [{events=EPOLLOUT, data={u32=0, u64=0}}], 
-1, 2000) = 1 <0.001886>
-15:41:44.040858 write(3, 
-"\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f", 15) = 15 
-<0.108069>
-...
-It is then possible to write on the socket but the write is blocking, 
-which is
-not the expected behavior for a non-blocking socket.
+> I don't know how to solve the problem. To me, using wq_has_sleeper seems 
+> weird.
 
-I don't know how to solve the problem. To me, using wq_has_sleeper seems 
-weird.
-The implementation of isotp_poll feels weird too (calling both 
-datagram_poll and
-poll_wait?). But I am not sure what would be the correct implementation.
+Agreed. I've never tried to understand how synchronization works here.
+Hopefully, Oliver knows more.
 
-Note that this behavior is currently on all linux-stable branches. I am
-currently testing on v6.1.36 but I know it is failing on v6.3 too.
+> The implementation of isotp_poll feels weird too (calling both 
+> datagram_poll and
+> poll_wait?). But I am not sure what would be the correct
+> implementation.
 
-My actual use-case is in Async Rust using tokio. Not using epoll is not an
-option and a non-blocking socket that sometimes blocks can be terrible for
-the performance of the whole application. Our embedded target runs with the
-out-of-tree module on an older linux version, but my colleagues with 
-up-to-date
-linux stable kernels have recently been prevented from running tests on 
-their
-PC.
+I understand it as follows (which might be wrong - someone, please
+correct me), isotp_poll() should register the file with all waitqueues
+it can wait on. so->wait is one and sock->sq.wait (used by
+datagram_poll) is another. The former is definitely used for TX, the
+latter is probably used because skb_recv_datagram() is called for RX.
+But so->wait is also used for RX and there might proabbly be be some
+inconsistency between those.
 
-Is there someone with a good idea of how to proceed to fix this?
-I'll probably keep digging but I don't think I can spend so much time on 
-this,
-so any help is appreciated.
+> My actual use-case is in Async Rust using tokio.
 
-Thanks,
-Maxime
+Our initial motivation was also Rust and tokio however than I did
+testing only with simple C programs. I'm definitely interested in having
+this working.
 
+I'll try to look at this in more detail during the weekend. It's too
+late for me today.
 
+Best regards,
+-Michal
