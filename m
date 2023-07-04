@@ -2,304 +2,220 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3512674697E
-	for <lists+linux-can@lfdr.de>; Tue,  4 Jul 2023 08:20:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A697469F3
+	for <lists+linux-can@lfdr.de>; Tue,  4 Jul 2023 08:48:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbjGDGUA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 4 Jul 2023 02:20:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49212 "EHLO
+        id S231294AbjGDGsI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 4 Jul 2023 02:48:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230216AbjGDGT6 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 4 Jul 2023 02:19:58 -0400
-Received: from mail-pl1-f208.google.com (mail-pl1-f208.google.com [209.85.214.208])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD0DBB
-        for <linux-can@vger.kernel.org>; Mon,  3 Jul 2023 23:19:55 -0700 (PDT)
-Received: by mail-pl1-f208.google.com with SMTP id d9443c01a7336-1b8a8154fcaso1343765ad.1
-        for <linux-can@vger.kernel.org>; Mon, 03 Jul 2023 23:19:55 -0700 (PDT)
+        with ESMTP id S230145AbjGDGsB (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 4 Jul 2023 02:48:01 -0400
+Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517991739
+        for <linux-can@vger.kernel.org>; Mon,  3 Jul 2023 23:47:33 -0700 (PDT)
+Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-66a44bf4651so6169091b3a.1
+        for <linux-can@vger.kernel.org>; Mon, 03 Jul 2023 23:47:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688451595; x=1691043595;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=h9zJkpdhcz8ZoyIzxv3ROL8wp9vBldRBuKkdUxQuZ4E=;
-        b=kCvvMBV3qy2x77VH/EewW6g0Zyio3WdsYVyKPNGmOMCpAheKzgHEE+vp3fm/LY757F
-         kckPMovb+Pkr3LN8MkUu/CB3azzlncP2X3WMikvlyuK4CbWV+P8282OuHgbBTjsqn/5Y
-         mcCKwD9kd1q+cXdWj0ZW5610nA3stPSSq3e097JytJXDg0Msdzvp/N+90gc0LSbigQRJ
-         Xjs/GSvDO3fSjXJDJJbRVSZo1GhZKHvqNBrnu7xwceivFdCpLPVJJErOLxdOBoUstruT
-         wVvUMIbGTvZl84uJlpmEtrQs8D9MVYrkSkSzIW9k9G54ABsTJh+fjpwRzqTrFDpcRHQz
-         AGjg==
-X-Gm-Message-State: ABy/qLZC6pIVWk/QgiEyJnesM9NciQ4frgIdOjbWSLMr6FXOI4/h31nj
-        PEtdSAL3VdoAFL9XkpNzBu0xjt/49L1W5KdpHFpTgOh9YSBH
-X-Google-Smtp-Source: APBJJlGawPdYOWZZ3ie+Mq4hPSlDIM7HxaeHDsNLF7Q6XKAfvraucuVN28bpAwvEJmA0IyQM55WdWEP/PY4yFaZgJcvow058N5nN
+        d=1e100.net; s=20221208; t=1688453247; x=1691045247;
+        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ACIBrwixBjWpiuudARGyb9TqOdMNUjtG62uNvT31qwI=;
+        b=L97O+i55/Gap9CU58GzdrIxqdEvRk06ItrGgRncMmj3+EMVSB2xTY6F4wJv1ikzf8x
+         zfjAQ+WHVfaGQW3CXxGUJrRtRykX6pG6N5d79vo7zhBnXCOSAQmawBV8FCpNMQIZ/GsG
+         /cxePc3rOObT149rOLYAo73luXPQiwkd66GfEhhMVybNKhxlWQf1lY8P4T8dDRnlu+lE
+         GTg86nGmW3laHrbQZS7xFqdh+r6I0iyR3Qy4K7fpH5Q4pIZBHUJVhb1wIFm3qtpL0Uqi
+         1gBvDi+apIDzhlfeQwVgcYcOGESpzdrj4td657MfSmD4rb1CQX/w54kOUrZBTCG4VlA3
+         YC/w==
+X-Gm-Message-State: AC+VfDzQPnB8VdNWm8IX0CkyIY/a00jy+88bSw82rVsFdNJ3P2cgDFWU
+        PQFaPzKNFH71EHXVa2EdLZcHdxkZ3u8dfGMypPx62C6OMaUB
+X-Google-Smtp-Source: ACHHUZ4Gpgjn42qIrs/aUUCL9ENRyznyVbIaqmBiEl9n7unYwO7oqG5AEd5e+DIhhnRWaWvju73GeCWeYo+w2C316h50NXfH/Lvr
 MIME-Version: 1.0
-X-Received: by 2002:a17:903:2790:b0:1b5:2496:8c10 with SMTP id
- jw16-20020a170903279000b001b524968c10mr10327455plb.2.1688451594943; Mon, 03
- Jul 2023 23:19:54 -0700 (PDT)
-Date:   Mon, 03 Jul 2023 23:19:54 -0700
+X-Received: by 2002:aa7:8685:0:b0:666:8f6c:c8ad with SMTP id
+ d5-20020aa78685000000b006668f6cc8admr12033599pfo.2.1688453247045; Mon, 03 Jul
+ 2023 23:47:27 -0700 (PDT)
+Date:   Mon, 03 Jul 2023 23:47:26 -0700
+In-Reply-To: <20230704064710.3189-1-astrajoan@yahoo.com>
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008981d905ffa345de@google.com>
-Subject: [syzbot] [can?] possible deadlock in j1939_sk_errqueue (2)
+Message-ID: <00000000000002937705ffa3a80b@google.com>
+Subject: Re: [PATCH] can: j1939: prevent deadlock by changing j1939_socks_lock
+ to rwlock
 From:   syzbot <syzbot+1591462f226d9cbf0564@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, kernel@pengutronix.de,
-        kuba@kernel.org, linux-can@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux@rempel-privat.de,
-        mkl@pengutronix.de, netdev@vger.kernel.org, pabeni@redhat.com,
-        robin@protonic.nl, socketcan@hartkopp.net,
-        syzkaller-bugs@googlegroups.com
+To:     astrajoan@yahoo.com
+Cc:     astrajoan@yahoo.com, davem@davemloft.net, edumazet@google.com,
+        ivan.orlov0322@gmail.com, kernel@pengutronix.de, kuba@kernel.org,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux@rempel-privat.de, mkl@pengutronix.de, netdev@vger.kernel.org,
+        pabeni@redhat.com, robin@protonic.nl, skhan@linuxfoundation.org,
+        socketcan@hartkopp.net, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
         RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello,
+> The following 3 locks would race against each other, causing the
+> deadlock situation in the Syzbot bug report:
+>
+> - j1939_socks_lock
+> - active_session_list_lock
+> - sk_session_queue_lock
+>
+> A reasonable fix is to change j1939_socks_lock to an rwlock, since in
+> the rare situations where a write lock is required for the linked list
+> that j1939_socks_lock is protecting, the code does not attempt to
+> acquire any more locks. This would break the circular lock dependency,
+> where, for example, the current thread already locks j1939_socks_lock
+> and attempts to acquire sk_session_queue_lock, and at the same time,
+> another thread attempts to acquire j1939_socks_lock while holding
+> sk_session_queue_lock.
+>
+> NOTE: This patch along does not fix the unregister_netdevice bug
+> reported by Syzbot; instead, it solves a deadlock situation to prepare
+> for one or more further patches to actually fix the Syzbot bug, which
+> appears to be a reference counting problem within the j1939 codebase.
+>
+> #syz test:
 
-syzbot found the following issue on:
+This crash does not have a reproducer. I cannot test it.
 
-HEAD commit:    ae230642190a Merge branch 'af_unix-followup-fixes-for-so_p..
-git tree:       net-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=1771bf67280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c9bf1936936ca698
-dashboard link: https://syzkaller.appspot.com/bug?extid=1591462f226d9cbf0564
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/8c060db03f09/disk-ae230642.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/1b9b937ece91/vmlinux-ae230642.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/0c7eb1c82bf0/bzImage-ae230642.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+1591462f226d9cbf0564@syzkaller.appspotmail.com
-
-======================================================
-WARNING: possible circular locking dependency detected
-6.4.0-rc7-syzkaller-01948-gae230642190a #0 Not tainted
-------------------------------------------------------
-syz-executor.2/11224 is trying to acquire lock:
-ffff88803bee50d0 (&priv->j1939_socks_lock){+.-.}-{2:2}, at: spin_lock_bh include/linux/spinlock.h:355 [inline]
-ffff88803bee50d0 (&priv->j1939_socks_lock){+.-.}-{2:2}, at: j1939_sk_errqueue+0xa3/0x1a0 net/can/j1939/socket.c:1081
-
-but task is already holding lock:
-ffff88803bee5088 (&priv->active_session_list_lock){+.-.}-{2:2}, at: spin_lock_bh include/linux/spinlock.h:355 [inline]
-ffff88803bee5088 (&priv->active_session_list_lock){+.-.}-{2:2}, at: j1939_session_list_lock net/can/j1939/transport.c:238 [inline]
-ffff88803bee5088 (&priv->active_session_list_lock){+.-.}-{2:2}, at: j1939_cancel_active_session+0x41/0x360 net/can/j1939/transport.c:2183
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #2 (&priv->active_session_list_lock){+.-.}-{2:2}:
-       __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
-       _raw_spin_lock_bh+0x33/0x40 kernel/locking/spinlock.c:178
-       spin_lock_bh include/linux/spinlock.h:355 [inline]
-       j1939_session_list_lock net/can/j1939/transport.c:238 [inline]
-       j1939_session_activate+0x47/0x4b0 net/can/j1939/transport.c:1564
-       j1939_sk_queue_activate_next_locked net/can/j1939/socket.c:181 [inline]
-       j1939_sk_queue_activate_next+0x2bf/0x4d0 net/can/j1939/socket.c:208
-       j1939_session_deactivate_activate_next net/can/j1939/transport.c:1108 [inline]
-       j1939_xtp_rx_abort_one+0x3c0/0x5b0 net/can/j1939/transport.c:1351
-       j1939_xtp_rx_abort net/can/j1939/transport.c:1362 [inline]
-       j1939_tp_cmd_recv net/can/j1939/transport.c:2111 [inline]
-       j1939_tp_recv+0xd98/0xf50 net/can/j1939/transport.c:2144
-       j1939_can_recv net/can/j1939/main.c:112 [inline]
-       j1939_can_recv+0x78e/0xa80 net/can/j1939/main.c:38
-       deliver net/can/af_can.c:572 [inline]
-       can_rcv_filter+0x5d4/0x8d0 net/can/af_can.c:606
-       can_receive+0x31d/0x5c0 net/can/af_can.c:663
-       can_rcv+0x1e1/0x280 net/can/af_can.c:687
-       __netif_receive_skb_one_core+0x114/0x180 net/core/dev.c:5452
-       __netif_receive_skb+0x1f/0x1c0 net/core/dev.c:5566
-       process_backlog+0x101/0x670 net/core/dev.c:5894
-       __napi_poll+0xb7/0x6f0 net/core/dev.c:6460
-       napi_poll net/core/dev.c:6527 [inline]
-       net_rx_action+0x8a9/0xcb0 net/core/dev.c:6660
-       __do_softirq+0x1d4/0x905 kernel/softirq.c:571
-       run_ksoftirqd kernel/softirq.c:939 [inline]
-       run_ksoftirqd+0x31/0x60 kernel/softirq.c:931
-       smpboot_thread_fn+0x659/0x9e0 kernel/smpboot.c:164
-       kthread+0x344/0x440 kernel/kthread.c:379
-       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
-
--> #1 (&jsk->sk_session_queue_lock){+.-.}-{2:2}:
-       __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
-       _raw_spin_lock_bh+0x33/0x40 kernel/locking/spinlock.c:178
-       spin_lock_bh include/linux/spinlock.h:355 [inline]
-       j1939_sk_queue_drop_all+0x3b/0x2f0 net/can/j1939/socket.c:139
-       j1939_sk_netdev_event_netdown+0x7f/0x160 net/can/j1939/socket.c:1280
-       j1939_netdev_notify+0x19f/0x1d0 net/can/j1939/main.c:381
-       notifier_call_chain+0xb6/0x3c0 kernel/notifier.c:93
-       call_netdevice_notifiers_info+0xb9/0x130 net/core/dev.c:1962
-       call_netdevice_notifiers_extack net/core/dev.c:2000 [inline]
-       call_netdevice_notifiers net/core/dev.c:2014 [inline]
-       __dev_notify_flags+0x1ea/0x2d0 net/core/dev.c:8571
-       dev_change_flags+0x11b/0x170 net/core/dev.c:8607
-       do_setlink+0x19e2/0x3ae0 net/core/rtnetlink.c:2867
-       __rtnl_newlink+0xd85/0x1860 net/core/rtnetlink.c:3655
-       rtnl_newlink+0x68/0xa0 net/core/rtnetlink.c:3702
-       rtnetlink_rcv_msg+0x43d/0xd50 net/core/rtnetlink.c:6424
-       netlink_rcv_skb+0x165/0x440 net/netlink/af_netlink.c:2549
-       netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
-       netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1365
-       netlink_sendmsg+0x925/0xe30 net/netlink/af_netlink.c:1914
-       sock_sendmsg_nosec net/socket.c:724 [inline]
-       sock_sendmsg+0xde/0x190 net/socket.c:747
-       ____sys_sendmsg+0x733/0x920 net/socket.c:2493
-       ___sys_sendmsg+0x110/0x1b0 net/socket.c:2547
-       __sys_sendmsg+0xf7/0x1c0 net/socket.c:2576
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #0 (&priv->j1939_socks_lock){+.-.}-{2:2}:
-       check_prev_add kernel/locking/lockdep.c:3113 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3232 [inline]
-       validate_chain kernel/locking/lockdep.c:3847 [inline]
-       __lock_acquire+0x2fcd/0x5f30 kernel/locking/lockdep.c:5088
-       lock_acquire kernel/locking/lockdep.c:5705 [inline]
-       lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5670
-       __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
-       _raw_spin_lock_bh+0x33/0x40 kernel/locking/spinlock.c:178
-       spin_lock_bh include/linux/spinlock.h:355 [inline]
-       j1939_sk_errqueue+0xa3/0x1a0 net/can/j1939/socket.c:1081
-       j1939_session_destroy+0x26c/0x4e0 net/can/j1939/transport.c:271
-       __j1939_session_release net/can/j1939/transport.c:294 [inline]
-       kref_put include/linux/kref.h:65 [inline]
-       j1939_session_put net/can/j1939/transport.c:299 [inline]
-       j1939_session_deactivate_locked net/can/j1939/transport.c:1086 [inline]
-       j1939_session_deactivate_locked+0x293/0x340 net/can/j1939/transport.c:1074
-       j1939_cancel_active_session+0x183/0x360 net/can/j1939/transport.c:2194
-       j1939_netdev_notify+0x197/0x1d0 net/can/j1939/main.c:380
-       notifier_call_chain+0xb6/0x3c0 kernel/notifier.c:93
-       call_netdevice_notifiers_info+0xb9/0x130 net/core/dev.c:1962
-       call_netdevice_notifiers_extack net/core/dev.c:2000 [inline]
-       call_netdevice_notifiers net/core/dev.c:2014 [inline]
-       __dev_notify_flags+0x1ea/0x2d0 net/core/dev.c:8571
-       dev_change_flags+0x11b/0x170 net/core/dev.c:8607
-       do_setlink+0x19e2/0x3ae0 net/core/rtnetlink.c:2867
-       __rtnl_newlink+0xd85/0x1860 net/core/rtnetlink.c:3655
-       rtnl_newlink+0x68/0xa0 net/core/rtnetlink.c:3702
-       rtnetlink_rcv_msg+0x43d/0xd50 net/core/rtnetlink.c:6424
-       netlink_rcv_skb+0x165/0x440 net/netlink/af_netlink.c:2549
-       netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
-       netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1365
-       netlink_sendmsg+0x925/0xe30 net/netlink/af_netlink.c:1914
-       sock_sendmsg_nosec net/socket.c:724 [inline]
-       sock_sendmsg+0xde/0x190 net/socket.c:747
-       ____sys_sendmsg+0x733/0x920 net/socket.c:2493
-       ___sys_sendmsg+0x110/0x1b0 net/socket.c:2547
-       __sys_sendmsg+0xf7/0x1c0 net/socket.c:2576
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-other info that might help us debug this:
-
-Chain exists of:
-  &priv->j1939_socks_lock --> &jsk->sk_session_queue_lock --> &priv->active_session_list_lock
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&priv->active_session_list_lock);
-                               lock(&jsk->sk_session_queue_lock);
-                               lock(&priv->active_session_list_lock);
-  lock(&priv->j1939_socks_lock);
-
- *** DEADLOCK ***
-
-2 locks held by syz-executor.2/11224:
- #0: ffffffff8e1194a8 (rtnl_mutex){+.+.}-{3:3}, at: rtnl_lock net/core/rtnetlink.c:78 [inline]
- #0: ffffffff8e1194a8 (rtnl_mutex){+.+.}-{3:3}, at: rtnetlink_rcv_msg+0x3e8/0xd50 net/core/rtnetlink.c:6421
- #1: ffff88803bee5088 (&priv->active_session_list_lock){+.-.}-{2:2}, at: spin_lock_bh include/linux/spinlock.h:355 [inline]
- #1: ffff88803bee5088 (&priv->active_session_list_lock){+.-.}-{2:2}, at: j1939_session_list_lock net/can/j1939/transport.c:238 [inline]
- #1: ffff88803bee5088 (&priv->active_session_list_lock){+.-.}-{2:2}, at: j1939_cancel_active_session+0x41/0x360 net/can/j1939/transport.c:2183
-
-stack backtrace:
-CPU: 1 PID: 11224 Comm: syz-executor.2 Not tainted 6.4.0-rc7-syzkaller-01948-gae230642190a #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2188
- check_prev_add kernel/locking/lockdep.c:3113 [inline]
- check_prevs_add kernel/locking/lockdep.c:3232 [inline]
- validate_chain kernel/locking/lockdep.c:3847 [inline]
- __lock_acquire+0x2fcd/0x5f30 kernel/locking/lockdep.c:5088
- lock_acquire kernel/locking/lockdep.c:5705 [inline]
- lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5670
- __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
- _raw_spin_lock_bh+0x33/0x40 kernel/locking/spinlock.c:178
- spin_lock_bh include/linux/spinlock.h:355 [inline]
- j1939_sk_errqueue+0xa3/0x1a0 net/can/j1939/socket.c:1081
- j1939_session_destroy+0x26c/0x4e0 net/can/j1939/transport.c:271
- __j1939_session_release net/can/j1939/transport.c:294 [inline]
- kref_put include/linux/kref.h:65 [inline]
- j1939_session_put net/can/j1939/transport.c:299 [inline]
- j1939_session_deactivate_locked net/can/j1939/transport.c:1086 [inline]
- j1939_session_deactivate_locked+0x293/0x340 net/can/j1939/transport.c:1074
- j1939_cancel_active_session+0x183/0x360 net/can/j1939/transport.c:2194
- j1939_netdev_notify+0x197/0x1d0 net/can/j1939/main.c:380
- notifier_call_chain+0xb6/0x3c0 kernel/notifier.c:93
- call_netdevice_notifiers_info+0xb9/0x130 net/core/dev.c:1962
- call_netdevice_notifiers_extack net/core/dev.c:2000 [inline]
- call_netdevice_notifiers net/core/dev.c:2014 [inline]
- __dev_notify_flags+0x1ea/0x2d0 net/core/dev.c:8571
- dev_change_flags+0x11b/0x170 net/core/dev.c:8607
- do_setlink+0x19e2/0x3ae0 net/core/rtnetlink.c:2867
- __rtnl_newlink+0xd85/0x1860 net/core/rtnetlink.c:3655
- rtnl_newlink+0x68/0xa0 net/core/rtnetlink.c:3702
- rtnetlink_rcv_msg+0x43d/0xd50 net/core/rtnetlink.c:6424
- netlink_rcv_skb+0x165/0x440 net/netlink/af_netlink.c:2549
- netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
- netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1365
- netlink_sendmsg+0x925/0xe30 net/netlink/af_netlink.c:1914
- sock_sendmsg_nosec net/socket.c:724 [inline]
- sock_sendmsg+0xde/0x190 net/socket.c:747
- ____sys_sendmsg+0x733/0x920 net/socket.c:2493
- ___sys_sendmsg+0x110/0x1b0 net/socket.c:2547
- __sys_sendmsg+0xf7/0x1c0 net/socket.c:2576
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fdb2bc8c389
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fdb2cab9168 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 00007fdb2bdabf80 RCX: 00007fdb2bc8c389
-RDX: 0000000000000000 RSI: 00000000200000c0 RDI: 0000000000000006
-RBP: 00007fdb2bcd7493 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffd70d89bbf R14: 00007fdb2cab9300 R15: 0000000000022000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+>
+> Signed-off-by: Ziqi Zhao <astrajoan@yahoo.com>
+> ---
+>  net/can/j1939/j1939-priv.h |  2 +-
+>  net/can/j1939/main.c       |  2 +-
+>  net/can/j1939/socket.c     | 25 +++++++++++++------------
+>  3 files changed, 15 insertions(+), 14 deletions(-)
+>
+> diff --git a/net/can/j1939/j1939-priv.h b/net/can/j1939/j1939-priv.h
+> index 16af1a7f80f6..74f15592d170 100644
+> --- a/net/can/j1939/j1939-priv.h
+> +++ b/net/can/j1939/j1939-priv.h
+> @@ -86,7 +86,7 @@ struct j1939_priv {
+>  	unsigned int tp_max_packet_size;
+>  
+>  	/* lock for j1939_socks list */
+> -	spinlock_t j1939_socks_lock;
+> +	rwlock_t j1939_socks_lock;
+>  	struct list_head j1939_socks;
+>  
+>  	struct kref rx_kref;
+> diff --git a/net/can/j1939/main.c b/net/can/j1939/main.c
+> index ecff1c947d68..a6fb89fa6278 100644
+> --- a/net/can/j1939/main.c
+> +++ b/net/can/j1939/main.c
+> @@ -274,7 +274,7 @@ struct j1939_priv *j1939_netdev_start(struct net_device *ndev)
+>  		return ERR_PTR(-ENOMEM);
+>  
+>  	j1939_tp_init(priv);
+> -	spin_lock_init(&priv->j1939_socks_lock);
+> +	rwlock_init(&priv->j1939_socks_lock);
+>  	INIT_LIST_HEAD(&priv->j1939_socks);
+>  
+>  	mutex_lock(&j1939_netdev_lock);
+> diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
+> index feaec4ad6d16..a8b981dc2065 100644
+> --- a/net/can/j1939/socket.c
+> +++ b/net/can/j1939/socket.c
+> @@ -80,16 +80,16 @@ static void j1939_jsk_add(struct j1939_priv *priv, struct j1939_sock *jsk)
+>  	jsk->state |= J1939_SOCK_BOUND;
+>  	j1939_priv_get(priv);
+>  
+> -	spin_lock_bh(&priv->j1939_socks_lock);
+> +	write_lock_bh(&priv->j1939_socks_lock);
+>  	list_add_tail(&jsk->list, &priv->j1939_socks);
+> -	spin_unlock_bh(&priv->j1939_socks_lock);
+> +	write_unlock_bh(&priv->j1939_socks_lock);
+>  }
+>  
+>  static void j1939_jsk_del(struct j1939_priv *priv, struct j1939_sock *jsk)
+>  {
+> -	spin_lock_bh(&priv->j1939_socks_lock);
+> +	write_lock_bh(&priv->j1939_socks_lock);
+>  	list_del_init(&jsk->list);
+> -	spin_unlock_bh(&priv->j1939_socks_lock);
+> +	write_unlock_bh(&priv->j1939_socks_lock);
+>  
+>  	j1939_priv_put(priv);
+>  	jsk->state &= ~J1939_SOCK_BOUND;
+> @@ -329,13 +329,13 @@ bool j1939_sk_recv_match(struct j1939_priv *priv, struct j1939_sk_buff_cb *skcb)
+>  	struct j1939_sock *jsk;
+>  	bool match = false;
+>  
+> -	spin_lock_bh(&priv->j1939_socks_lock);
+> +	read_lock_bh(&priv->j1939_socks_lock);
+>  	list_for_each_entry(jsk, &priv->j1939_socks, list) {
+>  		match = j1939_sk_recv_match_one(jsk, skcb);
+>  		if (match)
+>  			break;
+>  	}
+> -	spin_unlock_bh(&priv->j1939_socks_lock);
+> +	read_unlock_bh(&priv->j1939_socks_lock);
+>  
+>  	return match;
+>  }
+> @@ -344,11 +344,11 @@ void j1939_sk_recv(struct j1939_priv *priv, struct sk_buff *skb)
+>  {
+>  	struct j1939_sock *jsk;
+>  
+> -	spin_lock_bh(&priv->j1939_socks_lock);
+> +	read_lock_bh(&priv->j1939_socks_lock);
+>  	list_for_each_entry(jsk, &priv->j1939_socks, list) {
+>  		j1939_sk_recv_one(jsk, skb);
+>  	}
+> -	spin_unlock_bh(&priv->j1939_socks_lock);
+> +	read_unlock_bh(&priv->j1939_socks_lock);
+>  }
+>  
+>  static void j1939_sk_sock_destruct(struct sock *sk)
+> @@ -484,6 +484,7 @@ static int j1939_sk_bind(struct socket *sock, struct sockaddr *uaddr, int len)
+>  
+>  		priv = j1939_netdev_start(ndev);
+>  		dev_put(ndev);
+> +
+>  		if (IS_ERR(priv)) {
+>  			ret = PTR_ERR(priv);
+>  			goto out_release_sock;
+> @@ -1078,12 +1079,12 @@ void j1939_sk_errqueue(struct j1939_session *session,
+>  	}
+>  
+>  	/* spread RX notifications to all sockets subscribed to this session */
+> -	spin_lock_bh(&priv->j1939_socks_lock);
+> +	read_lock_bh(&priv->j1939_socks_lock);
+>  	list_for_each_entry(jsk, &priv->j1939_socks, list) {
+>  		if (j1939_sk_recv_match_one(jsk, &session->skcb))
+>  			__j1939_sk_errqueue(session, &jsk->sk, type);
+>  	}
+> -	spin_unlock_bh(&priv->j1939_socks_lock);
+> +	read_unlock_bh(&priv->j1939_socks_lock);
+>  };
+>  
+>  void j1939_sk_send_loop_abort(struct sock *sk, int err)
+> @@ -1271,7 +1272,7 @@ void j1939_sk_netdev_event_netdown(struct j1939_priv *priv)
+>  	struct j1939_sock *jsk;
+>  	int error_code = ENETDOWN;
+>  
+> -	spin_lock_bh(&priv->j1939_socks_lock);
+> +	read_lock_bh(&priv->j1939_socks_lock);
+>  	list_for_each_entry(jsk, &priv->j1939_socks, list) {
+>  		jsk->sk.sk_err = error_code;
+>  		if (!sock_flag(&jsk->sk, SOCK_DEAD))
+> @@ -1279,7 +1280,7 @@ void j1939_sk_netdev_event_netdown(struct j1939_priv *priv)
+>  
+>  		j1939_sk_queue_drop_all(priv, jsk, error_code);
+>  	}
+> -	spin_unlock_bh(&priv->j1939_socks_lock);
+> +	read_unlock_bh(&priv->j1939_socks_lock);
+>  }
+>  
+>  static int j1939_sk_no_ioctlcmd(struct socket *sock, unsigned int cmd,
+> -- 
+> 2.34.1
+>
