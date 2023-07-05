@@ -2,283 +2,117 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC817480C3
-	for <lists+linux-can@lfdr.de>; Wed,  5 Jul 2023 11:26:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34577748129
+	for <lists+linux-can@lfdr.de>; Wed,  5 Jul 2023 11:40:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbjGEJ0C (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 5 Jul 2023 05:26:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48934 "EHLO
+        id S231776AbjGEJk3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 5 Jul 2023 05:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbjGEJ0B (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 5 Jul 2023 05:26:01 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87545123;
-        Wed,  5 Jul 2023 02:25:57 -0700 (PDT)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QwvPv5Xg7zTm8L;
-        Wed,  5 Jul 2023 17:24:51 +0800 (CST)
-Received: from localhost.localdomain (10.175.104.82) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Wed, 5 Jul 2023 17:25:53 +0800
-From:   Ziyang Xuan <william.xuanziyang@huawei.com>
-To:     <socketcan@hartkopp.net>, <mkl@pengutronix.de>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <linux-can@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <penguin-kernel@I-love.SAKURA.ne.jp>
-Subject: [PATCH net] can: raw: fix receiver memory leak
-Date:   Wed, 5 Jul 2023 17:25:43 +0800
-Message-ID: <20230705092543.648022-1-william.xuanziyang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S230439AbjGEJkW (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 5 Jul 2023 05:40:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB78E54
+        for <linux-can@vger.kernel.org>; Wed,  5 Jul 2023 02:40:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E415C614C1
+        for <linux-can@vger.kernel.org>; Wed,  5 Jul 2023 09:40:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 53028C433C7;
+        Wed,  5 Jul 2023 09:40:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688550020;
+        bh=BL615b5IF7/nLs4QiWPSb9Zd2CYKJy7kdWODpiawfo0=;
+        h=From:Subject:Date:To:Cc:Reply-To:From;
+        b=j04+tBw2IC6ccMmlSOCNBdpS+86fKOb6tJErmpCXUnMZ6jhNjRJqeF8y4i02RlcM1
+         LdXVHk3/YJTMFFcx6puW45x7vOUR6r0rR+EavCAPPq5ovBglT5m2OD9GxdP9moFRqU
+         hOr/iqbLUjOSe4t+drEQbS874YnyxXvaz+P4A5fbLXHWyNm5QiOR42jhUQcCZXixwk
+         Fo7R91hCGvmohmRbcInLuy9FI5PcwxfSB6LxoZQLn0eGkvqnkpnf72ijWEBdi0KC86
+         gCvMymly8Qi/Og6wBzK7lgNmaDVFFytWHa6DqmqV0SY2E3nw/HgI871TzhDVAbLUw9
+         5naM+GFLUeiFw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by smtp.lore.kernel.org (Postfix) with ESMTP id 2DAC7C001B0;
+        Wed,  5 Jul 2023 09:40:20 +0000 (UTC)
+From:   Marc Kleine-Budde via B4 Relay 
+        <devnull+mkl.pengutronix.de@kernel.org>
+Subject: [PATCH 0/6] can: gs_usb: convert to NAPI
+Date:   Wed, 05 Jul 2023 11:39:51 +0200
+Message-Id: <20230705-gs_usb-rx-offload-v1-0-8e7e46e40137@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.82]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGc6pWQC/x3M0QpAQBBA0V/RPJtaI1Z+RRJ2lilZ7URK/t3m8
+ Tzc+4ByFFZoswciX6IS9oQiz2Bex31hFJcMZKg01lS46HDqhPHG4P0WRoeWyBFVtXV1A6k7Inu
+ 5/2fXv+8HE0MgymMAAAA=
+To:     linux-can@vger.kernel.org
+Cc:     kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>
+X-Mailer: b4 0.13-dev-099c9
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2015; i=mkl@pengutronix.de;
+ h=from:subject:message-id; bh=BL615b5IF7/nLs4QiWPSb9Zd2CYKJy7kdWODpiawfo0=;
+ b=owEBbQGS/pANAwAKAb5QHEoqigToAcsmYgBkpTpvDCVuXvyUP1TBGBN0tPlqc3OXqxMsDpJSz
+ b9tVyfJMFuJATMEAAEKAB0WIQQOzYG9qPI0qV/1MlC+UBxKKooE6AUCZKU6bwAKCRC+UBxKKooE
+ 6AxNB/466dNgyz7YolWbxqWRjzcre1JDzHREaWprwL7y+CUMJSsfaXKMvAiVynXNdOYsqCHambL
+ BEkXyZkqMpb55lw/9qqfdU5Zkmb6+vO40YxP5NtQKzA1G7z/tR/f+KfL75GiuqYv16hh2cPK75y
+ clgSGH+WRiflMKm7G4LmSY0rXNCeBh/KsRLXIrU6ZM5USuIMBGKH6GFd/tgbZvhaii23Pjmcwcp
+ 2DxGgMYMdBuwGyCVN0c1iKhM+GJ3skBEG36VSMznbSB/jeP8mHAKnGdJWTCQKR3Hh5WR+fIK41q
+ My9wdsdhI2IJpgP4w9rHqRB7VX94fBEDfLnPPwMgE6K9kO9M
+X-Developer-Key: i=mkl@pengutronix.de; a=openpgp;
+ fpr=C1400BA0B3989E6FBC7D5B5C2B5EE211C58AEA54
+X-Endpoint-Received: by B4 Relay for mkl@pengutronix.de/default with auth_id=52
+X-Original-From: Marc Kleine-Budde <mkl@pengutronix.de>
+Reply-To: <mkl@pengutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Got kmemleak errors with the following ltp can_filter testcase:
+Traditionally USB drivers used to pass the received CAN frames/skbs to
+the network stack with netif_rx(). In netif_rx() the skbs are queued
+to the local CPU. If IRQs are handled in round robin, OoO packets may
+occur.
 
-for ((i=1; i<=100; i++))
-do
-        ./can_filter &
-        sleep 0.1
-done
+To support devices without timestamping the TX path of the rx-offload
+helper is cleaned up and extended:
+- rename rx_offload_get_echo_skb() ->
+  can_rx_offload_get_echo_skb_queue_timestamp()
+- add can_rx_offload_get_echo_skb_queue_tail()
 
-==============================================================
-[<00000000db4a4943>] can_rx_register+0x147/0x360 [can]
-[<00000000a289549d>] raw_setsockopt+0x5ef/0x853 [can_raw]
-[<000000006d3d9ebd>] __sys_setsockopt+0x173/0x2c0
-[<00000000407dbfec>] __x64_sys_setsockopt+0x61/0x70
-[<00000000fd468496>] do_syscall_64+0x33/0x40
-[<00000000b7e47d51>] entry_SYSCALL_64_after_hwframe+0x61/0xc6
+The remaining 4 patches first add some cleanups to the gs_usb driver
+and the last one converts it to NAPI with the rx-offload helper.
 
-It's a bug in the concurrent scenario of unregister_netdevice_many()
-and raw_release() as following:
-
-             cpu0                                        cpu1
-unregister_netdevice_many(can_dev)
-  unlist_netdevice(can_dev) // dev_get_by_index() return NULL after this
-  net_set_todo(can_dev)
-						raw_release(can_socket)
-						  dev = dev_get_by_index(, ro->ifindex); // dev == NULL
-						  if (dev) { // receivers in dev_rcv_lists not free because dev is NULL
-						    raw_disable_allfilters(, dev, );
-						    dev_put(dev);
-						  }
-						...
-						ro->bound = 0;
-						...
-
-call_netdevice_notifiers(NETDEV_UNREGISTER, )
-  raw_notify(, NETDEV_UNREGISTER, )
-    if (ro->bound) // invalid because ro->bound has been set 0
-      raw_disable_allfilters(, dev, ); // receivers in dev_rcv_lists will never be freed
-
-Add a net_device pointer member in struct raw_sock to record bound can_dev,
-and use rtnl_lock to serialize raw_socket members between raw_bind(), raw_release(),
-raw_setsockopt() and raw_notify(). Use ro->dev to decide whether to free receivers in
-dev_rcv_lists.
-
-Fixes: 8d0caedb7596 ("can: bcm/raw/isotp: use per module netdevice notifier")
-Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+Link: https://lore.kernel.org/all/559D628C.5020100@hartkopp.net
+Link: https://github.com/candle-usb/candleLight_fw/issues/166
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- net/can/raw.c | 63 ++++++++++++++++++++++-----------------------------
- 1 file changed, 27 insertions(+), 36 deletions(-)
+Marc Kleine-Budde (6):
+      can: rx-offload: rename rx_offload_get_echo_skb() -> can_rx_offload_get_echo_skb_queue_timestamp()
+      can: rx-offload: add can_rx_offload_get_echo_skb_queue_tail()
+      can: gs_usb: gs_usb_receive_bulk_callback(): count RX overflow errors also in case of OOM
+      can: gs_usb: gs_usb_receive_bulk_callback(): make use of netdev
+      can: gs_usb: gs_usb_receive_bulk_callback(): make use of stats
+      can: gs_usb: convert to NAPI/rx-offload to avoid OoO reception
 
-diff --git a/net/can/raw.c b/net/can/raw.c
-index 15c79b079184..e767d356f695 100644
---- a/net/can/raw.c
-+++ b/net/can/raw.c
-@@ -84,6 +84,7 @@ struct raw_sock {
- 	struct sock sk;
- 	int bound;
- 	int ifindex;
-+	struct net_device *dev;
- 	struct list_head notifier;
- 	int loopback;
- 	int recv_own_msgs;
-@@ -277,7 +278,7 @@ static void raw_notify(struct raw_sock *ro, unsigned long msg,
- 	if (!net_eq(dev_net(dev), sock_net(sk)))
- 		return;
- 
--	if (ro->ifindex != dev->ifindex)
-+	if (ro->dev != dev)
- 		return;
- 
- 	switch (msg) {
-@@ -292,6 +293,7 @@ static void raw_notify(struct raw_sock *ro, unsigned long msg,
- 
- 		ro->ifindex = 0;
- 		ro->bound = 0;
-+		ro->dev = NULL;
- 		ro->count = 0;
- 		release_sock(sk);
- 
-@@ -337,6 +339,7 @@ static int raw_init(struct sock *sk)
- 
- 	ro->bound            = 0;
- 	ro->ifindex          = 0;
-+	ro->dev              = NULL;
- 
- 	/* set default filter to single entry dfilter */
- 	ro->dfilter.can_id   = 0;
-@@ -385,19 +388,13 @@ static int raw_release(struct socket *sock)
- 
- 	lock_sock(sk);
- 
-+	rtnl_lock();
- 	/* remove current filters & unregister */
- 	if (ro->bound) {
--		if (ro->ifindex) {
--			struct net_device *dev;
--
--			dev = dev_get_by_index(sock_net(sk), ro->ifindex);
--			if (dev) {
--				raw_disable_allfilters(dev_net(dev), dev, sk);
--				dev_put(dev);
--			}
--		} else {
-+		if (ro->dev)
-+			raw_disable_allfilters(dev_net(ro->dev), ro->dev, sk);
-+		else
- 			raw_disable_allfilters(sock_net(sk), NULL, sk);
--		}
- 	}
- 
- 	if (ro->count > 1)
-@@ -405,8 +402,10 @@ static int raw_release(struct socket *sock)
- 
- 	ro->ifindex = 0;
- 	ro->bound = 0;
-+	ro->dev = NULL;
- 	ro->count = 0;
- 	free_percpu(ro->uniq);
-+	rtnl_unlock();
- 
- 	sock_orphan(sk);
- 	sock->sk = NULL;
-@@ -422,6 +421,7 @@ static int raw_bind(struct socket *sock, struct sockaddr *uaddr, int len)
- 	struct sockaddr_can *addr = (struct sockaddr_can *)uaddr;
- 	struct sock *sk = sock->sk;
- 	struct raw_sock *ro = raw_sk(sk);
-+	struct net_device *dev = NULL;
- 	int ifindex;
- 	int err = 0;
- 	int notify_enetdown = 0;
-@@ -431,14 +431,13 @@ static int raw_bind(struct socket *sock, struct sockaddr *uaddr, int len)
- 	if (addr->can_family != AF_CAN)
- 		return -EINVAL;
- 
-+	rtnl_lock();
- 	lock_sock(sk);
- 
--	if (ro->bound && addr->can_ifindex == ro->ifindex)
-+	if (ro->bound && ro->dev && addr->can_ifindex == ro->dev->ifindex)
- 		goto out;
- 
- 	if (addr->can_ifindex) {
--		struct net_device *dev;
--
- 		dev = dev_get_by_index(sock_net(sk), addr->can_ifindex);
- 		if (!dev) {
- 			err = -ENODEV;
-@@ -465,28 +464,23 @@ static int raw_bind(struct socket *sock, struct sockaddr *uaddr, int len)
- 	}
- 
- 	if (!err) {
-+		/* unregister old filters */
- 		if (ro->bound) {
--			/* unregister old filters */
--			if (ro->ifindex) {
--				struct net_device *dev;
--
--				dev = dev_get_by_index(sock_net(sk),
--						       ro->ifindex);
--				if (dev) {
--					raw_disable_allfilters(dev_net(dev),
--							       dev, sk);
--					dev_put(dev);
--				}
--			} else {
-+			if (ro->dev)
-+				raw_disable_allfilters(dev_net(ro->dev),
-+						       ro->dev, sk);
-+			else
- 				raw_disable_allfilters(sock_net(sk), NULL, sk);
--			}
- 		}
- 		ro->ifindex = ifindex;
-+
- 		ro->bound = 1;
-+		ro->dev = dev;
- 	}
- 
-  out:
- 	release_sock(sk);
-+	rtnl_unlock();
- 
- 	if (notify_enetdown) {
- 		sk->sk_err = ENETDOWN;
-@@ -553,9 +547,9 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
- 		rtnl_lock();
- 		lock_sock(sk);
- 
--		if (ro->bound && ro->ifindex) {
--			dev = dev_get_by_index(sock_net(sk), ro->ifindex);
--			if (!dev) {
-+		dev = ro->dev;
-+		if (ro->bound && dev) {
-+			if (dev->reg_state != NETREG_REGISTERED) {
- 				if (count > 1)
- 					kfree(filter);
- 				err = -ENODEV;
-@@ -596,7 +590,6 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
- 		ro->count  = count;
- 
-  out_fil:
--		dev_put(dev);
- 		release_sock(sk);
- 		rtnl_unlock();
- 
-@@ -614,9 +607,9 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
- 		rtnl_lock();
- 		lock_sock(sk);
- 
--		if (ro->bound && ro->ifindex) {
--			dev = dev_get_by_index(sock_net(sk), ro->ifindex);
--			if (!dev) {
-+		dev = ro->dev;
-+		if (ro->bound && dev) {
-+			if (dev->reg_state != NETREG_REGISTERED) {
- 				err = -ENODEV;
- 				goto out_err;
- 			}
-@@ -627,7 +620,6 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
- 			/* (try to) register the new err_mask */
- 			err = raw_enable_errfilter(sock_net(sk), dev, sk,
- 						   err_mask);
--
- 			if (err)
- 				goto out_err;
- 
-@@ -640,7 +632,6 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
- 		ro->err_mask = err_mask;
- 
-  out_err:
--		dev_put(dev);
- 		release_sock(sk);
- 		rtnl_unlock();
- 
+ drivers/net/can/dev/rx-offload.c              | 36 +++++++++--
+ drivers/net/can/flexcan/flexcan-core.c        |  4 +-
+ drivers/net/can/m_can/m_can.c                 |  8 +--
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-tef.c |  6 +-
+ drivers/net/can/ti_hecc.c                     |  4 +-
+ drivers/net/can/usb/Kconfig                   |  1 +
+ drivers/net/can/usb/gs_usb.c                  | 90 ++++++++++++++++++++-------
+ include/linux/can/rx-offload.h                | 11 ++--
+ 8 files changed, 116 insertions(+), 44 deletions(-)
+---
+base-commit: 3a8a670eeeaa40d87bd38a587438952741980c18
+change-id: 20230705-gs_usb-rx-offload-722d22567d68
+
+Best regards,
 -- 
-2.25.1
+Marc Kleine-Budde <mkl@pengutronix.de>
 
