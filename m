@@ -2,52 +2,70 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4694374846F
-	for <lists+linux-can@lfdr.de>; Wed,  5 Jul 2023 14:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33E80748E6A
+	for <lists+linux-can@lfdr.de>; Wed,  5 Jul 2023 21:54:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230100AbjGEMxw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 5 Jul 2023 08:53:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53784 "EHLO
+        id S233405AbjGETy0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 5 Jul 2023 15:54:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbjGEMxv (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 5 Jul 2023 08:53:51 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4BA4DA
-        for <linux-can@vger.kernel.org>; Wed,  5 Jul 2023 05:53:50 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qH20p-000280-Ce; Wed, 05 Jul 2023 14:53:39 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 046461E9A17;
-        Wed,  5 Jul 2023 12:17:29 +0000 (UTC)
-Date:   Wed, 5 Jul 2023 14:17:28 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Kumari Pallavi <kumari.pallavi@intel.com>
-Cc:     rcsekar@samsung.com, mallikarjunappa.sangannavar@intel.com,
-        jarkko.nikula@intel.com, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srikanth Thokala <srikanth.thokala@intel.com>
-Subject: Re: [RESEND] [PATCH 1/1] can: m_can: Control tx and rx flow to avoid
- communication stall
-Message-ID: <20230705-return-slogan-36c499673bb6-mkl@pengutronix.de>
-References: <20230623085920.12904-1-kumari.pallavi@intel.com>
+        with ESMTP id S233435AbjGETyY (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 5 Jul 2023 15:54:24 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA041981;
+        Wed,  5 Jul 2023 12:54:21 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 365JruRW029344;
+        Wed, 5 Jul 2023 14:53:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1688586836;
+        bh=JYEmsOFHbXgS5MxsHkWI4gJFbQZO7FxeLmm0d1G/I18=;
+        h=From:To:CC:Subject:Date;
+        b=Dtr3GvoLEH1+JV3O3xC2peTbniUUh/ZSq7Q9izsEuwludmzMUCn5n0sEuISQuHuly
+         kwKid9WkcW3YLBQhPcA8BzLhPAD/fTrIxCADe4z4QlOLfmOUqK5nlgEchxFW1eJ3DK
+         /crXLuuEVeUlM4dQqThHW3qsgJc8Ee1dLse8xWh8=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 365Jru2k083979
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 5 Jul 2023 14:53:56 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 5
+ Jul 2023 14:53:56 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 5 Jul 2023 14:53:56 -0500
+Received: from uda0498204.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 365JrueS041658;
+        Wed, 5 Jul 2023 14:53:56 -0500
+From:   Judith Mendez <jm@ti.com>
+To:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+CC:     Wolfgang Grandegger <wg@grandegger.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, <linux-can@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Schuyler Patton <spatton@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <devicetree@vger.kernel.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Simon Horman <simon.horman@corigine.com>
+Subject: [PATCH 0/2] Enable multiple MCAN on AM62x
+Date:   Wed, 5 Jul 2023 14:53:54 -0500
+Message-ID: <20230705195356.866774-1-jm@ti.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2r4fdrigq4xuvtru"
-Content-Disposition: inline
-In-Reply-To: <20230623085920.12904-1-kumari.pallavi@intel.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,133 +73,111 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On AM62x there are two MCANs in MCU domain. The MCANs in MCU domain
+were not enabled since there is no hardware interrupt routed to A53
+GIC interrupt controller. Therefore A53 Linux cannot be interrupted
+by MCU MCANs.
 
---2r4fdrigq4xuvtru
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This solution instantiates a hrtimer with 1 ms polling interval
+for MCAN device when there is no hardware interrupt property in
+DTB MCAN node. The hrtimer generates a recurring software interrupt
+which allows to call the isr. The isr will check if there is pending
+transaction by reading a register and proceed normally if there is.
+MCANs with hardware interrupt routed to A53 Linux will continue to
+use the hardware interrupt as expected.
 
-On 23.06.2023 14:29:20, Kumari Pallavi wrote:
-> In bi-directional CAN transfer using M_CAN IP, with
-> the frame gap being set to '0', it leads to Protocol
-> error in Arbitration phase resulting in communication
-> stall.
+Timer polling method was tested on both classic CAN and CAN-FD
+at 125 KBPS, 250 KBPS, 1 MBPS and 2.5 MBPS with 4 MBPS bitrate
+switching.
 
-Is there a (public) erratum describing the problem?
+Letency and CPU load benchmarks were tested on 3x MCAN on AM62x.
+1 MBPS timer polling interval is the better timer polling interval
+since it has comparable latency to hardware interrupt with the worse
+case being 1ms + CAN frame propagation time and CPU load is not
+substantial. Latency can be improved further with less than 1 ms
+polling intervals, howerver it is at the cost of CPU usage since CPU
+load increases at 0.5 ms.
 
-> Discussed with Bosch M_CAN IP team and the stall issue
-> can only be overcome by controlling the tx and rx=20
-> packets flow as done by the patch.
+Note that in terms of power, enabling MCU MCANs with timer-polling
+implementation might have negative impact since we will have to wake
+up every 1 ms whether there are CAN packets pending in the RX FIFO or
+not. This might prevent the CPU from entering into deeper idle states
+for extended periods of time.
 
-Please elaborate the suggested workaround.
+v8:
+Link: https://lore.kernel.org/linux-can/20230530224820.303619-1-jm@ti.com/T/#t
 
-> Rx packets would also be serviced when there is a tx=20
-> interrupt. The solution has been tested extensively for
-> more than 10 days, and no issues has been observed.
+v7:
+Link: https://lore.kernel.org/linux-can/20230523023749.4526-1-jm@ti.com/T/#t
 
-Can you describe how your patch implements the workaround?
+v6:
+Link: https://lore.kernel.org/linux-can/20230518193613.15185-1-jm@ti.com/T/#t
 
-| Describe your changes in imperative mood, e.g. "make xyzzy do frotz"
-| instead of "[This patch] makes xyzzy do frotz" or "[I] changed xyzzy
-| to do frotz", as if you are giving orders to the codebase to change
-| its behaviour.
+v5:
+Link: https://lore.kernel.org/linux-can/20230510202952.27111-1-jm@ti.com/T/#t
 
-See: https://github.com/torvalds/linux/blob/master/Documentation/process/su=
-bmitting-patches.rst#describe-your-changes
+v4:
+Link: https://lore.kernel.org/linux-can/c3395692-7dbf-19b2-bd3f-31ba86fa4ac9@linaro.org/T/#t
 
-> Setup that is used to reproduce the issue:=20
->=20
-> +---------------------+		+----------------------+
-> |Intel ElkhartLake    |		|Intel ElkhartLake     |	=09
-> |	+--------+    |		|	+--------+     |
-> |	|m_can 0 |    |<=3D=3D=3D=3D=3D=3D=3D>|	|m_can 0 |     |		   =20
-> |	+--------+    |		|	+--------+     |		=20
-> +---------------------+		+----------------------+          =20
->=20
-> Steps to be run on the two Elkhartlake HW:
->=20
-> 1. ip link set can0 type can bitrate 1000000
-> 2. ip link set can0 txqueuelen 2048
-> 3. ip link set can0 up
-> 4. cangen -g 0 can0
-> 5. candump can0
->=20
-> cangen -g 0 can0 & candump can0 commands are used for transmit and=20
-> receive on both the m_can HW simultaneously where -g is the frame gap=20
-> between two frames.
->=20
-> Signed-off-by: Kumari Pallavi <kumari.pallavi@intel.com>
-> Signed-off-by: Srikanth Thokala <srikanth.thokala@intel.com>
-> ---
->  drivers/net/can/m_can/m_can.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-> index a5003435802b..94aa0ba89202 100644
-> --- a/drivers/net/can/m_can/m_can.c
-> +++ b/drivers/net/can/m_can/m_can.c
-> @@ -1118,7 +1118,7 @@ static irqreturn_t m_can_isr(int irq, void *dev_id)
->  			/* New TX FIFO Element arrived */
->  			if (m_can_echo_tx_event(dev) !=3D 0)
->  				goto out_fail;
-> -
+v2:
+Link: https://lore.kernel.org/linux-can/20230424195402.516-1-jm@ti.com/T/#t
 
-nitpick: please keep that empty line.
+V1:
+Link: https://lore.kernel.org/linux-can/19d8ae7f-7b74-a869-a818-93b74d106709@ti.com/T/#t
 
-> +			m_can_write(cdev, M_CAN_IE, IR_ALL_INT & ~(IR_TEFN));
+RFC:
+Link: https://lore.kernel.org/linux-can/52a37e51-4143-9017-42ee-8d17c67028e3@ti.com/T/#t
 
-- What's the purpose of  "()" around IR_TEFN?
-- You enable a lot of interrupts that have not been enabled before. Have
-  a look at m_can_chip_config() how the original register value for
-  M_CAN_IE is calculated.
+v9:
+- Change add MS to HRTIMER_POLL_INTERVAL
+- Change syntax from "= 0" to "!"
 
->  			if (netif_queue_stopped(dev) &&
->  			    !m_can_tx_fifo_full(cdev))
->  				netif_wake_queue(dev);
-> @@ -1787,6 +1787,7 @@ static netdev_tx_t m_can_start_xmit(struct sk_buff =
-*skb,
->  		}
->  	} else {
->  		cdev->tx_skb =3D skb;
-> +		m_can_write(cdev, M_CAN_IE, IR_ALL_INT & (IR_TEFN));
+v8:
+- Cancel hrtimer after interrupts in m_can_stop
+- Move assignment of hrtimer_callback to m_can_class_register()
+- Initialize irq = 0 if polling mode is used
 
-- What's the purpose of  "()" around IR_TEFN?
-- "IR_ALL_INT & (IR_TEFN)" is equal to IR_TEFN, isn't it?
-- This basically disables all other interrupts, is this what you want to
-  do?
-- What happens if the bus is busy with high prio CAN frames and you want
-  to send low prio ones? You will not get any RX-IRQ, this doesn't look
-  correct to me.
+v7:
+- Clean up m_can_platform.c after removing poll-interval
 
->  		return m_can_tx_handler(cdev);
->  	}
-> =20
-> --=20
-> 2.17.1
->=20
->
+v6:
+- Move hrtimer stop/start function calls to m_can_open and m_can_close to
+support power suspend/resume
 
-Marc
+v5:
+- Remove poll-interval in bindings
+- Change dev_dbg to dev_info if hardware int exists and polling
+is enabled
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+v4:
+- Wrong patches sent
 
---2r4fdrigq4xuvtru
-Content-Type: application/pgp-signature; name="signature.asc"
+v3:
+- Update binding poll-interval description
+- Add oneOf to select either
+interrupts/798d276b39e984345d52b933a900a71fa0815928
 
------BEGIN PGP SIGNATURE-----
+v2:
+- Add poll-interval property to bindings and MCAN DTB node
+- Add functionality to check for 'poll-interval' property in MCAN node 
+- Bindings: add an example using poll-interval
+- Add 'polling' flag in driver to check if device is using polling method
+- Check for timer polling and hardware interrupt cases, default to
+hardware interrupt method
+- Change ns_to_ktime() to ms_to_ktime()
 
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmSlX1UACgkQvlAcSiqK
-BOjz4Af/fuwWzlnPHic3y+9DPHRMCJ8UfsD+t6Laxb+0+h71My4+l+W0qOmboG4S
-/g7Z8shDmZnqdOv/EpnQpxdMG5CUMx6w28XDB5Nf868OASn1TiRvHtntd1R5AWwO
-6FapQ7jiQJlnaNCLX9swKCx6cNQZNBaN07bX3vsqMV5SSCvVUdoDA49X+xcxPi0h
-ZGBi+gi8obue2OzGLEZsOmRABrvksLPJ21vScnc1mVMgSpTyyna+h8AAijPtQV0P
-cEL/KM0uJAmGeMBki4D9lF/IBoFzTs+BfQwoPKIWn+sR7EQ3xZLvCITzON5YpHd0
-0aEeAwjo3gS2F9HesNl8ccVO9K/zqA==
-=ot/V
------END PGP SIGNATURE-----
+Judith Mendez (2):
+  dt-bindings: net: can: Remove interrupt properties for MCAN
+  can: m_can: Add hrtimer to generate software interrupt
 
---2r4fdrigq4xuvtru--
+ .../bindings/net/can/bosch,m_can.yaml         | 20 ++++++++++--
+ drivers/net/can/m_can/m_can.c                 | 32 ++++++++++++++++++-
+ drivers/net/can/m_can/m_can.h                 |  3 ++
+ drivers/net/can/m_can/m_can_platform.c        | 23 +++++++++++--
+ 4 files changed, 72 insertions(+), 6 deletions(-)
+
+
+base-commit: e1f6a8eaf1c271a0158114a03e3605f4fba059ad
+-- 
+2.34.1
+
