@@ -2,62 +2,62 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4311174812D
-	for <lists+linux-can@lfdr.de>; Wed,  5 Jul 2023 11:40:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9061F74812C
+	for <lists+linux-can@lfdr.de>; Wed,  5 Jul 2023 11:40:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231823AbjGEJkb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 5 Jul 2023 05:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54456 "EHLO
+        id S231819AbjGEJka (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 5 Jul 2023 05:40:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231661AbjGEJkX (ORCPT
+        with ESMTP id S231626AbjGEJkX (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Wed, 5 Jul 2023 05:40:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5F221711
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C1D1719
         for <linux-can@vger.kernel.org>; Wed,  5 Jul 2023 02:40:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B319614CF
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 28D7E614D4
         for <linux-can@vger.kernel.org>; Wed,  5 Jul 2023 09:40:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7D704C433CB;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8A36DC433CC;
         Wed,  5 Jul 2023 09:40:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1688550020;
-        bh=wMKKvQrPkMzoRIpdV6P/Uisc8DsH/BV9Wpmiee/Wkyk=;
+        bh=ThZ9FkfbWFwJDXJbUIQrf5bgI70h1HawvSLzUEKqquo=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-        b=AUsx8zPooXjl1nGMAbLvnwR8c2UCg3I11zI392r66m9DGIvidmAMOHV5drO6iLjJN
-         a32hwYAARb0Aa1DKN4bfhjGTF+TeuxYuNvJuFTuOOlUM+hNkTieNPYa4dap8pYwV2V
-         4sK4f98YVs0xhVyBv8tFWMs/4J4UNSwqjdGQWvwLU51N++8Xox+6uW0jTMyIyFi+sK
-         +6SdAP9aoXaQHAMASpfOIqFggbEMpYGNHVFR8odPKmlvZEkxYp2lDMv+dEG13RsMI0
-         zcWV3kWeBcmG/fy0HgV4JyvoD9twCQhXe4Xra0GdRAUHw1SCcXIS8LpS/Z9Ix0IEYj
-         h63y3BH+LV+iw==
+        b=gQWRnYzdqi9Q0JJpECrSR3pta9h3tpOak76p7hFc/fpqFQlBqT+4cdy86D+89XdXJ
+         fzbeKch4i0PtajrsTEjbmKFXK6YAqVNgzvSGG+J318AGYfLMcxzQG1RxFyB/2mH+QO
+         VBQKIyJErCrzxZRwvPycTlSRodDC0a23S8rB9BFcYYJTAI6Zj3OIOaXA/fNoU9jaFM
+         4y7eQ7Uo7zp+r+qX226JJOVwtv0p+I8AHZLsZVKAzUIMdlWL++zeWO/Se7tUBemM/x
+         hC+5DnAGNxbdoTiLo+1ytjQKXcLR6UhCe8qDuH36ZNC3jUHV3P045t5o+guTn/d1T+
+         NIszHsdWMdw1A==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by smtp.lore.kernel.org (Postfix) with ESMTP id 68C83C001E0;
+        by smtp.lore.kernel.org (Postfix) with ESMTP id 7924DC001DF;
         Wed,  5 Jul 2023 09:40:20 +0000 (UTC)
 From:   Marc Kleine-Budde via B4 Relay 
         <devnull+mkl.pengutronix.de@kernel.org>
-Date:   Wed, 05 Jul 2023 11:39:54 +0200
-Subject: [PATCH 3/6] can: gs_usb: gs_usb_receive_bulk_callback(): count RX
- overflow errors also in case of OOM
+Date:   Wed, 05 Jul 2023 11:39:55 +0200
+Subject: [PATCH 4/6] can: gs_usb: gs_usb_receive_bulk_callback(): make use
+ of netdev
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230705-gs_usb-rx-offload-v1-3-8e7e46e40137@pengutronix.de>
+Message-Id: <20230705-gs_usb-rx-offload-v1-4-8e7e46e40137@pengutronix.de>
 References: <20230705-gs_usb-rx-offload-v1-0-8e7e46e40137@pengutronix.de>
 In-Reply-To: <20230705-gs_usb-rx-offload-v1-0-8e7e46e40137@pengutronix.de>
 To:     linux-can@vger.kernel.org
 Cc:     kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>
 X-Mailer: b4 0.13-dev-099c9
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1185; i=mkl@pengutronix.de;
- h=from:subject:message-id; bh=GKQzem9MCaDKD+CYo1F0A0x3ZO3+aBNF5BxFuvgp1OY=;
- b=owEBbQGS/pANAwAKAb5QHEoqigToAcsmYgBkpTp3cRLRpgNiG9gLwrJE1zS/P2EDYgoac7SWK
- rl877uNZ8CJATMEAAEKAB0WIQQOzYG9qPI0qV/1MlC+UBxKKooE6AUCZKU6dwAKCRC+UBxKKooE
- 6MjIB/9Z08jmbD52uWLUn/3UXHeHa5K2hubho2WWgmuQvUQt5bqeAGmAZ0lnU7ZHFwIEpiAjZ0v
- tqiLsbtnwwv33ujIeTLKnjDOlGlagxeeyqhr9iJa2j5LdUKZmraDhXFe/H9mdO+EyETBBG0nHKY
- kFXpGV8uzjQQFbwWvFEfTxs7cMkd6bcLUz0bB9Y3lQOD/xMN5dnbXDHBJUxdn0JK8MKmNONXZ22
- kpOHG19/NMm4J4LHMoNqlwvZSvwhJ6ZB+ZUhEF0Z2lgmIzNt5kMJ8h6cjqzy1524cNJMKG5GF4/
- N0Ezo/F0zY+FDcbbRczNprn71oNRGDfQO8G+Yo1HYVKaVYtf
+X-Developer-Signature: v=1; a=openpgp-sha256; l=983; i=mkl@pengutronix.de;
+ h=from:subject:message-id; bh=zz+nwXmpKwhnMzawf01FuKz+6ARnpv+x4HcZTBNnWBg=;
+ b=owEBbQGS/pANAwAKAb5QHEoqigToAcsmYgBkpTp5xh6MS+Vi5+6emmBSy+0xA5bo0XTWpnhLV
+ T7sUsVKHkuJATMEAAEKAB0WIQQOzYG9qPI0qV/1MlC+UBxKKooE6AUCZKU6eQAKCRC+UBxKKooE
+ 6CMcCACKom74WEQ+ZPXd5GOnby36AODdI7XaV+NvXtCf6D0guHCaZ9ZQ0E3dCbbEx/jI+65Fstg
+ TUfYKYfkFaNHhS5CS65x1a7xmcz40t44hyHy3B0oAuOGnqXrBalrLSzUcbuFUw9rAKvKa6tsdqB
+ dULYSNN0LCkR8rlc1eiuSRqqfIkcFYi1nD41yyhdI6a10nridwgPHStsCv9hEPaZz1xAn/dKfsC
+ T2ibdWmLVegpXNOChCcuXGEDCrBepME6NCcIya8NmsPuR0hkaUKj4kLPG+/6B2XFPHDH9RfmXRe
+ LlBYnm9aB9Id9sbaltL0oR3XxwnSRI6GMJaWgf1/i/FYlxBe
 X-Developer-Key: i=mkl@pengutronix.de; a=openpgp;
  fpr=C1400BA0B3989E6FBC7D5B5C2B5EE211C58AEA54
 X-Endpoint-Received: by B4 Relay for mkl@pengutronix.de/default with auth_id=52
@@ -75,40 +75,35 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 
-In case of an RX overflow error from the CAN controller and an OOM
-where no skb can be allocated, the error counters are not incremented.
+Make use the previously assigned variable netdev instead of using
+dev->netdev.
 
-Fix this by first incrementing the error counters and then allocate
-the skb.
-
-Fixes: d08e973a77d1 ("can: gs_usb: Added support for the GS_USB CAN devices")
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/usb/gs_usb.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/net/can/usb/gs_usb.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
-index d476c2884008..a60153f4cf1d 100644
+index a60153f4cf1d..b66af9d0ce6a 100644
 --- a/drivers/net/can/usb/gs_usb.c
 +++ b/drivers/net/can/usb/gs_usb.c
-@@ -628,6 +628,9 @@ static void gs_usb_receive_bulk_callback(struct urb *urb)
- 	}
+@@ -562,7 +562,7 @@ static void gs_usb_receive_bulk_callback(struct urb *urb)
  
- 	if (hf->flags & GS_CAN_FLAG_OVERFLOW) {
-+		stats->rx_over_errors++;
-+		stats->rx_errors++;
-+
- 		skb = alloc_can_err_skb(netdev, &cf);
- 		if (!skb)
- 			goto resubmit_urb;
-@@ -635,8 +638,6 @@ static void gs_usb_receive_bulk_callback(struct urb *urb)
- 		cf->can_id |= CAN_ERR_CRTL;
- 		cf->len = CAN_ERR_DLC;
- 		cf->data[1] = CAN_ERR_CRTL_RX_OVERFLOW;
--		stats->rx_over_errors++;
--		stats->rx_errors++;
- 		netif_rx(skb);
- 	}
+ 	if (hf->echo_id == -1) { /* normal rx */
+ 		if (hf->flags & GS_CAN_FLAG_FD) {
+-			skb = alloc_canfd_skb(dev->netdev, &cfd);
++			skb = alloc_canfd_skb(netdev, &cfd);
+ 			if (!skb)
+ 				return;
+ 
+@@ -575,7 +575,7 @@ static void gs_usb_receive_bulk_callback(struct urb *urb)
+ 
+ 			memcpy(cfd->data, hf->canfd->data, cfd->len);
+ 		} else {
+-			skb = alloc_can_skb(dev->netdev, &cf);
++			skb = alloc_can_skb(netdev, &cf);
+ 			if (!skb)
+ 				return;
  
 
 -- 
