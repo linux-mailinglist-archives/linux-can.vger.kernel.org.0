@@ -2,63 +2,85 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17B06749656
-	for <lists+linux-can@lfdr.de>; Thu,  6 Jul 2023 09:26:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 646CA749B3B
+	for <lists+linux-can@lfdr.de>; Thu,  6 Jul 2023 13:58:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233026AbjGFHZ6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 6 Jul 2023 03:25:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46512 "EHLO
+        id S230453AbjGFL6h (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 6 Jul 2023 07:58:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233200AbjGFHZ4 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 6 Jul 2023 03:25:56 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3BB51BD8
-        for <linux-can@vger.kernel.org>; Thu,  6 Jul 2023 00:25:54 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qHJMf-0004nH-2I; Thu, 06 Jul 2023 09:25:21 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 3B9B51EA41D;
-        Thu,  6 Jul 2023 07:25:14 +0000 (UTC)
-Date:   Thu, 6 Jul 2023 09:25:13 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Judith Mendez <jm@ti.com>
-Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Schuyler Patton <spatton@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Simon Horman <simon.horman@corigine.com>
-Subject: Re: [PATCH 2/2] can: m_can: Add hrtimer to generate software
- interrupt
-Message-ID: <20230706-unstopped-skedaddle-7168f2b12189-mkl@pengutronix.de>
-References: <20230705195356.866774-1-jm@ti.com>
- <20230705195356.866774-3-jm@ti.com>
+        with ESMTP id S229610AbjGFL6h (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 6 Jul 2023 07:58:37 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E680171A;
+        Thu,  6 Jul 2023 04:58:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1688644526; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=eZhrc/z9BJpMdGrTd7kPlejrq6tthGEkwnJh1Jiq+BrrzfLl4TS92HaS8rshwHaLIH
+    DLyS5VtRg/f3NKlOCr8L/eFO0tutHLrnxaWaJFc6s1AXyNc4ovzM5xIOQiGz8IjVSCMa
+    qRMvaztpIZ1hu9kTv4erPK62wQuRMF9HXQEIC1VSHwtor1us6Ybi+66lPNmGZPe8NKcI
+    fqtgAmd8mwuoexxGoViQZpKSbazVtmTMzjv9g5RdzI76B3xP92KHC68DoCEqXxKfz4dl
+    4U+T2UgzDpmPoPGKKOomkkiVJT8yxgnzTJWE12mMExmTkHirrJQoPY42A6o5I6JO0f/Q
+    Btgw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1688644526;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
+    Subject:Sender;
+    bh=AOXTzDi5h/B07lHAo7FOJdfVUIJvegXlfgKvUXFQp2Q=;
+    b=qifp5cdBNcnKuNbAwuKBuQeAifw4yytIiJmMwaG0oOwZKuaVkoe3FcY/X3ys7yIX1A
+    FOXullIygqulhjeywC3JpmExmTzlpZocxs5fK970sPHHmP8oPkRJbdm6QnqhyQVpMXJU
+    2j331Bhcsysrz2U214k9NRFb3gVs9IEkKtX1F2cYREpGJxmQLLz1jdSQeIoJmw4Z8QVV
+    Pm4qJfphSBN8rsA2NjNV33M+eagu2Qvm8Yv8REZ0ZHX2DG+n78l16UEFDlaLMHea/HfL
+    CNC4wtiqmJNBfwvpWh8AuUbg8uDvU7TxDX/24YQ+CUGz6uwJN91KU3X6lQLaIGmurgVY
+    bAqg==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1688644526;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
+    Subject:Sender;
+    bh=AOXTzDi5h/B07lHAo7FOJdfVUIJvegXlfgKvUXFQp2Q=;
+    b=LIpDRSmCnFgSeRIbbOCD+deGQTuZLM6j5Lpj+eTy+mNP5JDRbpRmgfhDr7Sfi8Zdi2
+    kfQqmV6bZMOIWq2AqrAEWqeSVp60vHO3CsLw9mZKBih9XIGo9ItzktrDWtYfxB0odQti
+    7EEKLw3l0mELQQZxi6UUvtwY6R7NQBmNpHQG1joZwuKN2/BuI6U2APvgWUFVZdk4qSxj
+    a9n3uyy8uhoJa6yDQha4FKDwVr8ANDYq/VXQ0p2wmNDD4q2UP1Xd6EjomUGel2JqfxI1
+    HrojUU4fAwIWjS5wt8+5ztJlUGJAiCxL8YliTkn8NN6OZPY258iqxr4rH9NwbRpShASl
+    Bq1w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1688644526;
+    s=strato-dkim-0003; d=hartkopp.net;
+    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
+    Subject:Sender;
+    bh=AOXTzDi5h/B07lHAo7FOJdfVUIJvegXlfgKvUXFQp2Q=;
+    b=d9uo8+wS7PwMZbdYrpVhQ0g0UByjoFJicxg/tkWReXPpvTK3BvbzQtZUSI1ptT7qjO
+    plopodpp5J1bwLryJpCA==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusl129OHEdFq0UTfM49EU6zESG7Syney4Zyv6WKe"
+Received: from [IPV6:2a00:6020:4a8e:5000:af1c:b276:f0e8:d21]
+    by smtp.strato.de (RZmta 49.6.0 AUTH)
+    with ESMTPSA id J16f43z66BtPCBa
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 6 Jul 2023 13:55:25 +0200 (CEST)
+Message-ID: <2aa65b0c-2170-46c0-57a4-17b653e41f96@hartkopp.net>
+Date:   Thu, 6 Jul 2023 13:55:19 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tmycw3ojonpci4ns"
-Content-Disposition: inline
-In-Reply-To: <20230705195356.866774-3-jm@ti.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH net] can: raw: fix receiver memory leak
+To:     Ziyang Xuan <william.xuanziyang@huawei.com>, mkl@pengutronix.de,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, penguin-kernel@I-love.SAKURA.ne.jp
+References: <20230705092543.648022-1-william.xuanziyang@huawei.com>
+Content-Language: en-US
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20230705092543.648022-1-william.xuanziyang@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,261 +88,203 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello Ziyang Xuan,
 
---tmycw3ojonpci4ns
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+thanks for your patch and the found inconsistency!
 
-On 05.07.2023 14:53:56, Judith Mendez wrote:
-> Introduce timer polling method to MCAN since some SoCs may not
-> have M_CAN interrupt routed to A53 Linux and do not have
-> interrupt property in device tree M_CAN node.
->=20
-> On AM62x SoC, MCANs on MCU domain do not have hardware interrupt
-> routed to A53 Linux, instead they will use timer polling method.
->=20
-> Add an hrtimer to MCAN class device. Each MCAN will have its own
-> hrtimer instantiated if there is no hardware interrupt found in
-> device tree M_CAN node. The timer will generate a software
-> interrupt every 1 ms. In hrtimer callback, we check if there is
-> a transaction pending by reading a register, then process by
-> calling the isr if there is.
->=20
-> Tested-by: Hiago De Franco <hiago.franco@toradex.com> # Toradex Verdin AM=
-62
-> Reviewed-by: Tony Lindgren <tony@atomide.com>
-> Signed-off-by: Judith Mendez <jm@ti.com>
-> ---
-> Changelog:
-> v9:
-> - Change add MS to HRTIMER_POLL_INTERVAL
-> - Change syntax from "=3D 0" to "!"
-> v8:
-> - Cancel hrtimer after interrupts in m_can_stop
-> - Move assignment of hrtimer_callback to m_can_class_register()
-> - Initialize irq =3D 0 if polling mode is used
+The ro->ifindex value might be zero even on a bound CAN_RAW socket which 
+results in the use of a common filter for all CAN interfaces, see below ...
 
-This change has been lost :(
+On 2023-07-05 11:25, Ziyang Xuan wrote:
 
-> - Add reson for polling mode in commit msg
-> - Remove unrelated change
-> - Remove polling flag
-> v7:
-> - Clean up m_can_platform.c if/else section after removing poll-interval
-> - Remove poll-interval from patch description
-> v6:
-> - Move hrtimer stop/start function calls to m_can_open and m_can_close to
-> support power suspend/resume
-> v5:
-> - Change dev_dbg to dev_info if hardware interrupt exists and polling
-> is enabled
-> v4:
-> - No changes
-> v3:
-> - Create a define for 1 ms polling interval
-> - Change plarform_get_irq to optional to not print error msg
-> v2:
-> - Add functionality to check for 'poll-interval' property in MCAN node=20
-> - Add 'polling' flag in driver to check if device is using polling method
-> - Check for timer polling and hardware interrupt cases, default to
-> hardware interrupt method
-> - Change ns_to_ktime() to ms_to_ktime()
-> ---
->  drivers/net/can/m_can/m_can.c          | 32 +++++++++++++++++++++++++-
->  drivers/net/can/m_can/m_can.h          |  3 +++
->  drivers/net/can/m_can/m_can_platform.c | 23 +++++++++++++++---
->  3 files changed, 54 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-> index c5af92bcc9c9..13fd84b2e2dd 100644
-> --- a/drivers/net/can/m_can/m_can.c
-> +++ b/drivers/net/can/m_can/m_can.c
-> @@ -11,6 +11,7 @@
->  #include <linux/bitfield.h>
->  #include <linux/can/dev.h>
->  #include <linux/ethtool.h>
-> +#include <linux/hrtimer.h>
->  #include <linux/interrupt.h>
->  #include <linux/io.h>
->  #include <linux/iopoll.h>
-> @@ -308,6 +309,9 @@ enum m_can_reg {
->  #define TX_EVENT_MM_MASK	GENMASK(31, 24)
->  #define TX_EVENT_TXTS_MASK	GENMASK(15, 0)
-> =20
-> +/* Hrtimer polling interval */
-> +#define HRTIMER_POLL_INTERVAL_MS		1
+(..)
+
+> @@ -277,7 +278,7 @@ static void raw_notify(struct raw_sock *ro, unsigned long msg,
+>   	if (!net_eq(dev_net(dev), sock_net(sk)))
+>   		return;
+>   
+> -	if (ro->ifindex != dev->ifindex)
+> +	if (ro->dev != dev)
+>   		return;
+>   
+>   	switch (msg) {
+> @@ -292,6 +293,7 @@ static void raw_notify(struct raw_sock *ro, unsigned long msg,
+>   
+>   		ro->ifindex = 0;
+>   		ro->bound = 0;
+> +		ro->dev = NULL;
+>   		ro->count = 0;
+>   		release_sock(sk);
+>   
+
+This would be ok for raw_notify().
+
+> @@ -337,6 +339,7 @@ static int raw_init(struct sock *sk)
+>   
+>   	ro->bound            = 0;
+>   	ro->ifindex          = 0;
+> +	ro->dev              = NULL;
+>   
+>   	/* set default filter to single entry dfilter */
+>   	ro->dfilter.can_id   = 0;
+> @@ -385,19 +388,13 @@ static int raw_release(struct socket *sock)
+>   
+>   	lock_sock(sk);
+>   
+> +	rtnl_lock();
+>   	/* remove current filters & unregister */
+>   	if (ro->bound) {
+> -		if (ro->ifindex) {
+> -			struct net_device *dev;
+> -
+> -			dev = dev_get_by_index(sock_net(sk), ro->ifindex);
+> -			if (dev) {
+> -				raw_disable_allfilters(dev_net(dev), dev, sk);
+> -				dev_put(dev);
+> -			}
+> -		} else {
+> +		if (ro->dev)
+> +			raw_disable_allfilters(dev_net(ro->dev), ro->dev, sk);
+> +		else
+>   			raw_disable_allfilters(sock_net(sk), NULL, sk);
+> -		}
+>   	}
+>   
+>   	if (ro->count > 1)
+> @@ -405,8 +402,10 @@ static int raw_release(struct socket *sock)
+>   
+>   	ro->ifindex = 0;
+>   	ro->bound = 0;
+> +	ro->dev = NULL;
+>   	ro->count = 0;
+>   	free_percpu(ro->uniq);
+> +	rtnl_unlock();
+>   
+>   	sock_orphan(sk);
+>   	sock->sk = NULL;
+
+This would be ok too.
+
+> @@ -422,6 +421,7 @@ static int raw_bind(struct socket *sock, struct sockaddr *uaddr, int len)
+>   	struct sockaddr_can *addr = (struct sockaddr_can *)uaddr;
+>   	struct sock *sk = sock->sk;
+>   	struct raw_sock *ro = raw_sk(sk);
+> +	struct net_device *dev = NULL;
+>   	int ifindex;
+>   	int err = 0;
+>   	int notify_enetdown = 0;
+> @@ -431,14 +431,13 @@ static int raw_bind(struct socket *sock, struct sockaddr *uaddr, int len)
+>   	if (addr->can_family != AF_CAN)
+>   		return -EINVAL;
+>   
+> +	rtnl_lock();
+>   	lock_sock(sk);
+>   
+> -	if (ro->bound && addr->can_ifindex == ro->ifindex)
+> +	if (ro->bound && ro->dev && addr->can_ifindex == ro->dev->ifindex)
+
+But this is wrong as the case for a bound socket for "all" CAN 
+interfaces (ifindex == 0) is not considered.
+
+>   		goto out;
+>   
+>   	if (addr->can_ifindex) {
+> -		struct net_device *dev;
+> -
+>   		dev = dev_get_by_index(sock_net(sk), addr->can_ifindex);
+>   		if (!dev) {
+>   			err = -ENODEV;
+> @@ -465,28 +464,23 @@ static int raw_bind(struct socket *sock, struct sockaddr *uaddr, int len)
+>   	}
+>   
+>   	if (!err) {
+> +		/* unregister old filters */
+>   		if (ro->bound) {
+> -			/* unregister old filters */
+> -			if (ro->ifindex) {
+> -				struct net_device *dev;
+> -
+> -				dev = dev_get_by_index(sock_net(sk),
+> -						       ro->ifindex);
+> -				if (dev) {
+> -					raw_disable_allfilters(dev_net(dev),
+> -							       dev, sk);
+> -					dev_put(dev);
+> -				}
+> -			} else {
+> +			if (ro->dev)
+> +				raw_disable_allfilters(dev_net(ro->dev),
+> +						       ro->dev, sk);
+> +			else
+>   				raw_disable_allfilters(sock_net(sk), NULL, sk);
+> -			}
+>   		}
+>   		ro->ifindex = ifindex;
 > +
->  /* The ID and DLC registers are adjacent in M_CAN FIFO memory,
->   * and we can save a (potentially slow) bus round trip by combining
->   * reads and writes to them.
-> @@ -1414,6 +1418,12 @@ static int m_can_start(struct net_device *dev)
-> =20
->  	m_can_enable_all_interrupts(cdev);
-> =20
-> +	if (!dev->irq) {
-> +		dev_dbg(cdev->dev, "Start hrtimer\n");
-> +		hrtimer_start(&cdev->hrtimer, ms_to_ktime(HRTIMER_POLL_INTERVAL_MS),
-> +			      HRTIMER_MODE_REL_PINNED);
-> +	}
-> +
->  	return 0;
->  }
-> =20
-> @@ -1568,6 +1578,11 @@ static void m_can_stop(struct net_device *dev)
->  {
->  	struct m_can_classdev *cdev =3D netdev_priv(dev);
-> =20
-> +	if (!dev->irq) {
-> +		dev_dbg(cdev->dev, "Stop hrtimer\n");
-> +		hrtimer_cancel(&cdev->hrtimer);
-> +	}
-> +
->  	/* disable all interrupts */
->  	m_can_disable_all_interrupts(cdev);
-> =20
-> @@ -1793,6 +1808,18 @@ static netdev_tx_t m_can_start_xmit(struct sk_buff=
- *skb,
->  	return NETDEV_TX_OK;
->  }
-> =20
-> +static enum hrtimer_restart hrtimer_callback(struct hrtimer *timer)
-> +{
-> +	struct m_can_classdev *cdev =3D container_of(timer, struct
-> +						   m_can_classdev, hrtimer);
-> +
-> +	m_can_isr(0, cdev->net);
-> +
-> +	hrtimer_forward_now(timer, ms_to_ktime(HRTIMER_POLL_INTERVAL_MS));
-> +
-> +	return HRTIMER_RESTART;
-> +}
-> +
->  static int m_can_open(struct net_device *dev)
->  {
->  	struct m_can_classdev *cdev =3D netdev_priv(dev);
-> @@ -1831,7 +1858,7 @@ static int m_can_open(struct net_device *dev)
->  		err =3D request_threaded_irq(dev->irq, NULL, m_can_isr,
->  					   IRQF_ONESHOT,
->  					   dev->name, dev);
-> -	} else {
-> +	} else if (dev->irq) {
->  		err =3D request_irq(dev->irq, m_can_isr, IRQF_SHARED, dev->name,
->  				  dev);
->  	}
-> @@ -2027,6 +2054,9 @@ int m_can_class_register(struct m_can_classdev *cde=
-v)
->  			goto clk_disable;
->  	}
-> =20
-> +	if (!cdev->net->irq)
-> +		cdev->hrtimer.function =3D &hrtimer_callback;
-> +
->  	ret =3D m_can_dev_setup(cdev);
->  	if (ret)
->  		goto rx_offload_del;
-> diff --git a/drivers/net/can/m_can/m_can.h b/drivers/net/can/m_can/m_can.h
-> index a839dc71dc9b..2ac18ac867a4 100644
-> --- a/drivers/net/can/m_can/m_can.h
-> +++ b/drivers/net/can/m_can/m_can.h
-> @@ -15,6 +15,7 @@
->  #include <linux/device.h>
->  #include <linux/dma-mapping.h>
->  #include <linux/freezer.h>
-> +#include <linux/hrtimer.h>
->  #include <linux/interrupt.h>
->  #include <linux/io.h>
->  #include <linux/iopoll.h>
-> @@ -93,6 +94,8 @@ struct m_can_classdev {
->  	int is_peripheral;
-> =20
->  	struct mram_cfg mcfg[MRAM_CFG_NUM];
-> +
-> +	struct hrtimer hrtimer;
->  };
-> =20
->  struct m_can_classdev *m_can_class_allocate_dev(struct device *dev, int =
-sizeof_priv);
-> diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m_c=
-an/m_can_platform.c
-> index 94dc82644113..76d11ce38220 100644
-> --- a/drivers/net/can/m_can/m_can_platform.c
-> +++ b/drivers/net/can/m_can/m_can_platform.c
-> @@ -5,6 +5,7 @@
->  //
->  // Copyright (C) 2018-19 Texas Instruments Incorporated - http://www.ti.=
-com/
-> =20
-> +#include <linux/hrtimer.h>
->  #include <linux/phy/phy.h>
->  #include <linux/platform_device.h>
-> =20
-> @@ -96,12 +97,28 @@ static int m_can_plat_probe(struct platform_device *p=
-dev)
->  		goto probe_fail;
+>   		ro->bound = 1;
+> +		ro->dev = dev;
+>   	}
+>   
+>    out:
+>   	release_sock(sk);
+> +	rtnl_unlock();
 
-Please set "irq" to 0 during declaration.
+Would it also fix the issue when just adding the rtnl_locks to 
+raw_bind() and raw_release() as suggested by you?
 
-> =20
->  	addr =3D devm_platform_ioremap_resource_byname(pdev, "m_can");
-> -	irq =3D platform_get_irq_byname(pdev, "int0");
-> -	if (IS_ERR(addr) || irq < 0) {
-> -		ret =3D -EINVAL;
-> +	if (IS_ERR(addr)) {
-> +		ret =3D PTR_ERR(addr);
->  		goto probe_fail;
->  	}
-> =20
-> +	if (device_property_present(mcan_class->dev, "interrupts") ||
-> +	    device_property_present(mcan_class->dev, "interrupt-names")) {
-> +		irq =3D platform_get_irq_byname(pdev, "int0");
-> +		if (irq =3D=3D -EPROBE_DEFER) {
-> +			ret =3D -EPROBE_DEFER;
-> +			goto probe_fail;
-> +		}
-> +		if (irq < 0) {
-> +			ret =3D -EINVAL;
+Many thanks,
+Oliver
 
-Please return the original error value.
-
-> +			goto probe_fail;
-> +		}
-> +	} else {
-> +		dev_dbg(mcan_class->dev, "Polling enabled, initialize hrtimer");
-> +		hrtimer_init(&mcan_class->hrtimer, CLOCK_MONOTONIC,
-> +			     HRTIMER_MODE_REL_PINNED);
-> +	}
-> +
->  	/* message ram could be shared */
->  	res =3D platform_get_resource_byname(pdev, IORESOURCE_MEM, "message_ram=
-");
->  	if (!res) {
-> --=20
-> 2.34.1
->=20
->=20
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---tmycw3ojonpci4ns
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmSmbFYACgkQvlAcSiqK
-BOgJaQgAhz4eZqUAOMPrcuu3yj+65snWRq39dbNtx7p8P3zynTmJTY/u+/5FcduW
-zPjps+bE+c+GKIPZXzsAPqVVJqxUunIFZJUC8kPEtMB1jQE9b6dGFeQlh0ssgrHg
-OfGhmKJ6IqDpOOTx5edZgBYphH0rMsoFXTiZK0QKlqjtLny0JC1iq9+zas+/YY4p
-/rbDoNFZQLcLwRAubcQHZ2ihhDvSN0kzGk89q3yCKZ489RwtGq4e+h1Ols7Sxp6+
-c0gglKT4SAETZtzOSl1O+wiKS/o8A88bPzdnWSOOhCxU2ZdouOzEEMrYyiWhZW3L
-1xrmb/4u+8uKcZb0ViUZ+LH26P8pOg==
-=mZ8A
------END PGP SIGNATURE-----
-
---tmycw3ojonpci4ns--
+>   
+>   	if (notify_enetdown) {
+>   		sk->sk_err = ENETDOWN;
+> @@ -553,9 +547,9 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
+>   		rtnl_lock();
+>   		lock_sock(sk);
+>   
+> -		if (ro->bound && ro->ifindex) {
+> -			dev = dev_get_by_index(sock_net(sk), ro->ifindex);
+> -			if (!dev) {
+> +		dev = ro->dev;
+> +		if (ro->bound && dev) {
+> +			if (dev->reg_state != NETREG_REGISTERED) {
+>   				if (count > 1)
+>   					kfree(filter);
+>   				err = -ENODEV;
+> @@ -596,7 +590,6 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
+>   		ro->count  = count;
+>   
+>    out_fil:
+> -		dev_put(dev);
+>   		release_sock(sk);
+>   		rtnl_unlock();
+>   
+> @@ -614,9 +607,9 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
+>   		rtnl_lock();
+>   		lock_sock(sk);
+>   
+> -		if (ro->bound && ro->ifindex) {
+> -			dev = dev_get_by_index(sock_net(sk), ro->ifindex);
+> -			if (!dev) {
+> +		dev = ro->dev;
+> +		if (ro->bound && dev) {
+> +			if (dev->reg_state != NETREG_REGISTERED) {
+>   				err = -ENODEV;
+>   				goto out_err;
+>   			}
+> @@ -627,7 +620,6 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
+>   			/* (try to) register the new err_mask */
+>   			err = raw_enable_errfilter(sock_net(sk), dev, sk,
+>   						   err_mask);
+> -
+>   			if (err)
+>   				goto out_err;
+>   
+> @@ -640,7 +632,6 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
+>   		ro->err_mask = err_mask;
+>   
+>    out_err:
+> -		dev_put(dev);
+>   		release_sock(sk);
+>   		rtnl_unlock();
+>   
