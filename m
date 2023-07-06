@@ -2,112 +2,142 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C8BD74A3C2
-	for <lists+linux-can@lfdr.de>; Thu,  6 Jul 2023 20:29:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C845674A4CE
+	for <lists+linux-can@lfdr.de>; Thu,  6 Jul 2023 22:21:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbjGFS3c (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 6 Jul 2023 14:29:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57006 "EHLO
+        id S230008AbjGFUVx (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 6 Jul 2023 16:21:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjGFS3b (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 6 Jul 2023 14:29:31 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8376F1BC3
-        for <linux-can@vger.kernel.org>; Thu,  6 Jul 2023 11:29:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1688668153; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=iBa/rYpTrhYcudjK231eDbysygTsl3c+WkEhTgyoKoThMY28w8DFhjnlehdJNGTr+P
-    kbQLEnsGCMnGCmXGP+xvAdP9+vNHbExsZmLT0Ztek6jWX8AZ3wcrX7A17NVer1weT8l9
-    MRc+/5x3B99Lxm2br11YIgUnBhYdaiGONCunPRwJLtseItYZw02b7PSmI8Ezot1PDpSO
-    X6DPXFaVWgjeiZS+tIEQCAByQ/ScxmO1EToAEH/+2f99+FRMwiTxCuWaJsNzT3P9Vb7z
-    zKYkZa68pnzalnZTqeI9zKSsGbJyTw/QSBO8tE0XCCtIU56MA/I5hQSxZ6eF6s8vsNM/
-    qYiw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1688668153;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
-    Subject:Sender;
-    bh=1NeheGUcAybSgshyvCWxGc+L75hjKHZwV+htD2/1P2c=;
-    b=ElxXTxgubhGxQMVKe3zJFOpe5MtuhJdjQEy4O3TsG9rZtb1S6Te/MtQnxAS1xlnH+Z
-    yOSwckGjJtdDK45dm644upWQEyFTWWcwU/nYVXI4EK7iSqfaZdj3FPzPddy4IDdFsrij
-    Uo+65oFCTrBZ6qarJghpexVlcrJp18+HRHhrWlhde1FxyN3Jk3zTzjjuj+n92xQVk2es
-    Zc241VwvDhH0SULwsUf2jYa93UdSOroKFfik5ApCdUWdCgH5//NVvIwR6zBeFlC2Z68g
-    JiAttaDDGJPwBOJYKwc9d9hrljVJ8vJRYN1VWJeU/giVp8b+7S1M2RUVPGp94GSj+pYl
-    4npw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1688668153;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
-    Subject:Sender;
-    bh=1NeheGUcAybSgshyvCWxGc+L75hjKHZwV+htD2/1P2c=;
-    b=LrVvc9EJbH7RkfVN5NaIAR5+T223/4RkeS1e9/aSrOmKKiveudGH5WVnqqdO3Tl9Yx
-    +nduGBkiChvmQopZlZpR8l/I98EPOZCWULNzNbJ8BLPENJ2hNjd+qXoxvx4GyCRPjVSR
-    9MpG+B1Pl+IGPKM23Fn6x2ZxqnPtjwNxyvSg/ebFOm2FgDCH+OoFEqt9aXqjwlGhTft+
-    lvYo3r9NZ7dDgw3QPNaaQ1jD48p9TdntSFvDTHCwYtcBX72U6tdBUzJLZIuPQZux1OyB
-    RWuYQnXpgV8U8yDVDsij+YyejMvQwXmiUEpQWD1QHMktLZmrQUMK+R4vw263OdkzCu9W
-    NxuA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1688668153;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
-    Subject:Sender;
-    bh=1NeheGUcAybSgshyvCWxGc+L75hjKHZwV+htD2/1P2c=;
-    b=hCIsOnMMG4pcUFQCAgXcjv8i/5koYLQwnJidKaHu3zpF7Uka4Xehk8j7EtyKZSzW4P
-    0lUSwwG5hVgXja+oG7AQ==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusl129OHEdFq0USEbDUQnQ=="
-Received: from [IPV6:2a00:6020:4a8e:5000::923]
-    by smtp.strato.de (RZmta 49.6.0 AUTH)
-    with ESMTPSA id J16f43z66ITCEfC
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Thu, 6 Jul 2023 20:29:12 +0200 (CEST)
-Message-ID: <2a035aab-d10a-bb6f-d056-ea93c454a51d@hartkopp.net>
-Date:   Thu, 6 Jul 2023 20:29:05 +0200
+        with ESMTP id S229787AbjGFUVw (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 6 Jul 2023 16:21:52 -0400
+Received: from mail11.truemail.it (mail11.truemail.it [IPv6:2001:4b7e:0:8::81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3937E1996;
+        Thu,  6 Jul 2023 13:21:50 -0700 (PDT)
+Received: from francesco-nb.int.toradex.com (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+        by mail11.truemail.it (Postfix) with ESMTPA id DC821209B4;
+        Thu,  6 Jul 2023 22:21:47 +0200 (CEST)
+Date:   Thu, 6 Jul 2023 22:21:43 +0200
+From:   Francesco Dolcini <francesco@dolcini.it>
+To:     Judith Mendez <jm@ti.com>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Schuyler Patton <spatton@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Simon Horman <simon.horman@corigine.com>
+Subject: Re: [PATCH 2/2] can: m_can: Add hrtimer to generate software
+ interrupt
+Message-ID: <ZKciVy4juK55OUrG@francesco-nb.int.toradex.com>
+References: <20230705195356.866774-1-jm@ti.com>
+ <20230705195356.866774-3-jm@ti.com>
+ <20230706-unstopped-skedaddle-7168f2b12189-mkl@pengutronix.de>
+ <0ba17779-9cd9-6cb2-a79c-6b14b73a42db@ti.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH net] can: raw: fix receiver memory leak
-To:     "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>,
-        mkl@pengutronix.de, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, penguin-kernel@I-love.SAKURA.ne.jp
-References: <20230705092543.648022-1-william.xuanziyang@huawei.com>
- <2aa65b0c-2170-46c0-57a4-17b653e41f96@hartkopp.net>
- <4880eff5-1009-add8-8c58-ac31ab6771db@huawei.com>
-Content-Language: en-US
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <4880eff5-1009-add8-8c58-ac31ab6771db@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0ba17779-9cd9-6cb2-a79c-6b14b73a42db@ti.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 06.07.23 14:48, Ziyang Xuan (William) wrote:
-
-(..)
-
->>>        }
->>>       out:
->>>        release_sock(sk);
->>> +    rtnl_unlock();
->>
->> Would it also fix the issue when just adding the rtnl_locks to raw_bind() and raw_release() as suggested by you?
+On Thu, Jul 06, 2023 at 10:20:59AM -0500, Judith Mendez wrote:
+> Hi Marc
 > 
-> This patch just add rtnl_lock in raw_bind() and raw_release(). raw_setsockopt() has rtnl_lock before this. raw_notify()
-> is under rtnl_lock. My patch has been tested and solved the issue before send. I don't know if it answered your doubts.
+> On 7/6/23 2:25 AM, Marc Kleine-Budde wrote:
+> > On 05.07.2023 14:53:56, Judith Mendez wrote:
+> > > Introduce timer polling method to MCAN since some SoCs may not
+> > > have M_CAN interrupt routed to A53 Linux and do not have
+> > > interrupt property in device tree M_CAN node.
+> > > 
+> > > On AM62x SoC, MCANs on MCU domain do not have hardware interrupt
+> > > routed to A53 Linux, instead they will use timer polling method.
+> > > 
+> > > Add an hrtimer to MCAN class device. Each MCAN will have its own
+> > > hrtimer instantiated if there is no hardware interrupt found in
+> > > device tree M_CAN node. The timer will generate a software
+> > > interrupt every 1 ms. In hrtimer callback, we check if there is
+> > > a transaction pending by reading a register, then process by
+> > > calling the isr if there is.
+> > > 
+> > > Tested-by: Hiago De Franco <hiago.franco@toradex.com> # Toradex Verdin AM62
+> > > Reviewed-by: Tony Lindgren <tony@atomide.com>
+> > > Signed-off-by: Judith Mendez <jm@ti.com>
+> > > ---
 
-My question was whether adding rtnl_locks to raw_bind() and 
-raw_release() would be enough to fix the issue.
+...
 
-Without introducing the additional ro->dev element!?
+> > > diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m_can/m_can_platform.c
+> > > index 94dc82644113..76d11ce38220 100644
+> > > --- a/drivers/net/can/m_can/m_can_platform.c
+> > > +++ b/drivers/net/can/m_can/m_can_platform.c
+> > > @@ -5,6 +5,7 @@
+> > >   //
+> > >   // Copyright (C) 2018-19 Texas Instruments Incorporated - http://www.ti.com/
+> > > +#include <linux/hrtimer.h>
+> > >   #include <linux/phy/phy.h>
+> > >   #include <linux/platform_device.h>
+> > > @@ -96,12 +97,28 @@ static int m_can_plat_probe(struct platform_device *pdev)
+> > >   		goto probe_fail;
+> > 
+> > Please set "irq" to 0 during declaration.
+> 
+> During declaration of irq, it is already set to 0:
+> 
+> int irq, ret = 0;
 
-Best regards,
-Oliver
+The initialization here applies only to ret.
+
+int irq = 0, ret = 0;
+
+> > >   	addr = devm_platform_ioremap_resource_byname(pdev, "m_can");
+> > > -	irq = platform_get_irq_byname(pdev, "int0");
+> > > -	if (IS_ERR(addr) || irq < 0) {
+> > > -		ret = -EINVAL;
+> > > +	if (IS_ERR(addr)) {
+> > > +		ret = PTR_ERR(addr);
+> > >   		goto probe_fail;
+> > >   	}
+> > > +	if (device_property_present(mcan_class->dev, "interrupts") ||
+> > > +	    device_property_present(mcan_class->dev, "interrupt-names")) {
+> > > +		irq = platform_get_irq_byname(pdev, "int0");
+> > > +		if (irq == -EPROBE_DEFER) {
+> > > +			ret = -EPROBE_DEFER;
+> > > +			goto probe_fail;
+> > > +		}
+> > > +		if (irq < 0) {
+> > > +			ret = -EINVAL;
+> > 
+> > Please return the original error value.
+> 
+> The original value returned is -EINVAL:
+> 
+> -	if (IS_ERR(addr) || irq < 0) {
+> -		ret = -EINVAL;
+> 
+> Perhaps I am missing something here?
+
+if (irq < 0) {
+	ret = irq;
+	...
+}
+
+And you can also get rid of the explicit test for -EPROBE_DEFER this
+way simplifying the code.
+
+Francesco
+
