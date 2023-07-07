@@ -2,90 +2,58 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CA4C74AB0F
-	for <lists+linux-can@lfdr.de>; Fri,  7 Jul 2023 08:23:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE49574ABFA
+	for <lists+linux-can@lfdr.de>; Fri,  7 Jul 2023 09:34:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229452AbjGGGXJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 7 Jul 2023 02:23:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33650 "EHLO
+        id S232055AbjGGHe1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 7 Jul 2023 03:34:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232178AbjGGGW6 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 7 Jul 2023 02:22:58 -0400
-X-Greylist: delayed 42811 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 06 Jul 2023 23:22:57 PDT
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19403E1;
-        Thu,  6 Jul 2023 23:22:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1688710969; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=qRTCx/MgEn2PK8KaWCwWDfBOTJsSNm6YwjqVHG2MstZPNS6qUKCMaZwvkQNdUX0Kj0
-    1ZHk4UWQuJ4LNo2/+7cFqCbq4pM0+j6p+gpAjOIo184PXgVwLsZRFc7b4mMmivNHdF7c
-    Ay39oWWfWWpVdKTy6wbBN14UFZZpdBrbEUyaZvtdHfQ6Ceq2amiR35ccO0BrDQre7GLr
-    jC8U9/DhqbNEY1X0vvoMRJU5zqZZLO3nFcb2dTDiVM56ROULEHO8bchSc6S7KOu6aNBx
-    NHAHAl0SAy4tqbzsZYdxC4g42aFwj3bnWrZ6qD5Jlye+nej5Y10yjycQfkEEBV2yW+Vn
-    8x/Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1688710969;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
-    Subject:Sender;
-    bh=r4Z8zNUbjJk0qMg28NgEMMmR0/U0tXMFYk4LiIFA+Js=;
-    b=C15NQKNQxqwyQE6Rki2fiOkragnOH/tEVCUTqKMMBDHzLFnyqTH/xwdp+Z4/qAhRvQ
-    SqJs+PWpe1Nj4EPztXov3Rw8k/gVqTBxt+xtgUrhED98agiYe432eDGMGcu1i5Zv+xq1
-    ADqoMPy1f7/vV9YBRGffB4i8SA74nzf1oYrByiMn+daAIxI49drG3W6phG8SM/xs8c0N
-    knYDQoslMUD8u3mUzxqGUXuT7p+/CAQEPb7jmvTdlYDDLtHY8jVb9pCCYoLmsXtye2FA
-    /VH6AfpQ3UPWeaKYVWKx+ZBF/tFbbqr2Ky/hj0hO/mJHTV95ZscFJFKw9v2d/Npt66i/
-    lFog==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1688710969;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
-    Subject:Sender;
-    bh=r4Z8zNUbjJk0qMg28NgEMMmR0/U0tXMFYk4LiIFA+Js=;
-    b=Lc8KSJoZWUzlmrW24Tdr0XkfzJj3dQBkEnvfn3uEHCY6dniz5xFKmh3FHeNa3XFUqT
-    WKrP060pQaj0CPQwVCa/hFx7Pz4YCi8Te9WJ4SnLHxkdF4SmmqoLdPExowtVW9Lt+XDq
-    6KxBip7i+wTOgpUPgG66I1sjRCHpI/uZJAkc4Ux6LY4RiffXc1VKGw7+Be5Sl6OTLHlV
-    64dwFJ0H3F/TGMAUSYoQCkkSNx33P2A66RcTpz2+2GVyIXgk7fdI7+CrWszKWk3wcPze
-    CiyM2dueKG8VCtVPAXrucEYkh3cfrdPnW0roojwGjMv+Xcuiuh3A9sjKLzD8/T3FljyX
-    YFHA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1688710969;
-    s=strato-dkim-0003; d=hartkopp.net;
-    h=In-Reply-To:From:References:To:Subject:Date:Message-ID:Cc:Date:From:
-    Subject:Sender;
-    bh=r4Z8zNUbjJk0qMg28NgEMMmR0/U0tXMFYk4LiIFA+Js=;
-    b=qtRW04UdGs4b+lpOF9LT95Ue0M3njNQ5ydFwglChpuwrJHwJmC3yQwFmT98Y9akIgw
-    TnOQ++CeLpkEQHjBFcCw==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusl129OHEdFq0USEbDUQnQ=="
-Received: from [IPV6:2a00:6020:4a8e:5000::923]
-    by smtp.strato.de (RZmta 49.6.0 AUTH)
-    with ESMTPSA id J16f43z676MmFSG
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Fri, 7 Jul 2023 08:22:48 +0200 (CEST)
-Message-ID: <1de551fb-d4f2-d0b8-e155-a5830f4d8d62@hartkopp.net>
-Date:   Fri, 7 Jul 2023 08:22:43 +0200
+        with ESMTP id S229684AbjGGHe0 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 7 Jul 2023 03:34:26 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A9D1FE2
+        for <linux-can@vger.kernel.org>; Fri,  7 Jul 2023 00:34:25 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1qHfyq-0003Q6-E7; Fri, 07 Jul 2023 09:34:16 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id D3E421EAE26;
+        Fri,  7 Jul 2023 07:34:14 +0000 (UTC)
+Date:   Fri, 7 Jul 2023 09:34:14 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Kumari Pallavi <kumari.pallavi@intel.com>
+Cc:     "rcsekar@samsung.com" <rcsekar@samsung.com>,
+        "Sangannavar, Mallikarjunappa" 
+        <mallikarjunappa.sangannavar@intel.com>,
+        "Nikula, Jarkko" <jarkko.nikula@intel.com>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Thokala, Srikanth" <srikanth.thokala@intel.com>
+Subject: Re: RE: [RESEND] [PATCH 1/1] can: m_can: Control tx and rx flow to
+ avoid communication stall
+Message-ID: <20230707-breeder-shaft-61b826633b7e-mkl@pengutronix.de>
+References: <20230623085920.12904-1-kumari.pallavi@intel.com>
+ <20230705-return-slogan-36c499673bb6-mkl@pengutronix.de>
+ <SJ1PR11MB608478D62EDFAEDDBE8C0890872DA@SJ1PR11MB6084.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH net] can: raw: fix receiver memory leak
-To:     "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>,
-        mkl@pengutronix.de, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, penguin-kernel@I-love.SAKURA.ne.jp
-References: <20230705092543.648022-1-william.xuanziyang@huawei.com>
- <2aa65b0c-2170-46c0-57a4-17b653e41f96@hartkopp.net>
- <4880eff5-1009-add8-8c58-ac31ab6771db@huawei.com>
- <2a035aab-d10a-bb6f-d056-ea93c454a51d@hartkopp.net>
- <18374b78-dd42-c096-85bf-d7dd2e9c5fe8@huawei.com>
-Content-Language: en-US
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <18374b78-dd42-c096-85bf-d7dd2e9c5fe8@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dxld4druqcvwrqfa"
+Content-Disposition: inline
+In-Reply-To: <SJ1PR11MB608478D62EDFAEDDBE8C0890872DA@SJ1PR11MB6084.namprd11.prod.outlook.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,75 +62,63 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
+--dxld4druqcvwrqfa
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 07.07.23 03:59, Ziyang Xuan (William) wrote:
->> On 06.07.23 14:48, Ziyang Xuan (William) wrote:
->>
->> (..)
->>
->>>>>         }
->>>>>        out:
->>>>>         release_sock(sk);
->>>>> +    rtnl_unlock();
->>>>
->>>> Would it also fix the issue when just adding the rtnl_locks to raw_bind() and raw_release() as suggested by you?
->>>
->>> This patch just add rtnl_lock in raw_bind() and raw_release(). raw_setsockopt() has rtnl_lock before this. raw_notify()
->>> is under rtnl_lock. My patch has been tested and solved the issue before send. I don't know if it answered your doubts.
->>
->> My question was whether adding rtnl_locks to raw_bind() and raw_release() would be enough to fix the issue.
->>
->> Without introducing the additional ro->dev element!?
-> 
-> Understand. Just add rtnl_lock to raw_bind() and raw_release() can not fix the issue. I tested.
-> 
-> We should understand that unregister a net device is divided into two stages generally.
-> Fistly, call unregister_netdevice_many() to remove net_dev from device list and add
-> net_dev to net_todo_list. Secondly, free net_dev in netdev_run_todo().
-> 
-> In my issue. Firstly, unregister_netdevice_many() removed can_dev from device
-> list and added can_dev to net_todo_list. Then got NULL by dev_get_by_index()
-> and receivers in dev_rcv_lists would not be freed in raw_release().
-> After raw_release(), ro->bound would be set 0. When NETDEV_UNREGISTER event
-> arrived raw_notify(), receivers in dev_rcv_lists would not be freed too
-> because ro->bound was already 0. Thus receivers in dev_rcv_lists would be leaked.
+On 07.07.2023 05:38:09, Kumari Pallavi wrote:
+> > >  			if (netif_queue_stopped(dev) &&
+> > >  			    !m_can_tx_fifo_full(cdev))
+> > >  				netif_wake_queue(dev);
+> > > @@ -1787,6 +1787,7 @@ static netdev_tx_t m_can_start_xmit(struct sk_b=
+uff
+> > *skb,
+> > >  		}
+> > >  	} else {
+> > >  		cdev->tx_skb =3D skb;
+> > > +		m_can_write(cdev, M_CAN_IE, IR_ALL_INT & (IR_TEFN));
+> >=20
+> > - What's the purpose of  "()" around IR_TEFN?
+> > - "IR_ALL_INT & (IR_TEFN)" is equal to IR_TEFN, isn't it?
+> > - This basically disables all other interrupts, is this what you want to
+> >   do?
+> > - What happens if the bus is busy with high prio CAN frames and you want
+> >   to send low prio ones? You will not get any RX-IRQ, this doesn't look
+> >   correct to me.
+> >=20
+>=20
+> Even though the RX interrupt is disabled (in IE), if there is an TX
+> interrupt and the RF0N bit is set (in IR), the RX packet will still be
+> serviced because the TX and RX share the same IRQ handler.
 
-Thanks for the clarification and the testing!
+If the bus is busy with high prio CAN frames and the m_can wants to send
+a low prio frame, the m_can will not be able to send it's CAN frame,
+there will be not TX interrupt. If there are enough high prio CAN frames
+the RX buffer will overflow.
 
-I really assumed rtnl_lock would do this job and also protect the entire 
-sequence starting with unregister_netdevice_many() !?!
+regards,
+Marc
 
-Looking forward to the V2 patch then.
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
-Many thanks,
-Oliver
+--dxld4druqcvwrqfa
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> 
->               cpu0                                        cpu1
-> unregister_netdevice_many(can_dev)
->    unlist_netdevice(can_dev) // dev_get_by_index() return NULL after this
->    net_set_todo(can_dev)
-> 						raw_release(can_socket)
-> 						  dev = dev_get_by_index(, ro->ifindex); // dev == NULL
-> 						  if (dev) { // receivers in dev_rcv_lists not free because dev is NULL
-> 						    raw_disable_allfilters(, dev, );
-> 						    dev_put(dev);
-> 						  }
-> 						...
-> 						ro->bound = 0;
-> 						...
-> 
-> netdev_wait_allrefs_any()
->    call_netdevice_notifiers(NETDEV_UNREGISTER, )
->      raw_notify(, NETDEV_UNREGISTER, )
->        if (ro->bound) // invalid because ro->bound has been set 0
->          raw_disable_allfilters(, dev, ); // receivers in dev_rcv_lists will never be freed
-> 
-> 
-> Thanks,
-> William Xuan
-> 
->>
->> Best regards,
->> Oliver
->> .
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmSnv/MACgkQvlAcSiqK
+BOjdRAf/ev2175DU15TwDRx6naSR7QltyRAabcBHohWJrGf/oDogSB3PYo3V6wFY
+fRtr7Dy0JRw2p2jm1oTL+UzfB45Ap3Kp8x6DDA4+4Ca2eok+aK6r7jDE1rWKfod/
+iBjQt6x0Plk5PT4ph7M1f1ukGUsJERyFoAQsR1rZQv2n+eT0pqGJZwpWofNtppG5
+AQw04M1keRRE6LeMk1aeMdHi3fGiZT8QEJom0i1UEOiERIARuVsL5B3NDFEYkxVF
+FXSX8YPH6QZS6hNAbY7x79qEB0qRRX52Uj2FklIsYnl8YeXnFUe7ISp+n+9bFERs
+NcnMQ/tGrFAUHZc8ln6jnQOE5jtk0g==
+=dHVD
+-----END PGP SIGNATURE-----
+
+--dxld4druqcvwrqfa--
