@@ -2,84 +2,86 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D934574D15A
-	for <lists+linux-can@lfdr.de>; Mon, 10 Jul 2023 11:26:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4A6474D1C4
+	for <lists+linux-can@lfdr.de>; Mon, 10 Jul 2023 11:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230401AbjGJJ0m (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 10 Jul 2023 05:26:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48310 "EHLO
+        id S232970AbjGJJin (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 10 Jul 2023 05:38:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjGJJ0l (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 10 Jul 2023 05:26:41 -0400
-X-Greylist: delayed 898 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 10 Jul 2023 02:26:38 PDT
-Received: from mx01.mail-services.network (mx01.mail-services.network [212.18.219.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAD20BA;
-        Mon, 10 Jul 2023 02:26:38 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mx01.mail-services.network (Postfix) with ESMTP id 9B524E802380D;
-        Mon, 10 Jul 2023 11:01:29 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=schlau.com;
-        s=default; t=1688979689;
-        bh=kxlEKT5MABMv8TZNvWvmLUXvZaveA5yI1ozKvFMbNiM=;
-        h=Date:From:To:Subject:Reply-To;
-        b=Uog6YK3LignTu3GvkIyfGMqY1AwYw4xm0JzdK5JzFjftvdpatPhFiVxifltHaCW0t
-         tFbZJXg+H4wozEoEOHPy2eE1gSVJ7HoXOCoS2EdyR8rlylHfIl4x1qU7VRXKUB0YLW
-         SAzKqHVBBE81q0df9w3ajYbu0LWvXrPv+c+UMLPY=
-X-Virus-Scanned: amavisd-new at schlau.com
-Received: from mx01.mail-services.network ([127.0.0.1])
-        by localhost (mail.kirtel.de [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id MIOSqvQjkib3; Mon, 10 Jul 2023 11:01:29 +0200 (CEST)
-Received: from webmail.kirtel.de (www02 [10.15.54.199])
-        (Authenticated sender: heinenandy@schlau.com)
-        by mx01.mail-services.network (Postfix) with ESMTPA id CA66BE8026E7C;
-        Mon, 10 Jul 2023 10:59:05 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=schlau.com;
-        s=default; t=1688979548;
-        bh=kxlEKT5MABMv8TZNvWvmLUXvZaveA5yI1ozKvFMbNiM=;
-        h=Date:From:To:Subject:Reply-To;
-        b=Kp33U4kAFsANgZACFnf3P2Ra3sG8WgMiad9Nd3SNP+xfSWd/+wJeGY8nlw7I3mrqC
-         8VYzN54ZLoxjshEQNjQ8vkymFqAdWU0NKhLTcjVogjBX014WFUhJtYdcv9GakDNGXE
-         auNQgaGL7/ziKqgbmXe4HxY3ekW1KQqEicUBzPQ4=
+        with ESMTP id S231635AbjGJJiR (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 10 Jul 2023 05:38:17 -0400
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1EA30E2
+        for <linux-can@vger.kernel.org>; Mon, 10 Jul 2023 02:36:17 -0700 (PDT)
+Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-262f55069faso5385921a91.1
+        for <linux-can@vger.kernel.org>; Mon, 10 Jul 2023 02:36:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688981742; x=1691573742;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0ydRUn+tKaLG1zTzHEXZ2Ybmp5TubgGd03eOnLQcB9w=;
+        b=f4x56Gb9J2IpCSMIWWsDJ152nauDKuXhS9qkivqZQU7Aqzl+wgGtd9FC7SFMtzMDDH
+         /S3LuOr4DuRNNPCKwV1cH2PLA5vc2HuI7mg7L2xM+oRs375YvQbdU2gTH5BMPCRm7bxi
+         aNblyO3EGRBVCGgjZWOy4SmHbTrpmPZ06Cz9A8Xbdq2E9MUPHrMDNcEpwsFAXVqs8LEb
+         ynGbb3/ZO+vrQfQeE7bn5DLXgEb6lqVnRIMA5x3zzZtASWcG6ajZEFjMpKEpBoaad32c
+         QldFf7o5QE7iSf61nqA+vEwpZL/bHEKDEkkr6JbpqM4mQUIddPd/dLZ+92wgByg7NHkR
+         gT/g==
+X-Gm-Message-State: ABy/qLbbh6r1axhpbrYrbxLUnVdB6h5h3BgtwbL3hHoetZ21njhe135D
+        Vyuxplfa+scGQWfNwUOlWdIEN3Q2BzPjUWLnXqR7GOsReeudsxU=
+X-Google-Smtp-Source: APBJJlFte/aUON1/d+7OQe6PyezOXIdxpLKUCjpp5BSxfk2sXsOXrfOimFbJkWLgfI1py9v9VxR1Zb7iypewj+Cuo1VSsavUc/Ai
 MIME-Version: 1.0
-Date:   Mon, 10 Jul 2023 11:00:44 +0200
-From:   Pfizer <heinenandy@schlau.com>
-To:     undisclosed-recipients:;
-Subject: Invitation
-Reply-To: pfizernv@ftml.net
-User-Agent: Roundcube Webmail/1.4.3
-Message-ID: <23b470d7c857c87f5f6200ca288a6da1@schlau.com>
-X-Sender: heinenandy@schlau.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Received: by 2002:a17:90b:1283:b0:263:f16:3192 with SMTP id
+ fw3-20020a17090b128300b002630f163192mr9969156pjb.3.1688981741807; Mon, 10 Jul
+ 2023 02:35:41 -0700 (PDT)
+Date:   Mon, 10 Jul 2023 02:35:41 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c0affc06001eb4b5@google.com>
+Subject: [syzbot] Monthly can report (Jul 2023)
+From:   syzbot <syzbot+lista46e1a512a5bfdf1cfa5@syzkaller.appspotmail.com>
+To:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mkl@pengutronix.de, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Good Day Sir/Madam,
+Hello can maintainers/developers,
 
-We are pleased to invite you or your company to quote the following item
-listed
-below:
-Product/Model No: MNV FORGED 20K GLOBE VALVE MNV26092
-Model Number: MNV26092
-Qty. 53
-Compulsory, Kindly send your quotation to:
-quotation@pfizersuplychains.com
-for immediate approval.
+This is a 31-day syzbot report for the can subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/can
 
-Kind Regards,
-David Fielding
-Chief Procurement Officer
-PFIZER MANUFACTURING BELGIUM (NV)
-Address: Rijksweg 12, 2870 Puurs-Sint-Amands, Belgium
-B.T.W : BE 0400.778.165
-Tel: +32 78 48 03 31
-Fax: +32 20 12 94 06
+During the period, 1 new issues were detected and 0 were fixed.
+In total, 13 issues are still open and 45 have been fixed so far.
+
+Some of the still happening issues:
+
+Ref Crashes Repro Title
+<1> 279     Yes   possible deadlock in j1939_sk_queue_drop_all
+                  https://syzkaller.appspot.com/bug?extid=3bd970a1887812621b4c
+<2> 56      Yes   possible deadlock in j1939_session_activate
+                  https://syzkaller.appspot.com/bug?extid=f32cbede7fd867ce0d56
+<3> 10      No    KCSAN: data-race in bcm_can_tx / bcm_tx_setup (3)
+                  https://syzkaller.appspot.com/bug?extid=e1786f049e71693263bf
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
+
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
