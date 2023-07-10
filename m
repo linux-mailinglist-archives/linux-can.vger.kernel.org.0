@@ -2,73 +2,84 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0205D74CDDB
-	for <lists+linux-can@lfdr.de>; Mon, 10 Jul 2023 09:03:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D934574D15A
+	for <lists+linux-can@lfdr.de>; Mon, 10 Jul 2023 11:26:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230469AbjGJHDj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 10 Jul 2023 03:03:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57504 "EHLO
+        id S230401AbjGJJ0m (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 10 Jul 2023 05:26:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbjGJHDi (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 10 Jul 2023 03:03:38 -0400
-Received: from mail.nfschina.com (unknown [42.101.60.195])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 877BFE9;
-        Mon, 10 Jul 2023 00:03:35 -0700 (PDT)
-Received: from [172.30.11.106] (unknown [180.167.10.98])
-        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id 05916602B2DE0;
-        Mon, 10 Jul 2023 15:03:32 +0800 (CST)
-Message-ID: <9b5eb66d-984b-51b5-1eeb-7e71773958f7@nfschina.com>
-Date:   Mon, 10 Jul 2023 15:03:32 +0800
+        with ESMTP id S229493AbjGJJ0l (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 10 Jul 2023 05:26:41 -0400
+X-Greylist: delayed 898 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 10 Jul 2023 02:26:38 PDT
+Received: from mx01.mail-services.network (mx01.mail-services.network [212.18.219.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAD20BA;
+        Mon, 10 Jul 2023 02:26:38 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mx01.mail-services.network (Postfix) with ESMTP id 9B524E802380D;
+        Mon, 10 Jul 2023 11:01:29 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=schlau.com;
+        s=default; t=1688979689;
+        bh=kxlEKT5MABMv8TZNvWvmLUXvZaveA5yI1ozKvFMbNiM=;
+        h=Date:From:To:Subject:Reply-To;
+        b=Uog6YK3LignTu3GvkIyfGMqY1AwYw4xm0JzdK5JzFjftvdpatPhFiVxifltHaCW0t
+         tFbZJXg+H4wozEoEOHPy2eE1gSVJ7HoXOCoS2EdyR8rlylHfIl4x1qU7VRXKUB0YLW
+         SAzKqHVBBE81q0df9w3ajYbu0LWvXrPv+c+UMLPY=
+X-Virus-Scanned: amavisd-new at schlau.com
+Received: from mx01.mail-services.network ([127.0.0.1])
+        by localhost (mail.kirtel.de [127.0.0.1]) (amavisd-new, port 10024)
+        with LMTP id MIOSqvQjkib3; Mon, 10 Jul 2023 11:01:29 +0200 (CEST)
+Received: from webmail.kirtel.de (www02 [10.15.54.199])
+        (Authenticated sender: heinenandy@schlau.com)
+        by mx01.mail-services.network (Postfix) with ESMTPA id CA66BE8026E7C;
+        Mon, 10 Jul 2023 10:59:05 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=schlau.com;
+        s=default; t=1688979548;
+        bh=kxlEKT5MABMv8TZNvWvmLUXvZaveA5yI1ozKvFMbNiM=;
+        h=Date:From:To:Subject:Reply-To;
+        b=Kp33U4kAFsANgZACFnf3P2Ra3sG8WgMiad9Nd3SNP+xfSWd/+wJeGY8nlw7I3mrqC
+         8VYzN54ZLoxjshEQNjQ8vkymFqAdWU0NKhLTcjVogjBX014WFUhJtYdcv9GakDNGXE
+         auNQgaGL7/ziKqgbmXe4HxY3ekW1KQqEicUBzPQ4=
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH net-next v2 09/10] can: ems_pci: Remove unnecessary
- (void*) conversions
-Content-Language: en-US
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, uttenthaler@ems-wuensche.com,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-X-MD-Sfrom: yunchuan@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From:   yunchuan <yunchuan@nfschina.com>
-In-Reply-To: <bbd3da00-1b6e-9e47-e1a3-e9c050efb8aa@nfschina.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Date:   Mon, 10 Jul 2023 11:00:44 +0200
+From:   Pfizer <heinenandy@schlau.com>
+To:     undisclosed-recipients:;
+Subject: Invitation
+Reply-To: pfizernv@ftml.net
+User-Agent: Roundcube Webmail/1.4.3
+Message-ID: <23b470d7c857c87f5f6200ca288a6da1@schlau.com>
+X-Sender: heinenandy@schlau.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 2023/7/10 14:53, yunchuan wrote:
-> On 2023/7/10 14:49, Marc Kleine-Budde wrote:
->> On 10.07.2023 14:41:38, Su Hui wrote:
->>> From: wuych <yunchuan@nfschina.com>
->>>
->>> Pointer variables of void * type do not require type cast.
->> I like the idea. Please add my Acked-by: Marc Kleine-Budde
->> <mkl@pengutronix.de>, after you've fixed the issue:
-> that's great, I will do this.
-> thanks:)!
->
-> wuych
->
->>> Signed-off-by: wuych <yunchuan@nfschina.com>
->> This patch is not Signed-off-by the contributing person.
->>
+Good Day Sir/Madam,
 
-Oh, sorry for this, I just mixed the email because of some careless reasons.
-The send email <suhui@nfschina.com> is my co-worker.
-But the contributing person is me, sorry again!
+We are pleased to invite you or your company to quote the following item
+listed
+below:
+Product/Model No: MNV FORGED 20K GLOBE VALVE MNV26092
+Model Number: MNV26092
+Qty. 53
+Compulsory, Kindly send your quotation to:
+quotation@pfizersuplychains.com
+for immediate approval.
 
-wuych
-
-
->> regards,
->> Marc
->>
+Kind Regards,
+David Fielding
+Chief Procurement Officer
+PFIZER MANUFACTURING BELGIUM (NV)
+Address: Rijksweg 12, 2870 Puurs-Sint-Amands, Belgium
+B.T.W : BE 0400.778.165
+Tel: +32 78 48 03 31
+Fax: +32 20 12 94 06
