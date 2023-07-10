@@ -2,84 +2,100 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C981C74CD58
-	for <lists+linux-can@lfdr.de>; Mon, 10 Jul 2023 08:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9FDB74CD9E
+	for <lists+linux-can@lfdr.de>; Mon, 10 Jul 2023 08:49:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231890AbjGJGmD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 10 Jul 2023 02:42:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46038 "EHLO
+        id S229968AbjGJGth (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 10 Jul 2023 02:49:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231978AbjGJGlv (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 10 Jul 2023 02:41:51 -0400
-Received: from mail.nfschina.com (unknown [42.101.60.195])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 5C204E67;
-        Sun,  9 Jul 2023 23:41:44 -0700 (PDT)
-Received: from localhost.localdomain (unknown [180.167.10.98])
-        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id 42F2E602B2DC6;
-        Mon, 10 Jul 2023 14:41:40 +0800 (CST)
-X-MD-Sfrom: suhui@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From:   Su Hui <suhui@nfschina.com>
-To:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc:     uttenthaler@ems-wuensche.com, yunchuan@nfschina.com,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH net-next v2 09/10] can: ems_pci: Remove unnecessary (void*) conversions
-Date:   Mon, 10 Jul 2023 14:41:38 +0800
-Message-Id: <20230710064138.173912-1-suhui@nfschina.com>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S229493AbjGJGtg (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 10 Jul 2023 02:49:36 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E538E
+        for <linux-can@vger.kernel.org>; Sun,  9 Jul 2023 23:49:35 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1qIkhz-0004j7-25; Mon, 10 Jul 2023 08:49:19 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 3A4901ECAA5;
+        Mon, 10 Jul 2023 06:49:15 +0000 (UTC)
+Date:   Mon, 10 Jul 2023 08:49:14 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Su Hui <suhui@nfschina.com>
+Cc:     wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, uttenthaler@ems-wuensche.com,
+        yunchuan@nfschina.com, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH net-next v2 09/10] can: ems_pci: Remove unnecessary
+ (void*) conversions
+Message-ID: <20230710-parachute-dispersal-208e1a406b78-mkl@pengutronix.de>
+References: <20230710064138.173912-1-suhui@nfschina.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vliygvx23paytwk4"
+Content-Disposition: inline
+In-Reply-To: <20230710064138.173912-1-suhui@nfschina.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: wuych <yunchuan@nfschina.com>
 
-Pointer variables of void * type do not require type cast.
+--vliygvx23paytwk4
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: wuych <yunchuan@nfschina.com>
----
- drivers/net/can/sja1000/ems_pci.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On 10.07.2023 14:41:38, Su Hui wrote:
+> From: wuych <yunchuan@nfschina.com>
+>=20
+> Pointer variables of void * type do not require type cast.
 
-diff --git a/drivers/net/can/sja1000/ems_pci.c b/drivers/net/can/sja1000/ems_pci.c
-index c56e27223e5f..ac86640998a8 100644
---- a/drivers/net/can/sja1000/ems_pci.c
-+++ b/drivers/net/can/sja1000/ems_pci.c
-@@ -148,7 +148,7 @@ static void ems_pci_v1_write_reg(const struct sja1000_priv *priv,
- 
- static void ems_pci_v1_post_irq(const struct sja1000_priv *priv)
- {
--	struct ems_pci_card *card = (struct ems_pci_card *)priv->priv;
-+	struct ems_pci_card *card = priv->priv;
- 
- 	/* reset int flag of pita */
- 	writel(PITA2_ICR_INT0_EN | PITA2_ICR_INT0,
-@@ -168,7 +168,7 @@ static void ems_pci_v2_write_reg(const struct sja1000_priv *priv,
- 
- static void ems_pci_v2_post_irq(const struct sja1000_priv *priv)
- {
--	struct ems_pci_card *card = (struct ems_pci_card *)priv->priv;
-+	struct ems_pci_card *card = priv->priv;
- 
- 	writel(PLX_ICSR_ENA_CLR, card->conf_addr + PLX_ICSR);
- }
-@@ -186,7 +186,7 @@ static void ems_pci_v3_write_reg(const struct sja1000_priv *priv,
- 
- static void ems_pci_v3_post_irq(const struct sja1000_priv *priv)
- {
--	struct ems_pci_card *card = (struct ems_pci_card *)priv->priv;
-+	struct ems_pci_card *card = priv->priv;
- 
- 	writel(ASIX_LINTSR_INT0AC, card->conf_addr + ASIX_LINTSR);
- }
--- 
-2.30.2
+I like the idea. Please add my Acked-by: Marc Kleine-Budde
+<mkl@pengutronix.de>, after you've fixed the issue:
 
+> Signed-off-by: wuych <yunchuan@nfschina.com>
+
+This patch is not Signed-off-by the contributing person.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--vliygvx23paytwk4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmSrqecACgkQvlAcSiqK
+BOiTlQf+KaGq+RQKecV2KZC82/U90JGtuIisVjkNKRh/mMhg+6CPgj37A36dJopA
+B309j3311kHTCuBsPWfD+IXLkOunPKJRGtxL+IxsXWtcAClti6YDG7HqUYGl9Mpi
+f0vyLf1xV60WUFTu6yJ2w6Rn25G79SM+071PWHHgDGqqb2vSYZFIY8d2hhnh/as8
+oKl3x8v+Fskg/so9Z8QKZ3cydmNhH/FOFwu6kNk7ofEzNokpcVQ5Os6Fk6nt5VJT
+HjeB7kAV+JuKO07gyMqZKKPfOm5z4f+tsWB3RkSRnKPMM9J6+U/5Gwl/v7X21+5e
+d8sLIAYPaGagxcB1uQXk9Djy+S3kbg==
+=dqfX
+-----END PGP SIGNATURE-----
+
+--vliygvx23paytwk4--
