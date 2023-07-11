@@ -2,58 +2,67 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C206874F675
-	for <lists+linux-can@lfdr.de>; Tue, 11 Jul 2023 19:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 535B574F7CB
+	for <lists+linux-can@lfdr.de>; Tue, 11 Jul 2023 20:10:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231704AbjGKRFu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 11 Jul 2023 13:05:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55364 "EHLO
+        id S230385AbjGKSKW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 11 Jul 2023 14:10:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbjGKRFp (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 11 Jul 2023 13:05:45 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98BFF12A
-        for <linux-can@vger.kernel.org>; Tue, 11 Jul 2023 10:05:44 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qJGni-0003hd-JI; Tue, 11 Jul 2023 19:05:22 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
+        with ESMTP id S229626AbjGKSKU (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 11 Jul 2023 14:10:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4943F170C;
+        Tue, 11 Jul 2023 11:10:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 822D71EDE3F;
-        Tue, 11 Jul 2023 17:05:20 +0000 (UTC)
-Date:   Tue, 11 Jul 2023 19:05:19 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Mike Looijmans <mike.looijmans@topic.nl>
-Cc:     linux-can@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC1A8615AD;
+        Tue, 11 Jul 2023 18:10:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77234C433C8;
+        Tue, 11 Jul 2023 18:10:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689099018;
+        bh=fgsSU4RTwG4VGCYX1r2gOtI9K5ILxtnDHYmNK6g0Mkg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sc+m/bTBE4mmECtCDGZJiMQjX7s83U1TwrfjoYrot9ksHXoaYC0wEQd0ySZSa43Si
+         Xf53ueLL+QXtBWoxmxBxcTMwonY27GfRa0LU+rEcjrh1AV/NR1Xcp0XSsjJBmh5e4I
+         qF++OOo0UlxZUg95+pPSEle6XLficCeo38fGGIKXpMvWcwq6sZcq7LiUz4+28mC2Z0
+         3TJn0byHHeNPf8oEt6/XIzkcI1RPotW1TuG2G2us1+sfbgnWBpTA2z7dbDrGVEFmZ+
+         vfDpTvP85IxQ5PEsfdXAhiIo7wxIHBrxT8Wrvmtks2QdQMpQt5gIqDkcG8+Y9udOiN
+         WXFt5ncsTu0hQ==
+Date:   Tue, 11 Jul 2023 19:10:12 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Michal Simek <michal.simek@amd.com>
+Cc:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
+        michal.simek@xilinx.com, git@xilinx.com,
+        Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
         Paolo Abeni <pabeni@redhat.com>,
-        Thomas Kopp <thomas.kopp@microchip.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Wolfgang Grandegger <wg@grandegger.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH] can: mcp251xfd: Always stop on BUS_OFF and call
- netif_stop_queue
-Message-ID: <20230711-refusing-derby-9a9d4d255d30-mkl@pengutronix.de>
-References: <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.c7fafffb-93a7-4f4c-9c1e-df959c3ed3bb@emailsignatures365.codetwo.com>
- <20230711152647.28673-1-mike.looijmans@topic.nl>
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: can: xilinx_can: Add reset description
+Message-ID: <20230711-parted-rasping-82b911b90e1e@spud>
+References: <cover.1689084227.git.michal.simek@amd.com>
+ <c8e7f86d60b56a9ca2592d9ee30a3a64e535f429.1689084227.git.michal.simek@amd.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xjdidpnmyunubgfu"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="goRIxT+tsSQKD88J"
 Content-Disposition: inline
-In-Reply-To: <20230711152647.28673-1-mike.looijmans@topic.nl>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <c8e7f86d60b56a9ca2592d9ee30a3a64e535f429.1689084227.git.michal.simek@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -61,78 +70,55 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---xjdidpnmyunubgfu
-Content-Type: text/plain; charset=utf-8
+--goRIxT+tsSQKD88J
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 11.07.2023 17:26:47, Mike Looijmans wrote:
-> When there's an error attempting to store the BER counter, don't abort
-> but continue shutting down the chip as required.
-
-If you refer to an error by __mcp251xfd_get_berr_counter(), it's not a
-store error, but a failure of regmap_read(priv->map_reg,
-MCP251XFD_REG_TREC, &trec). By default the SPI transfers are CRC enabled
-and no/wrong data from the chip will be detected and return an error
-here (after 3 retires). In out of memory conditions or other kernel
-errors might be possible here, too.
-
-Have you seen a problem here? But as we shut down the chip here anyways,
-we can ignore the error here.
-
-> After disabling communications, also stop the TX queue with a call to
-> netif_stop_queue.
-
-can_bus_off() will call netif_carrier_off(), isn't this sufficient? Have
-you enabled automatic restart in case of bus off? I think the netdev
-watchdog will kick you, if the interface has a stooped queue for too
-long (IIRC 5 seconds).
-
-> When the interface restarts, mcp251xfd_set_mode will
-> call netif_wake_queue and resume.
+On Tue, Jul 11, 2023 at 04:03:54PM +0200, Michal Simek wrote:
+> IP core has input for reset signal which can be connected that's why
+> describe optional reset property.
 >=20
-> This fixes a hangup in either send() or poll() from userspace. To
-> reproduce: I ran "cansequence can0 -p" to flood the system with packets.
-> While running that, I shorted the CAN signals, causing a bus error.
-> Usually communications would resume after the CAN bus restarted, but
-> sometimes the system got stuck and refused to send any more packets.
-> The sending process would be in either poll() or send(), waiting for
-> the queue to resume. To "unstuck" the process from send() it was
-> sufficient to send any packet on the can interface from another
-> process. To get it out of the poll() hang, only bringing the can
-> interface down (and up) would work.
+> Signed-off-by: Michal Simek <michal.simek@amd.com>
+
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+
+Cheers,
+Conor.
+
+> ---
 >=20
-> After adding the netif_stop_queue call, I was unable to reproduce the
-> problem.
+>  Documentation/devicetree/bindings/net/can/xilinx,can.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/net/can/xilinx,can.yaml b/=
+Documentation/devicetree/bindings/net/can/xilinx,can.yaml
+> index 897d2cbda45b..64d57c343e6f 100644
+> --- a/Documentation/devicetree/bindings/net/can/xilinx,can.yaml
+> +++ b/Documentation/devicetree/bindings/net/can/xilinx,can.yaml
+> @@ -46,6 +46,9 @@ properties:
+>      $ref: /schemas/types.yaml#/definitions/uint32
+>      description: CAN Tx mailbox buffer count (CAN FD)
+> =20
+> +  resets:
+> +    maxItems: 1
+> +
+>  required:
+>    - compatible
+>    - reg
+> --=20
+> 2.36.1
+>=20
 
-The newly added netif_stop_queue() will cause the netif_wake_queue() in
-the mcp251xfd_set_mode() to actually wake the queue. If you observe a
-problem, I think it's a general problem, so all drivers would be
-effected.
-
-> Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---xjdidpnmyunubgfu
+--goRIxT+tsSQKD88J
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmSti8sACgkQvlAcSiqK
-BOhbsgf/ZDCk6kV2bkTAL5hEAJ20qEpn5KsjPtSV3Hg4n07RaxlTSKFbjesUBJYZ
-lGLGnIBxPQZE2g4z4pMKkBaG1E3xq1GJ04gEAefbg6u2Q7h5xvsZ8RLtnuT0ODsE
-WB7UJd9yAFKC+nlyRwErZdacem0Zni18rm482p5WPQbxItgO+VM9InLOxZxBaEjG
-HP7l2VKIxy/7QHm/UNrMZshFZjLAgH1uKnYkhpczxD2AI22XrM69SJZvODGsTqiz
-u0/mWRfTpHA7jbH3RrgX1nz5Ne7vxnx9HAey9QMpV4knF3osLFHGnk5AG0mnw8cu
-3at2k9pIKa9H/qE5hEF2liMqw+x7LQ==
-=e62K
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZK2bBAAKCRB4tDGHoIJi
+0pTmAP0RcjbnxLer61UPJAZOWQdhrzOor0yr7ddQcKI9iGX9RAEAshUh7JvDWhDV
+fnrS8qIgliqgcBJXI/9ewYwCU5qfTQ8=
+=QG6Q
 -----END PGP SIGNATURE-----
 
---xjdidpnmyunubgfu--
+--goRIxT+tsSQKD88J--
