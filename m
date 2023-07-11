@@ -2,86 +2,92 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CD6274EA54
-	for <lists+linux-can@lfdr.de>; Tue, 11 Jul 2023 11:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6403F74F0B1
+	for <lists+linux-can@lfdr.de>; Tue, 11 Jul 2023 15:52:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231982AbjGKJZY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 11 Jul 2023 05:25:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49184 "EHLO
+        id S231589AbjGKNwj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 11 Jul 2023 09:52:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231501AbjGKJZD (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 11 Jul 2023 05:25:03 -0400
-Received: from mail.nfschina.com (unknown [42.101.60.195])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 6C57F1BD2;
-        Tue, 11 Jul 2023 02:20:52 -0700 (PDT)
-Received: from [172.30.11.106] (unknown [180.167.10.98])
-        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id BFBE76062ABFD;
-        Tue, 11 Jul 2023 17:20:29 +0800 (CST)
-Message-ID: <c9b37dac-7f13-210b-23f7-57ece0f7d1c6@nfschina.com>
-Date:   Tue, 11 Jul 2023 17:20:28 +0800
+        with ESMTP id S229637AbjGKNwg (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 11 Jul 2023 09:52:36 -0400
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com [209.85.167.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC6199
+        for <linux-can@vger.kernel.org>; Tue, 11 Jul 2023 06:52:35 -0700 (PDT)
+Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-3a1c2d69709so5064955b6e.1
+        for <linux-can@vger.kernel.org>; Tue, 11 Jul 2023 06:52:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689083555; x=1691675555;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=try7kLiqOvWBbDWNv3AsjzJNZ1pHNvllo2yNmM+PfCo=;
+        b=BblO4TOAulmGSRCd5h6rsXWmLOG18wHqgPn37UfrIwKfYboDyoB9YePHP2SlIao9fR
+         4Oa5k7gQ1zii4qZmQryBm1OzNPVDV63l8VuSRQZHOCUjhxVh+9+wdlXZfpZf4pvHlvb9
+         XHA1JVroSiFErSzPo6LencPcFOKM6fIaMWsjaZouUVEt+V66DQjhF03yCsG/jpSuYrT7
+         tjH7xM0pQVtp0Q6x5lMYi+TnnuGTVl/jJsYx5aD7nQBTLkuMyipRVH8JfuCpHF8t5/hm
+         Q5DTiuwulIB7NKuzKTLf10da/Y8eRLyWQ+4L1C6fWaCi/hL8l/OiV0fI/FxWtVMpNUu4
+         Dl+g==
+X-Gm-Message-State: ABy/qLYj19yKDgbU32ltUCefh+uznLkwoArOVInq5U2Aii0Aun/n2nb1
+        U977Wh/uKWTgdnDCrwzKigKFYlV+ugu6IpYruyNPhQW40hYH
+X-Google-Smtp-Source: APBJJlGDsG+nOMkSJbLXJKRNGNJfHOn13Ov445zenjdwf+cSdHKoP10U8UttX2mqO6muw59vtWRMSKpRyJ6QOj+P2/CyrzrHnT/T
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [Intel-wired-lan] [PATCH net-next v2 00/10] Remove unnecessary
- (void*) conversions
-Content-Language: en-US
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        irusskikh@marvell.com, rmody@marvell.com, skalluru@marvell.com,
-        GR-Linux-NIC-Dev@marvell.com, yisen.zhuang@huawei.com,
-        salil.mehta@huawei.com, jesse.brandeburg@intel.com,
-        anthony.l.nguyen@intel.com, steve.glendinning@shawell.net,
-        iyappan@os.amperecomputing.com, keyur@os.amperecomputing.com,
-        quan@os.amperecomputing.com, andrew@lunn.ch, hkallweit1@gmail.com,
-        linux@armlinux.org.uk, mostrows@earthlink.net, xeb@mail.ru,
-        qiang.zhao@nxp.com, uttenthaler@ems-wuensche.com,
-        netdev@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, linuxppc-dev@lists.ozlabs.org
-X-MD-Sfrom: yunchuan@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From:   yunchuan <yunchuan@nfschina.com>
-In-Reply-To: <f1f9002c-ccc3-a2de-e4f5-d8fa1f8734e3@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:aca:bd03:0:b0:3a3:a8d1:1aa1 with SMTP id
+ n3-20020acabd03000000b003a3a8d11aa1mr1493645oif.2.1689083554789; Tue, 11 Jul
+ 2023 06:52:34 -0700 (PDT)
+Date:   Tue, 11 Jul 2023 06:52:34 -0700
+In-Reply-To: <0000000000009393ba059691c6a3@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000477efc0600366975@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in j1939_session_get_by_addr
+From:   syzbot <syzbot+d9536adc269404a984f8@syzkaller.appspotmail.com>
+To:     Jose.Abreu@synopsys.com, arvid.brodin@alten.se,
+        davem@davemloft.net, dvyukov@google.com,
+        ilias.apalodimas@linaro.org, joabreu@synopsys.com,
+        jose.abreu@synopsys.com, kernel@pengutronix.de,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux@rempel-privat.de, mkl@pengutronix.de, netdev@vger.kernel.org,
+        nogikh@google.com, robin@protonic.nl, socketcan@hartkopp.net,
+        syzkaller-bugs@googlegroups.com, tonymarislogistics@yandex.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 2023/7/11 16:53, Paul Menzel wrote:
-> Dear Su,
->
->
-> Thank you for your patch.
->
-> Am 10.07.23 um 08:38 schrieb Su Hui:
->> From: wuych <yunchuan@nfschina.com>
->
-> Can you please write the full name correctly? Maybe Yun Chuan?
->
->     git config --global user.name "Yun Chuan"
->     git commit --amend --author="Yun Chuan <yunchuan@nfschina.com>"
+This bug is marked as fixed by commit:
+can: j1939: transport: make sure the aborted session will be
 
-Dear Paul Menzel,
+But I can't find it in the tested trees[1] for more than 90 days.
+Is it a correct commit? Please update it by replying:
 
-Thanks for your reminder!
-I have already changed this  to my full name "Wu Yunchuan".
-Should I resend all these patches to change the author name?
-> I only got the cover letter by the way.
-> s
-Maybe the network met some problems.
-I will send this patchset to you separately.
+#syz fix: exact-commit-title
 
-Wu Yunchuan
+Until then the bug is still considered open and new crashes with
+the same signature are ignored.
 
->
-> Kind regards,
->
-> Paul
->
+Kernel: Linux
+Dashboard link: https://syzkaller.appspot.com/bug?extid=d9536adc269404a984f8
+
+---
+[1] I expect the commit to be present in:
+
+1. for-kernelci branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
+
+2. master branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
+
+3. master branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
+
+4. main branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
+
+The full list of 9 trees can be found at
+https://syzkaller.appspot.com/upstream/repos
