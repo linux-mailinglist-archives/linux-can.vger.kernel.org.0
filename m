@@ -2,225 +2,139 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F5FF750269
-	for <lists+linux-can@lfdr.de>; Wed, 12 Jul 2023 11:05:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81C4A750808
+	for <lists+linux-can@lfdr.de>; Wed, 12 Jul 2023 14:21:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232661AbjGLJFe (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 12 Jul 2023 05:05:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51896 "EHLO
+        id S230361AbjGLMVT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 12 Jul 2023 08:21:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232806AbjGLJFF (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 12 Jul 2023 05:05:05 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E849B268D
-        for <linux-can@vger.kernel.org>; Wed, 12 Jul 2023 02:03:46 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qJVl1-0003ZK-Hv; Wed, 12 Jul 2023 11:03:35 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id D6AF41EE5D7;
-        Wed, 12 Jul 2023 09:03:32 +0000 (UTC)
-Date:   Wed, 12 Jul 2023 11:03:32 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Michal Simek <michal.simek@amd.com>
-Cc:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
-        michal.simek@xilinx.com, git@xilinx.com,
-        Srinivas Neeli <srinivas.neeli@amd.com>,
-        Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
+        with ESMTP id S232145AbjGLMVT (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 12 Jul 2023 08:21:19 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2049.outbound.protection.outlook.com [40.107.100.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2629B;
+        Wed, 12 Jul 2023 05:21:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MoXnJsGgJyFJrFFbFjTiQKxpPklbf8lQRaOUjyAhuHOMJ3vRRfHzkB7KEJY8YRxUQ+nRojfrSH1JFEbm009uyoYCtaNQrmswbeKIfYna3AVw5Z0wUe8lo6hnQko0Gm0YaQasVez4rFyEh5RfqhW4bw4LxyLHFK6fxBe6sJ8eUzRICfpGFrihluynivVxFgaREDiEws/uUKHETHOaQk4douP4tsQu67OFX9MmgpsAtzKQll4s3sPOveQXyaXkFELnlw67hIIb98+JDxRHwb9XepVzD4EkxPAa6b4ERUu13QiPy2s/nBa/bFvbRRu8XPTg87oN67w+bk4Y226I+0aTdg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1S+TFdjPSevPjaaOxtZlrwgMXajCENZswHAc02DhrjY=;
+ b=bUobeeR8mxVUoTck9Bpflr53tHpeIbw4JmCXaE+HVYt2/LkewyzmG9JrUn1dcu6/P9ZfySQ3TCco8/BBsKsSRkcTJWlSw0C7uWXJVSF7DnuJ+kWXLiEsXUah0ilRbTkWKyn1MpFjGUrE63OZvnvj4TIjFag7oKUCIGW0PTICMRUZJ9OzCe6EtVysXBeAj71YORf7TmCNlZ38SCY+w8i6A5Fs9/Ay9UcSIkp7XJcbFC4SQTvZ7VWn4k4ECHKRwWwnYDJu8a8Q+b04DlezD5weBANTzd13yv32w8C/XyHI7Xb8JIUb9DFyciV/w9bOgsOU06X27mG2rfl4cyIxNMwKew==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1S+TFdjPSevPjaaOxtZlrwgMXajCENZswHAc02DhrjY=;
+ b=SxGhj1/YvMYk9AYClF7//WcjYr3jyBtRhycJhxvaEBfn3vw7jnrMhqiZ31Fo3dTUiRPH5RgG+052w0LrgR2wp1euOelg1EP7DQDT9VH/Cc3Z6q59EPpL3n8ToIduyD57cpmKBqeyp4DkWxfpyo5NecgWtsnmX4i7PPYxru9NvSg=
+Received: from BN9PR03CA0725.namprd03.prod.outlook.com (2603:10b6:408:110::10)
+ by LV2PR12MB5894.namprd12.prod.outlook.com (2603:10b6:408:174::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.22; Wed, 12 Jul
+ 2023 12:21:14 +0000
+Received: from BN8NAM11FT081.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:110:cafe::d7) by BN9PR03CA0725.outlook.office365.com
+ (2603:10b6:408:110::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.22 via Frontend
+ Transport; Wed, 12 Jul 2023 12:21:14 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT081.mail.protection.outlook.com (10.13.177.233) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6588.20 via Frontend Transport; Wed, 12 Jul 2023 12:21:14 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 12 Jul
+ 2023 07:20:49 -0500
+From:   Michal Simek <michal.simek@amd.com>
+To:     <linux-kernel@vger.kernel.org>, <monstr@monstr.eu>,
+        <michal.simek@xilinx.com>, <git@xilinx.com>
+CC:     Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
+        Conor Dooley <conor+dt@kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
         Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
         Paolo Abeni <pabeni@redhat.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
         Wolfgang Grandegger <wg@grandegger.com>,
-        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 2/2] can: xilinx_can: Add support for controller reset
-Message-ID: <20230712-recliner-subtly-196dece73001-mkl@pengutronix.de>
-References: <cover.1689084227.git.michal.simek@amd.com>
- <a913de6c4099a1d3408a3973f637446b50c5dee4.1689084227.git.michal.simek@amd.com>
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>
+Subject: [PATCH v2 0/2] can: xilinx_can: Add support for reset
+Date:   Wed, 12 Jul 2023 14:20:44 +0200
+Message-ID: <cover.1689164442.git.michal.simek@amd.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="t5miqgvjtmuko355"
-Content-Disposition: inline
-In-Reply-To: <a913de6c4099a1d3408a3973f637446b50c5dee4.1689084227.git.michal.simek@amd.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=563; i=michal.simek@amd.com; h=from:subject:message-id; bh=1+QhGE1RSmOv+y7+BhtDNFIGzu2+LwmNdEnPp+aL69Y=; b=owGbwMvMwCR4yjP1tKYXjyLjabUkhpR1s2Z3mfJZFX/TODXt5++5ShtF2+R0OEpiPt8uEv9oo q7Jvp21I5aFQZCJQVZMkUXa5sqZvZUzpghfPCwHM4eVCWQIAxenAEzEQIJhnn5fucz5tdpi29JP bCtJuCY/cZvmNIYFM5Rq5otu2M3Z0Vbkl6U2kX3Gr5frAA==
+X-Developer-Key: i=michal.simek@amd.com; a=openpgp; fpr=67350C9BF5CCEE9B5364356A377C7F21FE3D1F91
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT081:EE_|LV2PR12MB5894:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8ca42918-0b90-43fa-3e3f-08db82d27c7b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ccbbZsYESL7BDHi5HGq5ioFscx+f/zi2hJDJjp7IM1IVy7tP0MqvOIgms4FlnZG7Tw8yJaCwPQplP9PIzZaZwAxpDd850L8hpQNE+qxhZFMEqhWhkdtMndS7pafwvX2qKjP0UWU2R9+Jfa2Oe6dco054/HxEc21BK5mVV2S7+tz4IASNbC0T+IyzSZi6eWkvkQCqc5BcCAJNMiYro2j8x4EmWnabRBkQUJBatF4GapFfGNOXznkAEOrU7J4010OU127C+1mrc0x7iY5aBP9H7I8uWNnpcQXrQaFRF/SDOmeNfm1Wu29E2p42TBMv/JevrPmPqBc99cRRJB08NqDA7XxMT3BMIkcotgpJGgYiIZWyKN84nUwoMfuBaBgA2NcSqib1s0mYWpt1smFuO/c29n/UbUKsQpnERMcxKdBB5ekZrc+Q3ZTFP2WbzyaueoP0CvWi2YmSbr/eYpBxChtDRdVvPQlDA+BHST4f7j4Rw4suyU2+TvvmxDXbQQW5wuVkA3JHhT5ubYtiLhdKlG6GgULbgN2oydLqgs/QU9ORXMjaOXOSznajtEzAKA9mQLavObsW7VHRE2zopYfH3ic1Q800acH4G6C923U459HSROudlyNGuvaYMeD4sL0DKOnwxbfLOx209fa9P9SPWRWobvNTRfsCJO2FM7NbHuT48KIEDLXiGyumHucbt2uqavrhrg7Gq0NFGy4Zg02YGD/71PmnjQMcl/8vR7j6NH+0jiggltICIX3TraONgEXjozwE6XUgUw/cWZjr5H6CyxsQeWNxnaP0EzU/4j83WuvGBQ4=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(346002)(39860400002)(136003)(451199021)(40470700004)(46966006)(36840700001)(8676002)(8936002)(41300700001)(54906003)(110136005)(6666004)(40480700001)(5660300002)(7416002)(2906002)(316002)(44832011)(4744005)(4326008)(70586007)(70206006)(40460700003)(426003)(478600001)(36756003)(336012)(186003)(86362001)(82310400005)(16526019)(356005)(81166007)(47076005)(82740400003)(83380400001)(2616005)(26005)(36860700001)(36900700001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2023 12:21:14.5783
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8ca42918-0b90-43fa-3e3f-08db82d27c7b
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT081.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5894
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi,
 
---t5miqgvjtmuko355
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+IP core has option reset line which can be wired that's why add support
+for optional reset.
 
-On 11.07.2023 16:03:55, Michal Simek wrote:
-> From: Srinivas Neeli <srinivas.neeli@amd.com>
->=20
-> Add support for an optional reset for the CAN controller using the reset
-> driver. If the CAN node contains the "resets" property, then this logic
-> will perform CAN controller reset.
->=20
-> Signed-off-by: Srinivas Neeli <srinivas.neeli@amd.com>
-> Signed-off-by: Michal Simek <michal.simek@amd.com>
-> ---
->=20
->  drivers/net/can/xilinx_can.c | 25 +++++++++++++++++++++----
->  1 file changed, 21 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.c
-> index 4d3283db3a13..929e00061898 100644
-> --- a/drivers/net/can/xilinx_can.c
-> +++ b/drivers/net/can/xilinx_can.c
-> @@ -30,6 +30,7 @@
->  #include <linux/can/error.h>
->  #include <linux/phy/phy.h>
->  #include <linux/pm_runtime.h>
-> +#include <linux/reset.h>
-> =20
->  #define DRIVER_NAME	"xilinx_can"
-> =20
-> @@ -200,6 +201,7 @@ struct xcan_devtype_data {
->   * @can_clk:			Pointer to struct clk
->   * @devtype:			Device type specific constants
->   * @transceiver:		Optional pointer to associated CAN transceiver
-> + * @rstc:			Pointer to reset control
->   */
->  struct xcan_priv {
->  	struct can_priv can;
-> @@ -218,6 +220,7 @@ struct xcan_priv {
->  	struct clk *can_clk;
->  	struct xcan_devtype_data devtype;
->  	struct phy *transceiver;
-> +	struct reset_control *rstc;
->  };
-> =20
->  /* CAN Bittiming constants as per Xilinx CAN specs */
-> @@ -1799,6 +1802,16 @@ static int xcan_probe(struct platform_device *pdev)
->  	priv->can.do_get_berr_counter =3D xcan_get_berr_counter;
->  	priv->can.ctrlmode_supported =3D CAN_CTRLMODE_LOOPBACK |
->  					CAN_CTRLMODE_BERR_REPORTING;
-> +	priv->rstc =3D devm_reset_control_get_optional_exclusive(&pdev->dev, NU=
-LL);
-> +	if (IS_ERR(priv->rstc)) {
-> +		dev_err(&pdev->dev, "Cannot get CAN reset.\n");
-> +		ret =3D PTR_ERR(priv->rstc);
-> +		goto err_free;
-> +	}
-> +
-> +	ret =3D reset_control_reset(priv->rstc);
-> +	if (ret)
-> +		goto err_free;
-> =20
->  	if (devtype->cantype =3D=3D XAXI_CANFD) {
->  		priv->can.data_bittiming_const =3D
-> @@ -1827,7 +1840,7 @@ static int xcan_probe(struct platform_device *pdev)
->  	/* Get IRQ for the device */
->  	ret =3D platform_get_irq(pdev, 0);
->  	if (ret < 0)
-> -		goto err_free;
-> +		goto err_reset;
-> =20
->  	ndev->irq =3D ret;
-> =20
-> @@ -1843,21 +1856,21 @@ static int xcan_probe(struct platform_device *pde=
-v)
->  	if (IS_ERR(priv->can_clk)) {
->  		ret =3D dev_err_probe(&pdev->dev, PTR_ERR(priv->can_clk),
->  				    "device clock not found\n");
-> -		goto err_free;
-> +		goto err_reset;
->  	}
-> =20
->  	priv->bus_clk =3D devm_clk_get(&pdev->dev, devtype->bus_clk_name);
->  	if (IS_ERR(priv->bus_clk)) {
->  		ret =3D dev_err_probe(&pdev->dev, PTR_ERR(priv->bus_clk),
->  				    "bus clock not found\n");
-> -		goto err_free;
-> +		goto err_reset;
->  	}
-> =20
->  	transceiver =3D devm_phy_optional_get(&pdev->dev, NULL);
->  	if (IS_ERR(transceiver)) {
->  		ret =3D PTR_ERR(transceiver);
->  		dev_err_probe(&pdev->dev, ret, "failed to get phy\n");
-> -		goto err_free;
-> +		goto err_reset;
->  	}
->  	priv->transceiver =3D transceiver;
-> =20
-> @@ -1904,6 +1917,8 @@ static int xcan_probe(struct platform_device *pdev)
->  err_disableclks:
->  	pm_runtime_put(priv->dev);
->  	pm_runtime_disable(&pdev->dev);
-> +err_reset:
-> +	reset_control_assert(priv->rstc);
->  err_free:
->  	free_candev(ndev);
->  err:
-> @@ -1920,10 +1935,12 @@ static int xcan_probe(struct platform_device *pde=
-v)
->  static void xcan_remove(struct platform_device *pdev)
->  {
->  	struct net_device *ndev =3D platform_get_drvdata(pdev);
-> +	struct xcan_priv *priv =3D netdev_priv(ndev);
-> =20
->  	unregister_candev(ndev);
->  	pm_runtime_disable(&pdev->dev);
->  	free_candev(ndev);
-> +	reset_control_assert(priv->rstc);
+Thanks,
+Michal
 
-Nitpick: Can you make this symmetric with respect to the error handling
-in xcan_probe()?
+Changes in v2:
+- Add Conor's ACK
+- Fix use-after-free in xcan_remove reported by Marc.
 
-Oh - that's not a cosmetic issue, it's a use-after-free. free_candev()
-frees your priv.
+Michal Simek (1):
+  dt-bindings: can: xilinx_can: Add reset description
 
->  }
-> =20
->  static struct platform_driver xcan_driver =3D {
-> --=20
-> 2.36.1
->=20
->
+Srinivas Neeli (1):
+  can: xilinx_can: Add support for controller reset
 
-Marc
+ .../bindings/net/can/xilinx,can.yaml          |  3 +++
+ drivers/net/can/xilinx_can.c                  | 25 ++++++++++++++++---
+ 2 files changed, 24 insertions(+), 4 deletions(-)
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+-- 
+2.36.1
 
---t5miqgvjtmuko355
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmSubF8ACgkQvlAcSiqK
-BOhacAf+PxVDSySlZHv7eQtQBdt1l/9E2XzOP6qMS2eQpLWrbNO26uizX8nO1rPT
-fwAa0Gw7UoAO89GcLlh+kr4t24o6S6Cz4nY6X0eBi8EIpEyMcOyiVvi9zNt3mA/S
-RqnsymO5L+LieNQ2Bemo/yD+vxSFWnWOa2CYXFTR0ABzu2iceLKGe15SBobaoyEv
-138O+oyhWv6rYbgsx/K+a1woCXKiM9ByY0AV579xemEksdDBEAxq1DOKEd2gOjg3
-Az9/wTg68sFWfJoyh07+2kK/+i6WO42qsJRk4EKVKqBqD9dnKsNHF/MZmxHkDUSn
-X8zg50vZ2Zz5R7qAlcGjDeSuglyZ/w==
-=I9WH
------END PGP SIGNATURE-----
-
---t5miqgvjtmuko355--
