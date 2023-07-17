@@ -2,110 +2,96 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 469E9755C66
-	for <lists+linux-can@lfdr.de>; Mon, 17 Jul 2023 09:07:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E7A3755C7E
+	for <lists+linux-can@lfdr.de>; Mon, 17 Jul 2023 09:12:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbjGQHHU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 17 Jul 2023 03:07:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55110 "EHLO
+        id S229688AbjGQHMr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 17 Jul 2023 03:12:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbjGQHHS (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 17 Jul 2023 03:07:18 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB41E1AE
-        for <linux-can@vger.kernel.org>; Mon, 17 Jul 2023 00:07:17 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qLIK1-00012q-9t; Mon, 17 Jul 2023 09:07:05 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
+        with ESMTP id S230213AbjGQHMp (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 17 Jul 2023 03:12:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A7610DA;
+        Mon, 17 Jul 2023 00:12:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 144561F3074;
-        Mon, 17 Jul 2023 07:07:03 +0000 (UTC)
-Date:   Mon, 17 Jul 2023 09:07:02 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Wu Yunchuan <yunchuan@nfschina.com>
-Cc:     wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, uttenthaler@ems-wuensche.com,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH net-next v3 8/9] can: ems_pci: Remove unnecessary (void*)
- conversions
-Message-ID: <20230717-clash-kerchief-afdf910e2ce6-mkl@pengutronix.de>
-References: <20230717031221.55073-1-yunchuan@nfschina.com>
- <20230717-staple-uninjured-26bfd8cde5e0-mkl@pengutronix.de>
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 01C1960F7A;
+        Mon, 17 Jul 2023 07:12:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85DA4C433C8;
+        Mon, 17 Jul 2023 07:12:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689577962;
+        bh=Tx/77+tErUVZAWuLrax7VIUu2uzMqwMf9CKDUK2pqEU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=N8Zd171RBHYUsQaHAzpkU5YalNpirRqrgQrWhGk7q7GZ3A+xmv7yhqJ7u3U0fKAIH
+         X1jwKtSdXooNZjeRzUaMyY6jUCNCsC0AG4Xv2srM0fsZ+kK7y+lyjAFrzm+zaRL58H
+         pxQ2N6y3EnC0ENoybc2oEQ+FFyfFKI92xKTOKH9agFtQoGmXPijD25dPCTdnEkrbl5
+         ZiX1OkzbIG/bW15ABvmV9VnnFk95dRzqQ7uFPeifWxoJjOQLq0jArU0XmE2m+8eVgV
+         pQrDjeeu6q5X18vt7t20qpVxzPtJ4Uaw+OIM5ddy524jBazcUdhnPejktX/fHFB9Hb
+         LiJo1/XEqM0QQ==
+Message-ID: <07aa464d-c9d8-4fe0-2063-98562a3480d6@kernel.org>
+Date:   Mon, 17 Jul 2023 09:12:36 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5dxaakn7dnfa335u"
-Content-Disposition: inline
-In-Reply-To: <20230717-staple-uninjured-26bfd8cde5e0-mkl@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH 3/4] can: sun4i_can: Add send support for the Allwinner D1
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     John Watts <contact@jookia.org>, linux-sunxi@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Fabien Poussin <fabien.poussin@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>
+References: <20230715112523.2533742-1-contact@jookia.org>
+ <20230715112523.2533742-4-contact@jookia.org>
+ <f3b1240a-4be0-4c02-0a63-561499ad6d0d@kernel.org> <ZLQgQAigmhk9uYYd@titan>
+ <eb2d6e5a-595f-85f2-fe36-8acbb76d3987@kernel.org>
+ <20230717-aluminum-driven-a008473620ca-mkl@pengutronix.de>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20230717-aluminum-driven-a008473620ca-mkl@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On 17/07/2023 09:03, Marc Kleine-Budde wrote:
+> On 17.07.2023 08:41:07, Krzysztof Kozlowski wrote:
+>> On 16/07/2023 18:52, John Watts wrote:
+>>> Hello,
+>>>
+>>> On Sun, Jul 16, 2023 at 06:36:03PM +0200, Krzysztof Kozlowski wrote:
+>>>>> +static const struct sun4ican_quirks sun4ican_quirks_d1 = {
+>>>>> +	.has_reset = true,
+>>>>> +};
+>>>>
+>>>> Isn't this the same as previous?
+>>>
+>>> Yes, but I wanted to split up the new quirk in to its own patch.
+>>
+>> I don't understand why you need this new, duplicated entry. Aren't
+>> devices compatible?
+> 
+> According to patch 4/4 the devices are not compatible.
 
---5dxaakn7dnfa335u
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Ah, ok, I didn't go so far because it is not obvious to add support for
+a device in patch 3 which is already not correct and needs fix/followup
+in patch 4.
 
-On 17.07.2023 08:52:42, Marc Kleine-Budde wrote:
-> On 17.07.2023 11:12:21, Wu Yunchuan wrote:
-> > No need cast (void*) to (struct ems_pci_card *).
-> >=20
-> > Signed-off-by: Wu Yunchuan <yunchuan@nfschina.com>
-> > Acked-by: Marc Kleine-Budde<mkl@pengutronix.de>
->=20
-> Please add a space between my name and my e-mail address, so that it
-> reads:
->=20
-> Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
->=20
-> nitpick:
-> You should add your S-o-b as the last trailer.
+Thanks.
+> 
 
-BTW: The threading of this series is still broken. Make sure you send
-the whole patch series with one single "git send-email" command. For
-regular contribution you might have a look at the "b4" [1] tool.
+Best regards,
+Krzysztof
 
-regards,
-Marc
-
-[1] https://people.kernel.org/monsieuricon/sending-a-kernel-patch-with-b4-p=
-art-1
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---5dxaakn7dnfa335u
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmS06JMACgkQvlAcSiqK
-BOhunAgAq7HhqkHTxzfDvHIyljEnoxxDKpnB50lo14yvrgK7CjVNC0EMdtrE7+7e
-B8M9yaSCN5jOnXAMX/kc0w5nxe8rdR1r13UUoY6gnO8+NiP0k5X3DnWpVVEYWOaY
-gh8WuC7B2hFE1ZhICcDMI7xyUtsfs7FjoblBiTSPxt22umW8Viath5NQRWf1DbJO
-N+KJnHCPseaOC3YMOtWhFVfSkfvS03NpmpBbp50saBpo/9fcVKNAnlfFaN9uQZS2
-70PGkPxbMbeaXqva0TbHBkLoHU564Az/zY2ScKg9Qu1LCO+kb78vTNoGjggHUEge
-JS/C7tEFt766dMJGJ2ZRxnYAoeWxxQ==
-=PR62
------END PGP SIGNATURE-----
-
---5dxaakn7dnfa335u--
