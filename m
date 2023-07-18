@@ -2,52 +2,53 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8617575DD
-	for <lists+linux-can@lfdr.de>; Tue, 18 Jul 2023 09:57:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B5327575DF
+	for <lists+linux-can@lfdr.de>; Tue, 18 Jul 2023 09:57:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbjGRH5n (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        id S231546AbjGRH5n (ORCPT <rfc822;lists+linux-can@lfdr.de>);
         Tue, 18 Jul 2023 03:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60034 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231623AbjGRH5j (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 18 Jul 2023 03:57:39 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE831737
-        for <linux-can@vger.kernel.org>; Tue, 18 Jul 2023 00:57:14 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4fb960b7c9dso8785840e87.0
+        with ESMTP id S231629AbjGRH5m (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 18 Jul 2023 03:57:42 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A95F1987
+        for <linux-can@vger.kernel.org>; Tue, 18 Jul 2023 00:57:15 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-317009c0f9aso1987867f8f.0
         for <linux-can@vger.kernel.org>; Tue, 18 Jul 2023 00:57:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1689667032; x=1690271832;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yw8S8ohFAjJvqm8HRm1Ib4h2RNi+dhnA4IaPY526ysM=;
-        b=xuotYMKhWom8XlUQzbv1lWFQHoApOVmGWqonV/mG0O2JornO3adaNKalFzJSwG3xe9
-         HKBn/TVVQB2sZaQ9D9v48G7eGqizLOZcxgPyMPr7+fjzudxg+UXKbRK3Y87vD+k0tTfq
-         0FWaaou+5SFObSYd9wmn+4YCqHYt1m8bCMXzNxX60Xmm/R+T6ZL/NgEHNxGgqiSchNKI
-         RzYLGXllSWwxyPhLzS7SMA5wp9EpH7kJA1RNoCNdR3hxgpa5Lzi4I81ak1A9DqWuAitA
-         RhTVTBrzPBBYNaq7xK2ETPUWGIpaLQCHK4kD8DB911JpPi+iQxnsGIl3EwLv1gZp3rvc
-         52+Q==
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1689667033; x=1690271833;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ow0KD5sZWSRWo56RZ6bdbR/6fl1YYZAbnlt0NuXgAUU=;
+        b=Dr6uZBsWOW5xzIal3C1gWSsSF3hXGn/01ZqnqhiOT3glIWr69J+wehas+wZdf79Q8z
+         R4MxreQ4C4Ij+Lnxe+en7E46th/3IOLl1wlRD/UN0m015lsVdEf6u1ApyXkIp8Af8jIL
+         rNqP+Bg5osfj+iATiTjgfurqIIKaUqdSEC/WCCdonQbcIKF5pLv4AN1U4+CHZdZzyHc9
+         7g7vUfcK3sgMy9v3uBRJs6rQF4Yk6x2rrLRVEkzP45nGm6cW30/S4XWZiKX7ha5haxLU
+         pzBoBaiMuCq9Qkbx4K5ZQ3as5lcIQ6VT/VmvFrQO/HyV78ZXt/uDEdnaFCTf68Fjr/io
+         RgBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689667032; x=1690271832;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Yw8S8ohFAjJvqm8HRm1Ib4h2RNi+dhnA4IaPY526ysM=;
-        b=YhUJj6q3t3CPKY2FfJAKv8t34GpLRjmoz6U/YMkkLF4lZgMszMMix+iTQcdMfSpukz
-         NCg0dM8/RoMgkBnsdJMAs244ycOUTZD4zSbCV4W9n8/MQZa4BXFzL9ebVgnsmj64c+bg
-         vYf931HUNraOB8o28XzD8tIjul3r9oFuVMCUxqAPot0fiZegQRA74Nn62yqN8/0/yjD/
-         sVjp+ifpdVK7uhXaUe6yJUp38+BNZUUizbLrVSmRYzbOYW0QD049plSHrb0CdzMpmiC8
-         j6HL8JDjJNpA8DWlbeAJdbNfxrAlRNbplvMH+ss6P+YbtU+LOKkPKd+ahXGrJBqcbhHV
-         rZ3w==
-X-Gm-Message-State: ABy/qLbeGYMbc9zcONVI0s/NxsiGNa6kzq1Vtsr5l5TH7YzmzwmdQg8b
-        y12/JF3gwOyA5xL8GhTIQQEPiw==
-X-Google-Smtp-Source: APBJJlHx6i25vRWw7/xD22QR+8rmUVx4iZRBYki5dchLFjO6eC9KSAqrqs3yPRIxKY1p0z1dv1+OZQ==
-X-Received: by 2002:ac2:4a87:0:b0:4f9:547c:a3cc with SMTP id l7-20020ac24a87000000b004f9547ca3ccmr8551001lfp.14.1689667032251;
-        Tue, 18 Jul 2023 00:57:12 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1689667033; x=1690271833;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ow0KD5sZWSRWo56RZ6bdbR/6fl1YYZAbnlt0NuXgAUU=;
+        b=cgQ9I+zRBzUovcVitxwHAEoSro7GCSC08MTO6jqDLYWNEwZoZO45xkNfhTuIntHFTS
+         KLsBy9tnHJ1ugQWocZ3UqO1TZfVGReUu+5OPnxJjNxO0I4n7/RGIkJdCh/UBq3i+KnCa
+         p2rg7x7bfgfP2F/pwykUp5JxZOdQ4/je2OylQMxRm68oz0OF8aWbfxZDYTz+8gZ0C6Ji
+         5LzrDL1RDejTrzocAes5kwerglsikVHAn26n8p+k2qx480czX5zQfHi/ozdhMj/PFbzK
+         rXI65VSHWtN7pnnnmvMCw5/iBMWDXW7uNzjVwVMRSKXfJhXSIMspVDxM5zNK3tvBDNqC
+         Qa4w==
+X-Gm-Message-State: ABy/qLbVs2ATYeB5M73ch4BVdJmI1aiBXEHly1PkV5dE3E9l6S3SGIAy
+        XHo+029HqYa508xTWcNqPprbKQ==
+X-Google-Smtp-Source: APBJJlHVRaLHn0F1JdvwnkTQ/4mauOP2cP6/gHVr4fsugjvmxbBaR+XqGfCGrSkteg8mg7c8XcKvTw==
+X-Received: by 2002:a5d:670e:0:b0:314:12c:4322 with SMTP id o14-20020a5d670e000000b00314012c4322mr12924963wru.4.1689667033188;
+        Tue, 18 Jul 2023 00:57:13 -0700 (PDT)
 Received: from blmsp.fritz.box ([2001:4091:a247:82fa:b762:4f68:e1ed:5041])
-        by smtp.gmail.com with ESMTPSA id x4-20020a5d54c4000000b003142439c7bcsm1585959wrv.80.2023.07.18.00.57.11
+        by smtp.gmail.com with ESMTPSA id x4-20020a5d54c4000000b003142439c7bcsm1585959wrv.80.2023.07.18.00.57.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jul 2023 00:57:11 -0700 (PDT)
+        Tue, 18 Jul 2023 00:57:12 -0700 (PDT)
 From:   Markus Schneider-Pargmann <msp@baylibre.com>
 To:     Marc Kleine-Budde <mkl@pengutronix.de>,
         Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
@@ -61,93 +62,117 @@ Cc:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         Julien Panis <jpanis@baylibre.com>,
         Markus Schneider-Pargmann <msp@baylibre.com>
-Subject: [PATCH v5 00/12] can: m_can: Optimizations for m_can/tcan part 2
-Date:   Tue, 18 Jul 2023 09:56:56 +0200
-Message-Id: <20230718075708.958094-1-msp@baylibre.com>
+Subject: [PATCH v5 01/12] can: m_can: Write transmit header and data in one transaction
+Date:   Tue, 18 Jul 2023 09:56:57 +0200
+Message-Id: <20230718075708.958094-2-msp@baylibre.com>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230718075708.958094-1-msp@baylibre.com>
+References: <20230718075708.958094-1-msp@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Marc, Simon and everyone,
+Combine header and data before writing to the transmit fifo to reduce
+the overhead for peripheral chips.
 
-v5 got a rebase on v6.5 with some small style fixes as pointed out in v4.
+Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+---
+ drivers/net/can/m_can/m_can.c | 35 +++++++++++++++++++++--------------
+ 1 file changed, 21 insertions(+), 14 deletions(-)
 
-It is tested on tcan455x but I don't have hardware with mcan on the SoC
-myself so any testing is appreciated.
-
-The series implements many small and bigger throughput improvements and
-adds rx/tx coalescing at the end.
-
-Based on v6.5-rc1. Also available at
-https://gitlab.baylibre.com/msp8/linux/-/tree/topic/mcan-optimization/v6.5?ref_type=heads
-
-Best,
-Markus
-
-Changes in v5:
-- Add back parenthesis in m_can_set_coalesce(). This will make
-  checkpatch unhappy but gcc happy.
-- Remove unused fifo_header variable in m_can_tx_handler().
-- Rebased to v6.5-rc1
-
-Changes in v4:
-- Create and use struct m_can_fifo_element in m_can_tx_handler
-- Fix memcpy_and_pad to copy the full buffer
-- Fixed a few checkpatch warnings
-- Change putidx to be unsigned
-- Print hard_xmit error only once when TX FIFO is full
-
-Changes in v3:
-- Remove parenthesis in error messages
-- Use memcpy_and_pad for buffer copy in 'can: m_can: Write transmit
-  header and data in one transaction'.
-- Replace spin_lock with spin_lock_irqsave. I got a report of a
-  interrupt that was calling start_xmit just after the netqueue was
-  woken up before the locked region was exited. spin_lock_irqsave should
-  fix this. I attached the full stack at the end of the mail if someone
-  wants to know.
-- Rebased to v6.3-rc1.
-- Removed tcan4x5x patches from this series.
-
-Changes in v2:
-- Rebased on v6.2-rc5
-- Fixed missing/broken accounting for non peripheral m_can devices.
-
-previous versions:
-v1 - https://lore.kernel.org/lkml/20221221152537.751564-1-msp@baylibre.com
-v2 - https://lore.kernel.org/lkml/20230125195059.630377-1-msp@baylibre.com
-v3 - https://lore.kernel.org/lkml/20230315110546.2518305-1-msp@baylibre.com/
-v4 - https://lore.kernel.org/lkml/20230621092350.3130866-1-msp@baylibre.com/
-
-Markus Schneider-Pargmann (12):
-  can: m_can: Write transmit header and data in one transaction
-  can: m_can: Implement receive coalescing
-  can: m_can: Implement transmit coalescing
-  can: m_can: Add rx coalescing ethtool support
-  can: m_can: Add tx coalescing ethtool support
-  can: m_can: Use u32 for putidx
-  can: m_can: Cache tx putidx
-  can: m_can: Use the workqueue as queue
-  can: m_can: Introduce a tx_fifo_in_flight counter
-  can: m_can: Use tx_fifo_in_flight for netif_queue control
-  can: m_can: Implement BQL
-  can: m_can: Implement transmit submission coalescing
-
- drivers/net/can/m_can/m_can.c | 517 +++++++++++++++++++++++++---------
- drivers/net/can/m_can/m_can.h |  35 ++-
- 2 files changed, 418 insertions(+), 134 deletions(-)
-
-
-base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
+diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+index c5af92bcc9c9..478e0670f0d1 100644
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -317,6 +317,12 @@ struct id_and_dlc {
+ 	u32 dlc;
+ };
+ 
++struct m_can_fifo_element {
++	u32 id;
++	u32 dlc;
++	u8 data[CANFD_MAX_DLEN];
++};
++
+ static inline u32 m_can_read(struct m_can_classdev *cdev, enum m_can_reg reg)
+ {
+ 	return cdev->ops->read_reg(cdev, reg);
+@@ -1622,9 +1628,10 @@ static int m_can_next_echo_skb_occupied(struct net_device *dev, int putidx)
+ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
+ {
+ 	struct canfd_frame *cf = (struct canfd_frame *)cdev->tx_skb->data;
++	u8 len_padded = DIV_ROUND_UP(cf->len, 4);
++	struct m_can_fifo_element fifo_element;
+ 	struct net_device *dev = cdev->net;
+ 	struct sk_buff *skb = cdev->tx_skb;
+-	struct id_and_dlc fifo_header;
+ 	u32 cccr, fdflags;
+ 	u32 txfqs;
+ 	int err;
+@@ -1635,27 +1642,27 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
+ 	/* Generate ID field for TX buffer Element */
+ 	/* Common to all supported M_CAN versions */
+ 	if (cf->can_id & CAN_EFF_FLAG) {
+-		fifo_header.id = cf->can_id & CAN_EFF_MASK;
+-		fifo_header.id |= TX_BUF_XTD;
++		fifo_element.id = cf->can_id & CAN_EFF_MASK;
++		fifo_element.id |= TX_BUF_XTD;
+ 	} else {
+-		fifo_header.id = ((cf->can_id & CAN_SFF_MASK) << 18);
++		fifo_element.id = ((cf->can_id & CAN_SFF_MASK) << 18);
+ 	}
+ 
+ 	if (cf->can_id & CAN_RTR_FLAG)
+-		fifo_header.id |= TX_BUF_RTR;
++		fifo_element.id |= TX_BUF_RTR;
+ 
+ 	if (cdev->version == 30) {
+ 		netif_stop_queue(dev);
+ 
+-		fifo_header.dlc = can_fd_len2dlc(cf->len) << 16;
++		fifo_element.dlc = can_fd_len2dlc(cf->len) << 16;
+ 
+ 		/* Write the frame ID, DLC, and payload to the FIFO element. */
+-		err = m_can_fifo_write(cdev, 0, M_CAN_FIFO_ID, &fifo_header, 2);
++		err = m_can_fifo_write(cdev, 0, M_CAN_FIFO_ID, &fifo_element, 2);
+ 		if (err)
+ 			goto out_fail;
+ 
+ 		err = m_can_fifo_write(cdev, 0, M_CAN_FIFO_DATA,
+-				       cf->data, DIV_ROUND_UP(cf->len, 4));
++				       cf->data, len_padded);
+ 		if (err)
+ 			goto out_fail;
+ 
+@@ -1717,15 +1724,15 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
+ 				fdflags |= TX_BUF_BRS;
+ 		}
+ 
+-		fifo_header.dlc = FIELD_PREP(TX_BUF_MM_MASK, putidx) |
++		fifo_element.dlc = FIELD_PREP(TX_BUF_MM_MASK, putidx) |
+ 			FIELD_PREP(TX_BUF_DLC_MASK, can_fd_len2dlc(cf->len)) |
+ 			fdflags | TX_BUF_EFC;
+-		err = m_can_fifo_write(cdev, putidx, M_CAN_FIFO_ID, &fifo_header, 2);
+-		if (err)
+-			goto out_fail;
+ 
+-		err = m_can_fifo_write(cdev, putidx, M_CAN_FIFO_DATA,
+-				       cf->data, DIV_ROUND_UP(cf->len, 4));
++		memcpy_and_pad(fifo_element.data, CANFD_MAX_DLEN, &cf->data,
++			       cf->len, 0);
++
++		err = m_can_fifo_write(cdev, putidx, M_CAN_FIFO_ID,
++				       &fifo_element, 2 + len_padded);
+ 		if (err)
+ 			goto out_fail;
+ 
 -- 
 2.40.1
 
