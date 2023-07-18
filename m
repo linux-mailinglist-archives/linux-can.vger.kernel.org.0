@@ -2,55 +2,74 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0076756BDB
-	for <lists+linux-can@lfdr.de>; Mon, 17 Jul 2023 20:23:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D8617575DD
+	for <lists+linux-can@lfdr.de>; Tue, 18 Jul 2023 09:57:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbjGQSXU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 17 Jul 2023 14:23:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53540 "EHLO
+        id S230183AbjGRH5n (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 18 Jul 2023 03:57:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231826AbjGQSWw (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 17 Jul 2023 14:22:52 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E730019AB
-        for <linux-can@vger.kernel.org>; Mon, 17 Jul 2023 11:22:37 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qLSrk-0001cv-3U
-        for linux-can@vger.kernel.org; Mon, 17 Jul 2023 20:22:36 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 8F3771F3A00
-        for <linux-can@vger.kernel.org>; Mon, 17 Jul 2023 18:22:34 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id E3AD91F39C9;
-        Mon, 17 Jul 2023 18:22:31 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 95ee68e5;
-        Mon, 17 Jul 2023 18:22:30 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Jimmy Assarsson <extja@kvaser.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next 8/8] can: kvaser_pciefd: Add support for new Kvaser pciefd devices
-Date:   Mon, 17 Jul 2023 20:22:29 +0200
-Message-Id: <20230717182229.250565-9-mkl@pengutronix.de>
+        with ESMTP id S231623AbjGRH5j (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 18 Jul 2023 03:57:39 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE831737
+        for <linux-can@vger.kernel.org>; Tue, 18 Jul 2023 00:57:14 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4fb960b7c9dso8785840e87.0
+        for <linux-can@vger.kernel.org>; Tue, 18 Jul 2023 00:57:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1689667032; x=1690271832;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Yw8S8ohFAjJvqm8HRm1Ib4h2RNi+dhnA4IaPY526ysM=;
+        b=xuotYMKhWom8XlUQzbv1lWFQHoApOVmGWqonV/mG0O2JornO3adaNKalFzJSwG3xe9
+         HKBn/TVVQB2sZaQ9D9v48G7eGqizLOZcxgPyMPr7+fjzudxg+UXKbRK3Y87vD+k0tTfq
+         0FWaaou+5SFObSYd9wmn+4YCqHYt1m8bCMXzNxX60Xmm/R+T6ZL/NgEHNxGgqiSchNKI
+         RzYLGXllSWwxyPhLzS7SMA5wp9EpH7kJA1RNoCNdR3hxgpa5Lzi4I81ak1A9DqWuAitA
+         RhTVTBrzPBBYNaq7xK2ETPUWGIpaLQCHK4kD8DB911JpPi+iQxnsGIl3EwLv1gZp3rvc
+         52+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689667032; x=1690271832;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Yw8S8ohFAjJvqm8HRm1Ib4h2RNi+dhnA4IaPY526ysM=;
+        b=YhUJj6q3t3CPKY2FfJAKv8t34GpLRjmoz6U/YMkkLF4lZgMszMMix+iTQcdMfSpukz
+         NCg0dM8/RoMgkBnsdJMAs244ycOUTZD4zSbCV4W9n8/MQZa4BXFzL9ebVgnsmj64c+bg
+         vYf931HUNraOB8o28XzD8tIjul3r9oFuVMCUxqAPot0fiZegQRA74Nn62yqN8/0/yjD/
+         sVjp+ifpdVK7uhXaUe6yJUp38+BNZUUizbLrVSmRYzbOYW0QD049plSHrb0CdzMpmiC8
+         j6HL8JDjJNpA8DWlbeAJdbNfxrAlRNbplvMH+ss6P+YbtU+LOKkPKd+ahXGrJBqcbhHV
+         rZ3w==
+X-Gm-Message-State: ABy/qLbeGYMbc9zcONVI0s/NxsiGNa6kzq1Vtsr5l5TH7YzmzwmdQg8b
+        y12/JF3gwOyA5xL8GhTIQQEPiw==
+X-Google-Smtp-Source: APBJJlHx6i25vRWw7/xD22QR+8rmUVx4iZRBYki5dchLFjO6eC9KSAqrqs3yPRIxKY1p0z1dv1+OZQ==
+X-Received: by 2002:ac2:4a87:0:b0:4f9:547c:a3cc with SMTP id l7-20020ac24a87000000b004f9547ca3ccmr8551001lfp.14.1689667032251;
+        Tue, 18 Jul 2023 00:57:12 -0700 (PDT)
+Received: from blmsp.fritz.box ([2001:4091:a247:82fa:b762:4f68:e1ed:5041])
+        by smtp.gmail.com with ESMTPSA id x4-20020a5d54c4000000b003142439c7bcsm1585959wrv.80.2023.07.18.00.57.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jul 2023 00:57:11 -0700 (PDT)
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>
+Cc:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        Simon Horman <simon.horman@corigine.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Julien Panis <jpanis@baylibre.com>,
+        Markus Schneider-Pargmann <msp@baylibre.com>
+Subject: [PATCH v5 00/12] can: m_can: Optimizations for m_can/tcan part 2
+Date:   Tue, 18 Jul 2023 09:56:56 +0200
+Message-Id: <20230718075708.958094-1-msp@baylibre.com>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230717182229.250565-1-mkl@pengutronix.de>
-References: <20230717182229.250565-1-mkl@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,179 +77,77 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Jimmy Assarsson <extja@kvaser.com>
+Hi Marc, Simon and everyone,
 
-Add support for new Kvaser pciefd devices, based on SmartFusion2 SoC.
+v5 got a rebase on v6.5 with some small style fixes as pointed out in v4.
 
-Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
-Link: https://lore.kernel.org/all/20230622151153.294844-3-extja@kvaser.com
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/Kconfig         |  5 +++
- drivers/net/can/kvaser_pciefd.c | 77 ++++++++++++++++++++++++++++++++-
- 2 files changed, 81 insertions(+), 1 deletion(-)
+It is tested on tcan455x but I don't have hardware with mcan on the SoC
+myself so any testing is appreciated.
 
-diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
-index a5c5036dfb94..18e4a6e94ba9 100644
---- a/drivers/net/can/Kconfig
-+++ b/drivers/net/can/Kconfig
-@@ -160,8 +160,13 @@ config CAN_KVASER_PCIEFD
- 	    Kvaser PCIEcan 4xHS
- 	    Kvaser PCIEcan 2xHS v2
- 	    Kvaser PCIEcan HS v2
-+	    Kvaser PCIEcan 1xCAN v3
-+	    Kvaser PCIEcan 2xCAN v3
-+	    Kvaser PCIEcan 4xCAN v2
- 	    Kvaser Mini PCI Express HS v2
- 	    Kvaser Mini PCI Express 2xHS v2
-+	    Kvaser Mini PCI Express 1xCAN v3
-+	    Kvaser Mini PCI Express 2xCAN v3
- 
- config CAN_SLCAN
- 	tristate "Serial / USB serial CAN Adaptors (slcan)"
-diff --git a/drivers/net/can/kvaser_pciefd.c b/drivers/net/can/kvaser_pciefd.c
-index 539f97390761..57f60b87198f 100644
---- a/drivers/net/can/kvaser_pciefd.c
-+++ b/drivers/net/can/kvaser_pciefd.c
-@@ -1,7 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
- /* Copyright (C) 2018 KVASER AB, Sweden. All rights reserved.
-  * Parts of this driver are based on the following:
-- *  - Kvaser linux pciefd driver (version 5.25)
-+ *  - Kvaser linux pciefd driver (version 5.42)
-  *  - PEAK linux canfd driver
-  */
- 
-@@ -40,9 +40,19 @@ MODULE_DESCRIPTION("CAN driver for Kvaser CAN/PCIe devices");
- #define KVASER_PCIEFD_MINIPCIE_HS_V2_DEVICE_ID 0x0010
- #define KVASER_PCIEFD_MINIPCIE_2HS_V2_DEVICE_ID 0x0011
- 
-+/* SmartFusion2 based devices */
-+#define KVASER_PCIEFD_2CAN_V3_DEVICE_ID 0x0012
-+#define KVASER_PCIEFD_1CAN_V3_DEVICE_ID 0x0013
-+#define KVASER_PCIEFD_4CAN_V2_DEVICE_ID 0x0014
-+#define KVASER_PCIEFD_MINIPCIE_2CAN_V3_DEVICE_ID 0x0015
-+#define KVASER_PCIEFD_MINIPCIE_1CAN_V3_DEVICE_ID 0x0016
-+
- /* Altera SerDes Enable 64-bit DMA address translation */
- #define KVASER_PCIEFD_ALTERA_DMA_64BIT BIT(0)
- 
-+/* SmartFusion2 SerDes LSB address translation mask */
-+#define KVASER_PCIEFD_SF2_DMA_LSB_MASK GENMASK(31, 12)
-+
- /* Kvaser KCAN CAN controller registers */
- #define KVASER_PCIEFD_KCAN_FIFO_REG 0x100
- #define KVASER_PCIEFD_KCAN_FIFO_LAST_REG 0x180
-@@ -269,6 +279,8 @@ MODULE_DESCRIPTION("CAN driver for Kvaser CAN/PCIe devices");
- struct kvaser_pciefd;
- static void kvaser_pciefd_write_dma_map_altera(struct kvaser_pciefd *pcie,
- 					       dma_addr_t addr, int index);
-+static void kvaser_pciefd_write_dma_map_sf2(struct kvaser_pciefd *pcie,
-+					    dma_addr_t addr, int index);
- 
- struct kvaser_pciefd_address_offset {
- 	u32 serdes;
-@@ -311,22 +323,50 @@ const struct kvaser_pciefd_address_offset kvaser_pciefd_altera_address_offset =
- 	.kcan_ch1 = 0x11000,
- };
- 
-+const struct kvaser_pciefd_address_offset kvaser_pciefd_sf2_address_offset = {
-+	.serdes = 0x280c8,
-+	.pci_ien = 0x102004,
-+	.pci_irq = 0x102008,
-+	.sysid = 0x100000,
-+	.loopback = 0x103000,
-+	.kcan_srb_fifo = 0x120000,
-+	.kcan_srb = 0x121000,
-+	.kcan_ch0 = 0x140000,
-+	.kcan_ch1 = 0x142000,
-+};
-+
- const struct kvaser_pciefd_irq_mask kvaser_pciefd_altera_irq_mask = {
- 	.kcan_rx0 = BIT(4),
- 	.kcan_tx = { BIT(0), BIT(1), BIT(2), BIT(3) },
- 	.all = GENMASK(4, 0),
- };
- 
-+const struct kvaser_pciefd_irq_mask kvaser_pciefd_sf2_irq_mask = {
-+	.kcan_rx0 = BIT(4),
-+	.kcan_tx = { BIT(16), BIT(17), BIT(18), BIT(19) },
-+	.all = GENMASK(19, 16) | BIT(4),
-+};
-+
- const struct kvaser_pciefd_dev_ops kvaser_pciefd_altera_dev_ops = {
- 	.kvaser_pciefd_write_dma_map = kvaser_pciefd_write_dma_map_altera,
- };
- 
-+const struct kvaser_pciefd_dev_ops kvaser_pciefd_sf2_dev_ops = {
-+	.kvaser_pciefd_write_dma_map = kvaser_pciefd_write_dma_map_sf2,
-+};
-+
- const struct kvaser_pciefd_driver_data kvaser_pciefd_altera_driver_data = {
- 	.address_offset = &kvaser_pciefd_altera_address_offset,
- 	.irq_mask = &kvaser_pciefd_altera_irq_mask,
- 	.ops = &kvaser_pciefd_altera_dev_ops,
- };
- 
-+const struct kvaser_pciefd_driver_data kvaser_pciefd_sf2_driver_data = {
-+	.address_offset = &kvaser_pciefd_sf2_address_offset,
-+	.irq_mask = &kvaser_pciefd_sf2_irq_mask,
-+	.ops = &kvaser_pciefd_sf2_dev_ops,
-+};
-+
- struct kvaser_pciefd_can {
- 	struct can_priv can;
- 	struct kvaser_pciefd *kv_pcie;
-@@ -396,6 +436,26 @@ static struct pci_device_id kvaser_pciefd_id_table[] = {
- 		PCI_DEVICE(KVASER_PCIEFD_VENDOR, KVASER_PCIEFD_MINIPCIE_2HS_V2_DEVICE_ID),
- 		.driver_data = (kernel_ulong_t)&kvaser_pciefd_altera_driver_data,
- 	},
-+	{
-+		PCI_DEVICE(KVASER_PCIEFD_VENDOR, KVASER_PCIEFD_2CAN_V3_DEVICE_ID),
-+		.driver_data = (kernel_ulong_t)&kvaser_pciefd_sf2_driver_data,
-+	},
-+	{
-+		PCI_DEVICE(KVASER_PCIEFD_VENDOR, KVASER_PCIEFD_1CAN_V3_DEVICE_ID),
-+		.driver_data = (kernel_ulong_t)&kvaser_pciefd_sf2_driver_data,
-+	},
-+	{
-+		PCI_DEVICE(KVASER_PCIEFD_VENDOR, KVASER_PCIEFD_4CAN_V2_DEVICE_ID),
-+		.driver_data = (kernel_ulong_t)&kvaser_pciefd_sf2_driver_data,
-+	},
-+	{
-+		PCI_DEVICE(KVASER_PCIEFD_VENDOR, KVASER_PCIEFD_MINIPCIE_2CAN_V3_DEVICE_ID),
-+		.driver_data = (kernel_ulong_t)&kvaser_pciefd_sf2_driver_data,
-+	},
-+	{
-+		PCI_DEVICE(KVASER_PCIEFD_VENDOR, KVASER_PCIEFD_MINIPCIE_1CAN_V3_DEVICE_ID),
-+		.driver_data = (kernel_ulong_t)&kvaser_pciefd_sf2_driver_data,
-+	},
- 	{
- 		0,
- 	},
-@@ -960,6 +1020,21 @@ static void kvaser_pciefd_write_dma_map_altera(struct kvaser_pciefd *pcie,
- 	iowrite32(word2, serdes_base + 0x4);
- }
- 
-+static void kvaser_pciefd_write_dma_map_sf2(struct kvaser_pciefd *pcie,
-+					    dma_addr_t addr, int index)
-+{
-+	void __iomem *serdes_base;
-+	u32 lsb = addr & KVASER_PCIEFD_SF2_DMA_LSB_MASK;
-+	u32 msb = 0x0;
-+
-+#ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
-+	msb = addr >> 32;
-+#endif
-+	serdes_base = KVASER_PCIEFD_SERDES_ADDR(pcie) + 0x10 * index;
-+	iowrite32(lsb, serdes_base);
-+	iowrite32(msb, serdes_base + 0x4);
-+}
-+
- static int kvaser_pciefd_setup_dma(struct kvaser_pciefd *pcie)
- {
- 	int i;
+The series implements many small and bigger throughput improvements and
+adds rx/tx coalescing at the end.
+
+Based on v6.5-rc1. Also available at
+https://gitlab.baylibre.com/msp8/linux/-/tree/topic/mcan-optimization/v6.5?ref_type=heads
+
+Best,
+Markus
+
+Changes in v5:
+- Add back parenthesis in m_can_set_coalesce(). This will make
+  checkpatch unhappy but gcc happy.
+- Remove unused fifo_header variable in m_can_tx_handler().
+- Rebased to v6.5-rc1
+
+Changes in v4:
+- Create and use struct m_can_fifo_element in m_can_tx_handler
+- Fix memcpy_and_pad to copy the full buffer
+- Fixed a few checkpatch warnings
+- Change putidx to be unsigned
+- Print hard_xmit error only once when TX FIFO is full
+
+Changes in v3:
+- Remove parenthesis in error messages
+- Use memcpy_and_pad for buffer copy in 'can: m_can: Write transmit
+  header and data in one transaction'.
+- Replace spin_lock with spin_lock_irqsave. I got a report of a
+  interrupt that was calling start_xmit just after the netqueue was
+  woken up before the locked region was exited. spin_lock_irqsave should
+  fix this. I attached the full stack at the end of the mail if someone
+  wants to know.
+- Rebased to v6.3-rc1.
+- Removed tcan4x5x patches from this series.
+
+Changes in v2:
+- Rebased on v6.2-rc5
+- Fixed missing/broken accounting for non peripheral m_can devices.
+
+previous versions:
+v1 - https://lore.kernel.org/lkml/20221221152537.751564-1-msp@baylibre.com
+v2 - https://lore.kernel.org/lkml/20230125195059.630377-1-msp@baylibre.com
+v3 - https://lore.kernel.org/lkml/20230315110546.2518305-1-msp@baylibre.com/
+v4 - https://lore.kernel.org/lkml/20230621092350.3130866-1-msp@baylibre.com/
+
+Markus Schneider-Pargmann (12):
+  can: m_can: Write transmit header and data in one transaction
+  can: m_can: Implement receive coalescing
+  can: m_can: Implement transmit coalescing
+  can: m_can: Add rx coalescing ethtool support
+  can: m_can: Add tx coalescing ethtool support
+  can: m_can: Use u32 for putidx
+  can: m_can: Cache tx putidx
+  can: m_can: Use the workqueue as queue
+  can: m_can: Introduce a tx_fifo_in_flight counter
+  can: m_can: Use tx_fifo_in_flight for netif_queue control
+  can: m_can: Implement BQL
+  can: m_can: Implement transmit submission coalescing
+
+ drivers/net/can/m_can/m_can.c | 517 +++++++++++++++++++++++++---------
+ drivers/net/can/m_can/m_can.h |  35 ++-
+ 2 files changed, 418 insertions(+), 134 deletions(-)
+
+
+base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
 -- 
 2.40.1
-
 
