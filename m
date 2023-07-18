@@ -2,91 +2,90 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2F5E75823E
-	for <lists+linux-can@lfdr.de>; Tue, 18 Jul 2023 18:37:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F5027583BB
+	for <lists+linux-can@lfdr.de>; Tue, 18 Jul 2023 19:46:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232064AbjGRQhZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 18 Jul 2023 12:37:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48554 "EHLO
+        id S229730AbjGRRqO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 18 Jul 2023 13:46:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231786AbjGRQhY (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 18 Jul 2023 12:37:24 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092D910C
-        for <linux-can@vger.kernel.org>; Tue, 18 Jul 2023 09:37:24 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qLnhS-0006vK-GO
-        for linux-can@vger.kernel.org; Tue, 18 Jul 2023 18:37:22 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id E16931F4432
-        for <linux-can@vger.kernel.org>; Tue, 18 Jul 2023 16:37:21 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id F40361F442E;
-        Tue, 18 Jul 2023 16:37:20 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 66476c5a;
-        Tue, 18 Jul 2023 16:37:19 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org
-Cc:     kernel@pengutronix.de, Mao Zhu <zhumao001@208suo.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH v2] can: ucan: Remove repeated word
-Date:   Tue, 18 Jul 2023 18:37:18 +0200
-Message-Id: <20230718163718.461137-1-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.40.1
+        with ESMTP id S232053AbjGRRqN (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 18 Jul 2023 13:46:13 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 964FB173A;
+        Tue, 18 Jul 2023 10:46:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689702371; x=1721238371;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FUVD4hJBO5IxMDmFyymfYBCztnS3mXGJcBnU4SZwflA=;
+  b=A1OdLG73ALT+ieC9TD5wz6zlpD79usRG4fSq5gwCJ974em3U8LpVtcYm
+   yE1fsZWnxSBnprlHJkevNRMKGqfDstF1pl9A2eaGHM6n4dJvzAISOuH/G
+   v2puhmtU9PuKu3J+BVguETZJKcrbOSUFLTWSFGOojyc6ZAbcALSXjwTGs
+   F7jhhNmphfIoBTikcSCD8s8aI8o+o50qTx/srtIIQijS1NCfULeCPIrGx
+   theaYmPu//o2EIO3W2WyfIBYTLucaCcJDWgcCchvgSZvhjWcbN1BUOeLj
+   dMRQE0pIsGjap3y+DfF3nmWU5vpTPHPALt2DOcm+PVvnpBtBKkHKyUFNv
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="432452364"
+X-IronPort-AV: E=Sophos;i="6.01,214,1684825200"; 
+   d="scan'208";a="432452364"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 10:46:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="727034132"
+X-IronPort-AV: E=Sophos;i="6.01,214,1684825200"; 
+   d="scan'208";a="727034132"
+Received: from unknown (HELO jiaqingz-acrn-container.sh.intel.com) ([10.239.138.235])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 10:46:01 -0700
+From:   Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
+To:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-serial@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
+Subject: [PATCH 0/4] add support for ASIX AX99100
+Date:   Tue, 18 Jul 2023 17:41:56 +0000
+Message-Id: <20230718174200.2862849-1-jiaqing.zhao@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Mao Zhu <zhumao001@208suo.com>
+This patch adds kernel inbox driver support for the serial port and
+parallel port mode controller of ASIX AX99100 PCIe to Multi I/O
+Controller. This device has 4 separate PCI functions and each functions
+can be configured to operate in different modes.
 
-Delete one of repeated word 'information' in comment.
+This patchset is tested with ASIX AX99100 in following modes:
+* 4 x Serial Port
+* 2 x Serial Port
+* 2 x Serial Port + 1 x Parallel Port
+* 1 x Parallel Port
 
-Signed-off-by: Mao Zhu <zhumao001@208suo.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
-Hello,
+Jiaqing Zhao (4):
+  can: ems_pci: remove PCI_SUBVENDOR_ID_ASIX definition
+  can: ems_pci: move ASIX AX99100 ids to pci_ids.h
+  serial: 8250_pci: add support for ASIX AX99100
+  parport_pc: add support for ASIX AX99100
 
-taking Mao Zhu's multipart HTML mail, apply by hand and resend it as
-v2 via git send-email.
+ drivers/net/can/sja1000/ems_pci.c  |  7 +------
+ drivers/parport/parport_pc.c       |  5 +++++
+ drivers/tty/serial/8250/8250_pci.c | 10 ++++++++++
+ include/linux/pci_ids.h            |  4 ++++
+ 4 files changed, 20 insertions(+), 6 deletions(-)
 
-regards,
-Marc
-
- drivers/net/can/usb/ucan.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/can/usb/ucan.c b/drivers/net/can/usb/ucan.c
-index a0f7bcec719c..39a63b7313a4 100644
---- a/drivers/net/can/usb/ucan.c
-+++ b/drivers/net/can/usb/ucan.c
-@@ -284,7 +284,7 @@ struct ucan_priv {
- 	 */
- 	spinlock_t echo_skb_lock;
- 
--	/* usb device information information */
-+	/* usb device information */
- 	u8 intf_index;
- 	u8 in_ep_addr;
- 	u8 out_ep_addr;
 -- 
-2.40.1
-
+2.39.2
 
