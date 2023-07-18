@@ -2,145 +2,125 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 752D8757608
-	for <lists+linux-can@lfdr.de>; Tue, 18 Jul 2023 10:00:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 004E27577FB
+	for <lists+linux-can@lfdr.de>; Tue, 18 Jul 2023 11:28:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbjGRIAF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 18 Jul 2023 04:00:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32886 "EHLO
+        id S232354AbjGRJ2I (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 18 Jul 2023 05:28:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231476AbjGRH7q (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 18 Jul 2023 03:59:46 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B1D1FEA
-        for <linux-can@vger.kernel.org>; Tue, 18 Jul 2023 00:58:44 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qLfao-0005y5-CC; Tue, 18 Jul 2023 09:57:58 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 51F291F3ED5;
-        Tue, 18 Jul 2023 07:57:50 +0000 (UTC)
-Date:   Tue, 18 Jul 2023 09:57:49 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Markus Schneider-Pargmann <msp@baylibre.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "David S . Miller" <davem@davemloft.net>,
+        with ESMTP id S232318AbjGRJ2G (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 18 Jul 2023 05:28:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808F2E69
+        for <linux-can@vger.kernel.org>; Tue, 18 Jul 2023 02:27:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689672437;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=z0vyMeOfw7fSC/qxKnZBBj+xlz8lL8pZMksMNnnuzCg=;
+        b=Q2+7fGF0YkjJPjxBfiXUIFkyFK5IRcBIC8/xhlL+kpaCbfiCSxwWapD7JXhNS7srOtvUqS
+        idSrC9/xzjOeMZ/M8q6XgyTv9hMgFnvyY/sllrd8LeFgIm4k5nuBQ93iP4SiKvPFB6UUz+
+        ZN478OsyWDXLgMv7hDKdnoKQ5HpMCPE=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-547-1QQ5EVTCMFiLkaMkspHg9w-1; Tue, 18 Jul 2023 05:27:16 -0400
+X-MC-Unique: 1QQ5EVTCMFiLkaMkspHg9w-1
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-635eb5b04e1so13842186d6.1
+        for <linux-can@vger.kernel.org>; Tue, 18 Jul 2023 02:27:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689672436; x=1690277236;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=z0vyMeOfw7fSC/qxKnZBBj+xlz8lL8pZMksMNnnuzCg=;
+        b=iEmiDiHqLpvvHEP/sogT3Fl0BvW91JYiYMjLc7NTntM7FTsW0gE6jOCZ/IodZHWqQR
+         rFk013czanryPljzM+dWKC+GnhnysNcpalMK4uolRsPBhyNjFACoGdPRuFm1bvg1AYbp
+         36bPIkAScAaYTPf9u/isKNhuU1LRYCEh8ZnXNGZxdsOoaYgOjEmSfRkNZPQJbFarDF4Y
+         6sBJEoAcb2DlWzzAMpXiJgSxIkToehHLbzhkuhV9Ruz7/SHHPriU6OVxwxGoDWminTaM
+         LFS/uoK85Lfg+pAhT+Tv9kmXFXhKK4mNo3kMRQTqsonKYYpUiVTbYhruZutp89OFEbGS
+         czew==
+X-Gm-Message-State: ABy/qLaVOW6cZx1COLvK7MclMRo4pcq5LifTZcFHiE5INSrDpWwux7BM
+        smEVNNcz2EaugiGePKutAjS34NlsAoY++qQXXko7mRyrXh9r0nobdMrAFVTjtoPlv3kdaL8ENbG
+        sS2GAkOqRdI1pFPLgGp/x
+X-Received: by 2002:a05:6214:509d:b0:63c:7427:e7e9 with SMTP id kk29-20020a056214509d00b0063c7427e7e9mr12261342qvb.6.1689672436179;
+        Tue, 18 Jul 2023 02:27:16 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlFYFNw7x3jThmvZICEe6iXFu0qG+zQql7vEpRKMvc0qVPxJUK7o8zW+ji84Z85dUEkIw+qD2g==
+X-Received: by 2002:a05:6214:509d:b0:63c:7427:e7e9 with SMTP id kk29-20020a056214509d00b0063c7427e7e9mr12261327qvb.6.1689672435965;
+        Tue, 18 Jul 2023 02:27:15 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-226-170.dyn.eolo.it. [146.241.226.170])
+        by smtp.gmail.com with ESMTPSA id h10-20020a0cf20a000000b00635fc10afd6sm592785qvk.70.2023.07.18.02.27.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jul 2023 02:27:15 -0700 (PDT)
+Message-ID: <ee31215ededd386eba19fb62b0de8d0bad78d687.camel@redhat.com>
+Subject: Re: [PATCH] net: Explicitly include correct DT includes
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Alex Elder <elder@ieee.org>, Rob Herring <robh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Michal Kubiak <michal.kubiak@intel.com>,
-        Vivek Yadav <vivek.2311@samsung.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Simon Horman <simon.horman@corigine.com>
-Subject: Re: [PATCH v2 5/6] can: tcan4x5x: Add support for tcan4552/4553
-Message-ID: <20230718-marigold-violation-8d40e9d264c2-mkl@pengutronix.de>
-References: <20230621093103.3134655-1-msp@baylibre.com>
- <20230621093103.3134655-6-msp@baylibre.com>
- <32557326-650c-192d-9a82-ca5451b01f70@linaro.org>
- <20230621123158.fd3pd6i7aefawobf@blmsp>
- <21f12495-ffa9-a0bf-190a-11b6ae30ca45@linaro.org>
- <20230622122339.6tkajdcenj5r3vdm@blmsp>
- <e2cc150b-49e3-7f2f-ce7f-a5982d129346@linaro.org>
- <20230627142300.heju4qccian5hsjk@blmsp>
- <e5bd4f01-0b00-4d70-c642-4fdfc0a139fc@linaro.org>
+        Jakub Kicinski <kuba@kernel.org>, Alex Elder <elder@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-amlogic@lists.infradead.org, linux-oxnas@groups.io,
+        linux-tegra@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-wpan@vger.kernel.org, ath10k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, ath11k@lists.infradead.org,
+        wcn36xx@lists.infradead.org
+Date:   Tue, 18 Jul 2023 11:27:10 +0200
+In-Reply-To: <1c6175fc-496a-843c-c8c5-2173e065eaa8@ieee.org>
+References: <20230714174809.4060885-1-robh@kernel.org>
+         <1c6175fc-496a-843c-c8c5-2173e065eaa8@ieee.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="74iwm2jmiacg2jdx"
-Content-Disposition: inline
-In-Reply-To: <e5bd4f01-0b00-4d70-c642-4fdfc0a139fc@linaro.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi,
 
---74iwm2jmiacg2jdx
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 01.07.2023 10:34:00, Krzysztof Kozlowski wrote:
-> On 27/06/2023 16:23, Markus Schneider-Pargmann wrote:
+On Sat, 2023-07-15 at 10:11 -0500, Alex Elder wrote:
+> On 7/14/23 12:48 PM, Rob Herring wrote:
+> > The DT of_device.h and of_platform.h date back to the separate
+> > of_platform_bus_type before it as merged into the regular platform bus.
+> > As part of that merge prepping Arm DT support 13 years ago, they
+> > "temporarily" include each other. They also include platform_device.h
+> > and of.h. As a result, there's a pretty much random mix of those includ=
+e
+> > files used throughout the tree. In order to detangle these headers and
+> > replace the implicit includes with struct declarations, users need to
+> > explicitly include the correct includes.
+> >=20
+> > Signed-off-by: Rob Herring <robh@kernel.org>
 >=20
-> >>> The version information is always readable for that chip, regardless =
-of
-> >>> state and wake GPIOs as far as I know. So yes it is possible to setup
-> >>> the GPIOs based on the content of the ID register.
-> >>>
-> >>> I personally would prefer separate compatibles. The binding
-> >>> documentation needs to address that wake and state GPIOs are not
-> >>> available for tcan4552/4553. I think having compatibles that are for
-> >>> these chips would make sense then. However this is my opinion, you are
-> >>> the maintainer.
-> >>
-> >> We do not talk about compatibles in the bindings here. This is
-> >> discussion about your driver. The entire logic of validating DTB is
-> >> flawed and not needed. Detect the variant and act based on this.
-> >=20
-> > I thought it was about the bindings, sorry.
-> >=20
-> > So to summarize the compatibles ti,tcan4552 and ti,tcan4553 are fine.
-> > But the driver should use the ID register for detection and not compare
-> > the detected variant with the given compatible?
-> >=20
-> > In my opinion it is useful to have an error messages that says there is
-> > something wrong with the devicetree as this can be very helpful for the
-> > developers who bringup new devices. This helps to quickly find issues
-> > with the devicetree.
+> (I significantly reduced the addressee list to permit the message
+> to be sent.)
 >=20
-> That's not a current policy for other drivers, so this shouldn't be
-> really special. Kernel is poor in validating DTS. It's not its job. It's
-> the job of the DT schema.
+> For "drivers/net/ipa/ipa_main.c":
+>=20
+> Acked-by: Alex Elder <elder@linaro.org>
 
-Fine with me.
+The patch does not apply cleanly to net-next. Rob, could you please re-
+spin it? While at that, have you considered splitting it in a few
+smaller patches (e.g. can, dsa, freescale, ibm, marvel, mediatek,
+stmmicro,  sun, ti, xilinx, wireless, remaining)?
 
-I decided to have a check of the auto-detected chip variant against the
-specified one in the mcp251xfd driver, as it widely used with raspi
-boards, where commonly DT overlays are used. It also helps remote
-diagnostics of people, who don't focus on kernel development.
+Thanks!
 
-regards,
-Marc
+Paolo
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---74iwm2jmiacg2jdx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmS2RfoACgkQvlAcSiqK
-BOj47Af7B3Hdzd2/p1G8Qprj/lvOLWeZU5GsBj4CDxEtl62ZGZUusqFDMpPC0lTS
-TrrEcTZBT9Uozu1YdUTXzLWds6qD8vR9XoK5bq1PpXuF/0pcxFeOVodE14FhPYYu
-plLFed2tRYmQkcksXLgNQh8UPhVC44O7BOHlvHgTl+9ew27r1MKG2Aeb3BsPDDXq
-o0mck7GdJ7mTejPZDktkBhhyLbzYMSyn5PgdZMPgMR/5SGcCX38JiXUxWrSjD2jt
-7Tg7NiYyj3dyzaqzWFRUJgyJkifirMS+8rNRPUq8vZFvQGq80TdENuzsKibCS0xu
-+PQFb7a+suiwV9hwL9FvrfsOlY4Gsw==
-=HGF4
------END PGP SIGNATURE-----
-
---74iwm2jmiacg2jdx--
