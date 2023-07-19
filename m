@@ -2,100 +2,103 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D71759604
-	for <lists+linux-can@lfdr.de>; Wed, 19 Jul 2023 14:55:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAC8875A175
+	for <lists+linux-can@lfdr.de>; Thu, 20 Jul 2023 00:10:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbjGSMzn (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 19 Jul 2023 08:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35238 "EHLO
+        id S230492AbjGSWKr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 19 Jul 2023 18:10:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230061AbjGSMzj (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 19 Jul 2023 08:55:39 -0400
-Received: from mail-40136.proton.ch (mail-40136.proton.ch [185.70.40.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E9D51FCD
-        for <linux-can@vger.kernel.org>; Wed, 19 Jul 2023 05:55:19 -0700 (PDT)
-Date:   Wed, 19 Jul 2023 12:55:03 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jbrengineering.co.uk; s=protonmail3; t=1689771317; x=1690030517;
-        bh=4JURnOmIbaUuOn25occoYAZ4bwYBkYcZbdrQoIBOnRg=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=sDjUyVRde9/2s10wjUpbvmZXccuX9ao+0OOIDD3KHhodQcrVuZ0W8tBh3yYyrCsSi
-         W+S/cpweu+gdn6UFdHPRrpYdGVnTGtCkmFJJKld7dpCfR9tAvyHhnyA0Ioufg04n2P
-         i9QCl/4fJNuvrVRnefc2yMxvgIygT+11MaiXDn30LtvX7FE4g57QP/9ScjjZE3z0tg
-         k3EcbtKOAHGBWZW6TpgNqJNwEjSHKIxD4dlcJbY9XJTMlr7B3FsiEtaPLnLdPqfqmP
-         Yr6l8fjRjYqSUiePaWJC6UMv3vZiGBRs/tbYdabuPy+/h+ILHZoSAkaSrTbiBoAaoS
-         jzRJF8CsiDtNw==
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-From:   john@jbrengineering.co.uk
-Cc:     linux-can@vger.kernel.org, kernel@pengutronix.de,
-        John Whittington <git@jbrengineering.co.uk>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH 0/2] can: gs_usb: fix time stamp counter initialization
-Message-ID: <C3H7gx4Krj3hjq14-A92mCFngjXEie679zE1xQvTosJTiMAbVmr9Z6_cLvWKfPjLOjOOKgOAWFBuMCp5J2HxRMCWZal7RAWwsEecEpnvkSI=@jbrengineering.co.uk>
-In-Reply-To: <20230716-gs_usb-fix-time-stamp-counter-v1-0-9017cefcd9d5@pengutronix.de>
-References: <20230716-gs_usb-fix-time-stamp-counter-v1-0-9017cefcd9d5@pengutronix.de>
-Feedback-ID: 45109726:user:proton
+        with ESMTP id S230482AbjGSWKq (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 19 Jul 2023 18:10:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2B62127
+        for <linux-can@vger.kernel.org>; Wed, 19 Jul 2023 15:10:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DCB26185C
+        for <linux-can@vger.kernel.org>; Wed, 19 Jul 2023 22:10:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DF889C433CA;
+        Wed, 19 Jul 2023 22:10:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689804622;
+        bh=b1Jh+2XWSDzNJT1cGWQC4NXYhXR0setBy5OkZNgNgSA=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Dkxhs9vj0EWDD0LZRlsIKi1wEV6JThp3Zoy8OtothRy9C//hjSWN33fasI791DnNw
+         wMRjZkDmkpuy80IZ9TLgTbhYfJwE+pFQaoJ8EeTcT6NV/GvMFJeYdB4CZ5G9YCWdiN
+         KacRcGf7KSFKH79xfprZw8HCHqfUoZ+0itIpb0BR4EQENPzPRYVbYIGgLqSCDyil2Z
+         hKdvvarLJyNvosI52QiE4zBt9NQazwYjTsnv3uNqazuar3wBGxDo5tfJ/cAOF7kEOR
+         WUWECn7A1eozhOxsoee7dyCeaxNlqMriZV/Z65Hc+k6DoFrD1076w7HzxndzxgpVdT
+         Vh7lAujNYNvjg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BF686C6445A;
+        Wed, 19 Jul 2023 22:10:22 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 1/8] dt-bindings: net: can: Remove interrupt
+ properties for MCAN
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168980462277.30545.412966680711424216.git-patchwork-notify@kernel.org>
+Date:   Wed, 19 Jul 2023 22:10:22 +0000
+References: <20230719072348.525039-2-mkl@pengutronix.de>
+In-Reply-To: <20230719072348.525039-2-mkl@pengutronix.de>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        linux-can@vger.kernel.org, kernel@pengutronix.de, jm@ti.com,
+        tony@atomide.com, conor.dooley@microchip.com,
+        krzysztof.kozlowski@linaro.org
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Marc,
+Hello:
 
-Thanks for this. I've had a look and tested it (candleLight_fw v2.0, `candu=
-mp can0 -H`, unload) and all seems good.
+This series was applied to netdev/net-next.git (main)
+by Marc Kleine-Budde <mkl@pengutronix.de>:
 
-John.
-
-------- Original Message -------
-On Sunday, July 16th, 2023 at 21:33, Marc Kleine-Budde <mkl@pengutronix.de>=
- wrote:
-
-
->=20
->=20
-> During testing I noticed a crash if unloading/loading the gs_usb
-> driver during high CAN bus load.
->=20
-> The current version of the candlelight firmware doesn't flush the
-> queues of the received CAN frames during the reset command. This leads
-> to a crash if hardware timestamps are enabled, it a URB from the
-> device is received before the cycle counter/time counter
-> infrastructure has been setup.
->=20
-> First clean up then error handling in gs_can_open().
->=20
-> Then, fix the problem by converting the cycle counter/time counter
-> infrastructure from a per-channel to per-device and set it up before
-> submitting RX-URBs to the USB stack.
->=20
-> Signed-off-by: Marc Kleine-Budde mkl@pengutronix.de
->=20
-> ---
-> Marc Kleine-Budde (2):
-> can: gs_usb: gs_can_open(): improve error handling
-> can: gs_usb: fix time stamp counter initialization
->=20
-> drivers/net/can/usb/gs_usb.c | 130 ++++++++++++++++++++++++--------------=
------
-> 1 file changed, 74 insertions(+), 56 deletions(-)
-> ---
-> base-commit: 0dd1805fe498e0cf64f68e451a8baff7e64494ec
-> change-id: 20230712-gs_usb-fix-time-stamp-counter-4bd302c808af
->=20
-> Best regards,
-> --
-> Marc Kleine-Budde mkl@pengutronix.de
->=20
+On Wed, 19 Jul 2023 09:23:41 +0200 you wrote:
+> From: Judith Mendez <jm@ti.com>
 > 
+> On AM62x SoC, MCANs on MCU domain do not have hardware interrupt
+> routed to A53 Linux, instead they will use software interrupt by
+> timer polling.
+> 
+> To enable timer polling method, interrupts should be
+> optional so remove interrupts property from required section and
+> add an example for MCAN node with timer polling enabled.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,1/8] dt-bindings: net: can: Remove interrupt properties for MCAN
+    https://git.kernel.org/netdev/net-next/c/bb410c03b999
+  - [net-next,2/8] can: m_can: Add hrtimer to generate software interrupt
+    https://git.kernel.org/netdev/net-next/c/b382380c0d2d
+  - [net-next,3/8] dt-bindings: can: xilinx_can: Add reset description
+    https://git.kernel.org/netdev/net-next/c/62bd0232d745
+  - [net-next,4/8] can: xilinx_can: Add support for controller reset
+    https://git.kernel.org/netdev/net-next/c/25000fc785b4
+  - [net-next,5/8] can: Explicitly include correct DT includes
+    https://git.kernel.org/netdev/net-next/c/22d8e8d6338d
+  - [net-next,6/8] can: kvaser_pciefd: Move hardware specific constants and functions into a driver_data struct
+    https://git.kernel.org/netdev/net-next/c/c2ad812956ae
+  - [net-next,7/8] can: kvaser_pciefd: Add support for new Kvaser pciefd devices
+    https://git.kernel.org/netdev/net-next/c/f33ad6776b2f
+  - [net-next,8/8] can: ucan: Remove repeated word
+    https://git.kernel.org/netdev/net-next/c/03df47c1bb39
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
