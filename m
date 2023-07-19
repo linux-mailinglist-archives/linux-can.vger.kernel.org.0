@@ -2,54 +2,61 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84F6C758B2C
-	for <lists+linux-can@lfdr.de>; Wed, 19 Jul 2023 04:10:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6E3E758B2A
+	for <lists+linux-can@lfdr.de>; Wed, 19 Jul 2023 04:10:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbjGSCKk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        id S229476AbjGSCKk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
         Tue, 18 Jul 2023 22:10:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46966 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjGSCKj (ORCPT
+        with ESMTP id S229461AbjGSCKj (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Tue, 18 Jul 2023 22:10:39 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CECE71FD7
-        for <linux-can@vger.kernel.org>; Tue, 18 Jul 2023 19:10:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED5B1FD8;
+        Tue, 18 Jul 2023 19:10:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BBCC616B7
-        for <linux-can@vger.kernel.org>; Wed, 19 Jul 2023 02:10:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6AAA2C433D9;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B5AE616D1;
+        Wed, 19 Jul 2023 02:10:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 70763C43391;
         Wed, 19 Jul 2023 02:10:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1689732622;
-        bh=96Jt0TgXaRl/IuSMTNAabE3RdEAC0ecOVXMrdPNO4NA=;
+        bh=GZrsVklu6wW9LRIDBIigNtrV62SEsXbQ+xxiZOxft5s=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=kt9G1RN3zRDgO+YWxDqLM3WVtmAxIIsCi6VA42DwfwSADCJ7yGuE8ldBixU3kk+5w
-         4FpYt4okJB7gwYssv6NF9PdK4EwdQQMJi30d3S7dERMqudNU8G5SwmTDv0cvyqpCHC
-         J87j5Fp4PDgNfQGKexv4wbia6GBLKQMtj63zDem8P6RD6k7VWA1apnJOgdGW8JUV5j
-         9me6dAiZ9YEHsdOwqAZRPklrbsPCxHtpkv5y4E8Ivl0n7A77CipbV4Ob6nfhrT5JMm
-         AtO4ZuSwTUcYjbRKhAc8AsRLweMVUrIgxfR8zOY3d24XT0AFU8ctzpufVwZbnq2P8V
-         6+gpnj84fSGFg==
+        b=FIb0s6XXYq/T55KzIt+Av0wBEgHCjwPJAodcts8fRWJ6J1jZQlNGPkMQ1tiKO550I
+         xFyhtK8xnKYn/XakGD5CBsTPo0I2nXhjALNanhNdzHENLOUM0ANe3usMv+BTjJtAEt
+         vtE0WTDDk5w7gifeqCH4SMDAZp5zfq3WiAu84Rh79RrX8vtSLpWdWR1LR1QkwgbGTa
+         pDNfcbZE/UuKWCwUcSnnP0eLPRh6sVJ+/wtlaKRyYke1BW3+M4+Xv0gxDOEU7rdu0W
+         GHWh9+Y6WPmZv8dy2n2CsUClZTnhEf85MNfMIVA1uq1IfW8hBv6HzjPO+JtpjWndbD
+         Q9KUAIcKtF3fQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4F06CC64458;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 44377E22AE5;
         Wed, 19 Jul 2023 02:10:22 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 1/8] dt-bindings: net: can: Remove interrupt
- properties for MCAN
+Subject: Re: [PATCH net-next v3 0/9] Remove unnecessary (void*) conversions
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168973262231.24960.391251104381339496.git-patchwork-notify@kernel.org>
+Message-Id: <168973262227.24960.1211431370018888838.git-patchwork-notify@kernel.org>
 Date:   Wed, 19 Jul 2023 02:10:22 +0000
-References: <20230717182229.250565-2-mkl@pengutronix.de>
-In-Reply-To: <20230717182229.250565-2-mkl@pengutronix.de>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, kernel@pengutronix.de, jm@ti.com,
-        tony@atomide.com, conor.dooley@microchip.com,
-        krzysztof.kozlowski@linaro.org
+References: <20230717030937.53818-1-yunchuan@nfschina.com>
+In-Reply-To: <20230717030937.53818-1-yunchuan@nfschina.com>
+To:     yunchuan <yunchuan@nfschina.com>
+Cc:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        irusskikh@marvell.com, rmody@marvell.com, skalluru@marvell.com,
+        GR-Linux-NIC-Dev@marvell.com, yisen.zhuang@huawei.com,
+        salil.mehta@huawei.com, jesse.brandeburg@intel.com,
+        anthony.l.nguyen@intel.com, steve.glendinning@shawell.net,
+        iyappan@os.amperecomputing.com, keyur@os.amperecomputing.com,
+        quan@os.amperecomputing.com, andrew@lunn.ch, hkallweit1@gmail.com,
+        linux@armlinux.org.uk, mostrows@earthlink.net, xeb@mail.ru,
+        uttenthaler@ems-wuensche.com, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, kernel-janitors@vger.kernel.org
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -65,36 +72,39 @@ Hello:
 This series was applied to netdev/net-next.git (main)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Mon, 17 Jul 2023 20:22:22 +0200 you wrote:
-> From: Judith Mendez <jm@ti.com>
+On Mon, 17 Jul 2023 11:09:37 +0800 you wrote:
+> Remove (void*) conversions under "drivers/net" directory.
 > 
-> On AM62x SoC, MCANs on MCU domain do not have hardware interrupt
-> routed to A53 Linux, instead they will use software interrupt by
-> timer polling.
+> Changes in v3:
+> 	change the author name to my full name "Wu Yunchuan".
+> 	improve the commit message to be more clearly.
 > 
-> To enable timer polling method, interrupts should be
-> optional so remove interrupts property from required section and
-> add an example for MCAN node with timer polling enabled.
+> Changes in v2:
+>         move declarations to be reverse xmas tree.
+>         compile it in net and net-next branch.
+>         remove some error patches in v1.
 > 
 > [...]
 
 Here is the summary with links:
-  - [net-next,1/8] dt-bindings: net: can: Remove interrupt properties for MCAN
-    (no matching commit)
-  - [net-next,2/8] can: m_can: Add hrtimer to generate software interrupt
-    (no matching commit)
-  - [net-next,3/8] can: ems_pci: Remove unnecessary (void *) conversions
+  - [net-next,v3,1/9] net: atlantic: Remove unnecessary (void*) conversions
+    https://git.kernel.org/netdev/net-next/c/f15fbe46f5ed
+  - [net-next,v3,2/9] net: ppp: Remove unnecessary (void*) conversions
+    https://git.kernel.org/netdev/net-next/c/89c04d6c49c3
+  - [net-next,v3,3/9] net: hns3: remove unnecessary (void*) conversions.
+    https://git.kernel.org/netdev/net-next/c/14fbcad00fe5
+  - [net-next,v3,4/9] net: hns: Remove unnecessary (void*) conversions
+    https://git.kernel.org/netdev/net-next/c/406eb9cf6f6f
+  - [net-next,v3,5/9] ice: remove unnecessary (void*) conversions
+    https://git.kernel.org/netdev/net-next/c/c59cc2679acc
+  - [net-next,v3,6/9] ethernet: smsc: remove unnecessary (void*) conversions
+    https://git.kernel.org/netdev/net-next/c/099090c6effc
+  - [net-next,v3,7/9] net: mdio: Remove unnecessary (void*) conversions
+    https://git.kernel.org/netdev/net-next/c/04115debedce
+  - [net-next,v3,8/9] can: ems_pci: Remove unnecessary (void*) conversions
     https://git.kernel.org/netdev/net-next/c/9235e3bcc613
-  - [net-next,4/8] can: Explicitly include correct DT includes
-    (no matching commit)
-  - [net-next,5/8] dt-bindings: can: xilinx_can: Add reset description
-    (no matching commit)
-  - [net-next,6/8] can: xilinx_can: Add support for controller reset
-    (no matching commit)
-  - [net-next,7/8] can: kvaser_pciefd: Move hardware specific constants and functions into a driver_data struct
-    (no matching commit)
-  - [net-next,8/8] can: kvaser_pciefd: Add support for new Kvaser pciefd devices
-    (no matching commit)
+  - [net-next,v3,9/9] net: bna: Remove unnecessary (void*) conversions
+    https://git.kernel.org/netdev/net-next/c/1d5123efdb91
 
 You are awesome, thank you!
 -- 
