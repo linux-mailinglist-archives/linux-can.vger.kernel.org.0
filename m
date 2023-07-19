@@ -2,106 +2,136 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A4DD758EE0
-	for <lists+linux-can@lfdr.de>; Wed, 19 Jul 2023 09:24:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA64758ED7
+	for <lists+linux-can@lfdr.de>; Wed, 19 Jul 2023 09:24:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbjGSHYi (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 19 Jul 2023 03:24:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57152 "EHLO
+        id S229531AbjGSHYd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 19 Jul 2023 03:24:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbjGSHYh (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 19 Jul 2023 03:24:37 -0400
+        with ESMTP id S229480AbjGSHYc (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 19 Jul 2023 03:24:32 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A15FDE47
-        for <linux-can@vger.kernel.org>; Wed, 19 Jul 2023 00:24:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3434E47
+        for <linux-can@vger.kernel.org>; Wed, 19 Jul 2023 00:24:30 -0700 (PDT)
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1qM1Xy-0002qy-Uc; Wed, 19 Jul 2023 09:24:31 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
+        id 1qM1Xx-0002pQ-1J
+        for linux-can@vger.kernel.org; Wed, 19 Jul 2023 09:24:29 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 0888F1F4C27
+        for <linux-can@vger.kernel.org>; Wed, 19 Jul 2023 07:23:50 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 78B531F4B8B;
-        Wed, 19 Jul 2023 06:53:05 +0000 (UTC)
-Date:   Wed, 19 Jul 2023 08:53:04 +0200
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 0C87E1F4C0B;
+        Wed, 19 Jul 2023 07:23:50 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id a5fc065f;
+        Wed, 19 Jul 2023 07:23:49 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net,
-        linux-can@vger.kernel.org, kernel@pengutronix.de,
-        Jimmy Assarsson <extja@kvaser.com>,
-        Martin Jocic <majoc@kvaser.com>
-Subject: Re: [PATCH net-next 7/8] can: kvaser_pciefd: Move hardware specific
- constants and functions into a driver_data struct
-Message-ID: <20230719-purge-obtrusive-997e0ac2d998-mkl@pengutronix.de>
-References: <20230717182229.250565-1-mkl@pengutronix.de>
- <20230717182229.250565-8-mkl@pengutronix.de>
- <20230718183315.27c0cd27@kernel.org>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH net-next 0/8] pull-request: can-next 2023-07-19
+Date:   Wed, 19 Jul 2023 09:23:40 +0200
+Message-Id: <20230719072348.525039-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="znjxi2cp3uovi2gj"
-Content-Disposition: inline
-In-Reply-To: <20230718183315.27c0cd27@kernel.org>
+Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello netdev-team,
 
---znjxi2cp3uovi2gj
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+this is a pull request of 8 patches for net-next/master.
 
-On 18.07.2023 18:33:15, Jakub Kicinski wrote:
-> On Mon, 17 Jul 2023 20:22:28 +0200 Marc Kleine-Budde wrote:
-> > +const struct kvaser_pciefd_address_offset kvaser_pciefd_altera_address=
-_offset =3D {
->=20
-> > +const struct kvaser_pciefd_irq_mask kvaser_pciefd_altera_irq_mask =3D {
->=20
-> > +const struct kvaser_pciefd_dev_ops kvaser_pciefd_altera_dev_ops =3D {
->=20
-> > +const struct kvaser_pciefd_driver_data kvaser_pciefd_altera_driver_dat=
-a =3D {
->=20
-> sparse points out the structs in this and subsequent patch should
-> be static. Would you be able to queue a quick fix on top and resend,
-> or should we pull as is?
+The first 2 patches are by Judith Mendez, target the m_can driver and
+add hrtimer based polling support for TI AM62x SoCs, where the
+interrupt of the MCU domain's m_can cores is not routed to the Cortex
+A53 core.
 
-Sorry, I'll post an updated pull request.
+A patch by Rob Herring converts the grcan driver to use the correct DT
+include files.
 
+Michal Simek and Srinivas Neeli add support for optional reset control
+to the xilinx_can driver.
+
+The next 2 patches are by Jimmy Assarsson and add support for new
+Kvaser pciefd to the kvaser_pciefd driver.
+
+Mao Zhu's patch for the ucan driver removes a repeated word from a
+comment.
+
+regards,
 Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+---
 
---znjxi2cp3uovi2gj
-Content-Type: application/pgp-signature; name="signature.asc"
+The following changes since commit 68af900072c157c0cdce0256968edd15067e1e5a:
 
------BEGIN PGP SIGNATURE-----
+  gve: trivial spell fix Recive to Receive (2023-07-14 10:28:17 +0100)
 
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmS3iE4ACgkQvlAcSiqK
-BOgNnQgAkJ9B8RHY+hLzgnfPbVr0Em9zuVDJdh1qvs0vS0eiic5x+J3rfvIP83do
-rSHw1h2uP0GRzUVCq1c6jPLyJRZif41Cn8vBb5zy10ZcpSRimCJ31tsns/fupEkx
-HHeaDP6r2oKBSdVWzFSqCrGrfbDVMht5RN3RFOsMTLlpuYa3jYN7kKvhqrirluCi
-V6pUyQjSuBbSCF8E/58aLY9W8vNev47GAglnFwAReK/F/RfCYYTvf5gtw7gn8ehd
-uEAagpv9BBqmJBcFx435H5cdAvW4jk2S446QyhIetDB/ovF7HJx8PNEBYubQmnWN
-4Xsh37ooQD8h9YHgi1El0FC1eHrE6w==
-=N+Sh
------END PGP SIGNATURE-----
+are available in the Git repository at:
 
---znjxi2cp3uovi2gj--
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git tags/linux-can-next-for-6.6-20230719
+
+for you to fetch changes up to 03df47c1bb392b795bcecb6953dcc49199d33b2a:
+
+  can: ucan: Remove repeated word (2023-07-19 09:04:36 +0200)
+
+----------------------------------------------------------------
+linux-can-next-for-6.6-20230719
+
+----------------------------------------------------------------
+Jimmy Assarsson (2):
+      can: kvaser_pciefd: Move hardware specific constants and functions into a driver_data struct
+      can: kvaser_pciefd: Add support for new Kvaser pciefd devices
+
+Judith Mendez (2):
+      dt-bindings: net: can: Remove interrupt properties for MCAN
+      can: m_can: Add hrtimer to generate software interrupt
+
+Mao Zhu (1):
+      can: ucan: Remove repeated word
+
+Marc Kleine-Budde (3):
+      Merge patch series "Enable multiple MCAN on AM62x"
+      Merge patch series "can: xilinx_can: Add support for reset"
+      Merge patch series "can: kvaser_pciefd: Add support for new Kvaser PCI Express devices"
+
+Michal Simek (1):
+      dt-bindings: can: xilinx_can: Add reset description
+
+Rob Herring (1):
+      can: Explicitly include correct DT includes
+
+Srinivas Neeli (1):
+      can: xilinx_can: Add support for controller reset
+
+ .../devicetree/bindings/net/can/bosch,m_can.yaml   |  20 +-
+ .../devicetree/bindings/net/can/xilinx,can.yaml    |   3 +
+ drivers/net/can/Kconfig                            |   5 +
+ drivers/net/can/grcan.c                            |   3 +-
+ drivers/net/can/kvaser_pciefd.c                    | 307 +++++++++++++++------
+ drivers/net/can/m_can/m_can.c                      |  32 ++-
+ drivers/net/can/m_can/m_can.h                      |   3 +
+ drivers/net/can/m_can/m_can_platform.c             |  21 +-
+ drivers/net/can/usb/ucan.c                         |   2 +-
+ drivers/net/can/xilinx_can.c                       |  25 +-
+ 10 files changed, 331 insertions(+), 90 deletions(-)
+
+
