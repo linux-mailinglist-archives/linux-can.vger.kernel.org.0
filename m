@@ -2,98 +2,84 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D8675AD4E
-	for <lists+linux-can@lfdr.de>; Thu, 20 Jul 2023 13:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1435975B193
+	for <lists+linux-can@lfdr.de>; Thu, 20 Jul 2023 16:48:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230286AbjGTLrh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 20 Jul 2023 07:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44752 "EHLO
+        id S231922AbjGTOsz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 20 Jul 2023 10:48:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbjGTLrg (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 20 Jul 2023 07:47:36 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF584189
-        for <linux-can@vger.kernel.org>; Thu, 20 Jul 2023 04:47:34 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qMS7r-0003Lv-EV; Thu, 20 Jul 2023 13:47:19 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 90C721F62F9;
-        Thu, 20 Jul 2023 11:47:17 +0000 (UTC)
-Date:   Thu, 20 Jul 2023 13:47:16 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-can@vger.kernel.org, eric.dumazet@gmail.com,
-        syzbot <syzkaller@googlegroups.com>,
-        Ziyang Xuan <william.xuanziyang@huawei.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH net] can: raw: fix lockdep issue in raw_release()
-Message-ID: <20230720-relieving-gullible-d92198ce1312-mkl@pengutronix.de>
-References: <20230720114438.172434-1-edumazet@google.com>
+        with ESMTP id S232327AbjGTOsx (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 20 Jul 2023 10:48:53 -0400
+X-Greylist: delayed 471 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 20 Jul 2023 07:48:50 PDT
+Received: from mail3.ems-wuensche.com (mail3.ems-wuensche.com [81.169.186.156])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C399A26B8
+        for <linux-can@vger.kernel.org>; Thu, 20 Jul 2023 07:48:50 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by h2257714.serverkompetenz.net (Postfix) with ESMTP id EEC91FF350
+        for <linux-can@vger.kernel.org>; Thu, 20 Jul 2023 14:40:57 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at h2257714.serverkompetenz.net
+X-Spam-Score: -1.912
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
+Received: from mail3.ems-wuensche.com ([81.169.186.156])
+        by localhost (h2257714.serverkompetenz.net [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id DakZnjOoAEQL for <linux-can@vger.kernel.org>;
+        Thu, 20 Jul 2023 16:40:57 +0200 (CEST)
+From:   Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
+To:     linux-can@vger.kernel.org
+Cc:     mkl@pengutronix.de, vincent.mailhol@gmail.com,
+        Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
+Subject: [PATCH] MAINTAINERS: Add myself as maintainer of the ems_pci.c driver
+Date:   Thu, 20 Jul 2023 16:40:32 +0200
+Message-Id: <20230720144032.28960-1-uttenthaler@ems-wuensche.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="njycenkbtazb4qqm"
-Content-Disposition: inline
-In-Reply-To: <20230720114438.172434-1-edumazet@google.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+At the suggestion of Marc Kleine-Budde [1], I add myself as maintainer of the ems_pci.c driver.
 
---njycenkbtazb4qqm
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[1] https://lore.kernel.org/all/20230720-purplish-quizzical-247024e66671-mkl@pengutronix.de/
 
-On 20.07.2023 11:44:38, Eric Dumazet wrote:
-> syzbot complained about a lockdep issue [1]
->=20
-> Since raw_bind() and raw_setsockopt() first get RTNL
-> before locking the socket, we must adopt the same order in raw_release()
+Signed-off-by: Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
+---
+ MAINTAINERS | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Applied to linux-can/testing
+diff --git a/MAINTAINERS b/MAINTAINERS
+index dfbb271f1667..610591a0ace5 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -7585,6 +7585,13 @@ L:	linux-mmc@vger.kernel.org
+ S:	Supported
+ F:	drivers/mmc/host/cqhci*
+ 
++EMS CPC-PCI CAN DRIVER
++M:	Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
++M:	support@ems-wuensche.com
++L:	linux-can@vger.kernel.org
++S:	Maintained
++F:	drivers/net/can/sja1000/ems_pci.c
++
+ EMULEX 10Gbps iSCSI - OneConnect DRIVER
+ M:	Ketan Mukadam <ketan.mukadam@broadcom.com>
+ L:	linux-scsi@vger.kernel.org
+-- 
+2.35.3
 
-Thanks,
-Marc
+--
+EMS Dr. Thomas Wuensche e.K.
+Sonnenhang 3
+85304 Ilmmuenster
+HR Ingolstadt, HRA 170106
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---njycenkbtazb4qqm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmS5HsIACgkQvlAcSiqK
-BOgbsQf/fzzFkg4HORKC5uMObiQtPyNKnugJmoGdXNXkoP+mjmQCdTMnsEpi7sG4
-0lVqhMlKzvnevlRWDjS6pm3m5UJ1cXQij7C9GbRRGgmuWxGE/9Oh72O7MZ+uVGlC
-zlESkZywfZng14Ap/eMg/XxBbWVCUVof5ecq9LSOVIXZegk/QGSsepfwPse6CfDb
-iX6RZg94eezZC69HTYclKVfs+EDX1T6LukLRU+yEovtaQur/G2dnhrWYZ8p4GQbt
-+L0nCfAv5oCJu+AFbImgEqcVOztyrk24LCQxoId+RyhjNOybzYEb0T8pojC3gAki
-gWC7xPrwrmRNpUFrTC2SbNvbnjnvtg==
-=zByJ
------END PGP SIGNATURE-----
-
---njycenkbtazb4qqm--
+Phone: +49-8441-490260
+Fax  : +49-8441-81860
+http://www.ems-wuensche.com
