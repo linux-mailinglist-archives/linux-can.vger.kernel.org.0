@@ -2,84 +2,101 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1435975B193
-	for <lists+linux-can@lfdr.de>; Thu, 20 Jul 2023 16:48:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF7AB75B1C4
+	for <lists+linux-can@lfdr.de>; Thu, 20 Jul 2023 16:54:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231922AbjGTOsz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 20 Jul 2023 10:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37942 "EHLO
+        id S232142AbjGTOyJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 20 Jul 2023 10:54:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232327AbjGTOsx (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 20 Jul 2023 10:48:53 -0400
-X-Greylist: delayed 471 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 20 Jul 2023 07:48:50 PDT
-Received: from mail3.ems-wuensche.com (mail3.ems-wuensche.com [81.169.186.156])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C399A26B8
-        for <linux-can@vger.kernel.org>; Thu, 20 Jul 2023 07:48:50 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by h2257714.serverkompetenz.net (Postfix) with ESMTP id EEC91FF350
-        for <linux-can@vger.kernel.org>; Thu, 20 Jul 2023 14:40:57 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at h2257714.serverkompetenz.net
-X-Spam-Score: -1.912
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
-Received: from mail3.ems-wuensche.com ([81.169.186.156])
-        by localhost (h2257714.serverkompetenz.net [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id DakZnjOoAEQL for <linux-can@vger.kernel.org>;
-        Thu, 20 Jul 2023 16:40:57 +0200 (CEST)
-From:   Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
-To:     linux-can@vger.kernel.org
-Cc:     mkl@pengutronix.de, vincent.mailhol@gmail.com,
-        Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
-Subject: [PATCH] MAINTAINERS: Add myself as maintainer of the ems_pci.c driver
-Date:   Thu, 20 Jul 2023 16:40:32 +0200
-Message-Id: <20230720144032.28960-1-uttenthaler@ems-wuensche.com>
-X-Mailer: git-send-email 2.35.3
+        with ESMTP id S229586AbjGTOyI (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 20 Jul 2023 10:54:08 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B11E60;
+        Thu, 20 Jul 2023 07:54:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689864846; x=1721400846;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=sHKUqdVr24phow31YhtFZABiwRr2DFpKSY1jczZqZxk=;
+  b=R3CLeoNxR1pWeGZ6lhUUnlD0wpf1aH2Kl3PINQJyKYJsQWxW7z7/BZsU
+   7O8FIFR/69VBjNshhWXDlWT9vwFquJC3bp7YxB9YhDMb0yD5ef0klpZyF
+   JbvQwejeUmrhrb2Y2yrycvF9rXcQ56BYf/Q7Z8LeZkpjA4GRE1gGD+eqh
+   CMd0LwJgHNvuUrkpceV6iFsHyjmDlW474AhVJoKpJcJGik6VpuPI8F35y
+   siqmAVxcDYDuGg5429Smk7k5nhYSHydvyDOo6oQ0iwoTo4YzE0kPkXr5o
+   bRiM5C/453tz0AUqMxEwXm3ia3Kyr8ot/ZSjmllNMDKiFZLto07ZXXp06
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="369433469"
+X-IronPort-AV: E=Sophos;i="6.01,219,1684825200"; 
+   d="scan'208";a="369433469"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2023 07:54:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="718430688"
+X-IronPort-AV: E=Sophos;i="6.01,219,1684825200"; 
+   d="scan'208";a="718430688"
+Received: from jiaqingz-mobl.ccr.corp.intel.com (HELO [10.93.4.236]) ([10.93.4.236])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2023 07:54:03 -0700
+Message-ID: <61bbb2e6-8c18-d2fc-ce1e-78d462ac1bba@linux.intel.com>
+Date:   Thu, 20 Jul 2023 22:54:01 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v2 2/2] can: ems_pci: move ASIX AX99100 ids to pci_ids.h
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>,
+        support@ems-wuensche.com,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-can@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+References: <20230720102859.2985655-1-jiaqing.zhao@linux.intel.com>
+ <20230720102859.2985655-3-jiaqing.zhao@linux.intel.com>
+ <20230720-document-tingle-e5d555714021-mkl@pengutronix.de>
+Content-Language: en-US
+From:   Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
+In-Reply-To: <20230720-document-tingle-e5d555714021-mkl@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-At the suggestion of Marc Kleine-Budde [1], I add myself as maintainer of the ems_pci.c driver.
+On 2023-07-20 18:40, Marc Kleine-Budde wrote:
+> On 20.07.2023 10:28:59, Jiaqing Zhao wrote:
+>> Move PCI Vendor and Device ID of ASIX AX99100 PCIe to Multi I/O
+>> Controller to pci_ids.h for its serial and parallel port driver
+>> support in subsequent patches.
+> 
+> Sorry, I haven't noticed the change in "include/linux/pci_ids.h", that
+> the other patches depend on. How to coordinate among the subsystems?
+> 
+> I don't mind taking the entire (v1) series with the Acks from the
+> tty/serial and parport maintainers, or give my Acked-by to upstream
+> via their trees.
 
-[1] https://lore.kernel.org/all/20230720-purplish-quizzical-247024e66671-mkl@pengutronix.de/
+Add tty and parport maintainers to this thread.
 
-Signed-off-by: Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
----
- MAINTAINERS | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index dfbb271f1667..610591a0ace5 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -7585,6 +7585,13 @@ L:	linux-mmc@vger.kernel.org
- S:	Supported
- F:	drivers/mmc/host/cqhci*
+I'd like to ask other maintainers' opinion as I'm not sure which option
+is better and I had no similar experience before. 
  
-+EMS CPC-PCI CAN DRIVER
-+M:	Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
-+M:	support@ems-wuensche.com
-+L:	linux-can@vger.kernel.org
-+S:	Maintained
-+F:	drivers/net/can/sja1000/ems_pci.c
-+
- EMULEX 10Gbps iSCSI - OneConnect DRIVER
- M:	Ketan Mukadam <ketan.mukadam@broadcom.com>
- L:	linux-scsi@vger.kernel.org
--- 
-2.35.3
-
---
-EMS Dr. Thomas Wuensche e.K.
-Sonnenhang 3
-85304 Ilmmuenster
-HR Ingolstadt, HRA 170106
-
-Phone: +49-8441-490260
-Fax  : +49-8441-81860
-http://www.ems-wuensche.com
+>> Signed-off-by: Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
+>> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+>> ---
+>>  drivers/net/can/sja1000/ems_pci.c | 6 +-----
+>>  include/linux/pci_ids.h           | 4 ++++
+>>  2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> Marc
+> 
