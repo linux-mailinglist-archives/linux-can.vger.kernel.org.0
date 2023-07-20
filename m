@@ -2,44 +2,47 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6991675AAD8
-	for <lists+linux-can@lfdr.de>; Thu, 20 Jul 2023 11:30:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D685475AAE7
+	for <lists+linux-can@lfdr.de>; Thu, 20 Jul 2023 11:32:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230343AbjGTJau (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 20 Jul 2023 05:30:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34122 "EHLO
+        id S230322AbjGTJcY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 20 Jul 2023 05:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229976AbjGTJad (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 20 Jul 2023 05:30:33 -0400
+        with ESMTP id S230453AbjGTJcO (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 20 Jul 2023 05:32:14 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6824A2D47
-        for <linux-can@vger.kernel.org>; Thu, 20 Jul 2023 02:20:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABA44489
+        for <linux-can@vger.kernel.org>; Thu, 20 Jul 2023 02:26:16 -0700 (PDT)
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1qMPp9-0000It-Vw; Thu, 20 Jul 2023 11:19:52 +0200
+        id 1qMPvE-0001QP-NM; Thu, 20 Jul 2023 11:26:08 +0200
 Received: from pengutronix.de (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id BF9781F60F1;
-        Thu, 20 Jul 2023 09:19:50 +0000 (UTC)
-Date:   Thu, 20 Jul 2023 11:19:50 +0200
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 2355C1F6110;
+        Thu, 20 Jul 2023 09:26:07 +0000 (UTC)
+Date:   Thu, 20 Jul 2023 11:26:06 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     john@jbrengineering.co.uk
-Cc:     linux-can@vger.kernel.org, kernel@pengutronix.de,
-        John Whittington <git@jbrengineering.co.uk>
-Subject: Re: [PATCH 0/2] can: gs_usb: fix time stamp counter initialization
-Message-ID: <20230720-conclude-ravioli-6d846555a635-mkl@pengutronix.de>
-References: <20230716-gs_usb-fix-time-stamp-counter-v1-0-9017cefcd9d5@pengutronix.de>
- <C3H7gx4Krj3hjq14-A92mCFngjXEie679zE1xQvTosJTiMAbVmr9Z6_cLvWKfPjLOjOOKgOAWFBuMCp5J2HxRMCWZal7RAWwsEecEpnvkSI=@jbrengineering.co.uk>
+To:     Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-serial@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/4] add support for ASIX AX99100
+Message-ID: <20230720-enlarged-scratch-5c8629dc8bea-mkl@pengutronix.de>
+References: <20230718174200.2862849-1-jiaqing.zhao@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7uejvxoxd27og7sz"
+        protocol="application/pgp-signature"; boundary="p6ccc7kw3oatnm5q"
 Content-Disposition: inline
-In-Reply-To: <C3H7gx4Krj3hjq14-A92mCFngjXEie679zE1xQvTosJTiMAbVmr9Z6_cLvWKfPjLOjOOKgOAWFBuMCp5J2HxRMCWZal7RAWwsEecEpnvkSI=@jbrengineering.co.uk>
+In-Reply-To: <20230718174200.2862849-1-jiaqing.zhao@linux.intel.com>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -54,23 +57,28 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---7uejvxoxd27og7sz
+--p6ccc7kw3oatnm5q
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 19.07.2023 12:55:03, john@jbrengineering.co.uk wrote:
-> Hi Marc,
+On 18.07.2023 17:41:56, Jiaqing Zhao wrote:
+> This patch adds kernel inbox driver support for the serial port and
+> parallel port mode controller of ASIX AX99100 PCIe to Multi I/O
+> Controller. This device has 4 separate PCI functions and each functions
+> can be configured to operate in different modes.
 >=20
-> Thanks for this. I've had a look and tested it (candleLight_fw v2.0,
-> `candump can0 -H`, unload) and all seems good.
+> This patchset is tested with ASIX AX99100 in following modes:
+> * 4 x Serial Port
+> * 2 x Serial Port
+> * 2 x Serial Port + 1 x Parallel Port
+> * 1 x Parallel Port
 
-Thanks for testing!
+I think it's better to split the series into subsystems. For CAN that
+would be patches 1 and 2. Please add support@ems-wuensche.com and
+uttenthaler@ems-wuensche.com on Cc.
 
-Meanwhile the patch got mainline, otherwise I would have added your
-Tested-by.
-
-Thanks,
+regards,
 Marc
 
 --=20
@@ -79,19 +87,19 @@ Embedded Linux                   | https://www.pengutronix.de |
 Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
---7uejvxoxd27og7sz
+--p6ccc7kw3oatnm5q
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmS4/DMACgkQvlAcSiqK
-BOgRHggAmJaDvg6tdtv/vG+NzRxRveQloAvF/lOKp4J5GoEpUs1R3k/xV9oAPwRQ
-DXA6uejihMEKY26MffG3Y3VJYn4k8R6jP1bgK/Cob82njxGX4JgDKCWX3jd60eGA
-wK8ALjXbcTWjE0H/O+v+RSgf94KZaITjJFWjd3J9oVtmaFAEJW6aPOUfNmV3nigD
-Nu9USVQdApvOFLLsxuCcuqFZubBjk6RU101Z/7eaeapQ4JhL/Esh2IWQbr3ydO00
-Y2JsObey7IULM1Ut03pLTAZEQfpWAoI7J2CBQaznhGEqvYrq5WP6uICdLQBBNEkQ
-rMriOHaB4TufxwDDRsuFyY4oo6N2fA==
-=Ukr2
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmS4/akACgkQvlAcSiqK
+BOhxdgf/SWvDQp7oKl0hy/pf7oUnlBLlQcXCv3JXbrRDfYQsqM9pMEoy9T8pb68n
+UQqP/3GWxbH8u/Ajwo4j2E52vKraiIbkpiOKa0lFWVjlPMhwO3WhENsn1LECE1D6
+WmJlz9AMjKNaR69ncoNsWVig2xmyD2RRurAQdFIBYsDQcuIRqF0u3/Lisbm97rCK
+x2fAyeYkG4/VcwZOQkkJDpphcT7YTIHeDwe02d3PFp8JypcSVIkRnZrWqc43o9ux
+kOyrpa3+X26pxGRPBIojd21HB4q74r7ziQbUqU0X4IJcML8cELTQt12ngfWMtFES
+XimYTl0QvduhSs8NtEwrGbWIecQ+zw==
+=Wz7L
 -----END PGP SIGNATURE-----
 
---7uejvxoxd27og7sz--
+--p6ccc7kw3oatnm5q--
