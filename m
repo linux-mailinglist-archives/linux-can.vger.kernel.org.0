@@ -2,160 +2,115 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6425D75C848
-	for <lists+linux-can@lfdr.de>; Fri, 21 Jul 2023 15:50:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE14D75D113
+	for <lists+linux-can@lfdr.de>; Fri, 21 Jul 2023 20:08:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231622AbjGUNui (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 21 Jul 2023 09:50:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46822 "EHLO
+        id S229451AbjGUSIg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 21 Jul 2023 14:08:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231550AbjGUNu0 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 21 Jul 2023 09:50:26 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C73B530E4
-        for <linux-can@vger.kernel.org>; Fri, 21 Jul 2023 06:50:21 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3fbc1218262so17236295e9.3
-        for <linux-can@vger.kernel.org>; Fri, 21 Jul 2023 06:50:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1689947420; x=1690552220;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dRBYGxiJV+fUO8L5x5OkCA3grJdrnxlxanjlGq4MKP4=;
-        b=pfR7mREr9aayrh+8f9nOd5qtIuFl435AvZJdQGv4nHPrajIcHM6UzskadI1FY3Jaxs
-         NQS9yZsNmtZ22/yZjmm60KISaFO6zMnpY9KAevpevBTm4ZT4WNkfwH/P3qCRjmc8V9pX
-         N1ff8VZXBWBZmIVdkVV0SBJH4slQeFxdXn09zAK+U12hTq9eShicztoNnxb3wLdWlp2N
-         oCP5Zq610M8aEHl94yIKan/Lmk46W5ONk3k+hSSk3wwXqg9gLr3BGnLot2bedPF5OYtX
-         TT760rAP4bbDEajDXH44a9AKHxRJfj7wzq337I1DRLVeYTf51pk7Jr8PCKH2TFu4igwA
-         iN8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689947420; x=1690552220;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dRBYGxiJV+fUO8L5x5OkCA3grJdrnxlxanjlGq4MKP4=;
-        b=gkJyAPx9UNtg1B+bzMA02brw10TIHu+xN3/+uyGChQscWWV4IQHZRYLC7gXB3/Axeo
-         6pq26xYypneN6r9IQsrH80Kou3iN+4k148o1LbslPId7hvkRxOD24GDZPglFr2jeAOiM
-         Syw9pOI4VM60WCCUDG/knLl6sX2QOElpdh67I5vhANPX9ZmjcITVHyPf6nyYQ+m5Wh9M
-         TvhvXwMygXeANE2MfTFlfsTbA4BUXL6Ig434TkFh2f9BtK/ZTLNjh2YCzN+2bXOSD8ba
-         qb+R9teiMFrP+HsxGEbT6gr9B0Wsiib65KqpLGBoP+ViLjKxMAalvniuimXNN8ACpyzh
-         m7ZQ==
-X-Gm-Message-State: ABy/qLYjimwDpk7l7jq/bqyaKZapBEv4rPT+zZCcWRmQx7X3N1wpO7sd
-        oU2/bT+VBmpis9KbB2T+4soeuQ==
-X-Google-Smtp-Source: APBJJlFgG2WeFkm/yf/wlFlPZiCNsdoffBh//BtztWnERSfUFPNj2OMuWQPhdMMl7iGF3Y9DuEJvtA==
-X-Received: by 2002:a05:600c:20c4:b0:3f4:d18f:b2fb with SMTP id y4-20020a05600c20c400b003f4d18fb2fbmr1623924wmm.8.1689947419766;
-        Fri, 21 Jul 2023 06:50:19 -0700 (PDT)
-Received: from blmsp.fritz.box ([2001:4091:a247:82fa:b762:4f68:e1ed:5041])
-        by smtp.gmail.com with ESMTPSA id c14-20020adfed8e000000b00313e4d02be8sm4233980wro.55.2023.07.21.06.50.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jul 2023 06:50:19 -0700 (PDT)
-From:   Markus Schneider-Pargmann <msp@baylibre.com>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
+        with ESMTP id S229518AbjGUSIf (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 21 Jul 2023 14:08:35 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB7D92D46;
+        Fri, 21 Jul 2023 11:08:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+ s=s31663417; t=1689962895; x=1690567695; i=ps.report@gmx.net;
+ bh=d7+NOCj0zr2QbS/Qs3ayEuVHnM+vEVtZH5MttU94reQ=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+ b=Np1OBUPMC3WTOwoM91eZK5rrNtjNqd1PrbUEpnsCsJlpATQcpRDzX6tzjxfV7q+7EKRXoI5
+ AsBJqOjkdbfqks1+ooZce/l4lMviQRdkoPezslBErBBHmBm0Hfb8OIwfHvGPWrfhh1GjJVZQB
+ Rh5/35hGCIUnuB8Cys/FAEvvurUi1Sod9hJUwPkCQXJ85R3I6gmsmYfaBJekHxrGxRtU+X2Yp
+ AlcFanicrnPqZI20Fd8nDfDcubRMjNYFuv4/MfGnZ3R5Zf0yez4RWOea77gwkymQ5YY/qyeo7
+ T627Y0psaR4tdi3lfMmD28FFkWTjzvEAlM5TzXvwjoEMgDvMm8ew==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost.fritz.box ([62.216.209.39]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MDhhX-1qEybI0mUZ-00Aiwa; Fri, 21
+ Jul 2023 20:08:15 +0200
+From:   Peter Seiderer <ps.report@gmx.net>
+To:     linux-can@vger.kernel.org
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     "David S . Miller" <davem@davemloft.net>,
+        "David S . Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Michal Kubiak <michal.kubiak@intel.com>,
-        Vivek Yadav <vivek.2311@samsung.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Simon Horman <simon.horman@corigine.com>,
-        Markus Schneider-Pargmann <msp@baylibre.com>
-Subject: [PATCH v3 6/6] can: tcan4x5x: Add error messages in probe
-Date:   Fri, 21 Jul 2023 15:50:09 +0200
-Message-Id: <20230721135009.1120562-7-msp@baylibre.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230721135009.1120562-1-msp@baylibre.com>
-References: <20230721135009.1120562-1-msp@baylibre.com>
+        Lukas Magel <lukas.magel@posteo.net>,
+        Stephane Grosjean <s.grosjean@peak-system.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Seiderer <ps.report@gmx.net>
+Subject: [PATCH v1] can: peak_usb: remove unused/legacy peak_usb_netif_rx() function
+Date:   Fri, 21 Jul 2023 20:07:58 +0200
+Message-ID: <20230721180758.26199-1-ps.report@gmx.net>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+X-Provags-ID: V03:K1:HKm+8cK0Tw1sAFXS0uN6nAmdO3n8J4GLE+78t6hDn1BCjTrLeZJ
+ 93t5ncU96ScQpKqDboh6pVP0dM2pAS3NJ7jN5drsVZis8R6x1PX28VLmpP7rK1jVYGVgzBy
+ XjOtI20Y3Q+Z2QRasf295HRNx/3bTuTA1mkCtBPHr2xVDZsYSeJiLYlAIMMvcA7Q4dUAxI2
+ JeWFVL3QjLv8KaWrrvsAg==
+UI-OutboundReport: notjunk:1;M01:P0:i8wtBtZ+2lw=;XOKH+cMPUGrMTJSMwkuncju9v/4
+ j7aMj/uOUIGMHO0C1k4cO48wZOcQk5OTM5MPeJ5ft5VDt/mMYs/fq7SYoYNgBpfZqgdJa7CvE
+ w7km0RoDkBUR+FznHCyyQZZGvgIrCHsYQKNsxxoEBTP8HRAc6W/a+UXdV+Gt31o29HddaWdtv
+ CTTw8jmkutxYhWSz/mXrbMUX0xOxmFGc1sCcMVGaSZqSHzhe3q6O1zJO/cpwM1UxHQgySDCK8
+ 1O37hblSTFduLD5+/MXLa7xib4bG9bmrVfWXBkaNenFswlhzbWgV1uviWX3a76zVn/21B4hHu
+ 5y3U9q95mpFWkkhVigyyuMBlMER5q+EDLAMfkVyt1pf6F+b7yPmh1rlinoWAbtKeofXvnB22U
+ cl0YCvki3CnzxmyEY7xa+rZk2mDxwmqjHg0p/RSjqMubhli1izeTVsCqV0S/pn+7arz8iEizq
+ yPcPwstQqcVQbUVjHB2m8DpXMh66DmgPD4/gYjOY0VqxkwPvZPxHshaGKOiJCWNPik3p7K3r/
+ 8kZphDh2QippOecRzVDbfayZoKRxUg8Q12Cub0JgHVuC59qovvt0VCmLSdqfc/zkSi/KhZt2A
+ uDN8cCIFV4ZWDHDPyD/dc9LAtQytCsk4g7DPZpCMju7cLHUR3bcxWimZDYEgcpXGLkFNzFVaD
+ OH0hhV/3uTcUvG3gaxpJUbfyM0G6Ajgh/+FTf6n6aCdEJSUXYxTCvAsSdPseIKJEl2V+dKAOh
+ crHxyG3NBdN06hJUEERsAN+PZjBCBVpLW0JfThDuJncQ7pQkgygEUAB04C9cezoGcAnbCkw1w
+ MHJxkg9BX7mmKHI9WV0unb/2PMg9mAewbwgOnntv2c3yItVXG4sCbjmgWMBvLUNJqqfZ34zaM
+ z6suJo0TDcMmlQGaY1lccWaLHv4y3t6oHjOjC2YZPeOzAve4tXKpQCsx8HhWE1JVVPMIzWdYh
+ v732dflfqBbo9BrTm9CQQgI00sc=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-To be able to understand issues during probe easier, add error messages
-if something fails.
-
-Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
----
- drivers/net/can/m_can/tcan4x5x-core.c | 26 ++++++++++++++++++++------
- 1 file changed, 20 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/net/can/m_can/tcan4x5x-core.c b/drivers/net/can/m_can/tcan4x5x-core.c
-index 2d329b4e4f52..60380b50e553 100644
---- a/drivers/net/can/m_can/tcan4x5x-core.c
-+++ b/drivers/net/can/m_can/tcan4x5x-core.c
-@@ -402,6 +402,8 @@ static int tcan4x5x_can_probe(struct spi_device *spi)
- 
- 	/* Sanity check */
- 	if (freq < 20000000 || freq > TCAN4X5X_EXT_CLK_DEF) {
-+		dev_err(&spi->dev, "Clock frequency is out of supported range %d\n",
-+			freq);
- 		ret = -ERANGE;
- 		goto out_m_can_class_free_dev;
- 	}
-@@ -420,16 +422,22 @@ static int tcan4x5x_can_probe(struct spi_device *spi)
- 	/* Configure the SPI bus */
- 	spi->bits_per_word = 8;
- 	ret = spi_setup(spi);
--	if (ret)
-+	if (ret) {
-+		dev_err(&spi->dev, "SPI setup failed %d\n", ret);
- 		goto out_m_can_class_free_dev;
-+	}
- 
- 	ret = tcan4x5x_regmap_init(priv);
--	if (ret)
-+	if (ret) {
-+		dev_err(&spi->dev, "regmap init failed %d\n", ret);
- 		goto out_m_can_class_free_dev;
-+	}
- 
- 	ret = tcan4x5x_power_enable(priv->power, 1);
--	if (ret)
-+	if (ret) {
-+		dev_err(&spi->dev, "Enabling regulator failed %d\n", ret);
- 		goto out_m_can_class_free_dev;
-+	}
- 
- 	version_info = tcan4x5x_find_version(priv);
- 	if (IS_ERR(version_info)) {
-@@ -438,16 +446,22 @@ static int tcan4x5x_can_probe(struct spi_device *spi)
- 	}
- 
- 	ret = tcan4x5x_get_gpios(mcan_class, version_info);
--	if (ret)
-+	if (ret) {
-+		dev_err(&spi->dev, "Getting gpios failed %d\n", ret);
- 		goto out_power;
-+	}
- 
- 	ret = tcan4x5x_init(mcan_class);
--	if (ret)
-+	if (ret) {
-+		dev_err(&spi->dev, "tcan initialization failed %d\n", ret);
- 		goto out_power;
-+	}
- 
- 	ret = m_can_class_register(mcan_class);
--	if (ret)
-+	if (ret) {
-+		dev_err(&spi->dev, "Failed registering m_can device %d\n", ret);
- 		goto out_power;
-+	}
- 
- 	netdev_info(mcan_class->net, "TCAN4X5X successfully initialized.\n");
- 	return 0;
--- 
-2.40.1
-
+UmVtb3ZlIHVudXNlZC9sZWdhY3kgcGVha191c2JfbmV0aWZfcngoKSBmdW5jdGlvbiAobm90IGxv
+bmdlciB1c2VkCnNpbmNlIGNvbW1pdCAyOGUwYTcwY2VkZTMgKCJjYW46IHBlYWtfdXNiOiBDQU5G
+RDogc3RvcmUgNjQtYml0cyBodwp0aW1lc3RhbXBzIikuCgpTaWduZWQtb2ZmLWJ5OiBQZXRlciBT
+ZWlkZXJlciA8cHMucmVwb3J0QGdteC5uZXQ+Ci0tLQogZHJpdmVycy9uZXQvY2FuL3VzYi9wZWFr
+X3VzYi9wY2FuX3VzYl9jb3JlLmMgfCAxMyAtLS0tLS0tLS0tLS0tCiBkcml2ZXJzL25ldC9jYW4v
+dXNiL3BlYWtfdXNiL3BjYW5fdXNiX2NvcmUuaCB8ICAyIC0tCiAyIGZpbGVzIGNoYW5nZWQsIDE1
+IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L2Nhbi91c2IvcGVha191c2Iv
+cGNhbl91c2JfY29yZS5jIGIvZHJpdmVycy9uZXQvY2FuL3VzYi9wZWFrX3VzYi9wY2FuX3VzYl9j
+b3JlLmMKaW5kZXggZDg4MWUxZDMwMTgzLi4yNGFkOWY1OTNhNzcgMTAwNjQ0Ci0tLSBhL2RyaXZl
+cnMvbmV0L2Nhbi91c2IvcGVha191c2IvcGNhbl91c2JfY29yZS5jCisrKyBiL2RyaXZlcnMvbmV0
+L2Nhbi91c2IvcGVha191c2IvcGNhbl91c2JfY29yZS5jCkBAIC0yMTQsMTkgKzIxNCw2IEBAIHZv
+aWQgcGVha191c2JfZ2V0X3RzX3RpbWUoc3RydWN0IHBlYWtfdGltZV9yZWYgKnRpbWVfcmVmLCB1
+MzIgdHMsIGt0aW1lX3QgKnRpbWUpCiAJfQogfQogCi0vKgotICogcG9zdCByZWNlaXZlZCBza2Ig
+YWZ0ZXIgaGF2aW5nIHNldCBhbnkgaHcgdGltZXN0YW1wCi0gKi8KLWludCBwZWFrX3VzYl9uZXRp
+Zl9yeChzdHJ1Y3Qgc2tfYnVmZiAqc2tiLAotCQkgICAgICBzdHJ1Y3QgcGVha190aW1lX3JlZiAq
+dGltZV9yZWYsIHUzMiB0c19sb3cpCi17Ci0Jc3RydWN0IHNrYl9zaGFyZWRfaHd0c3RhbXBzICpo
+d3RzID0gc2tiX2h3dHN0YW1wcyhza2IpOwotCi0JcGVha191c2JfZ2V0X3RzX3RpbWUodGltZV9y
+ZWYsIHRzX2xvdywgJmh3dHMtPmh3dHN0YW1wKTsKLQotCXJldHVybiBuZXRpZl9yeChza2IpOwot
+fQotCiAvKiBwb3N0IHJlY2VpdmVkIHNrYiB3aXRoIG5hdGl2ZSA2NC1iaXQgaHcgdGltZXN0YW1w
+ICovCiBpbnQgcGVha191c2JfbmV0aWZfcnhfNjQoc3RydWN0IHNrX2J1ZmYgKnNrYiwgdTMyIHRz
+X2xvdywgdTMyIHRzX2hpZ2gpCiB7CmRpZmYgLS1naXQgYS9kcml2ZXJzL25ldC9jYW4vdXNiL3Bl
+YWtfdXNiL3BjYW5fdXNiX2NvcmUuaCBiL2RyaXZlcnMvbmV0L2Nhbi91c2IvcGVha191c2IvcGNh
+bl91c2JfY29yZS5oCmluZGV4IDk4MGUzMTUxODZjZi4uZjZjZjg0YmI3MThmIDEwMDY0NAotLS0g
+YS9kcml2ZXJzL25ldC9jYW4vdXNiL3BlYWtfdXNiL3BjYW5fdXNiX2NvcmUuaAorKysgYi9kcml2
+ZXJzL25ldC9jYW4vdXNiL3BlYWtfdXNiL3BjYW5fdXNiX2NvcmUuaApAQCAtMTQyLDggKzE0Miw2
+IEBAIHZvaWQgcGVha191c2JfaW5pdF90aW1lX3JlZihzdHJ1Y3QgcGVha190aW1lX3JlZiAqdGlt
+ZV9yZWYsCiB2b2lkIHBlYWtfdXNiX3VwZGF0ZV90c19ub3coc3RydWN0IHBlYWtfdGltZV9yZWYg
+KnRpbWVfcmVmLCB1MzIgdHNfbm93KTsKIHZvaWQgcGVha191c2Jfc2V0X3RzX25vdyhzdHJ1Y3Qg
+cGVha190aW1lX3JlZiAqdGltZV9yZWYsIHUzMiB0c19ub3cpOwogdm9pZCBwZWFrX3VzYl9nZXRf
+dHNfdGltZShzdHJ1Y3QgcGVha190aW1lX3JlZiAqdGltZV9yZWYsIHUzMiB0cywga3RpbWVfdCAq
+dHYpOwotaW50IHBlYWtfdXNiX25ldGlmX3J4KHN0cnVjdCBza19idWZmICpza2IsCi0JCSAgICAg
+IHN0cnVjdCBwZWFrX3RpbWVfcmVmICp0aW1lX3JlZiwgdTMyIHRzX2xvdyk7CiBpbnQgcGVha191
+c2JfbmV0aWZfcnhfNjQoc3RydWN0IHNrX2J1ZmYgKnNrYiwgdTMyIHRzX2xvdywgdTMyIHRzX2hp
+Z2gpOwogdm9pZCBwZWFrX3VzYl9hc3luY19jb21wbGV0ZShzdHJ1Y3QgdXJiICp1cmIpOwogdm9p
+ZCBwZWFrX3VzYl9yZXN0YXJ0X2NvbXBsZXRlKHN0cnVjdCBwZWFrX3VzYl9kZXZpY2UgKmRldik7
+Ci0tIAoyLjQxLjAKCg==
