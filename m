@@ -2,105 +2,131 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A28B75C7EE
-	for <lists+linux-can@lfdr.de>; Fri, 21 Jul 2023 15:37:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFB5175C836
+	for <lists+linux-can@lfdr.de>; Fri, 21 Jul 2023 15:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230403AbjGUNhH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 21 Jul 2023 09:37:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41722 "EHLO
+        id S229989AbjGUNuR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 21 Jul 2023 09:50:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230001AbjGUNhG (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 21 Jul 2023 09:37:06 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EAAA1986
-        for <linux-can@vger.kernel.org>; Fri, 21 Jul 2023 06:37:04 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-316f9abf204so1669292f8f.1
-        for <linux-can@vger.kernel.org>; Fri, 21 Jul 2023 06:37:03 -0700 (PDT)
+        with ESMTP id S230137AbjGUNuQ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 21 Jul 2023 09:50:16 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A9F273F
+        for <linux-can@vger.kernel.org>; Fri, 21 Jul 2023 06:50:14 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3fbc656873eso17747005e9.1
+        for <linux-can@vger.kernel.org>; Fri, 21 Jul 2023 06:50:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1689946622; x=1690551422;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cyJTSHbeo76bzi6vElx+C7cII9lsbnhay7widihGytw=;
-        b=zk1Ag3uPbpvIF+OjujPgm2Lry426dUcuFeJkaainc672cQ0u2V88zlLAKFj+30H1nv
-         nCvnihrj0cNimAIROEjqxQRYg59jmE+e9f67u5bzXhAKqp9Wp2wsmqtEFbHhMW49vMiB
-         lm73FUZFhW0c8HNVJQBZ836nxN+Ho1Ufh8x99SHaU5HKr0kxAIqKMLwv2K7Jr+0R2VDG
-         BWrMOb5aR9dErBy0t20aCrE16oY8fugS/3x8L+2zzSvJduYbu6wRtMm38WWk8FjynLlw
-         hrr2HdsJ33A/M8QCy7jaiETViUviVie+KrsFfb7T9HsyRctOQ+Jm0IarejMT5zNVBqjE
-         Ue3Q==
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1689947413; x=1690552213;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jzDN3rUK7N/Nj7i2zhkTUZdxm+FjSAWAWWXiJ9jyKGM=;
+        b=t0IebwfVFX4TVylqwkakMpBgBQh87vfKWrGUNUOGzIH2q68bgsJqzbgWODqFiL5QC/
+         GXytADzQh9cplYCNSC9D5prSf/1AEcCeatSWoiyF6fknD0eumdfEUHRT+hzeG+AdzV/f
+         5xQfu/G5kZGC25X5FnDvQsmDrXCjscvOBE0x7rAMq2ACs1wETCZcnTsGCipAqDD/9FPw
+         729xvuAyF72IckCzZP7K3eoIw9VYgDr1fJ8GB+Xs6xvAd8gCrwC7RPJG9M+dggiT+GRE
+         PF2smvKCVgnflYNGw2XkTflHg1wuq2EH5oYSHjucXpwjJnM6KdCk/TKcKlTrjN0DSTf5
+         HuTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689946622; x=1690551422;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cyJTSHbeo76bzi6vElx+C7cII9lsbnhay7widihGytw=;
-        b=jkmGUbwF8cZukpPC4C8n4DT7aePW8FbgXRCbswrdc+J+gSLg+nRrCpCXqIcuZFgRyq
-         ClhQsgf7NuOv30gNAYhqazKGaMPN2v5DEY2Czcs240NOINSnVxFhkL/yPOmaAI13S4/H
-         zTFdkdZu+GPRfki4TS4Ax0DzDqvMQAPRXZ8Te09LPeFNTbK3pwhssevepkkrRvWQfGg6
-         1n2U2eDpjX3K3C52mBx5D3OY72D4gijBMglS7TwOlHvAj411iknG1PUkhUO51yx9YB3r
-         hD2dc6ssGs4TPLVbyJWpFEXzpv09bJtgJ0CZCnHEbynSX+C/0vnVjEnSFOHrv6Kq/WyZ
-         2DAg==
-X-Gm-Message-State: ABy/qLaaubNhqMyOWZp4PBHyq3FvYwn+mlRhqep08Cvc05EjE1aJV1+1
-        LvCnUP0mWhjlE+Vd3vPg60zCO7CDP+HchBl2HC4=
-X-Google-Smtp-Source: APBJJlEamjH4SEwBOa7+/tDkX8IYcdS8z1RSOIETUrQMKtwEUtTm4XVENZbQn6tjOW7nZ1WOZ+STig==
-X-Received: by 2002:adf:fed2:0:b0:315:8f4f:81b8 with SMTP id q18-20020adffed2000000b003158f4f81b8mr1501101wrs.50.1689946622331;
-        Fri, 21 Jul 2023 06:37:02 -0700 (PDT)
-Received: from blmsp ([2001:4091:a247:82fa:b762:4f68:e1ed:5041])
-        by smtp.gmail.com with ESMTPSA id v11-20020a1cf70b000000b003fbacc853ccsm3412568wmh.18.2023.07.21.06.37.01
+        d=1e100.net; s=20221208; t=1689947413; x=1690552213;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jzDN3rUK7N/Nj7i2zhkTUZdxm+FjSAWAWWXiJ9jyKGM=;
+        b=Y1fy9eVtwZWSpOkRQBGGb69hVkvbxyy8RXADIYWLk3mVhJJncHlR/RTnGtV+qyT3qc
+         8uk8WJuHG+zEsEjbTOfXZISDrtwDwsk746jo7e707Z4G3bhwRokvbZFpsByvxCs4s6o8
+         u2eBohLFtuj6YZQvH1aYH6R4Hk4LrVoGo1Ea97lT+2k4SOLVihmsqJM/fobABhLqD6vM
+         tJYu+k8CeIef0//MG/Gld3BXws7LMH1C2q2yAii3LcwXXgxb7KBR9UDJtb2FCMZnMZlX
+         qdKFacqJqjQ0RG2IbYNW6+ogZP59D/dIcb4jnV6X1PR2Q74bb/5rgIpW06xgO4vFIdck
+         rPLQ==
+X-Gm-Message-State: ABy/qLZm/puQEvo2FfgMofoe1EorjiikJdcx7Gm8TnuS0mSl8Aqto6+2
+        2c19V0P7sLU1j2eWw1EtwVJ8MQ==
+X-Google-Smtp-Source: APBJJlEIRmsAY46OfrfXA0DVxMEDacjRJS458pI9GfBHW1DQAPi+8ykOPdPJDZ9Z1VWRe3AYrj7QiQ==
+X-Received: by 2002:a1c:f313:0:b0:3fc:855:db42 with SMTP id q19-20020a1cf313000000b003fc0855db42mr1573194wmq.34.1689947412657;
+        Fri, 21 Jul 2023 06:50:12 -0700 (PDT)
+Received: from blmsp.fritz.box ([2001:4091:a247:82fa:b762:4f68:e1ed:5041])
+        by smtp.gmail.com with ESMTPSA id c14-20020adfed8e000000b00313e4d02be8sm4233980wro.55.2023.07.21.06.50.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jul 2023 06:37:01 -0700 (PDT)
-Date:   Fri, 21 Jul 2023 15:37:00 +0200
+        Fri, 21 Jul 2023 06:50:12 -0700 (PDT)
 From:   Markus Schneider-Pargmann <msp@baylibre.com>
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        "David S . Miller" <davem@davemloft.net>,
+To:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     "David S . Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Julien Panis <jpanis@baylibre.com>
-Subject: Re: [PATCH v5 12/12] can: m_can: Implement transmit submission
- coalescing
-Message-ID: <20230721133603.eahybmvzf4yalyn7@blmsp>
-References: <20230718075708.958094-1-msp@baylibre.com>
- <20230718075708.958094-13-msp@baylibre.com>
- <ZLlZudoYyarYmEjz@corigine.com>
+        Paolo Abeni <pabeni@redhat.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Michal Kubiak <michal.kubiak@intel.com>,
+        Vivek Yadav <vivek.2311@samsung.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Simon Horman <simon.horman@corigine.com>,
+        Markus Schneider-Pargmann <msp@baylibre.com>
+Subject: [PATCH v3 0/6] can: tcan4x5x: Introduce tcan4552/4553
+Date:   Fri, 21 Jul 2023 15:50:03 +0200
+Message-Id: <20230721135009.1120562-1-msp@baylibre.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZLlZudoYyarYmEjz@corigine.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Simon,
+Hi everyone,
 
-On Thu, Jul 20, 2023 at 04:58:49PM +0100, Simon Horman wrote:
-> On Tue, Jul 18, 2023 at 09:57:08AM +0200, Markus Schneider-Pargmann wrote:
-> > m_can supports submitting multiple transmits with one register write.
-> > This is an interesting option to reduce the number of SPI transfers for
-> > peripheral chips.
-> > 
-> > The m_can_tx_op is extended with a bool that signals if it is the last
-> > transmission and the submit should be executed immediately.
-> > 
-> > The worker then writes the skb to the FIFO and submits it only if the
-> > submit bool is set. If it isn't set, the worker will write the next skb
-> > which is waiting in the workqueue to the FIFO, etc.
-> > 
-> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> 
-> Reviewed-by: Simon Horman <simon.horman@corigine.com>
+This series introduces two new chips tcan-4552 and tcan-4553. The
+generic driver works in general but needs a few small changes. These are
+caused by the removal of wake and state pins.
 
-Thank you for your reviews!
+v3 removes the check of the devicetree compatible and completely relies
+on the ID2 register.
+
+Based on v6.5-rc1.
 
 Best,
 Markus
+
+Changes in v3:
+- Rebased to v6.5-rc1
+- Removed devicetree compatible check in tcan driver. The device version
+  is now unconditionally detected using the ID2 register
+
+Changes in v2:
+- Update the binding documentation to specify tcan4552 and tcan4553 with
+  the tcan4x5x as fallback
+- Update the driver to use auto detection as well. If compatible differs
+  from the ID2 register, use the ID2 register and print a warning.
+- Small style changes
+
+Previous versions:
+v2 - https://lore.kernel.org/lkml/20230621093103.3134655-1-msp@baylibre.com/
+v1 - https://lore.kernel.org/lkml/20230314151201.2317134-1-msp@baylibre.com
+
+Markus Schneider-Pargmann (6):
+  dt-bindings: can: tcan4x5x: Add tcan4552 and tcan4553 variants
+  can: tcan4x5x: Remove reserved register 0x814 from writable table
+  can: tcan4x5x: Check size of mram configuration
+  can: tcan4x5x: Rename ID registers to match datasheet
+  can: tcan4x5x: Add support for tcan4552/4553
+  can: tcan4x5x: Add error messages in probe
+
+ .../devicetree/bindings/net/can/tcan4x5x.txt  |  11 +-
+ drivers/net/can/m_can/m_can.c                 |  16 ++
+ drivers/net/can/m_can/m_can.h                 |   1 +
+ drivers/net/can/m_can/tcan4x5x-core.c         | 139 +++++++++++++++---
+ drivers/net/can/m_can/tcan4x5x-regmap.c       |   1 -
+ 5 files changed, 142 insertions(+), 26 deletions(-)
+
+
+base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
+-- 
+2.40.1
+
