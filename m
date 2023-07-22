@@ -2,33 +2,62 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A3E375D749
-	for <lists+linux-can@lfdr.de>; Sat, 22 Jul 2023 00:17:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BC8175DB5D
+	for <lists+linux-can@lfdr.de>; Sat, 22 Jul 2023 11:30:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbjGUWRW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 21 Jul 2023 18:17:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59802 "EHLO
+        id S229683AbjGVJ37 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 22 Jul 2023 05:29:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbjGUWRV (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 21 Jul 2023 18:17:21 -0400
-Received: from out-58.mta1.migadu.com (out-58.mta1.migadu.com [95.215.58.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52A633AB5
-        for <linux-can@vger.kernel.org>; Fri, 21 Jul 2023 15:17:08 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jookia.org; s=key1;
-        t=1689977827;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gyIMbXR0OMPT1XfXDY8rkRHULGyYtVbg/Gm0FnqZe2E=;
-        b=AWarFzCbMDr3V+FB5IMpmHCu4/bKtqmJHKflB6ecOCwKj8g9ppLPEcfmBz1Cs8u4yaag7v
-        1e3VSEHJZloDKB48cg9i7Q1ZCAWpNum+64+bFnBxzZwb4IoaCH7rnuAgtAKZCibRG0mV8O
-        V2FdUT0XsFd5hYPU237fRpc7AS8izdzk1HAGacUele2kU+35IiGP5O0ej/F4WYXof6q2pw
-        pZeh3PvbEhsZsh3UrCSifndCtbRW3Na1Pd2b/J+Wgz8wXg0WGy3jA5Dg9YFN3j9xaS4eJK
-        PR9WvWIVOj4ygevxAmOQEOmFQk6xjIflat/QcjnuFz7fou/KVXXk3wSaqks36g==
-From:   John Watts <contact@jookia.org>
-To:     linux-sunxi@lists.linux.dev
+        with ESMTP id S229677AbjGVJ36 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 22 Jul 2023 05:29:58 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163DA2D7C
+        for <linux-can@vger.kernel.org>; Sat, 22 Jul 2023 02:29:56 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-98de21518fbso437984866b.0
+        for <linux-can@vger.kernel.org>; Sat, 22 Jul 2023 02:29:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1690018194; x=1690622994;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WjVqeX0y//4nrDSpiCRGlr32t9U96I9NgVlq9whIyS4=;
+        b=c/lWRogWO7Qdah02C1MkCGhNJvgGrif4oTCaPGdiK7W6NLpgxId3WwbMLqpuO472V/
+         hv+v+JpG78Ij/VjrLudZjSb9znRBygfAX13gn7AW9ZXgckupA3UpSu77hFE43mLYi2Fa
+         dTmzQqzoJTB+XVZxAcFcRNvrKHq8cPn3QNxRcXjlHczYx/PagKU2z79FFJsETjma5XPk
+         WNjKvgSkT7hDponNZI1p983MhnTS1Cst5EKzwhQIk1ixI2QEL4OsiIASZnodOuY3q33i
+         DzXo6i6W7Gban+p5Kj2vaFzbtu1B80PDCgmkgfzP8TzJaF9uqIgupXTYoalJZ8ajHxDt
+         bdvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690018194; x=1690622994;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WjVqeX0y//4nrDSpiCRGlr32t9U96I9NgVlq9whIyS4=;
+        b=Wrn7260RSkfXJHFvL+JPMQLVoOisydh/3FXVcsGCps9Hon6749rba4aU9DYMMU4xgA
+         y2Ha6dKv3oWDzpUbajovsdBh+uOzE8nwI3K6VstSiyNzzv0UTiJMfDD5eYd/wE+yCbR5
+         n4JIfupvSP8CDyDvHKRONVu9TTPBsBFtJSGoESwDTGYNJEPPzxPnALRMjP62fUEoMwp1
+         MV0+IFeVlxuz8lAh6V2ZivZHpMzF3U2v2WdcIqTz2a0TkEYCcP/v5ZnsCP2o+daChvge
+         dLIBRQ6uPo0qACbL71F9rpUSDo49W8NY7Q5VL33lBUCHxWhABVdwgTfJkOcJ/QesL0Rb
+         ppmw==
+X-Gm-Message-State: ABy/qLa2QYCj1Eyfvpl3C//l4+wcvE5IwXs50jVTRT+Sn+coPtfOwMa9
+        cvbPjfp7jo9ynuhBliabscfrgQ==
+X-Google-Smtp-Source: APBJJlE7HknlGAjPgKT8dkx6J4YpoyIOaTkrnSeiX1f1kudR9TNvxMzo3HNczgig+NEQVx/A2dTm0Q==
+X-Received: by 2002:a17:907:778c:b0:997:d975:64eb with SMTP id ky12-20020a170907778c00b00997d97564ebmr3847932ejc.35.1690018194587;
+        Sat, 22 Jul 2023 02:29:54 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id lg26-20020a170906f89a00b00992b50fbbe9sm3307981ejb.90.2023.07.22.02.29.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 22 Jul 2023 02:29:54 -0700 (PDT)
+Message-ID: <9fc41843-3dd6-7b22-edd7-1a22b937f646@linaro.org>
+Date:   Sat, 22 Jul 2023 11:29:52 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v2 1/4] dt-bindings: net: can: Add support for Allwinner
+ D1 CAN controller
+Content-Language: en-US
+To:     John Watts <contact@jookia.org>, linux-sunxi@lists.linux.dev
 Cc:     Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
@@ -46,93 +75,36 @@ Cc:     Wolfgang Grandegger <wg@grandegger.com>,
         Albert Ou <aou@eecs.berkeley.edu>, linux-can@vger.kernel.org,
         netdev@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, John Watts <contact@jookia.org>
-Subject: [PATCH v2 4/4] can: sun4i_can: Add support for the Allwinner D1
-Date:   Sat, 22 Jul 2023 08:15:53 +1000
-Message-ID: <20230721221552.1973203-6-contact@jookia.org>
-In-Reply-To: <20230721221552.1973203-2-contact@jookia.org>
+        linux-riscv@lists.infradead.org
 References: <20230721221552.1973203-2-contact@jookia.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+ <20230721221552.1973203-3-contact@jookia.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230721221552.1973203-3-contact@jookia.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The controllers present in the D1 are extremely similar to the R40
-and require the same reset quirks, but An extra quirk is needed to support
-receiving packets.
+On 22/07/2023 00:15, John Watts wrote:
+> The Allwinner D1 has two CAN controllers, both a variant of the R40
+> controller. Unfortunately the registers for the D1 controllers are
+> moved around enough to be incompatible and require a new compatible.
+> 
+> Introduce the "allwinner,sun20i-d1-can" compatible to support this.
+> 
+> Signed-off-by: John Watts <contact@jookia.org>
+> ---
 
-Signed-off-by: John Watts <contact@jookia.org>
----
- drivers/net/can/Kconfig     |  4 ++--
- drivers/net/can/sun4i_can.c | 12 +++++++++++-
- 2 files changed, 13 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
-index a5c5036dfb94..e626de33e735 100644
---- a/drivers/net/can/Kconfig
-+++ b/drivers/net/can/Kconfig
-@@ -185,10 +185,10 @@ config CAN_SLCAN
- 
- config CAN_SUN4I
- 	tristate "Allwinner A10 CAN controller"
--	depends on MACH_SUN4I || MACH_SUN7I || COMPILE_TEST
-+	depends on MACH_SUN4I || MACH_SUN7I || RISCV || COMPILE_TEST
- 	help
- 	  Say Y here if you want to use CAN controller found on Allwinner
--	  A10/A20 SoCs.
-+	  A10/A20/D1 SoCs.
- 
- 	  To compile this driver as a module, choose M here: the module will
- 	  be called sun4i_can.
-diff --git a/drivers/net/can/sun4i_can.c b/drivers/net/can/sun4i_can.c
-index 1f90fe6dbb8b..c508a328e38d 100644
---- a/drivers/net/can/sun4i_can.c
-+++ b/drivers/net/can/sun4i_can.c
-@@ -91,6 +91,8 @@
- #define SUN4I_REG_BUF12_ADDR	0x0070	/* CAN Tx/Rx Buffer 12 */
- #define SUN4I_REG_ACPC_ADDR	0x0040	/* CAN Acceptance Code 0 */
- #define SUN4I_REG_ACPM_ADDR	0x0044	/* CAN Acceptance Mask 0 */
-+#define SUN4I_REG_ACPC_ADDR_D1	0x0028	/* CAN Acceptance Code 0 on the D1 */
-+#define SUN4I_REG_ACPM_ADDR_D1	0x002C	/* CAN Acceptance Mask 0 on the D1 */
- #define SUN4I_REG_RBUF_RBACK_START_ADDR	0x0180	/* CAN transmit buffer start */
- #define SUN4I_REG_RBUF_RBACK_END_ADDR	0x01b0	/* CAN transmit buffer end */
- 
-@@ -779,6 +781,11 @@ static const struct sun4ican_quirks sun4ican_quirks_r40 = {
- 	.acp_offset = 0,
- };
- 
-+static const struct sun4ican_quirks sun4ican_quirks_d1 = {
-+	.has_reset = true,
-+	.acp_offset = (SUN4I_REG_ACPC_ADDR_D1 - SUN4I_REG_ACPC_ADDR),
-+};
-+
- static const struct of_device_id sun4ican_of_match[] = {
- 	{
- 		.compatible = "allwinner,sun4i-a10-can",
-@@ -789,6 +796,9 @@ static const struct of_device_id sun4ican_of_match[] = {
- 	}, {
- 		.compatible = "allwinner,sun8i-r40-can",
- 		.data = &sun4ican_quirks_r40
-+	}, {
-+		.compatible = "allwinner,sun20i-d1-can",
-+		.data = &sun4ican_quirks_d1
- 	}, {
- 		/* sentinel */
- 	},
-@@ -913,4 +923,4 @@ module_platform_driver(sun4i_can_driver);
- MODULE_AUTHOR("Peter Chen <xingkongcp@gmail.com>");
- MODULE_AUTHOR("Gerhard Bertelsmann <info@gerhard-bertelsmann.de>");
- MODULE_LICENSE("Dual BSD/GPL");
--MODULE_DESCRIPTION("CAN driver for Allwinner SoCs (A10/A20)");
-+MODULE_DESCRIPTION("CAN driver for Allwinner SoCs (A10/A20/D1)");
--- 
-2.41.0
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
