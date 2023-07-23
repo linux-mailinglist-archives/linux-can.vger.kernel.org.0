@@ -2,62 +2,33 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BC8175DB5D
-	for <lists+linux-can@lfdr.de>; Sat, 22 Jul 2023 11:30:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3026975E0AA
+	for <lists+linux-can@lfdr.de>; Sun, 23 Jul 2023 11:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbjGVJ37 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 22 Jul 2023 05:29:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55778 "EHLO
+        id S229688AbjGWJTE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 23 Jul 2023 05:19:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbjGVJ36 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 22 Jul 2023 05:29:58 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163DA2D7C
-        for <linux-can@vger.kernel.org>; Sat, 22 Jul 2023 02:29:56 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-98de21518fbso437984866b.0
-        for <linux-can@vger.kernel.org>; Sat, 22 Jul 2023 02:29:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690018194; x=1690622994;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WjVqeX0y//4nrDSpiCRGlr32t9U96I9NgVlq9whIyS4=;
-        b=c/lWRogWO7Qdah02C1MkCGhNJvgGrif4oTCaPGdiK7W6NLpgxId3WwbMLqpuO472V/
-         hv+v+JpG78Ij/VjrLudZjSb9znRBygfAX13gn7AW9ZXgckupA3UpSu77hFE43mLYi2Fa
-         dTmzQqzoJTB+XVZxAcFcRNvrKHq8cPn3QNxRcXjlHczYx/PagKU2z79FFJsETjma5XPk
-         WNjKvgSkT7hDponNZI1p983MhnTS1Cst5EKzwhQIk1ixI2QEL4OsiIASZnodOuY3q33i
-         DzXo6i6W7Gban+p5Kj2vaFzbtu1B80PDCgmkgfzP8TzJaF9uqIgupXTYoalJZ8ajHxDt
-         bdvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690018194; x=1690622994;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WjVqeX0y//4nrDSpiCRGlr32t9U96I9NgVlq9whIyS4=;
-        b=Wrn7260RSkfXJHFvL+JPMQLVoOisydh/3FXVcsGCps9Hon6749rba4aU9DYMMU4xgA
-         y2Ha6dKv3oWDzpUbajovsdBh+uOzE8nwI3K6VstSiyNzzv0UTiJMfDD5eYd/wE+yCbR5
-         n4JIfupvSP8CDyDvHKRONVu9TTPBsBFtJSGoESwDTGYNJEPPzxPnALRMjP62fUEoMwp1
-         MV0+IFeVlxuz8lAh6V2ZivZHpMzF3U2v2WdcIqTz2a0TkEYCcP/v5ZnsCP2o+daChvge
-         dLIBRQ6uPo0qACbL71F9rpUSDo49W8NY7Q5VL33lBUCHxWhABVdwgTfJkOcJ/QesL0Rb
-         ppmw==
-X-Gm-Message-State: ABy/qLa2QYCj1Eyfvpl3C//l4+wcvE5IwXs50jVTRT+Sn+coPtfOwMa9
-        cvbPjfp7jo9ynuhBliabscfrgQ==
-X-Google-Smtp-Source: APBJJlE7HknlGAjPgKT8dkx6J4YpoyIOaTkrnSeiX1f1kudR9TNvxMzo3HNczgig+NEQVx/A2dTm0Q==
-X-Received: by 2002:a17:907:778c:b0:997:d975:64eb with SMTP id ky12-20020a170907778c00b00997d97564ebmr3847932ejc.35.1690018194587;
-        Sat, 22 Jul 2023 02:29:54 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id lg26-20020a170906f89a00b00992b50fbbe9sm3307981ejb.90.2023.07.22.02.29.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Jul 2023 02:29:54 -0700 (PDT)
-Message-ID: <9fc41843-3dd6-7b22-edd7-1a22b937f646@linaro.org>
-Date:   Sat, 22 Jul 2023 11:29:52 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v2 1/4] dt-bindings: net: can: Add support for Allwinner
- D1 CAN controller
-Content-Language: en-US
-To:     John Watts <contact@jookia.org>, linux-sunxi@lists.linux.dev
+        with ESMTP id S229652AbjGWJTD (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 23 Jul 2023 05:19:03 -0400
+Received: from out-61.mta1.migadu.com (out-61.mta1.migadu.com [IPv6:2001:41d0:203:375::3d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB6A1AE
+        for <linux-can@vger.kernel.org>; Sun, 23 Jul 2023 02:19:00 -0700 (PDT)
+Date:   Sun, 23 Jul 2023 19:18:33 +1000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jookia.org; s=key1;
+        t=1690103938;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=IO21JPPuUrj/PlAXDeK+XBpU+sX32D1I5JxlNyZ8yxY=;
+        b=mcwgGlOY5K72c1mv4IEZ+ALhpmQdPQLC1UgX47qkA5/+JSNYwpY8Cbd4NhspuL3PWggka9
+        +Tp2jHAzGIGtZ+JuagzBwKyIzPP4siFbdcgs9wfpdyem9y9iriwEX2r/aqTGuhjvxzxVc8
+        ffa1A5ycZ+NBiAjPiudgTs4V6MapEdVyYxclJ00yN+6eNL1aELb4lfhWFJ1WSBK6Ym3pvX
+        iHirF0aGQHxKYK4bD6TTz55DuI0c8aHiu3JIsxqxZyBIlO4uLbCcLECpeLw+D+a9YodbAA
+        1kEm/i/2HNZZMAsB1qWQpVcPCfX4wgOS3u0c0vrGCvo+vo7rBRMASZjEesF1ow==
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   John Watts <contact@jookia.org>
+To:     linux-sunxi@lists.linux.dev
 Cc:     Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
@@ -76,35 +47,49 @@ Cc:     Wolfgang Grandegger <wg@grandegger.com>,
         netdev@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 2/4] riscv: dts: allwinner: d1: Add CAN controller
+ nodes
+Message-ID: <ZLzwaQlS-l_KKpUX@titan>
 References: <20230721221552.1973203-2-contact@jookia.org>
- <20230721221552.1973203-3-contact@jookia.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230721221552.1973203-3-contact@jookia.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+ <20230721221552.1973203-4-contact@jookia.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230721221552.1973203-4-contact@jookia.org>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 22/07/2023 00:15, John Watts wrote:
-> The Allwinner D1 has two CAN controllers, both a variant of the R40
-> controller. Unfortunately the registers for the D1 controllers are
-> moved around enough to be incompatible and require a new compatible.
-> 
-> Introduce the "allwinner,sun20i-d1-can" compatible to support this.
-> 
-> Signed-off-by: John Watts <contact@jookia.org>
-> ---
+On Sat, Jul 22, 2023 at 08:15:51AM +1000, John Watts wrote:
+> ...
+> +			/omit-if-no-ref/
+> +			can0_pins: can0-pins {
+> +				pins = "PB2", "PB3";
+> +				function = "can0";
+> +			};
+> ...
+> +		can0: can@2504000 {
+> +			compatible = "allwinner,sun20i-d1-can";
+> +			reg = <0x02504000 0x400>;
+> +			interrupts = <SOC_PERIPHERAL_IRQ(21) IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&ccu CLK_BUS_CAN0>;
+> +			resets = <&ccu RST_BUS_CAN0>;
+> +			status = "disabled";
+> +		};
 
+Just a quick late night question to people with more knowledge than me:
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+These chips only have one pinctrl configuration for can0 and can1. Should the
+can nodes have this pre-set instead of the board dts doing this?
 
-Best regards,
-Krzysztof
+I see this happening in sun4i-a10.dtsi for instance, but it also seems like it
+could become a problem when it comes to re-using the dtsi for newer chip variants.
 
+John.
