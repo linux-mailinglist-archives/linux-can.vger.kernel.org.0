@@ -2,102 +2,101 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C9D375EDD2
-	for <lists+linux-can@lfdr.de>; Mon, 24 Jul 2023 10:38:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CE8C75EDE2
+	for <lists+linux-can@lfdr.de>; Mon, 24 Jul 2023 10:40:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231685AbjGXIi0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 24 Jul 2023 04:38:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35932 "EHLO
+        id S231235AbjGXIkR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 24 Jul 2023 04:40:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231684AbjGXIiR (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 24 Jul 2023 04:38:17 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE89BE42
-        for <linux-can@vger.kernel.org>; Mon, 24 Jul 2023 01:38:15 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qNr4k-0000Cb-FM; Mon, 24 Jul 2023 10:37:54 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 531031F839B;
-        Mon, 24 Jul 2023 08:37:52 +0000 (UTC)
-Date:   Mon, 24 Jul 2023 10:37:51 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Markus Schneider-Pargmann <msp@baylibre.com>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Michal Kubiak <michal.kubiak@intel.com>,
-        Vivek Yadav <vivek.2311@samsung.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Simon Horman <simon.horman@corigine.com>
-Subject: Re: [PATCH v3 6/6] can: tcan4x5x: Add error messages in probe
-Message-ID: <20230724-switch-mulch-3ba56c15997e-mkl@pengutronix.de>
-References: <20230721135009.1120562-1-msp@baylibre.com>
- <20230721135009.1120562-7-msp@baylibre.com>
+        with ESMTP id S231727AbjGXIkF (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 24 Jul 2023 04:40:05 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1383E10EF;
+        Mon, 24 Jul 2023 01:39:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690187999; x=1721723999;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=x12lrtGBZQsSW3ujLW9h0V/KCIjM8IrYlUp2GSyhMfI=;
+  b=VfFns614YrMCCoRGXSr6KX3PaxCRzFKdZPYhw/v56M6WiIwV51B/aPxO
+   GbEFmIoBLAbPYnaqQzq4OHxyoTYQRGoinrwqmH0Md78nfnWG09Cvl1Mk2
+   vFHEdRbzj0NsCsrO3yYfMO4vNqPnaAN9A3r2gXPUBDKZubV6r9X0MssfR
+   dDN1oLBIoB+WF4nKNcbViw+a78KDu1IefriSL+CBCCqEQR1i5U7oBI0Rx
+   U+A471Fq6vBIiXgAHOCKE3uQtpudHIkPhvQsbhAKGeQs3s+KStydXWKsf
+   i7RdmbSNd32AYX8ZUxu8q2lT8GaEw0/JXc3NPJHbKTjVLpY1Db4D22NrR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="433627611"
+X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
+   d="scan'208";a="433627611"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2023 01:39:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="675749431"
+X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
+   d="scan'208";a="675749431"
+Received: from unknown (HELO jiaqingz-acrn-container.sh.intel.com) ([10.239.138.235])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2023 01:39:55 -0700
+From:   Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>,
+        support@ems-wuensche.com, linux-serial@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
+Subject: [PATCH v3 0/4] add support for ASIX AX99100
+Date:   Mon, 24 Jul 2023 08:39:29 +0000
+Message-Id: <20230724083933.3173513-1-jiaqing.zhao@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="47dlh53tks43qz2m"
-Content-Disposition: inline
-In-Reply-To: <20230721135009.1120562-7-msp@baylibre.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+This patch adds kernel inbox driver support for the serial port and
+parallel port mode controller of ASIX AX99100 PCIe to Multi I/O
+Controller. This device has 4 separate PCI functions and each functions
+can be configured to operate in different modes.
 
---47dlh53tks43qz2m
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This patchset is tested with ASIX AX99100 in following modes:
+* 4 x Serial Port
+* 2 x Serial Port
+* 2 x Serial Port + 1 x Parallel Port
+* 1 x Parallel Port
 
-On 21.07.2023 15:50:09, Markus Schneider-Pargmann wrote:
-> To be able to understand issues during probe easier, add error messages
-> if something fails.
+Changes in v3:
+* Keep all changes in a single patchset.
+* Update commit message of patch 3.
+* Get Acked-By from maintainers for patch 1 & 2.
 
-Can you print the error codes as "%pe", ERR_PTR(err)?
+Changes in v2:
+* Split changes into 2 patchsets.
+Link: https://lore.kernel.org/all/20230720102859.2985655-1-jiaqing.zhao@linux.intel.com/
 
-Marc
+Jiaqing Zhao (4):
+  can: ems_pci: remove PCI_SUBVENDOR_ID_ASIX definition
+  can: ems_pci: move ASIX AX99100 ids to pci_ids.h
+  serial: 8250_pci: add support for ASIX AX99100
+  parport_pc: add support for ASIX AX99100
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+ drivers/net/can/sja1000/ems_pci.c  |  7 +------
+ drivers/parport/parport_pc.c       |  5 +++++
+ drivers/tty/serial/8250/8250_pci.c | 10 ++++++++++
+ include/linux/pci_ids.h            |  4 ++++
+ 4 files changed, 20 insertions(+), 6 deletions(-)
 
---47dlh53tks43qz2m
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+2.39.2
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmS+OFwACgkQvlAcSiqK
-BOjakgf6A9YWvI4O+h3cneg50ebbmXekF1W+V+CO92LM4MNZ2Vlx3Iv6YrdxgAG/
-f7UASQ3G9eBjJLQYnGHbYG5DMgR2p9Y8LGJB6cJQ3EiRcsVe7vRi71iUyRthiUTB
-jDgHJwBcTO8jeitILlFmOsrZMljTU5AzkSJG6eoRY4xK5p2GjlFULxr0h8TwxgXQ
-McZkpazS9fiijMLL5V63U5P3vpui2iSp1nDy3ZfDeRI71/egjLVj1EmZ5ILcY/cQ
-hthAmBCjEZ5hHS8lvllfRcP5zr/N2L9/OylrwTrPT1dsU6dVAQE7einaoUgSSvrU
-z4zth+g2cGEh5UXzTHg3iZ2aZPR0LA==
-=23ps
------END PGP SIGNATURE-----
-
---47dlh53tks43qz2m--
