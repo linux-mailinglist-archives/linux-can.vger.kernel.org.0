@@ -2,50 +2,46 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8020B75F784
-	for <lists+linux-can@lfdr.de>; Mon, 24 Jul 2023 14:59:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3B0575FA50
+	for <lists+linux-can@lfdr.de>; Mon, 24 Jul 2023 17:01:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231220AbjGXM67 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 24 Jul 2023 08:58:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48216 "EHLO
+        id S229746AbjGXPBu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 24 Jul 2023 11:01:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbjGXM5x (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 24 Jul 2023 08:57:53 -0400
+        with ESMTP id S230321AbjGXPBs (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 24 Jul 2023 11:01:48 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B73130F0
-        for <linux-can@vger.kernel.org>; Mon, 24 Jul 2023 05:54:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1083110DC
+        for <linux-can@vger.kernel.org>; Mon, 24 Jul 2023 08:01:46 -0700 (PDT)
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1qNv3m-0003xy-60; Mon, 24 Jul 2023 14:53:10 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
+        id 1qNx4D-0004qW-Dr
+        for linux-can@vger.kernel.org; Mon, 24 Jul 2023 17:01:45 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 721E81F8A41
+        for <linux-can@vger.kernel.org>; Mon, 24 Jul 2023 15:01:44 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 7BE8F1F883E;
-        Mon, 24 Jul 2023 12:53:06 +0000 (UTC)
-Date:   Mon, 24 Jul 2023 14:53:05 +0200
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 8B3CE1F8A36;
+        Mon, 24 Jul 2023 15:01:43 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id eacadee7;
+        Mon, 24 Jul 2023 15:01:43 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-can@vger.kernel.org, eric.dumazet@gmail.com,
-        syzbot <syzkaller@googlegroups.com>,
-        Ziyang Xuan <william.xuanziyang@huawei.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH net] can: raw: fix lockdep issue in raw_release()
-Message-ID: <20230724-bubble-grasp-b7e65af54bb9-mkl@pengutronix.de>
-References: <20230720114438.172434-1-edumazet@google.com>
- <35c85eb5-24aa-d948-516a-72fa7db28c88@hartkopp.net>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH net 0/2] pull-request: can 2023-07-24
+Date:   Mon, 24 Jul 2023 17:01:39 +0200
+Message-Id: <20230724150141.766047-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rviok646mxfd6hxt"
-Content-Disposition: inline
-In-Reply-To: <35c85eb5-24aa-d948-516a-72fa7db28c88@hartkopp.net>
+Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -59,46 +55,45 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello netdev-team,
 
---rviok646mxfd6hxt
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+this is a pull request of 2 patches for net/master.
 
-On 24.07.2023 14:49:28, Oliver Hartkopp wrote:
-> Hello Eric, Jakub,
->=20
-> the patch that needs to be fixed here is currently already on its way into
-> the stable trees:
->=20
-> > Fixes: ee8b94c8510c ("can: raw: fix receiver memory leak")
->=20
-> Should this patch go through the linux-can tree or would somebody like to
-> apply it directly to the net tree?
+The first patch is by me and adds a missing set of CAN state to
+CAN_STATE_STOPPED on close in the gs_usb driver.
 
-I'll send a PR including this fix today.
+The last patch is by Eric Dumazet and fixes a lockdep issue in the CAN
+raw protocol.
 
+regards,
 Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+---
 
---rviok646mxfd6hxt
-Content-Type: application/pgp-signature; name="signature.asc"
+The following changes since commit 9f9d4c1a2e82174a4e799ec405284a2b0de32b6a:
 
------BEGIN PGP SIGNATURE-----
+  net: ethernet: mtk_eth_soc: always mtk_get_ib1_pkt_type (2023-07-19 21:15:04 -0700)
 
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmS+dC8ACgkQvlAcSiqK
-BOiXtAgAiaZgw+a+qM+EwegTjTMuBFDkqzNk/J/0algu+wrN2JCSjxfEA4LNwjNv
-779J3kcRB6xkFSlLDfh9ZZ7D2i27hH5G0KhJ39N0qQMbUdLY6yzADM58Gegxqnij
-NZHXpT3A1JMh/Bm4qAL6NIS+bHS/aiwPIyWF2jsBKI1TMC1ykSoSKTMRMjZoshkx
-+Guibdz9Zr4hAGuZe1fI0JPcHpIYir88atslMDGsGVcomfvLgQrC1ubIbyvf9UYu
-IoKY0VehsCcdT3v2+QioQ7w0BTtxcfMEomebMyvziVoESkyM0Fp9fNVEjZHjNQRo
-Vg/qlDn7q+nTsaYAIcZUepBdKOAqTg==
-=BYRw
------END PGP SIGNATURE-----
+are available in the Git repository at:
 
---rviok646mxfd6hxt--
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-6.5-20230724
+
+for you to fetch changes up to 11c9027c983e9e4b408ee5613b6504d24ebd85be:
+
+  can: raw: fix lockdep issue in raw_release() (2023-07-20 13:46:29 +0200)
+
+----------------------------------------------------------------
+linux-can-fixes-for-6.5-20230724
+
+----------------------------------------------------------------
+Eric Dumazet (1):
+      can: raw: fix lockdep issue in raw_release()
+
+Marc Kleine-Budde (1):
+      can: gs_usb: gs_can_close(): add missing set of CAN state to CAN_STATE_STOPPED
+
+ drivers/net/can/usb/gs_usb.c | 2 ++
+ net/can/raw.c                | 5 +++--
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+
