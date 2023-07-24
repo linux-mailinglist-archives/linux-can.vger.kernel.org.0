@@ -2,112 +2,192 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A75C175EDEF
-	for <lists+linux-can@lfdr.de>; Mon, 24 Jul 2023 10:40:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B30A75EE6C
+	for <lists+linux-can@lfdr.de>; Mon, 24 Jul 2023 10:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231728AbjGXIkV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 24 Jul 2023 04:40:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38034 "EHLO
+        id S231941AbjGXIyz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 24 Jul 2023 04:54:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231792AbjGXIkP (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 24 Jul 2023 04:40:15 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D16E1A1;
-        Mon, 24 Jul 2023 01:40:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690188011; x=1721724011;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ACtwk6q0osdWK/LRY8lcrJv/gU2GjAAIEZNi8CD+KKM=;
-  b=dPpx5aVju3ej9PX4u7K7zKzQViO7AN1G5Wb2VRVEqbiIVBJd3HDdGZF8
-   Msi036d57dOHW/ZdOLMOubqMqYj6FjKoNJZjz789kvod+znaUCMYDXCDY
-   W6++miZdpCpQQFKEnoCOsF9xy8WuMRA8pn7TcYaIjqQ96sZXCbXvy7ChF
-   0LGEcTylfTXKmMlIvzngSbaPrw0/Fuz2FtIFYcxJLCjIvqcIIjsLk1dFL
-   o172C2re2RnL5CA6aeU473YnO+JGJ8IpniMV4stqmt5YgcoeBSeF8mZdA
-   UNApLqJ7av3+NXupfqFcv7nCYdMZlodCKND8zJcY9Ep5a5LwcsZTuOjAg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="433627685"
-X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
-   d="scan'208";a="433627685"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2023 01:40:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="675749521"
-X-IronPort-AV: E=Sophos;i="6.01,228,1684825200"; 
-   d="scan'208";a="675749521"
-Received: from unknown (HELO jiaqingz-acrn-container.sh.intel.com) ([10.239.138.235])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2023 01:40:08 -0700
-From:   Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>,
-        support@ems-wuensche.com, linux-serial@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
-Subject: [PATCH v3 4/4] parport_pc: add support for ASIX AX99100
-Date:   Mon, 24 Jul 2023 08:39:33 +0000
-Message-Id: <20230724083933.3173513-5-jiaqing.zhao@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230724083933.3173513-1-jiaqing.zhao@linux.intel.com>
-References: <20230724083933.3173513-1-jiaqing.zhao@linux.intel.com>
+        with ESMTP id S231945AbjGXIyz (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 24 Jul 2023 04:54:55 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C5AEF9
+        for <linux-can@vger.kernel.org>; Mon, 24 Jul 2023 01:54:53 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1qNrKw-0002ZA-Jt; Mon, 24 Jul 2023 10:54:38 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id D5AC31F83E8;
+        Mon, 24 Jul 2023 08:54:36 +0000 (UTC)
+Date:   Mon, 24 Jul 2023 10:54:36 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     "Goud, Srinivas" <srinivas.goud@amd.com>
+Cc:     "wg@grandegger.com" <wg@grandegger.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "gcnu.goud@gmail.com" <gcnu.goud@gmail.com>,
+        "git (AMD-Xilinx)" <git@amd.com>,
+        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: RE: [PATCH 2/3] can: xilinx_can: Add ECC support
+Message-ID: <20230724-headpiece-switch-1717818d1be1-mkl@pengutronix.de>
+References: <1686570177-2836108-1-git-send-email-srinivas.goud@amd.com>
+ <1686570177-2836108-3-git-send-email-srinivas.goud@amd.com>
+ <20230613-sprinkler-pasta-08ae2bd72ac8-mkl@pengutronix.de>
+ <PH8PR12MB6675A9F83C930189272E784BE13FA@PH8PR12MB6675.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="s4xj6l7d5v25ys75"
+Content-Disposition: inline
+In-Reply-To: <PH8PR12MB6675A9F83C930189272E784BE13FA@PH8PR12MB6675.namprd12.prod.outlook.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The PCI function 2 on ASIX AX99100 PCIe to Multi I/O Controller can be
-configured as a single-port parallel port controller. The subvendor id
-is 0x2000 when configured as parallel port. It supports IEEE-1284 EPP /
-ECP with its ECR on BAR1.
 
-Signed-off-by: Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/parport/parport_pc.c | 5 +++++
- 1 file changed, 5 insertions(+)
+--s4xj6l7d5v25ys75
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/parport/parport_pc.c b/drivers/parport/parport_pc.c
-index 3bacbaf16f42..1f236aaf7867 100644
---- a/drivers/parport/parport_pc.c
-+++ b/drivers/parport/parport_pc.c
-@@ -2655,6 +2655,7 @@ enum parport_pc_pci_cards {
- 	netmos_9815,
- 	netmos_9901,
- 	netmos_9865,
-+	asix_ax99100,
- 	quatech_sppxp100,
- 	wch_ch382l,
- };
-@@ -2733,6 +2734,7 @@ static struct parport_pc_pci {
- 	/* netmos_9815 */		{ 2, { { 0, 1 }, { 2, 3 }, } },
- 	/* netmos_9901 */               { 1, { { 0, -1 }, } },
- 	/* netmos_9865 */               { 1, { { 0, -1 }, } },
-+	/* asix_ax99100 */		{ 1, { { 0, 1 }, } },
- 	/* quatech_sppxp100 */		{ 1, { { 0, 1 }, } },
- 	/* wch_ch382l */		{ 1, { { 2, -1 }, } },
- };
-@@ -2823,6 +2825,9 @@ static const struct pci_device_id parport_pc_pci_tbl[] = {
- 	  0xA000, 0x1000, 0, 0, netmos_9865 },
- 	{ PCI_VENDOR_ID_NETMOS, PCI_DEVICE_ID_NETMOS_9865,
- 	  0xA000, 0x2000, 0, 0, netmos_9865 },
-+	/* ASIX AX99100 PCIe to Multi I/O Controller */
-+	{ PCI_VENDOR_ID_ASIX, PCI_DEVICE_ID_ASIX_AX99100,
-+	  0xA000, 0x2000, 0, 0, asix_ax99100 },
- 	/* Quatech SPPXP-100 Parallel port PCI ExpressCard */
- 	{ PCI_VENDOR_ID_QUATECH, PCI_DEVICE_ID_QUATECH_SPPXP_100,
- 	  PCI_ANY_ID, PCI_ANY_ID, 0, 0, quatech_sppxp100 },
--- 
-2.39.2
+On 21.07.2023 05:23:02, Goud, Srinivas wrote:
+> >> +	if (priv->ecc_enable) {
+> >> +		u32 reg_ecc;
+> >> +
+> >> +		reg_ecc =3D priv->read_reg(priv, XCAN_RXFIFO_ECC_OFFSET);
+> >> +		if (isr & XCAN_IXR_E2BERX_MASK) {
+> >> +			priv->ecc_2bit_rxfifo_cnt +=3D
+> >> +				FIELD_GET(XCAN_ECC_2BIT_CNT_MASK,
+> >reg_ecc);
+> >> +			netdev_dbg(ndev, "%s: RX FIFO 2bit ECC error count
+> >%d\n",
+> >> +				   __func__, priv->ecc_2bit_rxfifo_cnt);
+> >> +		}
+> >> +		if (isr & XCAN_IXR_E1BERX_MASK) {
+> >> +			priv->ecc_1bit_rxfifo_cnt +=3D reg_ecc &
+> >> +				XCAN_ECC_1BIT_CNT_MASK;
+> >
+> >Please use FIELD_GET here, too.
+> >
+> >> +			netdev_dbg(ndev, "%s: RX FIFO 1bit ECC error count
+> >%d\n",
+> >> +				   __func__, priv->ecc_1bit_rxfifo_cnt);
+> >> +		}
+> >> +
+> >> +		reg_ecc =3D priv->read_reg(priv, XCAN_TXOLFIFO_ECC_OFFSET);
+> >> +		if (isr & XCAN_IXR_E2BETXOL_MASK) {
+> >> +			priv->ecc_2bit_txolfifo_cnt +=3D
+> >> +				FIELD_GET(XCAN_ECC_2BIT_CNT_MASK,
+> >reg_ecc);
+> >> +			netdev_dbg(ndev, "%s: TXOL FIFO 2bit ECC error count
+> >%d\n",
+> >> +				   __func__, priv->ecc_2bit_txolfifo_cnt);
+> >> +		}
+> >> +		if (isr & XCAN_IXR_E1BETXOL_MASK) {
+> >> +			priv->ecc_1bit_txolfifo_cnt +=3D reg_ecc &
+> >> +				XCAN_ECC_1BIT_CNT_MASK;
+> >
+> >same here
+> >
+> >> +			netdev_dbg(ndev, "%s: TXOL FIFO 1bit ECC error count
+> >%d\n",
+> >> +				   __func__, priv->ecc_1bit_txolfifo_cnt);
+> >> +		}
+> >> +
+> >> +		reg_ecc =3D priv->read_reg(priv, XCAN_TXTLFIFO_ECC_OFFSET);
+> >> +		if (isr & XCAN_IXR_E2BETXTL_MASK) {
+> >> +			priv->ecc_2bit_txtlfifo_cnt +=3D
+> >> +				FIELD_GET(XCAN_ECC_2BIT_CNT_MASK,
+> >reg_ecc);
+> >> +			netdev_dbg(ndev, "%s: TXTL FIFO 2bit ECC error count
+> >%d\n",
+> >> +				   __func__, priv->ecc_2bit_txtlfifo_cnt);
+> >> +		}
+> >> +		if (isr & XCAN_IXR_E1BETXTL_MASK) {
+> >> +			priv->ecc_1bit_txtlfifo_cnt +=3D reg_ecc &
+> >> +				XCAN_ECC_1BIT_CNT_MASK;
+> >
+> >same here
+> >
+> >> +			netdev_dbg(ndev, "%s: TXTL FIFO 1bit ECC error count
+> >%d\n",
+> >> +				   __func__, priv->ecc_1bit_txtlfifo_cnt);
+> >> +		}
+> >> +
+> >> +		/* Reset FIFO ECC counters */
+> >> +		priv->write_reg(priv, XCAN_ECC_CFG_OFFSET,
+> >XCAN_ECC_CFG_REECRX_MASK |
+> >> +				XCAN_ECC_CFG_REECTXOL_MASK |
+> >XCAN_ECC_CFG_REECTXTL_MASK);
+> >
+> >This is racy - you will lose events that occur between reading the regis=
+ter value
+> >and clearing the register. You can save the old value and add the differ=
+ence
+> >between the new and the old value to the total counter. What happens when
+> >the counter overflows? The following pseudocode should handle the u16
+> >counter rolling over to 0:
+> As per IP specifications when counter reaching maximum value of 0xFFFF wi=
+ll=20
+> stays there until reset.
+>=20
+> Not sure we can avoid this race condition completely, as we need to reset
+> the counters after reaching the 0xFFFF to avoid losing the events.
+>=20
+> To minimize the race condition, we can reset the counters after reaching=
+=20
+> the events to 0xFFFF instead of resetting for every interrupt.=20
+> Can you please suggest if we can go this approach.
 
+Ok, the counter doesn't overflow. To keep the logic in the driver
+simple, I think it's best to read the value and reset the counter
+directly in the next line. Please add a comment like: "The counter
+reaches its maximum at 0xffff and does not overflow. Accept the small
+race window between reading and resetting."
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--s4xj6l7d5v25ys75
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmS+PEkACgkQvlAcSiqK
+BOhBsAf/Uy9GZxrB5atT0YrG+tWWdXCviS7jrEfFCO/18HVSkDAy1S1rOwzPqMAP
+K905oZNNqdbcbfVA03kGzQe+SiS1AT9KZug+OlHwWxCbnEilYy6QgGGcGQsZnEel
+orari5fW4sTmZYPFpByDVpgoju2NL3rdpaBJ3OZywR3nV6lZK4dk7vieHFmtvUHR
+bfNAWh3LGj+55Zc6OH44lfalZyQXLrB7R1H0GeDP0m358WejiYVyezDl5dk2HC6p
+1ntGQ22ADAPDHiogtiBLTahdl+9W4EXgulhHQ8zrlmtkUd2xIC7Xcg9rgDUiEAY/
+/TxHQf39Jth7nuLgdmrFMMqhAbjhYQ==
+=TgLA
+-----END PGP SIGNATURE-----
+
+--s4xj6l7d5v25ys75--
