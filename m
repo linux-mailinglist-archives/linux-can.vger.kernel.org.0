@@ -2,192 +2,108 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B30A75EE6C
-	for <lists+linux-can@lfdr.de>; Mon, 24 Jul 2023 10:54:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A10475EEAB
+	for <lists+linux-can@lfdr.de>; Mon, 24 Jul 2023 11:06:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231941AbjGXIyz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 24 Jul 2023 04:54:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51212 "EHLO
+        id S232093AbjGXJGv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 24 Jul 2023 05:06:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231945AbjGXIyz (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 24 Jul 2023 04:54:55 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C5AEF9
-        for <linux-can@vger.kernel.org>; Mon, 24 Jul 2023 01:54:53 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qNrKw-0002ZA-Jt; Mon, 24 Jul 2023 10:54:38 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id D5AC31F83E8;
-        Mon, 24 Jul 2023 08:54:36 +0000 (UTC)
-Date:   Mon, 24 Jul 2023 10:54:36 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     "Goud, Srinivas" <srinivas.goud@amd.com>
-Cc:     "wg@grandegger.com" <wg@grandegger.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "gcnu.goud@gmail.com" <gcnu.goud@gmail.com>,
-        "git (AMD-Xilinx)" <git@amd.com>,
-        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: RE: [PATCH 2/3] can: xilinx_can: Add ECC support
-Message-ID: <20230724-headpiece-switch-1717818d1be1-mkl@pengutronix.de>
-References: <1686570177-2836108-1-git-send-email-srinivas.goud@amd.com>
- <1686570177-2836108-3-git-send-email-srinivas.goud@amd.com>
- <20230613-sprinkler-pasta-08ae2bd72ac8-mkl@pengutronix.de>
- <PH8PR12MB6675A9F83C930189272E784BE13FA@PH8PR12MB6675.namprd12.prod.outlook.com>
+        with ESMTP id S232070AbjGXJGs (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 24 Jul 2023 05:06:48 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4530A18F
+        for <linux-can@vger.kernel.org>; Mon, 24 Jul 2023 02:06:46 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4fba86f069bso5959306e87.3
+        for <linux-can@vger.kernel.org>; Mon, 24 Jul 2023 02:06:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1690189604; x=1690794404;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=MWiZQGtEoDd6vYkaCeUUHjlAedCnBQMw8cP5GB7UACs=;
+        b=T9je4nDcYplTvk7qGBjMRHyCVdXOwnMahnWtLXKXhBoorgvTE/t5sdwcXUZiBncr6U
+         bLqrke6vUMhkeBL6adwaYPqoRzfb7M6Vmm2/Vh7dlQ1lwqgr8m6WPZb0stCWt3q5jbE8
+         kAy1+N8x8aEiDHWJF1FclVDmfZFoksV7OJrap7krdYpWSmzBAMXKYX5S3W8OTJBQbgn6
+         aTvAktMm7eey+yYsXs1il/63EvZnlg70B6SD8LTUDdW4BMpChes/r/SzVm//lDlbBx8+
+         xUG5p+szFz5jJJ/VtJNOFrr0YzY4AnjQEB/M161fAMQJaXgS+XYKlJD+liV3ErxJrtGy
+         whnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690189604; x=1690794404;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MWiZQGtEoDd6vYkaCeUUHjlAedCnBQMw8cP5GB7UACs=;
+        b=QC1hxAlR+DnTZ2O1ITCSrtdDBgwfUeMGbz5XEv3YgfQU9WSwY+rB0F8oEyA8mYLGe/
+         1099/ioqu80mzJG283e4hQsKlOdCr5R2nRP2Pjv77pdGpx31+ir8tz+kroENAUQZweM+
+         7IZ3gV6sikCC4vM7NV4sSzbN5vB0rJzeIdw9ZqYZiXCQxCOFaXr4g21ueH6KrmxJQhdb
+         ueC0v8rUFNeDngw1ihXDGLg5fKu84R3kSpZ/4P3+3+kJ3JDzVv6lyKl47mKOyM2+0o4a
+         abrtuA+yz0q2BC4XA2eYpWUxG3PaAwW+jfmXu4P1DVYdBsqrrb5yUPKxxOzx/rUc4UYQ
+         qCpA==
+X-Gm-Message-State: ABy/qLarfY/lKvglCAW+Hu4IJPjvTdVWtK9eUuMEt4GJvVUlGT0e/TPq
+        hLVNMimm824Z/sso25G1CeGrZQ==
+X-Google-Smtp-Source: APBJJlGtZfuY7Kf4FYV4ziuMtTtkHqU8SSVKob/5rCL8zHjE3hyY370Fx8+xNu+OdiqC5x51a1zcgw==
+X-Received: by 2002:a05:6512:ac2:b0:4f7:6a40:9fd7 with SMTP id n2-20020a0565120ac200b004f76a409fd7mr5296059lfu.47.1690189604320;
+        Mon, 24 Jul 2023 02:06:44 -0700 (PDT)
+Received: from blmsp ([2001:4091:a247:82fa:b762:4f68:e1ed:5041])
+        by smtp.gmail.com with ESMTPSA id t18-20020aa7d4d2000000b0051de3c6c5e5sm5824932edr.94.2023.07.24.02.06.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jul 2023 02:06:43 -0700 (PDT)
+Date:   Mon, 24 Jul 2023 11:06:42 +0200
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Michal Kubiak <michal.kubiak@intel.com>,
+        Vivek Yadav <vivek.2311@samsung.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Simon Horman <simon.horman@corigine.com>
+Subject: Re: [PATCH v3 6/6] can: tcan4x5x: Add error messages in probe
+Message-ID: <20230724090642.o7qzib5onl53nmqc@blmsp>
+References: <20230721135009.1120562-1-msp@baylibre.com>
+ <20230721135009.1120562-7-msp@baylibre.com>
+ <20230724-switch-mulch-3ba56c15997e-mkl@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="s4xj6l7d5v25ys75"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <PH8PR12MB6675A9F83C930189272E784BE13FA@PH8PR12MB6675.namprd12.prod.outlook.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230724-switch-mulch-3ba56c15997e-mkl@pengutronix.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Mon, Jul 24, 2023 at 10:37:51AM +0200, Marc Kleine-Budde wrote:
+> On 21.07.2023 15:50:09, Markus Schneider-Pargmann wrote:
+> > To be able to understand issues during probe easier, add error messages
+> > if something fails.
+> 
+> Can you print the error codes as "%pe", ERR_PTR(err)?
 
---s4xj6l7d5v25ys75
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yes, thank you, I will use that instead.
 
-On 21.07.2023 05:23:02, Goud, Srinivas wrote:
-> >> +	if (priv->ecc_enable) {
-> >> +		u32 reg_ecc;
-> >> +
-> >> +		reg_ecc =3D priv->read_reg(priv, XCAN_RXFIFO_ECC_OFFSET);
-> >> +		if (isr & XCAN_IXR_E2BERX_MASK) {
-> >> +			priv->ecc_2bit_rxfifo_cnt +=3D
-> >> +				FIELD_GET(XCAN_ECC_2BIT_CNT_MASK,
-> >reg_ecc);
-> >> +			netdev_dbg(ndev, "%s: RX FIFO 2bit ECC error count
-> >%d\n",
-> >> +				   __func__, priv->ecc_2bit_rxfifo_cnt);
-> >> +		}
-> >> +		if (isr & XCAN_IXR_E1BERX_MASK) {
-> >> +			priv->ecc_1bit_rxfifo_cnt +=3D reg_ecc &
-> >> +				XCAN_ECC_1BIT_CNT_MASK;
-> >
-> >Please use FIELD_GET here, too.
-> >
-> >> +			netdev_dbg(ndev, "%s: RX FIFO 1bit ECC error count
-> >%d\n",
-> >> +				   __func__, priv->ecc_1bit_rxfifo_cnt);
-> >> +		}
-> >> +
-> >> +		reg_ecc =3D priv->read_reg(priv, XCAN_TXOLFIFO_ECC_OFFSET);
-> >> +		if (isr & XCAN_IXR_E2BETXOL_MASK) {
-> >> +			priv->ecc_2bit_txolfifo_cnt +=3D
-> >> +				FIELD_GET(XCAN_ECC_2BIT_CNT_MASK,
-> >reg_ecc);
-> >> +			netdev_dbg(ndev, "%s: TXOL FIFO 2bit ECC error count
-> >%d\n",
-> >> +				   __func__, priv->ecc_2bit_txolfifo_cnt);
-> >> +		}
-> >> +		if (isr & XCAN_IXR_E1BETXOL_MASK) {
-> >> +			priv->ecc_1bit_txolfifo_cnt +=3D reg_ecc &
-> >> +				XCAN_ECC_1BIT_CNT_MASK;
-> >
-> >same here
-> >
-> >> +			netdev_dbg(ndev, "%s: TXOL FIFO 1bit ECC error count
-> >%d\n",
-> >> +				   __func__, priv->ecc_1bit_txolfifo_cnt);
-> >> +		}
-> >> +
-> >> +		reg_ecc =3D priv->read_reg(priv, XCAN_TXTLFIFO_ECC_OFFSET);
-> >> +		if (isr & XCAN_IXR_E2BETXTL_MASK) {
-> >> +			priv->ecc_2bit_txtlfifo_cnt +=3D
-> >> +				FIELD_GET(XCAN_ECC_2BIT_CNT_MASK,
-> >reg_ecc);
-> >> +			netdev_dbg(ndev, "%s: TXTL FIFO 2bit ECC error count
-> >%d\n",
-> >> +				   __func__, priv->ecc_2bit_txtlfifo_cnt);
-> >> +		}
-> >> +		if (isr & XCAN_IXR_E1BETXTL_MASK) {
-> >> +			priv->ecc_1bit_txtlfifo_cnt +=3D reg_ecc &
-> >> +				XCAN_ECC_1BIT_CNT_MASK;
-> >
-> >same here
-> >
-> >> +			netdev_dbg(ndev, "%s: TXTL FIFO 1bit ECC error count
-> >%d\n",
-> >> +				   __func__, priv->ecc_1bit_txtlfifo_cnt);
-> >> +		}
-> >> +
-> >> +		/* Reset FIFO ECC counters */
-> >> +		priv->write_reg(priv, XCAN_ECC_CFG_OFFSET,
-> >XCAN_ECC_CFG_REECRX_MASK |
-> >> +				XCAN_ECC_CFG_REECTXOL_MASK |
-> >XCAN_ECC_CFG_REECTXTL_MASK);
-> >
-> >This is racy - you will lose events that occur between reading the regis=
-ter value
-> >and clearing the register. You can save the old value and add the differ=
-ence
-> >between the new and the old value to the total counter. What happens when
-> >the counter overflows? The following pseudocode should handle the u16
-> >counter rolling over to 0:
-> As per IP specifications when counter reaching maximum value of 0xFFFF wi=
-ll=20
-> stays there until reset.
->=20
-> Not sure we can avoid this race condition completely, as we need to reset
-> the counters after reaching the 0xFFFF to avoid losing the events.
->=20
-> To minimize the race condition, we can reset the counters after reaching=
-=20
-> the events to 0xFFFF instead of resetting for every interrupt.=20
-> Can you please suggest if we can go this approach.
+Best,
+Markus
 
-Ok, the counter doesn't overflow. To keep the logic in the driver
-simple, I think it's best to read the value and reset the counter
-directly in the next line. Please add a comment like: "The counter
-reaches its maximum at 0xffff and does not overflow. Accept the small
-race window between reading and resetting."
+> 
+> Marc
+> 
+> -- 
+> Pengutronix e.K.                 | Marc Kleine-Budde          |
+> Embedded Linux                   | https://www.pengutronix.de |
+> Vertretung Nürnberg              | Phone: +49-5121-206917-129 |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
-regards,
-Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---s4xj6l7d5v25ys75
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmS+PEkACgkQvlAcSiqK
-BOhBsAf/Uy9GZxrB5atT0YrG+tWWdXCviS7jrEfFCO/18HVSkDAy1S1rOwzPqMAP
-K905oZNNqdbcbfVA03kGzQe+SiS1AT9KZug+OlHwWxCbnEilYy6QgGGcGQsZnEel
-orari5fW4sTmZYPFpByDVpgoju2NL3rdpaBJ3OZywR3nV6lZK4dk7vieHFmtvUHR
-bfNAWh3LGj+55Zc6OH44lfalZyQXLrB7R1H0GeDP0m358WejiYVyezDl5dk2HC6p
-1ntGQ22ADAPDHiogtiBLTahdl+9W4EXgulhHQ8zrlmtkUd2xIC7Xcg9rgDUiEAY/
-/TxHQf39Jth7nuLgdmrFMMqhAbjhYQ==
-=TgLA
------END PGP SIGNATURE-----
-
---s4xj6l7d5v25ys75--
