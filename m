@@ -2,59 +2,53 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12FBC760108
-	for <lists+linux-can@lfdr.de>; Mon, 24 Jul 2023 23:19:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B4737603C3
+	for <lists+linux-can@lfdr.de>; Tue, 25 Jul 2023 02:20:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbjGXVTF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 24 Jul 2023 17:19:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52380 "EHLO
+        id S230087AbjGYAUZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 24 Jul 2023 20:20:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230510AbjGXVTC (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 24 Jul 2023 17:19:02 -0400
+        with ESMTP id S230271AbjGYAUX (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 24 Jul 2023 20:20:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247B2173B;
-        Mon, 24 Jul 2023 14:18:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB46172B;
+        Mon, 24 Jul 2023 17:20:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AFEF861418;
-        Mon, 24 Jul 2023 21:18:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8777C433C7;
-        Mon, 24 Jul 2023 21:18:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 06E6F6147B;
+        Tue, 25 Jul 2023 00:20:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 27D06C433CB;
+        Tue, 25 Jul 2023 00:20:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690233536;
-        bh=N4OuHYLYh0XTbs0p57g4iiEmvIO8lb9r0X7HGPxsqFc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=U3oJkQB3A0WbwrAOyw5CPf94OoZqbYk0mzmN+A42nLJLREQ1i3NoARsoF64EWOEuq
-         ehsrl7m0ICSj8a+12OmMq8RhyoL6tgc8xahROFAu+U5dEgzKica5ms2qBhTXYErOoq
-         EHTgz+ie961FIQNgXbMP4nRByL2eRbWWlZ/8tJ/Q8dPyT3tfDSMTBZLq1exCi8U15R
-         jlUwzNZr36SYyNItvKyVLUyCuaEXQ8Sf5khlqYGZRS1KEAvlssFifRPK2ulT5iMwyy
-         jWGNybvepS1bf5MRqVYjjvKN4y/XoRCQtsdggbhk7SmlGZVUt9kR2TkUQYmsI1Fiz7
-         yLP/h56I8yinw==
-Received: (nullmailer pid 805390 invoked by uid 1000);
-        Mon, 24 Jul 2023 21:18:54 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev
-Subject: [PATCH v2] can: Explicitly include correct DT includes, part 2
-Date:   Mon, 24 Jul 2023 15:18:40 -0600
-Message-Id: <20230724211841.805053-1-robh@kernel.org>
-X-Mailer: git-send-email 2.40.1
+        s=k20201202; t=1690244421;
+        bh=c+BzqUQbiiMX/ltbMk+0YwPg8Ke15f2UHcVMv7m/L4o=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=E0IGGztj+9WgtRiHrzWo4cwHArx9vVqFr+RTqChJwPEb7c1/nbTCSXN33kgQf1zJ6
+         5Hhg6H5revqSUXvYRxcDVjNICA4YqeBPHhgLlqUcj0+Yw9l0eOOlmXZxjeVWnSFiJW
+         J6hQTjrVUB8NgUId6qbQmkj+iY9n0EZlkEpIeeDy3P6WRZVuFZj9bj8hjBU+nfsgC4
+         5ALMK+IgrMhw7v47Q9XzDB5cCSGoKhejIACIE+LRIixm5MCftFAYWVmvVh1xmaJgem
+         sDlWv6RHMcshFSxNWKLUaVHsbbE3cRc8Y2d2UBkz8Eic/QguqGUQyZAUQjBjtQKkmk
+         AlHmaBbHiuf8Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0EF1BE21EE0;
+        Tue, 25 Jul 2023 00:20:21 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 1/2] can: gs_usb: gs_can_close(): add missing set of CAN
+ state to CAN_STATE_STOPPED
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <169024442105.15014.10559557791748669718.git-patchwork-notify@kernel.org>
+Date:   Tue, 25 Jul 2023 00:20:21 +0000
+References: <20230724150141.766047-2-mkl@pengutronix.de>
+In-Reply-To: <20230724150141.766047-2-mkl@pengutronix.de>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        linux-can@vger.kernel.org, kernel@pengutronix.de,
+        stable@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -65,129 +59,34 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The DT of_device.h and of_platform.h date back to the separate
-of_platform_bus_type before it as merged into the regular platform bus.
-As part of that merge prepping Arm DT support 13 years ago, they
-"temporarily" include each other. They also include platform_device.h
-and of.h. As a result, there's a pretty much random mix of those include
-files used throughout the tree. In order to detangle these headers and
-replace the implicit includes with struct declarations, users need to
-explicitly include the correct includes.
+Hello:
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
-I had the CAN changes in a separate patch, but inadvertently put these
-in the 'net' patch.
+This series was applied to netdev/net.git (main)
+by Marc Kleine-Budde <mkl@pengutronix.de>:
 
-v2:
- - Split out can, dsa, wireless, phy/pcs to separate patches
----
- drivers/net/can/bxcan.c                    | 1 -
- drivers/net/can/ifi_canfd/ifi_canfd.c      | 1 -
- drivers/net/can/m_can/m_can.c              | 1 -
- drivers/net/can/m_can/m_can.h              | 1 -
- drivers/net/can/rcar/rcar_canfd.c          | 1 -
- drivers/net/can/sja1000/sja1000_platform.c | 1 -
- drivers/net/can/sun4i_can.c                | 1 -
- drivers/net/can/ti_hecc.c                  | 1 -
- 8 files changed, 8 deletions(-)
+On Mon, 24 Jul 2023 17:01:40 +0200 you wrote:
+> After an initial link up the CAN device is in ERROR-ACTIVE mode. Due
+> to a missing CAN_STATE_STOPPED in gs_can_close() it doesn't change to
+> STOPPED after a link down:
+> 
+> | ip link set dev can0 up
+> | ip link set dev can0 down
+> | ip --details link show can0
+> | 13: can0: <NOARP,ECHO> mtu 16 qdisc pfifo_fast state DOWN mode DEFAULT group default qlen 10
+> |     link/can  promiscuity 0 allmulti 0 minmtu 0 maxmtu 0
+> |     can state ERROR-ACTIVE restart-ms 1000
+> 
+> [...]
 
-diff --git a/drivers/net/can/bxcan.c b/drivers/net/can/bxcan.c
-index 39de7164bc4e..49cf9682b925 100644
---- a/drivers/net/can/bxcan.c
-+++ b/drivers/net/can/bxcan.c
-@@ -23,7 +23,6 @@
- #include <linux/mfd/syscon.h>
- #include <linux/module.h>
- #include <linux/of.h>
--#include <linux/of_device.h>
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
- 
-diff --git a/drivers/net/can/ifi_canfd/ifi_canfd.c b/drivers/net/can/ifi_canfd/ifi_canfd.c
-index 1d6642c94f2f..72307297d75e 100644
---- a/drivers/net/can/ifi_canfd/ifi_canfd.c
-+++ b/drivers/net/can/ifi_canfd/ifi_canfd.c
-@@ -20,7 +20,6 @@
- #include <linux/module.h>
- #include <linux/netdevice.h>
- #include <linux/of.h>
--#include <linux/of_device.h>
- #include <linux/platform_device.h>
- 
- #include <linux/can/dev.h>
-diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index c5af92bcc9c9..4e76cd9c02b0 100644
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -18,7 +18,6 @@
- #include <linux/module.h>
- #include <linux/netdevice.h>
- #include <linux/of.h>
--#include <linux/of_device.h>
- #include <linux/phy/phy.h>
- #include <linux/pinctrl/consumer.h>
- #include <linux/platform_device.h>
-diff --git a/drivers/net/can/m_can/m_can.h b/drivers/net/can/m_can/m_can.h
-index a839dc71dc9b..267d06ce6ade 100644
---- a/drivers/net/can/m_can/m_can.h
-+++ b/drivers/net/can/m_can/m_can.h
-@@ -22,7 +22,6 @@
- #include <linux/module.h>
- #include <linux/netdevice.h>
- #include <linux/of.h>
--#include <linux/of_device.h>
- #include <linux/phy/phy.h>
- #include <linux/pinctrl/consumer.h>
- #include <linux/pm_runtime.h>
-diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index e4d748913439..b82842718735 100644
---- a/drivers/net/can/rcar/rcar_canfd.c
-+++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -34,7 +34,6 @@
- #include <linux/moduleparam.h>
- #include <linux/netdevice.h>
- #include <linux/of.h>
--#include <linux/of_device.h>
- #include <linux/phy/phy.h>
- #include <linux/platform_device.h>
- #include <linux/reset.h>
-diff --git a/drivers/net/can/sja1000/sja1000_platform.c b/drivers/net/can/sja1000/sja1000_platform.c
-index 4e59952c66d4..33f0e46ab1c2 100644
---- a/drivers/net/can/sja1000/sja1000_platform.c
-+++ b/drivers/net/can/sja1000/sja1000_platform.c
-@@ -17,7 +17,6 @@
- #include <linux/clk.h>
- #include <linux/io.h>
- #include <linux/of.h>
--#include <linux/of_device.h>
- 
- #include "sja1000.h"
- 
-diff --git a/drivers/net/can/sun4i_can.c b/drivers/net/can/sun4i_can.c
-index 0827830bbf28..b493a3d8ea9a 100644
---- a/drivers/net/can/sun4i_can.c
-+++ b/drivers/net/can/sun4i_can.c
-@@ -59,7 +59,6 @@
- #include <linux/io.h>
- #include <linux/module.h>
- #include <linux/of.h>
--#include <linux/of_device.h>
- #include <linux/platform_device.h>
- #include <linux/reset.h>
- 
-diff --git a/drivers/net/can/ti_hecc.c b/drivers/net/can/ti_hecc.c
-index 54284661992e..a8243acde92d 100644
---- a/drivers/net/can/ti_hecc.c
-+++ b/drivers/net/can/ti_hecc.c
-@@ -21,7 +21,6 @@
- #include <linux/clk.h>
- #include <linux/io.h>
- #include <linux/of.h>
--#include <linux/of_device.h>
- #include <linux/regulator/consumer.h>
- 
- #include <linux/can/dev.h>
+Here is the summary with links:
+  - [net,1/2] can: gs_usb: gs_can_close(): add missing set of CAN state to CAN_STATE_STOPPED
+    https://git.kernel.org/netdev/net/c/f8a2da6ec241
+  - [net,2/2] can: raw: fix lockdep issue in raw_release()
+    https://git.kernel.org/netdev/net/c/11c9027c983e
+
+You are awesome, thank you!
 -- 
-2.40.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
