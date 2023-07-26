@@ -2,69 +2,42 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17D3C76764E
-	for <lists+linux-can@lfdr.de>; Fri, 28 Jul 2023 21:28:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED913767BDC
+	for <lists+linux-can@lfdr.de>; Sat, 29 Jul 2023 05:15:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbjG1T2a (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 28 Jul 2023 15:28:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47378 "EHLO
+        id S233741AbjG2DPP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 28 Jul 2023 23:15:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjG1T23 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 28 Jul 2023 15:28:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A72C268B;
-        Fri, 28 Jul 2023 12:28:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C08C0621E1;
-        Fri, 28 Jul 2023 19:28:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C954C433C7;
-        Fri, 28 Jul 2023 19:28:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690572508;
-        bh=tkxqkheUYV+9BQzGj3DyNe/PKGjQVH/d429jWysjUCY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AZWjdbViMNiV6YzFIlwDasV2ge2qYM+qQj62KAmzx3qY7wbPsT4WEGRbBASsxrTFN
-         BINFjYdnnYEtvcr/9N6ArrwL2yyJIbh+qhQpxlA+/p2NNmfkCaxWMFa1JsX7t2quQL
-         k2ItsPtMHjFfRRCs7dyb0ZFJDeij69Zu6zm4n/JXmYx+9lroBxY/2MOIGBBVJa5ELN
-         DNuIIRxRkxJfCwt8qdm+j86T+JFZOvukM/1/TOffIGPZXwDVlGG956jzyHGKxBso2+
-         tG4LLAPGWFZ6efLogbhCCtqJxJzC/0/r2MllzldvUSRWEMM5VQeE0cSgOoWYnVDpsd
-         Dyq/u3HcYA9QQ==
-Received: (nullmailer pid 1175706 invoked by uid 1000);
-        Fri, 28 Jul 2023 19:28:24 -0000
-Date:   Fri, 28 Jul 2023 13:28:24 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Markus Schneider-Pargmann <msp@baylibre.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Michal Kubiak <michal.kubiak@intel.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Vivek Yadav <vivek.2311@samsung.com>,
-        linux-can@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 1/6] dt-bindings: can: tcan4x5x: Add tcan4552 and
- tcan4553 variants
-Message-ID: <169057250459.1175653.8334487301732394212.robh@kernel.org>
-References: <20230728141923.162477-1-msp@baylibre.com>
- <20230728141923.162477-2-msp@baylibre.com>
+        with ESMTP id S235477AbjG2DPM (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 28 Jul 2023 23:15:12 -0400
+Received: from mail.durme.pl (mail.durme.pl [217.182.69.186])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7535744B3
+        for <linux-can@vger.kernel.org>; Fri, 28 Jul 2023 20:15:11 -0700 (PDT)
+Received: by mail.durme.pl (Postfix, from userid 1002)
+        id 72FBA5D607; Wed, 26 Jul 2023 07:50:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=durme.pl; s=mail;
+        t=1690362992; bh=hFxZwVw4rIL+JwfEOGI47p+fdoVOAeqVswP6NWoHSHQ=;
+        h=Date:From:To:Subject:From;
+        b=Tyu61CrS6BloFA9+Esh2wnVqiAW56EWVPYrTNoIxWAKp/WabrbeMoPt0iFvWZHX2V
+         8aRaXtOd2ua/hcKlCSYGpfEkZO5qOBBW7K9oO2OQ3klQpVVIj3IgYmKyKC3Fk/UdT5
+         KpgNmRPqKPf/DHrGDOSPG1MFeAIYG7Srm2ZddLx2zmpubJqnrqH22SCKZ7VYkrjAC8
+         WMEaJrMdd5BzoDzjG50dfpa9g7GBihX5NTzHctlju9XErxmTnXZmcPV/KGX1E9JLgv
+         iHzU2frZtMpDxd81B4BJ+o9ISmqCgXbt21v3HWq5RjELzClJTFBZDeD0NA8wzMCNWL
+         2nre3H2uO/mwQ==
+Received: by mail.durme.pl for <linux-can@vger.kernel.org>; Wed, 26 Jul 2023 07:50:32 GMT
+Message-ID: <20230726064501-0.1.3b.cm32.0.omwj8nzmok@durme.pl>
+Date:   Wed, 26 Jul 2023 07:50:32 GMT
+From:   "Krystian Wieczorek" <krystian.wieczorek@durme.pl>
+To:     <linux-can@vger.kernel.org>
+Subject: W sprawie samochodu
+X-Mailer: mail.durme.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230728141923.162477-2-msp@baylibre.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,16 +45,23 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Dzie=C5=84 dobry,
 
-On Fri, 28 Jul 2023 16:19:18 +0200, Markus Schneider-Pargmann wrote:
-> These two new chips do not have state or wake pins.
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../devicetree/bindings/net/can/tcan4x5x.txt          | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
-> 
+chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
+, je=C5=9Bli chodzi o system monitoringu GPS.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
+e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
+a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
 
+Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
+dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
+szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
+mne znaczenie.
+
+Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
+b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
+
+
+Pozdrawiam
+Krystian Wieczorek
