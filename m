@@ -2,43 +2,43 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6611763146
-	for <lists+linux-can@lfdr.de>; Wed, 26 Jul 2023 11:10:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EDDA76314B
+	for <lists+linux-can@lfdr.de>; Wed, 26 Jul 2023 11:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233587AbjGZJK0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 26 Jul 2023 05:10:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59646 "EHLO
+        id S233493AbjGZJKo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 26 Jul 2023 05:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232916AbjGZJJg (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 26 Jul 2023 05:09:36 -0400
-Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01on2081.outbound.protection.outlook.com [40.107.13.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3391AB5;
-        Wed, 26 Jul 2023 02:06:12 -0700 (PDT)
+        with ESMTP id S233528AbjGZJKJ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 26 Jul 2023 05:10:09 -0400
+Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01on2053.outbound.protection.outlook.com [40.107.13.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639103A89;
+        Wed, 26 Jul 2023 02:06:22 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H3+V7dXhzohwucb/bEpfGZzLYpomjnZ6ASZUYW87nMee85mPqarWGitj1nLEBR6cKFcGquLx7a14nFdpcQv1I7y0HjuVQ8cgt0OyRR2rhR55HkHQINneUE0HW8g7scQEmx6LC4QUisRbF7iPqqpv6MPhp9bompWJGCdA/MPYC34vByPgMOEBDkDsU7c9mTl7golLIPDUbCoilNP4Vmj0T4IG4rVyKSnuCDVXz9VI+IbalzuU0DqnzYdfO7R+kL3LuIJPg2Sv6T3KjBGSQ2Kol0V/1fTOcdPFId4PhAMLe+5qkiCBep6WOqmOH6SSQHAF6xdMZVy/Ds6TRU6gahr6bw==
+ b=hamM460N4oKqWbbOBRnWblzSOYnjUzAIGc4KCu48mxfeEpNNdw4HKqagn6V6Enf747XpjlZWXHbF25WbHO4juNIQ3qF9JVJm5ClFNGhPAfgW9V1EZlNq5G2+xub0VWMNQhfl6xLmh/DJuR+6msqJZvoWTHGQK3htWwLsNuNralof76d3IKGlJF/cpcIBaeBAjLZB45NWtXX5XbCcIjmVVokRd828gfas8ielmzE10ayfzG3LOt6nZFx0ahU78aAhS9KnQvUA8YOkgAFmiXnWkRsfaZPqF+3ni8kiZinyXzvHDbgBaiki21Qj2m+pp3O0UXFGhauAoqywYT/v88PEvw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uSwo/TnEqDXh8/tpa2MZKXk+pxxpbNGr9bPHDr4nAuo=;
- b=P+7vpBIER6FOzaUiThELZq2J36nOVZNukJQF3uaDN0Wj2OCCWoD9xR+wYlNNkKarsDm61u2rNmmijcsON0XWFrHKWlq+4hgINdBGxMkArc+CWfTyo+5k0WKsBaPdouGjknNHA8BlchOozIWQD9InC39NkEE5wD/cg8vjAxQwHPetsq741iXiWQs0GPdEznMQMD0oVZ8t9zo2NzVmkst7/OHuzLIj4fw1wnPKDUAUpQTS2ZtUBgG2kPLhHu9f9nMTpKVm68L1TJyLLvDt4aqnCz/dPPrlB12EzMaeDHGEZ+OtM2p7njArS0FKe8pprsGQD2w/N8kwV/DUmFeSrlrojg==
+ bh=AM8ezf1mfsTBAcluUcy9r5HSykVDS01DHMSVGLkGRPc=;
+ b=UqVnZHQK7nZReYApzQGRjaZpNuQZY4O2ghcqBtT1Rbpvg+U5qULPTVnl03nIkja6oHh9CxPdM4CP40llnfVcomIPtP4UDx68lDiEQ2FT52S/rUazJOdZB9ukYGOW2YS8NbSM+UJHQ7wB3Hx6rYQUajhI7iuGDlt7Y4n5oR6/LT1JphPP3yz+GKHgQdxs9kucczggnKx0gjf/JWteWZYf3h6O5Lxk4Vy+ymGRvrWKMzyHdrsxjpcrTiKGbiIgaj+b3Qs53ytCvwrKIS8HrAeCxowGG0BY34kuV6QkDZFnmfq0quQVxVzYSYkVY+hQryXKBvG0Z3PqaoB0/QKKCtttpQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uSwo/TnEqDXh8/tpa2MZKXk+pxxpbNGr9bPHDr4nAuo=;
- b=XXI6n25mti/aBnUA2AxL8y5JDXjyXet6uzPboRGkEz4Ryfl5hF/OQ4to1V/rqFyF1tmGnTdv+st9lMBM3ERFGAUUs+mpLMbsV20Jm59ZN/ZpuqoOYcSCw7UXm8lMX2+G0RCRnYWOobPRwUwe4Oc5Vbf+TA6MULoTMH4l0ng/0jI=
+ bh=AM8ezf1mfsTBAcluUcy9r5HSykVDS01DHMSVGLkGRPc=;
+ b=AsV+BOuVC4q8sh7eTUKlI6gKf8jVjyChTmxm8hmTNh0E6KY8unsshrQyZzHSUaHSpl8JeFFDzmL1oFN7MZFlhJYMXHDBcdMyGvjWNwSwn6ZlyvqhAH/uPx5R0sJU0RidfpR1eGocTUBcQljBu+BtrOM5lMdQjNzT8nisZWDAhW4=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from DB7PR04MB4010.eurprd04.prod.outlook.com (2603:10a6:5:21::30) by
  VI1PR04MB7056.eurprd04.prod.outlook.com (2603:10a6:800:12c::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6609.31; Wed, 26 Jul
- 2023 09:05:35 +0000
+ 2023 09:05:40 +0000
 Received: from DB7PR04MB4010.eurprd04.prod.outlook.com
  ([fe80::d73c:e747:3911:dcc]) by DB7PR04MB4010.eurprd04.prod.outlook.com
  ([fe80::d73c:e747:3911:dcc%5]) with mapi id 15.20.6631.026; Wed, 26 Jul 2023
- 09:05:35 +0000
+ 09:05:40 +0000
 From:   haibo.chen@nxp.com
 To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         conor+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
@@ -47,9 +47,9 @@ Cc:     kernel@pengutronix.de, linux-imx@nxp.com, davem@davemloft.net,
         edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
         haibo.chen@nxp.com, devicetree@vger.kernel.org,
         linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH v2 2/3] can: flexcan: remove the auto stop mode for IMX93
-Date:   Wed, 26 Jul 2023 17:09:08 +0800
-Message-Id: <20230726090909.3417030-2-haibo.chen@nxp.com>
+Subject: [PATCH v2 3/3] can: flexcan: lack of stop mode dts properity should not block driver probe
+Date:   Wed, 26 Jul 2023 17:09:09 +0800
+Message-Id: <20230726090909.3417030-3-haibo.chen@nxp.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230726090909.3417030-1-haibo.chen@nxp.com>
 References: <20230726090909.3417030-1-haibo.chen@nxp.com>
@@ -60,50 +60,50 @@ X-ClientProxiedBy: SI2P153CA0007.APCP153.PROD.OUTLOOK.COM (2603:1096:4:140::8)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DB7PR04MB4010:EE_|VI1PR04MB7056:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4cf77a1b-2e57-41c6-b8df-08db8db778fd
+X-MS-Office365-Filtering-Correlation-Id: 935170e0-bd15-47f8-e939-08db8db77c06
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ip9rW1QHy3HfSn+MFF/jCF1JcpRZcVWTdWmBPe0HAANjwA8+cQ7F/D3XRa7cZfnwIJRdWKjGwTQWCkr+rCnYGFmPI66EBPJ+XqCdugilUb7uIb/PVmFTcJ6bEEXYzKPL0HeDBRCpplnV1Ru4+CEaoEe4zt6/Qx7AtDQ+BXcX/OzkHQAeM0y8Vn++KNYRe3q0yRYUR/wg6IwcYM4254HFoGfqnOsFf9s87kvHpbvKHWc8c0exIg1bTLSO+p/Qmu5VaGYvixhS9llTDRUZ/fEDGSa9LwxHF87kR6UMtSfzCUqq6S71GIWgIyCxHeqLCVw5gCDRxvS+U+TsUjV7oNHYZx4sICtSRLZz1ZFwqESr/0iOg5M9YsOC2a2TU2ALZvUuKw5lUSW/RdUUvxtUmOdkUHXMQrNrreT8jIEUjPN7VkhUaXCZGE4psRuQyEg3FlsfF66jvCRA2ymv0PqlWp+0Z9lMax61TsY10HXWzZmTYo46kk/ZvK9gTZrbseZU/DVSVP1CkhGnmqChb4taVvONaGrqRb1RsBbresG7ES+tDNpW7VPEvhx2suMbO4oQUZduSrqcmoNYl946FnHE3OS3EFqBEneWFgLaW4bA/3TJ8RBHPX6PyVlg0dNPt9GVL40p
+X-Microsoft-Antispam-Message-Info: +pJRkkk6ttoK2Owi3dB4vowZsi08h/db+BNk2QUvwhJBl2qfnBeHeTPmPpcsJBDaoEIc9YphjTlFuRRfEkZAUswXnrHkFB8GNNyqPCQBDyeG9DbWK26lj4nRofvJ/fUBkRKebGvQqxRuRsMj5l1AKggTaBxxVbfPS0WVPESrDwiabUaTcNb2rkBjcCgR+qv7XxH59TrPgiTl7+eWJp1ETpnj5eq9TbOlrOuH/luEKjMhyZfuUqR/1NV13Wi1aLiWMyiFv3WawKpaaTYlge+P3LEePqyjWW9edDe/MU7hmju9uUhC/Qvn7KNGMzITJ27SMSQ1veANNUnIF/Ns1BiobGNhVGXQpcTN7UonPfePMWMPp1WE2W7QgaTH8uOTT4bUIlJE+q5p1R2YOyn9E9AMiG0evVRJZ2lgpHbVzgK70HYOPhC7sLV/dy9IIJvurWWLA96W86dwBS8riu680lEQy9FeRteqLeDs7CJkxJqf4AnJ0j+rscIuDh9z49TY0kF+lLjj+DEL9SAwQgMC7f+v3NImWphbIjBg1MRJCs/dSMW/1Twydn5SPdZg/CJ30aIRnZd6Z2kY5Gl8nFzSeqPclfg8Dw21SvuLu6BOf2AiKty4aFBlgKz+JSaXnD6iCCMb
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB4010.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(366004)(136003)(376002)(396003)(346002)(451199021)(6486002)(52116002)(6512007)(9686003)(6666004)(478600001)(83380400001)(86362001)(36756003)(2906002)(186003)(38350700002)(6506007)(2616005)(26005)(1076003)(66476007)(38100700002)(316002)(8676002)(41300700001)(4326008)(66946007)(5660300002)(8936002)(66556008)(7416002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ycTuBlRR7+IN/G19ZUKTH8CZDSR4JiAteDag9wBj/xVOZ6YclwIGIUChnm4R?=
- =?us-ascii?Q?g1BFNBF7r2CvEbDXKTdabzw4JcOZMxSlYUSsgWBSscJKzOZOCp6qM7r7cK+5?=
- =?us-ascii?Q?pKIyk+dhQ31ZEvvSXdAFf8K2oTznZuCvnNAKdLLKjzsKMvM7iceZLKneQ3N+?=
- =?us-ascii?Q?z7aaeSlNYFyFArEhfndFa5NMP8EzLMmWjozAMd1B7do9LhCwO+8DP6uYo6Kh?=
- =?us-ascii?Q?9i1WeK2AReTl0m9He+pKoulJ3yRqdHM8SpmrgOmoDdp5nlaArgGlBaFqVtoH?=
- =?us-ascii?Q?hBDSvX9sR80eTTjGIa1/JOpICuXTRBsfqlDDYF6rswKzVlWPwZJWzHBOfsZA?=
- =?us-ascii?Q?5APe4COqDLMUJVfZr2ZRyf9wiGBO2CSBa7DoW7PO3rZ/4odGczXB27ub0BIQ?=
- =?us-ascii?Q?etnXH1sDYXPkFfssiCKVhsL9Kk3SrlDBD/Zjqtv3ffapccMXYKprjFbgSTuO?=
- =?us-ascii?Q?E0U5Eo83KRPEdZppAC5KzRkjs8sNdQdaRXHAyxTCzMZzS7Mc6GiwP5YijS43?=
- =?us-ascii?Q?do7rkJlQ+4q5DJAR0A+CCIazc022NdoYo+sXRqi6TcZTJFxKNSZQk7UwpjVW?=
- =?us-ascii?Q?ClFZ4uuk8QHbmJFfdLeUM0i4aFH0rUF/d7a/sbz/ozTixt7szXFtEibJAUi4?=
- =?us-ascii?Q?jf+a45hiWRqYCQxOD2gm+vJZj/UbcwoUGe9BciyTR7eHSGg/TY0JA1p4b/wn?=
- =?us-ascii?Q?2TqpqA9qmNYo1sfq+NPxAaGniSHsp4tiytLS+XCsH3I1rj8RbrUNbyWWZmTP?=
- =?us-ascii?Q?5RistzHUPn0P7Nt1TqkKgnpiUpMeS/7VYa+AB9EZN5gr/rwlfViNgwnobgJO?=
- =?us-ascii?Q?sGAHNi2Bf8xSDoR5UVnHRzokbrZygKXb/IJVrV/2wde/dXUk5/8vywW2qi6L?=
- =?us-ascii?Q?uAPAhJJTfwrainOmIhOVuhJJGG6iChKJ5a3NjsnyGGmlvd652tC3sA5qAuc1?=
- =?us-ascii?Q?Oo1m1GjIZ+WvjvJz+BGdgLw3TnlB5zL6Jz8CcaKwzB0PfGL94FpbdM9v5DiX?=
- =?us-ascii?Q?Nw85pEH2fGXJwwrNcvuRvaT77KTUZRpB1tX1WaDpz2znq/qJrQ4cn0ALa36y?=
- =?us-ascii?Q?YN8oimXD4mX0IaSjF1TBVPIYD0FvPY7ZONFhnendcYeCjODSWsPPlByB2U+o?=
- =?us-ascii?Q?ynCEXWM8U1IyQgX8tbX0+WvglI3vywdqq3tDpi0jfvnvL3VWKFkY67UtQED+?=
- =?us-ascii?Q?9ID1NFbSnUTS/yfJ+M0vhflQwqC9arz89aKj2gkfJn/45hoqbMHGhXAwHGIX?=
- =?us-ascii?Q?J57RxhK8CtIcCQsDpIJ3WO+q/23RqKl91j3c5AS5PPJ9CHnG7fLoJdxi84R1?=
- =?us-ascii?Q?ffghNfItKaTwHnUE00Of4cayMuMorgETiwqLCnivua0XaTFLcNpO0KZ3eBhx?=
- =?us-ascii?Q?Yw80EzDdUBNLgHqcGJcG/iJiEVEOsfMpAQ/JXUGYn8OAE0qJAJcuWlZ3ge2g?=
- =?us-ascii?Q?LwJffQR7wJL07TrlXZpTv19E3g2lrhMeD6Y9htKwD/klstZB0Oy1sih5YIX/?=
- =?us-ascii?Q?hC3wVbWyGB39MhWbouANNeUHu45+Nx7XPmnGAgWhOvY3yVbo/3zESWlTUzlz?=
- =?us-ascii?Q?scR7cG63AdcE48r3UaizjcCcmF2Lw7gVXYUQDDK9?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?sJaarLdx9m2On/o9X48wDpgjaNeGhGTgKq/WRktOJ5b5eN4VYiQIbHalZwct?=
+ =?us-ascii?Q?C18/Mw4xijbrx/WMaT6Tluj0TooKXQMAH8MPAC2tKbgj41Xb4K7Qp8tFWVX5?=
+ =?us-ascii?Q?aW8h2ujWw0zmpuYpVwAyx36bmSABl3aDBj3RasRNCkc67cy4T4gw2QfLrFDc?=
+ =?us-ascii?Q?cgx3sKQsK+DHVaryAwjPHsXrZtskH5egT7kyDWUWUVKtzVtearEy7xJj59kG?=
+ =?us-ascii?Q?KCu9Bp7DJVQ5GSn/Zs4dvrFXPRoJTYTDv1KzAmiIpD2Fuq/nkJbqLYWGlccR?=
+ =?us-ascii?Q?BMEXyaDFax6Q7lMjPVc431lC2SMscOm80EdomppMz8sfUPv+dQUWslAkOmLh?=
+ =?us-ascii?Q?ey/kPdBiAodJTZTcM5MDy0HjAywoqTVQ9+ADx4XIKvYkR+PeKSMEnspmj7wA?=
+ =?us-ascii?Q?te0bI5b1LtpmrXNNtVaR6EBaBU41KaTYMdCxYbiLXsP5+lEgCSKOEsg5aPbe?=
+ =?us-ascii?Q?+P7i3MF31bZymYeFUFWvvwQ8cAAhiHOsmusv0HfnvMcYiA2+2UREUhEjmpk0?=
+ =?us-ascii?Q?ZwbXwtbQnndsnMiaJCE9tdZ+jffPqYhUO9emxy3JsfmLnELSDSsySicvXFrs?=
+ =?us-ascii?Q?giI34SMnHsys2LfRm9uDjQv4fw7uy+MPupU0JAj0jQtYFOEzUXLcZQQh+NgL?=
+ =?us-ascii?Q?87aAReYSI00JaLzLxa7RTBd/L8P8viNqqHwZWhqSjDdfb18uVkYibPkoJssc?=
+ =?us-ascii?Q?vPIHxw9G/KQt3B15uJnC8FTHoKDhDaR5JBkI2GtSchtFUaFfiXxdp8azMkV1?=
+ =?us-ascii?Q?kf6ZsgUOZWj1wfnSUd8eutOeYs/ww1p45ai3lQzBjO5QEX4jrm6KSwOX+oec?=
+ =?us-ascii?Q?C5Q4MD3100FfkBfChjd5TaTqSbTLkSwni48AHmhshiAqsTVjbdgUt3pqw7oc?=
+ =?us-ascii?Q?32FcVB9g59YS+/0gPDoUfjHTldWV9Dbj0U6muz1VQAzUw3KRF3KlUVOAic/t?=
+ =?us-ascii?Q?Xw/I99KcjBpjQopv/8pzgnRu142XF+CVbC/iki5lPgLzZc5L2g/o1p5Dg3w6?=
+ =?us-ascii?Q?fvjG0RMM6B9Nk5YiolpbXJDF4MBuTCnlq1z2PCgRkIyOYOKAYlZ3PvCTYnFX?=
+ =?us-ascii?Q?S6gOktN/52amyMpPyeVHM+cTViCYcBPQucHNsZm8cfr8lTjBWGo/mo01vn8+?=
+ =?us-ascii?Q?DQMDnHQIJHElLOxLRjbcDhpGoajr1UUD9RdQvdadWQPalM0LUStF2vVHRGA9?=
+ =?us-ascii?Q?b7O5ON1R3/Cenmd8bmvCNB6PgNUYljKtQb1Hku6GAkrFC6VtNACmg4H2ZY7S?=
+ =?us-ascii?Q?2Ih4xDfL7ehrI2zGwCFTzZK6KQ7qbHj/5q866HkpFX+ugbPAjtp3azjFYINz?=
+ =?us-ascii?Q?YCme8lCxJc/mtiiHjuASCohpSPG9Pei6QhsxoAo0sBkaHQacjDDme83OuJru?=
+ =?us-ascii?Q?5e/LsAPV0I9Tsp8mCTNWUGw0G0T0d9FO3d9JKut+He+Xuy1Sty8pmN/E4PME?=
+ =?us-ascii?Q?cD3ObGkMLyg1l3ImHDVlWAkxR8tPKjcwdCcZgSTh3BU5ZchCsoIfWX+LUIKy?=
+ =?us-ascii?Q?xaeJOm7nzDhb3UcR9lMaMvcFckO9oikW2/0zhFcmiZXSHkP6zOogkk3/ceYw?=
+ =?us-ascii?Q?M46ycf0hoVwIQaF+HQGV74NqaMNE7LUP900O9Inc?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4cf77a1b-2e57-41c6-b8df-08db8db778fd
+X-MS-Exchange-CrossTenant-Network-Message-Id: 935170e0-bd15-47f8-e939-08db8db77c06
 X-MS-Exchange-CrossTenant-AuthSource: DB7PR04MB4010.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jul 2023 09:05:35.4083
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jul 2023 09:05:40.5606
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5SQKXb9Ak3VHhCcNkJvBnDR6sdo5LrMaxPqvJYhrGrdMUgsPVoXPlVPO0FZADWsZ54Sq9kkV5bjUlF6klKaL4g==
+X-MS-Exchange-CrossTenant-UserPrincipalName: nZVlQLvBnWEAF8wLC4W8PNzDMqDQZxvC5uZggFfSThupurZfuhonn+PR5Ora6ZPXbE6RfLsmEM6J+YzJqaLbQw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB7056
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
@@ -117,126 +117,36 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 From: Haibo Chen <haibo.chen@nxp.com>
 
-IMX93 A0 chip involve the internal q-channel handshake in LPCG and
-CCM to automatically handle the Flex-CAN IPG STOP signal. Only after
-FLEX-CAN enter stop mode then can support the self-wakeup feature.
-But meet issue when do the continue system PM stress test. When config
-the CAN as wakeup source, the first time after system suspend, any data
-on CAN bus can wakeup the system, this is as expect. But the second time
-when system suspend, data on CAN bus can't wakeup the system. If continue
-this test, we find in odd time system enter suspend, CAN can wakeup the
-system, but in even number system enter suspend, CAN can't wakeup the
-system. IC find a bug in the auto stop mode logic, and can't fix it easily.
-So for the new imx93 A1, IC drop the auto stop mode and involve the
-GPR to support stop mode (used before). IC define a bit in GPR which can
-trigger the IPG STOP signal to Flex-CAN, let it go into stop mode.
-And NXP claim to drop IMX93 A0, and only support IMX93 A1. So this patch
-remove the auto stop mode, and add flag FLEXCAN_QUIRK_SETUP_STOP_MODE_GPR
-to imx93.
+If SoC claim to support stop mode, but dts file do not contain the stop
+mode properity, this should not block the driver probe. For this case,
+the driver only need to skip the wakeup capable setting which means this
+device do not support the feature to wakeup system.
 
 Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
 ---
- drivers/net/can/flexcan/flexcan-core.c | 37 ++++----------------------
- drivers/net/can/flexcan/flexcan.h      |  2 --
- 2 files changed, 5 insertions(+), 34 deletions(-)
+ drivers/net/can/flexcan/flexcan-core.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/net/can/flexcan/flexcan-core.c b/drivers/net/can/flexcan/flexcan-core.c
-index ff0fc18baf13..a3f3a9c909be 100644
+index a3f3a9c909be..d8be69f4a0c3 100644
 --- a/drivers/net/can/flexcan/flexcan-core.c
 +++ b/drivers/net/can/flexcan/flexcan-core.c
-@@ -348,7 +348,7 @@ static struct flexcan_devtype_data fsl_imx8mp_devtype_data = {
- static struct flexcan_devtype_data fsl_imx93_devtype_data = {
- 	.quirks = FLEXCAN_QUIRK_DISABLE_RXFG | FLEXCAN_QUIRK_ENABLE_EACEN_RRS |
- 		FLEXCAN_QUIRK_DISABLE_MECR | FLEXCAN_QUIRK_USE_RX_MAILBOX |
--		FLEXCAN_QUIRK_BROKEN_PERR_STATE | FLEXCAN_QUIRK_AUTO_STOP_MODE |
-+		FLEXCAN_QUIRK_BROKEN_PERR_STATE | FLEXCAN_QUIRK_SETUP_STOP_MODE_GPR |
- 		FLEXCAN_QUIRK_SUPPORT_FD | FLEXCAN_QUIRK_SUPPORT_ECC |
- 		FLEXCAN_QUIRK_SUPPORT_RX_MAILBOX |
- 		FLEXCAN_QUIRK_SUPPORT_RX_MAILBOX_RTR,
-@@ -544,11 +544,6 @@ static inline int flexcan_enter_stop_mode(struct flexcan_priv *priv)
- 	} else if (priv->devtype_data.quirks & FLEXCAN_QUIRK_SETUP_STOP_MODE_GPR) {
- 		regmap_update_bits(priv->stm.gpr, priv->stm.req_gpr,
- 				   1 << priv->stm.req_bit, 1 << priv->stm.req_bit);
--	} else if (priv->devtype_data.quirks & FLEXCAN_QUIRK_AUTO_STOP_MODE) {
--		/* For the auto stop mode, software do nothing, hardware will cover
--		 * all the operation automatically after system go into low power mode.
--		 */
--		return 0;
- 	}
- 
- 	return flexcan_low_power_enter_ack(priv);
-@@ -574,12 +569,6 @@ static inline int flexcan_exit_stop_mode(struct flexcan_priv *priv)
- 	reg_mcr &= ~FLEXCAN_MCR_SLF_WAK;
- 	priv->write(reg_mcr, &regs->mcr);
- 
--	/* For the auto stop mode, hardware will exist stop mode
--	 * automatically after system go out of low power mode.
--	 */
--	if (priv->devtype_data.quirks & FLEXCAN_QUIRK_AUTO_STOP_MODE)
--		return 0;
--
- 	return flexcan_low_power_exit_ack(priv);
- }
- 
-@@ -1994,8 +1983,6 @@ static int flexcan_setup_stop_mode(struct platform_device *pdev)
- 		ret = flexcan_setup_stop_mode_scfw(pdev);
- 	else if (priv->devtype_data.quirks & FLEXCAN_QUIRK_SETUP_STOP_MODE_GPR)
- 		ret = flexcan_setup_stop_mode_gpr(pdev);
--	else if (priv->devtype_data.quirks & FLEXCAN_QUIRK_AUTO_STOP_MODE)
--		ret = 0;
- 	else
+@@ -1987,7 +1987,14 @@ static int flexcan_setup_stop_mode(struct platform_device *pdev)
  		/* return 0 directly if doesn't support stop mode feature */
  		return 0;
-@@ -2320,16 +2307,8 @@ static int __maybe_unused flexcan_noirq_suspend(struct device *device)
- 	if (netif_running(dev)) {
- 		int err;
  
--		if (device_may_wakeup(device)) {
-+		if (device_may_wakeup(device))
- 			flexcan_enable_wakeup_irq(priv, true);
--			/* For auto stop mode, need to keep the clock on before
--			 * system go into low power mode. After system go into
--			 * low power mode, hardware will config the flexcan into
--			 * stop mode, and gate off the clock automatically.
--			 */
--			if (priv->devtype_data.quirks & FLEXCAN_QUIRK_AUTO_STOP_MODE)
--				return 0;
--		}
+-	if (ret)
++	/* If ret is -EINVAL, this means SoC claim to support stop mode, but
++	 * dts file lack the stop mode property definition. For this case,
++	 * directly return 0, this will skip the wakeup capable setting and
++	 * will not block the driver probe.
++	 */
++	if (ret == -EINVAL)
++		return 0;
++	else if (ret)
+ 		return ret;
  
- 		err = pm_runtime_force_suspend(device);
- 		if (err)
-@@ -2347,15 +2326,9 @@ static int __maybe_unused flexcan_noirq_resume(struct device *device)
- 	if (netif_running(dev)) {
- 		int err;
- 
--		/* For the wakeup in auto stop mode, no need to gate on the
--		 * clock here, hardware will do this automatically.
--		 */
--		if (!(device_may_wakeup(device) &&
--		      priv->devtype_data.quirks & FLEXCAN_QUIRK_AUTO_STOP_MODE)) {
--			err = pm_runtime_force_resume(device);
--			if (err)
--				return err;
--		}
-+		err = pm_runtime_force_resume(device);
-+		if (err)
-+			return err;
- 
- 		if (device_may_wakeup(device))
- 			flexcan_enable_wakeup_irq(priv, false);
-diff --git a/drivers/net/can/flexcan/flexcan.h b/drivers/net/can/flexcan/flexcan.h
-index 91402977780b..025c3417031f 100644
---- a/drivers/net/can/flexcan/flexcan.h
-+++ b/drivers/net/can/flexcan/flexcan.h
-@@ -68,8 +68,6 @@
- #define FLEXCAN_QUIRK_SUPPORT_RX_MAILBOX_RTR BIT(15)
- /* Device supports RX via FIFO */
- #define FLEXCAN_QUIRK_SUPPORT_RX_FIFO BIT(16)
--/* auto enter stop mode to support wakeup */
--#define FLEXCAN_QUIRK_AUTO_STOP_MODE BIT(17)
- 
- struct flexcan_devtype_data {
- 	u32 quirks;		/* quirks needed for different IP cores */
+ 	device_set_wakeup_capable(&pdev->dev, true);
 -- 
 2.34.1
 
