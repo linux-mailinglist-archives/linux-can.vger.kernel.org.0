@@ -2,31 +2,31 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 974957632F7
-	for <lists+linux-can@lfdr.de>; Wed, 26 Jul 2023 11:58:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 348E7763343
+	for <lists+linux-can@lfdr.de>; Wed, 26 Jul 2023 12:17:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232323AbjGZJ6k (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 26 Jul 2023 05:58:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39726 "EHLO
+        id S229821AbjGZKRB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 26 Jul 2023 06:17:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232471AbjGZJ6T (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 26 Jul 2023 05:58:19 -0400
+        with ESMTP id S230391AbjGZKRA (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 26 Jul 2023 06:17:00 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4581D2115
-        for <linux-can@vger.kernel.org>; Wed, 26 Jul 2023 02:57:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D3C21984
+        for <linux-can@vger.kernel.org>; Wed, 26 Jul 2023 03:17:00 -0700 (PDT)
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1qObGc-0007rN-GQ; Wed, 26 Jul 2023 11:57:14 +0200
+        id 1qObZO-0002ZA-8k; Wed, 26 Jul 2023 12:16:38 +0200
 Received: from pengutronix.de (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 841111FB155;
-        Wed, 26 Jul 2023 09:57:12 +0000 (UTC)
-Date:   Wed, 26 Jul 2023 11:57:11 +0200
+        by smtp.blackshift.org (Postfix) with ESMTPSA id C32901FB186;
+        Wed, 26 Jul 2023 10:16:36 +0000 (UTC)
+Date:   Wed, 26 Jul 2023 12:16:36 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     haibo.chen@nxp.com
 Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
@@ -35,15 +35,16 @@ Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
         pabeni@redhat.com, devicetree@vger.kernel.org,
         linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] arm64: dts: imx93: add the Flex-CAN stop mode by
- GPR
-Message-ID: <20230726-moocher-managing-5a5352a4266a-mkl@pengutronix.de>
+Subject: Re: [PATCH v2 3/3] can: flexcan: lack of stop mode dts properity
+ should not block driver probe
+Message-ID: <20230726-majorette-manor-ea82bb4afa68-mkl@pengutronix.de>
 References: <20230726090909.3417030-1-haibo.chen@nxp.com>
+ <20230726090909.3417030-3-haibo.chen@nxp.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2ujf745qpqkrvicw"
+        protocol="application/pgp-signature"; boundary="cjbrrbvmxmmqq34f"
 Content-Disposition: inline
-In-Reply-To: <20230726090909.3417030-1-haibo.chen@nxp.com>
+In-Reply-To: <20230726090909.3417030-3-haibo.chen@nxp.com>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -58,65 +59,54 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---2ujf745qpqkrvicw
+--cjbrrbvmxmmqq34f
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 26.07.2023 17:09:07, haibo.chen@nxp.com wrote:
+On 26.07.2023 17:09:09, haibo.chen@nxp.com wrote:
 > From: Haibo Chen <haibo.chen@nxp.com>
 >=20
-> imx93 A0 chip use the internal q-channel handshake signal in LPCG
-> and CCM to automatically handle the Flex-CAN stop mode. But this
-> method meet issue when do the system PM stress test. IC can't fix
-> it easily. So in the new imx93 A1 chip, IC drop this method, and
-> involve back the old way=EF=BC=8Cuse the GPR method to trigger the Flex-C=
-AN
-> stop mode signal. Now NXP claim to drop imx93 A0, and only support
-> imx93 A1. So here add the stop mode through GPR.
+> If SoC claim to support stop mode, but dts file do not contain the stop
+> mode properity, this should not block the driver probe. For this case,
+> the driver only need to skip the wakeup capable setting which means this
+> device do not support the feature to wakeup system.
+
+This still breaks old DTS on kernels with patch 2 applied, but not 3.
+Please squash this into 2.
+
 >=20
 > Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
 > ---
->  arch/arm64/boot/dts/freescale/imx93.dtsi | 2 ++
->  1 file changed, 2 insertions(+)
+>  drivers/net/can/flexcan/flexcan-core.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
 >=20
-> diff --git a/arch/arm64/boot/dts/freescale/imx93.dtsi b/arch/arm64/boot/d=
-ts/freescale/imx93.dtsi
-> index 4ec9df78f205..d2040019e9c7 100644
-> --- a/arch/arm64/boot/dts/freescale/imx93.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx93.dtsi
-> @@ -319,6 +319,7 @@ flexcan1: can@443a0000 {
->  				assigned-clock-parents =3D <&clk IMX93_CLK_SYS_PLL_PFD1_DIV2>;
->  				assigned-clock-rates =3D <40000000>;
->  				fsl,clk-source =3D /bits/ 8 <0>;
-> +				fsl,stop-mode =3D <&anomix_ns_gpr 0x14 0>;
-
-I think there's a typo in the mainline imx93.dtsi. AFAICS it's supposed
-to be "aonmix_ns_gpr", not "anomix_ns_gpr". But that's a different
-problem to patch :)
-
-AFAICS, according to imx93, rev2 data sheet, offset 0x14 is 76.6.1.3
-QCHANNEL DISABLE (QCH_DIS) and bit 0 is "GPIO1". Are you sure this is
-the correct reg?
-
->  				status =3D "disabled";
->  			};
+> diff --git a/drivers/net/can/flexcan/flexcan-core.c b/drivers/net/can/fle=
+xcan/flexcan-core.c
+> index a3f3a9c909be..d8be69f4a0c3 100644
+> --- a/drivers/net/can/flexcan/flexcan-core.c
+> +++ b/drivers/net/can/flexcan/flexcan-core.c
+> @@ -1987,7 +1987,14 @@ static int flexcan_setup_stop_mode(struct platform=
+_device *pdev)
+>  		/* return 0 directly if doesn't support stop mode feature */
+>  		return 0;
 > =20
-> @@ -591,6 +592,7 @@ flexcan2: can@425b0000 {
->  				assigned-clock-parents =3D <&clk IMX93_CLK_SYS_PLL_PFD1_DIV2>;
->  				assigned-clock-rates =3D <40000000>;
->  				fsl,clk-source =3D /bits/ 8 <0>;
-> +				fsl,stop-mode =3D <&wakeupmix_gpr 0x0C 2>;
-
-looks plausible, please use lower case for hex addresses.
-
->  				status =3D "disabled";
->  			};
+> -	if (ret)
+> +	/* If ret is -EINVAL, this means SoC claim to support stop mode, but
+> +	 * dts file lack the stop mode property definition. For this case,
+> +	 * directly return 0, this will skip the wakeup capable setting and
+> +	 * will not block the driver probe.
+> +	 */
+> +	if (ret =3D=3D -EINVAL)
+> +		return 0;
+> +	else if (ret)
+>  		return ret;
 > =20
+>  	device_set_wakeup_capable(&pdev->dev, true);
 > --=20
 > 2.34.1
 >=20
->
+>=20
 
 regards,
 Marc
@@ -127,19 +117,19 @@ Embedded Linux                   | https://www.pengutronix.de |
 Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
---2ujf745qpqkrvicw
+--cjbrrbvmxmmqq34f
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmTA7fQACgkQvlAcSiqK
-BOhzjgf+Kgd/bRs+UDJX8hGI1Qfk1H3FdtJha2NOWmnPMg9Yi8i2JgNFB0132IML
-+aTKa9SZ6LzWNQ7yjslmhmaM59VECO0DX6UhGUrU6E9dNS3sGsUcFhwgJBxgSWvq
-4PhN3hLdWDexik6Qo1n9iWYflbmS/NnVJpixCwuQ2mKVvySsBOetmcFBnSY7pkD2
-VCXFsmEcRQ8QK48bPAbMSgVQDDoqdMjBA0y5f51LatAGQ74LF6S2Qi1r1ils04ZJ
-OCs30vbz1rvwe6GH9QWIhmea3HxWSH126n+YV7VCY2YZnOrE9sOR+ZwoRQ9yWmLI
-Ha38AFsQR7pT6+Sk/PPMMb4Cs8C5nw==
-=ynP/
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmTA8oEACgkQvlAcSiqK
+BOitZAgAre7gePm257fB84ueqkVE0mAA41PVK+xx6PvmmzojzCx48WrmuqgJUKxX
+iFaah4dWMj5ls7nm/HZBXCNrX8HVfwZQCqOok8TaMNWn2hlZ80kzJwykcngibAEB
+UCx+qAsIuUjniC8rEPkYNFxSTZg5Z+a2/oCo0orcMZ5G4mYzsIUMBH9jwtyuTJ1A
+qaZqSK58oLMKNrWtJHJox9Ji2i0uhFOtJuKKsZG8yizyxHQPkKvXk37C2aSEzDXV
+mDi3cI0KI+G0uNyoueYc/kxV+Dqpp03g5ZJmjSF1ak+NAvWu/g0KjoBKFSf1FYcE
+j24fcHXS6KoDt/1uSaorUjAPpPTTPQ==
+=FhOU
 -----END PGP SIGNATURE-----
 
---2ujf745qpqkrvicw--
+--cjbrrbvmxmmqq34f--
