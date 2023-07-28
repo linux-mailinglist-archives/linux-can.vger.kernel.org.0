@@ -2,43 +2,43 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1AC3766603
-	for <lists+linux-can@lfdr.de>; Fri, 28 Jul 2023 09:59:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5792A766608
+	for <lists+linux-can@lfdr.de>; Fri, 28 Jul 2023 10:00:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234563AbjG1H7l (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 28 Jul 2023 03:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42566 "EHLO
+        id S234698AbjG1IAA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 28 Jul 2023 04:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234567AbjG1H7W (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 28 Jul 2023 03:59:22 -0400
+        with ESMTP id S234608AbjG1H7b (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 28 Jul 2023 03:59:31 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D853B35A9
-        for <linux-can@vger.kernel.org>; Fri, 28 Jul 2023 00:58:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBD7B3A93
+        for <linux-can@vger.kernel.org>; Fri, 28 Jul 2023 00:58:57 -0700 (PDT)
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1qPIMr-0008H8-T8
-        for linux-can@vger.kernel.org; Fri, 28 Jul 2023 09:58:33 +0200
+        id 1qPIMt-0008JK-NC
+        for linux-can@vger.kernel.org; Fri, 28 Jul 2023 09:58:35 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 8627F1FD258
+        by bjornoya.blackshift.org (Postfix) with SMTP id 9D02C1FD260
         for <linux-can@vger.kernel.org>; Fri, 28 Jul 2023 07:56:20 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 94FE81FD1CA;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id B1F791FD1D1;
         Fri, 28 Jul 2023 07:56:18 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id af5a1d88;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id dfdc1984;
         Fri, 28 Jul 2023 07:56:17 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
         kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next 10/21] can: gs_usb: gs_usb_set_timestamp(): remove return statements form void function
-Date:   Fri, 28 Jul 2023 09:56:03 +0200
-Message-Id: <20230728075614.1014117-11-mkl@pengutronix.de>
+Subject: [PATCH net-next 11/21] can: gs_usb: uniformly use "parent" as variable name for struct gs_usb
+Date:   Fri, 28 Jul 2023 09:56:04 +0200
+Message-Id: <20230728075614.1014117-12-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230728075614.1014117-1-mkl@pengutronix.de>
 References: <20230728075614.1014117-1-mkl@pengutronix.de>
@@ -57,28 +57,175 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Remove the return statements from void gs_usb_set_timestamp()
-function, as it's not generally useful.
+To ease readability and maintainability uniformly use the variable
+name "parent" for the struct gs_usb in the gs_usb driver.
 
-Link: https://lore.kernel.org/all/20230718-gs_usb-cleanups-v1-3-c3b9154ec605@pengutronix.de
+Link: https://lore.kernel.org/all/20230718-gs_usb-cleanups-v1-4-c3b9154ec605@pengutronix.de
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/usb/gs_usb.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/net/can/usb/gs_usb.c | 62 ++++++++++++++++++------------------
+ 1 file changed, 31 insertions(+), 31 deletions(-)
 
 diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
-index 966e00ea768d..1e08d38b0f96 100644
+index 1e08d38b0f96..441143ad740b 100644
 --- a/drivers/net/can/usb/gs_usb.c
 +++ b/drivers/net/can/usb/gs_usb.c
-@@ -520,8 +520,6 @@ static void gs_usb_set_timestamp(struct gs_can *dev, struct sk_buff *skb,
- 		timestamp = le32_to_cpu(hf->classic_can_ts->timestamp_us);
- 
- 	gs_usb_skb_set_timestamp(dev, skb, timestamp);
--
--	return;
- }
+@@ -524,7 +524,7 @@ static void gs_usb_set_timestamp(struct gs_can *dev, struct sk_buff *skb,
  
  static void gs_usb_receive_bulk_callback(struct urb *urb)
+ {
+-	struct gs_usb *usbcan = urb->context;
++	struct gs_usb *parent = urb->context;
+ 	struct gs_can *dev;
+ 	struct net_device *netdev;
+ 	int rc;
+@@ -535,7 +535,7 @@ static void gs_usb_receive_bulk_callback(struct urb *urb)
+ 	struct canfd_frame *cfd;
+ 	struct sk_buff *skb;
+ 
+-	BUG_ON(!usbcan);
++	BUG_ON(!parent);
+ 
+ 	switch (urb->status) {
+ 	case 0: /* success */
+@@ -552,7 +552,7 @@ static void gs_usb_receive_bulk_callback(struct urb *urb)
+ 	if (hf->channel >= GS_MAX_INTF)
+ 		goto device_detach;
+ 
+-	dev = usbcan->canch[hf->channel];
++	dev = parent->canch[hf->channel];
+ 
+ 	netdev = dev->netdev;
+ 	stats = &netdev->stats;
+@@ -644,10 +644,10 @@ static void gs_usb_receive_bulk_callback(struct urb *urb)
+ 	}
+ 
+ resubmit_urb:
+-	usb_fill_bulk_urb(urb, usbcan->udev,
+-			  usb_rcvbulkpipe(usbcan->udev, GS_USB_ENDPOINT_IN),
++	usb_fill_bulk_urb(urb, parent->udev,
++			  usb_rcvbulkpipe(parent->udev, GS_USB_ENDPOINT_IN),
+ 			  hf, dev->parent->hf_size_rx,
+-			  gs_usb_receive_bulk_callback, usbcan);
++			  gs_usb_receive_bulk_callback, parent);
+ 
+ 	rc = usb_submit_urb(urb, GFP_ATOMIC);
+ 
+@@ -655,8 +655,8 @@ static void gs_usb_receive_bulk_callback(struct urb *urb)
+ 	if (rc == -ENODEV) {
+ device_detach:
+ 		for (rc = 0; rc < GS_MAX_INTF; rc++) {
+-			if (usbcan->canch[rc])
+-				netif_device_detach(usbcan->canch[rc]->netdev);
++			if (parent->canch[rc])
++				netif_device_detach(parent->canch[rc]->netdev);
+ 		}
+ 	}
+ }
+@@ -1369,7 +1369,7 @@ static int gs_usb_probe(struct usb_interface *intf,
+ {
+ 	struct usb_device *udev = interface_to_usbdev(intf);
+ 	struct gs_host_frame *hf;
+-	struct gs_usb *dev;
++	struct gs_usb *parent;
+ 	struct gs_host_config hconf = {
+ 		.byte_order = cpu_to_le32(0x0000beef),
+ 	};
+@@ -1412,49 +1412,49 @@ static int gs_usb_probe(struct usb_interface *intf,
+ 		return -EINVAL;
+ 	}
+ 
+-	dev = kzalloc(sizeof(*dev), GFP_KERNEL);
+-	if (!dev)
++	parent = kzalloc(sizeof(*parent), GFP_KERNEL);
++	if (!parent)
+ 		return -ENOMEM;
+ 
+-	init_usb_anchor(&dev->rx_submitted);
++	init_usb_anchor(&parent->rx_submitted);
+ 
+-	usb_set_intfdata(intf, dev);
+-	dev->udev = udev;
++	usb_set_intfdata(intf, parent);
++	parent->udev = udev;
+ 
+ 	for (i = 0; i < icount; i++) {
+ 		unsigned int hf_size_rx = 0;
+ 
+-		dev->canch[i] = gs_make_candev(i, intf, &dconf);
+-		if (IS_ERR_OR_NULL(dev->canch[i])) {
++		parent->canch[i] = gs_make_candev(i, intf, &dconf);
++		if (IS_ERR_OR_NULL(parent->canch[i])) {
+ 			/* save error code to return later */
+-			rc = PTR_ERR(dev->canch[i]);
++			rc = PTR_ERR(parent->canch[i]);
+ 
+ 			/* on failure destroy previously created candevs */
+ 			icount = i;
+ 			for (i = 0; i < icount; i++)
+-				gs_destroy_candev(dev->canch[i]);
++				gs_destroy_candev(parent->canch[i]);
+ 
+-			usb_kill_anchored_urbs(&dev->rx_submitted);
+-			kfree(dev);
++			usb_kill_anchored_urbs(&parent->rx_submitted);
++			kfree(parent);
+ 			return rc;
+ 		}
+-		dev->canch[i]->parent = dev;
++		parent->canch[i]->parent = parent;
+ 
+ 		/* set RX packet size based on FD and if hardware
+ 		 * timestamps are supported.
+ 		 */
+-		if (dev->canch[i]->can.ctrlmode_supported & CAN_CTRLMODE_FD) {
+-			if (dev->canch[i]->feature & GS_CAN_FEATURE_HW_TIMESTAMP)
++		if (parent->canch[i]->can.ctrlmode_supported & CAN_CTRLMODE_FD) {
++			if (parent->canch[i]->feature & GS_CAN_FEATURE_HW_TIMESTAMP)
+ 				hf_size_rx = struct_size(hf, canfd_ts, 1);
+ 			else
+ 				hf_size_rx = struct_size(hf, canfd, 1);
+ 		} else {
+-			if (dev->canch[i]->feature & GS_CAN_FEATURE_HW_TIMESTAMP)
++			if (parent->canch[i]->feature & GS_CAN_FEATURE_HW_TIMESTAMP)
+ 				hf_size_rx = struct_size(hf, classic_can_ts, 1);
+ 			else
+ 				hf_size_rx = struct_size(hf, classic_can, 1);
+ 		}
+-		dev->hf_size_rx = max(dev->hf_size_rx, hf_size_rx);
++		parent->hf_size_rx = max(parent->hf_size_rx, hf_size_rx);
+ 	}
+ 
+ 	return 0;
+@@ -1462,22 +1462,22 @@ static int gs_usb_probe(struct usb_interface *intf,
+ 
+ static void gs_usb_disconnect(struct usb_interface *intf)
+ {
+-	struct gs_usb *dev = usb_get_intfdata(intf);
++	struct gs_usb *parent = usb_get_intfdata(intf);
+ 	unsigned int i;
+ 
+ 	usb_set_intfdata(intf, NULL);
+ 
+-	if (!dev) {
++	if (!parent) {
+ 		dev_err(&intf->dev, "Disconnect (nodata)\n");
+ 		return;
+ 	}
+ 
+ 	for (i = 0; i < GS_MAX_INTF; i++)
+-		if (dev->canch[i])
+-			gs_destroy_candev(dev->canch[i]);
++		if (parent->canch[i])
++			gs_destroy_candev(parent->canch[i]);
+ 
+-	usb_kill_anchored_urbs(&dev->rx_submitted);
+-	kfree(dev);
++	usb_kill_anchored_urbs(&parent->rx_submitted);
++	kfree(parent);
+ }
+ 
+ static const struct usb_device_id gs_usb_table[] = {
 -- 
 2.40.1
 
