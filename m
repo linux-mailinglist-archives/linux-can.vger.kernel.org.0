@@ -2,66 +2,131 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED913767BDC
-	for <lists+linux-can@lfdr.de>; Sat, 29 Jul 2023 05:15:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00C2D7688FE
+	for <lists+linux-can@lfdr.de>; Mon, 31 Jul 2023 00:04:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233741AbjG2DPP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 28 Jul 2023 23:15:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47928 "EHLO
+        id S229485AbjG3WEG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 30 Jul 2023 18:04:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235477AbjG2DPM (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 28 Jul 2023 23:15:12 -0400
-Received: from mail.durme.pl (mail.durme.pl [217.182.69.186])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7535744B3
-        for <linux-can@vger.kernel.org>; Fri, 28 Jul 2023 20:15:11 -0700 (PDT)
-Received: by mail.durme.pl (Postfix, from userid 1002)
-        id 72FBA5D607; Wed, 26 Jul 2023 07:50:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=durme.pl; s=mail;
-        t=1690362992; bh=hFxZwVw4rIL+JwfEOGI47p+fdoVOAeqVswP6NWoHSHQ=;
-        h=Date:From:To:Subject:From;
-        b=Tyu61CrS6BloFA9+Esh2wnVqiAW56EWVPYrTNoIxWAKp/WabrbeMoPt0iFvWZHX2V
-         8aRaXtOd2ua/hcKlCSYGpfEkZO5qOBBW7K9oO2OQ3klQpVVIj3IgYmKyKC3Fk/UdT5
-         KpgNmRPqKPf/DHrGDOSPG1MFeAIYG7Srm2ZddLx2zmpubJqnrqH22SCKZ7VYkrjAC8
-         WMEaJrMdd5BzoDzjG50dfpa9g7GBihX5NTzHctlju9XErxmTnXZmcPV/KGX1E9JLgv
-         iHzU2frZtMpDxd81B4BJ+o9ISmqCgXbt21v3HWq5RjELzClJTFBZDeD0NA8wzMCNWL
-         2nre3H2uO/mwQ==
-Received: by mail.durme.pl for <linux-can@vger.kernel.org>; Wed, 26 Jul 2023 07:50:32 GMT
-Message-ID: <20230726064501-0.1.3b.cm32.0.omwj8nzmok@durme.pl>
-Date:   Wed, 26 Jul 2023 07:50:32 GMT
-From:   "Krystian Wieczorek" <krystian.wieczorek@durme.pl>
-To:     <linux-can@vger.kernel.org>
-Subject: W sprawie samochodu
-X-Mailer: mail.durme.pl
+        with ESMTP id S229379AbjG3WEE (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 30 Jul 2023 18:04:04 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD8610D0;
+        Sun, 30 Jul 2023 15:04:03 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3fe167d4a18so16516865e9.0;
+        Sun, 30 Jul 2023 15:04:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1690754642; x=1691359442;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pahPU3wSvsqJHIDLsqPi1ulLhJMWKZSO5rvQ5dMXskQ=;
+        b=q0sSR9AXHGYYmyVNDr+xpag+Dw277dZX9Y4ekqdWpmmrFAk+IkylG9pts4k/utI7SB
+         zHxzRfyKPebgYRJYkunUtLvj5sS8zxKQl/rhUk5cZJQIXFjNIZ/nNClC0D6BWdCUF1kr
+         fzAyd0fX7gdRjXwXHsIBljOjfQ2Pkl9bdDOji8mRYkSKOyEo1mHn2Y/99CtOUV7UOkQe
+         KxzfIg/nQMircpIV0T3thGF+3HJlvdO6sZVPjU2MIA6s6Go9vK32qNngksFxfQBf571Z
+         60mN9fdB21OXpFV8KY3m4hJg5j4fWeOvu585h2Cu3kZsVc1XjPt+g2fNfR9rszK7il5D
+         lU+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690754642; x=1691359442;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pahPU3wSvsqJHIDLsqPi1ulLhJMWKZSO5rvQ5dMXskQ=;
+        b=JfyASavspLr+F6tT5nQJJ9En37T32BSp4JSxrM8Atan4oDdO+WPVy5Ny0gbGfjCmrM
+         zcw3VrPS2SOi34sVjLTZklTq/2QKq6OgoGMuotip+O0yZ46QuAKvIcn9f9Kbuwv+xCt6
+         4KvpXES1lcFpjc11Nqbe7DVtSf7J7sy2ZmW73FN0VrCmvdtAwdGeuGE3ZrntRmbf++n8
+         3hHdnr/11XNz61TvoUC1GruCJqzBHDgnQtwNilw8odKLhrfhfg8iCeZEnYxAdYHTx31X
+         fzPllNeRiT1j6XXY9jlem9M46XswnxTJpAjI1eXuckm0QW+VV24o2Zvf3HYOIALjNueT
+         3arw==
+X-Gm-Message-State: ABy/qLZeMP5S1jUVH5yQ5Lei6q6So4x7mFYTMYHzgn8wDTyW+D99thgQ
+        eOp87KGQhwoyqm0g/qbvJH8=
+X-Google-Smtp-Source: APBJJlEgMsbnQlEpC7AIysBE3EqDVlDLnNG1AaWLi6MDNW/FVVcuRxpaFON35Ui2Xu5tD4xU0RLM5A==
+X-Received: by 2002:a05:6000:1289:b0:313:ecd3:7167 with SMTP id f9-20020a056000128900b00313ecd37167mr5545390wrx.42.1690754641719;
+        Sun, 30 Jul 2023 15:04:01 -0700 (PDT)
+Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
+        by smtp.gmail.com with ESMTPSA id u13-20020a5d514d000000b003172510d19dsm11132401wrt.73.2023.07.30.15.04.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 30 Jul 2023 15:04:01 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     linux-sunxi@lists.linux.dev, John Watts <contact@jookia.org>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 2/4] riscv: dts: allwinner: d1: Add CAN controller nodes
+Date:   Mon, 31 Jul 2023 00:03:59 +0200
+Message-ID: <5694691.DvuYhMxLoT@jernej-laptop>
+In-Reply-To: <ZLzwaQlS-l_KKpUX@titan>
+References: <20230721221552.1973203-2-contact@jookia.org>
+ <20230721221552.1973203-4-contact@jookia.org> <ZLzwaQlS-l_KKpUX@titan>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Dne nedelja, 23. julij 2023 ob 11:18:33 CEST je John Watts napisal(a):
+> On Sat, Jul 22, 2023 at 08:15:51AM +1000, John Watts wrote:
+> > ...
+> > +			/omit-if-no-ref/
+> > +			can0_pins: can0-pins {
+> > +				pins = "PB2", "PB3";
+> > +				function = "can0";
+> > +			};
+> > ...
+> > +		can0: can@2504000 {
+> > +			compatible = "allwinner,sun20i-d1-can";
+> > +			reg = <0x02504000 0x400>;
+> > +			interrupts = <SOC_PERIPHERAL_IRQ(21) 
+IRQ_TYPE_LEVEL_HIGH>;
+> > +			clocks = <&ccu CLK_BUS_CAN0>;
+> > +			resets = <&ccu RST_BUS_CAN0>;
+> > +			status = "disabled";
+> > +		};
+> 
+> Just a quick late night question to people with more knowledge than me:
+> 
+> These chips only have one pinctrl configuration for can0 and can1. Should
+> the can nodes have this pre-set instead of the board dts doing this?
 
-chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
-, je=C5=9Bli chodzi o system monitoringu GPS.
+Yes, that's usually how it's done.
 
-Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
-e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
-a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
+> 
+> I see this happening in sun4i-a10.dtsi for instance, but it also seems like
+> it could become a problem when it comes to re-using the dtsi for newer chip
+> variants.
 
-Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
-dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
-szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
-mne znaczenie.
+Properties can be either rewritten or deleted further down, so don't worry 
+about that.
 
-Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
-b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
+Best regards,
+Jernej
+
+> 
+> John.
 
 
-Pozdrawiam
-Krystian Wieczorek
+
+
