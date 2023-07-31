@@ -2,94 +2,123 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E28E768F37
-	for <lists+linux-can@lfdr.de>; Mon, 31 Jul 2023 09:53:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B3D9768F90
+	for <lists+linux-can@lfdr.de>; Mon, 31 Jul 2023 10:05:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbjGaHxd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 31 Jul 2023 03:53:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53618 "EHLO
+        id S231876AbjGaIFf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 31 Jul 2023 04:05:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbjGaHxd (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 31 Jul 2023 03:53:33 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA89D130;
-        Mon, 31 Jul 2023 00:53:31 -0700 (PDT)
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RDr7K5n1YzrRtl;
-        Mon, 31 Jul 2023 15:52:29 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by kwepemi500008.china.huawei.com
- (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 31 Jul
- 2023 15:53:29 +0800
-From:   Ruan Jinjie <ruanjinjie@huawei.com>
-To:     <wg@grandegger.com>, <mkl@pengutronix.de>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <haibo.chen@nxp.com>, <u.kleine-koenig@pengutronix.de>,
-        <socketcan@hartkopp.net>, <yangyingliang@huawei.com>,
-        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     <ruanjinjie@huawei.com>
-Subject: [PATCH -next] can: flexcan: fix the return value handle for platform_get_irq()
-Date:   Mon, 31 Jul 2023 15:52:52 +0800
-Message-ID: <20230731075252.359965-1-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S231214AbjGaIEX (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 31 Jul 2023 04:04:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E213426A3;
+        Mon, 31 Jul 2023 01:02:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B31260F5E;
+        Mon, 31 Jul 2023 08:02:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECEAAC43395;
+        Mon, 31 Jul 2023 08:02:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690790577;
+        bh=t10N72oEfrdWvctrgvxTa70mihQMypTsXP5is3fxQas=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=YFMtHrIhFzDSxjMCDs1WdZHEIKSx1+VX1YOY/dFgDZvmbzMGfH3RP0d+HhZhoU19t
+         hZlT/E0OjVoFFCdn2M8gZRsVrZNFE2xg83Ly7od1GPm5C1479rkTdgj2CLZwfW4StB
+         Twg4NRjSSaCFE4FsvZnKpqxXBAEeeD+q1lGqu2NjPqo2pBNKFOQ5tJgchlY82DRpY/
+         y7G0cT1PMK0AtF+xJ/BnB89INOyuzs3Ym2JPcAl0VlkWU7chVbYhaAI4cIrdI563VT
+         p2H/YQNsB5sSXBMzPudyFIfUmPr6nK0XXZhNJbJcf8VxCiGpnxOSlqz7nQVXFZT6aP
+         dJpIUIMMVM3Cw==
+From:   "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH 05/10] can: slcan: remove casts from tty->disc_data
+Date:   Mon, 31 Jul 2023 10:02:39 +0200
+Message-ID: <20230731080244.2698-6-jirislaby@kernel.org>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230731080244.2698-1-jirislaby@kernel.org>
+References: <20230731080244.2698-1-jirislaby@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.90.53.73]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500008.china.huawei.com (7.221.188.139)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-There is no possible for platform_get_irq() to return 0
-and the return value of platform_get_irq() is more sensible
-to show the error reason.
+tty->disc_data is 'void *', so there is no need to cast from that.
+Therefore remove the casts and assign the pointer directly.
 
-Signed-off-by: Ruan Jinjie <ruanjinjie@huawei.com>
+Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: Wolfgang Grandegger <wg@grandegger.com>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: linux-can@vger.kernel.org
+Cc: netdev@vger.kernel.org
 ---
- drivers/net/can/flexcan/flexcan-core.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/net/can/slcan/slcan-core.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/can/flexcan/flexcan-core.c b/drivers/net/can/flexcan/flexcan-core.c
-index ff0fc18baf13..52745cfef975 100644
---- a/drivers/net/can/flexcan/flexcan-core.c
-+++ b/drivers/net/can/flexcan/flexcan-core.c
-@@ -2089,8 +2089,8 @@ static int flexcan_probe(struct platform_device *pdev)
- 	}
+diff --git a/drivers/net/can/slcan/slcan-core.c b/drivers/net/can/slcan/slcan-core.c
+index f4db77007c13..371af9d17b14 100644
+--- a/drivers/net/can/slcan/slcan-core.c
++++ b/drivers/net/can/slcan/slcan-core.c
+@@ -583,7 +583,7 @@ static void slcan_transmit(struct work_struct *work)
+  */
+ static void slcan_write_wakeup(struct tty_struct *tty)
+ {
+-	struct slcan *sl = (struct slcan *)tty->disc_data;
++	struct slcan *sl = tty->disc_data;
  
- 	irq = platform_get_irq(pdev, 0);
--	if (irq <= 0)
--		return -ENODEV;
-+	if (irq < 0)
-+		return irq;
+ 	schedule_work(&sl->tx_work);
+ }
+@@ -778,7 +778,7 @@ static void slcan_receive_buf(struct tty_struct *tty,
+ 			      const unsigned char *cp, const char *fp,
+ 			      int count)
+ {
+-	struct slcan *sl = (struct slcan *)tty->disc_data;
++	struct slcan *sl = tty->disc_data;
  
- 	regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(regs))
-@@ -2167,13 +2167,13 @@ static int flexcan_probe(struct platform_device *pdev)
+ 	if (!netif_running(sl->dev))
+ 		return;
+@@ -862,7 +862,7 @@ static int slcan_open(struct tty_struct *tty)
+  */
+ static void slcan_close(struct tty_struct *tty)
+ {
+-	struct slcan *sl = (struct slcan *)tty->disc_data;
++	struct slcan *sl = tty->disc_data;
  
- 	if (priv->devtype_data.quirks & FLEXCAN_QUIRK_NR_IRQ_3) {
- 		priv->irq_boff = platform_get_irq(pdev, 1);
--		if (priv->irq_boff <= 0) {
--			err = -ENODEV;
-+		if (priv->irq_boff < 0) {
-+			err = priv->irq_boff;
- 			goto failed_platform_get_irq;
- 		}
- 		priv->irq_err = platform_get_irq(pdev, 2);
--		if (priv->irq_err <= 0) {
--			err = -ENODEV;
-+		if (priv->irq_err < 0) {
-+			err = priv->irq_err;
- 			goto failed_platform_get_irq;
- 		}
- 	}
+ 	unregister_candev(sl->dev);
+ 
+@@ -886,7 +886,7 @@ static void slcan_close(struct tty_struct *tty)
+ static int slcan_ioctl(struct tty_struct *tty, unsigned int cmd,
+ 		       unsigned long arg)
+ {
+-	struct slcan *sl = (struct slcan *)tty->disc_data;
++	struct slcan *sl = tty->disc_data;
+ 	unsigned int tmp;
+ 
+ 	switch (cmd) {
 -- 
-2.34.1
+2.41.0
 
