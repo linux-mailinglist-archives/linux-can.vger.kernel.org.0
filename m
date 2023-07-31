@@ -2,33 +2,55 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40963769800
-	for <lists+linux-can@lfdr.de>; Mon, 31 Jul 2023 15:48:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D9C076A046
+	for <lists+linux-can@lfdr.de>; Mon, 31 Jul 2023 20:23:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbjGaNsA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 31 Jul 2023 09:48:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41466 "EHLO
+        id S230401AbjGaSXU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 31 Jul 2023 14:23:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231526AbjGaNry (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 31 Jul 2023 09:47:54 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF2E198B
-        for <linux-can@vger.kernel.org>; Mon, 31 Jul 2023 06:47:46 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1qQTF5-0006St-4V; Mon, 31 Jul 2023 15:47:23 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 454F01FEF91;
-        Mon, 31 Jul 2023 13:47:19 +0000 (UTC)
-Date:   Mon, 31 Jul 2023 15:47:18 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Markus Schneider-Pargmann <msp@baylibre.com>
+        with ESMTP id S231197AbjGaSXT (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 31 Jul 2023 14:23:19 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A36819AF
+        for <linux-can@vger.kernel.org>; Mon, 31 Jul 2023 11:23:16 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-99bcf2de59cso762213566b.0
+        for <linux-can@vger.kernel.org>; Mon, 31 Jul 2023 11:23:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1690827794; x=1691432594;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rf2SueqzGQo0vJNgUag9FW9PB32GASllyVQGKBWgKls=;
+        b=5dLyn4WKWw7B3rxWFFir/LC1tRlLJAoVZpvvQdLTEpU8+nwbw8vVlqMnf/IwuBFgj0
+         d2v2k7swJJ4fJ5Q7P7F4Zmz23MLi9vA98/kr0qQpd2VkGi/l1LtMlTY+WL8PsJUbEcsa
+         7RoEWNAD/Y0NnmWYIo43QmdHJCaPiBufBaDpv4w7lGUqSGjXaIG43gMJIVVOKAQPpIVC
+         Y0GxhlMsozAB2XQC2jFr3IWwA/Ex+Ow/T0Qa0o/ZU8Y6bgXIREJGMQhvZn1oBa3st+nk
+         lAxIBmANtX3D0xD9tZ0lLzNmey8ygWVd17YrmfmlmwqBoQHWlniU7OU5U9LDXR6fppF+
+         IEQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690827794; x=1691432594;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rf2SueqzGQo0vJNgUag9FW9PB32GASllyVQGKBWgKls=;
+        b=ctKRyNj+extDhkvPET8PQRaE02Lc9KPkOYi7ofKvhfHlZmErZfC7kq4ukDEnStbrmA
+         2zg65/V+BqOckX8vsZcHwImj/PherZVIUQOrAuONyAN1qPGXDYsKK0lZSqFK1FuwYMuI
+         MD/yJEaVsTU9rFMNQcJrXKPwRiFgS5MW+VheYORmw669V95SpYz21gWhiJhkbOkdzq7l
+         XUWApySiwZFZVG6jhW7T4sOMEm3+SNE5Nt3dAYo6h7yh2jBIr67NfI8TPzITes1Kz5wW
+         zGgdBRvaBqOivVZ1/nl/FFR8TSUG+QBLkRBGAbsZwmPdu76BnUmca1LU7/6fQ1nNiaO0
+         QLww==
+X-Gm-Message-State: ABy/qLaYebAjRONWod9at+nyjZZQ5gob/PUy1uUfxa2RDxToF+ICwPeU
+        ta1JQFhoYy9SuAsc59xoJO2xwQ==
+X-Google-Smtp-Source: APBJJlEqhF6H+EF9UPW9v/50+fttk+UTCFn+fLaauftKmdzDXQ7UgKfy7xULxO8s4MFkZ/WstAheqg==
+X-Received: by 2002:a17:906:530b:b0:992:ef60:ab0d with SMTP id h11-20020a170906530b00b00992ef60ab0dmr321850ejo.69.1690827793970;
+        Mon, 31 Jul 2023 11:23:13 -0700 (PDT)
+Received: from blmsp ([2001:4090:a246:80e3:766f:be78:d79a:8686])
+        by smtp.gmail.com with ESMTPSA id e3-20020a17090681c300b00997d76981e0sm6457533ejx.208.2023.07.31.11.23.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jul 2023 11:23:13 -0700 (PDT)
+Date:   Mon, 31 Jul 2023 20:23:11 +0200
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
 Cc:     Wolfgang Grandegger <wg@grandegger.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -44,65 +66,36 @@ Cc:     Wolfgang Grandegger <wg@grandegger.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Simon Horman <simon.horman@corigine.com>
 Subject: Re: [PATCH v4 0/6] can: tcan4x5x: Introduce tcan4552/4553
-Message-ID: <20230731-issuing-unshackle-20c6cbcbca98-mkl@pengutronix.de>
+Message-ID: <20230731182311.fxq56r35y75j6vde@blmsp>
 References: <20230728141923.162477-1-msp@baylibre.com>
+ <20230731-issuing-unshackle-20c6cbcbca98-mkl@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7hokiv2uomu6txmp"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230728141923.162477-1-msp@baylibre.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230731-issuing-unshackle-20c6cbcbca98-mkl@pengutronix.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Mon, Jul 31, 2023 at 03:47:18PM +0200, Marc Kleine-Budde wrote:
+> On 28.07.2023 16:19:17, Markus Schneider-Pargmann wrote:
+> > Hi everyone,
+> > 
+> > This series introduces two new chips tcan-4552 and tcan-4553. The
+> > generic driver works in general but needs a few small changes. These are
+> > caused by the removal of wake and state pins.
+> > 
+> > v4 updates the printks to use '%pe'.
+> 
+> Applied to linux-can-next/testing.
 
---7hokiv2uomu6txmp
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thank you, Marc!
 
-On 28.07.2023 16:19:17, Markus Schneider-Pargmann wrote:
-> Hi everyone,
->=20
-> This series introduces two new chips tcan-4552 and tcan-4553. The
-> generic driver works in general but needs a few small changes. These are
-> caused by the removal of wake and state pins.
->=20
-> v4 updates the printks to use '%pe'.
-
-Applied to linux-can-next/testing.
-
-Thanks,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---7hokiv2uomu6txmp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmTHu2MACgkQvlAcSiqK
-BOg63gf/cPN6GYr1ujcAtB5q3AHV/GbjB+1Bp8DkT1yzWjXkcPXvm44qr9AnhbBX
-qF1UX4whquSeRDoKursw4/5h1THtdYHGIeM+kRa4jPUxB78b3i1AHWhMkuQQP/5h
-RXn57V6mIqdFdF1VVAl7/y8fxj7JLLTwoaFIDjjuW5E5aXxLEnNmT2rs5Y/OMG2Z
-jeG5Eip0Qu73qCBpVGUh0Wckya+K1b5xwQ2+BauCEzBg4/oCRx9RyIk7awlR6d26
-FxZ9nan7AjmkrW/cury9qKGQLdfM31myDypXRl7+C4esJ00KDUvOJlt01E/THvaG
-2NS6tk/FiCDV5Otlq3OmGaRfnuVLlA==
-=9Hzu
------END PGP SIGNATURE-----
-
---7hokiv2uomu6txmp--
+Best,
+Markus
