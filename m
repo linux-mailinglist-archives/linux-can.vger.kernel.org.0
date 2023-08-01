@@ -2,125 +2,66 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BFA376A8E6
-	for <lists+linux-can@lfdr.de>; Tue,  1 Aug 2023 08:23:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D645176AA64
+	for <lists+linux-can@lfdr.de>; Tue,  1 Aug 2023 09:59:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231488AbjHAGXE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 1 Aug 2023 02:23:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37166 "EHLO
+        id S230294AbjHAH7Z (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 1 Aug 2023 03:59:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231515AbjHAGWx (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Aug 2023 02:22:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA7219AA;
-        Mon, 31 Jul 2023 23:22:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 21FA361483;
-        Tue,  1 Aug 2023 06:22:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B5CFC4339A;
-        Tue,  1 Aug 2023 06:22:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690870970;
-        bh=kuEWnL9p9BoO9qyiypu88WnOmaK1A5r5Av53wC58X/4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sTAaCdjqqtaGw4jXqE8Zp1B4A46QbjBp0dXr631H/PgNlLVBuyCklYAGke2Wh0SrB
-         V3LiY5YC3HRiuHhVcgPq7e69TY1EfVP0ql+l85qpEBSMzhf5uQV4tFTSYFr0fOcbD8
-         YijqLZynDBoU/TqXA6ioHSRUf0zg2cPEPkzDJ9f3wj9kVA8/uPOlBzgCkQGQN9i6Pw
-         MPgq4IbGoM20r5r/j6iwS46RTzkeZJdGrcnUb/gBr559dRO7FmwyUfLNRKW9oHmcfA
-         G8TOEodJKvNN7nvplCEH4mTmHxXpQvq9abVmp9aoVl+hf+yq/awLxqUl2ijo8ewb5h
-         wIgfwLXTr1gpA==
-From:   "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
-        Max Staudt <max@enpas.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH 2/2] net: nfc: remove casts from tty->disc_data
-Date:   Tue,  1 Aug 2023 08:22:37 +0200
-Message-ID: <20230801062237.2687-3-jirislaby@kernel.org>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230801062237.2687-1-jirislaby@kernel.org>
-References: <20230801062237.2687-1-jirislaby@kernel.org>
+        with ESMTP id S229520AbjHAH7Y (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Aug 2023 03:59:24 -0400
+Received: from mail.durme.pl (mail.durme.pl [217.182.69.186])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 153EA1729
+        for <linux-can@vger.kernel.org>; Tue,  1 Aug 2023 00:59:24 -0700 (PDT)
+Received: by mail.durme.pl (Postfix, from userid 1002)
+        id 1365E4BCDD; Tue,  1 Aug 2023 07:55:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=durme.pl; s=mail;
+        t=1690876627; bh=hFxZwVw4rIL+JwfEOGI47p+fdoVOAeqVswP6NWoHSHQ=;
+        h=Date:From:To:Subject:From;
+        b=Du0HELgMbQtd0UA0DxlIY7mU7dTpQHdwZXlTUL3Dv5/Wywum3XQpfAkSLIb/q6+3T
+         LHTpKSs6bHHCLThZLn3clbBC79E6Oh1n4i81Mi+4SKGF8QSl11zxEAnaYSD/9Z3XWf
+         LDrUWNEIZrFJhkcuMB6YslmR63ZKxib/EvtNHMK2kUlJk7CWhte5+uKp84u5l8XxkI
+         eCNu7KpXCrEOfUUh3znyReUDAtmCIplLxMFqhx6xlDXzccjykcp9guwWVnNToDTmHM
+         /BSIw3zxamYvAXHaNylA6IUN2tf3w6ay9wsEjf6bDzIWs2oTiWD9PqLK/PCtag3744
+         fv+w82CVSg/jA==
+Received: by mail.durme.pl for <linux-can@vger.kernel.org>; Tue,  1 Aug 2023 07:55:32 GMT
+Message-ID: <20230801064501-0.1.3f.cm32.0.aiblohdhj0@durme.pl>
+Date:   Tue,  1 Aug 2023 07:55:32 GMT
+From:   "Krystian Wieczorek" <krystian.wieczorek@durme.pl>
+To:     <linux-can@vger.kernel.org>
+Subject: W sprawie samochodu
+X-Mailer: mail.durme.pl
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-tty->disc_data is 'void *', so there is no need to cast from that.
-Therefore remove the casts and assign the pointer directly.
+Dzie=C5=84 dobry,
 
-Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
-Cc: Max Staudt <max@enpas.org>
-Cc: Wolfgang Grandegger <wg@grandegger.com>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: linux-can@vger.kernel.org
-Cc: netdev@vger.kernel.org
----
- net/nfc/nci/uart.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
+, je=C5=9Bli chodzi o system monitoringu GPS.
 
-diff --git a/net/nfc/nci/uart.c b/net/nfc/nci/uart.c
-index cc8fa9e36159..082f94be0996 100644
---- a/net/nfc/nci/uart.c
-+++ b/net/nfc/nci/uart.c
-@@ -172,7 +172,7 @@ static int nci_uart_tty_open(struct tty_struct *tty)
-  */
- static void nci_uart_tty_close(struct tty_struct *tty)
- {
--	struct nci_uart *nu = (void *)tty->disc_data;
-+	struct nci_uart *nu = tty->disc_data;
- 
- 	/* Detach from the tty */
- 	tty->disc_data = NULL;
-@@ -204,7 +204,7 @@ static void nci_uart_tty_close(struct tty_struct *tty)
-  */
- static void nci_uart_tty_wakeup(struct tty_struct *tty)
- {
--	struct nci_uart *nu = (void *)tty->disc_data;
-+	struct nci_uart *nu = tty->disc_data;
- 
- 	if (!nu)
- 		return;
-@@ -298,7 +298,7 @@ static int nci_uart_default_recv_buf(struct nci_uart *nu, const u8 *data,
- static void nci_uart_tty_receive(struct tty_struct *tty, const u8 *data,
- 				 const char *flags, int count)
- {
--	struct nci_uart *nu = (void *)tty->disc_data;
-+	struct nci_uart *nu = tty->disc_data;
- 
- 	if (!nu || tty != nu->tty)
- 		return;
-@@ -325,7 +325,7 @@ static void nci_uart_tty_receive(struct tty_struct *tty, const u8 *data,
- static int nci_uart_tty_ioctl(struct tty_struct *tty, unsigned int cmd,
- 			      unsigned long arg)
- {
--	struct nci_uart *nu = (void *)tty->disc_data;
-+	struct nci_uart *nu = tty->disc_data;
- 	int err = 0;
- 
- 	switch (cmd) {
--- 
-2.41.0
+Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
+e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
+a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
 
+Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
+dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
+szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
+mne znaczenie.
+
+Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
+b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
+
+
+Pozdrawiam
+Krystian Wieczorek
